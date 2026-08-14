@@ -56,6 +56,20 @@ LEAN_LIBRARY_RE = re.compile(
 )
 
 
+def is_identifier_continuation(char: str) -> bool:
+    """Return whether ``char`` can continue a Lean identifier.
+
+    Lean permits one or more primes at the end of identifiers.  In
+    particular, a prime following an identifier is not the opening quote of a
+    character literal, so the scanner must distinguish those two uses.
+    """
+    return bool(char) and (
+        char.isalnum()
+        or char in {"_", "'", "?", "!"}
+        or not char.isascii()
+    )
+
+
 def strip_comments_and_strings(text: str) -> str:
     output: list[str] = []
     index = 0
@@ -91,15 +105,24 @@ def strip_comments_and_strings(text: str) -> str:
                 index += 1
             continue
 
-        if in_string or in_char:
-            terminator = '"' if in_string else "'"
+        if in_string:
             if char == "\\" and following:
                 output.extend("  ")
                 index += 2
             else:
                 output.append("\n" if char == "\n" else " ")
-                if char == terminator:
+                if char == '"':
                     in_string = False
+                index += 1
+            continue
+
+        if in_char:
+            if char == "\\" and following:
+                output.extend("  ")
+                index += 2
+            else:
+                output.append("\n" if char == "\n" else " ")
+                if char == "'":
                     in_char = False
                 index += 1
             continue
@@ -116,7 +139,9 @@ def strip_comments_and_strings(text: str) -> str:
             in_string = True
             output.append(" ")
             index += 1
-        elif char == "'":
+        elif char == "'" and not (
+            index > 0 and is_identifier_continuation(text[index - 1])
+        ):
             in_char = True
             output.append(" ")
             index += 1

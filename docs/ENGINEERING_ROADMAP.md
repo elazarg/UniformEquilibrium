@@ -9,8 +9,8 @@ promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 | Phase | Work | Status | Acceptance gate |
 | --- | --- | --- | --- |
 | 1 | Review baseline | Complete | Review facts and measured risks are recorded |
-| 2 | Trust scanner | In progress | Prime-aware scanner and lexical regression suite pass |
-| 3 | Import graph and inventory | Queued | Zero unexplained orphans and boundary violations |
+| 2 | Trust scanner | Complete | Prime-aware scanner and lexical regression suite pass |
+| 3 | Import graph and inventory | In progress | Zero unexplained orphans and boundary violations |
 | 4 | Ownership, Research, provenance, sync | Queued | Every shim/fork and sync decision has an owner and manifest |
 | 5 | Facades and dependency inversions | Queued | Architecture/certificate and Quitting/Diagnostics edges are layered |
 | 6 | Proof ratchets and Fubini API | Queued | Shared PMF identities replace selected duplication |
