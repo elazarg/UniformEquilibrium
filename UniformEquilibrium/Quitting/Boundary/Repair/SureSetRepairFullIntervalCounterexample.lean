@@ -264,20 +264,7 @@ theorem not_isεAsymptoticNash_sureSetOwnerRoot_empty
 private theorem nonempty_without_zero_cases (T : Finset Player)
     (hne : T.Nonempty) (hzero : 0 ∉ T) :
     T = {1} ∨ T = {2} ∨ T = {1, 2} := by
-  by_cases h1 : 1 ∈ T
-  · by_cases h2 : 2 ∈ T
-    · right; right
-      ext who
-      fin_cases who <;> simp [hzero, h1, h2]
-    · left
-      ext who
-      fin_cases who <;> simp [hzero, h1, h2]
-  · by_cases h2 : 2 ∈ T
-    · right; left
-      ext who
-      fin_cases who <;> simp [hzero, h1, h2]
-    · obtain ⟨who, hwho⟩ := hne
-      fin_cases who <;> simp_all
+  fin_cases T <;> simp_all <;> decide
 
 /-- At every positive owner hazard, one player has exact stationary
 unilateral gain at least `1/3`.  This theorem covers every nonempty sure set
@@ -364,43 +351,35 @@ theorem not_isεAsymptoticNash_sureSetOwnerRoot_all
 The terminal-payoff and fixed-opponent identities for the pure sure-exit
 root, and the two membership-toggle exploitability lemmas built from them,
 are the general facts proved once for every finite player set in the
-sure-exit-set characterization; only the two case-splitting helper theorems
-below are original to this table. -/
+sure-exit-set characterization; only the finite witness lookup and its
+numeric gap below are original to this table. -/
 
 private theorem nonempty_fin3_cases (S : Finset Player)
     (hS : S.Nonempty) :
     S = {0} ∨ S = {1} ∨ S = {2} ∨ S = {0, 1} ∨
       S = {0, 2} ∨ S = {1, 2} ∨ S = {0, 1, 2} := by
-  by_cases h0 : 0 ∈ S
-  · by_cases h1 : 1 ∈ S
-    · by_cases h2 : 2 ∈ S
-      · right; right; right; right; right; right
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · right; right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-    · by_cases h2 : 2 ∈ S
-      · right; right; right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-  · by_cases h1 : 1 ∈ S
-    · by_cases h2 : 2 ∈ S
-      · right; right; right; right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-    · by_cases h2 : 2 ∈ S
-      · right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · obtain ⟨who, hwho⟩ := hS
-        fin_cases who <;> simp_all
+  fin_cases S <;> simp_all <;> decide
+
+/-- A player whose membership toggle gains at least one at a nonempty pure
+exit set.  This is the finite witness table behind the direct-pure-set
+obstruction. -/
+private def directPureSetWitness (S : Finset Player) : Player :=
+  if 0 ∈ S then
+    if 1 ∈ S then if 2 ∈ S then 0 else 2 else 1
+  else if 1 ∈ S then if 2 ∈ S then 1 else 0 else 0
+
+private theorem directPureSetWitness_gap
+    (S : Finset Player) (hS : S.Nonempty) :
+    quittingSetReward reward S (directPureSetWitness S) + 1 ≤
+      max
+        (quittingSetReward reward (insert (directPureSetWitness S) S)
+          (directPureSetWitness S))
+        (quittingSetReward reward (S.erase (directPureSetWitness S))
+          (directPureSetWitness S)) := by
+  rcases nonempty_fin3_cases S hS with
+      hS | hS | hS | hS | hS | hS | hS <;>
+    subst S <;>
+    norm_num [directPureSetWitness, quittingSetReward, reward]
 
 /-- Every nonempty pure First profile has an actual unilateral gain of at
 least one.  The first five witnesses Quit immediately; on `{1,2}` player one
@@ -411,91 +390,12 @@ theorem not_isεAsymptoticNash_directPureSet
     ¬ (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) ε
         (quittingStationaryProfile reward (quittingPureSetRoot S)) := by
-  rcases nonempty_fin3_cases S hS with
-      hS | hS | hS | hS | hS | hS | hS
-  · subst S
-    intro hnash
-    have hquit := hnash 1 (quittingPureTimeBehaviorStrategy reward 1 (some 0))
-    rw [quittingTerminalPayoff_update_quitNow_eq_fixedOpponentsQuitValue,
-      quittingProfileLiveRoot_stationary,
-      quittingStationaryFixedOpponentsQuitValue_pureSetRoot,
-      quittingTerminalPayoff_pureSetRoot] at hquit
-    norm_num [quittingSetReward, reward] at hquit
-    linarith
-  · subst S
-    intro hnash
-    have hquit := hnash 0 (quittingPureTimeBehaviorStrategy reward 0 (some 0))
-    rw [quittingTerminalPayoff_update_quitNow_eq_fixedOpponentsQuitValue,
-      quittingProfileLiveRoot_stationary,
-      quittingStationaryFixedOpponentsQuitValue_pureSetRoot,
-      quittingTerminalPayoff_pureSetRoot] at hquit
-    norm_num [quittingSetReward, reward] at hquit
-    linarith
-  · subst S
-    intro hnash
-    have hquit := hnash 0 (quittingPureTimeBehaviorStrategy reward 0 (some 0))
-    rw [quittingTerminalPayoff_update_quitNow_eq_fixedOpponentsQuitValue,
-      quittingProfileLiveRoot_stationary,
-      quittingStationaryFixedOpponentsQuitValue_pureSetRoot,
-      quittingTerminalPayoff_pureSetRoot] at hquit
-    norm_num [quittingSetReward, reward] at hquit
-    linarith
-  · subst S
-    intro hnash
-    have hquit := hnash 2 (quittingPureTimeBehaviorStrategy reward 2 (some 0))
-    rw [quittingTerminalPayoff_update_quitNow_eq_fixedOpponentsQuitValue,
-      quittingProfileLiveRoot_stationary,
-      quittingStationaryFixedOpponentsQuitValue_pureSetRoot,
-      quittingTerminalPayoff_pureSetRoot] at hquit
-    norm_num [quittingSetReward, reward] at hquit
-    linarith
-  · subst S
-    intro hnash
-    have hquit := hnash 1 (quittingPureTimeBehaviorStrategy reward 1 (some 0))
-    rw [quittingTerminalPayoff_update_quitNow_eq_fixedOpponentsQuitValue,
-      quittingProfileLiveRoot_stationary,
-      quittingStationaryFixedOpponentsQuitValue_pureSetRoot,
-      quittingTerminalPayoff_pureSetRoot] at hquit
-    norm_num [quittingSetReward, reward] at hquit
-    linarith
-  · subst S
-    intro hnash
-    have herase : (({1, 2} : Finset Player).erase 1).Nonempty := by simp
-    have hmass :=
-      quittingStationaryFixedOpponentsContinueMass_pureSetRoot_of_erase_nonempty
-        herase
-    have hcontracts : quittingStationaryFixedOpponentsContinueMass
-        (quittingPureSetRoot ({1, 2} : Finset Player)) 1 < 1 := by
-      rw [hmass]
-      norm_num
-    have hnever := hnash 1 (quittingPureTimeBehaviorStrategy reward 1 none)
-    rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
-      quittingProfileLiveRoot_stationary,
-      quittingRootSequencePureTimeTerminalValue_const_none
-        reward (quittingPureSetRoot ({1, 2} : Finset Player)) 1 hcontracts 0,
-      quittingStationaryFixedOpponentsContinueReward_pureSetRoot, hmass,
-      quittingTerminalPayoff_pureSetRoot] at hnever
-    norm_num [quittingStationaryNeverValue, quittingSetReward, reward] at hnever
-    linarith
-  · subst S
-    intro hnash
-    have herase : (({0, 1, 2} : Finset Player).erase 0).Nonempty := by simp
-    have hmass :=
-      quittingStationaryFixedOpponentsContinueMass_pureSetRoot_of_erase_nonempty
-        herase
-    have hcontracts : quittingStationaryFixedOpponentsContinueMass
-        (quittingPureSetRoot ({0, 1, 2} : Finset Player)) 0 < 1 := by
-      rw [hmass]
-      norm_num
-    have hnever := hnash 0 (quittingPureTimeBehaviorStrategy reward 0 none)
-    rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
-      quittingProfileLiveRoot_stationary,
-      quittingRootSequencePureTimeTerminalValue_const_none
-        reward (quittingPureSetRoot ({0, 1, 2} : Finset Player)) 0 hcontracts 0,
-      quittingStationaryFixedOpponentsContinueReward_pureSetRoot, hmass,
-      quittingTerminalPayoff_pureSetRoot] at hnever
-    norm_num [quittingStationaryNeverValue, quittingSetReward, reward] at hnever
-    linarith
+  intro hnash
+  have htoggle :=
+    (isεAsymptoticNash_pureSetRoot_iff reward S ε).1 hnash
+  have hbound := htoggle (directPureSetWitness S)
+  have hgap := directPureSetWitness_gap S hS
+  linarith
 
 /-! ## Scope calibration: an exact mixed stationary repair -/
 

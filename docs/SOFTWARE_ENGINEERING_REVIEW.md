@@ -156,6 +156,21 @@ maintenance measurements, not evidence of mathematical progress.
   contributes to reverse variation, strengthening the whole-law coefficient
   from `3 M s²` to `2 M s²` and the deleted-player coefficient from `3 M s²`
   to `(3/2) M s²`; the checked compiler constants are propagated downstream.
+- The full-interval sure-set counterexample now records one finite witness
+  table and one membership-toggle gap lemma. The general pure-set Nash
+  characterization turns that lemma into the exclusion theorem, replacing
+  seven repeated behavioral-deviation arguments. Fin3 subset enumeration is
+  confined to `fin_cases` and decidable bookkeeping.
+- The K11 terminal-table bridge is now stated for an arbitrary four-player
+  hazard row. Four resource-bounded table computations share one explicit
+  local normalization script, and the phase theorem is only an instantiation;
+  combining all four computations in one declaration exceeded Lean's fixed
+  heartbeat budget.
+- The FTV three-phase rigidity proof now separates role-order deductions from
+  real inequalities and solves both continuation vectors through one affine
+  half-mixture lemma. A bounded `grind only [Function.update]` pilot replaces
+  one definitional update split. Trials that required broad Fin/vector rule
+  sets were rejected in favor of clearer `fin_cases`, `decide`, or `simp`.
 
 ## Proof-quality and grind policy
 

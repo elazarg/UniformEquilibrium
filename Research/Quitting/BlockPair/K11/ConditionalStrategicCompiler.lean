@@ -229,73 +229,69 @@ theorem expect_quittingHazardCoin
   simp
   ring
 
-private theorem rootQuitPayoff_zero_eq_chart
-    (x : HazardIndex → ℝ)
-    (hx : ∀ index, 0 < x index ∧ x index < 1)
-    (phase : Phase) (tail : Payoff Player) :
-    quittingRootQuitPayoff reward tail (phaseRoot x hx phase) 0 =
-      BlockPairCharts.opponentQuitValue (hazard x phase) 0 := by
-  unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [Math.PMFProduct.expect_pmfPi_fin4]
-  simp +decide [phaseRoot, expect_quittingHazardCoin, reward,
-    quittingRootPayoff, quittingQuitters, BlockPairCharts.opponentQuitValue,
-    BlockPairCharts.realSum, BlockPairCharts.maskProbability,
-    BlockPairCharts.realProduct, BlockPairCharts.actionFactor, hazard,
-    BlockPairCharts.terminalRewardNat,
-    LocalInterval.activeHazardIndex?, LocalInterval.activePlayersBefore,
-    maskHasPlayer, maskWithPlayer]
-  ring
+/-! The pure-Quit expectation is the mask chart for any four-coordinate
+Bernoulli hazard row.  The phase-specific compiler below only instantiates
+this finite coalition identity. -/
+private def hazardRoot
+    (q : Player → ℝ) (hq0 : ∀ who, 0 ≤ q who)
+    (hq1 : ∀ who, q who ≤ 1) : Player → PMF Bool :=
+  fun who ↦ quittingHazardCoin (q who) (hq0 who) (hq1 who)
 
-private theorem rootQuitPayoff_one_eq_chart
-    (x : HazardIndex → ℝ)
-    (hx : ∀ index, 0 < x index ∧ x index < 1)
-    (phase : Phase) (tail : Payoff Player) :
-    quittingRootQuitPayoff reward tail (phaseRoot x hx phase) 1 =
-      BlockPairCharts.opponentQuitValue (hazard x phase) 1 := by
-  unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [Math.PMFProduct.expect_pmfPi_fin4]
-  simp +decide [phaseRoot, expect_quittingHazardCoin, reward,
-    quittingRootPayoff, quittingQuitters, BlockPairCharts.opponentQuitValue,
-    BlockPairCharts.realSum, BlockPairCharts.maskProbability,
-    BlockPairCharts.realProduct, BlockPairCharts.actionFactor, hazard,
-    BlockPairCharts.terminalRewardNat,
-    LocalInterval.activeHazardIndex?, LocalInterval.activePlayersBefore,
-    maskHasPlayer, maskWithPlayer]
-  ring
+private def hazardRootQuitExpectation
+    (q : Player → ℝ) (hq0 : ∀ who, 0 ≤ q who)
+    (hq1 : ∀ who, q who ≤ 1) (who : Player)
+    (tail : Payoff Player) : ℝ :=
+  expect
+    (pmfPi (Function.update (hazardRoot q hq0 hq1) who (PMF.pure true)))
+    fun action ↦ quittingRootPayoff reward tail action who
 
-private theorem rootQuitPayoff_two_eq_chart
-    (x : HazardIndex → ℝ)
-    (hx : ∀ index, 0 < x index ∧ x index < 1)
-    (phase : Phase) (tail : Payoff Player) :
-    quittingRootQuitPayoff reward tail (phaseRoot x hx phase) 2 =
-      BlockPairCharts.opponentQuitValue (hazard x phase) 2 := by
-  unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [Math.PMFProduct.expect_pmfPi_fin4]
-  simp +decide [phaseRoot, expect_quittingHazardCoin, reward,
-    quittingRootPayoff, quittingQuitters, BlockPairCharts.opponentQuitValue,
-    BlockPairCharts.realSum, BlockPairCharts.maskProbability,
-    BlockPairCharts.realProduct, BlockPairCharts.actionFactor, hazard,
-    BlockPairCharts.terminalRewardNat,
-    LocalInterval.activeHazardIndex?, LocalInterval.activePlayersBefore,
-    maskHasPlayer, maskWithPlayer]
-  ring
+/-- Close one concrete player branch by exposing the finite coalition table,
+then normalize only the resulting polynomial identity. -/
+local macro "close_hazard_chart" : tactic =>
+  `(tactic|
+    (unfold hazardRootQuitExpectation hazardRoot
+     rw [Math.PMFProduct.expect_pmfPi_fin4]
+     simp +decide [expect_quittingHazardCoin, reward, quittingRootPayoff,
+       quittingQuitters, BlockPairCharts.opponentQuitValue,
+       BlockPairCharts.realSum, BlockPairCharts.maskProbability,
+       BlockPairCharts.realProduct, BlockPairCharts.actionFactor,
+       BlockPairCharts.terminalRewardNat, maskWithPlayer]
+     ring))
 
-private theorem rootQuitPayoff_three_eq_chart
-    (x : HazardIndex → ℝ)
-    (hx : ∀ index, 0 < x index ∧ x index < 1)
-    (phase : Phase) (tail : Payoff Player) :
-    quittingRootQuitPayoff reward tail (phaseRoot x hx phase) 3 =
-      BlockPairCharts.opponentQuitValue (hazard x phase) 3 := by
-  unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [Math.PMFProduct.expect_pmfPi_fin4]
-  simp +decide [phaseRoot, expect_quittingHazardCoin, reward,
-    quittingRootPayoff, quittingQuitters, BlockPairCharts.opponentQuitValue,
-    BlockPairCharts.realSum, BlockPairCharts.maskProbability,
-    BlockPairCharts.realProduct, BlockPairCharts.actionFactor, hazard,
-    BlockPairCharts.terminalRewardNat,
-    LocalInterval.activeHazardIndex?, LocalInterval.activePlayersBefore,
-    maskHasPlayer, maskWithPlayer]
-  ring
+private theorem hazardRootQuitExpectation_zero_eq_chart
+    (q : Player → ℝ) (hq0 : ∀ who, 0 ≤ q who)
+    (hq1 : ∀ who, q who ≤ 1) (tail : Payoff Player) :
+    hazardRootQuitExpectation q hq0 hq1 0 tail =
+      BlockPairCharts.opponentQuitValue q 0 := by close_hazard_chart
+
+private theorem hazardRootQuitExpectation_one_eq_chart
+    (q : Player → ℝ) (hq0 : ∀ who, 0 ≤ q who)
+    (hq1 : ∀ who, q who ≤ 1) (tail : Payoff Player) :
+    hazardRootQuitExpectation q hq0 hq1 1 tail =
+      BlockPairCharts.opponentQuitValue q 1 := by close_hazard_chart
+
+private theorem hazardRootQuitExpectation_two_eq_chart
+    (q : Player → ℝ) (hq0 : ∀ who, 0 ≤ q who)
+    (hq1 : ∀ who, q who ≤ 1) (tail : Payoff Player) :
+    hazardRootQuitExpectation q hq0 hq1 2 tail =
+      BlockPairCharts.opponentQuitValue q 2 := by close_hazard_chart
+
+private theorem hazardRootQuitExpectation_three_eq_chart
+    (q : Player → ℝ) (hq0 : ∀ who, 0 ≤ q who)
+    (hq1 : ∀ who, q who ≤ 1) (tail : Payoff Player) :
+    hazardRootQuitExpectation q hq0 hq1 3 tail =
+      BlockPairCharts.opponentQuitValue q 3 := by close_hazard_chart
+
+private theorem hazardRootQuitExpectation_eq_chart
+    (q : Player → ℝ) (hq0 : ∀ who, 0 ≤ q who)
+    (hq1 : ∀ who, q who ≤ 1) (who : Player) (tail : Payoff Player) :
+    hazardRootQuitExpectation q hq0 hq1 who tail =
+      BlockPairCharts.opponentQuitValue q who := by
+  fin_cases who
+  · exact hazardRootQuitExpectation_zero_eq_chart q hq0 hq1 tail
+  · exact hazardRootQuitExpectation_one_eq_chart q hq0 hq1 tail
+  · exact hazardRootQuitExpectation_two_eq_chart q hq0 hq1 tail
+  · exact hazardRootQuitExpectation_three_eq_chart q hq0 hq1 tail
 
 /-- The quitting-game pure-Quit endpoint is the public terminal-table
 opponent summary. -/
@@ -305,11 +301,10 @@ theorem rootQuitPayoff_eq_chart
     (phase : Phase) (who : Player) (tail : Payoff Player) :
     quittingRootQuitPayoff reward tail (phaseRoot x hx phase) who =
       BlockPairCharts.opponentQuitValue (hazard x phase) who := by
-  fin_cases who
-  · exact rootQuitPayoff_zero_eq_chart x hx phase tail
-  · exact rootQuitPayoff_one_eq_chart x hx phase tail
-  · exact rootQuitPayoff_two_eq_chart x hx phase tail
-  · exact rootQuitPayoff_three_eq_chart x hx phase tail
+  change hazardRootQuitExpectation (hazard x phase)
+    (hazard_nonneg x hx phase) (hazard_le_one x hx phase) who tail = _
+  exact hazardRootQuitExpectation_eq_chart (hazard x phase)
+    (hazard_nonneg x hx phase) (hazard_le_one x hx phase) who tail
 
 /-- Joint survival in the public eliminated polynomial system. -/
 def rho (x : HazardIndex → ℝ) : ℝ :=

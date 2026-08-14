@@ -14,8 +14,8 @@ promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 | 4 | Ownership, Research, provenance, sync | Complete | Every shim/fork and sync decision has an owner and manifest |
 | 5 | Facades and dependency inversions | Complete | Architecture/certificate and Quitting/Diagnostics edges are layered |
 | 6 | Proof ratchets, product and variation APIs | Complete | Shared finite-weight identities replace selected duplication |
-| 7 | Finite-case grind pilots | In progress | Pilot proofs reduce brittle expansion without weakening claims |
-| 8 | Monolith decomposition | Queued | Long proof files split behind checked interfaces |
+| 7 | Finite-case grind pilots | Complete | Pilot proofs reduce brittle expansion without weakening claims |
+| 8 | Monolith decomposition | In progress | Long proof files split behind checked interfaces |
 | 9 | Imports, internal APIs, options | Queued | Narrow imports and scoped options pass build and trust gates |
 | 10 | Final audit | Pending prior phases | All audits, full build, and documentation checks are green |
 

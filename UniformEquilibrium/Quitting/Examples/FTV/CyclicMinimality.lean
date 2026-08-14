@@ -81,36 +81,46 @@ theorem three_phase_normalized_rigidity
     role = ![0, 1, 2] ∧
       quitProb = ![(1 / 2 : ℝ), 1 / 2, 1 / 2] ∧
       promise = ![![1, 2, 1], ![1, 1, 2], ![2, 1, 1]] := by
-  have hpair : role 0 = 0 ∧ role 1 = 1 := by
+  have hrole0_ne_one : role 0 ≠ 1 := by
+    intro h0
+    have h0active := (hactive 0).1
+    rw [hinitial, h0] at h0active
+    norm_num [namedTarget] at h0active
+  have hrole0 : role 0 = 0 := by
     have h0active := (hactive 0).1
     have h1active := (hactive 1).1
     have hstep0 := congrFun (hpromise 0) (role 1)
-    have hinj01 : role 0 ≠ role 1 := by
-      intro h
-      exact (show (0 : Fin 3) ≠ 1 by decide) (hrole.1 h)
     rw [hinitial] at h0active hstep0
     generalize h0 : role 0 = r0
+    fin_cases r0
+    · rfl
+    · exact (hrole0_ne_one h0).elim
+    · have h20 : role 1 ≠ 2 := by
+        intro h1
+        exact (show (0 : Fin 3) ≠ 1 by decide) (hrole.1 (h0.trans h1.symm))
+      generalize h1 : role 1 = r1
+      fin_cases r1
+      · simp [h0, h1, namedTarget, soloReward, nextThree] at h0active h1active hstep0
+        have hx := hquitProb 0
+        nlinarith
+      · simp [h0, h1, namedTarget, soloReward, nextThree] at h0active h1active hstep0
+        have hx := hquitProb 0
+        nlinarith
+      · exact (h20 h1).elim
+  have hrole1 : role 1 = 1 := by
+    have h10 : role 1 ≠ role 0 := by
+      intro h
+      exact (show (1 : Fin 3) ≠ 0 by decide) (hrole.1 h)
+    have hstep0 := congrFun (hpromise 0) (role 1)
+    have h1active := (hactive 1).1
+    rw [hinitial, hrole0] at hstep0
     generalize h1 : role 1 = r1
-    fin_cases r0 <;> fin_cases r1
-    · exact (hinj01 (h0.trans h1.symm)).elim
-    · simp [h0, h1, namedTarget, soloReward, nextThree] at h0active h1active hstep0
-      have hx := hquitProb 0
-      exact ⟨by simp, by simp⟩
-    · simp [h0, h1, namedTarget, soloReward, nextThree] at h0active h1active hstep0
+    fin_cases r1
+    · exact (h10 (h1.trans hrole0.symm)).elim
+    · rfl
+    · simp [h1, namedTarget, soloReward, nextThree] at h1active hstep0
       have hx := hquitProb 0
       nlinarith
-    · simp [h0, namedTarget] at h0active
-    · exact (hinj01 (h0.trans h1.symm)).elim
-    · simp [h0, namedTarget] at h0active
-    · simp [h0, h1, namedTarget, soloReward, nextThree] at h0active h1active hstep0
-      have hx := hquitProb 0
-      nlinarith
-    · simp [h0, h1, namedTarget, soloReward, nextThree] at h0active h1active hstep0
-      have hx := hquitProb 0
-      nlinarith
-    · exact (hinj01 (h0.trans h1.symm)).elim
-  have hrole0 : role 0 = 0 := hpair.1
-  have hrole1 : role 1 = 1 := hpair.2
   have hrole2 : role 2 = 2 := by
     have h20 : role 2 ≠ role 0 := by
       intro h
@@ -130,29 +140,27 @@ theorem three_phase_normalized_rigidity
     rw [hrole1] at hnextActive
     simp [namedTarget, soloReward, nextThree, hnextActive] at hstep0
     linarith
-  have hpromise1 : promise 1 = ![1, 1, 2] := by
-    have hstep0 := hpromise 0
-    rw [hinitial, hrole0, hprob0] at hstep0
+  have half_mix (u v w : Payoff Player)
+      (h : u = (1 / 2 : ℝ) • v + (1 - (1 / 2 : ℝ)) • w) :
+      w = 2 • u - v := by
     funext who
-    fin_cases who
-    · change promise 1 0 = 1
-      have h := congrFun hstep0 (0 : Player)
-      change (1 : ℝ) = (1 / 2 : ℝ) * 1 +
-        (1 - 1 / 2) * promise 1 0 at h
-      norm_num at h
-      linarith
-    · change promise 1 1 = 1
-      have h := congrFun hstep0 (1 : Player)
-      change (2 : ℝ) = (1 / 2 : ℝ) * 3 +
-        (1 - 1 / 2) * promise 1 1 at h
-      norm_num at h
-      linarith
-    · change promise 1 2 = 2
-      have h := congrFun hstep0 (2 : Player)
-      change (1 : ℝ) = (1 / 2 : ℝ) * 0 +
-        (1 - 1 / 2) * promise 1 2 at h
-      norm_num at h
-      linarith
+    have hcoord := congrFun h who
+    change u who = (1 / 2 : ℝ) * v who +
+      (1 - (1 / 2 : ℝ)) * w who at hcoord
+    simp only [Pi.smul_apply, Pi.sub_apply]
+    norm_num at hcoord ⊢
+    linarith
+  have hpromise1 : promise 1 = ![1, 1, 2] := by
+    have hstep0 :
+        promise 0 = (1 / 2 : ℝ) • soloReward 0 +
+          (1 - (1 / 2 : ℝ)) • promise 1 := by
+      simpa only [hinitial, hrole0, hprob0, nextThree_zero] using hpromise 0
+    calc
+      promise 1 = 2 • promise 0 - soloReward 0 := half_mix _ _ _ hstep0
+      _ = ![1, 1, 2] := by
+        rw [hinitial]
+        funext who
+        fin_cases who <;> norm_num [namedTarget, soloReward]
   have hprob1 : quitProb 1 = 1 / 2 := by
     have hstep1 := congrFun (hpromise 1) 2
     have hnextActive := (hactive 2).1
@@ -161,28 +169,15 @@ theorem three_phase_normalized_rigidity
     simp [soloReward, nextThree, hnextActive] at hstep1
     linarith
   have hpromise2 : promise 2 = ![2, 1, 1] := by
-    have hstep1 := hpromise 1
-    rw [hpromise1, hrole1, hprob1] at hstep1
-    funext who
-    fin_cases who
-    · change promise 2 0 = 2
-      have h := congrFun hstep1 (0 : Player)
-      change (1 : ℝ) = (1 / 2 : ℝ) * 0 +
-        (1 - 1 / 2) * promise 2 0 at h
-      norm_num at h
-      linarith
-    · change promise 2 1 = 1
-      have h := congrFun hstep1 (1 : Player)
-      change (1 : ℝ) = (1 / 2 : ℝ) * 1 +
-        (1 - 1 / 2) * promise 2 1 at h
-      norm_num at h
-      linarith
-    · change promise 2 2 = 1
-      have h := congrFun hstep1 (2 : Player)
-      change (2 : ℝ) = (1 / 2 : ℝ) * 3 +
-        (1 - 1 / 2) * promise 2 2 at h
-      norm_num at h
-      linarith
+    have hstep1 :
+        promise 1 = (1 / 2 : ℝ) • soloReward 1 +
+          (1 - (1 / 2 : ℝ)) • promise 2 := by
+      simpa only [hpromise1, hrole1, hprob1, nextThree_one] using hpromise 1
+    calc
+      promise 2 = 2 • promise 1 - soloReward 1 := half_mix _ _ _ hstep1
+      _ = ![2, 1, 1] := by
+        funext who
+        fin_cases who <;> norm_num [hpromise1, soloReward]
   have hprob2 : quitProb 2 = 1 / 2 := by
     have hstep2 := congrFun (hpromise 2) 1
     rw [hpromise2, hrole2, nextThree_two, hinitial] at hstep2

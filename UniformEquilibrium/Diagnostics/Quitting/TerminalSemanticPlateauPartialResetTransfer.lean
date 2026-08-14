@@ -423,7 +423,7 @@ theorem quittingCoalitionMass_update_affine
             Function.update (fun player => 1 - x player) who
               (1 - endpoint) := by
         funext player
-        by_cases hplayer : player = who <;> simp [hplayer]
+        grind only [Function.update]
       rw [hupdate, Finset.prod_update_of_mem hcomplement]
     rw [hformula newEndpoint, hformula oldEndpoint,
       show coalitionMass x coalition =
