@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Paths.SureExitSet
+import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
 
 /-!
@@ -288,62 +289,6 @@ theorem update_quittingStationaryProfile_congr_of_opponents
   · subst player; simp
   · simp [Function.update_of_ne hplayer, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile, hagree player hplayer]
-
-omit [DecidableEq ι] in
-/-- A product root with all-continue mass one has every marginal pure
-Continue. -/
-theorem eq_pure_false_of_quittingStationaryContinueMass_eq_one
-    {root : ι → PMF Bool}
-    (hmass : quittingStationaryContinueMass root = 1) (player : ι) :
-    root player = PMF.pure false := by
-  classical
-  have hprod : ∏ index : ι, (root index false).toReal = 1 := by
-    rw [← ENNReal.toReal_prod]
-    simpa [quittingStationaryContinueMass, quittingAllContinueAction]
-      using hmass
-  have hnonneg : ∀ index : ι, 0 ≤ (root index false).toReal :=
-    fun _ => ENNReal.toReal_nonneg
-  have hle : ∀ index : ι, (root index false).toReal ≤ 1 := by
-    intro index
-    rw [← ENNReal.toReal_one,
-      ENNReal.toReal_le_toReal (PMF.apply_ne_top _ _) (by simp)]
-    exact PMF.coe_le_one _ _
-  have hsplit : ∏ index : ι, (root index false).toReal =
-      (root player false).toReal *
-        ∏ index ∈ Finset.univ.erase player, (root index false).toReal :=
-    (Finset.mul_prod_erase Finset.univ _ (Finset.mem_univ player)).symm
-  have hrest : ∏ index ∈ Finset.univ.erase player,
-      (root index false).toReal ≤ 1 :=
-    Finset.prod_le_one (fun index _ => hnonneg index)
-      (fun index _ => hle index)
-  have hfalse : (root player false).toReal = 1 := by
-    nlinarith [hnonneg player, hle player,
-      Finset.prod_nonneg (fun index (_ : index ∈ Finset.univ.erase player) =>
-        hnonneg index)]
-  have htrue : (root player true).toReal = 0 := by
-    have hsum := Math.ProbabilityMassFunction.sum_coe_fintype (root player)
-    have hsumReal : (root player true).toReal + (root player false).toReal
-        = 1 := by
-      have hne : (root player true) + (root player false) ≠ ⊤ := by
-        rw [Fintype.sum_bool] at hsum
-        rw [hsum]
-        simp
-      rw [← ENNReal.toReal_add (PMF.apply_ne_top _ _) (PMF.apply_ne_top _ _)]
-      rw [Fintype.sum_bool] at hsum
-      rw [hsum]
-      simp
-    linarith
-  have htrueZero : root player true = 0 := by
-    rcases (ENNReal.toReal_eq_zero_iff (root player true)).mp htrue with
-      hzero | htop
-    · exact hzero
-    · exact absurd htop (PMF.apply_ne_top _ _)
-  have hfalseOne : root player false = 1 := by
-    have hsum := Math.ProbabilityMassFunction.sum_coe_fintype (root player)
-    rw [Fintype.sum_bool, htrueZero, zero_add] at hsum
-    exact hsum
-  ext action
-  cases action <;> simp [PMF.pure_apply, htrueZero, hfalseOne]
 
 /-- The opponents' one-stage continue mass is a probability. -/
 theorem quittingStationaryFixedOpponentsContinueMass_le_one

@@ -719,21 +719,23 @@ theorem standardQ_and_noHomogeneous_iff_cycleDeterminant_pos_of_forward
   simp [cycleGap, cycleDeterminant, directedCycleMatrix]
   ring_nf
 
-private def swapOneTwoFun (i : Player) : Player :=
+/-- The coordinate permutation fixing zero and exchanging one with two. -/
+def swapOneTwoFun (i : Player) : Player :=
   if i = 0 then 0 else if i = 1 then 2 else 1
 
-private def swapOneTwo : Player ≃ Player where
+/-- The equivalence fixing coordinate zero and exchanging coordinates one and two. -/
+def swapOneTwo : Player ≃ Player where
   toFun := swapOneTwoFun
   invFun := swapOneTwoFun
   left_inv := by intro i; fin_cases i <;> rfl
   right_inv := by intro i; fin_cases i <;> rfl
 
-@[simp] private theorem swapOneTwo_zero : swapOneTwo 0 = 0 := rfl
-@[simp] private theorem swapOneTwo_one : swapOneTwo 1 = 2 := rfl
-@[simp] private theorem swapOneTwo_two : swapOneTwo 2 = 1 := rfl
-@[simp] private theorem swapOneTwo_symm_zero : swapOneTwo.symm 0 = 0 := rfl
-@[simp] private theorem swapOneTwo_symm_one : swapOneTwo.symm 1 = 2 := rfl
-@[simp] private theorem swapOneTwo_symm_two : swapOneTwo.symm 2 = 1 := rfl
+@[simp] theorem swapOneTwo_zero : swapOneTwo 0 = 0 := rfl
+@[simp] theorem swapOneTwo_one : swapOneTwo 1 = 2 := rfl
+@[simp] theorem swapOneTwo_two : swapOneTwo 2 = 1 := rfl
+@[simp] theorem swapOneTwo_symm_zero : swapOneTwo.symm 0 = 0 := rfl
+@[simp] theorem swapOneTwo_symm_one : swapOneTwo.symm 1 = 2 := rfl
+@[simp] theorem swapOneTwo_symm_two : swapOneTwo.symm 2 = 1 := rfl
 
 private theorem standardQ_reindex_iff (M : Player → Player → ℝ) :
     IsStandardQMatrix (reindexMatrix swapOneTwo M) ↔
@@ -754,7 +756,9 @@ private theorem noHomogeneous_reindex_iff (M : Player → Player → ℝ) :
       ¬HasHomogeneousSimplexSolution M := by
   exact not_congr (singletonLCPFeasible_reindexMatrix_iff swapOneTwo M)
 
-private theorem forward_reindex_of_reverse
+/-- Exchanging coordinates one and two turns reverse cyclic orientation into
+forward cyclic orientation. -/
+theorem forward_reindex_of_reverse
     (M : Player → Player → ℝ) (h : ReverseOrientation M) :
     ForwardOrientation (reindexMatrix swapOneTwo M) := by
   rcases h with ⟨h01, h02, h10, h12, h20, h21⟩

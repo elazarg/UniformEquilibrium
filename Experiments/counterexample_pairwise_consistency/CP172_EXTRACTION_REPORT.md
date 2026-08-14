@@ -30,9 +30,21 @@ In the refusal branch, support pinning and a positive refusal defect make
 funding strict.  The remaining missing packet clause is then the punishment
 floor (or the provenance needed to apply it).
 
-The compiled probes are in `CP172ExtractedClaims.lean`.  They reuse the
-production Bellman, pure-time extremality, Never-cap coupling, survival, and
-remaining-charge APIs.
+No CP172-specific Lean probes remain.  The extracted claims point directly to
+their maintained owners:
+
+- suffix best-response: `UniformEquilibrium.Quitting.Terminal.TailCompression.SummableTailBestResponse`;
+- collision concentration: `MathUE.Probability.WeightedCollisionConcentration`
+  and `UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration`;
+- annotation convergence and support pinning:
+  `UniformEquilibrium.Quitting.Cycles.PhantomBoundaryLimitGeometry`; and
+- phase/refusal packet algebra:
+  `UniformEquilibrium.Quitting.Classification.SingletonPacketDefectAlgebra`.
+
+The former Research extraction file was a duplicate of the packet-algebra
+owner and is not retained as a compatibility API.  All of these results reuse
+the production Bellman, pure-time extremality, Never-cap coupling, survival,
+and remaining-charge APIs.
 
 ## 1. Quantitative suffix best response
 
@@ -50,8 +62,9 @@ positive and the literal all-behavior best-response value satisfies
 |BR_i - K_i| <= 2 M R.
 ```
 
-This is machine-checked as
-`abs_suffixBestResponse_sub_maxSolo_le_totalCharge_of_lt_one`.
+This is machine-checked by the canonical theorem
+`abs_quittingRootSequenceBestResponseValue_sub_maxSolo_le_totalCharge_of_lt_one`
+in `UniformEquilibrium.Quitting.Terminal.TailCompression.SummableTailBestResponse`.
 
 The proof does not re-prove behavioral extremality.  Production already says
 that arbitrary behavior has the same supremum as deterministic quit times
@@ -61,7 +74,7 @@ plus Never, and that the entire best-response envelope is within
 2 M * (1 - deleted-player survival limit)
 ```
 
-of the all-Continue cap.  The experiment proves the additional explicit
+of the all-Continue cap.  The canonical owner also proves the explicit
 bridge
 
 ```text
@@ -106,8 +119,10 @@ coordinatewise limit `z`.  Moreover, for every player and start time,
   <= 2 M * sum_offset q(roots_(start+offset)).
 ```
 
-This is `exists_annotationBoundary_of_summable_absorption`.  It packages the
-production one-step and remaining-charge estimates; no Nash assumption is
+This is
+`exists_quittingAnnotationBoundary_of_summableAbsorption` in
+`UniformEquilibrium.Quitting.Cycles.PhantomBoundaryLimitGeometry`.  It packages
+the production one-step and remaining-charge estimates; no Nash assumption is
 needed for convergence itself.
 
 Exact one-stage Nash adds the solo floor:
@@ -116,10 +131,10 @@ Exact one-stage Nash adds the solo floor:
 r_i({i}) <= z_i.
 ```
 
-This is `singletonReward_le_annotationBoundary`.  At each date, the pure-Quit
-endpoint is within `2 M` times opponent absorption of `r_i({i})`, exact Nash
-keeps that endpoint below the prescribed value, and opponent absorption is
-bounded by the summable joint absorption clock.
+This is `quittingSingletonReward_le_annotationBoundary`.  At each date, the
+pure-Quit endpoint is within `2 M` times opponent absorption of `r_i({i})`,
+exact Nash keeps that endpoint below the prescribed value, and opponent
+absorption is bounded by the summable joint absorption clock.
 
 If player `i` has positive own-Quit probability along a cofinal subsequence,
 then
@@ -128,11 +143,11 @@ then
 z_i = r_i({i}).
 ```
 
-The experiment proves this directly in
-`annotationBoundary_eq_singleton_of_active_subsequence`.  It also proves the
-abstract occupation form
-`annotationBoundary_eq_singleton_of_positive_occupation`: a positive limiting
-occupation coordinate pins the player whenever every positive late
+The canonical owner proves this directly in
+`quittingAnnotationBoundary_eq_singleton_of_activeSubsequence`.  It also
+proves the abstract occupation form
+`quittingAnnotationBoundary_eq_singleton_of_positiveOccupation`: a positive
+limiting occupation coordinate pins the player whenever every positive late
 occupation supplies a positive-hazard date beyond the same cutoff.
 
 Thus any normalized occupation limit with the elementary
@@ -208,8 +223,10 @@ eta <= 2 M lambda_i.
 
 So a fixed positive refusal margin forces a nonvanishing owner share.
 
-The compiled theorem
-`phase_underfunded_or_refusal_floor_missing` makes the logical remainder
+The canonical theorem
+`phaseUnderfunded_or_refusalFloorMissing` in
+`UniformEquilibrium.Quitting.Classification.SingletonPacketDefectAlgebra`
+makes the logical remainder
 precise.  Assuming the funded and floor clauses do not both hold:
 
 ```text
@@ -250,10 +267,11 @@ collision_t
 because each marginal Quit event is contained in the absorption event and
 there are `choose(n,2)` unordered pairs.
 
-This stagewise pair-union statement is mathematically elementary but is **not
-yet formalized in this experiment**.  It should eventually be proved against
-the production `quittingRootCoalitionMass` API rather than by introducing a
-second product-law model.
+This stagewise pair-union statement is maintained by
+`MathUE.Probability.WeightedCollisionConcentration` and its quitting-window
+consumer `UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration`.
+It is stated against the production coalition-mass API rather than a second
+product-law model.
 
 The finite-window propagation is compiled.  For arbitrary nonnegative
 survival weights, if
@@ -263,7 +281,8 @@ collision_t <= C * alpha_t^2,
 alpha_t <= rho,
 ```
 
-then `finite_collision_concentration_or_zero` proves exactly one of:
+then `Math.Probability.finiteWeightedCollisionConcentration_or_zero` proves
+exactly one of:
 
 ```text
 A = 0 and collisionMass = 0,
@@ -289,9 +308,9 @@ that a pass has positive absorption probability; then repeated passes absorb
 almost surely.  If `choose(n,2) * rho < 1`, singleton mass is positive and its
 normalized owner occupation is defined.
 
-The compiled algebra theorem
-`abs_conditionalPayoff_sub_singletonMixture_le` then gives the explicit payoff
-estimate
+The canonical MathUE algebra theorem
+`Math.Probability.abs_conditionalPayoff_sub_singletonMixture_le` then gives the
+explicit payoff estimate
 
 ```text
 |periodic delivery_i - m_i(lambda)|
@@ -371,4 +390,6 @@ Recommended after review:
    The zero-denominator disjunction and the `2 M C/A` payoff lemma are already
    reusable exact statements.
 
-No production file or central document was changed by this extraction.
+The extraction report remains an experiment record; its Lean claims are owned
+by the canonical modules listed above, and no CP172-specific Lean probe is
+retained.

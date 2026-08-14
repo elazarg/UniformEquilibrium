@@ -334,13 +334,7 @@ theorem not_positiveDebtFloor_of_never_prefixInvariant_debtSaturated_finite
 
 /-- The rational symmetric root whose Continue probability is `1 / N`. -/
 def rationalSymmetricRoot (N : ℕ) (hN : 0 < N) : Fin 4 → PMF Bool :=
-  fun _ => booleanCoin (1 - 1 / (N : ℝ)) (by
-    have hNreal : 1 ≤ (N : ℝ) := by exact_mod_cast hN
-    have hNpos : 0 < (N : ℝ) := by exact_mod_cast hN
-    have honeDiv : 1 / (N : ℝ) ≤ 1 := (div_le_one hNpos).2 hNreal
-    linarith) (by
-      have honeDiv : 0 ≤ 1 / (N : ℝ) := by positivity
-      linarith)
+  rationalSymmetricRootOn N hN
 
 @[simp] theorem rationalSymmetricRoot_continue
     (N : ℕ) (hN : 0 < N) (who : Fin 4) :

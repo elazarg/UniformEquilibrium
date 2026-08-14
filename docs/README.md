@@ -21,7 +21,9 @@ the present interfaces and rules.
    completed engineering review, proof-quality policy, and measured baseline.
 8. [ENGINEERING_ROADMAP.md](ENGINEERING_ROADMAP.md) — preparatory engineering
    phases and acceptance gates.
-9. [references/README.md](references/README.md) — the external literature of
+9. [GAMETHEORY2_MIGRATION_PLAN.md](GAMETHEORY2_MIGRATION_PLAN.md) — the
+   deferred successor-dependency census, semantic waist, and cutover gates.
+10. [references/README.md](references/README.md) — the external literature of
    record.
 
 Integrated Lean is the source of exact theorem truth. The status page is a

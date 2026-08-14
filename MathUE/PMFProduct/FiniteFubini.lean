@@ -86,4 +86,18 @@ theorem expect_pmfPi_fin4 {A : Type*} [Fintype A]
   simp_rw [expect_pmfPi_fin_succ]
   simp [expect_pmfPi_fin_zero, hvec]
 
+/-- A four-coordinate Boolean vector has a true coordinate exactly when its
+    true-coordinate finset is nonempty. -/
+@[simp] theorem fin4_bool_true_finset_nonempty (a b c d : Bool) :
+    ({who | ![a, b, c, d] who = true} : Finset (Fin 4)).Nonempty ↔
+      a = true ∨ b = true ∨ c = true ∨ d = true := by
+  constructor
+  · rintro ⟨who, hwho⟩
+    fin_cases who <;> simp_all
+  · rintro (ha | hb | hc | hd)
+    · exact ⟨0, by simp [ha]⟩
+    · exact ⟨1, by simp [hb]⟩
+    · exact ⟨2, by simp [hc]⟩
+    · exact ⟨3, by simp [hd]⟩
+
 end Math.PMFProduct

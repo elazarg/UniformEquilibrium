@@ -25,33 +25,6 @@ open Math.LinearProgramming
 
 abbrev Player := Fin 3
 
-private def swapOneTwoFun (i : Player) : Player :=
-  if i = 0 then 0 else if i = 1 then 2 else 1
-
-private def swapOneTwo : Player ≃ Player where
-  toFun := swapOneTwoFun
-  invFun := swapOneTwoFun
-  left_inv := by intro i; fin_cases i <;> rfl
-  right_inv := by intro i; fin_cases i <;> rfl
-
-@[simp] private theorem swapOneTwo_zero : swapOneTwo 0 = 0 := rfl
-@[simp] private theorem swapOneTwo_one : swapOneTwo 1 = 2 := rfl
-@[simp] private theorem swapOneTwo_two : swapOneTwo 2 = 1 := rfl
-@[simp] private theorem swapOneTwo_symm_zero : swapOneTwo.symm 0 = 0 := rfl
-@[simp] private theorem swapOneTwo_symm_one : swapOneTwo.symm 1 = 2 := rfl
-@[simp] private theorem swapOneTwo_symm_two : swapOneTwo.symm 2 = 1 := rfl
-
-private theorem forward_reindex_of_reverse
-    (M : Player → Player → ℝ) (h : ReverseOrientation M) :
-    ForwardOrientation (reindexMatrix swapOneTwo M) := by
-  rcases h with ⟨h01, h02, h10, h12, h20, h21⟩
-  exact ⟨by simpa [reindexMatrix] using h02,
-    by simpa [reindexMatrix] using h01,
-    by simpa [reindexMatrix] using h20,
-    by simpa [reindexMatrix] using h21,
-    by simpa [reindexMatrix] using h10,
-    by simpa [reindexMatrix] using h12⟩
-
 private theorem eq_directedCycleMatrix_of_forward
     (M : Player → Player → ℝ) (hdiag : ∀ i, M i i = 0) :
     M = directedCycleMatrix (-M 0 1) (M 0 2) (M 1 0)

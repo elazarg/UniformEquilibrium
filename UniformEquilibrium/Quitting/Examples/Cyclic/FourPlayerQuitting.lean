@@ -241,19 +241,6 @@ def quitCoin (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) : PMF Bool :=
   simp
   ring
 
-/-- Fubini expansion of a product of four Boolean mixed actions. -/
-@[simp] theorem vector4_quitters_nonempty (a b c d : Bool) :
-    ({who | ![a, b, c, d] who = true} : Finset Player).Nonempty ↔
-      a = true ∨ b = true ∨ c = true ∨ d = true := by
-  constructor
-  · rintro ⟨who, hwho⟩
-    fin_cases who <;> simp_all
-  · rintro (ha | hb | hc | hd)
-    · exact ⟨0, by simp [ha]⟩
-    · exact ⟨1, by simp [hb]⟩
-    · exact ⟨2, by simp [hc]⟩
-    · exact ⟨3, by simp [hd]⟩
-
 /-- The symmetric product action at the selected algebraic parameter. -/
 def stationaryRoot : Player → PMF Bool :=
   fun _ => quitCoin stationaryParameter stationaryParameter_pos.le

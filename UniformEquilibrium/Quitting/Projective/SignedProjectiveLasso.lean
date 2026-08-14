@@ -121,27 +121,11 @@ theorem toFiniteSupportRationalCycle
     (lasso : QuittingFiniteSignedProjectiveLasso reward K error) :
     IsQuittingFiniteSupportRationalCycle reward lasso.cycle
       (exactValue lasso) (2 * error) (2 * error) := by
-  refine ⟨?_, ?_, ?_⟩
-  · intro phase
-    exact quittingCyclicTerminalValue_eq_rootSuccessorPayoff
-      reward lasso.cycle phase
-  · intro phase
-    have htransfer := isQuittingRootSupportApproxNash_of_tail_close
-      reward (lasso.cycle phase)
-        (lasso.value (finRotate K phase))
-        (exactValue lasso (finRotate K phase))
-        (δ := error) (η := error)
-        (lasso.support phase) (fun who => ?_)
-    · simpa [two_mul] using htransfer
-    · simpa [exactValue, abs_sub_comm] using
-        abs_value_sub_exactValue_le lasso (finRotate K phase) who
-  · intro target phase
-    have hir := lasso.rational target phase
-    have hclose := abs_value_sub_exactValue_le lasso phase target
-    rw [abs_le] at hclose
-    have hupper := hclose.2
-    dsimp only [exactValue] at hupper ⊢
-    linarith
+  exact toFiniteSupportRationalCycle_of_value_close
+    reward lasso.cycle lasso.value (exactValue lasso) error
+    lasso.support lasso.rational
+    (fun phase who => abs_value_sub_exactValue_le lasso phase who)
+    (fun _ => rfl)
 
 /-- A signed projective lasso produces the divergent support-rational path
 consumed by the support-witness compiler. -/

@@ -102,6 +102,19 @@ theorem quittingPhaseSwitchRoots_comp_add
       punish :=
   funext fun offset => quittingPhaseSwitchRoots_add plan punish switch offset
 
+omit [Fintype ι] [DecidableEq ι] in
+theorem quittingPhaseSwitchRoots_allContinue_eq_of_allContinue_from
+    (roots : ℕ → ι → PMF Bool) (cutoff : ℕ)
+    (htail : ∀ time, cutoff ≤ time →
+      roots time = (quittingAllContinueRoot : ι → PMF Bool)) :
+    quittingPhaseSwitchRoots roots (fun _ => quittingAllContinueRoot) cutoff =
+      roots := by
+  funext time
+  by_cases htime : time < cutoff
+  · rw [quittingPhaseSwitchRoots_of_lt roots _ htime]
+  · rw [quittingPhaseSwitchRoots_of_le roots _ (Nat.not_lt.mp htime),
+      htail time (Nat.not_lt.mp htime)]
+
 /-- A root sequence frozen to all-Continue from a cutoff on: the *truncated*
 plan, whose whole payoff is generated strictly before the cutoff. -/
 def quittingTruncatedRoots (roots : ℕ → ι → PMF Bool) (cutoff : ℕ) :

@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Boundary.Analytic.Germ
 import MathUE.ProjectiveBellmanPacket
+import MathUE.Topology.FiniteLimitDecomposition
 
 /-!
 # Matching-order analytic first-event masses
@@ -219,19 +220,10 @@ theorem excludedContinueProduct_tendsto_one
     Tendsto
       (fun t : ℝ => ∏ other ∈ Finset.univ.erase owner,
         (1 - quittingGermQuitRate g other t))
-      (𝓝[>] (0 : ℝ)) (𝓝 1) := by
-  have hone : Tendsto (fun _ : ℝ => (1 : ℝ))
-      (𝓝[>] (0 : ℝ)) (𝓝 1) := tendsto_const_nhds
-  have hprod :
-      Tendsto
-        (fun t : ℝ => ∏ other ∈ Finset.univ.erase owner,
-          (1 - quittingGermQuitRate g other t))
-        (𝓝[>] (0 : ℝ))
-        (𝓝 (∏ _other ∈ Finset.univ.erase owner, (1 : ℝ))) :=
-    tendsto_finsetProd (Finset.univ.erase owner)
-      (fun other _ => by
-        simpa using hone.sub (data.quitRate_tendsto_zero other))
-  simpa using hprod
+      (𝓝[>] (0 : ℝ)) (𝓝 1) :=
+  Math.excludedProduct_tendsto_one_of_tendsto_zero
+    (fun other => quittingGermQuitRate g other)
+    (fun other => data.quitRate_tendsto_zero other) owner
 
 /-- A singleton quitting event has leading coefficient `a_owner`. -/
 theorem singletonProbability_div_discount_tendsto

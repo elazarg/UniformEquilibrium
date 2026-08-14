@@ -1214,25 +1214,10 @@ noncomputable def accountMemoryController
     (hvalueLower : ∀ lam s, 0 ≤ v lam s)
     (hvalueUpper : ∀ lam s, v lam s ≤ 1)
     (hε0 : 0 ≤ ε) (hε2 : ε ≤ 2) :
-    G.MemoryController who where
-  Mem t := Fin (t + 1)
-  finiteMem _ := inferInstance
-  initial := PMF.pure 0
-  select _ h k :=
-    x (discountRate (accountAtLevel γ M k)) h.2
-  update _ h a s' k :=
-    let s := accountAtLevel γ M k
-    let lam := discountRate s
-    let y := G.stagePayoff h.2 a who - v lam s' + ε / 2
-    (updatePMF γ M s y
-      (isValidScale_accountAtLevel hfloorScale k)
-      (by
-        dsimp [y]
-        nlinarith [hpayLower h.2 a, hvalueUpper lam s'])
-      (by
-        dsimp [y]
-        nlinarith [hpayUpper h.2 a, hvalueLower lam s']))
-      |>.map (nextAccountLevel k)
+    G.MemoryController who :=
+  accountMemoryControllerOnUnitInterval 0 γ M ε x v hfloorScale
+    (by simpa using hpayLower) (by simpa using hpayUpper)
+    (by simpa using hvalueLower) (by simpa using hvalueUpper) hε0 hε2
 
 /-- Every possible next account lies in the multiplicative interval
 `[γ⁻¹s, γs]`. -/

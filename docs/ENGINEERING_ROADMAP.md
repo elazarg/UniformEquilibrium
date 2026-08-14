@@ -17,7 +17,7 @@ promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 | 7 | Finite-case grind pilots | Complete | Pilot proofs reduce brittle expansion without weakening claims |
 | 8 | Monolith decomposition | Complete | Long proof files split behind checked interfaces |
 | 9 | Imports, internal APIs, options | Complete | Narrow imports and scoped options pass build and trust gates |
-| 10 | Final audit | Pending prior phases | All audits, full build, and documentation checks are green |
+| 10 | Final audit | Complete | Current generated audit, full build, and repository gates pass |
 
 ## Phase gates
 
@@ -103,11 +103,14 @@ project-owned global weakening.
 
 ### 10. Final audit
 
-Run the complete documentation gate, trust tests and scan, import-graph
-inventory, generated axiom audit, and full `lake build`. Recheck every
-Research/sync/provenance exception and record measurable build output. The
-phase closes only with no unexplained orphan or boundary violation and with
-the review documents refreshed.
+The scoped-option build completed all 10,160 jobs before the ownership cleanup.
+After that cleanup, the current generated audit and normal-root build completed
+all 10,147 jobs. `AxiomAudit` checked 43,241 project declarations and reported
+only the permitted `propext`, `Quot.sound`, and `Classical.choice` library
+axioms. The exact cross-lane duplicate ratchet, trust scan, import graph,
+documentation checks, unit suite, generated-data checker, and build-artifact
+check form the closing gate. No unexplained production orphan, lane-boundary
+violation, or exact Research-to-production proof-body fork remains.
 
 ## Deferred dependency decision
 

@@ -73,6 +73,7 @@ import MathUE.FiniteDeflationIteration
 import MathUE.FiniteInequalityCompatibility
 import MathUE.FiniteLinearCompatibility
 import MathUE.FinitePivotOrbit
+import MathUE.Finset.FinThree
 import MathUE.GuardedRoutingAudit
 import MathUE.GradedConvolution
 import MathUE.Interval.CachedDyadicDual
@@ -212,6 +213,7 @@ import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.CompactFinitePrefixRelation
 import MathUE.Topology.CompactSerialRelation
+import MathUE.Topology.FiniteLimitDecomposition
 import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.UnivariatePolynomialCurveSelection

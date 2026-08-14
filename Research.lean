@@ -1,5 +1,3 @@
-import Research.Counterexamples.Pairwise.CP172ExtractedClaims
-import Research.Counterexamples.Pairwise.CoalitionLocksAxiomAudit
 import Research.Counterexamples.Pairwise.PWPacketWindowConsistency
 import Research.Counterexamples.Pairwise.TPWCyclicFourTripleWitness
 import Research.Counterexamples.Pairwise.TailPacketCyclicFourWitness
@@ -55,7 +53,6 @@ import Research.Quitting.AtomEndpointReturnSeparation
 import Research.Quitting.BestEndpointForcedOwnerRectanglePassport
 import Research.Quitting.BlockPair.K11
 import Research.Quitting.CancellationSafeAggregationCounterexample
-import Research.Quitting.CancellationSafeAggregationStationaryRegression
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
 import Research.Quitting.CausalQuitConvexHull
@@ -103,7 +100,6 @@ import Research.Quitting.FourByFourQFiniteSupportReduction
 import Research.Quitting.FourPlayerBlockerCirculation
 import Research.Quitting.FourPlayerCyclicPlateauCandidate
 import Research.Quitting.FullCoreDuplicatedCyclicLasso
-import Research.Quitting.FullRateStationaryVerifier
 import Research.Quitting.HandshakeClub
 import Research.Quitting.HolonomyEquivalenceCompression
 import Research.Quitting.KActiveCompactPath
@@ -140,7 +136,6 @@ import Research.Quitting.Q182EndpointRecipientAtomInterfaceNoGo
 import Research.Quitting.RectangleEndpointFixedLawAtomReturn
 import Research.Quitting.ReinsertionPenaltyBound
 import Research.Quitting.RetainedRoleClockArithmetic
-import Research.Quitting.SharedPunishmentCycle
 import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
@@ -161,12 +156,10 @@ import Research.Quitting.TerminalAtomPolarityDuality
 import Research.Quitting.TerminalLawTwoOutcomePassport
 import Research.Quitting.TerminalSemanticAuxiliaryNashHandoff
 import Research.Quitting.TerminalSemanticCapRegretDecomposition
-import Research.Quitting.TerminalSemanticConcentratedSingletonStrategicDispatchAxiomAudit
 import Research.Quitting.TerminalSemanticCoordinatewiseBoxBarrierNoGo
 import Research.Quitting.TerminalSemanticDebtSaturatedBarrierNoGo
 import Research.Quitting.TerminalSemanticGlobalDebtBarrierCertificate
 import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertion
-import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertionAxiomAudit
 import Research.Quitting.TwoResetFourRoleAdapter
 import Research.Quitting.UniqueAllContinueCapStackNoGo
 import Research.Semantics.SemanticFinalRegimeArithmetic

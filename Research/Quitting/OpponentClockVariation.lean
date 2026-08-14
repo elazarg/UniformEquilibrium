@@ -3,13 +3,10 @@ import UniformEquilibrium.Quitting.Debt.Marked.TimeAdvance
 /-!
 # Opponent-clock variation kernels
 
-The marked successor-escape estimate contains an unconditional one-step
-variation bound: choose its threshold to be the negative of the current
-coordinate and its escape budget to be the actual forward increment.
-
-The second theorem is the scalar telescope consumed by an infinite version:
-bounded values and a summable upper clock make the whole value path have
-finite total variation.
+The canonical marked successor-escape estimate already supplies the
+unconditional one-step bound.  This Research residual keeps the genuinely
+distinct scalar telescope consumed by an infinite version: bounded values and
+a summable upper clock make the whole value path have finite total variation.
 -/
 
 
@@ -19,22 +16,7 @@ namespace GameTheory
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-theorem quittingSuccessor_sub_current_le_two_mul_opponentAbsorptionMass
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (current successor : Payoff ι) (root : ι → PMF Bool)
-    (who : ι) (M : ℝ)
-    (hreward : ∀ S player, |reward S player| ≤ M)
-    (hsuccessorBound : |successor who| ≤ M)
-    (hbellman : current =
-      quittingRootSuccessorPayoff reward successor root)
-    (hnash : IsεQuittingRootNash reward successor 0 root) :
-    successor who - current who ≤
-      2 * M * quittingRootOpponentAbsorptionMass root who := by
-  apply successorEscape_le_two_mul_opponentAbsorptionMass
-    reward current successor root who M (-current who)
-      (successor who - current who) hreward hsuccessorBound hbellman hnash
-  · linarith
-  · linarith
+/-! ## The Research-specific finite telescope -/
 
 theorem sum_abs_forwardDifference_le_clock
     (value charge : ℕ → ℝ) (M C : ℝ)

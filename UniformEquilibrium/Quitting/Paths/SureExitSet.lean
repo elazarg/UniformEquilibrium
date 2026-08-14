@@ -380,6 +380,22 @@ def IsQuittingSureExitSet
         quittingSetReward reward S outsider
 
 omit [Fintype ι] in
+/-- A strict profitable membership toggle rules out the sure-exit property. -/
+theorem not_isQuittingSureExitSet_of_strict_toggle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {S : Finset ι}
+    (h : (∃ member ∈ S,
+        quittingSetReward reward S member <
+          quittingSetReward reward (S.erase member) member) ∨
+      (∃ outsider ∉ S,
+        quittingSetReward reward S outsider <
+          quittingSetReward reward (insert outsider S) outsider)) :
+    ¬ IsQuittingSureExitSet reward S := by
+  rintro ⟨hmember, houtsider⟩
+  rcases h with ⟨member, hmem, hgain⟩ | ⟨outsider, hout, hgain⟩
+  · exact (not_le_of_gt hgain) (hmember member hmem)
+  · exact (not_le_of_gt hgain) (houtsider outsider hout)
+
+omit [Fintype ι] in
 /-- The membership split is only bookkeeping: at each player one of the two
 toggles is the identity, so the sure-exit conditions are exactly the uniform
 toggle test. -/

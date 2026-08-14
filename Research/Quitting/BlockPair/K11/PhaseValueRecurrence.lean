@@ -1,6 +1,6 @@
-import Research.Quitting.BlockPair.K11.CyclicNumeratorEvaluation
 import Research.Quitting.BlockPair.K11.ImmediateSemantic
 import Research.Quitting.BlockPair.K11.ContinueMassPhase
+import UniformEquilibrium.Quitting.Examples.BlockPair.K11System
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 
 noncomputable section
@@ -27,7 +27,9 @@ theorem phaseValue_eq_quittingRootSuccessorPayoff
       1 - RationalPolynomial.evalReal x jointCycleSurvival ≠ 0 := by
     unfold rho at hrho
     linarith
-  have hrecurrence := evalReal_cyclicValueNumerator_recurrence x phase who
+  have hrecurrence :=
+    _root_.GameTheory.BlockPairK11.evalReal_cyclicValueNumerator_recurrence
+      x phase who
   field_simp
   linear_combination hrecurrence
 

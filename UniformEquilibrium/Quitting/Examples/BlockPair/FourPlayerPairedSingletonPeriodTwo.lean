@@ -414,19 +414,6 @@ theorem oddValue_ne_evenValue : oddValue ≠ evenValue := by
     simpa using hmul
   exact (ne_of_lt periodTwoSecondary_lt_one) hsecondary
 
-/-- Fubini expansion of a product of four Boolean mixed actions. -/
-@[simp] theorem vector4_quitters_nonempty (a b c d : Bool) :
-    ({who | ![a, b, c, d] who = true} : Finset Player).Nonempty ↔
-      a = true ∨ b = true ∨ c = true ∨ d = true := by
-  constructor
-  · rintro ⟨who, hwho⟩
-    fin_cases who <;> simp_all
-  · rintro (ha | hb | hc | hd)
-    · exact ⟨0, by simp [ha]⟩
-    · exact ⟨1, by simp [hb]⟩
-    · exact ⟨2, by simp [hc]⟩
-    · exact ⟨3, by simp [hd]⟩
-
 /-- One-stage value recursion at the odd phase. -/
 theorem oddRoot_successor :
     quittingRootSuccessorPayoff periodTwoReward evenValue oddRoot = oddValue := by

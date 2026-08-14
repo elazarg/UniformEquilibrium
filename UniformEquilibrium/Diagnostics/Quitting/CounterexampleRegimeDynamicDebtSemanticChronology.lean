@@ -10,6 +10,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtCapCarrier
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtChains
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
+import UniformEquilibrium.Quitting.Cycles.PhaseSwitchProfile
 
 /-!
 # Semantic chronology of the counterexample exact-D tail
@@ -130,21 +131,6 @@ theorem quittingDynamicDebtEdge_semanticPrefixChronology
     quittingDynamicDebtEdge_exactNash reward current successor hedge,
     fun who => by simpa using hsuccessorDebt who⟩
 
-/-! ## Finite all-Continue completions -/
-
-omit [Fintype ι] [DecidableEq ι] in
-theorem quittingPhaseSwitchRoots_allContinue_eq_of_allContinue_from_semantic
-    (roots : ℕ → ι → PMF Bool) (cutoff : ℕ)
-    (htail : ∀ time, cutoff ≤ time →
-      roots time = (quittingAllContinueRoot : ι → PMF Bool)) :
-    quittingPhaseSwitchRoots roots (fun _ => quittingAllContinueRoot) cutoff =
-      roots := by
-  funext time
-  by_cases htime : time < cutoff
-  · rw [quittingPhaseSwitchRoots_of_lt roots _ htime]
-  · rw [quittingPhaseSwitchRoots_of_le roots _ (Nat.not_lt.mp htime),
-      htail time (Nat.not_lt.mp htime)]
-
 /-- Time-translated semantic identification of the finite dynamic debt of a
 zero-boundary exact policy completed by all-Continue. -/
 theorem quittingFiniteDynamicDebt_eq_terminalSemanticDebt_suffix_completion
@@ -174,7 +160,7 @@ theorem quittingFiniteDynamicDebt_eq_terminalSemanticDebt_suffix_completion
     exact htail (start + time) (Nat.add_le_add_left htime start)
   have hphaseRoots :
       quittingPhaseSwitchRoots shiftedRoots never fuel = shiftedRoots := by
-    exact quittingPhaseSwitchRoots_allContinue_eq_of_allContinue_from_semantic
+    exact quittingPhaseSwitchRoots_allContinue_eq_of_allContinue_from
       shiftedRoots fuel hshiftTail
   have hphaseProfile :
       quittingPhaseSwitchProfile reward shiftedRoots never fuel =

@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDebtTransfer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumAggregateSurplusConsumer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNegativeVertexGerm
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceCapReturn
 
 /-!
 # Four-role local obstruction reduction
@@ -196,30 +197,6 @@ theorem exists_strictCoalitionToggle
   · exact ⟨⟨member, Or.inl ⟨hmem, hgain⟩⟩⟩
   · exact ⟨⟨outsider, Or.inr ⟨hout, hgain⟩⟩⟩
 
-/-- A positive opponent-incidence coordinate contains a concrete
-positive-mass terminal atom carrying that opponent label. -/
-theorem exists_positiveMass_terminal_of_incidence_pos
-    (owner quitter : ι) (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
-    (hincidence : 0 <
-      quittingTerminalOpponentIncidenceMass owner quitter mass) :
-    ∃ terminal : {S : Finset ι // S.Nonempty},
-      quitter ∈ terminal.val ∧ quitter ≠ owner ∧
-        0 < mass (some terminal) := by
-  let terminals := Finset.univ.filter
-    (fun terminal : {S : Finset ι // S.Nonempty} =>
-      quitter ∈ terminal.val ∧ quitter ≠ owner)
-  have hnonneg : ∀ terminal ∈ terminals, 0 ≤ mass (some terminal) := by
-    intro terminal _
-    exact hmass.1 (some terminal)
-  have hsum : 0 < ∑ terminal ∈ terminals, mass (some terminal) := by
-    simpa only [terminals, quittingTerminalOpponentIncidenceMass] using
-      hincidence
-  obtain ⟨terminal, hterminal, hpositive⟩ :=
-    (Finset.sum_pos_iff_of_nonneg hnonneg).mp hsum
-  have hfilter := (Finset.mem_filter.mp hterminal).2
-  exact ⟨terminal, hfilter.1, hfilter.2, hpositive⟩
-
 /-- The quantitative average-share conclusion is genuinely positive whenever
 the source debt is positive and the receiver is an opponent. -/
 theorem debtChange_pos_of_average_le
@@ -277,7 +254,7 @@ theorem exists_matched_transfer_incidence_or_separatedToggle
     obtain ⟨receiver, quitter, hreceiverNe, hquitterNe, hdistinct,
       haverage, hincidencePos, _hthree⟩ := hseparated
     obtain ⟨terminal, hquitterMem, _hquitterNe', hterminalMass⟩ :=
-      exists_positiveMass_terminal_of_incidence_pos
+      _root_.GameTheory.exists_positiveMass_terminal_of_opponentIncidence
         owner quitter mass hmass hincidencePos
     let toggle := Classical.choice
       (exists_strictCoalitionToggle regime terminal)
@@ -540,7 +517,7 @@ theorem exists_sameLawResetCluster_localFourRoleBranch
     · obtain ⟨receiver, quitter, hreceiverNe, hquitterNe, hdistinct,
           haverage, hincidencePos, _hthree⟩ := hseparated
       obtain ⟨terminal, hquitterMem, _hquitterNe', hterminalMass⟩ :=
-        exists_positiveMass_terminal_of_incidence_pos
+      _root_.GameTheory.exists_positiveMass_terminal_of_opponentIncidence
           owner quitter mass hmass hincidencePos
       let toggle := Classical.choice
         (exists_strictCoalitionToggle regime terminal)

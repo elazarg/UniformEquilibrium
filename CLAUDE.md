@@ -137,13 +137,15 @@ For a Lean change, use the narrowest relevant checks while iterating:
   substitute for Lean compilation; it also checks the warning policy and that
   the generated exhaustive axiom audit is current;
 - `python scripts/generate_axiom_audit.py` regenerates `AxiomAudit.lean` after
-  adding, moving, or removing project-owned Lean modules; and
-- `python scripts/check_docs.py` checks generated status, source references,
-  frontier evidence paths, and local documentation links.
+  adding, moving, or removing project-owned Lean modules;
 - `python scripts/check_import_graph.py` checks static import reachability for
   the declared Lean umbrellas and reports production-lane boundary violations;
   `python -m unittest scripts/test_check_import_graph.py` runs its regression
-  tests.
+  tests;
+- `python scripts/check_proof_duplicates.py` rejects long exact Research copies
+  of canonical `MathUE` or `UniformEquilibrium` declaration bodies; and
+- `python scripts/check_docs.py` checks generated status, source references,
+  frontier evidence paths, and local documentation links.
 
 `AxiomAudit.lean` is a default Lake target. It imports every project-owned Lean
 module, including modules outside the main umbrellas, and audits every

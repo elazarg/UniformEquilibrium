@@ -92,6 +92,12 @@ Keep living documents timeless and update them when an interface, theorem
 boundary, or process rule changes. Publication years and source dates in the
 literature are retained as mathematical provenance.
 
+Research residuals import their maintained owners instead of copying long
+proof bodies. `python scripts/check_proof_duplicates.py` enforces exact
+cross-lane copies above its documented threshold; semantic duplication still
+requires review because the checker intentionally does not attempt theorem
+equivalence.
+
 Volatile documentation has structured ownership:
 
 | Change | Owning source |

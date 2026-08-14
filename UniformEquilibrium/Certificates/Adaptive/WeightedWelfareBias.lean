@@ -44,7 +44,9 @@ def HasWeightedWelfareBias
           expect (G.transition state action) bias ≤
         (∑ i, weight i * v i) + bias state
 
-private theorem weightedStageEU_eq_expect
+/-- Weighted expected stage utility is the expectation of weighted stage
+payoff under the profile's joint-action law at a history. -/
+theorem weightedStageEU_eq_expect
     (G : StochasticGame ι) [Fintype ι] [Finite G.State]
     [∀ i, Finite (G.Act i)]
     (weight : ι → ℝ) (profile : G.BehaviorProfile)
@@ -58,7 +60,9 @@ private theorem weightedStageEU_eq_expect
   unfold GameTheory.StochasticGame.stageEUAt
   rw [expect_const_mul]
 
-private theorem weightedExpectedStagePayoff_eq_expect
+/-- Weighted expected stage payoff is the history-law expectation of weighted
+stage utility. -/
+theorem weightedExpectedStagePayoff_eq_expect
     (G : StochasticGame ι) [Fintype ι] [Finite G.State]
     [∀ i, Finite (G.Act i)]
     (weight : ι → ℝ) (profile : G.BehaviorProfile)

@@ -2,6 +2,7 @@
 analytic Bellman-germ construction. -/
 import MathUE.CurveSelection.Termination
 import MathUE.CurveSelection.FactorCoverage
+import MathUE.CurveSelection.AlgebraicReduction
 import MathUE.AnalyticImplicitFunction
 import MathUE.RamifiedWeierstrass
 import MathUE.WeierstrassCurve
@@ -20,6 +21,7 @@ namespace Math
 namespace CurveSelection.Internal.Convergence
 
 open CurveSelection.Internal.FactorCoverage
+open CurveSelection.Internal.AlgebraicReduction
 open CurveSelection.Internal.Termination
 
 variable {E F G : Type*}
@@ -1602,39 +1604,7 @@ theorem exists_commonRamification_centeredSplittingsOver'
           (ramifyPowerSeriesPolynomial q hq
             (mapPowerSeriesPolynomial σ (f j))).IsRoot s →
             s.constantCoeff = 0 := by
-  classical
-  letI : Fintype J := Fintype.ofFinite J
-  choose p hp hsplit using fun j =>
-    hasRamifiedPowerSeriesSplittingOver_of_hasRamifiedRootProperty
-      σ Hroot (Hdist j).monic
-  let q : ℕ := ∏ j, p j
-  have hq : q ≠ 0 := by
-    exact Finset.prod_ne_zero_iff.mpr fun j _hj => hp j
-  refine ⟨q, hq, fun j => ?_⟩
-  have hp_dvd : p j ∣ q := by
-    exact Finset.dvd_prod_of_mem (fun k => p k)
-      (Finset.mem_univ j)
-  obtain ⟨r, hr⟩ := hp_dvd
-  have hr_ne : r ≠ 0 := by
-    intro hr0
-    apply hq
-    rw [hr, hr0, mul_zero]
-  have hsplit' :
-      (ramifyPowerSeriesPolynomial r hr_ne
-        (ramifyPowerSeriesPolynomial (p j) (hp j)
-          (mapPowerSeriesPolynomial σ (f j)))).Splits :=
-    (hsplit j).map (PowerSeries.expand r hr_ne).toRingHom
-  have hsplitq :
-      (ramifyPowerSeriesPolynomial q hq
-        (mapPowerSeriesPolynomial σ (f j))).Splits := by
-    rw [ramifyPowerSeriesPolynomial_comp] at hsplit'
-    simpa [hr, mul_comm] using hsplit'
-  refine ⟨hsplitq, ?_⟩
-  intro s hs
-  exact constantCoeff_eq_zero_of_isRoot_of_isDistinguishedAt
-    (isDistinguishedAt_ramifyPowerSeriesPolynomial
-      (isDistinguishedAt_mapPowerSeriesPolynomial σ (Hdist j))
-      q hq) hs
+  exact exists_commonRamification_centeredSplittingsOver σ Hroot f Hdist
 
 /--
 Finite-coordinate convergence package.  A common ramification splits all

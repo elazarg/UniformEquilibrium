@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetRepairCounterexample
+import MathUE.Finset.FinThree
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
 import UniformEquilibrium.Quitting.Paths.SureExitSet
@@ -354,12 +355,6 @@ are the general facts proved once for every finite player set in the
 sure-exit-set characterization; only the finite witness lookup and its
 numeric gap below are original to this table. -/
 
-private theorem nonempty_fin3_cases (S : Finset Player)
-    (hS : S.Nonempty) :
-    S = {0} ∨ S = {1} ∨ S = {2} ∨ S = {0, 1} ∨
-      S = {0, 2} ∨ S = {1, 2} ∨ S = {0, 1, 2} := by
-  fin_cases S <;> simp_all <;> decide
-
 /-- A player whose membership toggle gains at least one at a nonempty pure
 exit set.  This is the finite witness table behind the direct-pure-set
 obstruction. -/
@@ -376,7 +371,7 @@ private theorem directPureSetWitness_gap
           (directPureSetWitness S))
         (quittingSetReward reward (S.erase (directPureSetWitness S))
           (directPureSetWitness S)) := by
-  rcases nonempty_fin3_cases S hS with
+  rcases Math.Finset.nonempty_fin_three_cases S hS with
       hS | hS | hS | hS | hS | hS | hS <;>
     subst S <;>
     norm_num [directPureSetWitness, quittingSetReward, reward]

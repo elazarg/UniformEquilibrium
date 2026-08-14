@@ -8,6 +8,8 @@ From a fresh checkout:
 git submodule update --init --recursive
 lake build
 python scripts/generate_axiom_audit.py --check
+python scripts/check_import_graph.py
+python scripts/check_proof_duplicates.py
 python scripts/check_trust.py
 python scripts/check_docs.py
 ```
@@ -18,7 +20,8 @@ dependency or manifest changes.
 While iterating on Lean, use the narrowest relevant file or module check. A
 toolchain, Lake configuration, dependency pin, umbrella, or repository-
 structure change requires a full build. Always report exactly which checks
-completed. The trust scan is lexical and does not substitute for compilation.
+completed. The trust scan and duplicate-body ratchet are static checks and do
+not substitute for compilation or proof review.
 
 ## Code placement
 

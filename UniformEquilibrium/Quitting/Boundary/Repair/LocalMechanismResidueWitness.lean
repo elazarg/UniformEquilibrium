@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Boundary.Repair.CollisionRepairCharacterization
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
+import MathUE.Finset.FinThree
 
 /-!
 # A parametric three-player local-mechanism residue
@@ -216,52 +217,12 @@ theorem sureExitFails_012 (L : ℝ) :
   refine Or.inl ⟨0, by decide, ?_⟩
   simp [reward]
 
-private theorem nonempty_fin3_cases (S : Finset Player) (hS : S.Nonempty) :
-    S = {0} ∨ S = {1} ∨ S = {2} ∨ S = {0, 1} ∨
-      S = {0, 2} ∨ S = {1, 2} ∨ S = {0, 1, 2} := by
-  by_cases h0 : 0 ∈ S
-  · by_cases h1 : 1 ∈ S
-    · by_cases h2 : 2 ∈ S
-      · right; right; right; right; right; right
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · right; right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-    · by_cases h2 : 2 ∈ S
-      · right; right; right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-  · by_cases h1 : 1 ∈ S
-    · by_cases h2 : 2 ∈ S
-      · right; right; right; right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-    · by_cases h2 : 2 ∈ S
-      · right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · obtain ⟨who, hwho⟩ := hS
-        fin_cases who <;> simp_all
-
 /-- Arithmetic sure-exit failure implies failure of the game-layer predicate. -/
 theorem not_isQuittingSureExitSet_of_sureExitFails
     (L : ℝ) {S : Finset Player} (h : SureExitFails L S) :
     ¬ IsQuittingSureExitSet (gameReward L) S := by
-  rintro ⟨hmember, houtsider⟩
-  rcases h with ⟨i, hi, hlt⟩ | ⟨j, hj, hlt⟩
-  · exact absurd (hmember i hi) (by
-      rw [quittingSetReward_gameReward, quittingSetReward_gameReward]
-      exact not_le.mpr hlt)
-  · exact absurd (houtsider j hj) (by
-      rw [quittingSetReward_gameReward, quittingSetReward_gameReward]
-      exact not_le.mpr hlt)
+  apply not_isQuittingSureExitSet_of_strict_toggle
+  simpa only [SureExitFails, quittingSetReward_gameReward] using h
 
 /-- No nonempty coalition is a sure exit set. -/
 def NoSureExitSet (L : ℝ) : Prop :=
@@ -269,7 +230,8 @@ def NoSureExitSet (L : ℝ) : Prop :=
 
 theorem noSureExitSet (L : ℝ) : NoSureExitSet L := by
   intro S hS
-  rcases nonempty_fin3_cases S hS with rfl | rfl | rfl | rfl | rfl | rfl | rfl
+  rcases Math.Finset.nonempty_fin_three_cases S hS with
+    rfl | rfl | rfl | rfl | rfl | rfl | rfl
   · exact not_isQuittingSureExitSet_of_sureExitFails L (sureExitFails_0 L)
   · exact not_isQuittingSureExitSet_of_sureExitFails L (sureExitFails_1 L)
   · exact not_isQuittingSureExitSet_of_sureExitFails L (sureExitFails_2 L)

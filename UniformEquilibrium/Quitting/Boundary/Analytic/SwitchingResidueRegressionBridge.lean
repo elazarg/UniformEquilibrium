@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Boundary.Analytic.SwitchingResidueRegression
 import UniformEquilibrium.Quitting.Paths.SureExitSet
+import MathUE.Finset.FinThree
 
 /-!
 # The switching-residue regression table has no sure exit set
@@ -58,48 +59,8 @@ game-layer sure-exit-set predicate at the same `S`. -/
 theorem not_isQuittingSureExitSet_of_sureExitFails
     {S : Finset Player} (h : SureExitFails S) :
     ¬ IsQuittingSureExitSet gameReward S := by
-  rintro ⟨hmember, houtsider⟩
-  rcases h with ⟨i, hi, hlt⟩ | ⟨j, hj, hlt⟩
-  · exact absurd (hmember i hi) (by
-      rw [quittingSetReward_gameReward, quittingSetReward_gameReward]
-      exact not_le.mpr hlt)
-  · exact absurd (houtsider j hj) (by
-      rw [quittingSetReward_gameReward, quittingSetReward_gameReward]
-      exact not_le.mpr hlt)
-
-private theorem nonempty_fin3_cases (S : Finset Player) (hS : S.Nonempty) :
-    S = {0} ∨ S = {1} ∨ S = {2} ∨ S = {0, 1} ∨
-      S = {0, 2} ∨ S = {1, 2} ∨ S = {0, 1, 2} := by
-  by_cases h0 : 0 ∈ S
-  · by_cases h1 : 1 ∈ S
-    · by_cases h2 : 2 ∈ S
-      · right; right; right; right; right; right
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · right; right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-    · by_cases h2 : 2 ∈ S
-      · right; right; right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-  · by_cases h1 : 1 ∈ S
-    · by_cases h2 : 2 ∈ S
-      · right; right; right; right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-    · by_cases h2 : 2 ∈ S
-      · right; right; left
-        ext who
-        fin_cases who <;> simp [h0, h1, h2]
-      · obtain ⟨who, hwho⟩ := hS
-        fin_cases who <;> simp_all
+  apply not_isQuittingSureExitSet_of_strict_toggle
+  simpa only [SureExitFails, quittingSetReward_gameReward] using h
 
 /-- **No sure exit set.** Every nonempty coalition fails the game-layer
 sure-exit-set test against `gameReward`: this is exactly the arithmetic
@@ -109,7 +70,8 @@ failure `SureExitFails`, established over the seven nonempty coalitions of
 theorem not_isQuittingSureExitSet_gameReward
     (S : Finset Player) (hS : S.Nonempty) :
     ¬ IsQuittingSureExitSet gameReward S := by
-  rcases nonempty_fin3_cases S hS with rfl | rfl | rfl | rfl | rfl | rfl | rfl
+  rcases Math.Finset.nonempty_fin_three_cases S hS with
+    rfl | rfl | rfl | rfl | rfl | rfl | rfl
   · exact not_isQuittingSureExitSet_of_sureExitFails sureExitFails_1
   · exact not_isQuittingSureExitSet_of_sureExitFails sureExitFails_2
   · exact not_isQuittingSureExitSet_of_sureExitFails sureExitFails_3

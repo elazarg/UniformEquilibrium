@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Paths.OutsiderNeverGluing
 import UniformEquilibrium.Quitting.Stationary.MinMax
 import UniformEquilibrium.Quitting.Paths.OpponentActionMass
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchProfile
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCoalitionToggleDeletion
 
 /-!
 # Question 175: the negative antitone owner has a Never floor
@@ -33,35 +34,6 @@ namespace Question175OwnerNeverFloor
 open Filter Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- `owner` weakly loses by joining every already nonempty coalition of
-opponent quitters. -/
-def QuittingOwnerJoinAntitone
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι) : Prop :=
-  ∀ (quitters : Finset ι) (hquitters : quitters.Nonempty),
-    owner ∉ quitters →
-      reward
-          ⟨insert owner quitters, Finset.insert_nonempty owner quitters⟩ owner ≤
-        reward ⟨quitters, hquitters⟩ owner
-
-/-- Join-antitonicity makes the Continue-minus-join terminal advantage
-nonnegative on every action where the owner is forced to Continue. -/
-theorem quittingTerminalOpponentAdvantage_nonneg_of_ownerJoinAntitone
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (owner : ι) (hjoin : QuittingOwnerJoinAntitone reward owner)
-    (action : ι → Bool) (howner : action owner = false) :
-    0 ≤ quittingTerminalOpponentAdvantage reward owner action := by
-  unfold quittingTerminalOpponentAdvantage quittingRootPayoff
-  rw [quittingQuitters_update_true_of_apply_false]
-  by_cases hquitters : (quittingQuitters action).Nonempty
-  · simp only [dif_pos hquitters,
-      dif_pos (Finset.insert_nonempty owner (quittingQuitters action))]
-    apply sub_nonneg.mpr
-    apply hjoin (quittingQuitters action) hquitters
-    simp [quittingQuitters, howner]
-  · have hempty : quittingQuitters action = ∅ :=
-      Finset.not_nonempty_iff_eq_empty.mp hquitters
-    simp [hempty, quittingSingletonTerminal]
 
 /-- The expected Continue-minus-join terminal advantage is nonnegative at
 every product row. -/
@@ -194,62 +166,6 @@ theorem quittingRootSequencePureTimeTerminalValue_none_eq_shift
   rw [quittingRootSequenceTerminalValue_eq_shift]
   congr 2
 
-/-- Every deterministic finite quit time is weakly dominated by literal
-`Never` under the negative join-antitone gate. -/
-theorem quittingRootSequencePureTimeTerminalValue_le_never_of_ownerJoinAntitone
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (owner : ι)
-    (hjoin : QuittingOwnerJoinAntitone reward owner)
-    (hsolo : reward (quittingSingletonTerminal owner) owner <
-      quittingPunishmentValue reward owner)
-    (hchi : quittingPunishmentValue reward owner ≤ 0)
-    (quitTime : Option ℕ) :
-    quittingRootSequencePureTimeTerminalValue reward roots owner quitTime 0 ≤
-      quittingRootSequencePureTimeTerminalValue reward roots owner none 0 := by
-  cases quitTime with
-  | none => exact le_rfl
-  | some time =>
-      have hfloor : ∀ start,
-          quittingPunishmentValue reward owner ≤
-            quittingRootSequencePureTimeTerminalValue reward roots owner none
-              start := by
-        intro start
-        rw [quittingRootSequencePureTimeTerminalValue_none_eq_shift]
-        exact quittingPunishmentValue_le_never_of_ownerJoinAntitone
-          reward (fun offset ↦ roots (start + offset)) owner hjoin hsolo hchi
-      have hjoining :
-          quittingOutsiderJoiningContribution reward (roots time) owner ≤ 0 := by
-        unfold quittingOutsiderJoiningContribution
-        have hexpect :=
-          expect_quittingTerminalOpponentAdvantage_nonneg_of_ownerJoinAntitone
-            reward (roots time) owner hjoin
-        linarith
-      have hcoefficient : 0 ≤
-          1 - quittingRootAbsorptionMass
-            (Function.update (roots time) owner (PMF.pure false)) := by
-        unfold quittingRootAbsorptionMass
-        nlinarith [quittingStationaryContinueMass_nonneg
-          (Function.update (roots time) owner (PMF.pure false))]
-      have htail : reward (quittingSingletonTerminal owner) owner -
-          quittingRootSequencePureTimeTerminalValue reward roots owner none
-            (time + 1) ≤ 0 := by
-        have := hfloor (time + 1)
-        linarith
-      have hendpoint : quittingRootEndpointDifference reward
-          (fun _ ↦ quittingRootSequencePureTimeTerminalValue
-            reward roots owner none (time + 1))
-          (roots time) owner ≤ 0 := by
-        rw [quittingRootEndpointDifference_eq_outsiderNever]
-        have hscaled := mul_nonpos_of_nonneg_of_nonpos hcoefficient htail
-        linarith
-      have hexact :=
-        quittingRootSequencePureTimeTerminalValue_some_sub_none_eq
-          reward roots owner 0 time
-      simp only [Nat.zero_add] at hexact
-      have hreach := quittingOpponentSurvivalWeight_nonneg roots owner 0 time
-      have hgain := mul_nonpos_of_nonneg_of_nonpos hreach hendpoint
-      linarith
-
 /-- **Full stopping-time theorem for Question 175.**  Literal `Never` is a
 best response against every arbitrary behavioral opponent profile under the
 negative join-antitone gate.  The arbitrary-deviation step is discharged by
@@ -273,7 +189,7 @@ theorem quittingTerminalPayoff_update_le_never_of_ownerJoinAntitone
     exists_quittingPureTimeBehaviorStrategy_terminalPayoff_ge_sub
       reward profile owner deviation hε
   have hpure :=
-    quittingRootSequencePureTimeTerminalValue_le_never_of_ownerJoinAntitone
+    _root_.GameTheory.quittingRootSequencePureTimeTerminalValue_le_never_of_ownerJoinAntitone
       reward (quittingProfileLiveRoot reward profile) owner hjoin hsolo hchi
         quitTime
   rw [← quittingTerminalPayoff_update_pureTimeBehaviorStrategy

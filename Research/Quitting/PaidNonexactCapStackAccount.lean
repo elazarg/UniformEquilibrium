@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
+import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.CapDebtBellmanReduction
 
 /-!
 # Paid nonexact cap-stack accounting
@@ -40,50 +41,6 @@ namespace GameTheory
 open Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- Exact one-row debt identity for an arbitrary root selected against the
-behavioral cap coordinate of a semantic pair.  No Nash hypothesis is used. -/
-theorem quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_add_capDefect
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (who : ι) :
-    quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPrefix reward root pair) who =
-      quittingStationaryContinueMass root *
-          quittingTerminalSemanticDebt pair who +
-        quittingRootCoordinateNashDefect reward pair.2 root who := by
-  have hquit : quittingRootQuitPayoff reward pair.1 root who =
-      quittingRootQuitPayoff reward pair.2 root who :=
-    quittingRootQuitPayoff_continuation_invariant
-      reward pair.1 pair.2 root who
-  have hcontinue :
-      quittingRootContinuePayoff reward
-          (Function.update pair.1 who (pair.2 who)) root who =
-        quittingRootContinuePayoff reward pair.2 root who := by
-    apply quittingRootExpectedPayoff_continuation_congr
-    simp
-  have hsuccessor := quittingRootSuccessorPayoff_sub_eq_continueMass_mul
-    reward pair.2 pair.1 root who
-  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPrefix
-    quittingRootCoordinateNashDefect
-  dsimp only
-  rw [hquit, hcontinue]
-  linarith
-
-/-- Total-debt version of the arbitrary-root cap identity. -/
-theorem quittingTerminalSemanticDebtSum_prefix_eq_continueMass_mul_add_capDefect
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) :
-    quittingTerminalSemanticDebtSum
-        (quittingTerminalSemanticPrefix reward root pair) =
-      quittingStationaryContinueMass root *
-          quittingTerminalSemanticDebtSum pair +
-        quittingRootTotalNashDefect reward pair.2 root := by
-  unfold quittingTerminalSemanticDebtSum quittingRootTotalNashDefect
-  simp_rw [quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_add_capDefect
-    reward pair root]
-  rw [Finset.sum_add_distrib, Finset.mul_sum]
 
 /-- Cumulative sum of the exact playerwise Nash defects incurred by a root
 word.  Each defect is evaluated against the behavioral cap of its actual

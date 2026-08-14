@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.Q182EndpointRecipientAtomInterfaceNoGo
+import Research.Quitting.ForcedOwnerContinueFaceLossSupportNoGo
 import
 UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeObserverAbsentRectangleBaselineDispatch
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtOwnerTransferCounterexample
@@ -40,105 +41,7 @@ namespace ObserverAbsentNegativeCollisionAtomicSourceNoGo
 
 open StochasticGame Math.Probability Math.PMFProduct
 open QuittingDynamicDebtOwnerTransferCounterexample
-
-abbrev owner : Bool := false
-abbrev outsider : Bool := true
-
-def ownerContinueRoot : Bool → PMF Bool :=
-  Function.update root owner (PMF.pure false)
-
-def ownerQuitRoot : Bool → PMF Bool :=
-  Function.update root owner (PMF.pure true)
-
-@[simp] theorem outsider_quitProbability :
-    (root outsider true).toReal = 1 / 2 := by
-  norm_num [root, outsider, PMF.uniformOfFintype_apply]
-
-theorem actual_pureQuit_gain_eq_zero :
-    quittingRootDeviationGain reward (0 : Payoff Bool) root outsider
-        (PMF.pure true) = 0 := by
-  rw [quittingRootDeviationGain_pure_true_eq]
-  unfold quittingRootEndpointDifference
-  rw [true_quitPayoff, true_continuePayoff]
-  ring
-
-theorem actual_pureContinue_gain_eq_zero :
-    quittingRootDeviationGain reward (0 : Payoff Bool) root outsider
-        (PMF.pure false) = 0 := by
-  rw [quittingRootDeviationGain_pure_false_eq]
-  unfold quittingRootEndpointDifference
-  rw [true_quitPayoff, true_continuePayoff]
-  ring
-
-theorem ownerContinue_outsider_quitPayoff_eq_neg_one :
-    quittingRootQuitPayoff reward (0 : Payoff Bool) ownerContinueRoot
-        outsider = -1 := by
-  unfold quittingRootQuitPayoff quittingRootExpectedPayoff ownerContinueRoot
-  rw [QuittingDynamicDebtOwnerTransferCounterexample.expect_pmfPi_bool]
-  simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
-    QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction,
-    owner, outsider]
-
-theorem ownerContinue_outsider_continuePayoff_eq_zero :
-    quittingRootContinuePayoff reward (0 : Payoff Bool) ownerContinueRoot
-        outsider = 0 := by
-  unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-    ownerContinueRoot
-  rw [QuittingDynamicDebtOwnerTransferCounterexample.expect_pmfPi_bool]
-  simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
-    QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction,
-    owner, outsider]
-
-theorem ownerContinue_pureQuit_gain_eq_neg_half :
-    quittingRootDeviationGain reward (0 : Payoff Bool) ownerContinueRoot
-        outsider (PMF.pure true) = -(1 / 2 : ℝ) := by
-  rw [quittingRootDeviationGain_pure_true_eq]
-  unfold quittingRootEndpointDifference
-  rw [ownerContinue_outsider_quitPayoff_eq_neg_one,
-    ownerContinue_outsider_continuePayoff_eq_zero]
-  norm_num [ownerContinueRoot, root, outsider,
-    PMF.uniformOfFintype_apply]
-
-theorem ownerQuit_outsider_quitPayoff_eq_one :
-    quittingRootQuitPayoff reward (0 : Payoff Bool) ownerQuitRoot outsider =
-      1 := by
-  unfold quittingRootQuitPayoff quittingRootExpectedPayoff ownerQuitRoot
-  rw [QuittingDynamicDebtOwnerTransferCounterexample.expect_pmfPi_bool]
-  simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
-    QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction,
-    owner, outsider]
-
-theorem ownerQuit_outsider_continuePayoff_eq_zero :
-    quittingRootContinuePayoff reward (0 : Payoff Bool) ownerQuitRoot outsider =
-      0 := by
-  unfold quittingRootContinuePayoff quittingRootExpectedPayoff ownerQuitRoot
-  rw [QuittingDynamicDebtOwnerTransferCounterexample.expect_pmfPi_bool]
-  simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
-    QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction,
-    owner, outsider]
-
-theorem ownerQuit_pureQuit_gain_eq_half :
-    quittingRootDeviationGain reward (0 : Payoff Bool) ownerQuitRoot outsider
-        (PMF.pure true) = 1 / 2 := by
-  rw [quittingRootDeviationGain_pure_true_eq]
-  unfold quittingRootEndpointDifference
-  rw [ownerQuit_outsider_quitPayoff_eq_one,
-    ownerQuit_outsider_continuePayoff_eq_zero]
-  norm_num [ownerQuitRoot, root, outsider, PMF.uniformOfFintype_apply]
-
-theorem positive_quit_rectangle_eq_one :
-    quittingOwnerOutsiderDeviationRectangle reward (0 : Payoff Bool) root
-        owner outsider true = 1 := by
-  unfold quittingOwnerOutsiderDeviationRectangle
-  rw [show Function.update root owner (PMF.pure true) = ownerQuitRoot by rfl,
-    show Function.update root owner (PMF.pure false) = ownerContinueRoot by rfl,
-    ownerQuit_pureQuit_gain_eq_half,
-    ownerContinue_pureQuit_gain_eq_neg_half]
-  ring
+open ForcedOwnerContinueFaceLossSupportNoGo
 
 /-- The counterfactual forced-Quit row carries a positive outsider defect.
 This is exactly the local atomic object exported by both frontier leaves. -/

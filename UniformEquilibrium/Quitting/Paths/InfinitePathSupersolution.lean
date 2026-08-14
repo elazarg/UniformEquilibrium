@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Cycles.CyclicSupersolution
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 
 /-!
 # Nonperiodic quitting-path supersolutions
@@ -197,47 +198,12 @@ theorem isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError
       Nonempty (QuittingInfinitePathQuitErrorCertificate
         reward target error bound)) :
     (quittingGame reward).IsUniformEquilibriumPayoff none target := by
-  intro ε hε
-  let error := ε / 2
-  have herror : 0 < error := by
-    dsimp only [error]
-    linarith
+  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_fixedTarget
+  intro error herror
   obtain ⟨certificate⟩ := hcertificates error herror
-  let profile := quittingInfinitePathProfile reward certificate.roots
   have hcompiled := certificate.isεAsymptoticNash_and_delivers
     reward target herror.le hbound hreward
-  have hterminalNash : (quittingGame reward).IsεAsymptoticNash
-      (quittingTerminalPayoff reward) error profile := by
-    simpa only [profile] using hcompiled.1
-  have hterminalValue : quittingTerminalPayoff reward profile = target := by
-    simpa only [profile] using hcompiled.2
-  have huniform : (quittingGame reward).IsUniformεEquilibrium
-      none ε profile :=
-    quittingGame_isUniformεEquilibrium_of_terminalNash
-      reward profile (by dsimp only [error]; linarith)
-        hterminalNash bound hbound hreward
-  obtain ⟨nashThreshold, hnashThreshold⟩ := huniform
-  have heventuallyDelivery : ∀ᶠ horizon : ℕ in atTop, ∀ who,
-      |(quittingGame reward).finiteAveragePayoff none horizon profile who -
-          target who| ≤ ε := by
-    apply Filter.eventually_all.mpr
-    intro who
-    have hball :=
-      (tendsto_finiteAveragePayoff_quittingGame reward profile who).eventually
-        (Metric.ball_mem_nhds
-          (quittingTerminalPayoff reward profile who) hε)
-    filter_upwards [hball] with horizon hhorizon
-    have htarget := congrFun hterminalValue who
-    rw [htarget] at hhorizon
-    simpa [Metric.mem_ball, Real.dist_eq] using hhorizon.le
-  obtain ⟨deliveryThreshold, hdeliveryThreshold⟩ :=
-    Filter.eventually_atTop.1 heventuallyDelivery
-  refine ⟨profile, max nashThreshold deliveryThreshold,
-    fun horizon hhorizon ↦ ?_⟩
-  constructor
-  · exact hnashThreshold horizon
-      (le_trans (Nat.le_max_left _ _) hhorizon)
-  · exact hdeliveryThreshold horizon
-      (le_trans (Nat.le_max_right _ _) hhorizon)
+  exact ⟨quittingInfinitePathProfile reward certificate.roots,
+    hcompiled.1, hcompiled.2⟩
 
 end GameTheory

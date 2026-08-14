@@ -1,4 +1,4 @@
-import UniformEquilibrium.Certificates.Adaptive.WeightedSecurityWelfareAssembly
+import UniformEquilibrium.Certificates.Adaptive.WeightedWelfareBias
 import Mathlib.Data.ZMod.Basic
 
 /-!
@@ -47,34 +47,6 @@ def expectedPhaseBias
     (bias : ZMod P → G.State → ℝ) (time : ℕ) : ℝ :=
   G.expectedStateValue profile s₀ time (bias (time : ZMod P))
 
-private theorem weightedStageEU_eq_expect
-    (G : StochasticGame ι) [Fintype ι] [Finite G.State]
-    [∀ i, Finite (G.Act i)]
-    (weight : ι → ℝ) (profile : G.BehaviorProfile)
-    {time : ℕ} (history : G.Hist time) :
-    (∑ i, weight i * G.stageEUAt profile history i) =
-      expect (G.stageActionDist profile history)
-        (fun action => ∑ i, weight i * G.stagePayoff history.2 action i) := by
-  rw [← expect_sum_comm]
-  apply Finset.sum_congr rfl
-  intro i i_mem
-  unfold GameTheory.StochasticGame.stageEUAt
-  rw [expect_const_mul]
-
-private theorem weightedExpectedStagePayoff_eq_expect
-    (G : StochasticGame ι) [Fintype ι] [Finite G.State]
-    [∀ i, Finite (G.Act i)]
-    (weight : ι → ℝ) (profile : G.BehaviorProfile)
-    (s₀ : G.State) (time : ℕ) :
-    (∑ i, weight i * G.expectedStagePayoff profile s₀ time i) =
-      expect (G.histDist profile s₀ time)
-        (fun history => ∑ i, weight i * G.stageEUAt profile history i) := by
-  rw [← expect_sum_comm]
-  apply Finset.sum_congr rfl
-  intro i i_mem
-  unfold GameTheory.StochasticGame.expectedStagePayoff
-  rw [expect_const_mul]
-
 /-- Exact quantitative consequence of a phase-lifted social bias. -/
 theorem weightedFiniteAverage_le_target_add_boundary_of_phaseBias
     (G : StochasticGame ι) [Fintype ι] [Finite G.State]
@@ -103,7 +75,7 @@ theorem weightedFiniteAverage_le_target_add_boundary_of_phaseBias
           expectedPhaseBias G profile s₀ bias (time + 1) ≤
         target + expectedPhaseBias G profile s₀ bias time := by
     unfold expectedPhaseBias
-    rw [weightedExpectedStagePayoff_eq_expect]
+    rw [GameTheory.StochasticGame.weightedExpectedStagePayoff_eq_expect]
     rw [G.expectedStateValue_succ]
     rw [phaseSucc]
     rw [← expect_add]
@@ -119,7 +91,7 @@ theorem weightedFiniteAverage_le_target_add_boundary_of_phaseBias
             (fun history => target + bias (time : ZMod P) history.2) := by
         apply expect_mono
         intro history
-        rw [weightedStageEU_eq_expect, ← expect_add]
+        rw [GameTheory.StochasticGame.weightedStageEU_eq_expect, ← expect_add]
         calc
           expect (G.stageActionDist profile history)
               (fun action =>

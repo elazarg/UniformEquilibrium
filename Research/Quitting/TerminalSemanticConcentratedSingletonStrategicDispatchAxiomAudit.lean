@@ -1,8 +1,0 @@
-import
-  UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonStrategicDispatch
-
-
-namespace GameTheory.QuittingCounterexampleRegime
-
-
-end GameTheory.QuittingCounterexampleRegime

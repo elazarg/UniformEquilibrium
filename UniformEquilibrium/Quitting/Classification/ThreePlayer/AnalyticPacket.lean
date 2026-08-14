@@ -501,19 +501,10 @@ theorem excludedContinueProduct_tendsto_one
     Tendsto
       (fun t : ℝ => ∏ other ∈ Finset.univ.erase owner,
         (1 - quittingGermQuitRate g other t))
-      (𝓝[>] (0 : ℝ)) (𝓝 1) := by
-  have hone : Tendsto (fun _ : ℝ => (1 : ℝ))
-      (𝓝[>] (0 : ℝ)) (𝓝 1) := tendsto_const_nhds
-  have hprod :
-      Tendsto
-        (fun t : ℝ => ∏ other ∈ Finset.univ.erase owner,
-          (1 - quittingGermQuitRate g other t))
-        (𝓝[>] (0 : ℝ))
-        (𝓝 (∏ _other ∈ Finset.univ.erase owner, (1 : ℝ))) :=
-    tendsto_finsetProd (Finset.univ.erase owner)
-      (fun other _ => by
-        simpa using hone.sub (data.quitRate_tendsto_zero other))
-  simpa using hprod
+      (𝓝[>] (0 : ℝ)) (𝓝 1) :=
+  Math.excludedProduct_tendsto_one_of_tendsto_zero
+    (fun other => quittingGermQuitRate g other)
+    (fun other => data.quitRate_tendsto_zero other) owner
 
 /-- A singleton event, normalized by total absorption, tends to its conditional
 leading mass. -/
@@ -712,28 +703,9 @@ theorem nonsingletonFirstEventWeight_tendsto_zero
 theorem nonsingletonRewardFirstEventWeight_tendsto_zero
     (data : QuittingGermFastLeadingData reward g) (who : ι) :
     Tendsto (quittingGermNonsingletonRewardFirstEventWeight g who)
-      (𝓝[>] (0 : ℝ)) (𝓝 0) := by
-  have hscaled : Tendsto
-      (fun t => quittingRewardBound reward *
-        quittingGermNonsingletonFirstEventWeight g t)
-      (𝓝[>] (0 : ℝ)) (𝓝 0) := by
-    simpa using data.nonsingletonFirstEventWeight_tendsto_zero.const_mul
-      (quittingRewardBound reward)
-  have hltOne : ∀ᶠ t in 𝓝[>] (0 : ℝ), t < 1 :=
-    (show ∀ᶠ t in 𝓝 (0 : ℝ), t < 1 from
-      Iio_mem_nhds (show (0 : ℝ) < 1 by norm_num)).filter_mono
-        nhdsWithin_le_nhds
-  have habs : Tendsto
-      (fun t => |quittingGermNonsingletonRewardFirstEventWeight g who t|)
-      (𝓝[>] (0 : ℝ)) (𝓝 0) := by
-    apply squeeze_zero'
-    · exact Filter.Eventually.of_forall fun t => abs_nonneg _
-    · filter_upwards [eventually_mem_Ioo_radius g, hltOne] with t ht ht1
-      exact abs_quittingGermNonsingletonRewardFirstEventWeight_le
-        g ht ht1 who
-    · exact hscaled
-  apply tendsto_iff_norm_sub_tendsto_zero.2
-  simpa [Real.norm_eq_abs] using habs
+      (𝓝[>] (0 : ℝ)) (𝓝 0) :=
+  quittingGermNonsingletonRewardFirstEventWeight_tendsto_zero_of_mass
+    data.nonsingletonFirstEventWeight_tendsto_zero who
 
 /-- The fast endpoint value is exactly the conditional singleton-reward
 mixture. -/
@@ -742,19 +714,6 @@ theorem value_eq_singleton_mix
     quittingGermValue g 0 who =
       ∑ owner, data.normalizedMass owner *
         reward (quittingProjectiveSingletonTerminal owner) who := by
-  have hsingle : Tendsto
-      (fun t => ∑ owner,
-        quittingGermSingletonFirstEventWeight g owner t *
-          reward (quittingProjectiveSingletonTerminal owner) who)
-      (𝓝[>] (0 : ℝ))
-      (𝓝 (∑ owner, data.normalizedMass owner *
-        reward (quittingProjectiveSingletonTerminal owner) who)) := by
-    apply tendsto_finsetSum Finset.univ
-    intro owner _
-    exact (data.singletonFirstEventWeight_tendsto owner).mul
-      tendsto_const_nhds
-  have hright := hsingle.add
-    (data.nonsingletonRewardFirstEventWeight_tendsto_zero who)
   have hltOne : ∀ᶠ t in 𝓝[>] (0 : ℝ), t < 1 :=
     (show ∀ᶠ t in 𝓝 (0 : ℝ), t < 1 from
       Iio_mem_nhds (show (0 : ℝ) < 1 by norm_num)).filter_mono
@@ -768,13 +727,15 @@ theorem value_eq_singleton_mix
     filter_upwards [eventually_mem_Ioo_radius g, hltOne] with t ht ht1
     exact quittingGermValue_eq_singleton_sum_add_nonsingletonReward
       g ht ht1 who
-  have hfromRight : Tendsto (fun t => quittingGermValue g t who)
-      (𝓝[>] (0 : ℝ))
-      (𝓝 ((∑ owner, data.normalizedMass owner *
-        reward (quittingProjectiveSingletonTerminal owner) who) + 0)) :=
-    hright.congr' hexact.symm
-  simpa using tendsto_nhds_unique
-    (quittingGermValue_tendsto_zero g who) hfromRight
+  exact Math.endpoint_eq_finsetSum_mul_add_of_tendsto
+    (fun t => quittingGermValue g t who)
+    (fun t => quittingGermNonsingletonRewardFirstEventWeight g who t)
+    (fun owner t => quittingGermSingletonFirstEventWeight g owner t)
+    (fun owner => data.normalizedMass owner)
+    (fun owner => reward (quittingProjectiveSingletonTerminal owner) who)
+    (fun owner => data.singletonFirstEventWeight_tendsto owner)
+    (data.nonsingletonRewardFirstEventWeight_tendsto_zero who)
+    hexact (quittingGermValue_tendsto_zero g who)
 
 /-- Every singleton reward lies below the fast endpoint value. -/
 theorem solo_le_value

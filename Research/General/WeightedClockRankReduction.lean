@@ -1,5 +1,6 @@
 import Mathlib
 import MathUE.CurveSelection.PositiveRoot
+import UniformEquilibrium.Quitting.Cycles.ConditionedDiffuseProductRescaling
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionDiffuseClockBridge
 
@@ -932,33 +933,6 @@ section CollisionEnergy
 
 variable {Player : Type} [Fintype Player] [DecidableEq Player]
 
-theorem opponentAbsorption_eq_one_sub_prod_erase
-    (root : Player → PMF Bool) (owner : Player) :
-    quittingRootOpponentAbsorptionMass root owner =
-      1 - ∏ other ∈ Finset.univ.erase owner,
-        (1 - (root other true).toReal) := by
-  classical
-  have hproduct :
-      (∏ player,
-          (Function.update root owner (PMF.pure false) player false).toReal) =
-        ∏ other ∈ Finset.univ.erase owner,
-          (root other false).toReal := by
-    rw [← Finset.mul_prod_erase Finset.univ
-      (fun player ↦
-        (Function.update root owner (PMF.pure false) player false).toReal)
-      (Finset.mem_univ owner)]
-    rw [Function.update_self]
-    simp only [PMF.pure_apply, if_true, ENNReal.toReal_one, one_mul]
-    apply Finset.prod_congr rfl
-    intro other hother
-    rw [Function.update_of_ne (Finset.ne_of_mem_erase hother)]
-  unfold quittingRootOpponentAbsorptionMass quittingRootAbsorptionMass
-  rw [quittingStationaryContinueMass_eq_prod_continueProbability, hproduct]
-  congr 1
-  apply Finset.prod_congr rfl
-  intro other _
-  rw [pmfBool_false_toReal]
-
 /-- Collision is contained in every player's opponent-absorption event.
 This aggregate inclusion is stronger than charging each coalition and then
 summing: no number-of-coalitions factor is introduced. -/
@@ -1009,7 +983,7 @@ theorem collisionMass_le_opponentAbsorption
             gcongr
             exact sub_nonneg.mpr (hrate1 owner)
       _ = 1 - ∏ who ∈ others, (1 - rate who) := by ring
-  rw [opponentAbsorption_eq_one_sub_prod_erase]
+  rw [_root_.GameTheory.quittingRootOpponentAbsorptionMass_eq_one_sub_prod]
   simpa only [quittingRootCollisionMass, rate, others,
     quittingRootQuitRates] using hbound
 

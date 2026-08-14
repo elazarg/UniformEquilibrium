@@ -122,33 +122,63 @@ already belonged to production. The source
 a forwarding module; its surviving generic interface is maintained in
 `MathUE/Interval/PolynomialLipschitz.lean`.
 
+The final ownership normalization retained only genuine experimental deltas.
+`Research.Quitting.OwnerSoloCertification` and
+`Research.General.CycleStrataGlobalFeedback` import their production or
+`MathUE` owners and contain only their ownerwise/stagewise and
+landed-stratum/phase-conflict results, respectively. The five phase/refusal
+declarations formerly in
+`Research.Counterexamples.Pairwise.CP172ExtractedClaims` are owned by
+`UniformEquilibrium.Quitting.Classification.SingletonPacketDefectAlgebra`; the
+Research file was removed without a compatibility API. The CP172 extraction
+report remains an experiment record pointing to the canonical best-response,
+collision, annotation, and packet-algebra owners.
+`PaidNonexactCapStackAccount` and `Question175OwnerNeverFloor` likewise use the
+canonical cap-debt and coalition-toggle declarations instead of copied bodies.
+The stale Research-only `FullRateStationaryVerifier` forwarding module was
+removed; the maintained full-rate verifier remains under
+`UniformEquilibrium.Quitting.Stationary`.
+The promoted `CancellationSafeAggregationStationaryRegression` and generic
+`SharedPunishmentCycle` files were removed, as were three declaration-free
+`*AxiomAudit` shims; the exhaustive generated `AxiomAudit.lean` owns project
+axiom coverage.
+
 The maintained period-eleven entry point is
 `Research.Quitting.BlockPair.K11`. Redundant `K11` filename prefixes were
-removed inside the `K11/` directory without renaming declarations. Its 40
+removed inside the `K11/` directory without renaming declarations. Its 32
 implementation modules are all reachable from the umbrella:
 
 ```text
-ActiveEquationSemanticAdapter       ClearedSemantic
-ConditionalAbsorption               ConditionalBlock
-ConditionalBlockData                ConditionalData
-ConditionalExactNash                ConditionalNash
-ConditionalPackage                  ConditionalProfile
-ConditionalStrategicCompiler        ConditionalUniformPayoff
+ClearedSemantic                     ConditionalAbsorption
+ConditionalBlock                    ConditionalBlockData
+ConditionalData                     ConditionalExactNash
+ConditionalNash                     ConditionalPackage
+ConditionalProfile                  ConditionalUniformPayoff
 ContinueMassPhase                   ContinueMassRoot
-CycleProduct                        CyclicNumeratorAlgebra
-CyclicNumeratorEvaluation           EndpointSemantic
-EndpointSemanticOne                 EndpointSemanticThree
-EndpointSemanticTwo                 EndpointSemanticZero
-EvalImmediateReward                 FourPlayerExpectation
-ImmediateSemantic                   ImmediateSemanticOne
-ImmediateSemanticThree              ImmediateSemanticTwo
-ImmediateSemanticZero               JacobianCache
-KrawczykConditionalConsumer         KrawczykConditionalData
-KrawczykConditionalSemantic         NumeratorAlgebra
-NumeratorEvaluation                 PhaseArithmetic
+EndpointSemantic                    EndpointSemanticOne
+EndpointSemanticThree               EndpointSemanticTwo
+EndpointSemanticZero                EvalImmediateReward
+FourPlayerExpectation               ImmediateSemantic
+ImmediateSemanticOne                ImmediateSemanticThree
+ImmediateSemanticTwo                ImmediateSemanticZero
+JacobianCache                       KrawczykConditionalConsumer
+KrawczykConditionalData             KrawczykConditionalSemantic
 PhaseValueRecurrence                Preconditioner
 RowZeroCacheData                    RowZeroSemantic
 ```
+
+The parallel `ConditionalStrategicCompiler.lean` was later removed in favor of
+the stronger compositional route ending at `ConditionalPackage.lean`; the
+compositional compiler derives the cleared equation, recurrence, and absorption
+facts which the parallel compiler accepted as hypotheses. The duplicate
+`ActiveEquationSemanticAdapter.lean` was also removed. `RowZeroSemantic` now
+uses the canonical production theorem in
+`UniformEquilibrium.Quitting.Examples.BlockPair.K11ActiveEquationInterval`.
+The six-module scalar numerator chain (`PhaseArithmetic`, `NumeratorAlgebra`,
+`NumeratorEvaluation`, `CyclicNumeratorAlgebra`, `CycleProduct`, and
+`CyclicNumeratorEvaluation`) was removed after its sole downstream use was
+rewired to the stronger canonical recurrence in
+`UniformEquilibrium.Quitting.Examples.BlockPair.K11System`.
 
 ### Period-eleven quarantine
 

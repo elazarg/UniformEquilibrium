@@ -262,6 +262,43 @@ structure QuittingFiniteChargedProjectiveLasso
   absorbingPhase : Fin K
   absorbing : 0 < quittingRootAbsorptionMass (cycle absorbingPhase)
 
+/-- A uniformly close periodic value satisfies the finite support-rational
+cycle conditions after the standard two-error correction. -/
+theorem toFiniteSupportRationalCycle_of_value_close
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cycle : Fin K → ι → PMF Bool) (value exactValue : Fin K → Payoff ι)
+    (error : ℝ)
+    (hsupport : ∀ phase,
+      IsQuittingRootSupportApproxNash reward
+        (value (finRotate K phase)) error (cycle phase))
+    (hrational : ∀ target phase,
+      quittingPunishmentValue reward target - error ≤ value phase target)
+    (hclose : ∀ phase who, |value phase who - exactValue phase who| ≤ error)
+    (hexact : ∀ phase,
+      exactValue phase = quittingCyclicTerminalValue reward cycle phase) :
+    IsQuittingFiniteSupportRationalCycle reward cycle
+      exactValue (2 * error) (2 * error) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro phase
+    rw [hexact phase, hexact (finRotate K phase)]
+    exact quittingCyclicTerminalValue_eq_rootSuccessorPayoff reward cycle phase
+  · intro phase
+    have htransfer := isQuittingRootSupportApproxNash_of_tail_close
+      reward (cycle phase)
+        (value (finRotate K phase))
+        (exactValue (finRotate K phase))
+        (δ := error) (η := error)
+        (hsupport phase) (fun who => ?_)
+    · simpa [two_mul] using htransfer
+    · simpa [abs_sub_comm] using hclose (finRotate K phase) who
+  · intro target phase
+    have hir := hrational target phase
+    have hbound := hclose phase target
+    rw [abs_le] at hbound
+    have hupper := hbound.2
+    rw [congrFun (hexact phase) target] at hupper ⊢
+    linarith
+
 namespace QuittingFiniteChargedProjectiveLasso
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -289,27 +326,11 @@ theorem toFiniteSupportRationalCycle
     (lasso : QuittingFiniteChargedProjectiveLasso reward K error) :
     IsQuittingFiniteSupportRationalCycle reward lasso.cycle
       (exactValue lasso) (2 * error) (2 * error) := by
-  refine ⟨?_, ?_, ?_⟩
-  · intro phase
-    exact quittingCyclicTerminalValue_eq_rootSuccessorPayoff
-      reward lasso.cycle phase
-  · intro phase
-    have htransfer := isQuittingRootSupportApproxNash_of_tail_close
-      reward (lasso.cycle phase)
-        (lasso.value (finRotate K phase))
-        (exactValue lasso (finRotate K phase))
-        (δ := error) (η := error)
-        (lasso.support phase) (fun who => ?_)
-    · simpa [two_mul] using htransfer
-    · simpa [exactValue, abs_sub_comm] using
-        abs_value_sub_exactValue_le lasso (finRotate K phase) who
-  · intro target phase
-    have hir := lasso.rational target phase
-    have hclose := abs_value_sub_exactValue_le lasso phase target
-    rw [abs_le] at hclose
-    have hupper := hclose.2
-    dsimp only [exactValue] at hupper ⊢
-    linarith
+  exact toFiniteSupportRationalCycle_of_value_close
+    reward lasso.cycle lasso.value (exactValue lasso) error
+    lasso.support lasso.rational
+    (fun phase who => abs_value_sub_exactValue_le lasso phase who)
+    (fun _ => rfl)
 
 /-- A charged projective lasso produces the exact divergent path consumed by
 the support-witness compiler. -/

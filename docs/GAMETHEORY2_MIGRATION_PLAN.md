@@ -38,8 +38,12 @@ declarations have compatible types.
 - The current dependency has 484 modules below its `GameTheory/` and `Math/`
   source roots; the inspected successor has 344 below `GameTheory/` and
   `GameTheoryMath/`. Only 18 module names coincide.
-- This project directly imports 55 distinct dependency modules. None exists at
+- This project directly imports 56 distinct dependency modules. None exists at
   the same module path in the inspected successor.
+- The additional direct edge is `GameTheory.Basic`, imported by the
+  game-facing `UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter`.
+  It supplies the v1 reward carrier at the semantic adapter boundary; it is
+  not a reason to move game semantics into the generic `MathUE` lane.
 - Lexical reach indicators across `MathUE`, `UniformEquilibrium`, `Research`,
   and `Theorems` find `StochasticGame` in 589 files, `BehaviorProfile` in 382,
   `.Act` in 254, `PMF` in 739, and `quittingGame` in 398. The `.Act` and `PMF`

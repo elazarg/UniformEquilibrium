@@ -496,34 +496,42 @@ theorem abs_quittingGermNonsingletonRewardFirstEventWeight_le
       rw [← Finset.mul_sum,
         sum_quittingGermCoalitionFirstEventWeight_card_ge_two]
 
+/-- A vanishing nonsingleton first-event mass carries vanishing normalized
+reward. -/
+theorem quittingGermNonsingletonRewardFirstEventWeight_tendsto_zero_of_mass
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {g : (quittingGame reward).AnalyticBellmanGerm}
+    (hmass : Tendsto (quittingGermNonsingletonFirstEventWeight g)
+      (𝓝[>] (0 : ℝ)) (𝓝 0)) (who : ι) :
+    Tendsto (quittingGermNonsingletonRewardFirstEventWeight g who)
+      (𝓝[>] (0 : ℝ)) (𝓝 0) := by
+  have hscaled : Tendsto
+      (fun t => quittingRewardBound reward *
+      quittingGermNonsingletonFirstEventWeight g t)
+      (𝓝[>] (0 : ℝ)) (𝓝 0) := by
+    simpa using hmass.const_mul
+      (quittingRewardBound reward)
+  have hltOne : ∀ᶠ t in 𝓝[>] (0 : ℝ), t < 1 :=
+    (show ∀ᶠ t in 𝓝 (0 : ℝ), t < 1 from
+      Iio_mem_nhds (show (0 : ℝ) < 1 by norm_num)).filter_mono
+        nhdsWithin_le_nhds
+  apply Math.tendsto_zero_of_abs_le_of_tendsto_zero
+    (quittingGermNonsingletonRewardFirstEventWeight g who)
+    (fun t => quittingRewardBound reward *
+      quittingGermNonsingletonFirstEventWeight g t) hscaled
+  filter_upwards [eventually_mem_Ioo_radius g, hltOne] with t ht ht1
+  exact abs_quittingGermNonsingletonRewardFirstEventWeight_le
+    g ht ht1 who
+
 /-- The normalized nonsingleton reward contribution vanishes. -/
 theorem quittingGermNonsingletonRewardFirstEventWeight_tendsto_zero
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {g : (quittingGame reward).AnalyticBellmanGerm}
     (data : QuittingGermMatchingLeadingData reward g) (who : ι) :
     Tendsto (quittingGermNonsingletonRewardFirstEventWeight g who)
-      (𝓝[>] (0 : ℝ)) (𝓝 0) := by
-  have hscaled : Tendsto
-      (fun t => quittingRewardBound reward *
-        quittingGermNonsingletonFirstEventWeight g t)
-      (𝓝[>] (0 : ℝ)) (𝓝 0) := by
-    simpa using data.nonsingletonFirstEventWeight_tendsto_zero.const_mul
-      (quittingRewardBound reward)
-  have hltOne : ∀ᶠ t in 𝓝[>] (0 : ℝ), t < 1 :=
-    (show ∀ᶠ t in 𝓝 (0 : ℝ), t < 1 from
-      Iio_mem_nhds (show (0 : ℝ) < 1 by norm_num)).filter_mono
-        nhdsWithin_le_nhds
-  have habs : Tendsto
-      (fun t => |quittingGermNonsingletonRewardFirstEventWeight g who t|)
-      (𝓝[>] (0 : ℝ)) (𝓝 0) := by
-    apply squeeze_zero'
-    · exact Filter.Eventually.of_forall fun t => abs_nonneg _
-    · filter_upwards [eventually_mem_Ioo_radius g, hltOne] with t ht ht1
-      exact abs_quittingGermNonsingletonRewardFirstEventWeight_le
-        g ht ht1 who
-    · exact hscaled
-  apply tendsto_iff_norm_sub_tendsto_zero.2
-  simpa [Real.norm_eq_abs] using habs
+      (𝓝[>] (0 : ℝ)) (𝓝 0) :=
+  quittingGermNonsingletonRewardFirstEventWeight_tendsto_zero_of_mass
+    data.nonsingletonFirstEventWeight_tendsto_zero who
 
 /-- The analytic endpoint value is the singleton-reward mixture selected by
 the matching leading coefficients. -/
@@ -535,20 +543,6 @@ theorem QuittingGermMatchingLeadingData.value_eq_singleton_mix
       ∑ owner,
         (data.leading owner / (1 + ∑ other, data.leading other)) *
           reward (quittingProjectiveSingletonTerminal owner) who := by
-  have hsingle : Tendsto
-      (fun t => ∑ owner,
-        quittingGermSingletonFirstEventWeight g owner t *
-          reward (quittingProjectiveSingletonTerminal owner) who)
-      (𝓝[>] (0 : ℝ))
-      (𝓝 (∑ owner,
-        (data.leading owner / (1 + ∑ other, data.leading other)) *
-          reward (quittingProjectiveSingletonTerminal owner) who)) := by
-    apply tendsto_finsetSum Finset.univ
-    intro owner _
-    exact (data.singletonFirstEventWeight_tendsto owner).mul
-      tendsto_const_nhds
-  have hright := hsingle.add
-    (quittingGermNonsingletonRewardFirstEventWeight_tendsto_zero data who)
   have hltOne : ∀ᶠ t in 𝓝[>] (0 : ℝ), t < 1 :=
     (show ∀ᶠ t in 𝓝 (0 : ℝ), t < 1 from
       Iio_mem_nhds (show (0 : ℝ) < 1 by norm_num)).filter_mono
@@ -562,14 +556,15 @@ theorem QuittingGermMatchingLeadingData.value_eq_singleton_mix
     filter_upwards [eventually_mem_Ioo_radius g, hltOne] with t ht ht1
     exact quittingGermValue_eq_singleton_sum_add_nonsingletonReward
       g ht ht1 who
-  have hfromRight : Tendsto (fun t => quittingGermValue g t who)
-      (𝓝[>] (0 : ℝ))
-      (𝓝 ((∑ owner,
-        (data.leading owner / (1 + ∑ other, data.leading other)) *
-          reward (quittingProjectiveSingletonTerminal owner) who) + 0)) :=
-    hright.congr' hexact.symm
-  have hfromValue := quittingGermValue_tendsto_zero g who
-  simpa using tendsto_nhds_unique hfromValue hfromRight
+  exact Math.endpoint_eq_finsetSum_mul_add_of_tendsto
+    (fun t => quittingGermValue g t who)
+    (fun t => quittingGermNonsingletonRewardFirstEventWeight g who t)
+    (fun owner t => quittingGermSingletonFirstEventWeight g owner t)
+    (fun owner => data.leading owner / (1 + ∑ other, data.leading other))
+    (fun owner => reward (quittingProjectiveSingletonTerminal owner) who)
+    (fun owner => data.singletonFirstEventWeight_tendsto owner)
+    (quittingGermNonsingletonRewardFirstEventWeight_tendsto_zero data who)
+    hexact (quittingGermValue_tendsto_zero g who)
 
 /-- Under exact endpoint Nash, a positive own-Quit mass pins the prescribed
 root successor to the pure-Quit endpoint. -/

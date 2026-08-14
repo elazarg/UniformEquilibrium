@@ -1,4 +1,5 @@
 import Research.Quitting.BlockPair.K11.ConditionalData
+import MathUE.PMFProduct.FiniteFubini
 
 noncomputable section
 
@@ -13,17 +14,5 @@ theorem expect_quittingHazardCoin
   rw [expect_eq_sum, Fintype.sum_bool]
   simp
   ring
-
-@[simp] theorem vector4_quitters_nonempty (a b c d : Bool) :
-    ({who | ![a, b, c, d] who = true} : Finset Player).Nonempty ↔
-      a = true ∨ b = true ∨ c = true ∨ d = true := by
-  constructor
-  · rintro ⟨who, hwho⟩
-    fin_cases who <;> simp_all
-  · rintro (ha | hb | hc | hd)
-    · exact ⟨0, by simp [ha]⟩
-    · exact ⟨1, by simp [hb]⟩
-    · exact ⟨2, by simp [hc]⟩
-    · exact ⟨3, by simp [hd]⟩
 
 end GameTheory.BlockPairK11.ConditionalData

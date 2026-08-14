@@ -180,6 +180,7 @@ theorem row_accountMemoryController_payoff_step
             (fun move => nextAccount γ s move) := by
     intro o
     simpa [C, s, accountMemoryController,
+      accountMemoryControllerOnUnitInterval,
       accountLevelMemoryPotential] using
       expect_map_nextAccountLevel_accountPotential
         k hscale (hyLower o) (hyUpper o) (fun u => u)
@@ -197,6 +198,7 @@ theorem row_accountMemoryController_payoff_step
               v (discountRate (nextAccount γ s move)) o.2 0) := by
     intro o
     simpa [C, s, accountMemoryController,
+      accountMemoryControllerOnUnitInterval,
       rowAccountValueMemoryPotential] using
       expect_map_nextAccountLevel_accountPotential
         k hscale (hyLower o) (hyUpper o)
@@ -737,6 +739,7 @@ theorem row_accountMemoryController_correctedPotential_drift_ge
                 logCorrector (nextAccount γ s move)) := by
     intro o
     simpa [C, s, accountMemoryController,
+      accountMemoryControllerOnUnitInterval,
       rowAccountCorrectedMemoryPotential] using
       expect_map_nextAccountLevel_accountPotential
         k hscale

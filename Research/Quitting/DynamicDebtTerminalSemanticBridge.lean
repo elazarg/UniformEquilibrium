@@ -9,6 +9,8 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtCapCarrier
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtChains
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
+import UniformEquilibrium.Quitting.Cycles.PhaseSwitchProfile
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeDynamicDebtSemanticChronology
 
 /-!
 # Exact dynamic debt is terminal semantic debt
@@ -42,136 +44,7 @@ open StochasticGame Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-! ## An all-Continue completion is literally the original root sequence -/
-
-omit [Fintype ι] [DecidableEq ι] in
-theorem quittingPhaseSwitchRoots_allContinue_eq_of_allContinue_from
-    (roots : ℕ → ι → PMF Bool) (cutoff : ℕ)
-    (htail : ∀ time, cutoff ≤ time →
-      roots time = (quittingAllContinueRoot : ι → PMF Bool)) :
-    quittingPhaseSwitchRoots roots (fun _ => quittingAllContinueRoot) cutoff =
-      roots := by
-  funext time
-  by_cases htime : time < cutoff
-  · rw [quittingPhaseSwitchRoots_of_lt roots _ htime]
-  · rw [quittingPhaseSwitchRoots_of_le roots _ (Nat.not_lt.mp htime),
-      htail time (Nat.not_lt.mp htime)]
-
 /-! ## Generic exact semantic bridge -/
-
-/-- For any positive finite exact policy completed by all-Continue, its
-entrance dynamic debt is exactly the terminal semantic debt of the resulting
-infinite behavior profile. -/
-theorem quittingFiniteDynamicDebt_eq_terminalSemanticDebt_of_allContinue
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
-    (cutoff : ℕ) (hcutoff : 0 < cutoff)
-    (htail : ∀ time, cutoff ≤ time →
-      roots time = (quittingAllContinueRoot : ι → PMF Bool))
-    (hterminal : value cutoff = 0)
-    (hpolicy : ∀ time, time < cutoff →
-      value time = quittingRootSuccessorPayoff reward
-        (value (time + 1)) (roots time))
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
-    quittingFiniteDynamicDebt reward roots who (fun time => value time who)
-        (quittingPositiveSingletonDebtCap reward who) 0 cutoff =
-      quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPair reward
-          (quittingInfinitePathProfile reward roots)) who := by
-  let never : ℕ → ι → PMF Bool := fun _ => quittingAllContinueRoot
-  let cap : ℝ := max 0 (reward (quittingSingletonTerminal who) who)
-  have hphaseRoots :
-      quittingPhaseSwitchRoots roots never cutoff = roots := by
-    exact quittingPhaseSwitchRoots_allContinue_eq_of_allContinue_from
-      roots cutoff htail
-  have hphaseProfile :
-      quittingPhaseSwitchProfile reward roots never cutoff =
-        quittingInfinitePathProfile reward roots := by
-    unfold quittingPhaseSwitchProfile quittingInfinitePathProfile
-    rw [hphaseRoots]
-  have htailBest :
-      QuittingBoundaryHolonomy.behavioralTailEnvelopeBoundary reward never who =
-        cap := by
-    unfold QuittingBoundaryHolonomy.behavioralTailEnvelopeBoundary
-    simpa [never, cap, quittingElementaryCapRoots] using
-      (quittingRootSequenceBestResponseValue_elementaryCap_never
-        (ι := ι) reward who hM hreward)
-  have hlength : cutoff - 1 + 1 = cutoff :=
-    Nat.sub_add_cancel (Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hcutoff))
-  have hbest :=
-    quittingPhaseSwitch_bestResponseAt_eq_continuationBestResponse
-      reward roots never cutoff hcutoff who hM hreward
-  rw [hphaseProfile] at hbest
-  unfold QuittingBoundaryHolonomy.boundaryEnvelopeAt at hbest
-  rw [quittingFiniteBoundaryHolonomy_bestResponse_eval, hlength,
-    htailBest] at hbest
-  have hterminalWho : value cutoff who = 0 := congrFun hterminal who
-  have hdynamic :=
-    prescribed_add_quittingFiniteDynamicDebt_eq_bestResponse
-      reward roots who (fun time => value time who)
-        (quittingPositiveSingletonDebtCap reward who) 0 cutoff
-  have hdynamic' :
-      value 0 who +
-          quittingFiniteDynamicDebt reward roots who
-            (fun time => value time who)
-            (quittingPositiveSingletonDebtCap reward who) 0 cutoff =
-        quittingFiniteTerminalBestResponseValue reward roots who cap 0 cutoff := by
-    simpa [quittingPositiveSingletonDebtCap, cap, hterminalWho] using hdynamic
-  have hprescribed :
-      quittingTerminalPayoff reward
-          (quittingInfinitePathProfile reward roots) who = value 0 who := by
-    exact congrFun
-      (quittingTerminalPayoff_finiteExactChainProfile
-        reward roots value cutoff htail hterminal hpolicy) who
-  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
-  dsimp
-  linarith
-
-/-- Time-translated form of the bridge.  It identifies the exact dynamic debt
-at an arbitrary entrance `start` with the literal semantic debt of the
-continuation profile seen from that entrance. -/
-theorem quittingFiniteDynamicDebt_eq_terminalSemanticDebt_suffix
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
-    (start fuel : ℕ) (hfuel : 0 < fuel)
-    (htail : ∀ time, start + fuel ≤ time →
-      roots time = (quittingAllContinueRoot : ι → PMF Bool))
-    (hterminal : value (start + fuel) = 0)
-    (hpolicy : ∀ time, start ≤ time → time < start + fuel →
-      value time = quittingRootSuccessorPayoff reward
-        (value (time + 1)) (roots time))
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
-    quittingFiniteDynamicDebt reward roots who (fun time => value time who)
-        (quittingPositiveSingletonDebtCap reward who) start fuel =
-      quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPair reward
-          (quittingRootSequenceProfile reward roots start)) who := by
-  let shiftedRoots : ℕ → ι → PMF Bool := fun time => roots (start + time)
-  let shiftedValue : ℕ → Payoff ι := fun time => value (start + time)
-  have hshiftTail : ∀ time, fuel ≤ time →
-      shiftedRoots time = (quittingAllContinueRoot : ι → PMF Bool) := by
-    intro time htime
-    exact htail (start + time) (Nat.add_le_add_left htime start)
-  have hshiftTerminal : shiftedValue fuel = 0 := by
-    simpa [shiftedValue] using hterminal
-  have hshiftPolicy : ∀ time, time < fuel →
-      shiftedValue time = quittingRootSuccessorPayoff reward
-        (shiftedValue (time + 1)) (shiftedRoots time) := by
-    intro time htime
-    apply hpolicy (start + time)
-    · omega
-    · omega
-  have hzero :=
-    quittingFiniteDynamicDebt_eq_terminalSemanticDebt_of_allContinue
-      reward shiftedRoots shiftedValue fuel hfuel hshiftTail hshiftTerminal
-        hshiftPolicy who hM hreward
-  rw [quittingFiniteDynamicDebt_shift reward roots who
-    (fun time => value time who)
-    (quittingPositiveSingletonDebtCap reward who) start fuel]
-  rw [quittingRootSequenceProfile_eq_shift reward roots start]
-  exact hzero
 
 /-! ## Production finite-chain specialization -/
 
@@ -191,58 +64,23 @@ theorem quittingFiniteNashBellmanPathDynamicDebt_zero_eq_terminalSemanticDebt
           (quittingInfinitePathProfile reward
             (quittingFiniteNashBellmanPathRoots cutoff path))) who := by
   unfold quittingFiniteNashBellmanPathDynamicDebt
-  simpa using
-    (quittingFiniteDynamicDebt_eq_terminalSemanticDebt_of_allContinue
+  simpa [quittingInfinitePathProfile] using
+    (_root_.GameTheory.quittingFiniteDynamicDebt_eq_terminalSemanticDebt_suffix_completion
       reward
       (quittingFiniteNashBellmanPathRoots cutoff path)
       (quittingFiniteNashBellmanPathValue cutoff path)
-      cutoff hcutoff
-      (quittingFiniteNashBellmanPathRoots_eq_allContinue_of_cutoff_le
-        cutoff path)
-      (quittingFiniteNashBellmanPathValue_eq_zero_at_cutoff
-        reward cutoff path hpath)
-      (quittingFiniteNashBellmanPathValue_eq_successor
-        reward cutoff path hpath)
+      0 cutoff hcutoff
+      (fun time htime => by
+        apply quittingFiniteNashBellmanPathRoots_eq_allContinue_of_cutoff_le
+        simpa using htime)
+      (by
+        simpa using quittingFiniteNashBellmanPathValue_eq_zero_at_cutoff
+          reward cutoff path hpath)
+      (fun time _ htime => by
+        exact quittingFiniteNashBellmanPathValue_eq_successor
+          reward cutoff path hpath time (by simpa using htime))
       who (quittingRewardBound_nonneg reward)
       (abs_reward_le_quittingRewardBound reward))
-
-/-- Every nonterminal displayed exact-`D` coordinate of a production chain is
-the literal semantic debt of the executable continuation profile starting at
-that same displayed time.  Thus the entire annotated path, not just its first
-coordinate, has an infinite-game semantic interpretation. -/
-theorem quittingFiniteNashBellmanPathDynamicDebt_eq_terminalSemanticDebt_suffix
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (cutoff : ℕ) (path : QuittingFiniteNashBellmanPath ι cutoff)
-    (hpath : path ∈
-      quittingFiniteZeroBoundaryNashBellmanChainSet reward cutoff)
-    (who : ι) (time : ℕ) (htime : time < cutoff) :
-    quittingFiniteNashBellmanPathDynamicDebt reward cutoff path who time =
-      quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPair reward
-          (quittingRootSequenceProfile reward
-            (quittingFiniteNashBellmanPathRoots cutoff path) time)) who := by
-  let roots := quittingFiniteNashBellmanPathRoots cutoff path
-  let value := quittingFiniteNashBellmanPathValue cutoff path
-  have hsum : time + (cutoff - time) = cutoff :=
-    Nat.add_sub_of_le htime.le
-  have hsuffix :=
-    quittingFiniteDynamicDebt_eq_terminalSemanticDebt_suffix
-      reward roots value time (cutoff - time) (Nat.sub_pos_of_lt htime)
-      (fun later hlater => by
-        apply quittingFiniteNashBellmanPathRoots_eq_allContinue_of_cutoff_le
-          cutoff path later
-        simpa [hsum] using hlater)
-      (by
-        simpa [value, hsum] using
-          (quittingFiniteNashBellmanPathValue_eq_zero_at_cutoff
-            reward cutoff path hpath))
-      (fun later htimeLater hlater => by
-        apply quittingFiniteNashBellmanPathValue_eq_successor
-          reward cutoff path hpath later
-        simpa [hsum] using hlater)
-      who (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
-  simpa [quittingFiniteNashBellmanPathDynamicDebt, roots, value] using hsuffix
 
 /-- The padded terminal coordinate has the same interpretation.  At the
 cutoff the continuation is all-Continue, its prescribed payoff is zero, and
@@ -300,7 +138,7 @@ theorem quittingFiniteNashBellmanPathDynamicDebt_eq_terminalSemanticDebt
             (quittingFiniteNashBellmanPathRoots cutoff path) time)) who := by
   by_cases hlt : time < cutoff
   · exact
-      quittingFiniteNashBellmanPathDynamicDebt_eq_terminalSemanticDebt_suffix
+      _root_.GameTheory.quittingFiniteNashBellmanPathDynamicDebt_eq_terminalSemanticDebt_completion
         reward cutoff path hpath who time hlt
   · have heq : time = cutoff := Nat.le_antisymm htime (Nat.not_lt.mp hlt)
     subst time
@@ -406,7 +244,7 @@ theorem quittingBehaviorTerminalPort_suffix_eq_dynamicDebtPointRawPort
           reward cutoff path observer time := by
     funext observer
     exact
-      (quittingFiniteNashBellmanPathDynamicDebt_eq_terminalSemanticDebt_suffix
+      (_root_.GameTheory.quittingFiniteNashBellmanPathDynamicDebt_eq_terminalSemanticDebt_completion
         reward cutoff path hpath observer time htime).symm
   unfold quittingRawTerminalPort quittingDebtPointRawTerminalPort
     quittingFiniteNashBellmanPathDynamicDebtPoint

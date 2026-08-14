@@ -144,12 +144,17 @@ From a fresh checkout:
 git submodule update --init --recursive
 python scripts/generate_axiom_audit.py --check
 lake build
+python scripts/check_import_graph.py
+python scripts/check_proof_duplicates.py
 python scripts/check_trust.py
 python scripts/check_docs.py
 ```
 
 `lake build` performs the Lean compilation check. `check_trust.py` is a lexical
-escape-hatch scan and is not a substitute for compilation. Do not run
+escape-hatch scan and is not a substitute for compilation. The static
+duplicate check rejects long exact Research copies of maintained MathUE or
+UniformEquilibrium declaration bodies; it is a narrow ownership ratchet, not a
+semantic proof-equivalence test. Do not run
 `lake update` during ordinary setup; it is reserved for intentional dependency
 or manifest work.
 

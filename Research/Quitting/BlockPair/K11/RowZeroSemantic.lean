@@ -1,6 +1,6 @@
-import Research.Quitting.BlockPair.K11.ActiveEquationSemanticAdapter
 import Research.Quitting.BlockPair.K11.JacobianCache
 import Research.Quitting.BlockPair.K11.RowZeroCacheData
+import UniformEquilibrium.Quitting.Examples.BlockPair.K11ActiveEquationInterval
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11DyadicData
 
 namespace GameTheory.BlockPairK11.DyadicCertificate
