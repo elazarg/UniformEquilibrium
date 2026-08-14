@@ -12,7 +12,7 @@ open Filter Set Topology
 open Math.PolynomialSignCell
 
 namespace Math
-namespace CurveSelection.SquareLiftScratch
+namespace CurveSelection.Internal.SquareLift
 
 variable {ι σ : Type*}
 
@@ -1508,5 +1508,5 @@ theorem hasAnalyticPowerCurveAt_of_frequent_squareLift_branch
     ⟨q, δ, eta, hq, heta, hδ, hδ0,
       fun t ht => hinterval ht⟩
 
-end CurveSelection.SquareLiftScratch
+end CurveSelection.Internal.SquareLift
 end Math

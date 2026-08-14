@@ -11,7 +11,7 @@ namespace CurveSelection.RelativeChartSequence
 
 open CurveSelection.FunctionField
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 open CurveSelection.RelativePresentation
 open CurveSelection.RelativePresentationGerm
 open CurveSelection.RelativeSmoothGerm

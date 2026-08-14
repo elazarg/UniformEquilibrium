@@ -15,9 +15,9 @@ open Math.PolynomialSignCell
 namespace Math
 namespace CurveSelection.AlgebraicApproach
 
-open CurveSelection.AlgebraicReductionScratch
-open CurveSelection.AnalyticSignScratch
-open CurveSelection.ConvergenceScratch
+open CurveSelection.Internal.AlgebraicReduction
+open CurveSelection.Internal.AnalyticSign
+open CurveSelection.Internal.Convergence
 open CurveSelection.FiniteBranchCoverage
 
 /--
@@ -213,10 +213,10 @@ theorem hasAnalyticPowerCurveAt_signCell_of_algebraic_approach
         (relation j) (x₀ j.1)).primPart
   have hQrootEventually :
       ∀ᶠ i in atTop, ∀ j : J,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (Q j) (x i parameter) (x i j.1 - x₀ j.1) = 0 := by
     simpa [J, Q, bivEval,
-      CurveSelection.TerminationScratch.bivEvalAt] using
+      CurveSelection.Internal.Termination.bivEvalAt] using
       (eventually_centered_primPart_isRoot
         relation hrelation
         (fun i => x i parameter) hxpos hxparameter
@@ -252,7 +252,7 @@ theorem hasAnalyticPowerCurveAt_signCell_of_algebraic_approach
     exact Polynomial.isPrimitive_primPart _
   have hQroot :
       ∀ i j,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (Q j) (lam i) (centered i j) = 0 := by
     intro i j
     exact hN (shift i) (Nat.le_add_left N i) j
@@ -261,7 +261,7 @@ theorem hasAnalyticPowerCurveAt_signCell_of_algebraic_approach
         hq, hpairSub, hqroot, H, hsplit, hbranchData,
         htCanonical, ht, htPow, hcovered⟩ :=
     exists_factorTuple_finite_analytic_branches_covering_sequence
-        CurveSelection.PuiseuxDegreeScratch.hasRamifiedRootProperty_algClosed
+        CurveSelection.Internal.PuiseuxDegree.hasRamifiedRootProperty_algClosed
         Q hQne hQprimitive lam centered hlamPos hlam hcentered hQroot
   let parameterBranch : ℂ → ℂ := fun z => z ^ p
   let allBranches : σ → List (ℂ → ℂ) :=

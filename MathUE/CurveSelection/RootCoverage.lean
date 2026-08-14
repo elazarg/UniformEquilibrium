@@ -277,9 +277,9 @@ theorem coeff_specializeBivPolynomial
 theorem eval_specializeBivPolynomial
     (Q : Polynomial (Polynomial ℂ)) (x y : ℂ) :
     (specializeBivPolynomial Q x).eval y =
-      CurveSelection.TerminationScratch.bivEvalAt Q x y := by
+      CurveSelection.Internal.Termination.bivEvalAt Q x y := by
   simp [specializeBivPolynomial,
-    CurveSelection.TerminationScratch.bivEvalAt,
+    CurveSelection.Internal.Termination.bivEvalAt,
     Polynomial.eval_map]
 
 theorem tendsto_coeff_specializeBivPolynomial
@@ -644,11 +644,11 @@ theorem eventually_eq_branch_of_finite_centered_roots
     (hy : Tendsto y l (𝓝 y₀))
     (hroots :
       ∀ᶠ u in l, ∀ f ∈ γ,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           Q (x u) (f u) = 0)
     (hyroot :
       ∀ᶠ u in l,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           Q (x u) (y u) = 0)
     (hnodup :
       ∀ᶠ u in l, (γ.map fun f => f u).Nodup)

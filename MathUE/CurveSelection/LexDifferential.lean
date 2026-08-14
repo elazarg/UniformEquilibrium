@@ -10,7 +10,7 @@ noncomputable section
 open Set
 
 namespace Math
-namespace CurveSelection.LexDifferentialScratch
+namespace CurveSelection.Internal.LexDifferential
 
 /-- Algebraic chain rule for a derivation evaluated on a multivariate
 polynomial. -/
@@ -553,5 +553,5 @@ theorem isAlgebraic_of_equations_and_normalCriticality
       (MvPolynomial.eval₂ (algebraMap K L) x Q)
       hQ
 
-end CurveSelection.LexDifferentialScratch
+end CurveSelection.Internal.LexDifferential
 end Math

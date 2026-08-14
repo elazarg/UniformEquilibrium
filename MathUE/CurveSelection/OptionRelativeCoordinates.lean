@@ -11,7 +11,7 @@ namespace CurveSelection.OptionRelativeCoordinates
 
 open CurveSelection.FunctionField
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 open CurveSelection.LocalizedCoordinates
 open CurveSelection.RelativePresentation
 

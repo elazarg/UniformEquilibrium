@@ -54,6 +54,10 @@ WARNING_AS_ERROR = re.compile(r"⟨\s*`warningAsError\s*,\s*true\s*⟩")
 LEAN_LIBRARY_RE = re.compile(
     r"^lean_lib\s+([A-Za-z0-9_'.]+)\s+where\s*$", re.MULTILINE
 )
+RESOURCE_OPTION_RE = re.compile(
+    r"⟨\s*`(maxRecDepth|maxSynthPendingDepth|synthInstance\.maxSize)\s*,"
+    r"\s*\.ofNat\s+(\d+)\s*⟩"
+)
 
 
 def is_identifier_continuation(char: str) -> bool:
@@ -179,6 +183,44 @@ def token_failures(path: pathlib.Path, text: str) -> list[str]:
     return failures
 
 
+def resource_option_failures(lakefile: str) -> list[str]:
+    """Enforce the measured Lake resource-option ratchet.
+
+    The only demonstrated non-default need is instance-search size in the
+    semantic library.  Keeping this check structural prevents a local
+    elaboration issue from silently raising limits for every project lane.
+    """
+
+    clean = strip_comments_and_strings(lakefile)
+    libraries = list(LEAN_LIBRARY_RE.finditer(clean))
+    failures: list[str] = []
+    for option in RESOURCE_OPTION_RE.finditer(clean):
+        name, raw_value = option.groups()
+        value = int(raw_value)
+        owner = None
+        for index, library in enumerate(libraries):
+            end = (
+                libraries[index + 1].start()
+                if index + 1 < len(libraries)
+                else len(clean)
+            )
+            if library.end() <= option.start() < end:
+                owner = library.group(1)
+                break
+        if name in {"maxRecDepth", "maxSynthPendingDepth"}:
+            failures.append(
+                f"unnecessary resource override {name}={value}; controlled "
+                "isolation showed that it does not fix the sole default failure"
+            )
+        elif owner != "UniformEquilibrium" or value > 1024:
+            location = owner if owner is not None else "shared/global options"
+            failures.append(
+                f"synthInstance.maxSize={value} is outside the measured "
+                f"UniformEquilibrium-only bound (found in {location})"
+            )
+    return failures
+
+
 def check_global_configuration(failures: list[str]) -> None:
     paths = [ROOT / "lakefile.lean"]
     workflows = ROOT / ".github" / "workflows"
@@ -194,6 +236,10 @@ def check_global_configuration(failures: list[str]) -> None:
                     f"{path.relative_to(ROOT)}:{line}: forbidden {label}"
                 )
     lakefile = (ROOT / "lakefile.lean").read_text(encoding="utf-8")
+    failures.extend(
+        f"lakefile.lean: {failure}"
+        for failure in resource_option_failures(lakefile)
+    )
     if not WARNING_AS_ERROR.search(strip_comments_and_strings(lakefile)):
         failures.append(
             "lakefile.lean: project libraries must set warningAsError to true"

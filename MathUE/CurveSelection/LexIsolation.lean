@@ -6,7 +6,7 @@ noncomputable section
 open Filter Set Topology
 
 namespace Math
-namespace CurveSelection.LexIsolationScratch
+namespace CurveSelection.Internal.LexIsolation
 
 open CurveSelection.LocalRootIsolation
 
@@ -179,7 +179,7 @@ theorem exists_permanentMultipliers_of_separableLexRelations
     (hindependent :
       LinearIndependent ℝ
         (fun i : I =>
-          CurveSelection.NormalLagrangeScratch.evalGradient
+          CurveSelection.Internal.NormalLagrange.evalGradient
             (P i) x)) :
     ∃ Λ : Fin n → I → ℝ,
       ∀ (j : Fin n) (k : σ),
@@ -201,7 +201,7 @@ theorem exists_permanentMultipliers_of_separableLexRelations
             MvPolynomial.eval z.ofLp (Q l)) x := by
     intro l
     exact
-      (CurveSelection.NormalLagrangeScratch.hasStrictFDerivAt_eval
+      (CurveSelection.Internal.NormalLagrange.hasStrictFDerivAt_eval
         (Q l) x).continuousAt
   have hlocal :
       ∀ j : Fin n,
@@ -224,8 +224,8 @@ theorem exists_permanentMultipliers_of_separableLexRelations
       exact hderiv l.1
     · exact hlex j
   exact
-    Math.CurveSelection.NormalLagrangeScratch.exists_permanentMultipliers_of_localExtrOn
+    Math.CurveSelection.Internal.NormalLagrange.exists_permanentMultipliers_of_localExtrOn
       x P Q hlocal hindependent
 
-end CurveSelection.LexIsolationScratch
+end CurveSelection.Internal.LexIsolation
 end Math

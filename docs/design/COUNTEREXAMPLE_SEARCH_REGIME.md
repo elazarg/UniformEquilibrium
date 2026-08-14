@@ -50,8 +50,11 @@ singleton reward is positive.  The former free parameter `δ` was redundant.
 The capacity `C*` is canonical: its real value is the least valid prefix bound,
 not a user-chosen larger constant.
 
-The Lean umbrella is `CounterexampleRegimeAll`.  The direct characterization
-is `not_exists_uniformEquilibriumPayoff_iff_exists_gap_and_finiteChargeCapacity`.
+The Lean umbrella is `CounterexampleRegimeAll`, an import-only facade for the
+diagnostic inventory.  This document is the narrative source for its search
+protocol and current synthesis; the facade itself deliberately carries no
+duplicate prose.  The direct characterization is
+`not_exists_uniformEquilibriumPayoff_iff_exists_gap_and_finiteChargeCapacity`.
 
 ### Derived finite and asymptotic narrowing
 

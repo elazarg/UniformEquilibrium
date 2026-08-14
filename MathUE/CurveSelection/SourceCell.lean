@@ -8,7 +8,7 @@ open Math.PolynomialSignCell
 namespace Math
 namespace CurveSelection.SourceCell
 
-open CurveSelection.SquareLiftScratch
+open CurveSelection.Internal.SquareLift
 
 /-- Permanent parameterized square-lift equations, together with strict
 positivity of the squared slack score. -/

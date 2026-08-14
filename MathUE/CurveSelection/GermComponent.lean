@@ -8,7 +8,7 @@ noncomputable section
 open Filter
 
 namespace Math
-namespace CurveSelection.GermComponentScratch
+namespace CurveSelection.Internal.GermComponent
 
 /-- The free ultrafilter used to retain one coherent algebraic germ of a
 sequence. -/
@@ -245,5 +245,5 @@ theorem exists_prime_germComponent_preserving_strictParameter
     aeval_X_mem_sequenceGermIdeal_iff_of_strictAnti
       x parameter hanti p
 
-end CurveSelection.GermComponentScratch
+end CurveSelection.Internal.GermComponent
 end Math

@@ -5,7 +5,7 @@ noncomputable section
 open Filter Set Topology
 
 namespace Math
-namespace CurveSelection.PositiveRootScratch
+namespace CurveSelection.Internal.PositiveRoot
 
 /-- The positive real `q`-th root, used to pull an approaching positive
 parameter sequence back through a common Puiseux ramification. -/
@@ -52,5 +52,5 @@ theorem positiveNatRoot_parameter
     ∀ n, positiveNatRoot q (lam n) ^ q = lam n :=
   fun n => positiveNatRoot_pow hq (hlam_pos n).le
 
-end CurveSelection.PositiveRootScratch
+end CurveSelection.Internal.PositiveRoot
 end Math

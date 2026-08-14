@@ -9,7 +9,7 @@ noncomputable section
 open Set
 
 namespace Math
-namespace CurveSelection.NormalLagrangeScratch
+namespace CurveSelection.Internal.NormalLagrange
 
 /-- At a regular equality-constrained extremum the objective multiplier can
 be normalized to one.  This is the form that excludes the abnormal
@@ -529,5 +529,5 @@ theorem exists_permanentMultiplierSequences_of_localExtrOn
   choose Λ hcritical using hm
   exact ⟨Λ, hcritical⟩
 
-end CurveSelection.NormalLagrangeScratch
+end CurveSelection.Internal.NormalLagrange
 end Math

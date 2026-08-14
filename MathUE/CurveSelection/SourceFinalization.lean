@@ -10,9 +10,9 @@ open Math.PolynomialSignCell
 namespace Math
 namespace CurveSelection.SourceFinalization
 
-open CurveSelection.AlgebraicReductionScratch
+open CurveSelection.Internal.AlgebraicReduction
 open CurveSelection.SourceCell
-open CurveSelection.SquareLiftScratch
+open CurveSelection.Internal.SquareLift
 open CurveSelection.UltrafilterSubsequence
 
 /--
@@ -54,7 +54,7 @@ theorem positiveCoordinateArc_of_eventual_source_relations
     (hrelation : ∀ j, relation j ≠ 0)
     (hroot :
       ∀ j,
-        ∀ᶠ n in (CurveSelection.GermComponentScratch.sequenceUltrafilter :
+        ∀ᶠ n in (CurveSelection.Internal.GermComponent.sequenceUltrafilter :
           Filter ℕ),
           bivEval (relation j) (u n none) (u n j.1) = 0) :
     HasPositiveCoordinateAnalyticArcAt
@@ -66,7 +66,7 @@ theorem positiveCoordinateArc_of_eventual_source_relations
       bivEval (relation j) (u n none) (u n j.1) = 0
   have hgood :
       ∀ᶠ n in
-          (CurveSelection.GermComponentScratch.sequenceUltrafilter : Filter ℕ),
+          (CurveSelection.Internal.GermComponent.sequenceUltrafilter : Filter ℕ),
         good n := by
     apply Filter.eventually_all.2
     intro j
@@ -168,7 +168,7 @@ theorem positiveCoordinateArc_of_eventual_source_relations_some
     (hrelation : ∀ v, relation v ≠ 0)
     (hroot :
       ∀ v,
-        ∀ᶠ n in (CurveSelection.GermComponentScratch.sequenceUltrafilter :
+        ∀ᶠ n in (CurveSelection.Internal.GermComponent.sequenceUltrafilter :
           Filter ℕ),
           bivEval (relation v) (u n none) (u n (some v)) = 0) :
     HasPositiveCoordinateAnalyticArcAt

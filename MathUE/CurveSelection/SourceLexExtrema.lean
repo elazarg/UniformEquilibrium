@@ -9,8 +9,8 @@ open Math.PolynomialSignCell
 namespace Math
 namespace CurveSelection.SourceLexExtrema
 
-open CurveSelection.LexIsolationScratch
-open CurveSelection.SquareLiftScratch
+open CurveSelection.Internal.LexIsolation
+open CurveSelection.Internal.SquareLift
 
 /--
 The compact square-lift selection inequalities are precisely the local

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check project Lean import reachability and lane boundaries.
+"""Check project Lean import reachability and architecture boundaries.
 
 This is deliberately a static check.  It reads Lean source files and import
 commands, without invoking Lean or changing source files.  Imports belonging to
@@ -37,6 +37,20 @@ LEAN_LIBRARY_RE = re.compile(
     r"^\s*lean_lib\s+([A-Za-z_][A-Za-z0-9_']*)\s+where\b", re.MULTILINE
 )
 MODULE_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_']*(?:\.[A-Za-z_][A-Za-z0-9_']*)*")
+SCRATCH_NAMESPACE_RE = re.compile(
+    r"^\s*namespace\s+"
+    r"([A-Za-z_][A-Za-z0-9_']*(?:\.[A-Za-z_][A-Za-z0-9_']*)*Scratch)\s*$",
+    re.MULTILINE,
+)
+# These modules exist to make an umbrella inventory reachable.  Ordinary
+# consumers must import the declarations they use, otherwise one experimental
+# file can accidentally acquire hundreds of unrelated dependencies.
+INVENTORY_ONLY_FACADES = {
+    "UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAll": {
+        "UniformEquilibrium",
+        "AxiomAudit",
+    },
+}
 
 
 @dataclass(frozen=True)
@@ -200,7 +214,7 @@ def check_import_graph(
     root: pathlib.Path = ROOT,
     umbrella_names: Sequence[str] | None = None,
 ) -> list[str]:
-    """Return actionable diagnostics for reachability and lane violations."""
+    """Return diagnostics for reachability, ownership, and API-shape violations."""
 
     root = root.resolve()
     modules, imports = import_graph(root)
@@ -238,6 +252,17 @@ def check_import_graph(
 
     local_prefixes = tuple(by_name)
     for module, items in imports.items():
+        if module == "UniformEquilibrium" and any(
+            item.module == "MathUE" for item in items
+        ):
+            for item in items:
+                if item.module != "MathUE" and _is_prefixed(item.module, "MathUE"):
+                    failures.append(
+                        f"{modules[module]}:{item.line}: redundant direct import "
+                        f"{item.module} after import MathUE; keep generic inventory "
+                        "ownership in MathUE.lean"
+                    )
+
         for item in items:
             if item.module not in local_names and any(
                 _is_prefixed(item.module, prefix) for prefix in local_prefixes
@@ -282,6 +307,25 @@ def check_import_graph(
                         f"{modules[module]}:{item.line}: forbidden architectural "
                         f"edge {module} -> {item.module}; {rule.explanation}"
                     )
+
+            allowed_consumers = INVENTORY_ONLY_FACADES.get(item.module)
+            if allowed_consumers is not None and module not in allowed_consumers:
+                failures.append(
+                    f"{modules[module]}:{item.line}: module {module} imports "
+                    f"inventory-only facade {item.module}; import the narrow "
+                    "modules containing the declarations actually used"
+                )
+
+    for module, path in modules.items():
+        if not _is_prefixed(module, "MathUE"):
+            continue
+        clean = strip_comments_and_strings(path.read_text(encoding="utf-8"))
+        for match in SCRATCH_NAMESPACE_RE.finditer(clean):
+            line = clean.count("\n", 0, match.start()) + 1
+            failures.append(
+                f"{path}:{line}: MathUE namespace {match.group(1)} ends in "
+                "Scratch; put implementation details under an Internal namespace"
+            )
 
     return failures
 

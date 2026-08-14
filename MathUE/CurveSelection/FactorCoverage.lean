@@ -9,7 +9,7 @@ open Filter Polynomial
 open UniqueFactorizationMonoid
 
 namespace Math
-namespace CurveSelection.FactorCoverageScratch
+namespace CurveSelection.Internal.FactorCoverage
 
 variable {K : Type*} [Field K]
 
@@ -33,13 +33,13 @@ theorem exists_positiveDegree_irreducibleFactor_isRoot
     (hprimitive : Q.IsPrimitive)
     (x y : K)
     (hroot :
-      CurveSelection.TerminationScratch.bivEvalAt Q x y = 0) :
+      CurveSelection.Internal.Termination.bivEvalAt Q x y = 0) :
     ∃ q : Polynomial (Polynomial K),
       q ∈ irreducibleFactors Q ∧
       Irreducible q ∧
       0 < q.natDegree ∧
       q ∣ Q ∧
-      CurveSelection.TerminationScratch.bivEvalAt q x y = 0 := by
+      CurveSelection.Internal.Termination.bivEvalAt q x y = 0 := by
   classical
   let e : Polynomial (Polynomial K) →+* K :=
     Polynomial.eval₂RingHom (Polynomial.evalRingHom x) y
@@ -79,7 +79,7 @@ theorem exists_positiveDegree_irreducibleFactor_isRoot
     exact hqirr.not_isUnit hqUnit
   exact
     ⟨q, hqmem', hqirr, hqdegree, hqdvd,
-      by simpa [e, CurveSelection.TerminationScratch.bivEvalAt] using hqzero⟩
+      by simpa [e, CurveSelection.Internal.Termination.bivEvalAt] using hqzero⟩
 
 /-- Along an infinite sequence of roots, one fixed positive-degree
 irreducible factor recurs frequently. -/
@@ -90,14 +90,14 @@ theorem exists_positiveDegree_irreducibleFactor_frequently_isRoot
     (x y : ℕ → K)
     (hroot :
       ∀ n,
-        CurveSelection.TerminationScratch.bivEvalAt Q (x n) (y n) = 0) :
+        CurveSelection.Internal.Termination.bivEvalAt Q (x n) (y n) = 0) :
     ∃ q : Polynomial (Polynomial K),
       q ∈ irreducibleFactors Q ∧
       Irreducible q ∧
       0 < q.natDegree ∧
       q ∣ Q ∧
       ∃ᶠ n in atTop,
-        CurveSelection.TerminationScratch.bivEvalAt q (x n) (y n) = 0 := by
+        CurveSelection.Internal.Termination.bivEvalAt q (x n) (y n) = 0 := by
   classical
   choose q hqmem hqirr hqdegree hqdvd hqroot using
     fun n =>
@@ -139,7 +139,7 @@ theorem exists_positiveDegree_irreducibleFactor_subsequence_isRoot
     (hlim : Tendsto (fun n => (x n, y n)) atTop l)
     (hroot :
       ∀ n,
-        CurveSelection.TerminationScratch.bivEvalAt Q (x n) (y n) = 0) :
+        CurveSelection.Internal.Termination.bivEvalAt Q (x n) (y n) = 0) :
     ∃ (q : Polynomial (Polynomial K)) (ns : ℕ → ℕ),
       q ∈ irreducibleFactors Q ∧
       Irreducible q ∧
@@ -147,7 +147,7 @@ theorem exists_positiveDegree_irreducibleFactor_subsequence_isRoot
       q ∣ Q ∧
       Tendsto (fun n => (x (ns n), y (ns n))) atTop l ∧
       ∀ n,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           q (x (ns n)) (y (ns n)) = 0 := by
   obtain ⟨q, hqmem, hqirr, hqdegree, hqdvd, hqfrequent⟩ :=
     exists_positiveDegree_irreducibleFactor_frequently_isRoot
@@ -155,14 +155,14 @@ theorem exists_positiveDegree_irreducibleFactor_subsequence_isRoot
   have hqfrequent' :
       ∃ᶠ n in atTop,
         (fun w : K × K =>
-          CurveSelection.TerminationScratch.bivEvalAt q w.1 w.2 = 0)
+          CurveSelection.Internal.Termination.bivEvalAt q w.1 w.2 = 0)
           (x n, y n) := by
     simpa using hqfrequent
   obtain ⟨ns, hlimsub, hqroot⟩ :=
     Filter.subseq_forall_of_frequently
       (x := fun n => (x n, y n))
       (p := fun w : K × K =>
-        CurveSelection.TerminationScratch.bivEvalAt q w.1 w.2 = 0)
+        CurveSelection.Internal.Termination.bivEvalAt q w.1 w.2 = 0)
       (l := l) hlim hqfrequent'
   exact
     ⟨q, ns, hqmem, hqirr, hqdegree, hqdvd, hlimsub,
@@ -180,7 +180,7 @@ theorem exists_irreducibleFactorTuple_frequently_isRoot
     (y : ℕ → σ → K)
     (hroot :
       ∀ n j,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (Q j) (x n) (y n j) = 0) :
     ∃ q : σ → Polynomial (Polynomial K),
       (∀ j,
@@ -190,7 +190,7 @@ theorem exists_irreducibleFactorTuple_frequently_isRoot
         q j ∣ Q j) ∧
       ∃ᶠ n in atTop,
         ∀ j,
-          CurveSelection.TerminationScratch.bivEvalAt
+          CurveSelection.Internal.Termination.bivEvalAt
             (q j) (x n) (y n j) = 0 := by
   classical
   letI : Fintype σ := Fintype.ofFinite σ
@@ -247,7 +247,7 @@ theorem exists_irreducibleFactorTuple_subsequence_isRoot
     (hlim : Tendsto (fun n => (x n, y n)) atTop l)
     (hroot :
       ∀ n j,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (Q j) (x n) (y n j) = 0) :
     ∃ (q : σ → Polynomial (Polynomial K)) (ns : ℕ → ℕ),
       (∀ j,
@@ -257,7 +257,7 @@ theorem exists_irreducibleFactorTuple_subsequence_isRoot
         q j ∣ Q j) ∧
       Tendsto (fun n => (x (ns n), y (ns n))) atTop l ∧
       ∀ n j,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (q j) (x (ns n)) (y (ns n) j) = 0 := by
   obtain ⟨q, hq, hqfrequent⟩ :=
     exists_irreducibleFactorTuple_frequently_isRoot
@@ -266,7 +266,7 @@ theorem exists_irreducibleFactorTuple_subsequence_isRoot
       ∃ᶠ n in atTop,
         (fun w : K × (σ → K) =>
           ∀ j,
-            CurveSelection.TerminationScratch.bivEvalAt
+            CurveSelection.Internal.Termination.bivEvalAt
               (q j) w.1 (w.2 j) = 0)
           (x n, y n) := by
     simpa using hqfrequent
@@ -275,10 +275,10 @@ theorem exists_irreducibleFactorTuple_subsequence_isRoot
       (x := fun n => (x n, y n))
       (p := fun w : K × (σ → K) =>
         ∀ j,
-          CurveSelection.TerminationScratch.bivEvalAt
+          CurveSelection.Internal.Termination.bivEvalAt
             (q j) w.1 (w.2 j) = 0)
       (l := l) hlim hqfrequent'
   exact ⟨q, ns, hq, hlimsub, by simpa using hqroot⟩
 
-end CurveSelection.FactorCoverageScratch
+end CurveSelection.Internal.FactorCoverage
 end Math

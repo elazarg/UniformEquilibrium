@@ -10,7 +10,7 @@ open Filter Set Topology
 open Math.PolynomialSignCell
 
 namespace Math
-namespace CurveSelection.AnalyticSignScratch
+namespace CurveSelection.Internal.AnalyticSign
 
 variable {ι σ : Type*}
 
@@ -321,5 +321,5 @@ theorem hasAnalyticPowerCurveAt_of_finite_complexAnalytic_branches
     hasAnalyticPowerCurveAt_signCell_of_frequently
       P τ coordinate x₀ q γ hq hγ hγ0 hfrequent hpower
 
-end CurveSelection.AnalyticSignScratch
+end CurveSelection.Internal.AnalyticSign
 end Math

@@ -8,7 +8,7 @@ open Filter
 namespace Math
 namespace CurveSelection.UltrafilterSubsequence
 
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 
 /--
 Any property holding in the fixed free ultrafilter holds along a strictly

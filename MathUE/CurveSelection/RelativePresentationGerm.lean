@@ -9,7 +9,7 @@ namespace Math
 namespace CurveSelection.RelativePresentationGerm
 
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 open CurveSelection.RelativePresentation
 
 /-- Choose simultaneous real representatives of the images of the

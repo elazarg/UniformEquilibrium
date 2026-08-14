@@ -8,8 +8,8 @@ namespace Math
 namespace CurveSelection.RelativeLexInduction
 
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
-open CurveSelection.LexIsolationScratch
+open CurveSelection.Internal.GermComponent
+open CurveSelection.Internal.LexIsolation
 open CurveSelection.RelativeLexAlgebraicity
 open CurveSelection.RelativePresentation
 open CurveSelection.RelativePresentationGerm

@@ -106,6 +106,40 @@ example : True := by sorry
                 source = f"def {identifier} : Nat := 0\nexample : True := by sorry\n"
                 self.assertEqual(self.labels(source), ["proof placeholder"])
 
+    def test_resource_options_are_scoped_and_ratcheted(self) -> None:
+        accepted = """
+abbrev common := #[⟨`warningAsError, true⟩]
+lean_lib MathUE where
+  leanOptions := common
+lean_lib UniformEquilibrium where
+  leanOptions := common ++ #[⟨`synthInstance.maxSize, .ofNat 1024⟩]
+lean_lib Research where
+  leanOptions := common
+"""
+        self.assertEqual(check_trust.resource_option_failures(accepted), [])
+
+        rejected = """
+abbrev common := #[
+  ⟨`maxRecDepth, .ofNat 4096⟩,
+  ⟨`maxSynthPendingDepth, .ofNat 16⟩,
+  ⟨`synthInstance.maxSize, .ofNat 2048⟩
+]
+lean_lib UniformEquilibrium where
+  leanOptions := common
+lean_lib Research where
+  leanOptions := common ++ #[⟨`synthInstance.maxSize, .ofNat 1024⟩]
+"""
+        failures = check_trust.resource_option_failures(rejected)
+        self.assertEqual(len(failures), 4)
+        self.assertTrue(any("maxRecDepth=4096" in failure for failure in failures))
+        self.assertTrue(
+            any("maxSynthPendingDepth=16" in failure for failure in failures)
+        )
+        self.assertEqual(
+            sum("synthInstance.maxSize" in failure for failure in failures),
+            2,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

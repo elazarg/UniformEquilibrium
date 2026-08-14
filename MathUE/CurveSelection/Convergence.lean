@@ -17,10 +17,10 @@ open Filter Set Topology
 open scoped PowerSeries.WithPiTopology
 
 namespace Math
-namespace CurveSelection.ConvergenceScratch
+namespace CurveSelection.Internal.Convergence
 
-open CurveSelection.FactorCoverageScratch
-open CurveSelection.TerminationScratch
+open CurveSelection.Internal.FactorCoverage
+open CurveSelection.Internal.Termination
 
 variable {E F G : Type*}
   [NormedAddCommGroup E] [NormedSpace ℂ E] [CompleteSpace E]
@@ -411,59 +411,59 @@ theorem exists_analytic_complexBranch_of_formalRoot_of_derivative_ne_zero
       n = k + 1 ∧
       A = s.trunc n ∧
       c =
-        (CurveSelection.TerminationScratch.formalTail n s).constantCoeff ∧
+        (CurveSelection.Internal.Termination.formalTail n s).constantCoeff ∧
       R =
-        CurveSelection.TerminationScratch.normalizedBivPolynomialTaylorTransform
+        CurveSelection.Internal.Termination.normalizedBivPolynomialTaylorTransform
           Q A n k ∧
       AnalyticAt ℂ z 0 ∧
       z 0 = c ∧
       A.eval 0 = s.constantCoeff ∧
       (∀ x w : ℂ,
-        CurveSelection.TerminationScratch.bivEvalAt Q x
+        CurveSelection.Internal.Termination.bivEvalAt Q x
             (A.eval x + x ^ n * w) =
           x ^ (n + k) *
-            CurveSelection.TerminationScratch.bivEvalAt R x w) ∧
+            CurveSelection.Internal.Termination.bivEvalAt R x w) ∧
       AnalyticAt ℂ
         (fun x => A.eval x + x ^ n * z x) 0 ∧
       (fun x => A.eval x + x ^ n * z x) 0 =
         s.constantCoeff ∧
       (∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt Q x
+        CurveSelection.Internal.Termination.bivEvalAt Q x
           (A.eval x + x ^ n * z x) = 0) ∧
       (∀ᶠ w in 𝓝 ((0, c) : ℂ × ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt R w.1 w.2 = 0 ↔
+        CurveSelection.Internal.Termination.bivEvalAt R w.1 w.2 = 0 ↔
           z w.1 = w.2) := by
   let f := bivPolynomialToPowerSeriesPolynomial Q
   let k := (f.derivative.eval s).order.toNat
   let n := k + 1
   let A := s.trunc n
-  let tail := CurveSelection.TerminationScratch.formalTail n s
+  let tail := CurveSelection.Internal.Termination.formalTail n s
   let c := tail.constantCoeff
   let R :=
-    CurveSelection.TerminationScratch.normalizedBivPolynomialTaylorTransform
+    CurveSelection.Internal.Termination.normalizedBivPolynomialTaylorTransform
       Q A n k
   obtain ⟨hA0, htransform, hface, hsimple⟩ :=
-    CurveSelection.TerminationScratch.normalizedBivPolynomialTaylorTransform_has_simple_specialFiber
+    normalizedBivPolynomialTaylorTransform_has_simple_specialFiber
       Q s hroot hD
   obtain ⟨z, hzanalytic, hz0, hzroot, hzunique⟩ :=
     exists_analytic_complexBivPolynomial_root_of_simple_specialFiber
       R c (by
         simpa [complexBivEval,
-          CurveSelection.TerminationScratch.bivEvalAt] using hface)
+          CurveSelection.Internal.Termination.bivEvalAt] using hface)
       (by
         simpa [complexBivEval,
-          CurveSelection.TerminationScratch.bivEvalAt] using hsimple)
+          CurveSelection.Internal.Termination.bivEvalAt] using hsimple)
   have hzroot' :
       ∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt R x (z x) = 0 := by
+        CurveSelection.Internal.Termination.bivEvalAt R x (z x) = 0 := by
     simpa [complexBivEval,
-      CurveSelection.TerminationScratch.bivEvalAt] using hzroot
+      CurveSelection.Internal.Termination.bivEvalAt] using hzroot
   have hzunique' :
       ∀ᶠ w in 𝓝 ((0, c) : ℂ × ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt R w.1 w.2 = 0 ↔
+        CurveSelection.Internal.Termination.bivEvalAt R w.1 w.2 = 0 ↔
           z w.1 = w.2 := by
     simpa [complexBivEval,
-      CurveSelection.TerminationScratch.bivEvalAt] using hzunique
+      CurveSelection.Internal.Termination.bivEvalAt] using hzunique
   have hgamma :
       AnalyticAt ℂ
         (fun x => A.eval x + x ^ n * z x) 0 := by
@@ -481,7 +481,7 @@ theorem exists_analytic_complexBranch_of_formalRoot_of_derivative_ne_zero
     simp
   have hQroot :
       ∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt Q x
+        CurveSelection.Internal.Termination.bivEvalAt Q x
           (A.eval x + x ^ n * z x) = 0 := by
     filter_upwards [hzroot'] with x hx
     rw [htransform x (z x), hx, mul_zero]
@@ -512,19 +512,19 @@ theorem
     ∃ z : ℂ → ℂ,
       AnalyticAt ℂ z 0 ∧
       z 0 =
-        (CurveSelection.TerminationScratch.formalTail n s).constantCoeff ∧
+        (CurveSelection.Internal.Termination.formalTail n s).constantCoeff ∧
       AnalyticAt ℂ
         (fun x => (s.trunc n).eval x + x ^ n * z x) 0 ∧
       (fun x => (s.trunc n).eval x + x ^ n * z x) 0 =
         s.constantCoeff ∧
       (∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt Q x
+        CurveSelection.Internal.Termination.bivEvalAt Q x
           ((s.trunc n).eval x + x ^ n * z x) = 0) := by
   let A := s.trunc n
   let c :=
-    (CurveSelection.TerminationScratch.formalTail n s).constantCoeff
+    (CurveSelection.Internal.Termination.formalTail n s).constantCoeff
   let R :=
-    CurveSelection.TerminationScratch.normalizedBivPolynomialTaylorTransform
+    CurveSelection.Internal.Termination.normalizedBivPolynomialTaylorTransform
       Q A n k
   obtain ⟨hA0, htransform, hface, hsimple⟩ :=
     normalizedBivPolynomialTaylorTransform_has_simple_specialFiber_of_lt
@@ -534,15 +534,15 @@ theorem
       R c
       (by
         simpa [complexBivEval,
-          CurveSelection.TerminationScratch.bivEvalAt] using hface)
+          CurveSelection.Internal.Termination.bivEvalAt] using hface)
       (by
         simpa [complexBivEval,
-          CurveSelection.TerminationScratch.bivEvalAt] using hsimple)
+          CurveSelection.Internal.Termination.bivEvalAt] using hsimple)
   have hzroot' :
       ∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt R x (z x) = 0 := by
+        CurveSelection.Internal.Termination.bivEvalAt R x (z x) = 0 := by
     simpa [complexBivEval,
-      CurveSelection.TerminationScratch.bivEvalAt] using hzroot
+      CurveSelection.Internal.Termination.bivEvalAt] using hzroot
   have hgamma :
       AnalyticAt ℂ
         (fun x => A.eval x + x ^ n * z x) 0 := by
@@ -559,7 +559,7 @@ theorem
     simp
   have hQroot :
       ∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt Q x
+        CurveSelection.Internal.Termination.bivEvalAt Q x
           (A.eval x + x ^ n * z x) = 0 := by
     filter_upwards [hzroot'] with x hx
     rw [htransform x (z x), hx, mul_zero]
@@ -707,9 +707,9 @@ def ramifyBivPolynomial
 theorem bivEvalAt_ramifyBivPolynomial
     {K : Type*} [Field K]
     (p : ℕ) (Q : Polynomial (Polynomial K)) (t y : K) :
-    CurveSelection.TerminationScratch.bivEvalAt
+    CurveSelection.Internal.Termination.bivEvalAt
         (ramifyBivPolynomial p Q) t y =
-      CurveSelection.TerminationScratch.bivEvalAt Q (t ^ p) y := by
+      CurveSelection.Internal.Termination.bivEvalAt Q (t ^ p) y := by
   have hhom :
       (Polynomial.evalRingHom t).comp
           (Polynomial.compRingHom
@@ -719,7 +719,7 @@ theorem bivEvalAt_ramifyBivPolynomial
     · intro a
       simp
     · simp
-  simp [CurveSelection.TerminationScratch.bivEvalAt,
+  simp [CurveSelection.Internal.Termination.bivEvalAt,
     ramifyBivPolynomial, Polynomial.eval₂_map, hhom]
 
 theorem mapped_ramifyBivPolynomial
@@ -1159,7 +1159,7 @@ theorem exists_analytic_complexBranch_of_real_irreducible_formalRoot
       AnalyticAt ℂ γ 0 ∧
       γ 0 = s.constantCoeff ∧
       (∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (Q.map (Polynomial.mapRingHom Complex.ofRealHom))
           x (γ x) = 0) := by
   let Qℂ : Polynomial (Polynomial ℂ) :=
@@ -1331,7 +1331,7 @@ theorem
       AnalyticAt ℂ γ 0 ∧
       γ 0 = s.constantCoeff ∧
       (∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           ((ramifyBivPolynomial p Q).map
             (Polynomial.mapRingHom Complex.ofRealHom))
           x (γ x) = 0) := by
@@ -1417,13 +1417,13 @@ theorem
     ∃ z : ℂ → ℂ,
       AnalyticAt ℂ z 0 ∧
       z 0 =
-        (CurveSelection.TerminationScratch.formalTail n s).constantCoeff ∧
+        (CurveSelection.Internal.Termination.formalTail n s).constantCoeff ∧
       AnalyticAt ℂ
         (fun x => (s.trunc n).eval x + x ^ n * z x) 0 ∧
       (fun x => (s.trunc n).eval x + x ^ n * z x) 0 =
         s.constantCoeff ∧
       (∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           ((ramifyBivPolynomial p Q).map
             (Polynomial.mapRingHom Complex.ofRealHom))
           x ((s.trunc n).eval x + x ^ n * z x) = 0) := by
@@ -1561,7 +1561,7 @@ theorem exists_analytic_complexBranch_of_ramified_weierstrass_root
       AnalyticAt ℂ γ 0 ∧
       γ 0 = 0 ∧
       (∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           ((ramifyBivPolynomial p Q).map
             (Polynomial.mapRingHom Complex.ofRealHom))
           x (γ x) = 0) := by
@@ -1664,7 +1664,7 @@ theorem exists_commonRamified_analyticBranches
           AnalyticAt ℂ γ 0 ∧
           γ 0 = 0 ∧
           (∀ᶠ x in 𝓝 (0 : ℂ),
-            CurveSelection.TerminationScratch.bivEvalAt
+            CurveSelection.Internal.Termination.bivEvalAt
               ((ramifyBivPolynomial p (Q j)).map
                 (Polynomial.mapRingHom Complex.ofRealHom))
               x (γ x) = 0) := by
@@ -1708,7 +1708,7 @@ theorem
     (hlim : Tendsto (fun n => (x n, y n)) atTop l)
     (hroot :
       ∀ n j,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (Q j) (x n) (y n j) = 0) :
     ∃ (q : J → Polynomial (Polynomial ℝ))
         (ns : ℕ → ℕ)
@@ -1717,13 +1717,13 @@ theorem
         (p : ℕ) (hp : p ≠ 0),
       (∀ j,
         q j ∈
-            CurveSelection.FactorCoverageScratch.irreducibleFactors (Q j) ∧
+            CurveSelection.Internal.FactorCoverage.irreducibleFactors (Q j) ∧
         Irreducible (q j) ∧
         0 < (q j).natDegree ∧
         q j ∣ Q j) ∧
       Tendsto (fun n => (x (ns n), y (ns n))) atTop l ∧
       (∀ n j,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (q j) (x (ns n)) (y (ns n) j) = 0) ∧
       (∀ j,
         (bivPolynomialToIteratedPowerSeries
@@ -1738,7 +1738,7 @@ theorem
           AnalyticAt ℂ γ 0 ∧
           γ 0 = 0 ∧
           (∀ᶠ t in 𝓝 (0 : ℂ),
-            CurveSelection.TerminationScratch.bivEvalAt
+            CurveSelection.Internal.Termination.bivEvalAt
               ((ramifyBivPolynomial p (q j)).map
                 (Polynomial.mapRingHom Complex.ofRealHom))
               t (γ t) = 0) := by
@@ -1844,9 +1844,9 @@ theorem exists_analytic_complexBivPolynomial_root_of_formalRoot
       AnalyticAt ℂ γ 0 ∧
       γ 0 = s.constantCoeff ∧
       (∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt q x (γ x) = 0) ∧
+        CurveSelection.Internal.Termination.bivEvalAt q x (γ x) = 0) ∧
       (∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt Q x (γ x) = 0) := by
+        CurveSelection.Internal.Termination.bivEvalAt Q x (γ x) = 0) := by
   obtain ⟨q, hqirr, hqdegree, hqdiv, hqroot⟩ :=
     exists_irreducible_bivFactor_of_formalRoot Q hQ s hs
   have hqD :
@@ -1862,23 +1862,23 @@ theorem exists_analytic_complexBivPolynomial_root_of_formalRoot
   let γ : ℂ → ℂ := fun x => A.eval x + x ^ n * z x
   have hQeventually :
       ∀ᶠ x in 𝓝 (0 : ℂ),
-        CurveSelection.TerminationScratch.bivEvalAt Q x (γ x) = 0 := by
+        CurveSelection.Internal.Termination.bivEvalAt Q x (γ x) = 0 := by
     obtain ⟨T, hQT⟩ := hqdiv
     filter_upwards [hqeventually] with x hx
     change
-      CurveSelection.TerminationScratch.bivEvalAt q x (γ x) = 0 at hx
+      CurveSelection.Internal.Termination.bivEvalAt q x (γ x) = 0 at hx
     calc
-      CurveSelection.TerminationScratch.bivEvalAt Q x (γ x) =
-          CurveSelection.TerminationScratch.bivEvalAt (q * T) x (γ x) := by
+      CurveSelection.Internal.Termination.bivEvalAt Q x (γ x) =
+          CurveSelection.Internal.Termination.bivEvalAt (q * T) x (γ x) := by
             rw [hQT]
       _ =
-          CurveSelection.TerminationScratch.bivEvalAt q x (γ x) *
-            CurveSelection.TerminationScratch.bivEvalAt T x (γ x) := by
-              simp [CurveSelection.TerminationScratch.bivEvalAt]
+          CurveSelection.Internal.Termination.bivEvalAt q x (γ x) *
+            CurveSelection.Internal.Termination.bivEvalAt T x (γ x) := by
+              simp [CurveSelection.Internal.Termination.bivEvalAt]
       _ = 0 := by rw [hx, zero_mul]
   exact
     ⟨q, γ, hqirr, hqdegree, hqdiv,
       hγanalytic, hγ0, hqeventually, hQeventually⟩
 
-end CurveSelection.ConvergenceScratch
+end CurveSelection.Internal.Convergence
 end Math

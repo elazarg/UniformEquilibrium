@@ -4,7 +4,10 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAll
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimePacket
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeSearchConsequences
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOrbitSelfLoop
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeSmallPlayers
 
 /-!
 # Decentralized rollover and liquidation games

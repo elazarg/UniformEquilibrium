@@ -16,7 +16,7 @@ promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 | 6 | Proof ratchets, product and variation APIs | Complete | Shared finite-weight identities replace selected duplication |
 | 7 | Finite-case grind pilots | Complete | Pilot proofs reduce brittle expansion without weakening claims |
 | 8 | Monolith decomposition | Complete | Long proof files split behind checked interfaces |
-| 9 | Imports, internal APIs, options | Queued | Narrow imports and scoped options pass build and trust gates |
+| 9 | Imports, internal APIs, options | Complete | Narrow imports and scoped options pass build and trust gates |
 | 10 | Final audit | Pending prior phases | All audits, full build, and documentation checks are green |
 
 ## Phase gates

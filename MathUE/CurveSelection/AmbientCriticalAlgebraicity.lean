@@ -103,7 +103,7 @@ theorem isAlgebraic_of_equations_and_normalCriticality_in_ambient
   have hqE :
       IsAlgebraic K
         (MvPolynomial.eval₂ (algebraMap K E) xE Q) :=
-    CurveSelection.LexDifferentialScratch.isAlgebraic_of_equations_and_normalCriticality
+    CurveSelection.Internal.LexDifferential.isAlgebraic_of_equations_and_normalCriticality
       xE P hzeroE Q ΛE hcriticalE
   have hqH :
       IsAlgebraic K

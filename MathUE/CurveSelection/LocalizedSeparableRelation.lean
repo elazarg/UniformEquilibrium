@@ -12,7 +12,7 @@ namespace CurveSelection.LocalizedSeparableRelation
 open CurveSelection.AlgebraicRelation
 open CurveSelection.GermAlgebraicRelation
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 open CurveSelection.RelativeLexAlgebraicity
 open CurveSelection.RelativePresentation
 open CurveSelection.RelativePresentationGerm

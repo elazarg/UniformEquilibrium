@@ -12,7 +12,7 @@ namespace CurveSelection.AmbientGermRelation
 
 open CurveSelection.AlgebraicRelation
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 
 /-- Pointwise bivariate evaluation, passed to the ultrafilter germ field,
 is polynomial evaluation at the parameter and value germs. -/

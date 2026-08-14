@@ -15,12 +15,12 @@ open Filter Set
 namespace Math
 namespace CurveSelection.RelativeLexAlgebraicity
 
-open CurveSelection.LexIsolationScratch
+open CurveSelection.Internal.LexIsolation
 open CurveSelection.RelativePresentation
 open CurveSelection.RelativePresentationGerm
 open CurveSelection.RelativeSequenceCriticalAlgebraicity
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 
 /-- The fixed-parameter real fiber of a relative presentation. -/
 def presentationFiber

@@ -5,10 +5,7 @@ open Lake DSL
 abbrev uniformEquilibriumLeanOptions : Array LeanOption := #[
   ⟨`pp.unicode.fun, true⟩,
   ⟨`relaxedAutoImplicit, false⟩,
-  ⟨`warningAsError, true⟩,
-  ⟨`maxRecDepth, .ofNat 4096⟩,
-  ⟨`maxSynthPendingDepth, .ofNat 16⟩,
-  ⟨`synthInstance.maxSize, .ofNat 2048⟩
+  ⟨`warningAsError, true⟩
 ]
 
 package UniformEquilibrium where
@@ -26,7 +23,9 @@ lean_lib MathUE where
 @[default_target]
 lean_lib UniformEquilibrium where
   srcDir := "."
-  leanOptions := uniformEquilibriumLeanOptions
+  leanOptions := uniformEquilibriumLeanOptions ++ #[
+    ⟨`synthInstance.maxSize, .ofNat 1024⟩
+  ]
 
 @[default_target]
 lean_lib Literature where

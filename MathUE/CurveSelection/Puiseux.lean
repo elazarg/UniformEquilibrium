@@ -114,7 +114,7 @@ theorem exists_ramifiedRoot_X_pow_sub_C
 end Math
 
 namespace Math
-namespace CurveSelection.PuiseuxDegreeScratch
+namespace CurveSelection.Internal.PuiseuxDegree
 
 variable {K : Type*} [Field K]
 
@@ -1264,5 +1264,5 @@ theorem hasRamifiedRootProperty_algClosed
         ramify_comp_X_add_C] at hs
       simpa [Polynomial.IsRoot, Polynomial.eval_comp] using hs
 
-end CurveSelection.PuiseuxDegreeScratch
+end CurveSelection.Internal.PuiseuxDegree
 end Math

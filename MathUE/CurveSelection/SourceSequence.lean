@@ -9,9 +9,9 @@ open Math.PolynomialSignCell
 namespace Math
 namespace CurveSelection.SourceSequence
 
-open CurveSelection.AlgebraicReductionScratch
+open CurveSelection.Internal.AlgebraicReduction
 open CurveSelection.SourceCell
-open CurveSelection.SquareLiftScratch
+open CurveSelection.Internal.SquareLift
 
 /--
 Construct the lexicographically selected parameterized square-lift sequence

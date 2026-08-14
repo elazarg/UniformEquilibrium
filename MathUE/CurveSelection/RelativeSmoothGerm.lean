@@ -14,7 +14,7 @@ namespace Math
 namespace CurveSelection.RelativeSmoothGerm
 
 open CurveSelection.FunctionField
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 
 /-- A prime affine quotient with a transcendental distinguished parameter
 is generically standard smooth over the polynomial ring in that parameter.

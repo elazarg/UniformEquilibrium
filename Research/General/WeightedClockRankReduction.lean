@@ -714,13 +714,13 @@ theorem arbitraryRankFineBlowup
     (rank : ℕ) (hrank : 0 < rank)
     (live scale : ℝ) (hlive : 0 < live) (hscale : 0 < scale) :
     let hazard :=
-      Math.CurveSelection.PositiveRootScratch.positiveNatRoot rank
+      Math.CurveSelection.Internal.PositiveRoot.positiveNatRoot rank
         (scale / live)
     0 < hazard ∧ live * hazard ^ rank = scale := by
   dsimp only
   have hquot : 0 < scale / live := div_pos hscale hlive
-  refine ⟨Math.CurveSelection.PositiveRootScratch.positiveNatRoot_pos hquot, ?_⟩
-  rw [Math.CurveSelection.PositiveRootScratch.positiveNatRoot_pow hrank hquot.le]
+  refine ⟨Math.CurveSelection.Internal.PositiveRoot.positiveNatRoot_pos hquot, ?_⟩
+  rw [Math.CurveSelection.Internal.PositiveRoot.positiveNatRoot_pow hrank hquot.le]
   field_simp
 
 /-- Sequential form of the regression: the common hazard tends to zero while
@@ -730,7 +730,7 @@ theorem arbitraryRankFineBlowupSequence
     (scale : ℕ → ℝ) (hscalePos : ∀ index, 0 < scale index)
     (hscale : Filter.Tendsto scale Filter.atTop (nhds 0)) :
     let hazard : ℕ → ℝ := fun index ↦
-      Math.CurveSelection.PositiveRootScratch.positiveNatRoot rank
+      Math.CurveSelection.Internal.PositiveRoot.positiveNatRoot rank
         (scale index / live)
     Filter.Tendsto hazard Filter.atTop (nhdsWithin 0 (Set.Ioi 0)) ∧
       ∀ index, live * hazard index ^ rank = scale index := by
@@ -740,10 +740,10 @@ theorem arbitraryRankFineBlowupSequence
   have hquot : Filter.Tendsto (fun index ↦ scale index / live)
       Filter.atTop (nhds 0) := by
     simpa only [zero_div] using hscale.div_const live
-  refine ⟨Math.CurveSelection.PositiveRootScratch.tendsto_positiveNatRoot
+  refine ⟨Math.CurveSelection.Internal.PositiveRoot.tendsto_positiveNatRoot
       hrank hquotPos hquot, ?_⟩
   intro index
-  rw [Math.CurveSelection.PositiveRootScratch.positiveNatRoot_pow
+  rw [Math.CurveSelection.Internal.PositiveRoot.positiveNatRoot_pow
     hrank (hquotPos index).le]
   field_simp
 

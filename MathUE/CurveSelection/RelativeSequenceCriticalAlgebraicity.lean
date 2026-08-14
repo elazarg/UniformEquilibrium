@@ -10,7 +10,7 @@ namespace CurveSelection.RelativeSequenceCriticalAlgebraicity
 
 open CurveSelection.AmbientCriticalAlgebraicity
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 
 /-- Evaluation of an `ℝ[t]`-polynomial on a varying real parameter and a
 real sequence agrees with evaluation in the ultrafilter germ field after

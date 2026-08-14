@@ -197,6 +197,60 @@ import UniformEquilibrium.Certificates.Neutral
                 any("Certificates.Neutral ->" in failure for failure in failures)
             )
 
+    def test_inventory_and_internal_api_ratchets(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            self.write(
+                root,
+                "lakefile.lean",
+                "lean_lib MathUE where\n"
+                "lean_lib UniformEquilibrium where\n"
+                "lean_lib Research where\n",
+            )
+            self.write(
+                root,
+                "MathUE.lean",
+                "import MathUE.Kernel\nimport MathUE.BadInternal\n",
+            )
+            self.write(root, "MathUE/Kernel.lean", "")
+            self.write(
+                root,
+                "MathUE/BadInternal.lean",
+                "namespace Math.CurveSelection.ExtractionScratch\n"
+                "end Math.CurveSelection.ExtractionScratch\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium.lean",
+                "import MathUE\n"
+                "import MathUE.Kernel\n"
+                "import UniformEquilibrium.Diagnostics.Quitting."
+                "CounterexampleRegimeAll\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/Diagnostics/Quitting/"
+                "CounterexampleRegimeAll.lean",
+                "",
+            )
+            self.write(root, "Research.lean", "import Research.Consumer\n")
+            self.write(
+                root,
+                "Research/Consumer.lean",
+                "import UniformEquilibrium.Diagnostics.Quitting."
+                "CounterexampleRegimeAll\n",
+            )
+
+            failures = check_import_graph.check_import_graph(root)
+
+            self.assertEqual(len(failures), 3)
+            self.assertTrue(any("redundant direct import MathUE.Kernel" in failure
+                for failure in failures))
+            self.assertTrue(any("inventory-only facade" in failure
+                for failure in failures))
+            self.assertTrue(any("ExtractionScratch" in failure
+                for failure in failures))
+
 
 if __name__ == "__main__":
     unittest.main()

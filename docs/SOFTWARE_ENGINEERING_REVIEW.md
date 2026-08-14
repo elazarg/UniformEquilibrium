@@ -196,6 +196,26 @@ maintenance measurements, not evidence of mathematical progress.
   product-law calculation is stated once for an arbitrary player. Eight raw
   and normalized coordinate expansions were removed; the file now has 28
   private declarations rather than 35.
+- The production umbrella now delegates generic inventory entirely to its
+  leading `import MathUE`; 56 redundant direct `MathUE.*` imports were removed.
+  The three Research users of `CounterexampleRegimeAll` now import only their
+  actual declarations. The inventory facade retains all 255 diagnostic imports
+  but is only 274 lines rather than 1,039, with its mathematical narrative
+  owned by `docs/design/COUNTEREXAMPLE_SEARCH_REGIME.md`.
+- Twelve CurveSelection implementation namespaces, containing 275
+  declarations, now live under `Math.CurveSelection.Internal` rather than
+  public-looking `*Scratch` names. All internal consumers and the one Research
+  consumer were updated without compatibility aliases. The architecture check
+  rejects new MathUE `*Scratch` namespaces, redundant root MathUE imports, and
+  ordinary consumers of inventory-only facades.
+- A fresh build with Lean's resource defaults completed 10,156 of 10,160 jobs
+  and isolated one failure in `MetrizableMarkedAbsorptionPath`. Neither the
+  historical recursion-depth increase nor the pending-synthesis-depth increase
+  fixes it; both were removed. Lean 4.32.2 defaults these limits to 512 and 1,
+  respectively, and defaults `synthInstance.maxSize` to 128. Only the latter is
+  relevant: 698 fails and 699 passes in the direct source check. The retained
+  value is 1,024, half the historical setting, and is scoped to the
+  `UniformEquilibrium` library rather than all seven project libraries.
 
 ## Proof-quality and grind policy
 

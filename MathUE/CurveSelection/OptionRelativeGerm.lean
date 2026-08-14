@@ -9,7 +9,7 @@ namespace CurveSelection.OptionRelativeGerm
 
 open CurveSelection.FunctionField
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 open CurveSelection.OptionRelativeCoordinates
 open CurveSelection.RelativePresentation
 

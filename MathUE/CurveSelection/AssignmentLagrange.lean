@@ -9,7 +9,7 @@ open Set
 namespace Math
 namespace CurveSelection.AssignmentLagrange
 
-open CurveSelection.NormalLagrangeScratch.IsLocalExtrOn
+open CurveSelection.Internal.NormalLagrange.IsLocalExtrOn
 
 /- The finite Pi type has both its algebraic/product-topology instances and
 its finite-dimensional normed-space instances available.  Calculus must use
@@ -129,7 +129,7 @@ theorem hasStrictFDerivAt_eval
   let e : EuclideanSpace ℝ σ ≃L[ℝ] (σ → ℝ) :=
     EuclideanSpace.equiv σ ℝ
   have hEuclidean :=
-    CurveSelection.NormalLagrangeScratch.hasStrictFDerivAt_eval
+    CurveSelection.Internal.NormalLagrange.hasStrictFDerivAt_eval
       P (e.symm x)
   have hcomp :=
     hEuclidean.comp x e.symm.hasStrictFDerivAt
@@ -138,7 +138,7 @@ theorem hasStrictFDerivAt_eval
     rfl
   · ext d
     simp only [evalGradient_apply,
-      CurveSelection.NormalLagrangeScratch.evalGradient_apply,
+      CurveSelection.Internal.NormalLagrange.evalGradient_apply,
       ContinuousLinearMap.comp_apply]
     rfl
 

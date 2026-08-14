@@ -17,10 +17,10 @@ namespace Math
 namespace CurveSelection.PolynomialSignCellArc
 
 open CurveSelection.AmbientGermRelation
-open CurveSelection.AlgebraicReductionScratch
+open CurveSelection.Internal.AlgebraicReduction
 open CurveSelection.FunctionField
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 open CurveSelection.LocalizedSeparableRelation
 open CurveSelection.OptionRelativeCoordinates
 open CurveSelection.OptionRelativeGerm
@@ -33,7 +33,7 @@ open CurveSelection.SourceFinalization
 open CurveSelection.SourceCell
 open CurveSelection.SourceLexExtrema
 open CurveSelection.SourceSequence
-open CurveSelection.SquareLiftScratch
+open CurveSelection.Internal.SquareLift
 
 /--
 Unconditional mathematical curve selection for a complete real polynomial
@@ -208,7 +208,7 @@ theorem hasPositiveCoordinateAnalyticArcAt_signCell
                 MvPolynomial.eval₂
                   (Polynomial.evalRingHom (source n none))
                   w (relativeEquation e) = 0} ∩
-            CurveSelection.LexIsolationScratch.previousObjectiveLevelSet
+            CurveSelection.Internal.LexIsolation.previousObjectiveLevelSet
               (fun l w =>
                 MvPolynomial.eval₂
                   (Polynomial.evalRingHom (source n none))
@@ -270,7 +270,7 @@ theorem hasPositiveCoordinateAnalyticArcAt_signCell
                 chartPresentation
                 (source n none)
                 (canonicalChartSequence n) ∩
-              CurveSelection.LexIsolationScratch.previousObjectiveLevelSet
+              CurveSelection.Internal.LexIsolation.previousObjectiveLevelSet
                 (fun l z =>
                   CurveSelection.RelativeLexAlgebraicity.presentationObjective
                     chartPresentation

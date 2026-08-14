@@ -9,9 +9,9 @@ open Filter Polynomial Set Topology
 namespace Math
 namespace CurveSelection.FiniteBranchCoverage
 
-open CurveSelection.ConvergenceScratch
+open CurveSelection.Internal.Convergence
 open CurveSelection.RootCoverage
-open CurveSelection.PositiveRootScratch
+open CurveSelection.Internal.PositiveRoot
 
 theorem natDegree_trunc_lt_of_pos
     (s : PowerSeries ℂ) {n : ℕ} (hn : 0 < n) :
@@ -44,7 +44,7 @@ theorem exists_finite_analytic_branches_covering_sequence
     (hx : Tendsto x atTop (𝓝 0))
     (hy : Tendsto y atTop (𝓝 0))
     (hxyroot :
-      ∀ i, CurveSelection.TerminationScratch.bivEvalAt
+      ∀ i, CurveSelection.Internal.Termination.bivEvalAt
         Q (x i) (y i) = 0) :
     ∃ (n : ℕ) (branches : List (ℂ → ℂ))
         (t : ℕ → ℝ),
@@ -56,7 +56,7 @@ theorem exists_finite_analytic_branches_covering_sequence
         AnalyticAt ℂ γ 0 ∧
         γ 0 = 0 ∧
         ∀ᶠ z in 𝓝 (0 : ℂ),
-          CurveSelection.TerminationScratch.bivEvalAt
+          CurveSelection.Internal.Termination.bivEvalAt
             ((ramifyBivPolynomial p Q).map
               (Polynomial.mapRingHom Complex.ofRealHom))
             z (γ z) = 0) ∧
@@ -86,13 +86,13 @@ theorem exists_finite_analytic_branches_covering_sequence
   let Good (s : PowerSeries ℂ) (z : ℂ → ℂ) : Prop :=
     AnalyticAt ℂ z 0 ∧
     z 0 =
-      (CurveSelection.TerminationScratch.formalTail n s).constantCoeff ∧
+      (CurveSelection.Internal.Termination.formalTail n s).constantCoeff ∧
     AnalyticAt ℂ
       (fun a => (s.trunc n).eval a + a ^ n * z a) 0 ∧
     (fun a => (s.trunc n).eval a + a ^ n * z a) 0 =
       s.constantCoeff ∧
     (∀ᶠ a in 𝓝 (0 : ℂ),
-      CurveSelection.TerminationScratch.bivEvalAt Qram a
+      CurveSelection.Internal.Termination.bivEvalAt Qram a
         ((s.trunc n).eval a + a ^ n * z a) = 0)
   have hFmonic : F.Monic := by
     exact
@@ -171,7 +171,7 @@ theorem exists_finite_analytic_branches_covering_sequence
         AnalyticAt ℂ b 0 ∧
         b 0 = 0 ∧
         ∀ᶠ a in 𝓝 (0 : ℂ),
-          CurveSelection.TerminationScratch.bivEvalAt Qram a (b a) = 0 := by
+          CurveSelection.Internal.Termination.bivEvalAt Qram a (b a) = 0 := by
     intro b hb
     obtain ⟨s, hs, rfl⟩ := List.mem_map.mp hb
     have hsData := hBranchData s hs
@@ -225,30 +225,30 @@ theorem exists_finite_analytic_branches_covering_sequence
     simpa [branches, List.map_map, Function.comp_def] using h
   have hBranchRoots :
       ∀ᶠ i in atTop, ∀ b ∈ branches,
-        CurveSelection.TerminationScratch.bivEvalAt Qram
+        CurveSelection.Internal.Termination.bivEvalAt Qram
           (t i) (b (t i)) = 0 := by
     apply eventually_forall_mem_list
       (l := atTop) branches
       (fun b i =>
-        CurveSelection.TerminationScratch.bivEvalAt Qram
+        CurveSelection.Internal.Termination.bivEvalAt Qram
           (t i) (b (t i)) = 0)
     intro b hb
     exact htComplex.eventually (hBranches b hb).2.2
   have hSampleRoot :
       ∀ i,
-        CurveSelection.TerminationScratch.bivEvalAt Qram
+        CurveSelection.Internal.Termination.bivEvalAt Qram
           (t i) (y i) = 0 := by
     intro i
     have hram :
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (ramifyBivPolynomial p Q) (t i) (y i) = 0 := by
       rw [bivEvalAt_ramifyBivPolynomial, htPow i]
       exact hxyroot i
     calc
-      CurveSelection.TerminationScratch.bivEvalAt Qram
+      CurveSelection.Internal.Termination.bivEvalAt Qram
           (t i) (y i) =
           Complex.ofReal
-            (CurveSelection.TerminationScratch.bivEvalAt
+            (CurveSelection.Internal.Termination.bivEvalAt
               (ramifyBivPolynomial p Q) (t i) (y i)) := by
         have hevalHom :
             (Polynomial.evalRingHom (t i : ℂ)).comp
@@ -259,7 +259,7 @@ theorem exists_finite_analytic_branches_covering_sequence
           · intro a
             simp
           · simp
-        dsimp [Qram, CurveSelection.TerminationScratch.bivEvalAt]
+        dsimp [Qram, CurveSelection.Internal.Termination.bivEvalAt]
         rw [Polynomial.eval₂_map]
         rw [hevalHom]
         symm
@@ -390,7 +390,7 @@ theorem
     (hx : Tendsto x atTop (𝓝 0))
     (hy : Tendsto y atTop (𝓝 0))
     (hxyroot :
-      ∀ i, CurveSelection.TerminationScratch.bivEvalAt
+      ∀ i, CurveSelection.Internal.Termination.bivEvalAt
         Q (x i) (y i) = 0) :
     ∃ (n : ℕ) (branches : List (ℂ → ℂ))
         (t : ℕ → ℝ),
@@ -402,7 +402,7 @@ theorem
         AnalyticAt ℂ γ 0 ∧
         γ 0 = 0 ∧
         ∀ᶠ z in 𝓝 (0 : ℂ),
-          CurveSelection.TerminationScratch.bivEvalAt
+          CurveSelection.Internal.Termination.bivEvalAt
             ((ramifyBivPolynomial p Q).map
               (Polynomial.mapRingHom Complex.ofRealHom))
             z (γ z) = 0) ∧
@@ -452,7 +452,7 @@ theorem
     (hy : ∀ j, Tendsto (fun i => y i j) atTop (𝓝 0))
     (hxyroot :
       ∀ i j,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (Q j) (x i) (y i j) = 0) :
     ∃ (n : J → ℕ) (branches : J → List (ℂ → ℂ))
         (t : ℕ → ℝ),
@@ -465,7 +465,7 @@ theorem
           AnalyticAt ℂ γ 0 ∧
           γ 0 = 0 ∧
           ∀ᶠ z in 𝓝 (0 : ℂ),
-            CurveSelection.TerminationScratch.bivEvalAt
+            CurveSelection.Internal.Termination.bivEvalAt
               ((ramifyBivPolynomial p (Q j)).map
                 (Polynomial.mapRingHom Complex.ofRealHom))
               z (γ z) = 0) ∧
@@ -489,7 +489,7 @@ theorem
             AnalyticAt ℂ γ 0 ∧
             γ 0 = 0 ∧
             ∀ᶠ z in 𝓝 (0 : ℂ),
-              CurveSelection.TerminationScratch.bivEvalAt
+              CurveSelection.Internal.Termination.bivEvalAt
                 ((ramifyBivPolynomial p (Q j)).map
                   (Polynomial.mapRingHom Complex.ofRealHom))
                 z (γ z) = 0) ∧
@@ -551,7 +551,7 @@ theorem
     (hy : ∀ j, Tendsto (fun i => y i j) atTop (𝓝 0))
     (hxyroot :
       ∀ i j,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (Q j) (x i) (y i j) = 0) :
     ∃ (q : J → Polynomial (Polynomial ℝ))
         (ns : ℕ → ℕ)
@@ -562,7 +562,7 @@ theorem
         (branches : J → List (ℂ → ℂ))
         (t : ℕ → ℝ),
       (∀ j,
-        q j ∈ CurveSelection.FactorCoverageScratch.irreducibleFactors (Q j) ∧
+        q j ∈ CurveSelection.Internal.FactorCoverage.irreducibleFactors (Q j) ∧
         Irreducible (q j) ∧
         0 < (q j).natDegree ∧
         q j ∣ Q j) ∧
@@ -571,7 +571,7 @@ theorem
         atTop
         (𝓝 ((0 : ℝ), (0 : J → ℝ))) ∧
       (∀ i j,
-        CurveSelection.TerminationScratch.bivEvalAt
+        CurveSelection.Internal.Termination.bivEvalAt
           (q j) (x (ns i)) (y (ns i) j) = 0) ∧
       (∀ j,
         (bivPolynomialToIteratedPowerSeries (q j)).IsWeierstrassFactorization
@@ -588,7 +588,7 @@ theorem
           AnalyticAt ℂ γ 0 ∧
           γ 0 = 0 ∧
           ∀ᶠ z in 𝓝 (0 : ℂ),
-            CurveSelection.TerminationScratch.bivEvalAt
+            CurveSelection.Internal.Termination.bivEvalAt
               ((ramifyBivPolynomial p (q j)).map
                 (Polynomial.mapRingHom Complex.ofRealHom))
               z (γ z) = 0) ∧

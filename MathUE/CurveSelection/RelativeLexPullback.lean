@@ -8,7 +8,7 @@ open Filter Set
 namespace Math
 namespace CurveSelection.RelativeLexPullback
 
-open CurveSelection.LexIsolationScratch
+open CurveSelection.Internal.LexIsolation
 open CurveSelection.RelativeFiberPullback
 open CurveSelection.RelativePresentation
 

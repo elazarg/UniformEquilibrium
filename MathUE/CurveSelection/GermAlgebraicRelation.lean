@@ -12,7 +12,7 @@ namespace CurveSelection.GermAlgebraicRelation
 
 open CurveSelection.AlgebraicRelation
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 
 /-- Evaluating a real bivariate polynomial on representative sequences
 gives the same germ as evaluating it algebraically over `ℝ(t)`. -/

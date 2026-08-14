@@ -11,7 +11,7 @@ namespace CurveSelection.LocalizedCoordinates
 
 open CurveSelection.FunctionField
 open CurveSelection.GermChart
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 open CurveSelection.RelativePresentation
 
 /-- The image of an affine coordinate in a basic open of an affine

@@ -11,7 +11,7 @@ namespace Math
 namespace CurveSelection.GermChart
 
 open CurveSelection.FunctionField
-open CurveSelection.GermComponentScratch
+open CurveSelection.Internal.GermComponent
 
 /-- The ultraproduct of the real field along the fixed free ultrafilter. -/
 abbrev GermField :=

@@ -6,7 +6,7 @@ noncomputable section
 open Polynomial
 
 namespace Math
-namespace CurveSelection.TerminationScratch
+namespace CurveSelection.Internal.Termination
 
 variable {K : Type*} [Field K]
 
@@ -1001,5 +1001,5 @@ theorem finiteTailResidualPolynomial_spec
         Q s hroot hD)
 
 
-end CurveSelection.TerminationScratch
+end CurveSelection.Internal.Termination
 end Math

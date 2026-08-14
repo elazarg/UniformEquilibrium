@@ -1,5 +1,5 @@
 /-
-Scratch algebraic reduction for the analytic Bellman-germ construction.
+Internal algebraic reduction for the analytic Bellman-germ construction.
 
 This file contains only proved reductions.  In particular, the generic
 finiteness hypothesis below is displayed explicitly rather than hidden as an
@@ -18,7 +18,7 @@ noncomputable section
 open Filter Set SignType Topology
 
 namespace Math
-namespace CurveSelection.AlgebraicReductionScratch
+namespace CurveSelection.Internal.AlgebraicReduction
 
 open PolynomialSignCell
 open MultivariateElimination
@@ -1038,5 +1038,5 @@ theorem
       hxlim, hrelation_ne, hrelation_root, hprimitive, hdegree,
       hfactor, hsplit⟩
 
-end CurveSelection.AlgebraicReductionScratch
+end CurveSelection.Internal.AlgebraicReduction
 end Math
