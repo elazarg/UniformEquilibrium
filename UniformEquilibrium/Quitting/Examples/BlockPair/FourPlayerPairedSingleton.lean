@@ -67,10 +67,10 @@ def stationaryCompletionReward
 /-- Its projective singleton matrix is the displayed paired matrix.  Since
 the own-singleton entries vanish, no additional normalization is visible. -/
 theorem stationaryCompletion_singletonMatrix (who owner : Player) :
-    Math.LinearProgramming.quittingSingletonMatrix
+    QuittingLCPClassification.quittingSingletonMatrix
         stationaryCompletionReward who owner =
       pairedSingletonMatrix who owner := by
-  rw [Math.LinearProgramming.quittingSingletonMatrix]
+  rw [QuittingLCPClassification.quittingSingletonMatrix]
   rw [stationaryCompletionReward_singleton_set,
     stationaryCompletionReward_singleton_set]
   fin_cases who <;> fin_cases owner <;>

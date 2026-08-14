@@ -10,8 +10,8 @@ promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 | --- | --- | --- | --- |
 | 1 | Review baseline | Complete | Review facts and measured risks are recorded |
 | 2 | Trust scanner | Complete | Prime-aware scanner and lexical regression suite pass |
-| 3 | Import graph and inventory | In progress | Zero unexplained orphans and boundary violations |
-| 4 | Ownership, Research, provenance, sync | Queued | Every shim/fork and sync decision has an owner and manifest |
+| 3 | Import graph and inventory | Complete | Zero unexplained orphans and boundary violations |
+| 4 | Ownership, Research, provenance, sync | In progress | Every shim/fork and sync decision has an owner and manifest |
 | 5 | Facades and dependency inversions | Queued | Architecture/certificate and Quitting/Diagnostics edges are layered |
 | 6 | Proof ratchets and Fubini API | Queued | Shared PMF identities replace selected duplication |
 | 7 | Finite-case grind pilots | Queued | Pilot proofs reduce brittle expansion without weakening claims |
@@ -38,7 +38,9 @@ warnings-as-errors policy.
 
 ### 3. Import graph and inventory
 
-Run the import-graph checker across all umbrellas. Classify the 16
+Run the import-graph checker across all umbrellas with
+`python3 -m unittest scripts/test_check_import_graph.py` followed by
+`python3 scripts/check_import_graph.py`. Classify the 16
 non-reachable UE modules, the `SingletonLCP` generic-boundary violation, and
 any production-to-Research/Experiments edges. Acceptance is a checked,
 repeatable inventory with zero unexplained diagnostics; no module moves solely

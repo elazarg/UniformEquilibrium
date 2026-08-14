@@ -140,6 +140,10 @@ For a Lean change, use the narrowest relevant checks while iterating:
   adding, moving, or removing project-owned Lean modules; and
 - `python scripts/check_docs.py` checks generated status, source references,
   frontier evidence paths, and local documentation links.
+- `python scripts/check_import_graph.py` checks static import reachability for
+  the declared Lean umbrellas and reports production-lane boundary violations;
+  `python -m unittest scripts/test_check_import_graph.py` runs its regression
+  tests.
 
 `AxiomAudit.lean` is a default Lake target. It imports every project-owned Lean
 module, including modules outside the main umbrellas, and audits every

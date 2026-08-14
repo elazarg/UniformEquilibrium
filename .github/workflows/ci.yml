@@ -24,6 +24,8 @@ jobs:
           fetch-depth: 0
           submodules: recursive
       - run: python3 scripts/check_docs.py
+      - run: python3 -m unittest scripts/test_check_import_graph.py
+      - run: python3 scripts/check_import_graph.py
       - run: python3 -m unittest scripts/test_check_trust.py
       - run: python3 scripts/check_trust.py
       - uses: leanprover/lean-action@v1
@@ -44,6 +46,8 @@ jobs:
         with:
           submodules: recursive
       - run: python3 scripts/check_docs.py
+      - run: python3 -m unittest scripts/test_check_import_graph.py
+      - run: python3 scripts/check_import_graph.py
       - run: python3 -m unittest scripts/test_check_trust.py
       - run: python3 scripts/check_trust.py
       - uses: leanprover/lean-action@v1

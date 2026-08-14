@@ -263,7 +263,6 @@ import Research.General.GreedyBufferedExitDecoder
 import Research.General.GroupSumLiveEntropy
 import Research.General.HazardScaleDirectionBlowup
 import Research.General.KakutaniProductDichotomy
-import Research.General.KrawczykPolynomialLipschitzPrototype
 import Research.General.KrawczykPreconditionerInjectivePrototype
 import Research.General.LedgeredDissipativity
 import Research.General.MaxAffineHolonomySemigroup
@@ -939,6 +938,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.NormalCoreStrictnessExampl
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
 import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQClosure
 import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQProducer
+import UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter
 import UniformEquilibrium.Quitting.Classification.LCP.StandardQSideExample
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.LCP.SupportHierarchy

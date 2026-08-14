@@ -6,7 +6,6 @@ Authors: GameTheory contributors
 
 import Mathlib.Analysis.Convex.StdSimplex
 import Math.Simplex
-import GameTheory.Basic
 
 /-!
 # The normalized singleton LCP
@@ -16,21 +15,13 @@ singleton linear complementarity problem** asks for `λ ∈ Δ(ι)` (the standar
 simplex, `stdSimplex ℝ ι`) whose image `q = Bλ` is componentwise nonnegative
 and complementary to `λ`: `λ i * q i = 0` at every coordinate.
 
-This is the finite structure behind the "singleton" comparison matrices that
-appear throughout the quitting-game reduction: for a coalition reward
-`r : {S : Finset ι // S.Nonempty} → (ι → ℝ)`, the matrix
-`Bᵢⱼ = r({j})ᵢ - r({i})ᵢ` compares player `i`'s payoff at `j`'s solo
-termination against its own. Feasibility of this LCP is what several
-recorded results (the absorption-vanishing equivalence, in particular) turn
-on.
+This file develops the matrix problem independently of any game-semantic
+instantiation.
 
 ## Main definitions
 
 * `singletonLCPResidual B λ` — the residual vector `q = Bλ` at a simplex point
 * `SingletonLCPFeasible B` — the feasibility predicate itself
-* `quittingSingletonMatrix reward` — the game-facing comparison matrix
-* `quittingSingletonLCPFeasible reward` — the LCP instantiated at a quitting
-  reward
 
 ## Main results
 
@@ -41,16 +32,11 @@ on.
 * `singletonLCPFeasible_bool_iff` — the two-coordinate case, worked out as an
   explicit three-way disjunction of sign/algebraic conditions on the four
   matrix entries.
-* `quittingSingletonLCPFeasible_iff` — the unfolding lemma bridging the
-  game-facing predicate to the raw LCP.
 
 ## Design notes
 
-`Math.LinearProgramming` is otherwise independent of `GameTheory`; this file
-is the one place that bridges the two, since deliverable (3) of `LEAN-P1-5`
-is explicitly the game-facing instantiation. The bridge is one-directional
-(only `GameTheory.Basic`, the lightweight `Payoff` abbreviation, is needed)
-and does not create an import cycle.
+The definitions and theorems here are game-independent. Game-facing adapters
+belong in the production modules that own their semantic input types.
 -/
 
 noncomputable section
@@ -484,40 +470,6 @@ theorem singletonLCPFeasible_iff_exists_supportPattern (B : ι → ι → ℝ) :
     · by_cases hi : i ∈ S
       · rw [hzero i hi, mul_zero]
       · rw [hoff i hi, zero_mul]
-
-/-! ## Game-facing instantiation
-
-For a quitting weight assigning a payoff to every nonempty coalition (the
-reward type used throughout, e.g. `QuittingZeroSoloDisjunct.lean`), the
-singleton comparison matrix `Bᵢⱼ = r({j})ᵢ - r({i})ᵢ` measures player `i`'s
-incentive to let `j` solo-terminate rather than solo-terminating itself.
-Feasibility of its singleton LCP is the criterion the absorption-vanishing
-equivalence of the pipeline record `exact-vs-relaxed` turns on. -/
-
-variable {γ : Type} [Fintype γ]
-
-/-- The singleton comparison matrix of a quitting reward: the `(i, j)` entry
-is player `i`'s payoff when `j` solo-terminates minus player `i`'s payoff
-when `i` itself solo-terminates. -/
-def quittingSingletonMatrix
-    (reward : {S : Finset γ // S.Nonempty} → GameTheory.Payoff γ) (i j : γ) : ℝ :=
-  reward ⟨{j}, Finset.singleton_nonempty j⟩ i - reward ⟨{i}, Finset.singleton_nonempty i⟩ i
-
-/-- **The normalized singleton LCP of a quitting reward.** Feasibility of the
-singleton LCP for the reward's comparison matrix `quittingSingletonMatrix`. -/
-def quittingSingletonLCPFeasible
-    (reward : {S : Finset γ // S.Nonempty} → GameTheory.Payoff γ) : Prop :=
-  SingletonLCPFeasible (quittingSingletonMatrix reward)
-
-/-- Unfolding lemma: the game-facing predicate is exactly the singleton LCP
-of the comparison matrix, spelled out in full. -/
-theorem quittingSingletonLCPFeasible_iff
-    (reward : {S : Finset γ // S.Nonempty} → GameTheory.Payoff γ) :
-    quittingSingletonLCPFeasible reward ↔
-      ∃ lam : stdSimplex ℝ γ,
-        (∀ i, 0 ≤ singletonLCPResidual (quittingSingletonMatrix reward) lam i) ∧
-        ∀ i, lam.val i * singletonLCPResidual (quittingSingletonMatrix reward) lam i = 0 :=
-  Iff.rfl
 
 end LinearProgramming
 end Math

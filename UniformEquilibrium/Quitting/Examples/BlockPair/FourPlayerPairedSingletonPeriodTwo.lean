@@ -60,9 +60,9 @@ def periodTwoReward
 /-- The normalized singleton rows of the period-two completion have the
 paired comparison matrix. -/
 theorem periodTwo_singletonMatrix (who owner : Player) :
-    Math.LinearProgramming.quittingSingletonMatrix periodTwoReward who owner =
+    QuittingLCPClassification.quittingSingletonMatrix periodTwoReward who owner =
       pairedSingletonMatrix who owner := by
-  rw [Math.LinearProgramming.quittingSingletonMatrix]
+  rw [QuittingLCPClassification.quittingSingletonMatrix]
   fin_cases who <;> fin_cases owner <;>
     simp [periodTwoReward, pairedSingletonMatrix] <;> norm_num
 

@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses

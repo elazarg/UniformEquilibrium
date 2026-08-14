@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Projective.AnchoredSingletonLCP
-import MathUE.LinearProgramming.SingletonLCP
+import UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter
 
 /-!
 # Playerwise normalization for quitting-game LCP classifications
@@ -117,16 +117,15 @@ theorem normalized_singletonMatrix_eq_projectiveLCPMatrix
     QuittingPayoffTable.translate, repositoryQuittingPayoffTable,
     quittingSoloBaseline, quittingProjectiveLCPMatrix, sub_eq_add_neg]
 
-/-- The same matrix is the older game-facing singleton matrix from
-`Math.LinearProgramming.SingletonLCP`. -/
+/-- The same matrix is the normalized singleton-LCP reward adapter. -/
 theorem normalized_singletonMatrix_eq_quittingSingletonMatrix
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (who owner : ι) :
     (normalizedQuittingPayoffTable reward).singletonMatrix who owner =
-      Math.LinearProgramming.quittingSingletonMatrix reward who owner := by
+      quittingSingletonMatrix reward who owner := by
   rw [normalized_singletonMatrix_eq_projectiveLCPMatrix]
   unfold quittingProjectiveLCPMatrix
-    Math.LinearProgramming.quittingSingletonMatrix
+    quittingSingletonMatrix
   have hsingleton (player : ι) :
       quittingProjectiveSingletonTerminal player =
         ⟨{player}, Finset.singleton_nonempty player⟩ := by
