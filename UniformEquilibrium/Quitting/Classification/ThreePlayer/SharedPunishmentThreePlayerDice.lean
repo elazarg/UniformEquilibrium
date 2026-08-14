@@ -279,8 +279,7 @@ theorem quittingBestReplyValue_eq_alwaysContinue
   · apply quittingBestReplyValue_le
     intro strategy
     rw [quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-      reward profile who strategy (by norm_num)
-      (fun S player => abs_reward_le_one S player)]
+      reward profile who strategy]
     calc
       expect (quittingBehaviorStoppingLaw reward strategy)
           (fun choice =>

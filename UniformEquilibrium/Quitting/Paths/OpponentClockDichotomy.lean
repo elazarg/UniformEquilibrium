@@ -311,9 +311,8 @@ extraction must establish both independently. -/
 theorem exists_exceptionalStationaryFallback_of_positiveClock
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (owner : ι) {β M : ℝ}
-    (hβ : 0 ≤ β) (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι) {β : ℝ}
+    (hβ : 0 ≤ β)
     (hpositive : 0 < quittingLiveMassLimit reward
       (quittingOpponentOnlyProfile reward profile owner))
     (habsorbs : ∀ start,
@@ -330,6 +329,7 @@ theorem exists_exceptionalStationaryFallback_of_positiveClock
           (quittingSoloStationaryRoot owner
             (quittingProfileLiveRoot reward profile time owner))) := by
   exact exists_isεAsymptoticNash_soloStationary_of_exceptional_profile
-    reward profile owner hβ hM hreward habsorbs htailNash hpositive
+    reward profile owner hβ
+      habsorbs htailNash hpositive
 
 end GameTheory

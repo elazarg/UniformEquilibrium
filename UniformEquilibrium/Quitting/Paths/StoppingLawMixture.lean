@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.Probability.DiscreteHazardMixture
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingPayoff
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Behavioral realization of convex stopping-law mixtures
@@ -103,9 +104,7 @@ theorem quittingTerminalPayoff_update_stoppingLawMixture_eq
     (profile : (quittingGame reward).BehaviorProfile)
     (who : iota)
     (source target : (quittingGame reward).BehaviorStrategy who)
-    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1) :
     quittingTerminalPayoff reward
         (Function.update profile who
           (quittingStoppingLawMixtureBehaviorStrategy reward who source target
@@ -114,6 +113,7 @@ theorem quittingTerminalPayoff_update_stoppingLawMixture_eq
           quittingTerminalPayoff reward (Function.update profile who source) who +
         lambda *
           quittingTerminalPayoff reward (Function.update profile who target) who := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   let value : Option ℕ → ℝ := fun choice =>
     quittingTerminalPayoff reward
       (Function.update profile who
@@ -122,13 +122,13 @@ theorem quittingTerminalPayoff_update_stoppingLawMixture_eq
     intro choice
     exact abs_quittingTerminalPayoff_le reward _ who hM hreward
   have hsource := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-    reward profile who source hM hreward
+    reward profile who source
   have htarget := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-    reward profile who target hM hreward
+    reward profile who target
   rw [quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
       reward profile who
         (quittingStoppingLawMixtureBehaviorStrategy reward who source target
-          lambda hlambda0 hlambda1) hM hreward,
+          lambda hlambda0 hlambda1),
     quittingBehaviorStoppingLaw_stoppingLawMixture,
     expect_bind_of_bounded _ _ value hvalue,
     expect_eq_sum, Fintype.sum_bool]
@@ -145,9 +145,7 @@ theorem quittingTerminalPayoff_stoppingLawMixture_sub_eq
     (profile : (quittingGame reward).BehaviorProfile)
     (who : iota)
     (target : (quittingGame reward).BehaviorStrategy who)
-    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1) :
     quittingTerminalPayoff reward
           (Function.update profile who
             (quittingStoppingLawMixtureBehaviorStrategy reward who (profile who)
@@ -157,7 +155,7 @@ theorem quittingTerminalPayoff_stoppingLawMixture_sub_eq
         (quittingTerminalPayoff reward (Function.update profile who target) who -
           quittingTerminalPayoff reward profile who) := by
   rw [quittingTerminalPayoff_update_stoppingLawMixture_eq
-    reward profile who (profile who) target lambda hlambda0 hlambda1 hM hreward,
+    reward profile who (profile who) target lambda hlambda0 hlambda1,
     Function.update_eq_self]
   ring
 

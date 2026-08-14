@@ -158,9 +158,7 @@ selected face, and tolerance; no linear rate is asserted. -/
 theorem exists_surfaceTension_nearResetFace_penalty
     (source : QuittingTerminalSemanticPair iota)
     (returned : QuittingTerminalSemanticLawPoint iota)
-    (owner : iota) {M epsilon : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : iota) {epsilon : ℝ}
     (hminimum : ∀ point ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum point)
@@ -221,7 +219,7 @@ theorem exists_surfaceTension_nearResetFace_penalty
     linarith
   obtain ⟨delta, hdelta, hnear⟩ := exists_nearZero_support_of_compact
     (quittingTerminalSemanticLawCarrier reward)
-      (quittingTerminalSemanticLawCarrier_isCompact reward hM hreward)
+      (quittingTerminalSemanticLawCarrier_isCompact reward)
       face tension hfaceContinuous htensionContinuous hfaceNonneg hsupport
         hepsilon
   refine ⟨delta, hdelta, ?_⟩
@@ -346,9 +344,7 @@ The second is the separated plateau equipped with its reprojection costate. -/
 theorem resetFace_globalMinimum_or_surfaceTension_reprojectionCostate
     (source target : QuittingTerminalSemanticPair iota)
     (mass : QuittingTerminalOutcome iota → ℝ)
-    (owner : iota) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : iota)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -383,8 +379,7 @@ theorem resetFace_globalMinimum_or_surfaceTension_reprojectionCostate
           root = (quittingAllContinueRoot : iota → PMF Bool) := by
   obtain ⟨resetMinimum, hresetMinimum, hresetMinimumReset,
       hresetMinimumIsMin⟩ :=
-    exists_joint_resetFace_debtMinimizer target mass owner hM hreward
-      htarget hreset
+    exists_joint_resetFace_debtMinimizer target mass owner htarget hreset
   have hresetMinimumCarrier :=
     terminalSemanticLawCarrier_fst_mem_carrier resetMinimum hresetMinimum
   have hsourceLeReset := hminimum resetMinimum.1 hresetMinimumCarrier
@@ -394,8 +389,8 @@ theorem resetFace_globalMinimum_or_surfaceTension_reprojectionCostate
   · obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
         hresetMinLeReturned, hslope⟩ :=
       exists_resetFace_minimizer_excess_div_totalOpponentIncidence
-        source resetMinimum (target, mass) owner hM hreward
-          hresetMinimumIsMin hstrict htarget hreset hincidence
+        source resetMinimum (target, mass) owner hresetMinimumIsMin hstrict
+          htarget hreset hincidence
     have hreturnedStrict : quittingTerminalSemanticDebtSum source <
         quittingTerminalSemanticDebtSum returned.1 :=
       hstrict.trans_le hresetMinLeReturned

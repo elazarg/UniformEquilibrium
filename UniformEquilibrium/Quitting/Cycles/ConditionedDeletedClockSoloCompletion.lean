@@ -129,9 +129,7 @@ theorem isUniformEquilibriumPayoff_soloReward_of_deletedQuitLimits
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (owner : ι) (roots : ℕ → ι → PMF Bool)
     (continuation : ℕ → Payoff ι)
-    (hazardError targetError quitError : ℕ → ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hazardError targetError quitError : ℕ → ℝ)
     (hpositive : ∀ n, 0 < (roots n owner true).toReal)
     (hhazardError0 : ∀ n, 0 ≤ hazardError n)
     (htargetError0 : ∀ n, 0 ≤ targetError n)
@@ -152,6 +150,7 @@ theorem isUniformEquilibriumPayoff_soloReward_of_deletedQuitLimits
       quittingSoloReward reward owner owner) :
     (quittingGame reward).IsUniformEquilibriumPayoff none
       (quittingSoloReward reward owner) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   let totalError : ℕ → ℝ := fun n =>
     2 * M * hazardError n + targetError n + quitError n
   apply isUniformEquilibriumPayoff_soloReward_of_approximate_caps
@@ -297,8 +296,7 @@ theorem isUniformEquilibriumPayoff_soloReward_of_summableConditionedDeletedClock
       atTop (nhds (quittingSoloReward reward owner who)) := by
     intro who
     have horiginal := hterminalOriginal who start
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) habsorption hopponent
+      habsorption hopponent
     apply horiginal.congr'
     exact Filter.Eventually.of_forall fun time => by
       change quittingRootSequenceTerminalValue reward targetRoots who
@@ -398,8 +396,7 @@ theorem isUniformEquilibriumPayoff_soloReward_of_summableConditionedDeletedClock
       halpha.const_mul (6 * quittingRewardBound reward * Fintype.card ι)
   apply isUniformEquilibriumPayoff_soloReward_of_deletedQuitLimits
     reward owner selectedRoots selectedValue hazardError targetError quitError
-    (quittingRewardBound_nonneg reward)
-    (abs_reward_le_quittingRewardBound reward) hselectedPositive
+    hselectedPositive
     hhazardError0 htargetError0 hquitError0 hhazardVanish htargetVanish
     hquitVanish
   · intro n

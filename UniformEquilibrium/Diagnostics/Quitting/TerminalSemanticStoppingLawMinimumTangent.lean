@@ -317,7 +317,7 @@ theorem exists_stoppingLawResetRay_nearMinimum_normalizedFixedSupport
         quittingTerminalPayoff reward profile who = lambda * endpointGain := by
     dsimp only [mixedProfile, mixedStrategy, endpointGain, endpointProfile]
     exact quittingTerminalPayoff_stoppingLawMixture_sub_eq
-      reward profile who bestResponse lambda hlambdaPos.le hlambda1 hM hreward
+      reward profile who bestResponse lambda hlambdaPos.le hlambda1
   have hendpointDebt : quittingTerminalSemanticDebt endpoint who =
       quittingTerminalSemanticDebt source who - endpointGain := by
     dsimp only [endpoint, source, endpointGain, endpointProfile,
@@ -426,8 +426,6 @@ theorem exists_stoppingLawResetRay_minimum_transfer_and_windowRetention
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (who : ι) (terminal : {S : Finset ι // S.Nonempty}) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hwhoDebt : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -502,7 +500,7 @@ theorem exists_stoppingLawResetRay_minimum_transfer_and_windowRetention
         quittingTerminalPayoff reward profile who = lambda * endpointGain := by
     dsimp only [mixedProfile, mixedStrategy, endpointGain, endpointProfile]
     exact quittingTerminalPayoff_stoppingLawMixture_sub_eq
-      reward profile who bestResponse lambda hlambda0 hlambda1 hM hreward
+      reward profile who bestResponse lambda hlambda0 hlambda1
   have hendpointDebt : quittingTerminalSemanticDebt endpoint who =
       quittingTerminalSemanticDebt source who - endpointGain := by
     dsimp only [endpoint, source, endpointGain, endpointProfile,
@@ -559,8 +557,6 @@ theorem exists_stoppingLawResetRay_minimum_endpointSupportedRecipient
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (who : ι) (terminal : {S : Finset ι // S.Nonempty}) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hwhoDebt : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -588,7 +584,7 @@ theorem exists_stoppingLawResetRay_minimum_endpointSupportedRecipient
             0 < quittingTerminalSemanticDebtChange source target recipient := by
   obtain ⟨bestResponse, _hgainLower, hgainPos, hray⟩ :=
     exists_stoppingLawResetRay_minimum_transfer_and_windowRetention
-      reward profile who terminal cutoff hM hreward hwhoDebt hminimum
+      reward profile who terminal cutoff hwhoDebt hminimum
   refine ⟨bestResponse, ?_⟩
   dsimp only
   intro lambda hlambda0 hlambda1 hlambdaPos

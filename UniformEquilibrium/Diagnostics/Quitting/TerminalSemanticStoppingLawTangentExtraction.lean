@@ -179,8 +179,6 @@ theorem exists_commonBase_stoppingLawDebtTangentFamily
     (base : QuittingTerminalSemanticPair ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
     (active : Finset ι) (epsilon lambda : ℕ → ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hbase : base ∈ quittingTerminalSemanticCarrier reward)
     (hbasePositive : 0 < quittingTerminalSemanticDebtSum base)
     (hprofiles : Tendsto
@@ -228,6 +226,7 @@ theorem exists_commonBase_stoppingLawDebtTangentFamily
         (∀ mover, 0 ≤ ∑ observer, tangent mover observer) ∧
         ((∃ mover, 0 < ∑ observer, tangent mover observer) ∨
           ∀ mover, ∑ observer, tangent mover observer = 0) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hactiveNonempty : active.Nonempty := by
     by_contra hempty
     have hemptyEq : active = ∅ := Finset.not_nonempty_iff_eq_empty.mp hempty
@@ -504,8 +503,6 @@ theorem exists_commonBase_stoppingLawTangent_pipelineAlternative
     (base : QuittingTerminalSemanticPair ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
     (active : Finset ι) (epsilon lambda : ℕ → ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hbase : base ∈ quittingTerminalSemanticCarrier reward)
     (hbasePositive : 0 < quittingTerminalSemanticDebtSum base)
     (hprofiles : Tendsto
@@ -548,7 +545,7 @@ theorem exists_commonBase_stoppingLawTangent_pipelineAlternative
   obtain ⟨bestResponse, subseq, tangent, hsubseq, hlambdaSubseqZero, htangent,
       hdiagonal, hinactiveNonneg, _hsumNonneg, hslope⟩ :=
     exists_commonBase_stoppingLawDebtTangentFamily
-      reward base profiles active epsilon lambda hM hreward hbase
+      reward base profiles active epsilon lambda hbase
         hbasePositive hprofiles hactive hsourceActive hnear hlambdaPos
         hlambdaLe hlambdaZero herrorRate hinactiveRate
   refine ⟨bestResponse, subseq, tangent, hsubseq, hlambdaSubseqZero,

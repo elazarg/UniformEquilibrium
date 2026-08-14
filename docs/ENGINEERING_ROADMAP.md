@@ -144,13 +144,26 @@ declarations: 60 removable and 163 genuinely coupled. Calls to the strengthened
 declarations have been checked at the new arity, including field and qualified
 notation.
 
+The closing reward-bound slice removes the remaining 56 genuinely
+dischargeable triples. During that pass, a parser hardening reclassified four
+apparent candidates: three quantitative theorem results place the chosen bound
+after result-level `let` bindings, and one serial-relation definition uses the
+bound in its constructed data despite omitting it from the displayed result
+type. At that point the audited schema contains 167 coupled declarations and
+zero removable ones. A further quantitative theorem retains its arbitrary
+bound and coordinate premise but drops a derivable nonnegativity hypothesis,
+so it exits the strict triple census. The final census is therefore 166 coupled triples:
+153 expose the bound in the full result, 12 use it in a retained later binder,
+and one uses it in a data-definition body.
+
 The census recognizes the narrow `M`/`B`/`C` coordinate-bound schema in Lean
 definitions, theorems, lemmas, abbreviations, and opaque declarations. It
 handles grouped Unicode binders, strict implicits, equation declarations,
-identifier primes, nested comments, and colons inside result binders. It is
-not a Lean parser and does not inventory structure fields. The separately
-audited `PositiveMinimumPlateau.reward_bound` field remains intentional: the
-same positive constant controls reward coordinates and explicit mass-floor
+identifier primes, nested comments, colons inside result binders, result-level
+`let` chains, and bound-dependent data bodies. It is not a Lean parser and does
+not inventory structure fields. The separately audited
+`PositiveMinimumPlateau.reward_bound` field remains intentional: the same
+positive constant controls reward coordinates and explicit mass-floor
 denominators throughout that quantitative certificate.
 
 Keep arbitrary bounds in quantitative conclusions and wherever later data are

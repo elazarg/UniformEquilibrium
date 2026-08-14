@@ -144,9 +144,7 @@ complete joint rescaled clock and a summable owner-deleted clock force every
 late literal terminal payoff to converge to the owner's singleton vector. -/
 theorem tendsto_quittingRootSequenceTerminalValue_soloReward_of_ownerMonopoly
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (owner who : ι) (start : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (roots : ℕ → ι → PMF Bool) (owner who : ι) (start : ℕ)
     (habsorption : ¬Summable (fun offset =>
       quittingRootAbsorptionMass (roots (start + offset))))
     (hopponent : Summable (fun offset =>
@@ -154,6 +152,7 @@ theorem tendsto_quittingRootSequenceTerminalValue_soloReward_of_ownerMonopoly
     Tendsto (fun later =>
       quittingRootSequenceTerminalValue reward roots who (start + later))
       atTop (nhds (quittingSoloReward reward owner who)) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hopponentTail : ∀ later, Summable (fun offset =>
       quittingOpponentClockCharge roots owner ((start + later) + offset)) := by
     intro later
@@ -245,7 +244,6 @@ theorem conditionedDeletedClock_terminalConcentration
   intro who
   exact tendsto_quittingRootSequenceTerminalValue_soloReward_of_ownerMonopoly
     reward (quittingTailDiffuseRescaledRoots roots hpositive) owner who start
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) habsorption hopponent
+      habsorption hopponent
 
 end GameTheory

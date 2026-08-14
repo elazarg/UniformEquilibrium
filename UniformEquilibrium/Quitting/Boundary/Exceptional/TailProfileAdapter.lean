@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailFallback
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailLimits
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Canonical profile adapter for the exceptional stationary fallback
@@ -498,9 +499,8 @@ hazards are derived canonically from that profile. -/
 theorem exists_isεAsymptoticNash_soloStationary_of_exceptional_profile
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (owner : ι) {β M : ℝ}
-    (hβ : 0 ≤ β) (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι) {β : ℝ}
+    (hβ : 0 ≤ β)
     (habsorbs : ∀ start,
       quittingLiveMassLimit reward
         (quittingAllContinueProfileSpine reward profile start) = 0)
@@ -516,6 +516,7 @@ theorem exists_isεAsymptoticNash_soloStationary_of_exceptional_profile
         (quittingStationaryProfile reward
           (quittingSoloStationaryRoot owner
             (quittingProfileLiveRoot reward profile time owner))) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   let roots := quittingProfileLiveRoot reward profile
   let tails := quittingAllContinueProfileSpine reward profile
   let η := quittingExceptionalTailError reward profile owner

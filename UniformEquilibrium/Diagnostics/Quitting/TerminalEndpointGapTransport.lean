@@ -293,8 +293,7 @@ theorem eventually_half_min_le_terminalCoordinateDebt_of_conditionedEndpointGap
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile) (who : ι)
-    (endpoint delta eta : ℝ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (endpoint delta eta : ℝ)
     (hdelta : 0 < delta) (heta : 0 < eta)
     (hsolo : delta ≤ reward (quittingSingletonTerminal who) who)
     (hgap : eta ≤ reward (quittingSingletonTerminal who) who - endpoint)
@@ -309,6 +308,7 @@ theorem eventually_half_min_le_terminalCoordinateDebt_of_conditionedEndpointGap
       min delta eta / 2 ≤
         max 0 (quittingContinuationBestResponseValue reward (profiles n) who -
           quittingTerminalPayoff reward (profiles n) who) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   let error : ℕ → ℝ := fun n =>
     2 * M * quittingRootOpponentAbsorptionMass
         (quittingProfileLiveRoot reward (profiles n) 0) who +

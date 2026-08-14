@@ -248,8 +248,6 @@ theorem quittingTailConditionedValue_eq_terminalValue_div
     (boundary : Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hboundary : ∀ who,
       Tendsto (fun time ↦ value time who) atTop (nhds (boundary who)))
     (time : ℕ) :
@@ -260,7 +258,7 @@ theorem quittingTailConditionedValue_eq_terminalValue_div
   funext who
   have hdecomposition := congrFun
     (quittingValuePath_eq_terminalValue_add_survivalLimit_mul
-      reward roots value hpolicy boundary hM hreward hboundary time) who
+      reward roots value hpolicy boundary hboundary time) who
   unfold quittingTailConditionedValue
   rw [hdecomposition]
   ring
@@ -272,7 +270,7 @@ theorem abs_quittingTailConditionedValue_le
     (boundary : Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hboundary : ∀ who,
       Tendsto (fun time ↦ value time who) atTop (nhds (boundary who)))
@@ -280,7 +278,7 @@ theorem abs_quittingTailConditionedValue_le
     (who : ι) :
     |quittingTailConditionedValue roots value boundary time who| ≤ M := by
   rw [quittingTailConditionedValue_eq_terminalValue_div
-    roots value boundary hpolicy hM hreward hboundary time]
+    roots value boundary hpolicy hboundary time]
   rw [abs_div, abs_of_pos hpositive]
   exact (div_le_iff₀ hpositive).2 <| by
     simpa [quittingTailEventualAbsorption] using

@@ -161,9 +161,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_resetFaceDisp
     intro n
     exact quittingTerminalSemanticLawPoint_mem_carrier reward _
   obtain ⟨cluster, hcluster, subseq, hsubseq, hendpoint⟩ :=
-    (quittingTerminalSemanticLawCarrier_isCompact reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)).tendsto_subseq hendpointMem
+    (quittingTerminalSemanticLawCarrier_isCompact reward).tendsto_subseq
+      hendpointMem
   have hdebtCluster :=
     ((continuous_quittingTerminalSemanticDebt packet.observer).comp
       continuous_fst).tendsto cluster |>.comp hendpoint

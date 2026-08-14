@@ -5,7 +5,6 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumTransfer
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Global terminal-law retention on a minimum stopping-law reset
@@ -118,13 +117,11 @@ theorem exists_halfStoppingLawReset_nearMinimum_transfer_and_globalRetention
               quittingStageCoalitionMass reward profile time terminal) ≤
           ∑ time ∈ Finset.range cutoff,
             quittingStageCoalitionMass reward mixedProfile time terminal := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   obtain ⟨bestResponse, htarget, hgainQuarter, hgainPos, hdecrease,
       htransfer, hchord, _hselectedWindow⟩ :=
     exists_halfStoppingLawReset_nearMinimum_transfer_and_windowRetention
       reward profile who (quittingSingletonTerminal who) 0 epsilon
-        hM hreward hwhoDebt hnear
+        hwhoDebt hnear
   refine ⟨bestResponse, ?_⟩
   dsimp only
   let endpointProfile := Function.update profile who bestResponse

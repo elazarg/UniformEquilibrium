@@ -167,18 +167,15 @@ theorem every_observer_deviation_payoff_eq_zero
     quittingTerminalPayoff (reward scale)
         (Function.update (profile scale) observer deviation) observer = 0 := by
   rw [quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-    (reward scale) (profile scale) observer deviation (abs_nonneg scale)]
-  · have hpure : (fun choice =>
-        quittingTerminalPayoff (reward scale)
-          (Function.update (profile scale) observer
-            (quittingPureTimeBehaviorStrategy (reward scale) observer choice))
-          observer) = fun _ => 0 := by
-      funext choice
-      exact pureTimePayoff_observer_eq_zero scale choice
-    rw [hpure, expect_const]
-  · intro terminal player
-    simp only [reward]
-    split_ifs <;> simp
+    (reward scale) (profile scale) observer deviation]
+  have hpure : (fun choice =>
+      quittingTerminalPayoff (reward scale)
+        (Function.update (profile scale) observer
+          (quittingPureTimeBehaviorStrategy (reward scale) observer choice))
+        observer) = fun _ => 0 := by
+    funext choice
+    exact pureTimePayoff_observer_eq_zero scale choice
+  rw [hpure, expect_const]
 
 /-- Although the signed Quit advantage is zero, the formal eventwise
 positive-part Quit account is `scale / 2`: the favorable opponent-Continue

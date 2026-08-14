@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Debt.Marked.FenceFirstOpponentAdapter
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Concrete suffix transfers from marked first-opponent packets
@@ -186,7 +187,7 @@ theorem exists_goodBoundary_or_activeNegativeTransfer_of_finiteExactChain
     [Nontrivial ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
-    (owner : ι) (cutoff start : ℕ) (θ M : ℝ)
+    (owner : ι) (cutoff start : ℕ) (θ : ℝ)
     (hstart : start ≤ cutoff)
     (hterminal : value cutoff = 0)
     (hpolicy : ∀ time, time < cutoff →
@@ -194,8 +195,7 @@ theorem exists_goodBoundary_or_activeNegativeTransfer_of_finiteExactChain
         (value (time + 1)) (roots time))
     (hnash : ∀ time, time < cutoff →
       IsεQuittingRootNash reward (value (time + 1)) 0 (roots time))
-    (hθ : 0 < θ) (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (hθ : 0 < θ)
     (hnegative : value start owner ≤ -θ) :
     (∃ mark : QuittingFirstOpponentMark ι (cutoff - start),
       0 < quittingFirstOpponentRawWeight roots owner start
@@ -214,6 +214,7 @@ theorem exists_goodBoundary_or_activeNegativeTransfer_of_finiteExactChain
           (quittingFirstOpponentValue value start) j mark ∧
         0 < (roots (start + mark.1) j true).toReal := by
   classical
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   obtain ⟨hlocalTerminal, hlocalPolicy, hlocalNash⟩ :=
     finiteExactQuittingNashBellmanChain_rebase reward roots value cutoff start
       hstart hterminal hpolicy hnash
@@ -222,7 +223,7 @@ theorem exists_goodBoundary_or_activeNegativeTransfer_of_finiteExactChain
       reward roots value owner start (cutoff - start)
         hlocalTerminal hlocalPolicy hlocalNash
   have hfenceMass := quittingFirstOpponentMass_pos reward roots value owner
-    start (cutoff - start) θ M hθ hM hreward hnever hnegative
+    start (cutoff - start) θ hθ hnever hnegative
   have hdichotomy :=
     quittingFiniteExactChain_firstOpponent_markedFenceDichotomy
       reward roots value owner start (cutoff - start) θ M
@@ -495,21 +496,20 @@ theorem QuittingNegativeFlagState.hasGoodBoundary_or_exists_actualTransfer
     [Nontrivial ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
-    (cutoff : ℕ) (θ M : ℝ)
+    (cutoff : ℕ) (θ : ℝ)
     (hterminal : value cutoff = 0)
     (hpolicy : ∀ time, time < cutoff →
       value time = quittingRootSuccessorPayoff reward
         (value (time + 1)) (roots time))
     (hnash : ∀ time, time < cutoff →
       IsεQuittingRootNash reward (value (time + 1)) 0 (roots time))
-    (hθ : 0 < θ) (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (hθ : 0 < θ)
     (state : QuittingNegativeFlagState value cutoff θ) :
     state.HasGoodBoundary reward roots value cutoff θ ∨
       ∃ next, state.IsActualTransfer reward roots value cutoff θ next := by
   rcases exists_goodBoundary_or_activeNegativeTransfer_of_finiteExactChain
-    reward roots value state.owner cutoff state.time θ M
-      state.time_le_cutoff hterminal hpolicy hnash hθ hM hreward
+    reward roots value state.owner cutoff state.time θ
+      state.time_le_cutoff hterminal hpolicy hnash hθ
         state.negative with hgood | htransfer
   · exact Or.inl hgood
   · right
@@ -536,15 +536,14 @@ theorem exists_finiteActualNegativeFlagWalk_good_or_repeatedOwner
     [Nontrivial ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
-    (cutoff : ℕ) (θ M : ℝ)
+    (cutoff : ℕ) (θ : ℝ)
     (hterminal : value cutoff = 0)
     (hpolicy : ∀ time, time < cutoff →
       value time = quittingRootSuccessorPayoff reward
         (value (time + 1)) (roots time))
     (hnash : ∀ time, time < cutoff →
       IsεQuittingRootNash reward (value (time + 1)) 0 (roots time))
-    (hθ : 0 < θ) (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (hθ : 0 < θ)
     (initial : QuittingNegativeFlagState value cutoff θ) :
     ∃ walk : ℕ → QuittingNegativeFlagState value cutoff θ,
       walk 0 = initial ∧
@@ -565,7 +564,7 @@ theorem exists_finiteActualNegativeFlagWalk_good_or_repeatedOwner
       source.IsActualTransfer reward roots value cutoff θ target)
   · intro state
     exact state.hasGoodBoundary_or_exists_actualTransfer reward roots value
-      cutoff θ M hterminal hpolicy hnash hθ hM hreward
+      cutoff θ hterminal hpolicy hnash hθ
 
 /-- The repeated-owner branch refines into the exact calendar alternatives
 needed by the marked construction.  Because actual transfer times are
@@ -576,15 +575,14 @@ theorem exists_finiteActualNegativeFlagWalk_good_or_sameTime_or_strictTimeRepeat
     [Nontrivial ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
-    (cutoff : ℕ) (θ M : ℝ)
+    (cutoff : ℕ) (θ : ℝ)
     (hterminal : value cutoff = 0)
     (hpolicy : ∀ time, time < cutoff →
       value time = quittingRootSuccessorPayoff reward
         (value (time + 1)) (roots time))
     (hnash : ∀ time, time < cutoff →
       IsεQuittingRootNash reward (value (time + 1)) 0 (roots time))
-    (hθ : 0 < θ) (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (hθ : 0 < θ)
     (initial : QuittingNegativeFlagState value cutoff θ) :
     ∃ walk : ℕ → QuittingNegativeFlagState value cutoff θ,
       walk 0 = initial ∧
@@ -604,8 +602,7 @@ theorem exists_finiteActualNegativeFlagWalk_good_or_sameTime_or_strictTimeRepeat
               (walk m).time < (walk n).time)) := by
   obtain ⟨walk, hinitial, hsteps, hend⟩ :=
     exists_finiteActualNegativeFlagWalk_good_or_repeatedOwner
-      reward roots value cutoff θ M hterminal hpolicy hnash hθ hM
-        hreward initial
+      reward roots value cutoff θ hterminal hpolicy hnash hθ initial
   refine ⟨walk, hinitial, hsteps, ?_⟩
   rcases hend with hgood | ⟨hnogood, hrepeat⟩
   · exact Or.inl hgood

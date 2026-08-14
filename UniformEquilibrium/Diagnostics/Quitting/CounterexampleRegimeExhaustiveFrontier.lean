@@ -308,8 +308,7 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
       hslopeAlternative⟩ :=
     exists_commonBase_stoppingLawDebtTangentFamily
       reward base profiles active epsilon lambda
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) hbase hbasePositive
+      hbase hbasePositive
       hprofiles hactive hsourceActive hnear hlambdaPos hlambdaLe hlambdaZero
       hepsilonRate hinactiveRate'
   have hfrontierBranch :

@@ -5,8 +5,10 @@ This is a reporting census, not a failing lint.  It recognizes the narrow
 quitting schema consisting of a real bound variable (``M``, ``B``, or ``C``),
 a nonnegative hypothesis for that variable, and a coordinatewise hypothesis
 bounding ``reward`` by it.  The corrected classification checks every later
-binder type as well as the final result.  This matters because a theorem can
-omit the bound from its result while still using it in a later hypothesis.
+binder type and the full result.  For data declarations it also checks the
+body, since a parameter can affect the constructed object without occurring
+in its displayed type.  These distinctions keep qualitative proof parameters
+separate from genuinely quantitative theorem and definition data.
 """
 
 from __future__ import annotations
@@ -58,6 +60,7 @@ class RewardBoundDeclaration:
     bound_variable: str
     result_uses_bound: bool
     later_telescope_uses_bound: bool
+    body_uses_bound: bool
 
     @property
     def report_style_classification(self) -> str:
@@ -65,7 +68,11 @@ class RewardBoundDeclaration:
 
     @property
     def corrected_classification(self) -> str:
-        return "later-use" if self.later_telescope_uses_bound else "removable"
+        return (
+            "later-use"
+            if self.later_telescope_uses_bound or self.body_uses_bound
+            else "removable"
+        )
 
 
 @dataclass(frozen=True)
@@ -75,6 +82,7 @@ class _Signature:
     kind: str
     name: str
     text: str
+    body: str
 
 
 def _balanced_end(text: str, start: int, opener: str = "(") -> int:
@@ -235,6 +243,7 @@ def _declaration_signatures(path: pathlib.Path) -> list[_Signature]:
                 kind=match.group("kind"),
                 name=match.group("name"),
                 text=declaration[:signature_end],
+                body=declaration[body_offset:],
             )
         )
     return signatures
@@ -300,6 +309,14 @@ def inventory(root: pathlib.Path = ROOT) -> list[RewardBoundDeclaration]:
                         ),
                         later_telescope_uses_bound=bool(
                             re.search(_identifier_boundary(variable), retained)
+                        ),
+                        body_uses_bound=(
+                            signature.kind not in {"theorem", "lemma"}
+                            and bool(
+                                re.search(
+                                    _identifier_boundary(variable), signature.body
+                                )
+                            )
                         ),
                     )
                 )

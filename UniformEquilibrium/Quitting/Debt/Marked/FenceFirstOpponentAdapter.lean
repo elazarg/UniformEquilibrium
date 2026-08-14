@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Debt.Marked.FencePacket
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
 import UniformEquilibrium.Quitting.Paths.OpponentActionMass
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailLimits
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Actual first-opponent packets for finite quitting chains
@@ -478,13 +479,13 @@ positive. -/
 theorem quittingFirstOpponentMass_pos
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
-    (owner : ι) (start fuel : ℕ) (θ M : ℝ)
-    (hθ : 0 < θ) (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (owner : ι) (start fuel : ℕ) (θ : ℝ)
+    (hθ : 0 < θ)
     (hnever : quittingFirstOpponentRawMean reward roots owner start fuel ≤
       value start owner)
     (hnegative : value start owner ≤ -θ) :
     0 < quittingFirstOpponentMass roots owner start fuel := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hfence := theta_le_M_mul_quittingFirstOpponentMass
     reward roots value owner start fuel θ M hM hreward hnever hnegative
   have hmass0 := quittingFirstOpponentMass_nonneg roots owner start fuel
@@ -589,7 +590,7 @@ theorem quittingFirstOpponent_markedFenceDichotomy
               (quittingFirstOpponentQuitters owner)
               (quittingFirstOpponentValue value start) j) := by
   have hmass := quittingFirstOpponentMass_pos reward roots value owner
-    start fuel θ M hθ hM hreward hnever hnegative
+    start fuel θ hθ hnever hnegative
   apply QuittingMarkedFencePacket.marked_packet_dichotomy
     owner
     (quittingFirstOpponentWeight roots owner start fuel)

@@ -754,7 +754,7 @@ theorem source_payoff_eq_stoppingLaw_zero
         (Function.update sourceProfile true strategy) true =
       (quittingBehaviorStoppingLaw reward strategy (some 0)).toReal := by
   rw [quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-    reward sourceProfile true strategy (by norm_num) abs_reward_le_one]
+    reward sourceProfile true strategy]
   change expect (quittingBehaviorStoppingLaw reward strategy) sourcePureValue = _
   have hvalue : sourcePureValue =
       (fun choice => if choice = some 0 then (1 : ℝ) else 0) := by
@@ -771,7 +771,7 @@ theorem target_payoff_eq_stoppingLaw_one
         (Function.update targetProfile true strategy) true =
       (quittingBehaviorStoppingLaw reward strategy (some 1)).toReal := by
   rw [quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-    reward targetProfile true strategy (by norm_num) abs_reward_le_one]
+    reward targetProfile true strategy]
   change expect (quittingBehaviorStoppingLaw reward strategy) targetPureValue = _
   have hvalue : targetPureValue =
       (fun choice => if choice = some 1 then (1 : ℝ) else 0) := by

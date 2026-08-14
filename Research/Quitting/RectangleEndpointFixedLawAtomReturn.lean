@@ -7,7 +7,6 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalEndpointReturn
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetSurfaceTension
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticTwoReservoirConsumer
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Fixed-law return of the rectangle endpoint atom
@@ -110,9 +109,8 @@ theorem QuittingStoppingLawRectangleResetFaceDispatch.nonempty_jointAtomLimit
     intro n
     exact quittingTerminalSemanticLawPoint_mem_carrier reward _
   obtain ⟨comparison, hcomparison, subseq, hsubseq, hcomparisonLimit⟩ :=
-    (quittingTerminalSemanticLawCarrier_isCompact reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)).tendsto_subseq hcomparisonMem
+    (quittingTerminalSemanticLawCarrier_isCompact reward).tendsto_subseq
+      hcomparisonMem
   have hendpointLimit := dispatch.doubleEndpoint_tendsto.comp
     hsubseq.tendsto_atTop
   have hendpointMass : Tendsto (fun n =>
@@ -250,8 +248,7 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.exists_fixedLawResetDispatch
       htransfer, htoggle, hdynamic⟩ :=
     regime.exists_fixedLaw_resetFace_dispatch frontier.base
       dispatch.cluster.1 dispatch.cluster.2 packet.observer other
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) frontier.base_minimum
+      frontier.base_minimum
       frontier.base_positive dispatch.cluster_mem
       dispatch.cluster_observer_reset hincidence
   exact ⟨returned, ⟨hjoint, hreset, hsourceLe, htargetGe, htransfer,
@@ -372,8 +369,7 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.nonempty_minimizerBridge
   obtain ⟨global, hglobal, hglobalReset, hglobalMin⟩ :=
     exists_joint_resetFace_debtMinimizer dispatch.cluster.1
       dispatch.cluster.2 packet.observer
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) dispatch.cluster_mem
+      dispatch.cluster_mem
       dispatch.cluster_observer_reset
   obtain ⟨fixed, hfixed⟩ :=
     limit.exists_fixedLawResetDispatch hreward other hother hotherNe

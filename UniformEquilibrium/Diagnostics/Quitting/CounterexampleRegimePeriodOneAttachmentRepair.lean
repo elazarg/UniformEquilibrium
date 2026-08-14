@@ -81,8 +81,7 @@ Nash--Bellman annotation. -/
 theorem exists_elementaryTailCap_terminalExploitability_gt_sub
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (plan tail : ℕ → ι → PMF Bool) (switch : ℕ) (hswitch : 0 < switch)
-    {M gap ε : ℝ} (hM : 0 ≤ M) (hε : 0 < ε)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {gap ε : ℝ} (hε : 0 < ε)
     (hexploit : HasTerminalExploitabilityGap reward gap) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ cutoff,
       gap - ε < quittingTerminalExploitability reward
@@ -90,7 +89,7 @@ theorem exists_elementaryTailCap_terminalExploitability_gt_sub
           (quittingElementaryTailRoots tail cutoff cap) switch) := by
   obtain ⟨cap, cutoff, hclose⟩ :=
     QuittingBoundaryHolonomy.exists_elementaryTailCap_behavioralTailGain_close
-      reward tail plan 0 (switch - 1) hM hε hreward
+      reward tail plan 0 (switch - 1) hε
   have hactual := terminalExploitabilityGap_le_quittingTerminalExploitability
     reward hexploit
       (quittingPhaseSwitchProfile reward plan tail switch)
@@ -151,8 +150,7 @@ theorem exists_elementaryTailCap_periodOne_terminalObstruction (index : ℕ) :
       (quittingPeriodOneRootSequence
         (seam.periodOneReadoutRoot readout.start index))
       (seam.periodOneReadoutActualSuffix readout.start index) 1
-      (by omega) (quittingRewardBound_nonneg reward) hhalf
-      (abs_reward_le_quittingRewardBound reward)
+      (by omega) hhalf
       regime.terminalExploitability
   refine ⟨cap, cutoff, ?_⟩
   have hhalfEq : regime.terminalGap - regime.terminalGap / 2 =

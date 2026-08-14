@@ -43,8 +43,6 @@ theorem exists_halfStoppingLawReset_nearMinimum_transfer_and_windowRetention
     (profile : (quittingGame reward).BehaviorProfile)
     (who : ι) (terminal : {S : Finset ι // S.Nonempty}) (cutoff : ℕ)
     (epsilon : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hwhoDebt : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who)
     (hnear : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -74,7 +72,7 @@ theorem exists_halfStoppingLawReset_nearMinimum_transfer_and_windowRetention
             (1 / 2) * quittingTerminalSemanticDebt endpoint observer) ∧
       (1 / 2) *
           (∑ time ∈ Finset.range cutoff,
-            quittingStageCoalitionMass reward profile time terminal) ≤
+          quittingStageCoalitionMass reward profile time terminal) ≤
         ∑ time ∈ Finset.range cutoff,
           quittingStageCoalitionMass reward mixedProfile time terminal := by
   let source := quittingTerminalSemanticPair reward profile
@@ -86,7 +84,7 @@ theorem exists_halfStoppingLawReset_nearMinimum_transfer_and_windowRetention
       hwindow⟩ :=
     exists_stoppingLawMixture_debtContraction_and_windowRetention
       reward profile who terminal cutoff (1 / 2) error
-        (by norm_num) (by norm_num) herror hM hreward
+        (by norm_num) (by norm_num) herror
   refine ⟨bestResponse, ?_⟩
   dsimp only
   let endpointProfile := Function.update profile who bestResponse
@@ -142,8 +140,6 @@ theorem exists_halfStoppingLawReset_minimum_positiveTransfer
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (who : ι) (terminal : {S : Finset ι // S.Nonempty}) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hwhoDebt : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -174,7 +170,7 @@ theorem exists_halfStoppingLawReset_minimum_positiveTransfer
   obtain ⟨bestResponse, _htarget, _hquarter, hgainPos, _hdecrease,
       htransfer, _hchord, hwindow⟩ :=
     exists_halfStoppingLawReset_nearMinimum_transfer_and_windowRetention
-      reward profile who terminal cutoff 0 hM hreward hwhoDebt hnear
+      reward profile who terminal cutoff 0 hwhoDebt hnear
   refine ⟨bestResponse, ?_⟩
   dsimp only
   have hpositive : 0 < ∑ other ∈ Finset.univ.erase who,

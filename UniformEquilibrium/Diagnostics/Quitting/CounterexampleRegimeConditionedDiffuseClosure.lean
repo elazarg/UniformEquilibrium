@@ -74,8 +74,7 @@ theorem not_all_limitValue_eq_singleton_of_diffuse
         time player| ≤ quittingRewardBound reward := by
     intro time player
     exact abs_quittingTailConditionedValue_le roots value seam.limit.value
-      hpolicy (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) seam.value_tendsto time
+      hpolicy (abs_reward_le_quittingRewardBound reward) seam.value_tendsto time
       (hpositive time) player
   have hpunishment : ∀ who, quittingPunishmentValue reward who ≤
       quittingSoloReward reward who who := by
@@ -252,8 +251,7 @@ theorem
           time player| ≤ quittingRewardBound reward := by
       intro time player
       exact abs_quittingTailConditionedValue_le roots value seam.limit.value
-        hpolicy (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) seam.value_tendsto time
+        hpolicy (abs_reward_le_quittingRewardBound reward) seam.value_tendsto time
         (hpositive time) player
     have hexists :=
       quittingGame_exists_uniformEquilibriumPayoff_of_conditionedProperFaceDiffuseTail
@@ -378,8 +376,7 @@ theorem not_tendsto_rescaledQuitDefect_of_diffuse
           time player| ≤ quittingRewardBound reward := by
       intro time player
       exact abs_quittingTailConditionedValue_le roots value seam.limit.value
-        hpolicy (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) seam.value_tendsto time
+        hpolicy (abs_reward_le_quittingRewardBound reward) seam.value_tendsto time
         (hpositive time) player
     obtain ⟨_, _, _, hownerPositiveLate⟩ :=
       conditionedDeletedClock_ownerMonopoly roots owner start hpositive

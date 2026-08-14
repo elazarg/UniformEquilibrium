@@ -120,8 +120,7 @@ theorem exists_commonElementaryTail_isεAsymptoticNash_of_repairValue_lt
             quittingTerminalPayoff reward profile who) := by
   let holonomy := quittingFiniteBoundaryHolonomy reward plan 0 (switch - 1)
   have heq := elementaryTailRepairValue_eq_behavioralTailRepairValue
-    reward plan 0 (switch - 1) (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
+    reward plan 0 (switch - 1)
   have hlt : elementaryTailRepairValue reward holonomy < ε := by
     rw [heq]
     exact hrepair

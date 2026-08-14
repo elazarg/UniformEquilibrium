@@ -62,11 +62,19 @@ class DeclarationBody:
 
 
 def _body_assignment_offset(declaration: str) -> int | None:
-    """Locate the depth-zero ``:=`` introducing a declaration body."""
+    """Locate the depth-zero ``:=`` introducing a declaration body.
 
-    pairs = {"(": ")", "[": "]", "{": "}"}
+    A declaration result may itself start with a chain of ``let`` bindings.
+    Their assignment tokens are also at delimiter depth zero, but they belong
+    to the result rather than the declaration body.  Track those bindings so
+    the scanner reaches the assignment after the complete result expression.
+    """
+
+    pairs = {"(": ")", "[": "]", "{": "}", "⦃": "⦄"}
     closers = set(pairs.values())
     stack: list[str] = []
+    in_result = False
+    pending_result_lets = 0
     index = 0
     while index + 1 < len(declaration):
         character = declaration[index]
@@ -75,8 +83,32 @@ def _body_assignment_offset(declaration: str) -> int | None:
         elif character in closers:
             if stack and stack[-1] == character:
                 stack.pop()
-        elif not stack and declaration[index : index + 2] == ":=":
-            return index + 2
+        elif not stack:
+            if declaration[index : index + 2] == ":=":
+                if not in_result:
+                    return index + 2
+                if pending_result_lets:
+                    pending_result_lets -= 1
+                    index += 2
+                    continue
+                return index + 2
+            if character == ":":
+                in_result = True
+            elif (
+                in_result
+                and declaration.startswith("let", index)
+                and not is_identifier_continuation(
+                    declaration[index - 1] if index else ""
+                )
+                and not is_identifier_continuation(
+                    declaration[index + 3]
+                    if index + 3 < len(declaration)
+                    else ""
+                )
+            ):
+                pending_result_lets += 1
+                index += 3
+                continue
         index += 1
     return None
 

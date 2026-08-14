@@ -241,8 +241,6 @@ theorem exists_simultaneousStoppingLawMinimumResetFamily_withActivePassports
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (terminal : {S : Finset ι // S.Nonempty}) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward profile) ≤
@@ -279,7 +277,7 @@ theorem exists_simultaneousStoppingLawMinimumResetFamily_withActivePassports
         (quittingTerminalSemanticPair reward profile) who
     · obtain ⟨bestResponse, hgainLower, hgainPos, hray⟩ :=
         exists_stoppingLawResetRay_minimum_transfer_and_windowRetention
-          reward profile who terminal cutoff hM hreward hactive hminimum
+          reward profile who terminal cutoff hactive hminimum
       refine ⟨bestResponse, fun _hactive => ?_⟩
       dsimp only [IsQuittingStoppingLawMinimumResetPassport]
       refine ⟨hgainLower, hgainPos, ?_⟩

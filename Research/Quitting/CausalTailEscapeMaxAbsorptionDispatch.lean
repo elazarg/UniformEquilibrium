@@ -775,8 +775,6 @@ theorem exists_offMinimum_retainedLaw_allContinue_or_supportEntry
         ∃ root : iota → PMF Bool,
           IsεQuittingRootNash reward cluster.1.2 0 root ∧
             0 < quittingRootAbsorptionMass root) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let profile : ℕ → (quittingGame reward).BehaviorProfile :=
     quittingMaximalCapPrefixProfile reward terminal
   let root : ℕ → iota → PMF Bool := fun n ↦
@@ -836,7 +834,7 @@ theorem exists_offMinimum_retainedLaw_allContinue_or_supportEntry
     intro n
     exact quittingTerminalSemanticLawPoint_mem_carrier reward (profile n)
   obtain ⟨cluster, hcluster, subseq, hsubseq, hpointLimit⟩ :=
-    (quittingTerminalSemanticLawCarrier_isCompact reward hM hreward).tendsto_subseq
+    (quittingTerminalSemanticLawCarrier_isCompact reward).tendsto_subseq
       hpointMem
   have hpairLimit : Tendsto (fun rank ↦ (point (subseq rank)).1)
       atTop (nhds cluster.1) :=

@@ -351,9 +351,7 @@ simultaneously witnessed by one sequence of executable profiles. -/
 theorem exists_executable_positiveIncidence_normalizedReprojectionGerm
     (source : QuittingTerminalSemanticPair iota)
     (returned : QuittingTerminalSemanticLawPoint iota)
-    (owner : iota) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : iota)
     (hminimum : ∀ point ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum point)
@@ -454,7 +452,7 @@ theorem exists_executable_positiveIncidence_normalizedReprojectionGerm
     exists_normalized_contact_germ_in_dense_of_compact
       (quittingAttainableTerminalSemanticLawPoints reward)
       (quittingTerminalSemanticLawCarrier reward)
-      (quittingTerminalSemanticLawCarrier_isCompact reward hM hreward)
+      (quittingTerminalSemanticLawCarrier_isCompact reward)
       (subset_closure)
       (by rw [quittingTerminalSemanticLawCarrier])
       face tension hfaceContinuous htensionContinuous hfaceNonneg

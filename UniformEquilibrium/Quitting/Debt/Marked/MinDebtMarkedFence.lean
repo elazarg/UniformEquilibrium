@@ -121,8 +121,6 @@ theorem exists_finiteMinDebtNegativeFlagWalk_good_or_sameTime_or_strictTimeRepea
     exists_finiteActualNegativeFlagWalk_good_or_sameTime_or_strictTimeRepeat
       reward (quittingFiniteMinDebtRoots reward cutoff)
         (quittingFiniteMinDebtValue reward cutoff) cutoff θ
-        (quittingRewardBound reward) hterminal hpolicy hnash hθ
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) initial
+        hterminal hpolicy hnash hθ initial
 
 end GameTheory

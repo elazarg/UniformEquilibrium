@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCapEnvelop
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
 import UniformEquilibrium.Quitting.Debt.Ledger.TruncationLedgerFold
 import UniformEquilibrium.Quitting.Stationary.MinMax
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Deleted-tail coupling for the Never cap
@@ -526,12 +527,11 @@ literal behavioral best-response envelope. -/
 theorem tendsto_quittingRootSequenceBestResponseValue_elementaryNever
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingOpponentSurvivalLimit roots who 0) :
     Tendsto (fun cutoff => quittingRootSequenceBestResponseValue reward
         (quittingElementaryTailRoots roots cutoff (.never)) who)
       atTop (nhds (quittingRootSequenceBestResponseValue reward roots who)) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hmajorant : Tendsto (fun cutoff =>
       2 * M * (quittingOpponentSurvivalWeight roots who 0 cutoff -
         quittingOpponentSurvivalLimit roots who 0)) atTop (nhds 0) := by
@@ -576,9 +576,8 @@ theorem quittingOpponentSurvivalLimit_pos_of_joint_pos
 and all behavioral envelopes in the positive-joint-survival branch. -/
 theorem exists_elementaryNever_terminalPair_close_of_joint_pos
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) {M ε : ℝ}
-    (hM : 0 ≤ M) (hε : 0 < ε)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (roots : ℕ → ι → PMF Bool) {ε : ℝ}
+    (hε : 0 < ε)
     (hpositive : 0 < quittingJointSurvivalLimit roots 0) :
     ∃ cutoff,
       (∀ who, |quittingRootSequenceTerminalValue reward roots who 0 -
@@ -595,7 +594,7 @@ theorem exists_elementaryNever_terminalPair_close_of_joint_pos
     intro who
     obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp
       (tendsto_quittingRootSequenceTerminalValue_elementaryNever
-        reward roots who hM hreward hpositive) ε hε
+        reward roots who hpositive) ε hε
     exact eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
       simpa [Real.dist_eq, abs_sub_comm] using hN cutoff hcutoff⟩
   have hb : ∀ᶠ cutoff : ℕ in atTop, ∀ who,
@@ -606,7 +605,7 @@ theorem exists_elementaryNever_terminalPair_close_of_joint_pos
     intro who
     obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp
       (tendsto_quittingRootSequenceBestResponseValue_elementaryNever
-        reward roots who hM hreward
+        reward roots who
           (quittingOpponentSurvivalLimit_pos_of_joint_pos roots who hpositive)) ε hε
     exact eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
       simpa [Real.dist_eq, abs_sub_comm] using hN cutoff hcutoff⟩
@@ -618,9 +617,8 @@ that player simultaneously approximates every prescribed value and every
 behavioral envelope. -/
 theorem exists_elementarySureSolo_terminalPair_close_of_unique
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (owner : ι) {M ε : ℝ}
-    (hM : 0 ≤ M) (hε : 0 < ε)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (roots : ℕ → ι → PMF Bool) (owner : ι) {ε : ℝ}
+    (hε : 0 < ε)
     (hjoint : quittingJointSurvivalLimit roots 0 = 0)
     (howner : 0 < quittingOpponentSurvivalLimit roots owner 0)
     (hunique : ∀ who,
@@ -632,6 +630,7 @@ theorem exists_elementarySureSolo_terminalPair_close_of_unique
       (∀ who, |quittingRootSequenceBestResponseValue reward roots who -
         quittingRootSequenceBestResponseValue reward
           (quittingElementaryTailRoots roots cutoff (.sureSolo owner)) who| < ε) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hp : ∀ᶠ cutoff : ℕ in atTop, ∀ who,
       |quittingRootSequenceTerminalValue reward roots who 0 -
         quittingRootSequenceTerminalValue reward
@@ -659,7 +658,7 @@ theorem exists_elementarySureSolo_terminalPair_close_of_unique
     · subst who
       obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp
         (tendsto_quittingRootSequenceBestResponseValue_elementaryNever
-          reward roots owner hM hreward howner) ε hε
+          reward roots owner howner) ε hε
       exact eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
         rw [quittingRootSequenceBestResponseValue_elementarySureSolo_owner_eq_never]
         simpa [Real.dist_eq, abs_sub_comm] using hN cutoff hcutoff⟩
@@ -692,9 +691,8 @@ cutoff co-realize, for all players, both the prescribed tail value and the
 literal all-behavior best-response envelope to arbitrary accuracy. -/
 theorem exists_elementaryTailCap_terminalPair_close
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) {M ε : ℝ}
-    (hM : 0 ≤ M) (hε : 0 < ε)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (roots : ℕ → ι → PMF Bool) {ε : ℝ}
+    (hε : 0 < ε) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ cutoff,
       (∀ who, |quittingRootSequenceTerminalValue reward roots who 0 -
         quittingRootSequenceTerminalValue reward
@@ -706,15 +704,15 @@ theorem exists_elementaryTailCap_terminalPair_close
     hpositive | ⟨hjoint, hall | hunique⟩
   · obtain ⟨cutoff, hp, hb⟩ :=
       exists_elementaryNever_terminalPair_close_of_joint_pos
-        reward roots hM hε hreward hpositive
+        reward roots hε hpositive
     exact ⟨.never, cutoff, hp, hb⟩
   · obtain ⟨cutoff, hp, hb⟩ := exists_elementarySureJoint_terminalPair_close
-      reward roots hM hε hreward hjoint hall
+      reward roots hε hjoint hall
     exact ⟨.sureJoint, cutoff, hp, hb⟩
   · obtain ⟨owner, howner, hownerUnique⟩ := hunique
     obtain ⟨cutoff, hp, hb⟩ :=
       exists_elementarySureSolo_terminalPair_close_of_unique
-        reward roots owner hM hε hreward hjoint howner hownerUnique
+        reward roots owner hε hjoint howner hownerUnique
     exact ⟨.sureSolo owner, cutoff, hp, hb⟩
 
 end GameTheory

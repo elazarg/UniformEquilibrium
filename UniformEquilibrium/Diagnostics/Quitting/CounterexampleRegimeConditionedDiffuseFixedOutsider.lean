@@ -319,7 +319,7 @@ theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
         quittingRewardBound reward := by
     intro time player
     exact abs_quittingTailConditionedValue_le roots value boundary
-      hpolicy hbound hreward seam.value_tendsto time (hpositive time) player
+      hpolicy hreward seam.value_tendsto time (hpositive time) player
   have hscaled : Tendsto (fun time =>
       (Fintype.card ι : ℝ) * alpha time) atTop (nhds 0) := by
     simpa [alpha, roots] using hmesh.const_mul (Fintype.card ι : ℝ)

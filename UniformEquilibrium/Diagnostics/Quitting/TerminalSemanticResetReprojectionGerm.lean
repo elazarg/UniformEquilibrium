@@ -157,9 +157,7 @@ identifying this carrier germ with a charge-normalized strategic tangent. -/
 theorem exists_positiveIncidence_normalizedReprojectionGerm
     (source : QuittingTerminalSemanticPair iota)
     (returned : QuittingTerminalSemanticLawPoint iota)
-    (owner : iota) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : iota)
     (hminimum : ∀ point ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum point)
@@ -251,7 +249,7 @@ theorem exists_positiveIncidence_normalizedReprojectionGerm
       hcontactTension⟩ :=
     exists_normalized_contact_germ_of_compact
       (quittingTerminalSemanticLawCarrier reward)
-      (quittingTerminalSemanticLawCarrier_isCompact reward hM hreward)
+      (quittingTerminalSemanticLawCarrier_isCompact reward)
       face tension hfaceContinuous htensionContinuous hfaceNonneg
         hsupport hobstruction
   have hslopePositive : 0 <

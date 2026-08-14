@@ -67,9 +67,8 @@ theorem exists_positiveObserver_carrierResetFaceLawPoint
     intro n
     exact quittingTerminalSemanticLawPoint_mem_carrier reward _
   obtain ⟨point, hpoint, subseq, hsubseq, hendpoint⟩ :=
-    (quittingTerminalSemanticLawCarrier_isCompact reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)).tendsto_subseq hendpointMem
+    (quittingTerminalSemanticLawCarrier_isCompact reward).tendsto_subseq
+      hendpointMem
   have hdebtLimit :=
     ((continuous_quittingTerminalSemanticDebt packet.observer).comp
       continuous_fst).tendsto point |>.comp hendpoint

@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Strategic purification of conditioned singleton rows
@@ -365,8 +366,6 @@ theorem exists_conditionedSingletonProductRoot_path_with_opponentSurvivalObstruc
     (heventual : ∀ time,
       0 < quittingTailEventualAbsorption roots time)
     (htight : ∀ who, boundary who = quittingSoloReward reward who who)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal who, |reward terminal who| ≤ M)
     (hboundary : ∀ who,
       Filter.Tendsto (fun time ↦ value time who) Filter.atTop
         (nhds (boundary who)))
@@ -387,6 +386,7 @@ theorem exists_conditionedSingletonProductRoot_path_with_opponentSurvivalObstruc
         ∃ who start, ¬ Filter.Tendsto
           (quittingOpponentSurvivalWeight conditionedRoots who start)
           Filter.atTop (nhds 0) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   obtain ⟨conditionedRoots, hconditioned⟩ :=
     exists_conditionedSingletonProductRoot_path_isEndpointNash_of_tightBoundary
       reward roots value boundary hpolicy hnash owner hazard hroot hquit
@@ -398,7 +398,7 @@ theorem exists_conditionedSingletonProductRoot_path_with_opponentSurvivalObstruc
       |quittingTailConditionedValue roots value boundary time who| ≤ M := by
     intro time who
     exact abs_quittingTailConditionedValue_le
-      roots value boundary hpolicy hM hreward hboundary time
+      roots value boundary hpolicy hreward hboundary time
         (heventual time) who
   have hrootNash : ∀ time,
       IsεQuittingRootNash reward

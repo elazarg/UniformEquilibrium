@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchResiduals
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Elementary terminal caps for quitting tails
@@ -559,12 +560,11 @@ every prescribed coordinate. -/
 theorem tendsto_quittingRootSequenceTerminalValue_elementarySureJoint
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hzero : quittingJointSurvivalLimit roots 0 = 0) :
     Tendsto (fun cutoff => quittingRootSequenceTerminalValue reward
         (quittingElementaryTailRoots roots cutoff (.sureJoint)) who 0)
       atTop (nhds (quittingRootSequenceTerminalValue reward roots who 0)) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hmajorant : Tendsto (fun cutoff =>
       2 * M * quittingJointSurvivalWeight roots 0 cutoff) atTop (nhds 0) := by
     have hscaled :=
@@ -590,12 +590,11 @@ converge in that player's all-behavior best-response envelope. -/
 theorem tendsto_quittingRootSequenceBestResponseValue_elementarySureJoint
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hzero : quittingOpponentSurvivalLimit roots who 0 = 0) :
     Tendsto (fun cutoff => quittingRootSequenceBestResponseValue reward
         (quittingElementaryTailRoots roots cutoff (.sureJoint)) who)
       atTop (nhds (quittingRootSequenceBestResponseValue reward roots who)) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hmajorant : Tendsto (fun cutoff =>
       2 * M * quittingOpponentSurvivalWeight roots who 0 cutoff)
       atTop (nhds 0) := by
@@ -623,8 +622,7 @@ all-behavior best-response envelope. -/
 theorem exists_elementarySureJoint_terminalPair_close
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool)
-    {M ε : ℝ} (hM : 0 ≤ M) (hε : 0 < ε)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {ε : ℝ} (hε : 0 < ε)
     (hjoint : quittingJointSurvivalLimit roots 0 = 0)
     (hopponent : ∀ who, quittingOpponentSurvivalLimit roots who 0 = 0) :
     ∃ cutoff,
@@ -644,7 +642,7 @@ theorem exists_elementarySureJoint_terminalPair_close
     intro who
     obtain ⟨threshold, hthreshold⟩ := Metric.tendsto_atTop.mp
       (tendsto_quittingRootSequenceTerminalValue_elementarySureJoint
-        reward roots who hM hreward hjoint) ε hε
+        reward roots who hjoint) ε hε
     exact eventually_atTop.mpr ⟨threshold, fun cutoff hcutoff => by
       simpa [Real.dist_eq, abs_sub_comm] using hthreshold cutoff hcutoff⟩
   have henvelope : ∀ᶠ cutoff : ℕ in atTop, ∀ who,
@@ -655,7 +653,7 @@ theorem exists_elementarySureJoint_terminalPair_close
     intro who
     obtain ⟨threshold, hthreshold⟩ := Metric.tendsto_atTop.mp
       (tendsto_quittingRootSequenceBestResponseValue_elementarySureJoint
-        reward roots who hM hreward (hopponent who)) ε hε
+        reward roots who (hopponent who)) ε hε
     exact eventually_atTop.mpr ⟨threshold, fun cutoff hcutoff => by
       simpa [Real.dist_eq, abs_sub_comm] using hthreshold cutoff hcutoff⟩
   obtain ⟨threshold, hthreshold⟩ :=
@@ -755,12 +753,11 @@ terminal value by their finite prefixes capped with `Never`. -/
 theorem tendsto_quittingRootSequenceTerminalValue_elementaryNever
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingJointSurvivalLimit roots 0) :
     Tendsto (fun cutoff => quittingRootSequenceTerminalValue reward
         (quittingElementaryTailRoots roots cutoff (.never)) who 0)
       atTop (nhds (quittingRootSequenceTerminalValue reward roots who 0)) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hmajorant : Tendsto (fun cutoff =>
       M * (quittingJointSurvivalWeight roots 0 cutoff -
         quittingJointSurvivalLimit roots 0)) atTop (nhds 0) := by

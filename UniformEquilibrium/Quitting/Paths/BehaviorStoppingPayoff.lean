@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Payoff mixture over the live-spine stopping law
@@ -59,13 +60,13 @@ its deterministic finite-Quit and Never payoffs. -/
 theorem quittingRootSequenceHazardTerminalValue_eq_expect_stoppingLaw
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    (hazard : ℕ → PMF Bool) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (hazard : ℕ → PMF Bool) :
     quittingRootSequenceHazardTerminalValue reward roots who hazard 0 =
       expect (quittingHazardStoppingLaw hazard)
         (fun choice =>
           quittingRootSequencePureTimeTerminalValue reward roots who
             choice 0) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   let pureValue : Option ℕ → ℝ := fun choice =>
     quittingRootSequencePureTimeTerminalValue reward roots who choice 0
   have hpureBound : ∀ choice, |pureValue choice| ≤ M := by
@@ -155,9 +156,7 @@ mixture of its pure live-spine Quit-time/Never deviations. -/
 theorem quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (who : ι) (strategy : (quittingGame reward).BehaviorStrategy who)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (who : ι) (strategy : (quittingGame reward).BehaviorStrategy who) :
     quittingTerminalPayoff reward
         (Function.update profile who strategy) who =
       expect (quittingBehaviorStoppingLaw reward strategy)
@@ -168,7 +167,7 @@ theorem quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
   rw [quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
     quittingRootSequenceHazardTerminalValue_eq_expect_stoppingLaw
       reward (quittingProfileLiveRoot reward profile) who
-        (quittingBehaviorLiveHazard reward strategy) hM hreward]
+        (quittingBehaviorLiveHazard reward strategy)]
   apply congrArg
   funext choice
   rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy]

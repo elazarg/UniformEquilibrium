@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.SequenceVariation
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Phantom boundary and one-window restart identities
@@ -143,14 +144,13 @@ boundary directly, while positive limiting survival uses the conditional
 tail-absorption estimate. -/
 theorem tendsto_quittingRootSequenceTerminalValue_truncatedRoots
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ) :
     Tendsto (fun fuel ↦ quittingRootSequenceTerminalValue reward
         (quittingTruncatedRoots (fun time ↦ roots (start + time)) fuel)
         who 0) atTop
       (nhds (quittingRootSequenceTerminalValue reward roots who start)) := by
   classical
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   let shifted : ℕ → ι → PMF Bool := fun time ↦ roots (start + time)
   have hterminalShift :
       quittingRootSequenceTerminalValue reward shifted who 0 =
@@ -215,7 +215,7 @@ theorem tendsto_quittingRootSequenceTerminalValue_truncatedRoots
       lt_of_le_of_ne (quittingJointSurvivalLimit_nonneg shifted 0)
         (Ne.symm hlimitZero)
     have hconv := tendsto_quittingRootSequenceTerminalValue_elementaryNever
-      reward shifted who hM hreward hpositive
+      reward shifted who hpositive
     simpa only [quittingElementaryTailRoots_never, hterminalShift] using hconv
 
 omit [DecidableEq ι] in
@@ -226,8 +226,7 @@ theorem quittingPrescribedValue_eq_terminalValue_add_survivalLimit_mul
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (prescribed : ℕ → ℝ)
     (hprescribed : IsQuittingLivePrescribedValue reward roots who prescribed)
-    {boundary M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {boundary : ℝ}
     (hboundary : Tendsto prescribed atTop (nhds boundary))
     (start : ℕ) :
     prescribed start =
@@ -248,7 +247,7 @@ theorem quittingPrescribedValue_eq_terminalValue_add_survivalLimit_mul
         reward roots who prescribed hprescribed start fuel
   have htruncated :=
     tendsto_quittingRootSequenceTerminalValue_truncatedRoots
-      reward roots who start hM hreward
+      reward roots who start
   have hsurvival := tendsto_quittingJointSurvivalLimit roots start
   have hfar : Tendsto (fun fuel ↦ prescribed (start + fuel)) atTop
       (nhds boundary) := by
@@ -268,8 +267,7 @@ theorem quittingValuePath_eq_terminalValue_add_survivalLimit_mul
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    (boundary : Payoff ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (boundary : Payoff ι)
     (hboundary : ∀ who,
       Tendsto (fun time ↦ value time who) atTop (nhds (boundary who)))
     (start : ℕ) :
@@ -285,7 +283,7 @@ theorem quittingValuePath_eq_terminalValue_add_survivalLimit_mul
     rw [quittingRootSuccessorPayoff_apply_eq_affine]
     exact hcoordinate
   exact quittingPrescribedValue_eq_terminalValue_add_survivalLimit_mul
-    reward roots who (fun time ↦ value time who) hprescribed hM hreward
+    reward roots who (fun time ↦ value time who) hprescribed
       (hboundary who) start
 
 omit [DecidableEq ι] in

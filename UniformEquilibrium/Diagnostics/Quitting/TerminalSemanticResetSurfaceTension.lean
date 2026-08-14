@@ -85,9 +85,7 @@ theorem surfaceTension_maximumPrinciple
 theorem exists_joint_resetFace_debtMinimizer
     (target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι)
     (htarget : (target, mass) ∈
       quittingTerminalSemanticLawCarrier reward)
     (hreset : quittingTerminalSemanticDebt target owner = 0) :
@@ -108,7 +106,7 @@ theorem exists_joint_resetFace_debtMinimizer
       ((continuous_quittingTerminalSemanticDebt owner).comp continuous_fst)
       continuous_const
   have hresetCompact : IsCompact resetFace :=
-    (quittingTerminalSemanticLawCarrier_isCompact reward hM hreward).inter_right
+    (quittingTerminalSemanticLawCarrier_isCompact reward).inter_right
       hresetClosed
   have hresetNonempty : resetFace.Nonempty :=
     ⟨(target, mass), htarget, hreset⟩
@@ -126,9 +124,7 @@ apparently open domain `I > 0`. -/
 theorem exists_resetFace_minimizer_excess_div_totalOpponentIncidence
     (source : QuittingTerminalSemanticPair ι)
     (resetMinimum target : QuittingTerminalSemanticLawPoint ι)
-    (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι)
     (hresetMinimumIsMin : ∀ candidate ∈
       quittingTerminalSemanticLawCarrier reward,
       quittingTerminalSemanticDebt candidate.1 owner = 0 →
@@ -204,7 +200,7 @@ theorem exists_resetFace_minimizer_excess_div_totalOpponentIncidence
         incidenceFloor ≤ incidence point} :=
     isClosed_Ici.preimage hincidenceContinuous
   have hadmissibleCompact : IsCompact admissible :=
-    ((quittingTerminalSemanticLawCarrier_isCompact reward hM hreward).inter_right
+    ((quittingTerminalSemanticLawCarrier_isCompact reward).inter_right
       hresetClosed).inter_right hfloorClosed
   have htargetAdmissible : target ∈ admissible :=
     ⟨⟨htarget, htargetReset⟩, hfloorLeTarget⟩
@@ -351,9 +347,7 @@ minimizer exists and has the singleton all-Continue exact cap correspondence. -/
 theorem resetFace_globalMinimum_or_surfaceTension_allContinue
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -379,8 +373,7 @@ theorem resetFace_globalMinimum_or_surfaceTension_allContinue
           root = (quittingAllContinueRoot : ι → PMF Bool) := by
   obtain ⟨resetMinimum, hresetMinimum, hresetMinimumReset,
       hresetMinimumIsMin⟩ :=
-    exists_joint_resetFace_debtMinimizer target mass owner hM hreward
-      htarget hreset
+    exists_joint_resetFace_debtMinimizer target mass owner htarget hreset
   have hresetMinimumCarrier :=
     terminalSemanticLawCarrier_fst_mem_carrier resetMinimum hresetMinimum
   have hsourceLeReset := hminimum resetMinimum.1 hresetMinimumCarrier
@@ -389,8 +382,8 @@ theorem resetFace_globalMinimum_or_surfaceTension_allContinue
   · obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
         hresetMinLeReturned, hslope⟩ :=
       exists_resetFace_minimizer_excess_div_totalOpponentIncidence
-        source resetMinimum (target, mass) owner hM hreward
-          hresetMinimumIsMin hstrict htarget hreset hincidence
+        source resetMinimum (target, mass) owner hresetMinimumIsMin hstrict
+          htarget hreset hincidence
     have hreturnedStrict : quittingTerminalSemanticDebtSum source <
         quittingTerminalSemanticDebtSum returned.1 :=
       hstrict.trans_le hresetMinLeReturned

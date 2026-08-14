@@ -167,22 +167,20 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close
       (∀ who, |quittingRootSequenceBestResponseValue reward roots who -
         quittingRootSequenceBestResponseValue reward
           (quittingElementaryTailRoots roots cutoff cap) who| < ε) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   rcases quittingSurvivalLimit_trichotomy reward roots with
     hpositive | ⟨hjoint, hall | hunique⟩
   · obtain ⟨cutoff, hp, hb⟩ :=
       exists_elementaryNever_terminalPair_close_of_joint_pos
-        reward roots hM hε hreward hpositive
+        reward roots hε hpositive
     exact ⟨.never, cutoff, hpositive, hp, hb⟩
   · obtain ⟨cutoff, hp, hb⟩ :=
       exists_elementarySureJoint_terminalPair_close
-        reward roots hM hε hreward hjoint hall
+        reward roots hε hjoint hall
     exact ⟨.sureJoint, cutoff, ⟨hjoint, hall⟩, hp, hb⟩
   · obtain ⟨owner, howner, hownerUnique⟩ := hunique
     obtain ⟨cutoff, hp, hb⟩ :=
       exists_elementarySureSolo_terminalPair_close_of_unique
-        reward roots owner hM hε hreward hjoint howner hownerUnique
+        reward roots owner hε hjoint howner hownerUnique
     exact ⟨.sureSolo owner, cutoff,
       ⟨hjoint, howner, hownerUnique⟩, hp, hb⟩
 
@@ -221,7 +219,7 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close_after
       intro who
       obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp
         (tendsto_quittingRootSequenceTerminalValue_elementaryNever
-          reward roots who hM hreward hpositive) ε hε
+          reward roots who hpositive) ε hε
       exact Filter.eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
         simpa [Real.dist_eq, abs_sub_comm] using hN cutoff hcutoff⟩
     have hb : ∀ᶠ cutoff : ℕ in Filter.atTop, ∀ who,
@@ -232,7 +230,7 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close_after
       intro who
       obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp
         (tendsto_quittingRootSequenceBestResponseValue_elementaryNever
-          reward roots who hM hreward
+          reward roots who
             (quittingOpponentSurvivalLimit_pos_of_joint_pos
               roots who hpositive)) ε hε
       exact Filter.eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
@@ -250,7 +248,7 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close_after
       intro who
       obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp
         (tendsto_quittingRootSequenceTerminalValue_elementarySureJoint
-          reward roots who hM hreward hjoint) ε hε
+          reward roots who hjoint) ε hε
       exact Filter.eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
         simpa [Real.dist_eq, abs_sub_comm] using hN cutoff hcutoff⟩
     have hb : ∀ᶠ cutoff : ℕ in Filter.atTop, ∀ who,
@@ -261,7 +259,7 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close_after
       intro who
       obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp
         (tendsto_quittingRootSequenceBestResponseValue_elementarySureJoint
-          reward roots who hM hreward (hall who)) ε hε
+          reward roots who (hall who)) ε hε
       exact Filter.eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
         simpa [Real.dist_eq, abs_sub_comm] using hN cutoff hcutoff⟩
     obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp (hp.and hb)
@@ -299,7 +297,7 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close_after
       · subst who
         obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp
           (tendsto_quittingRootSequenceBestResponseValue_elementaryNever
-            reward roots owner hM hreward howner) ε hε
+            reward roots owner howner) ε hε
         exact Filter.eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
           rw [quittingRootSequenceBestResponseValue_elementarySureSolo_owner_eq_never]
           simpa [Real.dist_eq, abs_sub_comm] using hN cutoff hcutoff⟩
@@ -355,13 +353,11 @@ theorem exists_elementaryCompressedProfile_terminalSemantics_close
               (quittingTerminalSemanticPair reward
                 (quittingElementaryCompressedProfile reward profile cutoff cap))
               observer| < δ := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let η := δ / 2
   have hη : 0 < η := div_pos hδ (by norm_num)
   obtain ⟨cap, cutoff, hpayoff, henvelope⟩ :=
     exists_elementaryTailCap_terminalPair_close
-      reward (quittingProfileLiveRoot reward profile) hM hη hreward
+      reward (quittingProfileLiveRoot reward profile) hη
   refine ⟨cap, cutoff, fun observer => ?_⟩
   have hp := hpayoff observer
   have hb := henvelope observer

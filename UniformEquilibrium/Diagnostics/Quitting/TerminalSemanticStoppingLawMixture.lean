@@ -207,9 +207,7 @@ theorem exists_stoppingLawMixture_debtContraction_and_windowRetention
     (terminal : {S : Finset iota // S.Nonempty}) (cutoff : ℕ)
     (lambda error : ℝ)
     (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    (herror : 0 < error)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M) :
+    (herror : 0 < error) :
     ∃ bestResponse : (quittingGame reward).BehaviorStrategy who,
       let mixedStrategy := quittingStoppingLawMixtureBehaviorStrategy
         reward who (profile who) bestResponse lambda hlambda0 hlambda1
@@ -237,7 +235,7 @@ theorem exists_stoppingLawMixture_debtContraction_and_windowRetention
           lambda * error ∧
       (1 - lambda) *
           (∑ time ∈ Finset.range cutoff,
-            quittingStageCoalitionMass reward profile time terminal) ≤
+          quittingStageCoalitionMass reward profile time terminal) ≤
         ∑ time ∈ Finset.range cutoff,
           quittingStageCoalitionMass reward mixedProfile time terminal := by
   obtain ⟨bestResponse, hbestResponse⟩ :=
@@ -255,7 +253,7 @@ theorem exists_stoppingLawMixture_debtContraction_and_windowRetention
         quittingTerminalSemanticLawCarrier reward :=
     quittingTerminalSemanticLawPoint_mem_carrier reward mixedProfile
   have hgain := quittingTerminalPayoff_stoppingLawMixture_sub_eq
-    reward profile who bestResponse lambda hlambda0 hlambda1 hM hreward
+    reward profile who bestResponse lambda hlambda0 hlambda1
   have hbestResidual :
       quittingContinuationBestResponseValue reward profile who -
         quittingTerminalPayoff reward bestResponseProfile who ≤ error := by
@@ -285,7 +283,7 @@ theorem exists_stoppingLawMixture_debtContraction_and_windowRetention
             quittingTerminalPayoff reward bestResponseProfile who) := by
     have hpayoff := quittingTerminalPayoff_update_stoppingLawMixture_eq
       reward profile who (profile who) bestResponse lambda
-        hlambda0 hlambda1 hM hreward
+        hlambda0 hlambda1
     dsimp only [mixedProfile, mixedStrategy, bestResponseProfile]
     rw [Function.update_eq_self] at hpayoff
     dsimp only [quittingTerminalSemanticDebt,
@@ -324,8 +322,6 @@ theorem exists_halfStoppingLawReset_of_totalDebt_pos
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (owner : iota) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hdebt : 0 < quittingTerminalSemanticDebtSum
       (quittingTerminalSemanticPair reward profile)) :
     ∃ who, ∃ bestResponse : (quittingGame reward).BehaviorStrategy who,
@@ -395,7 +391,7 @@ theorem exists_halfStoppingLawReset_of_totalDebt_pos
   obtain ⟨bestResponse, _hlaw, hgain, _hdebtExact, hdebtUpper, hwindow⟩ :=
     exists_stoppingLawMixture_debtContraction_and_windowRetention
       reward profile who (quittingSingletonTerminal owner) cutoff
-        (1 / 2) error (by norm_num) (by norm_num) herror hM hreward
+        (1 / 2) error (by norm_num) (by norm_num) herror
   refine ⟨who, bestResponse, ?_⟩
   dsimp only
   have hgainPos : 0 < quittingTerminalPayoff reward

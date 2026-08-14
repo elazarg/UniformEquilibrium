@@ -5,7 +5,6 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # The debt/incidence variational obstruction on a reset face
@@ -139,9 +138,7 @@ on the same reset face with positive displayed incidence. -/
 theorem exists_resetFace_minimizer_debt_div_incidence
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner other : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner other : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -208,7 +205,7 @@ theorem exists_resetFace_minimizer_debt_div_incidence
         incidenceFloor ≤ incidence point} :=
     isClosed_Ici.preimage hincidenceContinuous
   have hadmissibleCompact : IsCompact admissible :=
-    ((quittingTerminalSemanticLawCarrier_isCompact reward hM hreward).inter_right
+    ((quittingTerminalSemanticLawCarrier_isCompact reward).inter_right
       hresetClosed).inter_right hfloorClosed
   have htargetAdmissible : (target, mass) ∈ admissible := by
     exact ⟨⟨htarget, hreset⟩, hfloorLeTarget⟩
@@ -265,9 +262,7 @@ boundary. -/
 theorem exists_resetFace_minimizer_debt_div_totalOpponentIncidence
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -334,7 +329,7 @@ theorem exists_resetFace_minimizer_debt_div_totalOpponentIncidence
         incidenceFloor ≤ incidence point} :=
     isClosed_Ici.preimage hincidenceContinuous
   have hadmissibleCompact : IsCompact admissible :=
-    ((quittingTerminalSemanticLawCarrier_isCompact reward hM hreward).inter_right
+    ((quittingTerminalSemanticLawCarrier_isCompact reward).inter_right
       hresetClosed).inter_right hfloorClosed
   have htargetAdmissible : (target, mass) ∈ admissible := by
     exact ⟨⟨htarget, hreset⟩, hfloorLeTarget⟩
@@ -395,9 +390,7 @@ inequality against the first minimizer. -/
 theorem exists_resetFace_lexicographic_totalOpponentIncidence_minimizer
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -432,7 +425,7 @@ theorem exists_resetFace_lexicographic_totalOpponentIncidence_minimizer
   obtain ⟨first, hfirstJoint, hfirstReset, hfirstIncidence,
       hsourceLeFirst, hfirstRatio⟩ :=
     exists_resetFace_minimizer_debt_div_totalOpponentIncidence
-      source target mass owner hM hreward hminimum hsourcePositive
+      source target mass owner hminimum hsourcePositive
         htarget hreset hincidence
   let sourceDebt := quittingTerminalSemanticDebtSum source
   let firstDebt := quittingTerminalSemanticDebtSum first.1
@@ -480,7 +473,7 @@ theorem exists_resetFace_lexicographic_totalOpponentIncidence_minimizer
     isClosed_le (hdebtContinuous.mul continuous_const)
       (continuous_const.mul hincidenceContinuous)
   have hsecondaryCompact : IsCompact secondary :=
-    (((quittingTerminalSemanticLawCarrier_isCompact reward hM hreward).inter_right
+    (((quittingTerminalSemanticLawCarrier_isCompact reward).inter_right
       hresetClosed).inter_right hfloorClosed).inter_right hratioSublevelClosed
   have hfirstSecondary : first ∈ secondary := by
     refine ⟨⟨⟨hfirstJoint, hfirstReset⟩, hfloorLeFirst⟩, ?_⟩
@@ -977,11 +970,10 @@ theorem exists_resetFace_positiveTotalIncidence_allContinueCapPlateau
       ∀ root : ι → PMF Bool,
         IsεQuittingRootNash reward returned.1.2 0 root →
           root = (quittingAllContinueRoot : ι → PMF Bool) := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
       hsourceLe, hratio, hsecondary⟩ :=
     exists_resetFace_lexicographic_totalOpponentIncidence_minimizer
-      source target mass owner hM hreward hminimum hsourcePositive
+      source target mass owner hminimum hsourcePositive
         htarget hreset hincidence
   have hallRoots : ∀ root : ι → PMF Bool,
       IsεQuittingRootNash reward returned.1.2 0 root →
@@ -1014,9 +1006,7 @@ same displayed opponent coordinate. -/
 theorem exists_resetFace_debtIncidence_obstruction
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner other : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner other : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -1038,7 +1028,7 @@ theorem exists_resetFace_debtIncidence_obstruction
   obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
       hsourceLe, hratio⟩ :=
     exists_resetFace_minimizer_debt_div_incidence
-      source target mass owner other hM hreward hminimum hsourcePositive
+      source target mass owner other hminimum hsourcePositive
         htarget hreset hincidence
   refine ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
     hsourceLe, ?_⟩

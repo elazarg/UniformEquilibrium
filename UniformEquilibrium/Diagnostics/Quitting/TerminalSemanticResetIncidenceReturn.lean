@@ -61,9 +61,8 @@ def quittingTerminalSemanticLawCarrier
 /-- The joint semantic/law carrier is compact under the usual reward bound. -/
 theorem quittingTerminalSemanticLawCarrier_isCompact
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
-    IsCompact (quittingTerminalSemanticLawCarrier reward) := by
+    : IsCompact (quittingTerminalSemanticLawCarrier reward) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   let ambient : Set (QuittingTerminalSemanticLawPoint ι) :=
     quittingTerminalSemanticBox ι M ×ˢ
       stdSimplex ℝ (QuittingTerminalOutcome ι)
@@ -137,9 +136,7 @@ theorem exists_fixedLaw_resetFace_minimizer
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (who : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -176,7 +173,7 @@ theorem exists_fixedLaw_resetFace_minimizer
       {point : QuittingTerminalSemanticLawPoint ι | point.2 = mass} :=
     isClosed_eq continuous_snd continuous_const
   have hcompact : IsCompact fixedLawResetFace :=
-    ((quittingTerminalSemanticLawCarrier_isCompact reward hM hreward).inter_right
+    ((quittingTerminalSemanticLawCarrier_isCompact reward).inter_right
       hresetClosed).inter_right hlawClosed
   have hnonempty : fixedLawResetFace.Nonempty :=
     ⟨(target, mass), ⟨htarget, hreset⟩, rfl⟩
@@ -227,9 +224,7 @@ theorem exists_fixedLaw_resetFace_minimizer_with_incidence
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (who other : ι) (incidenceFloor : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (who other : ι) (incidenceFloor : ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -252,7 +247,7 @@ theorem exists_fixedLaw_resetFace_minimizer_with_incidence
   obtain ⟨returned, hjoint, _hcarrier, hreturnedReset, hsourceLe,
       hreturnedLe, _hmoment, _hidentity, htransfer⟩ :=
     exists_fixedLaw_resetFace_minimizer reward source target mass who
-      hM hreward hminimum htarget hreset
+      hminimum htarget hreset
   exact ⟨returned, hjoint, hreturnedReset, hsourceLe, hreturnedLe,
     hincidence, htransfer⟩
 

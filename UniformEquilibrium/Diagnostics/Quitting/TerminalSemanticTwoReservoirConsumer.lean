@@ -214,7 +214,7 @@ theorem QuittingCounterexampleRegime.exists_twoReservoir_sameLaw_resetDispatch
       obtain ⟨returned, hreturnedJoint, _hreturnedCarrier, hreturnedReset,
           hsourceLe, hreturnedLe, htransfer, htoggle, hdynamic⟩ :=
         regime.exists_fixedLaw_resetFace_dispatch source cluster mass owner
-          other hM.le hreward hminimum hpositive hjoint hreset hotherIncidence
+          other hminimum hpositive hjoint hreset hotherIncidence
       exact ⟨other, returned, hotherNe, hotherIncidence,
         ⟨hreturnedJoint, hreturnedReset, hsourceLe, hreturnedLe, htransfer,
           htoggle, hdynamic⟩⟩

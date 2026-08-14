@@ -246,6 +246,43 @@ theorem second {M : ℝ}
                 "later-use",
             )
 
+    def test_result_classifier_keeps_result_level_lets(self) -> None:
+        with self._root() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "UniformEquilibrium" / "ResultLet.lean").write_text(
+                """theorem quantitative {M : ℝ}
+    (hM : 0 ≤ M) (hreward : ∀ S, |reward S| ≤ M) :
+    let scale := 8 * M
+    let h : scale = scale := by rfl
+    scale = scale := by trivial
+""",
+                encoding="utf-8",
+            )
+            declarations = check_reward_bounds.inventory(root)
+            self.assertEqual(len(declarations), 1)
+            self.assertEqual(
+                declarations[0].corrected_classification,
+                "later-use",
+            )
+
+    def test_data_definition_body_is_part_of_corrected_classification(self) -> None:
+        with self._root() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "UniformEquilibrium" / "Definition.lean").write_text(
+                """def quantitative {M : ℝ}
+    (hM : 0 ≤ M) (hreward : ∀ S, |reward S| ≤ M) : Nat :=
+  if M = 0 then 0 else 1
+def removable {M : ℝ}
+    (hM : 0 ≤ M) (hreward : ∀ S, |reward S| ≤ M) : Nat := 0
+""",
+                encoding="utf-8",
+            )
+            declarations = check_reward_bounds.inventory(root)
+            self.assertEqual(
+                [declaration.corrected_classification for declaration in declarations],
+                ["later-use", "removable"],
+            )
+
     def test_json_is_deterministic_and_contains_exact_inventory(self) -> None:
         with self._root() as temporary:
             root = pathlib.Path(temporary)

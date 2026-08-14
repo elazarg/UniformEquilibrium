@@ -116,9 +116,7 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_resetFace_dispatch
     (regime : QuittingCounterexampleRegime reward)
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner other : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner other : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -168,7 +166,7 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_resetFace_dispatch
   obtain ⟨returned, hjoint, hreturnedCarrier, hreturnedReset, hsourceLe,
       hreturnedLe, _hmoment, _htransferEq, htransfer⟩ :=
     exists_fixedLaw_resetFace_minimizer
-      reward source target mass owner hM hreward hminimum htarget hreset
+      reward source target mass owner hminimum htarget hreset
   have hmassSimplex : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) :=
     terminalSemanticLawCarrier_mass_mem_stdSimplex
       (point := (returned, mass)) hjoint
@@ -222,9 +220,7 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_dispatch_and_sourceAggregat
     (regime : QuittingCounterexampleRegime reward)
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner other : ι) (players : Finset ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner other : ι) (players : Finset ι)
     (hsource : source ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
@@ -261,7 +257,7 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_dispatch_and_sourceAggregat
   obtain ⟨returned, hjoint, _hcarrier, hresetReturned, hsourceLe,
       _hreturnedLe, _htransfer, _htoggle, _hdispatch⟩ :=
     regime.exists_fixedLaw_resetFace_dispatch source target mass owner other
-      hM hreward hminimum hsourcePositive htarget hreset hincidence
+      hminimum hsourcePositive htarget hreset hincidence
   exact ⟨⟨returned, hjoint, hresetReturned, hsourceLe⟩,
     regime.exists_neverBudget_or_blockedCoalition_exact
       source players hsource hminimum hsourcePositive⟩

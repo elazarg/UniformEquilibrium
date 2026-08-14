@@ -203,8 +203,7 @@ theorem exists_elementaryTailCap_behavioralTailGain_close
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool)
     (prefixRoots : ℕ → ι → PMF Bool) (start extra : ℕ)
-    {M ε : ℝ} (hM : 0 ≤ M) (hε : 0 < ε)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    {ε : ℝ} (hε : 0 < ε) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ cutoff,
       |(quittingFiniteBoundaryHolonomy reward prefixRoots start extra).maxCoRealizedGain
           (behavioralTailPrescribedBoundary reward roots)
@@ -217,7 +216,7 @@ theorem exists_elementaryTailCap_behavioralTailGain_close
   let holonomy := quittingFiniteBoundaryHolonomy reward prefixRoots start extra
   obtain ⟨cap, cutoff, hp, hb⟩ :=
     exists_elementaryTailCap_terminalPair_close reward roots
-      (M := M) (ε := ε / 4) hM (by linarith) hreward
+      (ε := ε / 4) (by linarith)
   refine ⟨cap, cutoff, ?_⟩
   have hpair :
       finitePlayerMax (holonomy.boundaryPairDistance
@@ -306,9 +305,7 @@ the reverse inequality uses pointwise density and the elementary infimum as a
 strict separator, so neither infimum needs to be attained. -/
 theorem elementaryTailRepairValue_eq_behavioralTailRepairValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (prefixRoots : ℕ → ι → PMF Bool) (start extra : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (prefixRoots : ℕ → ι → PMF Bool) (start extra : ℕ) :
     elementaryTailRepairValue reward
         (quittingFiniteBoundaryHolonomy reward prefixRoots start extra) =
       behavioralTailRepairValue reward
@@ -340,7 +337,7 @@ theorem elementaryTailRepairValue_eq_behavioralTailRepairValue
       linarith
     obtain ⟨cap, cutoff, hclose⟩ :=
       exists_elementaryTailCap_behavioralTailGain_close
-        reward roots prefixRoots start extra hM hδ hreward
+        reward roots prefixRoots start extra hδ
     let index : ElementaryTailIndex ι := (roots, (cap, cutoff))
     have hle := csInf_le hbelowE ⟨index, rfl⟩
     have hupper : elementaryTailGain reward holonomy index <

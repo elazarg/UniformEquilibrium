@@ -371,8 +371,6 @@ theorem conditionedTailValue_eq_terminalValue_div (time : ℕ) :
   apply quittingTailConditionedValue_eq_terminalValue_div
     (reward := reward)
   · exact fun date ↦ (seam.tail_edge date).1.1
-  · exact quittingRewardBound_nonneg reward
-  · exact abs_reward_le_quittingRewardBound reward
   · exact seam.value_tendsto
 
 /-- The conditioned floor deficit of the canonical counterexample tail is

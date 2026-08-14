@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryConditioning
 import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.EssentialAPS.Basic
+import UniformEquilibrium.Quitting.RewardBound
 import MathUE.DivergentChargeRecurrence
 
 /-!
@@ -403,8 +404,6 @@ theorem tendsto_quittingTailConditionedValue_activeCoordinate
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (owner : ι) (time : ℕ → ℕ)
     (hpositive : ∀ index,
       0 < quittingTailEventualAbsorption roots (time index))
@@ -418,6 +417,7 @@ theorem tendsto_quittingTailConditionedValue_activeCoordinate
       quittingTailConditionedValue roots value boundary (time index) owner)
       atTop
       (nhds (reward (quittingSingletonTerminal owner) owner)) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   rw [Metric.tendsto_atTop]
   intro ε hε
   have hbound : Tendsto (fun index ↦

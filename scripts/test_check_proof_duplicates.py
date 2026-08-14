@@ -76,6 +76,22 @@ class ProofDuplicateTests(unittest.TestCase):
             self.assertEqual(len(declarations), 1)
             self.assertTrue(declarations[0].normalized_body.startswith("by exact n"))
 
+    def test_result_let_is_not_the_body_assignment(self) -> None:
+        with self._root() as temporary:
+            root = pathlib.Path(temporary)
+            source = (
+                "theorem resultLet :\n"
+                "    let n := 1\n"
+                "    let h : n = n := by rfl\n"
+                "    n = n := by\n"
+                "  rfl\n"
+            )
+            path = root / "MathUE" / "ResultLet.lean"
+            path.write_text(source, encoding="utf-8")
+            declarations = check_proof_duplicates.declaration_bodies(path)
+            self.assertEqual(len(declarations), 1)
+            self.assertEqual(declarations[0].normalized_body, "by rfl")
+
     def test_equation_style_body_is_rejected(self) -> None:
         with self._root() as temporary:
             root = pathlib.Path(temporary)
