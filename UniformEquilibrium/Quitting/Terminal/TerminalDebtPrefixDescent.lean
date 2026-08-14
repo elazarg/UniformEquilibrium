@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Boundary.Holonomy.InfiniteBehavioralTailEvaluation
 import UniformEquilibrium.Quitting.Boundary.Repair.TerminalDebtSingletonDescent
-import UniformEquilibrium.Diagnostics.Uniform.NonexistenceCertificate
+import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 
 /-!
 # Lexicographic terminal-debt descent by a literal root prefix

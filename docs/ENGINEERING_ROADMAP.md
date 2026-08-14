@@ -12,8 +12,8 @@ promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 | 2 | Trust scanner | Complete | Prime-aware scanner and lexical regression suite pass |
 | 3 | Import graph and inventory | Complete | Zero unexplained orphans and boundary violations |
 | 4 | Ownership, Research, provenance, sync | Complete | Every shim/fork and sync decision has an owner and manifest |
-| 5 | Facades and dependency inversions | In progress | Architecture/certificate and Quitting/Diagnostics edges are layered |
-| 6 | Proof ratchets and Fubini API | Queued | Shared PMF identities replace selected duplication |
+| 5 | Facades and dependency inversions | Complete | Architecture/certificate and Quitting/Diagnostics edges are layered |
+| 6 | Proof ratchets, product and variation APIs | In progress | Shared finite-weight identities replace selected duplication |
 | 7 | Finite-case grind pilots | Queued | Pilot proofs reduce brittle expansion without weakening claims |
 | 8 | Monolith decomposition | Queued | Long proof files split behind checked interfaces |
 | 9 | Imports, internal APIs, options | Queued | Narrow imports and scoped options pass build and trust gates |
@@ -66,13 +66,15 @@ intended direction, no cyclic layer dependency, and unchanged checked
 consumers. Do not duplicate GameTheory foundations or silently broaden the
 strategy class.
 
-### 6. Proof ratchets and Fubini API
+### 6. Proof ratchets, finite products, and finite-weight variation
 
-Introduce shared fixed-arity PMF Fubini lemmas and use them in a small pilot.
-Specify ratchets for proof size, repeated algebra, and exact quantifiers;
-include conditioned-diffuse duplication in the inventory. Acceptance is a
-kernel-checked pilot, trust-clean source, and a documented consumer for each
-new interface.
+Introduce a generic finite-product PMF Fubini step and use it to remove local
+fixed-arity proofs. Extract the finite-weight Jordan-decomposition estimate
+behind the conditioned-diffuse compiler; preserve its subprobability semantics
+instead of forcing it through probability total variation. Specify ratchets
+for proof size, repeated algebra, and exact quantifiers. Acceptance is a
+kernel-checked pilot, trust-clean source, a documented consumer for each new
+interface, and checked downstream constants for any strengthened estimate.
 
 ### 7. Finite-case grind pilots
 

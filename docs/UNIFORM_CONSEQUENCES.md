@@ -59,9 +59,10 @@ perturbations.
   thin-interval characterization and its positive-width contrapositive.
 - `UniformEquilibrium/Diagnostics/Uniform/BoundedWork.lean` contains the bounded-work characterization and its
   exact unbounded-work obstruction.
-- `UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean` separately contains the late-horizon
-  and terminal exploitability certificates and the exact finite-quitting
-  fixed-gap characterization.
+- `UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean`
+  contains the general late-horizon exploitability certificate;
+  `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean` contains the
+  terminal certificate and exact finite-quitting fixed-gap characterization.
 - `TransitionPerturbationDiscontinuity.lean` contains the finite counterexample;
   `UniformEquilibrium/Diagnostics/Uniform/Consequences.lean` is the public entry point for the generic
   reverse-consequence layer above.

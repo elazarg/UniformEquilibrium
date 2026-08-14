@@ -4,7 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Architectures.PublicResponse.EnforcementCompiler
+import UniformEquilibrium.Certificates.Adaptive.PotentialSystem
+import UniformEquilibrium.Certificates.Public.PublicResponseEnforcementLedger
 
 /-!
 # Enforcement ledgers from adaptive systems
@@ -49,67 +50,6 @@ variable [Fintype ι] [DecidableEq ι] [Finite G.State]
   [∀ i, Finite (G.Act i)]
   {profile : G.BehaviorProfile} {initial : G.State}
   {target : Payoff ι} {error : ℝ}
-
-/-- The prescribed payoff of an adaptive system stays within twice its error
-of the target at every certified horizon. -/
-theorem abs_finiteAveragePayoff_sub_target_le_two_mul_error
-    (system :
-      G.AdaptivePotentialSystemAt profile initial target error)
-    (who : ι) (total : ℕ)
-    (htotal : system.horizon ≤ total) :
-    |G.finiteAveragePayoff initial total profile who - target who| ≤
-      2 * error := by
-  have htotal_pos : 0 < total := by
-    have hhorizon := system.horizon_ge_two
-    omega
-  have hlower :=
-    G.finiteAveragePayoff_ge_of_expectedHistoryValue_submartingale_le
-      profile initial who (system.lowerPotential who)
-      (system.lowerCharge who)
-      (system.lower_submartingale who)
-      (system.lower_stage who) htotal_pos
-  have hupper :=
-    G.finiteAveragePayoff_le_of_expectedHistoryValue_supermartingale_ge
-      profile initial who (system.upperPotential who)
-      (system.upperCharge who)
-      (system.upper_supermartingale who)
-      (system.upper_stage who) htotal_pos
-  rw [G.expectedHistoryValue_zero] at hlower hupper
-  have hlowerInitial := system.lower_initial who
-  have hupperInitial := system.upper_initial who
-  have hlowerCharge := system.lower_charge_cesaro who total htotal
-  have hupperCharge := system.upper_charge_cesaro who total htotal
-  rw [abs_le] at hlowerInitial hupperInitial
-  rw [abs_le]
-  constructor <;> linarith
-
-/-- Every unilateral deviation against an adaptive system is capped by the
-target plus twice the system error at every certified horizon. -/
-theorem finiteAveragePayoff_update_le_target_add_two_mul_error
-    (system :
-      G.AdaptivePotentialSystemAt profile initial target error)
-    (who : ι)
-    (deviation : G.BehaviorStrategy who) (total : ℕ)
-    (htotal : system.horizon ≤ total) :
-    G.finiteAveragePayoff initial total
-        (Function.update profile who deviation) who ≤
-      target who + 2 * error := by
-  have htotal_pos : 0 < total := by
-    have hhorizon := system.horizon_ge_two
-    omega
-  have hdeviation :=
-    G.finiteAveragePayoff_le_of_expectedHistoryValue_supermartingale_ge
-      (Function.update profile who deviation) initial who
-      (system.deviationPotential who)
-      (system.deviationCharge who deviation)
-      (system.deviation_supermartingale who deviation)
-      (system.deviation_stage who deviation) htotal_pos
-  rw [G.expectedHistoryValue_zero] at hdeviation
-  have hinitial := system.deviation_initial who
-  have hcharge :=
-    system.deviation_charge_cesaro who deviation total htotal
-  rw [abs_le] at hinitial
-  linarith
 
 /-- Canonical operational ledger extracted from an expectation-level adaptive
 system on the same behavior profile.

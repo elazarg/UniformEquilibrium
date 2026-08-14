@@ -92,7 +92,7 @@ maintenance measurements, not evidence of mathematical progress.
    are lexical occurrence counts, not theorem counts or quality scores, but
    they identify useful pilots for replacing brittle case trees with reusable
    lemmas or bounded automation.
-10. Ten handwritten fixed-arity PMF Fubini implementations, plus one local
+10. Twelve handwritten fixed-arity PMF Fubini implementations, plus one local
     forwarding declaration, duplicate the same Fin3/Fin4 product-expectation
     proof instead of using a shared API. Two long proofs in
     `Quitting/Cycles/ConditionedDiffuseCompiler.lean` separately rebuild
@@ -136,6 +136,15 @@ maintenance measurements, not evidence of mathematical progress.
 - Historical reconstruction is now staging-only: its preflight rejects live,
   repository, overlapping, broad, and symlink targets, and `--dry-run` emits a
   deterministic operation manifest before any mutation.
+- The public-response enforcement ledger is now a certificate interface; its
+  diagnostic boundary witness remains with the public-response architecture,
+  and generic adaptive payoff bounds live with `PotentialSystem`. There is no
+  remaining `Certificates` to `Architectures` import.
+- Reusable terminal exploitability, debt descent, equality-stratum, Nash-defect,
+  and player-reindex interfaces now live below Diagnostics in the quitting
+  hierarchy. The private-recommendation absorbing obstruction is classified as
+  a diagnostic. Checked rules reject future `Quitting` to `Diagnostics` and
+  `Certificates` to `Diagnostics` edges while permitting diagnostic consumers.
 
 ## Proof-quality and grind policy
 

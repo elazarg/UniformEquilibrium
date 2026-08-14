@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Certificates.Adaptive.SystemEnforcementLedger
+import UniformEquilibrium.Architectures.PublicResponse.CredibilityBoundary
 import MathUE.Probability.ChargedOccupationAlternative
 
 /-!

@@ -51,7 +51,7 @@
       "subject": "Quitting-game nonexistence and a fixed terminal exploitability gap",
       "kind": "Equivalence theorem",
       "declaration": "not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap",
-      "source": "UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean",
+      "source": "UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean",
       "umbrella": "UniformEquilibrium.lean",
       "scope": "A counterexample must quantify over every behavioral profile."
     }

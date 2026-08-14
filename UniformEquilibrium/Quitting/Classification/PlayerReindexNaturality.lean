@@ -5,7 +5,6 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
 
 /-!
 # Naturality of player reindexing
@@ -13,12 +12,8 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
 Player relabeling is functorial on finite quitting-game reward tables.  This
 module records the identity, composition, and inverse laws and upgrades the
 one-way equilibrium transport to an exact statement for the transported
-payoff vector.  Consequently both nonexistence and inhabitation of the
-combined counterexample regime are invariant under relabeling.
-
-The regime equivalence is deliberately existential.  It canonicalizes a
-counterexample search without claiming that a particular choice of terminal
-gap or prefix-capacity certificate is preserved field by field.
+payoff vector. Consequently existence and nonexistence of a uniform-equilibrium
+payoff are invariant under relabeling.
 -/
 
 noncomputable section
@@ -170,32 +165,5 @@ theorem not_exists_uniformEquilibriumPayoff_reindex_iff (e : ι ≃ κ)
   exact not_congr (exists_uniformEquilibriumPayoff_reindex_iff e reward)
 
 end Equilibrium
-
-section Regime
-
-variable [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
-  [Nonempty ι] [Nonempty κ]
-
-/-- Inhabitation of the combined counterexample regime is invariant under
-player relabeling.  This is the certificate-forgetting form appropriate for
-canonical finite searches. -/
-theorem nonempty_counterexampleRegime_reindex_iff (e : ι ≃ κ)
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    Nonempty (QuittingCounterexampleRegime (quittingRewardReindex e reward)) ↔
-      Nonempty (QuittingCounterexampleRegime reward) := by
-  rw [← not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime,
-    ← not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime]
-  exact not_exists_uniformEquilibriumPayoff_reindex_iff e reward
-
-/-- Every finite counterexample search can be carried out on the canonical
-player type `Fin (Fintype.card ι)`. -/
-theorem nonempty_counterexampleRegime_reindex_fin_iff
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    Nonempty (QuittingCounterexampleRegime
-        (quittingRewardReindex (Fintype.equivFin ι) reward)) ↔
-      Nonempty (QuittingCounterexampleRegime reward) :=
-  nonempty_counterexampleRegime_reindex_iff (Fintype.equivFin ι) reward
-
-end Regime
 
 end GameTheory

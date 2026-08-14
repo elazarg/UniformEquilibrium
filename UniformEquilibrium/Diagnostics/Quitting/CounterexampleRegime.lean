@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Uniform.NonexistenceCertificate
+import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefixChargedBridge
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorChargeCapacity
 

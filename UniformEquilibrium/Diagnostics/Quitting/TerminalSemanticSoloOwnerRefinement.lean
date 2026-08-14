@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAtomicOwner
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEqualityStratum
+import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 
 /-!
 # Game-facing refinement of the minimum semantic solo-owner row

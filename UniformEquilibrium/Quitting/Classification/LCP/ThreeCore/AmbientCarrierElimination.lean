@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonZeroRetentionCarrier
 import UniformEquilibrium.Quitting.Classification.LCP.CounterexampleNecessary
 import UniformEquilibrium.Quitting.Classification.LCP.StandardQSideExample
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEqualityStratum
+import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 
 /-!
 # Elimination of a three-element corrected core on the semantic carrier

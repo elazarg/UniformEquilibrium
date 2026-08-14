@@ -22,7 +22,7 @@ This table is generated from [`docs/ProjectStatus.json`](docs/ProjectStatus.json
 | Two-player finite quitting games | Unconditional theorem | [`quittingGame_exists_uniformEquilibriumPayoff_twoPlayer`](UniformEquilibrium/Quitting/Classification/TwoPlayer/Existence.lean) | All reward tables and all unilateral behavioral deviations. |
 | Three-player finite quitting games (`Fin 3`) | Unconditional theorem | [`quittingGame_exists_uniformEquilibriumPayoff_threePlayer`](UniformEquilibrium/Quitting/Classification/ThreePlayer/Existence.lean) | All reward tables on the concrete player type `Fin 3`; reindexing is recorded separately. |
 | Terminal approximate Nash existence and uniform-payoff existence | Equivalence theorem | [`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`](UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean) | Finite quitting games; terminal approximate profiles are required at every positive error. |
-| Quitting-game nonexistence and a fixed terminal exploitability gap | Equivalence theorem | [`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`](UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean) | A counterexample must quantify over every behavioral profile. |
+| Quitting-game nonexistence and a fixed terminal exploitability gap | Equivalence theorem | [`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`](UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean) | A counterexample must quantify over every behavioral profile. |
 
 Declaration kind and umbrella reachability are checked by the documentation gate. Compilation truth still comes from the relevant Lean check or CI run.
 <!-- END GENERATED STATUS -->

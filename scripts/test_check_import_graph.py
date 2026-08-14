@@ -102,6 +102,101 @@ lean_lib UniformEquilibrium where
                 ["Alpha", "Beta"],
             )
 
+    def test_layer_boundaries_are_directional(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            self.write(
+                root,
+                "lakefile.lean",
+                "lean_lib UniformEquilibrium where\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium.lean",
+                """\
+import UniformEquilibrium.Certificates.BadArchitecture
+import UniformEquilibrium.Quitting.BadDiagnostics
+import UniformEquilibrium.Certificates.BadDiagnostics
+import UniformEquilibrium.Architectures.CertificateConsumer
+import UniformEquilibrium.Diagnostics.QuittingConsumer
+import UniformEquilibrium.Diagnostics.CertificateConsumer
+import UniformEquilibrium.Certificates.Neutral
+""",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/Certificates/BadArchitecture.lean",
+                "import UniformEquilibrium.Architectures.Api\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/Quitting/BadDiagnostics.lean",
+                "import UniformEquilibrium.Diagnostics.Api\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/Certificates/BadDiagnostics.lean",
+                "import UniformEquilibrium.Diagnostics.Api\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/Architectures/CertificateConsumer.lean",
+                "import UniformEquilibrium.Certificates.Api\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/Diagnostics/QuittingConsumer.lean",
+                "import UniformEquilibrium.Quitting.Api\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/Diagnostics/CertificateConsumer.lean",
+                "import UniformEquilibrium.Certificates.Api\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/Certificates/Neutral.lean",
+                "import Mathlib\n",
+            )
+            for relative in (
+                "UniformEquilibrium/Architectures/Api.lean",
+                "UniformEquilibrium/Diagnostics/Api.lean",
+                "UniformEquilibrium/Quitting/Api.lean",
+                "UniformEquilibrium/Certificates/Api.lean",
+            ):
+                self.write(root, relative, "")
+
+            failures = check_import_graph.check_import_graph(root)
+
+            self.assertEqual(len(failures), 3)
+            self.assertTrue(
+                any(
+                    "Certificates.BadArchitecture -> "
+                    "UniformEquilibrium.Architectures.Api" in failure
+                    for failure in failures
+                )
+            )
+            self.assertTrue(
+                any(
+                    "Quitting.BadDiagnostics -> "
+                    "UniformEquilibrium.Diagnostics.Api" in failure
+                    for failure in failures
+                )
+            )
+            self.assertTrue(
+                any(
+                    "Certificates.BadDiagnostics -> "
+                    "UniformEquilibrium.Diagnostics.Api" in failure
+                    for failure in failures
+                )
+            )
+            self.assertFalse(
+                any("CertificateConsumer ->" in failure for failure in failures)
+            )
+            self.assertFalse(
+                any("Certificates.Neutral ->" in failure for failure in failures)
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

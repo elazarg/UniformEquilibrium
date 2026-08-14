@@ -5,9 +5,9 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.ElementaryTailSemanticReduction
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEqualityStratum
+import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawExploitabilityFloor
-import UniformEquilibrium.Diagnostics.Uniform.NonexistenceCertificate
+import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 
 /-!
 # An inductive barrier certificate for a global terminal-debt floor

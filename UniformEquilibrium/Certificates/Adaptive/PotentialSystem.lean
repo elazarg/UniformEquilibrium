@@ -102,6 +102,67 @@ variable {G : StochasticGame ι} [Fintype ι] [DecidableEq ι]
   {profile : G.BehaviorProfile}
   {s₀ : G.State} {v : Payoff ι} {error : ℝ}
 
+/-- The prescribed payoff of an adaptive system stays within twice its error
+of the target at every certified horizon. -/
+theorem abs_finiteAveragePayoff_sub_target_le_two_mul_error
+    (system :
+      G.AdaptivePotentialSystemAt profile s₀ v error)
+    (who : ι) (total : ℕ)
+    (htotal : system.horizon ≤ total) :
+    |G.finiteAveragePayoff s₀ total profile who - v who| ≤
+      2 * error := by
+  have htotal_pos : 0 < total := by
+    have hhorizon := system.horizon_ge_two
+    omega
+  have hlower :=
+    G.finiteAveragePayoff_ge_of_expectedHistoryValue_submartingale_le
+      profile s₀ who (system.lowerPotential who)
+      (system.lowerCharge who)
+      (system.lower_submartingale who)
+      (system.lower_stage who) htotal_pos
+  have hupper :=
+    G.finiteAveragePayoff_le_of_expectedHistoryValue_supermartingale_ge
+      profile s₀ who (system.upperPotential who)
+      (system.upperCharge who)
+      (system.upper_supermartingale who)
+      (system.upper_stage who) htotal_pos
+  rw [G.expectedHistoryValue_zero] at hlower hupper
+  have hlowerInitial := system.lower_initial who
+  have hupperInitial := system.upper_initial who
+  have hlowerCharge := system.lower_charge_cesaro who total htotal
+  have hupperCharge := system.upper_charge_cesaro who total htotal
+  rw [abs_le] at hlowerInitial hupperInitial
+  rw [abs_le]
+  constructor <;> linarith
+
+/-- Every unilateral deviation against an adaptive system is capped by the
+target plus twice the system error at every certified horizon. -/
+theorem finiteAveragePayoff_update_le_target_add_two_mul_error
+    (system :
+      G.AdaptivePotentialSystemAt profile s₀ v error)
+    (who : ι)
+    (deviation : G.BehaviorStrategy who) (total : ℕ)
+    (htotal : system.horizon ≤ total) :
+    G.finiteAveragePayoff s₀ total
+        (Function.update profile who deviation) who ≤
+      v who + 2 * error := by
+  have htotal_pos : 0 < total := by
+    have hhorizon := system.horizon_ge_two
+    omega
+  have hdeviation :=
+    G.finiteAveragePayoff_le_of_expectedHistoryValue_supermartingale_ge
+      (Function.update profile who deviation) s₀ who
+      (system.deviationPotential who)
+      (system.deviationCharge who deviation)
+      (system.deviation_supermartingale who deviation)
+      (system.deviation_stage who deviation) htotal_pos
+  rw [G.expectedHistoryValue_zero] at hdeviation
+  have hinitial := system.deviation_initial who
+  have hcharge :=
+    system.deviation_charge_cesaro who deviation total htotal
+  rw [abs_le] at hinitial
+  linarith
+
 /-- Forget the named packaging and supply the existing verifier input. -/
 theorem toIsAdaptivePotentialCertificateAt
     (system : G.AdaptivePotentialSystemAt profile s₀ v error) :

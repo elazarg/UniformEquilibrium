@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Topology.Order.IntermediateValue
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEqualityStratum
+import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
 
 /-!

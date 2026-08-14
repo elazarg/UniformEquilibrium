@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Certificates.Adaptive.SystemEnforcementLedger
+import UniformEquilibrium.Certificates.Adaptive.PotentialSystem
 
 /-!
 # Finite-time target bounds for adaptive potentials

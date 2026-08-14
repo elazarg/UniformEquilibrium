@@ -4,8 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Certificates.Adaptive.PotentialSystem
-import UniformEquilibrium.Architectures.PublicResponse.CredibilityBoundary
+import UniformEquilibrium.Certificates.Public.PhaseCertificate
 
 /-!
 # Compiling an operational public-response ledger
@@ -219,24 +218,6 @@ theorem toIsAdaptivePotentialCertificateAt
     s₀ v error ledger.toIsPublicPhasePunishmentSystemAt
 
 end PublicResponseEnforcementLedgerAt
-
-namespace CredibleResponseNoAutomaticCertificate
-
-open ActionDetectorNoAutomaticCloser
-
-/-- The one-state profitable-response example cannot carry an enforcement
-ledger.  Therefore the missing `deviation_stage` interface cannot be inferred
-from target attainment and a centered positive-drift public detector. -/
-theorem no_publicResponseEnforcementLedgerAt_feasibleTarget :
-    ¬∃ P : PublicPhaseProfile game,
-      Nonempty
-        (game.PublicResponseEnforcementLedgerAt
-          P () feasibleTarget (1 / 4 : ℝ)) := by
-  rintro ⟨P, ⟨ledger⟩⟩
-  exact not_isAdaptivePotentialCertificateAt_feasibleTarget
-    ledger.toIsAdaptivePotentialCertificateAt
-
-end CredibleResponseNoAutomaticCertificate
 
 end StochasticGame
 end GameTheory

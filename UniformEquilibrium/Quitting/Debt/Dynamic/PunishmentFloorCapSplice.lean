@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtCapCarrier
-import UniformEquilibrium.Diagnostics.Uniform.NonexistenceCertificate
+import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 /-!

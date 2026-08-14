@@ -86,8 +86,8 @@ selection theorem is
 [`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`](../UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean).
 
 Nonexistence is equivalent to a fixed positive terminal exploitability gap
-against every behavioral profile. The exact diagnostic is
-[`UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean`](../UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean).
+against every behavioral profile. The exact interface is
+[`UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`](../UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean).
 
 These two results determine what a complete positive proof or a complete
 counterexample must ultimately provide.

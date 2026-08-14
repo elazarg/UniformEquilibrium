@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Certificates.Adaptive.PotentialSystem
+import UniformEquilibrium.Certificates.Public.PublicResponseEnforcementLedger
 import UniformEquilibrium.VanishingDiscount.Analytic.Accounting.PublicActionFrequencyResponse
 
 /-!
@@ -218,6 +218,18 @@ theorem feasible_target_and_detector_but_no_automatic_adaptiveCloser :
   exact ⟨finiteAveragePayoff_obeyProfile_eq_feasibleTarget,
     centered_and_positive_action_detector,
     not_isAdaptivePotentialCertificateAt_feasibleTarget⟩
+
+/-- The one-state profitable-response example cannot carry an enforcement
+ledger. Therefore the missing `deviation_stage` interface cannot be inferred
+from target attainment and a centered positive-drift public detector. -/
+theorem no_publicResponseEnforcementLedgerAt_feasibleTarget :
+    ¬∃ P : PublicPhaseProfile game,
+      Nonempty
+        (game.PublicResponseEnforcementLedgerAt
+          P () feasibleTarget (1 / 4 : ℝ)) := by
+  rintro ⟨P, ⟨ledger⟩⟩
+  exact not_isAdaptivePotentialCertificateAt_feasibleTarget
+    ledger.toIsAdaptivePotentialCertificateAt
 
 end CredibleResponseNoAutomaticCertificate
 

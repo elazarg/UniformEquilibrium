@@ -8,7 +8,7 @@ import UniformEquilibrium.Diagnostics.PrivateRecommendationTargetSeparator
 import GameTheory.Concepts.Stochastic.Classes.Absorbing
 
 /-!
-# The one-decision absorbing lift of the private-recommendation separator
+# Diagnostic one-decision absorbing lift of the private-recommendation separator
 
 This file realizes the strategic-form matrix in
 `PrivateRecommendationTargetSeparator.lean` as a four-state stochastic game.

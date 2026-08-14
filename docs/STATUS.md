@@ -16,7 +16,7 @@ a result as *proved in Lean here* only after the relevant Lean check has complet
 | Two-player finite quitting games | Unconditional theorem | [`quittingGame_exists_uniformEquilibriumPayoff_twoPlayer`](../UniformEquilibrium/Quitting/Classification/TwoPlayer/Existence.lean) | All reward tables and all unilateral behavioral deviations. |
 | Three-player finite quitting games (`Fin 3`) | Unconditional theorem | [`quittingGame_exists_uniformEquilibriumPayoff_threePlayer`](../UniformEquilibrium/Quitting/Classification/ThreePlayer/Existence.lean) | All reward tables on the concrete player type `Fin 3`; reindexing is recorded separately. |
 | Terminal approximate Nash existence and uniform-payoff existence | Equivalence theorem | [`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`](../UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean) | Finite quitting games; terminal approximate profiles are required at every positive error. |
-| Quitting-game nonexistence and a fixed terminal exploitability gap | Equivalence theorem | [`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`](../UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean) | A counterexample must quantify over every behavioral profile. |
+| Quitting-game nonexistence and a fixed terminal exploitability gap | Equivalence theorem | [`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`](../UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean) | A counterexample must quantify over every behavioral profile. |
 
 ## Current quitting proof search
 

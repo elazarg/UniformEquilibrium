@@ -55,6 +55,38 @@ class Umbrella:
     path: pathlib.Path
 
 
+@dataclass(frozen=True)
+class ImportBoundaryRule:
+    """A directed import edge forbidden by the project architecture."""
+
+    source_prefix: str
+    target_prefix: str
+    explanation: str
+
+
+# Keep these rules explicit and directional.  The layers on the right may
+# depend on the layers on the left while the reverse dependency is being
+# removed; a bidirectional-looking check would hide which refactoring is
+# required and would reject legitimate lower-level consumers.
+IMPORT_BOUNDARY_RULES = (
+    ImportBoundaryRule(
+        "UniformEquilibrium.Certificates",
+        "UniformEquilibrium.Architectures",
+        "certificates must depend on semantic interfaces, not architectures",
+    ),
+    ImportBoundaryRule(
+        "UniformEquilibrium.Quitting",
+        "UniformEquilibrium.Diagnostics",
+        "quitting mathematics must depend on semantic interfaces, not diagnostics",
+    ),
+    ImportBoundaryRule(
+        "UniformEquilibrium.Certificates",
+        "UniformEquilibrium.Diagnostics",
+        "certificates must depend on semantic interfaces, not diagnostics",
+    ),
+)
+
+
 def parse_imports(text: str) -> list[ParsedImport]:
     """Parse ordinary Lean ``import`` commands without elaborating Lean.
 
@@ -241,6 +273,15 @@ def check_import_graph(
                     f"game-semantic module {item.module}; use project-owned "
                     "MathUE mathematics or the legacy generic Math.* interface"
                 )
+
+            for rule in IMPORT_BOUNDARY_RULES:
+                if _is_prefixed(module, rule.source_prefix) and _is_prefixed(
+                    item.module, rule.target_prefix
+                ):
+                    failures.append(
+                        f"{modules[module]}:{item.line}: forbidden architectural "
+                        f"edge {module} -> {item.module}; {rule.explanation}"
+                    )
 
     return failures
 

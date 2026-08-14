@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
-import UniformEquilibrium.Diagnostics.Quitting.TerminalDebtPrefixDescent
+import UniformEquilibrium.Quitting.Terminal.TerminalDebtPrefixDescent
 
 /-!
 # The four-player paired-singleton family

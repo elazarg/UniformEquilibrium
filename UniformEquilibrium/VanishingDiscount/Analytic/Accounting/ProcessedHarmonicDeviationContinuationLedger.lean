@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.VanishingDiscount.Analytic.Accounting.ProcessedHarmonicResponseRealization
-import UniformEquilibrium.Architectures.PublicResponse.EnforcementCompiler
+import UniformEquilibrium.Architectures.PublicResponse.CredibilityBoundary
 
 /-!
 # Deviation-law continuation ledgers for processed harmonic accounts
