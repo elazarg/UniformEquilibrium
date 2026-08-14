@@ -1,0 +1,605 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\definecolor{FrontierBlue}{HTML}{173B57}
+\definecolor{OpenRed}{HTML}{9A3D36}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=FrontierBlue,
+  pdftitle={A Semantic Gap for Finite Quitting Games},
+  pdfauthor={Internal mathematical frontier ledger}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.62em}
+\setlist[itemize]{leftmargin=1.55em,itemsep=0.28em,topsep=0.3em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.3em,topsep=0.3em}
+\allowdisplaybreaks
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\K}{\mathcal K}
+\newcommand{\UE}{\mathsf{UE}}
+\newcommand{\Front}{\mathsf{Front}}
+
+\newenvironment{statementbox}[1]
+{\def\statementcolor{#1}%
+ \par\medskip\begingroup\color{\statementcolor}%
+ \begin{quote}\hrule\medskip\color{black}}
+{\par\medskip\color{\statementcolor}\hrule\end{quote}%
+ \endgroup\par\medskip}
+
+\title{\vspace{-1.2cm}\textbf{A Semantic Gap for Finite Quitting Games}}
+\author{UniformEquilibrium project}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The open problem is represented by prescribed-payoff/best-response pairs.
+Failure of ordinary uniform equilibrium yields a positive minimum of total
+debt together with finitely many localized stopping-law alternatives.  In
+the positive-collision alternative, an unchanged mixed-action row and continuation
+cannot be repaired with vanishing Nash error; the root or tail must change,
+or the error must be paid explicitly.  Algebraic necessary conditions and
+prefix-invariant positive-debt sets provide complementary filters for a
+counterexample search.  This ledger states the localized alternatives, their
+proved consequences, and the coupled implication equivalent to the problem.
+\end{abstract}
+
+All mathematical assertions in this note have been formalized in Lean.
+
+\section{Semantic state and counterexample normal form}
+
+Let $I$ be a finite nonempty set of players.  At every stage each player
+chooses Continue or Quit.  If the nonempty set $S\subseteq I$ quits, the game
+absorbs and player $i$ receives $r_i(S)$; infinite continuation pays $0$.
+Put
+\[
+ R_r=\sum_{\varnothing\ne S\subseteq I}\sum_{i\in I}|r_i(S)|.
+\]
+Before absorption the only public history is a string of all-Continue
+outcomes.  A behavioral profile is therefore a sequence of product
+mixed-action rows.  For such a row $x$, let $c_i(x)$ be player $i$'s
+Continue probability and put $c(x)=\prod_i c_i(x)$.
+
+For an infinite profile $\sigma$, let $U_i(\sigma)$ be player $i$'s expected
+terminal payoff and let
+\[
+ B_i(\sigma)=\sup_{\tau_i}U_i(\tau_i,\sigma_{-i})
+\]
+be its unilateral terminal cap.  Define
+\[
+ d_i(\sigma)=B_i(\sigma)-U_i(\sigma),
+ \qquad D(\sigma)=\sum_{i\in I}d_i(\sigma).
+\]
+The compact terminal semantic carrier is
+\[
+ \K=\overline{\{(U(\sigma),B(\sigma)):\sigma
+       \text{ is a behavioral profile}\}}.
+\]
+For $z=(u,b)\in\K$, write $d_i(z)=b_i-u_i$ and
+$D(z)=\sum_i d_i(z)$.
+The canonical min--max exploitability is
+\[
+ \eta(r):=\min_{z=(u,b)\in\K}\max_{i\in I}(b_i-u_i).
+\]
+Compactness makes this a minimum on the closure.  Equivalently,
+\[
+ \eta(r)=\inf_\sigma\max_{i\in I}
+   \bigl(B_i(\sigma)-U_i(\sigma)\bigr),
+\]
+and no minimizing actual profile is asserted.  It is distinct from the
+playerwise punishment value
+\[
+ \chi_i=\inf_{\sigma_{-i}}\sup_{\tau_i}U_i(\tau_i,\sigma_{-i}):
+\]
+$\eta(r)$ is the infimum of maximum exploitability over complete profiles, whereas
+$\chi_i$ is a payoff level obtained by minimizing player $i$'s best-response
+value over opponents' profiles.
+
+A product row $x$ defines a continuous prefix map $T_x$ on semantic pairs:
+play $x$ now and use the represented continuation after unanimous
+continuation.  Let $e_\infty$ be the semantic pair of perpetual continuation.
+For a finite word $w=x_1\cdots x_m$, put
+$T_w=T_{x_1}\circ\cdots\circ T_{x_m}$.  Then
+\[
+ \boxed{\K=\overline{\{T_w e_\infty:
+       w\text{ is a finite word of product rows}\}}.}
+\]
+
+Write $\UE(r)$ for existence of an ordinary uniform-equilibrium payoff.  Its
+meaning is the following: for every $\varepsilon>0$, one behavioral profile
+is an $\varepsilon$-equilibrium in every sufficiently long finite horizon,
+and its expected finite-horizon average payoffs are eventually within
+$\varepsilon$ of one fixed vector.  Its
+negation has the exact terminal form
+\[
+ \neg\UE(r)
+ \quad\Longleftrightarrow\quad
+ \exists\gamma>0\ \forall\sigma\ \exists i,\tau_i,
+ \quad
+ U_i(\tau_i,\sigma_{-i})-U_i(\sigma)\ge\gamma.
+\]
+More precisely, every $\gamma$ satisfying the right-hand condition obeys
+$\gamma\le\eta(r)$, while every $\gamma'<\eta(r)$ satisfies it.  Hence
+$\eta(r)$ is the supremum of admissible terminal gaps; the endpoint need not
+be attained by an actual deviation.  Equivalently,
+\[
+ \neg\UE(r)\quad\Longleftrightarrow\quad\eta(r)>0.
+\]
+Fix any $0<\gamma<\eta(r)$; it is an admissible counterexample gap.  The
+associated construction gives a
+point $p\in\K$ at which total debt has a strictly positive global minimum:
+\[
+ D_*=D(p)>0,
+ \qquad \gamma\le D_*,
+ \qquad D_*\le D(z)\quad(z\in\K).
+\]
+Since all debt coordinates are nonnegative, minimization of maximum and
+total debt gives
+\[
+ \boxed{\eta(r)\le D_*\le |I|\eta(r).}
+\]
+The inequality $\gamma\le D_*$ follows by comparing the terminal
+exploitability gap with terminal exploitability at every realized semantic
+pair and then with the sum of its nonnegative coordinate debts.  The
+counterexample package stores the terminal gap as its only scalar datum.
+Finiteness of the canonical cumulative-absorption bound for exact
+punishment-floor prefixes is derived qualitatively from the gap and is not a
+second hypothesis.  For ordinary exact Nash--Bellman rows one has the
+coordinatewise monotonicity
+\[
+ d_i(T_xz)\le\left(\prod_{j\ne i}c_j\right)d_i(z),
+\]
+but this supplies no rate controlled by $1-c(x)$.  Indeed, if one player
+Quits with probability $1-\epsilon$, where $0<\epsilon<1$, and every
+opponent Continues surely, then that player's displayed factor is one while
+$c(x)=\epsilon$ and the row absorption charge is $1-\epsilon$.  For the
+narrower cap--Nash class, exact joint
+scaling does give the sharp finite-word bound
+\[
+ \sum_t(1-c(x_t))\le-\log\prod_t c(x_t)
+ \le\log\frac{D(\sigma)}{D_*},
+\]
+where $\sigma$ is the literal terminal profile of the word.  Thus the
+qualitative arbitrary-prefix capacity and the quantitative cap--Nash budget
+are distinct statements.  Exact cap--Nash words exist at every prescribed
+finite length, while the displayed upper bound is independent of that
+length.  Increasing exact word length is therefore compatible with bounded
+cumulative absorption.
+It also gives realizing profiles approaching $p$, unilateral reset targets,
+strict subsequences, and the stopping-law data below.  Every object in one
+alternative belongs to the same reward table and the same construction.
+
+\section{Row quantities and the common localization lemma}
+
+For a product row $x$ and continuation payoff $v$, let $Q_i(x;v)$ and
+$C_i(x;v)$ be player $i$'s payoff when its current action is forced to Quit or
+Continue, respectively, while the opponents use $x_{-i}$ and $v$ is used
+after unanimous continuation.  Let $F_i(x;v)$ be the payoff when player $i$
+uses its prescribed marginal in $x$.  The one-row defect is
+\[
+ \rho_i(x;v_i)=\max\{Q_i(x;v_i),C_i(x;v_i)\}-F_i(x;v_i)\ge0.
+\]
+For every semantic pair $z=(u,b)$ and product row $x$, prefix debt satisfies
+the exact decomposition
+\[
+ d_i(T_xz)=\rho_i(x;b_i)+c(x)d_i(z).
+\]
+Thus a root change is paid for by its defect against the tail cap, while tail
+debt is weighted by joint continuation.  No Nash hypothesis is used.
+
+Consider a literal profile $\pi$, a stage $t$, its product row $x$, and the
+literal tail payoff $v$ after all players Continue at $t$.  Let $h$ be the
+probability of reaching $t$.  Replacing player $i$'s current action by its
+better pure endpoint and then following the same tail is a legal behavioral
+deviation with exact terminal gain
+\[
+ g_i=h\rho_i(x;v_i).
+\]
+
+This same defect is the obstruction to literal exact return.  An exact
+Nash--Bellman edge using the same root $x$ and the same continuation payoff
+$v$ satisfies endpoint complementarity, and hence
+\[
+ \rho_i(x;v_i)=0\qquad(i\in I).
+\]
+Therefore $g_i>0$ rules out such an edge.  More quantitatively, for every
+$\varepsilon\ge0$, if the same root--tail fibre is $\varepsilon$-Nash, then
+\[
+ g_i\le\varepsilon.
+\]
+The certificate may retain the literal source profile, reached stage, deviator,
+and any named positive-mass terminal event.  The incompatibility already
+holds for the weaker embedding test that matches only the source payoff,
+root, and next continuation payoff.  Matching the whole source profile or
+behavioral tail is stronger and cannot remove it.
+
+Changing one player's entire behavioral strategy while keeping every opponent
+fixed has an exact potential.  If $\sigma'=(\tau_i,\sigma_{-i})$, then
+\[
+ B_i(\sigma')=B_i(\sigma),
+ \qquad
+ d_i(\sigma')=d_i(\sigma)-
+   \bigl(U_i(\sigma')-U_i(\sigma)\bigr).
+\]
+Hence a positive own-strategy payoff gain is exactly a decrease in that
+player's debt.  If the replacement is only $\varepsilon$-optimal against the
+same opponents, any amount $g\le d_i(\sigma)$ satisfies
+\[
+ g\le d_i(\sigma)-d_i(\sigma')+\varepsilon.
+\]
+This identity does not control transports that change an opponent's
+strategy, which is precisely the mismatch between $X_n$ and $Y_n$ in the
+negative-collision alternative.
+
+The following single lemma supplies both collision localizations.  Suppose
+the row is reached with probability $h\ge\ell>0$ and an observer $o$ Quits
+surely there.  Let
+$e_o=d_o(\pi)$ be the observer's debt at the initial profile.  Then
+\[
+ \boxed{
+ D_*-\frac{e_o}{\ell}
+ \le\sum_{j\ne o}\rho_j(x;v_j),
+ \qquad
+ g_j=h\rho_j(x;v_j)\quad(j\ne o).}
+\]
+Indeed, the sure Quit action kills continuation for every $j\ne o$, so the
+current-suffix debt of $j$ is exactly $\rho_j(x;v_j)$.  Global minimality bounds
+the sum of current-suffix debts below by $D_*$.  Finally, the observer's
+survival-weighted current debt is bounded by $e_o$, while $h\ge\ell$.  A
+named coalition is used only to certify the reach bound.  Alternatively,
+zero all-Continue mass at the row guarantees the existence of some sure
+quitter and hence an existential version of the same conclusion; it does not
+identify a prescribed observer.
+
+The importance of this lemma is localization, not the bare existence of a
+profitable deviation: the counterexample gap already supplies some global
+deviation.  Here the deviator, profile, reached row, continuation, event, and
+gain identity are retained together.
+
+For the refusal alternative used below, recall the punishment value $\chi_i$
+defined above.
+At a row where $o$ Quits surely, let $O_o(x)$ be its obedience payoff.  Let
+$P_o(x)$ be its payoff when forced to Continue, with continuation value
+$\chi_o$ only in the event that every outsider also Continues.  Define the
+atomic blocker certificate
+\[
+ \mathfrak b_o(x)=\max\{0,P_o(x)-O_o(x)\}.
+\]
+This is a punishment-value certificate, not the gain of a deviation followed
+by the literal tail.
+
+\section{Exhaustive stopping-law certificate}
+
+For profiles $\sigma,\tau$, observer $o$, and terminal outcome $S$, set
+\[
+ A_o(\sigma,\tau;S)
+ =\bigl(\Pr_\sigma[S]-\Pr_\tau[S]\bigr)r_o(S).
+\]
+Let $N$ be the number of terminal outcomes, including nonabsorption.  A
+rectangle charge $\kappa>0$ has mass scale
+\[
+ \ell=\frac{\kappa/4}{NR_r}>0.
+\]
+The rectangle charge forces $R_r>0$.  The order of the atom's arguments is
+important: the prescribed atom below is source minus reset endpoint, whereas
+the rectangle atom is reset target minus source.
+
+Every positive-minimum counterexample construction produces a prescribed
+atom or one rectangle certificate.  A prescribed atom consists of an active mover
+$a$ with $d_a(p)>0$, an observer $o\ne a$, a charge $\kappa>0$, a strict
+subsequence, a fixed nonempty coalition $S$, source profiles $\sigma_n$, and
+selected unilateral reset strategies $\theta_{a,n}$ such that
+\[
+ \frac{\kappa}{2}
+ \le N A_o\bigl(\sigma_n,
+       \sigma_n[a\leftarrow\theta_{a,n}];S\bigr)
+\]
+for every selected $n$.
+
+The same atom-producing suffix can already be placed behind an exact
+state-matched root word of length tending to infinity.  The total debt of the
+whole prefixed profile tends to $D_*$, while the literal suffix and its reset
+comparison are unchanged.  The finite-word theorem permits this increasing
+length while cumulative absorption stays bounded.  What is not supplied is
+one infinite chronology, or a bounded date on such a chronology, at which the
+atom can be consumed.
+
+A rectangle certificate consists of the same kind of mover, observer, charge,
+subsequence, and coalition, together with pure stopping times $q_n$ for the
+observer.  Define
+\[
+ X_n=\sigma_n[a\leftarrow\theta_{a,n},o\leftarrow q_n],
+ \qquad
+ Y_n=\sigma_n[o\leftarrow q_n].
+\]
+The certificate satisfies
+\[
+ \frac{\kappa}{4}\le N A_o(X_n,Y_n;S),
+ \qquad d_o(X_n)\longrightarrow0.
+\]
+For a fixed rectangle certificate, exactly one of the following four
+orientations applies.
+
+\begin{enumerate}
+\item \textbf{Observer absent.}  If $o\notin S$, a fixed owner in $S$ is
+      counterfactually forced to Quit on the rows carrying the selected
+      $S$-mass.  On one fixed side of the rectangle the total mass is at
+      least $\ell$ and decomposes over the rows before the observer's stopping
+      time.  Every such forced row has either an outsider defect at least
+      $\gamma$ or an atomic blocker certificate at least $\gamma$, with the
+      corresponding stage-mass weighting.  No individual row is asserted to
+      carry mass $\ell$.  These are counterfactual rows, not rows of the
+      selected profile.  For both finite $q_n$ and $q_n=\infty$, the total
+      lower bound can nevertheless be transferred to the actual profile
+      $Z_n$.  Up to fixed constants depending only on the finite player and
+      action sets, it yields at least one of the following: a legal behavioral
+      deviation with positive payoff gain; a positive finite sum, over actual
+      reached rows and opponent coalitions, of reach probabilities times
+      positive pure-Quit payoff advantages; or an actual reached row at which
+      one player's selected pure action is profitable when $k$ is forced to
+      Quit but unprofitable when $k$ is forced to Continue.  The
+      positive-part sum is not itself a deviation gain: the legal
+      pure-Quit gain uses the signed sum over coalitions, so cancellation
+      yields only an upper bound of the gain's positive part by the atom sum.
+      A positive lower bound on that account therefore does not imply a
+      profitable deviation.  In the last case the corresponding difference
+      of the two one-row deviation gains is
+      positive with a quantitative lower bound.  The positive-part branch
+      first needs a conversion from eventwise accounting to one legal gain,
+      before any chronological use is possible.  The reversal branch already
+      supplies a quantitative difference of two one-row gains; its missing
+      step is to transport or consume that difference along one exact
+      equilibrium chronology.
+
+\item \textbf{Singleton.}  If $S=\{o\}$, the shared static
+      compression gives either:
+      \begin{itemize}
+      \item a strict coalition-insertion payoff for some owner, together with
+            a profitable one-row deviation by a distinct player at the
+            corresponding pure quitting row; or
+      \item after deleting $o$, a nonempty smaller quitting game with the
+            same terminal gap $\gamma$.
+      \end{itemize}
+      This static alternative retains neither the marked singleton row nor
+      its chronology.  If the reward table has the smallest possible number
+      of players among counterexamples, exact deletion is impossible:
+      deletion would leave a nonempty smaller game with the same positive
+      terminal gap, while minimality supplies a uniform equilibrium there.
+      Thus in a minimal-player counterexample the singleton certificate
+      compresses to the static atomic toggle alone.  This still does not
+      restore the marked chronology.
+
+      A distinct singleton-tight boundary calculation is also exact.  Suppose
+      one owner carries all minimum debt $D_*>0$, its prescribed payoff equals
+      $r_o(\{o\})$, and a solo-owner row with Quit probability $q\in(0,1]$
+      admits $L\ge0$ such that every outsider's payoff increase from joining
+      the owner is at most $L$ and $qL\le(1-q)D_*$.  The row is Nash against
+      the prescribed continuation, but its owner defect against the cap is
+      $qD_*$, so
+      \[
+       D_*=qD_*+(1-q)D_*.
+      \]
+      Repetition preserves rather than contracts the minimum debt.  Its
+      finite-prefix semantic limit agrees with the actual stationary solo
+      profile exactly when
+      \[
+       \max\{r_o(\{o\}),0\}=r_o(\{o\})+D_*.
+      \]
+      Under these hypotheses, $r_o(\{o\})\ge0$ directly gives a stationary
+      uniform-equilibrium payoff.  Thus this solo iteration is completely
+      accounted for, but its hypotheses are not asserted for every singleton
+      stopping-law certificate.
+
+\item \textbf{Negative collision.}  If $o\in S$, $|S|>1$, and
+      $r_o(S)<0$, then for each $n$ a selected actual row of the source
+      profile $Y_n$ has the observer Quit surely and stage-$S$ mass at least
+      $\ell$.  The common lemma gives
+      \[
+       D_*-\frac{d_o(Y_n)}{\ell}
+       \le\sum_{j\ne o}\rho_{j,n}.
+      \]
+      In addition, either an outsider has $\rho_{j,n}\ge\gamma$, hence a
+      legal deviation at that same profile and row with exact gain
+      $g_{j,n}=h_n\rho_{j,n}\ge\ell\gamma$, or
+      $\mathfrak b_o(x_n)\ge\gamma$ with the corresponding weighted bound.
+
+      The certificate controls $d_o(X_n)\to0$, not $d_o(Y_n)$.  The profiles
+      $X_n$ and $Y_n$ differ by the mover's full reset; the certificate supplies
+      neither a smallness bound for this reset nor an observer-debt transport
+      inequality across it.  The exact negative-collision localization
+      therefore retains the term $d_o(Y_n)/\ell$.
+      Nevertheless the rowwise dichotomy itself can be frozen: after a
+      further strict subsequence, either one fixed outsider $j\ne o$ realizes
+      the outsider alternative at every selected row, with the exact gain
+      identity and lower bound above, or the observer refusal alternative
+      holds at every selected row.  This removes variation of the outsider
+      and of the dichotomy, but not the uncontrolled debt term.
+
+\item \textbf{Positive collision.}  If $o\in S$, $|S|>1$, and
+      $r_o(S)>0$, then, after a strict subsequence and deletion of finitely
+      many terms, the actual target profile $X_n$ reaches a marked row where
+      the observer Quits surely and the stage-$S$ mass is at least $\ell$.
+      Here $e_n=d_o(X_n)\to0$, so the common lemma gives
+      \[
+       D_*-\frac{e_n}{\ell}
+       \le\sum_{j\ne o}\rho_{j,n}.
+      \]
+      After a further strict subsequence, one fixed $j\ne o$ and its better
+      pure row action give a legal deviation from the same $X_n$, with
+      \[
+       g_{j,n}=h_n\rho_{j,n},
+       \qquad
+       \frac{\ell D_*}{2}\le(|I|-1)g_{j,n}.
+      \]
+      Consequently, for every $\varepsilon\ge0$, every
+      $\varepsilon$-Nash repair with that same root and continuation
+      satisfies the uniform floor
+      \[
+       \varepsilon\ge g_{j,n}\ge
+         \frac{\ell D_*}{2(|I|-1)}>0.
+      \]
+      The profile, row, coalition, tail, and deviation are unchanged by this
+      localization.  In particular $g_{j,n}>0$, so this literal root and tail
+      cannot be an exact Nash--Bellman edge.  Exact repair must change the
+      root, change the continuation payoff, or pay Nash error at least
+      $g_{j,n}$; merely appending an exact suffix leaves the source deviation
+      intact.
+\end{enumerate}
+
+The cases $r_o(S)=0$ and $o\in S$, $|S|>1$, are impossible because the
+rectangle atom is strictly positive.
+
+\section{The exact open implication}
+
+Let $\Front(r,p,\gamma)$ mean the disjunction just stated, with the reward table,
+minimum point, profiles, reset targets, subsequence, mover, observer,
+coalition, stopping times, rows, and literal tails coupled exactly as in the
+construction.  The reduction is
+\[
+ \neg\UE(r)\quad\Longrightarrow\quad
+ \exists\gamma>0\ \exists p\in\K,\quad
+ \begin{gathered}
+ \gamma\text{ is a terminal exploitability gap},\\
+ D(p)=\min_{z\in\K}D(z)>0,
+ \qquad \Front(r,p,\gamma).
+ \end{gathered}
+\]
+
+\begin{statementbox}{OpenRed}
+\textbf{Exact unresolved implication.}
+\[
+ \boxed{
+ \forall r\ \forall\gamma>0\ \forall p\in\K,\qquad
+ \left[
+ \begin{gathered}
+ \gamma\text{ is a terminal exploitability gap},\\
+ D(p)=\min_{z\in\K}D(z)>0,
+ \qquad \Front(r,p,\gamma)
+ \end{gathered}
+ \right]
+ \Longrightarrow\bot.}
+\]
+Together with the reduction, this implication is equivalent to
+the finite quitting-game uniform-equilibrium conjecture.  This is a logical
+equivalence, not an independently proved simplification of the conjecture.
+\end{statementbox}
+
+An adequate proof may derive debt below $D_*$, a return to the same semantic
+state with every intervening Nash error explicitly bounded, or terminal
+$\varepsilon$-Nash profiles for every $\varepsilon>0$.  It must use the
+actual coupled certificate.  In particular, it must turn the
+prescribed atom's arbitrarily deep finite exact-prefix placement into an
+infinite or bounded-date chronological use, consume the observer-absent
+Quit-defect atom or endpoint flip on one chronology, join the singleton
+static certificate to its chronology, consume
+the negative blocker arm, or use the positive target-row gain to fund a
+controlled change of root or continuation payoff.  An exact edge on the
+unchanged positive root--tail fibre is impossible, and an approximate repair
+on that fibre costs at least the retained gain.  Thus any change must account
+quantitatively for the coupled data it loses.  A further subdivision of one
+alternative does not prove the boxed implication.
+
+\section{Invariant synthesis for a counterexample}
+
+For $\delta\in\R$, an invariant debt barrier is a set
+$C\subseteq\R^I\times\R^I$ satisfying
+\[
+ e_\infty\in C,
+ \qquad
+ z\in C\Longrightarrow T_xz\in C
+       \quad\text{for every product row }x,
+ \qquad
+ z\in C\Longrightarrow D(z)\ge\delta.
+\]
+No closedness assumption on $C$ is needed.  Prefix density gives the exact
+characterization
+\[
+ \bigl(\exists C\text{ satisfying these conditions}\bigr)
+ \quad\Longleftrightarrow\quad
+ D(z)\ge\delta\quad\text{for every }z\in\K.
+\]
+For the reverse implication one may take $C=\K$; that proves logical
+completeness but supplies no finite description.\footnote{A finite sufficient
+condition is known.  Form the debt-safe hull by convexifying prescribed
+payoffs and then permitting them only to decrease, while permitting
+best-response caps only to increase.  If the states reachable in at most
+$N+1$ prefixes lie in the debt-safe hull of those reachable in at most $N$
+prefixes, then that hull is an invariant positive-debt barrier.  Whether
+$D_*>0$ forces this condition, or any rational semialgebraic barrier, remains
+open.}  If $\delta>0$, the barrier
+gives a fixed terminal exploitability gap and therefore a counterexample.
+Thus the constructive problem on this side is invariant synthesis: exhibit a
+finite reward table, $\delta>0$, and an explicit set $C$ satisfying all three
+conditions.
+
+The mandatory point $e_\infty$ gives the immediate table-level ceiling
+\[
+ \boxed{\delta\le
+   \sum_{i\in I}\max\{0,r_i(\{i\})\}.}
+\]
+There is also a dimension-free restriction on the form of $C$.  On every
+nonempty finite player set, the three barrier conditions with $\delta>0$ are
+inconsistent with membership depending only on the debt vector $b-u$.
+Indeed, equality of debt vectors would then permit simultaneous translation
+of prescribed payoffs and caps; a calibrated product-row prefix
+would multiply every debt coordinate by an arbitrarily small common
+Continue probability.  Thus a positive barrier must retain absolute payoff
+and cap levels, not only their difference.
+
+\paragraph{Auxiliary algebraic seam.}
+For the singleton comparison matrix
+\[
+ A_{ij}=r_i(\{j\})-r_i(\{i\}),
+\]
+every finite real zero-diagonal matrix is realized by some quitting table as
+such a normalized singleton-comparison matrix.  Define $I_0=I$ and
+\[
+ I_{n+1}=\{i\in I_n:\exists j\in I_n,
+      \ j\ne i,\ A_{ij}\le0\},
+ \qquad I_*=\bigcap_{n\ge0}I_n.
+\]
+Let $A_*$ be the principal matrix on $I_*$.  A homogeneous simplex solution
+is a vector $z\ge0$ with $\sum_i z_i=1$, $A_*z\ge0$, and
+$z_i(A_*z)_i=0$ for all $i$.  The matrix $A_*$ is standard $Q$ if, for every
+vector $q$, there are $z,w\ge0$ with
+\[
+ w=q+A_*z,
+ \qquad z_iw_i=0\quad(i\in I_*).
+\]
+The empty-core, homogeneous, and non-$Q$ branches each produce an ordinary
+uniform-equilibrium payoff.  Hence the sharp restriction is
+\[
+ \boxed{
+ \neg\UE(r)\Longrightarrow
+ I_*\ne\varnothing,\quad
+ A_*\text{ has no homogeneous simplex solution},\quad
+ A_*\text{ is standard }Q.}
+\]
+This necessary condition is independent of the unresolved implication above
+and is not another stopping-law alternative.  It is not a sufficient
+condition for a counterexample.  The algebraic condition is satisfiable by
+an explicit four-player quitting table, including one whose stabilized core
+contains all four players.
+
+For four players this restriction is sharper:
+\[
+ \boxed{\neg\UE(r)\Longrightarrow I_*=I.}
+\]
+Thus any four-player counterexample has full corrected core.  This full-core
+algebraic branch is nonempty, but it has no complete classification here and
+is only an input to invariant synthesis.
+
+\end{document}

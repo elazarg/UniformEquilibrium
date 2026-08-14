@@ -1,0 +1,4 @@
+[submodule "GameTheory"]
+	path = GameTheory
+	url = ../GameTheory
+	branch = main

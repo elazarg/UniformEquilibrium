@@ -1,0 +1,15 @@
+.lake/
+.lake-*/
+.cache/
+.lsp-state.json
+.codex/
+.claude/
+*.log
+*.aux
+*.out
+*.toc
+*.pdf
+**/__pycache__/
+*.py[cod]
+Experiments/**/runs/**/raw/
+Reverse/Runs/**/raw/
