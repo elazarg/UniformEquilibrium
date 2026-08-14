@@ -15,7 +15,7 @@ promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 | 5 | Facades and dependency inversions | Complete | Architecture/certificate and Quitting/Diagnostics edges are layered |
 | 6 | Proof ratchets, product and variation APIs | Complete | Shared finite-weight identities replace selected duplication |
 | 7 | Finite-case grind pilots | Complete | Pilot proofs reduce brittle expansion without weakening claims |
-| 8 | Monolith decomposition | In progress | Long proof files split behind checked interfaces |
+| 8 | Monolith decomposition | Complete | Long proof files split behind checked interfaces |
 | 9 | Imports, internal APIs, options | Queued | Narrow imports and scoped options pass build and trust gates |
 | 10 | Final audit | Pending prior phases | All audits, full build, and documentation checks are green |
 
@@ -86,11 +86,13 @@ tactic counts alone are not success criteria.
 
 ### 8. Monolith decomposition
 
-Prepare seams for `AnalyticOccupationFlow`, `NoTrap`, and the conditioned-
-diffuse compiler family. Split by mathematical interface, not arbitrary line
-count, and preserve declaration ownership and downstream imports. Acceptance
-is narrow compilation of each new module, full consumer compilation, and no
-new broad import.
+Prepare seams for `AnalyticOccupationFlow`, `NoTrap`, the conditioned-diffuse
+compiler family, `AccountStrategy`, and the Fink limit stack. Split by
+mathematical interface, not arbitrary line count, and preserve declaration
+ownership and downstream imports. Replace the period-two stationary
+coordinate tree by a player-indexed symmetry argument. Acceptance is narrow
+compilation of each new module, full consumer compilation, and no new broad
+import.
 
 ### 9. Imports, internal APIs, and options
 
@@ -109,8 +111,8 @@ the review documents refreshed.
 
 ## Deferred dependency decision
 
-GameTheory2 preparation is limited to the interface inventory and compatibility
-harness described above. The cutover itself is deferred: no parallel
-dependency, speculative port, or migration schedule is part of these phases.
-A future cutover requires a separate decision, acceptance build, and updated
-transition record.
+GameTheory2 preparation is limited to the census, semantic waist, and staged
+gates in [`GAMETHEORY2_MIGRATION_PLAN.md`](GAMETHEORY2_MIGRATION_PLAN.md). The
+cutover itself is deferred: no parallel dependency or speculative port is part
+of these phases. A future cutover requires a published successor pin, separate
+decision, acceptance build, and updated transition record.

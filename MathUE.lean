@@ -11,6 +11,7 @@ import MathUE.AnalyticOrderComparison
 import MathUE.AnalyticPowerNormalization
 import MathUE.BonferroniProductBounds
 import MathUE.BoundedDiscrepancyCirculation
+import MathUE.CalendarSummability
 import MathUE.ChargedPathBudget
 import MathUE.ChargedPathBudgetCounterexamples
 import MathUE.ChargedPathExecution
@@ -98,6 +99,7 @@ import MathUE.LinearAlgebra.OrientedAccountBridge
 import MathUE.LinearAlgebra.OwnerLabeledFlowHolonomy
 import MathUE.LinearAlgebra.OwnerObstructionCokernel
 import MathUE.LinearAlgebra.OwnerTypedDualLifting
+import MathUE.LinearProgramming.ClosedTrapPerturbation
 import MathUE.LinearProgramming.FlowCostateDuality
 import MathUE.LinearProgramming.OneDimensionalAffineMinimax
 import MathUE.LinearProgramming.SingletonLCP

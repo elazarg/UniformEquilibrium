@@ -44,6 +44,34 @@ private def stationaryGainThree (x y z : ℝ) : ℝ :=
     x * y * z ^ 2 + 3 * x * y * z -
     4 * x * y + 2 * x * z + 2 * y - 1
 
+/-- The four gain polynomials, indexed by the deviating player. -/
+private def stationaryGain (p : Player → ℝ) : Player → ℝ :=
+  ![stationaryGainZero (p 1) (p 2) (p 3),
+    stationaryGainOne (p 0) (p 2) (p 3),
+    stationaryGainTwo (p 0) (p 1) (p 3),
+    stationaryGainThree (p 0) (p 1) (p 2)]
+
+/-- A table symmetry which sends `anchor` to player `1`. -/
+private def centerAtOneIndex (anchor : Player) : Player → Player :=
+  ![![1, 0, 3, 2], ![0, 1, 2, 3], ![3, 2, 0, 1], ![2, 3, 1, 0]] anchor
+
+private def centerAtOne (anchor : Player) (p : Player → ℝ) : Player → ℝ :=
+  p ∘ centerAtOneIndex anchor
+
+private lemma centerAtOneIndex_one (anchor : Player) :
+    centerAtOneIndex anchor 1 = anchor := by
+  fin_cases anchor <;> rfl
+
+/-- Equivariance of the gain table under all four recentering symmetries. -/
+private lemma stationaryGain_centerAtOne (anchor : Player) (p : Player → ℝ)
+    (who : Player) :
+    stationaryGain (centerAtOne anchor p) who =
+      stationaryGain p (centerAtOneIndex anchor who) := by
+  fin_cases anchor <;> fin_cases who <;>
+    simp [stationaryGain, centerAtOne, centerAtOneIndex, stationaryGainZero,
+      stationaryGainOne, stationaryGainTwo, stationaryGainThree]
+  all_goals first | rfl | ring
+
 private lemma endpoint_or_interior {x : ℝ} (hx0 : 0 ≤ x) (hx1 : x ≤ 1) :
     x = 0 ∨ x = 1 ∨ (0 < x ∧ x < 1) := by
   by_cases h0 : x = 0
@@ -278,118 +306,26 @@ private lemma no_gain_zeros_of_second_coordinate_minimal
         hy hyz hhalf hzt ht1
       linarith
 
-private lemma stationaryGainZero_swapBoth (x z t : ℝ) :
-    stationaryGainZero x t z = stationaryGainOne x z t := by
-  dsimp [stationaryGainZero, stationaryGainOne]
-  ring
-
-private lemma stationaryGainThree_swapBoth (x y t : ℝ) :
-    stationaryGainThree y x t = stationaryGainTwo x y t := by
-  dsimp [stationaryGainThree, stationaryGainTwo]
-  ring
-
-private lemma stationaryGainZero_rotate (x y z : ℝ) :
-    stationaryGainZero z x y = stationaryGainThree x y z := by
-  dsimp [stationaryGainZero, stationaryGainThree]
-  ring
-
-private lemma stationaryGainThree_rotate (x z t : ℝ) :
-    stationaryGainThree t z x = stationaryGainOne x z t := by
-  dsimp [stationaryGainThree, stationaryGainOne]
-  ring
-
-private lemma stationaryGainOne_rotate (x y t : ℝ) :
-    stationaryGainOne t x y = stationaryGainTwo x y t := by
-  dsimp [stationaryGainOne, stationaryGainTwo]
-  ring
-
-private lemma stationaryGainTwo_rotate (y z t : ℝ) :
-    stationaryGainTwo t z y = stationaryGainZero y z t := by
-  dsimp [stationaryGainTwo, stationaryGainZero]
-  ring
-
-private lemma stationaryGainZero_exchangePairs (x y t : ℝ) :
-    stationaryGainZero t y x = stationaryGainTwo x y t := by
-  dsimp [stationaryGainZero, stationaryGainTwo]
-  ring
-
-private lemma stationaryGainThree_exchangePairs (y z t : ℝ) :
-    stationaryGainThree z t y = stationaryGainZero y z t := by
-  dsimp [stationaryGainThree, stationaryGainZero]
-  ring
-
 private lemma no_fullyMixed_stationaryGain_zeros
-    {x y z t : ℝ}
-    (hx : 0 < x) (hx1 : x < 1) (hy : 0 < y) (hy1 : y < 1)
-    (hz : 0 < z) (hz1 : z < 1) (ht : 0 < t) (ht1 : t < 1)
-    (hg0 : stationaryGainZero y z t = 0)
-    (hg1 : stationaryGainOne x z t = 0)
-    (hg2 : stationaryGainTwo x y t = 0)
-    (hg3 : stationaryGainThree x y z = 0) : False := by
-  by_cases hxy : x ≤ y
-  · by_cases hxz : x ≤ z
-    · by_cases hxt : x ≤ t
-      · apply no_gain_zeros_of_second_coordinate_minimal
-          hy hy1 hx hx1 ht ht1 hz hz1 hxy hxt hxz
-        · rw [stationaryGainZero_swapBoth]
-          exact hg1
-        · rw [stationaryGainThree_swapBoth]
-          exact hg2
-      · have hty : t ≤ y := le_trans (le_of_not_ge hxt) hxy
-        have htz : t ≤ z := le_trans (le_of_not_ge hxt) hxz
-        apply no_gain_zeros_of_second_coordinate_minimal
-          hz hz1 ht ht1 hy hy1 hx hx1 htz hty (le_of_not_ge hxt)
-        · rw [stationaryGainZero_exchangePairs]
-          exact hg2
-        · rw [stationaryGainThree_exchangePairs]
-          exact hg0
-    · have hzx : z ≤ x := le_of_not_ge hxz
-      by_cases hzt : z ≤ t
-      · have hzy : z ≤ y := le_trans hzx hxy
-        apply no_gain_zeros_of_second_coordinate_minimal
-          ht ht1 hz hz1 hx hx1 hy hy1 hzt hzx hzy
-        · rw [stationaryGainZero_rotate]
-          exact hg3
-        · rw [stationaryGainThree_rotate]
-          exact hg1
-      · have htx : t ≤ x := le_trans (le_of_not_ge hzt) hzx
-        have hty : t ≤ y := le_trans htx hxy
-        apply no_gain_zeros_of_second_coordinate_minimal
-          hz hz1 ht ht1 hy hy1 hx hx1 (le_of_not_ge hzt) hty htx
-        · rw [stationaryGainZero_exchangePairs]
-          exact hg2
-        · rw [stationaryGainThree_exchangePairs]
-          exact hg0
-  · have hyx : y ≤ x := le_of_not_ge hxy
-    by_cases hyz : y ≤ z
-    · by_cases hyt : y ≤ t
-      · exact no_gain_zeros_of_second_coordinate_minimal
-          hx hx1 hy hy1 hz hz1 ht ht1 hyx hyz hyt hg0 hg3
-      · have htx : t ≤ x := le_trans (le_of_not_ge hyt) hyx
-        have htz : t ≤ z := le_trans (le_of_not_ge hyt) hyz
-        apply no_gain_zeros_of_second_coordinate_minimal
-          hz hz1 ht ht1 hy hy1 hx hx1 htz (le_of_not_ge hyt) htx
-        · rw [stationaryGainZero_exchangePairs]
-          exact hg2
-        · rw [stationaryGainThree_exchangePairs]
-          exact hg0
-    · have hzy : z ≤ y := le_of_not_ge hyz
-      by_cases hzt : z ≤ t
-      · have hzx : z ≤ x := le_trans hzy hyx
-        apply no_gain_zeros_of_second_coordinate_minimal
-          ht ht1 hz hz1 hx hx1 hy hy1 hzt hzx hzy
-        · rw [stationaryGainZero_rotate]
-          exact hg3
-        · rw [stationaryGainThree_rotate]
-          exact hg1
-      · have hty : t ≤ y := le_trans (le_of_not_ge hzt) hzy
-        have htx : t ≤ x := le_trans hty hyx
-        apply no_gain_zeros_of_second_coordinate_minimal
-          hz hz1 ht ht1 hy hy1 hx hx1 (le_of_not_ge hzt) hty htx
-        · rw [stationaryGainZero_exchangePairs]
-          exact hg2
-        · rw [stationaryGainThree_exchangePairs]
-          exact hg0
+    (p : Player → ℝ) (hp0 : ∀ who, 0 < p who)
+    (hp1 : ∀ who, p who < 1) (hg : ∀ who, stationaryGain p who = 0) : False := by
+  obtain ⟨anchor, -, hminimal⟩ :=
+    Finset.univ.exists_min_image p Finset.univ_nonempty
+  let q := centerAtOne anchor p
+  have hq0 (who : Player) : 0 < q who := hp0 _
+  have hq1 (who : Player) : q who < 1 := hp1 _
+  have hqminimal (who : Player) : q 1 ≤ q who := by
+    change p (centerAtOneIndex anchor 1) ≤ p (centerAtOneIndex anchor who)
+    rw [centerAtOneIndex_one]
+    exact hminimal _ (Finset.mem_univ _)
+  have hqg (who : Player) : stationaryGain q who = 0 := by
+    rw [stationaryGain_centerAtOne]
+    exact hg _
+  exact no_gain_zeros_of_second_coordinate_minimal
+    (hq0 0) (hq1 0) (hq0 1) (hq1 1) (hq0 2) (hq1 2) (hq0 3) (hq1 3)
+    (hqminimal 0) (hqminimal 2) (hqminimal 3)
+    (by simpa [stationaryGain] using hqg 0)
+    (by simpa [stationaryGain] using hqg 3)
 private lemma no_stationaryGain_zeros_of_x_one_interior
     {y z t : ℝ}
     (hy : 0 < y) (hy1 : y < 1)
@@ -508,11 +444,16 @@ private lemma no_stationaryGain_zeros_of_x_one_interior
     nlinarith
   have hneg := stationaryGainZero_neg_of_lowest_le_t_le_z
     hz hzy.le hy1.le (le_refl 1) hy1
-  rw [stationaryGainZero_rotate] at hneg
+  have hequiv := stationaryGain_centerAtOne 2 ![1, y, z, 0] 0
+  simp [stationaryGain, centerAtOne, centerAtOneIndex] at hequiv
+  rw [hequiv] at hneg
   linarith
 
-private def stationaryGainComplementary
-    (x y z t : ℝ) : Prop :=
+private def IsStationaryGainComplementary (p : Player → ℝ) : Prop :=
+  ∀ who, p who * stationaryGain p who ≤ 0 ∧
+    0 ≤ (1 - p who) * stationaryGain p who
+
+private def stationaryGainComplementary (x y z t : ℝ) : Prop :=
   (x * stationaryGainZero y z t ≤ 0 ∧
       0 ≤ (1 - x) * stationaryGainZero y z t) ∧
     (y * stationaryGainOne x z t ≤ 0 ∧
@@ -522,25 +463,52 @@ private def stationaryGainComplementary
     (t * stationaryGainThree x y z ≤ 0 ∧
       0 ≤ (1 - t) * stationaryGainThree x y z)
 
+private lemma stationaryGainComplementary_iff (x y z t : ℝ) :
+    stationaryGainComplementary x y z t ↔
+      IsStationaryGainComplementary ![x, y, z, t] := by
+  constructor
+  · rintro ⟨h0, h1, h2, h3⟩ who
+    fin_cases who
+    · simpa [stationaryGain] using h0
+    · simpa [stationaryGain] using h1
+    · simpa [stationaryGain] using h2
+    · simpa [stationaryGain] using h3
+  · intro h
+    exact ⟨by simpa [stationaryGain] using h 0,
+      by simpa [stationaryGain] using h 1,
+      by simpa [stationaryGain] using h 2,
+      by simpa [stationaryGain] using h 3⟩
+
+private lemma IsStationaryGainComplementary.centerAtOne
+    {p : Player → ℝ} (anchor : Player) (h : IsStationaryGainComplementary p) :
+    IsStationaryGainComplementary (centerAtOne anchor p) := by
+  intro who
+  rw [stationaryGain_centerAtOne]
+  exact h _
+
 private lemma stationaryGainComplementary_swapBoth
     {x y z t : ℝ} (h : stationaryGainComplementary x y z t) :
     stationaryGainComplementary y x t z := by
-  rcases h with ⟨h0, h1, h2, h3⟩
-  refine ⟨?_, ?_, ?_, ?_⟩
-  · simpa only [stationaryGainZero_swapBoth] using h1
-  · simpa only [stationaryGainZero_swapBoth] using h0
-  · simpa only [stationaryGainThree_swapBoth] using h3
-  · simpa only [stationaryGainThree_swapBoth] using h2
+  rw [stationaryGainComplementary_iff] at h ⊢
+  have hc := IsStationaryGainComplementary.centerAtOne 0 h
+  intro who
+  have hw := hc who
+  fin_cases who <;>
+    simpa [stationaryGainComplementary, stationaryGain, centerAtOne,
+      centerAtOneIndex] using
+      hw
 
 private lemma stationaryGainComplementary_rotate
     {x y z t : ℝ} (h : stationaryGainComplementary x y z t) :
     stationaryGainComplementary t z x y := by
-  rcases h with ⟨h0, h1, h2, h3⟩
-  refine ⟨?_, ?_, ?_, ?_⟩
-  · simpa only [stationaryGainZero_rotate] using h3
-  · simpa only [stationaryGainOne_rotate] using h2
-  · simpa only [stationaryGainTwo_rotate] using h0
-  · simpa only [stationaryGainThree_rotate] using h1
+  rw [stationaryGainComplementary_iff] at h ⊢
+  have hc := IsStationaryGainComplementary.centerAtOne 2 h
+  intro who
+  have hw := hc who
+  fin_cases who <;>
+    simpa [stationaryGainComplementary, stationaryGain, centerAtOne,
+      centerAtOneIndex] using
+      hw
 
 private lemma no_stationaryGainComplementary_of_x_zero
     (y z t : ℝ)
@@ -618,12 +586,22 @@ private lemma no_stationaryGainComplementary_of_x_interior
           nlinarith [mul_le_mul_of_nonneg_right hzy hx.1.le]
         · exact stationaryGainComplementary_rotate hcomp
       · rcases hcomp with ⟨hg0, hg1, hg2, hg3⟩
-        exact no_fullyMixed_stationaryGain_zeros
-          hx.1 hx.2 hy.1 hy.2 hz.1 hz.2 ht.1 ht.2
-          (gain_eq_zero_of_interior hx.1 hx.2 hg0.1 hg0.2)
-          (gain_eq_zero_of_interior hy.1 hy.2 hg1.1 hg1.2)
-          (gain_eq_zero_of_interior hz.1 hz.2 hg2.1 hg2.2)
-          (gain_eq_zero_of_interior ht.1 ht.2 hg3.1 hg3.2)
+        let p : Player → ℝ := ![x, y, z, t]
+        apply no_fullyMixed_stationaryGain_zeros p
+        · intro who
+          fin_cases who <;> simp [p, hx.1, hy.1, hz.1, ht.1]
+        · intro who
+          fin_cases who <;> simp [p, hx.2, hy.2, hz.2, ht.2]
+        · intro who
+          fin_cases who
+          · simpa [p, stationaryGain] using
+              gain_eq_zero_of_interior hx.1 hx.2 hg0.1 hg0.2
+          · simpa [p, stationaryGain] using
+              gain_eq_zero_of_interior hy.1 hy.2 hg1.1 hg1.2
+          · simpa [p, stationaryGain] using
+              gain_eq_zero_of_interior hz.1 hz.2 hg2.1 hg2.2
+          · simpa [p, stationaryGain] using
+              gain_eq_zero_of_interior ht.1 ht.2 hg3.1 hg3.2
 
 private theorem no_stationaryGainComplementarity_algebra
     (x y z t : ℝ)
@@ -642,189 +620,26 @@ private theorem no_stationaryGainComplementarity_algebra
   · exact no_stationaryGainComplementary_of_x_interior
       x y z t hx hy0 hy1 hz0 hz1 ht0 ht1
 
-private theorem periodTwo_stationaryGain_zero_raw
-    (root : Player → PMF Bool) :
-    quittingStationaryGain periodTwoReward root 0 =
-      (1 - (root 1 false).toReal *
-          ((root 2 false).toReal * (root 3 false).toReal)) *
-        ((root 1 true).toReal *
-            ((root 2 true).toReal *
-                (-(root 3 true).toReal + (root 3 false).toReal) +
-              (root 2 false).toReal * (root 3 false).toReal) +
-          (root 1 false).toReal *
-            ((root 2 true).toReal * (root 3 false).toReal +
-              (root 2 false).toReal *
-                ((root 3 true).toReal + (root 3 false).toReal))) -
-        ((root 1 true).toReal *
-            ((root 2 false).toReal *
-              ((root 3 true).toReal + (root 3 false).toReal * 4)) +
-          (root 1 false).toReal *
-            ((root 2 true).toReal * (root 3 true).toReal)) := by
+private theorem periodTwo_stationaryGain_vector
+    (root : Player → PMF Bool) (who : Player) :
+    quittingStationaryGain periodTwoReward root who =
+      stationaryGain (fun player => (root player false).toReal) who := by
   classical
-  unfold quittingStationaryGain quittingStationaryFixedOpponentsContinueMass
-    quittingFixedOpponentsContinueMass
-    quittingStationaryFixedOpponentsQuitValue
-    quittingFixedOpponentsQuitValue quittingStationaryFixedOpponentsContinueReward
-    quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
-    quittingRootExpectedPayoff
-  rw [quittingStationaryContinueMass_eq_prod_continueProbability,
-    Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
-  simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
-    periodTwoReward, expect_eq_sum]
-
-private theorem periodTwo_stationaryGain_zero
-    (root : Player → PMF Bool) :
-    quittingStationaryGain periodTwoReward root 0 =
-      stationaryGainZero (root 1 false).toReal (root 2 false).toReal
-        (root 3 false).toReal := by
-  classical
-  have h1 := quittingRoot_continueProbability_add_quitProbability root 1
-  have h2 := quittingRoot_continueProbability_add_quitProbability root 2
-  have h3 := quittingRoot_continueProbability_add_quitProbability root 3
-  have h1q : (root 1 true).toReal = 1 - (root 1 false).toReal := by linarith
-  have h2q : (root 2 true).toReal = 1 - (root 2 false).toReal := by linarith
-  have h3q : (root 3 true).toReal = 1 - (root 3 false).toReal := by linarith
-  rw [periodTwo_stationaryGain_zero_raw, h1q, h2q, h3q]
-  dsimp [stationaryGainZero]
-  ring
-
-private theorem periodTwo_stationaryGain_one_raw
-    (root : Player → PMF Bool) :
-    quittingStationaryGain periodTwoReward root 1 =
-      (1 - (root 0 false).toReal *
-          ((root 2 false).toReal * (root 3 false).toReal)) *
-        ((root 0 true).toReal *
-            (-((root 2 true).toReal * (root 3 true).toReal) +
-              (root 2 false).toReal *
-                ((root 3 true).toReal + (root 3 false).toReal)) +
-          (root 0 false).toReal *
-            ((root 2 true).toReal * (root 3 false).toReal +
-              (root 2 false).toReal *
-                ((root 3 true).toReal + (root 3 false).toReal))) -
-        ((root 0 true).toReal *
-            ((root 2 true).toReal * (root 3 false).toReal +
-              (root 2 false).toReal * ((root 3 false).toReal * 4)) +
-          (root 0 false).toReal *
-            ((root 2 true).toReal * (root 3 true).toReal)) := by
-  classical
-  unfold quittingStationaryGain quittingStationaryFixedOpponentsContinueMass
-    quittingFixedOpponentsContinueMass
-    quittingStationaryFixedOpponentsQuitValue
-    quittingFixedOpponentsQuitValue quittingStationaryFixedOpponentsContinueReward
-    quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
-    quittingRootExpectedPayoff
-  rw [quittingStationaryContinueMass_eq_prod_continueProbability,
-    Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
-  simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
-    periodTwoReward, expect_eq_sum]
-
-private theorem periodTwo_stationaryGain_one
-    (root : Player → PMF Bool) :
-    quittingStationaryGain periodTwoReward root 1 =
-      stationaryGainOne (root 0 false).toReal (root 2 false).toReal
-        (root 3 false).toReal := by
-  classical
-  have h0 := quittingRoot_continueProbability_add_quitProbability root 0
-  have h2 := quittingRoot_continueProbability_add_quitProbability root 2
-  have h3 := quittingRoot_continueProbability_add_quitProbability root 3
-  have h0q : (root 0 true).toReal = 1 - (root 0 false).toReal := by linarith
-  have h2q : (root 2 true).toReal = 1 - (root 2 false).toReal := by linarith
-  have h3q : (root 3 true).toReal = 1 - (root 3 false).toReal := by linarith
-  rw [periodTwo_stationaryGain_one_raw, h0q, h2q, h3q]
-  dsimp [stationaryGainOne]
-  ring
-
-private theorem periodTwo_stationaryGain_two_raw
-    (root : Player → PMF Bool) :
-    quittingStationaryGain periodTwoReward root 2 =
-      (1 - (root 0 false).toReal *
-          ((root 1 false).toReal * (root 3 false).toReal)) *
-        ((root 0 true).toReal *
-            (-((root 1 true).toReal * (root 3 true).toReal) +
-              (root 1 false).toReal * (root 3 false).toReal) +
-          (root 0 false).toReal *
-            ((root 1 true).toReal *
-                ((root 3 true).toReal + (root 3 false).toReal) +
-              (root 1 false).toReal *
-                ((root 3 true).toReal + (root 3 false).toReal))) -
-        ((root 0 true).toReal *
-            ((root 1 true).toReal * (root 3 false).toReal +
-              (root 1 false).toReal * (root 3 true).toReal) +
-          (root 0 false).toReal *
-            ((root 1 false).toReal * ((root 3 true).toReal * 4))) := by
-  classical
-  unfold quittingStationaryGain quittingStationaryFixedOpponentsContinueMass
-    quittingFixedOpponentsContinueMass
-    quittingStationaryFixedOpponentsQuitValue
-    quittingFixedOpponentsQuitValue quittingStationaryFixedOpponentsContinueReward
-    quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
-    quittingRootExpectedPayoff
-  rw [quittingStationaryContinueMass_eq_prod_continueProbability,
-    Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
-  simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
-    periodTwoReward, expect_eq_sum]
-
-private theorem periodTwo_stationaryGain_two
-    (root : Player → PMF Bool) :
-    quittingStationaryGain periodTwoReward root 2 =
-      stationaryGainTwo (root 0 false).toReal (root 1 false).toReal
-        (root 3 false).toReal := by
-  classical
-  have h0 := quittingRoot_continueProbability_add_quitProbability root 0
-  have h1 := quittingRoot_continueProbability_add_quitProbability root 1
-  have h3 := quittingRoot_continueProbability_add_quitProbability root 3
-  have h0q : (root 0 true).toReal = 1 - (root 0 false).toReal := by linarith
-  have h1q : (root 1 true).toReal = 1 - (root 1 false).toReal := by linarith
-  have h3q : (root 3 true).toReal = 1 - (root 3 false).toReal := by linarith
-  rw [periodTwo_stationaryGain_two_raw, h0q, h1q, h3q]
-  dsimp [stationaryGainTwo]
-  ring
-
-private theorem periodTwo_stationaryGain_three_raw
-    (root : Player → PMF Bool) :
-    quittingStationaryGain periodTwoReward root 3 =
-      (1 - (root 0 false).toReal *
-          ((root 1 false).toReal * (root 2 false).toReal)) *
-        ((root 0 true).toReal *
-            (-((root 1 true).toReal * (root 2 true).toReal) +
-              (root 1 false).toReal *
-                ((root 2 true).toReal + (root 2 false).toReal)) +
-          (root 0 false).toReal *
-            ((root 1 true).toReal * (root 2 false).toReal +
-              (root 1 false).toReal *
-                ((root 2 true).toReal + (root 2 false).toReal))) -
-        ((root 0 true).toReal *
-            ((root 1 true).toReal * (root 2 false).toReal) +
-          (root 0 false).toReal *
-            ((root 1 true).toReal * (root 2 true).toReal +
-              (root 1 false).toReal * ((root 2 true).toReal * 4))) := by
-  classical
-  unfold quittingStationaryGain quittingStationaryFixedOpponentsContinueMass
-    quittingFixedOpponentsContinueMass
-    quittingStationaryFixedOpponentsQuitValue
-    quittingFixedOpponentsQuitValue quittingStationaryFixedOpponentsContinueReward
-    quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
-    quittingRootExpectedPayoff
-  rw [quittingStationaryContinueMass_eq_prod_continueProbability,
-    Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
-  simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
-    periodTwoReward, expect_eq_sum]
-
-private theorem periodTwo_stationaryGain_three
-    (root : Player → PMF Bool) :
-    quittingStationaryGain periodTwoReward root 3 =
-      stationaryGainThree (root 0 false).toReal (root 1 false).toReal
-        (root 2 false).toReal := by
-  classical
-  have h0 := quittingRoot_continueProbability_add_quitProbability root 0
-  have h1 := quittingRoot_continueProbability_add_quitProbability root 1
-  have h2 := quittingRoot_continueProbability_add_quitProbability root 2
-  have h0q : (root 0 true).toReal = 1 - (root 0 false).toReal := by linarith
-  have h1q : (root 1 true).toReal = 1 - (root 1 false).toReal := by linarith
-  have h2q : (root 2 true).toReal = 1 - (root 2 false).toReal := by linarith
-  rw [periodTwo_stationaryGain_three_raw, h0q, h1q, h2q]
-  dsimp [stationaryGainThree]
-  ring
+  have hquit (player : Player) :
+      (root player true).toReal = 1 - (root player false).toReal := by
+    linarith [quittingRoot_continueProbability_add_quitProbability root player]
+  fin_cases who <;>
+    unfold quittingStationaryGain quittingStationaryFixedOpponentsContinueMass
+      quittingFixedOpponentsContinueMass quittingStationaryFixedOpponentsQuitValue
+      quittingFixedOpponentsQuitValue quittingStationaryFixedOpponentsContinueReward
+      quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
+      quittingRootExpectedPayoff <;>
+    rw [quittingStationaryContinueMass_eq_prod_continueProbability,
+      Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4] <;>
+    simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
+      periodTwoReward, expect_eq_sum, stationaryGain, stationaryGainZero,
+      stationaryGainOne, stationaryGainTwo, stationaryGainThree, hquit] <;>
+    ring
 
 theorem periodTwo_not_stationaryGainComplementary_of_absorbs
     (root : Player → PMF Bool)
@@ -835,6 +650,7 @@ theorem periodTwo_not_stationaryGainComplementary_of_absorbs
   let y := (root 1 false).toReal
   let z := (root 2 false).toReal
   let t := (root 3 false).toReal
+  let p : Player → ℝ := fun who => (root who false).toReal
   have hnonneg (who : Player) : 0 ≤ (root who false).toReal :=
     ENNReal.toReal_nonneg
   have hleOne (who : Player) : (root who false).toReal ≤ 1 := by
@@ -846,27 +662,17 @@ theorem periodTwo_not_stationaryGainComplementary_of_absorbs
   apply no_stationaryGainComplementarity_algebra x y z t
       (hnonneg 0) (hleOne 0) (hnonneg 1) (hleOne 1)
       (hnonneg 2) (hleOne 2) (hnonneg 3) (hleOne 3) hproduct
-  unfold stationaryGainComplementary
-  have h0 := hcomp 0
-  have h1 := hcomp 1
-  have h2 := hcomp 2
-  have h3 := hcomp 3
-  have hsum0 := quittingRoot_continueProbability_add_quitProbability root 0
-  have hsum1 := quittingRoot_continueProbability_add_quitProbability root 1
-  have hsum2 := quittingRoot_continueProbability_add_quitProbability root 2
-  have hsum3 := quittingRoot_continueProbability_add_quitProbability root 3
-  rw [periodTwo_stationaryGain_zero] at h0
-  rw [periodTwo_stationaryGain_one] at h1
-  rw [periodTwo_stationaryGain_two] at h2
-  rw [periodTwo_stationaryGain_three] at h3
-  dsimp [x, y, z, t] at *
-  constructor
-  · constructor <;> nlinarith
-  constructor
-  · constructor <;> nlinarith
-  constructor
-  · constructor <;> nlinarith
-  · constructor <;> nlinarith
+  rw [stationaryGainComplementary_iff]
+  have hp : ![x, y, z, t] = p := by
+    funext who
+    fin_cases who <;> rfl
+  rw [hp]
+  intro who
+  have hwho := hcomp who
+  rw [periodTwo_stationaryGain_vector] at hwho
+  have hquit : (root who true).toReal = 1 - (root who false).toReal := by
+    linarith [quittingRoot_continueProbability_add_quitProbability root who]
+  simpa [p, hquit] using hwho
 
 /-- No absorbing stationary product profile is an exact terminal Nash
 profile, even against the full class of behavioral deviations. -/

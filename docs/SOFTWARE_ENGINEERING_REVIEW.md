@@ -171,6 +171,31 @@ maintenance measurements, not evidence of mathematical progress.
   half-mixture lemma. A bounded `grind only [Function.update]` pilot replaces
   one definitional update split. Trials that required broad Fin/vector rule
   sets were rejected in favor of clearer `fin_cases`, `decide`, or `simp`.
+- The analytic occupation-flow development now separates certificate encoding
+  from normalization and the final alternative. Seven named lemmas expose
+  stabilization, circulation decoding, branch incompatibility, converse
+  normalization, and separator decoding; the former 378-line capstone is a
+  20-line orchestration proof with the same public statement.
+- The single-controller no-trap proof now delegates finite closed-region
+  perturbation and zero-gap optimality to `MathUE`, and Vrieze LP
+  decode/bump/re-encode work to a game-facing adapter. The original 398-line
+  file is a 140-line graph-to-optimality argument with unchanged public
+  declarations.
+- The conditioned-diffuse compiler is split at its finite-law seam. The law
+  module owns coalition measures, product-law comparison, conditioning, and
+  forced-Continue estimates; the compiler owns strategic assembly. The split
+  preserves the stronger constants established by the finite-weight API.
+- The 4,382-line Mertens--Neyman account development is now a sequential
+  Bellman, memory, Puiseux, and algebraic stack behind a thin reader-facing
+  umbrella. The 3,923-line Fink limit development is similarly divided into
+  core compactness, stationary compilers, corrected-target calculus, and
+  indexed calendars; two generic summability tests moved to `MathUE`.
+- The paired-singleton period-two stationary obstruction now bundles its four
+  gain polynomials by player and proves one recentering equivariance theorem.
+  A finite argmin replaces the hand-built coordinate-order tree, and the
+  product-law calculation is stated once for an arbitrary player. Eight raw
+  and normalized coordinate expansions were removed; the file now has 28
+  private declarations rather than 35.
 
 ## Proof-quality and grind policy
 
@@ -201,12 +226,14 @@ maintenance measurements, not evidence of mathematical progress.
 
 ## GameTheory2 preparation and scope
 
-The review identifies preparation work—interface inventory, semantic
-assumptions, import-boundary tests, and a compatibility build harness—that
-would be needed before evaluating a future GameTheory2 cutover. Cutover is
-explicitly deferred. No parallel dependency, speculative port, or compatibility
-claim belongs in the present roadmap; any reopening requires a separate
-decision and an updated transition record.
+The detailed compatibility census, semantic target, staged port, and acceptance
+gates are recorded in [`GAMETHEORY2_MIGRATION_PLAN.md`](GAMETHEORY2_MIGRATION_PLAN.md).
+The inspected successor is source-incompatible, has no quitting API, changes
+PMF/history/profile semantics, and currently has no fetchable remote, so this
+is not an import-path substitution. Cutover is explicitly deferred. No
+parallel dependency, speculative port, or compatibility claim belongs in the
+present roadmap; any reopening requires a separate decision and an updated
+transition record.
 
 ## Conclusion
 
