@@ -17,7 +17,11 @@ the present interfaces and rules.
 5. [PROGRAM.md](PROGRAM.md) — the stable research and formalization method.
 6. [PIPELINE.md](PIPELINE.md) — how Discussions, Issues, and PRs record and
    promote work.
-7. [references/README.md](references/README.md) — the external literature of
+7. [SOFTWARE_ENGINEERING_REVIEW.md](SOFTWARE_ENGINEERING_REVIEW.md) — the
+   completed engineering review, proof-quality policy, and measured baseline.
+8. [ENGINEERING_ROADMAP.md](ENGINEERING_ROADMAP.md) — preparatory engineering
+   phases and acceptance gates.
+9. [references/README.md](references/README.md) — the external literature of
    record.
 
 Integrated Lean is the source of exact theorem truth. The status page is a

@@ -1,0 +1,153 @@
+# Software-engineering review
+
+This is the durable engineering review of the current tree. It records
+software structure and proof-production risks, not theorem status or a stable
+downstream API. Extraction and repository-transition facts are recorded only
+in [`TRANSITION.md`](../TRANSITION.md).
+
+## Baseline
+
+The reconstruction baseline completed a full `lake build` with 10,155 jobs and
+ran a nonvacuous `AxiomAudit` over the project-owned declarations. The current
+inventory has 911 `UniformEquilibrium` Lean modules and 1,375 project-owned
+Lean files scanned by the trust checker. The production boundary is the
+pinned `GameTheory` submodule.
+
+The review also found 16 `UniformEquilibrium` modules that are not reachable
+from `UniformEquilibrium.lean`. This is an integration defect, not evidence
+that those modules are invalid. The import-graph check identifies the exact
+paths and should be the authoritative count as the tree changes.
+
+The reviewed Lean surface in `MathUE`, `UniformEquilibrium`, `Research`, and
+`Theorems` contains 1,363 files and approximately 528,643 lines. These are
+maintenance measurements, not evidence of mathematical progress.
+
+## Strengths
+
+- The semantic waist, evidence seals (`M`, `L`, `A`, `C`), and repository lanes
+  separate checked mathematics from experiments, research, and attribution.
+- Generated status/frontier sources, local-link checks, warnings-as-errors,
+  and the exhaustive axiom audit provide useful repeatable gates.
+- The project intentionally avoids a compatibility-API promise and keeps
+  generic mathematics in `MathUE` and game semantics in `UniformEquilibrium`.
+- CI exercises documentation, trust, unit-test, and full-build gates; narrow
+  module checks remain available for iteration.
+
+## Findings
+
+### Scanner and inventory
+
+1. The trust scanner mishandled Lean prime-suffixed identifiers: a prime in
+   `value'` could be read as the start of a character literal, hiding a later
+   forbidden token. The scanner needs identifier-aware lexical handling plus
+   regression tests for multiple primes, escapes, nested comments, and
+   strings. A clean scan is not a substitute for those tests.
+2. Sixteen UE modules are not umbrella-reachable: the 15-module closure rooted
+   at `UniformEquilibrium.Quitting.Examples.BlockPair.All`, and
+   `UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixMetric`. The
+   inventory must classify each as an intentional quarantine leaf, a missing
+   import edge, or an ownership error; importing every file without reviewing
+   that classification is not a fix.
+3. `MathUE.LinearProgramming.SingletonLCP` crosses the generic boundary by
+   importing game-semantic `GameTheory.Basic`. It must move behind an allowed
+   generic interface or be reclassified; `MathUE` must not absorb that
+   dependency accidentally.
+
+### Dependency shape and ownership
+
+4. Architecture and certificate layers depend on each other in places (for
+   example, enforcement ledgers and compilers), and `Quitting` and
+   `Diagnostics` also cross-import. These inversions make facades and local
+   checks less effective and blur ownership of semantic interfaces.
+5. The production umbrellas and several modules use broad imports.
+   `UniformEquilibrium.lean` has 486 imports, including redundant direct
+   `MathUE.*` imports after importing `MathUE`, and the diagnostics aggregator
+   `CounterexampleRegimeAll.lean` has 255 imports and no declarations. Large
+   files and internal declarations therefore behave like an implicit API,
+   increasing rebuild and review cost. `lakefile.lean` also raises recursion
+   and instance-synthesis limits globally; their necessity should be measured
+   and ratcheted rather than expanded.
+6. `Research` contains eleven one-import forwarding shims and promoted forks
+   whose current owner or relationship to production is not apparent.
+   `PhaseOccupationDuality`, `GraphDirectedPeriodicLift`,
+   `WeightedSecurityWelfareAssembly`, and `DiscreteHazardStopping` retain
+   bodies or descriptions superseded by production modules. Each needs a
+   disposition: retain a genuine residual delta, replace with a canonical
+   reader-facing alias, or remove it from the Research inventory.
+7. The K11 implementation has a maintained entry point but lacks durable
+   generator/source-data provenance. A future regeneration must be able to
+   identify its inputs, transformations, generated leaves, and checker without
+   relying on an informal working-tree memory. Transition provenance remains
+   in [`TRANSITION.md`](../TRANSITION.md).
+8. `scripts/sync_from_source.py` is historical reconstruction tooling that can
+   remove production files absent from the old source snapshot. It must be
+   frozen as staging-only tooling with a guard that rejects the live repository
+   as a target; it must not become a synchronizer for current development.
+
+### Proof engineering and duplication
+
+9. Current tactic counts are heavily skewed toward explicit case and algebraic
+   expansion: 2 `grind`, 659 `fin_cases`, approximately 4,163 `linarith`, 1,392
+   `nlinarith`, 2,545 `ring`/`ring_nf`, and 2,111 `norm_num` occurrences. These
+   are lexical occurrence counts, not theorem counts or quality scores, but
+   they identify useful pilots for replacing brittle case trees with reusable
+   lemmas or bounded automation.
+10. Ten handwritten fixed-arity PMF Fubini implementations, plus one local
+    forwarding declaration, duplicate the same Fin3/Fin4 product-expectation
+    proof instead of using a shared API. Two long proofs in
+    `Quitting/Cycles/ConditionedDiffuseCompiler.lean` separately rebuild
+    closely related signed-mass and bounded-expectation estimates. This
+    multiplies maintenance and makes semantic mismatches harder to detect.
+11. `MathUE/Probability/AnalyticOccupationFlow.lean` (913 lines),
+    `UniformEquilibrium/SpecialCases/SingleController/NoTrap.lean` (398
+    lines), and the conditioned-diffuse compiler family contain long,
+    interleaved proof structures. Their decomposition should preserve exact
+    declarations while exposing small algebraic and probabilistic interfaces.
+12. Sixty Lean files exceed 1,000 lines and eleven exceed 2,000. The largest
+    production files combine multiple conceptual layers, notably
+    `MertensNeyman/AccountStrategy.lean` (4,382 lines) and `Fink/Limit.lean`
+    (3,923 lines). Splits should follow theorem interfaces, not line quotas.
+
+## Proof-quality and grind policy
+
+- Every promoted theorem remains a kernel-checked Lean declaration under its
+  stated imports. `sorry`, `admit`, explicit axioms, `native_decide`,
+  `implemented_by`, unsafe/partial declarations, project-owned `set_option`,
+  and weakened warning/linter settings are forbidden.
+- `grind`, `fin_cases`, and other automation are acceptable for local routine
+  work when they produce an ordinary checked term, have a bounded and
+  reproducible command, and do not conceal a missing mathematical interface.
+  Prefer a named lemma or shared API when a proof is repeated, huge, or
+  sensitive to elaboration order.
+- For a touched finite or propositional case tree longer than roughly ten
+  lines, development must try `grind?` or replace the tree with a symmetry,
+  finite table, or reusable lemma. Commit a constrained `grind only [...]`
+  proof when it is stable and clearer. Keep `ring`, `norm_num`, `omega`,
+  `linarith`, filters, and analytic tactics in their proper domains.
+- Changed proof bodies over 80--100 lines receive decomposition review; bodies
+  over 150 lines require an explicit reason not to extract named mathematical
+  steps. These are review ratchets, not claims that short proofs are
+  intrinsically better.
+- Generated numerical or certificate data is evidence until a deterministic
+  checker or kernel-checked consumer validates it. Tactic counts and line
+  counts measure maintenance risk; they do not provide `M`, `L`, `A`, or `C`.
+- A proof ratchet must preserve the exact statement and quantifiers. Never
+  weaken a claim, widen imports, or add a trust escape hatch merely to reduce
+  grind.
+
+## GameTheory2 preparation and scope
+
+The review identifies preparation work—interface inventory, semantic
+assumptions, import-boundary tests, and a compatibility build harness—that
+would be needed before evaluating a future GameTheory2 cutover. Cutover is
+explicitly deferred. No parallel dependency, speculative port, or compatibility
+claim belongs in the present roadmap; any reopening requires a separate
+decision and an updated transition record.
+
+## Conclusion
+
+The project has strong proof-integrity and research-lane foundations, but its
+large manually curated surface needs boundary, ownership, dependency, and
+proof-maintenance ratchets. The companion roadmap sequences those controls as
+preparatory phases and keeps mathematical closure separate from engineering
+progress.
