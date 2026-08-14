@@ -1,5 +1,15 @@
 # certsearch
 
+## K11 migrated generated-data integrity
+
+`block_pair/k11_generated_data_manifest.json` records the exact surviving K11
+preconditioner and Jacobian-cache payloads.  Run
+`python scripts/check_k11_generated_data.py` from the repository root to check
+their full-file and formatting-independent logical hashes, 31-by-31 shapes,
+and basic payload invariants.  This is an integrity check for migrated Lean
+evidence, not a producer for the lost original numerical computation; the
+historical limitation is recorded in [`../../TRANSITION.md`](../../TRANSITION.md).
+
 P13 ("certificate-guided weight search", `Experiments/PROPOSALS.md`), slice
 one: the exact filter layer and its validation suite. Plain Python 3, stdlib
 + `fractions` only -- no `numpy`, no `sympy`. Exact rational arithmetic

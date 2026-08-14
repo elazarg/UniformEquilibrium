@@ -4,7 +4,6 @@ import Research.Counterexamples.Pairwise.PWPacketWindowConsistency
 import Research.Counterexamples.Pairwise.TPWCyclicFourTripleWitness
 import Research.Counterexamples.Pairwise.TailPacketCyclicFourWitness
 import Research.General.AnytimeDetectionConditional
-import Research.General.BackwardStableComplementarity
 import Research.General.BinaryKLQuadratic
 import Research.General.BufferedOneSeamReturnOrExit
 import Research.General.CalibrationSliceCompactness
@@ -20,10 +19,8 @@ import Research.General.CyclicAbelCesaroModes
 import Research.General.CyclicPhaseReynolds
 import Research.General.DebtTransferTriangleGeometry
 import Research.General.DeterministicRateDenominator
-import Research.General.DiscreteHazardStopping
 import Research.General.DynamicPotentialCoboundary
 import Research.General.EntropyProduction
-import Research.General.EquivariantAveraging
 import Research.General.EquivariantWordTransport
 import Research.General.EscrowDrawdown
 import Research.General.FiniteGroupInvariantWeights
@@ -31,19 +28,16 @@ import Research.General.FiniteGroupOrbitGluing
 import Research.General.FiveCycleIncidenceSupportRigidity
 import Research.General.FourRoleObstructionReduction
 import Research.General.GraphDirectedFullShiftDensity
-import Research.General.GraphDirectedPeriodicLift
 import Research.General.GreedyBufferedExitDecoder
 import Research.General.GroupSumLiveEntropy
 import Research.General.HazardScaleDirectionBlowup
 import Research.General.KakutaniProductDichotomy
 import Research.General.KrawczykPreconditionerInjectivePrototype
-import Research.General.LedgeredDissipativity
 import Research.General.MaxAffineHolonomySemigroup
 import Research.General.MinimumSemanticPlateauConsistency
 import Research.General.ORCoupledCalibrationGame
 import Research.General.PathCarrierPrototype
 import Research.General.PhaseLiftedWelfareCap
-import Research.General.PhaseOccupationDuality
 import Research.General.PureTimeWitnessNormalForm
 import Research.General.Question175OwnerNeverFloor
 import Research.General.RandomDeviationAuditCardinalReduction
@@ -53,10 +47,8 @@ import Research.General.ReversibleDirichletContraction
 import Research.General.RolloverLiquidationGame
 import Research.General.SeveranceMutualThreeGames
 import Research.General.SignedResetSeriesContraction
-import Research.General.SignedTargetTransport
 import Research.General.WeightedClockRankReduction
 import Research.General.WeightedSaturationDefect
-import Research.General.WeightedSecurityWelfareAssembly
 import Research.Quitting.ActiveSetSupport
 import Research.Quitting.ActualRowDebtLocalizationAdapters
 import Research.Quitting.AtomEndpointReturnSeparation
@@ -67,10 +59,8 @@ import Research.Quitting.CancellationSafeAggregationStationaryRegression
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
 import Research.Quitting.CausalQuitConvexHull
-import Research.Quitting.CausalQuitFinitePayoff
 import Research.Quitting.CausalTailEscapeMaxAbsorptionDispatch
 import Research.Quitting.CausalTailEscapeReturnGate
-import Research.Quitting.CertifiedBoundaryPolyhedron
 import Research.Quitting.CertifiedForcedOwnerBackgroundHost
 import Research.Quitting.CertifiedForcedOwnerEndpointFlip
 import Research.Quitting.CertifiedForcedOwnerRectanglePacket
@@ -99,7 +89,6 @@ import Research.Quitting.CyclicKofNSupportedRootRetentionNoGo
 import Research.Quitting.CyclicSymmetricStationaryGapIVT
 import Research.Quitting.DebtTransportMarkovMonodromy
 import Research.Quitting.DiffusePairCollisionBound
-import Research.Quitting.DirectionBarycenter
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
 import Research.Quitting.ElementaryTailSemanticReduction
 import Research.Quitting.EnrichedSeamCompression
@@ -117,7 +106,6 @@ import Research.Quitting.FullCoreDuplicatedCyclicLasso
 import Research.Quitting.FullRateStationaryVerifier
 import Research.Quitting.HandshakeClub
 import Research.Quitting.HolonomyEquivalenceCompression
-import Research.Quitting.JoinMonotoneUniform
 import Research.Quitting.KActiveCompactPath
 import Research.Quitting.KActiveMarkedAtomBudgetPathConsumer
 import Research.Quitting.KActiveMarkedAtomCompactPath
@@ -177,8 +165,6 @@ import Research.Quitting.TerminalSemanticConcentratedSingletonStrategicDispatchA
 import Research.Quitting.TerminalSemanticCoordinatewiseBoxBarrierNoGo
 import Research.Quitting.TerminalSemanticDebtSaturatedBarrierNoGo
 import Research.Quitting.TerminalSemanticGlobalDebtBarrierCertificate
-import Research.Quitting.TerminalSemanticLawCarrierCausalizationAxiomAudit
-import Research.Quitting.TerminalSemanticResetFaceLawTemporalSplitAxiomAudit
 import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertion
 import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertionAxiomAudit
 import Research.Quitting.TwoResetFourRoleAdapter

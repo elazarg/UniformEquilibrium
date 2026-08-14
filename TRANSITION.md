@@ -117,10 +117,10 @@ UE prerequisite port and Lean 4.32.2 requirement are in `2ee854b`.
 
 Trust-clean experimental Lean was placed under `Research` and made reachable
 from `Research.lean`. Forwarding-only shims were omitted when their declarations
-already belonged to production. The current
-`Research/General/KrawczykPolynomialLipschitzPrototype.lean` remains outside the
-umbrella because it uses a dual-interval derivative interface not provided by
-the current math library.
+already belonged to production. The source
+`Research/General/KrawczykPolynomialLipschitzPrototype.lean` is not retained as
+a forwarding module; its surviving generic interface is maintained in
+`MathUE/Interval/PolynomialLipschitz.lean`.
 
 The maintained period-eleven entry point is
 `Research.Quitting.BlockPair.K11`. Redundant `K11` filename prefixes were
@@ -259,6 +259,32 @@ compositional chain; importing both redeclares the theorem in one namespace.
 The included `Preconditioner.lean` keeps the exact data but replaces one
 reducible generated check with kernel reduction. No `.olean`, cache, generated
 JSON certificate, or Python cache was copied.
+
+### Period-eleven generated-data provenance
+
+The surviving `Preconditioner.lean` header named
+`q117_krawczyk_certificate.json` and
+`q117_emit_lean_preconditioner.py`. Neither named artifact was present in this
+repository or the adjacent migrated source working tree at
+`/mnt/d/workspace/games/UniformEquilibrium` during the provenance audit. The
+Jacobian cache likewise had no surviving source-data or producer record. The
+complete tree of source revision
+`171e014480bfd59f09403abc68af45b7f2c44fb5` was also searched in the current
+`GameTheory` submodule. It contains neither named q117 artifact nor a matching
+K11 JSON, Python, Jacobian-cache, or preconditioner path.
+
+The two checked-in Lean files are consequently classified as migrated
+evidence without a reproducible original producer. The structured record
+`Experiments/certsearch/block_pair/k11_generated_data_manifest.json` stores
+full-file hashes and formatting-independent hashes of the parsed exact
+31-by-31 payloads. `scripts/check_k11_generated_data.py` deterministically
+checks those hashes, the matrix shapes, the dyadic precision and scale, the
+interval ordering, and the row-zero absolute-sum cache. It is a freshness and
+integrity check only: it neither reconstructs the missing JSON nor recomputes
+the preconditioner or Jacobian intervals from the game data. Thus the record
+does not supply independent numerical provenance, an adapter from recovered
+source data, or any stronger mathematical claim than the existing conditional
+Lean consumers.
 
 ## Questions, manuscripts, and supporting documents
 

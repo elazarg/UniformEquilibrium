@@ -1,6 +1,14 @@
-/- Generated from q117_krawczyk_certificate.json by
-   q117_emit_lean_preconditioner.py.  JSON integers are emitted
-   directly as decimal strings; no floating-point conversion occurs. -/
+/-
+# Migrated K11 preconditioner payload
+
+The legacy header named `q117_krawczyk_certificate.json` and
+`q117_emit_lean_preconditioner.py`, but neither artifact survived the
+repository extraction.  This checked-in Lean file is therefore the canonical
+surviving payload, not evidence that the original numerical computation can
+be rerun.  `scripts/check_k11_generated_data.py` checks its structure and
+freshness against the explicit non-regeneration record in
+`Experiments/certsearch/block_pair/k11_generated_data_manifest.json`.
+-/
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11DyadicData
 
 namespace GameTheory.BlockPairK11.DyadicCertificate

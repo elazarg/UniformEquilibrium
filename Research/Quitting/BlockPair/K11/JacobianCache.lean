@@ -1,3 +1,13 @@
+/-
+# Migrated K11 Jacobian interval payload
+
+The source data and producer for this generated-looking cache did not survive
+the repository extraction.  This checked-in Lean file is therefore the
+canonical surviving payload, not evidence that the original interval
+computation can be rerun.  `scripts/check_k11_generated_data.py` checks its
+structure and freshness against the explicit non-regeneration record in
+`Experiments/certsearch/block_pair/k11_generated_data_manifest.json`.
+-/
 import MathUE.Interval.DyadicInterval
 import Mathlib.Data.Fin.VecNotation
 import Mathlib.Data.Fintype.Fin

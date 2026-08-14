@@ -1,1 +1,0 @@
-import UniformEquilibrium.Quitting.Circulation.DirectionBarycenter

@@ -8,15 +8,15 @@ in [`TRANSITION.md`](../TRANSITION.md).
 ## Baseline
 
 The reconstruction baseline completed a full `lake build` with 10,155 jobs and
-ran a nonvacuous `AxiomAudit` over the project-owned declarations. The current
-inventory has 911 `UniformEquilibrium` Lean modules and 1,375 project-owned
-Lean files scanned by the trust checker. The production boundary is the
-pinned `GameTheory` submodule.
+ran a nonvacuous `AxiomAudit` over the project-owned declarations. At review
+start, the inventory had 911 `UniformEquilibrium` Lean modules and 1,375
+project-owned Lean files scanned by the trust checker. The production boundary
+is the pinned `GameTheory` submodule.
 
-The review also found 16 `UniformEquilibrium` modules that are not reachable
-from `UniformEquilibrium.lean`. This is an integration defect, not evidence
-that those modules are invalid. The import-graph check identifies the exact
-paths and should be the authoritative count as the tree changes.
+The review initially found 16 `UniformEquilibrium` modules that were not
+reachable from `UniformEquilibrium.lean`. This is an integration defect, not
+evidence that those modules are invalid. The import-graph check identifies the
+exact paths and should be the authoritative count as the tree changes.
 
 The reviewed Lean surface in `MathUE`, `UniformEquilibrium`, `Research`, and
 `Theorems` contains 1,363 files and approximately 528,643 lines. These are
@@ -107,6 +107,35 @@ maintenance measurements, not evidence of mathematical progress.
     production files combine multiple conceptual layers, notably
     `MertensNeyman/AccountStrategy.lean` (4,382 lines) and `Fink/Limit.lean`
     (3,923 lines). Splits should follow theorem interfaces, not line quotas.
+
+## Remediation record
+
+- The lexical scanner now distinguishes prime-suffixed Lean identifiers from
+  character literals, with regression tests covering the masking failure.
+- A checked import-graph inventory now enforces production reachability and
+  lane boundaries. The 16 production orphans are integrated, and the
+  game-facing quitting-reward adapter has moved out of `MathUE`.
+- Eleven declaration-free Research forwarding modules were removed. Their
+  canonical owners are the imported production or experiment modules:
+  `EndpointBackwardStability`, `EquivariantAveraging`,
+  `LedgeredDissipativity`, `SignedTargetTransport`,
+  `TerminalSemanticCausalQuitAggregation`, `CertifiedBoundaryPolyhedron`,
+  `DirectionBarycenter`, `JoinMonotoneUniform`, the two terminal-semantic
+  carrier modules, and `MathUE.Interval.PolynomialLipschitz`.
+- Four promoted Research bodies were removed in favor of their maintained
+  owners: `MathUE.Probability.PhaseOccupationDuality`,
+  `MathUE.Topology.GraphDirectedPeriodicLift`, the production weighted-security
+  assembly/bias pair, and the generic discrete-hazard stopping API and its
+  checked consumers. No compatibility claim is made for the removed Research
+  namespaces.
+- The two surviving K11 numeric payloads now have a structured integrity
+  manifest and deterministic checker. The exact migration source revision and
+  adjacent source tree contain neither the named JSON input nor its emitter,
+  so this is explicitly not a reproducible numerical generator or an
+  independent source-data adapter.
+- Historical reconstruction is now staging-only: its preflight rejects live,
+  repository, overlapping, broad, and symlink targets, and `--dry-run` emits a
+  deterministic operation manifest before any mutation.
 
 ## Proof-quality and grind policy
 

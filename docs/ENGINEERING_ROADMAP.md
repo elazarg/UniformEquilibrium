@@ -11,8 +11,8 @@ promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 | 1 | Review baseline | Complete | Review facts and measured risks are recorded |
 | 2 | Trust scanner | Complete | Prime-aware scanner and lexical regression suite pass |
 | 3 | Import graph and inventory | Complete | Zero unexplained orphans and boundary violations |
-| 4 | Ownership, Research, provenance, sync | In progress | Every shim/fork and sync decision has an owner and manifest |
-| 5 | Facades and dependency inversions | Queued | Architecture/certificate and Quitting/Diagnostics edges are layered |
+| 4 | Ownership, Research, provenance, sync | Complete | Every shim/fork and sync decision has an owner and manifest |
+| 5 | Facades and dependency inversions | In progress | Architecture/certificate and Quitting/Diagnostics edges are layered |
 | 6 | Proof ratchets and Fubini API | Queued | Shared PMF identities replace selected duplication |
 | 7 | Finite-case grind pilots | Queued | Pilot proofs reduce brittle expansion without weakening claims |
 | 8 | Monolith decomposition | Queued | Long proof files split behind checked interfaces |
@@ -49,11 +49,13 @@ to improve a count.
 ### 4. Ownership, Research, provenance, and sync
 
 Audit stale Research shims and promoted forks. Give each a retain, replace,
-promote, or quarantine disposition. Add a durable K11 generator/source-data
-record. Freeze `sync_from_source.py` as historical staging-only tooling and add
-a guard that rejects the live repository as a target; do not adapt it into a
-current-tree synchronizer. Acceptance is reproducible generated evidence and
-an owner for every exception; historical transition facts stay in
+promote, or quarantine disposition. Add a durable K11 generated-data record;
+if its original source or producer is absent, preserve that limitation and
+check only what can be reproduced. Freeze `sync_from_source.py` as historical
+staging-only tooling and add a guard that rejects the live repository as a
+target; do not adapt it into a current-tree synchronizer. Acceptance is a
+reproducible integrity check with an explicit non-regeneration boundary and an
+owner for every exception; historical transition facts stay in
 [`TRANSITION.md`](../TRANSITION.md).
 
 ### 5. Facades and dependency inversions

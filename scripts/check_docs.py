@@ -58,6 +58,16 @@ def check_generated(errors: list[str]) -> None:
     if result.returncode:
         errors.append(result.stdout.strip())
 
+    k11_result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "check_k11_generated_data.py")],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if k11_result.returncode:
+        errors.append(k11_result.stdout.strip())
+
 
 def check_markdown_names(errors: list[str]) -> None:
     result = subprocess.run(
