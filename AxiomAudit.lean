@@ -1156,6 +1156,7 @@ import UniformEquilibrium.Quitting.Punishment.SoloCycleCompletion
 import UniformEquilibrium.Quitting.Punishment.SoloFloorCompletion
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
+import UniformEquilibrium.Quitting.RewardBound
 import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
 import UniformEquilibrium.Quitting.Root.EndpointBackwardStability
 import UniformEquilibrium.Quitting.Root.FirstBranch
