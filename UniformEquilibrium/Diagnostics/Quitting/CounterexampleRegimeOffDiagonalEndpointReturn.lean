@@ -186,9 +186,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_resetFaceDisp
       hunique⟩ :=
     exists_resetFace_minimizer_with_unique_allContinue_capNash
       (reward := reward) frontier.base cluster.1 packet.observer
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) frontier.base_minimum
-      frontier.base_positive hclusterCarrier hclusterReset
+      frontier.base_minimum frontier.base_positive hclusterCarrier
+      hclusterReset
   refine ⟨⟨subseq, hsubseq, packet.rank_strictMono.comp hsubseq,
     cluster, hcluster, ?_, hclusterReset, hclusterFiber, returned, hreturned,
     hreturnedReset, hbaseLe, hreturnedLe, htransferIdentity, htransfer,

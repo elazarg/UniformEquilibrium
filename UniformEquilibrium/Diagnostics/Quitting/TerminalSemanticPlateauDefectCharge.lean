@@ -252,8 +252,7 @@ defect at every selected row. -/
 theorem quittingLiveMass_mul_spineDebt_le_initialDebt_of_prior_pureContinue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : ι) :
     ∀ time,
       (∀ stage < time,
         quittingProfileLiveRoot reward profile stage who = PMF.pure false) →
@@ -286,7 +285,7 @@ theorem quittingLiveMass_mul_spineDebt_le_initialDebt_of_prior_pureContinue
             quittingTerminalSemanticPrefix reward root tail := by
           dsimp only [current, root, tail]
           exact quittingTerminalSemanticPair_spine_eq_prefix
-            reward profile time hM hreward
+            reward profile time
         rw [hprefix]
         exact htransport
       have hjoint : quittingJointContinueMass reward profile time =
@@ -323,8 +322,7 @@ semantic debt of that player. -/
 theorem quittingLiveMass_mul_coordinateNashDefect_le_initialDebt_of_prior_pureContinue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (who : ι) (time : ℕ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (who : ι) (time : ℕ)
     (hprior : ∀ stage < time,
       quittingProfileLiveRoot reward profile stage who = PMF.pure false) :
     quittingLiveMass reward profile time *
@@ -343,17 +341,17 @@ theorem quittingLiveMass_mul_coordinateNashDefect_le_initialDebt_of_prior_pureCo
     quittingTerminalSemanticPair_mem_carrier reward _
   have htailDebt : 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htailCarrier who
+      reward htailCarrier who
   have hlocal :=
     quittingRootCoordinateNashDefect_le_terminalSemanticDebt_prefix
       reward tail root who htailDebt
   rw [← quittingTerminalSemanticPair_spine_eq_prefix
-    reward profile time hM hreward] at hlocal
+    reward profile time] at hlocal
   have hscaled := mul_le_mul_of_nonneg_left hlocal
     (quittingLiveMass_nonneg reward profile time)
   exact hscaled.trans
     (quittingLiveMass_mul_spineDebt_le_initialDebt_of_prior_pureContinue
-      reward profile who hM hreward time hprior)
+      reward profile who time hprior)
 
 /-- The selected player's live root in a pure-time deviation is exactly its
 displayed deterministic pure-time hazard. -/
@@ -385,9 +383,7 @@ defect at every row up to and including its selected stop. -/
 theorem quittingLiveMass_mul_coordinateNashDefect_update_pureTime_some_le_initialDebt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (who : ι) (stop time : ℕ) (htime : time ≤ stop)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : ι) (stop time : ℕ) (htime : time ≤ stop) :
     let deviated := Function.update profile who
       (quittingPureTimeBehaviorStrategy reward who (some stop))
     quittingLiveMass reward deviated time *
@@ -399,7 +395,7 @@ theorem quittingLiveMass_mul_coordinateNashDefect_update_pureTime_some_le_initia
         (quittingTerminalSemanticPair reward deviated) who := by
   dsimp only
   apply quittingLiveMass_mul_coordinateNashDefect_le_initialDebt_of_prior_pureContinue
-    reward _ who time hM hreward
+    reward _ who time
   intro stage hstage
   exact
     quittingProfileLiveRoot_update_pureTime_some_eq_pureContinue_of_lt
@@ -410,8 +406,7 @@ at every finite row. -/
 theorem quittingLiveMass_mul_coordinateNashDefect_update_pureTime_none_le_initialDebt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (who : ι) (time : ℕ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : ι) (time : ℕ) :
     let deviated := Function.update profile who
       (quittingPureTimeBehaviorStrategy reward who none)
     quittingLiveMass reward deviated time *
@@ -423,7 +418,7 @@ theorem quittingLiveMass_mul_coordinateNashDefect_update_pureTime_none_le_initia
         (quittingTerminalSemanticPair reward deviated) who := by
   dsimp only
   apply quittingLiveMass_mul_coordinateNashDefect_le_initialDebt_of_prior_pureContinue
-    reward _ who time hM hreward
+    reward _ who time
   intro stage _hstage
   rw [quittingProfileLiveRoot_update_pureTime_self,
     quittingPureTimeHazard_none]
@@ -474,9 +469,7 @@ the actual root's total Nash defect. -/
 theorem minimumTerminalSemantic_sum_opponentAbsorption_charge_le_excess_add_defect
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum tail : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (_hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -489,11 +482,11 @@ theorem minimumTerminalSemantic_sum_opponentAbsorption_charge_le_excess_add_defe
         quittingRootTotalNashDefect reward tail.1 root := by
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htail
+      reward htail
   let current := quittingTerminalSemanticPrefix reward root tail
   have hcurrent : current ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root tail hM hreward htail
+      reward root tail htail
   have hcharge :=
     sum_opponentAbsorptionMass_mul_debt_le_sumDebt_drift_add_totalNashDefect
       reward tail root htailDebt
@@ -579,8 +572,6 @@ theorem quittingStageCoalitionMass_mul_tailDebt_le_drift_add_nashDefect
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
     (terminal : {S : Finset ι // S.Nonempty}) (who other : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hother : other ∈ terminal.val) (hne : other ≠ who) :
     let tail := quittingTerminalSemanticPair reward
       (quittingAllContinueProfileSpine reward profile (time + 1))
@@ -600,7 +591,7 @@ theorem quittingStageCoalitionMass_mul_tailDebt_le_drift_add_nashDefect
     quittingTerminalSemanticPair_mem_carrier reward _
   have htailDebt : 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htailCarrier who
+      reward htailCarrier who
   have hrootCharge :=
     quittingRootCoalitionMass_mul_debt_le_drift_add_nashDefect
       reward tail root terminal.val who other htailDebt hother hne
@@ -613,8 +604,7 @@ theorem quittingStageCoalitionMass_mul_tailDebt_le_drift_add_nashDefect
     rw [quittingStageCoalitionMass_eq_liveMass_mul_rootCoalitionMass]
     nlinarith [quittingLiveMass_nonneg reward profile time]
   have hscaled := mul_le_mul_of_nonneg_right hstageLe htailDebt
-  rw [quittingTerminalSemanticPair_spine_eq_prefix
-    reward profile time hM hreward]
+  rw [quittingTerminalSemanticPair_spine_eq_prefix reward profile time]
   exact hscaled.trans hrootCharge
 
 /-- Survival-weighted live-row charge with the local Nash defect discharged
@@ -624,8 +614,6 @@ theorem quittingStageCoalitionMass_mul_tailDebt_le_liveMass_mul_drift_add_initia
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
     (terminal : {S : Finset ι // S.Nonempty}) (who other : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprior : ∀ stage < time,
       quittingProfileLiveRoot reward profile stage who = PMF.pure false)
     (hother : other ∈ terminal.val) (hne : other ≠ who) :
@@ -650,7 +638,7 @@ theorem quittingStageCoalitionMass_mul_tailDebt_le_liveMass_mul_drift_add_initia
     quittingTerminalSemanticPair_mem_carrier reward _
   have htailDebt : 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htailCarrier who
+      reward htailCarrier who
   have hrootCharge :=
     quittingRootCoalitionMass_mul_debt_le_drift_add_nashDefect
       reward tail root terminal.val who other htailDebt hother hne
@@ -658,11 +646,11 @@ theorem quittingStageCoalitionMass_mul_tailDebt_le_liveMass_mul_drift_add_initia
   have hweightedCharge := mul_le_mul_of_nonneg_left hrootCharge hliveNonneg
   have hdefect :=
     quittingLiveMass_mul_coordinateNashDefect_le_initialDebt_of_prior_pureContinue
-      reward profile who time hM hreward hprior
+      reward profile who time hprior
   have hprefix : current = quittingTerminalSemanticPrefix reward root tail := by
     dsimp only [current, root, tail]
     exact quittingTerminalSemanticPair_spine_eq_prefix
-      reward profile time hM hreward
+      reward profile time
   rw [← hprefix] at hweightedCharge
   rw [quittingStageCoalitionMass_eq_liveMass_mul_rootCoalitionMass]
   change (quittingLiveMass reward profile time *
@@ -699,8 +687,6 @@ theorem quittingStageCoalitionMass_mul_tailDebt_le_initialDebt_of_no_positive_dr
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
     (terminal : {S : Finset ι // S.Nonempty}) (who other : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprior : ∀ stage < time,
       quittingProfileLiveRoot reward profile stage who = PMF.pure false)
     (hother : other ∈ terminal.val) (hne : other ≠ who)
@@ -718,7 +704,7 @@ theorem quittingStageCoalitionMass_mul_tailDebt_le_initialDebt_of_no_positive_dr
         (quittingTerminalSemanticPair reward profile) who := by
   have hcharge :=
     quittingStageCoalitionMass_mul_tailDebt_le_liveMass_mul_drift_add_initialDebt
-      reward profile time terminal who other hM hreward hprior hother hne
+      reward profile time terminal who other hprior hother hne
   have hliveNonneg := quittingLiveMass_nonneg reward profile time
   have hweightedDrift : quittingLiveMass reward profile time *
       (quittingTerminalSemanticDebt
@@ -737,8 +723,6 @@ theorem terminalSemanticDebt_spine_lt_succ_of_initialDebt_lt_stageCharge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
     (terminal : {S : Finset ι // S.Nonempty}) (who other : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprior : ∀ stage < time,
       quittingProfileLiveRoot reward profile stage who = PMF.pure false)
     (hother : other ∈ terminal.val) (hne : other ≠ who)
@@ -758,7 +742,7 @@ theorem terminalSemanticDebt_spine_lt_succ_of_initialDebt_lt_stageCharge
   have hdrift := le_of_not_gt hnot
   have hcharge :=
     quittingStageCoalitionMass_mul_tailDebt_le_initialDebt_of_no_positive_drift
-      reward profile time terminal who other hM hreward hprior hother hne hdrift
+      reward profile time terminal who other hprior hother hne hdrift
   exact (not_lt_of_ge hcharge) hlarge
 
 end GameTheory

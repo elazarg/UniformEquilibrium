@@ -122,8 +122,6 @@ theorem quittingTerminalExploitability_rootThenContinuation_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hnash : IsεQuittingRootEndpointNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root) :
@@ -139,9 +137,9 @@ theorem quittingTerminalExploitability_rootThenContinuation_le
   apply finitePlayerMax_le
   intro who
   have hscaled := quittingTerminalDeviationDebt_rootThenContinuation_le
-    reward root continuation who hM hreward hnashRoot
+    reward root continuation who hnashRoot
   have hdebtNonneg := quittingTerminalDeviationDebt_nonneg
-    reward continuation who hM hreward
+    reward continuation who
   have hdebt : quittingTerminalDeviationDebt reward
       (quittingRootThenContinuationProfile reward root continuation) who ≤
       quittingTerminalDeviationDebt reward continuation who :=
@@ -196,9 +194,9 @@ theorem quittingTerminalDebtSum_rootThenContinuation_le_sub_min
         quittingTerminalDeviationDebt reward continuation player := by
     intro player
     have hscaled := quittingTerminalDeviationDebt_rootThenContinuation_le
-      reward root continuation player hM hreward hnashRoot
+      reward root continuation player hnashRoot
     have hdebtNonneg := quittingTerminalDeviationDebt_nonneg
-      reward continuation player hM hreward
+      reward continuation player
     have hfactor := quittingRootOpponentContinueMass_le_one root player
     have hprefixedScaled :
         quittingTerminalDeviationDebt reward prefixed player ≤
@@ -249,7 +247,7 @@ theorem exists_exactRoot_terminalExploitability_le_and_debtSum_descent
   let root' := quittingRootOfSimplex root
   refine ⟨root', hnash, ?_, ?_⟩
   · exact quittingTerminalExploitability_rootThenContinuation_le
-      reward root' continuation hM hreward hnash
+      reward root' continuation hnash
   · exact quittingTerminalDebtSum_rootThenContinuation_le_sub_min
       reward root' continuation who hM hgap hreward hsingleton hnash
 
@@ -266,22 +264,20 @@ def quittingTerminalDebtSumSublevelValues [Nonempty ι]
 theorem bddBelow_quittingTerminalDebtSumSublevelValues
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (bound : ℝ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (bound : ℝ) :
     BddBelow (quittingTerminalDebtSumSublevelValues reward bound) := by
   refine ⟨0, ?_⟩
   rintro total ⟨profile, _, rfl⟩
   unfold quittingTerminalDebtSum
   exact Finset.sum_nonneg fun player _ =>
-    quittingTerminalDeviationDebt_nonneg reward profile player hM hreward
+    quittingTerminalDeviationDebt_nonneg reward profile player
 
 /-- Lexicographic near-minimizers of maximum terminal exploitability and then
 total terminal debt exist at every positive accuracy. -/
 theorem exists_lexicographicallyNearMinimal_terminalProfile
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {ε M : ℝ} (hε : 0 < ε) (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    {ε : ℝ} (hε : 0 < ε) :
     ∃ profile : (quittingGame reward).BehaviorProfile,
       quittingTerminalExploitability reward profile ≤
           quittingTerminalExploitabilityInf reward + ε ∧
@@ -317,7 +313,7 @@ theorem exists_lexicographicallyNearMinimal_terminalProfile
       maxProfile, hmaxProfile, rfl⟩
   have hsumBelow : BddBelow sumValues :=
     bddBelow_quittingTerminalDebtSumSublevelValues reward
-      (quittingTerminalExploitabilityInf reward + ε) hM hreward
+      (quittingTerminalExploitabilityInf reward + ε)
   have hsumLt : sInf sumValues < sInf sumValues + ε := by linarith
   obtain ⟨sumValue, ⟨profile, hprofileMax, hsumValue⟩, hsumStrict⟩ :=
     (csInf_lt_iff hsumBelow hsumNonempty).mp hsumLt
@@ -392,7 +388,7 @@ theorem not_hasLexicographicallyNearMinimalSingletonGap
         quittingTerminalDebtSum reward prefixed := by
     apply csInf_le
     · exact bddBelow_quittingTerminalDebtSumSublevelValues
-        reward (floor + ε) hM.le hreward
+        reward (floor + ε)
     · exact ⟨prefixed, hprefixedSublevel, rfl⟩
   have hdecreaseLe : decrease ≤
       min

@@ -278,15 +278,13 @@ theorem fixedLawResetPoint_unique_allContinue_of_globalResetFaceMinimum
     ∀ root : ι → PMF Bool,
       IsεQuittingRootNash reward returned.1.2 0 root →
         root = (quittingAllContinueRoot : ι → PMF Bool) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   intro root hnash
   let prefixed := quittingTerminalSemanticPrefix reward root returned.1
   have hreturnedCarrier :=
     terminalSemanticLawCarrier_fst_mem_carrier returned hreturned
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
-    quittingTerminalSemanticPrefix_mem_carrier reward root returned.1 hM
-      hreward hreturnedCarrier
+    quittingTerminalSemanticPrefix_mem_carrier reward root returned.1
+      hreturnedCarrier
   have hprefixedReset : quittingTerminalSemanticDebt prefixed owner = 0 := by
     rw [quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash
       (reward := reward) returned.1 root owner hnash, hreset, mul_zero]
@@ -395,8 +393,7 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.nonempty_minimizerBridge
     have hprefixedJoint : (prefixed, prefixedMass) ∈
         quittingTerminalSemanticLawCarrier reward :=
       quittingTerminalSemanticLawPrefix_mem_carrier reward root
-        (fixed, dispatch.cluster.2) (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward) hfixed.joint
+        (fixed, dispatch.cluster.2) hfixed.joint
     have hprefixedReset : quittingTerminalSemanticDebt prefixed
         packet.observer = 0 := by
       rw [quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash

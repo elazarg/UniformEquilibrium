@@ -8,7 +8,6 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumPlateauPac
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupation
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Fixed solo-prefix iteration at a singleton-tight minimum
@@ -157,8 +156,6 @@ theorem isZeroQuittingRootNash_solo_of_singletonTightMinimumFace
     IsεQuittingRootNash reward pair.1 0
       (quittingSoloStationaryRoot owner
         (quittingHazardCoin rate hrate.1.le hrate.2.1)) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let hazard := quittingHazardCoin rate hrate.1.le hrate.2.1
   let root := quittingSoloStationaryRoot owner hazard
   apply (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
@@ -175,7 +172,7 @@ theorem isZeroQuittingRootNash_solo_of_singletonTightMinimumFace
     rw [hdiff]
     exact ⟨by simp, by simp⟩
   · have hmargin := minimumTerminalSemantic_singletonMargin
-      (reward := reward) pair hM hreward hface.mem_carrier hface.minimum
+      (reward := reward) pair hface.mem_carrier hface.minimum
         (hface.debt_sum.symm ▸ hface.debt_pos) who
     have hzero := hface.outsider_debt who hwho
     have hcapEq : pair.2 who = pair.1 who := by
@@ -216,8 +213,6 @@ theorem quittingSingletonTightMinimumFace_prefix
       (quittingHazardCoin rate hrate.1.le hrate.2.1)
     QuittingSingletonTightMinimumFace reward
       (quittingTerminalSemanticPrefix reward root pair) owner debt := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let hazard := quittingHazardCoin rate hrate.1.le hrate.2.1
   let root := quittingSoloStationaryRoot owner hazard
   let prefixed := quittingTerminalSemanticPrefix reward root pair
@@ -225,13 +220,13 @@ theorem quittingSingletonTightMinimumFace_prefix
     exact isZeroQuittingRootNash_solo_of_singletonTightMinimumFace
       pair owner hface hrate
   have hmem : prefixed ∈ quittingTerminalSemanticCarrier reward :=
-    quittingTerminalSemanticPrefix_mem_carrier reward root pair hM hreward
+    quittingTerminalSemanticPrefix_mem_carrier reward root pair
       hface.mem_carrier
   have hdebtEq : ∀ who,
       quittingTerminalSemanticDebt prefixed who =
         quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_prefix_eq_of_minimum
-      reward pair root hM hreward hface.mem_carrier hface.minimum hnash
+      reward pair root hface.mem_carrier hface.minimum hnash
   have hsumEq : quittingTerminalSemanticDebtSum prefixed =
       quittingTerminalSemanticDebtSum pair := by
     unfold quittingTerminalSemanticDebtSum
@@ -402,8 +397,6 @@ theorem quittingSoloReward_sub_ownSolo_ge_debt_of_singletonTightIteration
     (hother : other ≠ owner) :
     debt ≤ quittingSoloReward reward owner other -
       quittingSoloReward reward other other := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let step := quittingTerminalSemanticPrefix reward
     (quittingSoloStationaryRoot owner
       (quittingHazardCoin rate hrate.1.le hrate.2.1))
@@ -416,7 +409,7 @@ theorem quittingSoloReward_sub_ownSolo_ge_debt_of_singletonTightIteration
         quittingSoloReward reward other other := by
     intro n
     have hmargin := minimumTerminalSemantic_singletonMargin
-      (reward := reward) ((step^[n]) pair) hM hreward
+      (reward := reward) ((step^[n]) pair)
         (hfaces n).mem_carrier (hfaces n).minimum
         ((hfaces n).debt_sum.symm ▸ (hfaces n).debt_pos) other
     have hzero := (hfaces n).outsider_debt other hother

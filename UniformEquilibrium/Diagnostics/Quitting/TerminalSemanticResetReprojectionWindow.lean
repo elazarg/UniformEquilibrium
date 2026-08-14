@@ -253,8 +253,7 @@ player, actual live survival times shifted semantic debt is bounded by the
 initial semantic debt. -/
 theorem quittingLiveMass_mul_spineDebt_le_initialDebt
     (profile : (quittingGame reward).BehaviorProfile)
-    (who : iota) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : iota) :
     ∀ time,
       quittingLiveMass reward profile time *
           quittingTerminalSemanticDebt
@@ -281,7 +280,7 @@ theorem quittingLiveMass_mul_spineDebt_le_initialDebt
             quittingTerminalSemanticPrefix reward root tail := by
           dsimp only [current, root, tail]
           exact quittingTerminalSemanticPair_spine_eq_prefix
-            reward profile time hM hreward
+            reward profile time
         rw [hprefix]
         exact htransport
       have hweighted : quittingLiveMass reward profile (time + 1) *
@@ -312,8 +311,7 @@ the actual probability of reaching that row, by the initial best-response
 debt.  This is the one-stage-deviation packet needed at a moving mark. -/
 theorem quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
     (profile : (quittingGame reward).BehaviorProfile)
-    (who : iota) (time : ℕ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : iota) (time : ℕ) :
     quittingLiveMass reward profile time *
         quittingRootCoordinateNashDefect reward
           (quittingTerminalSemanticPair reward
@@ -330,17 +328,17 @@ theorem quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
     quittingTerminalSemanticPair_mem_carrier reward _
   have htailDebt : 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htailCarrier who
+      reward htailCarrier who
   have hlocal :=
     quittingRootCoordinateNashDefect_le_terminalSemanticDebt_prefix
       reward tail root who htailDebt
   rw [← quittingTerminalSemanticPair_spine_eq_prefix
-    reward profile time hM hreward] at hlocal
+    reward profile time] at hlocal
   have hscaled := mul_le_mul_of_nonneg_left hlocal
     (quittingLiveMass_nonneg reward profile time)
   exact hscaled.trans
     (quittingLiveMass_mul_spineDebt_le_initialDebt
-      (reward := reward) profile who hM hreward time)
+      (reward := reward) profile who time)
 
 /-! ## Executable reset-reprojection germ -/
 
@@ -422,7 +420,7 @@ theorem exists_executable_positiveIncidence_normalizedReprojectionGerm
       0 ≤ face point := by
     intro point hpoint
     exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward
+      reward
         (terminalSemanticLawCarrier_fst_mem_carrier point hpoint) owner
   have hsupport : ∀ point ∈ quittingTerminalSemanticLawCarrier reward,
       face point = 0 → tension point ≤ 0 := by
@@ -437,7 +435,7 @@ theorem exists_executable_positiveIncidence_normalizedReprojectionGerm
         0 < face point ∧ 0 < tension point ∧
           penalty * face point < tension point := by
     have halt := surfaceTension_linearPenalty_or_normalizedObstruction
-      source returned owner hM hreward hminimum hreturned hexcess
+      source returned owner hminimum hreturned hexcess
         hreturnedIncidence hslope
     have hunbounded := halt.resolve_left (by
       intro hlinear
@@ -531,9 +529,7 @@ defect divided by the same scale tends to zero. -/
 theorem exists_sameProfile_finiteWindow_defectPacket
     (contact : QuittingTerminalSemanticLawPoint iota)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
-    (owner : iota) (scale : ℕ → ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : iota) (scale : ℕ → ℝ)
     (hcontact : contact ∈ quittingTerminalSemanticLawCarrier reward)
     (hprofiles : Tendsto (fun n ↦
       (quittingTerminalSemanticPair reward (profiles n),
@@ -618,7 +614,7 @@ theorem exists_sameProfile_finiteWindow_defectPacket
   · intro n
     apply (div_le_div_iff_of_pos_right (hscale n)).2
     exact quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
-      (reward := reward) (profiles n) owner (mark n) hM hreward
+      (reward := reward) (profiles n) owner (mark n)
   · exact hratio
 
 end GameTheory

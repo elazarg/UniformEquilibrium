@@ -3,7 +3,6 @@ import MathUE.CurveSelection.PositiveRoot
 import UniformEquilibrium.Quitting.Cycles.ConditionedDiffuseProductRescaling
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionDiffuseClockBridge
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Weighted-clock rank reduction
@@ -1089,11 +1088,9 @@ theorem collisionMass_mul_minimumDebt_le_tailExcess_add_totalDefect
       (quittingTerminalSemanticDebtSum tail -
           quittingTerminalSemanticDebtSum minimum) +
         quittingRootTotalNashDefect reward tail.1 root := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htail
+      reward htail
   have hcollision0 := quittingRootCollisionMass_nonneg root
   have hminimumLeTail := hminimum tail htail
   have htoTail :
@@ -1106,7 +1103,7 @@ theorem collisionMass_mul_minimumDebt_le_tailExcess_add_totalDefect
     (fun who ↦ quittingTerminalSemanticDebt tail who) htailDebt
   have hcharge :=
     minimumTerminalSemantic_sum_opponentAbsorption_charge_le_excess_add_defect
-      reward minimum tail root hM hreward hminimumCarrier hminimum htail
+      reward minimum tail root hminimumCarrier hminimum htail
   exact htoTail.trans (htoCharge.trans hcharge)
 
 /-- `ε`-Nash specialization of the aggregate collision charge. -/
@@ -1149,11 +1146,9 @@ theorem minimumExactNash_atMostOnePositiveQuitter
     (hfirst : 0 < (root first true).toReal)
     (hsecond : 0 < (root second true).toReal) :
     first = second := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hcollisionZero :=
     (minimumTerminalSemantic_exactNash_criticalFace
-      (reward := reward) minimum root hM hreward hminimumCarrier hminimum
+      (reward := reward) minimum root hminimumCarrier hminimum
         hpositive hnash).1
   exact atMostOnePositive_of_collisionMass_eq_zero root hcollisionZero
     hfirst hsecond

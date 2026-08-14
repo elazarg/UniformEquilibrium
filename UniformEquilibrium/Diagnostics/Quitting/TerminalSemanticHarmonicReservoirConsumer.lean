@@ -217,8 +217,7 @@ theorem QuittingCounterexampleRegime.exists_joiner_or_harmonicObstruction_or_res
       · refine ⟨mass, cluster, hjoint, hreset, Or.inl ?_⟩
         have hownerPin :=
           (minimumTerminalSemantic_debtGate_ownerPin_and_debt_pos
-            (reward := reward) source owner hM.le hreward hsource hminimum
-              hpositive hgate).1
+            (reward := reward) source owner hsource hminimum hpositive hgate).1
         exact quittingHarmonicReservoirObstruction_of_negativeNever
           source owner mass hpositive hownerPin hnoJoin hmoat htheta
             hharmonic.1 hharmonic.2

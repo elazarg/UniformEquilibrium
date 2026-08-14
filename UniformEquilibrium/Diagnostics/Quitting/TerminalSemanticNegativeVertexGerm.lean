@@ -202,9 +202,7 @@ theorem QuittingCounterexampleRegime.not_exists_stationarySemanticGerm_of_noJoin
 /-- At a minimum debt gate, the prescribed owner coordinate is its singleton
 payoff and the owner carries positive debt. -/
 theorem minimumTerminalSemantic_debtGate_ownerPin_and_debt_pos
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -216,7 +214,7 @@ theorem minimumTerminalSemantic_debtGate_ownerPin_and_debt_pos
   constructor
   · simpa [quittingSoloReward, quittingSingletonTerminal] using
       (minimumTerminalSemantic_singletonTight_iff_debtGate
-        (reward := reward) pair hM hreward hpair hminimum hpositive owner).2
+        (reward := reward) pair hpair hminimum hpositive owner).2
         hgate
   · rw [hgate.1]
     exact hpositive
@@ -283,7 +281,7 @@ theorem QuittingCounterexampleRegime.exists_joiner_or_punishmentMoat_sameLaw
   · right
     refine ⟨hpunishment, ?_⟩
     have howner := minimumTerminalSemantic_debtGate_ownerPin_and_debt_pos
-      (reward := reward) pair owner hM.le hreward hpair hminimum hpositive hgate
+      (reward := reward) pair owner hpair hminimum hpositive hgate
     obtain ⟨profiles, quitTime, mass, subseq, hprofiles, hmass, hsubseq,
         hmassLimit, hlaw⟩ :=
       exists_samePureTimeLaw_negativeNever_or_chronologicalOpponentCharge

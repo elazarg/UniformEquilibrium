@@ -69,8 +69,6 @@ theorem exists_capNashRootStack_retaining_positiveStage
     (terminal : (quittingGame reward).BehaviorProfile)
     (time depth : ℕ)
     (coalition : {S : Finset ι // S.Nonempty})
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward)
     (hpositive : 0 <
       quittingStageCoalitionMass reward terminal time coalition) :
@@ -90,13 +88,13 @@ theorem exists_capNashRootStack_retaining_positiveStage
     exists_quittingCapNashRootStack reward terminal depth
   have hterminalPos : 0 < quittingTerminalDebtSum reward terminal :=
     hinf.trans_le
-      (quittingTerminalDebtSumInf_le (reward := reward) terminal hM hreward)
+      (quittingTerminalDebtSumInf_le (reward := reward) terminal)
   have hproductLower :
       quittingTerminalDebtSumInf reward /
           quittingTerminalDebtSum reward terminal ≤
         quittingCapNashStackContinueProduct roots :=
     capNashStack_continueProduct_lowerBound
-      (reward := reward) roots terminal hM hreward hinf hstack
+      (reward := reward) roots terminal hinf hstack
   have hscaledLower :
       quittingTerminalDebtSumInf reward /
             quittingTerminalDebtSum reward terminal *
@@ -216,8 +214,6 @@ theorem exists_deep_nearMinimum_capNashChronologies_with_causalSuffixAtom
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (point : QuittingTerminalSemanticLawPoint ι)
     (terminal : {S : Finset ι // S.Nonempty})
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward)
     (hmass : 0 < point.2 (some terminal))
     (hinf : 0 < quittingTerminalDebtSumInf reward)
@@ -295,18 +291,17 @@ theorem exists_deep_nearMinimum_capNashChronologies_with_causalSuffixAtom
     intro n
     exact quittingTerminalDebtSumInf_le (reward := reward)
       (quittingLiteralRootStackProfile reward (roots n) (profiles n))
-      hM hreward
   have hupper : ∀ n, prefixDebt n ≤ tailDebt n := by
     intro n
     have htailNonneg : 0 ≤ tailDebt n := by
       dsimp only [tailDebt, quittingTerminalDebtSum]
       exact Finset.sum_nonneg fun who _ ↦
-        quittingTerminalDeviationDebt_nonneg reward (profiles n) who hM hreward
+        quittingTerminalDeviationDebt_nonneg reward (profiles n) who
     rw [show prefixDebt n =
         quittingCapNashStackContinueProduct (roots n) * tailDebt n by
       simpa only [prefixDebt, tailDebt] using
         (quittingTerminalDebtSum_capNashRootStack_eq
-          (reward := reward) (roots n) (profiles n) hM hreward
+          (reward := reward) (roots n) (profiles n)
             (hrootsNash n))]
     exact mul_le_of_le_one_left htailNonneg
       (quittingCapNashStackContinueProduct_le_one (roots n))
@@ -332,9 +327,9 @@ theorem exists_deep_nearMinimum_capNashChronologies_with_causalSuffixAtom
     have htailPos := hn.2.2
     have hterminalDebtPos : 0 < quittingTerminalDebtSum reward (profiles n) :=
       hinf.trans_le
-        (quittingTerminalDebtSumInf_le (reward := reward) (profiles n) hM hreward)
+        (quittingTerminalDebtSumInf_le (reward := reward) (profiles n))
     have hproductLower := capNashStack_continueProduct_lowerBound
-      (reward := reward) (roots n) (profiles n) hM hreward hinf (hrootsNash n)
+      (reward := reward) (roots n) (profiles n) hinf (hrootsNash n)
     have hproductPos : 0 < quittingCapNashStackContinueProduct (roots n) :=
       (div_pos hinf hterminalDebtPos).trans_le hproductLower
     rw [← hrootsLength n,

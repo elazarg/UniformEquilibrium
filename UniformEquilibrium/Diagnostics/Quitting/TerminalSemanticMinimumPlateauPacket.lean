@@ -35,9 +35,7 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 /-- A singleton-tight coordinate of a positive minimum semantic pair carries
 all of the pair's total debt. -/
 theorem minimumTerminalSemantic_debt_eq_sum_of_singleton_tight
-    (pair : QuittingTerminalSemanticPair ι) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (who : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -49,15 +47,14 @@ theorem minimumTerminalSemantic_debt_eq_sum_of_singleton_tight
       quittingTerminalSemanticDebtSum pair := by
   have hdebtNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebt pair player :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
   have hcoordinateLe : quittingTerminalSemanticDebt pair who ≤
       quittingTerminalSemanticDebtSum pair := by
     unfold quittingTerminalSemanticDebtSum
     exact Finset.single_le_sum
       (fun player _ => hdebtNonneg player) (Finset.mem_univ who)
   have hmargin := minimumTerminalSemantic_singletonMargin
-    (reward := reward) pair hM hreward hpair hminimum hpositive who
+    (reward := reward) pair hpair hminimum hpositive who
   have hsumLeCoordinate : quittingTerminalSemanticDebtSum pair ≤
       quittingTerminalSemanticDebt pair who := by
     unfold quittingTerminalSemanticDebt
@@ -68,9 +65,7 @@ theorem minimumTerminalSemantic_debt_eq_sum_of_singleton_tight
 /-- A positive minimum semantic pair has at most one singleton-tight
 coordinate. -/
 theorem minimumTerminalSemantic_not_two_singleton_tight
-    (pair : QuittingTerminalSemanticPair ι) (first second : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (first second : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -83,14 +78,13 @@ theorem minimumTerminalSemantic_not_two_singleton_tight
       reward (quittingSingletonTerminal second) second) : False := by
   have hdebtNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebt pair player :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
   have hfirstDebt :=
     minimumTerminalSemantic_debt_eq_sum_of_singleton_tight
-      (reward := reward) pair first hM hreward hpair hminimum hpositive hfirst
+      (reward := reward) pair first hpair hminimum hpositive hfirst
   have hsecondDebt :=
     minimumTerminalSemantic_debt_eq_sum_of_singleton_tight
-      (reward := reward) pair second hM hreward hpair hminimum hpositive hsecond
+      (reward := reward) pair second hpair hminimum hpositive hsecond
   have hpairLe : quittingTerminalSemanticDebt pair first +
       quittingTerminalSemanticDebt pair second ≤
         quittingTerminalSemanticDebtSum pair := by
@@ -118,9 +112,7 @@ namespace QuittingChargeTangentPacket
 whose boundary is a positive minimum prescribed payoff. -/
 theorem not_two_positiveMass_of_boundary_eq_minimumTerminalSemantic
     (packet : QuittingChargeTangentPacket reward)
-    (pair : QuittingTerminalSemanticPair ι) (first second : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (first second : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -145,16 +137,14 @@ theorem not_two_positiveMass_of_boundary_eq_minimumTerminalSemantic
       _ = reward (quittingSingletonTerminal second) second :=
         packet.positive_mass_pins_boundary second hsecond
   exact minimumTerminalSemantic_not_two_singleton_tight
-    (reward := reward) pair first second hM hreward hpair hminimum hpositive
-      hne hfirstTight hsecondTight
+    (reward := reward) pair first second hpair hminimum hpositive hne
+      hfirstTight hsecondTight
 
 /-- Once one owner has positive mass, every other packet mass vanishes at a
 positive minimum boundary. -/
 theorem mass_eq_zero_of_boundary_eq_minimumTerminalSemantic
     (packet : QuittingChargeTangentPacket reward)
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -169,17 +159,15 @@ theorem mass_eq_zero_of_boundary_eq_minimumTerminalSemantic
     have hotherPositive : 0 < packet.mass other :=
       lt_of_not_ge hnot
     exact packet.not_two_positiveMass_of_boundary_eq_minimumTerminalSemantic
-      pair other owner hM hreward hpair hminimum hpositive hboundary hother
-        hotherPositive howner
+      pair other owner hpair hminimum hpositive hboundary hother hotherPositive
+        howner
   · exact packet.mass_nonneg other
 
 /-- A positive packet owner has full normalized mass at a positive minimum
 boundary. -/
 theorem mass_eq_one_of_boundary_eq_minimumTerminalSemantic
     (packet : QuittingChargeTangentPacket reward)
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -189,7 +177,7 @@ theorem mass_eq_one_of_boundary_eq_minimumTerminalSemantic
     (howner : 0 < packet.mass owner) : packet.mass owner = 1 := by
   have hzero :=
     packet.mass_eq_zero_of_boundary_eq_minimumTerminalSemantic
-      pair owner hM hreward hpair hminimum hpositive hboundary howner
+      pair owner hpair hminimum hpositive hboundary howner
   have hsum : (∑ other, packet.mass other) = packet.mass owner := by
     apply Finset.sum_eq_single owner
     · intro other _ hother
@@ -203,9 +191,7 @@ theorem mass_eq_one_of_boundary_eq_minimumTerminalSemantic
 positive owners. -/
 theorem singletonMixture_eq_singleton_of_boundary_eq_minimumTerminalSemantic
     (packet : QuittingChargeTangentPacket reward)
-    (pair : QuittingTerminalSemanticPair ι) (owner who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner who : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -217,10 +203,10 @@ theorem singletonMixture_eq_singleton_of_boundary_eq_minimumTerminalSemantic
       reward (quittingSingletonTerminal owner) who := by
   have hownerOne :=
     packet.mass_eq_one_of_boundary_eq_minimumTerminalSemantic
-      pair owner hM hreward hpair hminimum hpositive hboundary howner
+      pair owner hpair hminimum hpositive hboundary howner
   have hzero :=
     packet.mass_eq_zero_of_boundary_eq_minimumTerminalSemantic
-      pair owner hM hreward hpair hminimum hpositive hboundary howner
+      pair owner hpair hminimum hpositive hboundary howner
   unfold quittingSingletonMixture
   rw [Finset.sum_eq_single owner]
   · rw [hownerOne, one_mul]
@@ -232,9 +218,7 @@ theorem singletonMixture_eq_singleton_of_boundary_eq_minimumTerminalSemantic
 /-- The tangent of the unique packet owner is zero. -/
 theorem tangent_eq_zero_of_boundary_eq_minimumTerminalSemantic
     (packet : QuittingChargeTangentPacket reward)
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -244,7 +228,7 @@ theorem tangent_eq_zero_of_boundary_eq_minimumTerminalSemantic
     (howner : 0 < packet.mass owner) : packet.tangent owner = 0 := by
   rw [packet.tangent_eq owner,
     packet.singletonMixture_eq_singleton_of_boundary_eq_minimumTerminalSemantic
-      pair owner owner hM hreward hpair hminimum hpositive hboundary howner,
+      pair owner owner hpair hminimum hpositive hboundary howner,
     packet.positive_mass_pins_boundary owner howner]
   ring
 
@@ -259,9 +243,7 @@ owner whose singleton exit strictly underfunds some distinct outsider. -/
 theorem chargeTangentPacket_minimumBoundary_underfunds_outsider
     (regime : QuittingCounterexampleRegime reward)
     (packet : QuittingChargeTangentPacket reward)
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -273,10 +255,10 @@ theorem chargeTangentPacket_minimumBoundary_underfunds_outsider
       reward (quittingSingletonTerminal owner) outsider < pair.1 outsider := by
   have hzero :=
     packet.mass_eq_zero_of_boundary_eq_minimumTerminalSemantic
-      pair owner hM hreward hpair hminimum hpositive hboundary howner
+      pair owner hpair hminimum hpositive hboundary howner
   have hownerTangent :=
     packet.tangent_eq_zero_of_boundary_eq_minimumTerminalSemantic
-      pair owner hM hreward hpair hminimum hpositive hboundary howner
+      pair owner hpair hminimum hpositive hboundary howner
   obtain ⟨who, hwho⟩ | ⟨active, hactiveMass, hactiveTangent⟩ :=
     regime.chargeTangentPacket_underfunded_or_active_funded packet
   · have hwhoNe : who ≠ owner := by
@@ -287,7 +269,7 @@ theorem chargeTangentPacket_minimumBoundary_underfunds_outsider
     refine ⟨who, hwhoNe, ?_⟩
     rw [packet.tangent_eq who,
       packet.singletonMixture_eq_singleton_of_boundary_eq_minimumTerminalSemantic
-        pair owner who hM hreward hpair hminimum hpositive hboundary howner,
+        pair owner who hpair hminimum hpositive hboundary howner,
       hboundary] at hwho
     exact sub_neg.mp hwho
   · by_cases hactiveOwner : active = owner

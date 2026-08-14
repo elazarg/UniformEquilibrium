@@ -6,7 +6,6 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Fixed terminal ports under stopping-law mixtures
@@ -322,8 +321,6 @@ theorem quittingBehaviorTerminalPort_stoppingLawMixture_eq_on_zeroDebtFace
             lambda hlambda0 hlambda1)) =
       quittingBehaviorTerminalPort reward
         (Function.update profile mover source) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hmixedPayoff : ∀ observer,
       quittingTerminalPayoff reward
           (Function.update profile mover
@@ -345,7 +342,7 @@ theorem quittingBehaviorTerminalPort_stoppingLawMixture_eq_on_zeroDebtFace
       reward profile mover observer source target lambda hlambda0 hlambda1
     rw [hsourceDebt observer, htargetDebt observer] at hupper
     have hnonneg := quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward
+      reward
       (quittingTerminalSemanticPair_mem_carrier reward
         (Function.update profile mover
           (quittingStoppingLawMixtureBehaviorStrategy reward mover source target

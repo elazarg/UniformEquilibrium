@@ -190,9 +190,7 @@ theorem quittingRootCoalitionMass_mul_minimumDebt_le_tailExcess_add_defect
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum tail : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
-    (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty})
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -206,7 +204,7 @@ theorem quittingRootCoalitionMass_mul_minimumDebt_le_tailExcess_add_defect
         quittingRootTotalNashDefect reward tail.1 root := by
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htail
+      reward htail
   have htailMin : quittingTerminalSemanticDebtSum minimum ≤
       quittingTerminalSemanticDebtSum tail := hminimum tail htail
   have hcoalitionNonneg :
@@ -242,7 +240,7 @@ theorem quittingRootCoalitionMass_mul_minimumDebt_le_tailExcess_add_defect
     simpa [Finset.mul_sum] using hsum
   have hcharge :=
     minimumTerminalSemantic_sum_opponentAbsorption_charge_le_excess_add_defect
-      reward minimum tail root hM hreward hminimumCarrier hminimum htail
+      reward minimum tail root hminimumCarrier hminimum htail
   exact hminimumToTail.trans (hcoalitionToCharge.trans hcharge)
 
 /-- **Finite fractional-reset floor.**  After any finite family of
@@ -254,9 +252,7 @@ theorem fractionalEndpointMoves_collisionDebt_le_tailExcess_add_defect
     (minimum tail : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
     (moves : List (QuittingFractionalEndpointMove ι))
-    (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty})
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -274,15 +270,15 @@ theorem fractionalEndpointMoves_collisionDebt_le_tailExcess_add_defect
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun who _ =>
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward hminimumCarrier who
+        reward hminimumCarrier who
   have hretention :=
     quittingFractionalEndpointRetention_mul_coalitionMass_le
       moves root terminal.val
   have hscaled := mul_le_mul_of_nonneg_right hretention hminimumNonneg
   have hfinal :=
-    quittingRootCoalitionMass_mul_minimumDebt_le_tailExcess_add_defect
+      quittingRootCoalitionMass_mul_minimumDebt_le_tailExcess_add_defect
       reward minimum tail (quittingFractionalEndpointMoves moves root)
-        terminal hM hreward hminimumCarrier hminimum htail hcollision
+        terminal hminimumCarrier hminimum htail hcollision
   exact (by simpa [mul_assoc] using hscaled.trans hfinal)
 
 /-- On the minimum fiber itself, a finite positive-retention perturbation of
@@ -293,9 +289,7 @@ theorem fractionalEndpointMoves_totalNashDefect_pos_of_positiveRetention
     (minimum : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
     (moves : List (QuittingFractionalEndpointMove ι))
-    (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty})
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -308,8 +302,8 @@ theorem fractionalEndpointMoves_totalNashDefect_pos_of_positiveRetention
       (quittingFractionalEndpointMoves moves root) := by
   have hfloor :=
     fractionalEndpointMoves_collisionDebt_le_tailExcess_add_defect
-      reward minimum minimum root moves terminal hM hreward hminimumCarrier
-        hminimum hminimumCarrier hcollision
+      reward minimum minimum root moves terminal hminimumCarrier hminimum
+        hminimumCarrier hcollision
   have hleft : 0 < quittingFractionalEndpointRetention moves *
       quittingRootCoalitionMass root terminal.val *
         quittingTerminalSemanticDebtSum minimum :=
@@ -335,9 +329,7 @@ theorem exists_first_full_move_routes_positive_collision_of_finalDefect_eq_zero
     (minimum : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
     (moves : List (QuittingFractionalEndpointMove ι))
-    (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty})
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -375,7 +367,7 @@ theorem exists_first_full_move_routes_positive_collision_of_finalDefect_eq_zero
       intro hretention
       have hpositive :=
         fractionalEndpointMoves_totalNashDefect_pos_of_positiveRetention
-          reward minimum root moves terminal hM hreward hminimumCarrier
+          reward minimum root moves terminal hminimumCarrier
             hminimum hcollision hretention hmass hminimumDebt
       rw [hfinalDefect] at hpositive
       exact lt_irrefl 0 hpositive

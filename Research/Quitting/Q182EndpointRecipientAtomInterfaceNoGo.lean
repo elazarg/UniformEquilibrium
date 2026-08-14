@@ -9,7 +9,6 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalCollisionRe
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawExploitabilityFloor
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Q182: the endpoint-recipient atom interface does not source-match
@@ -82,8 +81,7 @@ theorem no_uniformPayoff_of_positive_globalSemanticDebtMinimum
     quittingTerminalDeviationDebt reward profile who
   have hlower :=
     minimumTerminalSemanticDebt_div_card_le_terminalExploitability
-      reward minimum profile (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) hminimum
+      reward minimum profile hminimum
   obtain ⟨who, _hwhoMem, hwho⟩ :=
     Finset.exists_mem_eq_sup' Finset.univ_nonempty
       (fun player : ι => max 0 (debt player))
@@ -93,8 +91,6 @@ theorem no_uniformPayoff_of_positive_globalSemanticDebtMinimum
     exact hwho
   have hdebtNonneg : 0 ≤ debt who := by
     exact quittingTerminalDeviationDebt_nonneg reward profile who
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
   have hlarge : 2 * gap ≤ debt who := by
     rw [hexploit, max_eq_right hdebtNonneg] at hlower
     dsimp only [gap]
@@ -165,13 +161,10 @@ theorem exists_resetFace_positiveIncidence_jointCapFixedPoint
       ∀ root : ι → PMF Bool,
         IsεQuittingRootNash reward returned.1.2 0 root →
           root = (quittingAllContinueRoot : ι → PMF Bool) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
       hsourceLe, hnash, hsemanticFixed, hallRoots⟩ :=
     exists_resetFace_positiveTotalIncidence_allContinueCapPlateau
-      source target mass owner hM hreward hminimum hsourcePositive
-        htarget hreset hincidence
+      source target mass owner hminimum hsourcePositive htarget hreset hincidence
   exact ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
     hsourceLe, hnash, hsemanticFixed,
     quittingTerminalOutcomeLawPrefix_allContinue_eq returned.2, hallRoots⟩

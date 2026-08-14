@@ -204,9 +204,7 @@ theorem exists_signed_pairDropout_negativeMoat_or_pairReplacement
     (minimum : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
     (moves : List (QuittingFractionalEndpointMove ι))
-    (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty})
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -288,7 +286,7 @@ theorem exists_signed_pairDropout_negativeMoat_or_pairReplacement
       hbeforeCard, hafterErase, hsingleton, hbeforePair, hdropperNe,
       hafterUpdate, hbeforeMass, hafterMass, hconsumer⟩ :=
     regime.exists_negativeMoat_or_pairReplacement_of_dropout
-      minimum root moves terminal hM hreward hminimumCarrier hminimum
+      minimum root moves terminal hminimumCarrier hminimum
         hcollision hmass hminimumDebt hfinalDefect
   have hbest : move.action =
       quittingRootBestEndpointAction reward minimum.1 beforeRoot move.who := by

@@ -48,9 +48,7 @@ strict tail escape; it is the mechanism by which the backward prefix can land
 closer to the minimum. -/
 theorem capNashPrefix_tailEscape_exact_account
     (minimum tail : QuittingTerminalSemanticPair iota)
-    (root : iota → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : iota → PMF Bool)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -71,7 +69,7 @@ theorem capNashPrefix_tailEscape_exact_account
   let returned := quittingTerminalSemanticPrefix reward root tail
   have hreturned : returned ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root tail hM hreward htail
+      reward root tail htail
   have hminimumReturned : quittingTerminalSemanticDebtSum minimum ≤
       quittingTerminalSemanticDebtSum returned :=
     hminimum returned hreturned

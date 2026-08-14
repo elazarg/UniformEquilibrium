@@ -34,8 +34,6 @@ prescribed payoff. -/
 theorem quittingTerminalSemanticPair_literalAllContinueStack_eq_terminal
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (terminal : (quittingGame reward).BehaviorProfile) (depth : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hsolo : ∀ who, reward (quittingSingletonTerminal who) who ≤
       quittingTerminalPayoff reward terminal who) :
     quittingTerminalSemanticPair reward
@@ -56,7 +54,7 @@ theorem quittingTerminalSemanticPair_literalAllContinueStack_eq_terminal
           (quittingTerminalSemanticPair reward terminal) who := by
         intro who
         exact quittingTerminalDeviationDebt_nonneg
-          reward terminal who hM hreward
+          reward terminal who
       have hnash : IsεQuittingRootNash reward
           (quittingTerminalSemanticPair reward terminal).1 0
           (quittingAllContinueRoot : ι → PMF Bool) := by
@@ -68,7 +66,7 @@ theorem quittingTerminalSemanticPair_literalAllContinueStack_eq_terminal
           reward (quittingTerminalSemanticPair reward terminal) hdebt hnash
       rw [List.replicate_succ, quittingLiteralRootStackProfile_cons,
         quittingTerminalSemanticPair_rootThenContinuation
-          reward quittingAllContinueRoot suffix hM hreward,
+          reward quittingAllContinueRoot suffix,
         hsuffix]
       exact hprefix
 
@@ -78,8 +76,6 @@ absorption nor normalized owner mass. -/
 theorem isQuittingLiteralExactRootStack_replicate_allContinue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (terminal : (quittingGame reward).BehaviorProfile) (depth : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hsolo : ∀ who, reward (quittingSingletonTerminal who) who ≤
       quittingTerminalPayoff reward terminal who) :
     IsQuittingLiteralExactRootStack reward
@@ -93,7 +89,7 @@ theorem isQuittingLiteralExactRootStack_replicate_allContinue
       constructor
       · have hsemantic :=
           quittingTerminalSemanticPair_literalAllContinueStack_eq_terminal
-            reward terminal depth hM hreward hsolo
+            reward terminal depth hsolo
         have hpayoff : (fun player => quittingTerminalPayoff reward
             (quittingLiteralRootStackProfile reward
               (List.replicate depth

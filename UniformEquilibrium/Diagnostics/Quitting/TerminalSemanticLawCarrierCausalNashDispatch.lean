@@ -51,9 +51,7 @@ theorem causalCollision_tailEscape_or_quantitativeBestEndpoint
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (stage : ℕ) (terminal : {S : Finset ι // S.Nonempty})
-    (lower : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (lower : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -112,14 +110,14 @@ theorem causalCollision_tailEscape_or_quantitativeBestEndpoint
     (quittingAllContinueProfileSpine reward profile (stage + 1))
   let root := quittingProfileLiveRoot reward profile stage
   have hsplit := tailExcess_or_totalNashDefect_of_persistent_collision
-    reward minimum profile stage terminal lower hM hreward hminimumCarrier
-      hminimum hcollision hmass
+    reward minimum profile stage terminal lower hminimumCarrier hminimum
+      hcollision hmass
   rcases hsplit with hescape | hdefect
   · left
     refine ⟨by simpa only [quittingSpineDebtExcess, tail] using hescape, ?_⟩
     intro capRoot hnash
     simpa only [tail] using capNashPrefix_tailEscape_exact_account
-      (reward := reward) minimum tail capRoot hM hreward hminimum
+      (reward := reward) minimum tail capRoot hminimum
         (quittingTerminalSemanticPair_mem_carrier reward _) hnash
   · right
     have htotalPos : 0 < quittingSpineTotalNashDefect reward profile stage :=

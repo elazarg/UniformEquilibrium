@@ -177,7 +177,7 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_resetFace_dispatch
   have hreturnedPositive : 0 < quittingTerminalSemanticDebtSum returned :=
     hsourcePositive.trans_le hsourceLe
   have hdispatch := resetExcursion_absorbingReturn_or_allContinue_capFace
-    (reward := reward) source returned owner hM hreward hminimum
+    (reward := reward) source returned owner hminimum
       hreturnedCarrier hreturnedReset hreturnedPositive
   refine ⟨returned, hjoint, hreturnedCarrier, hreturnedReset, hsourceLe,
     hreturnedLe, htransfer, htoggle, ?_⟩
@@ -190,7 +190,7 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_resetFace_dispatch
     have hprefixedCarrier : prefixed ∈
         quittingTerminalSemanticCarrier reward :=
       quittingTerminalSemanticPrefix_mem_carrier
-        reward root returned hM hreward hreturnedCarrier
+        reward root returned hreturnedCarrier
     have hprefixedLower : quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum prefixed :=
       hminimum prefixed hprefixedCarrier
@@ -206,7 +206,7 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_resetFace_dispatch
     have hprefixedJoint : (prefixed, prefixedMass) ∈
         quittingTerminalSemanticLawCarrier reward := by
       exact quittingTerminalSemanticLawPrefix_mem_carrier
-        reward root (returned, mass) hM hreward hjoint
+        reward root (returned, mass) hjoint
     have hprefixedIncidence : 0 <
         quittingTerminalOpponentIncidenceMass owner other prefixedMass :=
       positive_incidence_lawPrefix_of_positive_continueMass
@@ -311,8 +311,7 @@ theorem pair_coordinates :
     pair.1 false = 1 ∧ pair.1 true = 0 ∧
       pair.2 false = 1 ∧ pair.2 true = 1 := by
   have hprefix := quittingTerminalSemanticPair_rootThenContinuation
-    regressionReward collisionRoot continuation (M := 1) (by norm_num)
-      reward_bound
+    regressionReward collisionRoot continuation
   change quittingTerminalSemanticPair regressionReward profile =
       quittingTerminalSemanticPrefix regressionReward collisionRoot
         (quittingTerminalSemanticPair regressionReward continuation) at hprefix

@@ -234,8 +234,6 @@ theorem quittingTerminalDeviationDebt_atomicBlockerCompletion_outsider_eq_zero
   have hvalue : quittingTerminalPayoff reward profile who = value :=
     quittingTerminalPayoff_atomicBlockerCompletion hrow who
   have hnonneg := quittingTerminalDeviationDebt_nonneg reward profile who
-    (quittingRewardBound_nonneg reward)
-    (abs_reward_le_quittingRewardBound reward)
   unfold quittingTerminalDeviationDebt at hnonneg ⊢
   linarith
 
@@ -308,8 +306,6 @@ theorem quittingAtomicBlockerBalance_le_neg_of_terminalExploitabilityGap
     exists_quittingAtomicBlockerCompletion hrow hε
   let profile := quittingOneStagePunishedProfile reward root punishRow
   obtain ⟨who, deviation, hexploit⟩ := hgap profile
-  have hM := quittingRewardBound_nonneg reward
-  have hreward := abs_reward_le_quittingRewardBound reward
   have hdeviationBest :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward profile who deviation

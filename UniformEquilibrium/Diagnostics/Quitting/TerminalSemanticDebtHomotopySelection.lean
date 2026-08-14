@@ -47,9 +47,7 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 `(1 - t) * D`, where `D` is the current total semantic debt. -/
 theorem terminalSemantic_debtHomotopy_absorption_budget
     (base pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (t : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (t : ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -66,7 +64,7 @@ theorem terminalSemantic_debtHomotopy_absorption_budget
   let shift : Payoff ι := fun who => t * debt who
   have hdebtNonneg : ∀ who, 0 ≤ debt who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have htotalNonneg : 0 ≤ quittingTerminalSemanticDebtSum pair := by
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun who _ => hdebtNonneg who
@@ -79,8 +77,8 @@ theorem terminalSemantic_debtHomotopy_absorption_budget
   have hshiftNonneg : ∀ who, 0 ≤ shift who := fun who =>
     mul_nonneg ht0 (hdebtNonneg who)
   have hbudget := terminalSemantic_auxiliaryNash_excess_budget
-    (reward := reward) base pair shift root hM hreward hminimum hpair
-      hshiftNonneg (by simpa [shift, debt] using hnash)
+    (reward := reward) base pair shift root hminimum hpair hshiftNonneg
+      (by simpa [shift, debt] using hnash)
   have hscaleNonneg : 0 ≤ (1 - t) *
       quittingTerminalSemanticDebtSum pair :=
     mul_nonneg (sub_nonneg.mpr ht1) htotalNonneg
@@ -129,9 +127,7 @@ excess above the attained minimum.  The theorem is deliberately qualitative:
 a first support entry may have arbitrarily small absorption mass. -/
 theorem terminalSemantic_debtHomotopy_nontrivial_forces_strict_excess
     (base pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (t : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (t : ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -145,7 +141,7 @@ theorem terminalSemantic_debtHomotopy_nontrivial_forces_strict_excess
     quittingTerminalSemanticDebtSum base <
       quittingTerminalSemanticDebtSum pair := by
   have hbudget := terminalSemantic_debtHomotopy_absorption_budget
-    (reward := reward) base pair root t hM hreward hminimum hpair ht0 ht1.le
+    (reward := reward) base pair root t hminimum hpair ht0 ht1.le
       hnash
   have habsorptionNonneg := quittingRootAbsorptionMass_nonneg root
   have habsorptionPos : 0 < quittingRootAbsorptionMass root := by
@@ -173,9 +169,7 @@ joiner or a positive punishment moat. -/
 theorem QuittingCounterexampleRegime.minimumDebtHomotopy_endpoint_selection
     (regime : QuittingCounterexampleRegime reward)
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -204,8 +198,8 @@ theorem QuittingCounterexampleRegime.minimumDebtHomotopy_endpoint_selection
     rw [← htail]
     exact hnash
   rcases minimumTerminalSemantic_exactNash_allContinue_or_debtGateSolo
-      (reward := reward) pair root hM hreward hpair hminimum hpositive
-        hnashPrescribed with hcontinue | ⟨owner, hgate, hquit, hsolo⟩
+      (reward := reward) pair root hpair hminimum hpositive hnashPrescribed
+        with hcontinue | ⟨owner, hgate, hquit, hsolo⟩
   · exact Or.inl hcontinue
   · exact Or.inr ⟨owner, hgate, hquit, hsolo,
       regime.strictJoiner_or_soloReward_lt_punishmentValue owner⟩
@@ -326,8 +320,7 @@ theorem localGlobal_periodOne_debtHomotopy_stalls :
   · have hsemantic := semanticPair_allContinue_capNashPrefix_localGlobal
     rw [quittingTerminalSemanticPair_rootThenContinuation
       localGlobalCounterexampleReward quittingAllContinueRoot
-        localGlobalCounterexampleProfile (M := 1) (by norm_num)
-        abs_localGlobalCounterexampleReward_le_one] at hsemantic
+        localGlobalCounterexampleProfile] at hsemantic
     exact hsemantic
 
 end GameTheory

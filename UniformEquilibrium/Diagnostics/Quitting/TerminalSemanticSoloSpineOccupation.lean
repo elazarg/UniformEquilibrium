@@ -8,6 +8,7 @@ import MathUE.SurvivalProduct
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumSpine
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloOwnerRefinement
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
+import UniformEquilibrium.Quitting.RewardBound
 import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 
 /-!
@@ -211,8 +212,6 @@ select the owner's singleton reward as the initial prescribed vector. -/
 theorem quittingTerminalSemanticSoloSpine_initial_eq_soloReward_of_survival_tendsto_zero
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : ∀ time, pair time ∈ quittingTerminalSemanticCarrier reward)
     (hprefix : ∀ time, pair time = quittingTerminalSemanticPrefix reward
       (root time) (pair (time + 1)))
@@ -221,6 +220,7 @@ theorem quittingTerminalSemanticSoloSpine_initial_eq_soloReward_of_survival_tend
     (hsurvival : Tendsto
       (quittingSoloSemanticSurvival root owner 0) atTop (nhds 0)) :
     (pair 0).1 = quittingSoloReward reward owner := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   funext player
   let residual : ℕ → ℝ := fun fuel =>
     quittingSoloSemanticSurvival root owner 0 fuel *
@@ -386,8 +386,6 @@ equilibrium. -/
 theorem isZeroSoloEndpointNash_of_terminalSemanticSoloSpine_survival_tendsto_zero
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : ∀ time, pair time ∈ quittingTerminalSemanticCarrier reward)
     (hprefix : ∀ time, pair time = quittingTerminalSemanticPrefix reward
       (root time) (pair (time + 1)))
@@ -402,7 +400,7 @@ theorem isZeroSoloEndpointNash_of_terminalSemanticSoloSpine_survival_tendsto_zer
       (quittingSoloReward reward owner) 0 (root 0) := by
   have hzero :=
     quittingTerminalSemanticSoloSpine_initial_eq_soloReward_of_survival_tendsto_zero
-      pair root owner hM hreward hpair hprefix hpure hsurvival
+      pair root owner hpair hprefix hpure hsurvival
   have hone := quittingTerminalSemanticSoloSpine_next_eq_soloReward
     pair root owner hprefix hpure 0 hzero hcontinue
   rw [← hone]
@@ -415,8 +413,6 @@ theorem QuittingCounterexampleRegime.atomic_restrictions_of_soloSemanticSpine_su
     (regime : QuittingCounterexampleRegime reward)
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : ∀ time, pair time ∈ quittingTerminalSemanticCarrier reward)
     (hprefix : ∀ time, pair time = quittingTerminalSemanticPrefix reward
       (root time) (pair (time + 1)))
@@ -433,7 +429,7 @@ theorem QuittingCounterexampleRegime.atomic_restrictions_of_soloSemanticSpine_su
         quittingPunishmentValue reward owner := by
   have hendpoint :=
     isZeroSoloEndpointNash_of_terminalSemanticSoloSpine_survival_tendsto_zero
-      pair root owner hM hreward hpair hprefix hnash hpure hcontinue hsurvival
+      pair root owner hpair hprefix hnash hpure hcontinue hsurvival
   have hroot : root 0 =
       quittingSoloStationaryRoot owner (root 0 owner) :=
     eq_quittingSoloStationaryRoot_of_others_continue (hpure 0)
@@ -457,8 +453,6 @@ theorem QuittingCounterexampleRegime.nonAtomic_soloSemanticSpine_obstructions
     (regime : QuittingCounterexampleRegime reward)
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : ∀ time, pair time ∈ quittingTerminalSemanticCarrier reward)
     (hprefix : ∀ time, pair time = quittingTerminalSemanticPrefix reward
       (root time) (pair (time + 1)))
@@ -485,7 +479,7 @@ theorem QuittingCounterexampleRegime.nonAtomic_soloSemanticSpine_obstructions
     intro htendsto
     exact hnotAtomic
       (regime.atomic_restrictions_of_soloSemanticSpine_survival_zero
-        pair root owner hM hreward hpair hprefix hnash hpure
+        pair root owner hpair hprefix hnash hpure
           hquit hcontinue htendsto)
   have hnotEndpoint : ¬ IsεQuittingRootEndpointNash reward
       (quittingSoloReward reward owner) 0 (root 0) := by
@@ -564,8 +558,7 @@ then passes root Nash to the all-Continue limit. -/
 theorem exists_minimum_allContinueNash_of_soloSemanticSpine_survival_lower
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
-    {M lower : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {lower : ℝ}
     (hpair : ∀ time, pair time ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ time candidate,
       candidate ∈ quittingTerminalSemanticCarrier reward →
@@ -655,7 +648,7 @@ theorem exists_minimum_allContinueNash_of_soloSemanticSpine_survival_lower
     · exact congrArg nhds hallCoordinate
   obtain ⟨candidate, hcandidate, subsequence, hsubsequence,
       hcandidateLimit⟩ :=
-    (quittingTerminalSemanticCarrier_isCompact reward hM hreward).tendsto_subseq
+    (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
       (fun time => hpair (time + 1))
   have htailLimit : Tendsto
       (fun rank => (pair (subsequence rank + 1)).1) atTop
@@ -794,15 +787,13 @@ A pure-Quit first solo row is absorbed by branch 2: its arbitrary declared
 tail disappears from every endpoint comparison. -/
 theorem exists_semanticPlateau_or_atomicSolo_or_positiveSurvivalSpine_of_noUE
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (regime : QuittingCounterexampleRegime reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward ∨
       HasAtomicIsolatedNegativeSoloRow regime ∨
       HasPositiveSurvivalNontrivialMomentSoloSemanticSpine reward := by
   rcases
       exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_uniformPayoff
-        reward hM hreward regime.not_exists_uniformEquilibriumPayoff with
+        reward regime.not_exists_uniformEquilibriumPayoff with
     hplateau | ⟨pair, root, owner, debt, hdebt, hpair, hminimum,
       hprefix, hnash, hnoPlateau, hnoMinimumPlateau, hownerDebt, hotherDebt, hquit,
       hpure, hrootSolo, hopponentSurvival, htightNext, hblocker⟩
@@ -842,7 +833,7 @@ theorem exists_semanticPlateau_or_atomicSolo_or_positiveSurvivalSpine_of_noUE
         intro hsurvival
         exact hendpoint
           (isZeroSoloEndpointNash_of_terminalSemanticSoloSpine_survival_tendsto_zero
-            pair root owner hM hreward hpair hprefix hnash hpure
+            pair root owner hpair hprefix hnash hpure
               hcontinue hsurvival)
       obtain ⟨lower, hlower, hsurvivalLower⟩ :=
         exists_pos_le_quittingSoloSemanticSurvival_of_not_tendsto_zero
@@ -865,13 +856,11 @@ already contains either a positive minimum all-Continue plateau or a
 quantitative isolated-negative atomic solo row. -/
 theorem exists_semanticPlateau_or_atomicSolo_of_noUE
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (regime : QuittingCounterexampleRegime reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward ∨
       HasAtomicIsolatedNegativeSoloRow regime := by
   rcases exists_semanticPlateau_or_atomicSolo_or_positiveSurvivalSpine_of_noUE
-      regime hM hreward with hplateau | hatomic | hspine
+      regime with hplateau | hatomic | hspine
   · exact Or.inl hplateau
   · exact Or.inr hatomic
   · rcases hspine with
@@ -882,8 +871,7 @@ theorem exists_semanticPlateau_or_atomicSolo_of_noUE
         hmoment, hmomentOwner, hmomentNe⟩
     obtain ⟨candidate, hcandidate, hcandidateMin, hnashAll⟩ :=
       exists_minimum_allContinueNash_of_soloSemanticSpine_survival_lower
-        pair root owner hM hreward hpair hminimum hnash hpure
-          hlower hsurvivalLower
+        pair root owner hpair hminimum hnash hpure hlower hsurvivalLower
     exact False.elim
       (hnoMinimumPlateau
         ⟨candidate, hcandidate, hcandidateMin, hnashAll⟩)

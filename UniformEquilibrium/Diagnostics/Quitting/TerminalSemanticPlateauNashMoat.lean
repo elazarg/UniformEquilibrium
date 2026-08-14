@@ -256,9 +256,7 @@ every positive total-opponent-incidence scale. -/
 theorem exists_resetFace_positiveIncidence_robustNashMoat
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -288,8 +286,7 @@ theorem exists_resetFace_positiveIncidence_robustNashMoat
   obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
       hsourceLe, _hallContinueNash, _hfixed, hallRoots⟩ :=
     exists_resetFace_positiveTotalIncidence_allContinueCapPlateau
-      source target mass owner hM hreward hminimum hsourcePositive
-        htarget hreset hincidence
+      source target mass owner hminimum hsourcePositive htarget hreset hincidence
   refine ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
     hsourceLe, hallRoots, ?_⟩
   intro eta heta

@@ -302,9 +302,7 @@ switching loss; no relabeling is silently treated as free. -/
 theorem sum_liveMass_mul_spineCostateCharge_le_stoppedDefectExcessSwitch
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (theta : ℕ → Payoff ι) (reference : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (theta : ℕ → Payoff ι) (reference : ℝ) (cutoff : ℕ)
     (htheta : ∀ time who, 0 ≤ theta time who) :
     (∑ time ∈ Finset.range cutoff,
         quittingLiveMass reward profile time *
@@ -344,14 +342,14 @@ theorem sum_liveMass_mul_spineCostateCharge_le_stoppedDefectExcessSwitch
       quittingTerminalSemanticPair_mem_carrier reward _
     have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward htailCarrier
+        reward htailCarrier
     have hcharge :=
       quittingRootWeightedOpponentAbsorptionDebtCharge_le_drift_add_defect
         (theta time) reward tail root (htheta time) htailDebt
     have hprefix : current = quittingTerminalSemanticPrefix reward root tail := by
       dsimp only [current, root, tail]
       exact quittingTerminalSemanticPair_spine_eq_prefix
-        reward profile time hM hreward
+        reward profile time
     rw [← hprefix] at hcharge
     dsimp only [quittingSpineCostateOpponentAbsorptionDebtCharge,
       quittingSpineCostateNashDefect]
@@ -407,9 +405,7 @@ coordinate-matched weighted defect occupation. -/
 theorem sum_liveMass_mul_spineCostateCharge_le_epsilon_add_defect_of_uphill
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (theta : ℕ → Payoff ι) (reference epsilon : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (theta : ℕ → Payoff ι) (reference epsilon : ℝ) (cutoff : ℕ)
     (htheta : ∀ time who, 0 ≤ theta time who)
     (hinitial : 0 ≤ quittingSpineCostateDebtExcess
       reward profile theta reference 0)
@@ -429,7 +425,7 @@ theorem sum_liveMass_mul_spineCostateCharge_le_epsilon_add_defect_of_uphill
             quittingSpineCostateNashDefect reward profile theta time := by
   have htelescope :=
     sum_liveMass_mul_spineCostateCharge_le_stoppedDefectExcessSwitch
-      reward profile theta reference cutoff hM hreward htheta
+      reward profile theta reference cutoff htheta
   have hliveEndpointNonneg := quittingLiveMass_nonneg reward profile cutoff
   have hendpoint : quittingLiveMass reward profile cutoff *
       quittingSpineCostateDebtExcess reward profile theta reference cutoff ≤
@@ -493,15 +489,13 @@ theorem sum_liveMass_mul_spineCostateCharge_le_epsilon_add_defect_of_uphill
 terminal-semantic carrier. -/
 theorem exists_minimum_quittingTerminalSemanticExploitability
     [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     ∃ pair ∈ quittingTerminalSemanticCarrier reward,
       ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
         quittingTerminalSemanticExploitability pair ≤
           quittingTerminalSemanticExploitability candidate := by
   obtain ⟨pair, hpair, hmin⟩ :=
-    (quittingTerminalSemanticCarrier_isCompact reward hM hreward).exists_isMinOn
+    (quittingTerminalSemanticCarrier_isCompact reward).exists_isMinOn
       (quittingTerminalSemanticCarrier_nonempty reward)
       continuous_quittingTerminalSemanticExploitability.continuousOn
   exact ⟨pair, hpair, fun candidate hcandidate => hmin hcandidate⟩
@@ -520,9 +514,7 @@ theorem nearMinimumTerminalSemantic_exploitabilityAuxiliaryNash_absorptionMass_l
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι)
     (h : Payoff ι) (root : ι → PMF Bool)
-    (floor epsilon rho : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (floor epsilon rho : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       floor ≤ quittingTerminalSemanticExploitability candidate)
@@ -536,14 +528,14 @@ theorem nearMinimumTerminalSemantic_exploitabilityAuxiliaryNash_absorptionMass_l
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root pair hM hreward hpair
+      reward root pair hpair
   have hpairDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hprefixedDebt : ∀ who,
       0 ≤ quittingTerminalSemanticDebt prefixed who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hprefixed
+      reward hprefixed
   have hpairDebtLe : ∀ who, quittingTerminalSemanticDebt pair who ≤
       floor + epsilon := by
     intro who
@@ -598,9 +590,7 @@ theorem nearMinimumTerminalSemantic_exploitabilityAuxiliaryNash_absorptionMass_l
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι)
     (h : Payoff ι) (root : ι → PMF Bool)
-    (floor epsilon rho : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (floor epsilon rho : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       floor ≤ quittingTerminalSemanticExploitability candidate)
@@ -613,7 +603,7 @@ theorem nearMinimumTerminalSemantic_exploitabilityAuxiliaryNash_absorptionMass_l
     quittingRootAbsorptionMass root ≤ epsilon / rho := by
   have hsharp :=
     nearMinimumTerminalSemantic_exploitabilityAuxiliaryNash_absorptionMass_le_sharp
-      reward pair h root floor epsilon rho hM hreward hpair hfloor
+      reward pair h root floor epsilon rho hpair hfloor
         hpairUpper hepsilon hrho hh hshift hnash
   have hfraction : epsilon / (rho + epsilon) ≤ epsilon / rho := by
     exact div_le_div_of_nonneg_left hepsilon hrho (by linarith)
@@ -625,9 +615,7 @@ theorem minimumTerminalSemantic_exploitabilityAuxiliaryNash_eq_allContinue
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι)
-    (h : Payoff ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (h : Payoff ι) (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticExploitability pair ≤
@@ -656,7 +644,7 @@ theorem minimumTerminalSemantic_exploitabilityAuxiliaryNash_eq_allContinue
   have habsorptionLe :=
     nearMinimumTerminalSemantic_exploitabilityAuxiliaryNash_absorptionMass_le
       reward pair h root (quittingTerminalSemanticExploitability pair) 0 rho
-        hM hreward hpair hminimum (by simp) (by positivity) hrho hh hshift hnash
+        hpair hminimum (by simp) (by positivity) hrho hh hshift hnash
   rw [zero_div] at habsorptionLe
   have habsorptionZero : quittingRootAbsorptionMass root = 0 :=
     le_antisymm habsorptionLe (quittingRootAbsorptionMass_nonneg root)
@@ -673,9 +661,7 @@ the envelope is at least the full minimax debt. -/
 theorem minimumTerminalSemantic_exploitabilitySingletonMargin
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticExploitability pair ≤
@@ -690,7 +676,7 @@ theorem minimumTerminalSemantic_exploitabilitySingletonMargin
   have hzeroRoot : zeroRoot =
       (quittingAllContinueRoot : ι → PMF Bool) := by
     apply minimumTerminalSemantic_exploitabilityAuxiliaryNash_eq_allContinue
-      reward pair zeroShift zeroRoot hM hreward hpair hminimum
+      reward pair zeroShift zeroRoot hpair hminimum
     · intro player
       simp [zeroShift]
     · intro player
@@ -735,8 +721,7 @@ theorem minimumTerminalSemantic_exploitabilitySingletonMargin
     (reward := reward) (pair.2 - shift)
   have hroot : root = (quittingAllContinueRoot : ι → PMF Bool) :=
     minimumTerminalSemantic_exploitabilityAuxiliaryNash_eq_allContinue
-      reward pair shift root hM hreward hpair hminimum hshiftNonneg
-        hshiftStrict hnash
+      reward pair shift root hpair hminimum hshiftNonneg hshiftStrict hnash
   have hnashAll : IsεQuittingRootNash reward (pair.2 - shift) 0
       (quittingAllContinueRoot : ι → PMF Bool) := by
     simpa [hroot] using hnash
@@ -756,9 +741,7 @@ has the same plateau reduction as the previously used total-debt objective. -/
 theorem minimumTerminalSemantic_exploitabilityIs_allContinuePlateau
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticExploitability pair ≤
@@ -771,13 +754,13 @@ theorem minimumTerminalSemantic_exploitabilityIs_allContinuePlateau
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hsingleton : ∀ who,
       reward (quittingSingletonTerminal who) who ≤ pair.1 who := by
     intro who
     have hmargin :=
       minimumTerminalSemantic_exploitabilitySingletonMargin
-        reward pair hM hreward hpair hminimum hpositive who
+        reward pair hpair hminimum hpositive who
     have hdebtLe := quittingTerminalSemanticDebt_le_exploitability
       pair who (hdebtNonneg who)
     unfold quittingTerminalSemanticDebt at hdebtLe
@@ -803,9 +786,7 @@ theorem exists_maxDebtSelector_sum_liveMass_mul_charge_le_epsilon_add_defect
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (reference epsilon : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon : ℝ) (cutoff : ℕ)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticExploitability candidate)
     (hnear : ∀ time ≤ cutoff,
@@ -855,7 +836,7 @@ theorem exists_maxDebtSelector_sum_liveMass_mul_charge_le_epsilon_add_defect
     have hpairDebt : ∀ who,
         0 ≤ quittingTerminalSemanticDebt pair who :=
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward hpairCarrier
+        reward hpairCarrier
     have hmax : ∀ who, quittingTerminalSemanticDebt pair who ≤
         quittingTerminalSemanticDebt pair (owner time) := howner time
     unfold quittingSpineCostateDebt
@@ -890,8 +871,8 @@ theorem exists_maxDebtSelector_sum_liveMass_mul_charge_le_epsilon_add_defect
     exact howner (time + 1) (owner time)
   have hbound :=
     sum_liveMass_mul_spineCostateCharge_le_epsilon_add_defect_of_uphill
-      reward profile theta reference epsilon cutoff hM hreward htheta
-        hinitial hscoreNear huphill
+      reward profile theta reference epsilon cutoff htheta hinitial hscoreNear
+        huphill
   refine ⟨owner, howner, ?_⟩
   simpa only [quittingSpineCostateOpponentAbsorptionDebtCharge,
     quittingSpineCostateNashDefect, theta,
@@ -917,8 +898,6 @@ theorem maxDebtSelector_tailDebt_or_transfer
           (quittingTerminalSemanticPair reward
             (quittingAllContinueProfileSpine reward profile time))
           (owner time))
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (time : ℕ) :
     reference - eta ≤
         quittingTerminalSemanticDebt
@@ -940,7 +919,7 @@ theorem maxDebtSelector_tailDebt_or_transfer
     quittingTerminalSemanticPair_mem_carrier reward _
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htailCarrier
+      reward htailCarrier
   have hnextMax : quittingTerminalSemanticExploitability tail =
       quittingTerminalSemanticDebt tail (owner (time + 1)) :=
     quittingTerminalSemanticExploitability_eq_debt_of_maximizer

@@ -253,8 +253,8 @@ theorem fixed_minimal_on_fixedLaw
   have hotherNonneg : ∀ player ∈ Finset.univ,
       0 ≤ quittingTerminalSemanticDebt candidate player := by
     intro player _
-    exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-      (by norm_num) abs_reward_le_one hcandidateCarrier player
+    exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+      reward hcandidateCarrier player
   rw [fixed_debtSum]
   exact hdebt.trans (Finset.single_le_sum hotherNonneg (Finset.mem_univ debtor))
 
@@ -271,8 +271,8 @@ theorem global_minimal_on_resetFace
     terminalSemanticLawCarrier_fst_mem_carrier candidate hcandidate
   rw [global_debtSum]
   exact Finset.sum_nonneg fun player _ =>
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-      (by norm_num) abs_reward_le_one hcandidateCarrier player
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+      reward hcandidateCarrier player
 
 /-- The retained fixed law has unit mass on the displayed singleton atom. -/
 theorem fixedLaw_atom_eq_one : fixedLaw (some atomTerminal) = 1 := by

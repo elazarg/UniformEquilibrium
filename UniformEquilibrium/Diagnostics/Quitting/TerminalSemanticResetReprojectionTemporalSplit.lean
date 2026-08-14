@@ -89,8 +89,6 @@ temporal branches. -/
 theorem tendsto_normalized_moving_coordinateNashDefect_zero
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
     (owner : iota) (scale : ℕ → ℝ) (mark : ℕ → ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hscale : ∀ n, 0 < scale n)
     (hratio : Tendsto (fun n ↦
       quittingTerminalSemanticDebt
@@ -113,7 +111,7 @@ theorem tendsto_normalized_moving_coordinateNashDefect_zero
   · intro n
     apply (div_le_div_iff_of_pos_right (hscale n)).2
     exact quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
-      (reward := reward) (profiles n) owner (mark n) hM hreward
+      (reward := reward) (profiles n) owner (mark n)
   · exact hratio
 
 /-- A cofinally recurring positive stage atom, with its literal semantic edge
@@ -191,8 +189,6 @@ theorem exists_concentrated_or_diffuseWindowPacket
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
     (owner : iota) (terminal : {S : Finset iota // S.Nonempty})
     (cutoff : ℕ → ℕ) (scale : ℕ → ℝ) (lower : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hlower : 0 < lower)
     (hwindow : ∀ᶠ n in atTop, lower <
       quittingFiniteWindowCoalitionMass (profiles n) terminal (cutoff n))
@@ -227,12 +223,12 @@ theorem exists_concentrated_or_diffuseWindowPacket
       defect_tendsto := ?_ }⟩
     · intro rank
       exact positive_stageCoalitionMass_has_semanticPrefixIncidence
-        reward (profiles (subseq rank)) (mark rank) terminal hM hreward
+        reward (profiles (subseq rank)) (mark rank) terminal
           (hresolution.trans_le (hmarkMass rank))
     · exact
         (tendsto_normalized_moving_coordinateNashDefect_zero
           (reward := reward) (fun rank => profiles (subseq rank)) owner
-          (fun rank => scale (subseq rank)) mark hM hreward
+          (fun rank => scale (subseq rank)) mark
           (fun rank => hscale (subseq rank))
           (hratio.comp hsubseq.tendsto_atTop))
   · have hdiffuse : ∀ resolution : ℝ, 0 < resolution →
@@ -256,7 +252,7 @@ theorem exists_concentrated_or_diffuseWindowPacket
       clock_mesh := ?_
       defect_tendsto := fun mark =>
         tendsto_normalized_moving_coordinateNashDefect_zero
-          (reward := reward) profiles owner scale mark hM hreward hscale
+          (reward := reward) profiles owner scale mark hscale
             hratio }⟩
     · filter_upwards [hwindow] with n hn
       exact sum_quittingFiniteWindowCoalitionClock_eq_one
@@ -284,9 +280,7 @@ surface-tension scale. -/
 theorem exists_sameProfile_temporalTightnessSplit
     (contact : QuittingTerminalSemanticLawPoint iota)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
-    (owner : iota) (scale : ℕ → ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : iota) (scale : ℕ → ℝ)
     (hcontact : contact ∈ quittingTerminalSemanticLawCarrier reward)
     (hprofiles : Tendsto (fun n ↦
       (quittingTerminalSemanticPair reward (profiles n),
@@ -309,10 +303,10 @@ theorem exists_sameProfile_temporalTightnessSplit
   obtain ⟨other, terminal, lower, cutoff, hother, hterminal, hlower,
       hwindow, _hdefect⟩ :=
     exists_sameProfile_finiteWindow_defectPacket
-      (reward := reward) contact profiles owner scale hM hreward hcontact
+      (reward := reward) contact profiles owner scale hcontact
         hprofiles hincidence hscale hratio
   have hsplit := exists_concentrated_or_diffuseWindowPacket
-    (reward := reward) profiles owner terminal cutoff scale lower hM hreward
+    (reward := reward) profiles owner terminal cutoff scale lower
       hlower (by simpa [quittingFiniteWindowCoalitionMass] using hwindow)
         hscale hratio
   exact ⟨other, terminal, lower, cutoff, hother, hterminal, hlower, hsplit⟩

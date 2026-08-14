@@ -85,9 +85,7 @@ quitting opponent in a coalition with two or more members. -/
 theorem quittingStageCoalitionMass_mul_tailDebtSum_le_liveMass_mul_charge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
-    (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty})
     (hcollision : 1 < terminal.val.card) :
     quittingStageCoalitionMass reward profile time terminal *
         quittingTerminalSemanticDebtSum
@@ -102,7 +100,7 @@ theorem quittingStageCoalitionMass_mul_tailDebtSum_le_liveMass_mul_charge
     quittingTerminalSemanticPair_mem_carrier reward _
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htailCarrier
+      reward htailCarrier
   have hcoordinate : ∀ who,
       quittingRootCoalitionMass root terminal.val *
           quittingTerminalSemanticDebt tail who ≤
@@ -137,9 +135,7 @@ not identify it with the gain of one unilateral deviation. -/
 theorem sum_liveMass_mul_spineOpponentAbsorptionDebtCharge_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (reference : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (reference : ℝ) (cutoff : ℕ) :
     (∑ time ∈ Finset.range cutoff,
         quittingLiveMass reward profile time *
           quittingSpineOpponentAbsorptionDebtCharge reward profile time) ≤
@@ -168,14 +164,14 @@ theorem sum_liveMass_mul_spineOpponentAbsorptionDebtCharge_le
       quittingTerminalSemanticPair_mem_carrier reward _
     have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward htailCarrier
+        reward htailCarrier
     have hcharge :=
       sum_opponentAbsorptionMass_mul_debt_le_sumDebt_drift_add_totalNashDefect
         reward tail root htailDebt
     have hprefix : current = quittingTerminalSemanticPrefix reward root tail := by
       dsimp only [current, root, tail]
       exact quittingTerminalSemanticPair_spine_eq_prefix
-        reward profile time hM hreward
+        reward profile time
     rw [← hprefix] at hcharge
     simpa [quittingSpineOpponentAbsorptionDebtCharge,
       quittingSpineDebtExcess, quittingSpineTotalNashDefect,
@@ -217,9 +213,7 @@ theorem sum_stageCollisionMass_mul_tailDebtSum_le_stoppedDefectExcess
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (terminal : {S : Finset ι // S.Nonempty})
-    (reference : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference : ℝ) (cutoff : ℕ)
     (hcollision : 1 < terminal.val.card) :
     (∑ time ∈ Finset.range cutoff,
       quittingStageCoalitionMass reward profile time terminal *
@@ -238,10 +232,10 @@ theorem sum_stageCollisionMass_mul_tailDebtSum_le_stoppedDefectExcess
           quittingSpineTotalNashDefect reward profile time := by
   have hmarked := Finset.sum_le_sum fun time (_htime : time ∈ Finset.range cutoff) =>
     quittingStageCoalitionMass_mul_tailDebtSum_le_liveMass_mul_charge
-      reward profile time terminal hM hreward hcollision
+      reward profile time terminal hcollision
   exact hmarked.trans
     (sum_liveMass_mul_spineOpponentAbsorptionDebtCharge_le
-      reward profile reference cutoff hM hreward)
+      reward profile reference cutoff)
 
 /-- Minimum-carrier specialization.  All shifted-tail excesses are
 nonnegative; this makes explicit that the Abel telescope has no hidden
@@ -272,9 +266,7 @@ needed to consume the displayed defect occupation sum. -/
 theorem sum_liveMass_mul_spineOpponentAbsorptionDebtCharge_le_epsilon_add_defect
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (reference epsilon : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon : ℝ) (cutoff : ℕ)
     (hinitial : 0 ≤ quittingSpineDebtExcess reward profile reference 0)
     (hnear : ∀ time ≤ cutoff,
       quittingSpineDebtExcess reward profile reference time ≤ epsilon) :
@@ -287,7 +279,7 @@ theorem sum_liveMass_mul_spineOpponentAbsorptionDebtCharge_le_epsilon_add_defect
             quittingSpineTotalNashDefect reward profile time := by
   have htelescope :=
     sum_liveMass_mul_spineOpponentAbsorptionDebtCharge_le
-      reward profile reference cutoff hM hreward
+      reward profile reference cutoff
   have hliveEndpointNonneg := quittingLiveMass_nonneg reward profile cutoff
   have hliveEndpointLe := quittingLiveMass_le_one reward profile cutoff
   have hendpoint : quittingLiveMass reward profile cutoff *

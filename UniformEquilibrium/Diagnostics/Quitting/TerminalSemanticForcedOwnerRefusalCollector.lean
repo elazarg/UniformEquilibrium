@@ -226,8 +226,7 @@ theorem quittingStageCoalitionMass_mul_forcedRefusal_le_spineDebtDrop
     quittingTerminalSemanticPair_mem_carrier reward _
   have htailDebt : 0 ≤ quittingTerminalSemanticDebt tail owner :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) htailCarrier owner
+      htailCarrier owner
   have hfloor : quittingPunishmentValue reward owner ≤ tail.2 owner := by
     have h := quittingPunishmentValue_le reward owner
       (quittingAllContinueProfileSpine reward profile (time + 1))
@@ -262,8 +261,6 @@ theorem quittingStageCoalitionMass_mul_forcedRefusal_le_spineDebtDrop
   have hweighted := mul_le_mul_of_nonneg_left hrow hlive0
   have hprefix : current = quittingTerminalSemanticPrefix reward root tail :=
     quittingTerminalSemanticPair_spine_eq_prefix reward profile time
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
   have hliveSucc : quittingLiveMass reward profile (time + 1) =
       quittingLiveMass reward profile time *
         quittingStationaryContinueMass root := by
@@ -334,8 +331,6 @@ theorem sum_stageCoalitionMass_mul_forcedRefusal_le_initialSemanticDebt
       quittingForcedOwnerSpineDebt reward profile owner cutoff := by
     unfold quittingForcedOwnerSpineDebt
     exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
       (quittingTerminalSemanticPair_mem_carrier reward _) owner
   have hendpoint : 0 ≤ carried cutoff :=
     mul_nonneg (quittingLiveMass_nonneg reward profile cutoff) hendpointDebt

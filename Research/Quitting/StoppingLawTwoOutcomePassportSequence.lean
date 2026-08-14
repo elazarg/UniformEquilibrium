@@ -6,7 +6,6 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalAtomSequenceDispatch
 import Research.Quitting.TerminalLawTwoOutcomePassport
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Fixed two-outcome passports on the off-diagonal stopping-law frontier
@@ -195,10 +194,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtPassp
         rw [hactiveEmpty] at hmem
         simp at hmem
       exact le_antisymm (le_of_not_gt hnotPositive)
-        (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
-          frontier.base_mem who)
+        (quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+          reward frontier.base_mem who)
     have hbasePositive := frontier.base_positive
     unfold quittingTerminalSemanticDebtSum at hbasePositive
     simp only [hdebtZero, Finset.sum_const_zero] at hbasePositive
@@ -504,8 +501,6 @@ theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
       apply squeeze_zero
       · intro n
         exact quittingTerminalDeviationDebt_nonneg reward _ observer
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
       · intro n
         simpa only [rank, quitTime] using
           hdebtAt (pairSubseq (n + labelStart))

@@ -50,9 +50,7 @@ theorem causalCollision_tailEscape_or_quantitativeNearMinimumTransfer
     (minimum : QuittingTerminalSemanticPair iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (stage : ℕ) (terminal : {S : Finset iota // S.Nonempty})
-    (lower epsilon : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (lower epsilon : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -120,7 +118,7 @@ theorem causalCollision_tailEscape_or_quantitativeNearMinimumTransfer
   let tail := quittingTerminalSemanticPair reward
     (quittingAllContinueProfileSpine reward profile (stage + 1))
   have hdispatch := causalCollision_tailEscape_or_quantitativeBestEndpoint
-    reward minimum profile stage terminal lower hM hreward hminimumCarrier
+    reward minimum profile stage terminal lower hminimumCarrier
       hminimum hminimumDebt hcollision hlower hmass
   dsimp only [tail] at hdispatch ⊢
   rcases hdispatch with hescape | hgain

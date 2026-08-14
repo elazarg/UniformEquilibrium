@@ -252,9 +252,7 @@ all-Continue directly from the division-free maximum principle. -/
 theorem root_eq_allContinue_of_minimal_surfaceTension
     (source : QuittingTerminalSemanticPair ι)
     (returned : QuittingTerminalSemanticLawPoint ι)
-    (owner : ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι) (root : ι → PMF Bool)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -285,7 +283,7 @@ theorem root_eq_allContinue_of_minimal_surfaceTension
   have hprefixedJoint : (prefixed, prefixedMass) ∈
       quittingTerminalSemanticLawCarrier reward :=
     quittingTerminalSemanticLawPrefix_mem_carrier
-      reward root returned hM hreward hreturned
+      reward root returned hreturned
   have hprefixedCarrier :=
     terminalSemanticLawCarrier_fst_mem_carrier
       (prefixed, prefixedMass) hprefixedJoint
@@ -400,9 +398,8 @@ theorem resetFace_globalMinimum_or_surfaceTension_allContinue
       hreturnedStrict, ?_⟩
     intro root hnash
     exact root_eq_allContinue_of_minimal_surfaceTension
-      source returned owner root hM hreward hminimum hsourcePositive
-        hreturned hreturnedReset hreturnedStrict hreturnedIncidence
-        hslope hnash
+      source returned owner root hminimum hsourcePositive hreturned
+        hreturnedReset hreturnedStrict hreturnedIncidence hslope hnash
 
 /-! ## Face-preserving fractional transfer at the excess scale -/
 

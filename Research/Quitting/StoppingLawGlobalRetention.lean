@@ -304,8 +304,6 @@ theorem exists_twoMatchedHalfResets_or_firstExcessCharge
                     quittingStageCoalitionMass reward profile time terminal ≤
                   quittingStageCoalitionMass reward secondTargetProfile
                     time terminal) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hnearZero : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward profile) ≤
@@ -344,7 +342,7 @@ theorem exists_twoMatchedHalfResets_or_firstExcessCharge
     exact quittingTerminalSemanticPair_mem_carrier reward profile
   have hsourceDebtNonneg : 0 ≤ quittingTerminalSemanticDebt source secondMover :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hsourceMem secondMover
+      reward hsourceMem secondMover
   have hsecondDebt : 0 < quittingTerminalSemanticDebt firstTarget secondMover := by
     unfold quittingTerminalSemanticDebtChange at hsecondChange
     linarith

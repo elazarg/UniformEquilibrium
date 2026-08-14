@@ -152,8 +152,7 @@ theorem quittingContinuationBestResponseValue_rootThenContinuation_eq_max
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (who : ι) :
     quittingContinuationBestResponseValue reward
         (quittingRootThenContinuationProfile reward root continuation) who =
       max
@@ -177,11 +176,8 @@ theorem quittingContinuationBestResponseValue_rootThenContinuation_eq_max
     exact ⟨quittingTerminalPayoff reward
       (Function.update spliced who (spliced who)) who, ⟨spliced who, rfl⟩⟩
   have hbounded : BddAbove values := by
-    refine ⟨M, ?_⟩
-    rintro payoff ⟨deviation, rfl⟩
-    exact (le_abs_self _).trans
-      (abs_quittingTerminalPayoff_le reward
-        (Function.update spliced who deviation) who hM hreward)
+    dsimp only [values]
+    exact bddAbove_range_quittingTerminalPayoff_update reward spliced who
   change sSup values = _
   apply le_antisymm
   · apply csSup_le hvalues
@@ -275,19 +271,13 @@ theorem quittingContinuationBestResponseValue_rootThenContinuation_eq_max
 /-- Literal terminal deviation debt is nonnegative. -/
 theorem quittingTerminalDeviationDebt_nonneg
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
     0 ≤ quittingTerminalDeviationDebt reward profile who := by
   have hbounded : BddAbove (Set.range fun deviation :
       (quittingGame reward).BehaviorStrategy who =>
     quittingTerminalPayoff reward
       (Function.update profile who deviation) who) := by
-    refine ⟨M, ?_⟩
-    rintro payoff ⟨deviation, rfl⟩
-    exact (le_abs_self _).trans
-      (abs_quittingTerminalPayoff_le reward
-        (Function.update profile who deviation) who hM hreward)
+    exact bddAbove_range_quittingTerminalPayoff_update reward profile who
   have hprescribed : quittingTerminalPayoff reward profile who ≤
       quittingContinuationBestResponseValue reward profile who := by
     unfold quittingContinuationBestResponseValue
@@ -306,8 +296,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (who : ι)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player) 0 root) :
     quittingTerminalDeviationDebt reward
@@ -333,7 +322,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq
   let debt := quittingTerminalDeviationDebt reward continuation who
   rw [quittingTerminalDeviationDebt,
     quittingContinuationBestResponseValue_rootThenContinuation_eq_max
-      reward root continuation who hM hreward,
+      reward root continuation who,
     quittingTerminalPayoff_rootThenContinuation_eq]
   change max
       (quittingRootQuitPayoff reward base root who)
@@ -357,8 +346,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (who : ι)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player) 0 root) :
     quittingTerminalDeviationDebt reward
@@ -366,13 +354,13 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_le
       quittingRootOpponentContinueMass root who *
         quittingTerminalDeviationDebt reward continuation who := by
   rw [quittingTerminalDeviationDebt_rootThenContinuation_eq
-    reward root continuation who hM hreward hnash]
+    reward root continuation who hnash]
   let base : Payoff ι :=
     fun player => quittingTerminalPayoff reward continuation player
   let debt := quittingTerminalDeviationDebt reward continuation who
   let mass := quittingRootOpponentContinueMass root who
   have hdebt : 0 ≤ debt :=
-    quittingTerminalDeviationDebt_nonneg reward continuation who hM hreward
+    quittingTerminalDeviationDebt_nonneg reward continuation who
   have hmass : 0 ≤ mass := quittingRootOpponentContinueMass_nonneg root who
   have hmax := max_sub_max_le_max
     (quittingRootQuitPayoff reward base root who)

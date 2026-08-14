@@ -8,7 +8,6 @@ import Research.Semantics.SurvivalWeightedReachedHistoryAccount
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeNegativeCollisionAtomicDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauLocalizedOtherDefect
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionWindow
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Thin quitting adapters for reached-history localization
@@ -107,8 +106,6 @@ theorem sureQuitterReachedRow_minimumDebt_localization_of_reach
           (quittingTerminalSemanticPair reward
             (quittingAllContinueProfileSpine reward profile (stage + 1))).1
           (quittingProfileLiveRoot reward profile stage) other := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let current := quittingTerminalSemanticPair reward
     (quittingAllContinueProfileSpine reward profile stage)
   let tail := quittingTerminalSemanticPair reward
@@ -120,14 +117,14 @@ theorem sureQuitterReachedRow_minimumDebt_localization_of_reach
     quittingTerminalSemanticPair_mem_carrier reward _
   have hcurrentNonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt current who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hcurrentCarrier
+      reward hcurrentCarrier
   have htailNonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htailCarrier
+      reward htailCarrier
   have hprefix : current = quittingTerminalSemanticPrefix reward root tail := by
     dsimp only [current, root, tail]
     exact quittingTerminalSemanticPair_spine_eq_prefix
-      reward profile stage hM hreward
+      reward profile stage
   have hotherEq : ∀ other ∈ Finset.univ.erase observer,
       quittingTerminalSemanticDebt current other =
         quittingRootCoordinateNashDefect reward tail.1 root other := by
@@ -155,7 +152,7 @@ theorem sureQuitterReachedRow_minimumDebt_localization_of_reach
           (quittingTerminalSemanticPair reward profile) observer := by
     simpa only [current] using
       (quittingLiveMass_mul_spineDebt_le_initialDebt
-        (reward := reward) profile observer hM hreward stage)
+        (reward := reward) profile observer stage)
   have hlowerWeighted : lower *
       quittingTerminalSemanticDebt current observer ≤
         quittingTerminalSemanticDebt

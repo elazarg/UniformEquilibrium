@@ -255,8 +255,6 @@ theorem concentratedPacket_singletonStrategic_or_collisionMinimumResidual
       reward profiles owner terminal cutoff scale)
     (other : iota) (hotherNe : other ≠ owner)
     (hotherMem : other ∈ terminal.val)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -269,7 +267,7 @@ theorem concentratedPacket_singletonStrategic_or_collisionMinimumResidual
       Nonempty (QuittingConcentratedCollisionMinimumResidual
         reward minimum owner terminal packet) := by
   rcases exists_concentrated_singleton_or_tailEscape_or_otherDefect
-      (reward := reward) minimum packet hM hreward hminimumCarrier hminimum
+      (reward := reward) minimum packet hminimumCarrier hminimum
         hminimumPositive hscale hscaleTendsto with hsingleton | hcollision
   · exact Or.inl (regime.concentratedSingletonStrategicDispatch
       packet hsingleton other hotherNe hotherMem hscale hscaleTendsto)
@@ -298,8 +296,6 @@ theorem exists_resetFaceLaw_singletonStrategic_or_collisionMinimumResidual
     (point : QuittingTerminalSemanticLawPoint iota)
     (owner : iota)
     (terminal : {S : Finset iota // S.Nonempty})
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward)
     (hface : quittingTerminalSemanticDebt point.1 owner = 0)
     (hmass : 0 < point.2 (some terminal))
@@ -328,7 +324,7 @@ theorem exists_resetFaceLaw_singletonStrategic_or_collisionMinimumResidual
   obtain ⟨profiles, cutoff, scale, fixedOther, exact, hprofiles,
       hscale, hscaleTendsto, hfixedOther, hfixedOtherMem, hpacket⟩ :=
     exists_resetFaceLaw_concentratedPacket_of_collision
-      reward point owner terminal hM hreward hpoint hface hmass hcollision
+      reward point owner terminal hpoint hface hmass hcollision
   let packet := Classical.choice hpacket
   have hpointCarrier : point.1 ∈
       quittingTerminalSemanticCarrier reward := by
@@ -338,7 +334,7 @@ theorem exists_resetFaceLaw_singletonStrategic_or_collisionMinimumResidual
     exact ⟨profile, rfl⟩
   have hdispatch :=
     regime.concentratedPacket_singletonStrategic_or_collisionMinimumResidual
-      point.1 packet fixedOther hfixedOther hfixedOtherMem hM hreward
+      point.1 packet fixedOther hfixedOther hfixedOtherMem
         hpointCarrier hminimum hminimumPositive hscale hscaleTendsto
   exact ⟨profiles, cutoff, scale, fixedOther, exact, packet, hprofiles,
     hscale, hscaleTendsto, hfixedOther, hfixedOtherMem, hdispatch⟩

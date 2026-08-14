@@ -7,7 +7,6 @@ Authors: GameTheory contributors
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.CapDebtBellmanReduction
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Paid nonexact cap-stack accounting
@@ -87,10 +86,8 @@ theorem quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_add_cap
         quittingRootTotalNashDefect reward
           (fun who => quittingContinuationBestResponseValue reward continuation who)
           root := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hpair := quittingTerminalSemanticPair_rootThenContinuation
-    reward root continuation hM hreward
+    reward root continuation
   have hidentity :=
     quittingTerminalSemanticDebtSum_prefix_eq_continueMass_mul_add_capDefect
       reward (quittingTerminalSemanticPair reward continuation) root

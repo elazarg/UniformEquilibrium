@@ -76,9 +76,7 @@ exactly its actual time-zero live root prefixed to its shifted all-Continue
 continuation. -/
 theorem quittingTerminalSemanticPair_eq_prefix_allContinueContinuation
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (profile : (quittingGame reward).BehaviorProfile) :
     quittingTerminalSemanticPair reward profile =
       quittingTerminalSemanticPrefix reward
         (quittingProfileRoot reward profile)
@@ -88,14 +86,13 @@ theorem quittingTerminalSemanticPair_eq_prefix_allContinueContinuation
   unfold quittingFirstStageAdapter
   exact quittingTerminalSemanticPair_rootThenContinuation
     reward (quittingProfileRoot reward profile)
-      (quittingProfileAllContinueContinuation reward profile) hM hreward
+      (quittingProfileAllContinueContinuation reward profile)
 
 /-- The exact semantic prefix factorization at every actual live row. -/
 theorem quittingTerminalSemanticPair_spine_eq_prefix
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (time : ℕ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (time : ℕ) :
     quittingTerminalSemanticPair reward
         (quittingAllContinueProfileSpine reward profile time) =
       quittingTerminalSemanticPrefix reward
@@ -103,7 +100,7 @@ theorem quittingTerminalSemanticPair_spine_eq_prefix
         (quittingTerminalSemanticPair reward
           (quittingAllContinueProfileSpine reward profile (time + 1))) := by
   rw [quittingTerminalSemanticPair_eq_prefix_allContinueContinuation
-    reward (quittingAllContinueProfileSpine reward profile time) hM hreward]
+    reward (quittingAllContinueProfileSpine reward profile time)]
   have hroot : quittingProfileRoot reward
       (quittingAllContinueProfileSpine reward profile time) =
         quittingProfileLiveRoot reward profile time := by
@@ -220,8 +217,6 @@ theorem positive_stageCoalitionMass_has_semanticPrefixIncidence
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
     (terminal : {S : Finset ι // S.Nonempty})
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 <
       quittingStageCoalitionMass reward profile time terminal) :
     let current := quittingTerminalSemanticPair reward
@@ -237,7 +232,7 @@ theorem positive_stageCoalitionMass_has_semanticPrefixIncidence
   refine ⟨quittingTerminalSemanticPair_mem_carrier reward _,
     quittingTerminalSemanticPair_mem_carrier reward _,
     quittingTerminalSemanticPair_spine_eq_prefix
-      reward profile time hM hreward, ?_⟩
+      reward profile time, ?_⟩
   rw [quittingStageCoalitionMass_eq_liveMass_mul_rootCoalitionMass]
     at hpositive
   nlinarith [quittingLiveMass_nonneg reward profile time,
@@ -252,8 +247,6 @@ theorem not_isZeroQuittingRootNash_profileLiveRoot_of_positive_collisionStageMas
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
     (terminal : {S : Finset ι // S.Nonempty})
     (pair : QuittingTerminalSemanticPair ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -273,7 +266,7 @@ theorem not_isZeroQuittingRootNash_profileLiveRoot_of_positive_collisionStageMas
   let root := quittingProfileLiveRoot reward profile time
   have hcollisionZero : quittingRootCollisionMass root = 0 :=
     (minimumTerminalSemantic_exactNash_criticalFace
-      (reward := reward) pair root hM hreward hpair hminimum
+      (reward := reward) pair root hpair hminimum
         hpositiveDebt hnash).1
   have hrootCoalition : 0 < quittingRootCoalitionMass root terminal.val := by
     have hrow : 0 < quittingLiveRowCoalitionMass reward profile time terminal := by

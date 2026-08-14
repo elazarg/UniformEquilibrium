@@ -202,9 +202,7 @@ theorem quittingTerminalSemanticPrefix_allContinue_eq_of_isZeroNash
 theorem quittingTerminalSemanticPair_rootThenContinuation
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
-    (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (continuation : (quittingGame reward).BehaviorProfile) :
     quittingTerminalSemanticPair reward
         (quittingRootThenContinuationProfile reward root continuation) =
       quittingTerminalSemanticPrefix reward root
@@ -215,7 +213,7 @@ theorem quittingTerminalSemanticPair_rootThenContinuation
       reward root continuation who
   · funext who
     exact quittingContinuationBestResponseValue_rootThenContinuation_eq_max
-      reward root continuation who hM hreward
+      reward root continuation who
 
 /-- The all-behavior terminal envelope obeys the same reward bound as every
 terminal payoff. -/
@@ -324,19 +322,20 @@ theorem exists_terminalProfile_sequence_tendsto_semanticPair
   refine ⟨profiles, ?_⟩
   simpa only [hprofiles] using htendsto
 
-/-- The attainable semantic closure is compact under a uniform reward bound.
--/
+/-- The attainable semantic closure is compact inside the canonical finite
+reward box. -/
 theorem quittingTerminalSemanticCarrier_isCompact
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     IsCompact (quittingTerminalSemanticCarrier reward) := by
-  apply (quittingTerminalSemanticBox_isCompact (ι := ι) M).of_isClosed_subset
-    isClosed_closure
+  apply (quittingTerminalSemanticBox_isCompact
+    (ι := ι) (quittingRewardBound reward)).of_isClosed_subset isClosed_closure
   apply closure_minimal
   · rintro pair ⟨profile, rfl⟩
-    exact quittingTerminalSemanticPair_mem_box reward profile hM hreward
-  · exact (quittingTerminalSemanticBox_isCompact (ι := ι) M).isClosed
+    exact quittingTerminalSemanticPair_mem_box reward profile
+      (quittingRewardBound_nonneg reward)
+      (abs_reward_le_quittingRewardBound reward)
+  · exact (quittingTerminalSemanticBox_isCompact
+      (ι := ι) (quittingRewardBound reward)).isClosed
 
 /-- Prefixing by a fixed root is continuous on finite-dimensional semantic
 pairs. -/
@@ -424,8 +423,6 @@ root prefix. -/
 theorem quittingTerminalSemanticPrefix_mem_carrier
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool) (pair : QuittingTerminalSemanticPair ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     quittingTerminalSemanticPrefix reward root pair ∈
       quittingTerminalSemanticCarrier reward := by
@@ -434,6 +431,6 @@ theorem quittingTerminalSemanticPrefix_mem_carrier
   rintro source ⟨profile, rfl⟩
   refine ⟨quittingRootThenContinuationProfile reward root profile, ?_⟩
   exact quittingTerminalSemanticPair_rootThenContinuation
-    reward root profile hM hreward
+    reward root profile
 
 end GameTheory

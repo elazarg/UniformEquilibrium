@@ -143,8 +143,6 @@ theorem QuittingCounterexampleRegime.minimumTerminalSemantic_soloOwner_refinemen
     (regime : QuittingCounterexampleRegime reward)
     (pair : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hmin : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -189,7 +187,7 @@ theorem QuittingCounterexampleRegime.minimumTerminalSemantic_soloOwner_refinemen
             quittingSingletonCollisionReward reward owner gainWitness <
               quittingSoloReward reward owner gainWitness) := by
   rcases quittingTerminalSemantic_minimum_stratum_alternative
-      reward pair root hM hreward hpair hmin hnash first hfirst with
+      reward pair root hpair hmin hnash first hfirst with
     hall | ⟨owner, gainWitness, howner, hunique, hgainNe, hgain,
       hownerQuit, hownerTight, hpure, houtsiderEndpoint⟩
   · exact Or.inl hall

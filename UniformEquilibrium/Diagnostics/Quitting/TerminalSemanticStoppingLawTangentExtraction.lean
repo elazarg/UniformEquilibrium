@@ -241,7 +241,7 @@ theorem exists_commonBase_stoppingLawDebtTangentFamily
         simp at this
       exact le_antisymm (le_of_not_gt hnotPos)
         (quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-          reward hM hreward hbase who)
+          reward hbase who)
     have hsumZero : quittingTerminalSemanticDebtSum base = 0 := by
       unfold quittingTerminalSemanticDebtSum
       simp only [hbaseDebtZero, Finset.sum_const_zero]
@@ -369,7 +369,7 @@ theorem exists_commonBase_stoppingLawDebtTangentFamily
       have htargetNonneg := quittingTerminalDeviationDebt_nonneg reward
         (quittingStoppingLawResetProfile reward (profiles n) mover.1
           (bestResponse n mover) (lambda n) (hlambdaPos n).le (hlambdaLe n))
-        observer hM hreward
+        observer
       change 0 ≤ quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward
           (quittingStoppingLawResetProfile reward (profiles n) mover.1
@@ -585,7 +585,7 @@ theorem exists_commonBase_stoppingLawTangent_pipelineAlternative
       simp only [hmover, dite_true]
       exact hinactiveNonneg ⟨mover, hmover⟩ observer hzero
     exact stoppingLawFlatTangent_supportEntry_or_chargedCirculation_or_potentialCoDecrease
-      reward base active column gain hM hreward hbase hbasePositive hactive
+      reward base active column gain hbase hbasePositive hactive
         hgain hmoverLoss hcolumnFlat hzeroTangent
 
 end GameTheory

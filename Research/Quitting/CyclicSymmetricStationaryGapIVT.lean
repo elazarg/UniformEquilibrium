@@ -110,8 +110,6 @@ theorem exists_zeroDebt_uniformPayoff_of_commonStationaryGap_signChange
     intro who
     have hnonneg : 0 ≤ quittingTerminalDeviationDebt reward profile who :=
       quittingTerminalDeviationDebt_nonneg reward profile who
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward)
     have hnonpos : quittingTerminalDeviationDebt reward profile who ≤ 0 := by
       let values : Set ℝ := Set.range fun deviation :
           (quittingGame reward).BehaviorStrategy who ↦

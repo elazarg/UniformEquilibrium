@@ -6,7 +6,6 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDebtTransfer
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # A minimum-debt consumer for a counterfactual reset square
@@ -168,8 +167,6 @@ theorem positiveMinimum_counterfactualResetSquare_excess_or_secondTransfer
             quittingTerminalSemanticDebtChange
               (quittingTerminalSemanticPair reward first)
               (quittingTerminalSemanticPair reward both) recipient) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   dsimp only
   let first := Function.update profile mover moverTarget
   let observerFirst := Function.update profile observer observerResponse
@@ -192,8 +189,7 @@ theorem positiveMinimum_counterfactualResetSquare_excess_or_secondTransfer
     exact quittingTerminalSemanticPair_mem_carrier reward profile
   have hsourceNonneg : 0 ≤
       quittingTerminalSemanticDebt sourcePair observer :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hM hreward
-      hsourceMem observer
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hsourceMem observer
   have hfirstDebt : charge ≤
       quittingTerminalSemanticDebt firstPair observer := by
     linarith

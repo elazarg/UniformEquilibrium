@@ -38,9 +38,7 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 debt.  This is the non-minimal version of the auxiliary Nash budget. -/
 theorem terminalSemantic_auxiliaryNash_excess_budget
     (base pair : QuittingTerminalSemanticPair ι)
-    (h : Payoff ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (h : Payoff ι) (root : ι → PMF Bool)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -56,7 +54,7 @@ theorem terminalSemantic_auxiliaryNash_excess_budget
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root pair hM hreward hpair
+      reward root pair hpair
   have hcoordinate : ∀ who,
       quittingTerminalSemanticDebt prefixed who ≤
         quittingStationaryContinueMass root *
@@ -122,9 +120,7 @@ theorem terminalSemantic_auxiliaryNash_excess_budget
 and singleton absorption are charged by the complementary debt. -/
 theorem terminalSemantic_exactNash_nearMinimum_support_budget
     (base pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -140,7 +136,7 @@ theorem terminalSemantic_exactNash_nearMinimum_support_budget
   let debt : Payoff ι := fun who => quittingTerminalSemanticDebt pair who
   have hdebt : ∀ who, 0 ≤ debt who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have htail : pair.2 - debt = pair.1 := by
     funext who
     dsimp [debt, quittingTerminalSemanticDebt]
@@ -149,17 +145,14 @@ theorem terminalSemantic_exactNash_nearMinimum_support_budget
     rw [htail]
     exact hnash
   simpa [debt] using terminalSemantic_auxiliaryNash_excess_budget
-    (reward := reward) base pair debt root hM hreward hminimum hpair
-      hdebt hnashAux
+    (reward := reward) base pair debt root hminimum hpair hdebt hnashAux
 
 /-- If every debt coordinate stays at least `kappa` away from carrying the
 whole debt, the full one-stage absorption probability is bounded by debt
 excess divided by `kappa`. -/
 theorem kappa_mul_rootAbsorptionMass_le_debtExcess_of_exactNash
     (base pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (kappa : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (kappa : ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -173,7 +166,7 @@ theorem kappa_mul_rootAbsorptionMass_le_debtExcess_of_exactNash
       quittingTerminalSemanticDebtSum pair -
         quittingTerminalSemanticDebtSum base := by
   have hbudget := terminalSemantic_exactNash_nearMinimum_support_budget
-    (reward := reward) base pair root hM hreward hminimum hpair hnash
+    (reward := reward) base pair root hminimum hpair hnash
   have hcollisionNonneg : 0 ≤ quittingRootCollisionMass root :=
     quittingRootCollisionMass_nonneg root
   have hcollision : kappa * quittingRootCollisionMass root ≤

@@ -112,9 +112,7 @@ def resetPair
 clearance. -/
 theorem resetPair_mem_and_nonneg
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (label : normalCore (normalizedSoloMatrix reward) ≃ Fin 3)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ B) :
+    (label : normalCore (normalizedSoloMatrix reward) ≃ Fin 3) :
     resetPair reward label ∈ quittingTerminalSemanticCarrier reward ∧
       ∀ who, 0 ≤ capClearance reward (resetPair reward label).2 who := by
   let never := threeCoreNeverBoundarySemanticPair reward
@@ -126,18 +124,18 @@ theorem resetPair_mem_and_nonneg
     never_mem_carrier reward
   have hfirstMem : first ∈ quittingTerminalSemanticCarrier reward :=
     idealSingletonSemanticPair_zero_mem_carrier reward never
-      (coreOwner label 0) hneverClear hB hreward hneverMem
+      (coreOwner label 0) hneverClear hneverMem
   have hfirstClear : ∀ who, 0 ≤ capClearance reward first.2 who :=
     capClearance_idealSingletonSemanticPair_nonneg reward never
       (coreOwner label 0) 0 hneverClear
   have hsecondMem : second ∈ quittingTerminalSemanticCarrier reward :=
     idealSingletonSemanticPair_zero_mem_carrier reward first
-      (coreOwner label 2) hfirstClear hB hreward hfirstMem
+      (coreOwner label 2) hfirstClear hfirstMem
   have hsecondClear : ∀ who, 0 ≤ capClearance reward second.2 who :=
     capClearance_idealSingletonSemanticPair_nonneg reward first
       (coreOwner label 2) 0 hfirstClear
   have hthirdMem := idealSingletonSemanticPair_zero_mem_carrier reward second
-    (coreOwner label 1) hsecondClear hB hreward hsecondMem
+    (coreOwner label 1) hsecondClear hsecondMem
   have hthirdClear := capClearance_idealSingletonSemanticPair_nonneg reward second
     (coreOwner label 1) 0 hsecondClear
   simpa [resetPair, never, first, second] using And.intro hthirdMem hthirdClear
@@ -203,9 +201,7 @@ theorem labeled_directedCycle_ambientOrbit_mem_and_debt_tendsto_zero
     (hdet : a * d * e < b * c * f)
     (hmatrix : reindexMatrix label
         (normalPlayerMatrix (normalizedSoloMatrix reward)) =
-      directedCycleMatrix a b c d e f)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ B) :
+      directedCycleMatrix a b c d e f) :
     (∀ n, ambientSemanticOrbit reward label a b c d e f n ∈
       quittingTerminalSemanticCarrier reward) ∧
     Tendsto (fun n => quittingTerminalSemanticDebtSum
@@ -242,7 +238,7 @@ theorem labeled_directedCycle_ambientOrbit_mem_and_debt_tendsto_zero
     ratio_pos_le_one (hH₂ n) hd
   have hα₃ : ∀ n, 0 < α₃ n ∧ α₃ n ≤ 1 := fun n =>
     ratio_pos_le_one (hH₁ n) ha
-  have hstart := resetPair_mem_and_nonneg reward label hB hreward
+  have hstart := resetPair_mem_and_nonneg reward label
   have ht0 : ∀ n who, 0 ≤ t n who := by
     exact ambientClearanceOrbit_nonneg M label a b c d e f f
       (capClearance reward start.2) hstart.2
@@ -344,7 +340,7 @@ theorem labeled_directedCycle_ambientOrbit_mem_and_debt_tendsto_zero
     (fun n => (hα₂ n).1) (fun n => (hα₂ n).2)
     (fun n => (hα₃ n).1) (fun n => (hα₃ n).2)
     ht0 (by rfl) hcapStep hcost₁ hcost₂ hcost₃
-    q hq.1 hq.2 hcontract hB hreward hstart.1
+    q hq.1 hq.2 hcontract hstart.1
   constructor
   · intro n
     simpa [ambientSemanticOrbit, start, α₁, α₂, α₃, H, H₂, H₁] using
@@ -380,8 +376,6 @@ theorem exists_carrier_sequence_debt_tendsto_zero_of_three_core
   refine ⟨ambientSemanticOrbit reward label a b c d e f, ?_⟩
   exact labeled_directedCycle_ambientOrbit_mem_and_debt_tendsto_zero
     reward label ha hb hc hd he hf hdet hmatrix
-    (quittingRewardBound_nonneg reward)
-    (abs_reward_le_quittingRewardBound reward)
 
 /-- In particular, a three-element corrected core on the standard-Q,
 nonhomogeneous branch cannot support a positive total-debt floor on the
@@ -457,16 +451,14 @@ theorem exists_uniformEquilibriumPayoff_of_normalCore_card_three
   obtain ⟨minimum, _root, hminimumMem, _hnash, hminimum,
       ⟨who, hwho⟩, _hface⟩ :=
     exists_positive_minimumTerminalSemanticDebt_face_of_no_uniformPayoff
-      reward (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) hno
+      reward hno
   have hsumPos : 0 < quittingTerminalSemanticDebtSum minimum := by
     have hwhoLe : quittingTerminalSemanticDebt minimum who ≤
         quittingTerminalSemanticDebtSum minimum := by
       unfold quittingTerminalSemanticDebtSum
       exact Finset.single_le_sum
         (fun other _ => quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-          reward (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward) hminimumMem other)
+          reward hminimumMem other)
         (Finset.mem_univ who)
     exact hwho.trans_le hwhoLe
   exact not_exists_positive_minimum_of_three_core reward hcard

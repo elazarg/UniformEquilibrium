@@ -8,7 +8,6 @@ import Research.Quitting.OneActiveTransferDefectGraph
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticQuantileNashificationAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Aligned one-active clocks collapse the five-role window
@@ -54,17 +53,15 @@ theorem minimumExactNash_positiveSingletonClock_positiveDebt_owner_eq
     (hclock : 0 < quittingRootCoalitionMass root {clockOwner})
     (hdebt : 0 < quittingTerminalSemanticDebt pair debtOwner) :
     debtOwner = clockOwner := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hgate := minimumTerminalSemantic_debtGate_of_singletonMass_pos
-    (reward := reward) pair root hM hreward hpair hminimum hpositive
+    (reward := reward) pair root hpair hminimum hpositive
       hnash clockOwner hclock
   by_contra hne
   have hne' : clockOwner ≠ debtOwner := Ne.symm hne
   have hdebtNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebt pair player :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have htwoLe :
       quittingTerminalSemanticDebt pair clockOwner +
           quittingTerminalSemanticDebt pair debtOwner ≤
@@ -101,12 +98,10 @@ theorem singletonClock_mul_distinctDebtFloor_le_tailExcess_add_nashError
       (quittingTerminalSemanticDebtSum tail -
           quittingTerminalSemanticDebtSum minimum) +
         Fintype.card ι * epsilon := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have htailDebt : ∀ player,
       0 ≤ quittingTerminalSemanticDebt tail player :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htail
+      reward htail
   have hkappaErase : kappa ≤
       ∑ player ∈ (Finset.univ : Finset ι).erase clockOwner,
         quittingTerminalSemanticDebt tail player := by
@@ -131,7 +126,7 @@ theorem singletonClock_mul_distinctDebtFloor_le_tailExcess_add_nashError
           quittingTerminalSemanticDebtSum minimum) +
         Fintype.card ι * epsilon :=
       singletonMass_mul_otherDebt_le_tailExcess_add_card_mul_nashError
-        reward minimum tail root clockOwner epsilon hM hreward
+        reward minimum tail root clockOwner epsilon
           hminimumCarrier hminimum htail hnash
 
 /-! ## Actual-profile alignment without a rowwise Nash premise -/
@@ -210,8 +205,6 @@ theorem stageSingletonMass_mul_distinctTailDebtFloor_le_liveTailExcess_add_initi
             quittingTerminalSemanticDebtSum minimum) +
         quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward profile) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let tail := quittingTerminalSemanticPair reward
     (quittingAllContinueProfileSpine reward profile (time + 1))
   let root := quittingProfileLiveRoot reward profile time
@@ -220,7 +213,7 @@ theorem stageSingletonMass_mul_distinctTailDebtFloor_le_liveTailExcess_add_initi
   have htailDebt : ∀ player,
       0 ≤ quittingTerminalSemanticDebt tail player :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htail
+      reward htail
   have hrootMass : 0 ≤ quittingRootCoalitionMass root {clockOwner} :=
     MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg root {clockOwner}
   have hrootToOpponent :
@@ -251,7 +244,7 @@ theorem stageSingletonMass_mul_distinctTailDebtFloor_le_liveTailExcess_add_initi
       (Finset.mem_univ debtOwner)
   have hcharge :=
     minimumTerminalSemantic_sum_opponentAbsorption_charge_le_excess_add_defect
-      reward minimum tail root hM hreward hminimumCarrier hminimum htail
+      reward minimum tail root hminimumCarrier hminimum htail
   have hrootBound : quittingRootCoalitionMass root {clockOwner} * kappa ≤
       (quittingTerminalSemanticDebtSum tail -
           quittingTerminalSemanticDebtSum minimum) +
@@ -268,7 +261,7 @@ theorem stageSingletonMass_mul_distinctTailDebtFloor_le_liveTailExcess_add_initi
     intro player
     simpa only [tail, root] using
       quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
-        (reward := reward) profile player time hM hreward
+        (reward := reward) profile player time
   have htotalCollect :
       quittingLiveMass reward profile time *
           quittingRootTotalNashDefect reward tail.1 root ≤

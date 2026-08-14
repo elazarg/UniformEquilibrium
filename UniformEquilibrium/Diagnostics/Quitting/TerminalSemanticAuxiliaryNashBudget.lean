@@ -140,9 +140,7 @@ of two or more simultaneous quitters; singleton masses are unnormalized
 one-stage probabilities. -/
 theorem minimumTerminalSemantic_auxiliaryNash_budget
     (pair : QuittingTerminalSemanticPair ι)
-    (h : Payoff ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (h : Payoff ι) (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -156,7 +154,7 @@ theorem minimumTerminalSemantic_auxiliaryNash_budget
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root pair hM hreward hpair
+      reward root pair hpair
   have hcoordinate : ∀ who,
       quittingTerminalSemanticDebt prefixed who ≤
         quittingStationaryContinueMass root *
@@ -217,9 +215,7 @@ theorem minimumTerminalSemantic_auxiliaryNash_budget
 the total-debt cube has zero absorption and is the all-Continue root. -/
 theorem minimumTerminalSemantic_auxiliaryNash_eq_allContinue
     (pair : QuittingTerminalSemanticPair ι)
-    (h : Payoff ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (h : Payoff ι) (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -230,7 +226,7 @@ theorem minimumTerminalSemantic_auxiliaryNash_eq_allContinue
     (hnash : IsεQuittingRootNash reward (pair.2 - h) 0 root) :
     root = (quittingAllContinueRoot : ι → PMF Bool) := by
   have hbudget := minimumTerminalSemantic_auxiliaryNash_budget
-    (reward := reward) pair h root hM hreward hpair hminimum hh hnash
+    (reward := reward) pair h root hpair hminimum hh hnash
   have hcollisionNonneg : 0 ≤ quittingRootCollisionMass root :=
     quittingRootCollisionMass_nonneg root
   have htermsNonneg : ∀ who ∈ (Finset.univ : Finset ι),
@@ -282,9 +278,7 @@ absorption can occur only at a coordinate shifted by the full minimum debt.
 This is the critical-boundary form of the auxiliary-target budget. -/
 theorem minimumTerminalSemantic_auxiliaryNash_criticalFace
     (pair : QuittingTerminalSemanticPair ι)
-    (h : Payoff ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (h : Payoff ι) (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -297,7 +291,7 @@ theorem minimumTerminalSemantic_auxiliaryNash_criticalFace
       ∀ who, 0 < quittingRootCoalitionMass root {who} →
         h who = quittingTerminalSemanticDebtSum pair := by
   have hbudget := minimumTerminalSemantic_auxiliaryNash_budget
-    (reward := reward) pair h root hM hreward hpair hminimum hh hnash
+    (reward := reward) pair h root hpair hminimum hh hnash
   have hcollisionNonneg : 0 ≤ quittingRootCollisionMass root :=
     quittingRootCollisionMass_nonneg root
   have htermsNonneg : ∀ who ∈ (Finset.univ : Finset ι),
@@ -330,9 +324,7 @@ minimum semantic pair is collision-free.  Any singleton quitter must carry
 the entire total debt. -/
 theorem minimumTerminalSemantic_exactNash_criticalFace
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -346,7 +338,7 @@ theorem minimumTerminalSemantic_exactNash_criticalFace
   let debt : Payoff ι := fun who => quittingTerminalSemanticDebt pair who
   have hdebtNonneg : ∀ who, 0 ≤ debt who := fun who =>
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair who
+      reward hpair who
   have hdebtLe : ∀ who,
       debt who ≤ quittingTerminalSemanticDebtSum pair := by
     intro who
@@ -361,8 +353,8 @@ theorem minimumTerminalSemantic_exactNash_criticalFace
     rw [htail]
     exact hnash
   simpa [debt] using minimumTerminalSemantic_auxiliaryNash_criticalFace
-    (reward := reward) pair debt root hM hreward hpair hminimum hpositive
-      hdebtNonneg hdebtLe hnashAux
+    (reward := reward) pair debt root hpair hminimum hpositive hdebtNonneg
+      hdebtLe hnashAux
 
 /-! ## Every positive minimum point is an all-Continue plateau -/
 
@@ -379,9 +371,7 @@ theorem exists_isZeroQuittingRootNash
 
 /-- Quantitative singleton margin at every positive minimum semantic pair. -/
 theorem minimumTerminalSemantic_singletonMargin
-    (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -395,8 +385,7 @@ theorem minimumTerminalSemantic_singletonMargin
   have hzeroRoot : zeroRoot =
       (quittingAllContinueRoot : ι → PMF Bool) := by
     apply minimumTerminalSemantic_auxiliaryNash_eq_allContinue
-      (reward := reward) pair zeroShift zeroRoot hM hreward hpair hminimum
-        hpositive
+      (reward := reward) pair zeroShift zeroRoot hpair hminimum hpositive
     · intro player
       simp [zeroShift]
     · intro player
@@ -450,8 +439,8 @@ theorem minimumTerminalSemantic_singletonMargin
   have hrootAll : root =
       (quittingAllContinueRoot : ι → PMF Bool) :=
     minimumTerminalSemantic_auxiliaryNash_eq_allContinue
-      (reward := reward) pair shift root hM hreward hpair hminimum
-        hpositive hshiftNonneg hshiftStrict hnash
+      (reward := reward) pair shift root hpair hminimum hpositive
+        hshiftNonneg hshiftStrict hnash
   have hnashAll : IsεQuittingRootNash reward (pair.2 - shift) 0
       (quittingAllContinueRoot : ι → PMF Bool) := by
     simpa [hrootAll] using hnash
@@ -467,9 +456,7 @@ theorem minimumTerminalSemantic_singletonMargin
 /-- Every positive minimum semantic pair is an exact all-Continue Nash
 self-loop, and has the quantitative singleton margin above. -/
 theorem minimumTerminalSemantic_is_allContinuePlateau
-    (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -483,12 +470,12 @@ theorem minimumTerminalSemantic_is_allContinuePlateau
         reward (quittingSingletonTerminal who) who := by
   have hdebtNonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hsingleton : ∀ who,
       reward (quittingSingletonTerminal who) who ≤ pair.1 who := by
     intro who
     have hmargin := minimumTerminalSemantic_singletonMargin
-      (reward := reward) pair hM hreward hpair hminimum hpositive who
+      (reward := reward) pair hpair hminimum hpositive who
     have hcoordinateLe : quittingTerminalSemanticDebt pair who ≤
         quittingTerminalSemanticDebtSum pair := by
       unfold quittingTerminalSemanticDebtSum
@@ -503,7 +490,7 @@ theorem minimumTerminalSemantic_is_allContinuePlateau
     quittingTerminalSemanticPrefix_allContinue_eq_of_isZeroNash
       reward pair hdebtNonneg hnashAll,
     minimumTerminalSemantic_singletonMargin
-      (reward := reward) pair hM hreward hpair hminimum hpositive⟩
+      (reward := reward) pair hpair hminimum hpositive⟩
 
 /-! ## Global consequences -/
 
@@ -518,17 +505,13 @@ theorem not_hasProvenanceAtomicMinimumSemanticSoloRow
     _hgap, _hpunishment, _hcontinue⟩
   have htailDebtNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebt tail player :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) htailCarrier
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward htailCarrier
   have htailPositive : 0 < quittingTerminalSemanticDebtSum tail := by
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_pos' (fun player _ => htailDebtNonneg player)
       ⟨owner, Finset.mem_univ owner, htailDebt⟩
   have hplateau := minimumTerminalSemantic_is_allContinuePlateau
-    (reward := reward) tail (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) htailCarrier htailMin
-      htailPositive
+    (reward := reward) tail htailCarrier htailMin htailPositive
   have hsingleton :=
     (isZeroQuittingRootNash_allContinue_iff_singleton_le reward tail.1).mp
       hplateau.1 anchor
@@ -538,24 +521,22 @@ theorem not_hasProvenanceAtomicMinimumSemanticSoloRow
 plateau; the provenance atomic alternative is eliminated. -/
 theorem noUniformPayoff_implies_positiveMinimumSemanticPlateau
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (regime : QuittingCounterexampleRegime reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward := by
   obtain ⟨pair, _root, hpair, _hnash, hminimum, hdebt, _hface⟩ :=
     exists_positive_minimumTerminalSemanticDebt_face_of_no_uniformPayoff
-      reward hM hreward regime.not_exists_uniformEquilibriumPayoff
+      reward regime.not_exists_uniformEquilibriumPayoff
   have hdebtNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebt pair player :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hpositive : 0 < quittingTerminalSemanticDebtSum pair := by
     obtain ⟨who, hwho⟩ := hdebt
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_pos' (fun player _ => hdebtNonneg player)
       ⟨who, Finset.mem_univ who, hwho⟩
   have hplateau := minimumTerminalSemantic_is_allContinuePlateau
-    (reward := reward) pair hM hreward hpair hminimum hpositive
+    (reward := reward) pair hpair hminimum hpositive
   exact ⟨pair, hpair, hminimum, hdebt, hplateau.1, hplateau.2.1⟩
 
 end GameTheory

@@ -291,7 +291,7 @@ theorem pairProfile_semanticPair :
   rw [show pairProfile = quittingRootThenContinuationProfile reward
       pairRoot continuation by rfl,
     quittingTerminalSemanticPair_rootThenContinuation reward pairRoot
-      continuation (M := 1) (by norm_num) abs_reward_le_one,
+      continuation,
     continuation_semanticPair]
   apply Prod.ext
   · funext who
@@ -309,7 +309,7 @@ theorem singletonProfile_semanticPair :
   rw [show singletonProfile = quittingRootThenContinuationProfile reward
       singletonRoot continuation by rfl,
     quittingTerminalSemanticPair_rootThenContinuation reward singletonRoot
-      continuation (M := 1) (by norm_num) abs_reward_le_one,
+      continuation,
     continuation_semanticPair]
   apply Prod.ext
   · funext who
@@ -362,7 +362,7 @@ theorem pairProfile_is_globalMinimum :
   unfold quittingTerminalSemanticDebtSum
   exact Finset.sum_nonneg fun who _ =>
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward (by norm_num) abs_reward_le_one hcandidate who
+      reward hcandidate who
 
 /-- **Regression headline.**  Full recomputed best-endpoint routing, positive
 pair and singleton incidence, a negative singleton owner reward, and zero

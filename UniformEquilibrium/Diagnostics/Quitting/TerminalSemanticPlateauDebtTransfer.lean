@@ -61,8 +61,6 @@ theorem exists_terminalSemanticResetCluster_quantitative_transfer
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
     (who : ι)
     (strategies : ℕ → (quittingGame reward).BehaviorStrategy who)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -97,7 +95,7 @@ theorem exists_terminalSemanticResetCluster_quantitative_transfer
     apply subset_closure
     exact ⟨Function.update (profiles n) who (strategies n), rfl⟩
   obtain ⟨cluster, hcluster, subseq, hsubseq, hclusterLimit⟩ :=
-    (quittingTerminalSemanticCarrier_isCompact reward hM hreward).tendsto_subseq
+    (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
       hresetMem
   have hresetZero : Tendsto
       (fun n => quittingTerminalSemanticDebt (resetPair n) who)
@@ -517,7 +515,7 @@ theorem exists_samePureTimeLaw_resetCluster_negativeNever_or_matched_separator
     exists_terminalSemanticResetCluster_quantitative_transfer
       reward source (fun rank => profiles (baseSubseq rank)) who
       (fun rank => quittingPureTimeBehaviorStrategy reward who
-        (quitTime (baseSubseq rank))) hM.le hreward hminimum
+        (quitTime (baseSubseq rank))) hminimum
       (hprofiles.comp hbaseSubseq.tendsto_atTop) hpayoff
   obtain ⟨outcome, _hproduct, _hgain, hmassFloor, houtcome⟩ :=
     exists_terminalOutcome_quantitative_trichotomy_of_allContinuePlateau

@@ -124,8 +124,6 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedAtomAlternative
         simp at hmem
       exact le_antisymm (le_of_not_gt hnotPositive)
         (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
           frontier.base_mem who)
     have hbasePositive := frontier.base_positive
     unfold quittingTerminalSemanticDebtSum at hbasePositive
@@ -223,8 +221,6 @@ theorem QuittingCounterexampleStoppingLawFrontier.oneDebtOwner_dichotomy
         simp at hmem
       exact le_antisymm (le_of_not_gt hnotPositive)
         (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
           frontier.base_mem who)
     have hbasePositive := frontier.base_positive
     unfold quittingTerminalSemanticDebtSum at hbasePositive
@@ -253,8 +249,6 @@ theorem QuittingCounterexampleStoppingLawFrontier.oneDebtOwner_dichotomy
       have hdebtNonneg :
           0 ≤ quittingTerminalSemanticDebt frontier.base observer :=
         quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
           frontier.base_mem observer
       have hdebtZero :
           quittingTerminalSemanticDebt frontier.base observer = 0 := by

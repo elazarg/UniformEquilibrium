@@ -288,8 +288,6 @@ theorem quittingTerminalSemanticPrefix_mapsTo_tube
 theorem quittingTerminalSemanticCarrier_mapsTo_tube
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     {δ : ℝ} (hδ : 0 ≤ δ) :
     Set.MapsTo (quittingTerminalSemanticPrefix reward root)
       (semanticPairTube (quittingTerminalSemanticCarrier reward) δ)
@@ -297,7 +295,7 @@ theorem quittingTerminalSemanticCarrier_mapsTo_tube
   apply quittingTerminalSemanticPrefix_mapsTo_tube reward root hδ
   intro pair hpair
   exact quittingTerminalSemanticPrefix_mem_carrier
-    reward root pair hM hreward hpair
+    reward root pair hpair
 
 /-- Aggregate playerwise semantic debt. -/
 def semanticDebtSum (pair : QuittingTerminalSemanticPair ι) : ℝ :=

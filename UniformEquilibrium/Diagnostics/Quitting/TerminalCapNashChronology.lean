@@ -254,8 +254,6 @@ theorem abs_quittingTerminalPayoff_rootStack_sub_terminal_le
 theorem quittingTerminalDeviationDebt_capNashRootStack_eq
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingCapNashRootStack reward roots terminal) :
     quittingTerminalDeviationDebt reward
         (quittingLiteralRootStackProfile reward roots terminal) who =
@@ -269,7 +267,7 @@ theorem quittingTerminalDeviationDebt_capNashRootStack_eq
         quittingTerminalDeviationDebt_rootThenContinuation_eq_continueMass_mul_of_capNash
           (reward := reward) root
           (quittingLiteralRootStackProfile reward roots terminal) who
-          hM hreward hstack.1,
+          hstack.1,
         ih hstack.2]
       rw [quittingCapNashStackContinueProduct_cons]
       ring
@@ -302,10 +300,10 @@ theorem abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_
       (reward := reward) roots terminal who hM hreward
   have hdebtEq : stackDebt = survival * terminalDebt := by
     exact quittingTerminalDeviationDebt_capNashRootStack_eq
-      (reward := reward) roots terminal who hM hreward hstack
+      (reward := reward) roots terminal who hstack
   have hterminalDebtNonneg : 0 ≤ terminalDebt := by
     exact quittingTerminalDeviationDebt_nonneg
-      reward terminal who hM hreward
+      reward terminal who
   have hterminalDebtLe : terminalDebt ≤ 2 * M := by
     have hcapBound := abs_quittingContinuationBestResponseValue_le
       reward terminal who hM hreward
@@ -361,8 +359,6 @@ theorem abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_
 theorem quittingTerminalDebtSum_capNashRootStack_eq
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingCapNashRootStack reward roots terminal) :
     quittingTerminalDebtSum reward
         (quittingLiteralRootStackProfile reward roots terminal) =
@@ -370,7 +366,7 @@ theorem quittingTerminalDebtSum_capNashRootStack_eq
         quittingTerminalDebtSum reward terminal := by
   unfold quittingTerminalDebtSum
   simp_rw [quittingTerminalDeviationDebt_capNashRootStack_eq
-    (reward := reward) roots terminal _ hM hreward hstack]
+    (reward := reward) roots terminal _ hstack]
   rw [Finset.mul_sum]
 
 /-- The global literal total-debt infimum lies below the product-scaled debt
@@ -378,25 +374,21 @@ of every finite cap--Nash chronology. -/
 theorem debtSumInf_le_capNashStackContinueProduct_mul_debtSum
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingCapNashRootStack reward roots terminal) :
     quittingTerminalDebtSumInf reward ≤
       quittingCapNashStackContinueProduct roots *
         quittingTerminalDebtSum reward terminal := by
   have hinf := quittingTerminalDebtSumInf_le
     (reward := reward)
-    (quittingLiteralRootStackProfile reward roots terminal) hM hreward
+    (quittingLiteralRootStackProfile reward roots terminal)
   rwa [quittingTerminalDebtSum_capNashRootStack_eq
-    (reward := reward) roots terminal hM hreward hstack] at hinf
+    (reward := reward) roots terminal hstack] at hinf
 
 /-- Every one-stage absorption hazard in the cap chronology is paid by the
 drop of total debt, at the scale of the global literal debt infimum. -/
 theorem debtSumInf_mul_capNashStackAbsorptionSum_le_debtDrop
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingCapNashRootStack reward roots terminal) :
     quittingTerminalDebtSumInf reward *
         quittingCapNashStackAbsorptionSum roots ≤
@@ -410,7 +402,7 @@ theorem debtSumInf_mul_capNashStackAbsorptionSum_le_debtDrop
       let suffix := quittingLiteralRootStackProfile reward roots terminal
       have hinfSuffix : quittingTerminalDebtSumInf reward ≤
           quittingTerminalDebtSum reward suffix :=
-        quittingTerminalDebtSumInf_le (reward := reward) suffix hM hreward
+        quittingTerminalDebtSumInf_le (reward := reward) suffix
       have habsorption : 0 ≤ quittingRootAbsorptionMass root := by
         unfold quittingRootAbsorptionMass
         linarith [quittingStationaryContinueMass_le_one root]
@@ -421,7 +413,7 @@ theorem debtSumInf_mul_capNashStackAbsorptionSum_le_debtDrop
         mul_le_mul_of_nonneg_right hinfSuffix habsorption
       have hscale :=
         quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash
-          (reward := reward) root suffix hM hreward hstack.1
+          (reward := reward) root suffix hstack.1
       have htail := ih hstack.2
       change quittingTerminalDebtSumInf reward *
           (quittingRootAbsorptionMass root +
@@ -439,18 +431,17 @@ finite chronology, independently of its depth. -/
 theorem capNashStack_absorptionBudget_of_nearMinimum
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    (epsilon : ℝ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (epsilon : ℝ)
     (hstack : IsQuittingCapNashRootStack reward roots terminal)
     (hnear : quittingTerminalDebtSum reward terminal ≤
       quittingTerminalDebtSumInf reward + epsilon) :
     quittingTerminalDebtSumInf reward *
         quittingCapNashStackAbsorptionSum roots ≤ epsilon := by
   have hbudget := debtSumInf_mul_capNashStackAbsorptionSum_le_debtDrop
-    (reward := reward) roots terminal hM hreward hstack
+    (reward := reward) roots terminal hstack
   have hinfStack := quittingTerminalDebtSumInf_le
     (reward := reward)
-    (quittingLiteralRootStackProfile reward roots terminal) hM hreward
+    (quittingLiteralRootStackProfile reward roots terminal)
   linarith
 
 /-- In the positive-infimum regime, the full chronological survival product
@@ -458,8 +449,6 @@ is uniformly bounded away from zero, regardless of the stack depth. -/
 theorem capNashStack_continueProduct_lowerBound
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward)
     (hstack : IsQuittingCapNashRootStack reward roots terminal) :
     quittingTerminalDebtSumInf reward /
@@ -467,10 +456,10 @@ theorem capNashStack_continueProduct_lowerBound
       quittingCapNashStackContinueProduct roots := by
   have hterminalPos : 0 < quittingTerminalDebtSum reward terminal :=
     hinf.trans_le
-      (quittingTerminalDebtSumInf_le (reward := reward) terminal hM hreward)
+      (quittingTerminalDebtSumInf_le (reward := reward) terminal)
   have hscaled :=
     debtSumInf_le_capNashStackContinueProduct_mul_debtSum
-      (reward := reward) roots terminal hM hreward hstack
+      (reward := reward) roots terminal hstack
   apply (div_le_iff₀ hterminalPos).2
   simpa [mul_comm] using hscaled
 
@@ -479,8 +468,6 @@ Continue mass when the global literal debt infimum is positive. -/
 theorem capNashRootStack_continueMass_pos_of_debtSumInf_pos
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward)
     (hstack : IsQuittingCapNashRootStack reward roots terminal) :
     ∀ root ∈ roots, 0 < quittingStationaryContinueMass root := by
@@ -494,7 +481,7 @@ theorem capNashRootStack_continueMass_pos_of_debtSumInf_pos
       · exact capNash_continueMass_pos_of_debtSumInf_pos
           (reward := reward) selected
           (quittingLiteralRootStackProfile reward roots terminal)
-          hM hreward hinf hstack.1
+          hinf hstack.1
       · exact ih hstack.2 selected htail
 
 omit [DecidableEq ι] in
@@ -552,8 +539,6 @@ Continue masses rather than joint Continue mass. -/
 theorem capNashStack_absorptionSum_le_log_debtRatio
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward)
     (hstack : IsQuittingCapNashRootStack reward roots terminal) :
     quittingCapNashStackAbsorptionSum roots ≤
@@ -561,9 +546,9 @@ theorem capNashStack_absorptionSum_le_log_debtRatio
         quittingTerminalDebtSumInf reward) := by
   have hterminalPos : 0 < quittingTerminalDebtSum reward terminal :=
     hinf.trans_le
-      (quittingTerminalDebtSumInf_le (reward := reward) terminal hM hreward)
+      (quittingTerminalDebtSumInf_le (reward := reward) terminal)
   have hproductLower := capNashStack_continueProduct_lowerBound
-    (reward := reward) roots terminal hM hreward hinf hstack
+    (reward := reward) roots terminal hinf hstack
   have hproductPos : 0 < quittingCapNashStackContinueProduct roots := by
     exact (div_pos hinf hterminalPos).trans_le hproductLower
   have hlogMonotone :
@@ -575,7 +560,7 @@ theorem capNashStack_absorptionSum_le_log_debtRatio
   have hlogBudget :=
     capNashStack_absorptionSum_le_neg_log_continueProduct roots
       (capNashRootStack_continueMass_pos_of_debtSumInf_pos
-        (reward := reward) roots terminal hM hreward hinf hstack)
+        (reward := reward) roots terminal hinf hstack)
   calc
     quittingCapNashStackAbsorptionSum roots ≤
         -Real.log (quittingCapNashStackContinueProduct roots) := hlogBudget
@@ -620,9 +605,9 @@ theorem exists_deep_nearMinimum_capNashChronology
     exists_quittingCapNashRootStack reward terminal depth
   exact ⟨roots, hlength, hstack,
     capNashStack_absorptionBudget_of_nearMinimum
-      (reward := reward) roots terminal epsilon hM hreward hstack hnear,
+      (reward := reward) roots terminal epsilon hstack hnear,
     capNashStack_continueProduct_lowerBound
-      (reward := reward) roots terminal hM hreward hinf hstack,
+      (reward := reward) roots terminal hinf hstack,
     fun who => abs_quittingTerminalPayoff_rootStack_sub_terminal_le
       (reward := reward) roots terminal who hM hreward,
     fun who =>

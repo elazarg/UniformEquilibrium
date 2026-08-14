@@ -67,9 +67,7 @@ theorem quittingTerminalOutcomeMass_mul_coordinateNashDefect_at_pureTime_stop_le
     (profile : (quittingGame reward).BehaviorProfile)
     (who : ι) (stop : ℕ)
     (terminal : {S : Finset ι // S.Nonempty})
-    (hmem : who ∈ terminal.val)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M) :
+    (hmem : who ∈ terminal.val) :
     let deviated := Function.update profile who
       (quittingPureTimeBehaviorStrategy reward who (some stop))
     quittingTerminalOutcomeMass reward deviated (some terminal) *
@@ -100,7 +98,7 @@ theorem quittingTerminalOutcomeMass_mul_coordinateNashDefect_at_pureTime_stop_le
     mul_le_mul_of_nonneg_right hmassLe hdefectNonneg
   have hdebt :=
     quittingLiveMass_mul_coordinateNashDefect_update_pureTime_some_le_initialDebt
-      reward profile who stop stop le_rfl hM hreward
+      reward profile who stop stop le_rfl
   rw [hmassEq]
   exact hscaled.trans hdebt
 
@@ -119,8 +117,7 @@ theorem exists_stops_tendsto_coordinateNashDefect_zero_of_persistent_collision
     (who : ι) (quitTime : ℕ → Option ℕ)
     (terminal : {S : Finset ι // S.Nonempty})
     (hmem : who ∈ terminal.val)
-    {lower M : ℝ} (hlower : 0 < lower) (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    {lower : ℝ} (hlower : 0 < lower)
     (hreset : Tendsto (fun n => quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward
         (Function.update (profiles n) who
@@ -192,7 +189,7 @@ theorem exists_stops_tendsto_coordinateNashDefect_zero_of_persistent_collision
     rw [hchoice] at hmass
     have hbound :=
       quittingTerminalOutcomeMass_mul_coordinateNashDefect_at_pureTime_stop_le_debt
-        reward (profiles n) who (stop n) terminal hmem hM hreward
+        reward (profiles n) who (stop n) terminal hmem
     have hbound' :
         quittingTerminalOutcomeMass reward
             (Function.update (profiles n) who

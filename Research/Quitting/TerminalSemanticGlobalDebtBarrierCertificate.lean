@@ -8,7 +8,6 @@ import Research.Quitting.ElementaryTailSemanticReduction
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawExploitabilityFloor
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # An inductive barrier certificate for a global terminal-debt floor
@@ -465,8 +464,6 @@ theorem nonempty_certificate_iff_globalDebtFloor
     Nonempty (Certificate reward δ) ↔
       ∀ pair ∈ quittingTerminalSemanticCarrier reward,
         δ ≤ quittingTerminalSemanticDebtSum pair := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   constructor
   · rintro ⟨certificate⟩
     exact globalDebtFloor_of_certificate
@@ -477,7 +474,7 @@ theorem nonempty_certificate_iff_globalDebtFloor
       elementaryBoundary_mem := fun cap => ?_
       prefix_mem := fun pair hpair root =>
         quittingTerminalSemanticPrefix_mem_carrier
-          reward root pair hM hreward hpair
+          reward root pair hpair
       debt_floor := hfloor }⟩
     apply finiteElementarySemanticReachable_subset_carrier reward
     exact ⟨fun _ => quittingAllContinueRoot, 0, cap, by
@@ -525,8 +522,6 @@ theorem hasTerminalExploitabilityGap_of_certificate
     (hδ : 0 < δ) (certificate : Certificate reward δ) :
     HasTerminalExploitabilityGap reward
       (δ / (2 * (Fintype.card ι : ℝ))) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   intro profile
   let playerCount : ℝ := Fintype.card ι
   have hplayerCount : 0 < playerCount := by
@@ -541,7 +536,7 @@ theorem hasTerminalExploitabilityGap_of_certificate
     behavioralDebtFloor_of_certificate reward δ certificate profile
   have hsumBound :=
     quittingTerminalSemanticDebtSum_le_card_mul_terminalExploitability
-      reward profile hM hreward
+      reward profile
   have hexploit : δ / playerCount ≤
       quittingTerminalExploitability reward profile := by
     apply (div_le_iff₀ hplayerCount).2
@@ -552,7 +547,7 @@ theorem hasTerminalExploitabilityGap_of_certificate
       (quittingTerminalSemanticPair reward profile) who))
   have hwhoNonneg : 0 ≤ quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who :=
-    quittingTerminalDeviationDebt_nonneg reward profile who hM hreward
+    quittingTerminalDeviationDebt_nonneg reward profile who
   have hwhoDebt : δ / playerCount ≤ quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who := by
     rw [← quittingTerminalSemanticExploitability_pair] at hexploit

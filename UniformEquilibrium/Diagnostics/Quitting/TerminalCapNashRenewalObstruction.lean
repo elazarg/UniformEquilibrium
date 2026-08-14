@@ -43,8 +43,7 @@ one-stage absorption. -/
 theorem debtDrop_div_terminalDebt_le_capNashStackAbsorptionSum
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    (target : ℝ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (target : ℝ)
     (hstack : IsQuittingCapNashRootStack reward roots terminal)
     (hdebt : 0 < quittingTerminalDebtSum reward terminal)
     (hdescendant : quittingTerminalDebtSum reward
@@ -53,7 +52,7 @@ theorem debtDrop_div_terminalDebt_le_capNashStackAbsorptionSum
         quittingTerminalDebtSum reward terminal ≤
       quittingCapNashStackAbsorptionSum roots := by
   have hscale := quittingTerminalDebtSum_capNashRootStack_eq
-    (reward := reward) roots terminal hM hreward hstack
+    (reward := reward) roots terminal hstack
   have hproductGap := one_sub_capNashStackContinueProduct_le_absorptionSum
     roots
   have hscaled : quittingCapNashStackContinueProduct roots *
@@ -69,8 +68,7 @@ debt infimum. -/
 theorem debtExcess_sub_error_div_debt_le_capNashStackAbsorptionSum
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    (epsilon : ℝ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (epsilon : ℝ)
     (hstack : IsQuittingCapNashRootStack reward roots terminal)
     (hdebt : 0 < quittingTerminalDebtSum reward terminal)
     (hnear : quittingTerminalDebtSum reward
@@ -83,7 +81,7 @@ theorem debtExcess_sub_error_div_debt_le_capNashStackAbsorptionSum
   have hbound := debtDrop_div_terminalDebt_le_capNashStackAbsorptionSum
     (reward := reward) roots terminal
       (quittingTerminalDebtSumInf reward + epsilon)
-      hM hreward hstack hdebt hnear
+      hstack hdebt hnear
   simpa [sub_add_eq_sub_sub] using hbound
 
 /-! ## What the standard payoff estimate preserves -/
@@ -197,8 +195,6 @@ theorem quittingTerminalDeviationDebt_le_zero_of_isZeroAsymptoticNash
 /-- Under bounded rewards, exact terminal Nash has total literal debt zero. -/
 theorem quittingTerminalDebtSum_eq_zero_of_isZeroAsymptoticNash
     (profile : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hnash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) 0 profile) :
     quittingTerminalDebtSum reward profile = 0 := by
@@ -209,7 +205,7 @@ theorem quittingTerminalDebtSum_eq_zero_of_isZeroAsymptoticNash
         (reward := reward) profile who hnash).trans_eq (by simp)
   · unfold quittingTerminalDebtSum
     exact Finset.sum_nonneg fun who _ =>
-      quittingTerminalDeviationDebt_nonneg reward profile who hM hreward
+      quittingTerminalDeviationDebt_nonneg reward profile who
 
 /-- The local-to-global table is uniformly one-bounded. -/
 theorem abs_localGlobalCounterexampleReward_le_one
@@ -226,26 +222,21 @@ theorem quittingTerminalDebtSumInf_localGlobalCounterexample_eq_zero :
     quittingTerminalDebtSum_eq_zero_of_isZeroAsymptoticNash
       (reward := localGlobalCounterexampleReward)
       (quittingAlwaysContinueProfile localGlobalCounterexampleReward)
-      (M := 1) (by norm_num) abs_localGlobalCounterexampleReward_le_one
       isAsymptoticNash_quittingAlwaysContinue_localGlobalCounterexample
   apply le_antisymm
   · exact (quittingTerminalDebtSumInf_le
       (reward := localGlobalCounterexampleReward)
-      (quittingAlwaysContinueProfile localGlobalCounterexampleReward)
-      (M := 1) (by norm_num)
-      abs_localGlobalCounterexampleReward_le_one).trans_eq hzero
+      (quittingAlwaysContinueProfile localGlobalCounterexampleReward)).trans_eq hzero
   · unfold quittingTerminalDebtSumInf
     apply (le_csInf_iff
       (bddBelow_range_quittingTerminalDebtSum
-        (reward := localGlobalCounterexampleReward)
-        (M := 1) (by norm_num) abs_localGlobalCounterexampleReward_le_one)
+        (reward := localGlobalCounterexampleReward))
       (Set.range_nonempty _)).2
     rintro total ⟨profile, rfl⟩
     unfold quittingTerminalDebtSum
     exact Finset.sum_nonneg fun who _ =>
       quittingTerminalDeviationDebt_nonneg
         localGlobalCounterexampleReward profile who
-        (M := 1) (by norm_num) abs_localGlobalCounterexampleReward_le_one
 
 /-- Constant live roots presenting the local-to-global profile as an honest
 period-one renewal profile. -/
@@ -284,7 +275,6 @@ theorem isZeroQuittingRootNash_allContinue_localGlobal_actualCap :
   intro who
   have hdebt := quittingTerminalDeviationDebt_nonneg
     localGlobalCounterexampleReward localGlobalCounterexampleProfile who
-    (M := 1) (by norm_num) abs_localGlobalCounterexampleReward_le_one
   cases who with
   | false =>
       rw [localGlobalCounterexampleReward_singleton_false]
@@ -309,8 +299,7 @@ theorem semanticPair_allContinue_capNashPrefix_localGlobal :
         localGlobalCounterexampleProfile := by
   rw [quittingTerminalSemanticPair_rootThenContinuation
     localGlobalCounterexampleReward quittingAllContinueRoot
-      localGlobalCounterexampleProfile (M := 1) (by norm_num)
-      abs_localGlobalCounterexampleReward_le_one]
+      localGlobalCounterexampleProfile]
   apply Prod.ext
   · funext who
     change quittingRootSuccessorPayoff localGlobalCounterexampleReward
@@ -347,7 +336,6 @@ theorem one_le_terminalDebtSum_localGlobalCounterexample :
     linarith
   have htrue := quittingTerminalDeviationDebt_nonneg
     localGlobalCounterexampleReward localGlobalCounterexampleProfile true
-    (M := 1) (by norm_num) abs_localGlobalCounterexampleReward_le_one
   unfold quittingTerminalDebtSum
   simpa using add_le_add htrue hfalse
 
@@ -373,8 +361,7 @@ theorem localGlobal_periodOne_capNash_stalls_above_inf :
       quittingLiteralRootStackProfile_nil,
       quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash
         (reward := localGlobalCounterexampleReward) quittingAllContinueRoot
-        localGlobalCounterexampleProfile (M := 1) (by norm_num)
-        abs_localGlobalCounterexampleReward_le_one
+        localGlobalCounterexampleProfile
         isZeroQuittingRootNash_allContinue_localGlobal_actualCap]
     rw [quittingStationaryContinueMass_eq_prod_continueProbability]
     simp [quittingAllContinueRoot]

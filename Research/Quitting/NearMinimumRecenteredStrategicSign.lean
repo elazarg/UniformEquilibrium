@@ -5,7 +5,6 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.NearMinimumActualDeviationRectangle
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Recentring a near-minimum reset gives a literal strategic sign
@@ -78,8 +77,6 @@ theorem exists_nearMinimumReset_recentered_actualDeviation_gain_pos
           0 < quittingTerminalPayoff reward
                 (Function.update mixedProfile recipient deviation) recipient -
               quittingTerminalPayoff reward mixedProfile recipient := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let endpointProfile := Function.update profile mover target
   let mixedStrategy := quittingStoppingLawMixtureBehaviorStrategy reward mover
     (profile mover) target lambda hlambda0.le hlambda1
@@ -142,7 +139,7 @@ theorem exists_nearMinimumReset_recentered_actualDeviation_gain_pos
     exists_quittingContinuation_deviation_ge_sub reward mixedProfile recipient
       heta
   have hsourceDebtNonneg : 0 ≤ quittingTerminalSemanticDebt source recipient :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hM hreward
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
       (quittingTerminalSemanticPair_mem_carrier reward profile) recipient
   have hmixedDebt : quittingTerminalSemanticDebt source recipient +
       debtChange recipient = quittingTerminalSemanticDebt mixed recipient := by

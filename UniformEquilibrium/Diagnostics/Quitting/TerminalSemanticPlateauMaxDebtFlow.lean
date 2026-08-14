@@ -510,9 +510,7 @@ theorem exists_maxDebtSource_vertex_or_weightedMinimumSurplus
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (cut : QuittingFiniteMaxDebtMatchedCut
       debt transfer incidence weight cutoff)
-    (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -548,8 +546,7 @@ theorem exists_maxDebtSource_vertex_or_weightedMinimumSurplus
     quittingTerminalSemanticDebt pair source
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
   have hgapNonneg : 0 ≤ gap := by
     unfold gap quittingTerminalSemanticDebtSum
     exact Finset.single_le_sum
@@ -566,7 +563,7 @@ theorem exists_maxDebtSource_vertex_or_weightedMinimumSurplus
       div_pos cut.deficit_pos hcardPositive
     obtain ⟨outcome, houtcome⟩ :=
       exists_terminalOutcome_subset_singletonSurplus_ge_exactMinimumDebt
-        (reward := reward) pair {source} hM hreward hpair hminimum hpositive
+        (reward := reward) pair {source} hpair hminimum hpositive
     have houtcome' : gap ≤
         quittingTerminalOutcomeReward reward outcome source -
           reward (quittingSingletonTerminal source) source := by

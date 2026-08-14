@@ -174,8 +174,6 @@ theorem idealSingletonSemanticPair_zero_mem_carrier
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hclearance : ∀ who, 0 ≤ capClearance reward pair.2 who)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ S player, |reward S player| ≤ B)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     idealSingletonSemanticPair reward owner 0 pair ∈
       quittingTerminalSemanticCarrier reward := by
@@ -187,7 +185,7 @@ theorem idealSingletonSemanticPair_zero_mem_carrier
     unfold diffuseSingletonPrefix
     dsimp only
     exact repeatedSingletonPrefix_mem_carrier reward owner _ _ _
-      (meshIndex n + 1) pair hB hreward hpair
+      (meshIndex n + 1) pair hpair
 
 end IdealSingletonCarrierBridge
 end GameTheory

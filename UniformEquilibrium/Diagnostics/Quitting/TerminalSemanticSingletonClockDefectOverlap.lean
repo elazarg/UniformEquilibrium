@@ -312,8 +312,7 @@ theorem exists_stagePartialBestEndpoint_transfer_of_liveTotalDefect_pos
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (minimum : QuittingTerminalSemanticPair iota)
     (profile : (quittingGame reward).BehaviorProfile)
-    (stage : ℕ) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (stage : ℕ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -415,7 +414,7 @@ theorem exists_stagePartialBestEndpoint_transfer_of_liveTotalDefect_pos
     simpa only [gain, mul_assoc] using mul_pos hlambda0 hwhoDefect
   have hsourceDebt : 0 < quittingTerminalSemanticDebt source who := by
     have hcollectable := quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
-      (reward := reward) profile who stage hM hreward
+      (reward := reward) profile who stage
     exact hwhoDefect.trans_le hcollectable
   have hsourcePoint :
       (source, quittingTerminalOutcomeMass reward profile) ∈
@@ -459,7 +458,7 @@ theorem exists_stagePartialBestEndpoint_transfer_of_liveTotalDefect_pos
   have htargetDebt : 0 < quittingTerminalSemanticDebt target who := by
     exact terminalSemanticDebt_stagePartialBestEndpoint_pos
       (reward := reward) profile who stage lambda hlambda0.le hlambda1
-        hM hreward hsourceDebt
+        hsourceDebt
   exact ⟨hsourcePoint, htargetPoint, hgain, hdecrease, htransferExact,
     htransfer, htargetDebt⟩
 
@@ -472,8 +471,6 @@ theorem exists_stagePartialBestEndpoint_singletonTransfer_of_totalDefect_pos
     (minimum : QuittingTerminalSemanticPair iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (owner : iota) (stage : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -550,7 +547,7 @@ theorem exists_stagePartialBestEndpoint_singletonTransfer_of_totalDefect_pos
   have hgain : 0 < gain := mul_pos (mul_pos hlambda0 hlive) hwhoDefect
   have hsourceDebt : 0 < quittingTerminalSemanticDebt source who := by
     have hcollectable := quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
-      (reward := reward) profile who stage hM hreward
+      (reward := reward) profile who stage
     exact (mul_pos hlive hwhoDefect).trans_le hcollectable
   have hsourcePoint :
       (source, quittingTerminalOutcomeMass reward profile) ∈
@@ -605,7 +602,7 @@ theorem exists_stagePartialBestEndpoint_singletonTransfer_of_totalDefect_pos
   have htargetDebt : 0 < quittingTerminalSemanticDebt target who := by
     exact terminalSemanticDebt_stagePartialBestEndpoint_pos
       (reward := reward) profile who stage lambda hlambda0.le hlambda1
-        hM hreward hsourceDebt
+        hsourceDebt
   exact ⟨hsourcePoint, htargetPoint, hgain, hdecrease, htransferExact,
     htransfer, hretention, htargetStage, htargetDebt⟩
 
@@ -623,9 +620,7 @@ theorem exists_singletonClock_defectOverlap_or_offClockLeak
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (owner : iota)
-    (reference epsilon faceFloor clockMass : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon faceFloor clockMass : ℝ) (cutoff : ℕ)
     (hinitial : 0 ≤ quittingSpineDebtExcess reward profile reference 0)
     (hnear : ∀ time ≤ cutoff,
       quittingSpineDebtExcess reward profile reference time ≤ epsilon)
@@ -651,7 +646,7 @@ theorem exists_singletonClock_defectOverlap_or_offClockLeak
             quittingSpineTotalNashDefect reward profile time := by
   have hbudget := faceFloor_mul_clockMass_le_epsilon_add_defect
     reward profile owner reference epsilon faceFloor clockMass cutoff
-      hM hreward hinitial hnear hfaceFloor hface hclock
+      hinitial hnear hfaceFloor hface hclock
   have hoccupation : 0 < ∑ time ∈ Finset.range cutoff,
       quittingLiveMass reward profile time *
         quittingSpineTotalNashDefect reward profile time := by
@@ -739,9 +734,7 @@ theorem exists_singletonClock_windowPreservingPartialReset
     (minimum : QuittingTerminalSemanticPair iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (owner : iota)
-    (reference epsilon faceFloor clockMass : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon faceFloor clockMass : ℝ) (cutoff : ℕ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -789,7 +782,7 @@ theorem exists_singletonClock_windowPreservingPartialReset
             time (quittingSingletonTerminal owner) := by
   have hbudget := faceFloor_mul_clockMass_le_epsilon_add_defect
     reward profile owner reference epsilon faceFloor clockMass cutoff
-      hM hreward hinitial hnear hfaceFloor hface hclock
+      hinitial hnear hfaceFloor hface hclock
   have hoccupation : 0 < ∑ time ∈ Finset.range cutoff,
       quittingLiveMass reward profile time *
         quittingSpineTotalNashDefect reward profile time := by
@@ -824,7 +817,7 @@ theorem exists_singletonClock_windowPreservingPartialReset
     nlinarith
   obtain ⟨who, hcoordinateBound, hreset⟩ :=
     exists_stagePartialBestEndpoint_transfer_of_liveTotalDefect_pos
-      reward minimum profile stage hM hreward hminimum hstageDefect
+      reward minimum profile stage hminimum hstageDefect
         lambda hlambda0 hlambda1
   have hreservoir : faceFloor * clockMass - epsilon ≤
       ∑ time ∈ Finset.range cutoff,
@@ -893,9 +886,7 @@ theorem exists_singletonClock_routedReset_or_offClockLeak
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (owner : iota)
-    (reference epsilon faceFloor clockMass : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon faceFloor clockMass : ℝ) (cutoff : ℕ)
     (hinitial : 0 ≤ quittingSpineDebtExcess reward profile reference 0)
     (hnear : ∀ time ≤ cutoff,
       quittingSpineDebtExcess reward profile reference time ≤ epsilon)
@@ -943,7 +934,7 @@ theorem exists_singletonClock_routedReset_or_offClockLeak
             quittingSpineTotalNashDefect reward profile time := by
   rcases exists_singletonClock_defectOverlap_or_offClockLeak
       reward profile owner reference epsilon faceFloor clockMass cutoff
-      hM hreward hinitial hnear hfaceFloor hface hclock hstrict with
+      hinitial hnear hfaceFloor hface hclock hstrict with
     hoverlap | hleak
   · left
     obtain ⟨time, htime, hstage, hdefect⟩ := hoverlap

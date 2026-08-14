@@ -196,11 +196,11 @@ theorem debtSum_mul_preservedSingletonClock_mul_singletonGap_le_twoM_mul_excess
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun who _ =>
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward hpair who
+        reward hpair who
   have hscaled := mul_le_mul_of_nonneg_left hendpoint hdebtNonneg
   have hbudget :=
     (exactNash_preservedSingletonClock_mul_complementDebt_le_excess
-      (reward := reward) base pair root owner 0 hM hreward hminimum hpair
+      (reward := reward) base pair root owner 0 hminimum hpair
         hnash (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg root {owner})).2
   have htwoMNonneg : 0 ≤ 2 * M := by positivity
   have hbudgetScaled := mul_le_mul_of_nonneg_left hbudget htwoMNonneg
@@ -246,7 +246,7 @@ theorem debtFloor_mul_clockFloor_mul_singletonSlack_le_twoM_mul_excess
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hcomplement : 0 ≤ quittingTerminalSemanticDebtSum pair -
       quittingTerminalSemanticDebt pair owner := by
     unfold quittingTerminalSemanticDebtSum

@@ -6,7 +6,6 @@ coalition/background host; no cardinal reduction is claimed here.
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalCollisionRecipientAtom
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionConcentratedConsumer
-import UniformEquilibrium.Quitting.RewardBound
 
 noncomputable section
 
@@ -244,11 +243,9 @@ theorem tailEscape_or_threeRoleTransfer
           quittingTerminalSemanticDebtSum minimum) ∨
       Nonempty (ThreeRoleTransfer reward owner profile stage terminal
         lower epsilon minimum) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hdispatch :=
     causalCollision_tailEscape_or_quantitativeNearMinimumTransfer
-      reward minimum profile stage terminal lower epsilon hM hreward
+      reward minimum profile stage terminal lower epsilon
         hminimumCarrier hminimum hminimumDebt hcollision hlower hnear hmass
   dsimp only at hdispatch
   rcases hdispatch with hescape | hgain
@@ -783,8 +780,6 @@ theorem exists_threeRoleLimitChord_of_frequently_packetTransferRoles
       packetTransferRoles minimum packet rank mover recipient) :
     Nonempty (ThreeRoleLimitChord reward minimum owner mover recipient
       packet.resolution) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let eps : ℕ → ℝ := fun rank ↦ packetEpsilon minimum packet rank
   have hepsZero : Tendsto eps atTop (nhds 0) := by
     have hsub := hsourceDebt.sub_const
@@ -818,7 +813,7 @@ theorem exists_threeRoleLimitChord_of_frequently_packetTransferRoles
     quittingTerminalSemanticPair_mem_carrier reward _
   obtain ⟨sourceLimit, hsourceLimitMem, sourceSubseq, hsourceSubseq,
       hsourceLimit⟩ :=
-    (quittingTerminalSemanticCarrier_isCompact reward hM hreward).tendsto_subseq
+    (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
       hsourceMem
   have htargetMem : ∀ n,
       targetSeq (sourceSubseq n) ∈
@@ -826,7 +821,7 @@ theorem exists_threeRoleLimitChord_of_frequently_packetTransferRoles
     quittingTerminalSemanticPair_mem_carrier reward _
   obtain ⟨targetLimit, htargetLimitMem, targetSubseq, htargetSubseq,
       htargetLimit⟩ :=
-    (quittingTerminalSemanticCarrier_isCompact reward hM hreward).tendsto_subseq
+    (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
       htargetMem
   let finalIndex : ℕ → ℕ := fun n ↦
     selected (sourceSubseq (targetSubseq n))

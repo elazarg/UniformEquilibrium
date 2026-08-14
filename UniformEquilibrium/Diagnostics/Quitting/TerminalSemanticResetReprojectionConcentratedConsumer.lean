@@ -177,8 +177,6 @@ theorem exists_concentrated_singleton_or_tailEscape_or_otherDefect
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
     (packet : QuittingReprojectionConcentratedPacket
       reward profiles owner terminal cutoff scale)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -233,7 +231,7 @@ theorem exists_concentrated_singleton_or_tailEscape_or_otherDefect
         tail rank ∈ quittingTerminalSemanticCarrier reward := fun rank ↦
       quittingTerminalSemanticPair_mem_carrier reward _
     obtain ⟨cluster, hcluster, subseq, hsubseq, htailLimit⟩ :=
-      (quittingTerminalSemanticCarrier_isCompact reward hM hreward).tendsto_subseq
+      (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
         htailMem
     have howner := packet.ownerDefect_tendsto_zero hscale hscaleTendsto
     have hownerSub := howner.comp hsubseq.tendsto_atTop
@@ -312,7 +310,7 @@ theorem exists_concentrated_singleton_or_tailEscape_or_otherDefect
           quittingStageCollisionMass_mul_minimumDebt_le_tailExcess_add_totalNashDefect
             reward minimum
               (profiles (packet.subseq (subseq rank)))
-              (packet.mark (subseq rank)) terminal hM hreward
+              (packet.mark (subseq rank)) terminal
                 hminimumCarrier hminimum hcollision
         have hscaled : packet.resolution *
               quittingTerminalSemanticDebtSum minimum ≤

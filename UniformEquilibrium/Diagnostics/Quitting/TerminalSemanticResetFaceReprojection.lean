@@ -210,8 +210,7 @@ theorem exists_surfaceTension_nearResetFace_penalty
       0 ≤ face point := by
     intro point hpoint
     exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward
-        (terminalSemanticLawCarrier_fst_mem_carrier point hpoint) owner
+      reward (terminalSemanticLawCarrier_fst_mem_carrier point hpoint) owner
   have hsupport : ∀ point ∈ quittingTerminalSemanticLawCarrier reward,
       face point = 0 → tension point ≤ 0 := by
     intro point hpoint hface
@@ -245,9 +244,7 @@ the realizing strategic provenance. -/
 theorem surfaceTension_linearPenalty_or_normalizedObstruction
     (source : QuittingTerminalSemanticPair iota)
     (returned : QuittingTerminalSemanticLawPoint iota)
-    (owner : iota) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : iota)
     (hminimum : ∀ point ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum point)
@@ -308,8 +305,7 @@ theorem surfaceTension_linearPenalty_or_normalizedObstruction
     obtain ⟨point, hpoint, hviolation⟩ := hlinear penalty hpenalty
     have hfaceNonneg : 0 ≤ quittingTerminalSemanticDebt point.1 owner :=
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward
-          (terminalSemanticLawCarrier_fst_mem_carrier point hpoint) owner
+        reward (terminalSemanticLawCarrier_fst_mem_carrier point hpoint) owner
     have hfacePositive : 0 <
         quittingTerminalSemanticDebt point.1 owner := by
       apply lt_of_le_of_ne hfaceNonneg
@@ -407,8 +403,7 @@ theorem resetFace_globalMinimum_or_surfaceTension_reprojectionCostate
       hreturnedIncidence, hreturnedStrict, hslope, ?_⟩
     intro root hnash
     exact root_eq_allContinue_of_minimal_surfaceTension
-      source returned owner root hM hreward hminimum hsourcePositive
-        hreturned hreturnedReset hreturnedStrict hreturnedIncidence
-        hslope hnash
+      source returned owner root hminimum hsourcePositive hreturned
+        hreturnedReset hreturnedStrict hreturnedIncidence hslope hnash
 
 end GameTheory

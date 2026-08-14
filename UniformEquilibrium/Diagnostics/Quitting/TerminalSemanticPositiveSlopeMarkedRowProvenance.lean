@@ -71,7 +71,7 @@ theorem exists_markedTailCluster_escape_or_otherNashDefect_of_positiveTargetRect
     (quitTime : ℕ → Option ℕ) (time : ℕ → ℕ)
     (terminal : {S : Finset ι // S.Nonempty})
     (hobserver : observer ∈ terminal.val)
-    {lower M : ℝ} (hlower : 0 < lower) (hM : 0 ≤ M)
+    {lower M : ℝ} (hlower : 0 < lower)
     (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hterminalReward : 0 < reward terminal observer)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
@@ -219,7 +219,7 @@ theorem exists_markedTailCluster_escape_or_otherNashDefect_of_positiveTargetRect
         (deviated n) (time n) terminal)
   have hlocalized :=
     exists_markedTailCluster_escape_or_otherNashDefect reward minimum
-      targetBase observer quitTime terminal hobserver hlowerDiv hM hreward
+      targetBase observer quitTime terminal hobserver hlowerDiv
       hminimumCarrier hminimum hminimumPositive hcollision (by
         simpa only [targetBase, deviated] using hreset) (by
         simpa only [deviated] using hpersistent)
@@ -320,8 +320,7 @@ theorem target_is_zeroDebt_globalMinimizer :
   unfold quittingTerminalSemanticDebtSum
   apply Finset.sum_nonneg
   intro who _hwho
-  exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-    (by norm_num) abs_reward_le_one hcandidate who
+  exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hcandidate who
 
 /-- Hence exact minimum provenance, an actual positive collision atom, and
 an exact best response at the target still do not force a marked-row sign.

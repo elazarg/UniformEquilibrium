@@ -257,9 +257,7 @@ tight outsider.  A nonnegative increment would allow actual support entry,
 which contracts the owner's deleted survival and contradicts minimum debt. -/
 theorem collision_negative_or_exists_cotight_outsider_of_pureOwner_minimumSemanticDebt
     (pair : QuittingTerminalSemanticPair ι)
-    (owner entrant : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner entrant : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -307,7 +305,7 @@ theorem collision_negative_or_exists_cotight_outsider_of_pureOwner_minimumSemant
           (le_of_not_gt hcollision) hentrantTight hotherStrict
     have hzero :=
       quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
-        reward pair root hM hreward hpair hminimum hnash hownerDebt hne.symm
+        reward pair root hpair hminimum hnash hownerDebt hne.symm
     have hpositive : 0 < (root entrant true).toReal := by
       change 0 < hazardOfRoot root entrant
       rw [hrootHazard,
@@ -350,9 +348,7 @@ def HasSharpMinimumSemanticSoloSupportBoundary
 /-- First-boundary selection with the rate-one collision sign sharpened. -/
 theorem exists_sharp_minimalSoloBoundary
     (pair : QuittingTerminalSemanticPair ι)
-    (owner anchor : ι) (displayedRate : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner anchor : ι) (displayedRate : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -405,7 +401,7 @@ theorem exists_sharp_minimalSoloBoundary
   · left
     refine ⟨hrateLt, ?_⟩
     exact collision_nonzero_or_exists_cotight_outsider_of_minimumSemanticDebt
-      (reward := reward) pair owner entrant rate hM hreward hpair hminimum
+      (reward := reward) pair owner entrant rate hpair hminimum
         hownerDebt hentrantNe.symm hratePos hrateLt hownerPin
         hcomplementary' hentrantTight'
   · right
@@ -414,7 +410,7 @@ theorem exists_sharp_minimalSoloBoundary
     subst rate
     exact
       collision_negative_or_exists_cotight_outsider_of_pureOwner_minimumSemanticDebt
-        (reward := reward) pair owner entrant hM hreward hpair hminimum
+        (reward := reward) pair owner entrant hpair hminimum
           hownerDebt hentrantNe.symm hownerPin hcomplementary' hentrantTight'
 
 /-- Game-facing sharp boundary producer.  Unlike the earlier producer, this
@@ -422,9 +418,7 @@ requires no positive Continue mass: a pure-Quit solo row is handled by the
 rate-one collision-sign theorem. -/
 theorem exists_sharp_minimalSoloBoundary_of_soloRoot
     (pair : QuittingTerminalSemanticPair ι)
-    (owner anchor : ι) (hazard : PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner anchor : ι) (hazard : PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -467,7 +461,7 @@ theorem exists_sharp_minimalSoloBoundary_of_soloRoot
     rw [gainValue_twoOwner_second_fixedTail pair.1 owner anchor 0 0 hne]
     simpa using hattractive
   exact exists_sharp_minimalSoloBoundary
-    (reward := reward) pair owner anchor displayedRate hM hreward hpair
+    (reward := reward) pair owner anchor displayedRate hpair
       hminimum hownerDebt hne hquit hdisplayedLe hownerPin
       hdisplayedComplementary hanchorProfitable
 
@@ -520,9 +514,7 @@ def HasPunishmentSeparatedSharpMinimumSemanticSoloSupportBoundary
 boundary. -/
 theorem exists_punishmentSeparated_sharp_minimalSoloBoundary_of_soloRoot
     (pair : QuittingTerminalSemanticPair ι)
-    (owner anchor : ι) (hazard : PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner anchor : ι) (hazard : PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -541,7 +533,7 @@ theorem exists_punishmentSeparated_sharp_minimalSoloBoundary_of_soloRoot
     HasPunishmentSeparatedSharpMinimumSemanticSoloSupportBoundary
       reward pair owner (hazard true).toReal := by
   rcases exists_sharp_minimalSoloBoundary_of_soloRoot
-      (reward := reward) pair owner anchor hazard hM hreward hpair hminimum
+      (reward := reward) pair owner anchor hazard hpair hminimum
         hownerDebt hne hquit hownerPin hnash hattractive with
     ⟨rate, entrant, hratePos, hrateLe, hentrantNe,
       hcomplementary, hentrantTight, hsharp⟩
@@ -627,13 +619,11 @@ atomic solo edge with a sharp finite support boundary.  This strengthens the
 pure-Quit branch as well as the interior branch. -/
 theorem exists_semanticPlateau_or_sharpBoundaryProvenanceAtomicSolo_of_noUE
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (regime : QuittingCounterexampleRegime reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward ∨
       HasSharpBoundaryProvenanceAtomicMinimumSemanticSoloRow regime := by
   rcases exists_semanticPlateau_or_provenanceAtomicSolo_of_noUE
-      regime hM hreward with hplateau | hatomic
+      regime with hplateau | hatomic
   · exact Or.inl hplateau
   · right
     rcases hatomic with
@@ -653,7 +643,7 @@ theorem exists_semanticPlateau_or_sharpBoundaryProvenanceAtomicSolo_of_noUE
             hownerPin)
     have hsharpPunishment :=
       exists_punishmentSeparated_sharp_minimalSoloBoundary_of_soloRoot
-        (reward := reward) tail owner anchor hazard hM hreward htailCarrier
+        (reward := reward) tail owner anchor hazard htailCarrier
           htailMin htailDebt hanchorNe.symm hquit hownerPin hnash
           hattractive hpunishment
     refine ⟨current, tail, owner, hazard, anchor, hcurrentCarrier,

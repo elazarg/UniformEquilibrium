@@ -493,8 +493,6 @@ theorem quittingTerminalSemanticLawPrefix_mem_carrier
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (point : QuittingTerminalSemanticLawPoint ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward) :
     (quittingTerminalSemanticPrefix reward root point.1,
         quittingTerminalOutcomeLawPrefix root point.2) ∈
@@ -515,7 +513,7 @@ theorem quittingTerminalSemanticLawPrefix_mem_carrier
   refine ⟨quittingRootThenContinuationProfile reward root profile, ?_⟩
   apply Prod.ext
   · exact quittingTerminalSemanticPair_rootThenContinuation
-      reward root profile hM hreward
+      reward root profile
   · exact (quittingTerminalOutcomeLawPrefix_outcomeMass
       reward root profile).symm
 
@@ -585,9 +583,7 @@ theorem nearMinimum_resetPrefix_with_incidence_of_capNashReturnSelection
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (root : ι → PMF Bool) (who other : ι) (tolerance : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (who other : ι) (tolerance : ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -621,12 +617,12 @@ theorem nearMinimum_resetPrefix_with_incidence_of_capNashReturnSelection
     rintro point ⟨profile, rfl⟩
     exact ⟨profile, rfl⟩
   have haccount := capNashPrefix_resetExcursion_exact_account
-    (reward := reward) source target root who hM hreward hminimum
+    (reward := reward) source target root who hminimum
       htargetCarrier hreset hselection.1
   have hreturnedJoint : (returned, returnedMass) ∈
       quittingTerminalSemanticLawCarrier reward := by
     exact quittingTerminalSemanticLawPrefix_mem_carrier
-      reward root (target, mass) hM hreward hjoint
+      reward root (target, mass) hjoint
   have hnear : quittingTerminalSemanticDebtSum returned ≤
       quittingTerminalSemanticDebtSum source + tolerance := by
     dsimp only [returned]

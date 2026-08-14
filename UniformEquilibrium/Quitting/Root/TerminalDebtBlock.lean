@@ -105,8 +105,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_blockAct
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (who : ι)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root) :
@@ -122,11 +121,11 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_blockAct
   let continueValue := quittingRootContinuePayoff reward base root who
   let survived := quittingRootOpponentContinueMass root who * debt
   have hdebt : 0 ≤ debt :=
-    quittingTerminalDeviationDebt_nonneg reward continuation who hM hreward
+    quittingTerminalDeviationDebt_nonneg reward continuation who
   have hsurvived : 0 ≤ survived :=
     mul_nonneg (quittingRootOpponentContinueMass_nonneg root who) hdebt
   have hrecursion := quittingTerminalDeviationDebt_rootThenContinuation_eq
-    reward root continuation who hM hreward hnash
+    reward root continuation who hnash
   rw [hrecursion]
   change max quitValue (continueValue + survived) - max quitValue continueValue =
     max 0 (survived - max 0 (quitValue - continueValue))
@@ -140,8 +139,7 @@ theorem quittingTerminalDebt_utilization
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (who : ι)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root) :
@@ -157,9 +155,9 @@ theorem quittingTerminalDebt_utilization
             (fun player => quittingTerminalPayoff reward continuation player)
             root who) := by
   have hdebt := quittingTerminalDeviationDebt_nonneg
-    reward continuation who hM hreward
+    reward continuation who
   rw [quittingTerminalDeviationDebt_rootThenContinuation_eq_blockAct
-    reward root continuation who hM hreward hnash]
+    reward root continuation who hnash]
   have haccount := Block.debt_sub_act_eq_killed_add_min
     (quittingLiteralTerminalDebtBlock reward continuation root who)
     () hdebt
@@ -185,16 +183,15 @@ theorem quittingTerminalDebtUtilization_nonneg
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (who : ι) :
     0 ≤ quittingTerminalDebtUtilization reward root continuation who := by
   unfold quittingTerminalDebtUtilization
   apply add_nonneg
   · exact mul_nonneg (quittingRootOpponentAbsorptionMass_nonneg root who)
-      (quittingTerminalDeviationDebt_nonneg reward continuation who hM hreward)
+      (quittingTerminalDeviationDebt_nonneg reward continuation who)
   · apply le_min
     · exact mul_nonneg (quittingRootOpponentContinueMass_nonneg root who)
-        (quittingTerminalDeviationDebt_nonneg reward continuation who hM hreward)
+        (quittingTerminalDeviationDebt_nonneg reward continuation who)
     · exact quittingRootExercisePremium_nonneg reward
         (fun player => quittingTerminalPayoff reward continuation player)
         root who
@@ -204,8 +201,6 @@ theorem sum_quittingTerminalDebt_sub_prefixed_eq_sum_utilization
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root) :
@@ -217,7 +212,7 @@ theorem sum_quittingTerminalDebt_sub_prefixed_eq_sum_utilization
   apply Finset.sum_congr rfl
   intro who _
   exact quittingTerminalDebt_utilization
-    reward root continuation who hM hreward hnash
+    reward root continuation who hnash
 
 /-- A small total debt drop forces a macroscopic debtor to see little
 opponent absorption.  The estimate is division-free. -/
@@ -226,8 +221,6 @@ theorem quittingRootOpponentAbsorptionMass_mul_debtFloor_le_of_sumDebtDrop_le
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
     (who : ι) (debtFloor error : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root)
@@ -244,13 +237,13 @@ theorem quittingRootOpponentAbsorptionMass_mul_debtFloor_le_of_sumDebtDrop_le
         ∑ player, quittingTerminalDebtUtilization reward root continuation player :=
     Finset.single_le_sum
       (fun player _ => quittingTerminalDebtUtilization_nonneg
-        reward root continuation player hM hreward)
+        reward root continuation player)
       (Finset.mem_univ who)
   have hterm_le_error :
       quittingTerminalDebtUtilization reward root continuation who ≤ error := by
     apply hterm_le_sum.trans
     rw [← sum_quittingTerminalDebt_sub_prefixed_eq_sum_utilization
-      reward root continuation hM hreward hnash]
+      reward root continuation hnash]
     exact hdrop
   calc
     quittingRootOpponentAbsorptionMass root who * debtFloor ≤
@@ -262,7 +255,7 @@ theorem quittingRootOpponentAbsorptionMass_mul_debtFloor_le_of_sumDebtDrop_le
       unfold quittingTerminalDebtUtilization
       exact le_add_of_nonneg_right <| le_min
         (mul_nonneg (quittingRootOpponentContinueMass_nonneg root who)
-          (quittingTerminalDeviationDebt_nonneg reward continuation who hM hreward))
+          (quittingTerminalDeviationDebt_nonneg reward continuation who))
         (quittingRootExercisePremium_nonneg reward
           (fun player => quittingTerminalPayoff reward continuation player)
           root who)
@@ -275,8 +268,6 @@ theorem quittingRootExercisePremium_le_of_sumDebtDrop_lt_half_debtFloor
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
     (who : ι) (debtFloor error : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root)
@@ -296,20 +287,20 @@ theorem quittingRootExercisePremium_le_of_sumDebtDrop_lt_half_debtFloor
         ∑ player, quittingTerminalDebtUtilization reward root continuation player :=
     Finset.single_le_sum
       (fun player _ => quittingTerminalDebtUtilization_nonneg
-        reward root continuation player hM hreward)
+        reward root continuation player)
       (Finset.mem_univ who)
   have hterm_le_error :
       quittingTerminalDebtUtilization reward root continuation who ≤ error := by
     apply hterm_le_sum.trans
     rw [← sum_quittingTerminalDebt_sub_prefixed_eq_sum_utilization
-      reward root continuation hM hreward hnash]
+      reward root continuation hnash]
     exact hdrop
   have herror_nonneg : 0 ≤ error :=
     (quittingTerminalDebtUtilization_nonneg
-      reward root continuation who hM hreward).trans hterm_le_error
+      reward root continuation who).trans hterm_le_error
   have habs :=
     quittingRootOpponentAbsorptionMass_mul_debtFloor_le_of_sumDebtDrop_le
-      reward root continuation who debtFloor error hM hreward hnash
+      reward root continuation who debtFloor error hnash
       hfloor hdrop
   have hsurvived_floor :
       error < quittingRootOpponentContinueMass root who * debtFloor := by
@@ -339,7 +330,7 @@ theorem quittingRootExercisePremium_le_of_sumDebtDrop_lt_half_debtFloor
         unfold quittingTerminalDebtUtilization
         exact le_add_of_nonneg_left <| mul_nonneg
           (quittingRootOpponentAbsorptionMass_nonneg root who)
-          (quittingTerminalDeviationDebt_nonneg reward continuation who hM hreward)
+          (quittingTerminalDeviationDebt_nonneg reward continuation who)
       _ ≤ error := hterm_le_error
   by_contra hpremium
   have hpremium_lt : error < quittingRootExercisePremium reward
@@ -354,8 +345,6 @@ theorem quittingRoot_quitProbability_mul_debtFloor_le_of_sumDebtDrop_le
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
     {who other : ι} (hne : other ≠ who) (debtFloor error : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root)
@@ -376,7 +365,7 @@ theorem quittingRoot_quitProbability_mul_debtFloor_le_of_sumDebtDrop_le
         hfloor_nonneg
     _ ≤ error :=
       quittingRootOpponentAbsorptionMass_mul_debtFloor_le_of_sumDebtDrop_le
-        reward root continuation who debtFloor error hM hreward hnash
+        reward root continuation who debtFloor error hnash
         hfloor hdrop
 
 /-- If two distinct debt coordinates are macroscopic, every marginal is
@@ -387,8 +376,6 @@ theorem quittingRoot_all_quitProbability_mul_debtFloor_le_of_two_debtors
     (continuation : (quittingGame reward).BehaviorProfile)
     {first second : ι} (hdistinct : first ≠ second)
     (debtFloor error : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root)
@@ -407,10 +394,10 @@ theorem quittingRoot_all_quitProbability_mul_debtFloor_le_of_two_debtors
   by_cases hplayer : player = first
   · subst player
     exact quittingRoot_quitProbability_mul_debtFloor_le_of_sumDebtDrop_le
-      reward root continuation hdistinct debtFloor error hM hreward hnash
+      reward root continuation hdistinct debtFloor error hnash
       hfloor_nonneg hsecond hdrop
   · exact quittingRoot_quitProbability_mul_debtFloor_le_of_sumDebtDrop_le
-      reward root continuation hplayer debtFloor error hM hreward hnash
+      reward root continuation hplayer debtFloor error hnash
       hfloor_nonneg hfirst hdrop
 
 /-- A positive literal debt is preserved by an exact root precisely when
@@ -420,8 +407,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_self_iff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (who : ι)
     (hnash : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root)
@@ -434,7 +420,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_self_iff
           (fun player => quittingTerminalPayoff reward continuation player)
           root who = 0 := by
   rw [quittingTerminalDeviationDebt_rootThenContinuation_eq_blockAct
-    reward root continuation who hM hreward hnash]
+    reward root continuation who hnash]
   exact Block.act_eq_self_iff_of_pos
     (quittingLiteralTerminalDebtBlock reward continuation root who)
     () hdebt

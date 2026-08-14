@@ -41,9 +41,7 @@ block along near-minimizers can survive Nashification only by converging to a
 debt vertex, while collision disappears. -/
 theorem exactNash_preservedSingletonClock_mul_complementDebt_le_excess
     (base pair : QuittingTerminalSemanticPair iota)
-    (root : iota → PMF Bool) (owner : iota) (clockFloor : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : iota → PMF Bool) (owner : iota) (clockFloor : ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -62,7 +60,7 @@ theorem exactNash_preservedSingletonClock_mul_complementDebt_le_excess
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hcomplement : ∀ who,
       0 ≤ quittingTerminalSemanticDebtSum pair -
         quittingTerminalSemanticDebt pair who := by
@@ -92,7 +90,7 @@ theorem exactNash_preservedSingletonClock_mul_complementDebt_le_excess
         quittingRootCollisionMass root :=
     mul_nonneg hpairDebtNonneg (quittingRootCollisionMass_nonneg root)
   have hbudget := terminalSemantic_exactNash_nearMinimum_support_budget
-    (reward := reward) base pair root hM hreward hminimum hpair hnash
+    (reward := reward) base pair root hminimum hpair hnash
   constructor
   · calc
       clockFloor *
@@ -121,9 +119,7 @@ singleton at a positive minimum state is necessarily a solo debt-gate root
 owned by that singleton player. -/
 theorem minimumTerminalSemantic_exactNash_preservingSingletonClock_is_debtGateSolo
     (pair : QuittingTerminalSemanticPair iota)
-    (root : iota → PMF Bool) (owner : iota) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : iota → PMF Bool) (owner : iota)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -135,8 +131,7 @@ theorem minimumTerminalSemantic_exactNash_preservingSingletonClock_is_debtGateSo
       0 < (root owner true).toReal ∧
       ∀ other, other ≠ owner → root other = PMF.pure false := by
   have hgate := minimumTerminalSemantic_debtGate_of_singletonMass_pos
-    (reward := reward) pair root hM hreward hpair hminimum hpositive hnash
-      owner hclock
+    (reward := reward) pair root hpair hminimum hpositive hnash owner hclock
   have hquit : 0 < (root owner true).toReal :=
     QuittingFiniteRootWindow.quitProbability_pos_of_singletonCoalitionMass_pos
       root owner hclock
@@ -145,7 +140,7 @@ theorem minimumTerminalSemantic_exactNash_preservingSingletonClock_is_debtGateSo
   exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero
     (root other)
     (quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
-      reward pair root hM hreward hpair hminimum hnash
+      reward pair root hpair hminimum hnash
         (hgate.1.symm ▸ hpositive) hne)
 
 /-- Contrapositive producer fence: away from the prescribed debt gate, exact
@@ -153,9 +148,7 @@ Nashification annihilates the singleton clock that the quantile construction
 would need to preserve. -/
 theorem minimumTerminalSemantic_exactNash_singletonClock_eq_zero_of_not_debtGate
     (pair : QuittingTerminalSemanticPair iota)
-    (root : iota → PMF Bool) (owner : iota) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : iota → PMF Bool) (owner : iota)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -172,7 +165,7 @@ theorem minimumTerminalSemantic_exactNash_singletonClock_eq_zero_of_not_debtGate
       lt_of_not_ge hnot
     exact hnoGate
       (minimumTerminalSemantic_exactNash_preservingSingletonClock_is_debtGateSolo
-        (reward := reward) pair root owner hM hreward hpair hminimum
+        (reward := reward) pair root owner hpair hminimum
           hpositive hnash hclock).1
   · exact hnonneg
 
@@ -188,9 +181,7 @@ theorem
       reward profiles marked terminal cutoff scale lower)
     (owner : iota) (howner : owner ∈ terminal.val) (hne : owner ≠ marked)
     (pair : QuittingTerminalSemanticPair iota)
-    (root : iota → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (root : iota → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -206,7 +197,7 @@ theorem
   rw [hterminal] at hclock
   exact
     minimumTerminalSemantic_exactNash_preservingSingletonClock_is_debtGateSolo
-      (reward := reward) pair root owner hM hreward hpair hminimum hpositive
+      (reward := reward) pair root owner hpair hminimum hpositive
         hnash hclock
 
 end GameTheory

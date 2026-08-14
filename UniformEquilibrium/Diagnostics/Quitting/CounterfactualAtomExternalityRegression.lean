@@ -365,16 +365,14 @@ theorem singleton_reward_le_source_payoff (who : Player) :
 theorem roots_exactStack (depth : ℕ) :
     IsQuittingLiteralExactRootStack reward (roots depth) source := by
   exact isQuittingLiteralExactRootStack_replicate_allContinue reward source
-    depth (M := 1) (by norm_num) reward_bound
-      singleton_reward_le_source_payoff
+    depth singleton_reward_le_source_payoff
 
 theorem prefixed_semanticPair_eq_source (depth : ℕ) :
     quittingTerminalSemanticPair reward
         (quittingLiteralRootStackProfile reward (roots depth) source) =
       quittingTerminalSemanticPair reward source := by
   exact quittingTerminalSemanticPair_literalAllContinueStack_eq_terminal
-    reward source depth (M := 1) (by norm_num) reward_bound
-      singleton_reward_le_source_payoff
+    reward source depth singleton_reward_le_source_payoff
 
 theorem moverDeletedSurvival_eq_one (depth : ℕ) :
     quittingLiteralRootStackOpponentSurvival (roots depth) mover = 1 := by

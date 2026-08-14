@@ -76,9 +76,7 @@ theorem quittingTerminalSemanticMinimumSpineBox_nonempty
 compact. -/
 theorem quittingTerminalSemanticMinimumSpineBox_isCompact
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (base : QuittingTerminalSemanticPair ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (base : QuittingTerminalSemanticPair ι) :
     IsCompact (quittingTerminalSemanticMinimumSpineBox reward base) := by
   let fiber : Set (QuittingTerminalSemanticPair ι) :=
     quittingTerminalSemanticCarrier reward ∩
@@ -90,7 +88,7 @@ theorem quittingTerminalSemanticMinimumSpineBox_isCompact
           quittingTerminalSemanticDebtSum base} :=
     isClosed_eq continuous_quittingTerminalSemanticDebtSum continuous_const
   have hfiberCompact : IsCompact fiber :=
-    (quittingTerminalSemanticCarrier_isCompact reward hM hreward).inter_right
+    (quittingTerminalSemanticCarrier_isCompact reward).inter_right
       hfiberClosed
   have heq : quittingTerminalSemanticMinimumSpineBox reward base =
       fiber ×ˢ (Set.univ : Set (QuittingRootSimplex ι)) := by
@@ -102,9 +100,7 @@ theorem quittingTerminalSemanticMinimumSpineBox_isCompact
 /-- Exact minimum-fiber semantic prefix edges form a closed graph. -/
 theorem isClosed_quittingTerminalSemanticMinimumSpineEdgeGraph
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (base : QuittingTerminalSemanticPair ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (base : QuittingTerminalSemanticPair ι) :
     IsClosed {edge : QuittingTerminalSemanticSpinePoint ι ×
         QuittingTerminalSemanticSpinePoint ι |
       edge.1 ∈ quittingTerminalSemanticMinimumSpineBox reward base ∧
@@ -113,7 +109,7 @@ theorem isClosed_quittingTerminalSemanticMinimumSpineEdgeGraph
   let box := quittingTerminalSemanticMinimumSpineBox reward base
   have hbox : IsClosed box :=
     (quittingTerminalSemanticMinimumSpineBox_isCompact
-      reward base hM hreward).isClosed
+      reward base).isClosed
   have hcurrentBox : IsClosed
       {edge : QuittingTerminalSemanticSpinePoint ι ×
           QuittingTerminalSemanticSpinePoint ι | edge.1 ∈ box} :=
@@ -268,8 +264,6 @@ predecessor in the same fiber. -/
 theorem exists_quittingTerminalSemanticMinimumSpinePredecessor
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (base : QuittingTerminalSemanticPair ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hmin : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -294,12 +288,12 @@ theorem exists_quittingTerminalSemanticMinimumSpinePredecessor
   have hcurrentCarrier : currentPair ∈
       quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root tail.1 hM hreward htail.1
+      reward root tail.1 htail.1
   have hcoordinate : ∀ who,
       quittingTerminalSemanticDebt currentPair who =
         quittingTerminalSemanticDebt tail.1 who :=
     quittingTerminalSemanticDebt_prefix_eq_of_minimum
-      reward tail.1 root hM hreward htail.1 htailMin hnash
+      reward tail.1 root htail.1 htailMin hnash
   have hsum : quittingTerminalSemanticDebtSum currentPair =
       quittingTerminalSemanticDebtSum tail.1 := by
     unfold quittingTerminalSemanticDebtSum
@@ -312,8 +306,6 @@ theorem exists_quittingTerminalSemanticMinimumSpinePredecessor
 def quittingTerminalSemanticMinimumSerialRelation
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (base : QuittingTerminalSemanticPair ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hbase : base ∈ quittingTerminalSemanticCarrier reward)
     (hmin : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
@@ -324,13 +316,13 @@ def quittingTerminalSemanticMinimumSerialRelation
   box_nonempty :=
     quittingTerminalSemanticMinimumSpineBox_nonempty reward base hbase
   box_compact :=
-    quittingTerminalSemanticMinimumSpineBox_isCompact reward base hM hreward
+    quittingTerminalSemanticMinimumSpineBox_isCompact reward base
   relationGraph_closed :=
     isClosed_quittingTerminalSemanticMinimumSpineEdgeGraph
-      reward base hM hreward
+      reward base
   predecessor_exists :=
     exists_quittingTerminalSemanticMinimumSpinePredecessor
-      reward base hM hreward hmin
+      reward base hmin
 
 /-- **Minimum-semantic inverse limit.**  A minimum carrier point generates an
 infinite state-matched chronology of full semantic pairs and exact Nash roots.
@@ -338,8 +330,6 @@ Every pair remains in the same minimum-total-debt fiber. -/
 theorem exists_infinite_minimumTerminalSemanticSpine
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (base : QuittingTerminalSemanticPair ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hbase : base ∈ quittingTerminalSemanticCarrier reward)
     (hmin : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
@@ -356,7 +346,7 @@ theorem exists_infinite_minimumTerminalSemanticSpine
       ∀ time, IsεQuittingRootNash reward (pair (time + 1)).1 0
         (root time) := by
   let system := quittingTerminalSemanticMinimumSerialRelation
-    reward base hM hreward hbase hmin
+    reward base hbase hmin
   obtain ⟨state, hstateBox, hstateEdge⟩ := system.exists_infiniteChain
   let pair : ℕ → QuittingTerminalSemanticPair ι :=
     fun time => (state time).1
@@ -385,7 +375,7 @@ theorem exists_infinite_minimumTerminalSemanticSpine
       (root time) (pair (time + 1)) at hedge
     rw [hedge]
     exact quittingTerminalSemanticDebt_prefix_eq_of_minimum
-      reward (pair (time + 1)) (root time) hM hreward
+      reward (pair (time + 1)) (root time)
         (hstateBox (time + 1)).1 htailMin hnash who
   · intro time
     exact (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
@@ -461,8 +451,6 @@ turns the semantic spine into one terminal behavior profile. -/
 theorem exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_uniformPayoff
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
     (∃ pair : QuittingTerminalSemanticPair ι,
@@ -517,11 +505,11 @@ theorem exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_unifo
               (root time) blocker := by
   obtain ⟨base, _selectedRoot, hbase, _hnashBase, hmin, hpositive, _hface⟩ :=
     exists_positive_minimumTerminalSemanticDebt_face_of_no_uniformPayoff
-      reward hM hreward hno
+      reward hno
   have hbaseDebtNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebt base player :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hbase
+      reward hbase
   have hbaseSumPositive : 0 < quittingTerminalSemanticDebtSum base := by
     obtain ⟨who, hwho⟩ := hpositive
     unfold quittingTerminalSemanticDebtSum
@@ -543,7 +531,7 @@ theorem exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_unifo
     have hpairDebtNonneg : ∀ player,
         0 ≤ quittingTerminalSemanticDebt pair player :=
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward hpair
+        reward hpair
     have hpairPositive : ∃ player,
         0 < quittingTerminalSemanticDebt pair player := by
       by_contra hnot
@@ -564,7 +552,7 @@ theorem exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_unifo
   · obtain ⟨pair, root, hpairCarrier, hpairSum, hprefix, hdebtStep,
         hnash⟩ :=
       exists_infinite_minimumTerminalSemanticSpine
-        reward base hM hreward hbase hmin
+        reward base hbase hmin
     have hpairMin : ∀ time candidate,
         candidate ∈ quittingTerminalSemanticCarrier reward →
         quittingTerminalSemanticDebtSum (pair time) ≤
@@ -576,7 +564,7 @@ theorem exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_unifo
         0 ≤ quittingTerminalSemanticDebt (pair time) player := by
       intro time
       exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward (hpairCarrier time)
+        reward (hpairCarrier time)
     have htimeZeroPositive : ∃ owner,
         0 < quittingTerminalSemanticDebt (pair 0) owner := by
       by_contra hnot
@@ -641,7 +629,7 @@ theorem exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_unifo
               (root time) blocker := by
       intro time
       have halt := quittingTerminalSemantic_minimum_stratum_alternative
-        reward (pair (time + 1)) (root time) hM hreward
+        reward (pair (time + 1)) (root time)
           (hpairCarrier (time + 1)) (hpairMin (time + 1)) (hnash time)
           owner (hownerPositive (time + 1))
       rcases halt with hall | ⟨selectedOwner, blocker, hselectedPositive,

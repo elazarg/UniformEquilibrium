@@ -181,7 +181,7 @@ theorem exists_maximalCapNash_returnSelection_or_sameTailUndercharge
     have hreturnedCarrier : returned ∈
         quittingTerminalSemanticCarrier reward :=
       quittingTerminalSemanticPrefix_mem_carrier
-        reward root tail hM hreward htailCarrier
+        reward root tail htailCarrier
     have hreturnedLower := hminimum returned hreturnedCarrier
     have hscale : quittingTerminalSemanticDebtSum returned =
         quittingStationaryContinueMass root *
@@ -329,13 +329,11 @@ theorem quittingMaximalCapPrefixProfile_debt_succ
         quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
             (quittingMaximalCapPrefixProfile reward terminal n)) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   rw [quittingMaximalCapPrefixProfile_succ,
     quittingTerminalSemanticPair_rootThenContinuation reward
       (quittingMaximalCapPrefixRoot reward
         (quittingMaximalCapPrefixProfile reward terminal n))
-      (quittingMaximalCapPrefixProfile reward terminal n) hM hreward]
+      (quittingMaximalCapPrefixProfile reward terminal n)]
   exact quittingTerminalSemanticDebtSum_prefix_eq_continueMass_mul_of_capNash
     (reward := reward)
     (quittingTerminalSemanticPair reward
@@ -997,9 +995,7 @@ noncomputable def quittingMaximalCapPrefixPunishmentFloorPrefix
       quittingTerminalSemanticPair_rootThenContinuation reward
         (quittingMaximalCapPrefixRoot reward
           (quittingMaximalCapPrefixProfile reward terminal time))
-        (quittingMaximalCapPrefixProfile reward terminal time)
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward)]
+        (quittingMaximalCapPrefixProfile reward terminal time)]
     exact
       quittingTerminalSemanticPrefix_envelope_eq_rootSuccessorPayoff_of_capNash
         reward

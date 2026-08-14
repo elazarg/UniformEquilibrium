@@ -37,9 +37,7 @@ def quittingTerminalSemanticWeightedDebtSum
 /-- Weighted auxiliary-target budget at a minimum carrier point. -/
 theorem minimumTerminalSemantic_weightedAuxiliaryNash_budget
     (theta : Payoff ι) (pair : QuittingTerminalSemanticPair ι)
-    (h : Payoff ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (h : Payoff ι) (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticWeightedDebtSum theta pair ≤
@@ -55,7 +53,7 @@ theorem minimumTerminalSemantic_weightedAuxiliaryNash_budget
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root pair hM hreward hpair
+      reward root pair hpair
   have hcoordinate : ∀ who,
       theta who * quittingTerminalSemanticDebt prefixed who ≤
         theta who *
@@ -139,9 +137,7 @@ the positive weighted minimum, every exact auxiliary Nash root is
 all-Continue. -/
 theorem minimumTerminalSemantic_weightedAuxiliaryNash_eq_allContinue
     (theta : Payoff ι) (pair : QuittingTerminalSemanticPair ι)
-    (h : Payoff ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (h : Payoff ι) (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticWeightedDebtSum theta pair ≤
@@ -154,8 +150,7 @@ theorem minimumTerminalSemantic_weightedAuxiliaryNash_eq_allContinue
     (hnash : IsεQuittingRootNash reward (pair.2 - h) 0 root) :
     root = (quittingAllContinueRoot : ι → PMF Bool) := by
   have hbudget := minimumTerminalSemantic_weightedAuxiliaryNash_budget
-    (reward := reward) theta pair h root hM hreward hpair hminimum
-      htheta hh hnash
+    (reward := reward) theta pair h root hpair hminimum htheta hh hnash
   have hcollisionNonneg : 0 ≤ quittingRootCollisionMass root :=
     quittingRootCollisionMass_nonneg root
   have htermsNonneg : ∀ who ∈ (Finset.univ : Finset ι),
@@ -209,9 +204,7 @@ theorem minimumTerminalSemantic_weightedAuxiliaryNash_eq_allContinue
 singleton mass lies on a fully funded critical facet. -/
 theorem minimumTerminalSemantic_weightedAuxiliaryNash_criticalFace
     (theta : Payoff ι) (pair : QuittingTerminalSemanticPair ι)
-    (h : Payoff ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (h : Payoff ι) (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticWeightedDebtSum theta pair ≤
@@ -227,8 +220,7 @@ theorem minimumTerminalSemantic_weightedAuxiliaryNash_criticalFace
         theta who * h who =
           quittingTerminalSemanticWeightedDebtSum theta pair := by
   have hbudget := minimumTerminalSemantic_weightedAuxiliaryNash_budget
-    (reward := reward) theta pair h root hM hreward hpair hminimum
-      htheta hh hnash
+    (reward := reward) theta pair h root hpair hminimum htheta hh hnash
   have hcollisionNonneg : 0 ≤ quittingRootCollisionMass root :=
     quittingRootCollisionMass_nonneg root
   have htermsNonneg : ∀ who ∈ (Finset.univ : Finset ι),
@@ -263,9 +255,7 @@ theorem minimumTerminalSemantic_weightedAuxiliaryNash_criticalFace
 /-- A positive costate gives the sharp weighted singleton margin
 `m_theta ≤ theta_i * (b_i-s_i)`. -/
 theorem minimumTerminalSemantic_weightedSingletonMargin
-    (theta : Payoff ι) (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (theta : Payoff ι) (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticWeightedDebtSum theta pair ≤
@@ -281,8 +271,8 @@ theorem minimumTerminalSemantic_weightedSingletonMargin
   have hzeroRoot : zeroRoot =
       (quittingAllContinueRoot : ι → PMF Bool) := by
     apply minimumTerminalSemantic_weightedAuxiliaryNash_eq_allContinue
-      (reward := reward) theta pair zeroShift zeroRoot hM hreward hpair
-        hminimum hpositive (fun player => (htheta player).le)
+      (reward := reward) theta pair zeroShift zeroRoot hpair hminimum
+        hpositive (fun player => (htheta player).le)
     · intro player
       simp [zeroShift]
     · intro player
@@ -343,9 +333,8 @@ theorem minimumTerminalSemantic_weightedSingletonMargin
     (reward := reward) (pair.2 - shift)
   have hroot : root = (quittingAllContinueRoot : ι → PMF Bool) :=
     minimumTerminalSemantic_weightedAuxiliaryNash_eq_allContinue
-      (reward := reward) theta pair shift root hM hreward hpair hminimum
-        hpositive (fun player => (htheta player).le) hshiftNonneg
-          hshiftStrict hnash
+      (reward := reward) theta pair shift root hpair hminimum hpositive
+        (fun player => (htheta player).le) hshiftNonneg hshiftStrict hnash
   have hnashAll : IsεQuittingRootNash reward (pair.2 - shift) 0
       (quittingAllContinueRoot : ι → PMF Bool) := by
     simpa [hroot] using hnash
@@ -362,9 +351,7 @@ theorem minimumTerminalSemantic_weightedSingletonMargin
 /-- Every positive weighted minimum for a strictly positive costate is again
 an exact all-Continue Nash self-loop at its prescribed payoff. -/
 theorem minimumTerminalSemantic_weightedIs_allContinuePlateau
-    (theta : Payoff ι) (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (theta : Payoff ι) (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticWeightedDebtSum theta pair ≤
@@ -378,7 +365,7 @@ theorem minimumTerminalSemantic_weightedIs_allContinuePlateau
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hcostNonneg : ∀ who,
       0 ≤ theta who * quittingTerminalSemanticDebt pair who :=
     fun who => mul_nonneg (htheta who).le (hdebtNonneg who)
@@ -386,8 +373,7 @@ theorem minimumTerminalSemantic_weightedIs_allContinuePlateau
       reward (quittingSingletonTerminal who) who ≤ pair.1 who := by
     intro who
     have hmargin := minimumTerminalSemantic_weightedSingletonMargin
-      (reward := reward) theta pair hM hreward hpair hminimum hpositive
-        htheta who
+      (reward := reward) theta pair hpair hminimum hpositive htheta who
     have hcoordinateLe : theta who *
         quittingTerminalSemanticDebt pair who ≤
           quittingTerminalSemanticWeightedDebtSum theta pair := by

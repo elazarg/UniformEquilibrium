@@ -146,9 +146,7 @@ theorem exists_positiveObserver_resetFaceConcentratedPacket_of_collision
       hscalePos, hscaleZero, hfixedNe, hfixedMem, hconcentrated⟩ :=
     exists_resetFaceLaw_concentratedPacket_of_collision
       reward point packet.observer packet.terminal
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) hpoint hreset hmassPos
-          hcollision
+        hpoint hreset hmassPos hcollision
   exact ⟨point, hpoint, hreset, hmassPos, profiles, cutoff, scale,
     fixedOther, exact, hprofiles, hscalePos, hscaleZero, hfixedNe,
     hfixedMem, hconcentrated⟩

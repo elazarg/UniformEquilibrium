@@ -146,8 +146,6 @@ theorem stoppingLawFlatTangent_supportEntry_or_chargedCirculation_or_potentialCo
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (base : QuittingTerminalSemanticPair ι)
     (active : Finset ι) (column : ι → ι → ℝ) (gain : ι → ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hbase : base ∈ quittingTerminalSemanticCarrier reward)
     (hpositive : 0 < quittingTerminalSemanticDebtSum base)
     (hactive : ∀ who, who ∈ active ↔
@@ -174,7 +172,7 @@ theorem stoppingLawFlatTangent_supportEntry_or_chargedCirculation_or_potentialCo
         column mover other < 0 := by
   have hdebtNonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt base who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hbase
+      reward hbase
   have hactiveNonempty : active.Nonempty := by
     by_contra hempty
     rw [Finset.not_nonempty_iff_eq_empty.mp hempty] at hactive

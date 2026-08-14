@@ -219,8 +219,7 @@ theorem exists_positiveIncidence_normalizedReprojectionGerm
       0 ≤ face point := by
     intro point hpoint
     exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward
-        (terminalSemanticLawCarrier_fst_mem_carrier point hpoint) owner
+      reward (terminalSemanticLawCarrier_fst_mem_carrier point hpoint) owner
   have hsupport : ∀ point ∈ quittingTerminalSemanticLawCarrier reward,
       face point = 0 → tension point ≤ 0 := by
     intro point hpoint hface
@@ -234,7 +233,7 @@ theorem exists_positiveIncidence_normalizedReprojectionGerm
         0 < face point ∧ 0 < tension point ∧
           penalty * face point < tension point := by
     have halt := surfaceTension_linearPenalty_or_normalizedObstruction
-      source returned owner hM hreward hminimum hreturned hexcess
+      source returned owner hminimum hreturned hexcess
         hreturnedIncidence hslope
     have hunbounded := halt.resolve_left (by
       intro hlinear

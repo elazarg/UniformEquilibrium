@@ -269,8 +269,7 @@ theorem orbit_mem_and_exact_debt (n : ℕ) :
       | none => norm_num [startClearance]
       | some i => fin_cases i <;> norm_num [startClearance])
     never_capClearance hreturn hcost₁ hcost₂ hcost₃
-    (quittingRewardBound_nonneg reward)
-    (abs_reward_le_quittingRewardBound reward) never_mem_carrier n
+    never_mem_carrier n
   refine ⟨?_, ?_⟩
   · simpa [orbit] using horbit.1
   · rw [show quittingTerminalSemanticDebtSum (orbit n) =
@@ -321,8 +320,7 @@ theorem orbit_debt_tendsto_zero :
         | none => norm_num [startClearance]
         | some i => fin_cases i <;> norm_num [startClearance])
       never_capClearance hreturn hcost₁ hcost₂ hcost₃
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) never_mem_carrier)
+      never_mem_carrier)
 
 /-- This full-core algebraically admissible table has no positive total-debt
 floor on its attainable semantic carrier. -/

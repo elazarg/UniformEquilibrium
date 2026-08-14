@@ -48,9 +48,7 @@ theorem quittingStageCollisionMass_mul_minimumDebt_le_tailExcess_add_totalNashDe
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
-    (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty})
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -68,7 +66,7 @@ theorem quittingStageCollisionMass_mul_minimumDebt_le_tailExcess_add_totalNashDe
     quittingTerminalSemanticPair_mem_carrier reward _
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htailCarrier
+      reward htailCarrier
   have htailMin : quittingTerminalSemanticDebtSum minimum ≤
       quittingTerminalSemanticDebtSum tail :=
     hminimum tail htailCarrier
@@ -87,7 +85,7 @@ theorem quittingStageCollisionMass_mul_minimumDebt_le_tailExcess_add_totalNashDe
         quittingLiveMass reward profile time * charge := by
     simpa only [tail, charge] using
       quittingStageCoalitionMass_mul_tailDebtSum_le_liveMass_mul_charge
-        reward profile time terminal hM hreward hcollision
+        reward profile time terminal hcollision
   have hchargeNonneg : 0 ≤ charge := by
     unfold charge quittingSpineOpponentAbsorptionDebtCharge
     exact Finset.sum_nonneg fun who _ => mul_nonneg
@@ -100,7 +98,7 @@ theorem quittingStageCollisionMass_mul_minimumDebt_le_tailExcess_add_totalNashDe
   have hcharge :=
     minimumTerminalSemantic_sum_opponentAbsorption_charge_le_excess_add_defect
       reward minimum tail (quittingProfileLiveRoot reward profile time)
-        hM hreward hminimumCarrier hminimum htailCarrier
+        hminimumCarrier hminimum htailCarrier
   have hcharge' : charge ≤
       quittingSpineDebtExcess reward profile
           (quittingTerminalSemanticDebtSum minimum) (time + 1) +
@@ -116,9 +114,7 @@ theorem tailExcess_or_totalNashDefect_of_persistent_collision
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
-    (terminal : {S : Finset ι // S.Nonempty}) (lower : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty}) (lower : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -134,15 +130,14 @@ theorem tailExcess_or_totalNashDefect_of_persistent_collision
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun who _ =>
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward hminimumCarrier who
+        reward hminimumCarrier who
   have hscaled : lower * quittingTerminalSemanticDebtSum minimum ≤
       quittingStageCoalitionMass reward profile time terminal *
         quittingTerminalSemanticDebtSum minimum :=
     mul_le_mul_of_nonneg_right hmass hminimumNonneg
   have hbudget := hscaled.trans
     (quittingStageCollisionMass_mul_minimumDebt_le_tailExcess_add_totalNashDefect
-      reward minimum profile time terminal hM hreward hminimumCarrier hminimum
-        hcollision)
+      reward minimum profile time terminal hminimumCarrier hminimum hcollision)
   by_contra hnot
   push Not at hnot
   linarith
@@ -157,9 +152,7 @@ theorem minimumDebt_mul_stageCollisionMass_le_stoppedDefectExcessBudget
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile) (stop : ℕ)
-    (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty})
     (_hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -204,8 +197,7 @@ theorem minimumDebt_mul_stageCollisionMass_le_stoppedDefectExcessBudget
         unfold quittingTerminalSemanticDebtSum
         exact Finset.sum_nonneg fun who _ =>
           quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-            reward hM hreward
-              (quittingTerminalSemanticPair_mem_carrier reward _) who)
+            reward (quittingTerminalSemanticPair_mem_carrier reward _) who)
   have htermSum : term stop ≤
       ∑ time ∈ Finset.range (stop + 1), term time := by
     exact Finset.single_le_sum
@@ -213,7 +205,7 @@ theorem minimumDebt_mul_stageCollisionMass_le_stoppedDefectExcessBudget
   have htelescope :=
     sum_stageCollisionMass_mul_tailDebtSum_le_stoppedDefectExcess
       reward profile terminal (quittingTerminalSemanticDebtSum minimum)
-        (stop + 1) hM hreward hcollision
+        (stop + 1) hcollision
   exact hminTerm.trans (htermSum.trans (by simpa only [term] using htelescope))
 
 /-! ## Compact localization of the actual marked rows -/
@@ -236,8 +228,7 @@ theorem exists_markedTailCluster_escape_or_otherNashDefect
     (who : ι) (quitTime : ℕ → Option ℕ)
     (terminal : {S : Finset ι // S.Nonempty})
     (hmem : who ∈ terminal.val)
-    {lower M : ℝ} (hlower : 0 < lower) (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    {lower : ℝ} (hlower : 0 < lower)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -301,8 +292,7 @@ theorem exists_markedTailCluster_escape_or_otherNashDefect
                     (stop (subseq rank))) other) := by
   obtain ⟨stop, hfinite, hstage, hmarkedDefect⟩ :=
     exists_stops_tendsto_coordinateNashDefect_zero_of_persistent_collision
-      reward profiles who quitTime terminal hmem hlower hM hreward hreset
-        hpersistent
+      reward profiles who quitTime terminal hmem hlower hreset hpersistent
   let deviated : ℕ → (quittingGame reward).BehaviorProfile := fun n =>
     Function.update (profiles n) who
       (quittingPureTimeBehaviorStrategy reward who (quitTime n))
@@ -313,7 +303,7 @@ theorem exists_markedTailCluster_escape_or_otherNashDefect
     intro n
     exact quittingTerminalSemanticPair_mem_carrier reward _
   obtain ⟨cluster, hcluster, subseq, hsubseq, htailLimit⟩ :=
-    (quittingTerminalSemanticCarrier_isCompact reward hM hreward).tendsto_subseq
+    (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
       htailMem
   have hfiniteSub : ∀ᶠ rank in atTop,
       quitTime (subseq rank) = some (stop (subseq rank)) :=
@@ -382,7 +372,7 @@ theorem exists_markedTailCluster_escape_or_otherNashDefect
       have hrow :=
         quittingStageCollisionMass_mul_minimumDebt_le_tailExcess_add_totalNashDefect
           reward minimum (deviated (subseq rank)) (stop (subseq rank))
-            terminal hM hreward hminimumCarrier hminimum hcollision
+            terminal hminimumCarrier hminimum hcollision
       have hscaled : lower * quittingTerminalSemanticDebtSum minimum ≤
           quittingStageCoalitionMass reward (deviated (subseq rank))
               (stop (subseq rank)) terminal *

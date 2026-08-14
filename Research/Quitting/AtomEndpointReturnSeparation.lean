@@ -7,7 +7,6 @@ Authors: GameTheory contributors
 import Research.Quitting.CounterexampleAtomEndpointRisePassport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetFaceReprojection
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCommonSuffixCurvatureRegression
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Endpoint return versus reset-face separation
@@ -102,13 +101,11 @@ theorem hasQuittingResetFaceReturnOrAllContinueSeparation_of_reset
     (hreset : quittingTerminalSemanticDebt target owner = 0) :
     HasQuittingResetFaceReturnOrAllContinueSeparation reward source target
       owner := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   obtain ⟨returned, hreturned, hreturnedReset, hsourceLe, hreturnedLe,
       _htransferIdentity, _htransfer, hfiber, hnash, hfixed, hallRoots⟩ :=
     exists_resetFace_minimizer_with_unique_allContinue_capNash
-      (reward := reward) source target owner hM hreward hminimum
-        hsourcePositive htarget hreset
+      (reward := reward) source target owner hminimum hsourcePositive
+        htarget hreset
   exact ⟨returned, hreturned, hreturnedReset, hsourceLe, hreturnedLe,
     hfiber, hnash, hfixed, hallRoots⟩
 
@@ -177,9 +174,8 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.nonempty_endpointC
     intro n
     exact quittingTerminalSemanticPair_mem_carrier reward _
   obtain ⟨cluster, hcluster, subseq, hsubseq, hendpoint⟩ :=
-    (quittingTerminalSemanticCarrier_isCompact reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)).tendsto_subseq hendpointMem
+    (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
+      hendpointMem
   have hsource : Tendsto (fun n => quittingTerminalSemanticPair reward
       (frontier.profiles
         (frontier.subseq (sequence.rank (subseq n))))) atTop
@@ -269,9 +265,7 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.nonempty_endpointC
     tendsto_nhds_unique hendpointMover hendpointMover'
   have hmoverNonneg : 0 ≤ quittingTerminalSemanticDebt cluster
       packet.chronology.mover.1 :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) hcluster _
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hcluster _
   have hmoverLe : quittingTerminalSemanticDebt cluster
         packet.chronology.mover.1 ≤
       quittingTerminalSemanticDebt frontier.base
@@ -377,9 +371,8 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.nonempty_doubleEndpoint
     intro n
     exact quittingTerminalSemanticPair_mem_carrier reward _
   obtain ⟨cluster, hcluster, subseq, hsubseq, hendpoint⟩ :=
-    (quittingTerminalSemanticCarrier_isCompact reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)).tendsto_subseq hendpointMem
+    (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
+      hendpointMem
   have hdebtCluster :=
     (continuous_quittingTerminalSemanticDebt
       packet.chronology.observer).tendsto cluster |>.comp hendpoint

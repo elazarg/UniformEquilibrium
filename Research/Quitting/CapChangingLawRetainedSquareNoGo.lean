@@ -5,7 +5,6 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.UniqueAllContinueCapStackNoGo
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Cap-changing exact prefixes remain debt-budgeted
@@ -56,8 +55,6 @@ theorem semanticMinimum_mul_capNashStackAbsorptionSum_le_debtDrop
       quittingTerminalDebtSum reward terminal -
         quittingTerminalDebtSum reward
           (quittingLiteralRootStackProfile reward roots terminal) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   induction roots with
   | nil => simp [quittingCapNashStackAbsorptionSum]
   | cons root roots ih =>
@@ -80,7 +77,7 @@ theorem semanticMinimum_mul_capNashStackAbsorptionSum_le_debtDrop
         mul_le_mul_of_nonneg_right hsuffixMinimum habsorption
       have hscale :=
         quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash
-          (reward := reward) root suffix hM hreward hstack.1
+          (reward := reward) root suffix hstack.1
       have htail := ih hstack.2
       change quittingTerminalSemanticDebtSum minimum *
           (quittingRootAbsorptionMass root +
@@ -141,8 +138,6 @@ theorem literalReset_capNashStack_debtBudget_or_identity
           0 < quittingTerminalOutcomeMass reward
               (quittingLiteralRootStackProfile reward roots
                 (Function.update profile mover target)) (some atom))) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let reset := Function.update profile mover target
   have hbudget :=
     semanticMinimum_mul_capNashStackAbsorptionSum_le_debtDrop
@@ -190,7 +185,7 @@ theorem literalReset_capNashStack_debtBudget_or_identity
           quittingTerminalDebtSum, quittingTerminalDeviationDebt] using hle
       have hscale :=
         quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash
-          (reward := reward) candidate reset hM hreward hnash
+          (reward := reward) candidate reset hnash
       have hresetPositive : 0 < quittingTerminalDebtSum reward reset := by
         rw [← heq]
         exact hminimumPositive

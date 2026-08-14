@@ -6,7 +6,6 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumAggregateSurplus
 import UniformEquilibrium.Quitting.Paths.SureExitSet
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Exact aggregate-surplus consumers at the minimum semantic plateau
@@ -47,9 +46,7 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 /-- The unrelaxed subset form of the minimum-semantic singleton margin. -/
 theorem minimumTerminalSemantic_subset_singletonSurplus_exact
-    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -63,16 +60,14 @@ theorem minimumTerminalSemantic_subset_singletonSurplus_exact
   apply Finset.sum_le_sum
   intro who hwho
   have hmargin := minimumTerminalSemantic_singletonMargin
-    (reward := reward) pair hM hreward hpair hminimum hpositive who
+    (reward := reward) pair hpair hminimum hpositive who
   unfold quittingTerminalSemanticDebt at hmargin ⊢
   linarith
 
 /-- One common terminal outcome carries the exact debt-sensitive subset
 surplus. -/
 theorem exists_terminalOutcome_subset_singletonSurplus_ge_exactMinimumDebt
-    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -90,7 +85,7 @@ theorem exists_terminalOutcome_subset_singletonSurplus_ge_exactMinimumDebt
       (reward := reward) pair players hpair
   exact ⟨outcome,
     (minimumTerminalSemantic_subset_singletonSurplus_exact
-      (reward := reward) pair players hM hreward hpair hminimum hpositive).trans
+      (reward := reward) pair players hpair hminimum hpositive).trans
       houtcome⟩
 
 /-- The common high-surplus outcome can be selected in the positive support
@@ -201,9 +196,7 @@ theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_prescribed
 
 /-- Positive-support version of the exact minimum-debt certificate. -/
 theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_exactMinimumDebt
-    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -225,7 +218,7 @@ theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_exactMinim
       (reward := reward) pair players hpair
   exact ⟨mass, hmass, hmoment, outcome, hsupport,
     (minimumTerminalSemantic_subset_singletonSurplus_exact
-      (reward := reward) pair players hM hreward hpair hminimum hpositive).trans
+      (reward := reward) pair players hpair hminimum hpositive).trans
       houtcome⟩
 
 /-! ## Sure-exit consumption -/
@@ -292,10 +285,9 @@ theorem QuittingCounterexampleRegime.exists_neverBudget_or_blockedCoalition_exac
               quittingSetReward reward terminal.val outsider <
                 quittingSetReward reward
                   (insert outsider terminal.val) outsider) := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   obtain ⟨outcome, houtcome⟩ :=
     exists_terminalOutcome_subset_singletonSurplus_ge_exactMinimumDebt
-      (reward := reward) pair players hM hreward hpair hminimum hpositive
+      (reward := reward) pair players hpair hminimum hpositive
   cases outcome with
   | none =>
       left
@@ -310,9 +302,7 @@ Never or coalition witness has positive mass in one explicit reward-moment
 representation of the prescribed minimum value. -/
 theorem QuittingCounterexampleRegime.exists_supportedNever_or_supportedBlockedCoalition_exact
     (regime : QuittingCounterexampleRegime reward)
-    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -345,7 +335,7 @@ theorem QuittingCounterexampleRegime.exists_supportedNever_or_supportedBlockedCo
                       (insert outsider terminal.val) outsider)) := by
   obtain ⟨mass, hmass, hmoment, outcome, hsupport, houtcome⟩ :=
     exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_exactMinimumDebt
-      (reward := reward) pair players hM hreward hpair hminimum hpositive
+      (reward := reward) pair players hpair hminimum hpositive
   refine ⟨mass, hmass, hmoment, ?_⟩
   cases outcome with
   | none =>
@@ -399,9 +389,7 @@ theorem QuittingCounterexampleRegime.exists_blockedCoalition_exact_of_never_lt
 /-- If one coordinate carries the whole total debt, every other coordinate
 has zero debt. -/
 theorem minimumTerminalSemantic_debt_eq_zero_of_ne_of_debt_eq_sum
-    (pair : QuittingTerminalSemanticPair ι) (owner other : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner other : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hne : other ≠ owner)
     (howner : quittingTerminalSemanticDebt pair owner =
@@ -409,8 +397,7 @@ theorem minimumTerminalSemantic_debt_eq_zero_of_ne_of_debt_eq_sum
     quittingTerminalSemanticDebt pair other = 0 := by
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
   have hpairLe : quittingTerminalSemanticDebt pair owner +
       quittingTerminalSemanticDebt pair other ≤
         quittingTerminalSemanticDebtSum pair := by
@@ -433,9 +420,7 @@ theorem minimumTerminalSemantic_debt_eq_zero_of_ne_of_debt_eq_sum
 /-- At a singleton-tight minimum coordinate, one common terminal outcome pays
 `D` of aggregate surplus for every outsider. -/
 theorem exists_terminalOutcome_outsiderSurplus_ge_card_mul_minimumDebt_of_tight
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -451,15 +436,14 @@ theorem exists_terminalOutcome_outsiderSurplus_ge_card_mul_minimumDebt_of_tight
             reward (quittingSingletonTerminal who) who) := by
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
   have hownerLe : quittingTerminalSemanticDebt pair owner ≤
       quittingTerminalSemanticDebtSum pair := by
     unfold quittingTerminalSemanticDebtSum
     exact Finset.single_le_sum
       (fun who _ => hdebtNonneg who) (Finset.mem_univ owner)
   have hmargin := minimumTerminalSemantic_singletonMargin
-    (reward := reward) pair hM hreward hpair hminimum hpositive owner
+    (reward := reward) pair hpair hminimum hpositive owner
   have hsumLeOwner : quittingTerminalSemanticDebtSum pair ≤
       quittingTerminalSemanticDebt pair owner := by
     unfold quittingTerminalSemanticDebt
@@ -470,14 +454,13 @@ theorem exists_terminalOutcome_outsiderSurplus_ge_card_mul_minimumDebt_of_tight
     le_antisymm hownerLe hsumLeOwner
   obtain ⟨outcome, houtcome⟩ :=
     exists_terminalOutcome_subset_singletonSurplus_ge_exactMinimumDebt
-      (reward := reward) pair (Finset.univ.erase owner) hM hreward hpair
-        hminimum hpositive
+      (reward := reward) pair (Finset.univ.erase owner) hpair hminimum hpositive
   refine ⟨outcome, ?_⟩
   have hzero : ∀ who ∈ Finset.univ.erase owner,
       quittingTerminalSemanticDebt pair who = 0 := by
     intro who hwho
     apply minimumTerminalSemantic_debt_eq_zero_of_ne_of_debt_eq_sum
-      (reward := reward) pair owner who hM hreward hpair
+      (reward := reward) pair owner who hpair
     · exact (Finset.mem_erase.mp hwho).1
     · exact howner
   calc
@@ -498,9 +481,7 @@ outsider-funding outcome is either Never or a locally unstable absorbing
 coalition. -/
 theorem QuittingCounterexampleRegime.exists_neverBudget_or_blockedCoalition_of_tightOwner
     (regime : QuittingCounterexampleRegime reward)
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -527,7 +508,7 @@ theorem QuittingCounterexampleRegime.exists_neverBudget_or_blockedCoalition_of_t
                   (insert outsider terminal.val) outsider) := by
   obtain ⟨outcome, houtcome⟩ :=
     exists_terminalOutcome_outsiderSurplus_ge_card_mul_minimumDebt_of_tight
-      (reward := reward) pair owner hM hreward hpair hminimum hpositive htight
+      (reward := reward) pair owner hpair hminimum hpositive htight
   cases outcome with
   | none =>
       left
@@ -567,7 +548,6 @@ theorem QuittingCounterexampleRegime.exists_threeDebt_neverBudget_or_blockedCoal
               quittingSetReward reward terminal.val outsider <
                 quittingSetReward reward
                   (insert outsider terminal.val) outsider) := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hcardErase : 3 ≤ (Finset.univ.erase owner).card := by
     rw [Finset.card_erase_of_mem (Finset.mem_univ owner)]
     simpa using Nat.sub_le_sub_right hcard 1
@@ -578,7 +558,7 @@ theorem QuittingCounterexampleRegime.exists_threeDebt_neverBudget_or_blockedCoal
         quittingTerminalSemanticDebtSum pair :=
     mul_le_mul_of_nonneg_right hcardReal hpositive.le
   rcases regime.exists_neverBudget_or_blockedCoalition_of_tightOwner
-      pair owner hM hreward hpair hminimum hpositive htight with
+      pair owner hpair hminimum hpositive htight with
     hnever | ⟨terminal, hterminal, htoggle⟩
   · exact Or.inl (hthree.trans hnever)
   · exact Or.inr ⟨terminal, hthree.trans hterminal, htoggle⟩

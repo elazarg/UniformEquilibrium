@@ -156,8 +156,7 @@ theorem QuittingCounterexampleRegime.exists_twoReservoir_sameLaw_resetDispatch
   · right
     refine ⟨hpunishment, ?_⟩
     have howner := minimumTerminalSemantic_debtGate_ownerPin_and_debt_pos
-      (reward := reward) source owner hM.le hreward hsource hminimum
-        hpositive hgate
+      (reward := reward) source owner hsource hminimum hpositive hgate
     obtain ⟨profiles, quitTime, mass, baseSubseq, hprofiles, hmass,
         hbaseSubseq, hmassLimit, hmoment⟩ :=
       exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
@@ -183,7 +182,7 @@ theorem QuittingCounterexampleRegime.exists_twoReservoir_sameLaw_resetDispatch
       exists_terminalSemanticResetCluster_quantitative_transfer
         reward source (fun rank => profiles (baseSubseq rank)) owner
         (fun rank => quittingPureTimeBehaviorStrategy reward owner
-          (quitTime (baseSubseq rank))) hM.le hreward hminimum
+          (quitTime (baseSubseq rank))) hminimum
         (hprofiles.comp hbaseSubseq.tendsto_atTop) hpayoff
     have hjoint : (cluster, mass) ∈
         quittingTerminalSemanticLawCarrier reward := by

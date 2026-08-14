@@ -85,8 +85,7 @@ theorem debtShare_simplex
   constructor
   · intro who
     exact quittingTerminalSemanticDebtShare_nonneg_of_mem_carrier
-      source plateau.bound_pos.le plateau.reward_bound plateau.source_mem
-        plateau.debt_pos who
+      source plateau.source_mem plateau.debt_pos who
   · exact sum_quittingTerminalSemanticDebtShare_eq_one
       source plateau.debt_pos
 
@@ -99,7 +98,7 @@ theorem exists_positiveDebtor
       0 ≤ quittingTerminalSemanticDebt source owner := by
     intro owner _
     exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward plateau.bound_pos.le plateau.reward_bound plateau.source_mem owner
+      reward plateau.source_mem owner
   have hsum : 0 < ∑ owner, quittingTerminalSemanticDebt source owner := by
     simpa only [quittingTerminalSemanticDebtSum] using plateau.debt_pos
   obtain ⟨owner, _hownerMem, howner⟩ :=
@@ -112,8 +111,8 @@ theorem singletonSlack_nonneg
     (plateau : PositiveMinimumPlateau reward source M) (who : ι) :
     0 ≤ quittingTerminalSemanticSingletonSlack reward source who := by
   exact minimumTerminalSemantic_singletonSlack_nonneg
-    (reward := reward) source plateau.bound_pos.le plateau.reward_bound
-      plateau.source_mem plateau.minimum plateau.debt_pos who
+    (reward := reward) source plateau.source_mem plateau.minimum
+      plateau.debt_pos who
 
 /-- There is at most one debt-vertex/zero-slack singleton gate. -/
 theorem debtGate_unique
@@ -124,8 +123,7 @@ theorem debtGate_unique
     (hsecond : IsMinimumTerminalSemanticDebtGate reward source second) :
     first = second := by
   exact minimumTerminalSemantic_debtGate_unique
-    (reward := reward) source plateau.bound_pos.le plateau.reward_bound
-      plateau.source_mem plateau.debt_pos hfirst hsecond
+    (reward := reward) source plateau.source_mem plateau.debt_pos hfirst hsecond
 
 end PositiveMinimumPlateau
 
@@ -581,9 +579,7 @@ theorem exists_counterexampleLocalFourRoleCertificate
   letI : Nonempty ι := regime.nonempty_players
   obtain ⟨source, hsource, hminimum, ⟨owner, howner⟩,
       hnash, _hfixed⟩ :=
-    noUniformPayoff_implies_positiveMinimumSemanticPlateau
-      regime (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward)
+    noUniformPayoff_implies_positiveMinimumSemanticPlateau regime
   let M : ℝ := quittingRewardBound reward + 1
   have hM : 0 < M := by
     dsimp [M]
@@ -597,7 +593,7 @@ theorem exists_counterexampleLocalFourRoleCertificate
         0 ≤ quittingTerminalSemanticDebt source who := by
       intro who _
       exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM.le hreward hsource who
+        reward hsource who
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_pos' hnonneg ⟨owner, Finset.mem_univ owner, howner⟩
   let plateau : PositiveMinimumPlateau reward source M :=

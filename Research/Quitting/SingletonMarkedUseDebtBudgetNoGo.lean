@@ -7,7 +7,6 @@ Authors: GameTheory contributors
 import
   UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalStaticOrientationDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # A strict insertion atom is blind or debt-budgeted at an exact prefix
@@ -193,17 +192,15 @@ theorem quittingMarkedInsertionUse_eq_zero_of_minimum
     (hnash : IsεQuittingRootNash reward pair.1 0 root)
     (hgap : 0 ≤ quittingInsertionGap reward owner quitters hquitters) :
     quittingMarkedInsertionUse reward pair root owner quitters hquitters = 0 := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hdebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have huseNonneg := quittingMarkedInsertionUse_nonneg
     reward pair root owner quitters hquitters hgap (hdebt owner)
   have huseDrop := quittingMarkedInsertionUse_le_coordinateDebtDrop
     reward pair root owner quitters hquitters (hdebt owner) hnash
   have heq := quittingTerminalSemanticDebt_prefix_eq_of_minimum
-    reward pair root hM hreward hpair hminimum hnash owner
+    reward pair root hpair hminimum hnash owner
   rw [heq, sub_self] at huseDrop
   exact le_antisymm huseDrop huseNonneg
 
@@ -225,11 +222,9 @@ theorem insertionAtom_blind_or_zeroDebt_cancelled_of_minimum
     quittingInsertionOpponentMass root owner quitters = 0 ∨
       (quittingTerminalSemanticDebt pair owner = 0 ∧
         quittingRootExercisePremium reward pair.1 root owner = 0) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hdebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   by_cases hownerDebt : 0 < quittingTerminalSemanticDebt pair owner
   · left
     obtain ⟨other, hother⟩ := hquitters
@@ -239,7 +234,7 @@ theorem insertionAtom_blind_or_zeroDebt_cancelled_of_minimum
       exact howner hother
     have hotherZero : (root other true).toReal = 0 :=
       quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
-        reward pair root hM hreward hpair hminimum hnash
+        reward pair root hpair hminimum hnash
           hownerDebt hotherNe
     have hmassLe : quittingInsertionOpponentMass root owner quitters ≤
         ((Function.update root owner (PMF.pure false)) other true).toReal :=
@@ -265,7 +260,7 @@ theorem insertionAtom_blind_or_zeroDebt_cancelled_of_minimum
       linarith
     have hownerQuitZero : (root owner true).toReal = 0 :=
       quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
-        reward pair root hM hreward hpair hminimum hnash
+        reward pair root hpair hminimum hnash
           hdebtor hownerNe
     have hendpoint :=
       (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash

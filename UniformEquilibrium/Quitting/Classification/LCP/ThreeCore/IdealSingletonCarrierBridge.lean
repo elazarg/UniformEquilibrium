@@ -63,8 +63,6 @@ theorem repeatedSingletonPrefix_mem_carrier
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (owner : ι) (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
     (steps : ℕ) (pair : QuittingTerminalSemanticPair ι)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ S player, |reward S player| ≤ B)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     repeatedSingletonPrefix reward owner p hp0 hp1 steps pair ∈
       quittingTerminalSemanticCarrier reward := by
@@ -74,7 +72,7 @@ theorem repeatedSingletonPrefix_mem_carrier
       rw [show steps + 1 = Nat.succ steps by omega,
         Nat.succ_eq_add_one, repeatedSingletonPrefix_succ]
       exact quittingTerminalSemanticPrefix_mem_carrier reward _ _
-        hB hreward ih
+        ih
 
 /-- A singleton step mixes every prescribed coordinate toward the payoff of
 the owner's singleton terminal. -/
@@ -169,8 +167,6 @@ theorem mem_carrier_of_tendsto_repeatedSingletonPrefix
     (owner : ι) (p : ℕ → ℝ)
     (hp0 : ∀ n, 0 ≤ p n) (hp1 : ∀ n, p n ≤ 1)
     (steps : ℕ → ℕ)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ S player, |reward S player| ≤ B)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hlimit : Tendsto (fun n =>
       repeatedSingletonPrefix reward owner (p n) (hp0 n) (hp1 n)
@@ -179,7 +175,7 @@ theorem mem_carrier_of_tendsto_repeatedSingletonPrefix
   apply isClosed_closure.mem_of_tendsto hlimit
   exact Filter.Eventually.of_forall fun n =>
     repeatedSingletonPrefix_mem_carrier reward owner (p n)
-      (hp0 n) (hp1 n) (steps n) pair hB hreward hpair
+      (hp0 n) (hp1 n) (steps n) pair hpair
 
 /-! ## The actual diffuse mesh and its ideal limit -/
 
@@ -300,8 +296,6 @@ theorem idealSingletonSemanticPair_mem_carrier
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (α : ℝ) (hα0 : 0 < α) (hα1 : α ≤ 1)
     (hclearance : ∀ who, 0 ≤ capClearance reward pair.2 who)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ S player, |reward S player| ≤ B)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     idealSingletonSemanticPair reward owner α pair ∈
       quittingTerminalSemanticCarrier reward := by
@@ -311,7 +305,7 @@ theorem idealSingletonSemanticPair_mem_carrier
     unfold diffuseSingletonPrefix
     dsimp only
     exact repeatedSingletonPrefix_mem_carrier reward owner _ _ _ (n + 1)
-      pair hB hreward hpair
+      pair hpair
 
 /-! ## Exact limiting debt accounting -/
 
@@ -463,8 +457,6 @@ theorem threeIdealSingletonLasso_mem_carrier
     (hα₂0 : 0 < α₂) (hα₂1 : α₂ ≤ 1)
     (hα₃0 : 0 < α₃) (hα₃1 : α₃ ≤ 1)
     (hclearance : ∀ who, 0 ≤ capClearance reward pair.2 who)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ S player, |reward S player| ≤ B)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     threeIdealSingletonLasso reward owner₁ owner₂ owner₃ α₁ α₂ α₃ pair ∈
       quittingTerminalSemanticCarrier reward := by
@@ -472,18 +464,18 @@ theorem threeIdealSingletonLasso_mem_carrier
   let pair₂ := idealSingletonSemanticPair reward owner₂ α₂ pair₁
   have hpair₁ : pair₁ ∈ quittingTerminalSemanticCarrier reward :=
     idealSingletonSemanticPair_mem_carrier reward pair owner₁ α₁ hα₁0 hα₁1
-      hclearance hB hreward hpair
+      hclearance hpair
   have hclearance₁ : ∀ who, 0 ≤ capClearance reward pair₁.2 who :=
     capClearance_idealSingletonSemanticPair_nonneg reward pair owner₁ α₁
       hclearance
   have hpair₂ : pair₂ ∈ quittingTerminalSemanticCarrier reward :=
     idealSingletonSemanticPair_mem_carrier reward pair₁ owner₂ α₂ hα₂0 hα₂1
-      hclearance₁ hB hreward hpair₁
+      hclearance₁ hpair₁
   have hclearance₂ : ∀ who, 0 ≤ capClearance reward pair₂.2 who :=
     capClearance_idealSingletonSemanticPair_nonneg reward pair₁ owner₂ α₂
       hclearance₁
   exact idealSingletonSemanticPair_mem_carrier reward pair₂ owner₃ α₃
-    hα₃0 hα₃1 hclearance₂ hB hreward hpair₂
+    hα₃0 hα₃1 hclearance₂ hpair₂
 
 /-- If all three ideal phases have zero additive cost at the displayed cap
 orbit, one lasso turn multiplies total debt by the product of the three
@@ -546,8 +538,6 @@ theorem threeIdealSingletonLassoOrbit_mem_and_debt
       owner₃ α₃ (idealSingletonClearance (normalizedSoloMatrix reward)
         owner₂ α₂ (idealSingletonClearance (normalizedSoloMatrix reward)
           owner₁ α₁ t)) D = α₃ * D)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ S player, |reward S player| ≤ B)
     (hstart : start ∈ quittingTerminalSemanticCarrier reward) :
     ∀ n,
       threeIdealSingletonLassoOrbit reward owner₁ owner₂ owner₃
@@ -576,7 +566,7 @@ theorem threeIdealSingletonLassoOrbit_mem_and_debt
       have hmem := threeIdealSingletonLasso_mem_carrier reward
         (threeIdealSingletonLassoOrbit reward owner₁ owner₂ owner₃
           α₁ α₂ α₃ start n) owner₁ owner₂ owner₃ α₁ α₂ α₃
-        hα₁0 hα₁1 hα₂0 hα₂1 hα₃0 hα₃1 hclear hB hreward ih.1
+        hα₁0 hα₁1 hα₂0 hα₂1 hα₃0 hα₃1 hclear ih.1
       have hcap : capClearance reward
           (threeIdealSingletonLasso reward owner₁ owner₂ owner₃ α₁ α₂ α₃
             (threeIdealSingletonLassoOrbit reward owner₁ owner₂ owner₃
@@ -623,15 +613,13 @@ theorem threeIdealSingletonLassoOrbit_debt_tendsto_zero
       owner₃ α₃ (idealSingletonClearance (normalizedSoloMatrix reward)
         owner₂ α₂ (idealSingletonClearance (normalizedSoloMatrix reward)
           owner₁ α₁ t)) D = α₃ * D)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ S player, |reward S player| ≤ B)
     (hstart : start ∈ quittingTerminalSemanticCarrier reward) :
     Tendsto (fun n => quittingTerminalSemanticDebtSum
         (threeIdealSingletonLassoOrbit reward owner₁ owner₂ owner₃
           α₁ α₂ α₃ start n)) atTop (𝓝 0) := by
   have horbit := threeIdealSingletonLassoOrbit_mem_and_debt reward start
     owner₁ owner₂ owner₃ α₁ α₂ α₃ hα₁0 hα₁1 hα₂0 hα₂1 hα₃0 hα₃1
-    t ht0 hstartCap hreturn hcost₁ hcost₂ hcost₃ hB hreward hstart
+    t ht0 hstartCap hreturn hcost₁ hcost₂ hcost₃ hstart
   have hfactor0 : 0 ≤ α₁ * α₂ * α₃ := by positivity
   have hpow : Tendsto (fun n : ℕ => (α₁ * α₂ * α₃) ^ n) atTop (𝓝 0) :=
     tendsto_pow_atTop_nhds_zero_of_lt_one hfactor0 hcontract
@@ -683,8 +671,6 @@ theorem varyingThreeIdealSingletonLassoOrbit_mem_and_debt_tendsto_zero
           (normalizedSoloMatrix reward) owner₁ (α₁ n) (t n))) D = α₃ n * D)
     (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q < 1)
     (hcontract : ∀ n, α₁ n * α₂ n * α₃ n ≤ q)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ S player, |reward S player| ≤ B)
     (hstart : start ∈ quittingTerminalSemanticCarrier reward) :
     (∀ n,
       varyingThreeIdealSingletonLassoOrbit reward owner₁ owner₂ owner₃
@@ -726,7 +712,7 @@ theorem varyingThreeIdealSingletonLassoOrbit_mem_and_debt_tendsto_zero
         have hmem := threeIdealSingletonLasso_mem_carrier reward current
           owner₁ owner₂ owner₃ (α₁ n) (α₂ n) (α₃ n)
           (hα₁0 n) (hα₁1 n) (hα₂0 n) (hα₂1 n) (hα₃0 n) (hα₃1 n)
-          hclear hB hreward ih.1
+          hclear ih.1
         have hcap : capClearance reward
             (threeIdealSingletonLasso reward owner₁ owner₂ owner₃
               (α₁ n) (α₂ n) (α₃ n) current).2 = t (n + 1) := by
@@ -737,8 +723,8 @@ theorem varyingThreeIdealSingletonLassoOrbit_mem_and_debt_tendsto_zero
         have hcurrentNonneg : 0 ≤ quittingTerminalSemanticDebtSum current := by
           unfold quittingTerminalSemanticDebtSum
           exact Finset.sum_nonneg fun who _ =>
-            quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hB
-              hreward ih.1 who
+            quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+              reward ih.1 who
         have hfactorNonneg : 0 ≤ α₁ n * α₂ n * α₃ n :=
           mul_nonneg (mul_nonneg (hα₁0 n).le (hα₂0 n).le) (hα₃0 n).le
         have hscaledFactor :
@@ -772,8 +758,8 @@ theorem varyingThreeIdealSingletonLassoOrbit_mem_and_debt_tendsto_zero
   · intro n
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun who _ =>
-      quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hB
-        hreward (horbit n).1 who
+      quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+        reward (horbit n).1 who
   · intro n
     exact (horbit n).2.2
   · exact hupper
@@ -852,8 +838,6 @@ theorem directedCycle_semanticOrbit_mem_and_debt_tendsto_zero
     (hmatrix : normalizedSoloMatrix reward =
       directedCycleMatrix a b c d e f)
     (hstartCap : capClearance reward start.2 = axisTwo H₀)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ S player, |reward S player| ≤ B)
     (hstart : start ∈ quittingTerminalSemanticCarrier reward) :
     (∀ n, semanticOrbit reward a b c d e f H₀ start n ∈
       quittingTerminalSemanticCarrier reward) ∧
@@ -949,7 +933,7 @@ theorem directedCycle_semanticOrbit_mem_and_debt_tendsto_zero
     (fun n => (hα₃ n).1) (fun n => (hα₃ n).2)
     ht0 (by simpa [t, H, heightOrbit] using hstartCap)
     hcapStep hcost₁ hcost₂ hcost₃
-    q hq.1 hq.2 hcontract hB hreward hstart
+    q hq.1 hq.2 hcontract hstart
   constructor
   · intro n
     simpa [semanticOrbit, α₁, α₂, α₃, H, H₂, H₁] using

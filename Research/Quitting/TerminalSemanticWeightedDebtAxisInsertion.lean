@@ -291,8 +291,6 @@ theorem QuittingCounterexampleRegime.terminalGap_le_semanticDebtSum
     (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     regime.terminalGap ≤ quittingTerminalSemanticDebtSum pair := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hfloor : regime.terminalGap ≤
       quittingTerminalSemanticExploitability pair :=
     (terminalExploitabilityGap_le_quittingTerminalExploitabilityInf
@@ -301,7 +299,7 @@ theorem QuittingCounterexampleRegime.terminalGap_le_semanticDebtSum
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hexploitLe : quittingTerminalSemanticExploitability pair ≤
       quittingTerminalSemanticDebtSum pair := by
     unfold quittingTerminalSemanticExploitability
@@ -322,12 +320,10 @@ theorem QuittingCounterexampleRegime.weightedDebtSum_pos
     (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     0 < quittingTerminalSemanticWeightedDebtSum theta pair := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hsumPositive : 0 < quittingTerminalSemanticDebtSum pair :=
     regime.terminalGap_pos.trans_le
       (regime.terminalGap_le_semanticDebtSum pair hpair)
@@ -355,7 +351,7 @@ theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
     exists_quittingRewardBound reward
   letI : Nonempty ι := regime.nonempty_players
   let theta : ℕ → Payoff ι := quittingDebtAxisCostate owner
-  have hcompact := quittingTerminalSemanticCarrier_isCompact reward hM hreward
+  have hcompact := quittingTerminalSemanticCarrier_isCompact reward
   have hnonempty := quittingTerminalSemanticCarrier_nonempty reward
   have hmin : ∀ index, ∃ pair ∈ quittingTerminalSemanticCarrier reward,
       ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -377,7 +373,7 @@ theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
         (quittingAllContinueRoot : ι → PMF Bool) := by
     intro index
     exact (minimumTerminalSemantic_weightedIs_allContinuePlateau
-      (reward := reward) (theta index) (pair index) hM hreward
+      (reward := reward) (theta index) (pair index)
       (hpair index) (hminimum index) (hpositive index)
       (quittingDebtAxisCostate_pos owner index)).1
   have hbox : ∀ index,
@@ -395,13 +391,13 @@ theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
           2 * M * rate index := by
     intro index
     have hmargin := minimumTerminalSemantic_weightedSingletonMargin
-      (reward := reward) (theta index) (pair index) hM hreward
+      (reward := reward) (theta index) (pair index)
       (hpair index) (hminimum index) (hpositive index)
       (quittingDebtAxisCostate_pos owner index) owner
     have hownerDebtNonneg : 0 ≤
         quittingTerminalSemanticDebt (pair index) owner :=
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward (hpair index) owner
+        reward (hpair index) owner
     have hgapUpper :
         (pair index).2 owner -
             reward (quittingSingletonTerminal owner) owner ≤ 2 * M := by
@@ -446,7 +442,7 @@ theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
           quittingTerminalSemanticDebt (pair index) other := by
       exact Finset.sum_nonneg fun other _ =>
         quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-          reward hM hreward (hpair index) other
+          reward (hpair index) other
     have hscaledUpper := mul_le_mul_of_nonneg_left hgapUpper
       (hrateNonneg index)
     have hownerTermNonneg : 0 ≤ rate index *
@@ -473,14 +469,14 @@ theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
       apply squeeze_zero
       · intro index
         exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-          reward hM hreward (hpair (subseq index)) other
+          reward (hpair (subseq index)) other
       · intro index
         have hmem : other ∈ Finset.univ.erase owner :=
           Finset.mem_erase.mpr ⟨hother, Finset.mem_univ other⟩
         have hsingle := Finset.single_le_sum
           (s := Finset.univ.erase owner)
           (fun player _ => quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-            reward hM hreward (hpair (subseq index)) player)
+            reward (hpair (subseq index)) player)
           hmem
         exact hsingle.trans (hotherSumBound (subseq index))
       · simpa using hrateSubseq.const_mul (2 * M)
@@ -545,8 +541,6 @@ theorem QuittingCounterexampleRegime.exists_debtAxes_and_sourceMatchedInsertion
       quittingRootEndpointDifference reward pair.1
           (quittingSoloStationaryRoot owner
             (quittingHazardCoin rate hrate0 hrate1)) other = gain / 2 := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   letI : Nonempty ι := regime.nonempty_players
   have haxes : ∀ owner, ∃ pair : QuittingTerminalSemanticPair ι,
       pair ∈ quittingTerminalSemanticCarrier reward ∧
@@ -591,7 +585,7 @@ theorem QuittingCounterexampleRegime.exists_debtAxes_and_sourceMatchedInsertion
     nlinarith
   have hprefix := quittingTerminalSemanticPrefix_mem_carrier reward
     (quittingSoloStationaryRoot owner
-      (quittingHazardCoin rate hrate0 hrate1)) pair hM hreward hpair
+      (quittingHazardCoin rate hrate0 hrate1)) pair hpair
   refine ⟨owner, other, pair, rate, gain, hrate0, hrate1, hne,
     hpair, hownerDebt, hotherDebt, hprefix, hrateHalf, hgain, rfl, ?_⟩
   rw [quittingRootEndpointDifference_conditionedSolo_other reward hne]

@@ -219,7 +219,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_le_sub_min
     linarith
   have hdebtNonneg : 0 ≤ debt := by
     exact quittingTerminalDeviationDebt_nonneg
-      reward continuation who hM hreward
+      reward continuation who
   have hopponentNonneg : 0 ≤ opponentAbsorption :=
     quittingRootOpponentAbsorptionMass_nonneg root who
   have hopponentContinueNonneg : 0 ≤ opponentContinue :=
@@ -233,10 +233,10 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_le_sub_min
       reward base 0 root).mp hnash
   have hrecursion :=
     quittingTerminalDeviationDebt_rootThenContinuation_eq
-      reward root continuation who hM hreward hnashRoot
+      reward root continuation who hnashRoot
   have hmonotone :=
     quittingTerminalDeviationDebt_rootThenContinuation_le
-      reward root continuation who hM hreward hnashRoot
+      reward root continuation who hnashRoot
   have hendpoint : gap - 4 * M * opponentAbsorption ≤
       quitValue - continueValue := by
     simpa [base, quitValue, continueValue, opponentAbsorption,

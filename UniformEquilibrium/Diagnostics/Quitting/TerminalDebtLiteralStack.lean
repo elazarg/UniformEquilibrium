@@ -36,8 +36,6 @@ theorem quittingTerminalExploitability_literalRootStack_le_terminal
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingLiteralExactRootStack reward roots terminal) :
     quittingTerminalExploitability reward
         (quittingLiteralRootStackProfile reward roots terminal) ≤
@@ -55,7 +53,7 @@ theorem quittingTerminalExploitability_literalRootStack_le_terminal
               exact quittingTerminalExploitability_rootThenContinuation_le
                 reward root
                 (quittingLiteralRootStackProfile reward roots terminal)
-                hM hreward hstack.1
+                hstack.1
         _ ≤ quittingTerminalExploitability reward terminal := ih hstack.2
 
 /-- Every root of a literal exact stack over a lexicographic near-minimizer
@@ -65,8 +63,7 @@ theorem quittingTerminalDebtSum_literalExactStack_step_drop_lt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool) (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    {accuracy M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    {accuracy : ℝ}
     (hterminalMax : quittingTerminalExploitability reward terminal ≤
       quittingTerminalExploitabilityInf reward + accuracy)
     (hterminalSum : quittingTerminalDebtSum reward terminal <
@@ -85,7 +82,7 @@ theorem quittingTerminalDebtSum_literalExactStack_step_drop_lt
   have hprefixedMax : quittingTerminalExploitability reward prefixed ≤
       quittingTerminalExploitabilityInf reward + accuracy := by
     exact (quittingTerminalExploitability_literalRootStack_le_terminal
-      reward (root :: roots) terminal hM hreward ⟨hstack.1, hstack.2⟩).trans
+      reward (root :: roots) terminal ⟨hstack.1, hstack.2⟩).trans
       hterminalMax
   have hinfLe :
       sInf (quittingTerminalDebtSumSublevelValues reward
@@ -93,14 +90,14 @@ theorem quittingTerminalDebtSum_literalExactStack_step_drop_lt
       quittingTerminalDebtSum reward prefixed := by
     apply csInf_le
     · exact bddBelow_quittingTerminalDebtSumSublevelValues reward
-        (quittingTerminalExploitabilityInf reward + accuracy) hM hreward
+        (quittingTerminalExploitabilityInf reward + accuracy)
     · exact ⟨prefixed, hprefixedMax, rfl⟩
   have htailSum : quittingTerminalDebtSum reward
       (quittingLiteralRootStackProfile reward roots terminal) ≤
       quittingTerminalDebtSum reward terminal := by
     unfold quittingTerminalDebtSum
     exact sum_quittingTerminalDeviationDebt_literalRootStack_le_terminal
-      reward roots terminal hM hreward hstack.2
+      reward roots terminal hstack.2
   change quittingTerminalDebtSum reward
       (quittingLiteralRootStackProfile reward roots terminal) -
     quittingTerminalDebtSum reward prefixed < accuracy
@@ -114,8 +111,7 @@ theorem quittingLiteralExactStack_step_opponentAbsorption_mul_debtFloor_lt
     (root : ι → PMF Bool) (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
     (who : ι) (debtFloor : ℝ)
-    {accuracy M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    {accuracy : ℝ}
     (hterminalMax : quittingTerminalExploitability reward terminal ≤
       quittingTerminalExploitabilityInf reward + accuracy)
     (hterminalSum : quittingTerminalDebtSum reward terminal <
@@ -127,7 +123,7 @@ theorem quittingLiteralExactStack_step_opponentAbsorption_mul_debtFloor_lt
       (quittingLiteralRootStackProfile reward roots terminal) who) :
     quittingRootOpponentAbsorptionMass root who * debtFloor < accuracy := by
   have hstep := quittingTerminalDebtSum_literalExactStack_step_drop_lt
-    reward root roots terminal hM hreward hterminalMax hterminalSum hstack
+    reward root roots terminal hterminalMax hterminalSum hstack
   rw [isQuittingLiteralExactRootStack_cons_iff] at hstack
   have hnash :=
     (isεQuittingRootEndpointNash_iff_isεQuittingRootNash reward
@@ -141,7 +137,7 @@ theorem quittingLiteralExactStack_step_opponentAbsorption_mul_debtFloor_lt
         (quittingLiteralRootStackProfile reward roots terminal) -
       quittingTerminalDebtSum reward
         (quittingLiteralRootStackProfile reward (root :: roots) terminal))
-    hM hreward hnash hfloor le_rfl).trans_lt hstep
+    hnash hfloor le_rfl).trans_lt hstep
 
 /-- A sufficiently accurate stack charges the whole positive endpoint premium
 of every macroscopic debtor by the common lexicographic accuracy. -/
@@ -151,8 +147,7 @@ theorem quittingLiteralExactStack_step_exercisePremium_le
     (root : ι → PMF Bool) (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
     (who : ι) (debtFloor : ℝ)
-    {accuracy M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    {accuracy : ℝ}
     (hterminalMax : quittingTerminalExploitability reward terminal ≤
       quittingTerminalExploitabilityInf reward + accuracy)
     (hterminalSum : quittingTerminalDebtSum reward terminal <
@@ -168,7 +163,7 @@ theorem quittingLiteralExactStack_step_exercisePremium_le
           (quittingLiteralRootStackProfile reward roots terminal) player)
         root who ≤ accuracy := by
   have hstep := quittingTerminalDebtSum_literalExactStack_step_drop_lt
-    reward root roots terminal hM hreward hterminalMax hterminalSum hstack
+    reward root roots terminal hterminalMax hterminalSum hstack
   rw [isQuittingLiteralExactRootStack_cons_iff] at hstack
   have hnash :=
     (isεQuittingRootEndpointNash_iff_isεQuittingRootNash reward
@@ -183,7 +178,7 @@ theorem quittingLiteralExactStack_step_exercisePremium_le
           (quittingLiteralRootStackProfile reward roots terminal) -
         quittingTerminalDebtSum reward
           (quittingLiteralRootStackProfile reward (root :: roots) terminal))
-      hM hreward hnash hfloor le_rfl (hstep.trans hsmall)
+      hnash hfloor le_rfl (hstep.trans hsmall)
   exact hpremium.trans hstep.le
 
 /-- If two coordinates remain macroscopic at a stack node, the displayed
@@ -195,8 +190,7 @@ theorem quittingLiteralExactStack_step_all_quitProbability_mul_debtFloor_lt
     (terminal : (quittingGame reward).BehaviorProfile)
     {first second : ι} (hdistinct : first ≠ second)
     (debtFloor : ℝ)
-    {accuracy M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    {accuracy : ℝ}
     (hterminalMax : quittingTerminalExploitability reward terminal ≤
       quittingTerminalExploitabilityInf reward + accuracy)
     (hterminalSum : quittingTerminalDebtSum reward terminal <
@@ -211,7 +205,7 @@ theorem quittingLiteralExactStack_step_all_quitProbability_mul_debtFloor_lt
       (quittingLiteralRootStackProfile reward roots terminal) second) :
     ∀ player, (root player true).toReal * debtFloor < accuracy := by
   have hstep := quittingTerminalDebtSum_literalExactStack_step_drop_lt
-    reward root roots terminal hM hreward hterminalMax hterminalSum hstack
+    reward root roots terminal hterminalMax hterminalSum hstack
   rw [isQuittingLiteralExactRootStack_cons_iff] at hstack
   have hnash :=
     (isεQuittingRootEndpointNash_iff_isεQuittingRootNash reward
@@ -226,7 +220,7 @@ theorem quittingLiteralExactStack_step_all_quitProbability_mul_debtFloor_lt
         (quittingLiteralRootStackProfile reward roots terminal) -
       quittingTerminalDebtSum reward
         (quittingLiteralRootStackProfile reward (root :: roots) terminal))
-    hM hreward hnash hfloor_nonneg hfirst hsecond le_rfl player).trans_lt hstep
+    hnash hfloor_nonneg hfirst hsecond le_rfl player).trans_lt hstep
 
 /-- Arbitrarily deep finite literal stacks exist over lexicographic
 near-minimizers.  Every dropped suffix remains in the same maximum-debt
@@ -235,9 +229,7 @@ sublevel and is within the same total-debt accuracy of the terminal profile.
 theorem exists_deep_lexicographicallyNearMinimal_literalExactRootStack
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (depth : ℕ) {accuracy M : ℝ} (haccuracy : 0 < accuracy)
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (depth : ℕ) {accuracy : ℝ} (haccuracy : 0 < accuracy) :
     ∃ (terminal : (quittingGame reward).BehaviorProfile)
         (roots : List (ι → PMF Bool)),
       roots.length = depth ∧
@@ -260,7 +252,7 @@ theorem exists_deep_lexicographicallyNearMinimal_literalExactRootStack
           accuracy := by
   obtain ⟨terminal, hterminalMax, hterminalSum⟩ :=
     exists_lexicographicallyNearMinimal_terminalProfile
-      reward haccuracy hM hreward
+      reward haccuracy
   obtain ⟨roots, hlength, hstack⟩ :=
     exists_quittingLiteralExactRootStack reward terminal depth
   refine ⟨terminal, roots, hlength, hstack, hterminalMax, hterminalSum, ?_⟩
@@ -270,13 +262,13 @@ theorem exists_deep_lexicographicallyNearMinimal_literalExactRootStack
     IsQuittingLiteralExactRootStack.drop
       (reward := reward) (roots := roots) (terminal := terminal) hstack count
   have hmax := quittingTerminalExploitability_literalRootStack_le_terminal
-    reward (roots.drop count) terminal hM hreward hdropped
+    reward (roots.drop count) terminal hdropped
   have hsum : quittingTerminalDebtSum reward
       (quittingLiteralRootStackProfile reward (roots.drop count) terminal) ≤
       quittingTerminalDebtSum reward terminal := by
     unfold quittingTerminalDebtSum
     exact sum_quittingTerminalDeviationDebt_literalRootStack_le_terminal
-      reward (roots.drop count) terminal hM hreward hdropped
+      reward (roots.drop count) terminal hdropped
   have hinfLe :
       sInf (quittingTerminalDebtSumSublevelValues reward
         (quittingTerminalExploitabilityInf reward + accuracy)) ≤
@@ -284,7 +276,7 @@ theorem exists_deep_lexicographicallyNearMinimal_literalExactRootStack
         (quittingLiteralRootStackProfile reward (roots.drop count) terminal) := by
     apply csInf_le
     · exact bddBelow_quittingTerminalDebtSumSublevelValues reward
-        (quittingTerminalExploitabilityInf reward + accuracy) hM hreward
+        (quittingTerminalExploitabilityInf reward + accuracy)
     · exact ⟨quittingLiteralRootStackProfile reward (roots.drop count) terminal,
         hmax.trans hterminalMax, rfl⟩
   refine ⟨hmax.trans hterminalMax, hsum, ?_⟩

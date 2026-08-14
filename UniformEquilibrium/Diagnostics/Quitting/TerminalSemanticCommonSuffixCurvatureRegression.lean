@@ -296,8 +296,7 @@ theorem profile_envelope_left
         (profile x y hx0 hx1 hy0 hy1) left = y := by
   unfold profile
   rw [quittingContinuationBestResponseValue_rootThenContinuation_eq_max
-    reward (root x y hx0 hx1 hy0 hy1) continuation left
-      (by norm_num) abs_reward_le_one]
+    reward (root x y hx0 hx1 hy0 hy1) continuation left]
   simp only [continuation_payoff, continuation_envelope]
   rw [Function.update_eq_self]
   change max
@@ -314,8 +313,7 @@ theorem profile_envelope_right
         (profile x y hx0 hx1 hy0 hy1) right = 1 - x := by
   unfold profile
   rw [quittingContinuationBestResponseValue_rootThenContinuation_eq_max
-    reward (root x y hx0 hx1 hy0 hy1) continuation right
-      (by norm_num) abs_reward_le_one]
+    reward (root x y hx0 hx1 hy0 hy1) continuation right]
   simp only [continuation_payoff, continuation_envelope]
   rw [Function.update_eq_self]
   change max
@@ -333,8 +331,7 @@ theorem profile_envelope_anchor
         (profile x y hx0 hx1 hy0 hy1) anchor = 0 := by
   unfold profile
   rw [quittingContinuationBestResponseValue_rootThenContinuation_eq_max
-    reward (root x y hx0 hx1 hy0 hy1) continuation anchor
-      (by norm_num) abs_reward_le_one]
+    reward (root x y hx0 hx1 hy0 hy1) continuation anchor]
   simp only [continuation_payoff, continuation_envelope]
   rw [Function.update_eq_self]
   change max

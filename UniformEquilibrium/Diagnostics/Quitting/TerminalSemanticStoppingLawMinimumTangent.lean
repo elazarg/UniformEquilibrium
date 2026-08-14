@@ -200,7 +200,7 @@ theorem abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le
       hlambda0 hlambda1
   rw [Function.update_eq_self] at hchord
   have hsourceDebtNonneg : 0 ≤ quittingTerminalSemanticDebt source observer :=
-    quittingTerminalDeviationDebt_nonneg reward profile observer hM hreward
+    quittingTerminalDeviationDebt_nonneg reward profile observer
   have hendpointEnvelopeAbs := abs_quittingContinuationBestResponseValue_le
     reward endpointProfile observer hM hreward
   have hendpointDebtLe : quittingTerminalSemanticDebt endpoint observer ≤

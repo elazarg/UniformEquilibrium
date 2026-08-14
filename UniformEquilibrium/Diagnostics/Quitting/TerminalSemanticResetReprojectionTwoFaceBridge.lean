@@ -135,9 +135,7 @@ counterpart of marked-cylinder retention. -/
 theorem one_sub_mul_terminalSemanticDebt_le_stagePartialBestEndpoint
     (profile : (quittingGame reward).BehaviorProfile)
     (who : iota) (stage : ℕ) (lambda : ℝ)
-    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1) :
     (1 - lambda) * quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward profile) who ≤
       quittingTerminalSemanticDebt
@@ -153,7 +151,7 @@ theorem one_sub_mul_terminalSemanticDebt_le_stagePartialBestEndpoint
   have hgainLe : gain ≤ quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who := by
     exact quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
-      (reward := reward) profile who stage hM hreward
+      (reward := reward) profile who stage
   have hscaled : lambda * gain ≤ lambda *
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward profile) who :=
@@ -171,8 +169,6 @@ theorem terminalSemanticDebt_stagePartialBestEndpoint_pos
     (profile : (quittingGame reward).BehaviorProfile)
     (who : iota) (stage : ℕ) (lambda : ℝ)
     (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda < 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who) :
     0 < quittingTerminalSemanticDebt
@@ -183,7 +179,6 @@ theorem terminalSemanticDebt_stagePartialBestEndpoint_pos
   have hbarrier :=
     one_sub_mul_terminalSemanticDebt_le_stagePartialBestEndpoint
       (reward := reward) profile who stage lambda hlambda0 hlambda1.le
-        hM hreward
   exact (mul_pos (sub_pos.mpr hlambda1) hsource).trans_le hbarrier
 
 /-- **Exact zero-face landing forces the incidence-drop seam.**
@@ -197,8 +192,6 @@ theorem eq_one_and_fullGain_of_stagePartialBestEndpoint_hits_zeroDebt
     (profile : (quittingGame reward).BehaviorProfile)
     (who : iota) (stage : ℕ) (lambda : ℝ)
     (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who)
     (htarget : quittingTerminalSemanticDebt
@@ -216,7 +209,7 @@ theorem eq_one_and_fullGain_of_stagePartialBestEndpoint_hits_zeroDebt
           (quittingTerminalSemanticPair reward profile) who := by
   have hbarrier :=
     one_sub_mul_terminalSemanticDebt_le_stagePartialBestEndpoint
-      (reward := reward) profile who stage lambda hlambda0 hlambda1 hM hreward
+      (reward := reward) profile who stage lambda hlambda0 hlambda1
   rw [htarget] at hbarrier
   have hfactor : 0 ≤ 1 - lambda := sub_nonneg.mpr hlambda1
   have hproduct : (1 - lambda) * quittingTerminalSemanticDebt
@@ -249,8 +242,6 @@ theorem exists_concentrated_partialReset_sameProfile_twoFaceBridge
     (profile : (quittingGame reward).BehaviorProfile)
     (owner : iota) (stage : ℕ)
     (terminal : {S : Finset iota // S.Nonempty})
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -327,7 +318,7 @@ theorem exists_concentrated_partialReset_sameProfile_twoFaceBridge
     exact mul_pos (mul_pos hlambda0 hlive) hotherDefect
   have hsourceDebt : 0 < quittingTerminalSemanticDebt source other := by
     have hcollectable := quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
-      (reward := reward) profile other stage hM hreward
+      (reward := reward) profile other stage
     exact (mul_pos hlive hotherDefect).trans_le hcollectable
   have hsourcePoint :
       (source, quittingTerminalOutcomeMass reward profile) ∈
@@ -381,7 +372,7 @@ theorem exists_concentrated_partialReset_sameProfile_twoFaceBridge
   have htargetDebt : 0 < quittingTerminalSemanticDebt target other := by
     exact terminalSemanticDebt_stagePartialBestEndpoint_pos
       (reward := reward) profile other stage lambda hlambda0.le hlambda1
-        hM hreward hsourceDebt
+        hsourceDebt
   refine ⟨hsourcePoint, htargetPoint, hgain, hdecrease, htransferExact,
     htransfer, hretention, htargetStage, htargetDebt, ?_⟩
   constructor <;> intro h

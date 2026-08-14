@@ -37,9 +37,7 @@ its members' own singleton rewards.  This is the summed form of the auxiliary
 Nash singleton margin; the subtraction of one copy of `D` pays for all debt
 coordinates in the subset. -/
 theorem minimumTerminalSemantic_subset_singletonSurplus
-    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -50,7 +48,7 @@ theorem minimumTerminalSemantic_subset_singletonSurplus
         (pair.1 who - reward (quittingSingletonTerminal who) who) := by
   have hdebtNonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hsubsetDebt :
       (∑ who ∈ players, quittingTerminalSemanticDebt pair who) ≤
         quittingTerminalSemanticDebtSum pair := by
@@ -65,7 +63,7 @@ theorem minimumTerminalSemantic_subset_singletonSurplus
         pair.1 who - reward (quittingSingletonTerminal who) who := by
     intro who _
     have hmargin := minimumTerminalSemantic_singletonMargin
-      (reward := reward) pair hM hreward hpair hminimum hpositive who
+      (reward := reward) pair hpair hminimum hpositive who
     unfold quittingTerminalSemanticDebt at hmargin ⊢
     linarith
   have hsum := Finset.sum_le_sum hcoordinate
@@ -162,9 +160,7 @@ theorem exists_terminalOutcome_subset_singletonSurplus_ge_prescribed
 
 /-- Search-facing common-atom certificate for a positive minimum plateau. -/
 theorem exists_terminalOutcome_subset_singletonSurplus_ge_minimumDebt
-    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -180,7 +176,7 @@ theorem exists_terminalOutcome_subset_singletonSurplus_ge_minimumDebt
       (reward := reward) pair players hpair
   exact ⟨outcome,
     (minimumTerminalSemantic_subset_singletonSurplus
-      (reward := reward) pair players hM hreward hpair hminimum hpositive).trans
+      (reward := reward) pair players hpair hminimum hpositive).trans
       houtcome⟩
 
 end GameTheory

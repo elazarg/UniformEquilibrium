@@ -90,8 +90,7 @@ theorem halfPair_coordinates :
     halfPair.1 false = 0 ∧ halfPair.1 true = 1 / 2 ∧
       halfPair.2 true = 1 := by
   have hprefix := quittingTerminalSemanticPair_rootThenContinuation
-    reward halfRoot continuation (M := 1) (by norm_num)
-      QuittingResetIncidenceCapRegression.reward_bound
+    reward halfRoot continuation
   change quittingTerminalSemanticPair reward halfProfile =
       quittingTerminalSemanticPrefix reward halfRoot
         (quittingTerminalSemanticPair reward continuation) at hprefix
@@ -254,8 +253,7 @@ theorem half_cap_false_nonneg : 0 ≤ halfPair.2 false := by
     apply subset_closure
     exact ⟨halfProfile, rfl⟩
   have hdebt := quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-    reward (M := 1) (by norm_num)
-      QuittingResetIncidenceCapRegression.reward_bound hmem false
+    reward hmem false
   have hpayoff := halfPair_coordinates.1
   unfold quittingTerminalSemanticDebt at hdebt
   rw [hpayoff] at hdebt

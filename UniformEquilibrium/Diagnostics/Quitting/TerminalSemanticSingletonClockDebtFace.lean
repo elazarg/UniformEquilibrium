@@ -41,9 +41,7 @@ owner to the aggregate opponent-absorption account on the same row. -/
 theorem quittingStageSingletonMass_mul_tailComplementaryDebt_le_liveMass_mul_charge
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
-    (owner : iota) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (owner : iota) :
     quittingStageCoalitionMass reward profile time
           (quittingSingletonTerminal owner) *
         quittingTerminalSemanticComplementaryDebt
@@ -59,7 +57,7 @@ theorem quittingStageSingletonMass_mul_tailComplementaryDebt_le_liveMass_mul_cha
     quittingTerminalSemanticPair_mem_carrier reward _
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htailCarrier
+      reward htailCarrier
   have hcoordinate : ∀ who ∈ (Finset.univ : Finset iota).erase owner,
       quittingRootCoalitionMass root {owner} *
           quittingTerminalSemanticDebt tail who ≤
@@ -124,9 +122,7 @@ absorption-weighted tail excess, and total local Nash-defect occupation. -/
 theorem sum_stageSingletonMass_mul_tailComplementaryDebt_le_stoppedDefectExcess
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile)
-    (owner : iota) (reference : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (owner : iota) (reference : ℝ) (cutoff : ℕ) :
     (∑ time ∈ Finset.range cutoff,
       quittingStageCoalitionMass reward profile time
           (quittingSingletonTerminal owner) *
@@ -147,10 +143,10 @@ theorem sum_stageSingletonMass_mul_tailComplementaryDebt_le_stoppedDefectExcess
   have hmarked := Finset.sum_le_sum fun time
       (_htime : time ∈ Finset.range cutoff) =>
     quittingStageSingletonMass_mul_tailComplementaryDebt_le_liveMass_mul_charge
-      reward profile time owner hM hreward
+      reward profile time owner
   exact hmarked.trans
     (sum_liveMass_mul_spineOpponentAbsorptionDebtCharge_le
-      reward profile reference cutoff hM hreward)
+      reward profile reference cutoff)
 
 /-- If every shifted tail stays within `epsilon` of the reference debt
 level, the full singleton-clock complementary-debt occupation costs only one
@@ -158,9 +154,7 @@ level, the full singleton-clock complementary-debt occupation costs only one
 theorem sum_stageSingletonMass_mul_tailComplementaryDebt_le_epsilon_add_defect
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile)
-    (owner : iota) (reference epsilon : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : iota) (reference epsilon : ℝ) (cutoff : ℕ)
     (hinitial : 0 ≤ quittingSpineDebtExcess reward profile reference 0)
     (hnear : ∀ time ≤ cutoff,
       quittingSpineDebtExcess reward profile reference time ≤ epsilon) :
@@ -178,10 +172,10 @@ theorem sum_stageSingletonMass_mul_tailComplementaryDebt_le_epsilon_add_defect
   have hmarked := Finset.sum_le_sum fun time
       (_htime : time ∈ Finset.range cutoff) =>
     quittingStageSingletonMass_mul_tailComplementaryDebt_le_liveMass_mul_charge
-      reward profile time owner hM hreward
+      reward profile time owner
   exact hmarked.trans
     (sum_liveMass_mul_spineOpponentAbsorptionDebtCharge_le_epsilon_add_defect
-      reward profile reference epsilon cutoff hM hreward hinitial hnear)
+      reward profile reference epsilon cutoff hinitial hnear)
 
 /-- Quantitative vertex-or-defect alternative on a singleton window.  If
 all shifted tails in the window keep at least `faceFloor` debt outside the
@@ -191,9 +185,6 @@ theorem faceFloor_mul_sum_stageSingletonMass_le_epsilon_add_defect
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (owner : iota) (reference epsilon faceFloor : ℝ) (cutoff : ℕ)
-    {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hinitial : 0 ≤ quittingSpineDebtExcess reward profile reference 0)
     (hnear : ∀ time ≤ cutoff,
       quittingSpineDebtExcess reward profile reference time ≤ epsilon)
@@ -230,7 +221,7 @@ theorem faceFloor_mul_sum_stageSingletonMass_le_epsilon_add_defect
       nlinarith
   exact hweighted.trans
     (sum_stageSingletonMass_mul_tailComplementaryDebt_le_epsilon_add_defect
-      reward profile owner reference epsilon cutoff hM hreward hinitial hnear)
+      reward profile owner reference epsilon cutoff hinitial hnear)
 
 /-- If the finite singleton window has mass at least `clockMass`, the same
 alternative has the explicit product `faceFloor * clockMass` on its left. -/
@@ -238,9 +229,7 @@ theorem faceFloor_mul_clockMass_le_epsilon_add_defect
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (owner : iota)
-    (reference epsilon faceFloor clockMass : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon faceFloor clockMass : ℝ) (cutoff : ℕ)
     (hinitial : 0 ≤ quittingSpineDebtExcess reward profile reference 0)
     (hnear : ∀ time ≤ cutoff,
       quittingSpineDebtExcess reward profile reference time ≤ epsilon)
@@ -262,7 +251,6 @@ theorem faceFloor_mul_clockMass_le_epsilon_add_defect
   have hscaled := mul_le_mul_of_nonneg_left hclock hfaceFloor
   exact hscaled.trans
     (faceFloor_mul_sum_stageSingletonMass_le_epsilon_add_defect
-      reward profile owner reference epsilon faceFloor cutoff hM hreward
-        hinitial hnear hface)
+      reward profile owner reference epsilon faceFloor cutoff hinitial hnear hface)
 
 end GameTheory

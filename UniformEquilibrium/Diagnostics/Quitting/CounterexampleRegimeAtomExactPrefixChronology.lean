@@ -328,8 +328,7 @@ theorem nonempty_atomExactPrefixChronology
       quittingTerminalDeviationDebt] using
       (sum_quittingTerminalDeviationDebt_literalRootStack_le_terminal
         reward (roots rank) (frontier.profiles (frontier.subseq rank))
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) (hrootsExact rank))
+        (hrootsExact rank))
   have hgap : Tendsto (fun rank =>
       tailDebt rank - quittingTerminalSemanticDebtSum frontier.base)
       atTop (nhds 0) := by
@@ -435,8 +434,6 @@ theorem opponentSurvival_tendsto_one
         (quittingTerminalDeviationDebt_literalRootStack_le_terminal
           reward (chronology.roots rank)
           (frontier.profiles (frontier.subseq rank)) other
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
           (chronology.exact_stack rank))
     calc
       terminalDebt rank - prefixDebt rank ≤
@@ -461,8 +458,6 @@ theorem opponentSurvival_tendsto_one
       (quittingTerminalDeviationDebt_literalRootStack_eq_blockAct
         reward (chronology.roots rank)
         (frontier.profiles (frontier.subseq rank)) who
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward)
         (chronology.exact_stack rank))
   have hsurvivalBound : ∀ᶠ rank in atTop,
       1 - quittingLiteralRootStackOpponentSurvival

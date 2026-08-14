@@ -6,7 +6,6 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Exact cap-regret decomposition
@@ -66,12 +65,10 @@ theorem minimumTerminalSemantic_absorption_mul_debtSum_le_capDefect
     quittingRootAbsorptionMass root *
         quittingTerminalSemanticDebtSum pair ≤
       quittingRootTotalNashDefect reward pair.2 root := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root pair hM hreward hpair
+      reward root pair hpair
   have hminPrefix : quittingTerminalSemanticDebtSum pair ≤
       quittingTerminalSemanticDebtSum prefixed :=
     hminimum prefixed hprefixed

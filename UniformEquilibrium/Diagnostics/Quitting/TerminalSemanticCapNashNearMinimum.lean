@@ -47,9 +47,7 @@ and an explicit near-minimality error. -/
 theorem nearMinimumTerminalSemantic_auxiliaryNash_budget
     (pair : QuittingTerminalSemanticPair ι)
     (h : Payoff ι) (root : ι → PMF Bool)
-    (reference epsilon : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -63,7 +61,7 @@ theorem nearMinimumTerminalSemantic_auxiliaryNash_budget
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root pair hM hreward hpair
+      reward root pair hpair
   have hcoordinate : ∀ who,
       quittingTerminalSemanticDebt prefixed who ≤
         quittingStationaryContinueMass root *
@@ -131,9 +129,7 @@ theorem nearMinimumTerminalSemantic_auxiliaryNash_budget
 their exact distinct coefficients. -/
 theorem nearMinimumTerminalSemantic_constantShiftNash_budget
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (reference epsilon q : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (reference epsilon q : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -145,7 +141,7 @@ theorem nearMinimumTerminalSemantic_constantShiftNash_budget
         (reference - q) *
           (∑ who, quittingRootCoalitionMass root {who}) ≤ epsilon := by
   have hbudget := nearMinimumTerminalSemantic_auxiliaryNash_budget
-    (reward := reward) pair (fun _ => q) root reference epsilon hM hreward
+    (reward := reward) pair (fun _ => q) root reference epsilon
       hpair hfloor hnear hepsilon (fun _ => hq) hnash
   calc
     reference * quittingRootCollisionMass root +
@@ -165,9 +161,7 @@ theorem nearMinimumTerminalSemantic_constantShiftNash_budget
 at the residual moat width `reference - q`. -/
 theorem nearMinimumTerminalSemantic_constantShiftNash_absorption
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (reference epsilon q : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (reference epsilon q : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -177,8 +171,8 @@ theorem nearMinimumTerminalSemantic_constantShiftNash_absorption
     (hnash : IsεQuittingRootNash reward (pair.2 - fun _ => q) 0 root) :
     (reference - q) * quittingRootAbsorptionMass root ≤ epsilon := by
   have hbudget := nearMinimumTerminalSemantic_constantShiftNash_budget
-    (reward := reward) pair root reference epsilon q hM hreward hpair
-      hfloor hnear hepsilon hq hnash
+    (reward := reward) pair root reference epsilon q hpair hfloor hnear
+      hepsilon hq hnash
   have hcollisionNonneg : 0 ≤ quittingRootCollisionMass root :=
     quittingRootCollisionMass_nonneg root
   have hresidualNonneg : 0 ≤ reference - q := sub_nonneg.mpr hqle
@@ -209,9 +203,7 @@ quantitative absorption moat.  The root is auxiliary, while prefixing it to
 `pair` still gives an actual carrier point. -/
 theorem exists_constantShiftNash_with_absorption_moat
     (pair : QuittingTerminalSemanticPair ι)
-    (reference epsilon q : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon q : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -226,8 +218,8 @@ theorem exists_constantShiftNash_with_absorption_moat
       (reward := reward) (pair.2 - fun _ => q)
   exact ⟨root, hnash,
     nearMinimumTerminalSemantic_constantShiftNash_absorption
-      (reward := reward) pair root reference epsilon q hM hreward hpair
-        hfloor hnear hepsilon hq hqle hnash⟩
+      (reward := reward) pair root reference epsilon q hpair hfloor hnear
+        hepsilon hq hqle hnash⟩
 
 /-! ## Endpoint moat on the same auxiliary root -/
 
@@ -236,9 +228,7 @@ the root in the constant-shift moat has positive survival.  The generic sharp
 joining-loss estimate therefore applies to this very same root. -/
 theorem exists_constantShiftNash_with_endpoint_moat
     (pair : QuittingTerminalSemanticPair ι)
-    (reference epsilon q : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon q : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -259,8 +249,8 @@ theorem exists_constantShiftNash_with_endpoint_moat
   have hqle : q ≤ reference := by linarith
   obtain ⟨root, hnash, habsorption⟩ :=
     exists_constantShiftNash_with_absorption_moat
-      (reward := reward) pair reference epsilon q hM hreward hpair
-        hfloor hnear hepsilon hq hqle
+      (reward := reward) pair reference epsilon q hpair hfloor hnear
+        hepsilon hq hqle
   have hcontinueNonneg : 0 ≤ quittingStationaryContinueMass root :=
     quittingStationaryContinueMass_nonneg root
   have hcontinue : 0 < quittingStationaryContinueMass root := by
@@ -293,9 +283,7 @@ is the quantitative near-minimum version of the minimum singleton margin for
 the envelope coordinate. -/
 theorem nearMinimumTerminalSemantic_cap_sub_singleton_ge
     (pair : QuittingTerminalSemanticPair ι) (who : ι)
-    (reference epsilon q : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon q : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -307,8 +295,8 @@ theorem nearMinimumTerminalSemantic_cap_sub_singleton_ge
       pair.2 who - reward (quittingSingletonTerminal who) who := by
   obtain ⟨_root, _hnash, _habsorption, _hcontinue, _hodds, hmargin⟩ :=
     exists_constantShiftNash_with_endpoint_moat
-      (reward := reward) pair reference epsilon q hM hreward hpair
-        hfloor hnear hepsilon hq herror
+      (reward := reward) pair reference epsilon q hpair hfloor hnear
+        hepsilon hq herror
   exact hmargin who
 
 /-- Robust singleton floor for the prescribed coordinate of a near-minimum
@@ -316,9 +304,7 @@ semantic pair.  The same auxiliary root simultaneously witnesses the
 absorption moat and the displayed error on every player coordinate. -/
 theorem exists_constantShiftNash_prescribed_singletonFloor
     (pair : QuittingTerminalSemanticPair ι)
-    (reference epsilon q : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon q : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -335,13 +321,13 @@ theorem exists_constantShiftNash_prescribed_singletonFloor
                 (epsilon / (reference - q - epsilon)) := by
   obtain ⟨root, hnash, habsorption, _hcontinue, _hodds, hmargin⟩ :=
     exists_constantShiftNash_with_endpoint_moat
-      (reward := reward) pair reference epsilon q hM hreward hpair
-        hfloor hnear hepsilon hq herror
+      (reward := reward) pair reference epsilon q hpair hfloor hnear
+        hepsilon hq herror
   refine ⟨root, hnash, habsorption, ?_⟩
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   intro who
   have hcoordinateLe : quittingTerminalSemanticDebt pair who ≤
       quittingTerminalSemanticDebtSum pair := by
@@ -356,9 +342,7 @@ target cannot retain a positive solo endpoint gap when its coordinate error,
 the total-debt excess, and the cap-shift moat error all vanish. -/
 theorem exists_constantShiftNash_comparison_endpointGap_le
     (pair : QuittingTerminalSemanticPair ι) (comparison : Payoff ι)
-    (reference epsilon q : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon q : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -376,8 +360,8 @@ theorem exists_constantShiftNash_comparison_endpointGap_le
               |pair.1 who - comparison who| := by
   obtain ⟨root, hnash, habsorption, hfloorPair⟩ :=
     exists_constantShiftNash_prescribed_singletonFloor
-      (reward := reward) pair reference epsilon q hM hreward hpair
-        hfloor hnear hepsilon hq herror
+      (reward := reward) pair reference epsilon q hpair hfloor hnear
+        hepsilon hq herror
   refine ⟨root, hnash, habsorption, ?_⟩
   intro who
   have hcomparison : pair.1 who - comparison who ≤
@@ -390,9 +374,7 @@ bounded by the debt excess, the chosen moat width, and the conditioning
 error. -/
 theorem nearMinimumTerminalSemantic_comparison_endpointGap_le
     (pair : QuittingTerminalSemanticPair ι) (comparison : Payoff ι)
-    (who : ι) (reference epsilon q : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (who : ι) (reference epsilon q : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -406,8 +388,8 @@ theorem nearMinimumTerminalSemantic_comparison_endpointGap_le
         |pair.1 who - comparison who| := by
   obtain ⟨_root, _hnash, _habsorption, hgap⟩ :=
     exists_constantShiftNash_comparison_endpointGap_le
-      (reward := reward) pair comparison reference epsilon q hM hreward
-        hpair hfloor hnear hepsilon hq herror
+      (reward := reward) pair comparison reference epsilon q hpair hfloor
+        hnear hepsilon hq herror
   exact hgap who
 
 /-- A conditioned endpoint gap larger than the explicit cap--Nash error is
@@ -416,9 +398,7 @@ along near-minimizers whose conditioning error vanishes: first fix `q` below
 `reference`, let `epsilon` vanish, and then send `q` up to `reference`. -/
 theorem not_nearMinimumTerminalSemantic_conditionedEndpointGap
     (pair : QuittingTerminalSemanticPair ι) (comparison : Payoff ι)
-    (who : ι) (reference epsilon q gamma : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (who : ι) (reference epsilon q gamma : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticDebtSum candidate)
@@ -433,8 +413,8 @@ theorem not_nearMinimumTerminalSemantic_conditionedEndpointGap
       reward (quittingSingletonTerminal who) who - comparison who := by
   intro hgap
   have hupper := nearMinimumTerminalSemantic_comparison_endpointGap_le
-    (reward := reward) pair comparison who reference epsilon q hM hreward
-      hpair hfloor hnear hepsilon hq herror
+    (reward := reward) pair comparison who reference epsilon q hpair hfloor
+      hnear hepsilon hq herror
   linarith
 
 /-! ## Cap--Nash iteration freezes near the minimum -/
@@ -470,8 +450,8 @@ theorem nearMinimumTerminalSemantic_capNash_eq_allContinue
     exact hnash
   have habsorption :=
     nearMinimumTerminalSemantic_constantShiftNash_absorption
-      (reward := reward) pair root reference epsilon 0 hM hreward hpair
-        hfloor hnear hepsilon le_rfl hreference.le hnashZero
+      (reward := reward) pair root reference epsilon 0 hpair hfloor hnear
+        hepsilon le_rfl hreference.le hnashZero
   have hcontinueNonneg : 0 ≤ quittingStationaryContinueMass root :=
     quittingStationaryContinueMass_nonneg root
   have hcontinue : 0 < quittingStationaryContinueMass root := by
@@ -512,8 +492,8 @@ theorem nearMinimumTerminalSemantic_capNash_eq_allContinue
     quittingRootEndpointDifference_eq_zero_of_both_probabilities_pos
       reward pair.2 root who hendpoint hownContinue hquit
   have hcapRaw := nearMinimumTerminalSemantic_cap_sub_singleton_ge
-    (reward := reward) pair who reference epsilon q hM hreward hpair
-      hfloor hnear hepsilon hq herror
+    (reward := reward) pair who reference epsilon q hpair hfloor hnear
+      hepsilon hq herror
   have hlossBound := quittingJoiningLoss_le_two_mul
     (reward := reward) who hM hreward
   have hlossScaled :=

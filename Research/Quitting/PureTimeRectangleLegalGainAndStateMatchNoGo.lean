@@ -6,7 +6,6 @@ Authors: GameTheory contributors
 
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeCausalRegression
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # The legal target gain and the two-deviation state-match obstruction
@@ -108,8 +107,6 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound_and_target
           (quittingTerminalSemanticPair reward profile) observer) :
     HasQuittingStoppingLawVanishingDebtGainAtomAlternative reward profile
       mover observer target charge error := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let endpoint := Function.update profile mover target
   let mixed := Function.update profile mover
     (quittingStoppingLawMixtureBehaviorStrategy reward mover
@@ -137,8 +134,7 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound_and_target
     nlinarith
   have hsourceDebtNonneg : 0 ≤
       quittingTerminalSemanticDebt sourcePair observer := by
-    exact quittingTerminalDeviationDebt_nonneg reward profile observer hM
-      hreward
+    exact quittingTerminalDeviationDebt_nonneg reward profile observer
   have hendpointDebt : charge ≤
       quittingTerminalSemanticDebt endpointPair observer := by
     linarith

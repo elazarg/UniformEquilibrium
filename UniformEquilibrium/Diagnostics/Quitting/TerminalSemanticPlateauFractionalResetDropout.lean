@@ -214,9 +214,7 @@ theorem exists_positive_pair_to_singleton_dropout_of_finalDefect_eq_zero
     (minimum : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
     (moves : List (QuittingFractionalEndpointMove ι))
-    (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty})
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -254,7 +252,7 @@ theorem exists_positive_pair_to_singleton_dropout_of_finalDefect_eq_zero
       quittingRootCoalitionMass_mul_minimumDebt_le_tailExcess_add_defect
         reward minimum minimum
           (quittingFractionalEndpointMoves moves root) finalTerminal
-          hM hreward hminimumCarrier hminimum hminimumCarrier
+          hminimumCarrier hminimum hminimumCarrier
           hfinalCollision
     have hleft : 0 < quittingRootCoalitionMass
         (quittingFractionalEndpointMoves moves root) finalCoalition *

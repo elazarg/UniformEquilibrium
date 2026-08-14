@@ -7,7 +7,6 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumTransfer
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalPacketSimpleFallbackCounterexample
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Witness strata for stopping-law mixture directions
@@ -254,15 +253,13 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_eq_zero
           (Function.update profile mover
             (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
               lambda hlambda0 hlambda1))) observer = 0 := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hupper := quittingTerminalSemanticDebt_stoppingLawMixture_le
     reward profile mover observer source target lambda hlambda0 hlambda1
   rw [hsource, htarget] at hupper
   have hlower := quittingTerminalDeviationDebt_nonneg reward
     (Function.update profile mover
       (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
-        lambda hlambda0 hlambda1)) observer hM hreward
+        lambda hlambda0 hlambda1)) observer
   dsimp only [quittingTerminalDeviationDebt, quittingTerminalSemanticDebt,
     quittingTerminalSemanticPair] at hupper hlower ⊢
   exact le_antisymm (by linarith) hlower

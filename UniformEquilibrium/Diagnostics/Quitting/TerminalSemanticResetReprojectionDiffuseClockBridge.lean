@@ -539,9 +539,7 @@ theorem QuittingReprojectionDiffuseWindowPacket.exists_concentratedPacket_of_del
     {resolution : ℝ} (hresolution : 0 < resolution)
     (hatom : ∃ᶠ n in atTop, ∃ time < cutoff n,
       resolution ≤ quittingStageOpponentAbsorptionMass
-        (profiles n) owner time)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M) :
+        (profiles n) owner time) :
     ∃ other : ι, ∃ exact : {S : Finset ι // S.Nonempty},
       other ≠ owner ∧ other ∈ exact.val ∧
         Nonempty (QuittingReprojectionConcentratedPacket
@@ -606,7 +604,7 @@ theorem QuittingReprojectionDiffuseWindowPacket.exists_concentratedPacket_of_del
     defect_tendsto := ?_ }⟩⟩
   · intro rank
     exact positive_stageCoalitionMass_has_semanticPrefixIncidence
-      reward (profiles (subseq rank)) (mark rank) exact hM hreward
+      reward (profiles (subseq rank)) (mark rank) exact
         (hconcentratedResolution.trans_le (hmarkMass rank))
   · convert hdefectSubseq using 1
     funext rank
@@ -960,9 +958,7 @@ theorem QuittingReprojectionDiffuseWindowPacket.exists_concentrated_or_diffuseDe
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ} {lower : ℝ}
     (packet : QuittingReprojectionDiffuseWindowPacket
       reward profiles owner terminal cutoff scale lower)
-    (other : ι) (hother : other ∈ terminal.val) (hne : other ≠ owner)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M) :
+    (other : ι) (hother : other ∈ terminal.val) (hne : other ≠ owner) :
     (∃ fixedOther : ι,
       ∃ exact : {S : Finset ι // S.Nonempty},
         fixedOther ≠ owner ∧ fixedOther ∈ exact.val ∧
@@ -975,7 +971,7 @@ theorem QuittingReprojectionDiffuseWindowPacket.exists_concentrated_or_diffuseDe
   · obtain ⟨resolution, hresolution, hfrequent⟩ := hatom
     exact Or.inl
       (packet.exists_concentratedPacket_of_deletedStageAtom
-        hresolution hfrequent hM hreward)
+        hresolution hfrequent)
   · exact Or.inr hdiffuse
 
 /-- **Arbitrary-depth matched semantic chronology.**  Positive global
@@ -993,9 +989,7 @@ theorem QuittingReprojectionDiffuseWindowPacket.eventually_matchedChronology
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ} {lower : ℝ}
     (packet : QuittingReprojectionDiffuseWindowPacket
       reward profiles owner terminal cutoff scale lower)
-    (minimum : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (minimum : QuittingTerminalSemanticPair ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -1030,6 +1024,6 @@ theorem QuittingReprojectionDiffuseWindowPacket.eventually_matchedChronology
     quittingTerminalSemanticPair_mem_carrier reward _
   refine ⟨hcurrent, htail, hpositive, hminimum tail htail, ?_⟩
   exact quittingTerminalSemanticPair_spine_eq_prefix
-    reward (profiles n) time hM hreward
+    reward (profiles n) time
 
 end GameTheory

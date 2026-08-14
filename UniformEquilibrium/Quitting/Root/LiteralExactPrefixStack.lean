@@ -168,8 +168,6 @@ theorem quittingTerminalDeviationDebt_literalRootStack_eq_blockAct
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingLiteralExactRootStack reward roots terminal) :
     quittingTerminalDeviationDebt reward
         (quittingLiteralRootStackProfile reward roots terminal) who =
@@ -178,7 +176,7 @@ theorem quittingTerminalDeviationDebt_literalRootStack_eq_blockAct
   induction roots with
   | nil =>
       have hdebt := quittingTerminalDeviationDebt_nonneg
-        reward terminal who hM hreward
+        reward terminal who
       exact (Block.act_identity_of_nonneg () hdebt).symm
   | cons root roots ih =>
       rw [isQuittingLiteralExactRootStack_cons_iff] at hstack
@@ -191,7 +189,7 @@ theorem quittingTerminalDeviationDebt_literalRootStack_eq_blockAct
           0 root).mp hstack.1
       rw [quittingLiteralRootStackProfile_cons,
         quittingTerminalDeviationDebt_rootThenContinuation_eq_blockAct
-          reward root suffix who hM hreward hnashRoot]
+          reward root suffix who hnashRoot]
       rw [ih hstack.2]
       exact (Block.act_concat
         (quittingLiteralTerminalDebtBlock reward suffix root who)
@@ -204,17 +202,15 @@ theorem quittingTerminalDeviationDebt_literalRootStack_le_terminal
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingLiteralExactRootStack reward roots terminal) :
     quittingTerminalDeviationDebt reward
         (quittingLiteralRootStackProfile reward roots terminal) who ≤
       quittingTerminalDeviationDebt reward terminal who := by
   rw [quittingTerminalDeviationDebt_literalRootStack_eq_blockAct
-    reward roots terminal who hM hreward hstack]
+    reward roots terminal who hstack]
   exact Block.act_le_debt
     (quittingLiteralTerminalDebtAggregateBlock reward roots terminal who)
-    () (quittingTerminalDeviationDebt_nonneg reward terminal who hM hreward)
+    () (quittingTerminalDeviationDebt_nonneg reward terminal who)
 
 /-- Total terminal debt cannot increase across a finite literal exact-root
 stack. -/
@@ -222,15 +218,13 @@ theorem sum_quittingTerminalDeviationDebt_literalRootStack_le_terminal
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingLiteralExactRootStack reward roots terminal) :
     (∑ who, quittingTerminalDeviationDebt reward
         (quittingLiteralRootStackProfile reward roots terminal) who) ≤
       ∑ who, quittingTerminalDeviationDebt reward terminal who := by
   exact Finset.sum_le_sum fun who _ =>
     quittingTerminalDeviationDebt_literalRootStack_le_terminal
-      reward roots terminal who hM hreward hstack
+      reward roots terminal who hstack
 
 /-- Positive initial debt gives exact folded conservation: terminal debt times
 aggregate deleted survival equals initial debt plus aggregate exercise charge.
@@ -239,8 +233,6 @@ theorem quittingLiteralRootStack_debt_conservation_of_pos
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingLiteralExactRootStack reward roots terminal)
     (hpositive : 0 < quittingTerminalDeviationDebt reward
       (quittingLiteralRootStackProfile reward roots terminal) who) :
@@ -251,7 +243,7 @@ theorem quittingLiteralRootStack_debt_conservation_of_pos
         (quittingLiteralTerminalDebtAggregateBlock reward roots terminal who).charge.value
           () := by
   have hfold := quittingTerminalDeviationDebt_literalRootStack_eq_blockAct
-    reward roots terminal who hM hreward hstack
+    reward roots terminal who hstack
   have hact : 0 <
       (quittingLiteralTerminalDebtAggregateBlock reward roots terminal who).act
         () (quittingTerminalDeviationDebt reward terminal who) := by

@@ -70,8 +70,7 @@ profile actually executed after all Continue remains the common continuation.
 theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_continueMass_mul_of_capNash
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (who : ι)
     (hnash : IsεQuittingRootNash reward
       (fun player =>
         quittingContinuationBestResponseValue reward continuation player)
@@ -81,7 +80,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_continueMass_mul_o
       quittingStationaryContinueMass root *
         quittingTerminalDeviationDebt reward continuation who := by
   have hpair := quittingTerminalSemanticPair_rootThenContinuation
-    reward root continuation hM hreward
+    reward root continuation
   have hsemantic :=
     quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash
       (reward := reward) (quittingTerminalSemanticPair reward continuation)
@@ -93,8 +92,6 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_continueMass_mul_o
 theorem quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : IsεQuittingRootNash reward
       (fun player =>
         quittingContinuationBestResponseValue reward continuation player)
@@ -105,7 +102,7 @@ theorem quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capN
         quittingTerminalDebtSum reward continuation := by
   unfold quittingTerminalDebtSum
   simp_rw [quittingTerminalDeviationDebt_rootThenContinuation_eq_continueMass_mul_of_capNash
-    (reward := reward) root continuation _ hM hreward hnash]
+    (reward := reward) root continuation _ hnash]
   rw [Finset.mul_sum]
 
 /-! ## The actual-profile total-debt infimum -/
@@ -116,32 +113,26 @@ def quittingTerminalDebtSumInf
   sInf (Set.range (quittingTerminalDebtSum reward))
 
 theorem bddBelow_range_quittingTerminalDebtSum
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
-    BddBelow (Set.range (quittingTerminalDebtSum reward)) := by
+    : BddBelow (Set.range (quittingTerminalDebtSum reward)) := by
   refine ⟨0, ?_⟩
   rintro total ⟨profile, rfl⟩
   unfold quittingTerminalDebtSum
   exact Finset.sum_nonneg fun player _ =>
-    quittingTerminalDeviationDebt_nonneg reward profile player hM hreward
+    quittingTerminalDeviationDebt_nonneg reward profile player
 
 /-- The total-debt infimum lies below every actual profile. -/
 theorem quittingTerminalDebtSumInf_le
-    (profile : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (profile : (quittingGame reward).BehaviorProfile) :
     quittingTerminalDebtSumInf reward ≤
       quittingTerminalDebtSum reward profile := by
   exact csInf_le (bddBelow_range_quittingTerminalDebtSum
-    (reward := reward) hM hreward) ⟨profile, rfl⟩
+    (reward := reward)) ⟨profile, rfl⟩
 
 /-- Exact cap--Nash scaling and the literal infimum force positive joint
 Continue mass whenever the infimum is positive. -/
 theorem capNash_continueMass_pos_of_debtSumInf_pos
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward)
     (hnash : IsεQuittingRootNash reward
       (fun player =>
@@ -151,22 +142,19 @@ theorem capNash_continueMass_pos_of_debtSumInf_pos
   have hinfLe := quittingTerminalDebtSumInf_le
     (reward := reward)
     (quittingRootThenContinuationProfile reward root continuation)
-    hM hreward
   rw [quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash
-    (reward := reward) root continuation hM hreward hnash] at hinfLe
+    (reward := reward) root continuation hnash] at hinfLe
   have hcontinueNonneg := quittingStationaryContinueMass_nonneg root
   have hdebtNonneg : 0 ≤ quittingTerminalDebtSum reward continuation := by
     unfold quittingTerminalDebtSum
     exact Finset.sum_nonneg fun player _ =>
-      quittingTerminalDeviationDebt_nonneg reward continuation player hM hreward
+      quittingTerminalDeviationDebt_nonneg reward continuation player
   nlinarith
 
 /-- The literal total-debt infimum lies below the cap--Nash scaled debt. -/
 theorem debtSumInf_le_continueMass_mul_debtSum_of_capNash
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : IsεQuittingRootNash reward
       (fun player =>
         quittingContinuationBestResponseValue reward continuation player)
@@ -177,17 +165,14 @@ theorem debtSumInf_le_continueMass_mul_debtSum_of_capNash
   have hinfLe := quittingTerminalDebtSumInf_le
     (reward := reward)
     (quittingRootThenContinuationProfile reward root continuation)
-    hM hreward
   rwa [quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash
-    (reward := reward) root continuation hM hreward hnash] at hinfLe
+    (reward := reward) root continuation hnash] at hinfLe
 
 /-- Division-free absorption estimate: absorbed mass times current total debt
 is paid entirely by excess above the global actual-profile infimum. -/
 theorem capNash_absorptionMass_mul_debtSum_le_debtExcess
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : IsεQuittingRootNash reward
       (fun player =>
         quittingContinuationBestResponseValue reward continuation player)
@@ -197,7 +182,7 @@ theorem capNash_absorptionMass_mul_debtSum_le_debtExcess
       quittingTerminalDebtSum reward continuation -
         quittingTerminalDebtSumInf reward := by
   have hinfLe := debtSumInf_le_continueMass_mul_debtSum_of_capNash
-    (reward := reward) root continuation hM hreward hnash
+    (reward := reward) root continuation hnash
   unfold quittingRootAbsorptionMass
   nlinarith
 
@@ -205,8 +190,6 @@ theorem capNash_absorptionMass_mul_debtSum_le_debtExcess
 theorem capNash_absorptionMass_le_debtExcess_div_debtSum
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward)
     (hnash : IsεQuittingRootNash reward
       (fun player =>
@@ -218,18 +201,16 @@ theorem capNash_absorptionMass_le_debtExcess_div_debtSum
         quittingTerminalDebtSum reward continuation := by
   have hdebtPos : 0 < quittingTerminalDebtSum reward continuation :=
     hinf.trans_le (quittingTerminalDebtSumInf_le
-      (reward := reward) continuation hM hreward)
+      (reward := reward) continuation)
   exact (le_div_iff₀ hdebtPos).2
     (capNash_absorptionMass_mul_debtSum_le_debtExcess
-      (reward := reward) root continuation hM hreward hnash)
+      (reward := reward) root continuation hnash)
 
 /-- Near-minimal total debt bounds cap--Nash absorption odds.  This is the
 division form used by endpoint transport. -/
 theorem capNash_absorptionOdds_le_debtExcess_div_inf
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward)
     (hnash : IsεQuittingRootNash reward
       (fun player =>
@@ -242,12 +223,12 @@ theorem capNash_absorptionOdds_le_debtExcess_div_inf
         quittingTerminalDebtSumInf reward := by
   let prefixed := quittingRootThenContinuationProfile reward root continuation
   have hinfLe := quittingTerminalDebtSumInf_le
-    (reward := reward) prefixed hM hreward
+    (reward := reward) prefixed
   have hscale :=
     quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash
-      (reward := reward) root continuation hM hreward hnash
+      (reward := reward) root continuation hnash
   have hcontinue := capNash_continueMass_pos_of_debtSumInf_pos
-    (reward := reward) root continuation hM hreward hinf hnash
+    (reward := reward) root continuation hinf hnash
   dsimp [prefixed] at hinfLe
   rw [hscale] at hinfLe
   apply (div_le_div_iff₀ hcontinue hinf).2
@@ -507,8 +488,6 @@ theorem cap_sub_singleton_ge_shift_sub_joiningLoss_mul_absorptionOdds
 the sharp joining loss times relative excess above the total-debt infimum. -/
 theorem singleton_sub_cap_le_joiningLoss_mul_debtExcess_div_inf
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward) :
     reward (quittingSingletonTerminal who) who -
         quittingContinuationBestResponseValue reward profile who ≤
@@ -520,14 +499,14 @@ theorem singleton_sub_cap_le_joiningLoss_mul_debtExcess_div_inf
     (reward := reward)
     (fun player => quittingContinuationBestResponseValue reward profile player)
   have hcontinue := capNash_continueMass_pos_of_debtSumInf_pos
-    (reward := reward) root profile hM hreward hinf hnash
+    (reward := reward) root profile hinf hnash
   have hendpoint :=
     singleton_sub_tail_le_joiningLoss_mul_absorptionOdds_of_nash
       (reward := reward)
       (fun player => quittingContinuationBestResponseValue reward profile player)
       root who hcontinue hnash
   have hodds := capNash_absorptionOdds_le_debtExcess_div_inf
-    (reward := reward) root profile hM hreward hinf hnash
+    (reward := reward) root profile hinf hnash
   exact hendpoint.trans (mul_le_mul_of_nonneg_left hodds
     (quittingJoiningLoss_nonneg (reward := reward) who))
 
@@ -535,8 +514,6 @@ theorem singleton_sub_cap_le_joiningLoss_mul_debtExcess_div_inf
 theorem terminalDebt_ge_endpointGap_sub_error_sub_joiningLossExcess
     (profile : (quittingGame reward).BehaviorProfile)
     (comparison : Payoff ι) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward) :
     reward (quittingSingletonTerminal who) who - comparison who -
         |quittingTerminalPayoff reward profile who - comparison who| -
@@ -546,7 +523,7 @@ theorem terminalDebt_ge_endpointGap_sub_error_sub_joiningLossExcess
             quittingTerminalDebtSumInf reward) ≤
       quittingTerminalDeviationDebt reward profile who := by
   have hcap := singleton_sub_cap_le_joiningLoss_mul_debtExcess_div_inf
-    (reward := reward) profile who hM hreward hinf
+    (reward := reward) profile who hinf
   have herror : quittingTerminalPayoff reward profile who -
       comparison who ≤
         |quittingTerminalPayoff reward profile who - comparison who| := by

@@ -110,9 +110,7 @@ In particular the transferred amount is still at least the debt erased at
 the source. -/
 theorem capNashPrefix_resetExcursion_exact_account
     (source target : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (who : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -143,7 +141,7 @@ theorem capNashPrefix_resetExcursion_exact_account
   let prefixed := quittingTerminalSemanticPrefix reward root target
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root target hM hreward htarget
+      reward root target htarget
   have hscale : quittingTerminalSemanticDebtSum prefixed =
       quittingStationaryContinueMass root *
         quittingTerminalSemanticDebtSum target := by
@@ -159,7 +157,7 @@ theorem capNashPrefix_resetExcursion_exact_account
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun player _ =>
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward htarget player
+        reward htarget player
   have hcontinueLe : quittingStationaryContinueMass root ≤ 1 :=
     quittingStationaryContinueMass_le_one root
   have hprefixedLe : quittingTerminalSemanticDebtSum prefixed ≤
@@ -191,9 +189,7 @@ theorem capNashPrefix_resetExcursion_exact_account
 reset cluster, without losing the reset or its opposite-face transfer. -/
 theorem capNashPrefix_resetExcursion_strict_descent_of_absorption
     (source target : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (who : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -211,7 +207,7 @@ theorem capNashPrefix_resetExcursion_strict_descent_of_absorption
           quittingTerminalSemanticDebtChange source prefixed other := by
   let prefixed := quittingTerminalSemanticPrefix reward root target
   have haccount := capNashPrefix_resetExcursion_exact_account
-    (reward := reward) source target root who hM hreward hminimum htarget
+    (reward := reward) source target root who hminimum htarget
       hreset hnash
   have hcharge : 0 < quittingTerminalSemanticDebtSum target *
       quittingRootAbsorptionMass root := mul_pos htargetPositive habsorbs
@@ -252,9 +248,7 @@ This isolates the true obstruction to automatic excursion return: not Nash
 existence, but the cap-dominating singleton face. -/
 theorem resetExcursion_absorbingReturn_or_allContinue_capFace
     (source target : QuittingTerminalSemanticPair ι)
-    (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (who : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -308,7 +302,7 @@ theorem resetExcursion_absorbingReturn_or_allContinue_capFace
       simpa [quittingAllContinueRoot] using hpure
     have hreturn :=
       capNashPrefix_resetExcursion_strict_descent_of_absorption
-        (reward := reward) source target root who hM hreward hminimum
+        (reward := reward) source target root who hminimum
           htarget hreset htargetPositive hnash habsorbs
     exact ⟨root, hnash, habsorbs, hreturn.1, hreturn.2.1, hreturn.2.2⟩
 
@@ -331,9 +325,7 @@ does not retain a terminal incidence law attached to the original reset
 cluster. -/
 theorem exists_resetFace_minimizer_with_unique_allContinue_capNash
     (source target : QuittingTerminalSemanticPair ι)
-    (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (who : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -375,7 +367,7 @@ theorem exists_resetFace_minimizer_with_unique_allContinue_capNash
     isClosed_eq (continuous_quittingTerminalSemanticDebt who)
       continuous_const
   have hresetCompact : IsCompact resetFace :=
-    (quittingTerminalSemanticCarrier_isCompact reward hM hreward).inter_right
+    (quittingTerminalSemanticCarrier_isCompact reward).inter_right
       hresetClosed
   have hresetNonempty : resetFace.Nonempty :=
     ⟨target, htarget, hreset⟩
@@ -401,7 +393,7 @@ theorem exists_resetFace_minimizer_with_unique_allContinue_capNash
     let prefixed := quittingTerminalSemanticPrefix reward root returned
     have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
       quittingTerminalSemanticPrefix_mem_carrier
-        reward root returned hM hreward hreturned
+        reward root returned hreturned
     have hprefixedReset : quittingTerminalSemanticDebt prefixed who = 0 := by
       rw [quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash
         (reward := reward) returned root who hnash, hreturnedReset, mul_zero]
@@ -470,9 +462,7 @@ the requested total-debt tolerance, retaining the full source-debt transfer
 lower bound. -/
 theorem exists_nearMinimum_resetPrefix_of_capNashReturnSelection
     (source target : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (who : ι) (tolerance : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (who : ι) (tolerance : ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -491,7 +481,7 @@ theorem exists_nearMinimum_resetPrefix_of_capNashReturnSelection
           quittingTerminalSemanticDebtChange source returned other := by
   let returned := quittingTerminalSemanticPrefix reward root target
   have haccount := capNashPrefix_resetExcursion_exact_account
-    (reward := reward) source target root who hM hreward hminimum htarget
+    (reward := reward) source target root who hminimum htarget
       hreset hselection.1
   refine ⟨returned, haccount.1, haccount.2.1, haccount.2.2.1, ?_,
     haccount.2.2.2.2.2.2⟩

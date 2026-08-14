@@ -231,8 +231,6 @@ theorem individualValue_nonneg
     0 ≤ individualValue reward profile who := by
   rw [individualValue_eq_terminalDebt]
   exact quittingTerminalDeviationDebt_nonneg reward profile who
-    (quittingRewardBound_nonneg reward)
-    (abs_reward_le_quittingRewardBound reward)
 
 /-- Expected realized payment of a contingent pure-time audit policy. -/
 def policyPayoff
@@ -347,9 +345,7 @@ theorem score_nonneg
   rw [score_eq_weightedTerminalDebt]
   exact Finset.sum_nonneg fun who _ =>
     mul_nonneg (law.weight_nonneg who)
-      (quittingTerminalDeviationDebt_nonneg reward profile who
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward))
+      (quittingTerminalDeviationDebt_nonneg reward profile who)
 
 /-! ## Weighted and uniform zero sets -/
 
@@ -366,9 +362,7 @@ theorem score_eq_zero_iff_forall_terminalDebt_eq_zero
         quittingTerminalDeviationDebt reward profile who := by
     intro who _
     exact mul_nonneg (law.weight_nonneg who)
-      (quittingTerminalDeviationDebt_nonneg reward profile who
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward))
+      (quittingTerminalDeviationDebt_nonneg reward profile who)
   constructor
   · intro hzero who
     have hproduct :=
@@ -401,8 +395,7 @@ theorem score_eq_zero_iff_terminalExploitability_eq_zero
     · exact quittingTerminalExploitability_nonneg reward profile
   · intro hmax who
     have hdebtNonneg := quittingTerminalDeviationDebt_nonneg
-      reward profile who (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward)
+      reward profile who
     have hcoordinate : quittingTerminalDeviationDebt reward profile who ≤
         quittingTerminalExploitability reward profile := by
       exact (le_max_right 0 _).trans
@@ -534,9 +527,7 @@ theorem value_pos_of_no_uniformEquilibriumPayoff
         (law.weight_nonneg who)
     exact hproduct.trans (Finset.single_le_sum
       (fun player _ => mul_nonneg (law.weight_nonneg player)
-        (quittingTerminalDeviationDebt_nonneg reward profile player
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)))
+        (quittingTerminalDeviationDebt_nonneg reward profile player))
       (Finset.mem_univ who))
   exact (mul_pos (hfull least) hgap).trans_le hlower
 
@@ -600,8 +591,7 @@ theorem uniform_value_pos_of_no_uniformEquilibriumPayoff
       linarith
     exact hdebt.trans (Finset.single_le_sum
       (fun player _ => quittingTerminalDeviationDebt_nonneg
-        reward profile player (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward))
+        reward profile player)
       (Finset.mem_univ who))
   exact (div_pos hgap hcard).trans_le hlower
 
@@ -668,9 +658,7 @@ theorem semanticUniformScore_nonneg_of_mem_carrier [Nonempty ι]
   apply div_nonneg
   · unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun who _ =>
-      quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) hpair who
+      quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair who
   · positivity
 
 theorem bddBelow_semanticUniformScores [Nonempty ι] :
@@ -709,8 +697,6 @@ theorem uniform_value_eq_semanticUniformValue [Nonempty ι] :
     value reward (Law.uniform : Law ι) = semanticUniformValue reward := by
   obtain ⟨pair, hpair, hminimum⟩ :=
     exists_minimum_quittingTerminalSemanticDebtSum reward
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
   rw [semanticUniformValue_eq_of_minimum reward pair hpair hminimum]
   apply le_antisymm
   · obtain ⟨profiles, hprofiles⟩ :=
@@ -767,8 +753,7 @@ theorem positive_uniform_value_implies_minimum_allContinue_plateau
   let regime : QuittingCounterexampleRegime reward :=
     quittingCounterexampleRegimeOfNoUniformPayoff reward hno
   exact noUniformPayoff_implies_positiveMinimumSemanticPlateau
-    regime (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
+    regime
 
 /-- Fewer than four players cannot have positive uniform audit value. -/
 theorem not_positive_uniform_value_of_card_lt_four

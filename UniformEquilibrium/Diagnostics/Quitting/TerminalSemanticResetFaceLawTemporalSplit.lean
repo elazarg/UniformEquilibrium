@@ -50,8 +50,6 @@ theorem exists_resetFaceLaw_concentrated_or_diffuseWindowPacket
     (point : QuittingTerminalSemanticLawPoint iota)
     (owner : iota)
     (terminal : {S : Finset iota // S.Nonempty})
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward)
     (hface : quittingTerminalSemanticDebt point.1 owner = 0)
     (hmass : 0 < point.2 (some terminal)) :
@@ -95,8 +93,7 @@ theorem exists_resetFaceLaw_concentrated_or_diffuseWindowPacket
   have hdebtNonneg : ∀ n, 0 ≤ debt n := by
     intro n
     exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward
-        (quittingTerminalSemanticPair_mem_carrier reward (profiles n)) owner
+      reward (quittingTerminalSemanticPair_mem_carrier reward (profiles n)) owner
   obtain ⟨scale, hscalePos, _hscaleLe, hscaleZero, hdebtRate,
       _hnoLabels⟩ :=
     exists_commonVanishingResetScale (κ := Fin 0)
@@ -111,7 +108,7 @@ theorem exists_resetFaceLaw_concentrated_or_diffuseWindowPacket
   have hlower : 0 < point.2 (some terminal) / 2 := by linarith
   have hsplit := exists_concentrated_or_diffuseWindowPacket
     (reward := reward) profiles owner terminal cutoff scale
-      (point.2 (some terminal) / 2) hM hreward hlower hwindow hscalePos
+      (point.2 (some terminal) / 2) hlower hwindow hscalePos
         (by simpa only [debt] using hdebtRate)
   exact ⟨profiles, cutoff, scale, hprofiles, hscalePos, hscaleZero,
     by simpa only [debt] using hdebtRate, hwindow, hsplit⟩
@@ -135,8 +132,6 @@ theorem exists_resetFaceLaw_concentratedPacket_of_collision
     (point : QuittingTerminalSemanticLawPoint iota)
     (owner : iota)
     (terminal : {S : Finset iota // S.Nonempty})
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward)
     (hface : quittingTerminalSemanticDebt point.1 owner = 0)
     (hmass : 0 < point.2 (some terminal))
@@ -157,7 +152,7 @@ theorem exists_resetFaceLaw_concentratedPacket_of_collision
   obtain ⟨profiles, cutoff, scale, hprofiles, hscalePos, hscaleZero,
       _hdebtRate, _hwindow, hsplit⟩ :=
     exists_resetFaceLaw_concentrated_or_diffuseWindowPacket
-      reward point owner terminal hM hreward hpoint hface hmass
+      reward point owner terminal hpoint hface hmass
   have hother : ∃ other ∈ terminal.val, other ≠ owner := by
     by_contra hnone
     push Not at hnone
@@ -174,7 +169,7 @@ theorem exists_resetFaceLaw_concentratedPacket_of_collision
       hscalePos, hscaleZero, hotherNe, hotherMem, hconcentrated⟩
   · let packet := Classical.choice hdiffuse
     rcases packet.exists_concentrated_or_diffuseDeleted
-        other hotherMem hotherNe hM hreward with hatom | hdeleted
+      other hotherMem hotherNe with hatom | hdeleted
     · obtain ⟨fixedOther, exact, hfixedNe, hfixedMem,
           hconcentrated⟩ := hatom
       exact ⟨profiles, cutoff, scale, fixedOther, exact, hprofiles,

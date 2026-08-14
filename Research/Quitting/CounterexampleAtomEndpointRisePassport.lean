@@ -116,8 +116,7 @@ theorem nonempty_atomExactPrefixChronology_of_fixedAlternative
       quittingTerminalDeviationDebt] using
       (sum_quittingTerminalDeviationDebt_literalRootStack_le_terminal
         reward (roots rank) (frontier.profiles (frontier.subseq rank))
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) (hrootsExact rank))
+        (hrootsExact rank))
   have hgap : Tendsto (fun rank =>
       tailDebt rank - quittingTerminalSemanticDebtSum frontier.base)
       atTop (nhds 0) := by
@@ -233,10 +232,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChron
         rw [hactiveEmpty] at hmem
         simp at hmem
       exact le_antisymm (le_of_not_gt hnotPositive)
-        (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
-          frontier.base_mem who)
+        (quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+          reward frontier.base_mem who)
     have hbasePositive := frontier.base_positive
     unfold quittingTerminalSemanticDebtSum at hbasePositive
     simp only [hdebtZero, Finset.sum_const_zero] at hbasePositive
@@ -734,8 +731,6 @@ theorem QuittingStoppingLawAtomEndpointRiseChronology.exists_prescribed_or_recta
       apply squeeze_zero
       · intro n
         exact quittingTerminalDeviationDebt_nonneg reward _ observer
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
       · exact hdebt
       · exact herror
     exact Or.inr ⟨⟨rank, hrank, quitTime, terminal,

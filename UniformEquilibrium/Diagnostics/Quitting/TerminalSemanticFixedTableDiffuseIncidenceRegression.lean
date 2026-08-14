@@ -258,7 +258,7 @@ theorem pair_coordinates (n : ℕ) :
     (pair n).1 = (fun _ => 0) ∧
       (pair n).2 = ![0, q n, 0] := by
   have hprefix := quittingTerminalSemanticPair_rootThenContinuation
-    reward (root n) continuation (M := 1) (by norm_num) reward_bound
+    reward (root n) continuation
   change quittingTerminalSemanticPair reward (profile n) =
       quittingTerminalSemanticPrefix reward (root n)
         (quittingTerminalSemanticPair reward continuation) at hprefix

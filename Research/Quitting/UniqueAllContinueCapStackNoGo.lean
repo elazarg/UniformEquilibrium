@@ -11,7 +11,6 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRat
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefix
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactPath
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Unique all-Continue caps cannot causally realize a retained terminal law
@@ -202,13 +201,10 @@ theorem exists_resetFace_positiveIncidence_exactCapOperations_are_identity
           quittingTerminalSemanticPrefix reward root returned.1 = returned.1 ∧
           quittingTerminalOutcomeLawPrefix root returned.2 = returned.2 ∧
           quittingRootAbsorptionMass root = 0 := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
       hsourceLe, _hallContinueNash, _hfixed, hallRoots⟩ :=
     exists_resetFace_positiveTotalIncidence_allContinueCapPlateau
-      source target mass owner hM hreward hminimum hsourcePositive
-        htarget hreset hincidence
+      source target mass owner hminimum hsourcePositive htarget hreset hincidence
   refine ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
     hsourceLe, ?_⟩
   intro root hnash
@@ -287,8 +283,6 @@ theorem capNashRootStack_eq_replicate_allContinue_of_unique_terminalCap
       quittingTerminalSemanticPair reward
           (quittingLiteralRootStackProfile reward roots terminal) =
         quittingTerminalSemanticPair reward terminal := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hallContinueNash : IsεQuittingRootNash reward
       (quittingTerminalSemanticPair reward terminal).2 0
       (quittingAllContinueRoot : ι → PMF Bool) := by
@@ -343,7 +337,7 @@ theorem capNashRootStack_eq_replicate_allContinue_of_unique_terminalCap
           (List.cons (quittingAllContinueRoot : ι → PMF Bool)) hroots
       · rw [quittingLiteralRootStackProfile_cons,
           quittingTerminalSemanticPair_rootThenContinuation
-            reward root suffix hM hreward]
+            reward root suffix]
         rw [show quittingTerminalSemanticPair reward suffix =
             quittingTerminalSemanticPair reward terminal by
           simpa only [suffix] using hsemantic,

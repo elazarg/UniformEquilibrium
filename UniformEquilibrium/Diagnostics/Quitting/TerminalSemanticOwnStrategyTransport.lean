@@ -73,12 +73,10 @@ theorem quittingRootContinuationOptionSurcharge_nonneg_of_mem_carrier
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     0 ≤ quittingRootContinuationOptionSurcharge reward pair root who := by
   have hdebt := quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-    reward hM hreward hpair who
+    reward hpair who
   have htail : pair.1 who ≤ pair.2 who := by
     unfold quittingTerminalSemanticDebt at hdebt
     linarith
@@ -315,7 +313,7 @@ theorem quittingTerminalSemanticDebt_mem_Icc_zero_two_mul
         (quittingTerminalSemanticPair reward profile) who ∈
       Set.Icc 0 (2 * M) := by
   constructor
-  · exact quittingTerminalDeviationDebt_nonneg reward profile who hM hreward
+  · exact quittingTerminalDeviationDebt_nonneg reward profile who
   · unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
     have hbest := abs_quittingContinuationBestResponseValue_le
       reward profile who hM hreward
@@ -384,8 +382,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_capDefect_add_cont
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : ι) :
     quittingTerminalDeviationDebt reward
         (quittingRootThenContinuationProfile reward root continuation) who =
       quittingRootCoordinateNashDefect reward
@@ -395,7 +392,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_capDefect_add_cont
         quittingStationaryContinueMass root *
           quittingTerminalDeviationDebt reward continuation who := by
   have hpair := quittingTerminalSemanticPair_rootThenContinuation
-    reward root continuation hM hreward
+    reward root continuation
   have hdecomp :=
     quittingTerminalSemanticDebt_prefix_eq_capDefect_add_continueMass_mul
       reward (quittingTerminalSemanticPair reward continuation) root who

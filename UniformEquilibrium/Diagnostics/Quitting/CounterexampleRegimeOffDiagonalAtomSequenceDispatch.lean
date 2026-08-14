@@ -227,8 +227,6 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtAtomA
         simp at hmem
       exact le_antisymm (le_of_not_gt hnotPositive)
         (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
           frontier.base_mem who)
     have hbasePositive := frontier.base_positive
     unfold quittingTerminalSemanticDebtSum at hbasePositive
@@ -525,8 +523,6 @@ theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
       apply squeeze_zero
       · intro n
         exact quittingTerminalDeviationDebt_nonneg reward _ observer
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
       · intro n
         simpa only [rank, quitTime] using
           hdebtAt (terminalSubseq (n + labelStart))
@@ -737,9 +733,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetCollisio
     reward frontier.base
       (quittingStoppingLawRectangleTargetProfile packet)
       packet.observer packet.quitTime packet.terminal hobserver hlower
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) frontier.base_mem
-      frontier.base_minimum frontier.base_positive hcollision
+      frontier.base_mem frontier.base_minimum frontier.base_positive hcollision
       packet.observer_debt_tendsto_zero hpersistent
   simpa only [HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch,
     lower, card, M] using hconsumer

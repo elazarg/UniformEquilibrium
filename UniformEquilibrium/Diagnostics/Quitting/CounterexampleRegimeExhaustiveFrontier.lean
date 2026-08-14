@@ -197,13 +197,9 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
   obtain ⟨seam⟩ := regime.nonempty_seamWitness
   obtain ⟨base, hbase, hminimum, hbaseDebt, hnash, hprefix⟩ :=
     noUniformPayoff_implies_positiveMinimumSemanticPlateau regime
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
   have hbasePositive : 0 < quittingTerminalSemanticDebtSum base := by
     have hnonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt base who :=
-      quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) hbase
+      quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hbase
     obtain ⟨who, hwho⟩ := hbaseDebt
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_pos' (fun player _ ↦ hnonneg player)
@@ -272,8 +268,6 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
     dsimp only [inactiveDebt]
     split_ifs
     · exact quittingTerminalDeviationDebt_nonneg reward (profiles n) who
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward)
     · exact le_rfl
   have hinactiveZero : ∀ who,
       Tendsto (inactiveDebt who) atTop (nhds 0) := by
@@ -335,9 +329,7 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
             rw [hactiveEmpty] at hmem
             simp at hmem
           exact le_antisymm (le_of_not_gt hnotPositive)
-            (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-              (quittingRewardBound_nonneg reward)
-              (abs_reward_le_quittingRewardBound reward) hbase who)
+            (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hbase who)
         unfold quittingTerminalSemanticDebtSum at hbasePositive
         simp only [hdebtZero, Finset.sum_const_zero] at hbasePositive
         exact (lt_irrefl 0) hbasePositive
@@ -374,9 +366,7 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
       · exact Or.inr (Or.inl ⟨hflat, hentry⟩)
       · have hdebtNonneg : ∀ who,
             0 ≤ quittingTerminalSemanticDebt base who :=
-          quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-            (quittingRewardBound_nonneg reward)
-            (abs_reward_le_quittingRewardBound reward) hbase
+          quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hbase
         have hinactiveZero : ∀ mover ∈ active, ∀ who ∉ active,
             column mover who = 0 := by
           intro mover hmover who hwho

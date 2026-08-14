@@ -73,21 +73,16 @@ theorem sum_quittingTerminalSemanticDebtShare_eq_one
 
 /-- Every debt share is nonnegative at a semantic carrier point. -/
 theorem quittingTerminalSemanticDebtShare_nonneg_of_mem_carrier
-    (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hpositive : 0 < quittingTerminalSemanticDebtSum pair) (who : ι) :
     0 ≤ quittingTerminalSemanticDebtShare pair who := by
   exact div_nonneg
-    (quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair who) hpositive.le
+    (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair who) hpositive.le
 
 /-- The singleton slack is nonnegative at every positive minimum pair. -/
 theorem minimumTerminalSemantic_singletonSlack_nonneg
-    (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -95,7 +90,7 @@ theorem minimumTerminalSemantic_singletonSlack_nonneg
     (hpositive : 0 < quittingTerminalSemanticDebtSum pair) (who : ι) :
     0 ≤ quittingTerminalSemanticSingletonSlack reward pair who := by
   have hmargin := minimumTerminalSemantic_singletonMargin
-    (reward := reward) pair hM hreward hpair hminimum hpositive who
+    (reward := reward) pair hpair hminimum hpositive who
   unfold quittingTerminalSemanticSingletonSlack
   linarith
 
@@ -129,9 +124,7 @@ theorem minimumTerminalSemantic_normalizedSingletonGap
 
 /-- Singleton tightness is exactly the debt-vertex/zero-slack gate. -/
 theorem minimumTerminalSemantic_singletonTight_iff_debtGate
-    (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -141,15 +134,14 @@ theorem minimumTerminalSemantic_singletonTight_iff_debtGate
       IsMinimumTerminalSemanticDebtGate reward pair who := by
   have hdebtNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebt pair player :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
   have hdebtLe : quittingTerminalSemanticDebt pair who ≤
       quittingTerminalSemanticDebtSum pair := by
     unfold quittingTerminalSemanticDebtSum
     exact Finset.single_le_sum
       (fun player _ => hdebtNonneg player) (Finset.mem_univ who)
   have hslack := minimumTerminalSemantic_singletonSlack_nonneg
-    (reward := reward) pair hM hreward hpair hminimum hpositive who
+    (reward := reward) pair hpair hminimum hpositive who
   have hidentity :=
     minimumTerminalSemantic_singletonGap_eq_complementaryDebt_add_slack
       (reward := reward) pair who
@@ -162,9 +154,7 @@ theorem minimumTerminalSemantic_singletonTight_iff_debtGate
 
 /-- A positive semantic pair has at most one debt gate. -/
 theorem minimumTerminalSemantic_debtGate_unique
-    (pair : QuittingTerminalSemanticPair ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hpositive : 0 < quittingTerminalSemanticDebtSum pair)
     {first second : ι}
@@ -174,8 +164,7 @@ theorem minimumTerminalSemantic_debtGate_unique
   by_contra hne
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
   have hsumLe :
       ∑ who ∈ ({first, second} : Finset ι),
           quittingTerminalSemanticDebt pair who ≤
@@ -196,9 +185,7 @@ theorem minimumTerminalSemantic_debtGate_unique
 uniquely all-Continue. -/
 theorem minimumTerminalSemantic_debtHomotopy_eq_allContinue
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M t : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) {t : ℝ}
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -213,8 +200,7 @@ theorem minimumTerminalSemantic_debtHomotopy_eq_allContinue
     fun who => t * quittingTerminalSemanticDebt pair who
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
   have hdebtLe : ∀ who, quittingTerminalSemanticDebt pair who ≤
       quittingTerminalSemanticDebtSum pair := by
     intro who
@@ -222,7 +208,7 @@ theorem minimumTerminalSemantic_debtHomotopy_eq_allContinue
     exact Finset.single_le_sum
       (fun player _ => hdebtNonneg player) (Finset.mem_univ who)
   apply minimumTerminalSemantic_auxiliaryNash_eq_allContinue
-    (reward := reward) pair shift root hM hreward hpair hminimum hpositive
+    (reward := reward) pair shift root hpair hminimum hpositive
   · intro who
     exact mul_nonneg ht0 (hdebtNonneg who)
   · intro who
@@ -233,9 +219,7 @@ theorem minimumTerminalSemantic_debtHomotopy_eq_allContinue
 /-- Positive singleton mass at an exact root exposes a genuine debt gate. -/
 theorem minimumTerminalSemantic_debtGate_of_singletonMass_pos
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -245,7 +229,7 @@ theorem minimumTerminalSemantic_debtGate_of_singletonMass_pos
     (who : ι) (hmass : 0 < quittingRootCoalitionMass root {who}) :
     IsMinimumTerminalSemanticDebtGate reward pair who := by
   have hcritical := minimumTerminalSemantic_exactNash_criticalFace
-    (reward := reward) pair root hM hreward hpair hminimum hpositive hnash
+    (reward := reward) pair root hpair hminimum hpositive hnash
   have hdebt : quittingTerminalSemanticDebt pair who =
       quittingTerminalSemanticDebtSum pair := hcritical.2 who hmass
   have hquit : 0 < (root who true).toReal :=
@@ -253,7 +237,7 @@ theorem minimumTerminalSemantic_debtGate_of_singletonMass_pos
       root who hmass
   have hsingleton :=
     quittingTerminalSemantic_minimum_positiveDebt_singleton_eq_of_quit_pos
-      reward pair root hM hreward hpair hminimum hnash who
+      reward pair root hpair hminimum hnash who
         (hdebt.symm ▸ hpositive) hquit
   refine ⟨hdebt, ?_⟩
   unfold quittingTerminalSemanticSingletonSlack
@@ -264,9 +248,7 @@ theorem minimumTerminalSemantic_debtGate_of_singletonMass_pos
 solo at one debt-vertex/zero-slack gate. -/
 theorem minimumTerminalSemantic_exactNash_allContinue_or_debtGateSolo
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -281,7 +263,7 @@ theorem minimumTerminalSemantic_exactNash_allContinue_or_debtGateSolo
   by_cases hroot : root = (quittingAllContinueRoot : ι → PMF Bool)
   · exact Or.inl hroot
   · have hcritical := minimumTerminalSemantic_exactNash_criticalFace
-      (reward := reward) pair root hM hreward hpair hminimum hpositive hnash
+      (reward := reward) pair root hpair hminimum hpositive hnash
     have habsorptionPos : 0 < quittingRootAbsorptionMass root := by
       have habsorptionNonneg := quittingRootAbsorptionMass_nonneg root
       apply lt_of_le_of_ne habsorptionNonneg
@@ -306,8 +288,7 @@ theorem minimumTerminalSemantic_exactNash_allContinue_or_debtGateSolo
         MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg
           root {who}).mp hsingletonSum
     have hgate := minimumTerminalSemantic_debtGate_of_singletonMass_pos
-      (reward := reward) pair root hM hreward hpair hminimum hpositive
-        hnash owner hownerMass
+      (reward := reward) pair root hpair hminimum hpositive hnash owner hownerMass
     have hquit : 0 < (root owner true).toReal :=
       QuittingFiniteRootWindow.quitProbability_pos_of_singletonCoalitionMass_pos
         root owner hownerMass
@@ -316,16 +297,14 @@ theorem minimumTerminalSemantic_exactNash_allContinue_or_debtGateSolo
     exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero
       (root other)
       (quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
-        reward pair root hM hreward hpair hminimum hnash
+        reward pair root hpair hminimum hnash
           (hgate.1.symm ▸ hpositive) hne)
 
 /-- Away from every vertex/zero-slack gate, exact minimum dynamics is frozen
 at the all-Continue identity root. -/
 theorem minimumTerminalSemantic_exactNash_eq_allContinue_of_no_debtGate
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -335,7 +314,7 @@ theorem minimumTerminalSemantic_exactNash_eq_allContinue_of_no_debtGate
     (hnoGate : ∀ who, ¬ IsMinimumTerminalSemanticDebtGate reward pair who) :
     root = (quittingAllContinueRoot : ι → PMF Bool) := by
   rcases minimumTerminalSemantic_exactNash_allContinue_or_debtGateSolo
-      (reward := reward) pair root hM hreward hpair hminimum hpositive hnash with
+      (reward := reward) pair root hpair hminimum hpositive hnash with
     hroot | ⟨owner, hgate, _⟩
   · exact hroot
   · exact (hnoGate owner hgate).elim

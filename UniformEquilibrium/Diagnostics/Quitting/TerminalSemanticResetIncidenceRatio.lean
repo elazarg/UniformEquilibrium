@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # The debt/incidence variational obstruction on a reset face
@@ -550,9 +551,7 @@ the selected opponent coordinate to vanish. -/
 theorem rootOpponentIncidence_eq_zero_of_minimal_debt_div_incidence
     (source : QuittingTerminalSemanticPair ι)
     (returned : QuittingTerminalSemanticLawPoint ι)
-    (owner other : ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner other : ι) (root : ι → PMF Bool)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -579,7 +578,7 @@ theorem rootOpponentIncidence_eq_zero_of_minimal_debt_div_incidence
   have hprefixedJoint : (prefixed, prefixedMass) ∈
       quittingTerminalSemanticLawCarrier reward := by
     exact quittingTerminalSemanticLawPrefix_mem_carrier
-      reward root returned hM hreward hreturned
+      reward root returned hreturned
   have hprefixedCarrier : prefixed ∈
       quittingTerminalSemanticCarrier reward :=
     terminalSemanticLawCarrier_fst_mem_carrier
@@ -650,9 +649,7 @@ minimizer. -/
 theorem rootTotalOpponentIncidence_eq_zero_of_minimal_debt_div_incidence
     (source : QuittingTerminalSemanticPair ι)
     (returned : QuittingTerminalSemanticLawPoint ι)
-    (owner : ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι) (root : ι → PMF Bool)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -679,7 +676,7 @@ theorem rootTotalOpponentIncidence_eq_zero_of_minimal_debt_div_incidence
   have hprefixedJoint : (prefixed, prefixedMass) ∈
       quittingTerminalSemanticLawCarrier reward := by
     exact quittingTerminalSemanticLawPrefix_mem_carrier
-      reward root returned hM hreward hreturned
+      reward root returned hreturned
   have hprefixedCarrier : prefixed ∈
       quittingTerminalSemanticCarrier reward :=
     terminalSemanticLawCarrier_fst_mem_carrier
@@ -847,9 +844,7 @@ forces survival one. -/
 theorem root_eq_allContinue_of_lexicographic_totalOpponentIncidence_minimal
     (source : QuittingTerminalSemanticPair ι)
     (returned : QuittingTerminalSemanticLawPoint ι)
-    (owner : ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι) (root : ι → PMF Bool)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -884,12 +879,12 @@ theorem root_eq_allContinue_of_lexicographic_totalOpponentIncidence_minimal
     quittingTerminalTotalOpponentIncidenceMass owner returned.2
   have hfreshZero :=
     rootTotalOpponentIncidence_eq_zero_of_minimal_debt_div_incidence
-      source returned owner root hM hreward hminimum hsourcePositive
-        hreturned hreset hincidence hratio hnash
+      source returned owner root hminimum hsourcePositive hreturned hreset
+        hincidence hratio hnash
   have hprefixedJoint : (prefixed, prefixedMass) ∈
       quittingTerminalSemanticLawCarrier reward :=
     quittingTerminalSemanticLawPrefix_mem_carrier
-      reward root returned hM hreward hreturned
+      reward root returned hreturned
   have hprefixedCarrier :=
     terminalSemanticLawCarrier_fst_mem_carrier
       (prefixed, prefixedMass) hprefixedJoint
@@ -959,9 +954,7 @@ contains opponent incidence, while no exact cap root creates absorption. -/
 theorem exists_resetFace_positiveTotalIncidence_allContinueCapPlateau
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -984,6 +977,7 @@ theorem exists_resetFace_positiveTotalIncidence_allContinueCapPlateau
       ∀ root : ι → PMF Bool,
         IsεQuittingRootNash reward returned.1.2 0 root →
           root = (quittingAllContinueRoot : ι → PMF Bool) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
       hsourceLe, hratio, hsecondary⟩ :=
     exists_resetFace_lexicographic_totalOpponentIncidence_minimizer
@@ -994,7 +988,7 @@ theorem exists_resetFace_positiveTotalIncidence_allContinueCapPlateau
         root = (quittingAllContinueRoot : ι → PMF Bool) := by
     intro root hnash
     exact root_eq_allContinue_of_lexicographic_totalOpponentIncidence_minimal
-      source returned owner root hM hreward hminimum hsourcePositive
+      source returned owner root hminimum hsourcePositive
         hreturned hreturnedReset hreturnedIncidence hratio hsecondary hnash
   obtain ⟨root, hnash⟩ :=
     exists_isZeroQuittingRootNash (reward := reward) returned.1.2
@@ -1050,8 +1044,8 @@ theorem exists_resetFace_debtIncidence_obstruction
     hsourceLe, ?_⟩
   intro root hnash
   exact rootOpponentIncidence_eq_zero_of_minimal_debt_div_incidence
-    source returned owner other root hM hreward hminimum hsourcePositive
-      hreturned hreturnedReset hreturnedIncidence hratio hnash
+    source returned owner other root hminimum hsourcePositive hreturned
+      hreturnedReset hreturnedIncidence hratio hnash
 
 /-! ## What the quotient says about a partial reset -/
 

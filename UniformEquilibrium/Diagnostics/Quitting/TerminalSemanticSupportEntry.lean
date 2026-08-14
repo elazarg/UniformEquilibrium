@@ -376,9 +376,7 @@ inactive rows.  Otherwise the outsider enters support at a small positive
 rate, contradicting exact unit deleted survival of the positive debt. -/
 theorem collision_nonzero_or_exists_cotight_outsider_of_minimumSemanticDebt
     (pair : QuittingTerminalSemanticPair ι)
-    (owner entrant : ι) (ownerRate : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner entrant : ι) (ownerRate : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -427,7 +425,7 @@ theorem collision_nonzero_or_exists_cotight_outsider_of_minimumSemanticDebt
           hotherStrict
     have hzero :=
       quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
-        reward pair root hM hreward hpair hminimum hnash hownerDebt hne.symm
+        reward pair root hpair hminimum hnash hownerDebt hne.symm
     have hpositive : 0 < (root entrant true).toReal := by
       change 0 < hazardOfRoot root entrant
       rw [hrootHazard,
@@ -443,9 +441,7 @@ positive-debt tail that outsider either moves the owner's reciprocal
 collision row, or belongs to a simultaneous multi-outsider equality seam. -/
 theorem exists_minimalSoloBoundary_collision_nonzero_or_cotight
     (pair : QuittingTerminalSemanticPair ι)
-    (owner anchor : ι) (displayedRate : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner anchor : ι) (displayedRate : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -507,7 +503,7 @@ theorem exists_minimalSoloBoundary_collision_nonzero_or_cotight
   have hrateLt : rate < 1 := hrateLe.trans_lt hdisplayedLt
   have hresidual :=
     collision_nonzero_or_exists_cotight_outsider_of_minimumSemanticDebt
-      (reward := reward) pair owner entrant rate hM hreward hpair hminimum
+      (reward := reward) pair owner entrant rate hpair hminimum
         hownerDebt hentrantNe.symm hratePos hrateLt hownerPin
         hcomplementary' hentrantTight'
   exact ⟨rate, entrant, hratePos, hrateLe, hentrantNe,
@@ -534,9 +530,7 @@ select the first feasible tight outsider.  The remaining support-entry seam
 is the finite nonzero-collision-or-cotight alternative. -/
 theorem exists_minimalSoloBoundary_collision_nonzero_or_cotight_of_soloRoot
     (pair : QuittingTerminalSemanticPair ι)
-    (owner anchor : ι) (hazard : PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner anchor : ι) (hazard : PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -593,7 +587,7 @@ theorem exists_minimalSoloBoundary_collision_nonzero_or_cotight_of_soloRoot
     rw [gainValue_twoOwner_second_fixedTail pair.1 owner anchor 0 0 hne]
     simpa using hattractive
   exact exists_minimalSoloBoundary_collision_nonzero_or_cotight
-    (reward := reward) pair owner anchor displayedRate hM hreward hpair
+    (reward := reward) pair owner anchor displayedRate hpair
       hminimum hownerDebt hne hquit hdisplayedLt hownerPin
       hdisplayedComplementary hanchorProfitable
 
@@ -674,14 +668,12 @@ semantic pairs.  In the interior-hazard case the same tail exposes the
 nonzero-collision-or-cotight support-entry boundary. -/
 theorem exists_semanticPlateau_or_provenanceAtomicSolo_of_noUE
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (regime : QuittingCounterexampleRegime reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward ∨
       HasProvenanceAtomicMinimumSemanticSoloRow regime := by
   rcases
       exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_uniformPayoff
-        reward hM hreward regime.not_exists_uniformEquilibriumPayoff with
+        reward regime.not_exists_uniformEquilibriumPayoff with
     hplateau | ⟨pair, root, owner, debt, hdebt, hpair, hminimum,
       hprefix, hnash, _hnoPlateau, hnoMinimumPlateau, hownerDebt,
       hotherDebt, hquit, hpure, hrootSolo, _hopponentSurvival,
@@ -703,15 +695,14 @@ theorem exists_semanticPlateau_or_provenanceAtomicSolo_of_noUE
         intro hsurvival
         exact hnotEndpoint
           (isZeroSoloEndpointNash_of_terminalSemanticSoloSpine_survival_tendsto_zero
-            pair root owner hM hreward hpair hprefix hnash hpure
+            pair root owner hpair hprefix hnash hpure
               hcontinue hsurvival)
       obtain ⟨lower, hlower, hsurvivalLower⟩ :=
         exists_pos_le_quittingSoloSemanticSurvival_of_not_tendsto_zero
           root owner 0 hsurvivalNot
       obtain ⟨candidate, hcandidate, hcandidateMin, hnashAll⟩ :=
         exists_minimum_allContinueNash_of_soloSemanticSpine_survival_lower
-          pair root owner hM hreward hpair hminimum hnash hpure
-            hlower hsurvivalLower
+          pair root owner hpair hminimum hnash hpure hlower hsurvivalLower
       exact False.elim
         (hnoMinimumPlateau
           ⟨candidate, hcandidate, hcandidateMin, hnashAll⟩)
@@ -758,8 +749,8 @@ theorem exists_semanticPlateau_or_provenanceAtomicSolo_of_noUE
         refine ⟨hcontinuePos, ?_⟩
         exact
           exists_minimalSoloBoundary_collision_nonzero_or_cotight_of_soloRoot
-            (reward := reward) (pair 1) owner anchor hazard hM hreward
-              (hpair 1) (hminimum 1) htailDebt hanchorNe.symm
+            (reward := reward) (pair 1) owner anchor hazard (hpair 1)
+              (hminimum 1) htailDebt hanchorNe.symm
               (hquit 0) hcontinuePos (htightNext 0).symm hnashSolo
               hattractive
 

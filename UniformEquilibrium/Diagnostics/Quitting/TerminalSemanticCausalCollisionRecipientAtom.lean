@@ -230,9 +230,7 @@ theorem causalCollision_tailEscape_or_quantitativeRecipientAtom
     (minimum : QuittingTerminalSemanticPair iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (stage : ℕ) (terminal : {S : Finset iota // S.Nonempty})
-    (lower epsilon : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (lower epsilon : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -300,7 +298,7 @@ theorem causalCollision_tailEscape_or_quantitativeRecipientAtom
   dsimp only
   have hdispatch :=
     causalCollision_tailEscape_or_quantitativeNearMinimumTransfer
-      reward minimum profile stage terminal lower epsilon hM hreward
+      reward minimum profile stage terminal lower epsilon
         hminimumCarrier hminimum hminimumDebt hcollision hlower hnear hmass
   rcases hdispatch with hescape | hgain
   · exact Or.inl hescape

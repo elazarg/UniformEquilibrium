@@ -647,8 +647,6 @@ theorem quittingTerminalSemanticPair_elementaryCap
         (quittingRootSequenceProfile reward
           (quittingElementaryCapRoots cap) 0) =
       quittingElementaryBoundarySemanticPair reward cap := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   cases cap with
   | never =>
       exact quittingTerminalSemanticPair_elementaryCap_never
@@ -665,7 +663,7 @@ theorem quittingTerminalSemanticPair_elementaryCap
         cases time <;> rfl
       rw [quittingRootSequenceProfile_eq_rootThenContinuation,
         quittingTerminalSemanticPair_rootThenContinuation
-          reward _ _ hM hreward,
+          reward _ _,
         htail,
         quittingTerminalSemanticPair_elementaryCap_never reward]
       rfl
@@ -681,7 +679,7 @@ theorem quittingTerminalSemanticPair_elementaryCap
         cases time <;> rfl
       rw [quittingRootSequenceProfile_eq_rootThenContinuation,
         quittingTerminalSemanticPair_rootThenContinuation
-          reward _ _ hM hreward,
+          reward _ _,
         htail,
         quittingTerminalSemanticPair_elementaryCap_never reward]
       rfl
@@ -733,8 +731,6 @@ theorem quittingTerminalSemanticPair_elementaryTail_eq_finiteEval
           (quittingElementaryTailRoots roots cutoff cap) 0) =
       quittingFinitePrefixSemanticEval reward roots cutoff
         (quittingElementaryBoundarySemanticPair reward cap) := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   induction cutoff generalizing roots with
   | zero =>
       have hroots : quittingElementaryTailRoots roots 0 cap =
@@ -747,7 +743,7 @@ theorem quittingTerminalSemanticPair_elementaryTail_eq_finiteEval
   | succ cutoff ih =>
       rw [quittingRootSequenceProfile_eq_rootThenContinuation,
         quittingTerminalSemanticPair_rootThenContinuation
-          reward _ _ hM hreward]
+          reward _ _]
       change
         quittingTerminalSemanticPrefix reward
             (quittingElementaryTailRoots roots (cutoff + 1) cap 0)

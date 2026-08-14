@@ -136,6 +136,14 @@ coupled. That refinement also removes two derivable nonnegativity hypotheses
 and a punishment-bound hypothesis that had become dead through five local
 wrappers.
 
+The next stable propagation slice removes another 269 dischargeable triples
+without changing any theorem result or retained telescope. It also removes one
+unused nonnegativity hypothesis from a quantitative theorem while retaining
+its bound variable and coordinate-bound premise. The live census is now 223
+declarations: 60 removable and 163 genuinely coupled. Calls to the strengthened
+declarations have been checked at the new arity, including field and qualified
+notation.
+
 The census recognizes the narrow `M`/`B`/`C` coordinate-bound schema in Lean
 definitions, theorems, lemmas, abbreviations, and opaque declarations. It
 handles grouped Unicode binders, strict implicits, equation declarations,

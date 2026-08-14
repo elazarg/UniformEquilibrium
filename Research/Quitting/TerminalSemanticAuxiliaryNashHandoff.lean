@@ -5,7 +5,6 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCapNashDebtSupport
-import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Boundary handoff and overtilt corollaries
@@ -48,10 +47,8 @@ theorem minimumTerminalSemantic_boundaryNash_debt_handoff
         (quittingTerminalSemanticPrefix reward root pair) who =
       quittingStationaryContinueMass root *
           quittingTerminalSemanticDebt pair who +
-        quittingRootCoalitionMass root {who} *
+      quittingRootCoalitionMass root {who} *
           quittingTerminalSemanticDebtSum pair := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   let debt := quittingTerminalSemanticDebtSum pair
   have hdebtNonneg : 0 ≤ debt := hpositive.le
@@ -64,8 +61,8 @@ theorem minimumTerminalSemantic_boundaryNash_debt_handoff
     exact quittingTerminalSemanticDebt_prefix_le_auxiliaryNash
       (reward := reward) pair (fun _ => debt) root player hdebtNonneg hnash
   have hcritical := minimumTerminalSemantic_auxiliaryNash_criticalFace
-    (reward := reward) pair (fun _ => debt) root hM hreward hpair hminimum
-      hpositive (fun _ => hdebtNonneg) (fun _ => le_rfl) hnash
+    (reward := reward) pair (fun _ => debt) root hpair hminimum hpositive
+      (fun _ => hdebtNonneg) (fun _ => le_rfl) hnash
   have habsorption :=
     QuittingFiniteRootWindow.quittingRootAbsorptionMass_eq_sum_singletonMass_add_collisionMass
       root
@@ -91,7 +88,7 @@ theorem minimumTerminalSemantic_boundaryNash_debt_handoff
       _ = ∑ player, quittingTerminalSemanticDebt pair player := by rw [hmass, one_mul]
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier
-      reward root pair hM hreward hpair
+      reward root pair hpair
   have hsumLeftLower : debt ≤
       ∑ player, quittingTerminalSemanticDebt prefixed player := by
     exact hminimum prefixed hprefixed
@@ -150,10 +147,8 @@ theorem minimumTerminalSemantic_collision_mul_debtSum_le_positiveOvertilt
     quittingTerminalSemanticDebtSum pair * quittingRootCollisionMass root ≤
       ∑ who, quittingRootCoalitionMass root {who} *
         max (shift who - quittingTerminalSemanticDebtSum pair) 0 := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hbudget := minimumTerminalSemantic_auxiliaryNash_budget
-    (reward := reward) pair shift root hM hreward hpair hminimum hshift hnash
+    (reward := reward) pair shift root hpair hminimum hshift hnash
   have hsumNeg :
       (∑ who, quittingRootCoalitionMass root {who} *
           (quittingTerminalSemanticDebtSum pair - shift who)) =
@@ -194,14 +189,12 @@ theorem minimumTerminalSemantic_collisionScale_le_uniformOvertilt
     (hupper : ∀ who,
       shift who ≤ quittingTerminalSemanticDebtSum pair + epsilon) :
     quittingTerminalSemanticDebtSum pair * rho ≤ epsilon := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hbudget := minimumTerminalSemantic_auxiliaryNash_budget
-    (reward := reward) pair shift root hM hreward hpair hminimum hshift hnash
+    (reward := reward) pair shift root hpair hminimum hshift hnash
   have hcoordinateDebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hdebtNonneg : 0 ≤ quittingTerminalSemanticDebtSum pair := by
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun who _ => hcoordinateDebtNonneg who
@@ -270,14 +263,12 @@ theorem terminalSemantic_singletonMass_mul_complementaryDebt_le_excess
           quittingTerminalSemanticDebt pair who) ≤
       quittingTerminalSemanticDebtSum pair -
         quittingTerminalSemanticDebtSum base := by
-  obtain ⟨M, hM, hreward⟩ :=
-    exists_quittingRewardBound reward
   have hbudget := terminalSemantic_exactNash_nearMinimum_support_budget
-    (reward := reward) base pair root hM hreward hminimum hpair hnash
+    (reward := reward) base pair root hminimum hpair hnash
   have hdebtNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebt pair player :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hpair
+      reward hpair
   have hcomplementNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebtSum pair -
         quittingTerminalSemanticDebt pair player := by

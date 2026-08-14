@@ -118,9 +118,7 @@ theorem exists_maxDebtSelector_reference_mul_sum_opponentAbsorptionMass_le
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (reference epsilon : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (reference epsilon : ℝ) (cutoff : ℕ)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticExploitability candidate)
     (hnear : ∀ time ≤ cutoff,
@@ -152,7 +150,7 @@ theorem exists_maxDebtSelector_reference_mul_sum_opponentAbsorptionMass_le
                 (quittingProfileLiveRoot reward profile time) (owner time) := by
   obtain ⟨owner, howner, hweighted⟩ :=
     exists_maxDebtSelector_sum_liveMass_mul_charge_le_epsilon_add_defect
-      reward profile reference epsilon cutoff hM hreward hfloor hnear
+      reward profile reference epsilon cutoff hfloor hnear
   refine ⟨owner, howner, ?_⟩
   have hrow : ∀ time,
       reference * quittingRootOpponentAbsorptionMass
@@ -176,7 +174,7 @@ theorem exists_maxDebtSelector_reference_mul_sum_opponentAbsorptionMass_le
     let root := quittingProfileLiveRoot reward profile time
     have hprefix : current = quittingTerminalSemanticPrefix reward root tail :=
       quittingTerminalSemanticPair_spine_eq_prefix
-        reward profile time hM hreward
+        reward profile time
     have hcurrentFloor : reference ≤
         quittingTerminalSemanticDebt current (owner time) := by
       have hcurrentCarrier : current ∈ quittingTerminalSemanticCarrier reward :=
@@ -184,7 +182,7 @@ theorem exists_maxDebtSelector_reference_mul_sum_opponentAbsorptionMass_le
       have hcurrentDebt : ∀ who,
           0 ≤ quittingTerminalSemanticDebt current who :=
         quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-          reward hM hreward hcurrentCarrier
+          reward hcurrentCarrier
       have hcurrentMax : quittingTerminalSemanticExploitability current =
           quittingTerminalSemanticDebt current (owner time) :=
         quittingTerminalSemanticExploitability_eq_debt_of_maximizer
@@ -195,7 +193,7 @@ theorem exists_maxDebtSelector_reference_mul_sum_opponentAbsorptionMass_le
       quittingTerminalSemanticPair_mem_carrier reward _
     have htailDebt : 0 ≤ quittingTerminalSemanticDebt tail (owner time) :=
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-        reward hM hreward htailCarrier (owner time)
+        reward htailCarrier (owner time)
     rw [hprefix] at hcurrentFloor
     exact debtFloor_mul_opponentAbsorptionMass_le_charge_add_nashDefect
       reward tail root (owner time) reference hcurrentFloor htailDebt
@@ -274,9 +272,7 @@ theorem exists_maxDebtSelector_reference_mul_fixedOpponentClock_le
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (fixed : ι) (reference epsilon : ℝ) (cutoff : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (fixed : ι) (reference epsilon : ℝ) (cutoff : ℕ)
     (hreference : 0 ≤ reference)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       reference ≤ quittingTerminalSemanticExploitability candidate)
@@ -314,7 +310,7 @@ theorem exists_maxDebtSelector_reference_mul_fixedOpponentClock_le
                   (quittingProfileLiveRoot reward profile time) {owner time} := by
   obtain ⟨owner, howner, hselected⟩ :=
     exists_maxDebtSelector_reference_mul_sum_opponentAbsorptionMass_le
-      reward profile reference epsilon cutoff hM hreward hfloor hnear
+      reward profile reference epsilon cutoff hfloor hnear
   refine ⟨owner, howner, ?_⟩
   have hrow : ∀ time,
       quittingLiveMass reward profile time *

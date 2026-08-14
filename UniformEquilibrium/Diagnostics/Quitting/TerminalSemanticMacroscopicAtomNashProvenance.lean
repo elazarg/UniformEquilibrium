@@ -80,9 +80,7 @@ theorem coalitionMass_mul_minimumDebt_le_tailExcess_add_card_mul_nashError
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum tail : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
-    (terminal : {S : Finset ι // S.Nonempty}) (ε : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty}) (ε : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -97,8 +95,7 @@ theorem coalitionMass_mul_minimumDebt_le_tailExcess_add_card_mul_nashError
         Fintype.card ι * ε := by
   have hatom :=
     quittingRootCoalitionMass_mul_minimumDebt_le_tailExcess_add_defect
-      reward minimum tail root terminal hM hreward hminimumCarrier hminimum
-        htail hcollision
+      reward minimum tail root terminal hminimumCarrier hminimum htail hcollision
   have hdefect :=
     quittingRootTotalNashDefect_le_card_mul_of_isεQuittingRootNash
       reward tail.1 root ε hnash
@@ -112,9 +109,7 @@ toward the singleton owner's vertex. -/
 theorem singletonMass_mul_otherDebt_le_tailExcess_add_card_mul_nashError
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum tail : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (owner : ι) (ε : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (root : ι → PMF Bool) (owner : ι) (ε : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -129,7 +124,7 @@ theorem singletonMass_mul_otherDebt_le_tailExcess_add_card_mul_nashError
         Fintype.card ι * ε := by
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward htail
+      reward htail
   have hcoordinate : ∀ who ∈ (Finset.univ : Finset ι).erase owner,
       quittingRootCoalitionMass root {owner} *
           quittingTerminalSemanticDebt tail who ≤
@@ -163,7 +158,7 @@ theorem singletonMass_mul_otherDebt_le_tailExcess_add_card_mul_nashError
       _ = _ := Finset.sum_erase_add _ _ (Finset.mem_univ owner)
   have hcharge :=
     minimumTerminalSemantic_sum_opponentAbsorption_charge_le_excess_add_defect
-      reward minimum tail root hM hreward hminimumCarrier hminimum htail
+      reward minimum tail root hminimumCarrier hminimum htail
   have hdefect :=
     quittingRootTotalNashDefect_le_card_mul_of_isεQuittingRootNash
       reward tail.1 root ε hnash
@@ -191,9 +186,7 @@ forces the complementary debt face to be small. -/
 theorem singletonMass_mul_minimumOtherDebt_le_card_mul_nashError
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (owner : ι) (ε : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (root : ι → PMF Bool) (owner : ι) (ε : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -204,7 +197,7 @@ theorem singletonMass_mul_minimumOtherDebt_le_card_mul_nashError
           quittingTerminalSemanticDebt minimum who) ≤
       Fintype.card ι * ε := by
   simpa using singletonMass_mul_otherDebt_le_tailExcess_add_card_mul_nashError
-    reward minimum minimum root owner ε hM hreward hminimumCarrier hminimum
+    reward minimum minimum root owner ε hminimumCarrier hminimum
       hminimumCarrier hnash
 
 /-- Strictly more collision charge than tail excursion plus row-Nash error
@@ -213,9 +206,7 @@ theorem not_isεQuittingRootNash_of_tailExcess_add_card_mul_lt_collisionDebt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum tail : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
-    (terminal : {S : Finset ι // S.Nonempty}) (ε : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty}) (ε : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -232,8 +223,8 @@ theorem not_isεQuittingRootNash_of_tailExcess_add_card_mul_lt_collisionDebt
   intro hnash
   exact (not_lt_of_ge
     (coalitionMass_mul_minimumDebt_le_tailExcess_add_card_mul_nashError
-      reward minimum tail root terminal ε hM hreward hminimumCarrier hminimum
-        htail hcollision hnash)) hstrict
+      reward minimum tail root terminal ε hminimumCarrier hminimum htail
+        hcollision hnash)) hstrict
 
 /-- Actual-profile specialization.  The live row and its next-date
 all-Continue spine provide the common continuation automatically; a
@@ -243,9 +234,7 @@ theorem profileLiveRoot_coalitionMass_mul_minimumDebt_le_tailExcess_add_card_mul
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (time : ℕ) (terminal : {S : Finset ι // S.Nonempty}) (ε : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (time : ℕ) (terminal : {S : Finset ι // S.Nonempty}) (ε : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -267,7 +256,7 @@ theorem profileLiveRoot_coalitionMass_mul_minimumDebt_le_tailExcess_add_card_mul
     reward minimum
       (quittingTerminalSemanticPair reward
         (quittingAllContinueProfileSpine reward profile (time + 1)))
-      (quittingProfileLiveRoot reward profile time) terminal ε hM hreward
+      (quittingProfileLiveRoot reward profile time) terminal ε
       hminimumCarrier hminimum
       (quittingTerminalSemanticPair_mem_carrier reward _) hcollision hnash
 
@@ -286,9 +275,7 @@ theorem stageCoalitionMass_mul_minimumDebt_le_liveMass_mul_tailExcess_add_initia
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (time : ℕ) (terminal : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (time : ℕ) (terminal : {S : Finset ι // S.Nonempty})
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -310,8 +297,7 @@ theorem stageCoalitionMass_mul_minimumDebt_le_liveMass_mul_tailExcess_add_initia
     quittingTerminalSemanticPair_mem_carrier reward _
   have hatom :=
     quittingRootCoalitionMass_mul_minimumDebt_le_tailExcess_add_defect
-      reward minimum tail root terminal hM hreward hminimumCarrier hminimum
-        htail hcollision
+      reward minimum tail root terminal hminimumCarrier hminimum htail hcollision
   have hlive0 : 0 ≤ quittingLiveMass reward profile time :=
     quittingLiveMass_nonneg reward profile time
   have hscaled := mul_le_mul_of_nonneg_left hatom hlive0
@@ -323,7 +309,7 @@ theorem stageCoalitionMass_mul_minimumDebt_le_liveMass_mul_tailExcess_add_initia
     intro who
     simpa only [tail, root] using
       quittingLiveMass_mul_coordinateNashDefect_le_initialDebt
-        (reward := reward) profile who time hM hreward
+        (reward := reward) profile who time
   have htotal :
       quittingLiveMass reward profile time *
           quittingRootTotalNashDefect reward tail.1 root ≤

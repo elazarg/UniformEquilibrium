@@ -358,7 +358,7 @@ theorem exists_halfStoppingLawReset_of_totalDebt_pos
         (quittingTerminalSemanticPair reward profile) who := by
     intro who _
     exact quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward hM hreward hcarrier who
+      reward hcarrier who
   have hsum : 0 < ∑ who,
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward profile) who := by
