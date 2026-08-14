@@ -611,7 +611,7 @@ theorem source_bestResponse_eq_one :
   apply le_antisymm
   · exact (le_abs_self _).trans
       (abs_quittingContinuationBestResponseValue_le reward sourceProfile true
-        (by norm_num) abs_reward_le_one)
+        abs_reward_le_one)
   · rw [← source_match_payoff]
     exact quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward sourceProfile true
@@ -622,7 +622,7 @@ theorem target_bestResponse_eq_one :
   apply le_antisymm
   · exact (le_abs_self _).trans
       (abs_quittingContinuationBestResponseValue_le reward targetProfile true
-        (by norm_num) abs_reward_le_one)
+        abs_reward_le_one)
   · rw [← target_match_payoff]
     exact quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward targetProfile true

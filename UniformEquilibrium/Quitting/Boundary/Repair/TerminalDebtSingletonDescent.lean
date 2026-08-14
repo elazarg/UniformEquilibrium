@@ -35,7 +35,6 @@ theorem singletonGap_ge_quittingRootEndpointDifference_sub_four_mul
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : (quittingGame reward).BehaviorProfile)
     (root : ι → PMF Bool) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ S player, |reward S player| ≤ M) :
     quittingRootEndpointDifference reward
           (fun player => quittingTerminalPayoff reward continuation player)
@@ -43,6 +42,7 @@ theorem singletonGap_ge_quittingRootEndpointDifference_sub_four_mul
         4 * M * quittingRootOpponentAbsorptionMass root who ≤
       reward (quittingSingletonTerminal who) who -
         quittingTerminalPayoff reward continuation who := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let opponentAbsorption := quittingRootOpponentAbsorptionMass root who
   let singletonGap := reward (quittingSingletonTerminal who) who -
     quittingTerminalPayoff reward continuation who
@@ -50,7 +50,7 @@ theorem singletonGap_ge_quittingRootEndpointDifference_sub_four_mul
   have hopponentNonneg : 0 ≤ opponentAbsorption :=
     quittingRootOpponentAbsorptionMass_nonneg root who
   have hactualAbs := abs_quittingTerminalPayoff_le
-    reward continuation who hM hreward
+    reward continuation who hreward
   have hsingletonAbs := hreward (quittingSingletonTerminal who) who
   have hgapAbs : |singletonGap| ≤ 2 * M := by
     dsimp [singletonGap]
@@ -68,7 +68,7 @@ theorem singletonGap_ge_quittingRootEndpointDifference_sub_four_mul
     simpa [mul_assoc, mul_comm, mul_left_comm] using hmul
   have hjoiningAbs :=
     abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
-      reward root who hM hreward
+      reward root who hreward
   have hjoiningUpper : joining ≤ 2 * M * opponentAbsorption := by
     exact (le_abs_self joining).trans (by simpa [joining] using hjoiningAbs)
   have hdecomposition :=
@@ -99,7 +99,7 @@ theorem half_le_singletonGap_of_endpointDifference_and_small_absorption
       quittingTerminalPayoff reward continuation who := by
   have hgap :=
     singletonGap_ge_quittingRootEndpointDifference_sub_four_mul
-      reward continuation root who hM.le hreward
+      reward continuation root who hreward
   have hdenom : 0 < 8 * M := by positivity
   have hcharge : 8 * M * quittingRootOpponentAbsorptionMass root who ≤
       delta := by
@@ -113,7 +113,6 @@ theorem quittingRootEndpointDifference_ge_singletonGap_sub_four_mul
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : (quittingGame reward).BehaviorProfile)
     (root : ι → PMF Bool) (who : ι) {M gap : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hsingleton : gap ≤ reward (quittingSingletonTerminal who) who -
       quittingTerminalPayoff reward continuation who) :
@@ -121,11 +120,12 @@ theorem quittingRootEndpointDifference_ge_singletonGap_sub_four_mul
       quittingRootEndpointDifference reward
         (fun player => quittingTerminalPayoff reward continuation player)
         root who := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let opponentAbsorption := quittingRootOpponentAbsorptionMass root who
   let singleton := reward (quittingSingletonTerminal who) who
   let actual := quittingTerminalPayoff reward continuation who
   have hactualAbs : |actual| ≤ M := by
-    exact abs_quittingTerminalPayoff_le reward continuation who hM hreward
+    exact abs_quittingTerminalPayoff_le reward continuation who hreward
   have hsingletonAbs : |singleton| ≤ M :=
     hreward (quittingSingletonTerminal who) who
   have hgapBound : gap ≤ 2 * M := by
@@ -139,7 +139,7 @@ theorem quittingRootEndpointDifference_ge_singletonGap_sub_four_mul
     exact quittingRootOpponentAbsorptionMass_le_one root who
   have hjoiningAbs :=
     abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
-      reward root who hM hreward
+      reward root who hreward
   have hjoiningLower : -(2 * M * opponentAbsorption) ≤
       quittingOutsiderJoiningContribution reward root who := by
     simpa [opponentAbsorption] using neg_le_of_abs_le hjoiningAbs
@@ -175,7 +175,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_le_sub_min
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M gap : ℝ} (hM : 0 ≤ M) (hgap : 0 < gap)
+    (who : ι) {M gap : ℝ} (hgap : 0 < gap)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hsingleton : gap ≤ reward (quittingSingletonTerminal who) who -
       quittingTerminalPayoff reward continuation who)
@@ -189,6 +189,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_le_sub_min
           ((gap / (8 * M)) *
             quittingTerminalDeviationDebt reward continuation who)
           (gap / 2) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let base : Payoff ι :=
     fun player => quittingTerminalPayoff reward continuation player
   let debt := quittingTerminalDeviationDebt reward continuation who
@@ -198,7 +199,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_le_sub_min
   let quitValue := quittingRootQuitPayoff reward base root who
   let continueValue := quittingRootContinuePayoff reward base root who
   have hactualAbs : |base who| ≤ M := by
-    exact abs_quittingTerminalPayoff_le reward continuation who hM hreward
+    exact abs_quittingTerminalPayoff_le reward continuation who hreward
   have hsingletonAbs :
       |reward (quittingSingletonTerminal who) who| ≤ M :=
     hreward (quittingSingletonTerminal who) who
@@ -242,7 +243,7 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_le_sub_min
     simpa [base, quitValue, continueValue, opponentAbsorption,
       quittingRootEndpointDifference] using
       quittingRootEndpointDifference_ge_singletonGap_sub_four_mul
-        reward continuation root who hM hreward hsingleton
+        reward continuation root who hreward hsingleton
   by_cases hlarge : threshold ≤ opponentAbsorption
   · have hcontinueBound : opponentContinue ≤ 1 - threshold := by
       rw [hcomplement]

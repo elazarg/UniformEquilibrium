@@ -192,7 +192,7 @@ theorem QuittingCounterexampleRegime.exists_twoReservoir_sameLaw_resetDispatch
       simpa only [resetProfile] using hclusterLimit
     refine ⟨mass, cluster, hjoint, hreset, ?_⟩
     have hsourceBox := quittingTerminalSemanticCarrier_mem_box
-      source hM.le hreward hsource
+      source hreward hsource
     have hprescribed : |source.1 owner| ≤ M := by
       exact abs_le.mpr ⟨hsourceBox.1.1 owner, hsourceBox.1.2 owner⟩
     rcases negativeNever_or_opponentContainingMass

@@ -33,7 +33,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 absorption probability times twice the reward bound. -/
 theorem abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (root : ι → PMF Bool) (who : ι) {M : ℝ} (hM : 0 ≤ M)
+    (root : ι → PMF Bool) (who : ι) {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingOutsiderJoiningContribution reward root who| ≤
       2 * M * quittingRootOpponentAbsorptionMass root who := by
@@ -48,7 +48,7 @@ theorem abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
     · dsimp only [advantage, indicator]
       simpa [hquit] using
         abs_quittingTerminalOpponentAdvantage_le_two_mul
-          reward who action hM hreward
+          reward who action hreward
     · dsimp only [advantage, indicator]
       rw [quittingTerminalOpponentAdvantage_eq_zero_of_quitters_not_nonempty
         reward who action hquit]
@@ -94,11 +94,12 @@ absorption of every exact endpoint-Nash root against the fixed target. -/
 theorem gap_div_le_quittingRootAbsorptionMass_of_isZeroEndpointNash
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool) (who : ι)
-    {M eta : ℝ} (hM : 0 ≤ M) (heta : 0 < eta)
+    {M eta : ℝ} (heta : 0 < eta)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hgap : tail who ≤ reward (quittingSingletonTerminal who) who - eta)
     (hnash : IsεQuittingRootEndpointNash reward tail 0 root) :
-    eta / (eta + 2 * M) ≤ quittingRootAbsorptionMass root := by
+      eta / (eta + 2 * M) ≤ quittingRootAbsorptionMass root := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let ownContinue := (root who false).toReal
   let opponentMass := quittingRootOpponentAbsorptionMass root who
   have hdenom : 0 < eta + 2 * M := by positivity
@@ -136,7 +137,7 @@ theorem gap_div_le_quittingRootAbsorptionMass_of_isZeroEndpointNash
         (Function.update root who (PMF.pure false))]
     have hjoiningAbs :=
       abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
-        reward root who hM hreward
+        reward root who hreward
     have hjoiningLower :
         -(2 * M * opponentMass) ≤
           quittingOutsiderJoiningContribution reward root who := by

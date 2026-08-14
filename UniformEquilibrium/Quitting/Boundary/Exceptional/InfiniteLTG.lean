@@ -579,10 +579,10 @@ theorem quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_survival_zero
     have hdev := abs_quittingTerminalPayoff_le reward
       (quittingRootSequenceProfile reward
         (quittingRootSequenceUpdate roots who deviation) time)
-      who hbound0 hreward
+      who hreward
     have hpres := abs_quittingTerminalPayoff_le reward
       (quittingRootSequenceProfile reward roots time)
-      who hbound0 hreward
+      who hreward
     have hraw : deviationValue time - prescribed time ≤ 2 * bound := by
       dsimp [deviationValue, prescribed,
         quittingRootSequenceHazardTerminalValue,

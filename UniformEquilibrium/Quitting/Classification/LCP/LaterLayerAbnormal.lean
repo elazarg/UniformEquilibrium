@@ -311,13 +311,14 @@ theorem laterAbnormalRoot_fixedOpponents_contracts
 theorem abs_laterAbnormal_terminalPayoff_sub_ownerSolo_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {owner blocker : ι} (hne : blocker ≠ owner) {p M : ℝ}
-    (hp : 0 < p) (hp1 : p ≤ 1) (hM : 0 ≤ M)
+    (hp : 0 < p) (hp1 : p ≤ 1)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (who : ι) :
     |quittingTerminalPayoff reward
           (quittingStationaryProfile reward
             (laterAbnormalRoot owner blocker p hp.le hp1)) who -
         quittingSoloReward reward owner who| ≤ 2 * M * p := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let root := laterAbnormalRoot owner blocker p hp.le hp1
   let absorption := quittingRootAbsorptionMass root
   have habsorptionBounds := laterAbnormalRoot_absorption_bounds hne hp.le hp1
@@ -361,12 +362,13 @@ theorem abs_laterAbnormal_terminalPayoff_sub_ownerSolo_le
 theorem abs_laterAbnormal_quitValue_sub_solo_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {owner blocker : ι} (hne : blocker ≠ owner) {p M : ℝ}
-    (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hM : 0 ≤ M)
+    (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (who : ι) :
     |quittingStationaryFixedOpponentsQuitValue reward
           (laterAbnormalRoot owner blocker p hp0 hp1) who -
         quittingSoloReward reward who who| ≤ 4 * M * p := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hbase := abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
     (reward := reward) (laterAbnormalRoot owner blocker p hp0 hp1) who hM hreward
   have hopponent := quittingRootOpponentAbsorptionMass_le_absorptionMass
@@ -406,9 +408,9 @@ theorem isεAsymptoticNash_laterAbnormalRoot
     unfold quittingStationaryUnilateralCap quittingStationarySelectedCap
     apply max_le
     · have hquit := abs_laterAbnormal_quitValue_sub_solo_le
-        reward hne hp.le hp1 hM hreward who
+        reward hne hp.le hp1 hreward who
       have hpayoff := abs_laterAbnormal_terminalPayoff_sub_ownerSolo_le
-        reward hne hp hp1 hM hreward who
+        reward hne hp hp1 hreward who
       have hquitUpper := (abs_le.mp hquit).2
       have hpayoffLower := (abs_le.mp hpayoff).1
       linarith [hcolumn who]
@@ -421,7 +423,7 @@ theorem isεAsymptoticNash_laterAbnormalRoot
       by_cases hwhoOwner : who = owner
       · subst who
         have hpayoff := abs_laterAbnormal_terminalPayoff_sub_ownerSolo_le
-          reward hne hp hp1 hM hreward owner
+          reward hne hp hp1 hreward owner
         have hpayoffLower := (abs_le.mp hpayoff).1
         change quittingStationaryNeverValue
           (quittingRootAbsorbingContribution reward
@@ -446,7 +448,7 @@ theorem isεAsymptoticNash_laterAbnormalRoot
       · by_cases hwhoBlocker : who = blocker
         · subst who
           have hpayoff := abs_laterAbnormal_terminalPayoff_sub_ownerSolo_le
-            reward hne hp hp1 hM hreward blocker
+            reward hne hp hp1 hreward blocker
           have hpayoffLower := (abs_le.mp hpayoff).1
           change quittingStationaryNeverValue
             (quittingRootAbsorbingContribution reward

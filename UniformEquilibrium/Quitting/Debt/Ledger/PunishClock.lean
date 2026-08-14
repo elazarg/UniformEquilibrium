@@ -630,7 +630,7 @@ theorem quittingRootSequenceHazardTerminalValue_quittingAlwaysContinueHazard_le_
     simp [quittingOpponentSurvivalWeight], one_mul] at habel
   have hdeviated : |quittingRootSequenceHazardTerminalValue reward roots who
       quittingAlwaysContinueHazard horizon| ≤ bound :=
-    abs_quittingRootSequenceTerminalValue_le reward _ who horizon hbound hreward
+      abs_quittingRootSequenceTerminalValue_le reward _ who horizon hbound hreward
   have hprescribed : |quittingRootSequenceTerminalValue reward roots who horizon| ≤
       bound :=
     abs_quittingRootSequenceTerminalValue_le reward roots who horizon hbound hreward

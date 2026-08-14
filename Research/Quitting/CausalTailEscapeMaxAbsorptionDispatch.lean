@@ -130,7 +130,6 @@ theorem exists_maximalCapNash_returnSelection_or_sameTailUndercharge
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (minimum tail : QuittingTerminalSemanticPair iota)
     (tolerance : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -243,7 +242,7 @@ theorem exists_maximalCapNash_returnSelection_or_sameTailUndercharge
         linarith
       have habsorption :=
         gap_div_le_quittingRootAbsorptionMass_of_isZeroEndpointNash
-          reward tail.2 root blocker hM heta hreward hgapForm hendpoint
+          reward tail.2 root blocker heta hreward hgapForm hendpoint
       exact ⟨blocker, heta, habsorption, hselection⟩
 
 end GameTheory
@@ -531,7 +530,7 @@ theorem exists_maximalCapPrefix_singletonGapCollapse
         (quittingMaximalCapPrefixProfile reward terminal n)).2
       (quittingMaximalCapPrefixRoot reward
         (quittingMaximalCapPrefixProfile reward terminal n))
-      blocker hM heta hreward (hnot n) hendpoint
+      blocker heta hreward (hnot n) hendpoint
   exact (not_lt_of_ge hlower) hnSmall
 
 /-- If the original tail has a singleton-cap gap `eta`, some finite changed
@@ -565,7 +564,7 @@ literal absorption charge of the same finite prefix. -/
 theorem abs_maximalCapPrefix_cap_sub_initial_le_charge
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (terminal : (quittingGame reward).BehaviorProfile)
-    (who : iota) {M : ℝ} (hM : 0 ≤ M)
+    (who : iota) {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     ∀ horizon : ℕ,
       |(quittingTerminalSemanticPair reward
@@ -585,7 +584,7 @@ theorem abs_maximalCapPrefix_cap_sub_initial_le_charge
         exact ⟨quittingMaximalCapPrefixRoot_exactNash reward profile, trivial⟩
       have hstepRaw :=
         abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_le
-          (reward := reward) [root] profile who hM hreward hstack
+          (reward := reward) [root] profile who hreward hstack
       have hstep :
           |(quittingTerminalSemanticPair reward
                 (quittingMaximalCapPrefixProfile reward terminal (horizon + 1))).2
@@ -681,7 +680,7 @@ theorem exists_maximalCapPrefix_chargedCapRise_retainingAtom
     (terminal : (quittingGame reward).BehaviorProfile)
     (blocker : iota) (eta : ℝ)
     (stage : ℕ) (coalition : {S : Finset iota // S.Nonempty})
-    {M : ℝ} (hM : 0 ≤ M) (heta : 0 < eta)
+    {M : ℝ} (heta : 0 < eta)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -710,7 +709,7 @@ theorem exists_maximalCapPrefix_chargedCapRise_retainingAtom
     reward minimum terminal blocker eta heta hminimum
       hminimumPositive hinitialGap
   have hcapBound := abs_maximalCapPrefix_cap_sub_initial_le_charge
-    reward terminal blocker hM hreward horizon
+    reward terminal blocker hreward horizon
   have hrisePositive : 0 <
       (quittingTerminalSemanticPair reward
             (quittingMaximalCapPrefixProfile reward terminal horizon)).2 blocker -
@@ -974,13 +973,11 @@ noncomputable def quittingMaximalCapPrefixPunishmentFloorPrefix
       exact neg_le_of_abs_le
         (abs_quittingContinuationBestResponseValue_le reward
           (quittingMaximalCapPrefixProfile reward terminal time) who
-          (quittingRewardBound_nonneg reward)
           (abs_reward_le_quittingRewardBound reward))
     · intro who
       exact le_of_abs_le
         (abs_quittingContinuationBestResponseValue_le reward
           (quittingMaximalCapPrefixProfile reward terminal time) who
-          (quittingRewardBound_nonneg reward)
           (abs_reward_le_quittingRewardBound reward))
   anchor_floor := by
     intro who
@@ -1182,8 +1179,7 @@ theorem exists_maximalCapPrefix_punishmentFloorCharge_retainingAtom
   obtain ⟨horizon, hrise, hcharge, hatom⟩ :=
     exists_maximalCapPrefix_chargedCapRise_retainingAtom
       reward minimum terminal blocker eta stage coalition
-        (quittingRewardBound_nonneg reward) heta
-        (abs_reward_le_quittingRewardBound reward)
+        heta (abs_reward_le_quittingRewardBound reward)
         hminimum hminimumPositive hinitialGap
   refine ⟨horizon, hrise, ?_, hatom⟩
   simpa using hcharge

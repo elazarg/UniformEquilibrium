@@ -37,7 +37,6 @@ def canonicalQuittingNashBellmanSerialRelation
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     CompactSerialRelation (QuittingNashBellmanPoint ι) :=
   quittingNashBellmanSerialRelation reward (quittingRewardBound reward)
-    (quittingRewardBound_nonneg reward)
     (abs_reward_le_quittingRewardBound reward)
 
 /-- Simplex presentation of the all-Continue root. -/

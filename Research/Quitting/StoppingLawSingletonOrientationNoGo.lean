@@ -278,7 +278,7 @@ theorem target_payoff_mover :
   rw [htarget, source_bestResponse_mover] at hdeviation
   have hlower : -1 ≤ quittingTerminalPayoff reward target mover :=
     neg_le_of_abs_le (abs_quittingTerminalPayoff_le reward target mover
-      (M := 1) (by norm_num) reward_bound)
+      (M := 1) reward_bound)
   -- The upper bound is already zero; direct first-stage evaluation fixes
   -- the endpoint at the joint reward `-1`.
   have hsure : QuittingRootHasSureQuitter

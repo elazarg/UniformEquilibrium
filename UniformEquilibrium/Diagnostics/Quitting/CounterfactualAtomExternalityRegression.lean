@@ -242,7 +242,7 @@ theorem source_bestResponse_mover :
     quittingContinuationBestResponseValue reward source mover = 1 := by
   apply le_antisymm
   · exact le_of_abs_le (abs_quittingContinuationBestResponseValue_le
-      reward source mover (M := 1) (by norm_num) reward_bound)
+      reward source mover (M := 1) reward_bound)
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward source mover replacement
     change quittingTerminalPayoff reward target mover ≤
@@ -267,7 +267,7 @@ theorem target_bestResponse_mover :
     quittingContinuationBestResponseValue reward target mover = 1 := by
   apply le_antisymm
   · exact le_of_abs_le (abs_quittingContinuationBestResponseValue_le
-      reward target mover (M := 1) (by norm_num) reward_bound)
+      reward target mover (M := 1) reward_bound)
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward target mover (target mover)
     rw [Function.update_eq_self, target_payoff_mover] at hlower

@@ -74,8 +74,7 @@ theorem abs_quittingStationaryCapDiagonalEndpoint_le
     |quittingStationaryCapDiagonalEndpoint reward rows target| ≤
       quittingRewardBound reward := by
   exact abs_quittingStationaryUnilateralCap_le_of_bound
-    reward (rows target) target (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
+    reward (rows target) target (abs_reward_le_quittingRewardBound reward)
 
 /-! ## Finite semantic adapters for a prefix and an actual suffix -/
 

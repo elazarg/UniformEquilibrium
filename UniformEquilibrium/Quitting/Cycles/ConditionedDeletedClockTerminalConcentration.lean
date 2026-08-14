@@ -117,7 +117,6 @@ terminal singleton-concentration estimate on every suffix. -/
 theorem abs_quittingRootSequenceTerminalValue_sub_soloReward_le_tailCharge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (owner who : ι) (start : ℕ) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hjoint : Tendsto (quittingJointSurvivalWeight roots start)
       atTop (nhds 0))
@@ -137,7 +136,7 @@ theorem abs_quittingRootSequenceTerminalValue_sub_soloReward_le_tailCharge
       reward roots owner start hopponent
   exact abs_quittingTerminalPayoff_sub_soloReward_le_of_opponentLiveTail
     reward (quittingRootSequenceProfile reward roots start) owner who
-      hM hreward habsorbs htail
+      hreward habsorbs htail
 
 /-- **Terminal concentration of an owner-monopoly rescaled path.**  A
 complete joint rescaled clock and a summable owner-deleted clock force every
@@ -152,7 +151,7 @@ theorem tendsto_quittingRootSequenceTerminalValue_soloReward_of_ownerMonopoly
     Tendsto (fun later =>
       quittingRootSequenceTerminalValue reward roots who (start + later))
       atTop (nhds (quittingSoloReward reward owner who)) := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
+  obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   have hopponentTail : ∀ later, Summable (fun offset =>
       quittingOpponentClockCharge roots owner ((start + later) + offset)) := by
     intro later
@@ -184,7 +183,7 @@ theorem tendsto_quittingRootSequenceTerminalValue_soloReward_of_ownerMonopoly
       exact abs_nonneg _
     · intro later
       apply abs_quittingRootSequenceTerminalValue_sub_soloReward_le_tailCharge
-        reward roots owner who (start + later) hM hreward
+        reward roots owner who (start + later) hreward
       · exact tendsto_zero_quittingJointSurvivalWeight_of_not_summable_absorption
           roots (start + later) (habsorptionTail later)
       · exact hopponentTail later

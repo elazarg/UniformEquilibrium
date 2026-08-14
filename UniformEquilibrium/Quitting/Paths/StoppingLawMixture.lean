@@ -113,14 +113,14 @@ theorem quittingTerminalPayoff_update_stoppingLawMixture_eq
           quittingTerminalPayoff reward (Function.update profile who source) who +
         lambda *
           quittingTerminalPayoff reward (Function.update profile who target) who := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
+  obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   let value : Option ℕ → ℝ := fun choice =>
     quittingTerminalPayoff reward
       (Function.update profile who
         (quittingPureTimeBehaviorStrategy reward who choice)) who
   have hvalue : ∀ choice, |value choice| ≤ M := by
     intro choice
-    exact abs_quittingTerminalPayoff_le reward _ who hM hreward
+    exact abs_quittingTerminalPayoff_le reward _ who hreward
   have hsource := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
     reward profile who source
   have htarget := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime

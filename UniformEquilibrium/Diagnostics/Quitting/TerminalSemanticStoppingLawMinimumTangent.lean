@@ -92,10 +92,10 @@ theorem quittingContinuationBestResponseValue_source_sub_stoppingLawMixture_le
         at haffine
       rw [hmixedUpdate, hsourceUpdate, htargetUpdate] at haffine
       have hsourceAbs := abs_quittingTerminalPayoff_le reward
-        (Function.update profile observer deviation) observer hM hreward
+        (Function.update profile observer deviation) observer hreward
       have htargetAbs := abs_quittingTerminalPayoff_le reward
         (Function.update (Function.update profile mover target)
-          observer deviation) observer hM hreward
+          observer deviation) observer hreward
       have hdifference : quittingTerminalPayoff reward
             (Function.update profile observer deviation) observer -
           quittingTerminalPayoff reward
@@ -179,9 +179,9 @@ theorem abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le
       hlambda0 hlambda1
   rw [Function.update_eq_self] at hpayoff
   have hsourcePayoffAbs := abs_quittingTerminalPayoff_le
-    reward profile observer hM hreward
+    reward profile observer hreward
   have hendpointPayoffAbs := abs_quittingTerminalPayoff_le
-    reward endpointProfile observer hM hreward
+    reward endpointProfile observer hreward
   have hpayoffDifference : quittingTerminalPayoff reward endpointProfile observer -
       quittingTerminalPayoff reward profile observer ≤ 2 * M := by
     rw [abs_le] at hsourcePayoffAbs hendpointPayoffAbs
@@ -202,7 +202,7 @@ theorem abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le
   have hsourceDebtNonneg : 0 ≤ quittingTerminalSemanticDebt source observer :=
     quittingTerminalDeviationDebt_nonneg reward profile observer
   have hendpointEnvelopeAbs := abs_quittingContinuationBestResponseValue_le
-    reward endpointProfile observer hM hreward
+    reward endpointProfile observer hreward
   have hendpointDebtLe : quittingTerminalSemanticDebt endpoint observer ≤
       2 * M := by
     dsimp only [endpoint, endpointProfile, quittingTerminalSemanticDebt,

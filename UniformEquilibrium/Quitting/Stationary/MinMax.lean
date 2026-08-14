@@ -229,7 +229,6 @@ theorem neg_quittingRewardBound_le_quittingBestReplyValue
   refine le_trans ?_ (le_quittingBestReplyValue reward profile who
     (quittingAlwaysContinueStrategy reward who))
   exact neg_le_of_abs_le (abs_quittingTerminalPayoff_le reward _ who
-    (quittingRewardBound_nonneg reward)
     (abs_reward_le_quittingRewardBound reward))
 
 /-- The plan-indexed best-reply values are bounded below, so the punishment

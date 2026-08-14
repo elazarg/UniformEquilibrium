@@ -227,7 +227,7 @@ theorem exists_goodBoundary_or_activeNegativeTransfer_of_finiteExactChain
   have hdichotomy :=
     quittingFiniteExactChain_firstOpponent_markedFenceDichotomy
       reward roots value owner start (cutoff - start) θ M
-        hlocalTerminal hlocalPolicy hlocalNash hθ hM hreward hnegative
+        hlocalTerminal hlocalPolicy hlocalNash hθ hreward hnegative
   rcases hdichotomy with hgood | hbad
   · left
     let weight := quittingFirstOpponentWeight roots owner start

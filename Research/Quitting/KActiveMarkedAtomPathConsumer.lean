@@ -57,7 +57,6 @@ theorem exists_oneActiveMarkedSingletonSupportRationalDivergentPath_of_finitePre
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (bound : ℝ) (markedPlayer clockOwner : ι)
     (eta epsilon edgeCharge : ℝ)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (heta : 0 < eta)
     (hprefix : ∀ horizon,
@@ -118,7 +117,7 @@ theorem exists_oneActiveMarkedSingletonSupportRationalDivergentPath_of_finitePre
       value time = fun who =>
         quittingRootSequenceTerminalValue reward plan who time :=
     eq_quittingRootSequenceTerminalValue_of_exact_bounded_path_of_absorption_lower
-      reward plan value heta habsorption hbound0 hreward hvalueBound hpolicy
+      reward plan value heta habsorption hreward hvalueBound hpolicy
   have hsupport :
       IsQuittingRootSequenceSupportApproxNash reward plan epsilon := by
     intro time
@@ -151,7 +150,6 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedPrefixes
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (bound : ℝ)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hprefix : ∀ epsilon, 0 < epsilon →
       ∃ (markedPlayer clockOwner : ι) (eta edgeCharge : ℝ),
@@ -172,7 +170,7 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedPrefixes
   obtain ⟨plan, hsupport, hdiverges, hir, hactive, _hmarked⟩ :=
     exists_oneActiveMarkedSingletonSupportRationalDivergentPath_of_finitePrefixes
       reward bound markedPlayer clockOwner eta epsilon edgeCharge
-        hbound0 hreward heta hpref
+        hreward heta hpref
   exact ⟨plan, hsupport, hdiverges, hir, hactive⟩
 
 end GameTheory

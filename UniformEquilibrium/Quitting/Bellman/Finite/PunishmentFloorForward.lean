@@ -71,7 +71,6 @@ theorem abs_quittingPunishmentFloor_le_quittingRewardBound
         (quittingAlwaysContinueProfile reward) who fun deviation =>
           (le_abs_self _).trans
             (abs_quittingTerminalPayoff_le reward _ who
-              (quittingRewardBound_nonneg reward)
               (abs_reward_le_quittingRewardBound reward)))
 
 /-- **Punishment-floor invariance.**  An exact Nash predecessor of a tail

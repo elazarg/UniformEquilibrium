@@ -144,7 +144,7 @@ theorem positiveFiniteContribution_le_two_mul_opponentContainingMass
     (hnash : IsεQuittingRootNash reward pair.1 0
       (quittingAllContinueRoot : ι → PMF Bool))
     (who : ι) (mass : QuittingTerminalOutcome ι → ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprescribed : |pair.1 who| ≤ M)
     (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι)) :
@@ -167,6 +167,7 @@ theorem positiveFiniteContribution_le_two_mul_opponentContainingMass
         have hprescribedLower := (abs_le.mp hprescribed).1
         have hgainUpper : reward terminal who - pair.1 who ≤ 2 * M := by
           linarith
+        have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
         have hpositiveUpper :
             max 0 (reward terminal who - pair.1 who) ≤ 2 * M := by
           exact max_le (by linarith) hgainUpper
@@ -262,7 +263,7 @@ theorem finiteContribution_opponentContainingMass_lower_bound
       quittingTerminalPositiveFiniteContribution reward pair who mass) :
     charge / (2 * M) ≤ quittingTerminalOpponentContainingMass who mass := by
   have hupper := positiveFiniteContribution_le_two_mul_opponentContainingMass
-    reward pair hnash who mass hM.le hreward hprescribed hmass
+    reward pair hnash who mass hreward hprescribed hmass
   apply (div_le_iff₀ (by positivity : 0 < 2 * M)).2
   linarith
 
@@ -386,7 +387,7 @@ theorem exists_samePureTimeLaw_negativeNever_or_chronologicalOpponentCharge
     exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
       reward pair hpair who
   have hbox := quittingTerminalSemanticCarrier_mem_box
-    (reward := reward) pair hM.le hreward hpair
+    (reward := reward) pair hreward hpair
   have hprescribed : |pair.1 who| ≤ M :=
     abs_le.mpr ⟨hbox.1.1 who, hbox.1.2 who⟩
   have hpassport := negativeNever_or_opponentContainingMass

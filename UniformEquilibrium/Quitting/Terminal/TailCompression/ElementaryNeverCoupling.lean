@@ -110,7 +110,7 @@ absorption. -/
 theorem abs_quittingRootSequencePureTimeTerminalValue_sub_singleton_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (quitTime start : ℕ)
-    (hstart : start ≤ quitTime) {M : ℝ} (hM : 0 ≤ M)
+    (hstart : start ≤ quitTime) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootSequencePureTimeTerminalValue reward roots who
           (some quitTime) start - reward (quittingSingletonTerminal who) who| ≤
@@ -135,7 +135,7 @@ theorem abs_quittingRootSequencePureTimeTerminalValue_sub_singleton_le
         Function.update_of_ne hp]
   have hbound :=
     abs_quittingTerminalPayoff_sub_soloReward_le_of_opponentLiveTail
-      reward profile who who hM hreward habsorbs (η :=
+      reward profile who who hreward habsorbs (η :=
         1 - quittingLiveMassLimit reward
           (quittingOpponentOnlyProfile reward profile who)) le_rfl
   rw [hopponents] at hbound
@@ -248,7 +248,7 @@ cutoff. -/
 theorem abs_quittingRootSequencePureTimeTerminalValue_sub_elementaryNever_le_of_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) {cutoff quitTime : ℕ}
-    (hquit : cutoff ≤ quitTime) {M : ℝ} (hM : 0 ≤ M)
+    (hquit : cutoff ≤ quitTime) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingOpponentSurvivalLimit roots who 0) :
     |quittingRootSequencePureTimeTerminalValue reward roots who
@@ -288,7 +288,7 @@ theorem abs_quittingRootSequencePureTimeTerminalValue_sub_elementaryNever_le_of_
         2 * M * (1 - quittingOpponentSurvivalLimit roots who 0 /
           quittingOpponentSurvivalWeight roots who 0 cutoff) := by
     have hbound := abs_quittingRootSequencePureTimeTerminalValue_sub_singleton_le
-      reward roots who quitTime cutoff hquit hM hreward
+      reward roots who quitTime cutoff hquit hreward
     rw [quittingLiveMassLimit_opponentOnly_rootSequenceProfile_eq_ratio
       reward roots who cutoff hpositive] at hbound
     simpa [x, hazard, quittingRootSequencePureTimeTerminalValue,
@@ -353,7 +353,7 @@ theorem abs_quittingRootSequencePureTimeTerminalValue_none_le
 theorem abs_quittingRootSequencePureTimeTerminalValue_none_sub_elementaryNever_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingOpponentSurvivalLimit roots who 0) :
     |quittingRootSequencePureTimeTerminalValue reward roots who none 0 -
@@ -361,6 +361,7 @@ theorem abs_quittingRootSequencePureTimeTerminalValue_none_sub_elementaryNever_l
           (quittingElementaryTailRoots roots cutoff (.never)) who none 0| ≤
       2 * M * (quittingOpponentSurvivalWeight roots who 0 cutoff -
         quittingOpponentSurvivalLimit roots who 0) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let capped := quittingElementaryTailRoots roots cutoff (.never)
   let x := quittingRootSequenceUpdate roots who quittingAlwaysContinueHazard
   let y := quittingRootSequenceUpdate capped who quittingAlwaysContinueHazard
@@ -441,7 +442,7 @@ theorem abs_quittingRootSequencePureTimeTerminalValue_sub_elementaryNever_le
   cases quitTime with
   | none =>
       exact abs_quittingRootSequencePureTimeTerminalValue_none_sub_elementaryNever_le
-        reward roots who cutoff hM hreward hpositive
+        reward roots who cutoff hreward hpositive
   | some quitTime =>
       by_cases hquit : quitTime < cutoff
       · have heq := quittingRootSequencePureTimeTerminalValue_quittingTruncatedRoots_of_lt
@@ -454,7 +455,7 @@ theorem abs_quittingRootSequencePureTimeTerminalValue_sub_elementaryNever_le
             (tendsto_quittingOpponentSurvivalLimit roots who 0) cutoff))
       · exact
           abs_quittingRootSequencePureTimeTerminalValue_sub_elementaryNever_le_of_le
-            reward roots who (Nat.le_of_not_gt hquit) hM hreward hpositive
+            reward roots who (Nat.le_of_not_gt hquit) hreward hpositive
 
 /-- Literal all-behavior best-response envelopes inherit the sharp coupling
 estimate.  The proof uses exact behavioral pure-time extremality on both root

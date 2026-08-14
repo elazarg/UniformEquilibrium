@@ -128,7 +128,7 @@ theorem exactNash_preservedSingletonClock_mul_singletonGap_le_collision
     simpa [joining, opponentAbsorption,
       quittingRootOpponentAbsorptionMass] using
       quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
-        reward root owner hM hreward
+        reward root owner hreward
   have hgap :
       quit * opponentContinue *
           (pair.1 owner - reward (quittingSingletonTerminal owner) owner) ≤

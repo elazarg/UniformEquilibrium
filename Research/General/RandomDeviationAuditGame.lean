@@ -149,7 +149,6 @@ theorem pureTimeGain_le_individualValue
       (abs_quittingTerminalPayoff_le reward
         (Function.update profile who
           (quittingPureTimeBehaviorStrategy reward who choice)) who
-        (quittingRewardBound_nonneg reward)
         (abs_reward_le_quittingRewardBound reward))
   have hmember : quittingTerminalPayoff reward
       (Function.update profile who
@@ -179,7 +178,6 @@ theorem exists_pureTimeGain_gt_individualValue_sub
       (abs_quittingTerminalPayoff_le reward
         (Function.update profile who
           (quittingPureTimeBehaviorStrategy reward who choice)) who
-        (quittingRewardBound_nonneg reward)
         (abs_reward_le_quittingRewardBound reward))
   have hlt : sSup values - ε < sSup values := sub_lt_self _ hε
   obtain ⟨payoff, ⟨response, rfl⟩, hpayoff⟩ :=

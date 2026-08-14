@@ -132,13 +132,13 @@ theorem exists_pos_le_quittingSoloSemanticSurvival_of_not_tendsto_zero
 terminal semantic pairs. -/
 theorem quittingTerminalSemanticCarrier_mem_box
     (pair : QuittingTerminalSemanticPair ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     pair ∈ quittingTerminalSemanticBox ι M := by
   apply (closure_minimal ?_ ?_) hpair
   · rintro candidate ⟨profile, rfl⟩
-    exact quittingTerminalSemanticPair_mem_box reward profile hM hreward
+    exact quittingTerminalSemanticPair_mem_box reward profile hreward
   · exact (quittingTerminalSemanticBox_isCompact M).isClosed
 
 /-- One exact solo semantic-prefix edge is the ordinary occupation mixture
@@ -220,7 +220,7 @@ theorem quittingTerminalSemanticSoloSpine_initial_eq_soloReward_of_survival_tend
     (hsurvival : Tendsto
       (quittingSoloSemanticSurvival root owner 0) atTop (nhds 0)) :
     (pair 0).1 = quittingSoloReward reward owner := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
+  obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   funext player
   let residual : ℕ → ℝ := fun fuel =>
     quittingSoloSemanticSurvival root owner 0 fuel *
@@ -239,7 +239,7 @@ theorem quittingTerminalSemanticSoloSpine_initial_eq_soloReward_of_survival_tend
         2 * M := by
     intro fuel
     have hbox := quittingTerminalSemanticCarrier_mem_box
-      (reward := reward) (pair fuel) hM hreward (hpair fuel)
+      (reward := reward) (pair fuel) hreward (hpair fuel)
     have hpairAbs : |(pair fuel).1 player| ≤ M :=
       abs_le.mpr ⟨hbox.1.1 player, hbox.1.2 player⟩
     have hsoloAbs : |quittingSoloReward reward owner player| ≤ M := by

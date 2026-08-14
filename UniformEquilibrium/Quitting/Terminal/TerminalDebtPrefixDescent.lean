@@ -158,7 +158,7 @@ theorem quittingTerminalDebtSum_rootThenContinuation_le_sub_min
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M gap : ℝ} (hM : 0 ≤ M) (hgap : 0 < gap)
+    (who : ι) {M gap : ℝ} (hgap : 0 < gap)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hsingleton : gap ≤ reward (quittingSingletonTerminal who) who -
       quittingTerminalPayoff reward continuation who)
@@ -182,7 +182,7 @@ theorem quittingTerminalDebtSum_rootThenContinuation_le_sub_min
         quittingTerminalDeviationDebt reward continuation who - decrease := by
     simpa [prefixed, decrease] using
       quittingTerminalDeviationDebt_rootThenContinuation_le_sub_min
-        reward root continuation who hM hgap hreward hsingleton hnash
+        reward root continuation who hgap hreward hsingleton hnash
   have hnashRoot : IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward continuation player)
       0 root :=
@@ -223,7 +223,7 @@ theorem exists_exactRoot_terminalExploitability_le_and_debtSum_descent
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M gap : ℝ} (hM : 0 ≤ M) (hgap : 0 < gap)
+    (who : ι) {M gap : ℝ} (hgap : 0 < gap)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hsingleton : gap ≤ reward (quittingSingletonTerminal who) who -
       quittingTerminalPayoff reward continuation who) :
@@ -249,7 +249,7 @@ theorem exists_exactRoot_terminalExploitability_le_and_debtSum_descent
   · exact quittingTerminalExploitability_rootThenContinuation_le
       reward root' continuation hnash
   · exact quittingTerminalDebtSum_rootThenContinuation_le_sub_min
-      reward root' continuation who hM hgap hreward hsingleton hnash
+      reward root' continuation who hgap hreward hsingleton hnash
 
 /-! ## Lexicographic minimality consumer -/
 
@@ -378,7 +378,7 @@ theorem not_hasLexicographicallyNearMinimalSingletonGap
     hnear ε hε
   obtain ⟨root, hnash, hprefixedMax, hprefixedSum⟩ :=
     exists_exactRoot_terminalExploitability_le_and_debtSum_descent
-      reward profile owner hM.le hgap hreward hsingleton
+      reward profile owner hgap hreward hsingleton
   let prefixed := quittingRootThenContinuationProfile reward root profile
   have hprefixedSublevel :
       quittingTerminalExploitability reward prefixed ≤ floor + ε := by

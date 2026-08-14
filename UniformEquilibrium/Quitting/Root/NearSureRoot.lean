@@ -140,13 +140,14 @@ theorem abs_quittingRootDeviationRegret_forceQuit_other_sub_le
 theorem abs_quittingRootDeviationRegret_forceQuit_sub_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : Payoff ι) (root : ι → PMF Bool)
-    (changed who : ι) (deviation : PMF Bool) {M : ℝ} (hM : 0 ≤ M)
+    (changed who : ι) (deviation : PMF Bool) {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hcontinuation : ∀ player, |continuation player| ≤ M) :
     |quittingRootDeviationRegret reward continuation root who deviation -
         quittingRootDeviationRegret reward continuation
-          (Function.update root changed (PMF.pure true)) who deviation| ≤
+      (Function.update root changed (PMF.pure true)) who deviation| ≤
       4 * M * (root changed false).toReal := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   by_cases hself : changed = who
   · subst who
     calc
@@ -180,7 +181,7 @@ with the exact uniform error increment supplied by the regret bound. -/
 theorem isεQuittingRootNash_update_pure_true
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : Payoff ι) (root : ι → PMF Bool)
-    (changed : ι) {ε M : ℝ} (hM : 0 ≤ M)
+    (changed : ι) {ε M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hcontinuation : ∀ player, |continuation player| ≤ M)
     (hnash : IsεQuittingRootNash reward continuation ε root) :
@@ -190,8 +191,8 @@ theorem isεQuittingRootNash_update_pure_true
   intro who deviation
   have hold := hnash who deviation
   have hregret := abs_quittingRootDeviationRegret_forceQuit_sub_le
-    reward continuation root changed who deviation hM
-    hreward hcontinuation
+    reward continuation root changed who deviation hreward
+    hcontinuation
   unfold quittingRootDeviationRegret at hregret
   rw [abs_le] at hregret
   linarith
@@ -200,7 +201,7 @@ theorem isεQuittingRootNash_update_pure_true
 theorem nearSureRootReplacement
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : Payoff ι) (root : ι → PMF Bool)
-    (changed : ι) {ε M d : ℝ} (hM : 0 ≤ M)
+    (changed : ι) {ε M d : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hcontinuation : ∀ player, |continuation player| ≤ M)
     (hcontinue : (root changed false).toReal ≤ d)
@@ -220,6 +221,7 @@ theorem nearSureRootReplacement
           4 * M * d) ∧
       IsεQuittingRootNash reward continuation (ε + 4 * M * d)
         (Function.update root changed (PMF.pure true)) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward changed hreward
   have htwo : 0 ≤ 2 * M := mul_nonneg (by norm_num) hM
   have hfour : 0 ≤ 4 * M := mul_nonneg (by norm_num) hM
   refine ⟨quittingRootHasSureQuitter_update_pure_true root changed,
@@ -234,11 +236,11 @@ theorem nearSureRootReplacement
     calc
       _ ≤ 4 * M * (root changed false).toReal :=
         abs_quittingRootDeviationRegret_forceQuit_sub_le
-          reward continuation root changed who deviation hM
+          reward continuation root changed who deviation
           hreward hcontinuation
       _ ≤ 4 * M * d := mul_le_mul_of_nonneg_left hcontinue hfour
   · apply (isεQuittingRootNash_update_pure_true
-      reward continuation root changed hM hreward hcontinuation hnash).mono
+      reward continuation root changed hreward hcontinuation hnash).mono
     simpa [add_comm] using
       (add_le_add_left (mul_le_mul_of_nonneg_left hcontinue hfour) ε)
 
@@ -248,7 +250,7 @@ theorem exists_nearSureRootReplacement_of_allContinue_mass_le_pow
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : Payoff ι) (root : ι → PMF Bool)
-    {ε M d : ℝ} (hd : 0 < d) (hM : 0 ≤ M)
+    {ε M d : ℝ} (hd : 0 < d)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hcontinuation : ∀ player, |continuation player| ≤ M)
     (hnear : ((pmfPi root) quittingAllContinueAction).toReal ≤
@@ -271,17 +273,18 @@ theorem exists_nearSureRootReplacement_of_allContinue_mass_le_pow
           4 * M * d) ∧
       IsεQuittingRootNash reward continuation (ε + 4 * M * d)
         (Function.update root changed (PMF.pure true)) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward
   obtain ⟨changed, hcontinue⟩ :=
     exists_continueProbability_le_of_allContinue_mass_le_pow root hd hnear
   exact ⟨changed, hcontinue,
-    nearSureRootReplacement reward continuation root changed hM
+    nearSureRootReplacement reward continuation root changed
       hreward hcontinuation hcontinue hnash⟩
 
 /-- A bounded quitting game has a bounded continuation best-response vector. -/
 theorem abs_quittingContinuationBestResponse_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
+    (who : ι) {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingContinuationBestResponse reward continuation who| ≤ M := by
   let values : Set ℝ := Set.range fun deviation :
@@ -299,17 +302,17 @@ theorem abs_quittingContinuationBestResponse_le
     rintro payoff ⟨deviation, rfl⟩
     exact (le_abs_self _).trans
       (abs_quittingTerminalPayoff_le reward
-        (Function.update continuation who deviation) who hM hreward)
+        (Function.update continuation who deviation) who hreward)
   have hupper : sSup values ≤ M := by
     apply csSup_le hvalues
     rintro _ ⟨deviation, rfl⟩
     exact (le_abs_self _).trans
       (abs_quittingTerminalPayoff_le reward
-        (Function.update continuation who deviation) who hM hreward)
+        (Function.update continuation who deviation) who hreward)
   have hlowerValue : -M ≤ quittingTerminalPayoff reward
       (Function.update continuation who alwaysContinue) who :=
     (neg_le_of_abs_le (abs_quittingTerminalPayoff_le reward
-      (Function.update continuation who alwaysContinue) who hM hreward))
+      (Function.update continuation who alwaysContinue) who hreward))
   have hlowerSup : quittingTerminalPayoff reward
       (Function.update continuation who alwaysContinue) who ≤ sSup values :=
     le_csSup hbounded ⟨alwaysContinue, rfl⟩
@@ -324,7 +327,7 @@ theorem exists_sureFirst_of_nearSure_rootNash
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : (quittingGame reward).BehaviorProfile)
     (root : ι → PMF Bool) {ε M d : ℝ}
-    (hd : 0 < d) (hM : 0 ≤ M)
+    (hd : 0 < d)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hnear : ((pmfPi root) quittingAllContinueAction).toReal ≤
       d ^ Fintype.card ι)
@@ -334,13 +337,13 @@ theorem exists_sureFirst_of_nearSure_rootNash
       QuittingRootHasSureQuitter sureRoot ∧
       (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) (ε + 4 * M * d)
-        (quittingRootThenContinuationProfile reward sureRoot continuation) := by
+      (quittingRootThenContinuationProfile reward sureRoot continuation) := by
   obtain ⟨changed, -, hsure, -, -, hforced⟩ :=
     exists_nearSureRootReplacement_of_allContinue_mass_le_pow
       reward (quittingContinuationBestResponse reward continuation) root
-      hd hM hreward
+      hd hreward
       (fun who => abs_quittingContinuationBestResponse_le
-        reward continuation who hM hreward)
+        reward continuation who hreward)
       hnear hnash
   let sureRoot := Function.update root changed (PMF.pure true)
   exact ⟨sureRoot, hsure,

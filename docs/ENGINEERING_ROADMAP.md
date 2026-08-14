@@ -156,6 +156,16 @@ so it exits the strict triple census. The final census is therefore 166 coupled 
 153 expose the bound in the full result, 12 use it in a retained later binder,
 and one uses it in a data-definition body.
 
+The first quantitative-normalization slice keeps every arbitrary reward bound
+and every bound-dependent result, but derives nonnegativity from an actual
+reward coordinate whenever the player type is inhabited. It removes 79
+explicit nonnegativity hypotheses, leaving 87 across 25 files. A shared
+coordinate lemma covers declarations with a named player, a singleton lemma
+covers finite player types with a `Nonempty` instance, and the one empty-player
+Bellman construction is handled explicitly. The census has a separate
+`--max-nonnegative` ratchet so this weaker-but-still-redundant hypothesis class
+cannot regrow while the remaining quantitative layers are normalized.
+
 The census recognizes the narrow `M`/`B`/`C` coordinate-bound schema in Lean
 definitions, theorems, lemmas, abbreviations, and opaque declarations. It
 handles grouped Unicode binders, strict implicits, equation declarations,
@@ -168,20 +178,22 @@ denominators throughout that quantitative certificate.
 
 Keep arbitrary bounds in quantitative conclusions and wherever later data are
 bounded by the same constant. The canonical bound is the finite sum of
-absolute reward coordinates: besides bounding each coordinate, it controls
-row and subtable totals without extra cardinality factors. For qualitative
-declarations, construct that bound internally and propagate the stronger API
-through all callers. Process dependency layers bottom-up and use Lean
-elaboration as the call-site oracle, because field notation, namespace
-shortening, rewriting, direct canonical proof arguments, and partial
-applications make textual call graphs incomplete.
+absolute reward coordinates. Besides bounding each coordinate, this deliberate
+L1 choice controls row and subtable totals without extra cardinality factors.
+For qualitative declarations, construct that bound internally and propagate
+the stronger API through all callers.
+Process dependency layers bottom-up and use Lean elaboration as the call-site
+oracle, because field notation, namespace shortening, rewriting, direct
+canonical proof arguments, and partial applications make textual call graphs
+incomplete.
 
 Acceptance requires a deterministic census, zero remaining declarations in
 the audited removable schema, explicit classification of retained quantitative
 parameters, narrow checks for each layer, and a final exhaustive axiom audit
 and build. Use `python3 scripts/check_reward_bounds.py` for the inventory and
-its opt-in `--check` mode for the zero-candidate closing gate. The same audit
-then expands to other recurring hypotheses that are
+its opt-in `--check` mode for the zero-removable closing gate, together with
+`--max-nonnegative` while eliminating redundant positivity binders from the
+retained quantitative API. The same audit then expands to other recurring hypotheses that are
 canonically derivable from retained finite data; no claim of globally minimal
 logical hypotheses is inferred merely from the absence of compiler warnings.
 

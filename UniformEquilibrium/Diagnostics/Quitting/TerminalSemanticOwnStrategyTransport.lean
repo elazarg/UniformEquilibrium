@@ -307,7 +307,7 @@ potential, with range contained in `[0, 2M]`. -/
 theorem quittingTerminalSemanticDebt_mem_Icc_zero_two_mul
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward profile) who ∈
@@ -316,9 +316,9 @@ theorem quittingTerminalSemanticDebt_mem_Icc_zero_two_mul
   · exact quittingTerminalDeviationDebt_nonneg reward profile who
   · unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
     have hbest := abs_quittingContinuationBestResponseValue_le
-      reward profile who hM hreward
+      reward profile who hreward
     have hpayoff := abs_quittingTerminalPayoff_le
-      reward profile who hM hreward
+      reward profile who hreward
     have hbestUpper := le_of_abs_le hbest
     have hpayoffLower := neg_le_of_abs_le hpayoff
     linarith

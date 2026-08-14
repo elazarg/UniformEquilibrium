@@ -23,6 +23,38 @@ open scoped BigOperators
 
 variable {ι : Type} [Fintype ι]
 
+omit [Fintype ι] in
+/-- Any real bound which dominates one quitting-reward coordinate is
+nonnegative. -/
+theorem quittingRewardCoordinateBound_nonneg
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (terminal : {S : Finset ι // S.Nonempty}) (player : ι)
+    {M : ℝ} (hreward : ∀ outcome who, |reward outcome who| ≤ M) :
+    0 ≤ M :=
+  (abs_nonneg (reward terminal player)).trans (hreward terminal player)
+
+omit [Fintype ι] in
+/-- A player supplies a singleton terminal coordinate witnessing that every
+uniform quitting-reward bound is nonnegative. -/
+theorem quittingRewardCoordinateBound_nonneg_of_player
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (player : ι) {M : ℝ}
+    (hreward : ∀ outcome who, |reward outcome who| ≤ M) :
+    0 ≤ M :=
+  quittingRewardCoordinateBound_nonneg reward
+    ⟨{player}, Finset.singleton_nonempty player⟩ player hreward
+
+omit [Fintype ι] in
+/-- On a nonempty player type, every uniform quitting-reward bound is
+nonnegative. -/
+theorem quittingRewardCoordinateBound_nonneg_of_nonempty
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {M : ℝ} (hreward : ∀ outcome who, |reward outcome who| ≤ M) :
+    0 ≤ M :=
+  quittingRewardCoordinateBound_nonneg_of_player reward
+    (Classical.choice inferInstance) hreward
+
 /-- A canonical finite bound for every coordinate of a quitting payoff
 table. The sum form also controls finite row and subtable totals without
 introducing additional cardinality factors. -/

@@ -194,10 +194,11 @@ omit [Nonempty ι] in
 advantage. -/
 theorem terminalOpponentAdvantage_le_two_mul_bound
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (M : ℝ) (hM : 0 ≤ M)
+    (M : ℝ)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (owner : ι) (action : ι → Bool) :
     quittingTerminalOpponentAdvantage reward owner action ≤ 2 * M := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   let singleton := reward (quittingSingletonTerminal owner) owner
   let before := quittingRootPayoff reward (fun _ ↦ singleton) action owner
   let after := quittingRootPayoff reward (0 : Payoff ι)
@@ -412,7 +413,6 @@ mass carries that floor at the explicit uniform reward scale. -/
 theorem exists_packetCharge_of_pos_le_canonicalFullPrefixRepairValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (M η : ℝ) (last : ℕ)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hη : 0 < η)
     (hfloor : η ≤ canonicalAggregateFullPrefixRepairValue reward last) :
@@ -439,7 +439,7 @@ theorem exists_packetCharge_of_pos_le_canonicalFullPrefixRepairValue
       (mul_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))
       (le_of_lt anchor.packetMass_pos)
   have hadvantage := terminalOpponentAdvantage_le_two_mul_bound
-    reward M hM hreward anchor.owner anchor.action
+    reward M hreward anchor.owner anchor.action
   calc
     η ≤ quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
         reward (last + 1) := hηDebt

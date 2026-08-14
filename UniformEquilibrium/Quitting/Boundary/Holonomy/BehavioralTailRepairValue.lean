@@ -67,9 +67,10 @@ omit [DecidableEq ι] [Nonempty ι] in
 theorem abs_behavioralTailPrescribedBoundary_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |behavioralTailPrescribedBoundary reward roots who| ≤ M := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   exact abs_quittingRootSequenceTerminalValue_le
     reward roots who 0 hM hreward
 
@@ -77,14 +78,14 @@ omit [Nonempty ι] in
 theorem abs_behavioralTailEnvelopeBoundary_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |behavioralTailEnvelopeBoundary reward roots who| ≤ M := by
   simpa [behavioralTailEnvelopeBoundary,
     quittingRootSequenceBestResponseValue,
     quittingContinuationBestResponse] using
     (abs_quittingContinuationBestResponse_le reward
-      (quittingRootSequenceProfile reward roots 0) who hM hreward)
+      (quittingRootSequenceProfile reward roots 0) who hreward)
 
 /-- Every maximum-positive gain is nonnegative. -/
 theorem behavioralTailGain_nonneg
@@ -118,7 +119,6 @@ theorem behavioralTailGain_lipschitz
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (M : ℝ) (holonomy holonomy' : QuittingBoundaryHolonomy ι)
     (roots : ℕ → ι → PMF Bool)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |behavioralTailGain reward holonomy roots -
         behavioralTailGain reward holonomy' roots| ≤
@@ -127,16 +127,15 @@ theorem behavioralTailGain_lipschitz
     (behavioralTailPrescribedBoundary reward roots)
     (behavioralTailEnvelopeBoundary reward roots)
     (fun who => abs_behavioralTailPrescribedBoundary_le
-      reward roots who hM hreward)
+      reward roots who hreward)
     (fun who => abs_behavioralTailEnvelopeBoundary_le
-      reward roots who hM hreward)
+      reward roots who hreward)
 
 /-- The infimum over all co-realized behavioral tails inherits the same
 fixed-prefix Lipschitz modulus. -/
 theorem behavioralTailRepairValue_lipschitz
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (M : ℝ) (holonomy holonomy' : QuittingBoundaryHolonomy ι)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |behavioralTailRepairValue reward holonomy -
         behavioralTailRepairValue reward holonomy'| ≤
@@ -149,14 +148,14 @@ theorem behavioralTailRepairValue_lipschitz
     (bddBelow_range_behavioralTailGain reward holonomy')
   · intro roots
     have habs := behavioralTailGain_lipschitz
-      reward M holonomy holonomy' roots hM hreward
+      reward M holonomy holonomy' roots hreward
     have hle := (le_abs_self
       (behavioralTailGain reward holonomy roots -
         behavioralTailGain reward holonomy' roots)).trans habs
     linarith
   · intro roots
     have habs := behavioralTailGain_lipschitz
-      reward M holonomy holonomy' roots hM hreward
+      reward M holonomy holonomy' roots hreward
     have hle := (neg_le_abs
       (behavioralTailGain reward holonomy roots -
         behavioralTailGain reward holonomy' roots)).trans habs
@@ -168,7 +167,6 @@ theorem behavioralTail_repair_transfer
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (M ε : ℝ) (holonomy holonomy₀ : QuittingBoundaryHolonomy ι)
     (roots : ℕ → ι → PMF Bool)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hcenter : behavioralTailGain reward holonomy₀ roots < ε / 4)
     (hclose : maxCoordinateDistance M holonomy holonomy₀ < ε / 4) :
@@ -178,7 +176,7 @@ theorem behavioralTail_repair_transfer
     (maxCoordinateDistance M holonomy holonomy₀) roots
   · intro tail
     exact behavioralTailGain_lipschitz
-      reward M holonomy holonomy₀ tail hM hreward
+      reward M holonomy holonomy₀ tail hreward
   · exact hcenter
   · exact hclose
 
@@ -187,7 +185,6 @@ behavioral tail throughout the corresponding holonomy ball. -/
 theorem behavioralTail_obstruction_transfer
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (M ε : ℝ) (holonomy holonomy₀ : QuittingBoundaryHolonomy ι)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hinf : ε / 4 ≤ behavioralTailRepairValue reward holonomy₀)
     (hclose : maxCoordinateDistance M holonomy holonomy₀ < ε / 8)
@@ -198,7 +195,7 @@ theorem behavioralTail_obstruction_transfer
     (maxCoordinateDistance M holonomy holonomy₀)
   · intro tail
     exact behavioralTailGain_lipschitz
-      reward M holonomy holonomy₀ tail hM hreward
+      reward M holonomy holonomy₀ tail hreward
   · exact bddBelow_range_behavioralTailGain reward holonomy₀
   · simpa [behavioralTailRepairValue] using hinf
   · exact hclose

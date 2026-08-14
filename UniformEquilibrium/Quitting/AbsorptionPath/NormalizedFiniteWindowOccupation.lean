@@ -552,13 +552,14 @@ collision mass. -/
 theorem abs_absorbingDelivery_sub_singletonMixture_le
     (window : QuittingFiniteRootWindow roots)
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (habsorption : 0 < window.absorptionMass)
     (hsingleton : 0 < window.singletonTotal) :
     |window.absorbingDelivery reward who -
         window.singletonMixture reward who| ≤
-      2 * M * window.normalizedCollisionMass := by
+        2 * M * window.normalizedCollisionMass := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have h := abs_conditionalPayoff_sub_singletonMixture_le
     window.absorptionMass_eq_singletonTotal_add_collisionMass
     habsorption hsingleton window.collisionMass_nonneg hM
@@ -595,7 +596,7 @@ theorem abs_delivery_sub_absorptionSingletonMixture_le
 theorem abs_absorbingDelivery_sub_singletonMixture_le_of_cap
     (window : QuittingFiniteRootWindow roots)
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι)
-    {M rho : ℝ} (hM : 0 ≤ M)
+    {M rho : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (habsorption : 0 < window.absorptionMass)
     (hsingleton : 0 < window.singletonTotal) (hrho : 0 ≤ rho)
@@ -603,9 +604,10 @@ theorem abs_absorbingDelivery_sub_singletonMixture_le_of_cap
       quittingRootAbsorptionMass (window.rootAt phase) ≤ rho) :
     |window.absorbingDelivery reward who -
         window.singletonMixture reward who| ≤
-      2 * M * ((Fintype.card ι).choose 2 * rho) := by
+        2 * M * ((Fintype.card ι).choose 2 * rho) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   exact (window.abs_absorbingDelivery_sub_singletonMixture_le
-    reward who hM hreward habsorption hsingleton).trans
+    reward who hreward habsorption hsingleton).trans
       (mul_le_mul_of_nonneg_left
         (window.normalizedCollisionMass_le rho hrho hcap)
         (mul_nonneg (by norm_num) hM))

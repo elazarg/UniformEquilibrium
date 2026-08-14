@@ -427,7 +427,6 @@ nonzero tangent chronology. -/
 theorem nearMinimumTerminalSemantic_capNash_eq_allContinue
     (pair : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool) (reference epsilon q : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -475,8 +474,10 @@ theorem nearMinimumTerminalSemantic_capNash_eq_allContinue
     div_nonneg hepsilon hshiftDenominator.le
   have hrefRatioNonneg : 0 ≤ epsilon / (reference - epsilon) :=
     div_nonneg hepsilon hreferenceDenominator.le
-  have htwoMNonneg : 0 ≤ 2 * M := by positivity
   funext who
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
+  have htwoMNonneg : 0 ≤ 2 * M := by positivity
   apply pmf_eq_pure_false_of_apply_true_toReal_eq_zero
   by_contra hquitZero
   have hquit : 0 < (root who true).toReal :=
@@ -495,7 +496,7 @@ theorem nearMinimumTerminalSemantic_capNash_eq_allContinue
     (reward := reward) pair who reference epsilon q hpair hfloor hnear
       hepsilon hq herror
   have hlossBound := quittingJoiningLoss_le_two_mul
-    (reward := reward) who hM hreward
+    (reward := reward) who hreward
   have hlossScaled :=
     mul_le_mul_of_nonneg_right hlossBound hshiftRatioNonneg
   have hcapMargin :
@@ -521,7 +522,7 @@ theorem nearMinimumTerminalSemantic_capNash_eq_allContinue
   have hjoiningAbs : |joining| ≤ 2 * M * opponentAbsorption := by
     simpa [joining, opponentAbsorption] using
       abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
-        reward root who hM hreward
+        reward root who hreward
   have hdecomposition :=
     quittingRootEndpointDifference_eq_outsiderNever reward pair.2 root who
   have hopponentComplement : opponentContinue = 1 - opponentAbsorption :=

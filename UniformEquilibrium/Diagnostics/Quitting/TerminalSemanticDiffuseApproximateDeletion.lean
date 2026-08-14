@@ -176,7 +176,7 @@ theorem quittingOutsiderJoiningContribution_le_two_mul_collisionMass_of_singleto
       · simp only [if_pos hcollision, mul_one]
         exact (neg_le_abs (advantage action)).trans
           (abs_quittingTerminalOpponentAdvantage_le_two_mul
-            reward owner action hM hreward)
+            reward owner action hreward)
       · have hsmall : (quittingQuitters action).card ≤ 1 := by omega
         have hadvantage : 0 ≤ advantage action :=
           quittingTerminalOpponentAdvantage_nonneg_of_singletonJoinAntitone

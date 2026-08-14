@@ -327,13 +327,14 @@ opponent of `owner` quits. -/
 theorem abs_quittingStationaryFixedOpponentsQuitValue_sub_solo_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool) {owner who : ι} (hne : who ≠ owner)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingStationaryFixedOpponentsQuitValue reward root who -
         quittingStationaryFixedOpponentsQuitValue reward
           (quittingSoloStationaryRoot owner (root owner)) who| ≤
       2 * M *
         (1 - quittingStationaryFixedOpponentsContinueMass root owner) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   let distribution :=
     pmfPi (Function.update root who (PMF.pure true))
   let retraction := quittingKeepPairAction owner who
@@ -408,7 +409,7 @@ theorem abs_quittingStationaryFixedOpponentsQuitValue_sub_solo_le
 theorem abs_quittingStationaryFixedOpponentsQuitValue_sub_solo_le_of_hazard
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool) {owner who : ι} (hne : who ≠ owner)
-    {M η : ℝ} (hM : 0 ≤ M)
+    {M η : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hhazard :
       1 - quittingStationaryFixedOpponentsContinueMass root owner ≤ η) :
@@ -416,11 +417,12 @@ theorem abs_quittingStationaryFixedOpponentsQuitValue_sub_solo_le_of_hazard
         quittingStationaryFixedOpponentsQuitValue reward
           (quittingSoloStationaryRoot owner (root owner)) who| ≤
       2 * M * η := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   calc
     _ ≤ 2 * M *
           (1 - quittingStationaryFixedOpponentsContinueMass root owner) :=
       abs_quittingStationaryFixedOpponentsQuitValue_sub_solo_le
-        reward root hne hM hreward
+        reward root hne hreward
     _ ≤ 2 * M * η := mul_le_mul_of_nonneg_left hhazard (by positivity)
 
 /-- Terminal reward when `owner` is the unique quitter. -/
@@ -579,7 +581,7 @@ fallback. -/
 theorem abs_quittingTerminalPayoff_sub_soloReward_le_of_opponentLiveTail
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (owner who : ι) {M η : ℝ} (hM : 0 ≤ M)
+    (owner who : ι) {M η : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (habsorbs : quittingLiveMassLimit reward profile = 0)
     (htail : 1 - quittingLiveMassLimit reward
@@ -587,6 +589,7 @@ theorem abs_quittingTerminalPayoff_sub_soloReward_le_of_opponentLiveTail
     |quittingTerminalPayoff reward profile who -
         quittingSoloReward reward owner who| ≤
       2 * M * η := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   calc
     _ ≤ 2 * M * quittingNonSoloMassLimit reward profile owner :=
       abs_quittingTerminalPayoff_sub_soloReward_le_nonSoloMassLimit
@@ -909,7 +912,7 @@ theorem isεAsymptoticNash_soloStationary_of_tail_bounds_of_hazard
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (originalRoot : ι → PMF Bool) (tailValue : Payoff ι)
     (owner : ι) {β M η : ℝ}
-    (hβ : 0 ≤ β) (hM : 0 ≤ M) (hη : 0 ≤ η)
+    (hβ : 0 ≤ β) (hη : 0 ≤ η)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hhazard :
       1 - quittingStationaryFixedOpponentsContinueMass originalRoot owner ≤ η)
@@ -924,13 +927,14 @@ theorem isεAsymptoticNash_soloStationary_of_tail_bounds_of_hazard
       (quittingTerminalPayoff reward) (β + 4 * M * η)
       (quittingStationaryProfile reward
         (quittingSoloStationaryRoot owner (originalRoot owner))) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   apply isεAsymptoticNash_soloStationary_of_tail_bounds
     reward originalRoot tailValue owner hβ hM hη hpositive
       hconcentration hneverNash hquitNash
   intro who hne
   exact
     abs_quittingStationaryFixedOpponentsQuitValue_sub_solo_le_of_hazard
-      reward originalRoot hne hM hreward hhazard
+      reward originalRoot hne hreward hhazard
 
 /-- The one-tail exceptional fallback with both probabilistic estimates
 discharged semantically: absorption gives concentration, and the current
@@ -940,7 +944,7 @@ theorem isεAsymptoticNash_soloStationary_of_absorbing_tail
     (originalRoot : ι → PMF Bool)
     (tailProfile : (quittingGame reward).BehaviorProfile)
     (owner : ι) {β M η : ℝ}
-    (hβ : 0 ≤ β) (hM : 0 ≤ M) (hη : 0 ≤ η)
+    (hβ : 0 ≤ β) (hη : 0 ≤ η)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (habsorbs : quittingLiveMassLimit reward tailProfile = 0)
     (htail : 1 - quittingLiveMassLimit reward
@@ -959,11 +963,11 @@ theorem isεAsymptoticNash_soloStationary_of_absorbing_tail
         (quittingSoloStationaryRoot owner (originalRoot owner))) := by
   apply isεAsymptoticNash_soloStationary_of_tail_bounds_of_hazard
     reward originalRoot (quittingTerminalPayoff reward tailProfile) owner
-      hβ hM hη hreward hhazard hpositive
+      hβ hη hreward hhazard hpositive
   · intro who
     exact
       abs_quittingTerminalPayoff_sub_soloReward_le_of_opponentLiveTail
-        reward tailProfile owner who hM hreward habsorbs htail
+        reward tailProfile owner who hreward habsorbs htail
   · exact hneverNash
   · exact hquitNash
 
@@ -1023,7 +1027,7 @@ theorem exists_isεAsymptoticNash_soloStationary_of_tendsto_hazard_bounds
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (tailValue : ℕ → Payoff ι)
     (owner : ι) (η : ℕ → ℝ) {β M : ℝ}
-    (hβ : 0 ≤ β) (hM : 0 ≤ M)
+    (hβ : 0 ≤ β)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hη : ∀ time, 0 ≤ η time)
     (hηzero : Tendsto η atTop (nhds 0))
@@ -1045,13 +1049,14 @@ theorem exists_isεAsymptoticNash_soloStationary_of_tendsto_hazard_bounds
         (quittingTerminalPayoff reward) (β + ζ)
         (quittingStationaryProfile reward
           (quittingSoloStationaryRoot owner (roots time owner))) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   apply exists_isεAsymptoticNash_soloStationary_of_tendsto_tail_bounds
     reward roots tailValue owner η hβ hM hη hηzero hpositiveLate
       hconcentration hneverNash hquitNash
   intro time who hne
   exact
     abs_quittingStationaryFixedOpponentsQuitValue_sub_solo_le_of_hazard
-      reward (roots time) hne hM hreward (hhazard time)
+      reward (roots time) hne hreward (hhazard time)
 
 /-- Limit selection from a sequence of absorbing tails.  Both `2Mη`
 estimates are derived from live-mass bounds rather than supplied as abstract
@@ -1061,7 +1066,7 @@ theorem exists_isεAsymptoticNash_soloStationary_of_absorbing_tails
     (roots : ℕ → ι → PMF Bool)
     (tails : ℕ → (quittingGame reward).BehaviorProfile)
     (owner : ι) (η : ℕ → ℝ) {β M : ℝ}
-    (hβ : 0 ≤ β) (hM : 0 ≤ M)
+    (hβ : 0 ≤ β)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hη : ∀ time, 0 ≤ η time)
     (hηzero : Tendsto η atTop (nhds 0))
@@ -1088,11 +1093,11 @@ theorem exists_isεAsymptoticNash_soloStationary_of_absorbing_tails
           (quittingSoloStationaryRoot owner (roots time owner))) := by
   apply exists_isεAsymptoticNash_soloStationary_of_tendsto_hazard_bounds
     reward roots (fun time => quittingTerminalPayoff reward (tails time))
-      owner η hβ hM hreward hη hηzero hhazard hpositiveLate
+      owner η hβ hreward hη hηzero hhazard hpositiveLate
   · intro time who
     exact
       abs_quittingTerminalPayoff_sub_soloReward_le_of_opponentLiveTail
-        reward (tails time) owner who hM hreward
+        reward (tails time) owner who hreward
           (habsorbs time) (htail time)
   · exact hneverNash
   · exact hquitNash

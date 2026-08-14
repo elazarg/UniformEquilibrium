@@ -295,7 +295,7 @@ theorem expectedStagePayoff_update_le_cutoffTerminal_add_two_bound
     | none => simpa [quittingGame] using hbound
     | some terminal => simpa [quittingGame] using hreward terminal who
   have hterminal := abs_quittingTerminalPayoff_le
-    reward cutoffProfile who hbound hreward
+    reward cutoffProfile who hreward
   dsimp [cutoffProfile] at hterminal ⊢
   linarith [le_of_abs_le hstage, neg_le_of_abs_le hterminal]
 

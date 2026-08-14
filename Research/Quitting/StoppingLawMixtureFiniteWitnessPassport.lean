@@ -46,7 +46,7 @@ theorem abs_quittingTerminalPayoff_stoppingLawMixture_sub_le
     (lambda mu : ℝ)
     (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
     (hmu0 : 0 ≤ mu) (hmu1 : mu ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingTerminalPayoff reward
           (Function.update profile mover
@@ -66,9 +66,9 @@ theorem abs_quittingTerminalPayoff_stoppingLawMixture_sub_le
   let targetPayoff := quittingTerminalPayoff reward
     (Function.update profile mover target) observer
   have hsource : |sourcePayoff| ≤ M := by
-    exact abs_quittingTerminalPayoff_le reward _ observer hM hreward
+    exact abs_quittingTerminalPayoff_le reward _ observer hreward
   have htarget : |targetPayoff| ≤ M := by
-    exact abs_quittingTerminalPayoff_le reward _ observer hM hreward
+    exact abs_quittingTerminalPayoff_le reward _ observer hreward
   have hendpoint : |targetPayoff - sourcePayoff| ≤ 2 * M := by
     calc
       |targetPayoff - sourcePayoff| ≤ |targetPayoff| + |sourcePayoff| :=
@@ -106,7 +106,7 @@ theorem abs_quittingTerminalPayoff_update_stoppingLawMixture_sub_le
     (lambda mu : ℝ)
     (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
     (hmu0 : 0 ≤ mu) (hmu1 : mu ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingTerminalPayoff reward
           (Function.update
@@ -121,7 +121,7 @@ theorem abs_quittingTerminalPayoff_update_stoppingLawMixture_sub_le
       2 * M * |lambda - mu| := by
   have hbound := abs_quittingTerminalPayoff_stoppingLawMixture_sub_le
     reward (Function.update profile observer deviation) mover observer
-      source target lambda mu hlambda0 hlambda1 hmu0 hmu1 hM hreward
+      source target lambda mu hlambda0 hlambda1 hmu0 hmu1 hreward
   have hlambdaCommute :
       Function.update (Function.update profile observer deviation) mover
           (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
@@ -187,7 +187,7 @@ theorem abs_quittingContinuationBestResponseValue_stoppingLawMixture_sub_le
       have hpoint :=
         abs_quittingTerminalPayoff_update_stoppingLawMixture_sub_le
           reward profile mover observer hsame source target deviation lambda mu
-            hlambda0 hlambda1 hmu0 hmu1 hM hreward
+            hlambda0 hlambda1 hmu0 hmu1 hreward
       have hdeviation :=
         quittingTerminalPayoff_update_le_continuationBestResponseValue
           reward muProfile observer deviation
@@ -213,7 +213,7 @@ theorem abs_quittingContinuationBestResponseValue_stoppingLawMixture_sub_le
       have hpoint :=
         abs_quittingTerminalPayoff_update_stoppingLawMixture_sub_le
           reward profile mover observer hsame source target deviation mu lambda
-            hmu0 hmu1 hlambda0 hlambda1 hM hreward
+            hmu0 hmu1 hlambda0 hlambda1 hreward
       have hdeviation :=
         quittingTerminalPayoff_update_le_continuationBestResponseValue
           reward lambdaProfile observer deviation
@@ -405,7 +405,7 @@ theorem exists_finitePureTimeWitnessPassport_stoppingLawMixture
       abs_quittingTerminalPayoff_update_stoppingLawMixture_sub_le
         reward profile mover observer hne source target
           (quittingPureTimeBehaviorStrategy reward observer (chosen qpoint))
-          lambda q hlambda0 hlambda1 hq0 hq1 hM hreward
+          lambda q hlambda0 hlambda1 hq0 hq1 hreward
     have hscale : 2 * M * |lambda - q| ≤ 2 * M * rho := by
       exact mul_le_mul_of_nonneg_left hdistance (by positivity)
     have henvelopeMove :

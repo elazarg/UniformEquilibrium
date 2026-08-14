@@ -239,13 +239,13 @@ theorem exists_nearMinimumReset_actualDeviation_affineRectangle_sourceActive
     rw [abs_le] at hdebtVariation
     linarith
   have hsourcePrescribedAbs :=
-    abs_quittingTerminalPayoff_le reward profile recipient hM hreward
+    abs_quittingTerminalPayoff_le reward profile recipient hreward
   have hsourceDeviationAbs := abs_quittingTerminalPayoff_le reward
-    (Function.update profile recipient deviation) recipient hM hreward
+    (Function.update profile recipient deviation) recipient hreward
   have hendpointPrescribedAbs := abs_quittingTerminalPayoff_le reward
-    endpointProfile recipient hM hreward
+    endpointProfile recipient hreward
   have hendpointDeviationAbs := abs_quittingTerminalPayoff_le reward
-    (Function.update endpointProfile recipient deviation) recipient hM hreward
+    (Function.update endpointProfile recipient deviation) recipient hreward
   rw [abs_le] at hsourcePrescribedAbs hsourceDeviationAbs
   rw [abs_le] at hendpointPrescribedAbs hendpointDeviationAbs
   have hgainDifferenceUpper : endpointGain - sourceGain ≤ 4 * M := by

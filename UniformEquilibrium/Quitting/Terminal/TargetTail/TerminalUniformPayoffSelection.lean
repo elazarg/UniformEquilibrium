@@ -40,10 +40,8 @@ theorem quittingTerminalPayoff_mem_rewardCube
         (fun _ => quittingRewardBound reward) := by
   constructor <;> intro who
   · exact neg_le_of_abs_le (abs_quittingTerminalPayoff_le reward profile who
-      (quittingRewardBound_nonneg reward)
       (abs_reward_le_quittingRewardBound reward))
   · exact le_of_abs_le (abs_quittingTerminalPayoff_le reward profile who
-      (quittingRewardBound_nonneg reward)
       (abs_reward_le_quittingRewardBound reward))
 
 /-- Terminal approximate equilibria at every positive accuracy select one

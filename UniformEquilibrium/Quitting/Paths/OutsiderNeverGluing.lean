@@ -47,9 +47,10 @@ def quittingOutsiderJoiningContribution
 Continue-versus-join difference is at most `2*M`. -/
 theorem abs_quittingTerminalOpponentAdvantage_le_two_mul
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (owner : ι) (action : ι → Bool) {M : ℝ} (hM : 0 ≤ M)
+    (owner : ι) (action : ι → Bool) {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingTerminalOpponentAdvantage reward owner action| ≤ 2 * M := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   let singleton := reward (quittingSingletonTerminal owner) owner
   let before :=
     quittingRootPayoff reward (fun _ ↦ singleton) action owner
@@ -111,11 +112,12 @@ theorem quittingTerminalOpponentAdvantage_eq_zero_of_quitters_not_nonempty
 `2*M` times their one-stage absorption probability. -/
 theorem quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (root : ι → PMF Bool) (who : ι) {M : ℝ} (hM : 0 ≤ M)
+    (root : ι → PMF Bool) (who : ι) {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     quittingOutsiderJoiningContribution reward root who ≤
       2 * M * quittingRootAbsorptionMass
         (Function.update root who (PMF.pure false)) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let opponentRoot := Function.update root who (PMF.pure false)
   let advantage := quittingTerminalOpponentAdvantage reward who
   have hpoint : ∀ action : ι → Bool,
@@ -126,7 +128,7 @@ theorem quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
     · simp only [if_pos hquit, mul_one]
       exact (neg_le_abs (advantage action)).trans
         (abs_quittingTerminalOpponentAdvantage_le_two_mul
-          reward who action hM hreward)
+          reward who action hreward)
     · change -quittingTerminalOpponentAdvantage reward who action ≤ _
       rw [quittingTerminalOpponentAdvantage_eq_zero_of_quitters_not_nonempty
           reward who action hquit]
@@ -189,7 +191,7 @@ most `delta`, then switching from Continue to Quit gains at most
 theorem quittingRootEndpointDifference_le_eta_add_two_mul_M_mul_delta
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool) (who : ι)
-    {M eta delta : ℝ} (hM : 0 ≤ M) (heta : 0 ≤ eta)
+    {M eta delta : ℝ} (heta : 0 ≤ eta)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hcontinuation :
       reward (quittingSingletonTerminal who) who - tail who ≤ eta)
@@ -198,6 +200,7 @@ theorem quittingRootEndpointDifference_le_eta_add_two_mul_M_mul_delta
         (Function.update root who (PMF.pure false)) ≤ delta) :
     quittingRootEndpointDifference reward tail root who ≤
       eta + 2 * M * delta := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let mass := quittingRootAbsorptionMass
     (Function.update root who (PMF.pure false))
   have hmass0 : 0 ≤ mass := by
@@ -222,7 +225,7 @@ theorem quittingRootEndpointDifference_le_eta_add_two_mul_M_mul_delta
       _ = eta := one_mul eta
   have hjoining :=
     quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
-      reward root who hM hreward
+      reward root who hreward
   have hjoiningDelta :
       quittingOutsiderJoiningContribution reward root who ≤
         2 * M * delta := by
@@ -313,7 +316,7 @@ every possible stopping date. -/
 theorem quittingRootSequencePureTimeTerminalValue_le_never_add
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M eta delta : ℝ} (hM : 0 ≤ M) (heta : 0 ≤ eta)
+    {M eta delta : ℝ} (heta : 0 ≤ eta)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hcontinuation : ∀ time,
       reward (quittingSingletonTerminal who) who -
@@ -326,6 +329,7 @@ theorem quittingRootSequencePureTimeTerminalValue_le_never_add
     quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0 ≤
       quittingRootSequencePureTimeTerminalValue reward roots who none 0 +
         (eta + 2 * M * delta) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hcap0 : 0 ≤ eta + 2 * M * delta := by
     have hdelta0 : 0 ≤ delta :=
       (by
@@ -344,7 +348,7 @@ theorem quittingRootSequencePureTimeTerminalValue_le_never_add
           reward
           (fun _ ↦ quittingRootSequencePureTimeTerminalValue
             reward roots who none (time + 1))
-          (roots time) who hM heta hreward (hcontinuation time)
+          (roots time) who heta hreward (hcontinuation time)
           (habsorption time)
       have hexact :=
         quittingRootSequencePureTimeTerminalValue_some_sub_none_eq
@@ -370,7 +374,7 @@ theorem quittingTerminalPayoff_update_le_never_add
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
     (deviation : (quittingGame reward).BehaviorStrategy who)
-    {M eta delta : ℝ} (hM : 0 ≤ M) (heta : 0 ≤ eta)
+    {M eta delta : ℝ} (heta : 0 ≤ eta)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hcontinuation : ∀ time,
       reward (quittingSingletonTerminal who) who -
@@ -386,14 +390,15 @@ theorem quittingTerminalPayoff_update_le_never_add
       quittingTerminalPayoff reward
           (Function.update profile who
             (quittingPureTimeBehaviorStrategy reward who none)) who +
-        (eta + 2 * M * delta) := by
+      (eta + 2 * M * delta) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   refine le_of_forall_pos_le_add fun ε hε ↦ ?_
   obtain ⟨quitTime, hquitTime⟩ :=
     exists_quittingPureTimeBehaviorStrategy_terminalPayoff_ge_sub
       reward profile who deviation hε
   have hpure :=
     quittingRootSequencePureTimeTerminalValue_le_never_add
-      reward (quittingProfileLiveRoot reward profile) who hM heta hreward
+      reward (quittingProfileLiveRoot reward profile) who heta hreward
       hcontinuation habsorption quitTime
   rw [← quittingTerminalPayoff_update_pureTimeBehaviorStrategy
       reward profile who quitTime,

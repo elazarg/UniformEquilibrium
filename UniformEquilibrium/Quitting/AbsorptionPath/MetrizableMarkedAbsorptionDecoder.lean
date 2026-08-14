@@ -379,7 +379,6 @@ theorem metrizableBehavioralTailRepairValue_lipschitz
   exact QuittingBoundaryHolonomy.behavioralTailRepairValue_lipschitz
     reward (quittingRewardBound reward)
     (metrizableBoundaryHolonomy path) (metrizableBoundaryHolonomy path')
-    (quittingRewardBound_nonneg reward)
     (fun terminal player => abs_reward_le_quittingRewardBound reward terminal player)
 
 omit [DecidableEq ι] in

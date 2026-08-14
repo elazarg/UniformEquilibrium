@@ -62,7 +62,7 @@ def quittingTerminalSemanticLawCarrier
 theorem quittingTerminalSemanticLawCarrier_isCompact
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     : IsCompact (quittingTerminalSemanticLawCarrier reward) := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
+  obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   let ambient : Set (QuittingTerminalSemanticLawPoint ι) :=
     quittingTerminalSemanticBox ι M ×ˢ
       stdSimplex ℝ (QuittingTerminalOutcome ι)
@@ -72,7 +72,7 @@ theorem quittingTerminalSemanticLawCarrier_isCompact
   apply hambient.of_isClosed_subset isClosed_closure
   · apply closure_minimal
     · rintro point ⟨profile, rfl⟩
-      exact ⟨quittingTerminalSemanticPair_mem_box reward profile hM hreward,
+      exact ⟨quittingTerminalSemanticPair_mem_box reward profile hreward,
         quittingTerminalOutcomeMass_mem_stdSimplex reward profile⟩
     · exact hambient.isClosed
 

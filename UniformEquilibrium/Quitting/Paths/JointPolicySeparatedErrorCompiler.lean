@@ -45,7 +45,6 @@ theorem abs_value_sub_rootSequenceTerminalValue_le_jointPolicyCharge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     {policyCoefficient bound : ℝ}
-    (hbound : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hvalueBound : ∀ time who, |value time who| ≤ bound)
     (hpolicyError : ∀ time who,
@@ -68,7 +67,7 @@ theorem abs_value_sub_rootSequenceTerminalValue_le_jointPolicyCharge
       have hvalue := hvalueBound start who
       have hterminal := abs_quittingTerminalPayoff_le reward
         (quittingRootSequenceProfile reward roots start) who
-        hbound hreward
+        hreward
       change |quittingRootSequenceTerminalValue reward roots who start| ≤
         bound at hterminal
       exact (abs_sub _ _).trans (by linarith)
@@ -145,7 +144,6 @@ theorem abs_value_sub_rootSequenceTerminalValue_le_of_jointPolicyError
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     {policyCoefficient bound : ℝ}
-    (hbound : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hvalueBound : ∀ time who, |value time who| ≤ bound)
     (hpolicyError : ∀ time who,
@@ -162,7 +160,7 @@ theorem abs_value_sub_rootSequenceTerminalValue_le_of_jointPolicyError
   intro start who
   have hfinite :=
     abs_value_sub_rootSequenceTerminalValue_le_jointPolicyCharge
-      reward roots value hbound hreward hvalueBound
+      reward roots value hreward hvalueBound
         hpolicyError start
   have hlimit : Tendsto (fun fuel ↦
       policyCoefficient *
@@ -236,7 +234,7 @@ theorem
           quittingRootSequenceTerminalValue reward certificate.roots who time| ≤
         policyCoefficient :=
     abs_value_sub_rootSequenceTerminalValue_le_of_jointPolicyError
-      reward certificate.roots certificate.value hbound
+      reward certificate.roots certificate.value
         hreward certificate.value_bound certificate.policy_error
         certificate.joint_survival
   have hdelivery : ∀ who,

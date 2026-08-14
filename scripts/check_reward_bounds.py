@@ -397,6 +397,27 @@ def _check_diagnostics(
     return diagnostics
 
 
+def _nonnegative_check_diagnostics(
+    result: dict[str, object], max_nonnegative: int
+) -> list[str]:
+    declarations = result["declarations"]
+    assert isinstance(declarations, list)
+    if len(declarations) <= max_nonnegative:
+        return []
+    diagnostics = [
+        "Reward-bound nonnegativity ratchet failed: "
+        f"{len(declarations)} declarations exceed "
+        f"--max-nonnegative={max_nonnegative}."
+    ]
+    diagnostics.extend(
+        f"{declaration['path']}:{declaration['line']}: "
+        f"{declaration['kind']} {declaration['name']} "
+        f"[{declaration['bound_variable']}]"
+        for declaration in declarations
+    )
+    return diagnostics
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=pathlib.Path, default=ROOT)
@@ -412,9 +433,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         default=None,
         help="corrected-removable limit in --check mode (default: 0)",
     )
+    parser.add_argument(
+        "--max-nonnegative",
+        type=int,
+        default=None,
+        help=(
+            "limit declarations still carrying an explicit nonnegative "
+            "reward-bound hypothesis in --check mode"
+        ),
+    )
     args = parser.parse_args(argv)
     if args.max_removable is not None and args.max_removable < 0:
         parser.error("--max-removable must be nonnegative")
+    if args.max_nonnegative is not None and args.max_nonnegative < 0:
+        parser.error("--max-nonnegative must be nonnegative")
     result = report(args.root)
     if args.format == "json":
         print(json.dumps(result, indent=2, sort_keys=True))
@@ -431,6 +463,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.check:
         limit = 0 if args.max_removable is None else args.max_removable
         diagnostics = _check_diagnostics(result, limit)
+        if args.max_nonnegative is not None:
+            diagnostics.extend(
+                _nonnegative_check_diagnostics(result, args.max_nonnegative)
+            )
         if diagnostics:
             print(*diagnostics, sep="\n", file=sys.stderr)
             return 1

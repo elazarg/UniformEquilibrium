@@ -516,12 +516,12 @@ theorem exists_isεAsymptoticNash_soloStationary_of_exceptional_profile
         (quittingStationaryProfile reward
           (quittingSoloStationaryRoot owner
             (quittingProfileLiveRoot reward profile time owner))) := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
+  obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   let roots := quittingProfileLiveRoot reward profile
   let tails := quittingAllContinueProfileSpine reward profile
   let η := quittingExceptionalTailError reward profile owner
   apply exists_isεAsymptoticNash_soloStationary_of_absorbing_tails
-    reward roots tails owner η hβ hM hreward
+    reward roots tails owner η hβ hreward
   · exact quittingExceptionalTailError_nonneg reward profile owner
   · exact tendsto_quittingExceptionalTailError_zero
       reward profile owner hpositive

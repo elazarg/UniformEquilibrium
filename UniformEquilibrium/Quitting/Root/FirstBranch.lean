@@ -71,9 +71,10 @@ arbitrary quitting-game behavior profile. -/
 theorem abs_quittingTerminalPayoff_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingTerminalPayoff reward profile who| ≤ M := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hstage : ∀ t : ℕ,
       |(quittingGame reward).expectedStagePayoff profile none t who| ≤ M := by
     intro t
@@ -92,7 +93,7 @@ theorem abs_quittingTerminalPayoff_le_quittingRewardBound
     (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
     |quittingTerminalPayoff reward profile who| ≤ quittingRewardBound reward := by
   exact abs_quittingTerminalPayoff_le reward profile who
-    (quittingRewardBound_nonneg reward) (abs_reward_le_quittingRewardBound reward)
+    (abs_reward_le_quittingRewardBound reward)
 
 /-- Player `who`'s continuation best-response value against the prescribed
 opponents, defined as the supremum over all behavior deviations. -/

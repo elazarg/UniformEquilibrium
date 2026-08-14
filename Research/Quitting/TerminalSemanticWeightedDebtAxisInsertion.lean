@@ -154,7 +154,7 @@ def quittingTerminalSemanticCapContinueGap
 probability that an opponent quits. -/
 theorem abs_quittingTerminalSemanticCapContinueGap_sub_singletonMargin_le
     (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
+    (who : ι) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hbox : pair ∈ quittingTerminalSemanticBox ι M) :
     |quittingTerminalSemanticCapContinueGap (reward := reward) pair root who -
@@ -181,7 +181,7 @@ theorem abs_quittingTerminalSemanticCapContinueGap_sub_singletonMargin_le
   have hjoining : |joining| ≤ 2 * M * mass := by
     simpa [joining, mass] using
       abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
-        reward root who hM hreward
+        reward root who hreward
   have hdecomposition :=
     quittingRootEndpointDifference_eq_outsiderNever reward pair.2 root who
   have hmassEq : quittingRootAbsorptionMass
@@ -279,7 +279,7 @@ theorem half_minimumDebt_le_capContinueGap_of_small_root
       _ = minimumDebt / 2 := by field_simp; ring
   have hvariation :=
     abs_quittingTerminalSemanticCapContinueGap_sub_singletonMargin_le
-      (reward := reward) pair root who hM hreward hbox
+      (reward := reward) pair root who hreward hbox
   have hlower := neg_le_of_abs_le hvariation
   linarith
 
@@ -347,7 +347,7 @@ theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
         quittingTerminalSemanticDebt pair other = 0) ∧
       IsεQuittingRootNash reward pair.1 0
         (quittingAllContinueRoot : ι → PMF Bool) := by
-  obtain ⟨M, hM, hreward⟩ :=
+  obtain ⟨M, -, hreward⟩ :=
     exists_quittingRewardBound reward
   letI : Nonempty ι := regime.nonempty_players
   let theta : ℕ → Payoff ι := quittingDebtAxisCostate owner
@@ -379,7 +379,7 @@ theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
   have hbox : ∀ index,
       pair index ∈ quittingTerminalSemanticBox ι M := fun index =>
     quittingTerminalSemanticCarrier_mem_box
-      (reward := reward) (pair index) hM hreward (hpair index)
+      (reward := reward) (pair index) hreward (hpair index)
   let rate : ℕ → ℝ := fun index => 1 / ((index : ℝ) + 1)
   have hrateNonneg : ∀ index, 0 ≤ rate index := by
     intro index

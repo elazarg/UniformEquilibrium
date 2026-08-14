@@ -220,7 +220,7 @@ terminal payoff. -/
 theorem abs_quittingContinuationBestResponseValue_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingContinuationBestResponseValue reward profile who| ≤ M := by
   let values : Set ℝ := Set.range fun deviation :
@@ -235,19 +235,19 @@ theorem abs_quittingContinuationBestResponseValue_le
     rintro value ⟨deviation, rfl⟩
     exact (le_abs_self _).trans
       (abs_quittingTerminalPayoff_le reward
-        (Function.update profile who deviation) who hM hreward)
+        (Function.update profile who deviation) who hreward)
   have hupper : sSup values ≤ M := by
     apply csSup_le hnonempty
     rintro value ⟨deviation, rfl⟩
     exact le_of_abs_le (abs_quittingTerminalPayoff_le reward
-      (Function.update profile who deviation) who hM hreward)
+      (Function.update profile who deviation) who hreward)
   have hlower : -M ≤ sSup values := by
     have hmember : quittingTerminalPayoff reward profile who ∈ values := by
       refine ⟨profile who, ?_⟩
       simp
     have hpayoff : -M ≤ quittingTerminalPayoff reward profile who :=
       neg_le_of_abs_le
-        (abs_quittingTerminalPayoff_le reward profile who hM hreward)
+        (abs_quittingTerminalPayoff_le reward profile who hreward)
     exact hpayoff.trans (le_csSup hbounded hmember)
   change |sSup values| ≤ M
   exact abs_le.mpr ⟨hlower, hupper⟩
@@ -267,25 +267,25 @@ theorem quittingTerminalSemanticBox_isCompact (M : ℝ) :
 theorem quittingTerminalSemanticPair_mem_box
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     quittingTerminalSemanticPair reward profile ∈
       quittingTerminalSemanticBox ι M := by
   constructor <;> constructor
   · intro who
     exact neg_le_of_abs_le
-      (abs_quittingTerminalPayoff_le reward profile who hM hreward)
+      (abs_quittingTerminalPayoff_le reward profile who hreward)
   · intro who
     exact le_of_abs_le
-      (abs_quittingTerminalPayoff_le reward profile who hM hreward)
+      (abs_quittingTerminalPayoff_le reward profile who hreward)
   · intro who
     exact neg_le_of_abs_le
       (abs_quittingContinuationBestResponseValue_le
-        reward profile who hM hreward)
+        reward profile who hreward)
   · intro who
     exact le_of_abs_le
       (abs_quittingContinuationBestResponseValue_le
-        reward profile who hM hreward)
+        reward profile who hreward)
 
 /-- Set of finite-dimensional terminal semantic pairs realized by executable
 behavior profiles. -/
@@ -332,7 +332,6 @@ theorem quittingTerminalSemanticCarrier_isCompact
   apply closure_minimal
   · rintro pair ⟨profile, rfl⟩
     exact quittingTerminalSemanticPair_mem_box reward profile
-      (quittingRewardBound_nonneg reward)
       (abs_reward_le_quittingRewardBound reward)
   · exact (quittingTerminalSemanticBox_isCompact
       (ι := ι) (quittingRewardBound reward)).isClosed

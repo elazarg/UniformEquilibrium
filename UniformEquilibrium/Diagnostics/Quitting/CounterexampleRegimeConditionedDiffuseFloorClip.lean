@@ -223,8 +223,7 @@ theorem exists_fixedOutsider_punishment_ge_singleton_or_cofinal_floorClippedRese
         quittingRootAbsorptionMass (quittingRootOfSimplex root) := by
       exact gap_div_le_quittingRootAbsorptionMass_of_isZeroEndpointNash
         reward clipped (quittingRootOfSimplex root) who
-        (quittingRewardBound_nonneg reward) hgap
-        (abs_reward_le_quittingRewardBound reward) hclipped hnash
+        hgap (abs_reward_le_quittingRewardBound reward) hclipped hnash
     exact ⟨time, root, htime, hinactive,
       fun player => punishmentValue_le_quittingPunishmentFloorClip
         (reward := reward) target player,

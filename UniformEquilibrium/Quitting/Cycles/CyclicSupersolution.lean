@@ -234,13 +234,13 @@ theorem quittingCyclicHazardTerminalValue_le_add_of_quitError_exactContinue
     have hdev := abs_quittingTerminalPayoff_le reward
       (quittingRootSequenceProfile reward
         (quittingRootSequenceUpdate roots player deviation) time)
-      player hbound hreward
+      player hreward
     have hval : |value (quittingCyclicOrbit phase time) player| ≤ bound := by
       rw [hvalue]
       simpa only [quittingTerminalPayoff_cyclicBehaviorProfile] using
         (abs_quittingTerminalPayoff_le reward
-          (quittingCyclicBehaviorProfile reward cycle
-            (quittingCyclicOrbit phase time)) player hbound hreward)
+            (quittingCyclicBehaviorProfile reward cycle
+            (quittingCyclicOrbit phase time)) player hreward)
     have hraw : deviationValue time - super time ≤ 2 * bound := by
       dsimp only [deviationValue, super,
         quittingRootSequenceHazardTerminalValue,

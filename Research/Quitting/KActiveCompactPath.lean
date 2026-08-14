@@ -386,10 +386,6 @@ theorem exists_oneActiveSupportRationalDivergentPath_of_multiCirculation
   have hrowK : ∀ time, IsQuittingHazardKActive 1 (row time) := by
     intro time
     exact isQuittingHazardKActive_multiRow word β N time
-  have hbound0 : 0 ≤ bound := by
-    dsimp only [bound]
-    exact add_nonneg hM0 (Finset.sum_nonneg fun who _ =>
-      abs_nonneg (C.vertex 0 who))
   have hforwardBound : ∀ time who, |forward time who| ≤ bound := by
     intro time who
     simpa [forward, bound] using
@@ -449,7 +445,7 @@ theorem exists_oneActiveSupportRationalDivergentPath_of_multiCirculation
           (rewardOfWeight r) roots who time :=
     eq_quittingRootSequenceTerminalValue_of_exact_bounded_path_of_absorption_lower
       (rewardOfWeight r) roots value hcharge hvalueAbsorption
-      hbound0 hreward hvalueBound hvaluePolicy
+      hreward hvalueBound hvaluePolicy
   have hsupportSequence :
       IsQuittingRootSequenceSupportApproxNash
         (rewardOfWeight r) roots ε := by

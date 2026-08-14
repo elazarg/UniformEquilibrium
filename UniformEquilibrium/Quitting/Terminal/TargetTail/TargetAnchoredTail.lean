@@ -127,12 +127,12 @@ the closed-form ratio at saturated hazards. -/
 theorem abs_quittingStationaryUnilateralCap_le_of_bound
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M) (hreward : ∀ S player, |reward S player| ≤ M) :
+    (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingStationaryUnilateralCap reward root who| ≤ M := by
   obtain ⟨deviation, hdeviation⟩ :=
     exists_quittingTerminalPayoff_update_stationary_eq_cap reward root who
   rw [← hdeviation]
-  exact abs_quittingTerminalPayoff_le reward _ who hM hreward
+  exact abs_quittingTerminalPayoff_le reward _ who hreward
 
 /-- Player-indexed stationary rows can be converted simultaneously into a
 family of player-indexed closed tails.  No compatibility between distinct

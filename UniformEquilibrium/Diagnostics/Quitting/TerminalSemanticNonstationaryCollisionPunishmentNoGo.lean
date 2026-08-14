@@ -325,8 +325,7 @@ theorem full_bestResponseValue_ge_diffusePrefix_sub_survival
   have htailAbs :
       |quittingRootSequenceTerminalValue reward roots owner cutoff| ≤ 1 := by
     unfold quittingRootSequenceTerminalValue
-    exact abs_quittingTerminalPayoff_le reward _ owner (by norm_num)
-      reward_abs_le_one
+    exact abs_quittingTerminalPayoff_le reward _ owner reward_abs_le_one
   have htailLower :
       -1 ≤ quittingRootSequenceTerminalValue reward roots owner cutoff :=
     (abs_le.mp htailAbs).1

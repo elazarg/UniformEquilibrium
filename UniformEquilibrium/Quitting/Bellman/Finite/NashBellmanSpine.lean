@@ -486,12 +486,22 @@ theorem exists_quittingNashBellmanPredecessor
 /-- The compact exact Nash--Bellman predecessor correspondence. -/
 def quittingNashBellmanSerialRelation
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (M : ℝ) (hM : 0 ≤ M)
+    (M : ℝ)
     (hreward : ∀ S player, |reward S player| ≤ M) :
     CompactSerialRelation (QuittingNashBellmanPoint ι) where
   box := quittingNashBellmanBox M
   relation := IsQuittingNashBellmanEdge reward
-  box_nonempty := quittingNashBellmanBox_nonempty hM
+  box_nonempty := by
+    rcases isEmpty_or_nonempty ι with hι | hι
+    · letI : IsEmpty ι := hι
+      let root : QuittingRootSimplex ι :=
+        fun _ ↦ stdSimplexEquiv (PMF.pure false)
+      refine ⟨((0 : Payoff ι), root), ?_⟩
+      change (0 : Payoff ι) ∈ Set.Icc (fun _ ↦ -M) (fun _ ↦ M)
+      constructor <;> intro who <;> exact isEmptyElim who
+    · letI : Nonempty ι := hι
+      exact quittingNashBellmanBox_nonempty
+        (quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward)
   box_compact := quittingNashBellmanBox_isCompact M
   relationGraph_closed := isClosed_quittingNashBellmanEdgeGraph reward M
   predecessor_exists := exists_quittingNashBellmanPredecessor reward hreward
@@ -502,7 +512,7 @@ def quittingNashBellmanSerialRelation
 infinite exact Nash--Bellman spine. -/
 theorem exists_bounded_exact_quittingNashBellmanSpine
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     ∃ (value : ℕ → Payoff ι) (roots : ℕ → ι → PMF Bool),
       (∀ time who, |value time who| ≤ M) ∧
@@ -510,7 +520,7 @@ theorem exists_bounded_exact_quittingNashBellmanSpine
         (value (time + 1)) (roots time)) ∧
       ∀ time, IsεQuittingRootNash reward
         (value (time + 1)) 0 (roots time) := by
-  let system := quittingNashBellmanSerialRelation reward M hM hreward
+  let system := quittingNashBellmanSerialRelation reward M hreward
   obtain ⟨state, hstateBox, hstateEdge⟩ := system.exists_infiniteChain
   let value : ℕ → Payoff ι := fun time => (state time).1
   let roots : ℕ → ι → PMF Bool :=
@@ -536,7 +546,6 @@ theorem exists_exact_quittingNashBellmanSpine
       ∀ time, IsεQuittingRootNash reward
         (value (time + 1)) 0 (roots time) := by
   exact exists_bounded_exact_quittingNashBellmanSpine reward
-    (quittingRewardBound_nonneg reward)
     (abs_reward_le_quittingRewardBound reward)
 
 end GameTheory

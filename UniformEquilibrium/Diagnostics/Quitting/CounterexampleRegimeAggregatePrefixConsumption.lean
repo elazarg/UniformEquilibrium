@@ -86,7 +86,6 @@ theorem exists_aggregateAnchor_terminalGap_le_packetCharge
             (Fintype.card (ι → Bool) : ℝ) * anchor.packetMass := by
   exact exists_packetCharge_of_pos_le_canonicalFullPrefixRepairValue
       reward (quittingRewardBound reward) regime.terminalGap last
-      (quittingRewardBound_nonneg reward)
       (abs_reward_le_quittingRewardBound reward)
       regime.terminalGap_pos
       (regime.terminalGap_le_canonicalAggregateFullPrefixRepairValue last)

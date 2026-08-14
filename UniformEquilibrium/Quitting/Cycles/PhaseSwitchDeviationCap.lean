@@ -139,11 +139,11 @@ bounded by the same constant. -/
 theorem abs_quittingRootSequenceTerminalValue_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ)
-    {bound : ℝ} (hbound : 0 ≤ bound)
+    {bound : ℝ} (_ : 0 ≤ bound)
     (hreward : ∀ S player, |reward S player| ≤ bound) :
     |quittingRootSequenceTerminalValue reward roots who start| ≤ bound :=
-  abs_quittingTerminalPayoff_le reward
-    (quittingRootSequenceProfile reward roots start) who hbound hreward
+    abs_quittingTerminalPayoff_le reward
+    (quittingRootSequenceProfile reward roots start) who hreward
 
 /-! ## The cap -/
 

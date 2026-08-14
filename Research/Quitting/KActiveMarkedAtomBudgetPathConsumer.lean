@@ -206,7 +206,6 @@ theorem kActiveAbsorptionBudgetPath_is_supportRationalDivergent
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (K : ℕ) (bound epsilon : ℝ) (budget : ℕ → ℝ)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hbudget : Tendsto budget atTop atTop)
     (state : ℕ → QuittingNashBellmanPoint ι)
@@ -271,7 +270,7 @@ theorem kActiveAbsorptionBudgetPath_is_supportRationalDivergent
       value time = fun who =>
         quittingRootSequenceTerminalValue reward plan who time :=
     eq_quittingRootSequenceTerminalValue_of_exact_bounded_path_of_jointSurvival_tendsto_zero
-      reward plan value hsurvival hbound0 hreward hvalueBound hpolicy
+      reward plan value hsurvival hreward hvalueBound hpolicy
   have hsupport :
       IsQuittingRootSequenceSupportApproxNash reward plan epsilon := by
     intro time
@@ -300,7 +299,6 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_KActiveAbsorptionBudgetP
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (K : ℕ) (bound : ℝ)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hprefix : ∀ epsilon, 0 < epsilon →
       ∃ budget : ℕ → ℝ,
@@ -341,7 +339,7 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_KActiveAbsorptionBudgetP
       (by simpa only [box, relation, weight] using hpref)
   obtain ⟨plan, hsupport, hdiverges, hir, hactive⟩ :=
     kActiveAbsorptionBudgetPath_is_supportRationalDivergent
-      reward K bound epsilon budget hbound0 hreward hbudget state
+      reward K bound epsilon budget hreward hbudget state
         (by simpa only [box] using hstateBox)
         (by simpa only [relation] using hstateEdge)
         (by simpa only [weight] using hprefixBudget)
@@ -368,7 +366,6 @@ theorem oneActiveMarkedBudgetPath_is_supportRationalDivergent
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (bound epsilon : ℝ) (markedPlayer clockOwner : ι)
     (budget : ℕ → ℝ)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hbudget : Tendsto budget atTop atTop)
     (state : ℕ → QuittingNashBellmanPoint ι)
@@ -445,7 +442,7 @@ theorem oneActiveMarkedBudgetPath_is_supportRationalDivergent
       value time = fun who =>
         quittingRootSequenceTerminalValue reward plan who time :=
     eq_quittingRootSequenceTerminalValue_of_exact_bounded_path_of_jointSurvival_tendsto_zero
-      reward plan value hsurvival hbound0 hreward hvalueBound hpolicy
+      reward plan value hsurvival hreward hvalueBound hpolicy
   have hsupport :
       IsQuittingRootSequenceSupportApproxNash reward plan epsilon := by
     intro time
@@ -473,7 +470,6 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedBudgetPre
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (bound : ℝ)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hprefix : ∀ epsilon, 0 < epsilon →
       ∃ (markedPlayer clockOwner : ι) (budget : ℕ → ℝ),
@@ -519,7 +515,7 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedBudgetPre
   obtain ⟨plan, hsupport, hdiverges, hir, hactive⟩ :=
     oneActiveMarkedBudgetPath_is_supportRationalDivergent
       reward bound epsilon markedPlayer clockOwner budget
-        hbound0 hreward hbudget state
+        hreward hbudget state
         (by simpa only [box] using hstateBox)
         (by simpa only [relation] using hstateEdge)
         (by simpa only [weight] using hprefixBudget)
@@ -534,7 +530,6 @@ theorem QuittingCounterexampleRegime.not_KActiveAbsorptionBudgetPrefixes
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (regime : QuittingCounterexampleRegime reward)
     (K : ℕ) (bound : ℝ)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound) :
     ¬(∀ epsilon, 0 < epsilon →
       ∃ budget : ℕ → ℝ,
@@ -549,7 +544,7 @@ theorem QuittingCounterexampleRegime.not_KActiveAbsorptionBudgetPrefixes
   intro hprefix
   exact regime.not_exists_uniformEquilibriumPayoff
     (quittingGame_exists_uniformEquilibriumPayoff_of_KActiveAbsorptionBudgetPrefixes
-      reward K bound hbound0 hreward hprefix)
+      reward K bound hreward hprefix)
 
 /-- In particular, a counterexample cannot retain one fixed one-active
 singleton edge with a divergent cumulative clock on compatible prefixes at
@@ -559,7 +554,6 @@ theorem QuittingCounterexampleRegime.not_oneActiveMarkedBudgetPrefixes
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (regime : QuittingCounterexampleRegime reward)
     (bound : ℝ)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound) :
     ¬(∀ epsilon, 0 < epsilon →
       ∃ (markedPlayer clockOwner : ι) (budget : ℕ → ℝ),
@@ -575,6 +569,6 @@ theorem QuittingCounterexampleRegime.not_oneActiveMarkedBudgetPrefixes
   intro hprefix
   exact regime.not_exists_uniformEquilibriumPayoff
     (quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedBudgetPrefixes
-      reward bound hbound0 hreward hprefix)
+      reward bound hreward hprefix)
 
 end GameTheory

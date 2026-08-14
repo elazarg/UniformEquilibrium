@@ -222,7 +222,7 @@ private theorem neg_one_le_quittingRootSequencePureTimeTerminalValue
       (quittingRootSequenceProfile reward
         (quittingRootSequenceUpdate roots who
           (quittingPureTimeHazard choice)) start)
-      who (by norm_num) (fun S player => abs_reward_le_one S player))
+      who (fun S player => abs_reward_le_one S player))
 
 /-- Quitting at any finite deterministic date is weakly worse than Never. -/
 theorem quittingRootSequencePureTimeTerminalValue_some_le_none
@@ -306,12 +306,12 @@ theorem quittingBestReplyValue_eq_alwaysContinue
             exact abs_quittingTerminalPayoff_le reward
               (Function.update profile who
                 (quittingPureTimeBehaviorStrategy reward who choice)) who
-              (by norm_num) (fun S player => abs_reward_le_one S player)
+                (fun S player => abs_reward_le_one S player)
           · intro _
             exact abs_quittingTerminalPayoff_le reward
               (Function.update profile who
                 (quittingAlwaysContinueStrategy reward who)) who
-              (by norm_num) (fun S player => abs_reward_le_one S player)
+              (fun S player => abs_reward_le_one S player)
       _ = quittingTerminalPayoff reward
           (Function.update profile who
             (quittingAlwaysContinueStrategy reward who)) who :=

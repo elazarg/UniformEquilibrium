@@ -355,7 +355,7 @@ private theorem finite_packet_advantage_mem
   · rw [finite.2.packet.advantage_pin]
     exact QuittingAggregateCalibratedTerminalAnchor.terminalOpponentAdvantage_le_two_mul_bound
       reward
-      (quittingRewardBound reward) (quittingRewardBound_nonneg reward)
+      (quittingRewardBound reward)
       (fun terminal player => abs_reward_le_quittingRewardBound reward terminal player)
       finite.1.packet.owner finite.1.packet.action
 

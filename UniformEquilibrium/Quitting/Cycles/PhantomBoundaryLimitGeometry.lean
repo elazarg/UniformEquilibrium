@@ -39,7 +39,7 @@ theorem exists_quittingAnnotationBoundary_of_summableAbsorption
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hbound : ∀ time who, |value time who| ≤ M)
     (hcharge : Summable (fun time ↦
@@ -72,6 +72,8 @@ theorem exists_quittingAnnotationBoundary_of_summableAbsorption
   choose boundary hboundary using hcoordinate
   refine ⟨boundary, hboundary, ?_⟩
   intro start who
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   exact abs_quittingValuePath_sub_limit_le_tailCharge
     reward roots value hpolicy boundary hM hreward hbound hcharge
       hboundary start who

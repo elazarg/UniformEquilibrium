@@ -94,7 +94,7 @@ theorem abs_capNashRootStack_payoff_sub_comparison_le
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
     (comparison : Payoff ι) (who : ι)
-    {M error : ℝ} (hM : 0 ≤ M)
+    {M error : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hterminal : |quittingTerminalPayoff reward terminal who -
       comparison who| ≤ error) :
@@ -114,7 +114,7 @@ theorem abs_capNashRootStack_payoff_sub_comparison_le
     _ ≤ 2 * M * quittingCapNashStackAbsorptionSum roots + error :=
       add_le_add
         (abs_quittingTerminalPayoff_rootStack_sub_terminal_le
-          (reward := reward) roots terminal who hM hreward)
+          (reward := reward) roots terminal who hreward)
         hterminal
     _ = error + 2 * M * quittingCapNashStackAbsorptionSum roots := by ring
 

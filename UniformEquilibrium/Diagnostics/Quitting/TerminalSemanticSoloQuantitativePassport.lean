@@ -106,7 +106,7 @@ theorem exists_singletonGap_ge_of_le_maximumSingletonGap
 hazard above the fixed-tail absorption modulus. -/
 theorem gap_div_le_soloHazard_of_isZeroRootNash
     (tail : Payoff ι) (owner blocker : ι) (hazard : PMF Bool)
-    {M eta : ℝ} (hM : 0 ≤ M) (heta : 0 < eta)
+    {M eta : ℝ} (heta : 0 < eta)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hgap : tail blocker ≤
       reward (quittingSingletonTerminal blocker) blocker - eta)
@@ -120,7 +120,7 @@ theorem gap_div_le_soloHazard_of_isZeroRootNash
   simpa using
     gap_div_le_quittingRootAbsorptionMass_of_isZeroEndpointNash
       reward tail (quittingSoloStationaryRoot owner hazard) blocker
-        hM heta hreward hgap hendpoint
+        heta hreward hgap hendpoint
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- A uniform lower bound on the owner's Quit probability gives the expected
@@ -150,7 +150,7 @@ uniform owner hazard. -/
 theorem quittingSoloSemanticSpine_hazard_ge_gapDiv
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
-    {M eta : ℝ} (hM : 0 ≤ M) (heta : 0 < eta)
+    {M eta : ℝ} (heta : 0 < eta)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : ∀ time, IsεQuittingRootNash reward (pair (time + 1)).1 0
       (root time))
@@ -165,7 +165,7 @@ theorem quittingSoloSemanticSpine_hazard_ge_gapDiv
   obtain ⟨blocker, hblocker⟩ := hgap time
   have hbound := gap_div_le_soloHazard_of_isZeroRootNash
     (reward := reward) (pair (time + 1)).1 owner blocker
-      (root time owner) hM heta hreward hblocker
+      (root time owner) heta hreward hblocker
   rw [← hroot time] at hbound
   exact hbound (hnash time)
 
@@ -193,7 +193,7 @@ theorem quittingSoloSemanticSpine_survival_le_gapPow
   exact quittingSoloSemanticSurvival_le_pow_of_hazard_ge
     root owner (eta / (eta + 2 * M)) hrhoLeOne
       (quittingSoloSemanticSpine_hazard_ge_gapDiv pair root owner
-        hM heta hreward hnash hroot hgap)
+        heta hreward hnash hroot hgap)
 
 /-- Quantitative occupation error on a uniformly absorbing fixed-owner solo
 spine. -/
@@ -220,7 +220,7 @@ theorem abs_quittingTerminalSemanticSoloSpine_prescribed_sub_soloReward_le
             quittingSoloReward reward owner player) := by
     linarith only [hfold]
   have htailBox := quittingTerminalSemanticCarrier_mem_box
-    (reward := reward) (pair (start + fuel)) hM hreward
+    (reward := reward) (pair (start + fuel)) hreward
       (hpair (start + fuel))
   have htailAbs : |(pair (start + fuel)).1 player| ≤ M :=
     abs_le.mpr ⟨htailBox.1.1 player, htailBox.1.2 player⟩

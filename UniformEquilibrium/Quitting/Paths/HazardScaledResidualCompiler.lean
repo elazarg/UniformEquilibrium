@@ -105,7 +105,7 @@ theorem
   have hselected :=
     eq_quittingRootSequenceTerminalValue_of_exact_bounded_path_of_survival_tendsto_zero
       reward certificate.roots certificate.value certificate.survival
-        hbound hreward certificate.value_bound certificate.policy
+        hreward certificate.value_bound certificate.policy
   have hdelivery : quittingTerminalPayoff reward
       (quittingInfinitePathProfile reward certificate.roots) = target := by
     funext who
@@ -307,7 +307,7 @@ theorem quittingRootSequenceHazardTerminalValue_le_add_of_separatedError
     have hdev := abs_quittingTerminalPayoff_le reward
       (quittingRootSequenceProfile reward
         (quittingRootSequenceUpdate roots player deviation) time)
-      player hbound hreward
+      player hreward
     have hval := hvalueBound time player
     have hraw : deviationValue time - super time ≤ 2 * bound := by
       dsimp only [deviationValue, super, allowance,
@@ -341,7 +341,7 @@ theorem QuittingInfinitePathSeparatedErrorCertificate.isεAsymptoticNash_and_del
   have hselected :=
     eq_quittingRootSequenceTerminalValue_of_exact_bounded_path_of_survival_tendsto_zero
       reward certificate.roots certificate.value certificate.survival
-        hbound hreward certificate.value_bound certificate.policy
+        hreward certificate.value_bound certificate.policy
   have hdelivery : quittingTerminalPayoff reward
       (quittingInfinitePathProfile reward certificate.roots) = target := by
     funext who

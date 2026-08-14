@@ -130,7 +130,6 @@ theorem
     {bound : ℝ}
     (hsurvival : ∀ start,
       Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0))
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hvalueBound : ∀ time who, |value time who| ≤ bound)
     (hpolicy : ∀ time,
@@ -170,7 +169,7 @@ theorem
     have hvalue := hvalueBound (time + fuel) who
     have hterminal := abs_quittingTerminalPayoff_le reward
       (quittingRootSequenceProfile reward roots (time + fuel)) who
-      hbound0 hreward
+      hreward
     dsimp only [difference, terminal,
       quittingRootSequenceTerminalValue] at hterminal ⊢
     exact (abs_sub _ _).trans (by linarith)
@@ -203,7 +202,6 @@ theorem
     (hcharge : 0 < charge)
     (hlower : ∀ time,
       charge ≤ quittingRootAbsorptionMass (roots time))
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hvalueBound : ∀ time who, |value time who| ≤ bound)
     (hpolicy : ∀ time,
@@ -218,7 +216,7 @@ theorem
       reward roots value
       (tendsto_zero_quittingJointSurvivalWeight_of_absorption_lower
         roots hcharge hlower)
-      hbound0 hreward hvalueBound hpolicy
+      hreward hvalueBound hpolicy
 
 /-- A uniform positive lower bound makes the total absorption charge
 nonsummable. -/

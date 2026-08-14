@@ -89,7 +89,7 @@ theorem abs_quittingRootDeviationContinuationPayoff_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : (quittingGame reward).BehaviorProfile)
     (who : ι) (deviation : (quittingGame reward).BehaviorStrategy who)
-    (player : ι) {M : ℝ} (hM : 0 ≤ M)
+    (player : ι) {M : ℝ}
     (hreward : ∀ S i, |reward S i| ≤ M) :
     |quittingRootDeviationContinuationPayoff
       reward continuation who deviation player| ≤ M := by
@@ -97,10 +97,10 @@ theorem abs_quittingRootDeviationContinuationPayoff_le
   · subst player
     simp only [quittingRootDeviationContinuationPayoff,
       Function.update_self]
-    exact abs_quittingTerminalPayoff_le reward _ who hM hreward
+    exact abs_quittingTerminalPayoff_le reward _ who hreward
   · simp only [quittingRootDeviationContinuationPayoff,
       Function.update_of_ne hp]
-    exact abs_quittingTerminalPayoff_le reward continuation player hM hreward
+    exact abs_quittingTerminalPayoff_le reward continuation player hreward
 
 /-- Forcing one root coordinate to quit changes every prescribed terminal
 payoff of a root/continuation splice by at most `2 M` times that coordinate's
@@ -109,7 +109,7 @@ theorem abs_quittingTerminalPayoff_rootThenContinuation_forceQuit_sub_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (changed who : ι) {M : ℝ} (hM : 0 ≤ M)
+    (changed who : ι) {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingTerminalPayoff reward
           (quittingRootThenContinuationProfile reward root continuation) who -
@@ -117,7 +117,7 @@ theorem abs_quittingTerminalPayoff_rootThenContinuation_forceQuit_sub_le
           (quittingRootThenContinuationProfile reward
             (Function.update root changed (PMF.pure true))
             continuation) who| ≤
-      2 * M * (root changed false).toReal := by
+        2 * M * (root changed false).toReal := by
   rw [quittingTerminalPayoff_rootThenContinuation_eq,
     quittingTerminalPayoff_rootThenContinuation_eq]
   exact abs_quittingRootExpectedPayoff_forceQuit_sub_le
@@ -125,7 +125,7 @@ theorem abs_quittingTerminalPayoff_rootThenContinuation_forceQuit_sub_le
       quittingTerminalPayoff reward continuation player)
     root changed who hreward
     (fun player => abs_quittingTerminalPayoff_le
-      reward continuation player hM hreward)
+      reward continuation player hreward)
 
 /-- For a player other than the forced quitter, the payoff of every fixed full
 behavior deviation moves by at most `2 M d`. -/
@@ -135,7 +135,7 @@ theorem abs_quittingTerminalPayoff_update_rootThenContinuation_forceQuit_other_s
     (continuation : (quittingGame reward).BehaviorProfile)
     (changed who : ι) (hother : changed ≠ who)
     (deviation : (quittingGame reward).BehaviorStrategy who)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingTerminalPayoff reward
           (Function.update
@@ -162,7 +162,7 @@ theorem abs_quittingTerminalPayoff_update_rootThenContinuation_forceQuit_other_s
         (deviation 0 ((quittingGame reward).emptyHist none)))
       changed who hreward
       (fun player => abs_quittingRootDeviationContinuationPayoff_le
-        reward continuation who deviation player hM hreward))
+        reward continuation who deviation player hreward))
 
 /-- For the forced quitter itself, updating by any fixed full behavior
 deviation erases the root perturbation exactly. -/
@@ -192,19 +192,20 @@ theorem abs_quittingTerminalPayoff_update_rootThenContinuation_forceQuit_sub_le
     (continuation : (quittingGame reward).BehaviorProfile)
     (changed who : ι)
     (deviation : (quittingGame reward).BehaviorStrategy who)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingTerminalPayoff reward
           (Function.update
             (quittingRootThenContinuationProfile reward root continuation)
             who deviation) who -
         quittingTerminalPayoff reward
-          (Function.update
+      (Function.update
             (quittingRootThenContinuationProfile reward
               (Function.update root changed (PMF.pure true))
               continuation)
             who deviation) who| ≤
       2 * M * (root changed false).toReal := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   by_cases hself : changed = who
   · subst who
     rw [quittingTerminalPayoff_update_rootThenContinuation_forceQuit_self_eq]
@@ -212,7 +213,7 @@ theorem abs_quittingTerminalPayoff_update_rootThenContinuation_forceQuit_sub_le
     positivity
   · exact
       abs_quittingTerminalPayoff_update_rootThenContinuation_forceQuit_other_sub_le
-        reward root continuation changed who hself deviation hM hreward
+        reward root continuation changed who hself deviation hreward
 
 /-- **Full-profile near-sure-to-sure transfer.**  Forcing one root coordinate
 to quit surely increases terminal equilibrium error by at most four times the
@@ -221,7 +222,7 @@ theorem isεAsymptoticNash_rootThenContinuation_update_pure_true
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (changed : ι) {ε M : ℝ} (hM : 0 ≤ M)
+    (changed : ι) {ε M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hnash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) ε
@@ -235,10 +236,10 @@ theorem isεAsymptoticNash_rootThenContinuation_update_pure_true
   have hold := hnash who deviation
   have hprescribed :=
     abs_quittingTerminalPayoff_rootThenContinuation_forceQuit_sub_le
-      reward root continuation changed who hM hreward
+      reward root continuation changed who hreward
   have hdeviation :=
     abs_quittingTerminalPayoff_update_rootThenContinuation_forceQuit_sub_le
-      reward root continuation changed who deviation hM hreward
+      reward root continuation changed who deviation hreward
   rw [abs_le] at hprescribed hdeviation
   linarith
 
@@ -249,7 +250,7 @@ theorem exists_sureFirstProfile_of_allContinue_mass_le_pow
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {ε M d : ℝ} (hd : 0 < d) (hM : 0 ≤ M)
+    {ε M d : ℝ} (hd : 0 < d)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hnear : ((pmfPi root) quittingAllContinueAction).toReal ≤
       d ^ Fintype.card ι)
@@ -260,8 +261,9 @@ theorem exists_sureFirstProfile_of_allContinue_mass_le_pow
       QuittingRootHasSureQuitter sureRoot ∧
       (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) (ε + 4 * M * d)
-        (quittingRootThenContinuationProfile
+      (quittingRootThenContinuationProfile
           reward sureRoot continuation) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward
   obtain ⟨changed, hcontinue⟩ :=
     exists_continueProbability_le_of_allContinue_mass_le_pow root hd hnear
   let sureRoot := Function.update root changed (PMF.pure true)
@@ -270,7 +272,7 @@ theorem exists_sureFirstProfile_of_allContinue_mass_le_pow
   dsimp [sureRoot]
   have hforced :=
     isεAsymptoticNash_rootThenContinuation_update_pure_true
-      reward root continuation changed hM hreward hnash
+      reward root continuation changed hreward hnash
   intro who deviation
   have hbound := hforced who deviation
   have hfour : 0 ≤ 4 * M := mul_nonneg (by norm_num) hM
@@ -284,7 +286,7 @@ theorem exists_sureFirstProfile_of_profile_allContinue_mass_le_pow
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    {ε M d : ℝ} (hd : 0 < d) (hM : 0 ≤ M)
+    {ε M d : ℝ} (hd : 0 < d)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hnear : (((quittingGame reward).stageActionDist profile
       ((quittingGame reward).emptyHist none))
@@ -300,7 +302,7 @@ theorem exists_sureFirstProfile_of_profile_allContinue_mass_le_pow
   apply exists_sureFirstProfile_of_allContinue_mass_le_pow
     reward (quittingProfileRoot reward profile)
       (quittingProfileAllContinueContinuation reward profile)
-      hd hM hreward
+      hd hreward
   · change ((pmfPi (quittingProfileRoot reward profile))
       quittingAllContinueAction).toReal ≤ d ^ Fintype.card ι at hnear
     exact hnear

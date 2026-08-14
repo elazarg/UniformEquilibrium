@@ -169,7 +169,7 @@ theorem exists_terminalOutcome_quantitative_profitableAtom_of_mem_carrier
           (2 * M * Fintype.card (QuittingTerminalOutcome ι)) ≤
         mass outcome := by
   have hbox := quittingTerminalSemanticCarrier_mem_box
-    (reward := reward) pair hM.le hreward hpair
+    (reward := reward) pair hreward hpair
   exact exists_terminalOutcome_quantitative_profitableAtom
     reward pair who mass hM hreward
       (abs_le.mpr ⟨hbox.1.1 who, hbox.1.2 who⟩)

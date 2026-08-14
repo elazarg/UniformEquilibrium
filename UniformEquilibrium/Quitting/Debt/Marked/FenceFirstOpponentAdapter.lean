@@ -419,9 +419,10 @@ omit [DecidableEq ι] in
 theorem quittingFirstOpponentOwnerReward_lower
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (owner : ι) {fuel : ℕ} (mark : QuittingFirstOpponentMark ι fuel)
-    (M : ℝ) (hM : 0 ≤ M)
+    (M : ℝ)
     (hreward : ∀ S player, |reward S player| ≤ M) :
     -M ≤ quittingFirstOpponentOwnerReward reward owner mark := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   unfold quittingFirstOpponentOwnerReward
   by_cases hquit : (quittingQuitters mark.2).Nonempty
   · simp only [quittingRootPayoff, dif_pos hquit]
@@ -434,10 +435,11 @@ mass. -/
 theorem neg_M_mul_quittingFirstOpponentMass_le_rawMean
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (owner : ι) (start fuel : ℕ)
-    (M : ℝ) (hM : 0 ≤ M)
+    (M : ℝ)
     (hreward : ∀ S player, |reward S player| ≤ M) :
     -M * quittingFirstOpponentMass roots owner start fuel ≤
       quittingFirstOpponentRawMean reward roots owner start fuel := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   rw [← sum_quittingFirstOpponentRawWeight]
   unfold quittingFirstOpponentRawMean
   calc
@@ -455,7 +457,7 @@ theorem neg_M_mul_quittingFirstOpponentMass_le_rawMean
       apply Finset.sum_le_sum
       intro mark _
       exact mul_le_mul_of_nonneg_left
-        (quittingFirstOpponentOwnerReward_lower reward owner mark M hM hreward)
+        (quittingFirstOpponentOwnerReward_lower reward owner mark M hreward)
         (quittingFirstOpponentRawWeight_nonneg roots owner start fuel mark)
 
 /-- A Never inequality at a negative suffix forces a quantitative amount of
@@ -464,14 +466,14 @@ theorem theta_le_M_mul_quittingFirstOpponentMass
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (owner : ι) (start fuel : ℕ) (θ M : ℝ)
-    (hM : 0 ≤ M)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hnever : quittingFirstOpponentRawMean reward roots owner start fuel ≤
       value start owner)
     (hnegative : value start owner ≤ -θ) :
     θ ≤ M * quittingFirstOpponentMass roots owner start fuel := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   have hlower := neg_M_mul_quittingFirstOpponentMass_le_rawMean
-    reward roots owner start fuel M hM hreward
+    reward roots owner start fuel M hreward
   linarith
 
 /-- A positive threshold makes the actual opponent-fence mass strictly
@@ -487,7 +489,7 @@ theorem quittingFirstOpponentMass_pos
     0 < quittingFirstOpponentMass roots owner start fuel := by
   obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hfence := theta_le_M_mul_quittingFirstOpponentMass
-    reward roots value owner start fuel θ M hM hreward hnever hnegative
+    reward roots value owner start fuel θ M hreward hnever hnegative
   have hmass0 := quittingFirstOpponentMass_nonneg roots owner start fuel
   nlinarith
 
@@ -570,7 +572,7 @@ theorem quittingFirstOpponent_markedFenceDichotomy
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (owner : ι) (start fuel : ℕ) (θ M : ℝ)
-    (hθ : 0 < θ) (hM : 0 ≤ M)
+    (hθ : 0 < θ)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hnever : quittingFirstOpponentRawMean reward roots owner start fuel ≤
       value start owner)
@@ -589,6 +591,7 @@ theorem quittingFirstOpponent_markedFenceDichotomy
               (quittingFirstOpponentOwnerReward reward owner)
               (quittingFirstOpponentQuitters owner)
               (quittingFirstOpponentValue value start) j) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   have hmass := quittingFirstOpponentMass_pos reward roots value owner
     start fuel θ hθ hnever hnegative
   apply QuittingMarkedFencePacket.marked_packet_dichotomy
@@ -602,7 +605,7 @@ theorem quittingFirstOpponent_markedFenceDichotomy
   · exact hθ.le
   · exact hM
   · intro mark
-    exact quittingFirstOpponentOwnerReward_lower reward owner mark M hM hreward
+    exact quittingFirstOpponentOwnerReward_lower reward owner mark M hreward
   · exact sum_normalizedOwnerReward_le_neg_theta reward roots value owner
       start fuel θ hθ.le hmass hnever hnegative
   · exact quittingFirstOpponent_owner_not_quitter owner
@@ -626,7 +629,7 @@ theorem quittingFiniteExactChain_firstOpponent_markedFenceDichotomy
     (hnash : ∀ offset, offset < fuel →
       IsεQuittingRootNash reward (value (start + offset + 1)) 0
         (roots (start + offset)))
-    (hθ : 0 < θ) (hM : 0 ≤ M)
+    (hθ : 0 < θ)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hnegative : value start owner ≤ -θ) :
     θ ≤ 4 * M * QuittingMarkedFencePacket.packetMass
@@ -644,7 +647,7 @@ theorem quittingFiniteExactChain_firstOpponent_markedFenceDichotomy
               (quittingFirstOpponentQuitters owner)
               (quittingFirstOpponentValue value start) j) := by
   apply quittingFirstOpponent_markedFenceDichotomy reward roots value owner
-    start fuel θ M hθ hM hreward
+    start fuel θ M hθ hreward
   · exact quittingFirstOpponentRawMean_le_value_of_finiteExactChain
       reward roots value owner start fuel hterminal hpolicy hnash
   · exact hnegative

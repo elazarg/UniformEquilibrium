@@ -207,6 +207,36 @@ theorem second {M : ℝ}
             self.assertEqual(success, 0)
             self.assertEqual(stderr.getvalue(), "")
 
+    def test_check_mode_enforces_nonnegative_hypothesis_limit(self) -> None:
+        with self._root() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "UniformEquilibrium" / "Nonnegative.lean").write_text(
+                """theorem first {M : ℝ}
+    (hM : 0 ≤ M) (hreward : ∀ S, |reward S| ≤ M)
+    (hvalue : |value| ≤ M) : True := by trivial
+theorem second {M : ℝ}
+    (hM : 0 ≤ M) (hreward : ∀ S, |reward S| ≤ M)
+    (hvalue : |value| ≤ M) : True := by trivial
+""",
+                encoding="utf-8",
+            )
+            stdout = io.StringIO()
+            stderr = io.StringIO()
+            with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                failure = check_reward_bounds.main(
+                    ["--root", str(root), "--check", "--max-nonnegative", "1"]
+                )
+            self.assertEqual(failure, 1)
+            self.assertIn("--max-nonnegative=1", stderr.getvalue())
+            stdout = io.StringIO()
+            stderr = io.StringIO()
+            with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                success = check_reward_bounds.main(
+                    ["--root", str(root), "--check", "--max-nonnegative", "2"]
+                )
+            self.assertEqual(success, 0)
+            self.assertEqual(stderr.getvalue(), "")
+
     def test_interleaved_nontriple_binder_is_retained(self) -> None:
         with self._root() as temporary:
             root = pathlib.Path(temporary)

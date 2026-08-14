@@ -213,7 +213,7 @@ excess is small. -/
 theorem abs_quittingTerminalPayoff_rootStack_sub_terminal_le
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M) :
     |quittingTerminalPayoff reward
           (quittingLiteralRootStackProfile reward roots terminal) who -
@@ -225,7 +225,7 @@ theorem abs_quittingTerminalPayoff_rootStack_sub_terminal_le
       let suffix := quittingLiteralRootStackProfile reward roots terminal
       have hsuffixBound :
           |quittingTerminalPayoff reward suffix who| ≤ M :=
-        abs_quittingTerminalPayoff_le reward suffix who hM hreward
+        abs_quittingTerminalPayoff_le reward suffix who hreward
       have hstep :=
         abs_quittingRootSuccessorPayoff_sub_tail_le_two_mul_absorptionMass
           reward (fun player => quittingTerminalPayoff reward suffix player)
@@ -280,7 +280,7 @@ renewal tightness. -/
 theorem abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_le
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hstack : IsQuittingCapNashRootStack reward roots terminal) :
     |quittingContinuationBestResponseValue reward
@@ -297,7 +297,7 @@ theorem abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_
           quittingTerminalPayoff reward terminal who| ≤
         2 * M * absorption := by
     exact abs_quittingTerminalPayoff_rootStack_sub_terminal_le
-      (reward := reward) roots terminal who hM hreward
+      (reward := reward) roots terminal who hreward
   have hdebtEq : stackDebt = survival * terminalDebt := by
     exact quittingTerminalDeviationDebt_capNashRootStack_eq
       (reward := reward) roots terminal who hstack
@@ -306,9 +306,9 @@ theorem abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_
       reward terminal who
   have hterminalDebtLe : terminalDebt ≤ 2 * M := by
     have hcapBound := abs_quittingContinuationBestResponseValue_le
-      reward terminal who hM hreward
+      reward terminal who hreward
     have hpayoffBound := abs_quittingTerminalPayoff_le
-      reward terminal who hM hreward
+      reward terminal who hreward
     have hcapUpper := le_of_abs_le hcapBound
     have hpayoffLower := neg_le_of_abs_le hpayoffBound
     dsimp [terminalDebt]
@@ -578,7 +578,7 @@ survival floor.  This is the sharp finite obstruction to reading cap--Nash itera
 as an absorbing renewal construction. -/
 theorem exists_deep_nearMinimum_capNashChronology
     (terminal : (quittingGame reward).BehaviorProfile)
-    (depth : ℕ) (epsilon : ℝ) {M : ℝ} (hM : 0 ≤ M)
+    (depth : ℕ) (epsilon : ℝ) {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hinf : 0 < quittingTerminalDebtSumInf reward)
     (hnear : quittingTerminalDebtSum reward terminal ≤
@@ -608,10 +608,11 @@ theorem exists_deep_nearMinimum_capNashChronology
       (reward := reward) roots terminal epsilon hstack hnear,
     capNashStack_continueProduct_lowerBound
       (reward := reward) roots terminal hinf hstack,
-    fun who => abs_quittingTerminalPayoff_rootStack_sub_terminal_le
-      (reward := reward) roots terminal who hM hreward,
+    fun who =>
+      abs_quittingTerminalPayoff_rootStack_sub_terminal_le
+        (reward := reward) roots terminal who hreward,
     fun who =>
       abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_le
-        (reward := reward) roots terminal who hM hreward hstack⟩
+        (reward := reward) roots terminal who hreward hstack⟩
 
 end GameTheory

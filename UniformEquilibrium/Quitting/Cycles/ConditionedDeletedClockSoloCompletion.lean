@@ -55,7 +55,6 @@ theorem tendsto_value_sub_terminalValue_of_vanishing_jointPolicyCoefficient
       value start who -
         quittingRootSequenceTerminalValue reward roots who start)
       atTop (nhds 0) := by
-  have hM : 0 ≤ M := (abs_nonneg (value 0 who)).trans (hvalue 0 who)
   rw [Metric.tendsto_atTop]
   intro epsilon hepsilon
   have hhalf : 0 < epsilon / 2 := by linarith
@@ -98,9 +97,6 @@ theorem tendsto_value_sub_terminalValue_of_vanishing_jointPolicyCoefficient
         mul_le_mul_of_nonneg_right hcoefficient habsorption
       _ = _ := rfl
   let K : ℝ := max M (quittingRewardBound reward)
-  have hK : 0 ≤ K := by
-    dsimp only [K]
-    exact hM.trans (le_max_left M (quittingRewardBound reward))
   have hrewardK : ∀ terminal player, |reward terminal player| ≤ K := by
     intro terminal player
     exact (abs_reward_le_quittingRewardBound reward terminal player).trans
@@ -110,7 +106,7 @@ theorem tendsto_value_sub_terminalValue_of_vanishing_jointPolicyCoefficient
     exact (hvalue time player).trans (le_max_left M (quittingRewardBound reward))
   have hselected :=
     abs_value_sub_rootSequenceTerminalValue_le_of_jointPolicyError
-      reward shiftedRoots shiftedValue hK hrewardK
+      reward shiftedRoots shiftedValue hrewardK
       (fun time player => hvalueK (start + time) player)
       hshiftedPolicy hshiftedSurvival 0 who
   rw [show shiftedValue 0 who = value start who by
@@ -169,7 +165,7 @@ theorem isUniformEquilibriumPayoff_soloReward_of_deletedQuitLimits
   · intro n who hwho
     have hdelete :=
       abs_quittingStationaryFixedOpponentsQuitValue_sub_solo_le_of_hazard
-        reward (roots n) hwho hM hreward (hhazard n)
+        reward (roots n) hwho hreward (hhazard n)
     have hdeleteLower := (abs_le.mp hdelete).1
     have htargetUpper := (abs_le.mp (hclose n who)).2
     have hfull := hquit n who hwho

@@ -292,9 +292,11 @@ theorem quittingSetReward_sub_insert_le_joiningLoss
 
 /-- Under an `M` reward bound, the sharp joining loss is at most `2M`. -/
 theorem quittingJoiningLoss_le_two_mul
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
+    (who : ι) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     quittingJoiningLoss reward who ≤ 2 * M := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   unfold quittingJoiningLoss
   apply Finset.sup'_le
   intro S hS

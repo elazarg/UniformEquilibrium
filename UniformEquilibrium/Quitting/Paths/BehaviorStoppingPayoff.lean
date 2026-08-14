@@ -66,7 +66,7 @@ theorem quittingRootSequenceHazardTerminalValue_eq_expect_stoppingLaw
         (fun choice =>
           quittingRootSequencePureTimeTerminalValue reward roots who
             choice 0) := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
+  obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   let pureValue : Option ℕ → ℝ := fun choice =>
     quittingRootSequencePureTimeTerminalValue reward roots who choice 0
   have hpureBound : ∀ choice, |pureValue choice| ≤ M := by
@@ -78,7 +78,7 @@ theorem quittingRootSequenceHazardTerminalValue_eq_expect_stoppingLaw
         (quittingRootSequenceProfile reward
           (quittingRootSequenceUpdate roots who
             (quittingPureTimeHazard choice)) 0)
-        who hM hreward)
+        who hreward)
   have hsource : Tendsto
       (fun cutoff =>
         quittingFiniteRootPayoff reward roots who hazard 0 cutoff)

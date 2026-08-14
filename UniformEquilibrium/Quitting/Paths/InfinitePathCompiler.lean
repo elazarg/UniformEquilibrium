@@ -110,7 +110,6 @@ theorem
     (hsurvival : ∀ who start,
       Tendsto (quittingOpponentSurvivalWeight roots who start)
         atTop (nhds 0))
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hvalueBound : ∀ time who, |value time who| ≤ bound)
     (hpolicy : ∀ time,
@@ -151,7 +150,7 @@ theorem
     have hvalue := hvalueBound (time + fuel) who
     have hterminal := abs_quittingTerminalPayoff_le reward
       (quittingRootSequenceProfile reward roots (time + fuel)) who
-      hbound0 hreward
+      hreward
     dsimp only [difference, terminal,
       quittingRootSequenceTerminalValue] at hterminal ⊢
     exact (abs_sub _ _).trans (by linarith)
@@ -185,7 +184,6 @@ theorem eq_quittingRootSequenceTerminalValue_of_exact_bounded_path
     (hK : 0 < K)
     (hblock : IsQuittingOpponentBlockContraction roots K rho)
     (hrho0 : 0 ≤ rho) (hrho1 : rho < 1)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hvalueBound : ∀ time who, |value time who| ≤ bound)
     (hpolicy : ∀ time,
@@ -200,7 +198,7 @@ theorem eq_quittingRootSequenceTerminalValue_of_exact_bounded_path
         (fun who start ↦
           tendsto_zero_quittingOpponentSurvivalWeight_of_blockContraction
             roots hK hblock hrho0 hrho1 who start)
-        hbound0 hreward hvalueBound hpolicy
+        hreward hvalueBound hpolicy
 
 /-! ## Exact terminal Nash compilation -/
 
@@ -274,7 +272,7 @@ theorem
           (quittingInfinitePathProfile reward roots) = value 0 := by
   have hselected :=
     eq_quittingRootSequenceTerminalValue_of_exact_bounded_path_of_survival_tendsto_zero
-      reward roots value hsurvival hbound0 hreward hvalueBound hpolicy
+      reward roots value hsurvival hreward hvalueBound hpolicy
   have hdelivery : quittingTerminalPayoff reward
       (quittingInfinitePathProfile reward roots) = value 0 := by
     funext who

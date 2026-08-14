@@ -197,7 +197,7 @@ theorem abs_isolatedEndpointThreat_terminalPayoff_sub_ownerSolo_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {owner blocker : ι} (hne : blocker ≠ owner) (hazard : PMF Bool)
     {eta M : ℝ} (heta : 0 < eta) (heta1 : eta ≤ 1)
-    (howner : 0 < (hazard true).toReal) (hM : 0 ≤ M)
+    (howner : 0 < (hazard true).toReal)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (who : ι) :
     |quittingTerminalPayoff reward
@@ -205,6 +205,7 @@ theorem abs_isolatedEndpointThreat_terminalPayoff_sub_ownerSolo_le
             (isolatedEndpointThreatRoot owner blocker hazard eta heta.le heta1)) who -
         quittingSoloReward reward owner who| ≤
       2 * M * eta / (hazard true).toReal := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let root := isolatedEndpointThreatRoot owner blocker hazard eta heta.le heta1
   let absorption := quittingRootAbsorptionMass root
   have habsLower := isolatedEndpointThreatRoot_ownerHazard_le_absorption
@@ -249,13 +250,13 @@ theorem abs_isolatedEndpointThreat_quitValue_sub_soloRoot_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {owner blocker : ι} (hne : blocker ≠ owner) (hazard : PMF Bool)
     {eta M : ℝ} (heta0 : 0 ≤ eta) (heta1 : eta ≤ 1)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (who : ι) :
     |quittingStationaryFixedOpponentsQuitValue reward
           (isolatedEndpointThreatRoot owner blocker hazard eta heta0 heta1) who -
         quittingStationaryFixedOpponentsQuitValue reward
           (quittingSoloStationaryRoot owner hazard) who| ≤ 2 * M * eta := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   classical
   by_cases hwho : who = blocker
   · subst who
@@ -364,11 +365,11 @@ theorem terminalNash_all_errors_of_isolatedEndpoint
             zero_mul, add_zero] at hquit
           exact hquit
         have hquitClose := abs_isolatedEndpointThreat_quitValue_sub_soloRoot_le
-          reward hne hazard heta.le heta1 hM
+          reward hne hazard heta.le heta1
           (abs_reward_le_quittingRewardBound reward) who
         have hpayoffClose :=
           abs_isolatedEndpointThreat_terminalPayoff_sub_ownerSolo_le
-          reward hne hazard heta heta1 howner hM
+          reward hne hazard heta heta1 howner
           (abs_reward_le_quittingRewardBound reward) who
         have hquitUpper := (abs_le.mp hquitClose).2
         have hpayoffLower := (abs_le.mp hpayoffClose).1
@@ -390,7 +391,7 @@ theorem terminalNash_all_errors_of_isolatedEndpoint
         · subst who
           have hpayoffClose :=
             abs_isolatedEndpointThreat_terminalPayoff_sub_ownerSolo_le
-            reward hne hazard heta heta1 howner hM
+            reward hne hazard heta heta1 howner
             (abs_reward_le_quittingRewardBound reward) owner
           have hpayoffLower := (abs_le.mp hpayoffClose).1
           change
@@ -424,7 +425,7 @@ theorem terminalNash_all_errors_of_isolatedEndpoint
           · subst who
             have hpayoffClose :=
               abs_isolatedEndpointThreat_terminalPayoff_sub_ownerSolo_le
-              reward hne hazard heta heta1 howner hM
+              reward hne hazard heta heta1 howner
               (abs_reward_le_quittingRewardBound reward) blocker
             have hpayoffLower := (abs_le.mp hpayoffClose).1
             change

@@ -246,7 +246,7 @@ theorem bestResponseValue_eq_one_of_update_payoff
     quittingContinuationBestResponseValue reward profile who = 1 := by
   apply le_antisymm
   · exact le_of_abs_le (abs_quittingContinuationBestResponseValue_le
-      reward profile who (M := 1) (by norm_num) reward_bound)
+      reward profile who (M := 1) reward_bound)
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward profile who target
     rw [hpayoff] at hlower
