@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCapNashDebtSupport
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Boundary handoff and overtilt corollaries
@@ -34,9 +35,7 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 minimum debt, the prefix estimate is sharp in every coordinate. -/
 theorem minimumTerminalSemantic_boundaryNash_debt_handoff
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -51,6 +50,8 @@ theorem minimumTerminalSemantic_boundaryNash_debt_handoff
           quittingTerminalSemanticDebt pair who +
         quittingRootCoalitionMass root {who} *
           quittingTerminalSemanticDebtSum pair := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   let debt := quittingTerminalSemanticDebtSum pair
   have hdebtNonneg : 0 ≤ debt := hpositive.le
@@ -113,9 +114,7 @@ theorem minimumTerminalSemantic_boundaryNash_debt_handoff
 coefficient of `player` is its one-stage singleton absorption mass. -/
 theorem minimumTerminalSemantic_boundaryNash_normalizedDebt_handoff
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -132,7 +131,7 @@ theorem minimumTerminalSemantic_boundaryNash_normalizedDebt_handoff
             quittingTerminalSemanticDebtSum pair) +
         quittingRootCoalitionMass root {who} := by
   rw [minimumTerminalSemantic_boundaryNash_debt_handoff
-    (reward := reward) pair root hM hreward hpair hminimum hpositive hnash who]
+    (reward := reward) pair root hpair hminimum hpositive hnash who]
   field_simp [ne_of_gt hpositive]
 
 /-! ## Collision is paid by cap overtilt -/
@@ -141,9 +140,7 @@ theorem minimumTerminalSemantic_boundaryNash_normalizedDebt_handoff
 singleton-weighted positive overtilt beyond the closed debt cube. -/
 theorem minimumTerminalSemantic_collision_mul_debtSum_le_positiveOvertilt
     (pair : QuittingTerminalSemanticPair ι)
-    (shift : Payoff ι) (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (shift : Payoff ι) (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -153,6 +150,8 @@ theorem minimumTerminalSemantic_collision_mul_debtSum_le_positiveOvertilt
     quittingTerminalSemanticDebtSum pair * quittingRootCollisionMass root ≤
       ∑ who, quittingRootCoalitionMass root {who} *
         max (shift who - quittingTerminalSemanticDebtSum pair) 0 := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hbudget := minimumTerminalSemantic_auxiliaryNash_budget
     (reward := reward) pair shift root hM hreward hpair hminimum hshift hnash
   have hsumNeg :
@@ -183,9 +182,7 @@ overtilt. -/
 theorem minimumTerminalSemantic_collisionScale_le_uniformOvertilt
     (pair : QuittingTerminalSemanticPair ι)
     (shift : Payoff ι) (root : ι → PMF Bool)
-    (rho epsilon : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (rho epsilon : ℝ)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -197,6 +194,8 @@ theorem minimumTerminalSemantic_collisionScale_le_uniformOvertilt
     (hupper : ∀ who,
       shift who ≤ quittingTerminalSemanticDebtSum pair + epsilon) :
     quittingTerminalSemanticDebtSum pair * rho ≤ epsilon := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hbudget := minimumTerminalSemantic_auxiliaryNash_budget
     (reward := reward) pair shift root hM hreward hpair hminimum hshift hnash
   have hcoordinateDebtNonneg : ∀ who,
@@ -260,9 +259,7 @@ theorem minimumTerminalSemantic_collisionScale_le_uniformOvertilt
 by the semantic excess above a global minimum. -/
 theorem terminalSemantic_singletonMass_mul_complementaryDebt_le_excess
     (base pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool) (who : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -273,6 +270,8 @@ theorem terminalSemantic_singletonMass_mul_complementaryDebt_le_excess
           quittingTerminalSemanticDebt pair who) ≤
       quittingTerminalSemanticDebtSum pair -
         quittingTerminalSemanticDebtSum base := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hbudget := terminalSemantic_exactNash_nearMinimum_support_budget
     (reward := reward) base pair root hM hreward hminimum hpair hnash
   have hdebtNonneg : ∀ player,

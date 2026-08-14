@@ -71,8 +71,7 @@ exploitability infimum. -/
 theorem terminalExploitabilityGap_le_quittingTerminalExploitabilityInf
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {gap M : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap)
-    (hM : 0 ≤ M) (hreward : ∀ S player, |reward S player| ≤ M) :
+    {gap : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap) :
     gap ≤ quittingTerminalExploitabilityInf reward := by
   unfold quittingTerminalExploitabilityInf
   have hprofiles : Set.Nonempty
@@ -85,7 +84,7 @@ theorem terminalExploitabilityGap_le_quittingTerminalExploitabilityInf
   rintro value ⟨profile, rfl⟩
   obtain ⟨who, deviation, hgain⟩ := hexploit profile
   have hbest := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward profile who deviation hM hreward
+    reward profile who deviation
   have hdebt : gap ≤ quittingTerminalDeviationDebt reward profile who := by
     unfold quittingTerminalDeviationDebt
     linarith
@@ -100,8 +99,6 @@ literal terminal-exploitability infimum. -/
 theorem quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
     (hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
     0 < quittingTerminalExploitabilityInf reward := by
@@ -110,7 +107,7 @@ theorem quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff
       reward).mp hno
   exact hgap.trans_le
     (terminalExploitabilityGap_le_quittingTerminalExploitabilityInf
-      reward hexploit hM hreward)
+      reward hexploit)
 
 /-- Sum of playerwise literal terminal deviation debts. -/
 def quittingTerminalDebtSum
@@ -446,7 +443,7 @@ theorem no_uniformEquilibriumPayoff_implies_not_lexicographic_singletonGap
   apply not_hasLexicographicallyNearMinimalSingletonGap
     reward hM _ hgap hreward
   exact quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff
-    reward hM.le hreward hno
+    reward hno
 
 /-- In a putative counterexample, no fixed player with a positive singleton
 gap can persist through literal lexicographic near-minimizers at the global
@@ -464,6 +461,6 @@ theorem no_uniformEquilibriumPayoff_implies_not_lexicographic_fixedOutsider
   apply not_hasLexicographicallyNearMinimalFixedOutsider
     reward owner hM _ hgap hreward
   exact quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff
-    reward hM.le hreward hno
+    reward hno
 
 end GameTheory

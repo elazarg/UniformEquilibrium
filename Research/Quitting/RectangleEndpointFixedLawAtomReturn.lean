@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalEndpointReturn
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetSurfaceTension
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticTwoReservoirConsumer
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Fixed-law return of the rectangle endpoint atom
@@ -264,8 +265,6 @@ theorem fixedLawResetPoint_unique_allContinue_of_globalResetFaceMinimum
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (source : QuittingTerminalSemanticPair ι)
     (returned : QuittingTerminalSemanticLawPoint ι) (owner : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -279,6 +278,8 @@ theorem fixedLawResetPoint_unique_allContinue_of_globalResetFaceMinimum
     ∀ root : ι → PMF Bool,
       IsεQuittingRootNash reward returned.1.2 0 root →
         root = (quittingAllContinueRoot : ι → PMF Bool) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   intro root hnash
   let prefixed := quittingTerminalSemanticPrefix reward root returned.1
   have hreturnedCarrier :=

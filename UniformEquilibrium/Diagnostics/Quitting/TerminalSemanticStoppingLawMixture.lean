@@ -242,7 +242,7 @@ theorem exists_stoppingLawMixture_debtContraction_and_windowRetention
           quittingStageCoalitionMass reward mixedProfile time terminal := by
   obtain ⟨bestResponse, hbestResponse⟩ :=
     exists_quittingContinuation_deviation_ge_sub
-      reward profile who herror hM hreward
+      reward profile who herror
   refine ⟨bestResponse, ?_⟩
   dsimp only
   let mixedStrategy := quittingStoppingLawMixtureBehaviorStrategy

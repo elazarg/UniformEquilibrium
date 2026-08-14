@@ -287,29 +287,23 @@ def quittingRootSequenceBestResponseValue
   intro time _
   rfl
 
-/-- The `never` cap realizes the exact all-behavior deviation envelope, not
-merely the pure-time envelope.  Thus its co-realized semantic pair is
-`(0, max 0 qᵢ)` for every player. -/
-theorem quittingRootSequenceBestResponseValue_elementaryCap_never
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
-    quittingRootSequenceBestResponseValue reward
-        (quittingElementaryCapRoots (.never : QuittingElementaryTailCap ι)) who =
+/-- Against perpetual continuation, the all-behavior best-response envelope
+is the larger of continuing forever for payoff zero and quitting immediately
+for the player's singleton reward. -/
+theorem quittingContinuationBestResponseValue_quittingAlwaysContinueProfile
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
+    quittingContinuationBestResponseValue reward
+        (quittingAlwaysContinueProfile reward) who =
       max 0 (reward (quittingSingletonTerminal who) who) := by
   let profile := quittingAlwaysContinueProfile reward
-  have hprofile : quittingRootSequenceProfile reward
-      (quittingElementaryCapRoots (.never : QuittingElementaryTailCap ι)) 0 =
-      profile := rfl
   have hbounded : BddAbove (Set.range fun deviation :
       (quittingGame reward).BehaviorStrategy who =>
         quittingTerminalPayoff reward
           (Function.update profile who deviation) who) :=
     bddAbove_range_quittingTerminalPayoff_update
-      reward profile who hM hreward
-  unfold quittingRootSequenceBestResponseValue
-    quittingContinuationBestResponseValue
-  rw [hprofile]
+      reward profile who
+  change quittingContinuationBestResponseValue reward profile who = _
+  unfold quittingContinuationBestResponseValue
   apply le_antisymm
   · apply csSup_le
     · exact ⟨_, ⟨profile who, rfl⟩⟩
@@ -331,6 +325,17 @@ theorem quittingRootSequenceBestResponseValue_elementaryCap_never
           (quittingAlwaysQuitStrategy reward who)) who = _
       dsimp [profile]
       rw [quittingTerminalPayoff_update_quittingAlwaysQuitStrategy]
+
+/-- The `never` cap realizes the exact all-behavior deviation envelope, not
+merely the pure-time envelope.  Thus its co-realized semantic pair is
+`(0, max 0 qᵢ)` for every player. -/
+theorem quittingRootSequenceBestResponseValue_elementaryCap_never
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
+    quittingRootSequenceBestResponseValue reward
+        (quittingElementaryCapRoots (.never : QuittingElementaryTailCap ι)) who =
+      max 0 (reward (quittingSingletonTerminal who) who) := by
+  exact quittingContinuationBestResponseValue_quittingAlwaysContinueProfile
+    reward who
 
 /-! ## Generic prefix stability -/
 
@@ -464,7 +469,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_le_of_prefix_eq
     · exact ⟨_, ⟨xProfile who, rfl⟩⟩
     · rintro _ ⟨deviation, rfl⟩
       have hy := quittingTerminalPayoff_update_le_continuationBestResponseValue
-        reward yProfile who deviation hM hreward
+        reward yProfile who deviation
       unfold quittingContinuationBestResponseValue at hy
       have hp := hpoint deviation
       linarith [le_abs_self
@@ -479,7 +484,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_le_of_prefix_eq
     · exact ⟨_, ⟨yProfile who, rfl⟩⟩
     · rintro _ ⟨deviation, rfl⟩
       have hx := quittingTerminalPayoff_update_le_continuationBestResponseValue
-        reward xProfile who deviation hM hreward
+        reward xProfile who deviation
       unfold quittingContinuationBestResponseValue at hx
       have hp := hpoint deviation
       linarith [neg_le_abs

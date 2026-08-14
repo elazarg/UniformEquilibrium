@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeCausalRegression
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # The legal target gain and the two-deviation state-match obstruction
@@ -97,8 +98,6 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound_and_target
     (lambda charge error : ℝ) (hlambda0 : 0 < lambda)
     (hlambda1 : lambda ≤ 1) (hcharge : 0 < charge)
     (herror : 0 < error) (herrorLe : error ≤ charge / 8)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hslope : lambda * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
@@ -109,6 +108,8 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound_and_target
           (quittingTerminalSemanticPair reward profile) observer) :
     HasQuittingStoppingLawVanishingDebtGainAtomAlternative reward profile
       mover observer target charge error := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let endpoint := Function.update profile mover target
   let mixed := Function.update profile mover
     (quittingStoppingLawMixtureBehaviorStrategy reward mover
@@ -118,7 +119,7 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound_and_target
   let mixedPair := quittingTerminalSemanticPair reward mixed
   have hchord := quittingTerminalSemanticDebt_stoppingLawMixture_le
     reward profile mover observer (profile mover) target lambda hlambda0.le
-      hlambda1 hM hreward
+      hlambda1
   rw [Function.update_eq_self] at hchord
   change quittingTerminalSemanticDebt mixedPair observer ≤
       (1 - lambda) * quittingTerminalSemanticDebt sourcePair observer +
@@ -143,7 +144,7 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound_and_target
     linarith
   rcases exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound
       reward profile mover observer target lambda charge error hlambda0
-      hlambda1 hcharge herror herrorLe hM hreward hslope with
+      hlambda1 hcharge herror herrorLe hslope with
     hprescribed | ⟨quitTime, terminal, hatom, hdebt⟩
   · exact Or.inl hprescribed
   · right

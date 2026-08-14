@@ -8,6 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumPlateauPac
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupation
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Fixed solo-prefix iteration at a singleton-tight minimum
@@ -150,14 +151,14 @@ theorem singletonTight_owner_debt_eq_sum_capDefects_add_phantomTail
 /-- At a singleton-tight unique-debtor minimum, the controlled positive solo
 rate is exact Nash against the displayed prescribed coordinate. -/
 theorem isZeroQuittingRootNash_solo_of_singletonTightMinimumFace
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {debt rate bound M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {debt rate bound : ℝ}
     (hface : QuittingSingletonTightMinimumFace reward pair owner debt)
     (hrate : QuittingSoloRateControlled reward owner debt rate bound) :
     IsεQuittingRootNash reward pair.1 0
       (quittingSoloStationaryRoot owner
         (quittingHazardCoin rate hrate.1.le hrate.2.1)) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let hazard := quittingHazardCoin rate hrate.1.le hrate.2.1
   let root := quittingSoloStationaryRoot owner hazard
   apply (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
@@ -208,21 +209,21 @@ theorem isZeroQuittingRootNash_solo_of_singletonTightMinimumFace
 /-- Prefixing once by the controlled solo row preserves the entire
 singleton-tight minimum face and every debt coordinate. -/
 theorem quittingSingletonTightMinimumFace_prefix
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {debt rate bound M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {debt rate bound : ℝ}
     (hface : QuittingSingletonTightMinimumFace reward pair owner debt)
     (hrate : QuittingSoloRateControlled reward owner debt rate bound) :
     let root := quittingSoloStationaryRoot owner
       (quittingHazardCoin rate hrate.1.le hrate.2.1)
     QuittingSingletonTightMinimumFace reward
       (quittingTerminalSemanticPrefix reward root pair) owner debt := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let hazard := quittingHazardCoin rate hrate.1.le hrate.2.1
   let root := quittingSoloStationaryRoot owner hazard
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   have hnash : IsεQuittingRootNash reward pair.1 0 root := by
     exact isZeroQuittingRootNash_solo_of_singletonTightMinimumFace
-      pair owner hM hreward hface hrate
+      pair owner hface hrate
   have hmem : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier reward root pair hM hreward
       hface.mem_carrier
@@ -258,9 +259,7 @@ theorem quittingSingletonTightMinimumFace_prefix
 /-- Every finite iterate of the fixed solo prefix stays on the same
 singleton-tight minimum face. -/
 theorem quittingSingletonTightMinimumFace_iterate
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {debt rate bound M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {debt rate bound : ℝ}
     (hface : QuittingSingletonTightMinimumFace reward pair owner debt)
     (hrate : QuittingSoloRateControlled reward owner debt rate bound) :
     ∀ n,
@@ -275,7 +274,7 @@ theorem quittingSingletonTightMinimumFace_iterate
   | succ n ih =>
       rw [Function.iterate_succ_apply']
       exact quittingSingletonTightMinimumFace_prefix
-        _ owner hM hreward ih hrate
+        _ owner ih hrate
 
 /-- The prescribed coordinate of the fixed-row iterates has the exact
 geometric formula. -/
@@ -343,9 +342,7 @@ def quittingSingletonTightIterationLimit
 the retained-tail limit, not automatically to the stationary solo pair. -/
 theorem tendsto_quittingSingletonTightMinimumFace_iterate
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
-    {debt rate bound M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {debt rate bound : ℝ}
     (hface : QuittingSingletonTightMinimumFace reward pair owner debt)
     (hrate : QuittingSoloRateControlled reward owner debt rate bound) :
     Tendsto (fun n =>
@@ -359,7 +356,7 @@ theorem tendsto_quittingSingletonTightMinimumFace_iterate
   have hfaces : ∀ n,
       QuittingSingletonTightMinimumFace reward ((step^[n]) pair) owner debt :=
     quittingSingletonTightMinimumFace_iterate
-      pair owner hM hreward hface hrate
+      pair owner hface hrate
   have hprescribed : Tendsto (fun n => ((step^[n]) pair).1)
       atTop (𝓝 (quittingSoloReward reward owner)) :=
     tendsto_quittingSoloPrefix_iterate_prescribed
@@ -399,21 +396,21 @@ limiting owner-solo payoff clears its own singleton reward by the full minimum
 debt. -/
 theorem quittingSoloReward_sub_ownSolo_ge_debt_of_singletonTightIteration
     (pair : QuittingTerminalSemanticPair ι) (owner other : ι)
-    {debt rate bound M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {debt rate bound : ℝ}
     (hface : QuittingSingletonTightMinimumFace reward pair owner debt)
     (hrate : QuittingSoloRateControlled reward owner debt rate bound)
     (hother : other ≠ owner) :
     debt ≤ quittingSoloReward reward owner other -
       quittingSoloReward reward other other := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let step := quittingTerminalSemanticPrefix reward
     (quittingSoloStationaryRoot owner
       (quittingHazardCoin rate hrate.1.le hrate.2.1))
   have hfaces : ∀ n,
       QuittingSingletonTightMinimumFace reward ((step^[n]) pair) owner debt := by
     exact quittingSingletonTightMinimumFace_iterate
-      pair owner hM hreward hface hrate
+      pair owner hface hrate
   have hclearance : ∀ n,
       debt ≤ ((step^[n]) pair).1 other -
         quittingSoloReward reward other other := by
@@ -503,9 +500,7 @@ theorem quittingTerminalSemanticPair_stationarySolo_of_limitingClearance
 singleton-tight minimum face. -/
 theorem quittingTerminalSemanticPair_stationarySolo_of_singletonTightIteration
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
-    {debt rate bound M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {debt rate bound : ℝ}
     (hface : QuittingSingletonTightMinimumFace reward pair owner debt)
     (hrate : QuittingSoloRateControlled reward owner debt rate bound) :
     quittingTerminalSemanticPair reward
@@ -520,7 +515,7 @@ theorem quittingTerminalSemanticPair_stationarySolo_of_singletonTightIteration
         quittingSoloReward reward other other := by
     intro other hother
     exact quittingSoloReward_sub_ownSolo_ge_debt_of_singletonTightIteration
-      pair owner other hM hreward hface hrate hother
+      pair owner other hface hrate hother
   have hcollision : ∀ other, other ≠ owner →
       quittingSingletonCollisionReward reward owner other -
           quittingSoloReward reward owner other ≤
@@ -542,9 +537,7 @@ semantic pair exactly when the retained owner cap equals the stationary
 Quit-versus-Never cap. -/
 theorem stationarySolo_eq_singletonTightIterationLimit_iff
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
-    {debt rate bound M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {debt rate bound : ℝ}
     (hface : QuittingSingletonTightMinimumFace reward pair owner debt)
     (hrate : QuittingSoloRateControlled reward owner debt rate bound) :
     quittingTerminalSemanticPair reward
@@ -555,7 +548,7 @@ theorem stationarySolo_eq_singletonTightIterationLimit_iff
       max (quittingSoloReward reward owner owner) 0 =
         quittingSoloReward reward owner owner + debt := by
   rw [quittingTerminalSemanticPair_stationarySolo_of_singletonTightIteration
-    pair owner hM hreward hface hrate]
+    pair owner hface hrate]
   constructor
   · intro heq
     have hcoord := congrFun (congrArg Prod.snd heq) owner
@@ -573,9 +566,7 @@ theorem stationarySolo_eq_singletonTightIterationLimit_iff
 makes the stationary solo profile an exact uniform-equilibrium producer. -/
 theorem isUniformEquilibriumPayoff_solo_of_singletonTightIteration
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
-    {debt rate bound M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {debt rate bound : ℝ}
     (hface : QuittingSingletonTightMinimumFace reward pair owner debt)
     (hrate : QuittingSoloRateControlled reward owner debt rate bound)
     (hownerNonneg : 0 ≤ quittingSoloReward reward owner owner) :
@@ -586,7 +577,7 @@ theorem isUniformEquilibriumPayoff_solo_of_singletonTightIteration
         quittingSoloReward reward other other := by
     intro other hother
     exact quittingSoloReward_sub_ownSolo_ge_debt_of_singletonTightIteration
-      pair owner other hM hreward hface hrate hother
+      pair owner other hface hrate hother
   apply isUniformEquilibriumPayoff_soloReward_of_inactive reward owner
     (quittingHazardCoin rate hrate.1.le hrate.2.1)
   · simp [hrate.1]

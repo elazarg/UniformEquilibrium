@@ -128,7 +128,7 @@ theorem exists_halfStoppingLawReset_nearMinimum_transfer_and_windowRetention
       endpointProfile]
     have hbound := quittingTerminalSemanticDebt_stoppingLawMixture_le
       reward profile who observer (profile who) bestResponse
-        (1 / 2) (by norm_num) (by norm_num) hM hreward
+        (1 / 2) (by norm_num) (by norm_num)
     norm_num at hbound ⊢
     simpa only [Function.update_eq_self] using hbound
   refine ⟨htarget, hgainQuarter, hgainPos, hdecrease, htransfer, hchord, ?_⟩

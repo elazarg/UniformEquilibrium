@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import
   UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalStaticOrientationDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # A strict insertion atom is blind or debt-budgeted at an exact prefix
@@ -185,8 +186,6 @@ theorem quittingMarkedInsertionUse_eq_zero_of_minimum
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
     (owner : ι) (quitters : Finset ι) (hquitters : quitters.Nonempty)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -194,6 +193,8 @@ theorem quittingMarkedInsertionUse_eq_zero_of_minimum
     (hnash : IsεQuittingRootNash reward pair.1 0 root)
     (hgap : 0 ≤ quittingInsertionGap reward owner quitters hquitters) :
     quittingMarkedInsertionUse reward pair root owner quitters hquitters = 0 := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hdebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
       reward hM hreward hpair
@@ -215,8 +216,6 @@ theorem insertionAtom_blind_or_zeroDebt_cancelled_of_minimum
     (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
     (owner : ι) (quitters : Finset ι) (hquitters : quitters.Nonempty)
     (howner : owner ∉ quitters)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -226,6 +225,8 @@ theorem insertionAtom_blind_or_zeroDebt_cancelled_of_minimum
     quittingInsertionOpponentMass root owner quitters = 0 ∨
       (quittingTerminalSemanticDebt pair owner = 0 ∧
         quittingRootExercisePremium reward pair.1 root owner = 0) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hdebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
       reward hM hreward hpair

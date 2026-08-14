@@ -378,8 +378,6 @@ theorem exists_behaviorDeviation_gain_ge_sum_forcedRefusal_sub
           quittingTerminalPayoff reward profile owner := by
   obtain ⟨deviation, hdeviation⟩ :=
     exists_quittingContinuation_deviation_ge_sub reward profile owner hδ
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
   refine ⟨deviation, ?_⟩
   have hcharge :=
     sum_stageCoalitionMass_mul_forcedRefusal_le_initialSemanticDebt

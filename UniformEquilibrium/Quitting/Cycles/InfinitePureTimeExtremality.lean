@@ -233,34 +233,31 @@ theorem exists_quittingRootSequencePureTimeTerminalValue_ge_sub
             (some earlier.val) 0 + ε by
       linarith)
 
-/-- The deterministic pure-time payoff set is bounded above by every uniform
-bound on the quitting rewards. -/
+/-- The deterministic pure-time payoff set is bounded above by the canonical
+finite-game reward bound. -/
 theorem bddAbove_range_quittingRootSequencePureTimeTerminalValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (roots : ℕ → ι → PMF Bool) (who : ι) :
     BddAbove (Set.range fun quitTime : Option ℕ =>
       quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0) := by
-  refine ⟨M, ?_⟩
+  refine ⟨quittingRewardBound reward, ?_⟩
   rintro value ⟨quitTime, rfl⟩
   exact (le_abs_self _).trans (by
     simpa [quittingRootSequencePureTimeTerminalValue,
       quittingRootSequenceHazardTerminalValue,
       quittingRootSequenceTerminalValue] using
-      (abs_quittingTerminalPayoff_le reward
+      (abs_quittingTerminalPayoff_le_quittingRewardBound reward
         (quittingRootSequenceProfile reward
           (quittingRootSequenceUpdate roots who
             (quittingPureTimeHazard quitTime)) 0)
-        who hM hreward))
+        who))
 
 /-- Infinite pure quit-time extremality.  The supremum contains every finite
 quit date and the explicit `Never` atom. -/
 theorem quittingRootSequenceHazardTerminalValue_le_sSup_pureTime
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    (hazard : ℕ → PMF Bool) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (hazard : ℕ → PMF Bool) :
     quittingRootSequenceHazardTerminalValue reward roots who hazard 0 ≤
       sSup (Set.range fun quitTime : Option ℕ =>
         quittingRootSequencePureTimeTerminalValue reward roots who
@@ -269,7 +266,7 @@ theorem quittingRootSequenceHazardTerminalValue_le_sSup_pureTime
     quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0
   have hbounded : BddAbove values :=
     bddAbove_range_quittingRootSequencePureTimeTerminalValue
-      reward roots who hM hreward
+      reward roots who
   refine le_of_forall_pos_le_add fun ε hε => ?_
   obtain ⟨quitTime, hquitTime⟩ :=
     exists_quittingRootSequencePureTimeTerminalValue_ge_sub

@@ -244,7 +244,7 @@ theorem source_bestResponse_mover :
   · exact le_of_abs_le (abs_quittingContinuationBestResponseValue_le
       reward source mover (M := 1) (by norm_num) reward_bound)
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward source mover replacement (M := 1) (by norm_num) reward_bound
+      reward source mover replacement
     change quittingTerminalPayoff reward target mover ≤
       quittingContinuationBestResponseValue reward source mover at hlower
     rw [target_payoff_mover] at hlower
@@ -259,8 +259,7 @@ theorem source_bestResponse_observer :
     · rintro value ⟨deviation, rfl⟩
       simpa only using source_observer_deviation_payoff_le_zero deviation
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward source observer (source observer) (M := 1) (by norm_num)
-        reward_bound
+      reward source observer (source observer)
     rw [Function.update_eq_self, source_payoff_observer] at hlower
     exact hlower
 
@@ -270,7 +269,7 @@ theorem target_bestResponse_mover :
   · exact le_of_abs_le (abs_quittingContinuationBestResponseValue_le
       reward target mover (M := 1) (by norm_num) reward_bound)
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward target mover (target mover) (M := 1) (by norm_num) reward_bound
+      reward target mover (target mover)
     rw [Function.update_eq_self, target_payoff_mover] at hlower
     exact hlower
 
@@ -312,7 +311,6 @@ theorem target_bestResponse_observer :
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward target observer
         (quittingPureTimeBehaviorStrategy reward observer none)
-        (M := 1) (by norm_num) reward_bound
     rw [target_observer_continue_payoff] at hlower
     exact hlower
 
@@ -453,7 +451,7 @@ theorem exactPrefix_positiveAtom_but_no_observerGain (depth : ℕ) :
       exact this
     have hdeviation := quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward (quittingLiteralRootStackProfile reward (roots depth) source)
-        observer deviation (M := 1) (by norm_num) reward_bound
+        observer deviation
     rw [hcap] at hdeviation
     rw [hprofilePayoff]
     linarith

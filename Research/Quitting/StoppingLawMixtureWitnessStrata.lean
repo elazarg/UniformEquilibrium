@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumTransfer
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalPacketSimpleFallbackCounterexample
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Witness strata for stopping-law mixture directions
@@ -48,9 +49,7 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_chordGap_le
     (mover observer : ι) (hne : observer ≠ mover)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (deviation : (quittingGame reward).BehaviorStrategy observer)
-    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1) :
     (1 - lambda) * quittingContinuationBestResponseValue reward
           (Function.update profile mover source) observer +
         lambda * quittingContinuationBestResponseValue reward
@@ -96,7 +95,7 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_chordGap_le
         (Function.update profile mover
           (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
             lambda hlambda0 hlambda1))
-        observer deviation hM hreward
+        observer deviation
   nlinarith
 
 /-- If one deviation is best at both endpoints, it stays best throughout the
@@ -109,8 +108,6 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_eq_of_commonWit
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (deviation : (quittingGame reward).BehaviorStrategy observer)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : quittingTerminalPayoff reward
         (Function.update (Function.update profile mover source)
           observer deviation) observer =
@@ -132,11 +129,10 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_eq_of_commonWit
   have hupper :=
     quittingContinuationBestResponseValue_stoppingLawMixture_le
       reward profile mover observer source target lambda hlambda0 hlambda1
-        hM hreward
   have hdefect :=
     quittingContinuationBestResponseValue_stoppingLawMixture_chordGap_le
       reward profile mover observer hne source target deviation lambda
-        hlambda0 hlambda1 hM hreward
+        hlambda0 hlambda1
   rw [hsource, htarget] at hdefect
   linarith
 
@@ -151,8 +147,6 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_chordGap_le_of_
     (deviation : (quittingGame reward).BehaviorStrategy observer)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
     (sourceError targetError : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : quittingContinuationBestResponseValue reward
           (Function.update profile mover source) observer ≤
         quittingTerminalPayoff reward
@@ -175,7 +169,7 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_chordGap_le_of_
   have hcertificate :=
     quittingContinuationBestResponseValue_stoppingLawMixture_chordGap_le
       reward profile mover observer hne source target deviation lambda
-        hlambda0 hlambda1 hM hreward
+        hlambda0 hlambda1
   have hsourceRegret :
       quittingContinuationBestResponseValue reward
           (Function.update profile mover source) observer -
@@ -207,8 +201,6 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_eq_of_commonWitness
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (deviation : (quittingGame reward).BehaviorStrategy observer)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : quittingTerminalPayoff reward
         (Function.update (Function.update profile mover source)
           observer deviation) observer =
@@ -233,7 +225,7 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_eq_of_commonWitness
   have hbest :=
     quittingContinuationBestResponseValue_stoppingLawMixture_eq_of_commonWitness
       reward profile mover observer hne source target deviation lambda
-        hlambda0 hlambda1 hM hreward hsource htarget
+        hlambda0 hlambda1 hsource htarget
   have hpayoff := quittingTerminalPayoff_stoppingLawMixture_eq
     reward profile mover observer source target lambda hlambda0 hlambda1
   dsimp only [quittingTerminalSemanticDebt,
@@ -251,8 +243,6 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_eq_zero
     (mover observer : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward
           (Function.update profile mover source)) observer = 0)
@@ -264,9 +254,10 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_eq_zero
           (Function.update profile mover
             (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
               lambda hlambda0 hlambda1))) observer = 0 := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hupper := quittingTerminalSemanticDebt_stoppingLawMixture_le
     reward profile mover observer source target lambda hlambda0 hlambda1
-      hM hreward
   rw [hsource, htarget] at hupper
   have hlower := quittingTerminalDeviationDebt_nonneg reward
     (Function.update profile mover
@@ -284,8 +275,6 @@ theorem quittingStoppingLawMixture_preserves_zeroDebtFace
     (mover : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : ∀ observer, quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward
           (Function.update profile mover source)) observer = 0)
@@ -300,7 +289,7 @@ theorem quittingStoppingLawMixture_preserves_zeroDebtFace
   intro observer
   exact quittingTerminalSemanticDebt_stoppingLawMixture_eq_zero
     reward profile mover observer source target lambda hlambda0 hlambda1
-      hM hreward (hsource observer) (htarget observer)
+      (hsource observer) (htarget observer)
 
 /-- On the common zero-debt face, both halves of the terminal semantic pair
 are affine.  Payoff affinity is unconditional; envelope affinity follows
@@ -313,8 +302,6 @@ theorem quittingTerminalSemanticPair_stoppingLawMixture_affine_on_zeroDebtFace
     (mover : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : ∀ observer, quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward
           (Function.update profile mover source)) observer = 0)
@@ -343,8 +330,8 @@ theorem quittingTerminalSemanticPair_stoppingLawMixture_affine_on_zeroDebtFace
     reward profile mover observer source target lambda hlambda0 hlambda1
   refine ⟨hpayoff, ?_⟩
   have hmixed := quittingStoppingLawMixture_preserves_zeroDebtFace
-    reward profile mover source target lambda hlambda0 hlambda1 hM hreward
-      hsource htarget observer
+    reward profile mover source target lambda hlambda0 hlambda1 hsource htarget
+      observer
   have hs := hsource observer
   have ht := htarget observer
   dsimp only [quittingTerminalSemanticDebt,
@@ -363,8 +350,6 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_eq_chord_of_minimumFiber
     (mover : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
@@ -410,7 +395,6 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_eq_chord_of_minimumFiber
     dsimp only [mixedPair, sourcePair, endpointPair]
     exact quittingTerminalSemanticDebt_stoppingLawMixture_le
       reward profile mover observer source target lambda hlambda0 hlambda1
-        hM hreward
   have hchordSum :
       (∑ observer,
           ((1 - lambda) * quittingTerminalSemanticDebt sourcePair observer +
@@ -635,7 +619,6 @@ theorem source_bestResponse_eq_one :
     exact quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward sourceProfile true
         (quittingPureTimeBehaviorStrategy reward true (some 0))
-        (by norm_num) abs_reward_le_one
 
 theorem target_bestResponse_eq_one :
     quittingContinuationBestResponseValue reward targetProfile true = 1 := by
@@ -647,7 +630,6 @@ theorem target_bestResponse_eq_one :
     exact quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward targetProfile true
         (quittingPureTimeBehaviorStrategy reward true (some 1))
-        (by norm_num) abs_reward_le_one
 
 def sourcePureValue (choice : Option ℕ) : ℝ :=
   quittingTerminalPayoff reward
@@ -930,7 +912,6 @@ theorem mixed_bestResponse_eq_max
         quittingTerminalPayoff_update_le_continuationBestResponseValue
           reward (mixedProfile lambda hlambda0 hlambda1) true
             (quittingPureTimeBehaviorStrategy reward true (some 0))
-            (by norm_num) abs_reward_le_one
       rw [mixed_pureValue_eq, sourcePureValue_eq_indicator,
         targetPureValue_eq_indicator] at hlower
       simpa using hlower
@@ -938,7 +919,6 @@ theorem mixed_bestResponse_eq_max
         quittingTerminalPayoff_update_le_continuationBestResponseValue
           reward (mixedProfile lambda hlambda0 hlambda1) true
             (quittingPureTimeBehaviorStrategy reward true (some 1))
-            (by norm_num) abs_reward_le_one
       rw [mixed_pureValue_eq, sourcePureValue_eq_indicator,
         targetPureValue_eq_indicator] at hlower
       simpa using hlower

@@ -279,8 +279,7 @@ theorem continuation_semanticPair :
     · exact quittingContinuationBestResponseValue_le_of_terminalOutcomeReward_le
         continuation who 0 (fun outcome => terminalOutcomeReward_nonpos outcome who)
     · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
-        reward continuation who (continuation who) (M := 1) (by norm_num)
-          abs_reward_le_one
+        reward continuation who (continuation who)
       have hupdate : Function.update continuation who (continuation who) =
           continuation := Function.update_eq_self _ _
       rw [hupdate] at hlower

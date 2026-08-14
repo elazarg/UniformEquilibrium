@@ -124,7 +124,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_maxSolo_le_totalCharge
     rfl
   rw [hcap,
     quittingRootSequenceBestResponseValue_elementaryCap_never
-      reward who hM hreward,
+      reward who,
     quittingOpponentSurvivalWeight] at hcoupling
   have hloss := one_sub_quittingOpponentSurvivalLimit_le_totalCharge
     roots who hcharge

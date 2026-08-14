@@ -118,10 +118,8 @@ theorem source_totalDebt : quittingTerminalDebtSum reward source = 1 := by
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward source) false = 1
   rw [source,
-    quittingTerminalSemanticDebt_pureSetRoot_eq reward {observer} false
-      (by norm_num) reward_bound,
-    quittingTerminalSemanticDebt_pureSetRoot_eq reward {observer} true
-      (by norm_num) reward_bound]
+    quittingTerminalSemanticDebt_pureSetRoot_eq reward {observer} false,
+    quittingTerminalSemanticDebt_pureSetRoot_eq reward {observer} true]
   norm_num [quittingSetReward, reward, mover, observer, Finset.ext_iff]
 
 theorem first_totalDebt : quittingTerminalDebtSum reward first = 1 := by
@@ -133,10 +131,8 @@ theorem first_totalDebt : quittingTerminalDebtSum reward first = 1 := by
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward first) false = 1
   rw [first,
-    quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover, observer} false
-      (by norm_num) reward_bound,
-    quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover, observer} true
-      (by norm_num) reward_bound]
+    quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover, observer} false,
+    quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover, observer} true]
   norm_num [quittingSetReward, reward, mover, observer, Finset.ext_iff,
     show ({mover, observer} : Finset Player).Nontrivial by decide]
 
@@ -150,10 +146,8 @@ theorem observerFirst_totalDebt :
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward observerFirst) false = 1
   rw [observerFirst,
-    quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ false
-      (by norm_num) reward_bound,
-    quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ true
-      (by norm_num) reward_bound]
+    quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ false,
+    quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ true]
   norm_num [quittingSetReward, reward, mover, observer, Finset.ext_iff]
 
 theorem both_totalDebt : quittingTerminalDebtSum reward both = 1 := by
@@ -165,10 +159,8 @@ theorem both_totalDebt : quittingTerminalDebtSum reward both = 1 := by
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward both) false = 1
   rw [both,
-    quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover} false
-      (by norm_num) reward_bound,
-    quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover} true
-      (by norm_num) reward_bound]
+    quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover} false,
+    quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover} true]
   norm_num [quittingSetReward, reward, mover, observer, Finset.ext_iff]
 
 theorem target_observer_gain_eq_one :

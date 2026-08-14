@@ -8,6 +8,7 @@ import Research.Semantics.SurvivalWeightedReachedHistoryAccount
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeNegativeCollisionAtomicDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauLocalizedOtherDefect
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionWindow
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Thin quitting adapters for reached-history localization
@@ -90,9 +91,8 @@ theorem sureQuitterReachedRow_minimumDebt_localization_of_reach
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (observer : ι) (stage : ℕ) {lower M : ℝ}
-    (hlower : 0 < lower) (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (observer : ι) (stage : ℕ) {lower : ℝ}
+    (hlower : 0 < lower)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -107,6 +107,8 @@ theorem sureQuitterReachedRow_minimumDebt_localization_of_reach
           (quittingTerminalSemanticPair reward
             (quittingAllContinueProfileSpine reward profile (stage + 1))).1
           (quittingProfileLiveRoot reward profile stage) other := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let current := quittingTerminalSemanticPair reward
     (quittingAllContinueProfileSpine reward profile stage)
   let tail := quittingTerminalSemanticPair reward
@@ -180,9 +182,8 @@ theorem sureQuitterReachedRow_minimumDebt_localization
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (observer : ι) (stage : ℕ)
-    (terminal : {S : Finset ι // S.Nonempty}) {lower M : ℝ}
-    (hlower : 0 < lower) (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty}) {lower : ℝ}
+    (hlower : 0 < lower)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -199,7 +200,7 @@ theorem sureQuitterReachedRow_minimumDebt_localization
             (quittingAllContinueProfileSpine reward profile (stage + 1))).1
           (quittingProfileLiveRoot reward profile stage) other := by
   apply sureQuitterReachedRow_minimumDebt_localization_of_reach
-    reward minimum profile observer stage hlower hM hreward hminimum
+    reward minimum profile observer stage hlower hminimum
   · exact hmass.trans (quittingStageCoalitionMass_le_liveMass
       reward profile stage terminal)
   · exact hobserver
@@ -212,9 +213,8 @@ theorem surelyAbsorbingReachedRow_minimumDebt_localization
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (stage : ℕ) {lower M : ℝ}
-    (hlower : 0 < lower) (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (stage : ℕ) {lower : ℝ}
+    (hlower : 0 < lower)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -243,7 +243,7 @@ theorem surelyAbsorbingReachedRow_minimumDebt_localization
     (quittingRootHasSureQuitter_iff_allContinue_mass_zero root).mpr hzero
   refine ⟨observer, by simpa only [root] using hobserver, ?_⟩
   exact sureQuitterReachedRow_minimumDebt_localization_of_reach
-    reward minimum profile observer stage hlower hM hreward hminimum hreach
+    reward minimum profile observer stage hlower hminimum hreach
       (by simpa only [root] using hobserver)
 
 /-- **Common reached surely-absorbing row.**  Reach and zero joint Continue
@@ -254,9 +254,8 @@ theorem surelyAbsorbingReachedRow_localization_and_legalDeviations
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (stage : ℕ) {lower M : ℝ}
-    (hlower : 0 < lower) (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (stage : ℕ) {lower : ℝ}
+    (hlower : 0 < lower)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -285,7 +284,7 @@ theorem surelyAbsorbingReachedRow_localization_and_legalDeviations
               quittingRootCoordinateNashDefect reward tail.1 root other := by
   obtain ⟨observer, hobserver, hlocal⟩ :=
     surelyAbsorbingReachedRow_minimumDebt_localization reward minimum profile
-      stage hlower hM hreward hminimum hreach habsorbing
+      stage hlower hminimum hreach habsorbing
   refine ⟨observer, hobserver, ?_⟩
   dsimp only
   refine ⟨hlocal, ?_⟩
@@ -302,9 +301,8 @@ theorem sureQuitterReachedRow_localization_and_legalDeviations
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (observer : ι) (stage : ℕ)
-    (terminal : {S : Finset ι // S.Nonempty}) {lower M : ℝ}
-    (hlower : 0 < lower) (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (terminal : {S : Finset ι // S.Nonempty}) {lower : ℝ}
+    (hlower : 0 < lower)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -332,7 +330,7 @@ theorem sureQuitterReachedRow_localization_and_legalDeviations
             quittingRootCoordinateNashDefect reward tail.1 root other := by
   dsimp only
   refine ⟨sureQuitterReachedRow_minimumDebt_localization reward minimum
-    profile observer stage terminal hlower hM hreward hminimum hmass
+    profile observer stage terminal hlower hminimum hmass
       hobserver, ?_⟩
   intro other _hne
   exact
@@ -400,8 +398,7 @@ theorem negativeCollisionAtomicDispatch_outsider_isLegalDeviation
       reward frontier.base
         (quittingStoppingLawRectangleSourceProfile packet n)
         packet.observer (stops n) packet.terminal hlower
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) frontier.base_minimum
+        frontier.base_minimum
         hmass howner
   refine ⟨hmass, howner, hcommon.1, ?_⟩
   rcases halt with houtsider | hrefusal
@@ -638,8 +635,7 @@ theorem positiveCollisionMarkedTailDispatch_strongOtherDefectLocalization
   refine ⟨hstage, ?_⟩
   exact (sureQuitterReachedRow_localization_and_legalDeviations
     reward frontier.base profile packet.observer (stop (subseq rank))
-      packet.terminal hlower (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) frontier.base_minimum
+      packet.terminal hlower frontier.base_minimum
       hstage howner).1
 
 /-- The marked-row sharpening selects one fixed non-observer along a further

@@ -345,6 +345,6 @@ theorem exists_sureFirst_of_nearSure_rootNash
   let sureRoot := Function.update root changed (PMF.pure true)
   exact ⟨sureRoot, hsure,
     isεAsymptoticNash_quittingRootThenContinuation_of_isεQuittingRootNash
-      reward sureRoot continuation hM hreward hsure hforced⟩
+      reward sureRoot continuation hsure hforced⟩
 
 end GameTheory

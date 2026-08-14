@@ -35,9 +35,7 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_one_eq
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover observer : iota)
-    (source target : (quittingGame reward).BehaviorStrategy mover)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (source target : (quittingGame reward).BehaviorStrategy mover) :
     quittingContinuationBestResponseValue reward
         (Function.update profile mover
           (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
@@ -52,7 +50,6 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_one_eq
   · have hconvex :=
       quittingContinuationBestResponseValue_stoppingLawMixture_le
         reward profile mover observer source target 1 zero_le_one le_rfl
-          hM hreward
     norm_num at hconvex
     exact hconvex
   · by_cases hsame : observer = mover
@@ -83,7 +80,7 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_one_eq
           exact haffine
         have hbound :=
           quittingTerminalPayoff_update_le_continuationBestResponseValue
-            reward mixed observer deviation hM hreward
+            reward mixed observer deviation
         exact heq.symm.trans_le hbound
 
 /-- At unit weight, the full terminal semantic pair of a complete
@@ -92,9 +89,7 @@ theorem quittingTerminalSemanticPair_stoppingLawMixture_one_eq
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : iota)
-    (source target : (quittingGame reward).BehaviorStrategy mover)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (source target : (quittingGame reward).BehaviorStrategy mover) :
     quittingTerminalSemanticPair reward
         (Function.update profile mover
           (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
@@ -115,7 +110,7 @@ theorem quittingTerminalSemanticPair_stoppingLawMixture_one_eq
     exact hpayoff
   · funext observer
     exact quittingContinuationBestResponseValue_stoppingLawMixture_one_eq
-      reward profile mover observer source target hM hreward
+      reward profile mover observer source target
 
 /-- Literal atom output attached to one positive endpoint-debt recipient.
 The terminal label is selected by the payoff decoder, not inherited from an
@@ -151,8 +146,6 @@ theorem hasQuittingEndpointDebtRecipientAtom_of_pos
     (profile : (quittingGame reward).BehaviorProfile)
     (mover recipient : iota)
     (target : (quittingGame reward).BehaviorStrategy mover)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingTerminalSemanticDebtChange
       (quittingTerminalSemanticPair reward profile)
       (quittingTerminalSemanticPair reward
@@ -163,7 +156,7 @@ theorem hasQuittingEndpointDebtRecipientAtom_of_pos
     (quittingStoppingLawMixtureBehaviorStrategy reward mover (profile mover)
       target 1 zero_le_one le_rfl)
   have hpair := quittingTerminalSemanticPair_stoppingLawMixture_one_eq
-    reward profile mover (profile mover) target hM hreward
+    reward profile mover (profile mover) target
   have hslope : 1 * quittingTerminalSemanticDebtChange
         (quittingTerminalSemanticPair reward profile)
         (quittingTerminalSemanticPair reward
@@ -181,7 +174,7 @@ theorem hasQuittingEndpointDebtRecipientAtom_of_pos
           (quittingTerminalSemanticPair reward profile)
           (quittingTerminalSemanticPair reward
             (Function.update profile mover target)) recipient)
-        zero_lt_one le_rfl hpositive hM hreward
+        zero_lt_one le_rfl hpositive
         (by simpa only [mixed, one_mul] using hslope)
   exact ⟨hpositive, hdecoded⟩
 
@@ -193,8 +186,6 @@ theorem exists_endpointDebtRecipientAtom_of_positiveAggregateTransfer
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : iota) (target : (quittingGame reward).BehaviorStrategy mover)
     (charge : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (htransfer : charge ≤
       ∑ recipient ∈ Finset.univ.erase mover,
         quittingTerminalSemanticDebtChange
@@ -224,7 +215,7 @@ theorem exists_endpointDebtRecipientAtom_of_positiveAggregateTransfer
       simpa only [hzero] using hsumPositive)
   refine ⟨recipient, hrecipient, ?_⟩
   exact hasQuittingEndpointDebtRecipientAtom_of_pos reward profile mover
-    recipient target hM hreward hpositive
+    recipient target hpositive
 
 /-- **Causal collision dispatch with unmatched-recipient atom compilation.**
 
@@ -333,7 +324,7 @@ theorem causalCollision_tailEscape_or_quantitativeRecipientAtom
         hepsilon
     have hcompiled :=
       exists_endpointDebtRecipientAtom_of_positiveAggregateTransfer
-        reward profile who targetStrategy (gain - epsilon) hM hreward
+        reward profile who targetStrategy (gain - epsilon)
           (by simpa only [tail, root, action, targetStrategy, targetProfile,
             gain] using htransfer)
           (sub_pos.mpr hepsilon')

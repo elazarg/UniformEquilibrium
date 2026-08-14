@@ -40,14 +40,12 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 maximum positive terminal exploitability of every profile. -/
 theorem terminalExploitabilityGap_le_quittingTerminalExploitability
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M gap : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hexploit : HasTerminalExploitabilityGap reward gap)
+    {gap : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap)
     (profile : (quittingGame reward).BehaviorProfile) :
     gap ≤ quittingTerminalExploitability reward profile := by
   obtain ⟨who, deviation, hdeviation⟩ := hexploit profile
   have hbest := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward profile who deviation hM hreward
+    reward profile who deviation
   have hcoordinate : gap ≤
       quittingContinuationBestResponseValue reward profile who -
         quittingTerminalPayoff reward profile who := by
@@ -65,17 +63,15 @@ coordinates are supplied by the same actual suffix. -/
 theorem terminalExploitabilityGap_le_behavioralTailRepairValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (plan : ℕ → ι → PMF Bool) (switch : ℕ) (hswitch : 0 < switch)
-    {M gap : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hexploit : HasTerminalExploitabilityGap reward gap) :
+    {gap : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap) :
     gap ≤ QuittingBoundaryHolonomy.behavioralTailRepairValue reward
       (quittingFiniteBoundaryHolonomy reward plan 0 (switch - 1)) := by
   rw [behavioralTailRepairValue_eq_sInf_phaseSwitch_terminalExploitability
-    reward plan switch hswitch hM hreward]
+    reward plan switch hswitch]
   apply le_csInf (Set.range_nonempty _)
   rintro value ⟨tail, rfl⟩
   exact terminalExploitabilityGap_le_quittingTerminalExploitability
-    reward hM hreward hexploit
+    reward hexploit
       (quittingPhaseSwitchProfile reward plan tail switch)
 
 /-- Elementary compression returns any actual-tail terminal obstruction to
@@ -96,7 +92,7 @@ theorem exists_elementaryTailCap_terminalExploitability_gt_sub
     QuittingBoundaryHolonomy.exists_elementaryTailCap_behavioralTailGain_close
       reward tail plan 0 (switch - 1) hM hε hreward
   have hactual := terminalExploitabilityGap_le_quittingTerminalExploitability
-    reward hM hreward hexploit
+    reward hexploit
       (quittingPhaseSwitchProfile reward plan tail switch)
   change |QuittingBoundaryHolonomy.behavioralTailGain reward
         (quittingFiniteBoundaryHolonomy reward plan 0 (switch - 1)) tail -
@@ -104,10 +100,10 @@ theorem exists_elementaryTailCap_terminalExploitability_gt_sub
         (quittingFiniteBoundaryHolonomy reward plan 0 (switch - 1))
         (quittingElementaryTailRoots tail cutoff cap)| < ε at hclose
   rw [quittingPhaseSwitch_behavioralTailGain_eq_terminalExploitability
-      reward plan tail switch hswitch hM hreward,
+      reward plan tail switch hswitch,
     quittingPhaseSwitch_behavioralTailGain_eq_terminalExploitability
       reward plan (quittingElementaryTailRoots tail cutoff cap)
-        switch hswitch hM hreward] at hclose
+        switch hswitch] at hclose
   refine ⟨cap, cutoff, ?_⟩
   have hupper := (abs_lt.mp hclose).2
   linarith
@@ -134,8 +130,6 @@ theorem terminalGap_le_periodOne_behavioralTailRepairValue (index : ℕ) :
   exact terminalExploitabilityGap_le_behavioralTailRepairValue reward
     (quittingPeriodOneRootSequence
       (seam.periodOneReadoutRoot readout.start index)) 1 (by omega)
-    (quittingRewardBound_nonneg reward)
-    (abs_reward_le_quittingRewardBound reward)
     regime.terminalExploitability
 
 /-- For every selected root, elementary compression of its actual suffix

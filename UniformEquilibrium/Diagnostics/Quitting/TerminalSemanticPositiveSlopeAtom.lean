@@ -134,8 +134,6 @@ theorem exists_prescribedAtom_or_deviationRectangleAtom_of_stoppingLawDebtSlope
     (target : (quittingGame reward).BehaviorStrategy mover)
     (lambda charge : ℝ) (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
     (hcharge : 0 < charge)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hslope : lambda * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
@@ -167,7 +165,7 @@ theorem exists_prescribedAtom_or_deviationRectangleAtom_of_stoppingLawDebtSlope
   let mixedPair := quittingTerminalSemanticPair reward mixed
   have hchord := quittingTerminalSemanticDebt_stoppingLawMixture_le
     reward profile mover observer (profile mover) target lambda hlambda0.le
-      hlambda1 hM hreward
+      hlambda1
   rw [Function.update_eq_self] at hchord
   change quittingTerminalSemanticDebt mixedPair observer ≤
       (1 - lambda) * quittingTerminalSemanticDebt sourcePair observer +
@@ -202,10 +200,10 @@ theorem exists_prescribedAtom_or_deviationRectangleAtom_of_stoppingLawDebtSlope
     have herror : 0 < charge / 4 := by positivity
     obtain ⟨deviation, hdeviation⟩ :=
       exists_quittingContinuation_deviation_ge_sub reward endpoint observer
-        herror hM hreward
+        herror
     have hsourceBound :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
-        reward profile observer deviation hM hreward
+        reward profile observer deviation
     have hrectangle : charge / 4 ≤
         quittingTerminalPayoff reward
             (Function.update endpoint observer deviation) observer -
@@ -239,8 +237,6 @@ theorem exists_opponent_prescribedAtom_or_deviationRectangleAtom_of_totalSlope
     (mover : ι) (target : (quittingGame reward).BehaviorStrategy mover)
     (lambda sigma gain : ℝ) (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
     (htotalCharge : 0 < sigma + gain)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (htotalSlope : lambda * sigma ≤
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
@@ -329,7 +325,7 @@ theorem exists_opponent_prescribedAtom_or_deviationRectangleAtom_of_totalSlope
   have hdecoded :=
     exists_prescribedAtom_or_deviationRectangleAtom_of_stoppingLawDebtSlope
       reward profile mover observer target lambda charge hlambda0 hlambda1
-        hchargePositive hM hreward (by
+        hchargePositive (by
           dsimp only [debtChange, mixedPair, sourcePair, mixed] at hobserverSlope
           exact hobserverSlope)
   exact ⟨observer, hobserver, hdecoded⟩
@@ -350,8 +346,6 @@ theorem exists_opponent_prescribedAtom_or_deviationRectangleAtom_of_flatReset
     (mover : ι) (target : (quittingGame reward).BehaviorStrategy mover)
     (lambda gain : ℝ) (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
     (hgain : 0 < gain)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hflat : quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
             (Function.update profile mover
@@ -387,6 +381,6 @@ theorem exists_opponent_prescribedAtom_or_deviationRectangleAtom_of_flatReset
   simpa only [zero_add] using
     (exists_opponent_prescribedAtom_or_deviationRectangleAtom_of_totalSlope
       reward profile mover target lambda 0 gain hlambda0 hlambda1
-        (by linarith) hM hreward (by simp [hflat]) hmover)
+        (by linarith) (by simp [hflat]) hmover)
 
 end GameTheory

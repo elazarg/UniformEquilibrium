@@ -47,10 +47,9 @@ theorem isεAsymptoticNash_of_quittingTerminalExploitability_le
     (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) ε profile := by
   intro who deviation
-  have hM := quittingRewardBound_nonneg reward
   have hdeviation :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward profile who deviation hM (abs_reward_le_quittingRewardBound reward)
+      reward profile who deviation
   have hcoordinate :
       max 0 (quittingContinuationBestResponseValue reward profile who -
         quittingTerminalPayoff reward profile who) ≤
@@ -134,8 +133,7 @@ theorem exists_commonElementaryTail_isεAsymptoticNash_of_repairValue_lt
   let profile := quittingPhaseSwitchProfile reward plan tail switch
   have hexploit : quittingTerminalExploitability reward profile < ε := by
     rw [← quittingPhaseSwitch_behavioralTailGain_eq_terminalExploitability
-      reward plan tail switch hswitch (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward)]
+      reward plan tail switch hswitch]
     exact hgain
   have hnash := isεAsymptoticNash_of_quittingTerminalExploitability_le
     (reward := reward) profile hexploit.le
@@ -221,8 +219,7 @@ theorem twoOwnerCommonWordRepairValue_le_terminalExploitability
           (packet.twoOwnerCommonWordPlan first second t ht0 ht1) tail 1) := by
   rw [← quittingPhaseSwitch_behavioralTailGain_eq_terminalExploitability
     reward (packet.twoOwnerCommonWordPlan first second t ht0 ht1) tail 1
-      (by norm_num) (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)]
+      (by norm_num)]
   exact behavioralTailRepairValue_le_behavioralTailGain
     (reward := reward)
     (quittingFiniteBoundaryHolonomy reward

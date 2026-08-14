@@ -224,8 +224,6 @@ theorem never_mem_carrier :
     (quittingElementaryCapRoots (.never : QuittingElementaryTailCap Player)) 0,
     ?_⟩
   exact quittingTerminalSemanticPair_elementaryCap_never reward
-    (quittingRewardBound_nonneg reward)
-    (abs_reward_le_quittingRewardBound reward)
 
 /-- The actual carrier orbit supplied by the three ideal diffuse blocks. -/
 def orbit (n : ℕ) : QuittingTerminalSemanticPair Player :=

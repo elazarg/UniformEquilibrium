@@ -8,6 +8,7 @@ import Research.Quitting.ElementaryTailSemanticReduction
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawExploitabilityFloor
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # An inductive barrier certificate for a global terminal-debt floor
@@ -218,9 +219,7 @@ theorem finiteElementarySemanticReachable_eq_neverGenerated
 /-- Every finite elementary evaluation is literally attainable, hence lies in
 the semantic carrier. -/
 theorem finiteElementarySemanticReachable_subset_carrier
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     finiteElementarySemanticReachable reward ⊆
       quittingTerminalSemanticCarrier reward := by
   rintro pair ⟨roots, cutoff, cap, rfl⟩
@@ -228,14 +227,12 @@ theorem finiteElementarySemanticReachable_subset_carrier
   refine ⟨quittingRootSequenceProfile reward
       (quittingElementaryTailRoots roots cutoff cap) 0, ?_⟩
   exact quittingTerminalSemanticPair_elementaryTail_eq_finiteEval
-    reward roots cutoff cap hM hreward
+    reward roots cutoff cap
 
 /-- Every literal semantic pair is a limit of finite elementary evaluations.
 The cutoff may depend on the accuracy and is not uniformly bounded. -/
 theorem attainable_subset_closure_finiteElementarySemanticReachable
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     quittingAttainableTerminalSemanticPairs reward ⊆
       closure (finiteElementarySemanticReachable reward) := by
   rintro _ ⟨profile, rfl⟩
@@ -257,7 +254,7 @@ theorem attainable_subset_closure_finiteElementarySemanticReachable
     intro n
     obtain ⟨cap, cutoff, hclose⟩ :=
       exists_elementaryCompressedProfile_terminalSemantics_close
-        reward profile hM (haccuracy n) hreward
+        reward profile (haccuracy n)
     exact ⟨cap, cutoff, fun observer =>
       ⟨(hclose observer).1, (hclose observer).2.1⟩⟩
   choose caps cutoffs hclose using hexists
@@ -270,7 +267,7 @@ theorem attainable_subset_closure_finiteElementarySemanticReachable
     refine ⟨quittingProfileLiveRoot reward profile, cutoffs n, caps n, ?_⟩
     dsimp [approximant]
     exact quittingTerminalSemanticPair_elementaryCompressedProfile_eq_finiteEval
-      reward profile (cutoffs n) (caps n) hM hreward
+      reward profile (cutoffs n) (caps n)
   have haccuracyLimit : Tendsto accuracy atTop (𝓝 0) := by
     simpa [accuracy] using
       (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
@@ -307,31 +304,27 @@ it is the closure of finite words generated from the `card ι + 2` elementary
 boundaries.  This is the conceptual completeness statement behind inductive
 barrier certificates. -/
 theorem terminalSemanticCarrier_eq_closure_finiteElementarySemanticReachable
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     quittingTerminalSemanticCarrier reward =
       closure (finiteElementarySemanticReachable reward) := by
   apply Set.Subset.antisymm
   · apply closure_minimal
       (attainable_subset_closure_finiteElementarySemanticReachable
-        reward hM hreward)
+        reward)
       isClosed_closure
   · apply closure_minimal
-      (finiteElementarySemanticReachable_subset_carrier reward hM hreward)
+      (finiteElementarySemanticReachable_subset_carrier reward)
       isClosed_closure
 
 /-- Never alone is an exact finite-word generator of the compact semantic
 carrier after closure. -/
 theorem terminalSemanticCarrier_eq_closure_neverGeneratedSemanticReachable
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     quittingTerminalSemanticCarrier reward =
       closure (neverGeneratedSemanticReachable reward) := by
   rw [← finiteElementarySemanticReachable_eq_neverGenerated]
   exact terminalSemanticCarrier_eq_closure_finiteElementarySemanticReachable
-    reward hM hreward
+    reward
 
 /-- Every finite prefix evaluated from an elementary boundary lies in an
 inductive barrier. -/
@@ -362,9 +355,7 @@ barrier itself is closed. -/
 theorem globalDebtFloor_of_certificate
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ)
-    (certificate : Certificate reward δ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (certificate : Certificate reward δ) :
     ∀ pair ∈ quittingTerminalSemanticCarrier reward,
       δ ≤ quittingTerminalSemanticDebtSum pair := by
   have hattainable : ∀ pair ∈ quittingAttainableTerminalSemanticPairs reward,
@@ -390,14 +381,14 @@ theorem globalDebtFloor_of_certificate
       positivity
     obtain ⟨cap, cutoff, hclose⟩ :=
       exists_elementaryCompressedProfile_terminalSemantics_close
-        reward profile hM haccuracy hreward
+        reward profile haccuracy
     let compressed :=
       quittingElementaryCompressedProfile reward profile cutoff cap
     have hcompressedBarrier :
         quittingTerminalSemanticPair reward compressed ∈
           certificate.barrier := by
       rw [quittingTerminalSemanticPair_elementaryCompressedProfile_eq_finiteEval
-        reward profile cutoff cap hM hreward]
+        reward profile cutoff cap]
       exact finitePrefixSemanticEval_mem
         reward δ certificate (quittingProfileLiveRoot reward profile)
           cutoff cap
@@ -458,13 +449,10 @@ interface. -/
 theorem globalDebtFloor_of_reducedCertificate
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ)
-    (certificate : ReducedCertificate reward δ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (certificate : ReducedCertificate reward δ) :
     ∀ pair ∈ quittingTerminalSemanticCarrier reward,
       δ ≤ quittingTerminalSemanticDebtSum pair := by
   exact globalDebtFloor_of_certificate reward δ certificate.toCertificate
-    hM hreward
 
 /-- The barrier schema is logically complete: a certified barrier implies the
 global floor, while any true global floor admits the whole semantic carrier as
@@ -473,16 +461,16 @@ certificate; concrete search must still discover a finitely described
 semialgebraic superset with the required invariant and floor proofs. -/
 theorem nonempty_certificate_iff_globalDebtFloor
     [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ) :
     Nonempty (Certificate reward δ) ↔
       ∀ pair ∈ quittingTerminalSemanticCarrier reward,
         δ ≤ quittingTerminalSemanticDebtSum pair := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   constructor
   · rintro ⟨certificate⟩
     exact globalDebtFloor_of_certificate
-      reward δ certificate hM hreward
+      reward δ certificate
   · intro hfloor
     refine ⟨{
       barrier := quittingTerminalSemanticCarrier reward
@@ -491,7 +479,7 @@ theorem nonempty_certificate_iff_globalDebtFloor
         quittingTerminalSemanticPrefix_mem_carrier
           reward root pair hM hreward hpair
       debt_floor := hfloor }⟩
-    apply finiteElementarySemanticReachable_subset_carrier reward hM hreward
+    apply finiteElementarySemanticReachable_subset_carrier reward
     exact ⟨fun _ => quittingAllContinueRoot, 0, cap, by
       simp [quittingFinitePrefixSemanticEval]⟩
 
@@ -500,25 +488,21 @@ boundary fields.  As for the legacy interface, the reverse witness may be the
 whole carrier and need not be an effective finitely described certificate. -/
 theorem nonempty_reducedCertificate_iff_globalDebtFloor
     [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ) :
     Nonempty (ReducedCertificate reward δ) ↔
       ∀ pair ∈ quittingTerminalSemanticCarrier reward,
         δ ≤ quittingTerminalSemanticDebtSum pair := by
   rw [nonempty_reducedCertificate_iff_certificate]
-  exact nonempty_certificate_iff_globalDebtFloor reward δ hM hreward
+  exact nonempty_certificate_iff_globalDebtFloor reward δ
 
 /-- Profile-facing consumer for certified search. -/
 theorem behavioralDebtFloor_of_certificate
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ)
     (certificate : Certificate reward δ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (profile : (quittingGame reward).BehaviorProfile) :
     δ ≤ quittingTerminalDebtSum reward profile := by
-  exact globalDebtFloor_of_certificate reward δ certificate hM hreward
+  exact globalDebtFloor_of_certificate reward δ certificate
     (quittingTerminalSemanticPair reward profile)
     (subset_closure ⟨profile, rfl⟩)
 
@@ -527,12 +511,9 @@ theorem behavioralDebtFloor_of_reducedCertificate
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ)
     (certificate : ReducedCertificate reward δ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (profile : (quittingGame reward).BehaviorProfile) :
     δ ≤ quittingTerminalDebtSum reward profile := by
-  exact behavioralDebtFloor_of_certificate reward δ certificate.toCertificate
-    hM hreward profile
+  exact behavioralDebtFloor_of_certificate reward δ certificate.toCertificate profile
 
 /-- A positive certified total-debt floor gives a fixed terminal
 exploitability gap.  The factor `2` pays for approaching the behavioral
@@ -541,11 +522,11 @@ is made. -/
 theorem hasTerminalExploitabilityGap_of_certificate
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {δ : ℝ}
-    (hδ : 0 < δ) (certificate : Certificate reward δ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (hδ : 0 < δ) (certificate : Certificate reward δ) :
     HasTerminalExploitabilityGap reward
       (δ / (2 * (Fintype.card ι : ℝ))) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   intro profile
   let playerCount : ℝ := Fintype.card ι
   have hplayerCount : 0 < playerCount := by
@@ -557,8 +538,7 @@ theorem hasTerminalExploitabilityGap_of_certificate
     positivity
   have hfloor : δ ≤ quittingTerminalSemanticDebtSum
       (quittingTerminalSemanticPair reward profile) :=
-    behavioralDebtFloor_of_certificate
-      reward δ certificate hM hreward profile
+    behavioralDebtFloor_of_certificate reward δ certificate profile
   have hsumBound :=
     quittingTerminalSemanticDebtSum_le_card_mul_terminalExploitability
       reward profile hM hreward
@@ -582,7 +562,7 @@ theorem hasTerminalExploitabilityGap_of_certificate
     exact hexploit
   obtain ⟨deviation, hdeviation⟩ :=
     exists_quittingContinuation_deviation_ge_sub
-      reward profile who hgap hM hreward
+      reward profile who hgap
   refine ⟨who, deviation, ?_⟩
   change quittingTerminalPayoff reward profile who + gap ≤
     quittingTerminalPayoff reward
@@ -601,9 +581,7 @@ rules out every uniform-equilibrium payoff. -/
 theorem not_exists_uniformEquilibriumPayoff_of_certificate
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {δ : ℝ}
-    (hδ : 0 < δ) (certificate : Certificate reward δ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (hδ : 0 < δ) (certificate : Certificate reward δ) :
     ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
   have hplayerCount : 0 < (Fintype.card ι : ℝ) := by
@@ -611,32 +589,28 @@ theorem not_exists_uniformEquilibriumPayoff_of_certificate
   exact quittingGame_not_exists_uniformEquilibriumPayoff_of_terminalExploitabilityGap
     reward (div_pos hδ (mul_pos (by norm_num) hplayerCount))
       (hasTerminalExploitabilityGap_of_certificate
-        reward hδ certificate hM hreward)
+        reward hδ certificate)
 
 /-- A positive reduced Never-only certificate gives the same fixed terminal
 exploitability gap as the legacy elementary-boundary certificate. -/
 theorem hasTerminalExploitabilityGap_of_reducedCertificate
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {δ : ℝ}
-    (hδ : 0 < δ) (certificate : ReducedCertificate reward δ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (hδ : 0 < δ) (certificate : ReducedCertificate reward δ) :
     HasTerminalExploitabilityGap reward
       (δ / (2 * (Fintype.card ι : ℝ))) := by
   exact hasTerminalExploitabilityGap_of_certificate reward hδ
-    certificate.toCertificate hM hreward
+    certificate.toCertificate
 
 /-- Named conjecture-level consumer for the minimal Never-only interface. -/
 theorem not_exists_uniformEquilibriumPayoff_of_reducedCertificate
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {δ : ℝ}
-    (hδ : 0 < δ) (certificate : ReducedCertificate reward δ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (hδ : 0 < δ) (certificate : ReducedCertificate reward δ) :
     ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
   exact not_exists_uniformEquilibriumPayoff_of_certificate reward hδ
-    certificate.toCertificate hM hreward
+    certificate.toCertificate
 
 end TerminalSemanticGlobalDebtBarrierCertificate
 end GameTheory

@@ -175,8 +175,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedAtomAlternative
         (frontier.bestResponse activeMover (frontier.subseq rank))
         (frontier.lambda (frontier.subseq rank)) charge hlambda
         (frontier.lambda_le_one (frontier.subseq rank)) hcharge
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) hslope)
+        hslope)
 
 /-- **One-debt-owner frontier collapse.**  If the active positive-debt support
 has cardinality at most one, charged circulation and potential co-decrease are

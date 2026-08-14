@@ -139,8 +139,6 @@ theorem exists_rectangleAtom_and_targetEdgeAtom_of_mixedDebtSlope
     (hlambda0 : 0 < lambda) (hlambdaQuarter : lambda ≤ 1 / 4)
     (hcharge : 0 < charge) (herror0 : 0 ≤ error)
     (herror : error ≤ lambda * charge / 2)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hslope : lambda * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
@@ -218,7 +216,7 @@ theorem exists_rectangleAtom_and_targetEdgeAtom_of_mixedDebtSlope
       observer + error at hbest
   have hsourceCap :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward x00 observer deviation hM hreward
+      reward x00 observer deviation
   change quittingTerminalPayoff reward x10 observer ≤
     quittingContinuationBestResponseValue reward x00 observer at hsourceCap
   let rectangle := quittingTerminalPayoff reward x11 observer -
@@ -237,7 +235,7 @@ theorem exists_rectangleAtom_and_targetEdgeAtom_of_mixedDebtSlope
     x00 x01 x10 x11 observer (charge / 2) hrectanglePositive hrectangle
   have hmixedCapLower :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward mixed observer (mixed observer) hM hreward
+      reward mixed observer (mixed observer)
   rw [Function.update_eq_self] at hmixedCapLower
   have hmixedGain : -error ≤
       quittingTerminalPayoff reward (Function.update mixed observer deviation)

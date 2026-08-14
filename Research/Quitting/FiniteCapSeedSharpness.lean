@@ -198,8 +198,6 @@ theorem quittingNegative_allContinue_envelope_eq_zero (observer : ι) :
           (quittingNegativeTerminalReward (ι := ι))) observer
         (quittingAlwaysContinueStrategy
           (quittingNegativeTerminalReward (ι := ι)) observer)
-        (M := 1) (by norm_num)
-        (by intro terminal player; simp [quittingNegativeTerminalReward])
     have hupdate : Function.update
         (quittingAlwaysContinueProfile
           (quittingNegativeTerminalReward (ι := ι))) observer
@@ -234,8 +232,6 @@ theorem quittingSingleSeedProfile_envelope_eq_zero (seed : ι) :
         (quittingSingleSeedProfile seed) seed
         (quittingAlwaysContinueStrategy
           (quittingNegativeTerminalReward (ι := ι)) seed)
-        (M := 1) (by norm_num)
-        (by intro terminal player; simp [quittingNegativeTerminalReward])
     have hprofile : Function.update (quittingSingleSeedProfile seed) seed
         (quittingAlwaysContinueStrategy
           (quittingNegativeTerminalReward (ι := ι)) seed) =
@@ -312,8 +308,7 @@ theorem quittingAllPlayersFiniteCap_negative_envelope_eq_neg_one
   · have hlower :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
         (quittingNegativeTerminalReward (ι := ι)) capped observer
-        (capped observer) (M := 1) (by norm_num)
-        (by intro terminal player; simp [quittingNegativeTerminalReward])
+        (capped observer)
     rw [hdeviationPayoff (capped observer)] at hlower
     exact hlower
 

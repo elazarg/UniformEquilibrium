@@ -3,6 +3,7 @@ import MathUE.CurveSelection.PositiveRoot
 import UniformEquilibrium.Quitting.Cycles.ConditionedDiffuseProductRescaling
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionDiffuseClockBridge
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Weighted-clock rank reduction
@@ -1077,9 +1078,7 @@ are charged once by one collision scalar. -/
 theorem collisionMass_mul_minimumDebt_le_tailExcess_add_totalDefect
     {reward : {S : Finset Player // S.Nonempty} → Payoff Player}
     (minimum tail : QuittingTerminalSemanticPair Player)
-    (root : Player → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (root : Player → PMF Bool)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -1090,6 +1089,8 @@ theorem collisionMass_mul_minimumDebt_le_tailExcess_add_totalDefect
       (quittingTerminalSemanticDebtSum tail -
           quittingTerminalSemanticDebtSum minimum) +
         quittingRootTotalNashDefect reward tail.1 root := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
       reward hM hreward htail
@@ -1112,9 +1113,7 @@ theorem collisionMass_mul_minimumDebt_le_tailExcess_add_totalDefect
 theorem collisionMass_mul_minimumDebt_le_tailExcess_add_card_mul_nashError
     {reward : {S : Finset Player // S.Nonempty} → Payoff Player}
     (minimum tail : QuittingTerminalSemanticPair Player)
-    (root : Player → PMF Bool) (ε : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (root : Player → PMF Bool) (ε : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -1128,7 +1127,7 @@ theorem collisionMass_mul_minimumDebt_le_tailExcess_add_card_mul_nashError
         Fintype.card Player * ε := by
   have haggregate :=
     collisionMass_mul_minimumDebt_le_tailExcess_add_totalDefect
-      minimum tail root hM hreward hminimumCarrier hminimum htail
+      minimum tail root hminimumCarrier hminimum htail
   have hdefect :=
     quittingRootTotalNashDefect_le_card_mul_of_isεQuittingRootNash
       reward tail.1 root ε hnash
@@ -1139,9 +1138,7 @@ quitter. -/
 theorem minimumExactNash_atMostOnePositiveQuitter
     {reward : {S : Finset Player // S.Nonempty} → Payoff Player}
     (minimum : QuittingTerminalSemanticPair Player)
-    (root : Player → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (root : Player → PMF Bool)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -1152,6 +1149,8 @@ theorem minimumExactNash_atMostOnePositiveQuitter
     (hfirst : 0 < (root first true).toReal)
     (hsecond : 0 < (root second true).toReal) :
     first = second := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hcollisionZero :=
     (minimumTerminalSemantic_exactNash_criticalFace
       (reward := reward) minimum root hM hreward hminimumCarrier hminimum

@@ -805,7 +805,7 @@ theorem abs_quittingContinuationBestResponseValue_finiteCap_sub_le
       · rintro _ ⟨deviation, rfl⟩
         have hcap :=
           quittingTerminalPayoff_update_le_continuationBestResponseValue
-            reward cappedProfile observer deviation hM hreward
+            reward cappedProfile observer deviation
         unfold quittingContinuationBestResponseValue at hcap
         have hp := hpoint deviation
         linarith [le_abs_self
@@ -823,7 +823,7 @@ theorem abs_quittingContinuationBestResponseValue_finiteCap_sub_le
       · rintro _ ⟨deviation, rfl⟩
         have hsource :=
           quittingTerminalPayoff_update_le_continuationBestResponseValue
-            reward sourceProfile observer deviation hM hreward
+            reward sourceProfile observer deviation
         unfold quittingContinuationBestResponseValue at hsource
         have hp := hpoint deviation
         linarith [neg_le_abs
@@ -1202,7 +1202,7 @@ theorem abs_quittingContinuationBestResponseValue_mixtureFiniteCap_sub_le
       · rintro _ ⟨deviation, rfl⟩
         have hcap :=
           quittingTerminalPayoff_update_le_continuationBestResponseValue
-            reward cappedProfile observer deviation hM hreward
+            reward cappedProfile observer deviation
         unfold quittingContinuationBestResponseValue at hcap
         have hp := hpoint deviation
         linarith [le_abs_self
@@ -1220,7 +1220,7 @@ theorem abs_quittingContinuationBestResponseValue_mixtureFiniteCap_sub_le
       · rintro _ ⟨deviation, rfl⟩
         have htarget :=
           quittingTerminalPayoff_update_le_continuationBestResponseValue
-            reward targetProfile observer deviation hM hreward
+            reward targetProfile observer deviation
         unfold quittingContinuationBestResponseValue at htarget
         have hp := hpoint deviation
         linarith [neg_le_abs

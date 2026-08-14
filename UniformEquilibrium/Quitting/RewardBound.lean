@@ -21,15 +21,15 @@ namespace GameTheory
 open StochasticGame
 open scoped BigOperators
 
-variable {ι : Type} [Fintype ι] [DecidableEq ι]
+variable {ι : Type} [Fintype ι]
 
 /-- A canonical finite bound for every coordinate of a quitting payoff
-table.  The sum form avoids any nonempty maximum convention. -/
+table. The sum form also controls finite row and subtable totals without
+introducing additional cardinality factors. -/
 def quittingRewardBound
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : ℝ :=
-  ∑ S, ∑ who, |reward S who|
+  ∑ terminal, ∑ who, |reward terminal who|
 
-omit [DecidableEq ι] in
 /-- The canonical quitting reward bound is nonnegative. -/
 theorem quittingRewardBound_nonneg
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
@@ -37,7 +37,6 @@ theorem quittingRewardBound_nonneg
   unfold quittingRewardBound
   positivity
 
-omit [DecidableEq ι] in
 /-- Every terminal reward coordinate is below the canonical finite bound. -/
 theorem abs_reward_le_quittingRewardBound
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -47,14 +46,21 @@ theorem abs_reward_le_quittingRewardBound
   have hcoordinate : |reward terminal who| ≤
       ∑ player, |reward terminal player| := by
     exact Finset.single_le_sum
-      (fun player _ => abs_nonneg (reward terminal player))
+      (fun player _ ↦ abs_nonneg (reward terminal player))
       (Finset.mem_univ who)
   have hterminal : (∑ player, |reward terminal player|) ≤
-      ∑ S, ∑ player, |reward S player| := by
+      ∑ target, ∑ player, |reward target player| := by
     exact Finset.single_le_sum
-      (fun S _ => Finset.sum_nonneg fun player _ =>
-        abs_nonneg (reward S player))
+      (fun target _ ↦ Finset.sum_nonneg fun player _ ↦
+        abs_nonneg (reward target player))
       (Finset.mem_univ terminal)
   exact hcoordinate.trans hterminal
+
+/-- Every finite quitting reward table admits a nonnegative coordinate bound. -/
+theorem exists_quittingRewardBound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    ∃ M : ℝ, 0 ≤ M ∧ ∀ terminal who, |reward terminal who| ≤ M :=
+  ⟨quittingRewardBound reward, quittingRewardBound_nonneg reward,
+    abs_reward_le_quittingRewardBound reward⟩
 
 end GameTheory

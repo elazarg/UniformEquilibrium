@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryNeverCoupling
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauIncidence
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Unconditional elementary-tail semantic reduction
@@ -101,21 +102,19 @@ theorem quittingElementaryCompressedProfile_liveRoot_eq_of_lt
 depends only on the canonical live-root word. -/
 theorem quittingContinuationBestResponseValue_eq_rootSequence_profileLiveRoot
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
     quittingContinuationBestResponseValue reward profile who =
       quittingRootSequenceBestResponseValue reward
         (quittingProfileLiveRoot reward profile) who := by
   unfold quittingRootSequenceBestResponseValue
     quittingContinuationBestResponseValue
   rw [sSup_range_quittingTerminalPayoff_update_eq_pureTime
-      reward profile who hM hreward,
+      reward profile who,
     sSup_range_quittingTerminalPayoff_update_eq_pureTime
       reward
         (quittingRootSequenceProfile reward
           (quittingProfileLiveRoot reward profile) 0)
-        who hM hreward]
+        who]
   have hvalues :
       (fun quitTime : Option ℕ =>
         quittingTerminalPayoff reward
@@ -158,9 +157,8 @@ def QuittingElementaryCapMatchesSurvivalStratum
 matching survival stratum; the three cap shapes are not an arbitrary menu. -/
 theorem exists_stratifiedElementaryTailCap_terminalPair_close
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) {M ε : ℝ}
-    (hM : 0 ≤ M) (hε : 0 < ε)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (roots : ℕ → ι → PMF Bool) {ε : ℝ}
+    (hε : 0 < ε) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ cutoff,
       QuittingElementaryCapMatchesSurvivalStratum roots cap ∧
       (∀ who, |quittingRootSequenceTerminalValue reward roots who 0 -
@@ -169,6 +167,8 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close
       (∀ who, |quittingRootSequenceBestResponseValue reward roots who -
         quittingRootSequenceBestResponseValue reward
           (quittingElementaryTailRoots roots cutoff cap) who| < ε) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   rcases quittingSurvivalLimit_trichotomy reward roots with
     hpositive | ⟨hjoint, hall | hunique⟩
   · obtain ⟨cutoff, hp, hb⟩ :=
@@ -198,9 +198,8 @@ theorem quittingSureSolo_survivalStratum_owner_unique
 finite entrance block. -/
 theorem exists_stratifiedElementaryTailCap_terminalPair_close_after
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (lowerBound : ℕ) {M ε : ℝ}
-    (hM : 0 ≤ M) (hε : 0 < ε)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (roots : ℕ → ι → PMF Bool) (lowerBound : ℕ) {ε : ℝ}
+    (hε : 0 < ε) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ cutoff,
       lowerBound ≤ cutoff ∧
       QuittingElementaryCapMatchesSurvivalStratum roots cap ∧
@@ -210,6 +209,8 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close_after
       (∀ who, |quittingRootSequenceBestResponseValue reward roots who -
         quittingRootSequenceBestResponseValue reward
           (quittingElementaryTailRoots roots cutoff cap) who| < ε) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   rcases quittingSurvivalLimit_trichotomy reward roots with
     hpositive | ⟨hjoint, hall | hunique⟩
   · have hp : ∀ᶠ cutoff : ℕ in Filter.atTop, ∀ who,
@@ -337,8 +338,7 @@ hypothesis. -/
 theorem exists_elementaryCompressedProfile_terminalSemantics_close
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    {M δ : ℝ} (hM : 0 ≤ M) (hδ : 0 < δ)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    {δ : ℝ} (hδ : 0 < δ) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ cutoff,
       ∀ observer,
         |(quittingTerminalSemanticPair reward profile).1 observer -
@@ -355,6 +355,8 @@ theorem exists_elementaryCompressedProfile_terminalSemantics_close
               (quittingTerminalSemanticPair reward
                 (quittingElementaryCompressedProfile reward profile cutoff cap))
               observer| < δ := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let η := δ / 2
   have hη : 0 < η := div_pos hδ (by norm_num)
   obtain ⟨cap, cutoff, hpayoff, henvelope⟩ :=
@@ -385,11 +387,11 @@ theorem exists_elementaryCompressedProfile_terminalSemantics_close
           (quittingElementaryCompressedProfile reward profile cutoff cap)
           observer| < η := by
     rw [quittingContinuationBestResponseValue_eq_rootSequence_profileLiveRoot
-        reward profile observer hM hreward,
+        reward profile observer,
       quittingContinuationBestResponseValue_eq_rootSequence_profileLiveRoot
         reward
           (quittingElementaryCompressedProfile reward profile cutoff cap)
-          observer hM hreward,
+          observer,
       quittingProfileLiveRoot_elementaryCompressedProfile]
     exact hb
   constructor
@@ -431,8 +433,7 @@ literally. -/
 theorem exists_elementaryCompressedProfile_terminalSemantics_close_after
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (lowerBound : ℕ) {M δ : ℝ} (hM : 0 ≤ M) (hδ : 0 < δ)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (lowerBound : ℕ) {δ : ℝ} (hδ : 0 < δ) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ cutoff,
       lowerBound ≤ cutoff ∧
       QuittingElementaryCapMatchesSurvivalStratum
@@ -460,7 +461,7 @@ theorem exists_elementaryCompressedProfile_terminalSemantics_close_after
   have hη : 0 < η := div_pos hδ (by norm_num)
   obtain ⟨cap, cutoff, hlate, hmatch, hpayoff, henvelope⟩ :=
     exists_stratifiedElementaryTailCap_terminalPair_close_after
-      reward (quittingProfileLiveRoot reward profile) lowerBound hM hη hreward
+      reward (quittingProfileLiveRoot reward profile) lowerBound hη
   refine ⟨cap, cutoff, hlate, hmatch, ?_, fun observer => ?_⟩
   · intro time htime
     exact quittingElementaryCompressedProfile_liveRoot_eq_of_lt
@@ -489,11 +490,11 @@ theorem exists_elementaryCompressedProfile_terminalSemantics_close_after
             (quittingElementaryCompressedProfile reward profile cutoff cap)
             observer| < η := by
       rw [quittingContinuationBestResponseValue_eq_rootSequence_profileLiveRoot
-          reward profile observer hM hreward,
+          reward profile observer,
         quittingContinuationBestResponseValue_eq_rootSequence_profileLiveRoot
           reward
             (quittingElementaryCompressedProfile reward profile cutoff cap)
-            observer hM hreward,
+            observer,
         quittingProfileLiveRoot_elementaryCompressedProfile]
       exact hb
     constructor
@@ -534,8 +535,7 @@ may retain the explicit Never boundary; no two-seed hypothesis is needed. -/
 theorem exists_elementaryCompressedProfile_isεAsymptoticNash
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    {ε M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {ε : ℝ}
     (hnash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) ε profile)
     {δ : ℝ} (hδ : 0 < δ) :
@@ -560,7 +560,7 @@ theorem exists_elementaryCompressedProfile_isεAsymptoticNash
         (quittingElementaryCompressedProfile reward profile cutoff cap) := by
   obtain ⟨cap, cutoff, hclose⟩ :=
     exists_elementaryCompressedProfile_terminalSemantics_close
-      reward profile hM hδ hreward
+      reward profile hδ
   refine ⟨cap, cutoff, hclose, ?_⟩
   let target := quittingElementaryCompressedProfile reward profile cutoff cap
   have hsourceBest : ∀ observer,
@@ -575,7 +575,7 @@ theorem exists_elementaryCompressedProfile_isεAsymptoticNash
   intro observer deviation
   have hdeviation :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward target observer deviation hM hreward
+      reward target observer deviation
   have hp := (hclose observer).1
   have hb := (hclose observer).2.1
   change
@@ -611,9 +611,7 @@ def quittingNeverBoundarySemanticPair
 /-- The explicit Never boundary is the literal semantic pair of the
 all-Continue root word. -/
 theorem quittingTerminalSemanticPair_elementaryCap_never
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     quittingTerminalSemanticPair reward
         (quittingRootSequenceProfile reward
           (quittingElementaryCapRoots
@@ -624,7 +622,7 @@ theorem quittingTerminalSemanticPair_elementaryCap_never
     exact quittingRootSequenceTerminalValue_elementaryCap_never reward who
   · funext who
     exact quittingRootSequenceBestResponseValue_elementaryCap_never
-      reward who hM hreward
+      reward who
 
 /-- Finite-dimensional boundary pair for each elementary suffix.  A sure
 cap is one ordinary semantic-prefix step in front of the explicit Never
@@ -644,17 +642,17 @@ def quittingElementaryBoundarySemanticPair
 finite-dimensional boundary pair. -/
 theorem quittingTerminalSemanticPair_elementaryCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (cap : QuittingElementaryTailCap ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (cap : QuittingElementaryTailCap ι) :
     quittingTerminalSemanticPair reward
         (quittingRootSequenceProfile reward
           (quittingElementaryCapRoots cap) 0) =
       quittingElementaryBoundarySemanticPair reward cap := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   cases cap with
   | never =>
       exact quittingTerminalSemanticPair_elementaryCap_never
-        reward hM hreward
+        reward
   | sureJoint =>
       have htail :
           quittingRootSequenceProfile reward
@@ -669,7 +667,7 @@ theorem quittingTerminalSemanticPair_elementaryCap
         quittingTerminalSemanticPair_rootThenContinuation
           reward _ _ hM hreward,
         htail,
-        quittingTerminalSemanticPair_elementaryCap_never reward hM hreward]
+        quittingTerminalSemanticPair_elementaryCap_never reward]
       rfl
   | sureSolo owner =>
       have htail :
@@ -685,7 +683,7 @@ theorem quittingTerminalSemanticPair_elementaryCap
         quittingTerminalSemanticPair_rootThenContinuation
           reward _ _ hM hreward,
         htail,
-        quittingTerminalSemanticPair_elementaryCap_never reward hM hreward]
+        quittingTerminalSemanticPair_elementaryCap_never reward]
       rfl
 
 /-! ## Literal finite backward evaluation -/
@@ -729,14 +727,14 @@ boundary.  No limiting evaluation remains in this representative. -/
 theorem quittingTerminalSemanticPair_elementaryTail_eq_finiteEval
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (cutoff : ℕ)
-    (cap : QuittingElementaryTailCap ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (cap : QuittingElementaryTailCap ι) :
     quittingTerminalSemanticPair reward
         (quittingRootSequenceProfile reward
           (quittingElementaryTailRoots roots cutoff cap) 0) =
       quittingFinitePrefixSemanticEval reward roots cutoff
         (quittingElementaryBoundarySemanticPair reward cap) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   induction cutoff generalizing roots with
   | zero =>
       have hroots : quittingElementaryTailRoots roots 0 cap =
@@ -745,7 +743,7 @@ theorem quittingTerminalSemanticPair_elementaryTail_eq_finiteEval
         simp [quittingElementaryTailRoots, quittingPhaseSwitchRoots]
       rw [hroots]
       exact quittingTerminalSemanticPair_elementaryCap
-        reward cap hM hreward
+        reward cap
   | succ cutoff ih =>
       rw [quittingRootSequenceProfile_eq_rootThenContinuation,
         quittingTerminalSemanticPair_rootThenContinuation
@@ -777,16 +775,14 @@ theorem quittingTerminalSemanticPair_elementaryTail_eq_finiteEval
 theorem quittingTerminalSemanticPair_elementaryCompressedProfile_eq_finiteEval
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (cutoff : ℕ) (cap : QuittingElementaryTailCap ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (cutoff : ℕ) (cap : QuittingElementaryTailCap ι) :
     quittingTerminalSemanticPair reward
         (quittingElementaryCompressedProfile reward profile cutoff cap) =
       quittingFinitePrefixSemanticEval reward
         (quittingProfileLiveRoot reward profile) cutoff
         (quittingElementaryBoundarySemanticPair reward cap) := by
   exact quittingTerminalSemanticPair_elementaryTail_eq_finiteEval
-    reward (quittingProfileLiveRoot reward profile) cutoff cap hM hreward
+    reward (quittingProfileLiveRoot reward profile) cutoff cap
 
 /-! ## Compression after a marked causal date -/
 
@@ -874,8 +870,7 @@ compatibility of the retained roots. -/
 theorem exists_markedDate_elementaryCompression_continuationSemantics_close
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (mark retainedAfterMark : ℕ)
-    {M δ : ℝ} (hM : 0 ≤ M) (hδ : 0 < δ)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    {δ : ℝ} (hδ : 0 < δ) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ tailCutoff,
       retainedAfterMark + 1 ≤ tailCutoff ∧
       QuittingElementaryCapMatchesSurvivalStratum
@@ -918,7 +913,7 @@ theorem exists_markedDate_elementaryCompression_continuationSemantics_close
   have hη : 0 < η := div_pos hδ (by norm_num)
   obtain ⟨cap, tailCutoff, hlate, hmatch, hpayoff, henvelope⟩ :=
     exists_stratifiedElementaryTailCap_terminalPair_close_after
-      reward shifted (retainedAfterMark + 1) hM hη hreward
+      reward shifted (retainedAfterMark + 1) hη
   let capped :=
     quittingElementaryTailRoots roots (mark + tailCutoff) cap
   have hcappedShift :
@@ -1012,7 +1007,7 @@ theorem exists_markedDate_elementaryCompression_continuationSemantics_close
   · unfold quittingRootSequenceContinuationSemanticPair
     rw [quittingRootSequenceProfile_eq_shift, hcappedShift]
     exact quittingTerminalSemanticPair_elementaryTail_eq_finiteEval
-      reward shifted tailCutoff cap hM hreward
+      reward shifted tailCutoff cap
 
 /-- A strict negative sign with margin survives any marked-continuation
 compression error smaller than that margin. -/

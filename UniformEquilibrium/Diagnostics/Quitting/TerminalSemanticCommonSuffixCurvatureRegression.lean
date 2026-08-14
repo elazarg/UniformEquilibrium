@@ -158,7 +158,7 @@ theorem profile_common_live_suffix
     quittingContinuationBestResponseValue reward continuation who = 0 := by
   unfold continuation
   rw [quittingContinuationBestResponseValue_pureSetRoot_eq
-    reward ∅ who (by norm_num) abs_reward_le_one]
+    reward ∅ who]
   fin_cases who <;>
     norm_num [quittingSetReward, reward, left, right, anchor, Fin.ext_iff]
 

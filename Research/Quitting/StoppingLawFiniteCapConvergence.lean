@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFiniteSplice
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Convergence of stochastic-button finite caps
@@ -620,8 +621,6 @@ theorem exists_finiteCap_all_terminalSemantics_close_after
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : ι) (strategy : (quittingGame reward).BehaviorStrategy mover)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (herror : Tendsto (fun cutoff =>
       quittingFiniteSpliceError (quittingProfileLiveRoot reward profile)
       mover (quittingBehaviorLiveHazard reward strategy) cutoff)
@@ -649,6 +648,8 @@ theorem exists_finiteCap_all_terminalSemantics_close_after
               (Function.update profile mover
                 (quittingStoppingLawFiniteCapBehaviorStrategy reward mover strategy
                   cutoff))) observer| < δ := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let error : ℕ → ℝ := fun cutoff =>
     quittingFiniteSpliceError (quittingProfileLiveRoot reward profile)
       mover (quittingBehaviorLiveHazard reward strategy) cutoff
@@ -690,8 +691,6 @@ theorem exists_finiteCap_all_terminalSemantics_close
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : ι) (strategy : (quittingGame reward).BehaviorStrategy mover)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (herror : Tendsto (fun cutoff =>
       quittingFiniteSpliceError (quittingProfileLiveRoot reward profile)
         mover (quittingBehaviorLiveHazard reward strategy) cutoff)
@@ -720,7 +719,7 @@ theorem exists_finiteCap_all_terminalSemantics_close
                   cutoff))) observer| < δ := by
   obtain ⟨cutoff, _hcutoff, hclose⟩ :=
     exists_finiteCap_all_terminalSemantics_close_after
-      reward profile mover strategy hM hreward herror 0 hδ
+      reward profile mover strategy herror 0 hδ
   exact ⟨cutoff, hclose⟩
 
 /-- Finite-iteration reduction for a stochastic button with no `Never` atom. -/
@@ -728,8 +727,6 @@ theorem exists_finiteCap_all_terminalSemantics_close_of_neverMass_zero_after
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : ι) (strategy : (quittingGame reward).BehaviorStrategy mover)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnever : quittingHazardNeverMass
       (quittingBehaviorLiveHazard reward strategy) = 0)
     (lowerBound : ℕ) {δ : ℝ} (hδ : 0 < δ) :
@@ -755,7 +752,7 @@ theorem exists_finiteCap_all_terminalSemantics_close_of_neverMass_zero_after
                 (quittingStoppingLawFiniteCapBehaviorStrategy reward mover strategy
                   cutoff))) observer| < δ := by
   apply exists_finiteCap_all_terminalSemantics_close_after
-    reward profile mover strategy hM hreward
+    reward profile mover strategy
   · exact tendsto_quittingFiniteSpliceError_zero_of_neverMass_zero
       (quittingProfileLiveRoot reward profile) mover
         (quittingBehaviorLiveHazard reward strategy) hnever
@@ -766,8 +763,6 @@ theorem exists_finiteCap_all_terminalSemantics_close_of_neverMass_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : ι) (strategy : (quittingGame reward).BehaviorStrategy mover)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnever : quittingHazardNeverMass
       (quittingBehaviorLiveHazard reward strategy) = 0)
     {δ : ℝ} (hδ : 0 < δ) :
@@ -793,7 +788,7 @@ theorem exists_finiteCap_all_terminalSemantics_close_of_neverMass_zero
                 (quittingStoppingLawFiniteCapBehaviorStrategy reward mover strategy
                   cutoff))) observer| < δ := by
   apply exists_finiteCap_all_terminalSemantics_close
-    reward profile mover strategy hM hreward
+    reward profile mover strategy
   · exact tendsto_quittingFiniteSpliceError_zero_of_neverMass_zero
       (quittingProfileLiveRoot reward profile) mover
         (quittingBehaviorLiveHazard reward strategy) hnever
@@ -806,8 +801,6 @@ theorem exists_finiteCap_all_terminalSemantics_close_of_pairDeleted_after
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : ι) (strategy : (quittingGame reward).BehaviorStrategy mover)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hclock : Tendsto (fun cutoff =>
       quittingMaxPairDeletedSurvivalWeight
         (quittingProfileLiveRoot reward profile) mover 0 cutoff)
@@ -835,7 +828,7 @@ theorem exists_finiteCap_all_terminalSemantics_close_of_pairDeleted_after
                 (quittingStoppingLawFiniteCapBehaviorStrategy reward mover strategy
                   cutoff))) observer| < δ := by
   apply exists_finiteCap_all_terminalSemantics_close_after
-    reward profile mover strategy hM hreward
+    reward profile mover strategy
   · exact tendsto_quittingFiniteSpliceError_zero_of_pairDeleted
       (quittingProfileLiveRoot reward profile) mover
         (quittingBehaviorLiveHazard reward strategy) hclock
@@ -846,8 +839,6 @@ theorem exists_finiteCap_all_terminalSemantics_close_of_pairDeleted
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : ι) (strategy : (quittingGame reward).BehaviorStrategy mover)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hclock : Tendsto (fun cutoff =>
       quittingMaxPairDeletedSurvivalWeight
         (quittingProfileLiveRoot reward profile) mover 0 cutoff)
@@ -875,7 +866,7 @@ theorem exists_finiteCap_all_terminalSemantics_close_of_pairDeleted
                 (quittingStoppingLawFiniteCapBehaviorStrategy reward mover strategy
                   cutoff))) observer| < δ := by
   apply exists_finiteCap_all_terminalSemantics_close
-    reward profile mover strategy hM hreward
+    reward profile mover strategy
   · exact tendsto_quittingFiniteSpliceError_zero_of_pairDeleted
       (quittingProfileLiveRoot reward profile) mover
         (quittingBehaviorLiveHazard reward strategy) hclock
@@ -986,8 +977,7 @@ not needed for this implication. -/
 theorem isεAsymptoticNash_of_terminalSemanticsWithin
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source target : (quittingGame reward).BehaviorProfile)
-    {ε error M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {ε error : ℝ}
     (hnash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) ε source)
     (hclose : QuittingTerminalSemanticsWithin reward source target error) :
@@ -1005,7 +995,7 @@ theorem isεAsymptoticNash_of_terminalSemanticsWithin
   intro observer deviation
   have hdeviation :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward target observer deviation hM hreward
+      reward target observer deviation
   have h := hclose observer
   have hpayoff := h.1
   have hbest := h.2.1
@@ -1032,8 +1022,7 @@ theorem isεAsymptoticNash_of_terminalSemanticsWithin
 theorem exists_quittingFiniteCapProfileAt_semantics_close_of_neverMass_zero_after
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (mover : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (mover : ι)
     (hnever : quittingHazardNeverMass
       (quittingBehaviorLiveHazard reward (profile mover)) = 0)
     (lowerBound : ℕ) {δ : ℝ} (hδ : 0 < δ) :
@@ -1054,7 +1043,7 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_neverMass_zero_afte
               observer| < δ := by
   obtain ⟨cutoff, hlower, hcutoff⟩ :=
     exists_finiteCap_all_terminalSemantics_close_of_neverMass_zero_after
-      reward profile mover (profile mover) hM hreward hnever lowerBound hδ
+      reward profile mover (profile mover) hnever lowerBound hδ
   refine ⟨cutoff, hlower, fun observer => ?_⟩
   simpa [quittingFiniteCapProfileAt, quittingTerminalSemanticPair] using
     hcutoff observer
@@ -1063,8 +1052,7 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_neverMass_zero_afte
 theorem exists_quittingFiniteCapProfileAt_semantics_close_of_neverMass_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (mover : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (mover : ι)
     (hnever : quittingHazardNeverMass
       (quittingBehaviorLiveHazard reward (profile mover)) = 0)
     {δ : ℝ} (hδ : 0 < δ) :
@@ -1085,7 +1073,7 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_neverMass_zero
               observer| < δ := by
   obtain ⟨cutoff, hcutoff⟩ :=
     exists_finiteCap_all_terminalSemantics_close_of_neverMass_zero
-      reward profile mover (profile mover) hM hreward hnever hδ
+      reward profile mover (profile mover) hnever hδ
   refine ⟨cutoff, fun observer => ?_⟩
   simpa [quittingFiniteCapProfileAt, quittingTerminalSemanticPair] using
     hcutoff observer
@@ -1104,8 +1092,6 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_two_zeroNeverOppone
       (quittingBehaviorLiveHazard reward (profile first)) = 0)
     (hneverSecond : quittingHazardNeverMass
       (quittingBehaviorLiveHazard reward (profile second)) = 0)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     {δ : ℝ} (hδ : 0 < δ) :
     ∃ cutoff, ∀ observer,
       |(quittingTerminalSemanticPair reward profile).1 observer -
@@ -1136,7 +1122,7 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_two_zeroNeverOppone
     exact hneverSecond
   obtain ⟨cutoff, hcutoff⟩ :=
     exists_finiteCap_all_terminalSemantics_close_of_pairDeleted
-      reward profile mover (profile mover) hM hreward
+      reward profile mover (profile mover)
       (tendsto_quittingMaxPairDeletedSurvivalWeight_zero_of_two_zeroNever
         (quittingProfileLiveRoot reward profile) mover first second
           hfirstSecond hfirstMover hsecondMover hneverFirstRoot
@@ -1153,8 +1139,6 @@ strategy is literally a finite cap of its corresponding original strategy. -/
 theorem exists_allPlayersFiniteCap_terminalSemantics_close_of_neverMass_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnever : ∀ mover, quittingHazardNeverMass
       (quittingBehaviorLiveHazard reward (profile mover)) = 0)
     {δ : ℝ} (hδ : 0 < δ) :
@@ -1213,7 +1197,7 @@ theorem exists_allPlayersFiniteCap_terminalSemantics_close_of_neverMass_zero
           exact hnever mover
         obtain ⟨cutoff, hstep⟩ :=
           exists_quittingFiniteCapProfileAt_semantics_close_of_neverMass_zero
-            reward current mover hM hreward hmoverNever hη
+            reward current mover hmoverNever hη
         let next := quittingFiniteCapProfileAt reward current mover cutoff
         refine ⟨next, ?_, ?_, ?_⟩
         · intro player hplayer
@@ -1482,8 +1466,6 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_two_cappedPlayers_a
     (hsecondCap : current second =
       quittingStoppingLawFiniteCapBehaviorStrategy reward second
         (source second) secondTime)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (lowerBound : ℕ) {δ : ℝ} (hδ : 0 < δ) :
     ∃ cutoff, lowerBound ≤ cutoff ∧ ∀ observer,
       |(quittingTerminalSemanticPair reward current).1 observer -
@@ -1502,7 +1484,7 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_two_cappedPlayers_a
               observer| < δ := by
   obtain ⟨cutoff, hlower, hcutoff⟩ :=
     exists_finiteCap_all_terminalSemantics_close_of_pairDeleted_after
-      reward current mover (current mover) hM hreward
+      reward current mover (current mover)
       (tendsto_quittingMaxPairDeletedSurvivalWeight_zero_of_two_cappedPlayers
         reward source current mover first second hfirstSecond hfirstMover
           hsecondMover firstTime secondTime hfirstCap hsecondCap)
@@ -1525,8 +1507,6 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_two_cappedPlayers
     (hsecondCap : current second =
       quittingStoppingLawFiniteCapBehaviorStrategy reward second
         (source second) secondTime)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     {δ : ℝ} (hδ : 0 < δ) :
     ∃ cutoff, ∀ observer,
       |(quittingTerminalSemanticPair reward current).1 observer -
@@ -1545,7 +1525,7 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_two_cappedPlayers
               observer| < δ := by
   obtain ⟨cutoff, hcutoff⟩ :=
     exists_finiteCap_all_terminalSemantics_close_of_pairDeleted
-      reward current mover (current mover) hM hreward
+      reward current mover (current mover)
       (tendsto_quittingMaxPairDeletedSurvivalWeight_zero_of_two_cappedPlayers
         reward source current mover first second hfirstSecond hfirstMover
           hsecondMover firstTime secondTime hfirstCap hsecondCap)
@@ -1570,8 +1550,6 @@ theorem exists_allPlayersFiniteCap_terminalSemantics_close_of_two_zeroNever_afte
       (quittingBehaviorLiveHazard reward (profile first)) = 0)
     (hneverSecond : quittingHazardNeverMass
       (quittingBehaviorLiveHazard reward (profile second)) = 0)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (lowerBound : ℕ)
     {δ : ℝ} (hδ : 0 < δ) :
     ∃ capped : (quittingGame reward).BehaviorProfile,
@@ -1595,7 +1573,7 @@ theorem exists_allPlayersFiniteCap_terminalSemantics_close_of_two_zeroNever_afte
 
   obtain ⟨firstTime, hfirstLate, hfirstStep⟩ :=
     exists_quittingFiniteCapProfileAt_semantics_close_of_neverMass_zero_after
-      reward profile first hM hreward hneverFirst lowerBound hη
+      reward profile first hneverFirst lowerBound hη
   let afterFirst :=
     quittingFiniteCapProfileAt reward profile first firstTime
   have hsecondAfterFirst : afterFirst second = profile second := by
@@ -1607,7 +1585,7 @@ theorem exists_allPlayersFiniteCap_terminalSemantics_close_of_two_zeroNever_afte
     exact hneverSecond
   obtain ⟨secondTime, hsecondLate, hsecondStep⟩ :=
     exists_quittingFiniteCapProfileAt_semantics_close_of_neverMass_zero_after
-      reward afterFirst second hM hreward hneverSecondAfterFirst lowerBound hη
+      reward afterFirst second hneverSecondAfterFirst lowerBound hη
   let seeded :=
     quittingFiniteCapProfileAt reward afterFirst second secondTime
 
@@ -1692,7 +1670,7 @@ theorem exists_allPlayersFiniteCap_terminalSemantics_close_of_two_zeroNever_afte
           exists_quittingFiniteCapProfileAt_semantics_close_of_two_cappedPlayers_after
             reward profile current mover first second hfirstSecond
               hfirstMover hsecondMover firstTime secondTime
-              hfirstCurrent hsecondCurrent hM hreward lowerBound hη
+              hfirstCurrent hsecondCurrent lowerBound hη
         let next :=
           quittingFiniteCapProfileAt reward current mover cutoff
         refine ⟨next, ?_, ?_, ?_, ?_, ?_⟩
@@ -1794,8 +1772,6 @@ theorem exists_allPlayersFiniteCap_terminalSemantics_close_of_two_zeroNever
       (quittingBehaviorLiveHazard reward (profile first)) = 0)
     (hneverSecond : quittingHazardNeverMass
       (quittingBehaviorLiveHazard reward (profile second)) = 0)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     {δ : ℝ} (hδ : 0 < δ) :
     ∃ capped : (quittingGame reward).BehaviorProfile,
       (∀ mover, ∃ cutoff,
@@ -1814,7 +1790,7 @@ theorem exists_allPlayersFiniteCap_terminalSemantics_close_of_two_zeroNever
   obtain ⟨capped, hcapped, hclose⟩ :=
     exists_allPlayersFiniteCap_terminalSemantics_close_of_two_zeroNever_after
       reward profile first second hfirstSecond hneverFirst hneverSecond
-        hM hreward 0 hδ
+        0 hδ
   refine ⟨capped, ?_, hclose⟩
   intro mover
   obtain ⟨cutoff, _hlate, hcap⟩ := hcapped mover
@@ -1832,8 +1808,7 @@ theorem exists_allPlayersFiniteCap_isεAsymptoticNash_of_two_zeroNever
       (quittingBehaviorLiveHazard reward (profile first)) = 0)
     (hneverSecond : quittingHazardNeverMass
       (quittingBehaviorLiveHazard reward (profile second)) = 0)
-    {ε M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {ε : ℝ}
     (hnash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) ε profile)
     {δ : ℝ} (hδ : 0 < δ) :
@@ -1848,7 +1823,7 @@ theorem exists_allPlayersFiniteCap_isεAsymptoticNash_of_two_zeroNever
   obtain ⟨capped, hcapped, hclose⟩ :=
     exists_allPlayersFiniteCap_terminalSemantics_close_of_two_zeroNever
       reward profile first second hfirstSecond hneverFirst hneverSecond
-        hM hreward hδ
+        hδ
   have hwithin :
       QuittingTerminalSemanticsWithin reward profile capped δ := by
     intro observer
@@ -1856,6 +1831,6 @@ theorem exists_allPlayersFiniteCap_isεAsymptoticNash_of_two_zeroNever
     exact ⟨le_of_lt h.1, le_of_lt h.2.1, le_of_lt h.2.2⟩
   exact ⟨capped, hcapped, hwithin,
     isεAsymptoticNash_of_terminalSemanticsWithin
-      reward profile capped hM hreward hnash hwithin⟩
+      reward profile capped hnash hwithin⟩
 
 end GameTheory

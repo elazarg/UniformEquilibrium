@@ -250,7 +250,7 @@ theorem continuation_pair_coordinates :
       (quittingElementaryCapRoots (.never : QuittingElementaryTailCap Player))
         who = 0
     rw [quittingRootSequenceBestResponseValue_elementaryCap_never
-      reward who (by norm_num) reward_bound]
+      reward who]
     fin_cases who <;>
       simp [reward, quittingSingletonTerminal, owner, debtor, switch]
 

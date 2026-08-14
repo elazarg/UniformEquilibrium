@@ -39,8 +39,6 @@ theorem exists_twoReset_fourRoleWindow_or_excessCharge
     (reward : {S : Finset (Fin 5) // S.Nonempty} → Payoff (Fin 5))
     (profile : (quittingGame reward).BehaviorProfile)
     (firstMover incidenceLabel : Fin 5)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hfirstDebt : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) firstMover)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -69,7 +67,7 @@ theorem exists_twoReset_fourRoleWindow_or_excessCharge
                 omitted ∉
                     ({firstMover, secondMover, incidenceLabel} :
                       Finset (Fin 5)) ∪
-                      {secondMover, thirdMover, incidenceLabel} ∧
+    {secondMover, thirdMover, incidenceLabel} ∧
                 ∀ terminal time,
                   (1 / 4) *
                       quittingStageCoalitionMass reward profile time terminal ≤
@@ -77,7 +75,7 @@ theorem exists_twoReset_fourRoleWindow_or_excessCharge
                       time terminal) := by
   obtain ⟨firstBestResponse, hfirst⟩ :=
     exists_twoMatchedHalfResets_or_firstExcessCharge
-      reward profile firstMover hM hreward hfirstDebt hminimum
+      reward profile firstMover hfirstDebt hminimum
   dsimp only at hfirst
   let firstMixedStrategy := quittingStoppingLawMixtureBehaviorStrategy
     reward firstMover (profile firstMover) firstBestResponse

@@ -149,16 +149,14 @@ theorem source_debt_owner :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward source) owner = 2 := by
   unfold source
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {owner} owner
-    (by norm_num) abs_reward_le_two]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {owner} owner]
   norm_num [owner, quittingSetReward, reward]
 
 theorem source_debt_recipient :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward source) recipient = 0 := by
   unfold source
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {owner} recipient
-    (by norm_num) abs_reward_le_two]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {owner} recipient]
   norm_num [owner, recipient, quittingSetReward, reward, Fin.ext_iff,
     show ({true, false} : Finset Bool) ≠ {true} by decide]
 
@@ -166,16 +164,14 @@ theorem target_debt_owner :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward target) owner = 0 := by
   unfold target
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ owner
-    (by norm_num) abs_reward_le_two]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ owner]
   norm_num [owner, quittingSetReward, reward]
 
 theorem target_debt_recipient :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward target) recipient = 2 := by
   unfold target
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ recipient
-    (by norm_num) abs_reward_le_two]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ recipient]
   norm_num [recipient, owner, quittingSetReward, reward]
 
 /-- The owner loses debt at rate two. -/
@@ -306,8 +302,7 @@ theorem mixed_cap_recipient
       exact mixed_update_recipient_payoff_le lambda hlambda0 hlambda1 deviation
   · apply le_csSup
       (bddAbove_range_quittingTerminalPayoff_update reward
-        (mixed lambda hlambda0 hlambda1) recipient (by norm_num)
-          abs_reward_le_two)
+        (mixed lambda hlambda0 hlambda1) recipient)
     let deviation := quittingPureTimeBehaviorStrategy reward recipient (some 0)
     refine ⟨deviation, ?_⟩
     simpa only [deviation] using
@@ -550,8 +545,6 @@ theorem activePassport_flatSimultaneous_atomicRecipient_or_localizedPositiveSlop
     (replacement : ∀ who, (quittingGame reward).BehaviorStrategy who)
     (who : ι) (terminal : {S : Finset ι // S.Nonempty}) (cutoff : ℕ)
     (lambda : ℝ) (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hpassport : IsQuittingStoppingLawMinimumResetPassport reward profile who
       (replacement who) terminal cutoff)
     (hflat : quittingTerminalSemanticDebtSum
@@ -609,7 +602,7 @@ theorem activePassport_flatSimultaneous_atomicRecipient_or_localizedPositiveSlop
   have hlocalized :=
     activePassport_flatSimultaneous_directed_or_localizedPositiveSlope
       reward profile replacement who terminal cutoff lambda hlambda0 hlambda1
-        hM hreward hpassport hflat
+        hpassport hflat
   dsimp only at hlocalized
   rcases hlocalized with hrecipient | hslope
   · left

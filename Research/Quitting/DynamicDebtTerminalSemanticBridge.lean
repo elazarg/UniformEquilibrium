@@ -79,8 +79,7 @@ theorem quittingFiniteNashBellmanPathDynamicDebt_zero_eq_terminalSemanticDebt
       (fun time _ htime => by
         exact quittingFiniteNashBellmanPathValue_eq_successor
           reward cutoff path hpath time (by simpa using htime))
-      who (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward))
+      who)
 
 /-- The padded terminal coordinate has the same interpretation.  At the
 cutoff the continuation is all-Continue, its prescribed payoff is zero, and
@@ -113,8 +112,7 @@ theorem quittingFiniteNashBellmanPathDynamicDebt_cutoff_eq_terminalSemanticDebt
     simpa [quittingRootSequenceBestResponseValue, quittingElementaryCapRoots,
       quittingPositiveSingletonDebtCap] using
       (quittingRootSequenceBestResponseValue_elementaryCap_never
-        (ι := ι) reward who (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward))
+        (ι := ι) reward who)
   unfold quittingFiniteNashBellmanPathDynamicDebt
   rw [Nat.sub_self]
   simp only [quittingFiniteDynamicDebt_zero]

@@ -294,8 +294,6 @@ theorem activePassport_flatSimultaneous_directed_or_localizedPositiveSlope
     (replacement : ∀ who, (quittingGame reward).BehaviorStrategy who)
     (who : ι) (terminal : {S : Finset ι // S.Nonempty}) (cutoff : ℕ)
     (lambda : ℝ) (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hpassport : IsQuittingStoppingLawMinimumResetPassport reward profile who
       (replacement who) terminal cutoff)
     (hflat : quittingTerminalSemanticDebtSum
@@ -473,7 +471,7 @@ theorem activePassport_flatSimultaneous_directed_or_localizedPositiveSlope
     unfold HasQuittingStoppingLawPositiveSlopeAtom
     apply exists_prescribedAtom_or_deviationRectangleAtom_of_stoppingLawDebtSlope
       reward edgeSource mover who (replacement mover) lambda charge hlambda0
-        hlambda1 hchargePos hM hreward
+        hlambda1 hchargePos
     rw [← hedgeProfile]
     exact hslope
 

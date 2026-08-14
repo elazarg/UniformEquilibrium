@@ -271,8 +271,7 @@ theorem target_debt_observer_eq_zero :
             split_ifs <;> norm_num)
   have hcapLower :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward target observer (target observer) (by norm_num)
-        abs_reward_le_one
+      reward target observer (target observer)
   rw [Function.update_eq_self, target_payoff_eq_one] at hcapLower
   change quittingContinuationBestResponseValue reward target observer -
       quittingTerminalPayoff reward target observer = 0
@@ -292,7 +291,7 @@ theorem target_debt_clock_eq_zero :
             simp [quittingTerminalOutcomeReward, reward, clock, observer])
   have hcapLower :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward target clock (target clock) (by norm_num) abs_reward_le_one
+      reward target clock (target clock)
   rw [Function.update_eq_self, target_payoff_clock_eq_zero] at hcapLower
   change quittingContinuationBestResponseValue reward target clock -
       quittingTerminalPayoff reward target clock = 0

@@ -130,9 +130,7 @@ theorem individualValue_eq_terminalDebt
       quittingTerminalDeviationDebt reward profile who := by
   unfold individualValue quittingTerminalDeviationDebt
     quittingContinuationBestResponseValue
-  rw [sSup_range_quittingTerminalPayoff_update_eq_pureTime
-    reward profile who (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)]
+  rw [sSup_range_quittingTerminalPayoff_update_eq_pureTime reward profile who]
 
 /-- Every concrete pure-time response pays at most the post-audit value. -/
 theorem pureTimeGain_le_individualValue
@@ -525,8 +523,7 @@ theorem value_pos_of_no_uniformEquilibriumPayoff
     obtain ⟨who, deviation, hgain⟩ := hexploit profile
     have hbest :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
-        reward profile who deviation (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
+        reward profile who deviation
     have hdebt : gap ≤
         quittingTerminalDeviationDebt reward profile who := by
       unfold quittingTerminalDeviationDebt
@@ -596,8 +593,7 @@ theorem uniform_value_pos_of_no_uniformEquilibriumPayoff
     obtain ⟨who, deviation, hgain⟩ := hexploit profile
     have hbest :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
-        reward profile who deviation (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
+        reward profile who deviation
     have hdebt : gap ≤
         quittingTerminalDeviationDebt reward profile who := by
       unfold quittingTerminalDeviationDebt

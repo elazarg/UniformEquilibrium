@@ -84,9 +84,7 @@ which that debt was defined. -/
 theorem quittingTerminalPayoff_update_sub_le_terminalSemanticDebt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    (deviation : (quittingGame reward).BehaviorStrategy who)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (deviation : (quittingGame reward).BehaviorStrategy who) :
     quittingTerminalPayoff reward
           (Function.update profile who deviation) who -
         quittingTerminalPayoff reward profile who ≤
@@ -94,7 +92,7 @@ theorem quittingTerminalPayoff_update_sub_le_terminalSemanticDebt
         (quittingTerminalSemanticPair reward profile) who := by
   have hbest :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward profile who deviation hM hreward
+      reward profile who deviation
   unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
   exact sub_le_sub_right hbest _
 

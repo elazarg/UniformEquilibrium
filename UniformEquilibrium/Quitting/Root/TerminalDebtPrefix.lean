@@ -190,7 +190,7 @@ theorem quittingContinuationBestResponseValue_rootThenContinuation_eq_max
       reward root continuation who best
       (fun candidate =>
         quittingTerminalPayoff_update_le_continuationBestResponseValue
-          reward continuation who candidate hM hreward)
+          reward continuation who candidate)
       deviation
     let marginal := deviation 0 ((quittingGame reward).emptyHist none)
     have hmix := quittingRootExpectedPayoff_update_eq_endpointMix
@@ -247,7 +247,7 @@ theorem quittingContinuationBestResponseValue_rootThenContinuation_eq_max
     · refine le_of_forall_pos_le_add fun ε hε => ?_
       obtain ⟨candidate, hcandidate⟩ :=
         exists_quittingContinuation_deviation_ge_sub
-          reward continuation who hε hM hreward
+          reward continuation who hε
       let candidatePayoff := quittingTerminalPayoff reward
         (Function.update continuation who candidate) who
       let assembled := quittingRootAndContinuationDeviation reward

@@ -85,8 +85,7 @@ theorem fullPrefix_coRealizedGain_elementaryNever_eq_dynamicDebt
     QuittingBoundaryHolonomy.behavioralTailEnvelopeBoundary
   rw [quittingRootSequenceTerminalValue_elementaryCap_never]
   rw [quittingRootSequenceBestResponseValue_elementaryCap_never
-    reward who (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)]
+    reward who]
   change
     ((quittingFiniteBoundaryHolonomy reward roots 0 last).bestResponse who).eval
         cap -

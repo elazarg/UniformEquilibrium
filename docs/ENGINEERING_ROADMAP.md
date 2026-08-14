@@ -1,6 +1,6 @@
 # Engineering roadmap
 
-This is a preparatory ten-phase plan. It does not authorize a rewrite, a
+This is a preparatory engineering plan. It does not authorize a rewrite, a
 stable API, or a GameTheory2 cutover. Exact theorem truth remains in Lean;
 promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 
@@ -18,6 +18,7 @@ promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
 | 8 | Monolith decomposition | Complete | Long proof files split behind checked interfaces |
 | 9 | Imports, internal APIs, options | Complete | Narrow imports and scoped options pass build and trust gates |
 | 10 | Final audit | Complete | Current generated audit, full build, and repository gates pass |
+| 11 | Assumption normalization | In progress | Known derivable hypotheses are internalized |
 
 ## Phase gates
 
@@ -111,6 +112,50 @@ axioms. The exact cross-lane duplicate ratchet, trust scan, import graph,
 documentation checks, unit suite, generated-data checker, and build-artifact
 check form the closing gate. No unexplained production orphan, lane-boundary
 violation, or exact Research-to-production proof-body fork remains.
+
+### 11. Assumption normalization
+
+Remove hypotheses that finite source data can supply canonically, beginning
+with coordinate bounds on finite quitting reward tables. The parser-audited
+phase-entry measurement is 689 definitions and theorems in 175 files: 521
+with a dischargeable reward-bound triple and 168 retaining genuine coupling.
+Of the latter, 152 mention the chosen constant in the result and 16 use it in
+a later hypothesis. Classification inspects the entire retained telescope,
+rather than only the final result; the simpler result-only criterion would
+misclassify those 16 declarations.
+
+The first stable normalization slice removes 192 of the 521 dischargeable
+triples and leaves 329 across 95 files. The complete set of 168 coupled
+quantitative declarations is unchanged. This is progress toward the phase
+gate, not completion of it.
+
+The census recognizes the narrow `M`/`B`/`C` coordinate-bound schema in Lean
+definitions, theorems, lemmas, abbreviations, and opaque declarations. It
+handles grouped Unicode binders, strict implicits, equation declarations,
+identifier primes, nested comments, and colons inside result binders. It is
+not a Lean parser and does not inventory structure fields. The separately
+audited `PositiveMinimumPlateau.reward_bound` field remains intentional: the
+same positive constant controls reward coordinates and explicit mass-floor
+denominators throughout that quantitative certificate.
+
+Keep arbitrary bounds in quantitative conclusions and wherever later data are
+bounded by the same constant. The canonical bound is the finite sum of
+absolute reward coordinates: besides bounding each coordinate, it controls
+row and subtable totals without extra cardinality factors. For qualitative
+declarations, construct that bound internally and propagate the stronger API
+through all callers. Process dependency layers bottom-up and use Lean
+elaboration as the call-site oracle, because field notation, namespace
+shortening, rewriting, direct canonical proof arguments, and partial
+applications make textual call graphs incomplete.
+
+Acceptance requires a deterministic census, zero remaining declarations in
+the audited removable schema, explicit classification of retained quantitative
+parameters, narrow checks for each layer, and a final exhaustive axiom audit
+and build. Use `python3 scripts/check_reward_bounds.py` for the inventory and
+its opt-in `--check` mode for the zero-candidate closing gate. The same audit
+then expands to other recurring hypotheses that are
+canonically derivable from retained finite data; no claim of globally minimal
+logical hypotheses is inferred merely from the absence of compiler warnings.
 
 ## Deferred dependency decision
 

@@ -119,8 +119,7 @@ theorem exists_pureTimeCap_gap
   obtain ⟨who, deviation, hgap⟩ := regime.terminalExploitability profile
   refine ⟨who, hgap.trans ?_⟩
   exact quittingTerminalPayoff_update_le_sSup_pureTimeBehaviorStrategy
-    reward profile who deviation (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
+    reward profile who deviation
 
 /-- Every finite window of any dynamic-debt tail, restarted periodically, is
 exposed by the exact pure-time/`Never` cap at the regime's full terminal gap.
@@ -172,12 +171,9 @@ theorem exists_cyclicWindow_finiteEvaluation_gap
     intro time
     simp [profile, cycle]
   have hbdd := bddAbove_range_quittingTerminalPayoff_update
-    reward profile who (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
+    reward profile who
   have heval := sSup_range_quittingTerminalPayoff_update_eq_periodicWindow
     reward profile who (length + 1) hperiodic
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
   calc
     quittingCyclicTerminalValue reward cycle phase who +
         regime.terminalGap =

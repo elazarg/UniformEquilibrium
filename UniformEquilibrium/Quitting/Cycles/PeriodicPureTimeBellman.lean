@@ -596,8 +596,7 @@ theorem sSup_range_quittingRootSequencePureTimeTerminalValue_ge_of_fixed
     (hperiodic : ∀ k, roots (k + (m + 1)) = roots k)
     {cap : ℝ} (hfixed : quittingCompanionComposite reward roots who 0
       (m + 1) cap = cap)
-    (hP : quittingOpponentSurvivalWeight roots who 0 (m + 1) < 1)
-    {M : ℝ} (hM : 0 ≤ M) (hreward : ∀ S player, |reward S player| ≤ M) :
+    (hP : quittingOpponentSurvivalWeight roots who 0 (m + 1) < 1) :
     cap ≤ sSup (Set.range fun quitTime : Option ℕ =>
       quittingRootSequencePureTimeTerminalValue reward roots who
         quitTime 0) := by
@@ -605,7 +604,6 @@ theorem sSup_range_quittingRootSequencePureTimeTerminalValue_ge_of_fixed
       quittingRootSequencePureTimeTerminalValue reward roots who
         quitTime 0) :=
     bddAbove_range_quittingRootSequencePureTimeTerminalValue reward roots who
-      hM hreward
   apply le_of_forall_pos_le_add
   intro ε hε
   have hneverTendsto :=
@@ -698,8 +696,7 @@ theorem sSup_range_quittingRootSequencePureTimeTerminalValue_eq_of_fixed
     (hperiodic : ∀ k, roots (k + (m + 1)) = roots k)
     {cap : ℝ} (hfixed : quittingCompanionComposite reward roots who 0
       (m + 1) cap = cap)
-    (hP : quittingOpponentSurvivalWeight roots who 0 (m + 1) < 1)
-    {M : ℝ} (hM : 0 ≤ M) (hreward : ∀ S player, |reward S player| ≤ M) :
+    (hP : quittingOpponentSurvivalWeight roots who 0 (m + 1) < 1) :
     sSup (Set.range fun quitTime : Option ℕ =>
       quittingRootSequencePureTimeTerminalValue reward roots who
         quitTime 0) = cap :=
@@ -707,7 +704,7 @@ theorem sSup_range_quittingRootSequencePureTimeTerminalValue_eq_of_fixed
     (sSup_range_quittingRootSequencePureTimeTerminalValue_le_of_fixed
       reward roots who m hperiodic hfixed hP)
     (sSup_range_quittingRootSequencePureTimeTerminalValue_ge_of_fixed
-      reward roots who m hperiodic hfixed hP hM hreward)
+      reward roots who m hperiodic hfixed hP)
 
 /-- **The behavioral consequence.**  Composed with the pure-time reduction of
 `QuittingBehaviorPureTimeExtremality.lean` and the fixed-point construction
@@ -725,16 +722,14 @@ theorem sSup_range_quittingTerminalPayoff_update_eq_prescribed_add_gain
     (hperiodic : ∀ k, quittingProfileLiveRoot reward profile (k + (m + 1)) =
       quittingProfileLiveRoot reward profile k)
     (hP : quittingOpponentSurvivalWeight
-      (quittingProfileLiveRoot reward profile) who 0 (m + 1) < 1)
-    {M : ℝ} (hM : 0 ≤ M) (hreward : ∀ S player, |reward S player| ≤ M) :
+      (quittingProfileLiveRoot reward profile) who 0 (m + 1) < 1) :
     sSup (Set.range fun deviation :
         (quittingGame reward).BehaviorStrategy who =>
       quittingTerminalPayoff reward
         (Function.update profile who deviation) who) =
       prescribed 0 + quittingRelaxedCycleGain reward
         (quittingProfileLiveRoot reward profile) prescribed who m := by
-  rw [sSup_range_quittingTerminalPayoff_update_eq_pureTime reward profile who
-    hM hreward]
+  rw [sSup_range_quittingTerminalPayoff_update_eq_pureTime reward profile who]
   have hpureEq : (fun quitTime : Option ℕ => quittingTerminalPayoff reward
         (Function.update profile who
           (quittingPureTimeBehaviorStrategy reward who quitTime)) who) =
@@ -750,6 +745,5 @@ theorem sSup_range_quittingTerminalPayoff_update_eq_prescribed_add_gain
     hwrap hP
   exact sSup_range_quittingRootSequencePureTimeTerminalValue_eq_of_fixed
     reward (quittingProfileLiveRoot reward profile) who m hperiodic hcap hP
-    hM hreward
 
 end GameTheory

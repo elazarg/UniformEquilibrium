@@ -42,16 +42,14 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 best-response value against the same root sequence. -/
 theorem quittingRootSequenceHazardTerminalValue_le_continuationBestResponse
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (who : ι) (hazard : ℕ → PMF Bool)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (roots : ℕ → ι → PMF Bool) (who : ι) (hazard : ℕ → PMF Bool) :
     quittingRootSequenceHazardTerminalValue reward roots who hazard 0 ≤
       quittingContinuationBestResponseValue reward
         (quittingRootSequenceProfile reward roots 0) who := by
   rw [quittingRootSequenceHazardTerminalValue_eq_terminalPayoff_update]
   exact quittingTerminalPayoff_update_le_continuationBestResponseValue
     reward (quittingRootSequenceProfile reward roots 0) who
-      (fun time _history => hazard time) hM hreward
+      (fun time _history => hazard time)
 
 private theorem exists_finiteEarlyBestResponse_pureTime
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -200,8 +198,7 @@ phase-switch profile. -/
 theorem quittingPhaseSwitch_bestResponseAt_eq_continuationBestResponse
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (plan punish : ℕ → ι → PMF Bool) (switch : ℕ) (hswitch : 0 < switch)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (who : ι) :
     (quittingFiniteBoundaryHolonomy reward plan 0 (switch - 1)).boundaryEnvelopeAt
         (QuittingBoundaryHolonomy.behavioralTailEnvelopeBoundary reward punish)
         who =
@@ -269,19 +266,19 @@ theorem quittingPhaseSwitch_bestResponseAt_eq_continuationBestResponse
       rw [← hphaseValue]
       dsimp [phase, phaseProfile]
       exact quittingRootSequenceHazardTerminalValue_le_continuationBestResponse
-        reward (quittingPhaseSwitchRoots plan punish switch) who hazard hM hreward
+        reward (quittingPhaseSwitchRoots plan punish switch) who hazard
     · apply le_of_forall_pos_le_add
       intro ε hε
       obtain ⟨tailDeviation, htailApprox⟩ :=
         exists_quittingContinuation_deviation_ge_sub reward tailProfile who
-          hε hM hreward
+          hε
       let tailHazard := quittingBehaviorLiveHazard reward tailDeviation
       let hazard := quittingContinueUntilThenHazard switch tailHazard
       let tailValue := quittingTerminalPayoff reward
         (Function.update tailProfile who tailDeviation) who
       have htailValue : tailValue ≤ tailBest := by
         exact quittingTerminalPayoff_update_le_continuationBestResponseValue
-          reward tailProfile who tailDeviation hM hreward
+          reward tailProfile who tailDeviation
       have htailGap : 0 ≤ tailBest - tailValue := sub_nonneg.mpr htailValue
       have htailGapLe : tailBest - tailValue ≤ ε := by
         dsimp [tailBest, tailValue] at htailApprox ⊢
@@ -337,7 +334,7 @@ theorem quittingPhaseSwitch_bestResponseAt_eq_continuationBestResponse
           gcongr
           dsimp [phase, phaseProfile]
           exact quittingRootSequenceHazardTerminalValue_le_continuationBestResponse
-            reward (quittingPhaseSwitchRoots plan punish switch) who hazard hM hreward
+            reward (quittingPhaseSwitchRoots plan punish switch) who hazard
   · unfold quittingContinuationBestResponseValue
     apply csSup_le
     · refine ⟨_, ⟨phaseProfile who, rfl⟩⟩
@@ -359,7 +356,7 @@ theorem quittingPhaseSwitch_bestResponseAt_eq_continuationBestResponse
               (fun offset => hazard (switch + offset)) 0 ≤ tailBest := by
         dsimp [tailBest, tailProfile]
         exact quittingRootSequenceHazardTerminalValue_le_continuationBestResponse
-          reward punish who (fun offset => hazard (switch + offset)) hM hreward
+          reward punish who (fun offset => hazard (switch + offset))
       calc
         quittingFiniteTerminalHazardValue reward plan who hazard
               (quittingRootSequenceHazardTerminalValue reward punish who
@@ -392,8 +389,7 @@ attached phase-switch profile. -/
 theorem quittingPhaseSwitch_coRealizedGain_eq_terminalGain
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (plan punish : ℕ → ι → PMF Bool) (switch : ℕ) (hswitch : 0 < switch)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (who : ι) :
     (quittingFiniteBoundaryHolonomy reward plan 0 (switch - 1)).coRealizedGain
         (QuittingBoundaryHolonomy.behavioralTailPrescribedBoundary reward punish)
         (QuittingBoundaryHolonomy.behavioralTailEnvelopeBoundary reward punish)
@@ -404,7 +400,7 @@ theorem quittingPhaseSwitch_coRealizedGain_eq_terminalGain
           (quittingPhaseSwitchProfile reward plan punish switch) who := by
   unfold QuittingBoundaryHolonomy.coRealizedGain
   rw [quittingPhaseSwitch_bestResponseAt_eq_continuationBestResponse
-    reward plan punish switch hswitch who hM hreward]
+    reward plan punish switch hswitch who]
   change _ - (quittingFiniteBoundaryHolonomy reward plan 0
       (switch - 1)).prescribedAt
         (phaseSwitchPrescribedBoundary reward punish) who = _
@@ -419,9 +415,7 @@ concatenated profile. -/
 theorem quittingPhaseSwitch_behavioralTailGain_eq_terminalExploitability
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (plan punish : ℕ → ι → PMF Bool) (switch : ℕ) (hswitch : 0 < switch)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (plan punish : ℕ → ι → PMF Bool) (switch : ℕ) (hswitch : 0 < switch) :
     QuittingBoundaryHolonomy.behavioralTailGain reward
         (quittingFiniteBoundaryHolonomy reward plan 0 (switch - 1)) punish =
       quittingTerminalExploitability reward
@@ -432,7 +426,7 @@ theorem quittingPhaseSwitch_behavioralTailGain_eq_terminalExploitability
   congr 1
   funext who
   rw [quittingPhaseSwitch_coRealizedGain_eq_terminalGain
-    reward plan punish switch hswitch who hM hreward]
+    reward plan punish switch hswitch who]
 
 /-- The named fixed-prefix repair value is exactly the infimum of literal
 terminal exploitability over all behavioral tails attached after that prefix.
@@ -440,9 +434,7 @@ terminal exploitability over all behavioral tails attached after that prefix.
 theorem behavioralTailRepairValue_eq_sInf_phaseSwitch_terminalExploitability
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (plan : ℕ → ι → PMF Bool) (switch : ℕ) (hswitch : 0 < switch)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (plan : ℕ → ι → PMF Bool) (switch : ℕ) (hswitch : 0 < switch) :
     QuittingBoundaryHolonomy.behavioralTailRepairValue reward
         (quittingFiniteBoundaryHolonomy reward plan 0 (switch - 1)) =
       sInf (Set.range fun punish : ℕ → ι → PMF Bool =>
@@ -455,10 +447,10 @@ theorem behavioralTailRepairValue_eq_sInf_phaseSwitch_terminalExploitability
   · rintro ⟨punish, rfl⟩
     refine ⟨punish, ?_⟩
     exact (quittingPhaseSwitch_behavioralTailGain_eq_terminalExploitability
-      reward plan punish switch hswitch hM hreward).symm
+      reward plan punish switch hswitch).symm
   · rintro ⟨punish, rfl⟩
     refine ⟨punish, ?_⟩
     exact quittingPhaseSwitch_behavioralTailGain_eq_terminalExploitability
-      reward plan punish switch hswitch hM hreward
+      reward plan punish switch hswitch
 
 end GameTheory

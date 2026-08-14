@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.NearMinimumActualDeviationRectangle
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Recentring a near-minimum reset gives a literal strategic sign
@@ -48,8 +49,6 @@ theorem exists_nearMinimumReset_recentered_actualDeviation_gain_pos
     (mover : ι) (target : (quittingGame reward).BehaviorStrategy mover)
     (lambda epsilon eta : ℝ)
     (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1) (heta : 0 < eta)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnear : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward profile) ≤
@@ -79,6 +78,8 @@ theorem exists_nearMinimumReset_recentered_actualDeviation_gain_pos
           0 < quittingTerminalPayoff reward
                 (Function.update mixedProfile recipient deviation) recipient -
               quittingTerminalPayoff reward mixedProfile recipient := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let endpointProfile := Function.update profile mover target
   let mixedStrategy := quittingStoppingLawMixtureBehaviorStrategy reward mover
     (profile mover) target lambda hlambda0.le hlambda1
@@ -139,7 +140,7 @@ theorem exists_nearMinimumReset_recentered_actualDeviation_gain_pos
     linarith
   obtain ⟨deviation, hdeviation⟩ :=
     exists_quittingContinuation_deviation_ge_sub reward mixedProfile recipient
-      heta hM hreward
+      heta
   have hsourceDebtNonneg : 0 ≤ quittingTerminalSemanticDebt source recipient :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hM hreward
       (quittingTerminalSemanticPair_mem_carrier reward profile) recipient

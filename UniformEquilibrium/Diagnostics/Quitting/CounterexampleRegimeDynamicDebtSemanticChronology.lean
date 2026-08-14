@@ -143,8 +143,7 @@ theorem quittingFiniteDynamicDebt_eq_terminalSemanticDebt_suffix_completion
     (hpolicy : ∀ time, start ≤ time → time < start + fuel →
       value time = quittingRootSuccessorPayoff reward
         (value (time + 1)) (roots time))
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : ι) :
     quittingFiniteDynamicDebt reward roots who (fun time => value time who)
         (quittingPositiveSingletonDebtCap reward who) start fuel =
       quittingTerminalSemanticDebt
@@ -173,12 +172,12 @@ theorem quittingFiniteDynamicDebt_eq_terminalSemanticDebt_suffix_completion
     unfold QuittingBoundaryHolonomy.behavioralTailEnvelopeBoundary
     simpa [never, cap, quittingElementaryCapRoots] using
       (quittingRootSequenceBestResponseValue_elementaryCap_never
-        (ι := ι) reward who hM hreward)
+        (ι := ι) reward who)
   have hlength : fuel - 1 + 1 = fuel :=
     Nat.sub_add_cancel (Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hfuel))
   have hbest :=
     quittingPhaseSwitch_bestResponseAt_eq_continuationBestResponse
-      reward shiftedRoots never fuel hfuel who hM hreward
+      reward shiftedRoots never fuel hfuel who
   rw [hphaseProfile] at hbest
   unfold QuittingBoundaryHolonomy.boundaryEnvelopeAt at hbest
   rw [quittingFiniteBoundaryHolonomy_bestResponse_eval, hlength,
@@ -261,8 +260,7 @@ theorem quittingFiniteNashBellmanPathDynamicDebt_eq_terminalSemanticDebt_complet
         apply quittingFiniteNashBellmanPathValue_eq_successor
           reward cutoff path hpath later
         simpa [hsum] using hlater)
-      who (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
+      who
   simpa [quittingFiniteNashBellmanPathDynamicDebt, roots, value] using hsuffix
 
 /-- At every preterminal row, semanticization of the production exact-D

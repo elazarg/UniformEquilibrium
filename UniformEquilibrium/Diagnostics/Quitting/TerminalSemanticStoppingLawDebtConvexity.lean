@@ -171,9 +171,7 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_le
     (profile : (quittingGame reward).BehaviorProfile)
     (mover observer : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
-    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1) :
     quittingContinuationBestResponseValue reward
         (Function.update profile mover
           (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
@@ -198,11 +196,9 @@ theorem quittingContinuationBestResponseValue_stoppingLawMixture_le
     have hsourceBound :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
         reward (Function.update profile mover source) observer deviation
-          hM hreward
     have htargetBound :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
         reward (Function.update profile mover target) observer deviation
-          hM hreward
     have hcommuteSource :
         Function.update (Function.update profile observer deviation) mover source =
           Function.update (Function.update profile mover source) observer deviation :=
@@ -242,9 +238,7 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_le
     (profile : (quittingGame reward).BehaviorProfile)
     (mover observer : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
-    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1) :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward
           (Function.update profile mover
@@ -259,7 +253,6 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_le
   have henvelope :=
     quittingContinuationBestResponseValue_stoppingLawMixture_le
       reward profile mover observer source target lambda hlambda0 hlambda1
-        hM hreward
   have hpayoff := quittingTerminalPayoff_stoppingLawMixture_eq
     reward profile mover observer source target lambda hlambda0 hlambda1
   dsimp only [quittingTerminalSemanticDebt,

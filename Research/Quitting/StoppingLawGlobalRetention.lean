@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumTransfer
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Global terminal-law retention on a minimum stopping-law reset
@@ -76,8 +77,6 @@ theorem exists_halfStoppingLawReset_nearMinimum_transfer_and_globalRetention
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (who : ι) (epsilon : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hwhoDebt : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who)
     (hnear : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -119,6 +118,8 @@ theorem exists_halfStoppingLawReset_nearMinimum_transfer_and_globalRetention
               quittingStageCoalitionMass reward profile time terminal) ≤
           ∑ time ∈ Finset.range cutoff,
             quittingStageCoalitionMass reward mixedProfile time terminal := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   obtain ⟨bestResponse, htarget, hgainQuarter, hgainPos, hdecrease,
       htransfer, hchord, _hselectedWindow⟩ :=
     exists_halfStoppingLawReset_nearMinimum_transfer_and_windowRetention
@@ -177,8 +178,6 @@ theorem exists_halfStoppingLawReset_minimum_positiveTransfer_globalRetention
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hwhoDebt : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -218,7 +217,7 @@ theorem exists_halfStoppingLawReset_minimum_positiveTransfer_globalRetention
   obtain ⟨bestResponse, _htarget, _hgainQuarter, hgainPos, _hdecrease,
       htransfer, _hchord, hlaw, hpointwise, hglobalWindow⟩ :=
     exists_halfStoppingLawReset_nearMinimum_transfer_and_globalRetention
-      reward profile who 0 hM hreward hwhoDebt hnear
+      reward profile who 0 hwhoDebt hnear
   refine ⟨bestResponse, ?_⟩
   dsimp only
   have hpositive : 0 < ∑ other ∈ Finset.univ.erase who,
@@ -263,8 +262,6 @@ theorem exists_twoMatchedHalfResets_or_firstExcessCharge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (firstMover : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hfirstDebt : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) firstMover)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -307,6 +304,8 @@ theorem exists_twoMatchedHalfResets_or_firstExcessCharge
                     quittingStageCoalitionMass reward profile time terminal ≤
                   quittingStageCoalitionMass reward secondTargetProfile
                     time terminal) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hnearZero : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward profile) ≤
@@ -317,7 +316,7 @@ theorem exists_twoMatchedHalfResets_or_firstExcessCharge
       hfirstGainPos, _hfirstDecrease, hfirstTransfer, _hfirstChord,
       _hfirstLaw, hfirstPointwise, _hfirstWindows⟩ :=
     exists_halfStoppingLawReset_nearMinimum_transfer_and_globalRetention
-      reward profile firstMover 0 hM hreward hfirstDebt hnearZero
+      reward profile firstMover 0 hfirstDebt hnearZero
   refine ⟨firstBestResponse, ?_⟩
   dsimp only
   let firstMixedStrategy := quittingStoppingLawMixtureBehaviorStrategy
@@ -372,8 +371,7 @@ theorem exists_twoMatchedHalfResets_or_firstExcessCharge
         _hsecondGainPos, _hsecondDecrease, hsecondTransfer, _hsecondChord,
         _hsecondLaw, hsecondPointwise, _hsecondWindows⟩ :=
       exists_halfStoppingLawReset_nearMinimum_transfer_and_globalRetention
-        reward firstTargetProfile secondMover excess hM hreward
-          hsecondDebt hnearFirstTarget
+        reward firstTargetProfile secondMover excess hsecondDebt hnearFirstTarget
     refine ⟨secondBestResponse, ?_⟩
     let secondMixedStrategy :=
       quittingStoppingLawMixtureBehaviorStrategy reward secondMover

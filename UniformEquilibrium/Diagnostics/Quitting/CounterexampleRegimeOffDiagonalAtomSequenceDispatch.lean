@@ -104,8 +104,6 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound
     (lambda charge error : ℝ) (hlambda0 : 0 < lambda)
     (hlambda1 : lambda ≤ 1) (hcharge : 0 < charge)
     (herror : 0 < error) (herrorLe : error ≤ charge / 8)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hslope : lambda * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
@@ -125,7 +123,7 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound
   let mixedPair := quittingTerminalSemanticPair reward mixed
   have hchord := quittingTerminalSemanticDebt_stoppingLawMixture_le
     reward profile mover observer (profile mover) target lambda hlambda0.le
-      hlambda1 hM hreward
+      hlambda1
   rw [Function.update_eq_self] at hchord
   change quittingTerminalSemanticDebt mixedPair observer ≤
       (1 - lambda) * quittingTerminalSemanticDebt sourcePair observer +
@@ -158,7 +156,7 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound
     have hcap : charge / 2 < endpointCap - sourceCap := by linarith
     obtain ⟨deviation, hdeviation⟩ :=
       exists_quittingContinuation_deviation_ge_sub reward endpoint observer
-        (half_pos herror) hM hreward
+        (half_pos herror)
     obtain ⟨quitTime, hquitTime⟩ :=
       exists_quittingPureTimeBehaviorStrategy_terminalPayoff_ge_sub
         reward endpoint observer deviation (half_pos herror)
@@ -166,7 +164,7 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound
       quittingPureTimeBehaviorStrategy reward observer quitTime
     have hsourceBound :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
-        reward profile observer pureDeviation hM hreward
+        reward profile observer pureDeviation
     have hpureEndpoint : endpointCap - error ≤
         quittingTerminalPayoff reward
           (Function.update endpoint observer pureDeviation) observer := by
@@ -282,9 +280,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtAtomA
       (quittingStoppingLawAtomDecoderError charge rank) hlambda
       (frontier.lambda_le_one (frontier.subseq rank)) hcharge
       (quittingStoppingLawAtomDecoderError_pos hcharge rank)
-      (quittingStoppingLawAtomDecoderError_le hcharge rank)
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) hslope
+      (quittingStoppingLawAtomDecoderError_le hcharge rank) hslope
 
 /-! ## Fixed-label sequence extraction -/
 

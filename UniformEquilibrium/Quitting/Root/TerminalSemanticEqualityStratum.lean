@@ -625,7 +625,7 @@ theorem exists_positive_minimumTerminalSemanticDebt_face_of_no_uniformPayoff
       reward pair.1 0 root).mp hnash
   have hfloor : 0 < quittingTerminalExploitabilityInf reward :=
     quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff
-      reward hM hreward hno
+      reward hno
   have hpositive : ∃ who, 0 < quittingTerminalSemanticDebt pair who := by
     by_contra hnot
     have hnot' : ∀ who, quittingTerminalSemanticDebt pair who ≤ 0 := by

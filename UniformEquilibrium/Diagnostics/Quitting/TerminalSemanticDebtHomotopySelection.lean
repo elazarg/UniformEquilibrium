@@ -243,7 +243,6 @@ theorem quittingContinuationBestResponseValue_localGlobalCounterexample_eq_zero
       quittingTerminalPayoff_update_le_continuationBestResponseValue
         localGlobalCounterexampleReward localGlobalCounterexampleProfile who
         (quittingAlwaysContinueStrategy localGlobalCounterexampleReward who)
-        (M := 1) (by norm_num) abs_localGlobalCounterexampleReward_le_one
     cases who with
     | false =>
         rw [update_localGlobalCounterexampleProfile_false_continue,

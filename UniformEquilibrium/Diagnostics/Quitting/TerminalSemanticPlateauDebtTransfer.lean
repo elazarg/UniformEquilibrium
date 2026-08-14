@@ -495,7 +495,7 @@ theorem exists_samePureTimeLaw_resetCluster_negativeNever_or_matched_separator
   obtain ⟨profiles, quitTime, mass, baseSubseq, hprofiles, hmass,
       hbaseSubseq, hmassLimit, hmoment⟩ :=
     exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
-      reward source hsource who hM.le hreward
+      reward source hsource who
   let resetProfile : ℕ → (quittingGame reward).BehaviorProfile := fun rank =>
     Function.update (profiles (baseSubseq rank)) who
       (quittingPureTimeBehaviorStrategy reward who

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import GameTheory.Concepts.Stochastic.Models.Quitting.RootPerturbation
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # The sure-first-stage branch of a quitting game
@@ -84,6 +85,15 @@ theorem abs_quittingTerminalPayoff_le
   exact le_of_tendsto'
     (tendsto_expectedStagePayoff_quittingGame reward profile who).abs hstage
 
+omit [DecidableEq ι] in
+/-- The canonical finite-game reward bound controls every terminal payoff. -/
+theorem abs_quittingTerminalPayoff_le_quittingRewardBound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
+    |quittingTerminalPayoff reward profile who| ≤ quittingRewardBound reward := by
+  exact abs_quittingTerminalPayoff_le reward profile who
+    (quittingRewardBound_nonneg reward) (abs_reward_le_quittingRewardBound reward)
+
 /-- Player `who`'s continuation best-response value against the prescribed
 opponents, defined as the supremum over all behavior deviations. -/
 def quittingContinuationBestResponseValue
@@ -93,6 +103,20 @@ def quittingContinuationBestResponseValue
   sSup (Set.range fun deviation : (quittingGame reward).BehaviorStrategy who =>
     quittingTerminalPayoff reward
       (Function.update continuation who deviation) who)
+
+/-- All unilateral behavioral terminal payoffs form a bounded-above set. -/
+theorem bddAbove_range_quittingTerminalPayoff_update
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
+    BddAbove (Set.range fun deviation :
+      (quittingGame reward).BehaviorStrategy who =>
+        quittingTerminalPayoff reward
+          (Function.update profile who deviation) who) := by
+  refine ⟨quittingRewardBound reward, ?_⟩
+  rintro value ⟨deviation, rfl⟩
+  exact (le_abs_self _).trans
+    (abs_quittingTerminalPayoff_le_quittingRewardBound reward
+      (Function.update profile who deviation) who)
 
 /-- The vector of playerwise continuation best-response suprema. -/
 def quittingContinuationBestResponse
@@ -104,27 +128,20 @@ def quittingContinuationBestResponse
 theorem quittingTerminalPayoff_update_le_continuationBestResponseValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) (deviation : (quittingGame reward).BehaviorStrategy who)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (who : ι) (deviation : (quittingGame reward).BehaviorStrategy who) :
     quittingTerminalPayoff reward
-        (Function.update continuation who deviation) who ≤
-      quittingContinuationBestResponseValue reward continuation who := by
-  apply le_csSup
-  · refine ⟨M, ?_⟩
-    rintro payoff ⟨candidate, rfl⟩
-    exact (le_abs_self _).trans
-      (abs_quittingTerminalPayoff_le reward
-        (Function.update continuation who candidate) who hM hreward)
-  · exact ⟨deviation, rfl⟩
+      (Function.update continuation who deviation) who ≤
+    quittingContinuationBestResponseValue reward continuation who := by
+  apply le_csSup (bddAbove_range_quittingTerminalPayoff_update
+    reward continuation who)
+  exact ⟨deviation, rfl⟩
 
 /-- The continuation best-response supremum can be approached from below by
 an actual behavior deviation. -/
 theorem exists_quittingContinuation_deviation_ge_sub
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι) {δ M : ℝ} (hδ : 0 < δ) (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (who : ι) {δ : ℝ} (hδ : 0 < δ) :
     ∃ deviation : (quittingGame reward).BehaviorStrategy who,
       quittingContinuationBestResponseValue reward continuation who - δ ≤
         quittingTerminalPayoff reward
@@ -140,11 +157,7 @@ theorem exists_quittingContinuation_deviation_ge_sub
       (Function.update continuation who candidate) who,
       ⟨candidate, rfl⟩⟩
   have hbounded : BddAbove values := by
-    refine ⟨M, ?_⟩
-    rintro payoff ⟨candidate, rfl⟩
-    exact (le_abs_self _).trans
-      (abs_quittingTerminalPayoff_le reward
-        (Function.update continuation who candidate) who hM hreward)
+    exact bddAbove_range_quittingTerminalPayoff_update reward continuation who
   have hlt :
       quittingContinuationBestResponseValue reward continuation who - δ <
         quittingContinuationBestResponseValue reward continuation who :=
@@ -319,8 +332,7 @@ theorem isεAsymptoticNash_quittingRootThenContinuation_of_isεQuittingRootNash
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {ε M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    {ε : ℝ}
     (hsure : QuittingRootHasSureQuitter root)
     (hroot : IsεQuittingRootNash reward
       (quittingContinuationBestResponse reward continuation) ε root) :
@@ -337,7 +349,7 @@ theorem isεAsymptoticNash_quittingRootThenContinuation_of_isεQuittingRootNash
           (Function.update continuation who candidate) who ≤ best who := by
     intro candidate
     exact quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward continuation who candidate hM hreward
+      reward continuation who candidate
   have hdeviation := quittingTerminalPayoff_update_rootThenContinuation_le
     reward root continuation who (best who) hbound deviation
   have hdevContinuation :
@@ -365,8 +377,7 @@ theorem isεQuittingRootNash_of_isεAsymptoticNash_quittingRootThenContinuation
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {ε M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    {ε : ℝ}
     (hsure : QuittingRootHasSureQuitter root)
     (hnash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) ε
@@ -393,7 +404,7 @@ theorem isεQuittingRootNash_of_isεAsymptoticNash_quittingRootThenContinuation
   have hδ : 0 < δ := by dsimp [δ]; linarith
   obtain ⟨continuationDeviation, happ⟩ :=
     exists_quittingContinuation_deviation_ge_sub
-      reward continuation who hδ hM hreward
+      reward continuation who hδ
   let continuationPayoff := quittingTerminalPayoff reward
     (Function.update continuation who continuationDeviation) who
   let assembled := quittingRootAndContinuationDeviation reward
@@ -441,8 +452,7 @@ theorem isεAsymptoticNash_quittingRootThenContinuation_iff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
-    {ε M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    {ε : ℝ}
     (hsure : QuittingRootHasSureQuitter root) :
     (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) ε
@@ -451,8 +461,8 @@ theorem isεAsymptoticNash_quittingRootThenContinuation_iff
         (quittingContinuationBestResponse reward continuation) ε root := by
   constructor
   · exact isεQuittingRootNash_of_isεAsymptoticNash_quittingRootThenContinuation
-      reward root continuation hM hreward hsure
+      reward root continuation hsure
   · exact isεAsymptoticNash_quittingRootThenContinuation_of_isεQuittingRootNash
-      reward root continuation hM hreward hsure
+      reward root continuation hsure
 
 end GameTheory

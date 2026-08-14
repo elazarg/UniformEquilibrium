@@ -43,9 +43,7 @@ private def threeCoreNeverBoundarySemanticPair
 
 /-- The perpetual-Continue root word realizes the explicit boundary pair. -/
 private theorem quittingTerminalSemanticPair_never_eq_threeCoreBoundary
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ B) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     quittingTerminalSemanticPair reward
         (quittingRootSequenceProfile reward
           (quittingElementaryCapRoots
@@ -56,7 +54,7 @@ private theorem quittingTerminalSemanticPair_never_eq_threeCoreBoundary
     exact quittingRootSequenceTerminalValue_elementaryCap_never reward who
   · funext who
     exact quittingRootSequenceBestResponseValue_elementaryCap_never
-      reward who hB hreward
+      reward who
 
 /-- Three zero-retention singleton resets erase an arbitrary directed-core
 clearance vector and leave the positive coordinate-two axis. -/
@@ -91,16 +89,14 @@ theorem never_capClearance_nonneg
 
 /-- The explicit Never boundary is an actual semantic-carrier point. -/
 theorem never_mem_carrier
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {B : ℝ} (hB : 0 ≤ B)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ B) :
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     threeCoreNeverBoundarySemanticPair reward ∈
       quittingTerminalSemanticCarrier reward := by
   apply subset_closure
   refine ⟨quittingRootSequenceProfile reward
     (quittingElementaryCapRoots (.never : QuittingElementaryTailCap ι)) 0, ?_⟩
   exact quittingTerminalSemanticPair_never_eq_threeCoreBoundary
-    reward hB hreward
+    reward
 
 /-- Reset the Never boundary along the labeled owners `0,2,1`. -/
 def resetPair
@@ -127,7 +123,7 @@ theorem resetPair_mem_and_nonneg
   have hneverClear : ∀ who, 0 ≤ capClearance reward never.2 who :=
     never_capClearance_nonneg reward
   have hneverMem : never ∈ quittingTerminalSemanticCarrier reward :=
-    never_mem_carrier reward hB hreward
+    never_mem_carrier reward
   have hfirstMem : first ∈ quittingTerminalSemanticCarrier reward :=
     idealSingletonSemanticPair_zero_mem_carrier reward never
       (coreOwner label 0) hneverClear hB hreward hneverMem

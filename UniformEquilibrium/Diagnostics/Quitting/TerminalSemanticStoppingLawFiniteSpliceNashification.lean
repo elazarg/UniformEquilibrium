@@ -95,7 +95,7 @@ theorem isεAsymptoticNash_finiteCap
   intro observer deviation
   have hdeviation :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward cappedProfile observer deviation hM hreward
+      reward cappedProfile observer deviation
   have hbestUpper :
       quittingContinuationBestResponseValue reward cappedProfile observer ≤
         quittingContinuationBestResponseValue reward sourceProfile observer +
@@ -189,7 +189,7 @@ theorem isεAsymptoticNash_mixtureFiniteCap
   intro observer deviation
   have hdeviation :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward cappedProfile observer deviation hM hreward
+      reward cappedProfile observer deviation
   have hbestUpper :
       quittingContinuationBestResponseValue reward cappedProfile observer ≤
         quittingContinuationBestResponseValue reward sourceProfile observer +

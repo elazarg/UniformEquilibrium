@@ -140,9 +140,7 @@ each player in the same behavioral profile. -/
 theorem quittingFixedOpponentsQuitValue_sub_terminalPayoff_le_exploitability
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
     quittingStationaryFixedOpponentsQuitValue reward
           (quittingProfileLiveRoot reward profile 0) who -
         quittingTerminalPayoff reward profile who ≤
@@ -159,7 +157,7 @@ theorem quittingFixedOpponentsQuitValue_sub_terminalPayoff_le_exploitability
     rw [← quittingTerminalPayoff_update_quitNow_eq_fixedOpponentsQuitValue]
     exact quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward profile who
-        (quittingPureTimeBehaviorStrategy reward who (some 0)) hM hreward
+        (quittingPureTimeBehaviorStrategy reward who (some 0))
   have hcoordinate :
       quittingStationaryFixedOpponentsQuitValue reward
             (quittingProfileLiveRoot reward profile 0) who -
@@ -246,7 +244,7 @@ theorem affineConditionedEndpointGap_le_terminalCoordinateDebt
           quittingTerminalPayoff reward profile who := by rw [hfactor]
   exact hgainLower.trans
     (quittingFixedOpponentsQuitValue_sub_terminalPayoff_le_exploitability
-      reward profile who hM hreward).1
+      reward profile who).1
 
 /-- If both endpoints of the conditioning split have positive gaps, the
 literal debt bound is uniform in the eventual-absorption probability. -/

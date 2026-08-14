@@ -82,43 +82,41 @@ def atomTerminal : {S : Finset Player // S.Nonempty} :=
 theorem fixed_debt_owner :
     quittingTerminalSemanticDebt fixed owner = 0 := by
   unfold fixed fixedProfile
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {atomPlayer} owner
-    (by norm_num) abs_reward_le_one]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {atomPlayer} owner]
   norm_num [quittingSetReward, reward, owner, atomPlayer, debtor]
 
 theorem fixed_debt_atomPlayer :
     quittingTerminalSemanticDebt fixed atomPlayer = 0 := by
   unfold fixed fixedProfile
   rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {atomPlayer}
-    atomPlayer (by norm_num) abs_reward_le_one]
+    atomPlayer]
   norm_num [quittingSetReward, reward, owner, atomPlayer, debtor]
 
 theorem fixed_debt_debtor :
     quittingTerminalSemanticDebt fixed debtor = 1 := by
   unfold fixed fixedProfile
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {atomPlayer} debtor
-    (by norm_num) abs_reward_le_one]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {atomPlayer} debtor]
   norm_num [quittingSetReward, reward, owner, atomPlayer, debtor]
 
 theorem global_debt_owner :
     quittingTerminalSemanticDebt global owner = 0 := by
   unfold global globalProfile
   rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward
-    {atomPlayer, debtor} owner (by norm_num) abs_reward_le_one]
+    {atomPlayer, debtor} owner]
   norm_num [quittingSetReward, reward, owner, atomPlayer, debtor]
 
 theorem global_debt_atomPlayer :
     quittingTerminalSemanticDebt global atomPlayer = 0 := by
   unfold global globalProfile
   rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward
-    {atomPlayer, debtor} atomPlayer (by norm_num) abs_reward_le_one]
+    {atomPlayer, debtor} atomPlayer]
   norm_num [quittingSetReward, reward, owner, atomPlayer, debtor]
 
 theorem global_debt_debtor :
     quittingTerminalSemanticDebt global debtor = 0 := by
   unfold global globalProfile
   rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward
-    {atomPlayer, debtor} debtor (by norm_num) abs_reward_le_one]
+    {atomPlayer, debtor} debtor]
   norm_num [quittingSetReward, reward, owner, atomPlayer, debtor]
 
 theorem fixed_debtSum : quittingTerminalSemanticDebtSum fixed = 1 := by
@@ -191,7 +189,6 @@ theorem one_le_continuationBestResponseValue_debtor
   exact quittingTerminalPayoff_update_le_continuationBestResponseValue
     reward profile debtor
       (quittingPureTimeBehaviorStrategy reward debtor (some 0))
-      (by norm_num) abs_reward_le_one
 
 /-- The uniform immediate-Quit lower bound survives passage to the compact
 semantic carrier. -/

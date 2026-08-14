@@ -259,10 +259,7 @@ theorem exists_commonBase_stoppingLawDebtTangentFamily
       (reward := reward) (continuation := profiles n) (who := mover.1)
       (δ := quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward (profiles n)) mover.1 / 2)
-      (M := M)
     · exact div_pos (hsourceActive n mover.1 mover.2) (by norm_num)
-    · exact hM
-    · exact hreward
   choose bestResponse hbestResponse using hchoice
   let direction : ℕ → {who // who ∈ active} → ι → ℝ :=
     fun n mover observer ↦

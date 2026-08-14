@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDebtTransfer
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # A minimum-debt consumer for a counterfactual reset square
@@ -44,8 +45,6 @@ theorem stoppingLawSlope_le_fullEndpoint_observerDebtChange
     (mover observer : ι)
     (target : (quittingGame reward).BehaviorStrategy mover)
     (lambda charge : ℝ) (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hslope : lambda * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
@@ -62,7 +61,7 @@ theorem stoppingLawSlope_le_fullEndpoint_observerDebtChange
           (quittingTerminalSemanticPair reward profile) observer := by
   have hchord := quittingTerminalSemanticDebt_stoppingLawMixture_le
     reward profile mover observer (profile mover) target lambda hlambda0.le
-      hlambda1 hM hreward
+      hlambda1
   rw [Function.update_eq_self] at hchord
   have hscaled : lambda * charge ≤ lambda *
       (quittingTerminalSemanticDebt
@@ -139,8 +138,6 @@ theorem positiveMinimum_counterfactualResetSquare_excess_or_secondTransfer
     (lambda charge error : ℝ)
     (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
     (hcharge : 0 < charge) (herror : error ≤ charge / 4)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -171,6 +168,8 @@ theorem positiveMinimum_counterfactualResetSquare_excess_or_secondTransfer
             quittingTerminalSemanticDebtChange
               (quittingTerminalSemanticPair reward first)
               (quittingTerminalSemanticPair reward both) recipient) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   dsimp only
   let first := Function.update profile mover moverTarget
   let observerFirst := Function.update profile observer observerResponse
@@ -188,7 +187,7 @@ theorem positiveMinimum_counterfactualResetSquare_excess_or_secondTransfer
     dsimp only [firstPair, sourcePair, first]
     exact stoppingLawSlope_le_fullEndpoint_observerDebtChange
       reward profile mover observer moverTarget lambda charge hlambda0
-        hlambda1 hM hreward hslope
+        hlambda1 hslope
   have hsourceMem : sourcePair ∈ quittingTerminalSemanticCarrier reward := by
     exact quittingTerminalSemanticPair_mem_carrier reward profile
   have hsourceNonneg : 0 ≤
@@ -260,8 +259,6 @@ theorem positiveMinimum_counterfactualResetSquare_secondTransfer_of_nearFirst
     (lambda charge error : ℝ)
     (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
     (hcharge : 0 < charge) (herror : error ≤ charge / 4)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -294,8 +291,8 @@ theorem positiveMinimum_counterfactualResetSquare_secondTransfer_of_nearFirst
   have hsquare :=
     positiveMinimum_counterfactualResetSquare_excess_or_secondTransfer
       reward minimum profile mover observer hne moverTarget observerResponse
-      lambda charge error hlambda0 hlambda1 hcharge herror hM hreward
-      hminimum hslope hresponse
+      lambda charge error hlambda0 hlambda1 hcharge herror hminimum hslope
+      hresponse
   rcases hsquare.2 with hexcess | htransfer
   · linarith
   · exact htransfer
@@ -313,8 +310,6 @@ theorem positiveMinimum_counterfactualResetSquare_descent_or_secondTransfer_of_n
     (lambda charge error nearError : ℝ)
     (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
     (hcharge : 0 < charge) (herror : error ≤ charge / 4)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -355,8 +350,8 @@ theorem positiveMinimum_counterfactualResetSquare_descent_or_secondTransfer_of_n
   have hsquare :=
     positiveMinimum_counterfactualResetSquare_excess_or_secondTransfer
       reward minimum profile mover observer hne moverTarget observerResponse
-      lambda charge error hlambda0 hlambda1 hcharge herror hM hreward
-      hminimum hslope hresponse
+      lambda charge error hlambda0 hlambda1 hcharge herror hminimum hslope
+      hresponse
   rcases hsquare.2 with hexcess | htransfer
   · exact Or.inl (by linarith)
   · exact Or.inr htransfer

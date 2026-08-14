@@ -9,6 +9,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalCollisionRe
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawExploitabilityFloor
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Q182: the endpoint-recipient atom interface does not source-match
@@ -100,8 +101,6 @@ theorem no_uniformPayoff_of_positive_globalSemanticDebtMinimum
     linarith
   obtain ⟨deviation, hdeviation⟩ :=
     exists_quittingContinuation_deviation_ge_sub reward profile who hgap
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
   refine ⟨who, deviation, ?_⟩
   dsimp only [debt] at hlarge
   unfold quittingTerminalDeviationDebt at hlarge
@@ -141,9 +140,7 @@ theorem exists_resetFace_positiveIncidence_jointCapFixedPoint
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -168,6 +165,8 @@ theorem exists_resetFace_positiveIncidence_jointCapFixedPoint
       ∀ root : ι → PMF Bool,
         IsεQuittingRootNash reward returned.1.2 0 root →
           root = (quittingAllContinueRoot : ι → PMF Bool) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
       hsourceLe, hnash, hsemanticFixed, hallRoots⟩ :=
     exists_resetFace_positiveTotalIncidence_allContinueCapPlateau
@@ -202,7 +201,7 @@ theorem has_endpointDebtRecipientAtom :
     HasQuittingEndpointDebtRecipientAtom reward source mover observer
       replacement := by
   apply hasQuittingEndpointDebtRecipientAtom_of_pos reward source mover
-    observer replacement (M := 1) (by norm_num) reward_bound
+    observer replacement
   change 0 < quittingTerminalDeviationDebt reward target observer -
     quittingTerminalDeviationDebt reward source observer
   rw [target_debt_observer, source_debt_observer]

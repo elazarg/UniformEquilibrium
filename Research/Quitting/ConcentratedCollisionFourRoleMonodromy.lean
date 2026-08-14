@@ -6,6 +6,7 @@ coalition/background host; no cardinal reduction is claimed here.
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalCollisionRecipientAtom
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionConcentratedConsumer
+import UniformEquilibrium.Quitting.RewardBound
 
 noncomputable section
 
@@ -219,9 +220,7 @@ theorem tailEscape_or_threeRoleTransfer
     (owner : iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (stage : ℕ) (terminal : {S : Finset iota // S.Nonempty})
-    (lower epsilon : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (lower epsilon : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -245,6 +244,8 @@ theorem tailEscape_or_threeRoleTransfer
           quittingTerminalSemanticDebtSum minimum) ∨
       Nonempty (ThreeRoleTransfer reward owner profile stage terminal
         lower epsilon minimum) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hdispatch :=
     causalCollision_tailEscape_or_quantitativeNearMinimumTransfer
       reward minimum profile stage terminal lower epsilon hM hreward
@@ -340,7 +341,7 @@ theorem tailEscape_or_threeRoleTransfer
         root] using hrecipientQuantitative
     · apply hasQuittingEndpointDebtRecipientAtom_of_pos reward profile mover
         recipient (quittingStagePureEndpointBehaviorDeviation reward profile
-          mover stage (action reward profile stage mover)) hM hreward
+          mover stage (action reward profile stage mover))
       simpa only [source, target, targetProfile, action, tail, root] using
         (show 0 < quittingTerminalSemanticDebtChange (source reward profile)
             (target reward profile stage mover) recipient by
@@ -410,8 +411,6 @@ theorem packet_eventually_tailEscape_or_threeRoleTransfer
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
     (packet : QuittingReprojectionConcentratedPacket
       reward profiles owner terminal cutoff scale)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -470,7 +469,7 @@ theorem packet_eventually_tailEscape_or_threeRoleTransfer
     linarith
   have hrow := tailEscape_or_threeRoleTransfer reward minimum owner
     (packetProfile packet rank) (packet.mark rank) terminal
-      packet.resolution (eps rank) hM hreward hminimumCarrier hminimum
+      packet.resolution (eps rank) hminimumCarrier hminimum
       hminimumDebt hcollision packet.resolution_pos hnear
       (packet.stageMass rank) heps howner
   simpa only [packetEscape, packetTransfer, eps] using hrow
@@ -596,8 +595,6 @@ theorem packet_tailEscapeFrequently_or_fixedThreeRoleTransfer
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
     (packet : QuittingReprojectionConcentratedPacket
       reward profiles owner terminal cutoff scale)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -616,7 +613,7 @@ theorem packet_tailEscapeFrequently_or_fixedThreeRoleTransfer
           ∃ᶠ rank in atTop,
             packetTransferRoles minimum packet rank mover recipient := by
   have hrows := packet_eventually_tailEscape_or_threeRoleTransfer
-    minimum packet hM hreward hminimumCarrier hminimum hminimumDebt
+    minimum packet hminimumCarrier hminimum hminimumDebt
       hcollision hscale hscaleTendsto hsourceDebt
   by_cases hescape : ∃ᶠ rank in atTop, packetEscape minimum packet rank
   · exact Or.inl hescape
@@ -661,8 +658,6 @@ theorem packet_tailEscapeFrequently_or_fixedThreeRoleAtomLabel
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
     (packet : QuittingReprojectionConcentratedPacket
       reward profiles owner marked cutoff scale)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -684,7 +679,7 @@ theorem packet_tailEscapeFrequently_or_fixedThreeRoleAtomLabel
               packetRecipientFloor minimum packet ≤
                 packetRecipientCharge packet rank mover recipient := by
   have hroles := packet_tailEscapeFrequently_or_fixedThreeRoleTransfer
-    minimum packet hM hreward hminimumCarrier hminimum hminimumDebt
+    minimum packet hminimumCarrier hminimum hminimumDebt
       hcollision hscale hscaleTendsto hsourceDebt
   rcases hroles with hescape | hfixed
   · exact Or.inl hescape
@@ -776,8 +771,6 @@ theorem exists_threeRoleLimitChord_of_frequently_packetTransferRoles
     (packet : QuittingReprojectionConcentratedPacket
       reward profiles owner marked cutoff scale)
     (mover recipient : iota)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -790,6 +783,8 @@ theorem exists_threeRoleLimitChord_of_frequently_packetTransferRoles
       packetTransferRoles minimum packet rank mover recipient) :
     Nonempty (ThreeRoleLimitChord reward minimum owner mover recipient
       packet.resolution) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let eps : ℕ → ℝ := fun rank ↦ packetEpsilon minimum packet rank
   have hepsZero : Tendsto eps atTop (nhds 0) := by
     have hsub := hsourceDebt.sub_const
@@ -938,8 +933,6 @@ theorem packet_tailEscapeFrequently_or_threeRoleLimitChord
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
     (packet : QuittingReprojectionConcentratedPacket
       reward profiles owner marked cutoff scale)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -957,7 +950,7 @@ theorem packet_tailEscapeFrequently_or_threeRoleLimitChord
         Nonempty (ThreeRoleLimitChord reward minimum owner mover recipient
           packet.resolution) := by
   have hfixed := packet_tailEscapeFrequently_or_fixedThreeRoleTransfer
-    minimum packet hM hreward hminimumCarrier hminimum hminimumDebt
+    minimum packet hminimumCarrier hminimum hminimumDebt
       hcollision hscale hscaleTendsto hsourceDebt
   rcases hfixed with hescape | htransfer
   · exact Or.inl hescape
@@ -965,7 +958,7 @@ theorem packet_tailEscapeFrequently_or_threeRoleLimitChord
     obtain ⟨mover, recipient, _hmover, _hrecipient, hroles⟩ := htransfer
     exact ⟨mover, recipient,
       exists_threeRoleLimitChord_of_frequently_packetTransferRoles
-        minimum packet mover recipient hM hreward hminimum hminimumDebt
+        minimum packet mover recipient hminimum hminimumDebt
           hsourceDebt hroles⟩
 
 end ConcentratedCollisionFourRole

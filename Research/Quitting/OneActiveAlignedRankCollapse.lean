@@ -8,6 +8,7 @@ import Research.Quitting.OneActiveTransferDefectGraph
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticQuantileNashificationAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Aligned one-active clocks collapse the five-role window
@@ -43,9 +44,7 @@ positive debt coordinate have the same owner. -/
 theorem minimumExactNash_positiveSingletonClock_positiveDebt_owner_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
-    (clockOwner debtOwner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (clockOwner debtOwner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -55,6 +54,8 @@ theorem minimumExactNash_positiveSingletonClock_positiveDebt_owner_eq
     (hclock : 0 < quittingRootCoalitionMass root {clockOwner})
     (hdebt : 0 < quittingTerminalSemanticDebt pair debtOwner) :
     debtOwner = clockOwner := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hgate := minimumTerminalSemantic_debtGate_of_singletonMass_pos
     (reward := reward) pair root hM hreward hpair hminimum hpositive
       hnash clockOwner hclock
@@ -86,9 +87,7 @@ theorem singletonClock_mul_distinctDebtFloor_le_tailExcess_add_nashError
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum tail : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool) (clockOwner debtOwner : ι)
-    (hne : debtOwner ≠ clockOwner) (eta kappa epsilon : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (hne : debtOwner ≠ clockOwner) (eta kappa epsilon : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -102,6 +101,8 @@ theorem singletonClock_mul_distinctDebtFloor_le_tailExcess_add_nashError
       (quittingTerminalSemanticDebtSum tail -
           quittingTerminalSemanticDebtSum minimum) +
         Fintype.card ι * epsilon := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have htailDebt : ∀ player,
       0 ≤ quittingTerminalSemanticDebt tail player :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
@@ -191,9 +192,7 @@ theorem stageSingletonMass_mul_distinctTailDebtFloor_le_liveTailExcess_add_initi
     (minimum : QuittingTerminalSemanticPair ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (time : ℕ) (clockOwner debtOwner : ι) (hne : debtOwner ≠ clockOwner)
-    (kappa : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (kappa : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -211,6 +210,8 @@ theorem stageSingletonMass_mul_distinctTailDebtFloor_le_liveTailExcess_add_initi
             quittingTerminalSemanticDebtSum minimum) +
         quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward profile) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let tail := quittingTerminalSemanticPair reward
     (quittingAllContinueProfileSpine reward profile (time + 1))
   let root := quittingProfileLiveRoot reward profile time
@@ -375,9 +376,7 @@ theorem exists_omitted_transferDefectRole_or_sameProfileClockDebtCharge
     (minimum : QuittingTerminalSemanticPair (Fin 5))
     (profile : (quittingGame reward).BehaviorProfile)
     (path : ℕ → Fin 5) (time : ℕ)
-    (markedPlayer clockOwner : Fin 5) (rho kappa : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (markedPlayer clockOwner : Fin 5) (rho kappa : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -411,7 +410,7 @@ theorem exists_omitted_transferDefectRole_or_sameProfileClockDebtCharge
     exact hscaled.trans
       (stageSingletonMass_mul_distinctTailDebtFloor_le_liveTailExcess_add_initialDebt
         reward minimum profile time clockOwner (path time) heq kappa
-          hM hreward hminimumCarrier hminimum hdebtFloor)
+          hminimumCarrier hminimum hdebtFloor)
 
 /-- Terminal-Nash specialization of the same-profile alternative.  This is
 the form consumed by finite-splice Nashification: no rowwise Nash certificate
@@ -421,9 +420,7 @@ theorem exists_omitted_transferDefectRole_or_terminalNashClockDebtCharge
     (minimum : QuittingTerminalSemanticPair (Fin 5))
     (profile : (quittingGame reward).BehaviorProfile)
     (path : ℕ → Fin 5) (time : ℕ)
-    (markedPlayer clockOwner : Fin 5) (rho kappa epsilon : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (markedPlayer clockOwner : Fin 5) (rho kappa epsilon : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -449,7 +446,7 @@ theorem exists_omitted_transferDefectRole_or_terminalNashClockDebtCharge
             quittingTerminalSemanticDebtSum minimum) + 5 * epsilon := by
   rcases exists_omitted_transferDefectRole_or_sameProfileClockDebtCharge
       reward minimum profile path time markedPlayer clockOwner rho kappa
-        hM hreward hminimumCarrier hminimum hkappa0 hclockFloor hdebtFloor with
+        hminimumCarrier hminimum hkappa0 hclockFloor hdebtFloor with
     homitted | hcharge
   · exact Or.inl homitted
   · right
@@ -468,9 +465,7 @@ theorem exists_omitted_transferDefectRole_or_clockDebtCharge
     (minimum tail : QuittingTerminalSemanticPair (Fin 5))
     (root : Fin 5 → PMF Bool) (path : ℕ → Fin 5) (time : ℕ)
     (markedPlayer clockOwner : Fin 5)
-    (eta kappa epsilon : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (eta kappa epsilon : ℝ)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -507,7 +502,7 @@ theorem exists_omitted_transferDefectRole_or_clockDebtCharge
     have hcharge :=
       singletonClock_mul_distinctDebtFloor_le_tailExcess_add_nashError
         reward minimum tail root clockOwner (path time) heq eta kappa epsilon
-          hM hreward hminimumCarrier hminimum htail hkappa0 hclockRoot
+          hminimumCarrier hminimum htail hkappa0 hclockRoot
             hdebtFloor hnash
     norm_num at hcharge ⊢
     exact hcharge
@@ -520,9 +515,7 @@ theorem exists_omitted_transferDefectRole_of_alignedMinimumRoot
     (reward : {S : Finset (Fin 5) // S.Nonempty} → Payoff (Fin 5))
     (pair : QuittingTerminalSemanticPair (Fin 5))
     (root : Fin 5 → PMF Bool) (path : ℕ → Fin 5) (time : ℕ)
-    (markedPlayer clockOwner : Fin 5) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (markedPlayer clockOwner : Fin 5)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -543,7 +536,7 @@ theorem exists_omitted_transferDefectRole_of_alignedMinimumRoot
       root markedPlayer clockOwner hactive hmass
   have hownerEq : path time = clockOwner :=
     minimumExactNash_positiveSingletonClock_positiveDebt_owner_eq
-      reward pair root clockOwner (path time) hM hreward hpair hminimum
+      reward pair root clockOwner (path time) hpair hminimum
         hpositive hnash hclock htransferOwner
   have hproper : quittingTransferDefectRoleWindow
       (path time) (path (time + 1)) (path (time + 2))

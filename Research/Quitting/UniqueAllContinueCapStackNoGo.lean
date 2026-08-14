@@ -11,6 +11,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRat
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefix
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactPath
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Unique all-Continue caps cannot causally realize a retained terminal law
@@ -180,9 +181,7 @@ theorem exists_resetFace_positiveIncidence_exactCapOperations_are_identity
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (owner : ι)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -203,6 +202,8 @@ theorem exists_resetFace_positiveIncidence_exactCapOperations_are_identity
           quittingTerminalSemanticPrefix reward root returned.1 = returned.1 ∧
           quittingTerminalOutcomeLawPrefix root returned.2 = returned.2 ∧
           quittingRootAbsorptionMass root = 0 := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   obtain ⟨returned, hreturned, hreturnedReset, hreturnedIncidence,
       hsourceLe, _hallContinueNash, _hfixed, hallRoots⟩ :=
     exists_resetFace_positiveTotalIncidence_allContinueCapPlateau
@@ -275,9 +276,7 @@ preceding row. -/
 theorem capNashRootStack_eq_replicate_allContinue_of_unique_terminalCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (terminal : (quittingGame reward).BehaviorProfile)
-    (roots : List (ι → PMF Bool)) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (roots : List (ι → PMF Bool))
     (hunique : ∀ root : ι → PMF Bool,
       IsεQuittingRootNash reward
           (quittingTerminalSemanticPair reward terminal).2 0 root →
@@ -288,6 +287,8 @@ theorem capNashRootStack_eq_replicate_allContinue_of_unique_terminalCap
       quittingTerminalSemanticPair reward
           (quittingLiteralRootStackProfile reward roots terminal) =
         quittingTerminalSemanticPair reward terminal := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hallContinueNash : IsεQuittingRootNash reward
       (quittingTerminalSemanticPair reward terminal).2 0
       (quittingAllContinueRoot : ι → PMF Bool) := by
@@ -354,9 +355,7 @@ all-Continue terminal cap has no current-stage absorption budget at all. -/
 theorem capNashStackAbsorptionSum_eq_zero_of_unique_terminalCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (terminal : (quittingGame reward).BehaviorProfile)
-    (roots : List (ι → PMF Bool)) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (roots : List (ι → PMF Bool))
     (hunique : ∀ root : ι → PMF Bool,
       IsεQuittingRootNash reward
           (quittingTerminalSemanticPair reward terminal).2 0 root →
@@ -365,7 +364,7 @@ theorem capNashStackAbsorptionSum_eq_zero_of_unique_terminalCap
     quittingCapNashStackAbsorptionSum roots = 0 := by
   have hroots :=
     (capNashRootStack_eq_replicate_allContinue_of_unique_terminalCap
-      reward terminal roots hM hreward hunique hstack).1
+      reward terminal roots hunique hstack).1
   rw [hroots]
   simp [quittingCapNashStackAbsorptionSum,
     quittingRootAbsorptionMass_allContinueRoot]
@@ -376,9 +375,7 @@ behind zero-charge Continue rows; it is never promoted to fresh absorption. -/
 theorem capNashRootStack_terminalOutcomeMass_eq_of_unique_terminalCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (terminal : (quittingGame reward).BehaviorProfile)
-    (roots : List (ι → PMF Bool)) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (roots : List (ι → PMF Bool))
     (hunique : ∀ root : ι → PMF Bool,
       IsεQuittingRootNash reward
           (quittingTerminalSemanticPair reward terminal).2 0 root →
@@ -389,7 +386,7 @@ theorem capNashRootStack_terminalOutcomeMass_eq_of_unique_terminalCap
       quittingTerminalOutcomeMass reward terminal := by
   have hroots :=
     (capNashRootStack_eq_replicate_allContinue_of_unique_terminalCap
-      reward terminal roots hM hreward hunique hstack).1
+      reward terminal roots hunique hstack).1
   rw [hroots]
   let allContinue : ι → PMF Bool := quittingAllContinueRoot
   change quittingTerminalOutcomeMass reward

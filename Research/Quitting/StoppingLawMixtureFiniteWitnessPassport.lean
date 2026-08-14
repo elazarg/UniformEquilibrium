@@ -190,7 +190,7 @@ theorem abs_quittingContinuationBestResponseValue_stoppingLawMixture_sub_le
             hlambda0 hlambda1 hmu0 hmu1 hM hreward
       have hdeviation :=
         quittingTerminalPayoff_update_le_continuationBestResponseValue
-          reward muProfile observer deviation hM hreward
+          reward muProfile observer deviation
       unfold quittingContinuationBestResponseValue at hdeviation
       dsimp only [lambdaProfile, muProfile, error] at hpoint hdeviation ⊢
       linarith [le_abs_self
@@ -216,7 +216,7 @@ theorem abs_quittingContinuationBestResponseValue_stoppingLawMixture_sub_le
             hmu0 hmu1 hlambda0 hlambda1 hM hreward
       have hdeviation :=
         quittingTerminalPayoff_update_le_continuationBestResponseValue
-          reward lambdaProfile observer deviation hM hreward
+          reward lambdaProfile observer deviation
       unfold quittingContinuationBestResponseValue at hdeviation
       dsimp only [lambdaProfile, muProfile, error] at hpoint hdeviation ⊢
       rw [abs_sub_comm mu lambda] at hpoint
@@ -242,9 +242,7 @@ extremality; exact attainment is not asserted. -/
 theorem exists_quittingPureTime_terminalPayoff_ge_bestResponse_sub
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (observer : ι) (epsilon : ℝ) (hepsilon : 0 < epsilon)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (observer : ι) (epsilon : ℝ) (hepsilon : 0 < epsilon) :
     ∃ choice : Option ℕ,
       quittingContinuationBestResponseValue reward profile observer - epsilon ≤
         quittingTerminalPayoff reward
@@ -253,7 +251,7 @@ theorem exists_quittingPureTime_terminalPayoff_ge_bestResponse_sub
   have hhalf : 0 < epsilon / 2 := half_pos hepsilon
   obtain ⟨deviation, hdeviation⟩ :=
     exists_quittingContinuation_deviation_ge_sub
-      reward profile observer hhalf hM hreward
+      reward profile observer hhalf
   obtain ⟨choice, hchoice⟩ :=
     exists_quittingPureTimeBehaviorStrategy_terminalPayoff_ge_sub
       reward profile observer deviation hhalf
@@ -367,7 +365,7 @@ theorem exists_finitePureTimeWitnessPassport_stoppingLawMixture
           (Function.update profile mover
             (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
               q.1 (hgridBounds q.1 q.2).1 (hgridBounds q.1 q.2).2))
-          observer epsilon hepsilon hM hreward)
+          observer epsilon hepsilon)
   let passport : Finset (Option ℕ) := grid.attach.image chosen
   refine ⟨passport, ?_, ?_⟩
   · dsimp only [passport]
@@ -387,7 +385,7 @@ theorem exists_finitePureTimeWitnessPassport_stoppingLawMixture
             (Function.update profile mover
               (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
                 q (hgridBounds q hq).1 (hgridBounds q hq).2))
-            observer epsilon hepsilon hM hreward)
+            observer epsilon hepsilon)
     change quittingContinuationBestResponseValue reward
           (Function.update profile mover
             (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
@@ -664,7 +662,7 @@ theorem exists_accuracyPureTimeDebtAtlas_stoppingLawMixture
     source target lambda hlambda0 hlambda1
   have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
     reward (Function.update profile mover mixed) observer
-      (quittingPureTimeBehaviorStrategy reward observer choice) hM hreward
+      (quittingPureTimeBehaviorStrategy reward observer choice)
   refine ⟨choice, hchoice, ?_, ?_⟩
   · dsimp only [mixed] at hlower
     unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair

@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumAggregateSurplus
 import UniformEquilibrium.Quitting.Paths.SureExitSet
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Exact aggregate-surplus consumers at the minimum semantic plateau
@@ -266,9 +267,7 @@ which forces the displayed singleton-budget inequality, or an absorbing
 coalition with the same aggregate surplus and a strict toggle blocker. -/
 theorem QuittingCounterexampleRegime.exists_neverBudget_or_blockedCoalition_exact
     (regime : QuittingCounterexampleRegime reward)
-    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -293,6 +292,7 @@ theorem QuittingCounterexampleRegime.exists_neverBudget_or_blockedCoalition_exac
               quittingSetReward reward terminal.val outsider <
                 quittingSetReward reward
                   (insert outsider terminal.val) outsider) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   obtain ⟨outcome, houtcome⟩ :=
     exists_terminalOutcome_subset_singletonSurplus_ge_exactMinimumDebt
       (reward := reward) pair players hM hreward hpair hminimum hpositive
@@ -362,9 +362,7 @@ theorem QuittingCounterexampleRegime.exists_supportedNever_or_supportedBlockedCo
 genuine absorbing coalition and necessarily has a strict toggle blocker. -/
 theorem QuittingCounterexampleRegime.exists_blockedCoalition_exact_of_never_lt
     (regime : QuittingCounterexampleRegime reward)
-    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -391,7 +389,7 @@ theorem QuittingCounterexampleRegime.exists_blockedCoalition_exact_of_never_lt
               quittingSetReward reward
                 (insert outsider terminal.val) outsider) := by
   rcases regime.exists_neverBudget_or_blockedCoalition_exact
-      pair players hM hreward hpair hminimum hpositive with
+      pair players hpair hminimum hpositive with
     hneverBudget | hterminal
   · exact (not_le_of_gt hnever hneverBudget).elim
   · exact hterminal
@@ -545,10 +543,8 @@ The same outcome is either Never or an absorbing coalition with a strict
 toggle blocker. -/
 theorem QuittingCounterexampleRegime.exists_threeDebt_neverBudget_or_blockedCoalition_of_tightOwner
     (regime : QuittingCounterexampleRegime reward)
-    (pair : QuittingTerminalSemanticPair ι) (owner : ι) {M : ℝ}
+    (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hcard : 4 ≤ Fintype.card ι)
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -571,6 +567,7 @@ theorem QuittingCounterexampleRegime.exists_threeDebt_neverBudget_or_blockedCoal
               quittingSetReward reward terminal.val outsider <
                 quittingSetReward reward
                   (insert outsider terminal.val) outsider) := by
+  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
   have hcardErase : 3 ≤ (Finset.univ.erase owner).card := by
     rw [Finset.card_erase_of_mem (Finset.mem_univ owner)]
     simpa using Nat.sub_le_sub_right hcard 1

@@ -312,7 +312,7 @@ theorem quittingAtomicBlockerBalance_le_neg_of_terminalExploitabilityGap
   have hreward := abs_reward_le_quittingRewardBound reward
   have hdeviationBest :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward profile who deviation hM hreward
+      reward profile who deviation
   have hp0_le :
       quittingForcedOwnerAllOutsidersContinueMass root owner ≤ 1 :=
     quittingStationaryFixedOpponentsContinueMass_le_one root owner

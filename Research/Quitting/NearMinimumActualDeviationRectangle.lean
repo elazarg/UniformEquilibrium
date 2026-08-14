@@ -150,7 +150,7 @@ theorem exists_nearMinimumReset_actualDeviation_affineRectangle_sourceActive
       hrecipient
   obtain ⟨deviation, hdeviation⟩ :=
     exists_quittingContinuation_deviation_ge_sub reward mixedProfile recipient
-      heta hM hreward
+      heta
   refine ⟨recipient, ?_, deviation, ?_⟩
   · simpa only [opponents] using hrecipient
   dsimp only
@@ -192,7 +192,7 @@ theorem exists_nearMinimumReset_actualDeviation_affineRectangle_sourceActive
     linarith
   have hsourceCap :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue reward
-      profile recipient deviation hM hreward
+      profile recipient deviation
   have hmixedDebtLower :
       quittingTerminalSemanticDebt mixed recipient - eta ≤ mixedGain := by
     dsimp only [mixed, mixedGain, quittingTerminalSemanticDebt,

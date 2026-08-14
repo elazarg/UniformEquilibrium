@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Research.Quitting.KActiveCompactPath
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumDebtSimplex
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Exact minimum dynamics is one-active
@@ -31,9 +32,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 theorem minimumTerminalSemantic_exactNash_hasSupportCardAtMost_one
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -41,6 +40,8 @@ theorem minimumTerminalSemantic_exactNash_hasSupportCardAtMost_one
     (hpositive : 0 < quittingTerminalSemanticDebtSum pair)
     (hnash : IsεQuittingRootNash reward pair.1 0 root) :
     HasQuittingSupportCardAtMost 1 root := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   rcases minimumTerminalSemantic_exactNash_allContinue_or_debtGateSolo
       (reward := reward) pair root hM hreward hpair hminimum hpositive hnash with
     hcontinue | ⟨owner, _hgate, _hownerPositive, hothers⟩

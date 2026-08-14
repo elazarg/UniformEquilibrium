@@ -248,7 +248,7 @@ theorem bestResponseValue_eq_one_of_update_payoff
   · exact le_of_abs_le (abs_quittingContinuationBestResponseValue_le
       reward profile who (M := 1) (by norm_num) reward_bound)
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward profile who target (M := 1) (by norm_num) reward_bound
+      reward profile who target
     rw [hpayoff] at hlower
     exact hlower
 
@@ -493,7 +493,7 @@ theorem never_bestResponseValue_p :
     · rintro value ⟨deviation, rfl⟩
       exact never_p_deviation_payoff_nonpos deviation
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward never p (never p) (M := 1) (by norm_num) reward_bound
+      reward never p (never p)
     rw [Function.update_eq_self, never_payoff] at hlower
     exact hlower
 

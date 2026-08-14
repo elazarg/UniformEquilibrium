@@ -54,9 +54,7 @@ theorem terminalGap_le_canonicalAggregateFullPrefixRepairValue
       reward (last + 1)
   have hfloor := terminalExploitabilityGap_le_behavioralTailRepairValue
     reward (quittingFiniteNashBellmanPathRoots (last + 1) path)
-      (last + 1) (by omega) (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
-      regime.terminalExploitability
+      (last + 1) (by omega) regime.terminalExploitability
   simpa [path,
     QuittingAggregateCalibratedTerminalAnchor.canonicalAggregateFullPrefixRepairValue,
     QuittingAggregateCalibratedTerminalAnchor.canonicalAggregateFullPrefixHolonomy]
@@ -114,8 +112,7 @@ theorem immediateNever_terminalExploitability_eq_maxDynamicDebt
     reward anchor.roots
       (quittingElementaryCapRoots
         (.never : QuittingElementaryTailCap ι))
-      (anchor.last + 1) (by omega) (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)]
+      (anchor.last + 1) (by omega)]
   simpa [QuittingAggregateCalibratedTerminalAnchor.roots] using
     (fullPrefix_behavioralTailGain_elementaryNever_eq_maxDynamicDebt
       reward anchor.last anchor.path anchor.path_mem)
@@ -227,9 +224,7 @@ theorem elementaryCap_consumed_by_minAggregateDrop_or_reachableCharge
       chargeScale * edge.toBoxEdge.absorptionCharge :=
     mul_nonneg hchargeScale edge.toBoxEdge.absorptionCharge_nonneg
   have hgap := terminalExploitabilityGap_le_quittingTerminalExploitability
-    reward (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
-      regime.terminalExploitability
+    reward regime.terminalExploitability
       (quittingPhaseSwitchProfile reward anchor.roots
         (quittingElementaryTailRoots tail capCutoff cap)
         (anchor.last + 1))

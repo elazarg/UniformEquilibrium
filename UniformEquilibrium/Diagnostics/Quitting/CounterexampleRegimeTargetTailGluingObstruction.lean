@@ -80,8 +80,7 @@ theorem targetClosedApproxPunishmentTails_and_commonRepair_pos
     exact exists_targetClosedApproxPunishmentTailFamily
       (reward := reward) hδ
   · have hlower := terminalExploitabilityGap_le_behavioralTailRepairValue
-      reward plan switch hswitch (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) hexploit
+      reward plan switch hswitch hexploit
     exact hgap.trans_le hlower
 
 namespace QuittingChargeTangentPacket
@@ -113,8 +112,6 @@ theorem targetClosedApproxPunishmentTails_and_twoOwnerCommonRepair_pos
   simpa [twoOwnerCommonWordRepairValue] using
     (terminalExploitabilityGap_le_behavioralTailRepairValue reward
       (packet.twoOwnerCommonWordPlan first second t ht0 ht1) 1 (by norm_num)
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
       regime.terminalExploitability)
 
 /-- Therefore the common-word zero-repair premise cannot be derived from the

@@ -296,7 +296,7 @@ theorem truncated_bestResponseValue_ge_one_sub_two_mul_mesh
     (quittingTruncatedRoots
       (collisionPhaseRoots leftPlan rightPlan) cutoff) 0
   have hle := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward profile owner (profile owner) (by norm_num) reward_abs_le_one
+    reward profile owner (profile owner)
   simpa [profile, quittingRootSequenceTerminalValue,
     Function.update_eq_self] using hle
 
@@ -342,7 +342,7 @@ theorem full_bestResponseValue_ge_diffusePrefix_sub_survival
   unfold quittingRootSequenceBestResponseValue
   let profile := quittingRootSequenceProfile reward roots 0
   have hle := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward profile owner (profile owner) (by norm_num) reward_abs_le_one
+    reward profile owner (profile owner)
   simpa [profile, roots, quittingRootSequenceTerminalValue,
     Function.update_eq_self] using hle
 

@@ -226,14 +226,14 @@ theorem base_bestResponse_observer :
     quittingContinuationBestResponseValue reward base observer = 0 := by
   unfold base
   rw [quittingContinuationBestResponseValue_pureSetRoot_eq
-    reward ∅ observer (by norm_num) reward_bound]
+    reward ∅ observer]
   norm_num [quittingSetReward, reward, mover, observer]
 
 theorem base_bestResponse_mover :
     quittingContinuationBestResponseValue reward base mover = 1 := by
   unfold base
   rw [quittingContinuationBestResponseValue_pureSetRoot_eq
-    reward ∅ mover (by norm_num) reward_bound]
+    reward ∅ mover]
   norm_num [quittingSetReward, reward, mover, observer]
 
 theorem source_bestResponse_observer :
@@ -250,7 +250,7 @@ theorem source_bestResponse_mover :
     · rintro value ⟨deviation, rfl⟩
       exact source_mover_deviation_payoff_le_zero deviation
   · have hlower := quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward source mover (source mover) (M := 1) (by norm_num) reward_bound
+      reward source mover (source mover)
     rw [Function.update_eq_self, source_payoff_mover] at hlower
     exact hlower
 
@@ -265,7 +265,7 @@ theorem target_bestResponse_observer :
     quittingContinuationBestResponseValue_update_self,
     base_update_mover_eq_singleton,
     quittingContinuationBestResponseValue_pureSetRoot_eq
-      reward {mover} observer (by norm_num) reward_bound]
+      reward {mover} observer]
   norm_num [quittingSetReward, reward, mover, observer,
     show ({true, false} : Finset Bool) ≠ {false} by decide,
     show ({true, false} : Finset Bool) ≠ {true} by decide]
@@ -273,7 +273,7 @@ theorem target_bestResponse_observer :
 theorem target_payoff_mover :
     quittingTerminalPayoff reward target mover = -1 := by
   have hdeviation := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward source mover replacement (M := 1) (by norm_num) reward_bound
+    reward source mover replacement
   have htarget : Function.update source mover replacement = target := by rfl
   rw [htarget, source_bestResponse_mover] at hdeviation
   have hlower : -1 ≤ quittingTerminalPayoff reward target mover :=
@@ -309,7 +309,7 @@ theorem replacement_is_exactBestResponse_at_base :
   unfold base quittingTerminalDeviationDebt
   rw [quittingTerminalPayoff_pureSetRoot]
   rw [quittingContinuationBestResponseValue_pureSetRoot_eq
-    reward ∅ mover (by norm_num) reward_bound]
+    reward ∅ mover]
   norm_num [quittingSetReward, reward, mover, observer]
 
 theorem source_liveRoot_zero :
@@ -442,7 +442,7 @@ theorem positive_singletonAtom_with_staticHandoff_is_pureDebtTransfer :
   · intro deviation
     have hdeviation :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
-        reward target observer deviation (M := 1) (by norm_num) reward_bound
+        reward target observer deviation
     rw [target_bestResponse_observer] at hdeviation
     rw [target_payoff_observer]
     linarith

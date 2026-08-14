@@ -285,11 +285,13 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.pureTimeNormalForm_of_
   · exact Or.inr (Or.inl hfunded)
   · exact Or.inr (Or.inr hlate)
 
+namespace QuittingStoppingLawVanishingDebtRectangleSequence
+
 /-- Observer-containing rectangle packets therefore have a three-way
 subsequential temporal form: fixed finite, escaping and `Never`-funded, or
 escaping with a positive late local gap.  Fixed terminal and vanishing debt
 remain fields of the restricted packet. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_restrict_observerContaining_pureTimeNormalForm
+theorem exists_restrict_observerContaining_pureTimeNormalForm
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -325,7 +327,11 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_restrict_observ
   exact (packet.restrict subseq hsubseq).pureTimeNormalForm_of_observer_mem
     hobserver hnormal
 
+end QuittingStoppingLawVanishingDebtRectangleSequence
+
 /-! ## Unconditional finite semantics at a marked late endpoint -/
+
+namespace QuittingStoppingLawVanishingDebtRectangleSequence
 
 /-- At every finite selected date, the actual continuation after the marked
 root admits an elementary finite-semantic representative.  It retains the
@@ -335,7 +341,7 @@ payoff, envelope, and debt coordinate.
 
 This is an immediate game-facing specialization of the unconditional
 elementary-tail theorem. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_elementaryFiniteSemanticTail_after_selectedTime
+theorem exists_elementaryFiniteSemanticTail_after_selectedTime
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -401,8 +407,9 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_elementaryFinit
           (quittingElementaryBoundarySemanticPair reward cap) := by
   exact exists_markedDate_elementaryCompression_continuationSemantics_close
     reward (quittingStoppingLawRectangleTargetRoots packet n) (time + 1)
-      retainedAfterMark (quittingRewardBound_nonneg reward) hδ
-      (abs_reward_le_quittingRewardBound reward)
+      retainedAfterMark hδ
+
+end QuittingStoppingLawVanishingDebtRectangleSequence
 
 /-- Force the rectangle observer to Continue forever while leaving every
 opponent root literal.  This is the root word whose payoff is the `Never`
@@ -432,6 +439,8 @@ theorem quittingStoppingLawRectangleNeverRoots_payoff
         none start := by
   rfl
 
+namespace QuittingStoppingLawVanishingDebtRectangleSequence
+
 /-- **Finite-semantic consumer for the escaping late-gap mode.**  A positive
 late endpoint gap survives unconditional elementary compression of its
 forced-Continue tail.  The compressed continuation is evaluated by a finite
@@ -439,7 +448,7 @@ backward recursion and retains the whole root word through the marked root.
 
 What this does not prove is `IsQuittingRootEndpointNash` for the marked root
 against the displayed finite evaluator. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_elementaryFiniteSemanticTail_preserving_positiveEndpointGap
+theorem exists_elementaryFiniteSemanticTail_preserving_positiveEndpointGap
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -484,8 +493,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_elementaryFinit
       hsemantic, heval⟩ :=
     exists_markedDate_elementaryCompression_continuationSemantics_close
       reward (quittingStoppingLawRectangleNeverRoots packet n) (time + 1) 0
-      (quittingRewardBound_nonneg reward) hδ
-      (abs_reward_le_quittingRewardBound reward)
+      hδ
   refine ⟨cap, tailCutoff, by simpa using hlate, hmatch, hprefix, heval, ?_⟩
   let originalTail : Payoff ι := fun _ =>
     quittingRootSequencePureTimeTerminalValue reward
@@ -525,6 +533,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_elementaryFinit
       packet.observer
   dsimp only [δ] at hendpointClose'
   linarith
+
+end QuittingStoppingLawVanishingDebtRectangleSequence
 
 /-! ## Fixed-label access through an exact prefix -/
 

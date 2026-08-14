@@ -293,9 +293,7 @@ theorem exists_quittingPureTimeBehaviorStrategy_terminalPayoff_ge_sub
 theorem quittingTerminalPayoff_update_le_sSup_pureTimeBehaviorStrategy
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (who : ι) (deviation : (quittingGame reward).BehaviorStrategy who)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (who : ι) (deviation : (quittingGame reward).BehaviorStrategy who) :
     quittingTerminalPayoff reward (Function.update profile who deviation) who ≤
       sSup (Set.range fun quitTime : Option ℕ =>
         quittingTerminalPayoff reward
@@ -305,32 +303,13 @@ theorem quittingTerminalPayoff_update_le_sSup_pureTimeBehaviorStrategy
   simpa only [quittingTerminalPayoff_update_pureTimeBehaviorStrategy] using
     (quittingRootSequenceHazardTerminalValue_le_sSup_pureTime reward
       (quittingProfileLiveRoot reward profile) who
-      (quittingBehaviorLiveHazard reward deviation) hM hreward)
-
-/-- Under a uniform reward bound, all unilateral behavioral terminal payoffs
-form a bounded-above set. -/
-theorem bddAbove_range_quittingTerminalPayoff_update
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
-    BddAbove (Set.range fun deviation :
-      (quittingGame reward).BehaviorStrategy who =>
-        quittingTerminalPayoff reward
-          (Function.update profile who deviation) who) := by
-  refine ⟨M, ?_⟩
-  rintro value ⟨deviation, rfl⟩
-  exact (le_abs_self _).trans
-    (abs_quittingTerminalPayoff_le reward
-      (Function.update profile who deviation) who hM hreward)
+      (quittingBehaviorLiveHazard reward deviation))
 
 /-- Pure quit times and `Never` generate exactly the same best-response
 supremum as all unilateral behavior strategies. -/
 theorem sSup_range_quittingTerminalPayoff_update_eq_pureTime
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
     sSup (Set.range fun deviation :
         (quittingGame reward).BehaviorStrategy who =>
       quittingTerminalPayoff reward
@@ -349,7 +328,7 @@ theorem sSup_range_quittingTerminalPayoff_update_eq_pureTime
         (quittingPureTimeBehaviorStrategy reward who quitTime)) who
   have hbehaviorBounded : BddAbove behaviorValues :=
     bddAbove_range_quittingTerminalPayoff_update
-      reward profile who hM hreward
+      reward profile who
   have hbehaviorNonempty : behaviorValues.Nonempty := by
     exact ⟨quittingTerminalPayoff reward
       (Function.update profile who
@@ -364,7 +343,7 @@ theorem sSup_range_quittingTerminalPayoff_update_eq_pureTime
   · apply csSup_le hbehaviorNonempty
     rintro _ ⟨deviation, rfl⟩
     exact quittingTerminalPayoff_update_le_sSup_pureTimeBehaviorStrategy
-      reward profile who deviation hM hreward
+      reward profile who deviation
   · apply csSup_le hpureNonempty
     rintro _ ⟨quitTime, rfl⟩
     exact le_csSup hbehaviorBounded

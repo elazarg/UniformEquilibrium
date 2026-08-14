@@ -106,7 +106,7 @@ theorem quittingContinuationBestResponseValue_source_sub_stoppingLawMixture_le
       have hscaled := mul_le_mul_of_nonneg_left hdifference hlambda0
       have hmixedLe :=
         quittingTerminalPayoff_update_le_continuationBestResponseValue
-          reward mixedProfile observer deviation hM hreward
+          reward mixedProfile observer deviation
       have hscaled' : lambda *
             (quittingTerminalPayoff reward
                 (Function.update profile observer deviation) observer -
@@ -197,7 +197,7 @@ theorem abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le
     linarith
   have hchord := quittingTerminalSemanticDebt_stoppingLawMixture_le
     reward profile mover observer (profile mover) target lambda
-      hlambda0 hlambda1 hM hreward
+      hlambda0 hlambda1
   rw [Function.update_eq_self] at hchord
   have hsourceDebtNonneg : 0 ≤ quittingTerminalSemanticDebt source observer :=
     quittingTerminalDeviationDebt_nonneg reward profile observer hM hreward
@@ -285,7 +285,7 @@ theorem exists_stoppingLawResetRay_nearMinimum_normalizedFixedSupport
     linarith
   obtain ⟨bestResponse, hbestResponse⟩ :=
     exists_quittingContinuation_deviation_ge_sub
-      reward profile who herror hM hreward
+      reward profile who herror
   refine ⟨bestResponse, ?_⟩
   dsimp only
   let endpointProfile := Function.update profile who bestResponse
@@ -361,7 +361,7 @@ theorem exists_stoppingLawResetRay_nearMinimum_normalizedFixedSupport
       endpointProfile]
     have hbound := quittingTerminalSemanticDebt_stoppingLawMixture_le
       reward profile who observer (profile who) bestResponse lambda
-        hlambdaPos.le hlambda1 hM hreward
+        hlambdaPos.le hlambda1
     simpa only [Function.update_eq_self] using hbound
   have htransfer : lambda * endpointGain ≤ epsilon +
       ∑ other ∈ Finset.univ.erase who,
@@ -472,7 +472,7 @@ theorem exists_stoppingLawResetRay_minimum_transfer_and_windowRetention
     linarith
   obtain ⟨bestResponse, hbestResponse⟩ :=
     exists_quittingContinuation_deviation_ge_sub
-      reward profile who herror hM hreward
+      reward profile who herror
   refine ⟨bestResponse, ?_⟩
   dsimp only
   let endpointProfile := Function.update profile who bestResponse
@@ -534,7 +534,7 @@ theorem exists_stoppingLawResetRay_minimum_transfer_and_windowRetention
       endpointProfile]
     have hbound := quittingTerminalSemanticDebt_stoppingLawMixture_le
       reward profile who observer (profile who) bestResponse lambda
-        hlambda0 hlambda1 hM hreward
+        hlambda0 hlambda1
     simpa only [Function.update_eq_self] using hbound
   have hwindow : (1 - lambda) *
         (∑ time ∈ Finset.range cutoff,

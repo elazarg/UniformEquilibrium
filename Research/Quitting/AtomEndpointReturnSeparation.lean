@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import Research.Quitting.CounterexampleAtomEndpointRisePassport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetFaceReprojection
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCommonSuffixCurvatureRegression
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Endpoint return versus reset-face separation
@@ -93,8 +94,6 @@ used below. -/
 theorem hasQuittingResetFaceReturnOrAllContinueSeparation_of_reset
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source target : QuittingTerminalSemanticPair ι) (owner : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum source ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -103,6 +102,8 @@ theorem hasQuittingResetFaceReturnOrAllContinueSeparation_of_reset
     (hreset : quittingTerminalSemanticDebt target owner = 0) :
     HasQuittingResetFaceReturnOrAllContinueSeparation reward source target
       owner := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   obtain ⟨returned, hreturned, hreturnedReset, hsourceLe, hreturnedLe,
       _htransferIdentity, _htransfer, hfiber, hnash, hfixed, hallRoots⟩ :=
     exists_resetFace_minimizer_with_unique_allContinue_capNash
@@ -311,8 +312,7 @@ theorem QuittingPrescribedAtomEndpointCluster.return_or_resetFaceConsumer_or_pos
     · left
       exact hasQuittingResetFaceReturnOrAllContinueSeparation_of_reset
         reward frontier.base cluster.cluster packet.chronology.mover.1
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) frontier.base_minimum
+        frontier.base_minimum
         frontier.base_positive cluster.cluster_mem hreset
     · exact Or.inr (lt_of_le_of_ne cluster.mover_debt_nonneg
         (Ne.symm hreset))
@@ -411,8 +411,7 @@ theorem QuittingRectangleDoubleEndpointCluster.has_resetFaceConsumer
       cluster.cluster packet.chronology.observer :=
   hasQuittingResetFaceReturnOrAllContinueSeparation_of_reset reward
     frontier.base cluster.cluster packet.chronology.observer
-    (quittingRewardBound_nonneg reward)
-    (abs_reward_le_quittingRewardBound reward) frontier.base_minimum
+    frontier.base_minimum
     frontier.base_positive cluster.cluster_mem cluster.observer_reset
 
 end GameTheory

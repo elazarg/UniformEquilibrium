@@ -94,16 +94,14 @@ theorem source_debt_mover :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward source) mover = 1 := by
   unfold source
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover} mover
-    (by norm_num) abs_reward_le_two]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover} mover]
   norm_num [mover, quittingSetReward, reward]
 
 theorem source_debt_observer :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward source) observer = 0 := by
   unfold source
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover} observer
-    (by norm_num) abs_reward_le_two]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward {mover} observer]
   norm_num [mover, observer, quittingSetReward, reward, Fin.ext_iff,
     show ({true, false} : Finset Bool) ≠ {true} by decide]
 
@@ -111,16 +109,14 @@ theorem endpoint_debt_mover :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward endpoint) mover = 0 := by
   unfold endpoint
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ mover
-    (by norm_num) abs_reward_le_two]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ mover]
   norm_num [mover, quittingSetReward, reward]
 
 theorem endpoint_debt_observer :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward endpoint) observer = 2 := by
   unfold endpoint
-  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ observer
-    (by norm_num) abs_reward_le_two]
+  rw [quittingTerminalSemanticDebt_pureSetRoot_eq reward ∅ observer]
   norm_num [observer, mover, quittingSetReward, reward]
 
 /-- The reset mover's debt is exactly `1-lambda`. -/
@@ -256,8 +252,7 @@ theorem mixed_cap_observer
       exact mixed_update_observer_payoff_le lambda hlambda0 hlambda1 deviation
   · apply le_csSup
       (bddAbove_range_quittingTerminalPayoff_update reward
-        (mixed lambda hlambda0 hlambda1) observer (by norm_num)
-          abs_reward_le_two)
+        (mixed lambda hlambda0 hlambda1) observer)
     let deviation := quittingPureTimeBehaviorStrategy reward observer (some 0)
     refine ⟨deviation, ?_⟩
     simpa only [deviation] using
@@ -365,8 +360,6 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_of_stoppingLawDebtSlope
     (target : (quittingGame reward).BehaviorStrategy mover)
     (lambda charge : ℝ) (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
     (hcharge : 0 < charge)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hslope : lambda * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
@@ -407,7 +400,7 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_of_stoppingLawDebtSlope
   let mixedPair := quittingTerminalSemanticPair reward mixed
   have hchord := quittingTerminalSemanticDebt_stoppingLawMixture_le
     reward profile mover observer (profile mover) target lambda hlambda0.le
-      hlambda1 hM hreward
+      hlambda1
   rw [Function.update_eq_self] at hchord
   change quittingTerminalSemanticDebt mixedPair observer ≤
       (1 - lambda) * quittingTerminalSemanticDebt sourcePair observer +
@@ -442,7 +435,7 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_of_stoppingLawDebtSlope
     have herror : 0 < charge / 8 := by positivity
     obtain ⟨deviation, hdeviation⟩ :=
       exists_quittingContinuation_deviation_ge_sub reward endpoint observer
-        herror hM hreward
+        herror
     obtain ⟨quitTime, hquitTime⟩ :=
       exists_quittingPureTimeBehaviorStrategy_terminalPayoff_ge_sub
         reward endpoint observer deviation herror
@@ -450,7 +443,7 @@ theorem exists_prescribedAtom_or_pureTimeRectangleAtom_of_stoppingLawDebtSlope
       quittingPureTimeBehaviorStrategy reward observer quitTime
     have hsourceBound :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
-        reward profile observer pureDeviation hM hreward
+        reward profile observer pureDeviation
     have hpureEndpoint : endpointCap - charge / 4 ≤
         quittingTerminalPayoff reward
           (Function.update endpoint observer pureDeviation) observer := by

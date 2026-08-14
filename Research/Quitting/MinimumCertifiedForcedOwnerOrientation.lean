@@ -42,9 +42,7 @@ Every distinct outsider is pure Continue. -/
 theorem minimumExactNash_positiveCoalition_outsider_isPureContinue
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -57,7 +55,7 @@ theorem minimumExactNash_positiveCoalition_outsider_isPureContinue
     (hmass : 0 < quittingRootCoalitionMass root terminal.val) :
     root who = PMF.pure false := by
   have hcard := minimumTerminalSemantic_exactNash_hasSupportCardAtMost_one
-    pair root hM hreward hpair hminimum hpositive hnash
+    pair root hpair hminimum hpositive hnash
   have hownerQuit : 0 < (root owner true).toReal :=
     hmass.trans_le
       (quittingRootCoalitionMass_le_quitProbability_of_mem
@@ -87,9 +85,7 @@ nonsingleton charged atom directly to contradiction. -/
 theorem minimumExactNash_positiveCoalition_eq_ownerSingleton
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -106,7 +102,7 @@ theorem minimumExactNash_positiveCoalition_eq_ownerSingleton
     by_contra hne
     have hne' : player ≠ owner := by simpa using hne
     have hpure := minimumExactNash_positiveCoalition_outsider_isPureContinue
-      pair root hM hreward hpair hminimum hpositive hnash terminal owner player
+      pair root hpair hminimum hpositive hnash terminal owner player
         howner hne' hmass
     have hle := quittingRootCoalitionMass_le_quitProbability_of_mem
       root terminal.val player hplayer
@@ -124,9 +120,7 @@ prescribed action and has exactly zero deviation gain. -/
 theorem minimumExactNash_continueFaceLoss_forces_quitAction
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum pair ≤
@@ -143,7 +137,7 @@ theorem minimumExactNash_continueFaceLoss_forces_quitAction
         (PMF.pure action) < 0) :
     action = true := by
   have hwho := minimumExactNash_positiveCoalition_outsider_isPureContinue
-    pair root hM hreward hpair hminimum hpositive hnash terminal owner who
+    pair root hpair hminimum hpositive hnash terminal owner who
       howner hne hmass
   cases action with
   | false =>

@@ -161,7 +161,7 @@ theorem QuittingCounterexampleRegime.exists_twoReservoir_sameLaw_resetDispatch
     obtain ⟨profiles, quitTime, mass, baseSubseq, hprofiles, hmass,
         hbaseSubseq, hmassLimit, hmoment⟩ :=
       exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
-        reward source hsource owner hM.le hreward
+        reward source hsource owner
     let resetProfile : ℕ → (quittingGame reward).BehaviorProfile := fun rank =>
       Function.update (profiles (baseSubseq rank)) owner
         (quittingPureTimeBehaviorStrategy reward owner

@@ -482,10 +482,10 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_elementaryNever_le
       reward roots who cutoff quitTime hM hreward hpositive
   have hxBound : BddAbove (Set.range xValue) :=
     bddAbove_range_quittingRootSequencePureTimeTerminalValue
-      reward roots who hM hreward
+      reward roots who
   have hyBound : BddAbove (Set.range yValue) :=
     bddAbove_range_quittingRootSequencePureTimeTerminalValue
-      reward capped who hM hreward
+      reward capped who
   have hxy : sSup (Set.range xValue) ≤ sSup (Set.range yValue) + error := by
     apply csSup_le
     · exact ⟨xValue none, ⟨none, rfl⟩⟩
@@ -505,7 +505,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_elementaryNever_le
     unfold quittingRootSequenceBestResponseValue
       quittingContinuationBestResponseValue
     rw [sSup_range_quittingTerminalPayoff_update_eq_pureTime
-      reward (quittingRootSequenceProfile reward roots 0) who hM hreward]
+      reward (quittingRootSequenceProfile reward roots 0) who]
     simp only [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
       quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
     rfl,
@@ -514,7 +514,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_elementaryNever_le
     unfold quittingRootSequenceBestResponseValue
       quittingContinuationBestResponseValue
     rw [sSup_range_quittingTerminalPayoff_update_eq_pureTime
-      reward (quittingRootSequenceProfile reward capped 0) who hM hreward]
+      reward (quittingRootSequenceProfile reward capped 0) who]
     simp only [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
       quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
     rfl]

@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.CapDebtBellmanReduction
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Paid nonexact cap-stack accounting
@@ -78,9 +79,7 @@ theorem quittingCapStackNashDefectSum_cons
 theorem quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_add_capDefect
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool)
-    (continuation : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (continuation : (quittingGame reward).BehaviorProfile) :
     quittingTerminalDebtSum reward
         (quittingRootThenContinuationProfile reward root continuation) =
       quittingStationaryContinueMass root *
@@ -88,6 +87,8 @@ theorem quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_add_cap
         quittingRootTotalNashDefect reward
           (fun who => quittingContinuationBestResponseValue reward continuation who)
           root := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hpair := quittingTerminalSemanticPair_rootThenContinuation
     reward root continuation hM hreward
   have hidentity :=
@@ -105,9 +106,7 @@ theorem semanticMinimum_mul_capStackAbsorptionSum_le_debtDrop_add_defectSum
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (terminal : (quittingGame reward).BehaviorProfile)
-    (roots : List (ι → PMF Bool)) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (roots : List (ι → PMF Bool))
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate) :
@@ -139,7 +138,7 @@ theorem semanticMinimum_mul_capStackAbsorptionSum_le_debtDrop_add_defectSum
         exact mul_le_mul_of_nonneg_right hminimumLeSuffix habsorption
       have hstep :=
         quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_add_capDefect
-          reward root suffix hM hreward
+          reward root suffix
       have hcomplement : quittingRootAbsorptionMass root =
           1 - quittingStationaryContinueMass root := rfl
       change quittingTerminalSemanticDebtSum minimum *
@@ -164,9 +163,7 @@ theorem semanticMinimum_mul_capStackAbsorptionSum_le_semanticBudget_add_defectSu
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (terminal : (quittingGame reward).BehaviorProfile)
-    (roots : List (ι → PMF Bool)) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (roots : List (ι → PMF Bool))
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate) :
@@ -177,7 +174,7 @@ theorem semanticMinimum_mul_capStackAbsorptionSum_le_semanticBudget_add_defectSu
         quittingCapStackNashDefectSum reward roots terminal := by
   have haccount :=
     semanticMinimum_mul_capStackAbsorptionSum_le_debtDrop_add_defectSum
-      reward minimum terminal roots hM hreward hminimum
+      reward minimum terminal roots hminimum
   have hminimumLeFinal : quittingTerminalSemanticDebtSum minimum ≤
       quittingTerminalDebtSum reward
         (quittingLiteralRootStackProfile reward roots terminal) := by
@@ -244,9 +241,7 @@ theorem semanticMinimum_mul_capStackAbsorptionSum_le_semanticBudget_add_card_mul
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (terminal : (quittingGame reward).BehaviorProfile)
-    (roots : List (ι → PMF Bool)) (errors : List ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (roots : List (ι → PMF Bool)) (errors : List ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -259,7 +254,7 @@ theorem semanticMinimum_mul_capStackAbsorptionSum_le_semanticBudget_add_card_mul
         Fintype.card ι * errors.sum := by
   have haccount :=
     semanticMinimum_mul_capStackAbsorptionSum_le_semanticBudget_add_defectSum
-      reward minimum terminal roots hM hreward hminimum
+      reward minimum terminal roots hminimum
   have herrors := capStackNashDefectSum_le_card_mul_errorSum
     reward terminal roots errors hstack
   linarith
@@ -270,9 +265,7 @@ theorem margin_lt_capStackNashDefectSum_of_offBudget_absorption
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (terminal : (quittingGame reward).BehaviorProfile)
-    (roots : List (ι → PMF Bool)) (margin : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (roots : List (ι → PMF Bool)) (margin : ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -284,7 +277,7 @@ theorem margin_lt_capStackNashDefectSum_of_offBudget_absorption
     margin < quittingCapStackNashDefectSum reward roots terminal := by
   have haccount :=
     semanticMinimum_mul_capStackAbsorptionSum_le_semanticBudget_add_defectSum
-      reward minimum terminal roots hM hreward hminimum
+      reward minimum terminal roots hminimum
   linarith
 
 end GameTheory

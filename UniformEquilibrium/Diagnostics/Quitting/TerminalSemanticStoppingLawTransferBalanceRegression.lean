@@ -272,9 +272,7 @@ the repository's full history-dependent deviation semantics. -/
 theorem quittingContinuationBestResponseValue_pureSetRoot_eq
     {player : Type} [Fintype player] [DecidableEq player]
     (reward : {S : Finset player // S.Nonempty} → Payoff player)
-    (exit : Finset player) (observer : player)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal who, |reward terminal who| ≤ M) :
+    (exit : Finset player) (observer : player) :
     quittingContinuationBestResponseValue reward
         (quittingStationaryProfile reward (quittingPureSetRoot exit)) observer =
       max (quittingSetReward reward (insert observer exit) observer)
@@ -285,7 +283,7 @@ theorem quittingContinuationBestResponseValue_pureSetRoot_eq
         quittingTerminalPayoff reward
           (Function.update profile observer deviation) observer) :=
     bddAbove_range_quittingTerminalPayoff_update
-      reward profile observer hM hreward
+      reward profile observer
   unfold quittingContinuationBestResponseValue
   apply le_antisymm
   · apply csSup_le
@@ -308,9 +306,7 @@ membership-toggle cap minus the current set reward. -/
 theorem quittingTerminalSemanticDebt_pureSetRoot_eq
     {player : Type} [Fintype player] [DecidableEq player]
     (reward : {S : Finset player // S.Nonempty} → Payoff player)
-    (exit : Finset player) (observer : player)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal who, |reward terminal who| ≤ M) :
+    (exit : Finset player) (observer : player) :
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward
           (quittingStationaryProfile reward (quittingPureSetRoot exit)))
@@ -324,7 +320,7 @@ theorem quittingTerminalSemanticDebt_pureSetRoot_eq
         quittingTerminalPayoff reward
           (quittingStationaryProfile reward (quittingPureSetRoot exit)) observer = _
   rw [quittingContinuationBestResponseValue_pureSetRoot_eq
-    reward exit observer hM hreward,
+    reward exit observer,
     quittingTerminalPayoff_pureSetRoot]
 
 /-- Literal all-Never source of the passive-shear table. -/
@@ -527,8 +523,7 @@ theorem quittingFinThreePassiveShearSource_semanticDebt
       quittingFinThreeResetSourceDebt observer := by
   unfold quittingFinThreePassiveShearSource
   rw [quittingTerminalSemanticDebt_pureSetRoot_eq
-    quittingFinThreePassiveShearReward ∅ observer (by norm_num)
-      abs_quittingFinThreePassiveShearReward_le_three]
+    quittingFinThreePassiveShearReward ∅ observer]
   fin_cases observer <;>
     norm_num [quittingFinThreeResetSourceDebt,
       quittingSetReward, quittingFinThreePassiveShearReward,
@@ -545,8 +540,7 @@ theorem quittingFinThreePassiveShearEndpoint_semanticDebt
       quittingFinThreeResetEndpointDebt mover observer := by
   unfold quittingFinThreePassiveShearEndpoint
   rw [quittingTerminalSemanticDebt_pureSetRoot_eq
-    quittingFinThreePassiveShearReward {mover} observer (by norm_num)
-      abs_quittingFinThreePassiveShearReward_le_three]
+    quittingFinThreePassiveShearReward {mover} observer]
   fin_cases mover <;> fin_cases observer <;>
     norm_num [Fin.ext_iff, quittingFinThreeResetEndpointDebt,
       quittingFinThreeResetRecipient, quittingSetReward,
@@ -568,8 +562,7 @@ theorem quittingFinThreePassiveShearMixedProfile_semanticDebt
     quittingFinThreePassiveShearReward quittingFinThreePassiveShearSource
       mover observer (quittingFinThreePassiveShearSource mover)
       (quittingAlwaysQuitStrategy quittingFinThreePassiveShearReward mover)
-      lambda hlambda0 hlambda1 (by norm_num)
-      abs_quittingFinThreePassiveShearReward_le_three
+      lambda hlambda0 hlambda1
   rw [Function.update_eq_self,
     ← quittingFinThreePassiveShearEndpoint_eq_update_source] at hupper
   change quittingTerminalSemanticDebt
@@ -600,8 +593,7 @@ theorem quittingFinThreePassiveShearMixedProfile_semanticDebt
       quittingTerminalPayoff_update_le_continuationBestResponseValue
         quittingFinThreePassiveShearReward
         (quittingFinThreePassiveShearMixedProfile mover lambda
-          hlambda0 hlambda1) observer deviation (by norm_num)
-          abs_quittingFinThreePassiveShearReward_le_three
+          hlambda0 hlambda1) observer deviation
     have hquit := quittingFinThreePassiveShearMixedProfile_quitNow_payoff
       mover observer hsame lambda hlambda0 hlambda1
     have hpayoff := quittingFinThreePassiveShearMixedProfile_payoff
@@ -637,8 +629,7 @@ theorem quittingFinThreePassiveShear_allQuit_semanticDebt_eq_zero
           (quittingStationaryProfile quittingFinThreePassiveShearReward
             (quittingPureSetRoot Finset.univ))) observer = 0 := by
   rw [quittingTerminalSemanticDebt_pureSetRoot_eq
-    quittingFinThreePassiveShearReward Finset.univ observer (by norm_num)
-      abs_quittingFinThreePassiveShearReward_le_three]
+    quittingFinThreePassiveShearReward Finset.univ observer]
   fin_cases observer <;>
     norm_num [Fin.ext_iff, quittingSetReward,
       quittingFinThreePassiveShearReward,

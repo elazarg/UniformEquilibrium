@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.UniqueAllContinueCapStackNoGo
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Cap-changing exact prefixes remain debt-budgeted
@@ -45,9 +46,7 @@ theorem semanticMinimum_mul_capNashStackAbsorptionSum_le_debtDrop
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum : QuittingTerminalSemanticPair ι)
     (terminal : (quittingGame reward).BehaviorProfile)
-    (roots : List (ι → PMF Bool)) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (roots : List (ι → PMF Bool))
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -57,6 +56,8 @@ theorem semanticMinimum_mul_capNashStackAbsorptionSum_le_debtDrop
       quittingTerminalDebtSum reward terminal -
         quittingTerminalDebtSum reward
           (quittingLiteralRootStackProfile reward roots terminal) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   induction roots with
   | nil => simp [quittingCapNashStackAbsorptionSum]
   | cons root roots ih =>
@@ -108,9 +109,7 @@ theorem literalReset_capNashStack_debtBudget_or_identity
     (mover : ι)
     (target : (quittingGame reward).BehaviorStrategy mover)
     (roots : List (ι → PMF Bool))
-    (atom : {S : Finset ι // S.Nonempty}) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (atom : {S : Finset ι // S.Nonempty})
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -142,10 +141,12 @@ theorem literalReset_capNashStack_debtBudget_or_identity
           0 < quittingTerminalOutcomeMass reward
               (quittingLiteralRootStackProfile reward roots
                 (Function.update profile mover target)) (some atom))) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   let reset := Function.update profile mover target
   have hbudget :=
     semanticMinimum_mul_capNashStackAbsorptionSum_le_debtDrop
-      reward minimum reset roots hM hreward hminimum hstack
+      reward minimum reset roots hminimum hstack
   have hstackMinimum : quittingTerminalSemanticDebtSum minimum ≤
       quittingTerminalDebtSum reward
         (quittingLiteralRootStackProfile reward roots reset) := by
@@ -204,10 +205,10 @@ theorem literalReset_capNashStack_debtBudget_or_identity
           hcontinue who
     have hstackData :=
       capNashRootStack_eq_replicate_allContinue_of_unique_terminalCap
-        reward reset roots hM hreward hunique hstack
+        reward reset roots hunique hstack
     have hlaw :=
       capNashRootStack_terminalOutcomeMass_eq_of_unique_terminalCap
-        reward reset roots hM hreward hunique hstack
+        reward reset roots hunique hstack
     refine ⟨hstackData.1, ?_, ?_, ?_⟩
     · simpa only [reset] using hstackData.2
     · exact congrFun hlaw (some atom)

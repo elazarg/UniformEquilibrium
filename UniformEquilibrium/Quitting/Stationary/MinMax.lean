@@ -204,9 +204,8 @@ theorem le_quittingBestReplyValue
     quittingTerminalPayoff reward
         (Function.update profile who deviation) who ≤
       quittingBestReplyValue reward profile who :=
-  le_ciSup (bddAbove_range_quittingTerminalPayoff_update reward profile who
-    (quittingRewardBound_nonneg reward)
-    (abs_reward_le_quittingRewardBound reward)) deviation
+  le_ciSup (bddAbove_range_quittingTerminalPayoff_update reward profile who)
+    deviation
 
 /-- A uniform bound on all deviation payoffs bounds the best-reply value. -/
 theorem quittingBestReplyValue_le

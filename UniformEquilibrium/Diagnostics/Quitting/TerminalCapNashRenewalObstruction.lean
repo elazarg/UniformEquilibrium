@@ -340,7 +340,6 @@ theorem one_le_terminalDebtSum_localGlobalCounterexample :
       quittingTerminalPayoff_update_le_continuationBestResponseValue
         localGlobalCounterexampleReward localGlobalCounterexampleProfile false
         (quittingAlwaysContinueStrategy localGlobalCounterexampleReward false)
-        (M := 1) (by norm_num) abs_localGlobalCounterexampleReward_le_one
     rw [quittingTerminalPayoff_localGlobalCounterexampleDeviation_false]
       at hdeviation
     unfold quittingTerminalDeviationDebt

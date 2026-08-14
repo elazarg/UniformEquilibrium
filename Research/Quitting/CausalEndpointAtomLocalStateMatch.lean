@@ -604,8 +604,6 @@ theorem packet_tailEscape_or_fixedLocalPrescribed_or_rectangle
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
     (packet : QuittingReprojectionConcentratedPacket
       reward profiles owner marked cutoff scale)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -634,7 +632,7 @@ theorem packet_tailEscape_or_fixedLocalPrescribed_or_rectangle
               packetRecipientFloor minimum packet ≤
                 packetRecipientCharge packet rank mover recipient := by
   have hdispatch := packet_tailEscapeFrequently_or_fixedThreeRoleAtomLabel
-    minimum packet hM hreward hminimumCarrier hminimum hminimumDebt
+    minimum packet hminimumCarrier hminimum hminimumDebt
       hcollision hscale hscaleTendsto hsourceDebt
   rcases hdispatch with hescape |
       ⟨mover, recipient, mode, terminal, hmover, hrecipient, hfrequent⟩

@@ -275,8 +275,7 @@ when some surely absorbing root and continuation satisfy the finite root
 criterion with the continuation best-response vector. -/
 theorem exists_sureFirst_isεAsymptoticNash_iff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {ε M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ S player, |reward S player| ≤ M) :
+    {ε : ℝ} :
     (∃ profile : (quittingGame reward).BehaviorProfile,
       QuittingProfileAbsorbsSurelyAtFirstStage reward profile ∧
       (quittingGame reward).IsεAsymptoticNash
@@ -297,7 +296,7 @@ theorem exists_sureFirst_isεAsymptoticNash_iff
     refine ⟨root, continuation, hsure, ?_⟩
     apply
       isεQuittingRootNash_of_isεAsymptoticNash_quittingRootThenContinuation
-        reward root continuation hM hreward hsure
+        reward root continuation hsure
     exact (isεAsymptoticNash_firstStageAdapter_iff
       reward profile ε).mpr hnash
   · rintro ⟨root, continuation, hsure, hroot⟩
@@ -308,6 +307,6 @@ theorem exists_sureFirst_isεAsymptoticNash_iff
       exact hsure
     · exact
         isεAsymptoticNash_quittingRootThenContinuation_of_isεQuittingRootNash
-          reward root continuation hM hreward hsure hroot
+          reward root continuation hsure hroot
 
 end GameTheory

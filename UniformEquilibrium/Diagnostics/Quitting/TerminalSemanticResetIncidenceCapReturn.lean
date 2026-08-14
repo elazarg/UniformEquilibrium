@@ -264,7 +264,7 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_dispatch_and_sourceAggregat
       hM hreward hminimum hsourcePositive htarget hreset hincidence
   exact ⟨⟨returned, hjoint, hresetReturned, hsourceLe⟩,
     regime.exists_neverBudget_or_blockedCoalition_exact
-      source players hM hreward hsource hminimum hsourcePositive⟩
+      source players hsource hminimum hsourcePositive⟩
 
 /-! ## Sharp local regression for the cap-dominating branch -/
 

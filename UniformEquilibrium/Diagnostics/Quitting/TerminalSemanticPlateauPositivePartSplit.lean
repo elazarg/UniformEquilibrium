@@ -384,7 +384,7 @@ theorem exists_samePureTimeLaw_negativeNever_or_chronologicalOpponentCharge
   obtain ⟨profiles, quitTime, mass, subseq, hprofiles, hmass, hsubseq,
       hmassLimit, hmoment⟩ :=
     exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
-      reward pair hpair who hM.le hreward
+      reward pair hpair who
   have hbox := quittingTerminalSemanticCarrier_mem_box
     (reward := reward) pair hM.le hreward hpair
   have hprescribed : |pair.1 who| ≤ M :=

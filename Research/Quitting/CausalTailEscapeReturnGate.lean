@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLawCarrierCausalNashDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # The exact gate for returning a causal escaping tail
@@ -44,9 +45,7 @@ theorem capNashTailEscapeReturnSelection_retains_causalSuffixAtom
     (continuation : (quittingGame reward).BehaviorProfile)
     (root : iota → PMF Bool) (stage : ℕ)
     (terminal : {S : Finset iota // S.Nonempty})
-    (tolerance : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ outcome player, |reward outcome player| ≤ M)
+    (tolerance : ℝ)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -71,6 +70,8 @@ theorem capNashTailEscapeReturnSelection_retains_causalSuffixAtom
           quittingStageCoalitionMass reward continuation stage terminal ∧
       0 < quittingStageCoalitionMass
         reward returnedProfile (stage + 1) terminal := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   dsimp only
   let tail := quittingTerminalSemanticPair reward continuation
   let returned := quittingTerminalSemanticPrefix reward root tail

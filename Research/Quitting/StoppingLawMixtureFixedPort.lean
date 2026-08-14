@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Fixed terminal ports under stopping-law mixtures
@@ -190,8 +191,6 @@ theorem quittingBehaviorTerminalPort_stoppingLawMixture_eq_of_minimumFiber
     (mover : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
@@ -234,7 +233,6 @@ theorem quittingBehaviorTerminalPort_stoppingLawMixture_eq_of_minimumFiber
     intro observer
     have hconvex := quittingTerminalSemanticDebt_stoppingLawMixture_le
       reward profile mover observer source target lambda hlambda0 hlambda1
-        hM hreward
     dsimp only [mixedPair, sourcePair]
     rw [hdebt observer] at hconvex
     nlinarith
@@ -305,8 +303,6 @@ theorem quittingBehaviorTerminalPort_stoppingLawMixture_eq_on_zeroDebtFace
     (mover : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hroot : quittingBehaviorLiveHazard reward source 0 =
       quittingBehaviorLiveHazard reward target 0)
     (hpayoff : ∀ observer,
@@ -326,6 +322,8 @@ theorem quittingBehaviorTerminalPort_stoppingLawMixture_eq_on_zeroDebtFace
             lambda hlambda0 hlambda1)) =
       quittingBehaviorTerminalPort reward
         (Function.update profile mover source) := by
+  obtain ⟨M, hM, hreward⟩ :=
+    exists_quittingRewardBound reward
   have hmixedPayoff : ∀ observer,
       quittingTerminalPayoff reward
           (Function.update profile mover
@@ -345,7 +343,6 @@ theorem quittingBehaviorTerminalPort_stoppingLawMixture_eq_on_zeroDebtFace
     intro observer
     have hupper := quittingTerminalSemanticDebt_stoppingLawMixture_le
       reward profile mover observer source target lambda hlambda0 hlambda1
-        hM hreward
     rw [hsourceDebt observer, htargetDebt observer] at hupper
     have hnonneg := quittingTerminalSemanticDebt_nonneg_of_mem_carrier
       reward hM hreward

@@ -102,15 +102,13 @@ coordinate of every actual profile. -/
 theorem QuittingCounterexampleRegime.exists_terminalGap_le_terminalSemanticDebt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (regime : QuittingCounterexampleRegime reward)
-    (profile : (quittingGame reward).BehaviorProfile)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (profile : (quittingGame reward).BehaviorProfile) :
     ∃ player, regime.terminalGap ≤ quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) player := by
   obtain ⟨player, deviation, hgain⟩ := regime.terminalExploitability profile
   refine ⟨player, ?_⟩
   have hbest := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward profile player deviation hM hreward
+    reward profile player deviation
   unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
   dsimp only
   linarith
@@ -124,8 +122,6 @@ theorem QuittingCounterexampleRegime.exists_other_terminalGap_subsequence_of_sem
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (regime : QuittingCounterexampleRegime reward)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hreset : Tendsto (fun n => quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward (profiles n)) who)
       atTop (𝓝 0)) :
@@ -139,7 +135,7 @@ theorem QuittingCounterexampleRegime.exists_other_terminalGap_subsequence_of_sem
         (quittingTerminalSemanticPair reward (profiles n)) player)
       who regime.terminalGap regime.terminalGap_pos hreset
       (fun n => regime.exists_terminalGap_le_terminalSemanticDebt
-        reward (profiles n) hM hreward)
+        reward (profiles n))
   obtain ⟨subseq, hsubseq, hdebt⟩ :=
     extraction_of_frequently_atTop hfrequent
   exact ⟨other, subseq, hother, hsubseq, hdebt⟩
@@ -151,8 +147,7 @@ theorem exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
-    (who : ι) {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : ι) :
     ∃ (profiles : ℕ → (quittingGame reward).BehaviorProfile)
         (quitTime : ℕ → Option ℕ)
         (mass : QuittingTerminalOutcome ι → ℝ)
@@ -180,7 +175,7 @@ theorem exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
           (Function.update (profiles n) who deviation) who := by
     intro n
     exact exists_quittingContinuation_deviation_ge_sub reward
-      (profiles n) who (half_pos (herrorPositive n)) hM hreward
+      (profiles n) who (half_pos (herrorPositive n))
   choose deviation hdeviationPayoff using hdeviation
   have hpureTime : ∀ n, ∃ quitTime : Option ℕ,
       quittingTerminalPayoff reward
@@ -210,7 +205,6 @@ theorem exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
     exact quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward (profiles n) who
         (quittingPureTimeBehaviorStrategy reward who (quitTime n))
-          hM hreward
   have herror : Tendsto error atTop (nhds 0) := by
     simpa [error] using
       (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
@@ -315,9 +309,7 @@ theorem exists_persistent_profitableAtom_of_allContinueSemanticPlateau
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hnash : IsεQuittingRootNash reward pair.1 0
       (quittingAllContinueRoot : ι → PMF Bool))
-    (who : ι) (hpositive : 0 < quittingTerminalSemanticDebt pair who)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : ι) (hpositive : 0 < quittingTerminalSemanticDebt pair who) :
     ∃ (profiles : ℕ → (quittingGame reward).BehaviorProfile)
         (quitTime : ℕ → Option ℕ)
         (mass : QuittingTerminalOutcome ι → ℝ)
@@ -356,7 +348,7 @@ theorem exists_persistent_profitableAtom_of_allContinueSemanticPlateau
   obtain ⟨profiles, quitTime, mass, subseq, hprofiles, hmass, hsubseq,
       hmassLimit, hmoment⟩ :=
     exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
-      reward pair hpair who hM hreward
+      reward pair hpair who
   obtain ⟨outcome, houtcomeMass, houtcomeGain⟩ :=
     exists_positiveMass_profitableTerminalOutcome_of_semanticDebt
       reward pair who mass hmass hmoment hpositive
@@ -496,9 +488,7 @@ theorem exists_persistent_profitableAtom_trichotomy_of_allContinueSemanticPlatea
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hnash : IsεQuittingRootNash reward pair.1 0
       (quittingAllContinueRoot : ι → PMF Bool))
-    (who : ι) (hpositive : 0 < quittingTerminalSemanticDebt pair who)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (who : ι) (hpositive : 0 < quittingTerminalSemanticDebt pair who) :
     ∃ (profiles : ℕ → (quittingGame reward).BehaviorProfile)
         (quitTime : ℕ → Option ℕ)
         (mass : QuittingTerminalOutcome ι → ℝ)
@@ -541,7 +531,7 @@ theorem exists_persistent_profitableAtom_trichotomy_of_allContinueSemanticPlatea
   obtain ⟨profiles, quitTime, mass, subseq, outcome, hprofiles, hmass,
       hsubseq, hmassLimit, hpayoff, hreset, houtcomeMass, hpersistent, halt⟩ :=
     exists_persistent_profitableAtom_of_allContinueSemanticPlateau
-      reward pair hpair hnash who hpositive hM hreward
+      reward pair hpair hnash who hpositive
   refine ⟨profiles, quitTime, mass, subseq, outcome, hprofiles, hmass,
     hsubseq, hmassLimit, hpayoff, hreset, houtcomeMass, hpersistent, ?_⟩
   rcases halt with ⟨rfl, hnegative⟩ | ⟨terminal, rfl, hterminalNe, hgain⟩

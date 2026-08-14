@@ -310,9 +310,7 @@ values in one pass. -/
 theorem sSup_range_quittingRootSequencePureTimeTerminalValue_eq_finiteWindow
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (period : ℕ) [NeZero period]
-    (hperiodic : ∀ time, roots (time + period) = roots time)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    (hperiodic : ∀ time, roots (time + period) = roots time) :
     sSup (Set.range fun quitTime : Option ℕ ↦
       quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0) =
       quittingPeriodicWindowBestResponseValue reward roots who period := by
@@ -320,7 +318,7 @@ theorem sSup_range_quittingRootSequencePureTimeTerminalValue_eq_finiteWindow
     quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0
   have hbdd : BddAbove values :=
     bddAbove_range_quittingRootSequencePureTimeTerminalValue
-      reward roots who hM hreward
+      reward roots who
   apply le_antisymm
   · apply csSup_le
     · exact ⟨quittingPeriodicWindowRefusalValue reward roots who, ⟨none, rfl⟩⟩
@@ -346,9 +344,7 @@ theorem sSup_range_quittingTerminalPayoff_update_eq_periodicWindow
     (period : ℕ) [NeZero period]
     (hperiodic : ∀ time,
       quittingProfileLiveRoot reward profile (time + period) =
-        quittingProfileLiveRoot reward profile time)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+        quittingProfileLiveRoot reward profile time) :
     sSup (Set.range fun deviation :
         (quittingGame reward).BehaviorStrategy who ↦
       quittingTerminalPayoff reward
@@ -356,11 +352,10 @@ theorem sSup_range_quittingTerminalPayoff_update_eq_periodicWindow
       quittingPeriodicWindowBestResponseValue reward
         (quittingProfileLiveRoot reward profile) who period := by
   rw [sSup_range_quittingTerminalPayoff_update_eq_pureTime
-    reward profile who hM hreward]
+    reward profile who]
   simp_rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy]
   exact sSup_range_quittingRootSequencePureTimeTerminalValue_eq_finiteWindow
     reward (quittingProfileLiveRoot reward profile) who period hperiodic
-      hM hreward
 
 /-! ## Phase domination under exact local Nash -/
 

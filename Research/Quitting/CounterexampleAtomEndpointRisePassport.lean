@@ -297,8 +297,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChron
       (frontier.lambda (frontier.subseq rank)) charge
       (frontier.lambda_pos (frontier.subseq rank))
       (frontier.lambda_le_one (frontier.subseq rank))
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) hslope
+      hslope
   have hvanishing : ∀ᶠ rank in atTop,
       HasQuittingStoppingLawVanishingDebtAtomAlternative reward
         (frontier.profiles (frontier.subseq rank)) mover observer
@@ -313,9 +312,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChron
       (frontier.lambda_pos (frontier.subseq rank))
       (frontier.lambda_le_one (frontier.subseq rank)) hcharge
       (quittingStoppingLawAtomDecoderError_pos hcharge rank)
-      (quittingStoppingLawAtomDecoderError_le hcharge rank)
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) hslope
+      (quittingStoppingLawAtomDecoderError_le hcharge rank) hslope
   have hatom : ∀ᶠ rank in atTop,
       HasQuittingStoppingLawDebtSlopeAtomAlternative reward
         (frontier.profiles (frontier.subseq rank)) mover observer
@@ -800,8 +797,7 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.excess_or_secondTransfe
         have h := quittingStoppingLawAtomDecoderError_le
           packet.chronology.charge_pos (sequence.rank n)
         linarith [packet.chronology.charge_pos])
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward) frontier.base_minimum
+      frontier.base_minimum
       (by simpa only [profile, moverTarget] using sequence.mixedSlope n)
       (by simpa only [profile, moverTarget, observerResponse] using
         sequence.observer_debt_bound n)
@@ -810,7 +806,8 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.excess_or_secondTransfe
 /-- If the first mover-reset endpoints approach the minimum fiber, the
 square dispatch eventually leaves only a uniformly positive second transfer.
 -/
-theorem QuittingStoppingLawRectangleEndpointRiseSequence.eventually_secondTransfer_of_firstNearMinimum
+theorem
+    QuittingStoppingLawRectangleEndpointRiseSequence.eventually_secondTransfer_of_firstNearMinimum
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -857,10 +854,12 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.eventually_secondTransf
   · linarith
   · exact htransfer
 
+namespace QuittingStoppingLawRectangleEndpointRiseSequence
+
 /-- If the common double-reset endpoints approach the minimum fiber, every
 late square gives either a fixed literal total-debt descent on the observer
 edge or the same uniformly positive second-transfer certificate. -/
-theorem QuittingStoppingLawRectangleEndpointRiseSequence.eventually_descent_or_secondTransfer_of_bothNearMinimum
+theorem eventually_descent_or_secondTransfer_of_bothNearMinimum
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -919,10 +918,14 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.eventually_descent_or_s
   · exact Or.inl (by linarith)
   · exact Or.inr htransfer
 
+end QuittingStoppingLawRectangleEndpointRiseSequence
+
+namespace QuittingCounterexampleStoppingLawFrontier
+
 /-- Regime-facing enriched dispatch.  The prescribed branch retains the
 endpoint debt-rise passport; the rectangle branch additionally carries the
 literal reset-square alternative at every fixed-label rank. -/
-theorem QuittingCounterexampleStoppingLawFrontier.exists_prescribedEndpointRise_or_rectangleSquareDispatch
+theorem exists_prescribedEndpointRise_or_rectangleSquareDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
@@ -957,5 +960,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_prescribedEndpointRise_
   · exact Or.inl ⟨packet, hprescribed⟩
   · obtain ⟨sequence⟩ := hrectangle
     exact Or.inr ⟨packet, sequence, sequence.excess_or_secondTransfer⟩
+
+end QuittingCounterexampleStoppingLawFrontier
 
 end GameTheory
