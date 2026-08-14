@@ -1,4 +1,5 @@
 import Research.Quitting.BlockPair.K11.FourPlayerExpectation
+import MathUE.PMFProduct.FiniteFubini
 
 noncomputable section
 
@@ -13,7 +14,7 @@ theorem endpointDifference_one_eq_expanded
       BlockPairCharts.expandedDifference h tail 1 := by
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
     quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin4_bool, expect_pmfPi_fin4_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
   simp +decide [rootOfHazard, expect_quittingHazardCoin, reward,
     quittingRootPayoff, quittingQuitters,
     BlockPairCharts.expandedDifference,

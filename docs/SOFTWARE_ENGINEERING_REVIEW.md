@@ -145,6 +145,17 @@ maintenance measurements, not evidence of mathematical progress.
   hierarchy. The private-recommendation absorbing obstruction is classified as
   a diagnostic. Checked rules reject future `Quitting` to `Diagnostics` and
   `Certificates` to `Diagnostics` edges while permitting diagnostic consumers.
+- A dependent finite-product expectation step now owns the PMF Fubini
+  argument, with homogeneous Fin3 and Fin4 corollaries. All thirteen local
+  declarations (twelve handwritten implementations and one forwarding alias)
+  were removed; consumers now name the shared theorem directly.
+- A game-independent finite-weight Jordan-decomposition interface now handles
+  unequal-mass subprobability weights without manufacturing a cemetery atom.
+  The two parallel conditioned-diffuse expectation arguments delegate to it.
+  The one-sided singleton domination shows that only target collision mass
+  contributes to reverse variation, strengthening the whole-law coefficient
+  from `3 M s²` to `2 M s²` and the deleted-player coefficient from `3 M s²`
+  to `(3/2) M s²`; the checked compiler constants are propagated downstream.
 
 ## Proof-quality and grind policy
 

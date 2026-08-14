@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticRareHazardPunishmentScalingRegression
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchProfile
 
 /-!
@@ -170,7 +171,7 @@ theorem collisionPhaseRoots_owner_absorbingContribution
       stageAbsorption leftPlan rightPlan time -
         2 * stageCollision leftPlan rightPlan time := by
   unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff
-  rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [expect_eq_sum, quittingRootPayoff,
     QuittingRareHazardPunishmentScalingRegression.reward,
     collisionPhaseRoots, stageAbsorption, stageCollision,

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Architectures.PublicResponse.ArbitraryStartPrescribedDeliveryTelescope
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicCredibility
 
 /-!
@@ -63,7 +64,7 @@ theorem expect_deliveryBias_live (c who : Player) :
   change expect (Math.PMFProduct.pmfPi (play (Sum.inl c))) (fun act =>
       expect ((quittingGame terminalReward).transition none act) (fun s' =>
         deliveryBias (step (Sum.inl c) act s') who)) = _
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases c <;> fin_cases who <;>
     simp [play, game, quittingGame, step, target, phaseTarget, nextPhase,
       deliveryBias, terminalReward] <;> norm_num

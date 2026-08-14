@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFixedTableDiffuseIncidenceRegression
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Basic
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
@@ -234,7 +235,7 @@ theorem leftThenRight_quitValue_zero :
     quittingFixedOpponentsQuitValue reward leftThenRight owner 0 = 1 := by
   unfold quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [expect_eq_sum, quittingRootPayoff, reward, leftThenRight,
     fairSingletonRow, quittingSoloStationaryRoot, fairCoin,
     PMF.uniformOfFintype_apply,
@@ -246,7 +247,7 @@ theorem rightThenLeft_quitValue_zero :
     quittingFixedOpponentsQuitValue reward rightThenLeft owner 0 = 0 := by
   unfold quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [expect_eq_sum, quittingRootPayoff, reward, rightThenLeft,
     fairSingletonRow, quittingSoloStationaryRoot, fairCoin,
     PMF.uniformOfFintype_apply,
@@ -256,7 +257,7 @@ theorem leftThenRight_quitValue_one :
     quittingFixedOpponentsQuitValue reward leftThenRight owner 1 = -1 := by
   unfold quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [expect_eq_sum, quittingRootPayoff, reward, leftThenRight,
     sureSingletonRow, quittingSoloStationaryRoot, owner, left, right]
 
@@ -264,7 +265,7 @@ theorem rightThenLeft_quitValue_one :
     quittingFixedOpponentsQuitValue reward rightThenLeft owner 1 = 1 := by
   unfold quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [expect_eq_sum, quittingRootPayoff, reward, rightThenLeft,
     sureSingletonRow, quittingSoloStationaryRoot, owner, left, right]
 
@@ -276,7 +277,7 @@ theorem first_continueReward_eq_zero :
   constructor <;>
     unfold quittingFixedOpponentsContinueReward
       quittingRootAbsorbingContribution quittingRootExpectedPayoff <;>
-    rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3] <;>
+    rw [Math.PMFProduct.expect_pmfPi_fin3] <;>
     norm_num [expect_eq_sum, quittingRootPayoff, reward,
       leftThenRight, rightThenLeft, fairSingletonRow,
       quittingSoloStationaryRoot, fairCoin,
@@ -290,7 +291,7 @@ theorem second_continueReward_eq_zero :
   constructor <;>
     unfold quittingFixedOpponentsContinueReward
       quittingRootAbsorbingContribution quittingRootExpectedPayoff <;>
-    rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3] <;>
+    rw [Math.PMFProduct.expect_pmfPi_fin3] <;>
     norm_num [expect_eq_sum, quittingRootPayoff, reward,
       leftThenRight, rightThenLeft, sureSingletonRow,
       quittingSoloStationaryRoot, owner, left, right]

@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetRepairCounterexample
 import UniformEquilibrium.Quitting.Boundary.Repair.BoundedSurgeryDescentCounterexample
+import MathUE.PMFProduct.FiniteFubini
 import MathUE.SurvivalProduct
 
 /-!
@@ -95,7 +96,7 @@ With players `0, 1, 2` (the table's `1, 2, 3`) and parameter `η ≥ 0`:
 | `{0,1,2}`   | `(0, 0, 0)` |
 
 `Fin 3` is used rather than an abstract three-element type because the
-Fubini expansion `expect_pmfPi_fin3_bool` and the `![a, b, c]` action
+Fubini expansion `Math.PMFProduct.expect_pmfPi_fin3` and the `![a, b, c]` action
 notation are already available for it, which makes the eight-action
 expectations reduce by `simp`.
 
@@ -296,7 +297,6 @@ theorem noBounded_of_noCompletelyAbsorbingInverseIterate
 
 namespace QuittingUnboundedInverseIterate
 
-open QuittingSureSetRepairCounterexample (expect_pmfPi_fin3_bool)
 open QuittingBoundedSurgeryDescentCounterexample (coin)
 
 /-! ## The three-coordinate weight -/
@@ -398,7 +398,7 @@ theorem quitPayoff_zero (η p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
     (tail : Payoff Player) :
     quittingRootQuitPayoff (reward η) tail (row p hp0 hp1) 0 = 1 / 3 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [quittingRootPayoff, reward]
 
 /-- Coordinate `0` continuing meets only silent opponents, so it gets the
@@ -407,7 +407,7 @@ theorem continuePayoff_zero (η p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
     (tail : Payoff Player) :
     quittingRootContinuePayoff (reward η) tail (row p hp0 hp1) 0 = tail 0 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [quittingRootPayoff, reward]
 
 /-- Coordinate `1` quitting meets `{1}` with mass `1 - p` and `{0,1}` with
@@ -416,7 +416,7 @@ theorem quitPayoff_one (η p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
     (tail : Payoff Player) :
     quittingRootQuitPayoff (reward η) tail (row p hp0 hp1) 1 = (1 - p) / 3 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [quittingRootPayoff, reward]
   ring
 
@@ -427,7 +427,7 @@ theorem continuePayoff_one (η p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
     quittingRootContinuePayoff (reward η) tail (row p hp0 hp1) 1 =
       p + (1 - p) * tail 1 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [quittingRootPayoff, reward]
   ring
 
@@ -439,7 +439,7 @@ theorem quitPayoff_two (η p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
     quittingRootQuitPayoff (reward η) tail (row p hp0 hp1) 2 =
       (1 + η * p) / 3 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [quittingRootPayoff, reward]
   ring
 
@@ -450,7 +450,7 @@ theorem continuePayoff_two (η p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
     quittingRootContinuePayoff (reward η) tail (row p hp0 hp1) 2 =
       (1 - p) * tail 2 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [quittingRootPayoff, reward]
 
 /-! ## Quit probabilities of the row -/

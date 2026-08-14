@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicMinimality
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 
 /-!
@@ -145,42 +146,6 @@ test already decided.  This is the form the phase computations consume. -/
 /-! ## The three phase rows -/
 
 /-- Fubini expansion of a product of three Boolean mixed actions. -/
-theorem expect_pmfPi_fin3_bool (sigma : Player → PMF Bool)
-    (f : (Player → Bool) → ℝ) :
-    expect (pmfPi sigma) f =
-      expect (sigma 0) fun a ↦
-        expect (sigma 1) fun b ↦
-          expect (sigma 2) fun d ↦ f ![a, b, d] := by
-  classical
-  have h0 : Function.update sigma 0 (sigma 0) = sigma :=
-    Function.update_eq_self 0 sigma
-  rw [← h0, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 0))
-  funext a
-  have h1 : Function.update (Function.update sigma 0 (PMF.pure a)) 1 (sigma 1) =
-      Function.update sigma 0 (PMF.pure a) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h1, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 1))
-  funext b
-  have h2 : Function.update
-      (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-      2 (sigma 2) =
-      Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h2, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 2))
-  funext d
-  have hpure : Function.update
-      (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-      2 (PMF.pure d) = fun who ↦ PMF.pure (![a, b, d] who) := by
-    funext who
-    fin_cases who <;> simp
-  rw [hpure, pmfPi_pure, expect_pure]
-
-/-- The fair quit/continue coin, reusing the repository's Boolean coin. -/
 def halfCoin : PMF Bool :=
   QuittingBoundedSurgeryDescentCounterexample.coin (1 / 2) (by norm_num)
     (by norm_num)
@@ -240,7 +205,7 @@ theorem quittingRootSuccessorPayoff_phaseRoot (c : Player) (tail : Payoff Player
   funext who
   change quittingRootExpectedPayoff ftvReward tail (phaseRoot c) who = _
   unfold quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases c <;> fin_cases who <;>
     simp [phaseRoot, terminalReward, soloReward, Matrix.cons_val_two,
       expect_pure]
@@ -259,7 +224,7 @@ theorem endpointDifference_phaseRoot (c who : Player) :
       if who = nextThree c then -(3 / 2 : ℝ) else 0 := by
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
     quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool, expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3, Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases c <;> fin_cases who <;>
     simp [phaseRoot, terminalReward, standardPromise, nextThree,
       Matrix.cons_val_two, expect_pure] <;> norm_num

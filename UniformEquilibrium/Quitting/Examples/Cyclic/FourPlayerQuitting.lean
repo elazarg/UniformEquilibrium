@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Cycles.PureTimeExtremality
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
 import Mathlib.Analysis.Calculus.Deriv.MeanValue
 import Mathlib.Analysis.Calculus.Deriv.Pow
@@ -241,58 +242,6 @@ def quitCoin (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) : PMF Bool :=
   ring
 
 /-- Fubini expansion of a product of four Boolean mixed actions. -/
-theorem expect_pmfPi_fin4_bool (sigma : Player → PMF Bool)
-    (f : (Player → Bool) → ℝ) :
-    expect (pmfPi sigma) f =
-      expect (sigma 0) fun a ↦
-        expect (sigma 1) fun b ↦
-          expect (sigma 2) fun c ↦
-            expect (sigma 3) fun d ↦ f ![a, b, c, d] := by
-  classical
-  have h0 : Function.update sigma 0 (sigma 0) = sigma :=
-    Function.update_eq_self 0 sigma
-  rw [← h0, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 0))
-  funext a
-  have h1 : Function.update (Function.update sigma 0 (PMF.pure a))
-      1 (sigma 1) = Function.update sigma 0 (PMF.pure a) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h1, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 1))
-  funext b
-  have h2 : Function.update
-      (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-      2 (sigma 2) =
-      Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h2, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 2))
-  funext c
-  have h3 : Function.update
-      (Function.update
-        (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-        2 (PMF.pure c)) 3 (sigma 3) =
-      Function.update
-        (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-        2 (PMF.pure c) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h3, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 3))
-  funext d
-  have hpure : Function.update
-      (Function.update
-        (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-        2 (PMF.pure c)) 3 (PMF.pure d) =
-      fun who ↦ PMF.pure (![a, b, c, d] who) := by
-    funext who
-    fin_cases who <;> simp
-  rw [hpure, pmfPi_pure, expect_pure]
-
-/-- A concrete four-coordinate Boolean action has a quitter exactly when one
-of its four displayed coordinates is true. -/
 @[simp] theorem vector4_quitters_nonempty (a b c d : Bool) :
     ({who | ![a, b, c, d] who = true} : Finset Player).Nonempty ↔
       a = true ∨ b = true ∨ c = true ∨ d = true := by
@@ -326,7 +275,7 @@ theorem stationaryRoot_quitPayoff (who : Player) :
     quittingRootQuitPayoff terminalReward stationaryTail stationaryRoot who =
       stationaryPayoff := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin4_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin4]
   fin_cases who <;>
     simp [stationaryRoot, stationaryTail, quittingRootPayoff,
       quittingQuitters, terminalReward, stationaryPayoff] <;>
@@ -339,7 +288,7 @@ theorem stationaryRoot_continueReward (who : Player) :
       2 * stationaryParameter - 3 * stationaryParameter ^ 2 +
         stationaryParameter ^ 3 := by
   unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin4_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin4]
   fin_cases who <;>
     simp [stationaryRoot, quittingRootPayoff, quittingQuitters,
       terminalReward] <;>

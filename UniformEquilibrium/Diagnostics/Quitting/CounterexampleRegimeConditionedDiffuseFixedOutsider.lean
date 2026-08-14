@@ -336,13 +336,13 @@ theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
       (tendsto_order.1 hscaled).2 1 zero_lt_one
     exact hlt.mono fun time htime => htime.le
   have hchargeEventually : ∀ᶠ time : ℕ in atTop,
-      6 * quittingRewardBound reward *
+      4 * quittingRewardBound reward *
           ((Fintype.card ι : ℝ) * alpha time) < eta / 2 := by
     have hchargeTendsto : Tendsto (fun time =>
-        6 * quittingRewardBound reward *
+        4 * quittingRewardBound reward *
           ((Fintype.card ι : ℝ) * alpha time)) atTop (nhds 0) := by
       simpa [mul_assoc] using hscaled.const_mul
-        (6 * quittingRewardBound reward)
+        (4 * quittingRewardBound reward)
     exact (tendsto_order.1 hchargeTendsto).2 (eta / 2) (by positivity)
   obtain ⟨smallCutoff, hsmallCutoff⟩ :=
     Filter.eventually_atTop.1 hsmallEventually
@@ -357,7 +357,7 @@ theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
     le_trans (le_max_right _ _) htime
   have hsmall : (Fintype.card ι : ℝ) * alpha time ≤ 1 :=
     hsmallCutoff time (le_trans (le_max_left _ _) hcut)
-  have hchargeSmall : 6 * quittingRewardBound reward *
+  have hchargeSmall : 4 * quittingRewardBound reward *
       ((Fintype.card ι : ℝ) * alpha time) < eta / 2 :=
     hchargeCutoff time (le_trans (le_max_right _ _) hcut)
   let targetRoot := quittingTailDiffuseRescaledRoot roots time
@@ -408,16 +408,16 @@ theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
     unfold quittingRootOpponentAbsorptionMass quittingRootAbsorptionMass
     linarith [quittingStationaryContinueMass_nonneg
       (Function.update targetRoot who (PMF.pure false))]
-  have hcoeff : 0 ≤ 6 * quittingRewardBound reward *
+  have hcoeff : 0 ≤ 4 * quittingRewardBound reward *
       ((Fintype.card ι : ℝ) * alpha time) := by
-    exact mul_nonneg (mul_nonneg (show (0 : ℝ) ≤ 6 by norm_num) hbound)
+    exact mul_nonneg (mul_nonneg (show (0 : ℝ) ≤ 4 by norm_num) hbound)
       (mul_nonneg hcard.le (halpha time))
   have hcharge :
-      (6 * quittingRewardBound reward *
+      (4 * quittingRewardBound reward *
         ((Fintype.card ι : ℝ) * alpha time)) *
           quittingRootOpponentAbsorptionMass targetRoot who ≤ eta / 2 := by
     calc
-      _ ≤ 6 * quittingRewardBound reward *
+      _ ≤ 4 * quittingRewardBound reward *
           ((Fintype.card ι : ℝ) * alpha time) := by
         simpa only [mul_one] using
           (mul_le_mul_of_nonneg_left hmassle hcoeff)

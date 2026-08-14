@@ -165,15 +165,15 @@ theorem isεAsymptoticNash_and_approximates
     (certificate : QuittingConditionedDiffuseCertificate reward rho) :
     (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward)
-        ((6 * quittingRewardBound reward * Fintype.card ι * rho) +
+        ((4 * quittingRewardBound reward * Fintype.card ι * rho) +
           (6 * quittingRewardBound reward * Fintype.card ι * rho) +
-          ((7 * Fintype.card ι + 16) * quittingRewardBound reward * rho))
+          ((4 * Fintype.card ι + 16) * quittingRewardBound reward * rho))
         certificate.profile ∧
       ∀ who,
         |quittingTerminalPayoff reward certificate.profile who -
           quittingTailConditionedValue certificate.roots certificate.value
             certificate.boundary 0 who| ≤
-        6 * quittingRewardBound reward * Fintype.card ι * rho := by
+        4 * quittingRewardBound reward * Fintype.card ι * rho := by
   exact conditionedDiffuseRescaledRoots_isεAsymptoticNash_and_approximates
     certificate.roots certificate.value certificate.boundary
       certificate.policy certificate.nash
@@ -189,9 +189,9 @@ end QuittingConditionedDiffuseCertificate
 terminal Nash error. -/
 def quittingConditionedDiffuseCompilerCoefficient
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : ℝ :=
-  6 * quittingRewardBound reward * Fintype.card ι +
+  4 * quittingRewardBound reward * Fintype.card ι +
     6 * quittingRewardBound reward * Fintype.card ι +
-    (7 * Fintype.card ι + 16) * quittingRewardBound reward
+    (4 * Fintype.card ι + 16) * quittingRewardBound reward
 
 omit [DecidableEq ι] in
 theorem quittingConditionedDiffuseCompilerCoefficient_nonneg
@@ -227,9 +227,9 @@ theorem
     hcertificates targetMesh htargetMesh
   have hcompiled := certificate.isεAsymptoticNash_and_approximates.1
   have herrorEq :
-      (6 * quittingRewardBound reward * Fintype.card ι * rho) +
+      (4 * quittingRewardBound reward * Fintype.card ι * rho) +
           (6 * quittingRewardBound reward * Fintype.card ι * rho) +
-          ((7 * Fintype.card ι + 16) * quittingRewardBound reward * rho) =
+          ((4 * Fintype.card ι + 16) * quittingRewardBound reward * rho) =
         coefficient * rho := by
     dsimp only [coefficient]
     unfold quittingConditionedDiffuseCompilerCoefficient
@@ -390,8 +390,8 @@ pure-Quit error of literal-Never spectators is kept as a separate additive
 quantity. -/
 def quittingConditionedProperFaceDiffuseCompilerCoefficient
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : ℝ :=
-  6 * quittingRewardBound reward * Fintype.card ι +
-    (13 * Fintype.card ι + 16) * quittingRewardBound reward
+  4 * quittingRewardBound reward * Fintype.card ι +
+    (4 * Fintype.card ι + 16) * quittingRewardBound reward
 
 omit [DecidableEq ι] in
 theorem quittingConditionedProperFaceDiffuseCompilerCoefficient_nonneg
@@ -637,9 +637,9 @@ theorem
   refine ⟨quittingInfinitePathProfile reward
       (quittingTailDiffuseRescaledRoots suffixRoots hsuffixPositive), ?_⟩
   have herrorEq :
-      (6 * quittingRewardBound reward * Fintype.card ι * requestedMesh) +
+      (4 * quittingRewardBound reward * Fintype.card ι * requestedMesh) +
           targetQuitError +
-          ((13 * Fintype.card ι + 16) * quittingRewardBound reward *
+          ((4 * Fintype.card ι + 16) * quittingRewardBound reward *
             requestedMesh) =
         coefficient * requestedMesh + targetQuitError := by
     dsimp only [coefficient]

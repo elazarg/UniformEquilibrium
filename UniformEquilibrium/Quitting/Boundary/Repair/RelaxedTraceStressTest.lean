@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtSemantics
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtAugmentedEdge
 
 /-!
@@ -111,46 +112,11 @@ def singletonCappedGain (roots : ℕ → Player → PMF Bool)
     · exact ⟨2, by simp [hc]⟩
 
 /-- Fubini expansion used to make the three-player rows transparent. -/
-theorem expect_pmfPi_fin3_bool (sigma : Player → PMF Bool)
-    (f : (Player → Bool) → ℝ) :
-    expect (pmfPi sigma) f =
-      expect (sigma 0) (fun a =>
-        expect (sigma 1) (fun b =>
-          expect (sigma 2) (fun c => f ![a, b, c]))) := by
-  classical
-  have h0 : Function.update sigma 0 (sigma 0) = sigma :=
-    Function.update_eq_self 0 sigma
-  rw [← h0, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 0))
-  funext a
-  have h1 : Function.update (Function.update sigma 0 (PMF.pure a))
-      1 (sigma 1) = Function.update sigma 0 (PMF.pure a) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h1, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 1))
-  funext b
-  have h2 : Function.update
-      (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-      2 (sigma 2) =
-      Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h2, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 2))
-  funext c
-  have hpure : Function.update
-      (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-      2 (PMF.pure c) = fun who => PMF.pure (![a, b, c] who) := by
-    funext who
-    fin_cases who <;> simp
-  rw [hpure, pmfPi_pure, expect_pure]
-
 theorem source_quit_value_player_zero :
     quittingFixedOpponentsQuitValue reward sourceRoots 0 0 = 0 := by
   unfold quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [show sourceRoots 0 = sourceRoot by rfl, expect_pmfPi_fin3_bool]
+  rw [show sourceRoots 0 = sourceRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [sourceRoot, reward, quittingRootPayoff, quittingQuitters,
     vector3_quitters_nonempty,
     PMF.uniformOfFintype_apply,
@@ -161,7 +127,7 @@ theorem source_continue_value_player_zero :
       (1 / 2 : ℝ) := by
   unfold quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [show sourceRoots 0 = sourceRoot by rfl, expect_pmfPi_fin3_bool]
+  rw [show sourceRoots 0 = sourceRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [sourceRoot, reward, quittingRootPayoff, quittingQuitters,
     vector3_quitters_nonempty,
     PMF.uniformOfFintype_apply,
@@ -180,7 +146,7 @@ theorem append_quit_value_player_zero :
     quittingFixedOpponentsQuitValue reward repairedRoots 0 1 = 1 := by
   unfold quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [show repairedRoots 1 = appendRoot by rfl, expect_pmfPi_fin3_bool]
+  rw [show repairedRoots 1 = appendRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   simp [appendRoot, reward, quittingRootPayoff, quittingQuitters,
     vector3_quitters_nonempty, PMF.pure_apply, expect_eq_sum]
 
@@ -188,7 +154,7 @@ theorem append_continue_value_player_zero :
     quittingFixedOpponentsContinueReward reward repairedRoots 0 1 = 0 := by
   unfold quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [show repairedRoots 1 = appendRoot by rfl, expect_pmfPi_fin3_bool]
+  rw [show repairedRoots 1 = appendRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   simp [appendRoot, reward, quittingRootPayoff, quittingQuitters,
     vector3_quitters_nonempty, PMF.pure_apply, expect_eq_sum]
 
@@ -208,7 +174,7 @@ theorem repaired_row_zero_quit_value_player_zero :
     quittingFixedOpponentsQuitValue reward repairedRoots 0 0 = 0 := by
   unfold quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [show repairedRoots 0 = sourceRoot by rfl, expect_pmfPi_fin3_bool]
+  rw [show repairedRoots 0 = sourceRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [sourceRoot, reward, quittingRootPayoff, quittingQuitters,
     vector3_quitters_nonempty, PMF.uniformOfFintype_apply,
     expect_eq_sum, Fintype.sum_bool]
@@ -218,7 +184,7 @@ theorem repaired_row_zero_continue_value_player_zero :
       (1 / 2 : ℝ) := by
   unfold quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [show repairedRoots 0 = sourceRoot by rfl, expect_pmfPi_fin3_bool]
+  rw [show repairedRoots 0 = sourceRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [sourceRoot, reward, quittingRootPayoff, quittingQuitters,
     vector3_quitters_nonempty, PMF.uniformOfFintype_apply,
     expect_eq_sum, Fintype.sum_bool]

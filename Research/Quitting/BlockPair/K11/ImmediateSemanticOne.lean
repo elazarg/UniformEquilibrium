@@ -1,4 +1,5 @@
 import Research.Quitting.BlockPair.K11.FourPlayerExpectation
+import MathUE.PMFProduct.FiniteFubini
 import Research.Quitting.BlockPair.K11.EvalImmediateReward
 import UniformEquilibrium.Quitting.Stationary.Payoff
 
@@ -16,7 +17,7 @@ theorem rootAbsorbingContribution_one_eq_chart
         (terminalTable mask 1 : ℝ) *
           BlockPairCharts.maskProbability h mask := by
   unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin4_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin4]
   simp +decide [rootOfHazard, expect_quittingHazardCoin, reward,
     quittingRootPayoff, quittingQuitters, BlockPairCharts.realSum,
     BlockPairCharts.maskProbability, BlockPairCharts.realProduct,

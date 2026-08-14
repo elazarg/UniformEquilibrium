@@ -9,6 +9,7 @@ import UniformEquilibrium.Quitting.Paths.JointPolicySeparatedErrorCompiler
 import UniformEquilibrium.Quitting.Bellman.Finite.BooleanMobiusAdapter
 import UniformEquilibrium.Quitting.Projective.AnalyticPacket
 import MathUE.PMFProduct.CollisionMass
+import MathUE.Probability.FiniteWeightVariation
 
 /-!
 # Compiler for the tight diffuse conditioned branch
@@ -17,7 +18,7 @@ This module closes the finite-law seam in diffuse product rescaling.  The
 basic estimate partitions a finite law into its empty atom, singleton atoms,
 and collision atoms.  If the source singleton masses dominate the target
 singleton masses, their total-variation distance is paid entirely by the
-empty mismatch and the two collision masses.  Applied to hazards `a * x`
+empty mismatch and the target collision mass.  Applied to hazards `a * x`
 conditioned at scale `a` and the product hazards `x`, this gives the sharp
 quadratic law error.
 
@@ -43,65 +44,11 @@ def quittingDiffuseCollisionCoalitions : Finset (Finset ι) :=
   Finset.univ.filter fun coalition : Finset ι => 2 ≤ coalition.card
 
 omit [DecidableEq ι] in
-/-- Every finite coalition sum is the sum of its empty, singleton, and
-collision strata. -/
-theorem sum_finset_eq_empty_add_singletons_add_collisions
-    (f : Finset ι → ℝ) :
-    ∑ coalition, f coalition =
-      f ∅ + ∑ who, f {who} +
-        ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-          f coalition := by
-  classical
-  let singles : Finset (Finset ι) :=
-    Finset.univ.image fun who : ι => ({who} : Finset ι)
-  let collisions : Finset (Finset ι) :=
-    quittingDiffuseCollisionCoalitions (ι := ι)
-  have hdisjoint : Disjoint singles collisions := by
-    rw [Finset.disjoint_left]
-    intro coalition hsingle hcollision
-    simp only [singles, Finset.mem_image, Finset.mem_univ, true_and] at hsingle
-    obtain ⟨who, rfl⟩ := hsingle
-    simp [collisions, quittingDiffuseCollisionCoalitions] at hcollision
-  have hpartition :
-      Finset.univ.erase (∅ : Finset ι) = singles ∪ collisions := by
-    ext coalition
-    simp only [Finset.mem_erase, Finset.mem_univ, Finset.mem_union]
-    constructor
-    · intro hne
-      have hpos : 0 < coalition.card := Finset.card_pos.mpr
-        (Finset.nonempty_iff_ne_empty.mpr hne.1)
-      by_cases hone : coalition.card = 1
-      · left
-        obtain ⟨who, rfl⟩ := Finset.card_eq_one.mp hone
-        simp [singles]
-      · right
-        simp only [collisions, quittingDiffuseCollisionCoalitions,
-          Finset.mem_filter, Finset.mem_univ, true_and]
-        omega
-    · rintro (hsingle | hcollision)
-      · simp only [singles, Finset.mem_image, Finset.mem_univ, true_and]
-          at hsingle
-        obtain ⟨who, rfl⟩ := hsingle
-        simp
-      · simp only [collisions, quittingDiffuseCollisionCoalitions,
-          Finset.mem_filter, Finset.mem_univ, true_and] at hcollision
-        exact ⟨fun hempty => by simp [hempty] at hcollision, trivial⟩
-  have hsingleSum : ∑ coalition ∈ singles, f coalition = ∑ who, f {who} := by
-    rw [show singles = Finset.univ.image
-      (fun who : ι => ({who} : Finset ι)) by rfl, Finset.sum_image]
-    intro first _ second _ heq
-    simpa using heq
-  rw [← Finset.add_sum_erase Finset.univ f (Finset.mem_univ ∅),
-    hpartition, Finset.sum_union hdisjoint, hsingleSum]
-  dsimp only [collisions]
-  ring
-
-omit [DecidableEq ι] in
 /-- Abstract three-stratum comparison.  No probability representation is
-needed: total mass, singleton domination, and collision bounds suffice. -/
+needed: total mass, singleton domination, and a target collision bound suffice. -/
 theorem abs_sum_mul_sub_sum_mul_le_of_singleton_domination
     (source target payoff : Finset ι → ℝ)
-    {bound emptyError sourceCollision targetCollision : ℝ}
+    {bound emptyError targetCollision : ℝ}
     (hbound : 0 ≤ bound)
     (hpayoff : ∀ coalition, |payoff coalition| ≤ bound)
     (hsourceNonneg : ∀ coalition, 0 ≤ source coalition)
@@ -110,191 +57,44 @@ theorem abs_sum_mul_sub_sum_mul_le_of_singleton_domination
     (htargetTotal : ∑ coalition, target coalition = 1)
     (hsingleton : ∀ who, target {who} ≤ source {who})
     (hempty : |source ∅ - target ∅| ≤ emptyError)
-    (hsourceCollision :
-      ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-        source coalition ≤ sourceCollision)
     (htargetCollision :
       ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
         target coalition ≤ targetCollision) :
     |(∑ coalition, source coalition * payoff coalition) -
         ∑ coalition, target coalition * payoff coalition| ≤
       bound *
-        (2 * emptyError + 2 * (sourceCollision + targetCollision)) := by
+        (2 * emptyError + 2 * targetCollision) := by
   classical
-  let sourceColl :=
-    ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-      source coalition
-  let targetColl :=
-    ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-      target coalition
-  let singletonDifference := ∑ who, (source {who} - target {who})
-  have hsourceColl0 : 0 ≤ sourceColl :=
-    Finset.sum_nonneg fun coalition _ => hsourceNonneg coalition
-  have htargetColl0 : 0 ≤ targetColl :=
-    Finset.sum_nonneg fun coalition _ => htargetNonneg coalition
-  have hsingle0 : 0 ≤ singletonDifference :=
-    Finset.sum_nonneg fun who _ => sub_nonneg.mpr (hsingleton who)
-  have hmass :
-      (source ∅ - target ∅) + singletonDifference +
-          (sourceColl - targetColl) = 0 := by
-    have hs := sum_finset_eq_empty_add_singletons_add_collisions source
-    have ht := sum_finset_eq_empty_add_singletons_add_collisions target
-    rw [hsourceTotal] at hs
-    rw [htargetTotal] at ht
-    dsimp only [sourceColl, targetColl, singletonDifference]
-    rw [Finset.sum_sub_distrib]
-    linarith
-  have hsingleBound : singletonDifference ≤
-      emptyError + sourceCollision + targetCollision := by
-    have habsLower := neg_le_of_abs_le hempty
-    have hsc := hsourceCollision
-    have htc := htargetCollision
-    change sourceColl ≤ sourceCollision at hsc
-    change targetColl ≤ targetCollision at htc
-    linarith
-  have hemptyTerm :
-      |(source ∅ - target ∅) * payoff ∅| ≤ bound * emptyError := by
-    have hemptyError0 : 0 ≤ emptyError :=
-      (abs_nonneg (source ∅ - target ∅)).trans hempty
-    calc
-      |(source ∅ - target ∅) * payoff ∅| =
-          |source ∅ - target ∅| * |payoff ∅| := abs_mul _ _
-      _ ≤ emptyError * bound :=
-        mul_le_mul hempty (hpayoff ∅) (abs_nonneg _) hemptyError0
-      _ = bound * emptyError := mul_comm _ _
-  have hsingletonTerm :
-      |∑ who, (source {who} - target {who}) * payoff {who}| ≤
-        bound * singletonDifference := by
-    calc
-      |∑ who, (source {who} - target {who}) * payoff {who}| ≤
-          ∑ who, |(source {who} - target {who}) * payoff {who}| :=
-        Finset.abs_sum_le_sum_abs _ _
-      _ = ∑ who, (source {who} - target {who}) * |payoff {who}| := by
-        apply Finset.sum_congr rfl
-        intro who _
-        rw [abs_mul, abs_of_nonneg (sub_nonneg.mpr (hsingleton who))]
-      _ ≤ ∑ who, (source {who} - target {who}) * bound := by
-        apply Finset.sum_le_sum
-        intro who _
-        exact mul_le_mul_of_nonneg_left (hpayoff {who})
-          (sub_nonneg.mpr (hsingleton who))
-      _ = bound * singletonDifference := by
-        rw [← Finset.sum_mul]
-        dsimp only [singletonDifference]
-        ring
-  have hcollisionTerm :
-      |(∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-          source coalition * payoff coalition) -
-        ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-          target coalition * payoff coalition| ≤
-        bound * (sourceCollision + targetCollision) := by
-    calc
-      |_ - _| ≤
-          |∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            source coalition * payoff coalition| +
-          |∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            target coalition * payoff coalition| := abs_sub _ _
-      _ ≤ bound * sourceColl + bound * targetColl := by
-        apply add_le_add
-        · calc
-            |∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-                source coalition * payoff coalition| ≤ ∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                |source coalition * payoff coalition| :=
-              Finset.abs_sum_le_sum_abs _ _
-            _ ≤ ∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                source coalition * bound := by
-              apply Finset.sum_le_sum
-              intro coalition _
-              rw [abs_mul, abs_of_nonneg (hsourceNonneg coalition)]
-              exact mul_le_mul_of_nonneg_left (hpayoff coalition)
-                (hsourceNonneg coalition)
-            _ = bound * sourceColl := by
-              rw [← Finset.sum_mul]
-              change (∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                source coalition) * bound = bound * sourceColl
-              dsimp only [sourceColl]
-              ring
-        · calc
-            |∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-                target coalition * payoff coalition| ≤ ∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                |target coalition * payoff coalition| :=
-              Finset.abs_sum_le_sum_abs _ _
-            _ ≤ ∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                target coalition * bound := by
-              apply Finset.sum_le_sum
-              intro coalition _
-              rw [abs_mul, abs_of_nonneg (htargetNonneg coalition)]
-              exact mul_le_mul_of_nonneg_left (hpayoff coalition)
-                (htargetNonneg coalition)
-            _ = bound * targetColl := by
-              rw [← Finset.sum_mul]
-              change (∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                target coalition) * bound = bound * targetColl
-              dsimp only [targetColl]
-              ring
-      _ ≤ bound * sourceCollision + bound * targetCollision := by
-        change sourceColl ≤ sourceCollision at hsourceCollision
-        change targetColl ≤ targetCollision at htargetCollision
-        exact add_le_add
-          (mul_le_mul_of_nonneg_left hsourceCollision hbound)
-          (mul_le_mul_of_nonneg_left htargetCollision hbound)
-      _ = bound * (sourceCollision + targetCollision) := by ring
-  have hsourceSplit :=
-    sum_finset_eq_empty_add_singletons_add_collisions
-      (fun coalition => source coalition * payoff coalition)
-  have htargetSplit :=
-    sum_finset_eq_empty_add_singletons_add_collisions
-      (fun coalition => target coalition * payoff coalition)
-  rw [hsourceSplit, htargetSplit]
-  have hrewrite :
-      source ∅ * payoff ∅ + ∑ who, source {who} * payoff {who} +
-          ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            source coalition * payoff coalition -
-        (target ∅ * payoff ∅ + ∑ who, target {who} * payoff {who} +
-          ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            target coalition * payoff coalition) =
-      (source ∅ - target ∅) * payoff ∅ +
-        ∑ who, (source {who} - target {who}) * payoff {who} +
-        ((∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            source coalition * payoff coalition) -
-          ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            target coalition * payoff coalition) := by
-    simp_rw [sub_mul]
-    rw [Finset.sum_sub_distrib]
-    ring
-  rw [hrewrite]
-  calc
-    |_ + _ + _| ≤
-        |(source ∅ - target ∅) * payoff ∅| +
-          |∑ who, (source {who} - target {who}) * payoff {who}| +
-          |(∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-              source coalition * payoff coalition) -
-            ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-              target coalition * payoff coalition| := by
-      exact (abs_add_le _ _).trans (add_le_add (abs_add_le _ _) (le_refl _))
-    _ ≤ bound * emptyError +
-          bound * singletonDifference +
-          bound * (sourceCollision + targetCollision) :=
-      add_le_add (add_le_add hemptyTerm hsingletonTerm) hcollisionTerm
-    _ ≤ bound * emptyError +
-          bound * (emptyError + sourceCollision + targetCollision) +
-          bound * (sourceCollision + targetCollision) := by
-      gcongr
-    _ = bound *
-        (2 * emptyError + 2 * (sourceCollision + targetCollision)) := by ring
+  have hcomparison := abs_weightedSum_sub_le_of_domination_off
+    (totalError := 0) (controlledError := emptyError)
+    (exceptionalMass := targetCollision)
+    (Finset.univ : Finset (Finset ι)) {∅}
+    (quittingDiffuseCollisionCoalitions (ι := ι))
+    source target payoff hbound (fun coalition _ => hpayoff coalition)
+    (fun coalition _ => hsourceNonneg coalition)
+    (fun coalition _ => htargetNonneg coalition)
+    (fun coalition _ hnonempty hnotCollision => by
+      have hne : coalition ≠ ∅ := by simpa using hnonempty
+      have hpos : 0 < coalition.card :=
+        Finset.card_pos.mpr (Finset.nonempty_iff_ne_empty.mpr hne)
+      have hcard : coalition.card = 1 := by
+        simp only [quittingDiffuseCollisionCoalitions, Finset.mem_filter,
+          Finset.mem_univ, true_and] at hnotCollision
+        omega
+      obtain ⟨who, rfl⟩ := Finset.card_eq_one.mp hcard
+      exact hsingleton who)
+    (by simp [hsourceTotal, htargetTotal])
+    (by simpa using hempty)
+    (by simpa using htargetCollision)
+  convert hcomparison using 1
+  all_goals ring
 
 /-- Comparison of the nonempty parts of two subprobability laws.  The total
 mass mismatch replaces the empty-atom mismatch in the probability-law
 version. -/
 theorem abs_sum_nonempty_mul_sub_sum_nonempty_mul_le_of_singleton_domination
     (source target payoff : Finset ι → ℝ)
-    {bound totalError sourceCollision targetCollision : ℝ}
+    {bound totalError targetCollision : ℝ}
     (hbound : 0 ≤ bound)
     (hpayoff : ∀ coalition, |payoff coalition| ≤ bound)
     (hsourceNonneg : ∀ coalition, 0 ≤ source coalition)
@@ -304,9 +104,6 @@ theorem abs_sum_nonempty_mul_sub_sum_nonempty_mul_le_of_singleton_domination
       |(∑ coalition ∈ Finset.univ.erase (∅ : Finset ι), source coalition) -
         ∑ coalition ∈ Finset.univ.erase (∅ : Finset ι), target coalition| ≤
           totalError)
-    (hsourceCollision :
-      ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-        source coalition ≤ sourceCollision)
     (htargetCollision :
       ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
         target coalition ≤ targetCollision) :
@@ -314,184 +111,40 @@ theorem abs_sum_nonempty_mul_sub_sum_nonempty_mul_le_of_singleton_domination
           source coalition * payoff coalition) -
         ∑ coalition ∈ Finset.univ.erase (∅ : Finset ι),
           target coalition * payoff coalition| ≤
-      bound * (totalError + 2 * (sourceCollision + targetCollision)) := by
+      bound * (totalError + 2 * targetCollision) := by
   classical
-  let sourceColl :=
-    ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-      source coalition
-  let targetColl :=
-    ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-      target coalition
-  let singletonDifference := ∑ who, (source {who} - target {who})
-  have hsourceColl0 : 0 ≤ sourceColl :=
-    Finset.sum_nonneg fun coalition _ => hsourceNonneg coalition
-  have htargetColl0 : 0 ≤ targetColl :=
-    Finset.sum_nonneg fun coalition _ => htargetNonneg coalition
-  have hsingle0 : 0 ≤ singletonDifference :=
-    Finset.sum_nonneg fun who _ => sub_nonneg.mpr (hsingleton who)
-  have hsourceSplit := sum_finset_eq_empty_add_singletons_add_collisions source
-  have htargetSplit := sum_finset_eq_empty_add_singletons_add_collisions target
-  have hsourceErase :
-      (∑ coalition ∈ Finset.univ.erase (∅ : Finset ι), source coalition) =
-        (∑ who, source {who}) + sourceColl := by
-    rw [← Finset.add_sum_erase Finset.univ source (Finset.mem_univ ∅)] at hsourceSplit
-    dsimp only [sourceColl]
-    linarith
-  have htargetErase :
-      (∑ coalition ∈ Finset.univ.erase (∅ : Finset ι), target coalition) =
-        (∑ who, target {who}) + targetColl := by
-    rw [← Finset.add_sum_erase Finset.univ target (Finset.mem_univ ∅)] at htargetSplit
-    dsimp only [targetColl]
-    linarith
-  have hmass :
-      ((∑ coalition ∈ Finset.univ.erase (∅ : Finset ι), source coalition) -
-          ∑ coalition ∈ Finset.univ.erase (∅ : Finset ι), target coalition) =
-        singletonDifference + (sourceColl - targetColl) := by
-    rw [hsourceErase, htargetErase]
-    dsimp only [singletonDifference]
-    rw [Finset.sum_sub_distrib]
-    ring
-  have htotal0 : 0 ≤ totalError := (abs_nonneg _).trans htotal
-  have hsingleBound : singletonDifference ≤
-      totalError + sourceCollision + targetCollision := by
-    have hmassUpper := le_of_abs_le htotal
-    rw [hmass] at hmassUpper
-    change sourceColl ≤ sourceCollision at hsourceCollision
-    change targetColl ≤ targetCollision at htargetCollision
-    linarith
-  have hsingletonTerm :
-      |∑ who, (source {who} - target {who}) * payoff {who}| ≤
-        bound * singletonDifference := by
-    calc
-      |∑ who, (source {who} - target {who}) * payoff {who}| ≤
-          ∑ who, |(source {who} - target {who}) * payoff {who}| :=
-        Finset.abs_sum_le_sum_abs _ _
-      _ = ∑ who, (source {who} - target {who}) * |payoff {who}| := by
-        apply Finset.sum_congr rfl
-        intro who _
-        rw [abs_mul, abs_of_nonneg (sub_nonneg.mpr (hsingleton who))]
-      _ ≤ ∑ who, (source {who} - target {who}) * bound := by
-        apply Finset.sum_le_sum
-        intro who _
-        exact mul_le_mul_of_nonneg_left (hpayoff {who})
-          (sub_nonneg.mpr (hsingleton who))
-      _ = bound * singletonDifference := by
-        rw [← Finset.sum_mul]
-        dsimp only [singletonDifference]
-        ring
-  have hcollisionTerm :
-      |(∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-          source coalition * payoff coalition) -
-        ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-          target coalition * payoff coalition| ≤
-        bound * (sourceCollision + targetCollision) := by
-    calc
-      |_ - _| ≤
-          |∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            source coalition * payoff coalition| +
-          |∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            target coalition * payoff coalition| := abs_sub _ _
-      _ ≤ bound * sourceColl + bound * targetColl := by
-        apply add_le_add
-        · calc
-            |∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-                source coalition * payoff coalition| ≤ ∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                |source coalition * payoff coalition| :=
-              Finset.abs_sum_le_sum_abs _ _
-            _ ≤ ∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                source coalition * bound := by
-              apply Finset.sum_le_sum
-              intro coalition _
-              rw [abs_mul, abs_of_nonneg (hsourceNonneg coalition)]
-              exact mul_le_mul_of_nonneg_left (hpayoff coalition)
-                (hsourceNonneg coalition)
-            _ = bound * sourceColl := by
-              rw [← Finset.sum_mul]
-              dsimp only [sourceColl]
-              ring
-        · calc
-            |∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-                target coalition * payoff coalition| ≤ ∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                |target coalition * payoff coalition| :=
-              Finset.abs_sum_le_sum_abs _ _
-            _ ≤ ∑ coalition ∈
-                quittingDiffuseCollisionCoalitions (ι := ι),
-                target coalition * bound := by
-              apply Finset.sum_le_sum
-              intro coalition _
-              rw [abs_mul, abs_of_nonneg (htargetNonneg coalition)]
-              exact mul_le_mul_of_nonneg_left (hpayoff coalition)
-                (htargetNonneg coalition)
-            _ = bound * targetColl := by
-              rw [← Finset.sum_mul]
-              dsimp only [targetColl]
-              ring
-      _ ≤ bound * sourceCollision + bound * targetCollision := by
-        exact add_le_add
-          (mul_le_mul_of_nonneg_left hsourceCollision hbound)
-          (mul_le_mul_of_nonneg_left htargetCollision hbound)
-      _ = bound * (sourceCollision + targetCollision) := by ring
-  have hsourceWeighted :=
-    sum_finset_eq_empty_add_singletons_add_collisions
-      (fun coalition => source coalition * payoff coalition)
-  have htargetWeighted :=
-    sum_finset_eq_empty_add_singletons_add_collisions
-      (fun coalition => target coalition * payoff coalition)
-  have hsourceWeightedErase :
-      (∑ coalition ∈ Finset.univ.erase (∅ : Finset ι),
-          source coalition * payoff coalition) =
-        (∑ who, source {who} * payoff {who}) +
-          ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            source coalition * payoff coalition := by
-    rw [← Finset.add_sum_erase Finset.univ
-      (fun coalition => source coalition * payoff coalition)
-      (Finset.mem_univ ∅)] at hsourceWeighted
-    linarith
-  have htargetWeightedErase :
-      (∑ coalition ∈ Finset.univ.erase (∅ : Finset ι),
-          target coalition * payoff coalition) =
-        (∑ who, target {who} * payoff {who}) +
-          ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            target coalition * payoff coalition := by
-    rw [← Finset.add_sum_erase Finset.univ
-      (fun coalition => target coalition * payoff coalition)
-      (Finset.mem_univ ∅)] at htargetWeighted
-    linarith
-  rw [hsourceWeightedErase, htargetWeightedErase]
-  have hrewrite :
-      (∑ who, source {who} * payoff {who}) +
-          ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            source coalition * payoff coalition -
-        ((∑ who, target {who} * payoff {who}) +
-          ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            target coalition * payoff coalition) =
-      (∑ who, (source {who} - target {who}) * payoff {who}) +
-        ((∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            source coalition * payoff coalition) -
-          ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-            target coalition * payoff coalition) := by
-    simp_rw [sub_mul]
-    rw [Finset.sum_sub_distrib]
-    ring
-  rw [hrewrite]
-  calc
-    |_ + _| ≤
-        |∑ who, (source {who} - target {who}) * payoff {who}| +
-          |(∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-              source coalition * payoff coalition) -
-            ∑ coalition ∈ quittingDiffuseCollisionCoalitions (ι := ι),
-              target coalition * payoff coalition| := abs_add_le _ _
-    _ ≤ bound * singletonDifference +
-        bound * (sourceCollision + targetCollision) :=
-      add_le_add hsingletonTerm hcollisionTerm
-    _ ≤ bound * (totalError + sourceCollision + targetCollision) +
-        bound * (sourceCollision + targetCollision) := by
-      gcongr
-    _ = bound * (totalError + 2 *
-        (sourceCollision + targetCollision)) := by ring
+  let support := Finset.univ.erase (∅ : Finset ι)
+  have hcomparison := abs_weightedSum_sub_le_of_domination_off
+    (totalError := totalError) (controlledError := 0)
+    (exceptionalMass := targetCollision)
+    support (∅ : Finset (Finset ι))
+    (quittingDiffuseCollisionCoalitions (ι := ι))
+    source target payoff hbound (fun coalition _ => hpayoff coalition)
+    (fun coalition _ => hsourceNonneg coalition)
+    (fun coalition _ => htargetNonneg coalition)
+    (fun coalition hcoalition _ hnotCollision => by
+      have hne : coalition ≠ ∅ := Finset.ne_of_mem_erase hcoalition
+      have hpos : 0 < coalition.card :=
+        Finset.card_pos.mpr (Finset.nonempty_iff_ne_empty.mpr hne)
+      have hcard : coalition.card = 1 := by
+        simp only [quittingDiffuseCollisionCoalitions, Finset.mem_filter,
+          Finset.mem_univ, true_and] at hnotCollision
+        omega
+      obtain ⟨who, rfl⟩ := Finset.card_eq_one.mp hcard
+      exact hsingleton who)
+    (by simpa only [support] using htotal)
+    (by simp [support])
+    (by
+      have hsubset : quittingDiffuseCollisionCoalitions (ι := ι) ⊆ support := by
+        intro coalition hcoalition
+        simp only [quittingDiffuseCollisionCoalitions, Finset.mem_filter,
+          Finset.mem_univ, true_and] at hcoalition
+        exact Finset.mem_erase.mpr ⟨fun hempty => by
+          subst coalition
+          simp at hcoalition, Finset.mem_univ _⟩
+      simpa [Finset.inter_eq_right.mpr hsubset] using htargetCollision)
+  convert hcomparison using 1
+  all_goals ring
 
 /-! ## Scaled product laws -/
 
@@ -833,7 +486,7 @@ theorem abs_conditionedCoalitionMass_empty_sub_rescaled_empty_le
   exact hcomparison
 
 /-- **Quadratic conditioned-law comparison.**  Every bounded observable of
-the whole quitter coalition changes by at most `3 M s²` under product
+the whole quitter coalition changes by at most `2 M s²` under product
 rescaling. -/
 theorem abs_conditionedCoalitionExpectation_sub_rescaled_le
     (roots : ℕ → ι → PMF Bool) (time : ℕ)
@@ -847,7 +500,7 @@ theorem abs_conditionedCoalitionExpectation_sub_rescaled_le
           quittingRootCoalitionMass
               (quittingTailDiffuseRescaledRoot roots time hpositive) coalition *
             observable coalition| ≤
-      3 * M * quittingTailDiffuseRescaledTotal roots time ^ 2 := by
+      2 * M * quittingTailDiffuseRescaledTotal roots time ^ 2 := by
   have habstract :=
     abs_sum_mul_sub_sum_mul_le_of_singleton_domination
       (quittingTailConditionedCoalitionMass roots time)
@@ -868,16 +521,13 @@ theorem abs_conditionedCoalitionExpectation_sub_rescaled_le
           roots time who hpositive)
       (abs_conditionedCoalitionMass_empty_sub_rescaled_empty_le
         roots time hpositive)
-      (conditionedCoalitionCollisionMass_le_rescaledTotal_sq_div_two
-        roots time hpositive)
       (rescaledCoalitionCollisionMass_le_rescaledTotal_sq_div_two
         roots time hpositive)
   calc
     |_ - _| ≤ M *
         (2 * (quittingTailDiffuseRescaledTotal roots time ^ 2 / 2) +
-          2 * (quittingTailDiffuseRescaledTotal roots time ^ 2 / 2 +
-            quittingTailDiffuseRescaledTotal roots time ^ 2 / 2)) := habstract
-    _ = 3 * M * quittingTailDiffuseRescaledTotal roots time ^ 2 := by ring
+          2 * (quittingTailDiffuseRescaledTotal roots time ^ 2 / 2)) := habstract
+    _ = 2 * M * quittingTailDiffuseRescaledTotal roots time ^ 2 := by ring
 
 /-! ## Deleted-player absorbing laws -/
 
@@ -1121,7 +771,7 @@ theorem abs_conditionedOpponentAbsorbingReward_sub_rescaled_le
           quittingTailEventualAbsorption roots time -
         quittingStationaryFixedOpponentsContinueReward reward
           (quittingTailDiffuseRescaledRoot roots time hpositive) who| ≤
-      3 * M *
+      3 / 2 * M *
         quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 := by
   let payoff : Finset ι → ℝ := fun coalition =>
     if h : coalition.Nonempty then reward ⟨coalition, h⟩ who else 0
@@ -1133,8 +783,6 @@ theorem abs_conditionedOpponentAbsorbingReward_sub_rescaled_le
   have habstract :=
     abs_sum_nonempty_mul_sub_sum_nonempty_mul_le_of_singleton_domination
       (totalError :=
-        quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 / 2)
-      (sourceCollision :=
         quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 / 2)
       (targetCollision :=
         quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 / 2)
@@ -1155,8 +803,6 @@ theorem abs_conditionedOpponentAbsorbingReward_sub_rescaled_le
         simpa using
           (abs_conditionedOpponentWeight_sub_rescaledRoot_opponentAbsorption_le
             roots time who hpositive))
-      (conditionedOpponentCoalitionCollisionMass_le_total_sq_div_two
-        roots time who hpositive)
       (rescaledOpponentCoalitionCollisionMass_le_total_sq_div_two
         roots time who hpositive)
   have hsource :
@@ -1240,16 +886,10 @@ theorem abs_conditionedOpponentAbsorbingReward_sub_rescaled_le
   calc
     |_ - _| ≤ M *
         (quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 / 2 +
-          2 * (quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 / 2 +
-            quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 / 2)) :=
+          2 * (quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 / 2)) :=
       habstract
-    _ = 5 / 2 * M *
+    _ = 3 / 2 * M *
         quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 := by ring
-    _ ≤ 3 * M *
-        quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 := by
-      have hsq : 0 ≤ quittingTailDiffuseRescaledOpponentTotal
-          roots time who ^ 2 := sq_nonneg _
-      nlinarith [mul_nonneg hM hsq]
 
 /-- Exact source refusal inequality after conditioning.  The last term is
 the phantom mass carried by counterfactual own Quit; it is retained rather
@@ -1360,7 +1000,7 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
             (quittingTailDiffuseRescaledRoot roots time hcurrent) who *
           quittingTailConditionedValue roots value boundary (time + 1) who ≤
       quittingTailConditionedValue roots value boundary time who +
-        (7 * Fintype.card ι + 16) * M *
+        (4 * Fintype.card ι + 16) * M *
           quittingTailConditionedAbsorptionWeight roots time *
           quittingRootOpponentAbsorptionMass
             (quittingTailDiffuseRescaledRoot roots time hcurrent) who := by
@@ -1394,7 +1034,7 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
   have hrewards := abs_conditionedOpponentAbsorbingReward_sub_rescaled_le
     (reward := reward) roots time who hM hreward hcurrent
   change |sourceReward / quittingTailEventualAbsorption roots time -
-      targetReward| ≤ 3 * M * opponentTotal ^ 2 at hrewards
+      targetReward| ≤ 3 / 2 * M * opponentTotal ^ 2 at hrewards
   have hclock :=
     abs_conditionedOpponentWeight_sub_rescaledRoot_opponentAbsorption_le
       roots time who hcurrent
@@ -1552,7 +1192,7 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
         _ ≤ 16 * M * alpha * targetOpponent := habsUpper
   have hrewardsUpper : targetReward -
       sourceReward / quittingTailEventualAbsorption roots time ≤
-        3 * M * opponentTotal ^ 2 := by
+        3 / 2 * M * opponentTotal ^ 2 := by
     have := neg_le_of_abs_le hrewards
     linarith
   have hclockTerm : (sourceOpponent - targetOpponent) * nextValue ≤
@@ -1568,37 +1208,37 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
   rw [hdecompose]
   calc
     _ ≤ (currentValue - sourceContinue * own * phantom * boundary who) +
-          (3 * M * opponentTotal ^ 2) +
+          (3 / 2 * M * opponentTotal ^ 2) +
           M * (opponentTotal ^ 2 / 2) +
           sourceContinue * own * phantom * nextValue := by
       gcongr
-    _ = currentValue + 3 * M * opponentTotal ^ 2 +
+    _ = currentValue + 3 / 2 * M * opponentTotal ^ 2 +
           M * (opponentTotal ^ 2 / 2) +
           sourceContinue * own * phantom * (nextValue - boundary who) := by
       ring
-    _ ≤ currentValue + 3 * M * opponentTotal ^ 2 +
+    _ ≤ currentValue + 3 / 2 * M * opponentTotal ^ 2 +
           M * (opponentTotal ^ 2 / 2) +
           16 * M * alpha * targetOpponent := by
       gcongr
-    _ = currentValue + 7 / 2 * M * opponentTotal ^ 2 +
+    _ = currentValue + 2 * M * opponentTotal ^ 2 +
           16 * M * alpha * targetOpponent := by ring
     _ ≤ currentValue +
-          7 * M * (Fintype.card ι * alpha) * targetOpponent +
+          4 * M * (Fintype.card ι * alpha) * targetOpponent +
           16 * M * alpha * targetOpponent := by
-      have hcoefficient : 0 ≤ 7 / 2 * M := by positivity
+      have hcoefficient : 0 ≤ 2 * M := by positivity
       have hscaled := mul_le_mul_of_nonneg_left hsquare hcoefficient
-      have hscaled' : 7 / 2 * M * opponentTotal ^ 2 ≤
-          7 * M * (Fintype.card ι * alpha) * targetOpponent := by
+      have hscaled' : 2 * M * opponentTotal ^ 2 ≤
+          4 * M * (Fintype.card ι * alpha) * targetOpponent := by
         calc
-          7 / 2 * M * opponentTotal ^ 2 ≤
-              7 / 2 * M *
+          2 * M * opponentTotal ^ 2 ≤
+              2 * M *
                 (2 * (Fintype.card ι * alpha) * targetOpponent) := hscaled
-          _ = 7 * M * (Fintype.card ι * alpha) * targetOpponent := by ring
+          _ = 4 * M * (Fintype.card ι * alpha) * targetOpponent := by ring
       simpa [add_comm, add_left_comm, add_assoc] using
         (add_le_add_right (add_le_add_left hscaled' currentValue)
           (16 * M * alpha * targetOpponent))
     _ = currentValue +
-        (7 * Fintype.card ι + 16) * M * alpha * targetOpponent := by ring
+        (4 * Fintype.card ι + 16) * M * alpha * targetOpponent := by ring
 
 /-- The conditioned source coalition law evaluates exactly to the
 conditioned Bellman state. -/
@@ -1712,7 +1352,7 @@ theorem abs_conditionedValue_sub_rescaledSuccessorPayoff_le
         quittingRootSuccessorPayoff reward
           (quittingTailConditionedValue roots value boundary (time + 1))
           (quittingTailDiffuseRescaledRoot roots time hcurrent) who| ≤
-      3 * M * quittingTailDiffuseRescaledTotal roots time ^ 2 := by
+      2 * M * quittingTailDiffuseRescaledTotal roots time ^ 2 := by
   classical
   let next := quittingTailConditionedValue roots value boundary (time + 1)
   let observable : Finset ι → ℝ := fun coalition =>
@@ -1762,7 +1402,7 @@ theorem abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
         quittingRootSuccessorPayoff reward
           (quittingTailConditionedValue roots value boundary (time + 1))
           (quittingTailDiffuseRescaledRoot roots time hcurrent) who| ≤
-      (6 * M * Fintype.card ι * rho) *
+      (4 * M * Fintype.card ι * rho) *
         quittingRootAbsorptionMass
           (quittingTailDiffuseRescaledRoot roots time hcurrent) := by
   let alpha := quittingTailConditionedAbsorptionWeight roots time
@@ -1772,7 +1412,7 @@ theorem abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
   have hbase := abs_conditionedValue_sub_rescaledSuccessorPayoff_le
     (reward := reward) roots value boundary hpolicy hM hreward hconditionedBound
       time hcurrent hnext who
-  change |_ - _| ≤ 3 * M * total ^ 2 at hbase
+  change |_ - _| ≤ 2 * M * total ^ 2 at hbase
   have halpha0 : 0 ≤ alpha :=
     quittingTailConditionedAbsorptionWeight_nonneg roots time hcurrent
   have hrho0 : 0 ≤ rho := halpha0.trans hmesh
@@ -1800,12 +1440,12 @@ theorem abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
     have htotalAbsorption : total ≤ 2 * absorption := by linarith
     nlinarith [mul_nonneg (sub_nonneg.mpr htotalRho)
       (sub_nonneg.mpr htotalAbsorption)]
-  have hcoefficient : 0 ≤ 3 * M := mul_nonneg (by norm_num) hM
+  have hcoefficient : 0 ≤ 2 * M := mul_nonneg (by norm_num) hM
   calc
-    |_ - _| ≤ 3 * M * total ^ 2 := hbase
-    _ ≤ 3 * M * (2 * (Fintype.card ι * rho) * absorption) :=
+    |_ - _| ≤ 2 * M * total ^ 2 := hbase
+    _ ≤ 2 * M * (2 * (Fintype.card ι * rho) * absorption) :=
       mul_le_mul_of_nonneg_left hsquare hcoefficient
-    _ = (6 * M * Fintype.card ι * rho) * absorption := by ring
+    _ = (4 * M * Fintype.card ι * rho) * absorption := by ring
 
 /-- A source spectator needs no singleton-boundary estimate for its Continue
 endpoint.  Diffuse rescaling keeps the player at literal Never, so its
@@ -1833,7 +1473,7 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_jointCharge_of_source_pur
             (quittingTailDiffuseRescaledRoot roots time hcurrent) who *
           quittingTailConditionedValue roots value boundary (time + 1) who ≤
       quittingTailConditionedValue roots value boundary time who +
-        (6 * M * Fintype.card ι * rho) *
+        (4 * M * Fintype.card ι * rho) *
           quittingRootOpponentAbsorptionMass
             (quittingTailDiffuseRescaledRoot roots time hcurrent) who := by
   let targetRoot := quittingTailDiffuseRescaledRoot roots time hcurrent
@@ -1901,9 +1541,9 @@ theorem conditionedDiffuseRescaledRoots_isεAsymptoticNash_and_approximates
         quittingTailConditionedOpponentWeight roots (start + offset) who)) :
     (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward)
-        ((6 * M * Fintype.card ι * rho) +
+        ((4 * M * Fintype.card ι * rho) +
           (6 * M * Fintype.card ι * rho) +
-          ((7 * Fintype.card ι + 16) * M * rho))
+          ((4 * Fintype.card ι + 16) * M * rho))
         (quittingInfinitePathProfile reward
           (quittingTailDiffuseRescaledRoots roots hpositive)) ∧
       ∀ who,
@@ -1911,10 +1551,10 @@ theorem conditionedDiffuseRescaledRoots_isεAsymptoticNash_and_approximates
             (quittingInfinitePathProfile reward
               (quittingTailDiffuseRescaledRoots roots hpositive)) who -
           quittingTailConditionedValue roots value boundary 0 who| ≤
-        6 * M * Fintype.card ι * rho := by
-  let policyCoefficient := 6 * M * Fintype.card ι * rho
+        4 * M * Fintype.card ι * rho := by
+  let policyCoefficient := 4 * M * Fintype.card ι * rho
   let quitError := 6 * M * Fintype.card ι * rho
-  let refusalCoefficient := (7 * Fintype.card ι + 16) * M * rho
+  let refusalCoefficient := (4 * Fintype.card ι + 16) * M * rho
   let target := quittingTailConditionedValue roots value boundary 0
   let targetRoots := quittingTailDiffuseRescaledRoots roots hpositive
   let targetValue : ℕ → Payoff ι := fun time =>
@@ -1995,18 +1635,18 @@ theorem conditionedDiffuseRescaledRoots_isεAsymptoticNash_and_approximates
             (quittingTailDiffuseRescaledRoot roots time (hpositive time)) who
         calc
           _ ≤ quittingTailConditionedValue roots value boundary time who +
-              (7 * Fintype.card ι + 16) * M *
+              (4 * Fintype.card ι + 16) * M *
                 quittingTailConditionedAbsorptionWeight roots time *
                 quittingRootOpponentAbsorptionMass
                   (quittingTailDiffuseRescaledRoot roots time
                     (hpositive time)) who := hcontinue
           _ ≤ quittingTailConditionedValue roots value boundary time who +
-              ((7 * Fintype.card ι + 16) * M * rho) *
+              ((4 * Fintype.card ι + 16) * M * rho) *
                 quittingRootOpponentAbsorptionMass
                   (quittingTailDiffuseRescaledRoot roots time
                     (hpositive time)) who := by
             have hfactor : 0 ≤
-                (7 * Fintype.card ι + 16) * M := by positivity
+                (4 * Fintype.card ι + 16) * M := by positivity
             have hcharge := mul_le_mul_of_nonneg_left (hmesh time) hfactor
             have hopponent0 := quittingRootAbsorptionMass_nonneg
               (Function.update
@@ -2071,8 +1711,8 @@ theorem
         quittingTailConditionedOpponentWeight roots (start + offset) who)) :
     (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward)
-        ((6 * M * Fintype.card ι * rho) + quitError +
-          ((13 * Fintype.card ι + 16) * M * rho))
+        ((4 * M * Fintype.card ι * rho) + quitError +
+          ((4 * Fintype.card ι + 16) * M * rho))
         (quittingInfinitePathProfile reward
           (quittingTailDiffuseRescaledRoots roots hpositive)) ∧
       ∀ who,
@@ -2080,9 +1720,9 @@ theorem
             (quittingInfinitePathProfile reward
               (quittingTailDiffuseRescaledRoots roots hpositive)) who -
           quittingTailConditionedValue roots value boundary 0 who| ≤
-        6 * M * Fintype.card ι * rho := by
-  let policyCoefficient := 6 * M * Fintype.card ι * rho
-  let refusalCoefficient := (13 * Fintype.card ι + 16) * M * rho
+        4 * M * Fintype.card ι * rho := by
+  let policyCoefficient := 4 * M * Fintype.card ι * rho
+  let refusalCoefficient := (4 * Fintype.card ι + 16) * M * rho
   let target := quittingTailConditionedValue roots value boundary 0
   let targetRoots := quittingTailDiffuseRescaledRoots roots hpositive
   let targetValue : ℕ → Payoff ι := fun time =>
@@ -2105,17 +1745,17 @@ theorem
           targetRoots who start fuel)
       (hopponentSurvival who start)
   have hpolicy_le_refusal :
-      6 * M * Fintype.card ι * rho ≤
-        (13 * Fintype.card ι + 16) * M * rho := by
+      4 * M * Fintype.card ι * rho ≤
+        (4 * Fintype.card ι + 16) * M * rho := by
     have hMrho : 0 ≤ M * rho := mul_nonneg hM hrho
     calc
-      6 * M * Fintype.card ι * rho =
-          (6 * Fintype.card ι) * (M * rho) := by ring
-      _ ≤ (13 * Fintype.card ι + 16) * (M * rho) := by
+      4 * M * Fintype.card ι * rho =
+          (4 * Fintype.card ι) * (M * rho) := by ring
+      _ ≤ (4 * Fintype.card ι + 16) * (M * rho) := by
         exact mul_le_mul_of_nonneg_right (by
           have hcard : 0 ≤ (Fintype.card ι : ℝ) := Nat.cast_nonneg _
           linarith) hMrho
-      _ = (13 * Fintype.card ι + 16) * M * rho := by ring
+      _ = (4 * Fintype.card ι + 16) * M * rho := by ring
   let certificate : QuittingInfinitePathJointPolicySeparatedErrorCertificate
       reward target policyCoefficient quitError refusalCoefficient M :=
     { roots := targetRoots
@@ -2156,46 +1796,23 @@ theorem
               (quittingTailDiffuseRescaledRoot roots time (hpositive time)) who
           calc
             _ ≤ quittingTailConditionedValue roots value boundary time who +
-                (7 * Fintype.card ι + 16) * M *
+                (4 * Fintype.card ι + 16) * M *
                   quittingTailConditionedAbsorptionWeight roots time *
                   quittingRootOpponentAbsorptionMass
                     (quittingTailDiffuseRescaledRoot roots time
                       (hpositive time)) who := hcontinue
             _ ≤ quittingTailConditionedValue roots value boundary time who +
-                ((7 * Fintype.card ι + 16) * M * rho) *
+                ((4 * Fintype.card ι + 16) * M * rho) *
                   quittingRootOpponentAbsorptionMass
                     (quittingTailDiffuseRescaledRoot roots time
                       (hpositive time)) who := by
-              have hfactor : 0 ≤ (7 * Fintype.card ι + 16) * M := by
+              have hfactor : 0 ≤ (4 * Fintype.card ι + 16) * M := by
                 positivity
               have hcharge := mul_le_mul_of_nonneg_left (hmesh time) hfactor
               have hopponent0 := quittingRootAbsorptionMass_nonneg
                 (Function.update
                   (quittingTailDiffuseRescaledRoot roots time (hpositive time))
                   who (PMF.pure false))
-              gcongr
-            _ ≤ quittingTailConditionedValue roots value boundary time who +
-                ((13 * Fintype.card ι + 16) * M * rho) *
-                  quittingRootOpponentAbsorptionMass
-                    (quittingTailDiffuseRescaledRoot roots time
-                      (hpositive time)) who := by
-              have hopponent0 := quittingRootAbsorptionMass_nonneg
-                (Function.update
-                  (quittingTailDiffuseRescaledRoot roots time (hpositive time))
-                  who (PMF.pure false))
-              have hMrho : 0 ≤ M * rho := mul_nonneg hM hrho
-              have hcoefficient :
-                  (7 * Fintype.card ι + 16) * M * rho ≤
-                    (13 * Fintype.card ι + 16) * M * rho := by
-                calc
-                  (7 * Fintype.card ι + 16) * M * rho =
-                      (7 * Fintype.card ι + 16) * (M * rho) := by ring
-                  _ ≤ (13 * Fintype.card ι + 16) * (M * rho) := by
-                    exact mul_le_mul_of_nonneg_right (by
-                      have hcard : 0 ≤ (Fintype.card ι : ℝ) :=
-                        Nat.cast_nonneg _
-                      linarith) hMrho
-                  _ = (13 * Fintype.card ι + 16) * M * rho := by ring
               gcongr
         · have hcontinue :=
             rescaledContinuePayoff_le_conditionedValue_add_jointCharge_of_source_pure_false
@@ -2208,12 +1825,12 @@ theorem
               (quittingTailDiffuseRescaledRoot roots time (hpositive time)) who
           calc
             _ ≤ quittingTailConditionedValue roots value boundary time who +
-                (6 * M * Fintype.card ι * rho) *
+                (4 * M * Fintype.card ι * rho) *
                   quittingRootOpponentAbsorptionMass
                     (quittingTailDiffuseRescaledRoot roots time
                       (hpositive time)) who := hcontinue
             _ ≤ quittingTailConditionedValue roots value boundary time who +
-                ((13 * Fintype.card ι + 16) * M * rho) *
+                ((4 * Fintype.card ι + 16) * M * rho) *
                   quittingRootOpponentAbsorptionMass
                     (quittingTailDiffuseRescaledRoot roots time
                       (hpositive time)) who := by

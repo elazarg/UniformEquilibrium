@@ -65,7 +65,7 @@ theorem conditionedDiffuse_ownMarginalEndpointRepair_ge_jointCharge_shift
         who ≥
       quittingTailConditionedValue roots value boundary time who +
         eta / 2 - epsilon -
-          (6 * M * Fintype.card ι * rho) *
+          (4 * M * Fintype.card ι * rho) *
             quittingRootOpponentAbsorptionMass
               (quittingTailDiffuseRescaledRoot roots time hcurrent) who := by
   let targetRoot := quittingTailDiffuseRescaledRoot roots time hcurrent
@@ -105,7 +105,7 @@ theorem conditionedDiffuse_ownMarginalEndpointRepair_ge_jointCharge_shift
   have hlower :
       quittingRootExpectedPayoff reward next targetRoot who ≥
         current who -
-          (6 * M * Fintype.card ι * rho) *
+          (4 * M * Fintype.card ι * rho) *
             quittingRootOpponentAbsorptionMass targetRoot who := by
     have hcharge' := hcharge
     dsimp [targetRoot, next, current] at hcharge' ⊢
@@ -115,7 +115,7 @@ theorem conditionedDiffuse_ownMarginalEndpointRepair_ge_jointCharge_shift
             quittingRootExpectedPayoff reward
               (quittingTailConditionedValue roots value boundary (time + 1))
               (quittingTailDiffuseRescaledRoot roots time hcurrent) who| ≤
-          6 * M * Fintype.card ι * rho *
+          4 * M * Fintype.card ι * rho *
             quittingRootOpponentAbsorptionMass
               (quittingTailDiffuseRescaledRoot roots time hcurrent) who := by
       simpa only [quittingRootSuccessorPayoff] using hcharge'

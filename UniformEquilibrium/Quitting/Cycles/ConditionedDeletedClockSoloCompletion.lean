@@ -233,12 +233,12 @@ theorem isUniformEquilibriumPayoff_soloReward_of_summableConditionedDeletedClock
   let monoRoots : ℕ → ι → PMF Bool := fun time => targetRoots (start + time)
   let monoValue : ℕ → Payoff ι := fun time => targetValue (start + time)
   let coefficient : ℕ → ℝ := fun time =>
-    6 * M * Fintype.card ι *
+    4 * M * Fintype.card ι *
       quittingTailConditionedAbsorptionWeight roots (start + time)
   have hcoefficientVanish : Tendsto coefficient atTop (nhds 0) := by
     have halpha := hmesh.comp (tendsto_add_atTop_nat start)
     simpa [coefficient, Nat.add_comm] using
-      halpha.const_mul (6 * M * Fintype.card ι)
+      halpha.const_mul (4 * M * Fintype.card ι)
   have habsorptionTail : ∀ later, ¬Summable (fun offset =>
       quittingRootAbsorptionMass (monoRoots (later + offset))) := by
     intro later hsuffix

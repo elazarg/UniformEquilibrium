@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticIncidenceDebtRatioRegression
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
 
@@ -113,43 +114,6 @@ def mass (n : ℕ) : QuittingTerminalOutcome Player → ℝ :=
   quittingTerminalOutcomeMass reward (profile n)
 
 /-- Three-coordinate Fubini expansion for Boolean product roots. -/
-theorem expect_pmfPi_fin3 (sigma : Player → PMF Bool)
-    (f : (Player → Bool) → ℝ) :
-    expect (pmfPi sigma) f =
-      expect (sigma owner) (fun a =>
-        expect (sigma debtor) (fun b =>
-          expect (sigma switch) (fun c => f ![a, b, c]))) := by
-  classical
-  have howner : Function.update sigma owner (sigma owner) = sigma :=
-    Function.update_eq_self owner sigma
-  rw [← howner, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma owner))
-  funext a
-  have hdebtor : Function.update (Function.update sigma owner (PMF.pure a))
-      debtor (sigma debtor) = Function.update sigma owner (PMF.pure a) := by
-    funext who
-    fin_cases who <;> simp [owner, debtor]
-  rw [← hdebtor, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma debtor))
-  funext b
-  have hswitch : Function.update
-      (Function.update (Function.update sigma owner (PMF.pure a))
-        debtor (PMF.pure b)) switch (sigma switch) =
-      Function.update (Function.update sigma owner (PMF.pure a))
-        debtor (PMF.pure b) := by
-    funext who
-    fin_cases who <;> simp [owner, debtor, switch]
-  rw [← hswitch, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma switch))
-  funext c
-  have hpure : Function.update
-      (Function.update (Function.update sigma owner (PMF.pure a))
-        debtor (PMF.pure b)) switch (PMF.pure c) =
-      fun who => PMF.pure (![a, b, c] who) := by
-    funext who
-    fin_cases who <;> simp [owner, debtor, switch]
-  rw [hpure, pmfPi_pure, expect_pure]
-
 @[simp] theorem quittingQuitters_vec3 (a b c : Bool) :
     quittingQuitters ![a, b, c] =
       (if a then {owner} else ∅) ∪
@@ -170,38 +134,38 @@ theorem root_probabilities (n : ℕ) :
 theorem generating_quitPayoff_owner (n : ℕ) :
     quittingRootQuitPayoff reward (fun _ => 0) (root n) owner = -1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
-  simp [root, quittingRootPayoff, reward, owner, debtor, switch, expect_eq_sum]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [root, quittingRootPayoff, reward, owner, debtor, expect_eq_sum]
   ring
 
 theorem generating_continuePayoff_owner (n : ℕ) :
     quittingRootContinuePayoff reward (fun _ => 0) (root n) owner = 0 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
-  simp [root, quittingRootPayoff, reward, owner, debtor, switch, expect_eq_sum]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [root, quittingRootPayoff, reward, owner, debtor, expect_eq_sum]
 
 theorem generating_quitPayoff_debtor (n : ℕ) :
     quittingRootQuitPayoff reward (fun _ => 0) (root n) debtor = 0 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [root, quittingRootPayoff, reward, owner, debtor, switch, expect_eq_sum]
 
 theorem generating_continuePayoff_debtor (n : ℕ) :
     quittingRootContinuePayoff reward (fun _ => 0) (root n) debtor = q n := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [root, quittingRootPayoff, reward, owner, debtor, switch, expect_eq_sum]
 
 theorem generating_quitPayoff_switch (n : ℕ) :
     quittingRootQuitPayoff reward (fun _ => 0) (root n) switch = 0 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [root, quittingRootPayoff, reward, owner, debtor, switch, expect_eq_sum]
 
 theorem generating_continuePayoff_switch (n : ℕ) :
     quittingRootContinuePayoff reward (fun _ => 0) (root n) switch = 0 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [root, quittingRootPayoff, reward, owner, debtor, switch, expect_eq_sum]
 
 /-- The generating root has zero payoff in the owner coordinate. -/
@@ -310,16 +274,16 @@ theorem pair_coordinates (n : ℕ) :
     fin_cases who
     · unfold quittingRootQuitPayoff quittingRootContinuePayoff
         quittingRootExpectedPayoff
-      rw [expect_pmfPi_fin3, expect_pmfPi_fin3]
-      simp [root, quittingRootPayoff, reward, owner, debtor, switch, expect_eq_sum]
+      rw [Math.PMFProduct.expect_pmfPi_fin3, Math.PMFProduct.expect_pmfPi_fin3]
+      simp [root, quittingRootPayoff, reward, owner, debtor, expect_eq_sum]
     · unfold quittingRootQuitPayoff quittingRootContinuePayoff
         quittingRootExpectedPayoff
-      rw [expect_pmfPi_fin3, expect_pmfPi_fin3]
+      rw [Math.PMFProduct.expect_pmfPi_fin3, Math.PMFProduct.expect_pmfPi_fin3]
       simpa [root, quittingRootPayoff, reward, owner, debtor, switch,
         expect_eq_sum] using (q_pos n).le
     · unfold quittingRootQuitPayoff quittingRootContinuePayoff
         quittingRootExpectedPayoff
-      rw [expect_pmfPi_fin3, expect_pmfPi_fin3]
+      rw [Math.PMFProduct.expect_pmfPi_fin3, Math.PMFProduct.expect_pmfPi_fin3]
       simp [root, quittingRootPayoff, reward, owner, debtor, switch, expect_eq_sum]
 
 theorem pair_mass_mem_carrier (n : ℕ) :
@@ -412,8 +376,8 @@ theorem cap_endpointDifference_owner (n : ℕ) (candidate : Player → PMF Bool)
   rw [(pair_coordinates n).2]
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
     quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3, expect_pmfPi_fin3]
-  simp [quittingRootPayoff, reward, owner, debtor, switch, expect_eq_sum]
+  rw [Math.PMFProduct.expect_pmfPi_fin3, Math.PMFProduct.expect_pmfPi_fin3]
+  simp [quittingRootPayoff, reward, owner, expect_eq_sum]
   nlinarith
 
 theorem cap_endpointDifference_switch_of_owner_debtor_continue
@@ -424,7 +388,7 @@ theorem cap_endpointDifference_switch_of_owner_debtor_continue
   rw [(pair_coordinates n).2]
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
     quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3, expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3, Math.PMFProduct.expect_pmfPi_fin3]
   simp [quittingRootPayoff, reward, owner, debtor, switch, howner, hdebtor]
 
 /-- The exact cap correspondence is the singleton all-Continue root. -/
@@ -454,7 +418,7 @@ theorem exact_capNash_forces_allContinue (n : ℕ)
       rw [(pair_coordinates n).2]
       unfold quittingRootEndpointDifference quittingRootQuitPayoff
         quittingRootContinuePayoff quittingRootExpectedPayoff
-      rw [expect_pmfPi_fin3, expect_pmfPi_fin3]
+      rw [Math.PMFProduct.expect_pmfPi_fin3, Math.PMFProduct.expect_pmfPi_fin3]
       simp [quittingRootPayoff, reward, owner, debtor, switch, howner,
         expect_eq_sum]
     have h := (hendpoint debtor).2

@@ -115,6 +115,7 @@ import MathUE.OutcomeClosure.TerminalTarget
 import MathUE.ParametricFarkasBasis
 import MathUE.Periodicity
 import MathUE.PMFProduct.CollisionMass
+import MathUE.PMFProduct.FiniteFubini
 import MathUE.PolynomialSignCell
 import MathUE.Probability.Adaptive
 import MathUE.Probability.AdaptiveOccupationFlow
@@ -162,6 +163,7 @@ import MathUE.Probability.FiniteKernelRegeneration
 import MathUE.Probability.FiniteProductFlowKinematics
 import MathUE.Probability.FiniteProductFlowTwoStateRegression
 import MathUE.Probability.FiniteReachableClosedClass
+import MathUE.Probability.FiniteWeightVariation
 import MathUE.Probability.FrozenEndpointTransport
 import MathUE.Probability.FullSupportChargedClassRegeneration
 import MathUE.Probability.HarmonicClosedClass

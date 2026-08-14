@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetRepairCounterexample
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
@@ -107,14 +108,6 @@ def root : Player → PMF Bool := fun _ ↦ PMF.uniformOfFintype Bool
 def value : Payoff Player := ![1, 1, 1 / 4]
 def positiveContinueValue : Payoff Player := ![5 / 4, 1, 1 / 4]
 
-theorem expect_pmfPi_fin3_bool (sigma : Player → PMF Bool)
-    (f : (Player → Bool) → ℝ) :
-    expect (pmfPi sigma) f =
-      expect (sigma 0) fun a ↦
-        expect (sigma 1) fun b ↦
-          expect (sigma 2) fun c ↦ f ![a, b, c] :=
-  QuittingSureSetRepairCounterexample.expect_pmfPi_fin3_bool sigma f
-
 @[simp] theorem expect_uniform_bool (f : Bool → ℝ) :
     expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 :=
   QuittingSureSetRepairCounterexample.expect_uniform_bool f
@@ -130,7 +123,7 @@ theorem expect_pmfPi_fin3_bool (sigma : Player → PMF Bool)
 theorem quitPayoff_eq_value (who : Player) :
     quittingRootQuitPayoff reward (0 : Payoff Player) root who = value who := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [root, quittingRootPayoff, reward, value] <;>
       norm_num
@@ -138,7 +131,7 @@ theorem quitPayoff_eq_value (who : Player) :
 theorem continuePayoff_eq_value (who : Player) :
     quittingRootContinuePayoff reward (0 : Payoff Player) root who = value who := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [root, quittingRootPayoff, reward, value] <;>
       norm_num
@@ -183,7 +176,7 @@ theorem positiveContinuePayoff_eq (who : Player) :
       positiveContinueValue who := by
   unfold quittingCutoffOnePositiveContinuePayoff
     quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [root, quittingRootPayoff, reward,
       positiveContinueValue] <;> norm_num
@@ -545,7 +538,7 @@ theorem stationaryRepairRoot_absorbingContribution (who : Player) :
     quittingRootAbsorbingContribution reward stationaryRepairRoot who =
       stationaryRepairValue who := by
   unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [stationaryRepairRoot, halfCoin, quarterCoin,
       expect_hazardCoin,
@@ -570,7 +563,7 @@ theorem stationaryRepairRoot_fixedOpponentsQuitValue (who : Player) :
   unfold quittingStationaryFixedOpponentsQuitValue
     quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [stationaryRepairRoot, halfCoin, quarterCoin,
       expect_hazardCoin, quittingRootPayoff,
@@ -585,7 +578,7 @@ theorem stationaryRepairRoot_fixedOpponentsContinueReward
   unfold quittingStationaryFixedOpponentsContinueReward
     quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [stationaryRepairRoot, halfCoin, quarterCoin,
       expect_hazardCoin, quittingRootPayoff,

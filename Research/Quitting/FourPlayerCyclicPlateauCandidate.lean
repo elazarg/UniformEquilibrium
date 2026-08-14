@@ -5,6 +5,7 @@ Authors: GameTheory contributors.
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeCoalitionLocks
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalStaticOrientationDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
@@ -318,57 +319,6 @@ theorem phase_cap (phase : Phase) :
       first, second, host, observer, Fin.ext_iff]
 
 /-- Four-coordinate Fubini expansion for Boolean product roots. -/
-theorem expect_pmfPi_fin4 (sigma : Player → PMF Bool)
-    (f : (Player → Bool) → ℝ) :
-    expect (pmfPi sigma) f =
-      expect (sigma first) (fun a =>
-        expect (sigma second) (fun b =>
-          expect (sigma host) (fun c =>
-            expect (sigma observer) (fun d => f ![a, b, c, d])))) := by
-  classical
-  have hfirst : Function.update sigma first (sigma first) = sigma :=
-    Function.update_eq_self first sigma
-  rw [← hfirst, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma first))
-  funext a
-  have hsecond : Function.update (Function.update sigma first (PMF.pure a))
-      second (sigma second) = Function.update sigma first (PMF.pure a) := by
-    funext who
-    fin_cases who <;> simp [first, second]
-  rw [← hsecond, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma second))
-  funext b
-  have hhost : Function.update
-      (Function.update (Function.update sigma first (PMF.pure a))
-        second (PMF.pure b)) host (sigma host) =
-      Function.update (Function.update sigma first (PMF.pure a))
-        second (PMF.pure b) := by
-    funext who
-    fin_cases who <;> simp [first, second, host]
-  rw [← hhost, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma host))
-  funext c
-  have hobserver : Function.update
-      (Function.update
-        (Function.update (Function.update sigma first (PMF.pure a))
-          second (PMF.pure b)) host (PMF.pure c)) observer (sigma observer) =
-      Function.update
-        (Function.update (Function.update sigma first (PMF.pure a))
-          second (PMF.pure b)) host (PMF.pure c) := by
-    funext who
-    fin_cases who <;> simp [first, second, host, observer]
-  rw [← hobserver, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma observer))
-  funext d
-  have hpure : Function.update
-      (Function.update
-        (Function.update (Function.update sigma first (PMF.pure a))
-          second (PMF.pure b)) host (PMF.pure c)) observer (PMF.pure d) =
-      fun who => PMF.pure (![a, b, c, d] who) := by
-    funext who
-    fin_cases who <;> simp [first, second, host, observer]
-  rw [hpure, pmfPi_pure, expect_pure]
-
 @[simp] theorem quittingQuitters_vec4 (a b c d : Bool) :
     quittingQuitters ![a, b, c, d] =
       (if a then {first} else ∅) ∪
@@ -400,7 +350,7 @@ theorem phaseZero_endpointDifference_host (candidate : Player → PMF Bool) :
   rw [phaseZero_cap]
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
     quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
+  rw [Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
   simp [quittingRootPayoff, reward, first, second, host, observer,
     expect_eq_sum]
   nlinarith [hproduct]
@@ -427,7 +377,7 @@ theorem phaseZero_endpointDifference_observer
   rw [phaseZero_cap]
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
     quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
+  rw [Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
   simp [quittingRootPayoff, reward, first, second, host, observer,
     expect_eq_sum]
   nlinarith [hproduct]
@@ -446,7 +396,7 @@ theorem phaseZero_endpointDifference_mover_of_background_continue
     rw [phaseZero_cap]
     unfold quittingRootEndpointDifference quittingRootQuitPayoff
       quittingRootContinuePayoff quittingRootExpectedPayoff
-    rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
+    rw [Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
     simp [quittingRootPayoff, reward, first, second, host, observer,
       hhost, hobserver, expect_eq_sum]
     nlinarith [ENNReal.toReal_nonneg (a := candidate second false)]
@@ -455,7 +405,7 @@ theorem phaseZero_endpointDifference_mover_of_background_continue
     rw [phaseZero_cap]
     unfold quittingRootEndpointDifference quittingRootQuitPayoff
       quittingRootContinuePayoff quittingRootExpectedPayoff
-    rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
+    rw [Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
     simp [quittingRootPayoff, reward, first, second, host, observer,
       hhost, hobserver, expect_eq_sum]
     nlinarith [ENNReal.toReal_nonneg (a := candidate first false)]

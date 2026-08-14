@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTransferBalanceRegression
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 
 /-!
@@ -100,43 +101,6 @@ theorem profile_common_live_suffix
 /-! ## Explicit product-root calculations -/
 
 /-- Three-coordinate Fubini expansion for Boolean product roots. -/
-theorem expect_pmfPi_fin3 (sigma : Player → PMF Bool)
-    (f : (Player → Bool) → ℝ) :
-    expect (pmfPi sigma) f =
-      expect (sigma left) (fun a =>
-        expect (sigma right) (fun b =>
-          expect (sigma anchor) (fun c => f ![a, b, c]))) := by
-  classical
-  have hleft : Function.update sigma left (sigma left) = sigma :=
-    Function.update_eq_self left sigma
-  rw [← hleft, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma left))
-  funext a
-  have hright : Function.update (Function.update sigma left (PMF.pure a))
-      right (sigma right) = Function.update sigma left (PMF.pure a) := by
-    funext who
-    fin_cases who <;> simp [left, right]
-  rw [← hright, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma right))
-  funext b
-  have hanchor : Function.update
-      (Function.update (Function.update sigma left (PMF.pure a))
-        right (PMF.pure b)) anchor (sigma anchor) =
-      Function.update (Function.update sigma left (PMF.pure a))
-        right (PMF.pure b) := by
-    funext who
-    fin_cases who <;> simp [left, right, anchor]
-  rw [← hanchor, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma anchor))
-  funext c
-  have hpure : Function.update
-      (Function.update (Function.update sigma left (PMF.pure a))
-        right (PMF.pure b)) anchor (PMF.pure c) =
-      fun who => PMF.pure (![a, b, c] who) := by
-    funext who
-    fin_cases who <;> simp [left, right, anchor]
-  rw [hpure, pmfPi_pure, expect_pure]
-
 @[simp] theorem quittingQuitters_vec3 (a b c : Bool) :
     quittingQuitters ![a, b, c] =
       (if a then {left} else ∅) ∪
@@ -204,8 +168,8 @@ theorem root_quitPayoff_left
     quittingRootQuitPayoff reward (0 : Payoff Player)
       (root x y hx0 hx1 hy0 hy1) left = y := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
-  simp [root, quittingRootPayoff, reward, left, right, anchor,
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [root, quittingRootPayoff, reward, left, right,
     expect_eq_sum]
 
 theorem root_continuePayoff_left
@@ -214,8 +178,8 @@ theorem root_continuePayoff_left
     quittingRootContinuePayoff reward (0 : Payoff Player)
       (root x y hx0 hx1 hy0 hy1) left = 0 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
-  simp [root, quittingRootPayoff, reward, left, right, anchor,
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [root, quittingRootPayoff, reward, left, right,
     expect_eq_sum]
 
 theorem root_quitPayoff_right
@@ -224,8 +188,8 @@ theorem root_quitPayoff_right
     quittingRootQuitPayoff reward (0 : Payoff Player)
       (root x y hx0 hx1 hy0 hy1) right = 0 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
-  simp [root, quittingRootPayoff, reward, left, right, anchor,
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [root, quittingRootPayoff, reward, left, right,
     expect_eq_sum]
 
 theorem root_continuePayoff_right
@@ -234,8 +198,8 @@ theorem root_continuePayoff_right
     quittingRootContinuePayoff reward (0 : Payoff Player)
       (root x y hx0 hx1 hy0 hy1) right = 1 - x := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
-  simp [root, quittingRootPayoff, reward, left, right, anchor,
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [root, quittingRootPayoff, reward, left, right,
     expect_eq_sum]
 
 theorem root_quitPayoff_anchor
@@ -244,7 +208,7 @@ theorem root_quitPayoff_anchor
     quittingRootQuitPayoff reward (0 : Payoff Player)
       (root x y hx0 hx1 hy0 hy1) anchor = -1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [root, quittingRootPayoff, reward, left, right, anchor,
     expect_eq_sum]
 
@@ -254,7 +218,7 @@ theorem root_continuePayoff_anchor
     quittingRootContinuePayoff reward (0 : Payoff Player)
       (root x y hx0 hx1 hy0 hy1) anchor = 0 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [root, quittingRootPayoff, reward, left, right, anchor,
     expect_eq_sum]
 

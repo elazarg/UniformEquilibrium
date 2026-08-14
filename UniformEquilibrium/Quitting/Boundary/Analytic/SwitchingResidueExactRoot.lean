@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 import UniformEquilibrium.Quitting.Boundary.Analytic.SwitchingResidueRegressionBridge
 
@@ -104,43 +105,6 @@ def thirdCoin : PMF Bool :=
     thirdCoin_true_toReal, thirdCoin_false_toReal]
 
 /-- Fubini expansion of a product of three Boolean marginals. -/
-theorem expect_pmfPi_fin3_bool (sigma : Player → PMF Bool)
-    (f : (Player → Bool) → ℝ) :
-    expect (pmfPi sigma) f =
-      expect (sigma 0) fun a ↦
-        expect (sigma 1) fun b ↦
-          expect (sigma 2) fun d ↦ f ![a, b, d] := by
-  classical
-  have h0 : Function.update sigma 0 (sigma 0) = sigma :=
-    Function.update_eq_self 0 sigma
-  rw [← h0, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 0))
-  funext a
-  have h1 : Function.update (Function.update sigma 0 (PMF.pure a)) 1 (sigma 1) =
-      Function.update sigma 0 (PMF.pure a) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h1, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 1))
-  funext b
-  have h2 : Function.update
-      (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-      2 (sigma 2) =
-      Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h2, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 2))
-  funext d
-  have hpure : Function.update
-      (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-      2 (PMF.pure d) = fun who ↦ PMF.pure (![a, b, d] who) := by
-    funext who
-    fin_cases who <;> simp
-  rw [hpure, pmfPi_pure, expect_pure]
-
-/-- The one-stage payoff of the regression table, with the quitter-set
-presentation exposed. -/
 theorem quittingRootPayoff_gameReward
     (tail : Payoff Player) (action : Player → Bool) (who : Player) :
     quittingRootPayoff gameReward tail action who =
@@ -196,7 +160,7 @@ theorem quittingRootSuccessorPayoff_residueRoot (tail : Payoff Player) :
     quittingRootSuccessorPayoff gameReward tail residueRoot = residueValue := by
   funext who
   unfold quittingRootSuccessorPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [residueRoot, residueValue, QuittingSwitchingResidueRegression.reward,
       quittingQuitters, Matrix.cons_val_two]
@@ -207,7 +171,7 @@ theorem quittingRootEndpointDifference_residueRoot (who : Player) :
       ![(1 / 7 : ℝ), 0, 0] who := by
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
     quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool, expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3, Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [residueRoot, residueValue, QuittingSwitchingResidueRegression.reward,
       quittingQuitters, Matrix.cons_val_two]
@@ -313,7 +277,7 @@ theorem quittingRootSuccessorPayoff_enlargedRoot (tail : Payoff Player) :
     quittingRootSuccessorPayoff gameReward tail enlargedRoot = enlargedValue := by
   funext who
   unfold quittingRootSuccessorPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [enlargedRoot, enlargedValue, QuittingSwitchingResidueRegression.reward,
       quittingQuitters, Matrix.cons_val_two] <;> norm_num
@@ -324,7 +288,7 @@ theorem quittingRootEndpointDifference_enlargedRoot (who : Player) :
       ![(0 : ℝ), 1 / 5, 0] who := by
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
     quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_fin3_bool, expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3, Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [enlargedRoot, enlargedValue, QuittingSwitchingResidueRegression.reward,
       quittingQuitters, Matrix.cons_val_two] <;> norm_num

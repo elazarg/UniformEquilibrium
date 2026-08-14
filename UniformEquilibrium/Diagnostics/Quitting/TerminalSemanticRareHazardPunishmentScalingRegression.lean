@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFixedTableDiffuseIncidenceRegression
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Stationary.MinMax
 
 /-!
@@ -86,7 +87,7 @@ theorem collision_quitValue :
   unfold quittingStationaryFixedOpponentsQuitValue
     quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [expect_eq_sum, quittingRootPayoff, reward, collisionRoot,
     owner, left, right]
 
@@ -96,7 +97,7 @@ theorem collision_continueReward :
   unfold quittingStationaryFixedOpponentsContinueReward
     quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [expect_eq_sum, quittingRootPayoff, reward, collisionRoot,
     owner, left, right]
 
@@ -144,7 +145,7 @@ theorem rare_quitValue (n : ℕ) :
   unfold quittingStationaryFixedOpponentsQuitValue
     quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [expect_eq_sum, quittingRootPayoff, reward, rareRoot, coin,
     QuittingFixedTableDiffuseIncidenceRegression.switchCoin,
     owner, left, right]
@@ -156,7 +157,7 @@ theorem rare_continueReward (n : ℕ) :
   unfold quittingStationaryFixedOpponentsContinueReward
     quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
-  rw [QuittingFixedTableDiffuseIncidenceRegression.expect_pmfPi_fin3]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [expect_eq_sum, quittingRootPayoff, reward, rareRoot, coin,
     QuittingFixedTableDiffuseIncidenceRegression.switchCoin,
     owner, left, right]

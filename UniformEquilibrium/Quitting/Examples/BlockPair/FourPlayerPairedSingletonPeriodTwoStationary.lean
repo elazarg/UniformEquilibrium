@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwo
+import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Stationary.Gain
 import UniformEquilibrium.Quitting.Stationary.MinMax
 
@@ -667,7 +668,7 @@ private theorem periodTwo_stationaryGain_zero_raw
     quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
   rw [quittingStationaryContinueMass_eq_prod_continueProbability,
-    expect_pmfPi_fin4_bool, expect_pmfPi_fin4_bool]
+    Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
   simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
     periodTwoReward, expect_eq_sum]
 
@@ -713,7 +714,7 @@ private theorem periodTwo_stationaryGain_one_raw
     quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
   rw [quittingStationaryContinueMass_eq_prod_continueProbability,
-    expect_pmfPi_fin4_bool, expect_pmfPi_fin4_bool]
+    Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
   simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
     periodTwoReward, expect_eq_sum]
 
@@ -759,7 +760,7 @@ private theorem periodTwo_stationaryGain_two_raw
     quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
   rw [quittingStationaryContinueMass_eq_prod_continueProbability,
-    expect_pmfPi_fin4_bool, expect_pmfPi_fin4_bool]
+    Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
   simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
     periodTwoReward, expect_eq_sum]
 
@@ -805,7 +806,7 @@ private theorem periodTwo_stationaryGain_three_raw
     quittingFixedOpponentsContinueReward quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
   rw [quittingStationaryContinueMass_eq_prod_continueProbability,
-    expect_pmfPi_fin4_bool, expect_pmfPi_fin4_bool]
+    Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
   simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
     periodTwoReward, expect_eq_sum]
 

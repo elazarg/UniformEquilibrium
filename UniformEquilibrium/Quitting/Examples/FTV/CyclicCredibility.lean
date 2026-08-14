@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Architectures.PublicResponse.CredibilityCriterion
+import MathUE.PMFProduct.FiniteFubini
 import GameTheory.Concepts.Stochastic.Models.Quitting.Game
 
 /-!
@@ -169,41 +170,6 @@ abbrev architecture : game.FiniteResponseArchitecture initialState where
     architecture.step z act s' = step z act s' := rfl
 
 /-- Fubini expansion of a product of three Boolean mixed actions. -/
-theorem expect_pmfPi_fin3_bool (sigma : Player → PMF Bool)
-    (f : (Player → Bool) → ℝ) :
-    expect (pmfPi sigma) f =
-      expect (sigma 0) fun a ↦
-        expect (sigma 1) fun b ↦
-          expect (sigma 2) fun c ↦ f ![a, b, c] := by
-  classical
-  have h0 : Function.update sigma 0 (sigma 0) = sigma :=
-    Function.update_eq_self 0 sigma
-  rw [← h0, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 0))
-  funext a
-  have h1 : Function.update (Function.update sigma 0 (PMF.pure a))
-      1 (sigma 1) = Function.update sigma 0 (PMF.pure a) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h1, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 1))
-  funext b
-  have h2 : Function.update
-      (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-      2 (sigma 2) =
-      Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b) := by
-    funext who
-    fin_cases who <;> simp
-  rw [← h2, pmfPi_update_bind, expect_bind]
-  apply congrArg (expect (sigma 2))
-  funext c
-  have hpure : Function.update
-      (Function.update (Function.update sigma 0 (PMF.pure a)) 1 (PMF.pure b))
-      2 (PMF.pure c) = fun who ↦ PMF.pure (![a, b, c] who) := by
-    funext who
-    fin_cases who <;> simp
-  rw [hpure, pmfPi_pure, expect_pure]
-
 @[simp] theorem expect_uniform_bool (f : Bool → ℝ) :
     expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 := by
   rw [expect_eq_sum, Fintype.sum_bool]
@@ -260,7 +226,7 @@ theorem prescribed_target_live (c who : Player) :
   change expect (pmfPi (play (Sum.inl c))) (fun act ↦
       expect ((quittingGame terminalReward).transition none act) (fun s' ↦
         target (step (Sum.inl c) act s') who)) = target (Sum.inl c) who
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases c <;> fin_cases who <;>
     simp [play, game, quittingGame, step, target, phaseTarget, nextPhase,
       terminalReward] <;> norm_num
@@ -295,7 +261,7 @@ theorem unilateral_target_live (c who : Player) (act : Bool) :
         expect ((quittingGame terminalReward).transition none joint) (fun s' ↦
           target (step (Sum.inl c) joint s') who)) ≤
     target (Sum.inl c) who
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases c <;> fin_cases who <;> cases act <;>
     simp [play, game, quittingGame, step, target, phaseTarget, nextPhase,
       terminalReward_0, terminalReward_1, terminalReward_2,
@@ -355,7 +321,7 @@ theorem prescribedConfigDist_live_apply_live (source dest : Player) :
   change expect (pmfPi (play (Sum.inl source))) (fun joint ↦
       expect ((quittingGame terminalReward).transition none joint) (fun s' ↦
         if step (Sum.inl source) joint s' = Sum.inl dest then 1 else 0)) = _
-  rw [expect_pmfPi_fin3_bool]
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases source <;> fin_cases dest <;>
     simp [play, game, quittingGame, step, nextPhase]
 
