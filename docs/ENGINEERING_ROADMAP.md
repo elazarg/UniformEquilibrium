@@ -129,6 +129,13 @@ triples and leaves 329 across 95 files. The complete set of 168 coupled
 quantitative declarations is unchanged. This is progress toward the phase
 gate, not completion of it.
 
+A follow-up telescope audit internalizes four qualitative or independently
+bounded cases that the initial classifier conservatively retained. The live
+census is therefore 493 declarations: 329 removable and 164 genuinely
+coupled. That refinement also removes two derivable nonnegativity hypotheses
+and a punishment-bound hypothesis that had become dead through five local
+wrappers.
+
 The census recognizes the narrow `M`/`B`/`C` coordinate-bound schema in Lean
 definitions, theorems, lemmas, abbreviations, and opaque declarations. It
 handles grouped Unicode binders, strict implicits, equation declarations,

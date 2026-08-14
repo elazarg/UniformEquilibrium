@@ -441,8 +441,7 @@ theorem tendsto_quittingTailConditionedValue_solo_of_summableOpponentWeight
     (boundary : Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {M : ℝ}
     (hpositive : ∀ time,
       0 < quittingTailEventualAbsorption roots time)
     (heventualZero : Tendsto
@@ -458,6 +457,23 @@ theorem tendsto_quittingTailConditionedValue_solo_of_summableOpponentWeight
         atTop
         (nhds (reward (quittingSingletonTerminal owner) recipient)) := by
   intro recipient
+  have hM : 0 ≤ M := by
+    exact (abs_nonneg
+      (quittingTailConditionedValue roots value boundary 0 owner)).trans
+      (hconditionedBound 0 owner)
+  let K : ℝ := max M (quittingRewardBound reward)
+  have hK : 0 ≤ K := by
+    dsimp only [K]
+    exact hM.trans (le_max_left M (quittingRewardBound reward))
+  have hKReward : ∀ terminal player, |reward terminal player| ≤ K := by
+    intro terminal player
+    exact (abs_reward_le_quittingRewardBound reward terminal player).trans
+      (by dsimp only [K]; exact le_max_right _ _)
+  have hKConditioned : ∀ time player,
+      |quittingTailConditionedValue roots value boundary time player| ≤ K := by
+    intro time player
+    exact (hconditionedBound time player).trans
+      (by dsimp only [K]; exact le_max_left _ _)
   let beta : ℕ → ℝ := fun time ↦
     quittingTailConditionedOpponentWeight roots time owner
   have hbetaSummable : Summable beta := by
@@ -478,9 +494,9 @@ theorem tendsto_quittingTailConditionedValue_solo_of_summableOpponentWeight
       tendsto_sum_nat_add beta
     simpa [Nat.add_comm] using htail'
   have hmajor : Tendsto (fun time ↦
-      2 * M * ∑' offset : ℕ, beta (time + offset))
+      2 * K * ∑' offset : ℕ, beta (time + offset))
       atTop (nhds 0) := by
-    simpa using htail.const_mul (2 * M)
+    simpa using htail.const_mul (2 * K)
   rw [Metric.tendsto_atTop]
   intro ε hε
   obtain ⟨threshold, hthreshold⟩ :=
@@ -489,15 +505,15 @@ theorem tendsto_quittingTailConditionedValue_solo_of_summableOpponentWeight
   rw [Real.dist_eq]
   have hpointwise :=
     abs_quittingTailConditionedValue_sub_singleton_le_tsum
-      (reward := reward) roots value boundary hpolicy hM hreward hpositive
-        heventualZero hconditionedBound owner hclock time recipient
+      (reward := reward) roots value boundary hpolicy hK hKReward hpositive
+        heventualZero hKConditioned owner hclock time recipient
   exact lt_of_le_of_lt hpointwise <| by
     have hclose := hthreshold time htime
     have htail0 : 0 ≤ ∑' offset : ℕ, beta (time + offset) :=
       tsum_nonneg fun offset ↦ hbetaNonneg (time + offset)
     have hbound0 :
-        0 ≤ 2 * M * ∑' offset : ℕ, beta (time + offset) :=
-      mul_nonneg (mul_nonneg (by norm_num) hM) htail0
+        0 ≤ 2 * K * ∑' offset : ℕ, beta (time + offset) :=
+      mul_nonneg (mul_nonneg (by norm_num) hK) htail0
     rw [Real.dist_eq, sub_zero, abs_of_nonneg hbound0] at hclose
     simpa only [beta] using hclose
 

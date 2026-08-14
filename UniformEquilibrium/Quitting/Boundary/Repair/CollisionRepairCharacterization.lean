@@ -1042,29 +1042,6 @@ theorem not_quittingCollisionBlockerBalance_of_bonus_nonpos
   nlinarith [mul_nonneg hrate0 (neg_nonneg.mpr hbonus),
     mul_pos hgap (sub_pos.mpr hrate1)]
 
-omit [DecidableEq ι] in
-/-- Every extended set reward is inside the canonical reward bound. -/
-theorem abs_quittingSetReward_le_quittingRewardBound
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (S : Finset ι) (who : ι) :
-    |quittingSetReward reward S who| ≤ quittingRewardBound reward := by
-  by_cases hS : S.Nonempty
-  · rw [quittingSetReward_of_nonempty reward hS]
-    exact abs_reward_le_quittingRewardBound reward _ who
-  · rw [Finset.not_nonempty_iff_eq_empty.mp hS, quittingSetReward_empty,
-      abs_zero]
-    exact quittingRewardBound_nonneg reward
-
-/-- The exact punishment value is inside the canonical reward bound. -/
-theorem abs_quittingPunishmentValue_le_quittingRewardBound
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
-    |quittingPunishmentValue reward who| ≤ quittingRewardBound reward := by
-  refine abs_le.mpr
-    ⟨neg_quittingRewardBound_le_quittingPunishmentValue reward who, ?_⟩
-  refine (quittingPunishmentValue_le_max_solo reward who).trans (max_le ?_ ?_)
-  · exact (le_abs_self _).trans
-      (abs_quittingSetReward_le_quittingRewardBound reward {who} who)
-  · exact quittingRewardBound_nonneg reward
-
 /-- **The fixed-gap obstruction.**  Against the canonical reward bound `M`, a
 blocker whose solo exit sits a gap `γ` below its exact punishment value keeps
 a one-stage continuation gain of at least `γ - 4 * M * rate`: the erosion the

@@ -42,8 +42,6 @@ theorem tendsto_value_sub_terminalValue_of_vanishing_jointPolicyCoefficient
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (coefficient : ℕ → ℝ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hvalue : ∀ time player, |value time player| ≤ M)
     (hcoefficientVanish : Tendsto coefficient atTop (nhds 0))
     (hpolicy : ∀ time player,
@@ -57,6 +55,7 @@ theorem tendsto_value_sub_terminalValue_of_vanishing_jointPolicyCoefficient
       value start who -
         quittingRootSequenceTerminalValue reward roots who start)
       atTop (nhds 0) := by
+  have hM : 0 ≤ M := (abs_nonneg (value 0 who)).trans (hvalue 0 who)
   rw [Metric.tendsto_atTop]
   intro epsilon hepsilon
   have hhalf : 0 < epsilon / 2 := by linarith
@@ -98,10 +97,21 @@ theorem tendsto_value_sub_terminalValue_of_vanishing_jointPolicyCoefficient
       _ ≤ (epsilon / 2) * quittingRootAbsorptionMass (roots (start + time)) :=
         mul_le_mul_of_nonneg_right hcoefficient habsorption
       _ = _ := rfl
+  let K : ℝ := max M (quittingRewardBound reward)
+  have hK : 0 ≤ K := by
+    dsimp only [K]
+    exact hM.trans (le_max_left M (quittingRewardBound reward))
+  have hrewardK : ∀ terminal player, |reward terminal player| ≤ K := by
+    intro terminal player
+    exact (abs_reward_le_quittingRewardBound reward terminal player).trans
+      (le_max_right M (quittingRewardBound reward))
+  have hvalueK : ∀ time player, |value time player| ≤ K := by
+    intro time player
+    exact (hvalue time player).trans (le_max_left M (quittingRewardBound reward))
   have hselected :=
     abs_value_sub_rootSequenceTerminalValue_le_of_jointPolicyError
-      reward shiftedRoots shiftedValue hM hreward
-      (fun time player => hvalue (start + time) player)
+      reward shiftedRoots shiftedValue hK hrewardK
+      (fun time player => hvalueK (start + time) player)
       hshiftedPolicy hshiftedSurvival 0 who
   rw [show shiftedValue 0 who = value start who by
       simp [shiftedValue]] at hselected
@@ -277,8 +287,6 @@ theorem isUniformEquilibriumPayoff_soloReward_of_summableConditionedDeletedClock
     intro who
     exact tendsto_value_sub_terminalValue_of_vanishing_jointPolicyCoefficient
       reward monoRoots monoValue coefficient who
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
       (fun time player => hconditionedBound (start + time) player)
       hcoefficientVanish hpolicyError hsurvival
   have hterminalOriginal :=

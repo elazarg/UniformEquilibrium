@@ -584,10 +584,7 @@ punishment-floor statement is assumed for any conditioned suffix: boundedness
 of the punishment value and of literal terminal values is enough. -/
 theorem tendsto_opponentSurvival_mul_punishment_sub_never
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hchi : |quittingPunishmentValue reward owner| ≤ M)
+    (roots : ℕ → ι → PMF Bool) (owner : ι)
     (hcomplete : Tendsto
       (quittingOpponentSurvivalWeight roots owner 0) atTop (nhds 0)) :
     Tendsto (fun horizon =>
@@ -597,16 +594,17 @@ theorem tendsto_opponentSurvival_mul_punishment_sub_never
             horizon)) atTop (nhds 0) := by
   have hvalue : ∀ horizon,
       |quittingRootSequencePureTimeTerminalValue reward roots owner none
-          horizon| ≤ M := by
+          horizon| ≤ quittingRewardBound reward := by
     intro horizon
     unfold quittingRootSequencePureTimeTerminalValue
     exact abs_quittingRootSequenceTerminalValue_le reward
       (quittingRootSequenceUpdate roots owner (quittingPureTimeHazard none))
-      owner horizon hM hreward
+      owner horizon (quittingRewardBound_nonneg reward)
+      (abs_reward_le_quittingRewardBound reward)
   have hdifference : ∀ horizon,
       |quittingPunishmentValue reward owner -
           quittingRootSequencePureTimeTerminalValue reward roots owner none
-            horizon| ≤ 2 * M := by
+            horizon| ≤ 2 * quittingRewardBound reward := by
     intro horizon
     calc
       |quittingPunishmentValue reward owner -
@@ -615,13 +613,17 @@ theorem tendsto_opponentSurvival_mul_punishment_sub_never
           |quittingPunishmentValue reward owner| +
             |quittingRootSequencePureTimeTerminalValue reward roots owner none
               horizon| := abs_sub _ _
-      _ ≤ M + M := add_le_add hchi (hvalue horizon)
-      _ = 2 * M := by ring
+      _ ≤ quittingRewardBound reward + quittingRewardBound reward :=
+        add_le_add
+          (abs_quittingPunishmentValue_le_quittingRewardBound reward owner)
+          (hvalue horizon)
+      _ = 2 * quittingRewardBound reward := by ring
   have hscale : Tendsto
       (fun horizon =>
-        quittingOpponentSurvivalWeight roots owner 0 horizon * (2 * M))
+        quittingOpponentSurvivalWeight roots owner 0 horizon *
+          (2 * quittingRewardBound reward))
       atTop (nhds 0) := by
-    simpa using hcomplete.mul_const (2 * M)
+    simpa using hcomplete.mul_const (2 * quittingRewardBound reward)
   refine squeeze_zero_norm' (Eventually.of_forall fun horizon => ?_) hscale
   rw [Real.norm_eq_abs, abs_mul,
     abs_of_nonneg
@@ -642,7 +644,6 @@ theorem weighted_punishment_sub_never_le_collisionBudget_of_complete
       quittingPunishmentValue reward owner)
     {M budget : ℝ} (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hchi : |quittingPunishmentValue reward owner| ≤ M)
     (hcomplete : Tendsto
       (quittingOpponentSurvivalWeight roots owner 0) atTop (nhds 0))
     (hbudget : ∀ horizon,
@@ -656,7 +657,7 @@ theorem weighted_punishment_sub_never_le_collisionBudget_of_complete
   let never : ℕ → ℝ := fun time =>
     quittingRootSequencePureTimeTerminalValue reward roots owner none time
   have hfar := tendsto_opponentSurvival_mul_punishment_sub_never
-    reward roots owner hM hreward hchi hcomplete
+    reward roots owner hcomplete
   have hfarShift : Tendsto (fun fuel =>
       quittingOpponentSurvivalWeight roots owner 0 (start + fuel) *
         (chi - never (start + fuel))) atTop (nhds 0) := by
@@ -883,7 +884,6 @@ theorem quittingNeverFaceDebt_le_two_mul_collisionBudget_of_complete
       quittingPunishmentValue reward owner)
     {M budget : ℝ} (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hchi : |quittingPunishmentValue reward owner| ≤ M)
     (hcomplete : Tendsto
       (quittingOpponentSurvivalWeight
         (quittingProfileLiveRoot reward profile) owner 0) atTop (nhds 0))
@@ -913,7 +913,7 @@ theorem quittingNeverFaceDebt_le_two_mul_collisionBudget_of_complete
               (time + 1)) ≤ budget := by
     intro time
     exact weighted_punishment_sub_never_le_collisionBudget_of_complete
-      reward roots owner hjoin hsolo hM hreward hchi hcomplete hbudget
+      reward roots owner hjoin hsolo hM hreward hcomplete hbudget
         (time + 1)
   have hdebt := quittingNeverFaceDebt_le_collision_and_boundary
     reward profile owner hjoin hsolo hM hbudgetNonneg hbudgetNonneg hreward
@@ -931,7 +931,6 @@ theorem quittingNeverFaceDebt_le_four_mul_reward_mul_pairs_mul_mesh
       quittingPunishmentValue reward owner)
     {M mesh : ℝ} (hM : 0 ≤ M) (hmesh0 : 0 ≤ mesh)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hchi : |quittingPunishmentValue reward owner| ≤ M)
     (hcomplete : Tendsto
       (quittingOpponentSurvivalWeight
         (quittingProfileLiveRoot reward profile) owner 0) atTop (nhds 0))
@@ -953,7 +952,7 @@ theorem quittingNeverFaceDebt_le_four_mul_reward_mul_pairs_mul_mesh
       (quittingProfileLiveRoot reward profile) owner hM hmesh0 hmesh horizon
   have hdebt :=
     quittingNeverFaceDebt_le_two_mul_collisionBudget_of_complete
-      reward profile owner hjoin hsolo hM hreward hchi hcomplete hbudget
+      reward profile owner hjoin hsolo hM hreward hcomplete hbudget
   nlinarith
 
 /-- **Exact diffuse deletion on a collision-free complete clock.**  If the
@@ -967,9 +966,6 @@ theorem quittingNeverFaceDebt_eq_zero_of_complete_collisionFree
     (hjoin : QuittingOwnerSingletonJoinAntitone reward owner)
     (hsolo : reward (quittingSingletonTerminal owner) owner <
       quittingPunishmentValue reward owner)
-    {M : ℝ} (hM : 0 ≤ M)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hchi : |quittingPunishmentValue reward owner| ≤ M)
     (hcomplete : Tendsto
       (quittingOpponentSurvivalWeight
         (quittingProfileLiveRoot reward profile) owner 0) atTop (nhds 0))
@@ -984,13 +980,16 @@ theorem quittingNeverFaceDebt_eq_zero_of_complete_collisionFree
             (quittingPureTimeBehaviorStrategy reward owner none)) owner = 0 := by
   have hbudget : ∀ horizon,
       quittingOwnerCollisionErrorAccum
-        (quittingProfileLiveRoot reward profile) owner M 0 horizon ≤ 0 := by
+        (quittingProfileLiveRoot reward profile) owner
+          (quittingRewardBound reward) 0 horizon ≤ 0 := by
     intro horizon
     unfold quittingOwnerCollisionErrorAccum
     simp [hcollisionFree]
   have hupper :=
     quittingNeverFaceDebt_le_two_mul_collisionBudget_of_complete
-      reward profile owner hjoin hsolo hM hreward hchi hcomplete hbudget
+      reward profile owner hjoin hsolo (quittingRewardBound_nonneg reward)
+        (abs_reward_le_quittingRewardBound reward)
+        hcomplete hbudget
   have hlower := le_quittingBestReplyValue reward profile owner
     (quittingPureTimeBehaviorStrategy reward owner none)
   linarith
@@ -1023,7 +1022,6 @@ theorem exists_strict_owner_singleton_toggle_or_neverFaceDebt_le_two_mul_budget
       quittingPunishmentValue reward owner)
     {M budget : ℝ} (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hchi : |quittingPunishmentValue reward owner| ≤ M)
     (hcomplete : Tendsto
       (quittingOpponentSurvivalWeight
         (quittingProfileLiveRoot reward profile) owner 0) atTop (nhds 0))
@@ -1044,7 +1042,7 @@ theorem exists_strict_owner_singleton_toggle_or_neverFaceDebt_le_two_mul_budget
   · exact Or.inl htoggle
   · exact Or.inr <|
       quittingNeverFaceDebt_le_two_mul_collisionBudget_of_complete
-        reward profile owner hjoin hsolo hM hreward hchi hcomplete hbudget
+        reward profile owner hjoin hsolo hM hreward hcomplete hbudget
 
 /-- Zero-budget form of the diffuse deletion dispatcher.  This is exact for
 the displayed opponent chronology.  It does not by itself justify subtype
@@ -1056,7 +1054,6 @@ theorem exists_strict_owner_singleton_toggle_or_neverFaceDebt_eq_zero
       quittingPunishmentValue reward owner)
     {M : ℝ} (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hchi : |quittingPunishmentValue reward owner| ≤ M)
     (hcomplete : Tendsto
       (quittingOpponentSurvivalWeight
         (quittingProfileLiveRoot reward profile) owner 0) atTop (nhds 0))
@@ -1072,7 +1069,7 @@ theorem exists_strict_owner_singleton_toggle_or_neverFaceDebt_eq_zero
               (quittingPureTimeBehaviorStrategy reward owner none)) owner = 0 := by
   rcases
       exists_strict_owner_singleton_toggle_or_neverFaceDebt_le_two_mul_budget
-        reward profile owner hsolo hM hreward hchi hcomplete hbudget with
+        reward profile owner hsolo hM hreward hcomplete hbudget with
     htoggle | hdebt
   · exact Or.inl htoggle
   · right

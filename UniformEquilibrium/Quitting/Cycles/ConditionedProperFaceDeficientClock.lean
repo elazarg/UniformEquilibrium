@@ -69,9 +69,7 @@ theorem
     intro who
     exact tendsto_quittingTailConditionedValue_solo_of_summableOpponentWeight
       (reward := reward) roots value boundary hpolicy
-        (quittingRewardBound_nonneg reward)
-        (abs_reward_le_quittingRewardBound reward) hpositive heventualZero
-        hconditionedBound owner hclock who
+        hpositive heventualZero hconditionedBound owner hclock who
   have hquitLimit : ∀ who,
       Tendsto (fun time =>
         quittingStationaryFixedOpponentsQuitValue reward
