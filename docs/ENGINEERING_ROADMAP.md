@@ -166,6 +166,14 @@ Bellman construction is handled explicitly. The census has a separate
 `--max-nonnegative` ratchet so this weaker-but-still-redundant hypothesis class
 cannot regrow while the remaining quantitative layers are normalized.
 
+The closing quantitative-normalization slice removes those final 87 explicit
+nonnegativity hypotheses. Eighty-six declarations derive the fact from a named
+player or an available `Nonempty` witness; the last derives it from an implicit
+owner already present in the theorem telescope. Their arbitrary reward bounds,
+coordinate-bound premises, quantitative conclusions, and all later hypotheses
+remain unchanged. The strict nonnegativity census and its CI ratchet are now
+zero.
+
 The census recognizes the narrow `M`/`B`/`C` coordinate-bound schema in Lean
 definitions, theorems, lemmas, abbreviations, and opaque declarations. It
 handles grouped Unicode binders, strict implicits, equation declarations,

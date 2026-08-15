@@ -328,7 +328,7 @@ theorem abs_laterAbnormal_terminalPayoff_sub_ownerSolo_le
     linarith
   have hanchor :=
     abs_quittingRootAbsorbingContribution_sub_absorption_mul_solo_le
-      (reward := reward) root owner who hM hreward
+      (reward := reward) root owner who hreward
   rw [laterAbnormalRoot_owner_opponentAbsorption hne] at hanchor
   rw [quittingTerminalPayoff_stationary_eq_absorbingContribution_div
     reward root who hcontinue]
@@ -370,7 +370,7 @@ theorem abs_laterAbnormal_quitValue_sub_solo_le
         quittingSoloReward reward who who| ≤ 4 * M * p := by
   have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hbase := abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
-    (reward := reward) (laterAbnormalRoot owner blocker p hp0 hp1) who hM hreward
+    (reward := reward) (laterAbnormalRoot owner blocker p hp0 hp1) who hreward
   have hopponent := quittingRootOpponentAbsorptionMass_le_absorptionMass
     (laterAbnormalRoot owner blocker p hp0 hp1) who
   have habsorption := (laterAbnormalRoot_absorption_bounds hne hp0 hp1).2
@@ -389,7 +389,7 @@ cap, including the Never alternative. -/
 theorem isεAsymptoticNash_laterAbnormalRoot
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {owner blocker : ι} (hne : blocker ≠ owner) {p M : ℝ}
-    (hp : 0 < p) (hp1 : p ≤ 1) (hM : 0 ≤ M)
+    (hp : 0 < p) (hp1 : p ≤ 1)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hcolumn : ∀ who,
       quittingSoloReward reward who who ≤ quittingSoloReward reward owner who)
@@ -399,6 +399,7 @@ theorem isεAsymptoticNash_laterAbnormalRoot
       (quittingTerminalPayoff reward) (6 * M * p)
       (quittingStationaryProfile reward
         (laterAbnormalRoot owner blocker p hp.le hp1)) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   let root := laterAbnormalRoot owner blocker p hp.le hp1
   let payoff := fun who => quittingTerminalPayoff reward
     (quittingStationaryProfile reward root) who
@@ -544,7 +545,7 @@ theorem terminalNash_all_errors_of_nonnegative_column
       sub_nonpos.mp hblocker
   refine ⟨quittingStationaryProfile reward
       (laterAbnormalRoot owner blocker p hp.le hp1), ?_⟩
-  exact (isεAsymptoticNash_laterAbnormalRoot reward hne hp hp1 hM
+  exact (isεAsymptoticNash_laterAbnormalRoot reward hne hp hp1
     (abs_reward_le_quittingRewardBound reward) hcolumn' hblocker').mono herror.le
 
 /-- The same matrix hypotheses yield a uniform-equilibrium payoff. -/

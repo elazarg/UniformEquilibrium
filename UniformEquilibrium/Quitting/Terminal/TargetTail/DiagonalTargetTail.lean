@@ -42,7 +42,7 @@ theorem phaseSwitchProfile_isεAsymptoticNash_of_diagonalTarget
     (plan : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (tail : ι → ℕ → ι → PMF Bool)
     (target : ι) (switch : ℕ) {M δ : ℝ}
-    (hM : 0 ≤ M) (hδ : 0 ≤ δ)
+    (hδ : 0 ≤ δ)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hendpoint : value switch = quittingDiagonalTailEndpoint reward tail)
     (hvalueBound : ∀ who, |value switch who| ≤ M)
@@ -57,6 +57,7 @@ theorem phaseSwitchProfile_isεAsymptoticNash_of_diagonalTarget
     (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) (4 * M * δ)
       (quittingPhaseSwitchProfile reward plan (tail target) switch) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward target hreward
   intro who deviation
   rw [quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
     quittingProfileLiveRoot_quittingPhaseSwitchProfile,
@@ -78,7 +79,7 @@ theorem phaseSwitchProfile_isεAsymptoticNash_of_diagonalTarget
       quittingPhaseSwitchHazardGap_le_four_mul_opponentSurvival
         reward plan (tail target) value who
           (quittingBehaviorLiveHazard reward deviation) switch
-          hM hreward (hvalueBound who) hpolicy hnash
+          hreward (hvalueBound who) hpolicy hnash
     have hscaled := mul_le_mul_of_nonneg_left (hother who hwho)
       (by positivity : 0 ≤ 4 * M)
     nlinarith
@@ -89,7 +90,7 @@ theorem exists_phaseSwitchProfile_isεAsymptoticNash_of_diagonalJointSurvival
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (plan : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (tail : ι → ℕ → ι → PMF Bool) (switch : ℕ) {M δ : ℝ}
-    (hM : 0 ≤ M) (hδ : 0 ≤ δ)
+    (hδ : 0 ≤ δ)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hendpoint : value switch = quittingDiagonalTailEndpoint reward tail)
     (hvalueBound : ∀ who, |value switch who| ≤ M)
@@ -109,7 +110,7 @@ theorem exists_phaseSwitchProfile_isεAsymptoticNash_of_diagonalJointSurvival
       plan switch hδ hjoint
   exact ⟨quittingPhaseSwitchProfile reward plan (tail target) switch,
     phaseSwitchProfile_isεAsymptoticNash_of_diagonalTarget
-      reward plan value tail target switch hM hδ hreward hendpoint
+      reward plan value tail target switch hδ hreward hendpoint
       hvalueBound hpolicy hnash (hclosed target) hother⟩
 
 /-! ## Accuracy-indexed exact-prefix certificates -/
@@ -159,7 +160,7 @@ theorem
   obtain ⟨profile, hprofile⟩ :=
     exists_phaseSwitchProfile_isεAsymptoticNash_of_diagonalJointSurvival
       reward plan value tail switch
-      (quittingRewardBound_nonneg reward) hδ
+      hδ
       (abs_reward_le_quittingRewardBound reward)
       hendpoint hvalueBound hpolicy hnash hclosed hjoint
   exact ⟨profile, hprofile.mono hscale⟩
@@ -212,7 +213,7 @@ theorem exists_isεAsymptoticNash_of_finiteDiagonalEndpointFactory
   let value := quittingFiniteEndpointNashBellmanValue reward endpoint hendpoint cutoff
   refine exists_phaseSwitchProfile_isεAsymptoticNash_of_diagonalJointSurvival
     reward plan value tail cutoff
-      (quittingRewardBound_nonneg reward) hδ
+      hδ
       (abs_reward_le_quittingRewardBound reward) ?_ ?_ ?_ ?_ hclosed ?_
   · exact quittingFiniteEndpointNashBellmanValue_eq_endpoint_of_cutoff_le
       reward endpoint hendpoint cutoff cutoff le_rfl
@@ -259,7 +260,7 @@ theorem exists_isεAsymptoticNash_of_stationaryCapDiagonalFactory
     quittingFiniteEndpointNashBellmanValue reward endpoint endpointBound cutoff
   refine exists_phaseSwitchProfile_isεAsymptoticNash_of_diagonalJointSurvival
     reward plan value tail cutoff
-      (quittingRewardBound_nonneg reward) hδ
+      hδ
       (abs_reward_le_quittingRewardBound reward) ?_ ?_ ?_ ?_ hclosed ?_
   · calc
       value cutoff = endpoint :=

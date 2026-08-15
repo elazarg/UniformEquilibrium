@@ -761,7 +761,6 @@ theorem rescaledOpponentCoalitionCollisionMass_le_total_sq_div_two
 /-- **Quadratic forced-Continue absorbing-law comparison.** -/
 theorem abs_conditionedOpponentAbsorbingReward_sub_rescaled_le
     (roots : ℕ → ι → PMF Bool) (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingTailEventualAbsorption roots time) :
     |quittingStationaryFixedOpponentsContinueReward reward (roots time) who /
@@ -770,6 +769,8 @@ theorem abs_conditionedOpponentAbsorbingReward_sub_rescaled_le
           (quittingTailDiffuseRescaledRoot roots time hpositive) who| ≤
       3 / 2 * M *
         quittingTailDiffuseRescaledOpponentTotal roots time who ^ 2 := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let payoff : Finset ι → ℝ := fun coalition =>
     if h : coalition.Nonempty then reward ⟨coalition, h⟩ who else 0
   have hpayoff : ∀ coalition, |payoff coalition| ≤ M := by

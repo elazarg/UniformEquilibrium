@@ -278,7 +278,6 @@ theorem terminalValue_tendsto_zero (who : ι) :
         ((summable_nat_add_iff start).2 hsummable)
     exact abs_quittingRootSequenceTerminalValue_le_tailCharge
       reward (quittingDynamicDebtTailRoots seam.tail) who start
-        (quittingRewardBound_nonneg reward)
         (abs_reward_le_quittingRewardBound reward)
         hshift
   have habs : Tendsto (fun start ↦

@@ -242,7 +242,6 @@ margin and the semantic box. -/
 theorem half_minimumDebt_le_capContinueGap_of_small_root
     (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
     (who : ι) {minimumDebt M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hbox : pair ∈ quittingTerminalSemanticBox ι M)
     (hminimumDebt : 0 < minimumDebt)
@@ -252,6 +251,7 @@ theorem half_minimumDebt_le_capContinueGap_of_small_root
       minimumDebt / (8 * M)) :
     minimumDebt / 2 ≤
       quittingTerminalSemanticCapContinueGap (reward := reward) pair root who := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hMpos : 0 < M := by
     by_contra hnot
     have hMzero : M = 0 := le_antisymm (le_of_not_gt hnot) hM

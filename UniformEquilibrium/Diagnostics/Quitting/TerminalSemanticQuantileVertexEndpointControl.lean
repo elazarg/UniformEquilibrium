@@ -100,12 +100,12 @@ and singleton slack. -/
 theorem exactNash_preservedSingletonClock_mul_singletonGap_le_collision
     (pair : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : IsεQuittingRootNash reward pair.1 0 root) :
     quittingRootCoalitionMass root {owner} *
         (pair.1 owner - reward (quittingSingletonTerminal owner) owner) ≤
       2 * M * quittingRootCollisionMass root := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   let opponentAbsorption := quittingRootOpponentAbsorptionMass root owner
   let opponentContinue := quittingRootOpponentContinueMass root owner
   let joining := quittingOutsiderJoiningContribution reward root owner
@@ -176,7 +176,6 @@ slack, to vanish with the near-minimum excess. -/
 theorem debtSum_mul_preservedSingletonClock_mul_singletonGap_le_twoM_mul_excess
     (base pair : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool) (owner : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
@@ -189,9 +188,10 @@ theorem debtSum_mul_preservedSingletonClock_mul_singletonGap_le_twoM_mul_excess
       2 * M *
         (quittingTerminalSemanticDebtSum pair -
           quittingTerminalSemanticDebtSum base) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   have hendpoint :=
     exactNash_preservedSingletonClock_mul_singletonGap_le_collision
-      (reward := reward) pair root owner hM hreward hnash
+      (reward := reward) pair root owner hreward hnash
   have hdebtNonneg : 0 ≤ quittingTerminalSemanticDebtSum pair := by
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun who _ =>
@@ -224,7 +224,6 @@ theorem debtFloor_mul_clockFloor_mul_singletonSlack_le_twoM_mul_excess
     (base pair : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool) (owner : ι)
     (debtFloor clockFloor : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
@@ -240,6 +239,7 @@ theorem debtFloor_mul_clockFloor_mul_singletonSlack_le_twoM_mul_excess
       2 * M *
         (quittingTerminalSemanticDebtSum pair -
           quittingTerminalSemanticDebtSum base) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   let gap := pair.1 owner -
     reward (quittingSingletonTerminal owner) owner
   let floor := debtFloor * clockFloor
@@ -267,7 +267,7 @@ theorem debtFloor_mul_clockFloor_mul_singletonSlack_le_twoM_mul_excess
     exact mul_nonneg (by positivity) (sub_nonneg.mpr (hminimum pair hpair))
   have hmain :=
     debtSum_mul_preservedSingletonClock_mul_singletonGap_le_twoM_mul_excess
-      (reward := reward) base pair root owner hM hreward hminimum hpair hnash
+      (reward := reward) base pair root owner hreward hminimum hpair hnash
   by_cases hgap : 0 ≤ gap
   · have hmassNonneg : 0 ≤ quittingRootCoalitionMass root {owner} :=
       MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg root {owner}
@@ -309,7 +309,6 @@ theorem debtFloor_mul_clockFloor_mul_eta_le_twoM_mul_excess_of_slack
     (base pair : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool) (owner : ι)
     (debtFloor clockFloor eta : ℝ) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum base ≤
@@ -328,7 +327,7 @@ theorem debtFloor_mul_clockFloor_mul_eta_le_twoM_mul_excess_of_slack
           quittingTerminalSemanticDebtSum base) := by
   have hslack :=
     debtFloor_mul_clockFloor_mul_singletonSlack_le_twoM_mul_excess
-      (reward := reward) base pair root owner debtFloor clockFloor hM hreward
+      (reward := reward) base pair root owner debtFloor clockFloor hreward
         hminimum hpair hnash hdebtFloorNonneg hdebtFloor hclockFloorNonneg
         hclockFloor
   have hfloorNonneg : 0 ≤ debtFloor * clockFloor :=

@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingPayoff
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # Finite witness passports along a stopping-law segment
@@ -154,7 +155,7 @@ theorem abs_quittingContinuationBestResponseValue_stoppingLawMixture_sub_le
     (lambda mu : ℝ)
     (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
     (hmu0 : 0 ≤ mu) (hmu1 : mu ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingContinuationBestResponseValue reward
           (Function.update profile mover
@@ -165,6 +166,7 @@ theorem abs_quittingContinuationBestResponseValue_stoppingLawMixture_sub_le
             (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
               mu hmu0 hmu1)) observer| ≤
       2 * M * |lambda - mu| := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   by_cases hsame : observer = mover
   · subst observer
     rw [quittingContinuationBestResponseValue_update_self,
@@ -341,7 +343,7 @@ theorem exists_finitePureTimeWitnessPassport_stoppingLawMixture
     (hgridBounds : ∀ q ∈ grid, 0 ≤ q ∧ q ≤ 1)
     (hcover : ∀ lambda, 0 ≤ lambda → lambda ≤ 1 →
       ∃ q ∈ grid, |lambda - q| ≤ rho)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     ∃ passport : Finset (Option ℕ),
       passport.card ≤ grid.card ∧
@@ -358,6 +360,7 @@ theorem exists_finitePureTimeWitnessPassport_stoppingLawMixture
                       source target lambda hlambda0 hlambda1)) observer
                   (quittingPureTimeBehaviorStrategy reward observer choice)) observer +
               epsilon + 4 * M * rho := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   let chosen : (q : {x // x ∈ grid}) → Option ℕ := fun q =>
     Classical.choose
       (exists_quittingPureTime_terminalPayoff_ge_bestResponse_sub
@@ -400,7 +403,7 @@ theorem exists_finitePureTimeWitnessPassport_stoppingLawMixture
     have henvelope :=
       abs_quittingContinuationBestResponseValue_stoppingLawMixture_sub_le
         reward profile mover observer source target lambda q
-          hlambda0 hlambda1 hq0 hq1 hM hreward
+          hlambda0 hlambda1 hq0 hq1 hreward
     have hwitness :=
       abs_quittingTerminalPayoff_update_stoppingLawMixture_sub_le
         reward profile mover observer hne source target
@@ -530,7 +533,7 @@ theorem exists_boundedPureTimeWitnessPassport_stoppingLawMixture
     (mover observer : ι) (hne : observer ≠ mover)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (N : ℕ) (hN : 0 < N) (epsilon : ℝ) (hepsilon : 0 < epsilon)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     ∃ passport : Finset (Option ℕ),
       passport.card ≤ N + 1 ∧
@@ -553,7 +556,7 @@ theorem exists_boundedPureTimeWitnessPassport_stoppingLawMixture
         (quittingStoppingLawMixtureUnitGrid N) (1 / (N : ℝ)) epsilon hepsilon
         (fun _ hq => quittingStoppingLawMixtureUnitGrid_mem_bounds N hN hq)
         (quittingStoppingLawMixtureUnitGrid_cover N hN)
-        hM hreward
+        hreward
   refine ⟨passport,
     hcard.trans (quittingStoppingLawMixtureUnitGrid_card_le N), ?_⟩
   intro lambda hlambda0 hlambda1
@@ -573,7 +576,7 @@ theorem exists_accuracyPureTimeWitnessPassport_stoppingLawMixture
     (mover observer : ι) (hne : observer ≠ mover)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (delta epsilon : ℝ) (hdelta : 0 < delta) (hepsilon : 0 < epsilon)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     ∃ passport : Finset (Option ℕ),
       passport.card ≤ ⌊4 * M / delta⌋₊ + 2 ∧
@@ -606,7 +609,7 @@ theorem exists_accuracyPureTimeWitnessPassport_stoppingLawMixture
     exact (div_lt_iff₀ hNreal).2 (by nlinarith)
   obtain ⟨passport, hcard, hpassport⟩ :=
     exists_boundedPureTimeWitnessPassport_stoppingLawMixture
-      reward profile mover observer hne source target N hN epsilon hepsilon hM hreward
+      reward profile mover observer hne source target N hN epsilon hepsilon hreward
   refine ⟨passport, ?_, ?_⟩
   · dsimp only [N] at hcard
     omega
@@ -625,7 +628,7 @@ theorem exists_accuracyPureTimeDebtAtlas_stoppingLawMixture
     (mover observer : ι) (hne : observer ≠ mover)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (delta epsilon : ℝ) (hdelta : 0 < delta) (hepsilon : 0 < epsilon)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     ∃ passport : Finset (Option ℕ),
       passport.card ≤ ⌊4 * M / delta⌋₊ + 2 ∧
@@ -654,7 +657,7 @@ theorem exists_accuracyPureTimeDebtAtlas_stoppingLawMixture
   obtain ⟨passport, hcard, hpassport⟩ :=
     exists_accuracyPureTimeWitnessPassport_stoppingLawMixture
       reward profile mover observer hne source target delta epsilon
-        hdelta hepsilon hM hreward
+        hdelta hepsilon hreward
   refine ⟨passport, hcard, ?_⟩
   intro lambda hlambda0 hlambda1
   obtain ⟨choice, hchoice, hupper⟩ := hpassport lambda hlambda0 hlambda1
@@ -685,7 +688,7 @@ theorem exists_accuracyJointPureTimeDebtAtlas_stoppingLawMixture
     (mover : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (delta epsilon : ℝ) (hdelta : 0 < delta) (hepsilon : 0 < epsilon)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     ∃ passports : {observer : ι // observer ≠ mover} → Finset (Option ℕ),
       (∑ observer, (passports observer).card) ≤
@@ -706,7 +709,7 @@ theorem exists_accuracyJointPureTimeDebtAtlas_stoppingLawMixture
   let witness (observer : {observer : ι // observer ≠ mover}) :=
     exists_accuracyPureTimeDebtAtlas_stoppingLawMixture
       reward profile mover observer.1 observer.2 source target delta epsilon
-        hdelta hepsilon hM hreward
+        hdelta hepsilon hreward
   let passports : {observer : ι // observer ≠ mover} → Finset (Option ℕ) :=
     fun observer => Classical.choose (witness observer)
   refine ⟨passports, ?_, ?_⟩

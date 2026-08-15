@@ -93,7 +93,6 @@ theorem
         abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
           (reward := reward)
           (quittingTailDiffuseRescaledRoot roots time (hpositive time)) who
-          (quittingRewardBound_nonneg reward)
           (abs_reward_le_quittingRewardBound reward)
       have hopponent :=
         quittingTailDiffuseRescaledRoot_opponentAbsorption_le_card_mul_weight

@@ -36,11 +36,12 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 twice the reward bound times opponent absorption. -/
 theorem abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
     (root : ι → PMF Bool) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingStationaryFixedOpponentsQuitValue reward root who -
         reward (quittingSingletonTerminal who) who| ≤
       2 * M * quittingRootOpponentAbsorptionMass root who := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let roots : ℕ → ι → PMF Bool := fun _ ↦ root
   let continueMass :=
     quittingStationaryFixedOpponentsContinueMass root who
@@ -89,12 +90,13 @@ singleton payoff up to twice the reward bound times opponent absorption.
 The event where the player quits alone cancels exactly. -/
 theorem abs_quittingRootAbsorbingContribution_sub_absorption_mul_singleton_le
     (root : ι → PMF Bool) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootAbsorbingContribution reward root who -
         quittingRootAbsorptionMass root *
           reward (quittingSingletonTerminal who) who| ≤
       2 * M * quittingRootOpponentAbsorptionMass root who := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let ownQuit := (root who true).toReal
   let ownContinue := (root who false).toReal
   let opponentAbsorption := quittingRootOpponentAbsorptionMass root who
@@ -114,7 +116,7 @@ theorem abs_quittingRootAbsorbingContribution_sub_absorption_mul_singleton_le
   have hsolo : |solo| ≤ M := hreward (quittingSingletonTerminal who) who
   have hquit :=
     abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
-      (reward := reward) root who hM hreward
+      (reward := reward) root who hreward
   change |quitValue - solo| ≤ 2 * M * opponentAbsorption at hquit
   have hcontinue :=
     abs_quittingFixedOpponentsContinueReward_le_hazard
@@ -182,7 +184,6 @@ theorem abs_quittingRootAbsorbingContribution_sub_absorption_mul_singleton_le
 multiplication by its conditioned absorption coefficient. -/
 theorem abs_conditionedWeight_mul_delivery_sub_singleton_le
     (roots : ℕ → ι → PMF Bool) (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hrootAbsorption : 0 < quittingRootAbsorptionMass (roots time))
     (hpositive : 0 < quittingTailEventualAbsorption roots time) :
@@ -192,7 +193,7 @@ theorem abs_conditionedWeight_mul_delivery_sub_singleton_le
       2 * M * quittingTailConditionedOpponentWeight roots time who := by
   have hanchored :=
     abs_quittingRootAbsorbingContribution_sub_absorption_mul_singleton_le
-      (reward := reward) (roots time) who hM hreward
+      (reward := reward) (roots time) who hreward
   unfold quittingTailConditionedAbsorptionWeight
     quittingRootConditionalAbsorbingDelivery
     quittingTailConditionedOpponentWeight
@@ -231,7 +232,6 @@ theorem abs_quittingTailConditionedValue_succ_sub_singleton_le
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
     (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hcurrent : 0 < quittingTailEventualAbsorption roots time)
     (hnext : 0 < quittingTailEventualAbsorption roots (time + 1))
@@ -241,6 +241,8 @@ theorem abs_quittingTailConditionedValue_succ_sub_singleton_le
     |quittingTailConditionedValue roots value boundary (time + 1) who -
         reward (quittingSingletonTerminal who) who| ≤
       8 * M * quittingTailConditionedOpponentWeight roots time who := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let alpha := quittingTailConditionedAbsorptionWeight roots time
   let nextValue :=
     quittingTailConditionedValue roots value boundary (time + 1) who
@@ -271,7 +273,7 @@ theorem abs_quittingTailConditionedValue_succ_sub_singleton_le
         ring
   have hdeliveryGap :=
     abs_conditionedWeight_mul_delivery_sub_singleton_le
-      (reward := reward) roots time who hM hreward habsorption hcurrent
+      (reward := reward) roots time who hreward habsorption hcurrent
   have hstep := congrFun
     (quittingTailConditionedValue_step roots value boundary hpolicy time
       habsorption hcurrent hnext) who
@@ -339,7 +341,6 @@ theorem quittingSoloBaseline_le_sourceValue_add_opponentAbsorption
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
     (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     quittingSoloBaseline reward who ≤ value time who +
       2 * M * quittingRootOpponentAbsorptionMass (roots time) who := by
@@ -365,7 +366,7 @@ theorem quittingSoloBaseline_le_sourceValue_add_opponentAbsorption
       _ = value time who := (congrFun (hpolicy time) who).symm
   have hsolo :=
     abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
-      (reward := reward) (roots time) who hM hreward
+      (reward := reward) (roots time) who hreward
   rw [abs_le] at hsolo
   rw [quittingSoloBaseline_apply]
   change reward (quittingSingletonTerminal who) who ≤ _
@@ -382,7 +383,6 @@ theorem quittingSoloBaseline_le_conditionedValue_add_opponentWeight
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
     (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingTailEventualAbsorption roots time)
     (htight : boundary who = quittingSoloBaseline reward who) :
@@ -390,7 +390,7 @@ theorem quittingSoloBaseline_le_conditionedValue_add_opponentWeight
       quittingTailConditionedValue roots value boundary time who +
         2 * M * quittingTailConditionedOpponentWeight roots time who := by
   have hsource := quittingSoloBaseline_le_sourceValue_add_opponentAbsorption
-    (reward := reward) roots value hpolicy hnash time who hM hreward
+    (reward := reward) roots value hpolicy hnash time who hreward
   have hconditioned := quittingTailConditionedValue_sub_floor
     roots value boundary (quittingSoloBaseline reward) time who hpositive
   rw [htight, sub_self, mul_zero, sub_zero] at hconditioned
@@ -440,7 +440,6 @@ conditioned Quit gain and is governed by the separate source-slack gate. -/
 theorem quittingStationaryFixedOpponentsQuitValue_rescaledRoot_le_conditionedValue_add
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (boundary : Payoff ι) (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingTailEventualAbsorption roots time)
     (htight : boundary who = quittingSoloBaseline reward who)
@@ -450,13 +449,15 @@ theorem quittingStationaryFixedOpponentsQuitValue_rescaledRoot_le_conditionedVal
       quittingTailConditionedValue roots value boundary time who +
         2 * M * Fintype.card ι *
           quittingTailConditionedAbsorptionWeight roots time := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hconditionedFloor :=
     quittingSoloBaseline_le_conditionedValue_of_tightBoundary
       roots value boundary time who hpositive htight hsourceFloor
   have hquit :=
     abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
       (reward := reward)
-      (quittingTailDiffuseRescaledRoot roots time hpositive) who hM hreward
+      (quittingTailDiffuseRescaledRoot roots time hpositive) who hreward
   have hopponent :=
     quittingTailDiffuseRescaledRoot_opponentAbsorption_le_card_mul_weight
       roots time who hpositive
@@ -506,7 +507,6 @@ theorem
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
     (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingTailEventualAbsorption roots time)
     (htight : boundary who = quittingSoloBaseline reward who)
@@ -517,17 +517,19 @@ theorem
       quittingTailConditionedValue roots value boundary time who +
         6 * M * Fintype.card ι *
           quittingTailConditionedAbsorptionWeight roots time := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let targetOpponent := quittingRootOpponentAbsorptionMass
     (quittingTailDiffuseRescaledRoot roots time hpositive) who
   let sourceOpponent := quittingTailConditionedOpponentWeight roots time who
   have htarget :=
     abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
       (reward := reward)
-      (quittingTailDiffuseRescaledRoot roots time hpositive) who hM hreward
+      (quittingTailDiffuseRescaledRoot roots time hpositive) who hreward
   have hsource :=
     quittingSoloBaseline_le_conditionedValue_add_opponentWeight
-      (reward := reward) roots value boundary hpolicy hnash time who hM
-        hreward hpositive htight
+      (reward := reward) roots value boundary hpolicy hnash time who hreward
+        hpositive htight
   have hclock :=
     half_conditionedOpponentWeight_le_rescaledRoot_opponentAbsorption
       roots time who hpositive hsmall
@@ -595,7 +597,6 @@ theorem abs_quittingStationaryFixedOpponentsQuitValue_rescaledRoot_sub_condition
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
     (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingTailEventualAbsorption roots time)
     (hactive : 0 < (roots time who true).toReal)
@@ -611,7 +612,7 @@ theorem abs_quittingStationaryFixedOpponentsQuitValue_rescaledRoot_sub_condition
   have htarget :=
     abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
       (reward := reward)
-      (quittingTailDiffuseRescaledRoot roots time hpositive) who hM hreward
+      (quittingTailDiffuseRescaledRoot roots time hpositive) who hreward
   have hpin : boundary who = solo := by
     simpa [solo, quittingSoloBaseline, quittingSoloReward,
       quittingSingletonTerminal] using htight
@@ -662,7 +663,6 @@ theorem abs_rescaledQuitValue_sub_conditionedValue_le_six_mul_opponent
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
     (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingTailEventualAbsorption roots time)
     (hactive : 0 < (roots time who true).toReal)
@@ -674,9 +674,11 @@ theorem abs_rescaledQuitValue_sub_conditionedValue_le_six_mul_opponent
         quittingTailConditionedValue roots value boundary time who| ≤
       6 * M * quittingRootOpponentAbsorptionMass
         (quittingTailDiffuseRescaledRoot roots time hpositive) who := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hlocal :=
     abs_quittingStationaryFixedOpponentsQuitValue_rescaledRoot_sub_conditionedValue_le
-      roots value boundary hpolicy hnash time who hM hreward hpositive
+      roots value boundary hpolicy hnash time who hreward hpositive
         hactive htight
   have hclock :=
     half_conditionedOpponentWeight_le_rescaledRoot_opponentAbsorption

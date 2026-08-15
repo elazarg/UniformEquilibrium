@@ -188,7 +188,7 @@ theorem abs_quittingTerminalOutcomeEventMass_finiteCap_sub_le
       (quittingTerminalOutcomeEventReward eventᶜ)
       (quittingProfileLiveRoot reward profile) mover mover
       (quittingBehaviorLiveHazard reward strategy) cutoff
-      (M := 1) (by norm_num)
+      (M := 1)
       (quittingTerminalOutcomeEventReward_abs_le_one eventᶜ)
     have hsourceEvent :=
       quittingTerminalOutcomeEventMass_eq_rootSequenceTerminalValue
@@ -223,7 +223,7 @@ theorem abs_quittingTerminalOutcomeEventMass_finiteCap_sub_le
       (quittingTerminalOutcomeEventReward event)
       (quittingProfileLiveRoot reward profile) mover mover
       (quittingBehaviorLiveHazard reward strategy) cutoff
-      (M := 1) (by norm_num)
+      (M := 1)
       (quittingTerminalOutcomeEventReward_abs_le_one event)
     have hsourceEvent :=
       quittingTerminalOutcomeEventMass_eq_rootSequenceTerminalValue

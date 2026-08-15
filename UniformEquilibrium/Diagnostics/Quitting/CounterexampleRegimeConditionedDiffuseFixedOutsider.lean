@@ -129,7 +129,7 @@ theorem exists_fixed_inactive_rescaledQuitDefect_of_diffuse
     have hupper :=
       quittingStationaryFixedOpponentsQuitValue_rescaledRoot_le_conditionedValue_add_of_nash
         (reward := reward) roots value boundary hpolicy hnash time who
-        hbound hreward (hpositive time) (htight who hactive) hsmall
+        hreward (hpositive time) (htight who hactive) hsmall
     have hdefect : defect time who ≤
         6 * quittingRewardBound reward *
           ((Fintype.card ι : ℝ) * alpha time) := by
@@ -156,7 +156,7 @@ theorem exists_fixed_inactive_rescaledQuitDefect_of_diffuse
       abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
         (reward := reward)
         (quittingTailDiffuseRescaledRoot roots time (hpositive time)) who
-        hbound hreward
+        hreward
     have hmajor :
         2 * quittingRewardBound reward *
             quittingRootOpponentAbsorptionMass
@@ -367,7 +367,7 @@ theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
   have hcontinue :=
     rescaledContinuePayoff_le_conditionedValue_add_jointCharge_of_source_pure_false
       (reward := reward) (M := quittingRewardBound reward) (rho := alpha time)
-      roots value boundary hpolicy hbound hreward hconditionedBound time who
+      roots value boundary hpolicy hreward hconditionedBound time who
       (hpositive time) (hpositive (time + 1)) hinactive (le_rfl) hsmall
   have htargetInactive : targetRoot who = PMF.pure false :=
     quittingTailDiffuseRescaledRoot_eq_pure_false_of_source_eq_pure_false

@@ -106,7 +106,7 @@ positive deleted-player survival. -/
 theorem abs_quittingRootSequenceBestResponseValue_sub_maxSolo_le_totalCharge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hcharge : Summable (fun time ↦
       quittingRootAbsorptionMass (roots time)))
@@ -115,9 +115,10 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_maxSolo_le_totalCharge
         max 0 (reward (quittingSingletonTerminal who) who)| ≤
       2 * M * ∑' time : ℕ,
         quittingRootAbsorptionMass (roots time) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hcoupling :=
     abs_quittingRootSequenceBestResponseValue_sub_elementaryNever_le
-      reward roots who 0 hM hreward hpositive
+      reward roots who 0 hreward hpositive
   have hcap : quittingElementaryTailRoots roots 0 (.never) =
       quittingElementaryCapRoots (.never : QuittingElementaryTailCap ι) := by
     funext time player
@@ -136,7 +137,7 @@ charge below one supplies positive deleted-player survival. -/
 theorem abs_quittingRootSequenceBestResponseValue_sub_maxSolo_le_totalCharge_of_lt_one
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hcharge : Summable (fun time ↦
       quittingRootAbsorptionMass (roots time)))
@@ -147,7 +148,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_maxSolo_le_totalCharge_of_
       2 * M * ∑' time : ℕ,
         quittingRootAbsorptionMass (roots time) :=
   abs_quittingRootSequenceBestResponseValue_sub_maxSolo_le_totalCharge
-    reward roots who hM hreward hcharge
+    reward roots who hreward hcharge
       (quittingOpponentSurvivalLimit_pos_of_totalCharge_lt_one
         roots who hcharge hsmall)
 

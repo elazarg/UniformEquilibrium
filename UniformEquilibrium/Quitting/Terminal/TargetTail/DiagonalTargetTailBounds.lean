@@ -78,7 +78,7 @@ theorem quittingPhaseSwitchHazardGap_le_four_mul_opponentSurvival
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (plan tail : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (who : ι) (hazard : ℕ → PMF Bool) (switch : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hvalueBound : |value switch who| ≤ M)
     (hpolicy : ∀ time, time < switch →
@@ -91,6 +91,7 @@ theorem quittingPhaseSwitchHazardGap_le_four_mul_opponentSurvival
         quittingRootSequenceTerminalValue reward
           (quittingPhaseSwitchRoots plan tail switch) who 0 ≤
       4 * M * quittingOpponentSurvivalWeight plan who 0 switch := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let tailDeviation :=
     quittingRootSequenceHazardTerminalValue reward tail who
       (fun offset => hazard (switch + offset)) 0

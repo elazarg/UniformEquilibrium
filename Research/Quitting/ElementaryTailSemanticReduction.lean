@@ -281,7 +281,7 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close_after
       exact Filter.eventually_atTop.mpr ⟨N, fun cutoff hcutoff who => by
         have hbound :=
           abs_quittingRootSequenceTerminalValue_sub_elementarySureSolo_le
-            reward roots owner who cutoff hM hreward
+            reward roots owner who cutoff hreward
         have hclose := hN cutoff hcutoff
         rw [Real.dist_eq, sub_zero, abs_of_nonneg] at hclose
         · exact lt_of_le_of_lt hbound hclose
@@ -317,7 +317,7 @@ theorem exists_stratifiedElementaryTailCap_terminalPair_close_after
         exact Filter.eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
           have hbound :=
             abs_quittingRootSequenceBestResponseValue_sub_elementarySureSolo_le
-              reward roots owner who cutoff hM hreward
+              reward roots owner who cutoff hreward
           have hclose := hN cutoff hcutoff
           rw [Real.dist_eq, sub_zero, abs_of_nonneg] at hclose
           · exact lt_of_le_of_lt hbound hclose

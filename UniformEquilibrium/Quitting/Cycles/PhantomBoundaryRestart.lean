@@ -312,7 +312,7 @@ theorem abs_quittingPrescribedValue_sub_limit_le_tailCharge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (prescribed : ℕ → ℝ)
     (hprescribed : IsQuittingLivePrescribedValue reward roots who prescribed)
-    {boundary M : ℝ} (hM : 0 ≤ M)
+    {boundary M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hbound : ∀ time, |prescribed time| ≤ M)
     (hcharge : Summable (fun time ↦
@@ -321,6 +321,8 @@ theorem abs_quittingPrescribedValue_sub_limit_le_tailCharge
     |prescribed start - boundary| ≤
       2 * M * ∑' offset : ℕ,
         quittingRootAbsorptionMass (roots (start + offset)) := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let charge : ℕ → ℝ := fun offset ↦
     quittingRootAbsorptionMass (roots (start + offset))
   have hchargeShift : Summable charge := by
@@ -381,7 +383,7 @@ theorem abs_quittingValuePath_sub_limit_le_tailCharge
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    (boundary : Payoff ι) {M : ℝ} (hM : 0 ≤ M)
+    (boundary : Payoff ι) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hbound : ∀ time who, |value time who| ≤ M)
     (hcharge : Summable (fun time ↦
@@ -400,7 +402,7 @@ theorem abs_quittingValuePath_sub_limit_le_tailCharge
     rw [quittingRootSuccessorPayoff_apply_eq_affine]
     exact hcoordinate
   exact abs_quittingPrescribedValue_sub_limit_le_tailCharge reward roots who
-    (fun time ↦ value time who) hprescribed hM hreward
+    (fun time ↦ value time who) hprescribed hreward
       (fun time ↦ hbound time who) hcharge (hboundary who) start
 
 omit [DecidableEq ι] in
@@ -489,13 +491,15 @@ payoff is at most the reward bound times the remaining joint absorption
 charge. -/
 theorem abs_quittingRootSequenceTerminalValue_le_tailCharge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hcharge : Summable (fun offset ↦
       quittingRootAbsorptionMass (roots (start + offset)))) :
     |quittingRootSequenceTerminalValue reward roots who start| ≤
       M * ∑' offset : ℕ,
         quittingRootAbsorptionMass (roots (start + offset)) := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   exact (abs_quittingRootSequenceTerminalValue_le_one_sub_survivalLimit
     reward roots who start hreward).trans
       (mul_le_mul_of_nonneg_left

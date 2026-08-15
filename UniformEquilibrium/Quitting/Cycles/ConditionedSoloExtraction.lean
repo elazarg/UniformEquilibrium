@@ -145,7 +145,6 @@ singleton outcome in every payoff coordinate, not only in the owner's own
 coordinate. -/
 theorem abs_quittingRootAbsorbingContribution_sub_absorption_mul_solo_le
     (root : ι → PMF Bool) (owner recipient : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootAbsorbingContribution reward root recipient -
         quittingRootAbsorptionMass root *
@@ -161,7 +160,7 @@ theorem abs_quittingRootAbsorbingContribution_sub_absorption_mul_solo_le
     simpa only [projectedReward] using hreward terminal recipient
   have hanchor :=
     abs_quittingRootAbsorbingContribution_sub_absorption_mul_singleton_le
-      (reward := projectedReward) root owner hM hprojected
+      (reward := projectedReward) root owner hprojected
   simpa [projectedReward, quittingRootAbsorbingContribution,
     quittingRootExpectedPayoff, quittingRootPayoff] using hanchor
 
@@ -203,7 +202,6 @@ theorem abs_quittingTailConditionedValue_sub_singleton_le_step
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (time : ℕ) (owner recipient : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hcurrent : 0 < quittingTailEventualAbsorption roots time)
     (hnext : 0 < quittingTailEventualAbsorption roots (time + 1)) :
@@ -233,7 +231,7 @@ theorem abs_quittingTailConditionedValue_sub_singleton_le_step
   change current = absorbing / eventual + continuation * next at hrec
   have hanchor :=
     abs_quittingRootAbsorbingContribution_sub_absorption_mul_solo_le
-      (reward := reward) (roots time) owner recipient hM hreward
+      (reward := reward) (roots time) owner recipient hreward
   change |absorbing - absorption * solo| ≤
     2 * M * rawOpponent at hanchor
   have hscaled :
@@ -288,7 +286,7 @@ theorem abs_quittingTailConditionedValue_sub_singleton_le_tsum
     (boundary : Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : ∀ time,
       0 < quittingTailEventualAbsorption roots time)
@@ -304,6 +302,8 @@ theorem abs_quittingTailConditionedValue_sub_singleton_le_tsum
         reward (quittingSingletonTerminal owner) recipient| ≤
       2 * M * ∑' offset : ℕ,
         quittingTailConditionedOpponentWeight roots (start + offset) owner := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   let beta : ℕ → ℝ := fun time ↦
     quittingTailConditionedOpponentWeight roots time owner
   let distance : ℕ → ℝ := fun time ↦
@@ -349,7 +349,7 @@ theorem abs_quittingTailConditionedValue_sub_singleton_le_tsum
     simpa only [distance, charge, coefficient, beta] using
       (abs_quittingTailConditionedValue_sub_singleton_le_step
         (reward := reward) roots value boundary hpolicy time owner recipient
-          hM hreward (hpositive time) (hpositive (time + 1)))
+          hreward (hpositive time) (hpositive (time + 1)))
   have hbetaSuffix : Summable (fun offset ↦ beta (start + offset)) := by
     have hshift : Summable (fun offset ↦ beta (offset + start)) :=
       (summable_nat_add_iff start).2 hbetaSummable
@@ -505,7 +505,7 @@ theorem tendsto_quittingTailConditionedValue_solo_of_summableOpponentWeight
   rw [Real.dist_eq]
   have hpointwise :=
     abs_quittingTailConditionedValue_sub_singleton_le_tsum
-      (reward := reward) roots value boundary hpolicy hK hKReward hpositive
+      (reward := reward) roots value boundary hpolicy hKReward hpositive
         heventualZero hKConditioned owner hclock time recipient
   exact lt_of_le_of_lt hpointwise <| by
     have hclose := hthreshold time htime

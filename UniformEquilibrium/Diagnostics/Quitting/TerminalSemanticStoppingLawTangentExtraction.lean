@@ -226,7 +226,7 @@ theorem exists_commonBase_stoppingLawDebtTangentFamily
         (∀ mover, 0 ≤ ∑ observer, tangent mover observer) ∧
         ((∃ mover, 0 < ∑ observer, tangent mover observer) ∨
           ∀ mover, ∑ observer, tangent mover observer = 0) := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
+  obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   have hactiveNonempty : active.Nonempty := by
     by_contra hempty
     have hemptyEq : active = ∅ := Finset.not_nonempty_iff_eq_empty.mp hempty
@@ -277,7 +277,7 @@ theorem exists_commonBase_stoppingLawDebtTangentFamily
     intro observer
     have hbound := abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le
       reward (profiles n) mover.1 observer (bestResponse n mover)
-        (lambda n) (hlambdaPos n).le (hlambdaLe n) hM hreward
+        (lambda n) (hlambdaPos n).le (hlambdaLe n) hreward
     dsimp only [direction, quittingStoppingLawNormalizedDebtDirection,
       quittingStoppingLawResetProfile]
     have hnormalized :

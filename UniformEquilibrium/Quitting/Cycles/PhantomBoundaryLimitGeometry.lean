@@ -72,10 +72,8 @@ theorem exists_quittingAnnotationBoundary_of_summableAbsorption
   choose boundary hboundary using hcoordinate
   refine ⟨boundary, hboundary, ?_⟩
   intro start who
-  have hM :=
-    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   exact abs_quittingValuePath_sub_limit_le_tailCharge
-    reward roots value hpolicy boundary hM hreward hbound hcharge
+    reward roots value hpolicy boundary hreward hbound hcharge
       hboundary start who
 
 /-- Exact Nash plus vanishing opponent absorption passes every singleton-Quit

@@ -268,8 +268,7 @@ theorem isUniformEquilibriumPayoff_soloReward_of_summableConditionedDeletedClock
     have hlocal :=
       abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
         (reward := reward) roots value boundary hpolicy
-        (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward) hconditionedBound
+        (abs_reward_le_quittingRewardBound reward) hconditionedBound
         (start + time) who (hpositive (start + time))
           (hpositive (start + time + 1)) le_rfl
           (hsmall (start + time) (Nat.le_add_right start time))
@@ -410,7 +409,6 @@ theorem isUniformEquilibriumPayoff_soloReward_of_summableConditionedDeletedClock
         quittingStationaryFixedOpponentsQuitValue_rescaledRoot_le_conditionedValue_add_of_nash
           (reward := reward) roots value boundary hpolicy hnash
           (start + select n) who
-          (quittingRewardBound_nonneg reward)
           (abs_reward_le_quittingRewardBound reward)
           (hpositive (start + select n)) (htight who)
           (hsmall (start + select n)

@@ -179,7 +179,7 @@ theorem affineConditionedEndpointGap_le_terminalCoordinateDebt
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    (endpoint : ℝ) {M : ℝ} (hM : 0 ≤ M)
+    (endpoint : ℝ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     let alpha := quittingTerminalAbsorptionProbability reward profile
     let conditioned := quittingTerminalConditionedPayoff reward profile who
@@ -203,7 +203,7 @@ theorem affineConditionedEndpointGap_le_terminalCoordinateDebt
   have hquitClose :=
     abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
       (reward := reward) (quittingProfileLiveRoot reward profile 0) who
-        hM hreward
+        hreward
   change alpha ∈ Set.Icc 0 1 at halpha
   change quittingTerminalPayoff reward profile who = alpha * conditioned at hfactor
   change |quittingStationaryFixedOpponentsQuitValue reward
@@ -252,7 +252,7 @@ theorem min_sub_errors_le_terminalCoordinateDebt_of_conditionedEndpointGap
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    (endpoint delta eta : ℝ) {M : ℝ} (hM : 0 ≤ M)
+    (endpoint delta eta : ℝ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsolo : delta ≤ reward (quittingSingletonTerminal who) who)
     (hgap : eta ≤ reward (quittingSingletonTerminal who) who - endpoint) :
@@ -280,7 +280,7 @@ theorem min_sub_errors_le_terminalCoordinateDebt_of_conditionedEndpointGap
         |quittingTerminalConditionedPayoff reward profile who - endpoint| := by
     exact mul_le_of_le_one_left (abs_nonneg _) halpha.2
   have htransport := affineConditionedEndpointGap_le_terminalCoordinateDebt
-    reward profile who endpoint hM hreward
+    reward profile who endpoint hreward
   dsimp only at htransport
   dsimp only [alpha] at hconvex hendpoints hconditionedError
   linarith
@@ -308,7 +308,7 @@ theorem eventually_half_min_le_terminalCoordinateDebt_of_conditionedEndpointGap
       min delta eta / 2 ≤
         max 0 (quittingContinuationBestResponseValue reward (profiles n) who -
           quittingTerminalPayoff reward (profiles n) who) := by
-  obtain ⟨M, hM, hreward⟩ := exists_quittingRewardBound reward
+  obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   let error : ℕ → ℝ := fun n =>
     2 * M * quittingRootOpponentAbsorptionMass
         (quittingProfileLiveRoot reward (profiles n) 0) who +
@@ -328,7 +328,7 @@ theorem eventually_half_min_le_terminalCoordinateDebt_of_conditionedEndpointGap
   filter_upwards [heventually] with n hn
   have hpointwise :=
     min_sub_errors_le_terminalCoordinateDebt_of_conditionedEndpointGap
-      reward (profiles n) who endpoint delta eta hM hreward hsolo hgap
+      reward (profiles n) who endpoint delta eta hreward hsolo hgap
   dsimp only [error] at hn
   linarith
 

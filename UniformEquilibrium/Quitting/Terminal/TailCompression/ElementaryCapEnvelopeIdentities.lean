@@ -92,7 +92,7 @@ survival error bound. -/
 theorem abs_quittingRootSequenceTerminalValue_sub_elementarySureSolo_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (owner who : ι) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootSequenceTerminalValue reward roots who 0 -
         quittingRootSequenceTerminalValue reward
@@ -102,7 +102,7 @@ theorem abs_quittingRootSequenceTerminalValue_sub_elementarySureSolo_le
     (abs_quittingRootSequenceTerminalValue_sub_le_of_prefix_eq
       reward roots
         (quittingElementaryTailRoots roots cutoff (.sureSolo owner))
-      who cutoff hM hreward fun time htime =>
+      who cutoff hreward fun time htime =>
         (quittingElementaryTailRoots_of_lt roots (.sureSolo owner) htime).symm)
 
 /-- Every non-owner envelope has the standard deleted-clock prefix bound.
@@ -110,7 +110,7 @@ For the owner, the exact identity above is the sharper route. -/
 theorem abs_quittingRootSequenceBestResponseValue_sub_elementarySureSolo_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (owner who : ι) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootSequenceBestResponseValue reward roots who -
         quittingRootSequenceBestResponseValue reward
@@ -120,7 +120,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_elementarySureSolo_le
     (abs_quittingRootSequenceBestResponseValue_sub_le_of_prefix_eq
       reward roots
         (quittingElementaryTailRoots roots cutoff (.sureSolo owner))
-      who cutoff hM hreward fun time htime =>
+      who cutoff hreward fun time htime =>
         (quittingElementaryTailRoots_of_lt roots (.sureSolo owner) htime).symm)
 
 end GameTheory

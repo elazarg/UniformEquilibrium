@@ -431,7 +431,7 @@ Never. -/
 theorem abs_quittingRootSequencePureTimeTerminalValue_sub_elementaryNever_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ)
-    (quitTime : Option ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (quitTime : Option ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingOpponentSurvivalLimit roots who 0) :
     |quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0 -
@@ -439,6 +439,7 @@ theorem abs_quittingRootSequencePureTimeTerminalValue_sub_elementaryNever_le
           (quittingElementaryTailRoots roots cutoff (.never)) who quitTime 0| ≤
       2 * M * (quittingOpponentSurvivalWeight roots who 0 cutoff -
         quittingOpponentSurvivalLimit roots who 0) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   cases quitTime with
   | none =>
       exact abs_quittingRootSequencePureTimeTerminalValue_none_sub_elementaryNever_le
@@ -463,7 +464,7 @@ words. -/
 theorem abs_quittingRootSequenceBestResponseValue_sub_elementaryNever_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : 0 < quittingOpponentSurvivalLimit roots who 0) :
     |quittingRootSequenceBestResponseValue reward roots who -
@@ -481,7 +482,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_elementaryNever_le
   have hpoint : ∀ quitTime, |xValue quitTime - yValue quitTime| ≤ error := by
     intro quitTime
     exact abs_quittingRootSequencePureTimeTerminalValue_sub_elementaryNever_le
-      reward roots who cutoff quitTime hM hreward hpositive
+      reward roots who cutoff quitTime hreward hpositive
   have hxBound : BddAbove (Set.range xValue) :=
     bddAbove_range_quittingRootSequencePureTimeTerminalValue
       reward roots who
@@ -547,7 +548,7 @@ theorem tendsto_quittingRootSequenceBestResponseValue_elementaryNever
     (Metric.tendsto_atTop.mp hmajorant) ε hε
   refine ⟨threshold, fun cutoff hcutoff => ?_⟩
   have hbound := abs_quittingRootSequenceBestResponseValue_sub_elementaryNever_le
-    reward roots who cutoff hM hreward hpositive
+    reward roots who cutoff hreward hpositive
   have hclose := hthreshold cutoff hcutoff
   rw [Real.dist_eq, sub_zero, abs_of_nonneg] at hclose
   · rw [Real.dist_eq]
@@ -643,7 +644,7 @@ theorem exists_elementarySureSolo_terminalPair_close_of_unique
     obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp hmajorant ε hε
     exact eventually_atTop.mpr ⟨N, fun cutoff hcutoff who => by
       have hbound := abs_quittingRootSequenceTerminalValue_sub_elementarySureSolo_le
-        reward roots owner who cutoff hM hreward
+        reward roots owner who cutoff hreward
       have hclose := hN cutoff hcutoff
       rw [Real.dist_eq, sub_zero, abs_of_nonneg] at hclose
       · exact lt_of_le_of_lt hbound hclose
@@ -678,7 +679,7 @@ theorem exists_elementarySureSolo_terminalPair_close_of_unique
       exact eventually_atTop.mpr ⟨N, fun cutoff hcutoff => by
         have hbound :=
           abs_quittingRootSequenceBestResponseValue_sub_elementarySureSolo_le
-            reward roots owner who cutoff hM hreward
+            reward roots owner who cutoff hreward
         have hclose := hN cutoff hcutoff
         rw [Real.dist_eq, sub_zero, abs_of_nonneg] at hclose
         · exact lt_of_le_of_lt hbound hclose

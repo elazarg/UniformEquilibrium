@@ -120,7 +120,6 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
     (time : ℕ) (who : ι) {M : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hconditionedBound :
       |quittingTailConditionedValue roots value boundary (time + 1) who| ≤ M)
@@ -140,6 +139,8 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
           quittingTailConditionedAbsorptionWeight roots time *
           quittingRootOpponentAbsorptionMass
             (quittingTailDiffuseRescaledRoot roots time hcurrent) who := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let alpha := quittingTailConditionedAbsorptionWeight roots time
   let opponentTotal :=
     quittingTailDiffuseRescaledOpponentTotal roots time who
@@ -168,7 +169,7 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
         quittingTailEventualAbsorption roots time * nextValue ≤
     currentValue - sourceContinue * own * phantom * boundary who at hsource
   have hrewards := abs_conditionedOpponentAbsorbingReward_sub_rescaled_le
-    (reward := reward) roots time who hM hreward hcurrent
+    (reward := reward) roots time who hreward hcurrent
   change |sourceReward / quittingTailEventualAbsorption roots time -
       targetReward| ≤ 3 / 2 * M * opponentTotal ^ 2 at hrewards
   have hclock :=
@@ -279,7 +280,7 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
         positivity
       have hgap :=
         abs_quittingTailConditionedValue_succ_sub_singleton_le
-          roots value boundary hpolicy hnash time who hM hreward hcurrent hnext
+          roots value boundary hpolicy hnash time who hreward hcurrent hnext
             hactive htight hhalf
       have hboundary : boundary who =
           reward (quittingSingletonTerminal who) who := by
@@ -476,7 +477,7 @@ theorem abs_conditionedValue_sub_rescaledSuccessorPayoff_le
     (boundary : Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hconditionedBound : ∀ time player,
       |quittingTailConditionedValue roots value boundary time player| ≤ M)
@@ -489,6 +490,8 @@ theorem abs_conditionedValue_sub_rescaledSuccessorPayoff_le
           (quittingTailConditionedValue roots value boundary (time + 1))
           (quittingTailDiffuseRescaledRoot roots time hcurrent) who| ≤
       2 * M * quittingTailDiffuseRescaledTotal roots time ^ 2 := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   classical
   let next := quittingTailConditionedValue roots value boundary (time + 1)
   let observable : Finset ι → ℝ := fun coalition =>
@@ -524,7 +527,7 @@ theorem abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
     (boundary : Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    {M rho : ℝ} (hM : 0 ≤ M)
+    {M rho : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hconditionedBound : ∀ time player,
       |quittingTailConditionedValue roots value boundary time player| ≤ M)
@@ -541,12 +544,14 @@ theorem abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
       (4 * M * Fintype.card ι * rho) *
         quittingRootAbsorptionMass
           (quittingTailDiffuseRescaledRoot roots time hcurrent) := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let alpha := quittingTailConditionedAbsorptionWeight roots time
   let total := quittingTailDiffuseRescaledTotal roots time
   let absorption := quittingRootAbsorptionMass
     (quittingTailDiffuseRescaledRoot roots time hcurrent)
   have hbase := abs_conditionedValue_sub_rescaledSuccessorPayoff_le
-    (reward := reward) roots value boundary hpolicy hM hreward hconditionedBound
+    (reward := reward) roots value boundary hpolicy hreward hconditionedBound
       time hcurrent hnext who
   change |_ - _| ≤ 2 * M * total ^ 2 at hbase
   have halpha0 : 0 ≤ alpha :=
@@ -592,7 +597,7 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_jointCharge_of_source_pur
     (boundary : Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    {M rho : ℝ} (hM : 0 ≤ M)
+    {M rho : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hconditionedBound : ∀ time player,
       |quittingTailConditionedValue roots value boundary time player| ≤ M)
@@ -639,7 +644,7 @@ theorem rescaledContinuePayoff_le_conditionedValue_add_jointCharge_of_source_pur
     · simp [Function.update_of_ne hplayer]
   have hpolicyBound :=
     abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
-      (reward := reward) roots value boundary hpolicy hM hreward
+      (reward := reward) roots value boundary hpolicy hreward
         hconditionedBound time who hcurrent hnext hmesh hsmall
   have hupper := neg_le_of_abs_le hpolicyBound
   dsimp only [targetRoot, next] at hsuccessor habsorption
@@ -658,7 +663,7 @@ theorem conditionedDiffuseRescaledRoots_isεAsymptoticNash_and_approximates
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
-    {M rho : ℝ} (hM : 0 ≤ M) (hrho : 0 ≤ rho)
+    {M rho : ℝ} (hrho : 0 ≤ rho)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : ∀ time,
       0 < quittingTailEventualAbsorption roots time)
@@ -688,6 +693,7 @@ theorem conditionedDiffuseRescaledRoots_isεAsymptoticNash_and_approximates
               (quittingTailDiffuseRescaledRoots roots hpositive)) who -
           quittingTailConditionedValue roots value boundary 0 who| ≤
         4 * M * Fintype.card ι * rho := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward
   let policyCoefficient := 4 * M * Fintype.card ι * rho
   let quitError := 6 * M * Fintype.card ι * rho
   let refusalCoefficient := (4 * Fintype.card ι + 16) * M * rho
@@ -723,14 +729,14 @@ theorem conditionedDiffuseRescaledRoots_isεAsymptoticNash_and_approximates
       policy_error := by
         intro time who
         exact abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
-          (reward := reward) roots value boundary hpolicy hM hreward
+          (reward := reward) roots value boundary hpolicy hreward
             hconditionedBound time who (hpositive time) (hpositive (time + 1))
               (hmesh time) (hsmall time)
       quit_le := by
         intro time who
         have hquit :=
           quittingStationaryFixedOpponentsQuitValue_rescaledRoot_le_conditionedValue_add_of_nash
-            (reward := reward) roots value boundary hpolicy hnash time who hM
+            (reward := reward) roots value boundary hpolicy hnash time who
               hreward (hpositive time) (htight who) (hsmall time)
         change _ ≤ targetValue time who + quitError
         dsimp only [targetValue, quitError]
@@ -750,7 +756,7 @@ theorem conditionedDiffuseRescaledRoots_isεAsymptoticNash_and_approximates
         intro time who
         have hcontinue :=
           rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
-            (reward := reward) roots value boundary hpolicy hnash time who hM
+            (reward := reward) roots value boundary hpolicy hnash time who
               hreward (hconditionedBound (time + 1) who) (hpositive time)
                 (hpositive (time + 1)) (htight who) (hsmall time) (hhalf time)
         change _ ≤ targetValue time who + refusalCoefficient *
@@ -821,7 +827,7 @@ theorem
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
-    {M rho quitError : ℝ} (hM : 0 ≤ M) (hrho : 0 ≤ rho)
+    {M rho quitError : ℝ} (hrho : 0 ≤ rho)
     (hquitError : 0 ≤ quitError)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpositive : ∀ time,
@@ -857,6 +863,7 @@ theorem
               (quittingTailDiffuseRescaledRoots roots hpositive)) who -
           quittingTailConditionedValue roots value boundary 0 who| ≤
         4 * M * Fintype.card ι * rho := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward
   let policyCoefficient := 4 * M * Fintype.card ι * rho
   let refusalCoefficient := (4 * Fintype.card ι + 16) * M * rho
   let target := quittingTailConditionedValue roots value boundary 0
@@ -903,7 +910,7 @@ theorem
       policy_error := by
         intro time who
         exact abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
-          (reward := reward) roots value boundary hpolicy hM hreward
+          (reward := reward) roots value boundary hpolicy hreward
             hconditionedBound time who (hpositive time) (hpositive (time + 1))
               (hmesh time) (hsmall time)
       quit_le := by
@@ -923,7 +930,7 @@ theorem
         rcases htightOrInactive time who with htight | hinactive
         · have hcontinue :=
             rescaledContinuePayoff_le_conditionedValue_add_deletedCharge
-              (reward := reward) roots value boundary hpolicy hnash time who hM
+              (reward := reward) roots value boundary hpolicy hnash time who
                 hreward (hconditionedBound (time + 1) who) (hpositive time)
                   (hpositive (time + 1)) htight (hsmall time) (hhalf time)
           dsimp only [targetRoots, targetValue, refusalCoefficient]
@@ -952,7 +959,7 @@ theorem
               gcongr
         · have hcontinue :=
             rescaledContinuePayoff_le_conditionedValue_add_jointCharge_of_source_pure_false
-              (reward := reward) roots value boundary hpolicy hM hreward
+              (reward := reward) roots value boundary hpolicy hreward
                 hconditionedBound time who (hpositive time)
                   (hpositive (time + 1)) hinactive (hmesh time) (hsmall time)
           dsimp only [targetRoots, targetValue, refusalCoefficient]

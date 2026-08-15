@@ -518,7 +518,7 @@ theorem homogeneousScaledRoot_quitValue_le
   let M := quittingRewardBound reward
   have hM : 0 ≤ M := quittingRewardBound_nonneg reward
   have hquit := abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
-    (reward := reward) root who hM (abs_reward_le_quittingRewardBound reward)
+    (reward := reward) root who (abs_reward_le_quittingRewardBound reward)
   have hopponent := quittingRootOpponentAbsorptionMass_le_absorptionMass root who
   have habsorption := quittingRootAbsorptionMass_le_stationaryTotalHazard root
   have htotal := quittingStationaryTotalHazard_homogeneousScaledRoot

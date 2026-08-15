@@ -44,7 +44,7 @@ theorem quittingContinuationBestResponseValue_source_sub_stoppingLawMixture_le
     (mover observer : ι)
     (target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     quittingContinuationBestResponseValue reward profile observer -
         quittingContinuationBestResponseValue reward
@@ -52,6 +52,7 @@ theorem quittingContinuationBestResponseValue_source_sub_stoppingLawMixture_le
             (quittingStoppingLawMixtureBehaviorStrategy reward mover
               (profile mover) target lambda hlambda0 hlambda1)) observer ≤
       2 * M * lambda := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   by_cases hsame : observer = mover
   · subst observer
     rw [quittingContinuationBestResponseValue_update_self]
@@ -154,7 +155,7 @@ theorem abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le
     (mover observer : ι)
     (target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
@@ -164,6 +165,7 @@ theorem abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward profile) observer| ≤
       4 * M * lambda := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   let mixedStrategy := quittingStoppingLawMixtureBehaviorStrategy
     reward mover (profile mover) target lambda hlambda0 hlambda1
   let mixedProfile := Function.update profile mover mixedStrategy
@@ -173,7 +175,7 @@ theorem abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le
   let endpoint := quittingTerminalSemanticPair reward endpointProfile
   have henvelope :=
     quittingContinuationBestResponseValue_source_sub_stoppingLawMixture_le
-      reward profile mover observer target lambda hlambda0 hlambda1 hM hreward
+      reward profile mover observer target lambda hlambda0 hlambda1 hreward
   have hpayoff := quittingTerminalPayoff_stoppingLawMixture_eq
     reward profile mover observer (profile mover) target lambda
       hlambda0 hlambda1
@@ -238,7 +240,7 @@ theorem exists_stoppingLawResetRay_nearMinimum_normalizedFixedSupport
     (profile : (quittingGame reward).BehaviorProfile)
     (who : ι) (terminal : {S : Finset ι // S.Nonempty}) (cutoff : ℕ)
     (epsilon : ℝ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hwhoDebt : 0 < quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who)
@@ -347,7 +349,7 @@ theorem exists_stoppingLawResetRay_nearMinimum_normalizedFixedSupport
     intro observer
     have hraw := abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le
       reward profile who observer bestResponse lambda hlambdaPos.le hlambda1
-        hM hreward
+        hreward
     dsimp only [target, source, mixedProfile, mixedStrategy,
       quittingTerminalSemanticDebtChange] at hraw ⊢
     rw [abs_div, abs_of_pos hlambdaPos, div_le_iff₀ hlambdaPos]

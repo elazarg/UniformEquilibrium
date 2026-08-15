@@ -538,7 +538,6 @@ theorem tendsto_quittingGermPuncturedRoot_quitValue_singleton
         simpa [difference, quittingGermForcedContinueRoot] using
           (abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
             (reward := reward) (quittingGermPuncturedRoot g t) who
-            (quittingRewardBound_nonneg reward)
             (abs_reward_le_quittingRewardBound reward))
     · exact hmajor
   apply tendsto_iff_norm_sub_tendsto_zero.2
@@ -1430,7 +1429,6 @@ theorem tendsto_quittingGermPuncturedRoot_quitValue_singleton
         simpa [difference, quittingGermForcedContinueRoot] using
           (abs_quittingStationaryFixedOpponentsQuitValue_sub_singleton_le
             (reward := reward) (quittingGermPuncturedRoot g t) who
-            (quittingRewardBound_nonneg reward)
             (abs_reward_le_quittingRewardBound reward))
     · exact hmajor
   apply tendsto_iff_norm_sub_tendsto_zero.2

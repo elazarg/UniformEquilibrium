@@ -174,7 +174,7 @@ semantic spine. -/
 theorem quittingSoloSemanticSpine_survival_le_gapPow
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
-    {M eta : ℝ} (hM : 0 ≤ M) (heta : 0 < eta)
+    {M eta : ℝ} (heta : 0 < eta)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : ∀ time, IsεQuittingRootNash reward (pair (time + 1)).1 0
       (root time))
@@ -186,6 +186,7 @@ theorem quittingSoloSemanticSpine_survival_le_gapPow
     ∀ start fuel,
       quittingSoloSemanticSurvival root owner start fuel ≤
         (1 - eta / (eta + 2 * M)) ^ fuel := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   have hdenom : 0 < eta + 2 * M := by positivity
   have hrhoLeOne : eta / (eta + 2 * M) ≤ 1 := by
     apply (div_le_one hdenom).2
@@ -200,7 +201,7 @@ spine. -/
 theorem abs_quittingTerminalSemanticSoloSpine_prescribed_sub_soloReward_le
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
-    {M rho : ℝ} (hM : 0 ≤ M) (hrhoLeOne : rho ≤ 1)
+    {M rho : ℝ} (hrhoLeOne : rho ≤ 1)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hpair : ∀ time, pair time ∈ quittingTerminalSemanticCarrier reward)
     (hprefix : ∀ time, pair time = quittingTerminalSemanticPrefix reward
@@ -211,6 +212,7 @@ theorem abs_quittingTerminalSemanticSoloSpine_prescribed_sub_soloReward_le
     (start fuel : ℕ) (player : ι) :
     |(pair start).1 player - quittingSoloReward reward owner player| ≤
       2 * M * (1 - rho) ^ fuel := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   have hfold := quittingTerminalSemanticSoloSpine_prescribed_eq_occupation
     pair root owner hprefix hpure start fuel player
   have hresidual :

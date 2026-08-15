@@ -177,7 +177,7 @@ theorem isεAsymptoticNash_and_approximates
   exact conditionedDiffuseRescaledRoots_isεAsymptoticNash_and_approximates
     certificate.roots certificate.value certificate.boundary
       certificate.policy certificate.nash
-      (quittingRewardBound_nonneg reward) certificate.rho_nonneg
+      certificate.rho_nonneg
       (abs_reward_le_quittingRewardBound reward) certificate.positive
       certificate.conditionedBound certificate.tight certificate.mesh
       certificate.small certificate.half
@@ -548,7 +548,7 @@ theorem
         intro time
         simpa only [suffixRoots, suffixValue, quittingRootSequenceSuffix,
           Nat.add_assoc] using hnash (start + time))
-      (quittingRewardBound_nonneg reward) hrequestedMesh.le
+      hrequestedMesh.le
       htargetQuitError.le (abs_reward_le_quittingRewardBound reward)
       hsuffixPositive
       (by

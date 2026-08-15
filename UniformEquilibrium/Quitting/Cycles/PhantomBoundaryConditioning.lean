@@ -365,7 +365,7 @@ theorem abs_quittingTailConditionedValue_sub_singleton_le_weight
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (time : ℕ) (owner : ι)
     (hpositive : 0 < quittingTailEventualAbsorption roots time)
@@ -375,6 +375,8 @@ theorem abs_quittingTailConditionedValue_sub_singleton_le_weight
     |quittingTailConditionedValue roots value boundary time owner -
         reward (quittingSingletonTerminal owner) owner| ≤
       2 * M * quittingTailConditionedAbsorptionWeight roots time := by
+  have hM :=
+    quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   have hgate := abs_quittingTailConditionedValue_sub_singleton_le
     roots value boundary hpolicy hnash hreward time owner hpositive hquit hpin
   apply hgate.trans

@@ -346,12 +346,13 @@ values within `2M` times the probability of reaching the unmatched tail. -/
 theorem abs_quittingRootSequenceTerminalValue_sub_le_of_prefix_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (x y : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprefix : ∀ time, time < cutoff → x time = y time) :
     |quittingRootSequenceTerminalValue reward x who 0 -
         quittingRootSequenceTerminalValue reward y who 0| ≤
       2 * M * quittingJointSurvivalWeight y 0 cutoff := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hscaled :=
     quittingRootSequenceTerminalValue_sub_eq_jointSurvivalWeight_mul
       reward x y who cutoff hprefix
@@ -387,12 +388,13 @@ marginal cannot alter opponent survival. -/
 theorem abs_quittingRootSequenceHazardTerminalValue_sub_le_of_prefix_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (x y : ℕ → ι → PMF Bool) (who : ι) (hazard : ℕ → PMF Bool)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprefix : ∀ time, time < cutoff → x time = y time) :
     |quittingRootSequenceHazardTerminalValue reward x who hazard 0 -
         quittingRootSequenceHazardTerminalValue reward y who hazard 0| ≤
       2 * M * quittingOpponentSurvivalWeight y who 0 cutoff := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hupdatePrefix : ∀ time, time < cutoff →
       quittingRootSequenceUpdate x who hazard time =
         quittingRootSequenceUpdate y who hazard time := by
@@ -401,7 +403,7 @@ theorem abs_quittingRootSequenceHazardTerminalValue_sub_le_of_prefix_eq
     rw [hprefix time htime]
   have hbound := abs_quittingRootSequenceTerminalValue_sub_le_of_prefix_eq
     reward (quittingRootSequenceUpdate x who hazard)
-      (quittingRootSequenceUpdate y who hazard) who cutoff hM hreward
+      (quittingRootSequenceUpdate y who hazard) who cutoff hreward
       hupdatePrefix
   calc
     |quittingRootSequenceHazardTerminalValue reward x who hazard 0 -
@@ -421,7 +423,7 @@ theorem abs_quittingTerminalPayoff_update_rootSequence_sub_le_of_prefix_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (x y : ℕ → ι → PMF Bool) (who : ι)
     (deviation : (quittingGame reward).BehaviorStrategy who)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprefix : ∀ time, time < cutoff → x time = y time) :
     |quittingTerminalPayoff reward
@@ -437,7 +439,7 @@ theorem abs_quittingTerminalPayoff_update_rootSequence_sub_le_of_prefix_eq
     quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
   exact abs_quittingRootSequenceHazardTerminalValue_sub_le_of_prefix_eq
     reward x y who (quittingBehaviorLiveHazard reward deviation) cutoff
-      hM hreward hprefix
+      hreward hprefix
 
 /-- Suprema over all behavior deviations inherit the same deleted-clock
 prefix estimate.  This is an envelope statement, not a prescribed-value
@@ -445,7 +447,7 @@ proxy. -/
 theorem abs_quittingRootSequenceBestResponseValue_sub_le_of_prefix_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (x y : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprefix : ∀ time, time < cutoff → x time = y time) :
     |quittingRootSequenceBestResponseValue reward x who -
@@ -462,7 +464,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_le_of_prefix_eq
     intro deviation
     dsimp [xProfile, yProfile, error]
     exact abs_quittingTerminalPayoff_update_rootSequence_sub_le_of_prefix_eq
-      reward x y who deviation cutoff hM hreward hprefix
+      reward x y who deviation cutoff hreward hprefix
   have hxy : quittingContinuationBestResponseValue reward xProfile who ≤
       quittingContinuationBestResponseValue reward yProfile who + error := by
     unfold quittingContinuationBestResponseValue
@@ -526,7 +528,7 @@ through its matching prefix. -/
 theorem abs_quittingRootSequenceTerminalValue_sub_elementarySureJoint_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootSequenceTerminalValue reward roots who 0 -
         quittingRootSequenceTerminalValue reward
@@ -535,7 +537,7 @@ theorem abs_quittingRootSequenceTerminalValue_sub_elementarySureJoint_le
   simpa using
     (abs_quittingRootSequenceTerminalValue_sub_le_of_prefix_eq
       reward roots (quittingElementaryTailRoots roots cutoff (.sureJoint))
-      who cutoff hM hreward fun time htime =>
+      who cutoff hreward fun time htime =>
         (quittingElementaryTailRoots_of_lt roots (.sureJoint) htime).symm)
 
 /-- All-behavior best-response-envelope error for the same sure-joint
@@ -543,7 +545,7 @@ compression.  The scale is the player's deleted clock, not joint survival. -/
 theorem abs_quittingRootSequenceBestResponseValue_sub_elementarySureJoint_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootSequenceBestResponseValue reward roots who -
         quittingRootSequenceBestResponseValue reward
@@ -552,7 +554,7 @@ theorem abs_quittingRootSequenceBestResponseValue_sub_elementarySureJoint_le
   simpa using
     (abs_quittingRootSequenceBestResponseValue_sub_le_of_prefix_eq
       reward roots (quittingElementaryTailRoots roots cutoff (.sureJoint))
-      who cutoff hM hreward fun time htime =>
+      who cutoff hreward fun time htime =>
         (quittingElementaryTailRoots_of_lt roots (.sureJoint) htime).symm)
 
 /-- If full survival tends to zero, sure-joint capped prefixes converge in
@@ -577,7 +579,7 @@ theorem tendsto_quittingRootSequenceTerminalValue_elementarySureJoint
   refine ⟨threshold, fun cutoff hcutoff => ?_⟩
   have hbound :=
     abs_quittingRootSequenceTerminalValue_sub_elementarySureJoint_le
-      reward roots who cutoff hM hreward
+      reward roots who cutoff hreward
   have hmajorantClose := hthreshold cutoff hcutoff
   rw [Real.dist_eq, sub_zero, abs_of_nonneg] at hmajorantClose
   · rw [Real.dist_eq]
@@ -608,7 +610,7 @@ theorem tendsto_quittingRootSequenceBestResponseValue_elementarySureJoint
   refine ⟨threshold, fun cutoff hcutoff => ?_⟩
   have hbound :=
     abs_quittingRootSequenceBestResponseValue_sub_elementarySureJoint_le
-      reward roots who cutoff hM hreward
+      reward roots who cutoff hreward
   have hmajorantClose := hthreshold cutoff hcutoff
   rw [Real.dist_eq, sub_zero, abs_of_nonneg] at hmajorantClose
   · rw [Real.dist_eq]

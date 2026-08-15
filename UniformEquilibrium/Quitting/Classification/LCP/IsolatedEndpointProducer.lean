@@ -216,7 +216,7 @@ theorem abs_isolatedEndpointThreat_terminalPayoff_sub_ownerSolo_le
     linarith
   have hanchor :=
     abs_quittingRootAbsorbingContribution_sub_absorption_mul_solo_le
-      (reward := reward) root owner who hM hreward
+      (reward := reward) root owner who hreward
   rw [isolatedEndpointThreatRoot_owner_opponentAbsorption hne] at hanchor
   rw [quittingTerminalPayoff_stationary_eq_absorbingContribution_div
     reward root who hcontinue]

@@ -43,7 +43,7 @@ theorem isεAsymptoticNash_finiteCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : ι) (strategy : (quittingGame reward).BehaviorStrategy mover)
-    (cutoff : ℕ) {ε M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {ε M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) ε
@@ -78,14 +78,14 @@ theorem isεAsymptoticNash_finiteCap
     intro observer
     dsimp only [sourceProfile, cappedProfile, error]
     exact abs_quittingContinuationBestResponseValue_finiteCap_sub_le
-      reward profile mover observer strategy cutoff hM hreward
+      reward profile mover observer strategy cutoff hreward
   have hpayoff : ∀ observer,
       |quittingTerminalPayoff reward sourceProfile observer -
         quittingTerminalPayoff reward cappedProfile observer| ≤ error := by
     intro observer
     dsimp only [sourceProfile, cappedProfile, error]
     exact abs_quittingTerminalPayoff_finiteCap_sub_le
-      reward profile mover observer strategy cutoff hM hreward
+      reward profile mover observer strategy cutoff hreward
   have hdouble : error + error =
       4 * M * quittingFiniteSpliceError
         (quittingProfileLiveRoot reward profile) mover
@@ -128,7 +128,7 @@ theorem isεAsymptoticNash_mixtureFiniteCap
     (mover : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    (cutoff : ℕ) {ε M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {ε M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) ε
@@ -171,7 +171,7 @@ theorem isεAsymptoticNash_mixtureFiniteCap
     dsimp only [sourceProfile, cappedProfile, error]
     exact abs_quittingContinuationBestResponseValue_mixtureFiniteCap_sub_le
       reward profile mover observer source target lambda hlambda0 hlambda1
-        cutoff hM hreward
+        cutoff hreward
   have hpayoff : ∀ observer,
       |quittingTerminalPayoff reward sourceProfile observer -
         quittingTerminalPayoff reward cappedProfile observer| ≤ error := by
@@ -179,7 +179,7 @@ theorem isεAsymptoticNash_mixtureFiniteCap
     dsimp only [sourceProfile, cappedProfile, error]
     exact abs_quittingTerminalPayoff_mixtureFiniteCap_sub_le
       reward profile mover observer source target lambda hlambda0 hlambda1
-        cutoff hM hreward
+        cutoff hreward
   have hdouble : error + error =
       lambda * (4 * M * quittingFiniteSpliceError
         (quittingProfileLiveRoot reward profile) mover
@@ -232,7 +232,7 @@ theorem exists_finiteSpliceCutoffs_mixtureNash_markedEvent_of_capTight
     (source target : ℕ → (quittingGame reward).BehaviorStrategy mover)
     (lambda epsilon : ℕ → ℝ)
     (hlambda0 : ∀ n, 0 ≤ lambda n) (hlambda1 : ∀ n, lambda n ≤ 1)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : ∀ n,
       (quittingGame reward).IsεAsymptoticNash
@@ -293,6 +293,7 @@ theorem exists_finiteSpliceCutoffs_mixtureNash_markedEvent_of_capTight
                 (quittingStoppingLawFiniteCapBehaviorStrategy reward mover
                   (target n) (cutoffs n))
                 (lambda n) (hlambda0 n) (hlambda1 n))) event := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   obtain ⟨cutoffs, hcutoffs, herror, hmarked⟩ :=
     exists_finiteSpliceCutoffs_markedEvent_retained_of_capTight
       reward profile mover source target lambda hlambda0 hlambda1 event rho
@@ -337,6 +338,6 @@ theorem exists_finiteSpliceCutoffs_mixtureNash_markedEvent_of_capTight
   intro n
   exact isεAsymptoticNash_mixtureFiniteCap
     reward (profile n) mover (source n) (target n) (lambda n)
-      (hlambda0 n) (hlambda1 n) (cutoffs n) hM hreward (hnash n)
+      (hlambda0 n) (hlambda1 n) (cutoffs n) hreward (hnash n)
 
 end GameTheory

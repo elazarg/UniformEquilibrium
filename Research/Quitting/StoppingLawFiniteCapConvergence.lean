@@ -675,11 +675,11 @@ theorem exists_finiteCap_all_terminalSemantics_close_after
     nlinarith [mul_nonneg hM herror0]
   refine ⟨cutoff, hlowerBound, fun observer => ?_⟩
   have hpay := abs_quittingTerminalPayoff_finiteCap_sub_le
-    reward profile mover observer strategy cutoff hM hreward
+    reward profile mover observer strategy cutoff hreward
   have hbest := abs_quittingContinuationBestResponseValue_finiteCap_sub_le
-    reward profile mover observer strategy cutoff hM hreward
+    reward profile mover observer strategy cutoff hreward
   have hdebt := abs_quittingTerminalSemanticDebt_finiteCap_sub_le
-    reward profile mover observer strategy cutoff hM hreward
+    reward profile mover observer strategy cutoff hreward
   dsimp only [error] at hfour htwoLe
   exact ⟨lt_of_le_of_lt hpay (lt_of_le_of_lt htwoLe hfour),
     lt_of_le_of_lt hbest (lt_of_le_of_lt htwoLe hfour),

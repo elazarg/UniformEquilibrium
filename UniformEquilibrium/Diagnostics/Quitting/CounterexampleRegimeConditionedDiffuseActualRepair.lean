@@ -40,7 +40,6 @@ theorem conditionedDiffuse_ownMarginalEndpointRepair_ge_jointCharge_shift
     (eta epsilon M rho : ℝ)
     (hpolicy : ∀ date, value date =
       quittingRootSuccessorPayoff reward (value (date + 1)) (roots date))
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hconditionedBound : ∀ date player,
       |quittingTailConditionedValue roots value boundary date player| ≤ M)
@@ -76,7 +75,7 @@ theorem conditionedDiffuse_ownMarginalEndpointRepair_ge_jointCharge_shift
       roots time who hcurrent hinactive
   have hcharge :=
     abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
-      (reward := reward) roots value boundary hpolicy hM hreward
+      (reward := reward) roots value boundary hpolicy hreward
       hconditionedBound time who hcurrent hnext hmesh hsmall
   have hrepair :=
     quittingRootExpectedPayoff_update_ownMarginal_ge_pureContinue_add_gap_sub

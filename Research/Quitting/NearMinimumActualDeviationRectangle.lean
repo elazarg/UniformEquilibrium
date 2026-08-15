@@ -50,7 +50,7 @@ theorem exists_nearMinimumReset_actualDeviation_affineRectangle_sourceActive
     (mover : ι) (target : (quittingGame reward).BehaviorStrategy mover)
     (lambda epsilon eta : ℝ)
     (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1) (heta : 0 < eta)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnear : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum
@@ -231,7 +231,7 @@ theorem exists_nearMinimumReset_actualDeviation_affineRectangle_sourceActive
       _ ≤ endpointGain - sourceGain := hdivided
   have hdebtVariation :=
     abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le reward profile
-      mover recipient target lambda hlambda0.le hlambda1 hM hreward
+      mover recipient target lambda hlambda0.le hlambda1 hreward
   have hmixedDebtSourceLower :
       quittingTerminalSemanticDebt source recipient - 4 * M * lambda ≤
         quittingTerminalSemanticDebt mixed recipient := by

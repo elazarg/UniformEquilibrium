@@ -243,7 +243,7 @@ theorem quittingRootSequenceHazardTerminalGap_le_targetOwnSurvival
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (target who : ι) (hazard : ℕ → PMF Bool) (cutoff : ℕ)
-    {M δ : ℝ} (hM : 0 ≤ M) (hδ : 0 ≤ δ)
+    {M δ : ℝ} (hδ : 0 ≤ δ)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hterminal : value cutoff =
       fun player => quittingRootSequenceTerminalValue reward roots player cutoff)
@@ -258,6 +258,7 @@ theorem quittingRootSequenceHazardTerminalGap_le_targetOwnSurvival
           (quittingRootSequenceOwnHazard roots target) cutoff ≤ δ) :
     quittingRootSequenceHazardTerminalValue reward roots who hazard 0 -
         value 0 who ≤ 2 * M * δ := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   by_cases hwho : who = target
   · subst who
     have hdebt :
@@ -316,7 +317,7 @@ theorem finiteExactChainProfile_isεAsymptoticNash_of_targetClosedTail
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (target : ι) (cutoff : ℕ)
-    {M δ : ℝ} (hM : 0 ≤ M) (hδ : 0 ≤ δ)
+    {M δ : ℝ} (hδ : 0 ≤ δ)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hterminal : value cutoff =
       fun player => quittingRootSequenceTerminalValue reward roots player cutoff)
@@ -337,7 +338,7 @@ theorem finiteExactChainProfile_isεAsymptoticNash_of_targetClosedTail
     quittingRootSequenceHazardTerminalGap_le_targetOwnSurvival
       reward roots value target who
         (quittingBehaviorLiveHazard reward deviation) cutoff
-        hM hδ hreward hterminal hpolicy hnash hclosed hsurvival
+        hδ hreward hterminal hpolicy hnash hclosed hsurvival
   have hdeviation :=
     quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue
       reward (quittingInfinitePathProfile reward roots) who deviation

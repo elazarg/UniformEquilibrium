@@ -334,7 +334,7 @@ theorem abs_quittingRootSequenceTerminalValue_finiteCap_sub_le_opponent
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (mover observer : ι)
     (hazard : ℕ → PMF Bool)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootSequenceTerminalValue reward
           (quittingRootSequenceUpdate roots mover hazard) observer 0 -
@@ -345,6 +345,7 @@ theorem abs_quittingRootSequenceTerminalValue_finiteCap_sub_le_opponent
         (quittingHazardLateFiniteMass hazard cutoff +
           quittingHazardNeverMass hazard *
             quittingOpponentSurvivalWeight roots mover 0 cutoff) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   let x := quittingRootSequenceUpdate roots mover hazard
   let cappedHazard := quittingHazardCapAt hazard cutoff
   let y := quittingRootSequenceUpdate roots mover cappedHazard
@@ -477,7 +478,7 @@ theorem abs_quittingRootSequenceTerminalValue_finiteCap_sub_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (mover observer : ι)
     (hmoverObserver : mover ≠ observer) (hazard : ℕ → PMF Bool)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootSequenceTerminalValue reward
           (quittingRootSequenceUpdate roots mover hazard) observer 0 -
@@ -488,9 +489,10 @@ theorem abs_quittingRootSequenceTerminalValue_finiteCap_sub_le
         (quittingHazardLateFiniteMass hazard cutoff +
           quittingHazardNeverMass hazard *
             quittingPairDeletedSurvivalWeight roots mover observer 0 cutoff) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   have hcore :=
     abs_quittingRootSequenceTerminalValue_finiteCap_sub_le_opponent
-      reward roots mover observer hazard cutoff hM hreward
+      reward roots mover observer hazard cutoff hreward
   have hclock := quittingOpponentSurvivalWeight_le_pairDeleted roots mover
     observer hmoverObserver 0 cutoff
   have hnever := quittingHazardNeverMass_nonneg hazard
@@ -520,7 +522,7 @@ theorem abs_quittingRootSequenceTerminalValue_finiteCap_sub_le_max
     [Nontrivial ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (mover observer : ι)
-    (hazard : ℕ → PMF Bool) (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (hazard : ℕ → PMF Bool) (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingRootSequenceTerminalValue reward
           (quittingRootSequenceUpdate roots mover hazard) observer 0 -
@@ -531,9 +533,10 @@ theorem abs_quittingRootSequenceTerminalValue_finiteCap_sub_le_max
         (quittingHazardLateFiniteMass hazard cutoff +
           quittingHazardNeverMass hazard *
             quittingMaxPairDeletedSurvivalWeight roots mover 0 cutoff) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   have hcore :=
     abs_quittingRootSequenceTerminalValue_finiteCap_sub_le_opponent
-      reward roots mover observer hazard cutoff hM hreward
+      reward roots mover observer hazard cutoff hreward
   obtain ⟨other, hother⟩ := exists_ne mover
   have hclock : quittingOpponentSurvivalWeight roots mover 0 cutoff ≤
       quittingMaxPairDeletedSurvivalWeight roots mover 0 cutoff :=
@@ -668,7 +671,7 @@ theorem abs_quittingTerminalPayoff_finiteCap_sub_le [Nontrivial ι]
     (profile : (quittingGame reward).BehaviorProfile)
     (mover observer : ι)
     (strategy : (quittingGame reward).BehaviorStrategy mover)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingTerminalPayoff reward
           (Function.update profile mover strategy) observer -
@@ -686,7 +689,7 @@ theorem abs_quittingTerminalPayoff_finiteCap_sub_le [Nontrivial ι]
     quittingBehaviorLiveHazard_finiteCap]
   exact abs_quittingRootSequenceTerminalValue_finiteCap_sub_le_max
     reward (quittingProfileLiveRoot reward profile) mover observer
-      (quittingBehaviorLiveHazard reward strategy) cutoff hM hreward
+      (quittingBehaviorLiveHazard reward strategy) cutoff hreward
 
 /-- The same cap error controls the payoff of every behavioral deviation by
 a distinct observer.  The observer's hazard disappears from its own deleted
@@ -698,7 +701,7 @@ theorem abs_quittingTerminalPayoff_update_finiteCap_sub_le
     (mover observer : ι) (hmoverObserver : mover ≠ observer)
     (strategy : (quittingGame reward).BehaviorStrategy mover)
     (deviation : (quittingGame reward).BehaviorStrategy observer)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingTerminalPayoff reward
           (Function.update (Function.update profile mover strategy)
@@ -711,6 +714,7 @@ theorem abs_quittingTerminalPayoff_update_finiteCap_sub_le
       2 * M * quittingFiniteSpliceError
         (quittingProfileLiveRoot reward profile) mover
           (quittingBehaviorLiveHazard reward strategy) cutoff := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   rw [Function.update_comm hmoverObserver,
     Function.update_comm hmoverObserver,
     quittingTerminalPayoff_eq_rootSequence_profileLiveRoot,
@@ -725,7 +729,7 @@ theorem abs_quittingTerminalPayoff_update_finiteCap_sub_le
       (quittingProfileLiveRoot reward
         (Function.update profile observer deviation))
       mover observer hmoverObserver
-      (quittingBehaviorLiveHazard reward strategy) cutoff hM hreward
+      (quittingBehaviorLiveHazard reward strategy) cutoff hreward
   rw [quittingProfileLiveRoot_update_eq_rootSequenceUpdate,
     quittingPairDeletedSurvivalWeight_update_observer] at hbound
   have hclock := quittingPairDeletedSurvivalWeight_le_max
@@ -759,7 +763,7 @@ theorem abs_quittingContinuationBestResponseValue_finiteCap_sub_le
     (profile : (quittingGame reward).BehaviorProfile)
     (mover observer : ι)
     (strategy : (quittingGame reward).BehaviorStrategy mover)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingContinuationBestResponseValue reward
           (Function.update profile mover strategy) observer -
@@ -770,6 +774,7 @@ theorem abs_quittingContinuationBestResponseValue_finiteCap_sub_le
       2 * M * quittingFiniteSpliceError
         (quittingProfileLiveRoot reward profile) mover
           (quittingBehaviorLiveHazard reward strategy) cutoff := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   by_cases hsame : mover = observer
   · subst observer
     rw [quittingContinuationBestResponseValue_update_self,
@@ -794,7 +799,7 @@ theorem abs_quittingContinuationBestResponseValue_finiteCap_sub_le
       intro deviation
       dsimp only [sourceProfile, cappedProfile, error]
       exact abs_quittingTerminalPayoff_update_finiteCap_sub_le
-        reward profile mover observer hsame strategy deviation cutoff hM hreward
+        reward profile mover observer hsame strategy deviation cutoff hreward
     have hsourceCapped :
         quittingContinuationBestResponseValue reward sourceProfile observer ≤
           quittingContinuationBestResponseValue reward cappedProfile observer +
@@ -844,7 +849,7 @@ theorem abs_quittingTerminalSemanticDebt_finiteCap_sub_le
     (profile : (quittingGame reward).BehaviorProfile)
     (mover observer : ι)
     (strategy : (quittingGame reward).BehaviorStrategy mover)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
@@ -859,9 +864,9 @@ theorem abs_quittingTerminalSemanticDebt_finiteCap_sub_le
           (quittingBehaviorLiveHazard reward strategy) cutoff := by
   have hbest :=
     abs_quittingContinuationBestResponseValue_finiteCap_sub_le
-      reward profile mover observer strategy cutoff hM hreward
+      reward profile mover observer strategy cutoff hreward
   have hpay := abs_quittingTerminalPayoff_finiteCap_sub_le
-    reward profile mover observer strategy cutoff hM hreward
+    reward profile mover observer strategy cutoff hreward
   unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
   calc
     |(quittingContinuationBestResponseValue reward
@@ -944,7 +949,7 @@ theorem abs_quittingTerminalSemanticDebtSum_finiteCap_sub_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : ι) (strategy : (quittingGame reward).BehaviorStrategy mover)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
@@ -987,7 +992,7 @@ theorem abs_quittingTerminalSemanticDebtSum_finiteCap_sub_le
       apply Finset.sum_le_sum
       intro observer _
       exact abs_quittingTerminalSemanticDebt_finiteCap_sub_le
-        reward profile mover observer strategy cutoff hM hreward
+        reward profile mover observer strategy cutoff hreward
     _ = (Fintype.card ι : ℝ) *
         (4 * M * quittingFiniteSpliceError
           (quittingProfileLiveRoot reward profile) mover
@@ -1001,7 +1006,7 @@ theorem abs_quittingFiniteCap_moverGain_sub_le [Nontrivial ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (mover : ι) (strategy : (quittingGame reward).BehaviorStrategy mover)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |(quittingTerminalPayoff reward
           (Function.update profile mover strategy) mover -
@@ -1016,7 +1021,7 @@ theorem abs_quittingFiniteCap_moverGain_sub_le [Nontrivial ι]
           (quittingBehaviorLiveHazard reward strategy) cutoff := by
   simpa only [sub_sub_sub_cancel_right] using
     abs_quittingTerminalPayoff_finiteCap_sub_le
-      reward profile mover mover strategy cutoff hM hreward
+      reward profile mover mover strategy cutoff hreward
 
 /-! ## Lambda-scaled reset comparison -/
 
@@ -1029,7 +1034,7 @@ theorem abs_quittingTerminalPayoff_mixtureFiniteCap_sub_le
     (mover observer : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingTerminalPayoff reward
           (Function.update profile mover
@@ -1070,7 +1075,7 @@ theorem abs_quittingTerminalPayoff_mixtureFiniteCap_sub_le
     abs_mul, abs_of_nonneg hlambda0]
   exact mul_le_mul_of_nonneg_left
     (abs_quittingTerminalPayoff_finiteCap_sub_le
-      reward profile mover observer target cutoff hM hreward) hlambda0
+      reward profile mover observer target cutoff hreward) hlambda0
 
 /-- The lambda-scaled estimate remains uniform over every behavioral
 deviation of a distinct observer. -/
@@ -1082,7 +1087,7 @@ theorem abs_quittingTerminalPayoff_update_mixtureFiniteCap_sub_le
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (deviation : (quittingGame reward).BehaviorStrategy observer)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingTerminalPayoff reward
           (Function.update
@@ -1133,7 +1138,7 @@ theorem abs_quittingTerminalPayoff_update_mixtureFiniteCap_sub_le
                 cutoff)) observer) by ring,
     abs_mul, abs_of_nonneg hlambda0]
   have hendpoint := abs_quittingTerminalPayoff_update_finiteCap_sub_le
-    reward profile mover observer hmoverObserver target deviation cutoff hM hreward
+    reward profile mover observer hmoverObserver target deviation cutoff hreward
   rw [Function.update_comm hmoverObserver,
     Function.update_comm hmoverObserver] at hendpoint
   exact mul_le_mul_of_nonneg_left hendpoint hlambda0
@@ -1147,7 +1152,7 @@ theorem abs_quittingContinuationBestResponseValue_mixtureFiniteCap_sub_le
     (mover observer : ι)
     (source target : (quittingGame reward).BehaviorStrategy mover)
     (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
-    (cutoff : ℕ) {M : ℝ} (hM : 0 ≤ M)
+    (cutoff : ℕ) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     |quittingContinuationBestResponseValue reward
           (Function.update profile mover
@@ -1161,6 +1166,7 @@ theorem abs_quittingContinuationBestResponseValue_mixtureFiniteCap_sub_le
       lambda * (2 * M * quittingFiniteSpliceError
         (quittingProfileLiveRoot reward profile) mover
           (quittingBehaviorLiveHazard reward target) cutoff) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward mover hreward
   by_cases hsame : mover = observer
   · subst observer
     rw [quittingContinuationBestResponseValue_update_self,
@@ -1191,7 +1197,7 @@ theorem abs_quittingContinuationBestResponseValue_mixtureFiniteCap_sub_le
       dsimp only [targetProfile, cappedProfile, error]
       exact abs_quittingTerminalPayoff_update_mixtureFiniteCap_sub_le
         reward profile mover observer hsame source target deviation lambda
-          hlambda0 hlambda1 cutoff hM hreward
+          hlambda0 hlambda1 cutoff hreward
     have hforward :
         quittingContinuationBestResponseValue reward targetProfile observer ≤
           quittingContinuationBestResponseValue reward cappedProfile observer +

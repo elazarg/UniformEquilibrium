@@ -430,7 +430,7 @@ theorem tendsto_quittingTailConditionedValue_activeCoordinate
   rw [Real.dist_eq]
   exact lt_of_le_of_lt
     (abs_quittingTailConditionedValue_sub_singleton_le_weight
-      roots value boundary hpolicy hnash hM hreward (time index) owner
+      roots value boundary hpolicy hnash hreward (time index) owner
         (hpositive index) (hquit index) hpin)
     (by
       have hclose := hthreshold index hindex
