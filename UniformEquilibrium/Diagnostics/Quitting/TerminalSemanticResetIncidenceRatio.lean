@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
+import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
 /-!
 # The debt/incidence variational obstruction on a reset face

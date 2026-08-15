@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDebtTransfer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
+import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
 /-!
 # Returning a reset excursion by cap--Nash prefixing
@@ -213,28 +214,6 @@ theorem capNashPrefix_resetExcursion_strict_descent_of_absorption
       quittingRootAbsorptionMass root := mul_pos htargetPositive habsorbs
   refine ⟨?_, haccount.2.1, haccount.2.2.2.2.2.2⟩
   linarith [haccount.2.2.2.2.1]
-
-/-- The all-Continue prefix fixes a semantic pair as soon as its envelope
-dominates every singleton reward.  This condition concerns the cap, not the
-prescribed payoff. -/
-theorem quittingTerminalSemanticPrefix_allContinue_eq_of_singleton_le_cap
-    (pair : QuittingTerminalSemanticPair ι)
-    (hcap : ∀ player,
-      reward (quittingSingletonTerminal player) player ≤ pair.2 player) :
-    quittingTerminalSemanticPrefix reward quittingAllContinueRoot pair =
-      pair := by
-  apply Prod.ext
-  · funext player
-    change quittingRootSuccessorPayoff reward pair.1
-      quittingAllContinueRoot player = pair.1 player
-    rw [quittingRootSuccessorPayoff_eq_endpointMix]
-    simp [quittingAllContinueRoot]
-  · funext player
-    simp only [quittingTerminalSemanticPrefix,
-      quittingRootQuitPayoff_allContinueRoot,
-      quittingRootContinuePayoff_allContinueRoot,
-      Function.update_self]
-    exact max_eq_right (hcap player)
 
 /-- **Cap-face dichotomy for a reset excursion.**
 

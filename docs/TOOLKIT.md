@@ -63,16 +63,19 @@ the uniform finite-horizon delivery and unilateral-deviation bounds encoded by
 that constructor.
 
 For finite quitting games, a producer that already names its payoff target
-should use
+should retain that target through the terminal-to-uniform bridge.
 `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalTargetSemantics.lean`
-and retain that target through the terminal-to-uniform bridge.  The target-free
-fallback is
-`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`:
-it selects one bounded target from terminal approximate equilibria available
-at every positive accuracy.  Compact target selection is not a substitute for
-an exact or convergent target already supplied by the producer.  Terminal
-verification, target selection, and uniformization remain separate steps in
-lower-level proofs.
+owns the exact and per-accuracy approximate-target interfaces, while
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`
+also compiles a sequence whose errors tend to zero and whose terminal payoffs
+tend to a specified target, provided terminal Nash profiles occur arbitrarily
+far along that sequence.  Limits of terminal-payoff vectors remain in the
+canonical reward cube, as does every uniform-equilibrium target; the
+target-free fallback selects a payoff in that cube from terminal approximate
+equilibria available at every positive accuracy.  Compact target selection is
+not a substitute for an exact or convergent target already supplied by the
+producer.  Terminal verification, target selection, and uniformization remain
+separate steps in lower-level proofs.
 
 `UniformEquilibrium/Certificates/Adaptive/PotentialSystemTools.lean` is the transformation facade for the
 proof-facing adaptive-potential waist. It deliberately reuses the one

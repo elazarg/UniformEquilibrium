@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Boundary.Analytic.SeamPriceResidual
 import UniformEquilibrium.Quitting.Cycles.Isolated.AnchorMaxAffine
+import MathUE.Topology.FiniteLimitDecomposition
 
 /-!
 # Transported leverage: the corrected surgery currency
@@ -69,9 +70,11 @@ objects; the abstract value-channel machinery (`blockValueMap`,
 * `sub_blockFixedPoint_eq_transportedLeverageTerm` -- the exact re-closing
   identity `ṽ - v = (C_P / ρ̃_G)(Φ̃_B(z) - Φ_B(z))`, reproducing (26), derived
   from the composition law `blockValueMap_add` and the existing
-  `blockFixedPoint_isFixedPt` -- not re-imported as a hypothesis.
-* `not_eventually_ge_of_tendsto_leverage_zero` -- deliverable (3), the
-  corrected obstruction stated generically, directly usable as a no-go.
+  `blockFixedPoint_isFixedPt_iff` -- not re-imported as a hypothesis.
+* `tendsto_sub_blockFixedPoint_zero_of_tendsto_valueLeverage_zero` --
+  deliverable (3) in its strongest form: vanishing transported leverage forces
+  the induced fixed-point movement to vanish.  The `not_eventually_ge` results
+  are compatibility no-go corollaries.
 * `valueLeverage_smallSupport_eq_one` /
   `tendsto_valueLeverage_largeSupport_atTop_nhds_zero` -- deliverable (4),
   the incomparability witnesses.
@@ -374,16 +377,19 @@ confined to the block (prefix and rest coefficients agree), the movement of
 the whole window's own fixed point is the prefix transport factor over the
 post-modification whole-window deficit, times the block map's discrepancy at
 `z = Φ_R(v)`.  Derived entirely from `blockValueMap_add`,
-`blockValueMap_congr` and `blockFixedPoint_isFixedPt` -- no new hypothesis
-beyond the source's own `G = PBR` decomposition. -/
+`blockValueMap_congr` and `blockFixedPoint_isFixedPt_iff`: beyond the algebraic
+`G = PBR` decomposition, the old quotient need only satisfy its exact
+fixed-point disjunction, while the new whole-window deficit must be nonzero. -/
 theorem sub_blockFixedPoint_eq_transportedLeverageTerm
     (B C B' C' : ℕ → ℝ) (p ℓ r : ℕ)
     (hBeqP : ∀ offset, offset < p → B' offset = B offset)
     (hCeqP : ∀ offset, offset < p → C' offset = C offset)
     (hBeqR : ∀ offset, offset < r → B' (p + ℓ + offset) = B (p + ℓ + offset))
     (hCeqR : ∀ offset, offset < r → C' (p + ℓ + offset) = C (p + ℓ + offset))
-    (hρG : 0 < 1 - blockSurvival C 0 (p + ℓ + r))
-    (hρG' : 0 < 1 - blockSurvival C' 0 (p + ℓ + r)) :
+    (hfixedG :
+      1 - blockSurvival C 0 (p + ℓ + r) ≠ 0 ∨
+        blockConstant B C 0 (p + ℓ + r) = 0)
+    (hρG' : 1 - blockSurvival C' 0 (p + ℓ + r) ≠ 0) :
     blockFixedPoint B' C' 0 (p + ℓ + r) - blockFixedPoint B C 0 (p + ℓ + r) =
       (blockSurvival C 0 p / (1 - blockSurvival C' 0 (p + ℓ + r))) *
         (blockValueMap B' C' p ℓ
@@ -395,7 +401,7 @@ theorem sub_blockFixedPoint_eq_transportedLeverageTerm
   set z := blockValueMap B C (p + ℓ) r v with hz
   -- The old fixed point decomposes through the P;B;R window.
   have hvFix : v = blockValueMap B C 0 (p + ℓ + r) v := by
-    have h := blockFixedPoint_isFixedPt B C 0 (p + ℓ + r) hρG
+    have h := (blockFixedPoint_isFixedPt_iff B C 0 (p + ℓ + r)).2 hfixedG
     rw [← hv] at h
     rw [show blockValueMap B C 0 (p + ℓ + r) v =
         blockSurvival C 0 (p + ℓ + r) * v + blockConstant B C 0 (p + ℓ + r) from by
@@ -427,12 +433,7 @@ theorem sub_blockFixedPoint_eq_transportedLeverageTerm
       blockSurvival C 0 p * (blockValueMap B' C' p ℓ z - blockValueMap B C p ℓ z) := by
     rw [hnewAtOld, hvP]
     exact hPaffine _ _
-  -- Re-close: both fixed points solve the same affine equation over `[0, p+ℓ+r)`.
-  have hEqOld : blockConstant B C 0 (p + ℓ + r) = v * (1 - blockSurvival C 0 (p + ℓ + r)) := by
-    have h := hvFix
-    rw [show blockValueMap B C 0 (p + ℓ + r) v =
-        blockConstant B C 0 (p + ℓ + r) + blockSurvival C 0 (p + ℓ + r) * v from rfl] at h
-    linear_combination -h
+  -- Re-close the new fixed point over `[0, p+ℓ+r)`.
   have hEqNew : blockConstant B' C' 0 (p + ℓ + r) = v' * (1 - blockSurvival C' 0 (p + ℓ + r)) := by
     have h := hv'Fix
     rw [show blockValueMap B' C' 0 (p + ℓ + r) v' =
@@ -448,32 +449,80 @@ theorem sub_blockFixedPoint_eq_transportedLeverageTerm
   have hfinal : (v' - v) * (1 - blockSurvival C' 0 (p + ℓ + r)) =
       blockSurvival C 0 p * (blockValueMap B' C' p ℓ z - blockValueMap B C p ℓ z) := by
     linear_combination hdUnfold
-  rw [div_mul_eq_mul_div, eq_div_iff hρG'.ne']
+  rw [div_mul_eq_mul_div, eq_div_iff hρG']
   exact hfinal
 
-/-- **The corrected obstruction, deliverable (3), generic form.**  A family
-of modifications whose transported leverage tends to zero cannot change the
-origin objective by a fixed positive amount: if the change at index `n` is
-dominated by a leverage that tends to `0`, the change cannot stay `≥ c` for
-any fixed `c > 0`, eventually.  Stated with no reference to the game so it is
-directly usable as a no-go against *any* leverage bound of this shape. -/
+private theorem not_eventually_ge_abs_of_tendsto_zero
+    {change : ℕ → ℝ}
+    (hchange : Filter.Tendsto change Filter.atTop (nhds 0))
+    {c : ℝ} (hc : 0 < c) :
+    ¬ ∀ᶠ n in Filter.atTop, c ≤ |change n| := by
+  have habs := (tendsto_zero_iff_abs_tendsto_zero change).1 hchange
+  have hlt : ∀ᶠ n in Filter.atTop, |change n| < c := by
+    simpa only [Function.comp_apply] using (tendsto_order.1 habs).2 c hc
+  intro hev
+  obtain ⟨n, hge, hlt'⟩ := (hev.and hlt).exists
+  exact (not_lt_of_ge hge) hlt'
+
+/-- **The corrected obstruction, deliverable (3), generic no-go form.**  If a
+change is dominated in absolute value by a leverage tending to zero, it cannot
+stay above any fixed positive scale.  This is the threshold consequence of
+`Math.tendsto_zero_of_abs_le_of_tendsto_zero`. -/
 theorem not_eventually_ge_of_tendsto_leverage_zero
     {leverage change : ℕ → ℝ} (hbound : ∀ n, |change n| ≤ leverage n)
     (hL : Filter.Tendsto leverage Filter.atTop (nhds 0)) {c : ℝ} (hc : 0 < c) :
     ¬ ∀ᶠ n in Filter.atTop, c ≤ |change n| := by
-  intro hev
-  have hlt : ∀ᶠ n in Filter.atTop, leverage n < c := (tendsto_order.mp hL).2 c hc
-  have hboth : ∀ᶠ n in Filter.atTop, c ≤ |change n| ∧ leverage n < c := hev.and hlt
-  obtain ⟨n, hn1, hn2⟩ := hboth.exists
-  exact absurd (hn1.trans (hbound n)) (not_le.mpr hn2)
+  apply not_eventually_ge_abs_of_tendsto_zero ?_ hc
+  exact Math.tendsto_zero_of_abs_le_of_tendsto_zero
+    change leverage hL (Filter.Eventually.of_forall hbound)
 
-/-- **The obstruction, connected to the value channel.**  For a family of
-`G = PBR` decompositions satisfying the re-closing hypotheses at every index,
-if the value-channel leverage tends to `0`, the induced movement of the
-window's own fixed point -- the origin objective, in the source's language --
-cannot stay `≥ c` for any fixed `c > 0`, eventually. Combines
-`sub_blockFixedPoint_eq_transportedLeverageTerm` with
-`not_eventually_ge_of_tendsto_leverage_zero`. -/
+/-- **The strong obstruction, connected to the value channel.**  For a family
+of `G = PBR` decompositions satisfying the re-closing hypotheses at every
+index, vanishing value-channel leverage forces the induced movement of the
+window's own fixed point to tend to zero.  The old quotient need only satisfy
+its exact fixed-point disjunction; positivity of the new deficit controls the
+sign of the leverage factor. -/
+theorem tendsto_sub_blockFixedPoint_zero_of_tendsto_valueLeverage_zero
+    {B C B' C' : ℕ → ℕ → ℝ} {p ℓ r : ℕ → ℕ}
+    (hBeqP : ∀ n offset, offset < p n → B' n offset = B n offset)
+    (hCeqP : ∀ n offset, offset < p n → C' n offset = C n offset)
+    (hBeqR : ∀ n offset, offset < r n →
+      B' n (p n + ℓ n + offset) = B n (p n + ℓ n + offset))
+    (hCeqR : ∀ n offset, offset < r n →
+      C' n (p n + ℓ n + offset) = C n (p n + ℓ n + offset))
+    (hfixedG : ∀ n,
+      1 - blockSurvival (C n) 0 (p n + ℓ n + r n) ≠ 0 ∨
+        blockConstant (B n) (C n) 0 (p n + ℓ n + r n) = 0)
+    (hρG' : ∀ n, 0 < 1 - blockSurvival (C' n) 0 (p n + ℓ n + r n))
+    (hCPnn : ∀ n, 0 ≤ blockSurvival (C n) 0 (p n))
+    (hz1 : ∀ n, |blockValueMap (B n) (C n) (p n + ℓ n) (r n)
+        (blockFixedPoint (B n) (C n) 0 (p n + ℓ n + r n))| ≤ 1)
+    (hL : Filter.Tendsto
+      (fun n => valueLeverage (blockSurvival (C n) 0 (p n))
+        (1 - blockSurvival (C' n) 0 (p n + ℓ n + r n)) (B n) (C n) (B' n) (C' n) (p n) (ℓ n))
+      Filter.atTop (nhds 0)) :
+    Filter.Tendsto
+      (fun n => blockFixedPoint (B' n) (C' n) 0 (p n + ℓ n + r n) -
+        blockFixedPoint (B n) (C n) 0 (p n + ℓ n + r n))
+      Filter.atTop (nhds 0) := by
+  apply Math.tendsto_zero_of_abs_le_of_tendsto_zero _ _ hL
+  exact Filter.Eventually.of_forall fun n => by
+    rw [sub_blockFixedPoint_eq_transportedLeverageTerm
+      (B n) (C n) (B' n) (C' n) (p n) (ℓ n) (r n)
+      (hBeqP n) (hCeqP n) (hBeqR n) (hCeqR n) (hfixedG n) (hρG' n).ne',
+      valueLeverage_eq_mul_add_abs, abs_mul,
+      abs_of_nonneg (div_nonneg (hCPnn n) (hρG' n).le)]
+    exact mul_le_mul_of_nonneg_left
+      ((isGreatest_abs_blockValueMap_sub_image
+        (B n) (C n) (B' n) (C' n) (p n) (ℓ n)).2
+        ⟨blockValueMap (B n) (C n) (p n + ℓ n) (r n)
+            (blockFixedPoint (B n) (C n) 0 (p n + ℓ n + r n)),
+          Set.mem_Icc.mpr (abs_le.mp (hz1 n)), rfl⟩)
+      (div_nonneg (hCPnn n) (hρG' n).le)
+
+/-- Compatibility no-go form of
+`tendsto_sub_blockFixedPoint_zero_of_tendsto_valueLeverage_zero`: vanishing
+value leverage rules out an eventually fixed positive movement scale. -/
 theorem not_eventually_ge_of_tendsto_valueLeverage_zero
     {B C B' C' : ℕ → ℕ → ℝ} {p ℓ r : ℕ → ℕ}
     (hBeqP : ∀ n offset, offset < p n → B' n offset = B n offset)
@@ -482,30 +531,25 @@ theorem not_eventually_ge_of_tendsto_valueLeverage_zero
       B' n (p n + ℓ n + offset) = B n (p n + ℓ n + offset))
     (hCeqR : ∀ n offset, offset < r n →
       C' n (p n + ℓ n + offset) = C n (p n + ℓ n + offset))
-    (hρG : ∀ n, 0 < 1 - blockSurvival (C n) 0 (p n + ℓ n + r n))
+    (hfixedG : ∀ n,
+      1 - blockSurvival (C n) 0 (p n + ℓ n + r n) ≠ 0 ∨
+        blockConstant (B n) (C n) 0 (p n + ℓ n + r n) = 0)
     (hρG' : ∀ n, 0 < 1 - blockSurvival (C' n) 0 (p n + ℓ n + r n))
     (hCPnn : ∀ n, 0 ≤ blockSurvival (C n) 0 (p n))
     (hz1 : ∀ n, |blockValueMap (B n) (C n) (p n + ℓ n) (r n)
         (blockFixedPoint (B n) (C n) 0 (p n + ℓ n + r n))| ≤ 1)
     (hL : Filter.Tendsto
       (fun n => valueLeverage (blockSurvival (C n) 0 (p n))
-        (1 - blockSurvival (C' n) 0 (p n + ℓ n + r n)) (B n) (C n) (B' n) (C' n) (p n) (ℓ n))
+        (1 - blockSurvival (C' n) 0 (p n + ℓ n + r n))
+          (B n) (C n) (B' n) (C' n) (p n) (ℓ n))
       Filter.atTop (nhds 0))
     {c : ℝ} (hc : 0 < c) :
     ¬ ∀ᶠ n in Filter.atTop,
         c ≤ |blockFixedPoint (B' n) (C' n) 0 (p n + ℓ n + r n) -
               blockFixedPoint (B n) (C n) 0 (p n + ℓ n + r n)| := by
-  refine not_eventually_ge_of_tendsto_leverage_zero (fun n => ?_) hL hc
-  rw [sub_blockFixedPoint_eq_transportedLeverageTerm (B n) (C n) (B' n) (C' n) (p n) (ℓ n) (r n)
-    (hBeqP n) (hCeqP n) (hBeqR n) (hCeqR n) (hρG n) (hρG' n),
-    valueLeverage_eq_mul_add_abs, abs_mul,
-    abs_of_nonneg (div_nonneg (hCPnn n) (hρG' n).le)]
-  exact mul_le_mul_of_nonneg_left
-    ((isGreatest_abs_blockValueMap_sub_image (B n) (C n) (B' n) (C' n) (p n) (ℓ n)).2
-      ⟨blockValueMap (B n) (C n) (p n + ℓ n) (r n)
-          (blockFixedPoint (B n) (C n) 0 (p n + ℓ n + r n)),
-        Set.mem_Icc.mpr (abs_le.mp (hz1 n)), rfl⟩)
-    (div_nonneg (hCPnn n) (hρG' n).le)
+  apply not_eventually_ge_abs_of_tendsto_zero ?_ hc
+  exact tendsto_sub_blockFixedPoint_zero_of_tendsto_valueLeverage_zero
+    hBeqP hCeqP hBeqR hCeqR hfixedG hρG' hCPnn hz1 hL
 
 /-! ## Part 4: incomparability -- deliverable (4)
 

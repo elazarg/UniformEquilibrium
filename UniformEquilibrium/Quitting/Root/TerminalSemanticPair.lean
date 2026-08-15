@@ -161,6 +161,78 @@ theorem isZeroQuittingRootNash_allContinue_iff_singleton_le
         (sub_nonpos.mpr (hdominate who))
     · simp [quittingAllContinueRoot]
 
+/-- Exact action of an all-Continue prefix on an arbitrary semantic pair.
+The prescribed coordinate is unchanged, while each envelope coordinate is
+raised to the corresponding singleton quitting reward when necessary. -/
+theorem quittingTerminalSemanticPrefix_allContinue_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) :
+    quittingTerminalSemanticPrefix reward quittingAllContinueRoot pair =
+      (pair.1, fun who ↦
+        max (reward (quittingSingletonTerminal who) who) (pair.2 who)) := by
+  apply Prod.ext
+  · funext who
+    change quittingRootSuccessorPayoff reward pair.1
+      quittingAllContinueRoot who = pair.1 who
+    rw [quittingRootSuccessorPayoff_eq_endpointMix]
+    simp [quittingAllContinueRoot]
+  · funext who
+    simp [quittingTerminalSemanticPrefix]
+
+/-- Prefixing by all-Continue is idempotent on semantic pairs: one prefix
+already raises every envelope coordinate to the required singleton reward. -/
+@[simp] theorem quittingTerminalSemanticPrefix_allContinue_idempotent
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) :
+    quittingTerminalSemanticPrefix reward quittingAllContinueRoot
+        (quittingTerminalSemanticPrefix reward quittingAllContinueRoot pair) =
+      quittingTerminalSemanticPrefix reward quittingAllContinueRoot pair := by
+  rw [quittingTerminalSemanticPrefix_allContinue_eq,
+    quittingTerminalSemanticPrefix_allContinue_eq]
+  simp
+
+/-- **Sharp all-Continue fixed-point characterization.**  An all-Continue
+prefix fixes a semantic pair exactly when its envelope dominates every
+singleton quitting reward.  No condition on the prescribed coordinate or on
+semantic debt is needed. -/
+theorem quittingTerminalSemanticPrefix_allContinue_eq_self_iff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) :
+    quittingTerminalSemanticPrefix reward quittingAllContinueRoot pair = pair ↔
+      ∀ who, reward (quittingSingletonTerminal who) who ≤ pair.2 who := by
+  rw [quittingTerminalSemanticPrefix_allContinue_eq]
+  constructor
+  · intro hfixed who
+    have hcoordinate := congrArg
+      (fun candidate : QuittingTerminalSemanticPair ι ↦ candidate.2 who) hfixed
+    exact (le_max_left _ _).trans_eq hcoordinate
+  · intro hcap
+    apply Prod.ext
+    · rfl
+    · funext who
+      exact max_eq_right (hcap who)
+
+/-- An all-Continue prefix fixes a semantic pair exactly when all-Continue is
+exact Nash against the pair's envelope coordinate. -/
+theorem quittingTerminalSemanticPrefix_allContinue_eq_self_iff_isZeroNash_at_cap
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) :
+    quittingTerminalSemanticPrefix reward quittingAllContinueRoot pair = pair ↔
+      IsεQuittingRootNash reward pair.2 0
+        (quittingAllContinueRoot : ι → PMF Bool) := by
+  rw [quittingTerminalSemanticPrefix_allContinue_eq_self_iff,
+    isZeroQuittingRootNash_allContinue_iff_singleton_le]
+
+/-- The forward constructor form of the sharp all-Continue fixed-point
+characterization. -/
+theorem quittingTerminalSemanticPrefix_allContinue_eq_of_singleton_le_cap
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (hcap : ∀ who,
+      reward (quittingSingletonTerminal who) who ≤ pair.2 who) :
+    quittingTerminalSemanticPrefix reward quittingAllContinueRoot pair = pair :=
+  (quittingTerminalSemanticPrefix_allContinue_eq_self_iff reward pair).2 hcap
+
 /-- An exact all-Continue Nash prefix fixes a semantic pair whose envelope
 dominates its prescribed coordinate.  This is a finite-dimensional statement:
 it does not assert that the carrier point is realized by one behavior profile.
@@ -173,30 +245,13 @@ theorem quittingTerminalSemanticPrefix_allContinue_eq_of_isZeroNash
       (quittingAllContinueRoot : ι → PMF Bool)) :
     quittingTerminalSemanticPrefix reward quittingAllContinueRoot pair =
       pair := by
-  apply Prod.ext
-  · funext who
-    change quittingRootSuccessorPayoff reward pair.1
-      quittingAllContinueRoot who = pair.1 who
-    rw [quittingRootSuccessorPayoff_eq_endpointMix]
-    simp [quittingAllContinueRoot]
-  · funext who
-    have hsuccessor :
-        quittingRootSuccessorPayoff reward pair.1
-            quittingAllContinueRoot who = pair.1 who := by
-      rw [quittingRootSuccessorPayoff_eq_endpointMix]
-      simp [quittingAllContinueRoot]
-    have hsingleton :
-        reward (quittingSingletonTerminal who) who ≤ pair.1 who := by
-      have hquit := quittingRootQuitPayoff_le_successor_of_isZeroNash
-        reward pair.1 quittingAllContinueRoot who hnash
-      simpa [hsuccessor] using hquit
-    have hprescribed_le_envelope : pair.1 who ≤ pair.2 who := by
-      simpa [quittingTerminalSemanticDebt] using hdebt who
-    simp only [quittingTerminalSemanticPrefix,
-      quittingRootQuitPayoff_allContinueRoot,
-      quittingRootContinuePayoff_allContinueRoot,
-      Function.update_self]
-    exact max_eq_right (hsingleton.trans hprescribed_le_envelope)
+  apply quittingTerminalSemanticPrefix_allContinue_eq_of_singleton_le_cap
+  intro who
+  have hsingleton :=
+    (isZeroQuittingRootNash_allContinue_iff_singleton_le reward pair.1).1 hnash who
+  have hprescribed_le_envelope : pair.1 who ≤ pair.2 who := by
+    simpa [quittingTerminalSemanticDebt] using hdebt who
+  exact hsingleton.trans hprescribed_le_envelope
 
 /-- The semantic prefix action is exactly literal profile splicing. -/
 theorem quittingTerminalSemanticPair_rootThenContinuation

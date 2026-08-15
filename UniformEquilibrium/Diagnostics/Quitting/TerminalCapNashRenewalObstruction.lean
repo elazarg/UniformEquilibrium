@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashChronology
 import UniformEquilibrium.Quitting.Boundary.Repair.LocalGlobalCounterexample
 import UniformEquilibrium.Quitting.Cycles.ConditionedPeriodicRenewal
+import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
 /-!
 # Debt descent versus renewal drift for cap--Nash prefixes
@@ -300,24 +301,10 @@ theorem semanticPair_allContinue_capNashPrefix_localGlobal :
   rw [quittingTerminalSemanticPair_rootThenContinuation
     localGlobalCounterexampleReward quittingAllContinueRoot
       localGlobalCounterexampleProfile]
-  apply Prod.ext
-  · funext who
-    change quittingRootSuccessorPayoff localGlobalCounterexampleReward
-      (quittingTerminalSemanticPair localGlobalCounterexampleReward
-        localGlobalCounterexampleProfile).1 quittingAllContinueRoot who =
-      (quittingTerminalSemanticPair localGlobalCounterexampleReward
-        localGlobalCounterexampleProfile).1 who
-    rw [quittingRootSuccessorPayoff_eq_endpointMix]
-    simp [quittingAllContinueRoot]
-  · funext who
-    simp only [quittingTerminalSemanticPrefix,
-      quittingRootQuitPayoff_allContinueRoot,
-      quittingRootContinuePayoff_allContinueRoot, Function.update_self]
-    have hsolo :=
-      (isZeroQuittingRootNash_allContinue_iff_singleton_le
-        localGlobalCounterexampleReward _).1
-        isZeroQuittingRootNash_allContinue_localGlobal_actualCap who
-    exact max_eq_right hsolo
+  exact
+    (quittingTerminalSemanticPrefix_allContinue_eq_self_iff_isZeroNash_at_cap
+      localGlobalCounterexampleReward _).2
+        isZeroQuittingRootNash_allContinue_localGlobal_actualCap
 
 /-- The stalled profile nevertheless has terminal debt at least one. -/
 theorem one_le_terminalDebtSum_localGlobalCounterexample :

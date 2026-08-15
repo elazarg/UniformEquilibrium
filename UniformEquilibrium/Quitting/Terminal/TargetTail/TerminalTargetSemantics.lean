@@ -62,50 +62,10 @@ theorem QuittingTerminalTargetAcceptanceCertificate.isUniformEquilibriumPayoff
     {target : Payoff ι}
     (certificate : QuittingTerminalTargetAcceptanceCertificate reward target) :
     (quittingGame reward).IsUniformEquilibriumPayoff none target := by
+  apply quittingGame_isUniformEquilibriumPayoff_of_terminalTargetAcceptance
   intro ε hε
-  have hhalf : 0 < ε / 2 := by
-    linarith
-  obtain ⟨profile, hterminalNash, htarget⟩ :=
-    certificate.terminalProfile (ε / 2) hhalf
-  have huniform : (quittingGame reward).IsUniformεEquilibrium
-      none ε profile :=
-    quittingGame_isUniformεEquilibrium_of_terminalNash_finite
-      reward profile (by linarith) hterminalNash
-  obtain ⟨nashThreshold, hnashThreshold⟩ := huniform
-  have heventuallyDelivery : ∀ᶠ horizon : ℕ in atTop, ∀ who,
-      |(quittingGame reward).finiteAveragePayoff none horizon profile who -
-        quittingTerminalPayoff reward profile who| < ε / 2 := by
-    apply Filter.eventually_all.mpr
-    intro who
-    have hball :=
-      (tendsto_finiteAveragePayoff_quittingGame reward profile who).eventually
-        (Metric.ball_mem_nhds
-          (quittingTerminalPayoff reward profile who) hhalf)
-    filter_upwards [hball] with horizon hhorizon
-    simpa only [Metric.mem_ball, Real.dist_eq] using hhorizon
-  obtain ⟨deliveryThreshold, hdeliveryThreshold⟩ :=
-    Filter.eventually_atTop.1 heventuallyDelivery
-  refine ⟨profile, max nashThreshold deliveryThreshold,
-    fun horizon hhorizon => ?_⟩
-  constructor
-  · exact hnashThreshold horizon
-      (le_trans (Nat.le_max_left _ _) hhorizon)
-  · intro who
-    have hdelivery := hdeliveryThreshold horizon
-      (le_trans (Nat.le_max_right _ _) hhorizon) who
-    calc
-      |(quittingGame reward).finiteAveragePayoff none horizon profile who -
-          target who| =
-        |((quittingGame reward).finiteAveragePayoff none horizon profile who -
-            quittingTerminalPayoff reward profile who) +
-          (quittingTerminalPayoff reward profile who - target who)| := by
-            ring_nf
-      _ ≤ |(quittingGame reward).finiteAveragePayoff none horizon profile who -
-            quittingTerminalPayoff reward profile who| +
-          |quittingTerminalPayoff reward profile who - target who| :=
-        abs_add_le _ _
-      _ ≤ ε := by
-        linarith [htarget who]
+  obtain ⟨profile, hnash, htarget⟩ := certificate.terminalProfile ε hε
+  exact ⟨profile, hnash, fun who ↦ (htarget who).le⟩
 
 /-- Terminal approximate equilibria whose terminal payoffs converge uniformly
 to one prescribed target make that target a uniform-equilibrium payoff.  This
@@ -118,13 +78,8 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_appro
           (quittingTerminalPayoff reward) ε profile ∧
         ∀ who, |quittingTerminalPayoff reward profile who - target who| ≤ ε) :
     (quittingGame reward).IsUniformEquilibriumPayoff none target := by
-  apply QuittingTerminalTargetAcceptanceCertificate.isUniformEquilibriumPayoff
-  refine { terminalProfile := ?_ }
-  intro ε hε
-  obtain ⟨profile, hnash, hclose⟩ := hterminal (ε / 2) (by linarith)
-  exact ⟨profile, hnash.mono (by linarith), fun who => by
-    have := hclose who
-    linarith⟩
+  exact quittingGame_isUniformEquilibriumPayoff_of_terminalTargetAcceptance
+    reward target hterminal
 
 /-- Terminal approximate equilibria which deliver one exact terminal target at
 every error make that target a uniform-equilibrium payoff. -/

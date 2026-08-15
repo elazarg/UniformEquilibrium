@@ -289,30 +289,12 @@ theorem capNashRootStack_eq_replicate_allContinue_of_unique_terminalCap
     obtain ⟨root, hnash⟩ := exists_isZeroQuittingRootNash
       (reward := reward) (quittingTerminalSemanticPair reward terminal).2
     simpa only [hunique root hnash] using hnash
-  have hcap : ∀ player,
-      reward (quittingSingletonTerminal player) player ≤
-        (quittingTerminalSemanticPair reward terminal).2 player :=
-    (isZeroQuittingRootNash_allContinue_iff_singleton_le
-      reward (quittingTerminalSemanticPair reward terminal).2).1
-        hallContinueNash
   have hfixed : quittingTerminalSemanticPrefix reward
       quittingAllContinueRoot
         (quittingTerminalSemanticPair reward terminal) =
-      quittingTerminalSemanticPair reward terminal := by
-    apply Prod.ext
-    · funext player
-      change quittingRootSuccessorPayoff reward
-          (quittingTerminalSemanticPair reward terminal).1
-            quittingAllContinueRoot player =
-        (quittingTerminalSemanticPair reward terminal).1 player
-      rw [quittingRootSuccessorPayoff_eq_endpointMix]
-      simp [quittingAllContinueRoot]
-    · funext player
-      simp only [quittingTerminalSemanticPrefix,
-        quittingRootQuitPayoff_allContinueRoot,
-        quittingRootContinuePayoff_allContinueRoot,
-        Function.update_self]
-      exact max_eq_right (hcap player)
+      quittingTerminalSemanticPair reward terminal :=
+    (quittingTerminalSemanticPrefix_allContinue_eq_self_iff_isZeroNash_at_cap
+      reward (quittingTerminalSemanticPair reward terminal)).2 hallContinueNash
   induction roots with
   | nil => exact ⟨rfl, rfl⟩
   | cons root roots ih =>

@@ -33,9 +33,9 @@ law against the three contraction deficits it names:
    reward (z (t+1)) (roots t)` -- no Nash exactness needed, the recursion
    alone is unconditionally affine at each coordinate
    (`quittingRootSuccessorPayoff_apply_eq_affine`) -- the block value map is
-   affine with slope the *full* continue-mass product, and
+   affine with slope the *full* continue-mass product, and, when `ρ ≠ 0`,
    `z (start+fuel) who - v = d / ρ` exactly, where `d` is the boundary gap and
-   `v = B / ρ` is the window's own fixed point.
+   `v = B / ρ` is the window's fixed point.
 2. **The transport factor is multiplicative, not a denominator**
    (`one_sub_blockSurvival_eq_sum`,
    `one_sub_blockSurvival_add_eq_prefix_add_transported`,
@@ -67,8 +67,10 @@ definitions before formalizing.  `quittingRootSuccessorPayoff`'s coordinate
 `who` reads the continuation *only* at `continuation who`
 (`quittingRootExpectedPayoff_eq_absorbingContribution_add`), with slope the
 *full* joint continue mass -- the same scalar at every coordinate -- which is
-exactly the hypothesis the prose's `Φ(z)_i = B_i + C · z_i` needed.  The
-formula survived checking intact; no unstated hypothesis was found.
+exactly the hypothesis the prose's `Φ(z)_i = B_i + C · z_i` needed.  The affine
+formula is unconditional; passing to the quotient residual requires the explicit nonzero
+full-window deficit.  At zero deficit, division does not describe a generic affine fixed point;
+in the quitting specialization, full survival instead forces the identity case treated in Part 4.
 -/
 
 noncomputable section
@@ -153,46 +155,67 @@ theorem orbit_eq_blockSurvival_mul_add_blockConstant
         blockConstant_succ]
       ring
 
-/-- The window's own fixed point `v = B / ρ`, where `ρ = 1 - blockSurvival`.
-Well posed regardless of `ρ`; it is the correct affine fixed point exactly
-when `ρ ≠ 0` (`blockFixedPoint_isFixedPt`). -/
+/-- The total quotient value `v = B / ρ`, where `ρ = 1 - blockSurvival`.
+Lean division defines it even when `ρ = 0`.  For `ρ ≠ 0`,
+`blockFixedPoint_isFixedPt` proves that it is a fixed point.  If `ρ = 0`, the quotient evaluates
+to zero while the affine map has slope one: `blockFixedPoint` is fixed exactly when
+`blockConstant = 0`, and in that case every value is fixed
+(`blockFixedPoint_isFixedPt_iff`). -/
 def blockFixedPoint (B C : ℕ → ℝ) (start fuel : ℕ) : ℝ :=
   blockConstant B C start fuel / (1 - blockSurvival C start fuel)
 
-/-- **The fixed-point equation.**  Whenever the window's deficit is
-positive, `blockFixedPoint` really is a fixed point of the window's affine
-composite. -/
+/-- The exact fixed-point characterization for the total quotient `blockFixedPoint`: it satisfies
+the window's affine fixed-point equation exactly when the deficit is nonzero or the affine
+constant vanishes. -/
+theorem blockFixedPoint_isFixedPt_iff (B C : ℕ → ℝ) (start fuel : ℕ) :
+    blockFixedPoint B C start fuel =
+        blockSurvival C start fuel * blockFixedPoint B C start fuel +
+          blockConstant B C start fuel ↔
+      1 - blockSurvival C start fuel ≠ 0 ∨ blockConstant B C start fuel = 0 := by
+  by_cases hρ : 1 - blockSurvival C start fuel = 0
+  · have hsurvival : blockSurvival C start fuel = 1 := by linarith
+    simp only [blockFixedPoint, hsurvival, sub_self, div_zero, mul_zero, zero_add,
+      ne_eq, not_true_eq_false, false_or]
+    exact eq_comm
+  · constructor
+    · intro _
+      exact Or.inl hρ
+    · intro _
+      unfold blockFixedPoint
+      field_simp [hρ]
+      ring
+
+/-- **The fixed-point equation.**  Whenever the window's deficit is nonzero,
+`blockFixedPoint` really is a fixed point of the window's affine composite. -/
 theorem blockFixedPoint_isFixedPt (B C : ℕ → ℝ) (start fuel : ℕ)
-    (hρ : 0 < 1 - blockSurvival C start fuel) :
+    (hρ : 1 - blockSurvival C start fuel ≠ 0) :
     blockFixedPoint B C start fuel =
       blockSurvival C start fuel * blockFixedPoint B C start fuel +
         blockConstant B C start fuel := by
-  have hne : (1 - blockSurvival C start fuel) ≠ 0 := hρ.ne'
-  unfold blockFixedPoint
-  field_simp
-  ring
+  exact (blockFixedPoint_isFixedPt_iff B C start fuel).2 (Or.inl hρ)
 
-/-- **Deliverable 1, headline.**  `z (start+fuel) - v = d / ρ`, where
-`d = z (start+fuel) - z start` is the boundary gap and `v` is the window's
-own fixed point.  An exact identity, not an estimate. -/
+/-- **Deliverable 1, headline.**  For nonzero `ρ`,
+`z (start+fuel) - v = d / ρ`, where `d = z (start+fuel) - z start` is the
+boundary gap and `v` is the window's own fixed point.  An exact identity, not
+an estimate. -/
 theorem sub_blockFixedPoint_eq_div (B C z : ℕ → ℝ)
     (hz : ∀ t, z t = B t + C t * z (t + 1)) (start fuel : ℕ)
-    (hρ : 0 < 1 - blockSurvival C start fuel) :
+    (hρ : 1 - blockSurvival C start fuel ≠ 0) :
     z (start + fuel) - blockFixedPoint B C start fuel =
       (z (start + fuel) - z start) / (1 - blockSurvival C start fuel) := by
   have hclosed := orbit_eq_blockSurvival_mul_add_blockConstant B C z hz start fuel
   have hfix := blockFixedPoint_isFixedPt B C start fuel hρ
-  rw [eq_div_iff hρ.ne']
+  rw [eq_div_iff hρ]
   linear_combination hclosed - hfix
 
-/-- **Deliverable 1, general position.**  At any interior time `t` of the
-window, the orbit's deviation from the transported boundary value
+/-- **Deliverable 1, general position.**  For the same nonzero deficit, at any time `t` no later
+than the window's far endpoint, the orbit's deviation from the transported boundary value
 `blockSurvival C t (start+fuel-t) · v + blockConstant B C t (start+fuel-t)`
 is the tail survival factor times the same boundary ratio `d / ρ`:
 `z_t - v_t = (∏_{u=t}^{m-1} c_u) · (d / ρ)`. -/
 theorem sub_transportedFixedPoint_eq (B C z : ℕ → ℝ)
     (hz : ∀ t, z t = B t + C t * z (t + 1)) (start fuel t : ℕ)
-    (_ht : start ≤ t) (ht' : t ≤ start + fuel) (hρ : 0 < 1 - blockSurvival C start fuel) :
+    (ht' : t ≤ start + fuel) (hρ : 1 - blockSurvival C start fuel ≠ 0) :
     z t - (blockSurvival C t (start + fuel - t) * blockFixedPoint B C start fuel +
         blockConstant B C t (start + fuel - t)) =
       blockSurvival C t (start + fuel - t) *
@@ -259,16 +282,16 @@ theorem quittingRootSuccessorPayoff_apply_eq_affine
   quittingRootExpectedPayoff_eq_absorbingContribution_add reward tail root who
 
 omit [DecidableEq ι] in
-/-- **Deliverable 1, grounded (headline).**  For any sequence obeying the
-raw value recursion, the residual formula `z (start+fuel) who - v = d / ρ`
-holds exactly at every coordinate `who`, with `ρ` the *full* continue-mass
-deficit over the window. -/
+/-- **Deliverable 1, grounded (headline).**  For any sequence obeying the raw value recursion and
+with nonzero full continue-mass deficit `ρ`, the residual formula
+`z (start+fuel) who - v = d / ρ` holds exactly at every coordinate `who`. -/
 theorem quitting_sub_blockFixedPoint_eq_div
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (z : ℕ → Payoff ι)
     (hz : ∀ t, z t = quittingRootSuccessorPayoff reward (z (t + 1)) (roots t))
     (who : ι) (start fuel : ℕ)
-    (hρ : 0 < 1 - blockSurvival (fun t => quittingStationaryContinueMass (roots t)) start fuel) :
+    (hρ : 1 - blockSurvival
+      (fun t => quittingStationaryContinueMass (roots t)) start fuel ≠ 0) :
     z (start + fuel) who -
         blockFixedPoint (fun t => quittingRootAbsorbingContribution reward (roots t) who)
           (fun t => quittingStationaryContinueMass (roots t)) start fuel =
@@ -281,15 +304,16 @@ theorem quitting_sub_blockFixedPoint_eq_div
   rw [congrFun (hz t) who, quittingRootSuccessorPayoff_apply_eq_affine]
 
 omit [DecidableEq ι] in
-/-- **Deliverable 1, grounded (general position).**  The same residual
-formula at every interior time `t` of the window, transported by the tail
-survival factor `∏_{u=t}^{m-1} c_u`. -/
+/-- **Deliverable 1, grounded (general position).**  Under the same nonzero-deficit assumption,
+the residual formula holds at every time `t` no later than the window's far endpoint,
+transported by the tail survival factor `∏_{u=t}^{m-1} c_u`. -/
 theorem quitting_sub_transportedFixedPoint_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (z : ℕ → Payoff ι)
     (hz : ∀ t, z t = quittingRootSuccessorPayoff reward (z (t + 1)) (roots t))
-    (who : ι) (start fuel t : ℕ) (ht : start ≤ t) (ht' : t ≤ start + fuel)
-    (hρ : 0 < 1 - blockSurvival (fun s => quittingStationaryContinueMass (roots s)) start fuel) :
+    (who : ι) (start fuel t : ℕ) (ht' : t ≤ start + fuel)
+    (hρ : 1 - blockSurvival
+      (fun s => quittingStationaryContinueMass (roots s)) start fuel ≠ 0) :
     z t who -
         (blockSurvival (fun s => quittingStationaryContinueMass (roots s)) t (start + fuel - t) *
             blockFixedPoint (fun s => quittingRootAbsorbingContribution reward (roots s) who)
@@ -301,7 +325,8 @@ theorem quitting_sub_transportedFixedPoint_eq
           (1 - blockSurvival (fun s => quittingStationaryContinueMass (roots s)) start fuel)) := by
   apply sub_transportedFixedPoint_eq
     (fun s => quittingRootAbsorbingContribution reward (roots s) who)
-    (fun s => quittingStationaryContinueMass (roots s)) (fun s => z s who) ?_ start fuel t ht ht' hρ
+    (fun s => quittingStationaryContinueMass (roots s)) (fun s => z s who) ?_
+      start fuel t ht' hρ
   intro s
   rw [congrFun (hz s) who, quittingRootSuccessorPayoff_apply_eq_affine]
 

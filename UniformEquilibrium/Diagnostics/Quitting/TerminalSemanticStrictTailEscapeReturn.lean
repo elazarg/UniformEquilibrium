@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetExcursionReturn
+import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
 /-!
 # The exact return threshold for a strict semantic tail escape

@@ -70,21 +70,16 @@ theorem excludedProduct_tendsto_one_of_tendsto_zero
         simpa using hone.sub (hzero other))
   simpa using hprod
 
-omit [DecidableEq ι] in
-/-- A function dominated in absolute value by a vanishing bound also tends to
-zero. -/
+/-- Along any filter, a real-valued function eventually dominated in absolute
+value by a vanishing bound also tends to zero. -/
 theorem tendsto_zero_of_abs_le_of_tendsto_zero
-    (f bound : ℝ → ℝ)
-    (hbound : Tendsto bound (𝓝[>] (0 : ℝ)) (𝓝 0))
-    (hle : ∀ᶠ t in 𝓝[>] (0 : ℝ), |f t| ≤ bound t) :
-    Tendsto f (𝓝[>] (0 : ℝ)) (𝓝 0) := by
-  have habs : Tendsto (fun t => |f t|)
-      (𝓝[>] (0 : ℝ)) (𝓝 0) := by
-    apply squeeze_zero'
-    · exact Filter.Eventually.of_forall fun t => abs_nonneg _
-    · exact hle
-    · exact hbound
-  apply tendsto_iff_norm_sub_tendsto_zero.2
-  simpa [Real.norm_eq_abs] using habs
+    {index : Type*} {filter : Filter index}
+    (f bound : index → ℝ)
+    (hbound : Tendsto bound filter (𝓝 0))
+    (hle : ∀ᶠ t in filter, |f t| ≤ bound t) :
+    Tendsto f filter (𝓝 0) := by
+  rw [tendsto_zero_iff_abs_tendsto_zero]
+  exact squeeze_zero'
+    (Filter.Eventually.of_forall fun t => abs_nonneg (f t)) hle hbound
 
 end Math
