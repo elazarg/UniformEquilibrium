@@ -65,7 +65,6 @@ theorem uniformEquilibriumPayoff_or_summableClock_of_exactNashBellmanSpine
     exact infinitePath_isUniformEquilibriumPayoff_of_survival_tendsto_zero
       reward roots value
       (fun who start => (hdivergent who).2 start)
-      (quittingRewardBound_nonneg reward)
       (abs_reward_le_quittingRewardBound reward)
       hspine.1 hspine.2.1 hspine.2.2
   · exact Or.inr hexceptional

@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeBallisticity
 import UniformEquilibrium.Quitting.Cycles.ConditionedDeletedClockSoloCompletion
 import UniformEquilibrium.Quitting.Cycles.ConditionedProperFaceDeficientClock
@@ -136,7 +137,7 @@ theorem eventually_pureContinue_of_singleton_lt_limitValue
         (selected index) who true).toReal ≠ 0 := by
       intro hzero
       apply hnonzero index
-      exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero _ hzero
+      exact Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero _ hzero
     exact lt_of_le_of_ne hnonneg (Ne.symm hne)
   have hpinned := quittingAnnotationBoundary_eq_singleton_of_activeSubsequence
     reward (quittingDynamicDebtTailRoots seam.tail)

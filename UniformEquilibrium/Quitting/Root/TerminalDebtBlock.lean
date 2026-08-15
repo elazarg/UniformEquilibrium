@@ -4,7 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import UniformEquilibrium.Quitting.Stationary.LiveMass
 import MathUE.SurvivalWeightedObstructionAction
+import UniformEquilibrium.Quitting.Root.FaceGeometry
 import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix
 
 /-!
@@ -29,41 +31,6 @@ open Math.Probability
 open Math.SurvivalWeightedObstruction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- Positive immediate-exercise premium at a quitting root. -/
-def quittingRootExercisePremium
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι) : ℝ :=
-  max 0 (quittingRootEndpointDifference reward tail root who)
-
-theorem quittingRootExercisePremium_nonneg
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι) :
-    0 ≤ quittingRootExercisePremium reward tail root who :=
-  le_max_left _ _
-
-/-- Deleted Continue mass is at most every displayed opponent's Continue
-probability. -/
-theorem quittingRootOpponentContinueMass_le_continueProbability_of_ne
-    (root : ι → PMF Bool) {who other : ι} (hne : other ≠ who) :
-    quittingRootOpponentContinueMass root who ≤
-      (root other false).toReal := by
-  have hmass := quittingStationaryContinueMass_le_ownContinueProbability
-    (Function.update root who (PMF.pure false)) other
-  simpa [quittingRootOpponentContinueMass, Function.update_of_ne hne] using
-    hmass
-
-/-- An opponent's displayed Quit probability is bounded by the absorption
-hazard seen after forcing the selected player to Continue. -/
-theorem quittingRoot_quitProbability_le_opponentAbsorptionMass_of_ne
-    (root : ι → PMF Bool) {who other : ι} (hne : other ≠ who) :
-    (root other true).toReal ≤
-      quittingRootOpponentAbsorptionMass root who := by
-  have hcontinue :=
-    quittingRootOpponentContinueMass_le_continueProbability_of_ne root hne
-  have hsum := quittingRoot_continueProbability_add_quitProbability root other
-  rw [quittingRootOpponentContinueMass_eq_one_sub_absorptionMass] at hcontinue
-  linarith
 
 /-- Playerwise survival block attached to one literal root prefix. -/
 def quittingLiteralTerminalDebtBlock

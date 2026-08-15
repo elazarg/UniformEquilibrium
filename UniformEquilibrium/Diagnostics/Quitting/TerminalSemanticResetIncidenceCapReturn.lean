@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeStrictToggleOrbit
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumAggregateSurplusConsumer
@@ -503,14 +504,14 @@ theorem exact_capNash_forces_allContinue
     rw [cap_endpointDifference_true] at h
     exact le_antisymm (by linarith) ENNReal.toReal_nonneg
   have htrue : root true = PMF.pure false :=
-    pmf_eq_pure_false_of_apply_true_toReal_eq_zero (root true) htrueZero
+    Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero (root true) htrueZero
   have hfalseDiff := cap_endpointDifference_false_of_true_continue root htrue
   have hfalseZero : (root false true).toReal = 0 := by
     have h := (hendpoint false).2
     rw [hfalseDiff] at h
     exact le_antisymm (by linarith) ENNReal.toReal_nonneg
   have hfalse : root false = PMF.pure false :=
-    pmf_eq_pure_false_of_apply_true_toReal_eq_zero (root false) hfalseZero
+    Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero (root false) hfalseZero
   funext who
   cases who
   · simpa [quittingAllContinueRoot] using hfalse

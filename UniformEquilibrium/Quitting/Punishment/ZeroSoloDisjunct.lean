@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # The zero-solo disjunct of the finite-quitting reduction

@@ -413,7 +413,7 @@ theorem exists_conditionedSingletonProductRoot_path_with_opponentSurvivalObstruc
     infinitePath_isUniformEquilibriumPayoff_of_survival_tendsto_zero
       reward conditionedRoots
         (quittingTailConditionedValue roots value boundary)
-        hnoObstruction hM hreward hvalueBound
+        hnoObstruction hreward hvalueBound
         (fun time ↦ (hconditioned time).2.1) hrootNash
   exact hnoUniform
     ⟨quittingTailConditionedValue roots value boundary 0, huniform⟩

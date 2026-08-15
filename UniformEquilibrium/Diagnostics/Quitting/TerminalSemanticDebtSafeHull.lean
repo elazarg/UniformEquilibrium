@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import UniformEquilibrium.Quitting.Stationary.LiveMass
 import Mathlib.Analysis.Convex.Caratheodory
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Quitting.Stationary.Payoff

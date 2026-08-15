@@ -28,7 +28,7 @@ Hypothesis (b) is *hypothesised*, not proved: whether a punishment plan
 attains a player's punishment level is the separate lower-bound question.
 The value of the assembly is exactly that it turns any future punishment
 bound into an existence engine for terminal -- hence uniform -- approximate
-equilibria, via `quittingGame_isUniformεEquilibrium_of_terminalNash_finite`.
+equilibria, via `quittingGame_isUniformεEquilibrium_of_terminalNash`.
 
 ## Where the live-hazard collapse is load-bearing
 
@@ -331,7 +331,7 @@ theorem isUniformεEquilibrium_quittingPhaseSwitchProfile
       planError + survivalCap * (max (punishCap who + punishError) 0 + bound) ≤ ε) :
     (quittingGame reward).IsUniformεEquilibrium none ε'
       (quittingPhaseSwitchProfile reward plan punish switch) :=
-  quittingGame_isUniformεEquilibrium_of_terminalNash_finite reward _ herror
+  quittingGame_isUniformεEquilibrium_of_terminalNash reward _ herror
     (isεAsymptoticNash_quittingPhaseSwitchProfile reward plan punish switch
       hbound hreward hplan hpunish hsurvival hε)
 

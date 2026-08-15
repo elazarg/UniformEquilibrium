@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Boundary.Analytic.Germ
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 
@@ -82,7 +83,7 @@ theorem quittingGermRoot_eq_quittingAllContinueRoot
     quittingGermRoot g ht = (quittingAllContinueRoot : ι → PMF Bool) := by
   funext i
   change quittingGermRoot g ht i = PMF.pure false
-  refine pmf_eq_pure_false_of_apply_true_toReal_eq_zero _ ?_
+  refine Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero _ ?_
   rw [quittingGermRoot_apply_true_toReal g ht i, hzero i]
 
 /-- **At an all-continue parameter the germ's active value vanishes.**

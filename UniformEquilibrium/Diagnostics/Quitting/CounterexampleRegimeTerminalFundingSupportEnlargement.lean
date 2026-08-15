@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeTerminalFundingSupportNecessity
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeTangentTwoOwnerSupport
 
@@ -42,7 +43,7 @@ private theorem action_eq_false_of_forcedQuitSupport_of_hazard_zero
     (hzero : hazardOfRoot root other = 0) :
     action other = false := by
   have hpure : root other = PMF.pure false :=
-    pmf_eq_pure_false_of_apply_true_toReal_eq_zero (root other) hzero
+    Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero (root other) hzero
   have hcoordinate : action other ∈
       (pushforward
         (pmfPi (Function.update root owner (PMF.pure true)))

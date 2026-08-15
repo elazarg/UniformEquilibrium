@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDynamicDebtProvenance
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
-import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # Owner-solo certification, or a universal joining obstruction
@@ -151,41 +151,6 @@ theorem isεAsymptoticNash_soloStationary_exact_iff
   · rintro ⟨howner, hinactive⟩
     exact isεAsymptoticNash_soloStationary_exact
       reward owner hazard hpositive howner hinactive
-
-/-! ## Exact terminal Nash delivers its own terminal payoff uniformly -/
-
-/-- An exact terminal Nash profile's own terminal payoff is a
-uniform-equilibrium payoff. -/
-theorem quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile)
-    (hnash : (quittingGame reward).IsεAsymptoticNash
-      (quittingTerminalPayoff reward) 0 profile) :
-    (quittingGame reward).IsUniformEquilibriumPayoff none
-      (quittingTerminalPayoff reward profile) := by
-  intro ε hε
-  obtain ⟨nashThreshold, hnashThreshold⟩ :=
-    quittingGame_isUniformεEquilibrium_of_terminalNash_finite
-      reward profile hε hnash
-  have heventuallyDelivery : ∀ᶠ horizon : ℕ in Filter.atTop, ∀ who,
-      |(quittingGame reward).finiteAveragePayoff none horizon profile who -
-        quittingTerminalPayoff reward profile who| ≤ ε := by
-    apply Filter.eventually_all.mpr
-    intro who
-    have hball :=
-      (tendsto_finiteAveragePayoff_quittingGame reward profile who).eventually
-        (Metric.ball_mem_nhds
-          (quittingTerminalPayoff reward profile who) hε)
-    filter_upwards [hball] with horizon hhorizon
-    simpa [Metric.mem_ball, Real.dist_eq] using hhorizon.le
-  obtain ⟨deliveryThreshold, hdeliveryThreshold⟩ :=
-    Filter.eventually_atTop.1 heventuallyDelivery
-  refine ⟨profile, max nashThreshold deliveryThreshold,
-    fun horizon hhorizon ↦ ⟨?_, ?_⟩⟩
-  · exact hnashThreshold horizon
-      (le_trans (Nat.le_max_left _ _) hhorizon)
-  · exact hdeliveryThreshold horizon
-      (le_trans (Nat.le_max_right _ _) hhorizon)
 
 /-- The certified owner-solo payoff vector is a uniform-equilibrium
 payoff. -/

@@ -137,11 +137,9 @@ theorem minimumTerminalSemantic_exactNash_preservingSingletonClock_is_debtGateSo
       root owner hclock
   refine ⟨hgate, hquit, ?_⟩
   intro other hne
-  exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero
-    (root other)
-    (quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
-      reward pair root hpair hminimum hnash
-        (hgate.1.symm ▸ hpositive) hne)
+  exact quittingTerminalSemantic_minimum_positiveDebt_opponents_pureContinue
+    reward pair root hpair hminimum hnash
+      (hgate.1.symm ▸ hpositive) hne
 
 /-- Contrapositive producer fence: away from the prescribed debt gate, exact
 Nashification annihilates the singleton clock that the quantile construction

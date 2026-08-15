@@ -273,8 +273,6 @@ theorem quittingCyclicHazardTerminalGap_le_of_rootError
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (cycle : Fin K → ι → PMF Bool) (phase : Fin K) (who : ι)
     (deviation : ℕ → PMF Bool) (rootError : Fin K → ℝ)
-    (bound : ℝ) (hbound0 : 0 ≤ bound)
-    (hreward : ∀ S player, |reward S player| ≤ bound)
     (hrootError0 : ∀ cyclePhase, 0 ≤ rootError cyclePhase)
     (hroot : ∀ cyclePhase (oneShot : PMF Bool),
       quittingRootExpectedPayoff reward
@@ -365,8 +363,7 @@ theorem quittingCyclicHazardTerminalGap_le_of_rootError
       cycle phase who hcontracts
   have hgap :=
     quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_survival_zero
-      reward roots who deviation bound hbound0 hreward hsurvival
-        hsummableActual
+      reward roots who deviation hsurvival hsummableActual
   have hbase : prescribed 0 =
       quittingCyclicTerminalValue reward cycle phase who := by
     dsimp only [prescribed, roots]
@@ -578,9 +575,7 @@ theorem quittingCyclicHazardTerminalGap_le_of_nearReturn
       (∏ phase : Fin (K + 1),
         quittingStationaryFixedOpponentsContinueMass
           (cycle phase) who) < 1)
-    (who : ι) (deviation : ℕ → PMF Bool)
-    (bound : ℝ) (hbound0 : 0 ≤ bound)
-    (hreward : ∀ S player, |reward S player| ≤ bound) :
+    (who : ι) (deviation : ℕ → PMF Bool) :
     quittingRootSequenceHazardTerminalValue reward
           (quittingCyclicRootSequence cycle 0) who deviation 0 -
         quittingCyclicTerminalValue reward cycle 0 who ≤
@@ -631,7 +626,7 @@ theorem quittingCyclicHazardTerminalGap_le_of_nearReturn
   exact quittingCyclicHazardTerminalGap_le_of_rootError
     reward cycle 0 who deviation
       (quittingCyclicNearReturnRootError cycle δ who)
-      bound hbound0 hreward hrootError0 hroot (hcontracts who)
+      hrootError0 hroot (hcontracts who)
 
 /-! ## Abstract finite-block fixed-point closing
 

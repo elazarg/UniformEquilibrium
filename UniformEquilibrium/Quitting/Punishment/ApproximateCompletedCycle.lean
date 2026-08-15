@@ -174,7 +174,7 @@ theorem exists_isεAsymptoticNash_close_of_punishmentAdmissibleCycle_rootError
   · let profile := quittingCyclicBehaviorProfile reward cycle phase
     have hnash : (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) cycleError profile :=
-      isεAsymptoticNash_quittingCyclicBehaviorProfile_of_rootError_finite
+      isεAsymptoticNash_quittingCyclicBehaviorProfile_of_rootError
         reward cycle phase rootError cycleError hrootError0 hroot hall
           (fun who => hcharge who (hall who))
     refine ⟨profile, hnash.mono (le_of_lt hcycleError), ?_⟩
@@ -338,7 +338,6 @@ theorem exists_isεAsymptoticNash_close_of_punishmentAdmissibleCycle_rootError
           reward cycle phase who
           (quittingBehaviorLiveHazard reward deviation)
           (fun cyclePhase => rootError cyclePhase who)
-          bound hbound (abs_reward_le_quittingRewardBound reward)
           (fun cyclePhase => hrootError0 cyclePhase who)
           (fun cyclePhase oneShot => hroot cyclePhase who oneShot)
           (hotherContracts who hwho)

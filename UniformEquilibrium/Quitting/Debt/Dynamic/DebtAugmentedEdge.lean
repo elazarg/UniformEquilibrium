@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanDebtMonotonicity
 
 /-!
@@ -210,7 +211,7 @@ theorem quittingRootOfSimplex_eq_pure_false_of_zeroDebtLoss_of_other
   have hzero :=
     quittingProbability_eq_zero_of_fixedOpponentsContinueMass_eq_one
       (quittingRootOfSimplex current.1.2) owner other hne hmass
-  exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero _ hzero
+  exact Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero _ hzero
 
 /-- Positive total successor debt selects a player whose opponents all
 Continue at a zero-loss root. -/

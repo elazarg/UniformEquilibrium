@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticIncidenceDebtRatioRegression
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
@@ -406,7 +407,7 @@ theorem exact_capNash_forces_allContinue (n : ℕ)
       ENNReal.toReal_nonneg
     exact le_antisymm (by nlinarith) hnonneg
   have howner : candidate owner = PMF.pure false :=
-    pmf_eq_pure_false_of_apply_true_toReal_eq_zero _ hownerZero
+    Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero _ hownerZero
   have hdebtorZero : (candidate debtor true).toReal = 0 := by
     -- First force the switch to Continue conditionally after the debtor is
     -- forced; the debtor itself has a positive Continue value even before
@@ -442,7 +443,7 @@ theorem exact_capNash_forces_allContinue (n : ℕ)
       ENNReal.toReal_nonneg
     exact le_antisymm (by nlinarith) hnonneg
   have hdebtor : candidate debtor = PMF.pure false :=
-    pmf_eq_pure_false_of_apply_true_toReal_eq_zero _ hdebtorZero
+    Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero _ hdebtorZero
   have hswitchDiff := cap_endpointDifference_switch_of_owner_debtor_continue
     n candidate howner hdebtor
   have hswitchZero : (candidate switch true).toReal = 0 := by
@@ -452,7 +453,7 @@ theorem exact_capNash_forces_allContinue (n : ℕ)
       ENNReal.toReal_nonneg
     exact le_antisymm (by nlinarith) hnonneg
   have hswitch : candidate switch = PMF.pure false :=
-    pmf_eq_pure_false_of_apply_true_toReal_eq_zero _ hswitchZero
+    Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero _ hswitchZero
   funext who
   fin_cases who
   · simpa [quittingAllContinueRoot, owner] using howner

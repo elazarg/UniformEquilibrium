@@ -423,15 +423,16 @@ theorem collision_nonzero_or_exists_cotight_outsider_of_minimumSemanticDebt
         (reward := reward) pair.1 owner entrant ownerRate hne
           hownerRatePos hownerRateLt hownerPin hcollision hentrantTight
           hotherStrict
-    have hzero :=
-      quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
+    have hpure :=
+      quittingTerminalSemantic_minimum_positiveDebt_opponents_pureContinue
         reward pair root hpair hminimum hnash hownerDebt hne.symm
     have hpositive : 0 < (root entrant true).toReal := by
       change 0 < hazardOfRoot root entrant
       rw [hrootHazard,
         quittingTwoOwnerHazard_second owner entrant ownerRate entrantRate hne]
       exact hentrantRatePos
-    linarith
+    rw [hpure] at hpositive
+    simp at hpositive
   · exact Or.inl hcollision
 
 /-- **First feasible solo boundary at the minimum semantic stratum.**  An

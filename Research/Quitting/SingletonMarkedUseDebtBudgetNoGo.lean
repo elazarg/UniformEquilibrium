@@ -232,10 +232,13 @@ theorem insertionAtom_blind_or_zeroDebt_cancelled_of_minimum
       intro heq
       subst other
       exact howner hother
-    have hotherZero : (root other true).toReal = 0 :=
-      quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
+    have hotherPure :=
+      quittingTerminalSemantic_minimum_positiveDebt_opponents_pureContinue
         reward pair root hpair hminimum hnash
           hownerDebt hotherNe
+    have hotherZero : (root other true).toReal = 0 := by
+      rw [hotherPure]
+      simp
     have hmassLe : quittingInsertionOpponentMass root owner quitters ≤
         ((Function.update root owner (PMF.pure false)) other true).toReal :=
       quittingRootCoalitionMass_le_quitProbability_of_mem
@@ -258,10 +261,13 @@ theorem insertionAtom_blind_or_zeroDebt_cancelled_of_minimum
       intro heq
       subst debtor
       linarith
-    have hownerQuitZero : (root owner true).toReal = 0 :=
-      quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
+    have hownerPure :=
+      quittingTerminalSemantic_minimum_positiveDebt_opponents_pureContinue
         reward pair root hpair hminimum hnash
           hdebtor hownerNe
+    have hownerQuitZero : (root owner true).toReal = 0 := by
+      rw [hownerPure]
+      simp
     have hendpoint :=
       (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
         reward pair.1 root).mpr hnash

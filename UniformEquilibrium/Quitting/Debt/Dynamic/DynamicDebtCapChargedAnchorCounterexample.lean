@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtCapCarrier
 import UniformEquilibrium.Quitting.Debt.Dynamic.DynamicDebtCapBridge
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
@@ -291,7 +292,7 @@ theorem allContinue_uniqueNash_at_augmentedCap
     (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
       reward augmentedCap arbitraryRoot).2 hnash
   funext who
-  apply pmf_eq_pure_false_of_apply_true_toReal_eq_zero
+  apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
   have hwho := (hendpoint who).2
   rw [endpointDifference_augmentedCap] at hwho
   have hq : 0 ≤ (arbitraryRoot (!who) true).toReal := ENNReal.toReal_nonneg

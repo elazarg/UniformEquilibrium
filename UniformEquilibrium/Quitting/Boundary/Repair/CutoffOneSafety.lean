@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtChains
-import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # Exact safety at cutoff one in quitting games

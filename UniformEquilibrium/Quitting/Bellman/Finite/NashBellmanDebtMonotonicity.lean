@@ -4,9 +4,11 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanMinimizer
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailLimits
 import UniformEquilibrium.Quitting.Debt.Marked.TimeAdvance
+import UniformEquilibrium.Quitting.Root.FaceGeometry
 
 /-!
 # Monotonicity of minimum finite-chain debt
@@ -37,26 +39,11 @@ theorem quittingProbability_eq_zero_of_fixedOpponentsContinueMass_eq_one
     (hmass : quittingStationaryContinueMass
       (Function.update root owner (PMF.pure false)) = 1) :
     (root other true).toReal = 0 := by
-  have hle := quittingProbability_le_opponentAbsorptionMass
-    root (marked := other) (who := owner) hne
+  have hle := quittingRoot_quitProbability_le_opponentAbsorptionMass_of_ne
+    root (other := other) (who := owner) hne
   unfold quittingRootOpponentAbsorptionMass quittingRootAbsorptionMass at hle
   rw [hmass] at hle
   exact le_antisymm (by linarith) ENNReal.toReal_nonneg
-
-/-- A Boolean marginal with zero real Quit mass is pure Continue. -/
-theorem pmf_eq_pure_false_of_apply_true_toReal_eq_zero
-    (marginal : PMF Bool) (htrueReal : (marginal true).toReal = 0) :
-    marginal = PMF.pure false := by
-  have htrue : marginal true = 0 := by
-    have hfinite : marginal true ≠ ⊤ := PMF.apply_ne_top marginal true
-    rcases (ENNReal.toReal_eq_zero_iff (marginal true)).mp htrueReal with
-      hzero | htop
-    · exact hzero
-    · exact (hfinite htop).elim
-  have hsum := Math.ProbabilityMassFunction.sum_coe_fintype marginal
-  rw [Fintype.sum_bool, htrue, zero_add] at hsum
-  ext action
-  cases action <;> simp [PMF.pure_apply, htrue, hsum]
 
 /-- The first point of a finite chain, packaged in the canonical compact
 box. -/
@@ -525,7 +512,7 @@ theorem quittingFiniteNashBellmanPathRoots_prepend_eq_allContinue_of_plateau_two
         reward cutoff hplateau second hsecond first hne
     · exact quittingProbability_prepend_eq_zero_of_minDebt_plateau
         reward cutoff hplateau first hfirst player hp
-  exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero (root player) hquit
+  exact Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero (root player) hquit
 
 /-- Minimum aggregate debt is antitone over all cutoffs. -/
 theorem antitone_quittingFiniteZeroBoundaryNashBellmanMinDebt

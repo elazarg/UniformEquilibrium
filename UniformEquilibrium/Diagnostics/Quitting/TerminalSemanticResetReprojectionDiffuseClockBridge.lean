@@ -9,6 +9,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectChar
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectStratification
 import UniformEquilibrium.Quitting.Paths.OpponentActionMass
 import UniformEquilibrium.Quitting.Debt.Marked.FencePacket
+import UniformEquilibrium.Quitting.Root.FaceGeometry
 
 /-!
 # Matching a diffuse reprojection clock to a deleted-player chronology

@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Cycles.ConditionedDiffuseChronology
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationPath
 import UniformEquilibrium.Quitting.Paths.OpponentClockDichotomy
@@ -124,7 +125,7 @@ theorem quittingTailDiffuseRescaledRoot_eq_pure_false_of_source_eq_pure_false
     (hinactive : roots time who = PMF.pure false) :
   quittingTailDiffuseRescaledRoot roots time hpositive who =
       PMF.pure false := by
-  apply pmf_eq_pure_false_of_apply_true_toReal_eq_zero
+  apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
   rw [show
     ((quittingTailDiffuseRescaledRoot roots time hpositive who) true).toReal =
         quittingTailDiffuseRescaledHazard roots time who by

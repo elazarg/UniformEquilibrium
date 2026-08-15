@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix
+import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 
 /-!
 # One-stage Nash defect of a quitting root
@@ -90,64 +90,84 @@ theorem quittingRootTotalNashDefect_nonneg
   exact Finset.sum_nonneg fun who _ =>
     quittingRootCoordinateNashDefect_nonneg reward tail root who
 
+/-- Approximate root Nash is precisely the coordinatewise Nash-defect bound.
+No nonnegativity assumption on the error is needed. -/
+theorem isεQuittingRootNash_iff_coordinateNashDefect_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (ε : ℝ) (root : ι → PMF Bool) :
+    IsεQuittingRootNash reward tail ε root ↔
+      ∀ who, quittingRootCoordinateNashDefect reward tail root who ≤ ε := by
+  constructor
+  · intro hnash who
+    have hquit :=
+      quittingRootQuitPayoff_le_successor_add_of_isεNash
+        reward tail ε root who hnash
+    have hcontinue :=
+      quittingRootContinuePayoff_le_successor_add_of_isεNash
+        reward tail ε root who hnash
+    unfold quittingRootCoordinateNashDefect
+    linarith [max_le hquit hcontinue]
+  · intro hdefect
+    apply (isεQuittingRootEndpointNash_iff_isεQuittingRootNash
+      reward tail ε root).mp
+    apply (isεQuittingRootEndpointNash_iff_purePayoff_le
+      reward tail ε root).mpr
+    intro who
+    have hwho := hdefect who
+    unfold quittingRootCoordinateNashDefect at hwho
+    constructor
+    · linarith [le_max_left
+        (quittingRootQuitPayoff reward tail root who)
+        (quittingRootContinuePayoff reward tail root who)]
+    · linarith [le_max_right
+        (quittingRootQuitPayoff reward tail root who)
+        (quittingRootContinuePayoff reward tail root who)]
+
+/-- Total local Nash defect of an `ε`-Nash root is at most
+`card ι * ε`. -/
+theorem quittingRootTotalNashDefect_le_card_mul_of_isεQuittingRootNash
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) (ε : ℝ)
+    (hnash : IsεQuittingRootNash reward tail ε root) :
+    quittingRootTotalNashDefect reward tail root ≤ Fintype.card ι * ε := by
+  unfold quittingRootTotalNashDefect
+  calc
+    (∑ who, quittingRootCoordinateNashDefect reward tail root who) ≤
+        ∑ _who : ι, ε :=
+      Finset.sum_le_sum fun who _ =>
+        (isεQuittingRootNash_iff_coordinateNashDefect_le
+          reward tail ε root).mp hnash who
+    _ = Fintype.card ι * ε := by simp
+
 /-- Exact Nash is precisely zero coordinate defect. -/
 theorem isZeroQuittingRootNash_iff_coordinateNashDefect_eq_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool) :
     IsεQuittingRootNash reward tail 0 root ↔
       ∀ who, quittingRootCoordinateNashDefect reward tail root who = 0 := by
+  rw [isεQuittingRootNash_iff_coordinateNashDefect_le]
   constructor
-  · intro hnash who
-    rw [quittingRootCoordinateNashDefect,
-      ← quittingRootSuccessorPayoff_eq_max_of_isZeroNash
-        reward tail root who hnash, sub_self]
+  · intro hle who
+    exact le_antisymm (hle who)
+      (quittingRootCoordinateNashDefect_nonneg reward tail root who)
+  · intro hzero who
+    rw [hzero who]
+
+/-- Exact Nash is precisely zero total Nash defect. -/
+theorem isZeroQuittingRootNash_iff_totalNashDefect_eq_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) :
+    IsεQuittingRootNash reward tail 0 root ↔
+      quittingRootTotalNashDefect reward tail root = 0 := by
+  rw [isZeroQuittingRootNash_iff_coordinateNashDefect_eq_zero]
+  constructor
   · intro hzero
-    apply (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
-      reward tail root).mp
-    intro who
-    have hdefect := hzero who
-    unfold quittingRootCoordinateNashDefect at hdefect
-    have hquit : quittingRootQuitPayoff reward tail root who ≤
-        quittingRootSuccessorPayoff reward tail root who := by
-      linarith [le_max_left
-        (quittingRootQuitPayoff reward tail root who)
-        (quittingRootContinuePayoff reward tail root who)]
-    have hcontinue : quittingRootContinuePayoff reward tail root who ≤
-        quittingRootSuccessorPayoff reward tail root who := by
-      linarith [le_max_right
-        (quittingRootQuitPayoff reward tail root who)
-        (quittingRootContinuePayoff reward tail root who)]
-    have hmix := quittingRootSuccessorPayoff_eq_endpointMix
-      reward tail root who
-    have hsum := quittingRoot_continueProbability_add_quitProbability root who
-    have hcontinueProbability : 0 ≤ (root who false).toReal :=
-      ENNReal.toReal_nonneg
-    have hquitProbability : 0 ≤ (root who true).toReal := ENNReal.toReal_nonneg
-    have hquitRegret :
-        quittingRootQuitPayoff reward tail root who -
-            quittingRootSuccessorPayoff reward tail root who =
-          (root who false).toReal *
-            (quittingRootQuitPayoff reward tail root who -
-              quittingRootContinuePayoff reward tail root who) := by
-      rw [hmix]
-      have hquitMass : (root who true).toReal =
-          1 - (root who false).toReal := by linarith
-      rw [hquitMass]
-      ring
-    have hcontinueRegret :
-        quittingRootContinuePayoff reward tail root who -
-            quittingRootSuccessorPayoff reward tail root who =
-          -(root who true).toReal *
-            (quittingRootQuitPayoff reward tail root who -
-              quittingRootContinuePayoff reward tail root who) := by
-      rw [hmix]
-      have hcontinueMass : (root who false).toReal =
-          1 - (root who true).toReal := by linarith
-      rw [hcontinueMass]
-      ring
-    unfold quittingRootEndpointDifference
-    constructor
-    · linarith
-    · linarith
+    unfold quittingRootTotalNashDefect
+    exact Finset.sum_eq_zero fun who _ => hzero who
+  · intro hsum who
+    unfold quittingRootTotalNashDefect at hsum
+    exact (Finset.sum_eq_zero_iff_of_nonneg fun player _ =>
+      quittingRootCoordinateNashDefect_nonneg reward tail root player).mp
+        hsum who (Finset.mem_univ who)
 
 end GameTheory

@@ -107,6 +107,65 @@ theorem quittingRootSuccessorPayoff_eq_endpointMix
     (quittingRootExpectedPayoff_update_eq_endpointMix
       reward tail root who (root who))
 
+/-- The regret from replacing one marginal is exactly its change in Quit
+probability times the pure endpoint difference. -/
+theorem quittingRootExpectedPayoff_update_sub_successorPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool)
+    (who : ι) (marginal : PMF Bool) :
+    quittingRootExpectedPayoff reward tail
+          (Function.update root who marginal) who -
+        quittingRootSuccessorPayoff reward tail root who =
+      ((marginal true).toReal - (root who true).toReal) *
+        quittingRootEndpointDifference reward tail root who := by
+  rw [quittingRootExpectedPayoff_update_eq_endpointMix,
+    quittingRootSuccessorPayoff_eq_endpointMix,
+    quittingRootEndpointDifference]
+  have hmarginalSum :
+      (marginal false).toReal + (marginal true).toReal = 1 := by
+    simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one marginal
+  have hrootSum :=
+    quittingRoot_continueProbability_add_quitProbability root who
+  have hmarginalContinue :
+      (marginal false).toReal = 1 - (marginal true).toReal := by
+    linarith
+  have hrootContinue :
+      (root who false).toReal = 1 - (root who true).toReal := by
+    linarith
+  rw [hmarginalContinue, hrootContinue]
+  ring
+
+/-- The regret from deviating purely to Quit is Continue probability times
+the pure endpoint difference. -/
+theorem quittingRootQuitPayoff_sub_successorPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι) :
+    quittingRootQuitPayoff reward tail root who -
+        quittingRootSuccessorPayoff reward tail root who =
+      (root who false).toReal *
+        quittingRootEndpointDifference reward tail root who := by
+  rw [quittingRootQuitPayoff,
+    quittingRootExpectedPayoff_update_sub_successorPayoff]
+  have hsum :=
+    quittingRoot_continueProbability_add_quitProbability root who
+  have hcontinueProbability :
+      (root who false).toReal = 1 - (root who true).toReal := by
+    linarith
+  simp [hcontinueProbability]
+
+/-- The regret from deviating purely to Continue is minus Quit probability
+times the pure endpoint difference. -/
+theorem quittingRootContinuePayoff_sub_successorPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι) :
+    quittingRootContinuePayoff reward tail root who -
+        quittingRootSuccessorPayoff reward tail root who =
+      -(root who true).toReal *
+        quittingRootEndpointDifference reward tail root who := by
+  rw [quittingRootContinuePayoff,
+    quittingRootExpectedPayoff_update_sub_successorPayoff]
+  simp
+
 /-- The approximate endpoint inequalities: pure Quit has regret
 `continueProbability * difference`, while pure Continue has regret
 `-quitProbability * difference`. -/
@@ -119,6 +178,36 @@ def IsεQuittingRootEndpointNash
       -ε ≤ (root who true).toReal *
         quittingRootEndpointDifference reward tail root who
 
+/-- Endpoint Nash says exactly that the prescribed mixture approximately
+dominates both pure endpoint payoffs. -/
+theorem isεQuittingRootEndpointNash_iff_purePayoff_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (ε : ℝ) (root : ι → PMF Bool) :
+    IsεQuittingRootEndpointNash reward tail ε root ↔
+      ∀ who,
+        quittingRootQuitPayoff reward tail root who ≤
+            quittingRootSuccessorPayoff reward tail root who + ε ∧
+          quittingRootContinuePayoff reward tail root who ≤
+            quittingRootSuccessorPayoff reward tail root who + ε := by
+  constructor
+  · intro hendpoint who
+    have hwho := hendpoint who
+    constructor
+    · rw [← sub_le_iff_le_add',
+        quittingRootQuitPayoff_sub_successorPayoff]
+      exact hwho.1
+    · rw [← sub_le_iff_le_add',
+        quittingRootContinuePayoff_sub_successorPayoff]
+      linarith [hwho.2]
+  · intro hpure who
+    have hwho := hpure who
+    constructor
+    · rw [← quittingRootQuitPayoff_sub_successorPayoff]
+      exact sub_le_iff_le_add'.mpr hwho.1
+    · have hcontinue := sub_le_iff_le_add'.mpr hwho.2
+      rw [quittingRootContinuePayoff_sub_successorPayoff] at hcontinue
+      linarith
+
 /-- Testing the two endpoint inequalities is equivalent to testing every
 mixed unilateral root deviation. -/
 theorem isεQuittingRootEndpointNash_iff_isεQuittingRootNash
@@ -126,51 +215,10 @@ theorem isεQuittingRootEndpointNash_iff_isεQuittingRootNash
     (tail : Payoff ι) (ε : ℝ) (root : ι → PMF Bool) :
     IsεQuittingRootEndpointNash reward tail ε root ↔
       IsεQuittingRootNash reward tail ε root := by
+  rw [isεQuittingRootEndpointNash_iff_purePayoff_le]
   constructor
-  · intro hendpoint who deviation
-    have hendpointWho := hendpoint who
-    have hrootSum :=
-      quittingRoot_continueProbability_add_quitProbability root who
-    have hdeviationSum :
-        (deviation false).toReal + (deviation true).toReal = 1 := by
-      simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one deviation
-    have hrootMix :=
-      quittingRootSuccessorPayoff_eq_endpointMix reward tail root who
-    have hcontinueProbability :
-        (root who false).toReal = 1 - (root who true).toReal := by
-      linarith
-    have hquitRegret :
-        quittingRootQuitPayoff reward tail root who -
-            quittingRootSuccessorPayoff reward tail root who =
-          (root who false).toReal *
-            (quittingRootQuitPayoff reward tail root who -
-              quittingRootContinuePayoff reward tail root who) := by
-      rw [hrootMix, hcontinueProbability]
-      nlinarith
-    have hcontinueRegret :
-        quittingRootContinuePayoff reward tail root who -
-            quittingRootSuccessorPayoff reward tail root who =
-          -(root who true).toReal *
-            (quittingRootQuitPayoff reward tail root who -
-              quittingRootContinuePayoff reward tail root who) := by
-      rw [hrootMix, hcontinueProbability]
-      nlinarith
-    change
-      (root who false).toReal *
-            (quittingRootQuitPayoff reward tail root who -
-              quittingRootContinuePayoff reward tail root who) ≤ ε ∧
-        -ε ≤ (root who true).toReal *
-            (quittingRootQuitPayoff reward tail root who -
-              quittingRootContinuePayoff reward tail root who)
-      at hendpointWho
-    have hquit :
-        quittingRootQuitPayoff reward tail root who ≤
-          quittingRootSuccessorPayoff reward tail root who + ε := by
-      linarith [hquitRegret, hendpointWho.1]
-    have hcontinue :
-        quittingRootContinuePayoff reward tail root who ≤
-          quittingRootSuccessorPayoff reward tail root who + ε := by
-      linarith [hcontinueRegret, hendpointWho.2]
+  · intro hpure who deviation
+    have hwho := hpure who
     rw [quittingRootExpectedPayoff_update_eq_endpointMix]
     change _ ≤ quittingRootSuccessorPayoff reward tail root who + ε
     calc
@@ -183,48 +231,48 @@ theorem isεQuittingRootEndpointNash_iff_isεQuittingRootNash
           (deviation false).toReal *
             (quittingRootSuccessorPayoff reward tail root who + ε) := by
         exact add_le_add
-          (mul_le_mul_of_nonneg_left hquit ENNReal.toReal_nonneg)
-          (mul_le_mul_of_nonneg_left hcontinue ENNReal.toReal_nonneg)
+          (mul_le_mul_of_nonneg_left hwho.1 ENNReal.toReal_nonneg)
+          (mul_le_mul_of_nonneg_left hwho.2 ENNReal.toReal_nonneg)
       _ = quittingRootSuccessorPayoff reward tail root who + ε := by
         have hsum :
             (deviation true).toReal + (deviation false).toReal = 1 := by
-          linarith
+          simpa [Fintype.sum_bool, add_comm] using
+            pmf_toReal_sum_one deviation
         rw [← add_mul, hsum, one_mul]
   · intro hnash who
     have hquit := hnash who (PMF.pure true)
     have hcontinue := hnash who (PMF.pure false)
-    have hrootSum :=
-      quittingRoot_continueProbability_add_quitProbability root who
-    have hrootMix :=
-      quittingRootSuccessorPayoff_eq_endpointMix reward tail root who
-    have hcontinueProbability :
-        (root who false).toReal = 1 - (root who true).toReal := by
-      linarith
-    have hquitRegret :
-        quittingRootQuitPayoff reward tail root who -
-            quittingRootSuccessorPayoff reward tail root who =
-          (root who false).toReal *
-            (quittingRootQuitPayoff reward tail root who -
-              quittingRootContinuePayoff reward tail root who) := by
-      rw [hrootMix, hcontinueProbability]
-      nlinarith
-    have hcontinueRegret :
-        quittingRootContinuePayoff reward tail root who -
-            quittingRootSuccessorPayoff reward tail root who =
-          -(root who true).toReal *
-            (quittingRootQuitPayoff reward tail root who -
-              quittingRootContinuePayoff reward tail root who) := by
-      rw [hrootMix, hcontinueProbability]
-      nlinarith
     change quittingRootQuitPayoff reward tail root who ≤
       quittingRootSuccessorPayoff reward tail root who + ε at hquit
     change quittingRootContinuePayoff reward tail root who ≤
       quittingRootSuccessorPayoff reward tail root who + ε at hcontinue
-    dsimp only [IsεQuittingRootEndpointNash,
-      quittingRootEndpointDifference]
-    constructor
-    · linarith [hquitRegret, hquit]
-    · linarith [hcontinueRegret, hcontinue]
+    exact ⟨hquit, hcontinue⟩
+
+/-- Approximate root Nash bounds the pure-Quit endpoint by the prescribed
+successor payoff plus the Nash error. -/
+theorem quittingRootQuitPayoff_le_successor_add_of_isεNash
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (ε : ℝ) (root : ι → PMF Bool) (who : ι)
+    (hnash : IsεQuittingRootNash reward tail ε root) :
+    quittingRootQuitPayoff reward tail root who ≤
+      quittingRootSuccessorPayoff reward tail root who + ε := by
+  have h := hnash who (PMF.pure true)
+  change quittingRootQuitPayoff reward tail root who ≤
+    quittingRootSuccessorPayoff reward tail root who + ε at h
+  exact h
+
+/-- Approximate root Nash bounds the pure-Continue endpoint by the prescribed
+successor payoff plus the Nash error. -/
+theorem quittingRootContinuePayoff_le_successor_add_of_isεNash
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (ε : ℝ) (root : ι → PMF Bool) (who : ι)
+    (hnash : IsεQuittingRootNash reward tail ε root) :
+    quittingRootContinuePayoff reward tail root who ≤
+      quittingRootSuccessorPayoff reward tail root who + ε := by
+  have h := hnash who (PMF.pure false)
+  change quittingRootContinuePayoff reward tail root who ≤
+    quittingRootSuccessorPayoff reward tail root who + ε at h
+  exact h
 
 /-- Exact endpoint form of root Nash. -/
 theorem isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
@@ -243,10 +291,9 @@ theorem quittingRootQuitPayoff_le_successor_of_isZeroNash
     (hnash : IsεQuittingRootNash reward tail 0 root) :
     quittingRootQuitPayoff reward tail root who ≤
       quittingRootSuccessorPayoff reward tail root who := by
-  have h := hnash who (PMF.pure true)
-  change quittingRootQuitPayoff reward tail root who ≤
-    quittingRootSuccessorPayoff reward tail root who + 0 at h
-  simpa using h
+  simpa using
+    (quittingRootQuitPayoff_le_successor_add_of_isεNash
+      reward tail 0 root who hnash)
 
 /-- Exact root Nash dominates the pure-Continue endpoint against an arbitrary
 declared continuation. -/
@@ -256,10 +303,9 @@ theorem quittingRootContinuePayoff_le_successor_of_isZeroNash
     (hnash : IsεQuittingRootNash reward tail 0 root) :
     quittingRootContinuePayoff reward tail root who ≤
       quittingRootSuccessorPayoff reward tail root who := by
-  have h := hnash who (PMF.pure false)
-  change quittingRootContinuePayoff reward tail root who ≤
-    quittingRootSuccessorPayoff reward tail root who + 0 at h
-  simpa using h
+  simpa using
+    (quittingRootContinuePayoff_le_successor_add_of_isεNash
+      reward tail 0 root who hnash)
 
 /-- At a zero Quit-probability endpoint, exact endpoint Nash says Quit minus
 Continue is nonpositive. -/

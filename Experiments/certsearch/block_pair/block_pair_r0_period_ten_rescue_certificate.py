@@ -34,8 +34,8 @@ displayed identity restores the omitted active equality.
 The certified box also has strictly negative inactive Quit-minus-Continue
 gaps and strictly contracting opponent-cycle products.  Together with exact
 Bellman policy recursion, these are precisely the hypotheses of
-``isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate_finite``
-in ``QuittingPeriodicCompiler.lean``.  Consequently the exact root has zero
+``isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate`` in
+``UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean``.  Consequently the exact root has zero
 terminal exploitability and yields a uniform-equilibrium payoff.
 
 Floating point is used only to generate the printed center.  Every accepted

@@ -95,7 +95,6 @@ theorem
     (target : Payoff ι) {error bound : ℝ}
     (certificate : QuittingInfinitePathHazardScaledResidualCertificate
       reward target error bound)
-    (_herror : 0 ≤ error) (hbound : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound) :
     (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) error
@@ -182,7 +181,7 @@ theorem
     have hgap :=
       quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_survival_zero
         reward certificate.roots who
-          (quittingBehaviorLiveHazard reward deviation) bound hbound hreward
+          (quittingBehaviorLiveHazard reward deviation)
           (certificate.survival who 0) (by simpa only [weightedResidual] using
             hsummable)
     have hdeviation :=
@@ -396,7 +395,6 @@ arbitrarily small; the opponent clock performs the global summation. -/
 theorem isUniformEquilibriumPayoff_of_arbitrarily_small_hazardScaledResidual
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (target : Payoff ι) {bound : ℝ}
-    (hbound : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hcertificates : ∀ error, 0 < error →
       Nonempty (QuittingInfinitePathHazardScaledResidualCertificate
@@ -406,7 +404,7 @@ theorem isUniformEquilibriumPayoff_of_arbitrarily_small_hazardScaledResidual
   intro error herror
   obtain ⟨certificate⟩ := hcertificates error herror
   have hcompiled := certificate.isεAsymptoticNash_and_delivers
-    reward target herror.le hbound hreward
+    reward target hreward
   exact ⟨quittingInfinitePathProfile reward certificate.roots,
     hcompiled.1, hcompiled.2⟩
 

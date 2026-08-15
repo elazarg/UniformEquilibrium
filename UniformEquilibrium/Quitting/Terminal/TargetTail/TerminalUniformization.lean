@@ -39,11 +39,14 @@ approximation needed to transfer terminal Nash inequalities to uniform Nash
 inequalities. -/
 theorem quittingGame_hasUniformDeviationUpperApproximation
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile)
-    (bound : ℝ) (hbound : 0 ≤ bound)
-    (hreward : ∀ S who, |reward S who| ≤ bound) :
+    (profile : (quittingGame reward).BehaviorProfile) :
     (quittingGame reward).HasUniformDeviationUpperApproximation
       none (quittingTerminalPayoff reward) profile := by
+  let bound := quittingRewardBound reward
+  have hbound : 0 ≤ bound := quittingRewardBound_nonneg reward
+  have hreward : ∀ S who, |reward S who| ≤ bound := by
+    intro S who
+    exact abs_reward_le_quittingRewardBound reward S who
   intro error herror
   have hhalf : 0 < error / 2 := by linarith
   have heventuallyCesaro : ∀ᶠ horizon : ℕ in atTop, ∀ who,
@@ -169,31 +172,13 @@ theorem quittingGame_isUniformεEquilibrium_of_terminalNash
     (profile : (quittingGame reward).BehaviorProfile)
     {ε ε' : ℝ} (herror : ε < ε')
     (hnash : (quittingGame reward).IsεAsymptoticNash
-      (quittingTerminalPayoff reward) ε profile)
-    (bound : ℝ) (hbound : 0 ≤ bound)
-    (hreward : ∀ S who, |reward S who| ≤ bound) :
+      (quittingTerminalPayoff reward) ε profile) :
     (quittingGame reward).IsUniformεEquilibrium none ε' profile := by
   exact StochasticGame.isUniformεEquilibrium_of_isεAsymptoticNash_of_upperApproximation
     (quittingGame reward) none (quittingTerminalPayoff reward) profile
       herror hnash
-      (quittingGame_hasUniformDeviationUpperApproximation
-        reward profile bound hbound hreward)
+      (quittingGame_hasUniformDeviationUpperApproximation reward profile)
       (fun who => tendsto_finiteAveragePayoff_quittingGame
         reward profile who)
-
-/-- Bound-free finite-game form of the terminal-to-uniform theorem.  Finiteness
-of the player set and terminal table supplies the required reward bound
-automatically. -/
-theorem quittingGame_isUniformεEquilibrium_of_terminalNash_finite
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile)
-    {ε ε' : ℝ} (herror : ε < ε')
-    (hnash : (quittingGame reward).IsεAsymptoticNash
-      (quittingTerminalPayoff reward) ε profile) :
-    (quittingGame reward).IsUniformεEquilibrium none ε' profile := by
-  exact quittingGame_isUniformεEquilibrium_of_terminalNash
-    reward profile herror hnash (quittingRewardBound reward)
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
 
 end GameTheory

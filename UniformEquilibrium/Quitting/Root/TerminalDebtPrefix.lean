@@ -44,45 +44,6 @@ def quittingTerminalDeviationDebt
   quittingContinuationBestResponseValue reward profile who -
     quittingTerminalPayoff reward profile who
 
-/-- Probability that every opponent of `who` continues at `root`. -/
-def quittingRootOpponentContinueMass
-    (root : ι → PMF Bool) (who : ι) : ℝ :=
-  quittingStationaryContinueMass
-    (Function.update root who (PMF.pure false))
-
-theorem quittingRootOpponentContinueMass_nonneg
-    (root : ι → PMF Bool) (who : ι) :
-    0 ≤ quittingRootOpponentContinueMass root who :=
-  quittingStationaryContinueMass_nonneg _
-
-theorem quittingRootOpponentContinueMass_le_one
-    (root : ι → PMF Bool) (who : ι) :
-    quittingRootOpponentContinueMass root who ≤ 1 :=
-  quittingStationaryContinueMass_le_one _
-
-/-- Opponent Continue mass and opponent absorption mass are complementary. -/
-theorem quittingRootOpponentContinueMass_eq_one_sub_absorptionMass
-    (root : ι → PMF Bool) (who : ι) :
-    quittingRootOpponentContinueMass root who =
-      1 - quittingRootOpponentAbsorptionMass root who := by
-  unfold quittingRootOpponentContinueMass
-    quittingRootOpponentAbsorptionMass quittingRootAbsorptionMass
-  ring
-
-theorem quittingRootOpponentAbsorptionMass_nonneg
-    (root : ι → PMF Bool) (who : ι) :
-    0 ≤ quittingRootOpponentAbsorptionMass root who := by
-  have hcontinue := quittingRootOpponentContinueMass_le_one root who
-  rw [quittingRootOpponentContinueMass_eq_one_sub_absorptionMass] at hcontinue
-  linarith
-
-theorem quittingRootOpponentAbsorptionMass_le_one
-    (root : ι → PMF Bool) (who : ι) :
-    quittingRootOpponentAbsorptionMass root who ≤ 1 := by
-  have hcontinue := quittingRootOpponentContinueMass_nonneg root who
-  rw [quittingRootOpponentContinueMass_eq_one_sub_absorptionMass] at hcontinue
-  linarith
-
 /-- Pure Quit does not read the all-Continue continuation coordinate. -/
 theorem quittingRootQuitPayoff_continuation_invariant
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

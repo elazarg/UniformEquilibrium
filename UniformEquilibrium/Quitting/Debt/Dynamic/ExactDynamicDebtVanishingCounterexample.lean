@@ -4,8 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtPositiveLimit
-import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailFallback
 import UniformEquilibrium.Examples.BigMatch.Basic
 
@@ -382,9 +383,9 @@ theorem root_eq_allContinue_of_endpointNash_trapValue
   funext who
   cases who
   · simpa [quittingAllContinueRoot] using
-      pmf_eq_pure_false_of_apply_true_toReal_eq_zero (root false) hp
+      Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero (root false) hp
   · simpa [quittingAllContinueRoot] using
-      pmf_eq_pure_false_of_apply_true_toReal_eq_zero (root true) hy
+      Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero (root true) hy
 
 /-- Equivalent root-Nash formulation of trap-tail uniqueness. -/
 theorem root_eq_allContinue_of_nash_trapValue
@@ -972,7 +973,7 @@ theorem stationaryProfile_isUniformεEquilibrium
     {ε : ℝ} (hε : 0 < ε) :
     (quittingGame reward).IsUniformεEquilibrium none ε
       (quittingStationaryProfile reward stationaryRoot) :=
-  quittingGame_isUniformεEquilibrium_of_terminalNash_finite
+  quittingGame_isUniformεEquilibrium_of_terminalNash
     reward (quittingStationaryProfile reward stationaryRoot)
       hε stationaryProfile_isTerminalNash
 
@@ -980,33 +981,14 @@ theorem stationaryProfile_isUniformεEquilibrium
 uniform-equilibrium payoff of the game. -/
 theorem equilibriumValue_isUniformEquilibriumPayoff :
     (quittingGame reward).IsUniformEquilibriumPayoff none equilibriumValue := by
-  intro ε hε
-  obtain ⟨nashThreshold, hnashThreshold⟩ :=
-    stationaryProfile_isUniformεEquilibrium hε
-  have heventuallyDelivery : ∀ᶠ horizon : ℕ in Filter.atTop, ∀ who,
-      |(quittingGame reward).finiteAveragePayoff none horizon
-          (quittingStationaryProfile reward stationaryRoot) who -
-        equilibriumValue who| ≤ ε := by
-    apply Filter.eventually_all.mpr
-    intro who
-    have hball :=
-      (tendsto_finiteAveragePayoff_quittingGame reward
-        (quittingStationaryProfile reward stationaryRoot) who).eventually
-        (Metric.ball_mem_nhds
-          (quittingTerminalPayoff reward
-            (quittingStationaryProfile reward stationaryRoot) who) hε)
-    filter_upwards [hball] with horizon hhorizon
-    rw [terminalPayoff_stationaryRoot] at hhorizon
-    simpa [Metric.mem_ball, Real.dist_eq] using hhorizon.le
-  obtain ⟨deliveryThreshold, hdeliveryThreshold⟩ :=
-    Filter.eventually_atTop.1 heventuallyDelivery
-  refine ⟨quittingStationaryProfile reward stationaryRoot,
-    max nashThreshold deliveryThreshold, fun horizon hhorizon ↦ ?_⟩
-  constructor
-  · exact hnashThreshold horizon
-      (le_trans (Nat.le_max_left _ _) hhorizon)
-  · exact hdeliveryThreshold horizon
-      (le_trans (Nat.le_max_right _ _) hhorizon)
+  have hpayoff := quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact
+    reward (quittingStationaryProfile reward stationaryRoot)
+      stationaryProfile_isTerminalNash
+  have hvalue : quittingTerminalPayoff reward
+      (quittingStationaryProfile reward stationaryRoot) = equilibriumValue := by
+    funext who
+    exact terminalPayoff_stationaryRoot who
+  simpa only [hvalue] using hpayoff
 
 end QuittingExactDynamicDebtVanishingCounterexample
 

@@ -1,5 +1,5 @@
 import Research.Quitting.BlockPair.K11.ConditionalExactNash
-import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 noncomputable section
 

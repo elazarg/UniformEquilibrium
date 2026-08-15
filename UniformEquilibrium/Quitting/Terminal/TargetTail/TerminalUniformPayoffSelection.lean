@@ -126,7 +126,7 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_terminalTargetAcceptance
   obtain ⟨profile, hterminalNash, htarget⟩ := haccept (ε / 2) hhalf
   have huniform : (quittingGame reward).IsUniformεEquilibrium
       none ε profile :=
-    quittingGame_isUniformεEquilibrium_of_terminalNash_finite
+    quittingGame_isUniformεEquilibrium_of_terminalNash
       reward profile (by linarith) hterminalNash
   obtain ⟨nashThreshold, hnashThreshold⟩ := huniform
   have heventuallyDelivery : ∀ᶠ horizon : ℕ in atTop, ∀ who,
@@ -163,6 +163,19 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_terminalTargetAcceptance
         abs_add_le _ _
       _ ≤ ε := by
         linarith [htarget who]
+
+/-- An exact terminal Nash profile's own terminal payoff is a
+uniform-equilibrium payoff. -/
+theorem quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (hnash : (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) 0 profile) :
+    (quittingGame reward).IsUniformEquilibriumPayoff none
+      (quittingTerminalPayoff reward profile) := by
+  apply quittingGame_isUniformEquilibriumPayoff_of_terminalTargetAcceptance
+  intro ε hε
+  exact ⟨profile, hnash.mono hε.le, fun who ↦ by simpa using hε.le⟩
 
 /-- Terminal approximate equilibria whose errors tend to zero and whose
 terminal payoff vectors tend to one specified target make that target a

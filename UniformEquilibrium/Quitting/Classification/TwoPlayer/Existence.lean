@@ -6,7 +6,9 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.TwoPlayer.PairRepair
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
+import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # Every two-player finite quitting game has a uniform equilibrium payoff

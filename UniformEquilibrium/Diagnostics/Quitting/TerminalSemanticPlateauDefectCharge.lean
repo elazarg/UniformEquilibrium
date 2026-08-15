@@ -4,8 +4,10 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauIncidence
 import UniformEquilibrium.Quitting.Debt.Marked.TimeAdvance
+import UniformEquilibrium.Quitting.Root.FaceGeometry
 import UniformEquilibrium.Quitting.Root.NashDefect
 
 /-!
@@ -542,7 +544,7 @@ theorem quittingRootCoalitionMass_le_opponentAbsorptionMass_of_other_mem
       quittingRootOpponentAbsorptionMass root who := by
   exact (quittingRootCoalitionMass_le_quitProbability_of_mem
     root coalition other hother).trans
-      (quittingProbability_le_opponentAbsorptionMass root hne)
+      (quittingRoot_quitProbability_le_opponentAbsorptionMass_of_ne root hne)
 
 /-- A charged exact coalition at an arbitrary semantic prefix is paid by
 coordinate debt drift or local Nash defect. -/

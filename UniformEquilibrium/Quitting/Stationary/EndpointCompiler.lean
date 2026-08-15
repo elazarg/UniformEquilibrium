@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier
 import UniformEquilibrium.Quitting.Stationary.Payoff
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
-import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # Exact compilation of stationary endpoint certificates

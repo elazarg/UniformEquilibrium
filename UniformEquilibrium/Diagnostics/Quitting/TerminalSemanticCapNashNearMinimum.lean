@@ -4,6 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import UniformEquilibrium.Quitting.Stationary.LiveMass
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
 
 /-!
@@ -478,7 +480,7 @@ theorem nearMinimumTerminalSemantic_capNash_eq_allContinue
   have hM :=
     quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have htwoMNonneg : 0 ≤ 2 * M := by positivity
-  apply pmf_eq_pure_false_of_apply_true_toReal_eq_zero
+  apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
   by_contra hquitZero
   have hquit : 0 < (root who true).toReal :=
     lt_of_le_of_ne ENNReal.toReal_nonneg (Ne.symm hquitZero)

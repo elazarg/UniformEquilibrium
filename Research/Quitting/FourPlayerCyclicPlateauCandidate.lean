@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors.
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeCoalitionLocks
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalStaticOrientationDispatch
@@ -427,7 +428,7 @@ theorem phaseZero_exactCapNash_forces_allContinue
     have hnonneg : 0 ≤ (candidate who true).toReal := ENNReal.toReal_nonneg
     have hzero : (candidate who true).toReal = 0 := by
       exact le_antisymm (by nlinarith) hnonneg
-    exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero _ hzero
+    exact Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero _ hzero
   have hhost : candidate host = PMF.pure false :=
     forceContinue host (by rw [phaseZero_endpointDifference_host]; norm_num)
   have hobserver : candidate observer = PMF.pure false :=

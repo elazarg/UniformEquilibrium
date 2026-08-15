@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Root.FirstStageAdapter
+import UniformEquilibrium.Quitting.Root.FaceGeometry
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 
 /-!
@@ -210,59 +211,6 @@ theorem markedNegative_advance_or_absorptionMass_ge
 
 /-! ## A successor escape makes the product jump playerwise charged -/
 
-/-- A marked player's Quit hazard is part of every other player's opponent
-absorption hazard. -/
-theorem quittingProbability_le_opponentAbsorptionMass
-    (root : ι → PMF Bool) {marked who : ι} (hne : marked ≠ who) :
-    (root marked true).toReal ≤
-      quittingRootOpponentAbsorptionMass root who := by
-  let forced : ι → PMF Bool :=
-    Function.update root who (PMF.pure false)
-  let continueProbability : ι → ℝ := fun player ↦
-    (forced player false).toReal
-  have hfactor0 (player : ι) : 0 ≤ continueProbability player :=
-    ENNReal.toReal_nonneg
-  have hfactor1 (player : ι) : continueProbability player ≤ 1 := by
-    exact ENNReal.toReal_mono ENNReal.one_ne_top
-      (PMF.coe_le_one (forced player) false)
-  have hrest0 :
-      0 ≤ ∏ player ∈ (Finset.univ.erase marked : Finset ι),
-        continueProbability player :=
-    Finset.prod_nonneg fun player _ ↦ hfactor0 player
-  have hrest1 :
-      (∏ player ∈ (Finset.univ.erase marked : Finset ι),
-        continueProbability player) ≤ 1 :=
-    Finset.prod_le_one
-      (fun player _ ↦ hfactor0 player)
-      (fun player _ ↦ hfactor1 player)
-  have hproductSplit :
-      (∏ player, continueProbability player) =
-        (∏ player ∈ (Finset.univ.erase marked : Finset ι),
-          continueProbability player) * continueProbability marked := by
-    simpa using (Finset.prod_erase_mul Finset.univ continueProbability
-      (Finset.mem_univ marked)).symm
-  have hproductLe :
-      (∏ player, continueProbability player) ≤
-        continueProbability marked := by
-    rw [hproductSplit]
-    nlinarith [mul_nonneg (sub_nonneg.mpr hrest1)
-      (hfactor0 marked)]
-  have hforcedMarked : forced marked = root marked := by
-    simp [forced, hne]
-  have hcontinueLe :
-      quittingStationaryContinueMass forced ≤
-        (root marked false).toReal := by
-    rw [quittingStationaryContinueMass_eq_prod_continueProbability]
-    change (∏ player, continueProbability player) ≤ _
-    rw [← hforcedMarked]
-    exact hproductLe
-  have hsum :=
-    quittingRoot_continueProbability_add_quitProbability root marked
-  unfold quittingRootOpponentAbsorptionMass quittingRootAbsorptionMass
-  change (root marked true).toReal ≤
-    1 - quittingStationaryContinueMass forced
-  linarith
-
 /-- If an exact-Nash root starts with a `θ`-negative marked value but its
 survived successor rises by `η`, the marked player's *opponents* must absorb
 with mass at least `η/(2M)`.  Otherwise pure Continue would beat the current
@@ -350,7 +298,7 @@ theorem min_le_opponentAbsorptionMass_of_markedHazard_of_successorEscape
           hsuccessorBound hbellman hnash hnegative hescape)
   · exact (min_le_left β (η / (2 * M))).trans
       (hmarkedHazard.trans
-        (quittingProbability_le_opponentAbsorptionMass root
+        (quittingRoot_quitProbability_le_opponentAbsorptionMass_of_ne root
           (Ne.symm hwho)))
 
 /-- **Actual-suffix restart or playerwise-charged jump.**  The carrier is the

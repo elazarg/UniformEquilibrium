@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauLocalizedOtherDefect
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
+import UniformEquilibrium.Quitting.Root.NashDefect
 
 /-!
 # Literal source return and root--tail complementarity
@@ -204,18 +205,26 @@ fiber must pay at least the actual behavioral gain as Nash error. -/
 theorem gain_le_nashError_of_literal_root_tail
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (packet : QuittingLiteralPositiveActualRowPacket reward)
-    {error : ℝ} (herror : 0 ≤ error)
+    {error : ℝ}
     (hnash : IsεQuittingRootNash reward
       (quittingLiteralActualRowTail reward packet.profile packet.stage).1
       error
       (quittingLiteralActualRowRoot reward packet.profile packet.stage)) :
     quittingLiteralActualRowBestEndpointGain reward packet.profile
         packet.who packet.stage ≤ error := by
-  have hdefect := quittingRootCoordinateNashDefect_le_of_isεQuittingRootNash
-    reward
-    (quittingLiteralActualRowTail reward packet.profile packet.stage).1
-    (quittingLiteralActualRowRoot reward packet.profile packet.stage)
-    packet.who error hnash
+  have hdefect :=
+    (isεQuittingRootNash_iff_coordinateNashDefect_le
+      reward
+      (quittingLiteralActualRowTail reward packet.profile packet.stage).1
+      error
+      (quittingLiteralActualRowRoot reward packet.profile packet.stage)).mp
+        hnash packet.who
+  have herror : 0 ≤ error :=
+    (quittingRootCoordinateNashDefect_nonneg
+      reward
+      (quittingLiteralActualRowTail reward packet.profile packet.stage).1
+      (quittingLiteralActualRowRoot reward packet.profile packet.stage)
+      packet.who).trans hdefect
   rw [packet.gain_eq_liveMass_mul_complementarityResidual]
   calc
     quittingLiveMass reward packet.profile packet.stage *

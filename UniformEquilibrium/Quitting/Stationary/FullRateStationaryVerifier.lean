@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Stationary.BestResponse
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanDebtMonotonicity
 
@@ -89,7 +90,7 @@ theorem opponents_pure_continue_of_fixedOpponentsContinueMass_eq_one
     (hmass : quittingStationaryFixedOpponentsContinueMass root who = 1) :
     ∀ other, other ≠ who → root other = PMF.pure false := by
   intro other hne
-  apply pmf_eq_pure_false_of_apply_true_toReal_eq_zero
+  apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
   exact quittingProbability_eq_zero_of_fixedOpponentsContinueMass_eq_one
     root who other hne hmass
 

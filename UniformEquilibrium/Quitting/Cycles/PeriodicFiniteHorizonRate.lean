@@ -335,9 +335,7 @@ equilibrium. -/
 theorem isεAsymptoticNash_quittingCyclicBehaviorProfile_of_rootError
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (cycle : Fin K → ι → PMF Bool) (phase : Fin K)
-    (rootError : Fin K → ι → ℝ) (ε bound : ℝ)
-    (hbound0 : 0 ≤ bound)
-    (hreward : ∀ S player, |reward S player| ≤ bound)
+    (rootError : Fin K → ι → ℝ) (ε : ℝ)
     (hrootError0 : ∀ cyclePhase player,
       0 ≤ rootError cyclePhase player)
     (hroot : ∀ cyclePhase player (oneShot : PMF Bool),
@@ -370,7 +368,6 @@ theorem isεAsymptoticNash_quittingCyclicBehaviorProfile_of_rootError
     reward cycle phase player
       (quittingBehaviorLiveHazard reward deviation)
       (fun cyclePhase ↦ rootError cyclePhase player)
-      bound hbound0 hreward
       (fun cyclePhase ↦ hrootError0 cyclePhase player)
       (fun cyclePhase oneShot ↦ hroot cyclePhase player oneShot)
       (hcontracts player)
@@ -383,46 +380,6 @@ theorem isεAsymptoticNash_quittingCyclicBehaviorProfile_of_rootError
     reward cycle phase] at hhazard
   rw [hdeviation]
   linarith [hcharge player]
-
-/-- Finiteness supplies the reward bound for the approximate periodic
-compiler. -/
-theorem isεAsymptoticNash_quittingCyclicBehaviorProfile_of_rootError_finite
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (cycle : Fin K → ι → PMF Bool) (phase : Fin K)
-    (rootError : Fin K → ι → ℝ) (ε : ℝ)
-    (hrootError0 : ∀ cyclePhase player,
-      0 ≤ rootError cyclePhase player)
-    (hroot : ∀ cyclePhase player (oneShot : PMF Bool),
-      quittingRootExpectedPayoff reward
-          (quittingCyclicTerminalValue reward cycle
-            (finRotate K cyclePhase))
-          (Function.update (cycle cyclePhase) player oneShot) player ≤
-        quittingRootExpectedPayoff reward
-            (quittingCyclicTerminalValue reward cycle
-              (finRotate K cyclePhase))
-            (cycle cyclePhase) player + rootError cyclePhase player)
-    (hcontracts : ∀ player,
-      (∏ cyclePhase : Fin K,
-        quittingStationaryFixedOpponentsContinueMass
-          (cycle cyclePhase) player) < 1)
-    (hcharge : ∀ player,
-      quittingCyclicResidualCharge
-          (fun cyclePhase ↦
-            quittingStationaryFixedOpponentsContinueMass
-              (cycle cyclePhase) player)
-          (fun cyclePhase ↦ rootError cyclePhase player) phase K /
-        (1 - ∏ cyclePhase : Fin K,
-          quittingStationaryFixedOpponentsContinueMass
-            (cycle cyclePhase) player) ≤ ε) :
-    (quittingGame reward).IsεAsymptoticNash
-      (quittingTerminalPayoff reward) ε
-      (quittingCyclicBehaviorProfile reward cycle phase) := by
-  exact
-    isεAsymptoticNash_quittingCyclicBehaviorProfile_of_rootError
-      reward cycle phase rootError ε (quittingRewardBound reward)
-      (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
-      hrootError0 hroot hcontracts hcharge
 
 /-! ## Quantitative finite-horizon transfer -/
 
@@ -510,7 +467,7 @@ theorem isSqrtRateHorizonNash_quittingCyclicBehaviorProfile_of_rootError
   have hterminalNash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) (A / m) profile := by
     exact
-      isεAsymptoticNash_quittingCyclicBehaviorProfile_of_rootError_finite
+      isεAsymptoticNash_quittingCyclicBehaviorProfile_of_rootError
         reward cycle phase rootError (A / m)
         hrootError0 hroot hcontracts hterminal
   have hdelivery' : ∀ player,

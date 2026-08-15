@@ -13,8 +13,8 @@ generated computation into an unconditional mathematical result.
 ## Overall assessment
 
 The repository has unusually strong trust and evidence boundaries for an
-active Lean research project. Its main engineering risk is no longer basic
-buildability; it is the scale and density of the quitting development. Large
+active Lean research project. Its main engineering risk is the scale and
+density of the quitting development. Large
 semantic APIs, deeply dependent proof terms, and many specialized consumers
 make apparently local improvements propagate widely. The right response is a
 small number of stable mathematical interfaces, not more compatibility layers
@@ -69,6 +69,24 @@ proof-maintenance cost. Representative review targets include:
 Line count alone does not justify a split. A split is warranted when a file
 combines separable concepts, forces unrelated consumers through a broad import,
 or hides reusable mathematics inside a capstone proof.
+
+The highest-value declaration-level decomposition targets are more specific:
+
+- the direction-barycenter estimate should separate finite product-law
+  partition bounds, singleton-event approximation, and stationary-value
+  decoding;
+- finite analytic branch coverage should separate formal-root branch
+  construction, eventual branch separation, and sequence coverage;
+- exact and approximate punishment-completed cycles should share one suffix
+  selection and punishment-stitching engine, with exact root Nash exposed as a
+  specialization rather than a parallel long compiler; and
+- stopping-law tangent extraction should separate best-response selection,
+  compact subsequence extraction, and the diagonal, inactive-coordinate, and
+  total-debt constraints on the limiting tangent packet.
+
+These are interface problems, not requests to compress the existing proofs in
+place. A successful refactor leaves the public capstone as the composition of
+the named mathematical seams.
 
 Inventory-only diagnostic facades remain useful as navigation roots, but
 ordinary modules should not import them. Narrow hierarchical facades are
@@ -204,9 +222,9 @@ long-term basis, but the project still needs:
   uniform-payoff predicate; and
 - a successor-native replacement for the integrated Fink consumers.
 
-The canonical `v2` branch is fetchable, so publication is not the design
-blocker. A cutover still requires selecting and reviewing one immutable pin and
-passing the semantic gates in
+Operational availability of the successor is not sufficient for a cutover.
+A cutover requires selecting and reviewing one immutable pin and passing the
+semantic gates in
 [`GAMETHEORY2_MIGRATION_PLAN.md`](GAMETHEORY2_MIGRATION_PLAN.md). Production
 must not depend on the successor's experimental proof view, and v1/v2 should
 not coexist under overlapping public namespaces.

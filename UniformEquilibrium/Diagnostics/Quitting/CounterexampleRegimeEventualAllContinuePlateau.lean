@@ -4,10 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeStatePreservingChronologyCapacity
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeTangentPacket
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeToggles
 import UniformEquilibrium.Quitting.Punishment.BlockerIntervalCover
+import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 
 /-!
 # The eventual all-Continue counterexample plateau
@@ -306,7 +308,7 @@ theorem limitOwner_endpointNash_requires_second_quitter
   have hothers : ∀ other, other ≠ seam.limit.owner →
       root other = PMF.pure false := by
     intro other hother
-    apply pmf_eq_pure_false_of_apply_true_toReal_eq_zero
+    apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
     exact le_antisymm (hnot other hother) ENNReal.toReal_nonneg
   have hroot : root = quittingSoloStationaryRoot seam.limit.owner
       (root seam.limit.owner) :=

@@ -294,11 +294,9 @@ theorem minimumTerminalSemantic_exactNash_allContinue_or_debtGateSolo
         root owner hownerMass
     refine Or.inr ⟨owner, hgate, hquit, ?_⟩
     intro other hne
-    exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero
-      (root other)
-      (quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
-        reward pair root hpair hminimum hnash
-          (hgate.1.symm ▸ hpositive) hne)
+    exact quittingTerminalSemantic_minimum_positiveDebt_opponents_pureContinue
+      reward pair root hpair hminimum hnash
+        (hgate.1.symm ▸ hpositive) hne
 
 /-- Away from every vertex/zero-slack gate, exact minimum dynamics is frozen
 at the all-Continue identity root. -/

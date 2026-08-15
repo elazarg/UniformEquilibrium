@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Boundary.Repair.CutoffOneSafety
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier
 import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # Kernel-checked certificate types for the finite quitting repair ladder
@@ -159,7 +160,7 @@ theorem isZeroAsymptoticNash
     (phase : Fin K) :
     (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) 0 (certificate.profile phase) :=
-  isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate_finite
+  isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate
     reward certificate.cycle certificate.value phase certificate.policy
       certificate.rootNash certificate.contracts
 

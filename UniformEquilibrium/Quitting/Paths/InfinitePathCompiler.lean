@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Cycles.BlockSurvival
 import UniformEquilibrium.Quitting.Cycles.PeriodicFiniteHorizonRate
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # A nonperiodic exact-path compiler for quitting games
@@ -257,7 +258,6 @@ theorem
     (hsurvival : ∀ who start,
       Tendsto (quittingOpponentSurvivalWeight roots who start)
         atTop (nhds 0))
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hvalueBound : ∀ time who, |value time who| ≤ bound)
     (hpolicy : ∀ time,
@@ -297,7 +297,7 @@ theorem
     have hgap :=
       quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_survival_zero
         reward roots who (quittingBehaviorLiveHazard reward deviation)
-          bound hbound0 hreward hsurvivalWho hsummable
+          hsurvivalWho hsummable
     have hsum : (∑' time,
         quittingOpponentSurvivalWeight roots who 0 time *
           quittingPrescribedOneStepResidual reward roots who prescribed
@@ -322,7 +322,6 @@ theorem infinitePath_isZeroAsymptoticNash_and_delivers
     (hK : 0 < K)
     (hblock : IsQuittingOpponentBlockContraction roots K rho)
     (hrho0 : 0 ≤ rho) (hrho1 : rho < 1)
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hvalueBound : ∀ time who, |value time who| ≤ bound)
     (hpolicy : ∀ time,
@@ -341,7 +340,7 @@ theorem infinitePath_isZeroAsymptoticNash_and_delivers
         (fun who start ↦
           tendsto_zero_quittingOpponentSurvivalWeight_of_blockContraction
             roots hK hblock hrho0 hrho1 who start)
-        hbound0 hreward hvalueBound hpolicy hnash
+        hreward hvalueBound hpolicy hnash
 
 /-- Qualitative fixed-payoff corollary.  No common block rate is required:
 bounded exact Bellman/Nash play selects `value 0`, and if every playerwise
@@ -357,7 +356,6 @@ theorem
     (hsurvival : ∀ who start,
       Tendsto (quittingOpponentSurvivalWeight roots who start)
         atTop (nhds 0))
-    (hbound0 : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (hvalueBound : ∀ time who, |value time who| ≤ bound)
     (hpolicy : ∀ time,
@@ -369,40 +367,15 @@ theorem
   let profile := quittingInfinitePathProfile reward roots
   have hcompiled :=
     infinitePath_isZeroAsymptoticNash_and_delivers_of_survival_tendsto_zero
-      reward roots value hsurvival hbound0 hreward hvalueBound hpolicy hnash
+      reward roots value hsurvival hreward hvalueBound hpolicy hnash
   have hterminalNash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) 0 profile := by
     simpa only [profile] using hcompiled.1
   have hterminalValue : quittingTerminalPayoff reward profile = value 0 := by
     simpa only [profile] using hcompiled.2
-  intro ε hε
-  have huniform : (quittingGame reward).IsUniformεEquilibrium
-      none ε profile :=
-    quittingGame_isUniformεEquilibrium_of_terminalNash
-      reward profile hε hterminalNash bound hbound0 hreward
-  obtain ⟨nashThreshold, hnashThreshold⟩ := huniform
-  have heventuallyDelivery : ∀ᶠ horizon : ℕ in atTop, ∀ who,
-      |(quittingGame reward).finiteAveragePayoff none horizon profile who -
-          value 0 who| ≤ ε := by
-    apply Filter.eventually_all.mpr
-    intro who
-    have hball :=
-      (tendsto_finiteAveragePayoff_quittingGame reward profile who).eventually
-        (Metric.ball_mem_nhds
-          (quittingTerminalPayoff reward profile who) hε)
-    filter_upwards [hball] with horizon hhorizon
-    have hvalue := congrFun hterminalValue who
-    rw [hvalue] at hhorizon
-    simpa [Metric.mem_ball, Real.dist_eq] using hhorizon.le
-  obtain ⟨deliveryThreshold, hdeliveryThreshold⟩ :=
-    Filter.eventually_atTop.1 heventuallyDelivery
-  refine ⟨profile, max nashThreshold deliveryThreshold,
-    fun horizon hhorizon ↦ ?_⟩
-  constructor
-  · exact hnashThreshold horizon
-      (le_trans (Nat.le_max_left _ _) hhorizon)
-  · exact hdeliveryThreshold horizon
-      (le_trans (Nat.le_max_right _ _) hhorizon)
+  rw [← hterminalValue]
+  exact quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact
+    reward profile hterminalNash
 
 /-! ## Explicit finite-horizon transfer -/
 
@@ -498,7 +471,7 @@ theorem infinitePath_isHorizonNash_and_delivers
   have hNreal : (N : ℝ) ≠ 0 := by
     exact_mod_cast (Nat.ne_of_gt hN)
   have hterminal := infinitePath_isZeroAsymptoticNash_and_delivers
-    reward roots value hK hblock hrho0 hrho1 hbound0 hreward
+    reward roots value hK hblock hrho0 hrho1 hreward
       hvalueBound hpolicy hnash
   have hterminalNash : (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) 0 profile := by

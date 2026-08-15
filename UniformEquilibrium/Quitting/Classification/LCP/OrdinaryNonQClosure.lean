@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQProducer
 import UniformEquilibrium.Quitting.Classification.LCP.SupportHierarchy
 
@@ -99,7 +100,7 @@ theorem two_positive_or_isolated_of_continueMass_lt_one
       exact le_antisymm (le_of_not_gt hnonpos) ENNReal.toReal_nonneg
     have hroot : root = (quittingAllContinueRoot : ι → PMF Bool) := by
       funext owner
-      exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero _ (hzero owner)
+      exact Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero _ (hzero owner)
     subst root
     rw [quittingStationaryContinueMass_eq_prod_continueProbability] at habsorbs
     simp [quittingAllContinueRoot] at habsorbs
@@ -110,7 +111,7 @@ theorem two_positive_or_isolated_of_continueMass_lt_one
     exact Or.inl ⟨owner, other, Ne.symm hne, howner, hother⟩
   · refine Or.inr ⟨owner, howner, ?_⟩
     intro other hne
-    apply pmf_eq_pure_false_of_apply_true_toReal_eq_zero
+    apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
     apply le_antisymm
     · by_contra hpositive
       have hpos : 0 < (root other true).toReal :=

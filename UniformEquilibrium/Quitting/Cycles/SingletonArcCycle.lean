@@ -540,7 +540,7 @@ theorem singletonArcCycle_isUniformEquilibriumPayoff
       hcoarseSolo hcollision hcoarseContracts
   have huniform : (quittingGame reward).IsUniformεEquilibrium
       none (ε / 2) profile := by
-    exact quittingGame_isUniformεEquilibrium_of_terminalNash_finite
+    exact quittingGame_isUniformεEquilibrium_of_terminalNash
       reward profile hterminalError hterminalNash
   obtain ⟨nashThreshold, hnash⟩ := huniform
   have heventuallyDelivery : ∀ᶠ horizon : ℕ in atTop, ∀ who,

@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Debt.Dynamic.CyclePinnedDebt
 import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
-import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # An admissible absorbing cycle carries a terminal approximate equilibrium
@@ -79,7 +79,7 @@ playerwise hypothesis is the stronger one).
 
 ## Relation to the existing periodic compiler
 
-`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate_finite`
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate`
 already compiles a cyclic certificate to a terminal Nash profile, but under
 playerwise contraction at *every* coordinate.  That hypothesis fails on the
 program's own running example (the stationary row of the surgery table, where
@@ -327,9 +327,7 @@ theorem quittingCyclicHazardTerminalValue_le_of_isZeroRootNash_of_admissible
       exact tendsto_const_nhds
   have hgap :=
     quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_zero_or_nonnegativeSolo
-      reward roots who deviation (quittingRewardBound reward) limit
-      (quittingRewardBound_nonneg reward) (abs_reward_le_quittingRewardBound reward)
-      hlimit hbranch hsummable
+      reward roots who deviation limit hlimit hbranch hsummable
   have hsum : (∑' time, quittingOpponentSurvivalWeight roots who 0 time *
       quittingPrescribedOneStepResidual reward roots who prescribed time) = 0 := by
     simp only [hresidual, mul_zero, tsum_zero]

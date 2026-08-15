@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeTailBridge
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanQuitEndpointLimit
+import UniformEquilibrium.Quitting.Root.FaceGeometry
 
 /-!
 # Violation collapse for exact dynamic-debt tails
@@ -744,7 +745,7 @@ theorem summable_dynamicDebtTailAbsorptionCharge_of_floorViolation_of_positiveDe
     reward tail hbox hedge owner time₀ howner
   exact hown (Summable.of_nonneg_of_le
     (fun _ ↦ ENNReal.toReal_nonneg)
-    (fun time ↦ quittingProbability_le_opponentAbsorptionMass
+    (fun time ↦ quittingRoot_quitProbability_le_opponentAbsorptionMass_of_ne
       (quittingDynamicDebtTailRoots tail time) hne)
     hclockOwner)
 

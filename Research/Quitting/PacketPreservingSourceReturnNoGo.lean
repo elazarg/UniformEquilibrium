@@ -186,7 +186,7 @@ theorem positiveCollisionMarkedTailDispatch_sameFiberRepairErrorFloor
   intro hnash
   have hgainLe : gain ≤ error := by
     simpa only [row, gain] using
-      row.gain_le_nashError_of_literal_root_tail herror hnash
+      row.gain_le_nashError_of_literal_root_tail hnash
   have hdivisionFree :
       lower * quittingTerminalSemanticDebtSum frontier.base / 2 ≤
         (players.card : ℝ) * error :=

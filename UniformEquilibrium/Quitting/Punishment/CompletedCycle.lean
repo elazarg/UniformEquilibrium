@@ -511,7 +511,7 @@ theorem exists_isεAsymptoticNash_close_of_punishmentAdmissibleCycle
   · let profile := quittingCyclicBehaviorProfile reward cycle phase
     have hzero : (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) 0 profile :=
-      isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate_finite
+      isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate
         reward cycle value phase hpolicy hnash hall
     refine ⟨profile, hzero.mono (by simpa using hε.le), ?_⟩
     intro who
@@ -663,7 +663,6 @@ theorem exists_isεAsymptoticNash_close_of_punishmentAdmissibleCycle
           quittingCyclicHazardTerminalValue_le_of_isZeroRootNash
             reward cycle phase who
               (quittingBehaviorLiveHazard reward deviation)
-              bound hbound (abs_reward_le_quittingRewardBound reward)
               hnashTerminal (hotherContracts who hwho)
         have hdeviation :=
           quittingRootSequenceHazardTerminalValue_quittingPhaseSwitchRoots_le_of_plan

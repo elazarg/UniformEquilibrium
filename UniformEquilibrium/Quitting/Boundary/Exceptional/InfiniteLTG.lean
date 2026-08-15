@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailLimits
+import UniformEquilibrium.Quitting.RewardBound
 import UniformEquilibrium.Quitting.Root.FirstBranch
 
 /-!
@@ -547,9 +548,7 @@ condition on the player's singleton reward. -/
 theorem quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_survival_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    (deviation : ℕ → PMF Bool) (bound : ℝ)
-    (hbound0 : 0 ≤ bound)
-    (hreward : ∀ S player, |reward S player| ≤ bound)
+    (deviation : ℕ → PMF Bool)
     (hsurvival : Tendsto
       (quittingOpponentSurvivalWeight roots who 0) atTop (nhds 0))
     (hsummable : Summable (fun time =>
@@ -561,6 +560,10 @@ theorem quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_survival_zero
       ∑' time, quittingOpponentSurvivalWeight roots who 0 time *
         quittingPrescribedOneStepResidual reward roots who
           (quittingRootSequenceTerminalValue reward roots who) time := by
+  let bound := quittingRewardBound reward
+  have hbound0 : 0 ≤ bound := quittingRewardBound_nonneg reward
+  have hreward : ∀ S player, |reward S player| ≤ bound :=
+    abs_reward_le_quittingRewardBound reward
   let prescribed := quittingRootSequenceTerminalValue reward roots who
   let deviationValue :=
     quittingRootSequenceHazardTerminalValue reward roots who deviation
@@ -613,9 +616,7 @@ nonnegative. -/
 theorem quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_zero_or_nonnegativeSolo
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    (deviation : ℕ → PMF Bool) (bound limit : ℝ)
-    (hbound0 : 0 ≤ bound)
-    (hreward : ∀ S player, |reward S player| ≤ bound)
+    (deviation : ℕ → PMF Bool) (limit : ℝ)
     (hlimit : Tendsto
       (quittingOpponentSurvivalWeight roots who 0) atTop (nhds limit))
     (hbranch : limit = 0 ∨
@@ -631,12 +632,12 @@ theorem quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_zero_or_nonneg
           (quittingRootSequenceTerminalValue reward roots who) time := by
   rcases hbranch with hzero | hsolo
   · apply quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_survival_zero
-      reward roots who deviation bound hbound0 hreward
+      reward roots who deviation
     · simpa only [hzero] using hlimit
     · exact hsummable
   · by_cases hzero : limit = 0
     · apply quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_survival_zero
-        reward roots who deviation bound hbound0 hreward
+        reward roots who deviation
       · simpa only [hzero] using hlimit
       · exact hsummable
     · have hlimit0 : 0 ≤ limit := by
@@ -644,7 +645,9 @@ theorem quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_zero_or_nonneg
         exact quittingOpponentSurvivalWeight_nonneg roots who 0
       have hlimitPos : 0 < limit := lt_of_le_of_ne hlimit0 (Ne.symm hzero)
       exact quittingRootSequenceHazardTerminalGap_le_tsum_residual
-        reward roots who deviation bound limit hbound0 (fun S => hreward S who)
+        reward roots who deviation (quittingRewardBound reward) limit
+          (quittingRewardBound_nonneg reward)
+          (fun S => abs_reward_le_quittingRewardBound reward S who)
           hsolo hlimit hlimitPos hsummable
 
 end GameTheory

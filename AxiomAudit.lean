@@ -214,6 +214,7 @@ import MathUE.Probability.SurvivalAmplification
 import MathUE.Probability.SwitchedPotentialCalculus
 import MathUE.Probability.TriangularLedger
 import MathUE.Probability.WeightedCollisionConcentration
+import MathUE.ProbabilityMassFunction.Bool
 import MathUE.ProbabilityMassFunction.CoordinateTest
 import MathUE.ProbabilityMassFunction.Monitoring
 import MathUE.ProjectiveBellmanPacket
@@ -1159,6 +1160,7 @@ import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 import UniformEquilibrium.Quitting.RewardBound
 import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
 import UniformEquilibrium.Quitting.Root.EndpointBackwardStability
+import UniformEquilibrium.Quitting.Root.FaceGeometry
 import UniformEquilibrium.Quitting.Root.FirstBranch
 import UniformEquilibrium.Quitting.Root.FirstStageAdapter
 import UniformEquilibrium.Quitting.Root.FleschSuccessor

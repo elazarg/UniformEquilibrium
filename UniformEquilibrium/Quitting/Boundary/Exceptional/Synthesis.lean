@@ -50,8 +50,7 @@ residual bound controls every unilateral behavioral deviation. -/
 theorem quittingTerminalDeviationGap_le_tsum_liveResidual_of_oneException
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (exceptional : ι) (bound : ℝ) (hbound0 : 0 ≤ bound)
-    (hreward : ∀ S player, |reward S player| ≤ bound)
+    (exceptional : ι)
     (hothers : ∀ who, who ≠ exceptional →
       Tendsto (quittingLiveMass reward
         (quittingOpponentOnlyProfile reward profile who)) atTop (nhds 0))
@@ -106,8 +105,8 @@ theorem quittingTerminalDeviationGap_le_tsum_liveResidual_of_oneException
   have hroot :=
     quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_zero_or_nonnegativeSolo
       reward (quittingProfileLiveRoot reward profile) who
-      (quittingBehaviorLiveHazard reward deviation) bound limit
-      hbound0 hreward hlimit hbranch (hsummable who)
+      (quittingBehaviorLiveHazard reward deviation) limit
+      hlimit hbranch (hsummable who)
   rw [quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
     quittingTerminalPayoff_eq_rootSequence_profileLiveRoot]
   exact hroot
@@ -120,8 +119,6 @@ theorem exists_quittingExceptionalPlayer_terminalDeviationGap_le
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
-    (bound : ℝ) (hbound0 : 0 ≤ bound)
-    (hreward : ∀ S player, |reward S player| ≤ bound)
     (htotal : Tendsto (quittingLiveMass reward profile) atTop (nhds 0))
     (hsummable : ∀ who, Summable (fun time =>
       quittingOpponentSurvivalWeight
@@ -149,7 +146,6 @@ theorem exists_quittingExceptionalPlayer_terminalDeviationGap_le
     exists_quittingExceptionalPlayer reward profile htotal
   refine ⟨exceptional, fun hexceptional => ?_⟩
   exact quittingTerminalDeviationGap_le_tsum_liveResidual_of_oneException
-    reward profile exceptional bound hbound0 hreward hothers hexceptional
-      hsummable
+    reward profile exceptional hothers hexceptional hsummable
 
 end GameTheory

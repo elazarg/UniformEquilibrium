@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
+import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 
 /-!
 # Two blockers cover the owner's rate interval

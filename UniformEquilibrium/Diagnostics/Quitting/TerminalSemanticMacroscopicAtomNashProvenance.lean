@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauFractionalResetFloor
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionWindow
+import UniformEquilibrium.Quitting.Root.NashDefect
 
 /-!
 # Nash provenance of a macroscopic semantic atom
@@ -35,40 +36,6 @@ namespace GameTheory
 open Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- An `ε`-Nash product root has coordinate Nash defect at most `ε`.
-This is the exact bridge between the repository's root-Nash predicate and
-the defect accounting used by the minimum-semantic theory. -/
-theorem quittingRootCoordinateNashDefect_le_of_isεQuittingRootNash
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι) (ε : ℝ)
-    (hnash : IsεQuittingRootNash reward tail ε root) :
-    quittingRootCoordinateNashDefect reward tail root who ≤ ε := by
-  have hquit := hnash who (PMF.pure true)
-  have hcontinue := hnash who (PMF.pure false)
-  change quittingRootQuitPayoff reward tail root who ≤
-      quittingRootSuccessorPayoff reward tail root who + ε at hquit
-  change quittingRootContinuePayoff reward tail root who ≤
-      quittingRootSuccessorPayoff reward tail root who + ε at hcontinue
-  unfold quittingRootCoordinateNashDefect
-  have hmax := max_le hquit hcontinue
-  linarith
-
-/-- Total local Nash defect of an `ε`-Nash root is at most
-`card ι * ε`. -/
-theorem quittingRootTotalNashDefect_le_card_mul_of_isεQuittingRootNash
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool) (ε : ℝ)
-    (hnash : IsεQuittingRootNash reward tail ε root) :
-    quittingRootTotalNashDefect reward tail root ≤ Fintype.card ι * ε := by
-  unfold quittingRootTotalNashDefect
-  calc
-    (∑ who, quittingRootCoordinateNashDefect reward tail root who) ≤
-        ∑ _who : ι, ε :=
-      Finset.sum_le_sum fun who _ =>
-        quittingRootCoordinateNashDefect_le_of_isεQuittingRootNash
-          reward tail root who ε hnash
-    _ = Fintype.card ι * ε := by simp
 
 /-- **Macroscopic-atom Nash-provenance obstruction.**  A non-singleton
 coalition atom at an `ε`-Nash row is paid by the shifted tail's excess above

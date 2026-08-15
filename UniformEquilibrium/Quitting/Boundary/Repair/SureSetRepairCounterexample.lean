@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Boundary.Repair.CutoffOneSafety
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDynamicDebtProvenance
+import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 
 /-!
 # A three-player obstruction to sure-set owner repair

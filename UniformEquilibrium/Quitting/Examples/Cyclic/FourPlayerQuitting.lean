@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Cycles.PureTimeExtremality
 import MathUE.PMFProduct.FiniteFubini
-import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 import Mathlib.Analysis.Calculus.Deriv.MeanValue
 import Mathlib.Analysis.Calculus.Deriv.Pow
 import Mathlib.Topology.Order.IntermediateValue
@@ -597,7 +597,7 @@ theorem stationaryProfile_isUniformεEquilibrium
     {ε : ℝ} (hε : 0 < ε) :
     (quittingGame terminalReward).IsUniformεEquilibrium none ε
       (quittingStationaryProfile terminalReward stationaryRoot) :=
-  quittingGame_isUniformεEquilibrium_of_terminalNash_finite
+  quittingGame_isUniformεEquilibrium_of_terminalNash
     terminalReward (quittingStationaryProfile terminalReward stationaryRoot)
       hε stationaryProfile_isTerminalNash
 
@@ -605,33 +605,14 @@ theorem stationaryProfile_isUniformεEquilibrium
 the four-player quitting game. -/
 theorem stationaryTail_isUniformEquilibriumPayoff :
     game.IsUniformEquilibriumPayoff none stationaryTail := by
-  intro ε hε
-  obtain ⟨nashThreshold, hnashThreshold⟩ :=
-    stationaryProfile_isUniformεEquilibrium hε
-  have heventuallyDelivery : ∀ᶠ horizon : ℕ in atTop, ∀ who,
-      |game.finiteAveragePayoff none horizon
-          (quittingStationaryProfile terminalReward stationaryRoot) who -
-        stationaryTail who| ≤ ε := by
-    apply Filter.eventually_all.mpr
-    intro who
-    have hball :=
-      (tendsto_finiteAveragePayoff_quittingGame terminalReward
-        (quittingStationaryProfile terminalReward stationaryRoot) who).eventually
-        (Metric.ball_mem_nhds
-          (quittingTerminalPayoff terminalReward
-            (quittingStationaryProfile terminalReward stationaryRoot) who) hε)
-    filter_upwards [hball] with horizon hhorizon
-    rw [quittingTerminalPayoff_stationary] at hhorizon
-    simpa [Metric.mem_ball, Real.dist_eq, stationaryTail] using hhorizon.le
-  obtain ⟨deliveryThreshold, hdeliveryThreshold⟩ :=
-    Filter.eventually_atTop.1 heventuallyDelivery
-  refine ⟨quittingStationaryProfile terminalReward stationaryRoot,
-    max nashThreshold deliveryThreshold, fun horizon hhorizon => ?_⟩
-  constructor
-  · exact hnashThreshold horizon
-      (le_trans (Nat.le_max_left _ _) hhorizon)
-  · exact hdeliveryThreshold horizon
-      (le_trans (Nat.le_max_right _ _) hhorizon)
+  have hpayoff := quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact
+    terminalReward (quittingStationaryProfile terminalReward stationaryRoot)
+      stationaryProfile_isTerminalNash
+  have hvalue : quittingTerminalPayoff terminalReward
+      (quittingStationaryProfile terminalReward stationaryRoot) = stationaryTail := by
+    funext who
+    simp [quittingTerminalPayoff_stationary, stationaryTail]
+  simpa only [hvalue] using hpayoff
 
 end CyclicFourPlayerQuitting
 end GameTheory

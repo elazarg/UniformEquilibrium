@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
+import UniformEquilibrium.Quitting.Root.NashDefect
 
 /-!
 # A Nash-defect moat around the canonical incidence plateau
@@ -92,33 +93,6 @@ theorem continuous_quittingRootTotalNashDefect_simplex
   exact continuous_finsetSum _ fun who _ =>
     continuous_quittingRootCoordinateNashDefect_simplex reward who
 
-/-- Zero total Nash defect is exactly exact root Nash. -/
-theorem isZeroQuittingRootNash_iff_totalNashDefect_eq_zero
-    (tail : Payoff ι) (root : ι → PMF Bool) :
-    IsεQuittingRootNash reward tail 0 root ↔
-      quittingRootTotalNashDefect reward tail root = 0 := by
-  rw [isZeroQuittingRootNash_iff_coordinateNashDefect_eq_zero]
-  constructor
-  · intro hzero
-    unfold quittingRootTotalNashDefect
-    simp_rw [hzero]
-    simp
-  · intro hsum who
-    have hcoordinateNonneg :=
-      quittingRootCoordinateNashDefect_nonneg reward tail root who
-    have hcoordinateLe :
-        quittingRootCoordinateNashDefect reward tail root who ≤
-          quittingRootTotalNashDefect reward tail root := by
-      unfold quittingRootTotalNashDefect
-      exact Finset.single_le_sum
-        (f := fun player =>
-          quittingRootCoordinateNashDefect reward tail root player)
-        (fun player _ =>
-          quittingRootCoordinateNashDefect_nonneg reward tail root player)
-        (Finset.mem_univ who)
-    rw [hsum] at hcoordinateLe
-    exact le_antisymm hcoordinateLe hcoordinateNonneg
-
 /-- The all-Continue root has zero total opponent incidence. -/
 @[simp] theorem quittingRootTotalOpponentIncidenceMass_allContinueRoot
     (owner : ι) :
@@ -186,7 +160,7 @@ theorem exists_totalNashDefect_moat_of_unique_allContinue
       have hnash : IsεQuittingRootNash reward cap 0
           (quittingRootOfSimplex selected) :=
         (isZeroQuittingRootNash_iff_totalNashDefect_eq_zero
-          (reward := reward) cap (quittingRootOfSimplex selected)).2 hzero.symm
+          reward cap (quittingRootOfSimplex selected)).2 hzero.symm
       have hroot := hunique (quittingRootOfSimplex selected) hnash
       have hincidenceZero :
           quittingRootTotalOpponentIncidenceMass owner

@@ -9,6 +9,8 @@ import MathUE.Finset.FinThree
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
 import UniformEquilibrium.Quitting.Paths.SureExitSet
+import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # A full-interval obstruction to sure-set owner repair

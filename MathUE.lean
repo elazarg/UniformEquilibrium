@@ -200,6 +200,7 @@ import MathUE.Probability.SurvivalAmplification
 import MathUE.Probability.SwitchedPotentialCalculus
 import MathUE.Probability.TriangularLedger
 import MathUE.Probability.WeightedCollisionConcentration
+import MathUE.ProbabilityMassFunction.Bool
 import MathUE.ProbabilityMassFunction.CoordinateTest
 import MathUE.ProbabilityMassFunction.Monitoring
 import MathUE.ProjectiveBellmanPacket

@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtOwnerTransferCounterexample
 import UniformEquilibrium.Quitting.Stationary.Gain
 
@@ -406,11 +407,11 @@ theorem no_stationary_exact_terminal_equilibrium
   let b := (selectedRoot true true).toReal
   by_cases ha : a = 0
   · have hfalseMarginal : selectedRoot false = PMF.pure false :=
-      pmf_eq_pure_false_of_apply_true_toReal_eq_zero
+      Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
         (selectedRoot false) (by simpa [a] using ha)
     by_cases hb : b = 0
     · have htrueMarginal : selectedRoot true = PMF.pure false :=
-        pmf_eq_pure_false_of_apply_true_toReal_eq_zero
+        Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
           (selectedRoot true) (by simpa [b] using hb)
       have hroot : selectedRoot = quittingAllContinueRoot := by
         funext who

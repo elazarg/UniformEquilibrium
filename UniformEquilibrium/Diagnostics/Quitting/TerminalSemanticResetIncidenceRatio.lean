@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
@@ -771,7 +772,7 @@ theorem root_eq_pureContinue_of_opponentIncidence_eq_zero
     (hzero : quittingRootOpponentIncidenceMass owner other root = 0) :
     root other = PMF.pure false := by
   by_cases hquitZero : (root other true).toReal = 0
-  · exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero
+  · exact Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
       (root other) hquitZero
   · have hquitPositive : 0 < (root other true).toReal :=
       lt_of_le_of_ne ENNReal.toReal_nonneg (Ne.symm hquitZero)

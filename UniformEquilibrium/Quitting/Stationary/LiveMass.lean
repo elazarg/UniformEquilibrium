@@ -193,6 +193,56 @@ def quittingRootOpponentAbsorptionMass
   quittingRootAbsorptionMass
     (Function.update root who (PMF.pure false))
 
+/-- Probability that every opponent of `who` continues at `root`. -/
+def quittingRootOpponentContinueMass
+    (root : ι → PMF Bool) (who : ι) : ℝ :=
+  quittingStationaryContinueMass
+    (Function.update root who (PMF.pure false))
+
+theorem quittingRootOpponentContinueMass_nonneg
+    (root : ι → PMF Bool) (who : ι) :
+    0 ≤ quittingRootOpponentContinueMass root who :=
+  quittingStationaryContinueMass_nonneg _
+
+theorem quittingRootOpponentContinueMass_le_one
+    (root : ι → PMF Bool) (who : ι) :
+    quittingRootOpponentContinueMass root who ≤ 1 :=
+  quittingStationaryContinueMass_le_one _
+
+/-- Opponent Continue mass and opponent absorption mass are complementary. -/
+theorem quittingRootOpponentContinueMass_eq_one_sub_absorptionMass
+    (root : ι → PMF Bool) (who : ι) :
+    quittingRootOpponentContinueMass root who =
+      1 - quittingRootOpponentAbsorptionMass root who := by
+  unfold quittingRootOpponentContinueMass
+    quittingRootOpponentAbsorptionMass quittingRootAbsorptionMass
+  ring
+
+theorem quittingRootOpponentAbsorptionMass_nonneg
+    (root : ι → PMF Bool) (who : ι) :
+    0 ≤ quittingRootOpponentAbsorptionMass root who := by
+  have hcontinue := quittingRootOpponentContinueMass_le_one root who
+  rw [quittingRootOpponentContinueMass_eq_one_sub_absorptionMass] at hcontinue
+  linarith
+
+theorem quittingRootOpponentAbsorptionMass_le_one
+    (root : ι → PMF Bool) (who : ι) :
+    quittingRootOpponentAbsorptionMass root who ≤ 1 := by
+  have hcontinue := quittingRootOpponentContinueMass_nonneg root who
+  rw [quittingRootOpponentContinueMass_eq_one_sub_absorptionMass] at hcontinue
+  linarith
+
+/-- Deleted Continue mass is at most every displayed opponent's Continue
+probability. -/
+theorem quittingRootOpponentContinueMass_le_continueProbability_of_ne
+    (root : ι → PMF Bool) {who other : ι} (hne : other ≠ who) :
+    quittingRootOpponentContinueMass root who ≤
+      (root other false).toReal := by
+  have hmass := quittingStationaryContinueMass_le_ownContinueProbability
+    (Function.update root who (PMF.pure false)) other
+  simpa [quittingRootOpponentContinueMass, Function.update_of_ne hne] using
+    hmass
+
 /-- Forcing one player to Continue only removes absorption events. -/
 theorem quittingRootOpponentAbsorptionMass_le_absorptionMass
     (root : ι → PMF Bool) (who : ι) :

@@ -5,8 +5,10 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
+import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
 # The empty first normal-layer branch

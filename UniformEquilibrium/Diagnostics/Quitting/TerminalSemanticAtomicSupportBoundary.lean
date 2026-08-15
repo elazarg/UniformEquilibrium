@@ -303,15 +303,16 @@ theorem collision_negative_or_exists_cotight_outsider_of_pureOwner_minimumSemant
       exists_exact_twoOwnerSupportEntry_of_pureOwner_nonnegative_isolated
         (reward := reward) pair.1 owner entrant hne hownerPin
           (le_of_not_gt hcollision) hentrantTight hotherStrict
-    have hzero :=
-      quittingTerminalSemantic_minimum_positiveDebt_opponents_quit_eq_zero
+    have hpure :=
+      quittingTerminalSemantic_minimum_positiveDebt_opponents_pureContinue
         reward pair root hpair hminimum hnash hownerDebt hne.symm
     have hpositive : 0 < (root entrant true).toReal := by
       change 0 < hazardOfRoot root entrant
       rw [hrootHazard,
         quittingTwoOwnerHazard_second owner entrant 1 entrantRate hne]
       exact hentrantRatePos
-    linarith
+    rw [hpure] at hpositive
+    simp at hpositive
 
 /-- The sharp finite certificate at a minimum semantic solo boundary.  The
 selected rate is positive and at most the displayed solo rate.  Below one,

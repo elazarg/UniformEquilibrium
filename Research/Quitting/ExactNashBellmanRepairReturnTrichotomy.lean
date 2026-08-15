@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Classification.AnalyticWaist
 import UniformEquilibrium.Quitting.Classification.SingletonPacketEnergy
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeToggles
@@ -321,7 +322,9 @@ theorem QuittingExactStationaryNashBellmanReturn.root_eq_allContinue_of_no_unifo
               funext player
               by_cases hp : player = who
               · subst player
-                exact pmf_eq_pure_false_of_apply_true_toReal_eq_zero _ hzero
+                exact
+                  Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
+                    _ hzero
               · exact hopponents player hp
             rw [hall, quittingStationaryContinueMass_eq_prod] at habsorbs
             simp [quittingAllContinueRoot] at habsorbs
