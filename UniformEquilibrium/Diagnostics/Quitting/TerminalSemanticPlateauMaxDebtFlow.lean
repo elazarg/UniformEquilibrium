@@ -282,7 +282,6 @@ omit [DecidableEq ι] in
 /-- A positively weighted vertex has a positive matched outgoing edge before
 the cutoff, and the edge reaches a positively weighted next vertex. -/
 theorem exists_positive_matched_successor
-    [Nonempty ι]
     (packet : QuittingFiniteMaxDebtMatchedFlow debt transfer incidence cutoff)
     (time : ℕ) (htime : time < cutoff) (source : ι)
     (hsource : 0 < packet.weight time source) :
@@ -290,6 +289,7 @@ theorem exists_positive_matched_successor
       0 < packet.weight (time + 1) target ∧
       0 < transfer time source target ∧
         0 < incidence time source target := by
+  letI : Nonempty ι := ⟨source⟩
   have hsumPositive : 0 < ∑ target, packet.flow time source target := by
     rw [packet.row_sum time htime source]
     exact hsource

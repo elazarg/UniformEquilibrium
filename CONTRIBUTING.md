@@ -10,6 +10,9 @@ lake build
 python scripts/generate_axiom_audit.py --check
 python scripts/check_import_graph.py
 python scripts/check_proof_duplicates.py
+python scripts/check_reward_bounds.py --check --max-nonnegative 0
+python scripts/check_redundant_order_hypotheses.py --check
+python scripts/check_derivable_telescope_hypotheses.py --check
 python scripts/check_trust.py
 python scripts/check_docs.py
 ```

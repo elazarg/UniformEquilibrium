@@ -143,7 +143,10 @@ For a Lean change, use the narrowest relevant checks while iterating:
   `python -m unittest scripts/test_check_import_graph.py` runs its regression
   tests;
 - `python scripts/check_proof_duplicates.py` rejects long exact Research copies
-  of canonical `MathUE` or `UniformEquilibrium` declaration bodies; and
+  of canonical `MathUE` or `UniformEquilibrium` declaration bodies;
+- `python scripts/check_derivable_telescope_hypotheses.py --check` rejects
+  narrow finite-instance, membership/nonemptiness, and equality/bound
+  telescope redundancies; and
 - `python scripts/check_docs.py` checks generated status, source references,
   frontier evidence paths, and local documentation links.
 

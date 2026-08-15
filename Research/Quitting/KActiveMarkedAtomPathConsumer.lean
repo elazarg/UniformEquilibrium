@@ -53,7 +53,6 @@ The returned plan retains the fixed marked atom, is one-active, is
 support-approximately Nash against its actual tails, has a divergent
 absorption clock, and satisfies the punishment floors. -/
 theorem exists_oneActiveMarkedSingletonSupportRationalDivergentPath_of_finitePrefixes
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (bound : ℝ) (markedPlayer clockOwner : ι)
     (eta epsilon edgeCharge : ℝ)
@@ -76,6 +75,7 @@ theorem exists_oneActiveMarkedSingletonSupportRationalDivergentPath_of_finitePre
       ∀ time, eta ≤
         quittingOpponentCoalitionMass
           (plan time) markedPlayer {clockOwner} := by
+  letI : Nonempty ι := ⟨markedPlayer⟩
   obtain ⟨state, hstateBox, hstateEdge⟩ :=
     exists_chronologicalKActiveMarkedAtomPath_of_finitePrefixes
       reward bound
@@ -147,7 +147,6 @@ prefixes of every depth, the quitting game already has a uniform-equilibrium
 payoff.  Labels and floors may depend on the requested accuracy; they only
 have to be fixed across the prefixes used for that one compact extraction. -/
 theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedPrefixes
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (bound : ℝ)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
@@ -163,6 +162,10 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedPrefixes
             horizon).Nonempty) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  have hnonempty : Nonempty ι := by
+    obtain ⟨markedPlayer, _, _, _, _, _⟩ := hprefix 1 zero_lt_one
+    exact ⟨markedPlayer⟩
+  letI : Nonempty ι := hnonempty
   apply quittingGame_exists_uniformEquilibriumPayoff_of_KActivePaths reward 1
   intro epsilon hepsilon
   obtain ⟨markedPlayer, clockOwner, eta, edgeCharge, heta, hpref⟩ :=

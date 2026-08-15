@@ -362,7 +362,6 @@ theorem oneActive_markedSingletonMass_le_absorption'
 /-- A one-active exact Bellman path with divergent cumulative mass on one
 fixed singleton mark is a support-rational divergent terminal path. -/
 theorem oneActiveMarkedBudgetPath_is_supportRationalDivergent
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (bound epsilon : ℝ) (markedPlayer clockOwner : ι)
     (budget : ℕ → ℝ)
@@ -386,6 +385,7 @@ theorem oneActiveMarkedBudgetPath_is_supportRationalDivergent
         quittingPunishmentValue reward target - epsilon ≤
           quittingRootSequenceTerminalValue reward plan target time) ∧
       ∀ time, HasQuittingSupportCardAtMost 1 (plan time) := by
+  letI : Nonempty ι := ⟨markedPlayer⟩
   let value : ℕ → Payoff ι := fun time => (state time).1
   let plan : ℕ → ι → PMF Bool := fun time =>
     quittingRootOfSimplex (state time).2
@@ -467,7 +467,6 @@ theorem oneActiveMarkedBudgetPath_is_supportRationalDivergent
 one-active finite prefixes whose fixed singleton mark dominates one divergent
 cumulative budget imply a uniform-equilibrium payoff. -/
 theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedBudgetPrefixes
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (bound : ℝ)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
@@ -484,6 +483,11 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedBudgetPre
             budget horizon).Nonempty) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  have hnonempty : Nonempty ι := by
+    obtain ⟨markedPlayer, clockOwner, budget, hbudget, hpref⟩ :=
+      hprefix 1 zero_lt_one
+    exact ⟨markedPlayer⟩
+  letI : Nonempty ι := hnonempty
   apply quittingGame_exists_uniformEquilibriumPayoff_of_KActivePaths reward 1
   intro epsilon hepsilon
   obtain ⟨markedPlayer, clockOwner, budget, hbudget, hpref⟩ :=
@@ -550,7 +554,6 @@ theorem QuittingCounterexampleRegime.not_KActiveAbsorptionBudgetPrefixes
 singleton edge with a divergent cumulative clock on compatible prefixes at
 every accuracy. -/
 theorem QuittingCounterexampleRegime.not_oneActiveMarkedBudgetPrefixes
-    [Nonempty ι]
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (regime : QuittingCounterexampleRegime reward)
     (bound : ℝ)

@@ -107,6 +107,15 @@ proof's `.le` projection. The narrow census in
 `scripts/check_redundant_order_hypotheses.py` covers this schema and is enforced
 at zero.
 
+Do not retain a separate finite-type instance when a `Fintype` instance is
+already in the same telescope. Likewise, a named membership witness supplies
+the corresponding simple collection-nonemptiness proof, and an equality can
+transport or decide simple endpoint bounds. These narrow schemas are enforced
+at zero by `scripts/check_derivable_telescope_hypotheses.py`.
+The ratchet reads explicit declaration binders only; section variables,
+`include` commands, instance-indexed results, and body-derived facts remain
+manual obligations under the complete-telescope rule above.
+
 Derive `Nonempty ι` locally from a named player when the instance is used only
 inside the proof. Retain it when an instance-indexed definition occurs in the
 result or later telescope. Treat `DecidableEq` similarly: proof-local finite
@@ -185,6 +194,7 @@ python3 scripts/check_import_graph.py
 python3 scripts/check_proof_duplicates.py
 python3 scripts/check_reward_bounds.py --check --max-nonnegative 0
 python3 scripts/check_redundant_order_hypotheses.py --check
+python3 scripts/check_derivable_telescope_hypotheses.py --check
 python3 scripts/check_trust.py
 ```
 

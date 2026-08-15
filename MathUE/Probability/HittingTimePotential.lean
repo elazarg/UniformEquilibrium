@@ -382,14 +382,21 @@ theorem poissonPotential_norm_le_div
     [Fintype S] [Nonempty S]
     {kernel : S → PMF S} {core : Set S} {potential : S → ℝ}
     {m : ℕ} {δ : ℝ}
-    (hδpos : 0 < δ) (hδone : δ ≤ 1)
+    (hδpos : 0 < δ)
     (hreach : HasUniformCoreReach kernel core m δ)
     (hcore : potential ∈ coreVanishingSubmodule core)
     (hpoisson : ∀ s,
       potential s - expect (kernel s) potential =
-        transientCharge core s)
-    (hnonneg : ∀ s, 0 ≤ potential s) :
+        transientCharge core s) :
     ‖potential‖ ≤ (m : ℝ) / δ := by
+  obtain ⟨s₀⟩ := (inferInstance : Nonempty S)
+  have hδone : δ ≤ 1 := by
+    have hexpect : 0 ≤
+        expect (Math.PMFIter.iter kernel m s₀) (transientCharge core) :=
+      expect_nonneg _ _ (transientCharge_nonneg core)
+    linarith [hreach s₀]
+  have hnonneg : ∀ s, 0 ≤ potential s :=
+    poissonPotential_nonneg hcore hpoisson
   have hpoint (s : S) :
       potential s ≤ (m : ℝ) + ‖potential‖ * (1 - δ) := by
     rw [poissonPotential_eq_sum_expect_add_expect_iter hpoisson m s]
@@ -465,7 +472,7 @@ theorem exists_nonnegative_poissonPotential_of_uniformCoreReach
     poissonPotential_nonneg h.property hpoisson
   refine ⟨potential, hnonneg, h.property, hpoisson, ?_⟩
   exact poissonPotential_norm_le_div
-    hδpos hδone hreach h.property hpoisson hnonneg
+    hδpos hreach h.property hpoisson
 
 end
 

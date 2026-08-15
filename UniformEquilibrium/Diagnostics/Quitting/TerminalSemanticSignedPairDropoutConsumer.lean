@@ -46,11 +46,12 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 to the displayed root opponent-incidence coordinate. -/
 theorem quittingRootCoalitionMass_le_opponentIncidenceMass_of_other_mem
     (root : ι → PMF Bool) (coalition : Finset ι) (marked other : ι)
-    (hnonempty : coalition.Nonempty) (hother : other ∈ coalition)
+    (hother : other ∈ coalition)
     (hne : other ≠ marked) :
     quittingRootCoalitionMass root coalition ≤
       quittingRootOpponentIncidenceMass marked other root := by
-  let terminal : {S : Finset ι // S.Nonempty} := ⟨coalition, hnonempty⟩
+  let terminal : {S : Finset ι // S.Nonempty} :=
+    ⟨coalition, ⟨other, hother⟩⟩
   unfold quittingRootOpponentIncidenceMass
   have hterminal : terminal ∈ Finset.univ.filter
       (fun outcome : {S : Finset ι // S.Nonempty} =>
@@ -313,8 +314,6 @@ theorem exists_signed_pairDropout_negativeMoat_or_pairReplacement
     simpa [hbestContinue] using
       (quittingRootSuccessorPayoff_bestEndpoint_sub_eq_coordinateNashDefect
         reward minimum.1 beforeRoot move.who)
-  have hbeforeNonempty : beforeCoalition.Nonempty :=
-    Finset.card_pos.mp (by omega)
   have hownerBefore : owner ∈ beforeCoalition := by
     rw [hbeforePair]
     simp
@@ -325,17 +324,12 @@ theorem exists_signed_pairDropout_negativeMoat_or_pairReplacement
       quittingRootOpponentIncidenceMass move.who owner beforeRoot := by
     exact hbeforeMass.trans_le
       (quittingRootCoalitionMass_le_opponentIncidenceMass_of_other_mem
-        beforeRoot beforeCoalition move.who owner hbeforeNonempty
-          hownerBefore hdropperNe.symm)
+        beforeRoot beforeCoalition move.who owner hownerBefore hdropperNe.symm)
   have hafterIncidence : 0 <
       quittingRootOpponentIncidenceMass move.who owner afterRoot := by
-    have hafterNonempty : afterCoalition.Nonempty := by
-      rw [hsingleton]
-      simp
     exact hafterMass.trans_le
       (quittingRootCoalitionMass_le_opponentIncidenceMass_of_other_mem
-        afterRoot afterCoalition move.who owner hafterNonempty
-          hownerAfter hdropperNe.symm)
+        afterRoot afterCoalition move.who owner hownerAfter hdropperNe.symm)
   have hquitProbability : 0 < (beforeRoot move.who true).toReal := by
     exact hbeforeMass.trans_le
       (quittingRootCoalitionMass_le_quitProbability_of_mem

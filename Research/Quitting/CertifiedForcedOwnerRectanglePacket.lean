@@ -560,7 +560,6 @@ theorem finiteCertifiedPacket_le_sameRectangleOccupation
 
 /-- Freeze one certified outsider/action label. -/
 theorem exists_fixed_finiteCertifiedForcedOwnerRectanglePacket
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (terminal : {S : Finset ι // S.Nonempty})
@@ -573,6 +572,7 @@ theorem exists_fixed_finiteCertifiedForcedOwnerRectanglePacket
         (Fintype.card (ι × Bool) : ℝ) *
           quittingFiniteCertifiedForcedOwnerRectanglePacket
             reward profile terminal owner who action cutoff := by
+  letI : Nonempty (ι × Bool) := ⟨(owner, false)⟩
   let occupation : ι × Bool → ℝ := fun label =>
     quittingFiniteCertifiedForcedOwnerRectanglePacket reward profile terminal
       owner label.1 label.2 cutoff

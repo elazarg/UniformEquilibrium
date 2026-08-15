@@ -106,9 +106,8 @@ def profile (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
 private theorem profile_eq_of_eq
     {t u : ℝ}
     (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
-    (hu0 : 0 ≤ u) (hu1 : u ≤ 1)
     (h : t = u) :
-    profile t ht0 ht1 = profile u hu0 hu1 := by
+    profile t ht0 ht1 = profile u (h ▸ ht0) (h ▸ ht1) := by
   subst u
   rfl
 
@@ -331,8 +330,6 @@ private theorem prescribedMixedProfile_eq
       congrFun
         (profile_eq_of_eq
           valid.1.le valid.2.le
-          (calendarHazard_mem_Ioo stage).1.le
-          (calendarHazard_mem_Ioo stage).2.le
           scale_eq)
         state
 

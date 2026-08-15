@@ -1454,7 +1454,7 @@ equations; positivity of all original constraints is recovered after
 projection by analytic sign stabilization.
 -/
 theorem hasAnalyticPowerCurveAt_of_frequent_squareLift_branch
-    [Finite ι] [Fintype ι] [Fintype σ]
+    [Fintype ι] [Fintype σ]
     (P : ι → MvPolynomial σ ℝ)
     (τ : SignPattern ι)
     (coordinate : Assignment σ →L[ℝ] ℝ)

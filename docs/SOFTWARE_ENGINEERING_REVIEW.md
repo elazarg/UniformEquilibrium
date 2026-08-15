@@ -181,6 +181,7 @@ python3 scripts/check_import_graph.py
 python3 scripts/check_proof_duplicates.py
 python3 scripts/check_reward_bounds.py --check --max-nonnegative 0
 python3 scripts/check_redundant_order_hypotheses.py --check
+python3 scripts/check_derivable_telescope_hypotheses.py --check
 python3 scripts/check_trust.py
 ```
 

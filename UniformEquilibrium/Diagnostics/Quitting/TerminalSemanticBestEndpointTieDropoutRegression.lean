@@ -233,8 +233,8 @@ theorem pairRoot_positiveIncidence :
     0 < quittingRootOpponentIncidenceMass false true pairRoot := by
   have hle :=
     quittingRootCoalitionMass_le_opponentIncidenceMass_of_other_mem
-      pairRoot (Finset.univ : Finset Bool) false true (by simp) (by simp)
-        (by decide)
+      pairRoot (Finset.univ : Finset Bool) false true
+        (hother := by simp) (hne := by decide)
   rw [pairRoot_pairMass] at hle
   linarith
 
@@ -242,8 +242,8 @@ theorem singletonRoot_positiveIncidence :
     0 < quittingRootOpponentIncidenceMass false true singletonRoot := by
   have hle :=
     quittingRootCoalitionMass_le_opponentIncidenceMass_of_other_mem
-      singletonRoot ({true} : Finset Bool) false true (by simp) (by simp)
-        (by decide)
+      singletonRoot ({true} : Finset Bool) false true
+        (hother := by simp) (hne := by decide)
   rw [singletonRoot_singletonMass] at hle
   linarith
 

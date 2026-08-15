@@ -156,9 +156,10 @@ namespace QuittingCounterexampleRegime
 atom.  A strict-surplus atom supplies positive mass away from every putative
 full atom. -/
 theorem normalizedSingletonPacket_mass_lt_one
-    (regime : QuittingCounterexampleRegime reward) [Nonempty ι]
+    (regime : QuittingCounterexampleRegime reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) (owner : ι) :
     packet.mass owner < 1 := by
+  letI : Nonempty ι := ⟨owner⟩
   obtain ⟨selected, hselected, hselectedLt, -, -⟩ :=
     regime.exists_active_strictSingletonRefusal packet
   by_cases heq : owner = selected

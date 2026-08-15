@@ -517,7 +517,6 @@ theorem sum_stageCoalitionMass_mul_forcedOwnerDefect_half_le_actual_add_bestRect
 /-- Freeze one outsider and one Boolean best-endpoint orientation while
 retaining a finite-player fraction of the canonical rectangle charge. -/
 theorem exists_fixed_forcedOwnerBestRectanglePassport
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
     (terminal : {S : Finset ι // S.Nonempty})
@@ -530,6 +529,7 @@ theorem exists_fixed_forcedOwnerBestRectanglePassport
         (Fintype.card (ι × Bool) : ℝ) *
           quittingFiniteForcedOwnerBestRectanglePassport
             reward profile terminal owner who action cutoff := by
+  letI : Nonempty (ι × Bool) := ⟨(owner, false)⟩
   let occupation : ι × Bool → ℝ := fun label =>
     quittingFiniteForcedOwnerBestRectanglePassport reward profile terminal
       owner label.1 label.2 cutoff

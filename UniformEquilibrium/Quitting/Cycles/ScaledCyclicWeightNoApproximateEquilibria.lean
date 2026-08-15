@@ -443,31 +443,61 @@ theorem Pkg.rotate {a b c Ua Ub Uc : ℝ} (h : Pkg a b c Ua Ub Uc) :
   · rw [hmass]; exact h.hfix_c
   · rw [hmass]; exact h.hfix_a
 
-/-- **No coordinate can equal `1`.** Mirrors the answer's exclusion "if
-`x_1 = 1` then `x_2 = 0`, forcing `x_3 = 1`, contradicting `x_1`'s own
-bound": the same three-step cascade, run on `scaledCyclicWeight`'s own
-constants. -/
+/-- **No coordinate can equal `1`.**  This follows from the package alone,
+without ambient box bounds.  At `a = 1`, its constraints reduce to three
+incompatible scalar inequalities, separated according to whether `c` lies
+below `1`, between `1` and `3 / 2`, or above `3 / 2`. -/
 theorem Pkg.case_one_impossible {a b c Ua Ub Uc : ℝ} (h : Pkg a b c Ua Ub Uc)
-    (ha0 : 0 ≤ a) (ha1 : a ≤ 1) (_hb0 : 0 ≤ b) (_hb1 : b ≤ 1)
-    (_hc0 : 0 ≤ c) (hc1 : c ≤ 1) (haeq : a = 1) : False := by
+    (haeq : a = 1) : False := by
   subst haeq
   have hUa : Ua = (1 - c) / 3 := by have := h.hfix_a; nlinarith
-  have hb : b = 0 := by
-    have hUb : Ub = (1 - b) * (3 - 2 * c) / 3 := by have := h.hfix_b; nlinarith
+  have hUb : Ub = (1 - b) * (3 - 2 * c) / 3 := by
+    have := h.hfix_b
+    nlinarith
+  have hUc : Uc = (b + c - 2 * b * c) / 3 := by
+    have := h.hfix_c
+    nlinarith
+  have hbFactor : b * (3 - 2 * c) ≤ 0 := by
     have hcb := h.hc_b
     rw [hUb] at hcb
-    nlinarith [hc1]
-  have hUc : Uc = c / 3 := by
-    have hf := h.hfix_c
-    rw [hb] at hf
     nlinarith
-  have hc1' : c = 1 := by
+  have hqFactor : 0 ≤ (1 - c) * (2 * b - 1) := by
     have hq := h.hq_c
-    rw [hb, hUc] at hq
+    rw [hUc] at hq
     nlinarith
-  have hca := h.hc_a
-  rw [hUa, hb, hc1'] at hca
-  norm_num at hca
+  have hcFactor : c * (c + 2) ≤ b * (1 + c ^ 2) := by
+    have hca := h.hc_a
+    rw [hUa] at hca
+    nlinarith
+  by_cases hcOne : c < 1
+  · have hcoefficient : 0 < 3 - 2 * c := by linarith
+    have hb : b ≤ 0 := nonpos_of_mul_nonpos_left hbFactor hcoefficient
+    have hnegative : (1 - c) * (2 * b - 1) < 0 :=
+      mul_neg_of_pos_of_neg (sub_pos.mpr hcOne) (by linarith)
+    linarith
+  · have hcOne : 1 ≤ c := le_of_not_gt hcOne
+    by_cases hcThreeHalves : c < (3 : ℝ) / 2
+    · have hcoefficient : 0 < 3 - 2 * c := by linarith
+      have hb : b ≤ 0 := nonpos_of_mul_nonpos_left hbFactor hcoefficient
+      have hleftPositive : 0 < c * (c + 2) :=
+        mul_pos (zero_lt_one.trans_le hcOne) (by linarith)
+      have hrightNonpositive : b * (1 + c ^ 2) ≤ 0 :=
+        mul_nonpos_of_nonpos_of_nonneg hb (by positivity)
+      linarith
+    · have hcThreeHalves : (3 : ℝ) / 2 ≤ c :=
+        le_of_not_gt hcThreeHalves
+      have hqFactor' : 0 ≤ (c - 1) * (1 - 2 * b) := by
+        nlinarith [hqFactor]
+      have hbHalf : b ≤ (1 : ℝ) / 2 := by
+        have := nonneg_of_mul_nonneg_right hqFactor' (by linarith)
+        linarith
+      have hrightBound :
+          b * (1 + c ^ 2) ≤ ((1 : ℝ) / 2) * (1 + c ^ 2) :=
+        mul_le_mul_of_nonneg_right hbHalf (by positivity)
+      have hstrict :
+          ((1 : ℝ) / 2) * (1 + c ^ 2) < c * (c + 2) := by
+        nlinarith [sq_nonneg c]
+      linarith
 
 /-- `\varphi(t) = t(t+2)/(1+t^2)` strictly exceeds `t` for `0 < t \le 1`
 (cleared of its denominator): equation (11)-(14)'s monotonicity fact. -/
@@ -578,12 +608,11 @@ theorem no_stationary_approxEquilibrium {x : CyclicIndex → ℝ}
   intro hp
   have hpkg := pkg_of_isGlobalApproxEquilibrium hx0 hx1 hp
   by_cases h0 : x 0 = 1
-  · exact hpkg.case_one_impossible (hx0 0) (hx1 0) (hx0 1) (hx1 1) (hx0 2) (hx1 2) h0
+  · exact hpkg.case_one_impossible h0
   by_cases h1 : x 1 = 1
-  · exact hpkg.rotate.case_one_impossible (hx0 1) (hx1 1) (hx0 2) (hx1 2) (hx0 0) (hx1 0) h1
+  · exact hpkg.rotate.case_one_impossible h1
   by_cases h2 : x 2 = 1
-  · exact hpkg.rotate.rotate.case_one_impossible
-      (hx0 2) (hx1 2) (hx0 0) (hx1 0) (hx0 1) (hx1 1) h2
+  · exact hpkg.rotate.rotate.case_one_impossible h2
   have h0' : x 0 < 1 := lt_of_le_of_ne (hx1 0) h0
   have h1' : x 1 < 1 := lt_of_le_of_ne (hx1 1) h1
   have h2' : x 2 < 1 := lt_of_le_of_ne (hx1 2) h2
