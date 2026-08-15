@@ -62,12 +62,17 @@ construction waist: a candidate mechanism is complete only after it supplies
 the uniform finite-horizon delivery and unilateral-deviation bounds encoded by
 that constructor.
 
-For finite quitting games, the preferred higher-level waist is
-`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.  It selects one bounded target
-from terminal approximate equilibria available at every positive accuracy and
-then invokes the terminal-to-uniform bridge.  Terminal verification,
-target selection, and uniformization remain separate steps in lower-level
-proofs.
+For finite quitting games, a producer that already names its payoff target
+should use
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalTargetSemantics.lean`
+and retain that target through the terminal-to-uniform bridge.  The target-free
+fallback is
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`:
+it selects one bounded target from terminal approximate equilibria available
+at every positive accuracy.  Compact target selection is not a substitute for
+an exact or convergent target already supplied by the producer.  Terminal
+verification, target selection, and uniformization remain separate steps in
+lower-level proofs.
 
 `UniformEquilibrium/Certificates/Adaptive/PotentialSystemTools.lean` is the transformation facade for the
 proof-facing adaptive-potential waist. It deliberately reuses the one
@@ -87,7 +92,7 @@ obligations.
 | Essential APS | A compact convex functional unique-live component with finite-window face avoidance, terminal-freeness, and bounds | A coherent executable path, qualitative deleted-player survival, adaptive finite meshes, and a uniform payoff for every initial component value | Does not prove that an arbitrary game has a nonempty component; pointwise full jumps remain outside the adaptive logarithmic mesh. |
 | Multi-owner face circulation | A bounded balanced circulation with positive phase ratios, one common ratio ceiling below `1`, and a payoff floor above the quitting punishment value | Arbitrarily charged finite packets and a uniform payoff by finite closing; independently, a chronological compact path | Does not construct such a circulation for every game or identify the selected target with a named certificate vertex. |
 | Punishment-completed finite cycle | An exact absorbing Nash--Bellman cycle where each coordinate either contracts in deleted survival or has punishment value at most its selected solo value | The selected phase value is a uniform-equilibrium payoff; the nonnegative-solo admissible-cycle compiler is a corollary | Does not produce an exact cycle, and does not cover an isolated coordinate whose punishment value exceeds its negative solo value. |
-| Two-player closure | An arbitrary finite two-player quitting game | Unconditional uniform-payoff existence | Does not extend the pair-repair classification to three or more players. |
+| Two-player closure | An arbitrary finite two-player quitting game | Unconditional uniform-payoff existence, with an explicit zero, owner-solo, blocker-solo, or joint-exit target in each branch | Does not extend the pair-repair classification to three or more players. |
 | Three-player closure | An arbitrary finite quitting game on `Fin 3` | Unconditional uniform-payoff existence | Does not settle four or more players or the general stochastic-game proposition. |
 
 The essential-APS and circulation families contain genuine producers relative

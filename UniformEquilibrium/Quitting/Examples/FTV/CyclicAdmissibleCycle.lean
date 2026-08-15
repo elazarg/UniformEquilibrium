@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicMinimality
 import MathUE.PMFProduct.FiniteFubini
+import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 
 /-!
@@ -440,18 +441,19 @@ equilibrium payoff `(1, 2, 1)`.**
 discharged through the absorbing-cycle carrier: the three-phase cycle of
 `FTVCyclicMinimality.standardPacket` is an absorbing exact Nash--Bellman block
 whose deviation mismatch vanishes automatically (every solo weight is `1 > 0`),
-so `exists_uniformEquilibriumPayoff_of_admissible_quittingCyclicContinuationBlock`
-applies and the realized payoff is the packet's named target.
+so the named-target admissible-cycle compiler applies directly to the packet's
+named target.
 
 What it does **not** cover: it says nothing about uniqueness of this payoff, it
 does not formalize the classical fact that this table has no stationary
-`ε`-equilibrium, and it is an instance rather than a step toward completeness
-of the zero-solo/cycle disjunction, which remains open. -/
+`ε`-equilibrium, and it is only an instance.  The zero-solo/admissible-cycle
+disjunction is not exhaustive, as formalized by
+`not_forall_isQuittingZeroSolo_or_hasAdmissibleAbsorbingQuittingCycle`. -/
 theorem isUniformEquilibriumPayoff_namedTarget :
-    (quittingGame ftvReward).IsUniformEquilibriumPayoff none namedTarget := by
-  have huniform := quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact
-    ftvReward ftvCyclicProfile isZeroAsymptoticNash_ftvCyclicProfile
-  rwa [quittingTerminalPayoff_ftvCyclicProfile] at huniform
+    (quittingGame ftvReward).IsUniformEquilibriumPayoff none namedTarget :=
+  isUniformEquilibriumPayoff_terminal_of_admissible_quittingCyclicContinuationBlock
+    ftvReward namedTarget 2 ftvBlock ftvBlock_isQuittingCyclicContinuationBlock
+    isQuittingCycleAdmissible_ftvBlockCycle
 
 /-- Existential form, obtained from the disjunctive reduction itself. -/
 theorem exists_uniformEquilibriumPayoff_ftvReward :

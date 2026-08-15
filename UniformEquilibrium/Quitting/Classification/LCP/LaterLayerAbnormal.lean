@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.LCP.FirstLayerSimple
 import UniformEquilibrium.Quitting.Cycles.ConditionedSoloExtraction
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 
 /-!
 # The later-layer corrected all-abnormal branch
@@ -496,17 +497,21 @@ theorem isεAsymptoticNash_laterAbnormalRoot
 
 /-! ## Strategic closure -/
 
-/-- A nonnegative normalized singleton column and one nonpositive owner-row
-witness yield terminal approximate equilibria at every accuracy. -/
+/-- An off-diagonally nonnegative normalized singleton column and one
+nonpositive owner-row witness yield terminal approximate equilibria at every
+accuracy.  The diagonal comparison is reflexive. -/
 theorem terminalNash_all_errors_of_nonnegative_column
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {owner blocker : ι} (hne : blocker ≠ owner)
-    (hcolumn : ∀ who, 0 ≤ normalizedSoloMatrix reward who owner)
+    (hcolumn : ∀ who, who ≠ owner →
+      0 ≤ normalizedSoloMatrix reward who owner)
     (hblocker : normalizedSoloMatrix reward owner blocker ≤ 0) :
     ∀ ε : ℝ, 0 < ε →
       ∃ profile : (quittingGame reward).BehaviorProfile,
         (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) ε profile := by
+          (quittingTerminalPayoff reward) ε profile ∧
+        ∀ who, |quittingTerminalPayoff reward profile who -
+          quittingSoloReward reward owner who| ≤ ε := by
   intro ε hε
   let M := quittingRewardBound reward
   let scale := 6 * M
@@ -532,11 +537,14 @@ theorem terminalNash_all_errors_of_nonnegative_column
   have hcolumn' : ∀ who,
       quittingSoloReward reward who who ≤ quittingSoloReward reward owner who := by
     intro who
-    have h := hcolumn who
-    rw [normalizedSoloMatrix_eq_projectiveLCPMatrix] at h
-    unfold quittingProjectiveLCPMatrix at h
-    simpa [quittingSoloReward, quittingProjectiveSingletonTerminal] using
-      sub_nonneg.mp h
+    by_cases hwho : who = owner
+    · subst who
+      exact le_rfl
+    · have h := hcolumn who hwho
+      rw [normalizedSoloMatrix_eq_projectiveLCPMatrix] at h
+      unfold quittingProjectiveLCPMatrix at h
+      simpa [quittingSoloReward, quittingProjectiveSingletonTerminal] using
+        sub_nonneg.mp h
   have hblocker' : quittingSoloReward reward blocker owner ≤
       quittingSoloReward reward owner owner := by
     rw [normalizedSoloMatrix_eq_projectiveLCPMatrix] at hblocker
@@ -544,21 +552,47 @@ theorem terminalNash_all_errors_of_nonnegative_column
     simpa [quittingSoloReward, quittingProjectiveSingletonTerminal] using
       sub_nonpos.mp hblocker
   refine ⟨quittingStationaryProfile reward
-      (laterAbnormalRoot owner blocker p hp.le hp1), ?_⟩
-  exact (isεAsymptoticNash_laterAbnormalRoot reward hne hp hp1
-    (abs_reward_le_quittingRewardBound reward) hcolumn' hblocker').mono herror.le
+      (laterAbnormalRoot owner blocker p hp.le hp1), ?_, ?_⟩
+  · exact (isεAsymptoticNash_laterAbnormalRoot reward hne hp hp1
+      (abs_reward_le_quittingRewardBound reward) hcolumn' hblocker').mono herror.le
+  · intro who
+    have hclose := abs_laterAbnormal_terminalPayoff_sub_ownerSolo_le
+      reward hne hp hp1 (abs_reward_le_quittingRewardBound reward) who
+    calc
+      |quittingTerminalPayoff reward
+            (quittingStationaryProfile reward
+              (laterAbnormalRoot owner blocker p hp.le hp1)) who -
+          quittingSoloReward reward owner who| ≤ 2 * M * p := hclose
+      _ ≤ 6 * M * p := by
+        nlinarith [mul_nonneg hM hp.le]
+      _ ≤ ε := herror.le
+
+/-- An off-diagonally nonnegative singleton column with an owner-row blocker
+retains the owner's singleton payoff as the uniform-equilibrium target. -/
+theorem isUniformEquilibriumPayoff_soloReward_of_nonnegative_column
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {owner blocker : ι} (hne : blocker ≠ owner)
+    (hcolumn : ∀ who, who ≠ owner →
+      0 ≤ normalizedSoloMatrix reward who owner)
+    (hblocker : normalizedSoloMatrix reward owner blocker ≤ 0) :
+    (quittingGame reward).IsUniformEquilibriumPayoff none
+      (quittingSoloReward reward owner) := by
+  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_approxTarget
+  exact terminalNash_all_errors_of_nonnegative_column
+    reward hne hcolumn hblocker
 
 /-- The same matrix hypotheses yield a uniform-equilibrium payoff. -/
 theorem exists_uniformEquilibriumPayoff_of_nonnegative_column
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {owner blocker : ι} (hne : blocker ≠ owner)
-    (hcolumn : ∀ who, 0 ≤ normalizedSoloMatrix reward who owner)
+    (hcolumn : ∀ who, who ≠ owner →
+      0 ≤ normalizedSoloMatrix reward who owner)
     (hblocker : normalizedSoloMatrix reward owner blocker ≤ 0) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
-  exact terminalNash_all_errors_of_nonnegative_column
-    reward hne hcolumn hblocker
+  exact ⟨quittingSoloReward reward owner,
+    isUniformEquilibriumPayoff_soloReward_of_nonnegative_column
+      reward hne hcolumn hblocker⟩
 
 /-- **Later-layer all-abnormal producer.**  Empty corrected normal core always
 produces a uniform-equilibrium payoff.  The empty-first-layer case uses the
@@ -580,9 +614,12 @@ theorem exists_uniformEquilibriumPayoff_of_allPlayersAbnormal
     obtain ⟨blocker, hne, hblocker⟩ :=
       exists_firstLayer_blocker_of_mem_normalLayer
         (normalizedSoloMatrix reward) hlast howner
-    have hcolumn := nonnegative_column_of_last_normalLayer
-      (normalizedSoloMatrix reward)
-      (normalizedSoloMatrix_diagonal reward) hnext howner
+    have hcolumn : ∀ who, who ≠ owner →
+        0 ≤ normalizedSoloMatrix reward who owner := by
+      intro who _
+      exact nonnegative_column_of_last_normalLayer
+        (normalizedSoloMatrix reward)
+        (normalizedSoloMatrix_diagonal reward) hnext howner who
     exact exists_uniformEquilibriumPayoff_of_nonnegative_column
       reward hne hcolumn hblocker
 

@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingleton
 import MathUE.PMFProduct.FiniteFubini
-import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
+import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 import Mathlib.Analysis.Calculus.Deriv.MeanValue
 import Mathlib.Analysis.Calculus.Deriv.Pow
 import Mathlib.Topology.Order.IntermediateValue
@@ -763,10 +763,11 @@ theorem periodTwoProfile_terminalPayoff :
 /-- The period-two completion has the exact uniform-equilibrium payoff
 `(1,1/b,1,1/a)` in the shifted normalization. -/
 theorem periodTwo_isUniformEquilibriumPayoff :
-    (quittingGame periodTwoReward).IsUniformEquilibriumPayoff none oddValue := by
-  have h := quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact
-    periodTwoReward periodTwoProfile periodTwoProfile_isExactTerminalNash
-  rwa [periodTwoProfile_terminalPayoff] at h
+    (quittingGame periodTwoReward).IsUniformEquilibriumPayoff none oddValue :=
+  isUniformEquilibriumPayoff_terminal_of_admissible_quittingCyclicContinuationBlock
+    periodTwoReward oddValue 1 periodTwoBlock
+      periodTwoBlock_isQuittingCyclicContinuationBlock
+      periodTwoBlockCycle_isAdmissible
 
 end FourPlayerPairedSingleton
 end GameTheory

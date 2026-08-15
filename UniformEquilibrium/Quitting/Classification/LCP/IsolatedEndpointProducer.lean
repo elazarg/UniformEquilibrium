@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.LCP.LaterLayerAbnormal
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 import GameTheory.Concepts.Stochastic.Models.Quitting.RootPerturbation
 
 /-!
@@ -311,7 +312,9 @@ theorem terminalNash_all_errors_of_isolatedEndpoint
     ∀ epsilon : ℝ, 0 < epsilon →
       ∃ profile : (quittingGame reward).BehaviorProfile,
         (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) epsilon profile := by
+          (quittingTerminalPayoff reward) epsilon profile ∧
+        ∀ who, |quittingTerminalPayoff reward profile who -
+          quittingSoloReward reward owner who| ≤ epsilon := by
   intro epsilon hepsilon
   let M := quittingRewardBound reward
   let coefficient := 2 * M + 2 * M / (hazard true).toReal
@@ -335,7 +338,7 @@ theorem terminalNash_all_errors_of_isolatedEndpoint
   let root := isolatedEndpointThreatRoot owner blocker hazard eta heta.le heta1
   let payoff := fun who => quittingTerminalPayoff reward
     (quittingStationaryProfile reward root) who
-  refine ⟨quittingStationaryProfile reward root, ?_⟩
+  refine ⟨quittingStationaryProfile reward root, ?_, ?_⟩
   have hnashCoefficient :
       (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) (coefficient * eta)
@@ -470,7 +473,44 @@ theorem terminalNash_all_errors_of_isolatedEndpoint
               reward root who hcontinue]
             exact le_add_of_nonneg_right
               (mul_nonneg hcoefficient heta.le)
-  exact hnashCoefficient.mono herror.le
+  · exact hnashCoefficient.mono herror.le
+  · intro who
+    have hclose :=
+      abs_isolatedEndpointThreat_terminalPayoff_sub_ownerSolo_le
+        reward hne hazard heta heta1 howner
+        (abs_reward_le_quittingRewardBound reward) who
+    calc
+      |quittingTerminalPayoff reward
+            (quittingStationaryProfile reward root) who -
+          quittingSoloReward reward owner who| ≤
+          2 * M * eta / (hazard true).toReal := hclose
+      _ ≤ coefficient * eta := by
+        dsimp only [coefficient]
+        have hnonneg : 0 ≤ 2 * M * eta := by positivity
+        calc
+          2 * M * eta / (hazard true).toReal ≤
+              2 * M * eta + 2 * M * eta / (hazard true).toReal :=
+            le_add_of_nonneg_left hnonneg
+          _ = (2 * M + 2 * M / (hazard true).toReal) * eta := by
+            ring
+      _ ≤ epsilon := herror.le
+
+/-- The repaired isolated endpoint retains the owner's singleton payoff as
+the uniform-equilibrium target. -/
+theorem isUniformEquilibriumPayoff_soloReward_of_isolatedEndpoint
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {owner blocker : ι} (hne : blocker ≠ owner) (hazard : PMF Bool)
+    (howner : 0 < (hazard true).toReal)
+    (hnash : IsεQuittingRootEndpointNash reward
+      (quittingSoloReward reward owner) 0
+      (quittingSoloStationaryRoot owner hazard))
+    (hblocker : quittingSoloReward reward blocker owner ≤
+      quittingSoloReward reward owner owner) :
+    (quittingGame reward).IsUniformEquilibriumPayoff none
+      (quittingSoloReward reward owner) := by
+  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_approxTarget
+  exact terminalNash_all_errors_of_isolatedEndpoint
+    reward hne hazard howner hnash hblocker
 
 /-- Strategic closure of the isolated endpoint repair. -/
 theorem exists_uniformEquilibriumPayoff_of_isolatedEndpoint
@@ -484,9 +524,9 @@ theorem exists_uniformEquilibriumPayoff_of_isolatedEndpoint
       quittingSoloReward reward owner owner) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
-  exact terminalNash_all_errors_of_isolatedEndpoint
-    reward hne hazard howner hnash hblocker
+  exact ⟨quittingSoloReward reward owner,
+    isUniformEquilibriumPayoff_soloReward_of_isolatedEndpoint
+      reward hne hazard howner hnash hblocker⟩
 
 end QuittingLCPClassification
 end GameTheory

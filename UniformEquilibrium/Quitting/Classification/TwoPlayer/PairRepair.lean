@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 import UniformEquilibrium.Examples.BigMatch.Basic
 
 /-!
@@ -18,8 +19,8 @@ Player two quits surely.  Player one quits with a small positive hazard `p`.
 If player one weakly prefers player two's solo exit to joining it, and player
 two weakly prefers its own solo exit to waiting for player one's solo exit,
 then the stationary profile is a terminal approximate equilibrium.  Its
-error is linear in `p`, so the game has terminal approximate equilibria at
-every accuracy and hence a uniform-equilibrium payoff.
+error and its distance from player two's solo payoff are linear in `p`, so
+that solo payoff is a uniform-equilibrium payoff.
 
 This theorem is genuinely two-player.  With a simultaneous terminal set of
 three or more players, making the whole set quit surely creates additional
@@ -284,6 +285,45 @@ theorem pairRepairError_nonneg
   unfold pairRepairError
   positivity
 
+/-- The pair-repair profile's terminal payoff is coordinatewise within its
+strategic error of the sure blocker's solo payoff vector. -/
+theorem abs_terminalPayoff_pairRoot_sub_soloReward_le_pairRepairError
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
+    (howner : quittingSingletonCollisionReward reward true false ≤
+      quittingSoloReward reward true false)
+    (who : Bool) :
+    |quittingTerminalPayoff reward
+          (quittingStationaryProfile reward (pairRoot p hp0 hp1)) who -
+        quittingSoloReward reward true who| ≤
+      pairRepairError reward p := by
+  rw [terminalPayoff_pairRoot]
+  cases who
+  · simp only [Bool.false_eq_true, ↓reduceIte]
+    rw [show
+      (1 - p) * quittingSoloReward reward true false +
+            p * quittingSingletonCollisionReward reward true false -
+          quittingSoloReward reward true false =
+        p * (quittingSingletonCollisionReward reward true false -
+          quittingSoloReward reward true false) by ring,
+      abs_mul, abs_of_nonneg hp0,
+      abs_of_nonpos (sub_nonpos.mpr howner)]
+    have habs := abs_nonneg
+      (quittingSingletonCollisionReward reward false true -
+        quittingSoloReward reward true true)
+    unfold pairRepairError
+    nlinarith [mul_nonneg hp0 habs]
+  · simp only [if_true]
+    rw [show
+      (1 - p) * quittingSoloReward reward true true +
+            p * quittingSingletonCollisionReward reward false true -
+          quittingSoloReward reward true true =
+        p * (quittingSingletonCollisionReward reward false true -
+          quittingSoloReward reward true true) by ring,
+      abs_mul, abs_of_nonneg hp0]
+    unfold pairRepairError
+    nlinarith [mul_nonneg hp0 (sub_nonneg.mpr howner)]
+
 /-- **Two-player pair repair.**  The sure-blocker/vanishing-owner root caps
 every behavioral unilateral deviation with error linear in `p`. -/
 theorem isεAsymptoticNash_pairRoot
@@ -327,8 +367,8 @@ theorem isεAsymptoticNash_pairRoot
           (sub_nonneg.mpr howner)]
 
 /-- The pair-repair hypotheses give terminal approximate equilibria at every
-positive accuracy. -/
-theorem exists_terminalNash_all_errors_of_pairRepair
+positive accuracy whose payoffs approach the sure blocker's solo payoff. -/
+theorem exists_terminalNash_approxTarget_all_errors_of_pairRepair
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
     (howner : quittingSingletonCollisionReward reward true false ≤
       quittingSoloReward reward true false)
@@ -337,7 +377,10 @@ theorem exists_terminalNash_all_errors_of_pairRepair
     ∀ ε : ℝ, 0 < ε →
       ∃ profile : (quittingGame reward).BehaviorProfile,
         (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) ε profile := by
+            (quittingTerminalPayoff reward) ε profile ∧
+          ∀ who,
+            |quittingTerminalPayoff reward profile who -
+              quittingSoloReward reward true who| ≤ ε := by
   intro ε hε
   let scale :=
     (quittingSoloReward reward true false -
@@ -357,11 +400,47 @@ theorem exists_terminalNash_all_errors_of_pairRepair
     rw [div_mul_eq_mul_div, div_lt_iff₀ hden]
     nlinarith
   refine ⟨quittingStationaryProfile reward
-      (pairRoot p hp.le hp1), ?_⟩
-  exact (isεAsymptoticNash_pairRoot reward p hp1 hp
-    howner hblocker).mono herror.le
+      (pairRoot p hp.le hp1),
+    (isεAsymptoticNash_pairRoot reward p hp1 hp
+      howner hblocker).mono herror.le, ?_⟩
+  intro who
+  exact (abs_terminalPayoff_pairRoot_sub_soloReward_le_pairRepairError
+    reward p hp.le hp1 howner who).trans herror.le
 
-/-- The pair-repair branch yields a uniform-equilibrium payoff. -/
+/-- The pair-repair hypotheses give terminal approximate equilibria at every
+positive accuracy. -/
+theorem exists_terminalNash_all_errors_of_pairRepair
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (howner : quittingSingletonCollisionReward reward true false ≤
+      quittingSoloReward reward true false)
+    (hblocker : quittingSoloReward reward false true ≤
+      quittingSoloReward reward true true) :
+    ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame reward).BehaviorProfile,
+        (quittingGame reward).IsεAsymptoticNash
+          (quittingTerminalPayoff reward) ε profile := by
+  intro ε hε
+  obtain ⟨profile, hnash, _⟩ :=
+    exists_terminalNash_approxTarget_all_errors_of_pairRepair
+      reward howner hblocker ε hε
+  exact ⟨profile, hnash⟩
+
+/-- The fixed payoff delivered by pair repair is the sure blocker's solo
+reward vector. -/
+theorem quittingGame_isUniformEquilibriumPayoff_of_pairRepair
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (howner : quittingSingletonCollisionReward reward true false ≤
+      quittingSoloReward reward true false)
+    (hblocker : quittingSoloReward reward false true ≤
+      quittingSoloReward reward true true) :
+    (quittingGame reward).IsUniformEquilibriumPayoff none
+      (quittingSoloReward reward true) := by
+  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_approxTarget
+  exact exists_terminalNash_approxTarget_all_errors_of_pairRepair
+    reward howner hblocker
+
+/-- Existential compatibility wrapper for the fixed-target pair-repair
+theorem. -/
 theorem exists_uniformEquilibriumPayoff_of_pairRepair
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
     (howner : quittingSingletonCollisionReward reward true false ≤
@@ -370,8 +449,9 @@ theorem exists_uniformEquilibriumPayoff_of_pairRepair
       quittingSoloReward reward true true) :
     ∃ payoff : Payoff Bool,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
-  exact exists_terminalNash_all_errors_of_pairRepair reward howner hblocker
+  exact ⟨quittingSoloReward reward true,
+    quittingGame_isUniformEquilibriumPayoff_of_pairRepair
+      reward howner hblocker⟩
 
 /-! ## Role reversal and the role-parametric statement -/
 
@@ -596,6 +676,45 @@ private theorem mirrorPairRepairError_nonneg
   unfold mirrorPairRepairError
   positivity
 
+/-- The role-reversed pair-repair profile is coordinatewise within its
+strategic error of the sure blocker's solo payoff vector. -/
+theorem abs_terminalPayoff_mirrorPairRoot_sub_soloReward_le_pairRepairError
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
+    (howner : quittingSingletonCollisionReward reward false true ≤
+      quittingSoloReward reward false true)
+    (who : Bool) :
+    |quittingTerminalPayoff reward
+          (quittingStationaryProfile reward (mirrorPairRoot p hp0 hp1)) who -
+        quittingSoloReward reward false who| ≤
+      mirrorPairRepairError reward p := by
+  rw [terminalPayoff_mirrorPairRoot]
+  cases who
+  · simp only [Bool.false_eq_true, ↓reduceIte]
+    rw [show
+      (1 - p) * quittingSoloReward reward false false +
+            p * quittingSingletonCollisionReward reward true false -
+          quittingSoloReward reward false false =
+        p * (quittingSingletonCollisionReward reward true false -
+          quittingSoloReward reward false false) by ring,
+      abs_mul, abs_of_nonneg hp0]
+    unfold mirrorPairRepairError
+    nlinarith [mul_nonneg hp0 (sub_nonneg.mpr howner)]
+  · simp only [if_true]
+    rw [show
+      (1 - p) * quittingSoloReward reward false true +
+            p * quittingSingletonCollisionReward reward false true -
+          quittingSoloReward reward false true =
+        p * (quittingSingletonCollisionReward reward false true -
+          quittingSoloReward reward false true) by ring,
+      abs_mul, abs_of_nonneg hp0,
+      abs_of_nonpos (sub_nonpos.mpr howner)]
+    have habs := abs_nonneg
+      (quittingSingletonCollisionReward reward true false -
+        quittingSoloReward reward false false)
+    unfold mirrorPairRepairError
+    nlinarith [mul_nonneg hp0 habs]
+
 private theorem isεAsymptoticNash_mirrorPairRoot
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
     (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
@@ -635,9 +754,9 @@ private theorem isεAsymptoticNash_mirrorPairRoot
       unfold mirrorPairRepairError
       nlinarith [mul_nonneg hp.le habs]
 
-/-- The role-reversed pair repair also gives terminal approximate equilibria
-at every positive accuracy. -/
-theorem exists_terminalNash_all_errors_of_mirrorPairRepair
+/-- The role-reversed pair repair gives terminal approximate equilibria whose
+payoffs approach the sure blocker's solo payoff. -/
+theorem exists_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
     (howner : quittingSingletonCollisionReward reward false true ≤
       quittingSoloReward reward false true)
@@ -646,7 +765,10 @@ theorem exists_terminalNash_all_errors_of_mirrorPairRepair
     ∀ ε : ℝ, 0 < ε →
       ∃ profile : (quittingGame reward).BehaviorProfile,
         (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) ε profile := by
+            (quittingTerminalPayoff reward) ε profile ∧
+          ∀ who,
+            |quittingTerminalPayoff reward profile who -
+              quittingSoloReward reward false who| ≤ ε := by
   intro ε hε
   let scale :=
     (quittingSoloReward reward false true -
@@ -666,10 +788,48 @@ theorem exists_terminalNash_all_errors_of_mirrorPairRepair
     rw [div_mul_eq_mul_div, div_lt_iff₀ hden]
     nlinarith
   refine ⟨quittingStationaryProfile reward
-      (mirrorPairRoot p hp.le hp1), ?_⟩
-  exact (isεAsymptoticNash_mirrorPairRoot reward p hp1 hp
-    howner hblocker).mono herror.le
+      (mirrorPairRoot p hp.le hp1),
+    (isεAsymptoticNash_mirrorPairRoot reward p hp1 hp
+      howner hblocker).mono herror.le, ?_⟩
+  intro who
+  exact
+    (abs_terminalPayoff_mirrorPairRoot_sub_soloReward_le_pairRepairError
+      reward p hp.le hp1 howner who).trans herror.le
 
+/-- The role-reversed pair repair also gives terminal approximate equilibria
+at every positive accuracy. -/
+theorem exists_terminalNash_all_errors_of_mirrorPairRepair
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (howner : quittingSingletonCollisionReward reward false true ≤
+      quittingSoloReward reward false true)
+    (hblocker : quittingSoloReward reward true false ≤
+      quittingSoloReward reward false false) :
+    ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame reward).BehaviorProfile,
+        (quittingGame reward).IsεAsymptoticNash
+          (quittingTerminalPayoff reward) ε profile := by
+  intro ε hε
+  obtain ⟨profile, hnash, _⟩ :=
+    exists_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
+      reward howner hblocker ε hε
+  exact ⟨profile, hnash⟩
+
+/-- The fixed payoff delivered by role-reversed pair repair is the sure
+blocker's solo reward vector. -/
+theorem quittingGame_isUniformEquilibriumPayoff_of_mirrorPairRepair
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (howner : quittingSingletonCollisionReward reward false true ≤
+      quittingSoloReward reward false true)
+    (hblocker : quittingSoloReward reward true false ≤
+      quittingSoloReward reward false false) :
+    (quittingGame reward).IsUniformEquilibriumPayoff none
+      (quittingSoloReward reward false) := by
+  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_approxTarget
+  exact exists_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
+    reward howner hblocker
+
+/-- Existential compatibility wrapper for the fixed-target role-reversed
+pair-repair theorem. -/
 theorem exists_uniformEquilibriumPayoff_of_mirrorPairRepair
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
     (howner : quittingSingletonCollisionReward reward false true ≤
@@ -678,12 +838,56 @@ theorem exists_uniformEquilibriumPayoff_of_mirrorPairRepair
       quittingSoloReward reward false false) :
     ∃ payoff : Payoff Bool,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
-  exact exists_terminalNash_all_errors_of_mirrorPairRepair
-    reward howner hblocker
+  exact ⟨quittingSoloReward reward false,
+    quittingGame_isUniformEquilibriumPayoff_of_mirrorPairRepair
+      reward howner hblocker⟩
 
-/-- Role-parametric two-player pair repair.  The owner uses a vanishing
-hazard and `!owner` quits surely. -/
+/-- Role-parametric quantitative pair repair.  At every positive accuracy,
+one terminal approximate equilibrium is coordinatewise close to the sure
+blocker's solo reward vector. -/
+theorem exists_terminalNash_approxTarget_all_errors_of_bool_pairRepair
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (owner : Bool)
+    (howner : quittingSingletonCollisionReward reward (!owner) owner ≤
+      quittingSoloReward reward (!owner) owner)
+    (hblocker : quittingSoloReward reward owner (!owner) ≤
+      quittingSoloReward reward (!owner) (!owner)) :
+    ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame reward).BehaviorProfile,
+        (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) ε profile ∧
+          ∀ who,
+            |quittingTerminalPayoff reward profile who -
+              quittingSoloReward reward (!owner) who| ≤ ε := by
+  cases owner
+  · intro ε hε
+    obtain ⟨profile, hnash, hclose⟩ :=
+      exists_terminalNash_approxTarget_all_errors_of_pairRepair
+        reward howner hblocker ε hε
+    exact ⟨profile, hnash, fun who ↦ by simpa using hclose who⟩
+  · intro ε hε
+    obtain ⟨profile, hnash, hclose⟩ :=
+      exists_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
+        reward howner hblocker ε hε
+    exact ⟨profile, hnash, fun who ↦ by simpa using hclose who⟩
+
+/-- Role-parametric fixed-target two-player pair repair.  The owner uses a
+vanishing hazard, `!owner` quits surely, and the latter's solo reward vector
+is the resulting uniform-equilibrium payoff. -/
+theorem quittingGame_isUniformEquilibriumPayoff_of_bool_pairRepair
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (owner : Bool)
+    (howner : quittingSingletonCollisionReward reward (!owner) owner ≤
+      quittingSoloReward reward (!owner) owner)
+    (hblocker : quittingSoloReward reward owner (!owner) ≤
+      quittingSoloReward reward (!owner) (!owner)) :
+    (quittingGame reward).IsUniformEquilibriumPayoff none
+      (quittingSoloReward reward (!owner)) := by
+  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_approxTarget
+  exact exists_terminalNash_approxTarget_all_errors_of_bool_pairRepair
+    reward owner howner hblocker
+
+/-- Existential compatibility wrapper for role-parametric pair repair. -/
 theorem exists_uniformEquilibriumPayoff_of_bool_pairRepair
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
     (owner : Bool)
@@ -693,11 +897,9 @@ theorem exists_uniformEquilibriumPayoff_of_bool_pairRepair
       quittingSoloReward reward (!owner) (!owner)) :
     ∃ payoff : Payoff Bool,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  cases owner
-  · simpa using exists_uniformEquilibriumPayoff_of_pairRepair
-      reward howner hblocker
-  · simpa using exists_uniformEquilibriumPayoff_of_mirrorPairRepair
-      reward howner hblocker
+  exact ⟨quittingSoloReward reward (!owner),
+    quittingGame_isUniformEquilibriumPayoff_of_bool_pairRepair
+      reward owner howner hblocker⟩
 
 end QuittingTwoPlayerPairRepair
 

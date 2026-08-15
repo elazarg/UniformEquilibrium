@@ -9,6 +9,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.LaterLayerAbnormal
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.SingletonMixtureCompiler
 import UniformEquilibrium.Quitting.Circulation.DirectionBarycenter
 import UniformEquilibrium.Quitting.Cycles.ConditionedDiffuseStrategicRescaling
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 
 /-!
 # The corrected homogeneous LCP branch: algebra and strategic boundary
@@ -636,14 +637,14 @@ theorem isεAsymptoticNash_homogeneousScaledRoot_of_nonvertex
       quittingSingletonMixture reward weight.val who =
         reward (quittingSingletonTerminal who) who)
     (hnonvertex : ∀ who, weight.val who < 1) :
-    ∃ root : ι → PMF Bool,
-      (quittingGame reward).IsεAsymptoticNash
-        (quittingTerminalPayoff reward)
-        (12 * quittingRewardBound reward * scale)
-        (quittingStationaryProfile reward root) := by
+    (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward)
+      (12 * quittingRewardBound reward * scale)
+      (quittingStationaryProfile reward
+        (homogeneousScaledRoot weight scale hscale.le
+          (hscaleHalf.trans (by norm_num)))) := by
   let root := homogeneousScaledRoot weight scale hscale.le
     (hscaleHalf.trans (by norm_num))
-  refine ⟨root, ?_⟩
   have hcontracts : ∀ who,
       quittingStationaryFixedOpponentsContinueMass root who < 1 := by
     dsimp only [root]
@@ -690,7 +691,9 @@ theorem terminalNash_all_errors_of_nonvertexHomogeneousWitness
     ∀ ε : ℝ, 0 < ε →
       ∃ profile : (quittingGame reward).BehaviorProfile,
         (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) ε profile := by
+          (quittingTerminalPayoff reward) ε profile ∧
+        ∀ who, |quittingTerminalPayoff reward profile who -
+          quittingSingletonMixture reward weight.val who| ≤ ε := by
   obtain ⟨hmixFloor, hactivePinned⟩ :=
     fullHomogeneousWitness_singletonMixture reward weight
       hresidual hcomplementary
@@ -710,14 +713,42 @@ theorem terminalNash_all_errors_of_nonvertexHomogeneousWitness
       (12 * M * ε) / (24 * M + 2 * ε) by ring]
     rw [div_lt_iff₀ hden]
     nlinarith [mul_pos hε hε]
-  obtain ⟨root, hnash⟩ :=
-    isεAsymptoticNash_homogeneousScaledRoot_of_nonvertex
-      reward weight hscale hscaleHalf hmixFloor hactivePinned hnonvertex
-  refine ⟨quittingStationaryProfile reward root, ?_⟩
-  exact hnash.mono herror.le
+  let root := homogeneousScaledRoot weight scale hscale.le
+    (hscaleHalf.trans (by norm_num))
+  have hnash := isεAsymptoticNash_homogeneousScaledRoot_of_nonvertex
+    reward weight hscale hscaleHalf hmixFloor hactivePinned hnonvertex
+  refine ⟨quittingStationaryProfile reward root, ?_, ?_⟩
+  · exact hnash.mono herror.le
+  · intro who
+    have hclose := abs_homogeneousScaledRoot_terminalPayoff_sub_mixture_le
+      reward weight hscale hscaleHalf who
+    calc
+      |quittingTerminalPayoff reward
+            (quittingStationaryProfile reward root) who -
+          quittingSingletonMixture reward weight.val who| ≤
+          6 * M * scale := hclose
+      _ ≤ 12 * M * scale := by
+        nlinarith [mul_nonneg hM hscale.le]
+      _ ≤ ε := herror.le
 
-/-- A non-vertex homogeneous witness produces an ordinary uniform-equilibrium
-payoff by the terminal approximate-equilibrium consumer. -/
+/-- A non-vertex homogeneous witness retains its singleton mixture as the
+uniform-equilibrium target. -/
+theorem isUniformEquilibriumPayoff_singletonMixture_of_nonvertexHomogeneousWitness
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (weight : stdSimplex ℝ ι)
+    (hresidual : ∀ who,
+      0 ≤ singletonLCPResidual (normalizedSoloMatrix reward) weight who)
+    (hcomplementary : ∀ who,
+      weight.val who *
+        singletonLCPResidual (normalizedSoloMatrix reward) weight who = 0)
+    (hnonvertex : ∀ who, weight.val who < 1) :
+    (quittingGame reward).IsUniformEquilibriumPayoff none
+      (quittingSingletonMixture reward weight.val) := by
+  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_approxTarget
+  exact terminalNash_all_errors_of_nonvertexHomogeneousWitness
+    reward weight hresidual hcomplementary hnonvertex
+
+/-- A non-vertex homogeneous witness produces a uniform-equilibrium payoff. -/
 theorem exists_uniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (weight : stdSimplex ℝ ι)
@@ -729,9 +760,9 @@ theorem exists_uniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
     (hnonvertex : ∀ who, weight.val who < 1) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
-  exact terminalNash_all_errors_of_nonvertexHomogeneousWitness
-    reward weight hresidual hcomplementary hnonvertex
+  exact ⟨quittingSingletonMixture reward weight.val,
+    isUniformEquilibriumPayoff_singletonMixture_of_nonvertexHomogeneousWitness
+      reward weight hresidual hcomplementary hnonvertex⟩
 
 omit [DecidableEq ι] in
 /-- A simplex coordinate of mass one turns its homogeneous LCP residual into
@@ -806,8 +837,8 @@ theorem exists_uniformEquilibriumPayoff_of_homogeneousMatrixBranch
     obtain ⟨blocker, hne, hblocker⟩ :=
       exists_firstLayer_blocker_of_mem_normalLayer matrix (last := 1)
         (by norm_num) ((mem_normalCore matrix owner).1 hownerCore 1)
-    have hcolumn : ∀ who, 0 ≤ matrix who owner := by
-      intro who
+    have hcolumn : ∀ who, who ≠ owner → 0 ≤ matrix who owner := by
+      intro who _
       rw [← singletonLCPResidual_eq_column_of_weight_eq_one
         matrix fullWeight howner who]
       exact hfullResidual who

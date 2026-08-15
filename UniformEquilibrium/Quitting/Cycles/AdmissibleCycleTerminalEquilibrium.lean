@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Debt.Dynamic.CyclePinnedDebt
 import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
-import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
+import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 
 /-!
 # An admissible absorbing cycle carries a terminal approximate equilibrium
@@ -16,13 +16,13 @@ an `IsQuittingCyclicContinuationBlock`, i.e. a finite exact Nash--Bellman block
 which reproduces its own value at its origin and absorbs at some stage.
 This file closes the remaining arrow of the conditional: *an admissible
 absorbing block generates a behavior profile which is a terminal approximate
-equilibrium at every accuracy*, in exactly the sense the landed
-terminal-to-uniform consumer
-`quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors`
-requires, namely
-`(quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward) ε`.
-That predicate quantifies over **all** behavioral deviations of the deviating
-player, so nothing below is restricted to stopping-time deviations.
+equilibrium at every accuracy and realizes the block's supplied terminal
+target*.  Exact terminal Nash feeds the terminal-to-uniform compiler
+`quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact`; realization
+then identifies the compiler's payoff with the supplied target.
+The terminal Nash predicate quantifies over **all** behavioral deviations of
+the deviating player, so nothing below is restricted to stopping-time
+deviations.
 
 The infinite object is supplied at the *profile* level rather than at the
 prescribed-value level: `quittingCyclicRootSequence` reads the block's rows
@@ -508,8 +508,7 @@ theorem isZeroAsymptoticNash_quittingCyclicContinuationBlockProfile
 
 /-- **The conditional theorem, accuracy form.**  An admissible absorbing cyclic
 continuation block yields a terminal `ε`-Nash behavior profile at every positive
-accuracy -- the exact predicate consumed by
-`quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors`. -/
+accuracy. -/
 theorem exists_isεAsymptoticNash_of_admissible_quittingCyclicContinuationBlock
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (terminal : Payoff ι)
     (period : ℕ) (block : QuittingFiniteNashBellmanPath ι (period + 1))
@@ -543,11 +542,26 @@ theorem quittingTerminalPayoff_quittingCyclicContinuationBlockProfile
   rw [quittingCyclicContinuationBlockProfile,
     quittingTerminalPayoff_cyclicBehaviorProfile, ← hvalue, horigin]
 
-/-- **The chain to a uniform equilibrium payoff.**  Composing the conditional
-theorem with the landed terminal-to-uniform selection
-`quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors`:
-a weight admitting an admissible absorbing cyclic continuation block has a
-uniform equilibrium payoff.
+/-- **The exact-target chain to a uniform equilibrium payoff.**  The phase-zero
+profile is exact terminal Nash and realizes the block's supplied `terminal`,
+so the exact terminal compiler shows that this literal vector is a
+uniform-equilibrium payoff.  No compact payoff selection is needed. -/
+theorem isUniformEquilibriumPayoff_terminal_of_admissible_quittingCyclicContinuationBlock
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (terminal : Payoff ι)
+    (period : ℕ) (block : QuittingFiniteNashBellmanPath ι (period + 1))
+    (hblock : IsQuittingCyclicContinuationBlock reward terminal (period + 1) block)
+    (hadmissible : IsQuittingCycleAdmissible reward
+      (quittingCyclicContinuationBlockCycle period block)) :
+    (quittingGame reward).IsUniformEquilibriumPayoff none terminal := by
+  rw [← quittingTerminalPayoff_quittingCyclicContinuationBlockProfile
+    reward terminal period block hblock]
+  exact quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact reward _
+    (isZeroAsymptoticNash_quittingCyclicContinuationBlockProfile reward terminal
+      period block hblock hadmissible 0)
+
+/-- **The existential chain to a uniform equilibrium payoff.**  A weight
+admitting an admissible absorbing cyclic continuation block has a uniform
+equilibrium payoff, namely the block's supplied `terminal`.
 
 `HEADLINE` — the conditional half of the finite-quitting reduction. Together
 with the zero-solo disjunct this is the whole path from a cycle to the
@@ -561,11 +575,23 @@ theorem exists_uniformEquilibriumPayoff_of_admissible_quittingCyclicContinuation
       (quittingCyclicContinuationBlockCycle period block)) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
-  quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors reward
-    (fun ε hε ↦ exists_isεAsymptoticNash_of_admissible_quittingCyclicContinuationBlock
-      reward terminal period block hblock hadmissible ε hε)
+  ⟨terminal,
+    isUniformEquilibriumPayoff_terminal_of_admissible_quittingCyclicContinuationBlock
+      reward terminal period block hblock hadmissible⟩
 
-/-! ## The structural (wrapper-level) consumer -/
+/-! ## The structural (wrapper-level) consumers -/
+
+/-- **The wrapper-level exact-target theorem.**  An admissible realized
+continuation makes its supplied terminal vector a uniform-equilibrium payoff.
+The wrapper makes the block's absorption witness structurally mandatory. -/
+theorem isUniformEquilibriumPayoff_terminal_of_admissible_quittingRealizedContinuation
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (terminal : Payoff ι)
+    (rc : QuittingRealizedContinuation reward terminal)
+    (hadmissible : IsQuittingCycleAdmissible reward
+      (quittingCyclicContinuationBlockCycle rc.period rc.block)) :
+    (quittingGame reward).IsUniformEquilibriumPayoff none terminal :=
+  isUniformEquilibriumPayoff_terminal_of_admissible_quittingCyclicContinuationBlock
+    reward terminal rc.period rc.block rc.isQuittingCyclicContinuationBlock hadmissible
 
 /-- **The wrapper-level form of the chain to a uniform equilibrium payoff.**
 Identical conclusion to
@@ -585,8 +611,9 @@ theorem exists_uniformEquilibriumPayoff_of_admissible_quittingRealizedContinuati
       (quittingCyclicContinuationBlockCycle rc.period rc.block)) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
-  exists_uniformEquilibriumPayoff_of_admissible_quittingCyclicContinuationBlock
-    reward terminal rc.period rc.block rc.isQuittingCyclicContinuationBlock hadmissible
+  ⟨terminal,
+    isUniformEquilibriumPayoff_terminal_of_admissible_quittingRealizedContinuation
+      reward terminal rc hadmissible⟩
 
 namespace QuittingBoundedSurgeryDescentCounterexample
 

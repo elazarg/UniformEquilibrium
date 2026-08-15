@@ -29,7 +29,8 @@ the repository except for the joint-exit branch built below.
   end fails too, which forces `r_blocker({owner}) ≤ r_blocker({blocker})`.
   If additionally `r_owner({owner,blocker}) ≤ r_owner({blocker})`, the landed
   two-player pair repair applies: the blocker quits surely, the owner quits at
-  a vanishing rate (`exists_uniformEquilibriumPayoff_of_bool_pairRepair`).
+  a vanishing rate, and the fixed payoff target is the blocker's solo reward
+  vector (`quittingGame_isUniformEquilibriumPayoff_of_bool_pairRepair`).
 * **Joint exit.**  In the remaining case `r_owner({blocker})` is *below*
   `r_owner({owner,blocker})`, and `p = 1`'s failure already gave
   `r_blocker({owner}) ≤ r_blocker({owner,blocker})`.  Both players quitting
@@ -267,14 +268,14 @@ payoff.**
 statement is unconditional: no hypothesis on the weight, no restriction to a
 class of tables, and the deviation class is all behavior strategies.
 
-Three of the four branches name their payoff: the zero vector
+All four branches name their payoff: the zero vector
 (`quittingGame_isUniformEquilibriumPayoff_zero_of_zeroSolo`), the owner's solo
 reward `r(·)({owner})` (`quittingGame_isUniformEquilibriumPayoff_soloRate`),
-and the joint exit reward `r(·)({0,1})`
-(`quittingGame_isUniformEquilibriumPayoff_jointExit`).  The pair-repair branch
-does not: its profiles are only approximate equilibria, one per accuracy, and
-the payoff is extracted by compactness, so the statement below is existential
-rather than an evaluation.
+the blocker's solo reward `r(·)({!owner})`
+(`quittingGame_isUniformEquilibriumPayoff_of_bool_pairRepair`), and the joint
+exit reward `r(·)({0,1})`
+(`quittingGame_isUniformEquilibriumPayoff_jointExit`).  The headline remains
+existential because the case split chooses which branch and target applies.
 
 Three or more players are not covered.  The pair-repair branch is two-player
 by construction: making a terminal set of three or more players quit surely
@@ -303,8 +304,9 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_twoPlayer
       by_cases hpair :
           quittingSingletonCollisionReward reward (!owner) owner ≤
             quittingSoloReward reward (!owner) owner
-      · exact QuittingTwoPlayerPairRepair.exists_uniformEquilibriumPayoff_of_bool_pairRepair
-          reward owner hpair hblockerSolo
+      · exact ⟨quittingSoloReward reward (!owner),
+          QuittingTwoPlayerPairRepair.quittingGame_isUniformEquilibriumPayoff_of_bool_pairRepair
+            reward owner hpair hblockerSolo⟩
       · push Not at hpair
         exact ⟨_, quittingGame_isUniformEquilibriumPayoff_jointExit reward
           owner hpair.le hjoin.le⟩
