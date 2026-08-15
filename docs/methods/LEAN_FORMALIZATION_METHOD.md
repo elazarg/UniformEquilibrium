@@ -105,7 +105,7 @@ credible play.
 
 ## Build and axiom discipline
 
-Each landed package records its focused build and umbrella build when imports
+Each integration package records its focused build and umbrella build when imports
 change. Repository acceptance additionally requires the exhaustive generated
 `AxiomAudit` target: it imports every project-owned module and rejects every
 transitive axiom except `propext`, `Quot.sound`, and `Classical.choice`.

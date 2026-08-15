@@ -98,4 +98,6 @@ python scripts/check_docs.py
 Living documentation describes the current mathematics and workflow. Put
 repository-transition chronology, old paths, and superseded implementation
 approaches only in `TRANSITION.md`. Literature and source-history audits remain
-within their explicitly scoped reference or audit records.
+within their explicitly scoped reference or audit records. Every Markdown file
+directly under `docs/` is living documentation and must remain free of dated
+repository snapshots, raw commit locators, and changelog sections.

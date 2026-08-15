@@ -68,6 +68,17 @@ inspect the complete elaborated telescope and, for data declarations, the
 constructed body. A constant absent from the final displayed proposition may
 still index a later hypothesis or a proof-carrying object.
 
+Every touched declaration receives a two-sided strength review:
+
+- derive or remove assumptions that retained data already supplies; and
+- state the strongest stable conclusion proved by the argument, rather than a
+  needlessly specialized corollary.
+
+When that strengthening needs a wider API or mathematical redesign, record it
+as an explicit review target instead of silently leaving the opportunity
+unexamined. Mechanical censuses identify known syntactic families; a zero
+census is never a claim that every theorem telescope is logically minimal.
+
 ### Finite quitting reward bounds
 
 For a finite quitting reward table, use
@@ -102,9 +113,8 @@ result or later telescope. Treat `DecidableEq` similarly: proof-local finite
 bookkeeping can often use classical decidability, while computational data and
 instance-indexed statements may genuinely retain the parameter.
 
-The absence of a known scanner pattern is not a claim that every declaration
-has a logically minimal telescope. Extend deterministic censuses one coherent
-hypothesis family at a time, and use Lean elaboration as the call-site oracle.
+Extend deterministic censuses one coherent hypothesis family at a time, and
+use Lean elaboration as the call-site oracle.
 
 ## Proof and API quality
 

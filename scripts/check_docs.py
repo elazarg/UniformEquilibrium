@@ -15,11 +15,13 @@ from urllib.parse import unquote
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 STATUS_PATH = ROOT / "docs" / "ProjectStatus.json"
 FRONTIER_PATH = ROOT / "docs" / "QuittingProofFrontier.json"
-LIVE_DOCS = (
+CORE_LIVE_DOCS = (
     ROOT / "README.md",
     ROOT / "AGENTS.md",
     ROOT / "CLAUDE.md",
     ROOT / "CONTRIBUTING.md",
+    ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md",
+    ROOT / "Literature" / "README.md",
     ROOT / "docs" / "README.md",
     ROOT / "docs" / "SEMANTICS.md",
     ROOT / "docs" / "STATUS.md",
@@ -31,11 +33,56 @@ LIVE_DOCS = (
     ROOT / "docs" / "SOFTWARE_ENGINEERING_REVIEW.md",
     ROOT / "docs" / "GAMETHEORY2_MIGRATION_PLAN.md",
     ROOT / "UniformEquilibrium" / "README.md",
+    ROOT / "UniformEquilibrium" / "UNIFORM_EQUILIBRIUM_PROBLEM.md",
+)
+TOP_LEVEL_LIVING_DOCS = tuple(sorted((ROOT / "docs").glob("*.md")))
+METHOD_LIVING_DOCS = tuple(sorted((ROOT / "docs" / "methods").glob("*.md")))
+DESIGN_LIVING_DOCS = tuple(
+    document
+    for document in sorted((ROOT / "docs" / "design").glob("*.md"))
+    if "Historical design record." not in document.read_text(encoding="utf-8")[:512]
+)
+LANE_LIVING_DOCS = tuple(
+    sorted(
+        document
+        for lane in ("Research", "Reverse", "Theorems", "UniformEquilibrium")
+        for pattern in ("README.md", "MANIFEST.md")
+        for document in (ROOT / lane).rglob(pattern)
+    )
+)
+LIVE_DOCS = tuple(
+    dict.fromkeys(
+        (
+            *CORE_LIVE_DOCS,
+            *TOP_LEVEL_LIVING_DOCS,
+            *METHOD_LIVING_DOCS,
+            *DESIGN_LIVING_DOCS,
+            *LANE_LIVING_DOCS,
+        )
+    )
 )
 TIMELESS_DOCS = LIVE_DOCS
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 IMPORT_RE = re.compile(r"^import\s+([^\s]+)", re.MULTILINE)
-COMMIT_HASH_RE = re.compile(r"(?<![0-9A-Za-z])[0-9a-f]{7,40}(?![0-9A-Za-z])")
+SOURCE_REFERENCE_RE = re.compile(
+    r"`([A-Za-z0-9_./+-]+\.lean)(?::(\d+)(?:-(\d+))?)?`"
+)
+NAMED_SOURCE_REFERENCE_RE = re.compile(
+    r"`([^\s`\n]+)`\s*"
+    r"\(`([A-Za-z0-9_./+-]+\.lean):(\d+)(?:-(\d+))?`\)"
+)
+TABLE_SOURCE_REFERENCE_RE = re.compile(
+    r"^\|\s*[A-Z][A-Z0-9]*\s*\|\s*`([^\s`\n]+)`\s*\|\s*"
+    r"`([A-Za-z0-9_./+-]+\.lean):(\d+)(?:-(\d+))?`\s*\|",
+    re.MULTILINE,
+)
+COMMIT_HASH_RE = re.compile(
+    r"(?<![0-9A-Za-z])"
+    r"(?=[0-9a-f]{7,40}(?![0-9A-Za-z]))"
+    r"(?=[0-9a-f]*[a-f])"
+    r"[0-9a-f]{7,40}"
+)
+DOI_PREFIX_RE = re.compile(r"(?:\bdoi\s+)?10\.\d{4,9}/$", re.IGNORECASE)
 CALENDAR_DATE_RE = re.compile(r"\b(?:19|20)\d{2}-\d{2}-\d{2}\b")
 HISTORICAL_HEADING_RE = re.compile(
     r"^#{1,6}\s+.*(?:"
@@ -44,6 +91,16 @@ HISTORICAL_HEADING_RE = re.compile(
     r"phase\s+\d+.*(?:complete|completed|results?)"
     r")",
     re.IGNORECASE | re.MULTILINE,
+)
+HISTORICAL_NARRATIVE_RE = re.compile(
+    r"\b(?:"
+    r"first pass of (?:this|the) document|"
+    r"landed at|committed at|previous revision|"
+    r"(?:module|shim|file|path|import|declaration|theorem|producer|compiler|"
+    r"adapter|implementation|body|chain|leaf|route|branch|argument|hypothesis)"
+    r"s? (?:was|were|has been|have been) removed"
+    r")\b",
+    re.IGNORECASE,
 )
 PRUNED_DIRECTORIES = {".git", ".lake", "GameTheory", "__pycache__", ".pytest_cache"}
 
@@ -59,6 +116,45 @@ def project_markdown_files() -> list[pathlib.Path]:
         base = pathlib.Path(directory)
         documents.extend(base / name for name in filenames if name.endswith(".md"))
     return documents
+
+
+def is_dedicated_history_or_evidence(document: pathlib.Path) -> bool:
+    """Whether a Markdown file is an explicitly scoped non-living record."""
+    relative_path = document.relative_to(ROOT)
+    parts = relative_path.parts
+    if relative_path == pathlib.Path("TRANSITION.md"):
+        return True
+    if parts[0] == "Experiments":
+        return True
+    if parts[:2] in {("docs", "audits"), ("docs", "references")}:
+        return True
+    if parts[:2] == ("Reverse", "Tasks") and document.name != "README.md":
+        return True
+    prefix = document.read_text(encoding="utf-8")[:512]
+    return (
+        "Historical design record." in prefix
+        or "Historical case-study record." in prefix
+    )
+
+
+def check_document_classification(errors: list[str]) -> None:
+    documents = set(project_markdown_files())
+    living = {document for document in LIVE_DOCS if document.is_file()}
+    evidence = {
+        document for document in documents if is_dedicated_history_or_evidence(document)
+    }
+    overlap = living & evidence
+    if overlap:
+        errors.append(
+            "Markdown files classified as both living and historical/evidence: "
+            + ", ".join(relative(document) for document in sorted(overlap))
+        )
+    unclassified = documents - living - evidence
+    if unclassified:
+        errors.append(
+            "unclassified Markdown files: "
+            + ", ".join(relative(document) for document in sorted(unclassified))
+        )
 
 
 def check_generated(errors: list[str]) -> None:
@@ -172,6 +268,69 @@ def check_frontier(errors: list[str]) -> None:
                 errors.append(f"{transition['id']}: missing evidence {evidence}")
 
 
+def source_reference_issues(
+    text: str,
+    root: pathlib.Path = ROOT,
+) -> list[str]:
+    """Validate exact root-relative Lean source references and line bounds."""
+    issues: list[str] = []
+    for raw_path, first_text, last_text in SOURCE_REFERENCE_RE.findall(text):
+        source = root / raw_path
+        if not source.is_file():
+            issues.append(f"missing source reference {raw_path}")
+            continue
+        line_count = len(source.read_text(encoding="utf-8").splitlines())
+        if not first_text:
+            continue
+        first = int(first_text)
+        last = int(last_text) if last_text else first
+        if first < 1 or last < first or last > line_count:
+            issues.append(
+                f"out-of-range source reference {raw_path}:{first_text}"
+                + (f"-{last_text}" if last_text else "")
+            )
+    return issues
+
+
+def named_source_reference_issues(
+    text: str,
+    root: pathlib.Path = ROOT,
+) -> list[str]:
+    """Check that a named source locator points at a line containing its name."""
+    issues: list[str] = []
+    references = (
+        NAMED_SOURCE_REFERENCE_RE.findall(text)
+        + TABLE_SOURCE_REFERENCE_RE.findall(text)
+    )
+    for name, raw_path, first_text, last_text in references:
+        source = root / raw_path
+        if not source.is_file():
+            continue
+        lines = source.read_text(encoding="utf-8").splitlines()
+        first = int(first_text)
+        last = int(last_text) if last_text else first
+        if first < 1 or last < first or last > len(lines):
+            continue
+        terminal_name = name.rsplit(".", 1)[-1]
+        if terminal_name not in "\n".join(lines[first - 1 : last]):
+            locator = f"{raw_path}:{first_text}"
+            if last_text:
+                locator += f"-{last_text}"
+            issues.append(f"named source reference {name} not found at {locator}")
+    return issues
+
+
+def check_living_document_sources(errors: list[str]) -> None:
+    for document in TIMELESS_DOCS:
+        if not document.is_file():
+            continue
+        text = document.read_text(encoding="utf-8")
+        for issue in source_reference_issues(text):
+            errors.append(f"{relative(document)}: {issue}")
+        for issue in named_source_reference_issues(text):
+            errors.append(f"{relative(document)}: {issue}")
+
+
 def check_links(errors: list[str]) -> None:
     for document in project_markdown_files():
         if "audits" in document.relative_to(ROOT).parts:
@@ -213,12 +372,19 @@ def check_live_docs(errors: list[str]) -> None:
 def timeless_document_issues(text: str) -> list[str]:
     """Return chronology markers that do not belong in living documentation."""
     issues: list[str] = []
-    if COMMIT_HASH_RE.search(text):
+    hash_matches = (
+        match
+        for match in COMMIT_HASH_RE.finditer(text)
+        if not DOI_PREFIX_RE.search(text[max(0, match.start() - 32) : match.start()])
+    )
+    if next(hash_matches, None) is not None:
         issues.append("contains a raw Git commit hash")
     if CALENDAR_DATE_RE.search(text):
         issues.append("contains a calendar-dated snapshot")
     if HISTORICAL_HEADING_RE.search(text):
         issues.append("contains a changelog-style heading")
+    if HISTORICAL_NARRATIVE_RE.search(text):
+        issues.append("contains repository-change narrative")
     return issues
 
 
@@ -233,9 +399,11 @@ def check_timeless_docs(errors: list[str]) -> None:
 def main() -> int:
     errors: list[str] = []
     check_markdown_names(errors)
+    check_document_classification(errors)
     check_generated(errors)
     check_status(errors)
     check_frontier(errors)
+    check_living_document_sources(errors)
     check_links(errors)
     check_live_docs(errors)
     check_timeless_docs(errors)

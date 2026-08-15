@@ -325,7 +325,7 @@ in `UniformEquilibrium/Quitting/Terminal/TargetTail/InfiniteVariableSingletonMes
 
 ### Optional common hazard ceiling
 
-The older fixed-mesh specialization obtains a uniform ceiling from compact
+The fixed-mesh specialization obtains a uniform ceiling from compact
 terminal-freeness as follows.
 
 For owner `i`, let

@@ -145,6 +145,11 @@ perfect monitoring. Prove, for one finite horizon:
 - equivalence of the project's proof-facing uniform constructor with the
   canonical successor uniform-payoff predicate.
 
+The canonical successor uniform module should also own elementary consequences
+of that predicate, including the projection to a uniform approximate
+equilibrium at each positive accuracy and its target-free contrapositive.
+These are generic semantic API, not conjecture-specific facts.
+
 This phase must use a nontrivial action-dependent transition fixture and a
 profitable-deviation control. Definitional equality on a constant game is not
 adequate evidence.

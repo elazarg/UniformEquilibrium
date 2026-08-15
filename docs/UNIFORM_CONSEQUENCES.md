@@ -37,7 +37,7 @@ characterization.  Nonexistence of any uniform-equilibrium payoff is equivalent
 to the existence of one fixed `gap > 0` such that every behavioral profile has
 a unilateral deviation improving expected terminal reward by at least `gap`.
 The forward direction negates terminal approximate Nash existence at every
-positive accuracy; the reverse direction is the existing terminal-gap
+positive accuracy; the reverse direction is the terminal-gap
 nonexistence compiler.  This is an exact semantic target for counterexample
 search, not a finite separator language by itself.
 
@@ -51,9 +51,9 @@ perturbations.
 
 ## Lean surface
 
-- `Equilibrium/Uniform/AsymptoticPayoffEquivalence.lean` contains the two transfer directions
+- `GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform/AsymptoticPayoffEquivalence.lean` contains the two transfer directions
   and their fixed-target equivalence.
-- `Equilibrium/Uniform/ExpectedPotentialShaping.lean` proves the expectation telescope,
+- `GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform/ExpectedPotentialShaping.lean` proves the expectation telescope,
   finite-average bound, and exact shaping invariance.
 - `UniformEquilibrium/Diagnostics/Uniform/TailWidth.lean` and `UniformEquilibrium/Diagnostics/Uniform/TailWidthObstruction.lean` contain the
   thin-interval characterization and its positive-width contrapositive.
@@ -63,6 +63,6 @@ perturbations.
   contains the general late-horizon exploitability certificate;
   `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean` contains the
   terminal certificate and exact finite-quitting fixed-gap characterization.
-- `TransitionPerturbationDiscontinuity.lean` contains the finite counterexample;
+- `UniformEquilibrium/Diagnostics/Uniform/TransitionPerturbationDiscontinuity.lean` contains the finite counterexample;
   `UniformEquilibrium/Diagnostics/Uniform/Consequences.lean` is the public entry point for the generic
   reverse-consequence layer above.

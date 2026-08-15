@@ -86,7 +86,7 @@ Math.exists_same_label_with_large_charge_gap
 Math.exists_close_pair_with_large_charge_gap_of_finite_labels
 ```
 
-in `Math/FiniteChargedReturn.lean`.
+in `MathUE/FiniteChargedReturn.lean`.
 
 ## 2. Compactness selects the target before the packet
 
@@ -105,7 +105,7 @@ Math.exists_charge_threshold_for_close_pair_of_compact
 Math.exists_close_pair_of_arbitrarily_large_finite_charge
 ```
 
-in `Math/CompactFiniteChargedReturn.lean`.
+in `MathUE/CompactFiniteChargedReturn.lean`.
 
 The useful quantifier order is
 
@@ -152,7 +152,7 @@ Math.prod_one_sub_mul_one_add_sum_range_le_one
 Math.half_le_one_sub_prod_one_sub_of_one_le_sum_range
 ```
 
-in `Math/DivergentChargeRecurrence.lean`.
+in `MathUE/DivergentChargeRecurrence.lean`.
 
 The denominator is the absorption of the entire block, not the source
 one-stage charge.
@@ -245,12 +245,12 @@ single-seam lasso
   -> uniform-equilibrium payoff.
 ```
 
-## 7. The motivating circulation producer now uses the finite route
+## 7. Circulation producer interface
 
-`MultiOwnerFaceCirculationFiniteClosing.lean` retains the interval data hidden
-by the older public tuple from `exists_multiCirculation_orbit`, converts the
-real hazard rows into PMF roots, and places every target-dependent orbit in the
-common compact carrier
+`UniformEquilibrium/Quitting/Circulation/MultiOwnerFaceCirculationFiniteClosing.lean`
+exposes the interval data needed
+by the finite route, converts the real hazard rows into PMF roots, and places
+every target-dependent orbit in the common compact carrier
 
 ```text
 [-B,B]^I,
@@ -272,11 +272,11 @@ forall epsilon > 0, forall Q,
   exists one finite circulation orbit reaching Q
 ```
 
-and does not call `exists_multiCirculation_orbit_uniform_prefix`.
-This is the repository regression showing that the stronger one-orbit-for-all-
-targets theorem is unnecessary for projective closing.
+and does not require `exists_multiCirculation_orbit_uniform_prefix`. Thus the
+stronger one-orbit-for-all-targets theorem is unnecessary for projective
+closing.
 
-## 8. Why the old recurrence no-go does not apply
+## 8. Why the bounded-charge obstruction does not apply
 
 `UniformEquilibrium/Quitting/Debt/Ledger/VanishingChargeRecurrenceNoGo.lean` uses
 
@@ -318,5 +318,5 @@ obligation.  For arbitrary quitting games, the remaining upstream work is:
    a compact carrier fixed independently of the charge target, or consume the
    complementary bounded-charge boundary.
 
-The fourth item is now a progress dichotomy rather than a metric recurrence
+The fourth item is a progress dichotomy rather than a metric recurrence
 problem.

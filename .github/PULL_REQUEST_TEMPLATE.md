@@ -11,5 +11,7 @@ consumer.
 - [ ] `python scripts/check_docs.py`
 - [ ] `python scripts/check_proof_duplicates.py`
 - [ ] Structural changes received a full build.
+- [ ] Touched declarations were reviewed for derivable assumptions and a
+      stronger stable conclusion.
 - [ ] Living documentation still describes the current repository rather than
       the chronology of the change.

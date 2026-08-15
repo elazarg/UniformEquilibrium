@@ -8,6 +8,7 @@ An open claim remains only a `def` returning `Prop`.
 Paper modules may depend on `UniformEquilibrium`; integrated modules never
 depend on `Literature`.
 
-Each paper module exports a `Literature.PaperRecord` from `Catalog.lean` so
+Each paper module exports a `Literature.PaperRecord` from
+`Literature/Catalog.lean` so
 coverage can be enumerated without introducing assumptions or placeholder
 proofs.

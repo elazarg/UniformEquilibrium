@@ -5,7 +5,7 @@ kernel, and discount field—uniform-equilibrium payoffs are stable under unifor
 perturbations of the stage-payoff table.
 
 The formal interface lives in
-`GameTheory/Concepts/Stochastic/Equilibrium/Uniform.lean`:
+`GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform.lean`:
 
 - `StochasticGame.withStagePayoff` replaces only the stage-payoff table;
 - `abs_finiteAveragePayoff_withStagePayoff_sub_le` proves that a pointwise
@@ -20,7 +20,7 @@ The formal interface lives in
   convergent uniform-equilibrium targets.
 
 The target-free layer lives in
-`GameTheory/Concepts/Stochastic/Equilibrium/Uniform/PayoffExistenceClosure.lean`:
+`GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform/PayoffExistenceClosure.lean`:
 
 - `exists_uniformEquilibriumPayoff_of_uniform_stagePayoff_limit` assumes only
   that every approximating reward table has some uniform-equilibrium payoff;
@@ -40,6 +40,6 @@ This result does **not** cover either of the following stronger claims:
 1. continuity under perturbations of the transition kernel; or
 2. density of any particular proposed class of solved payoff tables.
 
-The second item is now the substantive game-specific obligation: once a class
-is proved dense, the target-free closure theorem promotes its existence result
-to every payoff table on the same finite skeleton.
+The second item is a substantive game-specific obligation: if a class is
+proved dense, the target-free closure theorem promotes its existence result to
+every payoff table on the same finite skeleton.

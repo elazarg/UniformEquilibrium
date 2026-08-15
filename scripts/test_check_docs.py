@@ -3,12 +3,122 @@
 
 from __future__ import annotations
 
+import pathlib
+import tempfile
 import unittest
 
-from scripts.check_docs import timeless_document_issues
+from scripts.check_docs import (
+    ROOT,
+    TIMELESS_DOCS,
+    is_dedicated_history_or_evidence,
+    named_source_reference_issues,
+    project_markdown_files,
+    source_reference_issues,
+    timeless_document_issues,
+)
 
 
 class TimelessDocumentTests(unittest.TestCase):
+    def test_named_source_reference_validation(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "Owner.lean").write_text(
+                "theorem first := True\ntheorem second := True\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                named_source_reference_issues(
+                    "`second` (`Owner.lean:2`)\n"
+                    "| A1 | `first` | `Owner.lean:1` | description |",
+                    root,
+                ),
+                [],
+            )
+            self.assertEqual(
+                named_source_reference_issues(
+                    "`first` (`Owner.lean:2`)",
+                    root,
+                ),
+                ["named source reference first not found at Owner.lean:2"],
+            )
+
+    def test_source_reference_validation(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "Owner.lean").write_text("one\ntwo\nthree\n", encoding="utf-8")
+            self.assertEqual(
+                source_reference_issues(
+                    "`Owner.lean` and `Owner.lean:2` and `Owner.lean:1-3`",
+                    root,
+                ),
+                [],
+            )
+            self.assertEqual(
+                source_reference_issues(
+                    "`Missing.lean` and `Owner.lean:2-4`",
+                    root,
+                ),
+                [
+                    "missing source reference Missing.lean",
+                    "out-of-range source reference Owner.lean:2-4",
+                ],
+            )
+
+    def test_every_top_level_document_is_living(self) -> None:
+        self.assertLessEqual(
+            set((ROOT / "docs").glob("*.md")),
+            set(TIMELESS_DOCS),
+        )
+
+    def test_lane_readmes_and_manifests_are_living(self) -> None:
+        expected = {
+            document
+            for lane in ("Research", "Reverse", "Theorems", "UniformEquilibrium")
+            for pattern in ("README.md", "MANIFEST.md")
+            for document in (ROOT / lane).rglob(pattern)
+        }
+        self.assertLessEqual(expected, set(TIMELESS_DOCS))
+
+    def test_methods_and_current_designs_are_living(self) -> None:
+        methods = set((ROOT / "docs" / "methods").glob("*.md"))
+        designs = {
+            document
+            for document in (ROOT / "docs" / "design").glob("*.md")
+            if "Historical design record."
+            not in document.read_text(encoding="utf-8")[:512]
+        }
+        self.assertLessEqual(methods | designs, set(TIMELESS_DOCS))
+
+    def test_every_markdown_file_has_exactly_one_lifetime(self) -> None:
+        documents = set(project_markdown_files())
+        living = set(TIMELESS_DOCS) & documents
+        evidence = {
+            document
+            for document in documents
+            if is_dedicated_history_or_evidence(document)
+        }
+        self.assertFalse(living & evidence)
+        self.assertEqual(documents, living | evidence)
+
+    def test_transition_record_is_history_not_living(self) -> None:
+        transition = ROOT / "TRANSITION.md"
+        self.assertNotIn(transition, TIMELESS_DOCS)
+        self.assertTrue(is_dedicated_history_or_evidence(transition))
+
+    def test_scoped_evidence_records_are_not_living(self) -> None:
+        records = (
+            ROOT / "docs" / "audits" / "README.md",
+            ROOT / "docs" / "references" / "README.md",
+            ROOT / "docs" / "case-studies" / "FTV_ARCHITECTURE_ANALYSIS.md",
+            ROOT / "docs" / "design" / "HISTORY_CARRIER.md",
+            ROOT / "Reverse" / "Tasks" / "Q194_SEMIALGEBRAIC_BARRIER_COMPLETENESS.md",
+            ROOT / "Experiments" / "README.md",
+        )
+        for record in records:
+            with self.subTest(record=record):
+                self.assertNotIn(record, TIMELESS_DOCS)
+                self.assertTrue(is_dedicated_history_or_evidence(record))
+
     def test_current_plan_is_allowed(self) -> None:
         text = """# Engineering roadmap
 
@@ -22,6 +132,24 @@ Repository-transition provenance belongs in `TRANSITION.md`.
     def test_raw_commit_hash_is_rejected(self) -> None:
         issues = timeless_document_issues("Pinned dependency: 0123456789abcdef")
         self.assertIn("contains a raw Git commit hash", issues)
+
+    def test_git_url_hash_is_rejected(self) -> None:
+        issues = timeless_document_issues(
+            "See https://github.com/example/project/tree/deadbee"
+        )
+        self.assertIn("contains a raw Git commit hash", issues)
+
+    def test_numeric_source_identifier_is_allowed(self) -> None:
+        self.assertEqual(
+            timeless_document_issues("JSTOR stable identifier 3690127"),
+            [],
+        )
+
+    def test_hexadecimal_doi_suffix_is_allowed(self) -> None:
+        self.assertEqual(
+            timeless_document_issues("DOI 10.1234/abcdef123456"),
+            [],
+        )
 
     def test_calendar_snapshot_is_rejected(self) -> None:
         issues = timeless_document_issues("Status as of 2026-08-15")
@@ -39,6 +167,27 @@ Repository-transition provenance belongs in `TRANSITION.md`.
                     "contains a changelog-style heading",
                     timeless_document_issues(heading),
                 )
+
+    def test_repository_change_narrative_is_rejected(self) -> None:
+        for sentence in (
+            "The first pass of this document got the evidence wrong.",
+            "The theorem landed at deadbee.",
+            "The forwarding shim was removed after promotion.",
+            "This correction remains from the previous revision.",
+        ):
+            with self.subTest(sentence=sentence):
+                self.assertIn(
+                    "contains repository-change narrative",
+                    timeless_document_issues(sentence),
+                )
+
+    def test_mathematical_removal_is_allowed(self) -> None:
+        self.assertEqual(
+            timeless_document_issues(
+                "The transient state has been removed from the graph."
+            ),
+            [],
+        )
 
     def test_forward_phase_heading_is_allowed(self) -> None:
         self.assertEqual(

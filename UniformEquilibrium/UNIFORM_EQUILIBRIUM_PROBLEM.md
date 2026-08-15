@@ -1,7 +1,7 @@
 # Uniform-equilibrium problem
 
-The integrated directory no longer maintains a second state-of-development
-essay. Use these repository-wide authorities instead:
+The integrated directory has no independent state-of-development essay. Use
+these repository-wide authorities:
 
 - [`../docs/SEMANTICS.md`](../docs/SEMANTICS.md) for the stable model and
   quantifier contract;
@@ -10,5 +10,5 @@ essay. Use these repository-wide authorities instead:
 - [`../docs/FRONTIER.md`](../docs/FRONTIER.md) for the current mathematical
   boundary and resolution criteria.
 
-The preserved historical essay is
+The explicitly historical source essay is
 [`../docs/audits/UNIFORM_EQUILIBRIUM_PROBLEM_LEGACY.md`](../docs/audits/UNIFORM_EQUILIBRIUM_PROBLEM_LEGACY.md).

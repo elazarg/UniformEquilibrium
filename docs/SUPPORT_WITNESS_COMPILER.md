@@ -9,7 +9,7 @@ the alternative.
 ## Deterministic clock collapse
 
 For player `i` at stage `t`, let `q_t` be the prescribed Quit probability and
-let `D_t` be Quit payoff minus Continue payoff.  The existing ledger identity
+let `D_t` be Quit payoff minus Continue payoff.  The ledger identity
 is
 
 ```text
@@ -78,10 +78,10 @@ accuracy.
 ## Scope boundary
 
 These modules are compilers, not general producers.  Multi-owner face
-circulations now supply a genuine conditional subclass of producers: a supplied
+circulations supply a genuine conditional subclass of producers: a supplied
 bounded `FaceCirculationCertificate` with phase-ratio ceiling below one and a
 floor above `quittingPunishmentValue` yields the required paths and hence a
-uniform payoff.  They still do not prove that an arbitrary finite quitting game
+uniform payoff.  They do not prove that an arbitrary finite quitting game
 supplies such a certificate, a support-rational divergent path, or a finite
 cycle at every tolerance.  Periodicity alone also supplies neither the support
 inequalities nor individual rationality; both remain explicit fields of the

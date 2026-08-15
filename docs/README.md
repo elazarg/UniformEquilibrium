@@ -4,6 +4,15 @@ This directory contains the current mathematical, engineering, and research
 documentation for the UniformEquilibrium project. Living documents describe
 the present interfaces and rules.
 
+Every Markdown file directly under `docs/` is living documentation and is
+checked for snapshot dates, raw commit locators, and changelog-style sections.
+Backticked Lean-file references in living documents are repository-root
+relative; named line locators are checked against the cited source line.
+Repository-transition history belongs only in
+[`TRANSITION.md`](../TRANSITION.md). Explicitly historical literature,
+source-verification, experiment, or audit records may preserve the evidence
+they were created to record, but they are never current status authorities.
+
 ## Start here
 
 1. [SEMANTICS.md](SEMANTICS.md) — the stable model, quantifiers, strategy class,
@@ -50,11 +59,12 @@ These files describe current mathematical interfaces and scope boundaries.
 ## Methods and evidence
 
 - [methods/](methods/) contains the stable methodology.
-- [design/](design/) contains design records; historical records say so at the
-  top.
+- [design/](design/) contains current design records and explicitly marked
+  historical design studies.
 - [case-studies/](case-studies/) contains focused worked analyses and audits.
-- [audits/](audits/) preserves superseded or source-transition synthesis that
-  remains useful for provenance but is not current authority.
+- [audits/](audits/) preserves explicitly historical mathematical and
+  source-verification synthesis that remains useful as evidence but is not
+  current authority.
 - [references/](references/) records published results, citations, and source
   corrections.
 - [manuscript/](manuscript/) contains derivative exposition, including the

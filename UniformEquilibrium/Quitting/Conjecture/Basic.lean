@@ -24,7 +24,8 @@ quantifies over all behavior strategies.
 
 Those two cases are **not** exhaustive.
 `not_forall_isQuittingZeroSolo_or_hasAdmissibleAbsorbingQuittingCycle` in
-`QuittingDisjunctionCounterexample.lean` refutes the disjunction outright, on
+`UniformEquilibrium/Quitting/Boundary/Repair/DisjunctionCounterexample.lean`
+refutes the disjunction outright, on
 the two-coordinate weight quoted in the conjecture's own docstring below.  So
 the conjecture remains a separate open proposition rather than being reduced
 to a false completeness premise.
@@ -38,7 +39,7 @@ weights admitting no absorbing cycle at all lie outside its scope.
 
 The truncated-ledger route is likewise only conditional.  Packages at every
 positive tolerance still compile to a uniform-equilibrium payoff, but the
-former universal producer declaration is false even for `Bool`: a solved
+universal producer proposition is false even for `Bool`: a solved
 zero-solo game has no such package at accuracy `1/2`.  The canonical boundary
 module records a persistent-live zero-solo branch versus a supplied package
 producer without claiming that this disjunction is exhaustive.
@@ -138,15 +139,17 @@ every phase, so the deleted survival product at coordinate `2` is `1`; since
 `r₂({2}) = -1 < 0`, the mismatch there is `1` and no cycle is admissible.
 
 All of that is machine-checked in
-`QuittingDisjunctionCounterexample.lean`, whose
+`UniformEquilibrium/Quitting/Boundary/Repair/DisjunctionCounterexample.lean`,
+whose
 `not_forall_isQuittingZeroSolo_or_hasAdmissibleAbsorbingQuittingCycle` refutes
 the disjunction outright; this paragraph is a summary of that file, not a hand
 argument.
 
-The weight has two coordinates, so a uniform-equilibrium payoff does exist for
-it externally.  Its equilibrium therefore lies outside the cycle carrier, and
-what the carrier needs is a third branch covering weights of this shape — not a
-proof that the existing two are exhaustive. -/
+`QuittingTwoPlayerExistence.quittingGame_exists_uniformEquilibriumPayoff_twoPlayer`
+proves that this weight has a uniform-equilibrium payoff even though the table
+lies outside the cycle carrier. Any complete carrier needs an additional branch
+covering weights of this shape rather than an exhaustiveness proof for the
+existing two. -/
 def quittingUniformEquilibriumPayoffConjecture
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     Prop :=

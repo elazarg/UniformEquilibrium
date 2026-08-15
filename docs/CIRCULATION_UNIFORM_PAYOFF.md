@@ -4,7 +4,9 @@
 umbrella import for the integrated
 certificate/orbit/path chain, its concrete payoff examples, and the sharp
 two-coordinate boundary analyses. Other proofs that need only the generic
-compiler should import `MultiOwnerFaceCirculationCompactPath.lean` directly.
+compiler should import
+`UniformEquilibrium/Quitting/Circulation/MultiOwnerFaceCirculationCompactPath.lean`
+directly.
 
 This note records the integrated face-circulation producer class for finite
 quitting games. It is a genuine existence class, not an arbitrary-game
@@ -59,9 +61,9 @@ floor with a min--max construction.
    turns the support-rational divergent path, at every accuracy, into an
    existential uniform-equilibrium payoff.
 
-The finite terminal theorem is
+The finite-closing theorem is
 `quittingGame_exists_uniformEquilibriumPayoff_of_multiCirculation_finiteClosing`.
-The earlier path theorem is
+The compact-path theorem is
 `quittingGame_exists_uniformEquilibriumPayoff_of_multiCirculation`; its
 singleton-support specialization is
 `quittingGame_exists_uniformEquilibriumPayoff_of_singletonCirculation`.
@@ -86,7 +88,7 @@ that every cyclic or every four-player quitting game has such a certificate.
 
 ## Phase occupation duality: adjacent, not a producer
 
-`Math/Probability/PhaseOccupationDuality.lean` compiles a finite periodic
+`MathUE/Probability/PhaseOccupationDuality.lean` compiles a finite periodic
 phase-occupation problem to a standard-form LP.  Given a phase occupation, it
 proves the exact semantic feasibility equivalence, LP attainment, a decoded
 phase-bias dual certificate, and equality of the optimal occupation reward and
@@ -98,13 +100,12 @@ not provide a strategic circulation or any other producer for a quitting
 game.  It is therefore an optimization/verification interface, not an
 extension of the circulation existence theorem.
 
-## Path-consistency fence for future flow synthesis
+## Path-consistency fence for flow synthesis
 
-The landed face-circulation theorem already produces finite charged forward
-packets and, independently, an infinite chronological path.  The following
-warning does not weaken either theorem.  It constrains a possible future
-attempt to *produce* such data from a global occupation LP on a finite atlas of
-legal transitions.
+The face-circulation theorem produces finite charged forward packets and,
+independently, an infinite chronological path.  The following warning does not
+weaken either theorem.  It constrains any attempt to *produce* such data from a
+global occupation LP on a finite atlas of legal transitions.
 
 A global zero-defect circulation may cancel signed defects across recurrent
 strongly connected components that no single legal path can visit recurrently.
@@ -118,7 +119,7 @@ The corresponding single global dual can also fail: the vertex-potential terms
 vanish on both loops, so a strict inequality would require both
 `lambda >= c` and `-lambda >= c` for `c > 0`.
 
-The correct prospective positive alternative is therefore componentwise:
+The compatible positive alternative is componentwise:
 choose one reachable recurrent SCC `C` and a nonnegative circulation supported
 on its internal edges satisfying
 
@@ -146,6 +147,5 @@ the ratio, boundedness, support-size, or punishment-floor hypotheses.  Its
 compact reversal selects an existential payoff only.  The remaining
 arbitrary-game producer problem is open.
 
-Equal-atom constructions are not production mathematics in this repository.
-They may be considered as a next intake target, but they are not a corollary,
-an alternative producer, or a claimed extension of this theorem chain.
+Equal-atom constructions are not a corollary, an alternative producer, or a
+claimed extension of this theorem chain.

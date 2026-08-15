@@ -43,7 +43,7 @@ without producing a witness.
 | Projective packets and lassos | `UniformEquilibrium/Quitting/Projective/LassoAll.lean` | Matching-order analytic packets, packet-target mismatch, resolved-chart/Farkas contracts, exact signed monodromy, finite charged return, forward-block single-seam closing, and lasso compilation. |
 | Punishment-completed cycles | `UniformEquilibrium/Quitting/Punishment/CompletedCycle.lean` | Coupled phase-switch caps, exact instant-punishment characterization, and exact absorbing cycles completed coordinatewise by contraction or credible punishment. |
 | Truncated-ledger boundary | `UniformEquilibrium/Quitting/Debt/Ledger/TruncatedLedgerCapBoundary.lean` | The sound package compiler interface together with one- and two-player counterexamples to treating it as a universal normal form. |
-| Face circulations | `UniformEquilibrium/Quitting/Circulation/FaceCirculationAll.lean` | Certificate/orbit production, finite charged closing, the compatible compact-path route, concrete payoff examples, and boundary analyses. Use `MultiOwnerFaceCirculationFiniteClosing.lean` for the finite compiler. |
+| Face circulations | `UniformEquilibrium/Quitting/Circulation/FaceCirculationAll.lean` | Certificate/orbit production, finite charged closing, the compatible compact-path route, concrete payoff examples, and boundary analyses. Use `UniformEquilibrium/Quitting/Circulation/MultiOwnerFaceCirculationFiniteClosing.lean` for the finite compiler. |
 | Boundary holonomy | `UniformEquilibrium/Quitting/Boundary/Holonomy/All.lean` | Source-retaining fixed-cutoff compactness together with residual, self-similar, tangent, and realized-coordinate analysis. |
 | Reward closure | `GameTheory/GameTheory/Concepts/Stochastic/Models/Quitting/UniformPayoffExistenceClosure.lean` | Fixed-skeleton quitting-game existence under uniform reward limits and dense solved approximants. |
 | General nonexistence certificates | `UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean` | A uniform positive exploitability gap at arbitrarily late finite horizons rules out every uniform-equilibrium payoff. |
@@ -55,7 +55,8 @@ not external compatibility promises or a ban on precise dependencies.
 
 ## Semantic waist and terminal bridge
 
-`Uniform.lean` owns `StochasticGame.IsUniformEquilibriumPayoff` and
+`GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform.lean` owns
+`StochasticGame.IsUniformEquilibriumPayoff` and
 `HasUniformDeviationCapConstructor`.  Their exact equivalence is the
 construction waist: a candidate mechanism is complete only after it supplies
 the uniform finite-horizon delivery and unilateral-deviation bounds encoded by
@@ -85,7 +86,7 @@ obligations.
 | Finite charged forward packets | At every charge target, one exact finite forward Bellman packet in a fixed compact carrier, with support optimality and punishment rationality | Compact charged return, a single-seam lasso, and a uniform payoff | Does not produce the packets or consume the complementary bounded-charge branch. |
 | Essential APS | A compact convex functional unique-live component with finite-window face avoidance, terminal-freeness, and bounds | A coherent executable path, qualitative deleted-player survival, adaptive finite meshes, and a uniform payoff for every initial component value | Does not prove that an arbitrary game has a nonempty component; pointwise full jumps remain outside the adaptive logarithmic mesh. |
 | Multi-owner face circulation | A bounded balanced circulation with positive phase ratios, one common ratio ceiling below `1`, and a payoff floor above the quitting punishment value | Arbitrarily charged finite packets and a uniform payoff by finite closing; independently, a chronological compact path | Does not construct such a circulation for every game or identify the selected target with a named certificate vertex. |
-| Punishment-completed finite cycle | An exact absorbing Nash--Bellman cycle where each coordinate either contracts in deleted survival or has punishment value at most its selected solo value | The selected phase value is a uniform-equilibrium payoff; the old nonnegative-solo admissible-cycle compiler is a corollary | Does not produce an exact cycle, and does not cover an isolated coordinate whose punishment value exceeds its negative solo value. |
+| Punishment-completed finite cycle | An exact absorbing Nash--Bellman cycle where each coordinate either contracts in deleted survival or has punishment value at most its selected solo value | The selected phase value is a uniform-equilibrium payoff; the nonnegative-solo admissible-cycle compiler is a corollary | Does not produce an exact cycle, and does not cover an isolated coordinate whose punishment value exceeds its negative solo value. |
 | Two-player closure | An arbitrary finite two-player quitting game | Unconditional uniform-payoff existence | Does not extend the pair-repair classification to three or more players. |
 | Three-player closure | An arbitrary finite quitting game on `Fin 3` | Unconditional uniform-payoff existence | Does not settle four or more players or the general stochastic-game proposition. |
 
@@ -126,7 +127,7 @@ a game or strategy producer.
 - `GameTheory/GameTheory/Concepts/Stochastic/Models/Quitting/RootPerturbation.lean` gives local one-coordinate payoff and regret
   bounds; it should not be confused with target-free closure.
 
-These tools transport an existing mechanism or existence result.  They do not
+These tools transport a supplied mechanism or existence result.  They do not
 supply density of solved games or construct a missing certificate.
 
 ## Boundary analysis and diagnostics
@@ -183,17 +184,18 @@ The following distinctions are load-bearing across the toolkit:
    instance—is not realization, compatibility, or an all-accuracy producer;
    and
 10. a global occupation that cancels signed defects across different recurrent
-    SCCs is not one legal path.  Future flow synthesis must choose one reachable
+    SCCs is not one legal path.  Flow synthesis must choose one reachable
     recurrent component or prove a separate strategic common-randomization
     theorem.
 
 ## Universal declaration leaves
 
 Consult [`STATUS.md`](STATUS.md) for the generated declaration kind of the
-general and finite-quitting propositions. The former truncated-ledger producer
-leaf was removed after a two-player counterexample; its valid conditional
-compiler is indexed above. Existing positive compilers narrow what a universal
-producer must supply, but are not silently an arbitrary-game producer.
+general and finite-quitting propositions. The truncated-ledger package is a
+valid conditional compiler, while its universal-producer claim is refuted by
+the two-player counterexample indexed above. The positive compilers narrow
+what a universal producer must supply, but are not silently an arbitrary-game
+producer.
 
 For new work, first identify the row above whose required input is closest to
 the available data.  If no row accepts it, record the missing adapter or

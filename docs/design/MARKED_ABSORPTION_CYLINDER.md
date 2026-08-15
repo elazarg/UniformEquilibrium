@@ -16,7 +16,7 @@ source block, literal length, and chronology.  It is the finite semantic
 adapter used to validate formulas, **not** the source-forgetting cylinder
 specified below.
 
-`L` The first genuinely source-forgetting primitive is
+`L` The source-forgetting primitive is
 `UniformEquilibrium/Quitting/AbsorptionPath/MarkedObstacleRecord.lean`.  Its
 encoder discards the source word, horizon, and literal offset after one stage,
 while retaining the current product root, pre/post vector factors, full and
@@ -50,7 +50,7 @@ with accumulated mass `τ(t) = 1 - S(t)`.
 
 ## 2. The cylinder carries `|ι|+1` clocks
 
-`L` The landed holonomy coordinates already separate two survival factors: the
+`L` The holonomy coordinates separate two survival factors: the
 prescribed slope is full survival `P = S(m)`, while the unilateral max-affine
 slope is opponent-only survival `χ_i = S_{-i}(m)`.
 
@@ -86,7 +86,7 @@ between stage masses the snapped value is a jump value.
 `τ` is mass, not calendar time, so paths do not reintroduce the length fence. A
 finite list of absorption atoms is rejected for the opposite reason: its atom
 count is a natural-number coordinate that diverges exactly as calendar length
-does, re-importing the `14d75ff` obstruction.
+does, re-importing the finite-length obstruction.
 
 Every mass and survival coordinate is bounded in `[0,1]`: in particular
 `0 ≤ s_exit ≤ 1` and `0 ≤ χ_i ≤ 1` are both required as fields. The upper
@@ -99,7 +99,7 @@ and the cap as fields, each carrying a hypothesis pinning it to its path. `ℝ`'
 order is classical and not kernel-reducible, so a cap defined by `sSup` and a
 defect defined by a sum over a *spliced* path both fail to reduce
 definitionally, and `forgetful_compose` stops being `rfl`. That `rfl` is the
-only line machine-checking the encoding against the landed holonomy law; it is
+only line machine-checking the encoding against the holonomy law; it is
 worth more than eliminating five fields.
 
 ## 3. The obstacle is not a function of mass
@@ -220,7 +220,7 @@ still determines all semantics is the content of P0-A.
    finite policy value, slope `P = s_exit`.
 2. **Obstacle.** `O_i` equals the joint marked completed graph of the block's
    literal quit-at-`t` records, including repeated-mass stages; its derived cap
-   equals the landed max-affine cap coordinate, slope `χ_i = S_{-i}(m)`.
+   equals the max-affine cap coordinate, slope `χ_i = S_{-i}(m)`.
    If a pointed cap hypograph is also stored, prove its incidence and maximizing
    equations rather than assuming a continuous argmax selection.
 3. **Clocks.** `G_i` and the absorption path agree with `S(·)`, `S_{-i}(·)`.
@@ -229,7 +229,7 @@ still determines all semantics is the content of P0-A.
 5. **Debt.** Retained entry debt equals the block's dynamic debt at entry.
 6. **Anchors.** `e_in`, `e_out` are the block's exact-`D` endpoints.
 7. **Concatenation.** The cylinder of a concatenation equals the composition of
-   cylinders, associatively, agreeing with the landed `(B,P)`/`(A,T,χ)` laws
+   cylinders, associatively, agreeing with the `(B,P)`/`(A,T,χ)` laws
    under the forgetful map.
 
 Item 7 subsumes the test that matters most: the forgetful map to holonomy

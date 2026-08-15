@@ -105,6 +105,10 @@ preferable to manually curated mega-umbrellas.
   is too low-level.
 - A theorem parameter used only to construct another hypothesis should be
   tested for internal derivability from retained finite data.
+- A touched theorem should be checked in both directions: minimize its
+  assumptions and expose the strongest stable conclusion its proof already
+  establishes. Flag wider strengthening opportunities when they cannot be
+  taken without redesigning the surrounding API.
 - Proof arguments embedded in constructed roots or profiles are still API
   parameters even when proof irrelevance makes their values mathematically
   immaterial. Normalize them to a canonical proof when a stronger retained

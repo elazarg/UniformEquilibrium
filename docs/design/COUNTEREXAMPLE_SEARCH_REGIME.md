@@ -46,38 +46,41 @@ sharp cross-lane chain
 ```
 
 Thus every counterexample has a positive optimized exact-D floor, and some own
-singleton reward is positive.  The former free parameter `δ` was redundant.
+singleton reward is positive.  No independent free parameter `δ` is needed.
 The capacity `C*` is canonical: its real value is the least valid prefix bound,
 not a user-chosen larger constant.
 
 The Lean umbrella is `CounterexampleRegimeAll`, an import-only facade for the
 diagnostic inventory.  This document is the narrative source for its search
-protocol and current synthesis; the facade itself deliberately carries no
-duplicate prose.  The direct characterization is
+protocol and synthesis; the facade itself deliberately carries no duplicate
+prose.  The direct characterization is
 `not_exists_uniformEquilibriumPayoff_iff_exists_gap_and_finiteChargeCapacity`.
 
 ### Derived finite and asymptotic narrowing
 
 The regime is machine-checked EMPTY below four players
 (`QuittingCounterexampleRegime.three_lt_card`): fewer than two players is
-refuted by the toggle consequences below, and two or three players by a new
-player-reindex transport (`Classification/PlayerReindexNaturality.lean`) of the
-unconditional `Bool` and `Fin 3` existence theorems.  A one-player existence
-theorem for arbitrary `Unique` player types
-(`quittingGame_exists_uniformEquilibriumPayoff_onePlayer`) fills the
-previously unformalized base case.
+refuted by the toggle consequences below, and two or three players by
+player-reindex transport
+(`UniformEquilibrium/Quitting/Classification/PlayerReindexNaturality.lean`) of
+the unconditional `Bool` and `Fin 3` existence theorems.  A one-player
+existence theorem for arbitrary `Unique` player types
+(`quittingGame_exists_uniformEquilibriumPayoff_onePlayer`) supplies the
+one-player case.
 
-Player relabeling now preserves specified uniform-equilibrium payoffs and
+Player relabeling preserves specified uniform-equilibrium payoffs and
 counterexample-regime inhabitation in both directions.  Hence any hypothetical
 finite counterexample may be searched on `Fin n`.  It may moreover be chosen
 cardinality-minimal with `n ≥ 4`; every smaller nonempty player type, and every
 nonempty proper restriction of the minimal table, then has a uniform-equilibrium
-payoff as a game in its own right (`MinimalFinCounterexample.lean`).  The
+payoff as a game in its own right
+(`UniformEquilibrium/Diagnostics/Quitting/MinimalFinCounterexample.lean`).  The
 restriction theorem does not extend that payoff to excluded players or control
 their joining deviations.
 
 Further machine-checked necessary conditions
-(`CounterexampleRegimeToggles.lean`, `CounterexampleRegimePacket.lean`):
+(`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeToggles.lean`,
+`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimePacket.lean`):
 
 - no profile is terminally `ε`-Nash for any `ε < η`
   (`not_isεAsymptoticNash_of_lt_terminalGap`);
@@ -97,7 +100,8 @@ Further machine-checked necessary conditions
   bystander reward by `η` (`exists_collision_gain`);
 - every stationary profile is exploitable through its unilateral Snell cap,
   with no contraction hypothesis (`exists_stationaryCap_gain`);
-- the analytic waist (`Classification/AnalyticWaist.lean`, general player
+- the analytic waist
+  (`UniformEquilibrium/Quitting/Classification/AnalyticWaist.lean`, general player
   type) forces a normalized singleton source packet on every counterexample
   table (`nonempty_normalizedSingletonSourcePacket`) — a finite
   semialgebraic system search code can refute directly; and
@@ -186,7 +190,7 @@ Positive debt is also floor-safe at every finite date: any positive-debt
 coordinate already dominates its behavioral punishment value.
 
 Finite exact-D caps nevertheless lie in a common reward-bounded,
-punishment-floor-admissible carrier.  Closed projective passage now places every
+punishment-floor-admissible carrier.  Closed projective passage places every
 augmented cap of the optimized infinite tail in that same carrier.  Its limit
 is a literal zero-charge all-Continue exact self-loop there.  This does not make
 the finite dynamic-debt transitions exact edges of the carrier relation; the
@@ -227,7 +231,7 @@ summable and tend to zero, so every such root sequence converges coordinatewise
 to all-Continue.  Nevertheless, the actual behavior profile starting at every
 sufficiently late date remains terminally exploitable by at least `η`.
 
-The optimized exact-D path and the floor-prefix family now meet at every date.
+The optimized exact-D path and the floor-prefix family meet at every date.
 Every unaugmented selected-tail value dominates the punishment floor: zero
 debt removes the augmented-cap term directly, while positive debt invokes the
 floor-persistence/self-loop theorem.  Reversing any finite chronological
@@ -309,7 +313,7 @@ decomposition it can be approached with piecewise-affine, polynomial, or
 sum-of-squares barrier templates.
 
 Apparent saturation of the horizon maxima is only candidate evidence.  The
-capacity is a supremum and need not be attained.  The current generic attained
+capacity is a supremum and need not be attained.  The generic attained
 finite-horizon API assumes a finite edge type and does not by itself prove
 compact continuum-edge attainment for the quitting relation.
 
@@ -396,7 +400,7 @@ denominator.  These facts supply singleton concentration, not funding or the
 survival-reweighting needed to identify a refusal law with the original owner
 occupation conditioned off one player.
 
-That reweighting now has an exact search-facing bound.  If the refusing
+That reweighting has an exact search-facing bound.  If the refusing
 player's hazard is at most `rho` throughout a finite window, then the raw
 joint-versus-opponent chronology discrepancy is at most the window's
 triangular time factor times `rho`.  With a certified positive lower bound
@@ -418,7 +422,7 @@ normalization.  A positive limiting owner coordinate produces an actual
 positive-hazard source phase beyond the same cutoff and therefore pins the
 annotation boundary to that owner's singleton reward.  This closes the
 support-pinning part of the occupation bridge.  On the selected optimized tail
-the punishment-floor clause is now automatic; funding and vanishing of the
+the punishment-floor clause is automatic; funding and vanishing of the
 normalized refusal-reweighting ratio remain independent tests.
 
 The same data give a direct rejection test for charge-scale recurrence.  There
@@ -472,8 +476,10 @@ inequalities with enough data for reconstruction.
 
 ## The cross-lane question — collapsed to one branch
 
-The former two-branch alternative is now a theorem with a single surviving
-branch (`CounterexampleRegimeViolationCollapse.lean`).  At every exact
+The two-branch alternative is a theorem with a single surviving
+branch
+(`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeViolationCollapse.lean`).
+At every exact
 Nash--Bellman edge, a value below the punishment floor amplifies through the
 opponents-continue mass — `χ - v ≤ c · (χ - w)` — so the violating
 coordinate set is monotone along any exact tail: *rotating* violation never
@@ -509,7 +515,8 @@ annotations, not realized payoffs; the two-player positive-debt plateau
 table realizes this entire package inside a game that HAS a uniform payoff,
 so no contradiction can come from the tail data alone.
 
-The production seam is now explicit in `CounterexampleRegimeSeam.lean`.
+The production seam is explicit in
+`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeSeam.lean`.
 Every counterexample simultaneously carries the strict-refusal packet, the
 positive-debt all-Continue tail limit, and the exact pure-time/`Never` gap on
 every periodic tail window.  No theorem identifies the packet weights with
@@ -543,7 +550,7 @@ underfunding.  A positive refusal defect at a proper positive owner mass
 instead forces strict funding and a quantitative lower bound on that mass; if
 the clauses of a generic packet still fail, the scalar algebra leaves the
 punishment floor as the missing clause.  On the selected optimized tail that
-clause is now automatic.  Consequently charge-scale delivery closure would
+clause is automatic.  Consequently charge-scale delivery closure would
 produce a forbidden complementary packet, which is exactly the ballisticity
 argument.  Thus “the packet lacks funding” is not a branch-independent
 diagnosis, and ordinary endpoint convergence is not delivery closure.
@@ -559,7 +566,8 @@ M μ ≥ 0  and  μ_i * (M μ)_i = 0 for every i,
 ```
 
 plus the pure-owner Never condition.  Failure of this complementarity can be
-uniformly separated from zero on the simplex.  `FourPlayerSingletonBlocker.lean`
+uniformly separated from zero on the simplex.
+`UniformEquilibrium/Diagnostics/Quitting/FourPlayerSingletonBlocker.lean`
 proves this with an exact bounded rational table and a strictly positive compact
 separation constant.  Consequently the forced packet may be the source of
 perpetual restart blocking rather than its cure.  The table is a regression for

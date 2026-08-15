@@ -6,9 +6,10 @@ declaration index is [`STATUS.md`](STATUS.md). Detailed compiler interfaces are
 in [`TOOLKIT.md`](TOOLKIT.md), and the mechanically maintained quitting leaf
 ledger is [`QuittingProofFrontier.json`](QuittingProofFrontier.json).
 
-This is not a chronology. Superseded routes and source-repository locators are
-preserved in [`audits/FRONTIER_LEGACY.md`](audits/FRONTIER_LEGACY.md) and
-[`../TRANSITION.md`](../TRANSITION.md), as appropriate.
+This is not a chronology. Explicitly historical mathematical synthesis is
+scoped under [`audits/`](audits/README.md); repository-transition provenance,
+old source paths, and extraction decisions belong only in
+[`../TRANSITION.md`](../TRANSITION.md).
 
 ## Exact questions
 

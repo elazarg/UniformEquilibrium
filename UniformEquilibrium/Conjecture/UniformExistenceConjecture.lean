@@ -22,6 +22,10 @@ definition of a proposition, not by an assumed theorem.
 the conjecture. It is equivalent to the semantic form by
 `hasUniformDeviationCapConstructor_iff`. The lemmas below record the semantic
 consequences conditionally, without introducing a proof of the conjecture.
+`IsUniformEquilibriumPayoff.exists_isUniformεEquilibrium` separately exposes
+the assumption-minimal approximate-equilibrium consequence of one fixed
+uniform payoff, and its target-free contrapositive records the corresponding
+nonexistence certificate.
 
 Known cases: two-player zero-sum games (Mertens--Neyman 1981), two-player games
 (Vieille 2000), three-player absorbing games (Solan, *Three-Player Absorbing
@@ -88,6 +92,29 @@ namespace StochasticGame
 
 variable {ι : Type}
 
+/-- A fixed uniform-equilibrium payoff supplies a uniform approximate
+equilibrium at every positive accuracy. -/
+theorem IsUniformEquilibriumPayoff.exists_isUniformεEquilibrium
+    {G : StochasticGame ι} [Fintype ι] [DecidableEq ι]
+    {s₀ : G.State} {v : Payoff ι}
+    (hv : G.IsUniformEquilibriumPayoff s₀ v)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ σ : G.BehaviorProfile, G.IsUniformεEquilibrium s₀ ε σ := by
+  obtain ⟨σ, threshold, hprofile⟩ := hv ε hε
+  exact ⟨σ, threshold, fun horizon hhorizon =>
+    (hprofile horizon hhorizon).1⟩
+
+/-- Failure of uniform `ε`-equilibrium at one positive accuracy rules out
+every uniform-equilibrium payoff target. -/
+theorem not_exists_uniformEquilibriumPayoff_of_no_uniformεEquilibrium
+    {G : StochasticGame ι} [Fintype ι] [DecidableEq ι]
+    {s₀ : G.State} {ε : ℝ} (hε : 0 < ε)
+    (hno : ¬ ∃ σ : G.BehaviorProfile,
+      G.IsUniformεEquilibrium s₀ ε σ) :
+    ¬ ∃ v : Payoff ι, G.IsUniformEquilibriumPayoff s₀ v := by
+  rintro ⟨v, hv⟩
+  exact hno (hv.exists_isUniformεEquilibrium hε)
+
 /-- Quantitative statement of the uniform-equilibrium existence problem.
 
 This is the proof-construction waist at which analytic hierarchy,
@@ -130,8 +157,7 @@ theorem exists_isUniformεEquilibrium_of_conjecture (G : StochasticGame ι)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ σ : G.BehaviorProfile, G.IsUniformεEquilibrium s₀ ε σ := by
   obtain ⟨v, hv⟩ := G.exists_uniformEquilibriumPayoff_of_conjecture s₀ hconjecture
-  obtain ⟨σ, T₀, h⟩ := hv ε hε
-  exact ⟨σ, T₀, fun T hT => (h T hT).1⟩
+  exact hv.exists_isUniformεEquilibrium hε
 
 
 end StochasticGame

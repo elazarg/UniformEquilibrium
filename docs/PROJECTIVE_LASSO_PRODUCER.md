@@ -122,7 +122,7 @@ That deviation converges to `2` minus the probability that the opponent never
 quits.  Both opponent exit probabilities are therefore at most
 `delta + epsilon`; survival-product domination then bounds the prescribed
 payoff by twice their sum.  At equal errors, `eta >= 1/9`, and the packet value
-is not a uniform-equilibrium payoff.  The singleton sure-exit profiles still
+is not a uniform-equilibrium payoff.  The singleton sure-exit profiles
 give exact uniform payoffs `(1,2)` and `(2,1)`.
 
 Thus the correct producer interface is a disjunction:
@@ -133,7 +133,7 @@ packet
    | rejected target plus certified strategic retarget.
 ```
 
-The general analytic target-selection layer already distinguishes endpoint
+The general analytic target-selection layer distinguishes endpoint
 acceptance from obstruction and retargeting.  The quitting example is the
 projective regression ensuring that finite packet and lasso code is connected
 through that layer, rather than treating an affine anchor as a strategy.
@@ -229,7 +229,7 @@ y_i(t) = α_i t^q + o(t^q),
 L = ∑ i, α_i > 0.
 ```
 
-The existing analytic-order library proves
+The analytic-order library proves
 
 ```text
 Q(t) = 1 - ∏ i (1 - y_i(t)) = L t^q + o(t^q).
@@ -272,7 +272,7 @@ identity.  Together these facts construct
 `QuittingProjectiveSingletonPacket` directly.
 
 This theorem closes the matching-order case only.  The complete order
-trichotomy remains
+trichotomy is
 
 ```text
 m < q  → cemetery mass 0,
@@ -347,7 +347,7 @@ The module does not construct an instance for the quitting Bellman variety;
 that construction, coverage proof, and arc-lifting theorem remain producer
 work.
 
-## 6. Semantic Farkas decoding remains strategic
+## 6. Semantic Farkas decoding requires strategic content
 
 A normalized obstruction arising from a resolved quitting chart must be
 converted into one of the following fully typed outputs:
@@ -415,9 +415,9 @@ Thus, under positive aggregate absorption, the rotation-uniform signed bound
 
 is equivalent to coordinatewise `η`-closeness to the actual periodic values.
 Cancellation inside one turn is legitimate; checking every cyclic entry is
-still load-bearing.
+load-bearing.
 
-The older absolute condition
+The stronger absolute condition
 
 ```text
 ∑ k, s_k * |e_k| ≤ η * (1 - ∏ k, c_k)
@@ -451,7 +451,7 @@ phase later.  The required target is therefore
 or an equivalent bound on the maximum ratio over all phases and players.
 
 `IsQuittingRotationUniformSignedResidual` is the canonical exact predicate.
-`QuittingFiniteWeightedProjectiveLasso` remains a stronger compatibility
+`QuittingFiniteWeightedProjectiveLasso` is a stronger compatibility
 certificate and delegates through its `.toSigned` adapter.  The pointwise
 certificate
 
@@ -459,7 +459,7 @@ certificate
 |e_k(i)| ≤ η * q_k
 ```
 
-is stronger still and maps through the same compiler chain.
+is even stronger and maps through the same compiler chain.
 
 ## 10. Finite charged closing
 
@@ -485,7 +485,7 @@ that seam exactly once with survival prefix at most one.  Therefore
 ∀ chargeTarget ≥ 0, ∃ one finite exact forward packet
 ```
 
-in a carrier independent of `chargeTarget` already implies single-seam lassos
+in a carrier independent of `chargeTarget` implies single-seam lassos
 at every accuracy.  It does not require one orbit that works for all charge
 targets or a separate rotation-recurrence theorem.
 

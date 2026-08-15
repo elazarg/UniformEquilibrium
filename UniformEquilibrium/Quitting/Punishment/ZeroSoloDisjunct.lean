@@ -22,14 +22,13 @@ never absorbing is worth `0`.  So all-continue is an *exact* terminal Nash
 profile, and the exact terminal-to-uniform consumer delivers the zero vector
 as a uniform-equilibrium payoff.
 
-The absorbing-cycle route cannot reach these weights: absorption is exactly
-what a zero-solo equilibrium refuses to do, and there are zero-solo weights
-admitting no admissible absorbing cycle at all.  That is why the reduction is
-stated below as a *disjunction*: a weight is covered either by this file's
-zero-solo branch or by the cycle branch of
-`QuittingAdmissibleCycleTerminalEquilibrium`.  Whether the second disjunct
-holds on every weight with some `r_i({i}) > 0` is open; the disjunction as
-stated here is a theorem.
+The absorbing-cycle route cannot reach all these weights: absorption is
+exactly what a zero-solo equilibrium refuses to do, and some zero-solo weights
+admit no admissible absorbing cycle. Conversely, the finite Bool counterexample
+in `not_forall_isQuittingZeroSolo_or_hasAdmissibleAbsorbingQuittingCycle` has a
+positive solo reward but no admissible cycle. Thus the two branches are
+sufficient conditions, not an exhaustive classification; the theorem below is
+conditional on a supplied disjunction witness.
 
 ## What is reused
 
@@ -163,13 +162,12 @@ def HasAdmissibleAbsorbingQuittingCycle
 either zero-solo or admits an admissible absorbing cycle has a uniform
 equilibrium payoff.
 
-`HEADLINE` — the current shape of the whole finite-quitting reduction in one
-statement: the zero-solo branch is this file, the cycle branch is
+The zero-solo branch is this file, and the cycle branch is
 `exists_uniformEquilibriumPayoff_of_admissible_quittingCyclicContinuationBlock`.
-What it does **not** cover is the completeness of the disjunction itself: that
-*every* weight satisfies one of the two disjuncts is open, and is exactly the
-remaining obligation of the program.  In particular this theorem is not an
-unconditional existence result. -/
+The disjunction is not exhaustive:
+`not_forall_isQuittingZeroSolo_or_hasAdmissibleAbsorbingQuittingCycle` proves
+that some finite reward table satisfies neither branch. Thus this conditional
+theorem is not an unconditional existence result. -/
 theorem exists_uniformEquilibriumPayoff_of_zeroSolo_or_admissibleCycle
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hbranch : IsQuittingZeroSolo reward ∨
