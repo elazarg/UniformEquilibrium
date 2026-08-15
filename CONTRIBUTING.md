@@ -96,5 +96,6 @@ python scripts/check_docs.py
 ```
 
 Living documentation describes the current mathematics and workflow. Put
-chronology and superseded approaches only in `TRANSITION.md` or explicitly
-historical audit/design records.
+repository-transition chronology, old paths, and superseded implementation
+approaches only in `TRANSITION.md`. Literature and source-history audits remain
+within their explicitly scoped reference or audit records.

@@ -754,7 +754,7 @@ theorem partialBestEndpoint_nearMinimumDebt_transfer_with_positiveIncidence
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
     (who marked other : ι) (lambda epsilon : ℝ)
-    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
+    (hlambda0 : 0 ≤ lambda)
     (hlambdaStrict : lambda < 1)
     (hnear : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum
@@ -770,7 +770,7 @@ theorem partialBestEndpoint_nearMinimumDebt_transfer_with_positiveIncidence
       quittingRootThenContinuationProfile reward root continuation
     let targetProfile := quittingRootThenContinuationProfile reward
       (quittingPartialEndpointRoot root who action lambda
-        hlambda0 hlambda1) continuation
+        hlambda0 hlambdaStrict.le) continuation
     let source := quittingTerminalSemanticPair reward sourceProfile
     let target := quittingTerminalSemanticPair reward targetProfile
     let gain := lambda *
@@ -794,7 +794,7 @@ theorem partialBestEndpoint_nearMinimumDebt_transfer_with_positiveIncidence
     quittingRootThenContinuationProfile reward root continuation
   let targetProfile := quittingRootThenContinuationProfile reward
     (quittingPartialEndpointRoot root who action lambda
-      hlambda0 hlambda1) continuation
+      hlambda0 hlambdaStrict.le) continuation
   let source := quittingTerminalSemanticPair reward sourceProfile
   let target := quittingTerminalSemanticPair reward targetProfile
   let gain := lambda * quittingRootCoordinateNashDefect reward
@@ -813,7 +813,7 @@ theorem partialBestEndpoint_nearMinimumDebt_transfer_with_positiveIncidence
       quittingTerminalPayoff_rootThenContinuation_eq]
     exact quittingRootSuccessorPayoff_partialBestEndpoint_sub_eq_mul_defect
       reward (quittingTerminalSemanticPair reward continuation).1 root who
-        lambda hlambda0 hlambda1
+        lambda hlambda0 hlambdaStrict.le
   have hdecrease : quittingTerminalSemanticDebt target who =
       quittingTerminalSemanticDebt source who - gain := by
     change quittingContinuationBestResponseValue reward targetProfile who -
@@ -839,7 +839,7 @@ theorem partialBestEndpoint_nearMinimumDebt_transfer_with_positiveIncidence
     rw [← quittingTerminalOutcomeLawPrefix_outcomeMass,
       ← quittingTerminalOutcomeLawPrefix_outcomeMass]
     exact one_sub_mul_incidence_le_partialLawPrefix
-      marked other root who action lambda hlambda0 hlambda1
+      marked other root who action lambda hlambda0 hlambdaStrict.le
       (quittingTerminalOutcomeMass reward continuation)
       hcontinuationIncidence
   have hincidencePositive : 0 <
@@ -859,7 +859,7 @@ theorem partialBestEndpoint_minimumReference_transfer_with_positiveIncidence
     (root : ι → PMF Bool)
     (continuation : (quittingGame reward).BehaviorProfile)
     (who marked other : ι) (lambda : ℝ)
-    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
+    (hlambda0 : 0 ≤ lambda)
     (hlambdaStrict : lambda < 1)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
@@ -873,7 +873,7 @@ theorem partialBestEndpoint_minimumReference_transfer_with_positiveIncidence
       quittingRootThenContinuationProfile reward root continuation
     let targetProfile := quittingRootThenContinuationProfile reward
       (quittingPartialEndpointRoot root who action lambda
-        hlambda0 hlambda1) continuation
+        hlambda0 hlambdaStrict.le) continuation
     let source := quittingTerminalSemanticPair reward sourceProfile
     let target := quittingTerminalSemanticPair reward targetProfile
     let gain := lambda *
@@ -907,6 +907,6 @@ theorem partialBestEndpoint_minimumReference_transfer_with_positiveIncidence
     reward root continuation who marked other lambda
       (quittingTerminalSemanticDebtSum source -
         quittingTerminalSemanticDebtSum minimum)
-      hlambda0 hlambda1 hlambdaStrict hnear hincidence
+      hlambda0 hlambdaStrict hnear hincidence
 
 end GameTheory

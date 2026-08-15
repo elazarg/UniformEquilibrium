@@ -278,17 +278,17 @@ theorem hasHalfLiveValueForDiscountedBellmanEquilibria :
 Big-Match value: zero at the zero state, `(1,-1)` at the one state, and
 `(1/2,-1/2)` at the live state. -/
 theorem finkValue_eq_of_finkMap_fixedPoint
-    (β U : ℝ) (hβ0 : 0 ≤ β) (hβle : β ≤ 1) (hβ1 : β < 1)
+    (β U : ℝ) (hβ0 : 0 ≤ β) (hβ1 : β < 1)
     (hpay : ∀ s a who, |game.stagePayoff s a who| ≤ U)
     (z : game.finkDomain U)
-    (hfix : game.finkMap β U hβ0 hβle hpay z = z) :
+    (hfix : game.finkMap β U hβ0 hβ1.le hpay z = z) :
     (∀ who, game.finkValue z .zero who = 0) ∧
       game.finkValue z .one false = 1 ∧
       game.finkValue z .one true = -1 ∧
       game.finkValue z .live false = (1 / 2 : ℝ) ∧
       game.finkValue z .live true = -(1 / 2 : ℝ) := by
   have hF := game.isDiscountedStationaryBellmanEq_of_finkMap_fixedPoint
-    β U hβ0 hβle hpay z hfix
+    β U hβ0 hβ1.le hpay z hfix
   exact discountedStationaryBellmanEq_values hβ0 hβ1 hF
 
 end BigMatch

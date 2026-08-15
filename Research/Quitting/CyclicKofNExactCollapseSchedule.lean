@@ -124,16 +124,16 @@ theorem exactCollapseSchedule_covers_translationPhase
 quitting coordinates. -/
 theorem card_positiveHazardSupport_exactCollapseRoots
     {n k d : ℕ} [NeZero n] [NeZero d]
-    (hk : k ≤ n) (β : ℝ) (hβ0 : 0 ≤ β) (hβ1 : β ≤ 1)
+    (hk : k ≤ n) (β : ℝ) (hβ1 : β ≤ 1)
     (hβpos : 0 < β) (time : ℕ) :
     (quittingPositiveHazardSupport
-      (exactCollapseRoots n k d β hβ0 hβ1 time)).card = k * d := by
+      (exactCollapseRoots n k d β hβpos.le hβ1 time)).card = k * d := by
   calc
     (quittingPositiveHazardSupport
-      (exactCollapseRoots n k d β hβ0 hβ1 time)).card =
+      (exactCollapseRoots n k d β hβpos.le hβ1 time)).card =
         (exactCollapseBlock n k d).card :=
       card_positiveHazardSupport_cyclicRoots
-        (exactCollapseBlock n k d) β hβ0 hβ1 hβpos time
+        (exactCollapseBlock n k d) β hβ1 hβpos time
     _ = k * d := card_exactCollapseBlock hk
 
 /-- The behavioral root sequence itself has exact period `n`. -/

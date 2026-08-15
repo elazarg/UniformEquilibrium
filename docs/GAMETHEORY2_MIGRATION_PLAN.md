@@ -1,62 +1,44 @@
 # GameTheory2 migration plan
 
-This document records the engineering plan for eventually replacing the pinned
-`GameTheory/` dependency with the current GameTheory2 development. It does not
-authorize that cutover, a second simultaneous dependency, or a compatibility
-fork. The present engineering roadmap may prepare boundaries and tests, but it
-must continue to build against the pinned v1 dependency until a separate
-cutover decision is made.
+This is the living engineering plan for eventually replacing the pinned
+`GameTheory/` dependency with the canonical `v2` development. It records target
+architecture and acceptance gates, not a chronology of inspected commits. It
+does not authorize the cutover, a second simultaneous dependency, or a
+compatibility fork. The current tree must continue to build against the pinned
+v1 dependency until a separate cutover decision is made.
 
-## Current reproducibility gate
+## Reproducibility gate
 
-The audited dependency snapshots are:
+The canonical `v2` branch is published at the existing GameTheory remote, but a
+moving branch is not a dependency pin. Before any dependency edit:
 
-| Item | Audited value |
-| --- | --- |
-| Current pinned GameTheory gitlink | `02898a2d8b918f9b106a683420ca78c99867560e` |
-| Locally inspected GameTheory2 head | `8464fd300683eca4163fc6a7b1710ad26d1861d6` |
-| Lean toolchain | `v4.32.2` in both trees |
-| Mathlib revision | `905b95818eb32af7874a58b427f50c1711a5e96c` in both manifests |
-| Current fixed-point dependency | nested gitlink `6839b05aad04d5a10a8062d9e8b2ee3c4abd92f7` |
-| GameTheory2 fixed-point dependency | git revision `9571dd7e0ff0af9c9e9becb2738a309cf48387c1` |
+1. select one immutable reviewed `v2` commit;
+2. verify its Lean, Mathlib, and auxiliary dependency revisions against this
+   project;
+3. build it from a clean clone using its architecture audits; and
+4. record the immutable commit in the actual gitlink/manifest change.
 
-The inspected GameTheory2 checkout has no configured remote. That is a hard
-operational blocker: the repository cannot record a reproducible submodule URL
-and another checkout cannot fetch the inspected commit. Before any dependency
-edit, GameTheory2 needs a canonical published remote, an immutable reviewed
-commit, and a successful clean-clone build at that commit.
-
-The shared Lean and Mathlib versions remove one source of migration noise. The
-fixed-point revision change does not justify an early manifest edit; it should
-arrive with the actual dependency cutover and its required `lake update`.
+Do not edit the manifest merely to follow an auxiliary dependency revision.
+Toolchain, fixed-point, and manifest changes arrive together with the real
+cutover and its required `lake update`.
 
 ## Compatibility census
 
-This is a source-architecture census, not a claim that similarly named
-declarations have compatible types.
+Treat the successor as source-incompatible. Its design does not preserve the
+v1 module graph or declaration names, and similarly named objects do not imply
+compatible types. Regenerate a machine-readable direct-import and external-
+declaration census from the tree immediately before any port; do not preserve
+an old measured count in this living plan.
 
-- The current dependency has 484 modules below its `GameTheory/` and `Math/`
-  source roots; the inspected successor has 344 below `GameTheory/` and
-  `GameTheoryMath/`. Only 18 module names coincide.
-- This project directly imports 56 distinct dependency modules. None exists at
-  the same module path in the inspected successor.
-- The additional direct edge is `GameTheory.Basic`, imported by the
-  game-facing `UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter`.
-  It supplies the v1 reward carrier at the semantic adapter boundary; it is
-  not a reason to move game semantics into the generic `MathUE` lane.
-- Lexical reach indicators across `MathUE`, `UniformEquilibrium`, `Research`,
-  and `Theorems` find `StochasticGame` in 589 files, `BehaviorProfile` in 382,
-  `.Act` in 254, `PMF` in 739, and `quittingGame` in 398. The `.Act` and `PMF`
-  scans use identifier boundaries. These counts include comments and
-  declaration sites; they measure migration breadth, not API usage precisely.
-- There are 22 inspected `StochasticGame` structure literals in 21 files. All
-  store discount zero, so deleting the obsolete discount fields is mechanical;
-  their surrounding play semantics are not.
+The project depends pervasively on v1 `StochasticGame`, PMF histories,
+behavioral profiles, quitting roots, asymptotic calculus, and Fink interfaces.
+The game-facing `QuittingRewardAdapter` also directly uses the v1 reward
+carrier. That edge belongs at the semantic adapter boundary and is not a reason
+to move game semantics into `MathUE`.
 
-The successor's own `V1CapabilityMap.md` explicitly describes it as
-source-incompatible. Its design rejects declaration-for-declaration ports and
-compatibility aliases in favor of successor-native owners. The replacement is
-therefore a semantic port, not a module rename.
+The replacement is therefore a semantic port, not a module rename. Delete
+obsolete structure fields only as part of a checked vertical slice; simple
+literal changes do not validate the surrounding play semantics.
 
 ## Semantic differences that control the plan
 
@@ -84,6 +66,16 @@ should use `FinDist` through its public `pure`, `map`, `bind`, `pi`, `prob`, and
 `expect` interface. A theorem belongs in `GameTheoryMath` only when the
 successor project accepts ownership; otherwise project-specific generic work
 remains in `MathUE`.
+
+The successor's experimental `PostArchitecture.StochasticProofView` is useful
+as a specification: it provides proof-facing public-history policies, profile
+round trips, one-step runner exposure, and compatibility with unilateral
+profile update. It is not a production migration waist. In particular it does
+not provide the v1 indexed-history correspondence, generic finite-horizon law
+and payoff equality, or the canonical uniform-payoff bridge, and its hostile
+fixture does not exercise action-dependent transitions. Production code must
+not import the experimental module. Reuse its design only through a promoted
+stable successor interface or a project-owned facade over public v2 APIs.
 
 ## Target dependency shape
 
@@ -115,9 +107,9 @@ consumer exists.
 
 ## Staged execution plan
 
-### 0. Make the dependency fetchable
+### 0. Select a reproducible successor pin
 
-Publish GameTheory2 at a canonical remote, select a reviewed commit, verify a
+Select a reviewed immutable commit from the canonical `v2` branch, verify a
 clean clone, and record its build and architecture-audit commands. No gitlink
 or Lake change precedes this gate.
 
@@ -138,8 +130,8 @@ For every used legacy `Math.*` declaration, choose exactly one owner:
 3. genuinely project-owned generic theorem in `MathUE`; or
 4. delete it with its obsolete consumer.
 
-Do not vendor the legacy `Math/` tree wholesale. Port narrow leaves only after
-a live consumer identifies their needed statement.
+Do not vendor the legacy generic-mathematics tree wholesale. Port narrow
+leaves only after a live consumer identifies their needed statement.
 
 ### 3. Prove one stochastic semantic waist
 

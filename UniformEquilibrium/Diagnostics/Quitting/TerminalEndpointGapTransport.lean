@@ -176,7 +176,6 @@ theorem quittingFixedOpponentsQuitValue_sub_terminalPayoff_le_exploitability
 compared with the conditioned terminal payoff of one actual profile.  The
 result is a lower bound on that same player's literal terminal debt. -/
 theorem affineConditionedEndpointGap_le_terminalCoordinateDebt
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
     (endpoint : ℝ) {M : ℝ}
@@ -190,6 +189,7 @@ theorem affineConditionedEndpointGap_le_terminalCoordinateDebt
           alpha * |conditioned - endpoint| ≤
       max 0 (quittingContinuationBestResponseValue reward profile who -
         quittingTerminalPayoff reward profile who) := by
+  letI : Nonempty ι := ⟨who⟩
   dsimp only
   let alpha := quittingTerminalAbsorptionProbability reward profile
   let conditioned := quittingTerminalConditionedPayoff reward profile who
@@ -249,7 +249,6 @@ theorem affineConditionedEndpointGap_le_terminalCoordinateDebt
 /-- If both endpoints of the conditioning split have positive gaps, the
 literal debt bound is uniform in the eventual-absorption probability. -/
 theorem min_sub_errors_le_terminalCoordinateDebt_of_conditionedEndpointGap
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
     (endpoint delta eta : ℝ) {M : ℝ}
@@ -262,6 +261,7 @@ theorem min_sub_errors_le_terminalCoordinateDebt_of_conditionedEndpointGap
           |quittingTerminalConditionedPayoff reward profile who - endpoint| ≤
       max 0 (quittingContinuationBestResponseValue reward profile who -
         quittingTerminalPayoff reward profile who) := by
+  letI : Nonempty ι := ⟨who⟩
   let alpha := quittingTerminalAbsorptionProbability reward profile
   have halpha := quittingTerminalAbsorptionProbability_mem_Icc reward profile
   have hconvex := min_le_one_sub_mul_add_mul
@@ -290,7 +290,6 @@ conditioned payoffs approach an endpoint, its first-row opponent absorption
 vanishes, and both endpoint gaps stay positive, then that same player's
 literal debt is eventually bounded below by half the smaller gap. -/
 theorem eventually_half_min_le_terminalCoordinateDebt_of_conditionedEndpointGap
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile) (who : ι)
     (endpoint delta eta : ℝ)
@@ -308,6 +307,7 @@ theorem eventually_half_min_le_terminalCoordinateDebt_of_conditionedEndpointGap
       min delta eta / 2 ≤
         max 0 (quittingContinuationBestResponseValue reward (profiles n) who -
           quittingTerminalPayoff reward (profiles n) who) := by
+  letI : Nonempty ι := ⟨who⟩
   obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   let error : ℕ → ℝ := fun n =>
     2 * M * quittingRootOpponentAbsorptionMass

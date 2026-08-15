@@ -658,10 +658,10 @@ theorem unilateralCap_approximateRoot_false
   norm_num
 
 theorem unilateralCap_approximateRoot_true
-    (a : ℝ) (ha0 : 0 ≤ a) (ha1 : a ≤ 1)
+    (a : ℝ) (ha1 : a ≤ 1)
     (hapositive : 0 < a) :
     quittingStationaryUnilateralCap reward
-        (approximateRoot a ha0 ha1) true = a - 1 := by
+        (approximateRoot a hapositive.le ha1) true = a - 1 := by
   unfold quittingStationaryUnilateralCap quittingStationarySelectedCap
     quittingStationaryNeverValue
   rw [stationaryFixedOpponentsQuitValue_true,
@@ -686,11 +686,11 @@ theorem approximationError_nonneg
 /-- Every behavioral unilateral deviation is capped with error
 `a²/(a+2)`. -/
 theorem isεAsymptoticNash_approximateRoot
-    (a : ℝ) (ha0 : 0 ≤ a) (ha1 : a ≤ 1)
+    (a : ℝ) (ha1 : a ≤ 1)
     (hapositive : 0 < a) :
     (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) (approximationError a)
-      (quittingStationaryProfile reward (approximateRoot a ha0 ha1)) := by
+      (quittingStationaryProfile reward (approximateRoot a hapositive.le ha1)) := by
   apply isεAsymptoticNash_stationary_of_unilateralCap_le
   · intro who
     cases who
@@ -704,8 +704,8 @@ theorem isεAsymptoticNash_approximateRoot
     · rw [unilateralCap_approximateRoot_false,
         terminalPayoff_approximateRoot]
       simp only [Bool.false_eq_true, ↓reduceIte]
-      exact le_add_of_nonneg_right (approximationError_nonneg a ha0)
-    · rw [unilateralCap_approximateRoot_true a ha0 ha1 hapositive,
+      exact le_add_of_nonneg_right (approximationError_nonneg a hapositive.le)
+    · rw [unilateralCap_approximateRoot_true a ha1 hapositive,
         terminalPayoff_approximateRoot]
       simp only [if_true]
       unfold approximationError
@@ -751,7 +751,7 @@ theorem stationary_approximation_family (n : ℕ) :
         (approximateRoot (smallHazard n) (smallHazard_pos n).le
           (smallHazard_le_one n))) :=
   isεAsymptoticNash_approximateRoot
-    (smallHazard n) (smallHazard_pos n).le (smallHazard_le_one n)
+    (smallHazard n) (smallHazard_le_one n)
       (smallHazard_pos n)
 
 /-- In particular, neither stationary singleton-First root is an exact

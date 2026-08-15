@@ -237,25 +237,25 @@ theorem sureSetOwnerRoot_empty_eq_solo
 /-- The empty-sure-set chart is quantitatively worse: player one's Quit-now
 deviation gains `p + 1`, hence more than one at every positive hazard. -/
 theorem not_isεAsymptoticNash_sureSetOwnerRoot_empty
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p)
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
     (ε : ℝ) (hε : ε < 1) :
     ¬ (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) ε
         (quittingStationaryProfile reward
-          (quittingSureSetOwnerRoot ∅ 0 p hp0 hp1)) := by
+          (quittingSureSetOwnerRoot ∅ 0 p hp.le hp1)) := by
   intro hnash
-  rw [sureSetOwnerRoot_empty_eq_solo p hp0 hp1] at hnash
+  rw [sureSetOwnerRoot_empty_eq_solo p hp.le hp1] at hnash
   have hquit := hnash 1
     (quittingPureTimeBehaviorStrategy reward 1 (some 0))
   have hhazard :
-      0 < ((quittingHazardCoin p hp0 hp1) true).toReal := by
+      0 < ((quittingHazardCoin p hp.le hp1) true).toReal := by
     simpa using hp
   rw [quittingTerminalPayoff_update_quitNow_eq_fixedOpponentsQuitValue,
     quittingProfileLiveRoot_stationary,
     quittingTerminalPayoff_soloStationary reward 0 1
-      (quittingHazardCoin p hp0 hp1) hhazard,
+      (quittingHazardCoin p hp.le hp1) hhazard,
     quittingStationaryFixedOpponentsQuitValue_solo_other_eq_mix
-      reward (by decide) (quittingHazardCoin p hp0 hp1)] at hquit
+      reward (by decide) (quittingHazardCoin p hp.le hp1)] at hquit
   norm_num [quittingSoloReward, quittingSingletonCollisionReward,
     reward] at hquit
   linarith
@@ -312,40 +312,40 @@ theorem exists_exactCap_gap_nonempty
 terminal `ε`-Nash equilibrium below the uniform `1/3` threshold. -/
 theorem not_isεAsymptoticNash_sureSetOwnerRoot
     (T : Finset Player) (hT : T.Nonempty) (howner : 0 ∉ T)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p)
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
     (ε : ℝ) (hε : ε < 1 / 3) :
     ¬ (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) ε
         (quittingStationaryProfile reward
-          (quittingSureSetOwnerRoot T 0 p hp0 hp1)) := by
+          (quittingSureSetOwnerRoot T 0 p hp.le hp1)) := by
   intro hnash
   have hcap :=
     (isεAsymptoticNash_sureSetOwnerRoot_iff_exactCap_le
-      reward hT howner p hp0 hp1 hp ε).1 hnash
+      reward hT howner p hp1 hp ε).1 hnash
   obtain ⟨who, hgap⟩ :=
     exists_exactCap_gap_nonempty T hT howner p hp
   have hwho := hcap who
   rw [terminalPayoff_sureSetOwnerRoot
-    reward hT howner p hp0 hp1 who] at hwho
+    reward hT howner p hp.le hp1 who] at hwho
   linarith
 
 /-- Uniform semantic exclusion of the entire owner-zero/sure-set grammar,
 including its owner-solo (`T = ∅`) chart. -/
 theorem not_isεAsymptoticNash_sureSetOwnerRoot_all
     (T : Finset Player) (howner : 0 ∉ T)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p)
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
     (ε : ℝ) (hε : ε < 1 / 3) :
     ¬ (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) ε
         (quittingStationaryProfile reward
-          (quittingSureSetOwnerRoot T 0 p hp0 hp1)) := by
+          (quittingSureSetOwnerRoot T 0 p hp.le hp1)) := by
   by_cases hT : T.Nonempty
   · exact not_isεAsymptoticNash_sureSetOwnerRoot
-      T hT howner p hp0 hp1 hp ε hε
+      T hT howner p hp1 hp ε hε
   · have hTempty : T = ∅ := Finset.not_nonempty_iff_eq_empty.mp hT
     subst T
     exact not_isεAsymptoticNash_sureSetOwnerRoot_empty
-      p hp0 hp1 hp ε (by linarith)
+      p hp1 hp ε (by linarith)
 
 /-! ## Direct pure First profiles
 

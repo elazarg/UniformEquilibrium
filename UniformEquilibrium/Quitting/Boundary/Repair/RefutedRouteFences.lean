@@ -447,13 +447,17 @@ closure with both rates positive exists.
 The positivity assumptions convert the sign information in the value
 recursions into coordinate bounds. -/
 theorem quittingTwoPhaseClosure_rates_eq_zero
-    (p1 p2 : ℝ) (hp1_0 : 0 ≤ p1) (hp1_1 : p1 ≤ 1) (hp2_0 : 0 ≤ p2) (hp2_1 : p2 ≤ 1)
+    (p1 p2 : ℝ) (hp1_1 : p1 ≤ 1) (hp2_1 : p2 ≤ 1)
     (hp1_pos : 0 < p1) (hp2_pos : 0 < p2)
     (V1 V2 : Payoff Bool)
-    (hvalue1 : V1 = quittingRootSuccessorPayoff reward2 V2 (phaseRoot false p1 hp1_0 hp1_1))
-    (hnash1 : IsεQuittingRootEndpointNash reward2 V2 0 (phaseRoot false p1 hp1_0 hp1_1))
-    (hvalue2 : V2 = quittingRootSuccessorPayoff reward2 V1 (phaseRoot true p2 hp2_0 hp2_1))
-    (hnash2 : IsεQuittingRootEndpointNash reward2 V1 0 (phaseRoot true p2 hp2_0 hp2_1)) :
+    (hvalue1 : V1 = quittingRootSuccessorPayoff reward2 V2
+      (phaseRoot false p1 hp1_pos.le hp1_1))
+    (hnash1 : IsεQuittingRootEndpointNash reward2 V2 0
+      (phaseRoot false p1 hp1_pos.le hp1_1))
+    (hvalue2 : V2 = quittingRootSuccessorPayoff reward2 V1
+      (phaseRoot true p2 hp2_pos.le hp2_1))
+    (hnash2 : IsεQuittingRootEndpointNash reward2 V1 0
+      (phaseRoot true p2 hp2_pos.le hp2_1)) :
     p1 = 0 ∧ p2 = 0 := by
   -- The `true`-coordinate value-recursion equations around the cycle.
   have hval1_true : V1 true = (1 - p1) * V2 true := by
@@ -535,7 +539,7 @@ theorem quittingTwoPhaseClosure_not_both_pos
     (hnash2 : IsεQuittingRootEndpointNash reward2 V1 0 (phaseRoot true p2 hp2_0 hp2_1)) :
     ¬ (0 < p1 ∧ 0 < p2) := by
   rintro ⟨hp1_pos, hp2_pos⟩
-  have := quittingTwoPhaseClosure_rates_eq_zero p1 p2 hp1_0 hp1_1 hp2_0 hp2_1
+  have := quittingTwoPhaseClosure_rates_eq_zero p1 p2 hp1_1 hp2_1
     hp1_pos hp2_pos V1 V2 hvalue1 hnash1 hvalue2 hnash2
   linarith [this.1]
 

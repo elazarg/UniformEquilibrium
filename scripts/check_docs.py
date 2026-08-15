@@ -27,10 +27,24 @@ LIVE_DOCS = (
     ROOT / "docs" / "TOOLKIT.md",
     ROOT / "docs" / "PROGRAM.md",
     ROOT / "docs" / "PIPELINE.md",
+    ROOT / "docs" / "ENGINEERING_ROADMAP.md",
+    ROOT / "docs" / "SOFTWARE_ENGINEERING_REVIEW.md",
+    ROOT / "docs" / "GAMETHEORY2_MIGRATION_PLAN.md",
     ROOT / "UniformEquilibrium" / "README.md",
 )
+TIMELESS_DOCS = LIVE_DOCS
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 IMPORT_RE = re.compile(r"^import\s+([^\s]+)", re.MULTILINE)
+COMMIT_HASH_RE = re.compile(r"(?<![0-9A-Za-z])[0-9a-f]{7,40}(?![0-9A-Za-z])")
+CALENDAR_DATE_RE = re.compile(r"\b(?:19|20)\d{2}-\d{2}-\d{2}\b")
+HISTORICAL_HEADING_RE = re.compile(
+    r"^#{1,6}\s+.*(?:"
+    r"change\s*log|implementation history|historical baseline|"
+    r"remediation record|review-start|progress (?:log|table)|"
+    r"phase\s+\d+.*(?:complete|completed|results?)"
+    r")",
+    re.IGNORECASE | re.MULTILINE,
+)
 PRUNED_DIRECTORIES = {".git", ".lake", "GameTheory", "__pycache__", ".pytest_cache"}
 
 
@@ -196,6 +210,26 @@ def check_live_docs(errors: list[str]) -> None:
             )
 
 
+def timeless_document_issues(text: str) -> list[str]:
+    """Return chronology markers that do not belong in living documentation."""
+    issues: list[str] = []
+    if COMMIT_HASH_RE.search(text):
+        issues.append("contains a raw Git commit hash")
+    if CALENDAR_DATE_RE.search(text):
+        issues.append("contains a calendar-dated snapshot")
+    if HISTORICAL_HEADING_RE.search(text):
+        issues.append("contains a changelog-style heading")
+    return issues
+
+
+def check_timeless_docs(errors: list[str]) -> None:
+    for document in TIMELESS_DOCS:
+        if not document.is_file():
+            continue
+        for issue in timeless_document_issues(document.read_text(encoding="utf-8")):
+            errors.append(f"{relative(document)}: {issue}")
+
+
 def main() -> int:
     errors: list[str] = []
     check_markdown_names(errors)
@@ -204,6 +238,7 @@ def main() -> int:
     check_frontier(errors)
     check_links(errors)
     check_live_docs(errors)
+    check_timeless_docs(errors)
     if errors:
         print("Documentation check failed:", file=sys.stderr)
         print(*errors, sep="\n", file=sys.stderr)

@@ -18,11 +18,11 @@ the present interfaces and rules.
 6. [PIPELINE.md](PIPELINE.md) — how Discussions, Issues, and PRs record and
    promote work.
 7. [SOFTWARE_ENGINEERING_REVIEW.md](SOFTWARE_ENGINEERING_REVIEW.md) — the
-   completed engineering review, proof-quality policy, and measured baseline.
-8. [ENGINEERING_ROADMAP.md](ENGINEERING_ROADMAP.md) — preparatory engineering
-   phases and acceptance gates.
+   current architecture assessment, proof-quality policy, and risk register.
+8. [ENGINEERING_ROADMAP.md](ENGINEERING_ROADMAP.md) — current engineering
+   priorities, invariants, and acceptance gates.
 9. [GAMETHEORY2_MIGRATION_PLAN.md](GAMETHEORY2_MIGRATION_PLAN.md) — the
-   deferred successor-dependency census, semantic waist, and cutover gates.
+   successor semantic target, required waist, and deferred cutover gates.
 10. [references/README.md](references/README.md) — the external literature of
    record.
 

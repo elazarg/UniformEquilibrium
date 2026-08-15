@@ -196,7 +196,7 @@ theorem quittingGame_isUniformEquilibriumPayoff_jointExit
   have hnash := isεAsymptoticNash_sureSetOwnerRoot_of_exactCap_le reward
     (T := ({!owner} : Finset Bool)) (owner := owner)
     (Finset.singleton_nonempty _) (owner_notMem_blocker owner)
-    1 zero_le_one le_rfl one_pos 0
+    1 le_rfl one_pos 0
     (quittingSureSetOwnerExactCap_bothQuit_le reward owner howner hblocker)
   have huniform := quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact
     reward _ hnash

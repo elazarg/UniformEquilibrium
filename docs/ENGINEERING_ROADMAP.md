@@ -1,214 +1,195 @@
 # Engineering roadmap
 
-This is a preparatory engineering plan. It does not authorize a rewrite, a
-stable API, or a GameTheory2 cutover. Exact theorem truth remains in Lean;
-promotion and evidence rules remain in [`PIPELINE.md`](PIPELINE.md).
+This is the living engineering plan for the current tree. It records desired
+architecture, active priorities, and acceptance criteria. It is not a
+changelog. Repository-transition provenance belongs in
+[`TRANSITION.md`](../TRANSITION.md); ordinary implementation history belongs
+in Git.
 
-## Progress table
+The roadmap does not authorize a stable downstream API or a GameTheory2
+cutover. Exact theorem truth remains in Lean, while promotion and evidence
+rules remain in [`PIPELINE.md`](PIPELINE.md).
 
-| Phase | Work | Status | Acceptance gate |
-| --- | --- | --- | --- |
-| 1 | Review baseline | Complete | Review facts and measured risks are recorded |
-| 2 | Trust scanner | Complete | Prime-aware scanner and lexical regression suite pass |
-| 3 | Import graph and inventory | Complete | Zero unexplained orphans and boundary violations |
-| 4 | Ownership, Research, provenance, sync | Complete | Every shim/fork and sync decision has an owner and manifest |
-| 5 | Facades and dependency inversions | Complete | Architecture/certificate and Quitting/Diagnostics edges are layered |
-| 6 | Proof ratchets, product and variation APIs | Complete | Shared finite-weight identities replace selected duplication |
-| 7 | Finite-case grind pilots | Complete | Pilot proofs reduce brittle expansion without weakening claims |
-| 8 | Monolith decomposition | Complete | Long proof files split behind checked interfaces |
-| 9 | Imports, internal APIs, options | Complete | Narrow imports and scoped options pass build and trust gates |
-| 10 | Final audit | Complete | Current generated audit, full build, and repository gates pass |
-| 11 | Assumption normalization | In progress | Known derivable hypotheses are internalized |
+## Priority order
 
-## Phase gates
+1. Normalize assumptions that retained finite data can supply canonically.
+2. Raise proof bodies toward short mathematical arguments over reusable APIs.
+3. Preserve ownership, dependency direction, and narrow module interfaces.
+4. Keep trust, generated evidence, and repository inventories reproducible.
+5. Prepare a semantic waist for GameTheory2 without changing the dependency.
 
-### 1. Review baseline
+Work should be split into independently checkable vertical slices. A slice is
+ready to merge only when its public statements, downstream callers, and
+repository gates agree.
 
-Keep the completed 10,155-job full build and nonvacuous axiom audit as the
-engineering baseline. Record the 911 UE modules, 1,375 trust-scanned Lean
-files, 16 umbrella orphans, and proof-tactic counts (2 `grind`, 659
-`fin_cases`). The gate is documentation review, not a theorem claim.
+## Maintained engineering invariants
 
-### 2. Trust scanner
+### Trust and build surface
 
-Make lexical handling aware of prime-suffixed identifiers. Add tests for
-forbidden tokens after one or more primes, character escapes, strings, and
-nested comments. Acceptance is the unit suite plus `python scripts/check_trust.py`
-passing over the complete project, with no change to the forbidden-token or
-warnings-as-errors policy.
+- Project code contains no `sorry`, `admit`, explicit axioms,
+  `native_decide`, `implemented_by`, unsafe declarations, partial definitions,
+  or project-owned `set_option` commands.
+- Warnings remain errors; global linter weakening is not an implementation
+  technique.
+- `AxiomAudit.lean` imports every project-owned Lean module. Only `propext`,
+  `Quot.sound`, and `Classical.choice` are permitted library axioms.
+- Lean options are scoped to the smallest library that needs them.
+- Lean 4.32.2 and the committed dependency pins define the supported build.
 
-### 3. Import graph and inventory
+### Ownership and dependencies
 
-Run the import-graph checker across all umbrellas with
-`python3 -m unittest scripts/test_check_import_graph.py` followed by
-`python3 scripts/check_import_graph.py`. Classify the 16
-non-reachable UE modules, the `SingletonLCP` generic-boundary violation, and
-any production-to-Research/Experiments edges. Acceptance is a checked,
-repeatable inventory with zero unexplained diagnostics; no module moves solely
-to improve a count.
+- `MathUE` owns project-generic mathematics and does not import game-semantic
+  `GameTheory.*` modules.
+- `UniformEquilibrium` owns integrated game-semantic results.
+- `Research` may contain checked exploratory work, but it does not retain full
+  copies of declarations already owned by `MathUE` or `UniformEquilibrium`.
+- Production modules do not depend on `Research` or `Experiments`.
+- Lean umbrellas are authoritative inventories. Every production module is
+  reachable through the intended umbrella, and broad umbrellas are not used as
+  convenience imports inside ordinary source modules.
+- High-fan-in semantic infrastructure lives in a neutral owner rather than in
+  `Diagnostics` or an example module.
 
-### 4. Ownership, Research, provenance, and sync
+### Reproducibility
 
-Audit stale Research shims and promoted forks. Give each a retain, replace,
-promote, or quarantine disposition. Add a durable K11 generated-data record;
-if its original source or producer is absent, preserve that limitation and
-check only what can be reproduced. Freeze `sync_from_source.py` as historical
-staging-only tooling and add a guard that rejects the live repository as a
-target; do not adapt it into a current-tree synchronizer. Acceptance is a
-reproducible integrity check with an explicit non-regeneration boundary and an
-owner for every exception; historical transition facts stay in
-[`TRANSITION.md`](../TRANSITION.md).
+- Generated evidence names its source data and generator when they exist.
+- If original generation inputs are unavailable, the repository states that
+  limitation and checks only reproducible integrity properties.
+- Synchronization tooling operates on explicit staging directories and never
+  treats the live repository as a cleanup target.
+- Transition-specific paths, keep/drop decisions, and source-revision facts
+  remain confined to `TRANSITION.md`.
 
-### 5. Facades and dependency inversions
+## Assumption normalization
 
-Design narrow semantic facades to break the Architecture/Certificate and
-Quitting/Diagnostics inversions. Acceptance is an import graph with the
-intended direction, no cyclic layer dependency, and unchanged checked
-consumers. Do not duplicate GameTheory foundations or silently broaden the
-strategy class.
+Remove a hypothesis only when retained data proves the same fact without
+weakening the conclusion or changing later hypotheses. Classification must
+inspect the complete elaborated telescope and, for data declarations, the
+constructed body. A constant absent from the final displayed proposition may
+still index a later hypothesis or a proof-carrying object.
 
-### 6. Proof ratchets, finite products, and finite-weight variation
+### Finite quitting reward bounds
 
-Introduce a generic finite-product PMF Fubini step and use it to remove local
-fixed-arity proofs. Extract the finite-weight Jordan-decomposition estimate
-behind the conditioned-diffuse compiler; preserve its subprobability semantics
-instead of forcing it through probability total variation. Specify ratchets
-for proof size, repeated algebra, and exact quantifiers. Acceptance is a
-kernel-checked pilot, trust-clean source, a documented consumer for each new
-interface, and checked downstream constants for any strengthened estimate.
+For a finite quitting reward table, use
+`GameTheory.quittingRewardBound reward`, the finite sum of absolute reward
+coordinates. Its nonnegativity and coordinate bounds are canonical. The L1
+choice also controls row and subtable sums without introducing separate
+cardinality factors.
 
-### 7. Finite-case grind pilots
+Keep an arbitrary bound `M` when it occurs in a quantitative result, indexes
+retained data, or couples a later hypothesis to the same scale. Do not ask a
+caller for `0 ≤ M` when a retained coordinate-bound hypothesis and an
+available player witness prove it internally. The reward-bound census and its
+nonnegativity ratchet are enforced at zero by
+`scripts/check_reward_bounds.py`.
 
-Select representative `fin_cases`-heavy proofs and compare named lemmas,
-bounded `grind`, and existing automation. Keep only improvements that are
-reproducible and reviewable. Acceptance requires no forbidden escape hatch,
-no weakened statement, and recorded before/after proof-maintenance evidence;
-tactic counts alone are not success criteria.
+`Research.General.FourRoleObstructionReduction.PositiveMinimumPlateau`
+intentionally stores one positive reward bound that also determines explicit
+mass-floor denominators. It is a coherent quantitative certificate, not a
+removable theorem hypothesis.
 
-### 8. Monolith decomposition
+### Order and inhabitance hypotheses
 
-Prepare seams for `AnalyticOccupationFlow`, `NoTrap`, the conditioned-diffuse
-compiler family, `AccountStrategy`, and the Fink limit stack. Split by
-mathematical interface, not arbitrary line count, and preserve declaration
-ownership and downstream imports. Replace the period-two stationary
-coordinate tree by a player-indexed symmetry argument. Acceptance is narrow
-compilation of each new module, full consumer compilation, and no new broad
-import.
+Do not carry both a strict inequality and its weak consequence for the same
+simple endpoint. Normalize proof arguments in constructed terms to the strict
+proof's `.le` projection. The narrow census in
+`scripts/check_redundant_order_hypotheses.py` covers this schema and is enforced
+at zero.
 
-### 9. Imports, internal APIs, and options
+Derive `Nonempty ι` locally from a named player when the instance is used only
+inside the proof. Retain it when an instance-indexed definition occurs in the
+result or later telescope. Treat `DecidableEq` similarly: proof-local finite
+bookkeeping can often use classical decidability, while computational data and
+instance-indexed statements may genuinely retain the parameter.
 
-Reduce broad umbrella imports, expose intentional internal facades, and audit
-the centralized Lean options in `lakefile.lean`. Acceptance is a full build,
-trust scan, and import-graph check with warnings-as-errors preserved and no
-project-owned global weakening.
+The absence of a known scanner pattern is not a claim that every declaration
+has a logically minimal telescope. Extend deterministic censuses one coherent
+hypothesis family at a time, and use Lean elaboration as the call-site oracle.
 
-### 10. Final audit
+## Proof and API quality
 
-The scoped-option build completed all 10,160 jobs before the ownership cleanup.
-After that cleanup, the current generated audit and normal-root build completed
-all 10,147 jobs. `AxiomAudit` checked 43,241 project declarations and reported
-only the permitted `propext`, `Quot.sound`, and `Classical.choice` library
-axioms. The exact cross-lane duplicate ratchet, trust scan, import graph,
-documentation checks, unit suite, generated-data checker, and build-artifact
-check form the closing gate. No unexplained production orphan, lane-boundary
-violation, or exact Research-to-production proof-body fork remains.
+### Mathematical interfaces
 
-### 11. Assumption normalization
+- Put game-independent finite-sum, probability, topology, and optimization
+  lemmas in `MathUE`.
+- Prefer one parameterized theorem over player-by-player or fixed-arity copies.
+- Express capstones as orchestration over named mathematical seams: certificate
+  decoding, incompatibility, normalization, and semantic compilation should be
+  independently reusable.
+- Keep reader-facing declarations in `Theorems` as thin restatements that
+  delegate to the owning proof.
+- Do not expose scratch namespaces or generic helper lemmas through broad game
+  namespaces.
 
-Remove hypotheses that finite source data can supply canonically, beginning
-with coordinate bounds on finite quitting reward tables. The parser-audited
-phase-entry measurement is 689 definitions and theorems in 175 files: 521
-with a dischargeable reward-bound triple and 168 retaining genuine coupling.
-Of the latter, 152 mention the chosen constant in the result and 16 use it in
-a later hypothesis. Classification inspects the entire retained telescope,
-rather than only the final result; the simpler result-only criterion would
-misclassify those 16 declarations.
+The finite-product PMF API and finite-weight variation API are the canonical
+owners for their respective calculations. New consumers should use them rather
+than recreating nested expectation expansions or signed-mass estimates.
 
-The first stable normalization slice removes 192 of the 521 dischargeable
-triples and leaves 329 across 95 files. The complete set of 168 coupled
-quantitative declarations is unchanged. This is progress toward the phase
-gate, not completion of it.
+### Proof implementation
 
-A follow-up telescope audit internalizes four qualitative or independently
-bounded cases that the initial classifier conservatively retained. The live
-census is therefore 493 declarations: 329 removable and 164 genuinely
-coupled. That refinement also removes two derivable nonnegativity hypotheses
-and a punishment-bound hypothesis that had become dead through five local
-wrappers.
+Use the tactic matched to the mathematical residue:
 
-The next stable propagation slice removes another 269 dischargeable triples
-without changing any theorem result or retained telescope. It also removes one
-unused nonnegativity hypothesis from a quantitative theorem while retaining
-its bound variable and coordinate-bound premise. The live census is now 223
-declarations: 60 removable and 163 genuinely coupled. Calls to the strengthened
-declarations have been checked at the new arity, including field and qualified
-notation.
+- `grind only` for closed finite propositional, membership, update, and
+  extensionality bookkeeping;
+- `ring` or `ring_nf` for polynomial normalization;
+- `linarith` or `nlinarith` for ordered-ring consequences;
+- `norm_num` and `omega` for concrete arithmetic; and
+- named analytic or topological lemmas for limiting arguments.
 
-The closing reward-bound slice removes the remaining 56 genuinely
-dischargeable triples. During that pass, a parser hardening reclassified four
-apparent candidates: three quantitative theorem results place the chosen bound
-after result-level `let` bindings, and one serial-relation definition uses the
-bound in its constructed data despite omitting it from the displayed result
-type. At that point the audited schema contains 167 coupled declarations and
-zero removable ones. A further quantitative theorem retains its arbitrary
-bound and coordinate premise but drops a derivable nonnegativity hypothesis,
-so it exits the strict triple census. The final census is therefore 166 coupled triples:
-153 expose the bound in the full result, 12 use it in a retained later binder,
-and one uses it in a data-definition body.
+Golfing is valuable when it exposes the right abstraction. It is not a reason
+to hide a missing semantic lemma behind broad automation. Repeated isomorphic
+proofs, long local simp inventories, and Cartesian case trees are signals to
+extract an interface before shortening the final proof.
 
-The first quantitative-normalization slice keeps every arbitrary reward bound
-and every bound-dependent result, but derives nonnegativity from an actual
-reward coordinate whenever the player type is inhabited. It removes 79
-explicit nonnegativity hypotheses, leaving 87 across 25 files. A shared
-coordinate lemma covers declarations with a named player, a singleton lemma
-covers finite player types with a `Nonempty` instance, and the one empty-player
-Bellman construction is handled explicitly. The census has a separate
-`--max-nonnegative` ratchet so this weaker-but-still-redundant hypothesis class
-cannot regrow while the remaining quantitative layers are normalized.
+Large declarations should have an explicit mathematical reason to remain
+large. Proofs that combine several conceptual steps should be decomposed at
+those steps, with the public capstone reduced to composition. Generated literal
+data is excluded from source-golf judgments but must have a deterministic
+freshness or integrity check.
 
-The closing quantitative-normalization slice removes those final 87 explicit
-nonnegativity hypotheses. Eighty-six declarations derive the fact from a named
-player or an available `Nonempty` witness; the last derives it from an implicit
-owner already present in the theorem telescope. Their arbitrary reward bounds,
-coordinate-bound premises, quantitative conclusions, and all later hypotheses
-remain unchanged. The strict nonnegativity census and its CI ratchet are now
-zero.
+## Module and import design
 
-The census recognizes the narrow `M`/`B`/`C` coordinate-bound schema in Lean
-definitions, theorems, lemmas, abbreviations, and opaque declarations. It
-handles grouped Unicode binders, strict implicits, equation declarations,
-identifier primes, nested comments, colons inside result binders, result-level
-`let` chains, and bound-dependent data bodies. It is not a Lean parser and does
-not inventory structure fields. The separately audited
-`PositiveMinimumPlateau.reward_bound` field remains intentional: the same
-positive constant controls reward coordinates and explicit mass-floor
-denominators throughout that quantitative certificate.
+- Use the narrowest direct imports needed by a module.
+- Break dependency inversions by moving shared structures and semantic lemmas
+  to neutral owners, not by creating forwarding cycles.
+- Keep diagnostic examples downstream of the semantic interfaces they test.
+- Split large files at stable mathematical boundaries while preserving public
+  declaration ownership.
+- Prefer hierarchical facades and generated inventories to hand-maintained
+  mega-umbrellas.
 
-Keep arbitrary bounds in quantitative conclusions and wherever later data are
-bounded by the same constant. The canonical bound is the finite sum of
-absolute reward coordinates. Besides bounding each coordinate, this deliberate
-L1 choice controls row and subtable totals without extra cardinality factors.
-For qualitative declarations, construct that bound internally and propagate
-the stronger API through all callers.
-Process dependency layers bottom-up and use Lean elaboration as the call-site
-oracle, because field notation, namespace shortening, rewriting, direct
-canonical proof arguments, and partial applications make textual call graphs
-incomplete.
+Any module move or new file requires regeneration of `AxiomAudit.lean` and a
+fresh import-graph check. A source-only refactor still requires compilation of
+the changed owner and representative downstream consumers.
 
-Acceptance requires a deterministic census, zero remaining declarations in
-the audited removable schema, explicit classification of retained quantitative
-parameters, narrow checks for each layer, and a final exhaustive axiom audit
-and build. Use `python3 scripts/check_reward_bounds.py` for the inventory and
-its opt-in `--check` mode for the zero-removable closing gate, together with
-`--max-nonnegative` while eliminating redundant positivity binders from the
-retained quantitative API. The same audit then expands to other recurring hypotheses that are
-canonically derivable from retained finite data; no claim of globally minimal
-logical hypotheses is inferred merely from the absence of compiler warnings.
+## Acceptance gates
 
-## Deferred dependency decision
+Use narrow checks while iterating, then run the gates appropriate to the risk:
 
-GameTheory2 preparation is limited to the census, semantic waist, and staged
-gates in [`GAMETHEORY2_MIGRATION_PLAN.md`](GAMETHEORY2_MIGRATION_PLAN.md). The
-cutover itself is deferred: no parallel dependency or speculative port is part
-of these phases. A future cutover requires a published successor pin, separate
-decision, acceptance build, and updated transition record.
+```text
+lake env lean path/to/File.lean
+lake build Module.Name
+python3 scripts/check_docs.py
+python3 -m unittest discover -s scripts -p 'test_*.py'
+python3 scripts/check_import_graph.py
+python3 scripts/check_proof_duplicates.py
+python3 scripts/check_reward_bounds.py --check --max-nonnegative 0
+python3 scripts/check_redundant_order_hypotheses.py --check
+python3 scripts/check_trust.py
+```
+
+Run a full `lake build` for changes to toolchains, Lake configuration,
+dependency pins, umbrellas, module inventory, or broad semantic APIs. The full
+build must include the nonvacuous exhaustive axiom audit. Report the exact
+checks run; a static audit or focused build is not a full-build claim.
+
+## Deferred GameTheory2 decision
+
+GameTheory2 preparation is limited to the API census, semantic waist, and
+staged gates in
+[`GAMETHEORY2_MIGRATION_PLAN.md`](GAMETHEORY2_MIGRATION_PLAN.md). Do not import
+its experimental proof view into production and do not maintain old and new
+foundations side by side. A future cutover requires a canonical published pin,
+an exact finite-law/history/profile bridge, a complete quitting vertical slice,
+the required Fink replacement, an isolated acceptance build, and an explicit
+dependency decision.

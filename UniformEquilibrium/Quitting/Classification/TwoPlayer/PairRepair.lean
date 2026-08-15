@@ -232,8 +232,8 @@ theorem fixedOpponentsContinueReward_pairRoot_blocker
 or the payoff from waiting for player one's solo exit. -/
 theorem unilateralCap_pairRoot_blocker
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p) :
-    quittingStationaryUnilateralCap reward (pairRoot p hp0 hp1) true =
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p) :
+    quittingStationaryUnilateralCap reward (pairRoot p hp.le hp1) true =
       max
         ((1 - p) * quittingSoloReward reward true true +
           p * quittingSingletonCollisionReward reward false true)
@@ -288,14 +288,14 @@ theorem pairRepairError_nonneg
 every behavioral unilateral deviation with error linear in `p`. -/
 theorem isεAsymptoticNash_pairRoot
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p)
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
     (howner : quittingSingletonCollisionReward reward true false ≤
       quittingSoloReward reward true false)
     (hblocker : quittingSoloReward reward false true ≤
       quittingSoloReward reward true true) :
     (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) (pairRepairError reward p)
-      (quittingStationaryProfile reward (pairRoot p hp0 hp1)) := by
+      (quittingStationaryProfile reward (pairRoot p hp.le hp1)) := by
   apply isεAsymptoticNash_stationary_of_unilateralCap_le
   · intro who
     cases who
@@ -305,25 +305,25 @@ theorem isεAsymptoticNash_pairRoot
       linarith
   · intro who
     cases who
-    · rw [unilateralCap_pairRoot_owner reward p hp0 hp1 howner,
+    · rw [unilateralCap_pairRoot_owner reward p hp.le hp1 howner,
         terminalPayoff_pairRoot]
       simp only [Bool.false_eq_true, ↓reduceIte]
       have habs := abs_nonneg
         (quittingSingletonCollisionReward reward false true -
           quittingSoloReward reward true true)
       unfold pairRepairError
-      nlinarith [mul_nonneg hp0 habs]
-    · rw [unilateralCap_pairRoot_blocker reward p hp0 hp1 hp,
+      nlinarith [mul_nonneg hp.le habs]
+    · rw [unilateralCap_pairRoot_blocker reward p hp1 hp,
         terminalPayoff_pairRoot]
       simp only [if_true]
       apply max_le
       · exact le_add_of_nonneg_right
-          (pairRepairError_nonneg reward p hp0 howner)
+          (pairRepairError_nonneg reward p hp.le howner)
       · have habsLower := neg_abs_le
           (quittingSingletonCollisionReward reward false true -
             quittingSoloReward reward true true)
         unfold pairRepairError
-        nlinarith [mul_nonneg hp0
+        nlinarith [mul_nonneg hp.le
           (sub_nonneg.mpr howner)]
 
 /-- The pair-repair hypotheses give terminal approximate equilibria at every
@@ -358,7 +358,7 @@ theorem exists_terminalNash_all_errors_of_pairRepair
     nlinarith
   refine ⟨quittingStationaryProfile reward
       (pairRoot p hp.le hp1), ?_⟩
-  exact (isεAsymptoticNash_pairRoot reward p hp.le hp1 hp
+  exact (isεAsymptoticNash_pairRoot reward p hp1 hp
     howner hblocker).mono herror.le
 
 /-- The pair-repair branch yields a uniform-equilibrium payoff. -/
@@ -546,9 +546,9 @@ private theorem fixedOpponentsContinueReward_mirror_blocker
 
 private theorem unilateralCap_mirror_blocker
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p) :
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p) :
     quittingStationaryUnilateralCap reward
-        (mirrorPairRoot p hp0 hp1) false =
+        (mirrorPairRoot p hp.le hp1) false =
       max
         ((1 - p) * quittingSoloReward reward false false +
           p * quittingSingletonCollisionReward reward true false)
@@ -598,14 +598,14 @@ private theorem mirrorPairRepairError_nonneg
 
 private theorem isεAsymptoticNash_mirrorPairRoot
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p)
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
     (howner : quittingSingletonCollisionReward reward false true ≤
       quittingSoloReward reward false true)
     (hblocker : quittingSoloReward reward true false ≤
       quittingSoloReward reward false false) :
     (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) (mirrorPairRepairError reward p)
-      (quittingStationaryProfile reward (mirrorPairRoot p hp0 hp1)) := by
+      (quittingStationaryProfile reward (mirrorPairRoot p hp.le hp1)) := by
   apply isεAsymptoticNash_stationary_of_unilateralCap_le
   · intro who
     cases who
@@ -615,25 +615,25 @@ private theorem isεAsymptoticNash_mirrorPairRoot
       norm_num
   · intro who
     cases who
-    · rw [unilateralCap_mirror_blocker reward p hp0 hp1 hp,
+    · rw [unilateralCap_mirror_blocker reward p hp1 hp,
         terminalPayoff_mirrorPairRoot]
       simp only [Bool.false_eq_true, ↓reduceIte]
       apply max_le
       · exact le_add_of_nonneg_right
-          (mirrorPairRepairError_nonneg reward p hp0 howner)
+          (mirrorPairRepairError_nonneg reward p hp.le howner)
       · have habsLower := neg_abs_le
           (quittingSingletonCollisionReward reward true false -
             quittingSoloReward reward false false)
         unfold mirrorPairRepairError
-        nlinarith [mul_nonneg hp0 (sub_nonneg.mpr howner)]
-    · rw [unilateralCap_mirror_owner reward p hp0 hp1 howner,
+        nlinarith [mul_nonneg hp.le (sub_nonneg.mpr howner)]
+    · rw [unilateralCap_mirror_owner reward p hp.le hp1 howner,
         terminalPayoff_mirrorPairRoot]
       simp only [if_true]
       have habs := abs_nonneg
         (quittingSingletonCollisionReward reward true false -
           quittingSoloReward reward false false)
       unfold mirrorPairRepairError
-      nlinarith [mul_nonneg hp0 habs]
+      nlinarith [mul_nonneg hp.le habs]
 
 /-- The role-reversed pair repair also gives terminal approximate equilibria
 at every positive accuracy. -/
@@ -667,7 +667,7 @@ theorem exists_terminalNash_all_errors_of_mirrorPairRepair
     nlinarith
   refine ⟨quittingStationaryProfile reward
       (mirrorPairRoot p hp.le hp1), ?_⟩
-  exact (isεAsymptoticNash_mirrorPairRoot reward p hp.le hp1 hp
+  exact (isεAsymptoticNash_mirrorPairRoot reward p hp1 hp
     howner hblocker).mono herror.le
 
 theorem exists_uniformEquilibriumPayoff_of_mirrorPairRepair

@@ -156,9 +156,9 @@ omit [AddGroup G] in
 /-- With positive common hazard, the canonical positive-hazard support is
 exactly the prescribed active set. -/
 theorem quittingPositiveHazardSupport_uniformActiveRoot
-    (active : Finset G) (β : ℝ) (hβ0 : 0 ≤ β) (hβ1 : β ≤ 1)
+    (active : Finset G) (β : ℝ) (hβ1 : β ≤ 1)
     (hβpos : 0 < β) :
-    quittingPositiveHazardSupport (uniformActiveRoot active β hβ0 hβ1) =
+    quittingPositiveHazardSupport (uniformActiveRoot active β hβpos.le hβ1) =
       active := by
   ext who
   by_cases hwho : who ∈ active
@@ -184,23 +184,23 @@ theorem cyclicRoots_respects_schedule
 /-- Every root in the cyclic sequence has exactly `|A|` positive quitting
 hazards. -/
 theorem card_positiveHazardSupport_cyclicRoots
-    (A : Finset G) (β : ℝ) (hβ0 : 0 ≤ β) (hβ1 : β ≤ 1)
+    (A : Finset G) (β : ℝ) (hβ1 : β ≤ 1)
     (hβpos : 0 < β) (time : ℕ) :
-    (quittingPositiveHazardSupport (cyclicRoots A β hβ0 hβ1 time)).card =
+    (quittingPositiveHazardSupport (cyclicRoots A β hβpos.le hβ1 time)).card =
       A.card := by
   unfold cyclicRoots
-  rw [quittingPositiveHazardSupport_uniformActiveRoot _ β hβ0 hβ1 hβpos]
+  rw [quittingPositiveHazardSupport_uniformActiveRoot _ β hβ1 hβpos]
   exact card_cyclicSchedule_active A time
 
 /-- In particular, the roots satisfy the literal support-card predicate used
 by compact `K`-active path extraction. -/
 theorem hasQuittingSupportCardAtMost_cyclicRoots
-    (A : Finset G) (β : ℝ) (hβ0 : 0 ≤ β) (hβ1 : β ≤ 1)
+    (A : Finset G) (β : ℝ) (hβ1 : β ≤ 1)
     (hβpos : 0 < β) (time : ℕ) :
     HasQuittingSupportCardAtMost A.card
-      (cyclicRoots A β hβ0 hβ1 time) := by
+      (cyclicRoots A β hβpos.le hβ1 time) := by
   unfold HasQuittingSupportCardAtMost
-  rw [card_positiveHazardSupport_cyclicRoots A β hβ0 hβ1 hβpos time]
+  rw [card_positiveHazardSupport_cyclicRoots A β hβ1 hβpos time]
 
 /-- The cyclic root sequence itself repeats after the translation-orbit
 period. -/

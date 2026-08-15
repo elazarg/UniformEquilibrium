@@ -76,7 +76,7 @@ theorem not_forall_liveRoot_eq_cyclicPhaseRoots_of_oneActive_resetChain
       (cyclicRoots A β hβpos.le hβlt.le phase.val) at hownerHazard
   unfold cyclicRoots at hownerHazard
   rw [quittingPositiveHazardSupport_uniformActiveRoot
-    _ β hβpos.le hβlt.le hβpos] at hownerHazard
+    _ β hβlt.le hβpos] at hownerHazard
   have hcard : ((cyclicSchedule A).active phase.val).card ≤ 1 := by
     rw [card_cyclicSchedule_active, hAcard]
   have heq : owner = opponent :=

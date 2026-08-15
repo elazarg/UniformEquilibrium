@@ -103,7 +103,7 @@ theorem not_forall_liveRoot_eq_cyclicPhaseRoots_of_proper_resetChain
       (cyclicRoots A β hβpos.le hβlt.le phase.val) at hownerHazard
   unfold cyclicRoots at hownerHazard
   rw [quittingPositiveHazardSupport_uniformActiveRoot
-    _ β hβpos.le hβlt.le hβpos] at hownerHazard
+    _ β hβlt.le hβpos] at hownerHazard
   exact hownerInactive hownerHazard
 
 /-- Cardinal version: any nonempty `K`-block in an `N`-player population

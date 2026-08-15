@@ -555,7 +555,7 @@ theorem isExactTerminalNash_doubleSureMixerProfile (L : ℝ) :
   rw [doubleSureMixerProfile, doubleSureMixerRoot]
   refine isεAsymptoticNash_sureSetOwnerRoot_of_exactCap_le
     (gameReward L) doubleSure_nonempty mixer_not_mem_doubleSure
-      (2 / 7) twoSevenths_nonneg twoSevenths_le_one twoSevenths_pos 0 ?_
+      (2 / 7) twoSevenths_le_one twoSevenths_pos 0 ?_
   intro who
   rcases player_cases who with rfl | rfl | rfl
   · norm_num [quittingSureSetOwnerExactCap, quittingSureSetOwnerValue,

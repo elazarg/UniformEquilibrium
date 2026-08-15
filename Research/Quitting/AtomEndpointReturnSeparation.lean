@@ -44,17 +44,17 @@ theorem stoppingLawNormalizedDebtDirection_self_eq_endpointDebtChange
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (mover : ι)
     (target : (quittingGame reward).BehaviorStrategy mover)
-    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
+    (lambda : ℝ) (hlambda1 : lambda ≤ 1)
     (hlambda : 0 < lambda) :
     quittingStoppingLawNormalizedDebtDirection reward profile mover target
-        lambda hlambda0 hlambda1 mover =
+        lambda hlambda.le hlambda1 mover =
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
             (Function.update profile mover target)) mover -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward profile) mover := by
   have hself := quittingTerminalSemanticDebt_stoppingLawMixture_eq_self
-    reward profile mover (profile mover) target lambda hlambda0 hlambda1
+    reward profile mover (profile mover) target lambda hlambda.le hlambda1
   rw [Function.update_eq_self] at hself
   unfold quittingStoppingLawNormalizedDebtDirection
     quittingStoppingLawResetProfile quittingTerminalSemanticDebtChange

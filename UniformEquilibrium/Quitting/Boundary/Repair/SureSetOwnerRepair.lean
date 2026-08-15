@@ -480,9 +480,9 @@ theorem unilateralCap_sureSetOwnerRoot_other_of_erase_empty
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {T : Finset ι} {owner who : ι} (howner : owner ∉ T)
     (hne : who ≠ owner) (herase : T.erase who = ∅)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p) :
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p) :
     quittingStationaryUnilateralCap reward
-        (quittingSureSetOwnerRoot T owner p hp0 hp1) who =
+        (quittingSureSetOwnerRoot T owner p hp.le hp1) who =
       max (quittingSureSetOwnerValue reward (insert who T) owner p who)
         (quittingSetReward reward {owner} who) := by
   unfold quittingStationaryUnilateralCap quittingStationarySelectedCap
@@ -502,10 +502,10 @@ theorem unilateralCap_sureSetOwnerRoot
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {T : Finset ι} {owner : ι} (hT : T.Nonempty)
     (howner : owner ∉ T)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p)
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
     (who : ι) :
     quittingStationaryUnilateralCap reward
-        (quittingSureSetOwnerRoot T owner p hp0 hp1) who =
+        (quittingSureSetOwnerRoot T owner p hp.le hp1) who =
       quittingSureSetOwnerExactCap reward T owner p who := by
   by_cases hwho : who = owner
   · subst who
@@ -517,7 +517,7 @@ theorem unilateralCap_sureSetOwnerRoot
       simp [quittingSureSetOwnerExactCap, hwho, herase]
     · have heraseEq : T.erase who = ∅ := Finset.not_nonempty_iff_eq_empty.mp herase
       rw [unilateralCap_sureSetOwnerRoot_other_of_erase_empty
-        reward howner hwho heraseEq p hp0 hp1 hp]
+        reward howner hwho heraseEq p hp1 hp]
       simp [quittingSureSetOwnerExactCap, hwho, herase]
 
 /-- Every selected coordinate is strictly contracting at positive owner
@@ -525,10 +525,10 @@ hazard. -/
 theorem fixedOpponentsContinueMass_sureSetOwnerRoot_lt_one
     {T : Finset ι} {owner : ι} (hT : T.Nonempty)
     (howner : owner ∉ T)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p)
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
     (who : ι) :
     quittingStationaryFixedOpponentsContinueMass
-        (quittingSureSetOwnerRoot T owner p hp0 hp1) who < 1 := by
+        (quittingSureSetOwnerRoot T owner p hp.le hp1) who < 1 := by
   by_cases hwho : who = owner
   · subst who
     rw [fixedOpponentsContinueMass_sureSetOwnerRoot_owner hT howner]
@@ -549,7 +549,7 @@ theorem isεAsymptoticNash_sureSetOwnerRoot_of_exactCap_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {T : Finset ι} {owner : ι} (hT : T.Nonempty)
     (howner : owner ∉ T)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p)
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
     (ε : ℝ)
     (hcap : ∀ who,
       quittingSureSetOwnerExactCap reward T owner p who ≤
@@ -557,13 +557,13 @@ theorem isεAsymptoticNash_sureSetOwnerRoot_of_exactCap_le
     (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) ε
       (quittingStationaryProfile reward
-        (quittingSureSetOwnerRoot T owner p hp0 hp1)) := by
+        (quittingSureSetOwnerRoot T owner p hp.le hp1)) := by
   apply isεAsymptoticNash_stationary_of_unilateralCap_le
   · exact fixedOpponentsContinueMass_sureSetOwnerRoot_lt_one
-      hT howner p hp0 hp1 hp
+      hT howner p hp1 hp
   · intro who
-    rw [unilateralCap_sureSetOwnerRoot reward hT howner p hp0 hp1 hp who,
-      terminalPayoff_sureSetOwnerRoot reward hT howner p hp0 hp1 who]
+    rw [unilateralCap_sureSetOwnerRoot reward hT howner p hp1 hp who,
+      terminalPayoff_sureSetOwnerRoot reward hT howner p hp.le hp1 who]
     exact hcap who
 
 /-- Exact semantic characterization of terminal approximate Nash for the
@@ -574,29 +574,29 @@ theorem isεAsymptoticNash_sureSetOwnerRoot_iff_exactCap_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {T : Finset ι} {owner : ι} (hT : T.Nonempty)
     (howner : owner ∉ T)
-    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hp : 0 < p)
+    (p : ℝ) (hp1 : p ≤ 1) (hp : 0 < p)
     (ε : ℝ) :
     (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) ε
         (quittingStationaryProfile reward
-          (quittingSureSetOwnerRoot T owner p hp0 hp1)) ↔
+          (quittingSureSetOwnerRoot T owner p hp.le hp1)) ↔
       ∀ who,
         quittingSureSetOwnerExactCap reward T owner p who ≤
           quittingTerminalPayoff reward
             (quittingStationaryProfile reward
-              (quittingSureSetOwnerRoot T owner p hp0 hp1)) who + ε := by
+              (quittingSureSetOwnerRoot T owner p hp.le hp1)) who + ε := by
   rw [isεAsymptoticNash_stationary_iff_unilateralCap_le reward
-    (quittingSureSetOwnerRoot T owner p hp0 hp1) ε
+    (quittingSureSetOwnerRoot T owner p hp.le hp1) ε
     (fixedOpponentsContinueMass_sureSetOwnerRoot_lt_one
-      hT howner p hp0 hp1 hp)]
+      hT howner p hp1 hp)]
   constructor
   · intro hcap who
     rw [← unilateralCap_sureSetOwnerRoot
-      reward hT howner p hp0 hp1 hp who]
+      reward hT howner p hp1 hp who]
     exact hcap who
   · intro hcap who
     rw [unilateralCap_sureSetOwnerRoot
-      reward hT howner p hp0 hp1 hp who]
+      reward hT howner p hp1 hp who]
     exact hcap who
 
 end QuittingSureSetOwnerRepair
