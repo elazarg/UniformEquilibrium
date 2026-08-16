@@ -1,0 +1,42 @@
+name: Repair and compile SL-PRESCRIBED elimination
+
+on:
+  push:
+    branches: [agent/eliminate-sl-prescribed]
+    paths:
+      - '.github/workflows/repair_sl_compile.yml'
+      - '.agent/sl-prescribed/fix.py'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - run: python3 .agent/sl-prescribed/fix.py
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Compile repaired module
+        run: lake build UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SelfOrientedAtomSequence
+      - name: Commit successful repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -r .agent/sl-prescribed
+          rm .github/workflows/repair_sl_compile.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m 'Finish self-oriented atom proof repair'
+          git push origin HEAD:agent/eliminate-sl-prescribed
