@@ -100,9 +100,10 @@ theorem fourWayLocalization
     HasQuittingStoppingLawFourWayLocalization frontier := by
   classical
   rcases frontier.exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
-      with hprescribed | ⟨packet⟩
+      with hprescribed | hrectangle
   · exact Or.inl hprescribed
-  · by_cases hobserver : packet.observer ∈ packet.terminal.val
+  · obtain ⟨packet⟩ := hrectangle
+    by_cases hobserver : packet.observer ∈ packet.terminal.val
     · by_cases hpositive : 0 < reward packet.terminal packet.observer
       · exact Or.inr (Or.inr (Or.inr
           ⟨packet, hobserver, hpositive,
