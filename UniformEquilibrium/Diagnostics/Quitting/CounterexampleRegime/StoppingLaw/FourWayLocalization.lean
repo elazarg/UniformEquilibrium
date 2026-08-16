@@ -11,5 +11,5 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.
 
 The canonical exhaustive result is now `threeWayLocalization`. This module
 retains only the old import path for source links and downstream imports; it
-defines no prescribed-comparison branch.
+defines no prescribed-comparison branch or legacy four-way theorem.
 -/
