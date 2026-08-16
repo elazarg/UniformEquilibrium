@@ -57,6 +57,36 @@ def HasQuittingStoppingLawFourWayLocalization
             ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
               quittingRewardBound reward))
 
+/-- **Direct elimination of the former singleton leaf.**  Its packet-specific
+information is only that the observer belongs to the terminal.  The packet's
+positive atom makes the observer reward nonzero, so its sign routes the same
+literal packet to the negative source-row dispatch or the positive target-row
+localization.  The singleton cardinality and ambient static dispatch are not
+used. -/
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.singleton_signedRowElimination
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
+    (orientation : HasQuittingStoppingLawSingletonStrategicOrientation packet) :
+    (reward packet.terminal packet.observer < 0 ∧
+        HasQuittingStoppingLawNegativeCollisionAtomicDispatch packet
+          (quittingStoppingLawNegativeCollisionMassLower packet)) ∨
+      (0 < reward packet.terminal packet.observer ∧
+        HasQuittingStoppingLawPositiveCollisionReachedRowLocalization packet
+          ((packet.charge / 4) /
+            ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
+              quittingRewardBound reward))) := by
+  classical
+  rcases orientation with ⟨hobserver, _hcard, _hstatic⟩
+  by_cases hpositive : 0 < reward packet.terminal packet.observer
+  · exact Or.inr ⟨hpositive,
+      packet.positiveTarget_reachedRowLocalization hobserver hpositive⟩
+  · have hnegative : reward packet.terminal packet.observer < 0 :=
+      lt_of_le_of_ne (le_of_not_gt hpositive) packet.reward_ne_zero
+    exact Or.inl ⟨hnegative,
+      packet.negativeCollision_atomicDispatch hobserver hnegative⟩
+
 namespace QuittingCounterexampleStoppingLawFrontier
 
 /-- **Cardinality-free exhaustive stopping-law capstone.**  The former
