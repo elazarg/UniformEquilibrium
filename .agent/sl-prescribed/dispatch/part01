@@ -1,0 +1,120 @@
+            mass * regime.terminalGap ≤
+              mass * quittingRootCoordinateNashDefect reward tail.1
+                forcedRoot who) ∨
+          (regime.terminalGap ≤
+              max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner) ∧
+            mass * regime.terminalGap ≤
+              mass * max 0
+                (-quittingAtomicBlockerBalance reward forcedRoot owner)))
+
+/-- Exact pre-observer-stop accounting for a pure-time carrier. -/
+theorem quittingPureTimeCarrier_mass_eq_clock
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (base : ℕ → (quittingGame reward).BehaviorProfile)
+    (observer : ι) (quitTime : ℕ → Option ℕ)
+    (terminal : {S : Finset ι // S.Nonempty})
+    (habsent : observer ∉ terminal.val) (n : ℕ) :
+    quittingTerminalOutcomeMass reward
+        (quittingPureTimeCarrierProfile reward base observer quitTime n)
+        (some terminal) =
+      match quitTime n with
+      | some stop => ∑ time ∈ Finset.range stop,
+          quittingStageCoalitionMass reward
+            (quittingPureTimeCarrierProfile reward base observer quitTime n)
+            time terminal
+      | none => ∑' time,
+          quittingStageCoalitionMass reward
+            (quittingPureTimeCarrierProfile reward base observer quitTime n)
+            time terminal := by
+  cases htime : quitTime n with
+  | none =>
+      simpa only using quittingTerminalOutcomeMass_eq_timeDisintegration reward
+        (quittingPureTimeCarrierProfile reward base observer quitTime n)
+        (some terminal)
+  | some stop =>
+      unfold quittingPureTimeCarrierProfile quittingPureTimeUpdatedProfile
+      simpa only [htime] using
+        quittingTerminalOutcomeMass_update_pureTime_some_notMem_eq_before
+          reward (base n) observer stop terminal habsent
+
+/-- Before its selected stopping date, the observer literally Continues. -/
+theorem quittingPureTimeCarrier_root_observer
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (base : ℕ → (quittingGame reward).BehaviorProfile)
+    (observer : ι) (quitTime : ℕ → Option ℕ) (n time : ℕ)
+    (hbefore : match quitTime n with
+      | some stop => time < stop
+      | none => True) :
+    quittingProfileLiveRoot reward
+        (quittingPureTimeCarrierProfile reward base observer quitTime n) time
+        observer = PMF.pure false := by
+  cases htime : quitTime n with
+  | none =>
+      unfold quittingPureTimeCarrierProfile quittingPureTimeUpdatedProfile
+      rw [quittingProfileLiveRoot_update_pureTime_self, htime,
+        quittingPureTimeHazard_none]
+  | some stop =>
+      have hlt : time < stop := by simpa only [htime] using hbefore
+      unfold quittingPureTimeCarrierProfile quittingPureTimeUpdatedProfile
+      simpa only [htime] using
+        quittingProfileLiveRoot_update_pureTime_some_eq_pureContinue_of_lt
+          reward (base n) observer hlt
+
+/-- The forced profile has exactly the advertised product root. -/
+theorem quittingProfileLiveRoot_pureTimeObserverAbsentForcedOwnerProfile
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (base : ℕ → (quittingGame reward).BehaviorProfile)
+    (observer : ι) (quitTime : ℕ → Option ℕ)
+    (terminal : {S : Finset ι // S.Nonempty}) (n time : ℕ) :
+    quittingProfileLiveRoot reward
+        (quittingPureTimeObserverAbsentForcedOwnerProfile reward base observer
+          quitTime terminal n time) time =
+      Function.update
+        (quittingProfileLiveRoot reward
+          (quittingPureTimeCarrierProfile reward base observer quitTime n) time)
+        (quittingPureTimeObserverAbsentOwner terminal) (PMF.pure true) := by
+  funext player
+  unfold quittingPureTimeObserverAbsentForcedOwnerProfile
+    quittingProfileLiveRoot
+  by_cases hplayer : player = quittingPureTimeObserverAbsentOwner terminal
+  · subst player
+    simp [quittingStagePureEndpointBehaviorDeviation,
+      quittingStageDeviationHazard_self]
+  · simp [Function.update_of_ne hplayer]
+
+/-- Forcing a terminal member to Quit cannot decrease the displayed
+coalition cylinder. -/
+theorem quittingPureTimeCarrier_stageMass_le_forcedOwnerCylinder
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (base : ℕ → (quittingGame reward).BehaviorProfile)
+    (observer : ι) (quitTime : ℕ → Option ℕ)
+    (terminal : {S : Finset ι // S.Nonempty}) (n time : ℕ) :
+    quittingStageCoalitionMass reward
+        (quittingPureTimeCarrierProfile reward base observer quitTime n) time
+        terminal ≤
+      quittingLiveMass reward
+          (quittingPureTimeCarrierProfile reward base observer quitTime n) time *
+        quittingRootCoalitionMass
+          (Function.update
+            (quittingProfileLiveRoot reward
+              (quittingPureTimeCarrierProfile reward base observer quitTime n)
+              time)
+            (quittingPureTimeObserverAbsentOwner terminal) (PMF.pure true))
+          terminal.val := by
+  rw [quittingStageCoalitionMass_eq_liveMass_mul_rootCoalitionMass]
+  apply mul_le_mul_of_nonneg_left
+  · simpa [quittingPureEndpointRoutedCoalition,
+      quittingPureTimeObserverAbsentOwner_mem terminal] using
+      quittingRootCoalitionMass_le_pureEndpointRouted
+        (quittingProfileLiveRoot reward
+          (quittingPureTimeCarrierProfile reward base observer quitTime n) time)
+        terminal.val (quittingPureTimeObserverAbsentOwner terminal) true
+  · exact quittingLiveMass_nonneg reward
+      (quittingPureTimeCarrierProfile reward base observer quitTime n) time
+
+/-- A persistent observer-absent terminal mass produces the generic
+pure-time forced-owner wall. -/
+theorem pureTimeObserverAbsent_forcedOwnerDispatch
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    (base : ℕ → (quittingGame reward).BehaviorProfile)
