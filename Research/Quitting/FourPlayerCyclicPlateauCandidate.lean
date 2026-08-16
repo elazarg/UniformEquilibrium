@@ -5,9 +5,9 @@ Authors: GameTheory contributors.
 -/
 
 import MathUE.ProbabilityMassFunction.Bool
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeCoalitionLocks
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 import MathUE.PMFProduct.FiniteFubini
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalStaticOrientationDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
 
@@ -509,7 +509,7 @@ equilibrium theorem contradicts the retained exploitability gap. -/
 theorem no_exactPlayerDeletionAtPositiveGap (owner : Player) (gap : ℝ)
     (hgap : 0 < gap) :
     ¬ HasQuittingExactPlayerDeletionAtGap reward owner gap := by
-  rintro ⟨_hnonempty, hreducedGap, _hcard⟩
+  rintro ⟨_hnonempty, hreducedGap⟩
   let reducedReward := quittingDeletePlayerReward reward owner
   have hno : ¬ ∃ payoff : Payoff (QuittingDeletedPlayer owner),
       (quittingGame reducedReward).IsUniformEquilibriumPayoff none payoff :=

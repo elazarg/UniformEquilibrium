@@ -26,6 +26,8 @@ range is bounded above and below, and its **oscillation** is
 
 - `ChargedRelation` — edges with source, target, and nonnegative charge
 - `ChargedRelation.Path` — finite admissible paths, indexed by their endpoints
+- `ChargedRelation.Path.highChargeCount` — number of edges above a charge
+  threshold
 - `ChargedRelation.budget`, `ChargedRelation.HasFiniteBudget` — the path budget
 - `ChargedRelation.budgetEN` — the same budget as a totally defined `ℝ≥0∞`
 - `ChargedRelation.value` — the budget-to-go function
@@ -140,6 +142,38 @@ theorem chargeSum_nonneg {s t : State} (p : R.Path s t) : 0 ≤ p.chargeSum := b
       have := R.charge_nonneg e
       simp only [chargeSum_cons]
       linarith
+
+/-- Number of edges in a path whose charge is at least `threshold`. -/
+noncomputable def highChargeCount (threshold : ℝ) :
+    {source target : State} → R.Path source target → ℕ
+  | _, _, .nil _ => 0
+  | _, _, .cons edge rest =>
+      if threshold ≤ R.charge edge then highChargeCount threshold rest + 1
+      else highChargeCount threshold rest
+
+@[simp] theorem highChargeCount_nil (threshold : ℝ) (state : State) :
+    highChargeCount threshold (Path.nil state : R.Path state state) = 0 := rfl
+
+@[simp] theorem highChargeCount_cons (threshold : ℝ) (edge : Edge)
+    {target : State} (rest : R.Path (R.tgt edge) target) :
+    highChargeCount threshold (Path.cons edge rest) =
+      if threshold ≤ R.charge edge then highChargeCount threshold rest + 1
+      else highChargeCount threshold rest := rfl
+
+/-- Counting high-charge edges gives a lower bound on total path charge. -/
+theorem highChargeCount_mul_le_chargeSum
+    (threshold : ℝ)
+    {source target : State} (path : R.Path source target) :
+    (highChargeCount threshold path : ℝ) * threshold ≤ path.chargeSum := by
+  induction path with
+  | nil state => simp
+  | cons edge rest ih =>
+      by_cases hedge : threshold ≤ R.charge edge
+      · simp only [highChargeCount_cons, hedge, if_true,
+          Nat.cast_add, Nat.cast_one, chargeSum_cons]
+        nlinarith
+      · simp only [highChargeCount_cons, hedge, if_false, chargeSum_cons]
+        nlinarith [R.charge_nonneg edge]
 
 /-- The one-edge path. -/
 def single (e : Edge) : R.Path (R.src e) (R.tgt e) := .cons e (.nil _)

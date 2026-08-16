@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimePacketSurplus
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Surplus
 
 /-!
 # A four-player singleton packet with no complementary distribution

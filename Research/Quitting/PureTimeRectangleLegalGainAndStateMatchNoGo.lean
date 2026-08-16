@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.VanishingDebtAtomAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeCausalRegression
 
 /-!

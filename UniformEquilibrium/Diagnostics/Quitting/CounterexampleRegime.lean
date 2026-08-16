@@ -56,12 +56,9 @@ namespace QuittingCounterexampleRegime
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 /-- The terminal-gap witness itself forces the player type to be inhabited. -/
-private theorem nonemptyPlayers_of_terminalGap
-    (regime : QuittingCounterexampleRegime reward) : Nonempty ι := by
-  classical
-  obtain ⟨who, _, _⟩ :=
-    regime.terminalExploitability (quittingAlwaysContinueProfile reward)
-  exact ⟨who⟩
+theorem nonempty_players
+    (regime : QuittingCounterexampleRegime reward) : Nonempty ι :=
+  regime.terminalExploitability.nonempty_players
 
 /-- Finiteness of canonical prefix capacity is derivable from the stored
 terminal gap.  An infinite capacity would supply arbitrarily charged exact
@@ -69,7 +66,7 @@ prefixes, hence a uniform-equilibrium payoff, contradicting the gap. -/
 theorem prefixChargeCapacity_ne_top
     (regime : QuittingCounterexampleRegime reward) :
     quittingPunishmentFloorPrefixChargeCapacity reward ≠ ⊤ := by
-  letI : Nonempty ι := regime.nonemptyPlayers_of_terminalGap
+  letI : Nonempty ι := regime.nonempty_players
   have hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
     quittingGame_not_exists_uniformEquilibriumPayoff_of_terminalExploitabilityGap
@@ -189,7 +186,6 @@ end QuittingCounterexampleRegime
 used only for the terminal margin; intrinsic prefix-capacity finiteness is
 derived from that margin. -/
 noncomputable def quittingCounterexampleRegimeOfNoUniformPayoff
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
@@ -208,7 +204,6 @@ noncomputable def quittingCounterexampleRegimeOfNoUniformPayoff
 
 /-- Every counterexample supplies a combined regime. -/
 theorem nonempty_counterexampleRegime_of_not_exists_uniformEquilibriumPayoff
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
@@ -216,12 +211,11 @@ theorem nonempty_counterexampleRegime_of_not_exists_uniformEquilibriumPayoff
   ⟨quittingCounterexampleRegimeOfNoUniformPayoff reward hno⟩
 
 /-- **Combined counterexample normal form.**  Nonexistence of a
-uniform-equilibrium payoff is equivalent to simultaneous terminal instability
-and finite canonical absorption capacity for all exact punishment-floor prefixes.
-Positive optimized exact-D persistence is a theorem from the former, not an
-additional field. -/
+uniform-equilibrium payoff is equivalent to the existence of one quantitative
+terminal-instability regime.  Finite canonical absorption capacity and positive
+optimized exact-D persistence are consequences of that regime, not additional
+fields. -/
 theorem not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
-    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     (¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
@@ -232,58 +226,19 @@ theorem not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
   · rintro ⟨regime⟩
     exact regime.not_exists_uniformEquilibriumPayoff
 
-/-- Quantifier-expanded form of the combined regime.  A counterexample is
-exactly a positive terminal gap together with one finite bound valid for every
-exact punishment-floor prefix.  This is the direct interface for search code
-that does not need the bundled structure. -/
-theorem not_exists_uniformEquilibriumPayoff_iff_exists_gap_and_chargeBound
-    [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    (¬ ∃ payoff : Payoff ι,
-        (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
-      ∃ (gap chargeBound : ℝ),
-        0 < gap ∧
-        HasTerminalExploitabilityGap reward gap ∧
-        0 ≤ chargeBound ∧
-        ∀ cert : QuittingPunishmentFloorFinitePrefix reward,
-          cert.charge ≤ chargeBound := by
-  constructor
-  · intro hno
-    let regime := quittingCounterexampleRegimeOfNoUniformPayoff reward hno
-    exact ⟨regime.terminalGap,
-      quittingPunishmentFloorPrefixChargeBound reward,
-      regime.terminalGap_pos, regime.terminalExploitability,
-      quittingPunishmentFloorPrefixChargeBound_nonneg reward,
-      regime.prefixCharge_le⟩
-  · rintro ⟨gap, _chargeBound, hgap, hexploit, _hbound_nonneg, _hbound⟩
-    exact ({
-      terminalGap := gap
-      terminalGap_pos := hgap
-      terminalExploitability := hexploit } :
-        QuittingCounterexampleRegime reward).not_exists_uniformEquilibriumPayoff
-
-/-- Canonical quantifier-expanded form.  The charge condition is finiteness of
-the intrinsic prefix capacity, rather than existence of a chosen upper-bound
-witness. -/
-theorem not_exists_uniformEquilibriumPayoff_iff_exists_gap_and_finiteChargeCapacity
-    [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    (¬ ∃ payoff : Payoff ι,
-        (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
-      ∃ gap : ℝ,
-        0 < gap ∧
-        HasTerminalExploitabilityGap reward gap ∧
-        quittingPunishmentFloorPrefixChargeCapacity reward ≠ ⊤ := by
-  constructor
-  · intro hno
-    let regime := quittingCounterexampleRegimeOfNoUniformPayoff reward hno
-    exact ⟨regime.terminalGap, regime.terminalGap_pos,
-      regime.terminalExploitability, regime.prefixChargeCapacity_ne_top⟩
-  · rintro ⟨gap, hgap, hexploit, _hcapacity⟩
-    exact ({
-      terminalGap := gap
-      terminalGap_pos := hgap
-      terminalExploitability := hexploit } :
-        QuittingCounterexampleRegime reward).not_exists_uniformEquilibriumPayoff
+/-- Every counterexample supplies both its quantitative terminal gap and the
+derived finiteness of the intrinsic prefix-charge capacity.  Capacity is a
+search-facing consequence of the gap, not an independent converse premise. -/
+theorem exists_gap_and_finiteChargeCapacity_of_not_exists_uniformEquilibriumPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hno : ¬ ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ gap : ℝ,
+      0 < gap ∧
+      HasTerminalExploitabilityGap reward gap ∧
+      quittingPunishmentFloorPrefixChargeCapacity reward ≠ ⊤ := by
+  let regime := quittingCounterexampleRegimeOfNoUniformPayoff reward hno
+  exact ⟨regime.terminalGap, regime.terminalGap_pos,
+    regime.terminalExploitability, regime.prefixChargeCapacity_ne_top⟩
 
 end GameTheory

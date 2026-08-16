@@ -5,7 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCoalitionToggleDeletion
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAtomicBlockerCompletion
+import UniformEquilibrium.Quitting.Boundary.Repair.AtomicBlockerCompletion
+import UniformEquilibrium.Quitting.Classification.PlayerDeletion
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionDiffuseClockBridge
@@ -34,9 +35,6 @@ namespace GameTheory
 open StochasticGame Filter Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- The subtype of players remaining after deleting `owner`. -/
-abbrev QuittingDeletedPlayer (owner : ι) := {who : ι // who ≠ owner}
 
 /-- Embed a nonempty coalition of undeleted players in the original player
 type. -/
@@ -657,12 +655,6 @@ theorem nonempty_deletedPlayer_of_ownerJoinAntitone_and_gap
     hdeleted (quittingAlwaysContinueProfile
       (quittingDeletePlayerReward reward owner))
   exact ⟨who⟩
-
-/-- The deleted subtype has strictly smaller cardinality. -/
-theorem card_quittingDeletedPlayer_lt (owner : ι) :
-    Fintype.card (QuittingDeletedPlayer owner) < Fintype.card ι := by
-  exact Fintype.card_subtype_lt (p := fun who : ι => who ≠ owner)
-    (x := owner) (by simp)
 
 /-- **Toggle-or-cardinality-descent dispatcher.**  At the negative singleton
 gate with a positive terminal exploitability floor, either a strict

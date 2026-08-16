@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeStrictToggleOrbit
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles.StrictOrbit
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumAggregateSurplusConsumer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauMarkedExitNashificationRegression
 

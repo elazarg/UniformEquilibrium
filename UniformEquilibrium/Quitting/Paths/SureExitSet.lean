@@ -146,6 +146,16 @@ theorem quittingTerminalPayoff_pureSetRoot
     rw [quittingStationaryProfile_pureSetRoot_empty,
       quittingTerminalPayoff_quittingAlwaysContinue, quittingSetReward_empty]
 
+omit [Fintype ι] [DecidableEq ι] in
+/-- A singleton's extended set reward is its solo reward, at every payoff
+coordinate. -/
+theorem quittingSetReward_singleton_eq_soloReward
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (owner who : ι) :
+    quittingSetReward reward ({owner} : Finset ι) who =
+      quittingSoloReward reward owner who := by
+  simp [quittingSetReward, quittingSoloReward]
+
 /-! ## The two membership toggles -/
 
 /-- Quitting now against a sure exit set joins it. -/

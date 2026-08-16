@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalAtomSequenceDispatch
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.AtomSequenceDispatch
 import Research.Quitting.TerminalLawTwoOutcomePassport
 
 /-!
@@ -246,7 +246,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtPassp
       (quittingStoppingLawAtomDecoderError charge rank) hlambda
       (frontier.lambda_le_one (frontier.subseq rank)) hcharge
       (quittingStoppingLawAtomDecoderError_pos hcharge rank)
-      (quittingStoppingLawAtomDecoderError_le hcharge rank)
+      (quittingStoppingLawAtomDecoderError_le hcharge.le rank)
       hslope
 
 /-! ## A fixed ordered passport along a strict subsequence -/

@@ -39,6 +39,56 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
+/-! ## Moving-terminal-boundary regression -/
+
+/-- Scalar finite-prefix debt equal to one strictly before its cutoff and
+zero at and after the moving terminal end. -/
+def projectiveTerminalEscapeDebt (cutoff time : ℕ) : ℝ :=
+  if time < cutoff then 1 else 0
+
+/-- The single source atom immediately before the moving terminal end. -/
+def projectiveTerminalEscapeSource (cutoff time : ℕ) : ℝ :=
+  if time + 1 = cutoff then 1 else 0
+
+/-- Every finite regression prefix satisfies an exact survival-one killed
+recursion. -/
+theorem projectiveTerminalEscapeDebt_step (cutoff time : ℕ) :
+    projectiveTerminalEscapeDebt cutoff time =
+      projectiveTerminalEscapeSource cutoff time +
+        projectiveTerminalEscapeDebt cutoff (time + 1) := by
+  unfold projectiveTerminalEscapeDebt projectiveTerminalEscapeSource
+  split_ifs <;> norm_num at * <;> omega
+
+/-- Every finite approximant has literal zero debt at its own terminal end. -/
+@[simp]
+theorem projectiveTerminalEscapeDebt_diagonal (cutoff : ℕ) :
+    projectiveTerminalEscapeDebt cutoff cutoff = 0 := by
+  simp [projectiveTerminalEscapeDebt]
+
+/-- Nevertheless, every fixed initial coordinate converges to one as the
+moving cutoff escapes. -/
+theorem projectiveTerminalEscapeDebt_tendsto_one (time : ℕ) :
+    Tendsto (fun cutoff ↦ projectiveTerminalEscapeDebt cutoff time)
+      atTop (nhds 1) := by
+  apply tendsto_const_nhds.congr'
+  filter_upwards [eventually_ge_atTop (time + 1)] with cutoff hcutoff
+  simp [projectiveTerminalEscapeDebt,
+    lt_of_lt_of_le (Nat.lt_succ_self time) hcutoff]
+
+/-- The moving terminal source disappears from every fixed coordinate. -/
+theorem projectiveTerminalEscapeSource_tendsto_zero (time : ℕ) :
+    Tendsto (fun cutoff ↦ projectiveTerminalEscapeSource cutoff time)
+      atTop (nhds 0) := by
+  apply tendsto_const_nhds.congr'
+  filter_upwards [eventually_ge_atTop (time + 2)] with cutoff hcutoff
+  have hne : time + 1 ≠ cutoff := by omega
+  simp [projectiveTerminalEscapeSource, hne]
+
+/-- The fixed-coordinate limit is the positive harmonic solution of the
+source-free survival-one recursion. -/
+theorem projectiveTerminalEscape_limit_harmonic :
+    (1 : ℝ) = 0 + 1 * 1 := by norm_num
+
 /-- The selected finite min-max exact-D chain, read backward from its terminal
 zero boundary and padded by its initial point after the available depth. -/
 def quittingFiniteMinMaxDynamicDebtReverseTail [Nonempty ι]

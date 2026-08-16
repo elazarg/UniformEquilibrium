@@ -37,6 +37,16 @@ open Filter Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
+/-- Read a finite window of a dynamic-debt tail as a nonempty cycle. -/
+def quittingDynamicDebtTailWindowCycle
+    (tail : ℕ → QuittingDebtPoint ι) (start length : ℕ) :
+    Fin (length + 1) → ι → PMF Bool :=
+  fun phase ↦ quittingDynamicDebtTailRoots tail (start + phase.1)
+
+/-- Phase zero of the canonical nonempty window indexed by `window`. -/
+def quittingPeriodicWindowInitialPhase (window : ℕ) : Fin (window + 1) :=
+  ⟨0, Nat.succ_pos window⟩
+
 /-- Value obtained by refusing to quit forever against a periodic window. -/
 def quittingPeriodicWindowRefusalValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

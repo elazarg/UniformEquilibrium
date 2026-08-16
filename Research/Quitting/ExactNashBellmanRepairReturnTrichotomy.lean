@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Classification.AnalyticWaist
 import UniformEquilibrium.Quitting.Classification.SingletonPacketEnergy
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeToggles
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
 

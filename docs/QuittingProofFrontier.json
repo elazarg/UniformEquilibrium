@@ -21,7 +21,7 @@
       "status": "open",
       "obstruction_class": "OB-ALIGN",
       "representative": "Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean",
       "producer": "QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch"
     },
     {
@@ -29,7 +29,7 @@
       "status": "open",
       "obstruction_class": "OB-ALIGN",
       "representative": "packet.observer ∉ packet.terminal.val ∧ HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch packet (quittingStoppingLawObserverAbsentMassLower packet)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean",
       "producer": "QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch"
     },
     {
@@ -37,7 +37,7 @@
       "status": "open",
       "obstruction_class": "OB-SINGLETON",
       "representative": "HasQuittingStoppingLawSingletonStrategicOrientation packet",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean",
       "producer": "QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch"
     },
     {
@@ -45,7 +45,7 @@
       "status": "open",
       "obstruction_class": "OB-ALIGN",
       "representative": "packet.observer ∈ packet.terminal.val ∧ 1 < packet.terminal.val.card ∧ reward packet.terminal packet.observer < 0 ∧ HasQuittingStoppingLawNegativeCollisionAtomicDispatch packet (quittingStoppingLawNegativeCollisionMassLower packet)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean",
       "producer": "QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch"
     },
     {
@@ -53,7 +53,7 @@
       "status": "open",
       "obstruction_class": "OB-RETURN",
       "representative": "packet.observer ∈ packet.terminal.val ∧ 1 < packet.terminal.val.card ∧ 0 < reward packet.terminal packet.observer ∧ HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch packet ((packet.charge / 4) / (card outcomes * rewardBound))",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean",
       "producer": "QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch"
     }
   ],
@@ -84,7 +84,7 @@
       ],
       "summary": "The exhaustive capstone retains, on the same rectangle packet, the observer-membership, coalition-cardinality, and reward-sign facts that select each strategic consumer, carrying each fact from producer to leaf.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean"
       ]
     },
     {
@@ -114,9 +114,9 @@
       ],
       "summary": "Mechanically exhaustive antichain: five formal leaves in three obstruction classes, together with an exact bundled five-way localization of every counterexample regime.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeExhaustiveFrontier.lean",
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean",
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeFiveWayLocalization.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/Frontier.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FiveWayLocalization.lean"
       ]
     },
     {
@@ -161,7 +161,7 @@
       "target_ids": ["SL-SINGLETON"],
       "summary": "Positive punishment, recurrent owner-tail escape, and fixed owner-join loss require no separate compiler: each nondeletion arm yields the existing static atomic-toggle handoff, leaving only its source-matched alignment problem.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeFiveWayLocalization.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FiveWayLocalization.lean",
         "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticConcentratedSingletonStrategicCompression.lean",
         "Research/Quitting/StoppingLawSingletonOrientationNoGo.lean"
       ]
@@ -172,7 +172,7 @@
       "target_ids": ["SL-POS-COLLISION"],
       "summary": "At the packet's canonical positive mass floor, the positive-collision branch supplies a strict subsequence on which one fixed non-observer's actual-row best-endpoint gain has an explicit uniform positive lower bound, hence does not converge to zero. The adapter needs no repeated terminal-membership, collision-cardinality, or reward-sign premise; the packet's stored tail cluster and escape/fiber alternative are also unnecessary. The result does not return that gain to the original source or close an exact Nash--Bellman cycle.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeReachedRowDebtLocalization.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ReachedRowDebtLocalization.lean"
       ]
     },
     {
@@ -335,7 +335,7 @@
       "target_ids": ["SL-NEG-COLLISION"],
       "summary": "The outsider-defect arm is a legal one-row behavioral deviation on the identical source profile, stop, and coalition event, with exact gain live-mass times actual coordinate defect. The refusal arm is unchanged because its blocker balance is not an expected refusal gain.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeNegativeCollisionAtomicDispatch.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/NegativeCollisionAtomicDispatch.lean"
       ]
     },
     {
@@ -344,7 +344,7 @@
       "target_ids": ["SL-POS-COLLISION"],
       "summary": "The tail-cluster escape/fiber split is unnecessary for actual-row localization. Along one strict subsequence the marked target observer debt tends to zero, one fixed non-observer has a legal same-row deviation, and lower times minimum debt over two is bounded by the number of opponents times its global gain. Source re-entry is not supplied.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeReachedRowDebtLocalization.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ReachedRowDebtLocalization.lean"
       ]
     },
     {

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeObserverAbsentRectangleBaselineDispatch
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticForcedOwnerWallRectangleCurvature
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtOwnerTransferCounterexample
 
 /-!

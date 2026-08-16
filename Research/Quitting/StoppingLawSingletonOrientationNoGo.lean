@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import
   UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonStrategicCompression
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
 import UniformEquilibrium.Diagnostics.Quitting.MinimalFinCounterexample
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauTimeDisintegration
 
@@ -80,7 +81,7 @@ theorem hasStaticAtomicToggleHandoff
       (minimal.regime.singletonStaticStrategicDispatch owner) with
     hatomic | hdelete
   · exact hatomic
-  · obtain ⟨hnonempty, hgap, hcard⟩ := hdelete
+  · obtain ⟨hnonempty, hgap⟩ := hdelete
     letI : Nonempty (QuittingDeletedPlayer owner) := hnonempty
     let reducedReward := quittingDeletePlayerReward minimal.reward owner
     have hno : ¬ ∃ payoff : Payoff (QuittingDeletedPlayer owner),
@@ -91,7 +92,7 @@ theorem hasStaticAtomicToggleHandoff
             minimal.regime.terminalGap_pos, hgap⟩
     have hcard' : Fintype.card (QuittingDeletedPlayer owner) <
         minimal.playerCount := by
-      simpa using hcard
+      simpa using card_quittingDeletedPlayer_lt owner
     exact False.elim
       (hno (minimal.exists_uniformEquilibriumPayoff_of_card_lt
         hcard' reducedReward))

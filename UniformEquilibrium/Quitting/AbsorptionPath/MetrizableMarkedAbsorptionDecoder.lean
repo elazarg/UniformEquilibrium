@@ -512,6 +512,33 @@ theorem exists_finite_subsequence_with_repairState_limit
   simpa only [Function.comp_apply, Function.comp_def] using
     (continuous_metrizableRepairState.continuousAt.tendsto.comp htendsto)
 
+/-- Every finite coherent-cylinder sequence has one subsequence on which
+the completed path, both exact-D anchors, and the decoder-facing repair state
+converge jointly. -/
+theorem exists_finite_subsequence_with_anchor_repairState_limit
+    (finite : ℕ → FiniteMarkedAbsorptionPath reward) :
+    ∃ (limit : MetrizableMarkedAbsorptionPath reward) (subseq : ℕ → ℕ),
+      StrictMono subseq ∧
+      Tendsto (fun index ↦ completeMetrizable (finite (subseq index)))
+        atTop (nhds limit) ∧
+      Tendsto (fun index ↦ finiteEntryAnchor (finite (subseq index)))
+        atTop (nhds (metrizableEntryAnchor limit)) ∧
+      Tendsto (fun index ↦ finiteExitAnchor (finite (subseq index)))
+        atTop (nhds (metrizableExitAnchor limit)) ∧
+      Tendsto
+        (fun index ↦ metrizableRepairState
+          (completeMetrizable (finite (subseq index))))
+        atTop (nhds (metrizableRepairState limit)) := by
+  obtain ⟨limit, subseq, hsubseq, hpath, hrepair⟩ :=
+    exists_finite_subsequence_with_repairState_limit finite
+  refine ⟨limit, subseq, hsubseq, hpath, ?_, ?_, hrepair⟩
+  · have hentry :=
+      continuous_metrizableEntryAnchor.continuousAt.tendsto.comp hpath
+    simpa [Function.comp_def] using hentry
+  · have hexit :=
+      continuous_metrizableExitAnchor.continuousAt.tendsto.comp hpath
+    simpa [Function.comp_def] using hexit
+
 end MetrizableMarkedAbsorptionCompletion
 
 end GameTheory

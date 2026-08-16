@@ -6,7 +6,8 @@ Authors: GameTheory contributors
 
 import Research.Quitting.CertifiedForcedOwnerRectanglePacket
 import Research.Quitting.OwnerOutsiderSquareContextDecomposition
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeObserverAbsentRectangleBaselineDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ForcedOwnerRectangleBaseline
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticForcedOwnerRefusalCollector
 
 /-!
 # The certified rectangle residual is an endpoint flip

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumDebtSimplex
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeSmallPlayers
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.SmallPlayers
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 
 /-!

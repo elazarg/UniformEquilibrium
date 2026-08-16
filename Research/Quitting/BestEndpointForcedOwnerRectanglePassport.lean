@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeObserverAbsentDefectPolarityDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ForcedOwnerDefectPolarity
 
 /-!
 # A best-endpoint passport for forced-owner rectangles

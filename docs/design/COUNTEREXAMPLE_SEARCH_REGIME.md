@@ -20,23 +20,21 @@ Fix a finite quitting reward table `reward`.  Let:
 - `C* = sup { charge(P) | P ∈ P_floor }` in the extended nonnegative reals;
 - `q(x) = 1 - ∏ i, x_i(Continue)` be the absorption mass of a product root.
 
-The production counterexample regime consists of two independent conditions:
+The production counterexample regime stores one quantitative witness:
 
 ```text
 terminal gap η > 0
-canonical prefix-charge capacity C* < ∞
 ```
 
-satisfying:
+It satisfies:
 
 1. Every behavioral profile has a unilateral terminal-payoff improvement of at
    least `η`.
-2. `C*` is finite; equivalently every `P ∈ P_floor` satisfies
-   `∑ t < |P|, q(P.root t) ≤ C*`.
 
 This package is equivalent to nonexistence of a uniform-equilibrium payoff.
-The terminal gap supplies the reverse implication by itself; finite charge
-capacity is additional structure forced on every counterexample.
+The same terminal gap forces `C* < ∞`; equivalently every `P ∈ P_floor`
+satisfies `∑ t < |P|, q(P.root t) ≤ C*`.  Capacity is therefore a derived
+search constraint, not an independent field or converse premise.
 
 Dynamic debt is not an independent field.  The terminal compiler gives the
 sharp cross-lane chain
@@ -50,11 +48,20 @@ singleton reward is positive.  No independent free parameter `δ` is needed.
 The capacity `C*` is canonical: its real value is the least valid prefix bound,
 not a user-chosen larger constant.
 
-The Lean umbrella is `CounterexampleRegimeAll`, an import-only facade for the
-diagnostic inventory.  This document is the narrative source for its search
-protocol and synthesis; the facade itself deliberately carries no duplicate
-prose.  The direct characterization is
-`not_exists_uniformEquilibriumPayoff_iff_exists_gap_and_finiteChargeCapacity`.
+The regime structure is the quantitative context shared by the search
+pipeline.  Its module subtree inventories regime-indexed reductions; the
+broader quitting-diagnostics umbrella separately inventories unrelated
+diagnostics.  The enriched search consequence is
+`exists_gap_and_finiteChargeCapacity_of_not_exists_uniformEquilibriumPayoff`.
+
+The word *regime* is intentional.  The object fixes one exploitability margin
+and preserves its provenance through packet, tail, and stopping-law
+localizations.  It is not a finite certificate: terminal exploitability still
+quantifies over every behavioral profile.  The regime therefore owns only
+results whose conclusions depend on that selected counterexample context.
+Reusable tangent, repair, debt, and finite-combinatorial results are organized
+by their mathematical objects in the production tree, independently of any
+regime specialization.
 
 ### Derived finite and asymptotic narrowing
 
@@ -79,8 +86,8 @@ restriction theorem does not extend that payoff to excluded players or control
 their joining deviations.
 
 Further machine-checked necessary conditions
-(`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeToggles.lean`,
-`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimePacket.lean`):
+(`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Toggles.lean`,
+`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Packet.lean`):
 
 - no profile is terminally `ε`-Nash for any `ε < η`
   (`not_isεAsymptoticNash_of_lt_terminalGap`);
@@ -478,7 +485,7 @@ inequalities with enough data for reconstruction.
 
 The two-branch alternative is a theorem with a single surviving
 branch
-(`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeViolationCollapse.lean`).
+(`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Debt/ViolationCollapse.lean`).
 At every exact
 Nash--Bellman edge, a value below the punishment floor amplifies through the
 opponents-continue mass — `χ - v ≤ c · (χ - w)` — so the violating
@@ -516,7 +523,7 @@ table realizes this entire package inside a game that HAS a uniform payoff,
 so no contradiction can come from the tail data alone.
 
 The production seam is explicit in
-`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeSeam.lean`.
+`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Seam.lean`.
 Every counterexample simultaneously carries the strict-refusal packet, the
 positive-debt all-Continue tail limit, and the exact pure-time/`Never` gap on
 every periodic tail window.  No theorem identifies the packet weights with

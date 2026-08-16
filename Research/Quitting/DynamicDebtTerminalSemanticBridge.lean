@@ -10,7 +10,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtChains
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchProfile
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeDynamicDebtSemanticChronology
+import UniformEquilibrium.Quitting.Debt.Dynamic.SemanticChronology
 
 /-!
 # Exact dynamic debt is terminal semantic debt

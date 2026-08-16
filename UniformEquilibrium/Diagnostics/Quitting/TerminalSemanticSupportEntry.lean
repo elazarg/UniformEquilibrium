@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeTangentTwoOwnerExactRoot
+import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.TwoOwner.ExactRoot
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupation
 

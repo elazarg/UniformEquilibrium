@@ -260,26 +260,32 @@ import UniformEquilibrium.Certificates.Neutral
                 "UniformEquilibrium.lean",
                 "import MathUE\n"
                 "import MathUE.Kernel\n"
+                "import UniformEquilibrium.Diagnostics.Quitting.All\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/Diagnostics/Quitting/All.lean",
                 "import UniformEquilibrium.Diagnostics.Quitting."
-                "CounterexampleRegimeAll\n",
+                "CounterexampleRegime.All\n",
             )
             self.write(
                 root,
                 "UniformEquilibrium/Diagnostics/Quitting/"
-                "CounterexampleRegimeAll.lean",
+                "CounterexampleRegime/All.lean",
                 "",
             )
             self.write(root, "Research.lean", "import Research.Consumer\n")
             self.write(
                 root,
                 "Research/Consumer.lean",
+                "import UniformEquilibrium.Diagnostics.Quitting.All\n"
                 "import UniformEquilibrium.Diagnostics.Quitting."
-                "CounterexampleRegimeAll\n",
+                "CounterexampleRegime.All\n",
             )
 
             failures = check_import_graph.check_import_graph(root)
 
-            self.assertEqual(len(failures), 3)
+            self.assertEqual(len(failures), 4)
             self.assertTrue(any("redundant direct import MathUE.Kernel" in failure
                 for failure in failures))
             self.assertTrue(any("inventory-only facade" in failure

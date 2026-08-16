@@ -4,8 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeReindexNaturality
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeSmallPlayers
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.ReindexNaturality
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.SmallPlayers
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonStrategicCompression
 
 /-!
@@ -163,11 +164,11 @@ theorem not_hasQuittingExactPlayerDeletionAtGap
     (owner : Fin minimal.playerCount) :
     ¬ HasQuittingExactPlayerDeletionAtGap minimal.reward owner
       minimal.regime.terminalGap := by
-  rintro ⟨hdeletedNonempty, hdeletedGap, hcard⟩
+  rintro ⟨hdeletedNonempty, hdeletedGap⟩
   letI : Nonempty (QuittingDeletedPlayer owner) := hdeletedNonempty
   have hcard' : Fintype.card (QuittingDeletedPlayer owner) <
       minimal.playerCount := by
-    simpa using hcard
+    simpa using card_quittingDeletedPlayer_lt owner
   have hpayoff := minimal.exists_uniformEquilibriumPayoff_of_card_lt hcard'
     (quittingDeletePlayerReward minimal.reward owner)
   exact

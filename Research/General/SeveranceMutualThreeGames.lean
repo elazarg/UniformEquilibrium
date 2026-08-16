@@ -4,11 +4,11 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimePacketEnergy
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeSearchConsequences
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeSmallPlayers
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimePeriodicWindows
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeBallisticity
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Energy
+import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefixChargedBridge
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.SmallPlayers
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Ballisticity
 import UniformEquilibrium.Quitting.Cycles.PeriodicNormalizedSeam
 
 /-!

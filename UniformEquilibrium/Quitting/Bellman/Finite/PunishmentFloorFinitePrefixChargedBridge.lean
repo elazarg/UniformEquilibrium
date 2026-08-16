@@ -225,4 +225,84 @@ theorem quittingGame_uniformPayoff_or_punishmentFloorReachable_canonicalPotentia
       (quittingPunishmentFloorReachablePotential_isBoundedPotential
         (hasAnchoredChargeBound_of_finitePrefixChargeBound hbound))
 
+private theorem nonempty_of_positive_punishmentFloorReachable_cycle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {state : QuittingPunishmentFloorReachableState reward}
+    (cycle : (quittingPunishmentFloorReachableChargedRelation reward).Path
+      state state)
+    (hpositive : 0 < cycle.chargeSum) : Nonempty ι := by
+  rcases isEmpty_or_nonempty ι with hempty | hnonempty
+  · letI : IsEmpty ι := hempty
+    exfalso
+    have hedgeZero : ∀ edge : QuittingPunishmentFloorReachableEdge reward,
+        edge.toBoxEdge.absorptionCharge = 0 := by
+      intro edge
+      unfold QuittingPunishmentFloorBoxEdge.absorptionCharge
+      have hroot : edge.toBoxEdge.root = quittingAllContinueRoot := by
+        funext who
+        exact isEmptyElim who
+      rw [hroot, quittingRootAbsorptionMass_allContinueRoot]
+    have pathChargeSum_eq_zero :
+        ∀ {source target : QuittingPunishmentFloorReachableState reward}
+          (path : (quittingPunishmentFloorReachableChargedRelation reward).Path
+            source target), path.chargeSum = 0 := by
+      intro source target path
+      induction path with
+      | nil state => rfl
+      | cons edge rest ih =>
+          rw [ChargedRelation.Path.chargeSum_cons, ih, add_zero]
+          exact hedgeZero edge
+    have hzero : cycle.chargeSum = 0 := pathChargeSum_eq_zero cycle
+    linarith
+  · exact hnonempty
+
+/-- A positive-charge cycle in the reachable exact predecessor relation is a
+finite certificate that the game has a uniform-equilibrium payoff.  Cycle
+positivity itself forces the player type to be nonempty. -/
+theorem quittingGame_exists_uniformPayoff_of_positive_reachable_cycle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {state : QuittingPunishmentFloorReachableState reward}
+    (cycle : (quittingPunishmentFloorReachableChargedRelation reward).Path
+      state state)
+    (hpositive : 0 < cycle.chargeSum) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  letI : Nonempty ι :=
+    nonempty_of_positive_punishmentFloorReachable_cycle reward cycle hpositive
+  rcases quittingGame_uniformPayoff_or_punishmentFloorReachable_hasFiniteBudget
+    reward with hpayoff | hbudget
+  · exact hpayoff
+  · exact ((quittingPunishmentFloorReachableChargedRelation reward)
+      |>.not_hasFiniteBudget_of_positive_cycle cycle hpositive hbudget).elim
+
+/-- A reachable exact predecessor edge with positive absorption and an exact
+return path certifies a uniform-equilibrium payoff. -/
+theorem quittingGame_exists_uniformPayoff_of_positive_reachable_return
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (edge : QuittingPunishmentFloorReachableEdge reward)
+    (returnPath :
+      (quittingPunishmentFloorReachableChargedRelation reward).Path
+        edge.current edge.tail)
+    (hpositive : 0 < edge.toBoxEdge.absorptionCharge) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  apply quittingGame_exists_uniformPayoff_of_positive_reachable_cycle reward
+    (ChargedRelation.Path.cons edge returnPath)
+  change 0 < edge.toBoxEdge.absorptionCharge + returnPath.chargeSum
+  nlinarith [returnPath.chargeSum_nonneg]
+
+/-- A positive-absorption self-loop in the reachable exact predecessor
+relation certifies a uniform-equilibrium payoff. -/
+theorem quittingGame_exists_uniformPayoff_of_positive_reachable_selfLoop
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (edge : QuittingPunishmentFloorReachableEdge reward)
+    (hloop : edge.current = edge.tail)
+    (hpositive : 0 < edge.toBoxEdge.absorptionCharge) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  apply quittingGame_exists_uniformPayoff_of_positive_reachable_return
+    reward edge
+  · exact (ChargedRelation.Path.nil edge.current).castTgt hloop
+  · exact hpositive
+
 end GameTheory

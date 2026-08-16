@@ -66,6 +66,46 @@ theorem QuittingPunishmentFloorFinitePrefix.charge_nonneg
   unfold quittingRootAbsorptionMass
   linarith [quittingStationaryContinueMass_le_one (cert.roots time)]
 
+namespace QuittingPunishmentFloorFinitePrefix
+
+/-- Number of certified prefix stages whose literal absorption mass is at
+least `threshold`. -/
+def highAbsorptionStageCount
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (cert : QuittingPunishmentFloorFinitePrefix reward)
+    (threshold : ℝ) : ℕ :=
+  (Finset.range cert.horizon |>.filter fun time =>
+    threshold ≤ quittingRootAbsorptionMass (cert.roots time)).card
+
+/-- The high-absorption stage count is controlled by the prefix's exact total
+absorption charge. -/
+theorem highAbsorptionStageCount_mul_le_charge
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (cert : QuittingPunishmentFloorFinitePrefix reward)
+    (threshold : ℝ) :
+    (cert.highAbsorptionStageCount threshold : ℝ) * threshold ≤ cert.charge := by
+  let highStages := Finset.range cert.horizon |>.filter fun time =>
+    threshold ≤ quittingRootAbsorptionMass (cert.roots time)
+  calc
+    (cert.highAbsorptionStageCount threshold : ℝ) * threshold =
+        ∑ _time ∈ highStages, threshold := by
+          simp [highAbsorptionStageCount, highStages]
+    _ ≤ ∑ time ∈ highStages,
+        quittingRootAbsorptionMass (cert.roots time) := by
+          apply Finset.sum_le_sum
+          intro time htime
+          exact (Finset.mem_filter.mp htime).2
+    _ ≤ ∑ time ∈ Finset.range cert.horizon,
+        quittingRootAbsorptionMass (cert.roots time) := by
+          apply Finset.sum_le_sum_of_subset_of_nonneg
+          · exact Finset.filter_subset _ _
+          · intro time _ _
+            unfold quittingRootAbsorptionMass
+            linarith [quittingStationaryContinueMass_le_one (cert.roots time)]
+    _ = cert.charge := rfl
+
+end QuittingPunishmentFloorFinitePrefix
+
 /-- The anchor floor propagates through every exact forward edge. -/
 theorem quittingPunishmentValue_le_finitePrefixValue
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -206,5 +246,48 @@ theorem quittingGame_uniformPayoff_or_bounded_floorPrefixCharge
     refine ⟨chargeTarget, hchargeTarget, ?_⟩
     intro cert
     exact (hno cert).le
+
+/-- If exact prefixes realize arbitrarily many stages above one fixed positive
+absorption threshold, their charges are unbounded and the finite-prefix
+compiler produces a uniform-equilibrium payoff.  The producer hypothesis
+itself forces the player type to be nonempty. -/
+theorem quittingGame_exists_uniformPayoff_of_unbounded_highAbsorptionCount
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (threshold : ℝ) (hthreshold : 0 < threshold)
+    (hprefix : ∀ countTarget : ℕ,
+      Nonempty {cert : QuittingPunishmentFloorFinitePrefix reward //
+        countTarget ≤ cert.highAbsorptionStageCount threshold}) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  letI : Nonempty ι := by
+    rcases isEmpty_or_nonempty ι with hempty | hnonempty
+    · letI : IsEmpty ι := hempty
+      obtain ⟨⟨cert, hcount⟩⟩ := hprefix 1
+      have hzero : cert.highAbsorptionStageCount threshold = 0 := by
+        unfold QuittingPunishmentFloorFinitePrefix.highAbsorptionStageCount
+        apply Finset.card_eq_zero.mpr
+        apply Finset.filter_eq_empty_iff.mpr
+        intro time _
+        have hroot : cert.roots time = quittingAllContinueRoot :=
+          Subsingleton.elim _ _
+        rw [hroot, quittingRootAbsorptionMass_allContinueRoot]
+        exact not_le_of_gt hthreshold
+      omega
+    · exact hnonempty
+  apply quittingGame_exists_uniformPayoff_of_arbitrarilyCharged_floorPrefixes
+    reward
+  intro chargeTarget _
+  obtain ⟨countTarget, hcountTarget⟩ :=
+    exists_nat_ge (chargeTarget / threshold)
+  obtain ⟨⟨cert, hcount⟩⟩ := hprefix countTarget
+  refine ⟨⟨cert, ?_⟩⟩
+  have hchargeTarget : chargeTarget ≤ (countTarget : ℝ) * threshold :=
+    (div_le_iff₀ hthreshold).mp hcountTarget
+  have hcountReal : (countTarget : ℝ) ≤
+      cert.highAbsorptionStageCount threshold := by
+    exact_mod_cast hcount
+  exact hchargeTarget.trans <|
+    (mul_le_mul_of_nonneg_right hcountReal hthreshold.le).trans
+      (cert.highAbsorptionStageCount_mul_le_charge threshold)
 
 end GameTheory

@@ -5,6 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonStrategicDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Punishment.InstantPunishment
 
 /-!

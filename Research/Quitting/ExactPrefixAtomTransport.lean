@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAtomExactPrefixChronology
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.LiteralRootStackSurvival
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeRectangle
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 

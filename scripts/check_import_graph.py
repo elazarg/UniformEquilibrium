@@ -46,8 +46,12 @@ SCRATCH_NAMESPACE_RE = re.compile(
 # consumers must import the declarations they use, otherwise one experimental
 # file can accidentally acquire hundreds of unrelated dependencies.
 INVENTORY_ONLY_FACADES = {
-    "UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAll": {
+    "UniformEquilibrium.Diagnostics.Quitting.All": {
         "UniformEquilibrium",
+        "AxiomAudit",
+    },
+    "UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.All": {
+        "UniformEquilibrium.Diagnostics.Quitting.All",
         "AxiomAudit",
     },
 }

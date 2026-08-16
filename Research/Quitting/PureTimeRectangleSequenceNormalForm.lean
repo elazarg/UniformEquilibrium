@@ -6,8 +6,8 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticElementaryTailCompression
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAtomContinuePrefixAccess
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalAtomSequenceDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ContinuePrefixAtomAccess
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.AtomSequenceDispatch
 
 /-!
 # A four-way normal form for the literal stopping-law rectangle sequence

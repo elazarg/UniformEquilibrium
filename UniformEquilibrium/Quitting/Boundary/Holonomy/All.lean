@@ -11,6 +11,7 @@ import UniformEquilibrium.Quitting.Boundary.Holonomy.BehavioralTailEvaluation
 import UniformEquilibrium.Quitting.Boundary.Holonomy.BehavioralTailRepairValue
 import UniformEquilibrium.Quitting.Boundary.Holonomy.BehavioralTailGainDensity
 import UniformEquilibrium.Quitting.Boundary.Holonomy.InfiniteBehavioralTailEvaluation
+import UniformEquilibrium.Quitting.Boundary.Holonomy.AggregatePrefixConsumption
 import UniformEquilibrium.Quitting.Boundary.Holonomy.AggregateTerminalAnchor
 import UniformEquilibrium.Quitting.Boundary.Holonomy.QuantitativeAggregateTerminalAnchor
 

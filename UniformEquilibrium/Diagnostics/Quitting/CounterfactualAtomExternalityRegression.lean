@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Stationary.LiveMass
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAtomContinuePrefixAccess
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ContinuePrefixAtomAccess
 import UniformEquilibrium.Diagnostics.Quitting.TerminalDebtLiteralStackAllContinueRegression
 
 /-!

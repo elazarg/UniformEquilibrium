@@ -8,7 +8,7 @@ import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticWeightedAuxiliaryNashBudget
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupation
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeToggles
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
 import MathUE.BonferroniProductBounds
 import UniformEquilibrium.Quitting.RewardBound
 

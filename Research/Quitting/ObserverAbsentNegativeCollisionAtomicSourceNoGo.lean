@@ -6,8 +6,6 @@ Authors: GameTheory contributors
 
 import Research.Quitting.Q182EndpointRecipientAtomInterfaceNoGo
 import Research.Quitting.ForcedOwnerContinueFaceLossSupportNoGo
-import
-UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeObserverAbsentRectangleBaselineDispatch
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtOwnerTransferCounterexample
 
 /-!

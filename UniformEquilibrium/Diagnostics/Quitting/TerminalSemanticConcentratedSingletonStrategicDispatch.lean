@@ -6,7 +6,8 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetFaceLawTemporalSplit
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonCancellation
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalStaticOrientationDispatch
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.StaticOrientationDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
 
 /-!
 # Strategic dispatch for a relabeled concentrated singleton

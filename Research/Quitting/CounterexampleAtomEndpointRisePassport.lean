@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAtomExactPrefixChronology
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalAtomSequenceDispatch
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Atom.ExactPrefixChronology
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.AtomSequenceDispatch
 import Research.Quitting.CounterfactualAtomMinimumResetSquare
 
 /-!
@@ -309,7 +309,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChron
       (frontier.lambda_pos (frontier.subseq rank))
       (frontier.lambda_le_one (frontier.subseq rank)) hcharge
       (quittingStoppingLawAtomDecoderError_pos hcharge rank)
-      (quittingStoppingLawAtomDecoderError_le hcharge rank) hslope
+      (quittingStoppingLawAtomDecoderError_le hcharge.le rank) hslope
   have hatom : ∀ᶠ rank in atTop,
       HasQuittingStoppingLawDebtSlopeAtomAlternative reward
         (frontier.profiles (frontier.subseq rank)) mover observer
@@ -790,7 +790,7 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.excess_or_secondTransfe
       packet.chronology.charge_pos
       (by
         have h := quittingStoppingLawAtomDecoderError_le
-          packet.chronology.charge_pos (sequence.rank n)
+          packet.chronology.charge_pos.le (sequence.rank n)
         linarith [packet.chronology.charge_pos])
       frontier.base_minimum
       (by simpa only [profile, moverTarget] using sequence.mixedSlope n)

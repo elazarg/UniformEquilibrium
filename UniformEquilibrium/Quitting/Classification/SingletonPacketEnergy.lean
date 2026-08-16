@@ -4,7 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.AnalyticWaist
+import UniformEquilibrium.Quitting.Classification.SingletonPacketDefect
+import UniformEquilibrium.Quitting.Classification.SingletonPacketRefusal
 
 /-!
 # Energy and reciprocal effects of a singleton source packet
@@ -21,10 +22,11 @@ the quadratic form
 `sum_i mu_i (y_i - z_i) = sum_i,j mu_i mu_j M_i,j`.
 
 The skew part of `M` vanishes in this quadratic form; only reciprocal pair
-sums contribute.  This gives both a finite obstruction for counterexamples
-and a solved class: if every reciprocal pair sum is nonpositive, the packet
-is complementary and the existing singleton-circulation compiler supplies a
-uniform-equilibrium payoff.
+sums contribute. Conditional refusal has the same aggregate energy, and the
+maximum packet defect is bounded by that energy. This gives a solved class:
+if every reciprocal pair sum is nonpositive, the packet is complementary and
+the existing singleton-circulation compiler supplies a uniform-equilibrium
+payoff.
 
 These are packet-local identities.  They do not identify a source packet with
 a chronological occupation law or turn its energy into an exact charged
@@ -274,6 +276,103 @@ theorem quittingPacketWeightedSurplus_nonneg
   unfold quittingPacketWeightedSurplus
   exact Finset.sum_nonneg fun who _ => packet.mass_mul_surplus_nonneg who
 
+/-- Mass-weighted gain from conditioning each owner out of the singleton
+delivery. Its energy identity applies when every packet atom has mass below
+one. -/
+def quittingPacketWeightedRefusalSurplus
+    (packet : QuittingNormalizedSingletonSourcePacket reward) : ℝ :=
+  ∑ owner, (1 - packet.mass owner) *
+    (quittingSingletonRefusalValue reward packet.mass owner owner -
+      quittingSingletonMixture reward packet.mass owner)
+
+namespace QuittingNormalizedSingletonSourcePacket
+
+/-- On a proper atom, the weighted refusal gain is exactly the weighted
+packet surplus. Zero-mass atoms are included; only a full-mass denominator
+is excluded. -/
+theorem one_sub_mass_mul_refusal_sub_mixture_eq_mass_mul_surplus
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    (owner : ι) (hmass : packet.mass owner < 1) :
+    (1 - packet.mass owner) *
+        (quittingSingletonRefusalValue reward packet.mass owner owner -
+          quittingSingletonMixture reward packet.mass owner) =
+      packet.mass owner *
+        (quittingSingletonMixture reward packet.mass owner -
+          packet.target owner) := by
+  have hsplit := packet.singletonMixture_eq_mass_mul_add_refusal hmass owner
+  have hcomplement := packet.mass_mul_target_sub_solo_eq_zero owner
+  have hfirst :
+      (1 - packet.mass owner) *
+          (quittingSingletonRefusalValue reward packet.mass owner owner -
+            quittingSingletonMixture reward packet.mass owner) =
+        packet.mass owner *
+          (quittingSingletonMixture reward packet.mass owner -
+            reward (quittingSingletonTerminal owner) owner) := by
+    rw [hsplit]
+    ring
+  have htargetSolo :
+      packet.mass owner * packet.target owner =
+        packet.mass owner *
+          reward (quittingSingletonTerminal owner) owner := by
+    rw [mul_sub] at hcomplement
+    linarith
+  rw [hfirst]
+  calc
+    packet.mass owner *
+        (quittingSingletonMixture reward packet.mass owner -
+          reward (quittingSingletonTerminal owner) owner) =
+      packet.mass owner *
+          quittingSingletonMixture reward packet.mass owner -
+        packet.mass owner *
+          reward (quittingSingletonTerminal owner) owner := by ring
+    _ = packet.mass owner *
+          quittingSingletonMixture reward packet.mass owner -
+        packet.mass owner * packet.target owner := by rw [htargetSolo]
+    _ = packet.mass owner *
+        (quittingSingletonMixture reward packet.mass owner -
+          packet.target owner) := by ring
+
+end QuittingNormalizedSingletonSourcePacket
+
+/-- **Aggregate refusal-energy identity.** If every packet atom is proper,
+the total weighted refusal surplus is the solo-effect quadratic form. -/
+theorem quittingPacketWeightedRefusal_eq_quadraticForm
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    (hmass : ∀ owner, packet.mass owner < 1) :
+    quittingPacketWeightedRefusalSurplus packet =
+      quittingSingletonPacketQuadraticEnergy reward packet.mass := by
+  classical
+  calc
+    quittingPacketWeightedRefusalSurplus packet =
+        quittingPacketWeightedSurplus packet := by
+      unfold quittingPacketWeightedRefusalSurplus
+        quittingPacketWeightedSurplus
+      apply Finset.sum_congr rfl
+      intro owner _
+      exact packet.one_sub_mass_mul_refusal_sub_mixture_eq_mass_mul_surplus
+        owner (hmass owner)
+    _ = quittingSingletonPacketQuadraticEnergy reward packet.mass :=
+      quittingPacketWeightedSurplus_eq_quadraticForm packet
+
+/-- The maximum coordinate packet defect is at most the sum of all weighted
+coordinate surpluses. -/
+theorem quittingNormalizedSingletonPacketDefect_le_weightedSurplus
+    [Nonempty ι]
+    (packet : QuittingNormalizedSingletonSourcePacket reward) :
+    quittingNormalizedSingletonPacketDefect reward
+        (packet.mass, packet.target) ≤
+      quittingPacketWeightedSurplus packet := by
+  classical
+  obtain ⟨owner, _, howner⟩ := Finset.exists_mem_eq_sup'
+    Finset.univ_nonempty
+    (fun who => packet.mass who *
+      (quittingSingletonMixture reward packet.mass who - packet.target who))
+  rw [quittingNormalizedSingletonPacketDefect, howner]
+  unfold quittingPacketWeightedSurplus
+  exact Finset.single_le_sum
+    (fun who _ => packet.mass_mul_surplus_nonneg who)
+    (Finset.mem_univ owner)
+
 omit [DecidableEq ι] in
 /-- Pairwise nonpositive reciprocal solo effects make every nonnegative mass
 vector's symmetric packet energy nonpositive. -/
@@ -335,6 +434,26 @@ theorem exists_supported_pair_pos_reciprocalSoloEffect_of_energy_pos
         le_antisymm (le_of_not_gt hwho) (hmass who)
       simp [hwhoZero]
   exact (not_lt_of_ge henergyNonpos) henergy
+
+/-- A positive normalized packet defect forces a positive reciprocal-synergy
+pair in the positive support of that packet. -/
+theorem exists_supported_pair_pos_reciprocalSoloEffect_of_packetDefect_pos
+    [Nonempty ι]
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    (hdefect : 0 < quittingNormalizedSingletonPacketDefect reward
+      (packet.mass, packet.target)) :
+    ∃ who owner,
+      0 < packet.mass who ∧ 0 < packet.mass owner ∧ who ≠ owner ∧
+        0 < quittingSingletonSoloEffect reward who owner +
+          quittingSingletonSoloEffect reward owner who := by
+  have hsurplus : 0 < quittingPacketWeightedSurplus packet :=
+    hdefect.trans_le
+      (quittingNormalizedSingletonPacketDefect_le_weightedSurplus packet)
+  have henergy :
+      0 < quittingSingletonPacketQuadraticEnergy reward packet.mass := by
+    rwa [quittingPacketWeightedSurplus_eq_quadraticForm] at hsurplus
+  exact exists_supported_pair_pos_reciprocalSoloEffect_of_energy_pos
+    reward packet.mass packet.mass_nonneg henergy
 
 /-- **Reciprocal-solo solved class.**  If every distinct player pair has
 nonpositive reciprocal solo effect, the finite quitting game has an ordinary
