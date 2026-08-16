@@ -1,0 +1,120 @@
+          (quittingPureTimeUpdatedProfile reward
+            (frontier.profiles (frontier.subseq (rank n))) owner
+            (targetQuitTime n))) owner) atTop (nhds 0) := by
+    apply squeeze_zero
+    · intro n
+      exact quittingTerminalDeviationDebt_nonneg reward _ owner
+    · intro n
+      simpa only [rank, selected, rawRank, targetQuitTime, error] using
+        hdebtAt (selected n)
+    · simpa only [error] using herror
+  exact ⟨⟨activeOwner, charge, hcharge, rank, hrank, sourceQuitTime,
+    targetQuitTime, terminal, hatom, htargetDebt⟩⟩
+
+end QuittingCounterexampleStoppingLawFrontier
+
+/-! ## Signed mass carried by the self-oriented atom -/
+
+/-- The fixed terminal reward coordinate selected by a positive atom is
+nonzero. -/
+theorem QuittingStoppingLawSelfOrientedAtomSequence.reward_ne_zero
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawSelfOrientedAtomSequence frontier) :
+    reward packet.terminal packet.owner.1 ≠ 0 := by
+  intro hzero
+  have hatom := packet.atom_bound 0
+  unfold quittingTerminalPayoffDifferenceAtom at hatom
+  simp only [quittingTerminalOutcomeReward] at hatom
+  rw [hzero, mul_zero, mul_zero] at hatom
+  linarith [packet.charge_pos]
+
+/-- The canonical reward bound is positive on a self-oriented atom packet. -/
+theorem QuittingStoppingLawSelfOrientedAtomSequence.rewardBound_pos
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawSelfOrientedAtomSequence frontier) :
+    0 < quittingRewardBound reward := by
+  have hbound := abs_reward_le_quittingRewardBound reward packet.terminal
+    packet.owner.1
+  exact (abs_pos.mpr packet.reward_ne_zero).trans_le hbound
+
+/-- Uniform terminal-mass scale supplied by the self-oriented atom. -/
+def quittingStoppingLawSelfOrientedMassLower
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawSelfOrientedAtomSequence frontier) : ℝ :=
+  (packet.charge / 4) /
+    ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
+      quittingRewardBound reward)
+
+/-- The mass scale is strictly positive. -/
+theorem QuittingStoppingLawSelfOrientedAtomSequence.massLower_pos
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawSelfOrientedAtomSequence frontier) :
+    0 < quittingStoppingLawSelfOrientedMassLower packet := by
+  unfold quittingStoppingLawSelfOrientedMassLower
+  exact div_pos (div_pos packet.charge_pos (by norm_num))
+    (mul_pos (by positivity) packet.rewardBound_pos)
+
+/-- Positive owner reward stores the atom's mass at the pure-time target. -/
+theorem QuittingStoppingLawSelfOrientedAtomSequence.positiveTarget_massLower
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawSelfOrientedAtomSequence frontier)
+    (hrewardPositive : 0 < reward packet.terminal packet.owner.1) (n : ℕ) :
+    quittingStoppingLawSelfOrientedMassLower packet ≤
+      quittingTerminalOutcomeMass reward
+        (quittingStoppingLawSelfOrientedTargetProfile packet n)
+        (some packet.terminal) := by
+  classical
+  let card : ℝ := Fintype.card (QuittingTerminalOutcome ι)
+  let M := quittingRewardBound reward
+  let targetMass := quittingTerminalOutcomeMass reward
+    (quittingStoppingLawSelfOrientedTargetProfile packet n)
+    (some packet.terminal)
+  let sourceMass := quittingTerminalOutcomeMass reward
+    (quittingStoppingLawSelfOrientedSourceProfile packet n)
+    (some packet.terminal)
+  have hcard : 0 < card := by
+    dsimp only [card]
+    exact_mod_cast Fintype.card_pos
+  have hrewardLe : reward packet.terminal packet.owner.1 ≤ M := by
+    exact (le_abs_self _).trans
+      (abs_reward_le_quittingRewardBound reward packet.terminal packet.owner.1)
+  have hMpos : 0 < M := hrewardPositive.trans_le hrewardLe
+  have htargetNonneg : 0 ≤ targetMass :=
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward
+      (quittingStoppingLawSelfOrientedTargetProfile packet n)).1
+        (some packet.terminal)
+  have hsourceNonneg : 0 ≤ sourceMass :=
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward
+      (quittingStoppingLawSelfOrientedSourceProfile packet n)).1
+        (some packet.terminal)
+  have hbound := packet.atom_bound n
+  change packet.charge / 4 ≤ card *
+      ((targetMass - sourceMass) * reward packet.terminal packet.owner.1)
+    at hbound
+  have hdiffRewardLe :
+      (targetMass - sourceMass) * reward packet.terminal packet.owner.1 ≤
+        targetMass * M := by
+    have hdiffLe : targetMass - sourceMass ≤ targetMass := by linarith
+    have hleft := mul_le_mul_of_nonneg_right hdiffLe hrewardPositive.le
+    have hright := mul_le_mul_of_nonneg_left hrewardLe htargetNonneg
+    exact hleft.trans hright
+  have htotal : packet.charge / 4 ≤ card * (targetMass * M) :=
+    hbound.trans (mul_le_mul_of_nonneg_left hdiffRewardLe hcard.le)
+  unfold quittingStoppingLawSelfOrientedMassLower
+  apply (div_le_iff₀ (mul_pos hcard hMpos)).2
+  change packet.charge / 4 ≤ targetMass * (card * M)
+  calc
+    packet.charge / 4 ≤ card * (targetMass * M) := htotal
+    _ = targetMass * (card * M) := by ring
+
+/-- Negative owner reward stores the atom's mass at the pure-time source. -/
