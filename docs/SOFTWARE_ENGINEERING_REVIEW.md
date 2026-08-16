@@ -208,26 +208,20 @@ Run a full `lake build` when changes affect module inventory, umbrellas,
 toolchain or Lake configuration, dependency pins, or a broad semantic API.
 Report focused and exhaustive evidence separately.
 
-## GameTheory2 fit
+## GameTheory integration
 
-The successor is a source-incompatible semantic target, not an import-path
-rename. Its `Stochastic.Game`, `FinDist`, Protocol histories, initial-state
-indexed behavior profiles, and canonical uniform-payoff predicate are a sound
-long-term basis, but the project still needs:
+GameTheory's `Stochastic.Game`, `FinDist`, Protocol histories,
+initial-state-indexed behavior profiles, and native uniform-payoff predicate
+form the semantic foundation. `UniformEquilibrium/ProofView/Native/` proves the
+history, finite-law, finite-average-payoff, unilateral-update, and
+uniform-payoff correspondences used by the indexed PMF proof view. Quitting
+semantics are project-owned above that boundary, and Fink consumers use the
+integrated stochastic interfaces.
 
-- an exact finite-law and history correspondence;
-- finite-average payoff and unilateral-update equivalence;
-- a project-owned quitting foundation above the successor core;
-- a complete quitting vertical slice ending in the canonical successor
-  uniform-payoff predicate; and
-- a successor-native replacement for the integrated Fink consumers.
-
-Operational availability of the successor is not sufficient for a cutover.
-A cutover requires selecting and reviewing one immutable pin and passing the
-semantic gates in
-[`GAMETHEORY2_MIGRATION_PLAN.md`](GAMETHEORY2_MIGRATION_PLAN.md). Production
-must not depend on the successor's experimental proof view, and v1/v2 should
-not coexist under overlapping public namespaces.
+The ownership and validation rules are in
+[`GAMETHEORY_INTEGRATION.md`](GAMETHEORY_INTEGRATION.md). The main engineering
+risk is accidental duplication or bypass of that boundary, especially through
+private finite-distribution representations.
 
 ## Review conclusion
 
@@ -235,6 +229,6 @@ The current engineering direction is sound: maintain strict trust and lane
 boundaries, remove derivable assumptions, consolidate semantic owners, and
 replace long proof scripts with mathematical interfaces. Remaining risk is
 concentrated in large multi-concept files, instance-heavy quitting APIs,
-non-regenerable numeric source data, and the still-unproved successor semantic
-waist. None of these risks is evidence for or against the mathematical
-uniform-equilibrium conjecture.
+non-regenerable numeric source data, and changes that bypass the proved native
+semantic boundary. None of these risks is evidence for or against the
+mathematical uniform-equilibrium conjecture.

@@ -30,8 +30,8 @@ they were created to record, but they are never current status authorities.
    current architecture assessment, proof-quality policy, and risk register.
 8. [ENGINEERING_ROADMAP.md](ENGINEERING_ROADMAP.md) — current engineering
    priorities, invariants, and acceptance gates.
-9. [GAMETHEORY2_MIGRATION_PLAN.md](GAMETHEORY2_MIGRATION_PLAN.md) — the
-   successor semantic target, required waist, and deferred cutover gates.
+9. [GAMETHEORY_INTEGRATION.md](GAMETHEORY_INTEGRATION.md) — the dependency,
+   semantic-boundary, and ownership contract for GameTheory.
 10. [references/README.md](references/README.md) — the external literature of
    record.
 

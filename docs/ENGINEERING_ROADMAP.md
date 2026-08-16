@@ -203,13 +203,12 @@ dependency pins, umbrellas, module inventory, or broad semantic APIs. The full
 build must include the nonvacuous exhaustive axiom audit. Report the exact
 checks run; a static audit or focused build is not a full-build claim.
 
-## Deferred GameTheory2 decision
+## GameTheory integration invariants
 
-GameTheory2 preparation is limited to the API census, semantic waist, and
-staged gates in
-[`GAMETHEORY2_MIGRATION_PLAN.md`](GAMETHEORY2_MIGRATION_PLAN.md). Do not import
-its experimental proof view into production and do not maintain old and new
-foundations side by side. A future cutover requires a canonical published pin,
-an exact finite-law/history/profile bridge, a complete quitting vertical slice,
-the required Fink replacement, an isolated acceptance build, and an explicit
-dependency decision.
+GameTheory supplies the native stochastic runner and uniform-payoff predicate.
+The exact project proof view, quitting semantics, and ownership boundary are
+specified in
+[`GAMETHEORY_INTEGRATION.md`](GAMETHEORY_INTEGRATION.md). Engineering changes
+must preserve the finite-law, finite-payoff, unilateral-update, and
+uniform-payoff equivalences. Private `FinDist` representations and parallel
+game foundations are outside the architecture.

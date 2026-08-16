@@ -31,7 +31,7 @@ CORE_LIVE_DOCS = (
     ROOT / "docs" / "PIPELINE.md",
     ROOT / "docs" / "ENGINEERING_ROADMAP.md",
     ROOT / "docs" / "SOFTWARE_ENGINEERING_REVIEW.md",
-    ROOT / "docs" / "GAMETHEORY2_MIGRATION_PLAN.md",
+    ROOT / "docs" / "GAMETHEORY_INTEGRATION.md",
     ROOT / "UniformEquilibrium" / "README.md",
     ROOT / "UniformEquilibrium" / "UNIFORM_EQUILIBRIUM_PROBLEM.md",
 )
