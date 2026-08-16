@@ -31,6 +31,7 @@ import Research.General.RandomDeviationAuditGame
 import Research.General.ResetSeriesCrossPinDebtCharge
 import Research.General.RolloverLiquidationGame
 import Research.General.SeveranceMutualThreeGames
+import Research.Literature
 import Research.Quitting.AtomEndpointReturnSeparation
 import Research.Quitting.BestEndpointForcedOwnerRectanglePassport
 import Research.Quitting.BlockPair.K11

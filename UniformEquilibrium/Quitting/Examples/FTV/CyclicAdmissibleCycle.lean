@@ -434,6 +434,17 @@ theorem quittingTerminalPayoff_ftvCyclicProfile :
   quittingTerminalPayoff_quittingCyclicContinuationBlockProfile ftvReward
     namedTarget 2 ftvBlock ftvBlock_isQuittingCyclicContinuationBlock
 
+/-- The displayed cyclic profile's finite-horizon payoff converges
+coordinatewise to its terminal payoff `(1, 2, 1)`. -/
+theorem tendsto_finiteAveragePayoff_ftvCyclicProfile (who : Player) :
+    Tendsto
+      (fun horizon : ℕ =>
+        (quittingGame ftvReward).finiteAveragePayoff none horizon
+          ftvCyclicProfile who)
+      atTop (nhds (namedTarget who)) := by
+  rw [← quittingTerminalPayoff_ftvCyclicProfile]
+  exact tendsto_finiteAveragePayoff_quittingGame ftvReward ftvCyclicProfile who
+
 /-- **The canonical hard three-player quitting table has the uniform
 equilibrium payoff `(1, 2, 1)`.**
 

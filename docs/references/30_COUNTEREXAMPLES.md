@@ -213,17 +213,21 @@ player 1 mixes. Numerically solving for `(12)(34)`-symmetric period-2
 equilibria gives continuation probabilities `≈ 0.746097` and `≈ 0.734525` with
 payoffs `≈ (1, 1.361424, 1, 1.340307)` and its swap.
 
-**A period-2 cyclic equilibrium appears to exist, so the qualitative claim may
-stand**, but the printed constants and the exact corrected certificate remain
-under source-specific audit. The final 2002 paper is author-hosted, so the old
-claim that only the 1998 discussion paper was readable is obsolete. Do not put
-the disputed constants into Lean; see [`40_OPEN_STATUS.md`](40_OPEN_STATUS.md).
+Lean checks the scalar defect and a corrected period-two equilibrium. In
+`Literature.Papers.SolanAndVieille2002a`, the printed primary continuation
+probability `1 / √2` is proved unequal to the exact parameter selected by the
+normalized Figure-2 equations. The corrected parameter is the unique quartic
+root in `(1/2,1)`, isolated in `(37/50,3/4)`, and
+`FourPlayerPairedSingleton.periodTwo_isUniformEquilibriumPayoff` checks the
+resulting period-two profile. This refutes the printed scalar value; it does
+not refute the existence of a period-two equilibrium.
 
-**Repo status.** `P1, not formalized`. This is the sharpest available fence on
-stationary, perturbed, near-all-Continue/small-termination, and
-solo-payoff-convex-hull fallback languages at `n = 4`. Formalize only the
-source-stable qualitative propositions until the Figure-2 numerical packet is
-reconciled.
+**Formalization status.** The printed scalar parameter is refuted in Lean and
+the corrected period-two equilibrium is proved in Lean. The normalized table's
+exact stationary terminal-equilibrium exclusion is also proved against all
+behavioral deviations. The approximate-stationary, perturbed,
+near-all-Continue/small-termination, and solo-payoff-convex-hull fallback
+exclusions remain source claims.
 
 ---
 

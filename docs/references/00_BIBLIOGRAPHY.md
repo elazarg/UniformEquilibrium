@@ -242,8 +242,10 @@ Journal of Game Theory **31**(3), 365--381.
 DOI [`10.1007/s001820200125`](https://doi.org/10.1007/s001820200125). `M` —
 author-hosted final paper available. This is the citation for the four-player
 fallback-collapse/Figure-2 fence; do not attribute that example to the 2001
-MOR paper. The repository's audit disputes the printed period-two numerical
-packet, so use the source-stable qualitative propositions pending recheck.
+MOR paper. Lean refutes the printed primary continuation probability
+`1 / √2` for the normalized Figure-2 table and checks a corrected exact
+period-two equilibrium. The paper's qualitative fallback-collapse claims are
+separate source claims.
 
 **Solan & Vieille 2002b** — *Correlated equilibrium in stochastic games*. GEB
 **38**(2), 362–399.

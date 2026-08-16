@@ -245,6 +245,76 @@ import UniformEquilibrium.Certificates.Neutral
                 failures[0],
             )
 
+    def test_literature_and_production_boundaries(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            self.write(
+                root,
+                "lakefile.lean",
+                "lean_lib Literature where\n"
+                "lean_lib UniformEquilibrium where\n"
+                "lean_lib Research where\n",
+            )
+            self.write(root, "Literature.lean", "import Literature.BadResearch\n")
+            self.write(
+                root,
+                "Literature/BadResearch.lean",
+                "import Research.Evidence\n",
+            )
+            self.write(root, "Research.lean", "import Research.Literature.Proof\n")
+            self.write(
+                root,
+                "Research/Literature/Proof.lean",
+                "import Literature.Papers.Example\n",
+            )
+            self.write(root, "Research/Evidence.lean", "")
+            self.write(root, "Literature/Papers/Example.lean", "")
+            self.write(
+                root,
+                "UniformEquilibrium.lean",
+                "import UniformEquilibrium.BadLiterature\n",
+            )
+            self.write(
+                root,
+                "UniformEquilibrium/BadLiterature.lean",
+                "import Literature.Papers.Example\n",
+            )
+
+            failures = check_import_graph.check_import_graph(root)
+
+            self.assertTrue(
+                any("Literature.BadResearch -> Research.Evidence" in failure
+                    for failure in failures)
+            )
+            self.assertTrue(
+                any("UniformEquilibrium.BadLiterature -> "
+                    "Literature.Papers.Example" in failure
+                    for failure in failures)
+            )
+            self.assertFalse(
+                any("Research.Literature.Proof -> Literature.Papers.Example" in failure
+                    for failure in failures)
+            )
+
+    def test_unrelated_research_cannot_import_literature(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            self.write(root, "lakefile.lean", "lean_lib Research where\n")
+            self.write(root, "Research.lean", "import Research.Proof\n")
+            self.write(
+                root,
+                "Research/Proof.lean",
+                "import Literature.Papers.Example\n",
+            )
+            self.write(root, "Literature/Papers/Example.lean", "")
+
+            failures = check_import_graph.check_import_graph(root)
+
+            self.assertTrue(
+                any("only Research.Literature may import" in failure
+                    for failure in failures)
+            )
+
     def test_inventory_and_internal_api_ratchets(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)

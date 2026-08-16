@@ -88,6 +88,31 @@ class ImportBoundaryRule:
 # required and would reject legitimate lower-level consumers.
 IMPORT_BOUNDARY_RULES = (
     ImportBoundaryRule(
+        "Literature",
+        "Research",
+        "the final literature audit must not depend on research-only modules",
+    ),
+    ImportBoundaryRule(
+        "Literature",
+        "Experiments",
+        "the final literature audit must not depend on experimental evidence",
+    ),
+    ImportBoundaryRule(
+        "MathUE",
+        "Literature",
+        "generic mathematics must not depend on literature audits",
+    ),
+    ImportBoundaryRule(
+        "UniformEquilibrium",
+        "Literature",
+        "integrated game semantics must not depend on literature audits",
+    ),
+    ImportBoundaryRule(
+        "Theorems",
+        "Literature",
+        "reader-facing integrated theorems must not depend on literature audits",
+    ),
+    ImportBoundaryRule(
         "UniformEquilibrium.Certificates",
         "UniformEquilibrium.Architectures",
         "certificates must depend on semantic interfaces, not architectures",
@@ -318,6 +343,26 @@ def check_import_graph(
                         f"{modules[module]}:{item.line}: forbidden architectural "
                         f"edge {module} -> {item.module}; {rule.explanation}"
                     )
+
+            # A research proof of an exact paper claim has a deliberately
+            # narrow escape hatch.  It may import the individual paper
+            # module, but not the final catalog/coverage umbrella and not
+            # from an unrelated Research lane.  Keeping this exception here
+            # (rather than weakening the Literature -> Research rule) makes
+            # the dependency direction visible to the static audit.
+            if (
+                _is_prefixed(module, "Research")
+                and _is_prefixed(item.module, "Literature")
+                and not (
+                    _is_prefixed(module, "Research.Literature")
+                    and _is_prefixed(item.module, "Literature.Papers")
+                )
+            ):
+                failures.append(
+                    f"{modules[module]}:{item.line}: research module {module} "
+                    f"imports {item.module}; only Research.Literature may import "
+                    "individual Literature.Papers modules"
+                )
 
             allowed_consumers = INVENTORY_ONLY_FACADES.get(item.module)
             if allowed_consumers is not None and module not in allowed_consumers:

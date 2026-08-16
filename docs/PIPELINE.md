@@ -23,6 +23,30 @@ Lean tree.
 The lanes may share mathematics, but evidence does not become a theorem by
 proximity. Integrated Lean remains the trusted boundary.
 
+Literature has a strict final boundary: it does not import Research or
+Experiments, and production modules do not import Literature. A narrow
+`Research.Literature` proof module may import an individual
+`Literature.Papers.*` module to close the exact claim recorded there; the
+aggregate Literature catalog and unrelated Research modules are not allowed as
+proof dependencies.
+
+Claim records have an explicit lifecycle. `sourceOnly` records a source claim
+without a Lean statement; `openInLean` names an unproved proposition;
+`provedInLean` names that proposition and a checked proof; and
+`refutedInLean` names the source proposition and a checked theorem proving its
+negation or a precise obstruction. `outOfScope` is a deliberate formalization
+boundary, not a refutation. A wrong source claim therefore gets a first-class
+refutation record rather than an informal correction in prose.
+
+When a claim enters `openInLean`, a narrow `Research.Literature` module
+imports the individual paper module and works against that exact proposition.
+Reusable mathematics is developed in `MathUE` or `UniformEquilibrium`; a
+source-specific definition may stay with the paper. When the proof closes,
+the reusable proof is promoted or the source-specific proof is placed in the
+paper module, an exact paper-facing delegation or negation theorem is added,
+and the Research module is removed. Final claim records never name Research or
+Experiments declarations as proofs.
+
 `Theorems/` is not a work lane. It is a capped reader-facing index of selected
 integrated results believed to have interest beyond the conjecture program;
 their canonical statements and proofs remain in `MathUE/` or
@@ -48,14 +72,13 @@ Experiments may import Research; Research may not import Experiments. A
 kernel-checked experimental instance remains bounded checked evidence rather
 than an integrated or general theorem.
 
-An experiment record retains its tracked source, exact reproduction command,
-assumptions, limitations, and compact evidence. A migrated payload whose
-producer is unavailable instead retains an explicit provenance-loss record and
-a deterministic integrity checker. Caches, logs, screenshots, raw runs, and
-other untracked generated output are not durable records.
+An experiment record includes its tracked source, exact reproduction command,
+assumptions, limitations, and compact evidence. A concrete payload without a
+recoverable producer includes an explicit provenance-loss record and a
+deterministic integrity checker. Caches, logs, screenshots, raw runs, and other
+untracked generated output are not durable records.
 
-The source repository used an `ideas/` tree for exploratory claims. This
-repository does not recreate it. GitHub owns that lifecycle:
+GitHub owns the lifecycle of exploratory claims:
 
 ```text
 Discussion: unresolved derivation, interpretation, or competing approaches
@@ -105,7 +128,7 @@ traces are never proof objects.
 
 Keep living documents timeless and update them when an interface, theorem
 boundary, or process rule changes. Publication years and source dates in the
-literature are retained as mathematical provenance.
+literature are mathematical provenance.
 
 Research residuals import their maintained owners instead of copying long
 proof bodies. `python scripts/check_proof_duplicates.py` enforces exact

@@ -4,6 +4,13 @@
 Paper-specific modules use these data structures to describe source access and
 Lean correspondence. Mathematical statements are ordinary proposition
 definitions, and checked arguments are ordinary theorem declarations.
+
+The claim lifecycle is explicit: a source claim starts as `sourceOnly`, may
+become an `openInLean` proposition, and may then be recorded as either
+`provedInLean` or `refutedInLean`. `outOfScope` is a terminal audit decision,
+not evidence that the source claim is false. A refutation records the source
+statement and a separate theorem proving its negation or a precise
+obstruction; it is not an unchecked disagreement in metadata.
 -/
 
 namespace Literature
@@ -42,6 +49,9 @@ inductive PaperAuditStatus where
 
 Declaration names are constructor data, so an open correspondence has one
 statement name and a checked correspondence has both statement and proof names.
+The `refutedInLean` constructor is first-class: its proof name must identify a
+checked theorem for the refutation or obstruction, just as `provedInLean` must
+identify a checked proof of the source statement.
 -/
 inductive ClaimStatus where
   | sourceOnly

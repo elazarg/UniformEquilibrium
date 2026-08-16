@@ -994,6 +994,36 @@ def IsOneSidedGuaranteeCertificate (G : StochasticGame ι) [Fintype ι]
     (s₀ : G.State) (who : ι) (vwho : ℝ) : Prop :=
   ∀ δ : ℝ, 0 < δ → G.IsOneSidedGuaranteeCertificateAt s₀ who vwho δ
 
+/-- A security certificate gives a necessary coordinate bound for every
+uniform-equilibrium target.  The proof uses the certificate against the
+profile selected by the target and the target profile's unilateral-deviation
+inequality. -/
+
+theorem uniformEquilibriumPayoff_coordinate_ge_of_isOneSidedGuaranteeCertificate
+    (G : StochasticGame ι) [Fintype ι] [DecidableEq ι] [Finite G.State]
+    [∀ i, Finite (G.Act i)] (s₀ : G.State) (who : ι) (value : ℝ)
+    (hsecurity : G.IsOneSidedGuaranteeCertificate s₀ who value)
+    {target : Payoff ι} (htarget : G.IsUniformEquilibriumPayoff s₀ target) :
+    value ≤ target who := by
+  by_contra hnot
+  have hgap : 0 < value - target who := sub_pos.mpr (lt_of_not_ge hnot)
+  let ε : ℝ := (value - target who) / 4
+  have hε : 0 < ε := by
+    dsimp [ε]
+    linarith
+  obtain ⟨profile, payoffThreshold, hprofile⟩ := htarget ε hε
+  obtain ⟨securityStrategy, securityThreshold, _, hsecurity⟩ := hsecurity ε hε
+  let horizon := max payoffThreshold securityThreshold
+  have hpayoffHorizon : payoffThreshold ≤ horizon := le_max_left _ _
+  have hsecurityHorizon : securityThreshold ≤ horizon := le_max_right _ _
+  have hprofileHorizon := hprofile horizon hpayoffHorizon
+  have hsecurityHorizon' := hsecurity profile horizon hsecurityHorizon
+  have hdeviation := hprofileHorizon.1 who securityStrategy
+  have hclose := (abs_le.mp (hprofileHorizon.2 who)).2
+  have hsecure := hsecurityHorizon'
+  dsimp [ε] at hdeviation hclose hsecure
+  linarith
+
 /-- **Sufficient condition for a one-sided guarantee from submartingale
 machinery.** A fixed securing strategy `σwho`, together
 with, for *every* error level `δ` and *every* opponent completion `opp`, a
