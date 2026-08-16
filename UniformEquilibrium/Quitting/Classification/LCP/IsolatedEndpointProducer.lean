@@ -270,7 +270,7 @@ theorem abs_isolatedEndpointThreat_quitValue_sub_soloRoot_le
       (Function.update (quittingSoloStationaryRoot owner hazard) who
         (PMF.pure true)) blocker
       (quittingHazardCoin eta heta0 heta1) (PMF.pure false) who
-      hM hreward (by intro; simpa using hM)
+      hreward (by intro; simpa using hM)
       (show pmfTV (quittingHazardCoin eta heta0 heta1) (PMF.pure false) ≤ eta by
         rw [pmfTV_quittingHazardCoin_pure_false])
     have hfirst :

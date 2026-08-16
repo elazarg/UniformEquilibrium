@@ -147,7 +147,7 @@ theorem abs_quittingRootExpectedPayoff_update_sub_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuation : Payoff ι) (root : ι → PMF Bool)
     (changed : ι) (oldMarginal newMarginal : PMF Bool)
-    (who : ι) {M d : ℝ} (hM : 0 ≤ M)
+    (who : ι) {M d : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hcontinuation : ∀ player, |continuation player| ≤ M)
     (htv : pmfTV oldMarginal newMarginal ≤ d) :
@@ -156,6 +156,8 @@ theorem abs_quittingRootExpectedPayoff_update_sub_le
         quittingRootExpectedPayoff reward continuation
           (Function.update root changed newMarginal) who| ≤
       2 * M * d := by
+  have hM : 0 ≤ M :=
+    (abs_nonneg (continuation who)).trans (hcontinuation who)
   calc
     _ ≤ (2 * M) * pmfTV oldMarginal newMarginal :=
       abs_quittingRootExpectedPayoff_update_sub_le_two_mul_pmfTV
@@ -188,7 +190,7 @@ theorem abs_quittingRootDeviationRegret_update_sub_le
     (continuation : Payoff ι) (root : ι → PMF Bool)
     (changed who : ι) (hother : changed ≠ who)
     (oldMarginal newMarginal deviation : PMF Bool)
-    {M d : ℝ} (hM : 0 ≤ M)
+    {M d : ℝ}
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hcontinuation : ∀ player, |continuation player| ≤ M)
     (htv : pmfTV oldMarginal newMarginal ≤ d) :
@@ -197,6 +199,8 @@ theorem abs_quittingRootDeviationRegret_update_sub_le
         quittingRootDeviationRegret reward continuation
           (Function.update root changed newMarginal) who deviation| ≤
       4 * M * d := by
+  have hM : 0 ≤ M :=
+    (abs_nonneg (continuation who)).trans (hcontinuation who)
   calc
     _ ≤ (4 * M) * pmfTV oldMarginal newMarginal :=
       abs_quittingRootDeviationRegret_update_sub_le_four_mul_pmfTV

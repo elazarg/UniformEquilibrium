@@ -231,8 +231,8 @@ theorem linear_comb_lt_of_le_lt (x y c : 𝕜) (H1 : x ≤ c) (H2 : y < c)
 theorem wsum_mix_gt_of_ge_gt {I : Type*} [Fintype I]
     (f : I → 𝕜) (x y : stdSimplex 𝕜 I) (c : 𝕜)
     (H1 : c ≤ wsum x f) (H2 : c < wsum y f)
-    {t : 𝕜} (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) (Ht : t < 1) :
-    c < wsum (stdSimplex.mix t ht₀ ht₁ x y) f := by
+    {t : 𝕜} (ht₀ : 0 ≤ t) (Ht : t < 1) :
+    c < wsum (stdSimplex.mix t ht₀ Ht.le x y) f := by
   rw [wsum_mix]
   exact linear_comb_gt_of_ge_gt _ _ c H1 H2 ht₀ Ht
 
@@ -240,8 +240,8 @@ theorem wsum_mix_gt_of_ge_gt {I : Type*} [Fintype I]
 theorem wsum_mix_lt_of_le_lt {I : Type*} [Fintype I]
     (f : I → 𝕜) (x y : stdSimplex 𝕜 I) (c : 𝕜)
     (H1 : wsum x f ≤ c) (H2 : wsum y f < c)
-    {t : 𝕜} (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) (Ht : t < 1) :
-    wsum (stdSimplex.mix t ht₀ ht₁ x y) f < c := by
+    {t : 𝕜} (ht₀ : 0 ≤ t) (Ht : t < 1) :
+    wsum (stdSimplex.mix t ht₀ Ht.le x y) f < c := by
   rw [wsum_mix]
   exact linear_comb_lt_of_le_lt _ _ c H1 H2 ht₀ Ht
 
