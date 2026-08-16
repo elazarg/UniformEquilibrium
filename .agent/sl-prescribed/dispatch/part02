@@ -1,0 +1,120 @@
+    (observer : ι) (quitTime : ℕ → Option ℕ)
+    (terminal : {S : Finset ι // S.Nonempty}) (lower : ℝ)
+    (habsent : observer ∉ terminal.val) (hlower : 0 < lower)
+    (hmassLower : ∀ n, lower ≤
+      quittingTerminalOutcomeMass reward
+        (quittingPureTimeCarrierProfile reward base observer quitTime n)
+        (some terminal)) :
+    HasQuittingPureTimeObserverAbsentForcedOwnerDispatch
+      (regime := regime) base observer quitTime terminal lower := by
+  classical
+  let owner := quittingPureTimeObserverAbsentOwner terminal
+  let profile := quittingPureTimeCarrierProfile reward base observer quitTime
+  have hownerMem : owner ∈ terminal.val :=
+    quittingPureTimeObserverAbsentOwner_mem terminal
+  have hownerNe : owner ≠ observer := by
+    intro heq
+    exact habsent (heq ▸ hownerMem)
+  have hmassWeighted : ∀ n,
+      lower * regime.terminalGap ≤
+        quittingTerminalOutcomeMass reward (profile n) (some terminal) *
+          regime.terminalGap := by
+    intro n
+    exact mul_le_mul_of_nonneg_right (hmassLower n)
+      regime.terminalGap_pos.le
+  refine ⟨hownerMem, hownerNe, hlower, ?_, hmassWeighted, ?_, ?_⟩
+  · intro n
+    simpa only [profile] using hmassLower n
+  · intro n
+    simpa only [profile] using
+      quittingPureTimeCarrier_mass_eq_clock reward base observer quitTime
+        terminal habsent n
+  · intro n time hbefore
+    let actualRoot := quittingProfileLiveRoot reward (profile n) time
+    let forcedRoot := Function.update actualRoot owner (PMF.pure true)
+    let forcedProfile := quittingPureTimeObserverAbsentForcedOwnerProfile
+      reward base observer quitTime terminal n time
+    let tail := quittingTerminalSemanticPair reward
+      (quittingAllContinueProfileSpine reward (profile n) (time + 1))
+    let mass := quittingStageCoalitionMass reward (profile n) time terminal
+    have hobserver : actualRoot observer = PMF.pure false := by
+      simpa only [actualRoot, profile] using
+        quittingPureTimeCarrier_root_observer reward base observer quitTime
+          n time hbefore
+    have hforcedProfile : quittingProfileLiveRoot reward forcedProfile time =
+        forcedRoot := by
+      simpa only [forcedProfile, forcedRoot, actualRoot, profile] using
+        quittingProfileLiveRoot_pureTimeObserverAbsentForcedOwnerProfile
+          reward base observer quitTime terminal n time
+    have hmass : mass ≤ quittingLiveMass reward (profile n) time *
+        quittingRootCoalitionMass forcedRoot terminal.val := by
+      simpa only [mass, forcedRoot, actualRoot, profile] using
+        quittingPureTimeCarrier_stageMass_le_forcedOwnerCylinder
+          reward base observer quitTime terminal n time
+    have hownerForced : forcedRoot owner = PMF.pure true := by
+      simp [forcedRoot]
+    have hbarrier : regime.terminalGap ≤
+        quittingPureTimeObserverAbsentRowBarrier reward base observer
+          quitTime terminal n time := by
+      simpa only [quittingPureTimeObserverAbsentRowBarrier, forcedRoot,
+        actualRoot, owner, profile] using
+        regime.terminalGap_le_atomicBlockerBarrier hownerForced
+    have hmassNonneg : 0 ≤ mass :=
+      quittingStageCoalitionMass_nonneg reward (profile n) time terminal
+    have hweightedBarrier : mass * regime.terminalGap ≤
+        mass * quittingPureTimeObserverAbsentRowBarrier reward base observer
+          quitTime terminal n time :=
+      mul_le_mul_of_nonneg_left hbarrier hmassNonneg
+    have halternative :
+        (∃ who, who ≠ owner ∧
+            regime.terminalGap ≤
+              quittingRootCoordinateNashDefect reward tail.1 forcedRoot who ∧
+            mass * regime.terminalGap ≤
+              mass * quittingRootCoordinateNashDefect reward tail.1
+                forcedRoot who) ∨
+          (regime.terminalGap ≤
+              max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner) ∧
+            mass * regime.terminalGap ≤
+              mass * max 0
+                (-quittingAtomicBlockerBalance reward forcedRoot owner)) := by
+      have hraw : regime.terminalGap ≤
+          max (quittingForcedOwnerOutsiderDefect reward forcedRoot owner)
+            (max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner)) := by
+        simpa only [quittingPureTimeObserverAbsentRowBarrier, forcedRoot,
+          actualRoot, owner, profile] using hbarrier
+      rcases (le_max_iff.mp hraw) with hdefect | hrefusal
+      · left
+        obtain ⟨who, hwho, hcoordinate⟩ :=
+          exists_outsider_coordinateNashDefect_ge_of_forcedOwnerDefect_ge
+            reward tail.1 forcedRoot owner hownerForced regime.terminalGap_pos
+              hdefect
+        exact ⟨who, hwho, hcoordinate,
+          mul_le_mul_of_nonneg_left hcoordinate hmassNonneg⟩
+      · exact Or.inr ⟨hrefusal,
+          mul_le_mul_of_nonneg_left hrefusal hmassNonneg⟩
+    exact ⟨hobserver, hforcedProfile, hmass, hbarrier, hweightedBarrier,
+      halternative⟩
+
+/-! ## Generic pure-time negative source-row dispatch -/
+
+/-- Actual-source atomic dispatch for a pure-time owner contained in the
+fixed terminal label. -/
+def HasQuittingPureTimeNegativeTargetAtomicDispatch
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    (base : ℕ → (quittingGame reward).BehaviorProfile)
+    (owner : ι) (quitTime : ℕ → Option ℕ)
+    (terminal : {S : Finset ι // S.Nonempty}) (lower : ℝ) : Prop :=
+  ∃ stop : ℕ → ℕ,
+    (∀ n, quitTime n = some (stop n)) ∧
+    ∀ n,
+      let profile := quittingPureTimeCarrierProfile reward base owner quitTime n
+      let root := quittingProfileLiveRoot reward profile (stop n)
+      let tail := quittingTerminalSemanticPair reward
+        (quittingAllContinueProfileSpine reward profile (stop n + 1))
+      lower ≤ quittingStageCoalitionMass reward profile (stop n) terminal ∧
+        root owner = PMF.pure true ∧
+        ((∃ who, who ≠ owner ∧
+            regime.terminalGap ≤
+              quittingRootCoordinateNashDefect reward tail.1 root who ∧
+            lower * regime.terminalGap ≤
