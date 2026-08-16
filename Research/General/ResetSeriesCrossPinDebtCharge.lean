@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.General.SignedResetSeriesContraction
+import MathUE.LinearAlgebra.AffineResetSeries
 import Research.Quitting.ORStationarizationDichotomy
 
 /-!
@@ -24,7 +24,7 @@ noncomputable section
 
 namespace Research.QuittingORStationarizationDichotomy
 
-open GameTheory
+open Math.AffineResetSeries
 
 /-- **Contract or pay.** The absolute pin error created by contracting two
 strict affine reset phases is paid by the recurrent common-slot endpoint
@@ -32,7 +32,7 @@ debt, with exactly the canonical weight of the adjacent phase. -/
 theorem mixingFloor_mul_abs_seriesPinError_le_weight_mul_totalDebt
     {ι : Type*}
     {firstRatio secondRatio : ℝ}
-    (hfirst0 : 0 ≤ firstRatio) (hfirst1 : firstRatio < 1)
+    (hfirst1 : firstRatio < 1)
     (hsecond0 : 0 ≤ secondRatio) (hsecond1 : secondRatio < 1)
     (firstTarget secondTarget : ι → ℝ) (who : ι) (pinned : ℝ)
     (hfirstPin : firstTarget who = pinned)
@@ -44,11 +44,11 @@ theorem mixingFloor_mul_abs_seriesPinError_le_weight_mul_totalDebt
       resetSeriesSecondWeight firstRatio secondRatio *
         channel.totalDebt pinned (secondTarget who) := by
   have hweight0 := (resetSeriesWeights_nonneg_sum_one
-    hfirst0 hfirst1 hsecond0 hsecond1).2.1
+    hfirst1 hsecond0 hsecond1).2.1
   have hcharge := channel.mixingFloor_mul_requiredVariation_le_totalDebt
     kappa pinned (secondTarget who) hfloor hkappa
   rw [abs_resetSeriesEffectiveTarget_sub_pin
-    hfirst0 hfirst1 hsecond0 hsecond1 firstTarget secondTarget who pinned
+    hfirst1 hsecond0 hsecond1 firstTarget secondTarget who pinned
       hfirstPin]
   calc
     kappa * (resetSeriesSecondWeight firstRatio secondRatio *

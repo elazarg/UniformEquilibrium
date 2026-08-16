@@ -82,7 +82,7 @@
         "SL-NEG-COLLISION",
         "SL-POS-COLLISION"
       ],
-      "summary": "The exhaustive capstone now retains, on the same rectangle packet, the observer-membership, coalition-cardinality, and reward-sign facts that select each strategic consumer; those facts are no longer discarded between producer and leaf.",
+      "summary": "The exhaustive capstone retains, on the same rectangle packet, the observer-membership, coalition-cardinality, and reward-sign facts that select each strategic consumer, carrying each fact from producer to leaf.",
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean"
       ]
@@ -99,7 +99,7 @@
       ],
       "summary": "The global-debt barrier certificate needs only the Never boundary and invariance under every one-row prefix; all other elementary boundaries and all finite elementary words are generated from these data.",
       "evidence": [
-        "Research/Quitting/TerminalSemanticGlobalDebtBarrierCertificate.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticGlobalDebtBarrierCertificate.lean"
       ]
     },
     {
@@ -258,9 +258,9 @@
         "SL-NEG-COLLISION",
         "SL-POS-COLLISION"
       ],
-      "summary": "A concrete positive global terminal-debt floor no longer requires a uniform finite-horizon cutoff: the semantic carrier is exactly the closure of finite prefix evaluations from the card(I)+2 elementary boundaries, and any inductive finite-dimensional barrier containing those boundaries proves a fixed terminal exploitability gap and nonexistence. The barrier schema is logically complete, but finding a finitely described semialgebraic barrier remains the candidate-specific obligation.",
+      "summary": "A concrete positive global terminal-debt floor does not require a uniform finite-horizon cutoff: the semantic carrier is exactly the closure of finite prefix evaluations from the card(I)+2 elementary boundaries, and any inductive finite-dimensional barrier containing those boundaries proves a fixed terminal exploitability gap and nonexistence. The barrier schema is logically complete, but finding a finitely described semialgebraic barrier remains the candidate-specific obligation.",
       "evidence": [
-        "Research/Quitting/TerminalSemanticGlobalDebtBarrierCertificate.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticGlobalDebtBarrierCertificate.lean"
       ]
     },
     {
@@ -276,7 +276,7 @@
       "id": "DROP-Q182-RECIPIENT-DEVIATION-SELECTION",
       "kind": "hypothesis_dropped",
       "target_ids": ["SL-PRESCRIBED"],
-      "summary": "At any near-minimum complete-law reset whose scaled mover gain exceeds the minimum error, the recipient, positive debt slope, and one approximate behavioral response no longer need to be supplied separately. One actual deviation is selected automatically, is exactly affine across source and endpoint, carries the quantitative rectangle charge, and is within 8*M*lambda+eta of the recipient's source debt. The remaining zero-source-debt branch still requires endpoint return or signed source transport.",
+      "summary": "At any near-minimum complete-law reset whose scaled mover gain exceeds the minimum error, the recipient, positive debt slope, and one approximate behavioral response are selected automatically. The actual deviation is exactly affine across source and endpoint, carries the quantitative rectangle charge, and is within 8*M*lambda+eta of the recipient's source debt. The remaining zero-source-debt branch still requires endpoint return or signed source transport.",
       "evidence": [
         "Research/Quitting/NearMinimumActualDeviationRectangle.lean"
       ]
@@ -293,7 +293,7 @@
       ],
       "summary": "Any axis-aligned or coordinatewise order-compatible semantic barrier containing the required elementary boundary pairs also contains the diagonal formed by the positive parts of the singleton rewards. That diagonal has zero total semantic debt, so no such independently recombined barrier can certify a strictly positive global debt floor; a successful barrier must couple player coordinates.",
       "evidence": [
-        "Research/Quitting/TerminalSemanticCoordinatewiseBoxBarrierNoGo.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCoordinatewiseBoxBarrierNoGo.lean"
       ]
     },
     {
@@ -317,7 +317,7 @@
       ],
       "summary": "No positive four-player global-debt certificate can use a barrier whose membership depends only on envelope minus prescribed payoff. Debt saturation supplies a calibrated point on the Never debt fiber, and one rational symmetric product-root prefix multiplies every debt coordinate by its arbitrarily small joint Continue mass, contradicting the floor. Debt-only polyhedral, semialgebraic, and max-plus cylinders are therefore excluded; a successful barrier must retain absolute semantic level.",
       "evidence": [
-        "Research/Quitting/TerminalSemanticDebtSaturatedBarrierNoGo.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticDebtSaturatedBarrierNoGo.lean"
       ]
     },
     {
@@ -335,7 +335,7 @@
       "target_ids": ["SL-NEG-COLLISION"],
       "summary": "The outsider-defect arm is a legal one-row behavioral deviation on the identical source profile, stop, and coalition event, with exact gain live-mass times actual coordinate defect. The refusal arm is unchanged because its blocker balance is not an expected refusal gain.",
       "evidence": [
-        "Research/Quitting/ActualRowDebtLocalizationAdapters.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeNegativeCollisionAtomicDispatch.lean"
       ]
     },
     {
@@ -344,14 +344,14 @@
       "target_ids": ["SL-POS-COLLISION"],
       "summary": "The tail-cluster escape/fiber split is unnecessary for actual-row localization. Along one strict subsequence the marked target observer debt tends to zero, one fixed non-observer has a legal same-row deviation, and lower times minimum debt over two is bounded by the number of opponents times its global gain. Source re-entry is not supplied.",
       "evidence": [
-        "Research/Quitting/ActualRowDebtLocalizationAdapters.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeReachedRowDebtLocalization.lean"
       ]
     },
     {
       "id": "DROP-SINGLETON-DEBT-AXIS-AND-STATIC-SOURCE-MATCH",
       "kind": "hypothesis_dropped",
       "target_ids": ["SL-SINGLETON"],
-      "summary": "Debt-axis concentration and one static source match no longer need to be assumed. Every counterexample supplies, for each player, a carrier state whose debt is supported on that player; for one positive-solo owner, the same axis state admits a solo prefix with hazard at least one half and a distinct player's exact endpoint difference equal to half a positive singleton-insertion gain. This does not compile the row into a chronology, so the singleton leaf remains open.",
+      "summary": "Every counterexample supplies, for each player, a carrier state whose debt is supported on that player, without assuming debt-axis concentration or a static source match. For one positive-solo owner, the same axis state admits a solo prefix with hazard at least one half and a distinct player's exact endpoint difference equal to half a positive singleton-insertion gain. This does not compile the row into a chronology, so the singleton leaf remains open.",
       "evidence": [
         "Research/Quitting/TerminalSemanticWeightedDebtAxisInsertion.lean"
       ]
@@ -376,7 +376,7 @@
         "SL-NEG-COLLISION",
         "SL-POS-COLLISION"
       ],
-      "summary": "Canonical punishment-floor prefix-capacity finiteness is no longer a primitive field of the counterexample regime. The stored positive terminal exploitability gap already rules out a uniform payoff; the established finite-prefix closing dichotomy then forces finite canonical capacity, whose toReal remains the least nonnegative bound. Exact debt telescoping alone does not give a numerical bound because its logarithmic theorem still requires an actual behavioral realization of the prefix value and cap.",
+      "summary": "Canonical punishment-floor prefix-capacity finiteness is derived rather than stored as a primitive field of the counterexample regime. The positive terminal exploitability gap rules out a uniform payoff; the finite-prefix closing dichotomy then forces finite canonical capacity, whose toReal is the least nonnegative bound. Exact debt telescoping alone does not give a numerical bound because its logarithmic theorem requires an actual behavioral realization of the prefix value and cap.",
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime.lean",
         "UniformEquilibrium/Quitting/Debt/Dynamic/PunishmentFloorCapSplice.lean"

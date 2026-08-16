@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.LinearAlgebra.FiniteGroupInvariantWeights
 import UniformEquilibrium.Certificates.Adaptive.Certificate
 
 /-!
@@ -22,6 +23,7 @@ namespace GameTheory
 
 open scoped BigOperators
 
+open Math.FiniteGroupInvariantWeights
 open Math.Probability
 
 namespace StochasticGame
@@ -38,6 +40,56 @@ def HasUniformWeightedWelfareCap
     ∀ (profile : G.BehaviorProfile) (T : ℕ), horizon ≤ T →
       (∑ i, weight i * G.finiteAveragePayoff s₀ T profile i) ≤
         (∑ i, weight i * v i) + error
+
+/-- A uniform welfare cap for every group translate of a weight combines
+into a cap for its invariant orbit sum. -/
+theorem hasUniformWeightedWelfareCap_orbitWeight
+    {Gamma : Type} [Group Gamma] [Fintype Gamma]
+    [Fintype ι] [MulAction Gamma ι] [Finite G.State]
+    [∀ player, Finite (G.Act player)]
+    (s₀ : G.State) (weight : ι → ℝ) (target : Payoff ι)
+    (translatedCaps : ∀ g : Gamma,
+      G.HasUniformWeightedWelfareCap
+        s₀ (fun player => weight (g • player)) target) :
+    G.HasUniformWeightedWelfareCap
+      s₀ (orbitWeight (Gamma := Gamma) weight) target := by
+  classical
+  intro error error_pos
+  have card_pos_nat : 0 < Fintype.card Gamma := Fintype.card_pos
+  have card_pos_real : (0 : ℝ) < Fintype.card Gamma := by
+    exact_mod_cast card_pos_nat
+  let translatedError : ℝ := error / Fintype.card Gamma
+  have translatedError_pos : 0 < translatedError :=
+    div_pos error_pos card_pos_real
+  have capAt : ∀ g : Gamma, ∃ horizon : ℕ,
+      ∀ (profile : G.BehaviorProfile) (T : ℕ), horizon ≤ T →
+        weightedValue (fun player => weight (g • player))
+            (fun player => G.finiteAveragePayoff s₀ T profile player) ≤
+          weightedValue (fun player => weight (g • player)) target +
+            translatedError := by
+    intro g
+    simpa only [weightedValue] using
+      translatedCaps g translatedError translatedError_pos
+  choose horizon cap using capAt
+  let commonHorizon : ℕ := Finset.univ.sup horizon
+  refine ⟨commonHorizon, fun profile T T_ge => ?_⟩
+  have eachCap : ∀ g : Gamma,
+      weightedValue (fun player => weight (g • player))
+          (fun player => G.finiteAveragePayoff s₀ T profile player) ≤
+        weightedValue (fun player => weight (g • player)) target +
+          translatedError := by
+    intro g
+    apply cap g profile T
+    exact (Finset.le_sup (s := Finset.univ) (f := horizon)
+      (Finset.mem_univ g)).trans T_ge
+  have summed := weightedValue_orbitWeight_le
+    (Gamma := Gamma) weight
+    (fun player => G.finiteAveragePayoff s₀ T profile player)
+    target translatedError eachCap
+  have error_eq : (Fintype.card Gamma : ℝ) * translatedError = error := by
+    dsimp only [translatedError]
+    exact mul_div_cancel₀ error card_pos_real.ne'
+  simpa only [weightedValue, error_eq] using summed
 
 /-- **Weighted security--welfare assembly.**
 

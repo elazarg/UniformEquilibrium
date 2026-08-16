@@ -105,7 +105,7 @@ theorem eventually_sum_activeOccupationColumn_eq_zero
 /-- Normalized positive charged circulation is invariant under a finite
 reindexing equivalence. -/
 theorem HasNormalizedPositiveChargedCirculation.reindex
-    [Fintype S] [Fintype I] [Fintype J]
+    [Fintype I] [Fintype J]
     (column : I → S → ℝ) (charge : I → ℝ)
     (circulation :
       HasNormalizedPositiveChargedCirculation column charge)
@@ -131,7 +131,7 @@ theorem HasNormalizedPositiveChargedCirculation.reindex
 /-- Extend an active-subtype circulation to the fixed ambient type by zero
 mass outside the active set. -/
 theorem HasNormalizedPositiveChargedCirculation.extendActive
-    [Fintype S] [Fintype I]
+    [Fintype I]
     (state : FiniteDeflationState I)
     (column : I → S → ℝ) (charge : I → ℝ)
     (circulation :
@@ -308,7 +308,7 @@ theorem ActiveAnalyticPotentialJet.leadingPairing_nonneg
 /-- Restrict a supplied complementary circulation across an arbitrary
 strict active-set deletion. -/
 theorem deleteStrict_hasNormalizedPositiveChargedCirculation
-    [Fintype S] [Fintype I] [DecidableEq I]
+    [Fintype I] [DecidableEq I]
     (state : FiniteDeflationState I)
     (column : I → S → ℝ) (charge : I → ℝ)
     (score : state.ActiveIndex → ℝ)

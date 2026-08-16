@@ -4,14 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.KActiveCompactPath
+import UniformEquilibrium.Quitting.Circulation.KActiveCompactPath
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEndpointDefectPolarity
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 
 /-!
 # The exceptional `3 + 2` graph in the one-active five-player stratum
 
-The `K`-active compact-path experiment becomes especially rigid at `K = 1`.
+The `K`-active compact-path interface becomes especially rigid at `K = 1`.
 Every positive opponent-coalition atom is then either the empty coalition or
 a singleton.  Thus a fixed nonempty polarity atom uses one defect player and
 one opponent partner, while reset transport supplies a directed path of debt

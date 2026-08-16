@@ -4,6 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import UniformEquilibrium.Diagnostics.Quitting.CyclicKofNFeasibilityObstruction
+import UniformEquilibrium.Diagnostics.Quitting.CyclicKofNSupportedRootRetentionNoGo
+import UniformEquilibrium.Diagnostics.Quitting.RetainedRoleClockArithmetic
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOrbitLimit
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOrbitSelfLoop
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeBallisticity
@@ -127,6 +130,12 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauIncidence
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticElementaryTailCompression
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFiniteCapSeedSharpness
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawGlobalRetention
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFiniteCapBootstrap
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMicroChatteringRetention
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawRetentionChain
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticGlobalDebtBarrierCertificate
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCoordinatewiseBoxBarrierNoGo
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticDebtSaturatedBarrierNoGo
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectTelescope
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauPositivePartSplit
@@ -270,8 +279,8 @@ import UniformEquilibrium.Quitting.Terminal.TailCompression.SummableTailBestResp
 # Quitting counterexample regime
 
 Import-only public facade for the complete quitting diagnostic inventory.  The
-explicit import list keeps this research surface stable while every diagnostic
-remains independently auditable; this module intentionally declares no API.
+explicit import list makes the integrated surface and each diagnostic
+independently auditable; this module intentionally declares no API.
 
 The mathematical synthesis, evidence seals, search protocol, and current open
 interfaces live in

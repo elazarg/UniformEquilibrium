@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.KActiveCompactPath
+import UniformEquilibrium.Quitting.Circulation.KActiveCompactPath
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumDebtSimplex
 
 /-!

@@ -397,31 +397,6 @@ theorem eventually_allContinue_or_exists_oneStage_chargeTangentPacket :
     · intro who
       exact htangent who
 
-/-- Backward-compatible form of the counterexample tail alternative, obtained
-by forgetting that every extracted window has fuel one. -/
-theorem eventually_allContinue_or_exists_chargeTangentPacket :
-    (∃ threshold, ∀ time, threshold ≤ time →
-      quittingDynamicDebtTailRoots seam.tail time =
-        (quittingAllContinueRoot : ι → PMF Bool)) ∨
-    ∃ packet : QuittingChargeTangentPacket reward,
-      ∃ window : ℕ → QuittingFiniteRootWindow
-          (quittingDynamicDebtTailRoots seam.tail),
-        Tendsto (fun index ↦ (window index).start) atTop atTop ∧
-        (∀ index, 0 < (window index).absorptionMass) ∧
-        (∀ owner, Tendsto
-          (fun index ↦
-            (window index).normalizedSingletonOccupation owner)
-          atTop (nhds (packet.mass owner))) ∧
-        ∀ who, Tendsto
-          (fun index ↦ seam.normalizedEndpointTangent (window index) who)
-          atTop (nhds (packet.tangent who)) := by
-  rcases seam.eventually_allContinue_or_exists_oneStage_chargeTangentPacket with
-    hplateau | ⟨packet, window, hstart, -, habsorption,
-      hoccupation, htangent⟩
-  · exact Or.inl hplateau
-  · exact Or.inr
-      ⟨packet, window, hstart, habsorption, hoccupation, htangent⟩
-
 end QuittingCounterexampleSeamWitness
 
 end GameTheory

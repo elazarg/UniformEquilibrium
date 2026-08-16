@@ -550,7 +550,7 @@ theorem soloRate_reward_collisionFacedTwoFeasible
   soloRate_collisionFacedTwoFeasible _ _ _ _ hcap hsolo hp0 hp1 hrate
 
 /-- **The pair-repair branch, at reward level.**  The hypotheses are verbatim
-those of `exists_uniformEquilibriumPayoff_of_bool_pairRepair` at
+those of `quittingGame_isUniformEquilibriumPayoff_of_bool_pairRepair` at
 `owner = false`, so every weight that branch handles admits the variant
 certificate for every capped `χ`. -/
 theorem pairRepair_reward_collisionFacedTwoFeasible

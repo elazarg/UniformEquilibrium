@@ -179,21 +179,13 @@ theorem soloReward_le_value
         limit.exactSelfLoop.1 who
   simpa [quittingRootOfSimplex_allContinueSimplexRoot] using hquit
 
-/-- Positive-debt compatibility wrapper for the general self-loop singleton
-inequality. -/
-theorem soloReward_le_value_of_debt_pos
-    (limit : QuittingPositiveDebtSelfLoopLimit reward) (who : ι)
-    (_hdebtPos : 0 < limit.debt who) :
-    reward (quittingSingletonTerminal who) who ≤ limit.value who :=
-  limit.soloReward_le_value who
-
 /-- Positive limiting debt is no larger than its phantom prescribed value. -/
 theorem debt_le_value_of_debt_pos
     (limit : QuittingPositiveDebtSelfLoopLimit reward) (who : ι)
     (hdebtPos : 0 < limit.debt who) :
     limit.debt who ≤ limit.value who :=
   (limit.debt_le_soloReward_of_debt_pos who hdebtPos).trans
-    (limit.soloReward_le_value_of_debt_pos who hdebtPos)
+    (limit.soloReward_le_value who)
 
 /-- Every positive-debt coordinate lies above its behavioral punishment
 floor at the phantom self-loop.  The distinguished owner is only the
@@ -204,7 +196,7 @@ theorem punishmentValue_le_value_of_debt_pos
     quittingPunishmentValue reward who ≤ limit.value who := by
   have hsoloPos : 0 < reward (quittingSingletonTerminal who) who :=
     hdebtPos.trans_le (limit.debt_le_soloReward_of_debt_pos who hdebtPos)
-  have hsoloLe := limit.soloReward_le_value_of_debt_pos who hdebtPos
+  have hsoloLe := limit.soloReward_le_value who
   have hpunishment := quittingPunishmentValue_le_max_solo reward who
   rw [QuittingSureSetOwnerRepair.quittingSetReward_of_nonempty reward
     (Finset.singleton_nonempty who) who] at hpunishment

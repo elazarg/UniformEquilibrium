@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalStaticOrientationDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicBlockerResetAdapter
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauLocalizedOtherDefect
 
 /-!
 # Source-row atomic dispatch for a negative stopping-law collision
@@ -22,7 +23,9 @@ result is a state-matched finite strategic alternative: either a named
 outsider has a root Nash defect of at least the counterexample gap against
 the literal source continuation, or the observer has a punishment-refusal
 certificate of the same size.  The persistent source-stage mass is retained
-in both branches.
+in both branches.  A finite-label extraction then freezes this alternative:
+either one fixed outsider has a uniformly positive legal source-row gain, or
+the refusal certificate persists along a strict subsequence.
 -/
 
 noncomputable section
@@ -233,7 +236,6 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollision_atom
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
-    (_hcollision : 1 < packet.terminal.val.card)
     (hnegative : reward packet.terminal packet.observer < 0) :
     HasQuittingStoppingLawNegativeCollisionAtomicDispatch packet
       (quittingStoppingLawNegativeCollisionMassLower packet) := by
@@ -282,12 +284,157 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollision_atom
       (quittingStageCoalitionMass_nonneg reward profile (stop n)
         packet.terminal)
 
+/-! ## Fixed actual-source alternative -/
+
+/-- **Negative-collision actual-source extraction.**  Along a strict
+subsequence, either one fixed outsider has the full root defect and its
+canonical legal source-row deviation has gain at least `lower * terminalGap`
+at every selected row, or the observer's atomic refusal certificate persists
+at every selected row.
+
+No positivity premise on `lower` is required for this exact projection.  When
+`lower` is the canonical negative-collision mass floor, its positivity follows
+separately from `negativeCollisionMassLower_pos`. -/
+theorem negativeCollisionAtomicDispatch_fixedActualSourceSubsequence
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
+    {lower : ℝ}
+    (dispatch : HasQuittingStoppingLawNegativeCollisionAtomicDispatch
+      packet lower) :
+    ∃ (stop : ℕ → ℕ) (subseq : ℕ → ℕ),
+      StrictMono subseq ∧
+      (∀ rank, packet.quitTime (subseq rank) = some (stop (subseq rank))) ∧
+      ((∃ who, who ≠ packet.observer ∧ ∀ rank,
+          let profile := quittingStoppingLawRectangleSourceProfile packet
+            (subseq rank)
+          let root := quittingProfileLiveRoot reward profile
+            (stop (subseq rank))
+          let tail := quittingTerminalSemanticPair reward
+            (quittingAllContinueProfileSpine reward profile
+              (stop (subseq rank) + 1))
+          let action := quittingRootBestEndpointAction reward tail.1 root who
+          let deviation := quittingStagePureEndpointBehaviorDeviation
+            reward profile who (stop (subseq rank)) action
+          lower ≤ quittingStageCoalitionMass reward profile
+              (stop (subseq rank)) packet.terminal ∧
+            root packet.observer = PMF.pure true ∧
+            regime.terminalGap ≤
+              quittingRootCoordinateNashDefect reward tail.1 root who ∧
+            quittingTerminalPayoff reward
+                  (Function.update profile who deviation) who -
+                quittingTerminalPayoff reward profile who =
+              quittingLiveMass reward profile (stop (subseq rank)) *
+                quittingRootCoordinateNashDefect reward tail.1 root who ∧
+            lower * regime.terminalGap ≤
+              quittingTerminalPayoff reward
+                  (Function.update profile who deviation) who -
+                quittingTerminalPayoff reward profile who) ∨
+        (∀ rank,
+          let profile := quittingStoppingLawRectangleSourceProfile packet
+            (subseq rank)
+          let root := quittingProfileLiveRoot reward profile
+            (stop (subseq rank))
+          lower ≤ quittingStageCoalitionMass reward profile
+              (stop (subseq rank)) packet.terminal ∧
+            root packet.observer = PMF.pure true ∧
+            regime.terminalGap ≤
+              max 0 (-quittingAtomicBlockerBalance reward root
+                packet.observer) ∧
+            lower * regime.terminalGap ≤
+              quittingStageCoalitionMass reward profile
+                (stop (subseq rank)) packet.terminal *
+                max 0 (-quittingAtomicBlockerBalance reward root
+                  packet.observer))) := by
+  classical
+  obtain ⟨stop, hstop, hrows⟩ := dispatch
+  let outsider : ℕ → ι → Prop := fun n who =>
+    let profile := quittingStoppingLawRectangleSourceProfile packet n
+    let root := quittingProfileLiveRoot reward profile (stop n)
+    let tail := quittingTerminalSemanticPair reward
+      (quittingAllContinueProfileSpine reward profile (stop n + 1))
+    who ≠ packet.observer ∧
+      regime.terminalGap ≤
+        quittingRootCoordinateNashDefect reward tail.1 root who ∧
+      lower * regime.terminalGap ≤
+        quittingStageCoalitionMass reward profile (stop n) packet.terminal *
+          quittingRootCoordinateNashDefect reward tail.1 root who
+  by_cases hfrequent : ∃ᶠ n in atTop, ∃ who, outsider n who
+  · rw [Filter.frequently_exists] at hfrequent
+    obtain ⟨who, hwhoFrequent⟩ := hfrequent
+    obtain ⟨subseq, hsubseq, hwho⟩ :=
+      extraction_of_frequently_atTop hwhoFrequent
+    refine ⟨stop, subseq, hsubseq, fun rank => hstop (subseq rank),
+      Or.inl ⟨who, (hwho 0).1, ?_⟩⟩
+    intro rank
+    dsimp only
+    let profile := quittingStoppingLawRectangleSourceProfile packet
+      (subseq rank)
+    let root := quittingProfileLiveRoot reward profile (stop (subseq rank))
+    let tail := quittingTerminalSemanticPair reward
+      (quittingAllContinueProfileSpine reward profile
+        (stop (subseq rank) + 1))
+    obtain ⟨hmass, howner, _⟩ := hrows (subseq rank)
+    have hfixed := hwho rank
+    dsimp only [outsider] at hfixed
+    have hgain :=
+      quittingTerminalPayoff_stageBestEndpointDeviation_sub_eq_liveMass_mul_defect
+        reward profile who (stop (subseq rank))
+    have hlive : quittingStageCoalitionMass reward profile
+        (stop (subseq rank)) packet.terminal ≤
+        quittingLiveMass reward profile (stop (subseq rank)) :=
+      quittingStageCoalitionMass_le_liveMass reward profile
+        (stop (subseq rank)) packet.terminal
+    have hdefectNonneg : 0 ≤ quittingRootCoordinateNashDefect reward
+        tail.1 root who :=
+      quittingRootCoordinateNashDefect_nonneg reward tail.1 root who
+    have hweighted : lower * regime.terminalGap ≤
+        quittingLiveMass reward profile (stop (subseq rank)) *
+          quittingRootCoordinateNashDefect reward tail.1 root who :=
+      hfixed.2.2.trans
+        (mul_le_mul_of_nonneg_right hlive hdefectNonneg)
+    refine ⟨hmass, howner, hfixed.2.1, ?_, ?_⟩
+    · simpa only [profile, tail, root] using hgain
+    · rw [hgain]
+      simpa only [profile, tail, root] using hweighted
+  · have hnoOutsider : ∀ᶠ n in atTop, ¬ ∃ who, outsider n who :=
+      not_frequently.mp hfrequent
+    obtain ⟨start, hstart⟩ := eventually_atTop.1 hnoOutsider
+    let subseq : ℕ → ℕ := fun rank => start + rank
+    have hsubseq : StrictMono subseq := fun _ _ hlt =>
+      Nat.add_lt_add_left hlt start
+    refine ⟨stop, subseq, hsubseq, fun rank => hstop (subseq rank),
+      Or.inr ?_⟩
+    intro rank
+    dsimp only
+    let profile := quittingStoppingLawRectangleSourceProfile packet
+      (subseq rank)
+    let root := quittingProfileLiveRoot reward profile (stop (subseq rank))
+    obtain ⟨hmass, howner, halt⟩ := hrows (subseq rank)
+    have hnone : ¬ ∃ who, outsider (subseq rank) who :=
+      hstart (subseq rank) (Nat.le_add_right start rank)
+    have hrefusal : regime.terminalGap ≤
+          max 0 (-quittingAtomicBlockerBalance reward root packet.observer) ∧
+        lower * regime.terminalGap ≤
+          quittingStageCoalitionMass reward profile (stop (subseq rank))
+            packet.terminal *
+            max 0 (-quittingAtomicBlockerBalance reward root
+              packet.observer) := by
+      rcases halt with houtsider | hrefusal
+      · exfalso
+        apply hnone
+        obtain ⟨who, hwho⟩ := houtsider
+        exact ⟨who, by simpa only [outsider, profile, root] using hwho⟩
+      · simpa only [profile, root] using hrefusal
+    exact ⟨hmass, howner, hrefusal⟩
+
 namespace QuittingCounterexampleStoppingLawFrontier
 
-/-- **Exhaustive static frontier with negative collisions consumed.**  The
-negative observer-containing collision is no longer a bare table sign: it is
-routed to a persistent, state-matched atomic source-row dispatch.  The only
-unconsumed atom orientations are now the prescribed comparison and the
+/-- **Exhaustive static frontier with negative collisions consumed.** The
+negative observer-containing collision is routed to a persistent,
+state-matched atomic source-row dispatch. The unconsumed atom orientations are
+the prescribed comparison and the
 observer-absent rectangle; the singleton and both collision signs have named
 strategic consumers. -/
 theorem exists_prescribed_or_absent_or_staticStrategicDispatch
@@ -311,7 +458,7 @@ theorem exists_prescribed_or_absent_or_staticStrategicDispatch
   · exact Or.inr ⟨packet, Or.inl habsent⟩
   · exact Or.inr ⟨packet, Or.inr (Or.inl hsingleton)⟩
   · exact Or.inr ⟨packet, Or.inr (Or.inr (Or.inl
-      (packet.negativeCollision_atomicDispatch hnegative.1 hnegative.2.1
+      (packet.negativeCollision_atomicDispatch hnegative.1
         hnegative.2.2)))⟩
   · exact Or.inr ⟨packet, Or.inr (Or.inr (Or.inr hmarked))⟩
 

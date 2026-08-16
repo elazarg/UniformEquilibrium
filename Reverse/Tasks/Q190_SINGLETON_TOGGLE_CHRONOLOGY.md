@@ -86,7 +86,7 @@ in
 [`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticOwnStrategyTransport.lean`](../../UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticOwnStrategyTransport.lean).
 Its exact and approximate survival-weighted telescopes and the positive-floor
 return barrier are proved, without game-specific notation, in
-[`Research/Semantics/SurvivalWeightedReachedHistoryAccount.lean`](../../Research/Semantics/SurvivalWeightedReachedHistoryAccount.lean).  These results cover
+[`MathUE/Probability/SurvivalWeightedReachedHistoryAccount.lean`](../../MathUE/Probability/SurvivalWeightedReachedHistoryAccount.lean). These results cover
 all literal exact prefix insertions and all prefix insertions whose Bellman and
 state-matching residuals have summable survival-weighted budgets.  They do not
 exclude a different architecture that creates the required nonvanishing

@@ -704,14 +704,6 @@ theorem threeCertificateDispatch_iff_hasUniformPayoff [Nonempty ι] :
   · intro hpayoff dossier
     exact (dossier.not_hasUniformPayoff hpayoff).elim
 
-/-- Backward-compatible name for the earlier three-game presentation. -/
-abbrev EveryDossierResolved : Prop :=
-  club.ThreeCertificateDispatch
-
-theorem everyDossierResolved_iff_hasUniformPayoff [Nonempty ι] :
-    club.EveryDossierResolved ↔ club.HasUniformPayoff :=
-  club.threeCertificateDispatch_iff_hasUniformPayoff
-
 end Mutual
 end SeveranceMutual
 end GameTheory

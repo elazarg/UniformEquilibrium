@@ -10,7 +10,8 @@ import MathUE.Probability.DiscreteHazardStopping
 /-! # Stopping law of a live-spine quitting behavior
 
 The generic construction lives in `Math.Probability.DiscreteHazard`; this
-file is the backwards-compatible quitting-game spelling of that API. -/
+file specializes it to the Boolean hazards induced by quitting behavior and
+connects the resulting stopping law to quitting-game terminal semantics. -/
 
 noncomputable section
 
@@ -73,14 +74,14 @@ private theorem scalar_survival_eq (hazard : ℕ → PMF Bool) (cutoff : ℕ) :
   rw [← BooleanHazard.survival_eq_scalar]
   rfl
 
-/-- Compatibility aliases for the generic scalarized Boolean hazard. -/
+/-- Canonical quitting-hazard views through the generic scalarized Boolean hazard. -/
 def quittingHazardNeverMass (hazard : ℕ → PMF Bool) : ℝ := (BooleanHazard.toScalar hazard).neverMass
 def quittingHazardStopMass (hazard : ℕ → PMF Bool) (time : ℕ) : ℝ :=
   (BooleanHazard.toScalar hazard).stopMass time
 def quittingHazardStoppingLaw (hazard : ℕ → PMF Bool) : PMF (Option ℕ) :=
   (BooleanHazard.toScalar hazard).stoppingLaw
 
-/-- The compatibility stop mass is finite survival through `time`, followed
+/-- The quitting stop mass is finite survival through `time`, followed
 by stopping at `time`. -/
 theorem quittingHazardStopMass_eq_survival_mul_stop
     (hazard : ℕ → PMF Bool) (time : ℕ) :

@@ -17,8 +17,8 @@ uses every child at exactly the parent tolerance.  Finite-prefix splices have
 a different variance: to construct a parent certificate at error `δ`, they
 request child certificates at smaller positive errors such as `δ / 2`.
 
-This file adds a backward-compatible recursion whose induction hypothesis is
-polymorphic in the child error.  At a node, the closer may request any
+This file defines an accuracy-polymorphic recursion whose induction hypothesis
+ranges over the child error.  At a node, the closer may request any
 strictly lower-ranked child at any positive tolerance.  Well-founded
 induction first constructs the whole positive-error family at each child and
 then exposes that family to the parent closer.

@@ -506,8 +506,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_forcedO
   exact ⟨hobserver, hforcedProfile, hmass, hbarrier, hweightedBarrier,
     halternative⟩
 
-/-- **Static frontier after the observer-absent handoff.**  Every rectangle
-orientation now reaches a named strategic consumer.  The observer-absent
+/-- **Static frontier with the observer-absent handoff.** Every rectangle
+orientation reaches a named strategic consumer. The observer-absent
 consumer is the aggregate counterfactual forced-owner wall above; it is not
 claimed to close the conjecture-facing branch.  The only remaining bare
 atom orientation is the prescribed comparison sequence. -/
@@ -594,7 +594,7 @@ theorem exists_prescribed_or_orientationPreservingStrategicDispatch
       · exact Or.inr (Or.inr (Or.inl ⟨hnegative.1, hnegative.2.1,
           hnegative.2.2,
           packet.negativeCollision_atomicDispatch hnegative.1
-            hnegative.2.1 hnegative.2.2⟩))
+            hnegative.2.2⟩))
     · exact Or.inr (Or.inr (Or.inr ⟨hobserver, hcollision, hpositive,
         packet.positiveTargetCollision_markedTailDispatch hobserver hcollision
           hpositive⟩))

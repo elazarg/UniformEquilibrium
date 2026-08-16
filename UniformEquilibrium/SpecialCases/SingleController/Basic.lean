@@ -161,9 +161,6 @@ harmonicity, reward compatibility, and the mean-ergodic projection step.
 * `StochasticGame.FiniteReachability.exists_succ_canReachSet_of_canReachSet`
   — the "make one step of progress toward `R`" building block a total
   completion policy on the non-recurrent states would iterate
-* `StochasticGame.exists_controllerProjectionWitness_of_vriezePrimalDualOptimal`
-  — a legacy pass-through interface for callers that already carry an
-  explicit extraction witness; it is no longer used by the completed theorem
 * `SingleControllerExample.transientProjectionWitness` — a minimal concrete
   instance: a two-state single-controller game (one transient, one absorbing
   state under the extracted policy) with an explicit
@@ -349,9 +346,7 @@ together with a candidate gain `ρ` such that:
 
 This is exactly the data an optimal primal–dual pair of Vrieze's LP would
 supply for the controller's side (`τ` from the normalized dual occupation
-measure; `ρ` the shared optimal gain) — see the module docstring for what
-extracting it needs and why it is not attempted here
-(`exists_controllerProjectionWitness_of_vriezePrimalDualOptimal`). Given the
+measure; `ρ` the shared optimal gain). Given the
 witness, `isUpperAverageCertificate_of_controllerProjectionWitness` produces
 the controller's own `IsStationaryAverageGuaranteeCertificate` by a purely
 mechanical Poisson-equation computation. -/
@@ -554,25 +549,9 @@ structure IsVriezePrimalOptimal (G : StochasticGame Bool) [Finite G.State]
     letI : Fintype G.State := Fintype.ofFinite G.State
     ∑ s, g' s ≤ ∑ s, g s
 
-/-- Legacy pass-through interface for an explicitly supplied projection
-witness.  The completed constructor is
-`exists_controllerProjectionWitness_of_vriezePrimalOptimal` in
-`SingleControllerFlowReward`; it builds this witness from the ordinary
-zero-gap dual and does not use this assumption. -/
-theorem exists_controllerProjectionWitness_of_vriezePrimalDualOptimal
-    {controller : Bool} {x : G.State → PMF (G.Act (!controller))} {g v : G.State → ℝ}
-    (_hopt : G.IsVriezePrimalOptimal controller x g v)
-    (hextract : ∃ (τ : G.State → PMF (G.Act controller)) (ρ : G.State → ℝ),
-      G.IsControllerProjectionWitness controller τ ρ ∧ ρ = fun s => -(g s)) :
-    ∃ (τ : G.State → PMF (G.Act controller)) (ρ : G.State → ℝ),
-      G.IsControllerProjectionWitness controller τ ρ ∧ ρ = fun s => -(g s) :=
-  hextract
-
 /-- The full undiscounted single-controller uniform-value theorem,
-**conditional** on the residual `hextract`
-(`exists_controllerProjectionWitness_of_vriezePrimalDualOptimal`'s
-hypothesis): once `hextract` is discharged for an actual single-controller
-game, this corollary needs no further work to deliver
+**conditional** on an explicit controller-projection witness: once `hextract`
+is discharged for an actual single-controller game, this corollary delivers
 `IsUniformEquilibriumPayoff`. -/
 theorem exists_uniformEquilibriumPayoff_of_singleController_of_vriezePrimalOptimal_of_extraction
     (hzs : G.IsZeroSumBoolGame) {controller : Bool}
@@ -582,8 +561,7 @@ theorem exists_uniformEquilibriumPayoff_of_singleController_of_vriezePrimalOptim
     (hextract : ∃ (τ : G.State → PMF (G.Act controller)) (ρ : G.State → ℝ),
       G.IsControllerProjectionWitness controller τ ρ ∧ ρ = fun s => -(g s)) :
     ∃ payoff : Payoff Bool, G.IsUniformEquilibriumPayoff s₀ payoff := by
-  obtain ⟨τ, ρ, hw, hρeq⟩ :=
-    G.exists_controllerProjectionWitness_of_vriezePrimalDualOptimal hopt hextract
+  obtain ⟨τ, ρ, hw, hρeq⟩ := hextract
   refine G.exists_uniformEquilibriumPayoff_of_singleController hzs hSC s₀ (g s₀) x g v
     hopt.feasible rfl τ ρ hw ?_
   rw [hρeq]

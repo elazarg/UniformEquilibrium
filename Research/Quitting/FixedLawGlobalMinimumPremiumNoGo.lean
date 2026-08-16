@@ -258,13 +258,11 @@ theorem fixed_minimal_on_fixedLaw
   rw [fixed_debtSum]
   exact hdebt.trans (Finset.single_le_sum hotherNonneg (Finset.mem_univ debtor))
 
-/-- The comparison point is a global total-debt minimizer, hence in
-particular a global minimizer on the owner's reset face. -/
-theorem global_minimal_on_resetFace
+/-- The comparison point has no more total debt than any point in the law
+carrier. -/
+theorem global_debtSum_le_of_mem_lawCarrier
     (candidate : QuittingTerminalSemanticLawPoint Player)
-    (hcandidate : candidate ∈ quittingTerminalSemanticLawCarrier reward)
-    (_hcandidateReset :
-      quittingTerminalSemanticDebt candidate.1 owner = 0) :
+    (hcandidate : candidate ∈ quittingTerminalSemanticLawCarrier reward) :
     quittingTerminalSemanticDebtSum global ≤
       quittingTerminalSemanticDebtSum candidate.1 := by
   have hcandidateCarrier :=

@@ -15,7 +15,7 @@ At one quitting row, regard the probability that at least one button works as
 the row's scalar **effectiveness**.  A row above a threshold is retained as an
 atomic packet.  A row below the threshold belongs to the diffuse part.
 
-This experiment proves a finite-window compression ledger with three exact or
+This module proves a finite-window compression ledger with three exact or
 quantitative conclusions.
 
 * Survival-weighted effectiveness telescopes exactly to absorbed mass.
@@ -208,8 +208,7 @@ omit [DecidableEq ι] in
 /-- A finite cumulative-effectiveness budget permits only finitely many rows
 above a fixed positive scale. -/
 theorem atomicButtonTimes_card_mul_threshold_le_cumulativeEffectiveness
-    (roots : ℕ → ι → PMF Bool) (horizon : ℕ) {threshold : ℝ}
-    (_hthreshold : 0 ≤ threshold) :
+    (roots : ℕ → ι → PMF Bool) (horizon : ℕ) (threshold : ℝ) :
     (atomicButtonTimes roots horizon threshold).card * threshold ≤
       cumulativeEffectiveness roots horizon := by
   calc
@@ -238,7 +237,7 @@ theorem atomicButtonTimes_card_le_budget_div_threshold
     (atomicButtonTimes roots horizon threshold).card ≤ budget / threshold := by
   apply (le_div_iff₀ hthreshold).2
   exact (atomicButtonTimes_card_mul_threshold_le_cumulativeEffectiveness
-    roots horizon hthreshold.le).trans hbudget
+    roots horizon threshold).trans hbudget
 
 /-- **Diffuse collision bound.**  After retaining every row above
 `threshold` as an atom, the total survival-weighted collision probability of
@@ -407,7 +406,7 @@ theorem stochasticButton_atom_diffuse_tail_certificate
       quittingSurvivalPrefix roots horizon ≤ Real.exp (-level) := by
   refine ⟨
     (atomicButtonTimes_card_mul_threshold_le_cumulativeEffectiveness
-      roots horizon hthreshold).trans hupper,
+      roots horizon threshold).trans hupper,
     diffuseCollisionMass_le_threshold roots horizon hthreshold,
     ?_⟩
   have hsurvival := survival_le_exp_neg_cumulativeEffectiveness roots horizon

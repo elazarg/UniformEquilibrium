@@ -34,7 +34,7 @@ debt.
 A changing required table entry is not yet a Nash defect in one stationary
 four-player quitting game.  Turning recurrent table mismatch into a
 state-matched deviation, blocker, or punishment charge remains the global
-producer.  This experiment formalizes the finite-dimensional interface that
+producer. This module formalizes the finite-dimensional interface that
 such a producer may consume; it does not assert that the producer exists.
 -/
 
@@ -45,8 +45,8 @@ namespace Research.QuittingORStationarizationDichotomy
 
 open scoped BigOperators
 
-/-- Prescribed mixture, best endpoint, and endpoint debt are repeated here
-so this ignored experiment compiles independently of another ignored file. -/
+/-- Prescribed mixture, best endpoint, and endpoint debt for the local affine
+interface. -/
 def prescribedBinaryValue (ownQuit : ℝ) (value : Bool → ℝ) : ℝ :=
   (1 - ownQuit) * value false + ownQuit * value true
 
@@ -767,7 +767,7 @@ theorem mixingFloor_or_nearPure (row : StationaryTableRow) (kappa : ℝ)
 the two endpoint debts at that same row. -/
 theorem mixingFloor_mul_fixedMismatch_le_endpointDebt
     (row : StationaryTableRow) (fixedQuit kappa : ℝ)
-    (hfloor : row.HasMixingFloor kappa) (_hkappa : 0 ≤ kappa) :
+    (hfloor : row.HasMixingFloor kappa) :
     kappa * |fixedQuit - row.requiredQuit| ≤ row.endpointDebt fixedQuit := by
   have hbase := RecurrentTableChannel.minBoundary_mul_tableMismatch_le_debtSum
     row.ownQuit row.continueValue row.requiredQuit fixedQuit
@@ -810,9 +810,9 @@ theorem mixingFloor_mul_cyclicRequiredVariation_le_two_stationaryTableDebt
           (rows (next index)).endpointDebt fixedQuit := by
     intro index
     have hleft := StationaryTableRow.mixingFloor_mul_fixedMismatch_le_endpointDebt
-      (rows index) fixedQuit kappa (hfloor index) hkappa
+      (rows index) fixedQuit kappa (hfloor index)
     have hright := StationaryTableRow.mixingFloor_mul_fixedMismatch_le_endpointDebt
-      (rows (next index)) fixedQuit kappa (hfloor (next index)) hkappa
+      (rows (next index)) fixedQuit kappa (hfloor (next index))
     have htriangle : |(rows index).requiredQuit -
         (rows (next index)).requiredQuit| ≤
         |fixedQuit - (rows index).requiredQuit| +

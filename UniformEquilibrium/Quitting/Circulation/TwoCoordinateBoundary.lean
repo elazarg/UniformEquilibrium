@@ -354,7 +354,8 @@ private noncomputable def pairRepairWitness : {S : Finset Bool // S.Nonempty} �
     (fun j => if j then 0 else -1)
 
 /-- **The pair-repair branch, outside the circulation class.**
-`pairRepairWitness` satisfies both of `exists_uniformEquilibriumPayoff_of_bool_pairRepair`'s
+`pairRepairWitness` satisfies both of
+`quittingGame_isUniformEquilibriumPayoff_of_bool_pairRepair`'s
 hypotheses at `owner = false` — so it has a uniform-equilibrium payoff via
 pair repair — yet fails `circulationTwoExists_iff` at both disjuncts: the
 theorem's own `hblocker` (`v0 true ≤ v1 true`, here `0 ≤ 5`) is consistent
@@ -374,8 +375,9 @@ theorem pairRepair_exists_outside_circulationTwoExists :
   have hblocker : quittingSoloReward pairRepairWitness false true ≤
       quittingSoloReward pairRepairWitness true true := by
     simp [pairRepairWitness]
-  refine ⟨exists_uniformEquilibriumPayoff_of_bool_pairRepair pairRepairWitness false
-      howner hblocker, ?_⟩
+  refine ⟨⟨quittingSoloReward pairRepairWitness true,
+      quittingGame_isUniformEquilibriumPayoff_of_bool_pairRepair
+        pairRepairWitness false howner hblocker⟩, ?_⟩
   simp only [pairRepairWitness, quittingSoloReward_sampleReward_false,
     quittingSoloReward_sampleReward_true]
   rw [circulationTwoExists_iff]

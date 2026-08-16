@@ -4,37 +4,35 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.ActualRowDebtLocalizationAdapters
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeReachedRowDebtLocalization
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLiteralSourceReturnNoGo
 
 /-!
 # Positive-collision instance of the literal source-return no-go
 
-The production theorem identifies the root--tail complementarity obstruction.
-This thin adapter packages the actual positive-collision rows selected by the
-stopping-law localization theorem.  It does not close the leaf: a charged
-root or continuation-payoff change is still permitted.
+The production reached-row certificate selects actual positive-collision rows
+with a uniform legal gain.  This consumer turns those rows into literal
+root--tail complementarity obstructions.  It does not close the leaf: a
+charged root or continuation-payoff change is still permitted.
 -/
 
 noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
-
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 /-- The localized positive-collision rows form positive actual-row packets,
 so none admits an exact Nash--Bellman embedding on its literal root--tail
 fiber. -/
-theorem positiveCollisionMarkedTailDispatch_no_packetPreservingExactSourceReturn
+theorem positiveCollisionReachedRowLocalization_no_packetPreservingExactSourceReturn
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (frontierPacket : QuittingStoppingLawVanishingDebtRectangleSequence
       frontier)
-    {lower : ℝ} (hlower : 0 < lower)
-    (dispatch : HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch
+    {lower : ℝ}
+    (certificate : HasQuittingStoppingLawPositiveCollisionReachedRowLocalization
       frontierPacket lower) :
     ∃ (stop : ℕ → ℕ) (subseq : ℕ → ℕ) (other : ι),
       StrictMono subseq ∧
@@ -42,12 +40,8 @@ theorem positiveCollisionMarkedTailDispatch_no_packetPreservingExactSourceReturn
       ∀ rank,
         frontierPacket.quitTime (subseq rank) =
             some (stop (subseq rank)) ∧
-          let actual := Function.update
-            (quittingStoppingLawRectangleTargetProfile frontierPacket
-              (subseq rank))
-            frontierPacket.observer
-            (quittingPureTimeBehaviorStrategy reward frontierPacket.observer
-              (frontierPacket.quitTime (subseq rank)))
+          let actual := quittingStoppingLawPositiveCollisionReachedRowProfile
+            frontierPacket (subseq rank)
           ∃ row : QuittingLiteralPositiveActualRowPacket reward,
             row.profile = actual ∧
               row.stage = stop (subseq rank) ∧
@@ -56,19 +50,14 @@ theorem positiveCollisionMarkedTailDispatch_no_packetPreservingExactSourceReturn
               lower ≤ row.mass ∧
               ¬ ∃ current tail : QuittingNashBellmanPoint ι,
                 row.IsLiteralNashBellmanEmbedding current tail := by
-  obtain ⟨stop, subseq, other, hsubseq, hother, _hdebt, hrows⟩ :=
-    positiveCollisionMarkedTailDispatch_fixedOtherLegalDeviation
-      frontierPacket hlower dispatch
+  obtain ⟨hlower, stop, subseq, other, hsubseq, hother, htime, hmass,
+      hgain⟩ := certificate
   refine ⟨stop, subseq, other, hsubseq, hother, ?_⟩
   intro rank
-  obtain ⟨htime, hmass, _hgainIdentity, hgainLower⟩ := hrows rank
-  refine ⟨htime, ?_⟩
+  refine ⟨htime rank, ?_⟩
   dsimp only
-  let actual := Function.update
-    (quittingStoppingLawRectangleTargetProfile frontierPacket (subseq rank))
-    frontierPacket.observer
-    (quittingPureTimeBehaviorStrategy reward frontierPacket.observer
-      (frontierPacket.quitTime (subseq rank)))
+  let actual := quittingStoppingLawPositiveCollisionReachedRowProfile
+    frontierPacket (subseq rank)
   let stage := stop (subseq rank)
   let players := Finset.univ.erase frontierPacket.observer
   have hotherMem : other ∈ players := by
@@ -78,19 +67,23 @@ theorem positiveCollisionMarkedTailDispatch_no_packetPreservingExactSourceReturn
   have hcard : 0 < (players.card : ℝ) := by
     exact_mod_cast hcardNat
   have hfloor : 0 <
-      lower * quittingTerminalSemanticDebtSum frontier.base / 2 := by
-    exact div_pos (mul_pos hlower frontier.base_positive) (by norm_num)
+      quittingStoppingLawPositiveCollisionReachedRowGainFloor
+        frontierPacket lower := by
+    unfold quittingStoppingLawPositiveCollisionReachedRowGainFloor
+    exact div_pos (mul_pos hlower frontier.base_positive)
+      (mul_pos (by norm_num) hcard)
   have hgainLower' :
-      lower * quittingTerminalSemanticDebtSum frontier.base / 2 ≤
-        (players.card : ℝ) *
-          quittingLiteralActualRowBestEndpointGain reward actual other stage := by
-    simpa only [actual, stage, players,
+      quittingStoppingLawPositiveCollisionReachedRowGainFloor
+          frontierPacket lower ≤
+        quittingLiteralActualRowBestEndpointGain reward actual other stage := by
+    simpa only [actual, stage,
+      quittingStoppingLawPositiveCollisionReachedRowGain,
       quittingLiteralActualRowBestEndpointGain,
       quittingLiteralActualRowTail, quittingLiteralActualRowRoot] using
-        hgainLower
+        hgain rank
   have hgainPos : 0 <
       quittingLiteralActualRowBestEndpointGain reward actual other stage := by
-    nlinarith
+    exact hfloor.trans_le hgainLower'
   let row : QuittingLiteralPositiveActualRowPacket reward :=
     { profile := actual
       stage := stage
@@ -100,10 +93,10 @@ theorem positiveCollisionMarkedTailDispatch_no_packetPreservingExactSourceReturn
         frontierPacket.terminal
       mass_eq := rfl
       mass_pos := hlower.trans_le (by
-        simpa only [actual, stage] using hmass)
+        simpa only [actual, stage] using hmass rank)
       gain_pos := hgainPos }
   refine ⟨row, rfl, rfl, rfl, rfl, ?_, ?_⟩
-  · simpa only [row, actual, stage] using hmass
+  · simpa only [row, actual, stage] using hmass rank
   · exact row.not_exists_literalNashBellmanEmbedding
 
 /-- **Uniform same-fiber repair floor for the positive-collision arm.**
@@ -112,25 +105,21 @@ approximate Nash repair which reuses the literal root and continuation has
 error bounded away from zero by a table-level constant.  The division-free
 form is included because it does not require a separate cardinality
 denominator in downstream arithmetic. -/
-theorem positiveCollisionMarkedTailDispatch_sameFiberRepairErrorFloor
+theorem positiveCollisionReachedRowLocalization_sameFiberRepairErrorFloor
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (frontierPacket : QuittingStoppingLawVanishingDebtRectangleSequence
       frontier)
-    {lower : ℝ} (hlower : 0 < lower)
-    (dispatch : HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch
+    {lower : ℝ}
+    (certificate : HasQuittingStoppingLawPositiveCollisionReachedRowLocalization
       frontierPacket lower) :
     ∃ (stop : ℕ → ℕ) (subseq : ℕ → ℕ) (other : ι),
       StrictMono subseq ∧
       other ≠ frontierPacket.observer ∧
-      ∀ rank (error : ℝ), 0 ≤ error →
-        let actual := Function.update
-          (quittingStoppingLawRectangleTargetProfile frontierPacket
-            (subseq rank))
-          frontierPacket.observer
-          (quittingPureTimeBehaviorStrategy reward frontierPacket.observer
-            (frontierPacket.quitTime (subseq rank)))
+      ∀ rank (error : ℝ),
+        let actual := quittingStoppingLawPositiveCollisionReachedRowProfile
+          frontierPacket (subseq rank)
         let tail := quittingLiteralActualRowTail reward actual
           (stop (subseq rank))
         let root := quittingLiteralActualRowRoot reward actual
@@ -141,18 +130,13 @@ theorem positiveCollisionMarkedTailDispatch_sameFiberRepairErrorFloor
             lower * quittingTerminalSemanticDebtSum frontier.base /
                 (2 * ((Finset.univ.erase frontierPacket.observer).card : ℝ)) ≤
               error := by
-  obtain ⟨stop, subseq, other, hsubseq, hother, _hdebt, hrows⟩ :=
-    positiveCollisionMarkedTailDispatch_fixedOtherLegalDeviation
-      frontierPacket hlower dispatch
+  obtain ⟨hlower, stop, subseq, other, hsubseq, hother, _htime, hmass,
+      hgain⟩ := certificate
   refine ⟨stop, subseq, other, hsubseq, hother, ?_⟩
-  intro rank error herror
+  intro rank error
   dsimp only
-  obtain ⟨_htime, hmass, hgainIdentity, hgainFloor⟩ := hrows rank
-  let actual := Function.update
-    (quittingStoppingLawRectangleTargetProfile frontierPacket (subseq rank))
-    frontierPacket.observer
-    (quittingPureTimeBehaviorStrategy reward frontierPacket.observer
-      (frontierPacket.quitTime (subseq rank)))
+  let actual := quittingStoppingLawPositiveCollisionReachedRowProfile
+    frontierPacket (subseq rank)
   let stage := stop (subseq rank)
   let gain := quittingLiteralActualRowBestEndpointGain reward actual other stage
   let players := Finset.univ.erase frontierPacket.observer
@@ -162,17 +146,19 @@ theorem positiveCollisionMarkedTailDispatch_sameFiberRepairErrorFloor
     Finset.card_pos.mpr ⟨other, hotherMem⟩
   have hcard : 0 < (players.card : ℝ) := by exact_mod_cast hcardNat
   have hgainFloor' :
-      lower * quittingTerminalSemanticDebtSum frontier.base / 2 ≤
-        (players.card : ℝ) * gain := by
+      lower * quittingTerminalSemanticDebtSum frontier.base /
+          (2 * (players.card : ℝ)) ≤ gain := by
     simpa only [actual, stage, players, gain,
+      quittingStoppingLawPositiveCollisionReachedRowGainFloor,
+      quittingStoppingLawPositiveCollisionReachedRowGain,
       quittingLiteralActualRowBestEndpointGain,
       quittingLiteralActualRowTail, quittingLiteralActualRowRoot] using
-        hgainFloor
+        hgain rank
   have hgainPos : 0 < gain := by
-    have hfloorPos : 0 <
-        lower * quittingTerminalSemanticDebtSum frontier.base / 2 :=
-      div_pos (mul_pos hlower frontier.base_positive) (by norm_num)
-    nlinarith
+    have hdenom : 0 < 2 * (players.card : ℝ) :=
+      mul_pos (by norm_num) hcard
+    exact (div_pos (mul_pos hlower frontier.base_positive) hdenom).trans_le
+      hgainFloor'
   let row : QuittingLiteralPositiveActualRowPacket reward :=
     { profile := actual
       stage := stage
@@ -181,26 +167,27 @@ theorem positiveCollisionMarkedTailDispatch_sameFiberRepairErrorFloor
       mass := quittingStageCoalitionMass reward actual stage
         frontierPacket.terminal
       mass_eq := rfl
-      mass_pos := hlower.trans_le (by simpa only [actual, stage] using hmass)
+      mass_pos := hlower.trans_le (by
+        simpa only [actual, stage] using hmass rank)
       gain_pos := by simpa only [gain] using hgainPos }
   intro hnash
   have hgainLe : gain ≤ error := by
     simpa only [row, gain] using
       row.gain_le_nashError_of_literal_root_tail hnash
+  have hdivided : lower * quittingTerminalSemanticDebtSum frontier.base /
+        (2 * (players.card : ℝ)) ≤ error :=
+    hgainFloor'.trans hgainLe
+  have hdenom : 0 < 2 * (players.card : ℝ) :=
+    mul_pos (by norm_num) hcard
+  have hscaled : lower * quittingTerminalSemanticDebtSum frontier.base ≤
+      error * (2 * (players.card : ℝ)) :=
+    (div_le_iff₀ hdenom).mp hdivided
   have hdivisionFree :
       lower * quittingTerminalSemanticDebtSum frontier.base / 2 ≤
-        (players.card : ℝ) * error :=
-    hgainFloor'.trans (mul_le_mul_of_nonneg_left hgainLe hcard.le)
+        (players.card : ℝ) * error := by
+    apply (div_le_iff₀ (by norm_num : (0 : ℝ) < 2)).2
+    simpa [mul_comm, mul_left_comm, mul_assoc] using hscaled
   refine ⟨by simpa only [players] using hdivisionFree, ?_⟩
-  have hdenom : 0 < 2 * (players.card : ℝ) := mul_pos (by norm_num) hcard
-  apply (div_le_iff₀ hdenom).2
-  have halgebra :
-      lower * quittingTerminalSemanticDebtSum frontier.base / 2 ≤
-          (players.card : ℝ) * error ↔
-        lower * quittingTerminalSemanticDebtSum frontier.base ≤
-          (2 * (players.card : ℝ)) * error := by
-    constructor <;> intro h <;> nlinarith
-  simpa [mul_comm, mul_left_comm, mul_assoc] using
-    (halgebra.mp hdivisionFree)
+  simpa only [players] using hdivided
 
 end GameTheory

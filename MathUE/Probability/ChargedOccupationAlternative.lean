@@ -30,10 +30,11 @@ noncomputable section
 variable {S I : Type*}
 
 /-- A nonnegative balanced transition family with total charge normalized
-to one. Any balanced family with strictly positive charge can be rescaled
-into this form. -/
+to one. The transition family is finite, but the coordinate type need not be.
+Any balanced family with strictly positive charge can be rescaled into this
+form. -/
 def HasNormalizedPositiveChargedCirculation
-    [Fintype S] [Fintype I]
+    [Fintype I]
     (column : I → S → ℝ) (charge : I → ℝ) : Prop :=
   ∃ mass : I → ℝ,
     (∀ i, 0 ≤ mass i) ∧
@@ -204,7 +205,7 @@ theorem normalizedPositiveChargedCirculation_xor_driftPotential
 /-- A strictly positive charged circulation rescales to the normalized
 version used by the alternative. -/
 theorem exists_normalizedPositiveChargedCirculation_of_pos
-    [Fintype S] [Fintype I]
+    [Fintype I]
     {column : I → S → ℝ} {charge mass : I → ℝ}
     (hmass : ∀ i, 0 ≤ mass i)
     (hbalance : ∀ s, ∑ i, mass i * column i s = 0)
@@ -235,7 +236,6 @@ used. -/
 theorem exists_owner_normalizedPositiveChargedCirculation
     {Owner : Type*} {Index : Owner → Type*}
     [Fintype Owner] [∀ owner, Fintype (Index owner)]
-    [Fintype S]
     (column : ∀ owner, Index owner → S → ℝ)
     (charge mass : ∀ owner, Index owner → ℝ)
     (hmass : ∀ owner i, 0 ≤ mass owner i)

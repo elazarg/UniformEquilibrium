@@ -108,8 +108,7 @@ built:
   canonical vanishing calendar schedule) together give the maximizer-role
   finite-horizon guarantee, packaged as an `IsRowTrackingCertificate`.
   `IsTailVariationBounded` is used directly inside the proof to bound the
-  cumulative tracking error by `ε`, uniformly in the horizon. (The
-  deprecated alias `secures_vanishingDiscountLimit_row` still resolves.)
+  cumulative tracking error by `ε`, uniformly in the horizon.
 
 ### The zero-sum row/column protection bridge (`StageAB`) and its limits (`StageBSchedule`)
 
@@ -208,9 +207,7 @@ summability.
   The column-side guarantee is the mirror image of the row side (row and
   column swapped, sign of the target flipped) and is taken here as a
   hypothesis of that shape rather than re-derived, to keep this file's scope
-  bounded — the construction is identical with `0` and `1` exchanged. (The
-  deprecated alias `isUniformEquilibriumPayoff_of_secures_row_col` still
-  resolves.)
+  bounded — the construction is identical with `0` and `1` exchanged.
 -/
 
 noncomputable section

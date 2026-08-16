@@ -39,6 +39,7 @@ without producing a witness.
 | Quitting terminal selection | `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean` | The equivalence between terminal approximate Nash existence at every accuracy and uniform-payoff existence for finite quitting games. |
 | Diagonal target tails | `UniformEquilibrium/Quitting/Terminal/TargetTail/DiagonalTargetTail.lean` | Exact-prefix plus player-indexed closed-tail compilation and its counterexample restriction. |
 | Support-retaining paths | `UniformEquilibrium/Quitting/Paths/SupportWitnessUniform.lean` | Infinite support-rational paths, finite periodic witnesses, and signed, absolute-weighted, and single-seam projective-lasso compilation. |
+| Cyclic `K/N` finite words | `UniformEquilibrium/Quitting/Cycles/CyclicKofNPlayerPhaseHazards.lean` | Translated-block support clocks, positive player-and-phase hazards, canonical terminal evaluation, and a finite exact-Nash compiler. |
 | Essential APS | `UniformEquilibrium/Quitting/EssentialAPS/All.lean` | The complete singleton-flow APS layer, including the adaptive-mesh capstone. |
 | Projective packets and lassos | `UniformEquilibrium/Quitting/Projective/LassoAll.lean` | Matching-order analytic packets, packet-target mismatch, resolved-chart/Farkas contracts, exact signed monodromy, finite charged return, forward-block single-seam closing, and lasso compilation. |
 | Punishment-completed cycles | `UniformEquilibrium/Quitting/Punishment/CompletedCycle.lean` | Coupled phase-switch caps, exact instant-punishment characterization, and exact absorbing cycles completed coordinatewise by contraction or credible punishment. |
@@ -93,6 +94,7 @@ obligations.
 | --- | --- | --- | --- |
 | Diagonal target tail | Accuracy-indexed exact Nash--Bellman prefixes with small joint survival and player-indexed target-closed tails | Terminal approximate equilibria and hence a uniform payoff | Does not construct the prefixes or prove their survival certificate. |
 | Support witness | At every tolerance, a support-wise approximately optimal root path, divergent absorption, and continuation-by-continuation individual rationality; alternatively a finite periodic witness with one absorbing phase | A terminal `3ε` profile and target-free uniform-payoff existence | Does not produce the paths or cycles for arbitrary games. |
+| Cyclic `K/N` finite word | A translated finite block word with positive hazards on every scheduled player-phase pair and exact root Nash at every canonical successor value | Every cyclic entry value is a uniform-equilibrium payoff | Does not produce the finite Nash certificate for an arbitrary reward table; prescribed proper positive-hazard words fail for the self-membership reward. |
 | Signed projective lasso | An accepted target and, at every tolerance, a finite root word whose signed survival-weighted monodromy is small relative to absorption for every cyclic entry phase, with support optimality and punishment rationality | Exact periodic correction, a divergent support-rational path, and a uniform payoff | Matching analytic packet extraction neither accepts its endpoint nor constructs the required physical candidate; absolute-weighted variation is only a stronger compatibility interface. |
 | Finite charged forward packets | At every charge target, one exact finite forward Bellman packet in a fixed compact carrier, with support optimality and punishment rationality | Compact charged return, a single-seam lasso, and a uniform payoff | Does not produce the packets or consume the complementary bounded-charge branch. |
 | Essential APS | A compact convex functional unique-live component with finite-window face avoidance, terminal-freeness, and bounds | A coherent executable path, qualitative deleted-player survival, adaptive finite meshes, and a uniform payoff for every initial component value | Does not prove that an arbitrary game has a nonempty component; pointwise full jumps remain outside the adaptive logarithmic mesh. |
@@ -115,6 +117,7 @@ generic quitting-game existence theorems.
 | Finite charged return | `MathUE/FiniteChargedReturn.lean`, `MathUE/CompactFiniteChargedReturn.lean` | Converts sufficiently charged finite prefixes in one compact carrier into a close ordered block with fixed charge, without one orbit uniform in the target. |
 | Finite phase occupation duality | `MathUE/Probability/PhaseOccupationDuality.lean` | Semantic/LP primal equivalence, bounded attainment, phase-bias decoding, and strong duality conditional on occupation feasibility. |
 | Cyclic exposure | `MathUE/CyclicExposure.lean` | Sharp exposure bounds for finite permutation systems; the shared-punishment calculation is an application. |
+| Cyclic `K/N` collapse | `MathUE/GroupAction/CyclicKofNCollapseClassification.lean` | Exact `N / gcd(K,N)` minimum translated-block period, classification of attainable stabilizer factors, and explicit primitive-block fiber lifts. |
 | Nonperiodic Snell supersolution | `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean` | Turns exact Continue transport, vanishing local Quit error, and survival decay into history-dependent unilateral caps. |
 | Target-anchored stopping tail | `UniformEquilibrium/Quitting/Terminal/TargetTail/TargetAnchoredTail.lean` | Constructs one player's stationary-opponent closed tail at a prescribed target. |
 | Joint-survival selection | `UniformEquilibrium/Quitting/Paths/JointSurvivalSelection.lean` | Identifies compactly selected continuation values with actual infinite-path terminal values under joint-survival decay. |
@@ -167,6 +170,15 @@ The general reverse diagnostics are:
 fence: even a solved two-player zero-solo game need not admit a common-cutoff
 truncated-ledger package.  The package compiler is sound, but its hypothesis is
 not a necessary normal form for equilibrium existence.
+
+`UniformEquilibrium/Diagnostics/Quitting/CyclicKofNFeasibilityObstruction.lean`
+separates the cyclic compiler from a producer: constant, phase-varying, and
+player-and-phase positive hazards on a prescribed proper translated block all
+fail for one bounded self-membership reward, although that game has a trivial
+full-support uniform payoff.  Independently,
+`UniformEquilibrium/Diagnostics/Quitting/CyclicKofNSupportedRootRetentionNoGo.lean`
+shows that positive retention of one fixed chronological singleton atom over
+the finite orbit prefix cannot generate a proper rotating supported-root word.
 
 These characterize or falsify proposed routes.  They are not forward
 construction mechanisms.

@@ -68,7 +68,7 @@ the same-action rectangle is strictly positive. -/
 theorem forcedOwner_bestEndpoint_flip_of_continueFaceLoss
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool)
-    (owner who : ι) (_hne : owner ≠ who)
+    (owner who : ι)
     (hforcedPos : 0 < quittingRootCoordinateNashDefect reward tail
       (Function.update root owner (PMF.pure true)) who)
     (hloss : quittingRootDeviationGain reward tail
@@ -403,7 +403,7 @@ theorem exists_literal_endpointFlip_of_positive_supportedLoss
       reward tail root owner who = action := by
     simpa only [root, tail] using hprops.2.1
   have hflip := forcedOwner_bestEndpoint_flip_of_continueFaceLoss
-    reward tail root owner who (Ne.symm hprops.1) hforcedPos (by
+    reward tail root owner who hforcedPos (by
       rw [haction]
       exact hfaceNeg)
   rw [haction] at hflip
@@ -412,12 +412,14 @@ theorem exists_literal_endpointFlip_of_positive_supportedLoss
   · simpa only [root, tail] using hflip.2.1
   · simpa only [root, tail] using hflip.2.2
 
+namespace QuittingStoppingLawVanishingDebtRectangleSequence
+
 /-- **Game-facing finite-clock endpoint-flip frontier.**  The observer-absent
 finite clock is consumed by a legal deviation or fixed Quit atom, except for
 one fixed certified owner/outsider/action loss.  Every positive instance of
 that last loss is a literal copy/negate endpoint flip by
 `exists_literal_endpointFlip_of_positive_supportedLoss`. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteClock_certifiedEndpointFlip
+theorem observerAbsent_finiteClock_certifiedEndpointFlip
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -520,6 +522,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
           charge / (24 * (Fintype.card (ι × Bool) : ℝ)) by ring] using hrefined
   · left
     simpa only [charge, profile, owner] using hrefusal
+
+end QuittingStoppingLawVanishingDebtRectangleSequence
 
 /-- Every positive certified flip loss has a literal pure-background host.
 All ambient players enter its four payoff cells only through the displayed

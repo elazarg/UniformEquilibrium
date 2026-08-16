@@ -23,8 +23,8 @@ For an arbitrary semantic pair and root, prefixed debt is the cap-coordinate
 Nash defect of the root plus joint survival times the tail debt.  No Nash
 hypothesis is used.
 
-The opponent-aware surcharge identities are maintenance API: they localize
-best-response-envelope drift as hidden continuation-option debt and state the
+The opponent-aware surcharge identities localize best-response-envelope
+drift as hidden continuation-option debt and state the
 sharp residual/reserve condition for a paid inequality.  They do not prove
 that arbitrary opponent changes satisfy that condition, and hence are not a
 closure of the opponent-changing frontier branch.
@@ -353,6 +353,37 @@ theorem quittingTerminalSemanticDebt_prefix_eq_capDefect_add_continueMass_mul
   dsimp only
   rw [hquit, hcontinue]
   linarith
+
+/-- At a global minimum of total semantic debt, every root pays for its
+absorption mass through total cap Nash defect. -/
+theorem minimumTerminalSemantic_absorption_mul_debtSum_le_capDefect
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum pair ≤
+        quittingTerminalSemanticDebtSum candidate) :
+    quittingRootAbsorptionMass root *
+        quittingTerminalSemanticDebtSum pair ≤
+      quittingRootTotalNashDefect reward pair.2 root := by
+  let prefixed := quittingTerminalSemanticPrefix reward root pair
+  have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
+    quittingTerminalSemanticPrefix_mem_carrier reward root pair hpair
+  have hminPrefix : quittingTerminalSemanticDebtSum pair ≤
+      quittingTerminalSemanticDebtSum prefixed :=
+    hminimum prefixed hprefixed
+  have hsum : quittingTerminalSemanticDebtSum prefixed =
+      quittingRootTotalNashDefect reward pair.2 root +
+        quittingStationaryContinueMass root *
+          quittingTerminalSemanticDebtSum pair := by
+    dsimp only [prefixed]
+    unfold quittingTerminalSemanticDebtSum quittingRootTotalNashDefect
+    simp_rw [quittingTerminalSemanticDebt_prefix_eq_capDefect_add_continueMass_mul
+      reward pair root]
+    rw [Finset.sum_add_distrib, Finset.mul_sum]
+  unfold quittingRootAbsorptionMass
+  rw [hsum] at hminPrefix
+  nlinarith
 
 /-- **Maximal one-step transport/prefix account.**  Relative to an arbitrary
 source semantic state, a changed root and changed tail pay through prescribed
