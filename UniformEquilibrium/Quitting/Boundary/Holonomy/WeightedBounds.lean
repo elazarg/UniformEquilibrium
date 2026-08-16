@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Basic
 import UniformEquilibrium.Quitting.Boundary.Exceptional.BellmanTail
-import Math.PMFProduct.CoalitionMass
+import MathUE.PMFProduct.CoalitionMass
 
 /-!
 # Weighted boundary defects of actual finite quitting blocks

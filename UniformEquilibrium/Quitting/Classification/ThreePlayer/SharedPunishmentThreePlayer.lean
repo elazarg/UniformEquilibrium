@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Punishment.SharedPunishment
 import MathUE.CyclicExposure
-import Math.PMFProduct.Bool
+import MathUE.PMFProduct.Bool
 
 /-!
 # A sharp three-player obstruction for shared quitting punishment

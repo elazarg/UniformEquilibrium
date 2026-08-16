@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import GameTheory.Concepts.Stochastic.Strategy.Potential.Adaptive
-import Math.OutcomeClosure
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive
+import MathUE.OutcomeClosure
 
 /-!
 # Deviation-safe finite public-coin selection

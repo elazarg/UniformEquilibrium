@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Projective.AnalyticFirstEvent
 import UniformEquilibrium.Quitting.Projective.SingletonLCP
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
-import Math.PMFProduct.CoalitionMass
+import MathUE.PMFProduct.CoalitionMass
 
 /-!
 # Analytic construction of the projective singleton packet

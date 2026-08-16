@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.Probability.AnalyticOccupationFlow
 import MathUE.Probability.ChargedOccupationAlternative
-import Math.ProbabilityMassFunction
+import MathUE.ProbabilityMassFunction
 
 /-!
 # Realization of analytic occupation flows

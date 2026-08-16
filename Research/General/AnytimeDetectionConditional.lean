@@ -44,8 +44,8 @@ below discharges the rest of Q38 Part B's impossibility shape.
   hypothesis, discharged nowhere in this file.
 * No game or kernel model is instantiated: `Ω` is an abstract measurable
   space. The intended instantiation is the repo's
-  `GameTheory.Concepts.Stochastic.Core.Probability.InfinitePlayMeasure` play space, which is
-  not imported or referenced here.
+  `UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayMeasure`
+  play space, which is not imported or referenced here.
 * Finite-horizon quantitative versions (explicit KL/Pinsker rate bounds) are
   not attempted here; they live in the companion probes `ProductKLBudget` and
   `FinitePinskerBH` (where present).

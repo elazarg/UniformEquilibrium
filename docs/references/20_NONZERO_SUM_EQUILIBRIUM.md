@@ -671,7 +671,7 @@ Left `open`.
 witnessed by punishing the quitting player down to her **min-max value `χⁱ`**
 of the full stochastic game — an `inf sup` over *all* strategies of the
 opponents, not merely quitting-game solo-quit rewards `r_i({i})`. No file
-under `GameTheory/Concepts/Stochastic/` computes or represents a min-max /
+under `UniformEquilibrium/ProofView/Concepts/Stochastic/` computes or represents a min-max /
 punishment-level quantity for quitting games (checked: no `Instant`,
 `MinMax`, or "min-max value" construction exists there). The three-branch
 disjunction's vocabulary (solo rewards, cyclic products, isolation) simply
@@ -798,7 +798,7 @@ framing than the frontier's former "endogenous jointly controlled lotteries"
 portfolio item, but it is not a theorem that robust public randomness alone
 closes the gap.
 
-**Repo status.** `—` for both theorems. `GameTheory/Concepts/Correlation/` and
+**Repo status.** `—` for both theorems. `UniformEquilibrium/ProofView/Concepts/Correlation/` and
 `Repeated/MonitoringPublicRandomization.lean` exist but do not carry these.
 
 ---

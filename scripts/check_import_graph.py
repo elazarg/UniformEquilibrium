@@ -299,13 +299,15 @@ def check_import_graph(
                     "dependency behind a production interface or move this file "
                     "to Experiments"
                 )
-            if _is_prefixed(module, "MathUE") and _is_prefixed(
-                item.module, "GameTheory"
+            if (
+                _is_prefixed(module, "MathUE")
+                and _is_prefixed(item.module, "GameTheory")
+                and not _is_prefixed(item.module, "GameTheory.Math")
             ):
                 failures.append(
                     f"{modules[module]}:{item.line}: MathUE module {module} imports "
                     f"game-semantic module {item.module}; use project-owned "
-                    "MathUE mathematics or the legacy generic Math.* interface"
+                    "MathUE mathematics or GameTheory.Math generic interfaces"
                 )
 
             for rule in IMPORT_BOUNDARY_RULES:

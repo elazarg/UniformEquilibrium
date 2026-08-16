@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.LinearAlgebra.FourierMotzkin
+import MathUE.LinearAlgebra.FourierMotzkin
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.InnerProductSpace.Projection.Minimal

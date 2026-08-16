@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
-import GameTheory.Concepts.Stochastic.Models.Quitting.SimpleBranches
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!

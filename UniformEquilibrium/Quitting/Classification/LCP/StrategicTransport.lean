@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
-import GameTheory.Concepts.Stochastic.Models.Quitting.Asymptotic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Asymptotic
 
 /-!
 # Strategic transport across playerwise solo normalization

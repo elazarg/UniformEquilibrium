@@ -1,0 +1,288 @@
+/-
+Copyright (c) 2026 UniformEquilibrium contributors. All rights reserved.
+Released under the MIT license as described in the file LICENSE.
+Authors: UniformEquilibrium contributors
+-/
+
+import UniformEquilibrium.ProofView.Native.History
+
+/-!
+# Exact execution semantics for the native bridge
+
+The compiled law below is a proof view of GameTheory's sole Protocol runner:
+it unfolds one ordinary simultaneous-action draw and one native transition,
+then recurses under the translated continuation profile. The main theorem
+identifies this recursion exactly with GameTheory's public-history law.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open _root_.Math.Probability
+open GameTheory.Math.Probability
+open GameTheory.Protocol
+
+namespace StochasticGame.NativeBridge
+
+variable {ι : Type} (G : StochasticGame ι) [Fintype ι]
+  [Finite G.State] [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)]
+
+/-- The native public-history law written in the indexed PMF proof view's
+one-stage continuation coordinates. -/
+def compiledPublicHistoryLaw (profile : G.BehaviorProfile) :
+    (initial : G.State) → (horizon : ℕ) → FinDist G.toNative.PublicHistory
+  | _, 0 => FinDist.pure []
+  | initial, horizon + 1 =>
+      (FinDist.pi fun i => finDistOfPMF
+        (profile i 0 (G.emptyHist initial))).bind fun actions =>
+        (G.toNative.transition initial actions).bindOnSupport fun target _ =>
+          FinDist.map
+            (fun continuation => continuation ++
+              [{ source := initial, joint := actions, target := target }])
+            (compiledPublicHistoryLaw
+              (G.shiftProfile profile (initial, actions)) target horizon)
+
+omit [∀ i, Nonempty (G.Act i)] in
+@[simp]
+theorem compiledPublicHistoryLaw_zero (profile : G.BehaviorProfile)
+    (initial : G.State) :
+    compiledPublicHistoryLaw G profile initial 0 = FinDist.pure [] :=
+  rfl
+
+omit [∀ i, Nonempty (G.Act i)] in
+theorem compiledPublicHistoryLaw_succ (profile : G.BehaviorProfile)
+    (initial : G.State) (horizon : ℕ) :
+    compiledPublicHistoryLaw G profile initial (horizon + 1) =
+      (FinDist.pi fun i => finDistOfPMF
+        (profile i 0 (G.emptyHist initial))).bind fun actions =>
+        (G.toNative.transition initial actions).bindOnSupport fun target _ =>
+          FinDist.map
+            (fun continuation => continuation ++
+              [{ source := initial, joint := actions, target := target }])
+            (compiledPublicHistoryLaw G
+              (G.shiftProfile profile (initial, actions)) target horizon) :=
+  rfl
+
+/-- GameTheory's canonical Protocol execution has exactly the compiled
+proof-view public-history law. -/
+theorem native_publicHistoryLaw_eq_compiled
+    (profile : G.BehaviorProfile) (initial : G.State) :
+    ∀ horizon,
+      G.toNative.publicHistoryLaw initial
+          (toNativeBehaviorProfile G initial profile) horizon =
+        compiledPublicHistoryLaw G profile initial horizon := by
+  intro horizon
+  induction horizon generalizing profile initial with
+  | zero =>
+      change G.toNative.restartHistoryLaw
+          (toNativeBehaviorProfile G initial profile) [] initial 0 = _
+      rw [Stochastic.Game.restartHistoryLaw_zero]
+      rfl
+  | succ horizon ih =>
+      let publicProfile := toNativePublicProfile G initial profile
+      have hstep := G.toNative.restartHistoryLaw_succ_toPublicProfile
+        publicProfile [] initial horizon
+      change G.toNative.publicHistoryLaw initial
+          (G.toNative.toBehaviorProfile initial publicProfile) (horizon + 1) = _
+      rw [← show G.toNative.restartHistoryLaw
+          (G.toNative.toBehaviorProfile initial publicProfile) [] initial
+            (horizon + 1) =
+          G.toNative.publicHistoryLaw initial
+            (G.toNative.toBehaviorProfile initial publicProfile)
+              (horizon + 1) by
+        simp [Stochastic.Game.restartHistoryLaw]]
+      rw [hstep, compiledPublicHistoryLaw_succ]
+      apply FinDist.bind_congr
+      intro actions _
+      apply FinDist.bindOnSupport_congr
+      intro target realized
+      let record : G.toNative.StageRecord :=
+        { source := initial, joint := actions, target := target }
+      have hpublic :
+          Stochastic.Game.PublicProfile.after publicProfile [record] =
+            toNativePublicProfile G target
+              (G.shiftProfile profile (initial, actions)) :=
+        toNativePublicProfile_after_record G initial profile record
+      have hbehavior :
+          G.toNative.afterPublicHistory
+              (G.toNative.toBehaviorProfile initial publicProfile) [record] =
+            G.toNative.toBehaviorProfile target
+              (toNativePublicProfile G target
+                (G.shiftProfile profile (initial, actions))) := by
+        rw [← G.toNative.toBehaviorProfile_after publicProfile [record],
+          hpublic]
+      unfold Stochastic.Game.restartHistoryLaw
+      rw [hbehavior]
+      apply congrArg (FinDist.map
+        (fun continuation => continuation ++ [record]))
+      simpa only [toNativeBehaviorProfile] using
+        ih (G.shiftProfile profile (initial, actions)) target
+
+/-- Total proof-view payoff read from a native public history. -/
+def publicHistoryTotalPayoff (history : G.toNative.PublicHistory)
+    (who : ι) : ℝ :=
+  (history.map fun record =>
+    G.stagePayoff record.source record.joint who).sum
+
+omit [Fintype ι] [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)] in
+@[simp]
+theorem publicHistoryTotalPayoff_nil (who : ι) :
+    publicHistoryTotalPayoff G [] who = 0 :=
+  rfl
+
+omit [Fintype ι] [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)] in
+@[simp]
+theorem publicHistoryTotalPayoff_append_singleton
+    (history : G.toNative.PublicHistory) (record : G.toNative.StageRecord)
+    (who : ι) :
+    publicHistoryTotalPayoff G (history ++ [record]) who =
+      publicHistoryTotalPayoff G history who +
+        G.stagePayoff record.source record.joint who := by
+  simp [publicHistoryTotalPayoff]
+
+omit [∀ i, Nonempty (G.Act i)] in
+/-- The compiled native law and the indexed PMF law have identical expected
+total payoffs at every horizon. -/
+theorem expect_compiledPublicHistoryLaw_totalPayoff_eq
+    (profile : G.BehaviorProfile) (initial : G.State) (who : ι) :
+    ∀ horizon,
+      FinDist.expect (compiledPublicHistoryLaw G profile initial horizon)
+          (fun history => publicHistoryTotalPayoff G history who) =
+        _root_.Math.Probability.expect (G.histDist profile initial horizon)
+          (fun history => G.totalPayoff who history) := by
+  intro horizon
+  induction horizon generalizing profile initial with
+  | zero =>
+      simp [compiledPublicHistoryLaw, G.histDist_zero,
+        publicHistoryTotalPayoff]
+  | succ horizon ih =>
+      rw [compiledPublicHistoryLaw_succ]
+      simp only [FinDist.bindOnSupport_eq_bind]
+      rw [FinDist.expect_bind]
+      simp only [FinDist.expect_bind, FinDist.expect_map,
+        publicHistoryTotalPayoff_append_singleton]
+      rw [G.histDist_succ_shift profile initial horizon]
+      rw [_root_.Math.Probability.expect_bind]
+      change _root_.Math.Probability.expect
+          (G.stageActionDist profile (G.emptyHist initial)) _ =
+        _root_.Math.Probability.expect
+          (G.stageActionDist profile (G.emptyHist initial)) _
+      apply congrArg (_root_.Math.Probability.expect
+        (G.stageActionDist profile (G.emptyHist initial)))
+      funext actions
+      rw [_root_.Math.Probability.expect_bind]
+      change _root_.Math.Probability.expect (G.transition initial actions) _ =
+        _root_.Math.Probability.expect (G.transition initial actions) _
+      apply congrArg (_root_.Math.Probability.expect
+        (G.transition initial actions))
+      funext target
+      rw [_root_.Math.Probability.expect_map]
+      simp_rw [G.totalPayoff_consHist]
+      rw [FinDist.expect_add, FinDist.expect_const, ih,
+        _root_.Math.Probability.expect_add,
+        _root_.Math.Probability.expect_const]
+      ac_rfl
+
+/-- Finite-average payoff is preserved exactly by compilation to
+GameTheory's canonical behavioral runner. -/
+theorem native_finiteAveragePayoff_eq
+    (profile : G.BehaviorProfile) (initial : G.State)
+    (horizon : ℕ) (who : ι) :
+    G.toNative.finiteAveragePayoff initial horizon
+        (toNativeBehaviorProfile G initial profile) who =
+      G.finiteAveragePayoff initial horizon profile who := by
+  rw [← G.toNative.publicFiniteAveragePayoff_eq_finiteAveragePayoff]
+  unfold Stochastic.Game.publicFiniteAveragePayoff expectedUtility
+  rw [native_publicHistoryLaw_eq_compiled]
+  change FinDist.expect (compiledPublicHistoryLaw G profile initial horizon)
+      (fun history => (horizon : ℝ)⁻¹ *
+        publicHistoryTotalPayoff G history who) = _
+  have hcommute :
+      (fun history : G.toNative.PublicHistory =>
+          (horizon : ℝ)⁻¹ * publicHistoryTotalPayoff G history who) =
+        fun history =>
+          publicHistoryTotalPayoff G history who * (horizon : ℝ)⁻¹ := by
+    funext history
+    ring
+  rw [hcommute, FinDist.expect_mul_const,
+    expect_compiledPublicHistoryLaw_totalPayoff_eq]
+  unfold StochasticGame.finiteAveragePayoff
+  ring
+
+/-- Coherent-history agreement with a proof-view profile is enough for exact
+agreement of the canonical Protocol laws. -/
+theorem native_runBehavioral_eq_of_coherent
+    (initial : G.State) (proofProfile : G.BehaviorProfile)
+    (nativeProfile : G.toNative.PublicProfile initial)
+    (horizon : ℕ)
+    (hagree : ∀ i history, IsCoherentPublicHistory G initial history →
+      toNativePublicProfile G initial proofProfile i history =
+        nativeProfile i history) :
+    (G.toNative.perfectMonitoring initial).runBehavioral
+        (toNativeBehaviorProfile G initial proofProfile) horizon =
+      (G.toNative.perfectMonitoring initial).runBehavioral
+        (G.toNative.toBehaviorProfile initial nativeProfile) horizon := by
+  unfold InformationModel.runBehavioral
+  apply InformationModel.runBehavioralFrom_congr
+  intro history _ _ i
+  rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace]
+  unfold toNativeBehaviorProfile Stochastic.Game.toBehaviorProfile
+    Stochastic.Game.toBehavioralPolicy
+  apply congrArg (FinDist.map
+    (G.toNative.actionChoiceEquiv initial i
+      (G.toNative.publicHistoryOfTrace initial history.trace)))
+  exact hagree i _
+    (isCoherentPublicHistory_publicHistoryOfTrace G initial history.trace)
+
+/-- A native public profile and its proof-view round trip induce the same
+canonical Protocol history law. -/
+theorem native_runBehavioral_roundtrip
+    (initial : G.State) (profile : G.toNative.PublicProfile initial)
+    (horizon : ℕ) :
+    (G.toNative.perfectMonitoring initial).runBehavioral
+        (toNativeBehaviorProfile G initial
+          (ofNativePublicProfile G initial profile)) horizon =
+      (G.toNative.perfectMonitoring initial).runBehavioral
+        (G.toNative.toBehaviorProfile initial profile) horizon := by
+  apply native_runBehavioral_eq_of_coherent
+  exact fun i history hcoherent =>
+    toNativePublicProfile_ofNativePublicProfile_of_coherent
+      G initial profile i history hcoherent
+
+/-- A native public profile and a proof-view profile that agree on coherent
+histories have exactly the same finite-average payoff. -/
+theorem native_finiteAveragePayoff_eq_of_coherent
+    (initial : G.State) (proofProfile : G.BehaviorProfile)
+    (nativeProfile : G.toNative.PublicProfile initial)
+    (hagree : ∀ i history, IsCoherentPublicHistory G initial history →
+      toNativePublicProfile G initial proofProfile i history =
+        nativeProfile i history)
+    (horizon : ℕ) (who : ι) :
+    G.toNative.finiteAveragePayoff initial horizon
+        (G.toNative.toBehaviorProfile initial nativeProfile) who =
+      G.finiteAveragePayoff initial horizon proofProfile who := by
+  rw [← native_finiteAveragePayoff_eq G proofProfile initial horizon who]
+  unfold Stochastic.Game.finiteAveragePayoff
+  rw [G.toNative.horizonForm_play, G.toNative.horizonForm_play]
+  rw [native_runBehavioral_eq_of_coherent G initial proofProfile
+    nativeProfile horizon hagree]
+
+/-- Every native public profile has exactly the finite-average payoff of its
+decoded PMF proof-view profile. -/
+theorem native_finiteAveragePayoff_eq_of_publicProfile
+    (initial : G.State) (profile : G.toNative.PublicProfile initial)
+    (horizon : ℕ) (who : ι) :
+    G.toNative.finiteAveragePayoff initial horizon
+        (G.toNative.toBehaviorProfile initial profile) who =
+      G.finiteAveragePayoff initial horizon
+        (ofNativePublicProfile G initial profile) who := by
+  rw [← native_finiteAveragePayoff_eq G
+    (ofNativePublicProfile G initial profile) initial horizon who]
+  unfold Stochastic.Game.finiteAveragePayoff
+  rw [G.toNative.horizonForm_play, G.toNative.horizonForm_play]
+  rw [native_runBehavioral_roundtrip]
+
+end StochasticGame.NativeBridge
+
+end GameTheory

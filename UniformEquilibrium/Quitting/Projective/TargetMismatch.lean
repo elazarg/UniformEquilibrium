@@ -10,7 +10,7 @@ import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 import UniformEquilibrium.Quitting.Stationary.MinMax
 import UniformEquilibrium.VanishingDiscount.Analytic.Accounting.AnalyticBellmanHierarchy
-import Math.PMFProduct.Bool
+import MathUE.PMFProduct.Bool
 
 /-!
 # A projective packet whose analytic endpoint is not a uniform target

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Probability.MovingEndpointOccupationEvidence
-import Math.PMFIter
+import MathUE.PMFIter
 import MathUE.Probability.ChargedClassSupportRank
 import MathUE.Probability.IntegratedResponseLedger
 

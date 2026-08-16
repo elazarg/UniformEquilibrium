@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.ProbabilityMassFunction
-import Math.PMFIter
+import MathUE.ProbabilityMassFunction
+import MathUE.PMFIter
 
 /-!
 # Finite controlled stopping envelopes

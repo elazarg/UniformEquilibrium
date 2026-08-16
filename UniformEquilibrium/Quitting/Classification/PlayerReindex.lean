@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.PMFProduct
-import GameTheory.Concepts.Stochastic.Models.Quitting.Game
+import MathUE.PMFProduct
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Game
 import UniformEquilibrium.Quitting.Classification.TwoPlayer.Existence
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.Existence
 

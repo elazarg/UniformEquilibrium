@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Paths.OpponentLiveMass
-import Math.PMFProduct.Update
+import MathUE.PMFProduct.Update
 
 /-!
 # The one-stage mass of an opponent quitting

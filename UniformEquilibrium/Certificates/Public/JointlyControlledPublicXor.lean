@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Probability.Distributions.Uniform
-import GameTheory.Concepts.Stochastic.Core.Basic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Basic
 
 /-!
 # A jointly controlled one-stage public XOR coin

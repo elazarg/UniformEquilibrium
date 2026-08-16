@@ -5,8 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Architectures.PublicResponse.CredibilityCriterion
-import GameTheory.Concepts.Stochastic.Core.StageGame
-import GameTheory.Concepts.Welfare.FolkTheorem.Feasible
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.StageGame
+import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
 
 /-!
 # Regression examples separating architecture caps from static tests

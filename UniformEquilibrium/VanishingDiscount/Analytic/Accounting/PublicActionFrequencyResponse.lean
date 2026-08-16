@@ -189,7 +189,7 @@ theorem finkStageGain_le_two_mul_one_sub_actionMass
         profile owner (profile owner)
     simpa [profile, purePayoff, mixedStageEU, stageGame,
       KernelGame.mixedExtension, KernelGame.eu,
-      KernelGame.ofPureEU, GameForm.mixedExtension] using hupdate
+      KernelGame.ofPureEU, PMFGameForm.mixedExtension] using hupdate
   rw [finkStageGain]
   change purePayoff selected -
       G.mixedStageEU s profile owner ≤ _

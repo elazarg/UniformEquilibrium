@@ -17,7 +17,7 @@ Markers: see [README](README.md). Evidence from the 2026-08-02 research pass.
 > value** if both players can uniformly guarantee it.
 
 This is the zero-sum shadow of our `HasUniformDeviationCapConstructor`
-(`GameTheory/Concepts/Stochastic/Equilibrium/Uniform.lean:169`): one strategy per accuracy,
+(`UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform.lean:169`): one strategy per accuracy,
 one horizon threshold, and the guarantee holds at **every** horizon past it.
 Note the quantifier order — the threshold may depend on `ε` but not on the
 opponent. Getting this order wrong is the standard way to accidentally prove
@@ -322,7 +322,7 @@ player 2's action has maxmin `0` (Kohlberg 1974) versus value `1/2` under
 perfect monitoring, hence minmax `1` by symmetry and **no uniform value**.
 
 **Repo status.** `—` for the theorem. The repo's monitoring machinery
-(`GameTheory/Concepts/Repeated/Monitoring*.lean`, 12 files) is about
+(`UniformEquilibrium/ProofView/Concepts/Repeated/Monitoring*.lean`, 12 files) is about
 non-zero-sum repeated-game folk-theorem monitoring, a different subject.
 
 ---

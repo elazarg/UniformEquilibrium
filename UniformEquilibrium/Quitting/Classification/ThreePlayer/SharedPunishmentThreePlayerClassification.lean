@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.SharedPunishmentThreePlayerExtremal
 import MathUE.CyclicExposure
-import Math.ProbabilityMassFunction.Simplex
+import MathUE.ProbabilityMassFunction.Simplex
 
 /-!
 # Classification of optimal shared punishments for the cyclic three-player table

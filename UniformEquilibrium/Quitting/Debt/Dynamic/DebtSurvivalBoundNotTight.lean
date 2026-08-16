@@ -6,10 +6,10 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtOptimizer
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
-import GameTheory.Concepts.Stochastic.Models.Quitting.SimpleBranches
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtAugmentedEdge
-import Math.PMFProduct.Bool
+import MathUE.PMFProduct.Bool
 
 /-!
 # The survival-times-terminal dynamic-debt bound is not tight

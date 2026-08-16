@@ -1,4 +1,4 @@
-import Math.MultivariateElimination
+import MathUE.MultivariateElimination
 import Mathlib.Order.Filter.FilterProduct
 import Mathlib.Order.Filter.Ultrafilter.Basic
 import Mathlib.RingTheory.NoetherNormalization

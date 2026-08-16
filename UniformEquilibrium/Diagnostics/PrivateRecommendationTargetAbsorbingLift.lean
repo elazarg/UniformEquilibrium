@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.PrivateRecommendationTargetSeparator
-import GameTheory.Concepts.Stochastic.Classes.Absorbing
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 
 /-!
 # Diagnostic one-decision absorbing lift of the private-recommendation separator

@@ -46,7 +46,7 @@ without producing a witness.
 | Truncated-ledger boundary | `UniformEquilibrium/Quitting/Debt/Ledger/TruncatedLedgerCapBoundary.lean` | The sound package compiler interface together with one- and two-player counterexamples to treating it as a universal normal form. |
 | Face circulations | `UniformEquilibrium/Quitting/Circulation/FaceCirculationAll.lean` | Certificate/orbit production, finite charged closing, the compatible compact-path route, concrete payoff examples, and boundary analyses. Use `UniformEquilibrium/Quitting/Circulation/MultiOwnerFaceCirculationFiniteClosing.lean` for the finite compiler. |
 | Boundary holonomy | `UniformEquilibrium/Quitting/Boundary/Holonomy/All.lean` | Source-retaining fixed-cutoff compactness together with residual, self-similar, tangent, and realized-coordinate analysis. |
-| Reward closure | `GameTheory/GameTheory/Concepts/Stochastic/Models/Quitting/UniformPayoffExistenceClosure.lean` | Fixed-skeleton quitting-game existence under uniform reward limits and dense solved approximants. |
+| Reward closure | `UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/UniformPayoffExistenceClosure.lean` | Fixed-skeleton quitting-game existence under uniform reward limits and dense solved approximants. |
 | General nonexistence certificates | `UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean` | A uniform positive exploitability gap at arbitrarily late finite horizons rules out every uniform-equilibrium payoff. |
 | Quitting terminal exploitability | `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean` | Terminal gaps and the equivalence between finite-quitting nonexistence and some fixed positive terminal gap. |
 | Quitting counterexample localization | `UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FiveWayLocalization.lean` | Nonexistence produces one counterexample regime, an exhaustive stopping-law frontier for that regime, and its five-way localization. No converse is claimed from the branch data. Singleton compression is an ambient handoff, not a source-matched chronology. |
@@ -59,12 +59,15 @@ not external compatibility promises or a ban on precise dependencies.
 
 ## Semantic waist and terminal bridge
 
-`GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform.lean` owns
-`StochasticGame.IsUniformEquilibriumPayoff` and
-`HasUniformDeviationCapConstructor`.  Their exact equivalence is the
-construction waist: a candidate mechanism is complete only after it supplies
-the uniform finite-horizon delivery and unilateral-deviation bounds encoded by
-that constructor.
+`GameTheory/GameTheory/Stochastic/Uniform.lean` owns the canonical
+`Stochastic.Game.IsUniformEquilibriumPayoff` and its deviation-cap constructor.
+`UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform.lean`
+owns the project proof view, and
+`UniformEquilibrium/ProofView/Native/Equilibrium.lean` proves their exact
+finite-horizon Nash and uniform-payoff equivalence for finite states and
+actions. A candidate mechanism is complete only after it supplies the uniform
+finite-horizon delivery and unilateral-deviation bounds encoded by that
+semantic waist.
 
 For finite quitting games, a producer that already names its payoff target
 should retain that target through the terminal-to-uniform bridge.
@@ -130,15 +133,15 @@ a game or strategy producer.
 
 ## Closure and transfer
 
-- `GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform/AsymptoticPayoffEquivalence.lean` transfers an exact target across
+- `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform/AsymptoticPayoffEquivalence.lean` transfers an exact target across
   profile-uniform finite-average payoff gaps tending to zero.
-- `GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform/ExpectedPotentialShaping.lean` applies that transfer to bounded
+- `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform/ExpectedPotentialShaping.lean` applies that transfer to bounded
   expected-potential coboundaries with an `O(1/T)` endpoint telescope.
-- `GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform/PayoffExistenceClosure.lean` proves target-free existence closure
+- `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform/PayoffExistenceClosure.lean` proves target-free existence closure
   under uniform stage-payoff limits on a fixed finite skeleton.
-- `GameTheory/GameTheory/Concepts/Stochastic/Models/Quitting/UniformPayoffExistenceClosure.lean` specializes the closure theorem
+- `UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/UniformPayoffExistenceClosure.lean` specializes the closure theorem
   to uniformly convergent quitting reward tables.
-- `GameTheory/GameTheory/Concepts/Stochastic/Models/Quitting/RootPerturbation.lean` gives local one-coordinate payoff and regret
+- `UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/RootPerturbation.lean` gives local one-coordinate payoff and regret
   bounds; it should not be confused with target-free closure.
 
 These tools transport a supplied mechanism or existence result.  They do not

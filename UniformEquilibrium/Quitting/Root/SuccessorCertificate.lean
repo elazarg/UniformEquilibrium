@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Stationary.Payoff
-import GameTheory.Concepts.Stochastic.Models.Quitting.SimpleBranches
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 
 /-!
 # Finite successor certificates for quitting-game roots

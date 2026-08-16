@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Cycles.CyclicWeightRowDichotomy
-import Math.PMFProduct.CoalitionMass
+import MathUE.PMFProduct.CoalitionMass
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.ZMod.Basic
 

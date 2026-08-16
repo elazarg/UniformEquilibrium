@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Certificates.Public.StoppedHistoryAccounting
-import Math.PMFProduct.Update
+import MathUE.PMFProduct.Update
 import MathUE.Probability.FiniteControlledStoppingEnvelope
 
 /-!

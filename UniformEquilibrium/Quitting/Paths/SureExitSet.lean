@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
 import UniformEquilibrium.Quitting.Stationary.BestResponse
-import GameTheory.Concepts.Stochastic.Models.Quitting.SimpleBranches
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetRepairCounterexample
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection

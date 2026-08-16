@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.LinearAlgebra.ConeSeparation
-import Math.Probability
+import MathUE.Probability
 
 /-!
 # Actual occupation flows and their separating potentials

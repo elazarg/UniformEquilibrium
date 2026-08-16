@@ -10,7 +10,7 @@ import Mathlib.Tactic
 /-!
 # The canonical telescoping survival product
 
-A census of `GameTheory.Concepts.Stochastic` found the finite product of a
+A census of `UniformEquilibrium.ProofView.Concepts.Stochastic` found the finite product of a
 per-stage "continue mass" over a window reinvented under (at least) four
 names: `quittingFiniteContinueWeight` (a recursion, closed by a separate
 theorem), `blockSurvival` (a direct product, entangled with one file's own

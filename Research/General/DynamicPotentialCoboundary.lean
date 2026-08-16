@@ -1,4 +1,4 @@
-import GameTheory.Concepts.Stochastic.Equilibrium.Discounted
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 
 /-!
 # Dynamic common interest modulo a coboundary

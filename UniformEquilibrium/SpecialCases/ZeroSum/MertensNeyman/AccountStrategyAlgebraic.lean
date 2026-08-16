@@ -5,8 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.SpecialCases.ZeroSum.MertensNeyman.AccountStrategyPuiseux
-import GameTheory.Concepts.Stochastic.ZeroSum.DiscountedShapleyAlgebraic
-import GameTheory.Concepts.Stochastic.Transform.Payoff.AffinePayoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.ZeroSum.DiscountedShapleyAlgebraic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Payoff.AffinePayoff
 import MathUE.AlgebraicSelection
 import MathUE.WeierstrassCurve
 

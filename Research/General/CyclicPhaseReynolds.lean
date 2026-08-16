@@ -1,4 +1,4 @@
-import GameTheory.Concepts.Welfare.FolkTheorem.Periodic
+import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Periodic
 
 /-!
 # Cyclic Reynolds decomposition

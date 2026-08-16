@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Architectures.PublicResponse.ExplicitDomainGainBiasVerifier
-import Math.MeanErgodic
+import MathUE.MeanErgodic
 
 /-!
 # Split-domain gain--bias verification

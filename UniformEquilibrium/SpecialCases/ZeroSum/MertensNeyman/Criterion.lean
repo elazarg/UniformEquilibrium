@@ -3,10 +3,10 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
-import GameTheory.Concepts.Stochastic.Strategy.Potential.Adaptive
-import GameTheory.Concepts.Stochastic.Equilibrium.Discounted.Fink
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
 import UniformEquilibrium.VanishingDiscount.Fink.Schedule
-import GameTheory.Concepts.Stochastic.ZeroSum.Basic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.ZeroSum.Basic
 import Mathlib.Topology.EMetricSpace.BoundedVariation
 
 /-!

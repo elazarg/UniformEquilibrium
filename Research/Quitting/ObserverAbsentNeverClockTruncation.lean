@@ -169,11 +169,13 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverCl
     dsimp only [refusalCharge] at hrefusal hdeviation
     exact (sub_le_sub_right hrefusal δ).trans hdeviation
 
+namespace QuittingStoppingLawVanishingDebtRectangleSequence
+
 /-- **Never-clock endpoint-flip frontier.**  After finite truncation, the
 complete Never clock has exactly the same four strategic outputs as a finite
 clock.  The constants lose only the factor two used to capture a finite
 prefix of the terminal mass. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverClock_certifiedEndpointFlip
+theorem observerAbsent_neverClock_certifiedEndpointFlip
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -286,7 +288,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverCl
 branches have one common statement.  Every packet index has a finite
 certificate with the Never-clock constants; no residual alternative refers
 to the stopping time being infinite. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_anyClock_certifiedEndpointFlip
+theorem observerAbsent_anyClock_certifiedEndpointFlip
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -385,5 +387,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_anyCloc
           exact ⟨haction, coalition, hcoalition, hlabelLower.trans hgain⟩
         · refine ⟨stop, who, action, hwho, Or.inr (Or.inr ?_)⟩
           exact hlabelLower.trans hloss
+
+end QuittingStoppingLawVanishingDebtRectangleSequence
 
 end GameTheory

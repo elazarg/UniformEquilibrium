@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.OutcomeClosure
-import Math.Probability
+import MathUE.OutcomeClosure
+import MathUE.Probability
 
 /-!
 # Distributional target transport for outcome-closure value processes

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.OnlineLearning.MultiplicativeWeights
+import MathUE.OnlineLearning.MultiplicativeWeights
 import Mathlib.Analysis.Real.Sqrt
 
 /-!

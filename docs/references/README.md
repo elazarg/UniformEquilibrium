@@ -44,7 +44,7 @@ in the citation**, not about the quality of the result.
 
 Where a claim was checked and found wrong, it is recorded under a `REFUTED`
 heading rather than deleted. Same discipline as the no-go files in
-`GameTheory/Concepts/Stochastic/`: a killed claim is a permanent result.
+`UniformEquilibrium/ProofView/Concepts/Stochastic/`: a killed claim is a permanent result.
 
 ## Dated repository-status markers
 

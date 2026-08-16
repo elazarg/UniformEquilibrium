@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import GameTheory.Languages.MultiRound.StochasticGame
+import UniformEquilibrium.ProofView.Languages.MultiRound.StochasticGame
 
 /-!
 # Goal-generic well-founded local-response recursion

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ChargedPathBudget
-import Math.PMFProduct.CoalitionMass
+import MathUE.PMFProduct.CoalitionMass
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Topology.Order.Compact

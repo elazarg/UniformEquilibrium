@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.ProbabilityMassFunction
+import MathUE.ProbabilityMassFunction
 import Mathlib.Probability.Distributions.Uniform
 
 /-!

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Probability.MovingKernelEpochPotentialAccount
-import Math.ProbabilityMassFunction
+import MathUE.ProbabilityMassFunction
 
 /-!
 # Support-sensitive potential accounts for moving kernels

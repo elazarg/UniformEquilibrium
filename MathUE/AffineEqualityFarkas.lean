@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.LinearAlgebra.FourierMotzkin
+import MathUE.LinearAlgebra.FourierMotzkin
 
 /-!
 # Affine equalities plus inequalities: the resolved Farkas alternative

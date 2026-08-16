@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticForcedOwnerWallRectangleCurvature
-import GameTheory.Concepts.Potential.MixedPotential
+import UniformEquilibrium.ProofView.Concepts.Potential.MixedPotential
 
 /-!
 # Pure-background decomposition of an owner/outsider square

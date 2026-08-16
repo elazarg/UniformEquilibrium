@@ -7,8 +7,8 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Uniform.TailWidth
 import UniformEquilibrium.Diagnostics.Uniform.TailWidthObstruction
 import UniformEquilibrium.Diagnostics.Uniform.BoundedWork
-import GameTheory.Concepts.Stochastic.Equilibrium.Uniform.AsymptoticPayoffEquivalence
-import GameTheory.Concepts.Stochastic.Equilibrium.Uniform.ExpectedPotentialShaping
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.AsymptoticPayoffEquivalence
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.ExpectedPotentialShaping
 import UniformEquilibrium.Diagnostics.Uniform.TransitionPerturbationDiscontinuity
 
 /-!

@@ -6,8 +6,8 @@ Authors: GameTheory contributors
 import UniformEquilibrium.SpecialCases.ZeroSum.MertensNeyman.Account
 import UniformEquilibrium.SpecialCases.ZeroSum.MertensNeyman.Criterion
 import UniformEquilibrium.Certificates.Adaptive.Certificate
-import GameTheory.Concepts.Stochastic.ZeroSum.DiscountedShapleyAlgebraic
-import GameTheory.Concepts.Stochastic.Transform.Payoff.AffinePayoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.ZeroSum.DiscountedShapleyAlgebraic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Payoff.AffinePayoff
 
 /-!
 # Bellman and security interfaces for the Mertens--Neyman account controller

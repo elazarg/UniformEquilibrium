@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.Probability
-import Math.ProbabilityMassFunction
+import MathUE.Probability
+import MathUE.ProbabilityMassFunction
 import MathUE.SurvivalProduct
 
 /-! # Discrete hazard stopping laws

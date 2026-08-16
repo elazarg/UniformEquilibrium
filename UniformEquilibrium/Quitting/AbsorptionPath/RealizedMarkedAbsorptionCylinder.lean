@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Basic
-import Math.PMFProduct.CoalitionMass
+import MathUE.PMFProduct.CoalitionMass
 import MathUE.SurvivalProduct
 
 /-!

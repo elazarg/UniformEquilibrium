@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
-import Math.PMFProduct.Update
+import MathUE.PMFProduct.Update
 
 /-!
 # Repair by a sure quitting set and one owner hazard

@@ -3,8 +3,8 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
-import GameTheory.Concepts.Repeated.MonitoringInstances
-import GameTheory.Concepts.Repeated.MonitoringRank
+import UniformEquilibrium.ProofView.Concepts.Repeated.MonitoringInstances
+import UniformEquilibrium.ProofView.Concepts.Repeated.MonitoringRank
 import UniformEquilibrium.VanishingDiscount.Analytic.Endpoint.BellmanRowCompiler
 
 /-!

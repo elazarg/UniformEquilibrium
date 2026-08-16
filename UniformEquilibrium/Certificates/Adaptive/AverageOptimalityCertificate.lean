@@ -381,7 +381,7 @@ adversarial completion), the one-sided-guarantee certificate genuinely needs
 action, i.e. a security (maximin) strategy of the stage game at `s`, not
 merely a best response to one particular opponent profile. Built directly
 (via `Finset.exists_max_image` on the finite type `G.Act who`) rather than
-through `GameTheory.Concepts.ZeroSum.SecurityStrategy`'s `KernelGame`
+through `UniformEquilibrium.ProofView.Concepts.ZeroSum.SecurityStrategy`'s `KernelGame`
 machinery: that machinery states its guarantee for an *arbitrary* ambient
 `[DecidableEq ι]`, resolved once inside that file (to a classical instance,
 via its `open Classical in` decorations) and hence not syntactically equal

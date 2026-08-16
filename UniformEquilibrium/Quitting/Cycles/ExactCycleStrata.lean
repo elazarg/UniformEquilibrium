@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Punishment.CompletedCycle
-import GameTheory.Concepts.Stochastic.Models.Quitting.UniformPayoffExistenceClosure
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.UniformPayoffExistenceClosure
 
 /-!
 # Exact-cycle strata of quitting reward tables

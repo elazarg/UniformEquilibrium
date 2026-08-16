@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Certificates.Public.RecurrentClassTarget
-import Math.OutcomeClosure
+import MathUE.OutcomeClosure
 import MathUE.OutcomeClosure.TerminalTarget
 
 /-!

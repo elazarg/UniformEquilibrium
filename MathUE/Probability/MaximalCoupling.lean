@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.Coupling
-import Math.ProbabilityMassFunction.TotalVariation
+import MathUE.Coupling
+import MathUE.ProbabilityMassFunction.TotalVariation
 
 /-!
 # Maximal Couplings of Finite PMFs

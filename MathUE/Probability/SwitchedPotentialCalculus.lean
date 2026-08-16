@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.Probability
+import MathUE.Probability
 import MathUE.Probability.SublinearLedger
 import Mathlib.Data.ZMod.Basic
 

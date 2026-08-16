@@ -4,6 +4,22 @@ This is the sole repository document for historical and reproducibility facts
 about the extraction of UniformEquilibrium from the GameTheory monorepo. All
 other documentation describes only the current project.
 
+## GameTheory semantic rewrite
+
+The `migration/game-theory-rewrite` branch advances the GameTheory gitlink from
+`02898a2d8b918f9b106a683420ca78c99867560e` to
+`47b1c3dc1afa9f9e3e2639aa9d94cbf1d390f892`. The `v1-final` tag remains the
+source reference for declarations absent from the rewritten library.
+
+Forty game-independent modules moved from the v1 source surface into
+`MathUE`. Seventy-three proof-facing modules moved into
+`UniformEquilibrium/ProofView`; their declarations retain the mathematical
+names used by the project. `UniformEquilibrium/ProofView/Native` supplies the
+finite-PMF, public-history, execution, payoff, unilateral-deviation, and
+uniform-payoff equivalences with GameTheory's canonical stochastic runner.
+The bridge proves an exact iff for the central uniform-equilibrium-payoff
+predicate rather than relying on source-level compatibility.
+
 ## Reproducibility boundary
 
 - Source repository revision:
@@ -58,7 +74,7 @@ One GameTheory source module was rehomed because it belongs to the UE
 diagnostic surface:
 
 ```text
-GameTheory/Concepts/Correlation/PrivateRecommendationTargetSeparator.lean
+UniformEquilibrium/ProofView/Concepts/Correlation/PrivateRecommendationTargetSeparator.lean
   -> UniformEquilibrium/Diagnostics/PrivateRecommendationTargetSeparator.lean
 ```
 

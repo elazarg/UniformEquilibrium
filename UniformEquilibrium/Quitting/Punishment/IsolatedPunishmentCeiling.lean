@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Cycles.Isolated.AnchorMaxAffine
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier
-import GameTheory.Concepts.Stochastic.Models.Quitting.PunishmentLevel
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.PunishmentLevel
 import UniformEquilibrium.Quitting.Cycles.ThreeBranchDisjunction
 
 /-!

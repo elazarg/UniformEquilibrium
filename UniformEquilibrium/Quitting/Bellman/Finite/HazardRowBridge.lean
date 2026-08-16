@@ -7,8 +7,8 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Cycles.CyclicWeightRowDichotomy
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
-import Math.PMFProduct.Bool
-import Math.PMFProduct.Update
+import MathUE.PMFProduct.Bool
+import MathUE.PMFProduct.Update
 
 /-!
 # Bridging the `PMF Bool` and real-hazard encodings of quitting-game rows

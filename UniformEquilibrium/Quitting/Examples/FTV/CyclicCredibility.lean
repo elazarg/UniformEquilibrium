@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Architectures.PublicResponse.CredibilityCriterion
 import MathUE.PMFProduct.FiniteFubini
 import MathUE.ProbabilityMassFunction.Bool
-import GameTheory.Concepts.Stochastic.Models.Quitting.Game
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Game
 
 /-!
 # The Flesch--Thuijsman--Vrieze cyclic credibility architecture

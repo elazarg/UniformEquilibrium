@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Stationary.BestResponse
 import UniformEquilibrium.Quitting.Paths.OpponentActionMass
-import GameTheory.Concepts.Stochastic.Models.Quitting.RootPerturbation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation
 import UniformEquilibrium.Quitting.Paths.NonSoloTail
 
 /-!

@@ -4,11 +4,11 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import GameTheory.Concepts.Existence.NashExistenceMixed
+import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed
 import MathUE.Topology.CompactSerialRelation
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
-import Math.ProbabilityMassFunction.Simplex
+import MathUE.ProbabilityMassFunction.Simplex
 
 /-!
 # Exact Nash--Bellman spines for finite quitting games

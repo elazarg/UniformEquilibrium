@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Analysis.Convex.StdSimplex
-import Math.Simplex
+import MathUE.Simplex
 
 /-!
 # The normalized singleton LCP

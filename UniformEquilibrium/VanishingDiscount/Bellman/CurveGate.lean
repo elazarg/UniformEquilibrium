@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.VanishingDiscount.Bellman.Germ
 import UniformEquilibrium.VanishingDiscount.Fink.Limit
 import MathUE.CoordinatewisePuiseuxCurve
-import Math.Probability
+import MathUE.Probability
 
 /-!
 # The curve-selection gate for polynomial Bellman equilibria

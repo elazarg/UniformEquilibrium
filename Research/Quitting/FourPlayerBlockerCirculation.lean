@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.SchauderFixedPoint
+import MathUE.SchauderFixedPoint
 import UniformEquilibrium.Diagnostics.Quitting.FourPlayerSingletonBlocker
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactPath
 

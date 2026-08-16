@@ -51,9 +51,9 @@ perturbations.
 
 ## Lean surface
 
-- `GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform/AsymptoticPayoffEquivalence.lean` contains the two transfer directions
+- `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform/AsymptoticPayoffEquivalence.lean` contains the two transfer directions
   and their fixed-target equivalence.
-- `GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform/ExpectedPotentialShaping.lean` proves the expectation telescope,
+- `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform/ExpectedPotentialShaping.lean` proves the expectation telescope,
   finite-average bound, and exact shaping invariance.
 - `UniformEquilibrium/Diagnostics/Uniform/TailWidth.lean` and `UniformEquilibrium/Diagnostics/Uniform/TailWidthObstruction.lean` contain the
   thin-interval characterization and its positive-width contrapositive.

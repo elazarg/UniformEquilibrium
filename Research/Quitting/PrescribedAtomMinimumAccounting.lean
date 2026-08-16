@@ -130,7 +130,8 @@ theorem terminalSemanticDebt_source_sub_update_self_eq_payoffGain
 /-- The fixed prescribed sequence yields only the preceding ledger
 dichotomy.  In the compensating branch the selected payer is allowed to be
 the reset mover. -/
-theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointExcursion_or_compensatingDecrease
+theorem
+    QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointExcursion_or_compensatingDecrease
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -232,11 +233,13 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointPassiveTra
   · simpa only [quittingTerminalSemanticDebtChange, sourcePair,
       endpointPair, endpoint, profile] using sequence.endpointDebtRise n
 
+namespace QuittingStoppingLawPrescribedAtomEndpointRiseSequence
+
 /-- If the compensating coordinate selected by the minimum ledger is the
 mover, its bound is literally just the already-known mover payoff gain.
 Otherwise the packet exposes only an unlabelled third-coordinate debt drop.
 Neither alternative retains a second reset or the prescribed atom. -/
-theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointExcursion_or_knownMoverGain_or_unlabelledThirdDecrease
+theorem endpointExcursion_or_knownMoverGain_or_unlabelledThirdDecrease
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -274,5 +277,7 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointExcursion_
       rw [terminalSemanticDebt_source_sub_update_self_eq_payoffGain] at hpayerDecrease
       exact hpayerDecrease
     · exact Or.inr ⟨payer, hpayer, hpayerMover, hpayerDecrease⟩
+
+end QuittingStoppingLawPrescribedAtomEndpointRiseSequence
 
 end GameTheory

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import GameTheory.Concepts.Stochastic.Models.Quitting.RootContinuation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootContinuation
 
 /-!
 # The normalized singleton projective LCP

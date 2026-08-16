@@ -6,7 +6,7 @@ finiteness hypothesis below is displayed explicitly rather than hidden as an
 axiom.
 -/
 
-import Math.MultivariateElimination
+import MathUE.MultivariateElimination
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.WeierstrassCurve
 import MathUE.RamifiedWeierstrass

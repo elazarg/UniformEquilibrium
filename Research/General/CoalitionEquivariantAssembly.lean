@@ -23,6 +23,8 @@ noncomputable section
 
 namespace Research.CoalitionEquivariantAssembly
 
+open GameTheory.StochasticGame
+
 open GameTheory
 
 variable {Player Gamma : Type}
@@ -63,7 +65,7 @@ theorem isUniformEquilibriumPayoff_of_transitive_splitSecurity_of_welfareCap
           representative player
       rw [← moved]
       exact transportSecurity g representative representativeSecurity
-  exact GameTheory.StochasticGame.isUniformEquilibriumPayoff_of_oneSidedGuarantees_of_positiveWeightedWelfareCap
+  exact isUniformEquilibriumPayoff_of_oneSidedGuarantees_of_positiveWeightedWelfareCap
     G s₀ weight target weight_pos security welfareCap
 
 end Research.CoalitionEquivariantAssembly

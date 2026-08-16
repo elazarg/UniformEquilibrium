@@ -3,16 +3,17 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
-import GameTheory.Concepts.Stochastic.Strategy.Potential.Adaptive
-import GameTheory.Concepts.Stochastic.Classes.Absorbing
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 
 /-!
-# The Adaptive Equilibrium Certificate ("V1" verification interface)
+# Adaptive equilibrium certificates
 
 A proof-facing, self-contained sufficient condition for
 `StochasticGame.exists_uniformEquilibriumPayoff` in terms of history-adaptive
 continuation potentials.  It packages the quantitative data needed to run a
-Bellman telescope in the style of `GameTheory.Concepts.Stochastic.Strategy.Potential.Adaptive`,
+Bellman telescope in the style of
+`UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive`,
 so that once a candidate payoff `v` has been certified by
 `IsAdaptiveEquilibriumCertificate`, `IsUniformEquilibriumPayoff` follows by a
 single composition with
@@ -57,18 +58,18 @@ therefore genuinely a uniform (not merely on-path) regularity requirement on
 * `StochasticGame.finiteAveragePayoff_ge_of_expectedHistoryValue_bellman_le`
   / `StochasticGame.finiteAveragePayoff_le_of_expectedHistoryValue_bellman_ge`
   — expectation-level Bellman guarantee lemmas (self-contained telescoping,
-  in the style of `GameTheory.Concepts.Stochastic.Strategy.Potential.Adaptive`)
+  in the style of `UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive`)
 * `StochasticGame.isUniformEquilibriumPayoff_of_isAdaptiveEquilibriumCertificate`
   — the certificate implies `IsUniformEquilibriumPayoff`
 * `StochasticGame.isAdaptiveEquilibriumCertificate_of_isAbsorbingState` — the
   certificate holds with a *constant* potential from every absorbing state,
   validating the interface against the known special case
   `StochasticGame.exists_uniformEquilibriumPayoff_of_isAbsorbingState`
-  (`GameTheory.Concepts.Stochastic.Classes.Absorbing`)
+  (`UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing`)
 
-## "V2": the adaptive potential certificate
+## The adaptive potential certificate
 
-The certificate above ("V1") forces every potential to stay within `δ` of a
+The target-close certificate above forces every potential to stay within `δ` of a
 *constant* target `v` at *every* decision epoch and history. This provably
 cannot express the proof that actually witnesses the Big Match's uniform
 value `1/2` (the Big Match `Uniform.lean` module): along paths
@@ -78,20 +79,19 @@ alternative sufficient condition that *does* work there — a **submartingale
 floor** / **supermartingale ceiling** argument, needing no bound on the
 potential at any history but the initial one — as
 `StochasticGame.IsAdaptivePotentialCertificateAt` /
-`StochasticGame.IsAdaptivePotentialEquilibriumCertificate` ("V2"), with
+`StochasticGame.IsAdaptivePotentialEquilibriumCertificate`, with
 
 * `StochasticGame.finiteAveragePayoff_ge_of_expectedHistoryValue_submartingale_le`
   / `StochasticGame.finiteAveragePayoff_le_of_expectedHistoryValue_supermartingale_ge`
   — the expectation-level floor/ceiling guarantee lemmas
 * `StochasticGame.isUniformEquilibriumPayoff_of_isAdaptivePotentialEquilibriumCertificate`
-  — V2's verification theorem
+  — the adaptive-potential verification theorem
 * `StochasticGame.isAdaptivePotentialEquilibriumCertificate_of_isAbsorbingState`
-  — V1's own worked example (constant potential), re-derived through V2 as a
-  corollary, witnessing that V2 strictly generalizes V1
+  — the constant-potential absorbing-state example as a special case
 
-`bf_dev_eventually_ge_half_via_certificate`
-instantiates V2 with the Big Match's actual ingredients (`bfX`/`bfXExpect`),
-the case V1 cannot express.
+`bf_dev_eventually_ge_half_via_certificate` instantiates the adaptive-potential
+certificate with the Big Match's `bfX`/`bfXExpect`, which need not satisfy the
+target-close condition.
 -/
 
 noncomputable section
@@ -109,11 +109,12 @@ variable {ι : Type}
 --
 -- These mirror `finiteAveragePayoff_ge_of_history_bellman_le` /
 -- `finiteAveragePayoff_le_of_history_bellman_ge` of
--- `GameTheory.Concepts.Stochastic.Strategy.Potential.Adaptive`, specialized to a *constant*
+-- `UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive`,
+-- specialized to a *constant*
 -- target `v`, but with the Bellman hypothesis stated at the level of
 -- expectations (`expectedHistoryValue`, `expectedStagePayoff`) rather than
 -- pointwise on every history. The construction is general-purpose and belongs
--- conceptually with `GameTheory.Concepts.Stochastic.Strategy.Potential.Adaptive`.
+-- conceptually with `UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive`.
 
 /-- A history potential's expectation at a fixed decision epoch inherits a
 uniform per-history bound at that epoch. -/
@@ -349,7 +350,7 @@ def IsAdaptiveCertificateAt (G : StochasticGame ι) [Fintype ι]
     ∀ i, ∀ T, T₀ ≤ T →
       (T : ℝ)⁻¹ * ∑ t ∈ Finset.range T, e i t ≤ δ
 
-/-- **Adaptive equilibrium certificate** ("V1" verification interface).
+/-- **Target-close adaptive equilibrium certificate.**
 `v` is witnessed as a uniform-equilibrium-payoff candidate of `G` from `s₀`
 by history-adaptive per-player potentials: for every `δ > 0` there is an
 instance `IsAdaptiveCertificateAt G s₀ v δ`.
@@ -423,7 +424,7 @@ theorem isUniformEquilibriumPayoff_of_isAdaptiveEquilibriumCertificate
 constant potential.**  Stationary play of a mixed stage-Nash equilibrium `m`
 at an absorbing state `s₀` has exactly constant expected stage payoff at
 every epoch, under `σ` and under every unilateral deviation
-(`GameTheory.Concepts.Stochastic.Classes.Absorbing`); the constant potential
+(`UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing`); the constant potential
 `φ i t h := v i` then has exactly (zero-error) constant expectation
 `v i` at every epoch, under every profile, making the near-harmonicity and
 deviation-domination clauses hold with equality: this is the "CONSTANT
@@ -472,7 +473,7 @@ theorem isAdaptiveEquilibriumCertificate_of_isAbsorbingState
 absorbing initial state, reproved via the adaptive equilibrium certificate
 interface, validating its shape against the known result
 `exists_uniformEquilibriumPayoff_of_isAbsorbingState`
-(`GameTheory.Concepts.Stochastic.Classes.Absorbing`). -/
+(`UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing`). -/
 theorem exists_uniformEquilibriumPayoff_of_isAbsorbingState_of_certificate
     (G : StochasticGame ι) [Fintype ι] [DecidableEq ι] [Finite G.State]
     [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)] {s₀ : G.State}
@@ -493,7 +494,7 @@ theorem exists_uniformEquilibriumPayoff_of_subsingleton_state_of_certificate
     (G.isAbsorbingState_of_subsingleton s₀)
 
 -- ============================================================================
--- "V2": the adaptive potential certificate (non-constant target)
+-- The adaptive potential certificate (non-constant potential)
 -- ============================================================================
 --
 -- `BigMatchUniform.lean`'s actual proof of the Big Match's Stage 3c bound
@@ -507,26 +508,27 @@ theorem exists_uniformEquilibriumPayoff_of_subsingleton_state_of_certificate
 -- the floor into the per-stage inequality and summing over the horizon
 -- (Piece 4's two budget-summability bounds) gives the average-payoff
 -- guarantee directly, *without ever needing a bound on `φ` at any history
--- other than the initial one*: contrast the V1 Bellman clause, which
+-- other than the initial one*: contrast the target-close Bellman clause, which
 -- necessarily involves both `φ t` and `φ (t + 1)` and is telescoped, so it
 -- needs `φ` controlled at *every* epoch to bound the telescope's two loose
 -- ends.
 --
 -- `IsAdaptivePotentialCertificateAt` packages exactly this alternative
 -- sufficient condition. A certificate needs *three* directions (on-path
--- lower bound, on-path upper bound, deviation cap); V1 supplies all three
+-- lower bound, on-path upper bound, deviation cap); the target-close certificate supplies all three
 -- from *one* potential per player because its `hbound` clause bounds that
--- potential everywhere. V2 does not have that clause, so it supplies a
+-- potential everywhere. The adaptive-potential certificate does not have that clause,
+-- so it supplies a
 -- **separate** potential for each direction, each with its own initial
 -- value (close to the target), one-step expectation-level monotonicity
 -- fact (submartingale for the lower direction, supermartingale for the
 -- upper two), per-stage payoff bound, and vanishing-Cesàro-average budget.
--- V1's constant-potential certificates satisfy all of this trivially
--- (constancy makes every monotonicity clause hold with equality), so V1's
--- own worked example (`isAdaptiveEquilibriumCertificate_of_isAbsorbingState`)
--- is re-derived below as
+-- Constant target-close certificates satisfy all of this trivially
+-- (constancy makes every monotonicity clause hold with equality), so the
+-- absorbing-state example (`isAdaptiveEquilibriumCertificate_of_isAbsorbingState`)
+-- also follows below as
 -- `isAdaptivePotentialEquilibriumCertificate_of_isAbsorbingState`, a
--- corollary of V2's machinery via a constant potential.
+-- corollary of the adaptive-potential machinery.
 
 /-- `expectedHistoryValue` at the initial epoch is just the potential's own
 value at the (unique) empty history, independent of the behavior profile:
@@ -607,7 +609,7 @@ theorem finiteAveragePayoff_le_of_expectedHistoryValue_supermartingale_ge
   nlinarith [hs]
 
 /-- One instance, at error level `δ`, of an **adaptive equilibrium potential
-certificate** ("V2"): a behavior profile `σ`, a horizon threshold `T₀ ≥ 2`,
+certificate**: a behavior profile `σ`, a horizon threshold `T₀ ≥ 2`,
 and, for *each* of the three directions a certificate needs — the on-path
 lower bound, the on-path upper bound, and the deviation cap — a **separate**
 per-player history potential (`φlo`/`φhi`/`φdv`) together with its own
@@ -647,15 +649,14 @@ def IsAdaptivePotentialCertificateAt (G : StochasticGame ι) [Fintype ι]
     (∀ i (dev : G.BehaviorStrategy i), ∀ T, T₀ ≤ T →
       (T : ℝ)⁻¹ * ∑ t ∈ Finset.range T, edv i dev t ≤ δ)
 
-/-- **Adaptive equilibrium potential certificate** ("V2" verification
-interface). `v` is witnessed as a uniform-equilibrium-payoff candidate of
+/-- **Adaptive equilibrium potential certificate.** `v` is witnessed as a
+uniform-equilibrium-payoff candidate of
 `G` from `s₀` by the floor/ceiling mechanism: for every `δ > 0` there is an
-instance `IsAdaptivePotentialCertificateAt G s₀ v δ`. Strictly generalizes
-`IsAdaptiveEquilibriumCertificate` ("V1"): see
-`isAdaptivePotentialEquilibriumCertificate_of_isAbsorbingState` for V1's own
-worked example re-derived here via a constant potential, and
+instance `IsAdaptivePotentialCertificateAt G s₀ v δ`. It includes the
+constant target-close construction as a special case; see
+`isAdaptivePotentialEquilibriumCertificate_of_isAbsorbingState`, and
 `bf_dev_eventually_ge_half_via_certificate`
-for the genuinely non-constant instance V1 cannot express. -/
+for a genuinely non-constant instance. -/
 def IsAdaptivePotentialEquilibriumCertificate (G : StochasticGame ι) [Fintype ι]
     [DecidableEq ι] [Finite G.State] [∀ i, Finite (G.Act i)]
     (s₀ : G.State) (v : Payoff ι) : Prop :=
@@ -707,15 +708,16 @@ theorem isUniformEquilibriumPayoff_of_isAdaptivePotentialEquilibriumCertificate
     linarith
 
 -- ============================================================================
--- V2 acceptance test: V1's absorbing-state example, via a constant potential
+-- Absorbing-state construction via a constant potential
 -- ============================================================================
 
-/-- **V1 as a corollary of V2.** The certificate holds at every absorbing
+/-- **The target-close certificate as an adaptive-potential special case.**
+The certificate holds at every absorbing
 initial state with a *constant* potential shared by all three directions,
-re-deriving V1's own worked example
-(`isAdaptiveEquilibriumCertificate_of_isAbsorbingState`) through V2's
+recovering `isAdaptiveEquilibriumCertificate_of_isAbsorbingState` through the
+adaptive-potential
 machinery: constancy makes every monotonicity clause hold with equality, so
-the floor/ceiling mechanism reduces exactly to V1's shape. -/
+the floor/ceiling mechanism reduces exactly to the target-close shape. -/
 theorem isAdaptivePotentialEquilibriumCertificate_of_isAbsorbingState
     (G : StochasticGame ι) [Fintype ι] [DecidableEq ι] [Finite G.State]
     [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)] {s₀ : G.State}
@@ -762,9 +764,10 @@ theorem isAdaptivePotentialEquilibriumCertificate_of_isAbsorbingState
   · intro i T _hT; simp; linarith
   · intro i dev T _hT; simp; linarith
 
-/-- **Acceptance test, via V2.** Uniform equilibrium payoffs exist from every
-absorbing initial state, reproved via the adaptive *potential* certificate
-interface — demonstrating that V2 strictly generalizes V1
+/-- **Adaptive-potential acceptance at absorbing states.** Uniform equilibrium
+payoffs exist from every absorbing initial state, reproved via the adaptive
+*potential* certificate
+interface
 (`exists_uniformEquilibriumPayoff_of_isAbsorbingState_of_certificate`). -/
 theorem exists_uniformEquilibriumPayoff_of_isAbsorbingState_of_potentialCertificate
     (G : StochasticGame ι) [Fintype ι] [DecidableEq ι] [Finite G.State]
@@ -775,11 +778,11 @@ theorem exists_uniformEquilibriumPayoff_of_isAbsorbingState_of_potentialCertific
   exact ⟨v, G.isUniformEquilibriumPayoff_of_isAdaptivePotentialEquilibriumCertificate s₀ v hv⟩
 
 -- ============================================================================
--- "V2, decoupled bound" flavor: exact telescoping against a bounded
+-- Exact telescoping against a bounded target-decoupled potential
 -- (not close-to-`v`) potential
 -- ============================================================================
 --
--- The monotonicity-based V2 certificate above (`IsAdaptivePotentialCertificateAt`)
+-- The monotonicity-based certificate above (`IsAdaptivePotentialCertificateAt`)
 -- captures the Big Match's proof, but not every non-constant certificate
 -- has a monotone potential. `TransitionIndependent.lean`'s uniform
 -- equilibrium payoff (re-derived via a certificate in
@@ -792,14 +795,14 @@ theorem exists_uniformEquilibriumPayoff_of_isAbsorbingState_of_potentialCertific
 -- `finiteAveragePayoff_le_of_expectedHistoryValue_bellman_ge_of_bound` above
 -- were built for (their docstrings anticipate exactly this "several
 -- different absorbing values" situation). `IsAdaptiveDecoupledCertificateAt`
--- packages them at the certificate level: it is *exactly* V1's
+-- packages them at the certificate level: it is exactly the target-close
 -- `IsAdaptiveCertificateAt` with the `hbound` clause's target `v`
 -- *decoupled* from the boundedness constant `C` — replacing "every
 -- potential stays within `δ` of `v` everywhere" by "every potential stays
--- within a *fixed* `C` of `0` everywhere". Consequently every V1 instance
+-- within a *fixed* `C` of `0` everywhere". Consequently every target-close instance
 -- is *literally* (not just in the constant-potential special case) a
 -- decoupled instance too (`isAdaptiveDecoupledCertificateAt_of_isAdaptiveCertificateAt`),
--- giving a second, more direct sense in which "V1 is a corollary of V2".
+-- proving a direct inclusion between the two certificate predicates.
 
 /-- One instance, at error level `δ`, of an **adaptive decoupled equilibrium
 certificate**: exactly `IsAdaptiveCertificateAt`'s data and telescoping
@@ -870,12 +873,13 @@ theorem isUniformEquilibriumPayoff_of_isAdaptiveDecoupledEquilibriumCertificate
     have hCesT := hCes i T hT
     linarith
 
-/-- **V1 embeds into the decoupled V2 flavor.** Every V1 certificate instance
+/-- **Target-close certificates imply bounded target-decoupled certificates.**
+Every target-close certificate instance
 gives a decoupled certificate instance at the same `δ`, taking
-`C i := |v i| + δ / 2`: V1's `hbound` (`|φ - v| ≤ δ / 2`) trivially gives
-`|φ| ≤ C`, and V1's `hlow`/`hhigh`/`hdev` are *already* stated in exactly
+`C i := |v i| + δ / 2`: the `hbound` clause (`|φ - v| ≤ δ / 2`) gives
+`|φ| ≤ C`, and `hlow`/`hhigh`/`hdev` have exactly
 `IsAdaptiveDecoupledCertificateAt`'s shape (the same telescoping clauses).
-The horizon threshold is enlarged past V1's own `T₀` (which only controls
+The horizon threshold is enlarged past the source certificate's `T₀` (which only controls
 `(T)⁻¹ ∑ e`, not the boundary-loss term `2 * C i / T`, since `C i` depends
 on `v i` and so is not itself controlled by `T₀`) to also make
 `2 * C i / T ≤ δ / 2` for every player, using the finiteness of `ι`. -/
@@ -923,8 +927,8 @@ theorem isAdaptiveDecoupledCertificateAt_of_isAdaptiveCertificateAt
       linarith [hmono, hstep]
     linarith [hCesT, hdiv]
 
-/-- **V1's verification theorem, re-derived as a corollary of "V2,
-decoupled".** Same statement as
+/-- **The target-close verification theorem via the target-decoupled certificate.**
+Same statement as
 `isUniformEquilibriumPayoff_of_isAdaptiveEquilibriumCertificate`, via the
 literal embedding `IsAdaptiveCertificateAt → IsAdaptiveDecoupledCertificateAt`
 above instead of Adaptive.lean's original (unbounded-`C`) telescope. -/
@@ -990,8 +994,8 @@ def IsOneSidedGuaranteeCertificate (G : StochasticGame ι) [Fintype ι]
     (s₀ : G.State) (who : ι) (vwho : ℝ) : Prop :=
   ∀ δ : ℝ, 0 < δ → G.IsOneSidedGuaranteeCertificateAt s₀ who vwho δ
 
-/-- **Sufficient condition for a one-sided guarantee, from the
-submartingale-V2 machinery.** A fixed securing strategy `σwho`, together
+/-- **Sufficient condition for a one-sided guarantee from submartingale
+machinery.** A fixed securing strategy `σwho`, together
 with, for *every* error level `δ` and *every* opponent completion `opp`, a
 history potential whose expectation under `Function.update opp who σwho`
 (i) starts within `δ` of `vwho`, (ii) is monotone nondecreasing, and (iii)

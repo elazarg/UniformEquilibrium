@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.VanishingDiscount.Fink.Schedule
-import Math.MeanErgodic
+import MathUE.MeanErgodic
 import Mathlib.Analysis.Asymptotics.SpecificAsymptotics
 import Mathlib.LinearAlgebra.Dual.Lemmas
 

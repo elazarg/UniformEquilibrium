@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 -/
 
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
-import GameTheory.Concepts.Stochastic.Models.Quitting.SimpleBranches
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 
 /-!
 # A negative one-player quit prefix is not a global equilibrium certificate

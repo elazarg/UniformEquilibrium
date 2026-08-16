@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.AnalyticLinearSystem
-import Math.Probability
+import MathUE.Probability
 
 /-!
 # Pole-cleared stationary laws for analytic finite kernels

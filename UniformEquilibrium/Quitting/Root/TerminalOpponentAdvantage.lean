@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
-import GameTheory.Concepts.Potential.MixedPotential
+import UniformEquilibrium.ProofView.Concepts.Potential.MixedPotential
 
 /-!
 # Terminal full-set advantage at one quitting root

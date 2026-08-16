@@ -22,16 +22,28 @@ for every horizon beyond its threshold. A deviation replaces one player's
 whole behavioral strategy, not merely one stationary action or a bounded-memory
 controller.
 
-The exact definitions are in
-[`GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform.lean`](../GameTheory/GameTheory/Concepts/Stochastic/Equilibrium/Uniform.lean):
+The canonical execution-level definitions are in
+[`GameTheory/GameTheory/Stochastic/Uniform.lean`](../GameTheory/GameTheory/Stochastic/Uniform.lean):
+
+- `Stochastic.Game.IsεHorizonNash`;
+- `Stochastic.Game.IsUniformεEquilibrium`;
+- `Stochastic.Game.IsUniformEquilibriumPayoff`; and
+- `Stochastic.Game.HasUniformDeviationCapConstructor`.
+
+The project proof view is in
+[`UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform.lean`](../UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform.lean):
 
 - `IsεHorizonNash`;
 - `IsUniformεEquilibrium`;
 - `IsUniformEquilibriumPayoff`; and
 - `HasUniformDeviationCapConstructor`.
 
-The last predicate is the proof-facing delivery-and-deviation-cap constructor
-and is proved equivalent to the semantic payoff property.
+The last predicate is the delivery-and-deviation-cap constructor and is proved
+equivalent to the semantic payoff property. The finite-state, finite-action
+bridge in
+[`UniformEquilibrium/ProofView/Native/Equilibrium.lean`](../UniformEquilibrium/ProofView/Native/Equilibrium.lean)
+proves exact equivalence of finite-horizon approximate Nash and uniform-payoff
+predicates between the canonical runner and the project proof view.
 
 ## General model scope
 
@@ -53,7 +65,7 @@ quitters selects an absorbing state and its terminal reward; if nobody ever
 quits, active play continues with stage reward zero.
 
 The model is defined in
-[`GameTheory/GameTheory/Concepts/Stochastic/Models/Quitting/Game.lean`](../GameTheory/GameTheory/Concepts/Stochastic/Models/Quitting/Game.lean).
+[`UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/Game.lean`](../UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/Game.lean).
 The open quitting proposition concerns the live state `none`; absorbed states
 are already solved by the generic absorbing-state result.
 
@@ -64,7 +76,7 @@ with nonabsorption contributing zero. For every behavioral profile—including
 profiles produced by unilateral deviations—the expected finite-average payoff
 converges to this terminal payoff. The definitions and convergence theorem are
 in
-[`GameTheory/GameTheory/Concepts/Stochastic/Models/Quitting/Asymptotic.lean`](../GameTheory/GameTheory/Concepts/Stochastic/Models/Quitting/Asymptotic.lean).
+[`UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/Asymptotic.lean`](../UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/Asymptotic.lean).
 
 This convergence is a bridge, not a license to identify every asymptotic
 notion. The project distinguishes:

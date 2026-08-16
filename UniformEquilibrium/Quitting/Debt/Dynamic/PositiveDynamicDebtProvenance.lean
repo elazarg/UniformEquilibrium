@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtCalibration
 import UniformEquilibrium.Quitting.Debt.Marked.FenceFirstOpponentAdapter
 import UniformEquilibrium.Quitting.Root.TerminalOpponentAdvantage
-import GameTheory.Concepts.Potential.MixedPotential
+import UniformEquilibrium.ProofView.Concepts.Potential.MixedPotential
 
 /-!
 # Provenance forced by positive exact dynamic debt

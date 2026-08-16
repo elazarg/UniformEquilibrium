@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Cycles.OwnShiftCycleExactification
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 import UniformEquilibrium.Quitting.Cycles.ExactCycleStrata
-import GameTheory.Concepts.Stochastic.Models.Quitting.UniformPayoffExistenceClosure
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.UniformPayoffExistenceClosure
 
 /-!
 # Exact-cycle strata: Research residuals

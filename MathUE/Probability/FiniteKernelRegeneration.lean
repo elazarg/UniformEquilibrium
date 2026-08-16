@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.PMFIter
+import MathUE.PMFIter
 import MathUE.Probability.ReachableClosedClass
 
 /-!

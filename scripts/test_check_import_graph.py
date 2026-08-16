@@ -102,6 +102,18 @@ lean_lib UniformEquilibrium where
                 ["Alpha", "Beta"],
             )
 
+    def test_mathue_may_import_gametheory_generic_math(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            self.write(root, "lakefile.lean", "lean_lib MathUE where\n")
+            self.write(root, "MathUE.lean", "import MathUE.Kernel\n")
+            self.write(
+                root,
+                "MathUE/Kernel.lean",
+                "import GameTheory.Math.Probability.FinDist\n",
+            )
+            self.assertEqual(check_import_graph.check_import_graph(root), [])
+
     def test_layer_boundaries_are_directional(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)

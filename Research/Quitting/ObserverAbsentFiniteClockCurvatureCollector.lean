@@ -232,10 +232,12 @@ theorem half_sum_forcedOwnerOutsiderDefect_le_actualOccupation_add_squares
   rw [Finset.sum_add_distrib] at hrows
   simpa only [Finset.sum_div] using hrows
 
+namespace QuittingStoppingLawVanishingDebtRectangleSequence
+
 /-- Strong combined form of the finite-clock dispatch.  Before separating
 actual defect from square curvature, the only quantitative loss is the two
 halvings forced by the landed wall/refusal split and affine no-cancellation. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteClock_actualPlusSquare_or_deviation
+theorem observerAbsent_finiteClock_actualPlusSquare_or_deviation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -296,7 +298,7 @@ clock ending at its declared stopping time, one of three things happens:
   wall, up to the arbitrary approximation `δ`.
 
 The first two constants arise by two honest binary splits. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteClock_actualDefect_or_square_or_deviation
+theorem observerAbsent_finiteClock_actualDefect_or_square_or_deviation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -354,5 +356,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
       left
       linarith
   · exact Or.inr (Or.inr hdeviation)
+
+end QuittingStoppingLawVanishingDebtRectangleSequence
 
 end GameTheory

@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Analysis.Convex.Topology
 import Mathlib.Analysis.LocallyConvex.Separation
-import Math.Probability
+import MathUE.Probability
 
 /-!
 # Finite child-target transport or strict payoff separation

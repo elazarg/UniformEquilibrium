@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import GameTheory.Concepts.Stochastic.Transform.ActionLegality.BehaviorTransfer
-import Math.PMFProduct.Update
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.BehaviorTransfer
+import MathUE.PMFProduct.Update
 
 /-!
 # A padded uniform equilibrium payoff with no legal witness

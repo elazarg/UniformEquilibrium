@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.PMFProduct.Update
+import MathUE.PMFProduct.Update
 
 /-!
 # Fubini formulas for finite product PMFs

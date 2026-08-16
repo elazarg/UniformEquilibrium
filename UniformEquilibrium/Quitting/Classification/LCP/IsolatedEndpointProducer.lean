@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.LCP.LaterLayerAbnormal
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
-import GameTheory.Concepts.Stochastic.Models.Quitting.RootPerturbation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation
 
 /-!
 # Repairing an isolated absorbing endpoint

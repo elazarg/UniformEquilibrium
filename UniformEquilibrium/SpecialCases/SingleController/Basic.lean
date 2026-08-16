@@ -4,9 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 import UniformEquilibrium.Certificates.Adaptive.AverageOptimalityCertificate
-import Math.MeanErgodic
-import Math.LinearProgramming.StrongDuality
-import Math.LinearProgramming.StrongComplementarity
+import MathUE.MeanErgodic
+import MathUE.LinearProgramming.StrongDuality
+import MathUE.LinearProgramming.StrongComplementarity
 
 /-!
 # Single-Controller Zero-Sum Stochastic Games: the Undiscounted Vrieze Route

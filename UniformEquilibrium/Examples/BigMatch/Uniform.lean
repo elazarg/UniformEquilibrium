@@ -1756,7 +1756,7 @@ theorem bf_dev_eventually_ge_half (ε : ℝ) (hε : 0 < ε) :
     nlinarith [hstep1, hstep2]
   linarith [h1, h2, hNε, htail]
 
-/-! ## Stage 3c, re-derived via the "V2" adaptive potential certificate
+/-! ## Stage 3c via the adaptive potential certificate
 
 `bfXExpect N dev` (as `bfXPotential N`, a `HistoryPotential` constant in
 `t`) and its already-proved facts —
@@ -1764,13 +1764,12 @@ theorem bf_dev_eventually_ge_half (ε : ℝ) (hε : 0 < ε) :
 `expectedStagePayoff_bfDevProfile_ge_of_bfXExpect` (the per-stage bound) —
 are *exactly* the data
 `AdaptiveCertificate.lean`'s `finiteAveragePayoff_ge_of_expectedHistoryValue_submartingale_le`
-("V2") consumes: no bound on `bfX` at any history but the initial one is
+consumes: no bound on `bfX` at any history but the initial one is
 used anywhere below, matching the module docstring's obstruction that no
-*bounded, history-independent* (V1-style) potential can witness this bound.
+bounded, history-independent target-close potential can witness this bound.
 This reproves `finiteAveragePayoff_bfDevProfile_ge` /
 `bf_dev_eventually_ge_half` through the general verification machinery
-instead of by hand-telescoping Piece 2 and Piece 3 together, demonstrating
-that the "V2" interface captures the proof that actually works here. -/
+instead of by hand-telescoping Piece 2 and Piece 3 together. -/
 
 /-- `bfX N`, read as a `HistoryPotential` (constant in the calendar-time
 argument, as `bfX` itself already is independent of it). -/
@@ -1781,7 +1780,7 @@ theorem expectedHistoryValue_bfXPotential (N : ℕ) (dev : game.BehaviorStrategy
     game.expectedHistoryValue (bfDevProfile N dev) .live (bfXPotential N) t =
       bfXExpect N dev t := rfl
 
-/-- **Stage 3c's bound, re-derived via the V2 certificate's core lemma.**
+/-- **Stage 3c's bound via the adaptive-potential certificate's core lemma.**
 Instantiates `finiteAveragePayoff_ge_of_expectedHistoryValue_submartingale_le`
 with `φ := bfXPotential N`, submartingale step `bfXExpect_le_succ`, per-stage
 bound `expectedStagePayoff_bfDevProfile_ge_of_bfXExpect`, and budget
@@ -1829,7 +1828,7 @@ theorem finiteAveragePayoff_bfDevProfile_ge_via_certificate (N : ℕ)
   rw [hrw] at hmul2
   linarith [hkey, hmul2]
 
-/-- **Stage 3c, the target of this stage, re-derived via the V2 certificate.**
+/-- **Stage 3c via the adaptive-potential certificate.**
 Same statement as `bf_dev_eventually_ge_half`, via
 `finiteAveragePayoff_bfDevProfile_ge_via_certificate` in place of
 `finiteAveragePayoff_bfDevProfile_ge`; the surrounding `ε`-bookkeeping is

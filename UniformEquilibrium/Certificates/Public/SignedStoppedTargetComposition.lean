@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.Probability.OptionalTargetTransport
 import MathUE.Probability.SignedStoppedComposition
-import GameTheory.Concepts.Stochastic.Classes.Absorbing
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.Certificates.Adaptive.PotentialSystem
 
 /-!

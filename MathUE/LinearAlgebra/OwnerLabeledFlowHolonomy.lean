@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.LinearAlgebra.FourierMotzkin
+import MathUE.LinearAlgebra.FourierMotzkin
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.EquivFin

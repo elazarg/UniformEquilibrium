@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.BonferroniProductBounds
-import Math.PMFProduct.CoalitionMass
+import MathUE.PMFProduct.CoalitionMass
 import Mathlib.Data.Nat.Choose.Cast
 
 /-!

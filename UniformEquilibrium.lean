@@ -1,5 +1,5 @@
 import MathUE
-import GameTheory.Concepts.Stochastic
+import UniformEquilibrium.ProofView
 import UniformEquilibrium.Diagnostics.Uniform.Consequences
 import UniformEquilibrium.Diagnostics.Quitting.All
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.ProjectiveGauge

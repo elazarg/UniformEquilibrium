@@ -1,7 +1,7 @@
 import UniformEquilibrium.Quitting.Paths.LiveTail
 import UniformEquilibrium.Quitting.Paths.OpponentLiveMass
 import UniformEquilibrium.Quitting.Paths.NonSoloMass
-import GameTheory.Concepts.Stochastic.Equilibrium.Discounted
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 
 /-!
 # Proof-mining experiment: closing longer quitting paths

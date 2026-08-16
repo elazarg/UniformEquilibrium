@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import GameTheory.Cooperative.CoalitionalGame.MultilinearExtension
+import UniformEquilibrium.ProofView.Cooperative.CoalitionalGame.MultilinearExtension
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
 
 /-!

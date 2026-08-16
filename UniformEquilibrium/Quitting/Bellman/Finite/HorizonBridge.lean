@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import GameTheory.Concepts.Stochastic.Models.Quitting.Asymptotic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Asymptotic
 
 /-!
 # Eventual delivery and deviation caps at finite horizons

@@ -217,7 +217,7 @@ mathematics. Brouwer is supplied by an **external package**, not mathlib: the
 root `lakefile.lean:41` has
 `require FixedPointTheorems from "fixed-point-theorems-lean4"` (harfe's Lean 4
 Brouwer/Kakutani via a cubical Sperner route after Kuhn 1960). Nash existence
-is built here in `GameTheory/Concepts/Existence/`
+is built here in `UniformEquilibrium/ProofView/Concepts/Existence/`
 (`NashExistence.lean`, `NashExistenceMixed.lean`, `ProductSimplexBrouwer.lean`).
 
 **Consequence for anyone planning a Bewley–Kohlberg formalization:**

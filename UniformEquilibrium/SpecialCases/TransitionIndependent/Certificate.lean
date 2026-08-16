@@ -3,19 +3,19 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
-import GameTheory.Concepts.Stochastic.Classes.TransitionIndependent
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.TransitionIndependent
 import UniformEquilibrium.Certificates.Adaptive.Certificate
 
 /-!
-# `TransitionIndependent`'s uniform equilibrium payoff, via the certificate
+# Uniform equilibrium payoffs in transition-independent games
 
-Stage 3 of the adaptive-certificate generalization program: re-derives
+This module derives
 `StochasticGame.exists_uniformEquilibriumPayoff_of_isActionIndependent`
-(`GameTheory.Concepts.Stochastic.Classes.TransitionIndependent`) through the
+(`UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.TransitionIndependent`) through the
 adaptive certificate machinery of `Certificates/Adaptive/Certificate.lean`,
 using a genuinely **non-constant** history potential built from the
 relative-value (Poisson equation) of the induced autonomous Markov chain —
-instantiating the "decoupled" flavor of the "V2" interface
+instantiating the bounded, target-decoupled certificate
 (`StochasticGame.IsAdaptiveDecoupledEquilibriumCertificate`), because (as with
 the Big Match, but for a different reason) no potential *close to the target
 everywhere* is available here either: the Poisson potential `u` is bounded
@@ -41,9 +41,9 @@ transition gives an **exact** (zero-error) Bellman identity for the history
 potential `φ who t h := -(u who h.2)` against the *constant* target
 `v who := o who s₀`: `v who + E[φ who t] = payoff t who + E[φ who (t + 1)]`.
 Since `u who` is a fixed function on the finite state space it is bounded,
-but generally *not* close to `v who` anywhere — exactly the situation
-`IsAdaptiveDecoupledCertificateAt` (not `IsAdaptiveCertificateAt`, "V1") was
-built for.
+but generally *not* close to `v who` anywhere.  Thus it satisfies
+`IsAdaptiveDecoupledCertificateAt`, while the target-close condition of
+`IsAdaptiveCertificateAt` need not hold.
 
 The deviation clause reuses `TransitionIndependent.lean`'s own mechanism:
 action-independence keeps the state marginal identical under every
@@ -61,10 +61,8 @@ clause with zero error too.
 * `GameTheory.StochasticGame.exists_uniformEquilibriumPayoff_of_isActionIndependent_via_certificate`
   — `TransitionIndependent`'s result, re-derived through the certificate
 
-This file is deliberately **not** wired into `GameTheory.lean` (the project
-aggregator): it is a standalone validation of the certificate interface
-against a second worked example, not a new standing result that other files
-depend on. Import it directly if needed.
+The theorem gives a direct certificate construction for the
+transition-independent class.
 -/
 
 noncomputable section
@@ -109,7 +107,7 @@ theorem expectedStagePayoff_update_markovBehaviorProfile_le
 -- ============================================================================
 
 /-- **The relative-value (Poisson equation) certificate for action-independent
-games.** For every action-independent `G`, the "decoupled V2" certificate
+games.** For every action-independent `G`, the bounded target-decoupled certificate
 holds at `s₀` with target `v who := o who s₀`, the harmonic component of the
 Poisson decomposition of the stage-Nash payoff `fun s => G.mixedStageEU s
 (x s) who` — with *zero* error (`e ≡ 0`) throughout, since every clause is

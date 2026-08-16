@@ -3,7 +3,7 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
-import GameTheory.Concepts.Stochastic.Equilibrium.Discounted.Fink
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
 import Mathlib.Algebra.MvPolynomial.Eval
 
 /-!
@@ -11,9 +11,10 @@ import Mathlib.Algebra.MvPolynomial.Eval
 
 This file gives an explicit finite polynomial presentation of the discounted
 stationary Bellman equilibrium conditions `IsDiscountedStationaryBellmanEq`
-from `GameTheory.Concepts.Stochastic.Equilibrium.Discounted.Fink`.  It is the "W1" layer of the
-uniform-equilibrium roadmap: a bridge from the probabilistic formulation of
-Fink's theorem to real-algebraic geometry.
+from
+`UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink`.
+It bridges the probabilistic formulation of Fink's theorem with
+real-algebraic geometry.
 
 ## The variables
 
@@ -97,8 +98,8 @@ real variety cut out by finitely many polynomials over the parameter
 `λ = 1 - β`.  Existence of a Puiseux-series germ of such a section as
 `λ → 0⁺` (Shapley/Bewley–Kohlberg-style semialgebraic selection) and
 resultant-based elimination of the mixing and value variables (Mathlib's
-`RingTheory.Polynomial.Resultant`) are the next steps of the "W" layers of
-the roadmap; this file only sets up the exact polynomial data they act on.
+`RingTheory.Polynomial.Resultant`) can act on the exact polynomial data
+defined here.
 -/
 
 noncomputable section

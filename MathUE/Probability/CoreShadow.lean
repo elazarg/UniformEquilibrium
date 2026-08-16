@@ -4,9 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Math.ProbabilityMassFunction.TotalVariation
-import Math.ProbabilityMassFunction.Simplex
-import Math.Minimax.Loomis
+import MathUE.ProbabilityMassFunction.TotalVariation
+import MathUE.ProbabilityMassFunction.Simplex
+import MathUE.Minimax.Loomis
 
 /-!
 # Finite core-shadow alternatives

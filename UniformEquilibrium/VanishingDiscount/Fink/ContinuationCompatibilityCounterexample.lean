@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.LinearAlgebra.MixedCompatibilityCharge
-import Math.Probability
+import MathUE.Probability
 import Mathlib.Probability.Distributions.Uniform
 
 /-!
