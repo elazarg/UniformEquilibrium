@@ -1,0 +1,109 @@
+-/
+def HasQuittingPureTimePositiveTargetReachedRowLocalization
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (base : ℕ → (quittingGame reward).BehaviorProfile)
+    (owner : ι) (quitTime : ℕ → Option ℕ)
+    (terminal : {S : Finset ι // S.Nonempty}) (lower : ℝ) : Prop :=
+  0 < lower ∧
+    ∃ (stop : ℕ → ℕ) (subseq : ℕ → ℕ) (other : ι),
+      StrictMono subseq ∧ other ≠ owner ∧
+      (∀ rank, quitTime (subseq rank) = some (stop (subseq rank))) ∧
+      (∀ rank, lower ≤ quittingStageCoalitionMass reward
+        (quittingPureTimeCarrierProfile reward base owner quitTime
+          (subseq rank)) (stop (subseq rank)) terminal) ∧
+      ∀ rank,
+        quittingPureTimePositiveTargetReachedRowGainFloor frontier owner lower ≤
+          quittingPureTimePositiveTargetReachedRowGain reward base owner
+            quitTime stop other (subseq rank)
+
+/-- Eventual finite target times and persistent stage mass produce the generic
+positive reached-row localization. -/
+theorem pureTimePositiveTargetReachedRowLocalization_of_eventually_stop_mass
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (base : ℕ → (quittingGame reward).BehaviorProfile)
+    (owner : ι) (quitTime : ℕ → Option ℕ)
+    (terminal : {S : Finset ι // S.Nonempty})
+    {lower : ℝ} (hlower : 0 < lower) (stop baseSubseq : ℕ → ℕ)
+    (hbaseSubseq : StrictMono baseSubseq)
+    (hfinite : ∀ᶠ rank in atTop,
+      quitTime (baseSubseq rank) = some (stop (baseSubseq rank)))
+    (hmass : ∀ᶠ rank in atTop, lower ≤
+      quittingStageCoalitionMass reward
+        (quittingPureTimeCarrierProfile reward base owner quitTime
+          (baseSubseq rank)) (stop (baseSubseq rank)) terminal)
+    (hdebt : Tendsto (fun rank =>
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward
+          (quittingPureTimeCarrierProfile reward base owner quitTime rank))
+        owner) atTop (nhds 0)) :
+    HasQuittingPureTimePositiveTargetReachedRowLocalization
+      frontier base owner quitTime terminal lower := by
+  unfold HasQuittingPureTimePositiveTargetReachedRowLocalization
+  have hready := hfinite.and hmass
+  obtain ⟨start, hstart⟩ := eventually_atTop.1 hready
+  let shifted : ℕ → ℕ := fun n => start + n
+  have hshifted : StrictMono shifted := fun _ _ hlt =>
+    Nat.add_lt_add_left hlt start
+  let subseq : ℕ → ℕ := fun n => baseSubseq (shifted n)
+  have hsubseq : StrictMono subseq := hbaseSubseq.comp hshifted
+  let profile : ℕ → (quittingGame reward).BehaviorProfile := fun n =>
+    quittingPureTimeCarrierProfile reward base owner quitTime (subseq n)
+  let stage : ℕ → ℕ := fun n => stop (subseq n)
+  have htime : ∀ n, quitTime (subseq n) = some (stage n) := by
+    intro n
+    exact (hstart (shifted n) (Nat.le_add_right start n)).1
+  have hstageMass : ∀ n, lower ≤
+      quittingStageCoalitionMass reward (profile n) (stage n) terminal := by
+    intro n
+    exact (hstart (shifted n) (Nat.le_add_right start n)).2
+  have hsure : ∀ n,
+      quittingProfileLiveRoot reward (profile n) (stage n) owner =
+        PMF.pure true := by
+    intro n
+    dsimp only [profile, quittingPureTimeCarrierProfile,
+      quittingPureTimeUpdatedProfile]
+    rw [quittingProfileLiveRoot_update_pureTime_self, htime n,
+      quittingPureTimeHazard_some_self]
+  have hdebtSubseq : Tendsto (fun n =>
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward (profile n)) owner)
+      atTop (nhds 0) := by
+    have hcomp := hdebt.comp hsubseq.tendsto_atTop
+    simpa only [profile, subseq, Function.comp_def] using hcomp
+  have hminimum : ∀ n, quittingTerminalSemanticDebtSum frontier.base ≤
+      quittingTerminalSemanticDebtSum
+        (quittingTerminalSemanticPair reward
+          (quittingAllContinueProfileSpine reward (profile n) (stage n))) := by
+    intro n
+    exact frontier.base_minimum _
+      (quittingTerminalSemanticPair_mem_carrier reward _)
+  have hreach : ∀ n, lower ≤
+      quittingLiveMass reward (profile n) (stage n) := by
+    intro n
+    exact (hstageMass n).trans
+      (quittingStageCoalitionMass_le_liveMass reward (profile n) (stage n)
+        terminal)
+  obtain ⟨other, gainSubseq, hother, hgainSubseq, hgain⟩ :=
+    exists_fixed_other_reachedRowGain_subsequence reward
+      (quittingTerminalSemanticDebtSum frontier.base) frontier.base_positive
+      profile stage owner lower hminimum hlower hreach hsure hdebtSubseq
+  let finalSubseq : ℕ → ℕ := fun n => subseq (gainSubseq n)
+  have hfinalSubseq : StrictMono finalSubseq :=
+    hsubseq.comp hgainSubseq
+  refine ⟨hlower, stop, finalSubseq, other, hfinalSubseq, hother, ?_, ?_, ?_⟩
+  · intro rank
+    simpa only [finalSubseq, stage] using htime (gainSubseq rank)
+  · intro rank
+    simpa only [finalSubseq, profile, stage] using
+      hstageMass (gainSubseq rank)
+  · intro rank
+    simpa only [quittingPureTimePositiveTargetReachedRowGainFloor,
+      quittingPureTimePositiveTargetReachedRowGain, finalSubseq, profile,
+      stage] using hgain rank
+
+
+end GameTheory
