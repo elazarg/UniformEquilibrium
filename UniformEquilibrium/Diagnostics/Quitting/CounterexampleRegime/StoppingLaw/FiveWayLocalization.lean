@@ -9,7 +9,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.
 /-!
 # Compatibility import for the stopping-law localization
 
-The canonical exhaustive statement is now the cardinality-free four-way
+The canonical exhaustive statement is the cardinality-free four-way
 localization in `FourWayLocalization`.  This module remains only so existing
-umbrella imports continue to resolve.
+umbrella imports continue to resolve; it declares no five-way proposition.
 -/
