@@ -19,6 +19,8 @@ Research must not import this directory.
 - `counterexample_pairwise_consistency/` contains the pair/triple consistency
   campaign.
 - `counterexample_search/` contains the focused falsifier programs.
+- `joint_reset_law/` contains an exact-rational regression of the integrated
+  joint-reset semiconjugacy.
 - `Probes/` contains standalone bounded probes that are not in the Base suite.
 - `quitting_repair_cegis/` is the exact-rational repair-search package; its
   tests run with `python -m pytest Experiments/quitting_repair_cegis/tests`.

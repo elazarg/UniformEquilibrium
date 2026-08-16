@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.NegativeCollisionAtomicDispatch
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.NegativeTargetAtomicDispatch
 
 /-!
 # Negative rectangles compensate on the zero-debt endpoint
@@ -92,7 +92,7 @@ def quittingStoppingLawNegativeCompensationLower
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : ℝ :=
-  quittingStoppingLawNegativeCollisionMassLower packet /
+  quittingStoppingLawNegativeTargetMassLower packet /
     (Fintype.card (QuittingTerminalOutcome ι) : ℝ)
 
 namespace QuittingStoppingLawVanishingDebtRectangleSequence
@@ -157,9 +157,9 @@ theorem exists_negativeObserver_targetCompensation
       ((sourceMass selected - targetMass selected) * M) := by
     exact hbound.trans (mul_le_mul_of_nonneg_left
       (mul_le_mul_of_nonneg_left hrewardLe hdiff0) hcard.le)
-  have hloss : quittingStoppingLawNegativeCollisionMassLower packet ≤
+  have hloss : quittingStoppingLawNegativeTargetMassLower packet ≤
       sourceMass selected - targetMass selected := by
-    unfold quittingStoppingLawNegativeCollisionMassLower
+    unfold quittingStoppingLawNegativeTargetMassLower
     apply (div_le_iff₀ (mul_pos hcard hMpos)).2
     calc
       packet.charge / 4 ≤ card *
@@ -173,7 +173,7 @@ theorem exists_negativeObserver_targetCompensation
     exists_compensating_probability_coordinate
       targetMass sourceMass selected none (by simp)
       htargetSimplex.1 hsourceSimplex.1 htargetSimplex.2 hsourceSimplex.2
-      (quittingStoppingLawNegativeCollisionMassLower packet) hloss
+      (quittingStoppingLawNegativeTargetMassLower packet) hloss
   refine ⟨outcome, houtcome, ?_⟩
   unfold quittingStoppingLawNegativeCompensationLower
   exact (div_le_iff₀ hcard).2 (by
@@ -273,7 +273,7 @@ theorem negativeObserver_harmonic_or_absorbingResetFaceCompensation
           have hlowerPos : 0 <
               quittingStoppingLawNegativeCompensationLower packet := by
             unfold quittingStoppingLawNegativeCompensationLower
-            exact div_pos packet.negativeCollisionMassLower_pos
+            exact div_pos packet.negativeTargetMassLower_pos
               (by positivity)
           have hmassRank := hmass rank
           rw [hzero] at hmassRank
@@ -387,7 +387,7 @@ theorem exists_negativeObserver_absorbingCompensationConcentratedPacket
       terminal subseq hmass hdebt
   have hlowerPos : 0 < quittingStoppingLawNegativeCompensationLower packet := by
     unfold quittingStoppingLawNegativeCompensationLower
-    exact div_pos packet.negativeCollisionMassLower_pos
+    exact div_pos packet.negativeTargetMassLower_pos
       (by positivity)
   have hpointMassPos : 0 < point.2 (some terminal) :=
     hlowerPos.trans_le hpointMass

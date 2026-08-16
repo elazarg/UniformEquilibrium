@@ -134,6 +134,8 @@ def is_dedicated_history_or_evidence(document: pathlib.Path) -> bool:
         return True
     if parts[:2] == ("Reverse", "Tasks") and document.name != "README.md":
         return True
+    if parts[:2] == ("Reverse", "Runs") and document.name != "README.md":
+        return True
     prefix = document.read_text(encoding="utf-8")[:512]
     return (
         "Historical design record." in prefix
@@ -267,7 +269,7 @@ def check_status(errors: list[str]) -> None:
 
 def check_frontier(errors: list[str]) -> None:
     frontier = json.loads(FRONTIER_PATH.read_text(encoding="utf-8"))
-    if frontier.get("schema_version") != 1:
+    if frontier.get("schema_version") != 2:
         errors.append("docs/QuittingProofFrontier.json: unsupported schema_version")
     leaves = frontier.get("formal_leaves", [])
     if len(leaves) > frontier.get("open_leaf_limit", 0):
@@ -275,6 +277,49 @@ def check_frontier(errors: list[str]) -> None:
     leaf_ids = {leaf["id"] for leaf in leaves}
     if len(leaf_ids) != len(leaves):
         errors.append("docs/QuittingProofFrontier.json: duplicate formal leaf id")
+    alternatives = frontier.get("manuscript_alternatives", [])
+    alternative_numbers = {
+        alternative.get("alternative_number") for alternative in alternatives
+    }
+    issue_numbers = {alternative.get("issue_number") for alternative in alternatives}
+    if alternative_numbers != {1, 2, 3, 4, 5}:
+        errors.append(
+            "docs/QuittingProofFrontier.json: manuscript alternatives must be 1--5"
+        )
+    if len(issue_numbers) != len(alternatives):
+        errors.append("docs/QuittingProofFrontier.json: duplicate GitHub issue number")
+    open_alternatives = [
+        alternative for alternative in alternatives if alternative.get("status") == "open"
+    ]
+    mapped_leaf_ids = {alternative.get("leaf_id") for alternative in open_alternatives}
+    if mapped_leaf_ids != leaf_ids:
+        errors.append(
+            "docs/QuittingProofFrontier.json: open alternatives must map exactly to formal leaves"
+        )
+    transitions = frontier.get("transitions", [])
+    transition_ids = {transition["id"] for transition in transitions}
+    for alternative in alternatives:
+        status = alternative.get("status")
+        if status == "open":
+            if "resolution" in alternative:
+                errors.append(
+                    "docs/QuittingProofFrontier.json: open alternative has a resolution"
+                )
+        elif status == "eliminated":
+            resolution = alternative.get("resolution")
+            if resolution not in transition_ids:
+                errors.append(
+                    f"alternative {alternative.get('alternative_number')}: "
+                    f"unknown resolution {resolution}"
+                )
+            if "leaf_id" in alternative:
+                errors.append(
+                    "docs/QuittingProofFrontier.json: eliminated alternative has an open leaf"
+                )
+        else:
+            errors.append(
+                f"alternative {alternative.get('alternative_number')}: unknown status {status}"
+            )
     for leaf in leaves:
         source = ROOT / leaf["source"]
         if not source.is_file():
@@ -285,7 +330,7 @@ def check_frontier(errors: list[str]) -> None:
             errors.append(
                 f"{leaf['id']}: producer {leaf['producer']} not found in {leaf['source']}"
             )
-    for transition in frontier.get("transitions", []):
+    for transition in transitions:
         unknown = set(transition.get("target_ids", [])) - leaf_ids
         if unknown:
             errors.append(

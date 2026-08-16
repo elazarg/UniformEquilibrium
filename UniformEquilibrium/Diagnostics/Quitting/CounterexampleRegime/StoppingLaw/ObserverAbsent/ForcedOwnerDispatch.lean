@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.NegativeCollisionAtomicDispatch
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.NegativeTargetAtomicDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectStratification
 
 /-!
@@ -255,7 +255,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrier
       exact lt_of_le_of_ne (le_of_not_gt hpositive)
         packet.reward_ne_zero
     rw [quittingStoppingLawObserverAbsentCarrierProfile, if_neg hpositive]
-    exact packet.negativeCollision_sourceMassLower hnegative n
+    exact packet.negativeTarget_sourceMassLower hnegative n
 
 /-- Exact pre-observer-stop accounting for the selected endpoint. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrierMass_eq_clock
@@ -520,8 +520,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_strategic
         HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch packet
             (quittingStoppingLawObserverAbsentMassLower packet) ∨
           HasQuittingStoppingLawSingletonStrategicOrientation packet ∨
-          HasQuittingStoppingLawNegativeCollisionAtomicDispatch packet
-            (quittingStoppingLawNegativeCollisionMassLower packet) ∨
+          HasQuittingStoppingLawNegativeTargetAtomicDispatch packet
+            (quittingStoppingLawNegativeTargetMassLower packet) ∨
           HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch packet
             ((packet.charge / 4) /
               ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
@@ -553,8 +553,8 @@ def HasQuittingStoppingLawOrientationPreservingStrategicDispatch
     (packet.observer ∈ packet.terminal.val ∧
       1 < packet.terminal.val.card ∧
       reward packet.terminal packet.observer < 0 ∧
-      HasQuittingStoppingLawNegativeCollisionAtomicDispatch packet
-        (quittingStoppingLawNegativeCollisionMassLower packet)) ∨
+      HasQuittingStoppingLawNegativeTargetAtomicDispatch packet
+        (quittingStoppingLawNegativeTargetMassLower packet)) ∨
     (packet.observer ∈ packet.terminal.val ∧
       1 < packet.terminal.val.card ∧
       0 < reward packet.terminal packet.observer ∧
@@ -593,7 +593,7 @@ theorem exists_prescribed_or_orientationPreservingStrategicDispatch
       · exact Or.inr (Or.inl hsingleton)
       · exact Or.inr (Or.inr (Or.inl ⟨hnegative.1, hnegative.2.1,
           hnegative.2.2,
-          packet.negativeCollision_atomicDispatch hnegative.1
+          packet.negativeTarget_atomicDispatch hnegative.1
             hnegative.2.2⟩))
     · exact Or.inr (Or.inr (Or.inr ⟨hobserver, hcollision, hpositive,
         packet.positiveTargetCollision_markedTailDispatch hobserver hcollision

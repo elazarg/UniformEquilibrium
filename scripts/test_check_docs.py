@@ -112,6 +112,7 @@ class TimelessDocumentTests(unittest.TestCase):
             ROOT / "docs" / "case-studies" / "FTV_ARCHITECTURE_ANALYSIS.md",
             ROOT / "docs" / "design" / "HISTORY_CARRIER.md",
             ROOT / "Reverse" / "Tasks" / "Q194_SEMIALGEBRAIC_BARRIER_COMPLETENESS.md",
+            ROOT / "Reverse" / "Runs" / "Q194_ONE_PALM_SPINE_COMPRESSION.md",
             ROOT / "Experiments" / "README.md",
         )
         for record in records:

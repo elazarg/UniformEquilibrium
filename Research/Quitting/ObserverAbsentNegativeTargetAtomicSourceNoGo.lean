@@ -11,8 +11,8 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.DebtOwnerTransferCounterexample
 /-!
 # A forced-owner atomic barrier does not return to the actual source row
 
-The observer-absent and negative-collision leaves both reach the atomic
-blocker barrier, but at different rows.  In the negative-collision leaf the
+The observer-absent and negative-target leaves both reach the atomic
+blocker barrier, but at different rows.  In the negative-target leaf the
 sure quitter is part of the actual source profile.  In the observer-absent
 leaf the sure quitter was installed counterfactually, and the outsider edge
 must still be transported back across the owner square.
@@ -35,7 +35,7 @@ the carrier; the shared atomic barrier alone is insufficient.
 noncomputable section
 
 namespace GameTheory
-namespace ObserverAbsentNegativeCollisionAtomicSourceNoGo
+namespace ObserverAbsentNegativeTargetAtomicSourceNoGo
 
 open StochasticGame Math.Probability Math.PMFProduct
 open QuittingDynamicDebtOwnerTransferCounterexample
@@ -121,5 +121,5 @@ theorem not_exists_positive_terminalExploitabilityGap :
     (quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_two
       (by decide) reward)
 
-end ObserverAbsentNegativeCollisionAtomicSourceNoGo
+end ObserverAbsentNegativeTargetAtomicSourceNoGo
 end GameTheory

@@ -1545,17 +1545,43 @@ D_*>0
 \text{an open Lipschitz barrier},
 ]
 
-the explicit estimate (6)–(10), and the finite reset/potential certificate theorem (16)–(19). The unresolved implication is the correlation theorem
+the explicit estimate (6)–(10), and the finite reset/potential certificate theorem (16)–(19).
+
+There is also an exact correction at the representation level. A probability
+law on joint reset modes, updated using one pure-outcome sample shared by all
+coordinates, semiconjugates exactly to the terminal semantic prefix map. This
+avoids the coordinatewise false recombination in (22). The full construction,
+including its left-regular-band structure and exact tail coefficients, is in
+[the exact joint-reset lift](../../docs/JOINT_RESET_LIFT.md).
+
+The [one-Palm spine compression](../Runs/Q194_ONE_PALM_SPINE_COMPRESSION.md)
+gives a quadratic endpoint error and a finite affine branch normal form. The
+generic collision estimate and joint-reset semiconjugacy are checked in Lean;
+the bounded affine compression is rigorous mathematics recorded as run
+evidence. It does not preserve selector validity at the compressed
+intermediate states.
+
+For a rational initial state, the convex hull of all joint reset images is a
+rational invariant polytope. It is not a positive barrier: individual reset
+modes can have negative debt, and the full hull can contain negative-debt
+points. Nor does the finite lift prove that its selector-consistent reachable
+closure is semialgebraic. One sufficient unresolved implication is therefore
+a semialgebraic trapping theorem on the correlation-preserving law space:
 
 [
 \boxed{
 D_*>0
 \ \Longrightarrow
-\text{a bounded rational semialgebraic invariant set in the
-finite max-stochastic lift}.
+\begin{array}{c}
+\text{a rational semialgebraic set of joint reset laws containing the}\\
+\text{identity law, closed under maximizing-selector transitions, and}\\
+\text{having a uniformly positive projected debt floor}
+\end{array}.
 }
 ]
 
-Neither the near-spine estimate nor clamp saturation establishes that implication, and claiming that they do would leave precisely the singleton-envelope and correlated-history gaps above.
+Neither the near-spine estimate nor clamp saturation establishes that
+implication. The joint law lift removes false correlation from the
+representation, but it does not prove the displayed trapping implication.
 
 [1]: https://drops.dagstuhl.de/storage/00lipics/lipics-vol334-icalp2025/html/LIPIcs.ICALP.2025.163/LIPIcs.ICALP.2025.163.html "https://drops.dagstuhl.de/storage/00lipics/lipics-vol334-icalp2025/html/LIPIcs.ICALP.2025.163/LIPIcs.ICALP.2025.163.html"

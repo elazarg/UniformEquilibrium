@@ -276,6 +276,20 @@ theorem collisionMass_le_pairMulSum (x : ι → ℝ)
   exact collisionMassFormulaOn_le_pairMulSum x Finset.univ
     (fun i _ => h0 i) (fun i _ => h1 i)
 
+/-- Collision mass is at most half the squared total acting probability.
+
+This is the pair-union estimate used when all configurations with at least
+two acting coordinates are replaced by a common reference configuration. -/
+theorem collisionMass_le_sq_sum_div_two (x : ι → ℝ)
+    (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1) :
+    collisionMass x ≤ (∑ i, x i) ^ 2 / 2 := by
+  calc
+    collisionMass x ≤ Math.pairMulSum x Finset.univ :=
+      collisionMass_le_pairMulSum x h0 h1
+    _ ≤ (∑ i ∈ Finset.univ, x i) ^ 2 / 2 :=
+      Math.pairMulSum_le_sq_sum_div_two x Finset.univ
+    _ = (∑ i, x i) ^ 2 / 2 := by simp
+
 /-- Finite-player quadratic collision bound. -/
 theorem collisionMass_le_choose_card_mul_absorption_sq (x : ι → ℝ)
     (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1) :

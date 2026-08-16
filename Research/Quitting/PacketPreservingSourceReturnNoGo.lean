@@ -25,14 +25,14 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- The localized positive-collision rows form positive actual-row packets,
 so none admits an exact Nash--Bellman embedding on its literal root--tail
 fiber. -/
-theorem positiveCollisionReachedRowLocalization_no_packetPreservingExactSourceReturn
+theorem positiveTargetReachedRowLocalization_no_packetPreservingExactSourceReturn
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (frontierPacket : QuittingStoppingLawVanishingDebtRectangleSequence
       frontier)
     {lower : ℝ}
-    (certificate : HasQuittingStoppingLawPositiveCollisionReachedRowLocalization
+    (certificate : HasQuittingStoppingLawPositiveTargetReachedRowLocalization
       frontierPacket lower) :
     ∃ (stop : ℕ → ℕ) (subseq : ℕ → ℕ) (other : ι),
       StrictMono subseq ∧
@@ -40,7 +40,7 @@ theorem positiveCollisionReachedRowLocalization_no_packetPreservingExactSourceRe
       ∀ rank,
         frontierPacket.quitTime (subseq rank) =
             some (stop (subseq rank)) ∧
-          let actual := quittingStoppingLawPositiveCollisionReachedRowProfile
+          let actual := quittingStoppingLawPositiveTargetReachedRowProfile
             frontierPacket (subseq rank)
           ∃ row : QuittingLiteralPositiveActualRowPacket reward,
             row.profile = actual ∧
@@ -56,7 +56,7 @@ theorem positiveCollisionReachedRowLocalization_no_packetPreservingExactSourceRe
   intro rank
   refine ⟨htime rank, ?_⟩
   dsimp only
-  let actual := quittingStoppingLawPositiveCollisionReachedRowProfile
+  let actual := quittingStoppingLawPositiveTargetReachedRowProfile
     frontierPacket (subseq rank)
   let stage := stop (subseq rank)
   let players := Finset.univ.erase frontierPacket.observer
@@ -67,17 +67,17 @@ theorem positiveCollisionReachedRowLocalization_no_packetPreservingExactSourceRe
   have hcard : 0 < (players.card : ℝ) := by
     exact_mod_cast hcardNat
   have hfloor : 0 <
-      quittingStoppingLawPositiveCollisionReachedRowGainFloor
+      quittingStoppingLawPositiveTargetReachedRowGainFloor
         frontierPacket lower := by
-    unfold quittingStoppingLawPositiveCollisionReachedRowGainFloor
+    unfold quittingStoppingLawPositiveTargetReachedRowGainFloor
     exact div_pos (mul_pos hlower frontier.base_positive)
       (mul_pos (by norm_num) hcard)
   have hgainLower' :
-      quittingStoppingLawPositiveCollisionReachedRowGainFloor
+      quittingStoppingLawPositiveTargetReachedRowGainFloor
           frontierPacket lower ≤
         quittingLiteralActualRowBestEndpointGain reward actual other stage := by
     simpa only [actual, stage,
-      quittingStoppingLawPositiveCollisionReachedRowGain,
+      quittingStoppingLawPositiveTargetReachedRowGain,
       quittingLiteralActualRowBestEndpointGain,
       quittingLiteralActualRowTail, quittingLiteralActualRowRoot] using
         hgain rank
@@ -105,20 +105,20 @@ approximate Nash repair which reuses the literal root and continuation has
 error bounded away from zero by a table-level constant.  The division-free
 form is included because it does not require a separate cardinality
 denominator in downstream arithmetic. -/
-theorem positiveCollisionReachedRowLocalization_sameFiberRepairErrorFloor
+theorem positiveTargetReachedRowLocalization_sameFiberRepairErrorFloor
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (frontierPacket : QuittingStoppingLawVanishingDebtRectangleSequence
       frontier)
     {lower : ℝ}
-    (certificate : HasQuittingStoppingLawPositiveCollisionReachedRowLocalization
+    (certificate : HasQuittingStoppingLawPositiveTargetReachedRowLocalization
       frontierPacket lower) :
     ∃ (stop : ℕ → ℕ) (subseq : ℕ → ℕ) (other : ι),
       StrictMono subseq ∧
       other ≠ frontierPacket.observer ∧
       ∀ rank (error : ℝ),
-        let actual := quittingStoppingLawPositiveCollisionReachedRowProfile
+        let actual := quittingStoppingLawPositiveTargetReachedRowProfile
           frontierPacket (subseq rank)
         let tail := quittingLiteralActualRowTail reward actual
           (stop (subseq rank))
@@ -135,7 +135,7 @@ theorem positiveCollisionReachedRowLocalization_sameFiberRepairErrorFloor
   refine ⟨stop, subseq, other, hsubseq, hother, ?_⟩
   intro rank error
   dsimp only
-  let actual := quittingStoppingLawPositiveCollisionReachedRowProfile
+  let actual := quittingStoppingLawPositiveTargetReachedRowProfile
     frontierPacket (subseq rank)
   let stage := stop (subseq rank)
   let gain := quittingLiteralActualRowBestEndpointGain reward actual other stage
@@ -149,8 +149,8 @@ theorem positiveCollisionReachedRowLocalization_sameFiberRepairErrorFloor
       lower * quittingTerminalSemanticDebtSum frontier.base /
           (2 * (players.card : ℝ)) ≤ gain := by
     simpa only [actual, stage, players, gain,
-      quittingStoppingLawPositiveCollisionReachedRowGainFloor,
-      quittingStoppingLawPositiveCollisionReachedRowGain,
+      quittingStoppingLawPositiveTargetReachedRowGainFloor,
+      quittingStoppingLawPositiveTargetReachedRowGain,
       quittingLiteralActualRowBestEndpointGain,
       quittingLiteralActualRowTail, quittingLiteralActualRowRoot] using
         hgain rank

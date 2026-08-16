@@ -49,7 +49,7 @@
 The open problem is represented by prescribed-payoff/best-response pairs.
 Failure of ordinary uniform equilibrium yields a positive minimum of total
 debt together with finitely many localized stopping-law alternatives.  In
-the positive-collision alternative, an unchanged mixed-action row and continuation
+the positive observer-containing alternative, an unchanged mixed-action row and continuation
 cannot be repaired with vanishing Nash error; the root or tail must change,
 or the error must be paid explicitly.  Algebraic necessary conditions and
 prefix-invariant positive-debt sets provide complementary filters for a
@@ -242,9 +242,9 @@ same opponents, any amount $g\le d_i(\sigma)$ satisfies
 \]
 This identity does not control transports that change an opponent's
 strategy, which is precisely the mismatch between $X_n$ and $Y_n$ in the
-negative-collision alternative.
+negative observer-containing alternative.
 
-The following single lemma supplies both collision localizations.  Suppose
+The following single lemma supplies both observer-containing localizations.  Suppose
 the row is reached with probability $h\ge\ell>0$ and an observer $o$ Quits
 surely there.  Let
 $e_o=d_o(\pi)$ be the observer's debt at the initial profile.  Then
@@ -364,46 +364,9 @@ orientations applies.
       step is to transport or consume that difference along one exact
       equilibrium chronology.
 
-\item \textbf{Singleton.}  If $S=\{o\}$, the shared static
-      compression gives either:
-      \begin{itemize}
-      \item a strict coalition-insertion payoff for some owner, together with
-            a profitable one-row deviation by a distinct player at the
-            corresponding pure quitting row; or
-      \item after deleting $o$, a nonempty smaller quitting game with the
-            same terminal gap $\gamma$.
-      \end{itemize}
-      This static alternative retains neither the marked singleton row nor
-      its chronology.  If the reward table has the smallest possible number
-      of players among counterexamples, exact deletion is impossible:
-      deletion would leave a nonempty smaller game with the same positive
-      terminal gap, while minimality supplies a uniform equilibrium there.
-      Thus in a minimal-player counterexample the singleton certificate
-      compresses to the static atomic toggle alone.  This still does not
-      restore the marked chronology.
+\item \textbf{Singleton (impossible).}
 
-      A distinct singleton-tight boundary calculation is also exact.  Suppose
-      one owner carries all minimum debt $D_*>0$, its prescribed payoff equals
-      $r_o(\{o\})$, and a solo-owner row with Quit probability $q\in(0,1]$
-      admits $L\ge0$ such that every outsider's payoff increase from joining
-      the owner is at most $L$ and $qL\le(1-q)D_*$.  The row is Nash against
-      the prescribed continuation, but its owner defect against the cap is
-      $qD_*$, so
-      \[
-       D_*=qD_*+(1-q)D_*.
-      \]
-      Repetition preserves rather than contracts the minimum debt.  Its
-      finite-prefix semantic limit agrees with the actual stationary solo
-      profile exactly when
-      \[
-       \max\{r_o(\{o\}),0\}=r_o(\{o\})+D_*.
-      \]
-      Under these hypotheses, $r_o(\{o\})\ge0$ directly gives a stationary
-      uniform-equilibrium payoff.  Thus this solo iteration is completely
-      accounted for, but its hypotheses are not asserted for every singleton
-      stopping-law certificate.
-
-\item \textbf{Negative collision.}  If $o\in S$, $|S|>1$, and
+\item \textbf{Negative observer-containing case.}  If $o\in S$ and
       $r_o(S)<0$, then for each $n$ a selected actual row of the source
       profile $Y_n$ has the observer Quit surely and stage-$S$ mass at least
       $\ell$.  The common lemma gives
@@ -419,7 +382,7 @@ orientations applies.
       The certificate controls $d_o(X_n)\to0$, not $d_o(Y_n)$.  The profiles
       $X_n$ and $Y_n$ differ by the mover's full reset; the certificate supplies
       neither a smallness bound for this reset nor an observer-debt transport
-      inequality across it.  The exact negative-collision localization
+      inequality across it.  The exact negative observer-containing localization
       therefore retains the term $d_o(Y_n)/\ell$.
       Nevertheless the rowwise dichotomy itself can be frozen: after a
       further strict subsequence, either one fixed outsider $j\ne o$ realizes
@@ -428,7 +391,7 @@ orientations applies.
       holds at every selected row.  This removes variation of the outsider
       and of the dichotomy, but not the uncontrolled debt term.
 
-\item \textbf{Positive collision.}  If $o\in S$, $|S|>1$, and
+\item \textbf{Positive observer-containing case.}  If $o\in S$ and
       $r_o(S)>0$, then, after a strict subsequence and deletion of finitely
       many terms, the actual target profile $X_n$ reaches a marked row where
       the observer Quits surely and the stage-$S$ mass is at least $\ell$.
@@ -459,7 +422,7 @@ orientations applies.
       intact.
 \end{enumerate}
 
-The cases $r_o(S)=0$ and $o\in S$, $|S|>1$, are impossible because the
+The case $r_o(S)=0$ and $o\in S$ is impossible because the
 rectangle atom is strictly positive.
 
 \section{The exact open implication}
@@ -503,9 +466,8 @@ $\varepsilon$-Nash profiles for every $\varepsilon>0$.  It must use the
 actual coupled certificate.  In particular, it must turn the
 prescribed atom's arbitrarily deep finite exact-prefix placement into an
 infinite or bounded-date chronological use, consume the observer-absent
-Quit-defect atom or endpoint flip on one chronology, join the singleton
-static certificate to its chronology, consume
-the negative blocker arm, or use the positive target-row gain to fund a
+Quit-defect atom or endpoint flip on one chronology, consume the negative
+blocker arm, or use the positive target-row gain to fund a
 controlled change of root or continuation payoff.  An exact edge on the
 unchanged positive root--tail fibre is impossible, and an approximate repair
 on that fibre costs at least the retained gain.  Thus any change must account

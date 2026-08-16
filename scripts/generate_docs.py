@@ -103,21 +103,51 @@ def render_status(status: dict[str, Any]) -> str:
 
 
 def render_open_leaves(frontier: dict[str, Any]) -> str:
+    alternatives = {
+        alternative["leaf_id"]: alternative
+        for alternative in frontier["manuscript_alternatives"]
+        if alternative["status"] == "open"
+    }
+    eliminated = [
+        alternative
+        for alternative in frontier["manuscript_alternatives"]
+        if alternative["status"] == "eliminated"
+    ]
     lines = [
         FRONTIER_BEGIN,
         "This table is generated from "
         "[`QuittingProofFrontier.json`](QuittingProofFrontier.json).",
         "",
-        "| Leaf | Obstruction | Representative | Source producer |",
-        "| --- | --- | --- | --- |",
+        "| Manuscript alternative | GitHub issue | Leaf | Obstruction | Representative | Source producer |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
     for leaf in frontier["formal_leaves"]:
+        alternative = alternatives[leaf["id"]]
+        issue = alternative["issue_number"]
         source = leaf["source"]
         producer = leaf["producer"]
         source_link = f"[`{producer}`](../{source})"
         lines.append(
-            f"| `{leaf['id']}` | `{leaf['obstruction_class']}` | "
+            f"| {alternative['alternative_number']} | "
+            f"[#{issue}](https://github.com/elazarg/UniformEquilibrium/issues/{issue}) | "
+            f"`{leaf['id']}` | `{leaf['obstruction_class']}` | "
             f"`{leaf['representative']}` | {source_link} |"
+        )
+    if eliminated:
+        descriptions = []
+        for alternative in eliminated:
+            issue = alternative["issue_number"]
+            descriptions.append(
+                f"Alternative {alternative['alternative_number']} "
+                f"([issue #{issue}]"
+                f"(https://github.com/elazarg/UniformEquilibrium/issues/{issue})) "
+                f"is eliminated by `{alternative['resolution']}`"
+            )
+        lines.extend(
+            [
+                "",
+                "The manuscript numbering has five fixed slots. " + "; ".join(descriptions) + ".",
+            ]
         )
     lines.extend(["", FRONTIER_END])
     return "\n".join(lines)

@@ -446,6 +446,97 @@ def quittingStoppingLawRectangleTargetProfile
     packet.mover.1
     (frontier.bestResponse packet.mover (frontier.subseq (packet.rank n)))
 
+/-- The normalized target-mass scale supplied by a positive rectangle atom. -/
+def quittingStoppingLawPositiveTargetMassLower
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : ℝ :=
+  (packet.charge / 4) /
+    ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
+      quittingRewardBound reward)
+
+/-- The positive target-mass scale is strictly positive. -/
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetMassLower_pos
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
+    0 < quittingStoppingLawPositiveTargetMassLower packet := by
+  unfold quittingStoppingLawPositiveTargetMassLower
+  exact div_pos (div_pos packet.charge_pos (by norm_num))
+    (mul_pos (by positivity) packet.rewardBound_pos)
+
+/-- A positive rectangle atom stores its normalized mass at the literal
+target endpoint. The estimate does not use terminal cardinality. -/
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_massLower
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
+    (hrewardPositive : 0 < reward packet.terminal packet.observer) (n : ℕ) :
+    quittingStoppingLawPositiveTargetMassLower packet ≤
+      quittingTerminalOutcomeMass reward
+        (Function.update
+          (quittingStoppingLawRectangleTargetProfile packet n)
+          packet.observer
+          (quittingPureTimeBehaviorStrategy reward packet.observer
+            (packet.quitTime n))) (some packet.terminal) := by
+  classical
+  let card : ℝ := Fintype.card (QuittingTerminalOutcome ι)
+  let M := quittingRewardBound reward
+  let targetProfile := Function.update
+    (quittingStoppingLawRectangleTargetProfile packet n) packet.observer
+    (quittingPureTimeBehaviorStrategy reward packet.observer
+      (packet.quitTime n))
+  let sourceProfile := Function.update
+    (frontier.profiles (frontier.subseq (packet.rank n))) packet.observer
+    (quittingPureTimeBehaviorStrategy reward packet.observer
+      (packet.quitTime n))
+  let targetMass := quittingTerminalOutcomeMass reward targetProfile
+    (some packet.terminal)
+  let sourceMass := quittingTerminalOutcomeMass reward sourceProfile
+    (some packet.terminal)
+  have hcard : 0 < card := by
+    dsimp only [card]
+    exact_mod_cast Fintype.card_pos
+  have hrewardLe : reward packet.terminal packet.observer ≤ M := by
+    exact (le_abs_self _).trans
+      (abs_reward_le_quittingRewardBound reward packet.terminal packet.observer)
+  have hMpos : 0 < M := hrewardPositive.trans_le hrewardLe
+  have htargetNonneg : 0 ≤ targetMass :=
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile).1
+      (some packet.terminal)
+  have hsourceNonneg : 0 ≤ sourceMass :=
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile).1
+      (some packet.terminal)
+  have hbound := packet.atom_bound n
+  have hsourceUpdate : Function.update
+      (frontier.profiles (frontier.subseq (packet.rank n))) packet.mover.1
+      (frontier.profiles (frontier.subseq (packet.rank n)) packet.mover.1) =
+        frontier.profiles (frontier.subseq (packet.rank n)) :=
+    Function.update_eq_self _ _
+  rw [hsourceUpdate] at hbound
+  change packet.charge / 4 ≤ card *
+      ((targetMass - sourceMass) *
+        reward packet.terminal packet.observer) at hbound
+  have hdiffRewardLe :
+      (targetMass - sourceMass) * reward packet.terminal packet.observer ≤
+        targetMass * M := by
+    have hdiffLe : targetMass - sourceMass ≤ targetMass := by linarith
+    have hleft := mul_le_mul_of_nonneg_right hdiffLe hrewardPositive.le
+    have hright := mul_le_mul_of_nonneg_left hrewardLe htargetNonneg
+    exact hleft.trans hright
+  have hscaled := mul_le_mul_of_nonneg_left hdiffRewardLe hcard.le
+  have htotal : packet.charge / 4 ≤ card * (targetMass * M) :=
+    hbound.trans hscaled
+  unfold quittingStoppingLawPositiveTargetMassLower
+  apply (div_le_iff₀ (mul_pos hcard hMpos)).2
+  change packet.charge / 4 ≤ targetMass * (card * M)
+  calc
+    packet.charge / 4 ≤ card * (targetMass * M) := htotal
+    _ = targetMass * (card * M) := by ring
+
 /-- The named output of the marked-row consumer on the fixed literal suffix
 sequence. -/
 def HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch
@@ -525,73 +616,16 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetCollisio
       ((packet.charge / 4) /
         ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
           quittingRewardBound reward)) := by
-  classical
-  let card : ℝ := Fintype.card (QuittingTerminalOutcome ι)
-  let M := quittingRewardBound reward
-  let lower := (packet.charge / 4) / (card * M)
-  have hcard : 0 < card := by
-    dsimp only [card]
-    exact_mod_cast Fintype.card_pos
-  have hrewardLe : reward packet.terminal packet.observer ≤ M := by
-    exact (le_abs_self _).trans
-      (abs_reward_le_quittingRewardBound reward packet.terminal packet.observer)
-  have hMpos : 0 < M := hrewardPositive.trans_le hrewardLe
-  have hlower : 0 < lower := by
-    dsimp only [lower]
-    exact div_pos (div_pos packet.charge_pos (by norm_num))
-      (mul_pos hcard hMpos)
-  have hpersistent : ∀ᶠ n in atTop, lower ≤
+  have hlower := packet.positiveTargetMassLower_pos
+  have hpersistent : ∀ᶠ n in atTop,
+      quittingStoppingLawPositiveTargetMassLower packet ≤
       quittingTerminalOutcomeMass reward
         (Function.update
           (quittingStoppingLawRectangleTargetProfile packet n)
           packet.observer
           (quittingPureTimeBehaviorStrategy reward packet.observer
-            (packet.quitTime n))) (some packet.terminal) := by
-    apply Eventually.of_forall
-    intro n
-    let targetProfile := Function.update
-      (quittingStoppingLawRectangleTargetProfile packet n) packet.observer
-      (quittingPureTimeBehaviorStrategy reward packet.observer
-        (packet.quitTime n))
-    let sourceProfile := Function.update
-      (frontier.profiles (frontier.subseq (packet.rank n))) packet.observer
-      (quittingPureTimeBehaviorStrategy reward packet.observer
-        (packet.quitTime n))
-    let targetMass := quittingTerminalOutcomeMass reward targetProfile
-      (some packet.terminal)
-    let sourceMass := quittingTerminalOutcomeMass reward sourceProfile
-      (some packet.terminal)
-    have hbound := packet.atom_bound n
-    have hsourceUpdate : Function.update
-        (frontier.profiles (frontier.subseq (packet.rank n))) packet.mover.1
-        (frontier.profiles (frontier.subseq (packet.rank n)) packet.mover.1) =
-        frontier.profiles (frontier.subseq (packet.rank n)) :=
-      Function.update_eq_self _ _
-    rw [hsourceUpdate] at hbound
-    change packet.charge / 4 ≤ card *
-      ((targetMass - sourceMass) *
-        reward packet.terminal packet.observer) at hbound
-    have htargetNonneg : 0 ≤ targetMass :=
-      (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile).1
-        (some packet.terminal)
-    have hsourceNonneg : 0 ≤ sourceMass :=
-      (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile).1
-        (some packet.terminal)
-    have hdiffRewardLe :
-        (targetMass - sourceMass) * reward packet.terminal packet.observer ≤
-          targetMass * M := by
-      have hdiffLe : targetMass - sourceMass ≤ targetMass := by linarith
-      have hleft := mul_le_mul_of_nonneg_right hdiffLe hrewardPositive.le
-      have hright := mul_le_mul_of_nonneg_left hrewardLe htargetNonneg
-      exact hleft.trans hright
-    have hscaled := mul_le_mul_of_nonneg_left hdiffRewardLe hcard.le
-    have htotal : packet.charge / 4 ≤ card * (targetMass * M) :=
-      hbound.trans hscaled
-    apply (div_le_iff₀ (mul_pos hcard hMpos)).2
-    change packet.charge / 4 ≤ targetMass * (card * M)
-    calc
-      packet.charge / 4 ≤ card * (targetMass * M) := htotal
-      _ = targetMass * (card * M) := by ring
+            (packet.quitTime n))) (some packet.terminal) :=
+    Eventually.of_forall (packet.positiveTarget_massLower hrewardPositive)
   have hconsumer := exists_markedTailCluster_escape_or_otherNashDefect
     reward frontier.base
       (quittingStoppingLawRectangleTargetProfile packet)
@@ -599,7 +633,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetCollisio
       frontier.base_mem frontier.base_minimum frontier.base_positive hcollision
       packet.observer_debt_tendsto_zero hpersistent
   simpa only [HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch,
-    lower, card, M] using hconsumer
+    quittingStoppingLawPositiveTargetMassLower] using hconsumer
 
 namespace QuittingCounterexampleStoppingLawFrontier
 

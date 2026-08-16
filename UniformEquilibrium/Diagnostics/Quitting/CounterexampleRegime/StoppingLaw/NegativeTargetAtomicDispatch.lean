@@ -9,7 +9,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicBlockerRese
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauLocalizedOtherDefect
 
 /-!
-# Source-row atomic dispatch for a negative stopping-law collision
+# Source-row atomic dispatch for a negative stopping-law target
 
 A positive rectangle atom with negative observer reward is carried by a loss
 of terminal mass at the target endpoint.  Consequently the useful mass lies
@@ -22,7 +22,7 @@ and applies the atomic blocker barrier at the actual reached source row.  The
 result is a state-matched finite strategic alternative: either a named
 outsider has a root Nash defect of at least the counterexample gap against
 the literal source continuation, or the observer has a punishment-refusal
-certificate of the same size.  The persistent source-stage mass is retained
+certificate of the same size.  The persistent source-stage mass remains present
 in both branches.  A finite-label extraction then freezes this alternative:
 either one fixed outsider has a uniformly positive legal source-row gain, or
 the refusal certificate persists along a strict subsequence.
@@ -50,7 +50,7 @@ def quittingStoppingLawRectangleSourceProfile
       (packet.quitTime n))
 
 /-- The normalized persistent mass supplied by a negative rectangle atom. -/
-def quittingStoppingLawNegativeCollisionMassLower
+def quittingStoppingLawNegativeTargetMassLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -60,11 +60,11 @@ def quittingStoppingLawNegativeCollisionMassLower
       quittingRewardBound reward)
 
 /-- The game-facing output at every actual source row carrying a fixed
-negative collision.  The row is reached with uniform mass, the observer
+negative target.  The row is reached with uniform mass, the observer
 Quits surely there, and either an outsider carries the full counterexample
 gap as a state-matched root Nash defect or the observer carries the same gap
 as an atomic punishment-refusal certificate. -/
-def HasQuittingStoppingLawNegativeCollisionAtomicDispatch
+def HasQuittingStoppingLawNegativeTargetAtomicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
@@ -98,27 +98,27 @@ def HasQuittingStoppingLawNegativeCollisionAtomicDispatch
                       packet.observer)))
 
 /-- The persistent source-mass scale is strictly positive on the negative
-collision orientation. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollisionMassLower_pos
+target orientation. -/
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTargetMassLower_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
-    0 < quittingStoppingLawNegativeCollisionMassLower packet := by
-  unfold quittingStoppingLawNegativeCollisionMassLower
+    0 < quittingStoppingLawNegativeTargetMassLower packet := by
+  unfold quittingStoppingLawNegativeTargetMassLower
   exact div_pos (div_pos packet.charge_pos (by norm_num))
     (mul_pos (by positivity) packet.rewardBound_pos)
 
 /-- The repulsive atom quantitatively stores its mass at the source endpoint.
 This is the negative-reward counterpart of the target-mass estimate used by
 the positive marked-collision consumer. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollision_sourceMassLower
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTarget_sourceMassLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hnegative : reward packet.terminal packet.observer < 0) (n : ℕ) :
-    quittingStoppingLawNegativeCollisionMassLower packet ≤
+    quittingStoppingLawNegativeTargetMassLower packet ≤
       quittingTerminalOutcomeMass reward
         (quittingStoppingLawRectangleSourceProfile packet n)
         (some packet.terminal) := by
@@ -173,7 +173,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollision_sour
   have hscaled := mul_le_mul_of_nonneg_left hproductLe hcard.le
   have htotal : packet.charge / 4 ≤ card * (sourceMass * M) :=
     hbound.trans hscaled
-  unfold quittingStoppingLawNegativeCollisionMassLower
+  unfold quittingStoppingLawNegativeTargetMassLower
   apply (div_le_iff₀ (mul_pos hcard hMpos)).2
   change packet.charge / 4 ≤
     quittingTerminalOutcomeMass reward
@@ -194,14 +194,14 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_sourceStop_with
     (hnegative : reward packet.terminal packet.observer < 0) :
     ∃ stop : ℕ → ℕ,
       (∀ n, packet.quitTime n = some (stop n)) ∧
-      ∀ n, quittingStoppingLawNegativeCollisionMassLower packet ≤
+      ∀ n, quittingStoppingLawNegativeTargetMassLower packet ≤
         quittingStageCoalitionMass reward
           (quittingStoppingLawRectangleSourceProfile packet n) (stop n)
           packet.terminal := by
   classical
   have hpositiveLower : 0 <
-      quittingStoppingLawNegativeCollisionMassLower packet :=
-    packet.negativeCollisionMassLower_pos
+      quittingStoppingLawNegativeTargetMassLower packet :=
+    packet.negativeTargetMassLower_pos
   have hfinite : ∀ n, ∃ stop, packet.quitTime n = some stop := by
     intro n
     cases htime : packet.quitTime n with
@@ -210,7 +210,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_sourceStop_with
           quittingTerminalOutcomeMass_update_pureTime_none_mem_eq_zero reward
             (frontier.profiles (frontier.subseq (packet.rank n)))
             packet.observer packet.terminal hobserver
-        have hlower := packet.negativeCollision_sourceMassLower hnegative n
+        have hlower := packet.negativeTarget_sourceMassLower hnegative n
         rw [quittingStoppingLawRectangleSourceProfile, htime,
           hsourceZero] at hlower
         exact False.elim ((not_lt_of_ge hlower) hpositiveLower)
@@ -218,27 +218,27 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_sourceStop_with
   choose stop hstop using hfinite
   refine ⟨stop, hstop, ?_⟩
   intro n
-  have hlower := packet.negativeCollision_sourceMassLower hnegative n
+  have hlower := packet.negativeTarget_sourceMassLower hnegative n
   rw [quittingStoppingLawRectangleSourceProfile, hstop n,
     quittingTerminalOutcomeMass_update_pureTime_some_mem_eq_at reward
       (frontier.profiles (frontier.subseq (packet.rank n)))
       packet.observer (stop n) packet.terminal hobserver] at hlower
   simpa [quittingStoppingLawRectangleSourceProfile, hstop n] using hlower
 
-/-- **Negative-collision source-row closure.**  The repulsive rectangle
+/-- **Negative-target source-row closure.**  The repulsive rectangle
 orientation reaches a literal source row with uniform mass.  At that same
 row, and against its actual continuation value, either a named outsider has
 the full counterexample-gap Nash defect or the observer has a punishment
 refusal certificate of the same size. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollision_atomicDispatch
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTarget_atomicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hnegative : reward packet.terminal packet.observer < 0) :
-    HasQuittingStoppingLawNegativeCollisionAtomicDispatch packet
-      (quittingStoppingLawNegativeCollisionMassLower packet) := by
+    HasQuittingStoppingLawNegativeTargetAtomicDispatch packet
+      (quittingStoppingLawNegativeTargetMassLower packet) := by
   classical
   obtain ⟨stop, hstop, hstage⟩ :=
     packet.exists_sourceStop_with_stageMassLower hobserver hnegative
@@ -253,7 +253,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollision_atom
     rw [quittingProfileLiveRoot_update_pureTime_self, hstop n,
       quittingPureTimeHazard_some_self]
   have hbarrier := regime.terminalGap_le_atomicBlockerBarrier howner
-  have hstageN : quittingStoppingLawNegativeCollisionMassLower packet ≤
+  have hstageN : quittingStoppingLawNegativeTargetMassLower packet ≤
       quittingStageCoalitionMass reward profile (stop n) packet.terminal := by
     simpa only [profile] using hstage n
   refine ⟨hstageN, howner, ?_⟩
@@ -286,22 +286,22 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollision_atom
 
 /-! ## Fixed actual-source alternative -/
 
-/-- **Negative-collision actual-source extraction.**  Along a strict
+/-- **Negative-target actual-source extraction.**  Along a strict
 subsequence, either one fixed outsider has the full root defect and its
 canonical legal source-row deviation has gain at least `lower * terminalGap`
 at every selected row, or the observer's atomic refusal certificate persists
 at every selected row.
 
 No positivity premise on `lower` is required for this exact projection.  When
-`lower` is the canonical negative-collision mass floor, its positivity follows
-separately from `negativeCollisionMassLower_pos`. -/
-theorem negativeCollisionAtomicDispatch_fixedActualSourceSubsequence
+`lower` is the canonical negative-target mass floor, its positivity follows
+separately from `negativeTargetMassLower_pos`. -/
+theorem negativeTargetAtomicDispatch_fixedActualSourceSubsequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     {lower : ℝ}
-    (dispatch : HasQuittingStoppingLawNegativeCollisionAtomicDispatch
+    (dispatch : HasQuittingStoppingLawNegativeTargetAtomicDispatch
       packet lower) :
     ∃ (stop : ℕ → ℕ) (subseq : ℕ → ℕ),
       StrictMono subseq ∧
@@ -431,12 +431,12 @@ theorem negativeCollisionAtomicDispatch_fixedActualSourceSubsequence
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
-/-- **Exhaustive static frontier with negative collisions consumed.** The
-negative observer-containing collision is routed to a persistent,
+/-- **Exhaustive static frontier with negative targets consumed.** The
+negative observer-containing target is routed to a persistent,
 state-matched atomic source-row dispatch. The unconsumed atom orientations are
 the prescribed comparison and the
-observer-absent rectangle; the singleton and both collision signs have named
-strategic consumers. -/
+observer-absent rectangle; the singleton and both observer-containing reward
+signs have named strategic consumers. -/
 theorem exists_prescribed_or_absent_or_staticStrategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
@@ -445,8 +445,8 @@ theorem exists_prescribed_or_absent_or_staticStrategicDispatch
       ∃ packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier,
         packet.observer ∉ packet.terminal.val ∨
           HasQuittingStoppingLawSingletonStrategicOrientation packet ∨
-          HasQuittingStoppingLawNegativeCollisionAtomicDispatch packet
-            (quittingStoppingLawNegativeCollisionMassLower packet) ∨
+          HasQuittingStoppingLawNegativeTargetAtomicDispatch packet
+            (quittingStoppingLawNegativeTargetMassLower packet) ∨
           HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch packet
             ((packet.charge / 4) /
               ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
@@ -458,7 +458,7 @@ theorem exists_prescribed_or_absent_or_staticStrategicDispatch
   · exact Or.inr ⟨packet, Or.inl habsent⟩
   · exact Or.inr ⟨packet, Or.inr (Or.inl hsingleton)⟩
   · exact Or.inr ⟨packet, Or.inr (Or.inr (Or.inl
-      (packet.negativeCollision_atomicDispatch hnegative.1
+      (packet.negativeTarget_atomicDispatch hnegative.1
         hnegative.2.2)))⟩
   · exact Or.inr ⟨packet, Or.inr (Or.inr (Or.inr hmarked))⟩
 

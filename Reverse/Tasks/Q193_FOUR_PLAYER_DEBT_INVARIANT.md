@@ -689,6 +689,68 @@ At the latter state, the zero coordinates are (2) and (4). But
 
 Thus this reachable boundary point has no nontrivial zero-cost outgoing singleton pivot. It does not prove a positive floor—small charged moves or genuinely mixed product actions may still return with asymptotically vanishing cost—but it proves that the three-core lasso argument cannot simply be iterated through every full-core matrix.
 
+### An exact charged return for the same matrix
+
+The zero-cost deadlock does not prevent exact charged recurrence elsewhere in
+the cap space.  Put
+
+\[
+A=\left(\frac34,0,\frac14,0\right)
+\]
+
+and apply the singleton blocks
+
+\[
+(2,\tfrac89),\qquad
+(3,\tfrac12),\qquad
+(1,\tfrac23),\qquad
+(4,\tfrac34).
+\]
+
+The resulting cap-clearance cycle is
+
+\[
+\begin{aligned}
+A
+&\longmapsto (1,0,0,0)\\
+&\longmapsto (0,\tfrac12,0,\tfrac12)\\
+&\longmapsto (0,1,\tfrac23,0)\\
+&\longmapsto A.
+\end{aligned}
+\tag{30}
+\]
+
+Only the first block has positive additive charge.  Its reflection charge is
+\(2/9\), coming from coordinate \(4\); the other owner and reflection charges
+vanish.  The survival product after that charge is
+
+\[
+\frac12\cdot\frac23\cdot\frac34=\frac14.
+\]
+
+Consequently the complete word acts on total debt by
+
+\[
+D\longmapsto \frac29D+\frac1{18},
+\tag{31}
+\]
+
+whose unique fixed point is \(D=1/14\).  Repetition gives the exact formula
+
+\[
+D_k=\frac1{14}+\left(\frac29\right)^k
+  \left(D_0-\frac1{14}\right).
+\tag{32}
+\]
+
+Thus any cap–debt lower-barrier inequality valid for these limiting blocks,
+with a domain containing \(A\), must assign \(A\) a lower bound at most
+\(1/14\).  This is a local certificate test, not a global upper bound for
+every reward completion: \(A\) is different from the deadlock point in (29),
+and membership of a full semantic state above \(A\) in the attainable carrier
+still has to be established.  Other singleton words and genuinely mixed
+product roots may also force a smaller debt.
+
 ## Conclusion
 
 The exact status is:

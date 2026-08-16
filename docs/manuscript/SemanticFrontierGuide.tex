@@ -52,8 +52,8 @@ terminal payoff together with its coordinatewise unilateral best-response
 payoff; under one-row prefixing, this pair evolves by a finite-dimensional
 transport law.  If uniform equilibrium fails, the closed attainable set has
 a positive minimum of total debt, and a stopping-law reduction expresses the
-obstruction through five coupled alternatives.  In the positive-collision
-alternatives, an exact repair cannot retain both the same mixed-action root
+obstruction through four substantive alternatives, numbered 1, 2, 4, and 5.
+In the positive observer-containing alternative, an exact repair cannot retain both the same mixed-action root
 and the same continuation value: it must change one of them or incur a
 definite Nash error.  Algebraic necessary conditions and invariant-set
 criteria further restrict the counterexample search, but do not themselves
@@ -125,17 +125,17 @@ The established conclusions and the live gap can be read as follows.
       singleton matrix is standard $Q$ and has no homogeneous simplex
       solution.  This algebraic candidate class is nonempty.
 \item Failure of uniform equilibrium gives a positive semantic minimum and at
-      least one of the five outputs in Section~\ref{sec:five-alternatives}:
+      one of the four substantive outputs in
+      Section~\ref{sec:five-alternatives}:
       \begin{enumerate}
       \item There is a fixed signed terminal-coalition payoff comparison.
       \item Observer-absent terminal mass on an actual profile leads to a legal
             gain or to an account sensitive to cancellation or reversal.
-      \item The singleton case gives a static coalition toggle or exact player
-            deletion, with deletion excluded for a minimal counterexample.
-      \item A negative collision gives an actual source row with a fixed
+      \item The singleton case is impossible as a separate branch.
+      \item A negative observer-containing target gives an actual source row with a fixed
             outsider gain or a punishment-refusal bound, but no observer-debt
             control there.
-      \item A positive collision gives an actual target row with a fixed legal
+      \item A positive observer-containing target gives an actual target row with a fixed legal
             deviator and vanishing observer debt, hence a uniform lower bound
             on same-fibre repair error.
       \end{enumerate}
@@ -406,7 +406,7 @@ Section~\ref{sec:corrected-core} shows that corrected-core deletion genuinely
 iterates.  Section~\ref{sec:barriers} excludes two natural coarse invariant-set
 languages while leaving genuinely coupled barriers open.
 
-\section{The five alternatives}
+\section{The numbered alternatives}
 \label{sec:five-alternatives}
 
 Let
@@ -423,7 +423,7 @@ Every alternative has a positive scale $\kappa$.  For alternatives 2--5 set
 Positivity of the payoff comparison forces $R>0$.  The constant $\ell$ is a
 proved lower bound on the selected profile's total terminal $S$-mass in the
 observer-absent arm, and on a named unconditional stage-$S$ mass in either
-collision arm.  The factors $1/2$ and $1/4$ are the constants
+      observer-containing arm.  The factors $1/2$ and $1/4$ are the constants
 in the two quantitative outputs; no comparison between their witnesses is
 intended.
 
@@ -478,8 +478,8 @@ supplied for the different opponents in $Y_n$.  The profiles satisfy
  \le N\bigl(\Pr_{X_n}[S]-\Pr_{Y_n}[S]\bigr)r_o(S),
  \qquad d_o(X_n)\longrightarrow0.
 \]
-The four alternatives below are the mutually exclusive possibilities for
-the position of $o$ in $S$ and the sign of $r_o(S)$.
+Alternatives 2, 4, and 5 are the mutually exclusive possibilities for the
+position of $o$ in $S$ and the sign of $r_o(S)$.
 
 To state two alternatives, recall the punishment value $\chi_i$ defined
 above.
@@ -553,40 +553,12 @@ provides a quantitative difference of two one-row deviation gains; its missing s
 is transport into, or use within, one such path.  Returning to an actual profile
 has already been achieved in both branches.
 
-\subsection{Alternative 3: singleton}
+\subsection{Alternative 3: singleton (impossible)}
 \label{alt:singleton}
+\subsection{Alternative 4: the observer has negative payoff}
+\label{alt:negative-target}
 
-Here $S=\{o\}$.  The compression theorem gives one of two
-static conclusions:
-\begin{enumerate}
-\item players $k\ne j$ and a nonempty coalition $Q$ with $k\notin Q$ such
-      that
-      \[
-      r_k(Q)<r_k(Q\cup\{k\}),
-      \]
-      while, at the pure row where exactly $Q\cup\{k\}$ Quits, player $j$
-      has a strictly profitable pure one-row action change;
-\item deleting $o$ leaves a nonempty smaller quitting game with the same
-      terminal gap $\gamma$.
-\end{enumerate}
-Positive punishment value, which occurs at an intermediate stage of the
-proof, also produces the first alternative unless it already produces a
-uniform equilibrium.  It is therefore not a third alternative.  This adds a
-static payoff comparison or exact cardinal reduction, but it does not retain
-the selected singleton row or join the static conclusion to its original
-play path.
-
-One may, without loss of generality, choose a hypothetical counterexample
-with the smallest possible number of players.  In that refinement every
-smaller nonempty quitting game has a uniform-equilibrium payoff, so the exact
-deletion alternative is impossible.  The singleton conclusion then consists
-only of the static coalition-insertion toggle and its unstable pure row.  The
-play-path attachment problem is unchanged.
-
-\subsection{Alternative 4: negative collision}
-\label{alt:negative-collision}
-
-Here $o\in S$, $|S|>1$, and $r_o(S)<0$.  Each $q_n$ is finite.  At an actual
+Here $o\in S$ and $r_o(S)<0$.  Each $q_n$ is finite.  At an actual
 reached row $t_n$ of the source profile $Y_n$, the observer Quits surely and
 the unconditional stage-$S$ mass is at least $\ell$.  Let $x_n$ be the row
 played there, $v_n$ the literal continuation payoff after unanimous
@@ -617,10 +589,10 @@ weighted punishment bound.  The construction controls $d_o(X_n)\to0$, not
 $d_o(Y_n)$, and supplies no estimate transporting this debt across player
 $a$'s full strategy replacement.
 
-\subsection{Alternative 5: positive collision}
-\label{alt:positive-collision}
+\subsection{Alternative 5: the observer has positive payoff}
+\label{alt:positive-target}
 
-Here $o\in S$, $|S|>1$, and $r_o(S)>0$.  After a strict subsequence and
+Here $o\in S$ and $r_o(S)>0$.  After a strict subsequence and
 discarding finitely many terms, $q_n$ is finite and an actual reached row
 $t_n$ of the target profile $X_n$ has $o$ Quit surely and stage-$S$ mass at
 least $\ell$.  Let $x_n$ be the row played there, $v_n$ its literal
@@ -645,7 +617,7 @@ mixed action, literal continuation payoff, coalition event, and uniformly
 positive gain.  The lower bound uses $D_*$, not $\gamma$.  Its very
 positivity is what makes the general same-fibre obstruction quantitative.
 
-If $o\in S$, $|S|>1$, and $r_o(S)=0$, the signed payoff comparison is zero,
+If $o\in S$ and $r_o(S)=0$, the signed payoff comparison is zero,
 so the strict inequality is impossible.  Thus the four
 configurations are exhaustive and mutually exclusive for the fixed
 two-profile comparison.
@@ -672,7 +644,7 @@ from $\pi$, with exact terminal gain
 \]
 
 A named coalition with unconditional stage mass at least $\ell$ is used in
-the collision alternatives only to certify $h_t\ge\ell$; its identity plays
+the observer-containing alternatives only to certify $h_t\ge\ell$; its identity plays
 no role in this lemma.  Equivalently, if the row's joint Continue mass is
 zero, some sure quitter exists and the conclusion holds after selecting one.
 Zero joint Continue mass alone does not identify a prescribed observer.  The
@@ -705,11 +677,11 @@ behavioral source or tail to agree is stronger, so it cannot help.  The
 unchanged source profile is not a terminal $\varepsilon$-equilibrium for
 any $\varepsilon<g_i$.
 
-Apply this statement to the rows in the positive-collision alternative,
-Section~\ref{alt:positive-collision}.  After relabelling the selected
+Apply this statement to the rows in the positive observer-payoff alternative,
+Section~\ref{alt:positive-target}.  After relabelling the selected
 subsequence, for every selected $n$ and every $\varepsilon\ge0$,
 \begin{equation}
-\label{eq:positive-collision-repair-floor}
+\label{eq:positive-target-repair-floor}
  \left.
  \begin{array}{c}
  \text{the fixed literal row and literal continuation form a}\\
@@ -746,7 +718,7 @@ does not cover transports that also change an opponent's strategy.
 This rules out one precise proof architecture: localize a profitable
 root--continuation fibre, insert the row and literal continuation unchanged
 into an exact Nash--Bellman path or periodic cycle, and invoke the resulting
-exact play path.  The five alternatives
+exact play path.  The five numbered slots
 are not contradicted by this result.  A viable argument must instead:
 \begin{itemize}
 \item change the root and quantify how much literal event mass and gain are
@@ -757,58 +729,6 @@ are not contradicted by this result.  A viable argument must instead:
 \item retain it as a non-Nash row and offset its positive defect in an
       explicit telescoping account that returns to the same semantic state.
 \end{itemize}
-
-\subsection*{A singleton-tight boundary calculation}
-
-One natural solo-prefix iteration is completely explicit.  Suppose a
-minimum point has total debt $D_*>0$, one owner carries all of that debt,
-and the owner's prescribed payoff is its payoff from quitting alone; denote
-the owner by $h$.  Global
-minimality then gives, for every nonowner $j$,
-\[
- u_j-r_j(\{j\})\ge D_*.
-\]
-Let
-the owner Quit with probability $q\in(0,1]$ while every other player
-Continues.  Assume there is $L\ge0$ such that every other player's payoff
-increase from joining the owner is at most $L$ and
-\[
- qL\le(1-q)D_*.
-\]
-For a nonowner $j$, the Quit-minus-Continue endpoint difference is at most
-\[
- \begin{aligned}
-Q_j-C_j
-&=q\bigl(r_j(\{h,j\})-r_j(\{h\})\bigr)
-   +(1-q)\bigl(r_j(\{j\})-u_j\bigr)\\
- &\le qL-(1-q)D_*\le0;
- \end{aligned}
-\]
-the owner's two endpoints agree by singleton tightness.  Thus this row is
-exact Nash against the prescribed continuation, but its
-owner defect against the retained cap is $qD_*$.  The exact cap account is
-therefore
-\[
- D_*=qD_*+(1-q)D_*;
-\]
-the solo prefix preserves the minimum face rather than contracting the
-owner's debt.
-
-Finite repetition converges, as a sequence of prefixed semantic pairs, to
-the payoff vector generated by the owner's singleton outcome while retaining
-the cap $r_h(\{h\})+D_*$ at the owner.  The actual stationary solo profile
-instead has owner cap $\max\{r_h(\{h\}),0\}$.  The two semantic pairs agree
-exactly when
-\[
- \max\{r_h(\{h\}),0\}=r_h(\{h\})+D_*.
-\]
-Separately, the same hypotheses together with
-$r_h(\{h\})\ge0$ imply that the stationary solo profile has the owner's
-singleton payoff vector as a uniform-equilibrium payoff.  This conclusion
-uses the stationary best-reply comparison and does not follow from agreement
-of the two displayed semantic limits.  The finite iteration itself does not
-turn a positive-debt minimum into an exact cap--Nash play path; the retained
-owner cap is the precise obstruction.
 
 \section{The corrected-core standard-Q restriction}
 \label{sec:corrected-core}
@@ -989,11 +909,11 @@ exhaustive search beyond these screens is claimed.
 To prove
 ordinary uniform equilibrium for every finite quitting game, it is enough---
 and, given the reduction, equivalent---to show that the positive-minimum
-configuration cannot satisfy any of the five alternatives with all of its
+configuration cannot satisfy any of the four substantive alternatives with all of its
 displayed data coupled as stated.
 
 The localized information consists of fixed players and terminal
-coalitions, actual reached rows in the collision cases, exact unilateral
+coalitions, actual reached rows in the observer-containing cases, exact unilateral
 gain identities, arbitrarily deep finite exact prefixes, and a sharp lower
 bound on the error of any same-fibre repair.  What is not supplied is a
 single infinite or returning play path that preserves enough of one of
