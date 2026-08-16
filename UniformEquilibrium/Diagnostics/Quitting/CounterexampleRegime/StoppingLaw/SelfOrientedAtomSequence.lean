@@ -62,13 +62,13 @@ private theorem exists_quittingPureTimeBehaviorStrategy_terminalPayoff_le_add
       quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
         reward profile who strategy
   by_contra hnone
-  push_neg at hnone
+  simp only [not_exists, not_le] at hnone
   have hmono :
       expect (quittingBehaviorStoppingLaw reward strategy)
           (fun _ : Option ℕ => source + ε) ≤
         expect (quittingBehaviorStoppingLaw reward strategy) value := by
-    apply expect_mono
-    intro quitTime
+    apply FinDist.expect_mono
+    intro quitTime _
     exact (hnone quitTime).le
   rw [expect_const, ← hmixture] at hmono
   linarith
@@ -124,11 +124,23 @@ private theorem exists_quittingPureTimePair_gain_and_targetDebt
       (quittingTerminalSemanticPair reward
         (Function.update profile who
           (quittingPureTimeBehaviorStrategy reward who targetTime))) who ≤ ε := by
-    unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
+    change quittingContinuationBestResponseValue reward
+        (Function.update profile who
+          (quittingPureTimeBehaviorStrategy reward who targetTime)) who -
+      quittingTerminalPayoff reward
+        (Function.update profile who
+          (quittingPureTimeBehaviorStrategy reward who targetTime)) who ≤ ε
     rw [quittingContinuationBestResponseValue_update_self]
     linarith
   refine ⟨sourceTime, targetTime, ?_, htargetDebt⟩
-  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
+  change quittingContinuationBestResponseValue reward profile who -
+      quittingTerminalPayoff reward profile who - 2 * ε ≤
+    quittingTerminalPayoff reward
+        (Function.update profile who
+          (quittingPureTimeBehaviorStrategy reward who targetTime)) who -
+      quittingTerminalPayoff reward
+        (Function.update profile who
+          (quittingPureTimeBehaviorStrategy reward who sourceTime)) who
   linarith
 
 /-- Update one player by a deterministic Quit time or by `Never`. -/
@@ -286,7 +298,7 @@ theorem nonempty_selfOrientedAtomSequence
     have herrorLe : error n ≤ charge / 8 :=
       quittingStoppingLawAtomDecoderError_le hcharge.le n
     refine ⟨sourceTime, targetTime, ?_, htargetDebt⟩
-    nlinarith [hsourceDebt n]
+    linarith [hsourceDebt n, hgain, herrorLe]
   choose sourceTimeAt targetTimeAt hgainAt hdebtAt using hendpointChoice
   have hterminalChoice : ∀ n,
       ∃ terminal : {S : Finset ι // S.Nonempty},
