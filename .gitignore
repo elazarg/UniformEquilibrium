@@ -4,6 +4,7 @@
 .lsp-state.json
 .codex/
 .claude/
+/overleaf/
 *.log
 *.aux
 *.out
