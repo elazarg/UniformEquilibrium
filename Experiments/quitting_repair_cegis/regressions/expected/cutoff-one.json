@@ -35,11 +35,15 @@
   "machine_check": {
     "exact_arithmetic": "fractions.Fraction",
     "lean": {
+      "adapter_declaration": "GameTheory.QuittingCutoffOneMixedActual.isUniformEquilibriumPayoff",
+      "adapter_source": "UniformEquilibrium/Diagnostics/Quitting/CutoffOneMixedActual.lean",
       "certificate_type": "GameTheory.QuittingCutoffOneRepairCertificate",
       "conclusion": "GameTheory.QuittingCutoffOneRepairCertificate.isUniformEquilibriumPayoff",
-      "status": "theorem_schema_only"
+      "data_fingerprint": "sha256:a94fe0c3e4cb98f85c5632cc6169da76c7d3b75f30aaf92f69084da0734a36f5",
+      "data_source": "Experiments/quitting_repair_cegis/tables/cutoff_one_mixed.json",
+      "status": "actual_data_adapter_checked"
     },
-    "python_command": "python3 -m experiments.quitting_repair_cegis verify-report"
+    "python_command": "python3 -m Experiments.quitting_repair_cegis verify-report"
   },
   "rung": "cutoff_one",
   "schema": "quitting-repair-report/v1",

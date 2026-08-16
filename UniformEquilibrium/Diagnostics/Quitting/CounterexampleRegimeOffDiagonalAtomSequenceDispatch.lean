@@ -351,6 +351,32 @@ structure QuittingStoppingLawVanishingDebtRectangleSequence
           (quittingPureTimeBehaviorStrategy reward observer (quitTime n))))
       observer) atTop (nhds 0)
 
+/-- The terminal coordinate selected by a positive rectangle atom is nonzero. -/
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.reward_ne_zero
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
+    reward packet.terminal packet.observer ≠ 0 := by
+  intro hzero
+  have hatom := packet.atom_bound 0
+  unfold quittingTerminalPayoffDifferenceAtom at hatom
+  simp only [quittingTerminalOutcomeReward] at hatom
+  rw [hzero, mul_zero, mul_zero] at hatom
+  linarith [packet.charge_pos]
+
+/-- A positive rectangle atom makes the canonical finite-table reward bound
+strictly positive. -/
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.rewardBound_pos
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
+    0 < quittingRewardBound reward := by
+  have hbound := abs_reward_le_quittingRewardBound reward packet.terminal
+    packet.observer
+  exact (abs_pos.mpr packet.reward_ne_zero).trans_le hbound
+
 namespace QuittingCounterexampleStoppingLawFrontier
 
 /-- **Fixed-label sequence dispatch.**  The unconditional off-diagonal

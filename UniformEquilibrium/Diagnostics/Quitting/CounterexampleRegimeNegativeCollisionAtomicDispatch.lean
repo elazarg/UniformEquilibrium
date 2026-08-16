@@ -94,34 +94,17 @@ def HasQuittingStoppingLawNegativeCollisionAtomicDispatch
                     (-quittingAtomicBlockerBalance reward root
                       packet.observer)))
 
-/-- A negative collision packet has a positive reward bound: its fixed
-terminal reward is already a nonzero entry of the table. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.rewardBound_pos_of_negativeCollision
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
-    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
-    (hnegative : reward packet.terminal packet.observer < 0) :
-    0 < quittingRewardBound reward := by
-  have hbound := abs_reward_le_quittingRewardBound reward packet.terminal
-    packet.observer
-  have habs : 0 < |reward packet.terminal packet.observer| :=
-    abs_pos.mpr (ne_of_lt hnegative)
-  exact habs.trans_le hbound
-
 /-- The persistent source-mass scale is strictly positive on the negative
 collision orientation. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollisionMassLower_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
-    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
-    (hnegative : reward packet.terminal packet.observer < 0) :
+    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     0 < quittingStoppingLawNegativeCollisionMassLower packet := by
   unfold quittingStoppingLawNegativeCollisionMassLower
   exact div_pos (div_pos packet.charge_pos (by norm_num))
-    (mul_pos (by positivity)
-      (packet.rewardBound_pos_of_negativeCollision hnegative))
+    (mul_pos (by positivity) packet.rewardBound_pos)
 
 /-- The repulsive atom quantitatively stores its mass at the source endpoint.
 This is the negative-reward counterpart of the target-mass estimate used by
@@ -151,7 +134,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeCollision_sour
   have hcard : 0 < card := by
     dsimp only [card]
     exact_mod_cast Fintype.card_pos
-  have hMpos : 0 < M := packet.rewardBound_pos_of_negativeCollision hnegative
+  have hMpos : 0 < M := packet.rewardBound_pos
   have htargetNonneg : 0 ≤ targetMass :=
     (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile).1
       (some packet.terminal)
@@ -215,7 +198,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_sourceStop_with
   classical
   have hpositiveLower : 0 <
       quittingStoppingLawNegativeCollisionMassLower packet :=
-    packet.negativeCollisionMassLower_pos hnegative
+    packet.negativeCollisionMassLower_pos
   have hfinite : ∀ n, ∃ stop, packet.quitTime n = some stop := by
     intro n
     cases htime : packet.quitTime n with

@@ -39,7 +39,7 @@
       "conclusion": "GameTheory.QuittingCutoffOneRepairCertificate.isUniformEquilibriumPayoff",
       "status": "theorem_schema_only"
     },
-    "python_command": "python3 -m experiments.quitting_repair_cegis verify-report"
+    "python_command": "python3 -m Experiments.quitting_repair_cegis verify-report"
   },
   "rung": "cutoff_one",
   "schema": "quitting-repair-report/v1",

@@ -22,6 +22,24 @@ from .profiles import (
 from .search import LadderResult, RepairFinding, RungTrace, SearchConfig
 
 REPORT_SCHEMA = "quitting-repair-report/v1"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+ACTUAL_CUTOFF_TABLE = (
+    REPO_ROOT
+    / "Experiments"
+    / "quitting_repair_cegis"
+    / "tables"
+    / "cutoff_one_mixed.json"
+)
+ACTUAL_CUTOFF_ADAPTER = (
+    "UniformEquilibrium/Diagnostics/Quitting/CutoffOneMixedActual.lean"
+)
+ACTUAL_CUTOFF_DECLARATION = (
+    "GameTheory.QuittingCutoffOneMixedActual.isUniformEquilibriumPayoff"
+)
+ACTUAL_CUTOFF_FINGERPRINT = (
+    "sha256:a94fe0c3e4cb98f85c5632cc6169da76c7d3b75f30aaf92f69084da0734a36f5"
+)
+ACTUAL_CUTOFF_HAZARDS = ("1/2", "1/2")
 
 
 def canonical_json(data: Any) -> str:
@@ -44,13 +62,40 @@ def trace_dict(trace: RungTrace) -> dict[str, Any]:
     }
 
 
-def _lean_checker_for(kind: str) -> dict[str, str]:
+def _is_promoted_cutoff_certificate(
+    certificate: Mapping[str, Any], game: RationalQuittingGame | None
+) -> bool:
+    if game is None or game.source is None:
+        return False
+    if Path(game.source).resolve() != ACTUAL_CUTOFF_TABLE:
+        return False
+    if table_fingerprint(game) != ACTUAL_CUTOFF_FINGERPRINT:
+        return False
+    promoted = evaluate_cutoff_one(game, ACTUAL_CUTOFF_HAZARDS)
+    return promoted.exact and dict(certificate) == promoted.to_certificate_dict()
+
+
+def _lean_checker_for(
+    certificate: Mapping[str, Any], game: RationalQuittingGame | None = None
+) -> dict[str, str]:
+    kind = certificate.get("kind")
     if kind == "cutoff_one":
-        return {
+        checker = {
             "status": "theorem_schema_only",
             "certificate_type": "GameTheory.QuittingCutoffOneRepairCertificate",
             "conclusion": "GameTheory.QuittingCutoffOneRepairCertificate.isUniformEquilibriumPayoff",
         }
+        if _is_promoted_cutoff_certificate(certificate, game):
+            checker.update(
+                {
+                    "status": "actual_data_adapter_checked",
+                    "data_source": "Experiments/quitting_repair_cegis/tables/cutoff_one_mixed.json",
+                    "data_fingerprint": ACTUAL_CUTOFF_FINGERPRINT,
+                    "adapter_source": ACTUAL_CUTOFF_ADAPTER,
+                    "adapter_declaration": ACTUAL_CUTOFF_DECLARATION,
+                }
+            )
+        return checker
     if kind in {
         "stationary_full_rate",
         "quitter_subset",
@@ -101,9 +146,9 @@ def make_repair_report(
             "exact_arithmetic": "fractions.Fraction",
             "python_command": "python3 -m Experiments.quitting_repair_cegis verify-report",
             # The JSON payload is exact external evidence, not a Lean term.
-            # This identifies the theorem schema that a promoted certificate
-            # must instantiate; it never claims that Python authenticated one.
-            "lean": _lean_checker_for(certificate["kind"]),
+            # The promoted cutoff table additionally records the checked
+            # source-data adapter; other reports retain schema-only status.
+            "lean": _lean_checker_for(certificate, game),
         },
         "search": config.to_dict(),
         "trace": [trace_dict(entry) for entry in result.trace],
@@ -288,10 +333,10 @@ def verify_report(game: RationalQuittingGame, report: Mapping[str, Any]) -> None
             raise ValueError(
                 "repair certificate payload does not match exact recomputation"
             )
-        expected_lean = _lean_checker_for(expected["kind"])
+        expected_lean = _lean_checker_for(expected, game)
         if report.get("machine_check", {}).get("lean") != expected_lean:
             raise ValueError(
-                "repair report misstates its Lean theorem-schema status"
+                "repair report misstates its Lean checker status"
             )
     elif classification == "gap_counterexample":
         certificate = report["certificate"]

@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Boundary.Repair.CutoffOneSafety
 import MathUE.PMFProduct.FiniteFubini
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDynamicDebtProvenance
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 
@@ -103,13 +104,7 @@ def value : Payoff Player := ![1, 1 / 4, 0]
 /-- The positive-boundary Continue endpoint. -/
 def positiveContinueValue : Payoff Player := ![5 / 4, 1 / 4, 0]
 
-/-- Fubini expansion of a product of three Boolean marginals. -/
-@[simp] theorem expect_uniform_bool (f : Bool → ℝ) :
-    expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 := by
-  rw [expect_eq_sum, Fintype.sum_bool]
-  norm_num [PMF.uniformOfFintype_apply]
-  ring
-
+/-- Explicit quitter sets for the displayed three-player Boolean actions. -/
 @[simp] theorem quitters_vector (a b c : Bool) :
     quittingQuitters (![a, b, c] : Player → Bool) =
       (if a then {0} else ∅) ∪ (if b then {1} else ∅) ∪

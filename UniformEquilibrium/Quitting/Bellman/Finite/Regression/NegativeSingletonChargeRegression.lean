@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Examples.BigMatch.Basic
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
+import MathUE.ProbabilityMassFunction.Bool
 
 /-!
 # Negative-singleton survival charge can be a strict upper bound
@@ -61,12 +62,6 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
           f (fun who ↦ if who then second else first))) :=
   StochasticGame.BigMatch.expect_pmfPi_bool selectedRoot f
 
-@[simp] theorem expect_uniform_bool (f : Bool → ℝ) :
-    expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 := by
-  rw [expect_eq_sum, Fintype.sum_bool]
-  norm_num [PMF.uniformOfFintype_apply]
-  ring
-
 /-- Explicit quitter set for a two-coordinate Boolean action. -/
 @[simp] theorem quittingQuitters_boolAction (first second : Bool) :
     quittingQuitters (fun who : Bool ↦ if who then second else first) =
@@ -93,13 +88,15 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
     quittingRootQuitPayoff reward tail root false = 0 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_bool]
-  simp [root, quittingRootPayoff, reward, expect_uniform_bool]
+  simp [root, quittingRootPayoff, reward,
+    Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
 
 @[simp] theorem false_continuePayoff :
     quittingRootContinuePayoff reward tail root false = -(1 / 2 : ℝ) := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_bool]
-  simp [root, tail, quittingRootPayoff, reward, expect_uniform_bool]
+  simp [root, tail, quittingRootPayoff, reward,
+    Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
   norm_num
 
 @[simp] theorem true_quitPayoff :

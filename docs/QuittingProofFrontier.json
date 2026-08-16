@@ -112,10 +112,11 @@
         "SL-NEG-COLLISION",
         "SL-POS-COLLISION"
       ],
-      "summary": "Initial mechanically exhaustive antichain: five formal leaves in three obstruction classes.",
+      "summary": "Mechanically exhaustive antichain: five formal leaves in three obstruction classes, together with an exact bundled five-way localization of every counterexample regime.",
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeExhaustiveFrontier.lean",
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeObserverAbsentForcedOwnerDispatch.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeFiveWayLocalization.lean"
       ]
     },
     {
@@ -160,9 +161,18 @@
       "target_ids": ["SL-SINGLETON"],
       "summary": "Positive punishment, recurrent owner-tail escape, and fixed owner-join loss require no separate compiler: each nondeletion arm yields the existing static atomic-toggle handoff, leaving only its source-matched alignment problem.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeAll.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeFiveWayLocalization.lean",
         "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticConcentratedSingletonStrategicCompression.lean",
         "Research/Quitting/StoppingLawSingletonOrientationNoGo.lean"
+      ]
+    },
+    {
+      "id": "LOCALIZE-POSITIVE-COLLISION-REACHED-ROW",
+      "kind": "hypothesis_dropped",
+      "target_ids": ["SL-POS-COLLISION"],
+      "summary": "At the packet's canonical positive mass floor, the positive-collision branch supplies a strict subsequence on which one fixed non-observer's actual-row best-endpoint gain has an explicit uniform positive lower bound, hence does not converge to zero. The adapter needs no repeated terminal-membership, collision-cardinality, or reward-sign premise; the packet's stored tail cluster and escape/fiber alternative are also unnecessary. The result does not return that gain to the original source or close an exact Nash--Bellman cycle.",
+      "evidence": [
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegimeReachedRowDebtLocalization.lean"
       ]
     },
     {

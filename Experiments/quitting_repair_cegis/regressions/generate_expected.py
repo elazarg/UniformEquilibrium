@@ -24,7 +24,7 @@ from Experiments.quitting_repair_cegis.search import (
 )
 
 ROOT = Path(__file__).resolve().parents[3]
-PACKAGE = ROOT / "experiments" / "quitting_repair_cegis"
+PACKAGE = ROOT / "Experiments" / "quitting_repair_cegis"
 TABLES = PACKAGE / "tables"
 EXPECTED = PACKAGE / "regressions" / "expected"
 

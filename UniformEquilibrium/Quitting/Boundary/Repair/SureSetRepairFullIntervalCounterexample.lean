@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetRepairCounterexample
 import MathUE.Finset.FinThree
 import MathUE.PMFProduct.FiniteFubini
+import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
@@ -110,10 +111,6 @@ def root : Player → PMF Bool := fun _ ↦ PMF.uniformOfFintype Bool
 
 def value : Payoff Player := ![1, 1, 1 / 4]
 def positiveContinueValue : Payoff Player := ![5 / 4, 1, 1 / 4]
-
-@[simp] theorem expect_uniform_bool (f : Bool → ℝ) :
-    expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 :=
-  QuittingSureSetRepairCounterexample.expect_uniform_bool f
 
 @[simp] theorem quitters_vector (a b c : Bool) :
     quittingQuitters (![a, b, c] : Player → Bool) =

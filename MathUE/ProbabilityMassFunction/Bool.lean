@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Math.ProbabilityMassFunction
+import Mathlib.Probability.Distributions.Uniform
 
 /-!
 # Boolean probability mass functions
@@ -13,6 +14,15 @@ Elementary rigidity facts for probability mass functions on `Bool`.
 -/
 
 namespace Math.ProbabilityMassFunction
+
+open Math.Probability
+
+/-- Expectation of a real-valued function under the uniform Boolean PMF. -/
+@[simp] theorem expect_uniformOfFintype_bool (f : Bool → ℝ) :
+    expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 := by
+  rw [expect_eq_sum, Fintype.sum_bool]
+  norm_num [PMF.uniformOfFintype_apply]
+  ring
 
 /-- A Boolean probability mass function with zero real mass at `true` is the
 Dirac mass at `false`. -/

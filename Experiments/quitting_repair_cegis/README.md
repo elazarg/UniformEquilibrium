@@ -37,10 +37,17 @@ The corresponding kernel-facing types are in
 
 Each type exposes an exact terminal-Nash theorem and a uniform-payoff theorem
 through the existing production compilers. The JSON search output is exact
-external arithmetic evidence, not an instantiated Lean proof: reports identify
-the applicable theorem schema with `status: theorem_schema_only`. Promotion to
-a library theorem requires constructing that certificate in Lean. The
-diagnostic module contains no search procedure and no
+external arithmetic evidence, not by itself an instantiated Lean proof. Most
+reports therefore identify only the applicable theorem schema with
+`status: theorem_schema_only`.
+
+The cutoff-one table is also connected to
+`UniformEquilibrium/Diagnostics/Quitting/CutoffOneMixedActual.lean` by a
+deterministically generated data block and source fingerprint. Its report uses
+`status: actual_data_adapter_checked`, and the production theorem proves that
+the exact table has uniform-equilibrium payoff `(0, 0)`. The generated block
+contains only the finite source data; all certificate proofs remain handwritten
+Lean. The diagnostic modules contain no search procedure and no
 failure-to-nonexistence theorem.
 
 ## Exact semantics checked by Python
@@ -163,9 +170,12 @@ Regenerate and test all artifacts:
 
 ```bash
 python3 -m Experiments.quitting_repair_cegis.regressions.generate_expected
+python3 scripts/generate_quitting_repair_adapters.py --check
 python3 -m unittest discover \
   -s Experiments/quitting_repair_cegis/tests -v
+python3 -m unittest scripts/test_generate_quitting_repair_adapters.py -v
 git diff --exit-code -- \
   Experiments/quitting_repair_cegis/regressions/expected
 lake build +UniformEquilibrium.Diagnostics.Quitting.ExactRepairCertificate
+lake build +UniformEquilibrium.Diagnostics.Quitting.CutoffOneMixedActual
 ```

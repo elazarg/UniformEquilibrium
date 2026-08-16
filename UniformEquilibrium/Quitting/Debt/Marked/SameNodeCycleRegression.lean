@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Examples.BigMatch.Basic
 import UniformEquilibrium.Quitting.Debt.Marked.FenceIteration
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
+import MathUE.ProbabilityMassFunction.Bool
 
 /-!
 # A same-node marked-transfer cycle need not give an invariant edge law
@@ -57,12 +58,6 @@ def secondValue : Payoff Bool := fun _ => -1
 /-- Terminal continuation beyond the surely absorbing root. -/
 def terminalValue : Payoff Bool := fun _ => 0
 
-@[simp] theorem expect_uniform_bool (f : Bool → ℝ) :
-    expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 := by
-  rw [expect_eq_sum, Fintype.sum_bool]
-  norm_num [PMF.uniformOfFintype_apply]
-  ring
-
 /-- Fubini expansion of a two-player Boolean product law. -/
 theorem expect_pmfPi_bool (root : Bool → PMF Bool)
     (f : (Bool → Bool) → ℝ) :
@@ -107,7 +102,7 @@ joint-quit outcomes have equal weight. -/
   rw [expect_pmfPi_bool]
   cases who <;>
     simp [halfRoot, secondValue, quittingRootPayoff,
-      reward, expect_uniform_bool] <;>
+      reward, Math.ProbabilityMassFunction.expect_uniformOfFintype_bool] <;>
     norm_num
 
 /-- At the half root, pure Continue also pays `-2`: the opponent's singleton
@@ -118,7 +113,7 @@ outcome and the all-continue successor have equal weight. -/
   rw [expect_pmfPi_bool]
   cases who <;>
     simp [halfRoot, secondValue, quittingRootPayoff,
-      reward, expect_uniform_bool] <;>
+      reward, Math.ProbabilityMassFunction.expect_uniformOfFintype_bool] <;>
     norm_num
 
 /-- The half root has current value exactly `(-2,-2)`. -/

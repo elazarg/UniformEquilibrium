@@ -178,6 +178,20 @@ def check_generated(errors: list[str]) -> None:
     if k11_result.returncode:
         errors.append(k11_result.stdout.strip())
 
+    adapter_result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "generate_quitting_repair_adapters.py"),
+            "--check",
+        ],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if adapter_result.returncode:
+        errors.append(adapter_result.stdout.strip())
+
 
 def check_markdown_names(errors: list[str]) -> None:
     result = subprocess.run(

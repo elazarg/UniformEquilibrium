@@ -10,7 +10,7 @@ import Math.PMFProduct.Update
 # Fubini formulas for finite product PMFs
 
 This file gives a recursive expectation formula for a `Fin (n + 1)`-indexed
-independent product, followed by convenient three- and four-coordinate
+independent product, followed by convenient two-, three-, and four-coordinate
 specializations.  The recursive theorem supports dependent coordinate types;
 the displayed-vector corollaries use one homogeneous coordinate type.
 -/
@@ -53,6 +53,19 @@ theorem expect_pmfPi_fin_zero {A : Fin 0 → Type*} [∀ i, Fintype (A i)]
     funext i
     exact Fin.elim0 i
   rw [hsigma, pmfPi_pure, expect_pure]
+
+/-- Fubini expansion of a homogeneous two-coordinate product PMF. -/
+theorem expect_pmfPi_fin2 {A : Type*} [Fintype A]
+    (sigma : Fin 2 → PMF A) (f : (Fin 2 → A) → ℝ) :
+    expect (pmfPi sigma) f =
+      expect (sigma 0) fun a ↦ expect (sigma 1) fun b ↦ f ![a, b] := by
+  have hvec (a b : A) :
+      Fin.cons a (Fin.cons b (fun i ↦ Fin.elim0 i)) = ![a, b] := by
+    funext i
+    fin_cases i <;> rfl
+  rw [expect_pmfPi_fin_succ]
+  simp_rw [expect_pmfPi_fin_succ]
+  simp [expect_pmfPi_fin_zero, hvec]
 
 /-- Fubini expansion of a homogeneous three-coordinate product PMF. -/
 theorem expect_pmfPi_fin3 {A : Type*} [Fintype A]

@@ -82,12 +82,6 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
           f (fun who ↦ if who then second else first))) :=
   StochasticGame.BigMatch.expect_pmfPi_bool selectedRoot f
 
-@[simp] theorem expect_uniform_bool (f : Bool → ℝ) :
-    expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 := by
-  rw [expect_eq_sum, Fintype.sum_bool]
-  norm_num [PMF.uniformOfFintype_apply]
-  ring
-
 /-- Explicit quitter set for a two-coordinate Boolean action. -/
 @[simp] theorem quittingQuitters_boolAction (first second : Bool) :
     quittingQuitters (fun who : Bool ↦ if who then second else first) =

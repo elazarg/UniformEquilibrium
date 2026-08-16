@@ -121,7 +121,7 @@ theorem exists_negativeObserver_targetCompensation
   have hcard : 0 < card := by
     dsimp only [card]
     exact_mod_cast Fintype.card_pos
-  have hMpos : 0 < M := packet.rewardBound_pos_of_negativeCollision hnegative
+  have hMpos : 0 < M := packet.rewardBound_pos
   have hbound := packet.atom_bound n
   have hsourceUpdate : Function.update
       (frontier.profiles (frontier.subseq (packet.rank n))) packet.mover.1
@@ -273,7 +273,7 @@ theorem negativeObserver_harmonic_or_absorbingResetFaceCompensation
           have hlowerPos : 0 <
               quittingStoppingLawNegativeCompensationLower packet := by
             unfold quittingStoppingLawNegativeCompensationLower
-            exact div_pos (packet.negativeCollisionMassLower_pos hnegative)
+            exact div_pos packet.negativeCollisionMassLower_pos
               (by positivity)
           have hmassRank := hmass rank
           rw [hzero] at hmassRank
@@ -356,7 +356,6 @@ theorem exists_negativeObserver_absorbingCompensationConcentratedPacket
     {regime : QuittingCounterexampleRegime reward}
     {frontier : QuittingCounterexampleStoppingLawFrontier regime}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
-    (hnegative : reward packet.terminal packet.observer < 0)
     (terminal : {S : Finset ι // S.Nonempty})
     (hcollision : 1 < terminal.val.card)
     (subseq : ℕ → ℕ) (hsubseq : StrictMono subseq)
@@ -388,7 +387,7 @@ theorem exists_negativeObserver_absorbingCompensationConcentratedPacket
       terminal subseq hmass hdebt
   have hlowerPos : 0 < quittingStoppingLawNegativeCompensationLower packet := by
     unfold quittingStoppingLawNegativeCompensationLower
-    exact div_pos (packet.negativeCollisionMassLower_pos hnegative)
+    exact div_pos packet.negativeCollisionMassLower_pos
       (by positivity)
   have hpointMassPos : 0 < point.2 (some terminal) :=
     hlowerPos.trans_le hpointMass

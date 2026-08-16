@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Architectures.PublicResponse.CredibilityCriterion
 import MathUE.PMFProduct.FiniteFubini
+import MathUE.ProbabilityMassFunction.Bool
 import GameTheory.Concepts.Stochastic.Models.Quitting.Game
 
 /-!
@@ -169,13 +170,7 @@ abbrev architecture : game.FiniteResponseArchitecture initialState where
     (s' : game.State) :
     architecture.step z act s' = step z act s' := rfl
 
-/-- Fubini expansion of a product of three Boolean mixed actions. -/
-@[simp] theorem expect_uniform_bool (f : Bool → ℝ) :
-    expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 := by
-  rw [expect_eq_sum, Fintype.sum_bool]
-  norm_num [PMF.uniformOfFintype_apply]
-  ring
-
+/-- Explicit quitter sets for the displayed three-player Boolean actions. -/
 @[simp] theorem quitters_000 :
     ({i | ![false, false, false] i = true} : Finset Player) = ∅ := by
   ext i

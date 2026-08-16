@@ -179,29 +179,6 @@ def HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch
               mass * max 0
                 (-quittingAtomicBlockerBalance reward forcedRoot owner)))
 
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.reward_ne_zero
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
-    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
-    reward packet.terminal packet.observer ≠ 0 := by
-  intro hzero
-  have hatom := packet.atom_pos 0
-  unfold quittingTerminalPayoffDifferenceAtom at hatom
-  simp only [quittingTerminalOutcomeReward] at hatom
-  rw [hzero, mul_zero] at hatom
-  exact (lt_irrefl 0) hatom
-
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.rewardBound_pos
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
-    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
-    0 < quittingRewardBound reward := by
-  have hbound := abs_reward_le_quittingRewardBound reward packet.terminal
-    packet.observer
-  exact (abs_pos.mpr packet.reward_ne_zero).trans_le hbound
-
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsentMassLower_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
