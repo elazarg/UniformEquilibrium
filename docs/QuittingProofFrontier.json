@@ -1,12 +1,12 @@
 {
   "schema_version": 2,
-  "open_leaf_limit": 4,
+  "open_leaf_limit": 3,
   "manuscript_alternatives": [
     {
       "alternative_number": 1,
       "issue_number": 3,
-      "status": "open",
-      "leaf_id": "SL-PRESCRIBED"
+      "status": "eliminated",
+      "resolution": "ELIMINATE-PRESCRIBED-BY-SELF-ORIENTED-PURE-TIME"
     },
     {
       "alternative_number": 2,
@@ -45,44 +45,50 @@
   ],
   "formal_leaves": [
     {
-      "id": "SL-PRESCRIBED",
-      "status": "open",
-      "obstruction_class": "OB-ALIGN",
-      "representative": "Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean",
-      "producer": "QuittingCounterexampleStoppingLawFrontier.fourWayLocalization"
-    },
-    {
       "id": "SL-ABSENT-WALL",
       "status": "open",
       "obstruction_class": "OB-ALIGN",
-      "representative": "packet.observer ∉ packet.terminal.val ∧ HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch packet (quittingStoppingLawObserverAbsentMassLower packet)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean",
-      "producer": "QuittingCounterexampleStoppingLawFrontier.fourWayLocalization"
+      "representative": "packet.owner.1 ∉ packet.terminal.val ∧ HasQuittingPureTimeObserverAbsentForcedOwnerDispatch (quittingStoppingLawSelfOrientedBaseProfile packet) packet.owner.1 (quittingStoppingLawSelfOrientedCarrierQuitTime packet) packet.terminal (quittingStoppingLawSelfOrientedMassLower packet)",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ThreeWayLocalization.lean",
+      "producer": "QuittingCounterexampleStoppingLawFrontier.threeWayLocalization"
     },
     {
       "id": "SL-NEG-TARGET",
       "status": "open",
       "obstruction_class": "OB-ALIGN",
-      "representative": "packet.observer ∈ packet.terminal.val ∧ reward packet.terminal packet.observer < 0 ∧ HasQuittingStoppingLawNegativeTargetAtomicDispatch packet (quittingStoppingLawNegativeTargetMassLower packet)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean",
-      "producer": "QuittingCounterexampleStoppingLawFrontier.fourWayLocalization"
+      "representative": "packet.owner.1 ∈ packet.terminal.val ∧ reward packet.terminal packet.owner.1 < 0 ∧ HasQuittingPureTimeNegativeTargetAtomicDispatch (quittingStoppingLawSelfOrientedBaseProfile packet) packet.owner.1 packet.sourceQuitTime packet.terminal (quittingStoppingLawSelfOrientedMassLower packet)",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ThreeWayLocalization.lean",
+      "producer": "QuittingCounterexampleStoppingLawFrontier.threeWayLocalization"
     },
     {
       "id": "SL-POS-TARGET",
       "status": "open",
       "obstruction_class": "OB-RETURN",
-      "representative": "packet.observer ∈ packet.terminal.val ∧ 0 < reward packet.terminal packet.observer ∧ HasQuittingStoppingLawPositiveTargetReachedRowLocalization packet ((packet.charge / 4) / (card outcomes * rewardBound))",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean",
-      "producer": "QuittingCounterexampleStoppingLawFrontier.fourWayLocalization"
+      "representative": "packet.owner.1 ∈ packet.terminal.val ∧ 0 < reward packet.terminal packet.owner.1 ∧ HasQuittingPureTimePositiveTargetReachedRowLocalization frontier (quittingStoppingLawSelfOrientedBaseProfile packet) packet.owner.1 packet.targetQuitTime packet.terminal (quittingStoppingLawSelfOrientedMassLower packet)",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ThreeWayLocalization.lean",
+      "producer": "QuittingCounterexampleStoppingLawFrontier.threeWayLocalization"
     }
   ],
   "transitions": [
     {
+      "id": "ELIMINATE-PRESCRIBED-BY-SELF-ORIENTED-PURE-TIME",
+      "kind": "leaf_eliminated",
+      "target_ids": [
+        "SL-ABSENT-WALL",
+        "SL-NEG-TARGET",
+        "SL-POS-TARGET"
+      ],
+      "summary": "Choose one positive-debt owner and purify both a near-worst source and a near-best target to deterministic Quit times. Own-strategy updates preserve the owner cap, so a fixed terminal atom carries a positive target-minus-source gain while target debt vanishes. Owner incidence and reward sign route that atom into the three remaining consumers; manuscript Alternative 1 and issue #3 need no separate prescribed-comparison branch.",
+      "evidence": [
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SelfOrientedAtomSequence.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/PureTimeDispatch.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ThreeWayLocalization.lean"
+      ]
+    },
+    {
       "id": "ELIMINATE-THREE-ELEMENT-CORRECTED-CORE",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-ABSENT-WALL",
         "SL-NEG-TARGET",
         "SL-POS-TARGET"
@@ -93,23 +99,22 @@
       ]
     },
     {
-      "id": "PRESERVE-RECTANGLE-ORIENTATION-PROVENANCE",
+      "id": "PRESERVE-SELF-ORIENTED-PURE-TIME-PROVENANCE",
       "kind": "maintenance",
       "target_ids": [
         "SL-ABSENT-WALL",
         "SL-NEG-TARGET",
         "SL-POS-TARGET"
       ],
-      "summary": "The exhaustive capstone retains one literal rectangle packet and the observer-membership and reward-sign facts selecting its consumer. No terminal-cardinality split remains.",
+      "summary": "The exhaustive capstone retains one self-oriented pure-time atom packet, its fixed terminal label, and the owner-membership and reward-sign facts selecting one of the three remaining consumers.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ThreeWayLocalization.lean"
       ]
     },
     {
       "id": "DROP-BARRIER-ELEMENTARY-BOUNDARY-FAMILY",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-ABSENT-WALL",
         "SL-NEG-TARGET",
         "SL-POS-TARGET"
@@ -123,14 +128,13 @@
       "id": "FRONTIER-BASELINE",
       "kind": "census",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-ABSENT-WALL",
         "SL-NEG-TARGET",
         "SL-POS-TARGET"
       ],
-      "summary": "Mechanically exhaustive antichain: four formal leaves in two obstruction classes, together with an exact bundled four-way localization of every counterexample regime.",
+      "summary": "Mechanically exhaustive antichain: three formal leaves in two obstruction classes, together with an exact bundled three-way localization of every counterexample regime.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ThreeWayLocalization.lean"
       ]
     },
     {
@@ -144,25 +148,13 @@
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/NegativeTargetAtomicDispatch.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ReachedRowDebtLocalization.lean",
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean"
-      ]
-    },
-    {
-      "id": "NOGO-Q182-LOCAL-RECIPIENT-ATOM",
-      "kind": "architectural_nogo",
-      "target_ids": [
-        "SL-PRESCRIBED"
-      ],
-      "summary": "The exact endpoint-recipient atom interface, arbitrary exact prefix depth, unit deleted survival, and semantic-pair preservation do not imply a source-matched recipient gain.",
-      "evidence": [
-        "Research/Quitting/Q182EndpointRecipientAtomInterfaceNoGo.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ThreeWayLocalization.lean"
       ]
     },
     {
       "id": "NOGO-Q182-RESET-FACE-CAP-GAUGE",
       "kind": "architectural_nogo",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-POS-TARGET"
       ],
       "summary": "At the strongest positive-minimum reset-face/law selector, the unique exact cap root may be all-Continue and fix both the semantic pair and terminal law; exact cap-prefix iteration is then the identity.",
@@ -196,7 +188,6 @@
       "id": "NOGO-Q182-FIXED-LAW-PREMIUM-OWNER",
       "kind": "architectural_nogo",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-POS-TARGET"
       ],
       "summary": "A positive gap between fixed-law and global reset-face minima can be carried entirely by a third player's debt, despite retained positive incidence and a strict toggle; it need not fund any reset-owner deviation.",
@@ -219,7 +210,6 @@
       "id": "NOGO-CAP-CHANGING-EXACT-STACK-DEBT-BUDGET",
       "kind": "architectural_nogo",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-POS-TARGET"
       ],
       "summary": "After any literal unilateral reset, an arbitrary finite stack of exact cap-Nash prefixes remains fully charged by the reset endpoint's ordinary debt excess. At a minimum-fiber endpoint every row is all-Continue and the semantic pair and complete retained law are unchanged.",
@@ -231,7 +221,6 @@
       "id": "NOGO-CAP-CHANGING-APPROXIMATE-STACK-ERROR-BUDGET",
       "kind": "architectural_nogo",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-POS-TARGET"
       ],
       "summary": "Arbitrary approximate cap-changing stacks are charged by the reset endpoint's ordinary debt excess plus their cumulative exact playerwise Nash defect; rowwise epsilon certificates cost card(I) times the summed error. Summable errors cannot create off-budget absorption.",
@@ -243,7 +232,6 @@
       "id": "NOGO-SIGNED-TARGET-EDGE-SOURCE-MISMATCH",
       "kind": "architectural_nogo",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-POS-TARGET"
       ],
       "summary": "Atom, positive observer-containing target, a profitable signed observer edge at the reset target, a commuting reset square, arbitrary exact-prefix depth, complete-law retention, and debt conservation still need not produce any profitable observer deviation at the original source.",
@@ -255,7 +243,6 @@
       "id": "NOGO-MINIMUM-FIBER-SQUARE-SOURCE-MISMATCH",
       "kind": "architectural_nogo",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-POS-TARGET"
       ],
       "summary": "Even when all four vertices of a commuting reset square lie on one total-debt fiber, each parallel edge only equates the mover's payoff gain with its debt loss and aggregate opponent debt gain; a positive target edge does not source-match the parallel source edge.",
@@ -279,7 +266,6 @@
       "id": "DROP-UNIFORM-FINITE-HORIZON-DEBT-CERTIFICATION",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-ABSENT-WALL",
         "SL-NEG-TARGET",
         "SL-POS-TARGET"
@@ -290,21 +276,9 @@
       ]
     },
     {
-      "id": "DROP-Q182-RECIPIENT-DEVIATION-SELECTION",
-      "kind": "hypothesis_dropped",
-      "target_ids": [
-        "SL-PRESCRIBED"
-      ],
-      "summary": "At any near-minimum complete-law reset whose scaled mover gain exceeds the minimum error, the recipient, positive debt slope, and one approximate behavioral response are selected automatically. The actual deviation is exactly affine across source and endpoint, carries the quantitative rectangle charge, and is within 8*M*lambda+eta of the recipient's source debt. The remaining zero-source-debt branch still requires endpoint return or signed source transport.",
-      "evidence": [
-        "Research/Quitting/NearMinimumActualDeviationRectangle.lean"
-      ]
-    },
-    {
       "id": "NOGO-COORDINATEWISE-SEMANTIC-BARRIER",
       "kind": "architectural_nogo",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-ABSENT-WALL",
         "SL-NEG-TARGET",
         "SL-POS-TARGET"
@@ -318,7 +292,6 @@
       "id": "CORRECT-MINIMUM-FIBER-SQUARE-IS-CONDITIONAL",
       "kind": "maintenance",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-POS-TARGET"
       ],
       "summary": "The reset-square theorem assumes both the positive target edge and the nonpositive parallel source edge, together with equality of all four total debts, and derives only the opponent-transfer account. It supplies no quitting-game witness where those hypotheses co-realize on a positive global-minimum fiber, so source matching on that fiber is not fenced and remains open.",
@@ -330,7 +303,6 @@
       "id": "NOGO-DEBT-SATURATED-SEMANTIC-BARRIER",
       "kind": "architectural_nogo",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-ABSENT-WALL",
         "SL-NEG-TARGET",
         "SL-POS-TARGET"
@@ -344,7 +316,6 @@
       "id": "NOGO-COMMON-POSITIVE-FIBER-SOURCE-MATCH",
       "kind": "architectural_nogo",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-POS-TARGET"
       ],
       "summary": "A literal two-player quitting reset square can have all four vertices on one common positive total-debt fiber while the same observer reset gains one on the target face and loses one on the parallel source face. Thus quitting semantics plus common-fiber equality do not source-match parallel edges. The witness has no positive global semantic-debt minimum, so positive global-minimum provenance is the exact remaining possible repair.",
@@ -391,7 +362,6 @@
       "id": "DROP-COUNTEREXAMPLE-PREFIX-CAPACITY-FIELD",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "SL-PRESCRIBED",
         "SL-ABSENT-WALL",
         "SL-NEG-TARGET",
         "SL-POS-TARGET"
@@ -400,18 +370,6 @@
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime.lean",
         "UniformEquilibrium/Quitting/Debt/Dynamic/PunishmentFloorCapSplice.lean"
-      ]
-    },
-    {
-      "id": "RULE-OUT-POSITIVE-ATOM-AGGREGATION-BY-CAUSAL-QUIT-MIXING",
-      "kind": "architectural_nogo",
-      "target_ids": [
-        "SL-PRESCRIBED"
-      ],
-      "summary": "Finite Continue-to-Quit modifications obey an exact causal signed-gain recursion, not an eventwise positive-part recursion. In a stationary two-player quitting table the first two reached rows have any prescribed nonnegative sum of positive Quit-directed atoms, yet every arbitrary infinite-horizon behavioral deviation of the marked player has exactly zero payoff. Thus positive atom aggregation by causal Quit mixing is invalid without an additional signed anti-cancellation hypothesis; the prescribed-atom leaf itself remains open.",
-      "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCausalQuitAggregation.lean",
-        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCausalQuitAggregationNoGo.lean"
       ]
     },
     {

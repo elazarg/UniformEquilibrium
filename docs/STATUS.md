@@ -20,7 +20,7 @@ a result as *proved in Lean here* only after the relevant Lean check has complet
 
 ## Current quitting proof search
 
-The quitting proof search has four mechanically checkable open leaves. The general and all-quitting conjectures remain open independently of any one certificate grammar.
+The quitting proof search has three mechanically checkable open leaves. The general and all-quitting conjectures remain open independently of any one certificate grammar.
 
 The live formal-leaf ledger is [`QuittingProofFrontier.json`](QuittingProofFrontier.json). Its source and evidence paths are checked by `python scripts/check_docs.py`.
 

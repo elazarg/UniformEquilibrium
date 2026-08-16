@@ -58,6 +58,6 @@
   ],
   "quitting_frontier": {
     "ledger": "docs/QuittingProofFrontier.json",
-    "summary": "The quitting proof search has four mechanically checkable open leaves. The general and all-quitting conjectures remain open independently of any one certificate grammar."
+    "summary": "The quitting proof search has three mechanically checkable open leaves. The general and all-quitting conjectures remain open independently of any one certificate grammar."
   }
 }

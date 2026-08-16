@@ -224,4 +224,30 @@ theorem threeWayLocalization
 
 end QuittingCounterexampleStoppingLawFrontier
 
+
+/-- A counterexample regime supplies a three-way localization on one of its
+stopping-law frontiers. -/
+theorem QuittingCounterexampleRegime.exists_stoppingLaw_threeWayLocalization
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (regime : QuittingCounterexampleRegime reward) :
+    ∃ frontier : QuittingCounterexampleStoppingLawFrontier regime,
+      HasQuittingStoppingLawThreeWayLocalization frontier := by
+  letI : Nonempty ι := regime.nonempty_players
+  obtain ⟨frontier⟩ := regime.exists_stoppingLaw_exhaustiveFrontier
+  exact ⟨frontier, frontier.threeWayLocalization⟩
+
+/-- Failure of ordinary uniform-payoff existence produces a counterexample
+regime, a frontier, and its three-way localization. -/
+theorem exists_stoppingLaw_threeWayLocalization_of_not_exists_uniformEquilibriumPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hno : ¬ ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ regime : QuittingCounterexampleRegime reward,
+      ∃ frontier : QuittingCounterexampleStoppingLawFrontier regime,
+        HasQuittingStoppingLawThreeWayLocalization frontier := by
+  let regime := quittingCounterexampleRegimeOfNoUniformPayoff reward hno
+  obtain ⟨frontier, hlocalization⟩ :=
+    regime.exists_stoppingLaw_threeWayLocalization
+  exact ⟨regime, frontier, hlocalization⟩
+
 end GameTheory
