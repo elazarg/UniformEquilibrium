@@ -213,6 +213,165 @@ theorem positiveCollisionMarkedTailDispatch_reachedRowLocalization
       quittingStoppingLawPositiveCollisionReachedRowProfile, finalSubseq,
       profile, stage] using hgain rank
 
+
+/-- **Cardinality-free positive target localization.**  A positive fixed
+rectangle atom stores a uniform amount of terminal mass on the literal target
+profiles.  If the terminal contains the observer, the observer's pure-time
+reset therefore reaches one actual sure-Quit row with that mass.  Vanishing
+observer debt and the positive global debt floor then force one fixed other
+player's canonical legal row deviation to have a uniform positive gain along
+a strict subsequence.
+
+No collision-cardinality premise is used.  In particular this theorem applies
+when the fixed terminal is the observer singleton. -/
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_reachedRowLocalization
+    {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
+    (hobserver : packet.observer ∈ packet.terminal.val)
+    (hrewardPositive : 0 < reward packet.terminal packet.observer) :
+    HasQuittingStoppingLawPositiveCollisionReachedRowLocalization packet
+      ((packet.charge / 4) /
+        ((Fintype.card (QuittingTerminalOutcome iota) : Real) *
+          quittingRewardBound reward)) := by
+  classical
+  let card : Real := Fintype.card (QuittingTerminalOutcome iota)
+  let M := quittingRewardBound reward
+  let lower := (packet.charge / 4) / (card * M)
+  have hcard : 0 < card := by
+    dsimp only [card]
+    exact_mod_cast Fintype.card_pos
+  have hrewardLe : reward packet.terminal packet.observer <= M := by
+    exact (le_abs_self _).trans
+      (abs_reward_le_quittingRewardBound reward packet.terminal packet.observer)
+  have hMpos : 0 < M := hrewardPositive.trans_le hrewardLe
+  have hlower : 0 < lower := by
+    dsimp only [lower]
+    exact div_pos (div_pos packet.charge_pos (by norm_num))
+      (mul_pos hcard hMpos)
+  have hpersistent : ∀ᶠ n in atTop, lower <=
+      quittingTerminalOutcomeMass reward
+        (quittingStoppingLawPositiveCollisionReachedRowProfile packet n)
+        (some packet.terminal) := by
+    apply Eventually.of_forall
+    intro n
+    let targetProfile :=
+      quittingStoppingLawPositiveCollisionReachedRowProfile packet n
+    let sourceProfile := Function.update
+      (frontier.profiles (frontier.subseq (packet.rank n))) packet.observer
+      (quittingPureTimeBehaviorStrategy reward packet.observer
+        (packet.quitTime n))
+    let targetMass := quittingTerminalOutcomeMass reward targetProfile
+      (some packet.terminal)
+    let sourceMass := quittingTerminalOutcomeMass reward sourceProfile
+      (some packet.terminal)
+    have hbound := packet.atom_bound n
+    have hsourceUpdate : Function.update
+        (frontier.profiles (frontier.subseq (packet.rank n))) packet.mover.1
+        (frontier.profiles (frontier.subseq (packet.rank n)) packet.mover.1) =
+        frontier.profiles (frontier.subseq (packet.rank n)) :=
+      Function.update_eq_self _ _
+    rw [hsourceUpdate] at hbound
+    change packet.charge / 4 <= card *
+      ((targetMass - sourceMass) *
+        reward packet.terminal packet.observer) at hbound
+    have htargetNonneg : 0 <= targetMass :=
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile).1
+        (some packet.terminal)
+    have hsourceNonneg : 0 <= sourceMass :=
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile).1
+        (some packet.terminal)
+    have hdiffRewardLe :
+        (targetMass - sourceMass) * reward packet.terminal packet.observer <=
+          targetMass * M := by
+      have hdiffLe : targetMass - sourceMass <= targetMass := by linarith
+      have hleft := mul_le_mul_of_nonneg_right hdiffLe hrewardPositive.le
+      have hright := mul_le_mul_of_nonneg_left hrewardLe htargetNonneg
+      exact hleft.trans hright
+    have hscaled := mul_le_mul_of_nonneg_left hdiffRewardLe hcard.le
+    have htotal : packet.charge / 4 <= card * (targetMass * M) :=
+      hbound.trans hscaled
+    apply (div_le_iff₀ (mul_pos hcard hMpos)).2
+    change packet.charge / 4 <= targetMass * (card * M)
+    calc
+      packet.charge / 4 <= card * (targetMass * M) := htotal
+      _ = targetMass * (card * M) := by ring
+  obtain ⟨stop, hfinite, hmass, _hmarkedDefect⟩ :=
+    exists_stops_tendsto_coordinateNashDefect_zero_of_persistent_collision
+      reward (quittingStoppingLawRectangleTargetProfile packet)
+      packet.observer packet.quitTime packet.terminal hobserver hlower
+      packet.observer_debt_tendsto_zero (by
+        simpa only [quittingStoppingLawPositiveCollisionReachedRowProfile]
+          using hpersistent)
+  have hready := hfinite.and hmass
+  obtain ⟨start, hstart⟩ := eventually_atTop.1 hready
+  let subseq : Nat -> Nat := fun n => start + n
+  have hsubseq : StrictMono subseq := fun _ _ hlt =>
+    Nat.add_lt_add_left hlt start
+  let profile : Nat -> (quittingGame reward).BehaviorProfile := fun n =>
+    quittingStoppingLawPositiveCollisionReachedRowProfile packet (subseq n)
+  let stage : Nat -> Nat := fun n => stop (subseq n)
+  have htime : ∀ n,
+      packet.quitTime (subseq n) = some (stage n) := by
+    intro n
+    exact (hstart (subseq n) (Nat.le_add_right start n)).1
+  have hstageMass : ∀ n, lower <=
+      quittingStageCoalitionMass reward (profile n) (stage n)
+        packet.terminal := by
+    intro n
+    exact (hstart (subseq n) (Nat.le_add_right start n)).2
+  have hsure : ∀ n,
+      quittingProfileLiveRoot reward (profile n) (stage n) packet.observer =
+        PMF.pure true := by
+    intro n
+    dsimp only [profile,
+      quittingStoppingLawPositiveCollisionReachedRowProfile]
+    rw [quittingProfileLiveRoot_update_pureTime_self, htime n,
+      quittingPureTimeHazard_some_self]
+  have hdebt : Tendsto (fun n =>
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward (profile n)) packet.observer)
+      atTop (nhds 0) := by
+    have hcomp :=
+      packet.observer_debt_tendsto_zero.comp hsubseq.tendsto_atTop
+    simpa only [profile,
+      quittingStoppingLawPositiveCollisionReachedRowProfile, subseq,
+      quittingStoppingLawRectangleTargetProfile, Function.comp_def] using hcomp
+  have hminimum : ∀ n, quittingTerminalSemanticDebtSum frontier.base <=
+      quittingTerminalSemanticDebtSum
+        (quittingTerminalSemanticPair reward
+          (quittingAllContinueProfileSpine reward (profile n) (stage n))) := by
+    intro n
+    exact frontier.base_minimum _
+      (quittingTerminalSemanticPair_mem_carrier reward _)
+  have hreach : ∀ n, lower <=
+      quittingLiveMass reward (profile n) (stage n) := by
+    intro n
+    exact (hstageMass n).trans
+      (quittingStageCoalitionMass_le_liveMass reward (profile n) (stage n)
+        packet.terminal)
+  obtain ⟨other, gainSubseq, hother, hgainSubseq, hgain⟩ :=
+    exists_fixed_other_reachedRowGain_subsequence reward
+      (quittingTerminalSemanticDebtSum frontier.base) frontier.base_positive
+      profile stage packet.observer lower hminimum hlower hreach hsure hdebt
+  let finalSubseq : Nat -> Nat := fun n => subseq (gainSubseq n)
+  have hfinalSubseq : StrictMono finalSubseq :=
+    hsubseq.comp hgainSubseq
+  change HasQuittingStoppingLawPositiveCollisionReachedRowLocalization
+    packet lower
+  refine ⟨hlower, stop, finalSubseq, other, hfinalSubseq, hother, ?_, ?_, ?_⟩
+  · intro rank
+    simpa only [finalSubseq, stage] using htime (gainSubseq rank)
+  · intro rank
+    simpa only [finalSubseq, profile, stage] using
+      hstageMass (gainSubseq rank)
+  · intro rank
+    simpa only [quittingStoppingLawPositiveCollisionReachedRowGainFloor,
+      quittingStoppingLawPositiveCollisionReachedRowGain,
+      quittingStoppingLawPositiveCollisionReachedRowProfile, finalSubseq,
+      profile, stage] using hgain rank
+
 /-- **Canonical `SL-POS-COLLISION` adapter.**  The exact marked-tail dispatch
 stored by the five-way positive-collision branch yields the quantitative
 reached-row certificate at its canonical mass lower bound.  No terminal

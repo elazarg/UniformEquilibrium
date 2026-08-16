@@ -90,11 +90,10 @@ This table is generated from [`QuittingProofFrontier.json`](QuittingProofFrontie
 
 | Leaf | Obstruction | Representative | Source producer |
 | --- | --- | --- | --- |
-| `SL-PRESCRIBED` | `OB-ALIGN` | `Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier)` | [`QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean) |
-| `SL-ABSENT-WALL` | `OB-ALIGN` | `packet.observer ∉ packet.terminal.val ∧ HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch packet (quittingStoppingLawObserverAbsentMassLower packet)` | [`QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean) |
-| `SL-SINGLETON` | `OB-SINGLETON` | `HasQuittingStoppingLawSingletonStrategicOrientation packet` | [`QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean) |
-| `SL-NEG-COLLISION` | `OB-ALIGN` | `packet.observer ∈ packet.terminal.val ∧ 1 < packet.terminal.val.card ∧ reward packet.terminal packet.observer < 0 ∧ HasQuittingStoppingLawNegativeCollisionAtomicDispatch packet (quittingStoppingLawNegativeCollisionMassLower packet)` | [`QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean) |
-| `SL-POS-COLLISION` | `OB-RETURN` | `packet.observer ∈ packet.terminal.val ∧ 1 < packet.terminal.val.card ∧ 0 < reward packet.terminal packet.observer ∧ HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch packet ((packet.charge / 4) / (card outcomes * rewardBound))` | [`QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_orientationPreservingStrategicDispatch`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ObserverAbsent/ForcedOwnerDispatch.lean) |
+| `SL-PRESCRIBED` | `OB-ALIGN` | `Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier)` | [`QuittingCounterexampleStoppingLawFrontier.fourWayLocalization`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean) |
+| `SL-ABSENT-WALL` | `OB-ALIGN` | `packet.observer ∉ packet.terminal.val ∧ HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch packet (quittingStoppingLawObserverAbsentMassLower packet)` | [`QuittingCounterexampleStoppingLawFrontier.fourWayLocalization`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean) |
+| `SL-NEG-TARGET` | `OB-ALIGN` | `packet.observer ∈ packet.terminal.val ∧ reward packet.terminal packet.observer < 0 ∧ HasQuittingStoppingLawNegativeCollisionAtomicDispatch packet (quittingStoppingLawNegativeCollisionMassLower packet)` | [`QuittingCounterexampleStoppingLawFrontier.fourWayLocalization`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean) |
+| `SL-POS-TARGET` | `OB-RETURN` | `packet.observer ∈ packet.terminal.val ∧ 0 < reward packet.terminal packet.observer ∧ HasQuittingStoppingLawPositiveCollisionReachedRowLocalization packet ((packet.charge / 4) / (card outcomes * rewardBound))` | [`QuittingCounterexampleStoppingLawFrontier.fourWayLocalization`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/FourWayLocalization.lean) |
 
 <!-- END GENERATED OPEN LEAVES -->
 
@@ -103,9 +102,7 @@ The obstruction classes have the following durable readings:
 - `OB-ALIGN`: a counterfactual payoff or debt atom is not yet a source-matched
   strategic gain;
 - `OB-RETURN`: a charged tail or retained law is not yet transported through an
-  exact cap/state return; and
-- `OB-SINGLETON`: a static singleton certificate is not yet compiled into an
-  exact chronology.
+  exact cap/state return.
 
 A change to these leaves belongs first in `QuittingProofFrontier.json`. The
 generated table above must not be hand-edited.
