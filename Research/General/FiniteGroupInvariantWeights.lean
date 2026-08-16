@@ -14,7 +14,7 @@ the corresponding inequality for the invariant orbit weight.
 
 noncomputable section
 
-namespace Experiments.FiniteGroupInvariantWeights
+namespace Research.FiniteGroupInvariantWeights
 
 open scoped BigOperators
 
@@ -141,4 +141,4 @@ theorem hasUniformWeightedWelfareCap_orbitWeight
     exact mul_div_cancel₀ error card_pos_real.ne'
   simpa only [weightedValue, error_eq] using summed
 
-end Experiments.FiniteGroupInvariantWeights
+end Research.FiniteGroupInvariantWeights

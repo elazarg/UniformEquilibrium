@@ -88,7 +88,7 @@ This is the load-bearing failure, not a missed local reward inequality.
 ## New finite certificate extracted
 
 The production module
-`TerminalSemanticMinimumAggregateSurplus.lean` proves, for every player subset
+`../../UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticMinimumAggregateSurplus.lean` proves, for every player subset
 `J` at a positive minimum pair,
 
 ```text

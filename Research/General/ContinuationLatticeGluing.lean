@@ -12,7 +12,7 @@ feasible set is upward closed in the same order: join the separate witnesses.
 The dual statement uses finite meets and downward-closed feasible sets.
 -/
 
-namespace Experiments.ContinuationLatticeGluing
+namespace Research.ContinuationLatticeGluing
 
 open Set
 
@@ -80,4 +80,4 @@ theorem violation_join_le
   · exact antitone le_sup_left
   · exact antitone le_sup_right
 
-end Experiments.ContinuationLatticeGluing
+end Research.ContinuationLatticeGluing

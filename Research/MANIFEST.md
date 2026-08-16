@@ -10,9 +10,9 @@ intentional exceptions are documented below.
 - coordinated finite counterexample studies are under
   `Research/Counterexamples/`.
 
-The period-eleven conditional compiler and semantic/cache adapters live under
-`Research/Quitting/BlockPair/K11/`. Its local manifest defines the maintained
-trust boundary and admission rule.
+The period-eleven conditional compiler and parameterized semantic/checker
+interfaces live under `Research/Quitting/BlockPair/K11/`. Its local manifest
+defines the maintained trust boundary and admission rule.
 
 Research modules may use canonical production declarations through narrow
 direct imports. They do not recreate those declarations or preserve

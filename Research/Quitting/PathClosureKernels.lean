@@ -25,7 +25,7 @@ landed definitions and contains no axioms or placeholders.
 
 noncomputable section
 
-namespace Experiments.QuittingPathClosure
+namespace Research.QuittingPathClosure
 
 open GameTheory GameTheory.StochasticGame Filter
 
@@ -586,4 +586,4 @@ theorem eventually_abs_finiteAveragePayoff_update_sub_terminal_lt_of_opponentsAb
     (hthreshold horizon
       (le_trans (Nat.le_max_right 1 threshold) hhorizon))
 
-end Experiments.QuittingPathClosure
+end Research.QuittingPathClosure

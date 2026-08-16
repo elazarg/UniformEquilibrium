@@ -30,6 +30,7 @@ theorem phaseRoot_endpointDifference_eq_chart
     quittingRootEndpointDifference reward tail (phaseRoot x hx phase) who =
       BlockPairCharts.difference (hazard x phase) tail who := by
   exact endpointDifference_eq_chart (hazard x phase)
-    (hazard_nonneg x hx phase) (hazard_le_one x hx phase) tail who
+    (hazard_nonneg x (fun index ↦ (hx index).1.le) phase)
+    (hazard_le_one x (fun index ↦ (hx index).2.le) phase) tail who
 
 end GameTheory.BlockPairK11.ConditionalData

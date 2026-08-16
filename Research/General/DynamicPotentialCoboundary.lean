@@ -20,7 +20,7 @@ potentials divided by the horizon.  A bounded potential gives an explicit
 
 noncomputable section
 
-namespace Experiments.DynamicPotentialCoboundary
+namespace Research.DynamicPotentialCoboundary
 
 open scoped BigOperators
 
@@ -224,4 +224,4 @@ theorem abs_finiteAveragePayoff_sub_affineCommonReward_le
 
 end StochasticGame
 
-end Experiments.DynamicPotentialCoboundary
+end Research.DynamicPotentialCoboundary

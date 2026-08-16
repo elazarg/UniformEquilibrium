@@ -145,27 +145,29 @@ axiom coverage.
 
 The maintained period-eleven entry point is
 `Research.Quitting.BlockPair.K11`. Redundant `K11` filename prefixes were
-removed inside the `K11/` directory without renaming declarations. Its 32
-implementation modules are all reachable from the umbrella:
+removed inside the `K11/` directory without renaming declarations. Its local
+manifest records the exact Research inventory.
+
+The later lane split kept the parameterized Krawczyk data, semantic checker,
+and exact-zero consumer in Research while moving the four concrete payloads
+and their sole instance assembly to `Experiments/certsearch/block_pair/K11/`:
 
 ```text
-ClearedSemantic                     ConditionalAbsorption
-ConditionalBlock                    ConditionalBlockData
-ConditionalData                     ConditionalExactNash
-ConditionalNash                     ConditionalPackage
-ConditionalProfile                  ConditionalUniformPayoff
-ContinueMassPhase                   ContinueMassRoot
-EndpointSemantic                    EndpointSemanticOne
-EndpointSemanticThree               EndpointSemanticTwo
-EndpointSemanticZero                EvalImmediateReward
-FourPlayerExpectation               ImmediateSemantic
-ImmediateSemanticOne                ImmediateSemanticThree
-ImmediateSemanticTwo                ImmediateSemanticZero
-JacobianCache                       KrawczykConditionalConsumer
-KrawczykConditionalData             KrawczykConditionalSemantic
-PhaseValueRecurrence                Preconditioner
-RowZeroCacheData                    RowZeroSemantic
+UniformEquilibrium/Quitting/Examples/BlockPair/K11DyadicData.lean
+  -> Experiments/certsearch/block_pair/K11/DyadicData.lean
+Research/Quitting/BlockPair/K11/Preconditioner.lean
+  -> Experiments/certsearch/block_pair/K11/Preconditioner.lean
+Research/Quitting/BlockPair/K11/JacobianCache.lean
+  -> Experiments/certsearch/block_pair/K11/JacobianCache.lean
+Research/Quitting/BlockPair/K11/RowZeroCacheData.lean
+  -> Experiments/certsearch/block_pair/K11/RowZeroCacheData.lean
 ```
+
+No Research or production module imports the concrete evidence lane. The
+Research checker takes preconditioner injectivity directly and proves a unique
+canonical residual zero in the certified ball, including interval-box
+membership. The concrete assembly is `checkedK11KrawczykData`; no forwarding
+declarations preserve the old data locations.
 
 The parallel `ConditionalStrategicCompiler.lean` was later removed in favor of
 the stronger compositional route ending at `ConditionalPackage.lean`; the
@@ -286,9 +288,8 @@ K11RowZeroScalarRecurrenceAudit.lean
 The source `K11ConditionalCompiler.lean` was omitted because
 `ConditionalPackage.lean` exposes the same `compile` theorem through the
 compositional chain; importing both redeclares the theorem in one namespace.
-The included `Preconditioner.lean` keeps the exact data but replaces one
-reducible generated check with kernel reduction. No `.olean`, cache, generated
-JSON certificate, or Python cache was copied.
+No `.olean`, cache, original generated JSON certificate, or Python cache was
+copied.
 
 ### Period-eleven generated-data provenance
 
@@ -297,24 +298,26 @@ The surviving `Preconditioner.lean` header named
 `q117_emit_lean_preconditioner.py`. Neither named artifact was present in this
 repository or the adjacent migrated source working tree at
 `/mnt/d/workspace/games/UniformEquilibrium` during the provenance audit. The
-Jacobian cache likewise had no surviving source-data or producer record. The
-complete tree of source revision
+`RowZeroCacheData.lean` header likewise named `q117_verify.py`, which was not
+present. `DyadicData.lean` and `JacobianCache.lean` had no surviving source-data
+or producer record. The complete tree of source revision
 `171e014480bfd59f09403abc68af45b7f2c44fb5` was also searched in the current
 `GameTheory` submodule. It contains neither named q117 artifact nor a matching
-K11 JSON, Python, Jacobian-cache, or preconditioner path.
+K11 JSON, Python, dyadic-data, Jacobian-cache, row-zero-cache, or preconditioner
+path.
 
-The two checked-in Lean files are consequently classified as migrated
+The four checked-in Lean payload files are consequently classified as migrated
 evidence without a reproducible original producer. The structured record
 `Experiments/certsearch/block_pair/k11_generated_data_manifest.json` stores
-full-file hashes and formatting-independent hashes of the parsed exact
-31-by-31 payloads. `scripts/check_k11_generated_data.py` deterministically
-checks those hashes, the matrix shapes, the dyadic precision and scale, the
-interval ordering, and the row-zero absolute-sum cache. It is a freshness and
-integrity check only: it neither reconstructs the missing JSON nor recomputes
-the preconditioner or Jacobian intervals from the game data. Thus the record
-does not supply independent numerical provenance, an adapter from recovered
-source data, or any stronger mathematical claim than the existing conditional
-Lean consumers.
+full-file hashes and formatting-independent logical hashes of the exact dyadic
+box, preconditioner, Jacobian, and row-zero cache payloads.
+`scripts/check_k11_generated_data.py` deterministically checks those hashes,
+the payload shapes, dyadic precisions and scale, interval ordering, matrix row
+routing and final constructors, and the row-zero absolute-sum cache. It is a
+freshness and integrity check only: it neither reconstructs the missing JSON
+nor recomputes any payload from the game data. Thus the record does not supply
+independent numerical provenance, an adapter from recovered source data, or
+any stronger mathematical claim than the existing conditional Lean consumers.
 
 ## Questions, manuscripts, and supporting documents
 
@@ -330,6 +333,34 @@ adjacent source checkout is available they resolve under
 New work follows the target workflow instead: unresolved derivations belong in
 GitHub Discussions, bounded obligations in Issues, and checked integration in
 Pull Requests. The durable contract is [`docs/PIPELINE.md`](docs/PIPELINE.md).
+
+The certsearch reference tables retain the following source locators:
+
+- `G_EPS` at `ε = 1/10` came from
+  `ideas/AbsorbingCycleCarrier/APublishedWeightSitsInTheCycleExistenceHole.md`;
+- `Q154_WEIGHT` and the label `B_ij = r_i({j}) - r_i({i})` came from
+  `questions/Question154-DoRelaxedCyclesDivergeWithoutAnExactOne.md`, section
+  2, equation (9);
+- `TWO_PLAYER_COUNTEREXAMPLE` is owned by
+  `UniformEquilibrium/Quitting/Boundary/Repair/DisjunctionCounterexample.lean`;
+- `FTV_WEIGHT` is the unperturbed table in
+  `UniformEquilibrium/Quitting/Examples/FTV/CyclicAdmissibleCycle.lean`;
+- `HOSTILE_WEIGHT` is owned by
+  `UniformEquilibrium/Quitting/Punishment/IsolatedPunishmentCeiling.lean`;
+- the circulation mode was launched from
+  `ideas/QuittingGameConjecture/SingletonFaceCirculationsSteerOrbits.md`;
+- the repaired four-player follow-up was
+  `questions/Question160-TheFourPlayerCyclicFamilyPhaseDiagram.md`; and
+- the earlier `Experiments/BackwardStableComplementarity.lean` locator is now
+  owned by
+  `UniformEquilibrium/Quitting/Root/EndpointBackwardStability.lean`.
+
+The pairwise-consistency campaign was launched from
+`questions/Question172-BoundedBellmanChargeVersusTerminalInstability.md`.
+That source packet was provenance, not an implementation dependency, and the
+question archive was not extracted. Its earlier collision-mass locator
+`Math/PMFProduct/CollisionMass.lean` is now owned by
+`MathUE/PMFProduct/CollisionMass.lean`.
 
 The live reverse questions became stable task packets under `Reverse/Tasks`:
 
@@ -358,6 +389,60 @@ QuittingGameSemanticFrontierGuide.tex
 The semantic guide in the target already defines `B_i` at first use. The
 four-player and semantic-gap manuscripts differ from their source inputs only
 in intentional presentation cleanup.
+
+## Experiment lane transition
+
+The registered Base suite now owns the reproducible programs and their paired
+reports. Three formerly report-only scripts were registered as `E34`--`E36`:
+
+```text
+Experiments/Base/cap_nash_endpoint_transport_search.py
+Experiments/Base/minimum_plateau_q_budget_search.py
+Experiments/Base/semantic_final_regime_search.py
+```
+
+Five bounded standalone programs were moved from `Experiments/Base/` to
+`Experiments/Probes/`; their old extraction paths were:
+
+```text
+Experiments/Base/backward_absorption_gamma_eta.py
+Experiments/Base/harmonic_module_audit.py
+Experiments/Base/homotopy_germ_endgame.py
+Experiments/Base/owner_cokernel_typed_holonomy.py
+Experiments/Base/reset_return_selection_search.py
+```
+
+The standalone Krawczyk certifier moved from
+`Experiments/Base/krawczyk_cycle_certifier.py` to
+`Experiments/certsearch/krawczyk_cycle_certifier.py`, and the certsearch bridge
+was updated to consume its new path. Earlier E66 prose named the nonexistent
+top-level path `Experiments/krawczyk_cycle_certifier.py`; the extracted tracked
+file was the Base path above. No compatibility aliases are retained.
+
+The concrete arithmetic replay
+`Research/Semantics/SemanticFinalRegimeArithmetic.lean` moved beside its
+source experiment as `Experiments/Base/SemanticFinalRegimeArithmetic.lean`.
+It checks selected scalar instances and is experimental evidence rather than a
+reusable Research interface.
+
+Thirty-two Research modules whose declarations used `Experiments.*` or
+`GameTheory.Experiments.*` namespaces were normalized to `Research.*` without
+aliases. Their theorem statements and bodies were unchanged.
+
+At source checkpoint `42459d79`, three then-local prototypes were checked with
+targeted Lean invocations, not a full build:
+
+```text
+Experiments/DiscreteHazardStopping.lean
+Experiments/PhaseOccupationDuality.lean
+Experiments/QuittingSharedPunishmentCycle.lean
+```
+
+Their maintained mathematical owners are now
+`MathUE/Probability/DiscreteHazardStopping.lean`,
+`MathUE/Probability/PhaseOccupationDuality.lean`, and
+`MathUE/CyclicExposure.lean`. The interim evaluation and promotion order were
+not retained as current documentation.
 
 ## Verification at the checkpoint
 

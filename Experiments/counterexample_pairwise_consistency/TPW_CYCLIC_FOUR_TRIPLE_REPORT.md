@@ -320,7 +320,7 @@ Run
 
 ```text
 python Experiments/counterexample_pairwise_consistency/tpw_cyclic_four_triple_exact.py
-lake env lean Experiments/counterexample_pairwise_consistency/TPWCyclicFourTripleWitness.lean
+lake env lean Research/Counterexamples/Pairwise/TPWCyclicFourTripleWitness.lean
 ```
 
 The Python probe uses `fractions.Fraction` only.  It expands the common table
@@ -329,9 +329,9 @@ honest-payoff, packet, occupation, canonical-window, evaluator, equilibrium,
 and self-loop identities.  Its finite loops are regression audits; (W1)--(W2)
 and the Lean scalar theorems carry the arbitrary-window proof.
 
-`TailPacketCyclicFourWitness.lean` remains the exact proof of the universal
+`../../Research/Counterexamples/Pairwise/TailPacketCyclicFourWitness.lean` remains the exact proof of the universal
 table-wide packet margin and the original arbitrary-date tail identities.
-`TPWCyclicFourTripleWitness.lean` proves the shifted phase monotonicity, common
+`../../Research/Counterexamples/Pairwise/TPWCyclicFourTripleWitness.lean` proves the shifted phase monotonicity, common
 margin, symmetric packet arithmetic, and discarded-root self-loop arithmetic
 without `sorry`.
 

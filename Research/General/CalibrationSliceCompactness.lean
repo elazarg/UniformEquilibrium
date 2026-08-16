@@ -35,7 +35,7 @@ protected audit.
 
 noncomputable section
 
-namespace Experiments
+namespace Research
 namespace CalibrationSliceCompactness
 
 open Set
@@ -117,4 +117,4 @@ theorem exists_uniformGap_of_positive_on_jointZeroSlice
       htotalCalibrationNonneg htotalZero
 
 end CalibrationSliceCompactness
-end Experiments
+end Research

@@ -167,7 +167,7 @@ probability.  Absorption therefore occurs almost surely, only `a` Quits, and
 the honest periodic delivery is zero.
 
 Now evaluate arbitrary unilateral behavior by the exact periodic-window
-taxonomy in `PeriodicWindowEvaluation.lean`.  For player `o`:
+taxonomy in `../../UniformEquilibrium/Quitting/Cycles/PeriodicWindowEvaluation.lean`.  For player `o`:
 
 ```text
 refusal/Never value = 0,

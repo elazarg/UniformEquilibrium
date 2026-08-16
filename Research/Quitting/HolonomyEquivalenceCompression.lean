@@ -34,7 +34,7 @@ nor source-relative splice admissibility for unrecorded boundary data.
 
 noncomputable section
 
-namespace Experiments.QuittingHolonomyEquivalenceCompression
+namespace Research.QuittingHolonomyEquivalenceCompression
 
 open GameTheory Math.Probability Math.PMFProduct
 
@@ -555,4 +555,4 @@ theorem exists_finite_boundary_gain_codebook
   simpa [center, coordinateBoundaryGain] using hgain
 
 
-end Experiments.QuittingHolonomyEquivalenceCompression
+end Research.QuittingHolonomyEquivalenceCompression

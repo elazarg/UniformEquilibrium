@@ -226,3 +226,29 @@ has exactly three total bits of conditional entropy.  Revealing the seed makes
 the total zero, while one fresh honest simultaneous XOR contribution supplies
 24 bits over 24 stages.  Deterministic expansion can redistribute seed entropy
 but cannot amplify it information-theoretically.
+
+## E34 — cap–Nash endpoint transport
+
+Passed. Exact rational grids checked 156,156 scalar endpoint cases and 17,139
+auxiliary excess-budget cases. A two-player local witness saturates the
+transport estimate. The witness is local only: the same game has a zero-debt
+carrier, so this does not establish a positive global minimum or a
+uniform-equilibrium construction. See
+[`CAP_NASH_ENDPOINT_TRANSPORT_AUDIT.md`](CAP_NASH_ENDPOINT_TRANSPORT_AUDIT.md).
+
+## E35 — minimum-plateau Q-budget search
+
+Passed. The exact four-player negative control audited 1,440 auxiliary cube
+roots; no admissible pure stationary root survived. Denominator bounds `3`,
+`4`, and `5` found respectively `4`, `6`, and `10` exact roots, all
+inadmissible. The positive-debt witness has an executable zero-debt escape,
+so this is not a minimum-carrier or unrestricted-equilibrium result. See
+[`MINIMUM_PLATEAU_Q_BUDGET_SEARCH.md`](MINIMUM_PLATEAU_Q_BUDGET_SEARCH.md).
+
+## E36 — semantic final-regime search
+
+Passed. Three exact atomic passports and three marked plateau atoms passed
+their finite consistency checks; no admissible pure root survived the atomic
+controls. The computation does not decide the global minimum semantic fibre:
+any zero-debt carrier disqualifies a positive-debt witness. See
+[`SEMANTIC_FINAL_REGIME_SEARCH.md`](SEMANTIC_FINAL_REGIME_SEARCH.md).

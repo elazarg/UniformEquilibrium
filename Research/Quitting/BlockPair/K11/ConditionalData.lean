@@ -34,20 +34,20 @@ def hazard (x : HazardIndex → ℝ) (phase : Phase) (who : Player) : ℝ :=
   | none => 0
 
 theorem hazard_nonneg (x : HazardIndex → ℝ)
-    (hx : ∀ index, 0 < x index ∧ x index < 1)
+    (hx : ∀ index, 0 ≤ x index)
     (phase : Phase) (who : Player) : 0 ≤ hazard x phase who := by
   unfold hazard
   cases LocalInterval.activeHazardIndex? phase who with
   | none => simp
-  | some index => exact (hx index).1.le
+  | some index => exact hx index
 
 theorem hazard_le_one (x : HazardIndex → ℝ)
-    (hx : ∀ index, 0 < x index ∧ x index < 1)
+    (hx : ∀ index, x index ≤ 1)
     (phase : Phase) (who : Player) : hazard x phase who ≤ 1 := by
   unfold hazard
   cases LocalInterval.activeHazardIndex? phase who with
   | none => simp
-  | some index => exact (hx index).2.le
+  | some index => exact hx index
 
 def rootOfHazard (h : Player → ℝ)
     (h0 : ∀ who, 0 ≤ h who) (h1 : ∀ who, h who ≤ 1) :
@@ -69,8 +69,9 @@ def rootOfHazard (h : Player → ℝ)
 def phaseRoot (x : HazardIndex → ℝ)
     (hx : ∀ index, 0 < x index ∧ x index < 1)
     (phase : Phase) : Player → PMF Bool :=
-  rootOfHazard (hazard x phase) (hazard_nonneg x hx phase)
-    (hazard_le_one x hx phase)
+  rootOfHazard (hazard x phase)
+    (hazard_nonneg x (fun index ↦ (hx index).1.le) phase)
+    (hazard_le_one x (fun index ↦ (hx index).2.le) phase)
 
 @[simp] theorem phaseRoot_true
     (x : HazardIndex → ℝ)

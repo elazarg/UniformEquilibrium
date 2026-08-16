@@ -1,36 +1,50 @@
 {
-  "schema_version": 1,
-  "classification": "migrated_checked_in_evidence_without_reproducible_original_producer",
+  "schema_version": 2,
+  "classification": "checked_in_evidence_without_reproducible_generator",
   "provenance_record": "TRANSITION.md#period-eleven-generated-data-provenance",
   "checker": "scripts/check_k11_generated_data.py",
-  "scope": "Integrity and structure of the surviving Lean payloads only; not regeneration of the original numerical computation.",
+  "scope": "Integrity and structure of the checked-in Lean payloads only; not regeneration of the numerical computation.",
   "integrity_check_reproducible": true,
   "original_numeric_generation_reproducible": false,
-  "recovery_method": "Exact values parsed from migrated checked-in Lean evidence; no independent numerical recomputation.",
-  "legacy_artifacts": {
-    "claimed_input": "q117_krawczyk_certificate.json",
-    "claimed_preconditioner_emitter": "q117_emit_lean_preconditioner.py",
-    "status": "not recovered"
-  },
   "artifacts": {
+    "dyadic_data": {
+      "path": "Experiments/certsearch/block_pair/K11/DyadicData.lean",
+      "canonical_role": "checked-in experimental evidence",
+      "source_file_sha256": "38ed7f43dffafb0add8106dc5a257f2f5d9817d03437cd54e45138531c461b1c",
+      "logical_payload_sha256": "1db7a63e48a84d477cd7d913376a3f28637455dc38b1ae69ec865c0850ed79ad",
+      "precision": 80,
+      "center_count": 31,
+      "radius_numerator": 1,
+      "radius_denominator": 100000000
+    },
     "preconditioner": {
-      "path": "Research/Quitting/BlockPair/K11/Preconditioner.lean",
-      "canonical_role": "surviving migrated Lean evidence",
-      "source_file_sha256": "84c3b7c18d2a55e21ebac003be5cd55590e5fc7c71da1748ae207bb7b7893daa",
-      "logical_payload_sha256": "b0af17092bbca3c33c051feba5ee39a675c8e4544986747eefcc3abcf2c4cd33",
+      "path": "Experiments/certsearch/block_pair/K11/Preconditioner.lean",
+      "canonical_role": "checked-in experimental evidence",
+      "source_file_sha256": "e2492d7c5ceb706dc7db4365e254174e3077e0e886c812acaf9031fb217deed9",
+      "logical_payload_sha256": "286d9ff1fbff0ce3061faea9fd7ea1ea921750fcf02b69515200c95f2c92c36f",
       "rows": 31,
       "columns": 31,
       "scale_power": 60,
       "row_zero_absolute_sum": 359551722580657339
     },
     "jacobian_cache": {
-      "path": "Research/Quitting/BlockPair/K11/JacobianCache.lean",
-      "canonical_role": "surviving migrated Lean evidence",
-      "source_file_sha256": "b87b75b2bec463755482e7d0852e75d4ce33175da26ed7670c8bed4a73d3d4e1",
-      "logical_payload_sha256": "cc396473e85e72740c7376e3b70b46c29195feb4df3f449f1e6fb98522b7685b",
+      "path": "Experiments/certsearch/block_pair/K11/JacobianCache.lean",
+      "canonical_role": "checked-in experimental evidence",
+      "source_file_sha256": "35b0b72e40a3def51852fc33915792c78622739c0e4a6e228bde7588dbb0f5d3",
+      "logical_payload_sha256": "fdcc9fd0539b86ef413bd816407a864c8c811c73b8055fb4db99e5f7b1c0283a",
       "rows": 31,
       "columns": 31,
       "precision": 80
+    },
+    "row_zero_cache": {
+      "path": "Experiments/certsearch/block_pair/K11/RowZeroCacheData.lean",
+      "canonical_role": "checked-in experimental evidence",
+      "source_file_sha256": "f31e24c519524cc583d183fa1708fa34b5d280275c43da39bf3a321c9fbad8a4",
+      "logical_payload_sha256": "08fa7efc45b99debfeab619311cb4cc57c5612603b92d548af4e095847360589",
+      "precision": 80,
+      "vector_count": 3,
+      "vector_length": 31,
+      "scalar_count": 4
     }
   }
 }

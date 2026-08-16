@@ -21,7 +21,7 @@ game's states, dependent actions, transition kernel, and payoffs.
 
 noncomputable section
 
-namespace Experiments.CoalitionEquivariantAssembly
+namespace Research.CoalitionEquivariantAssembly
 
 open GameTheory
 
@@ -66,4 +66,4 @@ theorem isUniformEquilibriumPayoff_of_transitive_splitSecurity_of_welfareCap
   exact GameTheory.StochasticGame.isUniformEquilibriumPayoff_of_oneSidedGuarantees_of_positiveWeightedWelfareCap
     G s₀ weight target weight_pos security welfareCap
 
-end Experiments.CoalitionEquivariantAssembly
+end Research.CoalitionEquivariantAssembly

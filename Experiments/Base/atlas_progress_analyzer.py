@@ -114,16 +114,23 @@ def analyze(repo: Path) -> dict:
     }
 
 
+def run(repo: Path | None = None) -> dict:
+    """Run the analyzer against the repository containing this module."""
+    if repo is None:
+        repo = Path(__file__).resolve().parents[2]
+    return analyze(repo)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--repo",
         type=Path,
-        default=Path(__file__).resolve().parents[1],
+        default=Path(__file__).resolve().parents[2],
         help="repository root",
     )
     args = parser.parse_args()
-    print(json.dumps(analyze(args.repo.resolve()), indent=2, sort_keys=True))
+    print(json.dumps(run(args.repo.resolve()), indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

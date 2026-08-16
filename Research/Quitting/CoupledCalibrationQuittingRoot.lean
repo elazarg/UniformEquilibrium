@@ -35,8 +35,8 @@ namespace GameTheory
 namespace CoupledCalibrationQuittingRoot
 
 open StochasticGame Math.Probability Math.PMFProduct
-open Experiments.ORCoupledCalibrationGame
-open Experiments.QuittingORRankReduction
+open Research.ORCoupledCalibrationGame
+open Research.QuittingORRankReduction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

@@ -51,7 +51,7 @@ below discharges the rest of Q38 Part B's impossibility shape.
   `FinitePinskerBH` (where present).
 -/
 
-namespace Experiments.AnytimeDetectionConditional
+namespace Research.AnytimeDetectionConditional
 
 open MeasureTheory Filter ENNReal
 
@@ -160,4 +160,4 @@ theorem undetectable_unbounded_debt_of_dichotomy_via_general (P Q : Measure Ω)
   undetectable_unbounded_debt_of_dichotomy_of_summable_sq P Q (fun t => (1 : ℝ) / (t + 1))
     (fun t => by positivity) harmonic_sq_summable harmonic_not_summable hdich
 
-end Experiments.AnytimeDetectionConditional
+end Research.AnytimeDetectionConditional

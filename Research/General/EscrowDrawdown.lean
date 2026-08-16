@@ -31,7 +31,7 @@ not payoffs, strategies, or equilibrium objects.
 
 noncomputable section
 
-namespace Experiments.EscrowDrawdown
+namespace Research.EscrowDrawdown
 
 open scoped BigOperators
 
@@ -164,4 +164,4 @@ theorem drawdown_eq_oscillation_of_antitone (d Φ : ℕ → ℝ) (N : ℕ)
     rw [prefixSum_eq_sub d Φ hd N] at hle
     linarith
 
-end Experiments.EscrowDrawdown
+end Research.EscrowDrawdown

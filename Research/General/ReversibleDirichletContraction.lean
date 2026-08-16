@@ -33,7 +33,7 @@ caveat that "general controlled kernels need not share an invariant law or
 reversibility" is unaddressed here, by design.
 -/
 
-namespace Experiments.ReversibleDirichletContraction
+namespace Research.ReversibleDirichletContraction
 
 open scoped BigOperators
 
@@ -360,4 +360,4 @@ theorem wnormSq_iterSwitch_le (π : S → ℝ) (Ps : ℕ → S → S → ℝ) (�
           _ = (1 - γ) ^ (m + 1) * wnormSq π f := by ring
   exact (main n).2
 
-end Experiments.ReversibleDirichletContraction
+end Research.ReversibleDirichletContraction

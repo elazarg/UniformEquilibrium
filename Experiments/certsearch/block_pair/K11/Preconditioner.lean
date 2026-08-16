@@ -1,15 +1,12 @@
 /-
-# Migrated K11 preconditioner payload
+# K11 preconditioner payload
 
-The legacy header named `q117_krawczyk_certificate.json` and
-`q117_emit_lean_preconditioner.py`, but neither artifact survived the
-repository extraction.  This checked-in Lean file is therefore the canonical
-surviving payload, not evidence that the original numerical computation can
-be rerun.  `scripts/check_k11_generated_data.py` checks its structure and
-freshness against the explicit non-regeneration record in
-`Experiments/certsearch/block_pair/k11_generated_data_manifest.json`.
+This checked-in file is concrete experimental evidence.
+`scripts/check_k11_generated_data.py` validates its structure and freshness
+but does not regenerate the numeric computation. Historical provenance is
+recorded in `TRANSITION.md`.
 -/
-import UniformEquilibrium.Quitting.Examples.BlockPair.K11DyadicData
+import Experiments.certsearch.block_pair.K11.DyadicData
 
 namespace GameTheory.BlockPairK11.DyadicCertificate
 

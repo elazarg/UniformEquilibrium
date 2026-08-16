@@ -27,7 +27,7 @@ prefix to a fixed-table host without losing deviation geometry.
 
 noncomputable section
 
-namespace Experiments
+namespace Research
 namespace CubicalResetIntegrability
 
 variable {Coordinate : Type*} [DecidableEq Coordinate]
@@ -218,4 +218,4 @@ theorem hasPositiveSquareAlong_of_frozen_lt_endpoint_sub_source
   linarith
 
 end CubicalResetIntegrability
-end Experiments
+end Research

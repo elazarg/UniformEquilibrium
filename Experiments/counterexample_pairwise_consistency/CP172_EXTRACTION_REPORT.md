@@ -4,7 +4,7 @@
 
 The four extracted leaf families have been promoted.  The formerly missing
 product-law pair-union estimate is also now proved in
-`Math/PMFProduct/CollisionMass.lean` and specialized to quitting windows in
+`../../MathUE/PMFProduct/CollisionMass.lean` and specialized to quitting windows in
 `UniformEquilibrium/Quitting/AbsorptionPath/CollisionConcentration.lean`.
 Refusal survival-reweighting remains unformalized; later sections describing
 the pair-union bound as pending record the state at extraction time.

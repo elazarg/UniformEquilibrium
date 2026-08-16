@@ -22,7 +22,7 @@ those hypotheses from one quitting chronology remains the game-facing gap.
 
 noncomputable section
 
-namespace Experiments.QuittingORStationarizationDichotomy
+namespace Research.QuittingORStationarizationDichotomy
 
 open GameTheory
 
@@ -65,4 +65,4 @@ theorem mixingFloor_mul_abs_seriesPinError_le_weight_mul_totalDebt
         channel.totalDebt pinned (secondTarget who) :=
       mul_le_mul_of_nonneg_left hcharge hweight0
 
-end Experiments.QuittingORStationarizationDichotomy
+end Research.QuittingORStationarizationDichotomy

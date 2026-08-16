@@ -12,7 +12,6 @@ import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonR
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11LocalValue
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11OpponentLocalValue
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11ActiveEquationInterval
-import UniformEquilibrium.Quitting.Examples.BlockPair.K11DyadicData
 import UniformEquilibrium.Quitting.Examples.BlockPair.PredecessorComposition
 
 /-!

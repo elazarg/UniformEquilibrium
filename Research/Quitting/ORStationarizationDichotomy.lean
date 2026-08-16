@@ -41,7 +41,7 @@ such a producer may consume; it does not assert that the producer exists.
 
 noncomputable section
 
-namespace Experiments.QuittingORStationarizationDichotomy
+namespace Research.QuittingORStationarizationDichotomy
 
 open scoped BigOperators
 
@@ -1061,4 +1061,4 @@ theorem protectedTableMismatch_or_positiveCalibratedHostDebt
       exact hmismatch heq.symm
     exact lt_of_le_of_ne hnonneg (Ne.symm hne)
 
-end Experiments.QuittingORStationarizationDichotomy
+end Research.QuittingORStationarizationDichotomy

@@ -7,11 +7,11 @@ finite run is evidence only for its stated bounded claim and does not promote
 that claim into the production import graph.
 
 An experiment result records its tracked executable source, exact reproduction
-command, assumptions, limitations, and compact evidence. A migrated payload
-whose producer is unavailable instead records that provenance loss and has a
-deterministic integrity checker. Generated caches, logs, screenshots, and raw
-runs are not experiment records. Experiments may import Research; Research must
-not import this directory.
+command, assumptions, limitations, and compact evidence. A checked-in payload
+whose generator is unavailable instead has a deterministic integrity checker;
+its provenance belongs in `TRANSITION.md`. Generated caches, logs, screenshots,
+and raw runs are not experiment records. Experiments may import Research;
+Research must not import this directory.
 
 ## Directory lifecycle
 
@@ -42,6 +42,14 @@ Run the registered base suite with:
 
 ```text
 python Experiments/Base/run_all.py
+```
+
+The repository gate also checks that every Base Python program is registered,
+has a uniform `run()` entry point, emits a unique experiment identifier, and
+passes through the suite:
+
+```text
+python scripts/check_experiment_registry.py --execute
 ```
 
 The suite uses only the Python standard library. The runner prints a
@@ -81,7 +89,19 @@ Lean proof: promotion requires constructing the named production certificate.
 | E31 | `commit_reveal_coin.py` | Which timing and abort assumptions separate robust simultaneous coins from vulnerable sequential and commit/reveal protocols? |
 | E32 | `threshold_secret_sharing.py` | Does threshold sharing create a genuine secret phase, and exactly which privacy is lost when shares are public? |
 | E33 | `live_entropy_budget.py` | Can a finite hidden or public seed provide a linear tail of conditional unpredictability? |
+| E34 | `cap_nash_endpoint_transport_search.py` | Do the cap–Nash endpoint transport and auxiliary excess-budget inequalities survive exact finite-grid checks? |
+| E35 | `minimum_plateau_q_budget_search.py` | Do the minimum-plateau Q-budget restrictions survive an exact four-player negative control and stationary-root screen? |
+| E36 | `semantic_final_regime_search.py` | Are the final minimum-semantic atomic and marked-plateau passports finitely consistent while admissible pure roots are absent? |
 
 The output records `status`, the exact checks performed, and limitations. A
 negative or inconclusive result is retained: these scripts are intended to kill
 attractive but false interfaces early.
+
+The final three registered programs are paired with their detailed reports:
+
+- [`CAP_NASH_ENDPOINT_TRANSPORT_AUDIT.md`](CAP_NASH_ENDPOINT_TRANSPORT_AUDIT.md)
+  (`E34`, `cap_nash_endpoint_transport_search.py`);
+- [`MINIMUM_PLATEAU_Q_BUDGET_SEARCH.md`](MINIMUM_PLATEAU_Q_BUDGET_SEARCH.md)
+  (`E35`, `minimum_plateau_q_budget_search.py`); and
+- [`SEMANTIC_FINAL_REGIME_SEARCH.md`](SEMANTIC_FINAL_REGIME_SEARCH.md)
+  (`E36`, `semantic_final_regime_search.py`).

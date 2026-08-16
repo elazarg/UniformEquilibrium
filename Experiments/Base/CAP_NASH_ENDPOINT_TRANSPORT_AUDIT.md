@@ -61,7 +61,7 @@ D * collision(x)
 ```
 
 This has been formalized in
-`TerminalSemanticCapNashDebtSupport.lean`.  In particular, if every
+`../../UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCapNashDebtSupport.lean`.  In particular, if every
 coordinate is at least `κ` away from carrying the whole debt, then
 
 ```text

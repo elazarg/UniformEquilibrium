@@ -14,7 +14,7 @@ the uniform `2*C/horizon` estimate for a bounded primitive.
 
 noncomputable section
 
-namespace Experiments.CyclicPhaseReynolds
+namespace Research.CyclicPhaseReynolds
 
 open scoped BigOperators
 
@@ -201,4 +201,4 @@ theorem exists_zmod_cyclicPrimitive
   rw [phaseSignal, ← zmodFinEquiv_add_one] at atPhase
   exact atPhase
 
-end Experiments.CyclicPhaseReynolds
+end Research.CyclicPhaseReynolds

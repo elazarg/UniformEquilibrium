@@ -4,8 +4,8 @@ A quitting weight assigns a payoff vector to every nonempty coalition of
 players (the set of players who quit simultaneously at that stage).  This
 module fixes the exact-rational representation used throughout
 `Experiments/certsearch/`, the affine gauge used to normalize a weight, the
-per-coordinate invariant matrix `B` from Question 154, and five named
-reference weights transcribed from the repository's own documents.
+per-coordinate invariant matrix `B`, and five named reference weights embedded
+in the tracked data.
 
 Only the Python standard library is used (`fractions.Fraction` for exact
 rational arithmetic); no `numpy`, no `sympy`.  See P13 in
@@ -32,9 +32,7 @@ Coordinatewise translation and positive scaling of a weight
 
     r'_i(J) = (r_i(J) - c_i) / s_i,   s_i > 0
 
-preserves every exactly-complementary sequence coordinatewise -- this is
-recorded in `ideas/AbsorbingCycleCarrier/APublishedWeightSitsInTheCycleExistenceHole.md`
-("Cycle sets are affine-invariant; branch membership is not").  The gauge
+preserves every exactly-complementary sequence coordinatewise. The gauge
 fixed here, `gauge_normalize`, uses this freedom to pin every coordinate's
 solo value `d_i = r_i({i})` into `{-1, 0, +1}`:
 
@@ -146,8 +144,7 @@ def _F(numerator: int, denominator: int = 1) -> Fr:
 
 
 #: `G_eps`, the `epsilon`-perturbed published cyclic table, `epsilon = 1/10`.
-#: Source: `ideas/AbsorbingCycleCarrier/APublishedWeightSitsInTheCycleExistenceHole.md`,
-#: "## The weight" (Solan 2001's three-player family with the `epsilon`-bonus
+#: Reference data for Solan 2001's three-player family with the `epsilon`-bonus
 #: on two-quitter entries).  Players `0, 1, 2` here are the document's
 #: `1, 2, 3`.  Transcribed with the document's own entries (not rescaled by
 #: 1/3 for the `||r||_inf <= 1` convention -- the document notes that
@@ -171,8 +168,8 @@ def g_eps_weight(eps: Fr = _F(1, 10)) -> Weight:
 G_EPS = g_eps_weight()
 
 
-#: The Q154 weight: Question154-DoRelaxedCyclesDivergeWithoutAnExactOne.md,
-#: section 2, eq. (9).  Players `0, 1, 2` here are the document's `1, 2, 3`.
+#: The Q154 reference weight. Players `0, 1, 2` are the reference table's
+#: `1, 2, 3`.
 #: This is the weight with `epsilon`-cycles at every tolerance, absorbed mass
 #: always `7/8`, but *no* exact cycle of any period -- the question's answer.
 Q154_WEIGHT: Weight = {

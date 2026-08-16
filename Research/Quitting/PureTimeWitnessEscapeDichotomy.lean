@@ -38,7 +38,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter
-open Experiments.PureTimeWitnessNormalForm
+open Research.PureTimeWitnessNormalForm
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

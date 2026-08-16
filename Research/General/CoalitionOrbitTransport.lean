@@ -14,7 +14,7 @@ player as soon as the property transports under the action.
 
 noncomputable section
 
-namespace Experiments.CoalitionOrbitTransport
+namespace Research.CoalitionOrbitTransport
 
 variable {ι : Type}
 
@@ -133,4 +133,4 @@ theorem forall_of_representative_of_transport
   rw [← moved]
   exact transport g representative atRepresentative
 
-end Experiments.CoalitionOrbitTransport
+end Research.CoalitionOrbitTransport

@@ -39,10 +39,10 @@ clock estimates below reduce terminal-coalition rank.
 
 noncomputable section
 
-namespace GameTheory.Experiments.WeightedClockRankReduction
+namespace Research.WeightedClockRankReduction
 
 open scoped BigOperators
-open Finset Math.PMFProduct
+open GameTheory Finset Math.PMFProduct
 
 /-! ## 1. Finite weighted clocks -/
 
@@ -1184,4 +1184,4 @@ theorem landedDiffuseClock_fixedCoalition_eq_opponentSingleton
 
 end LandedAdapter
 
-end GameTheory.Experiments.WeightedClockRankReduction
+end Research.WeightedClockRankReduction

@@ -16,7 +16,7 @@ No group structure is assumed on the block maps themselves.
 
 noncomputable section
 
-namespace Experiments.EquivariantWordTransport
+namespace Research.EquivariantWordTransport
 
 variable {Gamma Edge Fiber : Type}
   [Group Gamma] [MulAction Gamma Edge] [MulAction Gamma Fiber]
@@ -114,4 +114,4 @@ theorem fixed_and_accepted_relabel
   exact ⟨isFixedWord_relabel block blockEquivariant g word point fixed,
     acceptEquivariant g word point accepted⟩
 
-end Experiments.EquivariantWordTransport
+end Research.EquivariantWordTransport

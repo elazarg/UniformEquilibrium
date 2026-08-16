@@ -3,10 +3,9 @@
 Runs `circulation.certify_circulation` over two families:
 
 * the five named reference weights (`weights.NAMED_WEIGHTS`);
-* the repaired four-player family `F'(x, eps)` from `questions/Question160-
-  TheFourPlayerCyclicFamilyPhaseDiagram.md`'s followup section (transcribed
-  below -- see `four_player_family`'s docstring for the exact table and the
-  source quotation), on the small rational grid `x in {1/4, 1/2, 1, 2}`,
+* the repaired four-player family `F'(x, eps)` transcribed below (see
+  `four_player_family`'s docstring for the exact table), on the small rational
+  grid `x in {1/4, 1/2, 1, 2}`,
   `eps in {0, 1/10, 1/2}`.
 
 Per `README.md`'s validation-gate principle: **this sweep is not evidence of
@@ -48,9 +47,8 @@ _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 # --------------------------------------------------------------------------
 
 def four_player_family(x: Fr, eps: Fr) -> Weight:
-    """`F'(x, eps)`, `questions/Question160-TheFourPlayerCyclicFamilyPhase
-    Diagram.md`, "## The repaired family" (the followup section, after the
-    original all-zero-triples family was retired for being degenerate):
+    """`F'(x, eps)`, the repaired four-player family (after the original
+    all-zero-triples family was retired for being degenerate):
 
         I = Z/4, sigma(i) = i + 1.
 

@@ -51,7 +51,7 @@ stationarization (or a positive charge for its failure).
 
 noncomputable section
 
-namespace Experiments.QuittingORRankReduction
+namespace Research.QuittingORRankReduction
 
 open GameTheory
 open scoped BigOperators
@@ -575,4 +575,4 @@ theorem reflectCoordinate_reflectionOdd (value : Fin 5 → ℝ) :
   simp [reflectCoordinate, reflectionOdd]
   ring
 
-end Experiments.QuittingORRankReduction
+end Research.QuittingORRankReduction

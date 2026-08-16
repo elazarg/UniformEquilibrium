@@ -20,7 +20,7 @@ the construction is deliberately a regression for the missing interface, not
 a counterexample to Question 172.
 
 The exact scalar proof is
-`TailPacketCyclicFourWitness.lean`.  The full-table finite-date audit is
+`../../Research/Counterexamples/Pairwise/TailPacketCyclicFourWitness.lean`.  The full-table finite-date audit is
 `tail_packet_cyclic_four_exact.py`.
 
 ## 1. One common reward table

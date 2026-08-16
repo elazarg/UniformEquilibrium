@@ -1,8 +1,8 @@
-"""E23: can the landed owner-obstruction cokernel express E06's typed holonomy?
+"""Probe: can the landed owner-obstruction cokernel express E06's typed holonomy?
 
 E06 (`owner_monodromy.py`) exhibits a two-edge cycle whose *aggregate* charge
 is a coboundary -- zero scalar holonomy -- while its *owner-typed* holonomy is
-`(1, -1)`.  `Math/LinearAlgebra/OwnerObstructionCokernel.lean` defines, for a
+`(1, -1)`.  `MathUE/LinearAlgebra/OwnerObstructionCokernel.lean` defines, for a
 finite owner-labeled system, the cokernel
 
     Obstruction sys i = (T -> R) / ownerNormals sys i,
@@ -98,7 +98,7 @@ def kernel(rows: Sequence[Sequence[Fraction]], width: int) -> list[Vector]:
 class OwnerSystem:
     """`OwnerObstructionCokernel.OwnerSystem` with all blocks given explicitly.
 
-    Index conventions follow the Lean structure: `A`/`R` are the structural
+    Index conventions follow the maintained Lean structure: `A`/`R` are the structural
     rows, `C`/`Q` the owner-neutral rows, `B`/`S` the owner-tagged unilateral
     rows, `Y` the internal columns and `T` the boundary columns.
     """
@@ -328,7 +328,7 @@ def run() -> dict:
     )
 
     return {
-        "experiment": "E23",
+        "probe": "owner_cokernel_typed_holonomy",
         "status": "passed",
         "system": "TwoCycleObstruction.system (empty typed cell, two-cycle flow)",
         "certifiable_subspace_dimension": len(coboundaries),

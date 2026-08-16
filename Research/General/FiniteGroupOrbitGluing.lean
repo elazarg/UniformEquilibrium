@@ -14,7 +14,7 @@ The infimum/downward-closed theorem is dual.
 
 noncomputable section
 
-namespace Experiments.FiniteGroupOrbitGluing
+namespace Research.FiniteGroupOrbitGluing
 
 variable {Gamma L : Type} [Group Gamma]
   [CompleteLattice L] [MulAction Gamma L]
@@ -143,4 +143,4 @@ theorem exists_invariant_common_of_orbitInf
     orbitInf_mem_all family x downward translatedWitness,
     fun h => smul_orbitInf_eq smul_mono h x⟩
 
-end Experiments.FiniteGroupOrbitGluing
+end Research.FiniteGroupOrbitGluing

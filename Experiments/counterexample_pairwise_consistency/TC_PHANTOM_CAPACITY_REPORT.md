@@ -185,7 +185,7 @@ with charge `N`.  The universal capacity is infinite.  The probe checks all
 of (2)--(11) in exact rational arithmetic.
 
 The same issue invalidates the existing cap-only regression as evidence for
-`C`: `DynamicDebtCapChargedAnchorCounterexample.lean` proves only that the
+`C`: `../../UniformEquilibrium/Quitting/Debt/Dynamic/DynamicDebtCapChargedAnchorCounterexample.lean` proves only that the
 augmented cap has no charged exact predecessor, while the file also exhibits
 a genuine absorbing exact terminal equilibrium.  Repeating that equilibrium
 is an unbounded charged chain.  A zero-charge cap loop never certifies the

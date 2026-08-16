@@ -54,7 +54,7 @@ The adapted-kernel version — history-dependent steps, the repo's
 -/
 
 
-namespace Experiments.KakutaniProductDichotomy
+namespace Research.KakutaniProductDichotomy
 
 open MeasureTheory Filter
 open scoped ENNReal Topology symmDiff
@@ -782,4 +782,4 @@ theorem hdich_of_product (p s : ℕ → I → ℝ) (δ : ℕ → ℝ) (C : ℝ)
     (fun t i => (hp_pos t i).le) hq1 hp1 (fun t i => (hsupp t i).symm)
     (hρ.congr fun t => by rw [affinity_comm])
 
-end Experiments.KakutaniProductDichotomy
+end Research.KakutaniProductDichotomy

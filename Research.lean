@@ -164,5 +164,4 @@ import Research.Quitting.TerminalSemanticGlobalDebtBarrierCertificate
 import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertion
 import Research.Quitting.TwoResetFourRoleAdapter
 import Research.Quitting.UniqueAllContinueCapStackNoGo
-import Research.Semantics.SemanticFinalRegimeArithmetic
 import Research.Semantics.SurvivalWeightedReachedHistoryAccount

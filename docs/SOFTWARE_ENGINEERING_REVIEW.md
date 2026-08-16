@@ -64,7 +64,7 @@ proof-maintenance cost. Representative review targets include:
 - `UniformEquilibrium/Examples/BigMatch/Uniform.lean`;
 - `MathUE/NormalizedFarkasBasis.lean`;
 - `MathUE/BoundedDiscrepancyCirculation.lean`; and
-- `Research/Quitting/BlockPair/K11/JacobianCache.lean`.
+- `Experiments/certsearch/block_pair/K11/JacobianCache.lean`.
 
 Line count alone does not justify a split. A split is warranted when a file
 combines separable concepts, forces unrelated consumers through a broad import,

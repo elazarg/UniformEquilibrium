@@ -22,7 +22,7 @@ Abel/Cesàro asymmetry for one mode.
 
 noncomputable section
 
-namespace Experiments.CyclicAbelCesaroModes
+namespace Research.CyclicAbelCesaroModes
 
 /-- The slow-kernel Fourier multiplier on the character with value `ω`:
 `μ(λ) = 1 - c*λ + c*λ*ω`, i.e. `(1-t) + t*ω` with `t = c*λ`. -/
@@ -203,4 +203,4 @@ theorem abel_ne_zero_limit (c : ℝ) (ω : ℂ) (hω : ‖ω‖ = 1)
     (1 : ℂ) / (1 + (c : ℂ) * (1 - ω)) ≠ 0 :=
   one_div_ne_zero (one_add_mul_one_sub_ne_zero c ω hω hc0 hc1)
 
-end Experiments.CyclicAbelCesaroModes
+end Research.CyclicAbelCesaroModes

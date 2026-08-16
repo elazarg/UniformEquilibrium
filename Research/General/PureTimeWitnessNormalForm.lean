@@ -31,7 +31,7 @@ not turn an escaping witness into a state-matched suffix.
 
 noncomputable section
 
-namespace Experiments
+namespace Research
 namespace PureTimeWitnessNormalForm
 
 open Filter Finset
@@ -120,4 +120,4 @@ theorem exists_common_strictMono_hasNormalForm
   exact ⟨φ, hφ, fun mover ↦ hqφ mover (mem_univ mover)⟩
 
 end PureTimeWitnessNormalForm
-end Experiments
+end Research

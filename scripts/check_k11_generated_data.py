@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Check the integrity of the migrated K11 numeric Lean payloads.
+"""Check the integrity of the checked-in K11 numeric Lean payloads.
 
-This checker does not recreate the lost q117 numerical computation.  It
-parses the surviving exact integers from the checked-in Lean files, validates
-their matrix shape and basic invariants, and compares both the source bytes
-and a formatting-independent logical payload digest with the provenance
-manifest.
+This checker does not recreate the numerical computation. It parses the exact
+rationals and integers from the checked-in Lean files, validates their shapes
+and basic invariants, and compares both the source bytes and a
+formatting-independent logical payload digest with the integrity manifest.
 """
 
 from __future__ import annotations
@@ -16,6 +15,7 @@ import json
 import pathlib
 import re
 import sys
+from fractions import Fraction
 from typing import Any
 
 
@@ -28,8 +28,9 @@ MANIFEST_PATH = (
     / "k11_generated_data_manifest.json"
 )
 EXPECTED_CLASSIFICATION = (
-    "migrated_checked_in_evidence_without_reproducible_original_producer"
+    "checked_in_evidence_without_reproducible_generator"
 )
+EXPECTED_SCHEMA_VERSION = 2
 MATRIX_SIZE = 31
 
 PRECONDITIONER_ROW_RE = re.compile(
@@ -44,10 +45,24 @@ JACOBIAN_ROW_RE = re.compile(
     re.DOTALL,
 )
 INTERVAL_RE = re.compile(r"⟨\s*\((-?\d+)\),\s*\((-?\d+)\)⟩", re.DOTALL)
+FLEX_INTERVAL_RE = re.compile(
+    r"⟨\s*\(?(-?\d+)\)?\s*,\s*\(?(-?\d+)\)?\s*⟩", re.DOTALL
+)
+ROW_ZERO_VECTOR_NAMES = (
+    "residualAtCenterCache",
+    "preconditionedJacobianProductRowZeroCache",
+    "preconditionedBRowZeroCache",
+)
+ROW_ZERO_SCALAR_NAMES = (
+    "preconditionedResidualRowZero",
+    "preconditionedRemainderRowZero",
+    "krawczykRowZeroCache",
+    "boxRowZeroCache",
+)
 
 
 class PayloadError(ValueError):
-    """A surviving Lean payload does not have its recorded structure."""
+    """A checked-in Lean payload does not have its recorded structure."""
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -63,6 +78,61 @@ def logical_digest(payload: dict[str, Any]) -> str:
 
 def expected_row_labels(zero_name: str) -> list[str]:
     return [zero_name, *(f"{index:02d}" for index in range(1, MATRIX_SIZE))]
+
+
+def fraction_payload(value: Fraction) -> list[int]:
+    return [value.numerator, value.denominator]
+
+
+def parse_dyadic_data(text: str) -> dict[str, Any]:
+    precision_match = re.search(r"abbrev Precision\s*:\s*ℕ\s*:=\s*(\d+)", text)
+    if precision_match is None:
+        raise PayloadError("missing dyadic-data Precision")
+
+    center_match = re.search(
+        r"def center\s*:\s*HazardIndex\s*→\s*ℚ\s*:=\s*!\[(.*?)\n\]",
+        text,
+        re.DOTALL,
+    )
+    if center_match is None:
+        raise PayloadError("missing dyadic-data center vector")
+    center = [
+        Fraction(token)
+        for token in re.findall(r"-?\d+(?:\.\d+)?", center_match.group(1))
+    ]
+    if len(center) != MATRIX_SIZE:
+        raise PayloadError(
+            f"dyadic-data center has {len(center)} entries, expected {MATRIX_SIZE}"
+        )
+
+    radius_match = re.search(
+        r"def radius\s*:\s*ℚ\s*:=\s*(-?\d+)\s*/\s*(\d+)", text
+    )
+    if radius_match is None:
+        raise PayloadError("missing dyadic-data rational radius")
+    radius = Fraction(int(radius_match.group(1)), int(radius_match.group(2)))
+    if radius < 0:
+        raise PayloadError(f"dyadic-data radius is negative: {radius}")
+
+    box_match = re.search(
+        r"def box\s*\(index\s*:\s*HazardIndex\)\s*:\s*"
+        r"DyadicInterval Precision\s*:=\s*"
+        r"⟨Rat\.floor\s*\(\(center index - radius\)\s*\*\s*"
+        r"DyadicInterval\.scale Precision\),\s*"
+        r"Rat\.ceil\s*\(\(center index \+ radius\)\s*\*\s*"
+        r"DyadicInterval\.scale Precision\)⟩",
+        text,
+        re.DOTALL,
+    )
+    if box_match is None:
+        raise PayloadError("dyadic-data box is not the recorded outward rounding")
+
+    return {
+        "kind": "exact_dyadic_box_data",
+        "precision": int(precision_match.group(1)),
+        "center": [fraction_payload(value) for value in center],
+        "radius": fraction_payload(radius),
+    }
 
 
 def parse_preconditioner(text: str) -> dict[str, Any]:
@@ -103,11 +173,45 @@ def parse_preconditioner(text: str) -> dict[str, Any]:
             f"{recorded_abs_sum}, computed {computed_abs_sum}"
         )
 
+    routing_match = re.search(
+        r"def preconditionerNumerator\s*:.*?\s*:=\s*"
+        r"fun row column\s*=>\s*\(Vector\.ofFn\s*!\[(.*?)\]\)"
+        r"\.get row column",
+        text,
+        re.DOTALL,
+    )
+    if routing_match is None:
+        raise PayloadError("missing preconditioner row/column assembly")
+    row_routing = re.findall(
+        r"preconditionerNumeratorRow(?:Zero|\d{2})", routing_match.group(1)
+    )
+    expected_routing = [
+        "preconditionerNumeratorRowZero",
+        *(f"preconditionerNumeratorRow{index:02d}" for index in range(1, 31)),
+    ]
+    if row_routing != expected_routing:
+        raise PayloadError(
+            f"preconditioner row routing is {row_routing!r}, "
+            f"expected {expected_routing!r}"
+        )
+
+    wrapper_match = re.search(
+        r"def preconditioner\s*\(row column\s*:\s*PreconditionerIndex\)"
+        r"\s*:\s*ℚ\s*:=\s*"
+        r"\(preconditionerNumerator row column\s*:\s*ℚ\)\s*/\s*"
+        r"preconditionerScale",
+        text,
+    )
+    if wrapper_match is None:
+        raise PayloadError("missing rational preconditioner scale wrapper")
+
     return {
         "kind": "rational_preconditioner_numerators",
         "scale_power": int(scale_match.group(1)),
         "row_zero_absolute_sum": recorded_abs_sum,
         "rows": rows,
+        "row_routing": row_routing,
+        "wrapper": "preconditionerNumerator/preconditionerScale",
     }
 
 
@@ -145,16 +249,125 @@ def parse_jacobian(text: str) -> dict[str, Any]:
                 )
         rows.append(entries)
 
+    routing_match = re.search(
+        r"def jacobianBoxCacheRow\s*\(row\s*:\s*Fin 31\)\s*:.*?"
+        r"\s*:=\s*(.*?)\n\ndef jacobianBoxCache\s*:",
+        text,
+        re.DOTALL,
+    )
+    if routing_match is None:
+        raise PayloadError("missing Jacobian Fin.cases row assembly")
+    routing_body = routing_match.group(1)
+    expected_routing = [
+        f"jacobianBoxCacheRow{index:02d}" for index in range(MATRIX_SIZE)
+    ]
+    row_routing = re.findall(r"jacobianBoxCacheRow\d{2}", routing_body)
+    if row_routing != expected_routing:
+        raise PayloadError(
+            f"Jacobian row routing is {row_routing!r}, "
+            f"expected {expected_routing!r}"
+        )
+
+    expected_body = "Fin.cases jacobianBoxCacheRow00"
+    for index in range(MATRIX_SIZE - 1):
+        expected_body += (
+            f" (fun t{index} => Fin.cases "
+            f"jacobianBoxCacheRow{index + 1:02d}"
+        )
+    expected_body += " (fun impossible => Fin.elim0 impossible)"
+    for index in reversed(range(MATRIX_SIZE - 1)):
+        expected_body += f" t{index})"
+    expected_body += " row"
+
+    token_pattern = r"[A-Za-z_][A-Za-z0-9_]*|\d+|=>|[().]"
+    if re.findall(token_pattern, routing_body) != re.findall(
+        token_pattern, expected_body
+    ):
+        raise PayloadError("Jacobian Fin.cases assembly does not match row order")
+
+    constructor_match = re.search(
+        r"def jacobianBoxCache\s*:\s*"
+        r"Vector \(Vector \(DyadicInterval JacobianCachePrecision\) 31\) 31"
+        r"\s*:=\s*Vector\.ofFn jacobianBoxCacheRow",
+        text,
+    )
+    if constructor_match is None:
+        raise PayloadError("missing final Jacobian cache constructor")
+
     return {
         "kind": "dyadic_jacobian_intervals",
         "precision": int(precision_match.group(1)),
         "rows": rows,
+        "row_routing": row_routing,
+        "constructor": "Vector.ofFn jacobianBoxCacheRow",
+    }
+
+
+def parse_row_zero_cache(text: str) -> dict[str, Any]:
+    precision_match = re.search(
+        r"abbrev CachePrecision\s*:\s*ℕ\s*:=\s*(\d+)", text
+    )
+    if precision_match is None:
+        raise PayloadError("missing row-zero CachePrecision")
+
+    vectors: dict[str, list[list[int]]] = {}
+    for name in ROW_ZERO_VECTOR_NAMES:
+        match = re.search(
+            rf"def {name}\s*:\s*"
+            r"Vector \(DyadicInterval CachePrecision\) 31\s*:=\s*"
+            r"Vector\.ofFn\s*!\[(.*?)\n\]",
+            text,
+            re.DOTALL,
+        )
+        if match is None:
+            raise PayloadError(f"missing row-zero vector {name}")
+        entries = [
+            [int(lower), int(upper)]
+            for lower, upper in FLEX_INTERVAL_RE.findall(match.group(1))
+        ]
+        if len(entries) != MATRIX_SIZE:
+            raise PayloadError(
+                f"row-zero vector {name} has {len(entries)} intervals, "
+                f"expected {MATRIX_SIZE}"
+            )
+        for index, (lower, upper) in enumerate(entries):
+            if lower > upper:
+                raise PayloadError(
+                    f"row-zero interval {name}[{index}] is reversed: "
+                    f"{lower} > {upper}"
+                )
+        vectors[name] = entries
+
+    scalars: dict[str, list[int]] = {}
+    for name in ROW_ZERO_SCALAR_NAMES:
+        match = re.search(
+            rf"def {name}\s*:\s*DyadicInterval CachePrecision\s*:=\s*"
+            r"⟨\s*\(?(-?\d+)\)?\s*,\s*\(?(-?\d+)\)?\s*⟩",
+            text,
+            re.DOTALL,
+        )
+        if match is None:
+            raise PayloadError(f"missing row-zero scalar {name}")
+        lower, upper = (int(value) for value in match.groups())
+        if lower > upper:
+            raise PayloadError(
+                f"row-zero scalar {name} is reversed: {lower} > {upper}"
+            )
+        scalars[name] = [lower, upper]
+
+    return {
+        "kind": "dyadic_row_zero_cache",
+        "precision": int(precision_match.group(1)),
+        "vectors": vectors,
+        "scalars": scalars,
     }
 
 
 PARSERS = {
+    "dyadic_data": parse_dyadic_data,
     "preconditioner": parse_preconditioner,
     "jacobian_cache": parse_jacobian,
+    "row_zero_cache": parse_row_zero_cache,
 }
 
 
@@ -174,18 +387,32 @@ def calculate_artifact(
     path = resolve_project_path(root, entry["path"])
     source = path.read_bytes()
     payload = parser(source.decode("utf-8"))
-    rows = payload["rows"]
     calculated = {
         "source_file_sha256": sha256_bytes(source),
         "logical_payload_sha256": logical_digest(payload),
-        "rows": len(rows),
-        "columns": len(rows[0]) if rows else 0,
     }
-    if name == "preconditioner":
+    if name == "dyadic_data":
+        calculated["precision"] = payload["precision"]
+        calculated["center_count"] = len(payload["center"])
+        calculated["radius_numerator"] = payload["radius"][0]
+        calculated["radius_denominator"] = payload["radius"][1]
+    elif name == "preconditioner":
+        rows = payload["rows"]
+        calculated["rows"] = len(rows)
+        calculated["columns"] = len(rows[0]) if rows else 0
         calculated["scale_power"] = payload["scale_power"]
         calculated["row_zero_absolute_sum"] = payload["row_zero_absolute_sum"]
     elif name == "jacobian_cache":
+        rows = payload["rows"]
+        calculated["rows"] = len(rows)
+        calculated["columns"] = len(rows[0]) if rows else 0
         calculated["precision"] = payload["precision"]
+    elif name == "row_zero_cache":
+        vectors = payload["vectors"]
+        calculated["precision"] = payload["precision"]
+        calculated["vector_count"] = len(vectors)
+        calculated["vector_length"] = len(next(iter(vectors.values())))
+        calculated["scalar_count"] = len(payload["scalars"])
     return calculated
 
 
@@ -200,14 +427,14 @@ def check_repository(
     try:
         manifest = load_manifest(manifest_path)
     except (OSError, json.JSONDecodeError) as error:
-        return [f"cannot read K11 provenance manifest: {error}"]
+        return [f"cannot read K11 integrity manifest: {error}"]
 
-    if manifest.get("schema_version") != 1:
-        errors.append("unsupported K11 provenance manifest schema_version")
+    if manifest.get("schema_version") != EXPECTED_SCHEMA_VERSION:
+        errors.append("unsupported K11 integrity manifest schema_version")
     if manifest.get("classification") != EXPECTED_CLASSIFICATION:
         errors.append(
-            "K11 provenance manifest must retain its explicit "
-            "non-regeneration classification"
+            "K11 integrity manifest must retain its explicit "
+            "generator-availability classification"
         )
     if manifest.get("integrity_check_reproducible") is not True:
         errors.append("K11 integrity check must remain classified as reproducible")
@@ -220,8 +447,8 @@ def check_repository(
     artifacts = manifest.get("artifacts")
     if not isinstance(artifacts, dict) or set(artifacts) != set(PARSERS):
         errors.append(
-            "K11 provenance manifest must describe exactly preconditioner and "
-            "jacobian_cache"
+            "K11 integrity manifest must describe exactly dyadic_data, "
+            "preconditioner, jacobian_cache, and row_zero_cache"
         )
         return errors
 
@@ -267,7 +494,7 @@ def main() -> int:
         print("K11 generated-data check failed:", file=sys.stderr)
         print(*errors, sep="\n", file=sys.stderr)
         return 1
-    print("K11 migrated generated-data integrity check passed.")
+    print("K11 generated-data integrity check passed.")
     return 0
 
 

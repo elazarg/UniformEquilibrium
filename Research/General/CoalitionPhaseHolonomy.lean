@@ -16,7 +16,7 @@ the resolved cycle-geometry program.
 
 noncomputable section
 
-namespace Experiments.CoalitionPhaseHolonomy
+namespace Research.CoalitionPhaseHolonomy
 
 open scoped BigOperators
 
@@ -169,4 +169,4 @@ theorem diagonalPlayerPhase_mul
   · simp [diagonalPlayerPhase, shift_mul]
     abel
 
-end Experiments.CoalitionPhaseHolonomy
+end Research.CoalitionPhaseHolonomy

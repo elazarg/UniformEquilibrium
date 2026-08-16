@@ -6,6 +6,7 @@ by the proposed argument and exhibits a rational local game which saturates
 every estimate except the global-infimum premise.
 """
 
+import json
 from fractions import Fraction as Q
 
 
@@ -82,10 +83,27 @@ def check_excess_budget_grid() -> int:
     return checked
 
 
-if __name__ == "__main__":
+def run() -> dict[str, object]:
     check_local_sharp_example()
     scalar_cases = check_scalar_grid()
     budget_cases = check_excess_budget_grid()
-    print(f"cap endpoint scalar cases: {scalar_cases}")
-    print(f"auxiliary excess-budget cases: {budget_cases}")
-    print("exact local saturation witness: passed")
+    return {
+        "experiment": "E34",
+        "status": "passed",
+        "scalar_cases": scalar_cases,
+        "excess_budget_cases": budget_cases,
+        "conclusion": (
+            "The cap--Nash endpoint inequalities and auxiliary excess-budget "
+            "bound pass exact rational grids; a two-player local witness "
+            "saturates the transport estimate."
+        ),
+        "limitation": (
+            "The witness is local only: the same game has a zero-debt carrier, "
+            "so this does not establish a positive global minimum or a "
+            "uniform-equilibrium construction."
+        ),
+    }
+
+
+if __name__ == "__main__":
+    print(json.dumps(run(), indent=2, sort_keys=True))

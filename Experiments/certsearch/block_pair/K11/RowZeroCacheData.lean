@@ -1,6 +1,10 @@
-/- Exact precision-80 cache extracted deterministically from q117_verify.py.
-   These are certificate payloads; evaluator soundness is proved separately
-   for the phase-local slices and is not inferred from the extraction script. -/
+/-
+# K11 row-zero cache payload
+
+This checked-in file is concrete experimental evidence. Evaluator soundness
+is proved separately for the phase-local slices and is not inferred from the
+payload integrity check. Historical provenance is recorded in `TRANSITION.md`.
+-/
 import MathUE.Interval.DyadicInterval
 import Mathlib.Data.Fin.VecNotation
 

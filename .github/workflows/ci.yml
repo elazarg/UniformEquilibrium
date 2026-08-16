@@ -25,6 +25,7 @@ jobs:
           submodules: recursive
       - run: python3 scripts/check_docs.py
       - run: python3 -m unittest discover -s scripts -p 'test_*.py'
+      - run: python3 scripts/check_experiment_registry.py --execute
       - run: python3 scripts/check_import_graph.py
       - run: python3 scripts/check_proof_duplicates.py
       - run: python3 scripts/check_reward_bounds.py --check --max-nonnegative 0
@@ -50,6 +51,7 @@ jobs:
           submodules: recursive
       - run: python3 scripts/check_docs.py
       - run: python3 -m unittest discover -s scripts -p 'test_*.py'
+      - run: python3 scripts/check_experiment_registry.py --execute
       - run: python3 scripts/check_import_graph.py
       - run: python3 scripts/check_proof_duplicates.py
       - run: python3 scripts/check_reward_bounds.py --check --max-nonnegative 0

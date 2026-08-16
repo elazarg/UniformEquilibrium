@@ -2,13 +2,13 @@
 Exact arithmetic replay for `semantic_final_regime_search.py`.
 
 These are deliberately only the finite scalar consequences of the final
-minimum-semantic passports.  No theorem below asserts minimum-carrier
+minimum-semantic passports. No theorem below asserts minimum-carrier
 provenance or absence of a uniform equilibrium.
 -/
 
 import Mathlib
 
-namespace GameTheory.Experiments.SemanticFinalRegimeArithmetic
+namespace Experiments.SemanticFinalRegimeArithmetic
 
 /-- The integral interior example has first feasible entrant rate `1/2`.
 The entrant's gain is `(1-p) * 1 + p * (-1)`. -/
@@ -54,4 +54,4 @@ theorem plateau_marked_atom_debt :
     ((1 : ℝ) - 0 = 1) ∧ 0 < (1 : ℝ) - 0 := by
   norm_num
 
-end GameTheory.Experiments.SemanticFinalRegimeArithmetic
+end Experiments.SemanticFinalRegimeArithmetic

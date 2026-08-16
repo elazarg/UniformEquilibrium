@@ -1,14 +1,19 @@
 # certsearch
 
-## K11 migrated generated-data integrity
+## K11 checked-in evidence integrity
 
-`block_pair/k11_generated_data_manifest.json` records the exact surviving K11
-preconditioner and Jacobian-cache payloads.  Run
+`block_pair/k11_generated_data_manifest.json` records the exact K11 dyadic
+box, preconditioner, Jacobian-cache, and row-zero-cache payloads checked in
+under `block_pair/K11/`. The local Lean umbrella
+`Experiments.certsearch.block_pair.K11` assembles those four payload modules
+into the parameterized Research checker interface.
+Run
 `python scripts/check_k11_generated_data.py` from the repository root to check
 their full-file and formatting-independent logical hashes, 31-by-31 shapes,
-and basic payload invariants.  This is an integrity check for migrated Lean
-evidence, not a producer for the lost original numerical computation; the
-historical limitation is recorded in [`../../TRANSITION.md`](../../TRANSITION.md).
+and basic payload invariants. This is an integrity check for checked-in Lean
+evidence, not a producer: the original numerical generator is unavailable.
+Historical provenance and that limitation are recorded only in
+[`../../TRANSITION.md`](../../TRANSITION.md).
 
 P13 ("certificate-guided weight search", `Experiments/PROPOSALS.md`), slice
 one: the exact filter layer and its validation suite. Plain Python 3, stdlib
@@ -23,18 +28,17 @@ comparison.
   (`gauge_normalize`: per-coordinate positive scaling pinning every solo
   value into `{-1, 0, +1}`; see the module docstring for the exact map and
   why translation is unused), the invariant matrix (`invariant_matrix`,
-  Question 154's `B_ij = r_i({j}) - r_i({i})`), and five named reference
-  weights transcribed from the source repository's documents. `ideas/...` and
-  `questions/...` entries in this table are source-revision provenance locators,
-  not live target paths; see [`../../TRANSITION.md`](../../TRANSITION.md):
+  `B_ij = r_i({j}) - r_i({i})`), and five named reference weights embedded in
+  the tracked data. Historical source provenance is maintained only in
+  [`../../TRANSITION.md`](../../TRANSITION.md):
 
   | Name | Source |
   |---|---|
-  | `G_EPS` (`eps=1/10`) | `ideas/AbsorbingCycleCarrier/APublishedWeightSitsInTheCycleExistenceHole.md` |
-  | `Q154_WEIGHT` | `questions/Question154-DoRelaxedCyclesDivergeWithoutAnExactOne.md` section 2, eq. (9) |
-  | `TWO_PLAYER_COUNTEREXAMPLE` | `UniformEquilibrium/Quitting/Boundary/Repair/DisjunctionCounterexample.lean` |
-  | `FTV_WEIGHT` | `UniformEquilibrium/Quitting/Examples/FTV/CyclicAdmissibleCycle.lean` (unperturbed table) |
-  | `HOSTILE_WEIGHT` | `UniformEquilibrium/Quitting/Punishment/IsolatedPunishmentCeiling.lean` |
+  | `G_EPS` (`eps=1/10`) | tracked reference weight |
+  | `Q154_WEIGHT` | tracked reference weight |
+  | `TWO_PLAYER_COUNTEREXAMPLE` | tracked reference weight |
+  | `FTV_WEIGHT` | tracked reference weight |
+  | `HOSTILE_WEIGHT` | tracked reference weight |
 
 - **`filters.py`** -- four exact deciders, each returning a `Certificate`
   (`ok: bool`, `detail: dict`) rather than a bare boolean, so every
@@ -74,7 +78,7 @@ comparison.
   already fails there at every coordinate (its real admissible cycle is
   period-three, never tested by this period-one filter).
 - **`certifier_bridge.py`** -- filter (4): wraps
-  `Experiments/krawczyk_cycle_certifier.py` (E66) UNMODIFIED, generalizing
+  `Experiments/certsearch/krawczyk_cycle_certifier.py` UNMODIFIED, generalizing
   its `certificate_B`/`certificate_C`/`certificate_A` to an arbitrary
   `weights.Weight` instead of the two hardcoded tables the certifier's own
   `main()` exercises. Period 1 is exhaustive (26 patterns); period 2 is the
@@ -83,7 +87,7 @@ comparison.
   rescale of `FTV_WEIGHT` (the certifier's only known root), via affine
   invariance.
 - **`backward_distance.py`** -- the E64 own-set-shift upper bound
-  (`Experiments/BackwardStableComplementarity.lean`) on the distance to the
+  (`UniformEquilibrium/Quitting/Root/EndpointBackwardStability.lean`) on the distance to the
   exact-cycle stratum `Sigma_1`, searched exactly (no float pre-filter
   needed at these denominators) over the same small-denominator grid
   `stationary_row_search` uses, reporting `bound = C * defect` with
@@ -109,8 +113,7 @@ their correctness obligation.
 
 ## Certsearch mode: circulation certificates
 
-`ideas/QuittingGameConjecture/SingletonFaceCirculationsSteerOrbits.md`'s
-singleton-face circulation certificates, as a new certsearch mode:
+The singleton-face circulation certificates form a certsearch mode:
 
 - **`circulation.py`** -- the `L = 1` per-support linear check
   (`circulation_L1`) and a small-`L` (`L <= 3`) search over singleton owner
@@ -126,11 +129,12 @@ singleton-face circulation certificates, as a new certsearch mode:
   wrapper.
 - **`sweep_circulation.py`** -- runs the mode over the five named reference
   weights and the repaired four-player family `F'(x, eps)`
-  (`questions/Question160-TheFourPlayerCyclicFamilyPhaseDiagram.md`'s
-  followup section) on a small rational grid, gated by a fresh `validate.py`
+  repaired four-player family on a small rational grid, gated by a fresh
+  `validate.py`
   run exactly like `sweep.py`.
 - **`validate.py`'s Part 5** -- the positive control (the scaled cyclic
-  weight `FTV_WEIGHT / 3` must reproduce `SingletonFaceCirculation.lean`'s
+  weight `FTV_WEIGHT / 3` must reproduce
+  `UniformEquilibrium/Quitting/Circulation/SingletonFaceCirculation.lean`'s
   own machine-checked `cyclicCirculation` witness, owners `0, 2, 1`, `alpha
   = 1/2`, exactly) and the negative control (the two-player counterexample
   comes back empty at `L = 1` under the sound floor, by a hand-checked

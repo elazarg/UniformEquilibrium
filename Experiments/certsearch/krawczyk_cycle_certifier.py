@@ -1,11 +1,12 @@
 """Krawczyk / interval-exclusion certifier for quitting-cycle complementarity.
 
-Generalizes the repository's K11 dyadic-island Krawczyk lane (`GameTheory/
-UniformEquilibrium/Quitting/Examples/BlockPair/K11DyadicData.lean`) from a single quarantined
-use to quitting-cycle complementarity systems, per the numerical-analysis
-source note, section 2 ("Validated numerics: native technology, not
-yet a weapon").  Standard-library only: exact rational interval arithmetic on
-`fractions.Fraction` endpoints, deterministic, no external solvers.
+Generalizes the repository's K11 dyadic-island Krawczyk lane
+(`Experiments/certsearch/block_pair/K11/DyadicData.lean`) from a single
+quarantined use to quitting-cycle complementarity systems, per the
+numerical-analysis source note, section 2 ("Validated numerics: native
+technology, not yet a weapon"). Standard-library only: exact rational interval
+arithmetic on `fractions.Fraction` endpoints, deterministic, no external
+solvers.
 
 WHAT IS CERTIFIED, AND HOW
 ---------------------------
@@ -20,7 +21,7 @@ Two different proof techniques are used for two different kinds of claim:
   If `K(X)` is a STRICT SUBSET of the interior of `X` (checked with exact
   `Fraction` comparisons), the classical Krawczyk/Moore theorem certifies
   that `F` has exactly one zero in `X`.  This is the *same* criterion
-  `Math/KrawczykBridge.lean` packages as a Banach-fixed-point bridge; only
+  `MathUE/KrawczykBridge.lean` packages as a Banach-fixed-point bridge; only
   the interval arithmetic that discharges its hypotheses is new here.
 
 * NONEXISTENCE: exhaustive interval exclusion via branch-and-bound.  A
@@ -57,10 +58,9 @@ the 0/1 corners; a mismatch aborts the run via `assert`.
 CERTIFICATES PRODUCED
 ----------------------
 (A) Tool validation, EXISTENCE.  The Flesch-Thuijsman-Vrieze cubic /3
-    period-3 absorbing complementary cycle (`ideas/AbsorbingCycleCarrier/
-    FiniteCyclesAreRefutedTheCarrierIsAMassPath.md`: "each coordinate in turn
-    quits with probability 1/2, values (1/3, 2/3, 1/3) cyclically", the
-    table read off `UniformEquilibrium/Quitting/Examples/FTV/CyclicMinimality.lean`
+    period-3 absorbing complementary cycle (each coordinate in turn quits
+    with probability 1/2, values (1/3, 2/3, 1/3) cyclically), the table read
+    off the maintained FTV cyclic-minimality declarations
     divided by 3).  Twelve unknowns (3 active rates + the 3x3 phase-value
     matrix), twelve equations (3 value-recursion residuals per phase + 1
     active-gap-zero residual per phase).  Krawczyk certifies existence and
@@ -97,8 +97,8 @@ CERTIFICATES PRODUCED
 NONCLAIMS
 ---------
 * This is a certified-computation PROTOTYPE, not a Lean proof.  A faithful
-  Lean port would follow the K11 island pattern (`BlockPairK11DyadicData.
-  lean`): the interval arithmetic stays outside Lean, only the final
+  Lean port would follow the K11 data-island pattern: interval arithmetic
+  stays outside Lean, and only the final
   containment/exclusion facts get consumed as hypotheses.
 * Rational arithmetic is exact throughout; the search is depth-capped.  Any
   pattern reported UNDECIDED is genuinely undecided by this run, not a
@@ -345,7 +345,7 @@ def survival_probability(y):
 
 # The Flesch-Thuijsman-Vrieze cubic table (FTVCyclicMinimality.lean's
 # `soloReward` / `terminalReward`), divided by 3 -- the case-2 weight of
-# ideas/AbsorbingCycleCarrier/FiniteCyclesAreRefutedTheCarrierIsAMassPath.md
+# The hand-derived cyclic witness used by this regression.
 # ("The eta = 0 weight is the Flesch-Thuijsman-Vrieze (1997) cubic game
 # divided by 3 ... exact absorbing complementary cycle of length 3: each
 # coordinate in turn quits with probability 1/2, values (1/3, 2/3, 1/3)
@@ -629,9 +629,8 @@ def certificate_A():
     # Full exact complementarity, evaluated AT the exact (now Krawczyk-
     # confirmed-unique) center point rather than over a widened box: some
     # silent gaps here are knife-edges (g_i = 0 exactly, not < 0 -- matching
-    # ideas/AbsorbingCycleCarrier/FiniteCyclesAreRefutedTheCarrierIsAMass
-    # Path.md's "against y=(1/2,0,0) the idle third coordinate has g_3 = 0
-    # at eta=0, exactly indifferent"), so widening to a nonzero-width box
+    # against y=(1/2,0,0) the idle third coordinate has g_3 = 0 at eta=0,
+    # exactly indifferent, so widening to a nonzero-width box
     # would make the upper bound cross 0 in the direction that increases the
     # rate or decreases the value -- an artifact of interval width, not a
     # failure of complementarity at the actual point.  The exact rational
@@ -989,7 +988,7 @@ def main():
         "timings": timings,
         "nonclaims": [
             "Prototype, not a Lean proof; a Lean port would follow the K11 "
-            "island pattern (BlockPairK11DyadicData.lean).",
+            "island data pattern.",
             "Rational arithmetic is exact; the branch-and-bound search is "
             "depth-capped. UNDECIDED means genuinely undecided by this run.",
             "Period >= 3 for cyclicWeight is not attempted.",

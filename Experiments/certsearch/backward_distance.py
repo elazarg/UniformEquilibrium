@@ -3,7 +3,7 @@
 
 ## The cited theorem (E64)
 
-`Experiments/BackwardStableComplementarity.lean`,
+`UniformEquilibrium/Quitting/Root/EndpointBackwardStability.lean`,
 `exists_exact_of_isεQuittingRootEndpointNash`: every `eps`-complementary root
 row is EXACTLY complementary for an own-set-shifted reward table `r'`, with
 
@@ -12,13 +12,13 @@ row is EXACTLY complementary for an own-set-shifted reward table `r'`, with
 
 so `‖r - r'‖_inf <= C * eps` with `C = 1` at a pure row and, in general,
 `C = max` over interior coordinates `i` of `1 / min(x_i, 1 - x_i)` (the
-condition number blowing up as an interior rate approaches a pure endpoint --
-`ideas/CycleGeometryResolution/ExactCycleStrataCarryTheRelaxedFamilies.md`
-calls this ledger entry S1, "fixed tail only").  Both the theorem and this
+condition number blowing up as an interior rate approaches a pure endpoint.
+Historical cycle-strata discussion is retained only in `TRANSITION.md`. Both
+the theorem and this
 module are period-ONE / fixed-tail: the row is a single stationary phase
 played forever, not a genuinely period-`L` sequence of varying phases (the
-cycle-feedback generalization is `ExactCycleStrataCarryTheRelaxedFamilies.md`'s
-open item, not attempted here).
+cycle-feedback generalization is an open item, not attempted here; no
+period-specific search is claimed.
 
 ## What "defect" means for a stationary candidate row
 
@@ -62,8 +62,7 @@ valid upper bound on the distance to `Sigma_L` for EVERY `L` -- the table
 below reports the same number at every `L`, honestly, rather than
 fabricating an `L`-specific search this slice does not implement (a
 genuinely period-`L` stationary-row search, with `L` independently varying
-phases, is the natural next slice; see the module docstring's citation of
-`ExactCycleStrataCarryTheRelaxedFamilies.md`'s open cycle-feedback item).
+phases, is the natural next slice; no period-specific search is claimed).
 """
 
 from __future__ import annotations

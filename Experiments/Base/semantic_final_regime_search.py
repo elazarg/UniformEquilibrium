@@ -25,6 +25,7 @@ load-bearing hypothesis rather than producing a counterexample.
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from fractions import Fraction as F
 from itertools import combinations, product
@@ -436,8 +437,9 @@ def small_probability_grid(max_denominator: int) -> Tuple[F, ...]:
         for numerator in range(denominator + 1)}))
 
 
-def main() -> None:
+def run() -> dict[str, object]:
     grid = small_probability_grid(5)
+    atomic_results = []
     for label, constructor, displayed_rate in (
         ("integral-interior", atomic_no_pure_root_table, F(1, 2)),
         ("generic-denominator-101-interior", atomic_generic_grid_control, F(1, 2)),
@@ -450,40 +452,58 @@ def main() -> None:
         solved_pure = [root for root in pure if root["admissible"]]
         solved_grid = [root for root in rational if root["admissible"]]
 
-        print(f"ATOMIC STATIC PASSPORT ({label})")
-        print(f"  tail={render_tuple(certificate.tail)}")
-        print(f"  envelope={render_tuple(certificate.envelope)}")
-        print(f"  debt={render_tuple(certificate.debt)}")
-        print(f"  first support breakpoint={render_fraction(certificate.breakpoint)}")
-        print(f"  owner collision={render_fraction(certificate.owner_collision)}")
-        print(f"  reverse entrant collision={render_fraction(certificate.reverse_entrant_collision)}")
-        print(f"  punishment value={render_fraction(certificate.punishment_value)}")
-        print(f"  punishment gap={render_fraction(certificate.punishment_gap)}")
-        print(f"  one-outsider cap={render_fraction(certificate.one_outsider_cap)}")
-        print(f"  pure local roots={len(pure)}; admissible/solved={len(solved_pure)}")
-        print(
-            f"  exact roots on reduced-denominator<=5 grid={len(rational)};"
-            f" admissible/solved={len(solved_grid)}"
-        )
-        for root in rational[:8]:
-            print(
-                "    rates=" + render_tuple(root["rates"])
-                + " value=" + render_tuple(root["value"])
-                + f" support={root['support']} admissible={root['admissible']}"
-            )
         assert not solved_pure
+        atomic_results.append(
+            {
+                "label": label,
+                "tail": render_tuple(certificate.tail),
+                "envelope": render_tuple(certificate.envelope),
+                "debt": render_tuple(certificate.debt),
+                "breakpoint": render_fraction(certificate.breakpoint),
+                "owner_collision": render_fraction(certificate.owner_collision),
+                "reverse_entrant_collision": render_fraction(
+                    certificate.reverse_entrant_collision
+                ),
+                "punishment_value": render_fraction(certificate.punishment_value),
+                "punishment_gap": render_fraction(certificate.punishment_gap),
+                "one_outsider_cap": render_fraction(certificate.one_outsider_cap),
+                "pure_roots": len(pure),
+                "admissible_pure_roots": len(solved_pure),
+                "grid_roots": len(rational),
+                "admissible_grid_roots": len(solved_grid),
+            }
+        )
 
-    print("PLATEAU MARKED-ATOM NEGATIVE CONTROLS")
+    plateau_results = []
     for constructor in (plateau_never_table, plateau_collision_table, plateau_waiting_table):
         reward, plateau = constructor()
         solved = pure_stationary_roots(reward)
         solved_admissible = [root for root in solved if root["admissible"]]
-        print(
-            f"  {plateau.kind}: debt={render_tuple(plateau.debt)}"
-            + f" gain={render_fraction(plateau.profitable_gain)}"
-            + f" pure local roots={len(solved)}"
-            + f" admissible/solved={len(solved_admissible)}"
+        plateau_results.append(
+            {
+                "kind": plateau.kind,
+                "debt": render_tuple(plateau.debt),
+                "gain": render_fraction(plateau.profitable_gain),
+                "pure_roots": len(solved),
+                "admissible_pure_roots": len(solved_admissible),
+            }
         )
+    return {
+        "experiment": "E36",
+        "status": "passed",
+        "grid": "reduced denominator <= 5",
+        "atomic_results": atomic_results,
+        "plateau_results": plateau_results,
+        "conclusion": (
+            "Exact atomic passports and all three marked plateau atoms pass "
+            "their finite consistency checks, while no admissible pure root "
+            "survives the displayed controls."
+        ),
+        "limitation": (
+            "The search does not decide the global minimum semantic fibre; any "
+            "zero-debt carrier disqualifies a positive-debt witness."
+        ),
+    }
 
 if __name__ == "__main__":
-    main()
+    print(json.dumps(run(), indent=2, sort_keys=True))

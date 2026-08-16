@@ -117,11 +117,9 @@ def solo_quitter_admissible(w: Weight, i: int) -> Certificate:
     This is exactly the FTV table's situation: `solo_quitter_lp` fails at
     every coordinate (slice one's `validate.py`), so (2b) never fires there;
     FTV's actual admissible cycle is the period-THREE phase-rotation block
-    (`FTVCyclicAdmissibleCycle.lean`), never a period-one solo row -- see
-    `ideas/InvertedCounterexampleSearch/
-    EveryProvedTheoremConstrainsTheHypotheticalCounterexample.md`, which
-    records the FTV table passing the (unrelated) algebraic screen `K4`
-    while its only admissible cycle is period-three, not period-one.
+    (`UniformEquilibrium/Quitting/Examples/FTV/CyclicAdmissibleCycle.lean`),
+    never a period-one solo row. Its
+    separate algebraic screen does not change that period distinction.
     """
     n = players(w)
     lp_cert = solo_quitter_lp(w, i)

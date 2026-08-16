@@ -37,7 +37,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter Math.Probability
-open Experiments.PureTimeWitnessNormalForm
+open Research.PureTimeWitnessNormalForm
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

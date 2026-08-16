@@ -8,6 +8,7 @@ auxiliary cube budget on a stated rational grid and screen obvious stationary
 solutions.
 """
 
+import json
 from fractions import Fraction as F
 from functools import reduce
 from itertools import product
@@ -168,7 +169,7 @@ def stationary_semantics(reward, quit_rates):
     return prescribed, tuple(envelope)
 
 
-def main():
+def run() -> dict[str, object]:
     reward = witness_table()
     prescribed, envelope = singleton_absorption_semantics(reward, OWNER)
     debt = tuple(envelope[who] - prescribed[who] for who in range(N))
@@ -236,24 +237,42 @@ def main():
         for index in range(len(escape_debt) - 1)
     )
 
-    print("Q-COMPATIBLE MINIMUM-PLATEAU NEGATIVE CONTROL")
-    print(f"  prescribed={prescribed}")
-    print(f"  envelope={envelope}")
-    print(f"  debt={debt}; D={debt_sum}")
-    print(f"  envelope-minus-solo margins={margins}")
-    print(f"  aggregate prescribed surplus={sum(prescribed_surplus, F(0))}")
-    print(f"  Never passport: mass={never_mass}, gain={never_gain}")
-    print(f"  exact auxiliary roots audited on cube grid={cube_roots}")
-    print(f"  admissible pure stationary roots={len(admissible_pure)}")
-    for denominator, roots_found, admissible_found in stationary_counts:
-        print(
-            f"  stationary denominator<={denominator}: "
-            f"exact={roots_found}, admissible={admissible_found}"
-        )
-    print("  exact stationary zero-debt escape:")
-    for denominator, total_debt in escape_debt:
-        print(f"    epsilon=1/{denominator}: total debt={float(total_debt):.12f}")
+    return {
+        "experiment": "E35",
+        "status": "passed",
+        "prescribed": tuple(map(str, prescribed)),
+        "envelope": tuple(map(str, envelope)),
+        "debt": tuple(map(str, debt)),
+        "total_debt": str(debt_sum),
+        "margins": tuple(map(str, margins)),
+        "aggregate_prescribed_surplus": str(sum(prescribed_surplus, F(0))),
+        "never_mass": str(never_mass),
+        "never_gain": str(never_gain),
+        "auxiliary_cube_roots": cube_roots,
+        "admissible_pure_roots": len(admissible_pure),
+        "stationary_counts": [
+            {
+                "max_denominator": denominator,
+                "exact_roots": roots_found,
+                "admissible_roots": admissible_found,
+            }
+            for denominator, roots_found, admissible_found in stationary_counts
+        ],
+        "escape_debt": [
+            {"denominator": denominator, "total_debt": str(total_debt)}
+            for denominator, total_debt in escape_debt
+        ],
+        "conclusion": (
+            "The displayed minimum-plateau inequalities remain consistent in "
+            "an exact four-player negative control, while pure and bounded "
+            "rational stationary roots are screened out."
+        ),
+        "limitation": (
+            "This is not a minimum-carrier or unrestricted-equilibrium result; "
+            "the positive-debt witness has an executable zero-debt escape."
+        ),
+    }
 
 
 if __name__ == "__main__":
-    main()
+    print(json.dumps(run(), indent=2, sort_keys=True))

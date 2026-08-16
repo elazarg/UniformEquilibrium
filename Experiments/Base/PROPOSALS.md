@@ -2,7 +2,7 @@
 
 These are proposed finite or exact-computation attacks on the current
 uniform-equilibrium program. They are not theorem claims and they are not yet
-members of the executable E01--E33 suite. Every proposal has an explicit
+members of the registered Base suite. Every proposal has an explicit
 promotion boundary. In particular, failure of a bounded controller grammar,
 bounded path grammar, stationary class, or public strategy class is never
 called a refutation of unrestricted uniform-equilibrium existence.
@@ -509,7 +509,7 @@ existence, is the discriminating filter at period one.
 
 **Integration with the numerical-analysis intake (2026-08-05).** Filter (4)
 — fixed-period exact-cycle decision — must **consume**
-`krawczyk_cycle_certifier.py` (in flight from
+`Experiments/certsearch/krawczyk_cycle_certifier.py` (in flight from
 the numerical-analysis source note §2), not rebuild it; slice two waits for it.
 Two search modes join the design from the backward-error lens: **backward
 distance** — for surviving weights, estimate the distance to the nearest

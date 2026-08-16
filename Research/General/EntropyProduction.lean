@@ -105,7 +105,7 @@ nonnegative stationary weights `π` and nonnegative kernel `P` — is recorded s
 
 noncomputable section
 
-namespace Experiments.EntropyProduction
+namespace Research.EntropyProduction
 
 variable {S : Type} [Fintype S]
 
@@ -288,4 +288,4 @@ theorem detailedBalance_of_EP_eq_zero (F : S → S → ℝ) (hF0 : ∀ x y, 0 �
   have heq : F x y * Real.log (F x y / F y x) = F x y - F y x := by linarith
   exact eq_of_diff_eq_zero (hF0 x y) (hF0 y x) (hsym x y) heq
 
-end Experiments.EntropyProduction
+end Research.EntropyProduction

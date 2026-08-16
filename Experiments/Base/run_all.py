@@ -39,21 +39,20 @@ EXPERIMENT_MODULES = [
     "commit_reveal_coin",
     "threshold_secret_sharing",
     "live_entropy_budget",
+    "cap_nash_endpoint_transport_search",
+    "minimum_plateau_q_budget_search",
+    "semantic_final_regime_search",
 ]
 
 
 def main() -> None:
     directory = Path(__file__).resolve().parent
-    repo = directory.parent.parent
     sys.path.insert(0, str(directory))
 
     results = []
     for module_name in EXPERIMENT_MODULES:
         module = importlib.import_module(module_name)
-        if module_name == "atlas_progress_analyzer":
-            result = module.analyze(repo)
-        else:
-            result = module.run()
+        result = module.run()
         assert result["status"] == "passed"
         results.append(
             {

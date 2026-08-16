@@ -38,7 +38,7 @@ certificates.
 
 noncomputable section
 
-namespace Experiments.QuittingStochasticButtonCompression
+namespace Research.QuittingStochasticButtonCompression
 
 open GameTheory Filter Math.Probability
 open scoped BigOperators
@@ -456,4 +456,4 @@ theorem exists_stochasticButton_atom_diffuse_tail_certificate_of_not_summable
     roots hthreshold hlevel hdiverges
 
 
-end Experiments.QuittingStochasticButtonCompression
+end Research.QuittingStochasticButtonCompression

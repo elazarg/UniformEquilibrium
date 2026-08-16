@@ -33,7 +33,7 @@ continuation/obstacle coordinate.
 
 noncomputable section
 
-namespace Experiments.QuittingSingletonOccupationOrderObstruction
+namespace Research.QuittingSingletonOccupationOrderObstruction
 
 open GameTheory Math.Probability Math.PMFProduct
 open scoped BigOperators
@@ -432,4 +432,4 @@ theorem same_singletonOccupation_distinct_holonomy :
   ⟨singletonOccupation_eq, finiteBoundaryHolonomy_ne⟩
 
 
-end Experiments.QuittingSingletonOccupationOrderObstruction
+end Research.QuittingSingletonOccupationOrderObstruction

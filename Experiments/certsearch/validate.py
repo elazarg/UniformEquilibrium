@@ -160,8 +160,8 @@ print("=" * 78)
 print()
 
 # --- G_eps (eps = 1/10) --------------------------------------------------
-# Source: ideas/AbsorbingCycleCarrier/APublishedWeightSitsInTheCycleExistenceHole.md
-# "Solo values are all 1 > 0, so it is not zero-solo" and "It fails at every
+# Reference-weight facts: solo values are all 1 > 0, so it is not zero-solo;
+# the no-join LP fails at every
 # coordinate and every rate" (the no-join LP, i.e. solo_quitter_lp).
 print("-- G_EPS (eps = 1/10) --")
 check("is_zero_solo(G_EPS)", is_zero_solo(G_EPS), False,
@@ -171,8 +171,8 @@ for i in range(3):
           "doc: 'fails at every coordinate and every rate'")
 
 # --- Q154 ------------------------------------------------------------------
-# Source: questions/Question154-DoRelaxedCyclesDivergeWithoutAnExactOne.md
-# section 2: "For every coordinate, the solo value is d_i = -1/2" (so
+# Reference-weight facts: for every coordinate, the solo value is d_i = -1/2
+# (so
 # zero-solo TRUE: all d_i <= 0), and section 7: "The LCP (5) has no
 # solution" for this weight's own B matrix (eq. 37).
 print("-- Q154 --")
@@ -317,11 +317,11 @@ assert cert_admissible_owner0.detail.get("not_applicable") is True
 
 # --- FTV: solo_quitter_lp fails at EVERY coordinate (Part 1 above), so -----
 # --- (2b) is not applicable at any owner -----------------------------------
-# ideas/InvertedCounterexampleSearch/
-# EveryProvedTheoremConstrainsTheHypotheticalCounterexample.md records that
-# FTV passes the (unrelated) algebraic screen K4 but its only admissible
+# The FTV reference weight passes a separate algebraic screen, but its only
+# admissible
 # absorbing cycle is the PERIOD-THREE phase rotation
-# (FTVCyclicAdmissibleCycle.lean), never a period-one solo row. Consistent
+# (`UniformEquilibrium/Quitting/Examples/FTV/CyclicAdmissibleCycle.lean`),
+# never a period-one solo row. Consistent
 # with that: filter (2), the period-one no-join LP, is infeasible at every
 # coordinate for FTV (Part 1 above), so there is no period-one solo row for
 # (2b) to judge -- every owner must come back "not applicable", not
@@ -335,8 +335,8 @@ for i in range(3):
         f"solo_quitter_admissible(FTV_WEIGHT, {i})", cert, False,
         "solo_quitter_lp fails at every coordinate for FTV (Part 1); FTV's "
         "actual admissible cycle is period-THREE "
-        "(FTVCyclicAdmissibleCycle.lean), never tested by this period-one "
-        "filter -- see EveryProvedTheoremConstrainsTheHypotheticalCounterexample.md",
+        "(CyclicAdmissibleCycle.lean), never tested by this period-one "
+    "filter -- see the maintained FTV reference-data audit",
     )
     assert cert.detail.get("not_applicable") is True, (
         f"owner {i}: (2b) must report not_applicable when the LP is "
@@ -357,8 +357,8 @@ print("-- Q154, period 1 (must reproduce E66: 26/26 refuted) --")
 cert_q154_p1 = period1_certificate(Q154_WEIGHT)
 check(
     "period1_certificate(Q154_WEIGHT)", cert_q154_p1, True,
-    "E66 (Experiments/krawczyk_cycle_certifier.py certificate_B, and "
-    "ExactCycleStrataCarryTheRelaxedFamilies.md S3): period-1 nonexistence "
+    "the Krawczyk certificate_B regression and the period-1 support-stratum "
+    "check: period-1 nonexistence "
     "for the Q154/cyclicWeight table certified 26/26 support patterns, zero "
     "undecided",
 )
@@ -371,7 +371,7 @@ assert len(cert_q154_p1.detail["certified_infeasible"]) == 26, (
 assert cert_q154_p1.detail["undecided_patterns"] == []
 
 # --- G_EPS (eps=1/10) period 1: refuted -- the machine-checked exclusion --
-# PerturbedCyclicWeightNoExactCycle.lean's `no_exactCycle` proves NO exact
+# `PerturbedCyclicWeightNoExactCycle.lean`'s `no_exactCycle` proves NO exact
 # cycle of ANY finite period exists for this weight at every eps in (0, 2],
 # machine-checked over the reals -- period 1 is the special case tested
 # here, by exact rational branch-and-bound rather than the Lean proof

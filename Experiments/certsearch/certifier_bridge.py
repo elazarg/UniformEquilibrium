@@ -1,5 +1,5 @@
 """Filter (4): fixed-period exact-cycle existence, via
-`Experiments/krawczyk_cycle_certifier.py` (E66, "the repo's dyadic-interval
+`Experiments/certsearch/krawczyk_cycle_certifier.py` (a dyadic-interval
 /Krawczyk island... generalized... to quitting-cycle complementarity
 systems").  This module does not modify the certifier; it adapts a
 `weights.Weight` table into the certifier's own `table(S, i)` calling
@@ -47,8 +47,8 @@ import sys
 from fractions import Fraction as Fr
 from typing import Optional
 
-_experiments_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(_experiments_root, "Base"))
+_certsearch_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _certsearch_dir)
 
 from krawczyk_cycle_certifier import (  # noqa: E402  (path insert must precede this)
     bnb_period1,

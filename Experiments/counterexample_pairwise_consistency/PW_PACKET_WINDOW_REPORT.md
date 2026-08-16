@@ -246,4 +246,4 @@ the master question forbids.
 - No cap realization, prefix attachment, annotation/payoff equality, or
   universal terminal-instability claim is used.
 
-The arithmetic certificates are checked in `PWPacketWindowConsistency.lean`.
+The arithmetic certificates are checked in `../../Research/Counterexamples/Pairwise/PWPacketWindowConsistency.lean`.

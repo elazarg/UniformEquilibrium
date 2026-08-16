@@ -35,7 +35,7 @@ compactness obstruction when the seam triple is compressed as one object.
 
 noncomputable section
 
-namespace Experiments.QuittingEnrichedSeamCompression
+namespace Research.QuittingEnrichedSeamCompression
 
 open GameTheory
 open GameTheory.MetrizableMarkedAbsorptionCompletion
@@ -384,4 +384,4 @@ theorem exists_exactSeamRepresentative_anchors_close
   · exact representative.2
 
 
-end Experiments.QuittingEnrichedSeamCompression
+end Research.QuittingEnrichedSeamCompression

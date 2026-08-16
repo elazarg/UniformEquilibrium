@@ -39,12 +39,12 @@ punishment-floor transport is asserted here.
 
 noncomputable section
 
-namespace Experiments.QuittingStochasticButtonUnilateralCompression
+namespace Research.QuittingStochasticButtonUnilateralCompression
 
 open GameTheory Filter Math.Probability
 open scoped BigOperators
 
-open Experiments.QuittingStochasticButtonCompression
+open Research.QuittingStochasticButtonCompression
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -588,4 +588,4 @@ theorem behaviorDeviation_diffuseOverlap_le_threshold
   unilateralDiffuseOverlapMass_le_threshold _ _ _ _ hthreshold
 
 
-end Experiments.QuittingStochasticButtonUnilateralCompression
+end Research.QuittingStochasticButtonUnilateralCompression

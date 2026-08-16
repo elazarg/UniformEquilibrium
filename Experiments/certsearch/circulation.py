@@ -1,5 +1,4 @@
 """Circulation-certificate search (P13-adjacent; new certsearch mode), for
-`ideas/QuittingGameConjecture/SingletonFaceCirculationsSteerOrbits.md`'s
 singleton-face circulation certificates.
 
 A **face-circulation certificate** for a weight `r` and a floor vector

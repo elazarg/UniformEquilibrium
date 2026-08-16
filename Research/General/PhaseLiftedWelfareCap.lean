@@ -14,7 +14,7 @@ weighted welfare ceiling for every behavior profile.  The endpoint loss is
 
 noncomputable section
 
-namespace Experiments.PhaseLiftedWelfareCap
+namespace Research.PhaseLiftedWelfareCap
 
 open scoped BigOperators
 
@@ -214,4 +214,4 @@ theorem hasUniformWeightedWelfareCap_of_hasPhaseWeightedWelfareBias
 
 end StochasticGame
 
-end Experiments.PhaseLiftedWelfareCap
+end Research.PhaseLiftedWelfareCap

@@ -6,7 +6,13 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11LocalInterval
 
-/-! # Exact dyadic box data for the block-pair K11 certificate -/
+/-!
+# Exact dyadic box data for the block-pair K11 certificate
+
+This checked-in file is concrete experimental evidence. The K11 integrity
+checker validates its structure and freshness but does not regenerate the
+numeric computation. Historical provenance is recorded in `TRANSITION.md`.
+-/
 
 namespace GameTheory.BlockPairK11.DyadicCertificate
 

@@ -2,11 +2,9 @@
 
 WHAT THIS COMPUTES
 -------------------
-The repository's canonical case-2 hard weight ("Question147" weight / Solan's
-G_epsilon divided by 3 / AGKRS's own Gamma_eta under t -> (t+1)/3, see
-ideas/UniformEquilibriumLiterature/QBarMatrixQuittingGamesHaveContinuousEquilibria.md
-and ideas/AbsorbingCycleCarrier/FiniteCyclesAreRefutedTheCarrierIsAMassPath.md)
-is a 3-player quitting game with reward table (Fraction-exact):
+The repository's canonical case-2 hard weight (the Solan/AGKRS Gamma_eta
+family under t -> (t+1)/3) is a 3-player quitting game with reward table
+(Fraction-exact):
 
     r({1}) = (1/3, 1,   0)          r({1,2}) = ((1+eta)/3, 0, 1/3)
     r({2}) = (0,   1/3, 1)          r({1,3}) = (0, 1/3, (1+eta)/3)
@@ -370,9 +368,8 @@ def run() -> dict[str, object]:
     m_values = list(range(1, 9))
     rows: list[dict[str, object]] = []
 
-    # Integrity check tying the code to the hand-derived closed form recorded
-    # in ideas/AbsorbingCycleCarrier/FiniteCyclesAreRefutedTheCarrierIsAMassPath.md:
-    # "against y=(1/2,0,0) the idle third coordinate has g_3 = eta/6" at m=1.
+    # Integrity check tying the code to the hand-derived closed form:
+    # against y=(1/2,0,0) the idle third coordinate has g_3 = eta/6 at m=1.
     m1_rho = rho_for_m(1)
     assert abs(m1_rho - 0.5) < 1e-15
     m1_active = active_sequence(1)

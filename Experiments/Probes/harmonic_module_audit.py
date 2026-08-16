@@ -1,9 +1,9 @@
-"""E22: module-invariance audit of the processed endpoint-harmonic jet span.
+"""Probe: module-invariance audit of the processed endpoint-harmonic jet span.
 
-`ideas/wild/RepresentationTheory.md` §6 asks whether the processed harmonic-jet
-span is a submodule for the endpoint transition algebra, hoping that the
-induced module filtration would supply a canonical rebasing-stable progress
-rank.  This script performs that audit on the repository's own landed examples
+The processed harmonic-jet span is tested as a submodule for the endpoint
+transition algebra, asking whether an induced module filtration supplies a
+canonical rebasing-stable progress rank. This script performs that audit on
+the repository's own landed examples
 with exact rational arithmetic.
 
 Translation of the Lean objects (read-only extraction; nothing is imported):
@@ -38,9 +38,8 @@ Candidate algebras, following E18's generator list (`WildIdeas` §5):
 * `germ_payoff` : `germ` plus the endpoint stage-payoff multiplication
                   operators `diag(finkStageEU z (.) who)`.
 
-Registration note: `run_all.py` uses a hard-coded module list and this script
-was not permitted to edit it, so E22 is standalone -- run it directly with
-`python Experiments/harmonic_module_audit.py`.
+This is a standalone probe, outside the registered Base suite. Run it with
+`python Experiments/Probes/harmonic_module_audit.py`.
 """
 
 from __future__ import annotations
@@ -1025,7 +1024,7 @@ def run() -> dict:
                 ), "channel dimensions were expected to track the plain rank"
 
     return {
-        "experiment": "E22",
+        "probe": "harmonic_module_audit",
         "status": "passed",
         "examples": reports,
         "supported_action_census": censuses,

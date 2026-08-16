@@ -4,6 +4,13 @@ Do not edit it directly.
 -/
 
 import Experiments
+import Experiments.Base.SemanticFinalRegimeArithmetic
+import Experiments.certsearch.block_pair.K11
+import Experiments.certsearch.block_pair.K11.DyadicData
+import Experiments.certsearch.block_pair.K11.JacobianCache
+import Experiments.certsearch.block_pair.K11.KrawczykInstance
+import Experiments.certsearch.block_pair.K11.Preconditioner
+import Experiments.certsearch.block_pair.K11.RowZeroCacheData
 import Literature
 import Literature.Catalog
 import MathUE
@@ -312,13 +319,10 @@ import Research.Quitting.BlockPair.K11.ImmediateSemanticOne
 import Research.Quitting.BlockPair.K11.ImmediateSemanticThree
 import Research.Quitting.BlockPair.K11.ImmediateSemanticTwo
 import Research.Quitting.BlockPair.K11.ImmediateSemanticZero
-import Research.Quitting.BlockPair.K11.JacobianCache
 import Research.Quitting.BlockPair.K11.KrawczykConditionalConsumer
 import Research.Quitting.BlockPair.K11.KrawczykConditionalData
 import Research.Quitting.BlockPair.K11.KrawczykConditionalSemantic
 import Research.Quitting.BlockPair.K11.PhaseValueRecurrence
-import Research.Quitting.BlockPair.K11.Preconditioner
-import Research.Quitting.BlockPair.K11.RowZeroCacheData
 import Research.Quitting.BlockPair.K11.RowZeroSemantic
 import Research.Quitting.CancellationSafeAggregationCounterexample
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
@@ -430,7 +434,6 @@ import Research.Quitting.TerminalSemanticGlobalDebtBarrierCertificate
 import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertion
 import Research.Quitting.TwoResetFourRoleAdapter
 import Research.Quitting.UniqueAllContinueCapStackNoGo
-import Research.Semantics.SemanticFinalRegimeArithmetic
 import Research.Semantics.SurvivalWeightedReachedHistoryAccount
 import Theorems
 import Theorems.BoundedDiscrepancy
@@ -1078,7 +1081,6 @@ import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonP
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwoStationary
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonResidualHard
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11ActiveEquationInterval
-import UniformEquilibrium.Quitting.Examples.BlockPair.K11DyadicData
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11LocalInterval
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11LocalValue
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11OpponentLocalValue

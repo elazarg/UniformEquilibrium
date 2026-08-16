@@ -20,7 +20,7 @@ game model; the stochastic-game inputs merely supply its two hypotheses.
 
 noncomputable section
 
-namespace Experiments.WeightedSaturationDefect
+namespace Research.WeightedSaturationDefect
 
 open scoped BigOperators
 
@@ -116,4 +116,4 @@ theorem deviation_gain_le
       deviatingOthersFloor deviatingWeightedCap
   linarith
 
-end Experiments.WeightedSaturationDefect
+end Research.WeightedSaturationDefect

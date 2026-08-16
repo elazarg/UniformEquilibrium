@@ -28,7 +28,7 @@ additional timing-based zero-debt profiles.
 
 noncomputable section
 
-namespace Experiments.ORCoupledCalibrationGame
+namespace Research.ORCoupledCalibrationGame
 
 open Set
 open QuittingORRankReduction
@@ -247,4 +247,4 @@ theorem exists_uniformGap_of_positive_at_calibrationPoint
       audit calibration hauditContinuous hcalibrationContinuous hauditNonneg
       hcalibrationNonneg hzeroSlice
 
-end Experiments.ORCoupledCalibrationGame
+end Research.ORCoupledCalibrationGame
