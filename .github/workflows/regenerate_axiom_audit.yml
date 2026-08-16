@@ -1,0 +1,30 @@
+name: Regenerate axiom audit
+
+on:
+  push:
+    branches:
+      - agent/eliminate-sl-singleton
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - name: Regenerate audit
+        run: python3 scripts/generate_axiom_audit.py
+      - name: Commit generated audit
+        run: |
+          if git diff --quiet -- AxiomAudit.lean; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AxiomAudit.lean
+          git commit -m "Regenerate axiom audit"
+          git push
