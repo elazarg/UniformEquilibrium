@@ -1,0 +1,30 @@
+name: Repair self-oriented atom proof
+
+on:
+  push:
+    branches: [agent/eliminate-sl-prescribed]
+    paths:
+      - '.github/workflows/fix_sl_self1.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: python3 .agent/sl-prescribed/fix_self1.py
+      - name: Remove temporary repair files
+        run: |
+          rm -r .agent/sl-prescribed
+          rm .github/workflows/fix_sl_self1.yml
+      - name: Commit repair
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m 'Repair self-oriented atom proof'
+          git push origin HEAD:agent/eliminate-sl-prescribed
