@@ -4,15 +4,15 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.StoppingLawGlobalRetention
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawGlobalRetention
 import Research.General.FiveCycleIncidenceSupportRigidity
 import Research.Quitting.KActiveCompactPath
 
 /-!
 # Iterated global retention along stopping-law reset chains
 
-`QuittingStoppingLawGlobalRetention` proves that one half reset retains half
-of every literal chronological coalition atom simultaneously.  This file
+One half reset retains half of every literal chronological coalition atom
+simultaneously.  This file
 iterates that statement.  After `m` composable resets, every source atom is
 still present with at least `2⁻ᵐ` of its original mass.
 

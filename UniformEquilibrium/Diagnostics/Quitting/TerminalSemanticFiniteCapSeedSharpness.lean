@@ -10,10 +10,9 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAllContinuePlatea
 /-!
 # Sharpness of the two-seed finite-cap threshold
 
-The deleted-clock calculation shows that two zero-Never seeds are sufficient
-for reward-uniform all-player finite capping.  This experiment shows that one
-seed is genuinely insufficient for preserving the full behavioral semantic
-port, not merely insufficient for the splice estimate.
+Two zero-Never seeds suffice for reward-uniform all-player finite capping.  The
+results below show that one seed is genuinely insufficient for preserving the
+full behavioral semantic port, not merely insufficient for the splice estimate.
 
 Give every absorbing coalition payoff `-1`.  In a profile where one designated
 player quits surely and every opponent Continues forever, that player can

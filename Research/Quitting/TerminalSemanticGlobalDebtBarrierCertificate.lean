@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.ElementaryTailSemanticReduction
+import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryTailSemanticReduction
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawExploitabilityFloor
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap

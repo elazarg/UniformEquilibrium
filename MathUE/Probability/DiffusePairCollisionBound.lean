@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import MathUE.Probability.DiscreteHazardStopping
 
 /-!
-# Uniform collision bound against a diffuse quitting clock
+# Uniform collision bounds for discrete hazards
 
 Two independent public-time hazards `p` and `q` stop simultaneously at date
 `t` with live probability
@@ -35,10 +35,11 @@ priced.
 
 noncomputable section
 
-namespace GameTheory
+namespace Math
+namespace Probability
 namespace DiffusePairCollision
 
-open Math.Probability.DiscreteHazard
+open DiscreteHazard
 
 /-- The union hazard of two independent stop decisions. -/
 def pairHazard (first second : ScalarHazard) : ScalarHazard where
@@ -160,9 +161,10 @@ theorem collisionMass_le_mesh
 bound.  No completeness assumption is imposed on either stopping law. -/
 theorem summable_collisionMassAt_of_mesh
     (first second : ScalarHazard) (mesh : ℝ)
-    (hmesh0 : 0 ≤ mesh)
     (hmesh : ∀ time, first.stop time ≤ mesh) :
     Summable (collisionMassAt first second) := by
+  have hmesh0 : 0 ≤ mesh :=
+    (first.stop_nonneg 0).trans (hmesh 0)
   apply summable_of_sum_range_le
   · exact collisionMassAt_nonneg first second
   · intro cutoff
@@ -205,10 +207,11 @@ theorem abs_collisionPayoff_le_bound_mul_mesh
     (first second : ScalarHazard) (mesh bound payoff : ℝ) (cutoff : ℕ)
     (hmesh0 : 0 ≤ mesh)
     (hmesh : ∀ time < cutoff, first.stop time ≤ mesh)
-    (hbound0 : 0 ≤ bound) (hpayoff : |payoff| ≤ bound) :
+    (hpayoff : |payoff| ≤ bound) :
     |collisionMass first second cutoff * payoff| ≤ bound * mesh := by
   rw [abs_mul]
   have hcollision0 := collisionMass_nonneg first second cutoff
+  have hbound0 : 0 ≤ bound := (abs_nonneg payoff).trans hpayoff
   rw [abs_of_nonneg hcollision0]
   calc
     collisionMass first second cutoff * |payoff| ≤
@@ -220,4 +223,5 @@ theorem abs_collisionPayoff_le_bound_mul_mesh
     _ = bound * mesh := by ring
 
 end DiffusePairCollision
-end GameTheory
+end Probability
+end Math

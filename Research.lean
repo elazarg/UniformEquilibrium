@@ -4,7 +4,6 @@ import Research.Counterexamples.Pairwise.TailPacketCyclicFourWitness
 import Research.General.AnytimeDetectionConditional
 import Research.General.BinaryKLQuadratic
 import Research.General.BufferedOneSeamReturnOrExit
-import Research.General.CalibrationSliceCompactness
 import Research.General.ChargedCirculationChattering
 import Research.General.ChargedCirculationFiniteProbe
 import Research.General.CoalitionEquivariantAssembly
@@ -26,7 +25,6 @@ import Research.General.FiniteGroupInvariantWeights
 import Research.General.FiniteGroupOrbitGluing
 import Research.General.FiveCycleIncidenceSupportRigidity
 import Research.General.FourRoleObstructionReduction
-import Research.General.GraphDirectedFullShiftDensity
 import Research.General.GreedyBufferedExitDecoder
 import Research.General.GroupSumLiveEntropy
 import Research.General.HazardScaleDirectionBlowup
@@ -38,7 +36,6 @@ import Research.General.MinimumSemanticPlateauConsistency
 import Research.General.ORCoupledCalibrationGame
 import Research.General.PathCarrierPrototype
 import Research.General.PhaseLiftedWelfareCap
-import Research.General.PureTimeWitnessNormalForm
 import Research.General.Question175OwnerNeverFloor
 import Research.General.RandomDeviationAuditCardinalReduction
 import Research.General.RandomDeviationAuditGame
@@ -57,7 +54,6 @@ import Research.Quitting.BlockPair.K11
 import Research.Quitting.CancellationSafeAggregationCounterexample
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
-import Research.Quitting.CausalQuitConvexHull
 import Research.Quitting.CausalTailEscapeMaxAbsorptionDispatch
 import Research.Quitting.CausalTailEscapeReturnGate
 import Research.Quitting.CertifiedForcedOwnerBackgroundHost
@@ -87,13 +83,10 @@ import Research.Quitting.CyclicKofNResetRetentionNoGo
 import Research.Quitting.CyclicKofNSupportedRootRetentionNoGo
 import Research.Quitting.CyclicSymmetricStationaryGapIVT
 import Research.Quitting.DebtTransportMarkovMonodromy
-import Research.Quitting.DiffusePairCollisionBound
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
-import Research.Quitting.ElementaryTailSemanticReduction
 import Research.Quitting.EnrichedSeamCompression
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
-import Research.Quitting.FiniteCapSeedSharpness
 import Research.Quitting.FiniteDebtMonotonicity
 import Research.Quitting.FiniteResetCirculationRegression
 import Research.Quitting.FixedLawGlobalMinimumPremiumNoGo
@@ -136,7 +129,6 @@ import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
 import Research.Quitting.Q182EndpointRecipientAtomInterfaceNoGo
 import Research.Quitting.RectangleEndpointFixedLawAtomReturn
-import Research.Quitting.ReinsertionPenaltyBound
 import Research.Quitting.RetainedRoleClockArithmetic
 import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
@@ -145,7 +137,6 @@ import Research.Quitting.SingletonTightMinimumFaceIteration
 import Research.Quitting.StochasticButtonCompression
 import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawFiniteCapConvergence
-import Research.Quitting.StoppingLawGlobalRetention
 import Research.Quitting.StoppingLawMicroChatteringRetention
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport
 import Research.Quitting.StoppingLawMixtureFixedPort

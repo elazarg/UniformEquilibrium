@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.ElementaryTailSemanticReduction
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticElementaryTailCompression
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeAtomContinuePrefixAccess
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegimeOffDiagonalAtomSequenceDispatch
@@ -37,7 +37,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter Math.Probability
-open Research.PureTimeWitnessNormalForm
+open Math.PureTimeWitnessNormalForm
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

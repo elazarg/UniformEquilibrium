@@ -7,12 +7,12 @@ Authors: GameTheory contributors
 import MathUE.Probability.ReachableClosedClass
 
 /-!
-# Communicating classes under a full-support invariant law
+# Communicating classes under an invariant law
 
-A finite Markov kernel admitting a stationary law with strictly positive
-mass at every state has no transient states.  Equivalently, every support
-edge can be followed by a support path back to its source.  Consequently,
-the mutual-reachability class of any state is closed.
+A support edge of a finite Markov kernel can be followed by a support path
+back to its source whenever the kernel has a nonnegative stationary weight
+that is positive at the source.  In particular, a full-support stationary
+law has no transient states, and every mutual-reachability class is closed.
 
 The results here isolate the finite Markov-chain fact needed to decompose a
 positive occupation circulation into closed communicating classes.
@@ -112,18 +112,20 @@ theorem stationary_expectation
       intro destination _
       rw [hstationary destination]
 
-/-- A support edge of a finite kernel with a full-support stationary weight
-always lies on a support cycle. -/
-theorem supportStep_returns_of_stationary_fullSupport
+/-- A support edge whose source has positive stationary weight lies on a
+support cycle.  The stationary weight need only be nonnegative away from the
+source. -/
+theorem supportStep_returns_of_stationary_nonnegative
     [Fintype S]
     (kernel : S → PMF S) (weight : S → ℝ)
-    (hweight : ∀ state, 0 < weight state)
+    (hweight : ∀ state, 0 ≤ weight state)
     (hstationary :
       ∀ destination,
         ∑ source, weight source *
             (kernel source destination).toReal =
           weight destination)
     {source destination : S}
+    (hsource : 0 < weight source)
     (hstep : PMFSupportStep kernel source destination) :
     PMFReachable kernel destination source := by
   classical
@@ -136,7 +138,7 @@ theorem supportStep_returns_of_stationary_fullSupport
     exact
       ⟨Finset.mem_univ destination,
         Relation.ReflTransGen.refl⟩
-  have hsource : source ∉ reachable := by
+  have hsourceOutside : source ∉ reachable := by
     simpa [reachable] using hnotReachable
   have hclosed :
       ∀ ⦃current⦄, current ∈ reachable →
@@ -204,12 +206,12 @@ theorem supportStep_returns_of_stationary_fullSupport
         have hindicator : indicator current = 0 := by
           simp [indicator, hcurrent]
         rw [hindicator, mul_zero, sub_zero]
-        exact mul_nonneg (hweight current).le hnonneg
+        exact mul_nonneg (hweight current) hnonneg
     · refine ⟨source, Finset.mem_univ _, ?_⟩
       have hindicator : indicator source = 0 := by
-        simp [indicator, hsource]
+        simp [indicator, hsourceOutside]
       rw [hindicator, mul_zero, sub_zero]
-      exact mul_pos (hweight source) hexpect_source_pos
+      exact mul_pos hsource hexpect_source_pos
   have hdiff :
       (∑ current, weight current *
           expect (kernel current) indicator) -
@@ -247,8 +249,9 @@ theorem communicationClass_closed_of_stationary_fullSupport
     (mem_pmfCommunicationClass_iff kernel state source).mp hsource
   have hreturn :
       PMFReachable kernel destination source :=
-    supportStep_returns_of_stationary_fullSupport
-      kernel weight hweight hstationary hstep
+    supportStep_returns_of_stationary_nonnegative
+      kernel weight (fun current => (hweight current).le) hstationary
+        (hweight source) hstep
   apply (mem_pmfCommunicationClass_iff
     kernel state destination).mpr
   exact

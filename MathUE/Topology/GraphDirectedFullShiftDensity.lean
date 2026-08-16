@@ -10,29 +10,36 @@ import MathUE.Topology.GraphDirectedPeriodicLift
 # Periodic lifts are dense in a contracting full shift
 
 For a one-vertex graph-directed compact system, every edge sequence is an
-admissible full-shift code.  Repeat its first `period` symbols.  The resulting
-code and its unique compatible pullback lift are periodic, and common-prefix
-continuity bounds the initial-value error by `q ^ period * diameterBudget`.
+admissible full-shift code. For a positive `period`, repeat the code's first
+`period` symbols. The resulting code and its unique compatible pullback lift
+are periodic, and common-prefix continuity bounds the initial-value error by
+`contraction ^ period * diameterBudget`.
 
-This is the precise closing theorem used by the symbolic-resolution picture:
-exact periodic lifts are exponentially dense in all coded lifts.  It does not
-assert injectivity of the coding map or separation of branch images.
+At `period = 0`, periodicization is the original code, the asserted period
+identity is vacuous, and the theorem gives the diameter bound. Keeping this
+case makes the statements premise-free without attributing positive-period
+content to it.
 -/
-
 
 noncomputable section
 
-namespace GameTheory
-
-open Math.Topology
+namespace Math
+namespace Topology
 
 variable {Edge Point : Type*} [MetricSpace Point]
 
-/-- Repeat the first `period` entries of a one-sided code. -/
+/-- Repeat the first `period` entries of a one-sided code. For period zero,
+the code is unchanged. -/
 def periodicizeCode (code : ℕ → Edge) (period : ℕ) : ℕ → Edge :=
   fun time ↦ code (time % period)
 
-/-- Periodicization really has the requested period when it is nonzero. -/
+@[simp] theorem periodicizeCode_zero (code : ℕ → Edge) :
+    periodicizeCode code 0 = code := by
+  funext time
+  simp [periodicizeCode]
+
+/-- Periodicization has the requested period. At period zero this is the
+reflexive identity. -/
 theorem periodicizeCode_add_period
     (code : ℕ → Edge) (period time : ℕ) :
     periodicizeCode code period (time + period) =
@@ -54,9 +61,10 @@ theorem GraphDirectedCompactSystem.fullShift_isAdmissiblePath
   intro time
   exact ⟨Subsingleton.elim _ _, Subsingleton.elim _ _⟩
 
-/-- **Full-shift periodic closing.**  Every compatible coded lift has an
-exact periodic compatible lift whose initial value differs by at most the
-common contraction modulus over the repeated prefix. -/
+/-- Every compatible full-shift lift admits a lift of the periodicized code
+whose initial value satisfies the common-prefix contraction bound. For a
+positive period the new code and lift are genuinely periodic; at period zero
+the periodicity equation is vacuous and the code is unchanged. -/
 theorem GraphDirectedCompactSystem.exists_periodicLift_close
     (system : GraphDirectedCompactSystem Unit Edge Point)
     {contraction : ℝ}
@@ -93,5 +101,5 @@ theorem GraphDirectedCompactSystem.exists_periodicLift_close
       simpa using periodicizeCode_eq_of_lt code hoffset
     · rfl
 
-
-end GameTheory
+end Topology
+end Math

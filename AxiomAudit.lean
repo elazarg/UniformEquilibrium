@@ -165,12 +165,14 @@ import MathUE.Probability.AnalyticRestrictedSourceChargeAlternative
 import MathUE.Probability.AnalyticStationaryClass
 import MathUE.Probability.AnalyticStationaryPoisson
 import MathUE.Probability.BoundedRealizedAccountAlternative
+import MathUE.Probability.CausalQuitConvexHull
 import MathUE.Probability.ChargedClassSupportRank
 import MathUE.Probability.ChargedOccupationAlternative
 import MathUE.Probability.ContractionErrorRecurrence
 import MathUE.Probability.CoreShadow
 import MathUE.Probability.CoreShadowCompiler
 import MathUE.Probability.DecisionVariationMaximalInequality
+import MathUE.Probability.DiffusePairCollisionBound
 import MathUE.Probability.DiscreteHazardMixture
 import MathUE.Probability.DiscreteHazardStopping
 import MathUE.Probability.EntryReachableChargedClass
@@ -230,12 +232,15 @@ import MathUE.SqrtRate
 import MathUE.SurvivalProduct
 import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
+import MathUE.Topology.CalibrationSliceCompactness
 import MathUE.Topology.CompactFinitePrefixRelation
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.FiniteLabelSubsequence
 import MathUE.Topology.FiniteLimitDecomposition
 import MathUE.Topology.GraphDirectedCompactPullback
+import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
+import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.WeierstrassCurve
 import Research
@@ -245,7 +250,6 @@ import Research.Counterexamples.Pairwise.TailPacketCyclicFourWitness
 import Research.General.AnytimeDetectionConditional
 import Research.General.BinaryKLQuadratic
 import Research.General.BufferedOneSeamReturnOrExit
-import Research.General.CalibrationSliceCompactness
 import Research.General.ChargedCirculationChattering
 import Research.General.ChargedCirculationFiniteProbe
 import Research.General.CoalitionEquivariantAssembly
@@ -267,7 +271,6 @@ import Research.General.FiniteGroupInvariantWeights
 import Research.General.FiniteGroupOrbitGluing
 import Research.General.FiveCycleIncidenceSupportRigidity
 import Research.General.FourRoleObstructionReduction
-import Research.General.GraphDirectedFullShiftDensity
 import Research.General.GreedyBufferedExitDecoder
 import Research.General.GroupSumLiveEntropy
 import Research.General.HazardScaleDirectionBlowup
@@ -279,7 +282,6 @@ import Research.General.MinimumSemanticPlateauConsistency
 import Research.General.ORCoupledCalibrationGame
 import Research.General.PathCarrierPrototype
 import Research.General.PhaseLiftedWelfareCap
-import Research.General.PureTimeWitnessNormalForm
 import Research.General.Question175OwnerNeverFloor
 import Research.General.RandomDeviationAuditCardinalReduction
 import Research.General.RandomDeviationAuditGame
@@ -327,7 +329,6 @@ import Research.Quitting.BlockPair.K11.RowZeroSemantic
 import Research.Quitting.CancellationSafeAggregationCounterexample
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
-import Research.Quitting.CausalQuitConvexHull
 import Research.Quitting.CausalTailEscapeMaxAbsorptionDispatch
 import Research.Quitting.CausalTailEscapeReturnGate
 import Research.Quitting.CertifiedForcedOwnerBackgroundHost
@@ -357,13 +358,10 @@ import Research.Quitting.CyclicKofNResetRetentionNoGo
 import Research.Quitting.CyclicKofNSupportedRootRetentionNoGo
 import Research.Quitting.CyclicSymmetricStationaryGapIVT
 import Research.Quitting.DebtTransportMarkovMonodromy
-import Research.Quitting.DiffusePairCollisionBound
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
-import Research.Quitting.ElementaryTailSemanticReduction
 import Research.Quitting.EnrichedSeamCompression
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
-import Research.Quitting.FiniteCapSeedSharpness
 import Research.Quitting.FiniteDebtMonotonicity
 import Research.Quitting.FiniteResetCirculationRegression
 import Research.Quitting.FixedLawGlobalMinimumPremiumNoGo
@@ -406,7 +404,6 @@ import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
 import Research.Quitting.Q182EndpointRecipientAtomInterfaceNoGo
 import Research.Quitting.RectangleEndpointFixedLawAtomReturn
-import Research.Quitting.ReinsertionPenaltyBound
 import Research.Quitting.RetainedRoleClockArithmetic
 import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
@@ -415,7 +412,6 @@ import Research.Quitting.SingletonTightMinimumFaceIteration
 import Research.Quitting.StochasticButtonCompression
 import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawFiniteCapConvergence
-import Research.Quitting.StoppingLawGlobalRetention
 import Research.Quitting.StoppingLawMicroChatteringRetention
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport
 import Research.Quitting.StoppingLawMixtureFixedPort
@@ -672,8 +668,10 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConditionedEndpoi
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticDebtHomotopySelection
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticDebtSafeHull
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticDiffuseApproximateDeletion
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticElementaryTailCompression
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEndpointDefectPolarity
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEssentialityPassportCompressionRegression
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFiniteCapSeedSharpness
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFixedTableCapDefectRegression
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFixedTableDiffuseIncidenceRegression
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticForcedOwnerRefusalCollector
@@ -764,6 +762,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFinite
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFiniteSpliceMarkedLaw
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFiniteSpliceNashification
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFlatTangentAlternative
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawGlobalRetention
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumTangent
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumTransfer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMixture
@@ -1201,6 +1200,7 @@ import UniformEquilibrium.Quitting.Terminal.TailCompression.All
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCapEnvelopeIdentities
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryNeverCoupling
+import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryTailSemanticReduction
 import UniformEquilibrium.Quitting.Terminal.TailCompression.SummableTailBestResponse
 import UniformEquilibrium.Quitting.Terminal.TargetTail.DiagonalTargetTail
 import UniformEquilibrium.Quitting.Terminal.TargetTail.DiagonalTargetTailBounds

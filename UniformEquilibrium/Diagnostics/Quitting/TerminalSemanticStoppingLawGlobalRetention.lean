@@ -9,10 +9,10 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimu
 /-!
 # Global terminal-law retention on a minimum stopping-law reset
 
-The production stopping-law reset exports retention of one selected finite
+The underlying stopping-law reset theorem retains one selected finite
 coalition window.  Its proof is pointwise in the terminal coalition and time,
 and the selected approximate best response does not depend on that window.
-This experiment exposes the stronger simultaneous conclusion.
+This module derives the stronger simultaneous conclusion.
 
 One literal half reset:
 
@@ -48,8 +48,7 @@ def quittingPositiveSingletonStageSupport
       (quittingSingletonTerminal owner)
 
 /-- Half-retention of every singleton row makes its positive incidence
-support monotone.  This is the support premise consumed by the experimental
-five-cycle rigidity theorem. -/
+support monotone. -/
 theorem quittingPositiveSingletonStageSupport_mono_of_halfRetention
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source target : (quittingGame reward).BehaviorProfile) (time : ℕ)

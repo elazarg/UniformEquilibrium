@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.Topology.CalibrationSliceCompactness
 import Research.Quitting.ORRankReduction
-import Research.General.CalibrationSliceCompactness
 
 /-!
 # A coupled two-button calibrator for OR compression
@@ -243,7 +243,7 @@ theorem exists_uniformGap_of_positive_at_calibrationPoint
       · exact heq.2
     simpa [hprofile] using hauditAtTarget
   simpa only [calibration] using
-    CalibrationSliceCompactness.exists_uniformGap_of_positive_on_zeroSlice
+    Math.Topology.CalibrationSliceCompactness.exists_uniformGap_of_positive_on_zeroSlice
       audit calibration hauditContinuous hcalibrationContinuous hauditNonneg
       hcalibrationNonneg hzeroSlice
 

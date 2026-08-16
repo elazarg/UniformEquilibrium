@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCapEnvelopeIdentities
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryNeverCoupling
+import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryTailSemanticReduction
 import UniformEquilibrium.Quitting.Terminal.TailCompression.SummableTailBestResponse
 
 /-!

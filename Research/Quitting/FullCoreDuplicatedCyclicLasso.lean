@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.StandardQSideExample
-import Research.Quitting.ElementaryTailSemanticReduction
+import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryTailSemanticReduction
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonCapDebtLasso
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonBlockApproximation
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonCarrierBridge
@@ -104,12 +104,13 @@ theorem never_capClearance :
   funext who
   cases who with
   | none => norm_num [capClearance, ownSingleton,
-      quittingNeverBoundarySemanticPair, reward_quittingSingleton, ownSolo,
+      quittingNeverBoundarySemanticPair, reward_singleton,
+      reward_quittingSingleton, ownSolo,
       duplicatedCyclicMatrix_diagonal, startClearance]
   | some i =>
       fin_cases i <;>
         simp [capClearance, ownSingleton, quittingNeverBoundarySemanticPair,
-          reward_quittingSingleton, ownSolo,
+          reward_singleton, reward_quittingSingleton, ownSolo,
           duplicatedCyclicMatrix_diagonal, startClearance]
 
 theorem never_debtSum :

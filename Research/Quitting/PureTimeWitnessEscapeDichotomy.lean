@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.General.PureTimeWitnessNormalForm
+import MathUE.Topology.PureTimeWitnessNormalForm
 import UniformEquilibrium.Quitting.Paths.OutsiderNeverGluing
 
 /-!
@@ -38,7 +38,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter
-open Research.PureTimeWitnessNormalForm
+open Math.PureTimeWitnessNormalForm
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
