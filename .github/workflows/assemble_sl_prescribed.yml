@@ -1,0 +1,43 @@
+name: Assemble SL-PRESCRIBED elimination
+
+on:
+  push:
+    branches: [agent/eliminate-sl-prescribed]
+    paths:
+      - '.agent/sl-prescribed/**'
+      - '.github/workflows/assemble_sl_prescribed.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Assemble Lean sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw
+          cat .agent/sl-prescribed/self/part* > "$root/SelfOrientedAtomSequence.lean"
+          cat .agent/sl-prescribed/dispatch/part* > "$root/PureTimeDispatch.lean"
+          cat .agent/sl-prescribed/three/part* > "$root/ThreeWayLocalization.lean"
+          git rm "$root/FourWayLocalization.lean"
+          sed -i \
+            's/StoppingLaw\.FourWayLocalization/StoppingLaw.ThreeWayLocalization/' \
+            UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/All.lean
+          git rm -r .agent/sl-prescribed
+          git rm .github/workflows/assemble_sl_prescribed.yml
+      - name: Commit assembled sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw
+          git add UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/All.lean
+          git commit -m 'Eliminate prescribed stopping-law localization'
+          git push origin HEAD:agent/eliminate-sl-prescribed
