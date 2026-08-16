@@ -1,10 +1,9 @@
-"""Run the isolated experiment suite and the standalone Lean check."""
+"""Run the registered isolated experiment suite."""
 
 from __future__ import annotations
 
 import importlib
 import json
-import subprocess
 import sys
 from pathlib import Path
 
@@ -42,12 +41,6 @@ EXPERIMENT_MODULES = [
     "live_entropy_budget",
 ]
 
-LEAN_EXPERIMENTS = [
-    ("E09", "SignedTargetTransport.lean", "Standalone Lean signed-target transport compiled."),
-    ("E13", "LedgeredDissipativity.lean", "Standalone Lean ledgered dissipativity theorem compiled."),
-    ("E21", "EquivariantAveraging.lean", "Standalone Lean Reynolds averaging theorems compiled."),
-]
-
 
 def main() -> None:
     directory = Path(__file__).resolve().parent
@@ -67,25 +60,6 @@ def main() -> None:
                 "experiment": result["experiment"],
                 "status": result["status"],
                 "conclusion": result["conclusion"],
-            }
-        )
-
-    for experiment, filename, conclusion in LEAN_EXPERIMENTS:
-        lean_file = directory / filename
-        lean = subprocess.run(
-            ["lake", "env", "lean", str(lean_file)],
-            cwd=repo,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if lean.returncode != 0:
-            raise RuntimeError(lean.stdout + lean.stderr)
-        results.append(
-            {
-                "experiment": experiment,
-                "status": "passed",
-                "conclusion": conclusion,
             }
         )
 

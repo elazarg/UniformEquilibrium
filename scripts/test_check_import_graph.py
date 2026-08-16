@@ -197,6 +197,42 @@ import UniformEquilibrium.Certificates.Neutral
                 any("Certificates.Neutral ->" in failure for failure in failures)
             )
 
+    def test_research_experiments_boundary_is_directional(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            self.write(
+                root,
+                "lakefile.lean",
+                "lean_lib Research where\nlean_lib Experiments where\n",
+            )
+            self.write(
+                root,
+                "Research.lean",
+                "import Research.BadExperiments\n",
+            )
+            self.write(
+                root,
+                "Research/BadExperiments.lean",
+                "import Research.Interface\nimport Experiments.Evidence\n",
+            )
+            self.write(root, "Experiments.lean", "import Experiments.Consumer\n")
+            self.write(
+                root,
+                "Experiments/Consumer.lean",
+                "import Research.Interface\nimport Experiments.Evidence\n",
+            )
+            self.write(root, "Experiments/Evidence.lean", "")
+            self.write(root, "Research/Interface.lean", "")
+
+            failures = check_import_graph.check_import_graph(root)
+
+            self.assertEqual(len(failures), 1)
+            self.assertIn(
+                "forbidden architectural edge Research.BadExperiments -> "
+                "Experiments.Evidence",
+                failures[0],
+            )
+
     def test_inventory_and_internal_api_ratchets(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)

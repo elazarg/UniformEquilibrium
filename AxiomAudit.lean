@@ -4,9 +4,6 @@ Do not edit it directly.
 -/
 
 import Experiments
-import Experiments.Base.EquivariantAveraging
-import Experiments.Base.LedgeredDissipativity
-import Experiments.Base.SignedTargetTransport
 import Literature
 import Literature.Catalog
 import MathUE
@@ -256,6 +253,7 @@ import Research.General.DebtTransferTriangleGeometry
 import Research.General.DeterministicRateDenominator
 import Research.General.DynamicPotentialCoboundary
 import Research.General.EntropyProduction
+import Research.General.EquivariantAveraging
 import Research.General.EquivariantWordTransport
 import Research.General.EscrowDrawdown
 import Research.General.FiniteGroupInvariantWeights
@@ -268,6 +266,7 @@ import Research.General.GroupSumLiveEntropy
 import Research.General.HazardScaleDirectionBlowup
 import Research.General.KakutaniProductDichotomy
 import Research.General.KrawczykPreconditionerInjectivePrototype
+import Research.General.LedgeredDissipativity
 import Research.General.MaxAffineHolonomySemigroup
 import Research.General.MinimumSemanticPlateauConsistency
 import Research.General.ORCoupledCalibrationGame

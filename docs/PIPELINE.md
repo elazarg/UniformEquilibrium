@@ -39,6 +39,21 @@ Use the smallest durable record that fits the result:
 - a paper statement and its correspondence get a Literature entry;
 - compileable but architecturally unsettled Lean stays in Research.
 
+Classify by durable output rather than implementation language or origin. A
+reusable Lean theorem, checker, or interface whose meaning survives replacing
+an experimental instance stays in Research until integration. A producer,
+configuration, concrete input or output, generated payload, report, or
+integrity record tied to a bounded run or instance belongs in Experiments.
+Experiments may import Research; Research may not import Experiments. A
+kernel-checked experimental instance remains bounded checked evidence rather
+than an integrated or general theorem.
+
+An experiment record retains its tracked source, exact reproduction command,
+assumptions, limitations, and compact evidence. A migrated payload whose
+producer is unavailable instead retains an explicit provenance-loss record and
+a deterministic integrity checker. Caches, logs, screenshots, raw runs, and
+other untracked generated output are not durable records.
+
 The source repository used an `ideas/` tree for exploratory claims. This
 repository does not recreate it. GitHub owns that lifecycle:
 

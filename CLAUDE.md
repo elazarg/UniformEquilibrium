@@ -88,6 +88,21 @@ When a more precise description is needed, give it.
 - `docs/`: current mathematical interfaces, methodology, and exposition.
 - `TRANSITION.md`: the only place for repository-transition history.
 
+Classify Research and Experiments by their durable output, not by implementation
+language or provenance. A reusable, human-maintained Lean declaration, checker,
+or interface whose meaning survives replacing an experimental instance belongs
+in Research until integration. A producer, configuration, concrete input or
+output, generated payload, report, or integrity record tied to a bounded run or
+instance belongs in Experiments. Thus an experiment may import Research, but
+Research must never import Experiments. A kernel-checked experimental instance
+is bounded checked evidence, not an integrated or general theorem.
+
+An experiment record is durable only when its tracked source, reproduction
+command, assumptions, and limitations are recorded together. A migrated
+payload whose producer is unavailable instead needs an explicit provenance-loss
+record and a deterministic integrity checker. Caches, logs, screenshots, raw
+runs, and untracked generated output are not durable records.
+
 The Lean umbrellas are the authoritative module inventories. READMEs and
 manifests explain purpose, policy, and intentional exceptions; they do not
 track ordinary file churn.

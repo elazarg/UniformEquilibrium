@@ -98,6 +98,11 @@ IMPORT_BOUNDARY_RULES = (
         "UniformEquilibrium.Diagnostics",
         "certificates must depend on semantic interfaces, not diagnostics",
     ),
+    ImportBoundaryRule(
+        "Research",
+        "Experiments",
+        "Research must not depend on experimental evidence",
+    ),
 )
 
 

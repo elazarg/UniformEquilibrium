@@ -1,14 +1,21 @@
+/-
+Copyright (c) 2026 GameTheory contributors. All rights reserved.
+Released under the MIT license as described in the file LICENSE.
+Authors: GameTheory contributors
+-/
+
 import Mathlib
 
 /-!
-# E13: ledgered dissipativity telescoping
+# Ledgered dissipativity telescoping
 
-This standalone theorem is the deterministic algebra underneath the dynamic
-signal-processing interpretation of an adaptive certificate.  It deliberately
+This file proves the deterministic algebra underneath the dynamic
+signal-processing interpretation of an adaptive certificate. It deliberately
 does not construct a strategy, potential, target, or charge process.
 -/
 
-namespace Experiments.LedgeredDissipativity
+namespace Math
+namespace LedgeredDissipativity
 
 open scoped BigOperators
 
@@ -60,4 +67,5 @@ theorem average_error_le
       field_simp
       ring
 
-end Experiments.LedgeredDissipativity
+end LedgeredDissipativity
+end Math

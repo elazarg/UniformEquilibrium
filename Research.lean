@@ -19,6 +19,7 @@ import Research.General.DebtTransferTriangleGeometry
 import Research.General.DeterministicRateDenominator
 import Research.General.DynamicPotentialCoboundary
 import Research.General.EntropyProduction
+import Research.General.EquivariantAveraging
 import Research.General.EquivariantWordTransport
 import Research.General.EscrowDrawdown
 import Research.General.FiniteGroupInvariantWeights
@@ -31,6 +32,7 @@ import Research.General.GroupSumLiveEntropy
 import Research.General.HazardScaleDirectionBlowup
 import Research.General.KakutaniProductDichotomy
 import Research.General.KrawczykPreconditionerInjectivePrototype
+import Research.General.LedgeredDissipativity
 import Research.General.MaxAffineHolonomySemigroup
 import Research.General.MinimumSemanticPlateauConsistency
 import Research.General.ORCoupledCalibrationGame

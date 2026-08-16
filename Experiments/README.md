@@ -1,7 +1,16 @@
 # Experiments
 
-This directory contains reproducible executable searches and their compact
-evidence. It has no archive, cache, raw-run, or generated bulk content.
+This directory contains reproducible searches and instance-specific evidence:
+producers, configurations, concrete inputs and outputs, compact generated
+payloads, reports, and integrity records. It has no archive, cache, raw-run, or
+unreviewed generated bulk content. Reusable Lean declarations and checkers
+belong in Research or an integrated lane.
+
+An experiment result records its tracked executable source, exact reproduction
+command, assumptions, limitations, and compact evidence. A migrated payload
+whose producer is unavailable instead records that provenance loss and has a
+deterministic integrity checker. Experiments may import Research; Research must
+not import this directory.
 
 - `Base/` is the registered standard-library suite. Run it with
   `python Experiments/Base/run_all.py`.

@@ -1,45 +1,37 @@
 # Uniform-equilibrium research experiments
 
 This directory is deliberately isolated from the production theorem graph.
-Its programs are small executable falsifiers, finite-model prototypes, or
-isolated Lean proof probes for research ideas. Lean probes may import active
-proof modules, but production modules never import this directory. A curated
-set of active Lean probes is imported by `Experiments.lean` and compiled by
-the default `ActiveExperiments` target. A successful finite run is evidence
-only for its stated bounded claim; a successful Lean probe checks the theorem
-it declares without promoting that theorem into the production import graph.
+Its programs are small executable falsifiers or finite-model prototypes for
+research ideas. Production modules never import this directory. A successful
+finite run is evidence only for its stated bounded claim and does not promote
+that claim into the production import graph.
 
-The former source repository collected the signal-processing interpretation in
-`ideas/wild/README.md`. That is a provenance locator, not a live path; see
-[`../../TRANSITION.md`](../../TRANSITION.md). New derivations follow the
-Discussion → Issue → PR workflow in [`../../docs/PIPELINE.md`](../../docs/PIPELINE.md).
+An experiment result records its tracked executable source, exact reproduction
+command, assumptions, limitations, and compact evidence. A migrated payload
+whose producer is unavailable instead records that provenance loss and has a
+deterministic integrity checker. Generated caches, logs, screenshots, and raw
+runs are not experiment records. Experiments may import Research; Research must
+not import this directory.
 
 ## Directory lifecycle
 
-- The top-level registered programs and Lean probes form the reproducible base
+- The top-level registered programs form the reproducible base
   suite listed below; keep their paths stable because `run_all.py` and
   `RESULTS.md` refer to them directly.
-- [`quitting_repair_cegis/`](../quitting_repair_cegis/) is the tracked exact-rational
+- [`../quitting_repair_cegis/`](../quitting_repair_cegis/) is the tracked exact-rational
   repair search package.
-- `certsearch/` contains certificate-guided searches; its `block_pair/`
-  subdirectory contains the larger historical block-pair campaign.
-- `counterexample_pairwise_consistency/` contains the Q172 pair/triple
+- `../certsearch/` contains certificate-guided searches.
+- `../counterexample_pairwise_consistency/` contains the pair/triple
   consistency campaign and its exact witnesses.
-- `quitting/` and `tools/` contain useful unregistered probes routed out of
-  scratch space.
-- `archive/integrated/` retains experiment sources already consumed by
-  production Lean; `archive/rejected/` retains explicit negative or incomplete
-  probes. Neither archive is an active implementation queue.
+- `../counterexample_search/` contains focused falsifier programs.
 
 Python caches, `*.olean`, screenshots, and logs are generated products rather
 than experiments and should not be stored here.
 
-An active Lean probe must be source-reproducible: force-add its source and all
-of its `Experiments.*` dependencies, then import its top-level module from
-`Experiments.lean`. The repository audit rejects missing or untracked sources,
-production imports of experiments, and tracked probes outside that curated
-root. Remove an abandoned probe from `Experiments.lean`; do not rely on a
-stale local `.olean` to keep it compiling.
+Every registered program must be source-reproducible and listed in
+`run_all.py`. The repository audit rejects missing or untracked sources and
+production imports of experiments. Remove an abandoned program from the
+registry; do not rely on generated output to keep it running.
 
 Proposed adversarial searches that have not yet been implemented are specified
 in [`PROPOSALS.md`](PROPOSALS.md). Each proposal records its exact finite
@@ -48,14 +40,14 @@ bounded experimental evidence.
 
 Run the registered base suite with:
 
-```powershell
-python Experiments/run_all.py
+```text
+python Experiments/Base/run_all.py
 ```
 
-The suite uses only the Python standard library. Each experiment prints a
-machine-readable JSON summary and contains internal assertions for the stated
-finite claims. Exact external data is not itself a Lean proof: promotion
-requires constructing the named production certificate.
+The suite uses only the Python standard library. The runner prints a
+machine-readable JSON summary, and each experiment contains internal
+assertions for its stated finite claims. Exact external data is not itself a
+Lean proof: promotion requires constructing the named production certificate.
 
 | ID | Program | Question tested |
 |---|---|---|
@@ -67,11 +59,9 @@ requires constructing the named production certificate.
 | E06 | `owner_monodromy.py` | Can owner-custody failure be represented as a computable cocycle/monodromy obstruction? |
 | E07 | `kelly_debt_boundary.py` | Can likelihood evidence with quadratic information growth pay a linear punishment debt? |
 | E08 | `causal_state_minimizer.py` | How large is the exact predictive-state quotient of a finite hidden process? |
-| E09 | `SignedTargetTransport.lean` | Do one-sided deviation target bounds suffice for finite child composition, while branchwise absolute remainders destroy valid cancellation? |
 | E10 | `small_game_census.py` | Can an exact exhaustive census separate generic equilibrium-support phenomena from degenerate curiosities before an atlas-scale census is attempted? |
 | E11 | `continuous_time_resolvent.py` | Does the reduced Abel resolvent coincide with an exponentially killed continuous-time generator model? |
 | E12 | `collateral_account.py` | Is a bounded potential exactly a finite escrow bound for its pathwise account increments? |
-| E13 | `LedgeredDissipativity.lean` | Does a one-step storage-and-ledger inequality telescope to a uniform prefix-average bound? |
 | E14 | `predictive_compression.py` | When does contraction make a finite quantized belief filter uniformly accurate, and how can rare observations break it? |
 | E15 | `sigma_delta_lottery.py` | Can one robust random phase give exact one-time marginals and bounded prefix discrepancy for a rational rate stream? |
 | E16 | `abel_turnpike_retargeting.py` | How can an Abel boundary layer retain positive mass while every fixed-policy Cesaro occupation converges to a different sustainable target? |
@@ -79,7 +69,6 @@ requires constructing the named production certificate.
 | E18 | `transition_algebra.py` | What algebra and commutant are generated by endpoint-like transition/payoff operators, and where do transient nilpotent modes live? |
 | E19 | `player_representation.py` | How does player payoff space split into common, deviator, opponent-average, and redistribution channels? |
 | E20 | `cyclic_fourier_abel_cesaro.py` | Which cyclic representation modes survive a slow-kernel Abel limit but disappear under every fixed-policy Cesaro limit? |
-| E21 | `EquivariantAveraging.lean` | Is Reynolds averaging invariant and functorial for equivariant linear operators over a finite group? |
 | E22 | `markov_hodge_currents.py` | Can finite stationary edge fields be decomposed canonically into gradient and divergence-free current components, including owner-valued cancellation? |
 | E23 | `adiabatic_markov_tracking.py` | Does a moving two-state invariant law track when parameter variation is asymptotically slower than the closing spectral gap, and fail at the critical scale? |
 | E24 | `metastable_schur_confluence.py` | Is effective-generator and effective-reward elimination independent of the order in which fast transient states are removed? |
@@ -92,9 +81,6 @@ requires constructing the named production certificate.
 | E31 | `commit_reveal_coin.py` | Which timing and abort assumptions separate robust simultaneous coins from vulnerable sequential and commit/reveal protocols? |
 | E32 | `threshold_secret_sharing.py` | Does threshold sharing create a genuine secret phase, and exactly which privacy is lost when shares are public? |
 | E33 | `live_entropy_budget.py` | Can a finite hidden or public seed provide a linear tail of conditional unpredictability? |
-| E34 | `QuittingPathClosureKernels.lean` | Do hazard/first-divergence masses normalize with an infinity atom, do Bellman residuals telescope, and does the opponent-only clock control non-solo absorption and terminal approximation uniformly over deviations? |
-| E35 | `QuittingFiniteDebtMonotonicity.lean` | Is the minimum finite quitting debt antitone in the cutoff (hence a limit), what is its cutoff-zero value, and is its vanishing necessary for a uniform-equilibrium payoff? |
-| E36 | [`quitting_repair_cegis/`](../quitting_repair_cegis/) | Which exact rational cutoff, stationary, or periodic profiles repair a finite quitting table, and which proposed fixed exploitability gaps are refuted within a recorded finite grammar? |
 
 The output records `status`, the exact checks performed, and limitations. A
 negative or inconclusive result is retained: these scripts are intended to kill
