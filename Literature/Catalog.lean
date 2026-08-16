@@ -1,33 +1,72 @@
 /-!
 # Literature coverage records
 
-Small metadata records used by paper-specific Lean modules. Statements remain
-ordinary proposition definitions and proofs remain ordinary theorem
-declarations; this catalog records coverage without becoming a second logic.
+Paper-specific modules use these data structures to describe source access and
+Lean correspondence. Mathematical statements are ordinary proposition
+definitions, and checked arguments are ordinary theorem declarations.
 -/
 
 namespace Literature
 
-/-- Coverage state of a source claim. -/
+/-- Mathematical role of a work in the uniform-equilibrium bibliography. -/
+inductive PaperRole where
+  | foundations
+  | zeroSumUniformValue
+  | zeroSumBoundary
+  | nonzeroSumExistence
+  | recentNonzeroSum
+  | finiteMemoryAlgorithms
+  | counterexamples
+  | formalization
+  | surveys
+  deriving DecidableEq, Repr
+
+/-- Strongest kind of source inspection recorded for a paper. -/
+inductive SourceEvidence where
+  | bibliographic
+  | abstractInspected
+  | secondaryInspected
+  | primaryInspected
+  deriving DecidableEq, Repr
+
+/-- Completeness state of the paper-specific audit. -/
+inductive PaperAuditStatus where
+  | catalogued
+  | sourceInspected
+  | claimAuditInProgress
+  | claimAuditComplete
+  | correspondenceComplete
+  deriving DecidableEq, Repr
+
+/-- Lean correspondence state of one source claim.
+
+Declaration names are constructor data, so an open correspondence has one
+statement name and a checked correspondence has both statement and proof names.
+-/
 inductive ClaimStatus where
-  | stated
-  | proved
+  | sourceOnly
+  | openInLean (statementName : String)
+  | provedInLean (statementName proofName : String)
   | outOfScope
-  | refuted
+  | refutedInLean (statementName proofName : String)
   deriving DecidableEq, Repr
 
 /-- Auditable correspondence between one source claim and Lean declarations. -/
 structure ClaimRecord where
   claimId : String
   sourceLocator : String
-  statementName : String
-  proofName : Option String := none
+  summary : String
   status : ClaimStatus
   deriving Repr
 
 /-- Coverage record exported by a paper-specific module. -/
 structure PaperRecord where
-  citationKey : String
+  paperId : String
+  bibliographyLabel : String
+  bibliographyLocator : String
+  role : PaperRole
+  sourceEvidence : SourceEvidence
+  auditStatus : PaperAuditStatus
   claims : List ClaimRecord
   deriving Repr
 

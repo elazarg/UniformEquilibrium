@@ -196,6 +196,16 @@ def check_generated(errors: list[str]) -> None:
     if adapter_result.returncode:
         errors.append(adapter_result.stdout.strip())
 
+    literature_result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "check_literature.py")],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if literature_result.returncode:
+        errors.append(literature_result.stdout.strip())
+
 
 def check_markdown_names(errors: list[str]) -> None:
     result = subprocess.run(

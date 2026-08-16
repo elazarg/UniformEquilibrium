@@ -5,6 +5,7 @@
 .codex/
 .claude/
 /overleaf/
+/Literature/LocalSources/
 *.log
 *.aux
 *.out

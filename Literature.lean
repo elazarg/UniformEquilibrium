@@ -1,9 +1,8 @@
-import Literature.Catalog
+import Literature.All
 
 /-!
 # Literature coverage
 
 Paper-specific statement audits live under `Literature/`. This umbrella imports
-every tracked paper audit; it is intentionally not re-exported by
-`UniformEquilibrium`.
+the exhaustive catalog and is not re-exported by `UniformEquilibrium`.
 -/
