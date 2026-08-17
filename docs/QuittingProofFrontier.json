@@ -78,11 +78,13 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "Every counterexample regime has an absorbing singleton row with a source-matched collision gain at least the full terminal gap. Every reached full-gap solo preemption has a full-gap successor, so finiteness closes a positive-period directed preemption cycle.",
+      "summary": "Every counterexample regime has an absorbing singleton row with a source-matched collision gain at least the full terminal gap. Every reached full-gap solo preemption has a full-gap successor, so finiteness closes a positive-period directed preemption cycle. On at most four players, the collision owner roots one of six simple preemption lassos and the collider occupies one of seventeen marked positions; every position is realizable as payoff-table geometry.",
       "evidence": [
         "UniformEquilibrium/Quitting/Classification/ImmediateSingletonCollision.lean",
         "UniformEquilibrium/Quitting/Classification/PreemptionCycle.lean",
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean"
+        "UniformEquilibrium/Quitting/Classification/PreemptionGeometry.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionGeometry.lean"
       ]
     },
     {

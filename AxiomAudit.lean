@@ -163,6 +163,7 @@ import MathUE.FiniteDeflationIteration
 import MathUE.FiniteInequalityCompatibility
 import MathUE.FiniteLinearCompatibility
 import MathUE.FinitePivotOrbit
+import MathUE.FiniteSerialRelation
 import MathUE.Finset.CubicalResetIntegrability
 import MathUE.Finset.EscrowDrawdown
 import MathUE.Finset.FinThree
@@ -679,6 +680,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.Rein
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.SmallPlayers
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.ThreeRoleSpectator
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PreemptionCycle
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PreemptionGeometry
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Seam
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SearchConsequences
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Atom.ContinuePrefixAccess
@@ -1151,6 +1153,7 @@ import UniformEquilibrium.Quitting.Classification.PlayerDeletion
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
 import UniformEquilibrium.Quitting.Classification.PlayerReindexNaturality
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
+import UniformEquilibrium.Quitting.Classification.PreemptionGeometry
 import UniformEquilibrium.Quitting.Classification.SingletonPacketDefect
 import UniformEquilibrium.Quitting.Classification.SingletonPacketDefectAlgebra
 import UniformEquilibrium.Quitting.Classification.SingletonPacketEnergy
