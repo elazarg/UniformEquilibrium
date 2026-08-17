@@ -440,6 +440,7 @@ import Research.Quitting.AnchoredCyclicScreen
 import Research.Quitting.AtomEndpointReturnSeparation
 import Research.Quitting.BenevolentSinkSoloist
 import Research.Quitting.BestEndpointForcedOwnerRectanglePassport
+import Research.Quitting.BlockDeletionInequality
 import Research.Quitting.BlockPair.K11
 import Research.Quitting.BlockPair.K11.ClearedSemantic
 import Research.Quitting.BlockPair.K11.ConditionalAbsorption
@@ -471,6 +472,7 @@ import Research.Quitting.BlockPair.K11.KrawczykConditionalSemantic
 import Research.Quitting.BlockPair.K11.PhaseValueRecurrence
 import Research.Quitting.BlockPair.K11.RowZeroSemantic
 import Research.Quitting.BlockPeriodicCalibration
+import Research.Quitting.BlockPeriodicMultiVisit
 import Research.Quitting.BlockPeriodicProfile
 import Research.Quitting.BlockPlayerDeletion
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
