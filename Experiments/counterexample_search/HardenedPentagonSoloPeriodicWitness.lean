@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.SolanVieilleSoloPeriodicNoGo
+import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import Experiments.counterexample_search.HardenedPentagonCyclicEquilibrium
 
 /-!
 # The hardened pentagon is an exact anchored solo-periodic profile
 
-`GameTheory.SolanVieilleSoloPeriodic.IsExactAnchoredSoloPeriodic` is satisfied
+`GameTheory.IsExactAnchoredSoloPeriodic` is satisfied
 by the period-five schedule `(0, 3, 1, 4, 2)` at constant hazard `1/2` on
 `GameTheory.HardenedPentagonCyclicEquilibrium.hardenedReward`.
 
@@ -25,8 +25,6 @@ noncomputable section
 namespace GameTheory
 
 namespace HardenedPentagonCyclicEquilibrium
-
-open SolanVieilleSoloPeriodic
 
 /-- The anchored cyclic on-path value of the pentagon schedule is the block's
 own displayed value at every phase, not only at the start. -/

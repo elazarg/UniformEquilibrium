@@ -1,5 +1,6 @@
 import Literature.Catalog
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwo
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 
 /-!
 # Literature audit
@@ -43,6 +44,19 @@ theorem not_printedPeriodTwoContinuationClaim :
   rw [PrintedPeriodTwoContinuationClaim] at hprinted
   linarith
 
+/-- The paper's period-two existence claim, in the repository's semantics:
+the displayed four-player table has a uniform-equilibrium payoff. -/
+def PeriodTwoEquilibriumClaim : Prop :=
+  ∃ payoff : Payoff SolanVieilleBoundary.Player,
+    (quittingGame SolanVieilleBoundary.boundaryReward).IsUniformEquilibriumPayoff
+      none payoff
+
+/-- The period-two existence claim holds.  The witness is
+`GameTheory.SolanVieilleBoundary.crossBlockPayoff`, carried by
+`GameTheory.SolanVieilleBoundary.boundaryReward_isUniformEquilibriumPayoff`. -/
+theorem periodTwoEquilibriumClaim : PeriodTwoEquilibriumClaim :=
+  SolanVieilleBoundary.boundaryReward_exists_uniformEquilibriumPayoff
+
 /-- Paper-level coverage record. -/
 def record : Literature.PaperRecord where
   paperId := "solan_and_vieille_2002a"
@@ -52,7 +66,15 @@ def record : Literature.PaperRecord where
   sourceEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
-    [ { claimId := "no_stationary_equilibrium"
+    [ { claimId := "period_two_equilibrium_exists"
+        sourceLocator := "Section 3 and the period-two calculation"
+        summary :=
+          "The displayed table admits an equilibrium payoff built from a \
+period-two two-quitter profile."
+        status := .provedInLean
+          "Literature.Papers.SolanAndVieille2002a.PeriodTwoEquilibriumClaim"
+          "Literature.Papers.SolanAndVieille2002a.periodTwoEquilibriumClaim" },
+      { claimId := "no_stationary_equilibrium"
         sourceLocator := "Section 3.2"
         summary := "The example has no stationary limiting-average equilibrium."
         status := .sourceOnly },
