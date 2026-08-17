@@ -30,23 +30,23 @@
       "alternative_number": 5,
       "issue_number": 7,
       "status": "open",
-      "leaf_id": "IMMEDIATE-SINGLETON-COLLISION"
+      "leaf_id": "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
     }
   ],
   "obstruction_classes": [
     {
       "id": "OB-COLLISION",
-      "description": "A canonical absorbing singleton row has zero owner debt and a distinct player's source-matched collision gain at least the global terminal gap."
+      "description": "A canonical absorbing singleton row has a source-matched collision gain at least the global terminal gap, and full-gap solo preemptions propagate to a positive-period directed cycle."
     }
   ],
   "formal_leaves": [
     {
-      "id": "IMMEDIATE-SINGLETON-COLLISION",
+      "id": "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE",
       "status": "open",
       "obstruction_class": "OB-COLLISION",
-      "representative": "Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/ImmediateSingletonCollision.lean",
-      "producer": "QuittingCounterexampleRegime.exists_immediateSingletonCollision"
+      "representative": "Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap) ∧ Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap)",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean",
+      "producer": "QuittingCounterexampleRegime.immediateSingletonCollision_and_soloPreemptionCycle"
     }
   ],
   "transitions": [
@@ -54,7 +54,7 @@
       "id": "ELIMINATE-THREE-ELEMENT-CORRECTED-CORE",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
       "summary": "Every finite quitting game whose corrected normal core has cardinality three has an ordinary uniform-equilibrium payoff. Hence a four-player counterexample must have full corrected core, and its immediate singleton collision may be studied under that table-level restriction.",
       "evidence": [
@@ -65,7 +65,7 @@
       "id": "DROP-BARRIER-ELEMENTARY-BOUNDARY-FAMILY",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
       "summary": "The global-debt barrier certificate needs only the Never boundary and invariance under every one-row prefix; all other elementary boundaries and all finite elementary words are generated from these data.",
       "evidence": [
@@ -76,19 +76,20 @@
       "id": "FRONTIER-BASELINE",
       "kind": "census",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "Every counterexample regime has an absorbing singleton row whose owner has zero terminal-semantic debt and whose distinct collider has an immediate legal gain, equal to its debt, at least the full terminal gap.",
+      "summary": "Every counterexample regime has an absorbing singleton row with a source-matched collision gain at least the full terminal gap. Every reached full-gap solo preemption has a full-gap successor, so finiteness closes a positive-period directed preemption cycle.",
       "evidence": [
         "UniformEquilibrium/Quitting/Classification/ImmediateSingletonCollision.lean",
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/ImmediateSingletonCollision.lean"
+        "UniformEquilibrium/Quitting/Classification/PreemptionCycle.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean"
       ]
     },
     {
       "id": "ELIMINATE-SINGLETON-BY-SIGNED-ACTUAL-ROW",
       "kind": "leaf_eliminated",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
       "summary": "An observer-containing singleton terminal is already handled by the cardinality-free actual-row localization, so manuscript Alternative 3 and GitHub issue #5 require no independent branch.",
       "evidence": [
@@ -100,9 +101,9 @@
       "id": "ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET",
       "kind": "leaf_eliminated",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "Iterating exact pure-time self-resets for at most card(I)+1 steps makes the prescribed-comparison and negative-target branches unnecessary, closing manuscript Alternatives 1 and 4 and GitHub issues #3 and #6. The direct singleton-collision theorem gives the sharper canonical leaf.",
+      "summary": "Iterating exact pure-time self-resets for at most card(I)+1 steps makes the prescribed-comparison and negative-target branches unnecessary, closing manuscript Alternatives 1 and 4 and GitHub issues #3 and #6. The remaining localization combines the immediate singleton collision with its propagated preemption cycle.",
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticBoundedSelfReset.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean"
@@ -112,7 +113,7 @@
       "id": "ELIMINATE-ABSENT-BY-IMMEDIATE-SINGLETON-COLLISION",
       "kind": "leaf_eliminated",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
       "summary": "The all-Continue toggle selects an owner with positive solo reward, and the singleton toggle at that owner selects a distinct collider with gain at least the terminal gap. Thus every counterexample regime already has the canonical target row, so the observer-absent wall is unnecessary as a frontier leaf.",
       "evidence": [
@@ -124,7 +125,7 @@
       "id": "DROP-UNIFORM-FINITE-HORIZON-DEBT-CERTIFICATION",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
       "summary": "A concrete positive global terminal-debt floor does not require a uniform finite-horizon cutoff: the semantic carrier is exactly the closure of finite prefix evaluations from the elementary boundaries, and any inductive finite-dimensional barrier containing those boundaries proves a fixed terminal exploitability gap and nonexistence.",
       "evidence": [
@@ -135,7 +136,7 @@
       "id": "NOGO-COORDINATEWISE-SEMANTIC-BARRIER",
       "kind": "architectural_nogo",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
       "summary": "Any axis-aligned or coordinatewise order-compatible semantic barrier containing the required elementary boundary pairs also contains a zero-total-debt diagonal. A successful barrier must couple player coordinates.",
       "evidence": [
@@ -146,7 +147,7 @@
       "id": "NOGO-DEBT-SATURATED-SEMANTIC-BARRIER",
       "kind": "architectural_nogo",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
       "summary": "No positive global-debt certificate can use a barrier whose membership depends only on envelope minus prescribed payoff. A successful barrier must retain absolute semantic level.",
       "evidence": [
@@ -157,7 +158,7 @@
       "id": "DROP-COUNTEREXAMPLE-PREFIX-CAPACITY-FIELD",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "IMMEDIATE-SINGLETON-COLLISION"
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
       "summary": "Canonical punishment-floor prefix-capacity finiteness is derived from the positive terminal exploitability gap rather than stored in the counterexample regime.",
       "evidence": [
