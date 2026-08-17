@@ -471,6 +471,7 @@ import Research.Quitting.BlockPair.K11.PhaseValueRecurrence
 import Research.Quitting.BlockPair.K11.RowZeroSemantic
 import Research.Quitting.BlockPeriodicCalibration
 import Research.Quitting.BlockPeriodicProfile
+import Research.Quitting.BlockPlayerDeletion
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
 import Research.Quitting.CausalTailEscapeMaxAbsorptionDispatch
