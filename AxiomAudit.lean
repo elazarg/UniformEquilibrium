@@ -18,6 +18,7 @@ import Experiments.counterexample_search.RegularTournamentFiveSeed
 import Experiments.counterexample_search.RegularTournamentFiveSeedSoloExits
 import Experiments.counterexample_search.RegularTournamentFiveSeedSureExit
 import Experiments.counterexample_search.RegularTournamentFiveSeedZeroFree
+import Experiments.counterexample_search.RegularTournamentFiveSeedZeroOrbitGap
 import Literature
 import Literature.All
 import Literature.Catalog
@@ -552,6 +553,7 @@ import Research.Quitting.SingletonTightMinimumFaceIteration
 import Research.Quitting.SoloPeriodicBlockCompiler
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification
+import Research.Quitting.SoloWindowPhaseStopBranch
 import Research.Quitting.SourceMatchedSnellPurification
 import Research.Quitting.SourceMatchedSnellPurificationCollapse
 import Research.Quitting.StochasticButtonCompression
