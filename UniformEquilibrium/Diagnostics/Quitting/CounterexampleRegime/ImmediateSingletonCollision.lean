@@ -24,6 +24,8 @@ noncomputable section
 
 namespace GameTheory
 
+open QuittingSureSetOwnerRepair
+
 variable {player : Type} [Fintype player] [DecidableEq player]
 variable {reward : {S : Finset player // S.Nonempty} → Payoff player}
 
@@ -48,6 +50,26 @@ theorem exists_immediateSingletonCollision
     owner_solo_floor := howner
     collider_gain_floor := hgain
   }⟩
+
+/-- Every player with positive punishment value owns a full-gap singleton
+collision.  The punishment ceiling forces the positive solo payoff required
+by the collision-gain theorem. -/
+theorem exists_collision_gain_of_punishmentValue_pos
+    (regime : QuittingCounterexampleRegime reward) {owner : player}
+    (howner : 0 < quittingPunishmentValue reward owner) :
+    ∃ other, other ≠ owner ∧
+      quittingSoloReward reward owner other + regime.terminalGap ≤
+        quittingSingletonCollisionReward reward owner other := by
+  have hceil := quittingPunishmentValue_le_max_solo reward owner
+  have hsolo : 0 < quittingSoloReward reward owner owner := by
+    rcases le_total (quittingSetReward reward ({owner} : Finset player) owner) 0
+        with hnonpos | hnonneg
+    · rw [max_eq_right hnonpos] at hceil
+      linarith
+    · rw [max_eq_left hnonneg] at hceil
+      rw [← quittingSetReward_singleton_eq_soloReward]
+      linarith
+  exact regime.exists_collision_gain (by linarith [regime.terminalGap_pos])
 
 end QuittingCounterexampleRegime
 
