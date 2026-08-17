@@ -1,1 +1,2 @@
 import Research.Literature.Sorin1986.UniformPayoffSet
+import Research.Literature.Sorin1986.WeightedBlackwellFerguson

@@ -11,7 +11,14 @@ import sys
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PRUNED_DIRECTORIES = {".git", ".lake", "GameTheory", "__pycache__", ".pytest_cache"}
+PRUNED_DIRECTORIES = {
+    ".git",
+    ".lake",
+    "GameTheory",
+    "__pycache__",
+    ".pytest_cache",
+    "ephemeral",
+}
 TEXT_SUFFIXES = {
     ".json",
     ".md",
