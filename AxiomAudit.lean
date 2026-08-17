@@ -11,6 +11,7 @@ import Experiments.certsearch.block_pair.K11.JacobianCache
 import Experiments.certsearch.block_pair.K11.KrawczykInstance
 import Experiments.certsearch.block_pair.K11.Preconditioner
 import Experiments.certsearch.block_pair.K11.RowZeroCacheData
+import Experiments.counterexample_search.RegularTournamentFiveSeed
 import Literature
 import Literature.All
 import Literature.Catalog
@@ -216,6 +217,7 @@ import MathUE.LinearProgramming.SingletonLCP
 import MathUE.LinearProgramming.Standard
 import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
+import MathUE.LinearProgramming.Tournament
 import MathUE.List
 import MathUE.MaxAffineStoppingValue
 import MathUE.MeanErgodic
@@ -366,6 +368,7 @@ import MathUE.SequenceVariation
 import MathUE.ShapleyOperator
 import MathUE.Simplex
 import MathUE.SimplexApproximation
+import MathUE.SparseVanishingSchedule
 import MathUE.SqrtRate
 import MathUE.SurvivalProduct
 import MathUE.SurvivalWeightedObstruction
@@ -510,6 +513,7 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
+import Research.Quitting.SourceMatchedSnellPurification
 import Research.Quitting.StochasticButtonCompression
 import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport

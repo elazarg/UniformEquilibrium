@@ -1,5 +1,6 @@
 import Experiments.Base.SemanticFinalRegimeArithmetic
 import Experiments.certsearch.block_pair.K11
+import Experiments.counterexample_search.RegularTournamentFiveSeed
 
 /-!
 # Reproducible experimental evidence
