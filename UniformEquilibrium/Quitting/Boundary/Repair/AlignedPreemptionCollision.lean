@@ -266,4 +266,85 @@ theorem QuittingImmediateSingletonCollision.collisionRepairWorks_iff_of_aligned
     exact ⟨howner, hspectator,
       certificate.blockerBalance_of_aligned haligned hrate0 hrate1 hfloor⟩
 
+/-! ## Local feasibility -/
+
+/-- **The aligned local conditions are jointly feasible.**  If an irreflexive
+relation contains both edges between the marked owner and collider, its
+universal geometry table has the collision certificate, both preemption
+edges, and an exact collision repair at rate one.  Thus collision plus an
+aligned two-cycle is not a local contradiction; excluding it requires
+information beyond the recorded table geometry. -/
+theorem preemptionGeometryReward_twoCycle_and_collisionRepairWorks
+    (R : player → player → Prop) [DecidableRel R]
+    (hirreflexive : ∀ who, ¬ R who who)
+    {owner collider : player} (hne : collider ≠ owner)
+    (hforward : R owner collider) (hback : R collider owner) :
+    Nonempty (QuittingImmediateSingletonCollision
+      (quittingPreemptionGeometryReward R owner collider) 1) ∧
+      QuittingSoloPreempts
+        (quittingPreemptionGeometryReward R owner collider) 1 owner collider ∧
+      QuittingSoloPreempts
+        (quittingPreemptionGeometryReward R owner collider) 1 collider owner ∧
+      QuittingCollisionRepairWorks
+        (quittingPreemptionGeometryReward R owner collider)
+        owner collider 1 (by norm_num) (by norm_num) := by
+  have hpairOwner : ({owner, collider} : Finset player) ≠ {owner} := by
+    intro heq
+    have hmem : collider ∈ ({owner} : Finset player) := by
+      rw [← heq]
+      simp
+    exact hne (by simpa using hmem)
+  refine ⟨⟨quittingPreemptionGeometryCollision R hne⟩,
+    (quittingSoloPreempts_preemptionGeometryReward_iff
+      R hirreflexive hne).2 hforward,
+    (quittingSoloPreempts_preemptionGeometryReward_iff
+      R hirreflexive hne).2 hback, ?_⟩
+  apply (quittingCollisionRepairWorks_iff _ (Ne.symm hne)
+    (by norm_num) (by norm_num)).2
+  refine ⟨?_, ?_, ?_⟩
+  · unfold QuittingCollisionOwnerOptimal
+    rw [quittingCollisionRepairValue_apply]
+    norm_num [quittingSetReward, quittingPreemptionGeometryReward,
+      quittingPreemptionRelationSetReward,
+      quittingPreemptionRelationSoloReward, hpairOwner, hne, Ne.symm hne,
+      hback]
+  · intro spectator hspectatorOwner hspectatorCollider
+    have htripleOwner :
+        ({owner, spectator, collider} : Finset player) ≠ {owner} := by
+      intro heq
+      have hmem : collider ∈ ({owner} : Finset player) := by
+        rw [← heq]
+        simp
+      exact hne (by simpa using hmem)
+    have htripleSpectator :
+        ({owner, spectator, collider} : Finset player) ≠ {spectator} := by
+      intro heq
+      have hmem : owner ∈ ({spectator} : Finset player) := by
+        rw [← heq]
+        simp
+      have hequal : owner = spectator := by simpa using hmem
+      exact hspectatorOwner hequal.symm
+    have htripleCollider :
+        ({owner, spectator, collider} : Finset player) ≠ {collider} := by
+      intro heq
+      have hmem : owner ∈ ({collider} : Finset player) := by
+        rw [← heq]
+        simp
+      have hequal : owner = collider := by simpa using hmem
+      exact hne hequal.symm
+    unfold quittingCollisionRepairValue
+    norm_num [quittingSureSetOwnerValue, quittingSetReward,
+      quittingPreemptionGeometryReward, quittingPreemptionRelationSetReward,
+      hpairOwner, htripleOwner, htripleSpectator, htripleCollider,
+      hspectatorOwner, Ne.symm hspectatorOwner, hspectatorCollider,
+      Ne.symm hspectatorCollider, hne, Ne.symm hne]
+  · unfold QuittingCollisionBlockerBalance
+    rw [quittingCollisionRepairValue_apply]
+    simp only [one_mul, sub_self, zero_mul, zero_add]
+    rw [quittingSetReward_singleton_eq_soloReward,
+      quittingSetReward_pair_right,
+      quittingPreemptionGeometryReward_solo R hne,
+      quittingPreemptionGeometryReward_collision R hne]
+    norm_num
+
 end GameTheory
