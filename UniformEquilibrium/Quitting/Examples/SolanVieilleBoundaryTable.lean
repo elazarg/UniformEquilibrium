@@ -30,12 +30,6 @@ this module is only that explicit table data realizes the collision and
 preemption-cycle geometry.  Any terminal-gap conclusion therefore requires
 an additional checked argument beyond the realized configuration itself.
 
-The module also records the algebraic core of two-support rotation rigidity:
-against a strict preemption edge, any convex phase value placing weight
-`lam` on the preemptor's row under-serves the preempted player's own solo
-payoff by at least `lam * gap`, so a two-phase rotating architecture on a
-strict preemption pair cannot make its active member approximately
-indifferent away from the degenerate corner.
 -/
 
 noncomputable section

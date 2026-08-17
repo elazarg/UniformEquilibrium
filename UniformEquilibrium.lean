@@ -142,6 +142,7 @@ import UniformEquilibrium.Quitting.Examples.FTV.CyclicCredibility
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicFiniteHorizon
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicMinimality
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicSemanticBridge
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 import UniformEquilibrium.Quitting.Examples.BlockPair.All
 import UniformEquilibrium.Architectures.PublicResponse.ArchitectureCapSeparators
 import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer

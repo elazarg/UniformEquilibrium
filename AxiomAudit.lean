@@ -510,7 +510,6 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
-import Research.Quitting.SolanVieilleBoundaryTable
 import Research.Quitting.StochasticButtonCompression
 import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport
@@ -1340,6 +1339,7 @@ import UniformEquilibrium.Quitting.Examples.FTV.CyclicFiniteHorizon
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicMinimality
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicSemanticBridge
 import UniformEquilibrium.Quitting.Examples.FTV.EpsilonPerturbedCycleExclusion
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 import UniformEquilibrium.Quitting.Paths.AlmostSureOpponentUniformization
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingPayoff
