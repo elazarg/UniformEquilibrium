@@ -8,6 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Seam
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.Quantitative
 import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
 import UniformEquilibrium.Quitting.Debt.Dynamic.DynamicDebtConservation
+import UniformEquilibrium.Quitting.Paths.OpponentClockDichotomy
 
 /-!
 # Conservation and the positive phantom plateau of a counterexample tail
@@ -252,6 +253,17 @@ theorem jointSurvivalLimit_tendsto_one :
         (quittingDynamicDebtTailRoots seam.tail) start))
       atTop (nhds (1 - 0)) := tendsto_const_nhds.sub hgap
   simpa using hrecover
+
+/-- Every finite owner-deleted window starting late in the canonical tail has
+survival tending to one, even when its length varies with the start. -/
+theorem ownerOpponentSurvivalWeight_tendsto_one (fuel : ℕ → ℕ) :
+    Tendsto (fun start ↦
+      quittingOpponentSurvivalWeight
+        (quittingDynamicDebtTailRoots seam.tail) seam.limit.owner start
+          (fuel start)) atTop (nhds 1) :=
+  tendsto_opponentSurvivalWeight_from_late_start_of_summable
+    (quittingDynamicDebtTailRoots seam.tail) seam.limit.owner fuel
+      seam.ownerOpponentClock_summable
 
 /-- Actual play along later starts of the optimized root sequence delivers
 asymptotically zero. -/

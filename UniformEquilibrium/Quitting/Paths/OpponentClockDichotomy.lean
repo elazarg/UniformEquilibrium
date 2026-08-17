@@ -30,7 +30,7 @@ The second branch is only a probabilistic boundary.  It does **not** by
 itself imply that the prescribed path absorbs, that its Bellman values are
 Cauchy, or that its live suffixes are terminal Nash profiles.  The final
 theorem records the additional all-tail absorption and terminal-Nash
-hypotheses consumed by the existing exceptional stationary fallback.
+hypotheses consumed by the exceptional stationary fallback.
 -/
 
 noncomputable section
@@ -229,6 +229,59 @@ theorem exists_suffix_half_le_quittingOpponentSurvivalWeight_of_summable
     roots who start fuel
   linarith
 
+/-- A summable opponent clock makes every finite window starting sufficiently
+late asymptotically lossless, uniformly with respect to the supplied window
+length. -/
+theorem tendsto_opponentSurvivalWeight_from_late_start_of_summable
+    (roots : ℕ → ι → PMF Bool) (who : ι) (fuel : ℕ → ℕ)
+    (hsummable : Summable (quittingOpponentClockCharge roots who)) :
+    Tendsto (fun start ↦
+      quittingOpponentSurvivalWeight roots who start (fuel start))
+      atTop (nhds 1) := by
+  have htail : Tendsto (fun start : ℕ ↦
+      ∑' offset : ℕ,
+        quittingOpponentClockCharge roots who (offset + start))
+      atTop (nhds 0) :=
+    tendsto_sum_nat_add (quittingOpponentClockCharge roots who)
+  have hgap : Tendsto (fun start ↦
+      1 - quittingOpponentSurvivalWeight roots who start (fuel start))
+      atTop (nhds 0) := by
+    refine squeeze_zero (g := fun start ↦
+      ∑' offset : ℕ,
+        quittingOpponentClockCharge roots who (offset + start)) ?_ ?_ htail
+    · intro start
+      exact sub_nonneg.mpr
+        (quittingOpponentSurvivalWeight_le_one roots who start (fuel start))
+    · intro start
+      have hsuffix : Summable (fun offset ↦
+          quittingOpponentClockCharge roots who (start + offset)) := by
+        have hadd : Summable (fun offset ↦
+            quittingOpponentClockCharge roots who (offset + start)) :=
+          (summable_nat_add_iff start).2 hsummable
+        simpa [Nat.add_comm] using hadd
+      have hfinite :
+          (∑ offset ∈ Finset.range (fuel start),
+              quittingOpponentClockCharge roots who (start + offset)) ≤
+            ∑' offset : ℕ,
+              quittingOpponentClockCharge roots who (start + offset) :=
+        hsuffix.sum_le_tsum (Finset.range (fuel start)) fun offset _ ↦
+          quittingOpponentClockCharge_nonneg roots who (start + offset)
+      have htailRewrite :
+          (∑' offset : ℕ,
+              quittingOpponentClockCharge roots who (start + offset)) =
+            ∑' offset : ℕ,
+              quittingOpponentClockCharge roots who (offset + start) := by
+        congr 1
+        funext offset
+        rw [Nat.add_comm]
+      rw [htailRewrite] at hfinite
+      have hunion := one_sub_sum_quittingOpponentClockCharge_le_survival
+        roots who start (fuel start)
+      linarith
+  have hrecover := (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (1 : ℝ))
+    atTop (nhds 1)).sub hgap
+  simpa only [sub_sub_cancel, sub_zero] using hrecover
+
 /-- A summable clock therefore exposes a canonical live suffix with
 strictly positive limiting opponent survival. -/
 theorem exists_suffix_positive_opponentLiveMassLimit_of_summable
@@ -305,7 +358,7 @@ theorem divergent_opponentClocks_or_positive_exceptionalSuffix
       reward roots owner howner
 
 /-- The exact extra hypotheses which turn a positive opponent-survival
-clock into the landed exceptional stationary fallback.  The positivity
+clock into the exceptional stationary fallback.  The positivity
 hypothesis alone supplies none of `habsorbs` or `htailNash`; an actual-suffix
 extraction must establish both independently. -/
 theorem exists_exceptionalStationaryFallback_of_positiveClock

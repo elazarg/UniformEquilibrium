@@ -121,8 +121,8 @@ theorem oneSidedGuaranteeValue_le_quittingPunishmentValue
 
 /-- For a transitive invariant target, one representative security
 certificate bounds every target coordinate by the representative's
-nonnegative solo payoff.  A terminal row above the resulting total bound
-therefore refutes the unit-weight welfare cap. -/
+punishment value.  A terminal row above the resulting total bound therefore
+refutes the unit-weight welfare cap. -/
 theorem not_hasUniformWeightedWelfareCap_one_of_invariantTarget_of_rowExcess
     {reward : {S : Finset Player // S.Nonempty} → Payoff Player}
     (target : Payoff Player)
@@ -132,26 +132,20 @@ theorem not_hasUniformWeightedWelfareCap_one_of_invariantTarget_of_rowExcess
     (representativeSecurity :
       (quittingGame reward).IsOneSidedGuaranteeCertificate none representative
         (target representative))
-    (hsolo : 0 ≤ quittingSoloReward reward representative representative)
     (terminal : {S : Finset Player // S.Nonempty})
     (hexcess :
       (Fintype.card Player : ℝ) *
-          quittingSoloReward reward representative representative <
+          quittingPunishmentValue reward representative <
         ∑ player, reward terminal player) :
     ¬ HasUniformWeightedWelfareCap
       (quittingGame reward) none (fun _ ↦ 1) target := by
   have hsecurity :=
     oneSidedGuaranteeValue_le_quittingPunishmentValue
       representative (target representative) representativeSecurity
-  have hpunishment :=
-    quittingPunishmentValue_le_max_solo reward representative
-  rw [quittingSetReward_singleton_eq_soloReward,
-    max_eq_left hsolo] at hpunishment
   have hrepresentative : target representative ≤
-      quittingSoloReward reward representative representative :=
-    hsecurity.trans hpunishment
+      quittingPunishmentValue reward representative := hsecurity
   have htarget : ∀ player, target player ≤
-      quittingSoloReward reward representative representative := by
+      quittingPunishmentValue reward representative := by
     intro player
     obtain ⟨g, moved⟩ :=
       MulAction.IsPretransitive.exists_smul_eq (M := Gamma)
@@ -160,14 +154,14 @@ theorem not_hasUniformWeightedWelfareCap_one_of_invariantTarget_of_rowExcess
     exact hrepresentative
   have htargetSum : (∑ player, target player) ≤
       (Fintype.card Player : ℝ) *
-        quittingSoloReward reward representative representative := by
+        quittingPunishmentValue reward representative := by
     calc
       (∑ player, target player) ≤
           ∑ _player : Player,
-            quittingSoloReward reward representative representative :=
+            quittingPunishmentValue reward representative :=
         Finset.sum_le_sum fun player _ ↦ htarget player
       _ = (Fintype.card Player : ℝ) *
-          quittingSoloReward reward representative representative := by
+          quittingPunishmentValue reward representative := by
         simp [nsmul_eq_mul]
   apply not_hasUniformWeightedWelfareCap_of_terminal_welfare_gt
     (fun _ ↦ 1) target terminal
@@ -227,6 +221,64 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_transitive_rewardSymmetry_of_
   exact hasUniformWeightedWelfareCap_of_hasPhaseWeightedWelfareBias
     (P := P) (quittingGame reward) none weight target phaseBias
 
+/-- Phase-equivariant representative security transports to every player at
+every phase.  The source phase is shifted backwards before the player is
+relabelled. -/
+theorem quittingGame_oneSidedGuaranteeCertificate_of_transitive_phaseTargetSymmetry
+    {P : ℕ} [NeZero P]
+    {reward : {S : Finset Player // S.Nonempty} → Payoff Player}
+    (phaseShift : Gamma → ZMod P)
+    (target : ZMod P → Payoff Player)
+    (reward_invariant : ∀ g : Gamma,
+      quittingRewardReindex (MulAction.toPerm g) reward = reward)
+    (target_equivariant : ∀ (g : Gamma) (phase : ZMod P) (player : Player),
+      target (phase + phaseShift g) (g • player) = target phase player)
+    (representative : Player)
+    (representativeSecurity : ∀ phase : ZMod P,
+      (quittingGame reward).IsOneSidedGuaranteeCertificate none representative
+        (target phase representative))
+    (phase : ZMod P) (player : Player) :
+    (quittingGame reward).IsOneSidedGuaranteeCertificate none player
+      (target phase player) := by
+  obtain ⟨g, moved⟩ :=
+    MulAction.IsPretransitive.exists_smul_eq (M := Gamma)
+      representative player
+  rw [← moved]
+  let sourcePhase : ZMod P := phase - phaseShift g
+  have htransport := isOneSidedGuaranteeCertificate_reindex
+    (MulAction.toPerm g) reward representative
+      (target sourcePhase representative) (representativeSecurity sourcePhase)
+  rw [reward_invariant g] at htransport
+  have htarget := target_equivariant g sourcePhase representative
+  have hphase : sourcePhase + phaseShift g = phase := by
+    simp [sourcePhase]
+  rw [hphase] at htarget
+  rw [htarget]
+  exact htransport
+
+/-- Every coordinate of every equivariant target phase is bounded by that
+player's punishment value. -/
+theorem phaseTarget_le_quittingPunishmentValue_of_transitive_symmetry
+    {P : ℕ} [NeZero P]
+    {reward : {S : Finset Player // S.Nonempty} → Payoff Player}
+    (phaseShift : Gamma → ZMod P)
+    (target : ZMod P → Payoff Player)
+    (reward_invariant : ∀ g : Gamma,
+      quittingRewardReindex (MulAction.toPerm g) reward = reward)
+    (target_equivariant : ∀ (g : Gamma) (phase : ZMod P) (player : Player),
+      target (phase + phaseShift g) (g • player) = target phase player)
+    (representative : Player)
+    (representativeSecurity : ∀ phase : ZMod P,
+      (quittingGame reward).IsOneSidedGuaranteeCertificate none representative
+        (target phase representative))
+    (phase : ZMod P) (player : Player) :
+    target phase player ≤ quittingPunishmentValue reward player :=
+  oneSidedGuaranteeValue_le_quittingPunishmentValue player
+    (target phase player)
+    (quittingGame_oneSidedGuaranteeCertificate_of_transitive_phaseTargetSymmetry
+      phaseShift target reward_invariant target_equivariant representative
+        representativeSecurity phase player)
+
 /-- Phase-rotated targets permit a nonconstant target at phase zero.  Security
 for one player at every representative phase transports to phase-zero
 security for every player, while a phase-lifted welfare bias supplies the
@@ -252,22 +304,10 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_transitive_phaseTargetSymmetr
   letI : Nonempty Player := ⟨representative⟩
   have security : ∀ player,
       (quittingGame reward).IsOneSidedGuaranteeCertificate none player
-        (target 0 player) := fun player ↦ by
-    obtain ⟨g, moved⟩ :=
-      MulAction.IsPretransitive.exists_smul_eq (M := Gamma)
-        representative player
-    rw [← moved]
-    let phase : ZMod P := -phaseShift g
-    have htransport := isOneSidedGuaranteeCertificate_reindex
-      (MulAction.toPerm g) reward representative (target phase representative)
-        (representativeSecurity phase)
-    rw [reward_invariant g] at htransport
-    have htarget := target_equivariant g phase representative
-    have hphase : phase + phaseShift g = 0 := by
-      simp [phase]
-    rw [hphase] at htarget
-    rw [htarget]
-    exact htransport
+        (target 0 player) := fun player ↦
+    quittingGame_oneSidedGuaranteeCertificate_of_transitive_phaseTargetSymmetry
+      phaseShift target reward_invariant target_equivariant representative
+        representativeSecurity 0 player
   have welfareCap := hasUniformWeightedWelfareCap_of_hasPhaseWeightedWelfareBias
     (P := P) (quittingGame reward) none weight (target 0) phaseBias
   exact isUniformEquilibriumPayoff_of_oneSidedGuarantees_of_positiveWeightedWelfareCap

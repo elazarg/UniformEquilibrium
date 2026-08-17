@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import MathUE.FiniteSerialRelation
 import UniformEquilibrium.Quitting.Classification.ImmediateSingletonCollision
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
+import UniformEquilibrium.Quitting.Classification.PreemptionGateDictionary
 
 /-!
 # Realization of preemption geometries
@@ -182,11 +183,32 @@ def quittingPreemptionGeometryCollision
     rw [quittingPreemptionGeometryReward_solo R hcollision,
       quittingPreemptionGeometryReward_collision R hcollision]
 
-omit [Fintype player] in
+/-- The universal realization has an explicit normalized gate matrix: zero
+on the diagonal, `-1` on relation edges, and `1` on nonedges. -/
+theorem normalizedSoloMatrix_preemptionGeometryReward
+    (R : player → player → Prop) [DecidableRel R]
+    {collisionOwner collisionCollider : player}
+    (hcollision : collisionCollider ≠ collisionOwner)
+    (who owner : player) :
+    QuittingLCPClassification.normalizedSoloMatrix
+        (quittingPreemptionGeometryReward R collisionOwner collisionCollider)
+        who owner =
+      if owner = who then 0 else if R owner who then -1 else 1 := by
+  rw [normalizedSoloMatrix_eq_soloReward_sub,
+    quittingPreemptionGeometryReward_solo R hcollision,
+    quittingPreemptionGeometryReward_solo R hcollision]
+  unfold quittingPreemptionRelationSoloReward
+  by_cases hsame : owner = who
+  · simp [hsame]
+  · by_cases hedge : R owner who
+    · norm_num [hsame, hedge]
+    · norm_num [hsame, hedge]
+
 /-- **Universal table-level realization.**  Every irreflexive directed
 relation and every marked ordered pair of distinct players occur together as
 the exact margin-one preemption graph and an immediate singleton collision of
-one quitting reward table. -/
+one quitting reward table.  Its normalized gate matrix is explicitly `0` on
+the diagonal, `-1` on relation edges, and `1` on nonedges. -/
 theorem exists_reward_realizing_preemptionRelation_and_collision
     (R : player → player → Prop) [DecidableRel R]
     (hirreflexive : ∀ owner, ¬ R owner owner)
@@ -195,11 +217,15 @@ theorem exists_reward_realizing_preemptionRelation_and_collision
     ∃ reward : {S : Finset player // S.Nonempty} → Payoff player,
       (∀ owner other,
         QuittingSoloPreempts reward 1 owner other ↔ R owner other) ∧
+      (∀ who owner,
+        QuittingLCPClassification.normalizedSoloMatrix reward who owner =
+          if owner = who then 0 else if R owner who then -1 else 1) ∧
       Nonempty (QuittingImmediateSingletonCollision reward 1) := by
   refine ⟨quittingPreemptionGeometryReward R collisionOwner collisionCollider,
-    ?_, ⟨quittingPreemptionGeometryCollision R hcollision⟩⟩
-  intro owner other
-  exact quittingSoloPreempts_preemptionGeometryReward_iff
-    R hirreflexive hcollision
+    ?_, ?_, ⟨quittingPreemptionGeometryCollision R hcollision⟩⟩
+  · intro owner other
+    exact quittingSoloPreempts_preemptionGeometryReward_iff
+      R hirreflexive hcollision
+  · exact normalizedSoloMatrix_preemptionGeometryReward R hcollision
 
 end GameTheory

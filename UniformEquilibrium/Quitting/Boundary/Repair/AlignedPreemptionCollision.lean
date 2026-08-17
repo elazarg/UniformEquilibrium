@@ -347,4 +347,26 @@ theorem preemptionGeometryReward_twoCycle_and_collisionRepairWorks
       quittingPreemptionGeometryReward_collision R hne]
     norm_num
 
+/-- The universal aligned two-cycle realization has a uniform-equilibrium
+payoff.  Its rate-one repair is exactly the sure exit of the owner-collider
+pair, whose terminal reward is therefore uniform. -/
+theorem preemptionGeometryReward_twoCycle_hasUniformEquilibriumPayoff
+    (R : player → player → Prop) [DecidableRel R]
+    (hirreflexive : ∀ who, ¬ R who who)
+    {owner collider : player} (hne : collider ≠ owner)
+    (hforward : R owner collider) (hback : R collider owner) :
+    (quittingGame
+      (quittingPreemptionGeometryReward R owner collider)).IsUniformEquilibriumPayoff none
+      (quittingSetReward
+        (quittingPreemptionGeometryReward R owner collider)
+        ({owner, collider} : Finset player)) := by
+  have hconfiguration :=
+    preemptionGeometryReward_twoCycle_and_collisionRepairWorks
+      R hirreflexive hne hforward hback
+  have hsure :=
+    (quittingCollisionRepairWorks_one_iff
+      (quittingPreemptionGeometryReward R owner collider) (Ne.symm hne)).1
+        hconfiguration.2.2.2
+  exact isUniformEquilibriumPayoff_setReward_of_isQuittingSureExitSet _ hsure
+
 end GameTheory

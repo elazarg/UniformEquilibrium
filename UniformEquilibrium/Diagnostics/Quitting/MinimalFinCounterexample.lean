@@ -97,20 +97,28 @@ structure MinimalFinQuittingCounterexample where
     Payoff (Fin playerCount)
   /-- The table is a genuine counterexample regime. -/
   regime : QuittingCounterexampleRegime reward
-  /-- Small-player existence forces at least four players. -/
-  four_le_playerCount : 4 ≤ playerCount
   /-- No smaller canonical player cardinality carries a counterexample
   regime. -/
   minimal : ∀ m, m < playerCount → ¬ HasQuittingCounterexampleAtCard m
 
+/-- Small-player existence forces every minimal counterexample to have at
+least four players. -/
+theorem MinimalFinQuittingCounterexample.four_le_playerCount
+    (minimal : MinimalFinQuittingCounterexample) :
+    4 ≤ minimal.playerCount := by
+  have hcard := minimal.regime.three_lt_card
+  simp only [Fintype.card_fin] at hcard
+  omega
+
 /-- If any finite nonempty quitting counterexample exists, then a
 cardinality-minimal one exists on `Fin n`. -/
 theorem exists_minimalFinQuittingCounterexample
-    [Fintype ι] [Nonempty ι]
+    [Fintype ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hcounterexample : Nonempty (QuittingCounterexampleRegime reward)) :
     Nonempty MinimalFinQuittingCounterexample := by
   classical
+  letI : Nonempty ι := hcounterexample.some.nonempty_players
   have hcanonical : Nonempty (QuittingCounterexampleRegime
       (quittingRewardReindex (Fintype.equivFin ι) reward)) :=
     (nonempty_counterexampleRegime_reindex_fin_iff reward).2 hcounterexample
@@ -119,15 +127,10 @@ theorem exists_minimalFinQuittingCounterexample
   let n := Nat.find hexists
   have hn : HasQuittingCounterexampleAtCard n := Nat.find_spec hexists
   obtain ⟨minimalReward, ⟨minimalRegime⟩⟩ := hn
-  have hfour : 4 ≤ n := by
-    have hcard := minimalRegime.three_lt_card
-    simp only [Fintype.card_fin] at hcard
-    omega
   refine ⟨{
     playerCount := n
     reward := minimalReward
     regime := minimalRegime
-    four_le_playerCount := hfour
     minimal := ?_ }⟩
   intro m hm hcounter
   have hleast : n ≤ m := Nat.find_min' hexists hcounter
@@ -263,7 +266,7 @@ cardinality whose every player satisfies the owner-entry trichotomy.  The
 minimal witness also solves every smaller finite quitting game and every
 nonempty proper restriction of its own reward table. -/
 theorem exists_minimalFinQuittingCounterexample_with_ownerEntryTrichotomy
-    [Fintype ι] [Nonempty ι]
+    [Fintype ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hcounterexample : Nonempty (QuittingCounterexampleRegime reward)) :
     ∃ minimal : MinimalFinQuittingCounterexample,

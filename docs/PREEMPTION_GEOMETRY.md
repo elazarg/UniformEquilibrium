@@ -86,13 +86,27 @@ where \(\chi_c\) is \(c\)'s punishment value. Under this bound, owner
 optimality and spectator no-join are necessary and sufficient for the repair.
 Without it, the original three conditions remain the exact characterization.
 
+No such repair can work in a counterexample: it would supply terminal
+approximate equilibria below the fixed exploitability gap. More sharply, the
+collision certificate alone makes condition 3 automatic at every rate when
+
+\[
+  \chi_c\le r_c(\{c\}).
+\]
+
+In that case every rate fails through one of the other two conditions: either
+the owner's prescribed mixture is not endpoint-optimal, or some spectator has
+a profitable join.
+
 These local conditions are jointly feasible. If an irreflexive relation
 contains both \(q\to c\) and \(c\to q\), the universal realization above has
 the collision certificate, both preemption edges, and an exact rate-one
-collision repair at the pair exit \(\{q,c\}\). Consequently, the aligned
-two-cycle cases cannot be eliminated from the collision/preemption data and
-the local repair conditions alone. Any exclusion must use global information
-forced by a hypothetical counterexample.
+collision repair at the pair exit \(\{q,c\}\). That pair exit is a sure exit
+set, so its reward is a uniform-equilibrium payoff. Consequently, this
+universal realization is not a counterexample, and the aligned two-cycle
+cases cannot be eliminated from collision/preemption data and local repair
+conditions alone. Any exclusion must use global information forced by a
+hypothetical counterexample.
 
 If \(q\) lies on the cycle and \(c\) is the vertex immediately before it,
 the lasso instead supplies \(c\to q\). That edge is in player \(q\)'s payoff
@@ -154,6 +168,20 @@ and set
 The resulting margin-one preemption relation is exactly \(R\), and
 \((q,c)\) is an immediate singleton collision. Taking \(R\) to contain only
 the displayed lasso edges realizes every one of the seventeen rows above.
+The corresponding normalized gate matrix is explicit:
+
+\[
+ M_{y,x}=
+ \begin{cases}
+  0,&x=y,\\
+  -1,&x\ne y\text{ and }R(x,y),\\
+  1,&x\ne y\text{ and not }R(x,y).
+ \end{cases}
+\]
+
+Every vertex on a strict preemption cycle therefore survives every corrected
+normal-layer deletion: its predecessor on the cycle remains a distinct
+nonpositive gate witness.
 
 Therefore none of the seventeen cases can be eliminated by graph geometry
 alone. Any further reduction must use information beyond these finite
