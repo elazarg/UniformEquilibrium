@@ -33,6 +33,30 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
+namespace QuittingCounterexampleRegime
+
+/-- Every periodic behavior profile is exposed by its exact finite periodic
+best-response cap at the full terminal gap. -/
+theorem exists_periodicCap_gain
+    (regime : QuittingCounterexampleRegime reward)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (period : ℕ) [NeZero period]
+    (hperiodic : ∀ time,
+      quittingProfileLiveRoot reward profile (time + period) =
+        quittingProfileLiveRoot reward profile time) :
+    ∃ who,
+      quittingTerminalPayoff reward profile who + regime.terminalGap ≤
+        quittingPeriodicWindowBestResponseValue reward
+          (quittingProfileLiveRoot reward profile) who period := by
+  obtain ⟨who, hgain⟩ := regime.exists_pureTimeCap_gap profile
+  refine ⟨who, ?_⟩
+  rw [← sSup_range_quittingTerminalPayoff_update_eq_periodicWindow
+    reward profile who period hperiodic,
+    sSup_range_quittingTerminalPayoff_update_eq_pureTime]
+  exact hgain
+
+end QuittingCounterexampleRegime
+
 namespace QuittingCounterexampleSeamWitness
 
 variable (seam : QuittingCounterexampleSeamWitness regime)
