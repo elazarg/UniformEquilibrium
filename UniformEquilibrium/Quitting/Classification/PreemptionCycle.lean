@@ -44,8 +44,7 @@ def QuittingSoloPreempts
       quittingSoloReward reward other other
 
 /-- A positive-period closed directed walk in the strict solo-preemption
-relation.  Interior vertices need not be distinct; any repetition shortens
-the certificate to a simple directed cycle. -/
+relation. -/
 structure QuittingSoloPreemptionCycle
     (reward : {S : Finset player // S.Nonempty} → Payoff player)
     (gap : ℝ) where
@@ -72,6 +71,35 @@ theorem two_le_period
   exact hne hperiodic
 
 end QuittingSoloPreemptionCycle
+
+omit [Fintype player] [DecidableEq player] in
+/-- Exact algebraic defect of a convex value supported on two solo rows. -/
+theorem quittingSoloRotationDefect_eq
+    (preempted preemptor : player) (lam : ℝ) :
+    quittingSoloReward reward preemptor preemptor -
+        (lam * quittingSoloReward reward preempted preemptor +
+          (1 - lam) * quittingSoloReward reward preemptor preemptor) =
+      lam * (quittingSoloReward reward preemptor preemptor -
+        quittingSoloReward reward preempted preemptor) := by
+  ring
+
+omit [Fintype player] [DecidableEq player] in
+/-- Against a strict preemption edge, a convex value with nonnegative weight
+`lam` on the preemptor's solo row under-serves the preempted player's solo
+payoff by at least `lam * gap`. -/
+theorem QuittingSoloPreempts.rotation_indifference_defect
+    {gap : ℝ} {preempted preemptor : player}
+    (hedge : QuittingSoloPreempts reward gap preempted preemptor)
+    {lam : ℝ} (hlam : 0 ≤ lam) :
+    lam * gap ≤
+      quittingSoloReward reward preemptor preemptor -
+        (lam * quittingSoloReward reward preempted preemptor +
+          (1 - lam) * quittingSoloReward reward preemptor preemptor) := by
+  rw [quittingSoloRotationDefect_eq]
+  have hgap : gap ≤ quittingSoloReward reward preemptor preemptor -
+      quittingSoloReward reward preempted preemptor := by
+    linarith [hedge.2]
+  exact mul_le_mul_of_nonneg_left hgap hlam
 
 /-! ## The two-rate preemption probe -/
 
