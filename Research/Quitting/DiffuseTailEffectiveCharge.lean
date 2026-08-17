@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.DivergentChargeRecurrence
-import Research.Quitting.DiffuseTailSoloStructure
+import Research.Quitting.SoloTailExactStructure
 
 /-!
 # Effective charge budget and the extraction split for diffuse quitting tails
@@ -115,6 +115,24 @@ a uniform positive raw rate".  That hypothesis is *not* a tautology: it rules
 out idle dates, third-player activity, and collisions whose raw rate vanishes.
 It is stated separately so that the split's remaining hypotheses are named
 rather than bundled.
+
+## The zero-free route needs none of this
+
+`quittingTailPersistentlySolo_of_zeroFree_of_dichotomy` reaches the
+eventually-solo conclusion on a zero-free table from the pair dichotomy alone.
+Its engine is `not_quittingTailLateSoloAlternating_of_zeroFree`: between two
+consecutive dates at which one player is the active soloist, exact indifference
+pins that player's value at its own singleton reward on both sides, and the
+window telescope of `Research/Quitting/SoloTailExactStructure.lean` reads the
+displacement across the intervening run as the window's absorbed mass times the
+normalized solo entry, which therefore vanishes.  The window's own active
+soloist keeps the absorbed mass positive, so no uniform charge is needed.  The
+conditioned-value apparatus of this module is not used on that route at all:
+only the exact value recursion, exact root Nash, and interior hazards.
+
+The charge budget below remains the quantitative statement about a *single*
+window, and the extraction split remains the record of how the bundled
+hypothesis decomposes.
 
 The extraction hypothesis is moreover *equivalent* to the conclusion it is
 used to prove: at most one persistently active player makes it vacuous
@@ -680,6 +698,96 @@ theorem nonempty_quittingFencedSoloWindowFamily_of_lateSoloAlternating
            window_solo := fun index => (hwindow index).2.2.2.1
            window_active := fun index => (hwindow index).2.2.2.2 }⟩
 
+/-! ## Zero-freeness excludes late strict alternation outright -/
+
+/-- **Late strict alternation is impossible on a zero-free table.**  Between
+two consecutive dates at which `first` is the active soloist, `first` is a
+spectator at a run of `second`-solo dates.  Exact indifference at each of the
+two fences pins `first`'s value at its own singleton reward on both sides, so
+the window telescope reads the whole displacement as the window's absorbed mass
+times the normalized solo entry `M first second`, forcing that entry to vanish.
+
+No conditioned mesh, no boundary tightness, no reward bound and no uniform
+charge enter: this is the exact gap-return identity applied to the spectator,
+and the window's own active soloist keeps the absorbed mass positive. -/
+theorem not_quittingTailLateSoloAlternating_of_zeroFree
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    (hinterior : ∀ time who, 0 < (roots time who false).toReal)
+    (hzeroFree : QuittingZeroFreeSoloMatrix reward)
+    {first second : ι} (hne : first ≠ second)
+    (halternating : QuittingTailLateSoloAlternating roots first second)
+    (hfirst : QuittingTailPersistentlyActive roots first)
+    (hsecond : QuittingTailPersistentlyActive roots second) :
+    False := by
+  obtain ⟨base, hbase⟩ := halternating
+  obtain ⟨fence, length, hstart, hlengthPos, hfenceActive, hreturnActive,
+    hwindowSolo, hwindowActive⟩ :=
+    exists_quittingFencedSoloWindow_of_lateSoloAlternating hne
+      ⟨base, hbase⟩ hfirst hsecond base
+  have hsoloAt : ∀ time, base ≤ time → 0 < (roots time first true).toReal →
+      IsQuittingSoloRoot (roots time) first := by
+    intro time hle hactive
+    rcases hbase time hle with ⟨hsolo, -⟩ | ⟨hsolo, -⟩
+    · exact hsolo
+    · rw [quitProbability_eq_zero_of_isQuittingSoloRoot hsolo hne] at hactive
+      exact absurd hactive (lt_irrefl 0)
+  have hfenceSolo := hsoloAt fence hstart hfenceActive
+  have hreturnSolo := hsoloAt (fence + 1 + length) (by omega) hreturnActive
+  have hstartPin : value (fence + 1) first =
+      quittingSoloReward reward first first :=
+    hfenceSolo.tail_owner_eq_soloReward_of_interior reward (hnash fence)
+      hfenceActive (hinterior fence first)
+  have hendPin : value (fence + 1 + length) first =
+      quittingSoloReward reward first first := by
+    have hpin := hreturnSolo.tail_owner_eq_soloReward_of_interior reward
+      (hnash (fence + 1 + length)) hreturnActive
+      (hinterior (fence + 1 + length) first)
+    have hstep := hreturnSolo.successorPayoff_owner_eq_tail_of_interior reward
+      (hnash (fence + 1 + length)) hreturnActive
+      (hinterior (fence + 1 + length) first)
+    rw [hpolicy (fence + 1 + length)]
+    exact hstep.trans hpin
+  have htransport :=
+    quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner roots value
+      (fun _ => second) hpolicy first second hne
+      (quittingSoloReward reward first first) (fence + 1) length
+      (fun offset hoffset => hwindowSolo offset hoffset) (fun _ _ => rfl)
+  rw [hstartPin, hendPin, sub_self, mul_zero, add_zero] at htransport
+  have hsurvivalLt :
+      quittingSoloTailSurvival roots (fun _ => second) (fence + 1) length < 1 := by
+    obtain ⟨tailLength, rfl⟩ : ∃ tailLength, length = tailLength + 1 :=
+      ⟨length - 1, by omega⟩
+    rw [quittingSoloTailSurvival_succ_left]
+    have hrest := quittingSoloTailSurvival_mem_unitInterval roots
+      (fun _ => second) (fence + 1 + 1) tailLength
+    have hactive0 : 0 < (roots (fence + 1) second true).toReal := by
+      simpa using hwindowActive 0 (Nat.succ_pos tailLength)
+    have hsum := quittingRoot_continueProbability_add_quitProbability
+      (roots (fence + 1)) second
+    have hhead : quittingSoloTailContinueMass roots (fun _ => second)
+        (fence + 1) = (roots (fence + 1) second false).toReal := rfl
+    rw [hhead]
+    have hcontinue0 : (0 : ℝ) ≤ (roots (fence + 1) second false).toReal :=
+      ENNReal.toReal_nonneg
+    have hle : (roots (fence + 1) second false).toReal *
+        quittingSoloTailSurvival roots (fun _ => second) (fence + 1 + 1)
+          tailLength ≤ (roots (fence + 1) second false).toReal :=
+      mul_le_of_le_one_right hcontinue0 hrest.2
+    linarith
+  have hproduct : (1 - quittingSoloTailSurvival roots (fun _ => second)
+      (fence + 1) length) * (quittingSoloReward reward second first -
+        quittingSoloReward reward first first) = 0 := by linarith
+  have hentry : quittingSoloReward reward second first -
+      quittingSoloReward reward first first = 0 :=
+    (mul_eq_zero.1 hproduct).resolve_left (by linarith)
+  refine hzeroFree first second hne ?_
+  rw [normalizedSoloMatrix_eq_soloReward_sub]
+  exact hentry
+
 /-! ## (ii) The co-active branch and the raw collision budget -/
 
 /-- **Co-activity at a uniform raw rate.**  The pair quits simultaneously at
@@ -931,6 +1039,38 @@ theorem quittingTailPersistentlySolo_of_noFencedSoloWindowFamily
       nonempty_quittingFencedSoloWindowFamily_of_lateSoloAlternating hne
         halternating hfirst hsecond
     exact (hnofamily first second hne).false family
+  · exact absurd hcoactive
+      (not_quittingTailCoactiveChargeFloor_of_tendsto roots first second
+        hvanishing)
+
+/-- **The eventually-solo conclusion on a zero-free table, from the pair
+dichotomy alone.**  Late strict alternation is excluded by zero-freeness
+(`not_quittingTailLateSoloAlternating_of_zeroFree`) and a raw collision floor by
+a vanishing one-stage absorption mass, so the dichotomy leaves no distinct pair
+of persistently active players.
+
+Neither the extraction hypothesis, nor a uniform charge floor, nor the absence
+of fenced solo window families is used, and neither is the conditioned-value
+apparatus: only the exact value recursion, exact root Nash, and interior
+hazards. -/
+theorem quittingTailPersistentlySolo_of_zeroFree_of_dichotomy
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    (hinterior : ∀ time who, 0 < (roots time who false).toReal)
+    (hzeroFree : QuittingZeroFreeSoloMatrix reward)
+    (hvanishing : Tendsto (fun time => quittingRootAbsorptionMass (roots time))
+      atTop (nhds 0))
+    (hdichotomy : QuittingTailPairSoloDichotomy roots) :
+    QuittingTailPersistentlySolo roots := by
+  intro first second hfirst hsecond
+  by_contra hne
+  rcases hdichotomy first second hne hfirst hsecond with
+    halternating | hcoactive
+  · exact not_quittingTailLateSoloAlternating_of_zeroFree roots value hpolicy
+      hnash hinterior hzeroFree hne halternating hfirst hsecond
   · exact absurd hcoactive
       (not_quittingTailCoactiveChargeFloor_of_tendsto roots first second
         hvanishing)
