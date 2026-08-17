@@ -124,6 +124,7 @@ import MathUE.LinearAlgebra.WeightedSaturationDefect
 import MathUE.LinearAlgebra.ZeroSum
 import MathUE.LinearProgramming.ClosedTrapPerturbation
 import MathUE.LinearProgramming.Basic
+import MathUE.LinearProgramming.CirculantPocketR0
 import MathUE.LinearProgramming.ColumnSumQ
 import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
