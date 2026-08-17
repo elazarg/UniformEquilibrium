@@ -7,6 +7,7 @@ import Experiments.counterexample_search.RegularTournamentFiveSeed
 import Experiments.counterexample_search.RegularTournamentFiveSeedSoloExits
 import Experiments.counterexample_search.RegularTournamentFiveSeedSureExit
 import Experiments.counterexample_search.RegularTournamentFiveSeedZeroFree
+import Experiments.counterexample_search.RegularTournamentFiveSeedZeroOrbitGap
 
 /-!
 # Reproducible experimental evidence
