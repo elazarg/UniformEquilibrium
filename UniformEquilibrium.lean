@@ -307,6 +307,7 @@ import UniformEquilibrium.Quitting.Stationary.SnellCap
 import UniformEquilibrium.Quitting.Paths.OpponentLiveMass
 import UniformEquilibrium.Quitting.Paths.LiveTail
 import UniformEquilibrium.Quitting.Boundary.Exceptional.Hazard
+import UniformEquilibrium.Quitting.Bellman.Finite.BellmanCapPureTimeStop
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
 import UniformEquilibrium.Quitting.Bellman.Finite.Regression.NegativeSingletonChargeRegression
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine

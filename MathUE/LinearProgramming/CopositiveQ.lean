@@ -510,23 +510,15 @@ theorem singletonLCPFeasible_of_approximate (M : ι → ι → ℝ)
 exhausts the budget normalizes to a simplex point whose homogeneous violation
 is `O(1/r)`.  Copositivity enters only through the lower bound on the pairing
 `⟨z, q + Mz⟩`. -/
-theorem homogeneousViolation_normalized_le (M : ι → ι → ℝ) (q : ι → ℝ)
-    (hcop : IsCopositive M) {r : ℝ} (hr : 0 < r) {z : ι → ℝ} (hznn : ∀ i, 0 ≤ z i)
+theorem homogeneousViolation_normalized_le_of_bound (M : ι → ι → ℝ) (q : ι → ℝ)
+    (hcop : IsCopositive M) {r Bq : ℝ} (hr : 0 < r) (hBq_nonneg : 0 ≤ Bq)
+    (hq_le : ∀ i, |q i| ≤ Bq) {z : ι → ℝ} (hznn : ∀ i, 0 ≤ z i)
     (hsum : (∑ i, z i) = r)
     (hvi : ∀ y : ι → ℝ, (∀ i, 0 ≤ y i) → (∑ i, y i) ≤ r →
       0 ≤ ∑ i, (y i - z i) * lcpResidual M q z i) :
     homogeneousViolation M (fun i => z i / r) ≤
-      (2 * (Fintype.card ι : ℝ) + 1) * (∑ i, |q i|) / r := by
+      (2 * (Fintype.card ι : ℝ) + 1) * Bq / r := by
   classical
-  set Bq : ℝ := ∑ i, |q i| with hBq
-  have hBq_nonneg : 0 ≤ Bq := Finset.sum_nonneg fun _ _ => abs_nonneg _
-  have hq_le : ∀ i, |q i| ≤ Bq :=
-    fun i => Finset.single_le_sum (f := fun i => |q i|) (fun _ _ => abs_nonneg _)
-      (Finset.mem_univ i)
-  have hz_le : ∀ i, z i ≤ r := by
-    intro i
-    rw [← hsum]
-    exact Finset.single_le_sum (f := z) (fun j _ => hznn j) (Finset.mem_univ i)
   -- The pairing `⟨z, q + Mz⟩` and its two bounds.
   have hpair_eq : (∑ i, z i * lcpResidual M q z i) =
       (∑ i, z i * q i) + ∑ i, z i * ∑ j, z j * M i j := by
@@ -534,17 +526,17 @@ theorem homogeneousViolation_normalized_le (M : ι → ι → ℝ) (q : ι → �
     exact Finset.sum_congr rfl fun i _ => by rw [lcpResidual_def]; ring
   have hquad_nonneg : 0 ≤ ∑ i, z i * ∑ j, z j * M i j := hcop z hznn
   have hzq_ge : -(r * Bq) ≤ ∑ i, z i * q i := by
-    have hterm : ∀ i, -(r * |q i|) ≤ z i * q i := by
+    have hterm : ∀ i, -(z i * Bq) ≤ z i * q i := by
       intro i
       have h1 : -(z i * |q i|) ≤ z i * q i := by
         nlinarith [neg_abs_le (q i), hznn i]
-      have h2 : z i * |q i| ≤ r * |q i| :=
-        mul_le_mul_of_nonneg_right (hz_le i) (abs_nonneg _)
+      have h2 : z i * |q i| ≤ z i * Bq :=
+        mul_le_mul_of_nonneg_left (hq_le i) (hznn i)
       linarith
-    have hsum_le : (∑ i, -(r * |q i|)) ≤ ∑ i, z i * q i :=
+    have hsum_le : (∑ i, -(z i * Bq)) ≤ ∑ i, z i * q i :=
       Finset.sum_le_sum fun i _ => hterm i
-    have hconst : (∑ i, -(r * |q i|)) = -(r * Bq) := by
-      rw [hBq, Finset.mul_sum, ← Finset.sum_neg_distrib]
+    have hconst : (∑ i, -(z i * Bq)) = -(r * Bq) := by
+      rw [Finset.sum_neg_distrib, ← Finset.sum_mul, hsum]
     linarith [hsum_le, hconst.symm.le, hconst.le]
   have hpair_le : (∑ i, z i * lcpResidual M q z i) ≤ 0 := by
     have h := hvi (fun _ => 0) (fun _ => le_refl 0) (by simp; linarith)
@@ -625,6 +617,21 @@ theorem homogeneousViolation_normalized_le (M : ι → ι → ℝ) (q : ι → �
     field_simp
     ring
   linarith [hpiece1, hpiece2, hfinal.symm.le, hfinal.le]
+
+/-- The `‖q‖₁` reading of the boundary bound: the total `∑ i, |q i|` bounds
+every coordinate. -/
+theorem homogeneousViolation_normalized_le (M : ι → ι → ℝ) (q : ι → ℝ)
+    (hcop : IsCopositive M) {r : ℝ} (hr : 0 < r) {z : ι → ℝ} (hznn : ∀ i, 0 ≤ z i)
+    (hsum : (∑ i, z i) = r)
+    (hvi : ∀ y : ι → ℝ, (∀ i, 0 ≤ y i) → (∑ i, y i) ≤ r →
+      0 ≤ ∑ i, (y i - z i) * lcpResidual M q z i) :
+    homogeneousViolation M (fun i => z i / r) ≤
+      (2 * (Fintype.card ι : ℝ) + 1) * (∑ i, |q i|) / r :=
+  homogeneousViolation_normalized_le_of_bound M q hcop hr
+    (Finset.sum_nonneg fun _ _ => abs_nonneg _)
+    (fun i => Finset.single_le_sum (f := fun i => |q i|) (fun _ _ => abs_nonneg _)
+      (Finset.mem_univ i))
+    hznn hsum hvi
 
 /-! ## The headline theorem -/
 

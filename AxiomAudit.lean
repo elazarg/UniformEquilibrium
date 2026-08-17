@@ -468,7 +468,6 @@ import Research.Quitting.BlockPair.K11.KrawczykConditionalData
 import Research.Quitting.BlockPair.K11.KrawczykConditionalSemantic
 import Research.Quitting.BlockPair.K11.PhaseValueRecurrence
 import Research.Quitting.BlockPair.K11.RowZeroSemantic
-import Research.Quitting.BlockPlayerDeletion
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
 import Research.Quitting.CausalTailEscapeMaxAbsorptionDispatch
