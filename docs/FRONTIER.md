@@ -81,16 +81,30 @@ interface.
 
 The quitting counterexample-regime search is maintained as an explicit finite
 antichain of formal leaves. The ledger records each representative, source
-producer, obstruction class, and the evidence attached to transitions. This is
-a proof-search decomposition inside the formalized regime, not an exhaustive
-classification of every equilibrium profile.
+producer, obstruction class, the evidence attached to transitions, and the
+evidence seals carried by each. This is a proof-search decomposition inside the
+formalized regime, not an exhaustive classification of every equilibrium
+profile.
+
+Leaves and transitions are grouped by the cover clause they bear on. The four
+clauses are those of the necessary-condition manuscript — (A) periodic block
+profiles with fixed hazards, (B) solo tails with exact one-shot roots, (C)
+trigger repairs, and (D) player count — and two further groups collect the
+results that close a parameterized family of tables and the results about one
+named table. A seventh group collects restrictions derived inside the regime
+itself, which belong to none of the profile classes. The group definitions are
+in the ledger; a transition may bear on more than one.
+
+Seals are recorded per entry in the `M`/`L`/`A`/`C` language of
+[`STATUS.md`](STATUS.md) and are independent: `A` and `C` are never inferred
+from `L`. An entry marked as unchecked carries no seal at all.
 
 <!-- BEGIN GENERATED OPEN LEAVES -->
 This table is generated from [`QuittingProofFrontier.json`](QuittingProofFrontier.json).
 
-| Manuscript alternative | GitHub issue | Leaf | Obstruction | Representative | Source producer |
-| --- | --- | --- | --- | --- | --- |
-| 5 | [#40](https://github.com/elazarg/UniformEquilibrium/issues/40) | `IMMEDIATE-SINGLETON-PREEMPTION-CYCLE` | `OB-COLLISION` | `Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap) ∧ Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap)` | [`QuittingCounterexampleRegime.immediateSingletonCollision_and_soloPreemptionCycle`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean) |
+| Manuscript alternative | GitHub issue | Leaf | Cover clause | Obstruction | Seals | Representative | Source producer |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 5 | [#40](https://github.com/elazarg/UniformEquilibrium/issues/40) | `IMMEDIATE-SINGLETON-PREEMPTION-CYCLE` | `REGIME-LOCALIZATION`, `COVER-D` | `OB-COLLISION` | `M`, `L` | `Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap) ∧ Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap)` | [`QuittingCounterexampleRegime.immediateSingletonCollision_and_soloPreemptionCycle`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean) |
 
 The manuscript numbering has five fixed slots. Alternative 1 ([issue #3](https://github.com/elazarg/UniformEquilibrium/issues/3)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`; Alternative 2 ([issue #4](https://github.com/elazarg/UniformEquilibrium/issues/4)) is eliminated by `ELIMINATE-ABSENT-BY-IMMEDIATE-SINGLETON-COLLISION`; Alternative 3 ([issue #5](https://github.com/elazarg/UniformEquilibrium/issues/5)) is eliminated by `ELIMINATE-SINGLETON-BY-SIGNED-ACTUAL-ROW`; Alternative 4 ([issue #6](https://github.com/elazarg/UniformEquilibrium/issues/6)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`.
 

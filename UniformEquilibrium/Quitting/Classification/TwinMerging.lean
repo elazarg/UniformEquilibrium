@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlayerDeletion
+import UniformEquilibrium.Quitting.Classification.PlayerDeletionLift
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
@@ -29,12 +29,13 @@ is its contrapositive.
 The producer is proved from `QuittingTwinMergeable`, which asks for the
 shared row and for the two invisibility clauses only at the twins' own row,
 omitting them at every other player's row.  Indistinguishability implies it
-through `QuittingIndistinguishableTwins.toMergeable`, so the report's notion
-stays the named one and each statement is available under both hypotheses.
+through `QuittingIndistinguishableTwins.toMergeable`, so every statement is
+available under both hypotheses.
 
 The lift prescribes `Never` for the silent twin `e` and gives `d` the token's
-strategy.  Every player other than `e` is handled by the existing exact
-transport of `quittingLiftDeletedProfile`.  The silent twin is handled by
+strategy.  Every player other than `e` is handled by the exact transport of
+`quittingLiftDeletedProfile` in
+`UniformEquilibrium/Quitting/Classification/PlayerDeletionLift.lean`.  The silent twin is handled by
 `quittingBestReplyValue_le_twin`: whatever `e` could gain by quitting at some
 date, the token `d` could gain by quitting at the minimum of its own
 scheduled date and that date.  The one-stage content is
@@ -601,7 +602,7 @@ theorem quittingDeletePlayerReward_twinPullback {d e : ι} (hne : d ≠ e)
   rw [twinCollapse_val]
   exact congrFun (congrArg token (Subtype.ext himg)) who
 
-/-! ## The same statements under the report's full twin notion -/
+/-! ## The same statements under full indistinguishability -/
 
 /-- **Twin merging.**  If two players are indistinguishable twins and the
 token game obtained by deleting one of them has a uniform-equilibrium payoff,

@@ -8,8 +8,7 @@ import MathUE.Finset.ProdLtOne
 import UniformEquilibrium.Quitting.Bellman.Finite.ActiveSetSupport
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
-import Research.Quitting.AnchoredCyclicRenewal
-import Research.Quitting.PeriodicRootResponseSystem
+import UniformEquilibrium.Quitting.Cycles.PeriodicRootResponseSystem
 
 /-!
 # Periodic block profiles with fixed hazards
@@ -63,7 +62,6 @@ contraction.
 * `prod_continueMass_lt_one_of_pos` — one positive hazard makes the turn
   absorbing
 * `isUniformEquilibriumPayoff_of_isQuittingBlockCertificate`
-* `QuittingCounterexampleRegime.exists_quittingBlockResponse_gain`
 -/
 
 noncomputable section
@@ -127,11 +125,21 @@ theorem quittingRootSuccessorPayoff_eq_activeCoalitionSum
 variable (hazard : Fin (m + 1) → ι → ℝ)
 
 omit [Fintype ι] [DecidableEq ι] in
+/-- A quitting coin carrying no quit mass is the pure Continue law. -/
+theorem quittingHazardCoin_eq_pure_false_of_quitMass_zero {a : ℝ} (ha0 : 0 ≤ a)
+    (ha1 : a ≤ 1) (hzero : (quittingHazardCoin a ha0 ha1 true).toReal = 0) :
+    quittingHazardCoin a ha0 ha1 = PMF.pure false := by
+  rw [quittingHazardCoin_true_toReal] at hzero
+  subst hzero
+  refine PMF.ext fun action ↦ ?_
+  cases action <;> simp [quittingHazardCoin, PMF.ofFintype_apply]
+
+omit [Fintype ι] [DecidableEq ι] in
 /-- A hazard of zero is the pure Continue law, so a player outside a phase's
 block is the case `hazard k i = 0`. -/
 theorem quittingHazardCoin_zero (h0 : (0 : ℝ) ≤ 0) (h1 : (0 : ℝ) ≤ 1) :
     quittingHazardCoin 0 h0 h1 = PMF.pure false :=
-  quittingHazardCoin_eq_pure_false h0 h1
+  quittingHazardCoin_eq_pure_false_of_quitMass_zero h0 h1
     (by rw [quittingHazardCoin_true_toReal])
 
 omit [Fintype ι] [DecidableEq ι] in
@@ -325,7 +333,7 @@ theorem quittingCyclicDeletedCycle_quittingBlockCycle
   by_cases hp : player = who
   · subst hp
     rw [Function.update_self]
-    exact (quittingHazardCoin_eq_pure_false
+    exact (quittingHazardCoin_eq_pure_false_of_quitMass_zero
       (quittingBlockDeletedHazard_nonneg h0 player k player)
       (quittingBlockDeletedHazard_le_one h1 player k player)
       (by rw [quittingHazardCoin_true_toReal]
@@ -549,61 +557,5 @@ theorem isUniformEquilibriumPayoff_of_isQuittingBlockCertificate
     reward (U 0) m (quittingBlockPath hcert.hazard_nonneg hcert.hazard_le_one U)
     (isQuittingCyclicContinuationBlock_of_isQuittingBlockCertificate hcert)
     (fun who ↦ Or.inr (hcert.solo who))
-
-/-- A table carrying a certified block profile lies in no counterexample
-regime. -/
-theorem isEmpty_counterexampleRegime_of_isQuittingBlockCertificate
-    {U : Fin (m + 2) → Payoff ι}
-    (hcert : IsQuittingBlockCertificate reward hazard U) :
-    IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime ↦ regime.not_exists_uniformEquilibriumPayoff
-    ⟨U 0, isUniformEquilibriumPayoff_of_isQuittingBlockCertificate hcert⟩⟩
-
-/-! ## The necessary condition -/
-
-namespace QuittingCounterexampleRegime
-
-/-- **Every periodic block profile is exposed at the full terminal gap.**  A
-counterexample regime leaves some player a gain of at least its terminal gap
-over the block profile's on-path value, measured by the exact finite
-best-response statistic. -/
-theorem exists_quittingBlockCap_gain
-    (regime : QuittingCounterexampleRegime reward)
-    (h0 : ∀ k i, 0 ≤ hazard k i) (h1 : ∀ k i, hazard k i ≤ 1)
-    (phase : Fin (m + 1)) {U : Fin (m + 1) → Payoff ι}
-    (hU : IsQuittingBlockOnPathValue reward hazard U)
-    (habsorb : (∏ k : Fin (m + 1), continueMass (hazard k)) < 1) :
-    ∃ who, U phase who + regime.terminalGap ≤
-      quittingCyclicResponseCap reward (quittingBlockCycle hazard h0 h1) phase
-        who := by
-  obtain ⟨who, hgain⟩ := regime.exists_quittingCyclicCap_gain
-    (quittingBlockCycle hazard h0 h1) phase
-  refine ⟨who, ?_⟩
-  rwa [eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue_of_absorbing h0 h1 hU
-    habsorb]
-
-/-- **Every periodic block profile is exposed at the full terminal gap.**  A
-counterexample regime forces some player's response value to exceed the block
-profile's on-path value by at least the regime's terminal gap. -/
-theorem exists_quittingBlockResponse_gain
-    (regime : QuittingCounterexampleRegime reward)
-    (h0 : ∀ k i, 0 ≤ hazard k i) (h1 : ∀ k i, hazard k i ≤ 1)
-    (phase : Fin (m + 1)) {U W : Fin (m + 1) → Payoff ι}
-    (hU : IsQuittingBlockOnPathValue reward hazard U)
-    (hW : IsQuittingBlockResponseSolution reward hazard W)
-    (habsorb : (∏ k : Fin (m + 1), continueMass (hazard k)) < 1)
-    (hadmissible : IsQuittingCycleAdmissible reward
-      (quittingBlockCycle hazard h0 h1)) :
-    ∃ who, U phase who + regime.terminalGap ≤ W phase who := by
-  have hvalue := eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue_of_absorbing h0 h1
-    hU habsorb
-  obtain ⟨who, hgain⟩ := regime.exists_quittingCyclicResponse_gain
-    (quittingBlockCycle hazard h0 h1) phase
-    (isQuittingCyclicResponseSolution_of_isQuittingBlockResponseSolution h0 h1 hW)
-    hadmissible
-  refine ⟨who, ?_⟩
-  rwa [hvalue]
-
-end QuittingCounterexampleRegime
 
 end GameTheory

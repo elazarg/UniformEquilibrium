@@ -4,12 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.PunishmentValueClosedForm
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSmallSurvivorDeletion
+import UniformEquilibrium.Quitting.Punishment.ContinueFloor
 
 /-!
 # The quantitative deletion inequality
 
-`Research/Quitting/BlockPlayerDeletion.lean` deletes a block of players whose
+`UniformEquilibrium/Quitting/Classification/BlockDeletion.lean` deletes a block of players whose
 members are exactly untempted by the lift of a survivor profile.  This module
 drops the gate and measures the temptation instead.
 
@@ -87,6 +88,24 @@ theorem quittingBlockJoinCap_eq_zero_of_blockJoinAntitone
     have hdisjoint : Disjoint terminal.1 B := (Finset.mem_filter.mp hterminal).2
     have hstep := hjoin terminal.1 terminal.2 hdisjoint
     linarith
+
+/-- The join cap is the least nonnegative upper bound of the survivor join
+margins. -/
+theorem quittingBlockJoinCap_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
+    (owner : ι) {value : ℝ} (hzero : 0 ≤ value)
+    (hrow : ∀ (S : Finset ι) (hS : S.Nonempty), Disjoint S B →
+      reward ⟨insert owner S, Finset.insert_nonempty owner S⟩ owner -
+        reward ⟨S, hS⟩ owner ≤ value) :
+    quittingBlockJoinCap reward B owner ≤ value := by
+  classical
+  unfold quittingBlockJoinCap
+  refine Finset.max'_le _ _ _ ?_
+  intro entry hentry
+  rcases Finset.mem_insert.mp hentry with hzeroEntry | hmem
+  · exact hzeroEntry ▸ hzero
+  · obtain ⟨terminal, hterminal, rfl⟩ := Finset.mem_image.mp hmem
+    exact hrow terminal.1 terminal.2 (Finset.mem_filter.mp hterminal).2
 
 /-! ## Reading off the absorption probability -/
 

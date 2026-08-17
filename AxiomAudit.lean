@@ -11,6 +11,7 @@ import Experiments.certsearch.block_pair.K11.JacobianCache
 import Experiments.certsearch.block_pair.K11.KrawczykInstance
 import Experiments.certsearch.block_pair.K11.Preconditioner
 import Experiments.certsearch.block_pair.K11.RowZeroCacheData
+import Experiments.counterexample_search.BlockPeriodicMultiVisit
 import Experiments.counterexample_search.ColliderPocketCandidateEquilibrium
 import Experiments.counterexample_search.HardenedPentagonCyclicEquilibrium
 import Experiments.counterexample_search.HardenedPentagonSoloPeriodicWitness
@@ -19,6 +20,7 @@ import Experiments.counterexample_search.RegularTournamentFiveSeedSoloExits
 import Experiments.counterexample_search.RegularTournamentFiveSeedSureExit
 import Experiments.counterexample_search.RegularTournamentFiveSeedZeroFree
 import Experiments.counterexample_search.RegularTournamentFiveSeedZeroOrbitGap
+import Experiments.counterexample_search.SolanVieilleBoundaryDeletionCalibration
 import Literature
 import Literature.All
 import Literature.Catalog
@@ -471,10 +473,6 @@ import Research.Quitting.BlockPair.K11.KrawczykConditionalData
 import Research.Quitting.BlockPair.K11.KrawczykConditionalSemantic
 import Research.Quitting.BlockPair.K11.PhaseValueRecurrence
 import Research.Quitting.BlockPair.K11.RowZeroSemantic
-import Research.Quitting.BlockPeriodicCalibration
-import Research.Quitting.BlockPeriodicMultiVisit
-import Research.Quitting.BlockPeriodicProfile
-import Research.Quitting.BlockPlayerDeletion
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
 import Research.Quitting.CausalTailEscapeMaxAbsorptionDispatch
@@ -539,10 +537,8 @@ import Research.Quitting.PacketPreservingSourceReturnNoGo
 import Research.Quitting.PaidNonexactCapStackAccount
 import Research.Quitting.PairActiveSoloPhase
 import Research.Quitting.PathClosureKernels
-import Research.Quitting.PeriodicRootResponseSystem
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
 import Research.Quitting.PrescribedAtomMinimumAccounting
-import Research.Quitting.PunishmentValueClosedForm
 import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
@@ -553,7 +549,7 @@ import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
 import Research.Quitting.SolanVieilleSoloPeriodicGap
-import Research.Quitting.SoloPeriodicBlockCompiler
+import Research.Quitting.SolanVieilleSoloPeriodicTerminalGap
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification
 import Research.Quitting.SoloWindowPhaseStopBranch
@@ -568,13 +564,11 @@ import Research.Quitting.StoppingLawResetCube
 import Research.Quitting.StoppingLawRetentionChain
 import Research.Quitting.StoppingLawSingletonOrientationNoGo
 import Research.Quitting.StoppingLawTwoOutcomePassportSequence
-import Research.Quitting.SymmetricQuittingGame
 import Research.Quitting.TerminalAtomPolarityDuality
 import Research.Quitting.TerminalLawTwoOutcomePassport
 import Research.Quitting.TerminalSemanticAuxiliaryNashHandoff
 import Research.Quitting.TerminalSemanticCollisionRankReduction
 import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertion
-import Research.Quitting.TwinMerging
 import Research.Quitting.TwoResetFourRoleAdapter
 import Research.Quitting.UniqueAllContinueCapStackNoGo
 import Theorems
@@ -726,6 +720,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Suppo
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Surplus
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodOne.AttachmentRepair
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodOne.TangentReadout
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicBlockProfile
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.DebtTransferCardinality
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.ReindexNaturality
@@ -796,7 +791,6 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalCollisionRe
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalQuitAggregation
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalQuitAggregationNoGo
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCemeteryPairClockDecoder
-import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCommonSuffixCurvatureRegression
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCommonWitnessPassportRegression
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonCancellation
@@ -897,6 +891,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSimultaneousReset
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSimultaneousResetOrientationLocalization
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSingletonClockDebtFace
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSingletonClockDefectOverlap
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSmallSurvivorDeletion
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloOwnerRefinement
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloQuantitativePassport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupation
@@ -1176,6 +1171,7 @@ import UniformEquilibrium.Quitting.Circulation.TransportedLeverage
 import UniformEquilibrium.Quitting.Circulation.TwoCoordinateBoundary
 import UniformEquilibrium.Quitting.Circulation.UniformPayoffExamples
 import UniformEquilibrium.Quitting.Classification.AnalyticWaist
+import UniformEquilibrium.Quitting.Classification.BlockDeletion
 import UniformEquilibrium.Quitting.Classification.EquivariantSecurityWelfareAssembly
 import UniformEquilibrium.Quitting.Classification.ImmediateSingletonCollision
 import UniformEquilibrium.Quitting.Classification.LCP.All
@@ -1207,6 +1203,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonCa
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonZeroRetentionCarrier
 import UniformEquilibrium.Quitting.Classification.OnePlayer.Existence
 import UniformEquilibrium.Quitting.Classification.PlayerDeletion
+import UniformEquilibrium.Quitting.Classification.PlayerDeletionLift
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
 import UniformEquilibrium.Quitting.Classification.PlayerReindexNaturality
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
@@ -1218,6 +1215,7 @@ import UniformEquilibrium.Quitting.Classification.SingletonPacketEnergy
 import UniformEquilibrium.Quitting.Classification.SingletonPacketPreferenceLassoCirculation
 import UniformEquilibrium.Quitting.Classification.SingletonPacketRefusal
 import UniformEquilibrium.Quitting.Classification.SingletonPacketSupport
+import UniformEquilibrium.Quitting.Classification.SymmetricQuittingGame
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.AnalyticPacket
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.AuxiliaryShift
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.CyclicCompiler
@@ -1230,6 +1228,7 @@ import UniformEquilibrium.Quitting.Classification.ThreePlayer.SharedPunishmentTh
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.SingletonAlternative
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.SingletonDispatch
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.SingletonMixtureCompiler
+import UniformEquilibrium.Quitting.Classification.TwinMerging
 import UniformEquilibrium.Quitting.Classification.TwoPlayer.Existence
 import UniformEquilibrium.Quitting.Classification.TwoPlayer.PairRepair
 import UniformEquilibrium.Quitting.Conjecture.Basic
@@ -1237,6 +1236,7 @@ import UniformEquilibrium.Quitting.Conjecture.ReducedCapConjectureCounterexample
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
+import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 import UniformEquilibrium.Quitting.Cycles.BlockSurvival
 import UniformEquilibrium.Quitting.Cycles.CollisionAwareFiniteReturn
 import UniformEquilibrium.Quitting.Cycles.ConditionedDeletedClockMonopoly
@@ -1280,6 +1280,7 @@ import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
 import UniformEquilibrium.Quitting.Cycles.PeriodicFiniteHorizonRate
 import UniformEquilibrium.Quitting.Cycles.PeriodicNormalizedSeam
 import UniformEquilibrium.Quitting.Cycles.PeriodicPureTimeBellman
+import UniformEquilibrium.Quitting.Cycles.PeriodicRootResponseSystem
 import UniformEquilibrium.Quitting.Cycles.PeriodicWindowEvaluation
 import UniformEquilibrium.Quitting.Cycles.PerturbedCyclicWeightCycleExistenceHoleOccupied
 import UniformEquilibrium.Quitting.Cycles.PerturbedCyclicWeightNoExactCycle
@@ -1295,6 +1296,7 @@ import UniformEquilibrium.Quitting.Cycles.RelaxedCycleGainIsolatedCoordinate
 import UniformEquilibrium.Quitting.Cycles.ScaledCyclicWeightNoApproximateEquilibria
 import UniformEquilibrium.Quitting.Cycles.SingletonArcCycle
 import UniformEquilibrium.Quitting.Cycles.SoloEndpointIsolatedNegative
+import UniformEquilibrium.Quitting.Cycles.SoloPeriodicBlockCompiler
 import UniformEquilibrium.Quitting.Cycles.ThreeBranchDisjunction
 import UniformEquilibrium.Quitting.Cycles.WeightedRowMotionSeparation
 import UniformEquilibrium.Quitting.Debt.Dynamic.ChargeTimeCompactEdge
@@ -1380,6 +1382,7 @@ import UniformEquilibrium.Quitting.EssentialAPS.UniformWindowMass
 import UniformEquilibrium.Quitting.EssentialAPS.UniformWindowMassLive
 import UniformEquilibrium.Quitting.Examples.BlockPair.All
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingleton
+import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonBlockCertificate
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonLCP
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwo
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwoStationary
@@ -1457,6 +1460,7 @@ import UniformEquilibrium.Quitting.Punishment.ApproximateCompletedCycle
 import UniformEquilibrium.Quitting.Punishment.BlockerIntervalCover
 import UniformEquilibrium.Quitting.Punishment.CoalitionLock
 import UniformEquilibrium.Quitting.Punishment.CompletedCycle
+import UniformEquilibrium.Quitting.Punishment.ContinueFloor
 import UniformEquilibrium.Quitting.Punishment.Floor
 import UniformEquilibrium.Quitting.Punishment.FreeReduction
 import UniformEquilibrium.Quitting.Punishment.InstantPunishment
@@ -1494,6 +1498,7 @@ import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixMetric
 import UniformEquilibrium.Quitting.Stationary.BestResponse
+import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier
 import UniformEquilibrium.Quitting.Stationary.Gain

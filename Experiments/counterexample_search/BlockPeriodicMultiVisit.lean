@@ -4,7 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.BlockPeriodicProfile
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicBlockProfile
+import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 
 /-!
 # A period-three schedule with unequal visit multiplicities
@@ -139,7 +140,7 @@ theorem quittingBlockCycle_multiVisitHazard (k : Fin 3) :
       (by rw [quittingHazardCoin_true_toReal, quittingHazardCoin_true_toReal,
             multiVisitHazard, if_pos rfl])
   · rw [quittingSoloMixedRoot_of_ne hwho]
-    exact quittingHazardCoin_eq_pure_false (multiVisitHazard_nonneg k who)
+    exact quittingHazardCoin_eq_pure_false_of_quitMass_zero (multiVisitHazard_nonneg k who)
       (multiVisitHazard_le_one k who)
       (by rw [quittingHazardCoin_true_toReal, multiVisitHazard, if_neg hwho])
 

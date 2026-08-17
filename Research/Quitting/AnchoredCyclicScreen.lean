@@ -54,11 +54,19 @@ cyclic family and identifies it with the repository's Bellman cap recursion
 along the periodic live path.  It also records the matching lower bound
 `quittingAnchoredCyclicQuitValue_le_responseCap`: quitting at the opening phase
 is one of the deviations the cap ranges over, so a schedule whose opening quit
-value already beats its on-path value is rejected.  The passage from a solution of that system to
-the evaluator's response cap is *not* proved here.  Its
-deterministic-stop half is (`quittingAnchoredCyclicPhaseStop_le`); its
-refusal half is carried as the explicit hypothesis `hrefusal` of
-`exists_anchoredCyclicResponse_gain`.
+value already beats its on-path value is rejected.  The passage from a solution
+of that system to the evaluator's response cap splits into two halves.  The
+deterministic-stop half is `quittingAnchoredCyclicPhaseStop_le`, proved here.
+The refusal half is carried here as the explicit hypothesis `hrefusal` of
+`exists_anchoredCyclicResponse_gain`, and is discharged in
+`Research/Quitting/AnchoredCyclicRenewal.lean`: the refusal identity evaluates
+refusal against an anchored cyclic profile as the on-path value of the same
+schedule with the refuser's own phases zeroed, which gives
+`quittingAnchoredCyclicResponseCap_le_of_response`.  Its one residual — a
+player owning every phase that carries positive hazard needs a nonnegative
+solution coordinate — is removed by the spectator condition in
+`quittingAnchoredCyclicResponseCap_le_of_response_of_spectatorHazard` and
+`exists_anchoredCyclicResponse_gain_of_exists_spectatorHazard`.
 -/
 
 noncomputable section

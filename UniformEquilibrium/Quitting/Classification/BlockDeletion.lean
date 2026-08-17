@@ -4,27 +4,36 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCoalitionToggleDeletion
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.SmallPlayers
 import UniformEquilibrium.Quitting.Boundary.Exceptional.InfiniteLTG
-import UniformEquilibrium.Quitting.Classification.PlayerReindex
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
+import UniformEquilibrium.Quitting.Paths.SureExitSet
+import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 
 /-!
 # Deleting a whole block of universal Never players
 
-`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlayerDeletion.lean`
-restricts a quitting table to the complement of a single player.  This module
-restricts the table to the complement of an arbitrary `Finset` of players at
-once and supplies the same naturality: a behavioral profile of the survivor
-game lifts to the original game by making every deleted player Continue
-surely, and every surviving player's on-path payoff and arbitrary behavioral
-deviation payoff are exactly preserved.
+`UniformEquilibrium/Quitting/Classification/PlayerDeletionLift.lean` restricts
+a quitting table to the complement of a single player.  This module restricts
+the table to the complement of an arbitrary `Finset` of players at once and
+supplies the same naturality: a behavioral profile of the survivor game lifts
+to the original game by making every deleted player Continue surely, and every
+surviving player's on-path payoff and arbitrary behavioral deviation payoff are
+exactly preserved.
 
 The construction is kept at the live-root level.  This loses no behavioral
 generality in a quitting game: terminal payoffs and arbitrary unilateral
 behavioral deviations depend only on the unique all-Continue public history.
+
+`QuittingBlockDispensable` is the deletion gate, a pair of finite table checks:
+the block form of `QuittingOwnerJoinAntitone` over the survivors, and a solo
+reward at most the survivor continue floor.  When every member of the block
+passes it, `hasTerminalExploitabilityGap_deleteBlock_of_dispensable` carries a
+witnessed terminal exploitability gap to the survivor table with no loss, and
+`exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable` carries a
+uniform-equilibrium payoff back, unchanged at every survivor.  Deleting a whole
+block at once is a weaker demand than deleting its members one at a time,
+because the gate quantifies only over coalitions of survivors.
 -/
 
 noncomputable section
@@ -32,6 +41,7 @@ noncomputable section
 namespace GameTheory
 
 open StochasticGame Filter Math.Probability Math.PMFProduct
+open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -847,6 +857,92 @@ theorem quittingBlockContinueFloor_le
   exact Finset.mem_image.mpr
     ⟨⟨S, hS⟩, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hdisjoint⟩, rfl⟩
 
+/-- The continue floor is the greatest nonpositive lower bound of the
+survivor rewards. -/
+theorem le_quittingBlockContinueFloor
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
+    (owner : ι) {value : ℝ} (hzero : value ≤ 0)
+    (hrow : ∀ (S : Finset ι) (hS : S.Nonempty), Disjoint S B →
+      value ≤ reward ⟨S, hS⟩ owner) :
+    value ≤ quittingBlockContinueFloor reward B owner := by
+  classical
+  unfold quittingBlockContinueFloor
+  refine Finset.le_min' _ _ _ ?_
+  intro entry hentry
+  rcases Finset.mem_insert.mp hentry with hzeroEntry | hmem
+  · exact hzeroEntry ▸ hzero
+  · obtain ⟨terminal, hterminal, rfl⟩ := Finset.mem_image.mp hmem
+    exact hrow terminal.1 terminal.2 (Finset.mem_filter.mp hterminal).2
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- Set rewards of the survivor game are set rewards of the original table at
+the corresponding coalition of survivors. -/
+theorem quittingSetReward_deleteBlockReward
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
+    (E : Finset (QuittingBlockSurvivor B)) (who : QuittingBlockSurvivor B) :
+    quittingSetReward (quittingDeleteBlockReward reward B) E who =
+      quittingSetReward reward
+        (E.map (Function.Embedding.subtype (p := fun w : ι => w ∉ B))) who.1 := by
+  by_cases hE : E.Nonempty
+  · rw [quittingSetReward_of_nonempty _ hE,
+      quittingSetReward_of_nonempty _ (Finset.map_nonempty.mpr hE)]
+    rfl
+  · rw [Finset.not_nonempty_iff_eq_empty.mp hE]
+    simp [quittingSetReward]
+
+omit [Fintype ι] in
+/-- **Reading survivor sure exit sets off the original table.**  A set of
+survivors exits surely in the survivor game exactly when its image passes the
+membership toggles of the original table at the survivors. -/
+theorem isQuittingSureExitSet_deleteBlockReward_iff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
+    (E : Finset (QuittingBlockSurvivor B)) :
+    IsQuittingSureExitSet (quittingDeleteBlockReward reward B) E ↔
+      (∀ member ∈ E.map (Function.Embedding.subtype (p := fun w : ι => w ∉ B)),
+          quittingSetReward reward
+              ((E.map (Function.Embedding.subtype
+                (p := fun w : ι => w ∉ B))).erase member) member ≤
+            quittingSetReward reward
+              (E.map (Function.Embedding.subtype
+                (p := fun w : ι => w ∉ B))) member) ∧
+        ∀ outsider ∉ B,
+          outsider ∉ E.map (Function.Embedding.subtype
+              (p := fun w : ι => w ∉ B)) →
+            quittingSetReward reward
+                (insert outsider (E.map (Function.Embedding.subtype
+                  (p := fun w : ι => w ∉ B)))) outsider ≤
+              quittingSetReward reward
+                (E.map (Function.Embedding.subtype
+                  (p := fun w : ι => w ∉ B))) outsider := by
+  classical
+  constructor
+  · rintro ⟨hmember, houtsider⟩
+    refine ⟨fun member hmem => ?_, fun outsider hout hmem => ?_⟩
+    · obtain ⟨survivor, hsurvivor, rfl⟩ := Finset.mem_map.mp hmem
+      have hstep := hmember survivor hsurvivor
+      rw [quittingSetReward_deleteBlockReward,
+        quittingSetReward_deleteBlockReward, Finset.map_erase] at hstep
+      exact hstep
+    · have hsurvivor : (⟨outsider, hout⟩ : QuittingBlockSurvivor B) ∉ E := by
+        intro hcontra
+        exact hmem (Finset.mem_map_of_mem _ hcontra)
+      have hstep := houtsider ⟨outsider, hout⟩ hsurvivor
+      rw [quittingSetReward_deleteBlockReward,
+        quittingSetReward_deleteBlockReward, Finset.map_insert] at hstep
+      exact hstep
+  · rintro ⟨hmember, houtsider⟩
+    refine ⟨fun survivor hsurvivor => ?_, fun survivor hsurvivor => ?_⟩
+    · rw [quittingSetReward_deleteBlockReward,
+        quittingSetReward_deleteBlockReward, Finset.map_erase]
+      exact hmember survivor.1 (Finset.mem_map_of_mem _ hsurvivor)
+    · rw [quittingSetReward_deleteBlockReward,
+        quittingSetReward_deleteBlockReward, Finset.map_insert]
+      refine houtsider survivor.1 survivor.2 ?_
+      intro hcontra
+      obtain ⟨other, hother, heq⟩ := Finset.mem_map.mp hcontra
+      have hsame : other = survivor := Subtype.ext heq
+      exact hsurvivor (hsame ▸ hother)
+
 /-- **The block dispensability gate.**  Player `owner` weakly loses by joining
 every coalition of survivors, and its solo reward is at most its continue
 floor over the survivors.  Both clauses are finite table checks. -/
@@ -926,59 +1022,6 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_blockDispensable
       ⟨gap, hgap,
         hasTerminalExploitabilityGap_deleteBlock_of_dispensable reward B hgap
           hexploit hgate⟩) hsurvivor
-
-/-! ## The unconditional small-survivor producer -/
-
-/-- Every finite quitting game with at most three players has a
-uniform-equilibrium payoff.  This collects the unconditional one-, two-, and
-three-player existence theorems and the empty player type. -/
-theorem quittingGame_exists_uniformEquilibriumPayoff_of_card_le_three
-    {κ : Type} [Fintype κ] [DecidableEq κ] (hcard : Fintype.card κ ≤ 3)
-    (reward : {S : Finset κ // S.Nonempty} → Payoff κ) :
-    ∃ payoff : Payoff κ,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  interval_cases hcase : Fintype.card κ
-  · letI : IsEmpty κ := Fintype.card_eq_zero_iff.mp hcase
-    by_contra hno
-    obtain ⟨regime⟩ :=
-      (not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
-        reward).1 hno
-    exact QuittingCounterexampleRegime.elim_isEmpty regime
-  · letI : Unique κ := (Fintype.card_eq_one_iff_nonempty_unique.mp hcase).some
-    exact quittingGame_exists_uniformEquilibriumPayoff_onePlayer reward
-  · exact quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_two hcase reward
-  · exact quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_three hcase reward
-
-/-- **The unconditional small-survivor producer.**  At any player count, a
-finite quitting game whose players outside a block of at most three survivors
-all pass the block gate has a uniform-equilibrium payoff.  No minimality or
-induction hypothesis is used: the survivor game is solved outright by the
-small-cardinality existence theorems. -/
-theorem quittingGame_exists_uniformEquilibriumPayoff_of_blockDispensable_card_le_three
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (hgate : ∀ d ∈ B, QuittingBlockDispensable reward B d)
-    (hcard : Fintype.card (QuittingBlockSurvivor B) ≤ 3) :
-    ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
-  quittingGame_exists_uniformEquilibriumPayoff_of_blockDispensable reward B hgate
-    (quittingGame_exists_uniformEquilibriumPayoff_of_card_le_three hcard
-      (quittingDeleteBlockReward reward B))
-
-/-- **The minimal-counterexample necessary condition.**  A finite quitting
-game with no uniform-equilibrium payoff has, for every block whose survivors
-number at most three, a member of that block failing the gate.  The statement
-carries no minimality hypothesis. -/
-theorem exists_not_blockDispensable_of_not_exists_uniformEquilibriumPayoff
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (hno : ¬ ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
-    (B : Finset ι) (hcard : Fintype.card (QuittingBlockSurvivor B) ≤ 3) :
-    ∃ d ∈ B, ¬ QuittingBlockDispensable reward B d := by
-  by_contra hall
-  push Not at hall
-  exact hno
-    (quittingGame_exists_uniformEquilibriumPayoff_of_blockDispensable_card_le_three
-      reward B hall hcard)
 
 /-! ## The producer with the survivors' payoff preserved -/
 
@@ -1118,5 +1161,6 @@ theorem exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable
     refine Filter.Frequently.of_forall fun step => ?_
     exact isεAsymptoticNash_liftBlockProfile reward B hgate
       (herrorPos (subsequence step)).le (hnash (subsequence step))
+
 
 end GameTheory
