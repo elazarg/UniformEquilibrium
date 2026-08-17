@@ -39,8 +39,11 @@ the two with the stopping bounds of
   positive terminal exploitability gap, an exact solo root sequence has
   summable joint absorption charge unless some coordinate's opponent clock is
   summable.  `summable_absorptionCharge_or_lonelyNegativeSoloist` sharpens the
-  exceptional branch to a strictly negative singleton reward, conditional on
-  the refusal estimate `QuittingLonelyRefusalCap`.
+  exceptional branch to a strictly negative singleton reward: a lonely soloist
+  is cofinally the designated quitter
+  (`exists_isQuittingSoloRoot_of_not_summable_absorptionCharge`), which floors
+  its prescribed value at its own singleton reward and caps refusal
+  (`quittingRootSequencePureTimeTerminalValue_none_le_value_of_cofinalSolo`).
 -/
 
 noncomputable section
@@ -352,53 +355,167 @@ theorem isεAsymptoticNash_rootSequenceProfile_of_exactSoloTail
 
 /-! ## Hazard summability -/
 
-/-- **Hazard summability.**  Under a positive terminal exploitability gap, an
-exact solo root sequence has summable joint absorption charge unless some
-coordinate's opponent clock is summable -- the lonely soloist, which carries
-all the divergence by itself. -/
-theorem summable_absorptionCharge_or_lonelySoloist_of_exactSoloTail
-    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
+/-! ## The lonely branch -/
+
+/-- Refusal, unrolled: the ledger collected over the first `fuel` dates plus
+the surviving stake times the refusal value from there. -/
+theorem quittingRootSequencePureTimeTerminalValue_none_eq_ledger_add_survival
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (fuel : ℕ) :
+    quittingRootSequencePureTimeTerminalValue reward roots who none 0 =
+      quittingLiveLedgerAccum reward roots who 0 fuel +
+        quittingOpponentSurvivalWeight roots who 0 fuel *
+          quittingRootSequencePureTimeTerminalValue reward roots who none
+            fuel := by
+  induction fuel with
+  | zero => simp [quittingLiveLedgerAccum, quittingOpponentSurvivalWeight]
+  | succ fuel ih =>
+      have hstep :=
+        quittingRootSequencePureTimeTerminalValue_none_succ_eq_fixedOpponents
+          reward roots who fuel
+      have hledger : quittingLiveLedgerAccum reward roots who 0 (fuel + 1) =
+          quittingLiveLedgerAccum reward roots who 0 fuel +
+            quittingOpponentSurvivalWeight roots who 0 fuel *
+              quittingFixedOpponentsContinueReward reward roots who fuel := by
+        rw [quittingLiveLedgerAccum, Finset.sum_range_succ,
+          ← quittingLiveLedgerAccum, Nat.zero_add]
+      rw [hledger, quittingOpponentSurvivalWeight_succ, Nat.zero_add, ih, hstep]
+      ring
+
+/-- **The surviving stake in refusal vanishes.**  The ledger converges to the
+refusal value, so the residual term of the unrolling tends to zero.  No
+summability of the opponent clock is needed: the ledger's convergence is the
+definition of the refusal value. -/
+theorem tendsto_survivalWeight_mul_refusalValue_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) :
+    Tendsto (fun fuel => quittingOpponentSurvivalWeight roots who 0 fuel *
+        quittingRootSequencePureTimeTerminalValue reward roots who none fuel)
+      atTop (nhds 0) := by
+  have hledger := tendsto_quittingLiveLedgerAccum reward roots who
+  have hconst : Tendsto (fun _ : ℕ =>
+      quittingRootSequencePureTimeTerminalValue reward roots who none 0) atTop
+      (nhds (quittingRootSequencePureTimeTerminalValue reward roots who
+        none 0)) := tendsto_const_nhds
+  have hdiff := hconst.sub hledger
+  simp only [sub_self] at hdiff
+  refine hdiff.congr fun fuel => ?_
+  have hunroll :=
+    quittingRootSequencePureTimeTerminalValue_none_eq_ledger_add_survival reward
+      roots who fuel
+  linarith
+
+/-- At a date whose only possible quitter is `who`, exact root Nash floors
+`who`'s prescribed value at its own singleton reward: quitting alone is
+available and meets no collision. -/
+theorem quittingSoloReward_le_value_of_isQuittingSoloRoot
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
-    {bound : ℝ} (hbounded : ∀ time player, |value time player| ≤ bound)
-    {rewardBound : ℝ}
-    (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time))
-    {gap : ℝ} (hgapPos : 0 < gap)
-    (hexploit : HasTerminalExploitabilityGap reward gap) :
-    Summable (quittingRootSequenceAbsorptionCharge roots) ∨
-      ∃ who, Summable (quittingOpponentClockCharge roots who) := by
+    {who : ι} {time : ℕ} (hsolo : IsQuittingSoloRoot (roots time) who) :
+    quittingSoloReward reward who who ≤ value time who := by
+  have hquit := quittingRootQuitPayoff_le_successor_of_isZeroNash reward
+    (value (time + 1)) (roots time) who
+    ((isεQuittingRootEndpointNash_iff_isεQuittingRootNash reward
+      (value (time + 1)) 0 (roots time)).1 (hnash time))
+  rw [hsolo.quitPayoff_owner reward (value (time + 1))] at hquit
+  rw [hpolicy time]
+  exact hquit
+
+/-- **Refusal cap in the lonely branch.**  If `who` is the sole possible
+quitter at arbitrarily late dates and its own singleton reward is nonnegative,
+then refusing to quit is capped by `who`'s prescribed value.
+
+The late solo dates floor `who`'s prescribed value at a nonnegative number,
+while the surviving stake in the refusal unrolling vanishes, so the refusal
+displacement is squeezed to zero.  Neither the opponent clock's summability
+nor a bound on the value sequence enters. -/
+theorem quittingRootSequencePureTimeTerminalValue_none_le_value_of_cofinalSolo
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    (who : ι)
+    (hwindow : ∀ time, QuittingSoloDeviationDate roots who time)
+    (hcofinal : ∀ start, ∃ time, start ≤ time ∧
+      IsQuittingSoloRoot (roots time) who)
+    (hnonneg : 0 ≤ quittingSoloReward reward who who) :
+    quittingRootSequencePureTimeTerminalValue reward roots who none 0 ≤
+      value 0 who := by
   by_contra hcontra
   push Not at hcontra
-  obtain ⟨hjoint, hclock⟩ := hcontra
-  have hequilibrium := isεAsymptoticNash_rootSequenceProfile_of_exactSoloTail
-    roots value owner hpolicy hnash hbounded hreward hsolo hjoint hclock
-  obtain ⟨who, deviation, hbeat⟩ :=
-    hexploit (quittingRootSequenceProfile reward roots 0)
-  have hcap := hequilibrium who deviation
-  rw [add_zero] at hcap
-  linarith
+  set gap := quittingRootSequencePureTimeTerminalValue reward roots who none 0 -
+    value 0 who with hgap
+  have hgapPos : 0 < gap := by rw [hgap]; linarith
+  obtain ⟨start, hstart⟩ := eventually_atTop.1
+    ((tendsto_order.1 (tendsto_survivalWeight_mul_refusalValue_zero reward roots
+      who)).2 gap hgapPos)
+  obtain ⟨time, htime, hsolo⟩ := hcofinal start
+  have hstep := quittingRootSequencePureTimeTerminalValue_none_sub_value_le roots
+    value (fun _ => 0) hpolicy hnash (fun _ => le_rfl) who 0 time
+    (fun offset _ => hwindow (0 + offset))
+  simp only [quittingDeviatorSlackBudget, mul_zero, Finset.sum_const_zero,
+    add_zero, Nat.zero_add] at hstep
+  have hvalue : 0 ≤ value time who :=
+    hnonneg.trans (quittingSoloReward_le_value_of_isQuittingSoloRoot roots value
+      hpolicy hnash hsolo)
+  have hweight := quittingOpponentSurvivalWeight_nonneg roots who 0 time
+  have hlate := hstart time htime
+  nlinarith [hstep, hvalue, hweight, hlate]
 
-/-! ## The lonely branch -/
+/-- At a solo date whose designated quitter is not `who`, `who`'s opponent
+clock charge is the whole joint absorption charge. -/
+theorem quittingOpponentClockCharge_eq_absorptionCharge_of_ne
+    (roots : ℕ → ι → PMF Bool) {owner who : ι} {time : ℕ}
+    (hsolo : IsQuittingSoloRoot (roots time) owner) (hne : who ≠ owner) :
+    quittingOpponentClockCharge roots who time =
+      quittingRootSequenceAbsorptionCharge roots time := by
+  have hpure : roots time who = PMF.pure false := hsolo who hne
+  have hupdate : Function.update (roots time) who (PMF.pure false) =
+      roots time := by
+    rw [← hpure]
+    exact Function.update_eq_self who (roots time)
+  rw [quittingOpponentClockCharge_eq_one_sub,
+    quittingFixedOpponentsContinueMass, hupdate]
+  rfl
 
-/-- **Lonely refusal cap.**  On a root sequence at which `who`'s opponents
-absorb with positive residual probability and `who`'s own singleton reward is
-nonnegative, refusing to quit is capped by `who`'s prescribed value. -/
-def QuittingLonelyRefusalCap
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (who : ι) : Prop :=
-  Summable (quittingOpponentClockCharge roots who) →
-    0 ≤ quittingSoloReward reward who who →
-      quittingRootSequencePureTimeTerminalValue reward roots who none 0 ≤
-        value 0 who
+/-- **The lonely soloist is cofinally the designated quitter.**  If the joint
+absorption charge diverges while `who`'s opponent clock is summable, then at
+arbitrarily late dates `who` is the only coordinate that may quit: on every
+suffix where it is not, the two charges agree termwise. -/
+theorem exists_isQuittingSoloRoot_of_not_summable_absorptionCharge
+    (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι)
+    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time)) (who : ι)
+    (hjoint : ¬ Summable (quittingRootSequenceAbsorptionCharge roots))
+    (hclock : Summable (quittingOpponentClockCharge roots who))
+    (start : ℕ) :
+    ∃ time, start ≤ time ∧ IsQuittingSoloRoot (roots time) who := by
+  by_contra hcontra
+  push Not at hcontra
+  refine hjoint ?_
+  have hagree : ∀ offset : ℕ,
+      quittingOpponentClockCharge roots who (offset + start) =
+        quittingRootSequenceAbsorptionCharge roots (offset + start) := by
+    intro offset
+    have hne : who ≠ owner (offset + start) := by
+      intro heq
+      refine hcontra (offset + start) (by omega) ?_
+      rw [heq]
+      exact hsolo (offset + start)
+    exact quittingOpponentClockCharge_eq_absorptionCharge_of_ne roots
+      (hsolo (offset + start)) hne
+  have hshift : Summable fun offset =>
+      quittingRootSequenceAbsorptionCharge roots (offset + start) :=
+    ((summable_nat_add_iff start).2 hclock).congr hagree
+  exact (summable_nat_add_iff start).1 hshift
 
 /-- **Hazard summability, sharpened exceptional branch.**  Under a positive
-terminal exploitability gap and the lonely refusal estimate at every
-coordinate, an exact solo root sequence has summable joint absorption charge
-unless some coordinate is a lonely soloist with a strictly negative singleton
-reward. -/
+terminal exploitability gap, an exact solo root sequence has summable joint
+absorption charge unless some coordinate is a lonely soloist -- its opponent
+clock summable -- with a strictly negative singleton reward. -/
 theorem summable_absorptionCharge_or_lonelyNegativeSoloist
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
     (hpolicy : ∀ time, value time =
@@ -409,7 +526,6 @@ theorem summable_absorptionCharge_or_lonelyNegativeSoloist
     {rewardBound : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
     (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time))
-    (hlonely : ∀ who, QuittingLonelyRefusalCap reward roots value who)
     {gap : ℝ} (hgapPos : 0 < gap)
     (hexploit : HasTerminalExploitabilityGap reward gap) :
     Summable (quittingRootSequenceAbsorptionCharge roots) ∨
@@ -429,7 +545,10 @@ theorem summable_absorptionCharge_or_lonelyNegativeSoloist
         value 0 who := by
     intro who
     by_cases hsummable : Summable (quittingOpponentClockCharge roots who)
-    · exact hlonely who hsummable (hbranch who hsummable)
+    · exact quittingRootSequencePureTimeTerminalValue_none_le_value_of_cofinalSolo
+        roots value hpolicy hnash who (hwindow who)
+        (exists_isQuittingSoloRoot_of_not_summable_absorptionCharge roots owner
+          hsolo who hjoint hsummable) (hbranch who hsummable)
     · exact
         quittingRootSequencePureTimeTerminalValue_none_le_value_of_divergentClock
           roots value hpolicy hnash hbounded hreward who (hwindow who) hsummable
@@ -442,5 +561,29 @@ theorem summable_absorptionCharge_or_lonelyNegativeSoloist
     (hhonest who).symm
   rw [hprofile] at hbeat
   linarith
+
+/-- **Hazard summability.**  Under a positive terminal exploitability gap, an
+exact solo root sequence has summable joint absorption charge unless some
+coordinate's opponent clock is summable -- the lonely soloist, which carries
+all the divergence by itself. -/
+theorem summable_absorptionCharge_or_lonelySoloist_of_exactSoloTail
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    {bound : ℝ} (hbounded : ∀ time player, |value time player| ≤ bound)
+    {rewardBound : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
+    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time))
+    {gap : ℝ} (hgapPos : 0 < gap)
+    (hexploit : HasTerminalExploitabilityGap reward gap) :
+    Summable (quittingRootSequenceAbsorptionCharge roots) ∨
+      ∃ who, Summable (quittingOpponentClockCharge roots who) := by
+  rcases summable_absorptionCharge_or_lonelyNegativeSoloist roots value owner
+    hpolicy hnash hbounded hreward hsolo hgapPos hexploit with
+    hsummable | ⟨who, hclock, -⟩
+  · exact Or.inl hsummable
+  · exact Or.inr ⟨who, hclock⟩
 
 end GameTheory
