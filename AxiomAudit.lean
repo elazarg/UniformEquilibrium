@@ -220,6 +220,7 @@ import MathUE.LinearProgramming.Basic
 import MathUE.LinearProgramming.CirculantPocketR0
 import MathUE.LinearProgramming.ClosedTrapPerturbation
 import MathUE.LinearProgramming.ColumnSumQ
+import MathUE.LinearProgramming.CopositiveMargin
 import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
 import MathUE.LinearProgramming.FlowCostateDuality
@@ -468,6 +469,7 @@ import Research.Quitting.BlockPair.K11.KrawczykConditionalData
 import Research.Quitting.BlockPair.K11.KrawczykConditionalSemantic
 import Research.Quitting.BlockPair.K11.PhaseValueRecurrence
 import Research.Quitting.BlockPair.K11.RowZeroSemantic
+import Research.Quitting.BlockPeriodicProfile
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
 import Research.Quitting.CausalTailEscapeMaxAbsorptionDispatch

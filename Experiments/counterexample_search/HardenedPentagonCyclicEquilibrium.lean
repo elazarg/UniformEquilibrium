@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Experiments.counterexample_search.RegularTournamentFiveSeed
+import Research.Quitting.AnchoredCyclicRenewal
 import Research.Quitting.AnchoredCyclicScreen
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 
@@ -39,6 +40,20 @@ Consequences recorded below: `H` carries no `QuittingCounterexampleRegime`,
 and — through the anchored cyclic screen — its response cap never beats the
 on-path renewal value.  This is a checked statement about one table, not a
 general theorem about the pentagon geometry.
+
+The two exclusions are obtained from disjoint inputs.
+`hardened_isEmpty_counterexampleRegime` runs through the uniform-equilibrium
+payoff and the terminal exploitability gap.
+`hardened_isEmpty_counterexampleRegime_via_screen` instead solves two finite
+systems on the same schedule with exact rational data: the twenty-five renewal
+equations of `isAnchoredCyclicRenewalSolution_responseSolution`, which pin the
+on-path value by uniqueness because survival around one pass is `(1/2) ^ 5`,
+and the twenty-five max equations of
+`isAnchoredCyclicResponseSolution_responseSolution`, which cap the exact
+behavioral best response.  Its refusal branch is closed by the spectator
+condition `exists_spectatorHazard`.  Neither the cyclic continuation block, its
+admissibility, the uniform-equilibrium payoff, nor the profile's asymptotic
+Nash property enters that route.
 -/
 
 noncomputable section
@@ -319,21 +334,80 @@ theorem quittingCyclicContinuationBlockCycle_eq_anchoredCyclicCycle :
     quittingRootOfSimplex_phaseSimplexRoot]
   rfl
 
+/-! ### The exact rational solution of the max-linear response system -/
+
+/-- The candidate cap: the block's own phase values, read as a phase-indexed
+family of real vectors. -/
+def responseSolution : Fin 5 → Player → ℝ :=
+  fun phase ↦ phaseValue (Fin.castSucc phase)
+
+theorem responseSolution_start : responseSolution (quittingAnchoredCyclicStart 5)
+    = target := rfl
+
+/-- Survival around one full pass is `(1/2) ^ 5`, so the cycle absorbs. -/
+theorem prod_one_sub_hazard : ∏ k : Fin 5, (1 - hazard k) = 1 / 32 := by
+  rw [Fin.prod_univ_five]
+  norm_num [hazard]
+
+/-- **The twenty-five renewal equations.**  The displayed phase values solve
+the anchored cyclic renewal system of this schedule. -/
+theorem isAnchoredCyclicRenewalSolution_responseSolution :
+    IsAnchoredCyclicRenewalSolution hardenedReward schedule hazard
+      responseSolution := by
+  intro phase who
+  fin_cases phase <;> fin_cases who <;>
+    simp [responseSolution, schedule, phaseValue, hazard] <;> norm_num
+
+/-- **The twenty-five max equations.**  The same phase values solve the
+max-linear response system: at every phase the Continue branch already attains
+the value and the Quit branch never exceeds it. -/
+theorem isAnchoredCyclicResponseSolution_responseSolution :
+    IsAnchoredCyclicResponseSolution hardenedReward schedule hazard
+      responseSolution := by
+  intro phase who
+  rw [quittingAnchoredCyclicQuitValue, quittingAnchoredCyclicContinueValue]
+  fin_cases phase <;> fin_cases who <;>
+    simp [responseSolution, schedule, phaseValue, hazard, hardenedReward_pair] <;>
+    norm_num
+
+/-- Every player sits out some phase carrying positive hazard, since the
+schedule visits all five players and every hazard is `1/2`. -/
+theorem exists_spectatorHazard (who : Player) :
+    ∃ k, schedule k ≠ who ∧ 0 < hazard k := by
+  refine ⟨if who = 0 then 1 else 0, ?_, by norm_num [hazard]⟩
+  fin_cases who <;> decide
+
+/-- The anchored cyclic on-path value of this schedule is the phase-value
+family, by uniqueness of the renewal solution: survival around one pass is
+`1/32`, so the renewal system is contracting. -/
+theorem quittingAnchoredCyclicOnPathValue_eq_responseSolution :
+    quittingAnchoredCyclicOnPathValue hardenedReward schedule hazard
+        hazard_nonneg hazard_le_one = responseSolution :=
+  eq_of_isAnchoredCyclicRenewalSolution
+    (quittingAnchoredCyclicOnPathValue_isAnchoredCyclicRenewalSolution
+      hardenedReward schedule hazard hazard_nonneg hazard_le_one)
+    isAnchoredCyclicRenewalSolution_responseSolution
+    (by rw [prod_one_sub_hazard]; norm_num)
+
 /-- The anchored cyclic on-path value of this schedule is exactly the
 rational target `(1, 1, 1, 2, 2)`. -/
 theorem quittingAnchoredCyclicOnPathValue_eq_target :
     quittingAnchoredCyclicOnPathValue hardenedReward schedule hazard
         hazard_nonneg hazard_le_one (quittingAnchoredCyclicStart 5) = target := by
-  have hvalue := eq_quittingCyclicTerminalValue_of_rootSuccessorPayoff_of_absorbing
-    hardenedReward (quittingCyclicContinuationBlockCycle 4 hardenedBlock)
-    (quittingCyclicContinuationBlockValue 4 hardenedBlock)
-    (quittingCyclicContinuationBlock_policy hardenedReward target 4 hardenedBlock
-      hardenedBlock_isQuittingCyclicContinuationBlock)
-    (quittingCyclicContinuationBlock_prod_continueMass_lt_one hardenedReward target
-      4 hardenedBlock hardenedBlock_isQuittingCyclicContinuationBlock)
-  unfold quittingAnchoredCyclicOnPathValue
-  rw [← quittingCyclicContinuationBlockCycle_eq_anchoredCyclicCycle, ← hvalue]
-  rfl
+  rw [quittingAnchoredCyclicOnPathValue_eq_responseSolution,
+    responseSolution_start]
+
+/-- **The response cap, computed.**  The exact behavioral best-response
+statistic of this profile is at most the solved max-linear system, hence at
+most the rational target.  The inputs are the twenty-five max equations, the
+spectator condition, and nothing else. -/
+theorem quittingAnchoredCyclicResponseCap_le_target (who : Player) :
+    quittingAnchoredCyclicResponseCap hardenedReward schedule hazard
+        hazard_nonneg hazard_le_one who ≤ target who :=
+  quittingAnchoredCyclicResponseCap_le_of_response_of_spectatorHazard schedule
+    hazard hazard_nonneg hazard_le_one responseSolution
+    isAnchoredCyclicResponseSolution_responseSolution who
+    (exists_spectatorHazard who)
 
 /-- The pentagon's anchored cyclic profile is asymptotic Nash at accuracy zero
 for the terminal payoff: it is the profile of the certified cyclic
@@ -357,27 +431,31 @@ theorem isεAsymptoticNash_anchoredCyclicProfile :
 
 /-- **The anchored cyclic screen is satisfied with slack zero.**  No player's
 exact finite response cap beats the on-path renewal value of this schedule.
-The pentagon-specific input is `isεAsymptoticNash_anchoredCyclicProfile`; the
-passage from it to the cap bound is
-`quittingAnchoredCyclicResponseCap_le_onPathValue_of_isεAsymptoticNash`. -/
+Both sides are supplied by the solved finite systems: the cap by
+`quittingAnchoredCyclicResponseCap_le_target`, the on-path value by
+`quittingAnchoredCyclicOnPathValue_eq_target`.  No asymptotic Nash property of
+the profile enters. -/
 theorem quittingAnchoredCyclicResponseCap_le_onPathValue (who : Player) :
     quittingAnchoredCyclicResponseCap hardenedReward schedule hazard
         hazard_nonneg hazard_le_one who ≤
       quittingAnchoredCyclicOnPathValue hardenedReward schedule hazard
-        hazard_nonneg hazard_le_one (quittingAnchoredCyclicStart 5) who :=
-  quittingAnchoredCyclicResponseCap_le_onPathValue_of_isεAsymptoticNash
-    hardenedReward schedule hazard hazard_nonneg hazard_le_one
-    isεAsymptoticNash_anchoredCyclicProfile who
+        hazard_nonneg hazard_le_one (quittingAnchoredCyclicStart 5) who := by
+  rw [quittingAnchoredCyclicOnPathValue_eq_target]
+  exact quittingAnchoredCyclicResponseCap_le_target who
 
 /-- The same exclusion obtained through the screen's contrapositive rather
-than through the exploitability-gap incompatibility.  This is a checked
-downstream consumer of
-`QuittingCounterexampleRegime.isEmpty_of_anchoredCyclicCap_le`. -/
+than through the exploitability-gap incompatibility, and computed rather than
+read off an equilibrium: the inputs are the twenty-five max equations, the
+twenty-five renewal equations, the spectator condition, and the arithmetic
+`(1/2) ^ 5 ≠ 1`. -/
 theorem hardened_isEmpty_counterexampleRegime_via_screen :
     IsEmpty (QuittingCounterexampleRegime hardenedReward) :=
-  QuittingCounterexampleRegime.isEmpty_of_anchoredCyclicCap_le
-    schedule hazard hazard_nonneg hazard_le_one
-    quittingAnchoredCyclicResponseCap_le_onPathValue
+  isEmpty_of_anchoredCyclicResponseSolution_le schedule hazard hazard_nonneg
+    hazard_le_one responseSolution
+    isAnchoredCyclicResponseSolution_responseSolution exists_spectatorHazard
+    fun who ↦ le_of_eq
+      (congrFun (congrFun quittingAnchoredCyclicOnPathValue_eq_responseSolution
+        (quittingAnchoredCyclicStart 5)) who).symm
 
 end HardenedPentagonCyclicEquilibrium
 end GameTheory
