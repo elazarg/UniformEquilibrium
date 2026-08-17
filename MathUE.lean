@@ -130,6 +130,7 @@ import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
 import MathUE.LinearProgramming.FlowCostateDuality
 import MathUE.LinearProgramming.OneDimensionalAffineMinimax
+import MathUE.LinearProgramming.R0Margin
 import MathUE.LinearProgramming.SingletonLCP
 import MathUE.LinearProgramming.Standard
 import MathUE.LinearProgramming.StrongComplementarity

@@ -58,7 +58,16 @@ players in exact diffuse tails.
   windows are impossible along a strict solo-preemption edge, so the
   face-enlargement reading of an obstruction is unavailable there.
 * **T4(a)** (`QuittingSoloWindowPhaseStopBranch`): a proposition definition,
-  not a theorem.
+  not a theorem.  Its phase-stop conjunct is the conclusion of
+  `exists_phaseStopObstruction_of_soloWindows`, which needs the canonical
+  windows to be solo at `owner` and to deliver `owner` at least
+  `-terminalGap / 2`: a coordinate other than `owner` already continues surely
+  there, so its refusal reproduces the window's delivery
+  (`not_refusalObstruction_of_soloWindow`), while `owner`'s own refusal stops
+  all absorption and pays zero
+  (`quittingPeriodicWindowRefusalValue_eq_zero_of_soloRoots`).  What T4(a)
+  adds beyond that conjunct is the preemption edge at the obstructing
+  coordinate.
 
 Nothing in this file asserts that solo windows exist; every solo statement is
 conditional on being handed one.
@@ -692,6 +701,53 @@ theorem isEmpty_fencedSoloWindows_of_quittingSoloPreempts
   rw [hzero] at hentry
   linarith
 
+/-! ## Refusal is degenerate for a surely continuing coordinate -/
+
+/-- **Refusal changes nothing for a coordinate that already continues
+surely.**  Replacing such a coordinate's marginals by never-quit returns the
+prescribed root sequence, so its refusal value is its on-path value. -/
+theorem quittingPeriodicWindowRefusalValue_eq_of_continueSurely
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (hpure : ∀ time, roots time who = PMF.pure false) :
+    quittingPeriodicWindowRefusalValue reward roots who =
+      quittingRootSequenceTerminalValue reward roots who 0 := by
+  have hupdate : quittingRootSequenceUpdate roots who
+      (quittingPureTimeHazard none) = roots := by
+    funext time
+    rw [quittingRootSequenceUpdate, quittingPureTimeHazard_none, ← hpure time]
+    exact Function.update_eq_self who (roots time)
+  rw [quittingPeriodicWindowRefusalValue,
+    quittingRootSequencePureTimeTerminalValue,
+    quittingRootSequenceHazardTerminalValue, hupdate]
+
+/-- **The owner's refusal on a solo sequence stops all absorption.**  If every
+root is solo at `owner`, then replacing `owner`'s marginals by never-quit
+leaves the all-continue sequence, whose terminal payoff is zero. -/
+theorem quittingPeriodicWindowRefusalValue_eq_zero_of_soloRoots
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (owner : ι)
+    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) owner) :
+    quittingPeriodicWindowRefusalValue reward roots owner = 0 := by
+  have hupdate : quittingRootSequenceUpdate roots owner
+      (quittingPureTimeHazard none) =
+      fun _ => (quittingAllContinueRoot : ι → PMF Bool) := by
+    funext time player
+    rw [quittingRootSequenceUpdate, quittingPureTimeHazard_none]
+    by_cases hplayer : player = owner
+    · subst player
+      simp [quittingAllContinueRoot]
+    · rw [Function.update_of_ne hplayer, hsolo time player hplayer]
+      rfl
+  have hprofile : quittingRootSequenceProfile reward
+      (fun _ => (quittingAllContinueRoot : ι → PMF Bool)) 0 =
+      quittingAlwaysContinueProfile reward := rfl
+  rw [quittingPeriodicWindowRefusalValue,
+    quittingRootSequencePureTimeTerminalValue,
+    quittingRootSequenceHazardTerminalValue, hupdate,
+    quittingRootSequenceTerminalValue, hprofile]
+  exact quittingTerminalPayoff_quittingAlwaysContinue reward owner
+
 /-! ## The seam supplies active tightness -/
 
 namespace QuittingCounterexampleSeamWitness
@@ -716,11 +772,122 @@ theorem limitValue_eq_soloReward_of_persistentlyActive
     simp at hquit
   simpa using hstart time hle who hnotPure
 
+/-- **T4(a), refusal degeneracy.**  On a canonical periodic window whose every
+root is solo at `owner`, no other coordinate has a refusal obstruction: it
+already continues surely at every date of the window, so refusing to quit
+reproduces the window's own delivery. -/
+theorem not_refusalObstruction_of_soloWindow
+    (seam : QuittingCounterexampleSeamWitness regime) {window : ℕ}
+    {owner who : ι} (hne : who ≠ owner)
+    (hsolo : ∀ time, IsQuittingSoloRoot
+      (seam.canonicalPeriodicTailWindowFamily.roots window time) owner) :
+    ¬ regime.terminalGap / 2 <
+        quittingPeriodicWindowRefusalValue reward
+          (seam.canonicalPeriodicTailWindowFamily.roots window) who -
+          seam.canonicalPeriodicTailWindowFamily.delivery window who := by
+  have hpure : ∀ time,
+      seam.canonicalPeriodicTailWindowFamily.roots window time who =
+        PMF.pure false := fun time => hsolo time who hne
+  have hrefusal := quittingPeriodicWindowRefusalValue_eq_of_continueSurely
+    reward (seam.canonicalPeriodicTailWindowFamily.roots window) who hpure
+  have hdelivery : seam.canonicalPeriodicTailWindowFamily.delivery window who =
+      quittingRootSequenceTerminalValue reward
+        (seam.canonicalPeriodicTailWindowFamily.roots window) who 0 := rfl
+  rw [hrefusal, hdelivery, sub_self]
+  exact not_lt.2 (by linarith [regime.terminalGap_pos])
+
+/-- **T4(a), reduced to the owner's own refusal.**  On a seam whose canonical
+periodic windows are solo at `owner`, the stabilized obstruction of
+`exists_infinite_fixedPlayer_fixedBranch` is either `owner`'s own refusal or
+some coordinate's phase stop: every other coordinate's refusal obstruction set
+is empty. -/
+theorem soloWindows_ownerRefusal_or_phaseStop
+    (seam : QuittingCounterexampleSeamWitness regime) (owner : ι)
+    (hsolo : ∀ window time, IsQuittingSoloRoot
+      (seam.canonicalPeriodicTailWindowFamily.roots window time) owner) :
+    Set.Infinite {window : ℕ |
+        regime.terminalGap / 2 <
+          quittingPeriodicWindowRefusalValue reward
+            (seam.canonicalPeriodicTailWindowFamily.roots window) owner -
+            seam.canonicalPeriodicTailWindowFamily.delivery window owner} ∨
+      (∃ other, Set.Infinite {window : ℕ |
+        ∃ phase : Fin (window + 1),
+          regime.terminalGap / 2 <
+            quittingPeriodicWindowPhaseStopValue reward
+              (seam.canonicalPeriodicTailWindowFamily.roots window) other
+              phase -
+              seam.canonicalPeriodicTailWindowFamily.delivery window
+                other}) := by
+  rcases seam.exists_infinite_fixedPlayer_fixedBranch with
+    ⟨who, hinfinite⟩ | hphase
+  · by_cases hwho : who = owner
+    · subst who
+      exact Or.inl hinfinite
+    · obtain ⟨window, hwindow⟩ := hinfinite.nonempty
+      exact absurd hwindow
+        (seam.not_refusalObstruction_of_soloWindow hwho (hsolo window))
+  · exact Or.inr hphase
+
+/-- **T4(a), reduced to the owner's on-path delivery.**  On a seam whose
+canonical periodic windows are solo at `owner`, the stabilized obstruction is
+either an infinite family of windows whose delivery to `owner` falls below
+`-terminalGap / 2`, or some coordinate's phase stop.  The owner's refusal
+stops all absorption, so its refusal obstruction is exactly a negative
+delivery. -/
+theorem soloWindows_negativeOwnerDelivery_or_phaseStop
+    (seam : QuittingCounterexampleSeamWitness regime) (owner : ι)
+    (hsolo : ∀ window time, IsQuittingSoloRoot
+      (seam.canonicalPeriodicTailWindowFamily.roots window time) owner) :
+    Set.Infinite {window : ℕ |
+        seam.canonicalPeriodicTailWindowFamily.delivery window owner <
+          -(regime.terminalGap / 2)} ∨
+      (∃ other, Set.Infinite {window : ℕ |
+        ∃ phase : Fin (window + 1),
+          regime.terminalGap / 2 <
+            quittingPeriodicWindowPhaseStopValue reward
+              (seam.canonicalPeriodicTailWindowFamily.roots window) other
+              phase -
+              seam.canonicalPeriodicTailWindowFamily.delivery window
+                other}) := by
+  rcases seam.soloWindows_ownerRefusal_or_phaseStop owner hsolo with
+    hrefusal | hphase
+  · refine Or.inl (hrefusal.mono fun window hwindow => ?_)
+    have hzero := quittingPeriodicWindowRefusalValue_eq_zero_of_soloRoots reward
+      (seam.canonicalPeriodicTailWindowFamily.roots window) owner (hsolo window)
+    simp only [Set.mem_setOf_eq, hzero] at hwindow ⊢
+    linarith
+  · exact Or.inr hphase
+
+/-- **T4(a), phase-stop branch under a floored owner delivery.**  If the
+canonical windows are solo at `owner` and never deliver `owner` less than
+`-terminalGap / 2`, the stabilized obstruction is a phase stop. -/
+theorem exists_phaseStopObstruction_of_soloWindows
+    (seam : QuittingCounterexampleSeamWitness regime) (owner : ι)
+    (hsolo : ∀ window time, IsQuittingSoloRoot
+      (seam.canonicalPeriodicTailWindowFamily.roots window time) owner)
+    (hdelivery : ∀ window, -(regime.terminalGap / 2) ≤
+      seam.canonicalPeriodicTailWindowFamily.delivery window owner) :
+    ∃ other, Set.Infinite {window : ℕ |
+      ∃ phase : Fin (window + 1),
+        regime.terminalGap / 2 <
+          quittingPeriodicWindowPhaseStopValue reward
+            (seam.canonicalPeriodicTailWindowFamily.roots window) other phase -
+            seam.canonicalPeriodicTailWindowFamily.delivery window other} := by
+  rcases seam.soloWindows_negativeOwnerDelivery_or_phaseStop owner hsolo with
+    hnegative | hphase
+  · obtain ⟨window, hwindow⟩ := hnegative.nonempty
+    exact absurd (hdelivery window) (not_le.2 hwindow)
+  · exact hphase
+
 /-- The phase-stop-branch proposition (T4(a)): on the canonical periodic
 windows of a seam whose late roots are solo at `owner`, the stabilized
 obstruction of `exists_infinite_fixedPlayer_fixedBranch` is the phase-stop
 branch, and the obstructing player is a strict solo-preemption out-neighbour
-of `owner`. -/
+of `owner`.
+
+The phase-stop conjunct alone is the conclusion of
+`exists_phaseStopObstruction_of_soloWindows`; what this proposition adds is
+the preemption edge at the obstructing coordinate. -/
 def QuittingSoloWindowPhaseStopBranch
     (seam : QuittingCounterexampleSeamWitness regime) (owner : ι)
     (margin : ℝ) : Prop :=
