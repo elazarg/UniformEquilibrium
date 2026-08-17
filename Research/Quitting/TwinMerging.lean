@@ -26,6 +26,12 @@ uniform-equilibrium payoff of the token game yields one for the original
 game, and `not_exists_uniformEquilibriumPayoff_token_of_indistinguishableTwins`
 is its contrapositive.
 
+The producer is proved from `QuittingTwinMergeable`, which asks for the
+shared row and for the two invisibility clauses only at the twins' own row,
+omitting them at every other player's row.  Indistinguishability implies it
+through `QuittingIndistinguishableTwins.toMergeable`, so the report's notion
+stays the named one and each statement is available under both hypotheses.
+
 The lift prescribes `Never` for the silent twin `e` and gives `d` the token's
 strategy.  Every player other than `e` is handled by the existing exact
 transport of `quittingLiftDeletedProfile`.  The silent twin is handled by
@@ -74,6 +80,37 @@ structure QuittingIndistinguishableTwins
   merge_both : ∀ (i : ι) (S : Finset ι), d ∉ S → e ∉ S →
     reward ⟨insert d S, Finset.insert_nonempty d S⟩ i =
       reward ⟨insert d (insert e S), Finset.insert_nonempty d (insert e S)⟩ i
+
+/-- The clauses of `QuittingIndistinguishableTwins` that the merging producer
+consumes: the shared row, and the invisibility of which twin quits and of
+whether both quit *as recorded by the twins' own row*.  Nothing is required
+of any other player's row, so this is a weaker demand on the table than
+`QuittingIndistinguishableTwins`. -/
+structure QuittingTwinMergeable
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (d e : ι) : Prop where
+  /-- The two twins are distinct players. -/
+  ne : d ≠ e
+  /-- The twins have the same reward row. -/
+  row_eq : ∀ S, reward S d = reward S e
+  /-- Which twin quits is invisible to the twins' own row. -/
+  merge_swap : ∀ S : Finset ι, d ∉ S → e ∉ S →
+    reward ⟨insert d S, Finset.insert_nonempty d S⟩ d =
+      reward ⟨insert e S, Finset.insert_nonempty e S⟩ d
+  /-- Whether both twins quit is invisible to the twins' own row. -/
+  merge_both : ∀ S : Finset ι, d ∉ S → e ∉ S →
+    reward ⟨insert d S, Finset.insert_nonempty d S⟩ d =
+      reward ⟨insert d (insert e S), Finset.insert_nonempty d (insert e S)⟩ d
+
+omit [Fintype ι] in
+/-- Indistinguishable twins are mergeable. -/
+theorem QuittingIndistinguishableTwins.toMergeable
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
+    (htwin : QuittingIndistinguishableTwins reward d e) :
+    QuittingTwinMergeable reward d e where
+  ne := htwin.ne
+  row_eq := htwin.row_eq
+  merge_swap := fun S hd he ↦ htwin.merge_swap d S hd he
+  merge_both := fun S hd he ↦ htwin.merge_both d S hd he
 
 /-! ## Actions with the twin coordinates prescribed -/
 
@@ -125,7 +162,7 @@ theorem quittingQuitters_setTwins_false_true (d e : ι) (hne : d ≠ e) (a : ι 
 the other twin pays that other twin. -/
 theorem quittingRootPayoff_twin_true_true
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
-    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htwin : QuittingTwinMergeable reward d e)
     (V W : Payoff ι) (a : ι → Bool) :
     quittingRootPayoff reward V (setTwins d e a true true) e =
       quittingRootPayoff reward W (setTwins d e a true false) d := by
@@ -143,7 +180,7 @@ theorem quittingRootPayoff_twin_true_true
   have hrow := htwin.row_eq
     ⟨insert d (insert e (twinBase d e a)),
       Finset.insert_nonempty d (insert e (twinBase d e a))⟩
-  have hboth := htwin.merge_both d (twinBase d e a) hbase hbase'
+  have hboth := htwin.merge_both (twinBase d e a) hbase hbase'
   rw [show (⟨quittingQuitters (setTwins d e a true true), _⟩ :
         {S : Finset ι // S.Nonempty}) =
       ⟨insert d (insert e (twinBase d e a)),
@@ -157,7 +194,7 @@ theorem quittingRootPayoff_twin_true_true
 other twin pays that other twin. -/
 theorem quittingRootPayoff_twin_false_true
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
-    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htwin : QuittingTwinMergeable reward d e)
     (V W : Payoff ι) (a : ι → Bool) :
     quittingRootPayoff reward V (setTwins d e a false true) e =
       quittingRootPayoff reward W (setTwins d e a true false) d := by
@@ -174,7 +211,7 @@ theorem quittingRootPayoff_twin_false_true
   have hTF := quittingQuitters_setTwins_true_false d e htwin.ne a
   have hrow := htwin.row_eq
     ⟨insert e (twinBase d e a), Finset.insert_nonempty e (twinBase d e a)⟩
-  have hswap := htwin.merge_swap d (twinBase d e a) hbase hbase'
+  have hswap := htwin.merge_swap (twinBase d e a) hbase hbase'
   rw [show (⟨quittingQuitters (setTwins d e a false true), _⟩ :
         {S : Finset ι // S.Nonempty}) =
       ⟨insert e (twinBase d e a), Finset.insert_nonempty e _⟩ from Subtype.ext hFT,
@@ -187,7 +224,7 @@ theorem quittingRootPayoff_twin_false_true
 their continuation values agree. -/
 theorem quittingRootExpectedPayoff_twin_step
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
-    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htwin : QuittingTwinMergeable reward d e)
     (root : ι → PMF Bool) (V W : Payoff ι) (htail : V e = W d) :
     quittingRootExpectedPayoff reward V root e =
       quittingRootExpectedPayoff reward W root d := by
@@ -219,7 +256,7 @@ value equals the value of the other twin quitting for sure, whatever the
 continuations and whatever the other twin's own hazard. -/
 theorem quittingRootExpectedPayoff_twin_base
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
-    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htwin : QuittingTwinMergeable reward d e)
     (root : ι → PMF Bool) (he : root e = PMF.pure false) (V W : Payoff ι) :
     quittingRootExpectedPayoff reward V
         (Function.update root e (PMF.pure true)) e =
@@ -267,7 +304,7 @@ the other twin `d` from following its own hazard until `date` and quitting
 for sure there. -/
 theorem quittingRootSequenceTerminalValue_twin_coupling
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
-    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htwin : QuittingTwinMergeable reward d e)
     (roots : ℕ → ι → PMF Bool) (he : ∀ time, roots time e = PMF.pure false)
     (date : ℕ) :
     ∀ (n start : ℕ), start + n = date →
@@ -356,7 +393,7 @@ profile, the best reply value of the silent twin is at most that of the
 token. -/
 theorem quittingBestReplyValue_le_twin
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
-    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htwin : QuittingTwinMergeable reward d e)
     (profile :
       (quittingGame (quittingDeletePlayerReward reward e)).BehaviorProfile) :
     quittingBestReplyValue reward
@@ -407,9 +444,9 @@ theorem quittingBestReplyValue_le_twin
 /-- **Twin merging.**  If two players are indistinguishable twins and the
 token game obtained by deleting one of them has a uniform-equilibrium payoff,
 then so does the original game. -/
-theorem exists_uniformEquilibriumPayoff_of_indistinguishableTwins
+theorem exists_uniformEquilibriumPayoff_of_twinMergeable
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
-    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htwin : QuittingTwinMergeable reward d e)
     (htoken : ∃ payoff : Payoff (QuittingDeletedPlayer e),
       (quittingGame (quittingDeletePlayerReward reward e)).IsUniformEquilibriumPayoff
         none payoff) :
@@ -452,41 +489,41 @@ theorem exists_uniformEquilibriumPayoff_of_indistinguishableTwins
 
 /-- **The contrapositive.**  If a table has indistinguishable twins and no
 uniform-equilibrium payoff, then neither does its token game. -/
-theorem not_exists_uniformEquilibriumPayoff_token_of_indistinguishableTwins
+theorem not_exists_uniformEquilibriumPayoff_token_of_twinMergeable
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
-    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htwin : QuittingTwinMergeable reward d e)
     (hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
     ¬ ∃ payoff : Payoff (QuittingDeletedPlayer e),
       (quittingGame (quittingDeletePlayerReward reward e)).IsUniformEquilibriumPayoff
         none payoff :=
-  fun htoken ↦ hno (exists_uniformEquilibriumPayoff_of_indistinguishableTwins htwin htoken)
+  fun htoken ↦ hno (exists_uniformEquilibriumPayoff_of_twinMergeable htwin htoken)
 
 /-- **No indistinguishable twins in a minimal counterexample.**  If a table
 has no uniform-equilibrium payoff while its token game does, then the pair is
 not a pair of indistinguishable twins. -/
-theorem not_indistinguishableTwins_of_token_uniformEquilibriumPayoff
+theorem not_twinMergeable_of_token_uniformEquilibriumPayoff
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
     (hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
     (htoken : ∃ payoff : Payoff (QuittingDeletedPlayer e),
       (quittingGame (quittingDeletePlayerReward reward e)).IsUniformEquilibriumPayoff
         none payoff) :
-    ¬ QuittingIndistinguishableTwins reward d e :=
+    ¬ QuittingTwinMergeable reward d e :=
   fun htwin ↦
-    not_exists_uniformEquilibriumPayoff_token_of_indistinguishableTwins htwin hno htoken
+    not_exists_uniformEquilibriumPayoff_token_of_twinMergeable htwin hno htoken
 
 /-- The terminal exploitability gap descends to the token game across an
 indistinguishable twin pair. -/
-theorem exists_terminalExploitabilityGap_token_of_indistinguishableTwins
+theorem exists_terminalExploitabilityGap_token_of_twinMergeable
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
-    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htwin : QuittingTwinMergeable reward d e)
     {gap : ℝ} (hgap : 0 < gap)
     (hexploit : HasTerminalExploitabilityGap reward gap) :
     ∃ gap' : ℝ, 0 < gap' ∧
       HasTerminalExploitabilityGap (quittingDeletePlayerReward reward e) gap' := by
   rw [← not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap]
-  exact not_exists_uniformEquilibriumPayoff_token_of_indistinguishableTwins htwin
+  exact not_exists_uniformEquilibriumPayoff_token_of_twinMergeable htwin
     (quittingGame_not_exists_uniformEquilibriumPayoff_of_terminalExploitabilityGap
       reward hgap hexploit)
 
@@ -563,6 +600,59 @@ theorem quittingDeletePlayerReward_twinPullback {d e : ι} (hne : d ≠ e)
   unfold quittingDeletePlayerReward twinPullback
   rw [twinCollapse_val]
   exact congrFun (congrArg token (Subtype.ext himg)) who
+
+/-! ## The same statements under the report's full twin notion -/
+
+/-- **Twin merging.**  If two players are indistinguishable twins and the
+token game obtained by deleting one of them has a uniform-equilibrium payoff,
+then so does the original game. -/
+theorem exists_uniformEquilibriumPayoff_of_indistinguishableTwins
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
+    (htwin : QuittingIndistinguishableTwins reward d e)
+    (htoken : ∃ payoff : Payoff (QuittingDeletedPlayer e),
+      (quittingGame (quittingDeletePlayerReward reward e)).IsUniformEquilibriumPayoff
+        none payoff) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  exists_uniformEquilibriumPayoff_of_twinMergeable htwin.toMergeable htoken
+
+theorem not_exists_uniformEquilibriumPayoff_token_of_indistinguishableTwins
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
+    (htwin : QuittingIndistinguishableTwins reward d e)
+    (hno : ¬ ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ¬ ∃ payoff : Payoff (QuittingDeletedPlayer e),
+      (quittingGame (quittingDeletePlayerReward reward e)).IsUniformEquilibriumPayoff
+        none payoff :=
+  not_exists_uniformEquilibriumPayoff_token_of_twinMergeable htwin.toMergeable hno
+
+theorem not_indistinguishableTwins_of_token_uniformEquilibriumPayoff
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
+    (hno : ¬ ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
+    (htoken : ∃ payoff : Payoff (QuittingDeletedPlayer e),
+      (quittingGame (quittingDeletePlayerReward reward e)).IsUniformEquilibriumPayoff
+        none payoff) :
+    ¬ QuittingIndistinguishableTwins reward d e :=
+  fun htwin ↦
+    not_twinMergeable_of_token_uniformEquilibriumPayoff hno htoken htwin.toMergeable
+
+theorem exists_terminalExploitabilityGap_token_of_indistinguishableTwins
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
+    (htwin : QuittingIndistinguishableTwins reward d e)
+    {gap : ℝ} (hgap : 0 < gap)
+    (hexploit : HasTerminalExploitabilityGap reward gap) :
+    ∃ gap' : ℝ, 0 < gap' ∧
+      HasTerminalExploitabilityGap (quittingDeletePlayerReward reward e) gap' :=
+  exists_terminalExploitabilityGap_token_of_twinMergeable htwin.toMergeable hgap hexploit
+
+omit [Fintype ι] in
+/-- A pullback along the collapse is in particular mergeable. -/
+theorem twinMergeable_twinPullback {d e : ι} (hne : d ≠ e)
+    (token : {S : Finset (QuittingDeletedPlayer e) // S.Nonempty} →
+      Payoff (QuittingDeletedPlayer e)) :
+    QuittingTwinMergeable (twinPullback hne token) d e :=
+  (indistinguishableTwins_twinPullback hne token).toMergeable
 
 end QuittingTwinMerging
 
