@@ -14,8 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pull-request:
-    if: github.event_name == 'pull_request'
+  ci:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -40,27 +39,3 @@ jobs:
           use-mathlib-cache: true
           use-github-cache: true
       - run: lake build
-
-  full:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - run: python3 scripts/check_docs.py
-      - run: python3 -m unittest discover -s scripts -p 'test_*.py'
-      - run: python3 scripts/check_experiment_registry.py --execute
-      - run: python3 scripts/check_import_graph.py
-      - run: python3 scripts/check_proof_duplicates.py
-      - run: python3 scripts/check_reward_bounds.py --check --max-nonnegative 0
-      - run: python3 scripts/check_redundant_order_hypotheses.py --check
-      - run: python3 scripts/check_derivable_telescope_hypotheses.py --check
-      - run: python3 scripts/check_trust.py
-      - uses: leanprover/lean-action@v1
-        with:
-          build: true
-          test: false
-          use-mathlib-cache: true
-          use-github-cache: true
