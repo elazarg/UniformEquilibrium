@@ -4,9 +4,11 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.Finset.ProdLtOne
 import UniformEquilibrium.Quitting.Bellman.Finite.ActiveSetSupport
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
+import Research.Quitting.AnchoredCyclicRenewal
 import Research.Quitting.PeriodicRootResponseSystem
 
 /-!
@@ -40,6 +42,11 @@ Three systems are recorded.
   Nash block system with one absorbing phase and nonnegative solo rewards makes
   its displayed origin row a uniform-equilibrium payoff.
 
+Refusal against a block profile is the on-path value of the same schedule with
+the refuser's own hazards zeroed, so the deviator's cap needs only the
+admissibility disjunction at the deviating coordinate rather than a product
+contraction.
+
 ## Main definitions
 
 * `quittingBlockCycle` — the periodic family of product rows
@@ -51,6 +58,10 @@ Three systems are recorded.
 * `isQuittingBlockOnPathValue_cyclicTerminalValue`,
   `eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue`
 * `isQuittingCyclicResponseSolution_of_isQuittingBlockResponseSolution`
+* `quittingPeriodicWindowRefusalValue_quittingBlockCycle` — refusal is the
+  on-path value of the schedule with the refuser's own hazards zeroed
+* `prod_continueMass_lt_one_of_pos` — one positive hazard makes the turn
+  absorbing
 * `isUniformEquilibriumPayoff_of_isQuittingBlockCertificate`
 * `QuittingCounterexampleRegime.exists_quittingBlockResponse_gain`
 -/
@@ -115,12 +126,24 @@ theorem quittingRootSuccessorPayoff_eq_activeCoalitionSum
 
 variable (hazard : Fin (m + 1) → ι → ℝ)
 
+omit [Fintype ι] [DecidableEq ι] in
 /-- A hazard of zero is the pure Continue law, so a player outside a phase's
 block is the case `hazard k i = 0`. -/
 theorem quittingHazardCoin_zero (h0 : (0 : ℝ) ≤ 0) (h1 : (0 : ℝ) ≤ 1) :
-    quittingHazardCoin 0 h0 h1 = PMF.pure false := by
-  refine PMF.ext fun action ↦ ?_
-  cases action <;> simp [quittingHazardCoin, PMF.ofFintype_apply]
+    quittingHazardCoin 0 h0 h1 = PMF.pure false :=
+  quittingHazardCoin_eq_pure_false h0 h1
+    (by rw [quittingHazardCoin_true_toReal])
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- Two quitting coins with the same quit probability are the same law. -/
+theorem quittingHazardCoin_congr {a b : ℝ} (ha0 : 0 ≤ a) (ha1 : a ≤ 1)
+    (hb0 : 0 ≤ b) (hb1 : b ≤ 1)
+    (hab : (quittingHazardCoin a ha0 ha1 true).toReal =
+      (quittingHazardCoin b hb0 hb1 true).toReal) :
+    quittingHazardCoin a ha0 ha1 = quittingHazardCoin b hb0 hb1 := by
+  rw [quittingHazardCoin_true_toReal, quittingHazardCoin_true_toReal] at hab
+  subst hab
+  rfl
 
 /-- The periodic family of product rows of a hazard schedule: at phase `k`
 each player quits with probability `hazard k i`, independently. -/
@@ -238,6 +261,98 @@ theorem eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue_of_absorbing
   rw [prod_quittingStationaryContinueMass_quittingBlockCycle]
   exact habsorb
 
+omit [DecidableEq ι] in
+/-- A phase carrying a positive hazard survives with probability below one. -/
+theorem continueMass_lt_one_of_pos {x : ι → ℝ} (h0 : ∀ i, 0 ≤ x i)
+    (h1 : ∀ i, x i ≤ 1) {i₀ : ι} (hpos : 0 < x i₀) : continueMass x < 1 := by
+  refine Math.Finset.prod_lt_one_of_mem Finset.univ (fun i ↦ 1 - x i) i₀
+    (Finset.mem_univ i₀) (fun i _ _ ↦ by linarith [h1 i]) (fun i _ _ ↦ by linarith [h0 i])
+    (by linarith)
+
+omit [DecidableEq ι] in
+/-- **Some block is nonempty.**  One positive hazard anywhere in the schedule
+makes the block profile fail to survive a whole turn with positive
+probability. -/
+theorem prod_continueMass_lt_one_of_pos (h0 : ∀ k i, 0 ≤ hazard k i)
+    (h1 : ∀ k i, hazard k i ≤ 1) {k₀ : Fin (m + 1)} {i₀ : ι}
+    (hpos : 0 < hazard k₀ i₀) :
+    (∏ k : Fin (m + 1), continueMass (hazard k)) < 1 :=
+  Math.Finset.prod_lt_one_of_mem Finset.univ (fun k ↦ continueMass (hazard k)) k₀
+    (Finset.mem_univ k₀)
+    (fun k _ _ ↦ Finset.prod_nonneg fun i _ ↦ by linarith [h1 k i])
+    (fun k _ _ ↦ Finset.prod_le_one (fun i _ ↦ by linarith [h1 k i])
+      (fun i _ ↦ by linarith [h0 k i]))
+    (continueMass_lt_one_of_pos (h0 k₀) (h1 k₀) hpos)
+
+/-! ## The refusal identity in hazard form -/
+
+/-- The hazard schedule with `who`'s own hazards set to zero. -/
+def quittingBlockDeletedHazard (hazard : Fin (m + 1) → ι → ℝ) (who : ι) :
+    Fin (m + 1) → ι → ℝ :=
+  fun k ↦ Function.update (hazard k) who 0
+
+omit [Fintype ι] in
+theorem quittingBlockDeletedHazard_nonneg (h0 : ∀ k i, 0 ≤ hazard k i) (who : ι) :
+    ∀ k i, 0 ≤ quittingBlockDeletedHazard hazard who k i := by
+  intro k i
+  rw [quittingBlockDeletedHazard]
+  by_cases hi : i = who
+  · rw [hi, Function.update_self]
+  · rw [Function.update_of_ne hi]
+    exact h0 k i
+
+omit [Fintype ι] in
+theorem quittingBlockDeletedHazard_le_one (h1 : ∀ k i, hazard k i ≤ 1) (who : ι) :
+    ∀ k i, quittingBlockDeletedHazard hazard who k i ≤ 1 := by
+  intro k i
+  rw [quittingBlockDeletedHazard]
+  by_cases hi : i = who
+  · rw [hi, Function.update_self]
+    norm_num
+  · rw [Function.update_of_ne hi]
+    exact h1 k i
+
+omit [Fintype ι] in
+/-- Deleting a player from a block cycle is zeroing that player's hazards. -/
+theorem quittingCyclicDeletedCycle_quittingBlockCycle
+    (h0 : ∀ k i, 0 ≤ hazard k i) (h1 : ∀ k i, hazard k i ≤ 1) (who : ι) :
+    quittingCyclicDeletedCycle (quittingBlockCycle hazard h0 h1) who =
+      quittingBlockCycle (quittingBlockDeletedHazard hazard who)
+        (quittingBlockDeletedHazard_nonneg h0 who)
+        (quittingBlockDeletedHazard_le_one h1 who) := by
+  funext k player
+  rw [quittingCyclicDeletedCycle]
+  by_cases hp : player = who
+  · subst hp
+    rw [Function.update_self]
+    exact (quittingHazardCoin_eq_pure_false
+      (quittingBlockDeletedHazard_nonneg h0 player k player)
+      (quittingBlockDeletedHazard_le_one h1 player k player)
+      (by rw [quittingHazardCoin_true_toReal]
+          simp [quittingBlockDeletedHazard])).symm
+  · rw [Function.update_of_ne hp]
+    exact quittingHazardCoin_congr (h0 k player) (h1 k player)
+      (quittingBlockDeletedHazard_nonneg h0 who k player)
+      (quittingBlockDeletedHazard_le_one h1 who k player)
+      (by rw [quittingHazardCoin_true_toReal, quittingHazardCoin_true_toReal]
+          simp [quittingBlockDeletedHazard, Function.update_of_ne hp])
+
+/-- **The refusal identity for block profiles.**  Never quitting is worth
+exactly the on-path value of the same schedule with the refuser's own hazards
+zeroed. -/
+theorem quittingPeriodicWindowRefusalValue_quittingBlockCycle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (h0 : ∀ k i, 0 ≤ hazard k i) (h1 : ∀ k i, hazard k i ≤ 1)
+    (phase : Fin (m + 1)) (who : ι) :
+    quittingPeriodicWindowRefusalValue reward
+        (quittingCyclicRootSequence (quittingBlockCycle hazard h0 h1) phase) who =
+      quittingCyclicTerminalValue reward
+        (quittingBlockCycle (quittingBlockDeletedHazard hazard who)
+          (quittingBlockDeletedHazard_nonneg h0 who)
+          (quittingBlockDeletedHazard_le_one h1 who)) phase who := by
+  rw [quittingPeriodicWindowRefusalValue_eq_cyclicTerminalValue_deleted,
+    quittingCyclicDeletedCycle_quittingBlockCycle]
+
 /-! ## The deviator's system -/
 
 /-- **The deviator's max-linear system in coalition form.**  The quit branch
@@ -284,14 +399,13 @@ theorem quittingCyclicResponseCap_le_of_isQuittingBlockResponseSolution
     {W : Fin (m + 1) → Payoff ι}
     (hW : IsQuittingBlockResponseSolution reward hazard W) (phase : Fin (m + 1))
     (who : ι)
-    (hcontract : (∏ k : Fin (m + 1),
-      quittingStationaryFixedOpponentsContinueMass
-        (quittingBlockCycle hazard h0 h1 k) who) < 1) :
+    (hadmissible : IsQuittingCycleZeroDeviationMismatchAt reward
+      (quittingBlockCycle hazard h0 h1) who) :
     quittingCyclicResponseCap reward (quittingBlockCycle hazard h0 h1) phase who ≤
       W phase who :=
   quittingCyclicResponseCap_le_of_isQuittingCyclicResponseSolution
     (isQuittingCyclicResponseSolution_of_isQuittingBlockResponseSolution h0 h1 hW)
-    phase who hcontract
+    phase who hadmissible
 
 /-! ## The producer -/
 
@@ -477,16 +591,16 @@ theorem exists_quittingBlockResponse_gain
     (phase : Fin (m + 1)) {U W : Fin (m + 1) → Payoff ι}
     (hU : IsQuittingBlockOnPathValue reward hazard U)
     (hW : IsQuittingBlockResponseSolution reward hazard W)
-    (hcontracts : ∀ who, (∏ k : Fin (m + 1),
-      quittingStationaryFixedOpponentsContinueMass
-        (quittingBlockCycle hazard h0 h1 k) who) < 1) :
+    (habsorb : (∏ k : Fin (m + 1), continueMass (hazard k)) < 1)
+    (hadmissible : IsQuittingCycleAdmissible reward
+      (quittingBlockCycle hazard h0 h1)) :
     ∃ who, U phase who + regime.terminalGap ≤ W phase who := by
-  have hvalue := eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue h0 h1 hU
-    hcontracts
+  have hvalue := eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue_of_absorbing h0 h1
+    hU habsorb
   obtain ⟨who, hgain⟩ := regime.exists_quittingCyclicResponse_gain
     (quittingBlockCycle hazard h0 h1) phase
     (isQuittingCyclicResponseSolution_of_isQuittingBlockResponseSolution h0 h1 hW)
-    hcontracts
+    hadmissible
   refine ⟨who, ?_⟩
   rwa [hvalue]
 

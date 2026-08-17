@@ -7,7 +7,10 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanCapPureTimeStop
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
+import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
+import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.PeriodicPureTimeBellman
+import UniformEquilibrium.Quitting.Terminal.TargetTail.FiniteChainTerminalCompiler
 
 /-!
 # The max-linear response system of a periodic root cycle
@@ -34,9 +37,11 @@ cap along the periodic live path, and cap every deviation by it:
 
 * every deterministic stopping date inside one pass is capped
   (`quittingPeriodicWindowPhaseStopValue_le_of_isQuittingCyclicResponseSolution`);
-* never quitting is capped, provided the deviator's opponents absorb over one
-  turn with positive probability
-  (`quittingPeriodicWindowRefusalValue_le_of_isQuittingCyclicResponseSolution`);
+* never quitting is capped as soon as the deviating coordinate is admissible —
+  either its opponents absorb over one turn, or its own solo row is nonnegative
+  (`quittingPeriodicWindowRefusalValue_le_of_isQuittingCyclicResponseSolution_of_admissible`),
+  the second branch through the refusal identity
+  `quittingPeriodicWindowRefusalValue_eq_cyclicTerminalValue_deleted`;
 * hence the exact finite best-response statistic is capped
   (`quittingCyclicResponseCap_le_of_isQuittingCyclicResponseSolution`), and by
   `quittingTerminalPayoff_update_le_sSup_pureTimeBehaviorStrategy` that
@@ -54,6 +59,8 @@ either by the exact finite cap or by any response solution.
 
 ## Main results
 
+* `quittingPeriodicWindowRefusalValue_eq_cyclicTerminalValue_deleted` — the
+  refusal identity
 * `quittingCyclicResponseCap_le_of_isQuittingCyclicResponseSolution`
 * `QuittingCounterexampleRegime.exists_quittingCyclicCap_gain`
 * `QuittingCounterexampleRegime.exists_quittingCyclicResponse_gain`
@@ -236,19 +243,135 @@ theorem quittingPeriodicWindowRefusalValue_le_of_isQuittingCyclicResponseSolutio
   rw [quittingOpponentSurvivalWeight_cyclic_period]
   exact hcontract
 
+
+/-! ## The refusal identity -/
+
+/-- The cycle with `who` forced to continue at every phase. -/
+def quittingCyclicDeletedCycle (cycle : Fin (m + 1) → ι → PMF Bool) (who : ι) :
+    Fin (m + 1) → ι → PMF Bool :=
+  fun k ↦ Function.update (cycle k) who (PMF.pure false)
+
+/-- **The refusal identity.**  Never quitting against the periodic profile of
+`cycle` is worth exactly the on-path value of the cycle in which `who` is
+deleted, that is, forced to continue at every phase.  No absorption hypothesis
+is used. -/
+theorem quittingPeriodicWindowRefusalValue_eq_cyclicTerminalValue_deleted
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cycle : Fin (m + 1) → ι → PMF Bool) (phase : Fin (m + 1)) (who : ι) :
+    quittingPeriodicWindowRefusalValue reward
+        (quittingCyclicRootSequence cycle phase) who =
+      quittingCyclicTerminalValue reward (quittingCyclicDeletedCycle cycle who)
+        phase who := by
+  have hroots : quittingRootSequenceUpdate (quittingCyclicRootSequence cycle phase)
+      who (quittingPureTimeHazard none) =
+    quittingCyclicRootSequence (quittingCyclicDeletedCycle cycle who) phase := by
+    funext time
+    rw [quittingRootSequenceUpdate, quittingPureTimeHazard_none]
+    rfl
+  rw [quittingPeriodicWindowRefusalValue, quittingRootSequencePureTimeTerminalValue,
+    quittingRootSequenceHazardTerminalValue, hroots, quittingCyclicTerminalValue]
+
+/-- On the non-contracting branch every deleted phase mass is one. -/
+theorem quittingStationaryFixedOpponentsContinueMass_eq_one_of_not_contracts
+    {cycle : Fin (m + 1) → ι → PMF Bool} {who : ι}
+    (hcontracts : ¬ (∏ k : Fin (m + 1),
+      quittingStationaryFixedOpponentsContinueMass (cycle k) who) < 1)
+    (k : Fin (m + 1)) :
+    quittingStationaryFixedOpponentsContinueMass (cycle k) who = 1 := by
+  have hsurvival :=
+    quittingOpponentSurvivalWeight_cyclicRootSequence_eq_one_of_not_contracts cycle k
+      who hcontracts 1
+  simpa [quittingOpponentSurvivalWeight] using hsurvival
+
+/-- On the non-contracting branch the deleted cycle is the all-continue row at
+every phase. -/
+theorem quittingCyclicDeletedCycle_eq_allContinueRoot_of_not_contracts
+    {cycle : Fin (m + 1) → ι → PMF Bool} {who : ι}
+    (hcontracts : ¬ (∏ k : Fin (m + 1),
+      quittingStationaryFixedOpponentsContinueMass (cycle k) who) < 1)
+    (k : Fin (m + 1)) :
+    quittingCyclicDeletedCycle cycle who k =
+      (quittingAllContinueRoot : ι → PMF Bool) := by
+  funext player
+  exact eq_pure_false_of_quittingStationaryContinueMass_eq_one
+    (quittingStationaryFixedOpponentsContinueMass_eq_one_of_not_contracts hcontracts k)
+    player
+
+/-- **Refusal on the non-contracting branch.**  When the deviator's opponents
+never absorb, the deleted cycle never absorbs either, so refusal is worth
+zero. -/
+theorem quittingPeriodicWindowRefusalValue_eq_zero_of_not_contracts
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {cycle : Fin (m + 1) → ι → PMF Bool} (phase : Fin (m + 1)) {who : ι}
+    (hcontracts : ¬ (∏ k : Fin (m + 1),
+      quittingStationaryFixedOpponentsContinueMass (cycle k) who) < 1) :
+    quittingPeriodicWindowRefusalValue reward
+      (quittingCyclicRootSequence cycle phase) who = 0 := by
+  rw [quittingPeriodicWindowRefusalValue_eq_cyclicTerminalValue_deleted,
+    quittingCyclicTerminalValue]
+  refine quittingRootSequenceTerminalValue_eq_zero_of_allContinue_from reward _ who 0
+    fun time _ ↦ ?_
+  exact quittingCyclicDeletedCycle_eq_allContinueRoot_of_not_contracts hcontracts _
+
+/-- **The quit branch on the non-contracting branch.**  When the deviator's
+opponents never absorb, quitting now is worth exactly the deviator's own solo
+row. -/
+theorem quittingRootQuitPayoff_eq_solo_of_not_contracts
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
+    {cycle : Fin (m + 1) → ι → PMF Bool} (phase : Fin (m + 1)) {who : ι}
+    (hcontracts : ¬ (∏ k : Fin (m + 1),
+      quittingStationaryFixedOpponentsContinueMass (cycle k) who) < 1) :
+    quittingRootQuitPayoff reward tail (cycle phase) who =
+      reward (quittingSingletonTerminal who) who := by
+  have hdeleted :=
+    quittingCyclicDeletedCycle_eq_allContinueRoot_of_not_contracts hcontracts phase
+  have hupdate : Function.update (cycle phase) who (PMF.pure true) =
+      Function.update (quittingAllContinueRoot : ι → PMF Bool) who (PMF.pure true) := by
+    rw [← hdeleted, quittingCyclicDeletedCycle, Function.update_idem]
+  rw [quittingRootQuitPayoff, hupdate, quittingRootExpectedPayoff_allContinue_update_true]
+
+/-! ## The cap under admissibility -/
+
+/-- **Never quitting is capped by a response solution, under admissibility.**
+On the contracting branch this is the fixed-point bound; on the non-contracting
+branch refusal is worth zero, and the response value is at least the deviator's
+own solo row. -/
+theorem quittingPeriodicWindowRefusalValue_le_of_isQuittingCyclicResponseSolution_of_admissible
+    (hW : IsQuittingCyclicResponseSolution reward cycle W) (phase : Fin (m + 1))
+    (who : ι)
+    (hadmissible : IsQuittingCycleZeroDeviationMismatchAt reward cycle who) :
+    quittingPeriodicWindowRefusalValue reward
+        (quittingCyclicRootSequence cycle phase) who ≤ W phase who := by
+  by_cases hcontract : (∏ k : Fin (m + 1),
+      quittingStationaryFixedOpponentsContinueMass (cycle k) who) < 1
+  · exact quittingPeriodicWindowRefusalValue_le_of_isQuittingCyclicResponseSolution hW
+      phase who hcontract
+  · have hsolo : 0 ≤ reward (quittingSingletonTerminal who) who :=
+      hadmissible.resolve_left hcontract
+    rw [quittingPeriodicWindowRefusalValue_eq_zero_of_not_contracts reward phase
+      hcontract]
+    have hquit := le_max_left
+      (quittingRootQuitPayoff reward (W (finRotate (m + 1) phase)) (cycle phase) who)
+      (quittingRootContinuePayoff reward (W (finRotate (m + 1) phase)) (cycle phase)
+        who)
+    rw [← hW phase who,
+      quittingRootQuitPayoff_eq_solo_of_not_contracts reward _ phase hcontract] at hquit
+    linarith
+
 /-- **The exact finite best-response statistic is capped by a response
-solution.**  Together with
+solution.**  The hypothesis is the admissibility disjunction at the deviating
+coordinate: either its opponents absorb over one turn, or its own solo row is
+nonnegative.  Together with
 `quittingTerminalPayoff_update_le_sSup_pureTimeBehaviorStrategy` this caps
 every behavior deviation, not only the stopping times. -/
 theorem quittingCyclicResponseCap_le_of_isQuittingCyclicResponseSolution
     (hW : IsQuittingCyclicResponseSolution reward cycle W) (phase : Fin (m + 1))
     (who : ι)
-    (hcontract : (∏ cyclePhase : Fin (m + 1),
-      quittingStationaryFixedOpponentsContinueMass (cycle cyclePhase) who) < 1) :
+    (hadmissible : IsQuittingCycleZeroDeviationMismatchAt reward cycle who) :
     quittingCyclicResponseCap reward cycle phase who ≤ W phase who := by
   refine max_le
-    (quittingPeriodicWindowRefusalValue_le_of_isQuittingCyclicResponseSolution hW
-      phase who hcontract) ?_
+    (quittingPeriodicWindowRefusalValue_le_of_isQuittingCyclicResponseSolution_of_admissible
+      hW phase who hadmissible) ?_
   refine Finset.sup'_le _ _ fun stop _ ↦ ?_
   exact quittingPeriodicWindowPhaseStopValue_le_of_isQuittingCyclicResponseSolution
     hW phase who stop
@@ -293,23 +416,22 @@ theorem exists_quittingCyclicDeviationSup_gain
     rwa [sSup_range_quittingTerminalPayoff_update_cyclicBehaviorProfile]⟩
 
 /-- **The same statement read through the max-linear system.**  If `W` solves
-the response system and every player's opponents absorb over one turn, a
-counterexample regime forces some player's response value to beat the on-path
-value by at least the terminal gap. -/
+the response system and the cycle is admissible, a counterexample regime forces
+some player's response value to beat the on-path value by at least the terminal
+gap. -/
 theorem exists_quittingCyclicResponse_gain
     (regime : QuittingCounterexampleRegime reward)
     (cycle : Fin (m + 1) → ι → PMF Bool) (phase : Fin (m + 1))
     {W : Fin (m + 1) → Payoff ι}
     (hW : IsQuittingCyclicResponseSolution reward cycle W)
-    (hcontract : ∀ who, (∏ cyclePhase : Fin (m + 1),
-      quittingStationaryFixedOpponentsContinueMass (cycle cyclePhase) who) < 1) :
+    (hadmissible : IsQuittingCycleAdmissible reward cycle) :
     ∃ who,
       quittingCyclicTerminalValue reward cycle phase who + regime.terminalGap ≤
         W phase who := by
   obtain ⟨who, hgain⟩ := regime.exists_quittingCyclicCap_gain cycle phase
   exact ⟨who, hgain.trans
     (quittingCyclicResponseCap_le_of_isQuittingCyclicResponseSolution hW phase who
-      (hcontract who))⟩
+      (hadmissible who))⟩
 
 end QuittingCounterexampleRegime
 
