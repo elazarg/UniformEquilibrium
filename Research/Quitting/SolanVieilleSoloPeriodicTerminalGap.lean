@@ -386,6 +386,95 @@ theorem refusalGain_mul_one_sub_weight {m : ℕ} (w : Fin m → Player)
   rw [iterate_finRotate_period] at h
   linarith [h]
 
+/-! ## Sign of the accumulated quantities -/
+
+theorem refusalWeight_nonneg {m : ℕ} (w : Fin m → Player) {hazard : Fin m → ℝ}
+    (h1 : ∀ k, hazard k ≤ 1) (refuser : Player) :
+    ∀ (n : ℕ) (phase : Fin m), 0 ≤ refusalWeight w hazard refuser phase n := by
+  intro n
+  induction n with
+  | zero => intro phase; simp [refusalWeight]
+  | succ n ih =>
+    intro phase
+    rw [refusalWeight]
+    refine mul_nonneg ?_ (ih _)
+    split_ifs with h
+    · norm_num
+    · linarith [h1 phase]
+
+theorem refusalWeight_le_one {m : ℕ} (w : Fin m → Player) {hazard : Fin m → ℝ}
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (refuser : Player) :
+    ∀ (n : ℕ) (phase : Fin m), refusalWeight w hazard refuser phase n ≤ 1 := by
+  intro n
+  induction n with
+  | zero => intro phase; simp [refusalWeight]
+  | succ n ih =>
+    intro phase
+    rw [refusalWeight]
+    have hrec := ih (finRotate m phase)
+    have hrec0 := refusalWeight_nonneg w h1 refuser n (finRotate m phase)
+    split_ifs with h
+    · linarith
+    · nlinarith [h0 phase, h1 phase]
+
+/-- If the refuser's on-path value never falls below its own solo exit value,
+the accumulated drift is nonnegative. -/
+theorem refusalDrift_nonneg {m : ℕ} (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (refuser : Player)
+    (hU : ∀ k : Fin m, 1 ≤ quittingAnchoredCyclicOnPathValue boundaryReward w
+      hazard h0 h1 k refuser) :
+    ∀ (n : ℕ) (phase : Fin m),
+      0 ≤ refusalDrift w hazard h0 h1 refuser phase n := by
+  intro n
+  induction n with
+  | zero => intro phase; simp [refusalDrift]
+  | succ n ih =>
+    intro phase
+    rw [refusalDrift]
+    refine add_nonneg ?_ (mul_nonneg ?_ (ih _))
+    · split_ifs with h
+      · exact mul_nonneg (h0 phase) (by linarith [hU (finRotate m phase)])
+      · exact le_refl 0
+    · split_ifs with h
+      · norm_num
+      · linarith [h1 phase]
+
+/-- **The refusal gain dominates the accumulated drift.**  The cycle identity
+divides the drift by the absorption deficit `1 - W ≤ 1`, so the gain is at
+least the undivided drift. -/
+theorem refusalDrift_le_refusalGain {m : ℕ} (w : Fin m → Player)
+    (hazard : Fin m → ℝ) (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (refuser : Player)
+    (hU : ∀ k : Fin m, 1 ≤ quittingAnchoredCyclicOnPathValue boundaryReward w
+      hazard h0 h1 k refuser)
+    (phase : Fin m) (hW : refusalWeight w hazard refuser phase m < 1) :
+    refusalDrift w hazard h0 h1 refuser phase m ≤
+      refusalGain w hazard h0 h1 refuser phase := by
+  have hid := refusalGain_mul_one_sub_weight w hazard h0 h1 refuser phase
+  have hdr := refusalDrift_nonneg w hazard h0 h1 refuser hU m phase
+  have hw0 := refusalWeight_nonneg w h1 refuser m phase
+  nlinarith [hid, hdr, hw0, hW]
+
+/-! ## The residual -/
+
+/-- The uniform terminal gap for solo-periodic profiles on the Solan–Vieille
+table: some player's best-reply value exceeds its on-path value by at least
+`1 / 12`, for every period, every schedule with repetitions and every family
+of interior hazards.  The constant is the small-hazard optimum over exit
+distributions of the refusal gain; extracting it from
+`refusalGain_mul_one_sub_weight` requires bounding the accumulated drift
+against the absorption deficit, which is not carried out here. -/
+def HasUniformSoloPeriodicTerminalGap : Prop :=
+  ∀ (m : ℕ) (_ : NeZero m) (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1),
+    (∀ k, 0 < hazard k) →
+      ∃ who : Player,
+        quittingTerminalPayoff boundaryReward
+            (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who +
+            1 / 12 ≤
+          quittingBestReplyValue boundaryReward
+            (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who
+
 end SolanVieilleBoundary
 
 end GameTheory
