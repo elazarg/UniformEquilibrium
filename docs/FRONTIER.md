@@ -90,7 +90,7 @@ This table is generated from [`QuittingProofFrontier.json`](QuittingProofFrontie
 
 | Manuscript alternative | GitHub issue | Leaf | Obstruction | Representative | Source producer |
 | --- | --- | --- | --- | --- | --- |
-| 5 | [#7](https://github.com/elazarg/UniformEquilibrium/issues/7) | `IMMEDIATE-SINGLETON-PREEMPTION-CYCLE` | `OB-COLLISION` | `Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap) ∧ Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap)` | [`QuittingCounterexampleRegime.immediateSingletonCollision_and_soloPreemptionCycle`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean) |
+| 5 | [#40](https://github.com/elazarg/UniformEquilibrium/issues/40) | `IMMEDIATE-SINGLETON-PREEMPTION-CYCLE` | `OB-COLLISION` | `Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap) ∧ Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap)` | [`QuittingCounterexampleRegime.immediateSingletonCollision_and_soloPreemptionCycle`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean) |
 
 The manuscript numbering has five fixed slots. Alternative 1 ([issue #3](https://github.com/elazarg/UniformEquilibrium/issues/3)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`; Alternative 2 ([issue #4](https://github.com/elazarg/UniformEquilibrium/issues/4)) is eliminated by `ELIMINATE-ABSENT-BY-IMMEDIATE-SINGLETON-COLLISION`; Alternative 3 ([issue #5](https://github.com/elazarg/UniformEquilibrium/issues/5)) is eliminated by `ELIMINATE-SINGLETON-BY-SIGNED-ACTUAL-ROW`; Alternative 4 ([issue #6](https://github.com/elazarg/UniformEquilibrium/issues/6)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`.
 
