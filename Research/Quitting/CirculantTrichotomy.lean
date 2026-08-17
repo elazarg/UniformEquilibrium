@@ -49,13 +49,10 @@ regime.
 
 The last section reads the margins along the arithmetic progression of a
 fixed step as the coefficients of an anchor cubic and applies the root and
-patience facts of `MathUE/CubicAnchorRoot.lean` to it.
-`ConstantStepCyclicResolution` names the proposition that a step with negative
-margin and nonnegative complementary margins resolves a table of positive
-surplus.  Positivity of the backward partial sum at an anchor root is the
-constant-step, uniform-survival reading of the sign condition that the anchored
-cyclic patience system imposes on the margin from each quitter to its
-successor.
+patience facts of `MathUE/CubicAnchorRoot.lean` to it.  Positivity of the
+backward partial sum at an anchor root is the constant-step, uniform-survival
+reading of the sign condition that the anchored cyclic patience system imposes
+on the margin from each quitter to its successor.
 -/
 
 noncomputable section
@@ -290,18 +287,6 @@ theorem constantStepAnchorTail_pos_of_root {margin : ι → ℝ} {d : ι} {β : 
     (hroot : constantStepAnchor margin d β = 0) :
     0 < constantStepAnchorTail margin d β :=
   Math.cubicAnchorTail_pos_of_root hβ hneg hroot
-
-/-- The constant-step cyclic resolution of a rotation-symmetric table: whenever
-the surplus is positive and some step has negative margin while the
-complementary step and the doubled complementary step have nonnegative margins,
-the game has an ordinary uniform-equilibrium payoff. -/
-def ConstantStepCyclicResolution
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (margin : ι → ℝ) : Prop :=
-  HasCirculantSoloMatrix reward margin →
-    0 < ∑ e, margin e →
-    (∃ d : ι, margin d < 0 ∧ 0 ≤ margin (-d) ∧ 0 ≤ margin (-(2 • d))) →
-    ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff
 
 /-! ## Five players -/
 
