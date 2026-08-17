@@ -52,7 +52,203 @@ open Filter Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
+/-! ## The spectator incentive inequality as a hazard threshold
+
+The spectator hypothesis of `isZeroQuittingRootEndpointNash_soloMixedRoot`
+compares two mixtures.  Cancelling the common terms leaves a comparison of two
+reward differences weighted by the owner's quit and continue probabilities:
+hazard times a *collision penalty* against survival times a *continuation
+surplus*.  Both differences are properties of the table and the declared tail
+alone, so the condition reads as an explicit ceiling on the phase hazard.
+-/
+
+/-- What `who` loses by quitting alongside a solo exit owned by `owner`
+instead of standing outside it. -/
+def quittingSoloCollisionPenalty
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner who : ι) : ℝ :=
+  reward ⟨{owner, who}, Finset.insert_nonempty owner {who}⟩ who -
+    reward (quittingSingletonTerminal owner) who
+
+/-- What `who` gains by staying for the declared tail instead of taking its own
+solo exit. -/
+def quittingContinuationSurplus
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
+    (who : ι) : ℝ :=
+  tail who - reward (quittingSingletonTerminal who) who
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- **The spectator hypothesis, rearranged.**  Cancelling the common singleton
+and tail terms turns the mixture comparison into hazard times the collision
+penalty against survival times the continuation surplus. -/
+theorem quittingSoloSpectatorCap_iff_hazard_mul_penalty_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
+    (owner who : ι) (marginal : PMF Bool) :
+    ((marginal true).toReal *
+            reward ⟨{owner, who}, Finset.insert_nonempty owner {who}⟩ who +
+          (marginal false).toReal *
+            reward (quittingSingletonTerminal who) who ≤
+        (marginal true).toReal * reward (quittingSingletonTerminal owner) who +
+          (marginal false).toReal * tail who) ↔
+      (marginal true).toReal * quittingSoloCollisionPenalty reward owner who ≤
+        (marginal false).toReal * quittingContinuationSurplus reward tail who := by
+  unfold quittingSoloCollisionPenalty quittingContinuationSurplus
+  constructor <;> intro hcap <;> nlinarith [hcap]
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- **The threshold form.**  Against a positive collision penalty and below
+sure quitting, the spectator constraint is an explicit ceiling on the odds of
+the phase hazard. -/
+theorem hazard_mul_penalty_le_iff_ratio_le {hazard penalty surplus : ℝ}
+    (hlt : hazard < 1) (hpenalty : 0 < penalty) :
+    hazard * penalty ≤ (1 - hazard) * surplus ↔
+      hazard / (1 - hazard) ≤ surplus / penalty := by
+  have hsurvival : 0 < 1 - hazard := by linarith
+  rw [div_le_div_iff₀ hsurvival hpenalty]
+  constructor <;> intro hbound <;> nlinarith [hbound]
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- A nonpositive collision penalty against a nonnegative continuation surplus
+imposes no constraint at all: joining the exit never pays and staying never
+costs. -/
+theorem hazard_mul_penalty_le_of_penalty_nonpos {hazard penalty surplus : ℝ}
+    (h0 : 0 ≤ hazard) (h1 : hazard ≤ 1) (hpenalty : penalty ≤ 0)
+    (hsurplus : 0 ≤ surplus) :
+    hazard * penalty ≤ (1 - hazard) * surplus :=
+  le_trans (mul_nonpos_of_nonneg_of_nonpos h0 hpenalty)
+    (mul_nonneg (by linarith) hsurplus)
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- At a sure-quit phase the constraint degenerates to the sign of the
+collision penalty: the continuation surplus is never reached. -/
+theorem hazard_mul_penalty_le_one_iff {penalty surplus : ℝ} :
+    (1 : ℝ) * penalty ≤ (1 - 1) * surplus ↔ penalty ≤ 0 := by
+  constructor <;> intro hbound <;> linarith [hbound]
+
+/-! ### The owner's condition at a deterministic phase -/
+
+/-- **The sharp owner condition.**  Exact root Nash needs only the signed
+endpoint conditions the definition asks for: quitting must be weakly better
+where the owner puts Quit mass, and weakly worse where it puts Continue mass.
+Indifference is what those two force when both masses are positive. -/
+theorem isZeroQuittingRootEndpointNash_soloMixedRoot_of_ownerSigns
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (owner : ι) (marginal : PMF Bool)
+    (hquit : 0 ≤ (marginal true).toReal *
+      (reward (quittingSingletonTerminal owner) owner - tail owner))
+    (hcontinue : (marginal false).toReal *
+      (reward (quittingSingletonTerminal owner) owner - tail owner) ≤ 0)
+    (hspectator : ∀ who, who ≠ owner →
+      (marginal true).toReal * quittingSoloCollisionPenalty reward owner who ≤
+        (marginal false).toReal * quittingContinuationSurplus reward tail who) :
+    IsεQuittingRootEndpointNash reward tail 0
+      (quittingSoloMixedRoot owner marginal) := by
+  intro who
+  by_cases hwho : who = owner
+  · subst hwho
+    have hdiff : quittingRootEndpointDifference reward tail
+        (quittingSoloMixedRoot who marginal) who =
+          reward (quittingSingletonTerminal who) who - tail who := by
+      rw [quittingRootEndpointDifference,
+        quittingRootQuitPayoff_soloMixedRoot_self,
+        quittingRootContinuePayoff_soloMixedRoot_self]
+    rw [quittingSoloMixedRoot_self, hdiff]
+    exact ⟨hcontinue, by simpa using hquit⟩
+  · have hcap := (quittingSoloSpectatorCap_iff_hazard_mul_penalty_le reward tail
+      owner who marginal).2 (hspectator who hwho)
+    have hdiff : quittingRootEndpointDifference reward tail
+        (quittingSoloMixedRoot owner marginal) who ≤ 0 := by
+      rw [quittingRootEndpointDifference,
+        quittingRootQuitPayoff_soloMixedRoot_of_ne reward tail hwho,
+        quittingRootContinuePayoff_soloMixedRoot_of_ne reward tail hwho]
+      linarith [hcap]
+    rw [quittingSoloMixedRoot_of_ne hwho]
+    exact ⟨by simpa using hdiff, by simp⟩
+
+/-- **A sure-quit phase needs only one inequality from its owner.**  Where the
+owner quits with probability one, exact root Nash asks that its solo exit be
+weakly better than the declared tail, not that the two agree. -/
+theorem isZeroQuittingRootEndpointNash_soloMixedRoot_of_pureQuit
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (owner : ι) (marginal : PMF Bool)
+    (hpure : (marginal false).toReal = 0)
+    (howner : tail owner ≤ reward (quittingSingletonTerminal owner) owner)
+    (hspectator : ∀ who, who ≠ owner →
+      quittingSoloCollisionPenalty reward owner who ≤ 0) :
+    IsεQuittingRootEndpointNash reward tail 0
+      (quittingSoloMixedRoot owner marginal) := by
+  have hmass : (marginal true).toReal = 1 := by
+    have hsum : (marginal false).toReal + (marginal true).toReal = 1 := by
+      simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one marginal
+    linarith
+  refine isZeroQuittingRootEndpointNash_soloMixedRoot_of_ownerSigns reward tail
+    owner marginal ?_ ?_ fun who hwho ↦ ?_
+  · rw [hmass]
+    linarith
+  · rw [hpure]
+    linarith
+  · rw [hmass, hpure]
+    linarith [hspectator who hwho]
+
+/-- **A sure-continue phase needs only the reverse inequality.**  Where the
+owner never quits, exact root Nash asks that its solo exit be weakly worse than
+the declared tail, and every spectator's continuation surplus be nonnegative. -/
+theorem isZeroQuittingRootEndpointNash_soloMixedRoot_of_pureContinue
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (owner : ι) (marginal : PMF Bool)
+    (hpure : (marginal true).toReal = 0)
+    (howner : reward (quittingSingletonTerminal owner) owner ≤ tail owner)
+    (hspectator : ∀ who, who ≠ owner →
+      0 ≤ quittingContinuationSurplus reward tail who) :
+    IsεQuittingRootEndpointNash reward tail 0
+      (quittingSoloMixedRoot owner marginal) := by
+  have hmass : (marginal false).toReal = 1 := by
+    have hsum : (marginal false).toReal + (marginal true).toReal = 1 := by
+      simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one marginal
+    linarith
+  refine isZeroQuittingRootEndpointNash_soloMixedRoot_of_ownerSigns reward tail
+    owner marginal ?_ ?_ fun who hwho ↦ ?_
+  · rw [hpure]
+    linarith
+  · rw [hmass]
+    linarith
+  · rw [hmass, hpure]
+    linarith [hspectator who hwho]
+
 variable {m : ℕ}
+
+/-- The anchored cyclic root of a sure-quit phase is exactly Nash against a
+declared tail as soon as its owner weakly prefers its own solo exit and no
+spectator gains by joining that exit. -/
+theorem isZeroQuittingRootEndpointNash_anchoredCyclicCycle_of_pureQuit
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (tail : Payoff ι) (phase : Fin m) (hpure : hazard phase = 1)
+    (howner : tail (w phase) ≤
+      reward (quittingSingletonTerminal (w phase)) (w phase))
+    (hspectator : ∀ who, who ≠ w phase →
+      quittingSoloCollisionPenalty reward (w phase) who ≤ 0) :
+    IsεQuittingRootEndpointNash reward tail 0
+      (quittingAnchoredCyclicCycle w hazard h0 h1 phase) :=
+  isZeroQuittingRootEndpointNash_soloMixedRoot_of_pureQuit reward tail (w phase)
+    _ (by simp [hpure]) howner hspectator
+
+/-- The anchored cyclic root of a sure-continue phase is exactly Nash against a
+declared tail as soon as its owner weakly prefers the tail and every spectator's
+continuation surplus is nonnegative. -/
+theorem isZeroQuittingRootEndpointNash_anchoredCyclicCycle_of_pureContinue
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (tail : Payoff ι) (phase : Fin m) (hpure : hazard phase = 0)
+    (howner : reward (quittingSingletonTerminal (w phase)) (w phase) ≤
+      tail (w phase))
+    (hspectator : ∀ who, who ≠ w phase →
+      0 ≤ quittingContinuationSurplus reward tail who) :
+    IsεQuittingRootEndpointNash reward tail 0
+      (quittingAnchoredCyclicCycle w hazard h0 h1 phase) :=
+  isZeroQuittingRootEndpointNash_soloMixedRoot_of_pureContinue reward tail
+    (w phase) _ (by simp [hpure]) howner hspectator
 
 /-- The exact finite response cap of the anchored cyclic profile: the larger
 of the refusal value and the best deterministic stop in one pass. -/
@@ -225,6 +421,13 @@ end QuittingCounterexampleRegime
 The system below is the optimal-stopping fixed-point system `S` for the
 anchored cyclic family.  It is *stated*, and identified with the repository's
 Bellman cap recursion along the periodic live path.
+
+The three declarations of this section constrain the hazard vector nowhere.
+The one-phase Quit and Continue values are affine in `hazard phase` and the
+solution predicate is their fixed-point equation, so all three are defined, and
+the system is solvable or not, for an arbitrary real hazard vector.  The range
+matters only at the passage from a solution to a Bellman cap, which evaluates
+the actual root sequence and so needs each per-phase coin to be a probability.
 -/
 
 /-- The one-phase Quit value of `who` against the anchored cyclic root of

@@ -126,6 +126,7 @@ import MathUE.LinearProgramming.ClosedTrapPerturbation
 import MathUE.LinearProgramming.Basic
 import MathUE.LinearProgramming.CirculantPocketR0
 import MathUE.LinearProgramming.ColumnSumQ
+import MathUE.LinearProgramming.CopositiveMargin
 import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
 import MathUE.LinearProgramming.FlowCostateDuality

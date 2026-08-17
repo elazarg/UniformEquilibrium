@@ -40,6 +40,8 @@ it is a closed condition and can fail arbitrarily close to a copositive matrix.
 * `r0Margin_pos_iff_isR0Matrix` — the margin is positive exactly on `R₀`
   matrices
 * `sum_le_of_isStandardLCPSolution` — the explicit uniform solution bound
+* `abs_matrixAction_sub_le` and `abs_quadratic_sub_le` — the entrywise
+  perturbation estimates on the simplex
 * `abs_r0Margin_sub_le` — the margin is Lipschitz in the matrix
 * `isR0Matrix_of_r0Margin_lt` — `R₀` is open, with a computable radius
 * `isStandardQ_of_copositive_of_r0Margin_lt` — perturbation stability of the
@@ -168,7 +170,49 @@ theorem sum_le_of_isStandardLCPSolution [Nonempty ι] (M : ι → ι → ℝ)
     rw [le_div_iff₀ hmargin]
     nlinarith [hlow]
 
-/-! ## Lipschitz dependence on the matrix -/
+/-! ## Lipschitz dependence on the matrix
+
+The two estimates below are the entrywise-perturbation plumbing shared by every
+margin taken over the standard simplex: on the simplex the weights are
+nonnegative and sum to one, so a weighted average of entrywise deviations never
+exceeds the largest of them. -/
+
+/-- **The matrix action is Lipschitz in the matrix.**  At a simplex point the
+rows of `M` and of `N` differ by at most the largest entrywise deviation. -/
+theorem abs_matrixAction_sub_le (M N : ι → ι → ℝ) {δ : ℝ}
+    (hδ : ∀ i j, |M i j - N i j| ≤ δ) {p : ι → ℝ} (hp : p ∈ stdSimplex ℝ ι) (i : ι) :
+    |(∑ j, p j * M i j) - ∑ j, p j * N i j| ≤ δ := by
+  have hsplit : (∑ j, p j * M i j) - (∑ j, p j * N i j) =
+      ∑ j, p j * (M i j - N i j) := by
+    rw [← Finset.sum_sub_distrib]
+    exact Finset.sum_congr rfl fun j _ => by ring
+  rw [hsplit]
+  calc |∑ j, p j * (M i j - N i j)| ≤ ∑ j, |p j * (M i j - N i j)| :=
+        Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ j, p j * δ := by
+        refine Finset.sum_le_sum fun j _ => ?_
+        rw [abs_mul, abs_of_nonneg (hp.1 j)]
+        exact mul_le_mul_of_nonneg_left (hδ i j) (hp.1 j)
+    _ = δ := by rw [← Finset.sum_mul, hp.2, one_mul]
+
+/-- **The quadratic form is Lipschitz in the matrix**, with constant one: at a
+simplex point it moves by at most the largest entrywise deviation. -/
+theorem abs_quadratic_sub_le (M N : ι → ι → ℝ) {δ : ℝ}
+    (hδ : ∀ i j, |M i j - N i j| ≤ δ) {p : ι → ℝ} (hp : p ∈ stdSimplex ℝ ι) :
+    |(∑ i, p i * ∑ j, p j * M i j) - ∑ i, p i * ∑ j, p j * N i j| ≤ δ := by
+  have hsplit : (∑ i, p i * ∑ j, p j * M i j) - (∑ i, p i * ∑ j, p j * N i j) =
+      ∑ i, p i * ((∑ j, p j * M i j) - ∑ j, p j * N i j) := by
+    rw [← Finset.sum_sub_distrib]
+    exact Finset.sum_congr rfl fun i _ => by ring
+  rw [hsplit]
+  calc |∑ i, p i * ((∑ j, p j * M i j) - ∑ j, p j * N i j)| ≤
+        ∑ i, |p i * ((∑ j, p j * M i j) - ∑ j, p j * N i j)| :=
+        Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ i, p i * δ := by
+        refine Finset.sum_le_sum fun i _ => ?_
+        rw [abs_mul, abs_of_nonneg (hp.1 i)]
+        exact mul_le_mul_of_nonneg_left (abs_matrixAction_sub_le M N hδ hp i) (hp.1 i)
+    _ = δ := by rw [← Finset.sum_mul, hp.2, one_mul]
 
 /-- **The violation is Lipschitz in the matrix.**  On the standard simplex the
 homogeneous violation of `M` and of `N` differ by at most `card ι + 1` times the
@@ -178,34 +222,10 @@ theorem abs_homogeneousViolation_sub_le (M N : ι → ι → ℝ) {δ : ℝ}
     |homogeneousViolation M p - homogeneousViolation N p| ≤
       ((Fintype.card ι : ℝ) + 1) * δ := by
   classical
-  have hrow : ∀ i, |(∑ j, p j * M i j) - ∑ j, p j * N i j| ≤ δ := by
-    intro i
-    have hsplit : (∑ j, p j * M i j) - (∑ j, p j * N i j) =
-        ∑ j, p j * (M i j - N i j) := by
-      rw [← Finset.sum_sub_distrib]
-      exact Finset.sum_congr rfl fun j _ => by ring
-    rw [hsplit]
-    calc |∑ j, p j * (M i j - N i j)| ≤ ∑ j, |p j * (M i j - N i j)| :=
-          Finset.abs_sum_le_sum_abs _ _
-      _ ≤ ∑ j, p j * δ := by
-          refine Finset.sum_le_sum fun j _ => ?_
-          rw [abs_mul, abs_of_nonneg (hp.1 j)]
-          exact mul_le_mul_of_nonneg_left (hδ i j) (hp.1 j)
-      _ = δ := by rw [← Finset.sum_mul, hp.2, one_mul]
-  have hquad : |(∑ i, p i * ∑ j, p j * M i j) - ∑ i, p i * ∑ j, p j * N i j| ≤ δ := by
-    have hsplit : (∑ i, p i * ∑ j, p j * M i j) - (∑ i, p i * ∑ j, p j * N i j) =
-        ∑ i, p i * ((∑ j, p j * M i j) - ∑ j, p j * N i j) := by
-      rw [← Finset.sum_sub_distrib]
-      exact Finset.sum_congr rfl fun i _ => by ring
-    rw [hsplit]
-    calc |∑ i, p i * ((∑ j, p j * M i j) - ∑ j, p j * N i j)| ≤
-          ∑ i, |p i * ((∑ j, p j * M i j) - ∑ j, p j * N i j)| :=
-          Finset.abs_sum_le_sum_abs _ _
-      _ ≤ ∑ i, p i * δ := by
-          refine Finset.sum_le_sum fun i _ => ?_
-          rw [abs_mul, abs_of_nonneg (hp.1 i)]
-          exact mul_le_mul_of_nonneg_left (hrow i) (hp.1 i)
-      _ = δ := by rw [← Finset.sum_mul, hp.2, one_mul]
+  have hrow : ∀ i, |(∑ j, p j * M i j) - ∑ j, p j * N i j| ≤ δ :=
+    abs_matrixAction_sub_le M N hδ hp
+  have hquad : |(∑ i, p i * ∑ j, p j * M i j) - ∑ i, p i * ∑ j, p j * N i j| ≤ δ :=
+    abs_quadratic_sub_le M N hδ hp
   have hmax : |max 0 (∑ i, p i * ∑ j, p j * M i j) -
       max 0 (∑ i, p i * ∑ j, p j * N i j)| ≤ δ := by
     have hcomm : ∀ x : ℝ, max 0 x = max x 0 := fun x => max_comm 0 x
