@@ -150,6 +150,7 @@ import MathUE.OptimizationLocalGlobal
 import MathUE.OutcomeClosure.TerminalTarget
 import MathUE.OutcomeClosure
 import MathUE.ParametricFarkasBasis
+import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
 import MathUE.PMFIter
 import MathUE.PMFProduct

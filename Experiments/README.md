@@ -24,6 +24,10 @@ Research must not import this directory.
 - `Probes/` contains standalone bounded probes that are not in the Base suite.
 - `quitting_repair_cegis/` is the exact-rational repair-search package; its
   tests run with `python -m pytest Experiments/quitting_repair_cegis/tests`.
+- `singleton_collision_candidate_search/` searches four-player tables passing
+  the formalized counterexample necessary conditions against a bounded
+  architecture attack battery, seeded at the Solan-Vieille boundary table; run
+  with `python3 Experiments/singleton_collision_candidate_search/singleton_collision_candidate_search.py`.
 
 Reports retain their commands, assumptions, and exact evidence. The directory
 layout above is the current execution layout.
