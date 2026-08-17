@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.LinearProgramming.CirculantPocketR0
 import Research.Quitting.CirculantConstantStepCycle
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
@@ -48,6 +49,8 @@ supplies it.
   satisfying the floor carries no counterexample regime
 * `isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit` — the same
   conclusion from failure of the sure-exit property at one adjacent pair
+* `isEmpty_counterexampleRegime_colliderCompletion_closure` — the two settled
+  branches of the completion, nonpositive margin sum and the screened pocket
 -/
 
 noncomputable section
@@ -55,7 +58,7 @@ noncomputable section
 namespace GameTheory
 namespace CirculantColliderCompletion
 
-open CirculantConstantStepCycle QuittingSureSetOwnerRepair
+open CirculantConstantStepCycle QuittingLCPClassification QuittingSureSetOwnerRepair
 
 /-! ## Adjacent pairs of the five-cycle -/
 
@@ -264,6 +267,23 @@ theorem lt_margin_one_of_not_isQuittingSureExitSet
   · exact hlt
   · exact absurd (isQuittingSureExitSet_adjacent_of_le s low m hm4 hlow hge y) hno
 
+/-! ## The normalized solo matrix -/
+
+/-- The normalized solo matrix of a collider completion is the row circulant of
+its margin vector. -/
+theorem hasCirculantSoloMatrix_colliderReward (hm0 : m 0 = 0) :
+    HasCirculantSoloMatrix (colliderReward s low m) m := by
+  funext who owner
+  show (normalizedQuittingPayoffTable (colliderReward s low m)).singletonMatrix who owner
+    = m (owner - who)
+  rw [normalized_singletonMatrix_eq_quittingSingletonMatrix, quittingSingletonMatrix,
+    show (⟨{owner}, Finset.singleton_nonempty owner⟩ :
+        {S : Finset (ZMod 5) // S.Nonempty}) = quittingSingletonTerminal owner from rfl,
+    show (⟨{who}, Finset.singleton_nonempty who⟩ :
+        {S : Finset (ZMod 5) // S.Nonempty}) = quittingSingletonTerminal who from rfl,
+    colliderReward_singleton, colliderReward_singleton, sub_self, hm0]
+  ring
+
 /-! ## The pocket -/
 
 variable {s low m}
@@ -317,6 +337,46 @@ theorem isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit
     IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) :=
   isEmpty_counterexampleRegime_colliderPocket hm0 hs hm1 hm4 hm2 hm3 hsum
     (lt_margin_one_of_not_isQuittingSureExitSet s low m hm4.le hlow y hno).le
+
+/-- **The pocket branch is `R₀`.**  The normalized solo matrix of a pocket
+collider table admits only the zero solution of its homogeneous linear
+complementarity problem. -/
+theorem isR0Matrix_normalizedSoloMatrix_colliderPocket
+    (hm0 : m 0 = 0) (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
+    (hsum : 0 < m 1 + m 2 + m 3 + m 4) :
+    Math.LinearProgramming.IsR0Matrix
+      (normalizedSoloMatrix (colliderReward s low m)) := by
+  rw [hasCirculantSoloMatrix_colliderReward s low m hm0]
+  exact Math.LinearProgramming.isR0Matrix_rowCirculant_pentagon_pocket hm0 hm1 hm4
+    hm2 hm3 hsum
+
+/-! ## The two settled branches -/
+
+/-- **The settled branches of the collider completion.**  A five-player
+collider table with nonnegative solo self value and nonpositive joint value
+carries no counterexample regime as soon as either its margin sum is
+nonpositive, or it lies in the pocket and some adjacent pair fails the
+sure-exit property.
+
+The remaining branch — positive margin sum outside the pocket — is not covered
+by this statement. -/
+theorem isEmpty_counterexampleRegime_colliderCompletion_closure
+    (hm0 : m 0 = 0) (hs : 0 ≤ s) (hlow : low ≤ 0)
+    (hcase : m 1 + m 2 + m 3 + m 4 ≤ 0 ∨
+      (m 1 < 0 ∧ m 4 < 0 ∧ 0 ≤ m 2 ∧ 0 ≤ m 3 ∧ 0 < m 1 + m 2 + m 3 + m 4 ∧
+        ∃ y : ZMod 5,
+          ¬ IsQuittingSureExitSet (colliderReward s low m) {y, y + 1})) :
+    IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) := by
+  have hfive : (∑ e : ZMod 5, m e) = m 0 + m 1 + m 2 + m 3 + m 4 :=
+    Fin.sum_univ_five (fun e : ZMod 5 => m e)
+  rcases hcase with hnonpos | ⟨hm1, hm4, hm2, hm3, hsum, y, hno⟩
+  · refine ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
+      (exists_uniformEquilibriumPayoff_of_pentagonCirculant_surplus_nonpos
+        (hasCirculantSoloMatrix_colliderReward s low m hm0) ?_)⟩
+    rw [hfive, hm0]
+    linarith
+  · exact isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit hm0 hs hlow
+      hm1 hm4 hm2 hm3 hsum y hno
 
 end CirculantColliderCompletion
 end GameTheory
