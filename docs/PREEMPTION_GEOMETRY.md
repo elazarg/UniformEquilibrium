@@ -50,6 +50,42 @@ inequalities align at the same payoff coordinate:
   \min\bigl\{r_c(\{q,c\}),r_c(\{c\})\bigr\}.
 \]
 
+This alignment has two distinct semantic consequences. First consider the
+sequential profile in which \(q\) quits at rate \(\lambda\) at stage zero and,
+after survival, \(c\) quits surely. If \(c\) instead quits immediately, its
+exact gain is
+
+\[
+  \lambda\bigl(r_c(\{q,c\})-r_c(\{q\})\bigr).
+\]
+
+Thus the collision inequality alone gives gain at least
+\(\lambda\gamma\), strictly positive when \(\lambda,\gamma>0\). The solo
+preemption inequality does not enter this source-matched calculation. In
+particular, an algebraic comparison of convex combinations of the two solo
+rows is not by itself a legal periodic-deviation theorem.
+
+Second, consider the simultaneous repair row in which \(c\) quits surely and
+\(q\) quits at rate \(\lambda\), followed off path by a punishment of \(c\).
+The mechanism is an approximate terminal equilibrium exactly when all three
+of the following hold:
+
+1. \(q\)'s prescribed mixture is at least both of \(q\)'s pure endpoints;
+2. no spectator gains by joining the quitting set; and
+3. \(c\)'s prescribed payoff covers the exact punishment floor.
+
+Alignment makes the prescribed payoff to \(c\) at least
+\(r_c(\{q\})+\gamma\). Hence condition 3 is automatic under the scalar bound
+
+\[
+  \lambda r_c(\{q\})+(1-\lambda)\chi_c
+  \le r_c(\{q\})+\gamma,
+\]
+
+where \(\chi_c\) is \(c\)'s punishment value. Under this bound, owner
+optimality and spectator no-join are necessary and sufficient for the repair.
+Without it, the original three conditions remain the exact characterization.
+
 If \(q\) lies on the cycle and \(c\) is the vertex immediately before it,
 the lasso instead supplies \(c\to q\). That edge is in player \(q\)'s payoff
 coordinate, while the collision inequality is in player \(c\)'s coordinate;

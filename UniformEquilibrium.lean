@@ -466,4 +466,5 @@ import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 import UniformEquilibrium.Quitting.Stationary.MinMax
 import UniformEquilibrium.Quitting.Terminal.TargetTail.DiagonalTargetTail
 import UniformEquilibrium.Quitting.Boundary.Repair.CollisionRepairCharacterization
+import UniformEquilibrium.Quitting.Boundary.Repair.AlignedPreemptionCollision
 import UniformEquilibrium.Quitting.Punishment.QuitBonusSelfLoopBridge

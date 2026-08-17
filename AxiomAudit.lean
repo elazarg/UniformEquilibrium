@@ -1068,6 +1068,7 @@ import UniformEquilibrium.Quitting.Boundary.Holonomy.TerminalExploitabilityRepai
 import UniformEquilibrium.Quitting.Boundary.Holonomy.TwoEndedAnchorPersistenceCounterexample
 import UniformEquilibrium.Quitting.Boundary.Holonomy.TwoOwnerCommonWordRealization
 import UniformEquilibrium.Quitting.Boundary.Holonomy.WeightedBounds
+import UniformEquilibrium.Quitting.Boundary.Repair.AlignedPreemptionCollision
 import UniformEquilibrium.Quitting.Boundary.Repair.AtomicBlockerCompletion
 import UniformEquilibrium.Quitting.Boundary.Repair.BoundedSurgeryDescentCounterexample
 import UniformEquilibrium.Quitting.Boundary.Repair.BoundedWindowLanding
