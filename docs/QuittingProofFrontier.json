@@ -581,15 +581,15 @@
     },
     {
       "id": "CONDITIONAL-EVENTUALLY-SOLO-DIFFUSE-TAIL",
-      "kind": "conditional",
-      "open": true,
+      "kind": "route_refuted",
+      "open": false,
       "cover_clause_ids": [
         "COVER-B"
       ],
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "The eventually-solo conclusion -- at most one persistently active player in a diffuse tail -- is reached only conditionally, and the two routes now differ in what they ask. On a zero-free table the route rests on the pair dichotomy alone, together with the exact value recursion, exact root Nash, interior hazards and a vanishing one-stage absorption mass: zero-freeness excludes late strict alternation outright, through the window telescope forcing a vanishing pair entry of the normalized solo matrix, so no fenced solo window family and no uniform charge floor is asked for. On a general table the route still asks the pair dichotomy together with the absence of fenced solo window families. Both remaining hypotheses are proposition definitions rather than theorems, and no theorem anywhere concludes the absence of fenced families. On a zero-free table with vanishing conditioned mesh the extraction hypothesis is equivalent to the conclusion it is used to prove, so assuming extraction assumes the conclusion. Nothing on this route is closed unconditionally.",
+      "summary": "Both routes to the eventually-solo conclusion rest on the pair dichotomy, and that hypothesis is refuted. An explicit three-player zero-free table with an exact solo tail satisfies every other hypothesis of the zero-free route -- the exact value recursion, endpoint Nash at accuracy zero, interior hazards, zero-freeness and a vanishing one-stage absorption mass -- while both the dichotomy and the shared conclusion fail on it. So the conclusion is not merely unproved from those hypotheses: it is false there, and no argument from them alone can supply the dichotomy. The general-table route falls with it, since it assumes the same dichotomy alongside the absence of fenced solo window families; that second proposition is not itself refuted by this witness. The two consumer theorems remain true statements, but their hypothesis is unattainable in the setting they were written for.",
       "evidence": [
         "Research/Quitting/DiffuseTailEffectiveCharge.lean",
         "Research/Quitting/DiffuseTailSoloStructure.lean",
@@ -612,14 +612,15 @@
         "GameTheory.quittingSoloWindowExtraction_iff_persistentlySolo"
       ],
       "residual_propositions_by_route": {
-        "zero_free": [
-          "GameTheory.QuittingTailPairSoloDichotomy"
-        ],
+        "zero_free": [],
         "general_table": [
-          "GameTheory.QuittingTailPairSoloDichotomy",
           "GameTheory.QuittingNoFencedSoloWindowFamily"
         ]
-      }
+      },
+      "superseded_by": "REFUTE-TAIL-PAIR-SOLO-DICHOTOMY",
+      "refuted_propositions": [
+        "GameTheory.QuittingTailPairSoloDichotomy"
+      ]
     },
     {
       "id": "CONDITIONAL-SOLO-WINDOW-PHASE-STOP-BRANCH",
@@ -631,7 +632,7 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "The phase-stop branch is proved under solo-tail hypotheses, not outright. It assumes a seam witness of the counterexample regime, a fixed owner that is the sole possible quitter at every tail date, a nonnegative own solo reward for that owner, bounded rewards, and a vanishing live-mass limit on every window of the canonical periodic tail window family. The route to a tail of that shape runs through the pair dichotomy and the fenced-family residual of the diffuse-tail route, neither of which is proved, so the branch does not close a leaf on its own.",
+      "summary": "The phase-stop branch is proved under solo-tail hypotheses, not outright. It assumes a seam witness of the counterexample regime, a fixed owner that is the sole possible quitter at every tail date, a nonnegative own solo reward for that owner, bounded rewards, and a vanishing live-mass limit on every window of the canonical periodic tail window family. It remains a true theorem at those hypotheses, but the route that was to supply a tail of that shape -- the pair dichotomy of the diffuse-tail work -- is refuted, so the branch currently has no route to its own solo hypothesis.",
       "evidence": [
         "Research/Quitting/SoloWindowPhaseStopBranch.lean",
         "Research/Quitting/DiffuseTailEffectiveCharge.lean"
@@ -646,7 +647,8 @@
       ],
       "declarations": [
         "GameTheory.QuittingCounterexampleSeamWitness.quittingSoloWindowPhaseStopBranch_of_tailSolo"
-      ]
+      ],
+      "superseded_by": "REFUTE-TAIL-PAIR-SOLO-DICHOTOMY"
     },
     {
       "id": "COMPILER-BLOCK-PERIODIC-GENERAL",
@@ -673,6 +675,57 @@
         "GameTheory.isEmpty_counterexampleRegime_of_isQuittingBlockCertificate",
         "GameTheory.QuittingCounterexampleRegime.exists_quittingBlockResponse_gain",
         "GameTheory.eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue"
+      ]
+    },
+    {
+      "id": "REFUTE-TAIL-PAIR-SOLO-DICHOTOMY",
+      "kind": "refutation",
+      "cover_clause_ids": [
+        "COVER-B",
+        "INSTANCES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "An explicit three-player zero-free cyclic table refutes the tail pair-solo dichotomy. The coordinate congruent to the date modulo three quits with probability one over two to the date plus two, the gap-return balance is exact at every date, and every coordinate is persistently active while no two are ever active together. The table meets every hypothesis the dichotomy is consumed with -- exact value recursion, endpoint Nash at accuracy zero, interior hazards, zero-freeness, vanishing one-stage absorption mass -- and both the dichotomy and the eventually-solo conclusion fail on it. The eventually-solo claim for exact diffuse tails on zero-free tables is therefore false, not merely unproved.",
+      "evidence": [
+        "Research/Quitting/CyclicTripleSoloTail.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A"
+      ],
+      "declarations": [
+        "GameTheory.QuittingCyclicTripleSoloTail.not_quittingTailPairSoloDichotomy",
+        "GameTheory.QuittingCyclicTripleSoloTail.not_quittingTailPersistentlySolo",
+        "GameTheory.QuittingCyclicTripleSoloTail.pairSoloDichotomy_fails_under_consumer_hypotheses"
+      ]
+    },
+    {
+      "id": "NOGO-ANCHORED-PREEMPTION-EDGE",
+      "kind": "architectural_nogo",
+      "cover_clause_ids": [
+        "COVER-A",
+        "COVER-C"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "An exact anchored solo-periodic schedule cannot place a collision owner at a phase whose cyclic successor is the collider: the immediate singleton collision certificate of the counterexample regime and interior hazards contradict exactness on that edge. Supporting bounds are branch-free: on an exact anchored schedule the pair row never exceeds the solo reward, the solo collision penalty is nonpositive, and on an approximate schedule the product of two consecutive hazards with the collision margin, and with the continuation surplus, is bounded by the accuracy. The refusal gain of a solo-periodic schedule is also identified in closed form as a drift quotient.",
+      "evidence": [
+        "Research/Quitting/AnchoredCyclicPreemptionEdge.lean",
+        "Research/Quitting/SolanVieilleSoloPeriodicTerminalGap.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ],
+      "declarations": [
+        "GameTheory.not_isExactAnchoredSoloPeriodic_of_immediateSingletonCollision_on_edge",
+        "GameTheory.pairReward_le_soloReward_of_isExactAnchoredSoloPeriodic",
+        "GameTheory.quittingSoloCollisionPenalty_nonpos_of_isExactAnchoredSoloPeriodic",
+        "GameTheory.hazard_mul_hazard_mul_margin_le_of_isεExactAnchoredSoloPeriodic"
       ]
     }
   ]
