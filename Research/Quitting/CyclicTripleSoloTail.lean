@@ -430,9 +430,9 @@ zero at every date, has interior hazards and a vanishing one-stage absorption
 mass, and lives over a zero-free table -- every hypothesis of
 `quittingTailPersistentlySolo_of_zeroFree_of_dichotomy` except the pair
 dichotomy itself -- and it carries no fenced solo window family for any pair.
-Both the dichotomy and the eventually-solo conclusion fail here, so neither the
-dichotomy nor the absence of fenced solo window families follows from those
-hypotheses, and neither supplies the conclusion on its own. -/
+Both the dichotomy and the eventually-solo conclusion fail here, so the
+dichotomy does not follow from those hypotheses, and the absence of fenced
+solo window families, which does hold here, does not supply the conclusion. -/
 theorem pairSoloDichotomy_fails_under_consumer_hypotheses :
     (∀ time, value time =
         quittingRootSuccessorPayoff reward (value (time + 1)) (roots time)) ∧

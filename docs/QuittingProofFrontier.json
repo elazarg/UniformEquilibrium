@@ -589,7 +589,7 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "Both routes to the eventually-solo conclusion rest on the pair dichotomy, and that hypothesis is refuted. An explicit three-player zero-free table with an exact solo tail satisfies every other hypothesis of the zero-free route -- the exact value recursion, endpoint Nash at accuracy zero, interior hazards, zero-freeness and a vanishing one-stage absorption mass -- while both the dichotomy and the shared conclusion fail on it. So the conclusion is not merely unproved from those hypotheses: it is false there, and no argument from them alone can supply the dichotomy. The general-table route falls with it, since it assumes the same dichotomy alongside the absence of fenced solo window families; that second proposition is not itself refuted by this witness. The two consumer theorems remain true statements, but their hypothesis is unattainable in the setting they were written for.",
+      "summary": "Both routes to the eventually-solo conclusion are refuted, and the failure is attributable to the pair dichotomy alone. An explicit three-player zero-free table with an exact solo tail satisfies every other hypothesis of the zero-free route -- the exact value recursion, endpoint Nash at accuracy zero, interior hazards, zero-freeness and a vanishing one-stage absorption mass -- while both the dichotomy and the shared conclusion fail on it, so the conclusion is false there rather than unproved. The same witness satisfies the absence of fenced solo window families, which is the general-table route's other hypothesis, so that route is refuted with its second hypothesis granted and not merely through the shared dichotomy. The fenced-family proposition is therefore not refuted -- the witness satisfies it -- but proving it in general would not supply the conclusion. Both consumer theorems remain true statements whose hypotheses are unattainable in the setting they were written for.",
       "evidence": [
         "Research/Quitting/DiffuseTailEffectiveCharge.lean",
         "Research/Quitting/DiffuseTailSoloStructure.lean",
@@ -613,13 +613,14 @@
       ],
       "residual_propositions_by_route": {
         "zero_free": [],
-        "general_table": [
-          "GameTheory.QuittingNoFencedSoloWindowFamily"
-        ]
+        "general_table": []
       },
       "superseded_by": "REFUTE-TAIL-PAIR-SOLO-DICHOTOMY",
       "refuted_propositions": [
         "GameTheory.QuittingTailPairSoloDichotomy"
+      ],
+      "satisfied_by_refutation_witness": [
+        "GameTheory.QuittingNoFencedSoloWindowFamily"
       ]
     },
     {
@@ -687,7 +688,7 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "An explicit three-player zero-free cyclic table refutes the tail pair-solo dichotomy. The coordinate congruent to the date modulo three quits with probability one over two to the date plus two, the gap-return balance is exact at every date, and every coordinate is persistently active while no two are ever active together. The table meets every hypothesis the dichotomy is consumed with -- exact value recursion, endpoint Nash at accuracy zero, interior hazards, zero-freeness, vanishing one-stage absorption mass -- and both the dichotomy and the eventually-solo conclusion fail on it. The eventually-solo claim for exact diffuse tails on zero-free tables is therefore false, not merely unproved.",
+      "summary": "An explicit three-player zero-free cyclic table refutes the tail pair-solo dichotomy. The coordinate congruent to the date modulo three quits with probability one over two to the date plus two, the gap-return balance is exact at every date, and every coordinate is persistently active while no two are ever active together. The table meets every hypothesis the dichotomy is consumed with -- exact value recursion, endpoint Nash at accuracy zero, interior hazards, zero-freeness, vanishing one-stage absorption mass -- and it additionally carries no fenced solo window family for any pair, because each coordinate's active dates are isolated, so window runs have length one and the closing date lands on the third coordinate. Both the dichotomy and the eventually-solo conclusion fail on it. The eventually-solo claim for exact diffuse tails on zero-free tables is therefore false, not merely unproved; and since the absence of fenced solo window families holds here while the conclusion fails, that proposition does not yield the conclusion either.",
       "evidence": [
         "Research/Quitting/CyclicTripleSoloTail.lean"
       ],
@@ -699,6 +700,8 @@
       "declarations": [
         "GameTheory.QuittingCyclicTripleSoloTail.not_quittingTailPairSoloDichotomy",
         "GameTheory.QuittingCyclicTripleSoloTail.not_quittingTailPersistentlySolo",
+        "GameTheory.QuittingCyclicTripleSoloTail.isEmpty_quittingFencedSoloWindowFamily",
+        "GameTheory.QuittingCyclicTripleSoloTail.quittingNoFencedSoloWindowFamily",
         "GameTheory.QuittingCyclicTripleSoloTail.pairSoloDichotomy_fails_under_consumer_hypotheses"
       ]
     },
