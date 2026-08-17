@@ -86,6 +86,14 @@ where \(\chi_c\) is \(c\)'s punishment value. Under this bound, owner
 optimality and spectator no-join are necessary and sufficient for the repair.
 Without it, the original three conditions remain the exact characterization.
 
+These local conditions are jointly feasible. If an irreflexive relation
+contains both \(q\to c\) and \(c\to q\), the universal realization above has
+the collision certificate, both preemption edges, and an exact rate-one
+collision repair at the pair exit \(\{q,c\}\). Consequently, the aligned
+two-cycle cases cannot be eliminated from the collision/preemption data and
+the local repair conditions alone. Any exclusion must use global information
+forced by a hypothetical counterexample.
+
 If \(q\) lies on the cycle and \(c\) is the vertex immediately before it,
 the lasso instead supplies \(c\to q\). That edge is in player \(q\)'s payoff
 coordinate, while the collision inequality is in player \(c\)'s coordinate;
