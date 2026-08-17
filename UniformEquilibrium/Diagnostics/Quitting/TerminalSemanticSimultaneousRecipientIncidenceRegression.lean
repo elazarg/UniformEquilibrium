@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSimultaneousResetOrientationLocalization
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceCapReturn
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTransferBalanceRegression
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
 # A flat simultaneous recipient need not carry literal incidence

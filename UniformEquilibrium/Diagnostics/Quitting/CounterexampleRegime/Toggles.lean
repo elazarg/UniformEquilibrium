@@ -167,6 +167,30 @@ theorem exists_collision_gain
     · exact hjoin
     · linarith [regime.terminalGap_pos]
 
+/-- Every singleton row has a complete refusal-or-collision alternative.  The
+owner either gains the terminal gap by continuing forever, or a distinct
+player gains it by joining the owner's singleton exit. -/
+theorem singleton_refusal_or_exists_collision_gain
+    (regime : QuittingCounterexampleRegime reward) (owner : ι) :
+    regime.terminalGap ≤ -quittingSoloReward reward owner owner ∨
+      ∃ other, other ≠ owner ∧
+        quittingSoloReward reward owner other + regime.terminalGap ≤
+          quittingSingletonCollisionReward reward owner other := by
+  rcases regime.exists_leave_or_join_gain ({owner} : Finset ι) with hleave | hjoin
+  · obtain ⟨member, hmember, hgain⟩ := hleave
+    obtain rfl : member = owner := Finset.mem_singleton.mp hmember
+    left
+    rw [quittingSetReward_singleton_eq_soloReward, Finset.erase_singleton,
+      quittingSetReward_empty] at hgain
+    linarith
+  · obtain ⟨other, hother, hgain⟩ := hjoin
+    right
+    refine ⟨other, ?_, ?_⟩
+    · simpa using hother
+    · rw [quittingSetReward_insert_singleton,
+        quittingSetReward_singleton_eq_soloReward] at hgain
+      exact hgain
+
 /-- **At least two players.**  The empty-coalition toggle produces an owner
 with a profitable solo exit, whose singleton coalition then produces a
 distinct colliding opponent. -/

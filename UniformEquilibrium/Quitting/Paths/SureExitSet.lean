@@ -9,6 +9,7 @@ import UniformEquilibrium.Quitting.Stationary.BestResponse
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetRepairCounterexample
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!
@@ -346,6 +347,61 @@ theorem quittingTerminalPayoff_update_pureSetRoot_le
       max_comm]
     exact quittingTerminalPayoff_update_quittingAlwaysContinue_le_max
       reward who deviation
+
+/-! ## Exact terminal-semantic debt -/
+
+/-- The behavioral best-response value against a pure sure-exit set is the
+better membership toggle. -/
+theorem quittingContinuationBestResponseValue_pureSetRoot_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (S : Finset ι) (who : ι) :
+    quittingContinuationBestResponseValue reward
+        (quittingStationaryProfile reward (quittingPureSetRoot S)) who =
+      max (quittingSetReward reward (insert who S) who)
+        (quittingSetReward reward (S.erase who) who) := by
+  let profile := quittingStationaryProfile reward (quittingPureSetRoot S)
+  have hbdd : BddAbove (Set.range fun deviation :
+      (quittingGame reward).BehaviorStrategy who ↦
+        quittingTerminalPayoff reward
+          (Function.update profile who deviation) who) :=
+    bddAbove_range_quittingTerminalPayoff_update reward profile who
+  unfold quittingContinuationBestResponseValue
+  apply le_antisymm
+  · apply csSup_le
+    · refine ⟨quittingTerminalPayoff reward
+          (Function.update profile who
+            (quittingAlwaysContinueStrategy reward who)) who, ?_⟩
+      exact ⟨quittingAlwaysContinueStrategy reward who, rfl⟩
+    · rintro payoff ⟨deviation, rfl⟩
+      exact quittingTerminalPayoff_update_pureSetRoot_le
+        reward S who deviation
+  · apply max_le
+    · apply le_csSup hbdd
+      refine ⟨quittingPureTimeBehaviorStrategy reward who (some 0), ?_⟩
+      exact quittingTerminalPayoff_update_pureSetRoot_quitNow reward S who
+    · apply le_csSup hbdd
+      refine ⟨quittingAlwaysContinueStrategy reward who, ?_⟩
+      exact quittingTerminalPayoff_update_pureSetRoot_alwaysContinue
+        reward S who
+
+/-- Terminal-semantic debt at a pure sure-exit profile is exactly its
+membership-toggle cap minus its prescribed set reward. -/
+theorem quittingTerminalSemanticDebt_pureSetRoot_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (S : Finset ι) (who : ι) :
+    quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward
+          (quittingStationaryProfile reward (quittingPureSetRoot S))) who =
+      max (quittingSetReward reward (insert who S) who)
+          (quittingSetReward reward (S.erase who) who) -
+        quittingSetReward reward S who := by
+  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
+  change quittingContinuationBestResponseValue reward
+      (quittingStationaryProfile reward (quittingPureSetRoot S)) who -
+        quittingTerminalPayoff reward
+          (quittingStationaryProfile reward (quittingPureSetRoot S)) who = _
+  rw [quittingContinuationBestResponseValue_pureSetRoot_eq,
+    quittingTerminalPayoff_pureSetRoot]
 
 /-! ## The characterization -/
 

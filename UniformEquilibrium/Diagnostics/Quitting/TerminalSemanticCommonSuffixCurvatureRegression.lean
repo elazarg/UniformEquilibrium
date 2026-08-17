@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTransferBalanceRegression
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
 # A common live suffix does not turn flat debt height into a Nash return

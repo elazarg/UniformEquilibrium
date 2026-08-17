@@ -9,6 +9,7 @@ import
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
 import UniformEquilibrium.Diagnostics.Quitting.MinimalFinCounterexample
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauTimeDisintegration
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
 # The stopping-law singleton handoff is not a strategic closure interface
