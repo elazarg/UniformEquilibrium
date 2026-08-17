@@ -409,6 +409,99 @@ def IsExactAnchoredSoloPeriodic
       (quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 (finRotate m phase))
       0 (quittingAnchoredCyclicCycle w hazard h0 h1 phase)
 
+/-- An `ε`-exact anchored solo-periodic profile: at every phase the scheduled
+player's root is endpoint Nash at accuracy `ε` against the on-path
+continuation value of the next phase. -/
+def IsεExactAnchoredSoloPeriodic
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (ε : ℝ) {m : ℕ}
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) : Prop :=
+  ∀ phase : Fin m,
+    IsεQuittingRootEndpointNash reward
+      (quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 (finRotate m phase))
+      ε (quittingAnchoredCyclicCycle w hazard h0 h1 phase)
+
+theorem isExactAnchoredSoloPeriodic_iff_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {m : ℕ}
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) :
+    IsExactAnchoredSoloPeriodic reward w hazard h0 h1 ↔
+      IsεExactAnchoredSoloPeriodic reward 0 w hazard h0 h1 :=
+  Iff.rfl
+
+/-- The scheduled quitter's indifference, from above: the excess of the next
+phase's on-path value over the scheduled quitter's own solo exit, weighted by
+that player's own quit hazard, is capped by `ε`. -/
+theorem anchorUpperBound_of_isεExactAnchoredSoloPeriodic
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {ε : ℝ} {m : ℕ}
+    {w : Fin m → ι} {hazard : Fin m → ℝ}
+    {h0 : ∀ k, 0 ≤ hazard k} {h1 : ∀ k, hazard k ≤ 1}
+    (hexact : IsεExactAnchoredSoloPeriodic reward ε w hazard h0 h1)
+    (phase : Fin m) :
+    hazard phase *
+        (quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
+            (finRotate m phase) (w phase) -
+          reward (quittingSingletonTerminal (w phase)) (w phase)) ≤ ε := by
+  have hroot : quittingAnchoredCyclicCycle w hazard h0 h1 phase =
+      quittingSoloMixedRoot (w phase)
+        (quittingHazardCoin (hazard phase) (h0 phase) (h1 phase)) := rfl
+  have h := (hexact phase (w phase)).2
+  rw [hroot] at h
+  rw [quittingRootEndpointDifference,
+    quittingRootQuitPayoff_soloMixedRoot_self,
+    quittingRootContinuePayoff_soloMixedRoot_self] at h
+  simp only [quittingSoloMixedRoot_self, quittingHazardCoin_true_toReal] at h
+  nlinarith [h]
+
+/-- The scheduled quitter's indifference, from below. -/
+theorem anchorLowerBound_of_isεExactAnchoredSoloPeriodic
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {ε : ℝ} {m : ℕ}
+    {w : Fin m → ι} {hazard : Fin m → ℝ}
+    {h0 : ∀ k, 0 ≤ hazard k} {h1 : ∀ k, hazard k ≤ 1}
+    (hexact : IsεExactAnchoredSoloPeriodic reward ε w hazard h0 h1)
+    (phase : Fin m) :
+    (1 - hazard phase) *
+        (reward (quittingSingletonTerminal (w phase)) (w phase) -
+          quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
+            (finRotate m phase) (w phase)) ≤ ε := by
+  have hroot : quittingAnchoredCyclicCycle w hazard h0 h1 phase =
+      quittingSoloMixedRoot (w phase)
+        (quittingHazardCoin (hazard phase) (h0 phase) (h1 phase)) := rfl
+  have h := (hexact phase (w phase)).1
+  rw [hroot] at h
+  rw [quittingRootEndpointDifference,
+    quittingRootQuitPayoff_soloMixedRoot_self,
+    quittingRootContinuePayoff_soloMixedRoot_self] at h
+  simp only [quittingSoloMixedRoot_self, quittingHazardCoin_false_toReal] at h
+  nlinarith [h]
+
+/-- The spectator floor at accuracy `ε`. -/
+theorem spectatorFloor_of_isεExactAnchoredSoloPeriodic
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {ε : ℝ} {m : ℕ}
+    {w : Fin m → ι} {hazard : Fin m → ℝ}
+    {h0 : ∀ k, 0 ≤ hazard k} {h1 : ∀ k, hazard k ≤ 1}
+    (hexact : IsεExactAnchoredSoloPeriodic reward ε w hazard h0 h1)
+    (phase : Fin m) {who : ι} (hne : who ≠ w phase) :
+    hazard phase *
+          reward ⟨{w phase, who}, Finset.insert_nonempty (w phase) {who}⟩ who +
+        (1 - hazard phase) * reward (quittingSingletonTerminal who) who ≤
+      hazard phase * reward (quittingSingletonTerminal (w phase)) who +
+        (1 - hazard phase) *
+          quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
+            (finRotate m phase) who + ε := by
+  have hroot : quittingAnchoredCyclicCycle w hazard h0 h1 phase =
+      quittingSoloMixedRoot (w phase)
+        (quittingHazardCoin (hazard phase) (h0 phase) (h1 phase)) := rfl
+  have h := (hexact phase who).1
+  rw [hroot] at h
+  rw [quittingRootEndpointDifference,
+    quittingRootQuitPayoff_soloMixedRoot_of_ne _ _ hne,
+    quittingRootContinuePayoff_soloMixedRoot_of_ne _ _ hne] at h
+  rw [quittingSoloMixedRoot_of_ne hne] at h
+  simp only [PMF.pure_apply_self, ENNReal.toReal_one, one_mul,
+    quittingHazardCoin_true_toReal, quittingHazardCoin_false_toReal] at h
+  linarith
+
 /-- Exactness in the sense of `IsExactAnchoredSoloPeriodic` is exactly the
 statement that at every phase no player gains by any deviation of the
 one-stage root against the on-path continuation value of the next phase. -/
@@ -435,24 +528,18 @@ theorem anchor_of_isExactAnchoredSoloPeriodic
     reward (quittingSingletonTerminal (w phase)) (w phase) =
       quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
         (finRotate m phase) (w phase) := by
-  have hroot : quittingAnchoredCyclicCycle w hazard h0 h1 phase =
-      quittingSoloMixedRoot (w phase)
-        (quittingHazardCoin (hazard phase) (h0 phase) (h1 phase)) := rfl
-  have h := hexact phase (w phase)
-  rw [hroot] at h
-  rw [quittingRootEndpointDifference,
-    quittingRootQuitPayoff_soloMixedRoot_self,
-    quittingRootContinuePayoff_soloMixedRoot_self] at h
-  simp only [quittingSoloMixedRoot_self, quittingHazardCoin_true_toReal,
-    quittingHazardCoin_false_toReal, neg_zero] at h
+  have hup := anchorUpperBound_of_isεExactAnchoredSoloPeriodic hexact phase
+  have hlo := anchorLowerBound_of_isεExactAnchoredSoloPeriodic hexact phase
   have hp := hpos phase
   have hq : 0 < 1 - hazard phase := sub_pos.mpr (hlt phase)
-  have hle : reward (quittingSingletonTerminal (w phase)) (w phase) -
+  have hle : quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
+      (finRotate m phase) (w phase) -
+      reward (quittingSingletonTerminal (w phase)) (w phase) ≤ 0 := by
+    nlinarith [hup]
+  have hge : reward (quittingSingletonTerminal (w phase)) (w phase) -
       quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
-        (finRotate m phase) (w phase) ≤ 0 := by nlinarith [h.1]
-  have hge : 0 ≤ reward (quittingSingletonTerminal (w phase)) (w phase) -
-      quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
-        (finRotate m phase) (w phase) := by nlinarith [h.2]
+        (finRotate m phase) (w phase) ≤ 0 := by
+    nlinarith [hlo]
   linarith
 
 /-- The spectator floor: no player other than the scheduled quitter gains by
@@ -470,17 +557,7 @@ theorem spectatorFloor_of_isExactAnchoredSoloPeriodic
         (1 - hazard phase) *
           quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
             (finRotate m phase) who := by
-  have hroot : quittingAnchoredCyclicCycle w hazard h0 h1 phase =
-      quittingSoloMixedRoot (w phase)
-        (quittingHazardCoin (hazard phase) (h0 phase) (h1 phase)) := rfl
-  have h := (hexact phase who).1
-  rw [hroot] at h
-  rw [quittingRootEndpointDifference,
-    quittingRootQuitPayoff_soloMixedRoot_of_ne _ _ hne,
-    quittingRootContinuePayoff_soloMixedRoot_of_ne _ _ hne] at h
-  rw [quittingSoloMixedRoot_of_ne hne] at h
-  simp only [PMF.pure_apply_self, ENNReal.toReal_one,
-    one_mul, quittingHazardCoin_true_toReal, quittingHazardCoin_false_toReal] at h
+  have h := spectatorFloor_of_isεExactAnchoredSoloPeriodic hexact phase hne
   linarith
 
 end GameTheory
