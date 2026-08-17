@@ -28,7 +28,7 @@
     },
     {
       "alternative_number": 5,
-      "issue_number": 7,
+      "issue_number": 40,
       "status": "open",
       "leaf_id": "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
     }
