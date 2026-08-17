@@ -249,6 +249,7 @@ import MathUE.PMFProduct.Independence
 import MathUE.PMFProduct.TotalVariation
 import MathUE.PMFProduct.Update
 import MathUE.ParametricFarkasBasis
+import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
 import MathUE.PolynomialSignCell
 import MathUE.Probability
