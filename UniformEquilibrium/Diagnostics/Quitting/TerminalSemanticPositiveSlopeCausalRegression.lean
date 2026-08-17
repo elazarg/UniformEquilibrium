@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeAtom
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTransferBalanceRegression
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
 # A causal regression for positive stopping-law slope atoms

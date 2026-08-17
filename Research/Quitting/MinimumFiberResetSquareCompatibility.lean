@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import Research.Quitting.MinimumFiberResetSquareSourceMatchNoGo
 import Research.Quitting.Q182EndpointRecipientAtomInterfaceNoGo
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTransferBalanceRegression
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
 # A positive common-fiber reset square with opposite parallel signs

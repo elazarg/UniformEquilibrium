@@ -90,19 +90,18 @@ This table is generated from [`QuittingProofFrontier.json`](QuittingProofFrontie
 
 | Manuscript alternative | GitHub issue | Leaf | Obstruction | Representative | Source producer |
 | --- | --- | --- | --- | --- | --- |
-| 2 | [#4](https://github.com/elazarg/UniformEquilibrium/issues/4) | `RESET-ABSENT-WALL` | `OB-ALIGN` | `Nonempty (QuittingBoundedSelfResetObserverAbsentWall sequence)` | [`QuittingCounterexampleRegime.exists_boundedSelfResetTwoWayLocalization`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean) |
-| 5 | [#7](https://github.com/elazarg/UniformEquilibrium/issues/7) | `RESET-TARGET-ROW` | `OB-RETURN` | `Nonempty (QuittingBoundedSelfResetTargetRowLocalization sequence)` | [`QuittingCounterexampleRegime.exists_boundedSelfResetTwoWayLocalization`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean) |
+| 5 | [#7](https://github.com/elazarg/UniformEquilibrium/issues/7) | `IMMEDIATE-SINGLETON-COLLISION` | `OB-COLLISION` | `Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap)` | [`QuittingCounterexampleRegime.exists_immediateSingletonCollision`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/ImmediateSingletonCollision.lean) |
 
-The manuscript numbering has five fixed slots. Alternative 1 ([issue #3](https://github.com/elazarg/UniformEquilibrium/issues/3)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`; Alternative 3 ([issue #5](https://github.com/elazarg/UniformEquilibrium/issues/5)) is eliminated by `ELIMINATE-SINGLETON-BY-SIGNED-ACTUAL-ROW`; Alternative 4 ([issue #6](https://github.com/elazarg/UniformEquilibrium/issues/6)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`.
+The manuscript numbering has five fixed slots. Alternative 1 ([issue #3](https://github.com/elazarg/UniformEquilibrium/issues/3)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`; Alternative 2 ([issue #4](https://github.com/elazarg/UniformEquilibrium/issues/4)) is eliminated by `ELIMINATE-ABSENT-BY-IMMEDIATE-SINGLETON-COLLISION`; Alternative 3 ([issue #5](https://github.com/elazarg/UniformEquilibrium/issues/5)) is eliminated by `ELIMINATE-SINGLETON-BY-SIGNED-ACTUAL-ROW`; Alternative 4 ([issue #6](https://github.com/elazarg/UniformEquilibrium/issues/6)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`.
 
 <!-- END GENERATED OPEN LEAVES -->
 
 The obstruction classes have the following durable readings:
 
-- `OB-ALIGN`: a counterfactual payoff or debt atom is not yet a source-matched
-  strategic gain;
-- `OB-RETURN`: a charged tail or retained law is not yet transported through an
-  exact cap/state return.
+- `OB-COLLISION`: the canonical singleton row gives a distinct player a
+  source-matched legal collision gain equal to positive semantic debt. The
+  remaining task is to consume this geometry using the full counterexample
+  regime or characterize a genuine counterexample realizing it.
 
 A change to these leaves belongs first in `QuittingProofFrontier.json`. The
 generated table above must not be hand-edited.

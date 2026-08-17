@@ -266,63 +266,6 @@ theorem abs_quittingFinThreePassiveShearReward_le_three
   unfold quittingFinThreePassiveShearReward
   split_ifs <;> norm_num
 
-/-- The exact behavioral best-response cap against a pure sure-exit set is
-the better membership toggle.  This local adapter lets the regression use
-the repository's full history-dependent deviation semantics. -/
-theorem quittingContinuationBestResponseValue_pureSetRoot_eq
-    {player : Type} [Fintype player] [DecidableEq player]
-    (reward : {S : Finset player // S.Nonempty} → Payoff player)
-    (exit : Finset player) (observer : player) :
-    quittingContinuationBestResponseValue reward
-        (quittingStationaryProfile reward (quittingPureSetRoot exit)) observer =
-      max (quittingSetReward reward (insert observer exit) observer)
-        (quittingSetReward reward (exit.erase observer) observer) := by
-  let profile := quittingStationaryProfile reward (quittingPureSetRoot exit)
-  have hbdd : BddAbove (Set.range fun deviation :
-      (quittingGame reward).BehaviorStrategy observer =>
-        quittingTerminalPayoff reward
-          (Function.update profile observer deviation) observer) :=
-    bddAbove_range_quittingTerminalPayoff_update
-      reward profile observer
-  unfold quittingContinuationBestResponseValue
-  apply le_antisymm
-  · apply csSup_le
-    · exact Set.range_nonempty _
-    · rintro payoff ⟨deviation, rfl⟩
-      exact quittingTerminalPayoff_update_pureSetRoot_le
-        reward exit observer deviation
-  · apply max_le
-    · apply le_csSup hbdd
-      refine ⟨quittingPureTimeBehaviorStrategy reward observer (some 0), ?_⟩
-      exact quittingTerminalPayoff_update_pureSetRoot_quitNow
-        reward exit observer
-    · apply le_csSup hbdd
-      refine ⟨quittingAlwaysContinueStrategy reward observer, ?_⟩
-      exact quittingTerminalPayoff_update_pureSetRoot_alwaysContinue
-        reward exit observer
-
-/-- Consequently, semantic debt at a pure sure-exit profile is exactly the
-membership-toggle cap minus the current set reward. -/
-theorem quittingTerminalSemanticDebt_pureSetRoot_eq
-    {player : Type} [Fintype player] [DecidableEq player]
-    (reward : {S : Finset player // S.Nonempty} → Payoff player)
-    (exit : Finset player) (observer : player) :
-    quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPair reward
-          (quittingStationaryProfile reward (quittingPureSetRoot exit)))
-        observer =
-      max (quittingSetReward reward (insert observer exit) observer)
-          (quittingSetReward reward (exit.erase observer) observer) -
-        quittingSetReward reward exit observer := by
-  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
-  change quittingContinuationBestResponseValue reward
-      (quittingStationaryProfile reward (quittingPureSetRoot exit)) observer -
-        quittingTerminalPayoff reward
-          (quittingStationaryProfile reward (quittingPureSetRoot exit)) observer = _
-  rw [quittingContinuationBestResponseValue_pureSetRoot_eq
-    reward exit observer,
-    quittingTerminalPayoff_pureSetRoot]
-
 /-- Literal all-Never source of the passive-shear table. -/
 def quittingFinThreePassiveShearSource :
     (quittingGame quittingFinThreePassiveShearReward).BehaviorProfile :=

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "open_leaf_limit": 2,
+  "open_leaf_limit": 1,
   "manuscript_alternatives": [
     {
       "alternative_number": 1,
@@ -11,8 +11,8 @@
     {
       "alternative_number": 2,
       "issue_number": 4,
-      "status": "open",
-      "leaf_id": "RESET-ABSENT-WALL"
+      "status": "eliminated",
+      "resolution": "ELIMINATE-ABSENT-BY-IMMEDIATE-SINGLETON-COLLISION"
     },
     {
       "alternative_number": 3,
@@ -30,35 +30,23 @@
       "alternative_number": 5,
       "issue_number": 7,
       "status": "open",
-      "leaf_id": "RESET-TARGET-ROW"
+      "leaf_id": "IMMEDIATE-SINGLETON-COLLISION"
     }
   ],
   "obstruction_classes": [
     {
-      "id": "OB-ALIGN",
-      "description": "A counterfactual payoff/debt atom is not yet a source-matched strategic gain."
-    },
-    {
-      "id": "OB-RETURN",
-      "description": "A reached-row gain is not yet compiled through an exact cap/state return."
+      "id": "OB-COLLISION",
+      "description": "A canonical absorbing singleton row has zero owner debt and a distinct player's source-matched collision gain at least the global terminal gap."
     }
   ],
   "formal_leaves": [
     {
-      "id": "RESET-ABSENT-WALL",
+      "id": "IMMEDIATE-SINGLETON-COLLISION",
       "status": "open",
-      "obstruction_class": "OB-ALIGN",
-      "representative": "Nonempty (QuittingBoundedSelfResetObserverAbsentWall sequence)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean",
-      "producer": "QuittingCounterexampleRegime.exists_boundedSelfResetTwoWayLocalization"
-    },
-    {
-      "id": "RESET-TARGET-ROW",
-      "status": "open",
-      "obstruction_class": "OB-RETURN",
-      "representative": "Nonempty (QuittingBoundedSelfResetTargetRowLocalization sequence)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean",
-      "producer": "QuittingCounterexampleRegime.exists_boundedSelfResetTwoWayLocalization"
+      "obstruction_class": "OB-COLLISION",
+      "representative": "Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap)",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/ImmediateSingletonCollision.lean",
+      "producer": "QuittingCounterexampleRegime.exists_immediateSingletonCollision"
     }
   ],
   "transitions": [
@@ -66,10 +54,9 @@
       "id": "ELIMINATE-THREE-ELEMENT-CORRECTED-CORE",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "RESET-ABSENT-WALL",
-        "RESET-TARGET-ROW"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
-      "summary": "Every finite quitting game whose corrected normal core has cardinality three has an ordinary uniform-equilibrium payoff. Hence a four-player counterexample must have full corrected core, and both remaining leaves may be studied under that table-level restriction.",
+      "summary": "Every finite quitting game whose corrected normal core has cardinality three has an ordinary uniform-equilibrium payoff. Hence a four-player counterexample must have full corrected core, and its immediate singleton collision may be studied under that table-level restriction.",
       "evidence": [
         "UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean"
       ]
@@ -78,8 +65,7 @@
       "id": "DROP-BARRIER-ELEMENTARY-BOUNDARY-FAMILY",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "RESET-ABSENT-WALL",
-        "RESET-TARGET-ROW"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
       "summary": "The global-debt barrier certificate needs only the Never boundary and invariance under every one-row prefix; all other elementary boundaries and all finite elementary words are generated from these data.",
       "evidence": [
@@ -90,20 +76,19 @@
       "id": "FRONTIER-BASELINE",
       "kind": "census",
       "target_ids": [
-        "RESET-ABSENT-WALL",
-        "RESET-TARGET-ROW"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
-      "summary": "Mechanically exhaustive antichain: every counterexample regime and every starting-profile sequence produce a bounded pure-time reset sequence ending in either an observer-absent forced-owner wall or an observer-containing reached-row gain.",
+      "summary": "Every counterexample regime has an absorbing singleton row whose owner has zero terminal-semantic debt and whose distinct collider has an immediate legal gain, equal to its debt, at least the full terminal gap.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean"
+        "UniformEquilibrium/Quitting/Classification/ImmediateSingletonCollision.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/ImmediateSingletonCollision.lean"
       ]
     },
     {
       "id": "ELIMINATE-SINGLETON-BY-SIGNED-ACTUAL-ROW",
       "kind": "leaf_eliminated",
       "target_ids": [
-        "RESET-ABSENT-WALL",
-        "RESET-TARGET-ROW"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
       "summary": "An observer-containing singleton terminal is already handled by the cardinality-free actual-row localization, so manuscript Alternative 3 and GitHub issue #5 require no independent branch.",
       "evidence": [
@@ -115,43 +100,31 @@
       "id": "ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET",
       "kind": "leaf_eliminated",
       "target_ids": [
-        "RESET-ABSENT-WALL",
-        "RESET-TARGET-ROW"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
-      "summary": "Iterating exact pure-time self-resets for at most card(I)+1 steps forces a fixed positive-mass terminal. Membership of the final reset player in that terminal gives exactly the two remaining branches. The prescribed-comparison and negative-target branches are therefore unnecessary, closing manuscript Alternatives 1 and 4 and GitHub issues #3 and #6.",
+      "summary": "Iterating exact pure-time self-resets for at most card(I)+1 steps makes the prescribed-comparison and negative-target branches unnecessary, closing manuscript Alternatives 1 and 4 and GitHub issues #3 and #6. The direct singleton-collision theorem gives the sharper canonical leaf.",
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticBoundedSelfReset.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean"
       ]
     },
     {
-      "id": "LOCALIZE-BOUNDED-SELF-RESET-ABSENT-WALL",
-      "kind": "hypothesis_dropped",
+      "id": "ELIMINATE-ABSENT-BY-IMMEDIATE-SINGLETON-COLLISION",
+      "kind": "leaf_eliminated",
       "target_ids": [
-        "RESET-ABSENT-WALL"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
-      "summary": "The observer-absent endpoint retains one fixed terminal, observer, owner, and finite clock along a strict subsequence. Every selected row has an exact forced-owner profile, a uniform cylinder-mass floor, the terminal-gap barrier, and the coordinate-defect/refusal alternative.",
+      "summary": "The all-Continue toggle selects an owner with positive solo reward, and the singleton toggle at that owner selects a distinct collider with gain at least the terminal gap. Thus every counterexample regime already has the canonical target row, so the observer-absent wall is unnecessary as a frontier leaf.",
       "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean"
-      ]
-    },
-    {
-      "id": "LOCALIZE-BOUNDED-SELF-RESET-TARGET-ROW",
-      "kind": "hypothesis_dropped",
-      "target_ids": [
-        "RESET-TARGET-ROW"
-      ],
-      "summary": "The observer-containing endpoint retains a fixed non-observer and a strict subsequence whose actual-row best-endpoint gain has an explicit positive lower bound. No terminal-cardinality, reward-sign, or external nonemptiness hypothesis is required.",
-      "evidence": [
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Toggles.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/ImmediateSingletonCollision.lean"
       ]
     },
     {
       "id": "DROP-UNIFORM-FINITE-HORIZON-DEBT-CERTIFICATION",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "RESET-ABSENT-WALL",
-        "RESET-TARGET-ROW"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
       "summary": "A concrete positive global terminal-debt floor does not require a uniform finite-horizon cutoff: the semantic carrier is exactly the closure of finite prefix evaluations from the elementary boundaries, and any inductive finite-dimensional barrier containing those boundaries proves a fixed terminal exploitability gap and nonexistence.",
       "evidence": [
@@ -162,8 +135,7 @@
       "id": "NOGO-COORDINATEWISE-SEMANTIC-BARRIER",
       "kind": "architectural_nogo",
       "target_ids": [
-        "RESET-ABSENT-WALL",
-        "RESET-TARGET-ROW"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
       "summary": "Any axis-aligned or coordinatewise order-compatible semantic barrier containing the required elementary boundary pairs also contains a zero-total-debt diagonal. A successful barrier must couple player coordinates.",
       "evidence": [
@@ -174,8 +146,7 @@
       "id": "NOGO-DEBT-SATURATED-SEMANTIC-BARRIER",
       "kind": "architectural_nogo",
       "target_ids": [
-        "RESET-ABSENT-WALL",
-        "RESET-TARGET-ROW"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
       "summary": "No positive global-debt certificate can use a barrier whose membership depends only on envelope minus prescribed payoff. A successful barrier must retain absolute semantic level.",
       "evidence": [
@@ -186,8 +157,7 @@
       "id": "DROP-COUNTEREXAMPLE-PREFIX-CAPACITY-FIELD",
       "kind": "hypothesis_dropped",
       "target_ids": [
-        "RESET-ABSENT-WALL",
-        "RESET-TARGET-ROW"
+        "IMMEDIATE-SINGLETON-COLLISION"
       ],
       "summary": "Canonical punishment-floor prefix-capacity finiteness is derived from the positive terminal exploitability gap rather than stored in the counterexample regime.",
       "evidence": [
