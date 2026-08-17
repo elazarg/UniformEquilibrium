@@ -123,6 +123,8 @@ import MathUE.LinearAlgebra.WeightedSaturationDefect
 import MathUE.LinearAlgebra.ZeroSum
 import MathUE.LinearProgramming.ClosedTrapPerturbation
 import MathUE.LinearProgramming.Basic
+import MathUE.LinearProgramming.CopositiveQ
+import MathUE.LinearProgramming.CopositiveQCorollaries
 import MathUE.LinearProgramming.FlowCostateDuality
 import MathUE.LinearProgramming.OneDimensionalAffineMinimax
 import MathUE.LinearProgramming.SingletonLCP

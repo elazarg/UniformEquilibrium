@@ -11,7 +11,11 @@ import Experiments.certsearch.block_pair.K11.JacobianCache
 import Experiments.certsearch.block_pair.K11.KrawczykInstance
 import Experiments.certsearch.block_pair.K11.Preconditioner
 import Experiments.certsearch.block_pair.K11.RowZeroCacheData
+import Experiments.counterexample_search.HardenedPentagonCyclicEquilibrium
 import Experiments.counterexample_search.RegularTournamentFiveSeed
+import Experiments.counterexample_search.RegularTournamentFiveSeedSoloExits
+import Experiments.counterexample_search.RegularTournamentFiveSeedSureExit
+import Experiments.counterexample_search.RegularTournamentFiveSeedZeroFree
 import Literature
 import Literature.All
 import Literature.Catalog
@@ -211,6 +215,8 @@ import MathUE.LinearAlgebra.WeightedSaturationDefect
 import MathUE.LinearAlgebra.ZeroSum
 import MathUE.LinearProgramming.Basic
 import MathUE.LinearProgramming.ClosedTrapPerturbation
+import MathUE.LinearProgramming.CopositiveQ
+import MathUE.LinearProgramming.CopositiveQCorollaries
 import MathUE.LinearProgramming.FlowCostateDuality
 import MathUE.LinearProgramming.OneDimensionalAffineMinimax
 import MathUE.LinearProgramming.SingletonLCP
@@ -419,6 +425,7 @@ import Research.General.SeveranceMutualThreeGames
 import Research.Literature
 import Research.Literature.Sorin1986.UniformPayoffSet
 import Research.Literature.Sorin1986.WeightedBlackwellFerguson
+import Research.Quitting.AnchoredCyclicScreen
 import Research.Quitting.AtomEndpointReturnSeparation
 import Research.Quitting.BestEndpointForcedOwnerRectanglePassport
 import Research.Quitting.BlockPair.K11
@@ -459,11 +466,15 @@ import Research.Quitting.CertifiedForcedOwnerBackgroundHost
 import Research.Quitting.CertifiedForcedOwnerEndpointFlip
 import Research.Quitting.CertifiedForcedOwnerRectanglePacket
 import Research.Quitting.ConcentratedCollisionFourRoleMonodromy
+import Research.Quitting.CopositiveQBridge
 import Research.Quitting.CounterexampleAtomEndpointRisePassport
 import Research.Quitting.CounterfactualAtomMinimumResetSquare
 import Research.Quitting.CoupledCalibrationQuittingRoot
 import Research.Quitting.CyclicSymmetricStationaryGapIVT
 import Research.Quitting.DebtTransportMarkovMonodromy
+import Research.Quitting.DiffuseTailEffectiveCharge
+import Research.Quitting.DiffuseTailSoloCalibrations
+import Research.Quitting.DiffuseTailSoloStructure
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
 import Research.Quitting.EnrichedSeamCompression
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
@@ -514,6 +525,7 @@ import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
 import Research.Quitting.SourceMatchedSnellPurification
+import Research.Quitting.SourceMatchedSnellPurificationCollapse
 import Research.Quitting.StochasticButtonCompression
 import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport

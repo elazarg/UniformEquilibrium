@@ -19,6 +19,19 @@ input/output contract for that construction.
 enlargement output is a fully certified candidate with a strictly larger
 source face.  The finite-face consumer applies when an implementation supplies
 the whole interface for every candidate it creates.
+
+**Caveat: the interface as stated admits regime-free candidates, and its
+enlargement branch is free.**  `selected_support` bounds activity *above* by
+`face`; no field forces a face member to be active.  So enlargement is mere
+padding, and the finite-face induction carries content only at
+`face = Finset.univ.erase owner`.  Moreover a fully certified candidate with a
+schedule assembles on the Solan--Vieille boundary table from a single solo
+quitter and one strict preemption edge, with no counterexample regime, seam,
+minmax, or debt input, and with an unbounded phantom `boundary`.  Both facts
+are checked in `Research/Quitting/SourceMatchedSnellPurificationCollapse.lean`.
+Nothing below is changed by that module, and neither
+it nor this caveat refutes the proposition; they record that satisfying the
+interface cannot be powered by regime data reaching it through a candidate.
 -/
 
 noncomputable section
