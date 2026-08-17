@@ -483,6 +483,7 @@ import Research.Quitting.CirculantColliderSlivers
 import Research.Quitting.CirculantConstantStepCycle
 import Research.Quitting.CirculantPocketAnchoredNoGo
 import Research.Quitting.CirculantTrichotomy
+import Research.Quitting.CirculantTrichotomyClosure
 import Research.Quitting.ConcentratedCollisionFourRoleMonodromy
 import Research.Quitting.CopositiveQBridge
 import Research.Quitting.CounterexampleAtomEndpointRisePassport
