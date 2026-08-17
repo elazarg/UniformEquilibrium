@@ -63,6 +63,11 @@ theorem one_le_abs_normalizedSoloMatrix {who owner : Player} (hne : who ≠ owne
   rcases singletonMatrix_eq_two_or_neg_one hne with hentry | hentry <;>
     rw [hentry] <;> norm_num
 
+/-- **The regular five-player tournament seed has solo-matrix margin one.**
+This is the quantitative hypothesis the effective charge budget consumes. -/
+theorem soloMatrixMargin_reward : QuittingSoloMatrixMargin reward 1 :=
+  fun _ _ hne => one_le_abs_normalizedSoloMatrix hne
+
 /-- **The regular five-player tournament seed is zero-free.**  No off-diagonal
 entry of its normalized solo matrix vanishes. -/
 theorem zeroFree_reward : QuittingZeroFreeSoloMatrix reward := by

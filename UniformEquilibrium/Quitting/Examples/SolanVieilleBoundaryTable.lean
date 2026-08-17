@@ -25,10 +25,10 @@ exactly: it is the complete bipartite digraph between the pairs `{0, 1}` and
 The source paper proves that this table admits an approximate equilibrium
 through a period-two two-quitter architecture, and admits neither a
 stationary approximate equilibrium nor one in which at most one player quits
-per stage.  None of those statements is checked here.  The checked content of
-this module is only that explicit table data realizes the collision and
-preemption-cycle geometry.  Any terminal-gap conclusion therefore requires
-an additional checked argument beyond the realized configuration itself.
+per stage.  The checked content of this module is the table itself together
+with the collision and preemption-cycle geometry that its explicit data
+realizes.  Any terminal-gap conclusion therefore requires an additional
+checked argument beyond the realized configuration itself.
 
 -/
 
@@ -40,25 +40,31 @@ namespace SolanVieilleBoundary
 
 abbrev Player := Fin 4
 
-/-- The Solan–Vieille Section 3 reward table.  Rows are indexed by the
-quitting coalition; the final row is the grand coalition. -/
+/-- The Solan–Vieille Section 3 reward table, presented by membership
+pattern: the four Booleans record which of the players `0, 1, 2, 3` belong to
+the quitting coalition.  Each of the fifteen nonempty coalitions carries an
+explicit row.  The all-Continue pattern cannot occur on the
+nonempty-coalition subtype and is filled with zeros. -/
 def boundaryReward (quitters : {S : Finset Player // S.Nonempty}) :
     Payoff Player :=
-  if quitters.1 = {0} then ![1, 4, 0, 0]
-  else if quitters.1 = {1} then ![4, 1, 0, 0]
-  else if quitters.1 = {2} then ![0, 0, 1, 4]
-  else if quitters.1 = {3} then ![0, 0, 4, 1]
-  else if quitters.1 = {0, 1} then ![1, 1, 1, 1]
-  else if quitters.1 = {0, 2} then ![1, 1, 1, 0]
-  else if quitters.1 = {0, 3} then ![1, 0, 1, 1]
-  else if quitters.1 = {1, 2} then ![0, 1, 1, 1]
-  else if quitters.1 = {1, 3} then ![1, 1, 0, 1]
-  else if quitters.1 = {2, 3} then ![1, 1, 1, 1]
-  else if quitters.1 = {0, 1, 2} then ![1, 0, 0, 0]
-  else if quitters.1 = {0, 1, 3} then ![0, 1, 0, 0]
-  else if quitters.1 = {0, 2, 3} then ![0, 0, 0, 1]
-  else if quitters.1 = {1, 2, 3} then ![0, 0, 1, 0]
-  else ![-1, -1, -1, -1]
+  match decide (0 ∈ quitters.1), decide (1 ∈ quitters.1),
+      decide (2 ∈ quitters.1), decide (3 ∈ quitters.1) with
+  | true, false, false, false => ![1, 4, 0, 0]
+  | false, true, false, false => ![4, 1, 0, 0]
+  | false, false, true, false => ![0, 0, 1, 4]
+  | false, false, false, true => ![0, 0, 4, 1]
+  | true, true, false, false => ![1, 1, 1, 1]
+  | true, false, true, false => ![1, 1, 1, 0]
+  | true, false, false, true => ![1, 0, 1, 1]
+  | false, true, true, false => ![0, 1, 1, 1]
+  | false, true, false, true => ![1, 1, 0, 1]
+  | false, false, true, true => ![1, 1, 1, 1]
+  | true, true, true, false => ![1, 0, 0, 0]
+  | true, true, false, true => ![0, 1, 0, 0]
+  | true, false, true, true => ![0, 0, 0, 1]
+  | false, true, true, true => ![0, 0, 1, 0]
+  | true, true, true, true => ![-1, -1, -1, -1]
+  | false, false, false, false => ![0, 0, 0, 0]
 
 /-- Closed form of the sixteen singleton entries: a solo quitter pays itself
 `1`, its own-pair partner `4`, and the opposite pair `0`. -/

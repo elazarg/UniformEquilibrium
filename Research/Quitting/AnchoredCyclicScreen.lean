@@ -33,6 +33,14 @@ some player's response cap beats the on-path value by the full terminal gap.
 Contrapositively, exhibiting one schedule whose cap is everywhere at most
 the on-path value excludes the table from every counterexample regime.
 
+At accuracy zero the screen has a second reading.
+`StochasticGame.isεAsymptoticNash_zero_iff_sSup_range_update_le` characterizes
+exact asymptotic Nash by a supremum bound on unilateral deviations, and
+`quittingAnchoredCyclicResponseCap_le_onPathValue_of_isεAsymptoticNash` turns
+an exactly Nash anchored cyclic profile into the screen's contrapositive
+hypothesis.  That route consumes the profile's Nash property; it does not
+compute the response cap.
+
 The last section states the max-linear response system for the anchored
 cyclic family and identifies it with the repository's Bellman cap recursion
 along the periodic live path.  The passage from a solution of that system to
@@ -442,6 +450,67 @@ theorem sSup_range_quittingTerminalPayoff_update_anchoredCyclicProfile
   unfold quittingAnchoredCyclicResponseCap quittingAnchoredCyclicProfile
   rw [quittingProfileLiveRoot_cyclicBehaviorProfile]
 
+/-! ## Exact asymptotic Nash as a supremum bound
+
+Accuracy zero turns the family of Nash inequalities of
+`StochasticGame.IsεAsymptoticNash` into a single bound on the supremum of the
+deviation payoffs, because the on-path value bounds every deviation with no
+slack to spare.
+-/
+
+namespace StochasticGame
+
+/-- At accuracy zero, exact asymptotic Nash caps the supremum of a player's
+unilateral deviation payoffs by its on-path value.  Boundedness of the
+deviation range is not needed: the supremum is taken of a set every member of
+which is already below the on-path value. -/
+theorem sSup_range_update_le_of_isεAsymptoticNash_zero
+    (G : StochasticGame ι) (u : G.BehaviorProfile → ι → ℝ)
+    {σ : G.BehaviorProfile} (hnash : G.IsεAsymptoticNash u 0 σ) (who : ι) :
+    sSup (Set.range fun deviation : G.BehaviorStrategy who ↦
+        u (Function.update σ who deviation) who) ≤ u σ who := by
+  refine csSup_le ⟨_, Set.mem_range_self (σ who)⟩ ?_
+  rintro value ⟨deviation, rfl⟩
+  simpa using hnash who deviation
+
+/-- **Exact asymptotic Nash is a supremum bound.**  For a bounded deviation
+range the converse holds too, so accuracy-zero asymptotic Nash is exactly the
+statement that no player's deviation supremum exceeds its on-path value. -/
+theorem isεAsymptoticNash_zero_iff_sSup_range_update_le
+    (G : StochasticGame ι) (u : G.BehaviorProfile → ι → ℝ)
+    (σ : G.BehaviorProfile)
+    (hbdd : ∀ who, BddAbove (Set.range fun deviation : G.BehaviorStrategy who ↦
+      u (Function.update σ who deviation) who)) :
+    G.IsεAsymptoticNash u 0 σ ↔
+      ∀ who, sSup (Set.range fun deviation : G.BehaviorStrategy who ↦
+        u (Function.update σ who deviation) who) ≤ u σ who := by
+  refine ⟨fun hnash ↦ sSup_range_update_le_of_isεAsymptoticNash_zero G u hnash,
+    fun hsup who deviation ↦ ?_⟩
+  have hle := le_csSup (hbdd who) (Set.mem_range_self deviation)
+  simpa using hle.trans (hsup who)
+
+end StochasticGame
+
+/-- **An exactly Nash anchored cyclic profile has no response gain.**  If the
+anchored cyclic profile of `(m, w, p)` is asymptotic Nash at accuracy zero for
+the terminal payoff, then its exact finite response cap is everywhere at most
+its on-path renewal value. -/
+theorem quittingAnchoredCyclicResponseCap_le_onPathValue_of_isεAsymptoticNash
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) [NeZero m]
+    (hnash : (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) 0
+      (quittingAnchoredCyclicProfile reward w hazard h0 h1))
+    (who : ι) :
+    quittingAnchoredCyclicResponseCap reward w hazard h0 h1 who ≤
+      quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
+        (quittingAnchoredCyclicStart m) who := by
+  rw [← sSup_range_quittingTerminalPayoff_update_anchoredCyclicProfile reward w
+    hazard h0 h1 who, ← quittingTerminalPayoff_anchoredCyclicProfile reward w
+    hazard h0 h1]
+  exact StochasticGame.sSup_range_update_le_of_isεAsymptoticNash_zero _ _ hnash who
+
 /-! ## The screen -/
 
 namespace QuittingCounterexampleRegime
@@ -492,6 +561,19 @@ theorem isEmpty_of_anchoredCyclicCap_le
   refine ⟨fun regime ↦ ?_⟩
   obtain ⟨who, hgain⟩ := regime.exists_anchoredCyclicCap_gain w hazard h0 h1
   linarith [hexact who, regime.terminalGap_pos]
+
+/-- A table admitting one anchored cyclic profile that is asymptotic Nash at
+accuracy zero for the terminal payoff carries no counterexample regime. -/
+theorem isEmpty_of_anchoredCyclic_isεAsymptoticNash
+    {m : ℕ} [NeZero m] (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (hnash : (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) 0
+      (quittingAnchoredCyclicProfile reward w hazard h0 h1)) :
+    IsEmpty (QuittingCounterexampleRegime reward) :=
+  isEmpty_of_anchoredCyclicCap_le w hazard h0 h1
+    (quittingAnchoredCyclicResponseCap_le_onPathValue_of_isεAsymptoticNash reward
+      w hazard h0 h1 hnash)
 
 end QuittingCounterexampleRegime
 

@@ -43,6 +43,11 @@ players in exact diffuse tails.
 * **T2, asymptotic** (`normalizedSoloMatrix_eq_zero_of_fencedSoloWindows`):
   recurrent such windows with uniformly positive charge and vanishing mesh
   force `M spectator owner = 0`.
+* **Margin form of the table condition**
+  (`quittingZeroFreeSoloMatrix_iff_exists_soloMatrixMargin`): on a finite
+  player set, having no vanishing off-diagonal entry is equivalent to a
+  uniform positive lower bound `QuittingSoloMatrixMargin` on their absolute
+  values, so a quantitative budget asks no more of the table than T3 does.
 * **T3** (`quittingTailPersistentlySolo_of_zeroFree`): on a table whose
   normalized solo matrix has no vanishing off-diagonal entry, at most one
   player is persistently active — *conditional* on the window-extraction
@@ -52,8 +57,8 @@ players in exact diffuse tails.
 * **T4(b)** (`isEmpty_fencedSoloWindows_of_quittingSoloPreempts`): fenced solo
   windows are impossible along a strict solo-preemption edge, so the
   face-enlargement reading of an obstruction is unavailable there.
-* **T4(a)** (`QuittingSoloWindowPhaseStopBranch`): stated as a proposition
-  only.  It is *not* proved here.
+* **T4(a)** (`QuittingSoloWindowPhaseStopBranch`): a proposition definition,
+  not a theorem.
 
 Nothing in this file asserts that solo windows exist; every solo statement is
 conditional on being handed one.
@@ -523,12 +528,68 @@ theorem normalizedSoloMatrix_eq_zero_of_fencedSoloWindows
 
 /-! ## Zero-free tables and eventual solo degeneracy -/
 
+/-- Every off-diagonal entry of the normalized solo matrix has absolute value
+at least `margin`.  This is the quantitative currency consumed by budget
+arguments, which divide by the entry and so need a uniform bound rather than
+mere nonvanishing. -/
+def QuittingSoloMatrixMargin
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (margin : ℝ) : Prop :=
+  ∀ who owner : ι, who ≠ owner →
+    margin ≤ |normalizedSoloMatrix reward who owner|
+
 /-- No off-diagonal entry of the normalized solo matrix vanishes.  The
 Solan--Vieille boundary table and the regular five-player tournament seed are
 both of this kind. -/
 def QuittingZeroFreeSoloMatrix
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   ∀ who owner : ι, who ≠ owner → normalizedSoloMatrix reward who owner ≠ 0
+
+/-- A positive margin is a zero-free table. -/
+theorem quittingZeroFreeSoloMatrix_of_soloMatrixMargin
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {margin : ℝ}
+    (hmargin : 0 < margin) (hentries : QuittingSoloMatrixMargin reward margin) :
+    QuittingZeroFreeSoloMatrix reward := by
+  intro who owner hne hzero
+  have hentry := hentries who owner hne
+  rw [hzero, abs_zero] at hentry
+  linarith
+
+/-- A zero-free table has a positive margin: the finitely many off-diagonal
+entries are nonzero, so the least of their absolute values is positive.  With
+no off-diagonal pair at all the margin condition is vacuous. -/
+theorem exists_soloMatrixMargin_of_quittingZeroFreeSoloMatrix
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hzeroFree : QuittingZeroFreeSoloMatrix reward) :
+    ∃ margin, 0 < margin ∧ QuittingSoloMatrixMargin reward margin := by
+  let entry : ι × ι → ℝ :=
+    fun pair => |normalizedSoloMatrix reward pair.1 pair.2|
+  set pairs : Finset (ι × ι) :=
+    Finset.univ.filter (fun pair => pair.1 ≠ pair.2) with hpairs
+  have hmem : ∀ pair : ι × ι, pair ∈ pairs ↔ pair.1 ≠ pair.2 := by
+    intro pair
+    rw [hpairs, Finset.mem_filter]
+    exact ⟨fun h => h.2, fun h => ⟨Finset.mem_univ _, h⟩⟩
+  by_cases hnonempty : pairs.Nonempty
+  · refine ⟨pairs.inf' hnonempty entry, ?_, ?_⟩
+    · rw [Finset.lt_inf'_iff]
+      intro pair hpair
+      exact abs_pos.2 (hzeroFree pair.1 pair.2 ((hmem pair).1 hpair))
+    · intro who owner hne
+      exact Finset.inf'_le entry ((hmem (who, owner)).2 hne)
+  · exact ⟨1, one_pos, fun who owner hne =>
+      absurd ⟨(who, owner), (hmem (who, owner)).2 hne⟩ hnonempty⟩
+
+/-- **Zero-freeness is a uniform margin.**  On a finite player set the
+qualitative and the quantitative form of the table condition coincide, so a
+budget argument's margin hypothesis asks no more of the table than the
+coexistence obstruction already does. -/
+theorem quittingZeroFreeSoloMatrix_iff_exists_soloMatrixMargin
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    QuittingZeroFreeSoloMatrix reward ↔
+      ∃ margin, 0 < margin ∧ QuittingSoloMatrixMargin reward margin :=
+  ⟨exists_soloMatrixMargin_of_quittingZeroFreeSoloMatrix reward,
+    fun ⟨_, hmargin, hentries⟩ =>
+      quittingZeroFreeSoloMatrix_of_soloMatrixMargin reward hmargin hentries⟩
 
 /-- `who` quits with positive probability at arbitrarily late dates. -/
 def QuittingTailPersistentlyActive
@@ -659,8 +720,7 @@ theorem limitValue_eq_soloReward_of_persistentlyActive
 windows of a seam whose late roots are solo at `owner`, the stabilized
 obstruction of `exists_infinite_fixedPlayer_fixedBranch` is the phase-stop
 branch, and the obstructing player is a strict solo-preemption out-neighbour
-of `owner`.  The intended proof route is the degeneracy of the refusal branch
-on a solo window. -/
+of `owner`. -/
 def QuittingSoloWindowPhaseStopBranch
     (seam : QuittingCounterexampleSeamWitness regime) (owner : ι)
     (margin : ℝ) : Prop :=

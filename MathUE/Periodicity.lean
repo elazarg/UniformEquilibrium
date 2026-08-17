@@ -112,4 +112,17 @@ theorem denominator_le_card_of_orbit_window_rate
       a b L hrate hcoprime
   exact (Nat.le_of_dvd hL hdvd).trans hLn
 
+/-- A function on a nonempty finite cyclic index that agrees with its own
+cyclic successor everywhere is constant. -/
+theorem exists_const_of_cyclic_succ_eq {α : Type*} {m : ℕ} [NeZero m]
+    {f : Fin m → α} (hsucc : ∀ k : Fin m, f (k + 1) = f k) :
+    ∃ value, ∀ k, f k = value := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne m)
+  refine ⟨f 0, fun k => ?_⟩
+  induction k using Fin.induction with
+  | zero => rfl
+  | succ i ih =>
+      rw [← Fin.coeSucc_eq_succ, hsucc i.castSucc]
+      exact ih
+
 end Math
