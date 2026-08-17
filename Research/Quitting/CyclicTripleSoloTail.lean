@@ -28,9 +28,13 @@ activity leaves no co-activity floor: the pair dichotomy
 conclusion `QuittingTailPersistentlySolo`
 (`not_quittingTailPersistentlySolo`).
 
+No pair carries a fenced solo window family either
+(`quittingNoFencedSoloWindowFamily`), because each coordinate's active dates
+are isolated in the cycle.
+
 `pairSoloDichotomy_fails_under_consumer_hypotheses` collects the exact value
 recursion, exact endpoint Nash at accuracy zero, interior hazards, zero-freeness
-and vanishing one-stage absorption together with those two failures.
+and vanishing one-stage absorption together with those failures.
 -/
 
 noncomputable section
@@ -370,6 +374,54 @@ theorem not_quittingTailPersistentlySolo :
     ¬ QuittingTailPersistentlySolo roots := fun hsolo =>
   absurd (hsolo 0 1 (persistentlyActive 0) (persistentlyActive 1)) (by decide)
 
+/-! ## No fenced solo window family -/
+
+theorem eq_owner_of_active {time : ℕ} {who : Player}
+    (hactive : 0 < (roots time who true).toReal) : who = owner time := by
+  by_contra hne
+  rw [quitProbability_eq_zero_of_ne time hne] at hactive
+  exact absurd hactive (lt_irrefl 0)
+
+/-- **No distinct pair carries a fenced solo window family.**  A window's
+interior is a run of consecutive dates owned by one coordinate, and in the
+three-cycle each coordinate's dates are isolated, so the run has length one;
+its closing date is then owned by the third coordinate rather than by the
+spectator, which the fence condition forbids.  Distinctness of the pair is not
+needed: the fence and the closing date are two dates apart, and no coordinate
+owns both. -/
+theorem isEmpty_quittingFencedSoloWindowFamily (spectator ownerIndex : Player) :
+    IsEmpty (QuittingFencedSoloWindowFamily roots spectator ownerIndex) := by
+  refine ⟨fun family => ?_⟩
+  have hlength := family.length_pos 0
+  have hspectator : spectator = owner (family.fence 0) :=
+    eq_owner_of_active (family.fence_active 0)
+  have hownerIndex : ownerIndex = owner (family.fence 0 + 1) := by
+    have hactive := family.window_active 0 0 hlength
+    rw [Nat.add_zero] at hactive
+    exact eq_owner_of_active hactive
+  have hlengthOne : family.length 0 = 1 := by
+    by_contra hlengthNe
+    have htwo : 1 < family.length 0 := by omega
+    have hsecond : ownerIndex = owner (family.fence 0 + 1 + 1) :=
+      eq_owner_of_active (family.window_active 0 1 htwo)
+    have hval := congrArg Fin.val (hownerIndex.symm.trans hsecond)
+    simp only [owner_val] at hval
+    omega
+  have hreturn : spectator = owner (family.fence 0 + 1 + family.length 0) :=
+    eq_owner_of_active (family.return_active 0)
+  rw [hlengthOne] at hreturn
+  have hval := congrArg Fin.val (hspectator.symm.trans hreturn)
+  simp only [owner_val] at hval
+  omega
+
+/-- **The no-family residual holds on this tail.**  Together with
+`not_quittingTailPersistentlySolo` this exhibits an exact zero-free tail with
+vanishing one-stage absorption on which no distinct pair carries a fenced solo
+window family and yet every coordinate is persistently active. -/
+theorem quittingNoFencedSoloWindowFamily :
+    QuittingNoFencedSoloWindowFamily roots := fun spectator ownerIndex _ =>
+  isEmpty_quittingFencedSoloWindowFamily spectator ownerIndex
+
 /-! ## The assembled witness -/
 
 /-- **The pair dichotomy fails under the hypotheses it is consumed with.**
@@ -377,8 +429,10 @@ This tail obeys the exact value recursion, is exact endpoint-Nash at accuracy
 zero at every date, has interior hazards and a vanishing one-stage absorption
 mass, and lives over a zero-free table -- every hypothesis of
 `quittingTailPersistentlySolo_of_zeroFree_of_dichotomy` except the pair
-dichotomy itself.  Both the dichotomy and that theorem's conclusion fail here,
-so no argument from those hypotheses alone can supply the dichotomy. -/
+dichotomy itself -- and it carries no fenced solo window family for any pair.
+Both the dichotomy and the eventually-solo conclusion fail here, so neither the
+dichotomy nor the absence of fenced solo window families follows from those
+hypotheses, and neither supplies the conclusion on its own. -/
 theorem pairSoloDichotomy_fails_under_consumer_hypotheses :
     (∀ time, value time =
         quittingRootSuccessorPayoff reward (value (time + 1)) (roots time)) ∧
@@ -388,10 +442,12 @@ theorem pairSoloDichotomy_fails_under_consumer_hypotheses :
       QuittingZeroFreeSoloMatrix reward ∧
       Filter.Tendsto (fun time => quittingRootAbsorptionMass (roots time))
           Filter.atTop (nhds 0) ∧
+      QuittingNoFencedSoloWindowFamily roots ∧
       ¬ QuittingTailPairSoloDichotomy roots ∧
       ¬ QuittingTailPersistentlySolo roots :=
   ⟨hpolicy, hnash, hinterior, zeroFree, tendsto_absorptionMass,
-    not_quittingTailPairSoloDichotomy, not_quittingTailPersistentlySolo⟩
+    quittingNoFencedSoloWindowFamily, not_quittingTailPairSoloDichotomy,
+    not_quittingTailPersistentlySolo⟩
 
 end QuittingCyclicTripleSoloTail
 
