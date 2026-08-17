@@ -129,6 +129,7 @@ import MathUE.LinearProgramming.SingletonLCP
 import MathUE.LinearProgramming.Standard
 import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
+import MathUE.LinearProgramming.Tournament
 import MathUE.List
 import MathUE.MaxAffineStoppingValue
 import MathUE.MeanErgodic
@@ -278,6 +279,7 @@ import MathUE.SqrtRate
 import MathUE.SchauderFixedPoint
 import MathUE.Simplex
 import MathUE.SimplexApproximation
+import MathUE.SparseVanishingSchedule
 import MathUE.SurvivalProduct
 import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
