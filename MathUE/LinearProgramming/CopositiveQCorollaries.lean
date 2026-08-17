@@ -24,16 +24,24 @@ Everything here uses the repository's row convention
 
 ## Main results
 
-* `weight_eq_zero_of_copositive_of_pos` — for a copositive `M` and a strictly
-  positive `q`, a nonnegative complementary weight vector vanishes; no
-  residual sign condition is used
+* `weight_mul_eq_zero_of_quadratic_nonneg` — for a nonnegative `q`, a
+  nonnegative complementary weight vector is supported on the zero set of `q`;
+  no residual sign condition is used, and copositivity is needed only at the
+  weight vector itself
+* `weight_eq_zero_of_copositive_of_pos` — the special case of an everywhere
+  positive `q`, where that zero set is empty
 * `isStandardLCPSolution_iff_eq_zero_of_copositive_of_pos` — the same
   statement as a uniqueness theorem for `LCP(M, q)`
 * `isStandardQ_of_strictlyCopositive` — Karamardian's corollary
-* `homogeneousViolation_normalized_le_of_isStandardLCPSolution` — the `O(1/r)`
-  violation bound at an exact solution, with no copositivity input
+* `homogeneousViolation_normalized_le_of_isStandardLCPSolution_of_bound` — the
+  `O(1/r)` violation bound at an exact solution, against any coordinatewise
+  bound on `q` and with no copositivity input;
+  `homogeneousViolation_normalized_le_of_isStandardLCPSolution` is its `‖q‖₁`
+  reading
 * `exists_bound_sum_of_isR0Matrix` — under `R₀`, solutions of `LCP(M, q)` are
-  bounded uniformly over any `‖q‖₁`-bounded set of right-hand sides
+  bounded uniformly over any coordinatewise-bounded set of right-hand sides
+* `IsStrictlyCopositive.eq_zero_of_complementary` — strict copositivity kills
+  every nonzero complementary nonnegative vector, residual sign or not
 * `isStandardQ_or_singletonLCPFeasible_of_isIntegralTournament` — the
   dichotomy for integral tournaments: standard `Q`, or an explicit homogeneous
   simplex witness at an all-loser vertex
@@ -51,15 +59,17 @@ Copositivity alone forces the zero weight vector once the right-hand side is
 strictly positive.  Only nonnegativity and complementarity of the weights are
 used; the residual sign condition is not needed. -/
 
-/-- **Positive right-hand sides kill copositive weights.** If `M` is
-copositive, `q` is strictly positive, and `z ≥ 0` is complementary to the
-residual `q + Mz`, then `z = 0`.  Complementarity makes the pairing
-`⟨z, q + Mz⟩` vanish, so `⟨z, q⟩ = -⟨z, Mz⟩ ≤ 0`, while every term of
-`⟨z, q⟩` is nonnegative. -/
-theorem weight_eq_zero_of_copositive_of_pos (M : ι → ι → ℝ) (hcop : IsCopositive M)
-    (q z : ι → ℝ) (hq : ∀ i, 0 < q i) (hz : ∀ i, 0 ≤ z i)
+/-- **Nonnegative right-hand sides confine complementary weights to the zero
+set of `q`.**  Complementarity makes the pairing `⟨z, q + Mz⟩` vanish, so
+`⟨z, q⟩ = -⟨z, Mz⟩ ≤ 0` as soon as the quadratic form is nonnegative at `z`,
+while every term of `⟨z, q⟩` is nonnegative; the terms therefore vanish one by
+one.  Only the value of the quadratic form at this single `z` enters, so
+copositivity of `M` is more than is needed. -/
+theorem weight_mul_eq_zero_of_quadratic_nonneg (M : ι → ι → ℝ)
+    (q z : ι → ℝ) (hquad : 0 ≤ ∑ i, z i * ∑ j, z j * M i j)
+    (hq : ∀ i, 0 ≤ q i) (hz : ∀ i, 0 ≤ z i)
     (hcomp : ∀ i, z i * lcpResidual M q z i = 0) :
-    ∀ i, z i = 0 := by
+    ∀ i, z i * q i = 0 := by
   classical
   have hsum : (∑ i, z i * lcpResidual M q z i) = 0 :=
     Finset.sum_eq_zero fun i _ => hcomp i
@@ -67,17 +77,35 @@ theorem weight_eq_zero_of_copositive_of_pos (M : ι → ι → ℝ) (hcop : IsCo
       (∑ i, z i * q i) + ∑ i, z i * ∑ j, z j * M i j := by
     rw [← Finset.sum_add_distrib]
     exact Finset.sum_congr rfl fun i _ => by rw [lcpResidual_def]; ring
-  have hquad : 0 ≤ ∑ i, z i * ∑ j, z j * M i j := hcop z hz
   have hzq_nonneg : 0 ≤ ∑ i, z i * q i :=
-    Finset.sum_nonneg fun i _ => mul_nonneg (hz i) (hq i).le
+    Finset.sum_nonneg fun i _ => mul_nonneg (hz i) (hq i)
   have hzq : (∑ i, z i * q i) = 0 := by rw [hsplit] at hsum; linarith
-  intro i
-  have hterm : z i * q i = 0 :=
+  exact fun i =>
     (Finset.sum_eq_zero_iff_of_nonneg
-      (fun j _ => mul_nonneg (hz j) (hq j).le)).mp hzq i (Finset.mem_univ i)
-  rcases mul_eq_zero.mp hterm with h | h
+      (fun j _ => mul_nonneg (hz j) (hq j))).mp hzq i (Finset.mem_univ i)
+
+/-- **A copositive complementary weight vanishes wherever a nonnegative
+right-hand side is strictly positive.** -/
+theorem weight_eq_zero_of_copositive_of_nonneg (M : ι → ι → ℝ)
+    (hcop : IsCopositive M) (q z : ι → ℝ) (hq : ∀ i, 0 ≤ q i) (hz : ∀ i, 0 ≤ z i)
+    (hcomp : ∀ i, z i * lcpResidual M q z i = 0) {i : ι} (hqi : 0 < q i) :
+    z i = 0 := by
+  rcases mul_eq_zero.mp
+      (weight_mul_eq_zero_of_quadratic_nonneg M q z (hcop z hz) hq hz hcomp i) with
+    h | h
   · exact h
-  · exact absurd h (hq i).ne'
+  · exact absurd h hqi.ne'
+
+/-- **Positive right-hand sides kill copositive weights.** If `M` is
+copositive, `q` is strictly positive, and `z ≥ 0` is complementary to the
+residual `q + Mz`, then `z = 0`. -/
+theorem weight_eq_zero_of_copositive_of_pos (M : ι → ι → ℝ) (hcop : IsCopositive M)
+    (q z : ι → ℝ) (hq : ∀ i, 0 < q i) (hz : ∀ i, 0 ≤ z i)
+    (hcomp : ∀ i, z i * lcpResidual M q z i = 0) :
+    ∀ i, z i = 0 :=
+  fun i =>
+    weight_eq_zero_of_copositive_of_nonneg M hcop q z (fun j => (hq j).le) hz hcomp
+      (hq i)
 
 /-- The zero vector solves `LCP(M, q)` whenever `q` is nonnegative. -/
 theorem isStandardLCPSolution_zero (M : ι → ι → ℝ) {q : ι → ℝ} (hq : ∀ i, 0 ≤ q i) :
@@ -130,18 +158,28 @@ theorem IsStrictlyCopositive.isCopositive {M : ι → ι → ℝ}
       exact hne ⟨i, hi⟩
     simp [hzero]
 
-/-- Strict copositivity implies `R₀`: complementarity makes the quadratic form
-vanish at any homogeneous solution. -/
+/-- **Strict copositivity forbids every nonzero complementary nonnegative
+vector.**  Coordinatewise complementarity `z i * (Mz) i = 0` alone makes the
+quadratic form vanish, which a strictly copositive matrix allows only at the
+origin.  No sign condition on `Mz` is used, so this is stronger than `R₀`. -/
+theorem IsStrictlyCopositive.eq_zero_of_complementary {M : ι → ι → ℝ}
+    (h : IsStrictlyCopositive M) (z : ι → ℝ) (hz : ∀ i, 0 ≤ z i)
+    (hcomp : ∀ i, z i * ∑ j, z j * M i j = 0) : ∀ i, z i = 0 := by
+  intro i
+  by_contra hi
+  have hpos := h z hz ⟨i, hi⟩
+  have hzero : (∑ k, z k * ∑ j, z j * M k j) = 0 :=
+    Finset.sum_eq_zero fun k _ => hcomp k
+  linarith
+
+/-- Strict copositivity implies `R₀`: a homogeneous solution is in particular
+a complementary nonnegative vector. -/
 theorem IsStrictlyCopositive.isR0Matrix {M : ι → ι → ℝ}
     (h : IsStrictlyCopositive M) : IsR0Matrix M := by
-  intro z hsol i
-  by_contra hi
-  have hpos := h z hsol.weight_nonneg ⟨i, hi⟩
-  have hzero : (∑ k, z k * ∑ j, z j * M k j) = 0 := by
-    refine Finset.sum_eq_zero fun k _ => ?_
-    have hc := hsol.complementary k
-    rwa [lcpResidual_zero] at hc
-  linarith
+  intro z hsol
+  refine h.eq_zero_of_complementary z hsol.weight_nonneg fun k => ?_
+  have hc := hsol.complementary k
+  rwa [lcpResidual_zero] at hc
 
 /-- **Karamardian's corollary.** A strictly copositive matrix is a standard
 `Q`-matrix. -/
@@ -159,17 +197,12 @@ inequality bound of `CopositiveQ.lean`. -/
 /-- **The violation bound at an exact solution.** If `z` solves `LCP(M, q)`
 and has total mass `r > 0`, then the normalized point `z / r` has homogeneous
 violation at most `(card ι + 1) * ‖q‖₁ / r`.  Copositivity is not used. -/
-theorem homogeneousViolation_normalized_le_of_isStandardLCPSolution (M : ι → ι → ℝ)
-    (q z : ι → ℝ) (hsol : IsStandardLCPSolution M q z) {r : ℝ} (hr : 0 < r)
-    (hsum : (∑ i, z i) = r) :
+theorem homogeneousViolation_normalized_le_of_isStandardLCPSolution_of_bound (M : ι → ι → ℝ)
+    (q z : ι → ℝ) (hsol : IsStandardLCPSolution M q z) {r Bq : ℝ} (hr : 0 < r)
+    (hBq_nonneg : 0 ≤ Bq) (hq_le : ∀ i, |q i| ≤ Bq) (hsum : (∑ i, z i) = r) :
     homogeneousViolation M (fun i => z i / r) ≤
-      ((Fintype.card ι : ℝ) + 1) * (∑ i, |q i|) / r := by
+      ((Fintype.card ι : ℝ) + 1) * Bq / r := by
   classical
-  set Bq : ℝ := ∑ i, |q i| with hBq
-  have hBq_nonneg : 0 ≤ Bq := Finset.sum_nonneg fun _ _ => abs_nonneg _
-  have hq_le : ∀ i, |q i| ≤ Bq :=
-    fun i => Finset.single_le_sum (f := fun i => |q i|) (fun _ _ => abs_nonneg _)
-      (Finset.mem_univ i)
   -- Complementarity makes the pairing vanish, which bounds the quadratic form.
   have hpair : (∑ i, z i * lcpResidual M q z i) = 0 :=
     Finset.sum_eq_zero fun i _ => hsol.complementary i
@@ -240,19 +273,33 @@ theorem homogeneousViolation_normalized_le_of_isStandardLCPSolution (M : ι → 
     ring
   linarith [hpiece1, hpiece2, hfinal.symm.le, hfinal.le]
 
-/-- **Uniform solution bounds under `R₀`.** For an `R₀` matrix and any bound
-`B` on `‖q‖₁`, all solutions of `LCP(M, q)` have total mass at most a single
-constant `C`.  An unbounded family of solutions would normalize to simplex
-points of vanishing homogeneous violation, and the compactness limit of
-`CopositiveQ.lean` would then produce an exact homogeneous solution. -/
-theorem exists_bound_sum_of_isR0Matrix (M : ι → ι → ℝ) (hR0 : IsR0Matrix M) (B : ℝ) :
-    ∃ C : ℝ, ∀ q z : ι → ℝ, (∑ i, |q i|) ≤ B → IsStandardLCPSolution M q z →
+/-- The `‖q‖₁` reading of the violation bound at an exact solution: the total
+`∑ i, |q i|` bounds every coordinate. -/
+theorem homogeneousViolation_normalized_le_of_isStandardLCPSolution (M : ι → ι → ℝ)
+    (q z : ι → ℝ) (hsol : IsStandardLCPSolution M q z) {r : ℝ} (hr : 0 < r)
+    (hsum : (∑ i, z i) = r) :
+    homogeneousViolation M (fun i => z i / r) ≤
+      ((Fintype.card ι : ℝ) + 1) * (∑ i, |q i|) / r :=
+  homogeneousViolation_normalized_le_of_isStandardLCPSolution_of_bound M q z hsol hr
+    (Finset.sum_nonneg fun _ _ => abs_nonneg _)
+    (fun i => Finset.single_le_sum (f := fun i => |q i|) (fun _ _ => abs_nonneg _)
+      (Finset.mem_univ i))
+    hsum
+
+/-- **Uniform solution bounds under `R₀`.** For an `R₀` matrix and any
+coordinatewise bound `B` on `q`, all solutions of `LCP(M, q)` have total mass
+at most a single constant `C`.  An unbounded family of solutions would
+normalize to simplex points of vanishing homogeneous violation, and the
+compactness limit of `CopositiveQ.lean` would then produce an exact homogeneous
+solution.  A bound on `‖q‖₁` is one such coordinatewise bound, so this covers a
+strictly larger family of right-hand sides for the same `B`. -/
+theorem exists_bound_sum_of_isR0Matrix (M : ι → ι → ℝ) (hR0 : IsR0Matrix M) {B : ℝ}
+    (hB : 0 ≤ B) :
+    ∃ C : ℝ, ∀ q z : ι → ℝ, (∀ i, |q i| ≤ B) → IsStandardLCPSolution M q z →
       (∑ i, z i) ≤ C := by
   classical
   by_contra hno
   push Not at hno
-  obtain ⟨q₀, z₀, hq₀, _, _⟩ := hno 0
-  have hB : 0 ≤ B := le_trans (Finset.sum_nonneg fun _ _ => abs_nonneg _) hq₀
   set D : ℝ := ((Fintype.card ι : ℝ) + 1) * B with hD
   have hD_nonneg : 0 ≤ D := by
     have hcard : (0 : ℝ) ≤ (Fintype.card ι : ℝ) + 1 := by positivity
@@ -268,12 +315,9 @@ theorem exists_bound_sum_of_isR0Matrix (M : ι → ι → ℝ) (hR0 : IsR0Matrix
     ⟨fun i => div_nonneg (hsol.weight_nonneg i) hr.le,
       by rw [← Finset.sum_div, ← hrdef]; exact div_self hr.ne'⟩
   refine ⟨fun i => z i / r, hmem, ?_⟩
-  have hviol := homogeneousViolation_normalized_le_of_isStandardLCPSolution M q z hsol hr rfl
-  have hnum : ((Fintype.card ι : ℝ) + 1) * (∑ i, |q i|) ≤ D := by
-    have hcard : (0 : ℝ) ≤ (Fintype.card ι : ℝ) + 1 := by positivity
-    rw [hD]
-    exact mul_le_mul_of_nonneg_left hq hcard
-  have hstep : ((Fintype.card ι : ℝ) + 1) * (∑ i, |q i|) / r ≤ D / r := by gcongr
+  have hviol :=
+    homogeneousViolation_normalized_le_of_isStandardLCPSolution_of_bound M q z hsol
+      hr hB hq rfl
   have hCr : D / r ≤ D / C := by
     refine div_le_div_of_nonneg_left hD_nonneg (by linarith) hlt.le
   have hCε : D / C ≤ ε := by
@@ -321,7 +365,7 @@ end Restriction
 its column of the skew-dominant matrix is nonnegative and its diagonal entry
 vanishes, so the homogeneous simplex LCP is feasible. -/
 theorem singletonLCPFeasible_tournamentSkewMatrix_of_row_eq_zero {t : ℝ} {A : ι → ι → ℝ}
-    (hA : IsFractionalTournament A) (ht : 0 < t) {i : ι} (hrow : ∀ j, A i j = 0) :
+    (hA : IsFractionalTournament A) (ht : 0 ≤ t) {i : ι} (hrow : ∀ j, A i j = 0) :
     SingletonLCPFeasible (tournamentSkewMatrix t A) := by
   refine singletonLCPFeasible_of_diag_eq_zero i ?_ fun j => ?_
   · show t * A i i - A i i = 0
@@ -360,7 +404,7 @@ theorem isStandardQ_or_singletonLCPFeasible_of_isIntegralTournament (t : ℝ)
         · exact h
         · exact absurd h (hi j hij)
     exact singletonLCPFeasible_tournamentSkewMatrix_of_row_eq_zero hA.1
-      (lt_trans zero_lt_one ht) hrow
+      (lt_trans zero_lt_one ht).le hrow
 
 omit [Fintype ι] in
 /-- The dichotomy transported to an injective relabelling, which is the form
