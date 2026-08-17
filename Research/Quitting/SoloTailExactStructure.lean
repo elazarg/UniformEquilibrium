@@ -334,8 +334,9 @@ theorem quittingSoloTailValue_sub_eq_windowFlow_add_survival
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time))
     (who : ι) (base : ℝ) (start length : ℕ)
+    (hsolo : ∀ offset, offset < length →
+      IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset)))
     (hspectator : ∀ offset, offset < length → who ≠ owner (start + offset)) :
     value start who - base =
       (∑ offset ∈ Finset.range length,
@@ -348,10 +349,19 @@ theorem quittingSoloTailValue_sub_eq_windowFlow_add_survival
   | succ length ih =>
       have hspectator0 : who ≠ owner start := by
         simpa using hspectator 0 (Nat.succ_pos length)
+      have hsolo0 : IsQuittingSoloRoot (roots start) (owner start) := by
+        simpa using hsolo 0 (Nat.succ_pos length)
       have hspectatorTail : ∀ offset, offset < length →
           who ≠ owner (start + 1 + offset) := by
         intro offset hoffset
         have hshift := hspectator (offset + 1) (by omega)
+        rwa [show start + (offset + 1) = start + 1 + offset from by omega]
+          at hshift
+      have hsoloTail : ∀ offset, offset < length →
+          IsQuittingSoloRoot (roots (start + 1 + offset))
+            (owner (start + 1 + offset)) := by
+        intro offset hoffset
+        have hshift := hsolo (offset + 1) (by omega)
         rwa [show start + (offset + 1) = start + 1 + offset from by omega]
           at hshift
       have hstep : value start who =
@@ -360,9 +370,9 @@ theorem quittingSoloTailValue_sub_eq_windowFlow_add_survival
             quittingSoloTailContinueMass roots owner start *
               value (start + 1) who := by
         conv_lhs => rw [hpolicy start]
-        exact (hsolo start).successorPayoff_other reward hspectator0
+        exact hsolo0.successorPayoff_other reward hspectator0
           (value (start + 1))
-      have hIH := ih (start + 1) hspectatorTail
+      have hIH := ih (start + 1) hsoloTail hspectatorTail
       have hmass := quittingSoloTailContinueMass_add_hazard roots owner start
       have hsum :
           (∑ offset ∈ Finset.range (length + 1),
@@ -421,15 +431,16 @@ theorem quittingSoloTailValue_sub_soloReward_eq_matrixFlow_add_survival
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time))
     (who : ι) (start length : ℕ)
+    (hsolo : ∀ offset, offset < length →
+      IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset)))
     (hspectator : ∀ offset, offset < length → who ≠ owner (start + offset)) :
     value start who - quittingSoloReward reward who who =
       quittingSoloTailMatrixFlow reward roots owner who start length +
         quittingSoloTailSurvival roots owner start length *
           (value (start + length) who - quittingSoloReward reward who who) := by
   have hbase := quittingSoloTailValue_sub_eq_windowFlow_add_survival roots value
-    owner hpolicy hsolo who (quittingSoloReward reward who who) start length
+    owner hpolicy who (quittingSoloReward reward who who) start length hsolo
     hspectator
   rw [hbase, quittingSoloTailMatrixFlow]
   refine congrArg (· + _) (Finset.sum_congr rfl fun offset _ => ?_)
@@ -442,15 +453,16 @@ theorem quittingSoloTailMatrixFlow_eq_zero_of_pinnedEnds
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time))
     (who : ι) (start length : ℕ)
+    (hsolo : ∀ offset, offset < length →
+      IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset)))
     (hspectator : ∀ offset, offset < length → who ≠ owner (start + offset))
     (hstart : value start who = quittingSoloReward reward who who)
     (hend : value (start + length) who = quittingSoloReward reward who who) :
     quittingSoloTailMatrixFlow reward roots owner who start length = 0 := by
   have hidentity :=
     quittingSoloTailValue_sub_soloReward_eq_matrixFlow_add_survival roots value
-      owner hpolicy hsolo who start length hspectator
+      owner hpolicy who start length hsolo hspectator
   rw [hstart, hend] at hidentity
   simp only [sub_self, mul_zero, add_zero] at hidentity
   linarith
@@ -509,7 +521,8 @@ theorem quittingSoloTailMatrixFlow_eq_zero_of_fencedActiveDates
     value owner hpolicy hnash hsolo who (fence + 1 + length) hclose hcloseQuit
     hcloseContinue).1
   exact quittingSoloTailMatrixFlow_eq_zero_of_pinnedEnds roots value owner
-    hpolicy hsolo who (fence + 1) length hspectator hstart hend
+    hpolicy who (fence + 1) length (fun offset _ => hsolo _) hspectator hstart
+    hend
 
 /-! ## Constant-soloist windows and the phantom mismatch -/
 
@@ -520,9 +533,10 @@ theorem quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time))
     (who fixedOwner : ι) (hne : who ≠ fixedOwner) (base : ℝ)
     (start length : ℕ)
+    (hsolo : ∀ offset, offset < length →
+      IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset)))
     (hconstant : ∀ offset, offset < length → owner (start + offset) = fixedOwner) :
     value start who - base =
       (1 - quittingSoloTailSurvival roots owner start length) *
@@ -534,7 +548,7 @@ theorem quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner
     rw [hconstant offset hoffset]
     exact hne
   have hbase := quittingSoloTailValue_sub_eq_windowFlow_add_survival roots value
-    owner hpolicy hsolo who base start length hspectator
+    owner hpolicy who base start length hsolo hspectator
   have hflow :
       (∑ offset ∈ Finset.range length,
           quittingSoloTailWindowWeight roots owner start offset *
@@ -589,8 +603,8 @@ theorem quittingSoloTailValue_sub_le_of_constantOwner_preemption
         quittingSoloTailSurvival roots owner start length *
           (value (start + length) who - base) := by
   have hidentity := quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner
-    roots value owner hpolicy hsolo who fixedOwner hpreempt.1 base start length
-    hconstant
+    roots value owner hpolicy who fixedOwner hpreempt.1 base start length
+    (fun offset _ => hsolo _) hconstant
   have hmismatch := quittingSoloTailWindowDelivery_sub_base_le_neg_margin reward
     hpreempt hfloor
   have hsurvival :=
