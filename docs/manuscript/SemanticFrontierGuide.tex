@@ -423,13 +423,16 @@ Every alternative has a positive scale $\kappa$.  For alternatives 2--5 set
 Positivity of the payoff comparison forces $R>0$.  The constant $\ell$ is a
 proved lower bound on the selected profile's total terminal $S$-mass in the
 observer-absent arm, and on a named unconditional stage-$S$ mass in either
-      observer-containing arm.  The factors $1/2$ and $1/4$ are the constants
+      observer-containing branch.  The factors $1/2$ and $1/4$ are the constants
 in the two quantitative outputs; no comparison between their witnesses is
 intended.
 
 The global gap $\gamma$ already says that some player can profit somewhere
 from every profile.  Each alternative below adds localization or algebraic
 structure that this global statement does not contain.
+
+The canonical reduction uses only Alternatives~2 and~5.  The five-alternative
+numbering is used for cross-reference.
 
 There is already substantial play-path structure before the ensuing alternative is
 chosen.  The relevant suffix profiles can be placed after exact Nash-root
@@ -440,23 +443,10 @@ infinite play: exact word length can increase while cumulative absorption
 stays bounded, and the suffix moves to later dates while its payoff comparison
 may escape to infinity.
 
-\subsection{Alternative 1: a prescribed payoff comparison}
+\subsection{Alternative 1: unnecessary}
 \label{alt:direct-comparison}
 
-There are a player $a$ with $d_a(p)>0$, another player $o$, a number
-$\kappa>0$, profiles $\sigma_n$, unilateral replacements $\theta_{a,n}$,
-and a fixed nonempty coalition $S$ such that $o\ne a$ and
-\[
- \frac{\kappa}{2}
- \le N\bigl(\Pr_{\sigma_n}[S]
-       -\Pr_{\sigma_n[a\leftarrow\theta_{a,n}]}[S]\bigr)r_o(S)
-\]
-along a strict subsequence.  Thus the same player replacement, payoff
-coordinate, and absorbing coalition give a uniformly positive signed payoff
-comparison.  What is not supplied is a bounded position for this comparison
-inside one infinite equilibrium play path.
-
-\subsection*{Data shared by Alternatives 2--5}
+\subsection*{Data used by Alternatives 2 and 5}
 \label{alt:shared-data}
 
 The other output has the same types of $a,o,\kappa,\sigma_n,\theta_{a,n}$
@@ -478,9 +468,6 @@ supplied for the different opponents in $Y_n$.  The profiles satisfy
  \le N\bigl(\Pr_{X_n}[S]-\Pr_{Y_n}[S]\bigr)r_o(S),
  \qquad d_o(X_n)\longrightarrow0.
 \]
-Alternatives 2, 4, and 5 are the mutually exclusive possibilities for the
-position of $o$ in $S$ and the sign of $r_o(S)$.
-
 To state two alternatives, recall the punishment value $\chi_i$ defined
 above.
 At a row $x$ where player $k$ is forced to Quit, its punishment-based
@@ -555,39 +542,8 @@ has already been achieved in both branches.
 
 \subsection{Alternative 3: singleton (impossible)}
 \label{alt:singleton}
-\subsection{Alternative 4: the observer has negative payoff}
+\subsection{Alternative 4: unnecessary}
 \label{alt:negative-target}
-
-Here $o\in S$ and $r_o(S)<0$.  Each $q_n$ is finite.  At an actual
-reached row $t_n$ of the source profile $Y_n$, the observer Quits surely and
-the unconditional stage-$S$ mass is at least $\ell$.  Let $x_n$ be the row
-played there, $v_n$ the literal continuation payoff after unanimous
-Continue, $h_n$ the probability of reaching $t_n$, and abbreviate
-$\rho_{j,n}=\rho_j(x_n;v_{n,j})$.  At this selected row, for each $n$, either
-some $j\ne o$ has
-\[
- \rho_{j,n}\ge\gamma,
- \qquad g_{j,n}=h_n\rho_{j,n}\ge\ell\gamma,
-\]
-where $g_{j,n}$ is the exact gain from a legal one-row endpoint deviation at
-that same source, or
-\[
- \mathfrak b_o(x_n)\ge\gamma,
- \qquad \ell\gamma\le
-   (\text{stage-}S\text{ mass})\,\mathfrak b_o(x_n).
-\]
-After passing to a further strict subsequence, this dichotomy can be frozen:
-either the refusal alternative holds at every selected row, or one fixed
-$j\ne o$ has the displayed defect and legal gain at every selected row.
-In addition, the common reached-row lemma below gives
-\[
- D_*-\frac{d_o(Y_n)}{\ell}
- \le\sum_{j\ne o}\rho_{j,n}.
-\]
-This adds an actual source row and either an actual outsider gain or a
-weighted punishment bound.  The construction controls $d_o(X_n)\to0$, not
-$d_o(Y_n)$, and supplies no estimate transporting this debt across player
-$a$'s full strategy replacement.
 
 \subsection{Alternative 5: the observer has positive payoff}
 \label{alt:positive-target}

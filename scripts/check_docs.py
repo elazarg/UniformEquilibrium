@@ -102,7 +102,14 @@ HISTORICAL_NARRATIVE_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
-PRUNED_DIRECTORIES = {".git", ".lake", "GameTheory", "__pycache__", ".pytest_cache"}
+PRUNED_DIRECTORIES = {
+    ".git",
+    ".lake",
+    "GameTheory",
+    "__pycache__",
+    ".pytest_cache",
+    "ephemeral",
+}
 
 
 def relative(path: pathlib.Path) -> str:
