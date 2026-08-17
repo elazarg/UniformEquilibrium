@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.LinearAlgebra.FiniteGroupInvariantWeights
 import UniformEquilibrium.Certificates.Adaptive.Certificate
+import Mathlib.Algebra.Group.Action.Pretransitive
 
 /-!
 # Weighted security--welfare assembly
@@ -380,6 +381,32 @@ theorem isUniformEquilibriumPayoff_of_oneSidedGuarantees_of_positiveWeightedWelf
   exact
     isUniformEquilibriumPayoff_of_oneSidedGuarantees_of_weightedWelfareCap
       G s₀ normalizedWeight v normalizedWeight_ge_one security normalizedCap
+
+/-- Under a transitive player action, a transport law turns one representative
+one-sided security certificate into security for every player.  A positive
+weighted welfare cap then assembles a uniform-equilibrium payoff. -/
+theorem isUniformEquilibriumPayoff_of_transitiveSecurity_of_welfareCap
+    {Gamma : Type} [Group Gamma] [MulAction Gamma ι]
+    [MulAction.IsPretransitive Gamma ι]
+    (G : StochasticGame ι) [Fintype ι] [DecidableEq ι]
+    [Finite G.State] [∀ i, Finite (G.Act i)]
+    (s₀ : G.State) (weight : ι → ℝ) (v : Payoff ι)
+    (weight_pos : ∀ i, 0 < weight i)
+    (representative : ι)
+    (orbitSecurity : ∀ g : Gamma,
+      G.IsOneSidedGuaranteeCertificate s₀ (g • representative)
+        (v (g • representative)))
+    (welfareCap : HasUniformWeightedWelfareCap G s₀ weight v) :
+    G.IsUniformEquilibriumPayoff s₀ v := by
+  letI : Nonempty ι := ⟨representative⟩
+  have security : ∀ i, G.IsOneSidedGuaranteeCertificate s₀ i (v i) :=
+    fun i ↦ by
+      obtain ⟨g, moved⟩ :=
+        MulAction.IsPretransitive.exists_smul_eq (M := Gamma) representative i
+      rw [← moved]
+      exact orbitSecurity g
+  exact isUniformEquilibriumPayoff_of_oneSidedGuarantees_of_positiveWeightedWelfareCap
+    G s₀ weight v weight_pos security welfareCap
 
 end StochasticGame
 

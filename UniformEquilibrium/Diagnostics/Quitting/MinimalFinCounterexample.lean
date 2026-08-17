@@ -8,6 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.Rein
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.SmallPlayers
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonStrategicCompression
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlayerDeletion
 
 /-!
 # Minimal finite counterexamples to quitting-game uniform equilibrium
@@ -68,6 +69,22 @@ table on the included coalition and player. -/
 def HasQuittingCounterexampleAtCard (n : ℕ) : Prop :=
   ∃ reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n),
     Nonempty (QuittingCounterexampleRegime reward)
+
+/-- Every player either has positive punishment value, has solo payoff at
+least its punishment value, or strictly gains by joining a nonempty coalition
+of the other players. -/
+def HasQuittingOwnerEntryTrichotomy [Fintype ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
+  ∀ owner,
+    0 < quittingPunishmentValue reward owner ∨
+      quittingPunishmentValue reward owner ≤
+        quittingSoloReward reward owner owner ∨
+      ∃ (quitters : Finset ι) (hquitters : quitters.Nonempty),
+        owner ∉ quitters ∧
+          reward ⟨quitters, hquitters⟩ owner <
+            reward
+              ⟨insert owner quitters,
+                Finset.insert_nonempty owner quitters⟩ owner
 
 /-- A cardinality-minimal finite quitting-game counterexample in canonical
 coordinates.  Minimality is stated directly in terms of the combined regime;
@@ -176,6 +193,51 @@ theorem not_hasQuittingExactPlayerDeletionAtGap
       (quittingDeletePlayerReward minimal.reward owner)
       minimal.regime.terminalGap_pos hdeletedGap) hpayoff
 
+/-- At the negative singleton gate of a cardinality-minimal counterexample,
+the deleted player must gain strictly by joining some nonempty coalition of
+the other players.  Otherwise the full terminal gap descends to the smaller
+deleted game, contradicting minimality. -/
+theorem exists_strict_owner_entry_of_solo_lt_punishment_of_nonpos
+    (minimal : MinimalFinQuittingCounterexample)
+    (owner : Fin minimal.playerCount)
+    (hsolo : quittingSoloReward minimal.reward owner owner <
+      quittingPunishmentValue minimal.reward owner)
+    (hpunishment : quittingPunishmentValue minimal.reward owner ≤ 0) :
+    ∃ (quitters : Finset (Fin minimal.playerCount))
+        (hquitters : quitters.Nonempty),
+      owner ∉ quitters ∧
+        minimal.reward ⟨quitters, hquitters⟩ owner <
+          minimal.reward
+            ⟨insert owner quitters,
+              Finset.insert_nonempty owner quitters⟩ owner := by
+  have hsolo' : minimal.reward (quittingSingletonTerminal owner) owner <
+      quittingPunishmentValue minimal.reward owner := by
+    exact hsolo
+  rcases exists_strict_owner_toggle_or_exact_playerDeletion
+      minimal.reward owner minimal.regime.terminalGap_pos
+      minimal.regime.terminalExploitability hsolo' hpunishment with
+    hentry | hdeletion
+  · exact hentry
+  · exact False.elim
+      (minimal.not_hasQuittingExactPlayerDeletionAtGap owner
+        ⟨hdeletion.1, hdeletion.2.1⟩)
+
+/-- Every player of a cardinality-minimal counterexample satisfies the exact
+owner-entry trichotomy. -/
+theorem hasQuittingOwnerEntryTrichotomy
+    (minimal : MinimalFinQuittingCounterexample) :
+    HasQuittingOwnerEntryTrichotomy minimal.reward := by
+  intro owner
+  by_cases hpunishment : 0 < quittingPunishmentValue minimal.reward owner
+  · exact Or.inl hpunishment
+  · right
+    by_cases hsolo : quittingPunishmentValue minimal.reward owner ≤
+        quittingSoloReward minimal.reward owner owner
+    · exact Or.inl hsolo
+    · exact Or.inr
+        (minimal.exists_strict_owner_entry_of_solo_lt_punishment_of_nonpos
+          owner (lt_of_not_ge hsolo) (le_of_not_gt hpunishment))
+
 /-- On a cardinality-minimal counterexample, the stopping-law singleton
 orientation has only the common static atomic-toggle handoff.  The deletion
 arm of the general compression is eliminated by minimality rather than
@@ -195,5 +257,19 @@ theorem stoppingLawSingletonStrategicOrientation_atomicHandoff
         hdeletion)
 
 end MinimalFinQuittingCounterexample
+
+/-- If any finite quitting counterexample exists, one exists at minimal player
+cardinality whose every player satisfies the owner-entry trichotomy.  The
+minimal witness also solves every smaller finite quitting game and every
+nonempty proper restriction of its own reward table. -/
+theorem exists_minimalFinQuittingCounterexample_with_ownerEntryTrichotomy
+    [Fintype ι] [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hcounterexample : Nonempty (QuittingCounterexampleRegime reward)) :
+    ∃ minimal : MinimalFinQuittingCounterexample,
+      HasQuittingOwnerEntryTrichotomy minimal.reward := by
+  obtain ⟨minimal⟩ :=
+    exists_minimalFinQuittingCounterexample reward hcounterexample
+  exact ⟨minimal, minimal.hasQuittingOwnerEntryTrichotomy⟩
 
 end GameTheory

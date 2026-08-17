@@ -4,9 +4,6 @@ import Mathlib.Data.ZMod.Basic
 /-!
 # Phase-lifted weighted welfare caps
 
-This file formalizes the independent Bellman-calculus component used by
-`ideas/CoalitionSplittingGroupActions.md`.
-
 A bounded social bias on the phase-augmented state `ZMod P × State` supplies a
 weighted welfare ceiling for every behavior profile.  The endpoint loss is
 `2*bound/T`, uniformly in the horizon and in the initial clock phase.
@@ -14,11 +11,10 @@ weighted welfare ceiling for every behavior profile.  The endpoint loss is
 
 noncomputable section
 
-namespace Research.PhaseLiftedWelfareCap
+namespace GameTheory
 
 open scoped BigOperators
 
-open GameTheory
 open Math.Probability
 
 namespace StochasticGame
@@ -214,4 +210,4 @@ theorem hasUniformWeightedWelfareCap_of_hasPhaseWeightedWelfareBias
 
 end StochasticGame
 
-end Research.PhaseLiftedWelfareCap
+end GameTheory

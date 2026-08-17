@@ -386,7 +386,6 @@ import Research.Counterexamples.Pairwise.TailPacketCyclicFourWitness
 import Research.General.AnytimeDetectionConditional
 import Research.General.BinaryKLQuadratic
 import Research.General.BufferedOneSeamReturnOrExit
-import Research.General.CoalitionEquivariantAssembly
 import Research.General.CoalitionOrbitTransport
 import Research.General.CoalitionPhaseHolonomy
 import Research.General.CycleStrataGlobalFeedback
@@ -406,7 +405,6 @@ import Research.General.MaxAffineHolonomySemigroup
 import Research.General.MinimumSemanticPlateauConsistency
 import Research.General.ORCoupledCalibrationGame
 import Research.General.PathCarrierPrototype
-import Research.General.PhaseLiftedWelfareCap
 import Research.General.Question175OwnerNeverFloor
 import Research.General.RandomDeviationAuditCardinalReduction
 import Research.General.RandomDeviationAuditGame
@@ -566,6 +564,7 @@ import UniformEquilibrium.Certificates.Adaptive.CertificateTargetPerturbation
 import UniformEquilibrium.Certificates.Adaptive.LocalResponseAtlas
 import UniformEquilibrium.Certificates.Adaptive.LocalResponseRecursion
 import UniformEquilibrium.Certificates.Adaptive.OwnerSeparatedAdaptivePotentialSystem
+import UniformEquilibrium.Certificates.Adaptive.PhaseLiftedWelfareCap
 import UniformEquilibrium.Certificates.Adaptive.PotentialFiniteTimeTargetBounds
 import UniformEquilibrium.Certificates.Adaptive.PotentialSystem
 import UniformEquilibrium.Certificates.Adaptive.PotentialSystemTools
@@ -1117,6 +1116,7 @@ import UniformEquilibrium.Quitting.Circulation.TransportedLeverage
 import UniformEquilibrium.Quitting.Circulation.TwoCoordinateBoundary
 import UniformEquilibrium.Quitting.Circulation.UniformPayoffExamples
 import UniformEquilibrium.Quitting.Classification.AnalyticWaist
+import UniformEquilibrium.Quitting.Classification.EquivariantSecurityWelfareAssembly
 import UniformEquilibrium.Quitting.Classification.ImmediateSingletonCollision
 import UniformEquilibrium.Quitting.Classification.LCP.All
 import UniformEquilibrium.Quitting.Classification.LCP.CounterexampleNecessary

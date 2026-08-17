@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import UniformEquilibrium.Certificates.Adaptive.Certificate
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
 
 /-!
@@ -71,6 +72,52 @@ theorem quittingRewardReindex_trans (e : ι ≃ κ) (f : κ ≃ ν)
     quittingRewardReindex e (quittingRewardReindex e.symm reward) = reward := by
   rw [← quittingRewardReindex_trans]
   simp
+
+section Security
+
+variable [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
+
+/-- A one-sided security certificate transports covariantly with the secured
+player under an equivalence of finite quitting-game player types. -/
+theorem isOneSidedGuaranteeCertificateAt_reindex (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (who : ι) (value δ : ℝ)
+    (hsecurity : (quittingGame reward).IsOneSidedGuaranteeCertificateAt
+      none who value δ) :
+    IsOneSidedGuaranteeCertificateAt
+      (quittingGame (quittingRewardReindex e reward)) none (e who) value δ := by
+  obtain ⟨σwho, T₀, hT₀, hsecurity⟩ := hsecurity
+  let σwho' :
+      (quittingGame (quittingRewardReindex e reward)).BehaviorStrategy (e who) :=
+    fun t h ↦ σwho t ((quittingHistEquiv e reward t).symm h)
+  refine ⟨σwho', T₀, hT₀, fun opp T hT ↦ ?_⟩
+  have hpull :
+      quittingProfilePullback e reward (Function.update opp (e who) σwho') =
+        Function.update (quittingProfilePullback e reward opp) who σwho := by
+    rw [quittingProfilePullback_update]
+    refine congrArg
+      (Function.update (quittingProfilePullback e reward opp) who) ?_
+    funext t h
+    simp only [σwho', Equiv.symm_apply_apply]
+  have hpayoff := finiteAveragePayoff_quittingProfilePullback e reward
+    (Function.update opp (e who) σwho') T who
+  rw [hpull] at hpayoff
+  rw [hpayoff]
+  exact hsecurity (quittingProfilePullback e reward opp) T hT
+
+/-- Vanishing-error one-sided security is invariant under player reindexing. -/
+theorem isOneSidedGuaranteeCertificate_reindex (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (who : ι) (value : ℝ)
+    (hsecurity : (quittingGame reward).IsOneSidedGuaranteeCertificate
+      none who value) :
+    IsOneSidedGuaranteeCertificate
+      (quittingGame (quittingRewardReindex e reward)) none (e who) value := by
+  intro δ hδ
+  exact isOneSidedGuaranteeCertificateAt_reindex e reward who value δ
+    (hsecurity δ hδ)
+
+end Security
 
 section Equilibrium
 

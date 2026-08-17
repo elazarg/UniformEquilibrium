@@ -4,7 +4,6 @@ import Research.Counterexamples.Pairwise.TailPacketCyclicFourWitness
 import Research.General.AnytimeDetectionConditional
 import Research.General.BinaryKLQuadratic
 import Research.General.BufferedOneSeamReturnOrExit
-import Research.General.CoalitionEquivariantAssembly
 import Research.General.CoalitionOrbitTransport
 import Research.General.CoalitionPhaseHolonomy
 import Research.General.CycleStrataGlobalFeedback
@@ -24,7 +23,6 @@ import Research.General.MaxAffineHolonomySemigroup
 import Research.General.MinimumSemanticPlateauConsistency
 import Research.General.ORCoupledCalibrationGame
 import Research.General.PathCarrierPrototype
-import Research.General.PhaseLiftedWelfareCap
 import Research.General.Question175OwnerNeverFloor
 import Research.General.RandomDeviationAuditCardinalReduction
 import Research.General.RandomDeviationAuditGame
