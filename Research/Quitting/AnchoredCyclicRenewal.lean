@@ -34,7 +34,10 @@ single-quitter cycle.  This module iterates that step and solves the system.
 
 The convex-hull placement is a restriction on what a single-quitter periodic
 profile can pay: it is decided by the schedule's singleton geometry alone,
-before any best-response statistic is computed.
+before any best-response statistic is computed.  Its contrapositive
+`quittingAnchoredCyclicOnPathValue_ne_of_not_mem_convexHull` is a prescreen on
+candidate targets, and `range_quittingSingletonTerminal_comp` shows the hull
+depends only on the set of players the schedule visits.
 
 The last section identifies the refusal branch of the periodic best-response
 statistic.  Refusing to quit against an anchored cyclic profile leaves the same
@@ -45,6 +48,20 @@ schedule, in the absorbing and the never-absorbing branch alike.  Combined with
 the closed form this turns the refusal hypothesis of
 `exists_anchoredCyclicResponse_gain` into a comparison of finite sums, which is
 `exists_anchoredCyclicResponse_gain_of_refusalOnPathValue_le`.
+
+That comparison is in turn a consequence of the max-linear response system
+itself.  A solution of the system dominates its own continuation branch, the
+zeroed on-path value obeys that branch exactly, and the difference is
+contracted once around the cycle by the zeroed survival factor.  So
+`quittingAnchoredCyclicResponseCap_le_of_response` bounds the *exact behavioral*
+best response of the anchored cyclic profile by a solution of the finite max
+recursion, with the single residual that a player owning every positive-hazard
+phase — for whom refusal is worth nothing — needs a nonnegative solution
+coordinate.  The spectator condition "every player is a spectator at some phase
+carrying positive hazard" removes that residual, giving
+`quittingAnchoredCyclicResponseCap_le_of_response_of_spectatorHazard` and the
+contrapositive screen `isEmpty_of_anchoredCyclicResponseSolution_le`, whose
+inputs are all finite.
 -/
 
 noncomputable section
@@ -278,6 +295,37 @@ theorem quittingAnchoredCyclicOnPathValue_mem_convexHull
     (fun offset _ ↦ subset_convexHull ℝ _ (Set.mem_range_self _))
   exact div_nonneg
     (quittingAnchoredCyclicRenewalWeight_nonneg h0 h1 phase offset) hpos.le
+
+/-! ### A convex-hull prescreen on candidate targets -/
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- The hull the placement lives in depends only on the set of players the
+schedule visits, not on the order or the multiplicities. -/
+theorem range_quittingSingletonTerminal_comp
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (w : Fin m → ι) :
+    (Set.range fun k : Fin m ↦ reward (quittingSingletonTerminal (w k))) =
+      (fun owner ↦ reward (quittingSingletonTerminal owner)) '' Set.range w := by
+  rw [← Set.range_comp]
+  rfl
+
+/-- **A convex-hull prescreen for anchored cyclic targets.**  A payoff outside
+the convex hull of the singleton rows of the players a schedule visits is not
+the on-path value of any absorbing anchored cyclic profile on that schedule.
+The test reads only the table's singleton rows and the schedule's image, so it
+runs before any response-cap computation. -/
+theorem quittingAnchoredCyclicOnPathValue_ne_of_not_mem_convexHull
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (hcontraction : ∏ k, (1 - hazard k) < 1) (phase : Fin m) {payoff : Payoff ι}
+    (hpayoff : payoff ∉ convexHull ℝ
+      ((fun owner ↦ reward (quittingSingletonTerminal owner)) '' Set.range w)) :
+    quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 phase ≠ payoff := by
+  intro hcontra
+  refine hpayoff ?_
+  rw [← range_quittingSingletonTerminal_comp, ← hcontra]
+  exact quittingAnchoredCyclicOnPathValue_mem_convexHull reward w hazard h0 h1
+    hcontraction phase
 
 /-! ## Refusal is the anchored cyclic profile with the refuser's phases zeroed
 
@@ -595,5 +643,258 @@ theorem exists_anchoredCyclicResponse_gain_of_refusalOnPathValue_le
   exists_anchoredCyclicResponse_gain regime w hazard h0 h1 S hS fun who ↦
     (quittingPeriodicWindowRefusalValue_anchoredCyclic reward w hazard h0 h1
       (quittingAnchoredCyclicStart m) who).trans_le (hzeroed who)
+
+/-! ## Discharging the screen's refusal hypothesis
+
+The refusal identity turns `hrefusal` into a comparison between the zeroed
+on-path value and the candidate solution.  That comparison is itself a
+consequence of the max-linear system whenever the zeroed cycle still absorbs:
+a solution of the max recursion dominates its own continuation branch, and the
+zeroed on-path value obeys that branch exactly, so their difference is
+contracted by the zeroed survival factor once around the cycle.
+-/
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- A one-step contraction inequality around the cycle iterates. -/
+theorem sub_le_quittingAnchoredCyclicPrefixSurvival_mul
+    {rate : Fin m → ℝ} {phase : Fin m} {left right : Fin m → ℝ}
+    (hrate1 : ∀ k, rate k ≤ 1)
+    (hstep : ∀ k, left k - right k ≤
+      (1 - rate k) * (left (finRotate m k) - right (finRotate m k)))
+    (fuel : ℕ) :
+    left phase - right phase ≤
+      quittingAnchoredCyclicPrefixSurvival rate phase fuel *
+        (left (quittingCyclicOrbit phase fuel) -
+          right (quittingCyclicOrbit phase fuel)) := by
+  induction fuel with
+  | zero => simp
+  | succ fuel ih =>
+      have hnonneg :=
+        quittingAnchoredCyclicPrefixSurvival_nonneg hrate1 phase fuel
+      have hscaled := mul_le_mul_of_nonneg_left
+        (hstep (quittingCyclicOrbit phase fuel)) hnonneg
+      rw [quittingAnchoredCyclicPrefixSurvival_succ, quittingCyclicOrbit_succ]
+      calc left phase - right phase ≤
+            quittingAnchoredCyclicPrefixSurvival rate phase fuel *
+              (left (quittingCyclicOrbit phase fuel) -
+                right (quittingCyclicOrbit phase fuel)) := ih
+        _ ≤ quittingAnchoredCyclicPrefixSurvival rate phase fuel *
+              ((1 - rate (quittingCyclicOrbit phase fuel)) *
+                (left (finRotate m (quittingCyclicOrbit phase fuel)) -
+                  right (finRotate m (quittingCyclicOrbit phase fuel)))) :=
+          hscaled
+        _ = quittingAnchoredCyclicPrefixSurvival rate phase fuel *
+              (1 - rate (quittingCyclicOrbit phase fuel)) *
+              (left (finRotate m (quittingCyclicOrbit phase fuel)) -
+                right (finRotate m (quittingCyclicOrbit phase fuel))) := by ring
+
+/-- **A response solution dominates the zeroed on-path value.**  When the
+cycle with `who`'s phases zeroed still absorbs, every solution of the
+max-linear response system is at least the on-path value of that zeroed
+schedule. -/
+theorem quittingAnchoredCyclicOnPathValue_refusalHazard_le_of_response
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (S : Fin m → ι → ℝ)
+    (hS : IsAnchoredCyclicResponseSolution reward w hazard S)
+    (phase : Fin m) (who : ι)
+    (hcontraction :
+      ∏ k, (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) < 1) :
+    quittingAnchoredCyclicOnPathValue reward w
+        (quittingAnchoredCyclicRefusalHazard w hazard who)
+        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) phase who ≤
+      S phase who := by
+  have hstep : ∀ k,
+      quittingAnchoredCyclicOnPathValue reward w
+            (quittingAnchoredCyclicRefusalHazard w hazard who)
+            (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+            (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who -
+          S k who ≤
+        (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) *
+          (quittingAnchoredCyclicOnPathValue reward w
+              (quittingAnchoredCyclicRefusalHazard w hazard who)
+              (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+              (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
+              (finRotate m k) who -
+            S (finRotate m k) who) := by
+    intro k
+    have hzeroed := quittingAnchoredCyclicOnPathValue_renewal reward w
+      (quittingAnchoredCyclicRefusalHazard w hazard who)
+      (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+      (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who
+    have hcontinue : quittingAnchoredCyclicContinueValue reward w hazard k who
+        (S (finRotate m k) who) ≤ S k who := by
+      rw [hS k who]
+      exact le_max_right _ _
+    rw [quittingAnchoredCyclicContinueValue_eq_refusalHazard] at hcontinue
+    rw [show quittingAnchoredCyclicRefusalHazard w hazard who k *
+        reward (quittingSingletonTerminal (w k)) who =
+      quittingAnchoredCyclicOnPathValue reward w
+          (quittingAnchoredCyclicRefusalHazard w hazard who)
+          (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+          (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who -
+        (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) *
+          quittingAnchoredCyclicOnPathValue reward w
+            (quittingAnchoredCyclicRefusalHazard w hazard who)
+            (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+            (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
+            (finRotate m k) who from by linarith [hzeroed]] at hcontinue
+    linarith [hcontinue]
+  have hiterate := sub_le_quittingAnchoredCyclicPrefixSurvival_mul
+    (rate := quittingAnchoredCyclicRefusalHazard w hazard who) (phase := phase)
+    (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) hstep m
+  rw [quittingAnchoredCyclicPrefixSurvival_card, quittingCyclicOrbit_card]
+    at hiterate
+  nlinarith [hiterate]
+
+/-- **The screen's refusal hypothesis, discharged.**  Against a solution of the
+max-linear response system, refusal is dominated as soon as the refuser does
+not own every phase carrying positive hazard; on the degenerate branch refusal
+is worth nothing, so nonnegativity of the solution is all that is left. -/
+theorem quittingPeriodicWindowRefusalValue_le_of_response
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (S : Fin m → ι → ℝ)
+    (hS : IsAnchoredCyclicResponseSolution reward w hazard S)
+    (phase : Fin m) (who : ι)
+    (hdegenerate : (∀ k, w k ≠ who → hazard k = 0) → 0 ≤ S phase who) :
+    quittingPeriodicWindowRefusalValue reward
+        (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
+          phase) who ≤
+      S phase who := by
+  rw [quittingPeriodicWindowRefusalValue_anchoredCyclic reward w hazard h0 h1
+    phase who]
+  by_cases hzero : ∀ k, quittingAnchoredCyclicRefusalHazard w hazard who k = 0
+  · have hvalue :=
+      (quittingPeriodicWindowRefusalValue_anchoredCyclic_of_forall_eq_zero reward
+        w hazard h0 h1 phase who hzero).2
+    rw [hvalue]
+    refine hdegenerate fun k hk ↦ ?_
+    have := hzero k
+    rwa [quittingAnchoredCyclicRefusalHazard, if_neg hk] at this
+  · obtain ⟨k₀, hk₀⟩ := not_forall.1 hzero
+    refine quittingAnchoredCyclicOnPathValue_refusalHazard_le_of_response reward w
+      hazard h0 h1 S hS phase who ?_
+    exact prod_one_sub_lt_one_of_pos
+      (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+      (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
+      (lt_of_le_of_ne
+        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who k₀) (Ne.symm hk₀))
+
+/-- **The max-linear solution caps the exact behavioral best response.**  Both
+branches of the periodic best-response statistic are dominated: the
+deterministic stops by `quittingAnchoredCyclicPhaseStop_le`, the refusal branch
+by the refusal identity.  The only residual is nonnegativity of the solution
+for a player owning every phase that carries positive hazard, for whom refusal
+is worth nothing. -/
+theorem quittingAnchoredCyclicResponseCap_le_of_response
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} [NeZero m]
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (S : Fin m → ι → ℝ)
+    (hS : IsAnchoredCyclicResponseSolution reward w hazard S) (who : ι)
+    (hdegenerate : (∀ k, w k ≠ who → hazard k = 0) →
+      0 ≤ S (quittingAnchoredCyclicStart m) who) :
+    quittingAnchoredCyclicResponseCap reward w hazard h0 h1 who ≤
+      S (quittingAnchoredCyclicStart m) who := by
+  unfold quittingAnchoredCyclicResponseCap quittingPeriodicWindowBestResponseValue
+  refine max_le (quittingPeriodicWindowRefusalValue_le_of_response reward w hazard
+    h0 h1 S hS (quittingAnchoredCyclicStart m) who hdegenerate) ?_
+  unfold quittingPeriodicWindowBestPhaseStop
+  refine Finset.sup'_le _ _ fun stop _ ↦ ?_
+  exact quittingAnchoredCyclicPhaseStop_le reward w hazard h0 h1 S hS who stop
+
+omit [Fintype ι] in
+/-- Every phase not owned by `who` and carrying positive hazard keeps the
+zeroed cycle absorbing. -/
+theorem prod_one_sub_refusalHazard_lt_one
+    {w : Fin m → ι} {hazard : Fin m → ℝ} (h0 : ∀ k, 0 ≤ hazard k)
+    (h1 : ∀ k, hazard k ≤ 1) {who : ι} {k₀ : Fin m} (hne : w k₀ ≠ who)
+    (hpos : 0 < hazard k₀) :
+    ∏ k, (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) < 1 := by
+  refine prod_one_sub_lt_one_of_pos
+    (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+    (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) (k₀ := k₀) ?_
+  rwa [quittingAnchoredCyclicRefusalHazard, if_neg hne]
+
+/-- **The response cap bound with no residual.**  When every player is a
+spectator at some phase carrying positive hazard, the max-linear solution caps
+the exact behavioral best response outright. -/
+theorem quittingAnchoredCyclicResponseCap_le_of_response_of_spectatorHazard
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} [NeZero m]
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (S : Fin m → ι → ℝ)
+    (hS : IsAnchoredCyclicResponseSolution reward w hazard S) (who : ι)
+    (hspectator : ∃ k, w k ≠ who ∧ 0 < hazard k) :
+    quittingAnchoredCyclicResponseCap reward w hazard h0 h1 who ≤
+      S (quittingAnchoredCyclicStart m) who := by
+  obtain ⟨k₀, hne, hpos⟩ := hspectator
+  refine quittingAnchoredCyclicResponseCap_le_of_response w hazard h0 h1 S hS who
+    fun hall ↦ ?_
+  exact absurd (hall k₀ hne) (ne_of_gt hpos)
+
+/-- **The screen against the max-linear system with no refusal hypothesis.**
+The only residual is nonnegativity of the solution for the players who own
+every positive-hazard phase. -/
+theorem exists_anchoredCyclicResponse_gain_of_degenerate_nonneg
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (regime : QuittingCounterexampleRegime reward) [NeZero m]
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (S : Fin m → ι → ℝ)
+    (hS : IsAnchoredCyclicResponseSolution reward w hazard S)
+    (hdegenerate : ∀ who, (∀ k, w k ≠ who → hazard k = 0) →
+      0 ≤ S (quittingAnchoredCyclicStart m) who) :
+    ∃ who,
+      quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
+          (quittingAnchoredCyclicStart m) who + regime.terminalGap ≤
+        S (quittingAnchoredCyclicStart m) who := by
+  obtain ⟨who, hgain⟩ := regime.exists_anchoredCyclicCap_gain w hazard h0 h1
+  exact ⟨who, hgain.trans (quittingAnchoredCyclicResponseCap_le_of_response w
+    hazard h0 h1 S hS who (hdegenerate who))⟩
+
+/-- **The screen against the max-linear system, unconditionally.**  When every
+player is a spectator at some phase carrying positive hazard, the refusal
+hypothesis of `exists_anchoredCyclicResponse_gain` is discharged outright. -/
+theorem exists_anchoredCyclicResponse_gain_of_exists_spectatorHazard
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (regime : QuittingCounterexampleRegime reward) [NeZero m]
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (S : Fin m → ι → ℝ)
+    (hS : IsAnchoredCyclicResponseSolution reward w hazard S)
+    (hspectator : ∀ who, ∃ k, w k ≠ who ∧ 0 < hazard k) :
+    ∃ who,
+      quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
+          (quittingAnchoredCyclicStart m) who + regime.terminalGap ≤
+        S (quittingAnchoredCyclicStart m) who := by
+  obtain ⟨who, hgain⟩ := regime.exists_anchoredCyclicCap_gain w hazard h0 h1
+  exact ⟨who, hgain.trans
+    (quittingAnchoredCyclicResponseCap_le_of_response_of_spectatorHazard w hazard
+      h0 h1 S hS who (hspectator who))⟩
+
+/-- **The screen's contrapositive against the max-linear system.**  A schedule
+whose response system has a solution no larger than the on-path value at the
+starting phase excludes every counterexample regime.  Every input is finite:
+the max recursion, the spectator condition, and one comparison per player. -/
+theorem isEmpty_of_anchoredCyclicResponseSolution_le
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} [NeZero m]
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (S : Fin m → ι → ℝ)
+    (hS : IsAnchoredCyclicResponseSolution reward w hazard S)
+    (hspectator : ∀ who, ∃ k, w k ≠ who ∧ 0 < hazard k)
+    (hle : ∀ who, S (quittingAnchoredCyclicStart m) who ≤
+      quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
+        (quittingAnchoredCyclicStart m) who) :
+    IsEmpty (QuittingCounterexampleRegime reward) :=
+  QuittingCounterexampleRegime.isEmpty_of_anchoredCyclicCap_le w hazard h0 h1
+    fun who ↦
+      (quittingAnchoredCyclicResponseCap_le_of_response_of_spectatorHazard w hazard
+        h0 h1 S hS who (hspectator who)).trans (hle who)
 
 end GameTheory
