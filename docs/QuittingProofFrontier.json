@@ -519,6 +519,7 @@
       "summary": "Every finite quitting game on at most three players has an ordinary uniform-equilibrium payoff. A block whose join is antitone and whose roots are quiet on it is dispensable: deleting it preserves a uniform-equilibrium payoff on the survivors. Cardinally symmetric and permutation symmetric tables have uniform-equilibrium payoffs. A counterexample therefore has at least four players, is not symmetric in either sense, and has no dispensable block.",
       "evidence": [
         "UniformEquilibrium/Quitting/Classification/BlockDeletion.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSmallSurvivorDeletion.lean",
         "UniformEquilibrium/Quitting/Classification/SymmetricQuittingGame.lean",
         "UniformEquilibrium/Quitting/Classification/PlayerDeletion.lean"
       ],
@@ -529,6 +530,7 @@
       "declarations": [
         "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_card_le_three",
         "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_blockDispensable",
+        "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_blockDispensable_card_le_three",
         "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_cardinalSymmetric",
         "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_permutationSymmetric"
       ]
