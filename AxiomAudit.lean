@@ -510,6 +510,7 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
+import Research.Quitting.SolanVieilleBoundaryTable
 import Research.Quitting.StochasticButtonCompression
 import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport
