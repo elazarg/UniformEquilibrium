@@ -17,10 +17,10 @@ exploitability gap is incompatible with the existence of any
 uniform-equilibrium payoff, so that table carries no
 `QuittingCounterexampleRegime`.
 
-The exclusion is separated from
-`UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryEquilibrium.lean`
-because the counterexample regime is a diagnostic interface, on which the
-quitting mathematics lane does not depend.
+The exclusion lives in the diagnostics lane rather than beside the
+equilibrium it consumes, because `QuittingCounterexampleRegime` is a
+diagnostic interface and the quitting mathematics lane does not depend on
+diagnostics.
 -/
 
 noncomputable section

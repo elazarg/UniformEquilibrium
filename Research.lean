@@ -112,8 +112,6 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
-import Research.Quitting.SolanVieilleBoundaryRegimeExclusion
-import Research.Quitting.SolanVieilleSoloPeriodicNoGo
 import Research.Quitting.SoloPeriodicBlockCompiler
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification

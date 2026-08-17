@@ -541,8 +541,6 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
-import Research.Quitting.SolanVieilleBoundaryRegimeExclusion
-import Research.Quitting.SolanVieilleSoloPeriodicNoGo
 import Research.Quitting.SoloPeriodicBlockCompiler
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification
@@ -722,6 +720,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PreemptionCy
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PreemptionGeometry
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Seam
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SearchConsequences
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SolanVieilleBoundary
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Atom.ContinuePrefixAccess
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Atom.ExactPrefixChronology
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.DynamicDebtSemanticChronology
@@ -1220,6 +1219,7 @@ import UniformEquilibrium.Quitting.Classification.TwoPlayer.PairRepair
 import UniformEquilibrium.Quitting.Conjecture.Basic
 import UniformEquilibrium.Quitting.Conjecture.ReducedCapConjectureCounterexample
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
+import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Cycles.BlockSurvival
 import UniformEquilibrium.Quitting.Cycles.CollisionAwareFiniteReturn
@@ -1387,6 +1387,7 @@ import UniformEquilibrium.Quitting.Examples.FTV.CyclicMinimality
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicSemanticBridge
 import UniformEquilibrium.Quitting.Examples.FTV.EpsilonPerturbedCycleExclusion
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 import UniformEquilibrium.Quitting.Paths.AlmostSureOpponentUniformization
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
