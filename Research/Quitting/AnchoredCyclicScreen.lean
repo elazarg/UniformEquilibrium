@@ -27,6 +27,20 @@ some player's response cap beats the on-path value by the full terminal gap.
 Contrapositively, exhibiting one schedule whose cap is everywhere at most
 the on-path value excludes the table from every counterexample regime.
 
+The first section reads the spectator half of exact root Nash as a hazard
+threshold.  `quittingSoloCollisionPenalty` and `quittingContinuationSurplus`
+name the two reward differences the condition compares, and
+`hazard_mul_penalty_le_iff_ratio_le` turns the comparison into the ceiling
+`p / (1 - p) ≤ surplus / penalty` on a positive penalty below sure quitting.
+A nonpositive penalty drops the constraint only against a nonnegative surplus
+(`hazard_mul_penalty_le_of_penalty_nonpos`), and at `p = 1` the constraint is
+the sign of the penalty alone.  The owner half is sharpened the same way:
+`isZeroQuittingRootEndpointNash_soloMixedRoot_of_ownerSigns` asks only for the
+two signed endpoint conditions, so a deterministic phase carries a one-sided
+inequality rather than indifference
+(`isZeroQuittingRootEndpointNash_anchoredCyclicCycle_of_pureQuit` and its
+sure-continue companion).
+
 At accuracy zero the screen has a second reading.
 `StochasticGame.isεAsymptoticNash_zero_iff_sSup_range_update_le` characterizes
 exact asymptotic Nash by a supremum bound on unilateral deviations, and
@@ -37,7 +51,10 @@ compute the response cap.
 
 The last section states the max-linear response system for the anchored
 cyclic family and identifies it with the repository's Bellman cap recursion
-along the periodic live path.  The passage from a solution of that system to
+along the periodic live path.  It also records the matching lower bound
+`quittingAnchoredCyclicQuitValue_le_responseCap`: quitting at the opening phase
+is one of the deviations the cap ranges over, so a schedule whose opening quit
+value already beats its on-path value is rejected.  The passage from a solution of that system to
 the evaluator's response cap is *not* proved here.  Its
 deterministic-stop half is (`quittingAnchoredCyclicPhaseStop_le`); its
 refusal half is carried as the explicit hypothesis `hrefusal` of
@@ -76,7 +93,7 @@ def quittingContinuationSurplus
     (who : ι) : ℝ :=
   tail who - reward (quittingSingletonTerminal who) who
 
-omit [Fintype ι] [DecidableEq ι] in
+omit [Fintype ι] in
 /-- **The spectator hypothesis, rearranged.**  Cancelling the common singleton
 and tail terms turns the mixture comparison into hazard times the collision
 penalty against survival times the continuation surplus. -/
@@ -487,6 +504,31 @@ theorem quittingFixedOpponentsQuitValue_anchoredCyclic
     simp
   · rw [quittingRootQuitPayoff_soloMixedRoot_of_ne reward _ hwho]
     simp [hwho]
+
+/-- **The response cap dominates quitting at once.**  A lower bound on the
+exact finite best-response statistic: stopping at the opening phase is one of
+the deviations the cap ranges over.  This is what lets the screen *reject* a
+schedule, not only certify one. -/
+theorem quittingAnchoredCyclicQuitValue_le_responseCap
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) [NeZero m] (who : ι) :
+    quittingAnchoredCyclicQuitValue reward w hazard
+        (quittingAnchoredCyclicStart m) who ≤
+      quittingAnchoredCyclicResponseCap reward w hazard h0 h1 who := by
+  have hstop : quittingPeriodicWindowPhaseStopValue reward
+      (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
+        (quittingAnchoredCyclicStart m)) who (quittingAnchoredCyclicStart m) =
+      quittingAnchoredCyclicQuitValue reward w hazard
+        (quittingAnchoredCyclicStart m) who := by
+    show quittingRootSequencePureTimeTerminalValue reward
+      (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
+        (quittingAnchoredCyclicStart m)) who (some 0) 0 = _
+    rw [quittingRootSequencePureTimeTerminalValue_some_self_eq_fixedOpponents,
+      quittingFixedOpponentsQuitValue_anchoredCyclic, quittingCyclicOrbit_zero]
+  unfold quittingAnchoredCyclicResponseCap quittingPeriodicWindowBestResponseValue
+  refine le_trans (le_of_eq hstop.symm) (le_trans ?_ (le_max_right _ _))
+  exact Finset.le_sup' _ (Finset.mem_univ (quittingAnchoredCyclicStart m))
 
 /-- The one-phase Continue value is the repository's fixed-opponent continue
 statistic along the anchored cyclic live path. -/

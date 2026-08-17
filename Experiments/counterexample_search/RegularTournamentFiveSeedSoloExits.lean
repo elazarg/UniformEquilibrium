@@ -43,7 +43,8 @@ and that is exactly the vector this module does not list:
 the zero completion of the seed breaks the rotational symmetry at the
 completion vertex.  Whether `(1, 0, 0, 3, 3)` is a uniform-equilibrium payoff
 of the realized seed by some route other than a sure exit set is not settled
-here.
+here; the anchored cyclic route is answered in
+`Experiments/counterexample_search/RegularTournamentFiveSeedZeroOrbitGap.lean`.
 
 ## Inventory note
 
