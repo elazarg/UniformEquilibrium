@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.BlockPeriodicProfile
+import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwo
 
 /-!
@@ -30,7 +30,7 @@ payoff it returns is the same one.  It proves nothing new about the table.
 noncomputable section
 
 namespace GameTheory
-namespace FourPlayerPairedSingletonBlockCalibration
+namespace FourPlayerPairedSingletonBlockCertificate
 
 open FourPlayerPairedSingleton
 open SolanVieilleBoundary (boundaryReward)
@@ -125,12 +125,5 @@ theorem periodTwo_isUniformEquilibriumPayoff_via_block :
   isUniformEquilibriumPayoff_of_isQuittingBlockCertificate
     periodTwo_isQuittingBlockCertificate
 
-/-- The boundary table carries no counterexample regime, read through the
-general block producer. -/
-theorem isEmpty_counterexampleRegime_via_block :
-    IsEmpty (QuittingCounterexampleRegime boundaryReward) :=
-  isEmpty_counterexampleRegime_of_isQuittingBlockCertificate
-    periodTwo_isQuittingBlockCertificate
-
-end FourPlayerPairedSingletonBlockCalibration
+end FourPlayerPairedSingletonBlockCertificate
 end GameTheory

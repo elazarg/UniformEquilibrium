@@ -4,8 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.AnchoredCyclicScreen
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 
 /-!
@@ -41,8 +40,6 @@ certificate says nothing about coalitions of size three or more.
 
 * `isUniformEquilibriumPayoff_of_soloPeriodicBlock` — the displayed origin row
   is a uniform-equilibrium payoff
-* `isEmpty_counterexampleRegime_of_soloPeriodicBlock` — such a table carries no
-  `QuittingCounterexampleRegime`
 -/
 
 noncomputable section
@@ -185,14 +182,6 @@ theorem isUniformEquilibriumPayoff_of_soloPeriodicBlock
     reward (value 0) n (soloPeriodicBlock w marginal value)
     (isQuittingCyclicContinuationBlock_soloPeriodicBlock hcert)
     (isQuittingCycleAdmissible_soloPeriodicBlock hcert)
-
-/-- A table carrying a certified single-quitter periodic profile lies in no
-counterexample regime. -/
-theorem isEmpty_counterexampleRegime_of_soloPeriodicBlock
-    (hcert : IsSoloPeriodicCertificate reward w marginal value) :
-    IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime ↦ regime.not_exists_uniformEquilibriumPayoff
-    ⟨value 0, isUniformEquilibriumPayoff_of_soloPeriodicBlock hcert⟩⟩
 
 end SoloPeriodicBlockCompiler
 end GameTheory

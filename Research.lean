@@ -39,10 +39,6 @@ import Research.Quitting.BenevolentSinkSoloist
 import Research.Quitting.BestEndpointForcedOwnerRectanglePassport
 import Research.Quitting.BlockDeletionInequality
 import Research.Quitting.BlockPair.K11
-import Research.Quitting.BlockPeriodicCalibration
-import Research.Quitting.BlockPeriodicMultiVisit
-import Research.Quitting.BlockPeriodicProfile
-import Research.Quitting.BlockPlayerDeletion
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
 import Research.Quitting.CausalTailEscapeMaxAbsorptionDispatch
@@ -107,10 +103,8 @@ import Research.Quitting.PacketPreservingSourceReturnNoGo
 import Research.Quitting.PaidNonexactCapStackAccount
 import Research.Quitting.PairActiveSoloPhase
 import Research.Quitting.PathClosureKernels
-import Research.Quitting.PeriodicRootResponseSystem
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
 import Research.Quitting.PrescribedAtomMinimumAccounting
-import Research.Quitting.PunishmentValueClosedForm
 import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
@@ -121,7 +115,7 @@ import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
 import Research.Quitting.SolanVieilleSoloPeriodicGap
-import Research.Quitting.SoloPeriodicBlockCompiler
+import Research.Quitting.SolanVieilleSoloPeriodicTerminalGap
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification
 import Research.Quitting.SoloWindowPhaseStopBranch
@@ -136,12 +130,10 @@ import Research.Quitting.StoppingLawResetCube
 import Research.Quitting.StoppingLawRetentionChain
 import Research.Quitting.StoppingLawSingletonOrientationNoGo
 import Research.Quitting.StoppingLawTwoOutcomePassportSequence
-import Research.Quitting.SymmetricQuittingGame
 import Research.Quitting.TerminalAtomPolarityDuality
 import Research.Quitting.TerminalLawTwoOutcomePassport
 import Research.Quitting.TerminalSemanticAuxiliaryNashHandoff
 import Research.Quitting.TerminalSemanticCollisionRankReduction
 import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertion
-import Research.Quitting.TwinMerging
 import Research.Quitting.TwoResetFourRoleAdapter
 import Research.Quitting.UniqueAllContinueCapStackNoGo

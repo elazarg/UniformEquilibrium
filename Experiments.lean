@@ -1,5 +1,6 @@
 import Experiments.Base.SemanticFinalRegimeArithmetic
 import Experiments.certsearch.block_pair.K11
+import Experiments.counterexample_search.BlockPeriodicMultiVisit
 import Experiments.counterexample_search.ColliderPocketCandidateEquilibrium
 import Experiments.counterexample_search.HardenedPentagonCyclicEquilibrium
 import Experiments.counterexample_search.HardenedPentagonSoloPeriodicWitness
@@ -8,6 +9,7 @@ import Experiments.counterexample_search.RegularTournamentFiveSeedSoloExits
 import Experiments.counterexample_search.RegularTournamentFiveSeedSureExit
 import Experiments.counterexample_search.RegularTournamentFiveSeedZeroFree
 import Experiments.counterexample_search.RegularTournamentFiveSeedZeroOrbitGap
+import Experiments.counterexample_search.SolanVieilleBoundaryDeletionCalibration
 
 /-!
 # Reproducible experimental evidence

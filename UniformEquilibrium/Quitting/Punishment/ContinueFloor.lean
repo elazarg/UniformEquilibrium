@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.BlockPlayerDeletion
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlayerDeletion
+import UniformEquilibrium.Quitting.Classification.BlockDeletion
+import UniformEquilibrium.Quitting.Classification.PlayerDeletionLift
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
@@ -67,6 +67,8 @@ guarantees the floor against every opponent plan. -/
 theorem quittingContinueFloor_le_quittingPunishmentValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι) :
     quittingContinueFloor reward owner ≤ quittingPunishmentValue reward owner := by
+  haveI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+    ⟨quittingAlwaysContinueProfile reward⟩
   rw [quittingPunishmentValue]
   refine le_ciInf fun profile => ?_
   refine le_trans ?_ (le_quittingBestReplyValue reward profile owner
@@ -131,6 +133,33 @@ theorem quittingPunishmentValue_eq_continueFloor_of_ownerJoinAntitone
   le_antisymm
     (quittingPunishmentValue_le_continueFloor_of_ownerJoinAntitone reward hjoin
       hsolo)
+    (quittingContinueFloor_le_quittingPunishmentValue reward owner)
+
+/-- **The pure-row cap.**  Against the profile in which exactly the members of
+`S` quit at stage zero, the punishment value is capped by the better of the
+owner's joined and unjoined rows. -/
+theorem quittingPunishmentValue_le_pureRowCap
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι)
+    (S : Finset ι) :
+    quittingPunishmentValue reward owner ≤
+      max (quittingSetReward reward (insert owner S) owner)
+        (quittingSetReward reward (S.erase owner) owner) := by
+  have hcap := quittingPunishmentValue_le_stationaryUnilateralCap reward owner
+    (quittingPureSetRoot S)
+  rwa [quittingStationaryUnilateralCap_pureSetRoot] at hcap
+
+/-- **The closed form without join antitonicity.**  A single pure exit row
+whose cap is at most the continue floor already forces the punishment value to
+be the continue floor.  Join antitonicity is one way of supplying such a row,
+not the only one. -/
+theorem quittingPunishmentValue_eq_continueFloor_of_pureRow
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι)
+    (S : Finset ι)
+    (hrow : max (quittingSetReward reward (insert owner S) owner)
+        (quittingSetReward reward (S.erase owner) owner) ≤
+      quittingContinueFloor reward owner) :
+    quittingPunishmentValue reward owner = quittingContinueFloor reward owner :=
+  le_antisymm ((quittingPunishmentValue_le_pureRowCap reward owner S).trans hrow)
     (quittingContinueFloor_le_quittingPunishmentValue reward owner)
 
 /-! ## Discharging the abstract punishment hypotheses -/

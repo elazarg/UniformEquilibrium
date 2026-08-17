@@ -6,7 +6,8 @@ Authors: GameTheory contributors
 
 import Mathlib.Algebra.BigOperators.Fin
 import Research.Quitting.CirculantTrichotomy
-import Research.Quitting.SoloPeriodicBlockCompiler
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicBlockProfile
+import UniformEquilibrium.Quitting.Cycles.SoloPeriodicBlockCompiler
 
 /-!
 # Constant-step cyclic equilibria of five-player rotation-symmetric tables

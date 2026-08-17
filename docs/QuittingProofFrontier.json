@@ -1,6 +1,47 @@
 {
   "schema_version": 2,
   "open_leaf_limit": 1,
+  "cover_clauses": [
+    {
+      "id": "COVER-A",
+      "title": "Periodic block profiles with fixed hazards",
+      "source": "overleaf/necessary-conditions.tex",
+      "statement": "Periodic product profiles with phase-constant per-player hazards, their phase values, and the gamma-exploitability of every stationary row."
+    },
+    {
+      "id": "COVER-B",
+      "title": "Solo tails with exact one-shot roots",
+      "source": "overleaf/necessary-conditions.tex",
+      "statement": "Bounded value sequences with one designated quitter per date, the value recursion, the owner condition at positive hazard, and the spectator conditions."
+    },
+    {
+      "id": "COVER-C",
+      "title": "Trigger repairs",
+      "source": "overleaf/necessary-conditions.tex",
+      "statement": "History-dependent profiles following a pair path and switching to punishment after a detectable refusal of a prescribed sure quit."
+    },
+    {
+      "id": "COVER-D",
+      "title": "Player count",
+      "source": "overleaf/necessary-conditions.tex",
+      "statement": "The player set has cardinality at least four."
+    },
+    {
+      "id": "FAMILY-CLOSURES",
+      "title": "Table-family closures",
+      "statement": "Results closing a parameterized family of reward tables rather than a class of profiles."
+    },
+    {
+      "id": "INSTANCES",
+      "title": "Explicit table instances",
+      "statement": "Checked statements about one named reward table, carrying no claim about neighbouring tables."
+    },
+    {
+      "id": "REGIME-LOCALIZATION",
+      "title": "Counterexample-regime localization",
+      "statement": "Restrictions derived inside the formalized counterexample regime, independent of the profile classes of clauses (A)-(C)."
+    }
+  ],
   "manuscript_alternatives": [
     {
       "alternative_number": 1,
@@ -46,7 +87,15 @@
       "obstruction_class": "OB-COLLISION",
       "representative": "Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap) ∧ Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap)",
       "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean",
-      "producer": "QuittingCounterexampleRegime.immediateSingletonCollision_and_soloPreemptionCycle"
+      "producer": "QuittingCounterexampleRegime.immediateSingletonCollision_and_soloPreemptionCycle",
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION",
+        "COVER-D"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ]
     }
   ],
   "transitions": [
@@ -59,6 +108,13 @@
       "summary": "Every finite quitting game whose corrected normal core has cardinality three has an ordinary uniform-equilibrium payoff. Hence a four-player counterexample must have full corrected core, and its immediate singleton collision may be studied under that table-level restriction.",
       "evidence": [
         "UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean"
+      ],
+      "cover_clause_ids": [
+        "COVER-D"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
       ]
     },
     {
@@ -70,6 +126,13 @@
       "summary": "The global-debt barrier certificate needs only the Never boundary and invariance under every one-row prefix; all other elementary boundaries and all finite elementary words are generated from these data.",
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticGlobalDebtBarrierCertificate.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
       ]
     },
     {
@@ -89,6 +152,15 @@
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/CollisionRepairScreen.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionGeometry.lean"
+      ],
+      "cover_clause_ids": [
+        "COVER-C",
+        "COVER-D",
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
       ]
     },
     {
@@ -101,6 +173,13 @@
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/NegativeTargetAtomicDispatch.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/ReachedRowDebtLocalization.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
       ]
     },
     {
@@ -113,6 +192,13 @@
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticBoundedSelfReset.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/BoundedSelfResetLocalization.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
       ]
     },
     {
@@ -125,6 +211,13 @@
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Toggles.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/ImmediateSingletonCollision.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
       ]
     },
     {
@@ -136,6 +229,13 @@
       "summary": "A concrete positive global terminal-debt floor does not require a uniform finite-horizon cutoff: the semantic carrier is exactly the closure of finite prefix evaluations from the elementary boundaries, and any inductive finite-dimensional barrier containing those boundaries proves a fixed terminal exploitability gap and nonexistence.",
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticGlobalDebtBarrierCertificate.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
       ]
     },
     {
@@ -147,6 +247,13 @@
       "summary": "Any axis-aligned or coordinatewise order-compatible semantic barrier containing the required elementary boundary pairs also contains a zero-total-debt diagonal. A successful barrier must couple player coordinates.",
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCoordinatewiseBoxBarrierNoGo.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
       ]
     },
     {
@@ -158,6 +265,13 @@
       "summary": "No positive global-debt certificate can use a barrier whose membership depends only on envelope minus prescribed payoff. A successful barrier must retain absolute semantic level.",
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticDebtSaturatedBarrierNoGo.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
       ]
     },
     {
@@ -170,6 +284,393 @@
       "evidence": [
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime.lean",
         "UniformEquilibrium/Quitting/Debt/Dynamic/PunishmentFloorCapSplice.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ]
+    },
+    {
+      "id": "INSTANCE-SOLAN-VIEILLE-BOUNDARY-RESOLVED",
+      "kind": "instance_resolved",
+      "cover_clause_ids": [
+        "INSTANCES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "The Solan--Vieille boundary table has an ordinary uniform-equilibrium payoff at its cross-block target, delivered by a paired-singleton period-two profile, so it carries no counterexample regime. A separate no-go on the same table excludes exact anchored solo-periodic profiles whose hazards are strictly inside the unit interval; it says nothing about approximate equilibria, and nothing about single-quitter profiles that are not anchored in that sense.",
+      "evidence": [
+        "UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryTable.lean",
+        "UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryEquilibrium.lean",
+        "UniformEquilibrium/Quitting/Examples/SolanVieilleBoundarySoloPeriodicNoGo.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/SolanVieilleBoundary.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "INSTANCE-HARDENED-PENTAGON-RESOLVED",
+      "kind": "instance_resolved",
+      "cover_clause_ids": [
+        "INSTANCES",
+        "COVER-A"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "One explicit five-player table has a checked uniform-equilibrium payoff at an explicit target, delivered by a period-five constant-hazard single-quitter schedule, and therefore carries no counterexample regime; a second independent route reaches the same conclusion through the anchored cyclic screen. The same table carries an exact anchored solo-periodic profile with strictly interior hazards, so that class is inhabited. Both statements are about that one table.",
+      "evidence": [
+        "Experiments/counterexample_search/HardenedPentagonCyclicEquilibrium.lean",
+        "Experiments/counterexample_search/HardenedPentagonSoloPeriodicWitness.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "CLOSE-CIRCULANT-NONPOSITIVE-SURPLUS",
+      "kind": "family_closed",
+      "cover_clause_ids": [
+        "FAMILY-CLOSURES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "A table whose normalized solo matrix is the circulant matrix of a margin vector with nonpositive total has an ordinary uniform-equilibrium payoff. Every column sums to the total, so no column has positive sum and the all-ones right-hand side has no complementary solution: the matrix fails textbook standard Q. A vanishing total additionally makes every row sum vanish, so the uniform simplex point solves the homogeneous simplex problem. A nonpositive total forces some off-diagonal margin to be nonpositive, which keeps every player at every corrected normality layer, so both facts land on the principal matrix the LCP gate constrains.",
+      "evidence": [
+        "MathUE/LinearProgramming/ColumnSumQ.lean",
+        "Research/Quitting/CirculantTrichotomy.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "C"
+      ]
+    },
+    {
+      "id": "CLOSE-CIRCULANT-CONSTANT-STEP-BRANCH",
+      "kind": "family_closed",
+      "cover_clause_ids": [
+        "COVER-A",
+        "FAMILY-CLOSURES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "For a five-player table whose singleton and two-element rows are rotation symmetric around a nonnegative common solo self value, positive margin total together with a step whose own margin is negative while the margins at its complementary and doubled complementary distances are nonnegative, and nonpositive join margins along that step's progression, the constant-step periodic profile at an anchor root strictly inside the unit interval is an exact uniform equilibrium. The floor at the deepest elapsed phase needs no margin sign hypothesis: the anchor equation itself makes the backward partial sum positive.",
+      "evidence": [
+        "MathUE/CubicAnchorRoot.lean",
+        "Research/Quitting/CirculantConstantStepCycle.lean",
+        "Research/Quitting/CirculantTrichotomyClosure.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "C"
+      ]
+    },
+    {
+      "id": "LIMIT-CONSTANT-STEP-SIGN-ROUTE",
+      "kind": "route_limit",
+      "open": true,
+      "cover_clause_ids": [
+        "COVER-A",
+        "FAMILY-CLOSURES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "The constant-step sign condition is unavailable whenever at most one of the four nonzero margins is nonnegative: the complementary and doubled complementary distances of a candidate step would both have to be that one distance, which forces the step to vanish. Three negative margins with positive total therefore escape the sign route, as do the two complementary-pair sign patterns. This bounds the sign route only. A table can still satisfy the constant-step producer's floor inequalities without meeting the sign condition, as the collider completion does in the pocket at step four. Positive margin total outside the reach of the sign route is not closed.",
+      "evidence": [
+        "Research/Quitting/CirculantTrichotomyClosure.lean",
+        "Research/Quitting/CirculantPocketAnchoredNoGo.lean",
+        "Research/Quitting/CirculantColliderCompletion.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ]
+    },
+    {
+      "id": "CLOSE-COLLIDER-COMPLETION-BRANCHES",
+      "kind": "family_closed",
+      "cover_clause_ids": [
+        "FAMILY-CLOSURES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "For the collider completion of a five-player circulant margin vector with nonnegative solo self value and nonpositive joint value, two branches are settled: nonpositive margin total, and the pocket sign pattern together with failure of the sure-exit property at one adjacent pair. The two pocket faces on which a distant margin vanishes are settled separately, under the stronger condition that the joint value not exceed the solo self value. This is a disjunction of settled branches, not a closure of the parameter space.",
+      "evidence": [
+        "Research/Quitting/CirculantColliderCompletion.lean",
+        "Research/Quitting/CirculantColliderSlivers.lean",
+        "MathUE/LinearProgramming/CirculantPocketR0.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "C"
+      ]
+    },
+    {
+      "id": "COMPILER-SOLO-PERIODIC-BLOCK",
+      "kind": "producer",
+      "cover_clause_ids": [
+        "COVER-A"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "A finite certificate compiles a single-quitter periodic block profile into a uniform-equilibrium payoff, and hence into emptiness of the counterexample regime. Its obligations are box membership, wraparound, one-step succession, the owner anchor, the spectator join floor, positive absorption at some phase, and nonnegative own solo rewards. Only singleton and two-element rows of the table enter, so the certificate says nothing about coalitions of three or more players.",
+      "evidence": [
+        "UniformEquilibrium/Quitting/Cycles/SoloPeriodicBlockCompiler.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "C"
+      ]
+    },
+    {
+      "id": "SCREEN-ANCHORED-CYCLIC",
+      "kind": "screen",
+      "cover_clause_ids": [
+        "COVER-A"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "In a counterexample regime, every single-quitter periodic schedule with hazards in the unit interval has a player whose exact finite response cap beats the on-path value by the full terminal gap; contrapositively, one schedule whose cap is everywhere at most the on-path value excludes the table from every counterexample regime. The passage from a solution of the max-linear response system to the evaluator's response cap is not proved: its deterministic-stop half is available as a production lemma, and its refusal half is carried as an explicit hypothesis of the response-gain theorem.",
+      "evidence": [
+        "Research/Quitting/AnchoredCyclicScreen.lean",
+        "Research/Quitting/AnchoredCyclicRenewal.lean",
+        "UniformEquilibrium/Quitting/Bellman/Finite/BellmanCapPureTimeStop.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ]
+    },
+    {
+      "id": "NECESSARY-ANCHORED-PATIENCE-MARGINS",
+      "kind": "census",
+      "cover_clause_ids": [
+        "COVER-A"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "For the anchored cyclic patience system, at every period, schedule and nonuniform survival vector, the quitter of a phase has a nonpositive margin against the quitter of the next phase and a nonnegative margin against the quitter of the previous one, and every player has a nonnegative margin against the quitter of some phase. On a rotation-symmetric table the two margin conditions read off the same group difference, and in the five-player open pocket they leave only the vanishing step, which the tolerance condition then excludes. Patience is the vanishing-hazard reading of a spectator's incentive not to quit and is strictly stronger than the fixed-hazard comparison wherever pair rows pay their members less than their solo self payoffs, so emptiness of the system constrains the system and not the behaviour profiles of the table.",
+      "evidence": [
+        "Research/Quitting/AnchoredCyclicPatience.lean",
+        "Research/Quitting/CirculantPocketAnchoredNoGo.lean",
+        "Research/Quitting/AnchoredCyclicPatienceBridge.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ]
+    },
+    {
+      "id": "CENSUS-SOLO-TAIL-STRUCTURE",
+      "kind": "census",
+      "cover_clause_ids": [
+        "COVER-B"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "Along an exact solo tail with zero-slack endpoint Nash at every date, uniformly bounded values, bounded rewards and a positive terminal exploitability gap, either the absorption charge is summable or some player with negative solo reward has summable opponent clock charge. The window telescope for the solo tail value and the identification of the owner's tail value on an active interior hold at the same hypotheses, and the deterministic-stop verification bounds the pure-time terminal value by the value plus the slack budget. Every one of these presupposes the exact solo-tail shape -- one designated quitter per date -- and none is a statement about arbitrary profiles. No leaf on this route is closed unconditionally.",
+      "evidence": [
+        "Research/Quitting/HazardSummability.lean",
+        "Research/Quitting/SoloTailExactStructure.lean",
+        "Research/Quitting/SoloTailStoppingVerification.lean",
+        "Research/Quitting/DiffuseTailSoloStructure.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ],
+      "declarations": [
+        "GameTheory.summable_absorptionCharge_or_lonelyNegativeSoloist",
+        "GameTheory.summable_absorptionCharge_or_lonelySoloist_of_exactSoloTail"
+      ]
+    },
+    {
+      "id": "CENSUS-PLAYER-COUNT-DELETION",
+      "kind": "census",
+      "cover_clause_ids": [
+        "COVER-D"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "Every finite quitting game on at most three players has an ordinary uniform-equilibrium payoff. A block whose join is antitone and whose roots are quiet on it is dispensable: deleting it preserves a uniform-equilibrium payoff on the survivors. Cardinally symmetric and permutation symmetric tables have uniform-equilibrium payoffs. A counterexample therefore has at least four players, is not symmetric in either sense, and has no dispensable block.",
+      "evidence": [
+        "UniformEquilibrium/Quitting/Classification/BlockDeletion.lean",
+        "UniformEquilibrium/Quitting/Classification/SymmetricQuittingGame.lean",
+        "UniformEquilibrium/Quitting/Classification/PlayerDeletion.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ],
+      "declarations": [
+        "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_card_le_three",
+        "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_blockDispensable",
+        "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_cardinalSymmetric",
+        "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_permutationSymmetric"
+      ]
+    },
+    {
+      "id": "QUANTIFY-R0-AND-COPOSITIVE-MARGINS",
+      "kind": "quantitative_refinement",
+      "cover_clause_ids": [
+        "FAMILY-CLOSURES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "The least homogeneous violation over the standard simplex is positive exactly on the matrices with only the zero homogeneous solution, and it makes the uniform solution bound of the linear complementarity problem explicit. The least quadratic form value over the simplex is nonnegative exactly on copositive matrices and positive exactly on strictly copositive ones. Both margins are Lipschitz in the matrix against the largest entrywise deviation, with constant one more than the player count and constant one respectively, so both conditions are open with computable radii and the standard-Q placement of a strictly copositive matrix survives an explicit entrywise ball. Copositivity itself is a closed condition and is not inherited by a perturbation.",
+      "evidence": [
+        "MathUE/LinearProgramming/R0Margin.lean",
+        "MathUE/LinearProgramming/CopositiveMargin.lean",
+        "MathUE/LinearProgramming/CopositiveQCorollaries.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ]
+    },
+    {
+      "id": "CENSUS-BLOCK-DELETION-INEQUALITY",
+      "kind": "census",
+      "cover_clause_ids": [
+        "COVER-D"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "Deleting a block and lifting a profile back costs a bounded excess: the best-reply value of the lifted profile exceeds its terminal payoff by at most an explicit bound built from the block join cap and a per-stage absorption bound, and that bound vanishes with the absorption bound. On four players, singleton deletion of any owner yields an approximate Nash profile of the deleted game that splits into a solo escape -- the owner's solo reward beating its block continue floor by half the gap -- or an atomic temptation with positive join cap. A producer runs the other way: if the deleted game has approximate Nash profiles with absorption vanishing along the accuracy, and the owner's solo reward does not exceed its block continue floor, the full game has an ordinary uniform-equilibrium payoff. That producer asks nothing of the join, but it does ask the solo-versus-continue-floor comparison.",
+      "evidence": [
+        "Research/Quitting/BlockDeletionInequality.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ],
+      "declarations": [
+        "GameTheory.quittingBestReplyValue_liftBlockProfile_le_add_excessBound",
+        "GameTheory.singletonDeletion_soloEscape_or_atomicTemptation",
+        "GameTheory.fourPlayer_exists_terminalNash_soloEscape_or_atomicTemptation",
+        "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_vanishingAbsorption"
+      ]
+    },
+    {
+      "id": "CONDITIONAL-EVENTUALLY-SOLO-DIFFUSE-TAIL",
+      "kind": "conditional",
+      "open": true,
+      "cover_clause_ids": [
+        "COVER-B"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "The eventually-solo conclusion -- at most one persistently active player in a diffuse tail -- is reached only conditionally, and the two routes now differ in what they ask. On a zero-free table the route rests on the pair dichotomy alone, together with the exact value recursion, exact root Nash, interior hazards and a vanishing one-stage absorption mass: zero-freeness excludes late strict alternation outright, through the window telescope forcing a vanishing pair entry of the normalized solo matrix, so no fenced solo window family and no uniform charge floor is asked for. On a general table the route still asks the pair dichotomy together with the absence of fenced solo window families. Both remaining hypotheses are proposition definitions rather than theorems, and no theorem anywhere concludes the absence of fenced families. On a zero-free table with vanishing conditioned mesh the extraction hypothesis is equivalent to the conclusion it is used to prove, so assuming extraction assumes the conclusion. Nothing on this route is closed unconditionally.",
+      "evidence": [
+        "Research/Quitting/DiffuseTailEffectiveCharge.lean",
+        "Research/Quitting/DiffuseTailSoloStructure.lean",
+        "Research/Quitting/DiffuseTailSoloCalibrations.lean",
+        "Research/Quitting/DiffuseTailNonvacuity.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ],
+      "residual_propositions": [
+        "GameTheory.QuittingTailPairSoloDichotomy",
+        "GameTheory.QuittingNoFencedSoloWindowFamily",
+        "GameTheory.QuittingUniformSoloWindowChargeFloor"
+      ],
+      "declarations": [
+        "GameTheory.quittingTailPersistentlySolo_of_zeroFree_of_dichotomy",
+        "GameTheory.not_quittingTailLateSoloAlternating_of_zeroFree",
+        "GameTheory.quittingTailPersistentlySolo_of_noFencedSoloWindowFamily",
+        "GameTheory.quittingSoloWindowExtraction_iff_persistentlySolo"
+      ],
+      "residual_propositions_by_route": {
+        "zero_free": [
+          "GameTheory.QuittingTailPairSoloDichotomy"
+        ],
+        "general_table": [
+          "GameTheory.QuittingTailPairSoloDichotomy",
+          "GameTheory.QuittingNoFencedSoloWindowFamily"
+        ]
+      }
+    },
+    {
+      "id": "CONDITIONAL-SOLO-WINDOW-PHASE-STOP-BRANCH",
+      "kind": "conditional",
+      "open": true,
+      "cover_clause_ids": [
+        "COVER-B"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "The phase-stop branch is proved under solo-tail hypotheses, not outright. It assumes a seam witness of the counterexample regime, a fixed owner that is the sole possible quitter at every tail date, a nonnegative own solo reward for that owner, bounded rewards, and a vanishing live-mass limit on every window of the canonical periodic tail window family. The route to a tail of that shape runs through the pair dichotomy and the fenced-family residual of the diffuse-tail route, neither of which is proved, so the branch does not close a leaf on its own.",
+      "evidence": [
+        "Research/Quitting/SoloWindowPhaseStopBranch.lean",
+        "Research/Quitting/DiffuseTailEffectiveCharge.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ],
+      "residual_propositions": [
+        "GameTheory.QuittingTailPairSoloDichotomy",
+        "GameTheory.QuittingNoFencedSoloWindowFamily"
+      ],
+      "declarations": [
+        "GameTheory.QuittingCounterexampleSeamWitness.quittingSoloWindowPhaseStopBranch_of_tailSolo"
+      ]
+    },
+    {
+      "id": "COMPILER-BLOCK-PERIODIC-GENERAL",
+      "kind": "producer",
+      "cover_clause_ids": [
+        "COVER-A"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "The general multi-quitter periodic compiler takes a block cycle of product rows -- any set of players may quit at a phase, independently, at phase-constant hazards -- and compiles a finite certificate into a uniform-equilibrium payoff and emptiness of the counterexample regime. The certificate asks that hazards be probabilities, that displayed values fit the reward box and close up, the phase-value recursion, exact one-stage complementarity, positive absorption at some phase, and nonnegative own solo rewards. No product contraction is asked of the certificate, of the response cap, or of the refusal branch: the non-contracting branch is discharged explicitly, by identifying the deleted cycle there with the all-continue row. A contraction hypothesis survives at exactly one place, uniqueness of the phase values, which asks that every player's opponents jointly fail to survive one turn with certainty.",
+      "evidence": [
+        "UniformEquilibrium/Quitting/Cycles/BlockPeriodicProfile.lean",
+        "UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "C"
+      ],
+      "declarations": [
+        "GameTheory.IsQuittingBlockCertificate",
+        "GameTheory.isUniformEquilibriumPayoff_of_isQuittingBlockCertificate",
+        "GameTheory.isEmpty_counterexampleRegime_of_isQuittingBlockCertificate",
+        "GameTheory.QuittingCounterexampleRegime.exists_quittingBlockResponse_gain",
+        "GameTheory.eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue"
       ]
     }
   ]

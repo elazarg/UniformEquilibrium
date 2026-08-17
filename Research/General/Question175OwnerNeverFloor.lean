@@ -8,7 +8,7 @@ import UniformEquilibrium.Quitting.Paths.OutsiderNeverGluing
 import UniformEquilibrium.Quitting.Stationary.MinMax
 import UniformEquilibrium.Quitting.Paths.OpponentActionMass
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchProfile
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCoalitionToggleDeletion
+import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 
 /-!
 # Question 175: the negative antitone owner has a Never floor

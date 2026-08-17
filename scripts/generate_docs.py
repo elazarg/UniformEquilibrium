@@ -118,8 +118,8 @@ def render_open_leaves(frontier: dict[str, Any]) -> str:
         "This table is generated from "
         "[`QuittingProofFrontier.json`](QuittingProofFrontier.json).",
         "",
-        "| Manuscript alternative | GitHub issue | Leaf | Obstruction | Representative | Source producer |",
-        "| --- | --- | --- | --- | --- | --- |",
+        "| Manuscript alternative | GitHub issue | Leaf | Cover clause | Obstruction | Seals | Representative | Source producer |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for leaf in frontier["formal_leaves"]:
         alternative = alternatives[leaf["id"]]
@@ -127,10 +127,12 @@ def render_open_leaves(frontier: dict[str, Any]) -> str:
         source = leaf["source"]
         producer = leaf["producer"]
         source_link = f"[`{producer}`](../{source})"
+        clauses = ", ".join(f"`{clause}`" for clause in leaf.get("cover_clause_ids", []))
+        seals = ", ".join(f"`{seal}`" for seal in leaf.get("evidence_seals", []))
         lines.append(
             f"| {alternative['alternative_number']} | "
             f"[#{issue}](https://github.com/elazarg/UniformEquilibrium/issues/{issue}) | "
-            f"`{leaf['id']}` | `{leaf['obstruction_class']}` | "
+            f"`{leaf['id']}` | {clauses} | `{leaf['obstruction_class']}` | {seals} | "
             f"`{leaf['representative']}` | {source_link} |"
         )
     if eliminated:
