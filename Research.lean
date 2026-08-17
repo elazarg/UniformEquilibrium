@@ -30,8 +30,12 @@ import Research.General.ResetSeriesCrossPinDebtCharge
 import Research.General.RolloverLiquidationGame
 import Research.General.SeveranceMutualThreeGames
 import Research.Literature
+import Research.Quitting.AnchoredCyclicPatience
+import Research.Quitting.AnchoredCyclicPatienceBridge
+import Research.Quitting.AnchoredCyclicRenewal
 import Research.Quitting.AnchoredCyclicScreen
 import Research.Quitting.AtomEndpointReturnSeparation
+import Research.Quitting.BenevolentSinkSoloist
 import Research.Quitting.BestEndpointForcedOwnerRectanglePassport
 import Research.Quitting.BlockPair.K11
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
@@ -41,6 +45,11 @@ import Research.Quitting.CausalTailEscapeReturnGate
 import Research.Quitting.CertifiedForcedOwnerBackgroundHost
 import Research.Quitting.CertifiedForcedOwnerEndpointFlip
 import Research.Quitting.CertifiedForcedOwnerRectanglePacket
+import Research.Quitting.CirculantColliderCompletion
+import Research.Quitting.CirculantColliderSlivers
+import Research.Quitting.CirculantConstantStepCycle
+import Research.Quitting.CirculantPocketAnchoredNoGo
+import Research.Quitting.CirculantTrichotomy
 import Research.Quitting.ConcentratedCollisionFourRoleMonodromy
 import Research.Quitting.CopositiveQBridge
 import Research.Quitting.CounterexampleAtomEndpointRisePassport
@@ -49,6 +58,7 @@ import Research.Quitting.CoupledCalibrationQuittingRoot
 import Research.Quitting.CyclicSymmetricStationaryGapIVT
 import Research.Quitting.DebtTransportMarkovMonodromy
 import Research.Quitting.DiffuseTailEffectiveCharge
+import Research.Quitting.DiffuseTailNonvacuity
 import Research.Quitting.DiffuseTailSoloCalibrations
 import Research.Quitting.DiffuseTailSoloStructure
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
@@ -64,6 +74,7 @@ import Research.Quitting.FourPlayerBlockerCirculation
 import Research.Quitting.FourPlayerCyclicPlateauCandidate
 import Research.Quitting.FullCoreDuplicatedCyclicLasso
 import Research.Quitting.HandshakeClub
+import Research.Quitting.HazardSummability
 import Research.Quitting.HolonomyEquivalenceCompression
 import Research.Quitting.KActiveMarkedAtomBudgetPathConsumer
 import Research.Quitting.KActiveMarkedAtomCompactPath
@@ -88,6 +99,7 @@ import Research.Quitting.OwnerOutsiderSquareContextDecomposition
 import Research.Quitting.OwnerSoloCertification
 import Research.Quitting.PacketPreservingSourceReturnNoGo
 import Research.Quitting.PaidNonexactCapStackAccount
+import Research.Quitting.PairActiveSoloPhase
 import Research.Quitting.PathClosureKernels
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
 import Research.Quitting.PrescribedAtomMinimumAccounting
@@ -100,6 +112,11 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
+import Research.Quitting.SolanVieilleBoundaryRegimeExclusion
+import Research.Quitting.SolanVieilleSoloPeriodicNoGo
+import Research.Quitting.SoloPeriodicBlockCompiler
+import Research.Quitting.SoloTailExactStructure
+import Research.Quitting.SoloTailStoppingVerification
 import Research.Quitting.SourceMatchedSnellPurification
 import Research.Quitting.SourceMatchedSnellPurificationCollapse
 import Research.Quitting.StochasticButtonCompression

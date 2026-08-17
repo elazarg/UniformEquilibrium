@@ -4,15 +4,16 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.DivergentChargeRecurrence
 import Research.Quitting.DiffuseTailSoloStructure
 
 /-!
 # Effective charge budget and the extraction split for diffuse quitting tails
 
-`Research/Quitting/DiffuseTailSoloStructure.lean` proves a quantitative form
-of T2 for one fenced solo window and derives T3 *conditionally* on a single
-bundled hypothesis `QuittingSoloWindowExtraction`.  This module does two
-things with that material.
+`Research/Quitting/DiffuseTailSoloStructure.lean` proves a quantitative bound
+for one fenced solo window and derives `quittingTailPersistentlySolo_of_zeroFree`
+*conditionally* on a single bundled hypothesis `QuittingSoloWindowExtraction`.
+This module does two things with that material.
 
 ## Effective charge versus mesh
 
@@ -35,18 +36,42 @@ Summing over a family of windows gives `sum_quittingSoloWindowCharge_le_of_margi
 fenced solo windows with a summable window-mesh series has finite total
 conditioned charge, bounded by `8 * M / margin` times the mesh series.  That
 is the currency consumed by `MathUE/SparseVanishingSchedule.lean`, whose
-selection lemma produces dates with a summable mesh series.  It is *not* an
-automatic match: the schedule lemma controls the mesh only at the dates it
-selects, while a window family's return dates are determined by the windows,
-so the summability of the combined window-mesh series is a hypothesis here and
-not a consequence of a vanishing global mesh.
+selection lemma produces dates with a summable mesh series.
 
-The contrapositive `not_summable_quittingSoloWindowMesh_of_fencedSoloWindows`
-records the consequence: on a margin table, a fenced solo window family
-carrying a uniform positive charge has a *non-summable* window-mesh series.
-This is a companion to, not a corollary of, T2: T2 assumes the global
-conditioned mesh vanishes, which neither implies nor is implied by summability
-along the family.
+Summability of the window-mesh series is a sparseness condition on the family,
+not a global hypothesis in disguise:
+`not_summable_quittingTailConditionedAbsorptionWeight` shows that the global
+conditioned mesh series always diverges in an exact tail, because the
+conditioned chain absorbs almost surely
+(`tendsto_quittingTailConditionedSurvivalProduct_zero`).  A window family can
+still have a summable mesh series, since its fence and closing dates are sparse
+among all dates; separation of consecutive windows (`window_separated`) is what
+makes those dates distinct.
+
+The contrapositive `not_tendsto_quittingSoloWindowMesh_of_fencedSoloWindows`
+records the consequence in its strongest form: on a margin table, the
+window-mesh series of a fenced solo window family carrying a uniform positive
+charge does not even tend to zero.  Since the window mesh is a sum of two
+conditioned weights at dates escaping to infinity, that contradicts a vanishing
+global conditioned mesh, which gives
+`isEmpty_quittingFencedSoloWindows_of_soloMatrixMargin`: a second route to the
+coexistence obstruction, carrying the explicit constant `8 * M / margin` and
+not passing through the vanishing of the normalized solo entry.
+
+## The charge floor is an additive condition
+
+`quittingSoloWindowInsideHazard` is the total conditioned hazard strictly
+inside a window.  The union bound and the survival estimate of
+`MathUE/DivergentChargeRecurrence.lean` pin a window's conditioned charge
+between `inside / (1 + inside)` and `inside`
+(`quittingSoloWindowCharge_le_insideHazard`,
+`one_sub_quittingSoloWindowCharge_mul_insideHazard_le`), so the multiplicative
+charge floor and the additive inside-hazard floor are the same condition on a
+family (`quittingUniformSoloWindowChargeFloor_iff_insideHazardFloor`).  With the
+effective charge bound this also caps the inside hazard of a late window by a
+fixed multiple of its fence mesh
+(`quittingSoloWindowInsideHazard_le_of_margin`), and caps the conditioned mesh
+at every date inside a window by the window's charge.
 
 ## Splitting the extraction hypothesis
 
@@ -58,8 +83,9 @@ along the family.
   fenced solo windows of positive length — everything the extraction needs
   except the charge.
 * **(ii), proved, with a stated currency caveat.**
-  `not_quittingTailCoactiveChargeFloor_of_summable` routes the co-active branch
-  to a summable one-stage absorption budget, and
+  `not_quittingTailRawChargeFloor_of_tendsto` routes the co-active branch to a
+  vanishing one-stage absorption budget, consuming only one of the two players'
+  rates, and
   `QuittingCounterexampleSeamWitness.not_coactiveChargeFloor` discharges that
   budget from the seam field `jointAbsorption_summable`.  The budget is in
   *raw* one-stage absorption mass, which is the currency the seam supplies; it
@@ -69,7 +95,17 @@ along the family.
 * **(iii), open.**  `QuittingUniformSoloWindowChargeFloor` is a proposition
   definition, not a theorem: it says a fenced solo window family always has a
   subfamily with a uniform positive conditioned charge.  Nothing here proves
-  it.
+  it.  `QuittingUniformSoloWindowInsideHazardFloor` is its additive form.
+
+  On a margin table with vanishing conditioned mesh the charge floor is
+  refutable as soon as one fenced solo window family exists
+  (`not_quittingUniformSoloWindowChargeFloor_of_family`), because a floored
+  subfamily would be a `QuittingFencedSoloWindows` and
+  `isEmpty_quittingFencedSoloWindows_of_soloMatrixMargin` excludes those.  The
+  assembly below can therefore discharge (iii) only vacuously, when no family
+  exists; the quantitative target that remains is ruling out a family carrying
+  no floor at all, for which the effective charge bound gives `charge ≤
+  constant * mesh` with both sides vanishing.
 
 The assembly `quittingSoloWindowExtraction_of_dichotomy_of_chargeFloor` shows
 (i) + (ii) + (iii) ⟹ `QuittingSoloWindowExtraction`, modulo one further
@@ -77,11 +113,12 @@ isolated hypothesis `QuittingTailPairSoloDichotomy` — "each distinct pair of
 persistently active players either alternates strictly and late, or collides at
 a uniform positive raw rate".  That hypothesis is *not* a tautology: it rules
 out idle dates, third-player activity, and collisions whose raw rate vanishes.
-It is stated separately precisely so that the remaining genuinely quantitative
-open content is exactly (iii).
+It is stated separately so that the split's remaining hypotheses are named
+rather than bundled.
 
-`quittingTailPersistentlySolo_of_zeroFree_of_soloDichotomy` records T3 with its
-conditionality expressed in these terms.
+`quittingTailPersistentlySolo_of_zeroFree_of_soloDichotomy` records
+`quittingTailPersistentlySolo_of_zeroFree` with its conditionality expressed in
+these terms.
 -/
 
 noncomputable section
@@ -168,13 +205,13 @@ private theorem charge_le_of_window_inequality {fenceMesh returnMesh charge
   rw [div_mul_eq_mul_div, le_div_iff₀ hmargin]
   linarith
 
-/-- **M6, one window.**  On a table whose normalized solo entry
+/-- **One window.**  On a table whose normalized solo entry
 `M spectator owner` has absolute value at least `margin`, and at a fence whose
 conditioned mesh is at most `1/2`, the conditioned charge absorbed inside a
 fenced solo window is at most `8 * bound / margin` times the window mesh, where
 `bound` is a uniform bound on the reward table.
 
-This is the effective (rearranged) form of the quantitative T2 inequality
+This is the effective (rearranged) form of the quantitative inequality
 `survivalGap_mul_abs_normalizedSoloMatrix_le_of_soloWindow`. -/
 theorem quittingSoloWindowCharge_le_of_margin
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (boundary : Payoff ι)
@@ -224,8 +261,11 @@ structure QuittingFencedSoloWindowFamily
   fence : ℕ → ℕ
   /-- Number of solo dates in window `index`. -/
   length : ℕ → ℕ
-  /-- The fence dates escape to infinity. -/
-  fence_tendsto : Tendsto fence atTop atTop
+  /-- The fence dates are strictly increasing, hence escape to infinity. -/
+  fence_strictMono : StrictMono fence
+  /-- Each window closes strictly before the next one opens, so distinct
+  windows occupy disjoint blocks of dates. -/
+  window_separated : ∀ index, fence index + 1 + length index < fence (index + 1)
   /-- Every window has at least one solo date. -/
   length_pos : ∀ index, 0 < length index
   /-- `spectator` is active at every left fence. -/
@@ -254,7 +294,8 @@ def windows {roots : ℕ → ι → PMF Bool} {spectator owner : ι}
   fence index := family.fence (select index)
   length index := family.length (select index)
   charge := charge
-  fence_tendsto := family.fence_tendsto.comp hselect.tendsto_atTop
+  fence_tendsto :=
+    (family.fence_strictMono.tendsto_atTop).comp hselect.tendsto_atTop
   charge_pos := hpos
   fence_active index := family.fence_active (select index)
   return_active index := family.return_active (select index)
@@ -296,7 +337,7 @@ theorem quittingSoloWindowCharge_le_of_margin_of_family
     (family.return_active index) (family.window_solo index)
     (family.window_active index)
 
-/-- **M6, summed.**  The total conditioned charge of any finite set of windows
+/-- **Summed.**  The total conditioned charge of any finite set of windows
 of a family is at most `8 * bound / margin` times their total mesh. -/
 theorem sum_quittingSoloWindowCharge_le_of_margin
     (hpolicy : ∀ time, value time =
@@ -323,7 +364,7 @@ theorem sum_quittingSoloWindowCharge_le_of_margin
     quittingSoloWindowCharge_le_of_margin_of_family hpolicy hnash hreward
       hpositive htight hmargin hentry family index (hhalf index)
 
-/-- **M6, summable form.**  A summable window-mesh series forces a summable
+/-- **Summable form.**  A summable window-mesh series forces a summable
 window-charge series. -/
 theorem summable_quittingSoloWindowCharge_of_margin
     (hpolicy : ∀ time, value time =
@@ -349,7 +390,7 @@ theorem summable_quittingSoloWindowCharge_of_margin
       hreward hpositive htight hmargin hentry family index (hhalf index))
     (hmesh.mul_left _)
 
-/-- **M6, total charge.**  On a margin table, the total conditioned charge of a
+/-- **Total charge.**  On a margin table, the total conditioned charge of a
 fenced solo window family is at most `8 * bound / margin` times its total mesh.
 This is the statement whose right-hand side is the summable mesh-weighted cost
 produced by `Math.exists_sparse_vanishing_nonsummable_schedule`. -/
@@ -381,10 +422,11 @@ theorem tsum_quittingSoloWindowCharge_le_of_margin
       htight hmargin hentry family hhalf hmesh)
     (hmesh.mul_left _)
 
-/-- **M6, contrapositive.**  On a margin table, a fenced solo window family
-carrying a uniform positive conditioned charge has a non-summable window-mesh
-series.  No global mesh hypothesis is used. -/
-theorem not_summable_quittingSoloWindowMesh_of_fencedSoloWindows
+/-- **Contrapositive.**  On a margin table, the window-mesh series of a
+fenced solo window family carrying a uniform positive conditioned charge does
+not tend to zero.  No global mesh hypothesis is used, and nothing about the
+series beyond its termwise limit is consumed. -/
+theorem not_tendsto_quittingSoloWindowMesh_of_fencedSoloWindows
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (hnash : ∀ time,
@@ -395,11 +437,10 @@ theorem not_summable_quittingSoloWindowMesh_of_fencedSoloWindows
     (hmargin : 0 < margin)
     (hentry : margin ≤ |normalizedSoloMatrix reward spectator owner|)
     (windows : QuittingFencedSoloWindows roots spectator owner) :
-    ¬Summable fun index =>
+    ¬Tendsto (fun index =>
       quittingSoloWindowMesh roots (windows.fence index)
-        (windows.length index) := by
-  intro hmesh
-  have hzero := hmesh.tendsto_atTop_zero
+        (windows.length index)) atTop (nhds 0) := by
+  intro hzero
   have hscaled : Tendsto (fun index => 8 * bound / margin *
       quittingSoloWindowMesh roots (windows.fence index)
         (windows.length index)) atTop (nhds 0) := by
@@ -425,6 +466,59 @@ theorem not_summable_quittingSoloWindowMesh_of_fencedSoloWindows
     exact le_trans (windows.charge_le index) hstep
   exact absurd (ge_of_tendsto hscaled hfloor) (not_le.2 windows.charge_pos)
 
+/-- Summable form of the contrapositive: a summable window-mesh series has a
+vanishing general term, which the uniform charge already forbids. -/
+theorem not_summable_quittingSoloWindowMesh_of_fencedSoloWindows
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (htight : boundary spectator = quittingSoloReward reward spectator spectator)
+    (hmargin : 0 < margin)
+    (hentry : margin ≤ |normalizedSoloMatrix reward spectator owner|)
+    (windows : QuittingFencedSoloWindows roots spectator owner) :
+    ¬Summable fun index =>
+      quittingSoloWindowMesh roots (windows.fence index)
+        (windows.length index) := fun hmesh =>
+  not_tendsto_quittingSoloWindowMesh_of_fencedSoloWindows hpolicy hnash hreward
+    hpositive htight hmargin hentry windows hmesh.tendsto_atTop_zero
+
+/-- **Quantitative coexistence obstruction.**  On a margin table a vanishing
+global conditioned mesh already excludes a fenced solo window family carrying a
+uniform positive conditioned charge: the window mesh is a sum of two
+conditioned weights at dates escaping to infinity, so it vanishes along the
+family, while the effective charge bound keeps it bounded below by the charge
+divided by the bound's constant.
+
+This route does not pass through the vanishing of the normalized solo entry,
+and it carries the explicit constant `8 * bound / margin`. -/
+theorem isEmpty_quittingFencedSoloWindows_of_soloMatrixMargin
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (htight : boundary spectator = quittingSoloReward reward spectator spectator)
+    (hmargin : 0 < margin)
+    (hentry : margin ≤ |normalizedSoloMatrix reward spectator owner|)
+    (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight roots) atTop
+      (nhds 0)) :
+    IsEmpty (QuittingFencedSoloWindows roots spectator owner) := by
+  refine ⟨fun windows => ?_⟩
+  have hclose : Tendsto
+      (fun index => windows.fence index + 1 + windows.length index) atTop atTop :=
+    tendsto_atTop_mono (fun index => by omega) windows.fence_tendsto
+  have hwindowMesh : Tendsto (fun index =>
+      quittingSoloWindowMesh roots (windows.fence index)
+        (windows.length index)) atTop (nhds 0) := by
+    simpa [quittingSoloWindowMesh] using
+      (hmesh.comp windows.fence_tendsto).add (hmesh.comp hclose)
+  exact not_tendsto_quittingSoloWindowMesh_of_fencedSoloWindows hpolicy hnash
+    hreward hpositive htight hmargin hentry windows hwindowMesh
+
 end Budget
 
 /-! ## (i) Late strict alternation produces fenced solo windows -/
@@ -449,22 +543,34 @@ def QuittingTailLateSoloAlternating
       (IsQuittingSoloRoot (roots time) second ∧
         0 < (roots time second true).toReal)
 
-/-- A cofinal supply of window data can be threaded into an escaping
-sequence of windows. -/
-private theorem exists_escaping_of_cofinal {Q : ℕ → ℕ → Prop}
+/-- A cofinal supply of window data can be threaded into a *separated*
+sequence of windows: each window closes strictly before the next one opens.
+Restarting the search past the chosen window's own closing date, rather than
+past its fence, is what buys the separation, and separation is what makes the
+per-window fence and closing dates injective. -/
+private theorem exists_escaping_separated_of_cofinal {Q : ℕ → ℕ → Prop}
     (hcofinal : ∀ start, ∃ fence length, start ≤ fence ∧ Q fence length) :
     ∃ fence length : ℕ → ℕ,
-      Tendsto fence atTop atTop ∧ ∀ index, Q (fence index) (length index) := by
+      StrictMono fence ∧
+        (∀ index, fence index + 1 + length index < fence (index + 1)) ∧
+          ∀ index, Q (fence index) (length index) := by
   classical
   choose pick size hle hQ using hcofinal
-  let starts : ℕ → ℕ := fun index => Nat.rec 0 (fun _ prev => pick prev + 1) index
-  have hmono : StrictMono fun index => pick (starts index) := by
-    refine strictMono_nat_of_lt_succ fun index => ?_
-    have hstep : starts (index + 1) = pick (starts index) + 1 := rfl
+  let starts : ℕ → ℕ :=
+    fun index => Nat.rec 0 (fun _ prev => pick prev + size prev + 2) index
+  have hseparated : ∀ index,
+      pick (starts index) + 1 + size (starts index) <
+        pick (starts (index + 1)) := by
+    intro index
+    have hstep : starts (index + 1) =
+      pick (starts index) + size (starts index) + 2 := rfl
     have hbound := hle (starts (index + 1))
     omega
-  exact ⟨fun index => pick (starts index), fun index => size (starts index),
-    hmono.tendsto_atTop, fun index => hQ (starts index)⟩
+  refine ⟨fun index => pick (starts index), fun index => size (starts index),
+    strictMono_nat_of_lt_succ fun index => ?_, hseparated,
+    fun index => hQ (starts index)⟩
+  have := hseparated index
+  omega
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- One fenced solo window with `second` inside and `first` on both fences,
@@ -551,13 +657,14 @@ theorem nonempty_quittingFencedSoloWindowFamily_of_lateSoloAlternating
     (hfirst : QuittingTailPersistentlyActive roots first)
     (hsecond : QuittingTailPersistentlyActive roots second) :
     Nonempty (QuittingFencedSoloWindowFamily roots first second) := by
-  obtain ⟨fence, length, htendsto, hwindow⟩ :=
-    exists_escaping_of_cofinal
+  obtain ⟨fence, length, hmono, hseparated, hwindow⟩ :=
+    exists_escaping_separated_of_cofinal
       (exists_quittingFencedSoloWindow_of_lateSoloAlternating hne halternating
         hfirst hsecond)
   exact ⟨{ fence := fence
            length := length
-           fence_tendsto := htendsto
+           fence_strictMono := hmono
+           window_separated := hseparated
            length_pos := fun index => (hwindow index).1
            fence_active := fun index => (hwindow index).2.1
            return_active := fun index => (hwindow index).2.2.1
@@ -576,23 +683,64 @@ def QuittingTailCoactiveChargeFloor
     charge ≤ (roots time first true).toReal ∧
       charge ≤ (roots time second true).toReal
 
+/-- **A raw charge floor for one player.**  `who` quits at arbitrarily late
+dates, each time with probability at least a fixed positive `charge`.  This is
+the single-player content of a co-activity floor. -/
+def QuittingTailRawChargeFloor (roots : ℕ → ι → PMF Bool) (who : ι) : Prop :=
+  ∃ charge : ℝ, 0 < charge ∧ ∀ start, ∃ time, start ≤ time ∧
+    charge ≤ (roots time who true).toReal
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- A co-activity floor contains a raw charge floor for the first player. -/
+theorem QuittingTailCoactiveChargeFloor.rawChargeFloor_left
+    {roots : ℕ → ι → PMF Bool} {first second : ι}
+    (hcoactive : QuittingTailCoactiveChargeFloor roots first second) :
+    QuittingTailRawChargeFloor roots first := by
+  obtain ⟨charge, hpos, hrecurrent⟩ := hcoactive
+  refine ⟨charge, hpos, fun start => ?_⟩
+  obtain ⟨time, htime, hfirst, -⟩ := hrecurrent start
+  exact ⟨time, htime, hfirst⟩
+
 omit [DecidableEq ι] in
-/-- **(ii), proved.**  A summable one-stage absorption series excludes a
+/-- **(ii), proved, in the weakest currency.**  A *vanishing* one-stage
+absorption mass already excludes a raw charge floor for a single player: the
+player's own quit probability never exceeds the one-stage absorption mass, so a
+recurrent positive floor contradicts the limit. -/
+theorem not_quittingTailRawChargeFloor_of_tendsto
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (hvanishing : Tendsto (fun time => quittingRootAbsorptionMass (roots time))
+      atTop (nhds 0)) :
+    ¬QuittingTailRawChargeFloor roots who := by
+  rintro ⟨charge, hpos, hrecurrent⟩
+  obtain ⟨start, hstart⟩ := eventually_atTop.1
+    ((tendsto_order.1 hvanishing).2 charge hpos)
+  obtain ⟨time, htime, hcharge⟩ := hrecurrent start
+  exact absurd (hstart time htime)
+    (not_lt.2 (hcharge.trans
+      (quitProbability_le_quittingRootAbsorptionMass (roots time) who)))
+
+omit [DecidableEq ι] in
+/-- **(ii), proved.**  A vanishing one-stage absorption mass excludes a
 co-activity floor at a uniform positive raw rate.  Only one of the two players'
-rates is consumed, so the same budget already excludes a single-player raw
-charge floor; the co-active framing records where the branch arises, not the
-strength of the argument. -/
+rates is consumed; the co-active framing records where the branch arises, not
+the strength of the argument. -/
+theorem not_quittingTailCoactiveChargeFloor_of_tendsto
+    (roots : ℕ → ι → PMF Bool) (first second : ι)
+    (hvanishing : Tendsto (fun time => quittingRootAbsorptionMass (roots time))
+      atTop (nhds 0)) :
+    ¬QuittingTailCoactiveChargeFloor roots first second := fun hcoactive =>
+  not_quittingTailRawChargeFloor_of_tendsto roots first hvanishing
+    hcoactive.rawChargeFloor_left
+
+omit [DecidableEq ι] in
+/-- Summable form: a summable one-stage absorption series has a vanishing
+general term, which is already enough. -/
 theorem not_quittingTailCoactiveChargeFloor_of_summable
     (roots : ℕ → ι → PMF Bool) (first second : ι)
     (hsummable : Summable fun time => quittingRootAbsorptionMass (roots time)) :
-    ¬QuittingTailCoactiveChargeFloor roots first second := by
-  rintro ⟨charge, hpos, hrecurrent⟩
-  obtain ⟨start, hstart⟩ := eventually_atTop.1
-    ((tendsto_order.1 hsummable.tendsto_atTop_zero).2 charge hpos)
-  obtain ⟨time, htime, hfirstCharge, -⟩ := hrecurrent start
-  exact absurd (hstart time htime)
-    (not_lt.2 (hfirstCharge.trans
-      (quitProbability_le_quittingRootAbsorptionMass (roots time) first)))
+    ¬QuittingTailCoactiveChargeFloor roots first second :=
+  not_quittingTailCoactiveChargeFloor_of_tendsto roots first second
+    hsummable.tendsto_atTop_zero
 
 namespace QuittingCounterexampleSeamWitness
 
@@ -607,6 +755,15 @@ theorem not_coactiveChargeFloor
   not_quittingTailCoactiveChargeFloor_of_summable _ first second
     seam.jointAbsorption_summable
 
+/-- The seam's joint-absorption budget also excludes a single-player raw charge
+floor along its canonical tail roots. -/
+theorem not_rawChargeFloor
+    (seam : QuittingCounterexampleSeamWitness regime) (who : ι) :
+    ¬QuittingTailRawChargeFloor
+      (quittingDynamicDebtTailRoots seam.tail) who :=
+  not_quittingTailRawChargeFloor_of_tendsto _ who
+    seam.jointAbsorption_summable.tendsto_atTop_zero
+
 end QuittingCounterexampleSeamWitness
 
 /-! ## (iii) The uniform charge floor, and the assembly -/
@@ -615,16 +772,51 @@ end QuittingCounterexampleSeamWitness
 subfamily whose windows all absorb at least one fixed positive share of the
 conditioned scale.
 
-This is the *only* genuinely quantitative open content of T3's extraction
-hypothesis: pieces (i) and (ii) are proved above.  Nothing forces a fixed
-positive conditioned charge per window, and nothing in this file proves this
-proposition; it is stated as a `Prop` definition. -/
+This is the only genuinely quantitative open content of the extraction
+hypothesis of `quittingTailPersistentlySolo_of_zeroFree`: pieces (i) and (ii)
+are proved above.  Nothing forces a fixed positive conditioned charge per
+window, and nothing in this file proves this proposition; it is stated as a
+`Prop` definition. -/
 def QuittingUniformSoloWindowChargeFloor (roots : ℕ → ι → PMF Bool) : Prop :=
   ∀ spectator owner : ι,
     ∀ family : QuittingFencedSoloWindowFamily roots spectator owner,
       ∃ select : ℕ → ℕ, ∃ charge : ℝ, StrictMono select ∧ 0 < charge ∧
         ∀ index, charge ≤ quittingSoloWindowCharge roots
           (family.fence (select index)) (family.length (select index))
+
+/-- **The uniform charge floor is refutable, not merely unproved.**  On a
+margin table with vanishing conditioned mesh, a single fenced solo window
+family for a distinct boundary-tight pair already witnesses the failure of the
+uniform charge floor: a floored subfamily of it would be a
+`QuittingFencedSoloWindows`, and the quantitative obstruction excludes those.
+
+So the charge-floor hypothesis of the extraction assembly can hold only when no
+fenced solo window family exists at all, in which case it is discharged
+vacuously.  Ruling out families themselves, rather than floored families, is
+what the effective charge bound leaves open: it gives `charge ≤ constant *
+mesh`, and both sides vanish along a family with no floor. -/
+theorem not_quittingUniformSoloWindowChargeFloor_of_family
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (boundary : Payoff ι)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    {bound : ℝ} (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    {spectator owner : ι}
+    (htight : boundary spectator = quittingSoloReward reward spectator spectator)
+    {margin : ℝ} (hmargin : 0 < margin)
+    (hentry : margin ≤ |normalizedSoloMatrix reward spectator owner|)
+    (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight roots) atTop
+      (nhds 0))
+    (family : QuittingFencedSoloWindowFamily roots spectator owner) :
+    ¬QuittingUniformSoloWindowChargeFloor roots := by
+  intro hfloor
+  obtain ⟨select, charge, hselect, hpos, hcharge⟩ := hfloor spectator owner
+    family
+  exact (isEmpty_quittingFencedSoloWindows_of_soloMatrixMargin hpolicy hnash
+    hreward hpositive htight hmargin hentry hmesh).false
+    (family.windows hselect hpos hcharge)
 
 /-- **The one further hypothesis the split needs.**  Every distinct pair of
 persistently active players either alternates strictly and late, or collides at
@@ -644,14 +836,15 @@ def QuittingTailPairSoloDichotomy (roots : ℕ → ι → PMF Bool) : Prop :=
           QuittingTailCoactiveChargeFloor roots first second
 
 omit [DecidableEq ι] in
-/-- **M11, assembly.**  The bundled extraction hypothesis of
+/-- **Assembly.**  The bundled extraction hypothesis of
 `Research/Quitting/DiffuseTailSoloStructure.lean` follows from the mechanical
 alternation construction (i), the raw collision budget (ii), and the uniform
 charge floor (iii), given the isolated pair dichotomy.  Only (iii) and the
 dichotomy remain unproved. -/
 theorem quittingSoloWindowExtraction_of_dichotomy_of_chargeFloor
     (roots : ℕ → ι → PMF Bool)
-    (hsummable : Summable fun time => quittingRootAbsorptionMass (roots time))
+    (hvanishing : Tendsto (fun time => quittingRootAbsorptionMass (roots time))
+      atTop (nhds 0))
     (hdichotomy : QuittingTailPairSoloDichotomy roots)
     (hfloor : QuittingUniformSoloWindowChargeFloor roots) :
     QuittingSoloWindowExtraction roots := by
@@ -663,11 +856,11 @@ theorem quittingSoloWindowExtraction_of_dichotomy_of_chargeFloor
     obtain ⟨select, charge, hselect, hpos, hcharge⟩ := hfloor first second family
     exact Or.inl ⟨family.windows hselect hpos hcharge⟩
   · exact absurd hcoactive
-      (not_quittingTailCoactiveChargeFloor_of_summable roots first second
-        hsummable)
+      (not_quittingTailCoactiveChargeFloor_of_tendsto roots first second
+        hvanishing)
 
-/-- **T3 with its conditionality split.**  On a zero-free table, an exact
-diffuse tail with a summable one-stage absorption series has at most one
+/-- **Conditionality split.**  On a zero-free table, an exact
+diffuse tail with a vanishing one-stage absorption mass has at most one
 persistently active player — conditional on the pair dichotomy and on the
 uniform charge floor, and on nothing else beyond the landed hypotheses of
 `quittingTailPersistentlySolo_of_zeroFree`. -/
@@ -684,13 +877,361 @@ theorem quittingTailPersistentlySolo_of_zeroFree_of_soloDichotomy
     (htight : ∀ who, QuittingTailPersistentlyActive roots who →
       boundary who = quittingSoloReward reward who who)
     (hzeroFree : QuittingZeroFreeSoloMatrix reward)
-    (hsummable : Summable fun time => quittingRootAbsorptionMass (roots time))
+    (hvanishing : Tendsto (fun time => quittingRootAbsorptionMass (roots time))
+      atTop (nhds 0))
     (hdichotomy : QuittingTailPairSoloDichotomy roots)
     (hfloor : QuittingUniformSoloWindowChargeFloor roots) :
     QuittingTailPersistentlySolo roots :=
   quittingTailPersistentlySolo_of_zeroFree roots value boundary hpolicy hnash
     hreward hpositive hmesh htight hzeroFree
-    (quittingSoloWindowExtraction_of_dichotomy_of_chargeFloor roots hsummable
+    (quittingSoloWindowExtraction_of_dichotomy_of_chargeFloor roots hvanishing
       hdichotomy hfloor)
+
+/-! ## The charge floor in additive form -/
+
+/-- Total conditioned hazard strictly inside the window of `length` solo dates
+opened at `fence`.  This is the additive shadow of the window's multiplicative
+conditioned charge. -/
+def quittingSoloWindowInsideHazard
+    (roots : ℕ → ι → PMF Bool) (fence length : ℕ) : ℝ :=
+  ∑ offset ∈ Finset.range length,
+    quittingTailConditionedAbsorptionWeight roots (fence + 1 + offset)
+
+omit [DecidableEq ι] in
+/-- Each conditioned absorption weight is at most one in an exact tail. -/
+theorem quittingTailConditionedAbsorptionWeight_le_one_of_positive
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (time : ℕ) :
+    quittingTailConditionedAbsorptionWeight roots time ≤ 1 :=
+  (quittingTailConditionedWeights_mem_unitInterval roots time
+    (hpositive (time + 1)).le (hpositive time)).1.2
+
+omit [DecidableEq ι] in
+/-- The inside hazard of a window is nonnegative in an exact tail. -/
+theorem quittingSoloWindowInsideHazard_nonneg
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (fence length : ℕ) :
+    0 ≤ quittingSoloWindowInsideHazard roots fence length :=
+  Finset.sum_nonneg fun offset _ =>
+    quittingTailConditionedAbsorptionWeight_nonneg_of_positive roots hpositive
+      (fence + 1 + offset)
+
+omit [DecidableEq ι] in
+/-- A window's conditioned charge is at most one. -/
+theorem quittingSoloWindowCharge_le_one
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (fence length : ℕ) :
+    quittingSoloWindowCharge roots fence length ≤ 1 := by
+  have hsurvival := (quittingTailConditionedSurvivalProduct_mem_unitInterval
+    roots hpositive (fence + 1) length).1
+  unfold quittingSoloWindowCharge
+  linarith
+
+omit [DecidableEq ι] in
+/-- **Union bound.**  A window's conditioned charge is at most its total inside
+hazard. -/
+theorem quittingSoloWindowCharge_le_insideHazard
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (fence length : ℕ) :
+    quittingSoloWindowCharge roots fence length ≤
+      quittingSoloWindowInsideHazard roots fence length := by
+  have hbound := Math.one_sub_sum_range_le_prod_one_sub
+    (quittingTailConditionedAbsorptionWeight roots)
+    (quittingTailConditionedAbsorptionWeight_nonneg_of_positive roots hpositive)
+    (quittingTailConditionedAbsorptionWeight_le_one_of_positive roots hpositive)
+    (fence + 1) length
+  unfold quittingSoloWindowCharge quittingSoloWindowInsideHazard
+    quittingTailConditionedSurvivalProduct
+  linarith
+
+omit [DecidableEq ι] in
+/-- **Sharper lower bound.**  Survival times one plus the inside hazard is at
+most one, so the surviving share of a window's inside hazard is at most its
+conditioned charge.  Together with the union bound this pins the charge between
+`inside / (1 + inside)` and `inside`. -/
+theorem one_sub_quittingSoloWindowCharge_mul_insideHazard_le
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (fence length : ℕ) :
+    (1 - quittingSoloWindowCharge roots fence length) *
+        quittingSoloWindowInsideHazard roots fence length ≤
+      quittingSoloWindowCharge roots fence length := by
+  have hbound := Math.prod_one_sub_mul_one_add_sum_range_le_one
+    (quittingTailConditionedAbsorptionWeight roots)
+    (quittingTailConditionedAbsorptionWeight_nonneg_of_positive roots hpositive)
+    (quittingTailConditionedAbsorptionWeight_le_one_of_positive roots hpositive)
+    (fence + 1) length
+  have hexpand :
+      (∏ offset ∈ Finset.range length,
+          (1 - quittingTailConditionedAbsorptionWeight roots
+            (fence + 1 + offset))) *
+        (1 + ∑ offset ∈ Finset.range length,
+          quittingTailConditionedAbsorptionWeight roots (fence + 1 + offset)) =
+      (∏ offset ∈ Finset.range length,
+          (1 - quittingTailConditionedAbsorptionWeight roots
+            (fence + 1 + offset))) +
+        (∏ offset ∈ Finset.range length,
+            (1 - quittingTailConditionedAbsorptionWeight roots
+              (fence + 1 + offset))) *
+          ∑ offset ∈ Finset.range length,
+            quittingTailConditionedAbsorptionWeight roots
+              (fence + 1 + offset) := by ring
+  rw [hexpand] at hbound
+  unfold quittingSoloWindowCharge quittingSoloWindowInsideHazard
+    quittingTailConditionedSurvivalProduct
+  linarith
+
+omit [DecidableEq ι] in
+/-- The conditioned mesh at any date strictly inside a window is at most the
+window's conditioned charge. -/
+theorem quittingTailConditionedAbsorptionWeight_le_quittingSoloWindowCharge
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    {fence length offset : ℕ} (hoffset : offset < length) :
+    quittingTailConditionedAbsorptionWeight roots (fence + 1 + offset) ≤
+      quittingSoloWindowCharge roots fence length := by
+  have hmem : offset ∈ Finset.range length := Finset.mem_range.2 hoffset
+  have hsplit := Finset.mul_prod_erase (Finset.range length)
+    (fun o => 1 - quittingTailConditionedAbsorptionWeight roots (fence + 1 + o))
+    hmem
+  have hrest : (∏ o ∈ (Finset.range length).erase offset,
+      (1 - quittingTailConditionedAbsorptionWeight roots (fence + 1 + o))) ≤ 1 :=
+    Finset.prod_le_one
+      (fun o _ => by
+        linarith [quittingTailConditionedAbsorptionWeight_le_one_of_positive
+          roots hpositive (fence + 1 + o)])
+      (fun o _ => by
+        linarith [quittingTailConditionedAbsorptionWeight_nonneg_of_positive
+          roots hpositive (fence + 1 + o)])
+  have hrest0 : 0 ≤ (∏ o ∈ (Finset.range length).erase offset,
+      (1 - quittingTailConditionedAbsorptionWeight roots (fence + 1 + o))) :=
+    Finset.prod_nonneg fun o _ => by
+      linarith [quittingTailConditionedAbsorptionWeight_le_one_of_positive
+        roots hpositive (fence + 1 + o)]
+  have hfactor : 0 ≤ 1 - quittingTailConditionedAbsorptionWeight roots
+      (fence + 1 + offset) := by
+    linarith [quittingTailConditionedAbsorptionWeight_le_one_of_positive roots
+      hpositive (fence + 1 + offset)]
+  unfold quittingSoloWindowCharge quittingTailConditionedSurvivalProduct
+  nlinarith [hsplit, hrest, hrest0, hfactor]
+
+section InsideBudget
+
+variable {roots : ℕ → ι → PMF Bool} {value : ℕ → Payoff ι} {boundary : Payoff ι}
+variable {bound margin : ℝ} {spectator owner : ι}
+
+/-- **Inside-hazard budget.**  On a margin table, once the effective charge
+bound puts a window's conditioned charge at or below one half, the total
+conditioned hazard strictly inside the window is at most twice that bound.  A
+late fenced solo window therefore accumulates no more hazard inside it than a
+fixed multiple of the conditioned mesh at its two fences. -/
+theorem quittingSoloWindowInsideHazard_le_of_margin
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (htight : boundary spectator = quittingSoloReward reward spectator spectator)
+    (hmargin : 0 < margin)
+    (hentry : margin ≤ |normalizedSoloMatrix reward spectator owner|)
+    (fence length : ℕ)
+    (hhalf : quittingTailConditionedAbsorptionWeight roots fence ≤ 1 / 2)
+    (hsmall : 8 * bound / margin *
+      quittingSoloWindowMesh roots fence length ≤ 1 / 2)
+    (hfence : 0 < (roots fence spectator true).toReal)
+    (hreturn : 0 < (roots (fence + 1 + length) spectator true).toReal)
+    (hsolo : ∀ offset, offset < length →
+      IsQuittingSoloRoot (roots (fence + 1 + offset)) owner)
+    (hactive : ∀ offset, offset < length →
+      0 < (roots (fence + 1 + offset) owner true).toReal) :
+    quittingSoloWindowInsideHazard roots fence length ≤
+      2 * (8 * bound / margin) * quittingSoloWindowMesh roots fence length := by
+  have hcharge := quittingSoloWindowCharge_le_of_margin roots value boundary
+    hpolicy hnash hreward hpositive spectator owner htight hmargin hentry fence
+    length hhalf hfence hreturn hsolo hactive
+  have hkey := one_sub_quittingSoloWindowCharge_mul_insideHazard_le roots
+    hpositive fence length
+  have hinside := quittingSoloWindowInsideHazard_nonneg roots hpositive fence
+    length
+  nlinarith [hcharge, hkey, hinside, hsmall]
+
+end InsideBudget
+
+/-- **(iii), additive form.**  Every fenced solo window family has a subfamily
+whose windows all carry at least one fixed positive total conditioned hazard
+strictly inside them.
+
+This is a proposition definition, exactly like the multiplicative charge floor
+it mirrors. -/
+def QuittingUniformSoloWindowInsideHazardFloor
+    (roots : ℕ → ι → PMF Bool) : Prop :=
+  ∀ spectator owner : ι,
+    ∀ family : QuittingFencedSoloWindowFamily roots spectator owner,
+      ∃ select : ℕ → ℕ, ∃ floor : ℝ, StrictMono select ∧ 0 < floor ∧
+        ∀ index, floor ≤ quittingSoloWindowInsideHazard roots
+          (family.fence (select index)) (family.length (select index))
+
+omit [DecidableEq ι] in
+/-- **The charge floor is an additive statement.**  In an exact tail the
+multiplicative conditioned charge floor and the additive inside-hazard floor
+are the same condition on a window family: the union bound gives one direction
+and the survival estimate the other, with the constant `floor / (1 + floor)`.
+
+The additive form is the one that composes with a hazard series, so this
+identifies the remaining quantitative content of the extraction hypothesis as a
+statement about summed conditioned hazard rather than about a product. -/
+theorem quittingUniformSoloWindowChargeFloor_iff_insideHazardFloor
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time) :
+    QuittingUniformSoloWindowChargeFloor roots ↔
+      QuittingUniformSoloWindowInsideHazardFloor roots := by
+  constructor
+  · intro hfloor spectator owner family
+    obtain ⟨select, charge, hselect, hpos, hcharge⟩ := hfloor spectator owner
+      family
+    refine ⟨select, charge, hselect, hpos, fun index => (hcharge index).trans ?_⟩
+    exact quittingSoloWindowCharge_le_insideHazard roots hpositive _ _
+  · intro hfloor spectator owner family
+    obtain ⟨select, floor, hselect, hpos, hinside⟩ := hfloor spectator owner
+      family
+    refine ⟨select, floor / (1 + floor), hselect,
+      div_pos hpos (by linarith), fun index => ?_⟩
+    set fence := family.fence (select index) with hfence
+    set length := family.length (select index) with hlength
+    have hkey := one_sub_quittingSoloWindowCharge_mul_insideHazard_le roots
+      hpositive fence length
+    have hchargeLe := quittingSoloWindowCharge_le_one roots hpositive fence
+      length
+    have hfloorLe := hinside index
+    rw [div_le_iff₀ (by linarith : (0 : ℝ) < 1 + floor)]
+    nlinarith [hkey, hchargeLe, hfloorLe]
+
+/-! ## The conditioned mesh series always diverges -/
+
+omit [DecidableEq ι] in
+/-- The joint survival limit factors through any finite prefix. -/
+theorem quittingJointSurvivalLimit_eq_weight_mul
+    (roots : ℕ → ι → PMF Bool) (start length : ℕ) :
+    quittingJointSurvivalLimit roots start =
+      quittingJointSurvivalWeight roots start length *
+        quittingJointSurvivalLimit roots (start + length) := by
+  induction length with
+  | zero => simp
+  | succ length ih =>
+      rw [quittingJointSurvivalWeight_succ,
+        show start + (length + 1) = start + length + 1 from by omega,
+        mul_assoc, ← quittingJointSurvivalLimit_eq_continue_mul_succ]
+      exact ih
+
+omit [DecidableEq ι] in
+/-- **Conditioned survival is a survival ratio.**  The conditioned survival
+product over a window, scaled by the remaining eventual absorption at its
+start, is the raw joint survival weight scaled by the remaining eventual
+absorption at its end. -/
+theorem quittingTailConditionedSurvivalProduct_mul_eventualAbsorption
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (start length : ℕ) :
+    quittingTailConditionedSurvivalProduct roots start length *
+        quittingTailEventualAbsorption roots start =
+      quittingJointSurvivalWeight roots start length *
+        quittingTailEventualAbsorption roots (start + length) := by
+  induction length with
+  | zero => simp
+  | succ length ih =>
+      have hstep : quittingTailConditionedSurvivalProduct roots start
+          (length + 1) =
+            quittingTailConditionedSurvivalProduct roots start length *
+              (1 - quittingTailConditionedAbsorptionWeight roots
+                (start + length)) := by
+        unfold quittingTailConditionedSurvivalProduct
+        rw [Finset.prod_range_succ]
+      have hweights := quittingTailConditionedWeights_add roots (start + length)
+        (hpositive (start + length))
+      have hcontinuation :
+          1 - quittingTailConditionedAbsorptionWeight roots (start + length) =
+            quittingStationaryContinueMass (roots (start + length)) *
+                quittingTailEventualAbsorption roots (start + length + 1) /
+              quittingTailEventualAbsorption roots (start + length) := by
+        rw [show (1 : ℝ) -
+            quittingTailConditionedAbsorptionWeight roots (start + length) =
+          quittingTailConditionedContinuationWeight roots (start + length) from
+            by linarith]
+        rfl
+      have hne := (hpositive (start + length)).ne'
+      rw [hstep, mul_right_comm, ih, hcontinuation,
+        quittingJointSurvivalWeight_succ,
+        show start + (length + 1) = start + length + 1 from by omega]
+      field_simp
+
+omit [DecidableEq ι] in
+/-- Conditioned survival across a window, in the form that exhibits its limit:
+the raw survival weight minus the joint survival limit, scaled down by the
+remaining eventual absorption at the window's start. -/
+theorem quittingTailConditionedSurvivalProduct_mul_eventualAbsorption_eq_sub
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (start length : ℕ) :
+    quittingTailConditionedSurvivalProduct roots start length *
+        quittingTailEventualAbsorption roots start =
+      quittingJointSurvivalWeight roots start length -
+        quittingJointSurvivalLimit roots start := by
+  rw [quittingTailConditionedSurvivalProduct_mul_eventualAbsorption roots
+    hpositive start length, quittingTailEventualAbsorption,
+    quittingJointSurvivalLimit_eq_weight_mul roots start length]
+  ring
+
+omit [DecidableEq ι] in
+/-- **The conditioned chain absorbs almost surely.**  Every shifted conditioned
+survival product tends to zero: the raw survival weight converges to the joint
+survival limit, which is exactly the quantity the conditioning divides out. -/
+theorem tendsto_quittingTailConditionedSurvivalProduct_zero
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (start : ℕ) :
+    Tendsto (quittingTailConditionedSurvivalProduct roots start) atTop
+      (nhds 0) := by
+  have hscaled : Tendsto (fun length =>
+      quittingTailConditionedSurvivalProduct roots start length *
+        quittingTailEventualAbsorption roots start) atTop (nhds 0) := by
+    have hsub : Tendsto (fun length =>
+        quittingJointSurvivalWeight roots start length -
+          quittingJointSurvivalLimit roots start) atTop (nhds 0) := by
+      simpa using (tendsto_quittingJointSurvivalLimit roots start).sub
+        (tendsto_const_nhds
+          (x := quittingJointSurvivalLimit roots start) (f := atTop (α := ℕ)))
+    refine hsub.congr fun length => ?_
+    exact (quittingTailConditionedSurvivalProduct_mul_eventualAbsorption_eq_sub
+      roots hpositive start length).symm
+  have hcancel := hscaled.div_const (quittingTailEventualAbsorption roots start)
+  simp only [zero_div] at hcancel
+  have hne := (hpositive start).ne'
+  refine hcancel.congr fun length => ?_
+  field_simp
+
+omit [DecidableEq ι] in
+/-- **The conditioned mesh series always diverges.**  In an exact tail with
+positive remaining eventual absorption at every date, the conditioned
+absorption weights are the hazards of a chain that absorbs almost surely, so
+they are never summable.
+
+Consequently a budget stated against the conditioned mesh cannot be discharged
+from a global summability hypothesis; it has to be discharged along a sparse
+family of dates, which is what a window family's fence and closing dates
+supply. -/
+theorem not_summable_quittingTailConditionedAbsorptionWeight
+    (roots : ℕ → ι → PMF Bool)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time) :
+    ¬Summable (quittingTailConditionedAbsorptionWeight roots) :=
+  Math.not_summable_of_tendsto_prod_one_sub_zero
+    (quittingTailConditionedAbsorptionWeight roots)
+    (quittingTailConditionedAbsorptionWeight_nonneg_of_positive roots hpositive)
+    (quittingTailConditionedAbsorptionWeight_le_one_of_positive roots hpositive)
+    (tendsto_quittingTailConditionedSurvivalProduct_zero roots hpositive)
 
 end GameTheory

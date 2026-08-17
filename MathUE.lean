@@ -23,6 +23,7 @@ import MathUE.CofiniteIdeal
 import MathUE.ContinuationLatticeGluing
 import MathUE.CoordinatewisePuiseuxCurve
 import MathUE.Coupling
+import MathUE.CubicAnchorRoot
 import MathUE.CurveSelection.AlgebraicApproach
 import MathUE.CurveSelection.AlgebraicReduction
 import MathUE.CurveSelection.AlgebraicRelation
@@ -123,6 +124,7 @@ import MathUE.LinearAlgebra.WeightedSaturationDefect
 import MathUE.LinearAlgebra.ZeroSum
 import MathUE.LinearProgramming.ClosedTrapPerturbation
 import MathUE.LinearProgramming.Basic
+import MathUE.LinearProgramming.ColumnSumQ
 import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
 import MathUE.LinearProgramming.FlowCostateDuality

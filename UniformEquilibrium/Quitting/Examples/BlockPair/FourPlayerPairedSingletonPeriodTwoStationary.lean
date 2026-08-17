@@ -19,6 +19,7 @@ namespace GameTheory
 namespace FourPlayerPairedSingleton
 
 open StochasticGame Math.Probability Math.PMFProduct
+open SolanVieilleBoundary (boundaryReward)
 
 private def stationaryGainZero (y z t : ℝ) : ℝ :=
   y ^ 2 * z * t ^ 2 - y ^ 2 * z * t +
@@ -622,7 +623,7 @@ private theorem no_stationaryGainComplementarity_algebra
 
 private theorem periodTwo_stationaryGain_vector
     (root : Player → PMF Bool) (who : Player) :
-    quittingStationaryGain periodTwoReward root who =
+    quittingStationaryGain boundaryReward root who =
       stationaryGain (fun player => (root player false).toReal) who := by
   classical
   have hquit (player : Player) :
@@ -637,14 +638,14 @@ private theorem periodTwo_stationaryGain_vector
     rw [quittingStationaryContinueMass_eq_prod_continueProbability,
       Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4] <;>
     simp [Fin.prod_univ_succ, quittingRootPayoff, quittingQuitters,
-      periodTwoReward, expect_eq_sum, stationaryGain, stationaryGainZero,
+      boundaryReward, expect_eq_sum, stationaryGain, stationaryGainZero,
       stationaryGainOne, stationaryGainTwo, stationaryGainThree, hquit] <;>
     ring
 
 theorem periodTwo_not_stationaryGainComplementary_of_absorbs
     (root : Player → PMF Bool)
     (habsorbs : quittingStationaryContinueMass root < 1) :
-    ¬ IsQuittingStationaryGainComplementary periodTwoReward root := by
+    ¬ IsQuittingStationaryGainComplementary boundaryReward root := by
   intro hcomp
   let x := (root 0 false).toReal
   let y := (root 1 false).toReal
@@ -679,24 +680,24 @@ profile, even against the full class of behavioral deviations. -/
 theorem periodTwo_no_absorbing_stationary_exactTerminalNash
     (root : Player → PMF Bool)
     (habsorbs : quittingStationaryContinueMass root < 1) :
-    ¬ (quittingGame periodTwoReward).IsεAsymptoticNash
-      (quittingTerminalPayoff periodTwoReward) 0
-      (quittingStationaryProfile periodTwoReward root) := by
+    ¬ (quittingGame boundaryReward).IsεAsymptoticNash
+      (quittingTerminalPayoff boundaryReward) 0
+      (quittingStationaryProfile boundaryReward root) := by
   intro hnash
   have hroot := isεQuittingRootNash_of_isεAsymptoticNash_stationary
-    periodTwoReward root 0 hnash
+    boundaryReward root 0 hnash
   have hendpoint :=
     (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
-      periodTwoReward
-      (fun player => quittingTerminalPayoff periodTwoReward
-        (quittingStationaryProfile periodTwoReward root) player)
+      boundaryReward
+      (fun player => quittingTerminalPayoff boundaryReward
+        (quittingStationaryProfile boundaryReward root) player)
       root).mpr hroot
   have habsorption : 0 < quittingRootAbsorptionMass root := by
     change 0 < 1 - quittingStationaryContinueMass root
     linarith
   have hcomp :=
     (isQuittingStationaryGainComplementary_iff_endpointNash
-      periodTwoReward root habsorption).mpr hendpoint
+      boundaryReward root habsorption).mpr hendpoint
   exact periodTwo_not_stationaryGainComplementary_of_absorbs root habsorbs hcomp
 
 /-- No stationary product profile is an exact terminal equilibrium of the
@@ -705,9 +706,9 @@ by its profitable singleton Quit deviation; the absorbing regime is excluded
 by stationary-gain complementarity. -/
 theorem periodTwo_no_stationary_exactTerminalNash
     (root : Player → PMF Bool) :
-    ¬ (quittingGame periodTwoReward).IsεAsymptoticNash
-      (quittingTerminalPayoff periodTwoReward) 0
-      (quittingStationaryProfile periodTwoReward root) := by
+    ¬ (quittingGame boundaryReward).IsεAsymptoticNash
+      (quittingTerminalPayoff boundaryReward) 0
+      (quittingStationaryProfile boundaryReward root) := by
   intro hnash
   by_cases habsorbs : quittingStationaryContinueMass root < 1
   · exact periodTwo_no_absorbing_stationary_exactTerminalNash
@@ -719,15 +720,15 @@ theorem periodTwo_no_stationary_exactTerminalNash
       funext who
       simpa [quittingAllContinueRoot] using
         (eq_pure_false_of_quittingStationaryContinueMass_eq_one hmass who)
-    have hprofile : quittingStationaryProfile periodTwoReward root =
-        quittingAlwaysContinueProfile periodTwoReward := by
+    have hprofile : quittingStationaryProfile boundaryReward root =
+        quittingAlwaysContinueProfile boundaryReward := by
       rw [hroot]
       rfl
     rw [hprofile] at hnash
     have hcriterion :=
       (isεAsymptoticNash_quittingAlwaysContinue_iff
-        periodTwoReward le_rfl).mp hnash 0
-    simp [periodTwoReward, quittingSingletonTerminal] at hcriterion
+        boundaryReward le_rfl).mp hnash 0
+    simp [boundaryReward, quittingSingletonTerminal] at hcriterion
     norm_num at hcriterion
 
 end FourPlayerPairedSingleton

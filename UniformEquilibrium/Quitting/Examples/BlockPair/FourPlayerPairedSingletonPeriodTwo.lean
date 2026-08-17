@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingleton
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 import Mathlib.Analysis.Calculus.Deriv.MeanValue
@@ -12,12 +13,15 @@ import Mathlib.Analysis.Calculus.Deriv.Pow
 import Mathlib.Topology.Order.IntermediateValue
 
 /-!
-# An exact period-two equilibrium in the paired-singleton family
+# An exact period-two equilibrium on the Solan–Vieille boundary table
 
-The table in this file is the period-two completion of the four-player
-paired-singleton family.  Payoffs are shifted playerwise so that perpetual
-continuation has value zero; equivalently, every displayed absorbing payoff
-in the unshifted table is increased by one.  This harmless normalization is
+The table treated here is `GameTheory.SolanVieilleBoundary.boundaryReward`,
+which is simultaneously the period-two completion of the four-player
+paired-singleton family: its normalized singleton rows are
+`pairedSingletonMatrix`, as `periodTwo_singletonMatrix` records.  Payoffs are
+shifted playerwise so that perpetual continuation has value zero;
+equivalently, every displayed absorbing payoff in the unshifted
+paired-singleton table is increased by one.  This harmless normalization is
 the convention used by the repository's quitting-game model.
 
 An algebraic continuation probability `a` is selected as the unique root of
@@ -35,37 +39,16 @@ namespace FourPlayerPairedSingleton
 
 open Filter Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
   StochasticGame
-
-/-- The complete shifted terminal table of the period-two completion. -/
-def periodTwoReward
-    (S : {S : Finset Player // S.Nonempty}) : Payoff Player :=
-  match decide (0 ∈ S.1), decide (1 ∈ S.1),
-      decide (2 ∈ S.1), decide (3 ∈ S.1) with
-  | true, false, false, false => ![1, 4, 0, 0]
-  | false, true, false, false => ![4, 1, 0, 0]
-  | false, false, true, false => ![0, 0, 1, 4]
-  | false, false, false, true => ![0, 0, 4, 1]
-  | true, true, false, false => ![1, 1, 1, 1]
-  | true, false, true, false => ![1, 1, 1, 0]
-  | true, false, false, true => ![1, 0, 1, 1]
-  | false, true, true, false => ![0, 1, 1, 1]
-  | false, true, false, true => ![1, 1, 0, 1]
-  | false, false, true, true => ![1, 1, 1, 1]
-  | true, true, true, false => ![1, 0, 0, 0]
-  | true, true, false, true => ![0, 1, 0, 0]
-  | true, false, true, true => ![0, 0, 0, 1]
-  | false, true, true, true => ![0, 0, 1, 0]
-  | true, true, true, true => ![-1, -1, -1, -1]
-  | false, false, false, false => ![0, 0, 0, 0]
+open SolanVieilleBoundary (boundaryReward)
 
 /-- The normalized singleton rows of the period-two completion have the
 paired comparison matrix. -/
 theorem periodTwo_singletonMatrix (who owner : Player) :
-    QuittingLCPClassification.quittingSingletonMatrix periodTwoReward who owner =
+    QuittingLCPClassification.quittingSingletonMatrix boundaryReward who owner =
       pairedSingletonMatrix who owner := by
   rw [QuittingLCPClassification.quittingSingletonMatrix]
   fin_cases who <;> fin_cases owner <;>
-    simp [periodTwoReward, pairedSingletonMatrix] <;> norm_num
+    simp [boundaryReward, pairedSingletonMatrix] <;> norm_num
 
 /-- The quartic selecting the exact period-two continuation probability. -/
 def periodTwoPolynomial (x : ℝ) : ℝ :=
@@ -197,7 +180,7 @@ theorem exists_periodTwoParameter_mem_isolatingInterval :
       subst a
       linarith
 
-/-- There is exactly one quartic root in `(1/2,1)`; in fact it lies in the
+/-- There is exactly one quartic root in `(1/2,1)`; it lies in the
 rational isolating interval `(37/50,3/4)`. -/
 theorem existsUnique_periodTwoParameter :
     ∃! a : ℝ,
@@ -416,35 +399,35 @@ theorem oddValue_ne_evenValue : oddValue ≠ evenValue := by
 
 /-- One-stage value recursion at the odd phase. -/
 theorem oddRoot_successor :
-    quittingRootSuccessorPayoff periodTwoReward evenValue oddRoot = oddValue := by
+    quittingRootSuccessorPayoff boundaryReward evenValue oddRoot = oddValue := by
   funext who
-  change quittingRootExpectedPayoff periodTwoReward evenValue oddRoot who = _
+  change quittingRootExpectedPayoff boundaryReward evenValue oddRoot who = _
   unfold quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin4]
   fin_cases who <;>
     simp [oddRoot, oddValue, evenValue, quittingRootPayoff, quittingQuitters,
-      periodTwoReward] <;>
+      boundaryReward] <;>
     field_simp [periodTwoParameter_pos.ne', periodTwoSecondary_pos.ne'] <;>
     nlinarith [periodTwo_active_identity_first,
       periodTwo_active_identity_second]
 
 /-- One-stage value recursion at the even phase. -/
 theorem evenRoot_successor :
-    quittingRootSuccessorPayoff periodTwoReward oddValue evenRoot = evenValue := by
+    quittingRootSuccessorPayoff boundaryReward oddValue evenRoot = evenValue := by
   funext who
-  change quittingRootExpectedPayoff periodTwoReward oddValue evenRoot who = _
+  change quittingRootExpectedPayoff boundaryReward oddValue evenRoot who = _
   unfold quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin4]
   fin_cases who <;>
     simp [evenRoot, oddValue, evenValue, quittingRootPayoff, quittingQuitters,
-      periodTwoReward] <;>
+      boundaryReward] <;>
     field_simp [periodTwoParameter_pos.ne', periodTwoSecondary_pos.ne'] <;>
     nlinarith [periodTwo_active_identity_first,
       periodTwo_active_identity_second]
 
 /-- Exact endpoint differences at the odd phase. -/
 theorem oddRoot_endpointDifference (who : Player) :
-    quittingRootEndpointDifference periodTwoReward evenValue oddRoot who =
+    quittingRootEndpointDifference boundaryReward evenValue oddRoot who =
       ![0,
         periodTwoParameter + periodTwoSecondary -
           periodTwoParameter * periodTwoSecondary -
@@ -456,14 +439,14 @@ theorem oddRoot_endpointDifference (who : Player) :
   rw [Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
   fin_cases who <;>
     simp [oddRoot, evenValue, quittingRootPayoff, quittingQuitters,
-      periodTwoReward] <;>
+      boundaryReward] <;>
     field_simp [periodTwoParameter_pos.ne', periodTwoSecondary_pos.ne'] <;>
     nlinarith [periodTwo_active_identity_first,
       periodTwo_active_identity_second]
 
 /-- Exact endpoint differences at the even phase. -/
 theorem evenRoot_endpointDifference (who : Player) :
-    quittingRootEndpointDifference periodTwoReward oddValue evenRoot who =
+    quittingRootEndpointDifference boundaryReward oddValue evenRoot who =
       ![periodTwoParameter + periodTwoSecondary -
           periodTwoParameter * periodTwoSecondary -
             1 / periodTwoSecondary,
@@ -475,7 +458,7 @@ theorem evenRoot_endpointDifference (who : Player) :
   rw [Math.PMFProduct.expect_pmfPi_fin4, Math.PMFProduct.expect_pmfPi_fin4]
   fin_cases who <;>
     simp [evenRoot, oddValue, quittingRootPayoff, quittingQuitters,
-      periodTwoReward] <;>
+      boundaryReward] <;>
     field_simp [periodTwoParameter_pos.ne', periodTwoSecondary_pos.ne'] <;>
     nlinarith [periodTwo_active_identity_first,
       periodTwo_active_identity_second]
@@ -501,7 +484,7 @@ theorem inactivePrimaryGap_neg :
 
 /-- The odd row is exact endpoint Nash against the even continuation value. -/
 theorem oddRoot_isZeroEndpointNash :
-    IsεQuittingRootEndpointNash periodTwoReward evenValue 0 oddRoot := by
+    IsεQuittingRootEndpointNash boundaryReward evenValue 0 oddRoot := by
   intro who
   rw [oddRoot_endpointDifference]
   have hpair :
@@ -519,7 +502,7 @@ theorem oddRoot_isZeroEndpointNash :
 
 /-- The even row is exact endpoint Nash against the odd continuation value. -/
 theorem evenRoot_isZeroEndpointNash :
-    IsεQuittingRootEndpointNash periodTwoReward oddValue 0 evenRoot := by
+    IsεQuittingRootEndpointNash boundaryReward oddValue 0 evenRoot := by
   intro who
   rw [evenRoot_endpointDifference]
   have hpair :
@@ -563,16 +546,16 @@ def evenPoint : QuittingNashBellmanPoint Player :=
 def periodTwoBlock : QuittingFiniteNashBellmanPath Player 2 :=
   ![oddPoint, evenPoint, oddPoint]
 
-theorem four_le_periodTwoRewardBound :
-    (4 : ℝ) ≤ quittingRewardBound periodTwoReward := by
-  have h := abs_reward_le_quittingRewardBound periodTwoReward
+theorem four_le_boundaryRewardBound :
+    (4 : ℝ) ≤ quittingRewardBound boundaryReward := by
+  have h := abs_reward_le_quittingRewardBound boundaryReward
     (quittingSingletonTerminal 0) 1
-  simpa [periodTwoReward, quittingSingletonTerminal] using h
+  simpa [boundaryReward, quittingSingletonTerminal] using h
 
 theorem oddPoint_mem_box :
     oddPoint ∈ quittingNashBellmanBox
-      (quittingRewardBound periodTwoReward) := by
-  have hbound := four_le_periodTwoRewardBound
+      (quittingRewardBound boundaryReward) := by
+  have hbound := four_le_boundaryRewardBound
   have haInvPos : 0 < periodTwoParameter⁻¹ :=
     inv_pos.mpr periodTwoParameter_pos
   have hbInvPos : 0 < periodTwoSecondary⁻¹ :=
@@ -588,15 +571,15 @@ theorem oddPoint_mem_box :
       nlinarith [one_half_lt_periodTwoSecondary]
     simpa [one_div] using hdiv
   change oddValue ∈
-    Set.Icc (fun _ : Player => -(quittingRewardBound periodTwoReward))
-      (fun _ => quittingRewardBound periodTwoReward)
+    Set.Icc (fun _ : Player => -(quittingRewardBound boundaryReward))
+      (fun _ => quittingRewardBound boundaryReward)
   constructor <;> intro who <;> fin_cases who <;>
     simp [oddValue] <;> linarith
 
 theorem evenPoint_mem_box :
     evenPoint ∈ quittingNashBellmanBox
-      (quittingRewardBound periodTwoReward) := by
-  have hbound := four_le_periodTwoRewardBound
+      (quittingRewardBound boundaryReward) := by
+  have hbound := four_le_boundaryRewardBound
   have haInvPos : 0 < periodTwoParameter⁻¹ :=
     inv_pos.mpr periodTwoParameter_pos
   have hbInvPos : 0 < periodTwoSecondary⁻¹ :=
@@ -612,31 +595,31 @@ theorem evenPoint_mem_box :
       nlinarith [one_half_lt_periodTwoSecondary]
     simpa [one_div] using hdiv
   change evenValue ∈
-    Set.Icc (fun _ : Player => -(quittingRewardBound periodTwoReward))
-      (fun _ => quittingRewardBound periodTwoReward)
+    Set.Icc (fun _ : Player => -(quittingRewardBound boundaryReward))
+      (fun _ => quittingRewardBound boundaryReward)
   constructor <;> intro who <;> fin_cases who <;>
     simp [evenValue] <;> linarith
 
 theorem oddPoint_edge_evenPoint :
-    IsQuittingNashBellmanEdge periodTwoReward oddPoint evenPoint := by
+    IsQuittingNashBellmanEdge boundaryReward oddPoint evenPoint := by
   constructor
   · change oddValue =
-      quittingRootSuccessorPayoff periodTwoReward evenValue
+      quittingRootSuccessorPayoff boundaryReward evenValue
         (quittingRootOfSimplex oddSimplexRoot)
     rw [quittingRootOfSimplex_oddSimplexRoot, oddRoot_successor]
-  · change IsεQuittingRootEndpointNash periodTwoReward evenValue 0
+  · change IsεQuittingRootEndpointNash boundaryReward evenValue 0
       (quittingRootOfSimplex oddSimplexRoot)
     rw [quittingRootOfSimplex_oddSimplexRoot]
     exact oddRoot_isZeroEndpointNash
 
 theorem evenPoint_edge_oddPoint :
-    IsQuittingNashBellmanEdge periodTwoReward evenPoint oddPoint := by
+    IsQuittingNashBellmanEdge boundaryReward evenPoint oddPoint := by
   constructor
   · change evenValue =
-      quittingRootSuccessorPayoff periodTwoReward oddValue
+      quittingRootSuccessorPayoff boundaryReward oddValue
         (quittingRootOfSimplex evenSimplexRoot)
     rw [quittingRootOfSimplex_evenSimplexRoot, evenRoot_successor]
-  · change IsεQuittingRootEndpointNash periodTwoReward oddValue 0
+  · change IsεQuittingRootEndpointNash boundaryReward oddValue 0
       (quittingRootOfSimplex evenSimplexRoot)
     rw [quittingRootOfSimplex_evenSimplexRoot]
     exact evenRoot_isZeroEndpointNash
@@ -664,7 +647,7 @@ theorem oddRoot_absorption_pos :
 
 /-- The two displayed rows form an absorbing exact Nash--Bellman cycle. -/
 theorem periodTwoBlock_isQuittingCyclicContinuationBlock :
-    IsQuittingCyclicContinuationBlock periodTwoReward oddValue 2
+    IsQuittingCyclicContinuationBlock boundaryReward oddValue 2
       periodTwoBlock := by
   refine ⟨⟨?_, ?_, ?_⟩, rfl, ⟨0, ?_⟩⟩
   · intro time
@@ -693,31 +676,31 @@ theorem periodTwoBlock_isQuittingCyclicContinuationBlock :
 /-- Admissibility is automatic: every own-singleton payoff in the shifted
 table equals one. -/
 theorem periodTwoBlockCycle_isAdmissible :
-    IsQuittingCycleAdmissible periodTwoReward
+    IsQuittingCycleAdmissible boundaryReward
       (quittingCyclicContinuationBlockCycle 1 periodTwoBlock) := by
   intro who
   refine Or.inr ?_
   fin_cases who <;>
-    simp [periodTwoReward, quittingSingletonTerminal]
+    simp [boundaryReward, quittingSingletonTerminal]
 
 /-- The exact alternating behavioral profile. -/
-def periodTwoProfile : (quittingGame periodTwoReward).BehaviorProfile :=
-  quittingCyclicContinuationBlockProfile periodTwoReward 1 periodTwoBlock 0
+def periodTwoProfile : (quittingGame boundaryReward).BehaviorProfile :=
+  quittingCyclicContinuationBlockProfile boundaryReward 1 periodTwoBlock 0
 
 /-- The alternating profile is exact terminal Nash against every behavioral
 deviation. -/
 theorem periodTwoProfile_isExactTerminalNash :
-    (quittingGame periodTwoReward).IsεAsymptoticNash
-      (quittingTerminalPayoff periodTwoReward) 0 periodTwoProfile :=
+    (quittingGame boundaryReward).IsεAsymptoticNash
+      (quittingTerminalPayoff boundaryReward) 0 periodTwoProfile :=
   isZeroAsymptoticNash_quittingCyclicContinuationBlockProfile
-    periodTwoReward oddValue 1 periodTwoBlock
+    boundaryReward oddValue 1 periodTwoBlock
       periodTwoBlock_isQuittingCyclicContinuationBlock
       periodTwoBlockCycle_isAdmissible 0
 
 /-- The exact alternating profile is a literal zero-debt carrier for the
 canonical maximum all-behavior terminal exploitability. -/
 theorem periodTwoProfile_terminalExploitability_eq_zero :
-    quittingTerminalExploitability periodTwoReward periodTwoProfile = 0 := by
+    quittingTerminalExploitability boundaryReward periodTwoProfile = 0 := by
   apply le_antisymm
   · unfold quittingTerminalExploitability
     apply QuittingBoundaryHolonomy.finitePlayerMax_le
@@ -725,8 +708,8 @@ theorem periodTwoProfile_terminalExploitability_eq_zero :
     apply max_le
     · exact le_rfl
     · have hbest : quittingContinuationBestResponseValue
-          periodTwoReward periodTwoProfile who ≤
-        quittingTerminalPayoff periodTwoReward periodTwoProfile who := by
+          boundaryReward periodTwoProfile who ≤
+        quittingTerminalPayoff boundaryReward periodTwoProfile who := by
         unfold quittingContinuationBestResponseValue
         apply csSup_le
         · exact ⟨_, periodTwoProfile who, rfl⟩
@@ -739,33 +722,33 @@ theorem periodTwoProfile_terminalExploitability_eq_zero :
 exploitability: the infimum over all behavior profiles of maximum positive
 unilateral terminal gain is exactly zero. -/
 theorem periodTwo_terminalExploitabilityInf_eq_zero :
-    quittingTerminalExploitabilityInf periodTwoReward = 0 := by
+    quittingTerminalExploitabilityInf boundaryReward = 0 := by
   apply le_antisymm
   · exact (quittingTerminalExploitabilityInf_le
-      periodTwoReward periodTwoProfile).trans_eq
+      boundaryReward periodTwoProfile).trans_eq
       periodTwoProfile_terminalExploitability_eq_zero
   · unfold quittingTerminalExploitabilityInf
     have hprofiles : Set.Nonempty
         (Set.range fun profile :
-            (quittingGame periodTwoReward).BehaviorProfile ↦
-          quittingTerminalExploitability periodTwoReward profile) :=
+            (quittingGame boundaryReward).BehaviorProfile ↦
+          quittingTerminalExploitability boundaryReward profile) :=
       ⟨_, periodTwoProfile, rfl⟩
     apply le_csInf hprofiles
     rintro value ⟨profile, rfl⟩
     exact quittingTerminalExploitability_nonneg _ _
 
 theorem periodTwoProfile_terminalPayoff :
-    quittingTerminalPayoff periodTwoReward periodTwoProfile = oddValue :=
+    quittingTerminalPayoff boundaryReward periodTwoProfile = oddValue :=
   quittingTerminalPayoff_quittingCyclicContinuationBlockProfile
-    periodTwoReward oddValue 1 periodTwoBlock
+    boundaryReward oddValue 1 periodTwoBlock
       periodTwoBlock_isQuittingCyclicContinuationBlock
 
 /-- The period-two completion has the exact uniform-equilibrium payoff
 `(1,1/b,1,1/a)` in the shifted normalization. -/
 theorem periodTwo_isUniformEquilibriumPayoff :
-    (quittingGame periodTwoReward).IsUniformEquilibriumPayoff none oddValue :=
+    (quittingGame boundaryReward).IsUniformEquilibriumPayoff none oddValue :=
   isUniformEquilibriumPayoff_terminal_of_admissible_quittingCyclicContinuationBlock
-    periodTwoReward oddValue 1 periodTwoBlock
+    boundaryReward oddValue 1 periodTwoBlock
       periodTwoBlock_isQuittingCyclicContinuationBlock
       periodTwoBlockCycle_isAdmissible
 

@@ -29,6 +29,7 @@ namespace GameTheory
 namespace FourPlayerPairedSingleton
 
 open QuittingLCPClassification Math.LinearProgramming StochasticGame
+open SolanVieilleBoundary (boundaryReward)
 
 private def crossPair : Finset Player := {0, 2}
 
@@ -125,7 +126,7 @@ theorem normalizedSoloMatrix_stationaryCompletion :
   exact stationaryCompletion_singletonMatrix who owner
 
 theorem normalizedSoloMatrix_periodTwo :
-    normalizedSoloMatrix periodTwoReward = pairedSingletonMatrix := by
+    normalizedSoloMatrix boundaryReward = pairedSingletonMatrix := by
   funext who owner
   rw [normalizedSoloMatrix,
     normalized_singletonMatrix_eq_quittingSingletonMatrix]
@@ -162,21 +163,21 @@ theorem stationaryCompletion_residualHardClass :
 
 /-- The period-two completion belongs to the same residual hard class. -/
 theorem periodTwo_residualHardClass :
-    ResidualHardClass periodTwoReward :=
+    ResidualHardClass boundaryReward :=
   residualHardClass_of_normalizedSoloMatrix_eq
-    periodTwoReward normalizedSoloMatrix_periodTwo
+    boundaryReward normalizedSoloMatrix_periodTwo
 
 /-- Residual-hard membership, a full four-player corrected core, and exact
 stationary nonexistence do not imply counterexamplehood: the period-two
 completion has all three properties and an exact uniform-equilibrium payoff. -/
 theorem periodTwo_residualHard_fullCore_nonstationary_but_uniform :
-    ResidualHardClass periodTwoReward ∧
-      normalCore (normalizedSoloMatrix periodTwoReward) = Finset.univ ∧
+    ResidualHardClass boundaryReward ∧
+      normalCore (normalizedSoloMatrix boundaryReward) = Finset.univ ∧
       (∀ root : Player → PMF Bool,
-        ¬ (quittingGame periodTwoReward).IsεAsymptoticNash
-          (quittingTerminalPayoff periodTwoReward) 0
-          (quittingStationaryProfile periodTwoReward root)) ∧
-      (quittingGame periodTwoReward).IsUniformEquilibriumPayoff none
+        ¬ (quittingGame boundaryReward).IsεAsymptoticNash
+          (quittingTerminalPayoff boundaryReward) 0
+          (quittingStationaryProfile boundaryReward root)) ∧
+      (quittingGame boundaryReward).IsUniformEquilibriumPayoff none
         oddValue := by
   refine ⟨periodTwo_residualHardClass, ?_, periodTwo_no_stationary_exactTerminalNash,
     periodTwo_isUniformEquilibriumPayoff⟩

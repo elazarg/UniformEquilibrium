@@ -335,51 +335,39 @@ theorem quittingAnchoredCyclicOnPathValue_eq_target :
   rw [← quittingCyclicContinuationBlockCycle_eq_anchoredCyclicCycle, ← hvalue]
   rfl
 
+/-- The pentagon's anchored cyclic profile is asymptotic Nash at accuracy zero
+for the terminal payoff: it is the profile of the certified cyclic
+continuation block, read through the schedule identification. -/
+theorem isεAsymptoticNash_anchoredCyclicProfile :
+    (quittingGame hardenedReward).IsεAsymptoticNash
+      (quittingTerminalPayoff hardenedReward) 0
+      (quittingAnchoredCyclicProfile hardenedReward schedule hazard
+        hazard_nonneg hazard_le_one) := by
+  have hprofile : quittingAnchoredCyclicProfile hardenedReward schedule hazard
+      hazard_nonneg hazard_le_one =
+    quittingCyclicContinuationBlockProfile hardenedReward 4 hardenedBlock
+      (quittingAnchoredCyclicStart 5) := by
+    unfold quittingAnchoredCyclicProfile quittingCyclicContinuationBlockProfile
+    rw [quittingCyclicContinuationBlockCycle_eq_anchoredCyclicCycle]
+  rw [hprofile]
+  exact isZeroAsymptoticNash_quittingCyclicContinuationBlockProfile
+    hardenedReward target 4 hardenedBlock
+    hardenedBlock_isQuittingCyclicContinuationBlock
+    hardenedBlockCycle_isAdmissible (quittingAnchoredCyclicStart 5)
+
 /-- **The anchored cyclic screen is satisfied with slack zero.**  No player's
-exact finite response cap beats the on-path renewal value of this schedule;
-this is the contrapositive form of the screen, and it re-derives
-`hardened_isEmpty_counterexampleRegime`. -/
+exact finite response cap beats the on-path renewal value of this schedule.
+The pentagon-specific input is `isεAsymptoticNash_anchoredCyclicProfile`; the
+passage from it to the cap bound is
+`quittingAnchoredCyclicResponseCap_le_onPathValue_of_isεAsymptoticNash`. -/
 theorem quittingAnchoredCyclicResponseCap_le_onPathValue (who : Player) :
     quittingAnchoredCyclicResponseCap hardenedReward schedule hazard
         hazard_nonneg hazard_le_one who ≤
       quittingAnchoredCyclicOnPathValue hardenedReward schedule hazard
-        hazard_nonneg hazard_le_one (quittingAnchoredCyclicStart 5) who := by
-  by_contra hlt
-  push Not at hlt
-  have hcap := sSup_range_quittingTerminalPayoff_update_anchoredCyclicProfile
-    hardenedReward schedule hazard hazard_nonneg hazard_le_one who
-  have hnash : (quittingGame hardenedReward).IsεAsymptoticNash
-      (quittingTerminalPayoff hardenedReward) 0
-      (quittingAnchoredCyclicProfile hardenedReward schedule hazard
-        hazard_nonneg hazard_le_one) := by
-    have hprofile : quittingAnchoredCyclicProfile hardenedReward schedule hazard
-        hazard_nonneg hazard_le_one =
-      quittingCyclicContinuationBlockProfile hardenedReward 4 hardenedBlock
-        (quittingAnchoredCyclicStart 5) := by
-      unfold quittingAnchoredCyclicProfile quittingCyclicContinuationBlockProfile
-      rw [quittingCyclicContinuationBlockCycle_eq_anchoredCyclicCycle]
-    rw [hprofile]
-    exact isZeroAsymptoticNash_quittingCyclicContinuationBlockProfile
-      hardenedReward target 4 hardenedBlock
-      hardenedBlock_isQuittingCyclicContinuationBlock
-      hardenedBlockCycle_isAdmissible (quittingAnchoredCyclicStart 5)
-  have hle : sSup (Set.range fun deviation :
-      (quittingGame hardenedReward).BehaviorStrategy who ↦
-    quittingTerminalPayoff hardenedReward
-      (Function.update
-        (quittingAnchoredCyclicProfile hardenedReward schedule hazard
-          hazard_nonneg hazard_le_one) who deviation) who) ≤
-      quittingTerminalPayoff hardenedReward
-        (quittingAnchoredCyclicProfile hardenedReward schedule hazard
-          hazard_nonneg hazard_le_one) who := by
-    refine csSup_le
-      ⟨_, Set.mem_range_self
-        (quittingAnchoredCyclicProfile hardenedReward schedule hazard
-          hazard_nonneg hazard_le_one who)⟩ ?_
-    rintro value ⟨deviation, rfl⟩
-    simpa using hnash who deviation
-  rw [hcap, quittingTerminalPayoff_anchoredCyclicProfile] at hle
-  linarith
+        hazard_nonneg hazard_le_one (quittingAnchoredCyclicStart 5) who :=
+  quittingAnchoredCyclicResponseCap_le_onPathValue_of_isεAsymptoticNash
+    hardenedReward schedule hazard hazard_nonneg hazard_le_one
+    isεAsymptoticNash_anchoredCyclicProfile who
 
 /-- The same exclusion obtained through the screen's contrapositive rather
 than through the exploitability-gap incompatibility.  This is a checked

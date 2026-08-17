@@ -31,6 +31,20 @@ realized game therefore sits well inside the equilibrium region rather than
 at its boundary, which reinforces the reading of the seed as a calibration of
 the singleton geometry and not as a counterexample candidate.
 
+## A broken cyclic orbit
+
+The four vectors are successive cyclic shifts of one another, as the five-fold
+rotational symmetry of the regular tournament matrix predicts: shifting
+`(3, 1, 0, 0, 3)` one coordinate to the right gives `(3, 3, 1, 0, 0)`, then
+`(0, 3, 3, 1, 0)`, then `(0, 0, 3, 3, 1)`.  One more shift gives
+`(1, 0, 0, 3, 3)`, which is player zero's singleton row and closes the orbit,
+and that is exactly the vector this module does not list:
+`isQuittingSureExitSet_singleton_of_ne_zero` excludes the owner `0`, because
+the zero completion of the seed breaks the rotational symmetry at the
+completion vertex.  Whether `(1, 0, 0, 3, 3)` is a uniform-equilibrium payoff
+of the realized seed by some route other than a sure exit set is not settled
+here.
+
 ## Inventory note
 
 The checked inventory `isQuittingSureExitSet_iff` gives exactly twenty sure
