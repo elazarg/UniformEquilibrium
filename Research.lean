@@ -30,6 +30,7 @@ import Research.General.ResetSeriesCrossPinDebtCharge
 import Research.General.RolloverLiquidationGame
 import Research.General.SeveranceMutualThreeGames
 import Research.Literature
+import Research.Quitting.AnchoredCyclicScreen
 import Research.Quitting.AtomEndpointReturnSeparation
 import Research.Quitting.BestEndpointForcedOwnerRectanglePassport
 import Research.Quitting.BlockPair.K11
@@ -41,11 +42,15 @@ import Research.Quitting.CertifiedForcedOwnerBackgroundHost
 import Research.Quitting.CertifiedForcedOwnerEndpointFlip
 import Research.Quitting.CertifiedForcedOwnerRectanglePacket
 import Research.Quitting.ConcentratedCollisionFourRoleMonodromy
+import Research.Quitting.CopositiveQBridge
 import Research.Quitting.CounterexampleAtomEndpointRisePassport
 import Research.Quitting.CounterfactualAtomMinimumResetSquare
 import Research.Quitting.CoupledCalibrationQuittingRoot
 import Research.Quitting.CyclicSymmetricStationaryGapIVT
 import Research.Quitting.DebtTransportMarkovMonodromy
+import Research.Quitting.DiffuseTailEffectiveCharge
+import Research.Quitting.DiffuseTailSoloCalibrations
+import Research.Quitting.DiffuseTailSoloStructure
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
 import Research.Quitting.EnrichedSeamCompression
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
@@ -96,6 +101,7 @@ import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
 import Research.Quitting.SourceMatchedSnellPurification
+import Research.Quitting.SourceMatchedSnellPurificationCollapse
 import Research.Quitting.StochasticButtonCompression
 import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport

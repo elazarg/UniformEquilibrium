@@ -1,6 +1,10 @@
 import Experiments.Base.SemanticFinalRegimeArithmetic
 import Experiments.certsearch.block_pair.K11
+import Experiments.counterexample_search.HardenedPentagonCyclicEquilibrium
 import Experiments.counterexample_search.RegularTournamentFiveSeed
+import Experiments.counterexample_search.RegularTournamentFiveSeedSoloExits
+import Experiments.counterexample_search.RegularTournamentFiveSeedSureExit
+import Experiments.counterexample_search.RegularTournamentFiveSeedZeroFree
 
 /-!
 # Reproducible experimental evidence
