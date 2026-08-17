@@ -116,6 +116,15 @@ out idle dates, third-player activity, and collisions whose raw rate vanishes.
 It is stated separately so that the split's remaining hypotheses are named
 rather than bundled.
 
+The extraction hypothesis is moreover *equivalent* to the conclusion it is
+used to prove: at most one persistently active player makes it vacuous
+(`quittingSoloWindowExtraction_of_persistentlySolo`), so on a zero-free table
+with vanishing conditioned mesh the two are interchangeable
+(`quittingSoloWindowExtraction_iff_persistentlySolo`).  The residual that is
+not of that shape is `QuittingNoFencedSoloWindowFamily`, which asks no uniform
+charge of any window and yields the conclusion through
+`quittingTailPersistentlySolo_of_noFencedSoloWindowFamily`.
+
 `quittingTailPersistentlySolo_of_zeroFree_of_soloDichotomy` records
 `quittingTailPersistentlySolo_of_zeroFree` with its conditionality expressed in
 these terms.
@@ -855,6 +864,73 @@ theorem quittingSoloWindowExtraction_of_dichotomy_of_chargeFloor
         halternating hfirst hsecond
     obtain ⟨select, charge, hselect, hpos, hcharge⟩ := hfloor first second family
     exact Or.inl ⟨family.windows hselect hpos hcharge⟩
+  · exact absurd hcoactive
+      (not_quittingTailCoactiveChargeFloor_of_tendsto roots first second
+        hvanishing)
+
+omit [DecidableEq ι] in
+/-- **The extraction hypothesis is implied by the conclusion it is used to
+prove.**  If at most one player is persistently active, the extraction
+requirement is vacuous: it only ever speaks about distinct persistently active
+pairs. -/
+theorem quittingSoloWindowExtraction_of_persistentlySolo
+    (roots : ℕ → ι → PMF Bool) (hsolo : QuittingTailPersistentlySolo roots) :
+    QuittingSoloWindowExtraction roots := fun first second hne hfirst hsecond =>
+  absurd (hsolo first second hfirst hsecond) hne
+
+/-- **The extraction hypothesis is equivalent to the eventually-solo
+conclusion.**  On a zero-free table with vanishing conditioned mesh both
+implications hold, so assuming extraction assumes the conclusion: the
+hypothesis carries no content beyond the coexistence obstruction itself. -/
+theorem quittingSoloWindowExtraction_iff_persistentlySolo
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (boundary : Payoff ι)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    {bound : ℝ} (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (hpositive : ∀ time, 0 < quittingTailEventualAbsorption roots time)
+    (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight roots) atTop
+      (nhds 0))
+    (htight : ∀ who, QuittingTailPersistentlyActive roots who →
+      boundary who = quittingSoloReward reward who who)
+    (hzeroFree : QuittingZeroFreeSoloMatrix reward) :
+    QuittingSoloWindowExtraction roots ↔ QuittingTailPersistentlySolo roots :=
+  ⟨quittingTailPersistentlySolo_of_zeroFree roots value boundary hpolicy hnash
+      hreward hpositive hmesh htight hzeroFree,
+    quittingSoloWindowExtraction_of_persistentlySolo roots⟩
+
+/-- **The non-degenerate residual.**  No distinct pair of coordinates carries a
+fenced solo window family at all -- with no uniform charge asked of it.
+
+Unlike the uniform charge floor, this is not refuted by the effective charge
+budget: that budget bounds a window's charge by a multiple of its mesh, and
+along a family with no floor both sides vanish. -/
+def QuittingNoFencedSoloWindowFamily (roots : ℕ → ι → PMF Bool) : Prop :=
+  ∀ spectator owner : ι, spectator ≠ owner →
+    IsEmpty (QuittingFencedSoloWindowFamily roots spectator owner)
+
+omit [DecidableEq ι] in
+/-- **The eventually-solo conclusion without the charge floor.**  Late strict
+alternation produces a fenced solo window family and the raw collision budget
+kills the co-active branch, so the pair dichotomy together with the absence of
+families gives the conclusion outright.  No uniform charge is asked of any
+window, and no zero-freeness of the table is used. -/
+theorem quittingTailPersistentlySolo_of_noFencedSoloWindowFamily
+    (roots : ℕ → ι → PMF Bool)
+    (hvanishing : Tendsto (fun time => quittingRootAbsorptionMass (roots time))
+      atTop (nhds 0))
+    (hdichotomy : QuittingTailPairSoloDichotomy roots)
+    (hnofamily : QuittingNoFencedSoloWindowFamily roots) :
+    QuittingTailPersistentlySolo roots := by
+  intro first second hfirst hsecond
+  by_contra hne
+  rcases hdichotomy first second hne hfirst hsecond with
+    halternating | hcoactive
+  · obtain ⟨family⟩ :=
+      nonempty_quittingFencedSoloWindowFamily_of_lateSoloAlternating hne
+        halternating hfirst hsecond
+    exact (hnofamily first second hne).false family
   · exact absurd hcoactive
       (not_quittingTailCoactiveChargeFloor_of_tendsto roots first second
         hvanishing)
