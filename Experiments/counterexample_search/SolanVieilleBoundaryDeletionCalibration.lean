@@ -120,8 +120,8 @@ theorem zero_le_boundaryReward_of_notMem (S : Finset Player) (hS : S.Nonempty)
   exact_mod_cast zero_le_boundaryValue_of_notMem S who hwho
 
 /-- Every row pays each member of the quitting coalition at most `1`. -/
-theorem boundaryReward_le_one_of_mem (S : Finset Player) (hS : S.Nonempty)
-    (who : Player) (hwho : who ∈ S) : boundaryReward ⟨S, hS⟩ who ≤ 1 := by
+theorem boundaryReward_le_one_of_mem (S : Finset Player)
+    (who : Player) (hwho : who ∈ S) : boundaryReward ⟨S, ⟨who, hwho⟩⟩ who ≤ 1 := by
   rw [boundaryReward_eq_boundaryValue]
   exact_mod_cast boundaryValue_le_one_of_mem S who hwho
 
@@ -178,7 +178,7 @@ theorem quittingBlockJoinCap_eq_one (who : Player) :
     intro S hS hdisjoint
     have hnot : who ∉ S := Finset.disjoint_singleton_right.mp hdisjoint
     have hupper := boundaryReward_le_one_of_mem (insert who S)
-      (Finset.insert_nonempty who S) who (Finset.mem_insert_self who S)
+      who (Finset.mem_insert_self who S)
     have hlower := zero_le_boundaryReward_of_notMem S hS who hnot
     linarith
   · have hwitness := sub_le_quittingBlockJoinCap boundaryReward {who} who
