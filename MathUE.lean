@@ -76,6 +76,7 @@ import MathUE.FiniteDeflationIteration
 import MathUE.FiniteInequalityCompatibility
 import MathUE.FiniteLinearCompatibility
 import MathUE.FinitePivotOrbit
+import MathUE.FiniteSerialRelation
 import MathUE.Finset.FinThree
 import MathUE.GuardedRoutingAudit
 import MathUE.GradedConvolution
