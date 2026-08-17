@@ -386,6 +386,22 @@ theorem refusalGain_mul_one_sub_weight {m : ℕ} (w : Fin m → Player)
   rw [iterate_finRotate_period] at h
   linarith [h]
 
+/-- **The telescoped identity in divided form.**  Whenever the refuser's
+absence does not survive a whole cycle, the refusal gain at a phase is the
+accumulated own-phase drift over that cycle divided by the absorption
+deficit. -/
+theorem refusalGain_eq_drift_div {m : ℕ} (w : Fin m → Player)
+    (hazard : Fin m → ℝ) (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (refuser : Player) (phase : Fin m)
+    (hW : refusalWeight w hazard refuser phase m ≠ 1) :
+    refusalGain w hazard h0 h1 refuser phase =
+      refusalDrift w hazard h0 h1 refuser phase m /
+        (1 - refusalWeight w hazard refuser phase m) := by
+  have hne : (1 : ℝ) - refusalWeight w hazard refuser phase m ≠ 0 :=
+    fun h ↦ hW (by linarith)
+  rw [eq_div_iff hne]
+  exact refusalGain_mul_one_sub_weight w hazard h0 h1 refuser phase
+
 /-! ## Sign of the accumulated quantities -/
 
 theorem refusalWeight_nonneg {m : ℕ} (w : Fin m → Player) {hazard : Fin m → ℝ}

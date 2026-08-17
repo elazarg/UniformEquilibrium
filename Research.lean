@@ -32,6 +32,7 @@ import Research.General.SeveranceMutualThreeGames
 import Research.Literature
 import Research.Quitting.AnchoredCyclicPatience
 import Research.Quitting.AnchoredCyclicPatienceBridge
+import Research.Quitting.AnchoredCyclicPreemptionEdge
 import Research.Quitting.AnchoredCyclicRenewal
 import Research.Quitting.AnchoredCyclicScreen
 import Research.Quitting.AtomEndpointReturnSeparation
@@ -58,6 +59,7 @@ import Research.Quitting.CounterexampleAtomEndpointRisePassport
 import Research.Quitting.CounterfactualAtomMinimumResetSquare
 import Research.Quitting.CoupledCalibrationQuittingRoot
 import Research.Quitting.CyclicSymmetricStationaryGapIVT
+import Research.Quitting.CyclicTripleSoloTail
 import Research.Quitting.DebtTransportMarkovMonodromy
 import Research.Quitting.DiffuseTailEffectiveCharge
 import Research.Quitting.DiffuseTailNonvacuity
