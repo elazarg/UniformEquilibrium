@@ -100,6 +100,17 @@ form (Farkas duality between a nonpositive flow-charge pairing and a
 superharmonic account potential).  Its `holonomy` is the pairing of a
 circulation with a charge cochain, which is a different object from the
 composite walk label `gain` below.
+
+## Scope
+
+This file proves the exactness criterion and its obstruction, not the
+decomposition: splitting arbitrary edge data into a coboundary plus a
+circulation requires the orthogonality of cycle space and cut space, and the
+first cohomology group appears here only through the vanishing of its
+classes, never as a quotient.  For labels in a general group, balance of a
+gain graph is equivalent to the existence of a switching function
+(Zaslavsky, *Biased graphs. I*, J. Combin. Theory Ser. B 47 (1989)); only
+the translation-labelled real case is proved here.
 -/
 
 noncomputable section
@@ -498,7 +509,8 @@ section Translation
 variable {w : E → ℝ} {start finish : V}
 
 /-- Real edge data labels the graph by translations of the line: the gain of a
-walk is the exponentiated walk sum. -/
+walk is its walk sum, carried into the multiplicative encoding by the type tag
+`Multiplicative.ofAdd` (no exponential is applied). -/
 @[simp] theorem gain_ofAdd (walk : G.Walk start finish) :
     gain (fun edge => Multiplicative.ofAdd (w edge)) walk =
       Multiplicative.ofAdd (walkSum w walk) := by

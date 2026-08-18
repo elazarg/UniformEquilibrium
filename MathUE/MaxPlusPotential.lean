@@ -66,6 +66,17 @@ means is the max cycle mean, the tropical spectral radius, or the max-plus Perro
 root.  See Baccelli, Cohen, Olsder and Quadrat, *Synchronization and Linearity*
 (Wiley, 1992), and Akian, Gaubert and Guterman, *Tropical polyhedra are
 equivalent to mean payoff games* (Internat. J. Algebra Comput. 22 (2012)).
+
+## Scope
+
+This file develops the potential (subeigenvector) side of max-plus spectral
+theory only.  Not developed here: existence of genuine eigenvectors, the
+Collatz--Wielandt characterization of the max cycle mean as an attained
+maximum over cycles, the critical graph, and the Kleene-star (all-pairs
+longest-walk) operator, of which `maxIncomingWeight` is one row.  The natural
+common setting for those is the fixed-point theory of topical maps: Gaubert
+and Gunawardena, *The Perron--Frobenius theorem for homogeneous, monotone
+functions* (Trans. Amer. Math. Soc. 356 (2004)).
 -/
 
 noncomputable section

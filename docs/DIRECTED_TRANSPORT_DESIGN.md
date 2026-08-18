@@ -1,0 +1,264 @@
+# Design: directed transport and the max-affine gain graph
+
+Status: design only.  No module implements this yet; every stage below is
+marked provable now, staged, or recorded open.
+
+## The object, in one sentence
+
+A finite directed multigraph whose vertices carry state spaces (*fibers*) and
+whose edges carry maps between the fibers of their endpoints; walks compose
+those maps, closed walks give endomorphisms of the base fiber (*holonomy*),
+and the potential/section theory of the labels is the obstruction theory of
+the graph.
+
+Five committed `MathUE` modules are shadows of this object with all fibers
+equal:
+
+| Module | Reading inside the transport theory |
+| --- | --- |
+| `MathUE/CycleCoboundary.lean` | translation-valued transport on one fiber; cycle sums are holonomy; exact data is a trivialization |
+| `MathUE/MaxPlusPotential.lean` | lax sections (subsolutions) for ordered translation transport |
+| `MathUE/TransferSummaryMonoid.lean` | the label algebra: affine and max-affine endomorphism composition |
+| `MathUE/InverseCoordinateRecurrence.lean` | conjugation of one-dimensional transport inside a projective-linear action |
+| `MathUE/IndependenceModelValuation.lean` | leading-order degeneration of a hazard-parameterized transport family |
+
+The vertex-indexed generality is not decoration.  The quitting frontier's
+preemption cycle (issue `#40`) is a walk whose successive inequalities are
+stated in successive *players'* payoff coordinates; a scalar-weighted graph
+identifies those coordinates illegitimately, which is exactly why the cycle
+inequalities do not telescope.  In this design the coordinates are the
+fibers, the missing telescope is holonomy, and the additive telescope is the
+trivial-transport special case.  Probabilities and hazards are then not edge
+weights but *parameters of the edge maps*; survival products arise because
+maps compose, and the valuation module describes the family's degeneration as
+the hazards vanish.
+
+## Two layers, two modules
+
+### Layer 0 — planned module `DirectedTransport` (under `MathUE`)
+
+Deliberately small; no category-theory library.  Data over
+`Math.BoundedDiscrepancy.EdgeGraph V E`:
+
+```
+Fiber   : V → Type*
+edgeMap : (e : E) → Fiber (source e) → Fiber (target e)
+```
+
+Definitions:
+
+- `walkMap` — transport along a walk by dependent composition (the
+  representation of the free path category of the graph, said without the
+  word "category" in the code);
+- `holonomy` — `walkMap` of a closed walk, an endomorphism of the base
+  fiber;
+- `IsSection s : ∀ e, edgeMap e (s (source e)) = s (target e)` — a
+  transport-invariant family of fiber points; also called an equivariant or
+  flat section, a trivialization when the fibers are groups acted on freely;
+- `IsLaxSection` (fibers preordered, edge maps monotone):
+  `∀ e, edgeMap e (s (source e)) ≤ s (target e)` — also called a subsolution,
+  a subinvariant family, or a super-/subharmonic section depending on
+  orientation.
+
+Theorems (all provable now, all by walk induction):
+
+- `walkMap_append`, `walkMap` vs `Math.CycleCoboundary.transport` when all
+  fibers are equal (definitional bridge);
+- sections transport exactly: `walkMap walk (s start) = s finish`;
+- lax sections transport laxly (monotone edge maps):
+  `walkMap walk (s start) ≤ s finish`;
+- weak duality: a section forces trivial holonomy on every fiber point it
+  marks; a lax section forces every closed-walk holonomy to have `s base` as
+  a post-fixed point;
+- for one common fiber and labels acting through a monoid, `walkMap` is the
+  action of `Math.CycleCoboundary.gain` (this is `transport_eq_smul`,
+  re-exported rather than reproved).
+
+Layer 0's job is vocabulary plus the four or five induction lemmas that every
+specialization would otherwise reprove.  It should stay under a few hundred
+lines.
+
+### Layer 1 — planned module `MaxAffineGainGraph` (under `MathUE`)
+
+The first useful specialization: one common fiber `ℝ`, edge maps monotone
+max-affine.  This is where quantitative content lives.
+
+Label type:
+
+```
+structure Label where
+  floor : WithBot ℝ     -- ⊥ means "no floor": the affine class embeds there
+  shift : ℝ
+  slope : ℝ
+```
+
+with `apply` by cases on the floor (`⊥ ↦ shift + slope * x`,
+`↑e ↦ max e (shift + slope * x)`); the action always lands in `ℝ`.  Design
+decisions:
+
+1. **Floors in `WithBot ℝ`, not `EReal`.**  A `⊤` floor makes the action
+   constant `+∞` and leaves `ℝ`; nothing wants it.  `⊥` is the missing
+   identity: `⟨⊥, 0, 1⟩` acts as the identity, so positive-slope labels form
+   a monoid — the repair of the semigroup-only situation recorded in
+   `TransferSummaryMonoid`'s scope note, and the reason its docstring calls
+   the finite floor "not an incidental inconvenience": the natural carrier is
+   the ordered completion with a bottom element.
+2. **Slope positivity is a carried hypothesis, not a subtype bake-in.**
+   Slope `0` sends the inner floor through `0 * ⊥`, which `WithBot` leaves
+   junk; the monoid instance lives on `{f : Label // 0 < f.slope}` while
+   monotonicity lemmas take `0 ≤ slope` pointwise, as
+   `TransferSummaryMonoid` already does.
+
+Embeddings and identifications (T1, provable now):
+
+- `Math.TransferSummary.AffineSummary` at floor `⊥` (a monoid homomorphism)
+  and `Math.TransferSummary.MaxAffineSummary` at coerced floors, both
+  action-preserving;
+- the `MulAction` of positive-slope labels on `ℝ`, so Layer 0's `walkMap` and
+  `Math.CycleCoboundary.gain` agree here;
+- the missing identification flagged in review: the transfer matrices of
+  `Math.InverseCoordinate` assemble into a monoid homomorphism
+  `AffineSummary →* Matrix (Fin 2) (Fin 2) ℝ` (upper-triangular image), whose
+  composition law is `affineTransferMatrix_mul`; this ties the matrix
+  representation to the summary monoid instead of leaving them parallel.
+
+Core definitions:
+
+- `IsInvariantSection φ : ∀ e, (label e).apply (φ (source e)) ≤ φ (target e)`
+  — Layer 0's lax section at these labels; the potential of
+  `MaxPlusPotential` with the translation replaced by the edge's transfer;
+- `defect φ e := (label e).apply (φ (source e)) - φ (target e)`;
+- suffix weights `W i` — the product of the slopes after position `i` of a
+  walk; the abstract form of the survival-weighted accounting recurring
+  throughout the quitting development.
+
+Theorem ladder:
+
+**T2 — the weighted-defect telescope (provable now; centerpiece).**  For a
+walk `e₁ … eₙ` and any candidate `φ`:
+
+```
+holonomy (φ start) ≤ φ finish + Σᵢ Wᵢ · max 0 (defect φ eᵢ)
+```
+
+by induction from the one-sided Lipschitz estimate
+`apply f (x + d) ≤ apply f x + slope * d` for `0 ≤ d`.  At all slopes `1`
+this is `Math.MaxPlusPotential.sum_defect_eq` weakened to an inequality; at
+reflected labels it is the survival-weighted accounting of
+`Math.TransferSummary.reflectedIter_eq_sup'` read as a bound.  This is the
+checkable content of "the inequalities live in different fibers and do not
+telescope additively": they telescope with slope-product weights.
+
+**T3 — weak duality (provable now).**  An invariant section gives every cycle
+holonomy the post-fixed point `φ base`.  Layer 0's weak duality specialized.
+
+**T4 — the expansivity trichotomy (provable now).**  For a single label
+`(E, t, a)` with `0 ≤ a`, `∃ x, apply f x ≤ x` iff `a < 1`, or `a = 1 ∧
+t ≤ 0`, or `a > 1 ∧ E ≤ -t / (a - 1)` (`E = ⊥` always admissible).
+Decidable in the coefficients; applied to a cycle's composed label it decides
+post-fixed-point existence from the holonomy coefficients — the
+generalization of "cycle weight ≤ 0".
+
+**T5 — quantitative obstruction (provable now).**  If a cycle's holonomy
+satisfies `holonomy x ≥ x + γ` at `x = φ base`, some edge has
+`defect φ e ≥ γ / (Σᵢ Wᵢ)`.  At slopes `1` this is
+`Math.MaxPlusPotential.exists_edge_defect_ge`.  T4 identifies when the
+hypothesis holds at every `x`, making the obstruction candidate-free.
+
+**T6 — strong duality (staged).**  Does "every cycle holonomy has a
+post-fixed point" give an invariant section?
+
+  a. *Slope 1, finite floors* (staged, provable): a floor is an anchor; model
+     each floored edge by a translation edge plus an edge from an added
+     anchor vertex pinned to `0`, reducing to `MaxPlusPotential`'s duality on
+     the augmented graph.
+  b. *Uniformly contractive* (`slope ≤ β < 1`; staged, provable): the
+     monotone network operator
+     `F φ v = sup over incoming e of (label e).apply (φ (source e))`
+     iterated from a large constant section converges by contraction.
+  c. *General mixed slopes* (recorded open): the fixed-point/spectral problem
+     for monotone max-affine networks — the max-only corner of min-max
+     function theory (Gunawardena, *Min-max functions*, Discrete Event
+     Dynamic Systems 4 (1994)) resolved through topical-map Perron–Frobenius
+     (Gaubert–Gunawardena, Trans. Amer. Math. Soc. 356 (2004)) and policy
+     iteration (Cochet-Terrasson–Gaubert–Gunawardena).  To be stated as a
+     proposition definition only if a consumer needs it; never claimed.
+
+**T7 — periodic certificates (provable now, bridge).**  A fixed point of a
+cycle's holonomy is a solution of that cycle's cyclic system; bridge to
+`Math.CyclicMaxAffine.CyclicSolution`, whose equations
+`C k = max (1 - p k) (q k * C (k + 1) + p k)` are the labels
+`⟨↑(1 - p k), p k, q k⟩` read around a cycle, and whose survival-weighted
+bound is T2 on that cycle.
+
+**Specializations to recover as theorems**: translation labels recover
+`Math.MaxPlusPotential.IsPotential` and its duality; their equality case
+recovers `Math.CycleCoboundary.IsCoboundary` through
+`isCoboundary_iff_exists_defect_eq_zero`; reflected labels `⟨↑0, -g, a⟩`
+recover `Math.TransferSummary.reflectedIter` as transport along a path.
+
+## Naming
+
+Layer 0: `Math.DirectedTransport`.  Other names for the object, to be listed
+in its docstring: a representation of the free path category of a quiver; a
+functor from the path category to types (said structurally, not through a
+category-theory library); a (set-valued) gain graph or voltage graph when the
+fibers coincide (Zaslavsky, *Biased graphs. I*, J. Combin. Theory Ser. B 47
+(1989)); a discrete connection, with `holonomy` as its holonomy; sections are
+flat/equivariant sections, and `IsLaxSection` is a subsolution.
+
+Layer 1: `Math.MaxAffineGainGraph`.  Nearest named neighbours: min-max
+function networks (Gunawardena), topical maps (Gaubert–Gunawardena; the
+slope-1 sublattice is topical, general slopes are monotone but not additively
+homogeneous), timed event graphs of max-plus discrete-event theory (Baccelli,
+Cohen, Olsder, Quadrat, *Synchronization and Linearity*, Wiley 1992), and per
+vertex a one-player Bellman operator.  The general object appears to carry no
+established name.
+
+## Intended consumers (game side; not part of these modules)
+
+The adapter that would make this progress on the open frontier rather than
+generic mathematics: exhibit the `#40` preemption lasso as a directed
+transport problem — fibers the players' payoff/debt coordinates, edge maps
+supplied by a producer theorem from the counterexample regime's collision and
+repair data — and ask T2/T4/T5 about its holonomy.
+`UniformEquilibrium.Quitting.Boundary.Holonomy` already composes per-player
+affine and max-affine block summaries (words in Layer 1's label monoid); its
+documented gap, source-labelled splice admissibility, is that producer
+theorem's game-semantic half and stays game-side.  The debt transport law
+(`UniformEquilibrium/Quitting/Debt/Dynamic/DebtTransportLaw.lean`) is the
+reflected specialization on a path, and its documented refusal to compute
+cyclic mismatch corresponds to T4's `a = 1, t ≤ 0` boundary.
+
+## Milestones
+
+- **M0**: Layer 0 complete (small, provable now).
+- **M1**: Layer 1 label algebra + T2 + T3 + T4 + T5 + T7 + specialization
+  theorems + the `AffineSummary →* Matrix` identification.
+- **M2**: T6a and T6b.
+- **Open**: T6c.
+
+## Sibling-module completions (recorded)
+
+Scope notes recorded in the five modules' docstrings (literature-only
+citations there, per docstring policy); cross-referenced here:
+
+- `MathUE/MaxPlusPotential.lean`: potential side only; missing toward
+  max-plus Perron–Frobenius: eigenvector existence, the Collatz–Wielandt
+  attained form of the max cycle mean, the critical graph, the Kleene star
+  (of which `maxIncomingWeight` is one row).  Natural setting: topical maps.
+- `MathUE/TransferSummaryMonoid.lean`: the missing identity is the finite
+  floor; `WithBot` floors (Layer 1) repair it.  Missing on the Lindley side:
+  stationary (Loynes) theory, two-sided reflection.
+- `MathUE/CycleCoboundary.lean`: criterion and obstruction, not the Hodge
+  decomposition (coboundary + circulation), not `H¹` as a quotient;
+  general-group switching (Zaslavsky) only in the translation case.
+- `MathUE/InverseCoordinateRecurrence.lean`: single steps and two-phase
+  products; the `n`-phase trace trichotomy of the projective action is the
+  completion, and the matrix representation should be identified with the
+  summary monoid (Layer 1, T1).
+- `MathUE/IndependenceModelValuation.lean`: the all-small chart only; the
+  boundary charts where some coordinates approach `1` (cofactors carrying
+  the valuation) are the piece actual schedules need first.  The chamber
+  structure over varying exponents is the normal fan of the family's Newton
+  polytope, not the tropicalization of the model's ideal.
