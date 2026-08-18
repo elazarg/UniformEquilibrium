@@ -936,6 +936,13 @@
       "open_propositions": [
         "GameTheory.SolanVieilleBoundary.HasSurjectiveSoloPeriodicTerminalGap",
         "GameTheory.SolanVieilleBoundary.HasUniformSoloPeriodicTerminalGap"
+      ],
+      "reduces": [
+        {
+          "residual": "GameTheory.SolanVieilleBoundary.HasSurjectiveSoloPeriodicTerminalGap",
+          "implies": "GameTheory.SolanVieilleBoundary.HasUniformSoloPeriodicTerminalGap",
+          "by": "GameTheory.SolanVieilleBoundary.hasUniformSoloPeriodicTerminalGap_of_surjective"
+        }
       ]
     }
   ]
