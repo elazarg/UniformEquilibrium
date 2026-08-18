@@ -189,8 +189,12 @@ pre-fixed point" give a lax section?
      function theory (Gunawardena, *Min-max functions*, Discrete Event
      Dynamic Systems 4 (1994)) resolved through topical-map Perron–Frobenius
      (Gaubert–Gunawardena, Trans. Amer. Math. Soc. 356 (2004)) and policy
-     iteration (Cochet-Terrasson–Gaubert–Gunawardena).  To be stated as a
-     proposition definition only if a consumer needs it; never claimed.
+     iteration (Cochet-Terrasson–Gaubert–Gunawardena).  In proof-rule
+     terms: the per-cycle coefficient test is sound for lax-section
+     existence by weak duality, complete in the slope-one and contractive
+     regimes by T6a/T6b, and T6c asks whether it is complete in general.
+     To be stated as a proposition definition only if a consumer needs it;
+     never claimed.
 
 **T7 — periodic certificates (provable now, bridge).**  A fixed point of a
 cycle's holonomy is a solution of that cycle's cyclic system; bridge to
