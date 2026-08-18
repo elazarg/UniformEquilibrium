@@ -50,19 +50,26 @@ Joining the forced edge of one phase to the forced edge of the next needs the
 within-row edge `(y, y) → (y, z)`, from the diagonal cell of row `y` to the
 cell of row `y` read by the next preemptor's target `z`.  The solo table
 charges that switch `QuittingSoloPreemptionCycle.observerSwitchCost`, the row's
-own diagonal minus its cross value.  Charging at least that much keeps the
-solo table a lax section of the joined system
-(`QuittingSoloPreemptionCycle.isLaxSection_augmentedCellLabel`), so the
-augmented walk closes.
+own diagonal minus its cross value.  Charging at least that much keeps the solo
+table a lax section of the joined system
+(`QuittingSoloPreemptionCycle.isLaxSection_augmentedCellLabel`), and since every
+augmented label is a translation the cells are then a potential for the edge
+weights (`QuittingSoloPreemptionCycle.isPotential_augmentedCellWeight`).
 
-Its total weight is then nonpositive, and sharply so: around a forced cycle the
-switch costs total at least the total gap
-(`QuittingSoloPreemptionCycle.period_mul_gap_le_sum_observerSwitchCost`), and
-at some phase one switch costs the full gap
+The joined edges do close: alternating forced edge and observer switch through
+a full period returns to the tail cell of phase zero
+(`QuittingSoloPreemptionCycle.augmentedCellWalk`), a genuine closed walk of the
+augmented graph whose weight is one gap per phase less the total charge
+(`QuittingSoloPreemptionCycle.walkWeight_augmentedCellWalk`).  Weak duality
+therefore caps that weight at zero.
+
+The pricing behind the cap, proved directly: around a forced cycle the switch
+costs total at least the total gap
+(`QuittingSoloPreemptionCycle.period_mul_gap_le_sum_observerSwitchCost`), and at
+some phase one switch costs the full gap
 (`QuittingSoloPreemptionCycle.exists_gap_le_observerSwitchCost`).  The solo
 table pays back every gap it grants, so free observer switches are refuted
-(`QuittingSoloPreemptionCycle.not_forall_observerSwitchCost_nonpos`) and no
-static charging of the switch edges leaves a positive cycle.
+(`QuittingSoloPreemptionCycle.not_forall_observerSwitchCost_nonpos`).
 
 ## The scalar-per-player compression
 
@@ -98,21 +105,29 @@ one fixed player form an exact section of it
 (`isSection_quittingAnchoredRenewalTransport`).  The spectator index is frozen
 there; the observer-switch edges are what would move it.
 
-## The interfaces
+## The static no-go, and what is not here
 
-`QuittingObserverSwitchData` carries a charging of the switch edges together
-with the provenance that the regime's own solo table pays it, and it is
-inhabited (`QuittingSoloPreemptionCycle.tightObserverSwitchData`).  The open
-obligation is the separate property that the augmented cycle still has positive
-total weight (`QuittingObserverSwitchData.augmentedCycleWeight`), and
-`QuittingObserverSwitchData.elim` is the checked consumer turning
-obligation-holding data into a refutation of the regime.
-`QuittingObserverSwitchTransportProducer` is the corresponding production
-proposition, and
-`quittingObserverSwitchTransportProducer_iff_isEmpty_counterexampleRegime`
-records that on static data it is equivalent to nonexistence of the regime,
-because `QuittingSoloPreemptionCycle.isEmpty_positiveObserverSwitchData` shows
-no table-charged data has the obligation.
+`QuittingStaticObserverSwitchData` is the class of chargings the regime's own
+solo table justifies, inhabited by the tight one
+(`QuittingSoloPreemptionCycle.tightStaticObserverSwitchData`).  Every member
+makes the payoff cells a potential for the augmented edge weights, so weak
+duality caps one turn of the alternating closed walk
+`QuittingSoloPreemptionCycle.augmentedCellWalk`:
+`QuittingStaticObserverSwitchData.augmentedCycleWeight_nonpos`, in existential
+form `QuittingSoloPreemptionCycle.isEmpty_positiveObserverSwitchData`.  That
+closes the static route rather than leaving an obligation open, and no
+production proposition over these chargings is stated: positivity of the
+augmented weight is impossible for every member of the class, so proposing it
+as a target would be proposing an unsatisfiable one.
+
+A transport route that is not closed by the above needs different cells, not a
+different price on these ones.  Its vertices would have to carry values that
+the static terminal table does not determine -- phase values of a profile,
+continuation values indexed by the observing player, or debt coordinates --
+each with its own semantic provenance, and the forced edges of the preemption
+cycle would then relate those values rather than the solo rows.  No such cell
+values are defined here or elsewhere in this development, so no interface for
+them is stated.
 -/
 
 noncomputable section
@@ -343,7 +358,7 @@ omit [Fintype player] [DecidableEq player] in
 theorem observerSwitchCost_eq (cycle : QuittingSoloPreemptionCycle reward gap) (time : ℕ) :
     cycle.observerSwitchCost time =
       quittingSoloReward reward (cycle.vertex (time + 1)) (cycle.vertex (time + 1)) -
-        quittingSoloReward reward (cycle.vertex (time + 1)) (cycle.vertex (time + 2)) := rfl
+        quittingSoloReward reward (cycle.vertex (time + 1)) (cycle.vertex (time + 1 + 1)) := rfl
 
 /-- The **augmented payoff-cell graph**: the forced edges of the phases on the
 left, and on the right the within-row observer-switch edges that join each
@@ -355,7 +370,7 @@ def augmentedCellGraph (cycle : QuittingSoloPreemptionCycle reward gap) :
     fun edge ↦ (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 1))
   target := Sum.elim
     (fun edge ↦ (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 1)))
-    fun edge ↦ (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 2))
+    fun edge ↦ (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 1 + 1))
 
 omit [Fintype player] [DecidableEq player] in
 @[simp] theorem source_augmentedCellGraph_inl (cycle : QuittingSoloPreemptionCycle reward gap)
@@ -379,20 +394,42 @@ omit [Fintype player] [DecidableEq player] in
 @[simp] theorem target_augmentedCellGraph_inr (cycle : QuittingSoloPreemptionCycle reward gap)
     (edge : Fin cycle.period) :
     cycle.augmentedCellGraph.target (Sum.inr edge) =
-      (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 2)) := rfl
+      (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 1 + 1)) := rfl
+
+/-- The edge weights of the augmented payoff-cell graph at a charging of the
+switch edges: the gap on a forced edge, the negated charge on the switch edge
+of that phase. -/
+def augmentedCellWeight (cycle : QuittingSoloPreemptionCycle reward gap) (cost : ℕ → ℝ) :
+    Fin cycle.period ⊕ Fin cycle.period → ℝ :=
+  Sum.elim (fun _ ↦ gap) fun edge ↦ -cost (edge : ℕ)
+
+omit [Fintype player] [DecidableEq player] in
+@[simp] theorem augmentedCellWeight_inl (cycle : QuittingSoloPreemptionCycle reward gap)
+    (cost : ℕ → ℝ) (edge : Fin cycle.period) :
+    cycle.augmentedCellWeight cost (Sum.inl edge) = gap := rfl
+
+omit [Fintype player] [DecidableEq player] in
+@[simp] theorem augmentedCellWeight_inr (cycle : QuittingSoloPreemptionCycle reward gap)
+    (cost : ℕ → ℝ) (edge : Fin cycle.period) :
+    cycle.augmentedCellWeight cost (Sum.inr edge) = -cost (edge : ℕ) := rfl
 
 /-- The labels of the augmented payoff-cell graph at a charging of the switch
-edges: translation by the gap on a forced edge, translation by the negated
-charge on the switch edge of that phase. -/
-def augmentedCellLabel (cycle : QuittingSoloPreemptionCycle reward gap) (cost : ℕ → ℝ) :
-    Fin cycle.period ⊕ Fin cycle.period → Label :=
-  Sum.elim (fun _ ↦ translationLabel gap) fun edge ↦ translationLabel (-cost (edge : ℕ))
+edges: translation by the edge weight of `augmentedCellWeight`, so every label
+has slope one. -/
+def augmentedCellLabel (cycle : QuittingSoloPreemptionCycle reward gap) (cost : ℕ → ℝ)
+    (edge : Fin cycle.period ⊕ Fin cycle.period) : Label :=
+  translationLabel (cycle.augmentedCellWeight cost edge)
 
 omit [Fintype player] [DecidableEq player] in
 @[simp] theorem slope_augmentedCellLabel (cycle : QuittingSoloPreemptionCycle reward gap)
     (cost : ℕ → ℝ) (edge : Fin cycle.period ⊕ Fin cycle.period) :
-    (cycle.augmentedCellLabel cost edge).slope = 1 := by
-  cases edge <;> rfl
+    (cycle.augmentedCellLabel cost edge).slope = 1 := rfl
+
+omit [Fintype player] [DecidableEq player] in
+@[simp] theorem apply_augmentedCellLabel (cycle : QuittingSoloPreemptionCycle reward gap)
+    (cost : ℕ → ℝ) (edge : Fin cycle.period ⊕ Fin cycle.period) (x : ℝ) :
+    (cycle.augmentedCellLabel cost edge).apply x = cycle.augmentedCellWeight cost edge + x :=
+  apply_translationLabel _ x
 
 omit [Fintype player] [DecidableEq player] in
 /-- **The joined system is satisfied by the solo table exactly when the switch
@@ -407,7 +444,7 @@ theorem isLaxSection_augmentedCellLabel_iff (cycle : QuittingSoloPreemptionCycle
   · intro hφ edge
     have hswitch := hφ (Sum.inr edge)
     simp only [source_augmentedCellGraph_inr, target_augmentedCellGraph_inr,
-      augmentedCellLabel, Sum.elim_inr, apply_translationLabel, quittingPayoffCellValue] at hswitch
+      apply_augmentedCellLabel, augmentedCellWeight_inr, quittingPayoffCellValue] at hswitch
     rw [observerSwitchCost_eq]
     linarith
   · intro hcost edge
@@ -415,13 +452,13 @@ theorem isLaxSection_augmentedCellLabel_iff (cycle : QuittingSoloPreemptionCycle
     | inl edge =>
         have hedge := (cycle.edge (edge : ℕ)).2
         simp only [source_augmentedCellGraph_inl, target_augmentedCellGraph_inl,
-          augmentedCellLabel, Sum.elim_inl, apply_translationLabel, quittingPayoffCellValue]
+          apply_augmentedCellLabel, augmentedCellWeight_inl, quittingPayoffCellValue]
         linarith
     | inr edge =>
         have hswitch := hcost edge
         rw [observerSwitchCost_eq] at hswitch
         simp only [source_augmentedCellGraph_inr, target_augmentedCellGraph_inr,
-          augmentedCellLabel, Sum.elim_inr, apply_translationLabel, quittingPayoffCellValue]
+          apply_augmentedCellLabel, augmentedCellWeight_inr, quittingPayoffCellValue]
         linarith
 
 omit [Fintype player] [DecidableEq player] in
@@ -433,6 +470,110 @@ theorem isLaxSection_augmentedCellLabel (cycle : QuittingSoloPreemptionCycle rew
     IsLaxSection cycle.augmentedCellGraph (cycle.augmentedCellLabel cost)
       (quittingPayoffCellValue reward) :=
   (cycle.isLaxSection_augmentedCellLabel_iff cost).2 fun edge ↦ hcost (edge : ℕ)
+
+omit [Fintype player] [DecidableEq player] in
+/-- **The joined system read as a potential problem.**  Every augmented label
+is a translation, so a lax section of the labels is a potential for the edge
+weights of `augmentedCellWeight` in the sense of
+`Math.MaxPlusPotential.IsPotential`, and the weak duality of that module
+applies to it. -/
+theorem isPotential_augmentedCellWeight (cycle : QuittingSoloPreemptionCycle reward gap)
+    {cost : ℕ → ℝ} (hcost : ∀ time : ℕ, cycle.observerSwitchCost time ≤ cost time) :
+    Math.MaxPlusPotential.IsPotential cycle.augmentedCellGraph
+      (cycle.augmentedCellWeight cost) (quittingPayoffCellValue reward) := by
+  intro edge
+  have hedge := cycle.isLaxSection_augmentedCellLabel hcost edge
+  rw [apply_augmentedCellLabel] at hedge
+  linarith
+
+omit [Fintype player] [DecidableEq player] in
+/-- The forced edge of a phase lands exactly where that phase's observer switch
+starts. -/
+theorem target_inl_eq_source_inr_augmentedCellGraph
+    (cycle : QuittingSoloPreemptionCycle reward gap) (edge : Fin cycle.period) :
+    cycle.augmentedCellGraph.target (Sum.inl edge) =
+      cycle.augmentedCellGraph.source (Sum.inr edge) := rfl
+
+/-- The two edges of one phase: its forced edge, then the observer switch out of
+the diagonal cell that edge lands on. -/
+def phaseStepWalk (cycle : QuittingSoloPreemptionCycle reward gap) (edge : Fin cycle.period) :
+    cycle.augmentedCellGraph.Walk (cycle.vertex (edge : ℕ), cycle.vertex ((edge : ℕ) + 1))
+      (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 1 + 1)) :=
+  ((EdgeGraph.Walk.singleton (G := cycle.augmentedCellGraph) (Sum.inl edge)).castFinish
+      (cycle.target_inl_eq_source_inr_augmentedCellGraph edge)).concat (Sum.inr edge) rfl
+
+omit [Fintype player] [DecidableEq player] in
+@[simp] theorem edges_phaseStepWalk (cycle : QuittingSoloPreemptionCycle reward gap)
+    (edge : Fin cycle.period) :
+    (cycle.phaseStepWalk edge).edges = [Sum.inl edge, Sum.inr edge] := rfl
+
+omit [Fintype player] [DecidableEq player] in
+/-- One phase of the alternating walk carries the gap of its forced edge less
+the charge of its observer switch. -/
+theorem walkWeight_phaseStepWalk (cycle : QuittingSoloPreemptionCycle reward gap)
+    (cost : ℕ → ℝ) (edge : Fin cycle.period) :
+    Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight cost) (cycle.phaseStepWalk edge)
+      = gap - cost (edge : ℕ) := by
+  simp only [Math.MaxPlusPotential.walkWeight, edges_phaseStepWalk, List.map_cons, List.map_nil,
+    List.sum_cons, List.sum_nil, augmentedCellWeight_inl, augmentedCellWeight_inr]
+  ring
+
+/-- The alternating walk of the first `phaseCount` phases, starting at the tail
+cell of phase zero: one `phaseStepWalk` per phase, concatenated. -/
+def augmentedPrefixWalk (cycle : QuittingSoloPreemptionCycle reward gap) :
+    ∀ phaseCount : ℕ, phaseCount ≤ cycle.period →
+      cycle.augmentedCellGraph.Walk (cycle.vertex 0, cycle.vertex 1)
+        (cycle.vertex phaseCount, cycle.vertex (phaseCount + 1))
+  | 0, _ => .nil
+  | phaseCount + 1, hphase =>
+      (cycle.augmentedPrefixWalk phaseCount (Nat.le_of_succ_le hphase)).append
+        (cycle.phaseStepWalk ⟨phaseCount, Nat.lt_of_succ_le hphase⟩)
+
+omit [Fintype player] [DecidableEq player] in
+/-- The alternating walk of the first `phaseCount` phases carries one gap per
+forced edge and one charge per observer switch. -/
+theorem walkWeight_augmentedPrefixWalk (cycle : QuittingSoloPreemptionCycle reward gap)
+    (cost : ℕ → ℝ) : ∀ (phaseCount : ℕ) (hphase : phaseCount ≤ cycle.period),
+      Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight cost)
+          (cycle.augmentedPrefixWalk phaseCount hphase)
+        = phaseCount * gap - ∑ time ∈ Finset.range phaseCount, cost time
+  | 0, _ => by simp [augmentedPrefixWalk]
+  | phaseCount + 1, hphase => by
+      rw [augmentedPrefixWalk, Math.MaxPlusPotential.walkWeight_append,
+        cycle.walkWeight_augmentedPrefixWalk cost phaseCount (Nat.le_of_succ_le hphase),
+        cycle.walkWeight_phaseStepWalk cost ⟨phaseCount, Nat.lt_of_succ_le hphase⟩,
+        Finset.sum_range_succ]
+      push_cast
+      ring
+
+omit [Fintype player] [DecidableEq player] in
+/-- The alternating walk of a full period returns to its starting cell. -/
+theorem augmentedPrefixWalk_finish (cycle : QuittingSoloPreemptionCycle reward gap) :
+    (cycle.vertex cycle.period, cycle.vertex (cycle.period + 1)) =
+      (cycle.vertex 0, cycle.vertex 1) := by
+  have hzero := cycle.vertex_periodic 0
+  have hone := cycle.vertex_periodic 1
+  rw [zero_add] at hzero
+  rw [Nat.add_comm 1 cycle.period] at hone
+  rw [hzero, hone]
+
+/-- **The augmented closed walk.**  One turn of the alternating chain -- forced
+edge, observer switch, forced edge, ... -- through a full period, closed by the
+periodicity of the cycle's vertices. -/
+def augmentedCellWalk (cycle : QuittingSoloPreemptionCycle reward gap) :
+    cycle.augmentedCellGraph.Walk (cycle.vertex 0, cycle.vertex 1)
+      (cycle.vertex 0, cycle.vertex 1) :=
+  (cycle.augmentedPrefixWalk cycle.period le_rfl).castFinish cycle.augmentedPrefixWalk_finish
+
+omit [Fintype player] [DecidableEq player] in
+/-- The weight of the augmented closed walk: one gap per phase, minus the total
+charge of the observer switches. -/
+theorem walkWeight_augmentedCellWalk (cycle : QuittingSoloPreemptionCycle reward gap)
+    (cost : ℕ → ℝ) :
+    Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight cost) cycle.augmentedCellWalk
+      = (cycle.period : ℝ) * gap - ∑ time ∈ Finset.range cycle.period, cost time := by
+  rw [augmentedCellWalk, Math.MaxPlusPotential.walkWeight_castFinish,
+    cycle.walkWeight_augmentedPrefixWalk cost cycle.period le_rfl]
 
 /-! ## Layer 3: what the switch costs total
 
@@ -834,21 +975,21 @@ theorem isLaxSection_quittingAnchoredRenewalLabel
 
 end AnchoredRenewal
 
-/-! ## Layer 5: the split interfaces -/
+/-! ## Layer 5: the static no-go, stated on its class of chargings -/
 
-/-- A charging of the observer-switch edges of a forced preemption cycle,
-together with its provenance: the regime's own solo-reward table pays the
-charge at every switch.
+/-- A charging of the observer-switch edges of a forced preemption cycle that
+the regime's own solo-reward table justifies: every switch is charged at least
+what the table loses on it.
 
-The charge is the game-side datum a transport refutation needs and it is not
-arbitrary: `observerSwitchCost_le` ties every entry to the payoff cells the
-regime's table actually carries, and it is exactly what makes those cells a lax
-section of the joined system (`QuittingObserverSwitchData.isLaxSection`).  The
-structure alone is therefore consistent and inhabited
-(`GameTheory.QuittingSoloPreemptionCycle.tightObserverSwitchData`); the
-obligation is the separate positivity of
-`QuittingObserverSwitchData.augmentedCycleWeight`. -/
-structure QuittingObserverSwitchData
+This is the class over which the static no-go is stated, not an interface with
+an open obligation.  Its provenance field is exactly what makes the payoff
+cells a lax section of the joined system
+(`QuittingStaticObserverSwitchData.isLaxSection`), so every member leaves the
+augmented closed walk at nonpositive weight
+(`QuittingStaticObserverSwitchData.augmentedCycleWeight_nonpos`).  The class is
+inhabited by the tight charging
+(`GameTheory.QuittingSoloPreemptionCycle.tightStaticObserverSwitchData`). -/
+structure QuittingStaticObserverSwitchData
     (regime : QuittingCounterexampleRegime reward)
     (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) where
   /-- The weight charged to the observer switch out of each phase's head. -/
@@ -860,135 +1001,82 @@ namespace QuittingSoloPreemptionCycle
 
 variable {regime : QuittingCounterexampleRegime reward}
 
-/-- **The trivial switch charging.**  Charging every observer switch exactly
-what the regime's solo table loses on it is admissible data, so
-`QuittingObserverSwitchData` is not an empty package. -/
-def tightObserverSwitchData (regime : QuittingCounterexampleRegime reward)
+/-- **The tight charging.**  Charging every observer switch exactly what the
+regime's solo table loses on it is the least member of the class, so
+`QuittingStaticObserverSwitchData` is inhabited. -/
+def tightStaticObserverSwitchData (regime : QuittingCounterexampleRegime reward)
     (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) :
-    QuittingObserverSwitchData regime cycle where
+    QuittingStaticObserverSwitchData regime cycle where
   cost := cycle.observerSwitchCost
   observerSwitchCost_le _ := le_rfl
 
-instance nonempty_quittingObserverSwitchData
+instance nonempty_quittingStaticObserverSwitchData
     (regime : QuittingCounterexampleRegime reward)
     (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) :
-    Nonempty (QuittingObserverSwitchData regime cycle) :=
-  ⟨tightObserverSwitchData regime cycle⟩
+    Nonempty (QuittingStaticObserverSwitchData regime cycle) :=
+  ⟨tightStaticObserverSwitchData regime cycle⟩
 
 end QuittingSoloPreemptionCycle
 
-namespace QuittingObserverSwitchData
+namespace QuittingStaticObserverSwitchData
 
 variable {regime : QuittingCounterexampleRegime reward}
 variable {cycle : QuittingSoloPreemptionCycle reward regime.terminalGap}
 
 /-- **The charged data closes the joined system on the payoff cells.**  This is
 `GameTheory.QuittingSoloPreemptionCycle.isLaxSection_augmentedCellLabel` at the
-charge, and it is why data without the obligation is consistent. -/
-theorem isLaxSection (data : QuittingObserverSwitchData regime cycle) :
+charge. -/
+theorem isLaxSection (data : QuittingStaticObserverSwitchData regime cycle) :
     IsLaxSection cycle.augmentedCellGraph (cycle.augmentedCellLabel data.cost)
       (quittingPayoffCellValue reward) :=
   cycle.isLaxSection_augmentedCellLabel data.observerSwitchCost_le
 
-/-- The total label weight of one turn around
-`GameTheory.QuittingSoloPreemptionCycle.augmentedCellGraph` at this charge: one
+/-- The weight of the augmented closed walk
+`GameTheory.QuittingSoloPreemptionCycle.augmentedCellWalk` at this charge: one
 gap per forced edge, minus the charge of each observer switch. -/
-def augmentedCycleWeight (data : QuittingObserverSwitchData regime cycle) : ℝ :=
+def augmentedCycleWeight (data : QuittingStaticObserverSwitchData regime cycle) : ℝ :=
   (cycle.period : ℝ) * regime.terminalGap -
     ∑ time ∈ Finset.range cycle.period, data.cost time
 
-/-- **The consumer.**  A charging whose turn around the augmented graph still
-has positive total weight refutes the regime, because the observer switches of
-`GameTheory.QuittingSoloPreemptionCycle.period_mul_gap_le_sum_observerSwitchCost`
-already absorb the whole period's worth of gap and the charge dominates them. -/
-theorem elim (data : QuittingObserverSwitchData regime cycle)
-    (hweight : 0 < data.augmentedCycleWeight) : False := by
-  have htotal := cycle.period_mul_gap_le_sum_observerSwitchCost
-  have hcharge : ∑ time ∈ Finset.range cycle.period, cycle.observerSwitchCost time
-      ≤ ∑ time ∈ Finset.range cycle.period, data.cost time :=
-    Finset.sum_le_sum fun time _ ↦ data.observerSwitchCost_le time
-  rw [augmentedCycleWeight] at hweight
-  linarith
+/-- The defining arithmetic of `augmentedCycleWeight` is the weight of the
+augmented closed walk at the charge. -/
+theorem augmentedCycleWeight_eq_walkWeight (data : QuittingStaticObserverSwitchData regime cycle) :
+    data.augmentedCycleWeight =
+      Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight data.cost)
+        cycle.augmentedCellWalk :=
+  (cycle.walkWeight_augmentedCellWalk data.cost).symm
 
-end QuittingObserverSwitchData
+/-- **The static no-go.**  The payoff cells are a potential for the augmented
+edge weights, so the weak duality of
+`Math.MaxPlusPotential.IsPotential.closedWalk_nonpos` caps the augmented closed
+walk: no charging the solo table justifies leaves it at positive weight. -/
+theorem augmentedCycleWeight_nonpos (data : QuittingStaticObserverSwitchData regime cycle) :
+    data.augmentedCycleWeight ≤ 0 := by
+  rw [data.augmentedCycleWeight_eq_walkWeight]
+  exact (cycle.isPotential_augmentedCellWeight data.observerSwitchCost_le).closedWalk_nonpos
+    cycle.augmentedCellWalk
+
+/-- The contrapositive of `augmentedCycleWeight_nonpos`. -/
+theorem elim (data : QuittingStaticObserverSwitchData regime cycle)
+    (hweight : 0 < data.augmentedCycleWeight) : False :=
+  absurd data.augmentedCycleWeight_nonpos (not_le.2 hweight)
+
+end QuittingStaticObserverSwitchData
 
 namespace QuittingSoloPreemptionCycle
 
 variable {regime : QuittingCounterexampleRegime reward}
 
-/-- **No table-charged data carries the obligation.**  Around a forced
-preemption cycle the observer switches already absorb the whole period's worth
-of gap (`period_mul_gap_le_sum_observerSwitchCost`), so every admissible charge
-leaves the augmented walk at nonpositive weight.  The obstruction a transport
-refutation needs cannot come from a charging the static solo table justifies. -/
+/-- **No table-justified charging carries a positive augmented cycle.**  This is
+the static no-go in existential form: the obstruction a transport refutation
+would need cannot come from a charging the static solo table justifies. -/
 theorem isEmpty_positiveObserverSwitchData
     (regime : QuittingCounterexampleRegime reward)
     (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) :
-    ¬∃ data : QuittingObserverSwitchData regime cycle, 0 < data.augmentedCycleWeight :=
+    ¬∃ data : QuittingStaticObserverSwitchData regime cycle, 0 < data.augmentedCycleWeight :=
   fun ⟨data, hweight⟩ ↦ data.elim hweight
 
 end QuittingSoloPreemptionCycle
-
-/-- **The production a payoff-cell transport proof would need.**  Every quitting
-counterexample regime supplies, on every strict preemption cycle it forces, a
-charging of the observer-switch edges whose augmented closed walk still has
-positive total weight.
-
-The content is the obligation, not the data: switch data by itself exists for
-every regime and cycle
-(`GameTheory.QuittingSoloPreemptionCycle.tightObserverSwitchData`), so this
-proposition is not the mere existence of the interface.  It is nonetheless
-settled negatively on static data by
-`GameTheory.QuittingSoloPreemptionCycle.isEmpty_positiveObserverSwitchData`,
-which makes it equivalent to nonexistence of the regime
-(`quittingObserverSwitchTransportProducer_iff_isEmpty_counterexampleRegime`); a
-charging beating that bound has to be justified by data the solo-reward table
-does not contain. -/
-def QuittingObserverSwitchTransportProducer
-    (reward : {S : Finset player // S.Nonempty} → Payoff player) : Prop :=
-  ∀ regime : QuittingCounterexampleRegime reward,
-    ∀ cycle : QuittingSoloPreemptionCycle reward regime.terminalGap,
-      ∃ data : QuittingObserverSwitchData regime cycle, 0 < data.augmentedCycleWeight
-
-/-- The production proposition rules out the counterexample regime, using the
-forced preemption cycle of
-`QuittingCounterexampleRegime.nonempty_soloPreemptionCycle`. -/
-theorem isEmpty_counterexampleRegime_of_quittingObserverSwitchTransportProducer
-    (hproducer : QuittingObserverSwitchTransportProducer reward) :
-    IsEmpty (QuittingCounterexampleRegime reward) := by
-  refine ⟨fun regime ↦ ?_⟩
-  obtain ⟨cycle⟩ := regime.nonempty_soloPreemptionCycle
-  obtain ⟨data, hweight⟩ := hproducer regime cycle
-  exact data.elim hweight
-
-/-- **The consumer of the production proposition.**  A charging of the shape of
-`QuittingObserverSwitchData` with positive augmented weight at every regime and
-every forced preemption cycle gives every finite quitting game a
-uniform-equilibrium payoff, through
-`not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime`. -/
-theorem exists_uniformEquilibriumPayoff_of_quittingObserverSwitchTransportProducer
-    (hproducer : QuittingObserverSwitchTransportProducer reward) :
-    ∃ payoff : Payoff player,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  by_contra hno
-  exact (isEmpty_counterexampleRegime_of_quittingObserverSwitchTransportProducer
-    hproducer).false (quittingCounterexampleRegimeOfNoUniformPayoff reward hno)
-
-/-- **The production proposition is the goal, on static data.**  One direction
-is the consumer above; the other is vacuous, because no regime remains to
-supply data for.  Recording the equivalence keeps the interface honest: the
-decomposition it achieves is that the per-instance obligation is a concrete
-inequality about a named quantity, the observer-switch charge, and
-`GameTheory.QuittingSoloPreemptionCycle.isEmpty_positiveObserverSwitchData`
-settles that inequality negatively whenever the charge is justified by the
-solo-reward table. -/
-theorem quittingObserverSwitchTransportProducer_iff_isEmpty_counterexampleRegime :
-    QuittingObserverSwitchTransportProducer reward ↔
-      IsEmpty (QuittingCounterexampleRegime reward) := by
-  constructor
-  · exact isEmpty_counterexampleRegime_of_quittingObserverSwitchTransportProducer
-  · intro hempty regime
-    exact (hempty.false regime).elim
 
 end GameTheory
 
