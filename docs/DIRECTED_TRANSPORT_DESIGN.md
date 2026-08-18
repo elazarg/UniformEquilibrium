@@ -169,17 +169,21 @@ satisfies `holonomy x ≥ x + γ` at `x = φ base`, some edge has
 `Math.MaxPlusPotential.exists_edge_defect_ge`.  T4 identifies when the
 hypothesis holds at every `x`, making the obstruction candidate-free.
 
-**T6 — strong duality (staged).**  Does "every cycle holonomy has a
-pre-fixed point" give an lax section?
+**T6 — strong duality (a and b implemented in
+`MathUE/MaxAffineSectionDuality.lean`).**  Does "every cycle holonomy has a
+pre-fixed point" give a lax section?
 
-  a. *Slope 1, finite floors* (staged, provable): a floor is an anchor; model
-     each floored edge by a translation edge plus an edge from an added
-     anchor vertex pinned to `0`, reducing to `MaxPlusPotential`'s duality on
-     the augmented graph.
-  b. *Uniformly contractive* (`slope ≤ β < 1`; staged, provable): the
-     monotone network operator
-     `F φ v = sup over incoming e of (label e).apply (φ (source e))`
-     iterated from a large constant section converges by contraction.
+  a. *Slope 1* (implemented; floors may be `⊥` or finite): a lax section
+     exists iff no cycle has positive shift-sum, and iff every cycle's
+     composite label has a pre-fixed point.  Proved by lifting
+     `MaxPlusPotential`'s canonical potential for the shift weights by one
+     constant large enough to clear every floor — the classical added
+     anchor (slack) vertex done as a constant lift, with no augmented
+     graph.  `Fintype V` enters only through the max-plus duality.
+  b. *Uniformly contractive* (implemented; `slope < 1` edgewise, no sign
+     condition and no monotonicity): a constant section already closes edge
+     by edge, so existence needs no operator iteration and holds for any
+     `Finite E`.
   c. *General mixed slopes* (recorded open): the fixed-point/spectral problem
      for monotone max-affine networks — the max-only corner of min-max
      function theory (Gunawardena, *Min-max functions*, Discrete Event
