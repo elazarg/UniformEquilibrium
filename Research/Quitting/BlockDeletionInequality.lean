@@ -20,8 +20,10 @@ survivors, floored at `0`.  Its **solo premium** is the excess of `r_d({d})`
 over the continue floor, again floored at `0`.  Against the lift of a survivor
 profile whose per-stage absorption never exceeds `A`, the deleted player's
 best-response excess is at most `A` times the join cap plus the solo premium.
-Consequently a terminal exploitability gap is at most that bound at some
-deleted player.
+Consequently a terminal exploitability gap is charged to one of two sides:
+either some deleted player's excess bound covers it, or the survivor profile
+is exploitable by it inside the survivor game.  A survivor approximate
+equilibrium sharper than the gap closes the second side.
 
 For a singleton block over at most three survivors the bound holds at the one
 deleted player with no disjunction, which yields a solo-escape versus
@@ -49,18 +51,15 @@ survivors of `B`, floored at `0`. -/
 def quittingBlockJoinCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
     (owner : ι) : ℝ :=
-  (insert (0 : ℝ)
-      ((Finset.univ.filter
-        (fun T : {S : Finset ι // S.Nonempty} => Disjoint T.1 B)).image
-          (fun T =>
-            reward ⟨insert owner T.1, Finset.insert_nonempty owner T.1⟩ owner -
-              reward T owner))).max'
-    (Finset.insert_nonempty _ _)
+  Math.Finset.insertMax 0 (quittingSurvivorTerminals B)
+    (fun T => reward ⟨insert owner T.1, Finset.insert_nonempty owner T.1⟩ owner -
+      reward T owner)
 
 theorem quittingBlockJoinCap_nonneg
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (owner : ι) : 0 ≤ quittingBlockJoinCap reward B owner :=
-  Finset.le_max' _ _ (Finset.mem_insert_self _ _)
+    (owner : ι) : 0 ≤ quittingBlockJoinCap reward B owner := by
+  unfold quittingBlockJoinCap
+  exact Math.Finset.base_le_insertMax _ _ _
 
 theorem sub_le_quittingBlockJoinCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
@@ -68,26 +67,11 @@ theorem sub_le_quittingBlockJoinCap
     reward ⟨insert owner S, Finset.insert_nonempty owner S⟩ owner -
         reward ⟨S, hS⟩ owner ≤
       quittingBlockJoinCap reward B owner := by
-  refine Finset.le_max' _ _ (Finset.mem_insert_of_mem ?_)
-  exact Finset.mem_image.mpr
-    ⟨⟨S, hS⟩, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hdisjoint⟩, rfl⟩
-
-/-- A join-antitone player has join cap zero, so the quantitative bound below
-specializes to the exact gate of
-`quittingBestReplyValue_liftBlockProfile_eq_terminalPayoff`. -/
-theorem quittingBlockJoinCap_eq_zero_of_blockJoinAntitone
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {B : Finset ι}
-    {owner : ι} (hjoin : QuittingBlockJoinAntitone reward B owner) :
-    quittingBlockJoinCap reward B owner = 0 := by
-  refine le_antisymm ?_ (quittingBlockJoinCap_nonneg reward B owner)
-  refine Finset.max'_le _ _ _ ?_
-  intro value hvalue
-  rcases Finset.mem_insert.mp hvalue with hzero | hmem
-  · exact hzero.le
-  · obtain ⟨terminal, hterminal, rfl⟩ := Finset.mem_image.mp hmem
-    have hdisjoint : Disjoint terminal.1 B := (Finset.mem_filter.mp hterminal).2
-    have hstep := hjoin terminal.1 terminal.2 hdisjoint
-    linarith
+  unfold quittingBlockJoinCap
+  refine Math.Finset.le_insertMax (0 : ℝ)
+    (fun T => reward ⟨insert owner T.1, Finset.insert_nonempty owner T.1⟩ owner -
+      reward T owner) (index := ⟨S, hS⟩) ?_
+  exact mem_quittingSurvivorTerminals.mpr hdisjoint
 
 /-- The join cap is the least nonnegative upper bound of the survivor join
 margins. -/
@@ -98,14 +82,21 @@ theorem quittingBlockJoinCap_le
       reward ⟨insert owner S, Finset.insert_nonempty owner S⟩ owner -
         reward ⟨S, hS⟩ owner ≤ value) :
     quittingBlockJoinCap reward B owner ≤ value := by
-  classical
   unfold quittingBlockJoinCap
-  refine Finset.max'_le _ _ _ ?_
-  intro entry hentry
-  rcases Finset.mem_insert.mp hentry with hzeroEntry | hmem
-  · exact hzeroEntry ▸ hzero
-  · obtain ⟨terminal, hterminal, rfl⟩ := Finset.mem_image.mp hmem
-    exact hrow terminal.1 terminal.2 (Finset.mem_filter.mp hterminal).2
+  exact Math.Finset.insertMax_le hzero fun T hT =>
+    hrow T.1 T.2 (mem_quittingSurvivorTerminals.mp hT)
+
+/-- A join-antitone player has join cap zero, so the quantitative bound below
+specializes to the exact gate of
+`quittingBestReplyValue_liftDeletedProfile_eq_terminalPayoff_of_blockGate`. -/
+theorem quittingBlockJoinCap_eq_zero_of_blockJoinAntitone
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {B : Finset ι}
+    {owner : ι} (hjoin : QuittingBlockJoinAntitone reward B owner) :
+    quittingBlockJoinCap reward B owner = 0 := by
+  refine le_antisymm ?_ (quittingBlockJoinCap_nonneg reward B owner)
+  refine quittingBlockJoinCap_le reward B owner le_rfl fun S hS hdisjoint => ?_
+  have hstep := hjoin S hS hdisjoint
+  linarith
 
 /-! ## Reading off the absorption probability -/
 
@@ -324,25 +315,25 @@ theorem quittingBestReplyValue_le_never_add_excessBound
 
 /-! ## Transporting the absorption bound through the lift -/
 
-theorem quittingStationaryContinueMass_extendBlockRoot (B : Finset ι)
+theorem quittingStationaryContinueMass_extendDeletedRoot (B : Finset ι)
     (root : QuittingBlockSurvivor B → PMF Bool) :
-    quittingStationaryContinueMass (quittingExtendBlockRoot B root) =
+    quittingStationaryContinueMass (quittingExtendDeletedRoot (· ∈ B) root) =
       quittingStationaryContinueMass root := by
   rw [quittingStationaryContinueMass_eq_prod_continueProbability,
     quittingStationaryContinueMass_eq_prod_continueProbability,
-    prod_split_quittingBlock B
-      (fun who => (quittingExtendBlockRoot B root who false).toReal),
-    Finset.prod_eq_one (fun who hwho => by simp [hwho]), one_mul]
+    ← Fintype.prod_subtype_mul_prod_subtype (fun who : ι => who ∈ B)
+      (fun who => (quittingExtendDeletedRoot (· ∈ B) root who false).toReal),
+    Finset.prod_eq_one (fun who _ => by simp [who.2]), one_mul]
   exact Finset.prod_congr rfl fun who _ => by simp
 
-theorem quittingFixedOpponentsContinueMass_extendBlockRoots_of_mem
+theorem quittingFixedOpponentsContinueMass_extendDeletedRoots_of_mem
     (B : Finset ι) (roots : ℕ → QuittingBlockSurvivor B → PMF Bool)
     {owner : ι} (howner : owner ∈ B) (time : ℕ) :
     quittingFixedOpponentsContinueMass
-        (quittingExtendBlockRoots B roots) owner time =
+        (quittingExtendDeletedRoots (· ∈ B) roots) owner time =
       quittingStationaryContinueMass (roots time) := by
-  have hupdate : Function.update (quittingExtendBlockRoots B roots time) owner
-      (PMF.pure false) = quittingExtendBlockRoots B roots time := by
+  have hupdate : Function.update (quittingExtendDeletedRoots (· ∈ B) roots time) owner
+      (PMF.pure false) = quittingExtendDeletedRoots (· ∈ B) roots time := by
     funext who
     by_cases hp : who = owner
     · subst who
@@ -350,12 +341,12 @@ theorem quittingFixedOpponentsContinueMass_extendBlockRoots_of_mem
     · rw [Function.update_of_ne hp]
   unfold quittingFixedOpponentsContinueMass
   rw [hupdate]
-  exact quittingStationaryContinueMass_extendBlockRoot B (roots time)
+  exact quittingStationaryContinueMass_extendDeletedRoot B (roots time)
 
 /-- The excess bound applies to every deleted player against the lift of a
 survivor profile whose per-stage absorption never exceeds
 `absorptionBound`. -/
-theorem quittingBestReplyValue_liftBlockProfile_le_add_excessBound
+theorem quittingBestReplyValue_liftDeletedProfile_le_add_excessBound
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
     (profile : (quittingGame
       (quittingDeleteBlockReward reward B)).BehaviorProfile)
@@ -364,35 +355,80 @@ theorem quittingBestReplyValue_liftBlockProfile_le_add_excessBound
       (quittingProfileLiveRoot (quittingDeleteBlockReward reward B)
         profile time) ≤ absorptionBound) :
     quittingBestReplyValue reward
-        (quittingLiftBlockProfile reward B profile) owner ≤
+        (quittingLiftDeletedProfile reward (· ∈ B) profile) owner ≤
       quittingTerminalPayoff reward
-          (quittingLiftBlockProfile reward B profile) owner +
+          (quittingLiftDeletedProfile reward (· ∈ B) profile) owner +
         quittingBlockDeletionExcessBound reward B owner absorptionBound := by
-  have hroot := quittingProfileLiveRoot_liftBlockProfile reward B profile
+  have hroot := quittingProfileLiveRoot_liftDeletedProfile reward (· ∈ B) profile
   have hquiet : QuittingRootsBlockQuiet B owner
       (quittingProfileLiveRoot reward
-        (quittingLiftBlockProfile reward B profile)) := by
+        (quittingLiftDeletedProfile reward (· ∈ B) profile)) := by
     rw [hroot]
-    exact (quittingRootsQuietOn_extendBlockRoots B _).blockQuiet owner
+    exact (quittingRootsQuietOn_extendDeletedRoots B _).blockQuiet owner
   have hmass : ∀ time, 1 - quittingFixedOpponentsContinueMass
       (quittingProfileLiveRoot reward
-        (quittingLiftBlockProfile reward B profile)) owner time ≤
+        (quittingLiftDeletedProfile reward (· ∈ B) profile)) owner time ≤
       absorptionBound := by
     intro time
-    rw [hroot, quittingFixedOpponentsContinueMass_extendBlockRoots_of_mem
+    rw [hroot, quittingFixedOpponentsContinueMass_extendDeletedRoots_of_mem
       B _ howner time]
     exact habsorb time
   have hstep := quittingBestReplyValue_le_never_add_excessBound reward B
-    (quittingLiftBlockProfile reward B profile) owner hquiet hmass
-  rwa [Function.update_liftBlockProfile_never reward B profile howner] at hstep
+    (quittingLiftDeletedProfile reward (· ∈ B) profile) owner hquiet hmass
+  rwa [Function.update_liftDeletedProfile_never reward (· ∈ B) profile howner] at hstep
 
 /-! ## The deletion inequality -/
+
+/-- **The deletion alternative.**  A terminal exploitability gap of the
+original game is charged to exactly one of two sides against any survivor
+profile whose per-stage absorption never exceeds `absorptionBound`: either
+some deleted player's excess bound already covers the gap, or the survivor
+profile is itself exploitable by the gap inside the survivor game.  Nothing is
+asked of the survivor profile beyond its absorption bound. -/
+theorem exists_mem_gap_le_blockDeletionExcessBound_or_survivorGap
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
+    {gap absorptionBound : ℝ}
+    (hexploit : HasTerminalExploitabilityGap reward gap)
+    (profile : (quittingGame
+      (quittingDeleteBlockReward reward B)).BehaviorProfile)
+    (habsorb : ∀ time, 1 - quittingStationaryContinueMass
+      (quittingProfileLiveRoot (quittingDeleteBlockReward reward B)
+        profile time) ≤ absorptionBound) :
+    (∃ owner ∈ B,
+        gap ≤ quittingBlockDeletionExcessBound reward B owner absorptionBound) ∨
+      ∃ (survivor : QuittingBlockSurvivor B)
+        (deviation : (quittingGame
+          (quittingDeleteBlockReward reward B)).BehaviorStrategy survivor),
+        quittingTerminalPayoff (quittingDeleteBlockReward reward B) profile
+            survivor + gap ≤
+          quittingTerminalPayoff (quittingDeleteBlockReward reward B)
+            (Function.update profile survivor deviation) survivor := by
+  obtain ⟨player, deviation, hdeviation⟩ :=
+    hexploit (quittingLiftDeletedProfile reward (· ∈ B) profile)
+  by_cases hp : player ∈ B
+  · refine Or.inl ⟨player, hp, ?_⟩
+    have hbest := quittingBestReplyValue_liftDeletedProfile_le_add_excessBound
+      reward B profile hp habsorb
+    have hupper := le_quittingBestReplyValue reward
+      (quittingLiftDeletedProfile reward (· ∈ B) profile) player deviation
+    linarith
+  · refine Or.inr ⟨⟨player, hp⟩,
+      quittingDeletedDeviation reward (· ∈ B) ⟨player, hp⟩ deviation, ?_⟩
+    have hon := quittingTerminalPayoff_liftDeletedProfile
+      reward (· ∈ B) profile ⟨player, hp⟩
+    have hdev :=
+      quittingTerminalPayoff_update_liftDeletedProfile_eq_deleteDeviation
+        reward (· ∈ B) profile ⟨player, hp⟩ deviation
+    dsimp only at hon hdev
+    linarith
 
 /-- **The quantitative deletion inequality.**  If the original game has a
 terminal exploitability gap and the survivor game has a terminal
 `error`-equilibrium with `error < gap` whose per-stage absorption never
 exceeds `absorptionBound`, then some deleted player's excess bound is at least
-the gap. -/
+the gap: the survivor disjunct of
+`exists_mem_gap_le_blockDeletionExcessBound_or_survivorGap` is killed by the
+equilibrium hypothesis. -/
 theorem exists_mem_gap_le_blockDeletionExcessBound
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
     {gap error absorptionBound : ℝ}
@@ -407,25 +443,10 @@ theorem exists_mem_gap_le_blockDeletionExcessBound
         profile time) ≤ absorptionBound) :
     ∃ owner ∈ B,
       gap ≤ quittingBlockDeletionExcessBound reward B owner absorptionBound := by
-  obtain ⟨player, deviation, hdeviation⟩ :=
-    hexploit (quittingLiftBlockProfile reward B profile)
-  by_cases hp : player ∈ B
-  · refine ⟨player, hp, ?_⟩
-    have hbest := quittingBestReplyValue_liftBlockProfile_le_add_excessBound
-      reward B profile hp habsorb
-    have hupper := le_quittingBestReplyValue reward
-      (quittingLiftBlockProfile reward B profile) player deviation
-    linarith
-  · exfalso
-    have hon := quittingTerminalPayoff_liftBlockProfile
-      reward B profile ⟨player, hp⟩
-    have hdev :=
-      quittingTerminalPayoff_update_liftBlockProfile_eq_deleteDeviation
-        reward B profile ⟨player, hp⟩ deviation
-    have hstep := hnash ⟨player, hp⟩
-      (quittingDeleteBlockDeviation reward B ⟨player, hp⟩ deviation)
-    dsimp only at hon hdev
-    linarith
+  rcases exists_mem_gap_le_blockDeletionExcessBound_or_survivorGap reward B
+    hexploit profile habsorb with hmain | ⟨survivor, deviation, hgain⟩
+  · exact hmain
+  · exact absurd (hnash survivor deviation) (by push Not; linarith)
 
 /-! ## Deleting a single player over at most three survivors -/
 
@@ -437,10 +458,13 @@ theorem card_quittingBlockSurvivor_singleton (owner : ι) :
     Fintype.card_subtype_compl]
   simp
 
-theorem card_quittingBlockSurvivor_singleton_eq_three
-    (hcard : Fintype.card ι = 4) (owner : ι) :
-    Fintype.card (QuittingBlockSurvivor ({owner} : Finset ι)) = 3 := by
-  rw [card_quittingBlockSurvivor_singleton, hcard]
+/-- Deleting one player from at most `n + 1` players leaves at most `n`
+survivors. -/
+theorem card_quittingBlockSurvivor_singleton_le {n : ℕ}
+    (hcard : Fintype.card ι ≤ n + 1) (owner : ι) :
+    Fintype.card (QuittingBlockSurvivor ({owner} : Finset ι)) ≤ n := by
+  rw [card_quittingBlockSurvivor_singleton]
+  omega
 
 /-- A survivor game with at most three players has terminal approximate
 equilibria at every positive accuracy, unconditionally. -/
@@ -547,11 +571,40 @@ theorem le_absorptionBound_of_atomicTemptation
 
 /-! ## The vanishing-absorption screen -/
 
+/-- **The vanishing-absorption rate.**  Every positive absorption level `delta`
+below the gap that the survivor game realizes with matching accuracy carries
+the whole deletion inequality: the gap is at most `delta` times the join cap
+plus the solo premium over the continue floor.  The rate is uniform in `delta`,
+and `continueFloor_add_gap_le_solo_of_vanishingAbsorption` is its limit. -/
+theorem gap_le_singletonDeletionExcessBound_of_vanishingAbsorption
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι)
+    {gap : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap)
+    (hvanishing : ∀ delta : ℝ, 0 < delta →
+      ∃ profile : (quittingGame
+          (quittingDeleteBlockReward reward ({owner} : Finset ι))).BehaviorProfile,
+        (quittingGame
+            (quittingDeleteBlockReward reward
+              ({owner} : Finset ι))).IsεAsymptoticNash
+          (quittingTerminalPayoff
+            (quittingDeleteBlockReward reward ({owner} : Finset ι)))
+          delta profile ∧
+        ∀ time, 1 - quittingStationaryContinueMass
+          (quittingProfileLiveRoot
+            (quittingDeleteBlockReward reward ({owner} : Finset ι))
+            profile time) ≤ delta)
+    {delta : ℝ} (hdelta : 0 < delta) (hlt : delta < gap) :
+    gap ≤ quittingBlockDeletionExcessBound reward {owner} owner delta := by
+  obtain ⟨profile, hnash, habsorb⟩ := hvanishing delta hdelta
+  exact gap_le_singletonDeletionExcessBound reward owner hexploit profile hnash
+    hlt habsorb
+
 /-- **The vanishing-absorption necessary condition.**  If the survivor game
 has terminal approximate equilibria of arbitrarily small accuracy whose
 per-stage absorption is arbitrarily small, the join term of the deletion
 inequality drops out and the deleted player must clear its continue floor by
-the whole gap. -/
+the whole gap.  This is the `delta → 0` limit of
+`gap_le_singletonDeletionExcessBound_of_vanishingAbsorption`, which keeps the
+rate. -/
 theorem continueFloor_add_gap_le_solo_of_vanishingAbsorption
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι)
     {gap : ℝ} (hgap : 0 < gap)
@@ -578,21 +631,27 @@ theorem continueFloor_add_gap_le_solo_of_vanishingAbsorption
     quittingBlockContinueFloor reward {owner} owner) with hpremiumDef
   have hcap : 0 ≤ cap := quittingBlockJoinCap_nonneg reward {owner} owner
   have hpremiumLt : premium < gap := max_lt hgap (by linarith)
-  have hpremiumNonneg : 0 ≤ premium := le_max_left _ _
-  have hdenom : (0 : ℝ) < 2 * (cap + 1) := by linarith
-  set delta := (gap - premium) / (2 * (cap + 1)) with hdeltaDef
-  have hdeltaPos : 0 < delta := div_pos (by linarith) hdenom
-  have hdeltaMul : delta * (2 * (cap + 1)) = gap - premium := by
-    rw [hdeltaDef]
-    field_simp
-  have hdeltaCap : 0 ≤ delta * cap := mul_nonneg hdeltaPos.le hcap
-  have hdeltaSmall : delta * cap ≤ (gap - premium) / 2 := by nlinarith
-  have hdeltaHalf : delta ≤ gap / 2 := by nlinarith
-  obtain ⟨profile, hnash, habsorb⟩ := hvanishing delta hdeltaPos
-  have hmain := gap_le_singletonDeletionExcessBound reward owner hexploit
-    profile hnash (by linarith) habsorb
-  unfold quittingBlockDeletionExcessBound at hmain
-  rw [← hcapDef, ← hpremiumDef] at hmain
+  have hrate : ∀ delta : ℝ, 0 < delta → delta < gap →
+      gap ≤ delta * cap + premium := by
+    intro delta hdelta hlt
+    have hstep := gap_le_singletonDeletionExcessBound_of_vanishingAbsorption
+      reward owner hexploit hvanishing hdelta hlt
+    unfold quittingBlockDeletionExcessBound at hstep
+    rw [← hcapDef, ← hpremiumDef] at hstep
+    exact hstep
+  have hlimit : gap ≤ premium := by
+    refine le_of_forall_pos_le_add fun η hη => ?_
+    have hposc : (0 : ℝ) < cap + 1 := by linarith
+    have hdelta : 0 < min (gap / 2) (η / (cap + 1)) :=
+      lt_min (by linarith) (div_pos hη hposc)
+    have hlt : min (gap / 2) (η / (cap + 1)) < gap :=
+      lt_of_le_of_lt (min_le_left _ _) (by linarith)
+    have hstep := hrate _ hdelta hlt
+    have hshrink : min (gap / 2) (η / (cap + 1)) * cap ≤ η / (cap + 1) * cap :=
+      mul_le_mul_of_nonneg_right (min_le_right _ _) hcap
+    have hsplit : η / (cap + 1) * cap + η / (cap + 1) = η := by
+      field_simp
+    linarith [div_nonneg hη.le hposc.le]
   linarith
 
 /-- **The screen.**  A finite quitting game whose survivor game after deleting
@@ -626,18 +685,18 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_vanishingAbsorption
     hgap hexploit hvanishing
   linarith
 
-/-! ## Four players
+/-! ## At most four players
 
-At four players the survivor game after deleting one player has exactly three
-players, so its terminal approximate equilibria exist unconditionally and the
-single-deleted-player inequality applies to every player with no induction
-hypothesis. -/
+With at most four players the survivor game after deleting one player has at
+most three players, so its terminal approximate equilibria exist
+unconditionally and the single-deleted-player inequality applies to every
+player with no induction hypothesis. -/
 
-/-- At four players, the three-player subgame omitting one player has terminal
+/-- With at most four players, the subgame omitting one player has terminal
 approximate equilibria at every positive accuracy. -/
-theorem fourPlayer_exists_terminalNash_deleteSingleton
+theorem exists_terminalNash_deleteSingleton_of_card_le_four
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (hcard : Fintype.card ι = 4) (owner : ι) :
+    (hcard : Fintype.card ι ≤ 4) (owner : ι) :
     ∀ error : ℝ, 0 < error →
       ∃ profile : (quittingGame
           (quittingDeleteBlockReward reward
@@ -649,19 +708,19 @@ theorem fourPlayer_exists_terminalNash_deleteSingleton
             (quittingDeleteBlockReward reward ({owner} : Finset ι)))
           error profile :=
   exists_terminalNash_deleteBlock_of_card_le_three reward {owner}
-    (le_of_eq (card_quittingBlockSurvivor_singleton_eq_three hcard owner))
+    (card_quittingBlockSurvivor_singleton_le hcard owner)
 
-/-- **The four-player dichotomy.**  At four players with a positive gap, every
-player admits a three-player subgame approximate equilibrium sharper than the
-gap, and against any per-stage absorption bound for it the omitted player
-either escapes on its own or is atomically tempted.
+/-- **The dichotomy at most four players.**  With at most four players and a
+positive gap, every player admits a subgame approximate equilibrium sharper
+than the gap, and against any per-stage absorption bound for it the omitted
+player either escapes on its own or is atomically tempted.
 
 This is a necessary condition on a counterexample.  It does not characterize
 solvability: a four-player table can be solved by a profile in which every
 player quits, and no lift of a subgame equilibrium sees such a profile. -/
-theorem fourPlayer_exists_terminalNash_soloEscape_or_atomicTemptation
+theorem exists_terminalNash_soloEscape_or_atomicTemptation_of_card_le_four
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (hcard : Fintype.card ι = 4) (owner : ι) {gap error : ℝ}
+    (hcard : Fintype.card ι ≤ 4) (owner : ι) {gap error : ℝ}
     (hgap : 0 < gap) (hexploit : HasTerminalExploitabilityGap reward gap)
     (herrorPos : 0 < error) (herror : error < gap) :
     ∃ profile : (quittingGame
@@ -683,7 +742,7 @@ theorem fourPlayer_exists_terminalNash_soloEscape_or_atomicTemptation
             gap / 2 ≤
               absorptionBound * quittingBlockJoinCap reward {owner} owner) := by
   obtain ⟨profile, hnash⟩ :=
-    fourPlayer_exists_terminalNash_deleteSingleton reward hcard owner error
+    exists_terminalNash_deleteSingleton_of_card_le_four reward hcard owner error
       herrorPos
   exact ⟨profile, hnash, fun absorptionBound habsorb =>
     singletonDeletion_soloEscape_or_atomicTemptation reward owner hgap hexploit

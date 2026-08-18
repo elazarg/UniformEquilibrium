@@ -22,8 +22,11 @@ collision allowance is used anywhere, because at a solo root the owner's pure
 Quit meets no collision and an inactive player's pure Quit meets only the
 owner.
 
-* **Endpoint formulas** (`IsQuittingSoloRoot.quitPayoff_owner` and the three
-  companions): the four pure endpoint payoffs at a solo root in closed form.
+* **Endpoint formulas** (`IsQuittingSoloRoot.quitPayoff_owner` and its
+  companions): the pure endpoint payoffs at a solo root in closed form,
+  together with the prescribed value (`IsQuittingSoloRoot.successorPayoff_any`),
+  which mixes the owner's singleton row with the declared continuation at every
+  coordinate, the owner's own included.
 * **Active indifference**
   (`IsQuittingSoloRoot.tail_owner_eq_soloReward_of_interior`): at an exact
   endpoint-Nash solo root whose owner mixes strictly, the declared
@@ -33,15 +36,15 @@ owner.
 * **Approximate pin** (`IsQuittingSoloRoot.tail_owner_le_successorPayoff_add`):
   at Nash slack `ε` the owner's value falls by at most `ε` across the date,
   with no interiority hypothesis.
-* **Spectator floor** (`IsQuittingSoloRoot.spectator_floor` and
-  `IsQuittingSoloRoot.tail_other_floor`): an inactive player's mixture of
+* **Pure-Quit floor** (`IsQuittingSoloRoot.quitMix_floor` and
+  `IsQuittingSoloRoot.tail_displacement_floor`): a player's mixture of
   quitting alone and colliding with the owner is at most its prescribed
   value, exactly.
 * **Window telescope**
-  (`quittingSoloTailValue_sub_eq_windowFlow_add_survival`): across a window on
-  which a fixed spectator is inactive, its prescribed value decomposes into
-  the discounted hazard-weighted singleton rows received inside the window
-  plus the surviving endpoint term, around an arbitrary base point.
+  (`quittingSoloTailValue_sub_eq_windowFlow_add_survival`): across a window of
+  solo dates, every player's prescribed value decomposes into the discounted
+  hazard-weighted singleton rows received inside the window plus the surviving
+  endpoint term, around an arbitrary base point.
 * **Exact gap-return identity**
   (`quittingSoloTailMatrixFlow_eq_zero_of_fencedActiveDates`): between two
   consecutive dates at which a player is the strictly mixing soloist, that
@@ -59,6 +62,18 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 /-! ## Endpoint payoffs at a solo root -/
+
+omit [Fintype ι] in
+/-- A player colliding with itself receives its own singleton reward: the
+absorbing set `{who, who}` is the singleton `{who}`. -/
+theorem quittingSingletonCollisionReward_self
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
+    quittingSingletonCollisionReward reward who who =
+      quittingSoloReward reward who who := by
+  have hset : (⟨{who, who}, by simp⟩ : {S : Finset ι // S.Nonempty}) =
+      ⟨{who}, Finset.singleton_nonempty who⟩ :=
+    Subtype.ext (Finset.pair_eq_singleton who)
+  rw [quittingSingletonCollisionReward, quittingSoloReward, hset]
 
 namespace IsQuittingSoloRoot
 
@@ -83,19 +98,26 @@ theorem continuePayoff_owner (reward : {S : Finset ι // S.Nonempty} → Payoff 
   exact quittingRootContinuePayoff_soloStationaryRoot_owner reward owner
     (root owner) tail
 
-/-- An inactive player's pure-Quit endpoint at a solo root mixes quitting
-alone with colliding with the owner, and does not see the continuation. -/
-theorem quitPayoff_other (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {root : ι → PMF Bool} {owner other : ι}
-    (hsolo : IsQuittingSoloRoot root owner) (hne : other ≠ owner)
-    (tail : Payoff ι) :
-    quittingRootQuitPayoff reward tail root other =
-      (root owner false).toReal * quittingSoloReward reward other other +
+/-- Any player's pure-Quit endpoint at a solo root mixes quitting alone with
+colliding with the owner, and does not see the continuation.  At the owner's
+own coordinate the two branches coincide, so the formula needs no case
+distinction. -/
+theorem quitPayoff_any (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {root : ι → PMF Bool} {owner : ι} (hsolo : IsQuittingSoloRoot root owner)
+    (who : ι) (tail : Payoff ι) :
+    quittingRootQuitPayoff reward tail root who =
+      (root owner false).toReal * quittingSoloReward reward who who +
         (root owner true).toReal *
-          quittingSingletonCollisionReward reward owner other := by
-  conv_lhs => rw [hsolo.eq_soloStationaryRoot]
-  exact quittingRootQuitPayoff_soloStationaryRoot_other reward hne
-    (root owner) tail
+          quittingSingletonCollisionReward reward owner who := by
+  by_cases hne : who = owner
+  · subst hne
+    have hmass := quittingRoot_continueProbability_add_quitProbability root who
+    rw [hsolo.quitPayoff_owner reward tail,
+      quittingSingletonCollisionReward_self reward who]
+    linear_combination quittingSoloReward reward who who * hmass.symm
+  · conv_lhs => rw [hsolo.eq_soloStationaryRoot]
+    exact quittingRootQuitPayoff_soloStationaryRoot_other reward hne
+      (root owner) tail
 
 /-- An inactive player's pure-Continue endpoint at a solo root mixes the
 owner's singleton row with the declared continuation. -/
@@ -111,22 +133,30 @@ theorem continuePayoff_other
   exact quittingRootContinuePayoff_soloStationaryRoot_other reward hne
     (root owner) tail
 
-/-- An inactive player's prescribed value at a solo root is its pure-Continue
-endpoint: it already continues surely. -/
-theorem successorPayoff_other
+/-- **Uniform one-date recursion.**  Every player's prescribed value at a solo
+root splits along the owner's hazard into the owner's singleton row and the
+declared continuation.  An inactive player sees this because it continues
+surely and its pure-Continue endpoint already has that shape; the owner sees
+the same formula because its own pure-Quit endpoint is its singleton reward and
+its pure-Continue endpoint is the continuation. -/
+theorem successorPayoff_any
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {root : ι → PMF Bool} {owner other : ι}
-    (hsolo : IsQuittingSoloRoot root owner) (hne : other ≠ owner)
-    (tail : Payoff ι) :
-    quittingRootSuccessorPayoff reward tail root other =
-      (root owner true).toReal * quittingSoloReward reward owner other +
-        (root owner false).toReal * tail other := by
-  have hpure : root other = PMF.pure false := hsolo other hne
-  have hquitMass : (root other true).toReal = 0 := by rw [hpure]; simp
-  have hcontinueMass : (root other false).toReal = 1 := by rw [hpure]; simp
-  rw [quittingRootSuccessorPayoff_eq_endpointMix, hquitMass, hcontinueMass,
-    zero_mul, one_mul, zero_add,
-    hsolo.continuePayoff_other reward hne tail]
+    {root : ι → PMF Bool} {owner : ι} (hsolo : IsQuittingSoloRoot root owner)
+    (who : ι) (tail : Payoff ι) :
+    quittingRootSuccessorPayoff reward tail root who =
+      (root owner true).toReal * quittingSoloReward reward owner who +
+        (root owner false).toReal * tail who := by
+  by_cases hne : who = owner
+  · subst hne
+    rw [quittingRootSuccessorPayoff_eq_endpointMix,
+      hsolo.quitPayoff_owner reward tail,
+      hsolo.continuePayoff_owner reward tail]
+  · have hpure : root who = PMF.pure false := hsolo who hne
+    have hquitMass : (root who true).toReal = 0 := by rw [hpure]; simp
+    have hcontinueMass : (root who false).toReal = 1 := by rw [hpure]; simp
+    rw [quittingRootSuccessorPayoff_eq_endpointMix, hquitMass, hcontinueMass,
+      zero_mul, one_mul, zero_add,
+      hsolo.continuePayoff_other reward hne tail]
 
 /-! ## Active indifference -/
 
@@ -184,41 +214,41 @@ theorem tail_owner_le_successorPayoff_add
   have hendpoint := (hnash owner).2
   linarith
 
-/-! ## The spectator floor -/
+/-! ## The pure-Quit floor -/
 
-/-- **Exact spectator floor.**  At an exact endpoint-Nash solo root an
-inactive player's mixture of quitting alone and colliding with the owner is
-at most its prescribed value. -/
-theorem spectator_floor (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {root : ι → PMF Bool} {owner other : ι} {tail : Payoff ι}
-    (hsolo : IsQuittingSoloRoot root owner) (hne : other ≠ owner)
+/-- **Exact pure-Quit floor.**  At an exact endpoint-Nash solo root a player's
+mixture of quitting alone and colliding with the owner is at most its
+prescribed value. -/
+theorem quitMix_floor (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {root : ι → PMF Bool} {owner : ι} {tail : Payoff ι}
+    (hsolo : IsQuittingSoloRoot root owner) (who : ι)
     (hnash : IsεQuittingRootEndpointNash reward tail 0 root) :
-    (root owner false).toReal * quittingSoloReward reward other other +
+    (root owner false).toReal * quittingSoloReward reward who who +
         (root owner true).toReal *
-          quittingSingletonCollisionReward reward owner other ≤
-      quittingRootSuccessorPayoff reward tail root other := by
+          quittingSingletonCollisionReward reward owner who ≤
+      quittingRootSuccessorPayoff reward tail root who := by
   have hbound := quittingRootQuitPayoff_le_successor_of_isZeroNash reward tail
-    root other
+    root who
     ((isεQuittingRootEndpointNash_iff_isεQuittingRootNash reward tail 0
       root).1 hnash)
-  rwa [hsolo.quitPayoff_other reward hne tail] at hbound
+  rwa [hsolo.quitPayoff_any reward who tail] at hbound
 
-/-- **Rearranged spectator floor.**  The continuation's displacement above the
-inactive player's own singleton reward, weighted by the survival mass,
-dominates the hazard-weighted collision deficit.  Dividing by the survival
-mass is the `O(hazard)` floor with the collision increment as its
-constant. -/
-theorem tail_other_floor (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {root : ι → PMF Bool} {owner other : ι} {tail : Payoff ι}
-    (hsolo : IsQuittingSoloRoot root owner) (hne : other ≠ owner)
+/-- **Rearranged pure-Quit floor.**  The continuation's displacement above a
+player's own singleton reward, weighted by the survival mass, dominates the
+hazard-weighted collision deficit.  Dividing by the survival mass is the
+`O(hazard)` floor with the collision increment as its constant. -/
+theorem tail_displacement_floor
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {root : ι → PMF Bool} {owner : ι} {tail : Payoff ι}
+    (hsolo : IsQuittingSoloRoot root owner) (who : ι)
     (hnash : IsεQuittingRootEndpointNash reward tail 0 root) :
     (root owner true).toReal *
-        (quittingSingletonCollisionReward reward owner other -
-          quittingSoloReward reward owner other) ≤
+        (quittingSingletonCollisionReward reward owner who -
+          quittingSoloReward reward owner who) ≤
       (root owner false).toReal *
-        (tail other - quittingSoloReward reward other other) := by
-  have hfloor := hsolo.spectator_floor reward hne hnash
-  rw [hsolo.successorPayoff_other reward hne tail] at hfloor
+        (tail who - quittingSoloReward reward who who) := by
+  have hfloor := hsolo.quitMix_floor reward who hnash
+  rw [hsolo.successorPayoff_any reward who tail] at hfloor
   nlinarith [hfloor]
 
 end IsQuittingSoloRoot
@@ -270,13 +300,8 @@ theorem quittingSoloTailSurvival_succ_left
     (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι) (start length : ℕ) :
     quittingSoloTailSurvival roots owner start (length + 1) =
       quittingSoloTailContinueMass roots owner start *
-        quittingSoloTailSurvival roots owner (start + 1) length := by
-  unfold quittingSoloTailSurvival
-  rw [show length + 1 = 1 + length from by omega,
-    Math.survivalProduct_add]
-  congr 1
-  simpa using Math.survivalProduct_succ
-    (quittingSoloTailContinueMass roots owner) start 0
+        quittingSoloTailSurvival roots owner (start + 1) length :=
+  Math.survivalProduct_succ_left _ start length
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- Every window survival lies in the unit interval. -/
@@ -312,32 +337,37 @@ theorem sum_quittingSoloTailWindowWeight_add_survival
     (∑ offset ∈ Finset.range length,
         quittingSoloTailWindowWeight roots owner start offset) +
       quittingSoloTailSurvival roots owner start length = 1 := by
-  induction length with
-  | zero => simp
-  | succ length ih =>
-      have hmass := quittingSoloTailContinueMass_add_hazard roots owner
-        (start + length)
-      rw [Finset.sum_range_succ, quittingSoloTailSurvival_succ,
-        quittingSoloTailWindowWeight]
-      linear_combination ih +
-        quittingSoloTailSurvival roots owner start length * hmass
+  have hterm : ∀ offset ∈ Finset.range length,
+      quittingSoloTailWindowWeight roots owner start offset =
+        Math.survivalProduct (quittingSoloTailContinueMass roots owner) start
+            offset *
+          (1 - quittingSoloTailContinueMass roots owner (start + offset)) := by
+    intro offset _
+    have hmass := quittingSoloTailContinueMass_add_hazard roots owner
+      (start + offset)
+    simp only [quittingSoloTailWindowWeight, quittingSoloTailSurvival]
+    rw [show quittingSoloTailHazard roots owner (start + offset) =
+      1 - quittingSoloTailContinueMass roots owner (start + offset) from by
+        linarith]
+  rw [Finset.sum_congr rfl hterm, Math.sum_survivalProduct_mul_one_sub]
+  simp only [quittingSoloTailSurvival]
+  ring
 
-/-! ## Transporting a spectator's value across a window -/
+/-! ## Transporting a value across a window -/
 
-/-- **Window telescope.**  On a window of solo dates at which `who` is never
-the designated soloist, `who`'s prescribed value decomposes, around an
-arbitrary base point `base`, into the discounted singleton rows it receives
-inside the window plus the surviving endpoint displacement.  This is exact:
-only the value recursion and the solo shape of each root are used, and no
-endpoint-Nash input enters. -/
+/-- **Window telescope.**  On a window of solo dates, `who`'s prescribed value
+decomposes, around an arbitrary base point `base`, into the discounted
+singleton rows it receives inside the window plus the surviving endpoint
+displacement.  This is exact and holds at every coordinate, the dates' own
+soloists included: only the value recursion and the solo shape of each root are
+used, and no endpoint-Nash input enters. -/
 theorem quittingSoloTailValue_sub_eq_windowFlow_add_survival
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (who : ι) (base : ℝ) (start length : ℕ)
     (hsolo : ∀ offset, offset < length →
-      IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset)))
-    (hspectator : ∀ offset, offset < length → who ≠ owner (start + offset)) :
+      IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset))) :
     value start who - base =
       (∑ offset ∈ Finset.range length,
           quittingSoloTailWindowWeight roots owner start offset *
@@ -347,16 +377,8 @@ theorem quittingSoloTailValue_sub_eq_windowFlow_add_survival
   induction length generalizing start with
   | zero => simp
   | succ length ih =>
-      have hspectator0 : who ≠ owner start := by
-        simpa using hspectator 0 (Nat.succ_pos length)
       have hsolo0 : IsQuittingSoloRoot (roots start) (owner start) := by
         simpa using hsolo 0 (Nat.succ_pos length)
-      have hspectatorTail : ∀ offset, offset < length →
-          who ≠ owner (start + 1 + offset) := by
-        intro offset hoffset
-        have hshift := hspectator (offset + 1) (by omega)
-        rwa [show start + (offset + 1) = start + 1 + offset from by omega]
-          at hshift
       have hsoloTail : ∀ offset, offset < length →
           IsQuittingSoloRoot (roots (start + 1 + offset))
             (owner (start + 1 + offset)) := by
@@ -370,9 +392,8 @@ theorem quittingSoloTailValue_sub_eq_windowFlow_add_survival
             quittingSoloTailContinueMass roots owner start *
               value (start + 1) who := by
         conv_lhs => rw [hpolicy start]
-        exact hsolo0.successorPayoff_other reward hspectator0
-          (value (start + 1))
-      have hIH := ih (start + 1) hsoloTail hspectatorTail
+        exact hsolo0.successorPayoff_any reward who (value (start + 1))
+      have hIH := ih (start + 1) hsoloTail
       have hmass := quittingSoloTailContinueMass_add_hazard roots owner start
       have hsum :
           (∑ offset ∈ Finset.range (length + 1),
@@ -425,28 +446,28 @@ def quittingSoloTailMatrixFlow
       normalizedSoloMatrix reward who (owner (start + offset))
 
 /-- The window telescope written in normalized-solo-matrix coordinates: a
-spectator's displacement from its own singleton reward is its discounted
-matrix flow plus the surviving endpoint displacement. -/
+player's displacement from its own singleton reward is its discounted matrix
+flow plus the surviving endpoint displacement.  The dates at which the player
+is itself the soloist contribute nothing, their matrix entries being
+diagonal. -/
 theorem quittingSoloTailValue_sub_soloReward_eq_matrixFlow_add_survival
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (who : ι) (start length : ℕ)
     (hsolo : ∀ offset, offset < length →
-      IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset)))
-    (hspectator : ∀ offset, offset < length → who ≠ owner (start + offset)) :
+      IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset))) :
     value start who - quittingSoloReward reward who who =
       quittingSoloTailMatrixFlow reward roots owner who start length +
         quittingSoloTailSurvival roots owner start length *
           (value (start + length) who - quittingSoloReward reward who who) := by
   have hbase := quittingSoloTailValue_sub_eq_windowFlow_add_survival roots value
     owner hpolicy who (quittingSoloReward reward who who) start length hsolo
-    hspectator
   rw [hbase, quittingSoloTailMatrixFlow]
   refine congrArg (· + _) (Finset.sum_congr rfl fun offset _ => ?_)
   rw [normalizedSoloMatrix_eq_soloReward_sub]
 
-/-- **Pinned-end form.**  A window across which a spectator's prescribed value
+/-- **Pinned-end form.**  A window across which a player's prescribed value
 returns to its own singleton reward carries exactly zero discounted matrix
 flow. -/
 theorem quittingSoloTailMatrixFlow_eq_zero_of_pinnedEnds
@@ -456,48 +477,45 @@ theorem quittingSoloTailMatrixFlow_eq_zero_of_pinnedEnds
     (who : ι) (start length : ℕ)
     (hsolo : ∀ offset, offset < length →
       IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset)))
-    (hspectator : ∀ offset, offset < length → who ≠ owner (start + offset))
     (hstart : value start who = quittingSoloReward reward who who)
     (hend : value (start + length) who = quittingSoloReward reward who who) :
     quittingSoloTailMatrixFlow reward roots owner who start length = 0 := by
   have hidentity :=
     quittingSoloTailValue_sub_soloReward_eq_matrixFlow_add_survival roots value
-      owner hpolicy who start length hsolo hspectator
+      owner hpolicy who start length hsolo
   rw [hstart, hend] at hidentity
   simp only [sub_self, mul_zero, add_zero] at hidentity
   linarith
 
 /-- At a strictly mixing date on which `who` is the exact-Nash soloist, both
 `who`'s prescribed value at that date and its declared continuation are its
-own singleton reward. -/
+own singleton reward.  Only the one date's value recursion, Nash certificate
+and solo shape enter. -/
 theorem quittingSoloTailValue_eq_soloReward_of_activeInterior
-    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
-    (hpolicy : ∀ time, value time =
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (who : ι) (time : ℕ)
+    (hpolicy : value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    (hnash : ∀ time,
+    (hnash :
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time))
-    (who : ι) (time : ℕ) (hactive : owner time = who)
+    (hsolo : IsQuittingSoloRoot (roots time) who)
     (hquit : 0 < (roots time who true).toReal)
     (hcontinue : 0 < (roots time who false).toReal) :
     value time who = quittingSoloReward reward who who ∧
       value (time + 1) who = quittingSoloReward reward who who := by
-  have hsoloTime : IsQuittingSoloRoot (roots time) who := by
-    rw [← hactive]; exact hsolo time
-  have hpin := hsoloTime.tail_owner_eq_soloReward_of_interior reward
-    (hnash time) hquit hcontinue
+  have hpin := hsolo.tail_owner_eq_soloReward_of_interior reward hnash hquit
+    hcontinue
   refine ⟨?_, hpin⟩
-  have hstep := hsoloTime.successorPayoff_owner_eq_tail_of_interior reward
-    (hnash time) hquit hcontinue
-  rw [hpolicy time]
+  have hstep := hsolo.successorPayoff_owner_eq_tail_of_interior reward hnash
+    hquit hcontinue
+  rw [hpolicy]
   exact hstep.trans hpin
 
 /-- **Exact gap-return identity.**  Let `who` be the strictly mixing
-exact-Nash soloist at two dates `fence` and `fence + 1 + length`, and let it
-be a spectator at every date in between.  Then `who`'s discounted
-normalized-solo-matrix flow across the intervening window is exactly zero:
-every recurrent player's discounted flow over each of its gaps balances with
-no error term. -/
+exact-Nash soloist at two dates `fence` and `fence + 1 + length`.  Then `who`'s
+discounted normalized-solo-matrix flow across the intervening window is exactly
+zero: every recurrent player's discounted flow over each of its gaps balances
+with no error term.  Whether `who` is itself the soloist at some intervening
+date is immaterial, such a date contributing a diagonal matrix entry. -/
 theorem quittingSoloTailMatrixFlow_eq_zero_of_fencedActiveDates
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
     (hpolicy : ∀ time, value time =
@@ -511,18 +529,17 @@ theorem quittingSoloTailMatrixFlow_eq_zero_of_fencedActiveDates
     (hopenContinue : 0 < (roots fence who false).toReal)
     (hclose : owner (fence + 1 + length) = who)
     (hcloseQuit : 0 < (roots (fence + 1 + length) who true).toReal)
-    (hcloseContinue : 0 < (roots (fence + 1 + length) who false).toReal)
-    (hspectator : ∀ offset, offset < length →
-      who ≠ owner (fence + 1 + offset)) :
+    (hcloseContinue : 0 < (roots (fence + 1 + length) who false).toReal) :
     quittingSoloTailMatrixFlow reward roots owner who (fence + 1) length = 0 := by
   have hstart := (quittingSoloTailValue_eq_soloReward_of_activeInterior roots
-    value owner hpolicy hnash hsolo who fence hopen hopenQuit hopenContinue).2
+    value who fence (hpolicy fence) (hnash fence) (hopen ▸ hsolo fence)
+    hopenQuit hopenContinue).2
   have hend := (quittingSoloTailValue_eq_soloReward_of_activeInterior roots
-    value owner hpolicy hnash hsolo who (fence + 1 + length) hclose hcloseQuit
-    hcloseContinue).1
+    value who (fence + 1 + length) (hpolicy (fence + 1 + length))
+    (hnash (fence + 1 + length)) (hclose ▸ hsolo (fence + 1 + length))
+    hcloseQuit hcloseContinue).1
   exact quittingSoloTailMatrixFlow_eq_zero_of_pinnedEnds roots value owner
-    hpolicy who (fence + 1) length (fun offset _ => hsolo _) hspectator hstart
-    hend
+    hpolicy who (fence + 1) length (fun offset _ => hsolo _) hstart hend
 
 /-! ## Constant-soloist windows and the phantom mismatch -/
 
@@ -533,8 +550,7 @@ theorem quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    (who fixedOwner : ι) (hne : who ≠ fixedOwner) (base : ℝ)
-    (start length : ℕ)
+    (who fixedOwner : ι) (base : ℝ) (start length : ℕ)
     (hsolo : ∀ offset, offset < length →
       IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset)))
     (hconstant : ∀ offset, offset < length → owner (start + offset) = fixedOwner) :
@@ -543,12 +559,8 @@ theorem quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner
           (quittingSoloReward reward fixedOwner who - base) +
         quittingSoloTailSurvival roots owner start length *
           (value (start + length) who - base) := by
-  have hspectator : ∀ offset, offset < length → who ≠ owner (start + offset) := by
-    intro offset hoffset
-    rw [hconstant offset hoffset]
-    exact hne
   have hbase := quittingSoloTailValue_sub_eq_windowFlow_add_survival roots value
-    owner hpolicy who base start length hsolo hspectator
+    owner hpolicy who base start length hsolo
   have hflow :
       (∑ offset ∈ Finset.range length,
           quittingSoloTailWindowWeight roots owner start offset *
@@ -603,7 +615,7 @@ theorem quittingSoloTailValue_sub_le_of_constantOwner_preemption
         quittingSoloTailSurvival roots owner start length *
           (value (start + length) who - base) := by
   have hidentity := quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner
-    roots value owner hpolicy who fixedOwner hpreempt.1 base start length
+    roots value owner hpolicy who fixedOwner base start length
     (fun offset _ => hsolo _) hconstant
   have hmismatch := quittingSoloTailWindowDelivery_sub_base_le_neg_margin reward
     hpreempt hfloor

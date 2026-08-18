@@ -280,7 +280,7 @@ theorem hnash (time : ℕ) :
     have hdiff : quittingRootEndpointDifference reward (value (time + 1))
         (roots time) who ≤ 0 := by
       rw [quittingRootEndpointDifference,
-        hsolo.quitPayoff_other reward hwho (value (time + 1)),
+        hsolo.quitPayoff_any reward who (value (time + 1)),
         hsolo.continuePayoff_other reward hwho (value (time + 1)), hownerRoot,
         hazard_true, hazard_false, collisionReward_eval hwho]
       rcases player_cases time who with hcase | hcase | hcase

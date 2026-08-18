@@ -57,17 +57,29 @@ players in exact diffuse tails.
 * **T4(b)** (`isEmpty_fencedSoloWindows_of_quittingSoloPreempts`): fenced solo
   windows are impossible along a strict solo-preemption edge, so the
   face-enlargement reading of an obstruction is unavailable there.
-* **T4(a)** (`QuittingSoloWindowPhaseStopBranch`): a proposition definition,
-  not a theorem.  Its phase-stop conjunct is the conclusion of
-  `exists_phaseStopObstruction_of_soloWindows`, which needs the canonical
-  windows to be solo at `owner` and to deliver `owner` at least
+* **T4(a)** (`QuittingSoloWindowPhaseStopBranch`): a proposition definition.
+  Its phase-stop conjunct is the
+  conclusion of `exists_phaseStopObstruction_of_soloWindows`, which needs the
+  canonical windows to be solo at `owner` and to deliver `owner` at least
   `-terminalGap / 2`: a coordinate other than `owner` already continues surely
   there, so its refusal reproduces the window's delivery
   (`not_refusalObstruction_of_soloWindow`), while `owner`'s own refusal stops
   all absorption and pays zero
   (`quittingPeriodicWindowRefusalValue_eq_zero_of_soloRoots`).  What T4(a)
   adds beyond that conjunct is the preemption edge at the obstructing
-  coordinate.
+  coordinate, and
+  `QuittingCounterexampleSeamWitness.quittingSoloWindowPhaseStopBranch_of_tailSolo`
+  in `Research/Quitting/SoloWindowPhaseStopBranch.lean` supplies it at margin
+  `regime.terminalGap / 4` from four hypotheses: that every
+  tail root `quittingDynamicDebtTailRoots seam.tail time` is solo at `owner`;
+  that `owner`'s own singleton reward `quittingSoloReward reward owner owner`
+  is nonnegative; that some `bound` dominates `|reward terminal player|` at
+  every terminal coalition and player; and that every canonical periodic
+  window absorbs almost surely.  Its two specializations
+  `quittingSoloWindowPhaseStopBranch_of_tailSolo_of_blockActive` and
+  `quittingSoloWindowPhaseStopBranch_of_tailSolo_of_active` derive that last
+  hypothesis from a positive `owner` Quit probability at one date of each
+  restarted block, respectively at every date.
 
 Nothing in this file asserts that solo windows exist; every solo statement is
 conditional on being handed one.

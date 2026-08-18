@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanCapPureTimeStop
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
+import UniformEquilibrium.Quitting.Cycles.PeriodicRootResponseSystem
 
 /-!
 # The anchored cyclic screen for single-quitter periodic schedules
@@ -50,13 +51,24 @@ hypothesis.  That route consumes the profile's Nash property; it does not
 compute the response cap.
 
 The last section states the max-linear response system for the anchored
-cyclic family and identifies it with the repository's Bellman cap recursion
-along the periodic live path.  It also records the matching lower bound
+cyclic family and identifies it with the general periodic response system
+`IsQuittingCyclicResponseSolution`, of which it is the single-quitter case
+(`isQuittingCyclicResponseSolution_of_isAnchoredCyclicResponseSolution`), and
+hence with the repository's Bellman cap recursion along the periodic live path.
+It also records the matching lower bound
 `quittingAnchoredCyclicQuitValue_le_responseCap`: quitting at the opening phase
 is one of the deviations the cap ranges over, so a schedule whose opening quit
-value already beats its on-path value is rejected.  The passage from a solution
+value already beats its on-path value is rejected.  Two consequences of that
+lower bound are recorded with it.  On a table whose quit-now row at a player is
+flat — the same payoff alone as alongside the phase's scheduled quitter — that
+payoff is a best-reply floor (`le_quittingBestReplyValue_of_flatQuitRow`).  And
+against an `ε`-exact anchored solo-periodic profile the quit-now value exceeds
+the on-path value by at most `ε`, at every phase and for every player
+(`quittingAnchoredCyclicQuitValue_le_onPathValue_add_of_isεExactAnchoredSoloPeriodic`),
+so a flat quit-now row at `c` gives every on-path coordinate the floor `c - ε`.
+The passage from a solution
 of that system to the evaluator's response cap splits into two halves.  The
-deterministic-stop half is `quittingAnchoredCyclicPhaseStop_le`, proved here.
+deterministic-stop half is `quittingAnchoredCyclicPhaseStop_le`.
 The refusal half is carried here as the explicit hypothesis `hrefusal` of
 `exists_anchoredCyclicResponse_gain`, and is discharged in
 `Research/Quitting/AnchoredCyclicRenewal.lean`: the refusal identity evaluates
@@ -286,6 +298,16 @@ def quittingAnchoredCyclicResponseCap
     (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
       (quittingAnchoredCyclicStart m)) who m
 
+/-- The anchored cyclic response cap is the periodic response cap of the
+anchored cyclic cycle read from its opening phase. -/
+theorem quittingAnchoredCyclicResponseCap_eq_quittingCyclicResponseCap
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) [NeZero m] (who : ι) :
+    quittingAnchoredCyclicResponseCap reward w hazard h0 h1 who =
+      quittingCyclicResponseCap reward (quittingAnchoredCyclicCycle w hazard h0 h1)
+        (quittingAnchoredCyclicStart m) who := rfl
+
 /-- **The response cap is the exact behavioral best response.**  It is the
 supremum of the terminal payoffs of *all* unilateral behavioral deviations
 from the anchored cyclic profile, not merely of stopping times. -/
@@ -488,6 +510,71 @@ def IsAnchoredCyclicResponseSolution
         (quittingAnchoredCyclicContinueValue reward w hazard phase who
           (S (finRotate m phase) who))
 
+/-! ### The anchored system is the general cyclic system
+
+`IsQuittingCyclicResponseSolution` states the max-linear response system for an
+arbitrary cycle of product rows.  The anchored cyclic family is the
+single-quitter case, and the two scalar formulas
+`quittingAnchoredCyclicQuitValue` and `quittingAnchoredCyclicContinueValue`
+evaluate the general branches at a solo mixed row.
+-/
+
+/-- The general Quit branch of an anchored cyclic row is the scalar one-phase
+Quit value.  The declared tail does not enter: quitting ends the play. -/
+theorem quittingRootQuitPayoff_anchoredCyclicCycle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (phase : Fin m) (who : ι) :
+    quittingRootQuitPayoff reward tail
+        (quittingAnchoredCyclicCycle w hazard h0 h1 phase) who =
+      quittingAnchoredCyclicQuitValue reward w hazard phase who := by
+  rw [show quittingAnchoredCyclicCycle w hazard h0 h1 phase =
+    quittingSoloMixedRoot (w phase)
+      (quittingHazardCoin (hazard phase) (h0 phase) (h1 phase)) from rfl]
+  unfold quittingAnchoredCyclicQuitValue
+  by_cases hwho : who = w phase
+  · rw [hwho, quittingRootQuitPayoff_soloMixedRoot_self]
+    simp
+  · rw [quittingRootQuitPayoff_soloMixedRoot_of_ne reward _ hwho]
+    simp [hwho]
+
+/-- The general Continue branch of an anchored cyclic row is the scalar
+one-phase Continue value, evaluated at the declared tail's own coordinate. -/
+theorem quittingRootContinuePayoff_anchoredCyclicCycle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (phase : Fin m) (who : ι) :
+    quittingRootContinuePayoff reward tail
+        (quittingAnchoredCyclicCycle w hazard h0 h1 phase) who =
+      quittingAnchoredCyclicContinueValue reward w hazard phase who (tail who) := by
+  rw [show quittingAnchoredCyclicCycle w hazard h0 h1 phase =
+    quittingSoloMixedRoot (w phase)
+      (quittingHazardCoin (hazard phase) (h0 phase) (h1 phase)) from rfl]
+  unfold quittingAnchoredCyclicContinueValue
+  by_cases hwho : who = w phase
+  · rw [hwho, quittingRootContinuePayoff_soloMixedRoot_self]
+    simp
+  · rw [quittingRootContinuePayoff_soloMixedRoot_of_ne reward _ hwho]
+    simp [hwho]
+
+/-- **The anchored response system is the general one.**  A solution of the
+single-quitter scalar recursion solves the max-linear response system of the
+anchored cyclic cycle, so every bound proved for arbitrary product cycles
+applies to it. -/
+theorem isQuittingCyclicResponseSolution_of_isAnchoredCyclicResponseSolution
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) {S : Fin m → ι → ℝ}
+    (hS : IsAnchoredCyclicResponseSolution reward w hazard S) :
+    IsQuittingCyclicResponseSolution reward
+      (quittingAnchoredCyclicCycle w hazard h0 h1) S := by
+  intro phase who
+  rw [quittingRootQuitPayoff_anchoredCyclicCycle reward _ w hazard h0 h1 phase who,
+    quittingRootContinuePayoff_anchoredCyclicCycle reward _ w hazard h0 h1 phase who]
+  exact hS phase who
+
 /-- The one-phase Quit value is the repository's fixed-opponent quit value
 along the anchored cyclic live path. -/
 theorem quittingFixedOpponentsQuitValue_anchoredCyclic
@@ -500,18 +587,8 @@ theorem quittingFixedOpponentsQuitValue_anchoredCyclic
           (quittingAnchoredCyclicCycle w hazard h0 h1) phase) who time =
       quittingAnchoredCyclicQuitValue reward w hazard
         (quittingCyclicOrbit phase time) who := by
-  set step := quittingCyclicOrbit phase time with hstep
-  rw [← quittingRootQuitPayoff_eq_fixedOpponentsQuitValue reward _ who 0 time,
-    show quittingCyclicRootSequence
-        (quittingAnchoredCyclicCycle w hazard h0 h1) phase time =
-      quittingSoloMixedRoot (w step)
-        (quittingHazardCoin (hazard step) (h0 step) (h1 step)) from rfl]
-  unfold quittingAnchoredCyclicQuitValue
-  by_cases hwho : who = w step
-  · rw [hwho, quittingRootQuitPayoff_soloMixedRoot_self]
-    simp
-  · rw [quittingRootQuitPayoff_soloMixedRoot_of_ne reward _ hwho]
-    simp [hwho]
+  rw [← quittingRootQuitPayoff_eq_fixedOpponentsQuitValue reward _ who 0 time]
+  exact quittingRootQuitPayoff_anchoredCyclicCycle reward 0 w hazard h0 h1 _ who
 
 /-- **The response cap dominates quitting at once.**  A lower bound on the
 exact finite best-response statistic: stopping at the opening phase is one of
@@ -538,6 +615,133 @@ theorem quittingAnchoredCyclicQuitValue_le_responseCap
   refine le_trans (le_of_eq hstop.symm) (le_trans ?_ (le_max_right _ _))
   exact Finset.le_sup' _ (Finset.mem_univ (quittingAnchoredCyclicStart m))
 
+/-! ### A flat quit-now row -/
+
+omit [Fintype ι] in
+/-- **A flat quit-now row evaluates the one-phase Quit value.**  If quitting
+pays `who` the amount `c` both alone and alongside the phase's scheduled
+quitter, then quitting at that phase pays `c`, for every schedule and every
+hazard.  Only the scheduled quitter's pair row enters, and only when `who` is
+not that quitter. -/
+theorem quittingAnchoredCyclicQuitValue_eq_of_flatQuitRow
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ) (phase : Fin m) {who : ι} {c : ℝ}
+    (hself : reward (quittingSingletonTerminal who) who = c)
+    (hpair : who ≠ w phase →
+      reward ⟨{w phase, who}, Finset.insert_nonempty (w phase) {who}⟩ who = c) :
+    quittingAnchoredCyclicQuitValue reward w hazard phase who = c := by
+  unfold quittingAnchoredCyclicQuitValue
+  by_cases hwho : who = w phase
+  · rw [if_pos hwho, hself]
+  · rw [if_neg hwho, hpair hwho, hself]
+    ring
+
+omit [Fintype ι] in
+/-- At an idle phase quitting pays `who` its own solo exit, whatever the
+schedule: nobody else is quitting to collide with. -/
+theorem quittingAnchoredCyclicQuitValue_of_hazard_eq_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ) (phase : Fin m) (who : ι)
+    (hzero : hazard phase = 0) :
+    quittingAnchoredCyclicQuitValue reward w hazard phase who =
+      reward (quittingSingletonTerminal who) who := by
+  unfold quittingAnchoredCyclicQuitValue
+  rw [hzero]
+  split_ifs with hwho
+  · rfl
+  · ring
+
+/-- **The behavioral supremum dominates quitting at once.**  Stopping at the
+opening phase is one of the deviations the best-reply value ranges over. -/
+theorem quittingAnchoredCyclicQuitValue_le_quittingBestReplyValue
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) [NeZero m] (who : ι) :
+    quittingAnchoredCyclicQuitValue reward w hazard
+        (quittingAnchoredCyclicStart m) who ≤
+      quittingBestReplyValue reward
+        (quittingAnchoredCyclicProfile reward w hazard h0 h1) who := by
+  have hcap := quittingAnchoredCyclicQuitValue_le_responseCap reward w hazard
+    h0 h1 who
+  have hsup := sSup_range_quittingTerminalPayoff_update_anchoredCyclicProfile
+    reward w hazard h0 h1 who
+  show _ ≤ ⨆ deviation, _
+  rw [show (⨆ deviation : (quittingGame reward).BehaviorStrategy who,
+      quittingTerminalPayoff reward
+        (Function.update (quittingAnchoredCyclicProfile reward w hazard h0 h1)
+          who deviation) who) =
+      sSup (Set.range fun deviation :
+          (quittingGame reward).BehaviorStrategy who ↦
+        quittingTerminalPayoff reward
+          (Function.update (quittingAnchoredCyclicProfile reward w hazard h0 h1)
+            who deviation) who) from rfl, hsup]
+  exact hcap
+
+/-- **A flat quit-now row is a best-reply floor.**  Composing the flat row at
+the opening phase with the quit-now lower bound: no player's best reply against
+an anchored cyclic profile pays it less than the flat value. -/
+theorem le_quittingBestReplyValue_of_flatQuitRow
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) [NeZero m] {who : ι}
+    {c : ℝ} (hself : reward (quittingSingletonTerminal who) who = c)
+    (hpair : who ≠ w (quittingAnchoredCyclicStart m) →
+      reward ⟨{w (quittingAnchoredCyclicStart m), who},
+          Finset.insert_nonempty (w (quittingAnchoredCyclicStart m)) {who}⟩ who =
+        c) :
+    c ≤ quittingBestReplyValue reward
+      (quittingAnchoredCyclicProfile reward w hazard h0 h1) who := by
+  have hquit := quittingAnchoredCyclicQuitValue_le_quittingBestReplyValue reward
+    w hazard h0 h1 who
+  rwa [quittingAnchoredCyclicQuitValue_eq_of_flatQuitRow reward w hazard
+    (quittingAnchoredCyclicStart m) hself hpair] at hquit
+
+/-! ### The one-stage floor of an `ε`-exact profile -/
+
+/-- **The one-stage floor.**  Against an `ε`-exact anchored solo-periodic
+profile the quit-now value exceeds the on-path value by at most `ε`, at every
+phase and for every player.  The scheduled quitter's own coordinate is its
+lower endpoint condition read through the renewal identity; every other
+coordinate is the spectator floor.  No hazard positivity and no condition on
+the table enter. -/
+theorem quittingAnchoredCyclicQuitValue_le_onPathValue_add_of_isεExactAnchoredSoloPeriodic
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {ε : ℝ}
+    {w : Fin m → ι} {hazard : Fin m → ℝ}
+    {h0 : ∀ k, 0 ≤ hazard k} {h1 : ∀ k, hazard k ≤ 1}
+    (hexact : IsεExactAnchoredSoloPeriodic reward ε w hazard h0 h1)
+    (phase : Fin m) (who : ι) :
+    quittingAnchoredCyclicQuitValue reward w hazard phase who ≤
+      quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 phase who + ε := by
+  have hren := quittingAnchoredCyclicOnPathValue_renewal reward w hazard h0 h1
+    phase who
+  unfold quittingAnchoredCyclicQuitValue
+  by_cases hwho : who = w phase
+  · subst hwho
+    rw [if_pos rfl]
+    linarith [anchorLowerBound_of_isεExactAnchoredSoloPeriodic hexact phase]
+  · rw [if_neg hwho]
+    linarith [spectatorFloor_of_isεExactAnchoredSoloPeriodic hexact phase hwho]
+
+/-- **The value floor of a flat quit-now row.**  On a table whose quit-now row
+at `who` is flat at `c`, every on-path coordinate of an `ε`-exact anchored
+solo-periodic profile is at least `c - ε`, at every phase. -/
+theorem sub_le_quittingAnchoredCyclicOnPathValue_of_flatQuitRow
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {ε c : ℝ}
+    {w : Fin m → ι} {hazard : Fin m → ℝ}
+    {h0 : ∀ k, 0 ≤ hazard k} {h1 : ∀ k, hazard k ≤ 1} {who : ι}
+    (hself : reward (quittingSingletonTerminal who) who = c)
+    (hexact : IsεExactAnchoredSoloPeriodic reward ε w hazard h0 h1)
+    (phase : Fin m)
+    (hpair : who ≠ w phase →
+      reward ⟨{w phase, who}, Finset.insert_nonempty (w phase) {who}⟩ who = c) :
+    c - ε ≤ quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 phase who := by
+  have hquit :=
+    quittingAnchoredCyclicQuitValue_le_onPathValue_add_of_isεExactAnchoredSoloPeriodic
+      hexact phase who
+  rw [quittingAnchoredCyclicQuitValue_eq_of_flatQuitRow reward w hazard phase
+    hself hpair] at hquit
+  linarith
+
 /-- The one-phase Continue value is the repository's fixed-opponent continue
 statistic along the anchored cyclic live path. -/
 theorem quittingFixedOpponentsContinue_anchoredCyclic
@@ -554,20 +758,11 @@ theorem quittingFixedOpponentsContinue_anchoredCyclic
           next =
       quittingAnchoredCyclicContinueValue reward w hazard
         (quittingCyclicOrbit phase time) who next := by
-  set step := quittingCyclicOrbit phase time with hstep
-  set roots := quittingCyclicRootSequence
-    (quittingAnchoredCyclicCycle w hazard h0 h1) phase with hroots
-  have hstepRoot : roots time =
-      quittingSoloMixedRoot (w step)
-        (quittingHazardCoin (hazard step) (h0 step) (h1 step)) := rfl
-  rw [← quittingRootContinuePayoff_eq_fixedOpponents reward roots who
-    (fun _ ↦ next) time, hstepRoot]
-  unfold quittingAnchoredCyclicContinueValue
-  by_cases hwho : who = w step
-  · rw [hwho, quittingRootContinuePayoff_soloMixedRoot_self]
-    simp
-  · rw [quittingRootContinuePayoff_soloMixedRoot_of_ne reward _ hwho]
-    simp [hwho]
+  rw [← quittingRootContinuePayoff_eq_fixedOpponents reward
+    (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1) phase)
+    who (fun _ ↦ next) time]
+  exact quittingRootContinuePayoff_anchoredCyclicCycle reward (fun _ ↦ next) w hazard
+    h0 h1 _ who
 
 /-- **Identification of the max-linear system.**  A solution of the source
 analysis's system, read along the periodic live path, is exactly a Bellman
@@ -582,17 +777,10 @@ theorem isQuittingLiveBellmanCap_of_isAnchoredCyclicResponseSolution
     IsQuittingLiveBellmanCap reward
       (quittingCyclicRootSequence
         (quittingAnchoredCyclicCycle w hazard h0 h1) phase) who
-      (fun time ↦ S (quittingCyclicOrbit phase time) who) := by
-  intro time
-  rw [quittingLiveBellmanValue,
-    quittingFixedOpponentsQuitValue_anchoredCyclic reward w hazard h0 h1
-      phase who time,
-    quittingFixedOpponentsContinue_anchoredCyclic reward w hazard h0 h1
-      phase who time]
-  rw [show quittingCyclicOrbit phase (time + 1) =
-      finRotate m (quittingCyclicOrbit phase time) by
-    rw [quittingCyclicOrbit_succ, finRotate_eq_quittingCyclicOrbit_one]]
-  exact hS (quittingCyclicOrbit phase time) who
+      (fun time ↦ S (quittingCyclicOrbit phase time) who) :=
+  isQuittingLiveBellmanCap_of_isQuittingCyclicResponseSolution
+    (isQuittingCyclicResponseSolution_of_isAnchoredCyclicResponseSolution reward w
+      hazard h0 h1 hS) phase who
 
 /-! ### The deterministic-stop half of the bridge -/
 
@@ -610,10 +798,10 @@ theorem quittingAnchoredCyclicPureTime_le
           (quittingAnchoredCyclicCycle w hazard h0 h1) phase) who
         (some (start + fuel)) start ≤
       S (quittingCyclicOrbit phase start) who :=
-  quittingRootSequencePureTimeTerminalValue_le_of_bellmanCap reward _ who
+  quittingRootSequencePureTimeTerminalValue_le_of_bellmanSupersolution reward _ who
     (fun time ↦ S (quittingCyclicOrbit phase time) who)
     (isQuittingLiveBellmanCap_of_isAnchoredCyclicResponseSolution reward w hazard
-      h0 h1 S hS phase who) start fuel
+      h0 h1 S hS phase who).supersolution start fuel
 
 /-- Every phase stop of one pass is capped by a solution of the max-linear
 response system. -/
@@ -628,11 +816,10 @@ theorem quittingAnchoredCyclicPhaseStop_le
         (quittingCyclicRootSequence
           (quittingAnchoredCyclicCycle w hazard h0 h1)
           (quittingAnchoredCyclicStart m)) who stop ≤
-      S (quittingAnchoredCyclicStart m) who := by
-  have hbound := quittingAnchoredCyclicPureTime_le reward w hazard h0 h1 S hS
-    (quittingAnchoredCyclicStart m) who 0 stop.val
-  simpa [quittingPeriodicWindowPhaseStopValue, quittingCyclicOrbit_zero]
-    using hbound
+      S (quittingAnchoredCyclicStart m) who :=
+  quittingPeriodicWindowPhaseStopValue_le_of_isQuittingCyclicResponseSolution
+    (isQuittingCyclicResponseSolution_of_isAnchoredCyclicResponseSolution reward w
+      hazard h0 h1 hS) (quittingAnchoredCyclicStart m) who stop
 
 /-- **The screen against the max-linear system.**  Given a solution `S` of
 `IsAnchoredCyclicResponseSolution` whose refusal branch is also dominated, a
