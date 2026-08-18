@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.LinearProgramming.CirculantPocketR0
 import Research.Quitting.CirculantTrichotomyClosure
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SoloExitPreferenceScreen
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
@@ -463,6 +464,56 @@ theorem isEmpty_counterexampleRegime_colliderCompletion_closure
     hempty | ⟨hsum, hm2, hm3, -, -⟩
   · exact hempty
   · rcases hcase with h | h | h <;> linarith
+
+/-! ## The solo-exit preference screen
+
+The collider completion pays no member of a joint exit more than the solo self
+value `s`, and its own singleton row pays `s` on the diagonal.  So the whole
+family sits inside the two assumptions of the quitting existence theorem of
+Solan and Vieille, *Quitting games*, Math. Oper. Res. 26 (2001), Theorem 1.2,
+as soon as `s = 1` and `low ≤ 1`.  No margin hypothesis is needed: the margin
+vector only controls singleton rows for nonmembers, which those assumptions do
+not constrain.
+
+Granting that theorem, the exclusion below therefore covers the family with no
+margin-sum, firing-step, or sure-exit hypothesis at all — unlike the
+unconditional exclusions above, which all carry one.
+-/
+
+/-- The collider completion has unit solo exit exactly at solo self value
+one. -/
+theorem colliderReward_unitSoloExit (hm0 : m 0 = 0) (hs : s = 1) :
+    QuittingUnitSoloExit (colliderReward s low m) := by
+  intro who
+  show colliderReward s low m (quittingSingletonTerminal who) who = 1
+  rw [colliderReward_singleton, sub_self, hm0, add_zero, hs]
+
+/-- The collider completion caps joint exits as soon as both the solo self
+value and the joint value are at most one. -/
+theorem colliderReward_cappedJointExit (hm0 : m 0 = 0) (hs : s ≤ 1)
+    (hlow : low ≤ 1) : QuittingCappedJointExit (colliderReward s low m) := by
+  refine quittingCappedJointExit_of_solo_of_larger (fun who ↦ ?_)
+    (fun S who hmem hcard ↦ ?_)
+  · show colliderReward s low m (quittingSingletonTerminal who) who ≤ 1
+    rw [colliderReward_singleton, sub_self, hm0, add_zero]
+    exact hs
+  · by_cases hcollider : S.1 = ({who - 1, who} : Finset (ZMod 5))
+    · rw [colliderReward, if_neg hcard, if_neg (by simpa using hmem),
+        if_pos hcollider]
+      exact hs
+    · rw [colliderReward_of_mem s low m S hcard who hmem hcollider]
+      exact hlow
+
+/-- **Conditional.**  Granting the Solan--Vieille existence law, every collider
+completion of unit solo self value and joint value at most one carries no
+counterexample regime, whatever its margin vector. -/
+theorem isEmpty_counterexampleRegime_colliderUnitSolo
+    (hlaw : QuittingCappedJointExitUniformεExistence (ZMod 5))
+    (hm0 : m 0 = 0) (hs : s = 1) (hlow : low ≤ 1) :
+    IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) :=
+  isEmpty_quittingCounterexampleRegime_of_cappedJointExit hlaw
+    (colliderReward_unitSoloExit hm0 hs)
+    (colliderReward_cappedJointExit hm0 hs.le hlow)
 
 end CirculantColliderCompletion
 end GameTheory

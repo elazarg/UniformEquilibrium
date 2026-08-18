@@ -28,8 +28,15 @@ Two facts about such a cubic are recorded here.
 * `cubicAnchor` — the value `a + bβ + cβ² + dβ³`
 * `cubicAnchorTail` — the backward partial sum `b + cβ + dβ²`
 
+The root statement is also given on an arbitrary interval, which is what
+locates a root on the side of a prescribed point rather than merely inside the
+unit interval.
+
 ## Main results
 
+* `exists_cubicAnchor_root_mem_Ioo_of_neg_of_pos` and
+  `exists_cubicAnchor_root_mem_Ioc_of_neg_of_nonneg` — a root in a prescribed
+  interval
 * `exists_cubicAnchor_root_mem_Ioo` — the root in `(0, 1)`
 * `cubicAnchorTail_eq_of_root` — the backward partial sum at a nonzero root
 * `cubicAnchorTail_pos_of_root` — its positivity at a positive root of an
@@ -58,18 +65,33 @@ theorem continuous_cubicAnchor (a b c d : ℝ) : Continuous (cubicAnchor a b c d
   unfold cubicAnchor
   fun_prop
 
+/-- **A root strictly inside a prescribed interval.**  An anchor cubic that is
+negative at the left endpoint and positive at the right vanishes strictly
+between them. -/
+theorem exists_cubicAnchor_root_mem_Ioo_of_neg_of_pos {a b c d lo hi : ℝ}
+    (hle : lo ≤ hi) (hlo : cubicAnchor a b c d lo < 0)
+    (hhi : 0 < cubicAnchor a b c d hi) :
+    ∃ β ∈ Set.Ioo lo hi, cubicAnchor a b c d β = 0 :=
+  intermediate_value_Ioo hle (continuous_cubicAnchor a b c d).continuousOn
+    ⟨hlo, hhi⟩
+
+/-- **A root in a prescribed half-open interval.**  An anchor cubic that is
+negative at the left endpoint and nonnegative at the right vanishes past the
+left endpoint and no later than the right one. -/
+theorem exists_cubicAnchor_root_mem_Ioc_of_neg_of_nonneg {a b c d lo hi : ℝ}
+    (hle : lo ≤ hi) (hlo : cubicAnchor a b c d lo < 0)
+    (hhi : 0 ≤ cubicAnchor a b c d hi) :
+    ∃ β ∈ Set.Ioc lo hi, cubicAnchor a b c d β = 0 :=
+  intermediate_value_Ioc hle (continuous_cubicAnchor a b c d).continuousOn
+    ⟨hlo, hhi⟩
+
 /-- **A root strictly inside the unit interval.**  An anchor cubic that starts
 negative at `β = 0` and is positive at `β = 1` vanishes somewhere in between. -/
 theorem exists_cubicAnchor_root_mem_Ioo {a b c d : ℝ} (ha : a < 0)
     (htotal : 0 < a + b + c + d) :
-    ∃ β ∈ Set.Ioo (0 : ℝ) 1, cubicAnchor a b c d β = 0 := by
-  have hcont : ContinuousOn (cubicAnchor a b c d) (Set.Icc (0 : ℝ) 1) :=
-    (continuous_cubicAnchor a b c d).continuousOn
-  have hmem : (0 : ℝ) ∈ Set.Ioo (cubicAnchor a b c d 0) (cubicAnchor a b c d 1) := by
-    rw [cubicAnchor_zero, cubicAnchor_one]
-    exact ⟨ha, htotal⟩
-  obtain ⟨β, hβ, hroot⟩ := intermediate_value_Ioo zero_le_one hcont hmem
-  exact ⟨β, hβ, hroot⟩
+    ∃ β ∈ Set.Ioo (0 : ℝ) 1, cubicAnchor a b c d β = 0 :=
+  exists_cubicAnchor_root_mem_Ioo_of_neg_of_pos zero_le_one
+    (by rwa [cubicAnchor_zero]) (by rwa [cubicAnchor_one])
 
 /-- **The anchor equation funds the backward partial sum.**  At a nonzero root
 of the anchor cubic the backward partial sum is exactly `-a / β`. -/

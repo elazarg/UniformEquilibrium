@@ -47,6 +47,7 @@ import Research.Quitting.CausalTailEscapeReturnGate
 import Research.Quitting.CertifiedForcedOwnerBackgroundHost
 import Research.Quitting.CertifiedForcedOwnerEndpointFlip
 import Research.Quitting.CertifiedForcedOwnerRectanglePacket
+import Research.Quitting.CirculantColliderClosure
 import Research.Quitting.CirculantColliderCompletion
 import Research.Quitting.CirculantColliderSlivers
 import Research.Quitting.CirculantConstantStepCycle

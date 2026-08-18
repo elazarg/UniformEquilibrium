@@ -121,6 +121,23 @@ theorem exists_stepAnchor_root (hm0 : m 0 = 0) {c : ZMod 5} (hc : c ≠ 0)
   Math.exists_cubicAnchor_root_mem_Ioo hneg
     (by rw [sum_stepMargin m hm0 hc]; exact hsum)
 
+/-- **A located anchor root.**  An anchor negative at the left endpoint of an
+interval and positive at the right vanishes strictly between them.  Locating a
+root on a prescribed side of a point is what the floor inequalities that read
+the root itself need. -/
+theorem exists_stepAnchor_root_mem_Ioo {lo hi : ℝ} (hle : lo ≤ hi)
+    (hlo : stepAnchor m c lo < 0) (hhi : 0 < stepAnchor m c hi) :
+    ∃ q ∈ Set.Ioo lo hi, stepAnchor m c q = 0 :=
+  Math.exists_cubicAnchor_root_mem_Ioo_of_neg_of_pos hle hlo hhi
+
+/-- **A located anchor root, right endpoint admitted.**  An anchor negative at
+the left endpoint and nonnegative at the right vanishes past the left endpoint
+and no later than the right one. -/
+theorem exists_stepAnchor_root_mem_Ioc {lo hi : ℝ} (hle : lo ≤ hi)
+    (hlo : stepAnchor m c lo < 0) (hhi : 0 ≤ stepAnchor m c hi) :
+    ∃ q ∈ Set.Ioc lo hi, stepAnchor m c q = 0 :=
+  Math.exists_cubicAnchor_root_mem_Ioc_of_neg_of_nonneg hle hlo hhi
+
 /-- The displayed value of the constant-step profile, measured from the solo
 self value and indexed by the number of phases elapsed since the player's own
 quitting phase. -/
