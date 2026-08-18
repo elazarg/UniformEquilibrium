@@ -14,56 +14,51 @@ import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
 
 `SolanVieilleSoloPeriodicGap` bounds the accuracy of the one-stage anchored
 system.  This module works at the terminal-payoff level instead, where the
-bound is on the actual best-reply value of the induced behavior profile.
+bound is on the actual best-reply value of the induced behavior profile, and it
+settles the terminal-gap constant `1 / 12` negatively.
 
-Two facts drive everything.  Quitting at the opening phase pays *exactly* `1`
-to every player against every solo-periodic profile, whatever the schedule and
-the hazards (`quittingAnchoredCyclicQuitValue_eq_one`): every solo exit pays
-its owner `1` and every two-player exit pays each of its two members `1`, so
-the value of quitting immediately does not depend on what the scheduled
-quitter does.  And the four on-path values always sum to `5`
+Two facts drive the positive results.  Quitting at the opening phase pays
+*exactly* `1` to every player against every solo-periodic profile, whatever the
+schedule and the hazards (`quittingAnchoredCyclicQuitValue_eq_one`): every solo
+exit pays its owner `1` and every two-player exit pays each of its two members
+`1`.  And the four on-path values always sum to `5`
 (`sum_onPathValue_eq_five`), because each solo exit distributes a total of
-`1 + 4 + 0 + 0` across the four players.
+`1 + 4 + 0 + 0` across the four players.  Together these give
+`one_le_quittingBestReplyValue_anchoredCyclicProfile`: the best-reply value is
+at least `1` for every player, so a player whose on-path value falls below `1`
+is exploitable by the shortfall.
 
-Together these give `one_le_quittingBestReplyValue_anchoredCyclicProfile`: the
-best-reply value is at least `1` for every player, so every player whose
-on-path value falls below `1` is exploitable by the shortfall, and
-`exists_onPathValue_le_half_min_pairSum` locates such a player as soon as the
-two pairs' value sums are unbalanced.
+The other deviation is refusal, which faces the same schedule with the
+refuser's own phases carrying hazard zero.  It is available to the deviator
+(`quittingAnchoredCyclicOnPathValue_refusalHazard_le_bestReplyValue`), its gain
+is a terminal gain (`terminalPayoff_add_refusalGain_le_bestReplyValue`), and
+once it dominates the quit-now value `1` at every phase it solves the
+max-linear response recursion, so the whole behavioral supremum collapses onto
+it (`quittingBestReplyValue_eq_refusalOnPathValue`).  Around one cycle the
+refusal gain is the accumulated own-phase drift divided by the absorption
+deficit (`refusalGain_eq_drift_div`).
 
-The sum identity also delimits what this route can reach.  Since the four
-on-path values sum to `5`, they can all equal `5 / 4`, and then quitting at the
-opening phase loses `1 / 4` for every player.  A uniform terminal constant
-therefore cannot come from the opening quit alone; it needs the refusal
-deviation, whose gain obeys a different recursion — one that grows at the
-refusing player's own phases and decays at every other phase.
-
-Refusal is available to the deviator:
-`quittingAnchoredCyclicOnPathValue_refusalHazard_le_bestReplyValue` places the
-zeroed on-path value below the best-reply value, and
-`terminalPayoff_add_refusalGain_le_bestReplyValue` reads that as the refusal
-gain being a terminal gain.
-
-Two subclasses of the uniform statement are checked here.  A schedule omitting
-some player pays that player exactly four times what it pays the player's own
-pair partner (`onPathValue_eq_four_mul_of_forall_ne`), which together with the
-sum identity already forces a gap of `1 / 12`
+What holds for the class: a schedule omitting some player pays that player
+exactly four times what it pays the player's own pair partner
+(`onPathValue_eq_four_mul_of_forall_ne`), which with the sum identity forces a
+gap of `1 / 12`
 (`exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne`); a
-schedule paying some player nothing at all forces the full gap `1`.  And on the
-uniform four-cycle — period four, the schedule `0, 1, 2, 3`, one common
-interior hazard — the renewal system solves explicitly and the refusal gain of
-player `0` lies between `1 / 12` and `1 / 12 + 6 * p`
-(`twelfth_le_bestReplyValue_sub_terminalPayoff_uniformFourCycle` and
-`uniformFourCycleRefusalGain_le`).
+schedule paying some player nothing at all forces the full gap `1`.
 
-The residual is therefore the schedules designating every player at least
-once, isolated as `HasSurjectiveSoloPeriodicTerminalGap` and shown to be the
-whole residual by `hasUniformSoloPeriodicTerminalGap_of_surjective`.  It cannot
-be closed by quitting and refusing alone:
-`not_forall_exists_quitValue_or_refusalValue_gap` exhibits a period-five
-schedule on which both of those deviations gain at most `1 / 16`.
+What fails is the constant itself.  `refutingSchedule` is a period-four
+schedule designating every player, at interior hazards, on which every player's
+best-reply value is its refusal value and every gap is strictly below `1 / 12`:
+`not_hasSurjectiveSoloPeriodicTerminalGap` and
+`not_hasUniformSoloPeriodicTerminalGap`.
+
+Where the constant came from is recorded by the uniform four-cycle — period
+four, the schedule `0, 1, 2, 3`, one common interior hazard `p` — whose renewal
+system solves explicitly: the terminal gap there is at least `1 / 12`
+(`twelfth_le_bestReplyValue_sub_terminalPayoff_uniformFourCycle`) and the
+refusal gain at most `1 / 12 + 6 * p` (`uniformFourCycleRefusalGain_le`).  That
+pair calibrates the constant on one family as its hazard tends to zero; it is
+not uniform over schedules.
 -/
-
 noncomputable section
 
 namespace GameTheory
@@ -508,6 +503,76 @@ theorem terminalPayoff_add_refusalGain_le_bestReplyValue {m : ℕ} [NeZero m]
   unfold refusalGain
   linarith
 
+/-- **The refusal family solves the response system.**  Quitting pays exactly
+`1` at every phase of a solo-periodic profile on this table, so once the
+refusal value dominates `1` at every phase it is a fixed point of the
+max-linear response recursion `IsAnchoredCyclicResponseSolution`. -/
+theorem isAnchoredCyclicResponseSolution_refusalOnPathValue {m : ℕ}
+    (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (hone : ∀ (k : Fin m) (who : Player),
+      1 ≤ quittingAnchoredCyclicOnPathValue boundaryReward w
+        (quittingAnchoredCyclicRefusalHazard w hazard who)
+        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who) :
+    IsAnchoredCyclicResponseSolution boundaryReward w hazard
+      (fun k who ↦ quittingAnchoredCyclicOnPathValue boundaryReward w
+        (quittingAnchoredCyclicRefusalHazard w hazard who)
+        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who) := by
+  intro phase who
+  have hren := quittingAnchoredCyclicOnPathValue_renewal boundaryReward w
+    (quittingAnchoredCyclicRefusalHazard w hazard who)
+    (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+    (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) phase who
+  show quittingAnchoredCyclicOnPathValue boundaryReward w _ _ _ phase who = _
+  rw [quittingAnchoredCyclicQuitValue_eq_one,
+    quittingAnchoredCyclicContinueValue_eq_refusalHazard, ← hren]
+  exact (max_eq_right (hone phase who)).symm
+
+/-- **The best reply is refusal.**  When the refusal value dominates the
+quit-now value at every phase, and the deviator is a spectator at some phase
+carrying positive hazard, the best-reply value against a solo-periodic profile
+on this table is exactly the refusal value. -/
+theorem quittingBestReplyValue_eq_refusalOnPathValue {m : ℕ} [NeZero m]
+    (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (hone : ∀ (k : Fin m) (who : Player),
+      1 ≤ quittingAnchoredCyclicOnPathValue boundaryReward w
+        (quittingAnchoredCyclicRefusalHazard w hazard who)
+        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who)
+    (who : Player) (hspectator : ∃ k, w k ≠ who ∧ 0 < hazard k) :
+    quittingBestReplyValue boundaryReward
+        (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who =
+      quittingAnchoredCyclicOnPathValue boundaryReward w
+        (quittingAnchoredCyclicRefusalHazard w hazard who)
+        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
+        (quittingAnchoredCyclicStart m) who := by
+  refine le_antisymm ?_
+    (quittingAnchoredCyclicOnPathValue_refusalHazard_le_bestReplyValue
+      boundaryReward w hazard h0 h1 who)
+  have hcap := quittingAnchoredCyclicResponseCap_le_of_response_of_spectatorHazard
+    w hazard h0 h1 _
+    (isAnchoredCyclicResponseSolution_refusalOnPathValue w hazard h0 h1 hone) who
+    hspectator
+  have hsup := sSup_range_quittingTerminalPayoff_update_anchoredCyclicProfile
+    boundaryReward w hazard h0 h1 who
+  show (⨆ deviation, _) ≤ _
+  rw [show (⨆ deviation : (quittingGame boundaryReward).BehaviorStrategy who,
+      quittingTerminalPayoff boundaryReward
+        (Function.update
+          (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who
+          deviation) who) =
+      sSup (Set.range fun deviation :
+          (quittingGame boundaryReward).BehaviorStrategy who ↦
+        quittingTerminalPayoff boundaryReward
+          (Function.update
+            (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who
+            deviation) who) from rfl, hsup]
+  exact hcap
+
 /-- **Own-phase growth.**  At each phase scheduling the refuser, the refusal
 gain increases by the hazard times the excess of the next phase's on-path
 value over the refuser's own solo exit value. -/
@@ -735,6 +800,11 @@ is `(1 + 4 * q) / (1 + q + q ^ 2 + q ^ 3)` and its refusal value is
 of the cycle.  Their difference is at least `1 / 12` and at most
 `1 / 12 + 6 * p`, so on this family the refusal deviation delivers `1 / 12` and
 nothing beyond it.
+
+This is where the constant `1 / 12` is calibrated, and the calibration is
+correct: the bounds below are sharp for this family in the small-hazard limit.
+It does not carry to the class — `not_hasUniformSoloPeriodicTerminalGap`
+refutes the same constant at fixed hazards on an interleaved schedule.
 -/
 
 /-- The scalar bound behind the uniform four-cycle gap: with `q` in the unit
@@ -920,195 +990,27 @@ theorem uniformFourCycleRefusalGain_le {p : ℝ} (hp0 : 0 < p) (hp1 : p ≤ 1) :
     (uniformFourCycleOnPathValue hp0 hp1)
   linarith
 
-/-! ## Quitting now and refusing are not enough
+/-! ## The two propositions, and their refutation
 
-The two deviations this module evaluates in closed form — quitting at the
-opening phase, worth exactly `1`, and refusing forever, worth the zeroed
-on-path value — do not between them certify the constant `1 / 12`.  The
-period-five schedule `0, 2, 3, 2, 1` at hazards `1/4, 1/2, 1/3, 1/4, 1` has
-opening on-path values `1, 19/16, 15/16, 15/8` and refusal values
-`1, 16/13, 1, 15/8`, so every quit-now gain and every refusal gain is at most
-`1 / 16`.  Any proof of `HasUniformSoloPeriodicTerminalGap` therefore has to
-use the intermediate stops of `quittingPeriodicWindowBestPhaseStop` as well.
--/
+Both are false.  `refutingSchedule` below designates every player, carries
+interior hazards, and leaves every player short of `1 / 12` against every
+behavioral deviation; since the restricted proposition only adds a hypothesis
+to the unrestricted one, refuting the restricted one refutes both.  The
+definitions are kept because `not_hasSurjectiveSoloPeriodicTerminalGap` and
+`not_hasUniformSoloPeriodicTerminalGap` are statements about them.
 
-/-- **One turn of a period-five cycle**, with the hazards and the singleton
-rows read off by the supplied equations. -/
-theorem onPathValue_five_turn (w : Fin 5 → Player) (hazard : Fin 5 → ℝ)
-    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (who : Player)
-    {p₀ p₁ p₂ p₃ p₄ a₀ a₁ a₂ a₃ a₄ : ℝ}
-    (hp₀ : hazard 0 = p₀) (hp₁ : hazard 1 = p₁) (hp₂ : hazard 2 = p₂)
-    (hp₃ : hazard 3 = p₃) (hp₄ : hazard 4 = p₄)
-    (ha₀ : boundaryReward (quittingSingletonTerminal (w 0)) who = a₀)
-    (ha₁ : boundaryReward (quittingSingletonTerminal (w 1)) who = a₁)
-    (ha₂ : boundaryReward (quittingSingletonTerminal (w 2)) who = a₂)
-    (ha₃ : boundaryReward (quittingSingletonTerminal (w 3)) who = a₃)
-    (ha₄ : boundaryReward (quittingSingletonTerminal (w 4)) who = a₄) :
-    quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 0 who *
-        (1 - (1 - p₀) * (1 - p₁) * (1 - p₂) * (1 - p₃) * (1 - p₄)) =
-      p₀ * a₀ + (1 - p₀) * p₁ * a₁ + (1 - p₀) * (1 - p₁) * p₂ * a₂ +
-        (1 - p₀) * (1 - p₁) * (1 - p₂) * p₃ * a₃ +
-        (1 - p₀) * (1 - p₁) * (1 - p₂) * (1 - p₃) * p₄ * a₄ := by
-  subst hp₀; subst hp₁; subst hp₂; subst hp₃; subst hp₄
-  subst ha₀; subst ha₁; subst ha₂; subst ha₃; subst ha₄
-  have hren : ∀ k : Fin 5,
-      quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 k who =
-        hazard k * boundaryReward (quittingSingletonTerminal (w k)) who +
-          (1 - hazard k) * quittingAnchoredCyclicOnPathValue boundaryReward w
-            hazard h0 h1 (finRotate 5 k) who :=
-    fun k ↦ quittingAnchoredCyclicOnPathValue_renewal boundaryReward w hazard
-      h0 h1 k who
-  have e0 := hren 0
-  have e1 := hren 1
-  have e2 := hren 2
-  have e3 := hren 3
-  have e4 := hren 4
-  rw [show finRotate 5 (0 : Fin 5) = 1 from by decide] at e0
-  rw [show finRotate 5 (1 : Fin 5) = 2 from by decide] at e1
-  rw [show finRotate 5 (2 : Fin 5) = 3 from by decide] at e2
-  rw [show finRotate 5 (3 : Fin 5) = 4 from by decide] at e3
-  rw [show finRotate 5 (4 : Fin 5) = 0 from by decide] at e4
-  linear_combination e0 + (1 - hazard 0) * e1 +
-    (1 - hazard 0) * (1 - hazard 1) * e2 +
-    (1 - hazard 0) * (1 - hazard 1) * (1 - hazard 2) * e3 +
-    (1 - hazard 0) * (1 - hazard 1) * (1 - hazard 2) * (1 - hazard 3) * e4
-
-/-- The period-five schedule on which quitting now and refusing both fall
-short of `1 / 12`. -/
-def shortfallSchedule : Fin 5 → Player := ![0, 2, 3, 2, 1]
-
-/-- The hazards accompanying `shortfallSchedule`. -/
-def shortfallHazard : Fin 5 → ℝ := ![1 / 4, 1 / 2, 1 / 3, 1 / 4, 1]
-
-theorem shortfallHazard_pos : ∀ k, 0 < shortfallHazard k := by
-  intro k
-  fin_cases k <;> norm_num [shortfallHazard]
-
-theorem shortfallHazard_nonneg : ∀ k, 0 ≤ shortfallHazard k :=
-  fun k ↦ (shortfallHazard_pos k).le
-
-theorem shortfallHazard_le_one : ∀ k, shortfallHazard k ≤ 1 := by
-  intro k
-  fin_cases k <;> norm_num [shortfallHazard]
-
-/-- The singleton rows visited by `shortfallSchedule`. -/
-theorem shortfallReward (k : Fin 5) (who : Player) :
-    boundaryReward (quittingSingletonTerminal (shortfallSchedule k)) who =
-      ![![1, 4, 0, 0], ![0, 0, 1, 4], ![0, 0, 4, 1], ![0, 0, 1, 4],
-        ![4, 1, 0, 0]] k who := by
-  fin_cases k <;> fin_cases who <;> rfl
-
-/-- The four hazard vectors seen by the four refusers on
-`shortfallSchedule`. -/
-theorem shortfallRefusalHazard (who : Player) (k : Fin 5) :
-    quittingAnchoredCyclicRefusalHazard shortfallSchedule shortfallHazard who
-        k =
-      ![![0, 1 / 2, 1 / 3, 1 / 4, 1], ![1 / 4, 1 / 2, 1 / 3, 1 / 4, 0],
-        ![1 / 4, 0, 1 / 3, 0, 1], ![1 / 4, 1 / 2, 0, 1 / 4, 1]] who k := by
-  fin_cases who <;> fin_cases k <;> rfl
-
-/-- The four opening on-path values of `shortfallSchedule`: `1`, `19/16`,
-`15/16` and `15/8`, summing to `5`. -/
-theorem shortfallOnPathValue (who : Player) :
-    quittingAnchoredCyclicOnPathValue boundaryReward shortfallSchedule
-        shortfallHazard shortfallHazard_nonneg shortfallHazard_le_one 0 who =
-      ![1, 19 / 16, 15 / 16, 15 / 8] who := by
-  have q0 : shortfallHazard 0 = 1 / 4 := rfl
-  have q1 : shortfallHazard 1 = 1 / 2 := rfl
-  have q2 : shortfallHazard 2 = 1 / 3 := rfl
-  have q3 : shortfallHazard 3 = 1 / 4 := rfl
-  have q4 : shortfallHazard 4 = 1 := rfl
-  have h := onPathValue_five_turn shortfallSchedule shortfallHazard
-    shortfallHazard_nonneg shortfallHazard_le_one who q0 q1 q2 q3 q4
-    (shortfallReward 0 who) (shortfallReward 1 who) (shortfallReward 2 who)
-    (shortfallReward 3 who) (shortfallReward 4 who)
-  rcases player_eq who with rfl | rfl | rfl | rfl <;>
-    norm_num [Matrix.cons_val_two, Matrix.cons_val_three, Matrix.cons_val_four,
-      Matrix.head_cons, Matrix.tail_cons] at h ⊢ <;>
-    linarith
-
-/-- The four refusal values of `shortfallSchedule`: `1`, `16/13`, `1` and
-`15/8`. -/
-theorem shortfallRefusalValue (who : Player) :
-    quittingAnchoredCyclicOnPathValue boundaryReward shortfallSchedule
-        (quittingAnchoredCyclicRefusalHazard shortfallSchedule shortfallHazard
-          who)
-        (quittingAnchoredCyclicRefusalHazard_nonneg shortfallHazard_nonneg
-          shortfallSchedule who)
-        (quittingAnchoredCyclicRefusalHazard_le_one shortfallHazard_le_one
-          shortfallSchedule who) 0 who =
-      ![1, 16 / 13, 1, 15 / 8] who := by
-  have h := onPathValue_five_turn shortfallSchedule
-    (quittingAnchoredCyclicRefusalHazard shortfallSchedule shortfallHazard who)
-    (quittingAnchoredCyclicRefusalHazard_nonneg shortfallHazard_nonneg _ who)
-    (quittingAnchoredCyclicRefusalHazard_le_one shortfallHazard_le_one _ who)
-    who (shortfallRefusalHazard who 0) (shortfallRefusalHazard who 1)
-    (shortfallRefusalHazard who 2) (shortfallRefusalHazard who 3)
-    (shortfallRefusalHazard who 4) (shortfallReward 0 who)
-    (shortfallReward 1 who) (shortfallReward 2 who) (shortfallReward 3 who)
-    (shortfallReward 4 who)
-  rcases player_eq who with rfl | rfl | rfl | rfl <;>
-    norm_num [Matrix.cons_val_two, Matrix.cons_val_three, Matrix.cons_val_four,
-      Matrix.head_cons, Matrix.tail_cons] at h ⊢ <;>
-    linarith
-
-/-- **Quitting now and refusing do not deliver `1 / 12`.**  On
-`shortfallSchedule` no player's quit-now value or refusal value beats its
-opening on-path value by `1 / 12`, so those two deviations alone cannot prove
-`HasUniformSoloPeriodicTerminalGap`. -/
-theorem not_forall_exists_quitValue_or_refusalValue_gap :
-    ¬ ∀ (m : ℕ) (_ : NeZero m) (w : Fin m → Player) (hazard : Fin m → ℝ)
-        (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1),
-        (∀ k, 0 < hazard k) →
-          ∃ who : Player,
-            quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1
-                  (quittingAnchoredCyclicStart m) who + 1 / 12 ≤ 1 ∨
-              quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1
-                    (quittingAnchoredCyclicStart m) who + 1 / 12 ≤
-                quittingAnchoredCyclicOnPathValue boundaryReward w
-                  (quittingAnchoredCyclicRefusalHazard w hazard who)
-                  (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-                  (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
-                  (quittingAnchoredCyclicStart m) who := by
-  intro hall
-  obtain ⟨who, hwho⟩ := hall 5 (by infer_instance) shortfallSchedule
-    shortfallHazard shortfallHazard_nonneg shortfallHazard_le_one
-    shortfallHazard_pos
-  rw [show quittingAnchoredCyclicStart 5 = (0 : Fin 5) from rfl,
-    shortfallOnPathValue who, shortfallRefusalValue who] at hwho
-  rcases player_eq who with rfl | rfl | rfl | rfl <;>
-    rcases hwho with h | h <;>
-    norm_num [Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons,
-      Matrix.tail_cons] at h
-
-/-! ## The residual
-
-Two of the three ingredients of the uniform statement are checked above.
-Schedules omitting some player are settled at the stated constant by
-`exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne`, and the
-smallest schedule omitting none — the uniform four-cycle — is settled by
-`twelfth_le_bestReplyValue_sub_terminalPayoff_uniformFourCycle`.  What remains
-open is the general schedule visiting every player, stated as
-`HasSurjectiveSoloPeriodicTerminalGap`; the reduction
-`hasUniformSoloPeriodicTerminalGap_of_surjective` shows that it is the whole
-residual.
-
-The general case needs a deviation this module does not evaluate.  Bounding the
-accumulated own-phase drift of `refusalDrift` against the absorption deficit
-`1 - refusalWeight` in `refusalGain_mul_one_sub_weight` bounds the refusal gain
-and nothing else, and `not_forall_exists_quitValue_or_refusalValue_gap` exhibits
-a period-five schedule on which the refusal gain and the quit-now gain are both
-at most `1 / 16`.  The remaining deviations are the intermediate stops of
-`quittingPeriodicWindowBestPhaseStop`, which pay `1` at the phase reached and
-so read the on-path value at phases other than the opening one.
+The failure is not among the schedules omitting a player: those carry the
+constant outright
+(`exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne`).
 -/
 
 /-- The uniform terminal gap for solo-periodic profiles on the Solan–Vieille
 table: some player's best-reply value exceeds its on-path value by at least
 `1 / 12`, for every period, every schedule with repetitions and every family
-of interior hazards.  No larger constant is delivered by the refusal
-deviation: on the uniform four-cycle `uniformFourCycleRefusalGain_le` caps the
-refusal gain by `1 / 12 + 6 * p`. -/
+of interior hazards.  It is false: `not_hasUniformSoloPeriodicTerminalGap`.
+The constant is the one the uniform four-cycle calibrates as its hazard tends
+to zero (`twelfth_le_bestReplyValue_sub_terminalPayoff_uniformFourCycle` and
+`uniformFourCycleRefusalGain_le`). -/
 def HasUniformSoloPeriodicTerminalGap : Prop :=
   ∀ (m : ℕ) (_ : NeZero m) (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1),
@@ -1121,8 +1023,7 @@ def HasUniformSoloPeriodicTerminalGap : Prop :=
             (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who
 
 /-- The same gap restricted to schedules designating every player at least
-once.  This is the residual of `HasUniformSoloPeriodicTerminalGap`: the
-schedules omitting a player are already checked. -/
+once.  It is false: `not_hasSurjectiveSoloPeriodicTerminalGap`. -/
 def HasSurjectiveSoloPeriodicTerminalGap : Prop :=
   ∀ (m : ℕ) (_ : NeZero m) (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1),
@@ -1134,20 +1035,212 @@ def HasSurjectiveSoloPeriodicTerminalGap : Prop :=
           quittingBestReplyValue boundaryReward
             (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who
 
-/-- **The residual is exactly the schedules visiting every player.**  A
-schedule omitting one is settled by
-`exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne`. -/
-theorem hasUniformSoloPeriodicTerminalGap_of_surjective
-    (hgap : HasSurjectiveSoloPeriodicTerminalGap) :
-    HasUniformSoloPeriodicTerminalGap := by
-  intro m hm w hazard h0 h1 hpos
-  haveI := hm
-  by_cases hsurj : ∀ z : Player, ∃ k, w k = z
-  · exact hgap m hm w hazard h0 h1 hpos hsurj
-  · push Not at hsurj
-    obtain ⟨absent, hmiss⟩ := hsurj
-    exact exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne w
-      hazard h0 h1 hpos hmiss
+/-! ## The refuting witness
+
+Both propositions are false.  On the period-four schedule `0, 2, 1, 3` at
+hazards `3/16, 21/100, 7/40, 33/200` the opening on-path values are
+
+`(8151200, 11037800, 6657612, 9854403) / 7140203`,
+
+summing to `5`, and the refusal values are `442400/364631`, `80000/49497`,
+`56628/56357` and `43680/30109`.  Every one of the sixteen refusal values is at
+least `1`, so `quittingBestReplyValue_eq_refusalOnPathValue` identifies each
+best-reply value with the refusal value, and all four gaps are strictly below
+`1 / 12`, the largest being `4161768000/57485774353` at player `2`.
+
+The schedule interleaves the two pairs.  In the pairs-adjacent order of the
+uniform four-cycle each player's partner exit follows its own phase
+immediately, and refusal moves absorption onto that exit efficiently; the
+interleaved order with unequal hazards starves refusal while keeping every
+on-path value near `1`, and `1 / 12` fails.
+-/
+
+/-- **The four renewal equations of a period-four cycle**, with the hazards and
+the singleton rows read off by the supplied equations. -/
+theorem onPathValue_four_system (w : Fin 4 → Player) (hazard : Fin 4 → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (who : Player)
+    {p₀ p₁ p₂ p₃ a₀ a₁ a₂ a₃ : ℝ}
+    (hp₀ : hazard 0 = p₀) (hp₁ : hazard 1 = p₁) (hp₂ : hazard 2 = p₂)
+    (hp₃ : hazard 3 = p₃)
+    (ha₀ : boundaryReward (quittingSingletonTerminal (w 0)) who = a₀)
+    (ha₁ : boundaryReward (quittingSingletonTerminal (w 1)) who = a₁)
+    (ha₂ : boundaryReward (quittingSingletonTerminal (w 2)) who = a₂)
+    (ha₃ : boundaryReward (quittingSingletonTerminal (w 3)) who = a₃) :
+    quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 0 who =
+          p₀ * a₀ + (1 - p₀) * quittingAnchoredCyclicOnPathValue boundaryReward
+            w hazard h0 h1 1 who ∧
+        quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 1 who =
+          p₁ * a₁ + (1 - p₁) * quittingAnchoredCyclicOnPathValue boundaryReward
+            w hazard h0 h1 2 who ∧
+        quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 2 who =
+          p₂ * a₂ + (1 - p₂) * quittingAnchoredCyclicOnPathValue boundaryReward
+            w hazard h0 h1 3 who ∧
+      quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 3 who =
+        p₃ * a₃ + (1 - p₃) * quittingAnchoredCyclicOnPathValue boundaryReward
+          w hazard h0 h1 0 who := by
+  subst hp₀; subst hp₁; subst hp₂; subst hp₃
+  subst ha₀; subst ha₁; subst ha₂; subst ha₃
+  have hren : ∀ k : Fin 4,
+      quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 k who =
+        hazard k * boundaryReward (quittingSingletonTerminal (w k)) who +
+          (1 - hazard k) * quittingAnchoredCyclicOnPathValue boundaryReward w
+            hazard h0 h1 (finRotate 4 k) who :=
+    fun k ↦ quittingAnchoredCyclicOnPathValue_renewal boundaryReward w hazard
+      h0 h1 k who
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · have h := hren 0
+    rwa [show finRotate 4 (0 : Fin 4) = 1 from by decide] at h
+  · have h := hren 1
+    rwa [show finRotate 4 (1 : Fin 4) = 2 from by decide] at h
+  · have h := hren 2
+    rwa [show finRotate 4 (2 : Fin 4) = 3 from by decide] at h
+  · have h := hren 3
+    rwa [show finRotate 4 (3 : Fin 4) = 0 from by decide] at h
+
+/-- The period-four schedule refuting both propositions.  It interleaves the
+two pairs. -/
+def refutingSchedule : Fin 4 → Player := ![0, 2, 1, 3]
+
+/-- The hazards accompanying `refutingSchedule`. -/
+def refutingHazard : Fin 4 → ℝ := ![3 / 16, 21 / 100, 7 / 40, 33 / 200]
+
+theorem refutingSchedule_surjective (z : Player) : ∃ k, refutingSchedule k = z := by
+  rcases player_eq z with rfl | rfl | rfl | rfl
+  exacts [⟨0, rfl⟩, ⟨2, rfl⟩, ⟨1, rfl⟩, ⟨3, rfl⟩]
+
+theorem refutingHazard_pos : ∀ k, 0 < refutingHazard k := by
+  intro k
+  fin_cases k <;> norm_num [refutingHazard]
+
+theorem refutingHazard_nonneg : ∀ k, 0 ≤ refutingHazard k :=
+  fun k ↦ (refutingHazard_pos k).le
+
+theorem refutingHazard_le_one : ∀ k, refutingHazard k ≤ 1 := by
+  intro k
+  fin_cases k <;> norm_num [refutingHazard]
+
+/-- Every player is a spectator at a phase carrying positive hazard. -/
+theorem refutingSpectator (who : Player) :
+    ∃ k, refutingSchedule k ≠ who ∧ 0 < refutingHazard k := by
+  rcases player_eq who with rfl | rfl | rfl | rfl
+  · exact ⟨1, by decide, refutingHazard_pos 1⟩
+  · exact ⟨0, by decide, refutingHazard_pos 0⟩
+  · exact ⟨0, by decide, refutingHazard_pos 0⟩
+  · exact ⟨0, by decide, refutingHazard_pos 0⟩
+
+/-- The singleton rows visited by `refutingSchedule`. -/
+theorem refutingReward (k : Fin 4) (who : Player) :
+    boundaryReward (quittingSingletonTerminal (refutingSchedule k)) who =
+      ![![1, 4, 0, 0], ![0, 0, 1, 4], ![4, 1, 0, 0], ![0, 0, 4, 1]] k who := by
+  fin_cases k <;> fin_cases who <;> rfl
+
+/-- The four hazard vectors seen by the four refusers on
+`refutingSchedule`. -/
+theorem refutingRefusalHazard (who : Player) (k : Fin 4) :
+    quittingAnchoredCyclicRefusalHazard refutingSchedule refutingHazard who k =
+      ![![0, 21 / 100, 7 / 40, 33 / 200], ![3 / 16, 21 / 100, 0, 33 / 200],
+        ![3 / 16, 0, 7 / 40, 33 / 200],
+        ![3 / 16, 21 / 100, 7 / 40, 0]] who k := by
+  fin_cases who <;> fin_cases k <;> rfl
+
+/-- The four opening on-path values of `refutingSchedule`, summing to `5`. -/
+theorem refutingOnPathValue (who : Player) :
+    quittingAnchoredCyclicOnPathValue boundaryReward refutingSchedule
+        refutingHazard refutingHazard_nonneg refutingHazard_le_one 0 who =
+      ![8151200 / 7140203, 11037800 / 7140203, 6657612 / 7140203,
+        9854403 / 7140203] who := by
+  obtain ⟨e0, e1, e2, e3⟩ := onPathValue_four_system refutingSchedule
+    refutingHazard refutingHazard_nonneg refutingHazard_le_one who
+    (show refutingHazard 0 = 3 / 16 from rfl)
+    (show refutingHazard 1 = 21 / 100 from rfl)
+    (show refutingHazard 2 = 7 / 40 from rfl)
+    (show refutingHazard 3 = 33 / 200 from rfl) (refutingReward 0 who)
+    (refutingReward 1 who) (refutingReward 2 who) (refutingReward 3 who)
+  rcases player_eq who with rfl | rfl | rfl | rfl <;>
+    norm_num [Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons,
+      Matrix.tail_cons] at e0 e1 e2 e3 ⊢ <;>
+    linarith
+
+/-- The sixteen refusal values of `refutingSchedule`, phase by phase. -/
+theorem refutingRefusalValue (who : Player) (k : Fin 4) :
+    quittingAnchoredCyclicOnPathValue boundaryReward refutingSchedule
+        (quittingAnchoredCyclicRefusalHazard refutingSchedule refutingHazard
+          who)
+        (quittingAnchoredCyclicRefusalHazard_nonneg refutingHazard_nonneg
+          refutingSchedule who)
+        (quittingAnchoredCyclicRefusalHazard_le_one refutingHazard_le_one
+          refutingSchedule who) k who =
+      ![![442400 / 364631, 442400 / 364631, 560000 / 364631, 369404 / 364631],
+        ![80000 / 49497, 52772 / 49497, 66800 / 49497, 66800 / 49497],
+        ![56628 / 56357, 69696 / 56357, 69696 / 56357, 84480 / 56357],
+        ![43680 / 30109, 53760 / 30109, 36036 / 30109,
+          43680 / 30109]] who k := by
+  obtain ⟨e0, e1, e2, e3⟩ := onPathValue_four_system refutingSchedule
+    (quittingAnchoredCyclicRefusalHazard refutingSchedule refutingHazard who)
+    (quittingAnchoredCyclicRefusalHazard_nonneg refutingHazard_nonneg
+      refutingSchedule who)
+    (quittingAnchoredCyclicRefusalHazard_le_one refutingHazard_le_one
+      refutingSchedule who) who (refutingRefusalHazard who 0)
+    (refutingRefusalHazard who 1) (refutingRefusalHazard who 2)
+    (refutingRefusalHazard who 3) (refutingReward 0 who)
+    (refutingReward 1 who) (refutingReward 2 who) (refutingReward 3 who)
+  rcases player_eq who with rfl | rfl | rfl | rfl <;>
+    rcases player_eq k with rfl | rfl | rfl | rfl <;>
+    norm_num [Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons,
+      Matrix.tail_cons] at e0 e1 e2 e3 ⊢ <;>
+    linarith
+
+/-- Refusal beats quitting now at every phase of `refutingSchedule`. -/
+theorem one_le_refutingRefusalValue (k : Fin 4) (who : Player) :
+    1 ≤ quittingAnchoredCyclicOnPathValue boundaryReward refutingSchedule
+      (quittingAnchoredCyclicRefusalHazard refutingSchedule refutingHazard who)
+      (quittingAnchoredCyclicRefusalHazard_nonneg refutingHazard_nonneg
+        refutingSchedule who)
+      (quittingAnchoredCyclicRefusalHazard_le_one refutingHazard_le_one
+        refutingSchedule who) k who := by
+  rw [refutingRefusalValue who k]
+  rcases player_eq who with rfl | rfl | rfl | rfl <;>
+    rcases player_eq k with rfl | rfl | rfl | rfl <;>
+    norm_num [Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons,
+      Matrix.tail_cons]
+
+/-- **The best replies against the refuting witness.**  Each is the refusal
+value. -/
+theorem refutingBestReplyValue (who : Player) :
+    quittingBestReplyValue boundaryReward
+        (quittingAnchoredCyclicProfile boundaryReward refutingSchedule
+          refutingHazard refutingHazard_nonneg refutingHazard_le_one) who =
+      ![442400 / 364631, 80000 / 49497, 56628 / 56357, 43680 / 30109] who := by
+  rw [quittingBestReplyValue_eq_refusalOnPathValue refutingSchedule
+      refutingHazard refutingHazard_nonneg refutingHazard_le_one
+      one_le_refutingRefusalValue who (refutingSpectator who),
+    show quittingAnchoredCyclicStart 4 = (0 : Fin 4) from rfl,
+    refutingRefusalValue who 0]
+  rcases player_eq who with rfl | rfl | rfl | rfl <;>
+    norm_num [Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons,
+      Matrix.tail_cons]
+
+/-- **The surjective terminal gap fails.**  On `refutingSchedule` no player's
+best-reply value exceeds its on-path payoff by `1 / 12`. -/
+theorem not_hasSurjectiveSoloPeriodicTerminalGap :
+    ¬ HasSurjectiveSoloPeriodicTerminalGap := by
+  intro hgap
+  obtain ⟨who, hwho⟩ := hgap 4 (by infer_instance) refutingSchedule
+    refutingHazard refutingHazard_nonneg refutingHazard_le_one
+    refutingHazard_pos refutingSchedule_surjective
+  rw [quittingTerminalPayoff_anchoredCyclicProfile,
+    show quittingAnchoredCyclicStart 4 = (0 : Fin 4) from rfl,
+    refutingOnPathValue who, refutingBestReplyValue who] at hwho
+  rcases player_eq who with rfl | rfl | rfl | rfl <;>
+    norm_num [Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons,
+      Matrix.tail_cons] at hwho
+
+/-- **The uniform terminal gap fails.**  `refutingSchedule` designates every
+player, so it is an instance of the unrestricted statement as well. -/
+theorem not_hasUniformSoloPeriodicTerminalGap :
+    ¬ HasUniformSoloPeriodicTerminalGap := fun hgap ↦
+  not_hasSurjectiveSoloPeriodicTerminalGap
+    fun m hm w hazard h0 h1 hpos _ ↦ hgap m hm w hazard h0 h1 hpos
 
 end SolanVieilleBoundary
 
