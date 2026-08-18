@@ -368,7 +368,7 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "For a five-player table whose singleton and two-element rows are rotation symmetric around a nonnegative common solo self value, positive margin total together with a step whose own margin is negative while the margins at its complementary and doubled complementary distances are nonnegative, and nonpositive join margins along that step's progression, the constant-step periodic profile at an anchor root strictly inside the unit interval is an exact uniform equilibrium. The floor at the deepest elapsed phase needs no margin sign hypothesis: the anchor equation itself makes the backward partial sum positive.",
+      "summary": "For a five-player table whose singleton and two-element rows are rotation symmetric around a nonnegative common solo self value, positive margin total together with a step whose own margin is negative while the margins at its complementary and doubled complementary distances are nonnegative, and nonpositive join margins along that step's progression, the constant-step periodic profile at an anchor root strictly inside the unit interval is an exact uniform equilibrium. The floor at the deepest elapsed phase needs no margin sign hypothesis: the anchor equation itself makes the backward partial sum positive.  The sign condition stated here was subsequently weakened to a firing step, and the three theorems that carried this branch were replaced by their firing-step forms; the anchor-root and backward-partial-sum mechanism is unchanged and still carries the weakened branch.",
       "evidence": [
         "MathUE/CubicAnchorRoot.lean",
         "Research/Quitting/CirculantConstantStepCycle.lean",
@@ -378,12 +378,13 @@
         "M",
         "L",
         "C"
-      ]
+      ],
+      "superseded_by": "CLOSE-CIRCULANT-FIRING-STEP"
     },
     {
       "id": "LIMIT-CONSTANT-STEP-SIGN-ROUTE",
-      "kind": "route_limit",
-      "open": true,
+      "kind": "route_limit_resolved",
+      "open": false,
       "cover_clause_ids": [
         "COVER-A",
         "FAMILY-CLOSURES"
@@ -391,16 +392,17 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "The constant-step sign condition is unavailable whenever at most one of the four nonzero margins is nonnegative: the complementary and doubled complementary distances of a candidate step would both have to be that one distance, which forces the step to vanish. Three negative margins with positive total therefore escape the sign route, as do the two complementary-pair sign patterns. This bounds the sign route only. A table can still satisfy the constant-step producer's floor inequalities without meeting the sign condition, as the collider completion does in the pocket at step four. Positive margin total outside the reach of the sign route is not closed.",
+      "summary": "The original constant-step sign condition -- negative own margin, nonnegative complementary margin, nonnegative doubled complementary margin -- is unavailable whenever at most one of the four nonzero margins is nonnegative: the complementary and doubled complementary distances of a candidate step would both have to be that one distance, which forces the step to vanish. That obstruction is a true statement about that condition and remains recorded. It is no longer a limit on the region, because the condition was the wrong one: weakening its third clause to a disjunction, nonnegative doubled complementary margin OR nonpositive doubled margin, yields a step in exactly the patterns the strict condition missed.  The two Lean witnesses for the obstruction were removed when the condition was reformulated, so this entry now carries the mathematics only; the surviving checked statement of the same shape is that a complementary pocket admits no firing step.",
       "evidence": [
         "Research/Quitting/CirculantTrichotomyClosure.lean",
         "Research/Quitting/CirculantPocketAnchoredNoGo.lean",
         "Research/Quitting/CirculantColliderCompletion.lean"
       ],
       "evidence_seals": [
-        "M",
-        "L"
-      ]
+        "M"
+      ],
+      "superseded_by": "CLOSE-CIRCULANT-FIRING-STEP",
+      "declarations": []
     },
     {
       "id": "CLOSE-COLLIDER-COMPLETION-BRANCHES",
@@ -729,6 +731,75 @@
         "GameTheory.pairReward_le_soloReward_of_isExactAnchoredSoloPeriodic",
         "GameTheory.quittingSoloCollisionPenalty_nonpos_of_isExactAnchoredSoloPeriodic",
         "GameTheory.hazard_mul_hazard_mul_margin_le_of_isεExactAnchoredSoloPeriodic"
+      ]
+    },
+    {
+      "id": "CLOSE-CIRCULANT-FIRING-STEP",
+      "kind": "family_closed",
+      "cover_clause_ids": [
+        "COVER-A",
+        "FAMILY-CLOSURES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "A firing step weakens the constant-step sign condition: nonzero, negative own margin, nonnegative complementary margin, and either nonnegative doubled complementary margin or nonpositive doubled margin. On a rotation-symmetric table with nonnegative solo self value and nonpositive join margins, a firing step delivers an ordinary uniform-equilibrium payoff. A firing step exists whenever the margin at the identity vanishes, the surplus is positive, some nonzero distance carries a negative margin, and the negatives are not exactly one complementary pair; in particular the three-negative patterns that the strict sign condition missed are covered, through the complement of the single nonnegative distance. Coverage, stated exactly: nonpositive surplus is closed, and positive surplus is closed whenever at least one margin is negative and the pattern is not a complementary pocket. Two families remain outside this theorem -- the complementary pockets, and the pattern in which no margin is negative at all, which satisfies neither branch of its hypothesis.",
+      "evidence": [
+        "Research/Quitting/CirculantTrichotomyClosure.lean",
+        "Experiments/counterexample_search/ColliderThreeNegativeEquilibrium.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A",
+        "C"
+      ],
+      "declarations": [
+        "GameTheory.CirculantTrichotomyClosure.IsFiringStep",
+        "GameTheory.CirculantTrichotomyClosure.IsComplementaryPocketMargin",
+        "GameTheory.CirculantTrichotomyClosure.exists_uniformEquilibriumPayoff_of_isFiringStep",
+        "GameTheory.CirculantTrichotomyClosure.isEmpty_counterexampleRegime_of_isFiringStep",
+        "GameTheory.CirculantTrichotomyClosure.isFiringStep_complement_of_unique_nonneg",
+        "GameTheory.CirculantTrichotomyClosure.isEmpty_counterexampleRegime_of_unique_nonneg",
+        "GameTheory.CirculantTrichotomyClosure.exists_isFiringStep",
+        "GameTheory.CirculantTrichotomyClosure.not_isFiringStep_of_isComplementaryPocketMargin",
+        "GameTheory.CirculantTrichotomyClosure.isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin",
+        "GameTheory.ColliderThreeNegativeEquilibrium.threeNegative_isEmpty_counterexampleRegime"
+      ],
+      "open_propositions": [
+        "GameTheory.CirculantTrichotomyClosure.ConstantStepCyclicResolution"
+      ]
+    },
+    {
+      "id": "NOGO-PREEMPTION-STATIC-TRANSPORT",
+      "kind": "architectural_nogo",
+      "cover_clause_ids": [
+        "COVER-C",
+        "REGIME-LOCALIZATION"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "Read as labelled transport along the forced solo preemption cycle, the static preemption geometry supplies no obstruction. The preemption relation forces only slope-zero floor labels, the solo diagonal is an explicit lax section of the forced labelling, and the forced system admits no Farkas certificate, so no contradiction can be extracted from that geometry alone. The interpersonal comparison that would legitimize the naive telescope -- each player's own solo reward at most its cross value -- is refuted, and the unforced telescope label carries a Farkas certificate while admitting no lax section, which is the reverse pairing. The transport a proof would need is named as a proposition, with a consumer wiring it to the conjecture and a checked negative saying its labels cannot be the forced ones.",
+      "evidence": [
+        "Research/Quitting/PreemptionTransport.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ],
+      "declarations": [
+        "GameTheory.QuittingSoloPreemptionCycle.isLaxSection_forcedCrossFloorLabel",
+        "GameTheory.QuittingSoloPreemptionCycle.not_exists_farkasCertificate_forcedCrossFloorLabel",
+        "GameTheory.QuittingSoloPreemptionCycle.isFarkasCertificate_unforcedTelescopeLabel",
+        "GameTheory.QuittingSoloPreemptionCycle.not_exists_isLaxSection_unforcedTelescopeLabel",
+        "GameTheory.QuittingSoloPreemptionCycle.not_forall_soloReward_self_le_crossValue",
+        "GameTheory.isEmpty_counterexampleRegime_of_quittingPreemptionTransportProducer",
+        "GameTheory.exists_uniformEquilibriumPayoff_of_quittingPreemptionTransportProducer",
+        "GameTheory.QuittingPreemptionTransportRefutation.label_ne_forcedCrossFloorLabel"
+      ],
+      "open_propositions": [
+        "GameTheory.QuittingPreemptionTransportProducer"
       ]
     }
   ]
