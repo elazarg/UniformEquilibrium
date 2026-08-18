@@ -275,6 +275,116 @@ def check_status(errors: list[str]) -> None:
             errors.append(f"{claim_id}: {module} is not imported by {claim['umbrella']}")
 
 
+LEAN_NAME_RE = re.compile(r"\A[A-Za-z_][A-Za-z0-9_'ε]*(?:\.[A-Za-z_][A-Za-z0-9_'ε]*)+\Z")
+PROSE_FIELDS = frozenset(
+    {"id", "kind", "summary", "evidence", "source", "target_ids", "cover_clause_ids",
+     "superseded_by", "obstruction_class", "representative", "evidence_seals", "status",
+     "producer"}
+)
+DECLARATION_RE = re.compile(
+    r"\A\s*(?:@\[[^\]]*\]\s*)?"
+    r"(?:(?:private|protected|noncomputable|partial|unsafe|scoped|local)\s+)*"
+    r"(?:theorem|lemma|def|abbrev|structure|inductive|instance|class)\s+"
+    r"([A-Za-z_][^\s({\[:]*)"
+)
+NAMESPACE_RE = re.compile(r"\A\s*namespace\s+(\S+)")
+SECTION_RE = re.compile(r"\A\s*section(?:\s+(\S+))?\s*\Z")
+END_RE = re.compile(r"\A\s*end(?:\s+(\S+))?\s*\Z")
+
+
+def collect_lean_names(value: object, field: str | None = None) -> set[str]:
+    """Every dotted-identifier string reachable from a ledger entry.
+
+    Collection is by shape, not by a field whitelist, so a register field added
+    later is covered without touching this function; prose and path fields are
+    excluded by name because their contents are not declaration names.
+    """
+    if isinstance(value, str):
+        if field in PROSE_FIELDS or not LEAN_NAME_RE.match(value):
+            return set()
+        return {value}
+    if isinstance(value, list):
+        return set().union(*(collect_lean_names(item, field) for item in value)) if value else set()
+    if isinstance(value, dict):
+        found: set[str] = set()
+        for key, item in value.items():
+            if key in PROSE_FIELDS:
+                continue
+            found |= collect_lean_names(key, key)
+            found |= collect_lean_names(item, key)
+        return found
+    return set()
+
+
+def qualified_declaration_names(text: str) -> set[str]:
+    """Fully qualified names declared in one Lean source, read lexically."""
+    scopes: list[tuple[str, str | None]] = []
+    names: set[str] = set()
+    for line in text.splitlines():
+        namespace = NAMESPACE_RE.match(line)
+        if namespace:
+            scopes.append(("namespace", namespace.group(1)))
+            continue
+        section = SECTION_RE.match(line)
+        if section:
+            scopes.append(("section", section.group(1)))
+            continue
+        closing = END_RE.match(line)
+        if closing:
+            label = closing.group(1)
+            for index in range(len(scopes) - 1, -1, -1):
+                if scopes[index][1] == label:
+                    del scopes[index:]
+                    break
+            continue
+        declaration = DECLARATION_RE.match(line)
+        if declaration:
+            prefix = [name for kind, name in scopes if kind == "namespace" and name]
+            names.add(".".join(prefix + [declaration.group(1)]))
+    return names
+
+
+def check_frontier_names(entry: dict, sources: list[str], errors: list[str]) -> None:
+    """Every declaration name an entry records must occur in its own evidence.
+
+    Lexical only, in the spirit of the trust scan: the final segment must appear
+    in some evidence file, and where that file's namespaces can be reconstructed
+    the fully qualified name must match one of them.  A `#check` sweep over the
+    recorded names remains the semantic backstop.
+    """
+    names = collect_lean_names(entry)
+    if not names:
+        return
+    texts = {}
+    for source in sources:
+        path = ROOT / source
+        if path.is_file():
+            texts[source] = path.read_text(encoding="utf-8")
+    if not texts:
+        errors.append(
+            f"{entry['id']}: records declaration names but has no readable evidence file; "
+            "a #check sweep remains the semantic backstop"
+        )
+        return
+    for name in sorted(names):
+        segment = name.rsplit(".", 1)[-1]
+        hosts = [source for source, text in texts.items() if segment in text]
+        if not hosts:
+            errors.append(
+                f"{entry['id']}: recorded name {name} does not occur in its evidence "
+                f"({', '.join(sources)}); a #check sweep remains the semantic backstop"
+            )
+            continue
+        qualified: set[str] = set()
+        for source in hosts:
+            qualified |= qualified_declaration_names(texts[source])
+        if qualified and name not in qualified:
+            errors.append(
+                f"{entry['id']}: recorded name {name} is not declared under that namespace "
+                f"in {', '.join(hosts)}; a #check sweep remains the semantic backstop"
+            )
+
+
 def check_frontier(errors: list[str]) -> None:
     frontier = json.loads(FRONTIER_PATH.read_text(encoding="utf-8"))
     if frontier.get("schema_version") != 2:
@@ -347,6 +457,9 @@ def check_frontier(errors: list[str]) -> None:
         for evidence in transition.get("evidence", []):
             if not (ROOT / evidence).is_file():
                 errors.append(f"{transition['id']}: missing evidence {evidence}")
+        check_frontier_names(transition, transition.get("evidence", []), errors)
+    for leaf in leaves:
+        check_frontier_names(leaf, [leaf["source"]], errors)
 
 
 def source_reference_issues(
