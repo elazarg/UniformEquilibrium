@@ -62,7 +62,7 @@ Definitions:
   a subinvariant family, or a super-/subharmonic section depending on
   orientation.
 
-Theorems (all provable now, all by walk induction):
+Theorems (implemented, all by walk induction):
 
 - `walkMap_append`, `walkMap` vs `Math.CycleCoboundary.transport` when all
   fibers are equal (definitional bridge);
@@ -73,7 +73,7 @@ Theorems (all provable now, all by walk induction):
   marks; a lax section forces every closed-walk holonomy to have `s base` as
   a pre-fixed point;
 - for one common fiber and labels acting through a monoid, `walkMap` is the
-  action of `Math.CycleCoboundary.gain` (this is `transport_eq_smul`,
+  action of `Math.CycleCoboundary.walkLabel` (this is `transport_eq_smul`,
   re-exported rather than reproved).
 
 Layer 0's job is vocabulary plus the four or five induction lemmas that every
@@ -112,14 +112,15 @@ decisions:
    on `{f : Label // 0 ≤ f.slope}`; strict positivity is demanded only where
    a positive denominator needs it.
 
-Embeddings and identifications (T1, provable now):
+Embeddings and identifications (T1, implemented):
 
 - `Math.TransferSummary.AffineSummary` at floor `⊥` (a monoid homomorphism)
   and `Math.TransferSummary.MaxAffineSummary` at coerced floors, both
   action-preserving;
 - the `MulAction` of nonnegative-slope labels on `ℝ`, so Layer 0's `walkMap` and
-  `Math.CycleCoboundary.gain` agree here;
-- the missing identification flagged in review: the transfer matrices of
+  `Math.CycleCoboundary.walkLabel` agree here;
+- the identification tying the two representations together: the transfer
+  matrices of
   `Math.InverseCoordinate` assemble into a monoid homomorphism
   `AffineSummary →* Matrix (Fin 2) (Fin 2) ℝ` (upper-triangular image), whose
   composition law is `affineTransferMatrix_mul`; this ties the matrix
@@ -138,7 +139,7 @@ Core definitions:
 
 Theorem ladder:
 
-**T2 — the weighted-defect telescope (provable now; centerpiece).**  For a
+**T2 — the weighted-defect telescope (implemented; centerpiece).**  For a
 walk `e₁ … eₙ` and any candidate `φ`:
 
 ```
@@ -153,17 +154,17 @@ reflected labels it is the survival-weighted accounting of
 checkable content of "the inequalities live in different fibers and do not
 telescope additively": they telescope with slope-product weights.
 
-**T3 — weak duality (provable now).**  A lax section gives every cycle
+**T3 — weak duality (implemented).**  A lax section gives every cycle
 holonomy the pre-fixed point `φ base`.  Layer 0's weak duality specialized.
 
-**T4 — the expansivity trichotomy (provable now).**  For a single label
+**T4 — the expansivity trichotomy (implemented).**  For a single label
 `(E, t, a)` with `0 ≤ a`, `∃ x, apply f x ≤ x` iff `a < 1`, or `a = 1 ∧
 t ≤ 0`, or `a > 1 ∧ E ≤ -t / (a - 1)` (`E = ⊥` always admissible).
 Decidable in the coefficients; applied to a cycle's composed label it decides
 pre-fixed-point existence from the holonomy coefficients — the
 generalization of "cycle weight ≤ 0".
 
-**T5 — quantitative obstruction (provable now).**  If a cycle's holonomy
+**T5 — quantitative obstruction (implemented).**  If a cycle's holonomy
 satisfies `holonomy x ≥ x + γ` at `x = φ base`, some edge has
 `defect φ e ≥ γ / (Σᵢ Wᵢ)`.  At slopes `1` this is
 `Math.MaxPlusPotential.exists_edge_defect_ge`.  T4 identifies when the
@@ -207,7 +208,7 @@ pre-fixed point" give a lax section?
      Amer. Math. Soc. 356 (2004)) — remains the right frame for eigenvalue
      questions, which stay out of scope.
 
-**T7 — periodic certificates (provable now, bridge).**  A fixed point of a
+**T7 — periodic certificates (implemented, bridge).**  A fixed point of a
 cycle's holonomy is a solution of that cycle's cyclic system; bridge to
 `Math.CyclicMaxAffine.CyclicSolution`, whose equations
 `C k = max (1 - p k) (q k * C (k + 1) + p k)` are the labels
@@ -258,11 +259,15 @@ cyclic mismatch corresponds to T4's `a = 1, t ≤ 0` boundary.
 
 ## Milestones
 
-- **M0**: Layer 0 complete (small, provable now).
+All implemented.
+
+- **M0**: Layer 0 (`MathUE/DirectedTransport.lean`).
 - **M1**: Layer 1 label algebra + T2 + T3 + T4 + T5 + T7 + specialization
-  theorems + the `AffineSummary →* Matrix` identification.
-- **M2**: T6a and T6b.
-- **Open**: T6c.
+  theorems + the `AffineSummary →* Matrix` identification
+  (`MathUE/MaxAffineTransport.lean`).
+- **M2**: T6a and T6b (`MathUE/MaxAffineSectionDuality.lean`).
+- **M3**: the cyclewise-completeness refutation and the general Farkas
+  duality (`MathUE/MaxAffineFarkasDuality.lean`).
 
 ## Sibling-module completions (recorded)
 
