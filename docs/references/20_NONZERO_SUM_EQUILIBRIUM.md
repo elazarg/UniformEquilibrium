@@ -131,10 +131,33 @@ independently re-fetched and cross-checked against Crossref metadata
 
 **Citation.** E. Solan, *Three-Player Absorbing Games*, Mathematics of
 Operations Research **24**(3), 669–698 (1999),
-DOI [`10.1287/moor.24.3.669`](https://doi.org/10.1287/moor.24.3.669). MOR full
-text paywalled; not obtained.
+DOI [`10.1287/moor.24.3.669`](https://doi.org/10.1287/moor.24.3.669). The
+published MOR text **has since been obtained** and read as page images (a scan
+with no usable text layer).
 
-### The undiscounted/uniform question — resolved, `PRIMARY_FULLTEXT` on the dissertation
+### The undiscounted/uniform question — CLOSED BY THE PUBLISHED TEXT ITSELF
+
+`[primary, fulltext]` **Definition 3.2 of the published paper (p. 673) is the
+uniform notion, written out.** Verbatim: a vector `g ∈ R^N` is an *equilibrium
+payoff* if for every `ε > 0` there exist `t_ε ∈ N` and a strategy profile
+`σ_ε` such that for every player `i`, `E_{σ_ε}(liminf_t (r^i_1+…+r^i_t)/t) ≥
+g^i − ε` **and for every `t > t_ε`**, `E_{σ_ε}((r^i_1+…+r^i_t)/t) ≥ g^i − ε`;
+and (p. 674) for every player `i` and every deviation `τ^i`,
+`E_{σ_ε^{−i},τ^i}(limsup_t (r^i_1+…+r^i_t)/t) ≤ g^i + ε` **and for every
+`t > t_ε`**, `E_{σ_ε^{−i},τ^i}((r^i_1+…+r^i_t)/t) ≤ g^i + ε`. The
+"for every `t > t_ε`" clauses are exactly this program's finite-horizon
+uniformity requirement, so the paper's own notion is uniform *and* strictly
+stronger than it (the `liminf`/`limsup` clauses are extra). **Theorem 3.3
+(p. 674), verbatim:** "Every three-player absorbing game has an equilibrium
+payoff." No positivity or sign hypothesis appears in Definition 3.2, in
+Theorem 3.3, or in the Section 4 machinery (Definition 4.1 and Lemma 4.2 for
+the min-max, Theorems 4.5 and 4.7 for the two auxiliary results).
+
+The abstract's word *undiscounted* is therefore the headline label for a
+notion the body defines uniformly. **The three-secondary-source argument below
+is no longer load-bearing** and is retained only as corroboration.
+
+### The undiscounted/uniform question — earlier route, now corroboration only
 
 The published abstract's headline word is **undiscounted**. Under this
 document's own terminology table that is *a priori* the weaker notion, and
@@ -427,7 +450,7 @@ be quoted as-is.
 R.S. Simon, *The Structure of Non-Zero-Sum Stochastic Games*, Advances in
 Applied Mathematics **38**(1), 1–26 (2007), DOI
 [`10.1016/j.aam.2006.07.002`](https://doi.org/10.1016/j.aam.2006.07.002).
-The paper was read directly from a local source PDF (the earlier "genuinely
+The paper was read directly from the publisher's PDF (the earlier "genuinely
 paywalled" note is retired).
 
 **Confidence: `[primary]`.** Full text read — pp. 1, 5, 13–20, 24 — via
