@@ -348,11 +348,17 @@ bound.  This is
 `Math.MaxAffineTransport.rowDelta` and `Math.MaxAffineTransport.rowBase`, so no
 sign condition on the slopes and no structure on the graph is used.
 
-The certificate is a generalized-flow, or gain-flow, certificate: the weights of
-the affine rows are edge flows whose balance at a vertex scales the outgoing
-flow by the edge slopes, and the weights of the floor rows absorb the floors.  A
-positive-weight cycle is the special case supported on one closed walk, with the
-slopes multiplying along it; that special case is not complete, by
+At arbitrary slopes the certificate is a nonnegative linear dependency among
+the rows.  At nonnegative slopes it additionally reads as a generalized-flow,
+or gain-flow, certificate: the weights of the affine rows are edge flows whose
+balance at a vertex scales the outgoing flow by the edge slopes, and the
+weights of the floor rows absorb the floors; a negative slope puts positive
+coefficients at both endpoints of its row, which no flow reading carries.  An
+affine-only certificate supported on one closed walk must satisfy
+`λ (i - 1) = slope i * λ i` around the cycle, forcing the slope product to be
+one; the classical positive-shift cycle at unit slopes is that case, and an
+expanding cycle obstructed by a floor needs a floor-row weight as well.
+Cyclewise certificates alone are not complete, by
 `Math.MaxAffineTransport.not_forall_cycle_prefixed_imp_exists_isLaxSection`.
 Literature: linear programming duality and Farkas' lemma; generalized network
 flows. -/
@@ -367,7 +373,63 @@ theorem exists_isLaxSection_iff_no_nonnegative_certificate [Fintype E]
   exact Math.exists_potential_iff_no_nonnegative_incompatibility
     (rowDelta G label) (rowBase label)
 
+/-- A **Farkas certificate** against the lax-section system of a labelled
+graph: nonnegative weights on the rows, balanced at every vertex, with
+strictly positive total bound.  At nonnegative slopes this reads as a
+generalized-flow (gain-flow) certificate; at arbitrary slopes it is a
+nonnegative linear dependency witnessing infeasibility. -/
+def IsFarkasCertificate [Fintype E] (G : EdgeGraph V E) (label : E → Label)
+    (coefficient : E ⊕ E → ℝ) : Prop :=
+  (∀ action, 0 ≤ coefficient action) ∧
+    (∀ v : V, ∑ action, coefficient action * rowDelta G label action v = 0) ∧
+    0 < ∑ action, coefficient action * rowBase label action
+
+/-- Strong duality through the certificate predicate. -/
+theorem exists_isLaxSection_iff_no_farkasCertificate [Fintype E]
+    (G : EdgeGraph V E) (label : E → Label) :
+    (∃ φ : V → ℝ, IsLaxSection G label φ) ↔
+      ¬∃ coefficient, IsFarkasCertificate G label coefficient := by
+  simp only [IsFarkasCertificate]
+  exact exists_isLaxSection_iff_no_nonnegative_certificate G label
+
+/-- The certificate as a produced obstruction: when no lax section exists, a
+certificate does. -/
+theorem not_exists_isLaxSection_iff_exists_farkasCertificate [Fintype E]
+    (G : EdgeGraph V E) (label : E → Label) :
+    (¬∃ φ : V → ℝ, IsLaxSection G label φ) ↔
+      ∃ coefficient, IsFarkasCertificate G label coefficient := by
+  rw [exists_isLaxSection_iff_no_farkasCertificate, not_not]
+
+/-- The alternative: a lax section or a certificate, never neither. -/
+theorem exists_isLaxSection_or_exists_farkasCertificate [Fintype E]
+    (G : EdgeGraph V E) (label : E → Label) :
+    (∃ φ : V → ℝ, IsLaxSection G label φ) ∨
+      ∃ coefficient, IsFarkasCertificate G label coefficient := by
+  by_cases hcert : ∃ coefficient, IsFarkasCertificate G label coefficient
+  · exact Or.inr hcert
+  · exact Or.inl ((exists_isLaxSection_iff_no_farkasCertificate G label).mpr hcert)
+
 end Farkas
+
+/-! ## The certificate of the two-loop counterexample -/
+
+section LoopCertificate
+
+/-- The explicit certificate of the two-loop counterexample: unit weight on
+each affine row, none on the floor rows.  The reset's affine row is `1` at the
+unique vertex with bound `10`, the doubling's is `1 - 2 = -1` with bound `0`,
+so the combination is balanced with total bound `10`. -/
+theorem isFarkasCertificate_loopLabel :
+    IsFarkasCertificate loopGraph loopLabel (Sum.elim (fun _ => 1) fun _ => 0) := by
+  refine ⟨?_, ?_, ?_⟩
+  · rintro (e | e) <;> simp
+  · intro v
+    rw [Fintype.sum_sum_type]
+    simp [rowDelta, loopGraph, resetLabel, doubleLabel]
+  · rw [Fintype.sum_sum_type]
+    simp [rowBase, resetLabel, doubleLabel]
+
+end LoopCertificate
 
 end Math.MaxAffineTransport
 
