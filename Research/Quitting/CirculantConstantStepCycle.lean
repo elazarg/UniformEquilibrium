@@ -24,10 +24,11 @@ Nothing is assumed about coalitions of size three or more.
 
 For a step `c` the *constant-step profile* schedules player `c * k` at phase
 `k` of a period-five cycle and gives every scheduled player the same quit
-probability `1 - q`.  `stepSlack` is the resulting displayed value measured
-from `s`, indexed by the number of phases elapsed since the player's own
-quitting phase, and `stepAnchor` is the cubic whose vanishing at `q` closes the
-cycle.  `isSoloPeriodicCertificate_constantStep` records that the anchor
+probability `1 - q`, with `q` anywhere in `[0, 1)`; at `q = 0` the scheduled
+player quits for sure at every phase.  `stepSlack` is the resulting displayed
+value measured from `s`, indexed by the number of phases elapsed since the
+player's own quitting phase, and `stepAnchor` is the cubic whose vanishing at
+`q` closes the cycle.  `isSoloPeriodicCertificate_constantStep` records that the anchor
 equation and four floor inequalities — one per elapsed phase — supply every
 obligation of `GameTheory.SoloPeriodicBlockCompiler.IsSoloPeriodicCertificate`,
 so the profile realizes `stepValue … 0` as a uniform-equilibrium payoff.
@@ -300,16 +301,21 @@ theorem abs_stepValue_le (htable : IsCirculantPairTable reward s m J)
 
 /-- **The finite certificate of a constant-step cyclic profile.**  The anchor
 equation and the four floor inequalities supply every obligation of the
-single-quitter periodic compiler. -/
+single-quitter periodic compiler.
+
+The continuation probability is only required to be nonnegative.  At `q = 0`
+the profile is the one whose scheduled player quits for sure at every phase;
+the slack sequence is then identically zero and the anchor equation reads
+`m c = 0`. -/
 theorem isSoloPeriodicCertificate_constantStep
     (htable : IsCirculantPairTable reward s m J)
     (hcc' : c * c' = -1) (hs : 0 ≤ s)
-    (h0 : 0 < q) (h1 : q < 1) (hroot : stepAnchor m c q = 0)
+    (h0 : 0 ≤ q) (h1 : q < 1) (hroot : stepAnchor m c q = 0)
     (hfloor₁ : J c ≤ 0)
     (hfloor₂ : J (2 * c) ≤ m (2 * c) + q * m (3 * c) + q ^ 2 * m (4 * c))
     (hfloor₃ : J (3 * c) ≤ m (3 * c) + q * m (4 * c))
     (hfloor₄ : J (4 * c) ≤ m (4 * c)) :
-    IsSoloPeriodicCertificate reward (stepSchedule c) (stepCoin q h0.le h1.le)
+    IsSoloPeriodicCertificate reward (stepSchedule c) (stepCoin q h0 h1.le)
       (stepValue m c q s c') := by
   have hp : (0 : ℝ) < 1 - q := by linarith
   have hslack : ∀ t : ZMod 5,
@@ -343,7 +349,7 @@ theorem isSoloPeriodicCertificate_constantStep
     rw [Fin.val_succ]
     push_cast
     ring
-  refine ⟨abs_stepValue_le htable h0.le h1.le, stepValue_last m c q s c', ?_, ?_, ?_,
+  refine ⟨abs_stepValue_le htable h0 h1.le, stepValue_last m c q s c', ?_, ?_, ?_,
     ⟨0, ?_⟩, ?_⟩
   · intro k who
     rw [stepValue, stepValue, stepCoin_true, stepCoin_false, htable.singleton,
@@ -381,7 +387,7 @@ theorem isSoloPeriodicCertificate_constantStep
 theorem isUniformEquilibriumPayoff_constantStep
     (htable : IsCirculantPairTable reward s m J)
     (hcc' : c * c' = -1) (hs : 0 ≤ s)
-    (h0 : 0 < q) (h1 : q < 1) (hroot : stepAnchor m c q = 0)
+    (h0 : 0 ≤ q) (h1 : q < 1) (hroot : stepAnchor m c q = 0)
     (hfloor₁ : J c ≤ 0)
     (hfloor₂ : J (2 * c) ≤ m (2 * c) + q * m (3 * c) + q ^ 2 * m (4 * c))
     (hfloor₃ : J (3 * c) ≤ m (3 * c) + q * m (4 * c))
@@ -397,7 +403,7 @@ regime.** -/
 theorem isEmpty_counterexampleRegime_constantStep
     (htable : IsCirculantPairTable reward s m J)
     (hcc' : c * c' = -1) (hs : 0 ≤ s)
-    (h0 : 0 < q) (h1 : q < 1) (hroot : stepAnchor m c q = 0)
+    (h0 : 0 ≤ q) (h1 : q < 1) (hroot : stepAnchor m c q = 0)
     (hfloor₁ : J c ≤ 0)
     (hfloor₂ : J (2 * c) ≤ m (2 * c) + q * m (3 * c) + q ^ 2 * m (4 * c))
     (hfloor₃ : J (3 * c) ≤ m (3 * c) + q * m (4 * c))

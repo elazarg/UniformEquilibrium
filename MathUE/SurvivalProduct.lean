@@ -64,6 +64,28 @@ theorem survivalProduct_add (C : ℕ → ℝ) (start a b : ℕ) :
         survivalProduct_succ, show start + a + b = start + (a + b) by omega]
       ring
 
+/-- Survival over a window peels its first stage: the opening coefficient
+times the survival of the shifted remainder. -/
+theorem survivalProduct_succ_left (C : ℕ → ℝ) (start fuel : ℕ) :
+    survivalProduct C start (fuel + 1) =
+      C start * survivalProduct C (start + 1) fuel := by
+  rw [show fuel + 1 = 1 + fuel from by omega, survivalProduct_add]
+  congr 1
+  simpa using survivalProduct_succ C start 0
+
+/-- **The absorbed-mass telescope.**  Each stage's complementary coefficient,
+discounted by the survival that precedes it, together exhaust the complement
+of the window's survival.  No sign or size hypothesis on `C` is used. -/
+theorem sum_survivalProduct_mul_one_sub (C : ℕ → ℝ) (start fuel : ℕ) :
+    (∑ offset ∈ Finset.range fuel,
+        survivalProduct C start offset * (1 - C (start + offset))) =
+      1 - survivalProduct C start fuel := by
+  induction fuel with
+  | zero => simp
+  | succ fuel ih =>
+      rw [Finset.sum_range_succ, ih, survivalProduct_succ]
+      ring
+
 theorem survivalProduct_nonneg (C : ℕ → ℝ) (hC : ∀ time, 0 ≤ C time)
     (start fuel : ℕ) : 0 ≤ survivalProduct C start fuel :=
   Finset.prod_nonneg fun offset _ => hC (start + offset)

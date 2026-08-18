@@ -401,22 +401,6 @@ theorem quittingAnchoredCyclicContinueValue_eq_refusalHazard
     ring
   · rw [if_neg hwho, if_neg (fun hcontra ↦ hwho hcontra.symm)]
 
-/-- A hazard vector with one positive entry has cycle survival below one. -/
-theorem prod_one_sub_lt_one_of_pos {rate : Fin m → ℝ}
-    (h0 : ∀ k, 0 ≤ rate k) (h1 : ∀ k, rate k ≤ 1) {k₀ : Fin m}
-    (hpos : 0 < rate k₀) :
-    ∏ k, (1 - rate k) < 1 := by
-  have hrest : ∏ k ∈ Finset.univ.erase k₀, (1 - rate k) ≤ 1 :=
-    Finset.prod_le_one (fun k _ ↦ by linarith [h1 k]) (fun k _ ↦ by linarith [h0 k])
-  have hnonneg : (0 : ℝ) ≤ 1 - rate k₀ := by linarith [h1 k₀]
-  have hsplit : ∏ k, (1 - rate k) =
-      (∏ k ∈ Finset.univ.erase k₀, (1 - rate k)) * (1 - rate k₀) :=
-    (Finset.prod_erase_mul _ _ (Finset.mem_univ k₀)).symm
-  calc ∏ k, (1 - rate k) =
-        (∏ k ∈ Finset.univ.erase k₀, (1 - rate k)) * (1 - rate k₀) := hsplit
-    _ ≤ 1 * (1 - rate k₀) := mul_le_mul_of_nonneg_right hrest hnonneg
-    _ < 1 := by linarith
-
 omit [Fintype ι] in
 /-- **Deleting the refuser zeroes its own phases.**  Forcing `who` to continue
 at every phase of an anchored cyclic cycle leaves the anchored cyclic cycle of
@@ -660,9 +644,9 @@ theorem prod_one_sub_refusalHazard_lt_one
     (h1 : ∀ k, hazard k ≤ 1) {who : ι} {k₀ : Fin m} (hne : w k₀ ≠ who)
     (hpos : 0 < hazard k₀) :
     ∏ k, (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) < 1 := by
-  refine prod_one_sub_lt_one_of_pos
+  refine Math.PMFProduct.continueMass_lt_one_of_pos
     (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-    (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) (k₀ := k₀) ?_
+    (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) (i₀ := k₀) ?_
   rwa [quittingAnchoredCyclicRefusalHazard, if_neg hne]
 
 /-- **The response cap bound with no residual.**  When every player is a

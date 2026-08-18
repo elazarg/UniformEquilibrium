@@ -70,6 +70,13 @@ theorem survival_succ (hazard : ScalarHazard) (start fuel : ℕ) :
       hazard.survival start fuel * (1 - hazard.stop (start + fuel)) :=
   Math.survivalProduct_succ _ _ _
 
+/-- Survival over a window peels its first stage: the opening continuation
+coefficient times the survival of the shifted remainder. -/
+theorem survival_succ_left (hazard : ScalarHazard) (start fuel : ℕ) :
+    hazard.survival start (fuel + 1) =
+      (1 - hazard.stop start) * hazard.survival (start + 1) fuel :=
+  Math.survivalProduct_succ_left _ _ _
+
 theorem survival_nonneg (hazard : ScalarHazard) (start fuel : ℕ) :
     0 ≤ hazard.survival start fuel :=
   Math.survivalProduct_nonneg _ (fun t => sub_nonneg.mpr (hazard.stop_le_one t)) _ _
@@ -90,13 +97,20 @@ theorem stopMass_eq_survival_sub_succ (hazard : ScalarHazard) (time : ℕ) :
   dsimp [stopMass]
   ring_nf
 
+/-- **The window telescope.**  Over the window `[start, start + fuel)`, the
+stopping masses discounted by the survival preceding them exhaust the
+complement of the window's survival. -/
+theorem sum_survival_mul_stop (hazard : ScalarHazard) (start fuel : ℕ) :
+    (∑ offset ∈ Finset.range fuel,
+        hazard.survival start offset * hazard.stop (start + offset)) =
+      1 - hazard.survival start fuel := by
+  simp only [survival]
+  simpa using Math.sum_survivalProduct_mul_one_sub
+    (fun time => 1 - hazard.stop time) start fuel
+
 theorem sum_stopMass (hazard : ScalarHazard) (cutoff : ℕ) :
     (∑ time ∈ Finset.range cutoff, hazard.stopMass time) = 1 - hazard.survival 0 cutoff := by
-  induction cutoff with
-  | zero => simp [survival_zero]
-  | succ cutoff ih =>
-      rw [Finset.sum_range_succ, ih, stopMass_eq_survival_sub_succ]
-      ring
+  simpa [stopMass] using hazard.sum_survival_mul_stop 0 cutoff
 
 private theorem survival_antitone_zero (hazard : ScalarHazard) :
     Antitone (hazard.survival 0) := by
@@ -250,9 +264,11 @@ def BooleanHazard.toScalar (hazard : BooleanHazard) : ScalarHazard where
   stop_nonneg := stop_nonneg hazard
   stop_le_one := fun t => by linarith [continue_add_stop hazard t, continue_nonneg hazard t]
 
-theorem BooleanHazard.survival_eq_scalar (hazard : BooleanHazard) (cutoff : ℕ) :
-    Math.survivalProduct (continueProbability hazard) 0 cutoff =
-      hazard.toScalar.survival 0 cutoff := by
+/-- The product of a Boolean hazard's continuation masses over any window is
+the survival of its scalar view. -/
+theorem BooleanHazard.survival_eq_scalar (hazard : BooleanHazard) (start cutoff : ℕ) :
+    Math.survivalProduct (continueProbability hazard) start cutoff =
+      hazard.toScalar.survival start cutoff := by
   unfold ScalarHazard.survival BooleanHazard.toScalar
   congr 2
   funext t

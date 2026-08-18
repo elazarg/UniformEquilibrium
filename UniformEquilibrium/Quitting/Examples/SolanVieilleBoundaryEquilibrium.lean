@@ -31,6 +31,11 @@ elimination exposes `crossBlockQuartic` as the polynomial selecting the
 secondary continuation probability, isolated by an exact sign change on
 `[73/100, 74/100]`, and it sharpens the rational isolation of both
 continuation probabilities enough to localize every payoff coordinate.
+
+The localizations separate the two off-phase coordinates
+(`crossBlockPayoff_three_lt_crossBlockPayoff_one`): the equilibrium pays the
+two off-phase players different amounts, and its payoff vector is not constant
+across players.
 -/
 
 noncomputable section
@@ -175,6 +180,18 @@ theorem periodTwoSecondary_mem_isolatingInterval :
     norm_num at hhighSq ⊢
     linarith
 
+/-- The two continuation probabilities are distinct: the isolation intervals
+`(73/100, 74/100)` and `(373/500, 747/1000)` are disjoint, and the secondary
+one is the smaller. -/
+theorem periodTwoSecondary_lt_periodTwoParameter :
+    periodTwoSecondary < periodTwoParameter := by
+  have hsecondary := periodTwoSecondary_mem_isolatingInterval
+  have hprimary := periodTwoParameter_mem_sharpInterval
+  have h2 := hsecondary.2
+  have h1 := hprimary.1
+  norm_num at h1 h2
+  linarith
+
 /-! ## The uniform-equilibrium payoff -/
 
 /-- The payoff of the period-two cross-pair profile.  Players `0` and `2`
@@ -229,6 +246,35 @@ theorem crossBlockPayoff_three_mem :
     nlinarith [hmem.2]
   · rw [div_lt_iff₀ hpos]
     nlinarith [hmem.1]
+
+/-- **The two off-phase players are paid differently.**  The localizations of
+the two off-phase coordinates abut exactly at `135/100`, so the coordinate
+carrying the secondary continuation probability is strictly the larger.  The
+period-two cross-pair profile therefore treats the players scheduled to mix at
+the two phases asymmetrically even though the schedule is symmetric between
+the phases. -/
+theorem crossBlockPayoff_three_lt_crossBlockPayoff_one :
+    crossBlockPayoff 3 < crossBlockPayoff 1 := by
+  have hone := crossBlockPayoff_one_mem
+  have hthree := crossBlockPayoff_three_mem
+  have h1 := hone.1
+  have h3 := hthree.2
+  linarith
+
+/-- **The equilibrium payoff is not constant across players.**  Coordinates
+`0` and `2` receive the common solo exit value `1` while the other two receive
+strictly more, so no single number is the payoff of every player.  This is a
+statement about this equilibrium payoff, not about the table: it does not by
+itself decide whether `boundaryReward` is symmetric. -/
+theorem not_exists_forall_crossBlockPayoff_eq :
+    ¬ ∃ c : ℝ, ∀ who : Player, crossBlockPayoff who = c := by
+  rintro ⟨c, hc⟩
+  have hzero := hc 0
+  have hone := hc 1
+  have hlt := one_lt_crossBlockPayoff_one
+  rw [crossBlockPayoff_zero] at hzero
+  rw [hone] at hlt
+  linarith
 
 /-- **The Solan–Vieille boundary table has a uniform-equilibrium payoff.** -/
 theorem boundaryReward_isUniformEquilibriumPayoff :

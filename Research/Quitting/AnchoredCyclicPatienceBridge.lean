@@ -38,12 +38,19 @@ patient while its spectators still have no profitable one-phase quit.  Failure
 of the conjunction below is therefore failure of the anchored demand, not of
 any incentive condition on the profile.
 
+`spectatorQuitNowValue_le_onPathValue_of_isExactAnchoredSoloPeriodic` writes
+that spectator floor in the same vocabulary as patience, so the gap between the
+two readings is one inequality on a table's pair rows and nothing else.
+
 ## Main definitions
 
 * `quittingAnchoredCyclicPatienceSystemOfOnPathValue` — the packaging
 
 ## Main results
 
+* `spectatorQuitNowValue_le_onPathValue_of_isExactAnchoredSoloPeriodic` — the
+  spectator half of fixed-hazard exactness, as a bound on
+  `spectatorQuitNowValue`
 * `not_anchored_patient_onPathValue_of_isOpenPocketMargin` — over a five-player
   open-pocket circulant table no schedule with positive hazards has on-path
   values that are both anchored and patient
@@ -61,6 +68,40 @@ omit [Fintype ι] [DecidableEq ι] in
 /-- The singleton terminal state of one quitter, in its two spellings. -/
 theorem quittingSingletonTerminal_eq_projective (who : ι) :
     quittingSingletonTerminal who = quittingProjectiveSingletonTerminal who := rfl
+
+/-- **The spectator half of fixed-hazard exactness, written as the
+fixed-hazard comparison.**  At every phase of an exact anchored solo-periodic
+profile, a player other than that phase's scheduled quitter values quitting
+there — the mixture `spectatorQuitNowValue` of its pair row with the quitter
+and its own solo self payoff — at no more than the on-path value it already
+receives.
+
+This is the comparison whose place the patience field of
+`QuittingAnchoredCyclicPatienceSystem` gives to the bare solo self payoff.  The
+two agree exactly where a pair row pays its member that member's solo self
+payoff, by `spectatorQuitNowValue_eq_solo_of_pair_eq`, and patience is the
+strictly stronger demand wherever a pair row pays strictly less, by
+`spectatorQuitNowValue_lt_solo_of_pair_lt`.  The anchor field, by contrast, is
+the same equality in both readings, by
+`anchor_of_isExactAnchoredSoloPeriodic`. -/
+theorem spectatorQuitNowValue_le_onPathValue_of_isExactAnchoredSoloPeriodic
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {w : Fin m → ι} {hazard : Fin m → ℝ}
+    {h0 : ∀ k, 0 ≤ hazard k} {h1 : ∀ k, hazard k ≤ 1}
+    (hexact : IsExactAnchoredSoloPeriodic reward w hazard h0 h1)
+    (phase : Fin m) {who : ι} (hne : who ≠ w phase) :
+    spectatorQuitNowValue reward (hazard phase) (w phase) who ≤
+      quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 phase who := by
+  have hfloor := spectatorFloor_of_isExactAnchoredSoloPeriodic hexact phase hne
+  have hren :=
+    quittingAnchoredCyclicOnPathValue_renewal reward w hazard h0 h1 phase who
+  have hpair : (⟨{who, w phase}, Finset.insert_nonempty who {w phase}⟩ :
+      {S : Finset ι // S.Nonempty}) =
+      ⟨{w phase, who}, Finset.insert_nonempty (w phase) {who}⟩ :=
+    Subtype.ext (Finset.pair_comm who (w phase))
+  rw [spectatorQuitNowValue, hpair, ← quittingSingletonTerminal_eq_projective,
+    hren]
+  linarith
 
 /-- **The on-path values of an anchored cyclic schedule form a patience
 system.**  Survival is the complementary hazard, the renewal system supplies

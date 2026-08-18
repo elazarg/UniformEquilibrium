@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.CyclicContraction
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
 
@@ -53,19 +54,6 @@ theorem quittingSingletonMeshPhase_block_offset
         (quittingSingletonMeshOffset phase) = phase := by
   exact Equiv.apply_symm_apply finProdFinEquiv phase
 
-/-- Numeric form of `finRotate`: increment modulo the cardinality. -/
-theorem coe_finRotate_eq_succ_mod {n : ℕ} (phase : Fin n) :
-    (finRotate n phase : ℕ) = (phase.val + 1) % n := by
-  letI : NeZero n := phase.neZero
-  rw [finRotate_apply, Fin.val_add]
-  have hone : ((1 : Fin n) : ℕ) = 1 % n := Fin.val_natCast 1 n
-  rw [hone]
-  calc
-    (phase.val + 1 % n) % n =
-        (phase.val % n + 1 % n) % n := by
-      rw [Nat.mod_eq_of_lt phase.isLt]
-    _ = (phase.val + 1) % n := (Nat.add_mod phase.val 1 n).symm
-
 /-- Rotation increments a nonfinal micro-offset without changing its block. -/
 theorem finRotate_quittingSingletonMeshPhase_of_offset_succ_lt
     (block : Fin L) (offset : Fin m)
@@ -74,7 +62,7 @@ theorem finRotate_quittingSingletonMeshPhase_of_offset_succ_lt
       quittingSingletonMeshPhase block
         ⟨offset.val + 1, hoffset⟩ := by
   apply Fin.eq_of_val_eq
-  rw [coe_finRotate_eq_succ_mod]
+  rw [Math.val_finRotate]
   simp only [finProdFinEquiv_apply_val,
     quittingSingletonMeshPhase]
   have htotal : offset.val + m * block.val + 1 < L * m := by
@@ -98,11 +86,11 @@ theorem finRotate_quittingSingletonMeshPhase_of_offset_succ_eq
     finRotate (L * m) (quittingSingletonMeshPhase block offset) =
       quittingSingletonMeshPhase (finRotate L block) ⟨0, hm⟩ := by
   apply Fin.eq_of_val_eq
-  rw [coe_finRotate_eq_succ_mod
+  rw [Math.val_finRotate
       (quittingSingletonMeshPhase block offset)]
   simp only [finProdFinEquiv_apply_val,
     quittingSingletonMeshPhase, zero_add]
-  rw [coe_finRotate_eq_succ_mod block]
+  rw [Math.val_finRotate block]
   have hnum : offset.val + m * block.val + 1 =
       (block.val + 1) * m := by
     calc

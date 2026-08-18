@@ -10,6 +10,7 @@ import Mathlib.Data.Finset.BooleanAlgebra
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
+import MathUE.Finset.ProdLtOne
 
 /-!
 # Coalition mass over independent Bernoulli marginals
@@ -27,6 +28,14 @@ with their telescoping consequence along a sequence of rows.
 * `absorbedMass x t` is the total mass absorbed by some nonempty coalition at
   some stage strictly before `t`.
 
+For a family of probabilities the continuation mass lies in `[0, 1]`, it
+vanishes as soon as one coordinate acts for sure, and it is strictly below one
+as soon as one coordinate acts with positive probability
+(`continueMass_lt_one_of_pos`); equivalently, certain continuation forces every
+coordinate to be zero (`eq_zero_of_continueMass_eq_one`). Over a finite
+schedule of rows the same witness puts the product of the continuation masses
+strictly below one (`prod_continueMass_lt_one_of_pos`).
+
 Neither `sum_coalitionMass_nonempty` nor `sum_survivalMass_mul_sub_continueMass`
 below uses `0 ≤ x i` or `x i ≤ 1`: they are algebraic consequences of
 `x i + (1 - x i) = 1`, valid for any real family. The bounds are only needed
@@ -41,6 +50,56 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- The probability that every coordinate of `x` stays put. -/
 def continueMass (x : ι → ℝ) : ℝ := ∏ i, (1 - x i)
+
+omit [DecidableEq ι] in
+/-- Continuation mass is nonnegative as soon as no coordinate acts with
+probability above one. No lower bound on `x` is needed. -/
+theorem continueMass_nonneg {x : ι → ℝ} (h1 : ∀ i, x i ≤ 1) : 0 ≤ continueMass x :=
+  Finset.prod_nonneg fun i _ ↦ by linarith [h1 i]
+
+omit [DecidableEq ι] in
+/-- Continuation mass is at most one for a family of probabilities. -/
+theorem continueMass_le_one {x : ι → ℝ} (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1) :
+    continueMass x ≤ 1 :=
+  Finset.prod_le_one (fun i _ ↦ by linarith [h1 i]) (fun i _ ↦ by linarith [h0 i])
+
+omit [DecidableEq ι] in
+/-- A coordinate acting for sure annihilates the continuation mass. No bounds
+on the other coordinates are needed. -/
+theorem continueMass_eq_zero_of_eq_one {x : ι → ℝ} {i : ι} (hi : x i = 1) :
+    continueMass x = 0 :=
+  Finset.prod_eq_zero (Finset.mem_univ i) (by rw [hi]; ring)
+
+omit [DecidableEq ι] in
+/-- **A positive coordinate breaks certain continuation.** One coordinate
+acting with positive probability puts the continuation mass strictly below
+one. -/
+theorem continueMass_lt_one_of_pos {x : ι → ℝ} (h0 : ∀ i, 0 ≤ x i)
+    (h1 : ∀ i, x i ≤ 1) {i₀ : ι} (hpos : 0 < x i₀) : continueMass x < 1 :=
+  Math.Finset.prod_lt_one_of_mem Finset.univ (fun i ↦ 1 - x i) i₀
+    (Finset.mem_univ i₀) (fun i _ _ ↦ by linarith [h1 i]) (fun i _ _ ↦ by linarith [h0 i])
+    (by linarith)
+
+omit [DecidableEq ι] in
+/-- **Certain continuation forces inaction.** A family of probabilities whose
+continuation mass is one is identically zero. -/
+theorem eq_zero_of_continueMass_eq_one {x : ι → ℝ} (h0 : ∀ i, 0 ≤ x i)
+    (h1 : ∀ i, x i ≤ 1) (hone : continueMass x = 1) (i : ι) : x i = 0 := by
+  refine le_antisymm (not_lt.mp fun hpos ↦ ?_) (h0 i)
+  exact absurd hone (continueMass_lt_one_of_pos h0 h1 hpos).ne
+
+omit [DecidableEq ι] in
+/-- **A positive coordinate at one stage breaks certain continuation over the
+whole schedule.** One coordinate acting with positive probability at one stage
+puts the product of the continuation masses of an arbitrary finite schedule
+strictly below one. -/
+theorem prod_continueMass_lt_one_of_pos {Stage : Type*} (stages : Finset Stage)
+    {x : Stage → ι → ℝ} (h0 : ∀ s i, 0 ≤ x s i) (h1 : ∀ s i, x s i ≤ 1)
+    {s₀ : Stage} (hs₀ : s₀ ∈ stages) {i₀ : ι} (hpos : 0 < x s₀ i₀) :
+    (∏ s ∈ stages, continueMass (x s)) < 1 :=
+  Math.Finset.prod_lt_one_of_mem stages (fun s ↦ continueMass (x s)) s₀ hs₀
+    (fun s _ _ ↦ continueMass_nonneg (h1 s)) (fun s _ _ ↦ continueMass_le_one (h0 s) (h1 s))
+    (continueMass_lt_one_of_pos (h0 s₀) (h1 s₀) hpos)
 
 /-- The probability that exactly the coordinates in `J` act, and every
 coordinate outside `J` stays put. -/

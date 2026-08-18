@@ -33,11 +33,6 @@ arrays of reals. This file is the missing bridge between them.
   `weightOfReward_rewardOfWeight` (exact on nonempty coalitions -- the value
   a real weight assigns to the empty coalition has no Bool-side counterpart,
   but `sigmaValue`, `excludedValue`, `gammaValue`, `gainValue` never read it).
-* `expect_pmfPi_boolFamily_eq_sum_powerset`: the combinatorial heart --
-  expanding the expectation of a function of a Boolean joint action, drawn
-  from an independent-coordinate product with a fixed default outside a
-  carrier finset, into a `Finset.prod_add`-style sum over the powerset of the
-  carrier weighted by the coalition mass built from `hazardOfRoot`.
 * `quittingRootQuitPayoff_eq_sigmaValue`, `quittingRootContinuePayoff_eq_gammaValue`,
   `quittingRootEndpointDifference_eq_gainValue`: the gain values agree at a
   translated row, against `weightOfReward reward` on the real side.
@@ -46,6 +41,13 @@ arrays of reals. This file is the missing bridge between them.
 * `atMostOnePositive_of_isεQuittingRootEndpointNash_cyclicWeightReward`: the
   row dichotomy of `QuittingCyclicWeightRowDichotomy.lean`, restated on the
   `PMF Bool` side for `cyclicWeight`'s own root/continuation payoffs.
+
+The combinatorial heart of the translation is
+`Math.PMFProduct.expect_pmfPi_boolFamily_eq_sum_powerset`: the expectation of a
+function of a Boolean joint action, drawn from an independent-coordinate
+product with a fixed default outside a carrier finset, expands into a
+`Finset.prod_add`-style sum over the powerset of the carrier, weighted by the
+coalition mass built from `hazardOfRoot`.
 
 ## Scope
 
@@ -153,111 +155,6 @@ exactly. -/
     rewardOfWeight (weightOfReward reward) S i = reward S i := by
   obtain ⟨S, hS⟩ := S
   simp [rewardOfWeight, weightOfReward, hS]
-
-/-! ## The combinatorial heart: Boolean product expectations as powerset sums -/
-
-/-- **Coalition expansion of a Boolean product expectation.** Peeling
-independent Bernoulli coordinates in a carrier finset `t` one at a time
-turns the expectation of a function of the joint action into a
-`Finset.prod_add`-style sum over the powerset of `t`, weighted by the
-coalition mass built from `q`'s own quitting probabilities, holding the
-coordinates outside `t` fixed at the default `rest`. -/
-theorem expect_pmfPi_boolFamily_eq_sum_powerset (t : Finset ι) (q : ι → PMF Bool)
-    (rest : ι → Bool) (k : (ι → Bool) → ℝ) :
-    expect (pmfPi (fun i => if i ∈ t then q i else PMF.pure (rest i))) k =
-      ∑ J ∈ t.powerset,
-        (∏ i ∈ J, (q i true).toReal) * (∏ i ∈ t \ J, (q i false).toReal) *
-          k (fun i => if i ∈ J then true else if i ∈ t then false else rest i) := by
-  induction t using Finset.induction_on generalizing rest with
-  | empty =>
-      simp [pmfPi_pure]
-  | insert a s ha ih =>
-      have hσ : (fun i => if i ∈ insert a s then q i else PMF.pure (rest i)) =
-          Function.update (fun i => if i ∈ s then q i else PMF.pure (rest i)) a (q a) := by
-        funext i
-        by_cases hia : i = a
-        · subst hia; simp [ha]
-        · simp [hia, Finset.mem_insert]
-      rw [hσ, pmfPi_update_bind, expect_bind]
-      have hσb : ∀ b : Bool,
-          Function.update (fun i => if i ∈ s then q i else PMF.pure (rest i)) a (PMF.pure b) =
-            fun i => if i ∈ s then q i else PMF.pure ((Function.update rest a b) i) := by
-        intro b
-        funext i
-        by_cases hia : i = a
-        · subst hia; simp [ha]
-        · simp [hia]
-      simp_rw [hσb, ih]
-      -- `rw [add_comm]` below rewrites the *first* `_+_` it finds, which is
-      -- the left-hand `f true + f false`; it becomes `f false + f true`,
-      -- matching the right-hand `∑ g J + ∑ g (insert a J)` order.
-      rw [expect_eq_sum, Fintype.sum_bool, Finset.sum_powerset_insert ha, add_comm]
-      congr 1
-      · -- the `false` branch: `a` stays out, the quitting coalition is `J`.
-        rw [Finset.mul_sum]
-        apply Finset.sum_congr rfl
-        intro J hJ
-        rw [Finset.mem_powerset] at hJ
-        have haJ : a ∉ J := fun h => ha (hJ h)
-        have haNotSdiff : a ∉ s \ J := fun h => ha (Finset.mem_sdiff.mp h).1
-        have hprodfalse : ∏ i ∈ insert a s \ J, ((q i) false).toReal =
-            (q a false).toReal * ∏ i ∈ s \ J, ((q i) false).toReal := by
-          have hd : insert a s \ J = insert a (s \ J) := by
-            ext i
-            by_cases hia : i = a
-            · subst hia; simp [ha, haJ]
-            · simp [hia, Finset.mem_insert, Finset.mem_sdiff]
-          rw [hd, Finset.prod_insert haNotSdiff]
-        have hkeq :
-            (fun i => if i ∈ J then true else if i ∈ s then false else
-                (Function.update rest a false) i) =
-            (fun i => if i ∈ J then true else if i ∈ insert a s then false else rest i) := by
-          funext i
-          by_cases hia : i = a
-          · subst hia; simp [haJ, ha]
-          · simp [hia, Finset.mem_insert]
-        rw [hprodfalse, hkeq]; ring
-      · -- the `true` branch: `a` joins the quitting coalition `insert a J`.
-        rw [Finset.mul_sum]
-        apply Finset.sum_congr rfl
-        intro J hJ
-        rw [Finset.mem_powerset] at hJ
-        have haJ : a ∉ J := fun h => ha (hJ h)
-        have hprodtrue : ∏ i ∈ insert a J, ((q i) true).toReal =
-            (q a true).toReal * ∏ i ∈ J, ((q i) true).toReal :=
-          Finset.prod_insert haJ
-        have hd : insert a s \ insert a J = s \ J := by
-          ext i
-          by_cases hia : i = a
-          · subst hia; simp [ha, haJ]
-          · simp [hia, Finset.mem_insert, Finset.mem_sdiff]
-        have hkeq :
-            (fun i => if i ∈ J then true else if i ∈ s then false else
-                (Function.update rest a true) i) =
-            (fun i => if i ∈ insert a J then true else if i ∈ insert a s then false else
-                rest i) := by
-          funext i
-          by_cases hia : i = a
-          · subst hia; simp [haJ, ha]
-          · simp [hia, Finset.mem_insert]
-        rw [hprodtrue, hd, hkeq]; ring
-
-/-- Restatement of `expect_pmfPi_boolFamily_eq_sum_powerset` with the
-survival factor written as `1 - (quitting probability)`, matching the shape
-of `sigmaValue`, `excludedValue`, `gammaValue`. -/
-theorem expect_pmfPi_boolFamily_eq_sum_powerset' (t : Finset ι) (q : ι → PMF Bool)
-    (rest : ι → Bool) (k : (ι → Bool) → ℝ) :
-    expect (pmfPi (fun i => if i ∈ t then q i else PMF.pure (rest i))) k =
-      ∑ J ∈ t.powerset,
-        (∏ i ∈ J, (q i true).toReal) * (∏ i ∈ t \ J, (1 - (q i true).toReal)) *
-          k (fun i => if i ∈ J then true else if i ∈ t then false else rest i) := by
-  rw [expect_pmfPi_boolFamily_eq_sum_powerset]
-  apply Finset.sum_congr rfl
-  intro J _
-  congr 2
-  apply Finset.prod_congr rfl
-  intro i _
-  rw [pmfBool_false_toReal]
 
 /-! ## The gain values agree at a translated row -/
 

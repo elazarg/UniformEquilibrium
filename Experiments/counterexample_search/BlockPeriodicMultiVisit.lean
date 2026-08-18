@@ -184,7 +184,7 @@ theorem multiVisit_isQuittingBlockCertificate :
       (multiVisitHazard_le_one 0) (i₀ := 0) ?_⟩
     show (0 : ℝ) < multiVisitHazard 0 0
     norm_num [multiVisitHazard, multiVisitOwner, multiVisitRate]
-  · intro who
+  · refine fun who ↦ Or.inr ?_
     fin_cases who <;>
       simp [multiVisitReward_singleton_zero, multiVisitReward_singleton_one,
         multiVisitReward_singleton_two]

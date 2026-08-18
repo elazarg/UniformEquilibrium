@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.SurvivalProduct
+import MathUE.Probability.DiscreteHazardStopping
 import Research.Quitting.DiffuseTailSoloStructure
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 
@@ -56,7 +56,7 @@ noncomputable section
 
 namespace GameTheory
 
-open QuittingLCPClassification
+open QuittingLCPClassification Math.Probability.DiscreteHazard
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -255,79 +255,32 @@ end IsQuittingSoloRoot
 
 /-! ## Hazards and survival across a window of solo dates -/
 
-/-- The quit probability of the date's designated soloist. -/
-def quittingSoloTailHazard (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι)
-    (time : ℕ) : ℝ :=
-  (roots time (owner time) true).toReal
-
-/-- Survival mass of the date's designated soloist. -/
-def quittingSoloTailContinueMass (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι)
-    (time : ℕ) : ℝ :=
-  (roots time (owner time) false).toReal
+/-- The scalar hazard of a schedule of designated soloists: at each date, the
+quit probability of that date's owner. -/
+def quittingSoloTailHazard (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι) :
+    ScalarHazard :=
+  BooleanHazard.toScalar fun time => roots time (owner time)
 
 omit [Fintype ι] [DecidableEq ι] in
-/-- The two masses of a date's designated soloist sum to one. -/
-theorem quittingSoloTailContinueMass_add_hazard
-    (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι) (time : ℕ) :
-    quittingSoloTailContinueMass roots owner time +
-        quittingSoloTailHazard roots owner time = 1 :=
-  quittingRoot_continueProbability_add_quitProbability (roots time) (owner time)
-
-/-- Survival across the window of `length` solo dates beginning at `start`. -/
-def quittingSoloTailSurvival (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι)
-    (start length : ℕ) : ℝ :=
-  Math.survivalProduct (quittingSoloTailContinueMass roots owner) start length
-
-omit [Fintype ι] [DecidableEq ι] in
-@[simp] theorem quittingSoloTailSurvival_zero
-    (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι) (start : ℕ) :
-    quittingSoloTailSurvival roots owner start 0 = 1 :=
-  Math.survivalProduct_zero _ start
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- Appending one date multiplies the window survival by that date's survival
+/-- The complement of a date's soloist hazard is that soloist's continuation
 mass. -/
-theorem quittingSoloTailSurvival_succ
-    (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι) (start length : ℕ) :
-    quittingSoloTailSurvival roots owner start (length + 1) =
-      quittingSoloTailSurvival roots owner start length *
-        quittingSoloTailContinueMass roots owner (start + length) :=
-  Math.survivalProduct_succ _ start length
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- The window survival peels its first factor. -/
-theorem quittingSoloTailSurvival_succ_left
-    (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι) (start length : ℕ) :
-    quittingSoloTailSurvival roots owner start (length + 1) =
-      quittingSoloTailContinueMass roots owner start *
-        quittingSoloTailSurvival roots owner (start + 1) length :=
-  Math.survivalProduct_succ_left _ start length
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- Every window survival lies in the unit interval. -/
-theorem quittingSoloTailSurvival_mem_unitInterval
-    (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι) (start length : ℕ) :
-    0 ≤ quittingSoloTailSurvival roots owner start length ∧
-      quittingSoloTailSurvival roots owner start length ≤ 1 := by
-  have hmass : ∀ time,
-      0 ≤ quittingSoloTailContinueMass roots owner time ∧
-        quittingSoloTailContinueMass roots owner time ≤ 1 := by
-    intro time
-    have hsum := quittingSoloTailContinueMass_add_hazard roots owner time
-    have hhazard : 0 ≤ quittingSoloTailHazard roots owner time :=
-      ENNReal.toReal_nonneg
-    exact ⟨ENNReal.toReal_nonneg, by linarith⟩
-  exact ⟨Math.survivalProduct_nonneg _ (fun time => (hmass time).1) start length,
-    Math.survivalProduct_le_one _ (fun time => (hmass time).1)
-      (fun time => (hmass time).2) start length⟩
+theorem one_sub_quittingSoloTailHazard_stop (roots : ℕ → ι → PMF Bool)
+    (owner : ℕ → ι) (time : ℕ) :
+    1 - (quittingSoloTailHazard roots owner).stop time =
+      (roots time (owner time) false).toReal := by
+  have hmass := continue_add_stop (fun time => roots time (owner time)) time
+  simp only [continueProbability, stopProbability] at hmass
+  show 1 - (roots time (owner time) true).toReal = _
+  linarith
 
 /-- Discounted hazard weight of the date `start + offset` inside the window
 beginning at `start`: the probability that the window's first absorption
-happens exactly then. -/
+happens exactly then.  At `start = 0` this is
+`Math.Probability.DiscreteHazard.ScalarHazard.stopMass`. -/
 def quittingSoloTailWindowWeight (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι)
     (start offset : ℕ) : ℝ :=
-  quittingSoloTailSurvival roots owner start offset *
-    quittingSoloTailHazard roots owner (start + offset)
+  (quittingSoloTailHazard roots owner).survival start offset *
+    (quittingSoloTailHazard roots owner).stop (start + offset)
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- The window weights and the window survival together exhaust the unit
@@ -336,22 +289,11 @@ theorem sum_quittingSoloTailWindowWeight_add_survival
     (roots : ℕ → ι → PMF Bool) (owner : ℕ → ι) (start length : ℕ) :
     (∑ offset ∈ Finset.range length,
         quittingSoloTailWindowWeight roots owner start offset) +
-      quittingSoloTailSurvival roots owner start length = 1 := by
-  have hterm : ∀ offset ∈ Finset.range length,
-      quittingSoloTailWindowWeight roots owner start offset =
-        Math.survivalProduct (quittingSoloTailContinueMass roots owner) start
-            offset *
-          (1 - quittingSoloTailContinueMass roots owner (start + offset)) := by
-    intro offset _
-    have hmass := quittingSoloTailContinueMass_add_hazard roots owner
-      (start + offset)
-    simp only [quittingSoloTailWindowWeight, quittingSoloTailSurvival]
-    rw [show quittingSoloTailHazard roots owner (start + offset) =
-      1 - quittingSoloTailContinueMass roots owner (start + offset) from by
-        linarith]
-  rw [Finset.sum_congr rfl hterm, Math.sum_survivalProduct_mul_one_sub]
-  simp only [quittingSoloTailSurvival]
-  ring
+      (quittingSoloTailHazard roots owner).survival start length = 1 := by
+  have htelescope :=
+    (quittingSoloTailHazard roots owner).sum_survival_mul_stop start length
+  simp only [quittingSoloTailWindowWeight]
+  linarith
 
 /-! ## Transporting a value across a window -/
 
@@ -372,10 +314,10 @@ theorem quittingSoloTailValue_sub_eq_windowFlow_add_survival
       (∑ offset ∈ Finset.range length,
           quittingSoloTailWindowWeight roots owner start offset *
             (quittingSoloReward reward (owner (start + offset)) who - base)) +
-        quittingSoloTailSurvival roots owner start length *
+        (quittingSoloTailHazard roots owner).survival start length *
           (value (start + length) who - base) := by
   induction length generalizing start with
-  | zero => simp
+  | zero => simp [ScalarHazard.survival]
   | succ length ih =>
       have hsolo0 : IsQuittingSoloRoot (roots start) (owner start) := by
         simpa using hsolo 0 (Nat.succ_pos length)
@@ -387,22 +329,22 @@ theorem quittingSoloTailValue_sub_eq_windowFlow_add_survival
         rwa [show start + (offset + 1) = start + 1 + offset from by omega]
           at hshift
       have hstep : value start who =
-          quittingSoloTailHazard roots owner start *
+          (quittingSoloTailHazard roots owner).stop start *
               quittingSoloReward reward (owner start) who +
-            quittingSoloTailContinueMass roots owner start *
+            (1 - (quittingSoloTailHazard roots owner).stop start) *
               value (start + 1) who := by
+        rw [one_sub_quittingSoloTailHazard_stop]
         conv_lhs => rw [hpolicy start]
         exact hsolo0.successorPayoff_any reward who (value (start + 1))
       have hIH := ih (start + 1) hsoloTail
-      have hmass := quittingSoloTailContinueMass_add_hazard roots owner start
       have hsum :
           (∑ offset ∈ Finset.range (length + 1),
               quittingSoloTailWindowWeight roots owner start offset *
                 (quittingSoloReward reward (owner (start + offset)) who -
                   base)) =
-            quittingSoloTailHazard roots owner start *
+            (quittingSoloTailHazard roots owner).stop start *
                 (quittingSoloReward reward (owner start) who - base) +
-              quittingSoloTailContinueMass roots owner start *
+              (1 - (quittingSoloTailHazard roots owner).stop start) *
                 ∑ offset ∈ Finset.range length,
                   quittingSoloTailWindowWeight roots owner (start + 1) offset *
                     (quittingSoloReward reward
@@ -411,27 +353,27 @@ theorem quittingSoloTailValue_sub_eq_windowFlow_add_survival
             quittingSoloTailWindowWeight roots owner start (offset + 1) *
                 (quittingSoloReward reward
                   (owner (start + (offset + 1))) who - base) =
-              quittingSoloTailContinueMass roots owner start *
+              (1 - (quittingSoloTailHazard roots owner).stop start) *
                 (quittingSoloTailWindowWeight roots owner (start + 1) offset *
                   (quittingSoloReward reward
                     (owner (start + 1 + offset)) who - base)) := by
           intro offset _
           unfold quittingSoloTailWindowWeight
-          rw [quittingSoloTailSurvival_succ_left,
+          rw [ScalarHazard.survival_succ_left,
             show start + (offset + 1) = start + 1 + offset from by omega]
           ring
         rw [Finset.sum_range_succ', Finset.sum_congr rfl hshift,
           ← Finset.mul_sum]
         have hfirst : quittingSoloTailWindowWeight roots owner start 0 *
             (quittingSoloReward reward (owner (start + 0)) who - base) =
-              quittingSoloTailHazard roots owner start *
+              (quittingSoloTailHazard roots owner).stop start *
                 (quittingSoloReward reward (owner start) who - base) := by
-          simp [quittingSoloTailWindowWeight]
+          simp [quittingSoloTailWindowWeight, ScalarHazard.survival]
         rw [hfirst, add_comm]
       rw [hsum, show start + (length + 1) = start + 1 + length from by omega,
-        quittingSoloTailSurvival_succ_left, hstep]
-      linear_combination quittingSoloTailContinueMass roots owner start * hIH +
-        base * hmass
+        ScalarHazard.survival_succ_left, hstep]
+      linear_combination
+        (1 - (quittingSoloTailHazard roots owner).stop start) * hIH
 
 /-! ## The exact gap-return identity -/
 
@@ -459,7 +401,7 @@ theorem quittingSoloTailValue_sub_soloReward_eq_matrixFlow_add_survival
       IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset))) :
     value start who - quittingSoloReward reward who who =
       quittingSoloTailMatrixFlow reward roots owner who start length +
-        quittingSoloTailSurvival roots owner start length *
+        (quittingSoloTailHazard roots owner).survival start length *
           (value (start + length) who - quittingSoloReward reward who who) := by
   have hbase := quittingSoloTailValue_sub_eq_windowFlow_add_survival roots value
     owner hpolicy who (quittingSoloReward reward who who) start length hsolo
@@ -555,9 +497,9 @@ theorem quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner
       IsQuittingSoloRoot (roots (start + offset)) (owner (start + offset)))
     (hconstant : ∀ offset, offset < length → owner (start + offset) = fixedOwner) :
     value start who - base =
-      (1 - quittingSoloTailSurvival roots owner start length) *
+      (1 - (quittingSoloTailHazard roots owner).survival start length) *
           (quittingSoloReward reward fixedOwner who - base) +
-        quittingSoloTailSurvival roots owner start length *
+        (quittingSoloTailHazard roots owner).survival start length *
           (value (start + length) who - base) := by
   have hbase := quittingSoloTailValue_sub_eq_windowFlow_add_survival roots value
     owner hpolicy who base start length hsolo
@@ -576,7 +518,8 @@ theorem quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner
   rw [hbase, hflow]
   have hmass : (∑ offset ∈ Finset.range length,
       quittingSoloTailWindowWeight roots owner start offset) =
-      1 - quittingSoloTailSurvival roots owner start length := by linarith
+      1 - (quittingSoloTailHazard roots owner).survival start length := by
+    linarith
   rw [hmass]
 
 omit [Fintype ι] [DecidableEq ι] in
@@ -611,8 +554,9 @@ theorem quittingSoloTailValue_sub_le_of_constantOwner_preemption
     (hconstant : ∀ offset, offset < length →
       owner (start + offset) = fixedOwner) :
     value start who - base ≤
-      -((1 - quittingSoloTailSurvival roots owner start length) * margin) +
-        quittingSoloTailSurvival roots owner start length *
+      -((1 - (quittingSoloTailHazard roots owner).survival start length) *
+          margin) +
+        (quittingSoloTailHazard roots owner).survival start length *
           (value (start + length) who - base) := by
   have hidentity := quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner
     roots value owner hpolicy who fixedOwner base start length
@@ -620,7 +564,7 @@ theorem quittingSoloTailValue_sub_le_of_constantOwner_preemption
   have hmismatch := quittingSoloTailWindowDelivery_sub_base_le_neg_margin reward
     hpreempt hfloor
   have hsurvival :=
-    quittingSoloTailSurvival_mem_unitInterval roots owner start length
-  nlinarith [hidentity, hmismatch, hsurvival.2]
+    (quittingSoloTailHazard roots owner).survival_le_one start length
+  nlinarith [hidentity, hmismatch, hsurvival]
 
 end GameTheory

@@ -201,7 +201,7 @@ theorem exists_uniformEquilibriumPayoff_colliderDistantStepTwo
     · nlinarith
     · exact hgt
   refine ⟨_, isUniformEquilibriumPayoff_constantStep (c' := 2)
-    (isCirculantPairTable_colliderReward s low m hm0) (by decide) hs hq0 hq1 hroot
+    (isCirculantPairTable_colliderReward s low m hm0) (by decide) hs hq0.le hq1 hroot
     ?_ ?_ ?_ ?_⟩
   · rw [colliderJoin_of_ne s low (by decide)]
     linarith
@@ -233,7 +233,7 @@ theorem exists_uniformEquilibriumPayoff_colliderDistantStepThree
     · nlinarith
     · exact hgt
   refine ⟨_, isUniformEquilibriumPayoff_constantStep (c' := 3)
-    (isCirculantPairTable_colliderReward s low m hm0) (by decide) hs hq0 hq1 hroot
+    (isCirculantPairTable_colliderReward s low m hm0) (by decide) hs hq0.le hq1 hroot
     ?_ ?_ ?_ ?_⟩
   · rw [colliderJoin_of_ne s low (by decide)]
     linarith
@@ -266,7 +266,7 @@ theorem exists_uniformEquilibriumPayoff_colliderDistantStepFour
     · exact hle
     · nlinarith
   refine ⟨_, isUniformEquilibriumPayoff_constantStep (c' := 1)
-    (isCirculantPairTable_colliderReward s low m hm0) (by decide) hs hq0 hq1 hroot
+    (isCirculantPairTable_colliderReward s low m hm0) (by decide) hs hq0.le hq1 hroot
     ?_ ?_ ?_ ?_⟩
   · rw [colliderJoin_four]
   · rw [h24, h34, h44, colliderJoin_of_ne s low (by decide)]

@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.AffineIterateTelescope
 import MathUE.CyclicContraction
 import MathUE.Finset.MinimalMemberSum
 import Research.Quitting.AnchoredCyclicRenewal
@@ -599,32 +600,63 @@ theorem refusalGain_of_ne {m : ℕ} (w : Fin m → Player) (hazard : Fin m → �
   rw [hR, hU]
   ring
 
-/-! ## Telescoping around the cycle -/
+/-! ## Telescoping around the cycle
+
+The refusal gain obeys a one-step affine recursion with two branches
+(`refusalGain_step`), so it unrolls through the generic affine telescope of
+`Math.iterateWeight` and `Math.iterateAccumulation`.
+-/
+
+/-- The one-step coefficient of the refusal recursion: the refuser's own
+phases pass the gain through unchanged, and every other phase damps it by the
+phase's survival probability. -/
+def refusalCoefficient {m : ℕ} (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (refuser : Player) (phase : Fin m) : ℝ :=
+  if w phase = refuser then 1 else 1 - hazard phase
+
+/-- The one-step increment of the refusal recursion: the refuser's own phases
+contribute the hazard times the excess of the next phase's on-path value over
+the refuser's solo exit value, and every other phase contributes nothing. -/
+def refusalIncrement {m : ℕ} (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (refuser : Player)
+    (phase : Fin m) : ℝ :=
+  if w phase = refuser then
+    hazard phase *
+      (quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1
+        (finRotate m phase) refuser - 1)
+  else 0
 
 /-- Survival accumulated over `n` steps from `phase`, counting only the phases
 at which the refuser is not the scheduled quitter. -/
 def refusalWeight {m : ℕ} (w : Fin m → Player) (hazard : Fin m → ℝ)
-    (refuser : Player) : Fin m → ℕ → ℝ
-  | _, 0 => 1
-  | phase, (n + 1) =>
-      (if w phase = refuser then 1 else 1 - hazard phase) *
-        refusalWeight w hazard refuser (finRotate m phase) n
+    (refuser : Player) : Fin m → ℕ → ℝ :=
+  Math.iterateWeight (finRotate m) (refusalCoefficient w hazard refuser)
 
 /-- Drift accumulated over `n` steps from `phase`: the weighted excess of the
 on-path value over the refuser's solo exit value at the refuser's own
 phases. -/
 def refusalDrift {m : ℕ} (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (refuser : Player) :
-    Fin m → ℕ → ℝ
-  | _, 0 => 0
-  | phase, (n + 1) =>
-      (if w phase = refuser then
-          hazard phase *
-            (quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1
-              (finRotate m phase) refuser - 1)
-        else 0) +
-        (if w phase = refuser then 1 else 1 - hazard phase) *
-          refusalDrift w hazard h0 h1 refuser (finRotate m phase) n
+    Fin m → ℕ → ℝ :=
+  Math.iterateAccumulation (finRotate m) (refusalCoefficient w hazard refuser)
+    (refusalIncrement w hazard h0 h1 refuser)
+
+/-- **The one-step recursion.**  The two branches of `refusalGain_of_eq` and
+`refusalGain_of_ne` are one affine step with coefficient
+`refusalCoefficient` and increment `refusalIncrement`. -/
+theorem refusalGain_step {m : ℕ} (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (refuser : Player)
+    (phase : Fin m) :
+    refusalGain w hazard h0 h1 refuser phase =
+      refusalIncrement w hazard h0 h1 refuser phase +
+        refusalCoefficient w hazard refuser phase *
+          refusalGain w hazard h0 h1 refuser (finRotate m phase) := by
+  unfold refusalIncrement refusalCoefficient
+  by_cases h : w phase = refuser
+  · rw [if_pos h, if_pos h, refusalGain_of_eq w hazard h0 h1 h]
+    ring
+  · rw [if_neg h, if_neg h, refusalGain_of_ne w hazard h0 h1 h]
+    ring
 
 /-- **The telescoped recursion.**  Unrolling `n` steps splits the refusal gain
 into accumulated drift plus surviving weight times the gain `n` steps on. -/
@@ -634,22 +666,9 @@ theorem refusalGain_telescope {m : ℕ} (w : Fin m → Player) (hazard : Fin m �
       refusalGain w hazard h0 h1 refuser phase =
         refusalDrift w hazard h0 h1 refuser phase n +
           refusalWeight w hazard refuser phase n *
-            refusalGain w hazard h0 h1 refuser ((finRotate m)^[n] phase) := by
-  intro n
-  induction n with
-  | zero => intro phase; simp [refusalDrift, refusalWeight]
-  | succ n ih =>
-    intro phase
-    rw [Function.iterate_succ_apply]
-    by_cases h : w phase = refuser
-    · rw [refusalGain_of_eq w hazard h0 h1 h, ih (finRotate m phase),
-        refusalDrift, refusalWeight]
-      simp only [if_pos h]
-      ring
-    · rw [refusalGain_of_ne w hazard h0 h1 h, ih (finRotate m phase),
-        refusalDrift, refusalWeight]
-      simp only [if_neg h]
-      ring
+            refusalGain w hazard h0 h1 refuser ((finRotate m)^[n] phase) :=
+  Math.eq_iterateAccumulation_add_iterateWeight_mul
+    (refusalGain_step w hazard h0 h1 refuser)
 
 /-- **The cycle identity.**  Around one full cycle the refusal gain satisfies
 `D * (1 - W) = Drift`, with `W` the survival weight of the refuser's absence
@@ -660,9 +679,9 @@ theorem refusalGain_mul_one_sub_weight {m : ℕ} (w : Fin m → Player)
     refusalGain w hazard h0 h1 refuser phase *
         (1 - refusalWeight w hazard refuser phase m) =
       refusalDrift w hazard h0 h1 refuser phase m := by
-  have h := refusalGain_telescope w hazard h0 h1 refuser m phase
-  rw [Math.iterate_finRotate_period] at h
-  linarith [h]
+  rw [mul_comm]
+  exact Math.one_sub_iterateWeight_mul_of_iterate_eq
+    (refusalGain_step w hazard h0 h1 refuser) (Math.iterate_finRotate_period phase)
 
 /-- **The telescoped identity in divided form.**  Whenever the refuser's
 absence does not survive a whole cycle, the refusal gain at a phase is the
@@ -674,42 +693,50 @@ theorem refusalGain_eq_drift_div {m : ℕ} (w : Fin m → Player)
     (hW : refusalWeight w hazard refuser phase m ≠ 1) :
     refusalGain w hazard h0 h1 refuser phase =
       refusalDrift w hazard h0 h1 refuser phase m /
-        (1 - refusalWeight w hazard refuser phase m) := by
-  have hne : (1 : ℝ) - refusalWeight w hazard refuser phase m ≠ 0 :=
-    fun h ↦ hW (by linarith)
-  rw [eq_div_iff hne]
-  exact refusalGain_mul_one_sub_weight w hazard h0 h1 refuser phase
+        (1 - refusalWeight w hazard refuser phase m) :=
+  Math.eq_iterateAccumulation_div_of_iterate_eq
+    (refusalGain_step w hazard h0 h1 refuser) (Math.iterate_finRotate_period phase) hW
 
 /-! ## Sign of the accumulated quantities -/
 
+theorem refusalCoefficient_nonneg {m : ℕ} (w : Fin m → Player) {hazard : Fin m → ℝ}
+    (h1 : ∀ k, hazard k ≤ 1) (refuser : Player) (phase : Fin m) :
+    0 ≤ refusalCoefficient w hazard refuser phase := by
+  unfold refusalCoefficient
+  split_ifs with h
+  · norm_num
+  · linarith [h1 phase]
+
+theorem refusalCoefficient_le_one {m : ℕ} (w : Fin m → Player) {hazard : Fin m → ℝ}
+    (h0 : ∀ k, 0 ≤ hazard k) (refuser : Player) (phase : Fin m) :
+    refusalCoefficient w hazard refuser phase ≤ 1 := by
+  unfold refusalCoefficient
+  split_ifs with h
+  · exact le_refl 1
+  · linarith [h0 phase]
+
 theorem refusalWeight_nonneg {m : ℕ} (w : Fin m → Player) {hazard : Fin m → ℝ}
     (h1 : ∀ k, hazard k ≤ 1) (refuser : Player) :
-    ∀ (n : ℕ) (phase : Fin m), 0 ≤ refusalWeight w hazard refuser phase n := by
-  intro n
-  induction n with
-  | zero => intro phase; simp [refusalWeight]
-  | succ n ih =>
-    intro phase
-    rw [refusalWeight]
-    refine mul_nonneg ?_ (ih _)
-    split_ifs with h
-    · norm_num
-    · linarith [h1 phase]
+    ∀ (n : ℕ) (phase : Fin m), 0 ≤ refusalWeight w hazard refuser phase n :=
+  Math.iterateWeight_nonneg (refusalCoefficient_nonneg w h1 refuser)
 
 theorem refusalWeight_le_one {m : ℕ} (w : Fin m → Player) {hazard : Fin m → ℝ}
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (refuser : Player) :
-    ∀ (n : ℕ) (phase : Fin m), refusalWeight w hazard refuser phase n ≤ 1 := by
-  intro n
-  induction n with
-  | zero => intro phase; simp [refusalWeight]
-  | succ n ih =>
-    intro phase
-    rw [refusalWeight]
-    have hrec := ih (finRotate m phase)
-    have hrec0 := refusalWeight_nonneg w h1 refuser n (finRotate m phase)
-    split_ifs with h
-    · linarith
-    · nlinarith [h0 phase, h1 phase]
+    ∀ (n : ℕ) (phase : Fin m), refusalWeight w hazard refuser phase n ≤ 1 :=
+  Math.iterateWeight_le_one (refusalCoefficient_nonneg w h1 refuser)
+    (refusalCoefficient_le_one w h0 refuser)
+
+/-- If the refuser's on-path value never falls below its own solo exit value,
+every own-phase increment is nonnegative. -/
+theorem refusalIncrement_nonneg {m : ℕ} (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (refuser : Player)
+    (hU : ∀ k : Fin m, 1 ≤ quittingAnchoredCyclicOnPathValue boundaryReward w
+      hazard h0 h1 k refuser) (phase : Fin m) :
+    0 ≤ refusalIncrement w hazard h0 h1 refuser phase := by
+  unfold refusalIncrement
+  split_ifs with h
+  · exact mul_nonneg (h0 phase) (by linarith [hU (finRotate m phase)])
+  · exact le_refl 0
 
 /-- If the refuser's on-path value never falls below its own solo exit value,
 the accumulated drift is nonnegative. -/
@@ -718,20 +745,9 @@ theorem refusalDrift_nonneg {m : ℕ} (w : Fin m → Player) (hazard : Fin m →
     (hU : ∀ k : Fin m, 1 ≤ quittingAnchoredCyclicOnPathValue boundaryReward w
       hazard h0 h1 k refuser) :
     ∀ (n : ℕ) (phase : Fin m),
-      0 ≤ refusalDrift w hazard h0 h1 refuser phase n := by
-  intro n
-  induction n with
-  | zero => intro phase; simp [refusalDrift]
-  | succ n ih =>
-    intro phase
-    rw [refusalDrift]
-    refine add_nonneg ?_ (mul_nonneg ?_ (ih _))
-    · split_ifs with h
-      · exact mul_nonneg (h0 phase) (by linarith [hU (finRotate m phase)])
-      · exact le_refl 0
-    · split_ifs with h
-      · norm_num
-      · linarith [h1 phase]
+      0 ≤ refusalDrift w hazard h0 h1 refuser phase n :=
+  Math.iterateAccumulation_nonneg (refusalCoefficient_nonneg w h1 refuser)
+    (refusalIncrement_nonneg w hazard h0 h1 refuser hU)
 
 /-- **The refusal gain dominates the accumulated drift.**  The cycle identity
 divides the drift by the absorption deficit `1 - W ≤ 1`, so the gain is at

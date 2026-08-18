@@ -16,8 +16,11 @@ import Experiments.counterexample_search.ColliderMirrorPocketEquilibrium
 import Experiments.counterexample_search.ColliderNonnegativeMarginEquilibrium
 import Experiments.counterexample_search.ColliderPocketCandidateEquilibrium
 import Experiments.counterexample_search.ColliderThreeNegativeEquilibrium
+import Experiments.counterexample_search.CyclicBlockExactPeriodicCalibration
+import Experiments.counterexample_search.FlatNeighbourPocketEquilibrium
 import Experiments.counterexample_search.HardenedPentagonCyclicEquilibrium
 import Experiments.counterexample_search.HardenedPentagonSoloPeriodicWitness
+import Experiments.counterexample_search.NormalCoreStrictnessExactPeriodicCalibration
 import Experiments.counterexample_search.RegularTournamentFiveSeed
 import Experiments.counterexample_search.RegularTournamentFiveSeedSoloExits
 import Experiments.counterexample_search.RegularTournamentFiveSeedSureExit
@@ -99,6 +102,7 @@ import Literature.Papers.Ziliotto2016
 import Literature.Papers.Ziliotto2024
 import MathUE
 import MathUE.AffineEqualityFarkas
+import MathUE.AffineIterateTelescope
 import MathUE.AlgebraicSelection
 import MathUE.AnalyticConeDichotomy
 import MathUE.AnalyticConeLift
@@ -109,6 +113,7 @@ import MathUE.AnalyticLinearSystem
 import MathUE.AnalyticMixedObstruction
 import MathUE.AnalyticOrderComparison
 import MathUE.AnalyticPowerNormalization
+import MathUE.BackwardOrbitSelection
 import MathUE.BonferroniProductBounds
 import MathUE.BoundedDiscrepancyCirculation
 import MathUE.CalendarSummability
@@ -118,6 +123,7 @@ import MathUE.ChargedPathExecution
 import MathUE.ChargedPathFiniteHorizon
 import MathUE.ChargedPathSelection
 import MathUE.ChargedPathSelectionCounterexamples
+import MathUE.CoerciveIntervalMinimum
 import MathUE.CofiniteIdeal
 import MathUE.CompactFiniteChargedReturn
 import MathUE.ContinuationLatticeGluing
@@ -170,6 +176,7 @@ import MathUE.CurveSelection.SquareLift
 import MathUE.CurveSelection.Termination
 import MathUE.CurveSelection.UltrafilterSubsequence
 import MathUE.CycleCoboundary
+import MathUE.CyclicContraction
 import MathUE.CyclicExposure
 import MathUE.CyclicMaxAffineBound
 import MathUE.DirectedTransport
@@ -183,9 +190,13 @@ import MathUE.FiniteSerialRelation
 import MathUE.Finset.CubicalResetIntegrability
 import MathUE.Finset.EscrowDrawdown
 import MathUE.Finset.FinThree
+import MathUE.Finset.InsertExtremum
+import MathUE.Finset.MinimalMemberSum
 import MathUE.Finset.MonotoneChainChangeBudget
+import MathUE.Finset.PowersetBernoulliWeight
 import MathUE.Finset.ProdLtOne
 import MathUE.Finset.RetainedRoleClockArithmetic
+import MathUE.Finset.SupNonexpansive
 import MathUE.GradedConvolution
 import MathUE.GroupAction.CyclicKofNArithmetic
 import MathUE.GroupAction.CyclicKofNBlockCosets
@@ -248,6 +259,7 @@ import MathUE.MaxAffineStoppingValue
 import MathUE.MaxAffineTransport
 import MathUE.MaxPlusPotential
 import MathUE.MeanErgodic
+import MathUE.MeshContraction
 import MathUE.Minimax.DiscountedShapleySystem
 import MathUE.Minimax.Loomis
 import MathUE.Minimax.MinimaxLoomis
@@ -255,6 +267,7 @@ import MathUE.Minimax.ShapleySnow
 import MathUE.MultivariateElimination
 import MathUE.NonnegativeLeadingSymbol
 import MathUE.NormalizedFarkasBasis
+import MathUE.OddsThreshold
 import MathUE.OnlineLearning.AnytimeCalendarLimits
 import MathUE.OnlineLearning.AnytimeMultiplicativeWeights
 import MathUE.OnlineLearning.CompletedEpochCalendar
@@ -398,6 +411,8 @@ import MathUE.SimplexApproximation
 import MathUE.SparseVanishingSchedule
 import MathUE.SqrtRate
 import MathUE.SurvivalProduct
+import MathUE.SurvivalProductComparison
+import MathUE.SurvivalSegmentBalance
 import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.CalibrationSliceCompactness
@@ -494,6 +509,9 @@ import Research.Quitting.CausalTailEscapeReturnGate
 import Research.Quitting.CertifiedForcedOwnerBackgroundHost
 import Research.Quitting.CertifiedForcedOwnerEndpointFlip
 import Research.Quitting.CertifiedForcedOwnerRectanglePacket
+import Research.Quitting.CirculantColliderBonusFamily
+import Research.Quitting.CirculantColliderBonusStationary
+import Research.Quitting.CirculantColliderBonusWindow
 import Research.Quitting.CirculantColliderClosure
 import Research.Quitting.CirculantColliderCompletion
 import Research.Quitting.CirculantColliderSlivers
@@ -513,6 +531,7 @@ import Research.Quitting.DiffuseTailEffectiveCharge
 import Research.Quitting.DiffuseTailNonvacuity
 import Research.Quitting.DiffuseTailSoloCalibrations
 import Research.Quitting.DiffuseTailSoloStructure
+import Research.Quitting.DissipativePeriodizationCompleteness
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
 import Research.Quitting.EnrichedSeamCompression
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
@@ -531,6 +550,7 @@ import Research.Quitting.HolonomyEquivalenceCompression
 import Research.Quitting.KActiveMarkedAtomBudgetPathConsumer
 import Research.Quitting.KActiveMarkedAtomCompactPath
 import Research.Quitting.KActiveMarkedAtomPathConsumer
+import Research.Quitting.LiveRootExploitabilityFactorization
 import Research.Quitting.MinimumCertifiedForcedOwnerOrientation
 import Research.Quitting.MinimumExactNashOneActive
 import Research.Quitting.MinimumFiberResetSquareCompatibility
@@ -555,6 +575,7 @@ import Research.Quitting.PairActiveSoloPhase
 import Research.Quitting.PathClosureKernels
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
 import Research.Quitting.PreemptionTransport
+import Research.Quitting.PrefixTruncationExploitability
 import Research.Quitting.PrescribedAtomMinimumAccounting
 import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
@@ -565,8 +586,17 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
+import Research.Quitting.SolanVieilleActiveTelescope
+import Research.Quitting.SolanVieilleDeviationLedger
+import Research.Quitting.SolanVieilleExistenceReduction
+import Research.Quitting.SolanVieilleLedgerUnroll
+import Research.Quitting.SolanVieilleOneShotPerfection
+import Research.Quitting.SolanVieillePeriodicSelection
+import Research.Quitting.SolanVieilleQuietWindowRepair
+import Research.Quitting.SolanVieilleSequenceExtraction
 import Research.Quitting.SolanVieilleSoloPeriodicGap
 import Research.Quitting.SolanVieilleSoloPeriodicTerminalGap
+import Research.Quitting.SoloPeriodicInterVisitBalance
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification
 import Research.Quitting.SoloWindowPhaseStopBranch
@@ -1191,6 +1221,7 @@ import UniformEquilibrium.Quitting.Circulation.TwoCoordinateBoundary
 import UniformEquilibrium.Quitting.Circulation.UniformPayoffExamples
 import UniformEquilibrium.Quitting.Classification.AnalyticWaist
 import UniformEquilibrium.Quitting.Classification.BlockDeletion
+import UniformEquilibrium.Quitting.Classification.BlockDeletionCertificate
 import UniformEquilibrium.Quitting.Classification.EquivariantSecurityWelfareAssembly
 import UniformEquilibrium.Quitting.Classification.ExistenceBranches
 import UniformEquilibrium.Quitting.Classification.ImmediateSingletonCollision
@@ -1210,6 +1241,8 @@ import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQClosure
 import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQProducer
 import UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter
 import UniformEquilibrium.Quitting.Classification.LCP.StandardQSideExample
+import UniformEquilibrium.Quitting.Classification.LCP.StationaryEquilibrium
+import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.LCP.SupportHierarchy
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeByThreeZeroDiagonalQ
@@ -1300,6 +1333,7 @@ import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
 import UniformEquilibrium.Quitting.Cycles.PeriodicClosing
 import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
 import UniformEquilibrium.Quitting.Cycles.PeriodicFiniteHorizonRate
+import UniformEquilibrium.Quitting.Cycles.PeriodicJointSurvival
 import UniformEquilibrium.Quitting.Cycles.PeriodicNormalizedSeam
 import UniformEquilibrium.Quitting.Cycles.PeriodicPureTimeBellman
 import UniformEquilibrium.Quitting.Cycles.PeriodicRootResponseSystem
@@ -1319,6 +1353,7 @@ import UniformEquilibrium.Quitting.Cycles.ScaledCyclicWeightNoApproximateEquilib
 import UniformEquilibrium.Quitting.Cycles.SingletonArcCycle
 import UniformEquilibrium.Quitting.Cycles.SoloEndpointIsolatedNegative
 import UniformEquilibrium.Quitting.Cycles.SoloPeriodicBlockCompiler
+import UniformEquilibrium.Quitting.Cycles.SoloRootSequenceValues
 import UniformEquilibrium.Quitting.Cycles.ThreeBranchDisjunction
 import UniformEquilibrium.Quitting.Cycles.WeightedRowMotionSeparation
 import UniformEquilibrium.Quitting.Debt.Dynamic.ChargeTimeCompactEdge

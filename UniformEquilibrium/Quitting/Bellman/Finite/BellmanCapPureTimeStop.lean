@@ -8,26 +8,27 @@ import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
 import UniformEquilibrium.Quitting.Cycles.InfinitePureTimeExtremality
 
 /-!
-# A Bellman cap dominates every deterministic stop
+# A Bellman supersolution dominates every deterministic stop
 
-`IsQuittingLiveBellmanCap` asks a sequence to sit above the one-stage Bellman
-value along a live path.  This file proves the supersolution half of optimal
-stopping for that predicate: against a fixed sequence of opponent roots, the
-terminal value of any deterministic quit time never exceeds the cap read at the
-starting stage.
+`IsQuittingLiveBellmanSupersolution` asks a sequence to sit above the one-stage
+Bellman value along a live path.  This file proves the supersolution half of
+optimal stopping for that predicate: against a fixed sequence of opponent
+roots, the terminal value of any deterministic quit time never exceeds the
+supersolution read at the starting stage.
 
 The proof is a bare induction on the remaining fuel.  It uses no contraction,
 no periodicity, and no exactness of the prescribed roots, so it applies to every
 root sequence a stopping argument may present.
 
-This module exists because the statement pairs `IsQuittingLiveBellmanCap` with
-the deterministic-stop evaluator `quittingRootSequencePureTimeTerminalValue`,
-which are introduced in modules neither of which imports the other.
+This module exists because the statement pairs
+`IsQuittingLiveBellmanSupersolution` with the deterministic-stop evaluator
+`quittingRootSequencePureTimeTerminalValue`, which are introduced in modules
+neither of which imports the other.
 
 ## Main results
 
-* `quittingRootSequencePureTimeTerminalValue_le_of_bellmanCap` — the cap
-  dominates every deterministic stop
+* `quittingRootSequencePureTimeTerminalValue_le_of_bellmanSupersolution` — a
+  supersolution dominates every deterministic stop
 -/
 
 noncomputable section
@@ -38,13 +39,14 @@ open Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- **A Bellman cap dominates every deterministic stop.**  This is the
-supersolution half of the optimal-stopping identification: it needs no
-contraction, no periodicity, and no exactness of the prescribed root. -/
-theorem quittingRootSequencePureTimeTerminalValue_le_of_bellmanCap
+/-- **A Bellman supersolution dominates every deterministic stop.**  This is
+the supersolution half of the optimal-stopping identification: it needs no
+contraction, no periodicity, no exactness of the prescribed root, and no
+Bellman equality. -/
+theorem quittingRootSequencePureTimeTerminalValue_le_of_bellmanSupersolution
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (cap : ℕ → ℝ)
-    (hcap : IsQuittingLiveBellmanCap reward roots who cap)
+    (hcap : IsQuittingLiveBellmanSupersolution reward roots who cap)
     (start fuel : ℕ) :
     quittingRootSequencePureTimeTerminalValue reward roots who
         (some (start + fuel)) start ≤ cap start := by
@@ -54,12 +56,7 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_bellmanCap
         quittingRootSequencePureTimeTerminalValue_some_self_eq_fixedOpponents]
       have hstep := hcap start
       rw [quittingLiveBellmanValue] at hstep
-      have hquit := le_max_left
-        (quittingFixedOpponentsQuitValue reward roots who start)
-        (quittingFixedOpponentsContinueReward reward roots who start +
-          quittingFixedOpponentsContinueMass roots who start * cap (start + 1))
-      rw [← hstep] at hquit
-      exact hquit
+      exact le_trans (le_max_left _ _) hstep
   | succ fuel ih =>
       have hne : start ≠ start + (fuel + 1) := by omega
       have hidx : start + (fuel + 1) = start + 1 + fuel := by omega
@@ -73,11 +70,11 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_bellmanCap
           (Function.update (roots start) who (PMF.pure false))
       have hstep := hcap start
       rw [quittingLiveBellmanValue] at hstep
-      have hcontinue := le_max_right
+      have hcontinue := le_trans (le_max_right
         (quittingFixedOpponentsQuitValue reward roots who start)
         (quittingFixedOpponentsContinueReward reward roots who start +
-          quittingFixedOpponentsContinueMass roots who start * cap (start + 1))
-      rw [← hstep] at hcontinue
+          quittingFixedOpponentsContinueMass roots who start * cap (start + 1)))
+        hstep
       unfold quittingRootSequencePureTimeTerminalValue
       rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman,
         quittingPureTimeHazard_some_of_ne hne]
