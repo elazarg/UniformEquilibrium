@@ -98,14 +98,23 @@ theorem oneStageMixPayoff_sub_oneStageNext (r : Finset ι → ι → ℝ) (x : �
 
 /-! ## The two one-stage conditions -/
 
-/-- **The weighted one-stage condition**, `x ∈ E_ε(r)`: at every coordinate
-the two endpoint deviations, weighted by the mass that would be moved, gain
-at most `ε`. -/
+/-- **The weighted one-stage condition**: at every coordinate the two endpoint
+deviations, weighted by the mass that would be moved, gain at most `ε`.  For a
+row in `[0,1]` at nonnegative tolerance this is implied by the source's
+one-stage correspondence `IsSupportPerfectRow` below, and strictly so: the
+converse fails at small hazards. -/
 def IsWeightedRow (r : Finset ι → ι → ℝ) (x : ι → ℝ) (rest : ι → ℝ) (ε : ℝ) : Prop :=
   ∀ i, (1 - x i) * gainValue r x i (rest i) ≤ ε ∧ -(x i) * gainValue r x i (rest i) ≤ ε
 
-/-- **The support-perfect condition**: the stop-minus-continue difference
-itself is bounded, one-sidedly at each used endpoint. -/
+/-- **The support-perfect condition**, the source's one-stage correspondence
+`x ∈ E_ε(r)`: the stop-minus-continue difference itself is bounded,
+one-sidedly at each used endpoint.  Clause for clause this is the `E_ε` of
+Simon, *The structure of non-zero-sum stochastic games*, Adv. Appl. Math. 38
+(2007), Section 4.2, which compares each used action against the opposite
+endpoint.  The `ε`-perfectness of Ashkenazi-Golan, Krasikov, Rainer and
+Solan, *Absorption paths and equilibria in quitting games*, Math. Program.
+(2022), Definition 3.1, prices the same comparisons against the mixture value
+instead; this condition implies that one but is not literally it. -/
 def IsSupportPerfectRow (r : Finset ι → ι → ℝ) (x : ι → ℝ) (rest : ι → ℝ) (ε : ℝ) : Prop :=
   ∀ i, (0 < x i → -ε ≤ gainValue r x i (rest i)) ∧
     (x i < 1 → gainValue r x i (rest i) ≤ ε)

@@ -10,11 +10,11 @@ import UniformEquilibrium.Quitting.Classification.LCP.StandardQSideExample
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 
 /-!
-# Elimination of a three-element corrected core on the semantic carrier
+# Elimination of a three-element normal core on the semantic carrier
 
 This composes the cyclic labeling of a three-coordinate standard-Q core, the
 zero-retention carrier reset, and the varying-height directed-cycle lasso.
-The carrier construction eliminates the entire three-element corrected-core
+The carrier construction eliminates the entire three-element normal-core
 counterexample branch.
 -/
 
@@ -349,7 +349,7 @@ theorem labeled_directedCycle_ambientOrbit_mem_and_debt_tendsto_zero
       hcompiled.2
 
 /-- Coordinate-free three-core elimination.  Standard-Q and failure of the
-homogeneous simplex problem label the corrected core as a positive directed
+homogeneous simplex problem label the normal core as a positive directed
 cycle; the reset-and-lasso construction then supplies carrier points with
 total debt tending to zero. -/
 theorem exists_carrier_sequence_debt_tendsto_zero_of_three_core
@@ -377,7 +377,7 @@ theorem exists_carrier_sequence_debt_tendsto_zero_of_three_core
   exact labeled_directedCycle_ambientOrbit_mem_and_debt_tendsto_zero
     reward label ha hb hc hd he hf hdet hmatrix
 
-/-- In particular, a three-element corrected core on the standard-Q,
+/-- In particular, a three-element normal core on the standard-Q,
 nonhomogeneous branch cannot support a positive total-debt floor on the
 attainable terminal-semantic carrier. -/
 theorem no_positive_carrier_debt_floor_of_three_core
@@ -434,8 +434,8 @@ theorem not_exists_positive_minimum_of_three_core
   exact no_positive_carrier_debt_floor_of_three_core reward hcard hQ hhom
     ⟨quittingTerminalSemanticDebtSum minimum, hminimumPos, hminimum⟩
 
-/-- The three-element corrected-core counterexample branch is empty: every
-finite quitting game whose corrected normal core has cardinality three has an
+/-- The three-element normal-core counterexample branch is empty: every
+finite quitting game whose normal core has cardinality three has an
 ordinary uniform-equilibrium payoff.  Standard-Q and nonhomogeneity are not
 extra assumptions here; the existing counterexample-facing LCP gate supplies
 them under the contrary hypothesis. -/
@@ -475,7 +475,7 @@ theorem fourPlayer_exists_uniformEquilibriumPayoff_of_normalCore_card_three
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
   exists_uniformEquilibriumPayoff_of_normalCore_card_three reward hcard
 
-/-- Every four-player counterexample has the full corrected normal core. -/
+/-- Every four-player counterexample has the full normal core. -/
 theorem normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

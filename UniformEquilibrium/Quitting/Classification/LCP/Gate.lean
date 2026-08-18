@@ -13,11 +13,11 @@ This module contains the unconditional classification actually proved by the
 LCP layer.  It is deliberately a **matrix-regime theorem**, not a strategic
 existence theorem.
 
-After playerwise solo normalization and passage to the corrected
+After playerwise solo normalization and passage to the
 recursive normal-player principal matrix, exactly one of the following
 algebraic regimes is reached:
 
-1. the corrected normal core is empty;
+1. the normal core is empty;
 2. that core is nonempty and has a homogeneous simplex-LCP solution;
 3. after removing the homogeneous branch, its matrix is not standard Q;
 4. its matrix is standard Q and the full normalized matrix is projective
@@ -30,7 +30,7 @@ The fourth regime records only the matrix hypothesis used by the continuous
 absorption-path literature.  It does not assert that a continuous path has
 been formalized or compiled to ordinary strategies.  Likewise, the first
 three regimes are not assigned stationary equilibria here: those are source
-producer theorems that still require concrete formalization over the corrected
+producer theorems that still require concrete formalization over the
 normal recursion.
 
 Never and first-stage absorption are intentionally absent from the exhaustive
@@ -49,7 +49,7 @@ namespace QuittingLCPClassification
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- The corrected normal core is nonempty and admits the zero-cemetery,
+/-- The normal core is nonempty and admits the zero-cemetery,
 homogeneous simplex-LCP branch.  No stationary strategy conclusion is bundled
 into this algebraic predicate. -/
 structure HomogeneousMatrixBranch
@@ -58,7 +58,7 @@ structure HomogeneousMatrixBranch
   homogeneous : HasHomogeneousSimplexSolution
     (normalizedNormalPlayerMatrix reward)
 
-/-- After excluding the homogeneous branch, the corrected normal-player
+/-- After excluding the homogeneous branch, the normal-player
 matrix is not a textbook standard-Q matrix. -/
 structure OrdinaryNonQMatrixBranch
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop where
@@ -68,7 +68,7 @@ structure OrdinaryNonQMatrixBranch
   normal_not_standardQ : ¬IsStandardQMatrix
     (normalizedNormalPlayerMatrix reward)
 
-/-- The corrected normal-player matrix is standard Q, the homogeneous branch
+/-- The normal-player matrix is standard Q, the homogeneous branch
 is absent, and the full normalized singleton matrix is projective Q-bar.
 This is exactly the algebraic premise of the continuous-path route, not its
 strategic conclusion. -/
@@ -82,7 +82,7 @@ structure ProjectiveQBarMatrixBranch
   full_projectiveQBar : IsProjectiveQBarMatrix
     (normalizedSoloMatrix reward)
 
-/-- **Precise residual hard class.**  The corrected normal core is nonempty,
+/-- **Precise residual hard class.**  The normal core is nonempty,
 the homogeneous branch is absent, its matrix is standard Q, and the full
 normalized singleton matrix fails projective Q-bar. -/
 structure ResidualHardClass
@@ -95,7 +95,7 @@ structure ResidualHardClass
   not_full_projectiveQBar : ¬IsProjectiveQBarMatrix
     (normalizedSoloMatrix reward)
 
-/-- The standard-Q side of the corrected normal-player split, before deciding
+/-- The standard-Q side of the normal-player split, before deciding
 whether the full normalized matrix is projective Q-bar. -/
 structure StandardQMatrixSide
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop where
@@ -105,7 +105,7 @@ structure StandardQMatrixSide
   normal_standardQ : IsStandardQMatrix
     (normalizedNormalPlayerMatrix reward)
 
-/-- Forget the full-matrix Q-bar fact and retain the corrected normal-core
+/-- Forget the full-matrix Q-bar fact and retain the normal-core
 standard-Q side. -/
 theorem ProjectiveQBarMatrixBranch.toStandardQMatrixSide
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -114,7 +114,7 @@ theorem ProjectiveQBarMatrixBranch.toStandardQMatrixSide
   no_homogeneous := h.no_homogeneous
   normal_standardQ := h.normal_standardQ
 
-/-- Forget the full-matrix Q-bar failure and retain the corrected normal-core
+/-- Forget the full-matrix Q-bar failure and retain the normal-core
 standard-Q side. -/
 theorem ResidualHardClass.toStandardQMatrixSide
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -173,8 +173,8 @@ theorem faithful_q_nonQ_lcp_matrix_gate
       ((allPlayersAbnormal_iff_not_hasNormalPlayers
         (normalizedSoloMatrix reward)).2 hnormal)
 
-/-- The Q-bar and residual regimes form the exact split of the corrected
-standard-Q side by the full normalized matrix. -/
+/-- The Q-bar and residual regimes form the exact split of the
+normal-player standard-Q side by the full normalized matrix. -/
 theorem standardQMatrixSide_qbar_or_residual
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (hQ : StandardQMatrixSide reward) :

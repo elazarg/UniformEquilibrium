@@ -15,7 +15,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonCa
 
 This calibration reuses the production-proved duplicated cyclic standard-Q
 matrix.  Only the own-singleton levels are shifted; therefore its normalized
-singleton comparison matrix, corrected core, standard-Q property, and failure
+singleton comparison matrix, normal core, standard-Q property, and failure
 of the homogeneous simplex problem are inherited exactly.
 -/
 

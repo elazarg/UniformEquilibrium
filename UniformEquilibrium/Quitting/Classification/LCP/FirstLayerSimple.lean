@@ -13,7 +13,7 @@ import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSele
 /-!
 # The empty first normal-layer branch
 
-This file proves a concrete strategic subcase of the corrected all-abnormal
+This file proves a concrete strategic subcase of the all-abnormal
 regime.  Assume the first distinct-witness layer is empty.  Then every player
 strictly prefers every other player's solo absorption to its own solo
 absorption, after the playerwise normalization.
@@ -26,8 +26,8 @@ all inactive-player inequalities.  The landed owner-solo certification then
 gives an exact terminal Nash profile, whose own terminal payoff is a
 uniform-equilibrium payoff by the exact terminal-to-uniform consumer.
 
-This is genuinely weaker than the full corrected all-abnormal lemma.  When the
-first layer is nonempty but the corrected core is empty, the source proof uses
+This is genuinely weaker than the full all-abnormal lemma.  When the
+first layer is nonempty but the normal core is empty, the source proof uses
 a last nonempty layer and a two-player small-hazard construction.  That
 construction is not assumed here and remains the exact missing extension.
 -/
@@ -85,7 +85,7 @@ theorem exists_exact_stationary_terminalNash_of_positive_solo_strict_cross
   · intro other hother
     simpa [hazard] using hcriterion other hother
 
-/-- Empty first corrected normal layer gives a strict normalized singleton
+/-- Empty first normal layer gives a strict normalized singleton
 margin from every other player's own solo outcome to `owner`'s solo outcome. -/
 theorem strict_cross_of_normalLayer_one_eq_empty
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -115,7 +115,7 @@ theorem strict_cross_of_normalLayer_one_eq_empty
       hpositive
   exact sub_pos.mp hdifference
 
-/-- **Concrete first-layer stationary theorem.**  If the first corrected
+/-- **Concrete first-layer stationary theorem.**  If the first
 normal layer is empty, one stationary profile is an exact terminal Nash
 profile.  The profile is Never in the zero-solo case and a positive-hazard
 solo-quitter profile otherwise. -/
@@ -203,9 +203,9 @@ theorem exists_uniformEquilibriumPayoff_of_normalLayer_one_eq_empty
     (quittingStationaryProfile reward root), huniform⟩
 
 /-- A counterexample cannot lie in the already-solved empty-first-layer
-subcase of the corrected all-abnormal regime.  This is the unconditional
+subcase of the all-abnormal regime.  This is the unconditional
 strategic restriction currently supplied by the all-abnormal producer: the
-stronger conclusion that the corrected normal core is nonempty still needs
+stronger conclusion that the normal core is nonempty still needs
 the later-layer construction described at the top of this file. -/
 theorem normalLayer_one_ne_empty_of_not_exists_uniformEquilibriumPayoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

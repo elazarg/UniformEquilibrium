@@ -121,7 +121,7 @@ theorem two_positive_or_isolated_of_continueMass_lt_one
 
 /-- A provenance-preserving packet on the baseline-shifted table contradicts
 a forbidden normal-core right-hand side once punctured support has been
-placed in the corrected core. -/
+placed in the normal core. -/
 theorem false_of_supportedPacket_and_active_mem_normalCore
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (q : normalCore (normalizedSoloMatrix reward) → ℝ)
@@ -153,7 +153,7 @@ theorem false_of_supportedPacket_and_active_mem_normalCore
 
 /-- The all-Continue endpoint of the forbidden-direction auxiliary germ is
 impossible: its projective packet preserves punctured support, the hierarchy
-places that support in the corrected core, and restriction gives the
+places that support in the normal core, and restriction gives the
 forbidden projective solution. -/
 theorem false_of_forbidden_direction_allContinue_endpoint
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

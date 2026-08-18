@@ -65,8 +65,8 @@ the rows must converge to the all-continue row, whose stop branch pays
 `r_who({who}) >= V`, and quitting late is then within any prescribed error.
 
 The characterization is original to this development; the quitting-game
-model is that of Solan and Vieille, *Quitting games*, Israel J. Math. 119
-(2001).
+model is that of Solan and Vieille, *Quitting games*, Math. Oper. Res.
+**26**(2) (2001), 265--285.
 -/
 
 noncomputable section

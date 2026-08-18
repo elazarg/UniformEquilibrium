@@ -268,17 +268,16 @@ DOI [`10.1007/s001820200109`](https://doi.org/10.1007/s001820200109). `—`
 **Simon 2007** — *The Structure of Non-Zero-Sum Stochastic Games*. Advances in
 Applied Mathematics **38**(1), 1–26.
 DOI [`10.1016/j.aam.2006.07.002`](https://doi.org/10.1016/j.aam.2006.07.002). `—`
-⚠ **Paywalled, full text not obtained.** ScienceDirect and `core.ac.uk` both
-refused automated fetch (HTTP 403); LSE Research Online's record
-(`eprints.lse.ac.uk/6897`) states "Full text not available from this
-repository"; no author-hosted PDF, arXiv preprint, or green open-access copy
-was found. What is recorded in
-[`20_NONZERO_SUM_EQUILIBRIUM.md`](20_NONZERO_SUM_EQUILIBRIUM.md) is an
-`[unverified]` search-engine text extraction of the abstract plus `[secondary]`
-corroboration from Simon's own later survey — not a primary read. This is the
+Read directly from a local source PDF as rendered page images. The PDF's
+symbol fonts carry no `ToUnicode` map, so a text-layer extraction silently
+drops every Greek glyph and must not be used. Verbatim statements of Theorem
+3, Corollary 2, Theorem 4, Conjecture 1, and the Section 4.2–4.3 definitions
+are recorded in
+[`20_NONZERO_SUM_EQUILIBRIUM.md`](20_NONZERO_SUM_EQUILIBRIUM.md). This is the
 paper AGKRS's Theorem 3.4 cites as "Simon [13], Theorem 3" (bibliographic
-match confirmed against the primary source PDF); the
-content of that theorem itself is not independently verified.
+match confirmed against the primary source PDF); Theorem 3 is proved in
+Section 4.4 for arbitrary quitting games, not only for the escape games of
+Section 5.
 
 **Simon 2012** — *A Topological Approach to Quitting Games*. Mathematics of
 Operations Research **37**(1), 180–195.

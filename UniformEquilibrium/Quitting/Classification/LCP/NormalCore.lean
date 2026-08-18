@@ -7,27 +7,43 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
 
 /-!
-# Printed and corrected recursively normal-player matrices
+# Recursively normal-player matrices
 
-Solan--Solan's displayed recursion omits the condition that the witness quitter
-`j` differ from the receiver `i`:
+Solan and Solan, *Quitting games and linear complementarity problems*,
+Math. Oper. Res. **45**(2) (2020), use three distinguished player sets that
+must be kept apart.
+
+**The min-max normal players** of their Section 2.3.  Player `i` is normal
+when its min-max value is nonpositive, that is, no better than the payoff
+`r^i_i = 0` it gets by quitting alone under their standing normalization.  This
+set carries Lemma 2.6, Lemma 2.12 and Theorem 2.13.  It is defined by a
+strategic quantity, represented here by `GameTheory.quittingPunishmentValue`,
+and nothing in this file computes it.
+
+**The α-players** of their Section 5.  These are the members of the
+intersection of
+
+`Iₙ₊₁ = {i ∈ Iₙ | ∃ j ∈ Iₙ, j ≠ i ∧ M i j ≤ 0}`,
+
+the recursion the paper's Section 5 displays, with its witness condition
+written `j ∈ I_l \ {i}`.  Every α-player is normal in the sense above, and the
+paper states that the converse may fail.  This is `normalLayer` and
+`normalCore` below; the distinct-witness form is the source's, not a repair
+made here.
+
+**An earlier draft's display.**  A draft of the same paper displays this
+recursion without the distinctness condition,
 
 `Iₙ₊₁ = {i ∈ Iₙ | ∃ j ∈ Iₙ, M i j ≤ 0}`.
 
-Taken literally after their standing zero-diagonal normalization, this recursion
-never removes a player: one may always choose `j = i`.  This file formalizes
-that printed recursion and proves the collapse.
+Read literally after the standing zero-diagonal normalization that recursion
+never removes a player, since `j = i` always qualifies.  It is formalized as
+`printedNormalLayer` and `printedNormalCore`, and its collapse is proved, so
+that the two displays cannot be confused downstream.
 
-It then defines the distinct-witness recursion suggested by the adjacent prose,
-by the identification of the first layer with Simon's normal-player set, and by
-later source arguments that explicitly require `j ≠ i`:
-
-`Iₙ₊₁ = {i ∈ Iₙ | ∃ j ∈ Iₙ, j ≠ i ∧ M i j ≤ 0}`.
-
-The corrected object is useful and mathematically natural, but defining it does
-not repair the source theorem.  Any stationary or sunspot consequence over this
-core must be proved separately; the algebraic gate imports no abstract record
-that assumes those conclusions.
+Defining the α-player core does not carry any source theorem with it.  Every
+stationary or sunspot consequence over this core must be proved separately;
+the algebraic gate imports no abstract record that assumes those conclusions.
 -/
 
 noncomputable section
@@ -39,8 +55,8 @@ open Finset
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- The recursion exactly as displayed in Solan--Solan, before repairing its
-missing distinctness condition. -/
+/-- The recursion exactly as displayed in an earlier draft of the source,
+without the distinctness condition the final Section 5 carries. -/
 def printedNormalLayer (M : ι → ι → ℝ) : ℕ → Finset ι
   | 0 => Finset.univ
   | n + 1 =>
@@ -48,7 +64,7 @@ def printedNormalLayer (M : ι → ι → ℝ) : ℕ → Finset ι
         ∃ j ∈ printedNormalLayer M n, M i j ≤ 0
 
 omit [DecidableEq ι] in
-/-- With a nonpositive diagonal, the printed recursion retains every player at
+/-- With a nonpositive diagonal, the draft's recursion retains every player at
 every layer. -/
 theorem printedNormalLayer_eq_univ_of_diagonal_nonpos
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i ≤ 0) :
@@ -62,13 +78,13 @@ theorem printedNormalLayer_eq_univ_of_diagonal_nonpos
       intro i hi
       exact ⟨i, hi, hdiag i⟩
 
-/-- The literal intersection of the printed layers. -/
+/-- The literal intersection of the draft's layers. -/
 def printedNormalCore (M : ι → ι → ℝ) : Finset ι := by
   classical
   exact Finset.univ.filter fun i => ∀ n : ℕ, i ∈ printedNormalLayer M n
 
 omit [DecidableEq ι] in
-/-- The printed core is the full player set whenever the diagonal is
+/-- The draft's core is the full player set whenever the diagonal is
 nonpositive. -/
 theorem printedNormalCore_eq_univ_of_diagonal_nonpos
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i ≤ 0) :
@@ -78,8 +94,8 @@ theorem printedNormalCore_eq_univ_of_diagonal_nonpos
   simp [printedNormalCore,
     printedNormalLayer_eq_univ_of_diagonal_nonpos M hdiag]
 
-/-- In particular, the source-normalized singleton matrix makes the literal
-printed normal core degenerate. -/
+/-- In particular, the source-normalized singleton matrix makes the draft's
+literal normal core degenerate. -/
 theorem printedNormalCore_normalized_eq_univ
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     printedNormalCore (normalizedSoloMatrix reward) = Finset.univ := by
@@ -87,7 +103,7 @@ theorem printedNormalCore_normalized_eq_univ
   intro i
   simp
 
-/-- Corrected recursive normality layers `I₀ = I` and
+/-- The Section 5 normality layers `I₀ = I` and
 `Iₙ₊₁ = {i ∈ Iₙ | ∃ j ∈ Iₙ, j ≠ i ∧ M i j ≤ 0}`. -/
 def normalLayer (M : ι → ι → ℝ) : ℕ → Finset ι
   | 0 => Finset.univ
@@ -105,14 +121,14 @@ def normalLayer (M : ι → ι → ℝ) : ℕ → Finset ι
         ∃ j ∈ normalLayer M n, j ≠ i ∧ M i j ≤ 0 := by
   simp [normalLayer]
 
-/-- The corrected normality layers form a decreasing sequence. -/
+/-- The normality layers form a decreasing sequence. -/
 theorem normalLayer_succ_subset
     (M : ι → ι → ℝ) (n : ℕ) :
     normalLayer M (n + 1) ⊆ normalLayer M n := by
   intro i hi
   exact (mem_normalLayer_succ M n i).mp hi |>.1
 
-/-- Corrected normality layers are antitone in their layer index. -/
+/-- Normality layers are antitone in their layer index. -/
 theorem normalLayer_antitone
     (M : ι → ι → ℝ) {n m : ℕ} (hnm : n ≤ m) :
     normalLayer M m ⊆ normalLayer M n := by
@@ -121,7 +137,7 @@ theorem normalLayer_antitone
   | @step m hnm ih =>
       exact fun _ hi => ih (normalLayer_succ_subset M m hi)
 
-/-- The corrected normal-player set `I* = ⋂ₙ Iₙ`. -/
+/-- The α-player set `I∗∗ = ⋂ₙ Iₙ` of the source's Section 5. -/
 def normalCore (M : ι → ι → ℝ) : Finset ι := by
   classical
   exact Finset.univ.filter fun i => ∀ n : ℕ, i ∈ normalLayer M n
@@ -161,8 +177,8 @@ theorem exists_normalLayer_eq_normalCore (M : ι → ι → ℝ) :
   · intro i hi
     exact (mem_normalCore M i).1 hi cutoff
 
-/-- Every member of the stabilized corrected core has a distinct
-nonpositive comparison witness in that same core. -/
+/-- Every member of the stabilized α-player core has a distinct nonpositive
+comparison witness in that same core. -/
 theorem exists_core_blocker_of_mem_normalCore
     (M : ι → ι → ℝ) {i : ι} (hi : i ∈ normalCore M) :
     ∃ j ∈ normalCore M, j ≠ i ∧ M i j ≤ 0 := by
@@ -173,12 +189,12 @@ theorem exists_core_blocker_of_mem_normalCore
     (mem_normalLayer_succ M n i).1 hisucc
   exact ⟨j, by simpa [hn] using hj, hne, hentry⟩
 
-/-- The exact principal matrix on corrected recursively normal players. -/
+/-- The exact principal matrix on the recursively normal α-players. -/
 def normalPlayerMatrix (M : ι → ι → ℝ) :
     normalCore M → normalCore M → ℝ :=
   principalMatrix M (normalCore M)
 
-/-- Game-facing corrected normal-player matrix, built after the playerwise solo
+/-- Game-facing α-player matrix, built after the playerwise solo
 normalization. -/
 def normalizedNormalPlayerMatrix
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
@@ -186,17 +202,17 @@ def normalizedNormalPlayerMatrix
       normalCore (normalizedSoloMatrix reward) → ℝ :=
   normalPlayerMatrix (normalizedSoloMatrix reward)
 
-/-- A nonempty corrected normal core.  This is an algebraic side condition,
-not a strategic conclusion. -/
+/-- A nonempty α-player core.  This is an algebraic side condition, not a
+strategic conclusion. -/
 def HasNormalPlayers (M : ι → ι → ℝ) : Prop :=
   (normalCore M).Nonempty
 
-/-- The corrected all-abnormal matrix regime. -/
+/-- The all-abnormal matrix regime: no α-players at all. -/
 def AllPlayersAbnormal (M : ι → ι → ℝ) : Prop :=
   normalCore M = ∅
 
-/-- Failure of corrected normal-core nonemptiness is equivalent to the
-all-abnormal matrix regime. -/
+/-- Failure of α-player-core nonemptiness is equivalent to the all-abnormal
+matrix regime. -/
 theorem allPlayersAbnormal_iff_not_hasNormalPlayers
     (M : ι → ι → ℝ) :
     AllPlayersAbnormal M ↔ ¬HasNormalPlayers M := by

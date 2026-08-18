@@ -9,10 +9,10 @@ import UniformEquilibrium.Quitting.Cycles.ConditionedSoloExtraction
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 
 /-!
-# The later-layer corrected all-abnormal branch
+# The later-layer all-abnormal branch
 
-This file closes the part of the corrected all-abnormal regime left open by
-`FirstLayerSimple.lean`.  If the corrected core is empty but its first layer
+This file closes the part of the all-abnormal regime left open by
+`FirstLayerSimple.lean`.  If the normal core is empty but its first layer
 is nonempty, choose the last nonempty layer and an owner in it.  The owner's
 normalized singleton column is nonnegative for every receiver, while
 membership in the first layer supplies a distinct blocker whose singleton
@@ -28,12 +28,12 @@ uniform-equilibrium payoff.
 
 ## Convention warning
 
-The published displayed normal-layer recursion omits the condition that the
-witness differ from the receiver.  With the normalized zero diagonal that
-printed recursion never removes a player.  The theorem below is therefore a
-theorem about this repository's corrected distinct-witness recursion, which
-is the recursion used by the source proof's last-layer argument; it is not a
-literal theorem about `printedNormalLayer`.
+An earlier draft of the source displays the normal-layer recursion without
+the condition that the witness differ from the receiver.  With the normalized
+zero diagonal that display never removes a player.  The theorem below is
+therefore a theorem about the distinct-witness recursion of the final
+Section 5, which is the recursion the source proof's last-layer argument
+uses; it is not a literal theorem about `printedNormalLayer`.
 -/
 
 noncomputable section
@@ -45,7 +45,7 @@ open StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-! ## Finite corrected-layer algebra -/
+/-! ## Finite normal-layer algebra -/
 
 /-- If a receiver can use a player surviving to layer `n` as a nonpositive
 distinct witness, then the receiver itself survives to layer `n`. -/
@@ -63,7 +63,7 @@ theorem mem_normalLayer_of_persistent_witness
       exact (mem_normalLayer_succ M n receiver).2
         ⟨hreceiverPrev, witness, hwitnessPrev, hne, hentry⟩
 
-/-- Empty corrected core forces one finite layer to be empty.  The proof is
+/-- Empty normal core forces one finite layer to be empty.  The proof is
 the finite-witness argument: every player has a layer at which it disappears;
 the sum of those finitely many witness indices is later than all of them. -/
 theorem exists_normalLayer_eq_empty_of_normalCore_eq_empty
@@ -88,7 +88,7 @@ theorem exists_normalLayer_eq_empty_of_normalCore_eq_empty
     exact Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ i)
   exact hfirstMissing i (normalLayer_antitone M hle hi)
 
-/-- If the corrected core is empty but layer one is nonempty, there is a last
+/-- If the normal core is empty but layer one is nonempty, there is a last
 nonempty layer. -/
 theorem exists_last_nonempty_normalLayer
     (M : ι → ι → ℝ) (hcore : normalCore M = ∅)
@@ -128,7 +128,7 @@ theorem exists_last_nonempty_normalLayer
     omega
   · rwa [hlast]
 
-/-- At the last nonempty corrected layer, any selected owner's matrix column
+/-- At the last nonempty normal layer, any selected owner's matrix column
 is nonnegative everywhere, and strictly positive away from the diagonal. -/
 theorem nonnegative_column_of_last_normalLayer
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
@@ -150,7 +150,7 @@ theorem nonnegative_column_of_last_normalLayer
     rw [hnext] at hmem
     simp at hmem
 
-/-- Any owner in a positive corrected layer has a distinct nonpositive
+/-- Any owner in a positive normal layer has a distinct nonpositive
 first-layer witness. -/
 theorem exists_firstLayer_blocker_of_mem_normalLayer
     (M : ι → ι → ℝ) {last : ℕ} (hlast : 1 ≤ last)
@@ -594,7 +594,7 @@ theorem exists_uniformEquilibriumPayoff_of_nonnegative_column
     isUniformEquilibriumPayoff_soloReward_of_nonnegative_column
       reward hne hcolumn hblocker⟩
 
-/-- **Later-layer all-abnormal producer.**  Empty corrected normal core always
+/-- **Later-layer all-abnormal producer.**  Empty normal core always
 produces a uniform-equilibrium payoff.  The empty-first-layer case uses the
 exact stationary producer; the later-layer case uses the two-scale
 owner/blocker row above. -/
@@ -623,7 +623,7 @@ theorem exists_uniformEquilibriumPayoff_of_allPlayersAbnormal
     exact exists_uniformEquilibriumPayoff_of_nonnegative_column
       reward hne hcolumn hblocker
 
-/-- Consequently a counterexample cannot lie in the corrected all-abnormal
+/-- Consequently a counterexample cannot lie in the all-abnormal
 matrix regime. -/
 theorem hasNormalPlayers_of_not_exists_uniformEquilibriumPayoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

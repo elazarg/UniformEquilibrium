@@ -11,7 +11,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 
 This file isolates two reusable reductions that do not depend on determinant
 enumeration.  A standard LCP is a finite disjunction over complementary
-supports, and the corrected normal core is full exactly when every row has a
+supports, and the normal core is full exactly when every row has a
 distinct nonpositive witness.  In the zero-diagonal Q/no-homogeneous branch,
 each row also has a positive entry and each column a negative entry.
 -/
@@ -76,7 +76,7 @@ theorem isStandardQMatrix_iff_forall_exists_support
   classical
   simp only [IsStandardQMatrix, hasStandardLCPSolution_iff_exists_support]
 
-/-- The corrected core is full exactly when its first deletion step removes
+/-- The normal core is full exactly when its first deletion step removes
 nothing. -/
 theorem normalCore_eq_univ_iff_forall_exists_distinct_nonpos
     (M : ι → ι → ℝ) :

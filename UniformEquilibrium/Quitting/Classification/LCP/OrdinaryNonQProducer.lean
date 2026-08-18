@@ -12,12 +12,12 @@ import UniformEquilibrium.Quitting.Classification.ThreePlayer.AnalyticPacket
 /-!
 # The ordinary non-Q producer
 
-This file formalizes the auxiliary discounted-game argument for the corrected
+This file formalizes the auxiliary discounted-game argument for the
 normal core.  A right-hand side with no projective LCP solution is extended by
 a positive value off the core and used as the affine live anchor of a shifted
 quitting game.  An all-Continue analytic endpoint produces an anchored
 projective singleton packet.  Its positive singleton support either lies in
-the corrected normal core, where it restricts to the forbidden LCP solution,
+the normal core, where it restricts to the forbidden LCP solution,
 or is a single abnormal column; the latter is closed by the two-hazard
 nonnegative-column theorem.
 
@@ -339,7 +339,7 @@ theorem fixedOpponents_contract_of_two_positive
       exact hne (hfirstWho.trans hsecondWho.symm)) hsecond
   · exact hopponentContracts first hfirstWho hfirst
 
-/-- Membership in the corrected normal core supplies a distinct first-layer
+/-- Membership in the normal core supplies a distinct first-layer
 blocker. -/
 theorem exists_blocker_of_mem_normalCore
     (M : ι → ι → ℝ) {owner : ι} (howner : owner ∈ normalCore M) :
@@ -427,9 +427,9 @@ theorem exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedNormalEndpoint
     exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_blocker
       reward anchor g owner howner hother blocker hne hblockerMatrix
 
-/-! ## Restricting an anchored LCP packet to the corrected core -/
+/-! ## Restricting an anchored LCP packet to the normal core -/
 
-/-- Extend a right-hand side on the corrected normal core by the fixed
+/-- Extend a right-hand side on the normal core by the fixed
 strictly positive value `1` off the core. -/
 def extendNormalDirection (M : ι → ι → ℝ)
     (q : normalCore M → ℝ) : ι → ℝ :=
@@ -449,7 +449,7 @@ def extendNormalDirection (M : ι → ι → ℝ)
 
 /-- If a projective LCP solution for the positive off-core extension has two
 distinct positive singleton coordinates, every positive coordinate belongs
-to the corrected normal core. -/
+to the normal core. -/
 theorem positive_singleton_mem_normalCore_of_two_positive
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (q : normalCore (normalizedSoloMatrix reward) → ℝ)
@@ -529,7 +529,7 @@ theorem positive_singleton_mem_normalCore_of_two_positive
   exact (mem_normalCore _ _).2 (fun n => hlevels n owner howner)
 
 /-- Restrict a projective solution whose positive singleton support lies in
-the corrected normal core to the principal normal-player matrix. -/
+the normal core to the principal normal-player matrix. -/
 def restrictProjectiveLCPSolutionToNormalCore
     (M : ι → ι → ℝ) (q : normalCore M → ℝ)
     (solution : ProjectiveLCPSolution M (extendNormalDirection M q))

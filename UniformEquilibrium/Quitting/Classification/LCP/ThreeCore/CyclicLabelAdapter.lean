@@ -8,9 +8,9 @@ import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeByThreeZeroDiagonalQ
 
 /-!
-# Cyclic coordinates for a three-element corrected core
+# Cyclic coordinates for a three-element normal core
 
-This is the relabeling adapter between the coordinate-free corrected core and
+This is the relabeling adapter between the coordinate-free normal core and
 the explicit directed three-cycle used by the ideal singleton lasso.
 -/
 

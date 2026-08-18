@@ -16,7 +16,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SoloExitPref
 
 This is a checked finite calibration of the regular five-cycle singleton
 geometry.  Its singleton matrix is `2 A - Aᵀ` for the regular
-five-cycle tournament.  The corrected normal core is all five players, the
+five-cycle tournament.  The normal core is all five players, the
 homogeneous simplex branch is absent, and the table contains both a strict
 directed preemption cycle and a marked immediate collision.
 

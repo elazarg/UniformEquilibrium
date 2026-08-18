@@ -13,9 +13,9 @@ import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonZe
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.AmbientCarrierElimination
 
 /-!
-# Three-element corrected-core elimination
+# Three-element normal-core elimination
 
 This umbrella exports the exact cap-debt recursion, diffuse singleton-block
 carrier construction, cyclic relabeling, and the resulting elimination of the
-three-element corrected-core counterexample branch.
+three-element normal-core counterexample branch.
 -/

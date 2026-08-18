@@ -16,7 +16,7 @@ at margin `gap` exactly when the gate entry at recipient `other` and quitter
 `owner` is at most `-gap`.
 
 Consequently, every vertex of a nonnegative-margin solo-preemption cycle lies
-in the corrected normal core.  The in-cycle predecessor supplies a permanent
+in the normal core.  The in-cycle predecessor supplies a permanent
 distinct witness at every normal-layer deletion.
 -/
 
@@ -65,7 +65,7 @@ theorem normalizedSoloMatrix_le_neg
       (cycle.vertex time) (cycle.vertex (time + 1))).1 (cycle.edge time)).2
 
 /-- Every vertex of a nonnegative-margin strict preemption cycle survives all
-corrected normal-layer deletions. -/
+normal-layer deletions. -/
 theorem vertex_mem_normalCore
     {gap : ℝ} (hgap : 0 ≤ gap)
     (cycle : QuittingSoloPreemptionCycle reward gap) (time : ℕ) :

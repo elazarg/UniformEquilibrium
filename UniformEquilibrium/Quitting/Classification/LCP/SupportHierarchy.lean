@@ -9,12 +9,12 @@ import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupati
 import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
 
 /-!
-# Punctured analytic support and the corrected normal hierarchy
+# Punctured analytic support and the normal hierarchy
 
 The projective packet remembers only the least-order quitting coordinates.
 For the ordinary non-Q argument one needs the stronger fact that *every*
 coordinate which is present on the punctured analytic germ belongs to the
-corrected normal core.  This file starts from the exact analytic support,
+normal core.  This file starts from the exact analytic support,
 where an analytic nonnegative quit rate is either identically zero or
 strictly positive on a common punctured neighbourhood.
 
@@ -1710,7 +1710,7 @@ theorem eventuallyActive_mem_normalLayer_succ_of_mem
     exact (mem_normalLayer_succ M n who).2
       ⟨hwhoLevel, blocker, hblockerLevel, hne, hentry⟩
 
-/-- **Punctured support lies in the corrected normal core.**  This is the
+/-- **Punctured support lies in the normal core.**  This is the
 fast-coordinate support theorem consumed by the ordinary non-Q producer. -/
 theorem quittingGerm_eventuallyActive_mem_normalCore_of_baseline_extendShift
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

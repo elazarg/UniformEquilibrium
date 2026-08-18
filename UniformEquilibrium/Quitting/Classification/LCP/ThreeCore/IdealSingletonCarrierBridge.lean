@@ -942,7 +942,7 @@ theorem directedCycle_semanticOrbit_mem_and_debt_tendsto_zero
 
 end Question193ThreeCoreCarrier
 
-/-! ## Lifting the three-cycle through a three-element corrected core -/
+/-! ## Lifting the three-cycle through a three-element normal core -/
 
 namespace Question193ThreeCoreLift
 
@@ -1162,7 +1162,7 @@ theorem coreRestriction_ambientClearanceOrbit
         three_block_height_eq_return hH ha hb hc hd he]
       rfl
 
-/-- For a genuine corrected core, outside rows automatically satisfy every
+/-- For a genuine normal core, outside rows automatically satisfy every
 nonnegative affine condition used by a core singleton clock. -/
 theorem outside_core_affine_nonneg
     {ι : Type} [Fintype ι] [DecidableEq ι]

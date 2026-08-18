@@ -50,7 +50,7 @@ without producing a witness.
 | General nonexistence certificates | `UniformEquilibrium/Diagnostics/Uniform/NonexistenceCertificate.lean` | A uniform positive exploitability gap at arbitrarily late finite horizons rules out every uniform-equilibrium payoff. |
 | Quitting terminal exploitability | `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean` | Terminal gaps and the equivalence between finite-quitting nonexistence and some fixed positive terminal gap. |
 | Equivariant security--welfare assembly | `UniformEquilibrium/Quitting/Classification/EquivariantSecurityWelfareAssembly.lean` | Phase-equivariant security at one representative transports to every player at every phase, pins each phase target below that player's punishment value, and combines with a positive weighted phase-welfare cap to produce a uniform-equilibrium payoff. A terminal row above the punishment-priced target total refutes the corresponding welfare cap. |
-| Collision-anchored preemption geometry | `UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionGeometry.lean` | On at most four players, one collision owner roots one of six simple strict-preemption lassos and the collider occupies one of seventeen canonical positions. Every marked position is realizable with an explicit normalized gate matrix; every cycle vertex lies in the corrected normal core. See [`PREEMPTION_GEOMETRY.md`](PREEMPTION_GEOMETRY.md). |
+| Collision-anchored preemption geometry | `UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionGeometry.lean` | On at most four players, one collision owner roots one of six simple strict-preemption lassos and the collider occupies one of seventeen canonical positions. Every marked position is realizable with an explicit normalized gate matrix; every cycle vertex lies in the normal core. See [`PREEMPTION_GEOMETRY.md`](PREEMPTION_GEOMETRY.md). |
 | Aligned collision and preemption | `UniformEquilibrium/Quitting/Boundary/Repair/AlignedPreemptionCollision.lean` | In the sequential two-solo screen, the follower's exact immediate-Quit gain is the owner's rate times the collision gain; the preemption inequality does not enter. Every repair mechanism fails under a counterexample regime. When the collider's punishment value is at most its solo payoff, blocker balance is automatic, leaving owner endpoint failure or a profitable spectator join. The universal aligned two-cycle realization has a uniform-equilibrium payoff. |
 | Coupled Bellman--collision reduction | `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCoupledBellmanCollisionReduction.lean` | Persistent mass on one fixed pair, vanishing defects of both pair members, and return to the minimum-debt fiber force one fixed third player to have a uniformly positive legal reached-row gain along a strict subsequence. Without the return hypothesis, the exact alternative is nonvanishing shifted-tail excess or that third-player gain. |
 | Terminal semantic joint-reset lift | `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticJointResetLift.lean` | A finite left-regular band of coupled reset modes, its exact `FinDist` semiconjugacy with semantic prefixing, and debt, payoff-spine, and cap-retention observables. The invariant reset hull need not have positive debt. |
@@ -217,7 +217,14 @@ The following distinctions are load-bearing across the toolkit:
 10. a global occupation that cancels signed defects across different recurrent
     SCCs is not one legal path.  Flow synthesis must choose one reachable
     recurrent component or prove a separate strategic common-randomization
-    theorem.
+    theorem; and
+11. the three branch propositions in
+    `UniformEquilibrium/Quitting/Classification/ExistenceBranches.lean`
+    are source vocabulary, not the source characterization.  Nothing states or
+    proves the equivalence between existence of approximate equilibria and the
+    disjunction of the branches, and the instant-punishment branch is written
+    in a constant-row shape that is sufficient for, but not equivalent to, the
+    source's.
 
 ## Universal declaration leaves
 
