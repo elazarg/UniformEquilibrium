@@ -262,10 +262,15 @@ encoding: on the payoff-cell vertex set of ordered player pairs, with
 `(x, y)` carrying `r_y({x})`, each preemption is a genuine unit-slope
 translation edge into the target's diagonal cell, and what is missing is not
 transport but concatenation — the within-row observer-switch edges from a
-diagonal cell to the next off-diagonal cell, which no static datum supplies.
-A relational or fibered layer becomes worth writing when a producer supplies
-those switch edges from dynamic data — chronologies or blocks — rather than
-from the static table.
+diagonal cell to the next off-diagonal cell.  The static table does supply
+those edges, and at a price that settles the question negatively: around a
+forced preemption cycle the switch costs total at least the whole period's
+worth of gap, so the joined walk closes at nonpositive weight and every
+charging the table justifies is feasible
+(`Research/Quitting/PreemptionTransport.lean`).  A relational or fibered
+layer becomes worth writing when a producer charges those switch edges from
+dynamic data — chronologies or blocks — below what the static table
+demands.
 
 ## Exogenous and endogenous transport
 
@@ -278,8 +283,9 @@ policy or restricting to deterministic transitions).  In a quitting game the
 kernel has one live state and the transition system is endogenous: a profile
 supplies it — a periodic profile is an automaton on phases, and the phase
 counter is the state variable the kernel lacks — while the table supplies
-only rewards and absorption.  This is why the static table forces no
-transport (`Research/Quitting/PreemptionTransport.lean`) and the anchored
+only rewards and absorption.  This is why the static table, which does force
+payoff-cell transport, forces no obstruction from it
+(`Research/Quitting/PreemptionTransport.lean`), and why the anchored
 renewal transport exists only per profile: equilibrium existence quantifies
 over the induced transport systems, so a producer theorem must extract a
 canonical labelled system from an arbitrary chronology rather than analyze a
