@@ -130,6 +130,13 @@ Project-owned Markdown filenames use `UPPER_SNAKE_CASE.md`, without
 exceptions. Stable identifiers remain prefixes, for example
 `Q194_SEMIALGEBRAIC_BARRIER_COMPLETENESS.md`.
 
+Cite a Lean result by declaration name and file, never by line number, as in
+`exists_cubicAnchor_root_mem_Ioo` (`MathUE/CubicAnchorRoot.lean`). A line
+number goes stale as soon as anything is inserted above the declaration, so it
+fails for a declaration nobody touched and has to be repinned by hand; the
+name is stable and `scripts/check_docs.py` resolves it. That checker rejects a
+line-pinned reference in a living document.
+
 ## Current conventions
 
 Use narrow imports inside modules and keep coherent work reachable through the

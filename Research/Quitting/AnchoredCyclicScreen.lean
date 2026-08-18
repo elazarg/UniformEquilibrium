@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.OddsThreshold
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanCapPureTimeStop
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
@@ -31,11 +32,12 @@ the on-path value excludes the table from every counterexample regime.
 The first section reads the spectator half of exact root Nash as a hazard
 threshold.  `quittingSoloCollisionPenalty` and `quittingContinuationSurplus`
 name the two reward differences the condition compares, and
-`hazard_mul_penalty_le_iff_ratio_le` turns the comparison into the ceiling
+`Math.mul_le_one_sub_mul_iff_odds_le` turns the comparison into the ceiling
 `p / (1 - p) ≤ surplus / penalty` on a positive penalty below sure quitting.
 A nonpositive penalty drops the constraint only against a nonnegative surplus
-(`hazard_mul_penalty_le_of_penalty_nonpos`), and at `p = 1` the constraint is
-the sign of the penalty alone.  The owner half is sharpened the same way:
+(`Math.mul_le_one_sub_mul_of_nonpos`), and at `p = 1` the constraint is the
+sign of the penalty alone (`Math.one_mul_le_one_sub_one_mul_iff`).  The owner
+half is sharpened the same way:
 `isZeroQuittingRootEndpointNash_soloMixedRoot_of_ownerSigns` asks only for the
 two signed endpoint conditions, so a deterministic phase carries a one-sided
 inequality rather than indifference
@@ -130,36 +132,6 @@ theorem quittingSoloSpectatorCap_iff_hazard_mul_penalty_le
         (marginal false).toReal * quittingContinuationSurplus reward tail who := by
   unfold quittingSoloCollisionPenalty quittingContinuationSurplus
   constructor <;> intro hcap <;> nlinarith [hcap]
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- **The threshold form.**  Against a positive collision penalty and below
-sure quitting, the spectator constraint is an explicit ceiling on the odds of
-the phase hazard. -/
-theorem hazard_mul_penalty_le_iff_ratio_le {hazard penalty surplus : ℝ}
-    (hlt : hazard < 1) (hpenalty : 0 < penalty) :
-    hazard * penalty ≤ (1 - hazard) * surplus ↔
-      hazard / (1 - hazard) ≤ surplus / penalty := by
-  have hsurvival : 0 < 1 - hazard := by linarith
-  rw [div_le_div_iff₀ hsurvival hpenalty]
-  constructor <;> intro hbound <;> nlinarith [hbound]
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- A nonpositive collision penalty against a nonnegative continuation surplus
-imposes no constraint at all: joining the exit never pays and staying never
-costs. -/
-theorem hazard_mul_penalty_le_of_penalty_nonpos {hazard penalty surplus : ℝ}
-    (h0 : 0 ≤ hazard) (h1 : hazard ≤ 1) (hpenalty : penalty ≤ 0)
-    (hsurplus : 0 ≤ surplus) :
-    hazard * penalty ≤ (1 - hazard) * surplus :=
-  le_trans (mul_nonpos_of_nonneg_of_nonpos h0 hpenalty)
-    (mul_nonneg (by linarith) hsurplus)
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- At a sure-quit phase the constraint degenerates to the sign of the
-collision penalty: the continuation surplus is never reached. -/
-theorem hazard_mul_penalty_le_one_iff {penalty surplus : ℝ} :
-    (1 : ℝ) * penalty ≤ (1 - 1) * surplus ↔ penalty ≤ 0 := by
-  constructor <;> intro hbound <;> linarith [hbound]
 
 /-! ### The owner's condition at a deterministic phase -/
 

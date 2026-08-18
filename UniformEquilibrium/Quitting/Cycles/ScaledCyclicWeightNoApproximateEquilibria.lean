@@ -114,51 +114,12 @@ theorem planPayoff_deviate_le_of_isGlobalApproxEquilibrium
   have := hp ε hε j β hβ
   linarith
 
-/-! ## Basic bounds on `continueMass` and `stageValue` -/
+/-! ## Basic bounds on `stageValue`
 
-theorem continueMass_nonneg {x : CyclicIndex → ℝ} (_hx0 : ∀ j, 0 ≤ x j)
-    (hx1 : ∀ j, x j ≤ 1) : 0 ≤ continueMass x :=
-  Finset.prod_nonneg fun i _ => by linarith [hx1 i]
-
-theorem continueMass_le_one {x : CyclicIndex → ℝ} (hx0 : ∀ j, 0 ≤ x j)
-    (hx1 : ∀ j, x j ≤ 1) : continueMass x ≤ 1 :=
-  Finset.prod_le_one (fun i _ => by linarith [hx1 i]) (fun i _ => by linarith [hx0 i])
-
-/-- The scaled cyclic weight's diagonal quit value is `1/3 ≤ 1`, and every
-row has `‖scaledCyclicWeight‖∞ ≤ 1`, so every `sigmaValue`/`excludedValue`
-term (a convex-ish combination of table entries) is bounded; concretely, for
-`CyclicIndex` this is read off `sigmaValue_scaledCyclicWeight`. -/
-theorem continueMass_eq_zero_of_apply_eq_one {x : CyclicIndex → ℝ} {i : CyclicIndex}
-    (hi : x i = 1) : continueMass x = 0 :=
-  Finset.prod_eq_zero (Finset.mem_univ i) (by rw [hi]; ring)
-
-/-- `continueMass x = 1` forces every coordinate of a `[0,1]`-row to be `0`. -/
-theorem apply_eq_zero_of_continueMass_eq_one {x : CyclicIndex → ℝ}
-    (hx0 : ∀ j, 0 ≤ x j) (hx1 : ∀ j, x j ≤ 1) (hc : continueMass x = 1) (i : CyclicIndex) :
-    x i = 0 := by
-  have hexp : (1 - x 0) * (1 - x 1) * (1 - x 2) = 1 := by
-    have h := hc
-    unfold continueMass at h
-    rwa [Fin.prod_univ_three] at h
-  have h0 : x 0 = 0 := by
-    have hb1 : (1 - x 1) * (1 - x 2) ≤ 1 := by nlinarith [hx0 1, hx1 1, hx0 2, hx1 2]
-    have key : (1 - x 0) * ((1 - x 1) * (1 - x 2)) ≤ (1 - x 0) * 1 :=
-      mul_le_mul_of_nonneg_left hb1 (by linarith [hx1 0])
-    nlinarith [hexp, key, hx0 0]
-  have h1 : x 1 = 0 := by
-    have hb1 : (1 - x 2) * (1 - x 0) ≤ 1 := by nlinarith [hx0 2, hx1 2, hx0 0, hx1 0]
-    have key : (1 - x 1) * ((1 - x 2) * (1 - x 0)) ≤ (1 - x 1) * 1 :=
-      mul_le_mul_of_nonneg_left hb1 (by linarith [hx1 1])
-    nlinarith [hexp, key, hx0 1]
-  have h2 : x 2 = 0 := by
-    have hb1 : (1 - x 0) * (1 - x 1) ≤ 1 := by nlinarith [hx0 0, hx1 0, hx0 1, hx1 1]
-    have key : (1 - x 2) * ((1 - x 0) * (1 - x 1)) ≤ (1 - x 2) * 1 :=
-      mul_le_mul_of_nonneg_left hb1 (by linarith [hx1 2])
-    nlinarith [hexp, key, hx0 2]
-  fin_cases i
-  · exact h0
-  · exact h1
-  · exact h2
+The `[0, 1]`-row bounds on `continueMass` used below —
+`Math.PMFProduct.continueMass_nonneg`, `continueMass_le_one`,
+`continueMass_eq_zero_of_eq_one` and `eq_zero_of_continueMass_eq_one` — hold
+over an arbitrary finite index type. -/
 
 /-- `stageValue` vanishes at the all-zero row. -/
 theorem stageValue_zero (i : CyclicIndex) : stageValue (fun _ => 0) i = 0 := by
@@ -171,7 +132,7 @@ theorem stageValue_zero (i : CyclicIndex) : stageValue (fun _ => 0) i = 0 := by
 theorem stageValue_eq_zero_of_continueMass_eq_one {x : CyclicIndex → ℝ}
     (hx0 : ∀ j, 0 ≤ x j) (hx1 : ∀ j, x j ≤ 1) (hc : continueMass x = 1) (i : CyclicIndex) :
     stageValue x i = 0 := by
-  have hz : ∀ j, x j = 0 := apply_eq_zero_of_continueMass_eq_one hx0 hx1 hc
+  have hz : ∀ j, x j = 0 := eq_zero_of_continueMass_eq_one hx0 hx1 hc
   have : x = fun _ => 0 := funext hz
   rw [this]; exact stageValue_zero i
 
@@ -249,7 +210,7 @@ theorem hasSum_eventuallyConstantPlan (row0 π : CyclicIndex → ℝ) (i : Cycli
       rw [hstep]; ring
     rw [funext heq]
     by_cases hc : continueMass π < 1
-    · have hgeom := (hasSum_geometric_of_lt_one (continueMass_nonneg hπ0 hπ1) hc).mul_left
+    · have hgeom := (hasSum_geometric_of_lt_one (continueMass_nonneg hπ1) hc).mul_left
         (continueMass row0 * stageValue π i)
       have hval : continueMass row0 * stageValue π i * (1 - continueMass π)⁻¹ =
           continueMass row0 * constantPayoff π i := by
@@ -353,7 +314,7 @@ theorem sigmaValue_le_constantPayoff_of_isGlobalApproxEquilibrium {x : CyclicInd
     planPayoff_constantPlan _ i (update_nonneg hx0 i (by norm_num))
       (update_le_one hx1 i (le_refl 1))] at hle
   have hcm : continueMass (Function.update x i 1) = 0 :=
-    continueMass_eq_zero_of_apply_eq_one (apply_update_self x i 1)
+    continueMass_eq_zero_of_eq_one (apply_update_self x i 1)
   have hcp : constantPayoff (Function.update x i 1) i = sigmaValue scaledCyclicWeight x i := by
     unfold constantPayoff
     rw [if_pos (by rw [hcm]; norm_num), hcm]
@@ -677,7 +638,7 @@ theorem no_instant_approxEquilibrium (quitter : CyclicIndex) (row0 π : CyclicIn
   have hsj2 : cyclicSucc (cyclicPred quitter) = quitter := cyclicSucc_cyclicPred quitter
   have hne_q_j1 : quitter ≠ cyclicSucc quitter := (cyclicSucc_ne_self quitter).symm
   have hne_q_j2 : quitter ≠ cyclicPred quitter := (cyclicPred_ne_self quitter).symm
-  have hcm0 : continueMass row0 = 0 := continueMass_eq_zero_of_apply_eq_one hrow0q
+  have hcm0 : continueMass row0 = 0 := continueMass_eq_zero_of_eq_one hrow0q
   -- Step 1: `row0 (cyclicSucc quitter) = 0`, from the continue-forever
   -- deviation at `cyclicSucc quitter`.
   have ha : row0 (cyclicSucc quitter) = 0 := by
@@ -688,7 +649,7 @@ theorem no_instant_approxEquilibrium (quitter : CyclicIndex) (row0 π : CyclicIn
         (update_nonneg hπ0 _ (le_refl 0)) (update_le_one hπ1 _ (by norm_num)),
       planPayoff_eventuallyConstantPlan row0 π (cyclicSucc quitter) hπ0 hπ1] at hle
     have hcmU : continueMass (Function.update row0 (cyclicSucc quitter) 0) = 0 :=
-      continueMass_eq_zero_of_apply_eq_one
+      continueMass_eq_zero_of_eq_one
         (by rw [Function.update_of_ne hne_q_j1]; exact hrow0q)
     rw [hcm0, hcmU] at hle
     simp only [zero_mul, add_zero] at hle
@@ -707,7 +668,7 @@ theorem no_instant_approxEquilibrium (quitter : CyclicIndex) (row0 π : CyclicIn
         (update_nonneg hπ0 _ (by norm_num)) (update_le_one hπ1 _ (le_refl 1)),
       planPayoff_eventuallyConstantPlan row0 π (cyclicPred quitter) hπ0 hπ1] at hle
     have hcmU : continueMass (Function.update row0 (cyclicPred quitter) 1) = 0 :=
-      continueMass_eq_zero_of_apply_eq_one (apply_update_self row0 (cyclicPred quitter) 1)
+      continueMass_eq_zero_of_eq_one (apply_update_self row0 (cyclicPred quitter) 1)
     rw [hcm0, hcmU] at hle
     simp only [zero_mul, add_zero] at hle
     unfold stageValue at hle

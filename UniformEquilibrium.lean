@@ -344,6 +344,7 @@ import UniformEquilibrium.Quitting.Boundary.Repair.SureSetRepairFullIntervalCoun
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Classification.SymmetricQuittingGame
 import UniformEquilibrium.Quitting.Classification.BlockDeletion
+import UniformEquilibrium.Quitting.Classification.BlockDeletionCertificate
 import UniformEquilibrium.Quitting.Punishment.ContinueFloor
 import UniformEquilibrium.Quitting.Classification.TwinMerging
 import UniformEquilibrium.Quitting.Boundary.Analytic.SwitchingResidueRegression
@@ -485,3 +486,5 @@ import UniformEquilibrium.Quitting.Boundary.Repair.CollisionCertificateRepair
 import UniformEquilibrium.Quitting.Boundary.Repair.CollisionRepairCharacterization
 import UniformEquilibrium.Quitting.Boundary.Repair.AlignedPreemptionCollision
 import UniformEquilibrium.Quitting.Punishment.QuitBonusSelfLoopBridge
+import UniformEquilibrium.Quitting.Cycles.PeriodicJointSurvival
+import UniformEquilibrium.Quitting.Cycles.SoloRootSequenceValues

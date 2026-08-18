@@ -21,10 +21,20 @@ a quitting coalition, nor whether both do:
 The *token game* of such a pair is the one-player-smaller game obtained by
 deleting `e`, namely `quittingDeletePlayerReward reward e`, in which the
 surviving twin `d` plays the token.  The producer direction
-`exists_uniformEquilibriumPayoff_of_indistinguishableTwins` says that a
-uniform-equilibrium payoff of the token game yields one for the original
-game, and `not_exists_uniformEquilibriumPayoff_token_of_indistinguishableTwins`
-is its contrapositive.
+`exists_uniformEquilibriumPayoff_eq_on_survivors_of_indistinguishableTwins`
+says that a uniform-equilibrium payoff of the token game yields one for the
+original game with every coordinate pinned: unchanged at every player other
+than `e`, and equal at the two twins.  Its payoff-free form is
+`exists_uniformEquilibriumPayoff_of_indistinguishableTwins`, and
+`not_exists_uniformEquilibriumPayoff_token_of_indistinguishableTwins` is the
+contrapositive of that.
+
+Exploitability descends in the same direction with only the loss a supremum
+forces: `hasTerminalExploitabilityGap_token_of_indistinguishableTwins` carries
+every level strictly below a terminal exploitability gap of the original table
+to the token table.  Survivors carry the original level exactly; the silent
+twin's gain is charged to the token twin, where it is a supremum over
+deviations and so is attained only strictly below.
 
 The producer is proved from `QuittingTwinMergeable`, which asks for the
 shared row and for the two invisibility clauses only at the twins' own row,
@@ -241,17 +251,6 @@ theorem quittingRootExpectedPayoff_twin_step
 
 /-! ## The base case: one twin quitting for sure -/
 
-/-- A product root with both twin coordinates prescribed integrates against
-the original root along `setTwins`. -/
-theorem expect_pmfPi_setTwins (d e : ι) (root : ι → PMF Bool) (bd be : Bool)
-    (f : (ι → Bool) → ℝ) :
-    expect (pmfPi (Function.update (Function.update root e (PMF.pure be)) d
-        (PMF.pure bd))) f =
-      expect (pmfPi root) (fun a => f (setTwins d e a bd be)) := by
-  rw [← pmfPi_bind_update_pure, ← pmfPi_bind_update_pure]
-  simp only [expect_bind, expect_pure]
-  rfl
-
 /-- **The one-stage coupling.**  Once the silent twin quits for sure, its
 value equals the value of the other twin quitting for sure, whatever the
 continuations and whatever the other twin's own hazard. -/
@@ -276,12 +275,17 @@ theorem quittingRootExpectedPayoff_twin_base
   conv_lhs => rw [hsplit]
   rw [quittingRootExpectedPayoff_update_eq_moverMix]
   unfold quittingRootExpectedPayoff
-  rw [expect_pmfPi_setTwins, expect_pmfPi_setTwins, expect_pmfPi_setTwins]
-  have h1 : (fun a => quittingRootPayoff reward V (setTwins d e a true true) e)
-      = fun a => quittingRootPayoff reward W (setTwins d e a true false) d :=
+  rw [expect_pmfPi_update_update_pure, expect_pmfPi_update_update_pure,
+    expect_pmfPi_update_update_pure]
+  have h1 : (fun a : ι → Bool => quittingRootPayoff reward V
+        (Function.update (Function.update a e true) d true) e)
+      = fun a => quittingRootPayoff reward W
+        (Function.update (Function.update a e false) d true) d :=
     funext fun a => quittingRootPayoff_twin_true_true htwin V W a
-  have h2 : (fun a => quittingRootPayoff reward V (setTwins d e a false true) e)
-      = fun a => quittingRootPayoff reward W (setTwins d e a true false) d :=
+  have h2 : (fun a : ι → Bool => quittingRootPayoff reward V
+        (Function.update (Function.update a e true) d false) e)
+      = fun a => quittingRootPayoff reward W
+        (Function.update (Function.update a e false) d true) d :=
     funext fun a => quittingRootPayoff_twin_false_true htwin V W a
   rw [h1, h2, ← add_mul]
   have hsum : (root d true).toReal + (root d false).toReal = 1 := by
@@ -398,10 +402,10 @@ theorem quittingBestReplyValue_le_twin
     (profile :
       (quittingGame (quittingDeletePlayerReward reward e)).BehaviorProfile) :
     quittingBestReplyValue reward
-        (quittingLiftDeletedProfile reward e profile) e ≤
+        (quittingLiftDeletedProfile reward (· = e) profile) e ≤
       quittingBestReplyValue reward
-        (quittingLiftDeletedProfile reward e profile) d := by
-  set lifted := quittingLiftDeletedProfile reward e profile with hlifted
+        (quittingLiftDeletedProfile reward (· = e) profile) d := by
+  set lifted := quittingLiftDeletedProfile reward (· = e) profile with hlifted
   have hroots : ∀ time, quittingProfileLiveRoot reward lifted time e =
       PMF.pure false := by
     intro time
@@ -415,11 +419,11 @@ theorem quittingBestReplyValue_le_twin
     intro quitTime
     cases quitTime with
     | none =>
-      rw [hlifted, Function.update_liftDeletedProfile_never,
+      rw [hlifted, Function.update_liftDeletedProfile_never reward (· = e) profile rfl,
         ← quittingTerminalPayoff_congr_row htwin.row_eq]
       have h := le_quittingBestReplyValue reward
-        (quittingLiftDeletedProfile reward e profile) d
-        ((quittingLiftDeletedProfile reward e profile) d)
+        (quittingLiftDeletedProfile reward (· = e) profile) d
+        ((quittingLiftDeletedProfile reward (· = e) profile) d)
       rwa [Function.update_eq_self] at h
     | some date =>
       rw [quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
@@ -442,9 +446,137 @@ theorem quittingBestReplyValue_le_twin
 
 /-! ## The producer -/
 
-/-- **Twin merging.**  If two players are indistinguishable twins and the
-token game obtained by deleting one of them has a uniform-equilibrium payoff,
-then so does the original game. -/
+/-- **The lift of a token approximate equilibrium.**  The lift of a terminal
+`error`-equilibrium of the token game is a terminal `error`-equilibrium of the
+original game.  The survivors are handled by the exact transport of the
+deletion lift and the silent twin by `quittingBestReplyValue_le_twin`, so no
+accuracy is spent and no sign condition on `error` is used. -/
+theorem isεAsymptoticNash_liftDeletedProfile_of_twinMergeable
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
+    (htwin : QuittingTwinMergeable reward d e) {error : ℝ}
+    {profile :
+      (quittingGame (quittingDeletePlayerReward reward e)).BehaviorProfile}
+    (hnash :
+      (quittingGame (quittingDeletePlayerReward reward e)).IsεAsymptoticNash
+        (quittingTerminalPayoff (quittingDeletePlayerReward reward e))
+        error profile) :
+    (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward)
+      error (quittingLiftDeletedProfile reward (· = e) profile) := by
+  intro who dev
+  by_cases hwho : who = e
+  · subst hwho
+    have hbest := quittingBestReplyValue_le_twin htwin profile
+    have hdev := le_quittingBestReplyValue reward
+      (quittingLiftDeletedProfile reward (· = who) profile) who dev
+    have htoken' := hnash ⟨d, htwin.ne⟩
+    have hd : quittingBestReplyValue reward
+        (quittingLiftDeletedProfile reward (· = who) profile) d ≤
+        quittingTerminalPayoff reward
+          (quittingLiftDeletedProfile reward (· = who) profile) d + error := by
+      rw [quittingBestReplyValue_liftDeletedProfile reward (· = who) profile
+          ⟨d, htwin.ne⟩,
+        quittingTerminalPayoff_liftDeletedProfile reward (· = who) profile
+          ⟨d, htwin.ne⟩]
+      exact quittingBestReplyValue_le _ _ _ fun deviation ↦ by
+        have := htoken' deviation
+        linarith
+    have hrow := quittingTerminalPayoff_congr_row htwin.row_eq
+      (quittingLiftDeletedProfile reward (· = who) profile)
+    linarith
+  · have hstep := quittingTerminalPayoff_update_liftDeletedProfile_eq_deleteDeviation
+      reward (· = e) profile ⟨who, hwho⟩ dev
+    have hbase := quittingTerminalPayoff_liftDeletedProfile reward (· = e) profile
+      ⟨who, hwho⟩
+    have := hnash ⟨who, hwho⟩
+      (quittingDeletedDeviation reward (· = e) ⟨who, hwho⟩ dev)
+    simp only at hstep hbase
+    rw [hstep, hbase]
+    exact this
+
+/-- **Twin merging with the token payoff preserved.**  If `d` and `e` are
+mergeable twins and `target` is a uniform-equilibrium payoff of the token
+game, the original game has a uniform-equilibrium payoff which agrees with
+`target` at every player other than `e`, and which pays the two twins the same
+number.  Every coordinate is therefore pinned: the silent twin's coordinate is
+`target ⟨d, htwin.ne⟩`. -/
+theorem exists_uniformEquilibriumPayoff_eq_on_survivors_of_twinMergeable
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
+    (htwin : QuittingTwinMergeable reward d e)
+    (target : Payoff (QuittingDeletedPlayer e))
+    (htarget :
+      (quittingGame (quittingDeletePlayerReward reward e)).IsUniformEquilibriumPayoff
+        none target) :
+    ∃ payoff : Payoff ι,
+      (∀ who : QuittingDeletedPlayer e, payoff who.1 = target who) ∧
+        payoff e = payoff d ∧
+          (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  classical
+  let error : ℕ → ℝ := fun step => 1 / ((step : ℝ) + 1)
+  have herrorPos : ∀ step, 0 < error step := by
+    intro step
+    dsimp [error]
+    positivity
+  have hexists : ∀ step, ∃ profile : (quittingGame
+      (quittingDeletePlayerReward reward e)).BehaviorProfile,
+      (quittingGame (quittingDeletePlayerReward reward e)).IsεAsymptoticNash
+          (quittingTerminalPayoff (quittingDeletePlayerReward reward e))
+          (error step) profile ∧
+        ∀ who, |quittingTerminalPayoff (quittingDeletePlayerReward reward e)
+          profile who - target who| ≤ error step :=
+    fun step =>
+      exists_terminalNash_terminalPayoff_close_of_isUniformEquilibriumPayoff
+        (quittingDeletePlayerReward reward e) target htarget (herrorPos step)
+  choose profiles hnash hclose using hexists
+  let lifted : ℕ → (quittingGame reward).BehaviorProfile :=
+    fun step => quittingLiftDeletedProfile reward (· = e) (profiles step)
+  have hmem : ∀ step, quittingTerminalPayoff reward (lifted step) ∈
+      Set.Icc (fun _ : ι => -quittingRewardBound reward)
+        (fun _ : ι => quittingRewardBound reward) :=
+    fun step => quittingTerminalPayoff_mem_rewardCube reward (lifted step)
+  obtain ⟨payoff, -, subsequence, hsubsequence, hlimit⟩ :=
+    (isCompact_Icc : IsCompact
+      (Set.Icc (fun _ : ι => -quittingRewardBound reward)
+        (fun _ : ι => quittingRewardBound reward))).tendsto_subseq hmem
+  have herrorLimit : Filter.Tendsto error Filter.atTop (nhds 0) := by
+    simpa [error] using (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+  have hsubLimit : Filter.Tendsto (error ∘ subsequence) Filter.atTop (nhds 0) :=
+    herrorLimit.comp hsubsequence.tendsto_atTop
+  refine ⟨payoff, fun who => ?_, ?_, ?_⟩
+  · have hcoord : Filter.Tendsto
+        (fun step =>
+          quittingTerminalPayoff reward (lifted (subsequence step)) who.1)
+        Filter.atTop (nhds (payoff who.1)) :=
+      (tendsto_pi_nhds.mp hlimit) who.1
+    have hbound : ∀ step,
+        |quittingTerminalPayoff reward (lifted (subsequence step)) who.1 -
+          target who| ≤ (error ∘ subsequence) step := by
+      intro step
+      rw [quittingTerminalPayoff_liftDeletedProfile]
+      exact hclose (subsequence step) who
+    have hzero : |payoff who.1 - target who| ≤ 0 :=
+      le_of_tendsto_of_tendsto' ((hcoord.sub tendsto_const_nhds).abs)
+        hsubLimit hbound
+    have := abs_nonpos_iff.mp hzero
+    linarith [sub_eq_zero.mp this]
+  · have hcoordE : Filter.Tendsto
+        (fun step => quittingTerminalPayoff reward (lifted (subsequence step)) e)
+        Filter.atTop (nhds (payoff e)) := (tendsto_pi_nhds.mp hlimit) e
+    have hcoordD : Filter.Tendsto
+        (fun step => quittingTerminalPayoff reward (lifted (subsequence step)) d)
+        Filter.atTop (nhds (payoff d)) := (tendsto_pi_nhds.mp hlimit) d
+    refine tendsto_nhds_unique hcoordE (hcoordD.congr fun step => ?_)
+    exact quittingTerminalPayoff_congr_row htwin.row_eq
+      (lifted (subsequence step))
+  · refine quittingGame_isUniformEquilibriumPayoff_of_terminalNash_tendsto
+      (filter := Filter.atTop) reward payoff (error ∘ subsequence)
+      (fun step => lifted (subsequence step)) hsubLimit ?_ hlimit
+    refine Filter.Frequently.of_forall fun step => ?_
+    exact isεAsymptoticNash_liftDeletedProfile_of_twinMergeable htwin
+      (hnash (subsequence step))
+
+/-- **Twin merging.**  If two players are mergeable twins and the token game
+obtained by deleting one of them has a uniform-equilibrium payoff, then so
+does the original game. -/
 theorem exists_uniformEquilibriumPayoff_of_twinMergeable
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
     (htwin : QuittingTwinMergeable reward d e)
@@ -453,42 +585,13 @@ theorem exists_uniformEquilibriumPayoff_of_twinMergeable
         none payoff) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  rw [quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors]
-    at htoken ⊢
-  intro ε hε
-  obtain ⟨profile, hprofile⟩ := htoken ε hε
-  refine ⟨quittingLiftDeletedProfile reward e profile, fun who dev ↦ ?_⟩
-  by_cases hwho : who = e
-  · subst hwho
-    have hbest := quittingBestReplyValue_le_twin htwin profile
-    have hdev := le_quittingBestReplyValue reward
-      (quittingLiftDeletedProfile reward who profile) who dev
-    have htoken' := hprofile ⟨d, htwin.ne⟩
-    have hd : quittingBestReplyValue reward
-        (quittingLiftDeletedProfile reward who profile) d ≤
-        quittingTerminalPayoff reward
-          (quittingLiftDeletedProfile reward who profile) d + ε := by
-      rw [quittingBestReplyValue_liftDeletedProfile reward who profile
-          ⟨d, htwin.ne⟩,
-        quittingTerminalPayoff_liftDeletedProfile reward who profile
-          ⟨d, htwin.ne⟩]
-      exact quittingBestReplyValue_le _ _ _ fun deviation ↦ by
-        have := htoken' deviation
-        linarith
-    have hrow := quittingTerminalPayoff_congr_row htwin.row_eq
-      (quittingLiftDeletedProfile reward who profile)
-    linarith
-  · have hstep := quittingTerminalPayoff_update_liftDeletedProfile_eq_deleteDeviation
-      reward e profile ⟨who, hwho⟩ dev
-    have hbase := quittingTerminalPayoff_liftDeletedProfile reward e profile
-      ⟨who, hwho⟩
-    have := hprofile ⟨who, hwho⟩
-      (quittingDeletePlayerDeviation reward e ⟨who, hwho⟩ dev)
-    simp only at hstep hbase
-    rw [hstep, hbase]
-    exact this
+  obtain ⟨target, htarget⟩ := htoken
+  obtain ⟨payoff, -, -, huniform⟩ :=
+    exists_uniformEquilibriumPayoff_eq_on_survivors_of_twinMergeable htwin target
+      htarget
+  exact ⟨payoff, huniform⟩
 
-/-- **The contrapositive.**  If a table has indistinguishable twins and no
+/-- **The contrapositive.**  If a table has mergeable twins and no
 uniform-equilibrium payoff, then neither does its token game. -/
 theorem not_exists_uniformEquilibriumPayoff_token_of_twinMergeable
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
@@ -514,19 +617,56 @@ theorem not_twinMergeable_of_token_uniformEquilibriumPayoff
   fun htwin ↦
     not_exists_uniformEquilibriumPayoff_token_of_twinMergeable htwin hno htoken
 
-/-- The terminal exploitability gap descends to the token game across an
-indistinguishable twin pair. -/
-theorem exists_terminalExploitabilityGap_token_of_twinMergeable
+/-- **Exploitability descent across a twin pair.**  Every level strictly below
+a terminal exploitability gap of the original table is a terminal
+exploitability gap of the token table.  Survivors descend the original level
+exactly; the silent twin's gain is charged to the token twin `d` through
+`quittingBestReplyValue_le_twin`, and there the gain is only a supremum, so an
+attained witness is available at every strictly smaller level. -/
+theorem hasTerminalExploitabilityGap_token_of_twinMergeable
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
     (htwin : QuittingTwinMergeable reward d e)
-    {gap : ℝ} (hgap : 0 < gap)
-    (hexploit : HasTerminalExploitabilityGap reward gap) :
-    ∃ gap' : ℝ, 0 < gap' ∧
-      HasTerminalExploitabilityGap (quittingDeletePlayerReward reward e) gap' := by
-  rw [← not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap]
-  exact not_exists_uniformEquilibriumPayoff_token_of_twinMergeable htwin
-    (quittingGame_not_exists_uniformEquilibriumPayoff_of_terminalExploitabilityGap
-      reward hgap hexploit)
+    {gap smaller : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap)
+    (hsmaller : smaller < gap) :
+    HasTerminalExploitabilityGap (quittingDeletePlayerReward reward e)
+      smaller := by
+  intro profile
+  obtain ⟨player, deviation, hdeviation⟩ :=
+    hexploit (quittingLiftDeletedProfile reward (· = e) profile)
+  by_cases hp : player = e
+  · subst hp
+    haveI : Nonempty ((quittingGame
+        (quittingDeletePlayerReward reward player)).BehaviorStrategy
+          ⟨d, htwin.ne⟩) :=
+      ⟨quittingAlwaysContinueStrategy _ _⟩
+    have hbest := quittingBestReplyValue_le_twin htwin profile
+    have hdev := le_quittingBestReplyValue reward
+      (quittingLiftDeletedProfile reward (· = player) profile) player deviation
+    have hrow := quittingTerminalPayoff_congr_row htwin.row_eq
+      (quittingLiftDeletedProfile reward (· = player) profile)
+    have hvalue := quittingBestReplyValue_liftDeletedProfile reward
+      (· = player) profile ⟨d, htwin.ne⟩
+    have hon := quittingTerminalPayoff_liftDeletedProfile reward
+      (· = player) profile ⟨d, htwin.ne⟩
+    have hstrict :
+        quittingTerminalPayoff (quittingDeletePlayerReward reward player) profile
+            ⟨d, htwin.ne⟩ + smaller <
+          quittingBestReplyValue (quittingDeletePlayerReward reward player)
+            profile ⟨d, htwin.ne⟩ := by
+      dsimp only at hvalue hon
+      linarith
+    rw [quittingBestReplyValue] at hstrict
+    obtain ⟨witness, hwitness⟩ := exists_lt_of_lt_ciSup hstrict
+    exact ⟨⟨d, htwin.ne⟩, witness, hwitness.le⟩
+  · refine ⟨⟨player, hp⟩,
+      quittingDeletedDeviation reward (· = e) ⟨player, hp⟩ deviation, ?_⟩
+    have hon := quittingTerminalPayoff_liftDeletedProfile reward (· = e) profile
+      ⟨player, hp⟩
+    have hdev :=
+      quittingTerminalPayoff_update_liftDeletedProfile_eq_deleteDeviation
+        reward (· = e) profile ⟨player, hp⟩ deviation
+    simp only at hon hdev
+    linarith
 
 /-! ## Every token game arises from an indistinguishable twin pair -/
 
@@ -588,7 +728,7 @@ theorem quittingDeletePlayerReward_twinPullback {d e : ι} (hne : d ≠ e)
       Payoff (QuittingDeletedPlayer e)) :
     quittingDeletePlayerReward (twinPullback hne token) e = token := by
   funext T who
-  have himg : (quittingExtendDeletedCoalition e T).1.image (twinCollapse hne)
+  have himg : (quittingExtendDeletedCoalition (· = e) T).1.image (twinCollapse hne)
       = T.1 := by
     ext j
     simp only [quittingExtendDeletedCoalition, Finset.mem_image, Finset.mem_map,
@@ -598,7 +738,7 @@ theorem quittingDeletePlayerReward_twinPullback {d e : ι} (hne : d ≠ e)
       simpa using hk
     · intro hj
       exact ⟨j.1, ⟨j, hj, rfl⟩, twinCollapse_val hne j⟩
-  unfold quittingDeletePlayerReward twinPullback
+  unfold quittingDeletePlayerReward quittingDeleteReward twinPullback
   rw [twinCollapse_val]
   exact congrFun (congrArg token (Subtype.ext himg)) who
 
@@ -638,14 +778,31 @@ theorem not_indistinguishableTwins_of_token_uniformEquilibriumPayoff
   fun htwin ↦
     not_twinMergeable_of_token_uniformEquilibriumPayoff hno htoken htwin.toMergeable
 
-theorem exists_terminalExploitabilityGap_token_of_indistinguishableTwins
+theorem hasTerminalExploitabilityGap_token_of_indistinguishableTwins
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
     (htwin : QuittingIndistinguishableTwins reward d e)
-    {gap : ℝ} (hgap : 0 < gap)
-    (hexploit : HasTerminalExploitabilityGap reward gap) :
-    ∃ gap' : ℝ, 0 < gap' ∧
-      HasTerminalExploitabilityGap (quittingDeletePlayerReward reward e) gap' :=
-  exists_terminalExploitabilityGap_token_of_twinMergeable htwin.toMergeable hgap hexploit
+    {gap smaller : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap)
+    (hsmaller : smaller < gap) :
+    HasTerminalExploitabilityGap (quittingDeletePlayerReward reward e)
+      smaller :=
+  hasTerminalExploitabilityGap_token_of_twinMergeable htwin.toMergeable hexploit
+    hsmaller
+
+/-- **Twin merging with the token payoff preserved**, under full
+indistinguishability. -/
+theorem exists_uniformEquilibriumPayoff_eq_on_survivors_of_indistinguishableTwins
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {d e : ι}
+    (htwin : QuittingIndistinguishableTwins reward d e)
+    (target : Payoff (QuittingDeletedPlayer e))
+    (htarget :
+      (quittingGame (quittingDeletePlayerReward reward e)).IsUniformEquilibriumPayoff
+        none target) :
+    ∃ payoff : Payoff ι,
+      (∀ who : QuittingDeletedPlayer e, payoff who.1 = target who) ∧
+        payoff e = payoff d ∧
+          (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  exists_uniformEquilibriumPayoff_eq_on_survivors_of_twinMergeable
+    htwin.toMergeable target htarget
 
 omit [Fintype ι] in
 /-- A pullback along the collapse is in particular mergeable. -/

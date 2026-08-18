@@ -14,8 +14,10 @@ import MathUE.SurvivalProduct
 Fix a sequence of product roots along the unique live path and one player.
 The player's one-step Bellman operator compares quitting now with continuing
 now and using a supplied value at the next live stage.  This file records the
-prescribed residual, the gap to a Bellman cap, and their finite weighted
-telescope.
+prescribed residual, the two one-sided Bellman conditions and the exact
+recursion between them, the gap to a Bellman cap, and their finite weighted
+telescope.  The telescope bounds a cap from above, so it consumes only the
+subsolution half of the recursion.
 
 The finite statements make no tail-contraction claim.  In particular, a
 zero opponent-survival factor before the starting time is never used to infer
@@ -53,6 +55,24 @@ def quittingBellmanCapGap
     (prescribed cap : ℕ → ℝ) (time : ℕ) : ℝ :=
   cap time - prescribed time
 
+/-- A supplied value sequence dominates its own one-step pure-action Bellman
+value at every live stage.  This is the Snell supersolution condition for the
+live path; compare
+`Math.ChargedPathBudget.ChargedRelation.IsSupersolution`. -/
+def IsQuittingLiveBellmanSupersolution
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (value : ℕ → ℝ) : Prop :=
+  ∀ time, quittingLiveBellmanValue reward roots who value time ≤ value time
+
+/-- A supplied value sequence is dominated by its own one-step pure-action
+Bellman value at every live stage. -/
+def IsQuittingLiveBellmanSubsolution
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (value : ℕ → ℝ) : Prop :=
+  ∀ time, value time ≤ quittingLiveBellmanValue reward roots who value time
+
 /-- A supplied value sequence solves the pure-action Bellman maximum
 recursion along the live path.  Its terminal selection is deliberately a
 separate issue. -/
@@ -61,6 +81,33 @@ def IsQuittingLiveBellmanCap
     (roots : ℕ → ι → PMF Bool) (who : ι)
     (cap : ℕ → ℝ) : Prop :=
   ∀ time, cap time = quittingLiveBellmanValue reward roots who cap time
+
+/-- A Bellman cap is in particular a Bellman supersolution. -/
+theorem IsQuittingLiveBellmanCap.supersolution
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {roots : ℕ → ι → PMF Bool} {who : ι} {cap : ℕ → ℝ}
+    (hcap : IsQuittingLiveBellmanCap reward roots who cap) :
+    IsQuittingLiveBellmanSupersolution reward roots who cap :=
+  fun time => (hcap time).ge
+
+/-- A Bellman cap is in particular a Bellman subsolution. -/
+theorem IsQuittingLiveBellmanCap.subsolution
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {roots : ℕ → ι → PMF Bool} {who : ι} {cap : ℕ → ℝ}
+    (hcap : IsQuittingLiveBellmanCap reward roots who cap) :
+    IsQuittingLiveBellmanSubsolution reward roots who cap :=
+  fun time => (hcap time).le
+
+/-- Solving the Bellman recursion is exactly the conjunction of the two
+one-sided conditions. -/
+theorem isQuittingLiveBellmanCap_iff_supersolution_and_subsolution
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (cap : ℕ → ℝ) :
+    IsQuittingLiveBellmanCap reward roots who cap ↔
+      IsQuittingLiveBellmanSupersolution reward roots who cap ∧
+        IsQuittingLiveBellmanSubsolution reward roots who cap := by
+  refine ⟨fun hcap => ⟨hcap.supersolution, hcap.subsolution⟩, fun hcap time => ?_⟩
+  exact le_antisymm (hcap.2 time) (hcap.1 time)
 
 /-- The prescribed values are obtained by using the supplied product root
 at the current stage and the next prescribed value after all continue. -/
@@ -154,12 +201,13 @@ theorem quittingPrescribedOneStepResidual_nonneg
       reward roots who prescribed time)
 
 /-- One Bellman step: the cap gap is at most the prescribed local residual
-plus opponent survival times the next cap gap. -/
+plus opponent survival times the next cap gap.  Only the subsolution half of
+the Bellman recursion enters, since the cap is being bounded from above. -/
 theorem quittingBellmanCapGap_le_residual_add
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
     (prescribed cap : ℕ → ℝ)
-    (hcap : IsQuittingLiveBellmanCap reward roots who cap)
+    (hcap : IsQuittingLiveBellmanSubsolution reward roots who cap)
     (time : ℕ)
     (hnext : 0 ≤ quittingBellmanCapGap prescribed cap (time + 1)) :
     quittingBellmanCapGap prescribed cap time ≤
@@ -189,16 +237,19 @@ theorem quittingBellmanCapGap_le_residual_add
     apply max_le
     · linarith [le_max_left quitValue continueValue]
     · linarith [le_max_right quitValue continueValue]
-  unfold quittingBellmanCapGap quittingPrescribedOneStepResidual
-  rw [hcap time]
-  unfold quittingLiveBellmanValue
-  change
+  have hsub := hcap time
+  unfold quittingLiveBellmanValue at hsub
+  change cap time ≤
     max quitValue
-          (quittingFixedOpponentsContinueReward reward roots who time +
-            continueMass * cap (time + 1)) - prescribed time ≤
+      (quittingFixedOpponentsContinueReward reward roots who time +
+        continueMass * cap (time + 1)) at hsub
+  rw [hcontinue] at hsub
+  unfold quittingBellmanCapGap quittingPrescribedOneStepResidual
+    quittingLiveBellmanValue
+  change
+    cap time - prescribed time ≤
       (max quitValue continueValue - prescribed time) +
         continueMass * nextGap
-  rw [hcontinue]
   linarith
 
 /-! ## Finite weighted iteration -/
@@ -276,7 +327,7 @@ theorem quittingBellmanCapGap_le_sum_residual_add_tail
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
     (prescribed cap : ℕ → ℝ)
-    (hcap : IsQuittingLiveBellmanCap reward roots who cap)
+    (hcap : IsQuittingLiveBellmanSubsolution reward roots who cap)
     (hgap : ∀ time, 0 ≤ quittingBellmanCapGap prescribed cap time)
     (start fuel : ℕ) :
     quittingBellmanCapGap prescribed cap start ≤
@@ -351,7 +402,7 @@ theorem quittingBellmanCapGap_le_hazardScaled_add_tail
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
     (prescribed cap : ℕ → ℝ)
-    (hcap : IsQuittingLiveBellmanCap reward roots who cap)
+    (hcap : IsQuittingLiveBellmanSubsolution reward roots who cap)
     (hgap : ∀ time, 0 ≤ quittingBellmanCapGap prescribed cap time)
     (η : ℝ)
     (hresidual : ∀ time,
@@ -415,7 +466,7 @@ theorem quittingBellmanCapGap_le_of_hazardScaled_of_tail_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
     (prescribed cap : ℕ → ℝ)
-    (hcap : IsQuittingLiveBellmanCap reward roots who cap)
+    (hcap : IsQuittingLiveBellmanSubsolution reward roots who cap)
     (hgap : ∀ time, 0 ≤ quittingBellmanCapGap prescribed cap time)
     (η : ℝ)
     (hresidual : ∀ time,
@@ -438,7 +489,7 @@ theorem quittingBellmanCapGap_le_hazardScaled_of_survival_tendsto_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
     (prescribed cap : ℕ → ℝ)
-    (hcap : IsQuittingLiveBellmanCap reward roots who cap)
+    (hcap : IsQuittingLiveBellmanSubsolution reward roots who cap)
     (hgap : ∀ time, 0 ≤ quittingBellmanCapGap prescribed cap time)
     (η bound : ℝ)
     (hresidual : ∀ time,

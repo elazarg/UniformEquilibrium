@@ -187,7 +187,7 @@ theorem candidate_isUniformEquilibriumPayoff {q : ℝ} (hq : q ∈ Set.Ioo (0 : 
   rw [← stepValue_zero_eq_candidatePayoff hroot]
   refine isUniformEquilibriumPayoff_constantStep (c' := 1)
     (isCirculantPairTable_colliderReward 1 (-2) candidateMargin candidateMargin_zero)
-    (by decide) (by norm_num) hq.1 hq.2 hanchor ?_ ?_ ?_ ?_
+    (by decide) (by norm_num) hq.1.le hq.2 hanchor ?_ ?_ ?_ ?_
   · rw [colliderJoin_four]
   · rw [show (2 : ZMod 5) * 4 = 3 from by decide,
       show (3 : ZMod 5) * 4 = 2 from by decide,

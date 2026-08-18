@@ -12,6 +12,7 @@ import Mathlib.Probability.ProbabilityMassFunction.Constructions
 import MathUE.ProbabilityMassFunction
 import MathUE.Reindex
 import MathUE.PMFProduct.Conditioning
+import MathUE.Probability
 
 namespace Math
 namespace PMFProduct
@@ -350,6 +351,23 @@ theorem pmfPi_bind_update_pure
       pmfPi (Function.update σ j (PMF.pure x)) := by
   have h := pmfPi_bind_update_map σ j (Function.const _ x)
   simp only [PMF.map_const] at h; exact h
+
+/-- Integrating against a product PMF with two coordinates replaced by point
+    masses is integrating the same overwrite against the original product.
+    Iterating `pmfPi_bind_update_pure`; the two coordinates need not be
+    distinct, in which case the outer overwrite wins on both sides. -/
+theorem expect_pmfPi_update_update_pure
+    (σ : ∀ i, PMF (A i)) (outer inner : ι)
+    (outerValue : A outer) (innerValue : A inner)
+    (f : (∀ i, A i) → ℝ) :
+    Math.Probability.expect
+        (pmfPi (Function.update (Function.update σ inner (PMF.pure innerValue))
+          outer (PMF.pure outerValue))) f =
+      Math.Probability.expect (pmfPi σ)
+        (fun a => f (Function.update (Function.update a inner innerValue)
+          outer outerValue)) := by
+  rw [← pmfPi_bind_update_pure, ← pmfPi_bind_update_pure]
+  simp only [Math.Probability.expect_bind, Math.Probability.expect_pure]
 
 end UpdateLemmas
 

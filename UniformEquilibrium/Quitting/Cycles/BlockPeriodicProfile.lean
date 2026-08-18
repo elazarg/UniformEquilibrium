@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.Finset.ProdLtOne
+import MathUE.PMFProduct.CoalitionMass
 import UniformEquilibrium.Quitting.Bellman.Finite.ActiveSetSupport
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
@@ -38,8 +38,9 @@ Three systems are recorded.
   *same* stage and `gammaValue` is its continue branch.  The quit branch is
   `r_i({i})` only when no opponent of `i` moves at phase `k`.
 * The **producer** `IsQuittingBlockCertificate`: a bounded, periodic, exactly
-  Nash block system with one absorbing phase and nonnegative solo rewards makes
-  its displayed origin row a uniform-equilibrium payoff.
+  Nash block system with one absorbing phase, in which every player either sees
+  its opponents absorb over one turn or has a nonnegative solo reward, makes its
+  displayed origin row a uniform-equilibrium payoff.
 
 Refusal against a block profile is the on-path value of the same schedule with
 the refuser's own hazards zeroed, so the deviator's cap needs only the
@@ -59,8 +60,6 @@ contraction.
 * `isQuittingCyclicResponseSolution_of_isQuittingBlockResponseSolution`
 * `quittingPeriodicWindowRefusalValue_quittingBlockCycle` — refusal is the
   on-path value of the schedule with the refuser's own hazards zeroed
-* `prod_continueMass_lt_one_of_pos` — one positive hazard makes the turn
-  absorbing
 * `isUniformEquilibriumPayoff_of_isQuittingBlockCertificate`
 -/
 
@@ -269,29 +268,6 @@ theorem eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue_of_absorbing
   rw [prod_quittingStationaryContinueMass_quittingBlockCycle]
   exact habsorb
 
-omit [DecidableEq ι] in
-/-- A phase carrying a positive hazard survives with probability below one. -/
-theorem continueMass_lt_one_of_pos {x : ι → ℝ} (h0 : ∀ i, 0 ≤ x i)
-    (h1 : ∀ i, x i ≤ 1) {i₀ : ι} (hpos : 0 < x i₀) : continueMass x < 1 := by
-  refine Math.Finset.prod_lt_one_of_mem Finset.univ (fun i ↦ 1 - x i) i₀
-    (Finset.mem_univ i₀) (fun i _ _ ↦ by linarith [h1 i]) (fun i _ _ ↦ by linarith [h0 i])
-    (by linarith)
-
-omit [DecidableEq ι] in
-/-- **Some block is nonempty.**  One positive hazard anywhere in the schedule
-makes the block profile fail to survive a whole turn with positive
-probability. -/
-theorem prod_continueMass_lt_one_of_pos (h0 : ∀ k i, 0 ≤ hazard k i)
-    (h1 : ∀ k i, hazard k i ≤ 1) {k₀ : Fin (m + 1)} {i₀ : ι}
-    (hpos : 0 < hazard k₀ i₀) :
-    (∏ k : Fin (m + 1), continueMass (hazard k)) < 1 :=
-  Math.Finset.prod_lt_one_of_mem Finset.univ (fun k ↦ continueMass (hazard k)) k₀
-    (Finset.mem_univ k₀)
-    (fun k _ _ ↦ Finset.prod_nonneg fun i _ ↦ by linarith [h1 k i])
-    (fun k _ _ ↦ Finset.prod_le_one (fun i _ ↦ by linarith [h1 k i])
-      (fun i _ ↦ by linarith [h0 k i]))
-    (continueMass_lt_one_of_pos (h0 k₀) (h1 k₀) hpos)
-
 /-! ## The refusal identity in hazard form -/
 
 /-- The hazard schedule with `who`'s own hazards set to zero. -/
@@ -344,6 +320,28 @@ theorem quittingCyclicDeletedCycle_quittingBlockCycle
       (quittingBlockDeletedHazard_le_one h1 who k player)
       (by rw [quittingHazardCoin_true_toReal, quittingHazardCoin_true_toReal]
           simp [quittingBlockDeletedHazard, Function.update_of_ne hp])
+
+/-- **Opponent survival of a block phase in hazard form.**  The probability
+that every opponent of `who` continues through one phase is the continuation
+mass of that phase's hazard vector with `who`'s own hazard zeroed. -/
+theorem quittingStationaryFixedOpponentsContinueMass_quittingBlockCycle
+    (h0 : ∀ k i, 0 ≤ hazard k i) (h1 : ∀ k i, hazard k i ≤ 1) (who : ι)
+    (k : Fin (m + 1)) :
+    quittingStationaryFixedOpponentsContinueMass
+        (quittingBlockCycle hazard h0 h1 k) who =
+      continueMass (quittingBlockDeletedHazard hazard who k) := by
+  rw [← quittingStationaryContinueMass_quittingCyclicDeletedCycle,
+    quittingCyclicDeletedCycle_quittingBlockCycle h0 h1,
+    quittingStationaryContinueMass_quittingBlockCycle]
+
+/-- **One-turn opponent absorption in hazard form.** -/
+theorem prod_quittingStationaryFixedOpponentsContinueMass_quittingBlockCycle
+    (h0 : ∀ k i, 0 ≤ hazard k i) (h1 : ∀ k i, hazard k i ≤ 1) (who : ι) :
+    (∏ k : Fin (m + 1), quittingStationaryFixedOpponentsContinueMass
+        (quittingBlockCycle hazard h0 h1 k) who) =
+      ∏ k : Fin (m + 1), continueMass (quittingBlockDeletedHazard hazard who k) :=
+  Finset.prod_congr rfl fun k _ ↦
+    quittingStationaryFixedOpponentsContinueMass_quittingBlockCycle h0 h1 who k
 
 /-- **The refusal identity for block profiles.**  Never quitting is worth
 exactly the on-path value of the same schedule with the refuser's own hazards
@@ -450,8 +448,8 @@ variable (reward)
 
 /-- **The finite obligations of a block profile.**  The value recursion, the
 exact one-stage complementarity of every hazard against its coalition-form
-gain, periodicity, boundedness, one absorbing phase, and nonnegative solo
-rewards. -/
+gain, periodicity, boundedness, one absorbing phase, and the admissibility
+disjunction at every coordinate. -/
 structure IsQuittingBlockCertificate
     (hazard : Fin (m + 1) → ι → ℝ) (U : Fin (m + 2) → Payoff ι) : Prop where
   /-- Every hazard is a probability. -/
@@ -478,8 +476,13 @@ structure IsQuittingBlockCertificate
         gainValue (weightOfReward reward) (hazard k) who (U (Fin.succ k) who)
   /-- Some phase absorbs with positive probability. -/
   absorb : ∃ k : Fin (m + 1), continueMass (hazard k) < 1
-  /-- Every player's own solo reward is nonnegative. -/
-  solo : ∀ who : ι, 0 ≤ reward (quittingSingletonTerminal who) who
+  /-- Every player either sees its own opponents absorb over one turn, or has a
+  nonnegative solo reward.  The first branch reads the schedule with the
+  player's own hazards zeroed. -/
+  admissible : ∀ who : ι,
+    (∏ k : Fin (m + 1),
+        continueMass (quittingBlockDeletedHazard hazard who k)) < 1 ∨
+      0 ≤ reward (quittingSingletonTerminal who) who
 
 variable {reward}
 
@@ -498,9 +501,12 @@ theorem isQuittingBlockCertificate_of_root
     (hnash : ∀ k : Fin (m + 1), IsεQuittingRootEndpointNash reward (U (Fin.succ k)) 0
       (quittingBlockCycle hazard h0 h1 k))
     (habsorb : ∃ k : Fin (m + 1), continueMass (hazard k) < 1)
-    (hsolo : ∀ who : ι, 0 ≤ reward (quittingSingletonTerminal who) who) :
+    (hadmissible : ∀ who : ι,
+      (∏ k : Fin (m + 1),
+          continueMass (quittingBlockDeletedHazard hazard who k)) < 1 ∨
+        0 ≤ reward (quittingSingletonTerminal who) who) :
     IsQuittingBlockCertificate reward hazard U := by
-  refine ⟨h0, h1, hbox, hlast, ?_, ?_, habsorb, hsolo⟩
+  refine ⟨h0, h1, hbox, hlast, ?_, ?_, habsorb, hadmissible⟩
   · intro k who
     have hk := congrFun (hsucc k) who
     rwa [quittingRootSuccessorPayoff_eq_coalitionSum,
@@ -546,6 +552,31 @@ theorem isQuittingCyclicContinuationBlock_of_isQuittingBlockCertificate
       quittingStationaryContinueMass_quittingBlockCycle]
     linarith
 
+omit [DecidableEq ι] in
+/-- The cycle of rows played by a block profile is the block cycle itself. -/
+theorem quittingCyclicContinuationBlockCycle_quittingBlockPath
+    (h0 : ∀ k i, 0 ≤ hazard k i) (h1 : ∀ k i, hazard k i ≤ 1)
+    (U : Fin (m + 2) → Payoff ι) :
+    quittingCyclicContinuationBlockCycle m (quittingBlockPath h0 h1 U) =
+      quittingBlockCycle hazard h0 h1 :=
+  funext fun k ↦ quittingRootOfSimplex_quittingBlockPath h0 h1 U k
+
+/-- The admissibility branch of a certified block profile, read on the cycle
+the profile actually plays. -/
+theorem isQuittingCycleAdmissible_of_isQuittingBlockCertificate
+    {U : Fin (m + 2) → Payoff ι}
+    (hcert : IsQuittingBlockCertificate reward hazard U) :
+    IsQuittingCycleAdmissible reward
+      (quittingCyclicContinuationBlockCycle m
+        (quittingBlockPath hcert.hazard_nonneg hcert.hazard_le_one U)) := by
+  intro who
+  rw [quittingCyclicContinuationBlockCycle_quittingBlockPath]
+  rcases hcert.admissible who with hlt | hsolo
+  · refine Or.inl ?_
+    rw [prod_quittingStationaryFixedOpponentsContinueMass_quittingBlockCycle]
+    exact hlt
+  · exact Or.inr hsolo
+
 /-- **A certified block profile realizes its origin row as a
 uniform-equilibrium payoff.**  The deviation class is all behavior strategies,
 not stopping times. -/
@@ -556,6 +587,6 @@ theorem isUniformEquilibriumPayoff_of_isQuittingBlockCertificate
   isUniformEquilibriumPayoff_terminal_of_admissible_quittingCyclicContinuationBlock
     reward (U 0) m (quittingBlockPath hcert.hazard_nonneg hcert.hazard_le_one U)
     (isQuittingCyclicContinuationBlock_of_isQuittingBlockCertificate hcert)
-    (fun who ↦ Or.inr (hcert.solo who))
+    (isQuittingCycleAdmissible_of_isQuittingBlockCertificate hcert)
 
 end GameTheory

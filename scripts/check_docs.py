@@ -69,11 +69,11 @@ SOURCE_REFERENCE_RE = re.compile(
 )
 NAMED_SOURCE_REFERENCE_RE = re.compile(
     r"`([^\s`\n]+)`\s*"
-    r"\(`([A-Za-z0-9_./+-]+\.lean):(\d+)(?:-(\d+))?`\)"
+    r"\(`([A-Za-z0-9_./+-]+\.lean)(?::\d+(?:-\d+)?)?`\)"
 )
 TABLE_SOURCE_REFERENCE_RE = re.compile(
     r"^\|\s*[A-Z][A-Z0-9]*\s*\|\s*`([^\s`\n]+)`\s*\|\s*"
-    r"`([A-Za-z0-9_./+-]+\.lean):(\d+)(?:-(\d+))?`\s*\|",
+    r"`([A-Za-z0-9_./+-]+\.lean)(?::\d+(?:-\d+)?)?`\s*\|",
     re.MULTILINE,
 )
 COMMIT_HASH_RE = re.compile(
@@ -466,22 +466,26 @@ def source_reference_issues(
     text: str,
     root: pathlib.Path = ROOT,
 ) -> list[str]:
-    """Validate exact root-relative Lean source references and line bounds."""
+    """Validate root-relative Lean source references, which carry no line numbers.
+
+    A line number goes stale whenever anything is inserted above the cited
+    declaration, so it reports a spurious failure for an untouched declaration
+    and has to be repinned by hand.  The declaration name is the stable
+    locator, and `named_source_reference_issues` resolves it.
+    """
     issues: list[str] = []
     for raw_path, first_text, last_text in SOURCE_REFERENCE_RE.findall(text):
         source = root / raw_path
         if not source.is_file():
             issues.append(f"missing source reference {raw_path}")
             continue
-        line_count = len(source.read_text(encoding="utf-8").splitlines())
-        if not first_text:
-            continue
-        first = int(first_text)
-        last = int(last_text) if last_text else first
-        if first < 1 or last < first or last > line_count:
+        if first_text:
+            locator = raw_path + ":" + first_text
+            if last_text:
+                locator += f"-{last_text}"
             issues.append(
-                f"out-of-range source reference {raw_path}:{first_text}"
-                + (f"-{last_text}" if last_text else "")
+                f"line-pinned source reference {locator}; "
+                "cite the declaration name instead"
             )
     return issues
 
@@ -490,27 +494,24 @@ def named_source_reference_issues(
     text: str,
     root: pathlib.Path = ROOT,
 ) -> list[str]:
-    """Check that a named source locator points at a line containing its name."""
+    """Check that a named source locator names a file containing that name.
+
+    Resolution is by name rather than by position, so moving a declaration
+    within its file leaves the reference correct.  A missing path is reported
+    once by `source_reference_issues`, so it is skipped here.
+    """
     issues: list[str] = []
     references = (
         NAMED_SOURCE_REFERENCE_RE.findall(text)
         + TABLE_SOURCE_REFERENCE_RE.findall(text)
     )
-    for name, raw_path, first_text, last_text in references:
+    for name, raw_path in references:
         source = root / raw_path
         if not source.is_file():
             continue
-        lines = source.read_text(encoding="utf-8").splitlines()
-        first = int(first_text)
-        last = int(last_text) if last_text else first
-        if first < 1 or last < first or last > len(lines):
-            continue
         terminal_name = name.rsplit(".", 1)[-1]
-        if terminal_name not in "\n".join(lines[first - 1 : last]):
-            locator = f"{raw_path}:{first_text}"
-            if last_text:
-                locator += f"-{last_text}"
-            issues.append(f"named source reference {name} not found at {locator}")
+        if terminal_name not in source.read_text(encoding="utf-8"):
+            issues.append(f"named source reference {name} not found in {raw_path}")
     return issues
 
 

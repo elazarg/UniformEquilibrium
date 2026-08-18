@@ -28,39 +28,58 @@ class TimelessDocumentTests(unittest.TestCase):
             )
             self.assertEqual(
                 named_source_reference_issues(
-                    "`second` (`Owner.lean:2`)\n"
-                    "| A1 | `first` | `Owner.lean:1` | description |",
+                    "`second` (`Owner.lean`)\n"
+                    "| A1 | `first` | `Owner.lean` | description |",
                     root,
                 ),
                 [],
             )
             self.assertEqual(
                 named_source_reference_issues(
-                    "`first` (`Owner.lean:2`)",
+                    "`absent` (`Owner.lean`)",
                     root,
                 ),
-                ["named source reference first not found at Owner.lean:2"],
+                ["named source reference absent not found in Owner.lean"],
             )
+
+    def test_named_source_reference_survives_a_move_within_its_file(self) -> None:
+        """Resolution is by name, so inserting lines above a cited declaration
+        is not a documentation failure."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            owner = root / "Owner.lean"
+            reference = "`first` (`Owner.lean`)"
+            owner.write_text("theorem first := True\n", encoding="utf-8")
+            self.assertEqual(named_source_reference_issues(reference, root), [])
+            owner.write_text(
+                "-- padding\n" * 40 + "theorem first := True\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(named_source_reference_issues(reference, root), [])
 
     def test_source_reference_validation(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)
             (root / "Owner.lean").write_text("one\ntwo\nthree\n", encoding="utf-8")
+            self.assertEqual(source_reference_issues("`Owner.lean`", root), [])
             self.assertEqual(
-                source_reference_issues(
-                    "`Owner.lean` and `Owner.lean:2` and `Owner.lean:1-3`",
-                    root,
-                ),
-                [],
+                source_reference_issues("`Missing.lean`", root),
+                ["missing source reference Missing.lean"],
             )
+
+    def test_line_pinned_source_reference_is_rejected(self) -> None:
+        """A line number goes stale on any insertion above the declaration, so
+        a reference may not carry one even while the line is still correct."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "Owner.lean").write_text("one\ntwo\nthree\n", encoding="utf-8")
             self.assertEqual(
-                source_reference_issues(
-                    "`Missing.lean` and `Owner.lean:2-4`",
-                    root,
-                ),
+                source_reference_issues("`Owner.lean:2` and `Owner.lean:1-3`", root),
                 [
-                    "missing source reference Missing.lean",
-                    "out-of-range source reference Owner.lean:2-4",
+                    "line-pinned source reference Owner.lean:2; "
+                    "cite the declaration name instead",
+                    "line-pinned source reference Owner.lean:1-3; "
+                    "cite the declaration name instead",
                 ],
             )
 

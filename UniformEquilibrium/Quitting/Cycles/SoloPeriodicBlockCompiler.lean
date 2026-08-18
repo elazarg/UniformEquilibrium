@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
+import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 
 /-!
 # A finite certificate for single-quitter periodic profiles
@@ -26,14 +27,15 @@ The obligations are, for a displayed value path `value` with `n + 2` rows:
 * the join caps `hjoin`, saying no spectator gains by quitting alongside the
   scheduled quitter;
 * periodicity `hlast`, boundedness `hbox`, one phase of positive absorption
-  `habsorb`, and nonnegative solo rewards `hsolo`.
+  `habsorb`, and the admissibility disjunction at every coordinate: each player
+  either sees its own opponents absorb over one turn or has a nonnegative solo
+  reward.
 
 Only singleton rows and two-element collision rows of `reward` appear, so the
 certificate says nothing about coalitions of size three or more.
 
 ## Main definitions
 
-* `soloPeriodicPhase` — the stage index reduced modulo the period
 * `soloPeriodicBlock` — the Nash--Bellman path of the profile
 
 ## Main results
@@ -51,27 +53,19 @@ open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {n : ℕ}
 
-/-- The phase of a displayed stage: the stage index reduced modulo the period.
-The extra terminal stage therefore repeats the origin's root, which is the
-component the cyclic block ignores. -/
-def soloPeriodicPhase (n : ℕ) (stage : Fin (n + 2)) : Fin (n + 1) :=
-  ⟨stage.1 % (n + 1), Nat.mod_lt _ n.succ_pos⟩
-
-@[simp] theorem soloPeriodicPhase_castSucc (k : Fin (n + 1)) :
-    soloPeriodicPhase n (Fin.castSucc k) = k :=
-  Fin.ext (Nat.mod_eq_of_lt k.2)
-
 /-- The Nash--Bellman path of a single-quitter periodic profile: stage `stage`
-displays `value stage` together with the root in which `w (soloPeriodicPhase n
-stage)` randomizes by its prescribed law and everyone else continues. -/
+displays `value stage` together with the root in which
+`w (quittingPeriodicStage n stage)` randomizes by its prescribed law and
+everyone else continues.  The extra terminal stage repeats the origin's root,
+which is the component the cyclic block ignores. -/
 def soloPeriodicBlock (w : Fin (n + 1) → ι) (marginal : Fin (n + 1) → PMF Bool)
     (value : Fin (n + 2) → Payoff ι) :
     QuittingFiniteNashBellmanPath ι (n + 1) :=
   fun stage ↦
     (value stage,
       fun who ↦ stdSimplexEquiv
-        (quittingSoloMixedRoot (w (soloPeriodicPhase n stage))
-          (marginal (soloPeriodicPhase n stage)) who))
+        (quittingSoloMixedRoot (w (quittingPeriodicStage n stage))
+          (marginal (quittingPeriodicStage n stage)) who))
 
 variable {w : Fin (n + 1) → ι} {marginal : Fin (n + 1) → PMF Bool}
   {value : Fin (n + 2) → Payoff ι}
@@ -87,9 +81,62 @@ theorem quittingRootOfSimplex_soloPeriodicBlock (k : Fin (n + 1)) :
   funext who
   show (stdSimplexEquiv (α := Bool)).symm
       (stdSimplexEquiv (quittingSoloMixedRoot
-        (w (soloPeriodicPhase n (Fin.castSucc k)))
-        (marginal (soloPeriodicPhase n (Fin.castSucc k))) who)) = _
-  rw [soloPeriodicPhase_castSucc, (stdSimplexEquiv (α := Bool)).symm_apply_apply]
+        (w (quittingPeriodicStage n (Fin.castSucc k)))
+        (marginal (quittingPeriodicStage n (Fin.castSucc k))) who)) = _
+  rw [quittingPeriodicStage_castSucc, (stdSimplexEquiv (α := Bool)).symm_apply_apply]
+
+/-- The cycle of rows played by a single-quitter periodic profile. -/
+theorem quittingCyclicContinuationBlockCycle_soloPeriodicBlock :
+    quittingCyclicContinuationBlockCycle n (soloPeriodicBlock w marginal value) =
+      fun k ↦ quittingSoloMixedRoot (w k) (marginal k) :=
+  funext quittingRootOfSimplex_soloPeriodicBlock
+
+/-! ## Opponent survival along the profile -/
+
+omit [Fintype ι] in
+/-- Forcing a spectator to continue leaves a solo mixed root unchanged: the
+spectator was already continuing. -/
+theorem update_quittingSoloMixedRoot_of_ne {owner who : ι} (hne : who ≠ owner)
+    (marginal : PMF Bool) :
+    Function.update (quittingSoloMixedRoot owner marginal) who (PMF.pure false) =
+      quittingSoloMixedRoot owner marginal := by
+  funext player
+  by_cases hp : player = who
+  · subst hp
+    rw [Function.update_self, quittingSoloMixedRoot_of_ne hne]
+  · rw [Function.update_of_ne hp]
+
+/-- **Opponent survival at a solo mixed root, seen by a spectator.**  A player
+other than the owner faces exactly the owner's Continue probability. -/
+theorem quittingStationaryFixedOpponentsContinueMass_soloMixedRoot_of_ne
+    {owner who : ι} (hne : who ≠ owner) (marginal : PMF Bool) :
+    quittingStationaryFixedOpponentsContinueMass
+        (quittingSoloMixedRoot owner marginal) who = (marginal false).toReal := by
+  show quittingStationaryContinueMass
+      (Function.update (quittingSoloMixedRoot owner marginal) who
+        (PMF.pure false)) = _
+  rw [update_quittingSoloMixedRoot_of_ne hne,
+    quittingStationaryContinueMass_soloMixedRoot]
+
+/-- **One spectator phase with positive quit probability clears the deviation
+mismatch.**  If some phase quits with positive probability and is scheduled to
+a player other than `who`, then `who`'s opponents absorb over one turn, so the
+mismatch at `who` vanishes whatever the sign of its solo reward. -/
+theorem isQuittingCycleZeroDeviationMismatchAt_soloMixedRoot
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin (n + 1) → ι) (marginal : Fin (n + 1) → PMF Bool) {who : ι}
+    {phase : Fin (n + 1)} (hne : who ≠ w phase)
+    (hpos : 0 < (marginal phase true).toReal) :
+    IsQuittingCycleZeroDeviationMismatchAt reward
+      (fun k ↦ quittingSoloMixedRoot (w k) (marginal k)) who := by
+  refine Or.inl ?_
+  refine Math.Finset.prod_lt_one_of_mem Finset.univ _ phase (Finset.mem_univ phase)
+    (fun k _ _ ↦ quittingStationaryFixedOpponentsContinueMass_nonneg _ who)
+    (fun k _ _ ↦ quittingStationaryContinueMass_le_one _) ?_
+  rw [quittingStationaryFixedOpponentsContinueMass_soloMixedRoot_of_ne hne]
+  have hsum : (marginal phase false).toReal + (marginal phase true).toReal = 1 := by
+    simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one (marginal phase)
+  linarith
 
 /-! ## The finite obligations -/
 
@@ -125,8 +172,11 @@ structure IsSoloPeriodicCertificate
         (marginal k false).toReal * value (Fin.succ k) who
   /-- Some phase absorbs with positive probability. -/
   absorb : ∃ k : Fin (n + 1), 0 < (marginal k true).toReal
-  /-- Every player's own solo reward is nonnegative. -/
-  solo : ∀ who : ι, 0 ≤ reward (quittingSingletonTerminal who) who
+  /-- Every player either sees its own opponents absorb over one turn, or has a
+  nonnegative solo reward.  A player scheduled at no absorbing phase gets the
+  first branch from `isQuittingCycleZeroDeviationMismatchAt_soloMixedRoot`. -/
+  admissible : ∀ who : ι, IsQuittingCycleZeroDeviationMismatchAt reward
+    (fun k ↦ quittingSoloMixedRoot (w k) (marginal k)) who
 
 variable {reward}
 
@@ -165,12 +215,14 @@ theorem isQuittingCyclicContinuationBlock_soloPeriodicBlock
       quittingRootAbsorptionMass_soloMixedRoot]
     exact hk
 
-/-- Nonnegative solo rewards make the profile's cycle admissible. -/
+/-- The admissibility branch of a certified profile, read on the cycle the
+profile actually plays. -/
 theorem isQuittingCycleAdmissible_soloPeriodicBlock
     (hcert : IsSoloPeriodicCertificate reward w marginal value) :
     IsQuittingCycleAdmissible reward
-      (quittingCyclicContinuationBlockCycle n (soloPeriodicBlock w marginal value)) :=
-  fun who ↦ Or.inr (hcert.solo who)
+      (quittingCyclicContinuationBlockCycle n (soloPeriodicBlock w marginal value)) := by
+  rw [quittingCyclicContinuationBlockCycle_soloPeriodicBlock]
+  exact hcert.admissible
 
 /-- **A certified single-quitter periodic profile realizes its origin row as a
 uniform-equilibrium payoff.**  The deviation class is all behavior strategies,

@@ -31,10 +31,17 @@ next phase's value, and since every other player continues with certainty at
 that phase no hazard enters the comparison.  It is the equality that the
 fixed-hazard exactness condition `IsExactAnchoredSoloPeriodic`
 (`UniformEquilibrium/Quitting/Cycles/AnchoredSoloPeriodic.lean`) yields at each
-phase, through `anchor_of_isExactAnchoredSoloPeriodic`.  Patience is not the
-spectator half of that condition: fixed-hazard exactness bounds a spectator
-against `spectatorQuitNowValue`, while patience compares against the solo self
-payoff itself.
+phase, through `anchor_of_isExactAnchoredSoloPeriodic`, so the word *anchored*
+carries the same meaning in both readings.
+
+Patience is not the spectator half of that condition.  The spectator half is
+`spectatorFloor_of_isExactAnchoredSoloPeriodic`, which at a phase of hazard `p`
+bounds a spectator against `spectatorQuitNowValue` at that same `p`;
+`spectatorQuitNowValue_le_onPathValue_of_isExactAnchoredSoloPeriodic`
+(`Research/Quitting/AnchoredCyclicPatienceBridge.lean`) writes it that way.
+Patience compares against the solo self payoff itself, which that mixture
+reaches only as the hazard vanishes.  It is *patience*, not *anchored*, that
+means something different in the two readings.
 
 Patience is the vanishing-hazard reading of a player's incentive not to quit,
 and it is a hypothesis of the structure, not a derived fact.  At a phase where

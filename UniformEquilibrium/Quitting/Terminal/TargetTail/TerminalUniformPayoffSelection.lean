@@ -282,6 +282,47 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
       reward hterminal
   exact ⟨payoff, huniform⟩
 
+/-- A uniform-equilibrium payoff supplies terminal approximate equilibria whose
+own terminal payoffs are close to it.
+
+The payoff bound is what a producer transporting a solved reduced table back to
+a larger one needs: the approximating profiles must carry the target, not
+merely exist at every accuracy. -/
+theorem exists_terminalNash_terminalPayoff_close_of_isUniformEquilibriumPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (target : Payoff ι)
+    (hpayoff : (quittingGame reward).IsUniformEquilibriumPayoff none target)
+    {error : ℝ} (herror : 0 < error) :
+    ∃ profile : (quittingGame reward).BehaviorProfile,
+      (quittingGame reward).IsεAsymptoticNash
+          (quittingTerminalPayoff reward) error profile ∧
+        ∀ who,
+          |quittingTerminalPayoff reward profile who - target who| ≤ error := by
+  have hhalf : 0 < error / 2 := by linarith
+  obtain ⟨profile, threshold, hprofile⟩ := hpayoff (error / 2) hhalf
+  have huniform : (quittingGame reward).IsUniformεEquilibrium
+      none (error / 2) profile :=
+    ⟨threshold, fun horizon hhorizon ↦ (hprofile horizon hhorizon).1⟩
+  have hterminal : (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) (error / 2) profile :=
+    (quittingGame reward).isεAsymptoticNash_of_isUniformεEquilibrium
+      none (quittingTerminalPayoff reward) huniform
+      (fun selectedProfile who ↦
+        tendsto_finiteAveragePayoff_quittingGame
+          reward selectedProfile who)
+  refine ⟨profile, hterminal.mono (by linarith), fun who ↦ ?_⟩
+  have hlimit := tendsto_finiteAveragePayoff_quittingGame reward profile who
+  have habs : Tendsto
+      (fun horizon => |(quittingGame reward).finiteAveragePayoff none horizon
+        profile who - target who|) atTop
+      (nhds |quittingTerminalPayoff reward profile who - target who|) :=
+    ((hlimit.sub tendsto_const_nhds).abs)
+  have hhalfBound :
+      |quittingTerminalPayoff reward profile who - target who| ≤ error / 2 := by
+    refine le_of_tendsto habs ?_
+    exact Filter.eventually_atTop.mpr
+      ⟨threshold, fun horizon hhorizon ↦ (hprofile horizon hhorizon).2 who⟩
+  linarith
+
 /-- A uniform-equilibrium payoff supplies a terminal approximate equilibrium
 at every positive error. -/
 theorem quittingGame_terminalNash_all_errors_of_isUniformEquilibriumPayoff
@@ -291,21 +332,11 @@ theorem quittingGame_terminalNash_all_errors_of_isUniformEquilibriumPayoff
     ∀ ε : ℝ, 0 < ε →
       ∃ profile : (quittingGame reward).BehaviorProfile,
         (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) ε profile := by
-  intro ε hε
-  have hhalf : 0 < ε / 2 := by linarith
-  obtain ⟨profile, threshold, hprofile⟩ := hpayoff (ε / 2) hhalf
-  have huniform : (quittingGame reward).IsUniformεEquilibrium
-      none (ε / 2) profile :=
-    ⟨threshold, fun horizon hhorizon ↦ (hprofile horizon hhorizon).1⟩
-  have hterminal : (quittingGame reward).IsεAsymptoticNash
-      (quittingTerminalPayoff reward) (ε / 2) profile :=
-    (quittingGame reward).isεAsymptoticNash_of_isUniformεEquilibrium
-      none (quittingTerminalPayoff reward) huniform
-      (fun selectedProfile who ↦
-        tendsto_finiteAveragePayoff_quittingGame
-          reward selectedProfile who)
-  exact ⟨profile, hterminal.mono (by linarith)⟩
+          (quittingTerminalPayoff reward) ε profile := fun _ hε =>
+  let ⟨profile, hterminal, _⟩ :=
+    exists_terminalNash_terminalPayoff_close_of_isUniformEquilibriumPayoff
+      reward target hpayoff hε
+  ⟨profile, hterminal⟩
 
 /-- For finite quitting games, terminal approximate existence at every
 positive error is equivalent to existence of a uniform-equilibrium payoff in

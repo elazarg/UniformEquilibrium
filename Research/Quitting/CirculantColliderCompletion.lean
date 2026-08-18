@@ -35,11 +35,15 @@ completion are nonpositive as soon as `low ≤ s`, which is exactly the input th
 firing-step branch of `Research/Quitting/CirculantTrichotomyClosure.lean`
 consumes, so every margin vector of positive sum whose negative margins are not
 one complementary pair is closed outright.  In the *neighbour pocket* —
-`m 1 < 0`, `m 4 < 0`, `0 ≤ m 2`, `0 ≤ m 3`, positive margin sum — no step
+`m 1 ≤ 0`, `m 4 < 0`, `0 ≤ m 2`, `0 ≤ m 3`, positive margin sum — no step
 fires, and the step-four floors of the producer reduce instead to the single
 inequality `low - s ≤ m 1`, which the failure of the sure-exit property at an
 adjacent pair supplies.  Should no adjacent pair fail it, the pair's own row is
 a uniform-equilibrium payoff, so that pocket closes either way.
+
+Only the margin of the step itself has to be strictly negative there, so the
+equilibrium region includes the face `m 1 = 0`, on which the `R₀` certificate
+of `MathUE/LinearProgramming/CirculantPocketR0.lean` is unavailable.
 
 What remains of the family is therefore the distant pocket `m 2 < 0`,
 `m 3 < 0`, `0 ≤ m 1`, `0 ≤ m 4` of positive margin sum, and nothing else.
@@ -65,6 +69,9 @@ What remains of the family is therefore the distant pocket `m 2 < 0`,
   conclusion from failure of the sure-exit property at one adjacent pair
 * `isEmpty_counterexampleRegime_colliderNeighbourPocket` — the neighbour pocket
   closes with no further hypothesis
+* `neighbourFaceMargin` and
+  `isEmpty_counterexampleRegime_colliderNeighbourFace` — a margin vector with
+  `m 1 = 0` inside the equilibrium region and outside the `R₀` one
 * `isEmpty_counterexampleRegime_or_distantPocket` — the census: the distant
   pocket of positive margin sum is the whole residual
 * `isEmpty_counterexampleRegime_colliderCompletion_closure` — the census read
@@ -286,23 +293,6 @@ theorem lt_margin_one_of_not_isQuittingSureExitSet
   · exact hlt
   · exact absurd (isQuittingSureExitSet_adjacent_of_le s low m hm4 hlow hge y) hno
 
-/-! ## The normalized solo matrix -/
-
-/-- The normalized solo matrix of a collider completion is the row circulant of
-its margin vector. -/
-theorem hasCirculantSoloMatrix_colliderReward (hm0 : m 0 = 0) :
-    HasCirculantSoloMatrix (colliderReward s low m) m := by
-  funext who owner
-  show (normalizedQuittingPayoffTable (colliderReward s low m)).singletonMatrix who owner
-    = m (owner - who)
-  rw [normalized_singletonMatrix_eq_quittingSingletonMatrix, quittingSingletonMatrix,
-    show (⟨{owner}, Finset.singleton_nonempty owner⟩ :
-        {S : Finset (ZMod 5) // S.Nonempty}) = quittingSingletonTerminal owner from rfl,
-    show (⟨{who}, Finset.singleton_nonempty who⟩ :
-        {S : Finset (ZMod 5) // S.Nonempty}) = quittingSingletonTerminal who from rfl,
-    colliderReward_singleton, colliderReward_singleton, sub_self, hm0]
-  ring
-
 /-! ## The pocket -/
 
 variable {s low m}
@@ -349,13 +339,19 @@ theorem isEmpty_counterexampleRegime_colliderThreeNegative
 /-! ## The pocket floors -/
 
 /-- **The step-four floors of a pocket collider table.**  A five-player
-collider table with `m 1 < 0`, `m 4 < 0`, `0 ≤ m 2`, `0 ≤ m 3`, positive margin
+collider table with `m 1 ≤ 0`, `m 4 < 0`, `0 ≤ m 2`, `0 ≤ m 3`, positive margin
 sum, nonnegative solo self value, and `low - s ≤ m 1` carries no counterexample
 regime: the step-four constant-step cyclic profile is an exact equilibrium at
-an anchor root. -/
+an anchor root.
+
+Only the step's own margin `m 4` has to be strictly negative, that being what
+places the anchor root strictly inside the unit interval.  The neighbour margin
+`m 1` enters only through the two middle floors, where a nonpositive `m 1` and
+a survival factor below one give `q * m 1 ≥ m 1` and `q ^ 2 * m 1 ≥ m 1`, so
+the region is closed along the face `m 1 = 0`. -/
 theorem isEmpty_counterexampleRegime_colliderPocket
     (hm0 : m 0 = 0) (hs : 0 ≤ s)
-    (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
+    (hm1 : m 1 ≤ 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
     (hsum : 0 < m 1 + m 2 + m 3 + m 4) (hfloor : low - s ≤ m 1) :
     IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) := by
   have hsum' : 0 < ∑ e, m e := by
@@ -370,7 +366,7 @@ theorem isEmpty_counterexampleRegime_colliderPocket
   have hq2 : q ^ 2 < 1 := by nlinarith
   refine isEmpty_counterexampleRegime_constantStep
     (c' := 1) (isCirculantPairTable_colliderReward s low m hm0) (by decide) hs
-    hq0 hq1 hroot ?_ ?_ ?_ ?_
+    hq0.le hq1 hroot ?_ ?_ ?_ ?_
   · rw [colliderJoin_four]
   · rw [show (2 : ZMod 5) * 4 = 3 from by decide,
       show (3 : ZMod 5) * 4 = 2 from by decide,
@@ -391,7 +387,7 @@ fails the sure-exit property admits the step-four constant-step cyclic
 equilibrium, so it has a uniform-equilibrium payoff. -/
 theorem isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit
     (hm0 : m 0 = 0) (hs : 0 ≤ s) (hlow : low ≤ 0)
-    (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
+    (hm1 : m 1 ≤ 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
     (hsum : 0 < m 1 + m 2 + m 3 + m 4) (y : ZMod 5)
     (hno : ¬ IsQuittingSureExitSet (colliderReward s low m) {y, y + 1}) :
     IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) :=
@@ -406,9 +402,61 @@ theorem isR0Matrix_normalizedSoloMatrix_colliderPocket
     (hsum : 0 < m 1 + m 2 + m 3 + m 4) :
     Math.LinearProgramming.IsR0Matrix
       (normalizedSoloMatrix (colliderReward s low m)) := by
-  rw [hasCirculantSoloMatrix_colliderReward s low m hm0]
+  rw [hasCirculantSoloMatrix_of_isCirculantPairTable
+    (isCirculantPairTable_colliderReward s low m hm0)]
   exact Math.LinearProgramming.isR0Matrix_rowCirculant_pentagon_pocket hm0 hm1 hm4
     hm2 hm3 hsum
+
+/-! ## A margin vector on the face `m 1 = 0`
+
+The step-four equilibrium region of `isEmpty_counterexampleRegime_colliderPocket`
+asks only `m 1 ≤ 0`, whereas the pocket sign condition of
+`isR0Matrix_normalizedSoloMatrix_colliderPocket` — inherited from
+`Math.LinearProgramming.isR0Matrix_rowCirculant_pentagon_pocket` — asks
+`m 1 < 0`.  The margin vector below inhabits the difference: it satisfies every
+hypothesis of the equilibrium theorem and has `m 1 = 0`, so the `R₀` route is
+unavailable for it.  Whether its normalized solo matrix is nevertheless `R₀` by
+some other argument is not decided here. -/
+
+/-- The margin vector `(m 1, m 2, m 3, m 4) = (0, 1, 1, -1)`, on the face
+`m 1 = 0` of the neighbour pocket. -/
+def neighbourFaceMargin : ZMod 5 → ℝ :=
+  fun d => if d = 2 then 1 else if d = 3 then 1 else if d = 4 then -1 else 0
+
+@[simp] theorem neighbourFaceMargin_zero : neighbourFaceMargin 0 = 0 := by
+  rw [neighbourFaceMargin, if_neg (by decide), if_neg (by decide),
+    if_neg (by decide)]
+
+@[simp] theorem neighbourFaceMargin_one : neighbourFaceMargin 1 = 0 := by
+  rw [neighbourFaceMargin, if_neg (by decide), if_neg (by decide),
+    if_neg (by decide)]
+
+@[simp] theorem neighbourFaceMargin_two : neighbourFaceMargin 2 = 1 := by
+  rw [neighbourFaceMargin, if_pos rfl]
+
+@[simp] theorem neighbourFaceMargin_three : neighbourFaceMargin 3 = 1 := by
+  rw [neighbourFaceMargin, if_neg (by decide), if_pos rfl]
+
+@[simp] theorem neighbourFaceMargin_four : neighbourFaceMargin 4 = -1 := by
+  rw [neighbourFaceMargin, if_neg (by decide), if_neg (by decide), if_pos rfl]
+
+/-- **The equilibrium region reaches the face `m 1 = 0`.**  The collider
+completion of `neighbourFaceMargin` at any nonnegative solo self value and any
+joint value no larger than it carries no counterexample regime, even though its
+neighbour margin vanishes and the strict pocket sign condition of
+`isR0Matrix_normalizedSoloMatrix_colliderPocket` therefore fails. -/
+theorem isEmpty_counterexampleRegime_colliderNeighbourFace (hs : 0 ≤ s)
+    (hls : low ≤ s) :
+    IsEmpty (QuittingCounterexampleRegime
+      (colliderReward s low neighbourFaceMargin)) :=
+  isEmpty_counterexampleRegime_colliderPocket neighbourFaceMargin_zero hs
+    (le_of_eq neighbourFaceMargin_one)
+    (by rw [neighbourFaceMargin_four]; norm_num)
+    (by rw [neighbourFaceMargin_two]; norm_num)
+    (by rw [neighbourFaceMargin_three]; norm_num)
+    (by rw [neighbourFaceMargin_one, neighbourFaceMargin_two,
+      neighbourFaceMargin_three, neighbourFaceMargin_four]; norm_num)
+    (by rw [neighbourFaceMargin_one]; linarith)
 
 /-! ## The census -/
 
@@ -417,10 +465,10 @@ adjacent pair of the table is a sure exit set, and then its own row is a
 uniform-equilibrium payoff outright, or no adjacent pair is, and then the
 sure-exit failure supplies the step-four floor and the constant-step cyclic
 profile fires.  Nothing beyond the pocket signs and a positive margin sum is
-needed. -/
+needed, and the neighbour margin `m 1` may vanish. -/
 theorem isEmpty_counterexampleRegime_colliderNeighbourPocket
     (hm0 : m 0 = 0) (hs : 0 ≤ s) (hlow : low ≤ 0)
-    (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
+    (hm1 : m 1 ≤ 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
     (hsum : 0 < m 1 + m 2 + m 3 + m 4) :
     IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) := by
   by_cases hsure : IsQuittingSureExitSet (colliderReward s low m) {0, 0 + 1}
@@ -449,7 +497,7 @@ theorem isEmpty_counterexampleRegime_or_distantPocket
     rcases neighbour_or_distant_of_isComplementaryPocketMargin hpocket with
       ⟨hm1, hm4, hm2, hm3⟩ | ⟨hm2, hm3, hm4, hm1⟩
     · exact Or.inl (isEmpty_counterexampleRegime_colliderNeighbourPocket hm0 hs
-        hlow hm1 hm4 hm2 hm3 (by linarith))
+        hlow hm1.le hm4 hm2 hm3 (by linarith))
     · exact Or.inr ⟨by linarith, hm2, hm3, hm4, hm1⟩
 
 /-- **The settled branches of the collider completion.**  A five-player

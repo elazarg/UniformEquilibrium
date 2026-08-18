@@ -50,6 +50,13 @@ first.  So the complementary pockets of positive margin sum are the whole
 residual, which is what `isEmpty_counterexampleRegime_or_isComplementaryPocketMargin`
 records.
 
+Underneath that delimitation is a single inequality, free of the margin sum and
+of the value at the zero distance: a firing step is missing exactly when every
+distance of negative margin has a negative complementary margin.  The distances
+of negative margin are then closed under complementation, and in the five-cycle
+only four sets are — the empty one, the two complementary pairs, and all four
+distances.  The margin sum enters only to discard the last.
+
 Neither pocket is closed by sign data alone, but both are closed by sign data
 together with two inequalities on the join margins.  The producer behind that
 is `exists_uniformEquilibriumPayoff_of_complementaryStep`: a step whose own
@@ -89,6 +96,13 @@ settled outright in `Research/Quitting/CirculantColliderClosure.lean`.
   a negative margin carries a firing step
 * `not_isFiringStep_of_isComplementaryPocketMargin` — and the complementary
   pairs carry none
+* `not_exists_isFiringStep_of_nonneg_margins` — nor does the all-nonnegative
+  pattern
+* `not_exists_isFiringStep_iff` — a firing step is missing exactly when every
+  distance of negative margin has a negative complementary margin
+* `not_exists_isFiringStep_iff_isComplementaryPocketMargin_or_nonneg` — at
+  positive margin sum that leaves exactly the complementary pockets and the
+  all-nonnegative pattern
 * `neighbour_or_distant_of_isComplementaryPocketMargin` — there are two
   complementary pockets
 * `exists_uniformEquilibriumPayoff_of_complementaryStep` — the producer both
@@ -217,7 +231,7 @@ theorem exists_uniformEquilibriumPayoff_of_isFiringStep
     linarith [hjoin 3 (by decide)]
   have hfloor₄ : J (4 * c) ≤ m (4 * c) := by
     linarith [hjoin 4 (by decide)]
-  exact ⟨_, isUniformEquilibriumPayoff_constantStep htable hcc' hs hq.1 hq.2
+  exact ⟨_, isUniformEquilibriumPayoff_constantStep htable hcc' hs hq.1.le hq.2
     hrootStep hfloor₁ hfloor₂ hfloor₃ hfloor₄⟩
 
 /-- The firing-step branch, as emptiness of the counterexample regime. -/
@@ -432,7 +446,15 @@ theorem neighbour_or_distant_of_isComplementaryPocketMargin
     exact Or.inl ⟨hcomplement, hown, hdoubled, hdouble⟩
 
 /-- The open pocket of `Research/Quitting/CirculantPocketAnchoredNoGo.lean` is
-a complementary pocket. -/
+a complementary pocket.
+
+The containment is strict, and the two predicates are not interchangeable.
+`IsComplementaryPocketMargin` is the closed pattern, so
+`not_isFiringStep_of_isComplementaryPocketMargin` reaches the faces where a
+distant margin vanishes; `IsOpenPocketMargin` asks the distant margins to be
+strictly positive, which is what
+`isEmpty_anchoredCyclicPatienceSystem_of_isOpenPocketMargin` needs and what
+fails on those same faces. -/
 theorem isComplementaryPocketMargin_of_isOpenPocketMargin
     (hpocket : IsOpenPocketMargin m) : IsComplementaryPocketMargin m :=
   isComplementaryPocketMargin_one hpocket.1 hpocket.2.1 hpocket.2.2.1.le
@@ -495,6 +517,79 @@ theorem not_isFiringStep_of_isComplementaryPocketMargin
   · rw [← mul_assoc, show (4 : ZMod 5) * 4 = 1 from by decide, one_mul] at hcomplement
     linarith
 
+/-- **No firing step where no margin is negative.**  A firing step asks for a
+negative margin at its own distance. -/
+theorem not_exists_isFiringStep_of_nonneg_margins
+    (hm : ∀ d : ZMod 5, d ≠ 0 → 0 ≤ m d) : ¬ ∃ c : ZMod 5, IsFiringStep m c := by
+  rintro ⟨c, hc, hneg, -⟩
+  exact absurd (hm c hc) (not_le.mpr hneg)
+
+/-- **The firing census, on one inequality.**  A firing step is missing exactly
+when every distance of negative margin has a negative complementary margin — no
+hypothesis on the margin at the zero distance, and none on the margin sum.
+
+One direction is immediate, a firing step asking its complementary margin to be
+nonnegative.  The other is where the doubled distances earn their place in
+`IsFiringStep`.  Suppose a distance `c` has negative margin and nonnegative
+complementary margin yet fails to fire: then its doubled complementary margin
+is negative and its doubled margin is positive.  The doubled complementary
+distance `3 * c` fires in its place, its own margin being the negative one just
+found, its complementary margin `m (2 * c)` and its doubled complementary
+margin `m (4 * c)`.
+
+So absence of a firing step is a closure property: the distances of negative
+margin are closed under complementation.  The four such sets are the empty one,
+the two complementary pairs, and all four distances. -/
+theorem not_exists_isFiringStep_iff :
+    (¬ ∃ c : ZMod 5, IsFiringStep m c) ↔
+      ∀ c : ZMod 5, c ≠ 0 → m c < 0 → m (4 * c) < 0 := by
+  constructor
+  · intro hnone c hc hneg
+    rcases lt_or_ge (m (4 * c)) 0 with hlt | hge
+    · exact hlt
+    refine absurd ?_ hnone
+    by_cases hthird : 0 ≤ m (3 * c) ∨ m (2 * c) ≤ 0
+    · exact ⟨c, hc, hneg, hge, hthird⟩
+    rw [not_or, not_le, not_le] at hthird
+    refine ⟨3 * c, mul_ne_zero_five 3 c (by decide) hc, hthird.1, ?_, Or.inl ?_⟩
+    · rw [← mul_assoc, show (4 : ZMod 5) * 3 = 2 from by decide]
+      exact hthird.2.le
+    · rw [← mul_assoc, show (3 : ZMod 5) * 3 = 4 from by decide]
+      exact hge
+  · rintro hall ⟨c, hc, hneg, hcomplement, -⟩
+    exact absurd hcomplement (not_le.mpr (hall c hc hneg))
+
+/-- **The firing census, as a sign pattern.**  On a margin vector of positive
+sum a firing step is missing in exactly two places: the complementary pockets,
+and the pattern with no negative margin at all.  Positivity of the sum is what
+excludes the fourth set closed under complementation, the one carrying four
+negative margins.
+
+Absence of a firing step is absence of that one producer, not a resolution.
+The all-nonnegative pattern is resolved instead by the solo exit branch, in
+`isEmpty_counterexampleRegime_of_nonneg_margins`, at nonnegative solo self value
+and nonpositive join margins; the complementary pockets are resolved only under
+a cap pair, in
+`isEmpty_counterexampleRegime_of_neighbourPocket` and
+`isEmpty_counterexampleRegime_of_distantPocket`. -/
+theorem not_exists_isFiringStep_iff_isComplementaryPocketMargin_or_nonneg
+    (hm0 : m 0 = 0) (hsum : 0 < ∑ e, m e) :
+    (¬ ∃ c : ZMod 5, IsFiringStep m c) ↔
+      (IsComplementaryPocketMargin m ∨ ∀ d : ZMod 5, d ≠ 0 → 0 ≤ m d) := by
+  constructor
+  · intro hnone
+    by_cases hneg : ∃ a : ZMod 5, a ≠ 0 ∧ m a < 0
+    · refine Or.inl ?_
+      by_contra hpocket
+      exact hnone (exists_isFiringStep hm0 hsum hneg hpocket)
+    refine Or.inr fun d hd => ?_
+    rcases le_or_gt 0 (m d) with h | h
+    · exact h
+    · exact absurd ⟨d, hd, h⟩ hneg
+  · rintro (hpocket | hm)
+    · exact not_isFiringStep_of_isComplementaryPocketMargin hpocket
+    · exact not_exists_isFiringStep_of_nonneg_margins hm
+
 /-- **At most one nonnegative margin leaves the first disjunct unavailable.**
 If every nonzero distance other than `g` carries a negative margin, no step has
 both a nonnegative complementary and a nonnegative doubled complementary
@@ -550,7 +645,7 @@ theorem exists_uniformEquilibriumPayoff_of_complementaryStep
   have hrootStep : stepAnchor m c q = 0 :=
     (stepAnchor_eq_constantStepAnchor m c q).trans hroot
   have h1q : (0 : ℝ) ≤ 1 - q := by linarith [hq.2]
-  refine ⟨_, isUniformEquilibriumPayoff_constantStep htable hcc' hs hq.1 hq.2
+  refine ⟨_, isUniformEquilibriumPayoff_constantStep htable hcc' hs hq.1.le hq.2
     hrootStep hown ?_ ?_ hcap₄⟩
   · linarith
   · nlinarith

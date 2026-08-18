@@ -112,7 +112,7 @@ theorem periodTwo_isQuittingBlockCertificate :
     rw [hmass, oddRoot_continueMass]
     nlinarith [periodTwoParameter_pos, periodTwoParameter_lt_one,
       periodTwoSecondary_pos, periodTwoSecondary_lt_one]
-  · intro who
+  · refine fun who ↦ Or.inr ?_
     fin_cases who <;> simp [boundaryReward, quittingSingletonTerminal]
 
 /-! ## The payoff through the general producer -/

@@ -5,25 +5,25 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Boundary.Exceptional.InfiniteLTG
+import UniformEquilibrium.Quitting.Classification.PlayerDeletionLift
+import UniformEquilibrium.Quitting.Classification.SymmetricQuittingGame
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
+import MathUE.Finset.InsertExtremum
 
 /-!
 # Deleting a whole block of universal Never players
 
-`UniformEquilibrium/Quitting/Classification/PlayerDeletionLift.lean` restricts
-a quitting table to the complement of a single player.  This module restricts
-the table to the complement of an arbitrary `Finset` of players at once and
-supplies the same naturality: a behavioral profile of the survivor game lifts
-to the original game by making every deleted player Continue surely, and every
-surviving player's on-path payoff and arbitrary behavioral deviation payoff are
-exactly preserved.
-
-The construction is kept at the live-root level.  This loses no behavioral
-generality in a quitting game: terminal payoffs and arbitrary unilateral
-behavioral deviations depend only on the unique all-Continue public history.
+Restricting a quitting table to the complement of a `Finset` `B` of players is
+the deletion predicate `fun who => who ∈ B` of
+`UniformEquilibrium/Quitting/Classification/PlayerDeletionLift.lean`, so the
+whole lift-and-transport naturality is inherited: a behavioral profile of the
+survivor game lifts to the original game by making every deleted player
+Continue surely, and every surviving player's on-path payoff, arbitrary
+behavioral deviation payoff and best-response value are exactly preserved.
+What this module adds is the deletion gate and the producers it powers.
 
 `QuittingBlockDispensable` is the deletion gate, a pair of finite table checks:
 the block form of `QuittingOwnerJoinAntitone` over the survivors, and a solo
@@ -34,6 +34,14 @@ witnessed terminal exploitability gap to the survivor table with no loss, and
 uniform-equilibrium payoff back, unchanged at every survivor.  Deleting a whole
 block at once is a weaker demand than deleting its members one at a time,
 because the gate quantifies only over coalitions of survivors.
+
+Because the survivors' coordinates are preserved exactly, any solver for the
+survivor table transports its displayed answer to the original game.  The
+instance supplied here is
+`exists_uniformEquilibriumPayoff_eq_setReward_of_blockDispensable_cardinalSymmetric`,
+which solves cardinally symmetric survivors at any survivor count and reads the
+resulting coordinates off the original table as the exit reward of one
+coalition of survivors.
 -/
 
 noncomputable section
@@ -48,432 +56,19 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- The players that survive deletion of the block `B`. -/
 abbrev QuittingBlockSurvivor {ι : Type} (B : Finset ι) := {who : ι // who ∉ B}
 
-/-- Embed a nonempty coalition of surviving players in the original player
-type. -/
-def quittingExtendBlockCoalition (B : Finset ι)
-    (terminal : {S : Finset (QuittingBlockSurvivor B) // S.Nonempty}) :
-    {S : Finset ι // S.Nonempty} :=
-  ⟨terminal.1.map
-      (Function.Embedding.subtype (p := fun who : ι => who ∉ B)),
-    Finset.map_nonempty.mpr terminal.2⟩
+/-- Deleting a block removes exactly its members from the player count. -/
+@[simp] theorem card_quittingBlockSurvivor (B : Finset ι) :
+    Fintype.card (QuittingBlockSurvivor B) = Fintype.card ι - B.card := by
+  rw [show Fintype.card (QuittingBlockSurvivor B) =
+    Fintype.card {who : ι // ¬ who ∈ B} from rfl, Fintype.card_subtype_compl]
+  simp
 
 /-- Restriction of a quitting reward table to the players outside `B`. -/
-def quittingDeleteBlockReward
+abbrev quittingDeleteBlockReward
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι) :
     {S : Finset (QuittingBlockSurvivor B) // S.Nonempty} →
       Payoff (QuittingBlockSurvivor B) :=
-  fun terminal who => reward (quittingExtendBlockCoalition B terminal) who.1
-
-/-- Extend an action of the survivor game by making every deleted player
-Continue. -/
-def quittingExtendBlockAction (B : Finset ι)
-    (action : QuittingBlockSurvivor B → Bool) : ι → Bool :=
-  fun who => if h : who ∈ B then false else action ⟨who, h⟩
-
-omit [Fintype ι] in
-@[simp] theorem quittingExtendBlockAction_of_mem (B : Finset ι)
-    (action : QuittingBlockSurvivor B → Bool) {who : ι} (hwho : who ∈ B) :
-    quittingExtendBlockAction B action who = false := by
-  simp [quittingExtendBlockAction, hwho]
-
-omit [Fintype ι] in
-@[simp] theorem quittingExtendBlockAction_apply (B : Finset ι)
-    (action : QuittingBlockSurvivor B → Bool)
-    (who : QuittingBlockSurvivor B) :
-    quittingExtendBlockAction B action who.1 = action who := by
-  simp [quittingExtendBlockAction, who.2]
-
-omit [Fintype ι] in
-theorem quittingExtendBlockAction_injective (B : Finset ι) :
-    Function.Injective (quittingExtendBlockAction B) := by
-  intro first second heq
-  funext who
-  have h := congrFun heq who.1
-  simpa using h
-
-/-- Extend a survivor product root by making every deleted player Continue
-surely. -/
-def quittingExtendBlockRoot (B : Finset ι)
-    (root : QuittingBlockSurvivor B → PMF Bool) : ι → PMF Bool :=
-  fun who => if h : who ∈ B then PMF.pure false else root ⟨who, h⟩
-
-omit [Fintype ι] in
-@[simp] theorem quittingExtendBlockRoot_of_mem (B : Finset ι)
-    (root : QuittingBlockSurvivor B → PMF Bool) {who : ι} (hwho : who ∈ B) :
-    quittingExtendBlockRoot B root who = PMF.pure false := by
-  simp [quittingExtendBlockRoot, hwho]
-
-omit [Fintype ι] in
-@[simp] theorem quittingExtendBlockRoot_apply (B : Finset ι)
-    (root : QuittingBlockSurvivor B → PMF Bool)
-    (who : QuittingBlockSurvivor B) :
-    quittingExtendBlockRoot B root who.1 = root who := by
-  simp [quittingExtendBlockRoot, who.2]
-
-/-- Splitting a product over the player type along the deleted block. -/
-theorem prod_split_quittingBlock {M : Type*} [CommMonoid M] (B : Finset ι)
-    (value : ι → M) :
-    (∏ who : ι, value who) =
-      (∏ who ∈ B, value who) * ∏ who : QuittingBlockSurvivor B, value who.1 := by
-  classical
-  rw [← Finset.prod_mul_prod_compl B value]
-  congr 1
-  exact Finset.prod_subtype Bᶜ (fun x => by simp) value
-
-/-- The full product law with sure-Continue deleted coordinates is the push
-forward of the survivor product law under action extension. -/
-theorem pmfPi_quittingExtendBlockRoot
-    (B : Finset ι) (root : QuittingBlockSurvivor B → PMF Bool) :
-    pmfPi (quittingExtendBlockRoot B root) =
-      PMF.map (quittingExtendBlockAction B) (pmfPi root) := by
-  classical
-  ext action
-  rw [pmfPi_apply, PMF.map_apply, tsum_fintype]
-  by_cases hblock : ∀ who ∈ B, action who = false
-  · let reduced : QuittingBlockSurvivor B → Bool := fun who => action who.1
-    have hext : quittingExtendBlockAction B reduced = action := by
-      funext who
-      by_cases h : who ∈ B
-      · simp [quittingExtendBlockAction, h, hblock who h]
-      · simp [quittingExtendBlockAction, reduced, h]
-    have hprod :
-        (∏ who : ι, quittingExtendBlockRoot B root who (action who)) =
-          ∏ who : QuittingBlockSurvivor B, root who (reduced who) := by
-      rw [prod_split_quittingBlock B
-        (fun who => quittingExtendBlockRoot B root who (action who))]
-      rw [Finset.prod_eq_one (fun who hwho => by
-        simp [quittingExtendBlockRoot, hwho, hblock who hwho]), one_mul]
-      exact Finset.prod_congr rfl fun who _ => by simp [reduced]
-    rw [hprod]
-    change (pmfPi root) reduced = _
-    symm
-    have hsum :
-        (∑ b ∈ Finset.univ,
-          if action = quittingExtendBlockAction B b then
-            (pmfPi root) b else 0) =
-          (if action = quittingExtendBlockAction B reduced then
-            (pmfPi root) reduced else 0) := by
-      apply Finset.sum_eq_single reduced
-      · intro other _ hne
-        have hneq : action ≠ quittingExtendBlockAction B other := by
-          intro heq
-          apply hne
-          apply quittingExtendBlockAction_injective B
-          exact heq.symm.trans hext.symm
-        simp [hneq]
-      · simp
-    rw [if_pos hext.symm] at hsum
-    convert hsum using 1
-    congr 1
-    funext other
-    by_cases h : action = quittingExtendBlockAction B other <;> simp [h]
-  · push Not at hblock
-    obtain ⟨bad, hbad, hbadTrue⟩ := hblock
-    have hbadEq : action bad = true := by
-      cases h : action bad <;> simp_all
-    have hprod :
-        (∏ who : ι, quittingExtendBlockRoot B root who (action who)) = 0 := by
-      rw [prod_split_quittingBlock B
-        (fun who => quittingExtendBlockRoot B root who (action who))]
-      rw [Finset.prod_eq_zero hbad (by simp [quittingExtendBlockRoot, hbad,
-        hbadEq]), zero_mul]
-    rw [hprod]
-    symm
-    have hsum :
-        (∑ reduced ∈ Finset.univ,
-          if action = quittingExtendBlockAction B reduced then
-            (pmfPi root) reduced else 0) = 0 := by
-      apply Finset.sum_eq_zero
-      intro reduced _
-      simp [show action ≠ quittingExtendBlockAction B reduced by
-        intro heq
-        have := congrFun heq bad
-        simp [hbadEq, hbad] at this]
-    convert hsum using 1
-    congr 1
-    funext reduced
-    by_cases h : action = quittingExtendBlockAction B reduced <;> simp [h]
-
-/-- Extend a survivor payoff vector by irrelevant zero coordinates on the
-deleted block. -/
-def quittingExtendBlockPayoff (B : Finset ι)
-    (payoff : Payoff (QuittingBlockSurvivor B)) : Payoff ι :=
-  fun who => if h : who ∈ B then 0 else payoff ⟨who, h⟩
-
-omit [Fintype ι] in
-@[simp] theorem quittingExtendBlockPayoff_apply (B : Finset ι)
-    (payoff : Payoff (QuittingBlockSurvivor B))
-    (who : QuittingBlockSurvivor B) :
-    quittingExtendBlockPayoff B payoff who.1 = payoff who := by
-  simp [quittingExtendBlockPayoff, who.2]
-
-/-- Extending a survivor action maps its quitter set to the corresponding
-coalition in the original player type. -/
-theorem quittingQuitters_extendBlockAction (B : Finset ι)
-    (action : QuittingBlockSurvivor B → Bool) :
-    quittingQuitters (quittingExtendBlockAction B action) =
-      (quittingQuitters action).map
-        (Function.Embedding.subtype (p := fun who : ι => who ∉ B)) := by
-  classical
-  ext who
-  by_cases h : who ∈ B
-  · simp [quittingQuitters, quittingExtendBlockAction, h]
-  · simp [quittingQuitters, quittingExtendBlockAction, h]
-
-/-- One-stage root payoffs commute with block deletion for every surviving
-coordinate. -/
-theorem quittingRootPayoff_extendBlockAction_of_apply_eq
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (fullContinuation : Payoff ι)
-    (continuation : Payoff (QuittingBlockSurvivor B))
-    (action : QuittingBlockSurvivor B → Bool)
-    (who : QuittingBlockSurvivor B)
-    (hcontinuation : fullContinuation who.1 = continuation who) :
-    quittingRootPayoff reward fullContinuation
-        (quittingExtendBlockAction B action) who.1 =
-      quittingRootPayoff (quittingDeleteBlockReward reward B)
-        continuation action who := by
-  classical
-  by_cases hquit : (quittingQuitters action).Nonempty
-  · have hextQuit :
-        (quittingQuitters (quittingExtendBlockAction B action)).Nonempty := by
-      rw [quittingQuitters_extendBlockAction]
-      exact Finset.map_nonempty.mpr hquit
-    rw [quittingRootPayoff, dif_pos hextQuit,
-      quittingRootPayoff, dif_pos hquit]
-    unfold quittingDeleteBlockReward quittingExtendBlockCoalition
-    congr 2
-    exact quittingQuitters_extendBlockAction B action
-  · have hextQuit :
-        ¬(quittingQuitters (quittingExtendBlockAction B action)).Nonempty := by
-      rw [quittingQuitters_extendBlockAction]
-      exact fun h => hquit (Finset.map_nonempty.mp h)
-    rw [quittingRootPayoff, dif_neg hextQuit,
-      quittingRootPayoff, dif_neg hquit]
-    exact hcontinuation
-
-/-- The extension form of one-stage payoff naturality. -/
-theorem quittingRootPayoff_extendBlockAction
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (continuation : Payoff (QuittingBlockSurvivor B))
-    (action : QuittingBlockSurvivor B → Bool)
-    (who : QuittingBlockSurvivor B) :
-    quittingRootPayoff reward (quittingExtendBlockPayoff B continuation)
-        (quittingExtendBlockAction B action) who.1 =
-      quittingRootPayoff (quittingDeleteBlockReward reward B)
-        continuation action who :=
-  quittingRootPayoff_extendBlockAction_of_apply_eq
-    reward B (quittingExtendBlockPayoff B continuation)
-      continuation action who
-      (quittingExtendBlockPayoff_apply B continuation who)
-
-/-- Root-payoff naturality only needs agreement of the two continuation
-vectors at the displayed surviving player. -/
-theorem quittingRootExpectedPayoff_extendBlockRoot_of_apply_eq
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (fullContinuation : Payoff ι)
-    (continuation : Payoff (QuittingBlockSurvivor B))
-    (root : QuittingBlockSurvivor B → PMF Bool)
-    (who : QuittingBlockSurvivor B)
-    (hcontinuation : fullContinuation who.1 = continuation who) :
-    quittingRootExpectedPayoff reward fullContinuation
-        (quittingExtendBlockRoot B root) who.1 =
-      quittingRootExpectedPayoff (quittingDeleteBlockReward reward B)
-        continuation root who := by
-  unfold quittingRootExpectedPayoff
-  rw [pmfPi_quittingExtendBlockRoot, expect_map]
-  apply congrArg (expect (pmfPi root))
-  funext action
-  exact quittingRootPayoff_extendBlockAction_of_apply_eq
-    reward B fullContinuation continuation action who hcontinuation
-
-omit [Fintype ι] in
-/-- Extending roots commutes with updating a surviving coordinate. -/
-theorem Function.update_quittingExtendBlockRoot
-    (B : Finset ι) (root : QuittingBlockSurvivor B → PMF Bool)
-    (who : QuittingBlockSurvivor B) (hazard : PMF Bool) :
-    Function.update (quittingExtendBlockRoot B root) who.1 hazard =
-      quittingExtendBlockRoot B (Function.update root who hazard) := by
-  funext player
-  by_cases hp : player = who.1
-  · subst player
-    rw [Function.update_self]
-    simp
-  · by_cases ho : player ∈ B
-    · rw [Function.update_of_ne hp]
-      simp [ho]
-    · rw [Function.update_of_ne hp]
-      unfold quittingExtendBlockRoot
-      rw [dif_neg ho]
-      have hsub : (⟨player, ho⟩ : QuittingBlockSurvivor B) ≠ who := by
-        intro heq
-        exact hp (congrArg Subtype.val heq)
-      rw [dif_neg ho]
-      simp [Function.update_of_ne hsub]
-
-/-- Extend every row of a survivor root chronology by making the deleted
-block Continue. -/
-def quittingExtendBlockRoots (B : Finset ι)
-    (roots : ℕ → QuittingBlockSurvivor B → PMF Bool) :
-    ℕ → ι → PMF Bool :=
-  fun time => quittingExtendBlockRoot B (roots time)
-
-omit [Fintype ι] in
-@[simp] theorem quittingExtendBlockRoots_of_mem (B : Finset ι)
-    (roots : ℕ → QuittingBlockSurvivor B → PMF Bool) (time : ℕ)
-    {who : ι} (hwho : who ∈ B) :
-    quittingExtendBlockRoots B roots time who = PMF.pure false := by
-  simp [quittingExtendBlockRoots, hwho]
-
-omit [Fintype ι] in
-@[simp] theorem quittingExtendBlockRoots_apply (B : Finset ι)
-    (roots : ℕ → QuittingBlockSurvivor B → PMF Bool) (time : ℕ)
-    (who : QuittingBlockSurvivor B) :
-    quittingExtendBlockRoots B roots time who.1 = roots time who := by
-  simp [quittingExtendBlockRoots]
-
-/-- Every finite zero-boundary unilateral payoff is preserved under the block
-Never lift, for arbitrary hazards of a surviving player. -/
-theorem quittingFiniteRootPayoff_extendBlockRoots
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (roots : ℕ → QuittingBlockSurvivor B → PMF Bool)
-    (who : QuittingBlockSurvivor B) (hazard : ℕ → PMF Bool) :
-    ∀ start fuel,
-      quittingFiniteRootPayoff reward (quittingExtendBlockRoots B roots)
-          who.1 hazard start fuel =
-        quittingFiniteRootPayoff (quittingDeleteBlockReward reward B)
-          roots who hazard start fuel := by
-  intro start fuel
-  induction fuel generalizing start with
-  | zero => rfl
-  | succ fuel ih =>
-      rw [quittingFiniteRootPayoff, quittingFiniteRootPayoff,
-        show quittingExtendBlockRoots B roots start =
-          quittingExtendBlockRoot B (roots start) by rfl,
-        Function.update_quittingExtendBlockRoot]
-      exact quittingRootExpectedPayoff_extendBlockRoot_of_apply_eq
-        reward B
-          (fun _ => quittingFiniteRootPayoff reward
-            (quittingExtendBlockRoots B roots) who.1 hazard
-              (start + 1) fuel)
-          (fun _ => quittingFiniteRootPayoff
-            (quittingDeleteBlockReward reward B) roots who hazard
-              (start + 1) fuel)
-          (Function.update (roots start) who (hazard start)) who (ih (start + 1))
-
-/-- Infinite terminal values of arbitrary surviving-player hazard deviations
-are preserved by the block Never lift. -/
-theorem quittingRootSequenceHazardTerminalValue_extendBlockRoots
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (roots : ℕ → QuittingBlockSurvivor B → PMF Bool)
-    (who : QuittingBlockSurvivor B) (hazard : ℕ → PMF Bool) (start : ℕ) :
-    quittingRootSequenceHazardTerminalValue reward
-        (quittingExtendBlockRoots B roots) who.1 hazard start =
-      quittingRootSequenceHazardTerminalValue
-        (quittingDeleteBlockReward reward B) roots who hazard start := by
-  have hfull := tendsto_quittingFiniteRootPayoff_terminal reward
-    (quittingExtendBlockRoots B roots) who.1 hazard start
-  have hreduced := tendsto_quittingFiniteRootPayoff_terminal
-    (quittingDeleteBlockReward reward B) roots who hazard start
-  apply tendsto_nhds_unique hfull
-  apply hreduced.congr'
-  exact Filter.Eventually.of_forall fun fuel =>
-    (quittingFiniteRootPayoff_extendBlockRoots
-      reward B roots who hazard start fuel).symm
-
-/-- The prescribed terminal value of a survivor chronology is preserved by
-the block Never lift. -/
-theorem quittingRootSequenceTerminalValue_extendBlockRoots
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (roots : ℕ → QuittingBlockSurvivor B → PMF Bool)
-    (who : QuittingBlockSurvivor B) (start : ℕ) :
-    quittingRootSequenceTerminalValue reward
-        (quittingExtendBlockRoots B roots) who.1 start =
-      quittingRootSequenceTerminalValue
-        (quittingDeleteBlockReward reward B) roots who start := by
-  have hfull := tendsto_quittingFiniteRootPayoff_self_terminalValue reward
-    (quittingExtendBlockRoots B roots) who.1 start
-  have hreduced := tendsto_quittingFiniteRootPayoff_self_terminalValue
-    (quittingDeleteBlockReward reward B) roots who start
-  apply tendsto_nhds_unique hfull
-  apply hreduced.congr'
-  exact Filter.Eventually.of_forall fun fuel => by
-    simpa using (quittingFiniteRootPayoff_extendBlockRoots reward B roots
-      who (fun time => roots time who) start fuel).symm
-
-/-- Lift an arbitrary survivor behavioral profile through its canonical live
-root sequence, making every deleted player Continue surely. -/
-def quittingLiftBlockProfile
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (profile : (quittingGame
-      (quittingDeleteBlockReward reward B)).BehaviorProfile) :
-    (quittingGame reward).BehaviorProfile :=
-  quittingInfinitePathProfile reward
-    (quittingExtendBlockRoots B
-      (quittingProfileLiveRoot (quittingDeleteBlockReward reward B) profile))
-
-@[simp] theorem quittingProfileLiveRoot_liftBlockProfile
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (profile : (quittingGame
-      (quittingDeleteBlockReward reward B)).BehaviorProfile) :
-    quittingProfileLiveRoot reward
-        (quittingLiftBlockProfile reward B profile) =
-      quittingExtendBlockRoots B
-        (quittingProfileLiveRoot (quittingDeleteBlockReward reward B)
-          profile) := by
-  unfold quittingLiftBlockProfile
-  exact quittingProfileLiveRoot_infinitePathProfile _ _
-
-/-- Every surviving player's on-path terminal payoff is exactly preserved by
-the block profile lift. -/
-theorem quittingTerminalPayoff_liftBlockProfile
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (profile : (quittingGame
-      (quittingDeleteBlockReward reward B)).BehaviorProfile)
-    (who : QuittingBlockSurvivor B) :
-    quittingTerminalPayoff reward
-        (quittingLiftBlockProfile reward B profile) who.1 =
-      quittingTerminalPayoff (quittingDeleteBlockReward reward B)
-        profile who := by
-  unfold quittingLiftBlockProfile
-  rw [quittingTerminalPayoff_infinitePathProfile,
-    quittingTerminalPayoff_eq_rootSequence_profileLiveRoot]
-  exact quittingRootSequenceTerminalValue_extendBlockRoots reward B
-    (quittingProfileLiveRoot (quittingDeleteBlockReward reward B) profile)
-      who 0
-
-/-- Read the live-path hazard of an original-game deviation as a behavioral
-strategy of the survivor game. -/
-def quittingDeleteBlockDeviation
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (who : QuittingBlockSurvivor B)
-    (deviation : (quittingGame reward).BehaviorStrategy who.1) :
-    (quittingGame
-      (quittingDeleteBlockReward reward B)).BehaviorStrategy who :=
-  fun time _ => quittingBehaviorLiveHazard reward deviation time
-
-/-- An arbitrary behavioral deviation by a surviving player has exactly the
-same payoff after block deletion. -/
-theorem quittingTerminalPayoff_update_liftBlockProfile_eq_deleteDeviation
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (profile : (quittingGame
-      (quittingDeleteBlockReward reward B)).BehaviorProfile)
-    (who : QuittingBlockSurvivor B)
-    (deviation : (quittingGame reward).BehaviorStrategy who.1) :
-    quittingTerminalPayoff reward
-        (Function.update (quittingLiftBlockProfile reward B profile)
-          who.1 deviation) who.1 =
-      quittingTerminalPayoff (quittingDeleteBlockReward reward B)
-        (Function.update profile who
-          (quittingDeleteBlockDeviation reward B who deviation)) who := by
-  rw [quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
-    quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
-    quittingProfileLiveRoot_liftBlockProfile]
-  unfold quittingDeleteBlockDeviation quittingBehaviorLiveHazard
-  exact quittingRootSequenceHazardTerminalValue_extendBlockRoots
-    reward B
-      (quittingProfileLiveRoot (quittingDeleteBlockReward reward B) profile)
-      who (fun time => deviation time (quittingLiveHist reward time)) 0
+  quittingDeleteReward reward (· ∈ B)
 
 /-! ## The deletion gate of a single deleted player over the survivors -/
 
@@ -517,10 +112,10 @@ theorem quittingRootsBlockQuiet_singleton (owner : ι)
   exact absurd (Finset.mem_singleton.mp hwho) hne
 
 omit [Fintype ι] in
-theorem quittingRootsQuietOn_extendBlockRoots (B : Finset ι)
+theorem quittingRootsQuietOn_extendDeletedRoots (B : Finset ι)
     (roots : ℕ → QuittingBlockSurvivor B → PMF Bool) :
-    QuittingRootsQuietOn B (quittingExtendBlockRoots B roots) :=
-  fun _ _ hwho => quittingExtendBlockRoots_of_mem B roots _ hwho
+    QuittingRootsQuietOn B (quittingExtendDeletedRoots (· ∈ B) roots) :=
+  fun _ _ hwho => quittingExtendDeletedRoots_of_deleted (· ∈ B) roots _ hwho
 
 omit [Fintype ι] in
 /-- Forcing a quiet root to Continue at one coordinate keeps it quiet. -/
@@ -786,27 +381,9 @@ theorem quittingBestReplyValue_eq_never_of_blockGate
   · exact le_quittingBestReplyValue reward profile owner
       (quittingPureTimeBehaviorStrategy reward owner none)
 
-/-- The lifted profile already has every deleted player playing literal
-`Never` on every history. -/
-theorem Function.update_liftBlockProfile_never
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
-    (profile : (quittingGame
-      (quittingDeleteBlockReward reward B)).BehaviorProfile)
-    {owner : ι} (howner : owner ∈ B) :
-    Function.update (quittingLiftBlockProfile reward B profile) owner
-        (quittingPureTimeBehaviorStrategy reward owner none) =
-      quittingLiftBlockProfile reward B profile := by
-  funext player time history
-  by_cases hp : player = owner
-  · subst player
-    simp [quittingPureTimeBehaviorStrategy, quittingLiftBlockProfile,
-      quittingInfinitePathProfile, quittingRootSequenceProfile,
-      quittingExtendBlockRoots, howner]
-  · simp [Function.update_of_ne hp]
-
 /-- At the block gate every deleted player has exactly zero behavioral
 best-response debt on every lifted survivor profile. -/
-theorem quittingBestReplyValue_liftBlockProfile_eq_terminalPayoff
+theorem quittingBestReplyValue_liftDeletedProfile_eq_terminalPayoff_of_blockGate
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
     (profile : (quittingGame
       (quittingDeleteBlockReward reward B)).BehaviorProfile)
@@ -817,20 +394,31 @@ theorem quittingBestReplyValue_liftBlockProfile_eq_terminalPayoff
     (hnonpos : floor ≤ 0)
     (hsolo : reward (quittingSingletonTerminal owner) owner ≤ floor) :
     quittingBestReplyValue reward
-        (quittingLiftBlockProfile reward B profile) owner =
+        (quittingLiftDeletedProfile reward (· ∈ B) profile) owner =
       quittingTerminalPayoff reward
-        (quittingLiftBlockProfile reward B profile) owner := by
+        (quittingLiftDeletedProfile reward (· ∈ B) profile) owner := by
   have hquiet : QuittingRootsBlockQuiet B owner
       (quittingProfileLiveRoot reward
-        (quittingLiftBlockProfile reward B profile)) := by
-    rw [quittingProfileLiveRoot_liftBlockProfile]
-    exact (quittingRootsQuietOn_extendBlockRoots B _).blockQuiet owner
+        (quittingLiftDeletedProfile reward (· ∈ B) profile)) := by
+    rw [quittingProfileLiveRoot_liftDeletedProfile]
+    exact (quittingRootsQuietOn_extendDeletedRoots B _).blockQuiet owner
   rw [quittingBestReplyValue_eq_never_of_blockGate reward B
-    (quittingLiftBlockProfile reward B profile) owner floor hquiet
+    (quittingLiftDeletedProfile reward (· ∈ B) profile) owner floor hquiet
       hjoin hfloor hnonpos hsolo]
-  rw [Function.update_liftBlockProfile_never reward B profile howner]
+  rw [Function.update_liftDeletedProfile_never reward (· ∈ B) profile howner]
 
 /-! ## The dispensability gate as a finite table check -/
+
+/-- The nonempty coalitions of survivors of `B`, as a finite index set of
+reward rows. -/
+def quittingSurvivorTerminals (B : Finset ι) :
+    Finset {S : Finset ι // S.Nonempty} :=
+  Finset.univ.filter (fun T : {S : Finset ι // S.Nonempty} => Disjoint T.1 B)
+
+theorem mem_quittingSurvivorTerminals {B : Finset ι}
+    {T : {S : Finset ι // S.Nonempty}} :
+    T ∈ quittingSurvivorTerminals B ↔ Disjoint T.1 B := by
+  simp [quittingSurvivorTerminals]
 
 /-- The **continue floor** of `owner` over the survivors of `B`: the least of
 `0` and the rewards of `owner` at the nonempty coalitions disjoint from
@@ -838,24 +426,18 @@ theorem quittingBestReplyValue_liftBlockProfile_eq_terminalPayoff
 def quittingBlockContinueFloor
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
     (owner : ι) : ℝ :=
-  (insert (0 : ℝ)
-      ((Finset.univ.filter
-        (fun T : {S : Finset ι // S.Nonempty} => Disjoint T.1 B)).image
-          (fun T => reward T owner))).min'
-    (Finset.insert_nonempty _ _)
+  Math.Finset.insertMin 0 (quittingSurvivorTerminals B) (fun T => reward T owner)
 
 theorem quittingBlockContinueFloor_nonpos
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
     (owner : ι) : quittingBlockContinueFloor reward B owner ≤ 0 :=
-  Finset.min'_le _ _ (Finset.mem_insert_self _ _)
+  Math.Finset.insertMin_le_base _ _ _
 
 theorem quittingBlockContinueFloor_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
     (owner : ι) (S : Finset ι) (hS : S.Nonempty) (hdisjoint : Disjoint S B) :
-    quittingBlockContinueFloor reward B owner ≤ reward ⟨S, hS⟩ owner := by
-  refine Finset.min'_le _ _ (Finset.mem_insert_of_mem ?_)
-  exact Finset.mem_image.mpr
-    ⟨⟨S, hS⟩, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hdisjoint⟩, rfl⟩
+    quittingBlockContinueFloor reward B owner ≤ reward ⟨S, hS⟩ owner :=
+  Math.Finset.insertMin_le _ _ (mem_quittingSurvivorTerminals.mpr hdisjoint)
 
 /-- The continue floor is the greatest nonpositive lower bound of the
 survivor rewards. -/
@@ -864,15 +446,9 @@ theorem le_quittingBlockContinueFloor
     (owner : ι) {value : ℝ} (hzero : value ≤ 0)
     (hrow : ∀ (S : Finset ι) (hS : S.Nonempty), Disjoint S B →
       value ≤ reward ⟨S, hS⟩ owner) :
-    value ≤ quittingBlockContinueFloor reward B owner := by
-  classical
-  unfold quittingBlockContinueFloor
-  refine Finset.le_min' _ _ _ ?_
-  intro entry hentry
-  rcases Finset.mem_insert.mp hentry with hzeroEntry | hmem
-  · exact hzeroEntry ▸ hzero
-  · obtain ⟨terminal, hterminal, rfl⟩ := Finset.mem_image.mp hmem
-    exact hrow terminal.1 terminal.2 (Finset.mem_filter.mp hterminal).2
+    value ≤ quittingBlockContinueFloor reward B owner :=
+  Math.Finset.le_insertMin hzero fun T hT =>
+    hrow T.1 T.2 (mem_quittingSurvivorTerminals.mp hT)
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- Set rewards of the survivor game are set rewards of the original table at
@@ -889,6 +465,28 @@ theorem quittingSetReward_deleteBlockReward
     rfl
   · rw [Finset.not_nonempty_iff_eq_empty.mp hE]
     simp [quittingSetReward]
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- The survivor game's solo rows are the original table's solo rows. -/
+@[simp] theorem quittingDeleteBlockReward_singletonTerminal
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
+    (quitter who : QuittingBlockSurvivor B) :
+    quittingDeleteBlockReward reward B (quittingSingletonTerminal quitter) who =
+      reward (quittingSingletonTerminal quitter.1) who.1 := by
+  refine congrArg (fun T => reward T who.1) (Subtype.ext ?_)
+  simp [quittingExtendDeletedCoalition, quittingSingletonTerminal]
+
+omit [Fintype ι] in
+/-- The survivor game's two-player collision rows are the original table's
+collision rows at the corresponding pair. -/
+@[simp] theorem quittingDeleteBlockReward_pair
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
+    (first second who : QuittingBlockSurvivor B) :
+    quittingDeleteBlockReward reward B
+        ⟨{first, second}, Finset.insert_nonempty first {second}⟩ who =
+      reward ⟨{first.1, second.1}, Finset.insert_nonempty first.1 {second.1}⟩ who.1 := by
+  refine congrArg (fun T => reward T who.1) (Subtype.ext ?_)
+  simp [quittingExtendDeletedCoalition]
 
 omit [Fintype ι] in
 /-- **Reading survivor sure exit sets off the original table.**  A set of
@@ -955,17 +553,17 @@ def QuittingBlockDispensable
 
 /-- A player passing the gate has exactly zero behavioral best-response debt
 on every lifted survivor profile. -/
-theorem quittingBestReplyValue_liftBlockProfile_eq_terminalPayoff_of_dispensable
+theorem quittingBestReplyValue_liftDeletedProfile_eq_terminalPayoff_of_blockDispensable
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
     (profile : (quittingGame
       (quittingDeleteBlockReward reward B)).BehaviorProfile)
     {owner : ι} (howner : owner ∈ B)
     (hgate : QuittingBlockDispensable reward B owner) :
     quittingBestReplyValue reward
-        (quittingLiftBlockProfile reward B profile) owner =
+        (quittingLiftDeletedProfile reward (· ∈ B) profile) owner =
       quittingTerminalPayoff reward
-        (quittingLiftBlockProfile reward B profile) owner :=
-  quittingBestReplyValue_liftBlockProfile_eq_terminalPayoff reward B profile
+        (quittingLiftDeletedProfile reward (· ∈ B) profile) owner :=
+  quittingBestReplyValue_liftDeletedProfile_eq_terminalPayoff_of_blockGate reward B profile
     owner howner (quittingBlockContinueFloor reward B owner) hgate.1
     (fun S hS hdisjoint =>
       quittingBlockContinueFloor_le reward B owner S hS hdisjoint)
@@ -982,21 +580,21 @@ theorem hasTerminalExploitabilityGap_deleteBlock_of_dispensable
     HasTerminalExploitabilityGap (quittingDeleteBlockReward reward B) gap := by
   intro profile
   obtain ⟨player, deviation, hdeviation⟩ :=
-    hexploit (quittingLiftBlockProfile reward B profile)
+    hexploit (quittingLiftDeletedProfile reward (· ∈ B) profile)
   by_cases hp : player ∈ B
   · have hbest :=
-      quittingBestReplyValue_liftBlockProfile_eq_terminalPayoff_of_dispensable
+      quittingBestReplyValue_liftDeletedProfile_eq_terminalPayoff_of_blockDispensable
         reward B profile hp (hgate player hp)
     have hupper := le_quittingBestReplyValue reward
-      (quittingLiftBlockProfile reward B profile) player deviation
+      (quittingLiftDeletedProfile reward (· ∈ B) profile) player deviation
     linarith
   · refine ⟨⟨player, hp⟩,
-      quittingDeleteBlockDeviation reward B ⟨player, hp⟩ deviation, ?_⟩
-    have hon := quittingTerminalPayoff_liftBlockProfile
-      reward B profile ⟨player, hp⟩
+      quittingDeletedDeviation reward (· ∈ B) ⟨player, hp⟩ deviation, ?_⟩
+    have hon := quittingTerminalPayoff_liftDeletedProfile
+      reward (· ∈ B) profile ⟨player, hp⟩
     have hdev :=
-      quittingTerminalPayoff_update_liftBlockProfile_eq_deleteDeviation
-        reward B profile ⟨player, hp⟩ deviation
+      quittingTerminalPayoff_update_liftDeletedProfile_eq_deleteDeviation
+        reward (· ∈ B) profile ⟨player, hp⟩ deviation
     dsimp only at hon hdev
     linarith
 
@@ -1027,7 +625,7 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_blockDispensable
 
 /-- The lift of a terminal `ε`-equilibrium of the survivor game is a terminal
 `ε`-equilibrium of the original game. -/
-theorem isεAsymptoticNash_liftBlockProfile
+theorem isεAsymptoticNash_liftDeletedProfile_of_blockDispensable
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
     (hgate : ∀ d ∈ B, QuittingBlockDispensable reward B d)
     {error : ℝ} (herror : 0 ≤ error)
@@ -1036,59 +634,24 @@ theorem isεAsymptoticNash_liftBlockProfile
     (hnash : (quittingGame (quittingDeleteBlockReward reward B)).IsεAsymptoticNash
       (quittingTerminalPayoff (quittingDeleteBlockReward reward B)) error profile) :
     (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward)
-      error (quittingLiftBlockProfile reward B profile) := by
+      error (quittingLiftDeletedProfile reward (· ∈ B) profile) := by
   intro who deviation
   by_cases hp : who ∈ B
   · have hbest :=
-      quittingBestReplyValue_liftBlockProfile_eq_terminalPayoff_of_dispensable
+      quittingBestReplyValue_liftDeletedProfile_eq_terminalPayoff_of_blockDispensable
         reward B profile hp (hgate who hp)
     have hupper := le_quittingBestReplyValue reward
-      (quittingLiftBlockProfile reward B profile) who deviation
+      (quittingLiftDeletedProfile reward (· ∈ B) profile) who deviation
     linarith
-  · have hon := quittingTerminalPayoff_liftBlockProfile
-      reward B profile ⟨who, hp⟩
+  · have hon := quittingTerminalPayoff_liftDeletedProfile
+      reward (· ∈ B) profile ⟨who, hp⟩
     have hdev :=
-      quittingTerminalPayoff_update_liftBlockProfile_eq_deleteDeviation
-        reward B profile ⟨who, hp⟩ deviation
+      quittingTerminalPayoff_update_liftDeletedProfile_eq_deleteDeviation
+        reward (· ∈ B) profile ⟨who, hp⟩ deviation
     have hstep := hnash ⟨who, hp⟩
-      (quittingDeleteBlockDeviation reward B ⟨who, hp⟩ deviation)
+      (quittingDeletedDeviation reward (· ∈ B) ⟨who, hp⟩ deviation)
     dsimp only at hon hdev
     linarith
-
-/-- A uniform-equilibrium payoff supplies terminal approximate equilibria
-whose own terminal payoffs are close to it. -/
-theorem exists_terminalNash_terminalPayoff_close_of_isUniformEquilibriumPayoff
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (target : Payoff ι)
-    (hpayoff : (quittingGame reward).IsUniformEquilibriumPayoff none target)
-    {error : ℝ} (herror : 0 < error) :
-    ∃ profile : (quittingGame reward).BehaviorProfile,
-      (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) error profile ∧
-        ∀ who, |quittingTerminalPayoff reward profile who - target who| ≤ error := by
-  have hhalf : 0 < error / 2 := by linarith
-  obtain ⟨profile, threshold, hprofile⟩ := hpayoff (error / 2) hhalf
-  have huniform : (quittingGame reward).IsUniformεEquilibrium
-      none (error / 2) profile :=
-    ⟨threshold, fun horizon hhorizon => (hprofile horizon hhorizon).1⟩
-  have hterminal : (quittingGame reward).IsεAsymptoticNash
-      (quittingTerminalPayoff reward) (error / 2) profile :=
-    (quittingGame reward).isεAsymptoticNash_of_isUniformεEquilibrium
-      none (quittingTerminalPayoff reward) huniform
-      (fun selectedProfile who =>
-        tendsto_finiteAveragePayoff_quittingGame reward selectedProfile who)
-  refine ⟨profile, hterminal.mono (by linarith), fun who => ?_⟩
-  have hlimit := tendsto_finiteAveragePayoff_quittingGame reward profile who
-  have habs : Tendsto
-      (fun horizon => |(quittingGame reward).finiteAveragePayoff none horizon
-        profile who - target who|) atTop
-      (nhds |quittingTerminalPayoff reward profile who - target who|) :=
-    ((hlimit.sub tendsto_const_nhds).abs)
-  have hhalfBound :
-      |quittingTerminalPayoff reward profile who - target who| ≤ error / 2 := by
-    refine le_of_tendsto habs ?_
-    exact Filter.eventually_atTop.mpr
-      ⟨threshold, fun horizon hhorizon => (hprofile horizon hhorizon).2 who⟩
-  linarith
 
 /-- **The block deletion producer, with the survivors' payoff preserved.**
 If every member of `B` passes the block gate and `target` is a
@@ -1126,7 +689,7 @@ theorem exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable
         (quittingDeleteBlockReward reward B) target htarget (herrorPos step)
   choose profiles hnash hclose using hexists
   let lifted : ℕ → (quittingGame reward).BehaviorProfile :=
-    fun step => quittingLiftBlockProfile reward B (profiles step)
+    fun step => quittingLiftDeletedProfile reward (· ∈ B) (profiles step)
   have hmem : ∀ step, quittingTerminalPayoff reward (lifted step) ∈
       Set.Icc (fun _ : ι => -quittingRewardBound reward)
         (fun _ : ι => quittingRewardBound reward) :=
@@ -1148,7 +711,7 @@ theorem exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable
         |quittingTerminalPayoff reward (lifted (subsequence step)) who.1 -
           target who| ≤ (error ∘ subsequence) step := by
       intro step
-      rw [quittingTerminalPayoff_liftBlockProfile]
+      rw [quittingTerminalPayoff_liftDeletedProfile]
       exact hclose (subsequence step) who
     have hzero : |payoff who.1 - target who| ≤ 0 := by
       refine le_of_tendsto_of_tendsto' ((hcoord.sub tendsto_const_nhds).abs)
@@ -1159,8 +722,43 @@ theorem exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable
       (filter := atTop) reward payoff (error ∘ subsequence)
       (fun step => lifted (subsequence step)) hsubLimit ?_ hlimit
     refine Filter.Frequently.of_forall fun step => ?_
-    exact isεAsymptoticNash_liftBlockProfile reward B hgate
+    exact isεAsymptoticNash_liftDeletedProfile_of_blockDispensable reward B hgate
       (herrorPos (subsequence step)).le (hnash (subsequence step))
 
+/-! ## Cardinally symmetric survivors -/
+
+/-- **Deleting a block onto cardinally symmetric survivors.**  If every member
+of `B` passes the block gate and the survivor table depends only on the size of
+the quitting coalition and on membership in it, then the original game has a
+uniform-equilibrium payoff whose value at every survivor is the exit reward of
+one fixed coalition of survivors, read off the original table.
+
+No bound on the number of survivors is imposed: the survivor game is solved by
+`exists_isQuittingSureExitSet_of_cardinalSymmetric`, whose enlargement argument
+runs at any finite player count. -/
+theorem exists_uniformEquilibriumPayoff_eq_setReward_of_blockDispensable_cardinalSymmetric
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (B : Finset ι)
+    (hgate : ∀ d ∈ B, QuittingBlockDispensable reward B d)
+    (hsymmetric :
+      IsQuittingCardinalSymmetric (quittingDeleteBlockReward reward B)) :
+    ∃ (exitSet : Finset ι) (payoff : Payoff ι),
+      Disjoint exitSet B ∧
+        (∀ who ∉ B, payoff who = quittingSetReward reward exitSet who) ∧
+          (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  classical
+  obtain ⟨survivorExit, hexit⟩ := exists_isQuittingSureExitSet_of_cardinalSymmetric
+    (quittingDeleteBlockReward reward B) hsymmetric
+  obtain ⟨payoff, hvalue, huniform⟩ :=
+    exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable reward B
+      hgate (quittingSetReward (quittingDeleteBlockReward reward B) survivorExit)
+      (isUniformEquilibriumPayoff_setReward_of_isQuittingSureExitSet
+        (quittingDeleteBlockReward reward B) hexit)
+  refine ⟨survivorExit.map
+      (Function.Embedding.subtype (p := fun who : ι => who ∉ B)),
+    payoff, Finset.disjoint_left.mpr ?_, fun who hwho => ?_, huniform⟩
+  · intro member hmember
+    obtain ⟨survivor, -, rfl⟩ := Finset.mem_map.mp hmember
+    exact survivor.2
+  · rw [hvalue ⟨who, hwho⟩, quittingSetReward_deleteBlockReward]
 
 end GameTheory

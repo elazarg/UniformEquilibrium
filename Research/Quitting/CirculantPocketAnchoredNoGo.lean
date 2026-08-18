@@ -93,7 +93,14 @@ theorem step_margin_neg_nonneg (h : HasCirculantSoloMatrix reward margin)
 /-! ## The five-player open pocket -/
 
 /-- The open pocket of five-player circulant margins: both neighbour margins
-are strictly negative and both distant margins are strictly positive. -/
+are strictly negative and both distant margins are strictly positive.
+
+Strictness at the two distant distances is what `step_eq_zero_of_isOpenPocketMargin`
+consumes, and it cannot be relaxed to nonnegativity.  On a face where a distant
+margin vanishes, the step at that distance has nonpositive margin and its
+reverse — the other distant distance — has nonnegative margin, so that step
+passes both patience conditions and the schedule may move.  Strictness at the
+two neighbour distances is the negativity of the pocket itself. -/
 def IsOpenPocketMargin (margin : ZMod 5 → ℝ) : Prop :=
   margin 1 < 0 ∧ margin 4 < 0 ∧ 0 < margin 2 ∧ 0 < margin 3
 

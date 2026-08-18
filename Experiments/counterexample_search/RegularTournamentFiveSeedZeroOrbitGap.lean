@@ -86,6 +86,18 @@ theorem reward_singletonTerminal_zero :
   rw [reward_singletonTerminal_entries]
   fin_cases who <;> rfl
 
+/-- Player one's own solo exit pays it `1`. -/
+theorem reward_singletonTerminal_one_self :
+    reward (quittingSingletonTerminal (1 : Player)) 1 = 1 := by
+  rw [reward_singletonTerminal_entries]
+  norm_num
+
+/-- The marked pair `{0, 1}` pays player one `1`, as much as its own solo exit
+does. -/
+theorem reward_markedPair_one :
+    reward ⟨{(0 : Player), 1}, Finset.insert_nonempty 0 {1}⟩ 1 = 1 := by
+  norm_num [reward]
+
 /-! ## Only player zero's exit reaches the target -/
 
 /-- The separating functional: the sum of the last two coordinates. -/
@@ -212,11 +224,8 @@ theorem not_isZeroQuittingRootEndpointNash_soloMixedRoot_zero
   rw [quittingRootEndpointDifference,
     quittingRootQuitPayoff_soloMixedRoot_of_ne reward tail hne,
     quittingRootContinuePayoff_soloMixedRoot_of_ne reward tail hne] at hcontinue
-  have hpair : reward ⟨{(0 : Player), 1}, Finset.insert_nonempty 0 {1}⟩ 1 = 1 := by
-    norm_num [reward]
-  have hsolo : reward (quittingSingletonTerminal (1 : Player)) 1 = 1 := by
-    rw [reward_singletonTerminal_entries]
-    norm_num
+  have hpair := reward_markedPair_one
+  have hsolo := reward_singletonTerminal_one_self
   have hpreempt : reward (quittingSingletonTerminal (0 : Player)) 1 = 0 := by
     rw [reward_singletonTerminal_entries]
     norm_num
@@ -259,21 +268,11 @@ alone does. -/
 theorem quittingAnchoredCyclicQuitValue_one_of_zero {m : ℕ}
     (w : Fin m → Player) (hazard : Fin m → ℝ) (phase : Fin m)
     (hphase : w phase = 0) :
-    quittingAnchoredCyclicQuitValue reward w hazard phase 1 = 1 := by
-  have hsolo : reward (quittingSingletonTerminal (1 : Player)) 1 = 1 := by
-    rw [reward_singletonTerminal_entries]
-    norm_num
-  have hgeneral : ∀ owner : Player, owner = 0 → ∀ rate : ℝ,
-      (if (1 : Player) = owner then reward (quittingSingletonTerminal 1) 1
-        else rate * reward ⟨{owner, (1 : Player)},
-              Finset.insert_nonempty owner {1}⟩ 1 +
-            (1 - rate) * reward (quittingSingletonTerminal 1) 1) = 1 := by
-    rintro owner rfl rate
-    have hpair : reward ⟨{(0 : Player), 1}, Finset.insert_nonempty 0 {1}⟩ 1 = 1 := by
-      norm_num [reward]
-    rw [if_neg (by decide : ¬ (1 : Player) = 0), hpair, hsolo]
-    ring
-  exact hgeneral (w phase) hphase (hazard phase)
+    quittingAnchoredCyclicQuitValue reward w hazard phase 1 = 1 :=
+  quittingAnchoredCyclicQuitValue_eq_of_flatQuitRow reward w hazard phase
+    reward_singletonTerminal_one_self fun _ ↦ by
+      rw [hphase]
+      exact reward_markedPair_one
 
 /-- Player one's one-phase Quit value against an idle phase is one: quitting
 alone pays it its own singleton row. -/
@@ -281,15 +280,9 @@ theorem quittingAnchoredCyclicQuitValue_one_of_hazard_eq_zero {m : ℕ}
     (w : Fin m → Player) (hazard : Fin m → ℝ) (phase : Fin m)
     (hzero : hazard phase = 0) :
     quittingAnchoredCyclicQuitValue reward w hazard phase 1 = 1 := by
-  have hsolo : reward (quittingSingletonTerminal (1 : Player)) 1 = 1 := by
-    rw [reward_singletonTerminal_entries]
-    norm_num
-  unfold quittingAnchoredCyclicQuitValue
-  rw [hzero]
-  split_ifs with hcase
-  · exact hsolo
-  · rw [hsolo]
-    ring
+  rw [quittingAnchoredCyclicQuitValue_of_hazard_eq_zero reward w hazard phase 1
+    hzero]
+  exact reward_singletonTerminal_one_self
 
 /-- **The opening phase of a target-paying schedule is idle or owned by player
 zero.**  Both player one and player two are paid nothing by the target, and the
