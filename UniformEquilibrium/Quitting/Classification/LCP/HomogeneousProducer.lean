@@ -677,9 +677,11 @@ theorem isεAsymptoticNash_homogeneousScaledRoot_of_nonvertex
   exact isεAsymptoticNash_stationary_of_unilateralCap_le reward root
     (12 * quittingRewardBound reward * scale) hcontracts hcap
 
-/-- A non-vertex homogeneous witness gives terminal approximate equilibria at
-every positive accuracy. -/
-theorem terminalNash_all_errors_of_nonvertexHomogeneousWitness
+/-- A non-vertex homogeneous witness gives *stationary* terminal approximate
+equilibria at every positive accuracy, all approaching the singleton mixture
+of the witness.  Each is one product root of hazards along the witness
+direction, repeated forever. -/
+theorem isQuittingStationaryUniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (weight : stdSimplex ℝ ι)
     (hresidual : ∀ who,
@@ -688,12 +690,8 @@ theorem terminalNash_all_errors_of_nonvertexHomogeneousWitness
       weight.val who *
         singletonLCPResidual (normalizedSoloMatrix reward) weight who = 0)
     (hnonvertex : ∀ who, weight.val who < 1) :
-    ∀ ε : ℝ, 0 < ε →
-      ∃ profile : (quittingGame reward).BehaviorProfile,
-        (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) ε profile ∧
-        ∀ who, |quittingTerminalPayoff reward profile who -
-          quittingSingletonMixture reward weight.val who| ≤ ε := by
+    IsQuittingStationaryUniformEquilibriumPayoff reward
+      (quittingSingletonMixture reward weight.val) := by
   obtain ⟨hmixFloor, hactivePinned⟩ :=
     fullHomogeneousWitness_singletonMixture reward weight
       hresidual hcomplementary
@@ -717,7 +715,7 @@ theorem terminalNash_all_errors_of_nonvertexHomogeneousWitness
     (hscaleHalf.trans (by norm_num))
   have hnash := isεAsymptoticNash_homogeneousScaledRoot_of_nonvertex
     reward weight hscale hscaleHalf hmixFloor hactivePinned hnonvertex
-  refine ⟨quittingStationaryProfile reward root, ?_, ?_⟩
+  refine ⟨root, ?_, ?_⟩
   · exact hnash.mono herror.le
   · intro who
     have hclose := abs_homogeneousScaledRoot_terminalPayoff_sub_mixture_le
@@ -743,10 +741,9 @@ theorem isUniformEquilibriumPayoff_singletonMixture_of_nonvertexHomogeneousWitne
         singletonLCPResidual (normalizedSoloMatrix reward) weight who = 0)
     (hnonvertex : ∀ who, weight.val who < 1) :
     (quittingGame reward).IsUniformEquilibriumPayoff none
-      (quittingSingletonMixture reward weight.val) := by
-  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_approxTarget
-  exact terminalNash_all_errors_of_nonvertexHomogeneousWitness
-    reward weight hresidual hcomplementary hnonvertex
+      (quittingSingletonMixture reward weight.val) :=
+  (isQuittingStationaryUniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
+    reward weight hresidual hcomplementary hnonvertex).isUniformEquilibriumPayoff
 
 /-- A non-vertex homogeneous witness produces a uniform-equilibrium payoff. -/
 theorem exists_uniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
@@ -795,16 +792,22 @@ theorem singletonLCPResidual_eq_column_of_weight_eq_one
     rw [hzero other (Finset.mem_erase.mp hother).1, zero_mul]
   rw [herase, zero_add]
 
-/-- **Homogeneous matrix producer.**  The homogeneous branch always
-produces an ordinary uniform-equilibrium payoff.  A vertex witness is handled
-by the landed two-scale owner/blocker construction; every non-vertex witness
-is realized by stationary hazards tending to zero along its simplex
-direction. -/
-theorem exists_uniformEquilibriumPayoff_of_homogeneousMatrixBranch
+/-- **Homogeneous matrix producer, at stationary strength.**  The homogeneous
+branch always produces a payoff vector approached by stationary
+`ε`-equilibria.  A vertex witness is handled by the two-scale owner/blocker
+root; every non-vertex witness is realized by stationary hazards tending to
+zero along its simplex direction.
+
+Solan and Solan, *Quitting games and linear complementarity problems*,
+Math. Oper. Res. **45**(2) (2020), Section 5.1, assert without proof that a
+nontrivial solution of the homogeneous problem on the α-player matrix yields a
+stationary `ε`-equilibrium for every `ε > 0`.  This is that claim, with a
+pinned limit payoff. -/
+theorem exists_stationaryUniformEquilibriumPayoff_of_homogeneousMatrixBranch
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (branch : HomogeneousMatrixBranch reward) :
-    ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+    ∃ value : Payoff ι,
+      IsQuittingStationaryUniformEquilibriumPayoff reward value := by
   classical
   let matrix := normalizedSoloMatrix reward
   obtain ⟨weight, hresidual, hcomplementary⟩ := branch.homogeneous
@@ -842,8 +845,8 @@ theorem exists_uniformEquilibriumPayoff_of_homogeneousMatrixBranch
       rw [← singletonLCPResidual_eq_column_of_weight_eq_one
         matrix fullWeight howner who]
       exact hfullResidual who
-    exact exists_uniformEquilibriumPayoff_of_nonnegative_column
-      reward hne hcolumn hblocker
+    exact ⟨_, isQuittingStationaryUniformEquilibriumPayoff_of_nonnegative_column
+      reward hne hcolumn hblocker⟩
   · have hnonvertex : ∀ who, fullWeight.val who < 1 := by
       intro who
       have hle : fullWeight.val who ≤ 1 := by
@@ -851,8 +854,21 @@ theorem exists_uniformEquilibriumPayoff_of_homogeneousMatrixBranch
         exact Finset.single_le_sum
           (fun owner _ => fullWeight.property.1 owner) (Finset.mem_univ who)
       exact lt_of_le_of_ne hle (fun heq => hvertex ⟨who, heq⟩)
-    exact exists_uniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
-      reward fullWeight hfullResidual hfullComplementary hnonvertex
+    exact ⟨_,
+      isQuittingStationaryUniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
+        reward fullWeight hfullResidual hfullComplementary hnonvertex⟩
+
+/-- **Homogeneous matrix producer.**  The homogeneous branch always produces
+an ordinary uniform-equilibrium payoff. -/
+theorem exists_uniformEquilibriumPayoff_of_homogeneousMatrixBranch
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (branch : HomogeneousMatrixBranch reward) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  obtain ⟨_, hvalue⟩ :=
+    exists_stationaryUniformEquilibriumPayoff_of_homogeneousMatrixBranch
+      reward branch
+  exact exists_uniformEquilibriumPayoff_of_stationaryFamily hvalue
 
 end QuittingLCPClassification
 end GameTheory

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.LaterLayerAbnormal
+import UniformEquilibrium.Quitting.Classification.LCP.StationaryEquilibrium
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation
@@ -299,8 +300,15 @@ theorem abs_isolatedEndpointThreat_quitValue_sub_soloRoot_le
       hwho] using hperturb
 
 /-- A normal blocker repairs any exact absorbing isolated endpoint into
-terminal approximate equilibria at every accuracy. -/
-theorem terminalNash_all_errors_of_isolatedEndpoint
+*stationary* terminal approximate equilibria at every accuracy, all of them
+approaching the owner's singleton payoff.
+
+The repaired profile is one product root repeated forever, so this is the
+stationary conclusion shape of Solan and Solan, *Quitting games and linear
+complementarity problems*, Math. Oper. Res. **45**(2) (2020), Section 5.1: it
+is their displayed profile in which the owner keeps its hazard, the blocker
+receives a small positive hazard, and everyone else continues. -/
+theorem isQuittingStationaryUniformEquilibriumPayoff_of_isolatedEndpoint
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {owner blocker : ι} (hne : blocker ≠ owner) (hazard : PMF Bool)
     (howner : 0 < (hazard true).toReal)
@@ -309,12 +317,8 @@ theorem terminalNash_all_errors_of_isolatedEndpoint
       (quittingSoloStationaryRoot owner hazard))
     (hblocker : quittingSoloReward reward blocker owner ≤
       quittingSoloReward reward owner owner) :
-    ∀ epsilon : ℝ, 0 < epsilon →
-      ∃ profile : (quittingGame reward).BehaviorProfile,
-        (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) epsilon profile ∧
-        ∀ who, |quittingTerminalPayoff reward profile who -
-          quittingSoloReward reward owner who| ≤ epsilon := by
+    IsQuittingStationaryUniformEquilibriumPayoff reward
+      (quittingSoloReward reward owner) := by
   intro epsilon hepsilon
   let M := quittingRewardBound reward
   let coefficient := 2 * M + 2 * M / (hazard true).toReal
@@ -338,7 +342,7 @@ theorem terminalNash_all_errors_of_isolatedEndpoint
   let root := isolatedEndpointThreatRoot owner blocker hazard eta heta.le heta1
   let payoff := fun who => quittingTerminalPayoff reward
     (quittingStationaryProfile reward root) who
-  refine ⟨quittingStationaryProfile reward root, ?_, ?_⟩
+  refine ⟨root, ?_, ?_⟩
   have hnashCoefficient :
       (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) (coefficient * eta)
@@ -507,10 +511,9 @@ theorem isUniformEquilibriumPayoff_soloReward_of_isolatedEndpoint
     (hblocker : quittingSoloReward reward blocker owner ≤
       quittingSoloReward reward owner owner) :
     (quittingGame reward).IsUniformEquilibriumPayoff none
-      (quittingSoloReward reward owner) := by
-  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_approxTarget
-  exact terminalNash_all_errors_of_isolatedEndpoint
-    reward hne hazard howner hnash hblocker
+      (quittingSoloReward reward owner) :=
+  (isQuittingStationaryUniformEquilibriumPayoff_of_isolatedEndpoint
+    reward hne hazard howner hnash hblocker).isUniformEquilibriumPayoff
 
 /-- Strategic closure of the isolated endpoint repair. -/
 theorem exists_uniformEquilibriumPayoff_of_isolatedEndpoint

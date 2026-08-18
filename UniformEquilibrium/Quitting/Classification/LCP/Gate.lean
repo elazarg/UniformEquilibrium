@@ -28,10 +28,12 @@ algebraic regimes is reached:
 The fifth regime is the precise residual hard class supplied by this file.
 The fourth regime records only the matrix hypothesis used by the continuous
 absorption-path literature.  It does not assert that a continuous path has
-been formalized or compiled to ordinary strategies.  Likewise, the first
-three regimes are not assigned stationary equilibria here: those are source
-producer theorems that still require concrete formalization over the
-normal recursion.
+been formalized or compiled to ordinary strategies.
+
+This file assigns no strategic conclusion to any regime.  The producers for
+the first three regimes are proved separately and collected in
+`UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence`; the
+fourth and fifth remain strategically open.
 
 Never and first-stage absorption are intentionally absent from the exhaustive
 theorem below.  Never already has a repository-native strategic theorem, while

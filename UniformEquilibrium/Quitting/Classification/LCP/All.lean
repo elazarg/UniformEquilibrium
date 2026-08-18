@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
+import UniformEquilibrium.Quitting.Classification.LCP.StationaryEquilibrium
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCoreStrictnessExample
 import UniformEquilibrium.Quitting.Classification.LCP.CyclicParametricQ
@@ -22,6 +23,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQProducer
 import UniformEquilibrium.Quitting.Classification.LCP.SupportHierarchy
 import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQClosure
 import UniformEquilibrium.Quitting.Classification.LCP.CounterexampleNecessary
+import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.All
 
 /-!
@@ -57,7 +59,10 @@ This umbrella exports the theorem-bearing infrastructure proved in this folder:
   isolated-endpoint blocker repair; and
 * the sharp unconditional counterexample restriction: the normal
   core is nonempty, nonhomogeneous, and its principal matrix is textbook
-  standard Q (hence also projective Q).
+  standard Q (hence also projective Q); and
+* the stationary strengthening of that restriction: all three producers off
+  the standard-Q side deliver a payoff vector approached by *stationary*
+  `ε`-equilibria, which is the source's Section 5 conclusion shape.
 
 It deliberately does not export a source-theorem record or a completed
 strategic classification theorem.  Concrete sunspot semantics, continuous

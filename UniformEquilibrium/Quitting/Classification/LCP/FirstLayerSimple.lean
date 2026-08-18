@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
+import UniformEquilibrium.Quitting.Classification.LCP.StationaryEquilibrium
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
@@ -188,6 +189,23 @@ theorem terminalNash_all_errors_of_normalLayer_one_eq_empty
   intro who deviation
   have h := hexact who deviation
   linarith
+
+/-- **Stationary existence on the empty-first-layer branch.**  The exact
+stationary profile is a stationary `ε`-equilibrium at every accuracy, with no
+accuracy spent, and its own terminal payoff is the pinned limit.  This is the
+first of the two stationary claims Solan and Solan, *Quitting games and linear
+complementarity problems*, Math. Oper. Res. **45**(2) (2020), Section 5.1,
+assert without proof alongside their Theorem 5.1. -/
+theorem exists_stationaryUniformEquilibriumPayoff_of_normalLayer_one_eq_empty
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hlayer : normalLayer (normalizedSoloMatrix reward) 1 = ∅) :
+    ∃ value : Payoff ι,
+      IsQuittingStationaryUniformEquilibriumPayoff reward value := by
+  obtain ⟨root, hexact⟩ :=
+    exists_exact_stationary_terminalNash_of_normalLayer_one_eq_empty
+      reward hlayer
+  exact ⟨_, isQuittingStationaryUniformEquilibriumPayoff_of_exact
+    reward root hexact⟩
 
 /-- The exact stationary profile's terminal payoff gives target-free
 uniform-payoff existence. -/
