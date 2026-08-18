@@ -663,10 +663,11 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "The general multi-quitter periodic compiler takes a block cycle of product rows -- any set of players may quit at a phase, independently, at phase-constant hazards -- and compiles a finite certificate into a uniform-equilibrium payoff and emptiness of the counterexample regime. The certificate asks that hazards be probabilities, that displayed values fit the reward box and close up, the phase-value recursion, exact one-stage complementarity, positive absorption at some phase, and nonnegative own solo rewards. No product contraction is asked of the certificate, of the response cap, or of the refusal branch: the non-contracting branch is discharged explicitly, by identifying the deleted cycle there with the all-continue row. A contraction hypothesis survives at exactly one place, uniqueness of the phase values, which asks that every player's opponents jointly fail to survive one turn with certainty.",
+      "summary": "The general multi-quitter periodic compiler takes a block cycle of product rows -- any set of players may quit at a phase, independently, at phase-constant hazards -- and compiles a finite certificate into a uniform-equilibrium payoff and emptiness of the counterexample regime. The certificate asks that hazards be probabilities, that displayed values fit the reward box and close up, the phase-value recursion, exact one-stage complementarity, positive absorption at some phase, and nonnegative own solo rewards. No product contraction is asked of the certificate, of the response cap, or of the refusal branch: the non-contracting branch is discharged explicitly, by identifying the deleted cycle there with the all-continue row. A contraction hypothesis survives at exactly one place, uniqueness of the phase values, which asks that every player's opponents jointly fail to survive one turn with certainty. The regime-facing consumers live beside the compiler, in the diagnostics module that reads the certificate against the counterexample regime.",
       "evidence": [
         "UniformEquilibrium/Quitting/Cycles/BlockPeriodicProfile.lean",
-        "UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean"
+        "UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PeriodicBlockProfile.lean"
       ],
       "evidence_seals": [
         "M",
@@ -782,7 +783,7 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "Read as labelled transport on payoff cells along the forced solo preemption cycle, the static preemption geometry supplies no obstruction, and the reason is now priced. Each forced preemption is a unit-slope translation edge into the target's diagonal, satisfied exactly by the cell values, so the forced system has a lax section and no Farkas certificate; forced edges end on diagonals and never leave them, so no closed walk uses one, which is structural feasibility rather than an accident of the labels. The observer switches carry the cost instead: their total around the cycle is at least the period times the gap, so some single switch costs a full gap and free switches are refuted outright at positive gap. Under any charging the static solo table justifies, the augmented system stays feasible, and no such charging leaves the augmented closed walk at positive weight. In the scalar-per-player reading the same split appears as a compression no-go: the forced constant label has a lax section and no certificate, the unforced telescope label has a certificate and no section, and the interpersonal comparison that would legitimize the naive telescope is refuted. The transport a proof would need is named as a proposition, but it is equivalent to nonexistence of the counterexample regime and so is not a reduction; its genuine content is to charge the switch edges below the static price, from data the solo-reward table does not contain.",
+      "summary": "Read as labelled transport on payoff cells along the forced solo preemption cycle, the static route is a completed no-go. Each forced preemption is a unit-slope translation edge into the target's diagonal, satisfied exactly by the cell values, so the forced system has a lax section and no Farkas certificate; forced edges end on diagonals and never leave them, so no closed walk uses one. The observer switches carry the cost: their total around the cycle is at least the period times the gap, so some single switch costs a full gap and free switches are refuted outright at positive gap. The closing argument is now a genuine closed walk rather than scalar arithmetic. The phase steps and the augmented prefix assemble into an alternating closed walk whose transport weight is exactly the augmented cycle weight, and because the payoff cells are a potential the max-plus weak-duality machinery caps that closed walk at zero. So every charging the static solo table justifies has nonpositive augmented weight, and no such charging can carry a transport obstruction. Nothing in the static reading remains open. A dynamic interface would need vertices carrying profile-determined values -- phase values, observer-indexed continuations, or debt coordinates -- with their own provenance; no Lean statement for such an interface exists.",
       "evidence": [
         "Research/Quitting/PreemptionTransport.lean"
       ],
@@ -800,25 +801,23 @@
         "GameTheory.QuittingSoloPreemptionCycle.exists_gap_le_observerSwitchCost",
         "GameTheory.QuittingSoloPreemptionCycle.not_forall_observerSwitchCost_nonpos",
         "GameTheory.QuittingSoloPreemptionCycle.isLaxSection_augmentedCellLabel",
-        "GameTheory.QuittingSoloPreemptionCycle.tightObserverSwitchData",
+        "GameTheory.QuittingSoloPreemptionCycle.phaseStepWalk",
+        "GameTheory.QuittingSoloPreemptionCycle.augmentedPrefixWalk",
+        "GameTheory.QuittingSoloPreemptionCycle.augmentedCellWalk",
+        "GameTheory.QuittingSoloPreemptionCycle.walkWeight_augmentedCellWalk",
+        "GameTheory.QuittingSoloPreemptionCycle.tightStaticObserverSwitchData",
         "GameTheory.QuittingSoloPreemptionCycle.isEmpty_positiveObserverSwitchData",
-        "GameTheory.QuittingObserverSwitchData.augmentedCycleWeight",
-        "GameTheory.QuittingObserverSwitchData.elim",
+        "GameTheory.QuittingStaticObserverSwitchData.isLaxSection",
+        "GameTheory.QuittingStaticObserverSwitchData.augmentedCycleWeight",
+        "GameTheory.QuittingStaticObserverSwitchData.augmentedCycleWeight_eq_walkWeight",
+        "GameTheory.QuittingStaticObserverSwitchData.augmentedCycleWeight_nonpos",
+        "GameTheory.QuittingStaticObserverSwitchData.elim",
         "GameTheory.QuittingSoloPreemptionCycle.isLaxSection_forcedCrossConstantLabel",
         "GameTheory.QuittingSoloPreemptionCycle.not_exists_farkasCertificate_forcedCrossConstantLabel",
         "GameTheory.QuittingSoloPreemptionCycle.isFarkasCertificate_unforcedTelescopeLabel",
         "GameTheory.QuittingSoloPreemptionCycle.not_exists_isLaxSection_unforcedTelescopeLabel",
-        "GameTheory.QuittingSoloPreemptionCycle.not_forall_soloReward_self_le_crossValue",
-        "GameTheory.isEmpty_counterexampleRegime_of_quittingObserverSwitchTransportProducer",
-        "GameTheory.exists_uniformEquilibriumPayoff_of_quittingObserverSwitchTransportProducer",
-        "GameTheory.quittingObserverSwitchTransportProducer_iff_isEmpty_counterexampleRegime"
-      ],
-      "open_propositions": [
-        "GameTheory.QuittingObserverSwitchTransportProducer"
-      ],
-      "open_proposition_equivalences": {
-        "GameTheory.QuittingObserverSwitchTransportProducer": "GameTheory.quittingObserverSwitchTransportProducer_iff_isEmpty_counterexampleRegime"
-      }
+        "GameTheory.QuittingSoloPreemptionCycle.not_forall_soloReward_self_le_crossValue"
+      ]
     },
     {
       "id": "CLOSE-COLLIDER-COMPLETION-FAMILY",
