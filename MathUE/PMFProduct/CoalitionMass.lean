@@ -53,6 +53,18 @@ mass: nobody acting is the same event as everyone staying put. -/
     coalitionMass x (∅ : Finset ι) = continueMass x := by
   simp [coalitionMass, continueMass]
 
+/-- **Total mass.** The coalition masses of the `2 ^ #ι` coalitions sum to
+`1`. This is the binomial expansion of `∏ i, (x i + (1 - x i))`, so it holds
+for any real family, not only for probabilities. -/
+theorem sum_coalitionMass (x : ι → ℝ) : ∑ J : Finset ι, coalitionMass x J = 1 := by
+  have h := Fintype.prod_add x (fun i => 1 - x i)
+  have hlhs : (∏ a : ι, (x a + (1 - x a))) = (1 : ℝ) := by
+    have hfun : (fun a : ι => x a + (1 - x a)) = (fun _ : ι => (1 : ℝ)) := by
+      funext a; ring
+    rw [hfun, Finset.prod_const_one]
+  rw [hlhs] at h
+  simpa [coalitionMass] using h.symm
+
 /-- **Coalition sum.** Summing the coalition mass over every nonempty
 coalition recovers exactly the mass not accounted for by universal
 continuation. The sum ranges over `Finset.univ.erase ∅`, i.e. exactly the
@@ -60,14 +72,7 @@ finsets `J` with `J ≠ ∅`, equivalently `J.Nonempty` by
 `Finset.nonempty_iff_ne_empty`. -/
 theorem sum_coalitionMass_nonempty (x : ι → ℝ) :
     ∑ J ∈ Finset.univ.erase (∅ : Finset ι), coalitionMass x J = 1 - continueMass x := by
-  have hone : ∑ J : Finset ι, coalitionMass x J = 1 := by
-    have h := Fintype.prod_add x (fun i => 1 - x i)
-    have hlhs : (∏ a : ι, (x a + (1 - x a))) = (1 : ℝ) := by
-      have hfun : (fun a : ι => x a + (1 - x a)) = (fun _ : ι => (1 : ℝ)) := by
-        funext a; ring
-      rw [hfun, Finset.prod_const_one]
-    rw [hlhs] at h
-    simpa [coalitionMass] using h.symm
+  have hone : ∑ J : Finset ι, coalitionMass x J = 1 := sum_coalitionMass x
   have hsplit :
       coalitionMass x (∅ : Finset ι) +
           ∑ J ∈ Finset.univ.erase (∅ : Finset ι), coalitionMass x J

@@ -166,6 +166,7 @@ import MathUE.CurveSelection.SourceSequence
 import MathUE.CurveSelection.SquareLift
 import MathUE.CurveSelection.Termination
 import MathUE.CurveSelection.UltrafilterSubsequence
+import MathUE.CycleCoboundary
 import MathUE.CyclicExposure
 import MathUE.CyclicMaxAffineBound
 import MathUE.DivergentChargeRecurrence
@@ -188,6 +189,7 @@ import MathUE.GroupAction.CyclicKofNCollapseClassification
 import MathUE.GroupAction.CyclicKofNFiberLift
 import MathUE.GroupAction.CyclicKofNPrimitiveBlocks
 import MathUE.GuardedRoutingAudit
+import MathUE.IndependenceModelValuation
 import MathUE.InfinitesimalRatFunc
 import MathUE.Interval.CachedDyadicDual
 import MathUE.Interval.DyadicInterval
@@ -197,6 +199,7 @@ import MathUE.Interval.PolynomialLipschitz
 import MathUE.Interval.RationalInterval
 import MathUE.Interval.RationalPolynomial
 import MathUE.Interval.ScalarDyadicPolynomial
+import MathUE.InverseCoordinateRecurrence
 import MathUE.InvisibleNeutralActionDrift
 import MathUE.KrawczykBridge
 import MathUE.LinearAlgebra.AffineResetSeries
@@ -236,6 +239,7 @@ import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament
 import MathUE.List
 import MathUE.MaxAffineStoppingValue
+import MathUE.MaxPlusPotential
 import MathUE.MeanErgodic
 import MathUE.Minimax.DiscountedShapleySystem
 import MathUE.Minimax.Loomis
@@ -398,6 +402,7 @@ import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.PureTimeWitnessNormalForm
+import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.WeierstrassCurve
 import Research
