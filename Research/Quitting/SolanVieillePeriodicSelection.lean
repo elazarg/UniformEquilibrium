@@ -4,6 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.BackwardOrbitSelection
+import MathUE.MeshContraction
 import Research.Quitting.SolanVieilleOneShotPerfection
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 import UniformEquilibrium.Quitting.Root.TailStability
@@ -42,91 +44,6 @@ namespace GameTheory
 open Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-! ## Grid keys -/
-
-/-- Two reals whose scaled floors agree lie within one mesh of each other. -/
-theorem abs_sub_le_of_floor_div_eq {left right mesh : ℝ} (hmesh : 0 < mesh)
-    (hfloor : ⌊left / mesh⌋ = ⌊right / mesh⌋) : |left - right| ≤ mesh := by
-  have hleft₁ : (⌊left / mesh⌋ : ℝ) ≤ left / mesh := Int.floor_le (left / mesh)
-  have hleft₂ : left / mesh < ⌊left / mesh⌋ + 1 :=
-    Int.lt_floor_add_one (left / mesh)
-  have hright₁ : (⌊right / mesh⌋ : ℝ) ≤ right / mesh :=
-    Int.floor_le (right / mesh)
-  have hright₂ : right / mesh < ⌊right / mesh⌋ + 1 :=
-    Int.lt_floor_add_one (right / mesh)
-  rw [hfloor] at hleft₁ hleft₂
-  have hdiv : |left / mesh - right / mesh| ≤ 1 := by
-    rw [abs_le]
-    constructor <;> linarith
-  have hsplit : left - right = (left / mesh - right / mesh) * mesh := by
-    field_simp
-  rw [hsplit, abs_mul, abs_of_pos hmesh]
-  calc |left / mesh - right / mesh| * mesh ≤ 1 * mesh :=
-        mul_le_mul_of_nonneg_right hdiv hmesh.le
-    _ = mesh := one_mul mesh
-
-/-! ## Backward orbits through a finite absorbing range -/
-
-/-- **Backward orbit extraction.**  A self-map whose image lies in a finite
-set admits an infinite backward orbit: a sequence in which every term is the
-image of its successor.  A forward orbit must revisit a value, and reading
-the revealed cycle backwards, repeated, is such a sequence. -/
-theorem exists_backward_chain {β : Type*} (f : β → β) (start : β)
-    {range : Set β} (hfinite : range.Finite) (hmem : ∀ b, f b ∈ range) :
-    ∃ chain : ℕ → β, ∀ n, chain n = f (chain (n + 1)) := by
-  classical
-  have hsucc : ∀ j, f^[j + 1] start = f (f^[j] start) := fun j =>
-    Function.iterate_succ_apply' f j start
-  have hmapsTo : Set.MapsTo (fun j => f^[j] start) Set.univ
-      (insert start range) := by
-    intro j _
-    cases j with
-    | zero => exact Set.mem_insert start range
-    | succ j =>
-        show f^[j + 1] start ∈ insert start range
-        rw [hsucc j]
-        exact Set.mem_insert_of_mem start (hmem (f^[j] start))
-  obtain ⟨x, -, y, -, hxy, heq⟩ :=
-    Set.infinite_univ.exists_ne_map_eq_of_mapsTo hmapsTo
-      (hfinite.insert start)
-  have hpair : ∃ low high : ℕ, low < high ∧ f^[low] start = f^[high] start := by
-    rcases lt_or_gt_of_ne hxy with hlt | hlt
-    · exact ⟨x, y, hlt, heq⟩
-    · exact ⟨y, x, hlt, heq.symm⟩
-  obtain ⟨low, high, hlt, hcycle⟩ := hpair
-  set period := high - low with hperiod
-  have hperiod1 : 1 ≤ period := by omega
-  refine ⟨fun n => f^[low + (period - 1) - n % period] start, fun n => ?_⟩
-  show f^[low + (period - 1) - n % period] start =
-    f (f^[low + (period - 1) - (n + 1) % period] start)
-  rw [← hsucc (low + (period - 1) - (n + 1) % period)]
-  have hppos : 0 < period := hperiod1
-  obtain ⟨residue, hresidue⟩ : ∃ residue, n % period = residue :=
-    ⟨n % period, rfl⟩
-  have hresidueLt : residue < period := hresidue ▸ Nat.mod_lt n hppos
-  rw [hresidue]
-  by_cases hlast : residue = period - 1
-  · have hnext : (n + 1) % period = 0 := by
-      rcases Nat.lt_or_ge 1 period with hbig | hsmall
-      · rw [Nat.add_mod, hresidue, hlast, Nat.mod_eq_of_lt hbig,
-          show period - 1 + 1 = period from by omega, Nat.mod_self]
-      · have hone : period = 1 := by omega
-        rw [hone, Nat.mod_one]
-    rw [hnext, hlast]
-    have hindexLeft : low + (period - 1) - (period - 1) = low := by omega
-    have hindexRight : low + (period - 1) - 0 + 1 = high := by omega
-    rw [hindexLeft, hindexRight]
-    exact hcycle
-  · have hstep : residue + 1 < period := by omega
-    have hbig : 1 < period := by omega
-    have hnext : (n + 1) % period = residue + 1 := by
-      rw [Nat.add_mod, hresidue, Nat.mod_eq_of_lt hbig,
-        Nat.mod_eq_of_lt hstep]
-    rw [hnext]
-    have hindex : low + (period - 1) - (residue + 1) + 1 =
-        low + (period - 1) - residue := by omega
-    rw [hindex]
 
 /-! ## Stability of one-stage perfectness -/
 
@@ -267,56 +184,27 @@ theorem abs_terminalValue_sub_successor_le_of_approximate_chain
         _ ≤ _ + η := by linarith
     have hslope0 : (0 : ℝ) ≤ 1 - δ := by linarith
     exact mul_le_mul (hmass n) htriangle (abs_nonneg _) hslope0
-  have hiterate : ∀ fuel n who,
-      |quittingRootSequenceTerminalValue reward roots who n -
-          quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who| ≤
-        (1 - δ) ^ fuel * (2 * R) + η / δ := by
-    intro fuel
-    induction fuel with
-    | zero =>
-        intro n who
-        obtain ⟨hγ₁, hγ₂⟩ := abs_le.mp (hγBound n who)
-        obtain ⟨hv₁, hv₂⟩ := abs_le.mp (hvalueBound n who)
-        rw [pow_zero, one_mul, abs_le]
-        constructor <;> linarith
-    | succ fuel ih =>
-        intro n who
-        have hstep := honestep n who
-        have hnext := ih (n + 1) who
-        have hslope0 : (0 : ℝ) ≤ 1 - δ := by linarith
-        have hpow0 : (0 : ℝ) ≤ (1 - δ) ^ fuel := pow_nonneg hslope0 fuel
-        have hgeom : (1 - δ) * (η / δ + η) ≤ η / δ := by
-          have hcancel : η / δ * δ = η := div_mul_cancel₀ η (ne_of_gt hδ0)
-          nlinarith [mul_nonneg (mul_nonneg hδ0.le hδ0.le) hηδ0]
-        have hmiddle : (1 - δ) *
-            (|quittingRootSequenceTerminalValue reward roots who (n + 1) -
-                quittingRootSuccessorPayoff reward (plan (n + 2))
-                  (roots (n + 1)) who| + η) ≤
-            (1 - δ) * ((1 - δ) ^ fuel * (2 * R) + η / δ + η) := by
-          apply mul_le_mul_of_nonneg_left _ hslope0
-          linarith
-        have hdistribute : (1 - δ) *
-            ((1 - δ) ^ fuel * (2 * R) + η / δ + η) =
-            (1 - δ) ^ (fuel + 1) * (2 * R) + (1 - δ) * (η / δ + η) := by
-          rw [pow_succ]
-          ring
-        linarith [hstep, hmiddle, hdistribute, hgeom]
   intro n who
-  refine le_of_forall_pos_le_add fun slack hslack => ?_
-  have hshrunk : (0 : ℝ) < slack / (2 * R + 1) :=
-    div_pos hslack (by linarith)
-  obtain ⟨fuel, hfuel⟩ :=
-    exists_pow_lt_of_lt_one hshrunk (by linarith : 1 - δ < 1)
-  have hcancel : slack / (2 * R + 1) * (2 * R + 1) = slack :=
-    div_mul_cancel₀ slack (by linarith : (2 : ℝ) * R + 1 ≠ 0)
-  have hshrunk0 : 0 ≤ slack / (2 * R + 1) := hshrunk.le
-  have hpow0 : (0 : ℝ) ≤ (1 - δ) ^ fuel := pow_nonneg (by linarith) fuel
-  have hpowBound : (1 - δ) ^ fuel * (2 * R) ≤ slack := by
-    have hmul := mul_le_mul_of_nonneg_right hfuel.le
-      (by linarith : (0 : ℝ) ≤ 2 * R)
-    calc (1 - δ) ^ fuel * (2 * R) ≤ slack / (2 * R + 1) * (2 * R) := hmul
-      _ ≤ slack := by linarith
-  have := hiterate fuel n who
+  have hgapBound : ∀ m,
+      |quittingRootSequenceTerminalValue reward roots who m -
+        quittingRootSuccessorPayoff reward (plan (m + 1)) (roots m) who| ≤
+        2 * R := by
+    intro m
+    obtain ⟨hγ₁, hγ₂⟩ := abs_le.mp (hγBound m who)
+    obtain ⟨hv₁, hv₂⟩ := abs_le.mp (hvalueBound m who)
+    rw [abs_le]
+    constructor <;> linarith
+  have hscalar := Math.le_div_of_forall_le_mul_succ_add
+    (u := fun m => |quittingRootSequenceTerminalValue reward roots who m -
+      quittingRootSuccessorPayoff reward (plan (m + 1)) (roots m) who|)
+    (slope := 1 - δ) (slack := η) (bound := 2 * R)
+    (by linarith) (by linarith) hη0 hgapBound
+    (fun m => honestep m who) n
+  have hslope : 1 - (1 - δ) = δ := by ring
+  rw [hslope] at hscalar
+  have hweaken : (1 - δ) * η / δ ≤ η / δ := by
+    gcongr
+    nlinarith
   linarith
 
 /-! ## The perfect absorbing sequence -/
@@ -403,7 +291,7 @@ theorem exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
     rw [Set.mem_pi]
     exact fun who _ => hkey who
   obtain ⟨keyChain, hkeyChain⟩ :=
-    exists_backward_chain dynamics (fun _ => 0) hrangeFinite hrange
+    Math.exists_backward_orbit dynamics (fun _ => 0) hrangeFinite hrange
   -- The plan and the row sequence.
   set plan : ℕ → Payoff ι := fun n => rep (keyChain n) with hplan
   set roots : ℕ → ι → PMF Bool := fun n => rowOf (plan (n + 1)) with hrootsdef
@@ -446,7 +334,7 @@ theorem exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
         quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who| ≤
         η := by
     intro n who
-    exact abs_sub_le_of_floor_div_eq hη0
+    exact Math.abs_sub_le_of_floor_div_eq hη0
       ((hplanKey n who).trans (hvalueKey n who).symm)
   -- The contraction bounds the actual continuation error by `η / δ`.
   have hmass : ∀ n, quittingStationaryContinueMass (roots n) ≤ 1 - δ := by
