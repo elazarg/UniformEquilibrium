@@ -47,6 +47,9 @@ import Research.Quitting.CausalTailEscapeReturnGate
 import Research.Quitting.CertifiedForcedOwnerBackgroundHost
 import Research.Quitting.CertifiedForcedOwnerEndpointFlip
 import Research.Quitting.CertifiedForcedOwnerRectanglePacket
+import Research.Quitting.CirculantColliderBonusFamily
+import Research.Quitting.CirculantColliderBonusStationary
+import Research.Quitting.CirculantColliderBonusWindow
 import Research.Quitting.CirculantColliderClosure
 import Research.Quitting.CirculantColliderCompletion
 import Research.Quitting.CirculantColliderSlivers
@@ -66,6 +69,7 @@ import Research.Quitting.DiffuseTailEffectiveCharge
 import Research.Quitting.DiffuseTailNonvacuity
 import Research.Quitting.DiffuseTailSoloCalibrations
 import Research.Quitting.DiffuseTailSoloStructure
+import Research.Quitting.DissipativePeriodizationCompleteness
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
 import Research.Quitting.EnrichedSeamCompression
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
@@ -84,6 +88,7 @@ import Research.Quitting.HolonomyEquivalenceCompression
 import Research.Quitting.KActiveMarkedAtomBudgetPathConsumer
 import Research.Quitting.KActiveMarkedAtomCompactPath
 import Research.Quitting.KActiveMarkedAtomPathConsumer
+import Research.Quitting.LiveRootExploitabilityFactorization
 import Research.Quitting.MinimumCertifiedForcedOwnerOrientation
 import Research.Quitting.MinimumExactNashOneActive
 import Research.Quitting.MinimumFiberResetSquareCompatibility
@@ -108,6 +113,7 @@ import Research.Quitting.PairActiveSoloPhase
 import Research.Quitting.PathClosureKernels
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
 import Research.Quitting.PreemptionTransport
+import Research.Quitting.PrefixTruncationExploitability
 import Research.Quitting.PrescribedAtomMinimumAccounting
 import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
@@ -118,8 +124,14 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SingletonTightMinimumFaceIteration
+import Research.Quitting.SolanVieilleDeviationLedger
+import Research.Quitting.SolanVieilleExistenceReduction
+import Research.Quitting.SolanVieilleLedgerUnroll
+import Research.Quitting.SolanVieilleOneShotPerfection
+import Research.Quitting.SolanVieillePeriodicSelection
 import Research.Quitting.SolanVieilleSoloPeriodicGap
 import Research.Quitting.SolanVieilleSoloPeriodicTerminalGap
+import Research.Quitting.SoloPeriodicInterVisitBalance
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification
 import Research.Quitting.SoloWindowPhaseStopBranch

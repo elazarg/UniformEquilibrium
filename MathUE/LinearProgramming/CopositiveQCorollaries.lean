@@ -292,12 +292,21 @@ at most a single constant `C`.  An unbounded family of solutions would
 normalize to simplex points of vanishing homogeneous violation, and the
 compactness limit of `CopositiveQ.lean` would then produce an exact homogeneous
 solution.  A bound on `‖q‖₁` is one such coordinatewise bound, so this covers a
-strictly larger family of right-hand sides for the same `B`. -/
-theorem exists_bound_sum_of_isR0Matrix (M : ι → ι → ℝ) (hR0 : IsR0Matrix M) {B : ℝ}
-    (hB : 0 ≤ B) :
+strictly larger family of right-hand sides for the same `B`.
+
+No sign condition on `B` is needed: a negative `B` bounds no right-hand side
+on an inhabited index type, and on an empty one every solution has total mass
+zero. -/
+theorem exists_bound_sum_of_isR0Matrix (M : ι → ι → ℝ) (hR0 : IsR0Matrix M) (B : ℝ) :
     ∃ C : ℝ, ∀ q z : ι → ℝ, (∀ i, |q i| ≤ B) → IsStandardLCPSolution M q z →
       (∑ i, z i) ≤ C := by
   classical
+  rcases lt_or_ge B 0 with hB | hB
+  · refine ⟨0, fun q z hq _ => ?_⟩
+    rcases isEmpty_or_nonempty ι with _ | hne
+    · simp
+    · obtain ⟨i₀⟩ := hne
+      exact absurd ((abs_nonneg (q i₀)).trans (hq i₀)) (not_le.mpr hB)
   by_contra hno
   push Not at hno
   set D : ℝ := ((Fintype.card ι : ℝ) + 1) * B with hD
