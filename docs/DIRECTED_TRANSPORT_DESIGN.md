@@ -199,8 +199,9 @@ pre-fixed point" give a lax section?
      `MathUE/FiniteInequalityCompatibility.lean`: a lax section exists iff
      no nonnegative balanced combination of the rows is infeasible — a
      generalized-flow certificate, of which a positive cycle is the special
-     case with slopes multiplying along one closed walk.  (Staged: the
-     counterexample and the Farkas instantiation.)  The spectral reading —
+     case with slopes multiplying along one closed walk.  (Implemented in
+     `MathUE/MaxAffineFarkasDuality.lean`: the counterexample and the
+     Farkas instantiation.)  The spectral reading —
      min-max function theory (Gunawardena, Discrete Event Dynamic Systems 4
      (1994)), topical-map Perron–Frobenius (Gaubert–Gunawardena, Trans.
      Amer. Math. Soc. 356 (2004)) — remains the right frame for eigenvalue
