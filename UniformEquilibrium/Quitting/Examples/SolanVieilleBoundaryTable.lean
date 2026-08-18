@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.ImmediateSingletonCollision
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
+import UniformEquilibrium.Quitting.Classification.SoloExitPreference
 
 /-!
 # The Solan–Vieille boundary table realizes the frontier configuration
@@ -21,6 +22,10 @@ combined configuration of the reduced quitting conjecture at margin `1`:
 The strict preemption relation at margin `1` is moreover characterized
 exactly: it is the complete bipartite digraph between the pairs `{0, 1}` and
 `{2, 3}`.
+
+The table also satisfies both assumptions of the source's own existence
+theorem: unit solo exit and capped joint exit.  Its approximate equilibrium is
+therefore an instance of that theorem and not evidence against it.
 
 The source paper proves that this table admits an approximate equilibrium
 through a period-two two-quitter architecture, and admits neither a
@@ -82,6 +87,25 @@ def boundaryReward (quitters : {S : Finset Player // S.Nonempty}) :
 @[simp] theorem soloReward_self (owner : Player) :
     quittingSoloReward boundaryReward owner owner = 1 := by
   simp
+
+/-- Every player's own solo exit pays it exactly `1`. -/
+theorem boundaryReward_unitSoloExit : QuittingUnitSoloExit boundaryReward :=
+  soloReward_self
+
+/-- No member of a quitting coalition is paid more than `1`.  The only entries
+above `1` are the value `4` paid to the partner of a solo quitter, and that
+partner is not a member of the quitting coalition. -/
+theorem boundaryReward_cappedJointExit :
+    QuittingCappedJointExit boundaryReward := by
+  intro quitters who
+  fin_cases quitters <;> fin_cases who <;> simp [boundaryReward]
+
+/-- Every player weakly prefers its own solo exit to every joint exit it takes
+part in. -/
+theorem boundaryReward_weakSoloExitPreference :
+    QuittingWeakSoloExitPreference boundaryReward :=
+  quittingWeakSoloExitPreference_of_unitSoloExit boundaryReward_unitSoloExit
+    boundaryReward_cappedJointExit
 
 /-- **The preemption digraph is complete bipartite.**  At margin `1`, `j`
 strictly preempts `i` exactly when `i` and `j` lie in opposite pairs. -/

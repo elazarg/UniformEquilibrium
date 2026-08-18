@@ -9,6 +9,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.Gate
 import UniformEquilibrium.Quitting.Classification.ImmediateSingletonCollision
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
 import UniformEquilibrium.Quitting.Classification.PreemptionGateDictionary
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SoloExitPreferenceScreen
 
 /-!
 # The regular five-player tournament seed
@@ -22,6 +23,11 @@ directed preemption cycle and a marked immediate collision.
 The module proves no standard-Q conclusion.  Such a conclusion requires a
 separate implication from the two LCP uniqueness statements to solvability for
 every right-hand side.
+
+The seed also satisfies both assumptions of the quitting existence theorem of
+Solan and Vieille, *Quitting games*, Math. Oper. Res. 26 (2001), Theorem 1.2,
+so granting that theorem it carries no counterexample regime.  That exclusion
+is conditional on the theorem and is not proved here.
 -/
 
 noncomputable section
@@ -194,6 +200,36 @@ def collision : QuittingImmediateSingletonCollision reward 1 where
 theorem collision_is_marked :
     collision.owner = 0 ∧ collision.collider = 1 := by
   simp [collision]
+
+/-! ## The solo-exit preference screen -/
+
+/-- Every player's own solo exit pays it exactly `1`: the tournament skew
+matrix has zero diagonal. -/
+theorem reward_unitSoloExit : QuittingUnitSoloExit reward := by
+  intro who
+  show reward ⟨{who}, Finset.singleton_nonempty who⟩ who = 1
+  simp [reward, singletonMatrix_diagonal]
+
+/-- No member of a quitting coalition is paid more than `1`.  The entries
+above `1` all sit in singleton rows at nonmember coordinates. -/
+theorem reward_cappedJointExit : QuittingCappedJointExit reward := by
+  refine quittingCappedJointExit_of_solo_of_larger (fun who ↦ ?_)
+    (fun quitters who _ hcard ↦ ?_)
+  · exact le_of_eq (reward_unitSoloExit who)
+  · show (if quitters.1.card = 1 then _ else _) ≤ (1 : ℝ)
+    rw [if_neg hcard]
+    split
+    · split <;> norm_num
+    · norm_num
+
+/-- **Conditional.**  Granting the Solan--Vieille existence law, the seed
+carries no counterexample regime.  The seed's preemption cycle and marked
+collision therefore cannot by themselves force one. -/
+theorem reward_isEmpty_counterexampleRegime_of_law
+    (hlaw : QuittingCappedJointExitUniformεExistence Player) :
+    IsEmpty (QuittingCounterexampleRegime reward) :=
+  isEmpty_quittingCounterexampleRegime_of_cappedJointExit hlaw
+    reward_unitSoloExit reward_cappedJointExit
 
 end RegularTournamentFiveSeed
 end GameTheory

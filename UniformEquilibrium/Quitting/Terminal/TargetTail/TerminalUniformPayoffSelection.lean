@@ -349,4 +349,50 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors
   · rintro ⟨payoff, _, hpayoff⟩
     exact ⟨payoff, hpayoff⟩
 
+/-- Uniform approximate equilibria at every positive error select one fixed
+uniform-equilibrium payoff.
+
+The hypothesis lets the profile and its payoff vector move with the error; the
+conclusion fixes one target before the error is chosen.  Cesaro convergence to
+the terminal payoff turns each uniform approximate equilibrium into a terminal
+approximate equilibrium, and terminal selection then supplies the fixed
+target. -/
+theorem quittingGame_exists_uniformEquilibriumPayoff_of_uniformεEquilibrium_all_errors
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (huniform : ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame reward).BehaviorProfile,
+        (quittingGame reward).IsUniformεEquilibrium none ε profile) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  refine quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
+    reward fun ε hε ↦ ?_
+  obtain ⟨profile, hprofile⟩ := huniform ε hε
+  exact ⟨profile,
+    (quittingGame reward).isεAsymptoticNash_of_isUniformεEquilibrium
+      none (quittingTerminalPayoff reward) hprofile
+      (fun selectedProfile who ↦
+        tendsto_finiteAveragePayoff_quittingGame reward selectedProfile who)⟩
+
+/-- **The quitting notion-alignment equivalence.**  For finite quitting games,
+having a uniform `ε`-equilibrium at every positive `ε`—with the profile and its
+payoff free to move with `ε`—is equivalent to having one fixed
+uniform-equilibrium payoff.
+
+The two sides are not equivalent for general stochastic games; the quitting
+Cesaro-convergence bridge and the compact terminal-payoff cube are what close
+the gap here. -/
+theorem quittingGame_exists_uniformEquilibriumPayoff_iff_uniformεEquilibrium_all_errors
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    (∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
+      ∀ ε : ℝ, 0 < ε →
+        ∃ profile : (quittingGame reward).BehaviorProfile,
+          (quittingGame reward).IsUniformεEquilibrium none ε profile := by
+  constructor
+  · rintro ⟨payoff, hpayoff⟩ ε hε
+    obtain ⟨profile, threshold, hprofile⟩ := hpayoff ε hε
+    exact ⟨profile, threshold, fun horizon hhorizon ↦ (hprofile horizon hhorizon).1⟩
+  · exact quittingGame_exists_uniformEquilibriumPayoff_of_uniformεEquilibrium_all_errors
+      reward
+
 end GameTheory

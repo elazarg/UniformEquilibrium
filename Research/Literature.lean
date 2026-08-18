@@ -1,2 +1,3 @@
+import Research.Literature.SolanAndVieille2001.SoloExitPreferenceScreen
 import Research.Literature.Sorin1986.UniformPayoffSet
 import Research.Literature.Sorin1986.WeightedBlackwellFerguson
