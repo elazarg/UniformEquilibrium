@@ -31,15 +31,16 @@ The same data carries several names.
   the assignment of a function to each morphism.  Nothing below imports a
   category-theory library, and the statements are the induction lemmas rather
   than a functoriality package.
-* When all fibers are one type and the edge maps come from a group or monoid
-  acting on it, the data is a *gain graph* or *voltage graph* (Zaslavsky,
-  *Biased graphs. I*, J. Combin. Theory Ser. B 47 (1989)), and for general
-  fibers a set-valued gain graph.
+* When all fibers are one type and the edge maps come from a group acting on
+  it, the data is a *gain graph* or *voltage graph* (Zaslavsky, *Biased
+  graphs. I*, J. Combin. Theory Ser. B 47 (1989)); monoid actions and general
+  fibers are a set-valued generalization, without the label inversion under
+  edge reversal that the classical notion carries.
 * Read geometrically the data is a *discrete connection*, `walkMap` is its
   parallel transport, and `holonomy` is its holonomy or monodromy.
 * A section is also called a *flat section*, an *equivariant section*, or, in
-  the gain-graph case with a group acting freely, a *trivialization* or
-  *switching function*.
+  the gain-graph case with a group acting simply transitively on the fiber (a
+  torsor), a *trivialization* or *switching function*.
 * A lax section is also called a *subsolution*, a *subinvariant family*, or a
   super- or subharmonic section depending on the orientation convention.
 
@@ -66,7 +67,7 @@ The same data carries several names.
 * `Math.DirectedTransport.Transport.IsLaxSection.walkMap_le` — for monotone edge
   maps a lax section is transported below itself, and
   `Math.DirectedTransport.Transport.IsLaxSection.holonomy_le` — every
-  closed-walk holonomy has the marked point as a post-fixed point.
+  closed-walk holonomy has the marked point as a pre-fixed point.
 * `Math.DirectedTransport.walkMap_ofEdgeAct` and
   `Math.DirectedTransport.walkMap_ofSMul_eq_gain_smul` — with one common fiber,
   transport is `Math.CycleCoboundary.transport`, and for a monoid action it is
@@ -272,7 +273,7 @@ theorem IsLaxSection.walkMap_le (hmono : ∀ edge : E, Monotone (T.edgeMap edge)
       rwa [fiberCast_family] at hcast
 
 /-- **Weak duality.**  With monotone edge maps, the point a lax section marks
-over the base vertex is a post-fixed point of every closed-walk holonomy. -/
+over the base vertex is a pre-fixed point of every closed-walk holonomy. -/
 theorem IsLaxSection.holonomy_le (hmono : ∀ edge : E, Monotone (T.edgeMap edge))
     (hfamily : T.IsLaxSection family) (cycle : G.Walk base base) :
     T.holonomy cycle (family base) ≤ family base :=

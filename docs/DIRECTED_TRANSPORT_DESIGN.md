@@ -1,7 +1,9 @@
 # Design: directed transport and the max-affine gain graph
 
-Status: design only.  No module implements this yet; every stage below is
-marked provable now, staged, or recorded open.
+Status: Layers 0 and 1 (milestones M0 and M1) are implemented in
+`MathUE/DirectedTransport.lean` and `MathUE/MaxAffineGainGraph.lean`; strong
+duality (T6) remains staged.  Each stage below is marked provable now,
+staged, or recorded open.
 
 ## The object, in one sentence
 
@@ -35,7 +37,7 @@ the hazards vanish.
 
 ## Two layers, two modules
 
-### Layer 0 — planned module `DirectedTransport` (under `MathUE`)
+### Layer 0 — `MathUE/DirectedTransport.lean`
 
 Deliberately small; no category-theory library.  Data over
 `Math.BoundedDiscrepancy.EdgeGraph V E`:
@@ -69,7 +71,7 @@ Theorems (all provable now, all by walk induction):
   `walkMap walk (s start) ≤ s finish`;
 - weak duality: a section forces trivial holonomy on every fiber point it
   marks; a lax section forces every closed-walk holonomy to have `s base` as
-  a post-fixed point;
+  a pre-fixed point;
 - for one common fiber and labels acting through a monoid, `walkMap` is the
   action of `Math.CycleCoboundary.gain` (this is `transport_eq_smul`,
   re-exported rather than reproved).
@@ -78,7 +80,7 @@ Layer 0's job is vocabulary plus the four or five induction lemmas that every
 specialization would otherwise reprove.  It should stay under a few hundred
 lines.
 
-### Layer 1 — planned module `MaxAffineGainGraph` (under `MathUE`)
+### Layer 1 — `MathUE/MaxAffineGainGraph.lean`
 
 The first useful specialization: one common fiber `ℝ`, edge maps monotone
 max-affine.  This is where quantitative content lives.
@@ -98,23 +100,24 @@ decisions:
 
 1. **Floors in `WithBot ℝ`, not `EReal`.**  A `⊤` floor makes the action
    constant `+∞` and leaves `ℝ`; nothing wants it.  `⊥` is the missing
-   identity: `⟨⊥, 0, 1⟩` acts as the identity, so positive-slope labels form
-   a monoid — the repair of the semigroup-only situation recorded in
+   identity: `⟨⊥, 0, 1⟩` acts as the identity, so nonnegative-slope labels
+   form a monoid — the repair of the semigroup-only situation recorded in
    `TransferSummaryMonoid`'s scope note, and the reason its docstring calls
    the finite floor "not an incidental inconvenience": the natural carrier is
    the ordered completion with a bottom element.
-2. **Slope positivity is a carried hypothesis, not a subtype bake-in.**
-   Slope `0` sends the inner floor through `0 * ⊥`, which `WithBot` leaves
-   junk; the monoid instance lives on `{f : Label // 0 < f.slope}` while
-   monotonicity lemmas take `0 ≤ slope` pointwise, as
-   `TransferSummaryMonoid` already does.
+2. **Slope zero is admitted; strict positivity is a carried hypothesis.**
+   Slope `0` would send the inner floor through `0 * ⊥`, which `WithBot`
+   multiplication leaves junk — but the composite floor is pushed through `Option.map`, which
+   preserves `⊥` and keeps slope zero coherent, so the monoid instance lives
+   on `{f : Label // 0 ≤ f.slope}`; strict positivity is demanded only where
+   a positive denominator needs it.
 
 Embeddings and identifications (T1, provable now):
 
 - `Math.TransferSummary.AffineSummary` at floor `⊥` (a monoid homomorphism)
   and `Math.TransferSummary.MaxAffineSummary` at coerced floors, both
   action-preserving;
-- the `MulAction` of positive-slope labels on `ℝ`, so Layer 0's `walkMap` and
+- the `MulAction` of nonnegative-slope labels on `ℝ`, so Layer 0's `walkMap` and
   `Math.CycleCoboundary.gain` agree here;
 - the missing identification flagged in review: the transfer matrices of
   `Math.InverseCoordinate` assemble into a monoid homomorphism
@@ -124,8 +127,9 @@ Embeddings and identifications (T1, provable now):
 
 Core definitions:
 
-- `IsInvariantSection φ : ∀ e, (label e).apply (φ (source e)) ≤ φ (target e)`
-  — Layer 0's lax section at these labels; the potential of
+- `IsLaxSection φ : ∀ e, (label e).apply (φ (source e)) ≤ φ (target e)` —
+  Layer 0's lax section at these labels (named in parallel with Layer 0,
+  since it is an inequality, not an invariance); the potential of
   `MaxPlusPotential` with the translation replaced by the edge's transfer;
 - `defect φ e := (label e).apply (φ (source e)) - φ (target e)`;
 - suffix weights `W i` — the product of the slopes after position `i` of a
@@ -149,14 +153,14 @@ reflected labels it is the survival-weighted accounting of
 checkable content of "the inequalities live in different fibers and do not
 telescope additively": they telescope with slope-product weights.
 
-**T3 — weak duality (provable now).**  An invariant section gives every cycle
-holonomy the post-fixed point `φ base`.  Layer 0's weak duality specialized.
+**T3 — weak duality (provable now).**  A lax section gives every cycle
+holonomy the pre-fixed point `φ base`.  Layer 0's weak duality specialized.
 
 **T4 — the expansivity trichotomy (provable now).**  For a single label
 `(E, t, a)` with `0 ≤ a`, `∃ x, apply f x ≤ x` iff `a < 1`, or `a = 1 ∧
 t ≤ 0`, or `a > 1 ∧ E ≤ -t / (a - 1)` (`E = ⊥` always admissible).
 Decidable in the coefficients; applied to a cycle's composed label it decides
-post-fixed-point existence from the holonomy coefficients — the
+pre-fixed-point existence from the holonomy coefficients — the
 generalization of "cycle weight ≤ 0".
 
 **T5 — quantitative obstruction (provable now).**  If a cycle's holonomy
@@ -166,7 +170,7 @@ satisfies `holonomy x ≥ x + γ` at `x = φ base`, some edge has
 hypothesis holds at every `x`, making the obstruction candidate-free.
 
 **T6 — strong duality (staged).**  Does "every cycle holonomy has a
-post-fixed point" give an invariant section?
+pre-fixed point" give an lax section?
 
   a. *Slope 1, finite floors* (staged, provable): a floor is an anchor; model
      each floored edge by a translation edge plus an edge from an added

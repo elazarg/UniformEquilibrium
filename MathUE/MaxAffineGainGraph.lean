@@ -19,8 +19,8 @@ import MathUE.TransferSummaryMonoid
 /-!
 # Max-affine gain graphs
 
-A finite directed multigraph whose edges are labelled by monotone max-affine
-self-maps of the line.  A walk transports a real number by composing the maps
+A finite directed multigraph whose edges are labelled by max-affine self-maps
+of the line, monotone at the nonnegative slopes the theory runs on.  A walk transports a real number by composing the maps
 of its edges in chronological order; a closed walk therefore acts on the line
 by an endomorphism, and the obstruction theory of that action is the subject of
 this file.
@@ -31,14 +31,15 @@ case the action is the affine map `x ↦ shift + slope * x`.  Admitting `⊥`
 supplies the identity `(⊥, 0, 1)` that the finite-floor class of
 `Math.TransferSummary.MaxAffineSummary` lacks
 (`Math.TransferSummary.MaxAffineSummary.not_exists_apply_eq_id`), so the
-positive-slope labels form a monoid acting on `ℝ`, and it embeds both the
+nonnegative-slope labels form a monoid acting on `ℝ`, and it embeds both the
 affine summaries (at floor `⊥`) and the max-affine summaries (at coerced
 floors).
 
 ## Vocabulary
 
-The labelled graph is a gain graph in the sense of Zaslavsky with gains in the
-label monoid, and the composite label of a walk is its holonomy.  The vertex
+The labelled graph is a monoid-valued generalization of the group-labelled
+gain graphs of Zaslavsky, whose labels invert under edge reversal while these
+generally do not, and the composite label of a walk is its holonomy.  The vertex
 operator `φ v ↦ sup over incoming edges of the label actions` is the max-only
 corner of a *min-max function network* (Gunawardena, *Min-max functions*,
 Discrete Event Dynamic Systems 4 (1994)); its slope-`1` sublattice consists of
@@ -54,12 +55,12 @@ homogeneous, and appears to carry no established name.
 ## Main definitions
 
 * `Math.MaxAffineGainGraph.Label`, its `apply`, `comp`, `id`, the `Monoid`
-  instance on positive-slope labels and the `MulAction` on `ℝ`.
+  instance on nonnegative-slope labels and the `MulAction` on `ℝ`.
 * `Math.MaxAffineGainGraph.ofAffine`, `ofAffineHom`, `ofMaxAffine` -- the two
   embeddings of `Math.TransferSummary`'s classes.
 * `Math.MaxAffineGainGraph.toTransferMatrix` -- affine summaries as
   `2 × 2` transfer matrices.
-* `Math.MaxAffineGainGraph.IsInvariantSection`, `defect` -- the lax section and
+* `Math.MaxAffineGainGraph.IsLaxSection`, `defect` -- the lax section and
   its edgewise residual.
 * `Math.MaxAffineGainGraph.holonomyApply` -- chronological transport along a
   walk.
@@ -79,11 +80,11 @@ homogeneous, and appears to carry no established name.
   **weighted-defect telescope**: transport along a walk is bounded by the value
   of the candidate at the far end plus the positive parts of the edge defects,
   each weighted by the product of the slopes traversed after it.
-* `Math.MaxAffineGainGraph.holonomyApply_cycle_le` -- an invariant section makes
-  its value at the base vertex a post-fixed point of every cycle's composite
+* `Math.MaxAffineGainGraph.holonomyApply_cycle_le` -- a lax section makes
+  its value at the base vertex a pre-fixed point of every cycle's composite
   action.
 * `Math.MaxAffineGainGraph.Label.exists_apply_le_self_iff` -- the expansivity
-  trichotomy: a single label has a post-fixed point exactly when its slope is
+  trichotomy: a single label has a pre-fixed point exactly when its slope is
   below one, or is one with nonpositive shift, or exceeds one with the floor
   below the affine fixed point.
 * `Math.MaxAffineGainGraph.exists_edge_defect_ge` -- the quantitative
@@ -93,9 +94,9 @@ homogeneous, and appears to carry no established name.
 
 ## Relation to the rest of `MathUE`
 
-At all slopes `1` the labels are translations, `IsInvariantSection` is
+At all slopes `1` the labels are translations, `IsLaxSection` is
 `Math.MaxPlusPotential.IsPotential`
-(`isInvariantSection_translationLabel_iff`), the edge residuals agree with
+(`isLaxSection_translationLabel_iff`), the edge residuals agree with
 `Math.MaxPlusPotential.defect` (`defect_translationLabel`), and the telescope
 `holonomyApply_le_add_weightedDefect` is the exact identity
 `Math.MaxPlusPotential.sum_defect_eq` weakened to an inequality, all suffix
@@ -106,7 +107,7 @@ path is the Lindley orbit `Math.TransferSummary.reflectedIter`
 
 `holonomyApply` is `Math.CycleCoboundary.transport` at these edge actions, and
 `holonomyApply_eq_gain_smul` identifies it with the gain-graph holonomy
-`Math.CycleCoboundary.gain` in the positive-slope monoid.  The composite label
+`Math.CycleCoboundary.gain` in the nonnegative-slope monoid.  The composite label
 of a walk is thereby a word in the monoid of `Math.TransferSummary`, whose
 affine part is represented by the transfer matrices of
 `Math.InverseCoordinate.affineTransferMatrix` through `toTransferMatrix`.
@@ -114,7 +115,7 @@ affine part is represented by the transfer matrices of
 ## Scope
 
 Only the section (subsolution) side is developed.  Whether every cycle's
-composite action having a post-fixed point forces an invariant section to exist
+composite action having a pre-fixed point forces a lax section to exist
 is not addressed here in any generality; nor are eigenvalue problems for the
 vertex operator, for which the setting is the fixed-point theory of topical
 maps.
@@ -126,8 +127,8 @@ namespace Math.MaxAffineGainGraph
 
 /-! ## The label algebra -/
 
-/-- Coefficients of a monotone max-affine self-map of the line with a floor in
-`WithBot ℝ`: the map `x ↦ max floor (shift + slope * x)`, read as the affine
+/-- Coefficients of a max-affine self-map of the line with a floor in
+`WithBot ℝ`, monotone exactly when the slope is nonnegative: the map `x ↦ max floor (shift + slope * x)`, read as the affine
 map `x ↦ shift + slope * x` when the floor is `⊥`. -/
 @[ext] structure Label where
   /-- The floor the map never falls below, or `⊥` for no floor at all. -/
@@ -336,29 +337,35 @@ theorem slope_comp_pos {outer inner : Label} (houter : 0 < outer.slope)
     (hinner : 0 < inner.slope) : 0 < (outer.comp inner).slope :=
   mul_pos houter hinner
 
-/-- **Positive-slope labels form a monoid.**  The identity is `(⊥, 0, 1)`; the
-finite-floor class of `Math.TransferSummary.MaxAffineSummary` has none. -/
-instance instMonoid : Monoid {f : Label // 0 < f.slope} where
-  mul outer inner := ⟨outer.1.comp inner.1, slope_comp_pos outer.2 inner.2⟩
+theorem slope_comp_nonneg {outer inner : Label} (houter : 0 ≤ outer.slope)
+    (hinner : 0 ≤ inner.slope) : 0 ≤ (outer.comp inner).slope :=
+  mul_nonneg houter hinner
+
+/-- **Nonnegative-slope labels form a monoid.**  The identity is `(⊥, 0, 1)`;
+the finite-floor class of `Math.TransferSummary.MaxAffineSummary` has none.
+Slope zero is admitted: the composite then ignores its inner label, exactly as
+the constant action does. -/
+instance instMonoid : Monoid {f : Label // 0 ≤ f.slope} where
+  mul outer inner := ⟨outer.1.comp inner.1, slope_comp_nonneg outer.2 inner.2⟩
   one := ⟨id, by simp⟩
-  mul_assoc first second third := Subtype.ext (comp_assoc first.2.le second.1 third.1)
+  mul_assoc first second third := Subtype.ext (comp_assoc first.2 second.1 third.1)
   one_mul f := Subtype.ext (id_comp f.1)
   mul_one f := Subtype.ext (comp_id f.1)
 
-@[simp] theorem val_mul (outer inner : {f : Label // 0 < f.slope}) :
+@[simp] theorem val_mul (outer inner : {f : Label // 0 ≤ f.slope}) :
     (outer * inner).1 = outer.1.comp inner.1 := rfl
 
-@[simp] theorem val_one : (1 : {f : Label // 0 < f.slope}).1 = id := rfl
+@[simp] theorem val_one : (1 : {f : Label // 0 ≤ f.slope}).1 = id := rfl
 
-instance instSMul : SMul {f : Label // 0 < f.slope} ℝ where
+instance instSMul : SMul {f : Label // 0 ≤ f.slope} ℝ where
   smul f x := f.1.apply x
 
-@[simp] theorem smul_eq_apply (f : {f : Label // 0 < f.slope}) (x : ℝ) : f • x = f.1.apply x := rfl
+@[simp] theorem smul_eq_apply (f : {f : Label // 0 ≤ f.slope}) (x : ℝ) : f • x = f.1.apply x := rfl
 
-/-- Positive-slope labels act on the line by their max-affine maps. -/
-instance instMulAction : MulAction {f : Label // 0 < f.slope} ℝ where
+/-- Nonnegative-slope labels act on the line by their max-affine maps. -/
+instance instMulAction : MulAction {f : Label // 0 ≤ f.slope} ℝ where
   one_smul x := apply_id x
-  mul_smul outer inner x := apply_comp outer.2.le inner.1 x
+  mul_smul outer inner x := apply_comp outer.2 inner.1 x
 
 /-! ### The two embeddings -/
 
@@ -384,20 +391,21 @@ theorem ofAffine_comp (outer inner : Math.TransferSummary.AffineSummary) :
 
 theorem ofAffine_one : ofAffine 1 = id := rfl
 
-/-- The positive-slope affine summaries, a submonoid of the `ax + b` monoid. -/
-def affinePosSubmonoid : Submonoid Math.TransferSummary.AffineSummary where
-  carrier := {f | 0 < f.slope}
+/-- The nonnegative-slope affine summaries, a submonoid of the `ax + b`
+monoid. -/
+def affineNonnegSubmonoid : Submonoid Math.TransferSummary.AffineSummary where
+  carrier := {f | 0 ≤ f.slope}
   mul_mem' hf hg := by
-    show (0 : ℝ) < _ * _
-    exact mul_pos hf hg
+    show (0 : ℝ) ≤ _ * _
+    exact mul_nonneg hf hg
   one_mem' := by
-    show (0 : ℝ) < 1
-    exact one_pos
+    show (0 : ℝ) ≤ 1
+    exact zero_le_one
 
-/-- **The floorless embedding as a monoid homomorphism.**  On positive slopes
-both sides are monoids and the embedding respects their laws. -/
-def ofAffineHom : affinePosSubmonoid →* {f : Label // 0 < f.slope} where
-  toFun f := ⟨ofAffine f.1, show (0 : ℝ) < f.1.slope from f.2⟩
+/-- **The floorless embedding as a monoid homomorphism.**  On nonnegative
+slopes both sides are monoids and the embedding respects their laws. -/
+def ofAffineHom : affineNonnegSubmonoid →* {f : Label // 0 ≤ f.slope} where
+  toFun f := ⟨ofAffine f.1, show (0 : ℝ) ≤ f.1.slope from f.2⟩
   map_one' := rfl
   map_mul' outer inner := Subtype.ext (ofAffine_comp outer.1 inner.1)
 
@@ -454,13 +462,13 @@ theorem le_coe_unbotD (b : WithBot ℝ) (d : ℝ) : b ≤ ((b.unbotD d : ℝ) : 
   | bot => exact bot_le
   | coe e => simp
 
-/-- **The expansivity trichotomy.**  A label admits a post-fixed point exactly
-when it is contracting, or is a nonpositive translation, or is expanding with
-its floor below the fixed point of its affine branch.  The condition is
-decidable in the coefficients, and applied to the composite label of a cycle it
-decides existence of a post-fixed point for that cycle's action.  No sign
-condition on the slope is needed: a decreasing branch falls in the first case
-of the trichotomy. -/
+/-- **The expansivity trichotomy.**  A label admits a pre-fixed point exactly
+when its slope is below one, or equals one with nonpositive shift, or exceeds
+one with the floor below the fixed point of its affine branch.  The condition
+is decidable in the coefficients, and applied to the composite label of a
+cycle it decides existence of a pre-fixed point for that cycle's action.  No
+sign condition on the slope is needed: a negative slope falls in the first
+case of the trichotomy. -/
 theorem exists_apply_le_self_iff (f : Label) :
     (∃ x : ℝ, f.apply x ≤ x) ↔
       f.slope < 1 ∨ (f.slope = 1 ∧ f.shift ≤ 0) ∨
@@ -516,10 +524,10 @@ universe uV uE
 
 variable {V : Type uV} {E : Type uE} {G : Math.BoundedDiscrepancy.EdgeGraph V E}
 
-/-- A **lax invariant section**: traversing an edge does not increase the
+/-- A **lax section**: traversing an edge does not increase the
 candidate beyond its value at the head of that edge.  Also called a
 subsolution, a subinvariant family, or a superharmonic section. -/
-def IsInvariantSection (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) : Prop :=
+def IsLaxSection (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) : Prop :=
   ∀ e : E, (label e).apply (φ (G.source e)) ≤ φ (G.target e)
 
 /-- The amount by which a candidate fails the edge inequality.  Also called the
@@ -527,9 +535,9 @@ edge slack or the residual of the edge. -/
 def defect (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) (e : E) : ℝ :=
   (label e).apply (φ (G.source e)) - φ (G.target e)
 
-theorem isInvariantSection_iff_forall_defect_nonpos (G : EdgeGraph V E) (label : E → Label)
-    (φ : V → ℝ) : IsInvariantSection G label φ ↔ ∀ e : E, defect G label φ e ≤ 0 := by
-  simp [IsInvariantSection, defect]
+theorem isLaxSection_iff_forall_defect_nonpos (G : EdgeGraph V E) (label : E → Label)
+    (φ : V → ℝ) : IsLaxSection G label φ ↔ ∀ e : E, defect G label φ e ≤ 0 := by
+  simp [IsLaxSection, defect]
 
 /-! ### Transport along a walk -/
 
@@ -561,9 +569,9 @@ theorem holonomyApply_eq_foldl_map (label : E → Label) {start finish : V}
     holonomyApply label walk x = (walk.edges.map label).foldl (fun y f => f.apply y) x := by
   rw [holonomyApply_eq_foldl, List.foldl_map]
 
-/-- At positive slopes the transport is the action of the gain-graph holonomy
-`Math.CycleCoboundary.gain` in the label monoid. -/
-theorem holonomyApply_eq_gain_smul (label : E → {f : Label // 0 < f.slope}) {start finish : V}
+/-- At nonnegative slopes the transport is the action of the gain-graph
+holonomy `Math.CycleCoboundary.gain` in the label monoid. -/
+theorem holonomyApply_eq_gain_smul (label : E → {f : Label // 0 ≤ f.slope}) {start finish : V}
     (walk : G.Walk start finish) (x : ℝ) :
     holonomyApply (fun e => (label e).1) walk x = Math.CycleCoboundary.gain label walk • x :=
   Math.CycleCoboundary.transport_eq_smul (G := G) (label := label) walk x
@@ -753,10 +761,10 @@ theorem holonomyApply_le_add_weightedDefect {label : E → Label}
       rw [holonomyApply_concat, EdgeGraph.Walk.edges_concat, weightedDefect_append_singleton]
       linarith
 
-/-- An invariant section transports laxly: its value can only be undercut. -/
-theorem holonomyApply_le_of_isInvariantSection {label : E → Label}
+/-- A lax section transports laxly: its value can only be undercut. -/
+theorem holonomyApply_le_of_isLaxSection {label : E → Label}
     (hslope : ∀ e : E, 0 ≤ (label e).slope) {φ : V → ℝ}
-    (hφ : IsInvariantSection G label φ) {start finish : V} (walk : G.Walk start finish) :
+    (hφ : IsLaxSection G label φ) {start finish : V} (walk : G.Walk start finish) :
     holonomyApply label walk (φ start) ≤ φ finish := by
   induction walk with
   | nil => simp
@@ -765,12 +773,12 @@ theorem holonomyApply_le_of_isInvariantSection {label : E → Label}
       have hmono := Label.monotone_apply (f := label edge) (hslope edge) ih
       exact hmono.trans (hφ edge)
 
-/-- **Weak duality.**  An invariant section makes its value at a vertex a
-post-fixed point of the composite action of every closed walk there. -/
+/-- **Weak duality.**  A lax section makes its value at a vertex a
+pre-fixed point of the composite action of every closed walk there. -/
 theorem holonomyApply_cycle_le {label : E → Label} (hslope : ∀ e : E, 0 ≤ (label e).slope)
-    {φ : V → ℝ} (hφ : IsInvariantSection G label φ) {base : V} (cycle : G.Walk base base) :
+    {φ : V → ℝ} (hφ : IsLaxSection G label φ) {base : V} (cycle : G.Walk base base) :
     holonomyApply label cycle (φ base) ≤ φ base :=
-  holonomyApply_le_of_isInvariantSection hslope hφ cycle
+  holonomyApply_le_of_isLaxSection hslope hφ cycle
 
 /-- **The quantitative obstruction.**  A closed walk whose composite action
 moves the candidate up by at least `γ > 0` forces one of its edges to fail the
@@ -885,19 +893,30 @@ def translationLabel (w : ℝ) : Label := ⟨⊥, w, 1⟩
   rw [Label.apply_of_floor_bot rfl]
   simp [Label.affinePart, translationLabel]
 
-/-- **Translation labels recover the max-plus potential theory.**  An invariant
+/-- **Translation labels recover the max-plus potential theory.**  A lax
 section for the translation labels of an edge weighting is exactly a potential
 in the sense of `Math.MaxPlusPotential.IsPotential`. -/
-theorem isInvariantSection_translationLabel_iff (G : EdgeGraph V E) (w : E → ℝ) (φ : V → ℝ) :
-    IsInvariantSection G (fun e => translationLabel (w e)) φ ↔
+theorem isLaxSection_translationLabel_iff (G : EdgeGraph V E) (w : E → ℝ) (φ : V → ℝ) :
+    IsLaxSection G (fun e => translationLabel (w e)) φ ↔
       Math.MaxPlusPotential.IsPotential G w φ := by
-  simp only [IsInvariantSection, Math.MaxPlusPotential.IsPotential, apply_translationLabel]
+  simp only [IsLaxSection, Math.MaxPlusPotential.IsPotential, apply_translationLabel]
   exact forall_congr' fun e => ⟨fun h => by linarith, fun h => by linarith⟩
 
 @[simp] theorem defect_translationLabel (G : EdgeGraph V E) (w : E → ℝ) (φ : V → ℝ) (e : E) :
     defect G (fun e => translationLabel (w e)) φ e = Math.MaxPlusPotential.defect G w φ e := by
   simp only [defect, Math.MaxPlusPotential.defect, apply_translationLabel]
   ring
+
+/-- **The equality case recovers exact coboundaries.**  Edge data is a
+coboundary exactly when some candidate has vanishing defect at every edge of
+its translation labelling; this reads
+`Math.CycleCoboundary.isCoboundary_iff_exists_defect_eq_zero` through
+`defect_translationLabel`. -/
+theorem isCoboundary_iff_exists_translation_defect_eq_zero (G : EdgeGraph V E) (w : E → ℝ) :
+    Math.CycleCoboundary.IsCoboundary G w ↔
+      ∃ φ : V → ℝ, ∀ e : E, defect G (fun e => translationLabel (w e)) φ e = 0 := by
+  rw [Math.CycleCoboundary.isCoboundary_iff_exists_defect_eq_zero]
+  simp only [defect_translationLabel]
 
 /-- Translation transport is the additive telescope: the walk weight of
 `Math.MaxPlusPotential.walkWeight`. -/
@@ -988,11 +1007,11 @@ theorem walkMap_toTransport (label : E → Label) {start finish : V}
     (toTransport G label).walkMap walk x = holonomyApply label walk x :=
   walkMap_ofEdgeAct _ walk x
 
-/-- An invariant section of a labelled graph is a lax section of its
-constant-fiber directed transport. -/
-theorem isInvariantSection_iff_isLaxSection (G : EdgeGraph V E) (label : E → Label)
+/-- A lax section of a labelled graph is a lax section of its constant-fiber
+directed transport. -/
+theorem isLaxSection_iff_toTransport_isLaxSection (G : EdgeGraph V E) (label : E → Label)
     (φ : V → ℝ) :
-    IsInvariantSection G label φ ↔ (toTransport G label).IsLaxSection φ :=
+    IsLaxSection G label φ ↔ (toTransport G label).IsLaxSection φ :=
   Iff.rfl
 
 end Transport
