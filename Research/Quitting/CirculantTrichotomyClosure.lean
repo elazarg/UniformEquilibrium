@@ -50,11 +50,17 @@ first.  So the complementary pockets of positive margin sum are the whole
 residual, which is what `isEmpty_counterexampleRegime_or_isComplementaryPocketMargin`
 records.
 
-Neither pocket is closed by sign data alone, but the neighbour one is closed by
-sign data together with two inequalities on the join margins, which is
-`exists_uniformEquilibriumPayoff_of_neighbourPocket`.  Both pockets of the
-collider completion are settled outright in
-`Research/Quitting/CirculantColliderClosure.lean`.
+Neither pocket is closed by sign data alone, but both are closed by sign data
+together with two inequalities on the join margins.  The producer behind that
+is `exists_uniformEquilibriumPayoff_of_complementaryStep`: a step whose own
+margin is negative and whose complementary margin is nonpositive runs the
+constant-step cycle once the join margins along its progression are
+nonpositive at the two shallowest phases and capped by the complementary
+margin at the two deepest.  Each pocket admits two such steps — the pocket
+distance and its complement — hence two independent cap pairs, and
+`isEmpty_counterexampleRegime_or_uncappedComplementaryPocket` records the
+census that survives all four.  Both pockets of the collider completion are
+settled outright in `Research/Quitting/CirculantColliderClosure.lean`.
 
 ## Main definitions
 
@@ -85,14 +91,23 @@ collider completion are settled outright in
   pairs carry none
 * `neighbour_or_distant_of_isComplementaryPocketMargin` — there are two
   complementary pockets
+* `exists_uniformEquilibriumPayoff_of_complementaryStep` — the producer both
+  complementary pockets run on
 * `exists_uniformEquilibriumPayoff_of_neighbourPocket` and
-  `isEmpty_counterexampleRegime_of_neighbourPocket` — the neighbour pocket of
-  any completion whose join margins at distances one and two are at most `m 1`
+  `exists_uniformEquilibriumPayoff_of_neighbourPocket_stepOne` — the neighbour
+  pocket of any completion capped at `m 1`, respectively at `m 4`
+* `exists_uniformEquilibriumPayoff_of_distantPocket` and
+  `exists_uniformEquilibriumPayoff_of_distantPocket_stepThree` — the distant
+  pocket of any completion capped at `m 3`, respectively at `m 2`
+* `isEmpty_counterexampleRegime_of_neighbourPocket` and
+  `isEmpty_counterexampleRegime_of_distantPocket` — either pocket at either cap
 * `not_exists_nonneg_complement_pair_of_unique_nonneg` — at three negative
   margins the first disjunct of the firing condition is unavailable
 * `isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin` and
   `isEmpty_counterexampleRegime_or_isComplementaryPocketMargin` — the branches
   together, and the census they leave
+* `isEmpty_counterexampleRegime_or_uncappedComplementaryPocket` — the same
+  census with the four cap pairs removed from the residual
 -/
 
 noncomputable section
@@ -501,60 +516,166 @@ theorem not_exists_nonneg_complement_pair_of_unique_nonneg {g : ZMod 5}
       (not_le.mpr (hnegative _ (mul_ne_zero_five 3 c (by decide) hc) hne))
   exact hc (by linear_combination hfour - hthree)
 
-/-! ## The neighbour pocket -/
+/-! ## The complementary-step producer -/
 
-/-- **A wedge containing the neighbour pocket, for any completion.**  The
-hypotheses `m 1 < 0`, `m 4 < 0`, `0 ≤ m 2` at positive margin sum do not
-constrain `m 3`, so they admit more than the pocket proper: with `m 3`
-negative a firing step may exist as well.  In the pocket proper, where `m 3`
-is also nonnegative, no step fires, and there the step-four cycle of this
-theorem is the only producer known; it runs on a single extra demand, that
-the join margins at distances one and two not exceed `m 1`.
+/-- **The complementary-step producer.**  A step whose own margin is negative
+and whose complementary margin is nonpositive carries a constant-step cyclic
+equilibrium as soon as the join margins along its progression obey four
+inequalities: nonpositive at the step itself and at its double, and capped by
+the complementary margin at the two deepest elapsed phases.
 
-The step-four anchor root exists because `m 4` is negative.  The floor at the
-shallowest elapsed phase reads a join margin against zero, the next is funded
-by the positive backward partial sum, and the two deepest read `m 2 + q * m 1`
-and `m 1`, the first of which exceeds `m 1` because `m 2` is nonnegative and
-`q` lies below one. -/
-theorem exists_uniformEquilibriumPayoff_of_neighbourPocket
+This is the producer the two complementary pockets need, where no step fires
+in the sense of `IsFiringStep` — a firing step wants `0 ≤ m (4 * c)`, and here
+that margin is the second negative one of the pocket.  What replaces it is the
+pair of caps, which the pocket cannot supply from sign data alone.
+
+The floor at the shallowest elapsed phase reads `J c` against zero and the
+next is funded by the positive backward partial sum at the anchor root.  The
+floor at the deepest phase is the cap `J (4 * c) ≤ m (4 * c)` verbatim, and
+the one before it reads `m (3 * c) + q * m (4 * c)`, which is at least
+`m (4 * c)` because `m (3 * c)` is nonnegative, `m (4 * c)` nonpositive and
+`q` below one.  So the same cap value serves at both depths. -/
+theorem exists_uniformEquilibriumPayoff_of_complementaryStep
     (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
-    (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0)
-    (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2)
-    (hsum : 0 < ∑ e, m e) (hone : J 1 ≤ m 1) (htwo : J 2 ≤ m 1) :
+    (hsum : 0 < ∑ e, m e) {c : ZMod 5} (hc : c ≠ 0) (hneg : m c < 0)
+    (hthird : 0 ≤ m (3 * c)) (hcomplement : m (4 * c) ≤ 0)
+    (hown : J c ≤ 0) (hdouble : J (2 * c) ≤ 0)
+    (hcap₃ : J (3 * c) ≤ m (4 * c)) (hcap₄ : J (4 * c) ≤ m (4 * c)) :
     ∃ payoff : Payoff (ZMod 5),
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
   obtain ⟨q, hq, hroot, htail⟩ :=
-    exists_constantStepAnchor_root_zmod_five m htable.margin_zero
-      (by decide : (4 : ZMod 5) ≠ 0) hm4 hsum
-  have hq0 : 0 < q := hq.1
-  have hq1 : q < 1 := hq.2
+    exists_constantStepAnchor_root_zmod_five m htable.margin_zero hc hneg hsum
+  obtain ⟨c', hcc'⟩ := exists_mul_eq_neg_one c hc
+  rw [constantStepAnchorTail_eq] at htail
+  have hrootStep : stepAnchor m c q = 0 :=
+    (stepAnchor_eq_constantStepAnchor m c q).trans hroot
+  have h1q : (0 : ℝ) ≤ 1 - q := by linarith [hq.2]
+  refine ⟨_, isUniformEquilibriumPayoff_constantStep htable hcc' hs hq.1 hq.2
+    hrootStep hown ?_ ?_ hcap₄⟩
+  · linarith
+  · nlinarith
+
+/-! ## The neighbour pocket -/
+
+/-- **A wedge containing the neighbour pocket, for any completion.**  The
+hypotheses `m 1 ≤ 0`, `m 4 < 0`, `0 ≤ m 2` at positive margin sum do not
+constrain `m 3`, so they admit more than the pocket proper: with `m 3`
+negative a firing step may exist as well.  In the pocket proper, where `m 3`
+is also nonnegative, no step fires, and the step-four cycle of this theorem is
+one of the two producers known there; it runs on the two caps `J 1 ≤ m 1` and
+`J 2 ≤ m 1`, and on nonpositivity of the join margins at distances three and
+four only.
+
+It is the case `c = 4` of `exists_uniformEquilibriumPayoff_of_complementaryStep`,
+whose complementary margin is `m 1`. -/
+theorem exists_uniformEquilibriumPayoff_of_neighbourPocket
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hm1 : m 1 ≤ 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2)
+    (hsum : 0 < ∑ e, m e) (hthree : J 3 ≤ 0) (hfour : J 4 ≤ 0)
+    (hone : J 1 ≤ m 1) (htwo : J 2 ≤ m 1) :
+    ∃ payoff : Payoff (ZMod 5),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
   have h24 : (2 : ZMod 5) * 4 = 3 := by decide
   have h34 : (3 : ZMod 5) * 4 = 2 := by decide
   have h44 : (4 : ZMod 5) * 4 = 1 := by decide
-  rw [constantStepAnchorTail_eq, h24, h34, h44] at htail
-  have hrootStep : stepAnchor m 4 q = 0 :=
-    (stepAnchor_eq_constantStepAnchor m 4 q).trans hroot
-  refine ⟨_, isUniformEquilibriumPayoff_constantStep (c' := 1) htable (by decide)
-    hs hq0 hq1 hrootStep ?_ ?_ ?_ ?_⟩
-  · exact hjoin 4 (by decide)
-  · rw [h24, h34, h44]
-    linarith [hjoin 3 (by decide)]
-  · rw [h34, h44]
-    nlinarith [mul_pos (sub_pos.mpr hq1) (neg_pos.mpr hm1)]
-  · rw [h44]
-    exact hone
+  exact exists_uniformEquilibriumPayoff_of_complementaryStep htable hs hsum
+    (by decide) hm4 (by rw [h34]; exact hm2) (by rw [h44]; exact hm1) hfour
+    (by rw [h24]; exact hthree) (by rw [h34, h44]; exact htwo)
+    (by rw [h44]; exact hone)
 
-/-- The neighbour pocket of any completion, as emptiness of the counterexample
-regime. -/
+/-- **The neighbour pocket, capped at `m 4`.**  The step-one cycle closes the
+same wedge from the other side: its complementary margin is `m 4`, so the two
+caps sit at `m 4` and the free floors ask nonpositivity at distances one and
+two.  It is the case `c = 1` of the complementary-step producer. -/
+theorem exists_uniformEquilibriumPayoff_of_neighbourPocket_stepOne
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hm1 : m 1 < 0) (hm4 : m 4 ≤ 0) (hm3 : 0 ≤ m 3)
+    (hsum : 0 < ∑ e, m e) (hone : J 1 ≤ 0) (htwo : J 2 ≤ 0)
+    (hthree : J 3 ≤ m 4) (hfour : J 4 ≤ m 4) :
+    ∃ payoff : Payoff (ZMod 5),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  have h21 : (2 : ZMod 5) * 1 = 2 := by decide
+  have h31 : (3 : ZMod 5) * 1 = 3 := by decide
+  have h41 : (4 : ZMod 5) * 1 = 4 := by decide
+  exact exists_uniformEquilibriumPayoff_of_complementaryStep htable hs hsum
+    (by decide) hm1 (by rw [h31]; exact hm3) (by rw [h41]; exact hm4)
+    hone (by rw [h21]; exact htwo) (by rw [h31, h41]; exact hthree)
+    (by rw [h41]; exact hfour)
+
+/-- **The neighbour pocket at either cap.**  In the pocket proper both cycles
+are available in principle, and the pocket closes as soon as one of the two
+cap pairs holds. -/
 theorem isEmpty_counterexampleRegime_of_neighbourPocket
     (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
     (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0)
-    (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2)
-    (hsum : 0 < ∑ e, m e) (hone : J 1 ≤ m 1) (htwo : J 2 ≤ m 1) :
-    IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
-    (exists_uniformEquilibriumPayoff_of_neighbourPocket htable hs hjoin hm1 hm4
-      hm2 hsum hone htwo)⟩
+    (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
+    (hsum : 0 < ∑ e, m e)
+    (hcap : (J 1 ≤ m 1 ∧ J 2 ≤ m 1) ∨ (J 3 ≤ m 4 ∧ J 4 ≤ m 4)) :
+    IsEmpty (QuittingCounterexampleRegime reward) := by
+  refine ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff ?_⟩
+  rcases hcap with ⟨hone, htwo⟩ | ⟨hthree, hfour⟩
+  · exact exists_uniformEquilibriumPayoff_of_neighbourPocket htable hs hm1.le hm4
+      hm2 hsum (hjoin 3 (by decide)) (hjoin 4 (by decide)) hone htwo
+  · exact exists_uniformEquilibriumPayoff_of_neighbourPocket_stepOne htable hs hm1
+      hm4.le hm3 hsum (hjoin 1 (by decide)) (hjoin 2 (by decide)) hthree hfour
+
+/-! ## The distant pocket -/
+
+/-- **A wedge containing the distant pocket, for any completion.**  This is
+the mirror of `exists_uniformEquilibriumPayoff_of_neighbourPocket` across the
+automorphism doubling the five-cycle: the negative pair is now `m 2`, `m 3`,
+the cycle is the step-two one, and the complementary margin at which the two
+caps sit is `m 3`.
+
+Before this the distant pocket was closed only for the collider completion of
+`Research/Quitting/CirculantColliderClosure.lean`, which supplies the caps
+from `low - s ≤ m 3`; the statement here asks only for the caps themselves. -/
+theorem exists_uniformEquilibriumPayoff_of_distantPocket
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hm2 : m 2 < 0) (hm3 : m 3 ≤ 0) (hm1 : 0 ≤ m 1)
+    (hsum : 0 < ∑ e, m e) (htwo : J 2 ≤ 0) (hfour : J 4 ≤ 0)
+    (hone : J 1 ≤ m 3) (hthree : J 3 ≤ m 3) :
+    ∃ payoff : Payoff (ZMod 5),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  have h22 : (2 : ZMod 5) * 2 = 4 := by decide
+  have h32 : (3 : ZMod 5) * 2 = 1 := by decide
+  have h42 : (4 : ZMod 5) * 2 = 3 := by decide
+  exact exists_uniformEquilibriumPayoff_of_complementaryStep htable hs hsum
+    (by decide) hm2 (by rw [h32]; exact hm1) (by rw [h42]; exact hm3) htwo
+    (by rw [h22]; exact hfour) (by rw [h32, h42]; exact hone)
+    (by rw [h42]; exact hthree)
+
+/-- **The distant pocket, capped at `m 2`.**  The step-three cycle closes the
+same wedge from the other side, with both caps at `m 2`. -/
+theorem exists_uniformEquilibriumPayoff_of_distantPocket_stepThree
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hm3 : m 3 < 0) (hm2 : m 2 ≤ 0) (hm4 : 0 ≤ m 4)
+    (hsum : 0 < ∑ e, m e) (hthree : J 3 ≤ 0) (hone : J 1 ≤ 0)
+    (hfour : J 4 ≤ m 2) (htwo : J 2 ≤ m 2) :
+    ∃ payoff : Payoff (ZMod 5),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  have h23 : (2 : ZMod 5) * 3 = 1 := by decide
+  have h33 : (3 : ZMod 5) * 3 = 4 := by decide
+  have h43 : (4 : ZMod 5) * 3 = 2 := by decide
+  exact exists_uniformEquilibriumPayoff_of_complementaryStep htable hs hsum
+    (by decide) hm3 (by rw [h33]; exact hm4) (by rw [h43]; exact hm2) hthree
+    (by rw [h23]; exact hone) (by rw [h33, h43]; exact hfour)
+    (by rw [h43]; exact htwo)
+
+/-- **The distant pocket at either cap.** -/
+theorem isEmpty_counterexampleRegime_of_distantPocket
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0)
+    (hm2 : m 2 < 0) (hm3 : m 3 < 0) (hm4 : 0 ≤ m 4) (hm1 : 0 ≤ m 1)
+    (hsum : 0 < ∑ e, m e)
+    (hcap : (J 1 ≤ m 3 ∧ J 3 ≤ m 3) ∨ (J 2 ≤ m 2 ∧ J 4 ≤ m 2)) :
+    IsEmpty (QuittingCounterexampleRegime reward) := by
+  refine ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff ?_⟩
+  rcases hcap with ⟨hone, hthree⟩ | ⟨htwo, hfour⟩
+  · exact exists_uniformEquilibriumPayoff_of_distantPocket htable hs hm2 hm3.le
+      hm1 hsum (hjoin 2 (by decide)) (hjoin 4 (by decide)) hone hthree
+  · exact exists_uniformEquilibriumPayoff_of_distantPocket_stepThree htable hs hm3
+      hm2.le hm4 hsum (hjoin 3 (by decide)) (hjoin 1 (by decide)) hfour htwo
 
 /-! ## The branches together -/
 
@@ -622,6 +743,59 @@ theorem isEmpty_counterexampleRegime_or_isComplementaryPocketMargin
     · exact Or.inr ⟨not_le.mp hsum, hpocket⟩
   · exact Or.inl (isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin
       htable hs hjoin (Or.inr hpocket))
+
+/-- **The census at the pocket caps.**  A rotation-symmetric table with
+nonnegative solo self value and nonpositive join margins either carries no
+counterexample regime, or has positive margin sum, negative margins forming
+exactly one complementary pair, and *both* cap pairs of that pocket violated.
+
+Against `isEmpty_counterexampleRegime_or_isComplementaryPocketMargin` this
+removes from the residual every pocket table meeting one of its two cap pairs.
+For the neighbour pocket the two pairs are `J 1, J 2 ≤ m 1` (step four) and
+`J 3, J 4 ≤ m 4` (step one); for the distant pocket they are `J 1, J 3 ≤ m 3`
+(step two) and `J 2, J 4 ≤ m 2` (step three).  What survives is a table whose
+join margins are nonpositive yet still strictly above both negative margins of
+its own pocket, in one coordinate of each cap pair. -/
+theorem isEmpty_counterexampleRegime_or_uncappedComplementaryPocket
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0) :
+    IsEmpty (QuittingCounterexampleRegime reward) ∨
+      (0 < ∑ e, m e ∧
+        ((m 1 < 0 ∧ m 4 < 0 ∧ 0 ≤ m 2 ∧ 0 ≤ m 3 ∧
+            (m 1 < J 1 ∨ m 1 < J 2) ∧ (m 4 < J 3 ∨ m 4 < J 4)) ∨
+          (m 2 < 0 ∧ m 3 < 0 ∧ 0 ≤ m 4 ∧ 0 ≤ m 1 ∧
+            (m 3 < J 1 ∨ m 3 < J 3) ∧ (m 2 < J 2 ∨ m 2 < J 4)))) := by
+  rcases isEmpty_counterexampleRegime_or_isComplementaryPocketMargin htable hs
+    hjoin with hempty | ⟨hsum, hpocket⟩
+  · exact Or.inl hempty
+  rcases neighbour_or_distant_of_isComplementaryPocketMargin hpocket with
+    ⟨hm1, hm4, hm2, hm3⟩ | ⟨hm2, hm3, hm4, hm1⟩
+  · by_cases hfirst : J 1 ≤ m 1 ∧ J 2 ≤ m 1
+    · exact Or.inl (isEmpty_counterexampleRegime_of_neighbourPocket htable hs hjoin
+        hm1 hm4 hm2 hm3 hsum (Or.inl hfirst))
+    by_cases hsecond : J 3 ≤ m 4 ∧ J 4 ≤ m 4
+    · exact Or.inl (isEmpty_counterexampleRegime_of_neighbourPocket htable hs hjoin
+        hm1 hm4 hm2 hm3 hsum (Or.inr hsecond))
+    refine Or.inr ⟨hsum, Or.inl ⟨hm1, hm4, hm2, hm3, ?_, ?_⟩⟩
+    · rcases not_and_or.mp hfirst with h | h
+      · exact Or.inl (not_le.mp h)
+      · exact Or.inr (not_le.mp h)
+    · rcases not_and_or.mp hsecond with h | h
+      · exact Or.inl (not_le.mp h)
+      · exact Or.inr (not_le.mp h)
+  · by_cases hfirst : J 1 ≤ m 3 ∧ J 3 ≤ m 3
+    · exact Or.inl (isEmpty_counterexampleRegime_of_distantPocket htable hs hjoin
+        hm2 hm3 hm4 hm1 hsum (Or.inl hfirst))
+    by_cases hsecond : J 2 ≤ m 2 ∧ J 4 ≤ m 2
+    · exact Or.inl (isEmpty_counterexampleRegime_of_distantPocket htable hs hjoin
+        hm2 hm3 hm4 hm1 hsum (Or.inr hsecond))
+    refine Or.inr ⟨hsum, Or.inr ⟨hm2, hm3, hm4, hm1, ?_, ?_⟩⟩
+    · rcases not_and_or.mp hfirst with h | h
+      · exact Or.inl (not_le.mp h)
+      · exact Or.inr (not_le.mp h)
+    · rcases not_and_or.mp hsecond with h | h
+      · exact Or.inl (not_le.mp h)
+      · exact Or.inr (not_le.mp h)
 
 /-! ## The residual -/
 

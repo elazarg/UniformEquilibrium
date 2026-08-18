@@ -42,10 +42,18 @@ it is a closed condition and can fail arbitrarily close to a copositive matrix.
 * `sum_le_of_isStandardLCPSolution` — the explicit uniform solution bound
 * `abs_matrixAction_sub_le` and `abs_quadratic_sub_le` — the entrywise
   perturbation estimates on the simplex
+* `r0Margin_sub_le_r0Margin` — the one-sided estimate: an explicit lower bound
+  for the margin of a perturbed matrix
 * `abs_r0Margin_sub_le` — the margin is Lipschitz in the matrix
-* `isR0Matrix_of_r0Margin_lt` — `R₀` is open, with a computable radius
+* `isR0Matrix_of_r0Margin_lt` and `exists_pos_isR0Matrix_of_dist_le` — `R₀` is
+  open, with a computable radius
 * `isStandardQ_of_copositive_of_r0Margin_lt` — perturbation stability of the
   copositive `R₀` route to standard `Q`
+
+The perturbation hypothesis controls `|M i j - N i j|` rather than a signed
+deviation, and no one-sided entrywise hypothesis replaces it: raising an entry
+raises the quadratic term of `homogeneousViolation` and lowers its negative-part
+term, so the violation is monotone in neither direction.
 -/
 
 noncomputable section
@@ -149,10 +157,12 @@ theorem r0Margin_pos_iff_isR0Matrix [Nonempty ι] (M : ι → ι → ℝ) :
 solution of `LCP(M, q)` has total mass at most `(card ι + 1) * B / r0Margin M`,
 for any coordinatewise bound `B` on `q`. -/
 theorem sum_le_of_isStandardLCPSolution [Nonempty ι] (M : ι → ι → ℝ)
-    (hmargin : 0 < r0Margin M) {B : ℝ} (hB : 0 ≤ B) (q z : ι → ℝ)
+    (hmargin : 0 < r0Margin M) {B : ℝ} (q z : ι → ℝ)
     (hq : ∀ i, |q i| ≤ B) (hsol : IsStandardLCPSolution M q z) :
     (∑ i, z i) ≤ ((Fintype.card ι : ℝ) + 1) * B / r0Margin M := by
   classical
+  obtain ⟨i₀⟩ := ‹Nonempty ι›
+  have hB : 0 ≤ B := (abs_nonneg (q i₀)).trans (hq i₀)
   have hznn : (0 : ℝ) ≤ ∑ i, z i :=
     Finset.sum_nonneg fun i _ => hsol.weight_nonneg i
   have hcard : (0 : ℝ) ≤ (Fintype.card ι : ℝ) + 1 := by positivity
@@ -263,34 +273,56 @@ theorem abs_homogeneousViolation_sub_le (M N : ι → ι → ℝ) {δ : ℝ}
   refine (abs_add_le _ _).trans ?_
   nlinarith [hmax, hparts]
 
+/-- **The perturbed margin has an explicit lower bound.**  At entrywise
+deviation `δ` the margin of `N` is at least the margin of `M` diminished by
+`card ι + 1` times `δ`.
+
+This one-sided form is what composes: chaining it along a sequence of
+perturbations accumulates the deviations, whereas the two-sided estimate
+`abs_r0Margin_sub_le` discards the direction at each step. -/
+theorem r0Margin_sub_le_r0Margin [Nonempty ι] (M N : ι → ι → ℝ) {δ : ℝ}
+    (hδ : ∀ i j, |M i j - N i j| ≤ δ) :
+    r0Margin M - ((Fintype.card ι : ℝ) + 1) * δ ≤ r0Margin N := by
+  refine le_r0Margin N fun p hp => ?_
+  have hle := (abs_le.mp (abs_homogeneousViolation_sub_le M N hδ hp)).2
+  linarith [r0Margin_le M hp]
+
 /-- **The margin is Lipschitz in the matrix**, with the same constant. -/
 theorem abs_r0Margin_sub_le [Nonempty ι] (M N : ι → ι → ℝ) {δ : ℝ}
     (hδ : ∀ i j, |M i j - N i j| ≤ δ) :
     |r0Margin M - r0Margin N| ≤ ((Fintype.card ι : ℝ) + 1) * δ := by
-  have hforward : r0Margin M - ((Fintype.card ι : ℝ) + 1) * δ ≤ r0Margin N := by
-    refine le_r0Margin N fun p hp => ?_
-    have hbound := abs_homogeneousViolation_sub_le M N hδ hp
-    have hle := (abs_le.mp hbound).2
-    linarith [r0Margin_le M hp]
-  have hreverse : r0Margin N - ((Fintype.card ι : ℝ) + 1) * δ ≤ r0Margin M := by
-    refine le_r0Margin M fun p hp => ?_
-    have hbound := abs_homogeneousViolation_sub_le M N hδ hp
-    have hle := (abs_le.mp hbound).1
-    linarith [r0Margin_le N hp]
-  exact abs_le.mpr ⟨by linarith, by linarith⟩
+  have hswap : ∀ i j, |N i j - M i j| ≤ δ := fun i j => by
+    rw [abs_sub_comm]; exact hδ i j
+  exact abs_sub_le_iff.mpr
+    ⟨by linarith [r0Margin_sub_le_r0Margin M N hδ],
+      by linarith [r0Margin_sub_le_r0Margin N M hswap]⟩
 
 /-! ## `R₀` is open -/
 
 /-- **`R₀` is an open condition, with a computable radius.**  Any matrix whose
 entries deviate from those of an `R₀` matrix by less than
-`r0Margin M / (card ι + 1)` is again `R₀`. -/
+`r0Margin M / (card ι + 1)` is again `R₀`.
+
+The margin of the perturbed matrix is bounded below explicitly by
+`r0Margin_sub_le_r0Margin`, which is what a further perturbation consumes. -/
 theorem isR0Matrix_of_r0Margin_lt [Nonempty ι] {M N : ι → ι → ℝ} {δ : ℝ}
     (hδ : ∀ i j, |M i j - N i j| ≤ δ)
     (hlt : ((Fintype.card ι : ℝ) + 1) * δ < r0Margin M) : IsR0Matrix N := by
   refine (r0Margin_pos_iff_isR0Matrix N).mp ?_
-  have hbound := abs_r0Margin_sub_le M N hδ
-  have hle := (abs_le.mp hbound).2
-  linarith
+  linarith [r0Margin_sub_le_r0Margin M N hδ]
+
+/-- **`R₀` is open, in ball form.**  Around every `R₀` matrix there is an
+entrywise ball of positive radius consisting of `R₀` matrices; half of
+`r0Margin M / (card ι + 1)` is such a radius. -/
+theorem exists_pos_isR0Matrix_of_dist_le [Nonempty ι] {M : ι → ι → ℝ}
+    (hM : IsR0Matrix M) :
+    ∃ ρ, 0 < ρ ∧ ∀ N : ι → ι → ℝ, (∀ i j, |M i j - N i j| ≤ ρ) → IsR0Matrix N := by
+  have hpos : 0 < r0Margin M := (r0Margin_pos_iff_isR0Matrix M).mpr hM
+  have hcard : (0 : ℝ) < 2 * ((Fintype.card ι : ℝ) + 1) := by positivity
+  refine ⟨r0Margin M / (2 * ((Fintype.card ι : ℝ) + 1)), by positivity, fun N hN => ?_⟩
+  refine isR0Matrix_of_r0Margin_lt hN ?_
+  rw [mul_div_assoc', div_lt_iff₀ hcard]
+  nlinarith
 
 /-- **Perturbation stability of the copositive `R₀` route to standard `Q`.**
 A copositive matrix whose entries are within `r0Margin M / (card ι + 1)` of an

@@ -373,6 +373,7 @@ theorem isSoloPeriodicCertificate_constantStep
   · rw [stepCoin_true]
     linarith
   · intro who
+    refine Or.inr ?_
     rw [htable.singleton, sub_self, htable.margin_zero, add_zero]
     exact hs
 

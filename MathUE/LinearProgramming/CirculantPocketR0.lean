@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.LinearProgramming.ColumnSumQ
 import MathUE.LinearProgramming.CopositiveQ
+import MathUE.LinearProgramming.R0Margin
 
 /-!
 # `R₀` for five-cycle circulants with two negative margins
@@ -33,6 +34,10 @@ LCP map, which is not developed in this repository.
 ## Main results
 
 * `isR0Matrix_rowCirculant_pentagon_pocket` — the `R₀` property
+* `r0Margin_rowCirculant_pentagon_pocket_pos` — the explicit perturbation
+  radius is positive on the pocket
+* `exists_pos_isR0Matrix_of_dist_le_rowCirculant_pentagon_pocket` — the pocket
+  `R₀` family is entrywise open
 
 ## Main definitions
 
@@ -250,6 +255,40 @@ theorem isR0Matrix_rowCirculant_pentagon_pocket (hm0 : m 0 = 0)
   · exact h2
   · exact h3
   · exact h4
+
+/-! ## The pocket is entrywise open
+
+`R₀` is an open condition on matrices with the explicit radius
+`r0Margin M / (card ι + 1)` of `isR0Matrix_of_r0Margin_lt`, so the pocket family
+sits inside an entrywise ball of `R₀` matrices.  Only `R₀` transfers: a
+perturbation of a pocket circulant need not be a circulant, need not be
+copositive, and standard `Q` for the pocket family itself is not established
+here. -/
+
+/-- **Pocket circulants have a positive `R₀` margin.**  This is the numerator of
+the explicit perturbation radius `r0Margin M / (card ι + 1)`. -/
+theorem r0Margin_rowCirculant_pentagon_pocket_pos (hm0 : m 0 = 0)
+    (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
+    (hsum : 0 < m 1 + m 2 + m 3 + m 4) :
+    0 < r0Margin (rowCirculant m) :=
+  (r0Margin_pos_iff_isR0Matrix _).mpr
+    (isR0Matrix_rowCirculant_pentagon_pocket hm0 hm1 hm4 hm2 hm3 hsum)
+
+/-- **The pocket `R₀` family is entrywise open.**  Around every pocket circulant
+there is an entrywise ball of positive radius consisting of `R₀` matrices; half
+of `r0Margin (rowCirculant m) / (card (ZMod 5) + 1)` is such a radius.
+
+The conclusion is `R₀` alone.  A standard-`Q` conclusion for a perturbed matrix
+needs copositivity supplied at that matrix, as in
+`isStandardQ_of_copositive_of_r0Margin_lt`, or the strictly copositive route of
+`isStandardQ_of_copositiveMargin_lt`. -/
+theorem exists_pos_isR0Matrix_of_dist_le_rowCirculant_pentagon_pocket
+    (hm0 : m 0 = 0) (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2)
+    (hm3 : 0 ≤ m 3) (hsum : 0 < m 1 + m 2 + m 3 + m 4) :
+    ∃ ρ, 0 < ρ ∧ ∀ N : ZMod 5 → ZMod 5 → ℝ,
+      (∀ i j, |rowCirculant m i j - N i j| ≤ ρ) → IsR0Matrix N :=
+  exists_pos_isR0Matrix_of_dist_le
+    (isR0Matrix_rowCirculant_pentagon_pocket hm0 hm1 hm4 hm2 hm3 hsum)
 
 /-! ## The standard-`Q` question -/
 
