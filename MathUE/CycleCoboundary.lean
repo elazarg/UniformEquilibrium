@@ -34,10 +34,13 @@ The same objects carry many names in different literatures.
 * Edge data whose cycle sums do not all vanish carries a nonzero *circulation*,
   a nonzero class in the *first cohomology* of the graph, or a *curvature* or
   *holonomy obstruction*.
-* Graphs with edge labels in a monoid are *gain graphs* or *voltage graphs*
-  (Zaslavsky, *Biased graphs* and the gain-graph surveys); the composite label
-  of a walk is its *gain*, *holonomy*, or *monodromy*, and a gain graph whose
-  cycle gains are all trivial is *balanced* or *flat*.
+* Graphs with edge labels in a *group*, inverting under edge reversal, are
+  *gain graphs* or *voltage graphs* (Zaslavsky, *Biased graphs* and the
+  gain-graph surveys); there the composite label of a walk is its *gain*, and
+  a gain graph with trivial cycle gains is *balanced* or *flat*.  Monoid
+  labels along directed walks, as below, are a one-directional generalization
+  with no established name; the composite label is also called the walk's
+  *holonomy* or *monodromy*, or its image in the transition monoid.
 
 ## Main definitions
 
@@ -46,8 +49,9 @@ The same objects carry many names in different literatures.
 * `Math.CycleCoboundary.IsCoboundary`, `Math.CycleCoboundary.HasZeroCycleSums`.
 * `Math.CycleCoboundary.LinkedTo`, `Math.CycleCoboundary.IsStronglyConnectedAt`
   — the reachability scope of the criterion.
-* `Math.CycleCoboundary.gain`, `Math.CycleCoboundary.HasTrivialCycleGains`,
-  `Math.CycleCoboundary.transport` — the monoid-labelled (gain-graph) layer.
+* `Math.CycleCoboundary.walkLabel`, `Math.CycleCoboundary.HasTrivialCycleLabels`,
+  `Math.CycleCoboundary.transport` — the monoid-labelled walk-composition
+  layer, whose group case is the gain-graph notion.
 
 ## Main results
 
@@ -66,8 +70,8 @@ The same objects carry many names in different literatures.
   obstruction: a closed walk of cycle sum at least `γ > 0` forces some edge on
   it to deviate from every potential difference by at least `γ / length`, in
   the positive direction.
-* `Math.CycleCoboundary.hasTrivialCycleGains_ofAdd_iff` and
-  `Math.CycleCoboundary.isCoboundary_iff_hasTrivialCycleGains` — for real edge
+* `Math.CycleCoboundary.hasTrivialCycleLabels_ofAdd_iff` and
+  `Math.CycleCoboundary.isCoboundary_iff_hasTrivialCycleLabels` — for real edge
   data, exactness is triviality of the cycle holonomy of the induced
   translation action.
 
@@ -99,7 +103,7 @@ convention is the reverse of the one in `MathUE.MaxPlusPotential`.
 form (Farkas duality between a nonpositive flow-charge pairing and a
 superharmonic account potential).  Its `holonomy` is the pairing of a
 circulation with a charge cochain, which is a different object from the
-composite walk label `gain` below.
+composite walk label `walkLabel` below.
 
 ## Scope
 
@@ -427,45 +431,49 @@ theorem not_isCoboundary_of_cycleSum_pos (cycle : G.Walk vertex vertex)
 
 end Quantitative
 
-/-! ### Gain graphs: monoid-labelled edges and cycle holonomy
+/-! ### Monoid-labelled edges and cycle holonomy
 
-Labels in a monoid `M` make the graph a *gain graph* (or voltage graph).  The
-composite label of a walk is its *gain*, *holonomy*, or *monodromy*.  Labels
-compose contravariantly here, so that the gain of a walk acts on a fibre
-exactly as the composite of the per-edge transports; see `transport_eq_smul`. -/
+Labels in a monoid `M` compose along directed walks.  When the monoid is a
+group and labels invert under edge reversal this is Zaslavsky's *gain graph*
+(or voltage graph) and the composite label is its *gain*; in general it is
+also called the walk's *holonomy* or *monodromy*.  Labels compose
+contravariantly here, so that the label of a walk acts on a fibre exactly as
+the composite of the per-edge transports; see `transport_eq_smul`. -/
 
 section Gain
 
 variable {M : Type*} [Monoid M]
 
-/-- Composite label of a walk in a gain graph: the product of its edge labels,
-with the last edge outermost.  Also called the walk's holonomy or monodromy. -/
-def gain (label : E → M) {start : V} :
+/-- Composite label of a walk: the product of its edge labels, with the last
+edge outermost.  Also called the walk's holonomy or monodromy, or, for group
+labels, its gain. -/
+def walkLabel (label : E → M) {start : V} :
     {finish : V} → G.Walk start finish → M
   | _, .nil => 1
-  | _, .concat walkSoFar edge _ => label edge * gain label walkSoFar
+  | _, .concat walkSoFar edge _ => label edge * walkLabel label walkSoFar
 
 variable {label : E → M} {start finish middle : V}
 
-@[simp] theorem gain_nil : gain label (.nil : G.Walk start start) = 1 := rfl
+@[simp] theorem walkLabel_nil : walkLabel label (.nil : G.Walk start start) = 1 := rfl
 
-@[simp] theorem gain_concat (walk : G.Walk start finish) (edge : E)
+@[simp] theorem walkLabel_concat (walk : G.Walk start finish) (edge : E)
     (legal : G.source edge = finish) :
-    gain label (walk.concat edge legal) = label edge * gain label walk := rfl
+    walkLabel label (walk.concat edge legal) = label edge * walkLabel label walk := rfl
 
 /-- Concatenation of walks composes gains contravariantly. -/
-@[simp] theorem gain_append (first : G.Walk start middle)
+@[simp] theorem walkLabel_append (first : G.Walk start middle)
     (second : G.Walk middle finish) :
-    gain label (first.append second) = gain label second * gain label first := by
+    walkLabel label (first.append second) = walkLabel label second * walkLabel label first := by
   induction second with
   | nil => simp
   | concat walkSoFar edge legal ih =>
-      rw [EdgeGraph.Walk.append_concat, gain_concat, gain_concat, ih, mul_assoc]
+      rw [EdgeGraph.Walk.append_concat, walkLabel_concat, walkLabel_concat, ih, mul_assoc]
 
-/-- Every closed walk has trivial gain.  A gain graph with this property is
-called *balanced* or *flat*; the condition is triviality of the holonomy. -/
-def HasTrivialCycleGains (G : EdgeGraph V E) (label : E → M) : Prop :=
-  ∀ (vertex : V) (cycle : G.Walk vertex vertex), gain label cycle = 1
+/-- Every closed walk has trivial composite label.  In the group-labelled
+case this is a *balanced* or *flat* gain graph; the condition is triviality
+of the holonomy. -/
+def HasTrivialCycleLabels (G : EdgeGraph V E) (label : E → M) : Prop :=
+  ∀ (vertex : V) (cycle : G.Walk vertex vertex), walkLabel label cycle = 1
 
 /-- Transport a fibre point along a walk, applying edge transports in
 chronological order. -/
@@ -481,66 +489,67 @@ def transport {X : Type*} (act : E → X → X) {start : V} :
     (walk : G.Walk start finish) (edge : E) (legal : G.source edge = finish) :
     transport act (walk.concat edge legal) = act edge ∘ transport act walk := rfl
 
-/-- For labels acting on a fibre, the gain of a walk is exactly its transport
-map.  This is why the gain is called the holonomy of the walk. -/
+/-- For labels acting on a fibre, the composite label of a walk is exactly
+its transport map.  This is why it is called the holonomy of the walk. -/
 theorem transport_eq_smul {X : Type*} [MulAction M X]
     (walk : G.Walk start finish) (point : X) :
     transport (fun edge value => label edge • value) walk point =
-      gain label walk • point := by
+      walkLabel label walk • point := by
   induction walk with
   | nil => simp
   | concat walkSoFar edge legal ih =>
-      rw [transport_concat, Function.comp_apply, ih, gain_concat, mul_smul]
+      rw [transport_concat, Function.comp_apply, ih, walkLabel_concat, mul_smul]
 
 /-- Under trivial cycle gains, transport around any closed walk is the
 identity. -/
 theorem transport_cycle_eq_self {X : Type*} [MulAction M X]
-    (hflat : HasTrivialCycleGains G label) {vertex : V}
+    (hflat : HasTrivialCycleLabels G label) {vertex : V}
     (cycle : G.Walk vertex vertex) (point : X) :
     transport (fun edge value => label edge • value) cycle point = point := by
   rw [transport_eq_smul, hflat vertex cycle, one_smul]
 
 end Gain
 
-/-! ### Real edge data as a translation gain graph -/
+/-! ### Real edge data as translation labels -/
 
 section Translation
 
 variable {w : E → ℝ} {start finish : V}
 
-/-- Real edge data labels the graph by translations of the line: the gain of a
-walk is its walk sum, carried into the multiplicative encoding by the type tag
-`Multiplicative.ofAdd` (no exponential is applied). -/
-@[simp] theorem gain_ofAdd (walk : G.Walk start finish) :
-    gain (fun edge => Multiplicative.ofAdd (w edge)) walk =
+/-- Real edge data labels the graph by translations of the line: the walk's
+composite label is its walk sum, carried into the multiplicative encoding by
+the type tag `Multiplicative.ofAdd` (no exponential is applied).  Translations
+invert, so this labelling is a genuine gain graph. -/
+@[simp] theorem walkLabel_ofAdd (walk : G.Walk start finish) :
+    walkLabel (fun edge => Multiplicative.ofAdd (w edge)) walk =
       Multiplicative.ofAdd (walkSum w walk) := by
   induction walk with
   | nil => simp
   | concat walkSoFar edge legal ih =>
-      rw [gain_concat, ih, walkSum_concat, ← ofAdd_add, add_comm]
+      rw [walkLabel_concat, ih, walkSum_concat, ← ofAdd_add, add_comm]
 
 /-- Vanishing cycle sums is triviality of the cycle holonomy for the
 translation labelling. -/
-theorem hasTrivialCycleGains_ofAdd_iff :
-    HasTrivialCycleGains G (fun edge => Multiplicative.ofAdd (w edge)) ↔
+theorem hasTrivialCycleLabels_ofAdd_iff :
+    HasTrivialCycleLabels G (fun edge => Multiplicative.ofAdd (w edge)) ↔
       HasZeroCycleSums G w := by
   constructor
   · intro hflat vertex cycle
     have := hflat vertex cycle
-    rw [gain_ofAdd] at this
+    rw [walkLabel_ofAdd] at this
     simpa using this
   · intro hzero vertex cycle
-    rw [gain_ofAdd, hzero vertex cycle]
+    rw [walkLabel_ofAdd, hzero vertex cycle]
     rfl
 
 /-- **Exactness as flatness.**  On a strongly connected graph, real edge data is
-a potential difference exactly when the translation gain graph it defines is
-balanced. -/
-theorem isCoboundary_iff_hasTrivialCycleGains {base : V}
+a potential difference exactly when the translation labelling it defines has
+trivial cycle labels, that is, when its gain graph is balanced. -/
+theorem isCoboundary_iff_hasTrivialCycleLabels {base : V}
     (hconnected : IsStronglyConnectedAt G base) :
     IsCoboundary G w ↔
-      HasTrivialCycleGains G (fun edge => Multiplicative.ofAdd (w edge)) := by
-  rw [hasTrivialCycleGains_ofAdd_iff]
+      HasTrivialCycleLabels G (fun edge => Multiplicative.ofAdd (w edge)) := by
+  rw [hasTrivialCycleLabels_ofAdd_iff]
   exact isCoboundary_iff_hasZeroCycleSums hconnected
 
 end Translation
