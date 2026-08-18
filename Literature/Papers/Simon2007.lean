@@ -102,6 +102,29 @@ def record : Literature.PaperRecord where
           "The paper conjectures that the expected total variation bound " ++
           "proved for time-homogeneous Markov chains survives without time " ++
           "homogeneity. It is stated as open and is not used by Theorem 3."
+        status := .sourceOnly },
+      { claimId := "theorem_3_proof_steps_asserted_not_derived"
+        sourceLocator :=
+          "Theorem 3, proof of the implications from the orbit conditions " ++
+          "and from existence of approximate equilibria"
+        summary :=
+          "Two steps of the proof are asserted rather than derived: the " ++
+          "constant relating a total-variation gap to the probability that " ++
+          "a quitting action was chosen, and the existence of a stage whose " ++
+          "survival probability lands inside a prescribed interval, which " ++
+          "needs that per-stage survival cannot jump across that interval. " ++
+          "Both are repairable from the surrounding estimates, but neither " ++
+          "is certified line by line by the printed text."
+        status := .sourceOnly },
+      { claimId := "printed_statement_defects"
+        sourceLocator := "Lemma 5(2)(a), Lemma 8, and the definition of chi"
+        summary :=
+          "Three printed statements need repair: Lemma 5(2)(a) bounds a " ++
+          "norm using a vector name that is never introduced, where the " ++
+          "hypothesis and the proof both name the continuation vector; " ++
+          "Lemma 8 repeats one pair where the proof establishes the other; " ++
+          "and the min-max definition quantifies over one player index while " ++
+          "defining the value for another. None is consumed here."
         status := .sourceOnly } ]
 
 end Literature.Papers.Simon2007

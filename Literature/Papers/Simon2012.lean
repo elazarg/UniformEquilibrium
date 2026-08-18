@@ -48,9 +48,14 @@ def record : Literature.PaperRecord where
         sourceLocator := "Abstract and the definitions it summarizes"
         summary :=
           "The normal and abnormal player vocabulary later used by Solan " ++
-          "and Solan 2020 is introduced here. Solan and Solan credit this " ++
-          "paper for it and define a normal player as one whose min-max " ++
-          "value is nonpositive after the solo-exit normalization."
+          "and Solan 2020 is introduced here. What that paper credits to " ++
+          "this one differs between its versions: the arXiv:1707.02598 " ++
+          "preprint says a player is normal in Simon's sense exactly when " ++
+          "some other player's solo exit pays him nonpositively, and calls " ++
+          "its own recursion a recursive application of that condition, " ++
+          "while the final manuscript credits Simon with normality by " ++
+          "nonpositive min-max value. This paper itself was not read, so " ++
+          "neither attribution is confirmed here."
         status := .sourceOnly },
       { claimId := "four_player_and_all_normal_cases_open"
         sourceLocator := "Abstract and the paper's own statement of scope"

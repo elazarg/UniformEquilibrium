@@ -31,15 +31,17 @@ paper states that the converse may fail.  This is `normalLayer` and
 `normalCore` below; the distinct-witness form is the source's, not a repair
 made here.
 
-**An earlier draft's display.**  A draft of the same paper displays this
-recursion without the distinctness condition,
+**The preprint's display.**  In the arXiv:1707.02598 preprint the same
+recursion appears in Section 2.3 as the *definition* of the normal players,
+and is displayed without the distinctness condition,
 
 `Iₙ₊₁ = {i ∈ Iₙ | ∃ j ∈ Iₙ, M i j ≤ 0}`.
 
 Read literally after the standing zero-diagonal normalization that recursion
-never removes a player, since `j = i` always qualifies.  It is formalized as
-`printedNormalLayer` and `printedNormalCore`, and its collapse is proved, so
-that the two displays cannot be confused downstream.
+never removes a player, since `j = i` always qualifies, so the preprint's
+normal set would be every player.  It is formalized as `printedNormalLayer`
+and `printedNormalCore`, and its collapse is proved, so that the two displays
+cannot be confused downstream.
 
 Defining the α-player core does not carry any source theorem with it.  Every
 stationary or sunspot consequence over this core must be proved separately;
