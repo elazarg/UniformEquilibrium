@@ -188,17 +188,29 @@ theorem false_of_forbidden_direction_allContinue_endpoint
 
 /-! ## Strategic closure -/
 
-/-- Every ordinary non-Q branch produces an ordinary uniform-equilibrium
-payoff.  The forbidden projective direction is fed to an analytic Bellman
-germ.  An all-Continue endpoint contradicts the provenance-preserving normal
-hierarchy; an absorbing endpoint either has two positive hazards and hence
-contracts every unilateral tail, or has one positive owner and is repaired by
-the first nonpositive opponent column exposed by the same germ. -/
-theorem exists_uniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch
+/-- **Stationary existence on the ordinary non-Q branch.**  This is the
+stationary branch of Solan and Solan, *Quitting games and linear
+complementarity problems*, Math. Oper. Res. **45**(2) (2020), Theorem 5.1(1),
+proved at strictly greater strength than the source statement.
+
+The hypothesis `OrdinaryNonQMatrixBranch` is exactly theirs: the α-player set
+`normalCore` is nonempty, the homogeneous problem on the restricted matrix has
+no nontrivial solution, and that restricted matrix is not a Q-matrix.  The
+conclusion pins one payoff vector `value` approached by the stationary
+`ε`-equilibria, rather than only asserting that some stationary
+`ε`-equilibrium exists at each accuracy.
+
+The forbidden projective direction is fed to an analytic Bellman germ.  An
+all-Continue endpoint contradicts the provenance-preserving α-player
+hierarchy; an absorbing endpoint either has two positive hazards, in which
+case the endpoint root is already an exact stationary equilibrium, or has one
+positive owner and is repaired stationarily by the first nonpositive opponent
+column exposed by the same germ. -/
+theorem exists_stationaryUniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (branch : OrdinaryNonQMatrixBranch reward) :
-    ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+    ∃ value : Payoff ι,
+      IsQuittingStationaryUniformEquilibriumPayoff reward value := by
   obtain ⟨q, hno⟩ := exists_direction_without_projectiveLCPSolution
     (normalizedNormalPlayerMatrix reward) branch.not_projectiveQ
   let qfull := extendNormalDirection (normalizedSoloMatrix reward) q
@@ -213,15 +225,15 @@ theorem exists_uniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch
   · rcases two_positive_or_isolated_of_continueMass_lt_one
         (g.endpointProfile none) habsorbs with htwo | hisolated
     · exact ⟨_,
-        isUniformEquilibriumPayoff_of_shiftedGerm_absorbingEndpoint_contracts
+        isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_absorbingEndpoint
           reward anchor g habsorbs
             (fixedOpponents_contract_of_two_positive
               (g.endpointProfile none) htwo)⟩
     · obtain ⟨owner, howner, hother⟩ := hisolated
       by_cases hnormal : owner ∈ normalCore (normalizedSoloMatrix reward)
-      · exact
-          exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedNormalEndpoint
-            reward anchor g owner howner hother hnormal
+      · exact ⟨_,
+          isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_isolatedNormalEndpoint
+            reward anchor g owner howner hother hnormal⟩
       · have hqfull : 0 < qfull owner := by
           change 0 < extendNormalDirection
             (normalizedSoloMatrix reward) q owner
@@ -232,13 +244,38 @@ theorem exists_uniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch
           exists_normalizedSoloMatrix_blocker_of_isolated_endpoint
             reward qfull (by simpa only [anchor] using g)
               owner howner hother hqfull
-        exact
-          exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_blocker
-            reward anchor g owner howner hother blocker hne hentry
+        exact ⟨_,
+          isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_blocker
+            reward anchor g owner howner hother blocker hne hentry⟩
   · exact False.elim
       (false_of_forbidden_direction_allContinue_endpoint
         reward q hno (by simpa only [anchor, qfull] using g)
           (by simpa only [anchor, qfull] using hcontinue))
+
+/-- **Solan and Solan's Theorem 5.1(1) as stated.**  On the ordinary non-Q
+branch a stationary `ε`-equilibrium exists at every positive accuracy.  This
+is the source's literal conclusion, obtained by forgetting the pinned limit
+payoff supplied above. -/
+theorem hasQuittingStationaryApproximateEquilibria_of_ordinaryNonQMatrixBranch
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (branch : OrdinaryNonQMatrixBranch reward) :
+    HasQuittingStationaryApproximateEquilibria reward := by
+  obtain ⟨_, hvalue⟩ :=
+    exists_stationaryUniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch
+      reward branch
+  exact hvalue.hasApproximateEquilibria
+
+/-- Every ordinary non-Q branch produces an ordinary uniform-equilibrium
+payoff. -/
+theorem exists_uniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (branch : OrdinaryNonQMatrixBranch reward) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  obtain ⟨_, hvalue⟩ :=
+    exists_stationaryUniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch
+      reward branch
+  exact exists_uniformEquilibriumPayoff_of_stationaryFamily hvalue
 
 end QuittingLCPClassification
 end GameTheory

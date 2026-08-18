@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.FirstLayerSimple
+import UniformEquilibrium.Quitting.Classification.LCP.StationaryEquilibrium
 import UniformEquilibrium.Quitting.Cycles.ConditionedSoloExtraction
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 
@@ -498,20 +499,18 @@ theorem isεAsymptoticNash_laterAbnormalRoot
 /-! ## Strategic closure -/
 
 /-- An off-diagonally nonnegative normalized singleton column and one
-nonpositive owner-row witness yield terminal approximate equilibria at every
-accuracy.  The diagonal comparison is reflexive. -/
-theorem terminalNash_all_errors_of_nonnegative_column
+nonpositive owner-row witness yield *stationary* terminal approximate
+equilibria at every accuracy, all approaching the owner's singleton payoff.
+The two-scale owner/blocker row is a single product root, so nothing beyond
+stationarity is used.  The diagonal comparison is reflexive. -/
+theorem isQuittingStationaryUniformEquilibriumPayoff_of_nonnegative_column
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {owner blocker : ι} (hne : blocker ≠ owner)
     (hcolumn : ∀ who, who ≠ owner →
       0 ≤ normalizedSoloMatrix reward who owner)
     (hblocker : normalizedSoloMatrix reward owner blocker ≤ 0) :
-    ∀ ε : ℝ, 0 < ε →
-      ∃ profile : (quittingGame reward).BehaviorProfile,
-        (quittingGame reward).IsεAsymptoticNash
-          (quittingTerminalPayoff reward) ε profile ∧
-        ∀ who, |quittingTerminalPayoff reward profile who -
-          quittingSoloReward reward owner who| ≤ ε := by
+    IsQuittingStationaryUniformEquilibriumPayoff reward
+      (quittingSoloReward reward owner) := by
   intro ε hε
   let M := quittingRewardBound reward
   let scale := 6 * M
@@ -551,8 +550,7 @@ theorem terminalNash_all_errors_of_nonnegative_column
     unfold quittingProjectiveLCPMatrix at hblocker
     simpa [quittingSoloReward, quittingProjectiveSingletonTerminal] using
       sub_nonpos.mp hblocker
-  refine ⟨quittingStationaryProfile reward
-      (laterAbnormalRoot owner blocker p hp.le hp1), ?_, ?_⟩
+  refine ⟨laterAbnormalRoot owner blocker p hp.le hp1, ?_, ?_⟩
   · exact (isεAsymptoticNash_laterAbnormalRoot reward hne hp hp1
       (abs_reward_le_quittingRewardBound reward) hcolumn' hblocker').mono herror.le
   · intro who
@@ -576,10 +574,9 @@ theorem isUniformEquilibriumPayoff_soloReward_of_nonnegative_column
       0 ≤ normalizedSoloMatrix reward who owner)
     (hblocker : normalizedSoloMatrix reward owner blocker ≤ 0) :
     (quittingGame reward).IsUniformEquilibriumPayoff none
-      (quittingSoloReward reward owner) := by
-  apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_approxTarget
-  exact terminalNash_all_errors_of_nonnegative_column
-    reward hne hcolumn hblocker
+      (quittingSoloReward reward owner) :=
+  (isQuittingStationaryUniformEquilibriumPayoff_of_nonnegative_column
+    reward hne hcolumn hblocker).isUniformEquilibriumPayoff
 
 /-- The same matrix hypotheses yield a uniform-equilibrium payoff. -/
 theorem exists_uniformEquilibriumPayoff_of_nonnegative_column
@@ -594,18 +591,23 @@ theorem exists_uniformEquilibriumPayoff_of_nonnegative_column
     isUniformEquilibriumPayoff_soloReward_of_nonnegative_column
       reward hne hcolumn hblocker⟩
 
-/-- **Later-layer all-abnormal producer.**  Empty normal core always
-produces a uniform-equilibrium payoff.  The empty-first-layer case uses the
-exact stationary producer; the later-layer case uses the two-scale
-owner/blocker row above. -/
-theorem exists_uniformEquilibriumPayoff_of_allPlayersAbnormal
+/-- **Later-layer all-abnormal producer, at stationary strength.**  An empty
+α-player core produces a payoff vector approached by stationary
+`ε`-equilibria.  The empty-first-layer case uses the exact stationary
+producer; the later-layer case uses the two-scale owner/blocker root above.
+
+Solan and Solan, *Quitting games and linear complementarity problems*,
+Math. Oper. Res. **45**(2) (2020), Section 5.1, assert without proof that a
+stationary `ε`-equilibrium exists for every `ε > 0` when there are no
+α-players.  This is that claim, with a pinned limit payoff. -/
+theorem exists_stationaryUniformEquilibriumPayoff_of_allPlayersAbnormal
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (habnormal : AllPlayersAbnormal (normalizedSoloMatrix reward)) :
-    ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+    ∃ value : Payoff ι,
+      IsQuittingStationaryUniformEquilibriumPayoff reward value := by
   classical
   by_cases hfirst : normalLayer (normalizedSoloMatrix reward) 1 = ∅
-  · exact exists_uniformEquilibriumPayoff_of_normalLayer_one_eq_empty
+  · exact exists_stationaryUniformEquilibriumPayoff_of_normalLayer_one_eq_empty
       reward hfirst
   · obtain ⟨last, hlast, hlastNonempty, hnext⟩ :=
       exists_last_nonempty_normalLayer (normalizedSoloMatrix reward)
@@ -620,8 +622,20 @@ theorem exists_uniformEquilibriumPayoff_of_allPlayersAbnormal
       exact nonnegative_column_of_last_normalLayer
         (normalizedSoloMatrix reward)
         (normalizedSoloMatrix_diagonal reward) hnext howner who
-    exact exists_uniformEquilibriumPayoff_of_nonnegative_column
-      reward hne hcolumn hblocker
+    exact ⟨_, isQuittingStationaryUniformEquilibriumPayoff_of_nonnegative_column
+      reward hne hcolumn hblocker⟩
+
+/-- **Later-layer all-abnormal producer.**  Empty α-player core always
+produces a uniform-equilibrium payoff. -/
+theorem exists_uniformEquilibriumPayoff_of_allPlayersAbnormal
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (habnormal : AllPlayersAbnormal (normalizedSoloMatrix reward)) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  obtain ⟨_, hvalue⟩ :=
+    exists_stationaryUniformEquilibriumPayoff_of_allPlayersAbnormal
+      reward habnormal
+  exact exists_uniformEquilibriumPayoff_of_stationaryFamily hvalue
 
 /-- Consequently a counterexample cannot lie in the all-abnormal
 matrix regime. -/

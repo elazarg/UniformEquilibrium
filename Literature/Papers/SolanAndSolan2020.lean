@@ -1,5 +1,5 @@
 import Literature.Catalog
-import UniformEquilibrium.Quitting.Classification.LCP.HomogeneousProducer
+import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 
 /-!
@@ -127,6 +127,79 @@ theorem exists_uniformEquilibriumPayoff_of_alphaHomogeneous
     { normal_nonempty := hnonempty
       homogeneous := hhomogeneous }
 
+/-! ## Section 5: the stationary branch -/
+
+/-- **The Section 5 empty-α-player claim.**  The paper states, without proof,
+that a stationary `ε`-equilibrium exists for every positive `ε` when there are
+no α-players.  The deviation class checked here is all behavior strategies,
+not only stationary ones.
+
+This is the α-player statement of Section 5, not Lemma 2.7, which concerns the
+min-max normal players `I∗` and is not implied by it. -/
+theorem hasStationaryApproximateEquilibria_of_noAlphaPlayers
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hempty : AllPlayersAbnormal (normalizedSoloMatrix reward)) :
+    HasQuittingStationaryApproximateEquilibria reward := by
+  obtain ⟨_, hvalue⟩ :=
+    exists_stationaryUniformEquilibriumPayoff_of_allPlayersAbnormal
+      reward hempty
+  exact hvalue.hasApproximateEquilibria
+
+/-- **The Section 5 homogeneous claim.**  The paper states, without proof,
+that a nontrivial solution of `LCP(R̂∗∗, ~0)` yields a stationary
+`ε`-equilibrium for every positive `ε`.  The deviation class checked here is
+all behavior strategies, not only stationary ones. -/
+theorem hasStationaryApproximateEquilibria_of_alphaHomogeneous
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hnonempty : HasNormalPlayers (normalizedSoloMatrix reward))
+    (hhomogeneous :
+      HasHomogeneousSimplexSolution (normalizedNormalPlayerMatrix reward)) :
+    HasQuittingStationaryApproximateEquilibria reward := by
+  obtain ⟨_, hvalue⟩ :=
+    exists_stationaryUniformEquilibriumPayoff_of_homogeneousMatrixBranch reward
+      { normal_nonempty := hnonempty
+        homogeneous := hhomogeneous }
+  exact hvalue.hasApproximateEquilibria
+
+/-- **Theorem 5.1(1).**  Suppose the α-player set is nonempty, the homogeneous
+problem `LCP(R̂∗∗, ~0)` has only the trivial solution, and `R̂∗∗` is not a
+Q-matrix in the sense of Definition 2.10.  Then the quitting game has a
+stationary `ε`-equilibrium for every positive `ε`.
+
+The deviation class checked here is all behavior strategies, not only
+stationary ones, so this is the strong reading of the source's conclusion. -/
+theorem hasStationaryApproximateEquilibria_of_alphaNonQ
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hnonempty : HasNormalPlayers (normalizedSoloMatrix reward))
+    (hhomogeneous :
+      ¬HasHomogeneousSimplexSolution (normalizedNormalPlayerMatrix reward))
+    (hnotQ : ¬IsStandardQMatrix (normalizedNormalPlayerMatrix reward)) :
+    HasQuittingStationaryApproximateEquilibria reward :=
+  hasQuittingStationaryApproximateEquilibria_of_ordinaryNonQMatrixBranch reward
+    { normal_nonempty := hnonempty
+      no_homogeneous := hhomogeneous
+      normal_not_standardQ := hnotQ }
+
+/-- **Theorem 5.1(1), with a pinned limit payoff.**  Under the hypotheses of
+Theorem 5.1(1) the stationary `ε`-equilibria can be chosen to approach one
+fixed payoff vector, which is therefore a uniform-equilibrium payoff of the
+game.  This conclusion is not in the source. -/
+theorem exists_stationaryUniformEquilibriumPayoff_of_alphaNonQ
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hnonempty : HasNormalPlayers (normalizedSoloMatrix reward))
+    (hhomogeneous :
+      ¬HasHomogeneousSimplexSolution (normalizedNormalPlayerMatrix reward))
+    (hnotQ : ¬IsStandardQMatrix (normalizedNormalPlayerMatrix reward)) :
+    ∃ value : Payoff ι,
+      IsQuittingStationaryUniformEquilibriumPayoff reward value ∧
+        (quittingGame reward).IsUniformEquilibriumPayoff none value := by
+  obtain ⟨value, hvalue⟩ :=
+    exists_stationaryUniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch reward
+      { normal_nonempty := hnonempty
+        no_homogeneous := hhomogeneous
+        normal_not_standardQ := hnotQ }
+  exact ⟨value, hvalue, hvalue.isUniformEquilibriumPayoff⟩
+
 /-- Paper-level coverage record. -/
 def record : Literature.PaperRecord where
   paperId := "solan_and_solan_2020"
@@ -234,8 +307,26 @@ def record : Literature.PaperRecord where
         summary :=
           "A nontrivial solution of the homogeneous linear complementarity " ++
           "problem on the alpha-player matrix yields a stationary " ++
-          "epsilon-equilibrium for every positive epsilon."
-        status := .sourceOnly },
+          "epsilon-equilibrium for every positive epsilon. The checked " ++
+          "statement caps deviations by all behavior strategies, not only " ++
+          "stationary ones."
+        status := .provedInLean
+          "Literature.Papers.SolanAndSolan2020.\
+hasStationaryApproximateEquilibria_of_alphaHomogeneous"
+          "GameTheory.QuittingLCPClassification.\
+exists_stationaryUniformEquilibriumPayoff_of_homogeneousMatrixBranch" },
+      { claimId := "no_alpha_players_gives_stationary_equilibrium"
+        sourceLocator := "Section 5, sentence after Equation (19)"
+        summary :=
+          "If there are no alpha-players then a stationary " ++
+          "epsilon-equilibrium exists for every positive epsilon. This is " ++
+          "the alpha-player statement of Section 5, distinct from Lemma " ++
+          "2.7, which concerns the min-max normal players."
+        status := .provedInLean
+          "Literature.Papers.SolanAndSolan2020.\
+hasStationaryApproximateEquilibria_of_noAlphaPlayers"
+          "GameTheory.QuittingLCPClassification.\
+exists_stationaryUniformEquilibriumPayoff_of_allPlayersAbnormal" },
       { claimId := "alpha_homogeneous_lcp_gives_uniform_equilibrium_payoff"
         sourceLocator := "Section 5, Lemma 2.12 analogue for the alpha-players"
         summary :=
@@ -253,8 +344,25 @@ exists_uniformEquilibriumPayoff_of_homogeneousMatrixBranch" },
           "If the alpha-player set is nonempty, its homogeneous problem has " ++
           "only the trivial solution, and its matrix is not a Q-matrix, " ++
           "then a stationary epsilon-equilibrium exists for every positive " ++
-          "epsilon."
-        status := .sourceOnly },
+          "epsilon. The checked statement caps deviations by all behavior " ++
+          "strategies, not only stationary ones."
+        status := .provedInLean
+          "Literature.Papers.SolanAndSolan2020.\
+hasStationaryApproximateEquilibria_of_alphaNonQ"
+          "GameTheory.QuittingLCPClassification.\
+hasQuittingStationaryApproximateEquilibria_of_ordinaryNonQMatrixBranch" },
+      { claimId := "alpha_non_q_matrix_gives_one_limit_stationary_payoff"
+        sourceLocator := "Theorem 5.1(1)"
+        summary :=
+          "Strengthening of the preceding claim that is not in the source: " ++
+          "under the same hypotheses the stationary epsilon-equilibria can " ++
+          "be chosen to approach one fixed payoff vector, which is " ++
+          "therefore a uniform-equilibrium payoff of the game."
+        status := .provedInLean
+          "Literature.Papers.SolanAndSolan2020.\
+exists_stationaryUniformEquilibriumPayoff_of_alphaNonQ"
+          "GameTheory.QuittingLCPClassification.\
+exists_stationaryUniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch" },
       { claimId := "alpha_q_matrix_gives_single_quitter_sunspot_equilibrium"
         sourceLocator := "Theorem 5.1(2)"
         summary :=

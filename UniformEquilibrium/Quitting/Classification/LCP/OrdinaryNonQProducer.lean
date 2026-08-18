@@ -271,9 +271,60 @@ def projectiveLCPSolutionOfBaselineShiftedPacket
 /-! ## Generic absorbing endpoint compiler -/
 
 /-- If an absorbing shifted analytic endpoint contracts every player's fixed
+opponents, the endpoint root itself, repeated forever, is already an **exact**
+stationary equilibrium of the original table, and its terminal payoff is the
+anchor-translated germ value.  No punishment-specific property of the anchor
+is used, and no accuracy is spent: this branch never needs the perturbation of
+Solan and Solan, *Quitting games and linear complementarity problems*,
+Math. Oper. Res. **45**(2) (2020), Section 5.1. -/
+theorem isεQuittingStationaryNash_zero_of_shiftedGerm_absorbingEndpoint_contracts
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (anchor : Payoff ι)
+    (g : (quittingGame (quittingRewardShift reward anchor)).AnalyticBellmanGerm)
+    (habsorbs : quittingStationaryContinueMass (g.endpointProfile none) < 1)
+    (hcontracts : ∀ who,
+      quittingStationaryFixedOpponentsContinueMass
+        (g.endpointProfile none) who < 1) :
+    IsεQuittingStationaryNash reward 0 (g.endpointProfile none) ∧
+      quittingTerminalPayoff reward
+          (quittingStationaryProfile reward (g.endpointProfile none)) =
+        quittingPayoffUnshift anchor (quittingGermValue g 0) := by
+  let root : ι → PMF Bool := g.endpointProfile none
+  let target := quittingPayoffUnshift anchor (quittingGermValue g 0)
+  have hfixedShift := quittingGerm_endpoint_fixedPoint g
+  have hfixed : target = quittingRootSuccessorPayoff reward target root :=
+    quittingRootFixedPoint_unshift reward anchor
+      (quittingGermValue g 0) root hfixedShift
+  have hnashShift := quittingGerm_endpoint_endpointNash g
+  have hnashEndpoint : IsεQuittingRootEndpointNash reward target 0 root :=
+    (isεQuittingRootEndpointNash_zero_shift_iff reward anchor
+      (quittingGermValue g 0) root).mp hnashShift
+  refine ⟨?_, ?_⟩
+  · exact isZeroAsymptoticNash_stationary_of_fixedPoint_endpointNash_contracts
+      reward root target habsorbs hfixed hnashEndpoint hcontracts
+  · exact quittingTerminalPayoff_stationary_eq_of_fixedPoint
+      reward root target habsorbs hfixed
+
+/-- Stationary form of the contracting absorbing-endpoint compiler. -/
+theorem isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_absorbingEndpoint
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (anchor : Payoff ι)
+    (g : (quittingGame (quittingRewardShift reward anchor)).AnalyticBellmanGerm)
+    (habsorbs : quittingStationaryContinueMass (g.endpointProfile none) < 1)
+    (hcontracts : ∀ who,
+      quittingStationaryFixedOpponentsContinueMass
+        (g.endpointProfile none) who < 1) :
+    IsQuittingStationaryUniformEquilibriumPayoff reward
+      (quittingPayoffUnshift anchor (quittingGermValue g 0)) := by
+  obtain ⟨hexact, hactual⟩ :=
+    isεQuittingStationaryNash_zero_of_shiftedGerm_absorbingEndpoint_contracts
+      reward anchor g habsorbs hcontracts
+  exact (isQuittingStationaryUniformEquilibriumPayoff_of_exact
+    reward (g.endpointProfile none) hexact).congr_value hactual
+
+/-- If an absorbing shifted analytic endpoint contracts every player's fixed
 opponents, translation back by an arbitrary anchor gives an ordinary uniform
-equilibrium payoff of the original table.  No punishment-specific property
-of the anchor is used. -/
+equilibrium payoff of the original table. -/
 theorem isUniformEquilibriumPayoff_of_shiftedGerm_absorbingEndpoint_contracts
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (anchor : Payoff ι)
@@ -283,31 +334,9 @@ theorem isUniformEquilibriumPayoff_of_shiftedGerm_absorbingEndpoint_contracts
       quittingStationaryFixedOpponentsContinueMass
         (g.endpointProfile none) who < 1) :
     (quittingGame reward).IsUniformEquilibriumPayoff none
-      (quittingPayoffUnshift anchor (quittingGermValue g 0)) := by
-  let root : ι → PMF Bool := g.endpointProfile none
-  let target := quittingPayoffUnshift anchor (quittingGermValue g 0)
-  have hfixedShift := quittingGerm_endpoint_fixedPoint g
-  have hfixed : target = quittingRootSuccessorPayoff reward target root := by
-    exact quittingRootFixedPoint_unshift reward anchor
-      (quittingGermValue g 0) root hfixedShift
-  have hnashShift := quittingGerm_endpoint_endpointNash g
-  have hnashEndpoint : IsεQuittingRootEndpointNash reward target 0 root :=
-    (isεQuittingRootEndpointNash_zero_shift_iff reward anchor
-      (quittingGermValue g 0) root).mp hnashShift
-  have hnash : IsεQuittingRootNash reward target 0 root :=
-    (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
-      reward target root).mp hnashEndpoint
-  let cycle : Fin 1 → ι → PMF Bool := fun _ => root
-  let value : Fin 1 → Payoff ι := fun _ => target
-  apply isUniformEquilibriumPayoff_of_punishmentAdmissibleCycle
-    reward cycle value 0
-  · intro phase
-    simpa [cycle, value, finRotate] using hfixed
-  · intro phase
-    simpa [cycle, value, finRotate] using hnash
-  · simpa [cycle] using habsorbs
-  · intro who
-    exact Or.inl (by simpa [cycle] using hcontracts who)
+      (quittingPayoffUnshift anchor (quittingGermValue g 0)) :=
+  (isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_absorbingEndpoint
+    reward anchor g habsorbs hcontracts).isUniformEquilibriumPayoff
 
 /-- Two distinct players with positive quit probability make every player's
 fixed opponents contract. -/
@@ -355,7 +384,7 @@ the isolated-endpoint repair as soon as one distinct nonpositive singleton
 column is exposed.  This is the exact strategic consumer needed from the
 one-step opponent-leading normalization; full normal-core membership is not
 required. -/
-theorem exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_blocker
+theorem isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_blocker
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (anchor : Payoff ι)
     (g : (quittingGame (quittingRewardShift reward anchor)).AnalyticBellmanGerm)
@@ -365,8 +394,8 @@ theorem exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_block
       g.endpointProfile none other = PMF.pure false)
     (blocker : ι) (hne : blocker ≠ owner)
     (hblockerMatrix : normalizedSoloMatrix reward owner blocker ≤ 0) :
-    ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+    IsQuittingStationaryUniformEquilibriumPayoff reward
+      (quittingSoloReward reward owner) := by
   let root : ι → PMF Bool := g.endpointProfile none
   let hazard : PMF Bool := root owner
   let shiftedValue : Payoff ι := quittingGermValue g 0
@@ -404,11 +433,47 @@ theorem exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_block
     unfold quittingProjectiveLCPMatrix at hblockerMatrix
     simpa [quittingSoloReward, quittingProjectiveSingletonTerminal] using
       hblockerMatrix
-  exact exists_uniformEquilibriumPayoff_of_isolatedEndpoint
+  exact isQuittingStationaryUniformEquilibriumPayoff_of_isolatedEndpoint
     reward hne hazard hhazard hnash hblocker
 
-/-- A shifted analytic endpoint supported by one positive normal owner is
-closed by the isolated-endpoint blocker repair. -/
+/-- Uniform-payoff form of the isolated-endpoint blocker repair. -/
+theorem exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_blocker
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (anchor : Payoff ι)
+    (g : (quittingGame (quittingRewardShift reward anchor)).AnalyticBellmanGerm)
+    (owner : ι)
+    (howner : 0 < ((g.endpointProfile none owner) true).toReal)
+    (hother : ∀ other, other ≠ owner →
+      g.endpointProfile none other = PMF.pure false)
+    (blocker : ι) (hne : blocker ≠ owner)
+    (hblockerMatrix : normalizedSoloMatrix reward owner blocker ≤ 0) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  exists_uniformEquilibriumPayoff_of_stationaryFamily
+    (isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_blocker
+      reward anchor g owner howner hother blocker hne hblockerMatrix)
+
+/-- A shifted analytic endpoint supported by one positive α-player owner is
+closed by the isolated-endpoint blocker repair, at stationary strength. -/
+theorem isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_isolatedNormalEndpoint
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (anchor : Payoff ι)
+    (g : (quittingGame (quittingRewardShift reward anchor)).AnalyticBellmanGerm)
+    (owner : ι)
+    (howner : 0 < ((g.endpointProfile none owner) true).toReal)
+    (hother : ∀ other, other ≠ owner →
+      g.endpointProfile none other = PMF.pure false)
+    (hnormal : owner ∈ normalCore (normalizedSoloMatrix reward)) :
+    IsQuittingStationaryUniformEquilibriumPayoff reward
+      (quittingSoloReward reward owner) := by
+  obtain ⟨blocker, hne, hblockerMatrix⟩ :=
+    exists_blocker_of_mem_normalCore
+      (normalizedSoloMatrix reward) hnormal
+  exact
+    isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_blocker
+      reward anchor g owner howner hother blocker hne hblockerMatrix
+
+/-- Uniform-payoff form of the α-player isolated-endpoint repair. -/
 theorem exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedNormalEndpoint
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (anchor : Payoff ι)
@@ -419,13 +484,10 @@ theorem exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedNormalEndpoint
       g.endpointProfile none other = PMF.pure false)
     (hnormal : owner ∈ normalCore (normalizedSoloMatrix reward)) :
     ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  obtain ⟨blocker, hne, hblockerMatrix⟩ :=
-    exists_blocker_of_mem_normalCore
-      (normalizedSoloMatrix reward) hnormal
-  exact
-    exists_uniformEquilibriumPayoff_of_shiftedGerm_isolatedEndpoint_of_blocker
-      reward anchor g owner howner hother blocker hne hblockerMatrix
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  exists_uniformEquilibriumPayoff_of_stationaryFamily
+    (isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_isolatedNormalEndpoint
+      reward anchor g owner howner hother hnormal)
 
 /-! ## Restricting an anchored LCP packet to the normal core -/
 
