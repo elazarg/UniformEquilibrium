@@ -1,9 +1,9 @@
 # Design: directed transport and max-affine transport graphs
 
 Status: Layers 0 and 1 (milestones M0 and M1) are implemented in
-`MathUE/DirectedTransport.lean` and `MathUE/MaxAffineTransport.lean`; strong
-duality (T6) remains staged.  Each stage below is marked provable now,
-staged, or recorded open.
+`MathUE/DirectedTransport.lean` and `MathUE/MaxAffineTransport.lean`, with
+the T6a/T6b duality regimes in `MathUE/MaxAffineSectionDuality.lean`.  Each
+stage below is marked implemented, staged, or refuted.
 
 ## The object, in one sentence
 
@@ -184,17 +184,27 @@ pre-fixed point" give a lax section?
      condition and no monotonicity): a constant section already closes edge
      by edge, so existence needs no operator iteration and holds for any
      `Finite E`.
-  c. *General mixed slopes* (recorded open): the fixed-point/spectral problem
-     for monotone max-affine networks — the max-only corner of min-max
-     function theory (Gunawardena, *Min-max functions*, Discrete Event
-     Dynamic Systems 4 (1994)) resolved through topical-map Perron–Frobenius
-     (Gaubert–Gunawardena, Trans. Amer. Math. Soc. 356 (2004)) and policy
-     iteration (Cochet-Terrasson–Gaubert–Gunawardena).  In proof-rule
-     terms: the per-cycle coefficient test is sound for lax-section
-     existence by weak duality, complete in the slope-one and contractive
-     regimes by T6a/T6b, and T6c asks whether it is complete in general.
-     To be stated as a proposition definition only if a consumer needs it;
-     never claimed.
+  c. *General mixed slopes*: the cyclewise test is REFUTED as a complete
+     proof rule.  Two loops at one vertex — a constant reset `x ↦ 10`
+     (slope `0`) and a doubling `x ↦ 2x` — admit no lax section
+     (`10 ≤ x` and `2x ≤ x` conflict), yet every closed word passes the
+     per-cycle test: a word containing the reset has slope `0`, and a pure
+     doubling word has floor `⊥`, so the trichotomy grants each a pre-fixed
+     point.  The existential witnesses of separate cycles do not
+     synchronize.  The correct general duality is not cyclewise but linear:
+     each edge contributes the rows `floor_e ≤ φ(target e)` and
+     `shift_e + slope_e · φ(source e) ≤ φ(target e)`, a finite linear
+     system in `φ` whatever the slope signs, so existence is governed by
+     the Farkas alternative already in
+     `MathUE/FiniteInequalityCompatibility.lean`: a lax section exists iff
+     no nonnegative balanced combination of the rows is infeasible — a
+     generalized-flow certificate, of which a positive cycle is the special
+     case with slopes multiplying along one closed walk.  (Staged: the
+     counterexample and the Farkas instantiation.)  The spectral reading —
+     min-max function theory (Gunawardena, Discrete Event Dynamic Systems 4
+     (1994)), topical-map Perron–Frobenius (Gaubert–Gunawardena, Trans.
+     Amer. Math. Soc. 356 (2004)) — remains the right frame for eigenvalue
+     questions, which stay out of scope.
 
 **T7 — periodic certificates (provable now, bridge).**  A fixed point of a
 cycle's holonomy is a solution of that cycle's cyclic system; bridge to
