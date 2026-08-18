@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.LinearProgramming.CirculantPocketR0
-import Research.Quitting.CirculantConstantStepCycle
+import Research.Quitting.CirculantTrichotomyClosure
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
@@ -29,11 +29,15 @@ collider `i + 1` the value `s`, while every other joint exit pays its members
 `low - s` at every other nonzero distance.
 
 The main results run the constant-step producer of
-`Research/Quitting/CirculantConstantStepCycle.lean` at step four.  In the
-*pocket* — `m 1 < 0`, `m 4 < 0`, `0 ≤ m 2`, `0 ≤ m 3`, positive margin sum —
-all four floors of that producer reduce to the single inequality
-`low - s ≤ m 1`, and the failure of the sure-exit property at an adjacent pair
-supplies it.
+`Research/Quitting/CirculantConstantStepCycle.lean`.  All join margins of the
+completion are nonpositive as soon as `low ≤ s`, which is exactly the input the
+firing-step branch of `Research/Quitting/CirculantTrichotomyClosure.lean`
+consumes, so every margin vector of positive sum whose negative margins are not
+one complementary pair is closed outright.  In the *pocket* — `m 1 < 0`,
+`m 4 < 0`, `0 ≤ m 2`, `0 ≤ m 3`, positive margin sum — no step fires, and the
+step-four floors of the producer reduce instead to the single inequality
+`low - s ≤ m 1`, which the failure of the sure-exit property at an adjacent
+pair supplies.
 
 ## Main definitions
 
@@ -43,14 +47,20 @@ supplies it.
 ## Main results
 
 * `isCirculantPairTable_colliderReward` — the singleton and pair rows
+* `colliderJoin_nonpos` — every join margin is nonpositive when `low ≤ s`
+* `isEmpty_counterexampleRegime_colliderFiringStep` — a firing step closes a
+  collider completion of positive margin sum
+* `isEmpty_counterexampleRegime_colliderThreeNegative` — three negative margins
+  are closed with no further hypothesis
 * `isQuittingSureExitSet_adjacent_of_le` — an adjacent pair is a sure exit set
   as soon as `m 1 ≤ low - s`, `m 4 ≤ 0` and `low ≤ 0`
 * `isEmpty_counterexampleRegime_colliderPocket` — a pocket collider table
   satisfying the floor carries no counterexample regime
 * `isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit` — the same
   conclusion from failure of the sure-exit property at one adjacent pair
-* `isEmpty_counterexampleRegime_colliderCompletion_closure` — the two settled
-  branches of the completion, nonpositive margin sum and the screened pocket
+* `isEmpty_counterexampleRegime_colliderCompletion_closure` — the three settled
+  branches of the completion: nonpositive margin sum, a sign pattern that is
+  not a complementary pocket, and the screened neighbour pocket
 -/
 
 noncomputable section
@@ -58,7 +68,8 @@ noncomputable section
 namespace GameTheory
 namespace CirculantColliderCompletion
 
-open CirculantConstantStepCycle QuittingLCPClassification QuittingSureSetOwnerRepair
+open CirculantConstantStepCycle CirculantTrichotomyClosure QuittingLCPClassification
+open QuittingSureSetOwnerRepair
 
 /-! ## Adjacent pairs of the five-cycle -/
 
@@ -288,6 +299,47 @@ theorem hasCirculantSoloMatrix_colliderReward (hm0 : m 0 = 0) :
 
 variable {s low m}
 
+/-! ## The firing-step branch -/
+
+/-- **The join margins of a collider completion are nonpositive.**  The join
+margin is zero at distance four and `low - s` at every other distance, so a
+joint value no larger than the solo self value makes all of them nonpositive:
+exactly the input the firing-step branch of
+`Research/Quitting/CirculantTrichotomyClosure.lean` consumes. -/
+theorem colliderJoin_nonpos (hls : low ≤ s) (d : ZMod 5) :
+    colliderJoin s low d ≤ 0 := by
+  by_cases hd : d = 4
+  · rw [hd, colliderJoin_four]
+  · rw [colliderJoin_of_ne s low hd]
+    linarith
+
+/-- **A firing step closes a collider completion.**  A five-player collider
+table of positive margin sum, nonnegative solo self value and joint value no
+larger than it carries no counterexample regime as soon as some step fires. -/
+theorem isEmpty_counterexampleRegime_colliderFiringStep
+    (hm0 : m 0 = 0) (hs : 0 ≤ s) (hls : low ≤ s) (hsum : 0 < ∑ e, m e)
+    {c : ZMod 5} (hfire : IsFiringStep m c) :
+    IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) :=
+  isEmpty_counterexampleRegime_of_isFiringStep
+    (isCirculantPairTable_colliderReward s low m hm0) hs hsum hfire
+    fun k _ => colliderJoin_nonpos hls (k * c)
+
+/-- **Three negative margins close a collider completion.**  A five-player
+collider table of positive margin sum whose only nonnegative nonzero distance
+is `g` carries no counterexample regime, the witness being the constant-step
+cyclic profile of step `4 * g`.  No screen on the larger coalitions and no
+regime hypothesis enters. -/
+theorem isEmpty_counterexampleRegime_colliderThreeNegative
+    (hm0 : m 0 = 0) (hs : 0 ≤ s) (hls : low ≤ s) (hsum : 0 < ∑ e, m e)
+    {g : ZMod 5} (hgm : 0 ≤ m g)
+    (hother : ∀ e : ZMod 5, e ≠ 0 → e ≠ g → m e < 0) :
+    IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) :=
+  isEmpty_counterexampleRegime_of_unique_nonneg
+    (isCirculantPairTable_colliderReward s low m hm0) hs hsum hgm hother
+    fun d _ => colliderJoin_nonpos hls d
+
+/-! ## The pocket floors -/
+
 /-- **The step-four floors of a pocket collider table.**  A five-player
 collider table with `m 1 < 0`, `m 4 < 0`, `0 ≤ m 2`, `0 ≤ m 3`, positive margin
 sum, nonnegative solo self value, and `low - s ≤ m 1` carries no counterexample
@@ -350,31 +402,38 @@ theorem isR0Matrix_normalizedSoloMatrix_colliderPocket
   exact Math.LinearProgramming.isR0Matrix_rowCirculant_pentagon_pocket hm0 hm1 hm4
     hm2 hm3 hsum
 
-/-! ## The two settled branches -/
+/-! ## The three settled branches -/
 
 /-- **The settled branches of the collider completion.**  A five-player
 collider table with nonnegative solo self value and nonpositive joint value
-carries no counterexample regime as soon as either its margin sum is
-nonpositive, or it lies in the pocket and some adjacent pair fails the
-sure-exit property.
+carries no counterexample regime as soon as its margin sum is nonpositive, or
+it has a negative margin and its negative margins are not exactly one
+complementary pair, or it lies in the neighbour pocket and some adjacent pair
+fails the sure-exit property.
 
-The remaining branch — positive margin sum outside the pocket — is not covered
-by this statement. -/
+Two sign patterns of positive margin sum are left outside this statement: a
+margin vector with no negative margin at all, and the distant pocket
+`m 2 < 0`, `m 3 < 0`, `0 ≤ m 1`, `0 ≤ m 4`.  The neighbour pocket enters only
+through failure of the sure-exit property at an adjacent pair. -/
 theorem isEmpty_counterexampleRegime_colliderCompletion_closure
     (hm0 : m 0 = 0) (hs : 0 ≤ s) (hlow : low ≤ 0)
     (hcase : m 1 + m 2 + m 3 + m 4 ≤ 0 ∨
+      ((∃ a : ZMod 5, a ≠ 0 ∧ m a < 0) ∧ ¬ IsComplementaryPocketMargin m) ∨
       (m 1 < 0 ∧ m 4 < 0 ∧ 0 ≤ m 2 ∧ 0 ≤ m 3 ∧ 0 < m 1 + m 2 + m 3 + m 4 ∧
         ∃ y : ZMod 5,
           ¬ IsQuittingSureExitSet (colliderReward s low m) {y, y + 1})) :
     IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) := by
   have hfive : (∑ e : ZMod 5, m e) = m 0 + m 1 + m 2 + m 3 + m 4 :=
     Fin.sum_univ_five (fun e : ZMod 5 => m e)
-  rcases hcase with hnonpos | ⟨hm1, hm4, hm2, hm3, hsum, y, hno⟩
+  rcases hcase with hnonpos | ⟨hneg, hpocket⟩ | ⟨hm1, hm4, hm2, hm3, hsum, y, hno⟩
   · refine ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
       (exists_uniformEquilibriumPayoff_of_pentagonCirculant_surplus_nonpos
         (hasCirculantSoloMatrix_colliderReward s low m hm0) ?_)⟩
     rw [hfive, hm0]
     linarith
+  · exact isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin
+      (isCirculantPairTable_colliderReward s low m hm0) hs
+      (fun d _ => colliderJoin_nonpos (hlow.trans hs) d) (Or.inr ⟨hneg, hpocket⟩)
   · exact isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit hm0 hs hlow
       hm1 hm4 hm2 hm3 hsum y hno
 

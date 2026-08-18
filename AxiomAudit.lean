@@ -13,6 +13,7 @@ import Experiments.certsearch.block_pair.K11.Preconditioner
 import Experiments.certsearch.block_pair.K11.RowZeroCacheData
 import Experiments.counterexample_search.BlockPeriodicMultiVisit
 import Experiments.counterexample_search.ColliderPocketCandidateEquilibrium
+import Experiments.counterexample_search.ColliderThreeNegativeEquilibrium
 import Experiments.counterexample_search.HardenedPentagonCyclicEquilibrium
 import Experiments.counterexample_search.HardenedPentagonSoloPeriodicWitness
 import Experiments.counterexample_search.RegularTournamentFiveSeed
@@ -549,6 +550,7 @@ import Research.Quitting.PaidNonexactCapStackAccount
 import Research.Quitting.PairActiveSoloPhase
 import Research.Quitting.PathClosureKernels
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
+import Research.Quitting.PreemptionTransport
 import Research.Quitting.PrescribedAtomMinimumAccounting
 import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
