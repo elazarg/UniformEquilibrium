@@ -503,10 +503,13 @@ theorem not_exists_nonneg_complement_pair_of_unique_nonneg {g : ZMod 5}
 
 /-! ## The neighbour pocket -/
 
-/-- **The neighbour pocket of any completion.**  In the pocket `m 1 < 0`,
-`m 4 < 0`, `0 ≤ m 2` of positive margin sum no step fires, but the step-four
-cycle still runs on a single extra demand: the join margins at distances one
-and two must not exceed `m 1`.
+/-- **A wedge containing the neighbour pocket, for any completion.**  The
+hypotheses `m 1 < 0`, `m 4 < 0`, `0 ≤ m 2` at positive margin sum do not
+constrain `m 3`, so they admit more than the pocket proper: with `m 3`
+negative a firing step may exist as well.  In the pocket proper, where `m 3`
+is also nonnegative, no step fires, and there the step-four cycle of this
+theorem is the only producer known; it runs on a single extra demand, that
+the join margins at distances one and two not exceed `m 1`.
 
 The step-four anchor root exists because `m 4` is negative.  The floor at the
 shallowest elapsed phase reads a join margin against zero, the next is funded
