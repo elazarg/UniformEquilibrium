@@ -198,9 +198,11 @@ pre-fixed point" give a lax section?
      system in `φ` whatever the slope signs, so existence is governed by
      the Farkas alternative already in
      `MathUE/FiniteInequalityCompatibility.lean`: a lax section exists iff
-     no nonnegative balanced combination of the rows is infeasible — a
-     generalized-flow certificate, of which a positive cycle is the special
-     case with slopes multiplying along one closed walk.  (Implemented in
+     no nonnegative balanced combination of the rows is infeasible.  At
+     nonnegative slopes the certificate reads as a generalized-flow
+     (gain-flow) certificate; the classical positive cycle is the
+     affine-only case at unit slope product, and floor rows enter for
+     expanding cycles.  (Implemented in
      `MathUE/MaxAffineFarkasDuality.lean`: the counterexample and the
      Farkas instantiation.)  The spectral reading —
      min-max function theory (Gunawardena, Discrete Event Dynamic Systems 4

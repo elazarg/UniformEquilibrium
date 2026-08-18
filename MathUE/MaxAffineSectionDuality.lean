@@ -25,8 +25,9 @@ edges are finitely many, a *constant* candidate already closes: a constant at
 least every finite floor and every affine fixed point `shift / (1 - slope)`
 satisfies the edge inequality outright, with no iteration and no structure on
 the vertices.  Negative slopes are admitted, so this is wider than the
-discounted, or `β`-contractive, case `0 ≤ slope < 1`, which is neither
-monotone nor a metric contraction in general.
+discounted, or `β`-contractive, case `0 ≤ slope < 1`; the wider class is
+neither monotone nor a metric contraction in general, and the constant
+witness needs neither.
 
 **The slope-one regime.**  When every slope equals one the labels are
 translations corrected by floors, and a lax section exists exactly when no
@@ -49,7 +50,7 @@ achieves the same reduction without enlarging the graph.
 
 ## Main results
 
-* `Math.MaxAffineTransport.Label.apply_const_le` -- the edgewise contractive
+* `Math.MaxAffineTransport.Label.apply_const_le` -- the edgewise subunit-slope
   estimate: below unit slope, a constant above the floor and above the affine
   fixed point is a pre-fixed point.
 * `Math.MaxAffineTransport.exists_const_isLaxSection_of_slope_lt_one` -- with
@@ -102,7 +103,7 @@ theorem add_shift_le_apply {f : Label} (hslope : f.slope = 1) (x : ℝ) :
   simp only [affinePart, hslope, one_mul]
   ring
 
-/-- **The edgewise contractive estimate.**  Below unit slope, any constant at
+/-- **The edgewise subunit-slope estimate.**  Below unit slope, any constant at
 least the floor and at least the fixed point `shift / (1 - slope)` of the affine
 branch is a pre-fixed point of the action.  This is the witness constructed in
 the first branch of `Math.MaxAffineTransport.Label.exists_apply_le_self_iff`,
@@ -199,15 +200,16 @@ universe uV uE
 
 variable {V : Type uV} {E : Type uE} {G : Math.BoundedDiscrepancy.EdgeGraph V E}
 
-/-! ### The contractive regime -/
+/-! ### The subunit-slope regime -/
 
-/-- **Contractive existence, with a constant witness.**  If the edges are
+/-- **Subunit-slope existence, with a constant witness.**  If the edges are
 finitely many and every slope is strictly below one, then some constant
 candidate is a lax section: it suffices that the constant clear every floor and
 every affine fixed point `shift / (1 - slope)`, and finitely many edges impose
 finitely many such demands.  The vertices need not be finitely many, and no
-iteration of the vertex operator is involved.  This is the discounted, or
-`β`-contractive, case. -/
+iteration of the vertex operator is involved.  At nonnegative slopes this is
+the discounted, or `β`-contractive, case; negative slopes are also
+admitted. -/
 theorem exists_const_isLaxSection_of_slope_lt_one [Finite E] {label : E → Label}
     (hslope : ∀ e : E, (label e).slope < 1) :
     ∃ C : ℝ, IsLaxSection G label (fun _ => C) := by
@@ -221,7 +223,7 @@ theorem exists_const_isLaxSection_of_slope_lt_one [Finite E] {label : E → Labe
     (le_max_right _ _).trans (hbound e)
   exact Label.apply_const_le (hslope e) hfloor hfix
 
-/-- **Contractive existence.**  Finitely many edges and slopes strictly below
+/-- **Subunit-slope existence.**  Finitely many edges and slopes strictly below
 one force a lax section to exist; the witness of
 `exists_const_isLaxSection_of_slope_lt_one` is constant. -/
 theorem exists_isLaxSection_of_slope_lt_one [Finite E] {label : E → Label}
