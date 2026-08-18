@@ -6,25 +6,30 @@ Authors: GameTheory contributors
 
 import Research.Quitting.CirculantConstantStepCycle
 import Research.Quitting.CirculantPocketAnchoredNoGo
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
 # Assembling the branches of the five-player circulant trichotomy
 
 For a five-player table whose singleton and two-element rows are rotation
-symmetric, three branches are available.
+symmetric, with nonnegative solo self value and nonpositive join margins, three
+producers divide every sign pattern between them.
 
 * Nonpositive margin sum makes the normalized solo matrix fail standard `Q`,
   and the counterexample gate is collapsed by
   `Research/Quitting/CirculantTrichotomy.lean`.
-* Positive margin sum together with a *firing step* — a step `c` whose own
-  margin is negative and whose complementary margin `m (4 * c)` is nonnegative,
-  and which in addition has either a nonnegative doubled complementary margin
-  `m (3 * c)` or a nonpositive doubled margin `m (2 * c)` — puts an anchor root
-  strictly inside the unit interval, at which the four floor inequalities of
-  the constant-step producer of
+* No negative margin at all leaves one player quitting alone self-enforcing:
+  it is a sure exit set in the sense of
+  `UniformEquilibrium/Quitting/Paths/SureExitSet.lean`, because no other player
+  prefers joining the exit to watching it.
+* Positive margin sum with a negative margin calls on a *firing step* — a step
+  `c` whose own margin is negative and whose complementary margin `m (4 * c)`
+  is nonnegative, and which in addition has either a nonnegative doubled
+  complementary margin `m (3 * c)` or a nonpositive doubled margin `m (2 * c)`.
+  A firing step puts an anchor root strictly inside the unit interval, at which
+  the four floor inequalities of the constant-step producer of
   `Research/Quitting/CirculantConstantStepCycle.lean` reduce to nonpositivity
   of the join margins along the same progression.
-* Everything else.
 
 Two of the four floors are free at any anchor root of a step of negative
 margin: the phase-one floor reads a join margin against zero, and the anchor
@@ -35,11 +40,15 @@ independent ways — directly by `0 ≤ m (3 * c)`, or through the positive
 backward partial sum by `m (2 * c) ≤ 0` — and admitting both is what carries
 the branch past the sign condition that only the first disjunct supports.
 
-The third branch is delimited exactly.  Among margin vectors of positive sum
+The third producer is delimited exactly.  Among margin vectors of positive sum
 with at least one negative margin, a firing step is missing precisely when the
 negative margins are one complementary pair of distances, and
-`IsComplementaryPocketMargin` names that pattern.  The open pocket of
-`Research/Quitting/CirculantPocketAnchoredNoGo.lean` is one instance of it.
+`IsComplementaryPocketMargin` names that pattern.  There are two such patterns,
+the neighbour distances and the distant ones; the open pocket of
+`Research/Quitting/CirculantPocketAnchoredNoGo.lean` is an instance of the
+first.  So the complementary pockets of positive margin sum are the whole
+residual, which is what `isEmpty_counterexampleRegime_or_isComplementaryPocketMargin`
+records.
 
 ## Main definitions
 
@@ -57,6 +66,8 @@ negative margins are one complementary pair of distances, and
   singleton rows give a circulant normalized solo matrix
 * `exists_uniformEquilibriumPayoff_of_isFiringStep` and
   `isEmpty_counterexampleRegime_of_isFiringStep` — the firing-step branch
+* `isQuittingSureExitSet_singleton_of_isCirculantPairTable` and
+  `isEmpty_counterexampleRegime_of_nonneg_margins` — the solo exit branch
 * `isFiringStep_complement_of_unique_nonneg` — with a single nonnegative
   distance `g`, the complementary distance `4 * g` is a firing step
 * `exists_uniformEquilibriumPayoff_of_unique_nonneg` and
@@ -66,11 +77,13 @@ negative margins are one complementary pair of distances, and
   a negative margin carries a firing step
 * `not_isFiringStep_of_isComplementaryPocketMargin` — and the complementary
   pairs carry none
+* `neighbour_or_distant_of_isComplementaryPocketMargin` — there are two
+  complementary pockets
 * `not_exists_nonneg_complement_pair_of_unique_nonneg` — at three negative
   margins the first disjunct of the firing condition is unavailable
-* `isEmpty_counterexampleRegime_of_nonpositiveSum_or_isFiringStep` and
-  `isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin` — the
-  branches together
+* `isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin` and
+  `isEmpty_counterexampleRegime_or_isComplementaryPocketMargin` — the branches
+  together, and the census they leave
 -/
 
 noncomputable section
@@ -192,6 +205,65 @@ theorem isEmpty_counterexampleRegime_of_isFiringStep
   ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
     (exists_uniformEquilibriumPayoff_of_isFiringStep htable hs hsum hfire hjoin)⟩
 
+/-! ## The solo exit branch -/
+
+/-- **The solo exit of a rotation-symmetric table.**  When the solo self value
+is nonnegative and every join margin is at most the singleton margin at the
+same distance, one player quitting alone at every live history is a sure exit
+set in the sense of `UniformEquilibrium/Quitting/Paths/SureExitSet.lean`: the
+quitter does not prefer nonabsorption to its own solo self value, and no other
+player prefers joining the exit to watching it. -/
+theorem isQuittingSureExitSet_singleton_of_isCirculantPairTable
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hle : ∀ d : ZMod 5, d ≠ 0 → J d ≤ m d) (owner : ZMod 5) :
+    IsQuittingSureExitSet reward {owner} := by
+  refine (isQuittingSureExitSet_singleton_iff reward owner).mpr ⟨?_, ?_⟩
+  · have hsolo : quittingSoloReward reward owner owner = s + m (owner - owner) :=
+      htable.singleton owner owner
+    rw [hsolo, sub_self, htable.margin_zero, add_zero]
+    exact hs
+  · intro other hother
+    have hcollision : quittingSingletonCollisionReward reward owner other =
+        s + J (owner - other) := htable.pair owner other (Ne.symm hother)
+    have hsolo : quittingSoloReward reward owner other = s + m (owner - other) :=
+      htable.singleton owner other
+    rw [hcollision, hsolo]
+    linarith [hle _ (sub_ne_zero_of_ne (Ne.symm hother))]
+
+/-- **The solo exit branch.**  A rotation-symmetric table with nonnegative solo
+self value whose join margins never exceed the singleton margins at the same
+distance has an ordinary uniform-equilibrium payoff, namely the row of a solo
+exit.  Neither the margin sum nor any anchor root enters. -/
+theorem exists_uniformEquilibriumPayoff_of_join_le_margin
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hle : ∀ d : ZMod 5, d ≠ 0 → J d ≤ m d) :
+    ∃ payoff : Payoff (ZMod 5),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  ⟨_, isUniformEquilibriumPayoff_setReward_of_isQuittingSureExitSet reward
+    (isQuittingSureExitSet_singleton_of_isCirculantPairTable htable hs hle 0)⟩
+
+/-- **No negative margin.**  A rotation-symmetric table of nonpositive join
+margins whose singleton margins are all nonnegative has an ordinary
+uniform-equilibrium payoff: every player weakly prefers watching a solo exit to
+joining it, so the solo exit is self-enforcing. -/
+theorem exists_uniformEquilibriumPayoff_of_nonneg_margins
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0)
+    (hm : ∀ d : ZMod 5, d ≠ 0 → 0 ≤ m d) :
+    ∃ payoff : Payoff (ZMod 5),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  exists_uniformEquilibriumPayoff_of_join_le_margin htable hs
+    fun d hd => (hjoin d hd).trans (hm d hd)
+
+/-- The solo exit branch, as emptiness of the counterexample regime. -/
+theorem isEmpty_counterexampleRegime_of_nonneg_margins
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0)
+    (hm : ∀ d : ZMod 5, d ≠ 0 → 0 ≤ m d) :
+    IsEmpty (QuittingCounterexampleRegime reward) :=
+  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
+    (exists_uniformEquilibriumPayoff_of_nonneg_margins htable hs hjoin hm)⟩
+
 /-! ## Three negative margins -/
 
 /-- **The step of a three-negative margin vector.**  If `g` is the only nonzero
@@ -308,6 +380,33 @@ theorem isComplementaryPocketMargin_two (h2 : m 2 < 0) (h3 : m 3 < 0)
   · rwa [show (2 : ZMod 5) * 2 = 4 from by decide]
   · rwa [show (3 : ZMod 5) * 2 = 1 from by decide]
 
+/-- **There are two complementary pockets.**  The negative margins of a
+complementary pocket are either the two neighbour distances or the two distant
+ones. -/
+theorem neighbour_or_distant_of_isComplementaryPocketMargin
+    (hpocket : IsComplementaryPocketMargin m) :
+    (m 1 < 0 ∧ m 4 < 0 ∧ 0 ≤ m 2 ∧ 0 ≤ m 3) ∨
+      (m 2 < 0 ∧ m 3 < 0 ∧ 0 ≤ m 4 ∧ 0 ≤ m 1) := by
+  obtain ⟨d, hd, hown, hcomplement, hdouble, hdoubled⟩ := hpocket
+  rcases zmod_five_cases d with h | h | h | h | h <;> subst h
+  · exact absurd rfl hd
+  · rw [show (4 : ZMod 5) * 1 = 4 from by decide] at hcomplement
+    rw [show (2 : ZMod 5) * 1 = 2 from by decide] at hdouble
+    rw [show (3 : ZMod 5) * 1 = 3 from by decide] at hdoubled
+    exact Or.inl ⟨hown, hcomplement, hdouble, hdoubled⟩
+  · rw [show (4 : ZMod 5) * 2 = 3 from by decide] at hcomplement
+    rw [show (2 : ZMod 5) * 2 = 4 from by decide] at hdouble
+    rw [show (3 : ZMod 5) * 2 = 1 from by decide] at hdoubled
+    exact Or.inr ⟨hown, hcomplement, hdouble, hdoubled⟩
+  · rw [show (4 : ZMod 5) * 3 = 2 from by decide] at hcomplement
+    rw [show (2 : ZMod 5) * 3 = 1 from by decide] at hdouble
+    rw [show (3 : ZMod 5) * 3 = 4 from by decide] at hdoubled
+    exact Or.inr ⟨hcomplement, hown, hdoubled, hdouble⟩
+  · rw [show (4 : ZMod 5) * 4 = 1 from by decide] at hcomplement
+    rw [show (2 : ZMod 5) * 4 = 3 from by decide] at hdouble
+    rw [show (3 : ZMod 5) * 4 = 2 from by decide] at hdoubled
+    exact Or.inl ⟨hcomplement, hown, hdoubled, hdouble⟩
+
 /-- The open pocket of `Research/Quitting/CirculantPocketAnchoredNoGo.lean` is
 a complementary pocket. -/
 theorem isComplementaryPocketMargin_of_isOpenPocketMargin
@@ -416,22 +515,49 @@ theorem isEmpty_counterexampleRegime_of_nonpositiveSum_or_isFiringStep
 /-- **The closure up to the complementary pockets.**  A rotation-symmetric
 table with nonnegative solo self value and nonpositive join margins carries no
 counterexample regime unless its margin sum is positive and its negative
-margins are exactly one complementary pair, or it has no negative margin at
-all. -/
+margins are exactly one complementary pair.
+
+Three producers divide the sign patterns between them.  Nonpositive margin sum
+is the failure of standard `Q`.  Positive margin sum with a negative margin and
+no complementary pocket has a firing step.  No negative margin at all leaves
+the solo exit self-enforcing. -/
 theorem isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin
     (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
     (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0)
-    (hbranch : (∑ e, m e) ≤ 0 ∨
-      ((∃ a : ZMod 5, a ≠ 0 ∧ m a < 0) ∧ ¬ IsComplementaryPocketMargin m)) :
+    (hbranch : (∑ e, m e) ≤ 0 ∨ ¬ IsComplementaryPocketMargin m) :
     IsEmpty (QuittingCounterexampleRegime reward) := by
-  refine isEmpty_counterexampleRegime_of_nonpositiveSum_or_isFiringStep htable hs
-    hjoin ?_
-  rcases hbranch with hsum | ⟨hneg, hpocket⟩
-  · exact Or.inl hsum
+  rcases hbranch with hsum | hpocket
+  · exact isEmpty_counterexampleRegime_of_pentagonCirculant_surplus_nonpos
+      (hasCirculantSoloMatrix_of_isCirculantPairTable htable) hsum
+  · by_cases hneg : ∃ a : ZMod 5, a ≠ 0 ∧ m a < 0
+    · refine isEmpty_counterexampleRegime_of_nonpositiveSum_or_isFiringStep htable
+        hs hjoin ?_
+      by_cases hsum : (∑ e, m e) ≤ 0
+      · exact Or.inl hsum
+      · exact Or.inr
+          (exists_isFiringStep htable.margin_zero (not_le.mp hsum) hneg hpocket)
+    · refine isEmpty_counterexampleRegime_of_nonneg_margins htable hs hjoin ?_
+      intro d hd
+      rcases le_or_gt 0 (m d) with h | h
+      · exact h
+      · exact absurd ⟨d, hd, h⟩ hneg
+
+/-- **The census.**  A rotation-symmetric table with nonnegative solo self
+value and nonpositive join margins either carries no counterexample regime, or
+has positive margin sum and negative margins forming exactly one complementary
+pair.  No sign pattern is left unaccounted for. -/
+theorem isEmpty_counterexampleRegime_or_isComplementaryPocketMargin
+    (htable : IsCirculantPairTable reward s m J) (hs : 0 ≤ s)
+    (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0) :
+    IsEmpty (QuittingCounterexampleRegime reward) ∨
+      (0 < ∑ e, m e ∧ IsComplementaryPocketMargin m) := by
+  by_cases hpocket : IsComplementaryPocketMargin m
   · by_cases hsum : (∑ e, m e) ≤ 0
-    · exact Or.inl hsum
-    · exact Or.inr
-        (exists_isFiringStep htable.margin_zero (not_le.mp hsum) hneg hpocket)
+    · exact Or.inl (isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin
+        htable hs hjoin (Or.inl hsum))
+    · exact Or.inr ⟨not_le.mp hsum, hpocket⟩
+  · exact Or.inl (isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin
+      htable hs hjoin (Or.inr hpocket))
 
 /-! ## The residual -/
 
