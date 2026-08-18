@@ -69,9 +69,9 @@ The same data carries several names.
   `Math.DirectedTransport.Transport.IsLaxSection.holonomy_le` — every
   closed-walk holonomy has the marked point as a pre-fixed point.
 * `Math.DirectedTransport.walkMap_ofEdgeAct` and
-  `Math.DirectedTransport.walkMap_ofSMul_eq_gain_smul` — with one common fiber,
+  `Math.DirectedTransport.walkMap_ofSMul_eq_walkLabel_smul` — with one common fiber,
   transport is `Math.CycleCoboundary.transport`, and for a monoid action it is
-  the action of `Math.CycleCoboundary.gain`.
+  the action of `Math.CycleCoboundary.walkLabel`.
 
 ## Relation to neighbouring modules
 
@@ -82,10 +82,10 @@ transport is `Math.DirectedTransport.Transport.walkMap_castFinish`.
 
 `MathUE.CycleCoboundary` is the constant-fiber case: its
 `Math.CycleCoboundary.transport` is `walkMap` for a transport built by
-`Math.DirectedTransport.ofEdgeAct`, its `Math.CycleCoboundary.gain` is the
+`Math.DirectedTransport.ofEdgeAct`, its `Math.CycleCoboundary.walkLabel` is the
 composite label of a walk, and `Math.CycleCoboundary.transport_eq_smul`
 identifies the two for a monoid action.  That identification is used here, not
-reproved.  Its `Math.CycleCoboundary.HasTrivialCycleGains` is triviality of the
+reproved.  Its `Math.CycleCoboundary.HasTrivialCycleLabels` is triviality of the
 holonomy of the corresponding constant-fiber transport.
 
 `MathUE.MaxPlusPotential` is the ordered constant-fiber case at translation edge
@@ -323,27 +323,27 @@ theorem walkMap_ofSMul {X : Type uX} {M : Type uM} [Monoid M] [MulAction M X]
       Math.CycleCoboundary.transport (fun edge value => label edge • value) walk point :=
   walkMap_ofEdgeAct _ walk point
 
-/-- **The gain-graph bridge.**  Transport by a monoid labelling is the action of
-the walk's composite label, by `Math.CycleCoboundary.transport_eq_smul`. -/
-theorem walkMap_ofSMul_eq_gain_smul {X : Type uX} {M : Type uM} [Monoid M] [MulAction M X]
+/-- **The walk-label bridge.**  Transport by a monoid labelling is the action
+of the walk's composite label, by `Math.CycleCoboundary.transport_eq_smul`. -/
+theorem walkMap_ofSMul_eq_walkLabel_smul {X : Type uX} {M : Type uM} [Monoid M] [MulAction M X]
     (label : E → M) (walk : G.Walk start finish) (point : X) :
-    (ofSMul G X label).walkMap walk point = Math.CycleCoboundary.gain label walk • point := by
+    (ofSMul G X label).walkMap walk point = Math.CycleCoboundary.walkLabel label walk • point := by
   rw [walkMap_ofSMul, Math.CycleCoboundary.transport_eq_smul]
 
-/-- The holonomy of a closed walk under a monoid labelling is the action of its
-cycle gain. -/
-theorem holonomy_ofSMul_eq_gain_smul {X : Type uX} {M : Type uM} [Monoid M] [MulAction M X]
+/-- The holonomy of a closed walk under a monoid labelling is the action of
+its cycle label. -/
+theorem holonomy_ofSMul_eq_walkLabel_smul {X : Type uX} {M : Type uM} [Monoid M] [MulAction M X]
     (label : E → M) {base : V} (cycle : G.Walk base base) (point : X) :
-    (ofSMul G X label).holonomy cycle point = Math.CycleCoboundary.gain label cycle • point :=
-  walkMap_ofSMul_eq_gain_smul label cycle point
+    (ofSMul G X label).holonomy cycle point = Math.CycleCoboundary.walkLabel label cycle • point :=
+  walkMap_ofSMul_eq_walkLabel_smul label cycle point
 
-/-- Under `Math.CycleCoboundary.HasTrivialCycleGains` every closed-walk holonomy
+/-- Under `Math.CycleCoboundary.HasTrivialCycleLabels` every closed-walk holonomy
 of the labelled constant-fiber transport is the identity. -/
 theorem holonomy_ofSMul_eq_self {X : Type uX} {M : Type uM} [Monoid M] [MulAction M X]
-    {label : E → M} (hflat : Math.CycleCoboundary.HasTrivialCycleGains G label)
+    {label : E → M} (hflat : Math.CycleCoboundary.HasTrivialCycleLabels G label)
     {base : V} (cycle : G.Walk base base) (point : X) :
     (ofSMul G X label).holonomy cycle point = point := by
-  rw [holonomy_ofSMul_eq_gain_smul, hflat base cycle, one_smul]
+  rw [holonomy_ofSMul_eq_walkLabel_smul, hflat base cycle, one_smul]
 
 end DirectedTransport
 

@@ -142,7 +142,7 @@ import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament
 import MathUE.List
-import MathUE.MaxAffineGainGraph
+import MathUE.MaxAffineTransport
 import MathUE.MaxAffineSectionDuality
 import MathUE.MaxAffineStoppingValue
 import MathUE.MaxPlusPotential

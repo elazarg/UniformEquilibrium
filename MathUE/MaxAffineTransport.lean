@@ -17,7 +17,7 @@ import MathUE.MaxPlusPotential
 import MathUE.TransferSummaryMonoid
 
 /-!
-# Max-affine gain graphs
+# Max-affine transport on a directed multigraph
 
 A finite directed multigraph whose edges are labelled by max-affine self-maps
 of the line, monotone at the nonnegative slopes the theory runs on.  A walk transports a real number by composing the maps
@@ -54,42 +54,42 @@ homogeneous, and appears to carry no established name.
 
 ## Main definitions
 
-* `Math.MaxAffineGainGraph.Label`, its `apply`, `comp`, `id`, the `Monoid`
+* `Math.MaxAffineTransport.Label`, its `apply`, `comp`, `id`, the `Monoid`
   instance on nonnegative-slope labels and the `MulAction` on `ℝ`.
-* `Math.MaxAffineGainGraph.ofAffine`, `ofAffineHom`, `ofMaxAffine` -- the two
+* `Math.MaxAffineTransport.ofAffine`, `ofAffineHom`, `ofMaxAffine` -- the two
   embeddings of `Math.TransferSummary`'s classes.
-* `Math.MaxAffineGainGraph.toTransferMatrix` -- affine summaries as
+* `Math.MaxAffineTransport.toTransferMatrix` -- affine summaries as
   `2 × 2` transfer matrices.
-* `Math.MaxAffineGainGraph.IsLaxSection`, `defect` -- the lax section and
+* `Math.MaxAffineTransport.IsLaxSection`, `defect` -- the lax section and
   its edgewise residual.
-* `Math.MaxAffineGainGraph.holonomyApply` -- chronological transport along a
+* `Math.MaxAffineTransport.holonomyApply` -- chronological transport along a
   walk.
-* `Math.MaxAffineGainGraph.slopeProd`, `suffixWeight`, `suffixWeightSum`,
+* `Math.MaxAffineTransport.slopeProd`, `suffixWeight`, `suffixWeightSum`,
   `weightedDefect` -- the survival-weighted accounting along an edge list.
-* `Math.MaxAffineGainGraph.cyclicLabel`, `cyclicChain`, `cyclicHolonomy` -- one
+* `Math.MaxAffineTransport.cyclicLabel`, `cyclicChain`, `cyclicHolonomy` -- one
   turn of a cyclic max-affine system read as a composite label action.
 
 ## Main results
 
-* `Math.MaxAffineGainGraph.Label.apply_comp`,
-  `Math.MaxAffineGainGraph.Label.comp_assoc` -- the composition law, at
+* `Math.MaxAffineTransport.Label.apply_comp`,
+  `Math.MaxAffineTransport.Label.comp_assoc` -- the composition law, at
   nonnegative outer slope.
-* `Math.MaxAffineGainGraph.Label.apply_add_le` -- the one-sided Lipschitz
+* `Math.MaxAffineTransport.Label.apply_add_le` -- the one-sided Lipschitz
   estimate `apply f (x + d) ≤ apply f x + slope * d` for `0 ≤ d`.
-* `Math.MaxAffineGainGraph.holonomyApply_le_add_weightedDefect` -- the
+* `Math.MaxAffineTransport.holonomyApply_le_add_weightedDefect` -- the
   **weighted-defect telescope**: transport along a walk is bounded by the value
   of the candidate at the far end plus the positive parts of the edge defects,
   each weighted by the product of the slopes traversed after it.
-* `Math.MaxAffineGainGraph.holonomyApply_cycle_le` -- a lax section makes
+* `Math.MaxAffineTransport.holonomyApply_cycle_le` -- a lax section makes
   its value at the base vertex a pre-fixed point of every cycle's composite
   action.
-* `Math.MaxAffineGainGraph.Label.exists_apply_le_self_iff` -- the expansivity
+* `Math.MaxAffineTransport.Label.exists_apply_le_self_iff` -- the expansivity
   trichotomy: a single label has a pre-fixed point exactly when its slope is
   below one, or is one with nonpositive shift, or exceeds one with the floor
   below the affine fixed point.
-* `Math.MaxAffineGainGraph.exists_edge_defect_ge` -- the quantitative
+* `Math.MaxAffineTransport.exists_edge_defect_ge` -- the quantitative
   obstruction dual to the telescope.
-* `Math.MaxAffineGainGraph.cyclicSolution_cyclicChain` -- a fixed point of one
+* `Math.MaxAffineTransport.cyclicSolution_cyclicChain` -- a fixed point of one
   turn of the cyclic labels is a `Math.CyclicMaxAffine.CyclicSolution`.
 
 ## Relation to the rest of `MathUE`
@@ -106,8 +106,8 @@ path is the Lindley orbit `Math.TransferSummary.reflectedIter`
 `Math.TransferSummary.reflectedIter_eq_sup'`.
 
 `holonomyApply` is `Math.CycleCoboundary.transport` at these edge actions, and
-`holonomyApply_eq_gain_smul` identifies it with the gain-graph holonomy
-`Math.CycleCoboundary.gain` in the nonnegative-slope monoid.  The composite label
+`holonomyApply_eq_walkLabel_smul` identifies it with the gain-graph holonomy
+`Math.CycleCoboundary.walkLabel` in the nonnegative-slope monoid.  The composite label
 of a walk is thereby a word in the monoid of `Math.TransferSummary`, whose
 affine part is represented by the transfer matrices of
 `Math.InverseCoordinate.affineTransferMatrix` through `toTransferMatrix`.
@@ -123,7 +123,7 @@ maps.
 
 noncomputable section
 
-namespace Math.MaxAffineGainGraph
+namespace Math.MaxAffineTransport
 
 /-! ## The label algebra -/
 
@@ -570,10 +570,10 @@ theorem holonomyApply_eq_foldl_map (label : E → Label) {start finish : V}
   rw [holonomyApply_eq_foldl, List.foldl_map]
 
 /-- At nonnegative slopes the transport is the action of the gain-graph
-holonomy `Math.CycleCoboundary.gain` in the label monoid. -/
-theorem holonomyApply_eq_gain_smul (label : E → {f : Label // 0 ≤ f.slope}) {start finish : V}
+holonomy `Math.CycleCoboundary.walkLabel` in the label monoid. -/
+theorem holonomyApply_eq_walkLabel_smul (label : E → {f : Label // 0 ≤ f.slope}) {start finish : V}
     (walk : G.Walk start finish) (x : ℝ) :
-    holonomyApply (fun e => (label e).1) walk x = Math.CycleCoboundary.gain label walk • x :=
+    holonomyApply (fun e => (label e).1) walk x = Math.CycleCoboundary.walkLabel label walk • x :=
   Math.CycleCoboundary.transport_eq_smul (G := G) (label := label) walk x
 
 /-! ### Survival-weighted accounting along an edge list -/
@@ -982,7 +982,7 @@ end Specialization
 /-! ## The directed-transport reading
 
 `Math.DirectedTransport` develops transport with vertex-indexed fibers; a
-max-affine gain graph is its constant-fiber case, with every fiber the line
+max-affine transport graph is its constant-fiber case, with every fiber the line
 and each edge acting by its label.  The identifications below let the
 section and holonomy statements of that module specialize here. -/
 
@@ -1016,4 +1016,4 @@ theorem isLaxSection_iff_toTransport_isLaxSection (G : EdgeGraph V E) (label : E
 
 end Transport
 
-end Math.MaxAffineGainGraph
+end Math.MaxAffineTransport

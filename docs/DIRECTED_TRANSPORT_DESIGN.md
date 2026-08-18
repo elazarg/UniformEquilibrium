@@ -1,7 +1,7 @@
-# Design: directed transport and the max-affine gain graph
+# Design: directed transport and max-affine transport graphs
 
 Status: Layers 0 and 1 (milestones M0 and M1) are implemented in
-`MathUE/DirectedTransport.lean` and `MathUE/MaxAffineGainGraph.lean`; strong
+`MathUE/DirectedTransport.lean` and `MathUE/MaxAffineTransport.lean`; strong
 duality (T6) remains staged.  Each stage below is marked provable now,
 staged, or recorded open.
 
@@ -80,7 +80,7 @@ Layer 0's job is vocabulary plus the four or five induction lemmas that every
 specialization would otherwise reprove.  It should stay under a few hundred
 lines.
 
-### Layer 1 — `MathUE/MaxAffineGainGraph.lean`
+### Layer 1 — `MathUE/MaxAffineTransport.lean`
 
 The first useful specialization: one common fiber `ℝ`, edge maps monotone
 max-affine.  This is where quantitative content lives.
@@ -215,7 +215,7 @@ fibers coincide (Zaslavsky, *Biased graphs. I*, J. Combin. Theory Ser. B 47
 (1989)); a discrete connection, with `holonomy` as its holonomy; sections are
 flat/equivariant sections, and `IsLaxSection` is a subsolution.
 
-Layer 1: `Math.MaxAffineGainGraph`.  Nearest named neighbours: min-max
+Layer 1: `Math.MaxAffineTransport`.  Nearest named neighbours: min-max
 function networks (Gunawardena), topical maps (Gaubert–Gunawardena; the
 slope-1 sublattice is topical, general slopes are monotone but not additively
 homogeneous), timed event graphs of max-plus discrete-event theory (Baccelli,

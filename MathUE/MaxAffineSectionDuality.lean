@@ -6,15 +6,15 @@ Authors: GameTheory contributors
 
 import Mathlib.Data.Fintype.Order
 import Mathlib.Order.WithBot
-import MathUE.MaxAffineGainGraph
+import MathUE.MaxAffineTransport
 import MathUE.MaxPlusPotential
 
 /-!
-# Existence of lax sections for max-affine gain graphs
+# Existence of lax sections for max-affine transport graphs
 
-`Math.MaxAffineGainGraph` develops the obstruction side of max-affine transport:
+`Math.MaxAffineTransport` develops the obstruction side of max-affine transport:
 a lax section forces the composite action of every closed walk to have a
-pre-fixed point (`Math.MaxAffineGainGraph.holonomyApply_cycle_le`).  This file
+pre-fixed point (`Math.MaxAffineTransport.holonomyApply_cycle_le`).  This file
 supplies the converse in the two regimes where it holds.
 
 **The contractive regime.**  When every slope is strictly below one and the
@@ -38,23 +38,23 @@ achieves the same reduction without enlarging the graph.
 
 ## Main definitions
 
-* `Math.MaxAffineGainGraph.Label.compList` -- the composite of a list of labels,
+* `Math.MaxAffineTransport.Label.compList` -- the composite of a list of labels,
   the head acting first, matching the fold of
-  `Math.MaxAffineGainGraph.holonomyApply_eq_foldl_map`.
+  `Math.MaxAffineTransport.holonomyApply_eq_foldl_map`.
 
 ## Main results
 
-* `Math.MaxAffineGainGraph.Label.apply_const_le` -- the edgewise contractive
+* `Math.MaxAffineTransport.Label.apply_const_le` -- the edgewise contractive
   estimate: below unit slope, a constant above the floor and above the affine
   fixed point is a pre-fixed point.
-* `Math.MaxAffineGainGraph.exists_const_isLaxSection_of_slope_lt_one` -- with
+* `Math.MaxAffineTransport.exists_const_isLaxSection_of_slope_lt_one` -- with
   finitely many edges and all slopes below one, a constant lax section exists.
-* `Math.MaxAffineGainGraph.exists_isLaxSection_iff_forall_cycle_shift_nonpos` --
+* `Math.MaxAffineTransport.exists_isLaxSection_iff_forall_cycle_shift_nonpos` --
   at unit slopes, a lax section exists exactly when every closed walk has
   nonpositive shift sum.
-* `Math.MaxAffineGainGraph.exists_isLaxSection_iff_forall_cycle_exists_prefixed`
+* `Math.MaxAffineTransport.exists_isLaxSection_iff_forall_cycle_exists_prefixed`
   -- the same criterion read through the composite label of each closed walk,
-  matching `Math.MaxAffineGainGraph.Label.exists_apply_le_self_iff`.
+  matching `Math.MaxAffineTransport.Label.exists_apply_le_self_iff`.
 
 ## Scope
 
@@ -67,7 +67,7 @@ homogeneous, monotone functions*, Trans. Amer. Math. Soc. 356 (2004)).
 
 noncomputable section
 
-namespace Math.MaxAffineGainGraph
+namespace Math.MaxAffineTransport
 
 namespace Label
 
@@ -75,7 +75,7 @@ namespace Label
 
 /-- A label is dominated at a target value exactly when both its floor and its
 affine branch are.  The diagonal case, at the argument itself, is
-`Math.MaxAffineGainGraph.Label.apply_le_iff`. -/
+`Math.MaxAffineTransport.Label.apply_le_iff`. -/
 theorem apply_le_target_iff (f : Label) (x y : ℝ) :
     f.apply x ≤ y ↔ f.floor ≤ (y : WithBot ℝ) ∧ f.affinePart x ≤ y := by
   rcases f.floor_cases with hfloor | ⟨e, hfloor⟩
@@ -100,7 +100,7 @@ theorem add_shift_le_apply {f : Label} (hslope : f.slope = 1) (x : ℝ) :
 /-- **The edgewise contractive estimate.**  Below unit slope, any constant at
 least the floor and at least the fixed point `shift / (1 - slope)` of the affine
 branch is a pre-fixed point of the action.  This is the witness constructed in
-the first branch of `Math.MaxAffineGainGraph.Label.exists_apply_le_self_iff`,
+the first branch of `Math.MaxAffineTransport.Label.exists_apply_le_self_iff`,
 stated for an arbitrary admissible constant so that one constant can serve every
 edge of a graph. -/
 theorem apply_const_le {f : Label} (hslope : f.slope < 1) {C : ℝ}
@@ -117,7 +117,7 @@ theorem apply_const_le {f : Label} (hslope : f.slope < 1) {C : ℝ}
 
 /-- The composite label of a list of labels, the head acting first.  This is the
 coefficient form of the fold of
-`Math.MaxAffineGainGraph.holonomyApply_eq_foldl_map`. -/
+`Math.MaxAffineTransport.holonomyApply_eq_foldl_map`. -/
 def compList (l : List Label) : Label := l.foldl (fun acc f => f.comp acc) Label.id
 
 @[simp] theorem compList_nil : compList [] = Label.id := rfl
@@ -169,7 +169,7 @@ theorem apply_compList {l : List Label} (hslope : ∀ f ∈ l, 0 ≤ f.slope) (x
 
 /-- **A composite of unit-slope labels has a pre-fixed point exactly when its
 shift sum is nonpositive.**  This is the unit-slope branch of
-`Math.MaxAffineGainGraph.Label.exists_apply_le_self_iff`; the floors, however
+`Math.MaxAffineTransport.Label.exists_apply_le_self_iff`; the floors, however
 large, obstruct nothing, since a pre-fixed point may be taken above them. -/
 theorem exists_apply_compList_le_self_iff {l : List Label} (hslope : ∀ f ∈ l, f.slope = 1) :
     (∃ x : ℝ, (compList l).apply x ≤ x) ↔ (l.map Label.shift).sum ≤ 0 := by
@@ -301,12 +301,12 @@ theorem shift_compList_edges {label : E → Label} (hslope : ∀ e : E, (label e
 /-- **Strong duality at unit slopes, read through composite labels.**  A lax
 section exists exactly when the composite label of every closed walk admits a
 pre-fixed point, the condition that
-`Math.MaxAffineGainGraph.Label.exists_apply_le_self_iff` decides from the
+`Math.MaxAffineTransport.Label.exists_apply_le_self_iff` decides from the
 coefficients.  Together with
-`Math.MaxAffineGainGraph.holonomyApply_cycle_le` this closes the unit-slope case
+`Math.MaxAffineTransport.holonomyApply_cycle_le` this closes the unit-slope case
 of the duality: the necessary condition of weak duality is sufficient.  The
 composite is the one that acts by transport,
-`Math.MaxAffineGainGraph.apply_compList_edges`. -/
+`Math.MaxAffineTransport.apply_compList_edges`. -/
 theorem exists_isLaxSection_iff_forall_cycle_exists_prefixed [Fintype V] [Finite E]
     {label : E → Label} (hslope : ∀ e : E, (label e).slope = 1) :
     (∃ φ : V → ℝ, IsLaxSection G label φ) ↔
@@ -323,6 +323,6 @@ theorem exists_isLaxSection_iff_forall_cycle_exists_prefixed [Fintype V] [Finite
 
 end Graph
 
-end Math.MaxAffineGainGraph
+end Math.MaxAffineTransport
 
 end
