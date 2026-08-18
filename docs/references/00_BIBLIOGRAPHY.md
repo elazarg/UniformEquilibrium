@@ -189,6 +189,10 @@ Open-access copy: Maastricht institutional repository.
 **Solan 1999** — *Three-Player Absorbing Games*. Mathematics of Operations
 Research **24**(3), 669–698.
 DOI [`10.1287/moor.24.3.669`](https://doi.org/10.1287/moor.24.3.669). `M`
+Published text read as page images (the scan has no usable text layer).
+Definition 3.2 defines the equilibrium payoff uniformly, so the abstract's
+"undiscounted" needs no secondary upgrade; see
+[`20_NONZERO_SUM_EQUILIBRIUM.md`](20_NONZERO_SUM_EQUILIBRIUM.md).
 
 **Solan 1999b** — *Uniform Equilibrium: More Than Two Players*. Author-hosted
 lecture chapter (30 July 1999), `math.tau.ac.il/~eilons/natoasi4.pdf`;
@@ -268,7 +272,7 @@ DOI [`10.1007/s001820200109`](https://doi.org/10.1007/s001820200109). `—`
 **Simon 2007** — *The Structure of Non-Zero-Sum Stochastic Games*. Advances in
 Applied Mathematics **38**(1), 1–26.
 DOI [`10.1016/j.aam.2006.07.002`](https://doi.org/10.1016/j.aam.2006.07.002). `—`
-Read directly from a local source PDF as rendered page images. The PDF's
+Read directly from the publisher's PDF as rendered page images. The PDF's
 symbol fonts carry no `ToUnicode` map, so a text-layer extraction silently
 drops every Greek glyph and must not be used. Verbatim statements of Theorem
 3, Corollary 2, Theorem 4, Conjecture 1, and the Section 4.2–4.3 definitions
@@ -291,8 +295,11 @@ Solan–Vieille 2025.
 arXiv:1803.00878 (v2, 5 Aug 2019). `—`
 
 **Solan & Solan 2020** — *Quitting Games and Linear Complementarity Problems*.
-Mathematics of Operations Research **45**(2), arXiv:1707.02598.
+Mathematics of Operations Research **45**(2), 626–651, arXiv:1707.02598.
 DOI [`10.1287/moor.2019.0996`](https://doi.org/10.1287/moor.2019.0996). `—`
+⚠ The preprint and the final manuscript number their results differently and
+define "normal player" differently; the preprint's normal set is the recursion
+that the final manuscript demotes to its Section 5 α-players. Cite by version.
 
 **Munk & Solan 2020** — arXiv:2001.03094. `—`
 
