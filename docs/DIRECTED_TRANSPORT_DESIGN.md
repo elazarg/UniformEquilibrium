@@ -244,6 +244,23 @@ Cohen, Olsder, Quadrat, *Synchronization and Linearity*, Wiley 1992), and per
 vertex a one-player Bellman operator.  The general object appears to carry no
 established name.
 
+## The relation-labelled variant, resolved
+
+A variant of Layer 0 with relations in place of functions — edge labels
+`R_e ⊆ Fiber (source e) × Fiber (target e)`, walks composing relations,
+sections satisfying `(s (source e), s (target e)) ∈ R_e` — would faithfully
+carry constraint data that is not functional, and for labels that are finite
+conjunctions of affine inequalities the Farkas layer already covers it: the
+row encoding of `MathUE/MaxAffineFarkasDuality.lean` never uses
+functionality.  The variant is nonetheless not written, for a proved reason:
+the constraints the counterexample regime forces on preemption edges are
+slope-zero floors (`Research/Quitting/PreemptionTransport.lean`), whose
+relational reading is a half-line at a single coordinate; such relations
+compose to relations of the same shape and obstruct nothing, exactly as the
+function-labelled reading proved.  A relational layer becomes worth writing
+only when a producer supplies labels from dynamic data — chronologies or
+blocks — rather than from the static table.
+
 ## Intended consumers (game side; not part of these modules)
 
 The adapter that would make this progress on the open frontier rather than
