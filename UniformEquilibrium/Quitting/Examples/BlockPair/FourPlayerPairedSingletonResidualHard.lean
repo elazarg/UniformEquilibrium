@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.Gate
 # Residual-hard calibration for the paired-singleton family
 
 The paired singleton matrix fails projective Q-bar already on the principal
-pair `{0,2}`.  Together with its full corrected core, standard-Q property,
+pair `{0,2}`.  Together with its full normal core, standard-Q property,
 and lack of a homogeneous simplex solution, this places both concrete
 completions in the residual hard class of the LCP gate.
 
@@ -167,7 +167,7 @@ theorem periodTwo_residualHardClass :
   residualHardClass_of_normalizedSoloMatrix_eq
     boundaryReward normalizedSoloMatrix_periodTwo
 
-/-- Residual-hard membership, a full four-player corrected core, and exact
+/-- Residual-hard membership, a full four-player normal core, and exact
 stationary nonexistence do not imply counterexamplehood: the period-two
 completion has all three properties and an exact uniform-equilibrium payoff. -/
 theorem periodTwo_residualHard_fullCore_nonstationary_but_uniform :

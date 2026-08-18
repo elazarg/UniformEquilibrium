@@ -79,7 +79,8 @@ exist; see the three-player sure-set repair regressions.
 ## Reference
 
 Quitting games and their uniform equilibria are those of Solan and Vieille,
-*Quitting games*, Israel J. Math. 119 (2001).  The characterization proved
+*Quitting games*, Math. Oper. Res. **26**(2) (2001), 265--285.  The
+characterization proved
 here is original to this development.
 -/
 

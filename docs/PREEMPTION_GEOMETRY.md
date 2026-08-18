@@ -179,7 +179,7 @@ The corresponding normalized gate matrix is explicit:
  \end{cases}
 \]
 
-Every vertex on a strict preemption cycle therefore survives every corrected
+Every vertex on a strict preemption cycle therefore survives every
 normal-layer deletion: its predecessor on the cycle remains a distinct
 nonpositive gate witness.
 

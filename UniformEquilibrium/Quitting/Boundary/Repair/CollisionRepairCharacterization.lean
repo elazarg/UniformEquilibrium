@@ -86,8 +86,28 @@ All statements are at an arbitrary finite player set: one owner, one blocker,
 and an arbitrary set of spectators, each carrying its own no-join inequality.
 Three players is the smallest instance with a spectator.
 
-Everything here is original to this development; the quitting-game model is
-that of Solan and Vieille, *Quitting games*, Israel J. Math. 119 (2001).
+## Reference and lineage
+
+The quitting-game model is that of Solan and Vieille, *Quitting games*,
+Math. Oper. Res. **26**(2) (2001), 265--285.
+
+The mechanism is not new.  It is the two-active-player specialization of the
+instant-equilibrium-with-punishment branch of the quitting-game literature:
+branch `S.2` of Theorem 3.4 of Ashkenazi-Golan, Krasikov, Rainer and Solan,
+*Absorption paths and equilibria in quitting games*, Math. Program. (2022),
+and the *instant approximate equilibria* of Simon, *The structure of
+non-zero-sum stochastic games*, Adv. Appl. Math. **38** (2007), Section 4.3.
+Both prescribe one player quitting surely at the first stage and punished
+thereafter to within the tolerance of her min-max level.  This file fixes that
+shape to a single mixing owner against a sure blocker, with every other player
+continuing.
+
+What is sharper here is that the shape is characterized rather than
+constructed.  `quittingCollisionRepairWorks_iff` is an exact biconditional
+between the mechanism working at a rate and three scalar conditions on the
+reward table, so it certifies failure as well as success; and the blocker's
+condition is priced against the exact min-max
+`GameTheory.quittingPunishmentValue`, not against an approximation of it.
 -/
 
 noncomputable section

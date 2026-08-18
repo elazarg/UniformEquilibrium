@@ -12,19 +12,19 @@ import UniformEquilibrium.Quitting.Cycles.ConditionedDiffuseStrategicRescaling
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 
 /-!
-# The corrected homogeneous LCP branch: algebra and strategic boundary
+# The homogeneous LCP branch: algebra and strategic boundary
 
-This file isolates what the homogeneous branch of the corrected normal-core
+This file isolates what the homogeneous branch of the normal-core
 gate actually supplies.
 
-A homogeneous simplex solution on the corrected normal core extends by zero
+A homogeneous simplex solution on the normal core extends by zero
 to a homogeneous simplex solution on the full singleton comparison matrix.
-The only nontrivial point is an abnormal row: every corrected-normal owner
+The only nontrivial point is an abnormal row: every normal-core owner
 has a strictly positive entry in such a row.  This follows directly from the
 recursive definition, without choosing a stabilization time.
 
 The extended solution gives a complementary singleton mixture.  If it is a
-vertex, its owner belongs to the corrected normal core and the landed
+vertex, its owner belongs to the normal core and the landed
 two-scale owner/blocker construction applies.  Otherwise small stationary
 hazards along the simplex direction give terminal approximate equilibria:
 the prescribed value, immediate-Quit value, and refusal value all converge to
@@ -53,7 +53,7 @@ omit [Fintype ι] [DecidableEq ι] in
   apply Subtype.ext
   rfl
 
-/-- Extend a weight on the corrected normal core by zero off the core. -/
+/-- Extend a weight on the normal core by zero off the core. -/
 def extendNormalWeight (M : ι → ι → ℝ)
     (weight : normalCore M → ℝ) : ι → ℝ :=
   fun who => if hwho : who ∈ normalCore M then weight ⟨who, hwho⟩ else 0
@@ -111,7 +111,7 @@ def extendNormalSimplex (M : ι → ι → ℝ)
     (extendNormalSimplex M weight).val who = 0 := by
   simp [extendNormalSimplex, hwho]
 
-/-- If a row lies outside the corrected normal core, every column belonging
+/-- If a row lies outside the normal core, every column belonging
 to the core is strictly positive in that row.  Otherwise that fixed core
 column would witness, inductively, that the row survives every layer. -/
 theorem normalCore_entry_pos_of_notMem
@@ -134,7 +134,7 @@ theorem normalCore_entry_pos_of_notMem
           ⟨ih, owner, (mem_normalCore M owner).1 howner n, hne, hle⟩
   exact lt_of_not_ge hnotle
 
-/-- On a corrected-normal row, zero extension reproduces the principal LCP
+/-- On a normal-core row, zero extension reproduces the principal LCP
 residual exactly. -/
 theorem singletonLCPResidual_extendNormalSimplex_of_mem
     (M : ι → ι → ℝ) (weight : stdSimplex ℝ (normalCore M))
@@ -167,7 +167,7 @@ theorem singletonLCPResidual_extendNormalSimplex_of_mem
           intro owner _
           rw [extendNormalSimplex_apply_of_mem M weight owner.property]
 
-/-- Off the corrected normal core, the zero-extended residual is
+/-- Off the normal core, the zero-extended residual is
 nonnegative (indeed it is a convex sum of strictly positive core entries). -/
 theorem singletonLCPResidual_extendNormalSimplex_nonneg_of_notMem
     (M : ι → ι → ℝ) (weight : stdSimplex ℝ (normalCore M))
@@ -183,7 +183,7 @@ theorem singletonLCPResidual_extendNormalSimplex_nonneg_of_notMem
   · change 0 ≤ (extendNormalSimplex M weight).val owner * M who owner
     rw [extendNormalSimplex_apply_of_notMem M weight howner, zero_mul]
 
-/-- A homogeneous solution on the corrected normal core extends to a
+/-- A homogeneous solution on the normal core extends to a
 homogeneous solution of the full singleton comparison matrix. -/
 theorem singletonLCPFeasible_of_normalPlayerMatrix
     (M : ι → ι → ℝ)
@@ -205,7 +205,7 @@ theorem singletonLCPFeasible_of_normalPlayerMatrix
       exact hcomplementary ⟨who, hwho⟩
     · rw [extendNormalSimplex_apply_of_notMem M weight hwho, zero_mul]
 
-/-- The full homogeneous witness attached to a corrected homogeneous matrix
+/-- The full homogeneous witness attached to a homogeneous matrix
 branch. -/
 theorem HomogeneousMatrixBranch.full_homogeneous
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -795,7 +795,7 @@ theorem singletonLCPResidual_eq_column_of_weight_eq_one
     rw [hzero other (Finset.mem_erase.mp hother).1, zero_mul]
   rw [herase, zero_add]
 
-/-- **Homogeneous matrix producer.**  The corrected homogeneous branch always
+/-- **Homogeneous matrix producer.**  The homogeneous branch always
 produces an ordinary uniform-equilibrium payoff.  A vertex witness is handled
 by the landed two-scale owner/blocker construction; every non-vertex witness
 is realized by stationary hazards tending to zero along its simplex

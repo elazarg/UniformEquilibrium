@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 
 /-!
-# The corrected normal core can be smaller than the first layer
+# The normal core can be smaller than the first layer
 
 This finite quitting table is a concrete diagnostic for the distinct-witness
 normal-player recursion.  Its normalized singleton comparison matrix is
@@ -21,7 +21,7 @@ row 2       1 -1  0
 
 The first screen retains players `1` and `2`: player `1` uses the already
 deleted player `0` as witness, while player `2` uses player `1`.  Repeating
-the screen removes `1`, then `2`, so the stabilized corrected core is empty.
+the screen removes `1`, then `2`, so the stabilized normal core is empty.
 Thus replacing the recursive core by the one-step normal-player set changes
 the index set even for a three-player singleton comparison table.
 -/
@@ -122,7 +122,7 @@ theorem normalLayer_two :
   ext who
   fin_cases who <;> simp [hzero, hone, htwo]
 
-/-- The next corrected layer is empty because no distinct witness remains. -/
+/-- The next normal layer is empty because no distinct witness remains. -/
 theorem normalLayer_three :
     normalLayer comparisonMatrix 3 = ∅ := by
   ext who
@@ -137,7 +137,7 @@ theorem normalLayer_three :
   · intro h
     simp at h
 
-/-- The stabilized corrected core is empty. -/
+/-- The stabilized normal core is empty. -/
 theorem normalCore_eq_empty : normalCore comparisonMatrix = ∅ := by
   ext who
   constructor
@@ -147,7 +147,7 @@ theorem normalCore_eq_empty : normalCore comparisonMatrix = ∅ := by
     simp at hthree
   · simp
 
-/-- The iterated corrected core is a strict subset of the ordinary one-step
+/-- The iterated normal core is a strict subset of the ordinary one-step
 normal-player screen. -/
 theorem normalCore_ssubset_normalLayer_one :
     normalCore comparisonMatrix ⊂ normalLayer comparisonMatrix 1 := by

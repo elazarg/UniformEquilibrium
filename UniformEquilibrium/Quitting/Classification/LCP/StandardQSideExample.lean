@@ -7,10 +7,10 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.LCP.Gate
 
 /-!
-# An exact four-player witness for the corrected-core standard-Q side
+# An exact four-player witness for the normal-core standard-Q side
 
 This file proves that the algebraic necessary condition for a quitting-game
-counterexample is satisfiable already with four players.  The corrected core
+counterexample is satisfiable already with four players.  The normal core
 of the displayed four-player singleton comparison table is a three-cycle.
 That `3 × 3` principal matrix is textbook standard Q and has no homogeneous
 simplex solution.
@@ -293,7 +293,7 @@ section SmallCore
 
 variable {α : Type} [Fintype α] [DecidableEq α]
 
-/-- A nonempty stabilized corrected core cannot consist of one player: every
+/-- A nonempty stabilized normal core cannot consist of one player: every
 survivor has a distinct survivor as a nonpositive comparison witness. -/
 theorem normalCore_card_ne_one (M : α → α → ℝ) :
     (normalCore M).card ≠ 1 := by
@@ -305,7 +305,7 @@ theorem normalCore_card_ne_one (M : α → α → ℝ) :
   have : blocker = owner := by simpa [hcore] using hblocker
   exact hne this
 
-/-- A zero-diagonal matrix whose stabilized corrected core has cardinality
+/-- A zero-diagonal matrix whose stabilized normal core has cardinality
 two cannot be textbook standard Q on that core. -/
 theorem normalPlayerMatrix_not_standardQ_of_core_card_two
     (M : α → α → ℝ) (hdiag : ∀ i, M i i = 0)
@@ -349,8 +349,8 @@ theorem normalPlayerMatrix_not_standardQ_of_core_card_two
   have hresidual := solution.residual_nonneg receiver
   linarith
 
-/-- For every finite zero-diagonal matrix whose corrected principal matrix
-is standard Q, the stabilized corrected core is either empty or has at least
+/-- For every finite zero-diagonal matrix whose principal matrix
+is standard Q, the stabilized normal core is either empty or has at least
 three players. -/
 theorem normalCore_eq_empty_or_three_le_card
     (M : α → α → ℝ) (hdiag : ∀ i, M i i = 0)
@@ -367,8 +367,8 @@ theorem normalCore_eq_empty_or_three_le_card
       exact normalPlayerMatrix_not_standardQ_of_core_card_two M hdiag htwo hQ
     omega
 
-/-- Consequently, for a four-player zero-diagonal table on the corrected
-standard-Q side, the stabilized core has cardinality either three or four. -/
+/-- Consequently, for a four-player zero-diagonal table on the
+normal-core standard-Q side, the stabilized core has cardinality either three or four. -/
 theorem standardQSide_core_card_eq_three_or_four
     (M : α → α → ℝ) (hdiag : ∀ i, M i i = 0)
     (hplayers : Fintype.card α = 4)
@@ -722,7 +722,7 @@ theorem normalizedSoloMatrix_duplicatedReward :
     duplicatedCyclicMatrix_diagonal
 
 /-- A second exact four-player realization of the standard-Q side, now with
-all four players in the corrected core. -/
+all four players in the normal core. -/
 theorem duplicatedReward_standardQMatrixSide :
     StandardQMatrixSide duplicatedReward := by
   refine
@@ -767,7 +767,7 @@ theorem next_ne (i : CorePlayer) : next i ≠ i := by
 
 /-- A four-player zero-diagonal comparison matrix.  The three `some` players
 carry the cyclic block; the `none` player has only positive off-diagonal
-comparisons and is removed by the first corrected screen. -/
+comparisons and is removed by the first normal-layer screen. -/
 def fourMatrix : Player → Player → ℝ
   | some i, some j => cyclicMatrix i j
   | some _, none => 1
@@ -812,11 +812,11 @@ theorem mem_normalCore_iff (player : Player) :
     exact (mem_normalCore fourMatrix (some i)).2
       (fun n => some_mem_normalLayer n i)
 
-/-- The embedding of the three cyclic players into the corrected core. -/
+/-- The embedding of the three cyclic players into the normal core. -/
 def coreEmbedding (i : CorePlayer) : normalCore fourMatrix :=
   ⟨some i, (mem_normalCore_iff (some i)).2 ⟨i, rfl⟩⟩
 
-/-- The evident identification of the corrected core with the cyclic block. -/
+/-- The evident identification of the normal core with the cyclic block. -/
 def coreEquiv : CorePlayer ≃ normalCore fourMatrix :=
   Equiv.ofBijective coreEmbedding ⟨by
     intro first second h
@@ -841,18 +841,18 @@ theorem normalPlayerMatrix_eq_reindex :
   rw [hreceiver, howner]
   simp [normalPlayerMatrix, principalMatrix, reindexMatrix, fourMatrix]
 
-/-- The four-player matrix has nonempty corrected core. -/
+/-- The four-player matrix has nonempty normal core. -/
 theorem fourMatrix_hasNormalPlayers : HasNormalPlayers fourMatrix := by
   exact ⟨some 0, (mem_normalCore_iff (some 0)).2 ⟨0, rfl⟩⟩
 
-/-- Its corrected principal matrix is textbook standard Q. -/
+/-- Its principal matrix is textbook standard Q. -/
 theorem fourMatrix_normal_standardQ :
     IsStandardQMatrix (normalPlayerMatrix fourMatrix) := by
   rw [normalPlayerMatrix_eq_reindex]
   exact isStandardQMatrix_reindexMatrix coreEquiv cyclicMatrix
     cyclicMatrix_standardQ
 
-/-- Its corrected principal matrix has no homogeneous simplex solution. -/
+/-- Its principal matrix has no homogeneous simplex solution. -/
 theorem fourMatrix_normal_noHomogeneous :
     ¬HasHomogeneousSimplexSolution (normalPlayerMatrix fourMatrix) := by
   rw [normalPlayerMatrix_eq_reindex]
@@ -868,7 +868,7 @@ theorem normalizedSoloMatrix_reward : normalizedSoloMatrix reward = fourMatrix :
   normalizedSoloMatrix_singletonRewardOfMatrix fourMatrix fourMatrix_diagonal
 
 /-- **Exact satisfiability of the four-player algebraic necessary
-condition.**  This reward table lies on the corrected-core standard-Q side:
+condition.**  This reward table lies on the normal-core standard-Q side:
 the core is nonempty, its principal matrix has no homogeneous simplex
 solution, and it is textbook standard Q. -/
 theorem reward_standardQMatrixSide : StandardQMatrixSide reward := by

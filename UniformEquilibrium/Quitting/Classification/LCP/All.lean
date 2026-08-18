@@ -33,29 +33,29 @@ This umbrella exports the theorem-bearing infrastructure proved in this folder:
   payoff;
 * exact strategic transport of ordinary terminal approximate-Nash inequalities;
 * the standard/projective Q split and projective Q-bar;
-* the audit of the printed normal-player recursion together with the corrected
-  distinct-witness object and an explicit quitting table on which its
+* the audit of the earlier draft's normal-player recursion together with the
+  source's distinct-witness object and an explicit quitting table on which its
   stabilized core is strictly smaller than the one-step screen;
 * exact four-player quitting tables witnessing satisfiability of the
-  corrected-core standard-Q, nonhomogeneous necessary condition, including
-  a witness whose corrected core is the full four-player set;
+  normal-core standard-Q, nonhomogeneous necessary condition, including
+  a witness whose normal core is the full four-player set;
 * the exact nonhomogeneous standard-Q region `0 < a < b` for the
   two-parameter cyclic singleton-comparison family;
 * the complete zero-diagonal `3 × 3` classification: outside the homogeneous
   branch, standard Q is exactly one of the two strict directed-cycle sign
   orientations together with positive determinant;
-* the elimination of every quitting game whose corrected normal core has
+* the elimination of every quitting game whose normal core has
   exactly three players, so every four-player counterexample has full core;
 * the unconditional algebraic matrix-regime gate with its precise residual
   class; and
-* the complete corrected all-abnormal producer, including the later-layer
+* the complete all-abnormal producer, including the later-layer
   two-scale owner/blocker construction;
-* the complete corrected homogeneous producer, including both vertex and
+* the complete homogeneous producer, including both vertex and
   nonvertex simplex witnesses; and
 * the complete ordinary non-Q producer, including the all-Continue
   provenance contradiction, the contracting multi-hazard endpoint, and the
   isolated-endpoint blocker repair; and
-* the sharp unconditional counterexample restriction: the corrected normal
+* the sharp unconditional counterexample restriction: the normal
   core is nonempty, nonhomogeneous, and its principal matrix is textbook
   standard Q (hence also projective Q).
 

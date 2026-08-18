@@ -11,7 +11,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 /-!
 # Singleton-matrix diagnostics for the paired-singleton family
 
-The common paired-singleton comparison matrix has full corrected normal core
+The common paired-singleton comparison matrix has full normal core
 and no homogeneous simplex-LCP solution.  These facts depend only on the four
 singleton rows, hence apply to every completion of the family.
 -/
@@ -33,7 +33,7 @@ theorem negativeWitness_ne (who : Player) : negativeWitness who ≠ who := by
     pairedSingletonMatrix who (negativeWitness who) = -1 := by
   fin_cases who <;> rfl
 
-/-- Every player survives every corrected normal-layer deletion. -/
+/-- Every player survives every normal-layer deletion. -/
 theorem pairedSingletonMatrix_mem_normalLayer (n : ℕ) (who : Player) :
     who ∈ normalLayer pairedSingletonMatrix n := by
   induction n generalizing who with
@@ -48,7 +48,7 @@ theorem pairedSingletonMatrix_mem_normalCore (who : Player) :
   (mem_normalCore pairedSingletonMatrix who).2
     (fun n => pairedSingletonMatrix_mem_normalLayer n who)
 
-/-- The iterated corrected normal core is all four players. -/
+/-- The iterated normal core is all four players. -/
 theorem pairedSingletonMatrix_normalCore_eq_univ :
     normalCore pairedSingletonMatrix = Finset.univ := by
   apply Finset.eq_univ_of_forall

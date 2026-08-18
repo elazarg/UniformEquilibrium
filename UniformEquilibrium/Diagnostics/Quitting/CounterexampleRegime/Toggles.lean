@@ -43,11 +43,24 @@ All statements are finite, table-level inequalities, intended as search-facing
 rejection tests: a candidate reward table on which any one of them fails
 cannot carry a counterexample regime.
 
-## Reference
+## Reference and lineage
 
 Quitting games and their uniform equilibria are those of Solan and Vieille,
-*Quitting games*, Israel J. Math. 119 (2001).  The statements here are
-original to this development.
+*Quitting games*, Math. Oper. Res. **26**(2) (2001), 265--285.
+
+The mechanism is not new.  Rejecting a candidate profile by the first-period
+unilateral toggles of its exit set is the standard first-stage Nash failure
+analysis of the quitting-game literature.  At `S = ∅` it is the solo-exit
+test, and at a singleton it is the collision test; the arguments proving
+Lemma 2.6 and Lemma 2.7 of Solan and Solan, *Quitting games and linear
+complementarity problems*, Math. Oper. Res. **45**(2) (2020), are of exactly
+this kind, run against one perturbed stationary row at a time.
+
+What is sharper here is the quantification.  Every inequality below is priced
+against one common terminal gap that depends neither on the coalition nor on
+the candidate profile, and the toggle statements hold simultaneously at every
+coalition, including the empty and the grand one.  That is what turns them
+from tests on a candidate into finite rejection tests on the reward table.
 -/
 
 noncomputable section

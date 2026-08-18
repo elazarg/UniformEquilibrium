@@ -16,18 +16,18 @@ This file records the precise strategic boundary of the algebraic LCP gate.
 It deliberately does not import the general quitting-game conjecture and does
 not assume any unformalized theorem from the literature.
 
-The corrected all-abnormal construction is now complete: the first-layer
+The all-abnormal construction is now complete: the first-layer
 branch is exact, while the later-layer branch uses a last surviving layer and
 a two-scale owner/blocker stationary row.  Consequently nonexistence reduces
 the faithful five-way matrix gate to three live alternatives:
 
-1. the corrected normal core has a homogeneous simplex solution;
-2. the nonhomogeneous corrected normal matrix is not standard Q; or
-3. the corrected normal matrix is on the nonhomogeneous standard-Q side.
+1. the normal core has a homogeneous simplex solution;
+2. the nonhomogeneous normal matrix is not standard Q; or
+3. the normal matrix is on the nonhomogeneous standard-Q side.
 
-The corrected homogeneous and ordinary non-Q producers are also complete.
+The homogeneous and ordinary non-Q producers are also complete.
 Consequently nonexistence of an ordinary uniform-equilibrium payoff forces the
-corrected normal matrix onto the nonhomogeneous textbook standard-Q side.
+normal matrix onto the nonhomogeneous textbook standard-Q side.
 Projective Q is the simplex convention used by the quitting-game LCP
 classification; the completed theorem proves both conventions, with standard
 Q as the sharper conclusion.
@@ -42,7 +42,7 @@ open StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- **Unconditional counterexample-facing LCP gate.**  The complete corrected
+/-- **Unconditional counterexample-facing LCP gate.**  The complete
 all-abnormal producer removes the empty-core branch.  No unformalized non-Q or
 homogeneous strategic theorem is smuggled into the conclusion. -/
 theorem lcp_necessary_alternative_of_not_exists_uniformEquilibriumPayoff
@@ -62,7 +62,7 @@ theorem lcp_necessary_alternative_of_not_exists_uniformEquilibriumPayoff
   · exact Or.inr (Or.inr hqbar.toStandardQMatrixSide)
   · exact Or.inr (Or.inr hresidual.toStandardQMatrixSide)
 
-/-- A counterexample has a nonempty corrected normal core and its corrected
+/-- A counterexample has a nonempty normal core and its
 normal matrix is projective Q.  The homogeneous branch is one of the two
 algebraic ways to be projective Q; the ordinary non-Q branch is now excluded
 strategically. -/
@@ -88,7 +88,7 @@ theorem projectiveQ_of_not_exists_uniformEquilibriumPayoff
 
 /-- **Sharp Q-matrix restriction for ordinary quitting counterexamples.**
 Nonexistence of an ordinary uniform-equilibrium payoff forces a nonempty
-corrected normal core, excludes the homogeneous simplex branch, and makes its
+normal core, excludes the homogeneous simplex branch, and makes its
 principal matrix a textbook standard-Q matrix. -/
 theorem standardQMatrixSide_of_not_exists_uniformEquilibriumPayoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

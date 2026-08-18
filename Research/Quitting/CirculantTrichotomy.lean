@@ -34,14 +34,14 @@ in two independent ways.
   simplex point solves the homogeneous simplex LCP
   (`Math.LinearProgramming.singletonLCPFeasible_rowCirculant`).
 
-Both facts are about the corrected normal-player principal matrix rather than
+Both facts are about the normal-player principal matrix rather than
 the full normalized matrix, and the passage is exact: a nonpositive surplus
 forces some off-diagonal margin to be nonpositive, and one such margin gives
-every player a distinct nonpositive comparison at every corrected normality
-layer, so the corrected normal core is the whole player set.
+every player a distinct nonpositive comparison at every normality
+layer, so the normal core is the whole player set.
 
 The gate then runs backwards.  `StandardQMatrixSide` asserts both that the
-corrected normal-player matrix is standard `Q` and that its homogeneous branch
+normal-player matrix is standard `Q` and that its homogeneous branch
 is absent, and either failure contradicts
 `standardQMatrixSide_of_not_exists_uniformEquilibriumPayoff`.  So such a table
 has an ordinary uniform-equilibrium payoff and lies in no counterexample
@@ -98,11 +98,11 @@ theorem HasCirculantSoloMatrix.row_sum
     (∑ j, normalizedSoloMatrix reward c j) = ∑ d, m d := by
   rw [h, sum_rowCirculant_row]
 
-/-! ## The corrected normal core of a circulant table of nonpositive surplus -/
+/-! ## The normal core of a circulant table of nonpositive surplus -/
 
 omit [AddCommGroup ι] in
 /-- A matrix with a distinct nonpositive comparison in every row keeps every
-player at every corrected normality layer. -/
+player at every normality layer. -/
 theorem normalLayer_eq_univ_of_forall_exists_ne_nonpos {M : ι → ι → ℝ}
     (hrow : ∀ i : ι, ∃ j, j ≠ i ∧ M i j ≤ 0) (n : ℕ) :
     normalLayer M n = Finset.univ := by
@@ -116,7 +116,7 @@ theorem normalLayer_eq_univ_of_forall_exists_ne_nonpos {M : ι → ι → ℝ}
 
 omit [AddCommGroup ι] in
 /-- A matrix with a distinct nonpositive comparison in every row has the whole
-player set as its corrected normal core. -/
+player set as its normal core. -/
 theorem normalCore_eq_univ_of_forall_exists_ne_nonpos {M : ι → ι → ℝ}
     (hrow : ∀ i : ι, ∃ j, j ≠ i ∧ M i j ≤ 0) : normalCore M = Finset.univ := by
   classical
@@ -124,7 +124,7 @@ theorem normalCore_eq_univ_of_forall_exists_ne_nonpos {M : ι → ι → ℝ}
   simp [normalCore, normalLayer_eq_univ_of_forall_exists_ne_nonpos hrow]
 
 omit [AddCommGroup ι] in
-/-- Sums over a corrected normal core that exhausts the player set are sums
+/-- Sums over a normal core that exhausts the player set are sums
 over all players. -/
 theorem sum_coe_normalCore_of_eq_univ {M : ι → ι → ℝ}
     (hcore : normalCore M = Finset.univ) (g : ι → ℝ) :
@@ -143,13 +143,13 @@ theorem HasCirculantSoloMatrix.exists_ne_nonpos [Nontrivial ι]
   simpa using hmd
 
 /-- A circulant table of nonpositive surplus has the whole player set as its
-corrected normal core. -/
+normal core. -/
 theorem HasCirculantSoloMatrix.normalCore_eq_univ [Nontrivial ι]
     (h : HasCirculantSoloMatrix reward m) (hσ : (∑ d, m d) ≤ 0) :
     normalCore (normalizedSoloMatrix reward) = Finset.univ :=
   normalCore_eq_univ_of_forall_exists_ne_nonpos (h.exists_ne_nonpos hσ)
 
-/-- The corrected normal core of a circulant table of nonpositive surplus is
+/-- The normal core of a circulant table of nonpositive surplus is
 inhabited. -/
 theorem HasCirculantSoloMatrix.nonempty_normalCore [Nontrivial ι]
     (h : HasCirculantSoloMatrix reward m) (hσ : (∑ d, m d) ≤ 0) :
@@ -159,7 +159,7 @@ theorem HasCirculantSoloMatrix.nonempty_normalCore [Nontrivial ι]
 
 /-! ## The two LCP branches -/
 
-/-- **Nonpositive surplus fails standard `Q`.**  Every column of the corrected
+/-- **Nonpositive surplus fails standard `Q`.**  Every column of the
 normal-player matrix of a circulant table of nonpositive surplus sums to the
 surplus, so the all-ones right-hand side has no complementary solution. -/
 theorem HasCirculantSoloMatrix.not_isStandardQMatrix [Nontrivial ι]
@@ -177,7 +177,7 @@ theorem HasCirculantSoloMatrix.not_isStandardQMatrix [Nontrivial ι]
   rw [hsum, h.column_sum j.1]
   exact hσ
 
-/-- **Vanishing surplus is homogeneous.**  Every row of the corrected
+/-- **Vanishing surplus is homogeneous.**  Every row of the
 normal-player matrix of a circulant table of vanishing surplus sums to zero,
 so the uniform simplex point solves the homogeneous simplex LCP. -/
 theorem HasCirculantSoloMatrix.hasHomogeneousSimplexSolution [Nontrivial ι]
@@ -197,7 +197,7 @@ theorem HasCirculantSoloMatrix.hasHomogeneousSimplexSolution [Nontrivial ι]
 /-! ## Collapsing the counterexample gate -/
 
 /-- A circulant table of nonpositive surplus is off the standard-`Q` side of
-the corrected normal-player split, its normal-player matrix failing standard
+the normal-player split, its normal-player matrix failing standard
 `Q`. -/
 theorem HasCirculantSoloMatrix.not_standardQMatrixSide [Nontrivial ι]
     (h : HasCirculantSoloMatrix reward m) (hσ : (∑ d, m d) ≤ 0) :
@@ -205,7 +205,7 @@ theorem HasCirculantSoloMatrix.not_standardQMatrixSide [Nontrivial ι]
   fun hside => h.not_isStandardQMatrix hσ hside.normal_standardQ
 
 /-- A circulant table of vanishing surplus is off the standard-`Q` side of the
-corrected normal-player split, its homogeneous branch being present. -/
+normal-player split, its homogeneous branch being present. -/
 theorem HasCirculantSoloMatrix.not_standardQMatrixSide_of_eq_zero [Nontrivial ι]
     (h : HasCirculantSoloMatrix reward m) (hσ : (∑ d, m d) = 0) :
     ¬StandardQMatrixSide reward :=

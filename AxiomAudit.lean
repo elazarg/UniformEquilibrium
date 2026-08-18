@@ -727,6 +727,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.TailBri
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.ViolationCollapse
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.EventualAllContinuePlateau
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.ExactCycleStrata
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.ExistenceBranches
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.ImmediateSingletonCollision
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Orbit.Limit
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Orbit.SelfLoop
@@ -1191,6 +1192,7 @@ import UniformEquilibrium.Quitting.Circulation.UniformPayoffExamples
 import UniformEquilibrium.Quitting.Classification.AnalyticWaist
 import UniformEquilibrium.Quitting.Classification.BlockDeletion
 import UniformEquilibrium.Quitting.Classification.EquivariantSecurityWelfareAssembly
+import UniformEquilibrium.Quitting.Classification.ExistenceBranches
 import UniformEquilibrium.Quitting.Classification.ImmediateSingletonCollision
 import UniformEquilibrium.Quitting.Classification.LCP.All
 import UniformEquilibrium.Quitting.Classification.LCP.CounterexampleNecessary
