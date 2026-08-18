@@ -212,9 +212,12 @@ recover `Math.TransferSummary.reflectedIter` as transport along a path.
 ## Naming
 
 Layer 0: `Math.DirectedTransport`.  Other names for the object, to be listed
-in its docstring: a representation of the free path category of a quiver; a
-functor from the path category to types (said structurally, not through a
-category-theory library); a (set-valued) gain graph or voltage graph when the
+in its docstring: a labelled transition system whose transitions transform a
+per-state value, with `walkMap` as its exact (concrete) semantics — the
+thing an abstract interpretation would soundly overapproximate, none being
+built here — and a lax section as an inductive invariant; a representation
+of the free path category of a quiver; a functor from the path category to
+types (said structurally, not through a category-theory library); a (set-valued) gain graph or voltage graph when the
 fibers coincide (Zaslavsky, *Biased graphs. I*, J. Combin. Theory Ser. B 47
 (1989)); a discrete connection, with `holonomy` as its holonomy; sections are
 flat/equivariant sections, and `IsLaxSection` is a subsolution.

@@ -526,7 +526,8 @@ variable {V : Type uV} {E : Type uE} {G : Math.BoundedDiscrepancy.EdgeGraph V E}
 
 /-- A **lax section**: traversing an edge does not increase the
 candidate beyond its value at the head of that edge.  Also called a
-subsolution, a subinvariant family, or a superharmonic section. -/
+subsolution, a subinvariant family, a superharmonic section, or an
+inductive invariant. -/
 def IsLaxSection (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) : Prop :=
   ∀ e : E, (label e).apply (φ (G.source e)) ≤ φ (G.target e)
 

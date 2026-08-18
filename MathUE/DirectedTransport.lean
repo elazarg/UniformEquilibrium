@@ -42,7 +42,14 @@ The same data carries several names.
   the gain-graph case with a group acting simply transitively on the fiber (a
   torsor), a *trivialization* or *switching function*.
 * A lax section is also called a *subsolution*, a *subinvariant family*, or a
-  super- or subharmonic section depending on the orientation convention.
+  super- or subharmonic section depending on the orientation convention; in
+  program-analysis terms it is an *inductive invariant*.
+* Read computationally the data is a labelled transition system whose
+  transitions transform a per-state value, and `walkMap` is its exact
+  (concrete) semantics -- the semantics an abstract interpretation would
+  soundly overapproximate (Cousot and Cousot, *Abstract interpretation: a
+  unified lattice model for static analysis of programs*, POPL 1977).  No
+  abstraction of it is developed here.
 
 ## Main definitions
 
@@ -250,8 +257,8 @@ section Ordered
 variable [∀ vertex : V, Preorder (Fiber vertex)]
 
 /-- A family of fiber points that every edge map carries below the family's
-value at the edge's target.  Also called a subsolution or a subinvariant
-family. -/
+value at the edge's target.  Also called a subsolution, a subinvariant
+family, or an inductive invariant. -/
 def IsLaxSection (T : Transport G Fiber) (family : ∀ vertex, Fiber vertex) : Prop :=
   ∀ edge : E, T.edgeMap edge (family (G.source edge)) ≤ family (G.target edge)
 
