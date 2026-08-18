@@ -240,6 +240,7 @@ import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament
 import MathUE.List
 import MathUE.MaxAffineGainGraph
+import MathUE.MaxAffineSectionDuality
 import MathUE.MaxAffineStoppingValue
 import MathUE.MaxPlusPotential
 import MathUE.MeanErgodic
