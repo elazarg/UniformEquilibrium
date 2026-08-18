@@ -72,6 +72,7 @@ import MathUE.CurveSelection.UltrafilterSubsequence
 import MathUE.CycleCoboundary
 import MathUE.CyclicExposure
 import MathUE.CyclicMaxAffineBound
+import MathUE.DirectedTransport
 import MathUE.DivergentChargeRecurrence
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
@@ -141,6 +142,7 @@ import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament
 import MathUE.List
+import MathUE.MaxAffineGainGraph
 import MathUE.MaxAffineStoppingValue
 import MathUE.MaxPlusPotential
 import MathUE.MeanErgodic
