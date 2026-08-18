@@ -813,21 +813,26 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "The collider completion of a five-player circulant margin vector carries no counterexample regime, for every margin vector with vanishing self margin, every nonnegative solo self value and every nonpositive joint value. No sign condition on the margins survives in the hypothesis. The distant pocket, which was the last branch, falls to four producers: a step-two cycle, a skip-pair sure exit, and step-three and step-four cycles at located anchor roots.",
+      "summary": "The collider completion of a five-player circulant margin vector carries no counterexample regime, for every margin vector with vanishing self margin, every nonnegative solo self value and every nonpositive joint value. No sign condition on the margins survives in the hypothesis. The distant pocket, which was the last branch, falls to four producers: a step-two cycle, a skip-pair sure exit, and step-three and step-four cycles at located anchor roots. A checked instance in the mirror pocket orientation runs this family's distant-pocket producer on an explicit table.",
       "evidence": [
         "Research/Quitting/CirculantColliderClosure.lean",
-        "Research/Quitting/CirculantColliderCompletion.lean"
+        "Research/Quitting/CirculantColliderCompletion.lean",
+        "Experiments/counterexample_search/ColliderMirrorPocketEquilibrium.lean"
       ],
       "evidence_seals": [
         "M",
         "L",
+        "A",
         "C"
       ],
       "declarations": [
         "GameTheory.CirculantColliderCompletion.isEmpty_counterexampleRegime_colliderReward",
         "GameTheory.CirculantColliderCompletion.isQuittingSureExitSet_skip_of_le",
         "GameTheory.CirculantColliderCompletion.exists_stepThree_root_of_mul_le",
-        "GameTheory.CirculantColliderCompletion.exists_stepFour_root_of_lt_mul"
+        "GameTheory.CirculantColliderCompletion.exists_stepFour_root_of_lt_mul",
+        "GameTheory.CirculantColliderCompletion.exists_uniformEquilibriumPayoff_colliderDistantPocket",
+        "GameTheory.CirculantColliderCompletion.isEmpty_counterexampleRegime_colliderDistantPocket",
+        "GameTheory.ColliderMirrorPocketEquilibrium.mirror_isEmpty_counterexampleRegime"
       ]
     },
     {
@@ -840,15 +845,13 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "For a rotation-symmetric table with nonnegative solo self value and nonpositive join margins the census is a single dichotomy: either the counterexample regime is empty, or the surplus is positive and the negative margins are exactly one complementary pair. The all-nonnegative pattern, previously outside the firing-step closure, is settled by a singleton sure exit whenever every join margin is at most its own margin. Within the pocket alternative the neighbour orientation is closed for general tables, not only collider completions, whenever the join margins at distances one and two are capped by the neighbour margin; a checked instance settles the mirror orientation. What remains for general tables is the distant pocket, and pockets whose join margins exceed those caps.",
+      "summary": "For a rotation-symmetric table with nonnegative solo self value and nonpositive join margins the census is a single dichotomy: either the counterexample regime is empty, or the surplus is positive and the negative margins are exactly one complementary pair. The all-nonnegative pattern, previously outside the firing-step closure, is settled by a singleton sure exit whenever every join margin is at most its own margin. Within the pocket alternative the neighbour orientation is closed for general tables, not only collider completions, whenever the join margins at distances one and two are capped by the neighbour margin; that theorem has no consumer instance, so this entry carries no adapter seal. The mirror orientation is settled only inside the collider family, by that family's own distant-pocket producer, not by the general theorem. What remains for general tables is the distant pocket, and pockets whose join margins exceed those caps.",
       "evidence": [
-        "Research/Quitting/CirculantTrichotomyClosure.lean",
-        "Experiments/counterexample_search/ColliderMirrorPocketEquilibrium.lean"
+        "Research/Quitting/CirculantTrichotomyClosure.lean"
       ],
       "evidence_seals": [
         "M",
         "L",
-        "A",
         "C"
       ],
       "declarations": [
