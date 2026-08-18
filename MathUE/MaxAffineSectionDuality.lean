@@ -12,25 +12,30 @@ import MathUE.MaxPlusPotential
 /-!
 # Existence of lax sections for max-affine transport graphs
 
-`Math.MaxAffineTransport` develops the obstruction side of max-affine transport:
-a lax section forces the composite action of every closed walk to have a
-pre-fixed point (`Math.MaxAffineTransport.holonomyApply_cycle_le`).  This file
-supplies the converse in the two regimes where it holds.
+`Math.MaxAffineTransport` develops the obstruction side of max-affine
+transport: at nonnegative slopes, a lax section forces the composite action of
+every closed walk to have a pre-fixed point
+(`Math.MaxAffineTransport.holonomyApply_cycle_le`; without the slope
+hypothesis this fails -- two labels of slope `-1` can each admit a lax value
+while their composite is a positive translation).  This file supplies the
+converse in two regimes.
 
-**The contractive regime.**  When every slope is strictly below one and the
+**The subunit-slope regime.**  When every slope is strictly below one and the
 edges are finitely many, a *constant* candidate already closes: a constant at
 least every finite floor and every affine fixed point `shift / (1 - slope)`
 satisfies the edge inequality outright, with no iteration and no structure on
-the vertices.  This is the discounted, or `β`-contractive, case.
+the vertices.  Negative slopes are admitted, so this is wider than the
+discounted, or `β`-contractive, case `0 ≤ slope < 1`, which is neither
+monotone nor a metric contraction in general.
 
 **The slope-one regime.**  When every slope equals one the labels are
 translations corrected by floors, and a lax section exists exactly when no
 closed walk has strictly positive shift sum.  This is the mean-payoff
 feasibility criterion, equivalently the Bellman--Ford criterion, lifted from
-translations to floored labels.  The lift is by a constant: both the potential
-inequality and the cycle condition are invariant under adding a constant to a
-candidate, so a potential for the shifts, raised until every floor clears,
-is a lax section.  In the timed-event-graph reading of max-plus discrete-event
+translations to floored labels.  The lift is by a constant: the translation
+inequalities are unchanged by adding a constant, and the floor inequalities
+only improve upward, so a potential for the shifts, raised until every floor
+clears, is a lax section.  In the timed-event-graph reading of max-plus discrete-event
 theory (Baccelli, Cohen, Olsder and Quadrat, *Synchronization and Linearity*,
 Wiley, 1992) a floor is a release date, and the usual device is an anchor or
 slack vertex pinned to zero and joined to every floored edge; adding a constant
@@ -250,9 +255,10 @@ all slopes being one, a lax section exists exactly when no closed walk has
 strictly positive shift sum.  This is the mean-payoff feasibility criterion,
 equivalently the Bellman--Ford criterion, lifted from the translations of
 `Math.MaxPlusPotential.exists_isPotential_iff_forall_closedWalk_nonpos` to
-floored labels.  Both sides are invariant under adding a constant to a
-candidate, and that is what carries the lift: a potential for the shifts, raised
-by a constant large enough for every floor, is a lax section.  Adjoining a
+floored labels.  The translation inequalities are unchanged by adding a
+constant and the floor inequalities only improve upward, and that is what
+carries the lift: a potential for the shifts, raised by a constant large
+enough for every floor, is a lax section.  Adjoining a
 vertex pinned to zero and an edge from it to the head of each floored edge is
 the same reduction performed on an enlarged graph. -/
 theorem exists_isLaxSection_iff_forall_cycle_shift_nonpos [Fintype V] [Finite E]
