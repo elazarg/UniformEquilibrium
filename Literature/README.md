@@ -63,7 +63,6 @@ check; Lean checks proposition and proof meaning.
 `python scripts/check_import_graph.py` checks the lane boundaries, including
 the narrow Research/Literature escape hatch.
 
-Source PDFs are working research material and live outside the tracked
-tree, under `ephemeral/`. The repository stores citations, public locators,
-source-page or theorem locators, and Lean correspondence; it does not
-redistribute PDFs and no tracked path houses them.
+The no-PDF policy: paper records carry citations, public locators,
+source-page or theorem locators, and Lean correspondence; no PDF enters the
+repository.
