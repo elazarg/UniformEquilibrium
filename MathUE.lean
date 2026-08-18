@@ -142,9 +142,10 @@ import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament
 import MathUE.List
-import MathUE.MaxAffineTransport
+import MathUE.MaxAffineFarkasDuality
 import MathUE.MaxAffineSectionDuality
 import MathUE.MaxAffineStoppingValue
+import MathUE.MaxAffineTransport
 import MathUE.MaxPlusPotential
 import MathUE.MeanErgodic
 import MathUE.Minimax.DiscountedShapleySystem
