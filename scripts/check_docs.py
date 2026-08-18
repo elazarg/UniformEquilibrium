@@ -106,6 +106,7 @@ PRUNED_DIRECTORIES = {
     ".git",
     ".lake",
     "GameTheory",
+    "Games",
     "__pycache__",
     ".pytest_cache",
     "ephemeral",
