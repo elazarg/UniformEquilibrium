@@ -26,11 +26,13 @@ when *both* coordinates mix strictly.
   the partner's hazard times the coordinate's collision increment.  Exact, with
   no asymptotics.
 * **Pointwise solo phase**
-  (`eq_of_pairActive_of_collisionIncrement_ne_zero`): if in addition the
-  continuation already pays the coordinate its own singleton reward — the pin
-  that a solo date supplies for free — then the collision increment vanishes.
-  On a table where it does not, two coordinates cannot both mix strictly at
-  such a root.
+  (`hazardOfRoot_eq_zero_of_pairActive_of_collisionIncrement_ne_zero`,
+  `isQuittingSoloRoot_of_pairActive_of_collisionIncrement_ne_zero`): if in
+  addition the continuation already pays the coordinate its own singleton
+  reward — the pin that a solo date supplies for free — then the partner's
+  hazard vanishes outright on a table where joining the partner's exit changes
+  what the coordinate receives, so the root is a solo root at the mixing
+  coordinate and the partner surely continues.
 
 The table condition here is `QuittingPairCollisionNondegenerate`, a condition
 on collision rows.  It is independent of the zero-freeness of the normalized
@@ -172,50 +174,69 @@ def QuittingPairCollisionNondegenerate
   ∀ who owner : ι, who ≠ owner →
     quittingPairCollisionIncrement reward who owner ≠ 0
 
-/-- **Pointwise solo phase.**  Two coordinates cannot both mix strictly at an
-exact endpoint-Nash root supported on them alone, once the continuation pins
-one of them at its own singleton reward and joining the partner's exit changes
-what that coordinate receives.
+/-- **The partner's hazard vanishes.**  At an exact endpoint-Nash root
+supported on two distinct coordinates, once the continuation pins the strictly
+mixing coordinate at its own singleton reward and joining the partner's exit
+changes what that coordinate receives, the partner quits with probability
+zero.
 
 The pin is exactly what a solo date supplies for free
 (`IsQuittingSoloRoot.tail_owner_eq_soloReward_of_interior`), and the collision
 condition is a condition on the pair's collision row, not on the normalized
 solo matrix. -/
-theorem eq_of_pairActive_of_collisionIncrement_ne_zero
+theorem hazardOfRoot_eq_zero_of_pairActive_of_collisionIncrement_ne_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {tail : Payoff ι}
-    {root : ι → PMF Bool} {first second : ι}
+    {root : ι → PMF Bool} {first second : ι} (hne : first ≠ second)
     (hroot : IsQuittingActiveRoot {first, second} root)
     (hnash : IsεQuittingRootEndpointNash reward tail 0 root)
     (hquit : 0 < (root first true).toReal)
     (hcontinue : 0 < (root first false).toReal)
-    (hpartner : 0 < (root second true).toReal)
     (hpin : tail first = quittingSoloReward reward first first)
     (hcollision : quittingPairCollisionIncrement reward first second ≠ 0) :
-    first = second := by
-  by_contra hne
-  have hbalance := hazard_mul_quittingPairCollisionIncrement_eq_zero reward hne
-    hroot hnash hquit hcontinue hpin
-  have hhazard : hazardOfRoot root second ≠ 0 := ne_of_gt hpartner
-  exact hcollision ((mul_eq_zero.1 hbalance).resolve_left hhazard)
+    hazardOfRoot root second = 0 :=
+  (mul_eq_zero.1 (hazard_mul_quittingPairCollisionIncrement_eq_zero reward hne
+    hroot hnash hquit hcontinue hpin)).resolve_right hcollision
+
+/-- **Pointwise solo phase.**  A pinned exact endpoint-Nash root supported on
+two distinct coordinates, on a pair whose collision increment does not vanish,
+is a solo root at the strictly mixing coordinate: every other coordinate,
+partner included, continues with certainty.  In particular two coordinates
+cannot both mix strictly at such a root. -/
+theorem isQuittingSoloRoot_of_pairActive_of_collisionIncrement_ne_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {tail : Payoff ι}
+    {root : ι → PMF Bool} {first second : ι} (hne : first ≠ second)
+    (hroot : IsQuittingActiveRoot {first, second} root)
+    (hnash : IsεQuittingRootEndpointNash reward tail 0 root)
+    (hquit : 0 < (root first true).toReal)
+    (hcontinue : 0 < (root first false).toReal)
+    (hpin : tail first = quittingSoloReward reward first first)
+    (hcollision : quittingPairCollisionIncrement reward first second ≠ 0) :
+    IsQuittingSoloRoot root first := by
+  have hzero := hazardOfRoot_eq_zero_of_pairActive_of_collisionIncrement_ne_zero
+    reward hne hroot hnash hquit hcontinue hpin hcollision
+  have hsecond : root second = PMF.pure false :=
+    quittingRoot_eq_pure_false_of_not_mem_positiveHazardSupport root
+      (by simp [quittingPositiveHazardSupport, hzero])
+  intro player hplayer
+  by_cases hp : player = second
+  · exact hp ▸ hsecond
+  · exact hroot player (by simp [hplayer, hp])
 
 /-- **Pointwise solo phase on a collision-nondegenerate table.**  A root
-supported on two coordinates, exact endpoint-Nash against a continuation that
-pins its strictly mixing coordinates, has at most one strictly mixing
+supported on two distinct coordinates, exact endpoint-Nash against a
+continuation that pins its strictly mixing coordinate, is a solo root at that
 coordinate. -/
-theorem eq_of_pairActive_of_collisionNondegenerate
+theorem isQuittingSoloRoot_of_pairActive_of_collisionNondegenerate
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {tail : Payoff ι}
-    {root : ι → PMF Bool} {first second : ι}
+    {root : ι → PMF Bool} {first second : ι} (hne : first ≠ second)
     (hnondegenerate : QuittingPairCollisionNondegenerate reward)
     (hroot : IsQuittingActiveRoot {first, second} root)
     (hnash : IsεQuittingRootEndpointNash reward tail 0 root)
     (hquit : 0 < (root first true).toReal)
     (hcontinue : 0 < (root first false).toReal)
-    (hpartner : 0 < (root second true).toReal)
     (hpin : tail first = quittingSoloReward reward first first) :
-    first = second := by
-  by_cases hne : first = second
-  · exact hne
-  · exact eq_of_pairActive_of_collisionIncrement_ne_zero reward hroot hnash
-      hquit hcontinue hpartner hpin (hnondegenerate first second hne)
+    IsQuittingSoloRoot root first :=
+  isQuittingSoloRoot_of_pairActive_of_collisionIncrement_ne_zero reward hne
+    hroot hnash hquit hcontinue hpin (hnondegenerate first second hne)
 
 end GameTheory

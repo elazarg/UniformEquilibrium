@@ -10,8 +10,8 @@ import UniformEquilibrium.Quitting.Classification.LCP.Normalization
 # Patience along an anchored cyclic single-quitter schedule
 
 A cyclic single-quitter schedule designates one quitter per phase and lets the
-cycle survive each phase with a probability strictly between zero and one.  Its
-phase values solve the one-step renewal recursion
+cycle survive each phase with a probability strictly below one.  Its phase
+values solve the one-step renewal recursion
 
 `Φ^k y = (1 - β_k) * r_y({w_k}) + β_k * Φ^{k+1} y`.
 
@@ -24,6 +24,17 @@ each valid for every period, every schedule — repetitions allowed — and ever
 nonuniform survival vector.
 
 ## Scope of the patience condition
+
+The two side conditions differ in kind.  The anchor is an exact equality at the
+given survivals: the phase's own quitter compares its solo self payoff with the
+next phase's value, and since every other player continues with certainty at
+that phase no hazard enters the comparison.  It is the equality that the
+fixed-hazard exactness condition `IsExactAnchoredSoloPeriodic`
+(`UniformEquilibrium/Quitting/Cycles/AnchoredSoloPeriodic.lean`) yields at each
+phase, through `anchor_of_isExactAnchoredSoloPeriodic`.  Patience is not the
+spectator half of that condition: fixed-hazard exactness bounds a spectator
+against `spectatorQuitNowValue`, while patience compares against the solo self
+payoff itself.
 
 Patience is the vanishing-hazard reading of a player's incentive not to quit,
 and it is a hypothesis of the structure, not a derived fact.  At a phase where
@@ -47,12 +58,14 @@ The central algebraic fact is an identity.  Applying the recursion at phase
 throughout expresses the patience slack two phases on as the slack one phase on
 minus the discounted margin `M[w_k][w_{k+1}]`.  At the anchor the first slack
 vanishes, so the anchor equation alone prices the successor margin into the
-deepest patience slot:
+deepest patience slot, and where the intervening survival does not vanish the
+identity may be divided through:
 
 `Φ^{k+2} (w_k) - r_{w_k}({w_k}) = -((1 - β_{k+1}) / β_{k+1}) * M[w_k][w_{k+1}]`.
 
 Nonnegativity of the left-hand side is then exactly a sign condition on the
-margin.  Along a schedule of constant step in a rotation-symmetric table with a
+margin, and that sign condition needs no division.  Along a schedule of
+constant step in a rotation-symmetric table with a
 uniform survival factor, that sign condition is the positivity of the backward
 partial sum of the step's anchor polynomial at a root of the polynomial.
 
@@ -64,8 +77,9 @@ partial sum of the step's anchor polynomial at a root of the polynomial.
 
 ## Main results
 
-* `QuittingAnchoredCyclicPatienceSystem.successor_defect_eq` — the identity
-  above
+* `QuittingAnchoredCyclicPatienceSystem.survival_mul_successor_defect` and
+  `QuittingAnchoredCyclicPatienceSystem.successor_defect_eq` — the identity
+  above, in its cleared and its divided form
 * `QuittingAnchoredCyclicPatienceSystem.successor_margin_nonpos` — successor
   patience: `M[w_k][w_{k+1}] ≤ 0`
 * `QuittingAnchoredCyclicPatienceSystem.predecessor_margin_nonneg` —
@@ -148,9 +162,9 @@ theorem spectatorQuitNowValue_le_solo_of_pair_le
   nlinarith [mul_nonneg hp (sub_nonneg.mpr hpair)]
 
 /-- An anchored cyclic single-quitter schedule together with its phase values:
-per-phase survival strictly between zero and one, the one-step renewal
-recursion, an anchor making each phase's quitter indifferent one phase later,
-and patience keeping every player's phase value at or above its solo payoff. -/
+per-phase survival in `[0, 1)`, the one-step renewal recursion, an anchor
+making each phase's quitter indifferent one phase later, and patience keeping
+every player's phase value at or above its solo payoff. -/
 structure QuittingAnchoredCyclicPatienceSystem
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (m : ℕ) [NeZero m] where
   /-- The designated quitter of each phase. -/
@@ -159,8 +173,8 @@ structure QuittingAnchoredCyclicPatienceSystem
   survival : Fin m → ℝ
   /-- The payoff vector the schedule delivers when read from a phase. -/
   phaseValue : Fin m → Payoff ι
-  /-- Survival is strictly positive at every phase. -/
-  survival_pos : ∀ k, 0 < survival k
+  /-- Survival is nonnegative at every phase. -/
+  survival_nonneg : ∀ k, 0 ≤ survival k
   /-- Survival is strictly below one at every phase. -/
   survival_lt_one : ∀ k, survival k < 1
   /-- One-step renewal around the cycle. -/
@@ -217,13 +231,13 @@ theorem survival_mul_successor_defect (k : Fin m) :
   rw [h]
   ring
 
-/-- The same identity solved for the patience slack two phases on. -/
-theorem successor_defect_eq (k : Fin m) :
+/-- The same identity solved for the patience slack two phases on, at a phase
+whose survival does not vanish. -/
+theorem successor_defect_eq (k : Fin m) (hsurvival : system.survival (k + 1) ≠ 0) :
     system.phaseValue (k + 1 + 1) (system.order k) -
         reward (quittingProjectiveSingletonTerminal (system.order k)) (system.order k) =
       -((1 - system.survival (k + 1)) / system.survival (k + 1)) *
         normalizedSoloMatrix reward (system.order k) (system.order (k + 1)) := by
-  have hpos := system.survival_pos (k + 1)
   have h := system.survival_mul_successor_defect k
   field_simp
   linarith [h]
@@ -232,12 +246,12 @@ theorem successor_defect_eq (k : Fin m) :
 against the quitter of the next phase. -/
 theorem successor_margin_nonpos (k : Fin m) :
     normalizedSoloMatrix reward (system.order k) (system.order (k + 1)) ≤ 0 := by
-  have hpos := system.survival_pos (k + 1)
+  have hnonneg := system.survival_nonneg (k + 1)
   have hlt := system.survival_lt_one (k + 1)
   have hslack : 0 ≤ system.phaseValue (k + 1 + 1) (system.order k) -
       reward (quittingProjectiveSingletonTerminal (system.order k)) (system.order k) :=
     sub_nonneg.mpr (system.patience (k + 1 + 1) (system.order k))
-  have hprod := mul_nonneg hpos.le hslack
+  have hprod := mul_nonneg hnonneg hslack
   rw [system.survival_mul_successor_defect k] at hprod
   by_contra hpositive
   have hmargin : 0 < normalizedSoloMatrix reward (system.order k)
@@ -249,7 +263,6 @@ against the quitter of the previous phase. -/
 theorem predecessor_margin_nonneg (k : Fin m) :
     0 ≤ normalizedSoloMatrix reward (system.order (k + 1)) (system.order k) := by
   have hlt := system.survival_lt_one k
-  have hpos := system.survival_pos k
   have hrec := system.recursion k (system.order (k + 1))
   rw [system.phaseValue_order_self (k + 1)] at hrec
   have hpat := system.patience k (system.order (k + 1))
@@ -277,7 +290,7 @@ theorem exists_margin_nonneg (z : ι) :
     Finset.exists_max_image Finset.univ
       (fun k => system.phaseValue k z - reward (quittingProjectiveSingletonTerminal z) z) hne
   refine ⟨top, ?_⟩
-  have hpos := system.survival_pos top
+  have hnonneg := system.survival_nonneg top
   have hlt := system.survival_lt_one top
   have hslack : 0 ≤ system.phaseValue top z -
       reward (quittingProjectiveSingletonTerminal z) z :=
@@ -287,7 +300,7 @@ theorem exists_margin_nonneg (z : ι) :
       (system.phaseValue (top + 1) z - reward (quittingProjectiveSingletonTerminal z) z) ≤
         system.survival top *
           (system.phaseValue top z - reward (quittingProjectiveSingletonTerminal z) z) :=
-    mul_le_mul_of_nonneg_left hle hpos.le
+    mul_le_mul_of_nonneg_left hle hnonneg
   have hrec := system.recursion top z
   rw [normalizedSoloMatrix_eq_singleton_sub]
   by_contra hnegative

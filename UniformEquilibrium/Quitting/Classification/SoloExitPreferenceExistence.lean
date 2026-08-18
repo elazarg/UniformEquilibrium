@@ -12,8 +12,11 @@ import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSele
 
 `QuittingCappedJointExitUniformεExistence` states the quitting existence
 theorem of Solan and Vieille, *Quitting games*, Math. Oper. Res. 26 (2001),
-Theorem 1.2, in this development's semantics.  It is an open proposition: no
-proof of it appears anywhere in this development.
+Theorem 1.2, in this development's semantics.  It is proved in Lean by
+`quittingCappedJointExitUniformεExistence_holds` in
+`Research/Quitting/SolanVieilleSequenceExtraction.lean`; that proof is not
+yet promoted into the integrated production surface, so this module still
+carries only the statement.
 
 Its conclusion is the source's, namely a uniform `ε`-equilibrium for each
 positive `ε`, with the profile and its payoff vector free to move with `ε`.
@@ -31,13 +34,16 @@ namespace GameTheory
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- **Open proposition.**  Every finite quitting game with unit solo exit and
-capped joint exit has a uniform `ε`-equilibrium at every positive `ε`.
+/-- Every finite quitting game with unit solo exit and capped joint exit has
+a uniform `ε`-equilibrium at every positive `ε`.
 
 This is the conclusion of Solan and Vieille, *Quitting games*,
 Math. Oper. Res. 26 (2001), Theorem 1.2, restricted to the profile-level
 equilibrium property and dropping the source's additional cyclic
-subgame-perfection.  No proof of it is supplied here. -/
+subgame-perfection.  It is proved in Lean by
+`quittingCappedJointExitUniformεExistence_holds` in
+`Research/Quitting/SolanVieilleSequenceExtraction.lean`, not yet promoted
+into the integrated production surface. -/
 def QuittingCappedJointExitUniformεExistence
     (ι : Type) [Fintype ι] [DecidableEq ι] : Prop :=
   ∀ reward : {S : Finset ι // S.Nonempty} → Payoff ι,

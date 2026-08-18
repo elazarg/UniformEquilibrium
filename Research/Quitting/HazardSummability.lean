@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.DivergentChargeRecurrence
+import Research.Quitting.DiffuseTailEffectiveCharge
 import Research.Quitting.SoloTailStoppingVerification
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchDeviationCap
 import UniformEquilibrium.Quitting.Paths.OpponentClockDichotomy
@@ -23,12 +24,16 @@ the two with the stopping bounds of
 `Research/Quitting/SoloTailStoppingVerification.lean`.
 
 * **No phantom**
-  (`quittingValue_eq_rootSequenceTerminalValue_of_not_summable`): a bounded
+  (`quittingValue_eq_rootSequenceTerminalValue_of_tendsto_jointSurvival`): a
   value sequence obeying the exact policy recursion of a root sequence whose
-  joint absorption charge diverges *is* that root sequence's honest terminal
-  payoff.  The declared boundary is transported by the joint survival product,
-  which vanishes.
-* **Refusal cap under a divergent clock**
+  joint survival vanishes *is* that root sequence's honest terminal payoff.
+  The declared boundary is transported by the joint survival product, so
+  almost-sure absorption leaves it no room.  Divergence of the joint charge is
+  one way to obtain the vanishing survival
+  (`quittingValue_eq_rootSequenceTerminalValue_of_not_summable`).
+* **Refusal cap under vanishing opponent survival**
+  (`quittingRootSequencePureTimeTerminalValue_none_le_value_of_tendsto`), and
+  its divergent-clock form
   (`quittingRootSequencePureTimeTerminalValue_none_le_value_of_divergentClock`).
 * **Verification**
   (`isεAsymptoticNash_rootSequenceProfile_of_exactSoloTail`): an exact solo
@@ -44,6 +49,11 @@ the two with the stopping bounds of
   (`exists_isQuittingSoloRoot_of_not_summable_absorptionCharge`), which floors
   its prescribed value at its own singleton reward and caps refusal
   (`quittingRootSequencePureTimeTerminalValue_none_le_value_of_cofinalSolo`).
+* **Charge floors in the summable branch**
+  (`not_rawChargeFloor_or_lonelySoloist_of_exactSoloTail`): the joint
+  absorption charge of a root sequence is the one-stage absorption mass of its
+  roots, so summability of that charge kills the recurrent raw charge floors of
+  `Research/Quitting/DiffuseTailEffectiveCharge.lean` at every coordinate.
 -/
 
 noncomputable section
@@ -165,19 +175,25 @@ theorem quittingValue_sub_rootSequenceTerminalValue_eq_jointSurvival_mul
           ih (start + 1)
 
 omit [DecidableEq ι] in
-/-- **No phantom.**  A bounded value sequence obeying the exact policy
-recursion of a root sequence whose joint absorption charge is not summable is
-that root sequence's honest terminal payoff: almost-sure absorption leaves the
-declared boundary no room. -/
-theorem quittingValue_eq_rootSequenceTerminalValue_of_not_summable
+/-- **No phantom.**  A value sequence obeying the exact policy recursion of a
+root sequence, bounded at the coordinate under consideration and whose joint
+survival from `start` vanishes, agrees at `start` with that root sequence's
+honest terminal payoff: almost-sure absorption leaves the declared boundary no
+room.
+
+Only the joint survival enters, in whatever way it was made to vanish;
+`quittingValue_eq_rootSequenceTerminalValue_of_not_summable` is the form fed by
+a divergent joint absorption charge. -/
+theorem quittingValue_eq_rootSequenceTerminalValue_of_tendsto_jointSurvival
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
-    {bound : ℝ} (hbounded : ∀ time player, |value time player| ≤ bound)
+    (who : ι) (start : ℕ)
+    {bound : ℝ} (hbounded : ∀ time, |value time who| ≤ bound)
     {rewardBound : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
-    (hdiverges : ¬ Summable (quittingRootSequenceAbsorptionCharge roots))
-    (who : ι) (start : ℕ) :
+    (hsurvival : Tendsto (quittingRootSequenceJointSurvival roots start) atTop
+      (nhds 0)) :
     value start who =
       quittingRootSequenceTerminalValue reward roots who start := by
   have hrewardBound0 : 0 ≤ rewardBound :=
@@ -194,20 +210,13 @@ theorem quittingValue_eq_rootSequenceTerminalValue_of_not_summable
         length)]
     refine mul_le_mul_of_nonneg_left ?_
       (quittingRootSequenceJointSurvival_nonneg roots start length)
-    have hleft := hbounded (start + length) who
+    have hleft := hbounded (start + length)
     have hright := abs_quittingRootSequenceTerminalValue_le reward roots who
       (start + length) hrewardBound0 hreward
     have hleftAbs := abs_le.1 hleft
     have hrightAbs := abs_le.1 hright
     rw [abs_le]
     constructor <;> linarith [hleftAbs.1, hleftAbs.2, hrightAbs.1, hrightAbs.2]
-  have hsurvival : Tendsto
-      (fun length => quittingRootSequenceJointSurvival roots start length)
-      atTop (nhds 0) :=
-    Math.tendsto_prod_one_sub_zero_of_not_summable
-      (quittingRootSequenceAbsorptionCharge roots)
-      (quittingRootSequenceAbsorptionCharge_nonneg roots)
-      (quittingRootSequenceAbsorptionCharge_le_one roots) hdiverges start
   have hlimit : Tendsto
       (fun length => quittingRootSequenceJointSurvival roots start length *
         (bound + rewardBound)) atTop (nhds 0) := by
@@ -221,69 +230,119 @@ theorem quittingValue_eq_rootSequenceTerminalValue_of_not_summable
   have := abs_eq_zero.1 (le_antisymm hzero habs)
   linarith
 
+omit [DecidableEq ι] in
+/-- **No phantom under a divergent joint charge.**  A nonsummable joint
+absorption charge drives the joint survival product to zero from every date, so
+a value sequence obeying the exact policy recursion is the root sequence's
+honest terminal payoff. -/
+theorem quittingValue_eq_rootSequenceTerminalValue_of_not_summable
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (who : ι) (start : ℕ)
+    {bound : ℝ} (hbounded : ∀ time, |value time who| ≤ bound)
+    {rewardBound : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
+    (hdiverges : ¬ Summable (quittingRootSequenceAbsorptionCharge roots)) :
+    value start who =
+      quittingRootSequenceTerminalValue reward roots who start :=
+  quittingValue_eq_rootSequenceTerminalValue_of_tendsto_jointSurvival roots
+    value hpolicy who start hbounded hreward
+    (Math.tendsto_prod_one_sub_zero_of_not_summable
+      (quittingRootSequenceAbsorptionCharge roots)
+      (quittingRootSequenceAbsorptionCharge_nonneg roots)
+      (quittingRootSequenceAbsorptionCharge_le_one roots) hdiverges start)
+
 /-! ## Capping the refusal deviation -/
 
-/-- **Refusal cap under a divergent clock.**  If the coordinate's opponents
-absorb almost surely, refusal is capped by the prescribed value. -/
+/-- **Refusal cap under vanishing opponent survival.**  If the coordinate's
+opponents absorb almost surely from `start`, refusal from `start` is capped by
+the prescribed value there.
+
+Only the opponent-survival weight enters, in whatever way it was made to
+vanish; a divergent opponent clock is one way
+(`quittingRootSequencePureTimeTerminalValue_none_le_value_of_divergentClock`).
+-/
+theorem quittingRootSequencePureTimeTerminalValue_none_le_value_of_tendsto
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    (who : ι) (start : ℕ)
+    {bound : ℝ} (hbounded : ∀ time, |value time who| ≤ bound)
+    {rewardBound : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
+    (hwindow : ∀ offset, QuittingSoloDeviationDate roots who (start + offset))
+    (hsurvival : Tendsto (quittingOpponentSurvivalWeight roots who start) atTop
+      (nhds 0)) :
+    quittingRootSequencePureTimeTerminalValue reward roots who none start ≤
+      value start who := by
+  have hrewardBound0 : 0 ≤ rewardBound :=
+    (abs_nonneg _).trans (hreward (quittingSingletonTerminal who) who)
+  have hstep : ∀ length,
+      quittingRootSequencePureTimeTerminalValue reward roots who none start -
+          value start who ≤
+        quittingOpponentSurvivalWeight roots who start length *
+          (rewardBound + bound) := by
+    intro length
+    have hmain := quittingRootSequencePureTimeTerminalValue_none_sub_value_le
+      roots value (fun _ => 0) hpolicy hnash (fun _ => le_rfl) who start length
+      (fun offset _ => hwindow offset)
+    have hnever : |quittingRootSequencePureTimeTerminalValue reward roots who
+        none (start + length)| ≤ rewardBound :=
+      abs_quittingRootSequenceTerminalValue_le reward
+        (quittingRootSequenceUpdate roots who (quittingPureTimeHazard none))
+        who (start + length) hrewardBound0 hreward
+    have hvalue := hbounded (start + length)
+    have hneverAbs := abs_le.1 hnever
+    have hvalueAbs := abs_le.1 hvalue
+    have hfactor :
+        quittingRootSequencePureTimeTerminalValue reward roots who none
+            (start + length) - value (start + length) who ≤
+          rewardBound + bound := by
+      linarith [hneverAbs.2, hvalueAbs.1]
+    have hweight := quittingOpponentSurvivalWeight_nonneg roots who start length
+    have hscaled := mul_le_mul_of_nonneg_left hfactor hweight
+    simp only [quittingDeviatorSlackBudget, mul_zero, Finset.sum_const_zero,
+      add_zero] at hmain
+    linarith
+  have hlimit : Tendsto
+      (fun length => quittingOpponentSurvivalWeight roots who start length *
+        (rewardBound + bound)) atTop (nhds 0) := by
+    simpa using hsurvival.mul (tendsto_const_nhds
+      (x := rewardBound + bound) (f := atTop (α := ℕ)))
+  have hnonpos :
+      quittingRootSequencePureTimeTerminalValue reward roots who none start -
+        value start who ≤ 0 :=
+    le_of_tendsto_of_tendsto' tendsto_const_nhds hlimit hstep
+  linarith
+
+/-- **Refusal cap under a divergent clock.**  A nonsummable opponent clock
+charge drives the opponent-survival weight to zero from every date, so refusal
+is capped by the prescribed value. -/
 theorem quittingRootSequencePureTimeTerminalValue_none_le_value_of_divergentClock
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
     (hnash : ∀ time,
       IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
-    {bound : ℝ} (hbounded : ∀ time player, |value time player| ≤ bound)
+    (who : ι) (start : ℕ)
+    {bound : ℝ} (hbounded : ∀ time, |value time who| ≤ bound)
     {rewardBound : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
-    (who : ι)
-    (hwindow : ∀ time, QuittingSoloDeviationDate roots who time)
+    (hwindow : ∀ offset, QuittingSoloDeviationDate roots who (start + offset))
     (hclock : ¬ Summable (quittingOpponentClockCharge roots who)) :
-    quittingRootSequencePureTimeTerminalValue reward roots who none 0 ≤
-      value 0 who := by
-  have hrewardBound0 : 0 ≤ rewardBound :=
-    (abs_nonneg _).trans (hreward (quittingSingletonTerminal who) who)
+    quittingRootSequencePureTimeTerminalValue reward roots who none start ≤
+      value start who := by
   have hshifted : ¬ Summable
-      (fun offset => quittingOpponentClockCharge roots who (0 + offset)) := by
-    simpa using hclock
-  have hsurvival : Tendsto (quittingOpponentSurvivalWeight roots who 0) atTop
-      (nhds 0) :=
-    tendsto_zero_quittingOpponentSurvivalWeight_of_not_summable_charge roots who
-      0 hshifted
-  have hstep : ∀ length,
-      quittingRootSequencePureTimeTerminalValue reward roots who none 0 -
-          value 0 who ≤
-        quittingOpponentSurvivalWeight roots who 0 length *
-          (rewardBound + bound) := by
-    intro length
-    have hmain := quittingRootSequencePureTimeTerminalValue_none_sub_value_le
-      roots value (fun _ => 0) hpolicy hnash (fun _ => le_rfl) who 0 length
-      (fun offset _ => hwindow (0 + offset))
-    have hnever : |quittingRootSequencePureTimeTerminalValue reward roots who
-        none (0 + length)| ≤ rewardBound :=
-      abs_quittingRootSequenceTerminalValue_le reward
-        (quittingRootSequenceUpdate roots who (quittingPureTimeHazard none))
-        who (0 + length) hrewardBound0 hreward
-    have hvalue := hbounded (0 + length) who
-    have hneverAbs := abs_le.1 hnever
-    have hvalueAbs := abs_le.1 hvalue
-    have hfactor :
-        quittingRootSequencePureTimeTerminalValue reward roots who none
-            (0 + length) - value (0 + length) who ≤ rewardBound + bound := by
-      linarith [hneverAbs.2, hvalueAbs.1]
-    have hweight := quittingOpponentSurvivalWeight_nonneg roots who 0 length
-    have hscaled := mul_le_mul_of_nonneg_left hfactor hweight
-    simp only [quittingDeviatorSlackBudget, mul_zero, Finset.sum_const_zero,
-      add_zero] at hmain
-    linarith
-  have hlimit : Tendsto
-      (fun length => quittingOpponentSurvivalWeight roots who 0 length *
-        (rewardBound + bound)) atTop (nhds 0) := by
-    simpa using hsurvival.mul (tendsto_const_nhds
-      (x := rewardBound + bound) (f := atTop (α := ℕ)))
-  have hnonpos :
-      quittingRootSequencePureTimeTerminalValue reward roots who none 0 -
-        value 0 who ≤ 0 :=
-    le_of_tendsto_of_tendsto' tendsto_const_nhds hlimit hstep
-  linarith
+      (fun offset => quittingOpponentClockCharge roots who (start + offset)) :=
+    fun hsum => hclock ((summable_nat_add_iff start).1
+      (by simpa [Nat.add_comm] using hsum))
+  exact quittingRootSequencePureTimeTerminalValue_none_le_value_of_tendsto roots
+    value hpolicy hnash who start hbounded hreward hwindow
+    (tendsto_zero_quittingOpponentSurvivalWeight_of_not_summable_charge roots
+      who start hshifted)
 
 /-! ## The verification theorem -/
 
@@ -339,12 +398,13 @@ theorem isεAsymptoticNash_rootSequenceProfile_of_exactSoloTail
       (quittingRootSequenceProfile reward roots 0) := by
   intro who deviation
   have hhonest := quittingValue_eq_rootSequenceTerminalValue_of_not_summable
-    roots value hpolicy hbounded hreward hjoint who 0
+    roots value hpolicy who 0 (fun time => hbounded time who) hreward hjoint
   have hwindow : ∀ time, QuittingSoloDeviationDate roots who time :=
     fun time => quittingSoloDeviationDate_of_isQuittingSoloRoot (hsolo time) who
   have hrefusal :=
     quittingRootSequencePureTimeTerminalValue_none_le_value_of_divergentClock
-      roots value hpolicy hnash hbounded hreward who hwindow (hclock who)
+      roots value hpolicy hnash who 0 (fun time => hbounded time who) hreward
+      (fun offset => hwindow (0 + offset)) (hclock who)
   have hcap := quittingTerminalPayoff_update_rootSequenceProfile_le_value roots
     value hpolicy hnash who hwindow hrefusal deviation
   have hprofile : quittingTerminalPayoff reward
@@ -536,7 +596,7 @@ theorem summable_absorptionCharge_or_lonelyNegativeSoloist
   obtain ⟨hjoint, hbranch⟩ := hcontra
   have hhonest := fun (who : ι) =>
     quittingValue_eq_rootSequenceTerminalValue_of_not_summable roots value
-      hpolicy hbounded hreward hjoint who 0
+      hpolicy who 0 (fun time => hbounded time who) hreward hjoint
   have hwindow : ∀ (who : ι) time, QuittingSoloDeviationDate roots who time :=
     fun who time =>
       quittingSoloDeviationDate_of_isQuittingSoloRoot (hsolo time) who
@@ -551,7 +611,8 @@ theorem summable_absorptionCharge_or_lonelyNegativeSoloist
           hsolo who hjoint hsummable) (hbranch who hsummable)
     · exact
         quittingRootSequencePureTimeTerminalValue_none_le_value_of_divergentClock
-          roots value hpolicy hnash hbounded hreward who (hwindow who) hsummable
+          roots value hpolicy hnash who 0 (fun time => hbounded time who) hreward
+          (fun offset => hwindow who (0 + offset)) hsummable
   obtain ⟨who, deviation, hbeat⟩ :=
     hexploit (quittingRootSequenceProfile reward roots 0)
   have hcap := quittingTerminalPayoff_update_rootSequenceProfile_le_value roots
@@ -585,5 +646,64 @@ theorem summable_absorptionCharge_or_lonelySoloist_of_exactSoloTail
     hsummable | ⟨who, hclock, -⟩
   · exact Or.inl hsummable
   · exact Or.inr ⟨who, hclock⟩
+
+/-! ## Charge floors in the summable branch -/
+
+omit [DecidableEq ι] in
+/-- A summable joint absorption charge excludes a recurrent raw charge floor at
+every coordinate: the charge is the one-stage absorption mass of the roots, and
+a summable series has a vanishing general term. -/
+theorem not_quittingTailRawChargeFloor_of_summable_absorptionCharge
+    (roots : ℕ → ι → PMF Bool)
+    (hsummable : Summable (quittingRootSequenceAbsorptionCharge roots))
+    (who : ι) :
+    ¬QuittingTailRawChargeFloor roots who :=
+  not_quittingTailRawChargeFloor_of_tendsto roots who
+    hsummable.tendsto_atTop_zero
+
+omit [DecidableEq ι] in
+/-- A summable joint absorption charge also excludes a co-activity floor in raw
+quit probability, which contains a single-coordinate raw floor. -/
+theorem not_quittingTailCoactiveChargeFloor_of_summable_absorptionCharge
+    (roots : ℕ → ι → PMF Bool)
+    (hsummable : Summable (quittingRootSequenceAbsorptionCharge roots))
+    (first second : ι) :
+    ¬QuittingTailCoactiveChargeFloor roots first second := fun hcoactive =>
+  not_quittingTailRawChargeFloor_of_summable_absorptionCharge roots hsummable
+    first hcoactive.rawChargeFloor_left
+
+/-- **Hazard summability against the raw charge floors.**  Under a positive
+terminal exploitability gap, an exact solo root sequence either has no
+recurrent raw charge floor at any coordinate -- hence no raw co-activity floor
+either, by
+`not_quittingTailCoactiveChargeFloor_of_summable_absorptionCharge` -- or has a
+lonely soloist whose opponent clock is summable.
+
+This is the summable branch of
+`summable_absorptionCharge_or_lonelySoloist_of_exactSoloTail` read in the raw
+one-stage currency.  The conditioned currency is a different matter: the
+conditioned weight divides the raw mass by an eventual absorption probability
+at most one, so summability of the conditioned series is the stronger, not the
+weaker, statement. -/
+theorem not_rawChargeFloor_or_lonelySoloist_of_exactSoloTail
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (owner : ℕ → ι)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time,
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time))
+    {bound : ℝ} (hbounded : ∀ time player, |value time player| ≤ bound)
+    {rewardBound : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
+    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) (owner time))
+    {gap : ℝ} (hgapPos : 0 < gap)
+    (hexploit : HasTerminalExploitabilityGap reward gap) :
+    (∀ who, ¬QuittingTailRawChargeFloor roots who) ∨
+      ∃ who, Summable (quittingOpponentClockCharge roots who) := by
+  rcases summable_absorptionCharge_or_lonelySoloist_of_exactSoloTail roots value
+    owner hpolicy hnash hbounded hreward hsolo hgapPos hexploit with
+    hsummable | hlonely
+  · exact Or.inl (not_quittingTailRawChargeFloor_of_summable_absorptionCharge
+      roots hsummable)
+  · exact Or.inr hlonely
 
 end GameTheory

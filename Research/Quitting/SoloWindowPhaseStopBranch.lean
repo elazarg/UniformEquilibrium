@@ -5,8 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.SoloTailStoppingVerification
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauIncidence
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauTimeDisintegration
+import UniformEquilibrium.Quitting.Cycles.PeriodicJointSurvival
+import UniformEquilibrium.Quitting.Cycles.SoloRootSequenceValues
 
 /-!
 # The phase-stop branch on a solo seam tail
@@ -21,17 +21,25 @@ supplies both from the tail.
   of window `window` at date `time` is the tail root at date
   `window + time % (window + 1)`, so tail-level soloness transfers verbatim
   (`isQuittingSoloRoot_canonicalPeriodicTailWindowFamily`).
-* **Terminal concentration on a solo sequence**
-  (`quittingAbsorbedMassLimit_eq_zero_of_soloRoots`): no coalition other than
-  the owner's singleton ever absorbs, so the terminal payoff is the owner's
-  singleton mass times its singleton row
-  (`quittingRootSequenceTerminalValue_eq_of_soloRoots`).  Nonnegativity of
-  that row therefore floors the delivery
-  (`quittingRootSequenceTerminalValue_nonneg_of_soloRoots`), with no
-  absorption hypothesis: the never-absorbed boundary contributes nothing.
-* **Assembly** (`exists_phaseStopObstruction_of_tailSolo`): a seam whose tail
-  roots are solo at an `owner` with nonnegative singleton reward has a
-  coordinate whose phase stops obstruct infinitely many canonical windows.
+* **The owner never obstructs**
+  (`quittingRootSequencePureTimeTerminalValue_some_owner_eq_of_soloRoots`): on
+  a solo sequence nobody else can absorb, so whenever the owner stops it exits
+  alone and collects exactly its singleton row.
+* **A profitable spectator stop is a preemption edge**
+  (`quittingSoloPreempts_of_phaseStop_gap`): on a solo sequence that absorbs
+  almost surely, a coordinate whose deterministic stop beats the delivery by
+  `margin` is strictly preempted by the owner at half that margin, once the
+  owner's hazard at the stopping date is too small for the collision term to
+  carry the gap.
+* **Assembly** (`quittingSoloWindowPhaseStopBranch_of_tailSolo`): a seam whose
+  tail roots are solo at an `owner` with nonnegative singleton reward, whose
+  rewards are globally bounded, and whose canonical windows absorb almost
+  surely, realizes the phase-stop branch at a quarter of the terminal gap.
+
+The closed forms of a solo root sequence used throughout are collected in
+`UniformEquilibrium/Quitting/Cycles/SoloRootSequenceValues.lean`, and the
+absorption of a canonical window comes from
+`quittingJointSurvivalLimit_eq_zero_of_periodic`.
 -/
 
 noncomputable section
@@ -42,195 +50,6 @@ open Filter
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-
-/-! ## Terminal concentration on a solo root sequence -/
-
-/-- **Only the owner's singleton absorbs.**  Along a root sequence at which
-`owner` is the only possible quitter, every other terminal coalition carries
-zero absorbed mass: each stage atom of the time disintegration vanishes. -/
-theorem quittingAbsorbedMassLimit_eq_zero_of_soloRoots
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (owner : ι)
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) owner)
-    {terminal : {S : Finset ι // S.Nonempty}}
-    (hterminal : terminal ≠ quittingSingletonTerminal owner) :
-    quittingAbsorbedMassLimit reward
-      (quittingRootSequenceProfile reward roots 0) terminal = 0 := by
-  have hne : terminal.val ≠ {owner} := fun hval => hterminal (Subtype.ext hval)
-  have hzero : ∀ time, quittingStageCoalitionMass reward
-      (quittingRootSequenceProfile reward roots 0) time terminal = 0 := by
-    intro time
-    rw [quittingStageCoalitionMass_eq_liveMass_mul_rootCoalitionMass,
-      quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
-    have hmass : quittingRootCoalitionMass (roots time) terminal.val = 0 := by
-      conv_lhs => rw [(hsolo time).eq_soloStationaryRoot]
-      rw [quittingRootCoalitionMass_solo_of_nonempty owner (roots time owner)
-        terminal.val terminal.2, if_neg hne]
-    rw [hmass, mul_zero]
-  rw [← tsum_quittingStageCoalitionMass reward
-    (quittingRootSequenceProfile reward roots 0) terminal]
-  simp [hzero]
-
-/-- **Closed form of the terminal value on a solo root sequence.**  The
-terminal payoff is the owner's singleton absorbed mass times the owner's
-singleton row. -/
-theorem quittingRootSequenceTerminalValue_eq_of_soloRoots
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (owner : ι)
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) owner) (who : ι) :
-    quittingRootSequenceTerminalValue reward roots who 0 =
-      quittingAbsorbedMassLimit reward
-          (quittingRootSequenceProfile reward roots 0)
-          (quittingSingletonTerminal owner) *
-        quittingSoloReward reward owner who := by
-  rw [quittingRootSequenceTerminalValue, quittingTerminalPayoff]
-  refine Finset.sum_eq_single (quittingSingletonTerminal owner) ?_ ?_
-  · intro terminal _ hterminal
-    rw [quittingAbsorbedMassLimit_eq_zero_of_soloRoots reward roots owner hsolo
-      hterminal, zero_mul]
-  · intro hmem
-    exact absurd (Finset.mem_univ _) hmem
-
-/-- **The delivery of a solo root sequence inherits the owner's sign.**  No
-absorption hypothesis is needed: the never-absorbed boundary contributes
-nothing to a terminal payoff. -/
-theorem quittingRootSequenceTerminalValue_nonneg_of_soloRoots
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (owner : ι)
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) owner) {who : ι}
-    (hnonneg : 0 ≤ quittingSoloReward reward owner who) :
-    0 ≤ quittingRootSequenceTerminalValue reward roots who 0 := by
-  rw [quittingRootSequenceTerminalValue_eq_of_soloRoots reward roots owner hsolo
-    who]
-  exact mul_nonneg (quittingAbsorbedMassLimit_nonneg reward _ _) hnonneg
-
-/-! ## Fixed-opponent coefficients of a spectator on a solo root sequence -/
-
-/-- At a solo root the survival mass seen by a spectator is the owner's
-continue probability. -/
-theorem quittingFixedOpponentsContinueMass_eq_of_soloRoot
-    (roots : ℕ → ι → PMF Bool) {owner other : ι} {time : ℕ}
-    (hsolo : IsQuittingSoloRoot (roots time) owner) (hne : other ≠ owner) :
-    quittingFixedOpponentsContinueMass roots other time =
-      (roots time owner false).toReal := by
-  have hupdate : Function.update (roots time) other (PMF.pure false) =
-      roots time := by
-    rw [← hsolo other hne]
-    exact Function.update_eq_self other (roots time)
-  rw [quittingFixedOpponentsContinueMass, hupdate]
-  conv_lhs => rw [hsolo.eq_soloStationaryRoot]
-  exact quittingStationaryContinueMass_solo owner (roots time owner)
-
-/-- At a solo root a spectator's continue reward is the owner's hazard times
-the owner's singleton row. -/
-theorem quittingFixedOpponentsContinueReward_eq_of_soloRoot
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) {owner other : ι} {time : ℕ}
-    (hsolo : IsQuittingSoloRoot (roots time) owner) (hne : other ≠ owner) :
-    quittingFixedOpponentsContinueReward reward roots other time =
-      (roots time owner true).toReal * quittingSoloReward reward owner other := by
-  have hupdate : Function.update (roots time) other (PMF.pure false) =
-      roots time := by
-    rw [← hsolo other hne]
-    exact Function.update_eq_self other (roots time)
-  rw [quittingFixedOpponentsContinueReward, hupdate]
-  conv_lhs => rw [hsolo.eq_soloStationaryRoot]
-  exact quittingRootAbsorbingContribution_solo reward owner other
-    (roots time owner)
-
-/-- At a solo root a spectator's quit-now value mixes exiting alone with
-colliding with the owner. -/
-theorem quittingFixedOpponentsQuitValue_eq_of_soloRoot
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) {owner other : ι} {time : ℕ}
-    (hsolo : IsQuittingSoloRoot (roots time) owner) (hne : other ≠ owner) :
-    quittingFixedOpponentsQuitValue reward roots other time =
-      (roots time owner false).toReal * quittingSoloReward reward other other +
-        (roots time owner true).toReal *
-          quittingSingletonCollisionReward reward owner other := by
-  have hstationary : quittingFixedOpponentsQuitValue reward roots other time =
-      quittingStationaryFixedOpponentsQuitValue reward (roots time) other := rfl
-  rw [hstationary]
-  conv_lhs => rw [hsolo.eq_soloStationaryRoot]
-  exact quittingStationaryFixedOpponentsQuitValue_solo_other_eq_mix reward hne
-    (roots time owner)
-
-/-! ## Closed form of a spectator's stopping values -/
-
-/-- **Ledger telescope on a solo sequence.**  Everything a spectator collects
-before stopping is the owner's singleton row weighted by the mass already
-absorbed. -/
-theorem quittingLiveLedgerAccum_eq_of_soloRoots
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) {owner other : ι} (hne : other ≠ owner)
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) owner) (fuel : ℕ) :
-    quittingLiveLedgerAccum reward roots other 0 fuel =
-      (1 - quittingOpponentSurvivalWeight roots other 0 fuel) *
-        quittingSoloReward reward owner other := by
-  induction fuel with
-  | zero => simp [quittingLiveLedgerAccum, quittingOpponentSurvivalWeight]
-  | succ fuel ih =>
-      have hmass := quittingFixedOpponentsContinueMass_eq_of_soloRoot roots
-        (hsolo (0 + fuel)) hne
-      have hreward := quittingFixedOpponentsContinueReward_eq_of_soloRoot reward
-        roots (hsolo (0 + fuel)) hne
-      have hsum := quittingRoot_continueProbability_add_quitProbability
-        (roots (0 + fuel)) owner
-      rw [quittingLiveLedgerAccum, Finset.sum_range_succ,
-        ← quittingLiveLedgerAccum, ih, quittingOpponentSurvivalWeight_succ,
-        hmass, hreward]
-      linear_combination (quittingSoloReward reward owner other *
-        quittingOpponentSurvivalWeight roots other 0 fuel) * hsum
-
-/-- **A spectator's deterministic stop, in closed form.**  Before the stop the
-spectator receives the owner's singleton row on the absorbed mass; at the stop
-it exits alone or collides with the owner. -/
-theorem quittingRootSequencePureTimeTerminalValue_some_eq_of_soloRoots
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) {owner other : ι} (hne : other ≠ owner)
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) owner) (phase : ℕ) :
-    quittingRootSequencePureTimeTerminalValue reward roots other
-        (some phase) 0 =
-      (1 - quittingOpponentSurvivalWeight roots other 0 phase) *
-          quittingSoloReward reward owner other +
-        quittingOpponentSurvivalWeight roots other 0 phase *
-          ((roots phase owner false).toReal *
-              quittingSoloReward reward other other +
-            (roots phase owner true).toReal *
-              quittingSingletonCollisionReward reward owner other) := by
-  have hsome := quittingRootSequencePureTimeTerminalValue_some_add reward roots
-    other 0 phase
-  rw [Nat.zero_add] at hsome
-  rw [hsome, quittingLiveLedgerAccum_eq_of_soloRoots reward roots hne hsolo
-    phase, quittingFixedOpponentsQuitValue_eq_of_soloRoot reward roots
-    (hsolo phase) hne]
-
-/-- **The delivery of a solo sequence that absorbs almost surely.**  With no
-surviving mass the whole delivery is the owner's singleton row. -/
-theorem quittingRootSequenceTerminalValue_eq_soloReward_of_absorbing
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (owner : ι)
-    (hsolo : ∀ time, IsQuittingSoloRoot (roots time) owner)
-    (habsorb : quittingLiveMassLimit reward
-      (quittingRootSequenceProfile reward roots 0) = 0) (who : ι) :
-    quittingRootSequenceTerminalValue reward roots who 0 =
-      quittingSoloReward reward owner who := by
-  have hconservation := quittingLiveMassLimit_add_sum_absorbedMassLimit reward
-    (quittingRootSequenceProfile reward roots 0)
-  have hconcentrate : ∑ terminal, quittingAbsorbedMassLimit reward
-      (quittingRootSequenceProfile reward roots 0) terminal =
-      quittingAbsorbedMassLimit reward
-        (quittingRootSequenceProfile reward roots 0)
-        (quittingSingletonTerminal owner) := by
-    refine Finset.sum_eq_single (quittingSingletonTerminal owner) ?_ ?_
-    · intro terminal _ hterminal
-      exact quittingAbsorbedMassLimit_eq_zero_of_soloRoots reward roots owner
-        hsolo hterminal
-    · intro hmem
-      exact absurd (Finset.mem_univ _) hmem
-  rw [hconcentrate, habsorb, zero_add] at hconservation
-  rw [quittingRootSequenceTerminalValue_eq_of_soloRoots reward roots owner hsolo
-    who, hconservation, one_mul]
 
 /-! ## The owner cannot obstruct its own solo sequence -/
 
@@ -294,9 +113,10 @@ theorem quittingSoloPreempts_of_phaseStop_gap
         quittingRootSequenceTerminalValue reward roots other 0) :
     QuittingSoloPreempts reward (margin / 2) owner other := by
   have hstop := quittingRootSequencePureTimeTerminalValue_some_eq_of_soloRoots
-    reward roots hne hsolo phase
+    reward roots hne hsolo 0 phase
+  rw [Nat.zero_add] at hstop
   have hdelivery := quittingRootSequenceTerminalValue_eq_soloReward_of_absorbing
-    reward roots owner hsolo habsorb other
+    reward roots owner 0 hsolo habsorb other
   rw [hstop, hdelivery] at hgap
   set survival := quittingOpponentSurvivalWeight roots other 0 phase
     with hsurvivalDef
@@ -343,91 +163,6 @@ theorem quittingSoloPreempts_of_phaseStop_gap
     · nlinarith
     · nlinarith
   linarith
-
-/-! ## A periodic sequence with one absorbing date absorbs almost surely -/
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- A periodic root sequence repeats after any multiple of its period. -/
-private theorem roots_add_mul_period
-    {roots : ℕ → ι → PMF Bool} {period : ℕ}
-    (hperiodic : ∀ time, roots (time + period) = roots time)
-    (multiple time : ℕ) : roots (multiple * period + time) = roots time := by
-  induction multiple with
-  | zero => simp
-  | succ multiple ih =>
-      rw [show (multiple + 1) * period + time = (multiple * period + time) +
-        period from by ring, hperiodic, ih]
-
-omit [DecidableEq ι] in
-/-- Over a periodic sequence the survival weight of `multiple` whole periods
-is the one-period weight raised to that power. -/
-private theorem quittingJointSurvivalWeight_mul_period
-    {roots : ℕ → ι → PMF Bool} {period : ℕ}
-    (hperiodic : ∀ time, roots (time + period) = roots time) (multiple : ℕ) :
-    quittingJointSurvivalWeight roots 0 (multiple * period) =
-      quittingJointSurvivalWeight roots 0 period ^ multiple := by
-  induction multiple with
-  | zero => simp [quittingJointSurvivalWeight_eq_prod]
-  | succ multiple ih =>
-      have hshift : quittingJointSurvivalWeight roots (0 + multiple * period)
-          period = quittingJointSurvivalWeight roots 0 period := by
-        rw [quittingJointSurvivalWeight_eq_prod,
-          quittingJointSurvivalWeight_eq_prod]
-        refine Finset.prod_congr rfl fun offset _ => ?_
-        rw [show 0 + multiple * period + offset =
-          multiple * period + (0 + offset) from by ring,
-          roots_add_mul_period hperiodic]
-      rw [show (multiple + 1) * period = multiple * period + period from by ring,
-        quittingJointSurvivalWeight_add, ih, hshift, pow_succ]
-
-omit [DecidableEq ι] in
-/-- **A periodic sequence with one absorbing date absorbs almost surely.**  The
-survival weight of a single period is below one, so its powers vanish and the
-joint survival limit is zero. -/
-theorem quittingJointSurvivalLimit_eq_zero_of_periodic
-    (roots : ℕ → ι → PMF Bool) {period date : ℕ}
-    (hperiodic : ∀ time, roots (time + period) = roots time)
-    (hdate : date < period)
-    (habsorbing : quittingStationaryContinueMass (roots date) < 1) :
-    quittingJointSurvivalLimit roots 0 = 0 := by
-  have hmem : date ∈ Finset.range period := Finset.mem_range.2 hdate
-  have hfactor0 : ∀ offset,
-      0 ≤ quittingStationaryContinueMass (roots (0 + offset)) := fun offset =>
-    quittingStationaryContinueMass_nonneg (roots (0 + offset))
-  have hperiodWeight0 : 0 ≤ quittingJointSurvivalWeight roots 0 period :=
-    quittingJointSurvivalWeight_nonneg roots 0 period
-  have hperiodWeight1 : quittingJointSurvivalWeight roots 0 period < 1 := by
-    rw [quittingJointSurvivalWeight_eq_prod]
-    have hsplit := Finset.mul_prod_erase (Finset.range period)
-      (fun offset => quittingStationaryContinueMass (roots (0 + offset))) hmem
-    have hrest : (∏ offset ∈ (Finset.range period).erase date,
-        quittingStationaryContinueMass (roots (0 + offset))) ≤ 1 :=
-      Finset.prod_le_one (fun offset _ => hfactor0 offset)
-        (fun offset _ => quittingStationaryContinueMass_le_one (roots (0 + offset)))
-    have hrest0 : 0 ≤ (∏ offset ∈ (Finset.range period).erase date,
-        quittingStationaryContinueMass (roots (0 + offset))) :=
-      Finset.prod_nonneg fun offset _ => hfactor0 offset
-    have hhead : quittingStationaryContinueMass (roots (0 + date)) < 1 := by
-      rwa [Nat.zero_add]
-    have hhead0 : 0 ≤ quittingStationaryContinueMass (roots (0 + date)) :=
-      hfactor0 date
-    nlinarith [hsplit, hrest, hrest0, hhead, hhead0]
-  have hpow : Tendsto
-      (fun multiple => quittingJointSurvivalWeight roots 0 period ^ multiple)
-      atTop (nhds 0) :=
-    tendsto_pow_atTop_nhds_zero_of_lt_one hperiodWeight0 hperiodWeight1
-  have hbdd : BddBelow (Set.range fun fuel =>
-      quittingJointSurvivalWeight roots 0 fuel) := by
-    refine ⟨0, ?_⟩
-    rintro value ⟨fuel, rfl⟩
-    exact quittingJointSurvivalWeight_nonneg roots 0 fuel
-  have hle : ∀ multiple, quittingJointSurvivalLimit roots 0 ≤
-      quittingJointSurvivalWeight roots 0 period ^ multiple := by
-    intro multiple
-    rw [← quittingJointSurvivalWeight_mul_period hperiodic multiple]
-    exact ciInf_le hbdd (multiple * period)
-  refine le_antisymm ?_ (quittingJointSurvivalLimit_nonneg roots 0)
-  exact ge_of_tendsto' hpow hle
 
 namespace QuittingCounterexampleSeamWitness
 
@@ -490,7 +225,7 @@ theorem exists_phaseStopObstruction_of_tailSolo
   have hzero : 0 ≤ seam.canonicalPeriodicTailWindowFamily.delivery window owner := by
     rw [hdelivery]
     exact quittingRootSequenceTerminalValue_nonneg_of_soloRoots reward
-      (seam.canonicalPeriodicTailWindowFamily.roots window) owner
+      (seam.canonicalPeriodicTailWindowFamily.roots window) owner 0
       (hwindowSolo window) hnonneg
   linarith [regime.terminalGap_pos]
 
@@ -533,7 +268,7 @@ theorem quittingSoloWindowPhaseStopBranch_of_tailSolo
         seam.canonicalPeriodicTailWindowFamily.delivery window owner =
           quittingSoloReward reward owner owner :=
       quittingRootSequenceTerminalValue_eq_soloReward_of_absorbing reward
-        (seam.canonicalPeriodicTailWindowFamily.roots window) owner
+        (seam.canonicalPeriodicTailWindowFamily.roots window) owner 0
         (hwindowSolo window) (habsorb window) owner
     rw [hdelivery] at hphase
     linarith
@@ -585,7 +320,7 @@ theorem quittingLiveMassLimit_canonicalWindow_eq_zero
         Nat.mod_eq_of_lt hdate]
     have hsum := quittingRoot_continueProbability_add_quitProbability
       (quittingDynamicDebtTailRoots seam.tail (window + date)) owner
-    rw [hroot]
+    rw [Nat.zero_add, hroot]
     conv_lhs => rw [(hsolo (window + date)).eq_soloStationaryRoot]
     rw [quittingStationaryContinueMass_solo]
     linarith

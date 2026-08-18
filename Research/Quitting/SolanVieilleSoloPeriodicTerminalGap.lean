@@ -4,8 +4,11 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.CyclicContraction
+import MathUE.Finset.MinimalMemberSum
 import Research.Quitting.AnchoredCyclicRenewal
 import Research.Quitting.AnchoredCyclicScreen
+import Research.Quitting.SolanVieilleSoloPeriodicGap
 import UniformEquilibrium.Quitting.Cycles.SingletonArcCycle
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
 
@@ -36,7 +39,11 @@ once it dominates the quit-now value `1` at every phase it solves the
 max-linear response recursion, so the whole behavioral supremum collapses onto
 it (`quittingBestReplyValue_eq_refusalOnPathValue`).  Around one cycle the
 refusal gain is the accumulated own-phase drift divided by the absorption
-deficit (`refusalGain_eq_drift_div`).
+deficit (`refusalGain_eq_drift_div`), and dominates that drift whenever the
+refuser's on-path value never falls below the quit-now value `1`
+(`refusalDrift_le_refusalGain`).  Exactness of the one-stage anchored system
+is one source of that floor
+(`refusalDrift_le_refusalGain_of_isExactAnchoredSoloPeriodic`).
 
 What holds for the class: a schedule omitting some player pays that player
 exactly four times what it pays the player's own pair partner
@@ -107,18 +114,13 @@ open StochasticGame
 
 /-- **Flat quit-now.**  Against a solo-periodic profile on the Solan–Vieille
 table, quitting at any phase pays exactly `1`, for every player and every
-hazard. -/
+hazard: every solo exit pays its owner `1` and every two-player exit pays each
+of its two members `1`. -/
 theorem quittingAnchoredCyclicQuitValue_eq_one {m : ℕ}
     (w : Fin m → Player) (hazard : Fin m → ℝ) (phase : Fin m) (who : Player) :
-    quittingAnchoredCyclicQuitValue boundaryReward w hazard phase who = 1 := by
-  have hself : ∀ x : Player, boundaryReward (quittingSingletonTerminal x) x = 1 :=
-    fun x ↦ soloReward_self x
-  unfold quittingAnchoredCyclicQuitValue
-  by_cases h : who = w phase
-  · rw [if_pos h]
-    exact hself who
-  · rw [if_neg h, boundaryReward_pair_eq_one, hself who]
-    ring
+    quittingAnchoredCyclicQuitValue boundaryReward w hazard phase who = 1 :=
+  quittingAnchoredCyclicQuitValue_eq_of_flatQuitRow boundaryReward w hazard phase
+    (soloReward_self who) fun _ ↦ boundaryReward_pair_eq_one (w phase) who
 
 /-- Every player's best-reply value against a solo-periodic profile is at
 least `1`. -/
@@ -126,52 +128,10 @@ theorem one_le_quittingBestReplyValue_anchoredCyclicProfile {m : ℕ} [NeZero m]
     (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (who : Player) :
     1 ≤ quittingBestReplyValue boundaryReward
-      (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who := by
-  have hsup := sSup_range_quittingTerminalPayoff_update_anchoredCyclicProfile
-    boundaryReward w hazard h0 h1 who
-  have hcap := quittingAnchoredCyclicQuitValue_le_responseCap boundaryReward w
-    hazard h0 h1 who
-  rw [quittingAnchoredCyclicQuitValue_eq_one] at hcap
-  show (1 : ℝ) ≤ ⨆ deviation, _
-  rw [show (⨆ deviation : (quittingGame boundaryReward).BehaviorStrategy who,
-      quittingTerminalPayoff boundaryReward
-        (Function.update
-          (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who
-          deviation) who) =
-      sSup (Set.range fun deviation :
-          (quittingGame boundaryReward).BehaviorStrategy who ↦
-        quittingTerminalPayoff boundaryReward
-          (Function.update
-            (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who
-            deviation) who) from rfl, hsup]
-  exact hcap
-
-/-! ## A contracted phase family vanishes -/
-
-/-- **Strict contraction around the cycle forces zero.**  A phase-indexed
-family reproduced at every phase by the survival factor of an interior hazard
-vanishes identically: its maximum is nonpositive and its minimum
-nonnegative. -/
-theorem eq_zero_of_renewalDecay {m : ℕ} [NeZero m] {hazard : Fin m → ℝ}
-    (h1 : ∀ k, hazard k ≤ 1) (hpos : ∀ k, 0 < hazard k) {D : Fin m → ℝ}
-    (hstep : ∀ k, D k = (1 - hazard k) * D (finRotate m k)) (phase : Fin m) :
-    D phase = 0 := by
-  haveI : Nonempty (Fin m) := ⟨phase⟩
-  obtain ⟨peak, hpeak⟩ := Finite.exists_max D
-  obtain ⟨dip, hdip⟩ := Finite.exists_min D
-  have hupper : D peak ≤ 0 := by
-    have h := hstep peak
-    have := hpeak (finRotate m peak)
-    nlinarith [hpos peak, h1 peak,
-      mul_nonneg (by linarith [h1 peak] : (0 : ℝ) ≤ 1 - hazard peak)
-        (by linarith : (0 : ℝ) ≤ D peak - D (finRotate m peak))]
-  have hlower : 0 ≤ D dip := by
-    have h := hstep dip
-    have := hdip (finRotate m dip)
-    nlinarith [hpos dip, h1 dip,
-      mul_nonneg (by linarith [h1 dip] : (0 : ℝ) ≤ 1 - hazard dip)
-        (by linarith : (0 : ℝ) ≤ D (finRotate m dip) - D dip)]
-  exact le_antisymm (le_trans (hpeak phase) hupper) (le_trans hlower (hdip phase))
+      (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who :=
+  le_quittingBestReplyValue_of_flatQuitRow boundaryReward w hazard h0 h1
+    (soloReward_self who)
+    fun _ ↦ boundaryReward_pair_eq_one (w (quittingAnchoredCyclicStart m)) who
 
 /-! ## The four on-path values always sum to five -/
 
@@ -186,11 +146,12 @@ theorem sum_soloReward_eq_five (owner : Player) :
   fin_cases owner <;> simp [Fin.sum_univ_four, heval] <;> norm_num
 
 /-- **The playerwise sum identity.**  The four on-path values of a
-solo-periodic profile sum to `5` at every phase. -/
+solo-periodic profile sum to `5` at every phase, as soon as one phase of the
+cycle carries a positive hazard. -/
 theorem sum_onPathValue_eq_five {m : ℕ} [NeZero m]
     (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
-    (hpos : ∀ k, 0 < hazard k) (phase : Fin m) :
+    (hsome : ∃ k, 0 < hazard k) (phase : Fin m) :
     ∑ who : Player,
         quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1
           phase who = 5 := by
@@ -212,7 +173,11 @@ theorem sum_onPathValue_eq_five {m : ℕ} [NeZero m]
     rw [sum_soloReward_eq_five] at hsum
     simp only [hD]
     linarith
-  have hzero : D phase = 0 := eq_zero_of_renewalDecay h1 hpos hstep phase
+  obtain ⟨positive, hpositive⟩ := hsome
+  have hzero : D phase = 0 :=
+    Math.eq_zero_of_eq_mul_finRotate (c := fun k ↦ 1 - hazard k)
+      (fun k ↦ by linarith [h1 k]) (fun k ↦ by linarith [h0 k])
+      ⟨positive, by linarith⟩ hstep phase
   simp only [hD] at hzero
   linarith
 
@@ -234,15 +199,18 @@ theorem exists_onPathValue_le_half_min_pairSum {m : ℕ} [NeZero m]
               phase 2 +
             quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1
               phase 3) := by
+  classical
   set U := quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 phase
     with hU
-  rcases le_total (U 0 + U 1) (U 2 + U 3) with hcase | hcase
-  · rcases le_total (U 0) (U 1) with h | h
-    · exact ⟨0, by rw [min_eq_left hcase]; linarith⟩
-    · exact ⟨1, by rw [min_eq_left hcase]; linarith⟩
-  · rcases le_total (U 2) (U 3) with h | h
-    · exact ⟨2, by rw [min_eq_right hcase]; linarith⟩
-    · exact ⟨3, by rw [min_eq_right hcase]; linarith⟩
+  obtain ⟨who, hwho⟩ := Math.Finset.exists_nsmul_le_forall_sum
+    (size := 2)
+    (parts := fun side : Bool ↦ if side then ({0, 1} : Finset Player) else {2, 3})
+    (by decide) (by decide) U
+  have htrue := hwho true
+  have hfalse := hwho false
+  rw [if_pos rfl, Finset.sum_pair (by decide), two_nsmul] at htrue
+  rw [if_neg Bool.false_ne_true, Finset.sum_pair (by decide), two_nsmul] at hfalse
+  exact ⟨who, le_min (by linarith) (by linarith)⟩
 
 /-- **The terminal gap in the unbalanced regime.**  If one of the two pairs
 carries value sum at most `2 * (1 - γ)` at the opening phase, then some player
@@ -282,12 +250,12 @@ exactly `1`, that deviation alone yields no positive uniform terminal gap. -/
 theorem exists_onPathValue_le_five_fourths {m : ℕ} [NeZero m]
     (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
-    (hpos : ∀ k, 0 < hazard k) (phase : Fin m) :
+    (hsome : ∃ k, 0 < hazard k) (phase : Fin m) :
     ∃ who : Player,
       quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1
         phase who ≤ 5 / 4 := by
   obtain ⟨who, hwho⟩ := exists_onPathValue_le_half_min_pairSum w hazard h0 h1 phase
-  have hsum := sum_onPathValue_eq_five w hazard h0 h1 hpos phase
+  have hsum := sum_onPathValue_eq_five w hazard h0 h1 hsome phase
   rw [Fin.sum_univ_four] at hsum
   refine ⟨who, ?_⟩
   have hleft := min_le_left
@@ -359,15 +327,19 @@ theorem boundaryReward_solo_eq_four_mul {owner absent partner : Player}
 its own-pair partner. -/
 theorem onPathValue_eq_four_mul_of_forall_ne {m : ℕ} [NeZero m]
     (w : Fin m → Player) (hazard : Fin m → ℝ)
-    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (hpos : ∀ k, 0 < hazard k)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (hsome : ∃ k, 0 < hazard k)
     {absent partner : Player} (hpair : absent.val / 2 = partner.val / 2)
     (hne : absent ≠ partner) (hmiss : ∀ k, w k ≠ absent) (phase : Fin m) :
     quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 phase absent =
       4 * quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 phase
         partner := by
   set U := quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 with hU
+  obtain ⟨positive, hpositive⟩ := hsome
   have hzero : ∀ k : Fin m, U k absent - 4 * U k partner = 0 := by
-    refine eq_zero_of_renewalDecay h1 hpos (fun k ↦ ?_)
+    refine Math.eq_zero_of_eq_mul_finRotate (c := fun k ↦ 1 - hazard k)
+      (fun k ↦ by linarith [h1 k]) (fun k ↦ by linarith [h0 k])
+      ⟨positive, by linarith⟩ (fun k ↦ ?_)
     have hA := quittingAnchoredCyclicOnPathValue_renewal boundaryReward w hazard
       h0 h1 k absent
     have hB := quittingAnchoredCyclicOnPathValue_renewal boundaryReward w hazard
@@ -382,13 +354,16 @@ theorem onPathValue_eq_four_mul_of_forall_ne {m : ℕ} [NeZero m]
 `who` zero, its on-path value vanishes at every phase. -/
 theorem onPathValue_eq_zero_of_forall_reward_eq_zero {m : ℕ} [NeZero m]
     (w : Fin m → Player) (hazard : Fin m → ℝ)
-    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (hpos : ∀ k, 0 < hazard k)
-    {who : Player}
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (hsome : ∃ k, 0 < hazard k) {who : Player}
     (hzero : ∀ k, boundaryReward (quittingSingletonTerminal (w k)) who = 0)
     (phase : Fin m) :
     quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 phase who =
       0 := by
-  refine eq_zero_of_renewalDecay h1 hpos
+  obtain ⟨positive, hpositive⟩ := hsome
+  refine Math.eq_zero_of_eq_mul_finRotate (c := fun k ↦ 1 - hazard k)
+    (fun k ↦ by linarith [h1 k]) (fun k ↦ by linarith [h0 k])
+    ⟨positive, by linarith⟩
     (D := fun k ↦ quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1
       k who) (fun k ↦ ?_) phase
   have hren := quittingAnchoredCyclicOnPathValue_renewal boundaryReward w hazard
@@ -400,8 +375,8 @@ theorem onPathValue_eq_zero_of_forall_reward_eq_zero {m : ℕ} [NeZero m]
 paid zero by every scheduled exit gains the full quit-now value. -/
 theorem exists_terminalPayoff_add_one_le_bestReplyValue {m : ℕ} [NeZero m]
     (w : Fin m → Player) (hazard : Fin m → ℝ)
-    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (hpos : ∀ k, 0 < hazard k)
-    {who : Player}
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (hsome : ∃ k, 0 < hazard k) {who : Player}
     (hzero : ∀ k, boundaryReward (quittingSingletonTerminal (w k)) who = 0) :
     quittingTerminalPayoff boundaryReward
         (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who + 1 ≤
@@ -409,7 +384,7 @@ theorem exists_terminalPayoff_add_one_le_bestReplyValue {m : ℕ} [NeZero m]
         (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who := by
   have hbest := one_le_quittingBestReplyValue_anchoredCyclicProfile w hazard h0 h1 who
   rw [quittingTerminalPayoff_anchoredCyclicProfile,
-    onPathValue_eq_zero_of_forall_reward_eq_zero w hazard h0 h1 hpos hzero]
+    onPathValue_eq_zero_of_forall_reward_eq_zero w hazard h0 h1 hsome hzero]
   linarith
 
 /-- **Omitting a player already gives the gap.**  If the schedule never
@@ -417,7 +392,8 @@ designates some player, then some player's best-reply value exceeds its on-path
 value by at least `1 / 12`. -/
 theorem exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne
     {m : ℕ} [NeZero m] (w : Fin m → Player) (hazard : Fin m → ℝ)
-    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (hpos : ∀ k, 0 < hazard k)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (hsome : ∃ k, 0 < hazard k)
     {absent : Player} (hmiss : ∀ k, w k ≠ absent) :
     ∃ who : Player,
       quittingTerminalPayoff boundaryReward
@@ -440,10 +416,10 @@ theorem exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne
     rw [quittingTerminalPayoff_anchoredCyclicProfile]
     simp only [← hU]
     linarith
-  have hfour := onPathValue_eq_four_mul_of_forall_ne w hazard h0 h1 hpos
+  have hfour := onPathValue_eq_four_mul_of_forall_ne w hazard h0 h1 hsome
     (val_div_two_pairPartner absent).symm (Ne.symm (pairPartner_ne absent)) hmiss
     (quittingAnchoredCyclicStart m)
-  have hsum := sum_onPathValue_eq_five w hazard h0 h1 hpos
+  have hsum := sum_onPathValue_eq_five w hazard h0 h1 hsome
     (quittingAnchoredCyclicStart m)
   rw [Fin.sum_univ_four] at hsum
   simp only [← hU] at hfour hsum
@@ -675,23 +651,6 @@ theorem refusalGain_telescope {m : ℕ} (w : Fin m → Player) (hazard : Fin m �
       simp only [if_neg h]
       ring
 
-/-- The `n`-step rotation of a phase is a shift modulo the period. -/
-theorem val_iterate_finRotate {m : ℕ} (phase : Fin m) :
-    ∀ n : ℕ, ((finRotate m)^[n] phase).val = (phase.val + n) % m := by
-  intro n
-  induction n with
-  | zero => simpa using (Nat.mod_eq_of_lt phase.isLt).symm
-  | succ n ih =>
-    rw [Function.iterate_succ_apply', coe_finRotate_eq_succ_mod, ih,
-      Nat.mod_add_mod, Nat.add_assoc]
-
-/-- One full cycle of rotations is the identity. -/
-theorem iterate_finRotate_period {m : ℕ} (phase : Fin m) :
-    (finRotate m)^[m] phase = phase := by
-  apply Fin.ext
-  rw [val_iterate_finRotate, Nat.add_mod_right]
-  exact Nat.mod_eq_of_lt phase.isLt
-
 /-- **The cycle identity.**  Around one full cycle the refusal gain satisfies
 `D * (1 - W) = Drift`, with `W` the survival weight of the refuser's absence
 over one cycle and `Drift` the accumulated own-phase drift. -/
@@ -702,7 +661,7 @@ theorem refusalGain_mul_one_sub_weight {m : ℕ} (w : Fin m → Player)
         (1 - refusalWeight w hazard refuser phase m) =
       refusalDrift w hazard h0 h1 refuser phase m := by
   have h := refusalGain_telescope w hazard h0 h1 refuser m phase
-  rw [iterate_finRotate_period] at h
+  rw [Math.iterate_finRotate_period] at h
   linarith [h]
 
 /-- **The telescoped identity in divided form.**  Whenever the refuser's
@@ -789,6 +748,43 @@ theorem refusalDrift_le_refusalGain {m : ℕ} (w : Fin m → Player)
   have hdr := refusalDrift_nonneg w hazard h0 h1 refuser hU m phase
   have hw0 := refusalWeight_nonneg w h1 refuser m phase
   nlinarith [hid, hdr, hw0, hW]
+
+/-! ### Where the on-path floor comes from
+
+The two statements above ask that the refuser's on-path value never fall below
+the quit-now value `1`.  Exactness of the one-stage anchored system supplies
+that floor on this table
+(`one_le_onPathValue_of_isExactAnchoredSoloPeriodic`), and the floor is a
+genuine restriction on the class: on `refutingSchedule` player `2`'s on-path
+value is below `1` (`refutingOnPathValue`).  Exactness itself is available here
+only where some hazard vanishes
+(`not_isExactAnchoredSoloPeriodic_of_quantitativeGap`).
+-/
+
+/-- The accumulated drift of an exact anchored solo-periodic profile is
+nonnegative. -/
+theorem refusalDrift_nonneg_of_isExactAnchoredSoloPeriodic {m : ℕ}
+    (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (refuser : Player)
+    (hexact : IsExactAnchoredSoloPeriodic boundaryReward w hazard h0 h1)
+    (n : ℕ) (phase : Fin m) :
+    0 ≤ refusalDrift w hazard h0 h1 refuser phase n :=
+  refusalDrift_nonneg w hazard h0 h1 refuser
+    (fun k ↦ one_le_onPathValue_of_isExactAnchoredSoloPeriodic hexact k refuser)
+    n phase
+
+/-- The refusal gain of an exact anchored solo-periodic profile dominates its
+accumulated drift over one cycle. -/
+theorem refusalDrift_le_refusalGain_of_isExactAnchoredSoloPeriodic {m : ℕ}
+    (w : Fin m → Player) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (refuser : Player)
+    (hexact : IsExactAnchoredSoloPeriodic boundaryReward w hazard h0 h1)
+    (phase : Fin m) (hW : refusalWeight w hazard refuser phase m < 1) :
+    refusalDrift w hazard h0 h1 refuser phase m ≤
+      refusalGain w hazard h0 h1 refuser phase :=
+  refusalDrift_le_refusalGain w hazard h0 h1 refuser
+    (fun k ↦ one_le_onPathValue_of_isExactAnchoredSoloPeriodic hexact k refuser)
+    phase hW
 
 /-! ## The uniform four-cycle
 

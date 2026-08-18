@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.AnchoredCyclicScreen
+import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 
 /-!
 # The anchored cyclic renewal system solved in closed form
@@ -40,19 +41,24 @@ candidate targets, and `range_quittingSingletonTerminal_comp` shows the hull
 depends only on the set of players the schedule visits.
 
 The last section identifies the refusal branch of the periodic best-response
-statistic.  Refusing to quit against an anchored cyclic profile leaves the same
-schedule with the refuser's own phases carrying hazard zero, so
-`quittingPeriodicWindowRefusalValue_anchoredCyclic` equates
-`quittingPeriodicWindowRefusalValue` with the on-path value of that zeroed
-schedule, in the absorbing and the never-absorbing branch alike.  Combined with
-the closed form this turns the refusal hypothesis of
-`exists_anchoredCyclicResponse_gain` into a comparison of finite sums, which is
+statistic.  Deleting a player from an anchored cyclic cycle — forcing it to
+continue at every phase — leaves the anchored cyclic cycle of the same schedule
+with the refuser's own phases carrying hazard zero
+(`quittingCyclicDeletedCycle_anchoredCyclicCycle`), so the general refusal
+identity `quittingPeriodicWindowRefusalValue_eq_cyclicTerminalValue_deleted`
+specializes to `quittingPeriodicWindowRefusalValue_anchoredCyclic`: refusal is
+the on-path value of that zeroed schedule, in the absorbing and the
+never-absorbing branch alike.  Combined with the closed form this turns the
+refusal hypothesis of `exists_anchoredCyclicResponse_gain` into a comparison of
+finite sums, which is
 `exists_anchoredCyclicResponse_gain_of_refusalOnPathValue_le`.
 
 That comparison is in turn a consequence of the max-linear response system
-itself.  A solution of the system dominates its own continuation branch, the
-zeroed on-path value obeys that branch exactly, and the difference is
-contracted once around the cycle by the zeroed survival factor.  So
+itself.  The anchored system is the single-quitter case of the general periodic
+response system (`isQuittingCyclicResponseSolution_of_isAnchoredCyclicResponseSolution`),
+and the deviator's one-turn opponent survival along an anchored cyclic cycle is
+the zeroed survival `∏ k, (1 - p_k)` of
+`quittingStationaryFixedOpponentsContinueMass_anchoredCyclicCycle`.  So
 `quittingAnchoredCyclicResponseCap_le_of_response` bounds the *exact behavioral*
 best response of the anchored cyclic profile by a solution of the finite max
 recursion, with the single residual that a player owning every positive-hazard
@@ -361,18 +367,22 @@ theorem quittingAnchoredCyclicRefusalHazard_le_one
   · norm_num
   · exact h1 k
 
-omit [Fintype ι] [DecidableEq ι] in
-/-- A quitting coin with no Quit mass is pure Continue. -/
-theorem quittingHazardCoin_eq_pure_false {rate : ℝ} (hrate0 : 0 ≤ rate)
-    (hrate1 : rate ≤ 1)
-    (hzero : (quittingHazardCoin rate hrate0 hrate1 true).toReal = 0) :
-    quittingHazardCoin rate hrate0 hrate1 = PMF.pure false := by
-  have hrate : rate = 0 := by
-    rw [← quittingHazardCoin_true_toReal rate hrate0 hrate1]
-    exact hzero
-  subst hrate
-  refine PMF.ext fun action ↦ ?_
-  cases action <;> simp [quittingHazardCoin, PMF.ofFintype_apply]
+omit [Fintype ι] in
+/-- At a phase the refuser does not own, the zeroed hazard is the original
+hazard. -/
+theorem quittingAnchoredCyclicRefusalHazard_of_ne
+    (w : Fin m → ι) (hazard : Fin m → ℝ) {who : ι} {k : Fin m}
+    (hk : w k ≠ who) :
+    quittingAnchoredCyclicRefusalHazard w hazard who k = hazard k := by
+  rw [quittingAnchoredCyclicRefusalHazard, if_neg hk]
+
+omit [Fintype ι] in
+/-- At a phase the refuser owns, the zeroed hazard is zero. -/
+theorem quittingAnchoredCyclicRefusalHazard_self
+    (w : Fin m → ι) (hazard : Fin m → ℝ) {who : ι} {k : Fin m}
+    (hk : w k = who) :
+    quittingAnchoredCyclicRefusalHazard w hazard who k = 0 := by
+  rw [quittingAnchoredCyclicRefusalHazard, if_pos hk]
 
 omit [Fintype ι] in
 /-- The one-phase Continue value against an anchored cyclic root, written with
@@ -391,57 +401,6 @@ theorem quittingAnchoredCyclicContinueValue_eq_refusalHazard
     ring
   · rw [if_neg hwho, if_neg (fun hcontra ↦ hwho hcontra.symm)]
 
-/-- Refusal satisfies the zeroed renewal recursion date by date. -/
-theorem quittingAnchoredCyclicRefusal_succ
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (w : Fin m → ι) (hazard : Fin m → ℝ)
-    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
-    (phase : Fin m) (who : ι) (time : ℕ) :
-    quittingRootSequencePureTimeTerminalValue reward
-        (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
-          phase) who none time =
-      quittingAnchoredCyclicRefusalHazard w hazard who
-            (quittingCyclicOrbit phase time) *
-          reward (quittingSingletonTerminal
-            (w (quittingCyclicOrbit phase time))) who +
-        (1 - quittingAnchoredCyclicRefusalHazard w hazard who
-            (quittingCyclicOrbit phase time)) *
-          quittingRootSequencePureTimeTerminalValue reward
-            (quittingCyclicRootSequence
-              (quittingAnchoredCyclicCycle w hazard h0 h1) phase) who none
-            (time + 1) := by
-  rw [quittingRootSequencePureTimeTerminalValue_none_succ_eq_fixedOpponents,
-    quittingFixedOpponentsContinue_anchoredCyclic reward w hazard h0 h1 phase who
-      time _,
-    quittingAnchoredCyclicContinueValue_eq_refusalHazard]
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- Two families obeying the same one-step renewal recursion — one along the
-calendar, one around the cycle — differ by the survival factor accumulated
-between the dates compared. -/
-theorem sub_eq_quittingAnchoredCyclicPrefixSurvival_mul
-    {rate atom : Fin m → ℝ} {phase : Fin m}
-    {calendar : ℕ → ℝ} {cyclic : Fin m → ℝ}
-    (hcalendar : ∀ time, calendar time =
-      rate (quittingCyclicOrbit phase time) *
-          atom (quittingCyclicOrbit phase time) +
-        (1 - rate (quittingCyclicOrbit phase time)) * calendar (time + 1))
-    (hcyclic : ∀ k, cyclic k =
-      rate k * atom k + (1 - rate k) * cyclic (finRotate m k))
-    (fuel : ℕ) :
-    calendar 0 - cyclic phase =
-      quittingAnchoredCyclicPrefixSurvival rate phase fuel *
-        (calendar fuel - cyclic (quittingCyclicOrbit phase fuel)) := by
-  induction fuel with
-  | zero => simp
-  | succ fuel ih =>
-      have hstepCalendar := hcalendar fuel
-      have hstepCyclic := hcyclic (quittingCyclicOrbit phase fuel)
-      rw [quittingAnchoredCyclicPrefixSurvival_succ, quittingCyclicOrbit_succ]
-      linear_combination ih +
-        quittingAnchoredCyclicPrefixSurvival rate phase fuel *
-          (hstepCalendar - hstepCyclic)
-
 /-- A hazard vector with one positive entry has cycle survival below one. -/
 theorem prod_one_sub_lt_one_of_pos {rate : Fin m → ℝ}
     (h0 : ∀ k, 0 ≤ rate k) (h1 : ∀ k, rate k ≤ 1) {k₀ : Fin m}
@@ -458,139 +417,50 @@ theorem prod_one_sub_lt_one_of_pos {rate : Fin m → ℝ}
     _ ≤ 1 * (1 - rate k₀) := mul_le_mul_of_nonneg_right hrest hnonneg
     _ < 1 := by linarith
 
-/-- **The refusal identity, nondegenerate branch.**  When the zeroed cycle
-still absorbs, refusal against an anchored cyclic profile pays exactly the
-on-path value of the same schedule with the refuser's phases zeroed. -/
-theorem quittingPeriodicWindowRefusalValue_anchoredCyclic_of_ne_one
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+omit [Fintype ι] in
+/-- **Deleting the refuser zeroes its own phases.**  Forcing `who` to continue
+at every phase of an anchored cyclic cycle leaves the anchored cyclic cycle of
+the same schedule with `who`'s own phases carrying hazard zero. -/
+theorem quittingCyclicDeletedCycle_anchoredCyclicCycle
     (w : Fin m → ι) (hazard : Fin m → ℝ)
-    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
-    (phase : Fin m) (who : ι)
-    (hcontraction :
-      ∏ k, (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) ≠ 1) :
-    quittingPeriodicWindowRefusalValue reward
-        (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
-          phase) who =
-      quittingAnchoredCyclicOnPathValue reward w
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (who : ι) :
+    quittingCyclicDeletedCycle (quittingAnchoredCyclicCycle w hazard h0 h1) who =
+      quittingAnchoredCyclicCycle w
         (quittingAnchoredCyclicRefusalHazard w hazard who)
         (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) phase who := by
-  have hdiff := sub_eq_quittingAnchoredCyclicPrefixSurvival_mul
-    (rate := quittingAnchoredCyclicRefusalHazard w hazard who)
-    (atom := fun k ↦ reward (quittingSingletonTerminal (w k)) who)
-    (phase := phase)
-    (calendar := fun time ↦ quittingRootSequencePureTimeTerminalValue reward
-      (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
-        phase) who none time)
-    (cyclic := fun k ↦ quittingAnchoredCyclicOnPathValue reward w
-      (quittingAnchoredCyclicRefusalHazard w hazard who)
-      (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-      (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who)
-    (quittingAnchoredCyclicRefusal_succ reward w hazard h0 h1 phase who)
-    (fun k ↦ quittingAnchoredCyclicOnPathValue_renewal reward w
-      (quittingAnchoredCyclicRefusalHazard w hazard who)
-      (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-      (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who) m
-  rw [quittingAnchoredCyclicPrefixSurvival_card, quittingCyclicOrbit_card] at hdiff
-  have hpos : 0 < m := phase.pos
-  obtain ⟨pred, hpred⟩ : ∃ pred, m = pred + 1 := ⟨m - 1, by omega⟩
-  have hreturn : quittingRootSequencePureTimeTerminalValue reward
-      (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
-        phase) who none m =
-    quittingRootSequencePureTimeTerminalValue reward
-      (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
-        phase) who none 0 := by
-    have hshift := quittingRootSequencePureTimeTerminalValue_none_shift_period
-      reward (quittingCyclicRootSequence
-        (quittingAnchoredCyclicCycle w hazard h0 h1) phase) who pred
-      (fun k ↦ by
-        rw [← hpred]
-        exact quittingCyclicRootSequence_add_period _ _ k) 0
-    rw [← hpred] at hshift
-    simpa using hshift
-  rw [hreturn] at hdiff
-  have hne : (1 : ℝ) -
-      ∏ k, (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) ≠ 0 :=
-    sub_ne_zero_of_ne (Ne.symm hcontraction)
-  have hzero : quittingRootSequencePureTimeTerminalValue reward
-      (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
-        phase) who none 0 -
-      quittingAnchoredCyclicOnPathValue reward w
-        (quittingAnchoredCyclicRefusalHazard w hazard who)
-        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) phase who = 0 := by
-    refine (mul_eq_zero.1 ?_).resolve_left hne
-    linarith [hdiff]
-  unfold quittingPeriodicWindowRefusalValue
-  linarith [hzero]
-
-/-- **The refusal identity, degenerate branch.**  When the refuser owns every
-phase carrying positive hazard, the zeroed cycle never absorbs; refusal and the
-zeroed on-path value are both zero. -/
-theorem quittingPeriodicWindowRefusalValue_anchoredCyclic_of_forall_eq_zero
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (w : Fin m → ι) (hazard : Fin m → ℝ)
-    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
-    (phase : Fin m) (who : ι)
-    (hzero : ∀ k, quittingAnchoredCyclicRefusalHazard w hazard who k = 0) :
-    quittingPeriodicWindowRefusalValue reward
-        (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
-          phase) who = 0 ∧
-      quittingAnchoredCyclicOnPathValue reward w
-        (quittingAnchoredCyclicRefusalHazard w hazard who)
-        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) phase who = 0 := by
-  have hcoinZero : ∀ k : Fin m, w k ≠ who → hazard k = 0 := by
-    intro k hk
-    have := hzero k
-    rwa [quittingAnchoredCyclicRefusalHazard, if_neg hk] at this
-  have hrefusalRoot : ∀ time,
-      quittingRootSequenceUpdate
-          (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
-            phase) who (quittingPureTimeHazard none) time =
-        (quittingAllContinueRoot : ι → PMF Bool) := by
-    intro time
-    funext player
-    by_cases hplayer : player = who
-    · subst hplayer
-      simp [quittingRootSequenceUpdate, quittingAllContinueRoot]
-    · rw [quittingRootSequenceUpdate, Function.update_of_ne hplayer]
-      show quittingAnchoredCyclicCycle w hazard h0 h1
-        (quittingCyclicOrbit phase time) player = _
-      by_cases howner : player = w (quittingCyclicOrbit phase time)
-      · have hne : w (quittingCyclicOrbit phase time) ≠ who := by
-          rw [← howner]; exact hplayer
-        rw [quittingAnchoredCyclicCycle, howner, quittingSoloMixedRoot_self,
-          quittingHazardCoin_eq_pure_false _ _
-            (by simp [hcoinZero (quittingCyclicOrbit phase time) hne])]
-        rfl
-      · rw [quittingAnchoredCyclicCycle, quittingSoloMixedRoot_of_ne howner]
-        rfl
-  have hcycleRoot : ∀ time,
-      quittingCyclicRootSequence (quittingAnchoredCyclicCycle w
-          (quittingAnchoredCyclicRefusalHazard w hazard who)
-          (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-          (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)) phase time =
-        (quittingAllContinueRoot : ι → PMF Bool) := by
-    intro time
-    show quittingAnchoredCyclicCycle w _ _ _ (quittingCyclicOrbit phase time) = _
-    rw [quittingAnchoredCyclicCycle, quittingHazardCoin_eq_pure_false _ _
-      (by simp [hzero (quittingCyclicOrbit phase time)]), quittingSoloMixedRoot,
-      quittingAllContinueRoot_update_false]
-  refine ⟨?_, ?_⟩
-  · unfold quittingPeriodicWindowRefusalValue
-      quittingRootSequencePureTimeTerminalValue
-      quittingRootSequenceHazardTerminalValue
-    exact quittingRootSequenceTerminalValue_eq_zero_of_allContinue_from reward _
-      who 0 (fun time _ ↦ hrefusalRoot time)
-  · show quittingCyclicTerminalValue reward _ phase who = 0
-    rw [quittingCyclicTerminalValue]
-    exact quittingRootSequenceTerminalValue_eq_zero_of_allContinue_from reward _
-      who 0 (fun time _ ↦ hcycleRoot time)
+        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) := by
+  funext k
+  show Function.update (quittingSoloMixedRoot (w k)
+      (quittingHazardCoin (hazard k) (h0 k) (h1 k))) who (PMF.pure false) =
+    quittingSoloMixedRoot (w k)
+      (quittingHazardCoin (quittingAnchoredCyclicRefusalHazard w hazard who k)
+        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who k)
+        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who k))
+  by_cases hk : w k = who
+  · have hcoin : quittingHazardCoin
+        (quittingAnchoredCyclicRefusalHazard w hazard who k)
+        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who k)
+        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who k) = PMF.pure false :=
+      quittingHazardCoin_eq_pure_false_of_quitMass_zero _ _
+        (by rw [quittingHazardCoin_true_toReal,
+          quittingAnchoredCyclicRefusalHazard_self w hazard hk])
+    rw [hcoin, hk]
+    simp only [quittingSoloMixedRoot]
+    rw [Function.update_idem]
+  · have hcoin : quittingHazardCoin (hazard k) (h0 k) (h1 k) =
+        quittingHazardCoin (quittingAnchoredCyclicRefusalHazard w hazard who k)
+          (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who k)
+          (quittingAnchoredCyclicRefusalHazard_le_one h1 w who k) :=
+      quittingHazardCoin_congr _ _ _ _
+        (by rw [quittingHazardCoin_true_toReal, quittingHazardCoin_true_toReal,
+          quittingAnchoredCyclicRefusalHazard_of_ne w hazard hk])
+    rw [← hcoin, ← quittingSoloMixedRoot_of_ne (Ne.symm hk)
+      (quittingHazardCoin (hazard k) (h0 k) (h1 k))]
+    exact Function.update_eq_self who _
 
 /-- **The refusal identity.**  Refusal by `who` against an anchored cyclic
 profile is worth exactly the on-path value of the same schedule with `who`'s
-own phases carrying hazard zero. -/
+own phases carrying hazard zero.  No absorption hypothesis is used. -/
 theorem quittingPeriodicWindowRefusalValue_anchoredCyclic
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (w : Fin m → ι) (hazard : Fin m → ℝ)
@@ -603,19 +473,80 @@ theorem quittingPeriodicWindowRefusalValue_anchoredCyclic
         (quittingAnchoredCyclicRefusalHazard w hazard who)
         (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
         (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) phase who := by
-  by_cases hzero : ∀ k, quittingAnchoredCyclicRefusalHazard w hazard who k = 0
-  · obtain ⟨hleft, hright⟩ :=
-      quittingPeriodicWindowRefusalValue_anchoredCyclic_of_forall_eq_zero reward w
-        hazard h0 h1 phase who hzero
-    rw [hleft, hright]
-  · obtain ⟨k₀, hk₀⟩ := not_forall.1 hzero
-    refine quittingPeriodicWindowRefusalValue_anchoredCyclic_of_ne_one reward w
-      hazard h0 h1 phase who (ne_of_lt ?_)
-    exact prod_one_sub_lt_one_of_pos
-      (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-      (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
-      (lt_of_le_of_ne
-        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who k₀) (Ne.symm hk₀))
+  rw [quittingPeriodicWindowRefusalValue_eq_cyclicTerminalValue_deleted,
+    quittingCyclicDeletedCycle_anchoredCyclicCycle]
+  rfl
+
+/-- **One-turn opponent survival of an anchored cyclic cycle.**  A phase owned
+by the deviator contributes no absorption against it, and every other phase
+contributes its continuation probability. -/
+theorem quittingStationaryFixedOpponentsContinueMass_anchoredCyclicCycle
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (k : Fin m) (who : ι) :
+    quittingStationaryFixedOpponentsContinueMass
+        (quittingAnchoredCyclicCycle w hazard h0 h1 k) who =
+      1 - quittingAnchoredCyclicRefusalHazard w hazard who k := by
+  rw [← quittingStationaryContinueMass_quittingCyclicDeletedCycle
+      (quittingAnchoredCyclicCycle w hazard h0 h1) who k,
+    quittingCyclicDeletedCycle_anchoredCyclicCycle]
+  show quittingStationaryContinueMass (quittingSoloMixedRoot (w k)
+    (quittingHazardCoin (quittingAnchoredCyclicRefusalHazard w hazard who k)
+      (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who k)
+      (quittingAnchoredCyclicRefusalHazard_le_one h1 w who k))) = _
+  rw [quittingStationaryContinueMass_soloMixedRoot, quittingHazardCoin_false_toReal]
+
+/-- The deviator's one-turn opponent survival is the zeroed schedule's own
+survival product. -/
+theorem prod_quittingStationaryFixedOpponentsContinueMass_anchoredCyclicCycle
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (who : ι) :
+    (∏ k, quittingStationaryFixedOpponentsContinueMass
+        (quittingAnchoredCyclicCycle w hazard h0 h1 k) who) =
+      ∏ k, (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) :=
+  Finset.prod_congr rfl fun k _ ↦
+    quittingStationaryFixedOpponentsContinueMass_anchoredCyclicCycle w hazard h0 h1
+      k who
+
+/-- **The degenerate branch read off the cycle.**  When the deviator's
+opponents never absorb over one turn, the deviator owns every phase that
+carries positive hazard. -/
+theorem hazard_eq_zero_of_not_contracts_anchoredCyclic
+    {w : Fin m → ι} {hazard : Fin m → ℝ}
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) {who : ι}
+    (hcontracts : ¬ (∏ k, quittingStationaryFixedOpponentsContinueMass
+      (quittingAnchoredCyclicCycle w hazard h0 h1 k) who) < 1)
+    (k : Fin m) (hk : w k ≠ who) :
+    hazard k = 0 := by
+  have hmass := quittingStationaryFixedOpponentsContinueMass_eq_one_of_not_contracts
+    hcontracts k
+  rw [quittingStationaryFixedOpponentsContinueMass_anchoredCyclicCycle,
+    quittingAnchoredCyclicRefusalHazard_of_ne w hazard hk] at hmass
+  linarith
+
+/-- **Refusal on the degenerate branch.**  A refuser owning every phase that
+carries positive hazard faces a schedule that never absorbs, so refusal is
+worth nothing. -/
+theorem quittingPeriodicWindowRefusalValue_anchoredCyclic_eq_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
+    (phase : Fin m) {who : ι} (hzero : ∀ k, w k ≠ who → hazard k = 0) :
+    quittingPeriodicWindowRefusalValue reward
+        (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
+          phase) who = 0 := by
+  refine quittingPeriodicWindowRefusalValue_eq_zero_of_not_contracts reward phase ?_
+  have hone : ∀ k : Fin m,
+      1 - quittingAnchoredCyclicRefusalHazard w hazard who k = 1 := by
+    intro k
+    by_cases hk : w k = who
+    · rw [quittingAnchoredCyclicRefusalHazard_self w hazard hk]
+      ring
+    · rw [quittingAnchoredCyclicRefusalHazard_of_ne w hazard hk, hzero k hk]
+      ring
+  rw [prod_quittingStationaryFixedOpponentsContinueMass_anchoredCyclicCycle,
+    Finset.prod_congr rfl fun k (_ : k ∈ Finset.univ) ↦ hone k,
+    Finset.prod_const_one]
+  exact lt_irrefl 1
 
 /-- **The screen against the max-linear system, with its refusal branch read
 as a zeroed on-path value.**  The hypothesis compares the solution `S` with the
@@ -647,46 +578,11 @@ theorem exists_anchoredCyclicResponse_gain_of_refusalOnPathValue_le
 /-! ## Discharging the screen's refusal hypothesis
 
 The refusal identity turns `hrefusal` into a comparison between the zeroed
-on-path value and the candidate solution.  That comparison is itself a
-consequence of the max-linear system whenever the zeroed cycle still absorbs:
-a solution of the max recursion dominates its own continuation branch, and the
-zeroed on-path value obeys that branch exactly, so their difference is
-contracted by the zeroed survival factor once around the cycle.
+on-path value and the candidate solution.  That comparison is a consequence of
+the max-linear system: the anchored system is the single-quitter case of the
+general periodic response system, and the deviator's one-turn opponent survival
+along the anchored cyclic cycle is the zeroed schedule's own survival product.
 -/
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- A one-step contraction inequality around the cycle iterates. -/
-theorem sub_le_quittingAnchoredCyclicPrefixSurvival_mul
-    {rate : Fin m → ℝ} {phase : Fin m} {left right : Fin m → ℝ}
-    (hrate1 : ∀ k, rate k ≤ 1)
-    (hstep : ∀ k, left k - right k ≤
-      (1 - rate k) * (left (finRotate m k) - right (finRotate m k)))
-    (fuel : ℕ) :
-    left phase - right phase ≤
-      quittingAnchoredCyclicPrefixSurvival rate phase fuel *
-        (left (quittingCyclicOrbit phase fuel) -
-          right (quittingCyclicOrbit phase fuel)) := by
-  induction fuel with
-  | zero => simp
-  | succ fuel ih =>
-      have hnonneg :=
-        quittingAnchoredCyclicPrefixSurvival_nonneg hrate1 phase fuel
-      have hscaled := mul_le_mul_of_nonneg_left
-        (hstep (quittingCyclicOrbit phase fuel)) hnonneg
-      rw [quittingAnchoredCyclicPrefixSurvival_succ, quittingCyclicOrbit_succ]
-      calc left phase - right phase ≤
-            quittingAnchoredCyclicPrefixSurvival rate phase fuel *
-              (left (quittingCyclicOrbit phase fuel) -
-                right (quittingCyclicOrbit phase fuel)) := ih
-        _ ≤ quittingAnchoredCyclicPrefixSurvival rate phase fuel *
-              ((1 - rate (quittingCyclicOrbit phase fuel)) *
-                (left (finRotate m (quittingCyclicOrbit phase fuel)) -
-                  right (finRotate m (quittingCyclicOrbit phase fuel)))) :=
-          hscaled
-        _ = quittingAnchoredCyclicPrefixSurvival rate phase fuel *
-              (1 - rate (quittingCyclicOrbit phase fuel)) *
-              (left (finRotate m (quittingCyclicOrbit phase fuel)) -
-                right (finRotate m (quittingCyclicOrbit phase fuel))) := by ring
 
 /-- **A response solution dominates the zeroed on-path value.**  When the
 cycle with `who`'s phases zeroed still absorbs, every solution of the
@@ -706,48 +602,13 @@ theorem quittingAnchoredCyclicOnPathValue_refusalHazard_le_of_response
         (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
         (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) phase who ≤
       S phase who := by
-  have hstep : ∀ k,
-      quittingAnchoredCyclicOnPathValue reward w
-            (quittingAnchoredCyclicRefusalHazard w hazard who)
-            (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-            (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who -
-          S k who ≤
-        (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) *
-          (quittingAnchoredCyclicOnPathValue reward w
-              (quittingAnchoredCyclicRefusalHazard w hazard who)
-              (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-              (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
-              (finRotate m k) who -
-            S (finRotate m k) who) := by
-    intro k
-    have hzeroed := quittingAnchoredCyclicOnPathValue_renewal reward w
-      (quittingAnchoredCyclicRefusalHazard w hazard who)
-      (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-      (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who
-    have hcontinue : quittingAnchoredCyclicContinueValue reward w hazard k who
-        (S (finRotate m k) who) ≤ S k who := by
-      rw [hS k who]
-      exact le_max_right _ _
-    rw [quittingAnchoredCyclicContinueValue_eq_refusalHazard] at hcontinue
-    rw [show quittingAnchoredCyclicRefusalHazard w hazard who k *
-        reward (quittingSingletonTerminal (w k)) who =
-      quittingAnchoredCyclicOnPathValue reward w
-          (quittingAnchoredCyclicRefusalHazard w hazard who)
-          (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-          (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) k who -
-        (1 - quittingAnchoredCyclicRefusalHazard w hazard who k) *
-          quittingAnchoredCyclicOnPathValue reward w
-            (quittingAnchoredCyclicRefusalHazard w hazard who)
-            (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-            (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
-            (finRotate m k) who from by linarith [hzeroed]] at hcontinue
-    linarith [hcontinue]
-  have hiterate := sub_le_quittingAnchoredCyclicPrefixSurvival_mul
-    (rate := quittingAnchoredCyclicRefusalHazard w hazard who) (phase := phase)
-    (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) hstep m
-  rw [quittingAnchoredCyclicPrefixSurvival_card, quittingCyclicOrbit_card]
-    at hiterate
-  nlinarith [hiterate]
+  rw [← quittingPeriodicWindowRefusalValue_anchoredCyclic reward w hazard h0 h1
+    phase who]
+  refine quittingPeriodicWindowRefusalValue_le_of_isQuittingCyclicResponseSolution
+    (isQuittingCyclicResponseSolution_of_isAnchoredCyclicResponseSolution reward w
+      hazard h0 h1 hS) phase who ?_
+  rw [prod_quittingStationaryFixedOpponentsContinueMass_anchoredCyclicCycle]
+  exact hcontraction
 
 /-- **The screen's refusal hypothesis, discharged.**  Against a solution of the
 max-linear response system, refusal is dominated as soon as the refuser does
@@ -764,32 +625,17 @@ theorem quittingPeriodicWindowRefusalValue_le_of_response
     quittingPeriodicWindowRefusalValue reward
         (quittingCyclicRootSequence (quittingAnchoredCyclicCycle w hazard h0 h1)
           phase) who ≤
-      S phase who := by
-  rw [quittingPeriodicWindowRefusalValue_anchoredCyclic reward w hazard h0 h1
-    phase who]
-  by_cases hzero : ∀ k, quittingAnchoredCyclicRefusalHazard w hazard who k = 0
-  · have hvalue :=
-      (quittingPeriodicWindowRefusalValue_anchoredCyclic_of_forall_eq_zero reward
-        w hazard h0 h1 phase who hzero).2
-    rw [hvalue]
-    refine hdegenerate fun k hk ↦ ?_
-    have := hzero k
-    rwa [quittingAnchoredCyclicRefusalHazard, if_neg hk] at this
-  · obtain ⟨k₀, hk₀⟩ := not_forall.1 hzero
-    refine quittingAnchoredCyclicOnPathValue_refusalHazard_le_of_response reward w
-      hazard h0 h1 S hS phase who ?_
-    exact prod_one_sub_lt_one_of_pos
-      (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-      (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
-      (lt_of_le_of_ne
-        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who k₀) (Ne.symm hk₀))
+      S phase who :=
+  quittingPeriodicWindowRefusalValue_le_of_isQuittingCyclicResponseSolution_of_nonneg
+    (isQuittingCyclicResponseSolution_of_isAnchoredCyclicResponseSolution reward w
+      hazard h0 h1 hS) phase who fun hcontracts ↦
+    hdegenerate (hazard_eq_zero_of_not_contracts_anchoredCyclic h0 h1 hcontracts)
 
-/-- **The max-linear solution caps the exact behavioral best response.**  Both
-branches of the periodic best-response statistic are dominated: the
-deterministic stops by `quittingAnchoredCyclicPhaseStop_le`, the refusal branch
-by the refusal identity.  The only residual is nonnegativity of the solution
-for a player owning every phase that carries positive hazard, for whom refusal
-is worth nothing. -/
+/-- **The max-linear solution caps the exact behavioral best response.**  The
+anchored response cap is the general periodic response cap of the anchored
+cyclic cycle, so a solution of the scalar recursion caps it.  The only residual
+is nonnegativity of the solution for a player owning every phase that carries
+positive hazard, for whom refusal is worth nothing. -/
 theorem quittingAnchoredCyclicResponseCap_le_of_response
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} [NeZero m]
     (w : Fin m → ι) (hazard : Fin m → ℝ)
@@ -800,12 +646,11 @@ theorem quittingAnchoredCyclicResponseCap_le_of_response
       0 ≤ S (quittingAnchoredCyclicStart m) who) :
     quittingAnchoredCyclicResponseCap reward w hazard h0 h1 who ≤
       S (quittingAnchoredCyclicStart m) who := by
-  unfold quittingAnchoredCyclicResponseCap quittingPeriodicWindowBestResponseValue
-  refine max_le (quittingPeriodicWindowRefusalValue_le_of_response reward w hazard
-    h0 h1 S hS (quittingAnchoredCyclicStart m) who hdegenerate) ?_
-  unfold quittingPeriodicWindowBestPhaseStop
-  refine Finset.sup'_le _ _ fun stop _ ↦ ?_
-  exact quittingAnchoredCyclicPhaseStop_le reward w hazard h0 h1 S hS who stop
+  rw [quittingAnchoredCyclicResponseCap_eq_quittingCyclicResponseCap]
+  exact quittingCyclicResponseCap_le_of_isQuittingCyclicResponseSolution_of_nonneg
+    (isQuittingCyclicResponseSolution_of_isAnchoredCyclicResponseSolution reward w
+      hazard h0 h1 hS) (quittingAnchoredCyclicStart m) who fun hcontracts ↦
+    hdegenerate (hazard_eq_zero_of_not_contracts_anchoredCyclic h0 h1 hcontracts)
 
 omit [Fintype ι] in
 /-- Every phase not owned by `who` and carrying positive hazard keeps the

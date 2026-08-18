@@ -753,7 +753,7 @@ theorem not_quittingTailLateSoloAlternating_of_zeroFree
     exact hstep.trans hpin
   have htransport :=
     quittingSoloTailValue_sub_eq_absorbedMass_mul_of_constantOwner roots value
-      (fun _ => second) hpolicy first second hne
+      (fun _ => second) hpolicy first second
       (quittingSoloReward reward first first) (fence + 1) length
       (fun offset hoffset => hwindowSolo offset hoffset) (fun _ _ => rfl)
   rw [hstartPin, hendPin, sub_self, mul_zero, add_zero] at htransport

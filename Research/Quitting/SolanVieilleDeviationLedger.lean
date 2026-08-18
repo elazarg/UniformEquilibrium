@@ -226,6 +226,23 @@ theorem quittingQuitters_nonempty_iff_ne_allContinue (action : ι → Bool) :
     exact ⟨someone, by simpa [quittingQuitters] using htrue⟩
 
 omit [DecidableEq ι] in
+/-- The all-continue point indicator's expectation under a product row is the
+joint continue mass. -/
+theorem expect_allContinueIndicator_eq_continueMass (root : ι → PMF Bool) :
+    expect (pmfPi root) (fun action =>
+      if action = (quittingAllContinueAction : ι → Bool)
+        then (1 : ℝ) else 0) =
+      quittingStationaryContinueMass root := by
+  classical
+  rw [expect_eq_sum]
+  rw [Finset.sum_eq_single (quittingAllContinueAction : ι → Bool)]
+  · simp [quittingStationaryContinueMass]
+  · intro action _ hne
+    simp [hne]
+  · intro habsent
+    exact absurd (Finset.mem_univ _) habsent
+
+omit [DecidableEq ι] in
 /-- The absorbing contribution is bounded by the payoff bound times the
 absorption mass: only absorbing actions contribute, and each contributes a
 bounded reward. -/
@@ -266,17 +283,7 @@ theorem abs_quittingRootAbsorbingContribution_le_mul_absorptionMass
         (quittingQuitters_nonempty_iff_ne_allContinue action).2 heq
       rw [if_pos hnonempty, if_neg heq]
       norm_num
-  have hpoint : expect (pmfPi root) (fun action =>
-      if action = (quittingAllContinueAction : ι → Bool)
-        then (1 : ℝ) else 0) =
-      quittingStationaryContinueMass root := by
-    rw [expect_eq_sum]
-    rw [Finset.sum_eq_single (quittingAllContinueAction : ι → Bool)]
-    · simp [quittingStationaryContinueMass]
-    · intro action _ hne
-      simp [hne]
-    · intro habsent
-      exact absurd (Finset.mem_univ _) habsent
+  have hpoint := expect_allContinueIndicator_eq_continueMass root
   have hindicatorExpect : expect (pmfPi root) (fun action =>
       if (quittingQuitters action).Nonempty then (1 : ℝ) else 0) =
       quittingRootAbsorptionMass root := by

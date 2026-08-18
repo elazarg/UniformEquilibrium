@@ -15,9 +15,9 @@ single-quitter periodic profile read from a phase, and
 `quittingAnchoredCyclicOnPathValue_renewal` is exactly the one-step recursion
 required by `QuittingAnchoredCyclicPatienceSystem`, with survival `1 - p_k` and
 the cyclic successor written as `finRotate`.  This file packages those on-path
-values into a patience system whenever the hazards are strictly between zero
-and one and the anchor and patience conditions are supplied, and reads the
-five-player open-pocket consequence off it.
+values into a patience system whenever the hazards are positive and the anchor
+and patience conditions are supplied, and reads the five-player open-pocket
+consequence off it.  A phase that quits for sure is allowed.
 
 The anchor and patience conditions are inputs here.  Nothing below asserts that
 a uniform or approximate equilibrium forces them, and nothing below evaluates a
@@ -25,15 +25,18 @@ deviation: the statements concern the on-path values alone.
 
 The two conditions are not on the same footing.  The anchor is the exact
 indifference of the phase's own quitter, whose quit-now value is its solo self
-payoff because the other players continue with certainty at that phase.
+payoff because the other players continue with certainty at that phase; it is
+the equality that `IsExactAnchoredSoloPeriodic` yields at each phase, through
+`anchor_of_isExactAnchoredSoloPeriodic`, at the very hazards supplied here.
 Patience is instead the vanishing-hazard reading of a spectator's incentive: at
 hazard `p` a spectator compares against `spectatorQuitNowValue`, the mixture of
 its pair row with the quitter and its solo self payoff.  Where pair rows pay
 their members strictly less than their solo self payoffs, patience asks strictly
-more than that comparison, so a schedule may fail to be patient while its
-spectators still have no profitable one-phase quit.  Failure of the conjunction
-below is therefore failure of the anchored demand, not of any incentive
-condition on the profile.
+more than that comparison — it is not the spectator floor
+`spectatorFloor_of_isExactAnchoredSoloPeriodic` — so a schedule may fail to be
+patient while its spectators still have no profitable one-phase quit.  Failure
+of the conjunction below is therefore failure of the anchored demand, not of
+any incentive condition on the profile.
 
 ## Main definitions
 
@@ -42,8 +45,8 @@ condition on the profile.
 ## Main results
 
 * `not_anchored_patient_onPathValue_of_isOpenPocketMargin` — over a five-player
-  open-pocket circulant table no schedule with hazards strictly inside the unit
-  interval has on-path values that are both anchored and patient
+  open-pocket circulant table no schedule with positive hazards has on-path
+  values that are both anchored and patient
 -/
 
 noncomputable section
@@ -67,7 +70,7 @@ def quittingAnchoredCyclicPatienceSystemOfOnPathValue [NeZero m]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (w : Fin m → ι) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
-    (hpos : ∀ k, 0 < hazard k) (hlt : ∀ k, hazard k < 1)
+    (hpos : ∀ k, 0 < hazard k)
     (hanchor : ∀ k,
       quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 (k + 1) (w k) =
         reward (quittingProjectiveSingletonTerminal (w k)) (w k))
@@ -77,7 +80,7 @@ def quittingAnchoredCyclicPatienceSystemOfOnPathValue [NeZero m]
   order := w
   survival := fun k => 1 - hazard k
   phaseValue := quittingAnchoredCyclicOnPathValue reward w hazard h0 h1
-  survival_pos := fun k => by linarith [hlt k]
+  survival_nonneg := fun k => by linarith [h1 k]
   survival_lt_one := fun k => by linarith [hpos k]
   recursion := by
     intro k y
@@ -91,8 +94,8 @@ def quittingAnchoredCyclicPatienceSystemOfOnPathValue [NeZero m]
 /-- **No anchored and patient on-path values over a five-player open-pocket
 circulant table.**  For a table whose normalized solo matrix is circulant with
 both neighbour margins negative and both distant margins positive, no period, no
-schedule and no hazard vector strictly inside the unit interval make the on-path
-values both anchored and patient.
+schedule and no positive hazard vector make the on-path values both anchored and
+patient.  Phases that quit for sure are covered.
 
 Patience is the vanishing-hazard spectator floor, above the fixed-hazard
 comparison `spectatorQuitNowValue` on tables whose pair rows pay their members
@@ -104,7 +107,7 @@ theorem not_anchored_patient_onPathValue_of_isOpenPocketMargin
     (hpocket : IsOpenPocketMargin margin) [NeZero m]
     (w : Fin m → ZMod 5) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
-    (hpos : ∀ k, 0 < hazard k) (hlt : ∀ k, hazard k < 1) :
+    (hpos : ∀ k, 0 < hazard k) :
     ¬((∀ k, quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 (k + 1) (w k) =
           reward (quittingProjectiveSingletonTerminal (w k)) (w k)) ∧
       ∀ k y, reward (quittingProjectiveSingletonTerminal y) y ≤
@@ -112,7 +115,7 @@ theorem not_anchored_patient_onPathValue_of_isOpenPocketMargin
   rintro ⟨hanchor, hpatience⟩
   exact (isEmpty_anchoredCyclicPatienceSystem_of_isOpenPocketMargin hcirculant
     hpocket m).elim
-    (quittingAnchoredCyclicPatienceSystemOfOnPathValue reward w hazard h0 h1 hpos hlt
+    (quittingAnchoredCyclicPatienceSystemOfOnPathValue reward w hazard h0 h1 hpos
       hanchor hpatience)
 
 end GameTheory
