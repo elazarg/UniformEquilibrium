@@ -17,3 +17,6 @@
 *.py[cod]
 Experiments/**/runs/**/raw/
 Reverse/Runs/**/raw/
+
+# Interactive game portal: local-only for now, never part of the Lean build
+Games/
