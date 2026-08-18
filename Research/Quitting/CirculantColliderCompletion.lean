@@ -33,11 +33,15 @@ The main results run the constant-step producer of
 completion are nonpositive as soon as `low ≤ s`, which is exactly the input the
 firing-step branch of `Research/Quitting/CirculantTrichotomyClosure.lean`
 consumes, so every margin vector of positive sum whose negative margins are not
-one complementary pair is closed outright.  In the *pocket* — `m 1 < 0`,
-`m 4 < 0`, `0 ≤ m 2`, `0 ≤ m 3`, positive margin sum — no step fires, and the
-step-four floors of the producer reduce instead to the single inequality
-`low - s ≤ m 1`, which the failure of the sure-exit property at an adjacent
-pair supplies.
+one complementary pair is closed outright.  In the *neighbour pocket* —
+`m 1 < 0`, `m 4 < 0`, `0 ≤ m 2`, `0 ≤ m 3`, positive margin sum — no step
+fires, and the step-four floors of the producer reduce instead to the single
+inequality `low - s ≤ m 1`, which the failure of the sure-exit property at an
+adjacent pair supplies.  Should no adjacent pair fail it, the pair's own row is
+a uniform-equilibrium payoff, so that pocket closes either way.
+
+What remains of the family is therefore the distant pocket `m 2 < 0`,
+`m 3 < 0`, `0 ≤ m 1`, `0 ≤ m 4` of positive margin sum, and nothing else.
 
 ## Main definitions
 
@@ -58,9 +62,12 @@ pair supplies.
   satisfying the floor carries no counterexample regime
 * `isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit` — the same
   conclusion from failure of the sure-exit property at one adjacent pair
-* `isEmpty_counterexampleRegime_colliderCompletion_closure` — the three settled
-  branches of the completion: nonpositive margin sum, a sign pattern that is
-  not a complementary pocket, and the screened neighbour pocket
+* `isEmpty_counterexampleRegime_colliderNeighbourPocket` — the neighbour pocket
+  closes with no further hypothesis
+* `isEmpty_counterexampleRegime_or_distantPocket` — the census: the distant
+  pocket of positive margin sum is the whole residual
+* `isEmpty_counterexampleRegime_colliderCompletion_closure` — the census read
+  as a sufficient condition
 -/
 
 noncomputable section
@@ -402,40 +409,60 @@ theorem isR0Matrix_normalizedSoloMatrix_colliderPocket
   exact Math.LinearProgramming.isR0Matrix_rowCirculant_pentagon_pocket hm0 hm1 hm4
     hm2 hm3 hsum
 
-/-! ## The three settled branches -/
+/-! ## The census -/
+
+/-- **The neighbour pocket carries no counterexample regime.**  Either some
+adjacent pair of the table is a sure exit set, and then its own row is a
+uniform-equilibrium payoff outright, or no adjacent pair is, and then the
+sure-exit failure supplies the step-four floor and the constant-step cyclic
+profile fires.  Nothing beyond the pocket signs and a positive margin sum is
+needed. -/
+theorem isEmpty_counterexampleRegime_colliderNeighbourPocket
+    (hm0 : m 0 = 0) (hs : 0 ≤ s) (hlow : low ≤ 0)
+    (hm1 : m 1 < 0) (hm4 : m 4 < 0) (hm2 : 0 ≤ m 2) (hm3 : 0 ≤ m 3)
+    (hsum : 0 < m 1 + m 2 + m 3 + m 4) :
+    IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) := by
+  by_cases hsure : IsQuittingSureExitSet (colliderReward s low m) {0, 0 + 1}
+  · exact ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
+      ⟨_, isUniformEquilibriumPayoff_setReward_of_isQuittingSureExitSet _ hsure⟩⟩
+  · exact isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit hm0 hs hlow
+      hm1 hm4 hm2 hm3 hsum 0 hsure
+
+/-- **The census of the collider completion.**  A five-player collider table
+with nonnegative solo self value and nonpositive joint value either carries no
+counterexample regime, or has positive margin sum with its negative margins
+exactly at the two distant distances.  That distant pocket is the whole
+residual of the family. -/
+theorem isEmpty_counterexampleRegime_or_distantPocket
+    (hm0 : m 0 = 0) (hs : 0 ≤ s) (hlow : low ≤ 0) :
+    IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) ∨
+      (0 < m 1 + m 2 + m 3 + m 4 ∧ m 2 < 0 ∧ m 3 < 0 ∧ 0 ≤ m 4 ∧ 0 ≤ m 1) := by
+  have hfive : (∑ e : ZMod 5, m e) = m 0 + m 1 + m 2 + m 3 + m 4 :=
+    Fin.sum_univ_five (fun e : ZMod 5 => m e)
+  rcases isEmpty_counterexampleRegime_or_isComplementaryPocketMargin
+      (isCirculantPairTable_colliderReward s low m hm0) hs
+      (fun d _ => colliderJoin_nonpos (hlow.trans hs) d) with
+    hempty | ⟨hsum, hpocket⟩
+  · exact Or.inl hempty
+  · rw [hfive, hm0] at hsum
+    rcases neighbour_or_distant_of_isComplementaryPocketMargin hpocket with
+      ⟨hm1, hm4, hm2, hm3⟩ | ⟨hm2, hm3, hm4, hm1⟩
+    · exact Or.inl (isEmpty_counterexampleRegime_colliderNeighbourPocket hm0 hs
+        hlow hm1 hm4 hm2 hm3 (by linarith))
+    · exact Or.inr ⟨by linarith, hm2, hm3, hm4, hm1⟩
 
 /-- **The settled branches of the collider completion.**  A five-player
 collider table with nonnegative solo self value and nonpositive joint value
-carries no counterexample regime as soon as its margin sum is nonpositive, or
-it has a negative margin and its negative margins are not exactly one
-complementary pair, or it lies in the neighbour pocket and some adjacent pair
-fails the sure-exit property.
-
-Two sign patterns of positive margin sum are left outside this statement: a
-margin vector with no negative margin at all, and the distant pocket
-`m 2 < 0`, `m 3 < 0`, `0 ≤ m 1`, `0 ≤ m 4`.  The neighbour pocket enters only
-through failure of the sure-exit property at an adjacent pair. -/
+carries no counterexample regime as soon as its margin sum is nonpositive or
+one of the two distant margins is nonnegative. -/
 theorem isEmpty_counterexampleRegime_colliderCompletion_closure
     (hm0 : m 0 = 0) (hs : 0 ≤ s) (hlow : low ≤ 0)
-    (hcase : m 1 + m 2 + m 3 + m 4 ≤ 0 ∨
-      ((∃ a : ZMod 5, a ≠ 0 ∧ m a < 0) ∧ ¬ IsComplementaryPocketMargin m) ∨
-      (m 1 < 0 ∧ m 4 < 0 ∧ 0 ≤ m 2 ∧ 0 ≤ m 3 ∧ 0 < m 1 + m 2 + m 3 + m 4 ∧
-        ∃ y : ZMod 5,
-          ¬ IsQuittingSureExitSet (colliderReward s low m) {y, y + 1})) :
+    (hcase : m 1 + m 2 + m 3 + m 4 ≤ 0 ∨ 0 ≤ m 2 ∨ 0 ≤ m 3) :
     IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) := by
-  have hfive : (∑ e : ZMod 5, m e) = m 0 + m 1 + m 2 + m 3 + m 4 :=
-    Fin.sum_univ_five (fun e : ZMod 5 => m e)
-  rcases hcase with hnonpos | ⟨hneg, hpocket⟩ | ⟨hm1, hm4, hm2, hm3, hsum, y, hno⟩
-  · refine ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
-      (exists_uniformEquilibriumPayoff_of_pentagonCirculant_surplus_nonpos
-        (hasCirculantSoloMatrix_colliderReward s low m hm0) ?_)⟩
-    rw [hfive, hm0]
-    linarith
-  · exact isEmpty_counterexampleRegime_of_not_isComplementaryPocketMargin
-      (isCirculantPairTable_colliderReward s low m hm0) hs
-      (fun d _ => colliderJoin_nonpos (hlow.trans hs) d) (Or.inr ⟨hneg, hpocket⟩)
-  · exact isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit hm0 hs hlow
-      hm1 hm4 hm2 hm3 hsum y hno
+  rcases isEmpty_counterexampleRegime_or_distantPocket hm0 hs hlow with
+    hempty | ⟨hsum, hm2, hm3, -, -⟩
+  · exact hempty
+  · rcases hcase with h | h | h <;> linarith
 
 end CirculantColliderCompletion
 end GameTheory
