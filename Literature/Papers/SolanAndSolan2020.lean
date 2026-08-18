@@ -8,11 +8,10 @@ import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 Bibliography label: Solan & Solan 2020
 
 E. Solan and O. N. Solan, *Quitting games and linear complementarity
-problems*, Mathematics of Operations Research **45**(2) (2020); preprint
-arXiv:1707.02598.  The final manuscript was read for the standing solo
-normalization of Assumption 2.1, the min-max normal players of Section 2.3,
-the main theorems of Section 2.4, and the recursion and Theorem 5.1 of
-Section 5.
+problems*, Mathematics of Operations Research **45**(2), 626–651 (2020);
+preprint arXiv:1707.02598.  Both were read.  All numbering below is the final
+manuscript's; the preprint numbers the same results differently, and the two
+versions do not define "normal player" the same way.
 
 ## Two player sets carry the word "normal"
 
@@ -36,10 +35,24 @@ misstate every result below.
   `normalizedSoloMatrix reward who owner` is the paper's `r^owner_who` after
   Assumption 2.1.
 
-The final manuscript's Section 5 display carries the distinctness condition
-`j ∈ I_l \ {i}`.  An earlier draft displays the same recursion without it;
-read literally after Assumption 2.1 that display never removes a player,
-because `j = i` always satisfies `r^i_i ≤ 0`.  The degeneracy is recorded by
+## What changed between the preprint and the final manuscript
+
+In the preprint the recursion is not a Section 5 aside: it is Section 2.3's
+*definition* of the normal players, and `R̂` is built on its intersection, so
+the preprint's Theorem 2.11 — the final manuscript's Theorem 2.13 — is stated
+over the recursive set rather than over the min-max set.  The preprint also
+credits Simon 2012 with the one-step condition, writing that a player is
+normal in Simon's sense exactly when he lies in `I₁` and that "our definition
+of normality is a recursive application of Simon's definition"; the final
+manuscript instead credits Simon 2012 with min-max normality and demotes the
+recursion to the α-players.
+
+The preprint's Section 2.3 display omits the distinctness condition:
+`I_{l+1} := {i ∈ I_l : there exists j ∈ I_l such that r^j_i ≤ 0}`.  Read
+literally after Assumption 2.1 that display never removes a player, because
+`j = i` always satisfies `r^i_i ≤ 0`, so the preprint's `I∗` would be the whole
+player set and `R̂` the whole matrix.  The final manuscript's Section 5 display
+carries `j ∈ I_l \ {i}`.  The degeneracy is recorded by
 `draftRecursionCore_eq_univ` below, and the development uses the final
 distinct-witness form throughout.
 -/
@@ -189,17 +202,33 @@ def record : Literature.PaperRecord where
           "Literature.Papers.SolanAndSolan2020.betaPlayer_alphaSoloExit_pos"
           "GameTheory.QuittingLCPClassification.normalCore_entry_pos_of_notMem" },
       { claimId := "draft_recursion_display_omits_distinctness"
-        sourceLocator := "Section 5, recursion display in an earlier draft"
+        sourceLocator :=
+          "Section 2.3 recursion display in the arXiv:1707.02598 preprint"
         summary :=
-          "That draft's display of the recursion omits the condition that " ++
-          "the witness j differ from i. Read literally under Assumption " ++
-          "2.1 it removes no player, so its intersection is the whole " ++
-          "player set. The final manuscript's display carries the " ++
-          "distinctness condition, and that final form is the one used " ++
-          "throughout this development."
+          "In the preprint the recursion is the definition of the normal " ++
+          "players, and its display omits the condition that the witness j " ++
+          "differ from i. Read literally under Assumption 2.1 it removes no " ++
+          "player, so the preprint's normal set would be every player and " ++
+          "its derived matrix the whole matrix. The final manuscript's " ++
+          "Section 5 display carries the distinctness condition, and that " ++
+          "final form is the one used throughout this development."
         status := .provedInLean
           "Literature.Papers.SolanAndSolan2020.draftRecursionCore_eq_univ"
           "GameTheory.QuittingLCPClassification.printedNormalCore_normalized_eq_univ" },
+      { claimId := "normality_definition_differs_between_versions"
+        sourceLocator :=
+          "Section 2.3 of the arXiv:1707.02598 preprint against Definition " ++
+          "2.5 and Section 5 of the final manuscript"
+        summary :=
+          "The preprint defines the normal players as the intersection of " ++
+          "the recursion and calls that a recursive application of Simon " ++
+          "2012's one-step condition, building its derived matrix on that " ++
+          "set. The final manuscript defines normal players by nonpositive " ++
+          "min-max value, credits that notion to Simon 2012, and keeps the " ++
+          "recursion only as the alpha-players of Section 5. A theorem " ++
+          "quoted from one version must not be restated with the other " ++
+          "version's index set."
+        status := .sourceOnly },
       { claimId := "alpha_homogeneous_lcp_gives_stationary_equilibrium"
         sourceLocator := "Section 5, Lemma 2.12 analogue for the alpha-players"
         summary :=
