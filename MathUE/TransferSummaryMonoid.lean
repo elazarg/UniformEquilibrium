@@ -97,6 +97,16 @@ closed form of its orbit and the limiting behaviour are developed in
 theory; this file has the composition law and no fixed-point theory for the
 affine class.
 
+## Scope
+
+The max-affine class lacks an identity only because floors are finite: over
+floors extended by a bottom element the class becomes a monoid, with the
+affine summaries embedded at the bottom floor.  That extension is not
+developed here.  Not developed either: the stationary theory of the Lindley
+recursion under stationary inputs (Loynes, *The stability of a queue with
+non-independent inter-arrival and service times*, Math. Proc. Cambridge
+Philos. Soc. 58 (1962)) and the two-sided reflection.
+
 ## References
 
 * D. V. Lindley, *The theory of queues with a single server*, Math. Proc.

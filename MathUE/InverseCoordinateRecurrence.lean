@@ -74,6 +74,13 @@ independently.
 for one specific envelope, solved in geometric-sum rather than fixed-point
 form.  `Math.AffineResetSeries.affineResetPhase` is the vector-valued affine
 step written with its fixed point as a parameter rather than derived.
+
+## Scope
+
+Single steps and two-phase composites only.  The classification of periodic
+orbits of an `n`-phase coefficient cycle by the trace of its product transfer
+matrix — the elliptic, parabolic and hyperbolic cases of the projective
+action — is not developed here.
 -/
 
 noncomputable section

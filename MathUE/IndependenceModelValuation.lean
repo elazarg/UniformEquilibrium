@@ -59,13 +59,22 @@ generality is not developed here.
 Coordinates with `α i = 0` are not silently excluded. Such a coordinate contributes a
 unit factor `p ^ 0 = 1` when it lies inside the coalition, but a vanishing factor
 `1 - p ^ 0 = 0` when it lies outside, which annihilates the coalition mass identically
-(`coalitionMass_powerHazard_eq_zero_of_exponent_eq_zero`). The asymptotic statements
-therefore carry the explicit hypothesis that the exponents are nonzero off the
-coalitions being compared.
+(`coalitionMass_powerHazard_eq_zero_of_exponent_eq_zero`). The zero-limit statements
+need no nondegeneracy hypothesis — an annihilated numerator or denominator only helps
+a ratio vanish — while the divergence statement and the leading-order jet carry the
+nondegeneracy they genuinely use.
 
-Varying `α` partitions exponent space into the polyhedral fan of subset-sum
-comparisons, the tropical variety of the model; only the fixed-`α` consequences are
-formalized here.
+Varying `α` partitions exponent space by subset-sum comparisons: the chamber where a
+coalition's valuation is minimal is the normal cone of its indicator vector in the
+Newton polytope of the family, so the partition is (the positive-orthant restriction
+of) that polytope's normal fan.  It is not the tropicalization of the model's
+defining ideal, which is a different construction (Giansiracusa and Giansiracusa,
+*Equations of tropical varieties*, Duke Math. J. 165 (2016)).  Only the fixed-`α`
+consequences are formalized here.
+
+The curve is the all-small chart: every coordinate vanishes with `p`.  Boundary
+charts in which some coordinates approach `1`, where the cofactors `1 - x i` carry
+the valuation instead of the monomials, are not developed here.
 -/
 
 namespace Math.PMFProduct
@@ -181,14 +190,38 @@ theorem coalitionMass_powerHazard_div {α : ι → ℕ} {S T : Finset ι} {p : �
     pow_add, mul_assoc, mul_div_mul_left _ _ (pow_ne_zero _ hp), mul_div_assoc]
 
 /-- **Comparison principle.** A coalition of strictly larger valuation carries
-asymptotically negligible mass. The hypotheses are exactly what is needed: the
-exponents off `S` and off `T` must be nonzero, or one of the two masses is identically
-zero (`coalitionMass_powerHazard_eq_zero_of_exponent_eq_zero`). -/
+asymptotically negligible mass. No nondegeneracy is assumed: a vanishing exponent off
+`T` makes the numerator identically zero
+(`coalitionMass_powerHazard_eq_zero_of_exponent_eq_zero`), and a vanishing exponent
+off `S` makes the denominator identically zero, so the ratio is identically zero by
+the division-by-zero convention. Contrast `tendsto_coalitionMass_div_atTop`, where
+both nondegeneracies are genuinely needed. -/
 theorem tendsto_coalitionMass_div_nhds_zero {α : ι → ℕ} {S T : Finset ι}
-    (hS : ∀ i ∈ Sᶜ, α i ≠ 0) (hT : ∀ i ∈ Tᶜ, α i ≠ 0)
     (hlt : coalitionValuation α S < coalitionValuation α T) :
     Tendsto (fun p : ℝ => coalitionMass (powerHazard α p) T / coalitionMass (powerHazard α p) S)
       (𝓝[>] (0 : ℝ)) (𝓝 0) := by
+  by_cases hT : ∀ i ∈ Tᶜ, α i ≠ 0
+  case neg =>
+    push Not at hT
+    obtain ⟨i, hi, hαi⟩ := hT
+    have hzero : (fun p : ℝ => coalitionMass (powerHazard α p) T /
+        coalitionMass (powerHazard α p) S) = fun _ => 0 := by
+      funext p
+      rw [coalitionMass_powerHazard_eq_zero_of_exponent_eq_zero hi hαi, zero_div]
+    rw [hzero]
+    exact tendsto_const_nhds
+  case pos =>
+  by_cases hS : ∀ i ∈ Sᶜ, α i ≠ 0
+  case neg =>
+    push Not at hS
+    obtain ⟨i, hi, hαi⟩ := hS
+    have hzero : (fun p : ℝ => coalitionMass (powerHazard α p) T /
+        coalitionMass (powerHazard α p) S) = fun _ => 0 := by
+      funext p
+      rw [coalitionMass_powerHazard_eq_zero_of_exponent_eq_zero hi hαi, div_zero]
+    rw [hzero]
+    exact tendsto_const_nhds
+  case pos =>
   have hcongr : ∀ᶠ p in 𝓝[>] (0 : ℝ),
       p ^ (coalitionValuation α T - coalitionValuation α S) *
           (coalitionCofactor α T p / coalitionCofactor α S p)
@@ -207,7 +240,9 @@ theorem tendsto_coalitionMass_div_nhds_zero {α : ι → ℕ} {S T : Finset ι}
   simpa using hpow.mul hratio
 
 /-- The same comparison read the other way round: the mass of the lower-valuation
-coalition dominates without bound. -/
+coalition dominates without bound. Here the nondegeneracy hypotheses are genuinely
+needed: a degenerate exponent annihilates one of the masses, and a ratio with a
+vanishing numerator or denominator is `0`, which does not tend to `atTop`. -/
 theorem tendsto_coalitionMass_div_atTop {α : ι → ℕ} {S T : Finset ι}
     (hS : ∀ i ∈ Sᶜ, α i ≠ 0) (hT : ∀ i ∈ Tᶜ, α i ≠ 0)
     (hlt : coalitionValuation α S < coalitionValuation α T) :
@@ -223,7 +258,7 @@ theorem tendsto_coalitionMass_div_atTop {α : ι → ℕ} {S T : Finset ι}
   have hwithin : Tendsto
       (fun p : ℝ => coalitionMass (powerHazard α p) T / coalitionMass (powerHazard α p) S)
       (𝓝[>] (0 : ℝ)) (𝓝[>] (0 : ℝ)) :=
-    tendsto_nhdsWithin_iff.mpr ⟨tendsto_coalitionMass_div_nhds_zero hS hT hlt, hpos⟩
+    tendsto_nhdsWithin_iff.mpr ⟨tendsto_coalitionMass_div_nhds_zero hlt, hpos⟩
   exact (tendsto_inv_nhdsGT_zero.comp hwithin).congr fun p => inv_div _ _
 
 /-! ## Leading-coalition selection -/
@@ -232,13 +267,13 @@ theorem tendsto_coalitionMass_div_atTop {α : ι → ℕ} {S T : Finset ι}
 minimize the valuation. Then the total mass of every member whose valuation is not
 minimal is asymptotically negligible against the mass of `S₀`. This is leading-term
 extraction for the independence model: only the minimizers of `coalitionValuation`
-survive the degeneration.
+survive the degeneration.  No nondegeneracy is assumed, for the reasons given at
+`tendsto_coalitionMass_div_nhds_zero`.
 
 Varying `α`, the resulting partition of exponent space by subset-sum comparisons is a
 polyhedral fan; that geometry is outside the scope of this file. -/
 theorem tendsto_sum_coalitionMass_div_nhds_zero {α : ι → ℕ} {F : Finset (Finset ι)}
-    {S₀ : Finset ι} (hS₀ : ∀ i ∈ S₀ᶜ, α i ≠ 0)
-    (hα : ∀ T ∈ F, ∀ i ∈ Tᶜ, α i ≠ 0)
+    {S₀ : Finset ι}
     (hmin : ∀ T ∈ F, coalitionValuation α S₀ ≤ coalitionValuation α T) :
     Tendsto (fun p : ℝ =>
         (∑ T ∈ F.filter fun T => coalitionValuation α T ≠ coalitionValuation α S₀,
@@ -253,7 +288,7 @@ theorem tendsto_sum_coalitionMass_div_nhds_zero {α : ι → ℕ} {F : Finset (F
       (𝓝 (∑ _T ∈ F.filter fun T => coalitionValuation α T ≠ coalitionValuation α S₀, (0 : ℝ))) := by
     refine tendsto_finsetSum _ fun T hT => ?_
     rw [Finset.mem_filter] at hT
-    exact tendsto_coalitionMass_div_nhds_zero hS₀ (hα T hT.1)
+    exact tendsto_coalitionMass_div_nhds_zero
       (lt_of_le_of_ne (hmin T hT.1) (Ne.symm hT.2))
   simpa using h
 
