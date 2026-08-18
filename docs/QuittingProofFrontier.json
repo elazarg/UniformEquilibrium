@@ -908,8 +908,8 @@
       ]
     },
     {
-      "id": "REDUCE-SOLO-PERIODIC-TERMINAL-GAP",
-      "kind": "census",
+      "id": "REFUTE-SOLO-PERIODIC-TERMINAL-GAP",
+      "kind": "refutation",
       "cover_clause_ids": [
         "COVER-A",
         "INSTANCES"
@@ -917,7 +917,7 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "On the Solan--Vieille boundary table the uniform four-cycle carries a terminal gap of one twelfth, and that constant is sharp for the refusal deviation there: the refusal gain is capped by one twelfth plus six times the hazard. Schedules omitting a player are settled outright, so the residual is exactly the schedules designating every player at least once, and the reduction from that residual to the full statement is checked. The easy deviations do not close the general case: no schedule-uniform choice between the quit value and the refusal value delivers the gap.",
+      "summary": "Both solo-periodic terminal-gap propositions on the Solan--Vieille boundary table are refuted. An explicit surjective period-four schedule with fixed interior hazards, checked by exact rational arithmetic through the best-reply identification, delivers no player a gain of one twelfth over the on-path payoff. The restricted proposition falls first and the unrestricted one falls with it, since a schedule designating every player is one of the schedules the unrestricted statement quantifies over. The proposition definitions are kept, because the refutations are statements about them. What survives is everything that was ever checked: the uniform four-cycle does carry a gap of one twelfth and that constant is sharp there for the refusal deviation, and schedules omitting a player are settled outright. The intermediate negative on the easy deviations, and the five-phase example carrying it, were removed as subsumed by the refutation. The mechanism of the error is that one twelfth is the diffuse-limit minimax of the class: correct in the vanishing-hazard limit and on the uniform four-cycle, false at fixed hazards. This repeats the lesson that a floor read off a vanishing-hazard limit need not survive at fixed hazards.",
       "evidence": [
         "Research/Quitting/SolanVieilleSoloPeriodicTerminalGap.lean"
       ],
@@ -927,21 +927,18 @@
         "A"
       ],
       "declarations": [
+        "GameTheory.SolanVieilleBoundary.not_hasSurjectiveSoloPeriodicTerminalGap",
+        "GameTheory.SolanVieilleBoundary.not_hasUniformSoloPeriodicTerminalGap",
+        "GameTheory.SolanVieilleBoundary.refutingSchedule",
+        "GameTheory.SolanVieilleBoundary.refutingHazard",
+        "GameTheory.SolanVieilleBoundary.refutingSchedule_surjective",
         "GameTheory.SolanVieilleBoundary.twelfth_le_bestReplyValue_sub_terminalPayoff_uniformFourCycle",
         "GameTheory.SolanVieilleBoundary.uniformFourCycleRefusalGain_le",
-        "GameTheory.SolanVieilleBoundary.not_forall_exists_quitValue_or_refusalValue_gap",
-        "GameTheory.SolanVieilleBoundary.hasUniformSoloPeriodicTerminalGap_of_surjective"
+        "GameTheory.SolanVieilleBoundary.exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne"
       ],
-      "open_propositions": [
+      "refuted_propositions": [
         "GameTheory.SolanVieilleBoundary.HasSurjectiveSoloPeriodicTerminalGap",
         "GameTheory.SolanVieilleBoundary.HasUniformSoloPeriodicTerminalGap"
-      ],
-      "reduces": [
-        {
-          "residual": "GameTheory.SolanVieilleBoundary.HasSurjectiveSoloPeriodicTerminalGap",
-          "implies": "GameTheory.SolanVieilleBoundary.HasUniformSoloPeriodicTerminalGap",
-          "by": "GameTheory.SolanVieilleBoundary.hasUniformSoloPeriodicTerminalGap_of_surjective"
-        }
       ]
     }
   ]
