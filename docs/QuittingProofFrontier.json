@@ -413,7 +413,7 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "For the collider completion of a five-player circulant margin vector with nonnegative solo self value and nonpositive joint value, two branches are settled: nonpositive margin total, and the pocket sign pattern together with failure of the sure-exit property at one adjacent pair. The two pocket faces on which a distant margin vanishes are settled separately, under the stronger condition that the joint value not exceed the solo self value. This is a disjunction of settled branches, not a closure of the parameter space.",
+      "summary": "For the collider completion of a five-player circulant margin vector with nonnegative solo self value and nonpositive joint value, two branches are settled: nonpositive margin total, and the pocket sign pattern together with failure of the sure-exit property at one adjacent pair. The two pocket faces on which a distant margin vanishes are settled separately, under the stronger condition that the joint value not exceed the solo self value. This is a disjunction of settled branches, not a closure of the parameter space.  The branch-by-branch coverage recorded here is superseded: the whole collider-completion family is now closed in one theorem.",
       "evidence": [
         "Research/Quitting/CirculantColliderCompletion.lean",
         "Research/Quitting/CirculantColliderSlivers.lean",
@@ -423,7 +423,8 @@
         "M",
         "L",
         "C"
-      ]
+      ],
+      "superseded_by": "CLOSE-COLLIDER-COMPLETION-FAMILY"
     },
     {
       "id": "COMPILER-SOLO-PERIODIC-BLOCK",
@@ -743,7 +744,7 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "A firing step weakens the constant-step sign condition: nonzero, negative own margin, nonnegative complementary margin, and either nonnegative doubled complementary margin or nonpositive doubled margin. On a rotation-symmetric table with nonnegative solo self value and nonpositive join margins, a firing step delivers an ordinary uniform-equilibrium payoff. A firing step exists whenever the margin at the identity vanishes, the surplus is positive, some nonzero distance carries a negative margin, and the negatives are not exactly one complementary pair; in particular the three-negative patterns that the strict sign condition missed are covered, through the complement of the single nonnegative distance. Coverage, stated exactly: nonpositive surplus is closed, and positive surplus is closed whenever at least one margin is negative and the pattern is not a complementary pocket. Two families remain outside this theorem -- the complementary pockets, and the pattern in which no margin is negative at all, which satisfies neither branch of its hypothesis.",
+      "summary": "A firing step weakens the constant-step sign condition: nonzero, negative own margin, nonnegative complementary margin, and either nonnegative doubled complementary margin or nonpositive doubled margin. On a rotation-symmetric table with nonnegative solo self value and nonpositive join margins, a firing step delivers an ordinary uniform-equilibrium payoff. A firing step exists whenever the margin at the identity vanishes, the surplus is positive, some nonzero distance carries a negative margin, and the negatives are not exactly one complementary pair; in particular the three-negative patterns that the strict sign condition missed are covered, through the complement of the single nonnegative distance. Coverage, stated exactly: nonpositive surplus is closed, and positive surplus is closed whenever at least one margin is negative and the pattern is not a complementary pocket. Two families remain outside this theorem -- the complementary pockets, and the pattern in which no margin is negative at all, which satisfies neither branch of its hypothesis.  The coverage statement recorded here is superseded: the all-nonnegative pattern is closed by a singleton sure exit, so the census reduces to a single dichotomy against the complementary pockets.",
       "evidence": [
         "Research/Quitting/CirculantTrichotomyClosure.lean",
         "Experiments/counterexample_search/ColliderThreeNegativeEquilibrium.lean"
@@ -768,7 +769,8 @@
       ],
       "open_propositions": [
         "GameTheory.CirculantTrichotomyClosure.ConstantStepCyclicResolution"
-      ]
+      ],
+      "superseded_by": "CENSUS-CIRCULANT-PAIR-DICHOTOMY"
     },
     {
       "id": "NOGO-PREEMPTION-STATIC-TRANSPORT",
@@ -800,6 +802,121 @@
       ],
       "open_propositions": [
         "GameTheory.QuittingPreemptionTransportProducer"
+      ]
+    },
+    {
+      "id": "CLOSE-COLLIDER-COMPLETION-FAMILY",
+      "kind": "family_closed",
+      "cover_clause_ids": [
+        "FAMILY-CLOSURES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "The collider completion of a five-player circulant margin vector carries no counterexample regime, for every margin vector with vanishing self margin, every nonnegative solo self value and every nonpositive joint value. No sign condition on the margins survives in the hypothesis. The distant pocket, which was the last branch, falls to four producers: a step-two cycle, a skip-pair sure exit, and step-three and step-four cycles at located anchor roots.",
+      "evidence": [
+        "Research/Quitting/CirculantColliderClosure.lean",
+        "Research/Quitting/CirculantColliderCompletion.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "C"
+      ],
+      "declarations": [
+        "GameTheory.CirculantColliderCompletion.isEmpty_counterexampleRegime_colliderReward",
+        "GameTheory.CirculantColliderCompletion.isQuittingSureExitSet_skip_of_le",
+        "GameTheory.CirculantColliderCompletion.exists_stepThree_root_of_mul_le",
+        "GameTheory.CirculantColliderCompletion.exists_stepFour_root_of_lt_mul"
+      ]
+    },
+    {
+      "id": "CENSUS-CIRCULANT-PAIR-DICHOTOMY",
+      "kind": "census",
+      "cover_clause_ids": [
+        "FAMILY-CLOSURES",
+        "COVER-A"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "For a rotation-symmetric table with nonnegative solo self value and nonpositive join margins the census is a single dichotomy: either the counterexample regime is empty, or the surplus is positive and the negative margins are exactly one complementary pair. The all-nonnegative pattern, previously outside the firing-step closure, is settled by a singleton sure exit whenever every join margin is at most its own margin. Within the pocket alternative the neighbour orientation is closed for general tables, not only collider completions, whenever the join margins at distances one and two are capped by the neighbour margin; a checked instance settles the mirror orientation. What remains for general tables is the distant pocket, and pockets whose join margins exceed those caps.",
+      "evidence": [
+        "Research/Quitting/CirculantTrichotomyClosure.lean",
+        "Experiments/counterexample_search/ColliderMirrorPocketEquilibrium.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A",
+        "C"
+      ],
+      "declarations": [
+        "GameTheory.CirculantTrichotomyClosure.isEmpty_counterexampleRegime_or_isComplementaryPocketMargin",
+        "GameTheory.CirculantTrichotomyClosure.isQuittingSureExitSet_singleton_of_isCirculantPairTable",
+        "GameTheory.CirculantTrichotomyClosure.exists_uniformEquilibriumPayoff_of_nonneg_margins",
+        "GameTheory.CirculantTrichotomyClosure.exists_uniformEquilibriumPayoff_of_neighbourPocket",
+        "GameTheory.CirculantTrichotomyClosure.isEmpty_counterexampleRegime_of_neighbourPocket"
+      ]
+    },
+    {
+      "id": "SCREEN-SOLO-EXIT-PREFERENCE",
+      "kind": "screen",
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "Weak solo-exit preference and strict joint-exit attraction are defined and shown equivalent to the shapes the classification uses, and a unit solo exit is shown incompatible with a capped joint exit. The screen excluding a table from every counterexample regime is conditional on a published existence claim, not on a checked theorem: the claim that a table with a unit solo exit and a capped joint exit admits a uniform epsilon-equilibrium at every positive accuracy is recorded as a proposition beside its literature audit, and both screen theorems take it as a hypothesis. Exact weak-preference instances are checked on the boundary table and the tournament seed.",
+      "evidence": [
+        "UniformEquilibrium/Quitting/Classification/SoloExitPreference.lean",
+        "UniformEquilibrium/Quitting/Classification/SoloExitPreferenceExistence.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/SoloExitPreferenceScreen.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ],
+      "declarations": [
+        "GameTheory.QuittingWeakSoloExitPreference",
+        "GameTheory.QuittingStrictJointExitAttraction",
+        "GameTheory.QuittingCounterexampleRegime.not_unitSoloExit_and_cappedJointExit",
+        "GameTheory.isEmpty_quittingCounterexampleRegime_of_cappedJointExit",
+        "GameTheory.isEmpty_quittingCounterexampleRegime_of_weakSoloExitPreference"
+      ],
+      "open_propositions": [
+        "GameTheory.QuittingCappedJointExitUniformεExistence"
+      ]
+    },
+    {
+      "id": "REDUCE-SOLO-PERIODIC-TERMINAL-GAP",
+      "kind": "census",
+      "cover_clause_ids": [
+        "COVER-A",
+        "INSTANCES"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "On the Solan--Vieille boundary table the uniform four-cycle carries a terminal gap of one twelfth, and that constant is sharp for the refusal deviation there: the refusal gain is capped by one twelfth plus six times the hazard. Schedules omitting a player are settled outright, so the residual is exactly the schedules designating every player at least once, and the reduction from that residual to the full statement is checked. The easy deviations do not close the general case: no schedule-uniform choice between the quit value and the refusal value delivers the gap.",
+      "evidence": [
+        "Research/Quitting/SolanVieilleSoloPeriodicTerminalGap.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A"
+      ],
+      "declarations": [
+        "GameTheory.SolanVieilleBoundary.twelfth_le_bestReplyValue_sub_terminalPayoff_uniformFourCycle",
+        "GameTheory.SolanVieilleBoundary.uniformFourCycleRefusalGain_le",
+        "GameTheory.SolanVieilleBoundary.not_forall_exists_quitValue_or_refusalValue_gap",
+        "GameTheory.SolanVieilleBoundary.hasUniformSoloPeriodicTerminalGap_of_surjective"
+      ],
+      "open_propositions": [
+        "GameTheory.SolanVieilleBoundary.HasSurjectiveSoloPeriodicTerminalGap",
+        "GameTheory.SolanVieilleBoundary.HasUniformSoloPeriodicTerminalGap"
       ]
     }
   ]
