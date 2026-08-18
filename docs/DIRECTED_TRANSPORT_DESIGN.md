@@ -252,14 +252,20 @@ sections satisfying `(s (source e), s (target e)) ∈ R_e` — would faithfully
 carry constraint data that is not functional, and for labels that are finite
 conjunctions of affine inequalities the Farkas layer already covers it: the
 row encoding of `MathUE/MaxAffineFarkasDuality.lean` never uses
-functionality.  The variant is nonetheless not written, for a proved reason:
-the constraints the counterexample regime forces on preemption edges are
-slope-zero floors (`Research/Quitting/PreemptionTransport.lean`), whose
-relational reading is a half-line at a single coordinate; such relations
-compose to relations of the same shape and obstruct nothing, exactly as the
-function-labelled reading proved.  A relational layer becomes worth writing
-only when a producer supplies labels from dynamic data — chronologies or
-blocks — rather than from the static table.
+functionality.  The variant is nonetheless not written, and the reason has a
+proved core with an honest scope: on the one-real-coordinate-per-player
+vertex set, the constraints the counterexample regime forces on preemption
+edges are floorless constant labels
+(`Research/Quitting/PreemptionTransport.lean`), which compose without
+obstruction.  That rules out the scalar-per-player compression, not every
+encoding: on the payoff-cell vertex set of ordered player pairs, with
+`(x, y)` carrying `r_y({x})`, each preemption is a genuine unit-slope
+translation edge into the target's diagonal cell, and what is missing is not
+transport but concatenation — the within-row observer-switch edges from a
+diagonal cell to the next off-diagonal cell, which no static datum supplies.
+A relational or fibered layer becomes worth writing when a producer supplies
+those switch edges from dynamic data — chronologies or blocks — rather than
+from the static table.
 
 ## Exogenous and endogenous transport
 
