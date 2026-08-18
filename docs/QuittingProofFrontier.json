@@ -782,7 +782,7 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "Read as labelled transport along the forced solo preemption cycle, the static preemption geometry supplies no obstruction. The preemption relation forces only slope-zero floor labels, the solo diagonal is an explicit lax section of the forced labelling, and the forced system admits no Farkas certificate, so no contradiction can be extracted from that geometry alone. The interpersonal comparison that would legitimize the naive telescope -- each player's own solo reward at most its cross value -- is refuted, and the unforced telescope label carries a Farkas certificate while admitting no lax section, which is the reverse pairing. The transport a proof would need is named as a proposition, with a consumer wiring it to the conjecture and a checked negative saying its labels cannot be the forced ones.",
+      "summary": "Read as labelled transport on payoff cells along the forced solo preemption cycle, the static preemption geometry supplies no obstruction, and the reason is now priced. Each forced preemption is a unit-slope translation edge into the target's diagonal, satisfied exactly by the cell values, so the forced system has a lax section and no Farkas certificate; forced edges end on diagonals and never leave them, so no closed walk uses one, which is structural feasibility rather than an accident of the labels. The observer switches carry the cost instead: their total around the cycle is at least the period times the gap, so some single switch costs a full gap and free switches are refuted outright at positive gap. Under any charging the static solo table justifies, the augmented system stays feasible, and no such charging leaves the augmented closed walk at positive weight. In the scalar-per-player reading the same split appears as a compression no-go: the forced constant label has a lax section and no certificate, the unforced telescope label has a certificate and no section, and the interpersonal comparison that would legitimize the naive telescope is refuted. The transport a proof would need is named as a proposition, but it is equivalent to nonexistence of the counterexample regime and so is not a reduction; its genuine content is to charge the switch edges below the static price, from data the solo-reward table does not contain.",
       "evidence": [
         "Research/Quitting/PreemptionTransport.lean"
       ],
@@ -791,18 +791,34 @@
         "L"
       ],
       "declarations": [
-        "GameTheory.QuittingSoloPreemptionCycle.isLaxSection_forcedCrossFloorLabel",
-        "GameTheory.QuittingSoloPreemptionCycle.not_exists_farkasCertificate_forcedCrossFloorLabel",
+        "GameTheory.quittingPayoffCellValue",
+        "GameTheory.QuittingSoloPreemptionCycle.isLaxSection_forcedCellLabel",
+        "GameTheory.QuittingSoloPreemptionCycle.edges_eq_nil_of_closedWalk",
+        "GameTheory.QuittingSoloPreemptionCycle.not_exists_farkasCertificate_forcedCellLabel",
+        "GameTheory.QuittingSoloPreemptionCycle.observerSwitchCost",
+        "GameTheory.QuittingSoloPreemptionCycle.period_mul_gap_le_sum_observerSwitchCost",
+        "GameTheory.QuittingSoloPreemptionCycle.exists_gap_le_observerSwitchCost",
+        "GameTheory.QuittingSoloPreemptionCycle.not_forall_observerSwitchCost_nonpos",
+        "GameTheory.QuittingSoloPreemptionCycle.isLaxSection_augmentedCellLabel",
+        "GameTheory.QuittingSoloPreemptionCycle.tightObserverSwitchData",
+        "GameTheory.QuittingSoloPreemptionCycle.isEmpty_positiveObserverSwitchData",
+        "GameTheory.QuittingObserverSwitchData.augmentedCycleWeight",
+        "GameTheory.QuittingObserverSwitchData.elim",
+        "GameTheory.QuittingSoloPreemptionCycle.isLaxSection_forcedCrossConstantLabel",
+        "GameTheory.QuittingSoloPreemptionCycle.not_exists_farkasCertificate_forcedCrossConstantLabel",
         "GameTheory.QuittingSoloPreemptionCycle.isFarkasCertificate_unforcedTelescopeLabel",
         "GameTheory.QuittingSoloPreemptionCycle.not_exists_isLaxSection_unforcedTelescopeLabel",
         "GameTheory.QuittingSoloPreemptionCycle.not_forall_soloReward_self_le_crossValue",
-        "GameTheory.isEmpty_counterexampleRegime_of_quittingPreemptionTransportProducer",
-        "GameTheory.exists_uniformEquilibriumPayoff_of_quittingPreemptionTransportProducer",
-        "GameTheory.QuittingPreemptionTransportRefutation.label_ne_forcedCrossFloorLabel"
+        "GameTheory.isEmpty_counterexampleRegime_of_quittingObserverSwitchTransportProducer",
+        "GameTheory.exists_uniformEquilibriumPayoff_of_quittingObserverSwitchTransportProducer",
+        "GameTheory.quittingObserverSwitchTransportProducer_iff_isEmpty_counterexampleRegime"
       ],
       "open_propositions": [
-        "GameTheory.QuittingPreemptionTransportProducer"
-      ]
+        "GameTheory.QuittingObserverSwitchTransportProducer"
+      ],
+      "open_proposition_equivalences": {
+        "GameTheory.QuittingObserverSwitchTransportProducer": "GameTheory.quittingObserverSwitchTransportProducer_iff_isEmpty_counterexampleRegime"
+      }
     },
     {
       "id": "CLOSE-COLLIDER-COMPLETION-FAMILY",
