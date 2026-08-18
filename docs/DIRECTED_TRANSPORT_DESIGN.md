@@ -261,6 +261,24 @@ function-labelled reading proved.  A relational layer becomes worth writing
 only when a producer supplies labels from dynamic data — chronologies or
 blocks — rather than from the static table.
 
+## Exogenous and endogenous transport
+
+In a many-state stochastic game the transition system is exogenous: the
+kernel supplies it, and a transport system on state vertices with
+one-dimensional shadows of the Shapley operator as labels would analyze
+given data (a coherent, unbuilt instance; the full operator couples all
+successors, so per-edge scalar labels appear only after fixing a stationary
+policy or restricting to deterministic transitions).  In a quitting game the
+kernel has one live state and the transition system is endogenous: a profile
+supplies it — a periodic profile is an automaton on phases, and the phase
+counter is the state variable the kernel lacks — while the table supplies
+only rewards and absorption.  This is why the static table forces no
+transport (`Research/Quitting/PreemptionTransport.lean`) and the anchored
+renewal transport exists only per profile: equilibrium existence quantifies
+over the induced transport systems, so a producer theorem must extract a
+canonical labelled system from an arbitrary chronology rather than analyze a
+given one.
+
 ## Intended consumers (game side; not part of these modules)
 
 The adapter that would make this progress on the open frontier rather than
