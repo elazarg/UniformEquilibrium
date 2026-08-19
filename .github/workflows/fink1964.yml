@@ -28,4 +28,4 @@ jobs:
           use-github-cache: true
       - run: |
           lake build +UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
-          lake build +Literature.Fink1964
+          lake env lean Literature/Fink1964.lean
