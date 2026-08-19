@@ -3,9 +3,13 @@ import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonP
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 
 /-!
-# Literature audit
+# Solan and Vieille 2002a — Quitting Games—An Example
 
 Bibliography label: Solan & Vieille 2002a
+
+This file is the audit of *Quitting Games—An Example*, International Journal
+of Game Theory 31(3), 365–381.  It is not the 2002 GEB paper *Correlated
+Equilibrium in Stochastic Games*, which is Solan & Vieille 2002b.
 
 The published four-player example was inspected. Its qualitative results and
 the disputed primary continuation probability in its printed numerical packet
