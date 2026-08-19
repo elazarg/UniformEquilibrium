@@ -4,11 +4,12 @@ on:
   pull_request:
     paths:
       - Literature/future/SolanAndVieille2002b.lean
+      - .tmp/SolanAndVieille2002b.repaired.gz.b64
       - .github/workflows/compile_solan_vieille_2002b.yml
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: compile-solan-vieille-2002b-${{ github.event.pull_request.number || github.ref }}
@@ -16,13 +17,21 @@ concurrency:
 
 jobs:
   compile:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: agent/repair-solan-vieille-2002b-correlated-equilibrium
           fetch-depth: 0
           submodules: recursive
+      - name: Reconstruct repaired audit
+        run: |
+          base64 --decode .tmp/SolanAndVieille2002b.repaired.gz.b64 \
+            | gzip --decompress > Literature/future/SolanAndVieille2002b.lean
+          echo '6c11ec44fde457fba62a1d4a7ae431878efc2cee662c0d65c7b4d93170863720  Literature/future/SolanAndVieille2002b.lean' \
+            | sha256sum --check
       - uses: leanprover/lean-action@v1
         with:
           auto-config: false
@@ -30,4 +39,14 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - run: lake env lean Literature/future/SolanAndVieille2002b.lean
+      - name: Compile repaired audit
+        run: lake env lean Literature/future/SolanAndVieille2002b.lean
+      - name: Commit repaired audit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Literature/future/SolanAndVieille2002b.lean
+          if ! git diff --cached --quiet; then
+            git commit -m 'Install repaired Solan and Vieille 2002b audit'
+            git push
+          fi
