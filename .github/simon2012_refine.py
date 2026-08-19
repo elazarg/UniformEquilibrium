@@ -4,6 +4,13 @@ from hashlib import sha256
 from pathlib import Path
 from subprocess import run
 
+target = Path("Literature/Simon2012.lean")
+if sha256(target.read_bytes()).hexdigest() == (
+    "1e7cfc3bdef2d28c56363da09ceed9888ad45b0429681f0acf8e94bfbde6444c"
+):
+    print("Reviewed Simon 2012 source is already present.")
+    raise SystemExit(0)
+
 parts = [
     Path(f".github/simon2012_patch_{i}.txt").read_text().strip()
     for i in range(8)
