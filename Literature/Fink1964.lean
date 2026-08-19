@@ -148,6 +148,16 @@ theorem one_sub_discount_ne (P : Game ι) (who : ι) :
     1 - P.discount who ≠ 0 :=
   ne_of_gt (P.one_sub_discount_pos who)
 
+private theorem update_own_mixedAction
+    (P : Game ι) [Fintype ι] [DecidableEq ι]
+    (x : P.StationaryMixedProfile) (s : P.State) (who : ι) :
+    Function.update (x s) who (x s who) = x s := by
+  funext i
+  by_cases hi : i = who
+  · subst i
+    simp
+  · simp [Function.update_of_ne hi]
+
 /-- The normalized-reward Bellman certificate is exactly the paper's
 cost-minimizing equilibrium condition. -/
 theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
@@ -162,32 +172,33 @@ theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
     · intro s who y
       have hmin' := hmin s who y
       unfold f at hmin'
-      simp only [Function.update_self] at hmin'
+      rw [P.update_own_mixedAction x s who] at hmin'
       have hpos := P.one_sub_discount_pos who
-      nlinarith
+      have hscaled := (div_le_div_iff_of_pos_right hpos).mp hmin'
+      linarith
     · intro s who
       have h := hvalue s who
       unfold f at h
-      simp only [Function.update_self] at h
+      rw [P.update_own_mixedAction x s who] at h
       have hne := P.one_sub_discount_ne who
       have hmul := (div_eq_iff hne).mp h
       dsimp [normalizedRewardValue]
-      nlinarith
+      linarith
   · rintro ⟨hnash, hvalue⟩
     constructor
     · intro s who
       unfold f
-      simp only [Function.update_self]
-      rw [hvalue s who]
+      rw [P.update_own_mixedAction x s who, hvalue s who]
       dsimp [normalizedRewardValue]
       field_simp [P.one_sub_discount_ne who]
       ring
     · intro s who y
       have h := hnash s who y
       unfold f
-      simp only [Function.update_self]
+      rw [P.update_own_mixedAction x s who]
       have hpos := P.one_sub_discount_pos who
-      nlinarith
+      apply (div_le_div_iff_of_pos_right hpos).mpr
+      linarith
 
 /-- A uniform bound on the finite reward table. -/
 def rewardBound (P : Game ι) [Fintype P.State] [Fintype ι]
