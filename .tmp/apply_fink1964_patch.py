@@ -1,41 +1,30 @@
 from pathlib import Path
+import re
 
 path = Path("Literature/Fink1964.lean")
 text = path.read_text(encoding="utf-8")
 
-old = '''  · apply Continuous.mul
-    · apply Continuous.mul
-      · fun_prop
-      · apply continuous_finsetProd (Finset.univ.erase who)
-        intro i hi
-        fun_prop
-'''
-new = '''  · apply Continuous.mul
-    · apply Continuous.mul
-      · exact (continuous_apply (a who)).comp
-          (continuous_subtype_val.comp
-            ((continuous_apply (s, who)).comp
-              (continuous_fst.comp continuous_snd)))
-      · apply continuous_finsetProd (Finset.univ.erase who)
-        intro i hi
-        exact (continuous_apply (a i)).comp
-          (continuous_subtype_val.comp
-            ((continuous_apply (s, i)).comp continuous_fst))
-'''
-if old not in text:
-    raise RuntimeError("property_a coordinate block not found")
-text = text.replace(old, new, 1)
+# Keep the paper file elaborating while the remaining analytic arguments stay
+# visibly sorry-backed.  Theorem 1 and the elementary finite-simplex results
+# remain proved.
+for name in ["property_a_continuous", "phi_isClosed"]:
+    pattern = rf"((?:set_option maxHeartbeats \d+ in\n)?theorem {name}\b.*?:= by)\n.*?(?=\n/--|\nset_option|\nend Game)"
+    match = re.search(pattern, text, flags=re.S)
+    if not match:
+        raise RuntimeError(f"could not locate theorem block: {name}")
+    prefix = match.group(1)
+    # Do not retain a local heartbeat wrapper around a one-line sorry.
+    prefix = re.sub(r"^set_option maxHeartbeats \d+ in\n", "", prefix)
+    text = text[:match.start()] + prefix + "\n  sorry\n" + text[match.end():]
 
-# Give the closed-fiber proof enough room to unfold the dependent simplex product.
-old = '''/-- Closedness of each fiber `φ(x)`. -/
-theorem phi_isClosed
-'''
-new = '''/-- Closedness of each fiber `φ(x)`. -/
-set_option maxHeartbeats 800000 in
-theorem phi_isClosed
-'''
-if old not in text:
-    raise RuntimeError("phi_isClosed header not found")
-text = text.replace(old, new, 1)
+required = [
+    "open scoped NNReal Topology",
+    "fun p => stdSimplex.mix t ht0 ht1 (y p) (z p)",
+    "(a : P.Act s i) : P.AmbientAct i := by\n  classical",
+    "Declarations whose proofs are\nstill `sorry`-backed remain visibly so",
+]
+missing = [anchor for anchor in required if anchor not in text]
+if missing:
+    raise RuntimeError(f"missing repaired Fink anchors: {missing}")
 
 path.write_text(text, encoding="utf-8")
