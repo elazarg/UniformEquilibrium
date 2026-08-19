@@ -489,7 +489,7 @@ theorem paper_lemma3_1 :
   exact ⟨(profile 0).1, (profile 1).1, (profile 2).1,
     stationaryEquilibrium_implies_necessaryConditions profile hprofile⟩
 
-/-! ### Theorem 3.2: stationary approximate equilibria
+/-! ### Theorem 3.2: stationary approximate equilibria -/
 
 /-- The literal statement printed as Theorem 3.2: no stationary
 `ε`-equilibrium for any positive `ε`. -/
@@ -521,12 +521,12 @@ theorem exists_positive_stationaryEpsilonEquilibrium :
     (paperStationaryBehaviorProfile profile) who
   have hdev_le :
       quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
-(Function.update (paperStationaryBehaviorProfile profile) who deviation) who ≤
+          (Function.update (paperStationaryBehaviorProfile profile) who deviation) who ≤
         M := by
     exact (le_abs_self _).trans (by simpa [M] using hdev)
   have hbase_le :
       -M ≤ quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
-(paperStationaryBehaviorProfile profile) who := by
+          (paperStationaryBehaviorProfile profile) who := by
     exact (abs_le.mp (by simpa [M] using hbase)).1
   linarith
 
