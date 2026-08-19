@@ -28,10 +28,11 @@ notions at a fixed punishment accuracy `δ`, and then use the arbitrarily-small
 compactness argument immediately following Lemma 2.1; it is not hidden in
 prose.
 
-`Payoff N = N → ℝ` inherits mathlib's finite product norm.  Thus the topological
-claims are represented in an equivalent finite-dimensional norm, while every
-quantitative estimate below is explicitly a claim in that chosen norm.  No
-unmentioned identification with the Euclidean two-norm is used.
+The paper uses the Euclidean two-norm on `ℝᴺ`.  Every quantitative distance,
+motion, matrix, and variation statement below therefore uses the explicit
+`PaperEuclideanNorm`, `PaperEuclideanDist`, or `PaperEuclideanInfDist` defined
+in this file.  The inherited finite-product topology is used only for purely
+topological notions; in finite dimension it is the same topology.
 
 A `sorry` below is preceded by the exact missing argument.  In particular, the
 large 2007 and 2012 correspondence/orbit theorems are not treated as proved
@@ -50,6 +51,35 @@ noncomputable section
 /-! ## 2. The model, the question, and the challenge -/
 
 abbrev UnitInterval := Set.Icc (0 : ℝ) 1
+
+/-- The Euclidean two-norm on the paper's finite-dimensional payoff space. -/
+def PaperEuclideanNorm {N : Type} [Fintype N] (x : Payoff N) : ℝ := by
+  classical
+  exact Real.sqrt (∑ i, (x i) ^ 2)
+
+/-- Euclidean distance on the paper's payoff space. -/
+def PaperEuclideanDist {N : Type} [Fintype N]
+    (x y : Payoff N) : ℝ :=
+  PaperEuclideanNorm (x - y)
+
+/-- Euclidean distance from a point to a set. -/
+def PaperEuclideanInfDist {N : Type} [Fintype N]
+    (x : Payoff N) (S : Set (Payoff N)) : ℝ :=
+  sInf (PaperEuclideanDist x '' S)
+
+/-- Unbounded total variation measured in the paper's Euclidean norm. -/
+def HasUnboundedPaperExtendedVariation {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) : Prop := by
+  classical
+  exact ∀ B : ℝ, ∃ J I : ℕ, B ≤
+    Finset.sum (Finset.range J) (fun j =>
+      Finset.sum (Finset.range I) fun i =>
+        if ActiveSegment orbit.segmentCount j ∧
+            SegmentIndex (orbit.segmentLength j) (i + 1)
+        then PaperEuclideanDist
+          (orbit.point j (i + 1)) (orbit.point j i)
+        else 0)
 
 /-- The all-continue row. -/
 def zeroQuitRow (G : QuittingGame) : QuitRow G := fun _ => 0
@@ -95,7 +125,7 @@ def EpsilonPayoffGraph (G : QuittingGame) (ε : ℝ) :
 def SmallStepGraph {N : Type} [Fintype N]
     (J : Set (Payoff N × Payoff N)) (δ : ℝ) :
     Set (Payoff N × Payoff N) :=
-  {z | z ∈ J ∧ ‖z.2 - z.1‖ ≤ δ}
+  {z | z ∈ J ∧ PaperEuclideanDist z.1 z.2 ≤ δ}
 
 /-- A cluster point in the sense stated for extended orbits on page 182. -/
 def IsExtendedOrbitClusterPoint {N : Type} [Fintype N]
@@ -142,7 +172,7 @@ def IsStraightLineOn {N : Type} [Fintype N] (C : Set (Payoff N))
 /--
 Question 1's seven hypotheses.  The explicit nonemptiness in condition (7)
 implements the usual convention that the distance to the empty set is
-infinite; `Metric.infDist` itself is real-valued.
+infinite; `PaperEuclideanInfDist` itself is real-valued.
 -/
 def Question1Hypotheses {N : Type} [Fintype N] {k : ℕ}
     (C : Set (Payoff N)) (piece : Fin k → Set (Payoff N))
@@ -158,21 +188,23 @@ def Question1Hypotheses {N : Type} [Fintype N] {k : ℕ}
   (∀ x, (x, x) ∈ HomotopyTerminalImage C H → x ∈ frontier C) ∧
   IsCompact V ∧ frontier C ⊆ interior V ∧
   IsCompact G ∧
+  (∀ z ∈ G, z.1 ∈ V) ∧
   (∀ x ∈ V, IsContractibleSet (GraphFiber G x) ∧ x ∈ GraphFiber G x) ∧
   IsCompact J ∧ HomotopyTerminalImage C H ⊆ J ∧ G ⊆ J ∧
   ∃ ω : ℝ, 0 < ω ∧ SmallStepGraph J ω ⊆ G ∧
     ∀ x ∈ V, ∀ i,
       (frontier C ∩ piece i).Nonempty →
-      Metric.infDist x (frontier C ∩ piece i) ≤ ω →
+      PaperEuclideanInfDist x (frontier C ∩ piece i) ≤ ω →
       ∃ y ∈ GraphFiber G x,
-        Metric.infDist y (piece i) ≤ Metric.infDist x (piece i) ∧
-        ω ≤ ‖y - x‖ ∧ segment ℝ x y ⊆ GraphFiber G x
+        PaperEuclideanInfDist y (piece i) ≤
+          PaperEuclideanInfDist x (piece i) ∧
+        ω ≤ PaperEuclideanDist x y ∧ segment ℝ x y ⊆ GraphFiber G x
 
 /-- The conclusion asked for in Question 1. -/
 def Question1Conclusion {N : Type} [Fintype N]
     (J : Set (Payoff N × Payoff N)) : Prop :=
   ∃ orbit : ExtendedOrbitData (graphCorrespondence J),
-    HasUnboundedExtendedVariation orbit
+    HasUnboundedPaperExtendedVariation orbit
 
 /-- An affirmative answer to Question 1, uniformly in its finite dimension. -/
 def Question1Affirmative : Prop :=
@@ -349,7 +381,7 @@ theorem stationary_implies_stationarilyGenerated (G : QuittingGame) :
 
 /-- A vector lies within distance one of the feasible set. -/
 def WithinOneOfFeasible (G : QuittingGame) (r : Payoff G.Player) : Prop :=
-  ∃ z, Feasible G z ∧ ‖r - z‖ ≤ 1
+  ∃ z, Feasible G z ∧ PaperEuclideanDist r z ≤ 1
 
 /-- The corrected uniform conclusion in Lemma 2.1(2). -/
 def SatisfiesCorrectedLemma2_1Parameter (G : QuittingGame) (ρ : ℝ) : Prop :=
@@ -357,7 +389,7 @@ def SatisfiesCorrectedLemma2_1Parameter (G : QuittingGame) (ρ : ℝ) : Prop :=
     WithinOneOfFeasible G r → IsRational G ρ r →
     p ∈ EpsilonRow G ρ r →
       let y := QuittingOneStagePayoff G r p
-      ρ * QuitProbability G p ≤ ‖r - y‖ ∧
+      ρ * QuitProbability G p ≤ PaperEuclideanDist r y ∧
         QuitProbability G p ≤ 1 - ρ
 
 /--
@@ -369,7 +401,7 @@ def SatisfiesCompactMotionBound (G : QuittingGame)
   ∃ ρ : ℝ, 0 < ρ ∧ ρ ≤ 1 ∧ ∀ r ∈ K, ∀ p,
     IsRational G ρ r → p ∈ EpsilonRow G ρ r →
       let y := QuittingOneStagePayoff G r p
-      ρ * QuitProbability G p ≤ ‖r - y‖ ∧
+      ρ * QuitProbability G p ≤ PaperEuclideanDist r y ∧
         QuitProbability G p ≤ 1 - ρ
 
 /--
@@ -386,20 +418,19 @@ theorem lemma2_1_part2_compact (G : QuittingGame)
     SatisfiesCompactMotionBound G K := by
   sorry
 
-/-- Lemma 2.1(1), isolated from the corrected compactness clause. -/
+/--
+Lemma 2.1(1), isolated from the corrected compactness clause.  Simon 2007,
+Lemma 5 contains this clause, but that declaration is itself `sorry`-backed.
+The elementary strategic proof therefore remains visible here rather than
+being hidden behind an open literature dependency.
+-/
 theorem lemma2_1_part1 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     (∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
       ∀ j, IsNormalPlayer G j → ∃ k, k ≠ j ∧ IsNormalPlayer G k ∧
         G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k := by
-  have hstationary : ¬Literature.Simon2007.HasStationaryApproximateEquilibria G :=
-    fun h => hgenerated (stationary_implies_stationarilyGenerated G h)
-  have hinstant2007 :
-      ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
-    fun h => hinstant ((instantApproximateEquilibria_iff_simon2007 G).2 h)
-  have h := Literature.Simon2007.lemma5 G hstationary hinstant2007
-  exact ⟨h.1, h.2.1⟩
+  sorry
 
 /--
 Lemma 2.1(2), with the two corrections printed on page 185.  Simon 2007's
@@ -413,7 +444,10 @@ theorem lemma2_1_part2 (G : QuittingGame)
     ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ := by
   sorry
 
-/-- Lemma 2.1, with both corrected clauses. -/
+/--
+Lemma 2.1, with both corrected clauses.  Both substantive clauses remain open,
+so the numbered lemma is left visibly open as well.
+-/
 theorem lemma2_1 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
@@ -421,22 +455,57 @@ theorem lemma2_1 (G : QuittingGame)
       ∀ j, IsNormalPlayer G j → ∃ k, k ≠ j ∧ IsNormalPlayer G k ∧
         G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k) ∧
       ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ := by
-  exact ⟨lemma2_1_part1 G hgenerated hinstant,
-    lemma2_1_part2 G hgenerated hinstant⟩
+  sorry
 
-/-- Theorem 2.1 uses the five conditions already stated exactly in Simon 2007. -/
+/-- A vector lies within Euclidean distance `ε` of the feasible vectors. -/
+def PaperNearFeasible (G : QuittingGame) (ε : ℝ)
+    (r : Payoff G.Player) : Prop :=
+  ∃ z, Feasible G z ∧ PaperEuclideanDist r z ≤ ε
+
+/-- Euclidean total variation of a finite vector sequence. -/
+def PaperFiniteOrbitVariation {N : Type} [Fintype N] {k : ℕ}
+    (x : Fin (k + 1) → Payoff N) : ℝ :=
+  ∑ i : Fin k, PaperEuclideanDist (x i.succ) (x i.castSucc)
+
+/-- Theorem 2.1(iii), with the paper's Euclidean norm. -/
+def PaperFiniteNearOrbitCondition (G : QuittingGame) : Prop :=
+  ∀ ε : ℝ, 0 < ε → ∀ B : ℝ, 1 < B → ∃ (k : ℕ)
+    (x : Fin (k + 1) → Payoff G.Player),
+      IsFiniteOrbit (FRow G ε) x ∧
+      (∀ i, IsRational G ε (x i) ∧ PaperNearFeasible G ε (x i)) ∧
+      B ≤ PaperFiniteOrbitVariation x
+
+/-- Unbounded Euclidean variation of an infinite orbit. -/
+def HasUnboundedPaperVariation {N : Type} [Fintype N]
+    (x : ℕ → Payoff N) : Prop :=
+  ∀ B : ℝ, ∃ k,
+    B ≤ ∑ i ∈ Finset.range k, PaperEuclideanDist (x (i + 1)) (x i)
+
+/-- Theorem 2.1(iv), with the paper's Euclidean norm. -/
+def PaperInfiniteOrbitCondition (G : QuittingGame) : Prop :=
+  ∀ ε : ℝ, 0 < ε → ∃ x : ℕ → Payoff G.Player,
+    IsInfiniteOrbit (FRow G ε) x ∧
+      (∀ i, IsRational G ε (x i)) ∧ HasUnboundedPaperVariation x
+
+/-- Theorem 2.1(v), with the paper's Euclidean norm. -/
+def PaperExtendedOrbitCondition (G : QuittingGame) : Prop :=
+  ∀ ε : ℝ, 0 < ε → ∃ x : ExtendedOrbitData (FRow G ε),
+    (∀ j, ActiveSegment x.segmentCount j → ∀ i,
+      SegmentIndex (x.segmentLength j) i → IsRational G ε (x.point j i)) ∧
+    HasUnboundedPaperExtendedVariation x
+
+/--
+Theorem 2.1.  Simon 2007, Theorem 3 has the same mathematical content, but its
+Lean declaration is `sorry`-backed and uses the inherited product norm.  This
+source-exact Euclidean statement therefore remains visibly open.
+-/
 theorem theorem2_1 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
-      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G)
-      (ExtendedOrbitCondition G) := by
-  have hstationary : ¬Literature.Simon2007.HasStationaryApproximateEquilibria G :=
-    fun h => hgenerated (stationary_implies_stationarilyGenerated G h)
-  have hinstant2007 :
-      ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
-    fun h => hinstant ((instantApproximateEquilibria_iff_simon2007 G).2 h)
-  exact Literature.Simon2007.theorem3 G hstationary hinstant2007
+      (PaperFiniteNearOrbitCondition G) (PaperInfiniteOrbitCondition G)
+      (PaperExtendedOrbitCondition G) := by
+  sorry
 
 /-- A positive bound on the differences between terminal payoffs. -/
 def IsPositivePayoffDifferenceBound (G : QuittingGame) (B : ℝ) : Prop :=
@@ -464,8 +533,9 @@ theorem lemma2_2 (G : QuittingGame) {B ε : ℝ}
   sorry
 
 /--
-Checked adapter to Simon 2007's more restrictive bound package.  This records
-exactly how much of Lemma 2.2 is already represented there.
+The specialization under Simon 2007's stronger payoff-bound package.  The
+reduction is mathematically immediate, but `Literature.Simon2007.lemma6` is
+itself `sorry`-backed, so this statement is not advertised as a checked proof.
 -/
 theorem lemma2_2_of_simon2007_bound (G : QuittingGame) {B ε : ℝ}
     (hB : IsQuittingPayoffDifferenceBound G B)
@@ -479,31 +549,30 @@ theorem lemma2_2_of_simon2007_bound (G : QuittingGame) {B ε : ℝ}
         s n ≥ MinMaxQuit G n - 3 * ε) ∧
       (r n < MinMaxQuit G n - 3 * ε →
         s n ≥ r n + ε ^ 2 / (2 * B)) := by
-  have hstationary : ¬Literature.Simon2007.HasStationaryApproximateEquilibria G :=
-    fun h => hgenerated (stationary_implies_stationarilyGenerated G h)
-  have hinstant2007 :
-      ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
-    fun h => hinstant ((instantApproximateEquilibria_iff_simon2007 G).2 h)
-  exact Literature.Simon2007.lemma6 G hB hnormal hstationary hinstant2007
-    hε hε1 hstep
+  sorry
 
-/-- Theorem 2.2, with `F_ε` infinite orbits of unbounded variation. -/
+/-- The unqualified Euclidean infinite-orbit condition in Theorem 2.2. -/
+def PaperInfiniteUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
+  ∀ ε : ℝ, 0 < ε → ∃ x : ℕ → Payoff G.Player,
+    IsInfiniteOrbit (FRow G ε) x ∧ HasUnboundedPaperVariation x
+
+/--
+Theorem 2.2.  Simon 2007, Corollary 2 is `sorry`-backed; the corrected
+stationarily-generated hypothesis and explicit Euclidean variation are left
+visible here.
+-/
 theorem theorem2_2 (G : QuittingGame)
     (hnormal : ∀ n, IsNormalPlayer G n)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
-    HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G := by
-  have hstationary : ¬Literature.Simon2007.HasStationaryApproximateEquilibria G :=
-    fun h => hgenerated (stationary_implies_stationarilyGenerated G h)
-  have hinstant2007 :
-      ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
-    fun h => hinstant ((instantApproximateEquilibria_iff_simon2007 G).2 h)
-  exact Literature.Simon2007.corollary2 G hnormal hinstant2007 hstationary
+    HasQuitApproximateEquilibria G ↔
+      PaperInfiniteUnrestrictedOrbitCondition G := by
+  sorry
 
 /-- The unqualified extended-orbit condition in Theorem 2.3. -/
 def ExtendedUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ orbit : ExtendedOrbitData (FRow G ε),
-    HasUnboundedExtendedVariation orbit
+    HasUnboundedPaperExtendedVariation orbit
 
 /--
 Theorem 2.3.  Removing rationality from an extended orbit uses Lemma 2.2 to
@@ -522,7 +591,7 @@ def SatisfiesLemma2_3At (G : QuittingGame) (r : Payoff G.Player)
     (ρ : ℝ) : Prop :=
   0 < ρ ∧ ρ ≤ 1 ∧ ∀ p, p ∈ EpsilonRow G ρ r →
     ρ * QuitProbability G p ≤
-      ‖r - QuittingOneStagePayoff G r p‖
+      PaperEuclideanDist r (QuittingOneStagePayoff G r p)
 
 /--
 Lemma 2.3.  The quantifier is `∀ r, ∃ ρ`; a single global parameter is not
@@ -635,7 +704,7 @@ def IsStructureMotionParameter (G : QuittingGame) (M ρ : ℝ) : Prop :=
     (∀ j, MinMaxQuit G j - ρ ≤ r j ∧
       r j ≤ 2 * (Fintype.card G.Player : ℝ) * M) →
     ∀ p, p ∈ EpsilonRow G ρ r →
-      ρ * QuitProbability G p ≤ ‖r - QuittingOneStagePayoff G r p‖
+      ρ * QuitProbability G p ≤ PaperEuclideanDist r (QuittingOneStagePayoff G r p)
 
 /-- The full five-part conclusion of Theorem 3.1. -/
 def StructureTheoremConclusion (G : QuittingGame) (M : ℝ) : Prop :=
@@ -742,9 +811,10 @@ theorem lemma3_5 (G : QuittingGame) (M d : ℝ)
     (hqsmall : QuitProbability G z.1.2 <
       1 / (2 * (Fintype.card G.Player : ℝ)))
     (j : G.Player) (hj : 0 < (z.1.2 j : ℝ)) :
-    Metric.infDist z.1.1 (Wj G j ∩ frontier (WSet G)) ≤
+    PaperEuclideanInfDist z.1.1 (Wj G j ∩ frontier (WSet G)) ≤
       QuitProbability G z.1.2 * (Fintype.card G.Player : ℝ) * M / 3 ∧
-    Metric.infDist (Phi G M d z) (Wj G j ∩ frontier (WSet G)) ≤
+    PaperEuclideanInfDist (Phi G M d z)
+      (Wj G j ∩ frontier (WSet G)) ≤
       12 * (Fintype.card G.Player : ℝ) ^ 2 * M *
         QuitProbability G z.1.2 / d := by
   sorry
@@ -807,7 +877,7 @@ theorem lemma4_1 {n : ℕ} (hn : 0 < n) {B ε : ℝ}
     (hB : 0 < B) (hε : 0 < ε) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ A : Matrix (Fin n) (Fin n) ℝ,
       MatrixEntriesBounded A B → ε ≤ |A.det| →
-      ∀ v : Fin n → ℝ, δ * ‖v‖ ≤ ‖A.mulVec v‖ := by
+      ∀ v : Fin n → ℝ, δ * PaperEuclideanNorm v ≤ PaperEuclideanNorm (A.mulVec v) := by
   sorry
 
 /-- The uniform perturbation corollary to Lemma 4.1. -/
@@ -816,7 +886,8 @@ def Corollary4_1Statement (G : QuittingGame) (η : ℝ) : Prop :=
     ∀ d : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ,
       (∀ i j, |d i j| ≤ η) →
       ∀ r : {i // i ∈ Q} → ℝ,
-        η * ‖r‖ ≤ ‖((SingletonDifferenceMatrix G Q + d).mulVec r)‖
+        η * PaperEuclideanNorm r ≤
+          PaperEuclideanNorm ((SingletonDifferenceMatrix G Q + d).mulVec r)
 
 /--
 Corollary 4.1.  The missing proof takes a minimum over the finitely many
@@ -866,7 +937,7 @@ def IsSection4Cutoff (G : QuittingGame) (R δ : ℝ)
     (cutoff : Payoff G.Player → UnitInterval) : Prop :=
   Continuous cutoff ∧
   (∀ x ∈ LowerBoundary G R, (cutoff x : ℝ) = 1) ∧
-  (∀ x, δ ≤ Metric.infDist x (LowerBoundary G R) → (cutoff x : ℝ) = 0) ∧
+  (∀ x, δ ≤ PaperEuclideanInfDist x (LowerBoundary G R) → (cutoff x : ℝ) = 0) ∧
   ∀ x ∈ TruncatedW G R \ LowerBoundary G R, (cutoff x : ℝ) < 1
 
 /-- The first coordinate `x(a)` of the deformed graph. -/
@@ -915,7 +986,7 @@ def UpperNeighborhood (G : QuittingGame) (R ε : ℝ) :
 /-- `V_D`, the `ε/3` neighborhood of the lower boundary. -/
 def LowerNeighborhood (G : QuittingGame) (R ε : ℝ) :
     Set (Payoff G.Player) :=
-  {x | Metric.infDist x (LowerBoundary G R) ≤ ε / 3}
+  {x | PaperEuclideanInfDist x (LowerBoundary G R) ≤ ε / 3}
 
 /-- The small-probability quitting correspondence near `U`. -/
 def UpperGlueFiber (G : QuittingGame) (R ε δ : ℝ)
@@ -1072,20 +1143,64 @@ theorem theorem4_1 (hquestion : Question1Affirmative) :
 
 /-! ## 5. Conclusion: abnormal players -/
 
-/-- Lemma 5.1 is exactly Simon 2007, Lemma 4 (numbered Lemma 3 there). -/
+/-- A player is abnormal when her solo payoff is below her min-max value. -/
+def IsAbnormalPlayer (G : QuittingGame) (j : G.Player) : Prop :=
+  ¬IsNormalPlayer G j
+
+/-- The positive gap `ν_j = χʲ - vʲ` attached to an abnormal player. -/
+def AbnormalGap (G : QuittingGame) (j : G.Player) : ℝ :=
+  MinMaxQuit G j - SoloPayoff G j
+
+/-- The game has at least one abnormal player. -/
+def HasAbnormalPlayer (G : QuittingGame) : Prop :=
+  ∃ j, IsAbnormalPlayer G j
+
+/--
+The minimum abnormal-player gap `ν`.  Section 5 invokes this only under
+`HasAbnormalPlayer G`; outside that case the total `sInf` convention is
+irrelevant.
+-/
+def MinimumAbnormalGap (G : QuittingGame) : ℝ :=
+  sInf {ν : ℝ | ∃ j, IsAbnormalPlayer G j ∧ ν = AbnormalGap G j}
+
+/-- The Section 5 restriction `0 < ε < ν/3`. -/
+def IsSection5Accuracy (G : QuittingGame) (ε : ℝ) : Prop :=
+  HasAbnormalPlayer G ∧ 0 < ε ∧ ε < MinimumAbnormalGap G / 3
+
+/--
+The modified compact set proposed in Section 5:
+`(⋃_{j normal} C_j) ∪ (⋃_{k ≠ l abnormal} (C_k ∩ C_l))`.
+-/
+def Section5ModifiedC (G : QuittingGame) (R : ℝ) :
+    Set (Payoff G.Player) :=
+  {x |
+    (∃ j, IsNormalPlayer G j ∧ x ∈ TruncatedPiece G R j) ∨
+    ∃ k l, k ≠ l ∧ IsAbnormalPlayer G k ∧ IsAbnormalPlayer G l ∧
+      x ∈ TruncatedPiece G R k ∩ TruncatedPiece G R l}
+
+/--
+Lemma 5.1 is Simon 2007, Lemma 4 (numbered Lemma 3 in that paper).  The
+corresponding Lean declaration is `sorry`-backed, so the result remains
+visibly open here.
+-/
 theorem lemma5_1 (G : QuittingGame) (j : G.Player)
-    (habnormal : ¬IsNormalPlayer G j) :
+    (habnormal : IsAbnormalPlayer G j) :
     SoloPayoff G j < 0 ∧ ∀ i, i ≠ j →
       G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j ≥ MinMaxQuit G j := by
-  exact Literature.Simon2007.lemma3 G j habnormal
+  sorry
 
-/-!
-The final paragraphs propose extending Theorem 4.1 by induction on the number
-of abnormal players: their Lemma 5.1 makes “never quit” a min-max-optimal
-response to singleton exits, while the structure map's parameter `d` is meant
-to retain the required slack.  The paper does not state a numbered theorem or
-complete that extension, so no unconditional all-player claim is added here.
+/--
+The unnumbered claim in Section 5: an affirmative answer to Question 1 still
+implies approximate-equilibrium existence when abnormal players are present.
+The paper sketches the modified set `Section5ModifiedC`, an artificial
+boundary homotopy and glue, and a choice of `d` depending on the minimum gap,
+but does not supply the complete verification.  That missing construction is
+therefore recorded explicitly.
 -/
+theorem question1_affirmative_implies_all_quitting_games
+    (hquestion : Question1Affirmative) :
+    ∀ G : QuittingGame, HasQuitApproximateEquilibria G := by
+  sorry
 
 end
 
