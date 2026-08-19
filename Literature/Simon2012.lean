@@ -515,8 +515,9 @@ def EZeroTilde (G : QuittingGame) : Set (Payoff G.Player × QuitRow G) :=
   {z | z.2 ∈ EpsilonRow G 0 z.1 ∧ QuitProbability G z.2 < 1}
 
 /-- The map `φ : Ẽ₀ → ℝᴺ` from Section 3.2. -/
-def Phi (G : QuittingGame) (M d : ℝ) : EZeroTilde G → Payoff G.Player :=
-  fun z j =>
+def Phi (G : QuittingGame) (M d : ℝ) : EZeroTilde G → Payoff G.Player := by
+  classical
+  exact fun z j =>
     QuittingOneStagePayoff G z.1.1 z.1.2 j -
       (5 * (Fintype.card G.Player : ℝ) * M / d) *
         ((z.1.2 j : ℝ) /
@@ -639,10 +640,10 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G)
     (hnormal : ∀ n, IsNormalPlayer G n)
-    (z : EZeroTilde G) (λ : UnitInterval)
+    (z : EZeroTilde G) (t : UnitInterval)
     (a : Payoff G.Player) (ha : a = Phi G M d z)
     (x : Payoff G.Player)
-    (hx : x = (1 - (λ : ℝ)) • z.1.1 + (λ : ℝ) • a) :
+    (hx : x = (1 - (t : ℝ)) • z.1.1 + (t : ℝ) • a) :
     ((∃ j, R ≤ |a j|) → ¬StructureTargetBox G M ρ x) ∧
     (∀ j, R ≤ a j →
       R - (Fintype.card G.Player : ℝ) * M < z.1.1 j ∧
@@ -676,12 +677,13 @@ def SingletonDifferenceMatrix (G : QuittingGame) (Q : Finset G.Player) :
     G.reward ⟨{j.1}, Finset.singleton_nonempty j.1⟩ i.1 - SoloPayoff G i.1
 
 /-- The nonsingular assumption of Section 4.2. -/
-def HasNonsingularSingletonDifferences (G : QuittingGame) : Prop :=
-  ∀ Q : Finset G.Player, 2 ≤ Q.card →
+def HasNonsingularSingletonDifferences (G : QuittingGame) : Prop := by
+  classical
+  exact ∀ Q : Finset G.Player, 2 ≤ Q.card →
     (SingletonDifferenceMatrix G Q).det ≠ 0
 
 /-- Replace only the reward table while keeping the player type. -/
-def QuittingGame.withReward (G : QuittingGame)
+def WithReward (G : QuittingGame)
     (reward : {A : Finset G.Player // A.Nonempty} → Payoff G.Player) :
     QuittingGame where
   Player := G.Player
@@ -696,7 +698,7 @@ def IsNonsingularPerturbation (G : QuittingGame)
   (∀ i j, i ≠ j →
     reward' ⟨{j}, Finset.singleton_nonempty j⟩ i ≤
       G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i) ∧
-  HasNonsingularSingletonDifferences (G.withReward reward')
+  HasNonsingularSingletonDifferences (WithReward G reward')
 
 /--
 The paper's generic perturbation assertion.  A proof must also show that the
@@ -706,7 +708,7 @@ normalization lemma proves this exact statement.
 theorem exists_nonsingularPerturbation (G : QuittingGame)
     (hnormal : ∀ n, IsNormalPlayer G n) {tol : ℝ} (htol : 0 < tol) :
     ∃ reward', IsNonsingularPerturbation G reward' tol ∧
-      ∀ n, IsNormalPlayer (G.withReward reward') n := by
+      ∀ n, IsNormalPlayer (WithReward G reward') n := by
   sorry
 
 /-- Every matrix entry is bounded in absolute value by `B`. -/
@@ -765,37 +767,37 @@ def UpperBoundary (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
 
 /-- The cutoff `λ` used to glue the structure homotopy to the identity near `D`. -/
 def IsSection4Cutoff (G : QuittingGame) (R δ : ℝ)
-    (λ : Payoff G.Player → UnitInterval) : Prop :=
-  Continuous λ ∧
-  (∀ x ∈ LowerBoundary G R, (λ x : ℝ) = 1) ∧
-  (∀ x, δ ≤ Metric.infDist x (LowerBoundary G R) → (λ x : ℝ) = 0) ∧
-  ∀ x ∈ TruncatedW G R \ LowerBoundary G R, (λ x : ℝ) < 1
+    (cutoff : Payoff G.Player → UnitInterval) : Prop :=
+  Continuous cutoff ∧
+  (∀ x ∈ LowerBoundary G R, (cutoff x : ℝ) = 1) ∧
+  (∀ x, δ ≤ Metric.infDist x (LowerBoundary G R) → (cutoff x : ℝ) = 0) ∧
+  ∀ x ∈ TruncatedW G R \ LowerBoundary G R, (cutoff x : ℝ) < 1
 
 /-- The first coordinate `x(a)` of the deformed graph. -/
 def Section4X (G : QuittingGame) {M d : ℝ}
     (inverse : PhiInverseData G M d)
-    (λ : Payoff G.Player → UnitInterval) (a : Payoff G.Player) :
+    (cutoff : Payoff G.Player → UnitInterval) (a : Payoff G.Player) :
     Payoff G.Player :=
-  (λ a : ℝ) • a + (1 - (λ a : ℝ)) • (inverse.inv a).1.1
+  (cutoff a : ℝ) • a + (1 - (cutoff a : ℝ)) • (inverse.inv a).1.1
 
 /-- The second coordinate `y(a)` of the deformed graph. -/
 def Section4Y (G : QuittingGame) {M d : ℝ}
     (inverse : PhiInverseData G M d)
-    (λ : Payoff G.Player → UnitInterval) (a : Payoff G.Player) :
+    (cutoff : Payoff G.Player → UnitInterval) (a : Payoff G.Player) :
     Payoff G.Player :=
-  let x := Section4X G inverse λ a
+  let x := Section4X G inverse cutoff a
   let p := (inverse.inv a).1.2
-  (λ a : ℝ) • x +
-    (1 - (λ a : ℝ)) • QuittingOneStagePayoff G x p
+  (cutoff a : ℝ) • x +
+    (1 - (cutoff a : ℝ)) • QuittingOneStagePayoff G x p
 
 /-- The straight-line homotopy used in Section 4.3. -/
 def Section4H (G : QuittingGame) {M d : ℝ}
     (inverse : PhiInverseData G M d)
-    (λ : Payoff G.Player → UnitInterval)
+    (cutoff : Payoff G.Player → UnitInterval)
     (a : Payoff G.Player) (t : UnitInterval) :
     Payoff G.Player × Payoff G.Player :=
   (1 - (t : ℝ)) • (a, a) +
-    (t : ℝ) • (Section4X G inverse λ a, Section4Y G inverse λ a)
+    (t : ℝ) • (Section4X G inverse cutoff a, Section4Y G inverse cutoff a)
 
 /-- The upper neighborhoods `V_j`. -/
 def UpperNeighborhoodFor (G : QuittingGame) (R ε : ℝ)
@@ -815,8 +817,9 @@ def LowerNeighborhood (G : QuittingGame) (R ε : ℝ) :
 
 /-- The small-probability quitting correspondence near `U`. -/
 def UpperGlueFiber (G : QuittingGame) (R ε δ : ℝ)
-    (x : Payoff G.Player) : Set (Payoff G.Player) :=
-  {y | ∃ p : QuitRow G,
+    (x : Payoff G.Player) : Set (Payoff G.Player) := by
+  classical
+  exact {y | ∃ p : QuitRow G,
     y = QuittingOneStagePayoff G x p ∧
       ∀ j, if x ∈ UpperNeighborhoodFor G R ε j
         then (p j : ℝ) ≤ δ else (p j : ℝ) = 0}
@@ -829,8 +832,9 @@ def LowerGlueFiber (G : QuittingGame) (x : Payoff G.Player) :
 
 /-- The piecewise glued correspondence `G`. -/
 def GluedFiber (G : QuittingGame) (R ε δ : ℝ) :
-    Correspondence (Payoff G.Player) (Payoff G.Player) :=
-  fun x =>
+    Correspondence (Payoff G.Player) (Payoff G.Player) := by
+  classical
+  exact fun x =>
     if x ∈ LowerNeighborhood G R ε then LowerGlueFiber G x
     else if x ∈ UpperNeighborhood G R ε then UpperGlueFiber G R ε δ x
     else ∅
@@ -842,9 +846,9 @@ def GluedNeighborhood (G : QuittingGame) (R ε : ℝ) : Set (Payoff G.Player) :=
 /-- `J = H(C,1) ∪ G`. -/
 def Section4J (G : QuittingGame) {M d : ℝ}
     (inverse : PhiInverseData G M d)
-    (λ : Payoff G.Player → UnitInterval)
+    (cutoff : Payoff G.Player → UnitInterval)
     (R ε δ : ℝ) : Set (Payoff G.Player × Payoff G.Player) :=
-  HomotopyTerminalImage (TruncatedW G R) (Section4H G inverse λ) ∪
+  HomotopyTerminalImage (TruncatedW G R) (Section4H G inverse cutoff) ∪
     correspondenceGraph (GluedFiber G R ε δ)
 
 /-- Lemma 4.2: the upper glue is contained in `F_ε`. -/
@@ -858,18 +862,18 @@ theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
 theorem lemma4_3 (G : QuittingGame) (M d ρ R : ℝ)
     (hM : IsSimonPayoffScale G M)
     (inverse : PhiInverseData G M d)
-    (λ : Payoff G.Player → UnitInterval)
+    (cutoff : Payoff G.Player → UnitInterval)
     (a : Payoff G.Player)
     (haC : a ∈ TruncatedW G R)
-    (hλ0 : 0 < (λ a : ℝ)) (hλ1 : (λ a : ℝ) < 1)
-    (hxbox : ∀ j, -M ≤ Section4X G inverse λ a j ∧
-      Section4X G inverse λ a j ≤ M) :
+    (hλ0 : 0 < (cutoff a : ℝ)) (hλ1 : (cutoff a : ℝ) < 1)
+    (hxbox : ∀ j, -M ≤ Section4X G inverse cutoff a j ∧
+      Section4X G inverse cutoff a j ≤ M) :
     ∀ j,
-      (MinMaxQuit G j - ρ / 3 ≤ Section4X G inverse λ a j →
-        MinMaxQuit G j - ρ / 3 ≤ Section4Y G inverse λ a j) ∧
-      (Section4X G inverse λ a j < MinMaxQuit G j - ρ / 3 →
-        Section4X G inverse λ a j + ρ ^ 2 / (500 * M) ≤
-          Section4Y G inverse λ a j) := by
+      (MinMaxQuit G j - ρ / 3 ≤ Section4X G inverse cutoff a j →
+        MinMaxQuit G j - ρ / 3 ≤ Section4Y G inverse cutoff a j) ∧
+      (Section4X G inverse cutoff a j < MinMaxQuit G j - ρ / 3 →
+        Section4X G inverse cutoff a j + ρ ^ 2 / (500 * M) ≤
+          Section4Y G inverse cutoff a j) := by
   sorry
 
 /-- Lemma 4.4's boundedness of the continuation coordinate `β`. -/
@@ -894,18 +898,18 @@ theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
     (hnonsingular : HasNonsingularSingletonDifferences G)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (inverse : PhiInverseData G M d)
-    (λ : Payoff G.Player → UnitInterval)
-    (hλ : IsSection4Cutoff G R δ λ)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hλ : IsSection4Cutoff G R δ cutoff)
     (hε : 0 < ε)
     (hδ : δ = ε / (2 * (Fintype.card G.Player : ℝ) * M)) :
     Question1Hypotheses
       (TruncatedW G R)
       (fun j : Fin (Fintype.card G.Player) =>
         TruncatedPiece G R ((Fintype.equivFin G.Player).symm j))
-      (Section4H G inverse λ)
+      (Section4H G inverse cutoff)
       (GluedNeighborhood G R ε)
       (correspondenceGraph (GluedFiber G R ε δ))
-      (Section4J G inverse λ R ε δ) := by
+      (Section4J G inverse cutoff R ε δ) := by
   sorry
 
 /-! ### 4.5. Application of Question 1 -/
