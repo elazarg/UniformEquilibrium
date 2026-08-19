@@ -150,7 +150,11 @@ theorem property_a_continuous
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)] :
     Continuous (fun q : P.X × P.X × P.R => P.f q.1 q.2.1 q.2.2) := by
-  sorry
+  classical
+  unfold f fCoord oneStepCost actionPMF
+  simp_rw [expect_eq_sum, pmfPi_apply, ENNReal.toReal_prod]
+  simp only [stdSimplexEquiv_symm_apply, ofVector_toReal]
+  fun_prop
 
 /-- Property (b): one coordinate of `f` changes by at most `α_h` times the
 sup-distance between continuation vectors. -/
@@ -161,7 +165,17 @@ theorem property_b
     (y : stdSimplex ℝ (P.Act s who)) (v u : P.R) :
     |P.fCoord x s who y v - P.fCoord x s who y u| ≤
       P.discount who * dist v u := by
-  sorry
+  unfold fCoord oneStepCost
+  rw [← expect_sub]
+  refine abs_expect_le_of_abs_le _ _ (fun a => ?_)
+  rw [add_sub_add_left_eq_sub, ← mul_sub, abs_mul,
+    abs_of_nonneg (P.discount_pos who).le]
+  apply mul_le_mul_of_nonneg_left _ (P.discount_pos who).le
+  rw [← expect_sub]
+  refine abs_expect_le_of_abs_le _ _ (fun s' => ?_)
+  rw [← Real.dist_eq]
+  exact (dist_le_pi_dist (v s') (u s') who).trans
+    (dist_le_pi_dist v u s')
 
 /-- The pure mixed action used in the finite minimum defining `T_x`. -/
 def pureAction (P : Game ι) [Fintype P.State] [Fintype ι]
@@ -178,7 +192,10 @@ theorem property_c
     (y : stdSimplex ℝ (P.Act s who)) (v : P.R) :
     P.fCoord x s who y v =
       wsum y (fun a => P.fCoord x s who (P.pureAction a) v) := by
-  sorry
+  unfold fCoord
+  rw [pmfPi_update_bind, expect_bind,
+    expect_stdSimplexEquiv_symm_eq_wsum]
+  simp [pureAction]
 
 /-- The fixed-profile evaluation operator used in Lemma 1. -/
 def valueOperator
@@ -193,7 +210,24 @@ theorem contractingWith_valueOperator
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     (x : P.X) :
     ContractingWith P.maxDiscountNNReal (P.valueOperator x) := by
-  sorry
+  refine ⟨P.maxDiscountNNReal_lt_one,
+    LipschitzWith.of_dist_le_mul (fun v u => ?_)⟩
+  rw [dist_pi_le_iff (by positivity)]
+  intro s
+  rw [dist_pi_le_iff (by positivity)]
+  intro who
+  rw [Real.dist_eq]
+  change |P.fCoord x s who (x (s, who)) v -
+      P.fCoord x s who (x (s, who)) u| ≤
+    (P.maxDiscountNNReal : ℝ) * dist v u
+  calc
+    |P.fCoord x s who (x (s, who)) v -
+        P.fCoord x s who (x (s, who)) u|
+        ≤ P.discount who * dist v u :=
+          P.property_b x s who (x (s, who)) v u
+    _ ≤ P.maxDiscount * dist v u :=
+      mul_le_mul_of_nonneg_right (P.discount_le_maxDiscount who) dist_nonneg
+    _ = (P.maxDiscountNNReal : ℝ) * dist v u := rfl
 
 /-- **Lemma 1.** For every stationary mixed profile `x`, equation (4) has a
 unique solution. -/
@@ -201,7 +235,14 @@ theorem lemma_1
     (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     (x : P.X) : ∃! e : P.R, P.IsValueVector x e := by
-  sorry
+  have hc := P.contractingWith_valueOperator x
+  let e := ContractingWith.fixedPoint (P.valueOperator x) hc
+  refine ⟨e, ?_, ?_⟩
+  · change P.valueOperator x e = e
+    exact hc.fixedPoint_isFixedPt
+  · intro u hu
+    change P.valueOperator x u = u at hu
+    exact hc.fixedPoint_unique hu
 
 /-- Equation (8): Fink's optimality operator `T_x`.  The finite minimum is
 written as the negative of a finite maximum. -/
@@ -220,7 +261,20 @@ theorem T_le_fCoord
     (x : P.X) (v : P.R) (s : P.State) (who : ι)
     (y : stdSimplex ℝ (P.Act s who)) :
     P.T x v s who ≤ P.fCoord x s who y v := by
-  sorry
+  rw [P.property_c]
+  calc
+    P.T x v s who = wsum y (fun _ => P.T x v s who) :=
+      (wsum_const y _).symm
+    _ ≤ wsum y
+        (fun a => P.fCoord x s who (P.pureAction a) v) := by
+      apply wsum_le_wsum
+      intro a
+      unfold T
+      have h := Finset.le_sup'
+        (f := fun b : P.Act s who =>
+          -P.fCoord x s who (P.pureAction b) v)
+        (Finset.mem_univ a)
+      linarith
 
 /-- The finite minimum is attained by a pure action. -/
 theorem exists_pure_fCoord_eq_T
@@ -229,7 +283,14 @@ theorem exists_pure_fCoord_eq_T
     (x : P.X) (v : P.R) (s : P.State) (who : ι) :
     ∃ a : P.Act s who,
       P.fCoord x s who (P.pureAction a) v = P.T x v s who := by
-  sorry
+  obtain ⟨a, -, ha⟩ :=
+    Finset.exists_mem_eq_sup' Finset.univ_nonempty
+      (fun a : P.Act s who =>
+        -P.fCoord x s who (P.pureAction a) v)
+  refine ⟨a, ?_⟩
+  unfold T
+  rw [ha]
+  ring
 
 /-- **Theorem 1.** For every `x ∈ X`, `T_x` is a contraction of `R`. -/
 theorem theorem_1
@@ -237,7 +298,33 @@ theorem theorem_1
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     [∀ s i, Nonempty (P.Act s i)]
     (x : P.X) : ContractingWith P.maxDiscountNNReal (P.T x) := by
-  sorry
+  refine ⟨P.maxDiscountNNReal_lt_one,
+    LipschitzWith.of_dist_le_mul (fun v u => ?_)⟩
+  rw [dist_pi_le_iff (by positivity)]
+  intro s
+  rw [dist_pi_le_iff (by positivity)]
+  intro who
+  rw [Real.dist_eq]
+  have hcoord :
+      |P.T x v s who - P.T x u s who| ≤
+        P.discount who * dist v u := by
+    unfold T
+    have h := Math.Finset.abs_sup'_sub_sup'_le_const
+      (indices := (Finset.univ : Finset (P.Act s who)))
+      Finset.univ_nonempty
+      (fun a => -P.fCoord x s who (P.pureAction a) v)
+      (fun a => -P.fCoord x s who (P.pureAction a) u)
+      (bound := P.discount who * dist v u)
+      (fun a _ => by
+        simpa [abs_sub_comm] using
+          P.property_b x s who (P.pureAction a) v u)
+    simpa [abs_sub_comm] using h
+  calc
+    |P.T x v s who - P.T x u s who|
+        ≤ P.discount who * dist v u := hcoord
+    _ ≤ P.maxDiscount * dist v u :=
+      mul_le_mul_of_nonneg_right (P.discount_le_maxDiscount who) dist_nonneg
+    _ = (P.maxDiscountNNReal : ℝ) * dist v u := rfl
 
 /-- **Corollary 1.** For every `x ∈ X`, `T_x` has a unique fixed point. -/
 theorem corollary_1
@@ -245,7 +332,10 @@ theorem corollary_1
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     [∀ s i, Nonempty (P.Act s i)]
     (x : P.X) : ∃! v : P.R, P.T x v = v := by
-  sorry
+  have hc := P.theorem_1 x
+  exact ⟨ContractingWith.fixedPoint (P.T x) hc,
+    hc.fixedPoint_isFixedPt,
+    fun v hv => hc.fixedPoint_unique hv⟩
 
 /-- **Corollary 2.** The family `{T_x | x ∈ X}` is equicontinuous.  This is
 its metric epsilon-delta form. -/
@@ -256,7 +346,20 @@ theorem corollary_2
     ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
       ∀ (x : P.X) (u v : P.R), dist u v < δ →
         dist (P.T x u) (P.T x v) < ε := by
-  sorry
+  intro ε hε
+  refine ⟨ε, hε, ?_⟩
+  intro x u v huv
+  have hL := (P.theorem_1 x).toLipschitzWith.dist_le_mul u v
+  have hα0 : 0 ≤ (P.maxDiscountNNReal : ℝ) :=
+    P.maxDiscountNNReal.property
+  have hα1 : (P.maxDiscountNNReal : ℝ) < 1 := by
+    change P.maxDiscount < 1
+    exact P.maxDiscount_lt_one
+  calc
+    dist (P.T x u) (P.T x v)
+        ≤ (P.maxDiscountNNReal : ℝ) * dist u v := hL
+    _ < (1 : ℝ) * ε := by nlinarith [dist_nonneg]
+    _ = ε := one_mul ε
 
 /-- Equation (9): the single-valued optimal value `β(x)`. -/
 def beta
@@ -287,7 +390,21 @@ theorem phi_nonempty
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     [∀ s i, Nonempty (P.Act s i)] (x : P.X) :
     (P.phi x).Nonempty := by
-  sorry
+  have hmin : ∀ p : P.Agent,
+      ∃ a : P.AgentAction p,
+        P.fCoord x p.1 p.2 (P.pureAction a) (P.beta x) =
+          P.T x (P.beta x) p.1 p.2 := by
+    intro p
+    exact P.exists_pure_fCoord_eq_T x (P.beta x) p.1 p.2
+  choose a ha using hmin
+  let y : P.X := fun p => P.pureAction (a p)
+  refine ⟨y, ?_⟩
+  unfold phi
+  funext s who
+  change P.fCoord x s who (P.pureAction (a (s, who))) (P.beta x) =
+    P.beta x s who
+  rw [ha (s, who)]
+  exact congrFun (congrFun (P.T_beta x) s) who
 
 /-- Convexity of `φ(x)`, stated by closure under simplex segments. -/
 theorem phi_segment
@@ -297,7 +414,34 @@ theorem phi_segment
     (x y z : P.X) (hy : y ∈ P.phi x) (hz : z ∈ P.phi x)
     (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     (fun p => stdSimplex.mix t ht0 ht1 (y p) (z p)) ∈ P.phi x := by
-  sorry
+  unfold phi at hy hz ⊢
+  funext s who
+  have hyc := congrFun (congrFun hy s) who
+  have hzc := congrFun (congrFun hz s) who
+  change P.fCoord x s who (y (s, who)) (P.beta x) =
+    P.beta x s who at hyc
+  change P.fCoord x s who (z (s, who)) (P.beta x) =
+    P.beta x s who at hzc
+  change P.fCoord x s who
+      (stdSimplex.mix t ht0 ht1 (y (s, who)) (z (s, who)))
+      (P.beta x) = P.beta x s who
+  calc
+    P.fCoord x s who
+        (stdSimplex.mix t ht0 ht1 (y (s, who)) (z (s, who)))
+        (P.beta x)
+        = wsum (stdSimplex.mix t ht0 ht1
+            (y (s, who)) (z (s, who)))
+            (fun a => P.fCoord x s who (P.pureAction a) (P.beta x)) :=
+          P.property_c x s who _ (P.beta x)
+    _ = t * wsum (y (s, who))
+          (fun a => P.fCoord x s who (P.pureAction a) (P.beta x)) +
+        (1 - t) * wsum (z (s, who))
+          (fun a => P.fCoord x s who (P.pureAction a) (P.beta x)) := by
+          rw [wsum_mix]
+    _ = t * P.fCoord x s who (y (s, who)) (P.beta x) +
+        (1 - t) * P.fCoord x s who (z (s, who)) (P.beta x) := by
+          rw [← P.property_c, ← P.property_c]
+    _ = P.beta x s who := by rw [hyc, hzc]; ring
 
 /-- Closedness of each fiber `φ(x)`. -/
 theorem phi_isClosed
@@ -305,7 +449,12 @@ theorem phi_isClosed
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     [∀ s i, Nonempty (P.Act s i)] (x : P.X) :
     IsClosed (P.phi x) := by
-  sorry
+  unfold phi
+  have hcont : Continuous (fun y : P.X => P.f x y (P.beta x)) := by
+    exact P.property_a_continuous.comp
+      (continuous_const.prodMk
+        (continuous_id.prodMk continuous_const))
+  exact isClosed_eq hcont continuous_const
 
 /-- A uniform finite bound on the cost table. -/
 def costBound
