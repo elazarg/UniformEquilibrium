@@ -27,6 +27,5 @@ jobs:
           use-mathlib-cache: true
           use-github-cache: true
       - run: |
-          lake build +UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous +UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Disintegration
-          lake env lean Literature/Fink1964/Basic.lean
-          lake env lean Literature/Fink1964/Contraction.lean
+          lake build +UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
+          lake env lean Literature/Fink1964.lean
