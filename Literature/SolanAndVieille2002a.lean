@@ -32,7 +32,7 @@ structure FiniteDistribution (α : Type) where
   prob : α → ℝ
   nonnegative : ∀ a, 0 ≤ prob a
   zero_off_atoms : ∀ a, a ∉ atoms → prob a = 0
-  total : ∑ a in atoms, prob a = 1
+  total : ∑ a ∈ atoms, prob a = 1
 
 namespace FiniteDistribution
 
@@ -44,7 +44,7 @@ def support (d : FiniteDistribution α) : Set α :=
 
 /-- Expectation under a finite distribution. -/
 def expectation (d : FiniteDistribution α) (f : α → ℝ) : ℝ :=
-  ∑ a in d.atoms, d.prob a * f a
+  ∑ a ∈ d.atoms, d.prob a * f a
 
 /-- Point mass at one element. -/
 noncomputable def pure (chosen : α) : FiniteDistribution α := by
@@ -66,11 +66,11 @@ noncomputable def pure (chosen : α) : FiniteDistribution α := by
 set is retained; removed atoms receive probability zero. -/
 noncomputable def conditionAway (d : FiniteDistribution α)
     (removed : Finset α)
-    (hpositive : 0 < ∑ a in d.atoms, if a ∈ removed then 0 else d.prob a) :
+    (hpositive : 0 < ∑ a ∈ d.atoms, if a ∈ removed then 0 else d.prob a) :
     FiniteDistribution α := by
   classical
   let mass : ℝ :=
-    ∑ a in d.atoms, if a ∈ removed then 0 else d.prob a
+    ∑ a ∈ d.atoms, if a ∈ removed then 0 else d.prob a
   have hmass : mass ≠ 0 := ne_of_gt hpositive
   refine
     { atoms := d.atoms
@@ -89,7 +89,7 @@ noncomputable def conditionAway (d : FiniteDistribution α)
     rw [d.zero_off_atoms a ha]
     split_ifs <;> simp
   · change
-      (∑ a in d.atoms,
+      (∑ a ∈ d.atoms,
         (if a ∈ removed then 0 else d.prob a) / mass) = 1
     rw [Finset.sum_div]
     change mass / mass = 1
@@ -98,7 +98,7 @@ noncomputable def conditionAway (d : FiniteDistribution α)
 @[simp]
 theorem conditionAway_removed (d : FiniteDistribution α)
     (removed : Finset α)
-    (hpositive : 0 < ∑ a in d.atoms, if a ∈ removed then 0 else d.prob a)
+    (hpositive : 0 < ∑ a ∈ d.atoms, if a ∈ removed then 0 else d.prob a)
     {a : α} (ha : a ∈ removed) :
     (d.conditionAway removed hpositive).prob a = 0 := by
   simp [conditionAway, ha]
@@ -969,9 +969,9 @@ noncomputable def inducedExitStateProbability
     {x : G.StationaryProfile} {states : Finset G.State}
     (exitLaw : FiniteDistribution (G.Exit x states))
     (next : G.State) : ℝ :=
-  (∑ exit in exitLaw.atoms,
+  (∑ exit ∈ exitLaw.atoms,
       exitLaw.prob exit * G.exitTransitionProbability exit next) /
-    (∑ exit in exitLaw.atoms,
+    (∑ exit ∈ exitLaw.atoms,
       exitLaw.prob exit *
         (∑ outside : G.State,
           if outside ∈ states then 0
@@ -1538,7 +1538,7 @@ noncomputable def kernelExpectedValue (kernel : G.FiniteKernel)
 noncomputable def kernelExpectedVisits (kernel : G.FiniteKernel)
     (states : Finset G.State) (source : G.State) : ℝ :=
   ∑' time : ℕ,
-    ∑ target in states,
+    ∑ target ∈ states,
       G.kernelStateProbability kernel target source time
 
 /-- Closed communicating class of a finite kernel. -/
@@ -1643,7 +1643,7 @@ structure ExitGraphEnumeration (states : Finset G.State) where
 /-- Equation (26): graph weight. -/
 noncomputable def graphWeight {states : Finset G.State}
     (x : G.StationaryProfile) (graph : G.ExitGraph states) : ℝ :=
-  ∏ state in states,
+  ∏ state ∈ states,
     G.productProbability (x state) (graph.action state) *
       (G.transition state (graph.action state)).prob (graph.target state)
 
@@ -1674,10 +1674,10 @@ def GraphExitFormulaClaim : Prop :=
     source ∈ states → target ∉ states →
     G.IsStationaryExitLaw x states source law →
       law target =
-        (∑ graph in enumeration.graphs,
+        (∑ graph ∈ enumeration.graphs,
           if G.GraphEndsAt graph source target then
             G.graphWeight x graph else 0) /
-        (∑ graph in enumeration.graphs, G.graphWeight x graph)
+        (∑ graph ∈ enumeration.graphs, G.graphWeight x graph)
 
 /-- Equation (27) is cited from Freidlin--Wentzell.  Its finite matrix-tree
 proof is not reconstructed in the repository. -/
@@ -1784,11 +1784,11 @@ def Lemma5_2Claim : Prop :=
       ∀ source, source ∈ states → ∀ target, target ∉ states →
         Tendsto
           (fun n =>
-            (∑ graph in enumeration.graphs,
+            (∑ graph ∈ enumeration.graphs,
               if G.IsMaximalGraph data graph ∧
                   G.GraphEndsAt graph source target then
                 G.graphWeight (data.evaluation n).profile graph else 0) /
-              (∑ graph in enumeration.graphs,
+              (∑ graph ∈ enumeration.graphs,
                 G.graphWeight (data.evaluation n).profile graph))
           atTop (nhds (data.exitLimit states source target))
 
@@ -1908,7 +1908,7 @@ theorem lemma5_3 : G.Lemma5_3Claim := by
 noncomputable def graphCost (x : G.StationaryProfile)
     (payoff : G.StatePayoff) {states : Finset G.State}
     (graph : G.ExitGraph states) : ℝ :=
-  ∑ state in states,
+  ∑ state ∈ states,
     ∑ who,
       G.continuationCost x payoff state who (graph.action state who)
 
