@@ -3,118 +3,86 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
-import Mathlib.Algebra.Group.Action.Defs
+
 import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Algebra.Order.BigOperators.Group.List
 import Mathlib.Data.Real.Basic
 import MathUE.BoundedDiscrepancyCirculation
 import MathUE.ChargedPathBudget
+import MathUE.DirectedTransport
 import MathUE.MaxPlusPotential
 
 /-!
-# Exactness of edge data on a finite directed multigraph
+# Additive exactness on a directed multigraph
 
-Edge data on a directed multigraph is a *coboundary* when it is the difference
-of a vertex function across each edge.  This file proves the exactness
-criterion: on a strongly connected graph, edge data is a coboundary exactly
-when every closed walk has cycle sum zero, and it records the quantitative
-obstruction supplied by a closed walk of nonzero cycle sum.
+An additive datum on the edges of a directed multigraph is a **coboundary** when
+it is the difference of a vertex potential across each edge.  This file proves
+the exactness criterion: on a strongly connected graph, edge data is a
+coboundary exactly when every closed walk has sum zero.  It also gives the
+quantitative obstruction supplied by a closed walk with nonzero sum.
+
+The generic path semantics does not live here.  It is defined in
+`MathUE.DirectedTransport`; this file is its additive translation
+specialization.  The edge datum `w e` acts by `x ↦ x + w e`, so a potential is
+a section, a walk acts by translation by its walk sum, and zero cycle sums are
+trivial holonomy.
 
 ## Vocabulary
 
-The same objects carry many names in different literatures.
-
-* Edge data of the form `e ↦ φ (target e) - φ (source e)` is a *coboundary*,
-  an *exact* `1`-cochain, a *potential difference*, a *gradient*, or a
-  *tension*.  The vertex function `φ` is the *potential*.
-* The criterion "every closed walk has cycle sum zero" is *Kirchhoff's voltage
-  law*, *path independence*, or *conservativeness*; in its multiplicative form
-  for transition rates it is the *Kolmogorov cycle criterion* for reversibility
-  (Kelly, *Reversibility and Stochastic Networks*, Chapter 1).
-* Edge data whose cycle sums do not all vanish carries a nonzero *circulation*,
-  a nonzero class in the *first cohomology* of the graph, or a *curvature* or
-  *holonomy obstruction*.
-* Graphs with edge labels in a *group*, inverting under edge reversal, are
-  *gain graphs* or *voltage graphs* (Zaslavsky, *Biased graphs* and the
-  gain-graph surveys); there the composite label of a walk is its *gain*, and
-  a gain graph with trivial cycle gains is *balanced* or *flat*.  Monoid
-  labels along directed walks, as below, are a one-directional generalization
-  with no established name; the composite label is also called the walk's
-  *holonomy* or *monodromy*, or its image in the transition monoid.
+* A coboundary is also an exact `1`-cochain, potential difference, gradient, or
+  tension.
+* Vanishing closed-walk sums are Kirchhoff's voltage law, path independence, or
+  conservativeness; in multiplicative form for transition rates it is the
+  Kolmogorov cycle criterion for reversibility (Kelly, *Reversibility and
+  Stochastic Networks*, Chapter 1).
+* A nonzero cycle sum is a circulation, first-cohomology class, curvature, or
+  holonomy obstruction.
+* Under the translation action, exactness is balance (flatness) of the induced
+  gain graph; for labels in a general group, balance is equivalent to the
+  existence of a switching function (Zaslavsky, *Biased graphs. I*, J. Combin.
+  Theory Ser. B 47 (1989)).  Only the translation-labelled case is proved here.
 
 ## Main definitions
 
-* `Math.CycleCoboundary.walkSum` — sum of edge data along a finite walk.
-* `Math.CycleCoboundary.coboundary` — the edge data induced by a potential.
-* `Math.CycleCoboundary.IsCoboundary`, `Math.CycleCoboundary.HasZeroCycleSums`.
-* `Math.CycleCoboundary.LinkedTo`, `Math.CycleCoboundary.IsStronglyConnectedAt`
-  — the reachability scope of the criterion.
-* `Math.CycleCoboundary.walkLabel`, `Math.CycleCoboundary.HasTrivialCycleLabels`,
-  `Math.CycleCoboundary.transport` — the monoid-labelled walk-composition
-  layer, whose group case is the gain-graph notion.
+* `Math.CycleCoboundary.walkSum` — sum of edge data along a walk.
+* `Math.CycleCoboundary.coboundary` and
+  `Math.CycleCoboundary.IsCoboundary`.
+* `Math.CycleCoboundary.HasZeroCycleSums`.
+* `Math.CycleCoboundary.LinkedTo` and
+  `Math.CycleCoboundary.IsStronglyConnectedAt`.
+* `Math.CycleCoboundary.translationTransport` — the direct additive reading as
+  a `Math.DirectedTransport.Transport`.
 
 ## Main results
 
-* `Math.CycleCoboundary.exists_coboundary_of_baseCycleSums_eq_zero` — the
-  construction of a potential by path sums from a base vertex.  Only the
-  closed walks *at the base vertex* are used, and only the endpoints of edges
-  need to be linked to the base.
-* `Math.CycleCoboundary.isCoboundary_iff_hasZeroCycleSums` — the exactness
-  criterion on a strongly connected graph.
-* `Math.CycleCoboundary.isCoboundary_iff_exists_defect_eq_zero` — exactness is
-  the vanishing-defect case of the one-sided potential inequality of
-  `MathUE.MaxPlusPotential`.
-* `Math.CycleCoboundary.cycleSum_le_length_mul_of_defect_le`,
-  `Math.CycleCoboundary.exists_edge_defect_ge_of_pos` and
-  `Math.CycleCoboundary.exists_edge_abs_defect_ge` — the quantitative
-  obstruction: a closed walk of cycle sum at least `γ > 0` forces some edge on
-  it to deviate from every potential difference by at least `γ / length`, in
-  the positive direction.
-* `Math.CycleCoboundary.hasTrivialCycleLabels_ofAdd_iff` and
-  `Math.CycleCoboundary.isCoboundary_iff_hasTrivialCycleLabels` — for real edge
-  data, exactness is triviality of the cycle holonomy of the induced
-  translation action.
+* `Math.CycleCoboundary.exists_coboundary_of_baseCycleSums_eq_zero` — reconstruct
+  a potential from path sums based at one vertex.
+* `Math.CycleCoboundary.isCoboundary_iff_hasZeroCycleSums` — exactness iff all
+  cycle sums vanish on a strongly connected graph.
+* `Math.CycleCoboundary.isCoboundary_iff_exists_isSection` — exactness iff the
+  translation transport has a section, without a connectivity hypothesis.
+* `Math.CycleCoboundary.hasZeroCycleSums_iff_hasTrivialHolonomy` — cycle sums are
+  precisely translation holonomy.
+* `Math.CycleCoboundary.exists_edge_defect_ge_of_pos` and
+  `Math.CycleCoboundary.exists_edge_abs_defect_ge` — quantitative obstruction
+  bounds from a positive cycle sum.
 
 ## Relation to neighbouring modules
 
-`MathUE.BoundedDiscrepancyCirculation` supplies the graph and walk
-representation, and `Math.CycleCoboundary.charge_eq_walkSum` identifies its
-integer walk charge with `walkSum`.
+`MathUE.DirectedTransport` owns typed walk composition, constant-fiber actions,
+monoid labels, and holonomy; the generic names live only there, and this file
+opens them where the translation specialization needs them.
 
-`MathUE.MaxPlusPotential` develops the *one-sided* theory of the same edge
-graphs: `Math.MaxPlusPotential.IsPotential G w φ` says that the coboundary of
-`φ` dominates `w` edgewise, `Math.MaxPlusPotential.defect` measures the failure
-at one edge, and a potential exists exactly when no closed walk has positive
-weight.  Its real-valued `Math.MaxPlusPotential.walkWeight` is definitionally
-the real instance of `walkSum`, recorded by
-`Math.CycleCoboundary.walkWeight_eq_walkSum`.  Exactness is the equality case,
-so the quantitative obstruction below is inherited from that module rather than
-reproved.
-
-`MathUE.ChargedPathBudget` proves the *inequality* form of the same duality:
-for nonnegative edge data, a bounded path budget is equivalent to a potential
-satisfying `Φ (tgt e) + w e ≤ Φ (src e)`, and the least oscillation of such a
-potential is the budget.  The criterion here is the equality form; the bridge
-`Math.CycleCoboundary.chargedIsPotential_neg_of_isCoboundary` exhibits an exact
-potential as a special case of an inequality potential.  Note that its sign
-convention is the reverse of the one in `MathUE.MaxPlusPotential`.
-
-`Math.LinearAlgebra.OwnerLabeledFlowHolonomy` treats the dual linear-programming
-form (Farkas duality between a nonpositive flow-charge pairing and a
-superharmonic account potential).  Its `holonomy` is the pairing of a
-circulation with a charge cochain, which is a different object from the
-composite walk label `walkLabel` below.
+`MathUE.MaxPlusPotential` develops the one-sided inequality
+`φ (source e) + w e ≤ φ (target e)` and its positive-cycle duality.  Exactness
+is its zero-defect case.  `MathUE.ChargedPathBudget` uses the opposite decrement
+orientation for nonnegative charges and bounded path budgets.
 
 ## Scope
 
-This file proves the exactness criterion and its obstruction, not the
-decomposition: splitting arbitrary edge data into a coboundary plus a
-circulation requires the orthogonality of cycle space and cut space, and the
-first cohomology group appears here only through the vanishing of its
-classes, never as a quotient.  For labels in a general group, balance of a
-gain graph is equivalent to the existence of a switching function
-(Zaslavsky, *Biased graphs. I*, J. Combin. Theory Ser. B 47 (1989)); only
-the translation-labelled real case is proved here.
+The file proves an exactness criterion, not a Hodge or cut-cycle decomposition.
+It detects the vanishing of the first cohomology class but does not construct the
+quotient or split arbitrary edge data into exact and circulating parts.
 -/
 
 noncomputable section
@@ -130,7 +98,6 @@ universe uV uE
 variable {V : Type uV} {E : Type uE} {G : EdgeGraph V E}
 
 /-! ### Sums of edge data along walks -/
-
 section WalkSum
 
 variable {A : Type*} [AddCommMonoid A]
@@ -190,7 +157,6 @@ theorem walkSum_sub {A : Type*} [AddCommGroup A] (w₁ w₂ : E → A)
       abel
 
 /-! ### Coboundaries and the cycle criterion -/
-
 section Coboundary
 
 variable {A : Type*} [AddCommGroup A]
@@ -204,7 +170,7 @@ def coboundary (G : EdgeGraph V E) (φ : V → A) : E → A :=
 @[simp] theorem coboundary_apply (φ : V → A) (edge : E) :
     coboundary G φ edge = φ (G.target edge) - φ (G.source edge) := rfl
 
-/-- Edge data is *exact* when it is the coboundary of some vertex potential. -/
+/-- Edge data is **exact** when it is the coboundary of some vertex potential. -/
 def IsCoboundary (G : EdgeGraph V E) (w : E → A) : Prop :=
   ∃ φ : V → A, ∀ edge : E, w edge = coboundary G φ edge
 
@@ -241,7 +207,6 @@ theorem IsCoboundary.hasZeroCycleSums {w : E → A} (hw : IsCoboundary G w) :
 end Coboundary
 
 /-! ### Reachability scope
-
 The converse construction needs the endpoints of every edge to lie on a closed
 walk through a fixed base vertex: a walk out to the endpoint and a walk back.
 In a directed graph neither direction follows from the other. -/
@@ -271,7 +236,6 @@ theorem IsStronglyConnectedAt.edgeEndpointsLinkedTo {base : V}
   fun _ => ⟨hconnected _, hconnected _⟩
 
 /-! ### The exactness criterion -/
-
 section Reconstruction
 
 variable {A : Type*} [AddCommGroup A]
@@ -333,15 +297,12 @@ theorem isCoboundary_iff_hasZeroCycleSums {w : E → A} {base : V}
 end Reconstruction
 
 /-! ### The quantitative obstruction
-
 A closed walk of positive cycle sum is not merely an obstruction to exactness:
 it forces every candidate potential to be wrong on some edge of that walk, by
 an amount inversely proportional to the walk's length.
-
 The residual of a candidate potential at one edge is `Math.MaxPlusPotential.defect`,
 and the one-sided existence statement is `Math.MaxPlusPotential.exists_edge_defect_ge`.
 Exactness is the case where that residual vanishes on every edge. -/
-
 section Quantitative
 
 open Math.MaxPlusPotential
@@ -431,88 +392,96 @@ theorem not_isCoboundary_of_cycleSum_pos (cycle : G.Walk vertex vertex)
 
 end Quantitative
 
-/-! ### Monoid-labelled edges and cycle holonomy
+/-! ### Translation transport
 
-Labels in a monoid `M` compose along directed walks.  When the monoid is a
-group and labels invert under edge reversal this is Zaslavsky's *gain graph*
-(or voltage graph) and the composite label is its *gain*; in general it is
-also called the walk's *holonomy* or *monodromy*.  Labels compose
-contravariantly here, so that the label of a walk acts on a fibre exactly as
-the composite of the per-edge transports; see `transport_eq_smul`. -/
+An additive edge datum `w e` acts on one common fiber by the translation
+`x ↦ x + w e`.  Under this reading, a coboundary potential is exactly a section,
+and zero cycle sums are exactly trivial holonomy. -/
 
-section Gain
+section TranslationTransport
 
-variable {M : Type*} [Monoid M]
+variable {A : Type*} [AddCommGroup A]
 
-/-- Composite label of a walk: the product of its edge labels, with the last
-edge outermost.  Also called the walk's holonomy or monodromy, or, for group
-labels, its gain. -/
-def walkLabel (label : E → M) {start : V} :
-    {finish : V} → G.Walk start finish → M
-  | _, .nil => 1
-  | _, .concat walkSoFar edge _ => label edge * walkLabel label walkSoFar
+variable {w : E → A} {start finish : V}
 
-variable {label : E → M} {start finish middle : V}
+/-- The constant-fiber directed transport whose edge `e` acts by translation by
+`w e`. -/
+def translationTransport (G : EdgeGraph V E) (w : E → A) :
+    Math.DirectedTransport.Transport G (fun _ : V => A) :=
+  Math.DirectedTransport.ofEdgeAct G A fun edge point => point + w edge
 
-@[simp] theorem walkLabel_nil : walkLabel label (.nil : G.Walk start start) = 1 := rfl
-
-@[simp] theorem walkLabel_concat (walk : G.Walk start finish) (edge : E)
-    (legal : G.source edge = finish) :
-    walkLabel label (walk.concat edge legal) = label edge * walkLabel label walk := rfl
-
-/-- Concatenation of walks composes gains contravariantly. -/
-@[simp] theorem walkLabel_append (first : G.Walk start middle)
-    (second : G.Walk middle finish) :
-    walkLabel label (first.append second) = walkLabel label second * walkLabel label first := by
-  induction second with
-  | nil => simp
-  | concat walkSoFar edge legal ih =>
-      rw [EdgeGraph.Walk.append_concat, walkLabel_concat, walkLabel_concat, ih, mul_assoc]
-
-/-- Every closed walk has trivial composite label.  In the group-labelled
-case this is a *balanced* or *flat* gain graph; the condition is triviality
-of the holonomy. -/
-def HasTrivialCycleLabels (G : EdgeGraph V E) (label : E → M) : Prop :=
-  ∀ (vertex : V) (cycle : G.Walk vertex vertex), walkLabel label cycle = 1
-
-/-- Transport a fibre point along a walk, applying edge transports in
-chronological order. -/
-def transport {X : Type*} (act : E → X → X) {start : V} :
-    {finish : V} → G.Walk start finish → X → X
-  | _, .nil => id
-  | _, .concat walkSoFar edge _ => act edge ∘ transport act walkSoFar
-
-@[simp] theorem transport_nil {X : Type*} (act : E → X → X) :
-    transport act (.nil : G.Walk start start) = id := rfl
-
-@[simp] theorem transport_concat {X : Type*} (act : E → X → X)
-    (walk : G.Walk start finish) (edge : E) (legal : G.source edge = finish) :
-    transport act (walk.concat edge legal) = act edge ∘ transport act walk := rfl
-
-/-- For labels acting on a fibre, the composite label of a walk is exactly
-its transport map.  This is why it is called the holonomy of the walk. -/
-theorem transport_eq_smul {X : Type*} [MulAction M X]
-    (walk : G.Walk start finish) (point : X) :
-    transport (fun edge value => label edge • value) walk point =
-      walkLabel label walk • point := by
+/-- Transport by additive edge data is translation by the walk sum. -/
+@[simp] theorem walkMap_translationTransport (w : E → A)
+    (walk : G.Walk start finish) (point : A) :
+    (translationTransport G w).walkMap walk point = point + walkSum w walk := by
   induction walk with
   | nil => simp
   | concat walkSoFar edge legal ih =>
-      rw [transport_concat, Function.comp_apply, ih, walkLabel_concat, mul_smul]
+      rw [Math.DirectedTransport.Transport.walkMap_concat,
+        Math.DirectedTransport.fiberCast_const, ih, walkSum_concat]
+      change (point + walkSum w walkSoFar) + w edge =
+        point + (walkSum w walkSoFar + w edge)
+      exact add_assoc _ _ _
 
-/-- Under trivial cycle gains, transport around any closed walk is the
-identity. -/
-theorem transport_cycle_eq_self {X : Type*} [MulAction M X]
-    (hflat : HasTrivialCycleLabels G label) {vertex : V}
-    (cycle : G.Walk vertex vertex) (point : X) :
-    transport (fun edge value => label edge • value) cycle point = point := by
-  rw [transport_eq_smul, hflat vertex cycle, one_smul]
+/-- The section equation for translation transport is the coboundary equation. -/
+theorem isSection_translationTransport_iff (w : E → A) (φ : V → A) :
+    (translationTransport G w).IsSection φ ↔
+      ∀ edge : E, w edge = coboundary G φ edge := by
+  constructor
+  · intro hsection edge
+    have hedge := hsection edge
+    change φ (G.source edge) + w edge = φ (G.target edge) at hedge
+    rw [coboundary_apply, eq_sub_iff_add_eq]
+    simpa [add_comm] using hedge
+  · intro h edge
+    have hedge := h edge
+    rw [coboundary_apply, eq_sub_iff_add_eq] at hedge
+    change φ (G.source edge) + w edge = φ (G.target edge)
+    simpa [add_comm] using hedge
 
-end Gain
+/-- Edge data is a coboundary exactly when its translation transport admits a
+section.  No connectivity hypothesis is needed. -/
+theorem isCoboundary_iff_exists_isSection (G : EdgeGraph V E) (w : E → A) :
+    IsCoboundary G w ↔
+      ∃ φ : V → A, (translationTransport G w).IsSection φ := by
+  constructor
+  · rintro ⟨φ, hφ⟩
+    exact ⟨φ, (isSection_translationTransport_iff (G := G) w φ).2 hφ⟩
+  · rintro ⟨φ, hφ⟩
+    exact ⟨φ, (isSection_translationTransport_iff (G := G) w φ).1 hφ⟩
+
+/-- Vanishing cycle sums are exactly trivial holonomy of translation
+transport. -/
+theorem hasZeroCycleSums_iff_hasTrivialHolonomy (G : EdgeGraph V E)
+    (w : E → A) :
+    HasZeroCycleSums G w ↔
+      (translationTransport G w).HasTrivialHolonomy := by
+  constructor
+  · intro hzero base cycle
+    funext point
+    change (translationTransport G w).walkMap cycle point = id point
+    rw [walkMap_translationTransport, hzero base cycle]
+    simp
+  · intro hflat base cycle
+    have hpoint := congrFun (hflat base cycle) 0
+    change (translationTransport G w).walkMap cycle 0 = id 0 at hpoint
+    rw [walkMap_translationTransport, zero_add] at hpoint
+    simpa using hpoint
+
+/-- On a strongly connected graph, additive exactness is equivalent to trivial
+holonomy of the translation transport. -/
+theorem isCoboundary_iff_hasTrivialHolonomy {base : V}
+    (hconnected : IsStronglyConnectedAt G base) :
+    IsCoboundary G w ↔ (translationTransport G w).HasTrivialHolonomy :=
+  (isCoboundary_iff_hasZeroCycleSums hconnected).trans
+    (hasZeroCycleSums_iff_hasTrivialHolonomy G w)
+
+end TranslationTransport
 
 /-! ### Real edge data as translation labels -/
-
 section Translation
+
+open Math.DirectedTransport
 
 variable {w : E → ℝ} {start finish : V}
 
@@ -555,13 +524,11 @@ theorem isCoboundary_iff_hasTrivialCycleLabels {base : V}
 end Translation
 
 /-! ### Bridge to the inequality form
-
 `MathUE.ChargedPathBudget` characterises finiteness of the path budget of
-nonnegative edge data by existence of a *bounded* potential obeying the
+nonnegative edge data by existence of a **bounded** potential obeying the
 one-sided decrement `Φ (tgt e) + w e ≤ Φ (src e)`.  With the sign convention
 there, that inequality says exactly that the coboundary of `-Φ` dominates the
 edge data.  An exact potential is the equality case. -/
-
 section ChargedBridge
 
 open Math.ChargedPathBudget
