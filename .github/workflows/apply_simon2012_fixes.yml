@@ -65,6 +65,12 @@ jobs:
           replace('Section4H G inverse λ', 'Section4H G inverse cutoff')
           replace('IsSection4Cutoff G R δ λ', 'IsSection4Cutoff G R δ cutoff')
           replace('Section4J G inverse λ', 'Section4J G inverse cutoff')
+          replace('(hλ0 : 0 < (cutoff a : ℝ))',
+                  '(hcutoff0 : 0 < (cutoff a : ℝ))')
+          replace('(hλ1 : (cutoff a : ℝ) < 1)',
+                  '(hcutoff1 : (cutoff a : ℝ) < 1)')
+          replace('(hλ : IsSection4Cutoff G R δ cutoff)',
+                  '(hcutoff : IsSection4Cutoff G R δ cutoff)')
           replace('def QuittingGame.withReward (G : QuittingGame)',
                   'def WithReward (G : QuittingGame)')
           replace('(G.withReward reward\')', '(WithReward G reward\')')
@@ -123,5 +129,5 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add Literature/Simon2012.lean
-          git commit -m "Fix Simon 2012 elaboration errors"
+          git commit -m "Fix remaining Simon 2012 parser errors"
           git push origin HEAD:agent/promote-simon2012
