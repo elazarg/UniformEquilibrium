@@ -7,37 +7,22 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: lean-ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  repair-ftv-review:
+  compile-ftv-literature:
     if: github.event_name == 'pull_request' && github.head_ref == 'agent/promote-ftv-1997'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: agent/promote-ftv-1997
           fetch-depth: 0
           submodules: recursive
-      - name: Apply source fix
-        run: |
-          echo 'H4sIAEbThWoC/+1YzW7cNhC+6ykmm4NXyK6coIcibo0iMeAiQOI4sZNLashcabTLgiIVktq1eirQomivBXrOpUDTBwh67wPkIfwkHVLSav/cZGPf2osNksP5+WbmG2ozrXIomJ0IPgKeF0pbOKZlELhN2PeLfu8xt6iZLTXuHgo0yeR0UvJvTc7kA5m+1By/w3v3738eCWSyFwYWLyzddSoijSyN3UY/DAJjmXYnbh1xmeJFv7c7vAW3b9+G0wlCQRaAhCxXkukKRmjsUGMhKtCYlonbJ/0o0yuUPMY8Z/BZdG8PpFrUhK9LTjFqXuYw3O0NwLsSBt7iPuidnZ1tHQkCL8kK1FAaNGBpWcpEyZT7ewIylljaZhbYmHFp7KJOVRRKorQGmLcXrNiD2h5ecGNNBI8kaeIG6M5Q8CkOnTjCmOXoLduZClRpE5UjeSpwyqRdi4MJSqSk5ZT8ZXTG8xxT7hQ9Kzm5Scge4RR1QHjZCLoIE8F4DmTfm00h49rYAXCZiDLlclyHqclvzT08dAScgrNVgRFhHgS7w+Ec3OFmcL3ynEBxiKadd8JJZYocnmfY60wxoxIl/45J58lc5UPS+NwpPPBe78GxVgXs7QcAlz9/D32tlHW7glUU2uVPv8Lxk0N4qJQIoT+bqPlZOKAr7tIPkEwUT5BOnhY+vMsff6sPAfrN2T4VnUSSfgvzHUP5gLshbf7RSNc+pDjl3l3Ym++TJge7JTi/dml1fwgwpavo8PTlQZUInjxIc24MHwl0a4wyO32OM6bTMFrQA/AQJ2zKlT6x1Lg4roDCGixItIZOUeecavWYVSrLtjO5ZJCcP6TqdyFFZZGS0ZXjhei6TFFiMi7WRWE7T8BlNFzT4lI5Bzr0y8tffl8S+6/gcLUTrnVOeY6rFXNtXxzcdR+EHnvHALc8A2SlEENnZZGbiHV4xqkfC608PVlLnOnJYFQ52gOVeaYznvI6unPcZIiABzAqreccvHCTjAhkxq1EYxxvMUnk3PITHY2acMmFOt7I87nGnKw6QiM3yKAaCT6uG3WCjjBrnqfZJ0SrfshT8pKcT2pBlrKCeDZQsvGXJqcnzZby3WCoSdE6NDGvSTYuNrNYQxEfQXT7BBXJGqV1VRPuCxqQPkaKurNPQ4qirnnau0gDw6NyIpHiSljhIfMZcFhVgfBPAAHnfjycAwG3PDu+8IqWBoChZaOB13aacAM3FIAwIUjd4JBAuk2dFJroa7k67zj3vAV9Cb6ujOJRC0nMTexq/EjNYqVj6fyOVRbPY5djD+sW06CWn7QazJy71xv6kF9g+rQd8Qd0g8sSn1Ch+h71zfEl3AsbFTc8YW6c1T7AaVsw2vX5bJ3Ntuey6zEZ7G+YpF3oLyQXzLfLASuC6wXvzbV9LdB6cy+ZKNHtfqjunrXCwadbb+wmTQk3px9h/GDpxs154JtoC/tLTUe6RlWcMPdgn3hOoIbrMO2eB+vaPfPVYitgLHpG1//+i4gv465R37x1DTuAp5o+VQToTAzgq/jyzZ/eip7Bq82tGtdt5ifCpoIerHjZdNtjetg/p0jjjhBXJd3xCX0OoUywbZfWtg/OEaSxwTVLtiPJM68qIZYf4yejOu+4dQUnzeyiXltI5L9nCOiJ4L7N+jm7iPF1rPl4Ypt6CCNT5flqGmuWbRKp/0/kBsJvfOj4pvX2w9m9e+P5XczIFT6ebSgEgRktBLqHgiT4KdKmKpqyCHZ2doL2Fw7379We/ynhDO7UX9t36l2U6d7ZolzkvnDp2df3Vnubv/h08yn3yLx/94DsFVZZnhwxM/lG9uqL/Stme3MV3r9zL1dXQ73BNU1tGLAfYzT0Px5FM01PxvqnH/cnDP4BXhQ/o20SAAA=' | base64 --decode | gzip --decompress > /tmp/fix_ftv.py
-          python3 /tmp/fix_ftv.py
-      - name: Commit source fix
-        run: |
-          if git diff --quiet -- Literature/FleschThuijsmanAndVrieze1997.lean; then
-            exit 0
-          fi
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add Literature/FleschThuijsmanAndVrieze1997.lean
-          git commit -m "Fix FTV audit review layout"
-          git push origin HEAD:agent/promote-ftv-1997
       - uses: leanprover/lean-action@v1
         with:
           auto-config: false
