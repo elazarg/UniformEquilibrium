@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Le Roux 2014
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Le Roux 2014"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Le Roux 2014"
   role := .formalization
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

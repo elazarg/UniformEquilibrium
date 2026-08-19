@@ -16,8 +16,8 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Ummels & Wojtczak 2009"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Ummels & Wojtczak 2009"
   role := .finiteMemoryAlgorithms
-  sourceEvidence := .primaryInspected
-  auditStatus := .sourceInspected
+  paperEvidence := .primaryInspected
+  auditStatus := .paperInspected
   claims := []
 
 end Literature.UmmelsAndWojtczak2009

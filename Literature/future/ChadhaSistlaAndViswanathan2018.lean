@@ -16,16 +16,16 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Chadha, Sistla & Viswanathan 2018"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Chadha, Sistla & Viswanathan 2018"
   role := .zeroSumBoundary
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "strict_cutpoint_emptiness_complexity"
-        sourceLocator := "Section 2"
+        paperLocator := "Section 2"
         summary := "Strict-cutpoint PFA emptiness is co-r.e.-complete."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "pfa_value_equality_complexity"
-        sourceLocator := "Section 2"
+        paperLocator := "Section 2"
         summary := "PFA value equality is Pi-0-2-complete."
-        status := .sourceOnly } ]
+        status := .paperOnly } ]
 
 end Literature.ChadhaSistlaAndViswanathan2018

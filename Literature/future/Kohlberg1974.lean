@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Kohlberg 1974
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Kohlberg 1974"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Kohlberg 1974"
   role := .zeroSumUniformValue
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

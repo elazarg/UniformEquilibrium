@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Renault & Ziliotto 2020a
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Renault & Ziliotto 2020a"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Renault & Ziliotto 2020a"
   role := .counterexamples
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

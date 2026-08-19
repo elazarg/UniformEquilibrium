@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Bolte, Gaubert & Vigeral 2015
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Bolte, Gaubert & Vigeral 2015"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Bolte, Gaubert & Vigeral 2015"
   role := .zeroSumBoundary
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

@@ -17,8 +17,8 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Chadha, Sistla & Viswanathan 2013"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Chadha, Sistla & Viswanathan 2013"
   role := .zeroSumBoundary
-  sourceEvidence := .secondaryInspected
-  auditStatus := .sourceInspected
+  paperEvidence := .secondaryInspected
+  auditStatus := .paperInspected
   claims := []
 
 end Literature.ChadhaSistlaAndViswanathan2013

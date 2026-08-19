@@ -16,12 +16,12 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Solan & Vieille 2002b"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan & Vieille 2002b"
   role := .nonzeroSumExistence
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "uniform_autonomous_correlated_equilibrium"
-        sourceLocator := "Definition 2.2 and Theorem 2.3"
+        paperLocator := "Definition 2.2 and Theorem 2.3"
         summary := "Every finite multiplayer stochastic game has the mediated payoff."
-        status := .sourceOnly } ]
+        status := .paperOnly } ]
 
 end Literature.SolanAndVieille2002b

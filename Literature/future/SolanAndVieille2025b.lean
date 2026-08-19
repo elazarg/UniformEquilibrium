@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Solan & Vieille 2025b
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Solan & Vieille 2025b"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan & Vieille 2025b"
   role := .recentNonzeroSum
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

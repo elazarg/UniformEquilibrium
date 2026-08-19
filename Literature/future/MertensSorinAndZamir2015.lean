@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Mertens, Sorin & Zamir 2015
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Mertens, Sorin & Zamir 2015"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Mertens, Sorin & Zamir 2015"
   role := .surveys
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

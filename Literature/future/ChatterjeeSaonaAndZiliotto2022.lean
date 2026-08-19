@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Chatterjee, Saona & Ziliotto 2022
 
-The primary paper supplies the source statements recorded below.
+The primary paper supplies the paper statements recorded below.
 -/
 
 namespace Literature.ChatterjeeSaonaAndZiliotto2022
@@ -16,20 +16,20 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Chatterjee, Saona & Ziliotto 2022"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Chatterjee, Saona & Ziliotto 2022"
   role := .zeroSumBoundary
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "finite_memory_epsilon_optimality"
-        sourceLocator := "Theorem 2.9"
+        paperLocator := "Theorem 2.9"
         summary := "Finite POMDPs admit deterministic finite-memory epsilon-optimal strategies."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "uniform_value_identification"
-        sourceLocator := "Remark 2.1"
+        paperLocator := "Remark 2.1"
         summary := "The long-run value agrees with asymptotic and uniform values."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "promised_gap_approximation"
-        sourceLocator := "Corollary 3.2"
+        paperLocator := "Corollary 3.2"
         summary := "The promised-gap approximation problem is recursively enumerable."
-        status := .sourceOnly } ]
+        status := .paperOnly } ]
 
 end Literature.ChatterjeeSaonaAndZiliotto2022

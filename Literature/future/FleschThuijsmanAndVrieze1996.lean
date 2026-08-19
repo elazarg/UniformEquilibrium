@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Flesch, Thuijsman & Vrieze 1996
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Flesch, Thuijsman & Vrieze 1996"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Flesch, Thuijsman & Vrieze 1996"
   role := .nonzeroSumExistence
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

@@ -32,20 +32,20 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Simon 2012"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Simon 2012"
   role := .nonzeroSumExistence
-  sourceEvidence := .abstractInspected
+  paperEvidence := .abstractInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "conditional_existence_for_normal_players"
-        sourceLocator := "Abstract"
+        paperLocator := "Abstract"
         summary :=
           "The paper poses a question of topological dynamics and shows " ++
           "that an affirmative answer would establish existence of " ++
           "approximate equilibria in all quitting games with only normal " ++
           "players. The existence conclusion is conditional on that " ++
           "unresolved question."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "normal_and_abnormal_player_vocabulary"
-        sourceLocator := "Abstract and the definitions it summarizes"
+        paperLocator := "Abstract and the definitions it summarizes"
         summary :=
           "The normal and abnormal player vocabulary later used by Solan " ++
           "and Solan 2020 is introduced here. What that paper credits to " ++
@@ -56,13 +56,13 @@ def record : Literature.PaperRecord where
           "while the final manuscript credits Simon with normality by " ++
           "nonpositive min-max value. This paper itself was not read, so " ++
           "neither attribution is confirmed here."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "four_player_and_all_normal_cases_open"
-        sourceLocator := "Abstract and the paper's own statement of scope"
+        paperLocator := "Abstract and the paper's own statement of scope"
         summary :=
           "The paper declares the four-player case and the all-normal case " ++
           "open, so it does not supply an unconditional extension of the " ++
           "Solan and Vieille 2001 existence theorem."
-        status := .sourceOnly } ]
+        status := .paperOnly } ]
 
 end Literature.Simon2012

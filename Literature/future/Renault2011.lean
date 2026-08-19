@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Renault 2011
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Renault 2011"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Renault 2011"
   role := .zeroSumBoundary
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 
