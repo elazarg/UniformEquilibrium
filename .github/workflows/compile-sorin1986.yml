@@ -4,14 +4,14 @@ on:
   pull_request:
     paths:
       - Literature/Sorin1986.lean
+      - .github/sorin-parts/**
       - .github/workflows/compile-sorin1986.yml
-  workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: compile-sorin1986-${{ github.event.pull_request.number || github.ref }}
+  group: compile-sorin1986-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
@@ -23,6 +23,19 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Assemble staged Sorin source
+        shell: bash
+        run: |
+          if compgen -G '.github/sorin-parts/part-*' > /dev/null; then
+            cat .github/sorin-parts/part-* > Literature/Sorin1986.lean
+            rm -rf .github/sorin-parts
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add -A -- Literature/Sorin1986.lean .github/sorin-parts
+            git commit -m 'Complete Sorin 1986 transcription'
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
       - uses: leanprover/lean-action@v1
         with:
           auto-config: false
