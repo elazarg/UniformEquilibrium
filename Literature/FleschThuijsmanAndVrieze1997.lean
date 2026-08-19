@@ -316,9 +316,9 @@ exactly the stopping-law definition underlying `quittingTerminalPayoff`.
 /-! ### The pure stationary best-reply reduction
 
 The paper uses the unconditional fact that against stationary opponents a pure
-stationary best reply exists.  In this one-live-state game the two outcome-
-relevant pure stationary alternatives are immediate Quit and Never quit.  The
-paper claim is stated first, including that restriction in its type. -/
+stationary best reply exists. In this one-live-state game the two
+outcome-relevant pure stationary alternatives are immediate Quit and Never
+quit. The paper claim is stated first, including that restriction in its type. -/
 
 /-- The pure-stationary best-reply statement used immediately before Lemma 3.1. -/
 def PaperPureStationaryBestReplyClaim : Prop :=
@@ -326,19 +326,20 @@ def PaperPureStationaryBestReplyClaim : Prop :=
     ∃ choice : Option ℕ,
       (choice = none ∨ choice = some 0) ∧
         ∀ deviation :
-(quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorStrategy who,
-quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
-    (Function.update
-      (quittingStationaryProfile
-        GameTheory.FTVCyclicAdmissibleCycle.ftvReward root)
-      who deviation) who ≤
-  quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
-    (Function.update
-      (quittingStationaryProfile
-        GameTheory.FTVCyclicAdmissibleCycle.ftvReward root)
-      who
-      (quittingPureTimeBehaviorStrategy
-        GameTheory.FTVCyclicAdmissibleCycle.ftvReward who choice)) who
+          (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).
+            BehaviorStrategy who,
+          quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+              (Function.update
+                (quittingStationaryProfile
+                  GameTheory.FTVCyclicAdmissibleCycle.ftvReward root)
+                who deviation) who ≤
+            quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+              (Function.update
+                (quittingStationaryProfile
+                  GameTheory.FTVCyclicAdmissibleCycle.ftvReward root)
+                who
+                (quittingPureTimeBehaviorStrategy
+                  GameTheory.FTVCyclicAdmissibleCycle.ftvReward who choice)) who
 
 /-! The full-rate stationary verifier proves attainment by one of the same two
 outcome classes, but its exported witness is an unrestricted behavior strategy.
@@ -357,15 +358,15 @@ theorem stationary_bestReply_is_quitNow_or_never_of_contracting
       quittingStationaryFixedOpponentsContinueMass root who < 1) :
     ∃ choice : Option ℕ,
       (choice = none ∨ choice = some 0) ∧
-      quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
-(Function.update
-  (quittingStationaryProfile
-    GameTheory.FTVCyclicAdmissibleCycle.ftvReward root)
-  who
-  (quittingPureTimeBehaviorStrategy
-    GameTheory.FTVCyclicAdmissibleCycle.ftvReward who choice)) who =
-        quittingStationaryUnilateralCap
-GameTheory.FTVCyclicAdmissibleCycle.ftvReward root who := by
+        quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+            (Function.update
+              (quittingStationaryProfile
+                GameTheory.FTVCyclicAdmissibleCycle.ftvReward root)
+              who
+              (quittingPureTimeBehaviorStrategy
+                GameTheory.FTVCyclicAdmissibleCycle.ftvReward who choice)) who =
+          quittingStationaryUnilateralCap
+            GameTheory.FTVCyclicAdmissibleCycle.ftvReward root who := by
   let quitValue := quittingStationaryFixedOpponentsQuitValue
     GameTheory.FTVCyclicAdmissibleCycle.ftvReward root who
   let continueReward := quittingStationaryFixedOpponentsContinueReward
@@ -1004,7 +1005,7 @@ def PaperFinalExistenceRemark : Prop :=
     ∀ ε : ℝ, 0 < ε →
       ∃ profile : (quittingGame reward).BehaviorProfile,
         (quittingGame reward).IsεAsymptoticNash
-(quittingTerminalPayoff reward) ε profile
+          (quittingTerminalPayoff reward) ε profile
 
 /-- The paper's final existence remark, discharged by the repository's general
 three-player uniform-payoff theorem and terminal selection. -/
