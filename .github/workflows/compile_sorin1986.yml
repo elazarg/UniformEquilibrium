@@ -7,6 +7,7 @@ on:
       - Literature/Sorin1986CompactScratch.lean
       - Literature/Sorin1986CompactPayoffScratch.lean
       - Literature/Sorin1986CompactGameScratch.lean
+      - Literature/Sorin1986PropertyScratch.lean
       - .github/workflows/compile_sorin1986.yml
   workflow_dispatch:
 
@@ -47,3 +48,4 @@ jobs:
           lake env bash -lc 'export LEAN_PATH="/tmp:$LEAN_PATH"; lean -o /tmp/Sorin1986CompactScratch.olean Literature/Sorin1986CompactScratch.lean'
           lake env bash -lc 'export LEAN_PATH="/tmp:$LEAN_PATH"; lean -o /tmp/Sorin1986CompactPayoffScratch.olean Literature/Sorin1986CompactPayoffScratch.lean'
           lake env bash -lc 'export LEAN_PATH="/tmp:$LEAN_PATH"; lean Literature/Sorin1986CompactGameScratch.lean'
+          lake env bash -lc 'export LEAN_PATH="/tmp:$LEAN_PATH"; lean Literature/Sorin1986PropertyScratch.lean'
