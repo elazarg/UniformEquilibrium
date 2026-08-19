@@ -34,7 +34,7 @@ namespace GameTheory
 
 open Set Function
 
-universe u
+universe u v
 
 /-- A compact continuous game with finite barycentres and own-coordinate
 affine payoffs. -/
@@ -42,7 +42,7 @@ structure CompactBarycentricGame where
   Player : Type u
   [finitePlayer : Fintype Player]
   [decidablePlayer : DecidableEq Player]
-  Strategy : Player → Type u
+  Strategy : Player → Type v
   [strategyTopology : ∀ i, TopologicalSpace (Strategy i)]
   [compactStrategy : ∀ i, CompactSpace (Strategy i)]
   [nonemptyStrategy : ∀ i, Nonempty (Strategy i)]
