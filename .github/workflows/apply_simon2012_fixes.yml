@@ -1,14 +1,15 @@
 name: Apply Simon 2012 fixes
 
 on:
-  push:
-    branches: [agent/promote-simon2012]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: write
 
 jobs:
   apply:
+    if: github.head_ref == 'agent/promote-simon2012'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
