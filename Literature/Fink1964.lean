@@ -13,9 +13,10 @@ This is a paper-order audit.  The paper's action set `J^h(i)` is represented
 literally by `Game.Act i h`; no padded action appears in the reader-facing
 strategy space `Game.X`.  The only padding is the internal contingent-plan
 adapter `Game.rewardGame`, used to invoke the reusable player-dependent Fink
-fixed-point theorem in the proof of Theorem 2.  The checked marginalization
-lemmas below transfer that certificate back to the literal state-dependent
-action sets.
+fixed-point theorem in the proof of Theorem 2.  The marginalization lemmas below identify the required transfer back to the
+literal state-dependent action sets.  The final reward/cost bridge and Theorem 2
+are stated explicitly; until their proofs are discharged, those conclusions remain
+`sorry`-backed rather than checked.
 -/
 
 noncomputable section
@@ -28,6 +29,7 @@ open Filter Set
 open Math.Probability
 open Math.PMFProduct
 open Math.ProbabilityMassFunction
+open scoped NNReal Topology
 
 /-- The finite stochastic cost game on pages 89--90. -/
 structure Game (ι : Type) where
@@ -294,11 +296,7 @@ theorem phi_segment
     [∀ s i, Nonempty (P.Act s i)]
     (x y z : P.X) (hy : y ∈ P.phi x) (hz : z ∈ P.phi x)
     (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
-    (fun p => ⟨fun a => t * y p a + (1 - t) * z p a,
-      fun a => add_nonneg (mul_nonneg ht0 (y p).property.1 a)
-        (mul_nonneg (sub_nonneg.mpr ht1) (z p).property.1 a),
-      by rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
-        (y p).property.2, (z p).property.2]; ring⟩) ∈ P.phi x := by
+    (fun p => stdSimplex.mix t ht0 ht1 (y p) (z p)) ∈ P.phi x := by
   sorry
 
 /-- Closedness of each fiber `φ(x)`. -/
@@ -312,8 +310,11 @@ theorem phi_isClosed
 /-- A uniform finite bound on the cost table. -/
 def costBound
     (P : Game ι) [Fintype P.State] [Fintype ι]
-    [∀ s i, Fintype (P.Act s i)] : ℝ :=
-  ∑ s : P.State, ∑ a : P.JointActionAt s, ∑ who : ι, |P.cost s a who|
+    [∀ s i, Fintype (P.Act s i)] : ℝ := by
+  classical
+  exact ∑ s : P.State,
+    letI : ∀ i, Fintype (P.Act s i) := fun i => inferInstance
+    ∑ a : P.JointActionAt s, ∑ who : ι, |P.cost s a who|
 
 /-- **Lemma 2.** The range of `β` is bounded. -/
 theorem lemma_2
@@ -423,6 +424,7 @@ def effectiveProfile
 
 /-- Extend one local action to a complete contingent plan using fixed actions
 at every other state. -/
+open Classical in
 def extendAction (P : Game ι) (s : P.State) (i : ι)
     (a : P.Act s i) : P.AmbientAct i :=
   fun t => if h : t = s then h.symm ▸ a else Classical.choice (P.act_nonempty t i)
@@ -430,6 +432,7 @@ def extendAction (P : Game ι) (s : P.State) (i : ι)
 @[simp] theorem extendAction_apply_same
     (P : Game ι) (s : P.State) (i : ι) (a : P.Act s i) :
     P.extendAction s i a s = a := by
+  classical
   simp [extendAction]
 
 /-- Lift a local mixed action to a production-game mixed contingent plan. -/
@@ -442,12 +445,12 @@ def liftMixedAction
 def normalizedRewardValue (P : Game ι) (e : P.R) : P.R :=
   fun s who => -(1 - P.discount who) * e s who
 
-/-- A finite bound on the production reward table. -/
+/-- A finite bound on the production reward table.  Since a contingent plan
+is evaluated only at the current state, the literal table bound suffices. -/
 def rewardBound
     (P : Game ι) [Fintype P.State] [Fintype ι]
     [∀ s i, Fintype (P.Act s i)] : ℝ :=
-  ∑ s : P.State, ∑ a : (∀ i, P.AmbientAct i), ∑ who : ι,
-    |P.rewardGame.stagePayoff s a who|
+  P.costBound
 
 /-- Marginalization of independent contingent plans commutes with their
 product distribution. -/
