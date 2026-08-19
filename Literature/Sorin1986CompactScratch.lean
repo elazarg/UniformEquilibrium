@@ -116,6 +116,13 @@ def RawRealizationPlan.mix {G : FiniteStageGame} {who : G.Player}
   (fun h => intervalMix t (x.1 h) (y.1 h),
     fun h a => intervalMix t (x.2 h a) (y.2 h a))
 
+@[fun_prop] theorem RawRealizationPlan.mix_continuous
+    (G : FiniteStageGame) (who : G.Player) :
+    Continuous fun p : ℝ ×
+        (RawRealizationPlan G who × RawRealizationPlan G who) =>
+      RawRealizationPlan.mix p.1 p.2.1 p.2.2 := by
+  apply Continuous.prodMk <;> fun_prop
+
 private theorem RawRealizationPlan.mix_valid
     {G : FiniteStageGame} {who : G.Player}
     (t : ℝ) {x y : RawRealizationPlan G who}
