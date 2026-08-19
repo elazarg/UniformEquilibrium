@@ -711,6 +711,7 @@ import UniformEquilibrium.ProofView.Concepts.Equilibrium.ApproximateNash
 import UniformEquilibrium.ProofView.Concepts.Equilibrium.GameFormSolutionConcepts
 import UniformEquilibrium.ProofView.Concepts.Equilibrium.SolutionConcepts
 import UniformEquilibrium.ProofView.Concepts.Equilibrium.StrictNashProperties
+import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed
 import UniformEquilibrium.ProofView.Concepts.Existence.ProductSimplexBrouwer
 import UniformEquilibrium.ProofView.Concepts.Foundations.Convergence
