@@ -170,6 +170,18 @@ theorem reward_discountedAuxEU_eq
   simp_rw [P.reward_discountedAuxPayoff_eq e s]
   rw [expect_const_mul]
 
+/-- The same mixed algebra for the prescribed profile, without the
+syntactic self-update. -/
+theorem reward_discountedAuxEU_profile_eq
+    (P : Game ι) [Fintype ι] [DecidableEq ι]
+    (x : P.StationaryMixedProfile) (e : P.State → Payoff ι)
+    (s : P.State) (who : ι) :
+    P.rewardGame.discountedAuxEU (P.discount who)
+        (P.normalizedRewardValue e) s (x s) who =
+      -(1 - P.discount who) * P.f x who (x s who) e s := by
+  rw [← P.update_own_mixedAction x s who]
+  exact P.reward_discountedAuxEU_eq x who (x s who) e s
+
 /-- The normalized-reward Bellman certificate is exactly the paper's
 cost-minimizing equilibrium condition. -/
 theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
@@ -183,25 +195,25 @@ theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
     constructor
     · intro s who y
       rw [P.reward_discountedAuxEU_eq x who y e s,
-        P.reward_discountedAuxEU_eq x who (x s who) e s]
+        P.reward_discountedAuxEU_profile_eq x e s who]
       exact mul_le_mul_of_nonpos_left (hmin s who y)
         (neg_nonpos.mpr (sub_nonneg.mpr (P.discount_lt_one who).le))
     · intro s who
-      rw [P.reward_discountedAuxEU_eq x who (x s who) e s,
+      rw [P.reward_discountedAuxEU_profile_eq x e s who,
         hvalue s who]
       rfl
   · rintro ⟨hnash, hvalue⟩
     constructor
     · intro s who
       have h := hvalue s who
-      rw [P.reward_discountedAuxEU_eq x who (x s who) e s] at h
+      rw [P.reward_discountedAuxEU_profile_eq x e s who] at h
       dsimp [normalizedRewardValue] at h
       have hne := P.one_sub_discount_ne who
       nlinarith
     · intro s who y
       have h := hnash s who y
       rw [P.reward_discountedAuxEU_eq x who y e s,
-        P.reward_discountedAuxEU_eq x who (x s who) e s] at h
+        P.reward_discountedAuxEU_profile_eq x e s who] at h
       have hpos := P.one_sub_discount_pos who
       nlinarith
 
