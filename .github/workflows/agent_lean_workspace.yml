@@ -23,20 +23,120 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - name: Measure Lean workspace
+      - name: Split cached Lean environment
         run: |
-          {
-            du -sh "$HOME/.elan" || true
-            du -sh "$HOME/.elan"/* || true
-            du -sh .lake || true
-            du -sh .lake/build || true
-            du -sh .lake/packages/* || true
-            du -sh .lake/packages/*/.lake/build || true
-            find "$HOME/.elan" .lake -type f -printf '%s %p\n' | sort -nr | head -100
-          } > /tmp/workspace-sizes.txt
-          cat /tmp/workspace-sizes.txt
+          tar -cf - -C "$HOME" .elan -C "$GITHUB_WORKSPACE" .lake \
+            | zstd -3 -T0 \
+            | split -d -a 2 -b 300M - /tmp/lean-env.tar.zst.part-
       - uses: actions/upload-artifact@v4
         with:
-          name: workspace-sizes
+          name: lean-env-00
           retention-days: 1
-          path: /tmp/workspace-sizes.txt
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-00
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-01
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-01
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-02
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-02
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-03
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-03
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-04
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-04
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-05
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-05
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-06
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-06
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-07
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-07
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-08
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-08
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-09
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-09
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-10
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-10
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-11
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-11
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-12
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-12
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-13
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-13
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-14
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-env-15
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
+          path: /tmp/lean-env.tar.zst.part-15
