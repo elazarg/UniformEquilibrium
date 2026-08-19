@@ -20,10 +20,10 @@ import MathUE.TransferSummaryMonoid
 # Max-affine transport on a directed multigraph
 
 A finite directed multigraph whose edges are labelled by max-affine self-maps
-of the line, monotone at the nonnegative slopes the theory runs on.  A walk transports a real number by composing the maps
-of its edges in chronological order; a closed walk therefore acts on the line
-by an endomorphism, and the obstruction theory of that action is the subject of
-this file.
+of the line, monotone at the nonnegative slopes used below.  A walk transports
+a real number by composing its edge maps in chronological order; a closed walk
+therefore acts on the line by an endomorphism.  The obstruction theory of that
+action is the subject of this file.
 
 The label of an edge is a triple `(floor, shift, slope)` acting by
 `x ↦ max floor (shift + slope * x)`, with the floor allowed to be `⊥`, in which
@@ -105,20 +105,23 @@ path is the Lindley orbit `Math.TransferSummary.reflectedIter`
 (`holonomyApply_eq_reflectedIter`), whose survival-weighted representation is
 `Math.TransferSummary.reflectedIter_eq_sup'`.
 
-`holonomyApply` is `Math.CycleCoboundary.transport` at these edge actions, and
-`holonomyApply_eq_walkLabel_smul` identifies it with the gain-graph holonomy
-`Math.CycleCoboundary.walkLabel` in the nonnegative-slope monoid.  The composite label
-of a walk is thereby a word in the monoid of `Math.TransferSummary`, whose
-affine part is represented by the transfer matrices of
+`MathUE.DirectedTransport` is the generic semantic layer.  `toTransport`
+reads a max-affine labelling as a constant-fiber transport on `ℝ`, and
+`holonomyApply` is `Math.DirectedTransport.transport` at those edge actions.
+The theorem `holonomyApply_eq_walkLabel_smul` identifies it with
+`Math.DirectedTransport.walkLabel` in the nonnegative-slope label monoid.
+`MathUE.CycleCoboundary` is used only for the additive exactness specialization.
+The affine part of a composite label is represented by the transfer matrices of
 `Math.InverseCoordinate.affineTransferMatrix` through `toTransferMatrix`.
 
 ## Scope
 
-Only the section (subsolution) side is developed.  Whether every cycle's
-composite action having a pre-fixed point forces a lax section to exist
-is not addressed here in any generality; nor are eigenvalue problems for the
-vertex operator, for which the setting is the fixed-point theory of topical
-maps.
+This file develops the label algebra, walk semantics, weak duality, and the
+quantitative obstruction.  `MathUE.MaxAffineSectionDuality` proves section
+existence in the subunit-slope and slope-one regimes;
+`MathUE.MaxAffineFarkasDuality` gives the finite linear-system alternative for
+general labels.  Eigenvalue problems for the vertex operator remain outside
+this file; their natural setting is the fixed-point theory of topical maps.
 -/
 
 noncomputable section
@@ -128,7 +131,8 @@ namespace Math.MaxAffineTransport
 /-! ## The label algebra -/
 
 /-- Coefficients of a max-affine self-map of the line with a floor in
-`WithBot ℝ`, monotone exactly when the slope is nonnegative: the map `x ↦ max floor (shift + slope * x)`, read as the affine
+`WithBot ℝ`, monotone exactly when the slope is nonnegative.  The map is
+`x ↦ max floor (shift + slope * x)`, read as the affine
 map `x ↦ shift + slope * x` when the floor is `⊥`. -/
 @[ext] structure Label where
   /-- The floor the map never falls below, or `⊥` for no floor at all. -/
@@ -144,7 +148,8 @@ namespace Label
 def affinePart (f : Label) (x : ℝ) : ℝ := f.shift + f.slope * x
 
 /-- The action of a label, computed in `WithBot ℝ`. -/
-def applyBot (f : Label) (x : ℝ) : WithBot ℝ := f.floor ⊔ ((f.affinePart x : ℝ) : WithBot ℝ)
+def applyBot (f : Label) (x : ℝ) : WithBot ℝ :=
+  f.floor ⊔ ((f.affinePart x : ℝ) : WithBot ℝ)
 
 /-- The action of a label on the line.  The affine branch is never `⊥`, so the
 action lands in `ℝ` whatever the floor. -/
@@ -179,7 +184,8 @@ theorem coe_apply (f : Label) (x : ℝ) : ((f.apply x : ℝ) : WithBot ℝ) = f.
   · rw [apply_of_floor_coe hfloor, applyBot, hfloor, ← WithBot.coe_sup]
 
 /-- The floor is never undercut. -/
-theorem floor_le_coe_apply (f : Label) (x : ℝ) : f.floor ≤ ((f.apply x : ℝ) : WithBot ℝ) := by
+theorem floor_le_coe_apply (f : Label) (x : ℝ) :
+    f.floor ≤ ((f.apply x : ℝ) : WithBot ℝ) := by
   rw [coe_apply]
   exact le_sup_left
 
@@ -360,7 +366,8 @@ instance instMonoid : Monoid {f : Label // 0 ≤ f.slope} where
 instance instSMul : SMul {f : Label // 0 ≤ f.slope} ℝ where
   smul f x := f.1.apply x
 
-@[simp] theorem smul_eq_apply (f : {f : Label // 0 ≤ f.slope}) (x : ℝ) : f • x = f.1.apply x := rfl
+@[simp] theorem smul_eq_apply (f : {f : Label // 0 ≤ f.slope}) (x : ℝ) :
+    f • x = f.1.apply x := rfl
 
 /-- Nonnegative-slope labels act on the line by their max-affine maps. -/
 instance instMulAction : MulAction {f : Label // 0 ≤ f.slope} ℝ where
@@ -456,7 +463,6 @@ def toTransferMatrix : Math.TransferSummary.AffineSummary →* Matrix (Fin 2) (F
     toTransferMatrix f = Math.InverseCoordinate.affineTransferMatrix f.slope f.shift := rfl
 
 /-! ### The expansivity trichotomy -/
-
 theorem le_coe_unbotD (b : WithBot ℝ) (d : ℝ) : b ≤ ((b.unbotD d : ℝ) : WithBot ℝ) := by
   cases b with
   | bot => exact bot_le
@@ -515,7 +521,6 @@ theorem exists_apply_le_self_iff (f : Label) :
 end Label
 
 /-! ## The graph layer -/
-
 section Graph
 
 open Math.BoundedDiscrepancy
@@ -545,8 +550,9 @@ theorem isLaxSection_iff_forall_defect_nonpos (G : EdgeGraph V E) (label : E →
 /-- Transport along a walk: the actions of the traversed edges composed in
 chronological order.  For a closed walk this is the action of the walk's
 holonomy. -/
-def holonomyApply (label : E → Label) {start finish : V} (walk : G.Walk start finish) : ℝ → ℝ :=
-  Math.CycleCoboundary.transport (fun e x => (label e).apply x) walk
+def holonomyApply (label : E → Label) {start finish : V}
+    (walk : G.Walk start finish) : ℝ → ℝ :=
+  Math.DirectedTransport.transport (fun e x => (label e).apply x) walk
 
 @[simp] theorem holonomyApply_nil (label : E → Label) {start : V} (x : ℝ) :
     holonomyApply label (.nil : G.Walk start start) x = x := rfl
@@ -571,11 +577,13 @@ theorem holonomyApply_eq_foldl_map (label : E → Label) {start finish : V}
   rw [holonomyApply_eq_foldl, List.foldl_map]
 
 /-- At nonnegative slopes the transport is the action of the gain-graph
-holonomy `Math.CycleCoboundary.walkLabel` in the label monoid. -/
-theorem holonomyApply_eq_walkLabel_smul (label : E → {f : Label // 0 ≤ f.slope}) {start finish : V}
+holonomy `Math.DirectedTransport.walkLabel` in the label monoid. -/
+theorem holonomyApply_eq_walkLabel_smul
+    (label : E → {f : Label // 0 ≤ f.slope}) {start finish : V}
     (walk : G.Walk start finish) (x : ℝ) :
-    holonomyApply (fun e => (label e).1) walk x = Math.CycleCoboundary.walkLabel label walk • x :=
-  Math.CycleCoboundary.transport_eq_smul (G := G) (label := label) walk x
+    holonomyApply (fun e => (label e).1) walk x =
+      Math.DirectedTransport.walkLabel label walk • x :=
+  Math.DirectedTransport.transport_eq_smul (G := G) (label := label) walk x
 
 /-! ### Survival-weighted accounting along an edge list -/
 
@@ -627,7 +635,8 @@ def weightedDefect (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) : 
 @[simp] theorem weightedDefect_nil (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) :
     weightedDefect G label φ ([] : List E) = 0 := rfl
 
-@[simp] theorem weightedDefect_cons (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) (e : E)
+@[simp] theorem weightedDefect_cons (G : EdgeGraph V E) (label : E → Label)
+    (φ : V → ℝ) (e : E)
     (rest : List E) :
     weightedDefect G label φ (e :: rest)
       = slopeProd label rest * max 0 (defect G label φ e) + weightedDefect G label φ rest := rfl
@@ -648,7 +657,7 @@ theorem suffixWeightSum_eq_sum (label : E → Label) : ∀ l : List E,
       simp [suffixWeight]
 
 /-- **The weighted defect sum is the suffix-weighted sum of the positive parts
-of the edge residuals.** -/
+of the edge residuals. -/
 theorem weightedDefect_eq_sum (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) :
     ∀ l : List E, weightedDefect G label φ l
       = ∑ i : Fin l.length, suffixWeight label l i * max 0 (defect G label φ (l.get i))
@@ -810,14 +819,14 @@ theorem exists_edge_defect_ge {label : E → Label} (hslope : ∀ e : E, 0 < (la
 end Graph
 
 /-! ## Cyclic max-affine systems -/
-
 section Cyclic
 
 /-- One phase of a cyclic max-affine system as a label: the equation
 `C k = max (1 - p k) (q k * C (k + 1) + p k)` of
 `Math.CyclicMaxAffine.CyclicSolution` is the action of this label on
 `C (k + 1)`. -/
-def cyclicLabel (p q : ℕ → ℝ) (k : ℕ) : Label := ⟨((1 - p k : ℝ) : WithBot ℝ), p k, q k⟩
+def cyclicLabel (p q : ℕ → ℝ) (k : ℕ) : Label :=
+  ⟨((1 - p k : ℝ) : WithBot ℝ), p k, q k⟩
 
 @[simp] theorem apply_cyclicLabel (p q : ℕ → ℝ) (k : ℕ) (x : ℝ) :
     (cyclicLabel p q k).apply x = max (1 - p k) (p k + q k * x) :=
@@ -829,7 +838,8 @@ def cyclicChain (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) : ℕ → ℝ
   | 0 => x
   | d + 1 => (cyclicLabel p q (L - (d + 1))).apply (cyclicChain p q L x d)
 
-@[simp] theorem cyclicChain_zero (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) : cyclicChain p q L x 0 = x := rfl
+@[simp] theorem cyclicChain_zero (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) :
+    cyclicChain p q L x 0 = x := rfl
 
 theorem cyclicChain_succ (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) (d : ℕ) :
     cyclicChain p q L x (d + 1)
@@ -856,7 +866,8 @@ theorem cyclicChain_eq_foldl (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) : ∀ d : �
 labels is the terminal value of a solution of the corresponding cyclic
 max-affine system, whose survival-weighted bounds are
 `Math.CyclicMaxAffine.CyclicSolution.weightedRate_bounds`. -/
-theorem cyclicSolution_cyclicChain {p q : ℕ → ℝ} (hp : ∀ k, 0 ≤ p k) (hq0 : ∀ k, 0 ≤ q k)
+theorem cyclicSolution_cyclicChain {p q : ℕ → ℝ} (hp : ∀ k, 0 ≤ p k)
+    (hq0 : ∀ k, 0 ≤ q k)
     (hq1 : ∀ k, q k ≤ 1) {L : ℕ} {x : ℝ} (hx : cyclicHolonomy p q L x = x) :
     Math.CyclicMaxAffine.CyclicSolution p q (fun k => cyclicChain p q L x (L - k)) L where
   rate_nonneg := hp
@@ -876,7 +887,6 @@ theorem cyclicSolution_cyclicChain {p q : ℕ → ℝ} (hp : ∀ k, 0 ≤ p k) (
 end Cyclic
 
 /-! ## Specializations -/
-
 section Specialization
 
 open Math.BoundedDiscrepancy
@@ -895,6 +905,7 @@ def translationLabel (w : ℝ) : Label := ⟨⊥, w, 1⟩
   simp [Label.affinePart, translationLabel]
 
 /-- **Translation labels recover the max-plus potential theory.**  A lax
+
 section for the translation labels of an edge weighting is exactly a potential
 in the sense of `Math.MaxPlusPotential.IsPotential`. -/
 theorem isLaxSection_translationLabel_iff (G : EdgeGraph V E) (w : E → ℝ) (φ : V → ℝ) :
@@ -903,7 +914,8 @@ theorem isLaxSection_translationLabel_iff (G : EdgeGraph V E) (w : E → ℝ) (�
   simp only [IsLaxSection, Math.MaxPlusPotential.IsPotential, apply_translationLabel]
   exact forall_congr' fun e => ⟨fun h => by linarith, fun h => by linarith⟩
 
-@[simp] theorem defect_translationLabel (G : EdgeGraph V E) (w : E → ℝ) (φ : V → ℝ) (e : E) :
+@[simp] theorem defect_translationLabel (G : EdgeGraph V E) (w : E → ℝ)
+    (φ : V → ℝ) (e : E) :
     defect G (fun e => translationLabel (w e)) φ e = Math.MaxPlusPotential.defect G w φ e := by
   simp only [defect, Math.MaxPlusPotential.defect, apply_translationLabel]
   ring
@@ -981,12 +993,11 @@ theorem cyclicSolution_of_holonomyApply_eq {label : E → Label} {p q : ℕ → 
 end Specialization
 
 /-! ## The directed-transport reading
-
 `Math.DirectedTransport` develops transport with vertex-indexed fibers; a
 max-affine transport graph is its constant-fiber case, with every fiber the line
 and each edge acting by its label.  The identifications below let the
-section and holonomy statements of that module specialize here. -/
 
+section and holonomy statements of that module specialize here. -/
 section Transport
 
 open Math.BoundedDiscrepancy Math.DirectedTransport
