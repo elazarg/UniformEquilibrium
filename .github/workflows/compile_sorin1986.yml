@@ -1,15 +1,17 @@
 name: Compile Sorin1986
 
 on:
-  push:
-    branches: [agent/promote-sorin1986]
+  pull_request:
+    paths:
+      - Literature/Sorin1986.lean
+      - .github/workflows/compile_sorin1986.yml
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: compile-sorin1986-${{ github.ref }}
+  group: compile-sorin1986-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
