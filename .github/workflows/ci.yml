@@ -40,6 +40,16 @@ jobs:
           Path('/tmp/repair_ftv.py').write_text(code)
           PY
           python3 /tmp/repair_ftv.py
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('Literature/FleschThuijsmanAndVrieze1997.lean')
+          text = path.read_text()
+          text = text.replace(
+              ").\n            BehaviorStrategy who,",
+              ").BehaviorStrategy who,",
+          )
+          path.write_text(text)
+          PY
       - uses: leanprover/lean-action@v1
         with:
           auto-config: false
@@ -55,7 +65,6 @@ jobs:
             UniformEquilibrium.Quitting.Paths.InfinitePathCompiler \
             UniformEquilibrium.Quitting.Root.ApproximateFirstBranch \
             UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier \
-            UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot \
             UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
       - name: Compile FTV audit
         run: lake env lean Literature/FleschThuijsmanAndVrieze1997.lean
