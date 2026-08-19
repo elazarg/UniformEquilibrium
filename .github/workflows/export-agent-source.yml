@@ -32,15 +32,57 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - name: Archive reusable Lean environment
-        run: >-
-          tar --zstd -cf /tmp/agent-lean-environment.tar.zst
-          -C "$HOME" .elan
-          -C "$GITHUB_WORKSPACE" .lake GameTheory/.lake
+      - name: Split reusable Lean environment
+        run: |
+          tar --zstd -cf - -C "$HOME" .elan -C "$GITHUB_WORKSPACE" .lake GameTheory/.lake \
+            | split -b 400M -d -a 2 - "$GITHUB_WORKSPACE/agent-lean-environment.part-"
+          ls -lh "$GITHUB_WORKSPACE"/agent-lean-environment.part-*
       - uses: actions/upload-artifact@v4
         with:
-          name: agent-lean-environment
-          path: /tmp/agent-lean-environment.tar.zst
+          name: agent-lean-environment-00
+          path: agent-lean-environment.part-00
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-lean-environment-01
+          path: agent-lean-environment.part-01
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-lean-environment-02
+          path: agent-lean-environment.part-02
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-lean-environment-03
+          path: agent-lean-environment.part-03
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-lean-environment-04
+          path: agent-lean-environment.part-04
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-lean-environment-05
+          path: agent-lean-environment.part-05
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-lean-environment-06
+          path: agent-lean-environment.part-06
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-lean-environment-07
+          path: agent-lean-environment.part-07
           compression-level: 0
           retention-days: 1
       - name: Build production dependencies
