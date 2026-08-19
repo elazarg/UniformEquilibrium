@@ -115,7 +115,7 @@ jobs:
             --exclude='./.lake' \
             --exclude='./GameTheory/.lake' \
             .
-          sha256sum "$out/source.tar.zst" > "$out/source.tar.zst.sha256"
+          (cd "$out" && sha256sum source.tar.zst > source.tar.zst.sha256)
 
           cat > "$out/README.txt" <<'EOF'
           This is an exact source directory snapshot without Git metadata.
