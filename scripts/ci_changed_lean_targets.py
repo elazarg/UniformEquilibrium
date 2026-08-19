@@ -13,9 +13,18 @@ STRUCTURAL = {
     "GameTheory",
     "lake-manifest.json",
     "lakefile.lean",
+    "lakefile.toml",
     "lean-toolchain",
 }
-LIBRARY_ROOTS = {"MathUE", "UniformEquilibrium", "Literature", "Research", "Theorems"}
+LIBRARY_ROOTS = {
+    "AxiomAudit",
+    "Experiments",
+    "Literature",
+    "MathUE",
+    "Research",
+    "Theorems",
+    "UniformEquilibrium",
+}
 
 
 def changed(base: str, head: str) -> list[tuple[str, tuple[str, ...]]]:
