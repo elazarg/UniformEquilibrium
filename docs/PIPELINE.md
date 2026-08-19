@@ -11,8 +11,8 @@ Lean tree.
 
 - **Integrated:** checked definitions, theorems, and adapters accepted into the
   main research line. This lane is not a compatibility API.
-- **Literature:** one Lean audit module per paper, with explicit statements,
-  citations, and proved or open status.
+- **Literature:** one plain Lean file per paper, with the paper's own
+  statements and citation; unproved claims are left as `sorry`.
 - **Research:** compileable Lean that is useful but not yet part of the
   integrated architecture.
 - **Experiments:** reproducible searches for counterexamples, boundaries, and
@@ -24,27 +24,21 @@ The lanes may share mathematics, but evidence does not become a theorem by
 proximity. Integrated Lean remains the trusted boundary.
 
 Literature has a strict final boundary: it does not import Research or
-Experiments, and nothing imports Literature. There is one record per paper,
-directly under `Literature/`, and active claim work lives inside the paper's
-own file, which may import production modules; there is no aggregate catalog
-to depend on.
+Experiments, nothing imports Literature, and it is not a `lean_lib` — no
+build target compiles it. A paper's file states its definitions and theorems
+in the paper's own order and terms; an unproved theorem ends in `sorry`,
+which is the open-claim marker, a proof is the settled record, and a proof
+of the negation is the refutation. There is no separate status metadata.
 
-Claim records have an explicit lifecycle. `sourceOnly` records a source claim
-without a Lean statement; `openInLean` names an unproved proposition;
-`provedInLean` names that proposition and a checked proof; and
-`refutedInLean` names the source proposition and a checked theorem proving its
-negation or a precise obstruction. `outOfScope` is a deliberate formalization
-boundary, not a refutation. A wrong source claim therefore gets a first-class
-refutation record rather than an informal correction in prose.
+Only papers with complete Lean coverage live directly under `Literature/`;
+every other paper lives under `Literature/future/` and is not built. A paper
+graduates by finishing its statements, not by proving them.
 
-When a claim enters `openInLean`, a narrow `Literature` module
-imports the individual paper module and works against that exact proposition.
+A paper's file may import production modules to state or discharge a claim.
 Reusable mathematics is developed in `MathUE` or `UniformEquilibrium`; a
-source-specific definition may stay with the paper. When the proof closes,
-the reusable proof is promoted or the source-specific proof is placed in the
-paper module, an exact paper-facing delegation or negation theorem is added,
-and the Research module is removed. Final claim records never name Research or
-Experiments declarations as proofs.
+source-specific definition stays with the paper. When a proof closes, the
+reusable proof is promoted to its durable home or written directly in the
+paper file, replacing the `sorry`.
 
 `Theorems/` is not a work lane. It is a capped reader-facing index of selected
 integrated results believed to have interest beyond the conjecture program;
@@ -59,7 +53,7 @@ Use the smallest durable record that fits the result:
 - a bounded engineering or proof obligation becomes an issue and then a PR;
 - an unresolved derivation or interpretation belongs in a Discussion;
 - a reproducible search result gets an experiment record;
-- a paper statement and its correspondence get a Literature entry;
+- a paper statement and its correspondence get a Literature file;
 - compileable but architecturally unsettled Lean stays in Research.
 
 Classify by durable output rather than implementation language or origin. A

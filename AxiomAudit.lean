@@ -1488,7 +1488,6 @@ open Lean Elab Command
 
 private def projectModuleRoots : Array Name := #[
   `Experiments,
-  `Literature,
   `MathUE,
   `Research,
   `Theorems,
