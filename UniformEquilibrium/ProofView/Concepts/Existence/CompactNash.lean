@@ -215,8 +215,8 @@ def nashMap (selected : Finset G.Deviation) :
     simp_rw [div_eq_mul_inv]
     rw [← Finset.sum_mul, Finset.sum_add_distrib]
     have hweights_sum :
-        (∑ action : G.ApproxAction selected who, weights who action) = 1 := by
-      simpa using (weights who).property.2
+        (∑ action : G.ApproxAction selected who, weights who action) = 1 :=
+      (weights who).property.2
     change
       ((∑ action : G.ApproxAction selected who, weights who action) +
           G.gainSum selected weights who) * denominator⁻¹ = 1
@@ -297,8 +297,8 @@ theorem weighted_pointGain_sum_zero (selected : Finset G.Deviation)
   simp_rw [mul_sub]
   rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
   have hweights_sum :
-      (∑ action : G.ApproxAction selected who, weights who action) = 1 := by
-    simpa using (weights who).property.2
+      (∑ action : G.ApproxAction selected who, weights who action) = 1 :=
+    (weights who).property.2
   rw [hweights_sum, one_mul]
   exact sub_eq_zero.mpr hmean.symm
 
