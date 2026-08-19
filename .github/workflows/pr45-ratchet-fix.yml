@@ -1,0 +1,53 @@
+name: Validate and apply PR 45 ratchet fix
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  validate-and-apply:
+    if: github.head_ref == 'agent/complete-solan-vieille-2001'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Apply reward-bound ratchet fix
+        shell: bash
+        run: |
+          echo "ad79b39948678e9187042fa83d433de910253d500256d9e195a29dcfb8e54528  .pr45-ratchet-fix.patch" | sha256sum --check -
+          git apply --check .pr45-ratchet-fix.patch
+          git apply .pr45-ratchet-fix.patch
+          rm .pr45-ratchet-fix.patch .github/workflows/pr45-ratchet-fix.yml
+          git diff --check
+
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+
+      - name: Build production dependencies
+        run: lake build UniformEquilibrium
+
+      - name: Compile Solan-Vieille 2001 audit
+        run: lake env lean Literature/SolanAndVieille2001.lean
+
+      - name: Commit validated correction
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Remove redundant reward-bound parameter"
+          git push origin "HEAD:${GITHUB_HEAD_REF}"
