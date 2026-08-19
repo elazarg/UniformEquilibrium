@@ -34,7 +34,7 @@ namespace GameTheory
 
 open Set Function
 
-universe u v
+universe u
 
 /-- A compact continuous game with finite barycentres and own-coordinate
 affine payoffs. -/
@@ -42,7 +42,7 @@ structure CompactBarycentricGame where
   Player : Type u
   [finitePlayer : Fintype Player]
   [decidablePlayer : DecidableEq Player]
-  Strategy : Player → Type v
+  Strategy : Player → Type u
   [strategyTopology : ∀ i, TopologicalSpace (Strategy i)]
   [compactStrategy : ∀ i, CompactSpace (Strategy i)]
   [nonemptyStrategy : ∀ i, Nonempty (Strategy i)]
@@ -121,7 +121,7 @@ theorem continuous_deviationGain (deviation : G.Deviation) :
 
 /-- A fixed base profile, used to make every finite approximation nonempty. -/
 def baseProfile : G.Profile :=
-  fun i => Classical.choice inferInstance
+  fun _ => Classical.choice inferInstance
 
 /-- The common finite action type used by the Brouwer approximation. -/
 abbrev ApproxAction (selected : Finset G.Deviation) (_who : G.Player) :=
@@ -186,12 +186,12 @@ theorem continuous_pointGain (selected : Finset G.Deviation)
 def gainSum (selected : Finset G.Deviation)
     (weights : G.ApproxProfile selected) (who : G.Player) : ℝ :=
   ∑ action : G.ApproxAction selected who,
-    G.pospart (G.pointGain selected weights who action)
+    pospart (G.pointGain selected weights who action)
 
 @[simp] theorem gainSum_nonneg (selected : Finset G.Deviation)
     (weights : G.ApproxProfile selected) (who : G.Player) :
     0 ≤ G.gainSum selected weights who :=
-  Finset.sum_nonneg fun _ _ => G.pospart_nonneg _
+  Finset.sum_nonneg fun _ _ => pospart_nonneg _
 
 /-- Nash's positive-gain map on the product of selected finite simplices. -/
 def nashMap (selected : Finset G.Deviation) :
@@ -200,12 +200,12 @@ def nashMap (selected : Finset G.Deviation) :
   let denominator : ℝ := 1 + G.gainSum selected weights who
   refine ⟨fun action =>
       (weights who action +
-        G.pospart (G.pointGain selected weights who action)) / denominator,
+        pospart (G.pointGain selected weights who action)) / denominator,
     ?_, ?_⟩
   · intro action
     exact div_nonneg
       (add_nonneg (stdSimplex.zero_le (weights who) action)
-        (G.pospart_nonneg _))
+        (pospart_nonneg _))
       (by
         dsimp [denominator]
         linarith [G.gainSum_nonneg selected weights who])
@@ -214,10 +214,13 @@ def nashMap (selected : Finset G.Deviation) :
       linarith [G.gainSum_nonneg selected weights who]
     simp_rw [div_eq_mul_inv]
     rw [← Finset.sum_mul, Finset.sum_add_distrib]
+    have hweights_sum :
+        (∑ action : G.ApproxAction selected who, weights who action) = 1 := by
+      simpa using (weights who).property.2
     change
-      ((∑ action, weights who action) +
+      ((∑ action : G.ApproxAction selected who, weights who action) +
           G.gainSum selected weights who) * denominator⁻¹ = 1
-    rw [(weights who).property.2]
+    rw [hweights_sum]
     exact mul_inv_cancel₀ hden_pos.ne'
 
 @[simp] theorem nashMap_apply (selected : Finset G.Deviation)
@@ -225,7 +228,7 @@ def nashMap (selected : Finset G.Deviation) :
     (who : G.Player) (action : G.ApproxAction selected who) :
     G.nashMap selected weights who action =
       (weights who action +
-          G.pospart (G.pointGain selected weights who action)) /
+          pospart (G.pointGain selected weights who action)) /
         (1 + G.gainSum selected weights who) :=
   rfl
 
@@ -236,7 +239,7 @@ theorem continuous_nashMap (selected : Finset G.Deviation) :
       Continuous
         (fun weights : G.ApproxProfile selected =>
           (weights who action +
-              G.pospart (G.pointGain selected weights who action)) /
+              pospart (G.pointGain selected weights who action)) /
             (1 + G.gainSum selected weights who)) := by
     intro who action
     have hweight : Continuous
@@ -248,13 +251,13 @@ theorem continuous_nashMap (selected : Finset G.Deviation) :
           G.gainSum selected weights who) := by
       unfold gainSum
       exact continuous_finsetSum _ fun other _ =>
-        G.continuous_pospart.comp
+        continuous_pospart.comp
           (G.continuous_pointGain selected who other)
     have hden : ∀ weights : G.ApproxProfile selected,
         1 + G.gainSum selected weights who ≠ 0 := by
       intro weights
       linarith [G.gainSum_nonneg selected weights who]
-    exact (hweight.add (G.continuous_pospart.comp
+    exact (hweight.add (continuous_pospart.comp
       (G.continuous_pointGain selected who action))).div
         (continuous_const.add hsum) hden
   apply continuous_pi
@@ -272,18 +275,31 @@ theorem weighted_pointGain_sum_zero (selected : Finset G.Deviation)
       weights who action * G.pointGain selected weights who action = 0 := by
   let profile := G.baryProfile selected weights
   let points := G.selectedPoint selected who
+  have hcurrent :
+      G.barycenter who (selected.card + 1) (weights who) points =
+        profile who := by
+    rfl
+  have hupdate :
+      Function.update profile who
+          (G.barycenter who (selected.card + 1) (weights who) points) =
+        profile := by
+    rw [hcurrent, Function.update_eq_self]
   have hmean :
       G.payoff profile who =
         ∑ action : G.ApproxAction selected who,
           weights who action *
             G.payoff (Function.update profile who (points action)) who := by
-    simpa [profile, points, baryProfile, Function.update_eq_self] using
-      (G.payoffBarycentric profile who (selected.card + 1)
-        (weights who) points)
+    have hbary := G.payoffBarycentric profile who (selected.card + 1)
+      (weights who) points
+    rw [hupdate] at hbary
+    exact hbary
   unfold pointGain
   simp_rw [mul_sub]
-  rw [Finset.sum_sub_distrib, Finset.sum_mul,
-    (weights who).property.2, one_mul]
+  rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
+  have hweights_sum :
+      (∑ action : G.ApproxAction selected who, weights who action) = 1 := by
+    simpa using (weights who).property.2
+  rw [hweights_sum, one_mul]
   exact sub_eq_zero.mpr hmean.symm
 
 /-- A fixed point of `nashMap` satisfies Nash's coordinate identity. -/
@@ -292,7 +308,7 @@ theorem fixedPoint_identity (selected : Finset G.Deviation)
     (hfixed : G.nashMap selected weights = weights)
     (who : G.Player) (action : G.ApproxAction selected who) :
     weights who action * (1 + G.gainSum selected weights who) =
-      weights who action + G.pospart (G.pointGain selected weights who action) := by
+      weights who action + pospart (G.pointGain selected weights who action) := by
   have hvalue : G.nashMap selected weights who action = weights who action := by
     exact congrFun (congrArg Subtype.val (congrFun hfixed who)) action
   rw [G.nashMap_apply] at hvalue
@@ -332,7 +348,14 @@ def selectedAction {selected : Finset G.Deviation}
     G.selectedPoint selected deviation.1
       (G.selectedAction deviation hdeviation) = deviation.2 := by
   classical
-  simp [selectedPoint, selectedAction, indexedDeviation]
+  unfold selectedAction selectedPoint
+  simp only [Fin.cases_succ]
+  have hindex :
+      G.indexedDeviation selected
+          (selected.equivFin ⟨deviation, hdeviation⟩) = deviation := by
+    simp [indexedDeviation]
+  rw [hindex]
+  simp
 
 @[simp] theorem pointGain_selectedAction
     {selected : Finset G.Deviation}
@@ -366,7 +389,7 @@ theorem exists_nash : ∃ profile : G.Profile, G.IsNash profile := by
     obtain ⟨deviation, hgain⟩ := hprofitable profile
     exact Set.mem_iUnion.2 ⟨deviation, hgain⟩
   obtain ⟨selected, hselected⟩ :=
-    isCompact_univ.elim_finite_subcover hopen hcover
+    isCompact_univ.elim_finite_subcover profitable hopen hcover
   obtain ⟨weights, hfixed⟩ :=
     brouwer_mixedSimplex (G.nashMap selected) (G.continuous_nashMap selected)
   let profile := G.baryProfile selected weights
