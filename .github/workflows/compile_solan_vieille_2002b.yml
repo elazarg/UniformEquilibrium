@@ -1,0 +1,33 @@
+name: Compile Solan and Vieille 2002b audit
+
+on:
+  pull_request:
+    paths:
+      - Literature/future/SolanAndVieille2002b.lean
+      - .github/workflows/compile_solan_vieille_2002b.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compile-solan-vieille-2002b-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - run: lake env lean Literature/future/SolanAndVieille2002b.lean
