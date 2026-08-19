@@ -33,8 +33,8 @@ theorem abs_stagePayoff_le (G : FiniteStageGame)
         ∑ h : PublicHistory G stage, ∑ a : JointAction G,
           |actionMass profile ⟨stage, h⟩ a * G.payoff a observer| := by
       unfold stagePayoff
-      exact (abs_sum_le_sum_abs _ _).trans <|
-        Finset.sum_le_sum fun h _ => abs_sum_le_sum_abs _ _
+      exact (Finset.abs_sum_le_sum_abs _ _).trans <|
+        Finset.sum_le_sum fun h _ => Finset.abs_sum_le_sum_abs _ _
     _ = ∑ h : PublicHistory G stage, ∑ a : JointAction G,
           actionMass profile ⟨stage, h⟩ a * |G.payoff a observer| := by
       apply Fintype.sum_congr
@@ -44,10 +44,16 @@ theorem abs_stagePayoff_le (G : FiniteStageGame)
       rw [abs_mul, abs_of_nonneg (actionMass_nonneg profile ⟨stage, h⟩ a)]
     _ ≤ ∑ h : PublicHistory G stage, ∑ a : JointAction G,
           actionMass profile ⟨stage, h⟩ a * payoffAbsBound G observer := by
-      gcongr with h a
-      exact abs_payoff_le_payoffAbsBound G observer a
+      apply Finset.sum_le_sum
+      intro h _
+      apply Finset.sum_le_sum
+      intro a _
+      exact mul_le_mul_of_nonneg_left
+        (abs_payoff_le_payoffAbsBound G observer a)
+        (actionMass_nonneg profile ⟨stage, h⟩ a)
     _ = payoffAbsBound G observer := by
-      rw [← Finset.sum_mul, ← Finset.sum_mul, sum_stageMass]
+      simp_rw [← Finset.sum_mul]
+      rw [sum_stageMass]
       ring
 
 /-- The continuation factor corresponding to the paper's current-stage
@@ -62,6 +68,7 @@ theorem continuationFactor_nonneg {G : FiniteStageGame}
 
 theorem continuationFactor_lt_one {G : FiniteStageGame}
     (lam : G.DiscountRate) : continuationFactor lam < 1 := by
+  unfold continuationFactor
   linarith [lam.2.1]
 
 theorem abs_continuationFactor_lt_one {G : FiniteStageGame}
@@ -90,7 +97,7 @@ private theorem summable_discount_powers {G : FiniteStageGame}
 private theorem summable_discount_bound {G : FiniteStageGame}
     (lam : G.DiscountRate) (C : ℝ) :
     Summable fun stage : ℕ => lam.1 * continuationFactor lam ^ stage * C := by
-  simpa [mul_assoc] using
+  simpa [mul_assoc, mul_left_comm, mul_comm] using
     (summable_discount_powers lam).mul_left (lam.1 * C)
 
 /-- Discounted payoff is continuous on the compact realization-plan space. -/
@@ -168,7 +175,7 @@ theorem discountedRealizationPayoff_update_mix
           ring
     _ = ∑' stage : ℕ, t * fx stage +
           ∑' stage : ℕ, (1 - t) * fy stage := by
-          rw [tsum_add (hx.mul_left t) (hy.mul_left (1 - t))]
+          exact (hx.mul_left t).tsum_add (hy.mul_left (1 - t))
     _ = t * ∑' stage : ℕ, fx stage +
           (1 - t) * ∑' stage : ℕ, fy stage := by
           rw [tsum_mul_left, tsum_mul_left]
