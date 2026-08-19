@@ -42,4 +42,5 @@ jobs:
       - name: Compile Sorin1986
         run: |
           lake env lean Literature/Sorin1986.lean
-          lake env lean Literature/Sorin1986CompactScratch.lean
+          cd Literature
+          lake env lean Sorin1986CompactScratch.lean
