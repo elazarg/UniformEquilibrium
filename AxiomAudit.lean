@@ -1524,7 +1524,3 @@ run_cmd do
       failures := failures.push s!"{declaration}: {names}"
   unless failures.isEmpty do
     throwError m!"Project axiom audit failed:\n{String.intercalate "\n" failures.toList}"
-  let summary : MessageData :=
-    m!"Project axiom audit passed for {declarations.size} declarations; only " ++
-      m!"propext, Quot.sound, and Classical.choice are permitted library axioms."
-  logInfo summary
