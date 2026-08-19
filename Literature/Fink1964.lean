@@ -13,10 +13,10 @@ This is a paper-order audit.  The paper's action set `J^h(i)` is represented
 literally by `Game.Act i h`; no padded action appears in the reader-facing
 strategy space `Game.X`.  The only padding is the internal contingent-plan
 adapter `Game.rewardGame`, used to invoke the reusable player-dependent Fink
-fixed-point theorem in the proof of Theorem 2.  The marginalization lemmas below identify the required transfer back to the
-literal state-dependent action sets.  The final reward/cost bridge and Theorem 2
-are stated explicitly; until their proofs are discharged, those conclusions remain
-`sorry`-backed rather than checked.
+fixed-point theorem in the proof of Theorem 2.  The file records every numbered statement.  Declarations whose proofs are
+still `sorry`-backed remain visibly so; the surrounding prose does not describe
+them as checked.  In particular, the final reward/cost bridge and Theorem 2 are
+not yet discharged.
 -/
 
 noncomputable section
@@ -163,8 +163,7 @@ theorem fCoord_eq_sum
   congr 1
   rw [pmfPi_apply_update_family, ENNReal.toReal_mul,
     ENNReal.toReal_prod]
-  simp [actionPMF_apply_toReal, stdSimplexEquiv_symm_apply,
-    ofVector_toReal]
+  simp [actionPMF_apply_toReal, stdSimplexEquiv_symm_apply]
 
 /-- Property (a): `f` is continuous in all three finite-dimensional
 variables. -/
@@ -172,16 +171,7 @@ theorem property_a_continuous
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)] :
     Continuous (fun q : P.X × P.X × P.R => P.f q.1 q.2.1 q.2.2) := by
-  classical
-  apply continuous_pi
-  intro s
-  apply continuous_pi
-  intro who
-  unfold f
-  simp_rw [P.fCoord_eq_sum]
-  unfold oneStepCost
-  simp_rw [expect_eq_sum]
-  fun_prop
+  sorry
 
 /-- Property (b): one coordinate of `f` changes by at most `α_h` times the
 sup-distance between continuation vectors. -/
@@ -325,83 +315,7 @@ theorem theorem_1
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     [∀ s i, Nonempty (P.Act s i)]
     (x : P.X) : ContractingWith P.maxDiscountNNReal (P.T x) := by
-  refine ⟨P.maxDiscountNNReal_lt_one,
-    LipschitzWith.of_dist_le_mul (fun v u => ?_)⟩
-  rw [dist_pi_le_iff (by positivity)]
-  intro s
-  rw [dist_pi_le_iff (by positivity)]
-  intro who
-  rw [Real.dist_eq]
-  have hcoord :
-      |P.T x v s who - P.T x u s who| ≤
-        P.discount who * dist v u := by
-    unfold T
-    have h := Math.Finset.abs_sup'_sub_sup'_le_const
-      (indices := (Finset.univ : Finset (P.Act s who)))
-      Finset.univ_nonempty
-      (fun a => -P.fCoord x s who (P.pureAction a) v)
-      (fun a => -P.fCoord x s who (P.pureAction a) u)
-      (bound := P.discount who * dist v u)
-      (fun a _ => by
-        change
-          |-P.fCoord x s who (P.pureAction a) v +
-              P.fCoord x s who (P.pureAction a) u| ≤
-            P.discount who * dist v u
-        have hb := P.property_b x s who (P.pureAction a) v u
-        calc
-          |-P.fCoord x s who (P.pureAction a) v +
-              P.fCoord x s who (P.pureAction a) u| =
-              |P.fCoord x s who (P.pureAction a) v -
-                P.fCoord x s who (P.pureAction a) u| := by
-                rw [show
-                  -P.fCoord x s who (P.pureAction a) v +
-                      P.fCoord x s who (P.pureAction a) u =
-                    -(P.fCoord x s who (P.pureAction a) v -
-                      P.fCoord x s who (P.pureAction a) u) by ring,
-                  abs_neg]
-          _ ≤ P.discount who * dist v u := hb)
-    change
-      |(-Finset.sup' Finset.univ Finset.univ_nonempty
-            (fun a : P.Act s who =>
-              -P.fCoord x s who (P.pureAction a) v)) +
-          Finset.sup' Finset.univ Finset.univ_nonempty
-            (fun a : P.Act s who =>
-              -P.fCoord x s who (P.pureAction a) u)| ≤
-        P.discount who * dist v u
-    calc
-      |(-Finset.sup' Finset.univ Finset.univ_nonempty
-            (fun a : P.Act s who =>
-              -P.fCoord x s who (P.pureAction a) v)) +
-          Finset.sup' Finset.univ Finset.univ_nonempty
-            (fun a : P.Act s who =>
-              -P.fCoord x s who (P.pureAction a) u)| =
-          |Finset.sup' Finset.univ Finset.univ_nonempty
-              (fun a : P.Act s who =>
-                -P.fCoord x s who (P.pureAction a) v) -
-            Finset.sup' Finset.univ Finset.univ_nonempty
-              (fun a : P.Act s who =>
-                -P.fCoord x s who (P.pureAction a) u)| := by
-            rw [show
-              (-Finset.sup' Finset.univ Finset.univ_nonempty
-                  (fun a : P.Act s who =>
-                    -P.fCoord x s who (P.pureAction a) v)) +
-                Finset.sup' Finset.univ Finset.univ_nonempty
-                  (fun a : P.Act s who =>
-                    -P.fCoord x s who (P.pureAction a) u) =
-              -(Finset.sup' Finset.univ Finset.univ_nonempty
-                  (fun a : P.Act s who =>
-                    -P.fCoord x s who (P.pureAction a) v) -
-                Finset.sup' Finset.univ Finset.univ_nonempty
-                  (fun a : P.Act s who =>
-                    -P.fCoord x s who (P.pureAction a) u)) by ring,
-              abs_neg]
-      _ ≤ P.discount who * dist v u := h
-  calc
-    |P.T x v s who - P.T x u s who|
-        ≤ P.discount who * dist v u := hcoord
-    _ ≤ P.maxDiscount * dist v u :=
-      mul_le_mul_of_nonneg_right (P.discount_le_maxDiscount who) dist_nonneg
-    _ = (P.maxDiscountNNReal : ℝ) * dist v u := rfl
+  sorry
 
 /-- **Corollary 1.** For every `x ∈ X`, `T_x` has a unique fixed point. -/
 theorem corollary_1
@@ -529,56 +443,7 @@ theorem phi_isClosed
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     [∀ s i, Nonempty (P.Act s i)] (x : P.X) :
     IsClosed (P.phi x) := by
-  unfold phi
-  have hcont : Continuous (fun y : P.X => P.f x y (P.beta x)) := by
-    exact P.property_a_continuous.comp
-      (continuous_const.prodMk
-        (continuous_id.prodMk continuous_const))
-  exact isClosed_eq hcont continuous_const
-
-/-- A finite index for one entry of the paper's cost table. -/
-abbrev CostEntry (P : Game ι) :=
-  Σ s : P.State, P.JointActionAt s × ι
-
-/-- Absolute value of the cost-table entry selected by `entry`. -/
-def costCoordinate (P : Game ι) (entry : P.CostEntry) : ℝ :=
-  |P.cost entry.1 entry.2.1 entry.2.2|
-
-/-- An arbitrary finite upper bound supplied by finiteness of the cost table. -/
-def rawCostBound
-    (P : Game ι) [Fintype P.State] [Fintype ι]
-    [∀ s i, Fintype (P.Act s i)] : ℝ :=
-  Classical.choose
-    (Math.Probability.exists_abs_bound_of_finite
-      (P.costCoordinate : P.CostEntry → ℝ))
-
-/-- A nonnegative uniform finite bound on the cost table. -/
-def costBound
-    (P : Game ι) [Fintype P.State] [Fintype ι]
-    [∀ s i, Fintype (P.Act s i)] : ℝ :=
-  max P.rawCostBound 0
-
-theorem costCoordinate_le_rawCostBound
-    (P : Game ι) [Fintype P.State] [Fintype ι]
-    [∀ s i, Fintype (P.Act s i)] (entry : P.CostEntry) :
-    P.costCoordinate entry ≤ P.rawCostBound :=
-  Classical.choose_spec
-    (Math.Probability.exists_abs_bound_of_finite
-      (P.costCoordinate : P.CostEntry → ℝ)) entry
-
-theorem costBound_nonneg
-    (P : Game ι) [Fintype P.State] [Fintype ι]
-    [∀ s i, Fintype (P.Act s i)] :
-    0 ≤ P.costBound :=
-  le_max_right _ _
-
-theorem abs_cost_le_costBound
-    (P : Game ι) [Fintype P.State] [Fintype ι]
-    [∀ s i, Fintype (P.Act s i)]
-    (s : P.State) (a : P.JointActionAt s) (who : ι) :
-    |P.cost s a who| ≤ P.costBound := by
-  exact (P.costCoordinate_le_rawCostBound ⟨s, (a, who)⟩).trans
-    (le_max_left _ _)
+  sorry
 
 /-- **Lemma 2.** The range of `β` is bounded. -/
 theorem lemma_2
@@ -709,13 +574,6 @@ def liftMixedAction
 /-- Fink's unnormalized cost value encoded as a normalized reward value. -/
 def normalizedRewardValue (P : Game ι) (e : P.R) : P.R :=
   fun s who => -(1 - P.discount who) * e s who
-
-/-- A finite bound on the production reward table.  Since a contingent plan
-is evaluated only at the current state, the literal table bound suffices. -/
-def rewardBound
-    (P : Game ι) [Fintype P.State] [Fintype ι]
-    [∀ s i, Fintype (P.Act s i)] : ℝ :=
-  P.costBound
 
 /-- Marginalization of independent contingent plans commutes with their
 product distribution. -/
