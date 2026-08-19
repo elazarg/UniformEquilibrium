@@ -1,35 +1,21 @@
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
-import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Disintegration
+import MathUE.Finset.SupNonexpansive
+import Mathlib.Topology.UniformSpace.HeineCantor
 
 /-!
 # A. M. Fink, *Equilibrium in a Stochastic n-Person Game* (1964)
-
-Primary source:
 
 A. M. Fink, “Equilibrium in a Stochastic n-Person Game,”
 *Journal of Science of the Hiroshima University, Series A-I* **28** (1964),
 89–93. DOI: `10.32917/hmj/1206139508`.
 
-The file follows the paper's cost-minimization convention and its
-player-specific discount factors `α_h`.  Two representation adapters are
-made explicit.
-
-* The paper writes a separate finite alternative set `J^h(i)` at each state.
-  `Game.Act h` is a finite ambient carrier and `Game.Legal i h` selects
-  `J^h(i)`.  Illegal ambient labels are mapped to a fixed legal alternative
-  before costs and transitions are evaluated.  This is the standard finite
-  padding of a state-dependent action family.
-* The production Fink map is written for normalized rewards.  A paper cost
-  value `e` is encoded as the normalized reward
-  `-(1 - α_h) e_h`.  The definition `f` divides the resulting auxiliary
-  reward by the same positive factor, so it is exactly Fink's unnormalized
-  expression `C_h + α_h E[e_h']`.
-
-The paper's headline theorem is proved without `sorry`.  The proof uses the
-single-valued Brouwer implementation in
-`FinkHeterogeneous.lean`; this is equivalent to the paper's Kakutani route
-but does not silently replace the paper's definitions or its
-player-dependent discounts.
+This is a paper-order audit.  The paper's action set `J^h(i)` is represented
+literally by `Game.Act i h`; no padded action appears in the reader-facing
+strategy space `Game.X`.  The only padding is the internal contingent-plan
+adapter `Game.rewardGame`, used to invoke the reusable player-dependent Fink
+fixed-point theorem in the proof of Theorem 2.  The checked marginalization
+lemmas below transfer that certificate back to the literal state-dependent
+action sets.
 -/
 
 noncomputable section
@@ -38,271 +24,476 @@ namespace Literature.Fink1964
 
 open GameTheory
 open GameTheory.StochasticGame
+open Filter Set
 open Math.Probability
+open Math.PMFProduct
 open Math.ProbabilityMassFunction
 
-/-- The finite stochastic cost game on pages 89–90.
-
-`Legal s i` is the paper's state-dependent alternative set `J^i(s)`,
-represented inside a common finite ambient action type. -/
+/-- The finite stochastic cost game on pages 89--90. -/
 structure Game (ι : Type) where
   State : Type
-  Act : ι → Type
-  Legal : State → ∀ i, Act i → Prop
-  legal_nonempty : ∀ s i, ∃ a, Legal s i a
-  cost : State → (∀ i, Act i) → ι → ℝ
-  transition : State → (∀ i, Act i) → PMF State
+  state_nonempty : Nonempty State
+  Act : State → ι → Type
+  act_nonempty : ∀ s i, Nonempty (Act s i)
+  cost : (s : State) → (∀ i, Act s i) → ι → ℝ
+  transition : (s : State) → (∀ i, Act s i) → PMF State
   discount : ι → ℝ
-  discount_nonneg : ∀ i, 0 ≤ discount i
+  discount_pos : ∀ i, 0 < discount i
   discount_lt_one : ∀ i, discount i < 1
 
 variable {ι : Type}
 
 namespace Game
 
-/-- The ambient cost game before state-dependent alternatives are padded. -/
-def costGame (P : Game ι) : StochasticGame ι where
+instance instNonemptyState (P : Game ι) : Nonempty P.State := P.state_nonempty
+
+instance instNonemptyAct (P : Game ι) (s : P.State) (i : ι) :
+    Nonempty (P.Act s i) := P.act_nonempty s i
+
+/-- The paper's state-player coordinates. -/
+abbrev Agent (P : Game ι) := P.State × ι
+
+/-- The paper's action set `J^h(i)` at a state-player coordinate. -/
+abbrev AgentAction (P : Game ι) (p : P.Agent) := P.Act p.1 p.2
+
+/-- The compact product `X` of all state-player mixed-action simplices. -/
+abbrev X (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)] :=
+  MixedSimplex P.Agent P.AgentAction
+
+/-- The value space `R`, with the sup metric inherited from the finite pi type. -/
+abbrev R (P : Game ι) := P.State → Payoff ι
+
+/-- A literal joint action at state `s`. -/
+abbrev JointActionAt (P : Game ι) (s : P.State) := ∀ i, P.Act s i
+
+/-- The PMF represented by one simplex coordinate. -/
+def actionPMF (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (x : P.X) (s : P.State) (i : ι) : PMF (P.Act s i) :=
+  (stdSimplexEquiv (α := P.Act s i)).symm (x (s, i))
+
+@[simp] theorem actionPMF_apply_toReal
+    (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (x : P.X) (s : P.State) (i : ι) (a : P.Act s i) :
+    ((P.actionPMF x s i) a).toReal = x (s, i) a := by
+  simp [actionPMF, stdSimplexEquiv_symm_apply]
+
+/-- Equation (3)'s one-stage cost plus discounted continuation cost. -/
+def oneStepCost (P : Game ι)
+    (e : P.R) (s : P.State) (a : P.JointActionAt s) (who : ι) : ℝ :=
+  P.cost s a who +
+    P.discount who * expect (P.transition s a) (fun s' => e s' who)
+
+/-- Equation (6), at one state-player coordinate. -/
+def fCoord (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)] [DecidableEq ι]
+    (x : P.X) (s : P.State) (who : ι)
+    (y : stdSimplex ℝ (P.Act s who)) (e : P.R) : ℝ :=
+  expect (pmfPi (Function.update (fun i => P.actionPMF x s i) who
+    ((stdSimplexEquiv (α := P.Act s who)).symm y)))
+    (fun a => P.oneStepCost e s a who)
+
+/-- Equation (6), assembled as the vector function `f(x,y,e)`. -/
+def f (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)] [DecidableEq ι]
+    (x y : P.X) (e : P.R) : P.R :=
+  fun s who => P.fCoord x s who (y (s, who)) e
+
+/-- Equation (4): `e(x)` is the value vector generated by `x`. -/
+def IsValueVector (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)] [DecidableEq ι]
+    (x : P.X) (e : P.R) : Prop :=
+  P.f x x e = e
+
+/-- Equation (5), equivalently `x ∈ φ(x)`: no player can lower cost by
+changing one statewise mixed action. -/
+def IsEquilibriumPoint (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)] [DecidableEq ι]
+    (x : P.X) (e : P.R) : Prop :=
+  P.IsValueVector x e ∧
+    ∀ s who (y : stdSimplex ℝ (P.Act s who)),
+      P.fCoord x s who (x (s, who)) e ≤ P.fCoord x s who y e
+
+/-- The largest player discount, Fink's common contraction coefficient
+`α = max_h α_h`. -/
+def maxDiscount (P : Game ι) [Fintype ι] [Nonempty ι] : ℝ :=
+  Finset.sup' Finset.univ Finset.univ_nonempty P.discount
+
+/-- The largest discount as a nonnegative Lipschitz constant. -/
+def maxDiscountNNReal (P : Game ι) [Fintype ι] [Nonempty ι] : ℝ≥0 :=
+  ⟨P.maxDiscount, by
+    obtain ⟨i⟩ := ‹Nonempty ι›
+    exact (P.discount_pos i).le.trans
+      (Finset.le_sup' (f := P.discount) (Finset.mem_univ i))⟩
+
+theorem discount_le_maxDiscount
+    (P : Game ι) [Fintype ι] [Nonempty ι] (who : ι) :
+    P.discount who ≤ P.maxDiscount :=
+  Finset.le_sup' (f := P.discount) (Finset.mem_univ who)
+
+theorem maxDiscount_lt_one
+    (P : Game ι) [Fintype ι] [Nonempty ι] : P.maxDiscount < 1 := by
+  simp [maxDiscount, Finset.sup'_lt_iff, P.discount_lt_one]
+
+theorem maxDiscountNNReal_lt_one
+    (P : Game ι) [Fintype ι] [Nonempty ι] :
+    P.maxDiscountNNReal < 1 :=
+  P.maxDiscount_lt_one
+
+/-- Property (a): `f` is continuous in all three finite-dimensional
+variables. -/
+theorem property_a_continuous
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)] :
+    Continuous (fun q : P.X × P.X × P.R => P.f q.1 q.2.1 q.2.2) := by
+  sorry
+
+/-- Property (b): one coordinate of `f` changes by at most `α_h` times the
+sup-distance between continuation vectors. -/
+theorem property_b
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (x : P.X) (s : P.State) (who : ι)
+    (y : stdSimplex ℝ (P.Act s who)) (v u : P.R) :
+    |P.fCoord x s who y v - P.fCoord x s who y u| ≤
+      P.discount who * dist v u := by
+  sorry
+
+/-- The pure mixed action used in the finite minimum defining `T_x`. -/
+def pureAction (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)]
+    {s : P.State} {who : ι} (a : P.Act s who) :
+    stdSimplex ℝ (P.Act s who) :=
+  stdSimplexEquiv (PMF.pure a)
+
+/-- Property (c): `f` is linear in the deviating mixed action. -/
+theorem property_c
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (x : P.X) (s : P.State) (who : ι)
+    (y : stdSimplex ℝ (P.Act s who)) (v : P.R) :
+    P.fCoord x s who y v =
+      wsum y (fun a => P.fCoord x s who (P.pureAction a) v) := by
+  sorry
+
+/-- The fixed-profile evaluation operator used in Lemma 1. -/
+def valueOperator
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (x : P.X) (v : P.R) : P.R :=
+  P.f x x v
+
+/-- The fixed-profile operator is a contraction. -/
+theorem contractingWith_valueOperator
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    (x : P.X) :
+    ContractingWith P.maxDiscountNNReal (P.valueOperator x) := by
+  sorry
+
+/-- **Lemma 1.** For every stationary mixed profile `x`, equation (4) has a
+unique solution. -/
+theorem lemma_1
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    (x : P.X) : ∃! e : P.R, P.IsValueVector x e := by
+  sorry
+
+/-- Equation (8): Fink's optimality operator `T_x`.  The finite minimum is
+written as the negative of a finite maximum. -/
+def T
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
+    (x : P.X) (v : P.R) : P.R :=
+  fun s who =>
+    -Finset.sup' Finset.univ Finset.univ_nonempty
+      (fun a : P.Act s who => -P.fCoord x s who (P.pureAction a) v)
+
+/-- The finite pure minimum is below every mixed action. -/
+theorem T_le_fCoord
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
+    (x : P.X) (v : P.R) (s : P.State) (who : ι)
+    (y : stdSimplex ℝ (P.Act s who)) :
+    P.T x v s who ≤ P.fCoord x s who y v := by
+  sorry
+
+/-- The finite minimum is attained by a pure action. -/
+theorem exists_pure_fCoord_eq_T
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
+    (x : P.X) (v : P.R) (s : P.State) (who : ι) :
+    ∃ a : P.Act s who,
+      P.fCoord x s who (P.pureAction a) v = P.T x v s who := by
+  sorry
+
+/-- **Theorem 1.** For every `x ∈ X`, `T_x` is a contraction of `R`. -/
+theorem theorem_1
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)]
+    (x : P.X) : ContractingWith P.maxDiscountNNReal (P.T x) := by
+  sorry
+
+/-- **Corollary 1.** For every `x ∈ X`, `T_x` has a unique fixed point. -/
+theorem corollary_1
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)]
+    (x : P.X) : ∃! v : P.R, P.T x v = v := by
+  sorry
+
+/-- **Corollary 2.** The family `{T_x | x ∈ X}` is equicontinuous.  This is
+its metric epsilon-delta form. -/
+theorem corollary_2
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)] :
+    ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
+      ∀ (x : P.X) (u v : P.R), dist u v < δ →
+        dist (P.T x u) (P.T x v) < ε := by
+  sorry
+
+/-- Equation (9): the single-valued optimal value `β(x)`. -/
+def beta
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)]
+    (x : P.X) : P.R :=
+  ContractingWith.fixedPoint (P.T x) (P.theorem_1 x)
+
+@[simp] theorem T_beta
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)] (x : P.X) :
+    P.T x (P.beta x) = P.beta x :=
+  (P.theorem_1 x).fixedPoint_isFixedPt
+
+/-- Equation (10): Fink's best-response correspondence `φ`. -/
+def phi
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)]
+    (x : P.X) : Set P.X :=
+  {y | P.f x y (P.beta x) = P.beta x}
+
+/-- Every fiber `φ(x)` is nonempty. -/
+theorem phi_nonempty
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)] (x : P.X) :
+    (P.phi x).Nonempty := by
+  sorry
+
+/-- Convexity of `φ(x)`, stated by closure under simplex segments. -/
+theorem phi_segment
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)]
+    (x y z : P.X) (hy : y ∈ P.phi x) (hz : z ∈ P.phi x)
+    (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
+    (fun p => ⟨fun a => t * y p a + (1 - t) * z p a,
+      fun a => add_nonneg (mul_nonneg ht0 (y p).property.1 a)
+        (mul_nonneg (sub_nonneg.mpr ht1) (z p).property.1 a),
+      by rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
+        (y p).property.2, (z p).property.2]; ring⟩) ∈ P.phi x := by
+  sorry
+
+/-- Closedness of each fiber `φ(x)`. -/
+theorem phi_isClosed
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)] (x : P.X) :
+    IsClosed (P.phi x) := by
+  sorry
+
+/-- A uniform finite bound on the cost table. -/
+def costBound
+    (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)] : ℝ :=
+  ∑ s : P.State, ∑ a : P.JointActionAt s, ∑ who : ι, |P.cost s a who|
+
+/-- **Lemma 2.** The range of `β` is bounded. -/
+theorem lemma_2
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)] :
+    ∃ B : ℝ, ∀ (x : P.X) (s : P.State) (who : ι),
+      |P.beta x s who| ≤ B := by
+  sorry
+
+/-- Fink's notation `S_v(x)=T_x v`. -/
+def S
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
+    (v : P.R) (x : P.X) : P.R :=
+  P.T x v
+
+/-- A compact cube containing all continuation vectors with coordinatewise
+absolute value at most `B`. -/
+def valueCube (P : Game ι) (B : ℝ) : Set P.R :=
+  Set.Icc (fun _ _ => -B) (fun _ _ => B)
+
+theorem valueCube_isCompact
+    (P : Game ι) [Fintype P.State] [Fintype ι] (B : ℝ) :
+    IsCompact (P.valueCube B) :=
+  isCompact_Icc
+
+/-- **Lemma 3, first part.** For fixed `v`, `S_v` is continuous on `X`. -/
+theorem lemma_3_continuous
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
+    (v : P.R) : Continuous (P.S v) := by
+  sorry
+
+/-- **Lemma 3, second part.** On every bounded value cube, the family
+`{S_v}` is equicontinuous.  `TendstoUniformly` is the paper's uniform-in-`v`
+formulation. -/
+theorem lemma_3_equicontinuous
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
+    (B : ℝ) (x : P.X) :
+    TendstoUniformly
+      (fun x' (v : {v : P.R // v ∈ P.valueCube B}) => P.S v.1 x')
+      (fun v => P.S v.1 x) (𝓝 x) := by
+  sorry
+
+/-- **Lemma 4.** The graph of `β` is sequentially closed. -/
+theorem lemma_4
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)]
+    {xn : ℕ → P.X} {x : P.X} {v₀ : P.R}
+    (hx : Tendsto xn atTop (𝓝 x))
+    (hv : Tendsto (fun n => P.beta (xn n)) atTop (𝓝 v₀)) :
+    P.beta x = v₀ := by
+  sorry
+
+/-- **Lemma 5.** The graph of the best-response correspondence `φ` is
+sequentially closed. -/
+theorem lemma_5
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
+    [∀ s i, Nonempty (P.Act s i)]
+    {xn yn : ℕ → P.X} {x y : P.X}
+    (hx : Tendsto xn atTop (𝓝 x)) (hy : Tendsto yn atTop (𝓝 y))
+    (hphi : ∀ n, yn n ∈ P.phi (xn n)) :
+    y ∈ P.phi x := by
+  sorry
+
+/-! ## Internal contingent-plan adapter for Theorem 2 -/
+
+/-- A state-independent pure action in the production game is a complete
+contingent plan, one paper action for every state. -/
+abbrev AmbientAct (P : Game ι) (i : ι) := ∀ s, P.Act s i
+
+/-- The reward game used by the reusable production theorem.  It evaluates a
+contingent plan only at the current state and negates the paper's cost. -/
+def rewardGame (P : Game ι) : StochasticGame ι where
   State := P.State
-  Act := P.Act
-  stagePayoff := P.cost
-  transition := P.transition
+  Act := P.AmbientAct
+  stagePayoff := fun s a who => -P.cost s (fun i => a i s) who
+  transition := fun s a => P.transition s (fun i => a i s)
   discount := 0
   discount_nonneg := le_rfl
   discount_lt_one := zero_lt_one
 
-/-- The padded cost game: every ambient action is first replaced by a legal
-action at the current state. -/
-abbrev paddedCostGame (P : Game ι) [Fintype ι] [DecidableEq ι] :
-    StochasticGame ι :=
-  P.costGame.normalizedGame P.Legal P.legal_nonempty
+/-- The current-state marginal of a production stationary profile. -/
+def effectiveMixedAction
+    (P : Game ι) [Fintype ι]
+    (x : P.rewardGame.StationaryMixedProfile)
+    (s : P.State) (i : ι) : PMF (P.Act s i) :=
+  (x s i).map (fun plan => plan s)
 
-/-- The reward game used by the production fixed-point theorem.  Rewards are
-the negatives of Fink's costs. -/
-abbrev rewardGame (P : Game ι) [Fintype ι] [DecidableEq ι] :
-    StochasticGame ι where
-  State := P.State
-  Act := P.Act
-  stagePayoff := fun s a who => -P.paddedCostGame.stagePayoff s a who
-  transition := P.paddedCostGame.transition
-  discount := 0
-  discount_nonneg := le_rfl
-  discount_lt_one := zero_lt_one
+/-- The literal paper profile induced by all current-state marginals. -/
+def effectiveProfile
+    (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (x : P.rewardGame.StationaryMixedProfile) : P.X :=
+  fun p => stdSimplexEquiv (P.effectiveMixedAction x p.1 p.2)
 
-/-- A stationary mixed profile, represented on the finite padded action
-carriers.  Its semantic marginal on `J^i(s)` is `effectiveMixedAction`. -/
-abbrev StationaryMixedProfile (P : Game ι) [Fintype ι] [DecidableEq ι] :=
-  P.rewardGame.StationaryMixedProfile
+@[simp] theorem actionPMF_effectiveProfile
+    (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (x : P.rewardGame.StationaryMixedProfile) (s : P.State) (i : ι) :
+    P.actionPMF (P.effectiveProfile x) s i = P.effectiveMixedAction x s i := by
+  exact (stdSimplexEquiv (α := P.Act s i)).symm_apply_apply _
 
-/-- The actual legal alternative selected by an ambient action label. -/
-def effectiveAction (P : Game ι) [Fintype ι] [DecidableEq ι]
-    (s : P.State) (i : ι) (a : P.Act i) :
-    {b : P.Act i // P.Legal s i b} :=
-  ⟨P.costGame.legalizeAct P.Legal P.legal_nonempty s i a,
-    P.costGame.legal_legalizeAct P.Legal P.legal_nonempty s i a⟩
+/-- Extend one local action to a complete contingent plan using fixed actions
+at every other state. -/
+def extendAction (P : Game ι) (s : P.State) (i : ι)
+    (a : P.Act s i) : P.AmbientAct i :=
+  fun t => if h : t = s then h.symm ▸ a else Classical.choice (P.act_nonempty t i)
 
-/-- The probability vector on the paper's literal alternative set `J^i(s)`
-induced by a padded stationary strategy. -/
-def effectiveMixedAction (P : Game ι) [Fintype ι] [DecidableEq ι]
-    (x : P.StationaryMixedProfile) (s : P.State) (i : ι) :
-    PMF {a : P.Act i // P.Legal s i a} :=
-  (x s i).map (P.effectiveAction s i)
+@[simp] theorem extendAction_apply_same
+    (P : Game ι) (s : P.State) (i : ι) (a : P.Act s i) :
+    P.extendAction s i a s = a := by
+  simp [extendAction]
 
-/-- Fink's unnormalized value vector `e_{hi}` is encoded as a normalized
-reward vector. -/
-def normalizedRewardValue (P : Game ι)
-    (e : P.State → Payoff ι) : P.State → Payoff ι :=
+/-- Lift a local mixed action to a production-game mixed contingent plan. -/
+def liftMixedAction
+    (P : Game ι) (s : P.State) (i : ι) (y : PMF (P.Act s i)) :
+    PMF (P.AmbientAct i) :=
+  y.map (P.extendAction s i)
+
+/-- Fink's unnormalized cost value encoded as a normalized reward value. -/
+def normalizedRewardValue (P : Game ι) (e : P.R) : P.R :=
   fun s who => -(1 - P.discount who) * e s who
 
-/-- Equation (6), and equations (3)–(5) after mixing.
-
-The displayed definition is the exact cost expression through the normalized
-reward adapter:
-`f(x,y,e) = - EU_reward(x_{-h},y; -(1-α_h)e) / (1-α_h)`.
-Because `α_h < 1`, this expands to
-`E[C_h + α_h E[e_h(next)]]`. -/
-def f (P : Game ι) [Fintype ι] [DecidableEq ι]
-    (x : P.StationaryMixedProfile) (who : ι) (y : PMF (P.Act who))
-    (e : P.State → Payoff ι) (s : P.State) : ℝ :=
-  -P.rewardGame.discountedAuxEU (P.discount who)
-      (P.normalizedRewardValue e) s (Function.update (x s) who y) who /
-    (1 - P.discount who)
-
-/-- Equation (4): `e(x)` is a value vector for the stationary profile `x`. -/
-def IsValueVector (P : Game ι) [Fintype ι] [DecidableEq ι]
-    (x : P.StationaryMixedProfile) (e : P.State → Payoff ι) : Prop :=
-  ∀ s who, P.f x who (x s who) e s = e s who
-
-/-- Equation (5): at every state and for every player, the prescribed mixed
-alternative minimizes the one-stage cost plus discounted continuation cost. -/
-def IsEquilibriumPoint (P : Game ι) [Fintype ι] [DecidableEq ι]
-    (x : P.StationaryMixedProfile) (e : P.State → Payoff ι) : Prop :=
-  P.IsValueVector x e ∧
-    ∀ s who (y : PMF (P.Act who)),
-      P.f x who (x s who) e s ≤ P.f x who y e s
-
-theorem one_sub_discount_pos (P : Game ι) (who : ι) :
-    0 < 1 - P.discount who :=
-  sub_pos.mpr (P.discount_lt_one who)
-
-theorem one_sub_discount_ne (P : Game ι) (who : ι) :
-    1 - P.discount who ≠ 0 :=
-  ne_of_gt (P.one_sub_discount_pos who)
-
-private theorem update_own_mixedAction
-    (P : Game ι) [Fintype ι] [DecidableEq ι]
-    (x : P.StationaryMixedProfile) (s : P.State) (who : ι) :
-    Function.update (x s) who (x s who) = x s := by
-  funext i
-  by_cases hi : i = who
-  · subst i
-    simp
-  · simp [Function.update_of_ne hi]
-
-/-- The normalized-reward Bellman certificate is exactly the paper's
-cost-minimizing equilibrium condition. -/
-theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
-    (P : Game ι) [Fintype ι] [DecidableEq ι]
-    (x : P.StationaryMixedProfile) (e : P.State → Payoff ι) :
-    P.IsEquilibriumPoint x e ↔
-      P.rewardGame.IsPlayerDiscountedStationaryBellmanEq P.discount x
-        (P.normalizedRewardValue e) := by
-  constructor
-  · rintro ⟨hvalue, hmin⟩
-    constructor
-    · intro s who y
-      have hmin' := hmin s who y
-      unfold f at hmin'
-      rw [P.update_own_mixedAction x s who] at hmin'
-      have hpos := P.one_sub_discount_pos who
-      have hscaled := (div_le_div_iff_of_pos_right hpos).mp hmin'
-      linarith
-    · intro s who
-      have h := hvalue s who
-      unfold f at h
-      rw [P.update_own_mixedAction x s who] at h
-      have hne := P.one_sub_discount_ne who
-      have hmul := (div_eq_iff hne).mp h
-      dsimp [normalizedRewardValue]
-      linarith
-  · rintro ⟨hnash, hvalue⟩
-    constructor
-    · intro s who
-      unfold f
-      rw [P.update_own_mixedAction x s who, hvalue s who]
-      dsimp [normalizedRewardValue]
-      field_simp [P.one_sub_discount_ne who]
-      ring
-    · intro s who y
-      have h := hnash s who y
-      unfold f
-      rw [P.update_own_mixedAction x s who]
-      have hpos := P.one_sub_discount_pos who
-      apply (div_le_div_iff_of_pos_right hpos).mpr
-      linarith
-
-/-- A uniform bound on the finite reward table. -/
-def rewardBound (P : Game ι) [Fintype P.State] [Fintype ι]
-    [DecidableEq ι] [∀ i, Fintype (P.Act i)] : ℝ :=
-  ∑ s : P.State, ∑ a : (∀ i, P.Act i), ∑ who : ι,
-    |P.rewardGame.stagePayoff s a who|
-
-theorem rewardBound_nonneg (P : Game ι) [Fintype P.State] [Fintype ι]
-    [DecidableEq ι] [∀ i, Fintype (P.Act i)] :
-    0 ≤ P.rewardBound := by
-  unfold rewardBound
-  exact Finset.sum_nonneg fun _ _ =>
-    Finset.sum_nonneg fun _ _ =>
-      Finset.sum_nonneg fun _ _ => abs_nonneg _
-
-theorem abs_reward_le_rewardBound
+/-- A finite bound on the production reward table. -/
+def rewardBound
     (P : Game ι) [Fintype P.State] [Fintype ι]
-    [DecidableEq ι] [∀ i, Fintype (P.Act i)]
-    (s : P.State) (a : ∀ i, P.Act i) (who : ι) :
-    |P.rewardGame.stagePayoff s a who| ≤ P.rewardBound := by
-  classical
-  unfold rewardBound
-  calc
+    [∀ s i, Fintype (P.Act s i)] : ℝ :=
+  ∑ s : P.State, ∑ a : (∀ i, P.AmbientAct i), ∑ who : ι,
     |P.rewardGame.stagePayoff s a who|
-        ≤ ∑ who' : ι, |P.rewardGame.stagePayoff s a who'| := by
-          exact Finset.single_le_sum
-            (f := fun who' : ι => |P.rewardGame.stagePayoff s a who'|)
-            (fun _ _ => abs_nonneg _) (Finset.mem_univ who)
-    _ ≤ ∑ a' : (∀ i, P.Act i),
-          ∑ who' : ι, |P.rewardGame.stagePayoff s a' who'| := by
-          exact Finset.single_le_sum
-            (f := fun a' : (∀ i, P.Act i) =>
-              ∑ who' : ι, |P.rewardGame.stagePayoff s a' who'|)
-            (fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _)
-            (Finset.mem_univ a)
-    _ ≤ ∑ s' : P.State, ∑ a' : (∀ i, P.Act i),
-          ∑ who' : ι, |P.rewardGame.stagePayoff s' a' who'| := by
-          exact Finset.single_le_sum
-            (f := fun s' : P.State =>
-              ∑ a' : (∀ i, P.Act i),
-                ∑ who' : ι, |P.rewardGame.stagePayoff s' a' who'|)
-            (fun _ _ => Finset.sum_nonneg fun _ _ =>
-              Finset.sum_nonneg fun _ _ => abs_nonneg _)
-            (Finset.mem_univ s)
 
-/-- Theorem 2: every finite stochastic `n`-person cost game has a stationary
-equilibrium point, with the discount factor allowed to depend on the player. -/
-theorem exists_equilibriumPoint
-    (P : Game ι) [Finite P.State] [Fintype ι] [DecidableEq ι]
-    [∀ i, Finite (P.Act i)] [∀ i, Nonempty (P.Act i)] :
-    ∃ (x : P.StationaryMixedProfile) (e : P.State → Payoff ι),
-      P.IsEquilibriumPoint x e := by
-  letI : Fintype P.State := Fintype.ofFinite P.State
-  letI : ∀ i, Fintype (P.Act i) := fun i => Fintype.ofFinite (P.Act i)
-  obtain ⟨x, V, hcert⟩ :=
-    P.rewardGame.exists_isPlayerDiscountedStationaryBellmanEq
-      P.discount P.rewardBound P.rewardBound_nonneg
-      P.discount_nonneg (fun who => (P.discount_lt_one who).le)
-      P.abs_reward_le_rewardBound
-  let e : P.State → Payoff ι :=
-    fun s who => -V s who / (1 - P.discount who)
-  have hencode : P.normalizedRewardValue e = V := by
-    funext s who
-    dsimp [normalizedRewardValue, e]
-    field_simp [P.one_sub_discount_ne who]
-  refine ⟨x, e,
-    (P.isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq x e).2 ?_⟩
-  rw [hencode]
-  exact hcert
+/-- Marginalization of independent contingent plans commutes with their
+product distribution. -/
+theorem pmfPi_map_eval
+    (P : Game ι) [Fintype P.State] [Fintype ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (m : ∀ i, PMF (P.AmbientAct i)) (s : P.State) :
+    (pmfPi m).map (fun a => fun i => a i s) =
+      pmfPi (fun i => (m i).map (fun plan => plan s)) := by
+  exact pmfPi_push_coordwise m (fun i plan => plan s)
+
+/-- The production auxiliary payoff is exactly the negative scaled paper
+cost expression after taking current-state marginals. -/
+theorem reward_discountedAuxEU_eq_fCoord
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (m : ∀ i, PMF (P.AmbientAct i)) (e : P.R)
+    (s : P.State) (who : ι) :
+    P.rewardGame.discountedAuxEU (P.discount who)
+        (P.normalizedRewardValue e) s m who =
+      -(1 - P.discount who) *
+        expect (pmfPi (fun i => (m i).map (fun plan => plan s)))
+          (fun a => P.oneStepCost e s a who) := by
+  sorry
+
+/-- **Theorem 2.** There are `x ∈ X` and `v ∈ R` such that
+`v=f(x,x,v)=min_y f(x,y,v)`, equivalently `x ∈ φ(x)`.  The returned profile
+is on the paper's literal state-dependent action sets. -/
+theorem theorem_2
+    (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
+    [DecidableEq ι] [∀ s i, Fintype (P.Act s i)] :
+    ∃ (x : P.X) (e : P.R), P.IsEquilibriumPoint x e := by
+  sorry
 
 /-!
-## Paper proof route
+## Closing remarks
 
-After Lemma 1, Fink defines the optimal-response operator `T_x`, proves it is
-an `α = max_h α_h` contraction (Theorem 1), obtains its unique fixed point
-`β(x)`, proves boundedness and continuity of `β`, proves that the optimal
-response correspondence `φ` has closed graph, and applies Kakutani.
-
-The production theorem above proves the same finite claim through the
-equivalent gain-adjustment Brouwer map.  In particular:
-
-* compactness and convexity are `convex_finkDomain` and
-  `isCompact_finkDomain`;
-* continuity of the joint map is `continuous_playerFinkMap`;
-* fixed-point existence is `exists_playerFinkMap_fixedPoint`;
-* decoding the fixed point is
-  `isPlayerDiscountedStationaryBellmanEq_of_playerFinkMap_fixedPoint`.
-
-Thus none of the paper's existence argument is assumed.  The numbered
-contraction and correspondence lemmas are proof architecture for Theorem 2,
-not additional game-theoretic conclusions; the imported Brouwer
-implementation discharges their role without introducing axioms.
-
-## Scope of the final paragraph
-
-The paper also says that the argument extends to countably many states with
-bounded costs by replacing the finite-dimensional value space by `ℓ∞`, and
-that arbitrary action cardinalities with `min` replaced by `inf` yield
-ε-effective strategies.  Those sentences do not specify the topology,
-measurability, or attainment hypotheses needed for a unique Lean statement.
-They are recorded here rather than silently strengthened.  The formal theorem
-above is exactly the finite-state, finite-action theorem proved in the body of
-the paper.  The comparisons with Shapley's two-player theorem and the
-one-player dynamic-programming case are bibliographic remarks.
+Fink observes after Theorem 2 that Lemmas 2 and 4 make `β` continuous, hence
+its range is compact and connected.  He then sketches two extensions: to a
+denumerable state set with uniformly bounded costs by replacing `R` by the
+bounded-sequence space, and to arbitrary action cardinalities by replacing
+`min` with `inf`, yielding ε-effective strategies.  The finite paper theorem
+above does not silently strengthen those sketches: the closing paragraph does
+not state the topology and compactness hypotheses required for a unique
+infinite-action Lean theorem.  The comparisons with Shapley's two-player
+result and the one-player dynamic-programming case are bibliographic remarks.
 -/
 
 end Game
