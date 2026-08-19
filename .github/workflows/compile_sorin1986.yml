@@ -11,6 +11,7 @@ on:
       - Literature/Sorin1986DiscountedScratch.lean
       - Literature/Sorin1986DirectGameScratch.lean
       - Literature/Sorin1986PropertyScratch.lean
+      - scripts/_build_sorin1986_integrated.py
       - .github/workflows/compile_sorin1986.yml
   workflow_dispatch:
 
@@ -45,7 +46,7 @@ jobs:
             UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter \
             UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
 
-      - name: Compile Sorin1986
+      - name: Compile implementation modules
         run: |
           lake env lean -o /tmp/Sorin1986.olean Literature/Sorin1986.lean
           lake env bash -lc 'export LEAN_PATH="/tmp:$LEAN_PATH"; lean -o /tmp/Sorin1986CompactScratch.olean Literature/Sorin1986CompactScratch.lean'
@@ -55,6 +56,12 @@ jobs:
           lake env bash -lc 'export LEAN_PATH="/tmp:$LEAN_PATH"; lean -o /tmp/Sorin1986DiscountedScratch.olean Literature/Sorin1986DiscountedScratch.lean'
           lake env bash -lc 'export LEAN_PATH="/tmp:$LEAN_PATH"; lean Literature/Sorin1986DirectGameScratch.lean'
           lake env bash -lc 'export LEAN_PATH="/tmp:$LEAN_PATH"; lean Literature/Sorin1986PropertyScratch.lean'
+
+      - name: Generate integrated source
+        run: python3 scripts/_build_sorin1986_integrated.py
+
+      - name: Compile integrated source
+        run: lake env lean Literature/Sorin1986IntegratedScratch.lean
 
       - name: Preserve source modules for integration
         if: always()
@@ -70,3 +77,4 @@ jobs:
             Literature/Sorin1986DiscountedScratch.lean
             Literature/Sorin1986DirectGameScratch.lean
             Literature/Sorin1986PropertyScratch.lean
+            Literature/Sorin1986IntegratedScratch.lean
