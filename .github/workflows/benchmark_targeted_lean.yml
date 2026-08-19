@@ -1,0 +1,41 @@
+name: Benchmark targeted Lean validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - Experiments/Base/SemanticFinalRegimeArithmetic.lean
+      - .github/workflows/benchmark_targeted_lean.yml
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Compile focused module and audit axioms
+        run: |
+          lake build Experiments.Base.SemanticFinalRegimeArithmetic
+          printf '%s\n' \
+            'import Experiments.Base.SemanticFinalRegimeArithmetic' \
+            '#print axioms Experiments.SemanticFinalRegimeArithmetic.interior_entrant_gain_eq' \
+            '#print axioms Experiments.SemanticFinalRegimeArithmetic.interior_entrant_breakpoint' \
+            '#print axioms Experiments.SemanticFinalRegimeArithmetic.interior_entrant_profitable_before' \
+            > /tmp/BenchmarkAxiomCheck.lean
+          lake env lean /tmp/BenchmarkAxiomCheck.lean | tee /tmp/benchmark-axioms.log
+          ! grep -q sorryAx /tmp/benchmark-axioms.log
+          python3 scripts/check_trust.py
