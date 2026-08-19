@@ -23,7 +23,6 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - run: lake build
       - name: Package Lean workspace
         run: |
           tar -C "$HOME" -cf /tmp/elan.tar .elan
