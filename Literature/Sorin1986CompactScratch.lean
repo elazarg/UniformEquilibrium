@@ -81,9 +81,8 @@ theorem clamp01_nonneg (t : ℝ) : 0 ≤ clamp01 t := by simp [clamp01]
 theorem clamp01_le_one (t : ℝ) : clamp01 t ≤ 1 := by simp [clamp01]
 
 @[fun_prop] theorem continuous_clamp01 : Continuous clamp01 := by
-  simpa [clamp01] using
-    (continuous_const.max (continuous_const.min continuous_id) :
-      Continuous fun t : ℝ => max 0 (min 1 t))
+  change Continuous fun t : ℝ => max 0 (min 1 t)
+  exact continuous_const.max (continuous_const.min continuous_id)
 
 def intervalMix (t : ℝ) (x y : UnitInterval) : UnitInterval :=
   ⟨clamp01 t * x + (1 - clamp01 t) * y, by
@@ -162,9 +161,7 @@ def RealizationPlan.mix {G : FiniteStageGame} {who : G.Player}
     Continuous fun p : ℝ × (RealizationPlan G who × RealizationPlan G who) =>
       RealizationPlan.mix p.1 p.2.1 p.2.2 := by
   apply Continuous.subtype_mk
-  apply Continuous.prod_mk
-  · fun_prop
-  · fun_prop
+  fun_prop
 
 end SequenceForm
 
