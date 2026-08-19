@@ -6,6 +6,7 @@ on:
       - agent/promote-fink1964
     paths:
       - .tmp/complete_fink1964.py
+      - .github/workflows/apply_complete_fink1964.yml
 
 permissions:
   contents: write
