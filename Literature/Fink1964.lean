@@ -121,8 +121,8 @@ reward adapter:
 Because `α_h < 1`, this expands to
 `E[C_h + α_h E[e_h(next)]]`. -/
 def f (P : Game ι) [Fintype ι] [DecidableEq ι]
-    (x : P.StationaryMixedProfile) (y : PMF (P.Act who))
-    (e : P.State → Payoff ι) (s : P.State) (who : ι) : ℝ :=
+    (x : P.StationaryMixedProfile) (who : ι) (y : PMF (P.Act who))
+    (e : P.State → Payoff ι) (s : P.State) : ℝ :=
   -P.rewardGame.discountedAuxEU (P.discount who)
       (P.normalizedRewardValue e) s (Function.update (x s) who y) who /
     (1 - P.discount who)
@@ -130,7 +130,7 @@ def f (P : Game ι) [Fintype ι] [DecidableEq ι]
 /-- Equation (4): `e(x)` is a value vector for the stationary profile `x`. -/
 def IsValueVector (P : Game ι) [Fintype ι] [DecidableEq ι]
     (x : P.StationaryMixedProfile) (e : P.State → Payoff ι) : Prop :=
-  ∀ s who, P.f x (x s who) e s who = e s who
+  ∀ s who, P.f x who (x s who) e s = e s who
 
 /-- Equation (5): at every state and for every player, the prescribed mixed
 alternative minimizes the one-stage cost plus discounted continuation cost. -/
@@ -138,7 +138,7 @@ def IsEquilibriumPoint (P : Game ι) [Fintype ι] [DecidableEq ι]
     (x : P.StationaryMixedProfile) (e : P.State → Payoff ι) : Prop :=
   P.IsValueVector x e ∧
     ∀ s who (y : PMF (P.Act who)),
-      P.f x (x s who) e s who ≤ P.f x y e s who
+      P.f x who (x s who) e s ≤ P.f x who y e s
 
 theorem one_sub_discount_pos (P : Game ι) (who : ι) :
     0 < 1 - P.discount who :=
@@ -162,13 +162,13 @@ theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
     · intro s who y
       have hmin' := hmin s who y
       unfold f at hmin'
-      simp only [Function.update_same] at hmin'
+      simp only [Function.update_self] at hmin'
       have hpos := P.one_sub_discount_pos who
       nlinarith
     · intro s who
       have h := hvalue s who
       unfold f at h
-      simp only [Function.update_same] at h
+      simp only [Function.update_self] at h
       have hne := P.one_sub_discount_ne who
       have hmul := (div_eq_iff hne).mp h
       dsimp [normalizedRewardValue]
@@ -177,7 +177,7 @@ theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
     constructor
     · intro s who
       unfold f
-      simp only [Function.update_same]
+      simp only [Function.update_self]
       rw [hvalue s who]
       dsimp [normalizedRewardValue]
       field_simp [P.one_sub_discount_ne who]
@@ -185,7 +185,7 @@ theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
     · intro s who y
       have h := hnash s who y
       unfold f
-      simp only [Function.update_same]
+      simp only [Function.update_self]
       have hpos := P.one_sub_discount_pos who
       nlinarith
 
@@ -253,7 +253,6 @@ theorem exists_equilibriumPoint
     funext s who
     dsimp [normalizedRewardValue, e]
     field_simp [P.one_sub_discount_ne who]
-    ring
   refine ⟨x, e,
     (P.isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq x e).2 ?_⟩
   rw [hencode]
