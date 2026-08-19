@@ -28,16 +28,35 @@ jobs:
           use-mathlib-cache: true
           use-github-cache: true
       - run: python3 .tmp/complete_fink1964.py
-      - run: |
-          lake build +UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous +MathUE.Finset.SupNonexpansive
-          lake env lean Literature/Fink1964.lean
-      - run: |
-          if git diff --quiet -- Literature/Fink1964.lean; then
-            echo "No change"
-            exit 0
-          fi
+      - name: Validate patched file
+        run: |
+          set +e
+          {
+            lake build +UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous +MathUE.Finset.SupNonexpansive
+            lake env lean Literature/Fink1964.lean
+          } > .tmp/fink_completion_build.log 2>&1
+          status=$?
+          echo "$status" > .tmp/fink_completion_status
+          cat .tmp/fink_completion_build.log
+          exit 0
+      - name: Publish result or diagnostics
+        run: |
+          status=$(cat .tmp/fink_completion_status)
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Literature/Fink1964.lean
-          git commit -m "Complete analytic part of Fink 1964 audit"
-          git push origin HEAD:agent/promote-fink1964
+          if [ "$status" = 0 ]; then
+            rm -f .tmp/fink_completion_build.log .tmp/fink_completion_status
+            git add Literature/Fink1964.lean
+            git add -u .tmp/fink_completion_build.log .tmp/fink_completion_status || true
+            if git diff --cached --quiet; then
+              echo "No change"
+            else
+              git commit -m "Complete analytic part of Fink 1964 audit"
+              git push origin HEAD:agent/promote-fink1964
+            fi
+          else
+            git add .tmp/fink_completion_build.log
+            git commit -m "Record Fink completion diagnostics"
+            git push origin HEAD:agent/promote-fink1964
+            exit 1
+          fi
