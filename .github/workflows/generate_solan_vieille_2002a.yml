@@ -1,0 +1,38 @@
+name: Generate Solan and Vieille 2002a source
+
+on:
+  push:
+    branches:
+      - agent/promote-solan-vieille-2002a
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate-solan-vieille-2002a-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - name: Reconstruct source
+        run: |
+          cat .tmp/SolanAndVieille2002a.part0* > /tmp/source.b64
+          base64 --decode /tmp/source.b64 | gzip --decompress > Literature/SolanAndVieille2002a.lean
+          echo '1354428abc7e72a795fb4f8805b7cbb1d5b79bbc4c61894221c2640bcc86b453  Literature/SolanAndVieille2002a.lean' | sha256sum --check
+      - name: Commit reconstructed source
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Literature/SolanAndVieille2002a.lean
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update Solan and Vieille paper formalization'
+            git push
+          fi
