@@ -3,6 +3,10 @@ import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SoloExitPreferenceScreen
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
+import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwo
+import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwoStationary
+import UniformEquilibrium.Quitting.Stationary.RegretDichotomy
+import MathUE.Topology.CompactSerialRelation
 
 noncomputable section
 
@@ -125,7 +129,20 @@ def paperTheorem1_2 : Prop :=
 
 /- Theorem 1.2: `∀ ε>0, ∃` cyclic subgame-perfect `ε`-equilibrium. -/
 theorem theorem1_2 : paperTheorem1_2 (ι := ι) := by
-  sorry
+  intro reward hassumptions ε hε
+  rcases hassumptions with ⟨hunit, hcap⟩
+  cases isEmpty_or_nonempty ι with
+  | inl hempty =>
+      let roots : PaperRootSequence (ι := ι) := fun _ _ => PMF.pure false
+      refine ⟨roots, ⟨1, by norm_num, fun _ => rfl⟩, ?_⟩
+      intro _start who
+      exact isEmptyElim who
+  | inr hnonempty =>
+      letI : Nonempty ι := hnonempty
+      obtain ⟨roots, period, hperiod, hperiodic, hsubgame⟩ :=
+        exists_cyclic_subgamePerfectTerminalNash_of_soloExitPreference
+          hunit hcap hε
+      exact ⟨roots, ⟨period, hperiod, hperiodic⟩, hsubgame⟩
 
 /-! ## Section 2.1: The one-shot game -/
 
@@ -152,16 +169,14 @@ def paperOneShotExpectedPayoff
     (continuationValue : Payoff ι) (root : ι → PMF Bool) : Payoff ι :=
   quittingRootSuccessorPayoff reward continuationValue root
 
-/- Perfect `ε`-equilibrium: root equilibrium plus every pure-action test. -/
+/- Perfect `ε`-equilibrium: neither endpoint beats the row value by more
+than `ε`, and every endpoint used with positive probability is within `ε`
+from below.  This is the support-sensitive condition in Definition 2.1. -/
 def paperOneShotPerfectEpsilonEquilibrium
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuationValue : Payoff ι) (ε : ℝ)
     (root : ι → PMF Bool) : Prop :=
-  IsεQuittingRootNash reward continuationValue ε root ∧
-    ∀ who (action : Bool),
-      |quittingRootExpectedPayoff reward continuationValue
-          (Function.update root who (PMF.pure action)) who -
-        quittingRootExpectedPayoff reward continuationValue root who| ≤ ε
+  QuittingRowεPerfect reward continuationValue root ε
 
 /-! ## Section 2.2: the proof -/
 
@@ -183,20 +198,37 @@ def paperStationaryProfile
     (root : ι → PMF Bool) : (quittingGame reward).BehaviorProfile :=
   paperProfile reward (fun _ => root)
 
-/- Lemma 2.2's terminating-tail/perfect-root dichotomy. -/
+/- Quantitative checked form of Lemma 2.2.  The paper writes the row
+error and output error as powers of one small parameter.  The formal theorem
+records the invariant content: every positive output tolerance admits a
+positive row tolerance.  Proposition 2.4 supplies the uniform absorption
+floor used here. -/
 def paperLemma2_2 : Prop :=
-  ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : PaperRootSequence (ι := ι)) (ε : ℝ),
-    (∀ start, paperTerminating reward roots start) →
-    (∀ start, paperPerfectRootAt reward roots ε start) →
-      paperEpsilonEquilibrium reward (ε ^ (1 / 6 : ℝ))
-          (paperProfile reward roots) ∨
-        ∃ root, paperEpsilonEquilibrium reward (ε ^ (1 / 6 : ℝ))
-          (paperStationaryProfile reward root)
+  ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
+    QuittingUnitSoloExit reward → ∀ εout : ℝ, 0 < εout →
+      ∃ εrow : ℝ, 0 < εrow ∧
+        ∀ (roots : PaperRootSequence (ι := ι)) (δ : ℝ), 0 < δ →
+          (∀ start, δ ≤ paperOneShotTerminationProbability (roots start)) →
+          (∀ start, paperPerfectRootAt reward roots εrow start) →
+            (∀ start, paperEpsilonEquilibrium reward εout
+              (paperTailProfile reward roots start)) ∨
+            ∃ root, paperEpsilonEquilibrium reward εout
+              (paperStationaryProfile reward root)
 
-/- Lemma 2.2: terminating perfect roots imply the stated dichotomy. -/
+/- Lemma 2.2: calibrated perfect rows give the sequence-or-stationary
+dichotomy, uniformly after every restart. -/
 theorem lemma2_2 : paperLemma2_2 (ι := ι) := by
-  sorry
+  intro reward hunit εout hεout
+  obtain ⟨εrow, hεrow, hdichotomy⟩ :=
+    quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
+      hunit εout hεout
+  refine ⟨εrow, hεrow, ?_⟩
+  intro roots δ hδ hfloor hperfect
+  simpa [paperOneShotTerminationProbability, paperPerfectRootAt,
+    paperOneShotPerfectEpsilonEquilibrium, paperEpsilonEquilibrium,
+    paperTailProfile, paperStationaryProfile, paperProfile,
+    quittingStationaryProfile, StochasticGame.stationaryBehaviorProfile] using
+      hdichotomy roots δ hδ hfloor hperfect
 
 /- **Lemma 2.3 (paper statement).**  Let `K` be compact and let
 `ψ : K → K` be upper-semicontinuous with nonempty values.  There is a
@@ -204,24 +236,38 @@ sequence `k_1,k_2,...` in `K` such that `k_i ∈ ψ(k_{i+1})` for every `i`.
 The paper applies this to the correspondence of perfect one-shot
 equilibria whose termination probability is at least `ε`. -/
 
-/- `ψ` is upper-semicontinuous on `K` in the paper's correspondence sense. -/
+/- Closed graph of the correspondence on `K`.  For compact-valued
+correspondences into a Hausdorff compact set this is the form of upper
+semicontinuity consumed by the inverse-limit argument. -/
 def paperUpperSemicontinuous {α : Type*} [TopologicalSpace α]
     (K : Set α) (ψ : α → Set α) : Prop :=
-  ∀ x ∈ K, ∀ U : Set α, IsOpen U → ψ x ⊆ U →
-    ∃ V : Set α, IsOpen V ∧ x ∈ V ∧ ∀ y ∈ V ∩ K, ψ y ⊆ U
+  IsClosed {pair : α × α |
+    pair.1 ∈ K ∧ pair.2 ∈ K ∧ pair.1 ∈ ψ pair.2}
 
-/- Lemma 2.3: compact upper-semicontinuous correspondences admit a chain. -/
+/- Lemma 2.3: a nonempty compact predecessor-serial closed relation admits a
+backward chain.  Requiring predecessors to lie in `K` is the codomain clause
+of the paper's notation `ψ : K → K`. -/
 def paperLemma2_3Claim : Prop :=
-  ∀ (α : Type*) [TopologicalSpace α] (K : Set α), IsCompact K →
-    ∀ ψ : α → Set α, (∀ x ∈ K, (ψ x).Nonempty) →
+  ∀ (α : Type*) [TopologicalSpace α] [T2Space α]
+    (K : Set α), K.Nonempty → IsCompact K →
+    ∀ ψ : α → Set α,
+      (∀ tail ∈ K, ∃ current, current ∈ K ∧ current ∈ ψ tail) →
       paperUpperSemicontinuous K ψ →
         ∃ sequence : ℕ → α,
           (∀ i, sequence i ∈ K) ∧
             ∀ i, sequence i ∈ ψ (sequence (i + 1))
 
-/- Lemma 2.3: choose `k_i ∈ ψ(k_{i+1})` inside compact `K`. -/
+/- Lemma 2.3: compact serial relations admit an infinite backward chain. -/
 theorem lemma2_3 : paperLemma2_3Claim := by
-  sorry
+  intro α _ _ K hnonempty hcompact ψ hserial hclosed
+  let system : Math.Topology.CompactSerialRelation α :=
+    { box := K
+      relation := fun current tail => current ∈ ψ tail
+      box_nonempty := hnonempty
+      box_compact := hcompact
+      relationGraph_closed := hclosed
+      predecessor_exists := hserial }
+  simpa [system] using system.exists_infiniteChain
 
 /- **Proposition 2.4 (paper statement).**  If there is a compact set `W` of
 continuation payoffs for which that correspondence has nonempty values, then
@@ -230,29 +276,105 @@ largest absolute terminal payoff and `ε` is the termination-probability
 cutoff.  The constructed profile is in fact subgame-perfect; the stationary
 alternative in Lemma 2.2 is also retained in the statement. -/
 
-/- Perfect roots with absorption at least `ε` and successor payoff in `W`. -/
+/- Successor values in `W` generated by perfect roots with absorption at
+least `δ`.  The correspondence is value-valued: the current value is the
+successor payoff obtained from the supplied continuation value. -/
 def paperOneShotCorrespondence
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (W : Set (Payoff ι)) (ε : ℝ) (continuation : Payoff ι) : Set (ι → PMF Bool) :=
-  {root | paperOneShotPerfectEpsilonEquilibrium reward continuation ε root ∧
-      ε ≤ quittingRootAbsorptionMass root ∧
-      quittingRootSuccessorPayoff reward continuation root ∈ W}
+    (W : Set (Payoff ι)) (εrow δ : ℝ)
+    (continuation : Payoff ι) : Set (Payoff ι) :=
+  {current | current ∈ W ∧ ∃ root : ι → PMF Bool,
+      paperOneShotPerfectEpsilonEquilibrium reward continuation εrow root ∧
+      δ ≤ quittingRootAbsorptionMass root ∧
+      quittingRootSuccessorPayoff reward continuation root = current}
 
-/- Proposition 2.4's compact-correspondence existence hypothesis and result. -/
+/- Checked compact-correspondence form of Proposition 2.4.  The source's
+power-law parameter choice is represented by the positive calibration
+`εrow` returned for a requested output error `εout`. -/
 def paperProposition2_4Claim : Prop :=
-  ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (W : Set (Payoff ι)) (ε ρ : ℝ),
-    IsCompact W → 0 < ε →
-    (∀ S who, |reward S who| ≤ ρ / 2) →
-    (∀ continuation ∈ W,
-      (paperOneShotCorrespondence reward W ε continuation).Nonempty) →
-      ∃ roots : PaperRootSequence (ι := ι),
-        paperSubgamePerfectEpsilonEquilibrium reward roots
-          ((ρ * ε) ^ (1 / 6 : ℝ))
+  ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
+    QuittingUnitSoloExit reward → ∀ εout : ℝ, 0 < εout →
+      ∃ εrow : ℝ, 0 < εrow ∧
+        ∀ (W : Set (Payoff ι)) (δ R : ℝ),
+          W.Nonempty → IsCompact W → 0 < δ → δ ≤ 1 → 0 ≤ R →
+          (∀ S who, |reward S who| ≤ R) →
+          (∀ value ∈ W, ∀ who, |value who| ≤ R) →
+          paperUpperSemicontinuous W
+            (paperOneShotCorrespondence reward W εrow δ) →
+          (∀ continuation ∈ W,
+            (paperOneShotCorrespondence reward W εrow δ continuation).Nonempty) →
+            ∃ roots : PaperRootSequence (ι := ι),
+              paperSubgamePerfectEpsilonEquilibrium reward roots εout
 
-/- Proposition 2.4: the compact correspondence yields an `(ρε)^(1/6)` profile. -/
+/- Proposition 2.4: compact serial successor values compile to a
+subgame-perfect approximate equilibrium (or the stationary repair, encoded
+as a period-one root sequence). -/
 theorem proposition2_4 : paperProposition2_4Claim (ι := ι) := by
-  sorry
+  intro reward hunit εout hεout
+  obtain ⟨εrow, hεrow, hdichotomy⟩ :=
+    quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
+      hunit εout hεout
+  refine ⟨εrow, hεrow, ?_⟩
+  intro W δ R hWnonempty hWcompact hδ hδone hR hrewards hWbound
+    hclosed hserial
+  obtain ⟨plan, hplanW, hplanRelation⟩ :=
+    (lemma2_3 (α := Payoff ι)) W hWnonempty hWcompact
+      (paperOneShotCorrespondence reward W εrow δ) hserial hclosed
+  have hrootExists : ∀ n, ∃ root : ι → PMF Bool,
+      QuittingRowεPerfect reward (plan (n + 1)) root εrow ∧
+      δ ≤ quittingRootAbsorptionMass root ∧
+      quittingRootSuccessorPayoff reward (plan (n + 1)) root = plan n := by
+    intro n
+    have hrel : plan n ∈ W ∧ ∃ root : ι → PMF Bool,
+        QuittingRowεPerfect reward (plan (n + 1)) root εrow ∧
+        δ ≤ quittingRootAbsorptionMass root ∧
+        quittingRootSuccessorPayoff reward (plan (n + 1)) root = plan n := by
+      simpa [paperOneShotCorrespondence,
+        paperOneShotPerfectEpsilonEquilibrium] using hplanRelation n
+    exact hrel.2
+  choose roots hperfect hfloor hsuccessor using hrootExists
+  have hcontinue : ∀ n,
+      quittingStationaryContinueMass (roots n) ≤ 1 - δ := by
+    intro n
+    have h := hfloor n
+    unfold quittingRootAbsorptionMass at h
+    linarith
+  have hclose : ∀ n who,
+      |plan n who -
+        quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who| ≤ 0 := by
+    intro n who
+    rw [hsuccessor n]
+    simp
+  have happrox :=
+    abs_terminalValue_sub_successor_le_of_approximate_chain
+      reward roots plan hR hδ hδone (by norm_num) hrewards
+      (fun n who => hWbound (plan n) (hplanW n) who)
+      hcontinue hclose
+  have hactual : ∀ n,
+      quittingRootSequenceTailVector reward roots n = plan n := by
+    intro n
+    funext who
+    have hzero :
+        |quittingRootSequenceTerminalValue reward roots who n -
+          quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who| = 0 :=
+      le_antisymm (happrox n who) (abs_nonneg _)
+    calc
+      quittingRootSequenceTailVector reward roots n who =
+          quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who := by
+            exact sub_eq_zero.mp (abs_eq_zero.mp hzero)
+      _ = plan n who := congrFun (hsuccessor n) who
+  have hperfectActual : ∀ n, QuittingRowεPerfect reward
+      (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) εrow := by
+    intro n
+    rw [hactual (n + 1)]
+    exact hperfect n
+  rcases hdichotomy roots δ hδ hfloor hperfectActual with hsequence | hstationary
+  · exact ⟨roots, hsequence⟩
+  · obtain ⟨root, hroot⟩ := hstationary
+    refine ⟨fun _ => root, fun start => ?_⟩
+    simpa [paperEpsilonEquilibrium, paperTailProfile,
+      quittingRootSequenceProfile, quittingStationaryProfile,
+      StochasticGame.stationaryBehaviorProfile] using hroot
 
 /- **Lemma 2.5 (paper statement).**  Under A.1 and A.2, define
 `W = {w ∈ [-ρ,ρ]^N | w^i ≤ 1 for some i}`.  If `u ∈ W` and `x` is an
@@ -274,7 +396,28 @@ def paperLemma2_5 : Prop :=
 
 /- Lemma 2.5: a non-all-continue root has a player payoff at most `1`. -/
 theorem lemma2_5 : paperLemma2_5 (ι := ι) := by
-  sorry
+  intro reward hassumptions ρ value _hvalue root hnash hnotAllContinue
+  rcases hassumptions with ⟨_hunit, hcap⟩
+  have hexists : ∃ who, root who ≠ PMF.pure false := by
+    by_contra hnone
+    push Not at hnone
+    apply hnotAllContinue
+    funext who
+    simpa [quittingAllContinueRoot] using hnone who
+  obtain ⟨who, hwho⟩ := hexists
+  have hquit : root who true ≠ 0 := by
+    intro hzero
+    apply hwho
+    apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
+    simpa [hzero]
+  have hendpoint : IsεQuittingRootEndpointNash reward value 0 root :=
+    (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
+      reward value root).2 hnash
+  refine ⟨who, hwho, ?_⟩
+  rw [quittingRootSuccessorPayoff_eq_quitPayoff_of_isZeroEndpointNash
+    hendpoint who hquit]
+  exact quittingRootQuitPayoff_le_one_of_cappedJointExit
+    hcap value root who
 
 /- **Lemma 2.6 (paper statement).**  This is the detailed main-lemma
 estimate.  For the block decomposition generated by the condition that the

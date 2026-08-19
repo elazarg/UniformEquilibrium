@@ -49,6 +49,74 @@ theorem IsεQuittingRootSequenceNash.mono
   have := h who hazard
   linarith
 
+
+/-- Global activity is stable under restarting the sequence.  Consequently
+its deviation telescope certifies every tail, not only the profile at time
+zero. -/
+theorem isεAsymptoticNash_quittingRootSequenceProfile_of_active
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (roots : ℕ → ι → PMF Bool)
+    {M εr δ ρ : ℝ} (hM : 0 ≤ M) (hεr : 0 ≤ εr) (hδ0 : 0 < δ)
+    (hρ0 : 0 < ρ)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hfloor : ∀ n, δ ≤ quittingRootAbsorptionMass (roots n))
+    (hperfect : ∀ n, QuittingRowεPerfect reward
+      (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) εr)
+    (hactive : ∀ (who : ι) (start fuel : ℕ),
+      ρ ≤ quittingJointSurvivalWeight roots start fuel +
+        ∑ t ∈ Finset.range fuel,
+          quittingJointSurvivalWeight roots start t *
+            quittingRootOpponentAbsorptionMass (roots (start + t)) who)
+    (start : ℕ) :
+    (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) (3 * εr / ρ)
+      (quittingRootSequenceProfile reward roots start) := by
+  let shifted : ℕ → ι → PMF Bool := fun n => roots (start + n)
+  have hsurvivalShift : ∀ s fuel,
+      quittingJointSurvivalWeight shifted s fuel =
+        quittingJointSurvivalWeight roots (start + s) fuel := by
+    intro s fuel
+    induction fuel generalizing s with
+    | zero => rfl
+    | succ fuel ih =>
+        simp [quittingJointSurvivalWeight, quittingFiniteContinueWeight,
+          shifted, ih, Nat.add_assoc]
+  have htailShift : ∀ s,
+      quittingRootSequenceTailVector reward shifted s =
+        quittingRootSequenceTailVector reward roots (start + s) := by
+    intro s
+    funext who
+    unfold quittingRootSequenceTailVector
+    rw [quittingRootSequenceTerminalValue_eq_shift,
+      quittingRootSequenceTerminalValue_eq_shift]
+    apply quittingRootSequenceTerminalValue_congr
+    intro offset
+    simp [shifted, Nat.add_assoc]
+  have hfloorShift : ∀ n,
+      δ ≤ quittingRootAbsorptionMass (shifted n) := by
+    intro n
+    exact hfloor (start + n)
+  have hperfectShift : ∀ n, QuittingRowεPerfect reward
+      (quittingRootSequenceTailVector reward shifted (n + 1))
+      (shifted n) εr := by
+    intro n
+    rw [htailShift]
+    simpa [shifted, Nat.add_assoc] using hperfect (start + n)
+  have hactiveShift : ∀ (who : ι) (s fuel : ℕ),
+      ρ ≤ quittingJointSurvivalWeight shifted s fuel +
+        ∑ t ∈ Finset.range fuel,
+          quittingJointSurvivalWeight shifted s t *
+            quittingRootOpponentAbsorptionMass (shifted (s + t)) who := by
+    intro who s fuel
+    have h := hactive who (start + s) fuel
+    simpa [hsurvivalShift, shifted, Nat.add_assoc] using h
+  have hnash := isεQuittingRootSequenceNash_of_active shifted hM hεr hδ0 hρ0
+    hreward hfloorShift hperfectShift hactiveShift
+  have hprofile :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash reward
+      (3 * εr / ρ) shifted).1 hnash
+  simpa [shifted] using hprofile
+
 /-- **The quiet-window branch.**  If some player's survival-weighted
 opponent absorption plus the plan's survival falls below `ρ ≤ 1/2` over some
 window, then some window stage has that player quitting with positive
@@ -241,19 +309,28 @@ theorem exists_quietWindow_anchor
       2 * (ρ / (1 - ρ)) + ρ / (1 - ρ) := by linarith
     _ = 3 * ρ / (1 - ρ) := by ring
 
-/-- **The extraction step holds under unit solo exit alone** (Solan and
-Vieille, *Quitting games*, Math. Oper. Res. 26 (2001), Proposition 2.4).
-Every table with unit solo exit admits the perfect-sequence extraction: for
-a suitably small row tolerance, every root sequence with a per-stage
-absorption floor and rows perfect against their own continuations yields a
-terminal approximate equilibrium — the sequence itself under global
-activity, a quiet-window stationary repair otherwise.  Capped joint exit is
-not needed at this step; it enters only through the construction of the
-perfect sequences themselves. -/
-theorem quittingPerfectSequenceExtraction_of_soloExitPreference
+/-- **Quantitative Lemma 2.2 dichotomy.**  For every target tolerance
+there is a row tolerance such that a uniformly absorbing sequence of rows
+which are perfect at that row tolerance has one of the two conclusions used
+by Solan--Vieille: every tail of the sequence is a terminal approximate Nash
+profile, or a stationary solo repair is. -/
+theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (hunit : QuittingUnitSoloExit reward) :
-    QuittingPerfectSequenceExtraction reward := by
+    ∀ εout : ℝ, 0 < εout → ∃ εrow : ℝ, 0 < εrow ∧
+      ∀ (roots : ℕ → ι → PMF Bool) (δ : ℝ), 0 < δ →
+        (∀ n, δ ≤ quittingRootAbsorptionMass (roots n)) →
+        (∀ n, QuittingRowεPerfect reward
+          (quittingRootSequenceTailVector reward roots (n + 1)) (roots n)
+          εrow) →
+        (∀ start,
+          (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) εout
+            (quittingRootSequenceProfile reward roots start)) ∨
+          ∃ root : ι → PMF Bool,
+            (quittingGame reward).IsεAsymptoticNash
+              (quittingTerminalPayoff reward) εout
+              (quittingStationaryProfile reward root) := by
   intro εout hεout
   set M := quittingRewardBound reward with hMdef
   have hM : 0 ≤ M := quittingRewardBound_nonneg reward
@@ -302,19 +379,14 @@ theorem quittingPerfectSequenceExtraction_of_soloExitPreference
         ∑ t ∈ Finset.range fuel,
           quittingJointSurvivalWeight roots start t *
             quittingRootOpponentAbsorptionMass (roots (start + t)) who
-  · -- active case: the sequence itself is the equilibrium
-    have hnash := isεQuittingRootSequenceNash_of_active roots hM hεrow0.le
-      hδ0 hρ0 hreward hfloor hperfect hactive
-    have hsmall : 3 * εrow / ρ ≤ εout := by
+  · have hsmall : 3 * εrow / ρ ≤ εout := by
       have hεrowρ : εrow ≤ εout * ρ / 3 := min_le_right _ _
       rw [div_le_iff₀ hρ0]
       nlinarith
-    have hmono := hnash.mono hsmall
-    exact ⟨quittingRootSequenceProfile reward roots 0,
-      (isεQuittingRootSequenceNash_iff_isεAsymptoticNash reward εout
-        roots).1 hmono⟩
-  · -- quiet case: repair with the stationary solo profile
-    push Not at hactive
+    exact Or.inl fun start =>
+      (isεAsymptoticNash_quittingRootSequenceProfile_of_active roots hM
+        hεrow0.le hδ0 hρ0 hreward hfloor hperfect hactive start).mono hsmall
+  · push Not at hactive
     obtain ⟨who, start, fuel, hquiet⟩ := hactive
     obtain ⟨anchor, window, hwindow, hanchorPos, hη'⟩ :=
       exists_quietWindow_anchor roots who hρ0 hρhalf start fuel hquiet
@@ -323,9 +395,87 @@ theorem quittingPerfectSequenceExtraction_of_soloExitPreference
       hanchorPos hwindow (le_of_le_of_eq hη' hηdef.symm) hMη
     have hεrowHalf : εrow ≤ εout / 2 := min_le_left _ _
     have hsmall : εrow + 4 * M * η ≤ εout := by linarith
-    exact ⟨quittingStationaryProfile reward
-      (quittingSoloStationaryRoot who (roots anchor who)),
+    exact Or.inr ⟨quittingSoloStationaryRoot who (roots anchor who),
       hrepair.mono hsmall⟩
+
+/-- **The extraction step holds under unit solo exit alone** (Solan and
+Vieille, *Quitting games*, Math. Oper. Res. 26 (2001), Proposition 2.4).
+Every table with unit solo exit admits the perfect-sequence extraction. -/
+theorem quittingPerfectSequenceExtraction_of_soloExitPreference
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward) :
+    QuittingPerfectSequenceExtraction reward := by
+  intro εout hεout
+  obtain ⟨εrow, hεrow0, hdichotomy⟩ :=
+    quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
+      hunit εout hεout
+  refine ⟨εrow, hεrow0, ?_⟩
+  intro roots δ hδ0 hfloor hperfect
+  rcases hdichotomy roots δ hδ0 hfloor hperfect with hsequence | hstationary
+  · exact ⟨quittingRootSequenceProfile reward roots 0, hsequence 0⟩
+  · obtain ⟨root, hroot⟩ := hstationary
+    exact ⟨quittingStationaryProfile reward root, hroot⟩
+
+/-- **Periodic, subgame-perfect sequence extraction.**  If the supplied
+perfect sequence is periodic, the quantitative dichotomy preserves that
+structure in its sequence branch; its stationary branch is represented by a
+constant period-one root sequence. -/
+theorem quittingPeriodicPerfectSequenceSubgameExtraction_of_soloExitPreference
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward) :
+    ∀ εout : ℝ, 0 < εout → ∃ εrow : ℝ, 0 < εrow ∧
+      ∀ (roots : ℕ → ι → PMF Bool) (δ : ℝ) (period : ℕ), 0 < δ →
+        0 < period →
+        (∀ n, roots (n + period) = roots n) →
+        (∀ n, δ ≤ quittingRootAbsorptionMass (roots n)) →
+        (∀ n, QuittingRowεPerfect reward
+          (quittingRootSequenceTailVector reward roots (n + 1)) (roots n)
+          εrow) →
+        ∃ resultRoots : ℕ → ι → PMF Bool,
+          (∃ resultPeriod : ℕ, 0 < resultPeriod ∧
+            ∀ n, resultRoots (n + resultPeriod) = resultRoots n) ∧
+          ∀ start,
+            (quittingGame reward).IsεAsymptoticNash
+              (quittingTerminalPayoff reward) εout
+              (quittingRootSequenceProfile reward resultRoots start) := by
+  intro εout hεout
+  obtain ⟨εrow, hεrow0, hdichotomy⟩ :=
+    quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
+      hunit εout hεout
+  refine ⟨εrow, hεrow0, ?_⟩
+  intro roots δ period hδ0 hperiod0 hperiodic hfloor hperfect
+  rcases hdichotomy roots δ hδ0 hfloor hperfect with hsequence | hstationary
+  · exact ⟨roots, ⟨period, hperiod0, hperiodic⟩, hsequence⟩
+  · obtain ⟨root, hroot⟩ := hstationary
+    refine ⟨fun _ => root, ⟨1, by norm_num, fun _ => rfl⟩, fun start => ?_⟩
+    simpa [quittingRootSequenceProfile, quittingStationaryProfile,
+      StochasticGame.stationaryBehaviorProfile] using hroot
+
+/-- **Cyclic subgame-perfect terminal equilibrium.**  The finite-range
+selection supplies a periodic perfect sequence; periodic extraction then
+returns either that active cycle or a constant quiet-window repair, and every
+tail is a terminal approximate equilibrium. -/
+theorem exists_cyclic_subgamePerfectTerminalNash_of_soloExitPreference
+    [Nonempty ι] {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward)
+    (hcap : QuittingCappedJointExit reward)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ (roots : ℕ → ι → PMF Bool) (period : ℕ), 0 < period ∧
+      (∀ n, roots (n + period) = roots n) ∧
+      ∀ start,
+        (quittingGame reward).IsεAsymptoticNash
+          (quittingTerminalPayoff reward) ε
+          (quittingRootSequenceProfile reward roots start) := by
+  obtain ⟨εrow, hεrow0, hextract⟩ :=
+    quittingPeriodicPerfectSequenceSubgameExtraction_of_soloExitPreference
+      hunit ε hε
+  obtain ⟨roots, δ, period, hδ0, hperiod0, hperiodic, hfloor, hperfect⟩ :=
+    exists_periodic_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
+      hunit hcap hεrow0
+  obtain ⟨resultRoots, ⟨resultPeriod, hresultPeriod0, hresultPeriodic⟩,
+      hsubgame⟩ :=
+    hextract roots δ period hδ0 hperiod0 hperiodic hfloor hperfect
+  exact ⟨resultRoots, resultPeriod, hresultPeriod0, hresultPeriodic, hsubgame⟩
 
 /-- **The Solan–Vieille existence law, unconditionally** (Solan and Vieille,
 *Quitting games*, Math. Oper. Res. 26 (2001), Theorem 1.2, profile-level
