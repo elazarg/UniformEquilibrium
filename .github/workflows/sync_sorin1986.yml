@@ -1,0 +1,85 @@
+name: Sync Sorin1986 branch with main
+
+on:
+  push:
+    branches:
+      - agent/promote-sorin1986
+    paths:
+      - .github/workflows/sync_sorin1986.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Merge main and refresh generated files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin main
+          set +e
+          git merge --no-commit --no-ff origin/main
+          merge_status=$?
+          set -e
+
+          if test "$merge_status" -ne 0; then
+            mapfile -t conflicts < <(git diff --name-only --diff-filter=U)
+            for path in "${conflicts[@]}"; do
+              case "$path" in
+                AxiomAudit.lean)
+                  ;;
+                Literature/future/Sorin1986.lean)
+                  git checkout --theirs -- "$path"
+                  git add "$path"
+                  ;;
+                Literature/future/Sorin1986AsymptoticProperties.lean)
+                  git checkout --ours -- "$path"
+                  git add "$path"
+                  ;;
+                *)
+                  echo "Unexpected merge conflict: $path" >&2
+                  exit 1
+                  ;;
+              esac
+            done
+          fi
+
+          if test -f Literature/future/Sorin1986.lean; then
+            mv Literature/future/Sorin1986.lean \
+              Literature/future/Sorin1986AsymptoticProperties.lean
+          fi
+
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('UniformEquilibrium/ProofView.lean')
+          text = path.read_text()
+          line = 'import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash\n'
+          anchor = 'import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed\n'
+          if line not in text:
+              if anchor not in text:
+                  raise SystemExit('ProofView import anchor not found')
+              text = text.replace(anchor, line + anchor, 1)
+              path.write_text(text)
+          PY
+
+          python3 scripts/generate_axiom_audit.py
+          rm -f .github/workflows/sync_sorin1986.yml
+          git add -A
+
+      - name: Commit synchronized tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -m "Merge main and expose compact Nash theorem"
+          git push origin HEAD:agent/promote-sorin1986
