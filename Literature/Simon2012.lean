@@ -865,7 +865,7 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ R : ℝ)
     (cutoff : Payoff G.Player → UnitInterval)
     (a : Payoff G.Player)
     (haC : a ∈ TruncatedW G R)
-    (hλ0 : 0 < (cutoff a : ℝ)) (hλ1 : (cutoff a : ℝ) < 1)
+    (hcutoff0 : 0 < (cutoff a : ℝ)) (hcutoff1 : (cutoff a : ℝ) < 1)
     (hxbox : ∀ j, -M ≤ Section4X G inverse cutoff a j ∧
       Section4X G inverse cutoff a j ≤ M) :
     ∀ j,
@@ -899,7 +899,7 @@ theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (inverse : PhiInverseData G M d)
     (cutoff : Payoff G.Player → UnitInterval)
-    (hλ : IsSection4Cutoff G R δ cutoff)
+    (hcutoff : IsSection4Cutoff G R δ cutoff)
     (hε : 0 < ε)
     (hδ : δ = ε / (2 * (Fintype.card G.Player : ℝ) * M)) :
     Question1Hypotheses
