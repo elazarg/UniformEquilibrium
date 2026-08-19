@@ -7,61 +7,13 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: lean-ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  compile-ftv-literature:
-    if: github.event_name == 'pull_request' && github.head_ref == 'agent/promote-ftv-1997'
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: agent/promote-ftv-1997
-          fetch-depth: 0
-          submodules: recursive
-      - name: Fix and commit FTV source syntax
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          path = Path('Literature/FleschThuijsmanAndVrieze1997.lean')
-          text = path.read_text()
-          text = text.replace(
-              '          (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).\n            BehaviorStrategy who,',
-              '          (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorStrategy who,',
-          )
-          path.write_text(text)
-          PY
-          if ! git diff --quiet -- Literature/FleschThuijsmanAndVrieze1997.lean; then
-            git config user.name github-actions[bot]
-            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-            git add Literature/FleschThuijsmanAndVrieze1997.lean
-            git commit -m "Fix FTV audit source syntax"
-            git push origin HEAD:agent/promote-ftv-1997
-          fi
-      - uses: leanprover/lean-action@v1
-        with:
-          auto-config: false
-          build: false
-          test: false
-          use-mathlib-cache: true
-          use-github-cache: true
-      - name: Build imported dependencies
-        run: |
-          lake build \
-            UniformEquilibrium.Quitting.Classification.PlayerReindex \
-            UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle \
-            UniformEquilibrium.Quitting.Paths.InfinitePathCompiler \
-            UniformEquilibrium.Quitting.Root.ApproximateFirstBranch \
-            UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier \
-            UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
-      - name: Compile FTV audit
-        run: lake env lean Literature/FleschThuijsmanAndVrieze1997.lean
-
   ci:
     runs-on: ubuntu-latest
     timeout-minutes: 120
