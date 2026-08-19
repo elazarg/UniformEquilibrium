@@ -1,4 +1,4 @@
-name: Export agent source
+name: Agent Lean environment
 
 on:
   push:
@@ -12,17 +12,40 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: agent-sv2001-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  export:
+  focused:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           submodules: recursive
-      - name: Archive source
-        run: tar --exclude=.git -czf /tmp/uniform-equilibrium-source.tgz .
-      - uses: actions/upload-artifact@v4
+      - uses: leanprover/lean-action@v1
         with:
-          name: uniform-equilibrium-source
-          path: /tmp/uniform-equilibrium-source.tgz
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Build production dependencies
+        run: lake build UniformEquilibrium
+      - name: Compile the literature file
+        run: lake env lean Literature/SolanAndVieille2001.lean
+      - name: Archive reusable Lean environment
+        if: always()
+        run: >-
+          tar --zstd -cf /tmp/agent-lean-environment.tar.zst
+          -C "$HOME" .elan
+          -C "$GITHUB_WORKSPACE" .lake GameTheory/.lake
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-lean-environment
+          path: /tmp/agent-lean-environment.tar.zst
+          compression-level: 0
           retention-days: 1
