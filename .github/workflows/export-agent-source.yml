@@ -85,6 +85,12 @@ jobs:
           path: agent-lean-environment.part-07
           compression-level: 0
           retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agent-lean-environment-08
+          path: agent-lean-environment.part-08
+          compression-level: 0
+          retention-days: 1
       - name: Build production dependencies
         run: lake build UniformEquilibrium
       - name: Compile the literature file
