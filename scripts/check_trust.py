@@ -176,7 +176,13 @@ def library_roots(lakefile: str) -> set[str]:
 def token_failures(path: pathlib.Path, text: str) -> list[str]:
     clean = strip_comments_and_strings(text)
     failures: list[str] = []
+    # The literature lane records genuinely unproved source claims with
+    # `sorry`; nothing imports that lane, so this is the only trust
+    # exception. Every other rule still applies to it.
+    in_literature = path.parts[0] == "Literature" if path.parts else False
     for pattern, label in TOKEN_PATTERNS:
+        if in_literature and label == "proof placeholder":
+            continue
         for match in pattern.finditer(clean):
             line = clean.count("\n", 0, match.start()) + 1
             failures.append(f"{path}:{line}: forbidden {label}")
@@ -264,6 +270,11 @@ def check_lean_ownership(files: list[pathlib.Path], failures: list[str]) -> None
         if relative in exceptions:
             continue
         root = relative.parts[0].removesuffix(".lean")
+        # The literature lane is deliberately not a lean_lib: nothing imports
+        # it, nothing builds it by default, and no source there enters the
+        # compiled axiom audit.
+        if root == "Literature":
+            continue
         if root not in roots:
             failures.append(
                 f"{relative}: project Lean source is not owned by a lean_lib and "

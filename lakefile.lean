@@ -28,11 +28,6 @@ lean_lib UniformEquilibrium where
   ]
 
 @[default_target]
-lean_lib Literature where
-  srcDir := "."
-  leanOptions := uniformEquilibriumLeanOptions
-
-@[default_target]
 lean_lib Research where
   srcDir := "."
   leanOptions := uniformEquilibriumLeanOptions

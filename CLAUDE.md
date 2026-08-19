@@ -80,9 +80,11 @@ When a more precise description is needed, give it.
 - `MathUE/`: game-independent mathematics owned by this project.
 - `UniformEquilibrium/`: integrated game-semantic development.
 - `Theorems/`: reader-facing restatements delegating to original proofs.
-- `Literature/`: one Lean audit record per paper of the bibliography, flat,
-  with active claim work inside the paper's own file; nothing imports this
-  lane, and its manifest exists for tooling reachability only.
+- `Literature/`: one plain Lean file per paper, definitions and theorem
+  statements in the paper's order and terms, unproved claims left as
+  `sorry`. Only complete paper coverage lives directly under `Literature/`;
+  everything else lives under `Literature/future/` and is not built.
+  Nothing imports this lane, and it is not a `lean_lib`.
 - `Research/`: compileable work not yet integrated.
 - `Experiments/`: reproducible systematic searches and generated evidence.
 - `Reverse/`: backward proof-search questions and evidence.
