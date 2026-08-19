@@ -402,6 +402,64 @@ theorem exists_nash : ∃ profile : G.Profile, G.IsNash profile := by
   rw [G.pointGain_selectedAction weights deviation hdeviation_selected] at hnonpos
   exact (not_lt_of_ge hnonpos) hdeviation_gain
 
+/-- Nash-equilibrium profiles as a subset of the compact profile space. -/
+def nashProfiles : Set G.Profile :=
+  {profile | G.IsNash profile}
+
+/-- The Nash-profile set is closed. -/
+theorem isClosed_nashProfiles : IsClosed G.nashProfiles := by
+  rw [show G.nashProfiles =
+      ⋂ who, ⋂ deviation : G.Strategy who,
+        {profile : G.Profile |
+          G.payoff (Function.update profile who deviation) who ≤
+            G.payoff profile who} by
+    ext profile
+    simp [nashProfiles, IsNash]]
+  apply isClosed_iInter
+  intro who
+  apply isClosed_iInter
+  intro deviation
+  exact isClosed_le
+    ((G.payoffContinuous who).comp
+      (G.continuous_update_const who deviation))
+    (G.payoffContinuous who)
+
+/-- The Nash-profile set is compact. -/
+theorem isCompact_nashProfiles : IsCompact G.nashProfiles :=
+  G.isClosed_nashProfiles.isCompact
+
+/-- Payoffs attained by Nash equilibria. -/
+def equilibriumPayoffs : Set (G.Player → ℝ) :=
+  {value | ∃ profile : G.Profile,
+    G.IsNash profile ∧ G.payoff profile = value}
+
+/-- The equilibrium-payoff set is the continuous image of the Nash-profile set. -/
+theorem equilibriumPayoffs_eq_image :
+    G.equilibriumPayoffs = G.payoff '' G.nashProfiles := by
+  ext value
+  constructor
+  · rintro ⟨profile, hprofile, rfl⟩
+    exact ⟨profile, hprofile, rfl⟩
+  · rintro ⟨profile, hprofile, rfl⟩
+    exact ⟨profile, hprofile, rfl⟩
+
+/-- Compact barycentric games have a nonempty equilibrium-payoff set. -/
+theorem equilibriumPayoffs_nonempty : G.equilibriumPayoffs.Nonempty := by
+  obtain ⟨profile, hprofile⟩ := G.exists_nash
+  exact ⟨G.payoff profile, profile, hprofile, rfl⟩
+
+/-- The equilibrium-payoff set is compact. -/
+theorem isCompact_equilibriumPayoffs : IsCompact G.equilibriumPayoffs := by
+  rw [G.equilibriumPayoffs_eq_image]
+  have hpayoff : Continuous G.payoff :=
+    continuous_pi G.payoffContinuous
+  exact G.isCompact_nashProfiles.image_of_continuousOn hpayoff.continuousOn
+
+/-- Nonemptiness and compactness of the equilibrium-payoff set. -/
+theorem equilibriumPayoffs_nonempty_and_compact :
+    G.equilibriumPayoffs.Nonempty ∧ IsCompact G.equilibriumPayoffs :=
+  ⟨G.equilibriumPayoffs_nonempty, G.isCompact_equilibriumPayoffs⟩
+
 end CompactBarycentricGame
 
 end GameTheory
