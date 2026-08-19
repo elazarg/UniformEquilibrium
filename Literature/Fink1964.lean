@@ -267,6 +267,43 @@ theorem continuous_fCoord_deviation
     · exact continuous_const
   · exact continuous_const
 
+/-- One coordinate of `f` is jointly continuous in the baseline profile,
+the deviating mixed action at that coordinate, and the continuation vector. -/
+theorem continuous_fCoord_all
+    (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
+    [∀ s i, Fintype (P.Act s i)]
+    (s : P.State) (who : ι) :
+    Continuous (fun q :
+        P.X × stdSimplex ℝ (P.Act s who) × P.R =>
+      P.fCoord q.1 s who q.2.1 q.2.2) := by
+  classical
+  simp_rw [P.fCoord_eq_sum]
+  unfold oneStepCost
+  simp_rw [expect_eq_sum]
+  apply continuous_finsetSum Finset.univ
+  intro a _
+  apply Continuous.mul
+  · apply Continuous.mul
+    · exact (continuous_apply (a who)).comp
+        (continuous_subtype_val.comp
+          (continuous_fst.comp continuous_snd))
+    · apply continuous_finsetProd (Finset.univ.erase who)
+      intro i _
+      exact (continuous_apply (a i)).comp
+        (continuous_subtype_val.comp
+          ((continuous_apply (s, i)).comp continuous_fst))
+  · apply Continuous.add
+    · exact continuous_const
+    · apply Continuous.mul
+      · exact continuous_const
+      · apply continuous_finsetSum Finset.univ
+        intro s' _
+        apply Continuous.mul
+        · exact continuous_const
+        · exact (continuous_apply who).comp
+            ((continuous_apply s').comp
+              (continuous_snd.comp continuous_snd))
+
 /-- Property (b): one coordinate of `f` changes by at most `α_h` times the
 sup-distance between continuation vectors. -/
 theorem property_b
@@ -733,18 +770,27 @@ theorem valueCube_isCompact
     IsCompact (P.valueCube B) := by
   exact isCompact_Icc
 
-set_option maxHeartbeats 800000 in
 /-- **Lemma 3, first part.** For fixed `v`, `S_v` is continuous on `X`. -/
 theorem lemma_3_continuous
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
     (v : P.R) : Continuous (P.S v) := by
-  change Continuous (fun x : P.X => P.T x v)
+  classical
+  apply continuous_pi
+  intro s
+  apply continuous_pi
+  intro who
+  change Continuous (fun x : P.X =>
+    -Finset.sup' Finset.univ Finset.univ_nonempty
+      (fun a : P.Act s who =>
+        -P.fCoord x s who (P.pureAction a) v))
+  apply Continuous.neg
+  apply Continuous.finset_sup'_apply Finset.univ_nonempty
+  intro a _
   have hpair : Continuous (fun x : P.X => (x, v)) :=
     continuous_id.prodMk continuous_const
-  exact P.continuous_T.comp hpair
+  exact ((P.continuous_fCoord s who (P.pureAction a)).comp hpair).neg
 
-set_option maxHeartbeats 800000 in
 /-- **Lemma 3, second part.** On every bounded value cube, the family
 `{S_v}` is equicontinuous.  `TendstoUniformly` is the paper's uniform-in-`v`
 formulation. -/
@@ -760,10 +806,27 @@ theorem lemma_3_equicontinuous
     (fun v => P.T x v.1) (𝓝 x)
   letI : CompactSpace {v : P.R // v ∈ P.valueCube B} :=
     isCompact_iff_compactSpace.mp (P.valueCube_isCompact B)
-  exact Continuous.tendstoUniformly
-    (fun x' (v : {v : P.R // v ∈ P.valueCube B}) => P.T x' v.1)
-    (P.continuous_T.comp
-      (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))) x
+  let F : P.X → {v : P.R // v ∈ P.valueCube B} → P.R :=
+    fun x' v => P.T x' v.1
+  have hF : Continuous (Function.uncurry F) := by
+    classical
+    apply continuous_pi
+    intro s
+    apply continuous_pi
+    intro who
+    change Continuous (fun q :
+        P.X × {v : P.R // v ∈ P.valueCube B} =>
+      -Finset.sup' Finset.univ Finset.univ_nonempty
+        (fun a : P.Act s who =>
+          -P.fCoord q.1 s who (P.pureAction a) q.2.1))
+    apply Continuous.neg
+    apply Continuous.finset_sup'_apply Finset.univ_nonempty
+    intro a _
+    have hpair : Continuous (fun q :
+        P.X × {v : P.R // v ∈ P.valueCube B} => (q.1, q.2.1)) :=
+      continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd)
+    exact ((P.continuous_fCoord s who (P.pureAction a)).comp hpair).neg
+  exact Continuous.tendstoUniformly F hF x
 
 set_option maxHeartbeats 800000 in
 /-- The fixed point `β(x)` depends continuously on the profile.  This is the
@@ -809,7 +872,6 @@ theorem continuous_beta
       (div_lt_div_iff_of_pos_right hden).2 hres
     _ = ε := by field_simp [ne_of_gt hden]
 
-set_option maxHeartbeats 800000 in
 /-- **Lemma 4.** The graph of `β` is sequentially closed. -/
 theorem lemma_4
     (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
@@ -819,11 +881,17 @@ theorem lemma_4
     (hx : Tendsto xn atTop (𝓝 x))
     (hv : Tendsto (fun n => P.beta (xn n)) atTop (𝓝 v₀)) :
     P.beta x = v₀ := by
-  have hβ : Tendsto (fun n => P.beta (xn n)) atTop (𝓝 (P.beta x)) :=
-    P.continuous_beta.continuousAt.tendsto.comp hx
-  exact tendsto_nhds_unique hβ hv
+  funext s who
+  have heval : Continuous (fun v : P.R => v s who) :=
+    (continuous_apply who).comp (continuous_apply s)
+  have hβ : Tendsto (fun n => P.beta (xn n) s who) atTop
+      (𝓝 (P.beta x s who)) :=
+    (heval.comp P.continuous_beta).continuousAt.tendsto.comp hx
+  have hv' : Tendsto (fun n => P.beta (xn n) s who) atTop
+      (𝓝 (v₀ s who)) :=
+    heval.continuousAt.tendsto.comp hv
+  exact tendsto_nhds_unique hβ hv'
 
-set_option maxHeartbeats 800000 in
 /-- **Lemma 5.** The graph of the best-response correspondence `φ` is
 sequentially closed. -/
 theorem lemma_5
@@ -834,25 +902,36 @@ theorem lemma_5
     (hx : Tendsto xn atTop (𝓝 x)) (hy : Tendsto yn atTop (𝓝 y))
     (hphi : ∀ n, yn n ∈ P.phi (xn n)) :
     y ∈ P.phi x := by
+  change P.f x y (P.beta x) = P.beta x
+  funext s who
   have hβ : Tendsto (fun n => P.beta (xn n)) atTop (𝓝 (P.beta x)) :=
     P.continuous_beta.continuousAt.tendsto.comp hx
+  have hycoord : Tendsto (fun n => yn n (s, who)) atTop
+      (𝓝 (y (s, who))) :=
+    (continuous_apply (s, who)).continuousAt.tendsto.comp hy
   have htriple : Tendsto
-      (fun n => (xn n, yn n, P.beta (xn n))) atTop
-      (𝓝 (x, y, P.beta x)) :=
-    hx.prodMk_nhds (hy.prodMk_nhds hβ)
+      (fun n => (xn n, yn n (s, who), P.beta (xn n))) atTop
+      (𝓝 (x, y (s, who), P.beta x)) :=
+    hx.prodMk_nhds (hycoord.prodMk_nhds hβ)
   have hf : Tendsto
-      (fun n => P.f (xn n) (yn n) (P.beta (xn n))) atTop
-      (𝓝 (P.f x y (P.beta x))) :=
-    P.property_a_continuous.continuousAt.tendsto.comp htriple
+      (fun n => P.fCoord (xn n) s who (yn n (s, who))
+        (P.beta (xn n))) atTop
+      (𝓝 (P.fCoord x s who (y (s, who)) (P.beta x))) :=
+    (P.continuous_fCoord_all s who).continuousAt.tendsto.comp htriple
   have heq :
-      (fun n => P.f (xn n) (yn n) (P.beta (xn n))) =
-        fun n => P.beta (xn n) := by
+      (fun n => P.fCoord (xn n) s who (yn n (s, who))
+        (P.beta (xn n))) = fun n => P.beta (xn n) s who := by
     funext n
-    simpa [phi] using hphi n
+    have hn := hphi n
+    change P.f (xn n) (yn n) (P.beta (xn n)) = P.beta (xn n) at hn
+    exact congrFun (congrFun hn s) who
   rw [heq] at hf
-  have hlimit : P.f x y (P.beta x) = P.beta x :=
-    tendsto_nhds_unique hf hβ
-  simpa [phi] using hlimit
+  have heval : Continuous (fun v : P.R => v s who) :=
+    (continuous_apply who).comp (continuous_apply s)
+  have hβcoord : Tendsto (fun n => P.beta (xn n) s who) atTop
+      (𝓝 (P.beta x s who)) :=
+    heval.continuousAt.tendsto.comp hβ
+  exact tendsto_nhds_unique hf hβcoord
 
 /-! ## Internal contingent-plan adapter for Theorem 2 -/
 
@@ -1074,7 +1153,6 @@ theorem reward_discountedAuxEU_lift_eq_fCoord
       apply congrArg pmfPi
       dsimp [m']
       rw [P.map_update_eval]
-      rfl
     _ = -(1 - P.discount who) *
         P.fCoord (P.effectiveProfile x) s who y e := by
       apply congrArg (fun z : ℝ => -(1 - P.discount who) * z)
