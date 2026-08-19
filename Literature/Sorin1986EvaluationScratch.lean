@@ -32,13 +32,13 @@ theorem actionMass_update_mix {G : FiniteStageGame}
   have updateMixOff (j : {j // j ≠ who}) :
       Function.update profile who (RealizationPlan.mix t x y) j.1 =
         profile j.1 :=
-    Function.update_of_ne j.2
+    Function.update_of_ne j.2 (RealizationPlan.mix t x y) profile
   have updateXOff (j : {j // j ≠ who}) :
       Function.update profile who x j.1 = profile j.1 :=
-    Function.update_of_ne j.2
+    Function.update_of_ne j.2 x profile
   have updateYOff (j : {j // j ≠ who}) :
       Function.update profile who y j.1 = profile j.1 :=
-    Function.update_of_ne j.2
+    Function.update_of_ne j.2 y profile
   simp_rw [updateMixOff, updateXOff, updateYOff]
   simp [RealizationPlan.mix, RawRealizationPlan.mix, intervalMix,
     clamp01_eq_of_bounds ht0 ht1]
