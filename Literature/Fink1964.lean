@@ -261,9 +261,11 @@ theorem continuous_fCoord_deviation
   simp_rw [P.fCoord_eq_sum]
   apply continuous_finsetSum Finset.univ
   intro a _
-  exact (((continuous_apply (a who)).comp continuous_subtype_val).mul_const
-    ((∏ i ∈ Finset.univ.erase who, x (s, i) (a i)) *
-      P.oneStepCost e s a who))
+  apply Continuous.mul
+  · apply Continuous.mul
+    · exact (continuous_apply (a who)).comp continuous_subtype_val
+    · exact continuous_const
+  · exact continuous_const
 
 /-- Property (b): one coordinate of `f` changes by at most `α_h` times the
 sup-distance between continuation vectors. -/
@@ -635,14 +637,20 @@ theorem abs_cost_le_costBound
   calc
     |P.cost s a who| ≤ ∑ who' : ι, |P.cost s a who'| := by
       exact Finset.single_le_sum
+        (f := fun who' : ι => |P.cost s a who'|)
         (fun _ _ => abs_nonneg _) (Finset.mem_univ who)
     _ ≤ ∑ a' : P.JointActionAt s, ∑ who' : ι, |P.cost s a' who'| := by
       exact Finset.single_le_sum
+        (f := fun a' : P.JointActionAt s =>
+          ∑ who' : ι, |P.cost s a' who'|)
         (fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _)
         (Finset.mem_univ a)
     _ ≤ ∑ s' : P.State,
         ∑ a' : P.JointActionAt s', ∑ who' : ι, |P.cost s' a' who'| := by
       exact Finset.single_le_sum
+        (f := fun s' : P.State =>
+          ∑ a' : P.JointActionAt s',
+            ∑ who' : ι, |P.cost s' a' who'|)
         (fun _ _ => Finset.sum_nonneg fun _ _ =>
           Finset.sum_nonneg fun _ _ => abs_nonneg _)
         (Finset.mem_univ s)
@@ -708,7 +716,7 @@ theorem lemma_2
     _ ≤ B := hglobal
 
 /-- Fink's notation `S_v(x)=T_x v`. -/
-def S
+abbrev S
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
     (v : P.R) (x : P.X) : P.R :=
@@ -730,7 +738,9 @@ theorem lemma_3_continuous
     [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
     (v : P.R) : Continuous (P.S v) := by
   change Continuous (fun x : P.X => P.T x v)
-  exact P.continuous_T.comp (continuous_id.prodMk continuous_const)
+  have hpair : Continuous (fun x : P.X => (x, v)) :=
+    continuous_id.prodMk continuous_const
+  exact P.continuous_T.comp hpair
 
 /-- **Lemma 3, second part.** On every bounded value cube, the family
 `{S_v}` is equicontinuous.  `TendstoUniformly` is the paper's uniform-in-`v`
@@ -747,9 +757,10 @@ theorem lemma_3_equicontinuous
     (fun v => P.T x v.1) (𝓝 x)
   letI : CompactSpace {v : P.R // v ∈ P.valueCube B} :=
     isCompact_iff_compactSpace.mp (P.valueCube_isCompact B)
-  apply Continuous.tendstoUniformly
-  exact P.continuous_T.comp
-    (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))
+  exact Continuous.tendstoUniformly
+    (fun x' (v : {v : P.R // v ∈ P.valueCube B}) => P.T x' v.1)
+    (P.continuous_T.comp
+      (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))) x
 
 /-- The fixed point `β(x)` depends continuously on the profile.  This is the
 uniform-contraction parameter theorem specialized to Fink's `T_x`. -/
@@ -845,7 +856,7 @@ abbrev AmbientAct (P : Game ι) (i : ι) := ∀ s, P.Act s i
 
 /-- The reward game used by the reusable production theorem.  It evaluates a
 contingent plan only at the current state and negates the paper's cost. -/
-def rewardGame (P : Game ι) : StochasticGame ι where
+abbrev rewardGame (P : Game ι) : StochasticGame ι where
   State := P.State
   Act := P.AmbientAct
   stagePayoff := fun s a who => -P.cost s (fun i => a i s) who
@@ -899,8 +910,10 @@ def liftMixedAction
     (P : Game ι) (s : P.State) (i : ι) (y : PMF (P.Act s i)) :
     (P.liftMixedAction s i y).map (fun plan => plan s) = y := by
   rw [liftMixedAction, PMF.map_comp]
-  simpa only [Function.comp_apply, P.extendAction_apply_same] using
-    PMF.map_id y
+  rw [show (fun plan => plan s) ∘ P.extendAction s i = id by
+    funext a
+    exact P.extendAction_apply_same s i a]
+  exact PMF.map_id y
 
 theorem map_update_eval
     (P : Game ι) [Fintype ι] [DecidableEq ι]
@@ -995,15 +1008,17 @@ theorem reward_discountedAuxEU_eq_fCoord_effectiveProfile
   rw [P.reward_discountedAuxEU_eq_fCoord (x s) e s who]
   apply congrArg (fun z : ℝ => -(1 - P.discount who) * z)
   unfold fCoord
-  apply congrArg (fun μ =>
-    expect μ (fun a => P.oneStepCost e s a who))
-  apply congrArg pmfPi
-  funext i
-  by_cases hi : i = who
-  · subst i
-    simp [effectiveProfile, effectiveMixedAction, actionPMF]
-  · simp [effectiveProfile, effectiveMixedAction, actionPMF,
-      Function.update_of_ne hi]
+  have hbase :
+      (fun i => P.actionPMF (P.effectiveProfile x) s i) =
+        fun i => P.effectiveMixedAction x s i := by
+    funext i
+    exact P.actionPMF_effectiveProfile x s i
+  have hown :
+      (stdSimplexEquiv (α := P.Act s who)).symm
+          (P.effectiveProfile x (s, who)) =
+        P.effectiveMixedAction x s who := by
+    exact (stdSimplexEquiv (α := P.Act s who)).symm_apply_apply _
+  rw [hbase, hown, Function.update_self]
 
 /-- The bridge specialized to a literal one-state deviation lifted to a
 contingent plan. -/
@@ -1026,16 +1041,13 @@ theorem reward_discountedAuxEU_lift_eq_fCoord
         ((stdSimplexEquiv (α := P.Act s who)).symm y))) e s who]
   apply congrArg (fun z : ℝ => -(1 - P.discount who) * z)
   unfold fCoord
-  apply congrArg (fun μ =>
-    expect μ (fun a => P.oneStepCost e s a who))
-  apply congrArg pmfPi
   rw [P.map_update_eval]
-  funext i
-  by_cases hi : i = who
-  · subst i
-    simp [effectiveProfile, effectiveMixedAction, actionPMF]
-  · simp [effectiveProfile, effectiveMixedAction, actionPMF,
-      Function.update_of_ne hi]
+  have hbase :
+      (fun i => P.actionPMF (P.effectiveProfile x) s i) =
+        fun i => P.effectiveMixedAction x s i := by
+    funext i
+    exact P.actionPMF_effectiveProfile x s i
+  rw [hbase]
 
 /-- The production reward table is bounded by the literal cost-table bound. -/
 theorem abs_rewardGame_stagePayoff_le_costBound
