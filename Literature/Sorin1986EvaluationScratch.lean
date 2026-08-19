@@ -36,21 +36,21 @@ theorem actionMass_update_mix {G : FiniteStageGame}
       ∏ j : {j // j ≠ who}, ↑((profile j.1).1.2 h (a j.1)) := by
     apply Fintype.prod_congr
     intro j
-    simp [Function.update_noteq j.2]
+    rw [Function.update_of_ne j.2]
   have hotherX :
       (∏ j : {j // j ≠ who},
         ↑((Function.update profile who x j.1).1.2 h (a j.1))) =
       ∏ j : {j // j ≠ who}, ↑((profile j.1).1.2 h (a j.1)) := by
     apply Fintype.prod_congr
     intro j
-    simp [Function.update_noteq j.2]
+    rw [Function.update_of_ne j.2]
   have hotherY :
       (∏ j : {j // j ≠ who},
         ↑((Function.update profile who y j.1).1.2 h (a j.1))) =
       ∏ j : {j // j ≠ who}, ↑((profile j.1).1.2 h (a j.1)) := by
     apply Fintype.prod_congr
     intro j
-    simp [Function.update_noteq j.2]
+    rw [Function.update_of_ne j.2]
   rw [hotherMix, hotherX, hotherY]
   simp [RealizationPlan.mix, RawRealizationPlan.mix, intervalMix,
     clamp01_eq_of_bounds ht0 ht1]
