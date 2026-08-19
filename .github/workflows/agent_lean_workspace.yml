@@ -23,15 +23,20 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - name: Package Lean workspace
+      - name: Measure Lean workspace
         run: |
-          tar -C "$HOME" -cf /tmp/elan.tar .elan
-          tar -cf /tmp/lake-workspace.tar .lake
+          {
+            du -sh "$HOME/.elan" || true
+            du -sh "$HOME/.elan"/* || true
+            du -sh .lake || true
+            du -sh .lake/build || true
+            du -sh .lake/packages/* || true
+            du -sh .lake/packages/*/.lake/build || true
+            find "$HOME/.elan" .lake -type f -printf '%s %p\n' | sort -nr | head -100
+          } > /tmp/workspace-sizes.txt
+          cat /tmp/workspace-sizes.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: lean-workspace
+          name: workspace-sizes
           retention-days: 1
-          compression-level: 1
-          path: |
-            /tmp/elan.tar
-            /tmp/lake-workspace.tar
+          path: /tmp/workspace-sizes.txt
