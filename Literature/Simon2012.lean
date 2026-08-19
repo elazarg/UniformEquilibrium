@@ -205,6 +205,7 @@ def Question2Hypotheses {N : Type} [Fintype N]
     (H : (Payoff N × Payoff N) → UnitInterval → Payoff N × Payoff N) : Prop :=
   IsFullDimensionalStarShaped C ∧
   IsCompact G ∧
+  (∀ g ∈ G, g.1 ∈ C) ∧
   (∀ c ∈ C, (GraphFiber G c).Nonempty ∧ Convex ℝ (GraphFiber G c)) ∧
   (∀ c ∈ C, ∀ y, IsExtremalPoint (GraphFiber G c) y → y ∈ C) ∧
   Continuous (fun z : G × UnitInterval => H z.1 z.2) ∧
@@ -251,10 +252,10 @@ theorem question1_with_no_escape : Question1NoEscapeAffirmative := by
 
 /-! ### 2.3. The challenge and the correction to Simon 2007 -/
 
-/-- Use a fixed row for `M` stages, then switch to the punishment profile. -/
+/-- Use a fixed row through stage `M`, then switch to the punishment profile. -/
 def StationaryPrefixThenPunish (G : QuittingGame) (p : QuitRow G)
     (M : ℕ) (punishment : QuitProfile G) : QuitProfile G :=
-  fun t => if t < M then p else punishment (t - M)
+  fun t => if t ≤ M then p else punishment (t - (M + 1))
 
 /-- The punishment profile holds player `j` to `χʲ + δ`. -/
 def IsPunishmentWithin (G : QuittingGame) (j : G.Player) (δ : ℝ)
@@ -593,8 +594,10 @@ def InClosedPayoffBox {N : Type} [Fintype N] (R : ℝ)
 
 /--
 A single `ρ` satisfying the two motion estimates on the bounded continuation
-region used in Sections 3--4.  Lemma 2.3 is pointwise (`∀ r, ∃ ρ`); compactness
-is therefore essential before one speaks of a common `ρ` in Theorem 3.1.
+region used in Sections 3--4.  The printed phrase “`ρ` satisfies Lemmas 2.1
+and 2.3” mixes a common parameter with Lemma 2.3's pointwise quantifiers
+`∀ r, ∃ ρ`; this predicate records the bounded uniformization actually used
+by Lemmas 3.3--4.5 rather than silently asserting a global `∃ ρ, ∀ r`.
 -/
 def IsStructureMotionParameter (G : QuittingGame) (M ρ : ℝ) : Prop :=
   SatisfiesCorrectedLemma2_1Parameter G ρ ∧
@@ -641,7 +644,7 @@ def Lemma3_3Statement (G : QuittingGame) (M ε : ℝ) : Prop :=
       MinMaxQuit G k - ε / 2 ≤ β k →
       (∀ l,
         (p l : ℝ) ≤ 1 - ε / (2 * (Fintype.card G.Player : ℝ) * M) →
-          |β l| ≤ (Fintype.card G.Player : ℝ) * M) →
+          β l ≤ (Fintype.card G.Player : ℝ) * M) →
     ∃ r : Payoff G.Player, ∃ p' : QuitRow G,
       IsRational G ε r ∧ (p' k : ℝ) = 1 ∧ p' ∈ EpsilonRow G ε r
 
@@ -687,7 +690,8 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
 
 /-- Lemma 3.5's two distance estimates. -/
 theorem lemma3_5 (G : QuittingGame) (M d : ℝ)
-    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (z : EZeroTilde G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (z : EZeroTilde G)
     (hqpos : 0 < QuitProbability G z.1.2)
     (hqsmall : QuitProbability G z.1.2 <
       1 / (2 * (Fintype.card G.Player : ℝ)))
@@ -797,6 +801,15 @@ def LowerBoundary (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
 def UpperBoundary (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
   frontier (TruncatedW G R) ∩ frontier (WSet G)
 
+/-- The small quitting bound `δ = ε / (2|N|M)` from Section 4.3. -/
+def Section4Delta (G : QuittingGame) (M ε : ℝ) : ℝ :=
+  ε / (2 * (Fintype.card G.Player : ℝ) * M)
+
+/-- The small-step radius `ω = d ε ξ ρ δ / (200 R |N|² M)`. -/
+def Section4Omega (G : QuittingGame) (M d ρ ξ R ε : ℝ) : ℝ :=
+  d * ε * ξ * ρ * Section4Delta G M ε /
+    (200 * R * (Fintype.card G.Player : ℝ) ^ 2 * M)
+
 /-- The cutoff `λ` used to glue the structure homotopy to the identity near `D`. -/
 def IsSection4Cutoff (G : QuittingGame) (R δ : ℝ)
     (cutoff : Payoff G.Player → UnitInterval) : Prop :=
@@ -889,8 +902,8 @@ upper neighborhood is explicit; without it `UpperGlueFiber` contains the
 all-continue image even outside the domain intended in the paper.
 -/
 theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
-    (hM : IsSimonPayoffScale G M)
-    (hδ : δ = ε / (2 * (Fintype.card G.Player : ℝ) * M)) :
+    (hM : IsSimonPayoffScale G M) (hε : 0 < ε)
+    (hδ : δ = Section4Delta G M ε) :
     ∀ x, x ∈ UpperNeighborhood G R ε → ∀ y,
       y ∈ UpperGlueFiber G R ε δ x → y ∈ FRow G ε x := by
   sorry
@@ -961,7 +974,7 @@ theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
     (cutoff : Payoff G.Player → UnitInterval)
     (hcutoff : IsSection4Cutoff G R δ cutoff)
     (hε : 0 < ε) (hεη : ε < η / 3) (hερ : ε < ρ / 3)
-    (hδ : δ = ε / (2 * (Fintype.card G.Player : ℝ) * M)) :
+    (hδ : δ = Section4Delta G M ε) :
     Question1Hypotheses
       (TruncatedW G R)
       (fun j : Fin (Fintype.card G.Player) =>
