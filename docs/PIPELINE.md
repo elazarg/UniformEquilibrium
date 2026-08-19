@@ -24,11 +24,10 @@ The lanes may share mathematics, but evidence does not become a theorem by
 proximity. Integrated Lean remains the trusted boundary.
 
 Literature has a strict final boundary: it does not import Research or
-Experiments, and production modules do not import Literature. A narrow
-`Research.Literature` proof module may import an individual
-`Literature.Papers.*` module to close the exact claim recorded there; the
-aggregate Literature catalog and unrelated Research modules are not allowed as
-proof dependencies.
+Experiments, and nothing imports Literature. There is one record per paper,
+directly under `Literature/`, and active claim work lives inside the paper's
+own file, which may import production modules; there is no aggregate catalog
+to depend on.
 
 Claim records have an explicit lifecycle. `sourceOnly` records a source claim
 without a Lean statement; `openInLean` names an unproved proposition;
@@ -38,7 +37,7 @@ negation or a precise obstruction. `outOfScope` is a deliberate formalization
 boundary, not a refutation. A wrong source claim therefore gets a first-class
 refutation record rather than an informal correction in prose.
 
-When a claim enters `openInLean`, a narrow `Research.Literature` module
+When a claim enters `openInLean`, a narrow `Literature` module
 imports the individual paper module and works against that exact proposition.
 Reusable mathematics is developed in `MathUE` or `UniformEquilibrium`; a
 source-specific definition may stay with the paper. When the proof closes,

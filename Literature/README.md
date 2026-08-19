@@ -32,23 +32,25 @@ obstruction, rather than merely asserting that the source calculation looks
 wrong. `outOfScope` records a deliberate boundary and does not refute the
 source.
 
-An open claim is represented by a `def` returning `Prop`, and a narrow
-`Research.Literature` module must consume that exact proposition while proof
-work is active. Reusable definitions and lemmas belong in `MathUE/` or
-`UniformEquilibrium/`; definitions meaningful only for one source claim may
-remain in its paper module. Once the claim is settled, its final proof is
-moved to the durable owner or written in the paper module, the paper module
-adds the exact restatement or negation theorem, and the Research proof module
-is deleted. A final `provedInLean` or `refutedInLean` record never points into
-Research or Experiments. String metadata never substitutes for a Lean
-proposition or proof.
+An open claim is represented by a `def` returning `Prop`, stated
+self-contained: the paper's author, reading the file alone, must be able to
+audit every definition and theorem statement without sifting through the
+codebase. A claim is never a one-line delegation to a proposition defined
+elsewhere — the file spells the statement out, and when an equivalent
+production proposition exists, an equivalence theorem connects them and makes
+the proof short. Active work on a claim lives inside the paper's own file.
+Reusable definitions and lemmas belong in
+`MathUE/` or `UniformEquilibrium/`; definitions meaningful only for one
+source claim stay in the paper file. Once the claim is settled, its final
+proof is moved to the durable owner or written in the paper file, which adds
+the exact restatement or negation theorem. A final `provedInLean` or
+`refutedInLean` record never points into Research or Experiments. String
+metadata never substitutes for a Lean proposition or proof.
 
-Paper modules may depend on `UniformEquilibrium`; integrated modules never
-depend on `Literature`. The final Literature lane also never imports
-`Research` or `Experiments`. A narrow `Research.Literature` module may import
-an individual `Literature.Papers.*` module when it proves the exact open claim
-recorded there; it may not import the aggregate catalog, and unrelated
-Research modules may not import Literature.
+Paper files may depend on `UniformEquilibrium`; nothing imports the
+literature lane. The lane never imports `Research` or `Experiments`. There is
+one file per paper, directly under `Literature/`, plus the record types in
+`Literature/Catalog.lean` and a generated manifest for tooling reachability.
 
 Paper modules own their source-inspection and claim-audit metadata. Run
 `python scripts/generate_literature.py` after changing the bibliography; it
@@ -56,9 +58,7 @@ creates missing paper templates without overwriting audits and regenerates the
 aggregate catalog. `python scripts/check_literature.py` checks catalog
 completeness, generated freshness, the no-PDF policy, and that every
 declaration name referenced by a non-source claim status exists in the local
-Lean tree. It also checks that every open proposition has an active
-`Research.Literature` consumer and that final proofs do not point into
-Research or Experiments. The declaration check is intentionally only a name
+Lean tree, with final proofs residing outside Research and Experiments. The declaration check is intentionally only a name
 check; Lean checks proposition and proof meaning.
 `python scripts/check_import_graph.py` checks the lane boundaries, including
 the narrow Research/Literature escape hatch.

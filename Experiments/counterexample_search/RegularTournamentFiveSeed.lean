@@ -222,13 +222,11 @@ theorem reward_cappedJointExit : QuittingCappedJointExit reward := by
     · split <;> norm_num
     · norm_num
 
-/-- **Conditional.**  Granting the Solan--Vieille existence law, the seed
-carries no counterexample regime.  The seed's preemption cycle and marked
-collision therefore cannot by themselves force one. -/
-theorem reward_isEmpty_counterexampleRegime_of_law
-    (hlaw : QuittingCappedJointExitUniformεExistence Player) :
+/-- The seed carries no counterexample regime.  The seed's preemption cycle
+and marked collision therefore cannot by themselves force one. -/
+theorem reward_isEmpty_counterexampleRegime :
     IsEmpty (QuittingCounterexampleRegime reward) :=
-  isEmpty_quittingCounterexampleRegime_of_cappedJointExit hlaw
+  isEmpty_quittingCounterexampleRegime_of_cappedJointExit
     reward_unitSoloExit reward_cappedJointExit
 
 end RegularTournamentFiveSeed

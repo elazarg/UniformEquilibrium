@@ -113,10 +113,15 @@ def _status_references(
     return references, errors
 
 
-def _declaration_names(root: pathlib.Path) -> set[str]:
-    """Collect declaration names with a conservative namespace-aware scan."""
+def _declaration_names(root: pathlib.Path) -> dict[str, set[str]]:
+    """Collect declaration names with a conservative namespace-aware scan.
 
-    names: set[str] = set()
+    Maps each name to the set of top-level lane directories whose files
+    define it, so callers can test lane residence by file location rather
+    than by name prefix: a namespace does not determine the lane of the file
+    that declares it."""
+
+    names: dict[str, set[str]] = {}
     paths = project_lean_files(root)
     # GameTheory is a pinned source dependency and is intentionally a leaf of
     # the project import graph.  Literature proofs may nevertheless delegate
@@ -126,6 +131,10 @@ def _declaration_names(root: pathlib.Path) -> set[str]:
     if dependency.is_dir():
         paths.extend(sorted(dependency.rglob("*.lean")))
     for path in paths:
+        try:
+            lane = path.relative_to(root).parts[0]
+        except ValueError:
+            lane = "GameTheory"
         clean = strip_comments_and_strings(path.read_text(encoding="utf-8"))
         blocks: list[tuple[str, str]] = []
         events = sorted(
@@ -148,10 +157,11 @@ def _declaration_names(root: pathlib.Path) -> set[str]:
                     blocks.pop()
                 event_index += 1
             short_name = declaration.group(1)
-            names.add(short_name)
+            names.setdefault(short_name, set()).add(lane)
             namespace = [value for kind, value in blocks if kind == "namespace"]
             if namespace and "." not in short_name:
-                names.add(".".join(namespace + [short_name]))
+                qualified = ".".join(namespace + [short_name])
+                names.setdefault(qualified, set()).add(lane)
     return names
 
 
@@ -165,7 +175,12 @@ def check_claim_declarations(root: pathlib.Path = ROOT) -> list[str]:
     positive theorem's proof name.
     """
 
-    paper_paths = sorted((root / "Literature" / "Papers").glob("*.lean"))
+    infrastructure = {"Catalog.lean"}
+    paper_paths = sorted(
+        path
+        for path in (root / "Literature").glob("*.lean")
+        if path.name not in infrastructure
+    )
     references: list[ReferencedDeclaration] = []
     errors: list[str] = []
     for path in paper_paths:
@@ -205,10 +220,6 @@ def check_claim_declarations(root: pathlib.Path = ROOT) -> list[str]:
                 "open or source-only claims"
             )
     declarations = _declaration_names(root)
-    research_sources = "\n".join(
-        strip_comments_and_strings(path.read_text(encoding="utf-8"))
-        for path in sorted((root / "Research" / "Literature").rglob("*.lean"))
-    ) if (root / "Research" / "Literature").is_dir() else ""
     for reference in references:
         paper_module = ".".join(reference.paper.relative_to(root).with_suffix("").parts)
         if reference.name not in declarations:
@@ -223,15 +234,10 @@ def check_claim_declarations(root: pathlib.Path = ROOT) -> list[str]:
                 f"{reference.paper.relative_to(root)}: .{reference.claim_status} "
                 f"statement {reference.name!r} is not owned by {paper_module}"
             )
-        if reference.claim_status == "openInLean" and reference.name not in research_sources:
-            errors.append(
-                f"{reference.paper.relative_to(root)}: open claim {reference.name!r} "
-                "has no active Research.Literature consumer"
-            )
         if (
             reference.claim_status in {"provedInLean", "refutedInLean"}
             and reference.name_index == 1
-            and reference.name.startswith(("Research.", "Experiments."))
+            and declarations.get(reference.name, set()) & {"Research", "Experiments"}
         ):
             errors.append(
                 f"{reference.paper.relative_to(root)}: final .{reference.claim_status} "

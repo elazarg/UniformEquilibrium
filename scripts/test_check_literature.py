@@ -28,18 +28,18 @@ class ClaimDeclarationTests(unittest.TestCase):
             )
             self.write(
                 root,
-                "Literature/Papers/Example.lean",
-                "namespace Literature.Papers.Example\n"
+                "Literature/Example.lean",
+                "namespace Literature.Example\n"
                 "def statement : Prop := True\n"
                 "theorem proof : statement := by trivial\n"
                 "def record : True := by trivial\n"
                 "auditStatus := .claimAuditInProgress\n"
                 "-- The status syntax permits Lean's escaped line splice.\n"
                 "status := .refutedInLean\n"
-                '  "Literature.Papers.Example.statement"\n'
+                '  "Literature.Example.statement"\n'
                 '  "GameTheory.\\\n'
                 'deep_ε_result"\n'
-                "end Literature.Papers.Example\n",
+                "end Literature.Example\n",
             )
 
             self.assertEqual(check_claim_declarations(root), [])
@@ -49,64 +49,38 @@ class ClaimDeclarationTests(unittest.TestCase):
             root = pathlib.Path(temporary)
             self.write(
                 root,
-                "Literature/Papers/Example.lean",
-                "namespace Literature.Papers.Example\n"
+                "Literature/Example.lean",
+                "namespace Literature.Example\n"
                 "def statement : Prop := True\n"
                 "status := .provedInLean\n"
-                '  "Literature.Papers.Example.statement" "missing"\n'
-                "end Literature.Papers.Example\n",
+                '  "Literature.Example.statement" "missing"\n'
+                "end Literature.Example\n",
             )
 
             failures = check_claim_declarations(root)
 
             self.assertTrue(any("missing" in failure for failure in failures))
 
-    def test_open_claim_requires_research_consumer(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary:
-            root = pathlib.Path(temporary)
-            self.write(
-                root,
-                "Literature/Papers/Example.lean",
-                "namespace Literature.Papers.Example\n"
-                "def statement : Prop := True\n"
-                "auditStatus := .claimAuditInProgress\n"
-                'status := .openInLean "Literature.Papers.Example.statement"\n'
-                "end Literature.Papers.Example\n",
-            )
-
-            failures = check_claim_declarations(root)
-
-            self.assertTrue(any("no active Research.Literature" in failure
-                                for failure in failures))
-
-            self.write(
-                root,
-                "Research/Literature/Example/Statement.lean",
-                "import Literature.Papers.Example\n"
-                "#check Literature.Papers.Example.statement\n",
-            )
-            self.assertEqual(check_claim_declarations(root), [])
-
     def test_final_proof_cannot_point_to_research(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)
             self.write(
                 root,
-                "Literature/Papers/Example.lean",
-                "namespace Literature.Papers.Example\n"
+                "Literature/Example.lean",
+                "namespace Literature.Example\n"
                 "def statement : Prop := True\n"
                 "auditStatus := .claimAuditInProgress\n"
                 "status := .provedInLean\n"
-                '  "Literature.Papers.Example.statement"\n'
-                '  "Research.Literature.Example.proof"\n'
-                "end Literature.Papers.Example\n",
+                '  "Literature.Example.statement"\n'
+                '  "Literature.Example.proof"\n'
+                "end Literature.Example\n",
             )
             self.write(
                 root,
                 "Research/Literature/Example/Proof.lean",
-                "namespace Research.Literature.Example\n"
+                "namespace Literature.Example\n"
                 "theorem proof : True := by trivial\n"
-                "end Research.Literature.Example\n",
+                "end Literature.Example\n",
             )
 
             failures = check_claim_declarations(root)
@@ -126,7 +100,7 @@ class ClaimDeclarationTests(unittest.TestCase):
             )
             self.write(
                 root,
-                "Literature/Papers/Example.lean",
+                "Literature/Example.lean",
                 "auditStatus := .correspondenceComplete\n"
                 "status := .provedInLean\n"
                 '  "GameTheory.result" "GameTheory.result"\n',
@@ -134,7 +108,7 @@ class ClaimDeclarationTests(unittest.TestCase):
 
             failures = check_claim_declarations(root)
 
-            self.assertTrue(any("is not owned by Literature.Papers.Example"
+            self.assertTrue(any("is not owned by Literature.Example"
                                 in failure for failure in failures))
 
     def test_namespace_survives_an_ended_section(self) -> None:
@@ -142,8 +116,8 @@ class ClaimDeclarationTests(unittest.TestCase):
             root = pathlib.Path(temporary)
             self.write(
                 root,
-                "Literature/Papers/Example.lean",
-                "namespace Literature.Papers.Example\n"
+                "Literature/Example.lean",
+                "namespace Literature.Example\n"
                 "section\n"
                 "def helper : True := by trivial\n"
                 "end\n"
@@ -151,9 +125,9 @@ class ClaimDeclarationTests(unittest.TestCase):
                 "theorem proof : statement := by trivial\n"
                 "auditStatus := .correspondenceComplete\n"
                 "status := .provedInLean\n"
-                '  "Literature.Papers.Example.statement"\n'
-                '  "Literature.Papers.Example.proof"\n'
-                "end Literature.Papers.Example\n",
+                '  "Literature.Example.statement"\n'
+                '  "Literature.Example.proof"\n'
+                "end Literature.Example\n",
             )
 
             self.assertEqual(check_claim_declarations(root), [])

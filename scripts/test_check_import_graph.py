@@ -238,11 +238,14 @@ import UniformEquilibrium.Certificates.Neutral
 
             failures = check_import_graph.check_import_graph(root)
 
-            self.assertEqual(len(failures), 1)
-            self.assertIn(
-                "forbidden architectural edge Research.BadExperiments -> "
-                "Experiments.Evidence",
-                failures[0],
+            self.assertEqual(len(failures), 2)
+            self.assertTrue(
+                any("forbidden architectural edge Research.BadExperiments -> "
+                    "Experiments.Evidence" in failure for failure in failures)
+            )
+            self.assertTrue(
+                any("imports research module Research.Interface; promote"
+                    in failure for failure in failures)
             )
 
     def test_literature_and_production_boundaries(self) -> None:
@@ -261,7 +264,7 @@ import UniformEquilibrium.Certificates.Neutral
                 "Literature/BadResearch.lean",
                 "import Research.Evidence\n",
             )
-            self.write(root, "Research.lean", "import Research.Literature.Proof\n")
+            self.write(root, "Research.lean", "import Literature.Proof\n")
             self.write(
                 root,
                 "Research/Literature/Proof.lean",
@@ -292,7 +295,7 @@ import UniformEquilibrium.Certificates.Neutral
                     for failure in failures)
             )
             self.assertFalse(
-                any("Research.Literature.Proof -> Literature.Papers.Example" in failure
+                any("Literature.Proof -> Literature.Papers.Example" in failure
                     for failure in failures)
             )
 
@@ -311,7 +314,7 @@ import UniformEquilibrium.Certificates.Neutral
             failures = check_import_graph.check_import_graph(root)
 
             self.assertTrue(
-                any("only Research.Literature may import" in failure
+                any("nothing imports the literature lane" in failure
                     for failure in failures)
             )
 

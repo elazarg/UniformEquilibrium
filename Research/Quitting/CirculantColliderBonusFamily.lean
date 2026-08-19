@@ -5,7 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.CubicAnchorRoot
-import Research.Quitting.CirculantColliderCompletion
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Circulant.ColliderCompletion
+import UniformEquilibrium.Quitting.Classification.Circulant.ColliderCompletion
 
 /-!
 # Raising the collider: a one-parameter family of five-player circulant tables

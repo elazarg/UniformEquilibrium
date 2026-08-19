@@ -5,7 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Probability.DiscreteHazardStopping
-import Research.Quitting.DiffuseTailSoloStructure
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.DiffuseTailSoloStructure
+import UniformEquilibrium.Quitting.Cycles.DiffuseTailSoloStructure
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 
 /-!

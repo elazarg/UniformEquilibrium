@@ -344,24 +344,31 @@ def check_import_graph(
                         f"edge {module} -> {item.module}; {rule.explanation}"
                     )
 
-            # A research proof of an exact paper claim has a deliberately
-            # narrow escape hatch.  It may import the individual paper
-            # module, but not the final catalog/coverage umbrella and not
-            # from an unrelated Research lane.  Keeping this exception here
-            # (rather than weakening the Literature -> Research rule) makes
-            # the dependency direction visible to the static audit.
+            # The literature lane is terminal: nothing imports it.  Active
+            # claim work lives inside the paper file itself, so no other
+            # lane ever needs a literature module.
             if (
-                _is_prefixed(module, "Research")
-                and _is_prefixed(item.module, "Literature")
-                and not (
-                    _is_prefixed(module, "Research.Literature")
-                    and _is_prefixed(item.module, "Literature.Papers")
-                )
+                _is_prefixed(item.module, "Literature")
+                and not _is_prefixed(module, "Literature")
+                and module != "AxiomAudit"
             ):
                 failures.append(
-                    f"{modules[module]}:{item.line}: research module {module} "
-                    f"imports {item.module}; only Research.Literature may import "
-                    "individual Literature.Papers modules"
+                    f"{modules[module]}:{item.line}: module {module} imports "
+                    f"{item.module}; nothing imports the literature lane"
+                )
+
+            # Research is tentative work: nothing outside Research imports
+            # it.  Anything important enough to be imported is important
+            # enough to reside under UniformEquilibrium or MathUE.
+            if (
+                _is_prefixed(item.module, "Research")
+                and not _is_prefixed(module, "Research")
+                and module != "AxiomAudit"
+            ):
+                failures.append(
+                    f"{modules[module]}:{item.line}: module {module} imports "
+                    f"research module {item.module}; promote the imported "
+                    "module to UniformEquilibrium or MathUE instead"
                 )
 
             allowed_consumers = INVENTORY_ONLY_FACADES.get(item.module)

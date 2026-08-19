@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.AnchoredCyclicScreen
-import Research.Quitting.CirculantPocketAnchoredNoGo
+import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
+import UniformEquilibrium.Quitting.Classification.Circulant.PocketAnchoredNoGo
 
 /-!
 # The anchored cyclic on-path values as a patience system
