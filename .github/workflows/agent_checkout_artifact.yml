@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - agent/complete-akrs2022
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
