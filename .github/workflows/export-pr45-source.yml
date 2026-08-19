@@ -1,0 +1,26 @@
+name: Export PR 45 source
+
+on:
+  push:
+    branches:
+      - agent/complete-solan-vieille-2001
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Pack current source
+        run: |
+          tar --exclude=.git --exclude=.lake --exclude='GameTheory/.git' -czf /tmp/pr45-current-source.tgz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr45-current-source
+          path: /tmp/pr45-current-source.tgz
+          compression-level: 0
+          retention-days: 1
