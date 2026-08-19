@@ -1,6 +1,7 @@
 name: Compile Solan and Vieille 2002a
 
 on:
+  pull_request:
   push:
     branches:
       - agent/promote-solan-vieille-2002a
@@ -10,7 +11,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: compile-solan-vieille-2002a-${{ github.ref }}
+  group: compile-solan-vieille-2002a-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
