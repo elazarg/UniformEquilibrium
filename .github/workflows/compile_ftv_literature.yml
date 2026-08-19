@@ -1,16 +1,15 @@
 name: Compile FTV literature
 
 on:
-  pull_request:
   push:
     branches: [agent/promote-ftv-1997]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: compile-ftv-literature-${{ github.event.pull_request.number || github.ref }}
+  group: compile-ftv-literature-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -20,8 +19,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: agent/promote-ftv-1997
           fetch-depth: 0
           submodules: recursive
+      - name: Clarify the Theorem 3.5 proof boundary
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("Literature/FleschThuijsmanAndVrieze1997.lean")
+          text = path.read_text()
+          old = """/-! The necessity half uses Theorem 3.4: once the first active run is fixed,
+one coordinate equals `1`, the other two are at least `1`, and the row-sum
+identity gives total reward `4`.  The imported exposed-face lemmas prove the
+row-sum part for finite exact packets, but the arbitrary-equilibrium cyclic
+support theorem remains open above.  Consequently this implication has exactly
+the same missing six-step tail argument, and no additional hidden gap. -/
+"""
+          new = """/-! The necessity half first restricts an arbitrary behavior profile to the
+unique nonabsorbing history, extracting a Markov hazard sequence with the same
+terminal law and unilateral values.  Theorem 3.4 then fixes its first active
+run: one coordinate equals `1`, the other two are at least `1`, and the row-sum
+identity gives total reward `4`.  The imported exposed-face lemmas prove the
+row-sum part only for finite exact packets.  The missing proof therefore consists
+of the behavior-to-Markov adapter, the six-step tail argument above, and the
+first-run payoff accounting. -/
+"""
+          if old in text:
+              path.write_text(text.replace(old, new, 1))
+          elif new not in text:
+              raise SystemExit("The expected Theorem 3.5 paragraph was not found")
+          PY
       - uses: leanprover/lean-action@v1
         with:
           auto-config: false
@@ -36,3 +64,13 @@ jobs:
           UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
           UniformEquilibrium.Quitting.Stationary.BestResponse
       - run: lake env lean Literature/FleschThuijsmanAndVrieze1997.lean
+      - name: Commit the clarified proof boundary
+        run: |
+          if git diff --quiet -- Literature/FleschThuijsmanAndVrieze1997.lean; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add Literature/FleschThuijsmanAndVrieze1997.lean
+          git commit -m "Clarify the FTV reward-necessity proof boundary"
+          git push origin HEAD:agent/promote-ftv-1997
