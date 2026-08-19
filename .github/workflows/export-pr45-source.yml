@@ -26,10 +26,10 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - name: Pack current source and fixed-point dependency
+      - name: Pack source and dependency sources
         run: |
           tar --exclude=.git --exclude=.lake --exclude='GameTheory/.git' -czf /tmp/pr45-current-source.tgz .
-          tar -czf /tmp/pr45-fixed-point-package.tgz -C .lake/packages fixed-point-theorems
+          tar --exclude='*/.git' --exclude='*/.lake' -czf /tmp/pr45-package-sources.tgz -C .lake packages
       - uses: actions/upload-artifact@v4
         with:
           name: pr45-current-source
@@ -38,7 +38,7 @@ jobs:
           retention-days: 1
       - uses: actions/upload-artifact@v4
         with:
-          name: pr45-fixed-point-package
-          path: /tmp/pr45-fixed-point-package.tgz
+          name: pr45-package-sources
+          path: /tmp/pr45-package-sources.tgz
           compression-level: 0
           retention-days: 1
