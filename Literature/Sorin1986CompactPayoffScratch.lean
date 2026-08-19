@@ -9,6 +9,9 @@ open scoped BigOperators Topology
 
 namespace SequenceForm
 
+local instance propDecidable (p : Prop) : Decidable p :=
+  Classical.propDecidable p
+
 /-- A fixed pure action used only to witness nonemptiness of the realization
 polytope. -/
 noncomputable def defaultAction (G : FiniteStageGame) (who : G.Player) :
@@ -49,7 +52,7 @@ def intervalZero : UnitInterval := ⟨0, by norm_num⟩
 def intervalOne : UnitInterval := ⟨1, by norm_num⟩
 
 /-- Indicator valued in the unit interval. -/
-noncomputable def intervalIndicator (p : Prop) : UnitInterval :=
+def intervalIndicator (p : Prop) : UnitInterval :=
   if p then intervalOne else intervalZero
 
 @[simp] theorem intervalIndicator_true {p : Prop} (hp : p) :
@@ -61,7 +64,7 @@ noncomputable def intervalIndicator (p : Prop) : UnitInterval :=
   simp [intervalIndicator, hp, intervalZero]
 
 /-- The realization plan of the fixed pure strategy. -/
-noncomputable def defaultRawRealizationPlan
+def defaultRawRealizationPlan
     (G : FiniteStageGame) (who : G.Player) :
     RawRealizationPlan G who :=
   (fun h => intervalIndicator (FollowsDefault who h),
@@ -77,16 +80,13 @@ private theorem defaultRawRealizationPlan_valid
   constructor
   · intro h
     by_cases hh : FollowsDefault who h
-    · simp [defaultRawRealizationPlan, hh, intervalIndicator,
-        intervalOne, intervalZero]
-    · simp [defaultRawRealizationPlan, hh, intervalIndicator,
-        intervalOne, intervalZero]
+    · simp [defaultRawRealizationPlan, hh]
+    · simp [defaultRawRealizationPlan, hh]
   · intro h a
-    simp [defaultRawRealizationPlan, followsDefault_snoc_iff,
-      intervalIndicator, intervalOne, intervalZero]
+    simp [defaultRawRealizationPlan, followsDefault_snoc_iff]
 
 /-- A canonical pure realization plan. -/
-noncomputable def defaultRealizationPlan
+def defaultRealizationPlan
     (G : FiniteStageGame) (who : G.Player) :
     RealizationPlan G who :=
   ⟨defaultRawRealizationPlan G who,
@@ -121,12 +121,14 @@ def actionMass {G : FiniteStageGame}
     (h : History G) :
     Continuous fun profile : RealizationProfile G => historyMass profile h := by
   classical
+  unfold historyMass
   fun_prop
 
 @[fun_prop] theorem continuous_actionMass (G : FiniteStageGame)
     (h : History G) (a : JointAction G) :
     Continuous fun profile : RealizationProfile G => actionMass profile h a := by
   classical
+  unfold actionMass actionWeight
   fun_prop
 
 theorem historyMass_nonneg {G : FiniteStageGame}
