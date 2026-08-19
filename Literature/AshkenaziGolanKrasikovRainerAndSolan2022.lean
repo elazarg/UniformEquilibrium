@@ -287,12 +287,30 @@ def AbsorptionPathJumpRelation (path : AbsorptionPath (ι := ι))
     (t : ℝ) (ξ : ι → PMF Bool) : Prop :=
   ∀ a, pathJump path.1 t a / (1 - t) = quittingRootCoalitionMass ξ a.1
 
+/-! Definition 4.1 supplies one product-row witness at every jump.  We select
+one witness from the path itself, once for each time, so Definition 4.11 uses
+the same `ξₜ` for every player rather than moving the existential quantifier
+inside the player quantifier. -/
+noncomputable def absorptionPathJumpRoot
+    (path : AbsorptionPath (ι := ι)) (t : ℝ) : ι → PMF Bool := by
+  classical
+  exact if ht : t ∈ pathJumps path.1 then
+      Classical.choose (path.property.2.2.1 t ht)
+    else
+      fun _ => PMF.pure false
+
+theorem absorptionPathJumpRoot_relation
+    (path : AbsorptionPath (ι := ι)) {t : ℝ} (ht : t ∈ pathJumps path.1) :
+    AbsorptionPathJumpRelation path t (absorptionPathJumpRoot path t) := by
+  simp only [absorptionPathJumpRoot, dif_pos ht]
+  exact Classical.choose_spec (path.property.2.2.1 t ht)
+
 def IsPlayerSequentiallyPerfectAbsorptionPath
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (path : AbsorptionPath (ι := ι)) (who : ι) (ε : ℝ) : Prop :=
-  (∀ t ∈ pathJumps path.1, pathTotal path.1 t < 1 → ∃ ξ,
-      AbsorptionPathJumpRelation path t ξ ∧
-      PlayerEpsilonPerfectRow reward (absorptionPathPayoff reward path t) ξ who ε) ∧
+  (∀ t ∈ pathJumps path.1, pathTotal path.1 t < 1 →
+      PlayerEpsilonPerfectRow reward (absorptionPathPayoff reward path t)
+        (absorptionPathJumpRoot path t) who ε) ∧
     (∀ t ∈ pathTimes path.1, t ≠ 1 →
       reward ⟨{who}, Finset.singleton_nonempty who⟩ who - ε ≤
         absorptionPathPayoff reward path t who ∧
@@ -304,17 +322,7 @@ def IsPlayerSequentiallyPerfectAbsorptionPath
 def IsSequentiallyPerfectAbsorptionPath
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (path : AbsorptionPath (ι := ι)) (ε : ℝ) : Prop :=
-  (∀ t ∈ pathJumps path.1, pathTotal path.1 t < 1 → ∃ ξ,
-      AbsorptionPathJumpRelation path t ξ ∧
-        ∀ who, PlayerEpsilonPerfectRow
-          reward (absorptionPathPayoff reward path t) ξ who ε) ∧
-  ∀ who, ∀ t ∈ pathTimes path.1, t ≠ 1 →
-    reward ⟨{who}, Finset.singleton_nonempty who⟩ who - ε ≤
-      absorptionPathPayoff reward path t who ∧
-    (pathRightDerivative path.1 t
-        ⟨{who}, Finset.singleton_nonempty who⟩ > 0 →
-      absorptionPathPayoff reward path t who ≤
-        reward ⟨{who}, Finset.singleton_nonempty who⟩ who + ε)
+  ∀ who, IsPlayerSequentiallyPerfectAbsorptionPath reward path who ε
 
 /-! **Proposition 4.6 (source).** For every absorption path `π` there is a
 sequence of absorbing behavior profiles `(xᵏ)` whose induced paths `πˣᵏ`
