@@ -1,0 +1,180 @@
+        G.finiteEquilibriumPayoffsAt n ∧
+      G.finiteEquilibriumPayoffsAt (n + 2) ⊄
+        G.finiteEquilibriumPayoffsAt n := by
+  sorry
+
+/-- Example 1 revisited: `(7/8,1/8)` is an equilibrium payoff at discount
+weight `7/8`. -/
+theorem example1_discount_seven_eighths :
+    pair (7 / 8) (1 / 8) ∈
+      example1.discountedEquilibriumPayoffsAt (7 / 8) := by
+  sorry
+
+/-- The preceding payoff is neither one-stage feasible nor feasible at
+current-stage weight `3/4`. -/
+theorem example1_discount_separation :
+    pair (7 / 8) (1 / 8) ∉ example1.finiteFeasiblePayoffsAt 1 ∧
+      pair (7 / 8) (1 / 8) ∉
+        example1.discountedFeasiblePayoffsAt (3 / 4) := by
+  sorry
+
+/-- Statement (16): the discounted feasible and equilibrium nets are not
+monotone.  The paper proves this through the two explicit weights above. -/
+theorem statement16 :
+    ∃ G : StageGame Bool, ∃ low high : ℝ,
+      0 < low ∧ low < high ∧ high ≤ 1 ∧
+      G.discountedFeasiblePayoffsAt high ⊄
+        G.discountedFeasiblePayoffsAt low ∧
+      G.discountedEquilibriumPayoffsAt high ⊄
+        G.discountedEquilibriumPayoffsAt low := by
+  refine ⟨example1, 3 / 4, 7 / 8, by norm_num, by norm_num,
+    by norm_num, ?_, ?_⟩
+  · intro h
+    have hhigh : pair (7 / 8) (1 / 8) ∈
+        example1.discountedFeasiblePayoffsAt (7 / 8) :=
+      example1.discountedEquilibriumPayoffsAt_subset_feasible
+        (7 / 8) example1_discount_seven_eighths
+    exact example1_discount_separation.2 (h hhigh)
+  · intro h
+    have hlow := h example1_discount_seven_eighths
+    exact example1_discount_separation.2
+      (example1.discountedEquilibriumPayoffsAt_subset_feasible
+        (3 / 4) hlow)
+
+
+/-! ## Convexity, stationarity, and faces -/
+
+namespace StageGame
+
+variable {ι : Type uι} (G : StageGame ι)
+
+/-! **Proposition 4, page 151.**  Fenchel's connected-set refinement of
+Carathéodory gives a decomposition into at most `N` points of `D₁`; the paper
+then recursively codes that decomposition in the discounted stages.  Mathlib
+contains Carathéodory's theorem but not the connected-set refinement in the
+required form, and the standard-monitoring coding lemma is also absent. -/
+theorem proposition4 [Fintype ι] [DecidableEq ι] [Nonempty ι]
+    {λ : ℝ} (hλ : 0 < λ ∧ λ ≤ 1)
+    (hsmall : λ < (Fintype.card ι : ℝ)⁻¹) :
+    G.discountedFeasiblePayoffsAt λ = G.correlatedFeasibleSet := by
+  sorry
+
+/-! **Proposition 5(18).**  If `D_n` is convex, then `D_{n+1}=D_n`, and all
+later finite feasible sets equal `C`.  The proof in the paper is an explicit
+first-stage/tail rearrangement; formalizing it needs the same finite-history
+profile splicing operation as Lemma 3. -/
+theorem proposition5 [Fintype ι] [DecidableEq ι]
+    {n : ℕ} (hn : 0 < n)
+    (hconvex : Convex ℝ (G.finiteFeasiblePayoffsAt n)) :
+    G.finiteFeasiblePayoffsAt (n + 1) =
+        G.finiteFeasiblePayoffsAt n ∧
+      ∀ m, n ≤ m →
+        G.finiteFeasiblePayoffsAt m = G.correlatedFeasibleSet := by
+  sorry
+
+/-! Statement (19).  Eventual stationarity at `D_n` forces `D_n=C`.  This is
+a direct consequence of property (3), or of Lemma 3 plus density of rational
+weights; the Hausdorff-limit uniqueness bridge is not yet packaged here. -/
+theorem statement19 [Fintype ι] [DecidableEq ι]
+    {n : ℕ} (hn : 0 < n)
+    (hstationary : ∀ m, n ≤ m →
+      G.finiteFeasiblePayoffsAt m = G.finiteFeasiblePayoffsAt n) :
+    G.finiteFeasiblePayoffsAt n = G.correlatedFeasibleSet := by
+  sorry
+
+/-! **Proposition 6(21), page 152.**  Convexity at current-stage weight `λ`
+forces every less patient feasible set `D_δ`, `0<δ<λ`, to be all of `C`.
+The recursive stage decomposition is the discounted counterpart of
+Proposition 5 and awaits the same splicing API. -/
+theorem proposition6 [Fintype ι] [DecidableEq ι]
+    {δ λ : ℝ} (hδ : 0 < δ) (hδλ : δ < λ) (hλ : λ ≤ 1)
+    (hconvex : Convex ℝ (G.discountedFeasiblePayoffsAt λ)) :
+    G.discountedFeasiblePayoffsAt δ = G.correlatedFeasibleSet := by
+  sorry
+
+/-! Statement (22). -/
+theorem statement22 [Fintype ι] [DecidableEq ι]
+    {λ : ℝ} (hλ : 0 < λ ∧ λ ≤ 1)
+    (hstationary : ∀ δ : ℝ, 0 < δ → δ < λ →
+      G.discountedFeasiblePayoffsAt λ =
+        G.discountedFeasiblePayoffsAt δ) :
+    G.discountedFeasiblePayoffsAt λ = G.correlatedFeasibleSet := by
+  sorry
+
+/-! **Proposition 7(23).**  On a one-dimensional face, a reversed inclusion
+between two discounted feasible sections forces the entire face into the less
+patient feasible set.  The proof is the paper's maximal-gap replacement
+argument.  Its formal dependencies are a compact-section maximizer and a
+history-contingent tail replacement lemma, neither currently available for the
+monitoring model. -/
+theorem proposition7 [Fintype ι] [DecidableEq ι]
+    {face : Set (ι → ℝ)}
+    (hface : IsOneDimensionalFace face G.correlatedFeasibleSet)
+    {δ λ : ℝ} (hδ : 0 < δ) (hδλ : δ < λ) (hλ : λ ≤ 1)
+    (hinclusion :
+      G.discountedFeasiblePayoffsAt δ ∩ face ⊆
+        G.discountedFeasiblePayoffsAt λ ∩ face) :
+    face ⊆ G.discountedFeasiblePayoffsAt δ := by
+  sorry
+
+/-! **Proposition 8(25).** -/
+theorem proposition8 [Fintype ι] [DecidableEq ι]
+    {n m : ℕ} (hm : 0 < m)
+    (hlarge : Fintype.card ι * m < n)
+    (hinclusion : G.finiteFeasiblePayoffsAt (n + m) ⊆
+      G.finiteFeasiblePayoffsAt n) :
+    G.finiteFeasiblePayoffsAt (n + m) =
+      G.correlatedFeasibleSet := by
+  sorry
+
+/-! **Proposition 9(26).**  This is retained at the paper's exact face
+dimension and horizon threshold.  The proof needs induction over polytope
+faces, Carathéodory, and finite-history tail replacement. -/
+theorem proposition9 [Fintype ι] [DecidableEq ι]
+    {face : Set (ι → ℝ)} {p n m : ℕ}
+    (hface : IsFaceOf face G.correlatedFeasibleSet)
+    (hdim : affineDimension face = p)
+    (hp : p < Fintype.card ι)
+    (hm : 0 < m) (hlarge : p * m < n)
+    (hinclusion :
+      G.finiteFeasiblePayoffsAt (n + m) ∩ face ⊆
+        G.finiteFeasiblePayoffsAt n ∩ face) :
+    face ⊆ G.finiteFeasiblePayoffsAt (n + m) := by
+  sorry
+
+end StageGame
+
+/-- A point of `face` maximizing distance from `set`. -/
+def IsMaximalDistancePoint {V : Type*} [PseudoMetricSpace V]
+    (set face : Set V) (point : V) : Prop :=
+  point ∈ face ∧
+    ∀ other ∈ face,
+      Metric.infDist other set ≤ Metric.infDist point set
+
+/-! **Lemma 10, pages 153--154.**  This is the geometric lemma used inside
+Proposition 9.  The paper's separating-hyperplane proof is fully specified,
+but a formal proof needs a compact polytope-face package connecting relative
+frontier, affine dimension, and nearest points; those interfaces are not
+present in Mathlib as one theorem. -/
+theorem lemma10
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
+    [FiniteDimensional ℝ V]
+    {feasible face : Set V} {point : V}
+    (hfaceConvex : Convex ℝ face)
+    (hfeasibleCompact : IsCompact feasible)
+    (hfeasibleNonempty : feasible.Nonempty)
+    (hfeasibleFace : feasible ⊆ face)
+    (hboundary : frontier face ⊆ feasible)
+    (hpoint : IsMaximalDistancePoint feasible face point) :
+    point ∈ convexHull ℝ
+      (Metric.closedBall point (Metric.infDist point feasible) ∩ feasible) := by
+  sorry
+
+/-- Example 5: unanimity on label `j` pays the unit vector `e_j`; every
+non-unanimous profile pays zero. -/
+def unanimityGame (ι : Type*) [Fintype ι] [DecidableEq ι] : StageGame ι where
+  Action _ := ι
+  payoff profile who := if (∀ player, profile player = who) then 1 else 0
+
+/-- The barycenter used in Example 5. -/
+def uniformBarycenter (ι : Type*) [Fintype ι] : ι → ℝ :=
