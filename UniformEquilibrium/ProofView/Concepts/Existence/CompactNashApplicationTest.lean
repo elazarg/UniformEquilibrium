@@ -98,8 +98,8 @@ theorem property2 (G : Game) :
   have hnash : ∃ profile : G.Profile, G.IsNash profile := by
     obtain ⟨profile, hprofile⟩ := G.toCompactBarycentricGame.exists_nash
     refine ⟨profile, ?_⟩
-    simpa [Game.IsNash, CompactBarycentricGame.IsNash,
-      Game.toCompactBarycentricGame] using hprofile
+    intro who deviation
+    exact hprofile who deviation
   constructor
   · obtain ⟨profile, hprofile⟩ := hnash
     exact ⟨G.payoff profile, profile, hprofile, rfl⟩
