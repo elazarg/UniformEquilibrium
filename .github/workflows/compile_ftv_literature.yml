@@ -29,4 +29,10 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
+      - name: Build imported FTV dependencies
+        run: >-
+          lake build
+          UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle
+          UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
+          UniformEquilibrium.Quitting.Stationary.BestResponse
       - run: lake env lean Literature/FleschThuijsmanAndVrieze1997.lean
