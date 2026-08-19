@@ -1,0 +1,180 @@
+import Mathlib
+import GameTheory.Core.Mixed
+import GameTheory.Repeated.MonitoringOneShot
+
+/-!
+# Sorin (1986): On Repeated Games with Complete Information
+
+Sylvain Sorin, *On Repeated Games with Complete Information*, Mathematics of
+Operations Research 11(1) (1986), 147--160.
+https://doi.org/10.1287/moor.11.1.147
+
+The paper writes `λ` for the weight of the current stage.  The library's
+normalized discounted sum writes `δ` for the continuation factor, so this file
+uses `δ = 1 - λ` when it invokes the library evaluator.
+
+Standard signalling is represented by public monitoring whose signal is the
+realized pure action profile.  A monitored strategy therefore maps every
+finite public action history to a finite mixed action.  For finite action sets
+this is the paper's behavioral-strategy model; perfect recall gives the usual
+mixed/behavioral equivalence.
+
+The paper's added-in-proof correction is part of the transcription: the
+Hausdorff convergence of discounted equilibrium payoff sets is stated only
+when the individually rational feasible set is full-dimensional or there are
+two players.
+-/
+
+noncomputable section
+
+namespace Literature.Sorin1986
+
+open GameTheory GameTheory.Math.Probability
+open Set Filter
+open scoped BigOperators Topology
+
+universe uι ua
+
+/-- A finite normal-form stage game.  Finiteness and nonemptiness are supplied
+as typeclass assumptions at the results that use them. -/
+structure StageGame (ι : Type uι) where
+  Action : ι → Type ua
+  payoff : (∀ i, Action i) → ι → ℝ
+
+namespace StageGame
+
+variable {ι : Type uι} (G : StageGame ι)
+
+/-- Pure stage-action profiles. -/
+abbrev PureProfile := ∀ i, G.Action i
+
+/-- Independent mixed stage-action profiles. -/
+abbrev MixedProfile := ∀ i, FinDist (G.Action i)
+
+/-- The deterministic utility game associated with the payoff table. -/
+@[reducible]
+def pureUtilityGame : UtilityGame ι where
+  form := GameForm.deterministic
+    { Strategy := G.Action
+      Outcome := G.PureProfile }
+    id
+  utility := G.payoff
+
+/-- The independent mixed extension of the stage game. -/
+@[reducible]
+def mixedUtilityGame [Fintype ι] : UtilityGame ι :=
+  G.pureUtilityGame.mixed
+
+/-- Perfect public monitoring of the realized pure action profile. -/
+@[reducible]
+def standardMonitoring [Fintype ι] :
+    G.mixedUtilityGame.PublicMonitoring where
+  Signal := G.PureProfile
+  signalLaw profile := G.mixedUtilityGame.form.play profile
+
+/-- Public histories in the paper. -/
+abbrev History [Fintype ι] (t : ℕ) :=
+  G.standardMonitoring.SignalHistory t
+
+/-- Behavioral strategies with standard signalling. -/
+abbrev BehaviorStrategy [Fintype ι] (who : ι) :=
+  G.standardMonitoring.MonitoredStrategy who
+
+/-- Behavioral profiles with standard signalling. -/
+abbrev BehaviorProfile [Fintype ι] :=
+  G.standardMonitoring.MonitoredProfile
+
+/-- Positive finite horizons. -/
+abbrev Horizon := {n : ℕ // 0 < n}
+
+/-- Paper discount parameters `λ ∈ (0,1]`. -/
+abbrev DiscountRate := {λ : ℝ // 0 < λ ∧ λ ≤ 1}
+
+/-- Expected average payoff in the `n`-stage repeated game. -/
+def finitePayoff [Fintype ι] (n : G.Horizon)
+    (profile : G.BehaviorProfile) (who : ι) : ℝ :=
+  (n.1 : ℝ)⁻¹ *
+    ∑ t ∈ Finset.range n.1,
+      G.standardMonitoring.monitoredStagePayoff profile t who
+
+/-- Vector form of the finite-horizon payoff. -/
+def finitePayoffVector [Fintype ι] (n : G.Horizon)
+    (profile : G.BehaviorProfile) : ι → ℝ :=
+  fun who => G.finitePayoff n profile who
+
+/-- Normalized `λ`-discounted payoff. -/
+def discountedPayoff [Fintype ι] (λ : G.DiscountRate)
+    (profile : G.BehaviorProfile) (who : ι) : ℝ :=
+  G.standardMonitoring.discountedPayoff (1 - λ.1) profile who
+
+/-- Vector form of the discounted payoff. -/
+def discountedPayoffVector [Fintype ι] (λ : G.DiscountRate)
+    (profile : G.BehaviorProfile) : ι → ℝ :=
+  fun who => G.discountedPayoff λ profile who
+
+end StageGame
+
+/-- A real sequence is bounded in the elementary sense needed by a Banach
+limit. -/
+def IsBoundedSequence (x : ℕ → ℝ) : Prop :=
+  ∃ bound : ℝ, ∀ n, |x n| ≤ bound
+
+/-- Left shift of a real sequence. -/
+def sequenceShift (x : ℕ → ℝ) : ℕ → ℝ :=
+  fun n => x (n + 1)
+
+/-- The properties of the Banach limit fixed in the paper.  The function is
+stored on all sequences, but every axiom is restricted to bounded sequences;
+its values outside `ℓ∞` are irrelevant. -/
+structure BanachLimit where
+  toFun : (ℕ → ℝ) → ℝ
+  map_add : ∀ {x y}, IsBoundedSequence x → IsBoundedSequence y →
+    toFun (x + y) = toFun x + toFun y
+  map_smul : ∀ (c : ℝ) {x}, IsBoundedSequence x →
+    toFun (c • x) = c * toFun x
+  nonnegative : ∀ {x}, IsBoundedSequence x →
+    (∀ n, 0 ≤ x n) → 0 ≤ toFun x
+  shift_invariant : ∀ {x}, IsBoundedSequence x →
+    toFun (sequenceShift x) = toFun x
+  map_const : ∀ c : ℝ, toFun (fun _ => c) = c
+
+instance : CoeFun BanachLimit (fun _ => (ℕ → ℝ) → ℝ) :=
+  ⟨BanachLimit.toFun⟩
+
+namespace StageGame
+
+variable {ι : Type uι} (G : StageGame ι)
+
+/-- The sequence to which the paper applies its Banach limit: expected
+Cesàro payoffs over horizons `1,2,...`. -/
+def averagePayoffSequence [Fintype ι] (profile : G.BehaviorProfile)
+    (who : ι) : ℕ → ℝ :=
+  fun n => G.finitePayoff ⟨n + 1, Nat.succ_pos n⟩ profile who
+
+/-- Payoff in the `L`-infinitely repeated game. -/
+def banachPayoff [Fintype ι] (L : BanachLimit)
+    (profile : G.BehaviorProfile) (who : ι) : ℝ :=
+  L (G.averagePayoffSequence profile who)
+
+/-- Vector form of the Banach-limit payoff. -/
+def banachPayoffVector [Fintype ι] (L : BanachLimit)
+    (profile : G.BehaviorProfile) : ι → ℝ :=
+  fun who => G.banachPayoff L profile who
+
+/-- Utility of the finite repeated game on the canonical monitored form. -/
+def finiteUtility [Fintype ι] (n : G.Horizon) :
+    Utility G.standardMonitoring.monitoredSignature :=
+  fun profile who => G.finitePayoff n profile who
+
+/-- Utility of the Banach-limit repeated game. -/
+def banachUtility [Fintype ι] (L : BanachLimit) :
+    Utility G.standardMonitoring.monitoredSignature :=
+  fun profile who => G.banachPayoff L profile who
+
+/-- Nash equilibrium in the `n`-stage game. -/
+def IsFiniteNash [Fintype ι] [DecidableEq ι] (n : G.Horizon)
+    (profile : G.BehaviorProfile) : Prop :=
+  IsNash G.standardMonitoring.monitoredForm
+    (euPreference (G.finiteUtility n)) profile
+
+/-- Nash equilibrium in the paper's `λ`-discounted game. -/
