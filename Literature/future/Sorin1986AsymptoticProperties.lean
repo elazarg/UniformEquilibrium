@@ -3,15 +3,15 @@ import UniformEquilibrium.Examples.Sorin.OccupationVanishing
 import UniformEquilibrium.Certificates.Adaptive.Certificate
 
 /-!
-# Literature audit
+# Sorin (1986), *Asymptotic properties of a non-zero sum stochastic game*
 
-Bibliography label: Sorin 1986
-
-The primary paper was inspected for both equilibrium-payoff-set statements and
-their separation.
+Sylvain Sorin, *Asymptotic properties of a non-zero sum stochastic game*,
+International Journal of Game Theory **15**(2), 101--107 (1986), DOI
+`10.1007/BF01770978`.  This is distinct from *On Repeated Games with Complete
+Information*, formalized in `Literature/Sorin1986.lean`.
 -/
 
-namespace Literature.Sorin1986
+namespace Literature.Sorin1986AsymptoticProperties
 
 open GameTheory StochasticGame
 
@@ -45,8 +45,8 @@ theorem uniformEquilibriumPayoff_weighted_eq_two
 
 /-- Paper-level coverage record. -/
 def record : Literature.PaperRecord where
-  paperId := "sorin_1986"
-  bibliographyLabel := "Sorin 1986"
+  paperId := "sorin_1986_asymptotic_properties"
+  bibliographyLabel := "Sorin 1986 — Asymptotic properties"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Sorin 1986"
   role := .counterexamples
   paperEvidence := .primaryInspected
@@ -60,7 +60,7 @@ def record : Literature.PaperRecord where
         paperLocator := "Theorem 2"
         summary := "The uniform equilibrium payoff set is the bounded Pareto segment F."
         status := .openInLean
-          "Literature.Sorin1986.UniformEquilibriumPayoffSetClaim" },
+          "Literature.Sorin1986AsymptoticProperties.UniformEquilibriumPayoffSetClaim" },
       { claimId := "approximation_sets_disjoint_from_uniform_set"
         paperLocator := "separation statement on page 107"
         summary := "The constant approximation payoff set is disjoint from F."
@@ -69,18 +69,18 @@ def record : Literature.PaperRecord where
         paperLocator := "separation statement on page 107"
         summary := "The discount-constant endpoint (1/2, 2/3) is not a uniform payoff."
         status := .provedInLean
-          "Literature.Sorin1986.discountedEndpoint_not_isUniformEquilibriumPayoff"
+          "Literature.Sorin1986AsymptoticProperties.discountedEndpoint_not_isUniformEquilibriumPayoff"
           "GameTheory.StochasticGame.SorinAbsorbingGame.\
 discountedEndpoint_not_isUniformEquilibriumPayoff" },
       { claimId := "uniform_payoffs_satisfy_affine_line"
         paperLocator := "Theorem 2"
         summary := "Every uniform payoff lies on 2 w1 + w2 = 2."
         status := .provedInLean
-          "Literature.Sorin1986.uniformEquilibriumPayoff_weighted_eq_two"
+          "Literature.Sorin1986AsymptoticProperties.uniformEquilibriumPayoff_weighted_eq_two"
           "GameTheory.StochasticGame.SorinAbsorbingGame.\
 uniformEquilibriumPayoff_weighted_eq_two" } ]
 
-end Literature.Sorin1986
+end Literature.Sorin1986AsymptoticProperties
 
 /-!
 # Research reduction for Sorin's uniform-payoff segment
@@ -91,13 +91,13 @@ paper module and proves the inclusion supplied by the two security
 certificates.  The converse inclusion is not claimed here.
 -/
 
-namespace Literature.Sorin1986
+namespace Literature.Sorin1986AsymptoticProperties
 
 open GameTheory StochasticGame
-open Literature.Sorin1986
+open Literature.Sorin1986AsymptoticProperties
 
 theorem uniformPayoff_mem_sorinSegment_of_paper_claim
-    (hclaim : Literature.Sorin1986.UniformEquilibriumPayoffSetClaim)
+    (hclaim : Literature.Sorin1986AsymptoticProperties.UniformEquilibriumPayoffSetClaim)
     (payoff : Payoff SorinAbsorbingGame.Player)
     (hpayoff : SorinAbsorbingGame.game.IsUniformEquilibriumPayoff
       SorinAbsorbingGame.State.live payoff) :
@@ -129,7 +129,7 @@ theorem uniformPayoff_mem_sorinSegment
     · simp [SorinAbsorbingGame.pair]
       nlinarith [hline]
 
-end Literature.Sorin1986
+end Literature.Sorin1986AsymptoticProperties
 
 /-!
 # Weighted Blackwell--Ferguson primitives for Sorin's absorbing game
@@ -141,10 +141,10 @@ weighted proof; no production umbrella imports this module.
 
 noncomputable section
 
-namespace Literature.Sorin1986.WeightedBlackwellFerguson
+namespace Literature.Sorin1986AsymptoticProperties.WeightedBlackwellFerguson
 
 open GameTheory StochasticGame
-open Literature.Sorin1986
+open Literature.Sorin1986AsymptoticProperties
 
 namespace SorinAbsorbingGame
 
@@ -306,4 +306,4 @@ theorem energy_expect_coin (a R : ℝ) (q : ℝ) :
 
 end SorinAbsorbingGame
 
-end Literature.Sorin1986.WeightedBlackwellFerguson
+end Literature.Sorin1986AsymptoticProperties.WeightedBlackwellFerguson
