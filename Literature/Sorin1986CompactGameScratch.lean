@@ -19,7 +19,7 @@ theorem historyMass_snoc {G : FiniteStageGame}
   unfold historyMass actionMass actionWeight
   apply Finset.prod_congr rfl
   intro who _
-  exact (profile who).2.2 h a
+  exact (profile who).2.2.2 h a
 
 /-- The joint-action masses leaving a public history sum to its mass. -/
 theorem sum_actionMass {G : FiniteStageGame}
@@ -38,7 +38,7 @@ theorem sum_actionMass {G : FiniteStageGame}
       unfold historyMass
       apply Finset.prod_congr rfl
       intro who _
-      exact (profile who).2.1 h
+      exact (profile who).2.2.1 h
 
 /-- The empty history has mass one. -/
 @[simp] theorem historyMass_empty {G : FiniteStageGame}
@@ -62,6 +62,10 @@ theorem sum_historyMass {G : FiniteStageGame}
     ∀ t : ℕ, ∑ h : PublicHistory G t,
       historyMass profile ⟨t, h⟩ = 1
   | 0 => by
+      have hhist : ∀ h : PublicHistory G 0,
+          h = (fun k : Fin 0 => k.elim0) :=
+        fun h => Subsingleton.elim _ _
+      simp_rw [hhist]
       simpa [emptyHistory] using historyMass_empty profile
   | t + 1 => by
       let e := historySnocEquiv G t
