@@ -1,0 +1,33 @@
+name: Compile Sorin1986 literature
+
+on:
+  pull_request:
+    paths:
+      - Literature/Sorin1986.lean
+      - .github/workflows/compile-sorin1986.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compile-sorin1986-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - run: lake env lean Literature/Sorin1986.lean
