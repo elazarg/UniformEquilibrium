@@ -1,0 +1,180 @@
+
+/-- Every finitely repeated Prisoner's Dilemma has only `(1,1)` as a Nash
+payoff. -/
+theorem prisonersDilemma_En_eq {n : ℕ} (hn : 0 < n) :
+    prisonersDilemma.finiteEquilibriumPayoffsAt n = {pair 1 1} :=
+  proposition13 prisonersDilemma prisonersDilemma_E1_eq hn
+
+/-! **Proposition 14.**  For current-stage weight `λ > 3/4`, every Nash payoff
+is `(1,1)`.  Sorin's proof integrates a continuation inequality and takes the
+supremum of expected total surplus.  The exact argument requires conditional
+continuation payoffs at all positive-probability histories and a measurable
+best-response selector; those interfaces are absent from the finite-support
+monitoring layer. -/
+theorem proposition14
+    {λ : ℝ} (hλ : 3 / 4 < λ ∧ λ ≤ 1) :
+    prisonersDilemma.discountedEquilibriumPayoffsAt λ = {pair 1 1} := by
+  sorry
+
+/-! **Proposition 15, first inclusion.**  Every point of `A` is achieved by an
+explicit equilibrium at `λ=3/4`:
+
+* `(4,4)` and `(1,1)` use constant play;
+* `(4,1)` alternates `(5,0),(0,5),...`, and `(1,4)` is symmetric;
+* a point `(4t+1-t,4s+1-s)` in the square mixes only in period one and selects
+  one of those four continuations from the observed first-period outcome;
+* `(4+3a/4,1)` plays `(5,0)` once and then uses `(1+3a,4)` in the square, with
+  the vertical arm obtained symmetrically.
+
+Checking these profiles against arbitrary public deviations is a finite-state
+one-shot-deviation calculation.  The library theorem is available, but a
+small finite-state strategy compiler from this description is not. -/
+theorem proposition15_forward :
+    prisonersDilemmaCriticalSet ⊆
+      prisonersDilemma.discountedEquilibriumPayoffsAt (3 / 4) := by
+  sorry
+
+/-! **Proposition 15, reverse inclusion.**  The paper assumes an equilibrium
+payoff `(a,b)` with `a>4`, `b>1`, defines optimal continuation payoffs after the
+four first-stage outcomes, and produces another such payoff for which
+`(a-4)(b-1)` grows by a factor exceeding four.  Boundedness gives the
+contradiction.  Formalization needs attained continuation best responses and
+the continuation-equilibrium property at every positive-probability outcome. -/
+theorem proposition15_reverse :
+    prisonersDilemma.discountedEquilibriumPayoffsAt (3 / 4) ⊆
+      prisonersDilemmaCriticalSet := by
+  sorry
+
+/-- **Proposition 15.** `E_{3/4}=A`. -/
+theorem proposition15 :
+    prisonersDilemma.discountedEquilibriumPayoffsAt (3 / 4) =
+      prisonersDilemmaCriticalSet :=
+  Set.Subset.antisymm proposition15_reverse proposition15_forward
+
+/-- The critical payoff set is connected and has affine dimension two, as
+stated in the introduction.  This is elementary geometry of the square and
+its two attached segments; the proof is deferred because no later result uses
+it and a direct subtype homotopy would be substantially longer than the paper. -/
+theorem prisonersDilemmaCriticalSet_connected_dimension_two :
+    IsConnected prisonersDilemmaCriticalSet ∧
+      affineDimension prisonersDilemmaCriticalSet = 2 := by
+  sorry
+
+/-- The critical equilibrium set differs from the individually rational
+feasible set. -/
+theorem prisonersDilemmaCriticalSet_ne_Delta :
+    prisonersDilemmaCriticalSet ≠
+      prisonersDilemma.individuallyRationalFeasibleSet := by
+  sorry
+
+/-- The finite equilibrium sets do not converge to `Δ`, as announced on page
+148: they are constantly `{(1,1)}`, while `Δ` is larger. -/
+theorem finiteEquilibriumPayoffs_do_not_converge_to_Delta :
+    ¬ HausdorffConvergesAtTop
+      prisonersDilemma.finiteEquilibriumPayoffsAt
+      prisonersDilemma.individuallyRationalFeasibleSet := by
+  sorry
+
+
+/-! ## Concluding remarks -/
+
+/-- The symmetric four-parameter table in concluding Remark 1. -/
+def symmetricParametricGame (α β x : ℝ) : StageGame Bool :=
+  twoByTwoGame
+    (pair (β - x) (β - x)) (pair (α - x) β)
+    (pair β (α - x)) (pair α α)
+
+/-- Critical current-stage weight in concluding Remark 1. -/
+def symmetricCriticalWeight (α β x : ℝ) : ℝ :=
+  (β - α - x) / (β - α)
+
+/-! **Concluding Remark 1.**  Under `β-x>α` and `x>0`, the analogue of
+Proposition 14 has critical weight `(β-α-x)/(β-α)`.  The proof is the same
+surplus recursion as Proposition 14, so it has the same missing conditional
+continuation interface. -/
+theorem concludingRemark1
+    {α β x λ : ℝ} (hgap : α < β - x) (hx : 0 < x)
+    (hλ : symmetricCriticalWeight α β x < λ ∧ λ ≤ 1) :
+    (symmetricParametricGame α β x).discountedEquilibriumPayoffsAt λ =
+      {pair α α} := by
+  sorry
+
+/-! **Concluding Remark 2.**  The paper says that the analogue of Proposition
+15 can also be proved, at least when `β > max (1+α) (1+2x)`, but it does not
+print the resulting payoff set.  No stronger formal statement is invented
+here: the condition and scope are recorded at their paper location. -/
+def ConcludingRemark2Condition (α β x : ℝ) : Prop :=
+  max (1 + α) (1 + 2 * x) < β
+
+/-- Weak Pareto dominance on a feasible set. -/
+def ParetoDominates {ι : Type*} (better worse : ι → ℝ) : Prop :=
+  (∀ who, worse who ≤ better who) ∧ ∃ who, worse who < better who
+
+/-- Pareto boundary of a payoff set. -/
+def ParetoBoundary {ι : Type*} (set : Set (ι → ℝ)) : Set (ι → ℝ) :=
+  {payoff | payoff ∈ set ∧
+    ¬ ∃ better ∈ set, ParetoDominates better payoff}
+
+/-! **Concluding Remark 3.**  For every `1/2<λ<3/4`, the equilibrium set has
+countably infinitely many points on the Pareto boundary.  Sorin gives no
+construction or proof in the paper, so this precise reading of “denumerably
+many” is retained as an explained `sorry`. -/
+theorem concludingRemark3
+    {λ : ℝ} (hλ : 1 / 2 < λ ∧ λ < 3 / 4) :
+    ∃ points : Set (Bool → ℝ),
+      points ⊆
+        prisonersDilemma.discountedEquilibriumPayoffsAt λ ∩
+          ParetoBoundary prisonersDilemma.correlatedFeasibleSet ∧
+      points.Countable ∧ points.Infinite := by
+  sorry
+
+/-- The asymmetric table in concluding Remark 4. -/
+def asymmetricParametricGame (α β x y : ℝ) : StageGame Bool :=
+  twoByTwoGame
+    (pair (β - y) (β - y)) (pair (α - x) β)
+    (pair β (α - x)) (pair α α)
+
+/-- Critical current-stage weight in concluding Remark 4. -/
+def asymmetricCriticalWeight (α β x y : ℝ) : ℝ :=
+  max (β - α - x) (β - α - y) / (β - α)
+
+/-- Discounted payoff of the deterministic alternating sequence
+`first,second,first,second,...`. -/
+def alternatingPayoff (λ : ℝ) (first second : Bool → ℝ) : Bool → ℝ :=
+  (2 - λ)⁻¹ • first + ((1 - λ) / (2 - λ)) • second
+
+/-! **Concluding Remark 4, threshold.**  Decreasing `x` or `y` preserves any
+putative equilibrium above the threshold, reducing to Remark 1 and producing
+a contradiction.  Formalization again needs the conditional equilibrium
+comparison used in Proposition 14. -/
+theorem concludingRemark4_above
+    {α β x y λ : ℝ}
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y)
+    (hλ : asymmetricCriticalWeight α β x y < λ ∧ λ ≤ 1) :
+    (asymmetricParametricGame α β x y).discountedEquilibriumPayoffsAt λ =
+      {pair α α} := by
+  sorry
+
+/-! If `y>x`, the alternating off-diagonal sequence is an equilibrium at the
+critical weight.  The paper states the strategy but not its payoff formula;
+`alternatingPayoff` evaluates that sequence. -/
+theorem concludingRemark4_alternating
+    {α β x y : ℝ}
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (hxy : x < y) :
+    alternatingPayoff (asymmetricCriticalWeight α β x y)
+        (pair β (α - x)) (pair (α - x) β) ∈
+      (asymmetricParametricGame α β x y).discountedEquilibriumPayoffsAt
+        (asymmetricCriticalWeight α β x y) := by
+  sorry
+
+/-! If `x>y`, stationary play at the upper-left outcome is an equilibrium at
+the critical weight. -/
+theorem concludingRemark4_stationary
+    {α β x y : ℝ}
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (hyx : y < x) :
+    pair (β - y) (β - y) ∈
+      (asymmetricParametricGame α β x y).discountedEquilibriumPayoffsAt
+        (asymmetricCriticalWeight α β x y) := by
+  sorry
+
+/-! The paper closes by noting that an explicit computation of the entire
