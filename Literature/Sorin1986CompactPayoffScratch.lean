@@ -80,7 +80,12 @@ private theorem defaultRawRealizationPlan_valid
   constructor
   · intro h
     by_cases hh : FollowsDefault who h
-    · simp [defaultRawRealizationPlan, hh]
+    · simp only [defaultRawRealizationPlan, hh, true_and]
+      rw [Finset.sum_eq_single (defaultAction G who)]
+      · simp
+      · intro b _ hb
+        simp [hb]
+      · simp
     · simp [defaultRawRealizationPlan, hh]
   · intro h a
     simp [defaultRawRealizationPlan, followsDefault_snoc_iff]
