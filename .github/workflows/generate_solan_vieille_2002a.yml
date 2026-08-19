@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - agent/promote-solan-vieille-2002a
-    paths:
-      - .tmp/SolanAndVieille2002a.version
   workflow_dispatch:
 
 permissions:
