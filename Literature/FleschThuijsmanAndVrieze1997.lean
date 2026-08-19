@@ -326,8 +326,7 @@ def PaperPureStationaryBestReplyClaim : Prop :=
     ∃ choice : Option ℕ,
       (choice = none ∨ choice = some 0) ∧
         ∀ deviation :
-          (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).
-            BehaviorStrategy who,
+          (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorStrategy who,
           quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
               (Function.update
                 (quittingStationaryProfile
