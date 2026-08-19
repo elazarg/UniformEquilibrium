@@ -1,4 +1,4 @@
-import Literature.Sorin1986
+import Sorin1986
 
 noncomputable section
 
