@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - Literature/Sorin1986.lean
+      - Literature/Sorin1986CompactScratch.lean
       - .github/workflows/compile_sorin1986.yml
   workflow_dispatch:
 
@@ -39,4 +40,6 @@ jobs:
             UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
 
       - name: Compile Sorin1986
-        run: lake env lean Literature/Sorin1986.lean
+        run: |
+          lake env lean Literature/Sorin1986.lean
+          lake env lean Literature/Sorin1986CompactScratch.lean
