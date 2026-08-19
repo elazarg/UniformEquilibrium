@@ -29,29 +29,17 @@ theorem actionMass_update_mix {G : FiniteStageGame}
   rw [Fintype.prod_eq_mul_prod_subtype_ne _ who]
   rw [Fintype.prod_eq_mul_prod_subtype_ne _ who]
   simp
-  have hotherMix :
-      (∏ j : {j // j ≠ who},
-        ↑((Function.update profile who (RealizationPlan.mix t x y) j.1).1.2 h
-          (a j.1))) =
-      ∏ j : {j // j ≠ who}, ↑((profile j.1).1.2 h (a j.1)) := by
-    apply Fintype.prod_congr
-    intro j
-    rw [Function.update_of_ne j.2]
-  have hotherX :
-      (∏ j : {j // j ≠ who},
-        ↑((Function.update profile who x j.1).1.2 h (a j.1))) =
-      ∏ j : {j // j ≠ who}, ↑((profile j.1).1.2 h (a j.1)) := by
-    apply Fintype.prod_congr
-    intro j
-    rw [Function.update_of_ne j.2]
-  have hotherY :
-      (∏ j : {j // j ≠ who},
-        ↑((Function.update profile who y j.1).1.2 h (a j.1))) =
-      ∏ j : {j // j ≠ who}, ↑((profile j.1).1.2 h (a j.1)) := by
-    apply Fintype.prod_congr
-    intro j
-    rw [Function.update_of_ne j.2]
-  rw [hotherMix, hotherX, hotherY]
+  have updateMixOff (j : {j // j ≠ who}) :
+      Function.update profile who (RealizationPlan.mix t x y) j.1 =
+        profile j.1 :=
+    Function.update_of_ne j.2
+  have updateXOff (j : {j // j ≠ who}) :
+      Function.update profile who x j.1 = profile j.1 :=
+    Function.update_of_ne j.2
+  have updateYOff (j : {j // j ≠ who}) :
+      Function.update profile who y j.1 = profile j.1 :=
+    Function.update_of_ne j.2
+  simp_rw [updateMixOff, updateXOff, updateYOff]
   simp [RealizationPlan.mix, RawRealizationPlan.mix, intervalMix,
     clamp01_eq_of_bounds ht0 ht1]
   ring
