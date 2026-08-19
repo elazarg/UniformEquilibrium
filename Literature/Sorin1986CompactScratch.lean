@@ -31,11 +31,8 @@ def RawRealizationPlan.Valid {G : FiniteStageGame} {who : G.Player}
       ∀ h a, (plan.1 (snocHistory h a) : ℝ) =
         (plan.2 h (a who) : ℝ)
 
-def RealizationPlan (G : FiniteStageGame) (who : G.Player) :=
+abbrev RealizationPlan (G : FiniteStageGame) (who : G.Player) :=
   {plan : RawRealizationPlan G who // plan.Valid}
-
-instance {G : FiniteStageGame} {who : G.Player} :
-    TopologicalSpace (RealizationPlan G who) := inferInstance
 
 private theorem validSet_isClosed (G : FiniteStageGame) (who : G.Player) :
     IsClosed {plan : RawRealizationPlan G who | plan.Valid} := by
@@ -51,24 +48,25 @@ private theorem validSet_isClosed (G : FiniteStageGame) (who : G.Player) :
     · fun_prop
     · fun_prop
   have hflow : IsClosed flow := by
-    apply isClosed_iInter
-    intro h
-    apply isClosed_eq
-    · fun_prop
-    · fun_prop
+    rw [show flow = ⋂ h, {plan | ∑ a, (plan.2 h a : ℝ) =
+        (plan.1 h : ℝ)} by
+      ext plan
+      simp [flow]]
+    exact isClosed_iInter fun h => isClosed_eq (by fun_prop) (by fun_prop)
   have hsuccessor : IsClosed successor := by
-    apply isClosed_iInter
-    intro h
-    apply isClosed_iInter
-    intro a
-    apply isClosed_eq <;> fun_prop
+    rw [show successor = ⋂ h, ⋂ a,
+        {plan | (plan.1 (snocHistory h a) : ℝ) =
+          (plan.2 h (a who) : ℝ)} by
+      ext plan
+      simp [successor]]
+    exact isClosed_iInter fun h => isClosed_iInter fun a =>
+      isClosed_eq (by fun_prop) (by fun_prop)
   have hset : {plan : RawRealizationPlan G who | plan.Valid} =
-      root ∩ flow ∩ successor := by
+      root ∩ (flow ∩ successor) := by
     ext plan
-    simp only [Set.mem_setOf_eq, Set.mem_inter_iff]
-    rfl
+    simp [RawRealizationPlan.Valid, root, flow, successor]
   rw [hset]
-  exact (hroot.inter hflow).inter hsuccessor
+  exact hroot.inter (hflow.inter hsuccessor)
 
 instance {G : FiniteStageGame} {who : G.Player} :
     CompactSpace (RealizationPlan G who) :=
@@ -82,15 +80,21 @@ def clamp01 (t : ℝ) : ℝ := max 0 (min 1 t)
 theorem clamp01_nonneg (t : ℝ) : 0 ≤ clamp01 t := by simp [clamp01]
 theorem clamp01_le_one (t : ℝ) : clamp01 t ≤ 1 := by simp [clamp01]
 
-theorem continuous_clamp01 : Continuous clamp01 := by
-  fun_prop
+@[fun_prop] theorem continuous_clamp01 : Continuous clamp01 := by
+  simpa [clamp01] using
+    (continuous_const.max (continuous_const.min continuous_id) :
+      Continuous fun t : ℝ => max 0 (min 1 t))
 
 def intervalMix (t : ℝ) (x y : UnitInterval) : UnitInterval :=
   ⟨clamp01 t * x + (1 - clamp01 t) * y, by
+    have hc0 : 0 ≤ clamp01 t := clamp01_nonneg t
+    have hc1 : clamp01 t ≤ 1 := clamp01_le_one t
     constructor
-    · positivity
-    · nlinarith [x.2.1, x.2.2, y.2.1, y.2.2,
-        clamp01_nonneg t, clamp01_le_one t]⟩
+    · exact add_nonneg (mul_nonneg hc0 x.2.1)
+        (mul_nonneg (sub_nonneg.mpr hc1) y.2.1)
+    · have hx := mul_le_mul_of_nonneg_left x.2.2 hc0
+      have hy := mul_le_mul_of_nonneg_left y.2.2 (sub_nonneg.mpr hc1)
+      nlinarith⟩
 
 @[simp] theorem intervalMix_zero (x y : UnitInterval) :
     intervalMix 0 x y = y := by
@@ -102,7 +106,7 @@ def intervalMix (t : ℝ) (x y : UnitInterval) : UnitInterval :=
   ext
   simp [intervalMix]
 
-theorem continuous_intervalMix :
+@[fun_prop] theorem continuous_intervalMix :
     Continuous fun p : ℝ × (UnitInterval × UnitInterval) =>
       intervalMix p.1 p.2.1 p.2.2 := by
   apply Continuous.subtype_mk
@@ -153,7 +157,7 @@ def RealizationPlan.mix {G : FiniteStageGame} {who : G.Player}
   · funext a
     simp [RealizationPlan.mix, RawRealizationPlan.mix]
 
-theorem RealizationPlan.mix_continuous
+@[fun_prop] theorem RealizationPlan.mix_continuous
     (G : FiniteStageGame) (who : G.Player) :
     Continuous fun p : ℝ × (RealizationPlan G who × RealizationPlan G who) =>
       RealizationPlan.mix p.1 p.2.1 p.2.2 := by
