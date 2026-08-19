@@ -2,78 +2,79 @@ import Mathlib
 
 noncomputable section
 
-open Filter
 open scoped BigOperators
+open Filter Set
 
 /-!
-# Solan and Vieille 2002b — Correlated Equilibrium in Stochastic Games
+# E. Solan and N. Vieille, “Correlated Equilibrium in Stochastic Games” (2002)
 
-Eilon Solan and Nicolas Vieille, *Games and Economic Behavior* 38 (2002),
-362–399, DOI `10.1006/game.2001.0887`.
+Bibliography label: Solan & Vieille 2002b.
+Published in *Games and Economic Behavior* 38(2), 362--399.
+DOI: `10.1006/game.2001.0887`.
+Public copy: `https://www.math.tau.ac.il/~eilons/correl8.pdf`.
 
-This is the paper identified as **Solan & Vieille 2002b** in the repository
-bibliography.  Solan & Vieille 2002a is *Quitting Games—An Example*.
+This is a partial source audit and therefore remains in `Literature/future/`.
+It records the semantic core needed before the later proof statements can be
+audited safely.  In particular:
 
-This file remains in `Literature/future/`.  It records the semantic core that
-must be fixed before the paper's later theorem statements are promoted:
+* action sets are finite and nonempty;
+* an exit stores only the coalition action, not arbitrary outsider actions;
+* equation (5) is a probability law on states outside the communicating set;
+* stationary evaluation is harmonic, with no added stage-payoff term;
+* the cleaning operation and equations (19)--(21) are explicit;
+* asymptotic exit laws first take the eventual exit law for each profile and
+  only then take the profile limit; and
+* the constrained fixed-point assertion is restricted to sufficiently small
+  parameters and to the positive-recursive absorbing reduction of Section 5.
 
-* finite nonempty action sets;
-* autonomous and stationary private-signal devices;
-* exits represented by a coalition action, not by an arbitrary completion;
-* the conditioned exit law of equation (5), supported on `S \ C`;
-* harmonic stationary evaluation `q γ = γ`, without an added stage payoff;
-* the two-stage limit defining the asymptotic exit law;
-* the exact cleaning operation and drift equations (19)–(21);
-* the outsider-support condition in graph use; and
-* the “sufficiently small ε” quantifier and positive-recursive absorbing
-  reduction used by the constrained fixed-point construction.
-
-The substantive existence proofs are deliberately not restated as Lean
-`theorem`s here.  In particular, no arbitrary `Prop` field stands in for the
-cleaning construction or for equations (19)–(21).  The printed Proposition
-3.8 is also not promoted: its proof invokes positivity in the unilateral-exit
-case although its printed statement is phrased for a general stochastic game.
+The paper's equilibrium conclusions are not restated as Lean propositions
+until the extended-game probability and deviation semantics are complete.
+This avoids hiding missing definitions behind arbitrary `Prop` parameters.
 -/
 
 namespace Literature.SolanAndVieille2002b
 
-/-- A finitely supported probability law.  No global finiteness assumption on
-`α` is hidden in this carrier. -/
-structure FiniteLaw (α : Type*) where
-  support : Finset α
-  mass : α → ℝ
-  nonnegative : ∀ a, 0 ≤ mass a
-  zero_off_support : ∀ {a}, a ∉ support → mass a = 0
-  total : ∑ a in support, mass a = 1
+/-- A finitely supported probability distribution.  The list representation
+avoids imposing a global decidable-equality instance on every semantic type. -/
+structure FiniteDistribution (α : Type*) where
+  support : List α
+  nodup : support.Nodup
+  prob : α → ℝ
+  nonnegative : ∀ a, 0 ≤ prob a
+  zero_off_support : ∀ a, a ∉ support → prob a = 0
+  total : (support.map prob).sum = 1
 
-namespace FiniteLaw
+namespace FiniteDistribution
 
-variable {α : Type*}
+variable {α β : Type*}
 
-/-- Positive mass, the paper's notion of support. -/
-def InSupport (law : FiniteLaw α) (a : α) : Prop :=
-  0 < law.mass a
+/-- Expectation of a real-valued function. -/
+def expectation (d : FiniteDistribution α) (f : α → ℝ) : ℝ :=
+  (d.support.map fun a => d.prob a * f a).sum
 
-end FiniteLaw
+/-- The probability assigned to a predicate. -/
+def eventProbability (d : FiniteDistribution α) (event : α → Prop)
+    [DecidablePred event] : ℝ :=
+  (d.support.map fun a => if event a then d.prob a else 0).sum
 
-/-- The finite stochastic-game data from Section 2.  Nonemptiness of every
-action set is explicit; otherwise Theorem 2.3 is false even as a statement of
-an ordinary strategic game. -/
-structure PaperGame (ι : Type*) [Fintype ι] where
-  State : Type*
-  Action : ι → Type*
+end FiniteDistribution
+
+/-- The finite stochastic-game data of Section 2.  Nonempty actions are part
+of the carrier, so Theorem 2.3 is not silently extended to empty menus. -/
+structure PaperGame (ι : Type*) [Fintype ι] [DecidableEq ι] where
+  State : Type
   stateFintype : Fintype State
   stateDecidableEq : DecidableEq State
+  Action : ι → Type
   actionFintype : ∀ i, Fintype (Action i)
   actionDecidableEq : ∀ i, DecidableEq (Action i)
   actionNonempty : ∀ i, Nonempty (Action i)
-  transition : State → (∀ i, Action i) → FiniteLaw State
+  transition : State → (∀ i, Action i) → FiniteDistribution State
   stagePayoff : State → (∀ i, Action i) → ι → ℝ
   payoffBound : ∀ state action who, |stagePayoff state action who| ≤ 1
 
 attribute [instance] PaperGame.stateFintype PaperGame.stateDecidableEq
-attribute [instance] PaperGame.actionFintype PaperGame.actionDecidableEq
-attribute [instance] PaperGame.actionNonempty
+  PaperGame.actionFintype PaperGame.actionDecidableEq PaperGame.actionNonempty
 
 namespace PaperGame
 
@@ -81,669 +82,749 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable (G : PaperGame ι)
 
 abbrev JointAction := ∀ i, G.Action i
-abbrev MixedAction := ∀ i, FiniteLaw (G.Action i)
-abbrev StationaryProfile := G.State → G.MixedAction
-abbrev StatePayoff := G.State → ι → ℝ
+abbrev ProductMixedAction := ∀ i, FiniteDistribution (G.Action i)
+abbrev StationaryProfile := G.State → G.ProductMixedAction
 
-/-- Product probability of a pure action profile under a mixed action. -/
-def jointMass (x : G.MixedAction) (action : G.JointAction) : ℝ :=
-  ∏ i, (x i).mass (action i)
-
-/-- The mixed transition kernel. -/
-def mixedTransitionProbability (state : G.State) (x : G.MixedAction)
-    (next : G.State) : ℝ :=
-  ∑ action : G.JointAction,
-    G.jointMass x action * (G.transition state action).mass next
-
-/-- Expected one-stage payoff under a mixed action. -/
-def mixedStagePayoff (state : G.State) (x : G.MixedAction) (who : ι) : ℝ :=
-  ∑ action : G.JointAction,
-    G.jointMass x action * G.stagePayoff state action who
-
-/-- A state is absorbing exactly as in Section 2. -/
-def IsAbsorbingState (state : G.State) : Prop :=
-  ∀ action : G.JointAction, (G.transition state action).mass state = 1
-
-/-- Recursive games have zero stage payoff at every nonabsorbing state. -/
-def IsRecursive : Prop :=
-  ∀ state, ¬ G.IsAbsorbingState state →
-    ∀ action : G.JointAction, ∀ who, G.stagePayoff state action who = 0
-
-/-- Positivity is required at every absorbing state, action, and player. -/
-def IsPositive : Prop :=
-  ∀ state, G.IsAbsorbingState state →
-    ∀ action : G.JointAction, ∀ who, 0 < G.stagePayoff state action who
-
-/-- The class used in Section 5. -/
-def IsPositiveRecursive : Prop :=
-  G.IsPositive ∧ G.IsRecursive
-
-/-- Finite-horizon probability of having reached `target`. -/
-def hitWithin (kernel : G.State → G.State → ℝ) (target : Finset G.State) :
-    ℕ → G.State → ℝ
-  | 0, state => if state ∈ target then 1 else 0
-  | horizon + 1, state =>
-      if state ∈ target then 1
-      else ∑ next, kernel state next * G.hitWithin kernel target horizon next
-
-/-- Almost-sure eventual hitting, expressed as the limit of finite-horizon
-hitting probabilities. -/
-def HitsEventually (kernel : G.State → G.State → ℝ)
-    (target : Finset G.State) : Prop :=
-  ∀ state,
-    Tendsto (fun horizon => G.hitWithin kernel target horizon state)
-      atTop (nhds 1)
-
-/-- The finite set of absorbing states. -/
-noncomputable def absorbingStates : Finset G.State := by
+/-- The product probability of a pure joint action. -/
+def productProbability (x : G.ProductMixedAction) (action : G.JointAction) : ℝ := by
   classical
-  exact Finset.univ.filter G.IsAbsorbingState
+  exact ∏ i, (x i).prob (action i)
 
-/-- A stationary profile is fully mixed. -/
-def IsFullyMixed (x : G.StationaryProfile) : Prop :=
-  ∀ state who action, 0 < (x state who).mass action
-
-/-- A stationary profile reaches the absorbing states almost surely. -/
-def IsAbsorbingProfile (x : G.StationaryProfile) : Prop :=
-  G.HitsEventually
-    (fun state next => G.mixedTransitionProbability state (x state) next)
-    G.absorbingStates
-
-/-- Section 5 first reduces to games in which every fully mixed stationary
-profile is absorbing. -/
-def FullyMixedProfilesAbsorb : Prop :=
-  ∀ x : G.StationaryProfile, G.IsFullyMixed x → G.IsAbsorbingProfile x
-
-/-- Harmonicity of a stationary continuation payoff.  This is equation (32):
-`q_{s,x} γ = γ_s`.  There is no stage-payoff summand. -/
-def IsHarmonic (x : G.StationaryProfile) (value : G.StatePayoff) : Prop :=
-  ∀ state who,
-    (∑ next,
-      G.mixedTransitionProbability state (x state) next * value next who) =
-      value state who
-
-/-- The continuation-value inequality against a pure unilateral action. -/
-noncomputable def unilateralTransitionProbability
-    (x : G.StationaryProfile) (state : G.State) (who : ι)
-    (chosen : G.Action who) (next : G.State) : ℝ := by
+/-- Mixed transition probability under independent player lotteries. -/
+def mixedTransitionProbability (state : G.State) (x : G.ProductMixedAction)
+    (next : G.State) : ℝ := by
   classical
-  exact
-    ∑ action : G.JointAction,
-      (if action who = chosen then
-        (∏ other in Finset.univ.erase who,
-          (x state other).mass (action other)) *
-          (G.transition state action).mass next
-       else 0)
+  exact ∑ action : G.JointAction,
+    G.productProbability x action * (G.transition state action).prob next
 
-/-- Condition 2(b) of Proposition 3.8. -/
-def NoProfitablePureContinuationDeviation
-    (x : G.StationaryProfile) (value : G.StatePayoff) : Prop :=
-  ∀ state who (chosen : G.Action who),
-    (∑ next,
-      G.unilateralTransitionProbability x state who chosen next *
-        value next who) ≤ value state who
+/-- Mixed transition mass of a finite state set. -/
+def mixedTransitionMass (state : G.State) (x : G.ProductMixedAction)
+    (states : Finset G.State) : ℝ := by
+  classical
+  exact ∑ next ∈ states, G.mixedTransitionProbability state x next
 
-end PaperGame
+/-- Mixed one-stage payoff under independent player lotteries. -/
+def mixedStagePayoff (state : G.State) (x : G.ProductMixedAction)
+    (who : ι) : ℝ := by
+  classical
+  exact ∑ action : G.JointAction,
+    G.productProbability x action * G.stagePayoff state action who
 
-/-! ## Definition 2.1: private autonomous and stationary devices -/
-
-/-- An autonomous device chooses the stage-`n` joint signal from the history
-of earlier joint signals only.  Stages are zero-indexed here. -/
-structure AutonomousDevice {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (G : PaperGame ι) where
-  Signal : ℕ → ι → Type*
+/-- An autonomous device chooses a fresh private signal vector from the
+previous private signal vectors only.  It does not observe states or actions. -/
+structure AutonomousDevice (G : PaperGame ι) where
+  Signal : ℕ → ι → Type
   signalFintype : ∀ n i, Fintype (Signal n i)
   signalDecidableEq : ∀ n i, DecidableEq (Signal n i)
-  law : ∀ n,
-    (∀ previous : Fin n, ∀ i, Signal previous.1 i) →
-      FiniteLaw (∀ i, Signal n i)
+  law : (n : ℕ) → ((k : Fin n) → ∀ i, Signal k i) →
+    FiniteDistribution (∀ i, Signal n i)
 
-attribute [instance] AutonomousDevice.signalFintype
-attribute [instance] AutonomousDevice.signalDecidableEq
-
-/-- A stationary device uses one fixed finite signal space and one fixed law
-at every date. -/
-structure StationaryDevice {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (G : PaperGame ι) where
-  Signal : ι → Type*
+/-- A stationary device draws the same private signal law independently at
+every stage. -/
+structure StationaryDevice (G : PaperGame ι) where
+  Signal : ι → Type
   signalFintype : ∀ i, Fintype (Signal i)
   signalDecidableEq : ∀ i, DecidableEq (Signal i)
-  law : FiniteLaw (∀ i, Signal i)
+  law : FiniteDistribution (∀ i, Signal i)
 
-attribute [instance] StationaryDevice.signalFintype
-attribute [instance] StationaryDevice.signalDecidableEq
-
-namespace StationaryDevice
-
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-variable {G : PaperGame ι}
-
-/-- A stationary device is an autonomous device whose law ignores all prior
-signals and is independent of the date. -/
-def toAutonomous (device : StationaryDevice G) : AutonomousDevice G where
+/-- Every stationary device is autonomous with history-independent laws. -/
+def StationaryDevice.toAutonomous (device : G.StationaryDevice) :
+    G.AutonomousDevice where
   Signal := fun _ => device.Signal
   signalFintype := fun _ => device.signalFintype
   signalDecidableEq := fun _ => device.signalDecidableEq
   law := fun _ _ => device.law
 
-end StationaryDevice
+/-- A state is absorbing when every pure action keeps the state fixed. -/
+def IsAbsorbingState (state : G.State) : Prop :=
+  ∀ action, (G.transition state action).prob state = 1
 
-namespace PaperGame
+/-- Recursive games have zero stage payoff at every nonabsorbing state. -/
+def IsRecursive : Prop :=
+  ∀ state, ¬G.IsAbsorbingState state →
+    ∀ action who, G.stagePayoff state action who = 0
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-variable (G : PaperGame ι)
+/-- Positive games have strictly positive stage payoff at absorbing states. -/
+def IsPositive : Prop :=
+  ∀ state, G.IsAbsorbingState state →
+    ∀ action who, 0 < G.stagePayoff state action who
 
-/-- A base-game history with `n` completed actions and `n+1` observed states. -/
-structure History (n : ℕ) where
-  state : Fin (n + 1) → G.State
-  action : Fin n → G.JointAction
+/-- The class used in Theorem 2.4. -/
+def IsPositiveRecursive : Prop := G.IsPositive ∧ G.IsRecursive
 
-/-- A correlated profile in the base game, Section 3.1. -/
-abbrev CorrelatedProfile :=
-  ∀ n, G.History n → FiniteLaw G.JointAction
+/-- A stationary profile is fully mixed. -/
+def FullyMixed (x : G.StationaryProfile) : Prop :=
+  ∀ state who action, 0 < (x state who).prob action
 
-end PaperGame
+/-- Positive transition edge of the stationary Markov chain. -/
+def SupportEdge (x : G.StationaryProfile) (source target : G.State) : Prop :=
+  0 < G.mixedTransitionProbability source (x source) target
 
-namespace AutonomousDevice
+/-- Reachability inside a state set by positive transition edges. -/
+def ReachesWithin (x : G.StationaryProfile) (states : Finset G.State)
+    (source target : G.State) : Prop :=
+  Relation.ReflTransGen
+    (fun s t => s ∈ states ∧ t ∈ states ∧ G.SupportEdge x s t)
+    source target
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-variable {G : PaperGame ι}
-variable (device : AutonomousDevice G)
+/-- Stability under a stationary profile. -/
+def StableUnder (x : G.StationaryProfile) (states : Finset G.State) : Prop :=
+  ∀ source ∈ states,
+    G.mixedTransitionMass source (x source) states = 1
 
-/-- The private history observed by `who`: public states and actions, together
-with that player's own signals. -/
-structure PrivateHistory (who : ι) (n : ℕ) extends G.History n where
-  signal : ∀ stage : Fin (n + 1), device.Signal stage.1 who
-
-abbrev Strategy (who : ι) :=
-  ∀ n, device.PrivateHistory who n → FiniteLaw (G.Action who)
-
-abbrev Profile := ∀ who, device.Strategy who
-
-end AutonomousDevice
-
-/-!
-Definition 2.2 quantifies, for every positive error, over a device and one
-behavioral profile that is an approximate equilibrium and has approximately
-the same state-indexed payoff in all sufficiently long Cesàro games and all
-sufficiently patient discounted games.  A complete induced-law evaluator for
-the dependent private-signal histories above has not yet been integrated, so
-the definition and Theorems 2.3–2.4 remain source claims rather than being
-hidden behind arbitrary payoff functions.
--/
-
-/-! ## Section 3.4: communicating sets and exits -/
-
-namespace PaperGame
-
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-variable (G : PaperGame ι)
-
-/-- Support inclusion for perturbations of a stationary profile. -/
-def IsPerturbation (x y : G.StationaryProfile) : Prop :=
-  ∀ state who action,
-    0 < (x state who).mass action → 0 < (y state who).mass action
-
-/-- Stability of a finite set under a stationary profile. -/
-def IsStableUnder (x : G.StationaryProfile) (states : Finset G.State) : Prop :=
-  ∀ state, state ∈ states →
-    ∑ next in states,
-      G.mixedTransitionProbability state (x state) next = 1
-
-/-- The paper's communicating-set definition, stated through almost-sure
-hitting under a perturbation that keeps the set stable. -/
-def CommunicatesUnder (x : G.StationaryProfile)
+/-- A finite closed communicating class of the stationary Markov chain. -/
+def IsErgodicSetUnder (x : G.StationaryProfile)
     (states : Finset G.State) : Prop :=
-  ∀ target, target ∈ states →
-    ∃ y : G.StationaryProfile,
-      G.IsPerturbation x y ∧
-      G.IsStableUnder y states ∧
-      ∀ initial, initial ∈ states →
-        Tendsto
-          (fun horizon =>
-            G.hitWithin
-              (fun state next =>
-                G.mixedTransitionProbability state (y state) next)
-              {target} horizon initial)
-          atTop (nhds 1)
+  states.Nonempty ∧ G.StableUnder x states ∧
+    ∀ source ∈ states, ∀ target ∈ states,
+      G.ReachesWithin x states source target
 
-/-- The paper's coalition action `aᴸ`.  Actions of outsiders are not stored. -/
-abbrev CoalitionAction (coalition : Finset ι) :=
-  ∀ who : ↥coalition, G.Action who.1
+/-- The absorbing reduction used at the start of Section 5.3: under every
+fully mixed profile, each ergodic set is one absorbing state. -/
+def FullyMixedErgodicReduction : Prop :=
+  ∀ x : G.StationaryProfile, G.FullyMixed x →
+    ∀ states : Finset G.State, G.IsErgodicSetUnder x states →
+      ∃ state, states = {state} ∧ G.IsAbsorbingState state
 
-/-- A full action matches the coalition component of an exit. -/
-def MatchesCoalition (action : G.JointAction) (coalition : Finset ι)
-    (coalitionAction : G.CoalitionAction coalition) : Prop :=
-  ∀ who : ↥coalition, action who.1 = coalitionAction who
+/-- A profile is absorbing when every nonempty closed set contains an
+absorbing state.  For a finite chain this is equivalent to almost-sure
+absorption from every initial state. -/
+def IsAbsorbingProfile (x : G.StationaryProfile) : Prop :=
+  ∀ states : Finset G.State, states.Nonempty → G.StableUnder x states →
+    ∃ state ∈ states, G.IsAbsorbingState state
 
-/-- Outsiders use actions in the support of the reference profile. -/
-def OutsidersSupported (x : G.StationaryProfile) (state : G.State)
-    (coalition : Finset ι) (action : G.JointAction) : Prop :=
-  ∀ who, who ∉ coalition → 0 < (x state who).mass (action who)
-
-/-- Weight of a pure completion of `(x⁻ᴸ,aᴸ)`. -/
-noncomputable def coalitionCompletionMass
-    (x : G.StationaryProfile) (state : G.State)
-    (coalition : Finset ι) (coalitionAction : G.CoalitionAction coalition)
-    (action : G.JointAction) : ℝ := by
-  classical
-  exact
-    if G.MatchesCoalition action coalition coalitionAction then
-      ∏ who in Finset.univ.filter (fun who => who ∉ coalition),
-        (x state who).mass (action who)
-    else 0
-
-/-- Transition probability under `(x⁻ᴸ,aᴸ)`. -/
-noncomputable def exitTransitionProbability
-    (x : G.StationaryProfile) (state : G.State)
-    (coalition : Finset ι) (coalitionAction : G.CoalitionAction coalition)
-    (next : G.State) : ℝ :=
-  ∑ action : G.JointAction,
-    G.coalitionCompletionMass x state coalition coalitionAction action *
-      (G.transition state action).mass next
-
-/-- Probability of leaving `states` under `(x⁻ᴸ,aᴸ)`. -/
-noncomputable def exitOutsideProbability
-    (x : G.StationaryProfile) (states : Finset G.State) (state : G.State)
-    (coalition : Finset ι) (coalitionAction : G.CoalitionAction coalition) : ℝ := by
-  classical
-  exact
-    ∑ next in Finset.univ.filter (fun next => next ∉ states),
-      G.exitTransitionProbability x state coalition coalitionAction next
-
-/-- Definition 3.5.  Minimality is with respect to restricting `aᴸ` to a
-strict subcoalition. -/
-structure Exit (x : G.StationaryProfile) (states : Finset G.State) where
-  source : G.State
-  coalition : Finset ι
-  action : G.CoalitionAction coalition
-  source_mem : source ∈ states
-  coalition_nonempty : coalition.Nonempty
-  leaves : 0 < G.exitOutsideProbability x states source coalition action
-  minimal :
-    ∀ smaller : Finset ι, ∀ hsub : smaller ⊆ coalition,
-      smaller ≠ coalition →
-        G.exitOutsideProbability x states source smaller
-          (fun who => action ⟨who.1, hsub who.2⟩) = 0
-
-/-- Denominator in equation (5). -/
-noncomputable def inducedExitDenominator
-    {x : G.StationaryProfile} {states : Finset G.State}
-    (law : FiniteLaw (G.Exit x states)) : ℝ :=
-  ∑ exit in law.support,
-    law.mass exit *
-      G.exitOutsideProbability x states exit.source exit.coalition exit.action
-
-/-- Equation (5).  The conditioned exit-state law is zero on `states` and is
-normalized only over states outside it. -/
-noncomputable def inducedExitStateProbability
-    {x : G.StationaryProfile} {states : Finset G.State}
-    (law : FiniteLaw (G.Exit x states)) (next : G.State) : ℝ := by
-  classical
-  exact
-    if next ∈ states then 0
-    else
-      (∑ exit in law.support,
-        law.mass exit *
-          G.exitTransitionProbability x exit.source exit.coalition exit.action next) /
-        G.inducedExitDenominator law
-
-@[simp] theorem inducedExitStateProbability_eq_zero_of_mem
-    {x : G.StationaryProfile} {states : Finset G.State}
-    (law : FiniteLaw (G.Exit x states)) {next : G.State}
-    (hnext : next ∈ states) :
-    G.inducedExitStateProbability law next = 0 := by
-  simp [inducedExitStateProbability, hnext]
-
-/-- Condition 5 of Proposition 3.8, using the conditioned law from equation
-(5), not the unconditioned transition mass. -/
-def ExitLawPreservesValue
-    {x : G.StationaryProfile} {states : Finset G.State}
-    (law : FiniteLaw (G.Exit x states)) (value : G.StatePayoff) : Prop :=
-  ∀ state, state ∈ states → ∀ who,
-    (∑ next,
-      G.inducedExitStateProbability law next * value next who) =
+/-- Correct stationary evaluation equation (paper equation (32)): the value
+is harmonic under the transition kernel.  No stage-payoff term is added. -/
+def StationaryHarmonic (x : G.StationaryProfile)
+    (value : G.State → ι → ℝ) : Prop :=
+  ∀ state who,
+    (∑ next : G.State,
+      G.mixedTransitionProbability state (x state) next * value next who) =
       value state who
 
-/-- A disjoint block system is represented by a partial block index.  The
-specification makes membership unique. -/
-structure ExitBlockSystem (x : G.StationaryProfile) where
-  Block : Type*
-  blockFintype : Fintype Block
-  blockDecidableEq : DecidableEq Block
-  states : Block → Finset G.State
-  blockOf : G.State → Option Block
-  blockOf_spec : ∀ state block, blockOf state = some block ↔ state ∈ states block
-  exitLaw : ∀ block, FiniteLaw (G.Exit x (states block))
+/-- Boundary values at absorbing states.  This formulation permits the
+absorbing payoff to depend on the stationary action used there. -/
+def StationaryBoundary (x : G.StationaryProfile)
+    (value : G.State → ι → ℝ) : Prop :=
+  ∀ state, G.IsAbsorbingState state →
+    ∀ who, value state who = G.mixedStagePayoff state (x state) who
 
-attribute [instance] ExitBlockSystem.blockFintype
-attribute [instance] ExitBlockSystem.blockDecidableEq
+/-- The stationary expected-undiscounted evaluation used in Section 5. -/
+def IsStationaryEvaluation (x : G.StationaryProfile)
+    (value : G.State → ι → ℝ) : Prop :=
+  G.IsAbsorbingProfile x ∧ G.StationaryHarmonic x value ∧
+    G.StationaryBoundary x value
 
-/-- Equation (7): blocks use their conditioned exit laws; all remaining
-states use the stationary transition kernel. -/
-noncomputable def inducedKernel
-    {x : G.StationaryProfile} (system : G.ExitBlockSystem x)
-    (state next : G.State) : ℝ :=
-  match system.blockOf state with
-  | none => G.mixedTransitionProbability state (x state) next
-  | some block => G.inducedExitStateProbability (system.exitLaw block) next
+/-! ## Communicating sets and exits (Section 3.4) -/
 
-/-- Transience of a set under a stationary profile.  This hypothesis is
-required by the graph-exit formula (27). -/
-def IsTransientUnder (x : G.StationaryProfile)
+/-- Support enlargement, the paper's notion of a perturbation. -/
+def IsSupportPerturbation (y x : G.StationaryProfile) : Prop :=
+  ∀ state who action,
+    0 < (x state who).prob action → 0 < (y state who).prob action
+
+/-- The paper's communicating-set condition, stated in support language. -/
+def CommunicatesUnder (x : G.StationaryProfile)
     (states : Finset G.State) : Prop :=
-  ∀ initial, initial ∈ states →
-    Tendsto
-      (fun horizon =>
-        G.hitWithin
-          (fun state next =>
-            G.mixedTransitionProbability state (x state) next)
-          (Finset.univ \ states) horizon initial)
-      atTop (nhds 1)
+  states.Nonempty ∧
+    ∀ target ∈ states,
+      ∃ y : G.StationaryProfile,
+        G.IsSupportPerturbation y x ∧ G.StableUnder y states ∧
+          ∀ source ∈ states, G.ReachesWithin y states source target
 
-end PaperGame
+/-- Pure actions of exactly the coalition `coalition`. -/
+abbrev CoalitionAction (coalition : Finset ι) :=
+  (who : {i // i ∈ coalition}) → G.Action who.1
 
-/-!
-Equation (27), the ratio of sums of `B`-graph weights, is valid only under
-`PaperGame.IsTransientUnder x B`.  The earlier draft omitted that premise.
-The full graph enumeration and proof are not promoted in this future record.
--/
+/-- Pure actions of the outsiders. -/
+abbrev OutsiderAction (coalition : Finset ι) :=
+  (who : {i // i ∉ coalition}) → G.Action who.1
 
-/-! ## Section 4.2: exact cleaning and equations (19)–(21) -/
+/-- Combine a coalition action and an outsider action without storing
+irrelevant outsider coordinates in the exit itself. -/
+def combineCoalitionAction (coalition : Finset ι)
+    (inside : G.CoalitionAction coalition)
+    (outside : G.OutsiderAction coalition) : G.JointAction :=
+  fun who => by
+    by_cases h : who ∈ coalition
+    · exact inside ⟨who, h⟩
+    · exact outside ⟨who, h⟩
 
-namespace PaperGame
+/-- Product probability of an outsider action. -/
+def outsiderProbability (x : G.ProductMixedAction) (coalition : Finset ι)
+    (outside : G.OutsiderAction coalition) : ℝ := by
+  classical
+  exact ∏ who : {i // i ∉ coalition},
+    (x who.1).prob (outside who)
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-variable (G : PaperGame ι)
+/-- Transition probability when the coalition action is fixed and outsiders
+use their components of `x`. -/
+def coalitionTransitionProbability (state : G.State)
+    (x : G.ProductMixedAction) (coalition : Finset ι)
+    (inside : G.CoalitionAction coalition) (next : G.State) : ℝ := by
+  classical
+  exact ∑ outside : G.OutsiderAction coalition,
+    G.outsiderProbability x coalition outside *
+      (G.transition state
+        (G.combineCoalitionAction coalition inside outside)).prob next
 
-/-- States with the same full min–max vector. -/
-noncomputable def equalValueClass (value : G.StatePayoff) (state : G.State) :
+/-- Transition mass of a state set under a coalition action. -/
+def coalitionTransitionMass (state : G.State) (x : G.ProductMixedAction)
+    (coalition : Finset ι) (inside : G.CoalitionAction coalition)
+    (states : Finset G.State) : ℝ := by
+  classical
+  exact ∑ next ∈ states,
+    G.coalitionTransitionProbability state x coalition inside next
+
+/-- Restrict a coalition action to a subcoalition. -/
+def restrictCoalitionAction {small large : Finset ι}
+    (hsub : small ⊆ large) (action : G.CoalitionAction large) :
+    G.CoalitionAction small :=
+  fun who => action ⟨who.1, hsub who.2⟩
+
+/-- The coalition action on the singleton `{who}`. -/
+def singletonCoalitionAction (who : ι) (action : G.Action who) :
+    G.CoalitionAction {who} :=
+  fun member => by
+    rcases member with ⟨player, hplayer⟩
+    simp only [Finset.mem_singleton] at hplayer
+    subst player
+    exact action
+
+/-- Definition 3.5.  An exit stores `(s, aᴸ)` relative to the fixed outsider
+profile; outsiders are not arbitrary data and hence cannot duplicate exits. -/
+structure Exit (x : G.StationaryProfile) (states : Finset G.State) where
+  state : G.State
+  state_mem : state ∈ states
+  coalition : Finset ι
+  coalition_nonempty : coalition.Nonempty
+  action : G.CoalitionAction coalition
+  leaves :
+    0 < G.coalitionTransitionMass state (x state) coalition action
+      (Finset.univ \ states)
+  minimal :
+    ∀ (small : Finset ι) (hsub : small ⊆ coalition),
+      small ≠ coalition →
+        G.coalitionTransitionMass state (x state) small
+          (G.restrictCoalitionAction hsub action)
+          (Finset.univ \ states) = 0
+
+namespace Exit
+
+variable {G}
+variable {x : G.StationaryProfile} {states : Finset G.State}
+
+/-- The transition law `q_e`. -/
+def transitionProbability (exit : G.Exit x states) (next : G.State) : ℝ :=
+  G.coalitionTransitionProbability exit.state (x exit.state)
+    exit.coalition exit.action next
+
+/-- Probability that the exit action actually leaves the set. -/
+def outsideMass (exit : G.Exit x states) : ℝ :=
+  G.coalitionTransitionMass exit.state (x exit.state)
+    exit.coalition exit.action (Finset.univ \ states)
+
+/-- A unilateral exit of player `who`. -/
+def IsUnilateral (exit : G.Exit x states) (who : ι) : Prop :=
+  exit.coalition = {who}
+
+/-- Continuation payoff `q_e γ`. -/
+def continuationValue (exit : G.Exit x states)
+    (value : G.State → ι → ℝ) (who : ι) : ℝ := by
+  classical
+  exact ∑ next : G.State, exit.transitionProbability next * value next who
+
+end Exit
+
+/-- Numerator in equation (5). -/
+def inducedExitNumerator {x : G.StationaryProfile}
+    {states : Finset G.State}
+    (distribution : FiniteDistribution (G.Exit x states))
+    (next : G.State) : ℝ :=
+  (distribution.support.map fun exit =>
+    distribution.prob exit * exit.transitionProbability next).sum
+
+/-- Denominator in equation (5), the probability that the selected exit
+action actually leaves the communicating set. -/
+def inducedExitDenominator {x : G.StationaryProfile}
+    {states : Finset G.State}
+    (distribution : FiniteDistribution (G.Exit x states)) : ℝ :=
+  (distribution.support.map fun exit =>
+    distribution.prob exit * exit.outsideMass).sum
+
+/-- Equation (5), extended by zero on `C`.  Its support is therefore contained
+in `S \ C`, as required for the induced Markov chain and Proposition 3.8. -/
+def inducedExitStateProbability {x : G.StationaryProfile}
+    {states : Finset G.State}
+    (distribution : FiniteDistribution (G.Exit x states))
+    (next : G.State) : ℝ := by
+  classical
+  exact if next ∈ states then 0 else
+    G.inducedExitNumerator distribution next /
+      G.inducedExitDenominator distribution
+
+@[simp]
+theorem inducedExitStateProbability_of_mem {x : G.StationaryProfile}
+    {states : Finset G.State}
+    (distribution : FiniteDistribution (G.Exit x states))
+    {next : G.State} (hnext : next ∈ states) :
+    G.inducedExitStateProbability distribution next = 0 := by
+  simp [inducedExitStateProbability, hnext]
+
+/-- Equation (5) is normalized on the complement.  This elementary finite
+sum proof is left open in the future audit. -/
+theorem inducedExitStateProbability_total {x : G.StationaryProfile}
+    {states : Finset G.State}
+    (distribution : FiniteDistribution (G.Exit x states)) :
+    (∑ next : G.State,
+      G.inducedExitStateProbability distribution next) = 1 := by
+  sorry
+
+/-- The induced chain (7).  A block state uses its conditioned exit law;
+other states use the stationary transition law. -/
+def inducedKernel {κ : Type*} [Fintype κ]
+    (x : G.StationaryProfile) (block : κ → Finset G.State)
+    (blockOf : G.State → Option κ)
+    (exitDistribution : ∀ k, FiniteDistribution (G.Exit x (block k)))
+    (source target : G.State) : ℝ :=
+  match blockOf source with
+  | none => G.mixedTransitionProbability source (x source) target
+  | some k => G.inducedExitStateProbability (exitDistribution k) target
+
+/-- A numerical finite kernel is absorbing relative to the game's absorbing
+states when every nonempty closed set contains one. -/
+def KernelIsAbsorbing (kernel : G.State → G.State → ℝ) : Prop :=
+  ∀ states : Finset G.State, states.Nonempty →
+    (∀ source ∈ states,
+      (∑ target ∈ states, kernel source target) = 1) →
+    ∃ state ∈ states, G.IsAbsorbingState state
+
+/-- The seven hypotheses of Proposition 3.8, without hiding any of them in
+opaque proposition fields.  The mediated-equilibrium conclusion awaits the
+extended-game semantics. -/
+def Proposition3_8Hypotheses {κ : Type*} [Fintype κ]
+    (value minmax : G.State → ι → ℝ) (x : G.StationaryProfile)
+    (block : κ → Finset G.State) (blockOf : G.State → Option κ)
+    (exitDistribution : ∀ k, FiniteDistribution (G.Exit x (block k))) : Prop :=
+  let kernel := G.inducedKernel x block blockOf exitDistribution
+  G.KernelIsAbsorbing kernel ∧
+  G.StationaryHarmonic x value ∧
+  (∀ state who action,
+    (∑ next : G.State,
+      G.coalitionTransitionProbability state (x state) {who}
+        (G.singletonCoalitionAction who action)
+        next * value next who) ≤ value state who) ∧
+  G.StationaryBoundary x value ∧
+  (∀ state who, minmax state who ≤ value state who) ∧
+  (∀ k state, state ∈ block k →
+    ∀ who,
+      (∑ next : G.State,
+        G.inducedExitStateProbability (exitDistribution k) next *
+          value next who) = value state who) ∧
+  (∀ k,
+    ((∀ exit, exit ∈ (exitDistribution k).support →
+        0 < (exitDistribution k).prob exit →
+        ∀ who, exit.IsUnilateral who →
+          ∀ state, state ∈ block k →
+            exit.continuationValue value who = value state who) ∨
+      (∀ exit, exit ∈ (exitDistribution k).support →
+        0 < (exitDistribution k).prob exit →
+          ∃ who, exit.IsUnilateral who))) ∧
+  (∀ k who (first second : G.Exit x (block k)),
+    Exit.IsUnilateral first who → Exit.IsUnilateral second who →
+      first ∈ (exitDistribution k).support →
+      0 < (exitDistribution k).prob first →
+      (∀ state, state ∈ block k →
+        Exit.continuationValue first value who ≤ value state who) ∧
+      Exit.continuationValue second value who ≤
+        Exit.continuationValue first value who)
+
+/-! ## The cleaning operation and equations (19)--(21) -/
+
+/-- Transition probability under a correlated joint-action law. -/
+def correlatedTransitionProbability (state : G.State)
+    (actionLaw : FiniteDistribution G.JointAction) (next : G.State) : ℝ :=
+  (actionLaw.support.map fun action =>
+    actionLaw.prob action * (G.transition state action).prob next).sum
+
+/-- Transition mass under a correlated joint-action law. -/
+def correlatedTransitionMass (state : G.State)
+    (actionLaw : FiniteDistribution G.JointAction)
+    (states : Finset G.State) : ℝ := by
+  classical
+  exact ∑ next ∈ states,
+    G.correlatedTransitionProbability state actionLaw next
+
+/-- States with the same min--max vector as `state`. -/
+def equalValueClass (value : G.State → ι → ℝ) (state : G.State) :
     Finset G.State := by
   classical
-  exact Finset.univ.filter (fun next => ∀ who, value next who = value state who)
+  exact Finset.univ.filter fun next => ∀ who, value next who = value state who
 
-/-- The set `(S \ C_s) ∪ changing` used in Section 4.2. -/
-noncomputable def escapeSet (value : G.StatePayoff)
-    (changing : Finset G.State) (state : G.State) : Finset G.State := by
-  classical
-  exact (Finset.univ \ G.equalValueClass value state) ∪ changing
+/-- The target set `(S \ C_s) ∪ S̄` used in equations (14)--(21). -/
+def changingTargetSet (value : G.State → ι → ℝ)
+    (marked : Finset G.State) (state : G.State) : Finset G.State :=
+  (Finset.univ \ G.equalValueClass value state) ∪ marked
 
-/-- `B₁`: pure joint actions that can reach the escape set with positive
-probability. -/
-noncomputable def initiallyBadActions (value : G.StatePayoff)
-    (changing : Finset G.State) (state : G.State) : Finset G.JointAction := by
-  classical
-  exact
-    Finset.univ.filter (fun action =>
-      0 < ∑ next in G.escapeSet value changing state,
-        (G.transition state action).mass next)
-
-/-- One step of the closure `Bₙ ↦ Bₙ₊₁` from Section 4.2.2. -/
-noncomputable def badActionClosureStep (epsilon : ℝ)
-    (law : FiniteLaw G.JointAction) (bad : Finset G.JointAction) :
+/-- The first bad-action set `B₁`. -/
+def initialBadActions (value : G.State → ι → ℝ)
+    (marked : Finset G.State) (state : G.State) :
     Finset G.JointAction := by
   classical
-  let exponent : ℝ := ((2 * Fintype.card G.JointAction : ℕ) : ℝ)⁻¹
-  let scale : ℝ := Real.rpow epsilon exponent
-  exact
-    bad ∪ Finset.univ.filter (fun action =>
-      ∃ badAction ∈ bad, law.mass action ≤ law.mass badAction / scale)
+  exact Finset.univ.filter fun action =>
+    0 < ∑ next ∈ G.changingTargetSet value marked state,
+      (G.transition state action).prob next
 
-/-- The stabilized closure is reached after at most `|A|` steps. -/
-noncomputable def badActionClosure (epsilon : ℝ)
-    (law : FiniteLaw G.JointAction) (initial : Finset G.JointAction) :
+/-- The scale `ε^(1/(2|A|))` from Definition 4.2 and Lemma 4.3. -/
+def cleaningScale (epsilon : ℝ) : ℝ :=
+  Real.rpow epsilon
+    ((1 : ℝ) / (2 * (Fintype.card G.JointAction : ℝ)))
+
+/-- One closure step `B_n ↦ B_{n+1}`. -/
+def badActionClosureStep (actionLaw : FiniteDistribution G.JointAction)
+    (epsilon : ℝ) (bad : Finset G.JointAction) : Finset G.JointAction := by
+  classical
+  exact bad ∪ Finset.univ.filter fun action =>
+    ∃ witness ∈ bad,
+      actionLaw.prob action ≤
+        actionLaw.prob witness / G.cleaningScale epsilon
+
+/-- Iteration of the bad-action closure. -/
+def badActionClosureAux (actionLaw : FiniteDistribution G.JointAction)
+    (epsilon : ℝ) : ℕ → Finset G.JointAction → Finset G.JointAction
+  | 0, bad => bad
+  | n + 1, bad =>
+      badActionClosureAux actionLaw epsilon n
+        (G.badActionClosureStep actionLaw epsilon bad)
+
+/-- The stationary closure `B_∞ = B_|A|`. -/
+def badActionClosure (actionLaw : FiniteDistribution G.JointAction)
+    (epsilon : ℝ) (initial : Finset G.JointAction) :
     Finset G.JointAction :=
-  (G.badActionClosureStep epsilon law)^[Fintype.card G.JointAction] initial
+  G.badActionClosureAux actionLaw epsilon
+    (Fintype.card G.JointAction) initial
 
-/-- Total mass retained after deleting the closed bad set. -/
-noncomputable def retainedMass (epsilon : ℝ)
-    (law : FiniteLaw G.JointAction) (initial : Finset G.JointAction) : ℝ := by
+/-- Surviving mass after deleting `B_∞`. -/
+def cleanedMass (actionLaw : FiniteDistribution G.JointAction)
+    (bad : Finset G.JointAction) : ℝ := by
   classical
-  exact
-    ∑ action : G.JointAction,
-      if action ∈ G.badActionClosure epsilon law initial then 0
-      else law.mass action
+  exact ∑ action : G.JointAction,
+    if action ∈ bad then 0 else actionLaw.prob action
 
-/-- The paper's cleaned mass: delete the closed bad set and normalize. -/
-noncomputable def cleanedMass (epsilon : ℝ)
-    (law : FiniteLaw G.JointAction) (initial : Finset G.JointAction)
-    (action : G.JointAction) : ℝ := by
+/-- The paper's cleaned and normalized probability.  Lemma 4.3 proves the
+denominator positive before this expression is used. -/
+def cleanedProbability (actionLaw : FiniteDistribution G.JointAction)
+    (bad : Finset G.JointAction) (action : G.JointAction) : ℝ := by
   classical
-  exact
-    if action ∈ G.badActionClosure epsilon law initial then 0
-    else law.mass action / G.retainedMass epsilon law initial
+  exact if action ∈ bad then 0 else
+    actionLaw.prob action / G.cleanedMass actionLaw bad
 
-/-- A concrete statement that a proposed law is exactly the paper's cleaning.
-This replaces the earlier unconstrained `isPaperCleaning : Prop` field. -/
-def IsPaperCleaning (epsilon : ℝ) (law : FiniteLaw G.JointAction)
-    (initial : Finset G.JointAction) (cleaned : G.JointAction → ℝ) : Prop :=
-  0 < G.retainedMass epsilon law initial ∧
-  (∀ action, cleaned action = G.cleanedMass epsilon law initial action) ∧
-  (∀ action, 0 ≤ cleaned action) ∧
-  (∑ action, cleaned action) = 1
+/-- The marginal probability of player `who` receiving action `own`. -/
+def playerMarginal (actionLaw : FiniteDistribution G.JointAction)
+    (who : ι) (own : G.Action who) : ℝ := by
+  classical
+  exact (actionLaw.support.map fun action =>
+    if action who = own then actionLaw.prob action else 0).sum
 
-/-- `n`-step transition probability of a finite kernel. -/
-def kernelPower (kernel : G.State → G.State → ℝ) :
+abbrev OtherAction (who : ι) :=
+  (other : {j // j ≠ who}) → G.Action other.1
+
+/-- Combine one recommended action with all opponents' actions. -/
+def combineOwnAndOthers (who : ι) (own : G.Action who)
+    (others : G.OtherAction who) : G.JointAction :=
+  fun player => by
+    by_cases h : player = who
+    · subst player
+      exact own
+    · exact others ⟨player, h⟩
+
+/-- Conditional probability over opponents' actions, given a recommendation. -/
+def conditionalOtherProbability (actionLaw : FiniteDistribution G.JointAction)
+    (who : ι) (own : G.Action who) (others : G.OtherAction who) : ℝ :=
+  actionLaw.prob (G.combineOwnAndOthers who own others) /
+    G.playerMarginal actionLaw who own
+
+/-- A pointwise formulation of the paper's correlated-distance bound. -/
+def CorrelatedDistanceLe
+    (left right : FiniteDistribution G.JointAction) (bound : ℝ) : Prop :=
+  ∀ who own others,
+    0 < left.prob (G.combineOwnAndOthers who own others) →
+      |G.conditionalOtherProbability left who own others -
+        G.conditionalOtherProbability right who own others| ≤ bound
+
+/-- The normalized cleaned law, available after Lemma 4.3 establishes
+positive surviving mass. -/
+def cleanedDistribution (actionLaw : FiniteDistribution G.JointAction)
+    (bad : Finset G.JointAction)
+    (hpositive : 0 < G.cleanedMass actionLaw bad) :
+    FiniteDistribution G.JointAction := by
+  classical
+  refine
+    { support := actionLaw.support.filter fun action => action ∉ bad
+      nodup := actionLaw.nodup.filter _
+      prob := G.cleanedProbability actionLaw bad
+      nonnegative := ?_
+      zero_off_support := ?_
+      total := ?_ }
+  · intro action
+    sorry
+  · intro action haction
+    sorry
+  · sorry
+
+/-- Concrete semantic content of Lemma 4.3.  There are no placeholder
+`isPaperCleaning` fields: the deleted set and normalization are the formulas
+above. -/
+def Lemma4_3Core (value : G.State → ι → ℝ)
+    (marked : Finset G.State) (state : G.State)
+    (actionLaw : FiniteDistribution G.JointAction) (epsilon : ℝ) : Prop :=
+  let initial := G.initialBadActions value marked state
+  let bad := G.badActionClosure actionLaw epsilon initial
+  ∃ hpositive : 0 < G.cleanedMass actionLaw bad,
+    G.CorrelatedDistanceLe
+      (G.cleanedDistribution actionLaw bad hpositive)
+      actionLaw
+      ((Fintype.card G.JointAction : ℝ) * G.cleaningScale epsilon) ∧
+    (∀ next ∈ G.changingTargetSet value marked state,
+      (∑ action : G.JointAction,
+        G.cleanedProbability actionLaw bad action *
+          (G.transition state action).prob next) = 0)
+
+/-- `n`-step transition probability of a numerical finite kernel. -/
+def kernelProbabilityAfter (kernel : G.State → G.State → ℝ) :
     ℕ → G.State → G.State → ℝ
-  | 0, state, next => if state = next then 1 else 0
-  | steps + 1, state, next =>
-      ∑ middle, kernel state middle * G.kernelPower kernel steps middle next
+  | 0, source, target => if source = target then 1 else 0
+  | n + 1, source, target =>
+      ∑ middle : G.State,
+        kernel source middle *
+          kernelProbabilityAfter kernel n middle target
 
-/-- Probability that the value vector differs after exactly `steps` block
-transitions. -/
-noncomputable def valueChangeProbabilityAt
-    (kernel : G.State → G.State → ℝ) (value : G.StatePayoff)
-    (state : G.State) (steps : ℕ) : ℝ := by
+/-- Expected next value under a numerical kernel. -/
+def kernelExpectedValue (kernel : G.State → G.State → ℝ)
+    (value : G.State → ι → ℝ) (state : G.State) (who : ι) : ℝ :=
+  ∑ next : G.State, kernel state next * value next who
+
+/-- Probability that the value vector differs after exactly `steps` moves. -/
+def valueChangeProbability (kernel : G.State → G.State → ℝ)
+    (value : G.State → ι → ℝ) (steps : ℕ) (state : G.State) : ℝ := by
   classical
-  exact
-    ∑ next in Finset.univ.filter (fun next =>
-      ∃ who, value next who ≠ value state who),
-      G.kernelPower kernel steps state next
+  exact ∑ next ∈ Finset.univ.filter
+      (fun next => ∃ who, value next who ≠ value state who),
+    G.kernelProbabilityAfter kernel steps state next
 
-/-- Expected next block value. -/
-def expectedNextValue (kernel : G.State → G.State → ℝ)
-    (value : G.StatePayoff) (state : G.State) (who : ι) : ℝ :=
-  ∑ next, kernel state next * value next who
-
-/-- Equation (19), with its two separate assertions. -/
+/-- Equation (19): nonnegative drift on `S̄` and a uniformly positive chance
+of a value change within at most `|S|` block steps. -/
 def Equation19 (kernel : G.State → G.State → ℝ)
-    (value : G.StatePayoff) (changing : Finset G.State)
+    (value : G.State → ι → ℝ) (marked : Finset G.State)
     (omega : ℝ) : Prop :=
-  ∀ state, state ∈ changing →
-    (∀ who, value state who ≤ G.expectedNextValue kernel value state who) ∧
+  ∀ state ∈ marked,
+    (∀ who, value state who ≤
+      G.kernelExpectedValue kernel value state who) ∧
     ∃ steps, 1 ≤ steps ∧ steps ≤ Fintype.card G.State ∧
-      omega ≤ G.valueChangeProbabilityAt kernel value state steps
+      omega ≤ G.valueChangeProbability kernel value steps state
 
-/-- Equation (20): the value vector is unchanged almost surely from a good
-state. -/
+/-- Equation (20): the value vector is constant after a good-state block. -/
 def Equation20 (kernel : G.State → G.State → ℝ)
-    (value : G.StatePayoff) (good : Finset G.State) : Prop :=
-  ∀ state, state ∈ good →
-    ∑ next in G.equalValueClass value state, kernel state next = 1
+    (value : G.State → ι → ℝ) (good : Finset G.State) : Prop :=
+  ∀ state ∈ good, ∀ next,
+    0 < kernel state next → ∀ who, value next who = value state who
 
-/-- The error exponent appearing in equation (21). -/
-def equation21Error (epsilon : ℝ) : ℝ :=
-  epsilon ^ ((Fintype.card ι + 1) * Fintype.card G.State + 1)
-
-/-- Equation (21): an almost-submartingale inequality and a lower bound on
-one-step value change. -/
+/-- Equation (21): controlled negative drift on `S₂` and a change probability
+at least `ε`. -/
 def Equation21 (kernel : G.State → G.State → ℝ)
-    (value : G.StatePayoff) (bad : Finset G.State) (epsilon : ℝ) : Prop :=
-  ∀ state, state ∈ bad →
+    (value : G.State → ι → ℝ) (residual : Finset G.State)
+    (epsilon error : ℝ) : Prop :=
+  ∀ state ∈ residual,
     (∀ who,
-      value state who - G.equation21Error epsilon ≤
-        G.expectedNextValue kernel value state who) ∧
-    epsilon ≤ G.valueChangeProbabilityAt kernel value state 1
+      value state who - error ≤
+        G.kernelExpectedValue kernel value state who) ∧
+    epsilon ≤ G.valueChangeProbability kernel value 1 state
 
-/-- The exact drift system used by Lemma 4.5. -/
-def PaperDriftSystem (kernel : G.State → G.State → ℝ)
-    (value : G.StatePayoff) (changing good bad : Finset G.State)
-    (epsilon omega : ℝ) : Prop :=
-  G.Equation19 kernel value changing omega ∧
-  G.Equation20 kernel value good ∧
-  G.Equation21 kernel value bad epsilon
+/-- The finite closed-class part of Lemma 4.5.  The almost-sure convergence
+and expected-visit bounds require the path measure, which is not yet defined
+in this partial file. -/
+def EveryClosedClassIsGood (kernel : G.State → G.State → ℝ)
+    (good : Finset G.State) : Prop :=
+  ∀ states : Finset G.State, states.Nonempty →
+    (∀ source ∈ states,
+      (∑ target ∈ states, kernel source target) = 1) →
+    states ⊆ good
 
-end PaperGame
+/-! ## Eventual exit laws and graph asymptotics (Section 5) -/
 
-/-!
-Lemmas 4.4 and 4.5 are not declared here.  Their hypotheses are the concrete
-cleaning formula and `PaperDriftSystem` above; replacing those hypotheses by
-uninterpreted propositions would strengthen the lemmas and can make them
-false.
--/
+/-- A set is transient under `x` when every nonempty subset has a positive
+one-step escape from at least one of its states. -/
+def IsTransientUnder (x : G.StationaryProfile)
+    (states : Finset G.State) : Prop :=
+  ∀ nonempty : Finset G.State, nonempty.Nonempty → nonempty ⊆ states →
+    ∃ state ∈ nonempty,
+      G.mixedTransitionMass state (x state) nonempty < 1
 
-/-! ## Section 5.1–5.2: graphs, exits, and the order of limits -/
+/-- Raw data of a `B`-graph: one action and successor for each state of `B`. -/
+abbrev GraphData (states : Finset G.State) :=
+  (state : {s // s ∈ states}) → G.JointAction × G.State
 
-namespace PaperGame
+/-- The deterministic successor relation of a graph. -/
+def GraphStep {states : Finset G.State} (graph : G.GraphData states)
+    (source target : G.State) : Prop :=
+  ∃ hsource : source ∈ states,
+    target = (graph ⟨source, hsource⟩).2
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-variable (G : PaperGame ι)
+/-- The graph path from `source` exits at `target`. -/
+def GraphEndsAt {states : Finset G.State} (graph : G.GraphData states)
+    (source target : G.State) : Prop :=
+  target ∉ states ∧
+    Relation.TransGen (G.GraphStep graph) source target
 
-/-- One outgoing labelled arrow per state of a `B`-graph. -/
-structure BGraph (states : Finset G.State) where
-  arrow : G.State → Option (G.JointAction × G.State)
-  domain : ∀ state, arrow state ≠ none ↔ state ∈ states
-  positive : ∀ state action next,
-    arrow state = some (action, next) →
-      0 < (G.transition state action).mass next
-  reachesOutside : ∀ state, state ∈ states →
-    ∃ steps,
-      let successor : G.State → G.State := fun current =>
-        match arrow current with
-        | none => current
-        | some (_, next) => next
-      (successor^[steps] state) ∉ states
+/-- The two defining conditions of a `B`-graph. -/
+def IsExitGraph {states : Finset G.State}
+    (graph : G.GraphData states) : Prop :=
+  (∀ state : {s // s ∈ states},
+    0 < (G.transition state.1 (graph state).1).prob (graph state).2) ∧
+  ∀ state : {s // s ∈ states},
+    ∃ target, G.GraphEndsAt graph state.1 target
 
-/-- A graph uses an exit only when its coalition component agrees and every
-outsider action lies in the support of `x⁻ᴸ`.  No equality with an arbitrary
-stored outsider completion is required. -/
-def GraphUsesExit {x : G.StationaryProfile} {states : Finset G.State}
-    (graph : G.BGraph states) (exit : G.Exit x states) : Prop :=
-  ∃ action next,
-    graph.arrow exit.source = some (action, next) ∧
-    G.MatchesCoalition action exit.coalition exit.action ∧
-    G.OutsidersSupported x exit.source exit.coalition action ∧
-    next ∉ states
+/-- Graph weight (26). -/
+def graphWeight (x : G.StationaryProfile) {states : Finset G.State}
+    (graph : G.GraphData states) : ℝ := by
+  classical
+  exact ∏ state : {s // s ∈ states},
+    G.productProbability (x state.1) (graph state).1 *
+      (G.transition state.1 (graph state).1).prob (graph state).2
 
-/-- The graph-exit ratio of equation (27) is meaningful only under this
-explicit package. -/
-structure GraphExitFormulaPremises (x : G.StationaryProfile)
-    (states : Finset G.State) where
-  transient : G.IsTransientUnder x states
+/-- Numerator in the Freidlin--Wentzell graph formula (27). -/
+def graphExitNumerator (x : G.StationaryProfile)
+    (states : Finset G.State) (source target : G.State) : ℝ := by
+  classical
+  exact ∑ graph : G.GraphData states,
+    if G.IsExitGraph graph ∧ G.GraphEndsAt graph source target then
+      G.graphWeight x graph
+    else 0
 
-end PaperGame
+/-- Denominator in the graph formula (27). -/
+def graphExitDenominator (x : G.StationaryProfile)
+    (states : Finset G.State) : ℝ := by
+  classical
+  exact ∑ graph : G.GraphData states,
+    if G.IsExitGraph graph then G.graphWeight x graph else 0
 
-/-- Correct order of limits for the asymptotic exit law.  For each profile
-`profileIndex`, first take the horizon to infinity; only then take the profile
-index to infinity.  This rules out the invalid diagonal `horizon = index`.
--/
-def HasTwoStageExitLimit {Exit : Type*}
-    (firstExitUseWithin : ℕ → ℕ → Exit → ℝ) (limitLaw : Exit → ℝ) : Prop :=
-  ∃ eventual : ℕ → Exit → ℝ,
-    (∀ profileIndex exit,
+/-- Eventual first-exit law for one stationary profile.  Formula (27) is
+valid under the explicit transience hypothesis used by its consumers. -/
+def stationaryExitLaw (x : G.StationaryProfile)
+    (states : Finset G.State) (source target : G.State) : ℝ :=
+  G.graphExitNumerator x states source target /
+    G.graphExitDenominator x states
+
+/-- Formula (27) may be used only together with transience.  The supplied
+`exitProbability` is the eventual first-exit law, not a finite-horizon event. -/
+def SatisfiesGraphExitFormula (x : G.StationaryProfile)
+    (states : Finset G.State)
+    (exitProbability : G.State → G.State → ℝ) : Prop :=
+  G.IsTransientUnder x states ∧
+  ∀ source, source ∈ states →
+    ∀ target, target ∉ states →
+      exitProbability source target =
+        G.stationaryExitLaw x states source target
+
+/-- The correct two-level asymptotic exit law: for each profile take its
+*eventual* first-exit law, then let the profile index tend to infinity. -/
+def HasAsymptoticExitLaw (profiles : ℕ → G.StationaryProfile)
+    (states : Finset G.State) (limitLaw : G.State → G.State → ℝ) : Prop :=
+  (∀ n, G.IsTransientUnder (profiles n) states) ∧
+  ∀ source, source ∈ states →
+    ∀ target, target ∉ states →
       Tendsto
-        (fun horizon => firstExitUseWithin profileIndex horizon exit)
-        atTop (nhds (eventual profileIndex exit))) ∧
-    ∀ exit,
-      Tendsto (fun profileIndex => eventual profileIndex exit)
-        atTop (nhds (limitLaw exit))
+        (fun n => G.stationaryExitLaw (profiles n) states source target)
+        atTop (nhds (limitLaw source target))
 
-/-!
-The paper's `μ_{θ,C}` is an instance of `HasTwoStageExitLimit`: under each
-absorbing stationary profile `x_ε`, one first takes the eventual law of the
-first exit used, and then lets `ε → 0`.  A hazard `2⁻ⁿ` shows why a diagonal
-“exit within `n` steps under profile `n`” is not equivalent.
--/
+/-- A graph uses an exit exactly when its coalition coordinates are `aᴸ`,
+its outsider coordinates lie in the support of `x⁻ᴸ`, and the arrow leaves
+`C`. -/
+def GraphUsesExit {x : G.StationaryProfile}
+    {states : Finset G.State} (graph : G.GraphData states)
+    (exit : G.Exit x states) : Prop :=
+  let arrow := graph ⟨exit.state, exit.state_mem⟩
+  arrow.2 ∉ states ∧
+  (∀ who, ∀ hwho : who ∈ exit.coalition,
+    arrow.1 who = exit.action ⟨who, hwho⟩) ∧
+  (∀ who, who ∉ exit.coalition →
+    0 < (x exit.state who).prob (arrow.1 who))
 
-/-! ## Section 5.3: the constrained fixed-point statement -/
+/-- A maximal graph has no competing graph with asymptotically unbounded
+relative weight. -/
+def IsMaximalGraph (profiles : ℕ → G.StationaryProfile)
+    {states : Finset G.State} (graph : G.GraphData states) : Prop :=
+  G.IsExitGraph graph ∧
+  ∀ other : G.GraphData states, G.IsExitGraph other →
+    ∃ bound : ℝ, 0 ≤ bound ∧
+      ∀ᶠ n in atTop,
+        G.graphWeight (profiles n) other ≤
+          bound * G.graphWeight (profiles n) graph
 
-namespace PaperGame
+/-- Correct support criterion for the limiting first-used-exit law.  It does
+not use the invalid diagonal event “exit within `n` under profile `n`.” -/
+def ExitHasPositiveAsymptoticWeight
+    (profiles : ℕ → G.StationaryProfile) (limitProfile : G.StationaryProfile)
+    {states : Finset G.State} (exit : G.Exit limitProfile states) : Prop :=
+  ∃ graph : G.GraphData states,
+    G.IsMaximalGraph profiles graph ∧ G.GraphUsesExit graph exit
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-variable (G : PaperGame ι)
+/-! ## Constrained fixed point (Section 5.3) -/
 
-/-- The constrained simplex `X_ε`. -/
-def InConstrainedSimplex (epsilon : ℝ) (x : G.StationaryProfile) : Prop :=
-  ∀ state who action, epsilon ^ 2 ≤ (x state who).mass action
+/-- The constraint set `X_ε`. -/
+def IsEpsilonConstrained (epsilon : ℝ) (x : G.StationaryProfile) : Prop :=
+  ∀ state who action, epsilon ^ 2 ≤ (x state who).prob action
 
-/-- A sufficient smallness condition for equation (31) to map into `X_ε`.
-It implies `ε / |Aᵢ| ≥ ε²` for every player. -/
-def IsSmallForActionSets (epsilon : ℝ) : Prop :=
-  0 < epsilon ∧ epsilon < 1 ∧
-  ∀ who, epsilon ≤ ((Fintype.card (G.Action who) : ℝ))⁻¹
+/-- Explicit feasibility condition for `X_ε`. -/
+def ConstraintFeasible (epsilon : ℝ) : Prop :=
+  ∀ who,
+    (Fintype.card (G.Action who) : ℝ) * epsilon ^ 2 ≤ 1
 
-abbrev StationaryValue := G.StationaryProfile → G.StatePayoff
-
-/-- The actual stationary evaluation required by Section 5.  Harmonicity is
-`q γ = γ`; adding the stage payoff would be inconsistent at positive
-absorbing states. -/
-def IsStationaryValue (value : G.StationaryValue) : Prop :=
-  ∀ x, G.IsAbsorbingProfile x →
-    G.IsHarmonic x (value x) ∧
-    ∀ state, G.IsAbsorbingState state → ∀ who,
-      value x state who = G.mixedStagePayoff state (x state) who
-
-/-- Continuation payoff after a pure action of one player. -/
-def pureContinuationValue (value : G.StationaryValue)
+/-- Continuation payoff from a pure unilateral action. -/
+def unilateralContinuation (value : G.State → ι → ℝ)
     (x : G.StationaryProfile) (state : G.State) (who : ι)
-    (chosen : G.Action who) : ℝ :=
-  ∑ next,
-    G.unilateralTransitionProbability x state who chosen next *
-      value x next who
+    (action : G.Action who) : ℝ :=
+  ∑ next : G.State,
+    G.coalitionTransitionProbability state (x state) {who}
+      (G.singletonCoalitionAction who action)
+      next * value next who
 
-/-- Best pure continuation payoff in equation (30). -/
-noncomputable def bestPureContinuationValue (value : G.StationaryValue)
+/-- Best continuation payoff in (30). -/
+def bestUnilateralContinuation (value : G.State → ι → ℝ)
     (x : G.StationaryProfile) (state : G.State) (who : ι) : ℝ :=
-  sSup (Set.range fun chosen : G.Action who =>
-    G.pureContinuationValue value x state who chosen)
+  sSup (Set.range fun action : G.Action who =>
+    G.unilateralContinuation value x state who action)
 
 /-- Continuation cost (30). -/
-noncomputable def continuationCost (value : G.StationaryValue)
+def continuationCost (value : G.State → ι → ℝ)
     (x : G.StationaryProfile) (state : G.State) (who : ι)
-    (chosen : G.Action who) : ℝ :=
-  G.bestPureContinuationValue value x state who -
-    G.pureContinuationValue value x state who chosen
+    (action : G.Action who) : ℝ :=
+  G.bestUnilateralContinuation value x state who -
+    G.unilateralContinuation value x state who action
 
-/-- Fixed-point equation (31), written exactly with `ε ^ cost`. -/
-def SatisfiesApproximateBestReplyEquation (value : G.StationaryValue)
-    (epsilon : ℝ) (x : G.StationaryProfile) : Prop :=
-  ∀ state who (chosen : G.Action who),
-    (x state who).mass chosen =
-      Real.rpow epsilon (G.continuationCost value x state who chosen) /
+/-- Fixed-point equation (31), stated without pretending that it maps into
+`X_ε` for arbitrary `ε`. -/
+def SatisfiesApproximateBestReplyEquation (epsilon : ℝ)
+    (value : G.State → ι → ℝ) (x : G.StationaryProfile) : Prop :=
+  ∀ state who action,
+    (x state who).prob action =
+      Real.rpow epsilon (G.continuationCost value x state who action) /
         (∑ alternative : G.Action who,
           Real.rpow epsilon
             (G.continuationCost value x state who alternative))
 
-/-- The quantifier and scope of the Section 5.3 construction.  The paper
-asserts the fixed point only for all sufficiently small positive `ε`, after
-restricting to positive recursive games and making the absorbing reduction.
--/
-def ConstrainedFixedPointClaim (value : G.StationaryValue) : Prop :=
-  G.IsPositiveRecursive →
-  G.FullyMixedProfilesAbsorb →
-  G.IsStationaryValue value →
-  ∃ epsilonZero : ℝ, 0 < epsilonZero ∧
-    ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonZero →
-      G.IsSmallForActionSets epsilon ∧
-      ∃ x : G.StationaryProfile,
-        G.InConstrainedSimplex epsilon x ∧
-        G.SatisfiesApproximateBestReplyEquation value epsilon x
+/-- Faithful quantifiers for the Section 5.3 fixed-point construction.
+The paper asserts the construction only for sufficiently small `ε`, after
+restricting to positive recursive games and making the absorbing reduction. -/
+def ConstrainedFixedPointClaim : Prop :=
+  G.IsPositiveRecursive → G.FullyMixedErgodicReduction →
+    ∃ epsilon0 : ℝ, 0 < epsilon0 ∧
+      ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilon0 →
+        G.ConstraintFeasible epsilon ∧
+        ∃ x : G.StationaryProfile, ∃ value : G.State → ι → ℝ,
+          G.IsEpsilonConstrained epsilon x ∧
+          G.IsStationaryEvaluation x value ∧
+          G.SatisfiesApproximateBestReplyEquation epsilon value x
 
 end PaperGame
-
-/-!
-## Remaining paper claims
-
-* Theorem 2.3: every finite stochastic game has a uniform autonomous
-  correlated-equilibrium payoff.
-* Theorem 2.4: every positive recursive game has a uniform stationary
-  correlated-equilibrium payoff, with one stationary device independent of
-  the requested error.
-
-Both remain paper-only in this future record.  Promotion requires a concrete
-induced-law semantics for the private devices and a corrected, fully checked
-route through Proposition 3.8, Lemmas 4.4–4.5, the graph formula under
-transience, the nested asymptotic exit law, and the constrained fixed point.
--/
 
 end Literature.SolanAndVieille2002b
