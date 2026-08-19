@@ -10,24 +10,20 @@ import UniformEquilibrium.ProofView.Concepts.Existence.ProductSimplexBrouwer
 /-!
 # Nash existence for compact barycentric games
 
-This file proves the compact-strategy Nash theorem needed by Sorin's compact
-repeated-game reduction.
-
 Each player has a nonempty compact strategy space equipped with finite
-barycentres. The payoff is continuous and preserves those barycentres in a
-player's own coordinate. This is the intrinsic formulation of a compact
-continuous mixed game: no ambient normed-space presentation and no
-finite-dimensionality assumption on the strategy spaces are required.
+barycentres. Payoffs are continuous and preserve barycentres in the player's
+own coordinate. This is the intrinsic form of a compact continuous mixed game;
+no ambient normed-space realization or finite-dimensionality assumption on the
+strategy spaces is needed.
 
-The proof is finite-dimensional. If no Nash equilibrium exists, the open sets
-on which a fixed unilateral deviation is profitable cover the compact profile
-space. A finite subcover selects finitely many deviations. Add one base
-strategy for each player and take the product of the corresponding finite
-simplices. The barycentre map turns simplex profiles into game profiles. Nash's
-positive-gain map is a continuous self-map of that finite product of
-simplices, so Brouwer supplies a fixed point. Barycentricity makes the weighted
-sum of unilateral gains zero; the fixed-point identities then force every
-selected gain to be nonpositive, contradicting the finite cover.
+If no Nash equilibrium exists, the open sets on which a fixed unilateral
+deviation is profitable cover the compact profile space. A finite subcover
+selects finitely many deviations. Add one base strategy and take the product of
+the resulting finite simplices. The barycentre map sends that finite product
+back to the original game. Nash's positive-gain map is a continuous self-map of
+the finite product, hence has a Brouwer fixed point. Barycentricity makes the
+weighted sum of unilateral gains zero, while the fixed-point equations force
+all selected gains to be nonpositive, contradicting the finite cover.
 -/
 
 noncomputable section
@@ -40,8 +36,8 @@ open Set Function
 
 universe u v
 
-/-- A compact continuous game whose strategy spaces admit finite
-barycentres and whose payoffs are affine in each player's own strategy. -/
+/-- A compact continuous game with finite barycentres and own-coordinate
+affine payoffs. -/
 structure CompactBarycentricGame where
   Player : Type u
   [finitePlayer : Fintype Player]
@@ -52,16 +48,16 @@ structure CompactBarycentricGame where
   [nonemptyStrategy : ∀ i, Nonempty (Strategy i)]
   payoff : (∀ i, Strategy i) → Player → ℝ
   payoffContinuous : ∀ who, Continuous fun profile => payoff profile who
-  barycenter : ∀ i {A : Type*} [Fintype A] [Nonempty A],
-    stdSimplex ℝ A → (A → Strategy i) → Strategy i
-  barycenterContinuous : ∀ i {A : Type*} [Fintype A] [Nonempty A]
-    (points : A → Strategy i),
-    Continuous fun weights : stdSimplex ℝ A => barycenter i weights points
+  barycenter : ∀ i (n : ℕ),
+    stdSimplex ℝ (Fin n) → (Fin n → Strategy i) → Strategy i
+  barycenterContinuous : ∀ i (n : ℕ) (points : Fin n → Strategy i),
+    Continuous fun weights : stdSimplex ℝ (Fin n) =>
+      barycenter i n weights points
   payoffBarycentric : ∀ (profile : ∀ i, Strategy i) (who : Player)
-    {A : Type*} [Fintype A] [Nonempty A]
-    (weights : stdSimplex ℝ A) (points : A → Strategy who),
+    (n : ℕ) (weights : stdSimplex ℝ (Fin n))
+    (points : Fin n → Strategy who),
     payoff (Function.update profile who
-        (barycenter who weights points)) who =
+        (barycenter who n weights points)) who =
       ∑ a, weights a * payoff (Function.update profile who (points a)) who
 
 attribute [instance] CompactBarycentricGame.finitePlayer
@@ -123,48 +119,49 @@ theorem continuous_deviationGain (deviation : G.Deviation) :
       (G.continuous_update_const deviation.1 deviation.2)).sub
     (G.payoffContinuous deviation.1)
 
-/-- A fixed admissible base profile, used only to make every selected finite
-simplex nonempty. -/
+/-- A fixed base profile, used to make every finite approximation nonempty. -/
 def baseProfile : G.Profile :=
   fun i => Classical.choice inferInstance
 
-/-- Selected deviations owned by one player. -/
-abbrev OwnedDeviation (selected : Finset G.Deviation) (who : G.Player) :=
-  {d : {d : G.Deviation // d ∈ selected} // d.1.1 = who}
+/-- The common finite action type used by the Brouwer approximation. -/
+abbrev ApproxAction (selected : Finset G.Deviation) (_who : G.Player) :=
+  Fin (selected.card + 1)
 
-/-- The finite action index used in the Brouwer reduction. `none` denotes the
-base strategy. -/
-abbrev ApproxAction (selected : Finset G.Deviation) (who : G.Player) :=
-  Option (G.OwnedDeviation selected who)
+/-- The selected deviation indexed by a positive finite action. -/
+def indexedDeviation (selected : Finset G.Deviation)
+    (index : Fin selected.card) : G.Deviation :=
+  (selected.equivFin.symm index).1
 
-/-- Cast an owned selected deviation to its owner's strategy type. -/
-def ownedStrategy {selected : Finset G.Deviation} {who : G.Player}
-    (deviation : G.OwnedDeviation selected who) : G.Strategy who :=
-  deviation.2 ▸ deviation.1.1.2
-
-/-- The finite strategy family attached to one player. -/
+/-- The finite strategy family attached to player `who`. Index zero is the
+base strategy. A later index carries its selected deviation when that
+deviation belongs to `who`, and the base strategy otherwise. -/
 def selectedPoint (selected : Finset G.Deviation) (who : G.Player) :
-    G.ApproxAction selected who → G.Strategy who
-  | none => G.baseProfile who
-  | some deviation => G.ownedStrategy deviation
+    G.ApproxAction selected who → G.Strategy who :=
+  Fin.cases (G.baseProfile who) fun index =>
+    let deviation := G.indexedDeviation selected index
+    if h : deviation.1 = who then h ▸ deviation.2 else G.baseProfile who
 
-/-- Barycentric game profile represented by a profile of finite-simplex
-weights. -/
+/-- Profiles of finite-simplex weights in the Brouwer approximation. -/
+abbrev ApproxProfile (selected : Finset G.Deviation) :=
+  MixedSimplex G.Player (G.ApproxAction selected)
+
+/-- Barycentric game profile represented by finite-simplex weights. -/
 def baryProfile (selected : Finset G.Deviation)
-    (weights : MixedSimplex G.Player (G.ApproxAction selected)) : G.Profile :=
-  fun who => G.barycenter who (weights who) (G.selectedPoint selected who)
+    (weights : G.ApproxProfile selected) : G.Profile :=
+  fun who => G.barycenter who (selected.card + 1) (weights who)
+    (G.selectedPoint selected who)
 
 /-- The barycentric profile depends continuously on the simplex weights. -/
 theorem continuous_baryProfile (selected : Finset G.Deviation) :
     Continuous (G.baryProfile selected) := by
   apply continuous_pi
   intro who
-  exact (G.barycenterContinuous who (G.selectedPoint selected who)).comp
-    (continuous_apply who)
+  exact (G.barycenterContinuous who (selected.card + 1)
+    (G.selectedPoint selected who)).comp (continuous_apply who)
 
-/-- Gain of one point of a player's selected finite strategy family. -/
+/-- Gain of one point in a player's selected finite strategy family. -/
 def pointGain (selected : Finset G.Deviation)
-    (weights : MixedSimplex G.Player (G.ApproxAction selected))
+    (weights : G.ApproxProfile selected)
     (who : G.Player) (action : G.ApproxAction selected who) : ℝ :=
   G.payoff (Function.update (G.baryProfile selected weights) who
       (G.selectedPoint selected who action)) who -
@@ -173,11 +170,11 @@ def pointGain (selected : Finset G.Deviation)
 /-- One selected point's gain is continuous in the simplex profile. -/
 theorem continuous_pointGain (selected : Finset G.Deviation)
     (who : G.Player) (action : G.ApproxAction selected who) :
-    Continuous (fun weights : MixedSimplex G.Player (G.ApproxAction selected) =>
+    Continuous (fun weights : G.ApproxProfile selected =>
       G.pointGain selected weights who action) := by
   have hbary := G.continuous_baryProfile selected
   have hupdate : Continuous
-      (fun weights : MixedSimplex G.Player (G.ApproxAction selected) =>
+      (fun weights : G.ApproxProfile selected =>
         Function.update (G.baryProfile selected weights) who
           (G.selectedPoint selected who action)) :=
     (G.continuous_update_const who
@@ -185,25 +182,22 @@ theorem continuous_pointGain (selected : Finset G.Deviation)
   exact ((G.payoffContinuous who).comp hupdate).sub
     ((G.payoffContinuous who).comp hbary)
 
-/-- Sum of positive gains in one player's selected finite strategy family. -/
+/-- Sum of positive gains in one player's selected finite family. -/
 def gainSum (selected : Finset G.Deviation)
-    (weights : MixedSimplex G.Player (G.ApproxAction selected))
-    (who : G.Player) : ℝ :=
+    (weights : G.ApproxProfile selected) (who : G.Player) : ℝ :=
   ∑ action : G.ApproxAction selected who,
     G.pospart (G.pointGain selected weights who action)
 
 @[simp] theorem gainSum_nonneg (selected : Finset G.Deviation)
-    (weights : MixedSimplex G.Player (G.ApproxAction selected))
-    (who : G.Player) :
+    (weights : G.ApproxProfile selected) (who : G.Player) :
     0 ≤ G.gainSum selected weights who :=
   Finset.sum_nonneg fun _ _ => G.pospart_nonneg _
 
 /-- Nash's positive-gain map on the product of selected finite simplices. -/
 def nashMap (selected : Finset G.Deviation) :
-    MixedSimplex G.Player (G.ApproxAction selected) →
-      MixedSimplex G.Player (G.ApproxAction selected) := by
+    G.ApproxProfile selected → G.ApproxProfile selected := by
   intro weights who
-  let denominator := 1 + G.gainSum selected weights who
+  let denominator : ℝ := 1 + G.gainSum selected weights who
   refine ⟨fun action =>
       (weights who action +
         G.pospart (G.pointGain selected weights who action)) / denominator,
@@ -212,7 +206,9 @@ def nashMap (selected : Finset G.Deviation) :
     exact div_nonneg
       (add_nonneg (stdSimplex.zero_le (weights who) action)
         (G.pospart_nonneg _))
-      (by linarith [G.gainSum_nonneg selected weights who])
+      (by
+        dsimp [denominator]
+        linarith [G.gainSum_nonneg selected weights who])
   · have hden_pos : 0 < denominator := by
       dsimp [denominator]
       linarith [G.gainSum_nonneg selected weights who]
@@ -225,7 +221,7 @@ def nashMap (selected : Finset G.Deviation) :
     exact mul_inv_cancel₀ hden_pos.ne'
 
 @[simp] theorem nashMap_apply (selected : Finset G.Deviation)
-    (weights : MixedSimplex G.Player (G.ApproxAction selected))
+    (weights : G.ApproxProfile selected)
     (who : G.Player) (action : G.ApproxAction selected who) :
     G.nashMap selected weights who action =
       (weights who action +
@@ -238,24 +234,23 @@ theorem continuous_nashMap (selected : Finset G.Deviation) :
     Continuous (G.nashMap selected) := by
   have hcoord : ∀ who (action : G.ApproxAction selected who),
       Continuous
-        (fun weights : MixedSimplex G.Player (G.ApproxAction selected) =>
+        (fun weights : G.ApproxProfile selected =>
           (weights who action +
               G.pospart (G.pointGain selected weights who action)) /
             (1 + G.gainSum selected weights who)) := by
     intro who action
     have hweight : Continuous
-        (fun weights : MixedSimplex G.Player (G.ApproxAction selected) =>
-          weights who action) :=
+        (fun weights : G.ApproxProfile selected => weights who action) :=
       (continuous_apply action).comp
         (continuous_subtype_val.comp (continuous_apply who))
     have hsum : Continuous
-        (fun weights : MixedSimplex G.Player (G.ApproxAction selected) =>
+        (fun weights : G.ApproxProfile selected =>
           G.gainSum selected weights who) := by
       unfold gainSum
       exact continuous_finsetSum _ fun other _ =>
         G.continuous_pospart.comp
           (G.continuous_pointGain selected who other)
-    have hden : ∀ weights : MixedSimplex G.Player (G.ApproxAction selected),
+    have hden : ∀ weights : G.ApproxProfile selected,
         1 + G.gainSum selected weights who ≠ 0 := by
       intro weights
       linarith [G.gainSum_nonneg selected weights who]
@@ -265,60 +260,49 @@ theorem continuous_nashMap (selected : Finset G.Deviation) :
   apply continuous_pi
   intro who
   apply Continuous.subtype_mk
-  · apply continuous_pi
-    intro action
-    exact hcoord who action
-  · intro weights
-    exact (G.nashMap selected weights who).property
+  apply continuous_pi
+  intro action
+  exact hcoord who action
 
 /-- Barycentricity makes the current finite mixture's weighted average gain
 exactly zero. -/
 theorem weighted_pointGain_sum_zero (selected : Finset G.Deviation)
-    (weights : MixedSimplex G.Player (G.ApproxAction selected))
-    (who : G.Player) :
+    (weights : G.ApproxProfile selected) (who : G.Player) :
     ∑ action : G.ApproxAction selected who,
       weights who action * G.pointGain selected weights who action = 0 := by
   let profile := G.baryProfile selected weights
   let points := G.selectedPoint selected who
-  have hbary := G.payoffBarycentric profile who (weights who) points
-  have hself : Function.update profile who (profile who) = profile := by
-    exact Function.update_eq_self who profile
-  change
-    ∑ action : G.ApproxAction selected who,
-      weights who action *
-        (G.payoff (Function.update profile who (points action)) who -
-          G.payoff profile who) = 0
+  have hmean :
+      G.payoff profile who =
+        ∑ action : G.ApproxAction selected who,
+          weights who action *
+            G.payoff (Function.update profile who (points action)) who := by
+    simpa [profile, points, baryProfile, Function.update_eq_self] using
+      (G.payoffBarycentric profile who (selected.card + 1)
+        (weights who) points)
+  unfold pointGain
   simp_rw [mul_sub]
-  rw [Finset.sum_sub_distrib, Finset.sum_mul]
-  rw [(weights who).property.2, one_mul]
-  change
-    (∑ action : G.ApproxAction selected who,
-      weights who action *
-        G.payoff (Function.update profile who (points action)) who) -
-      G.payoff profile who = 0
-  rw [← hbary, hself]
-  ring
+  rw [Finset.sum_sub_distrib, Finset.sum_mul,
+    (weights who).property.2, one_mul]
+  exact sub_eq_zero.mpr hmean.symm
 
-/-- A fixed point of `nashMap` satisfies the coordinate identity used in the
-positive-gain algebra. -/
+/-- A fixed point of `nashMap` satisfies Nash's coordinate identity. -/
 theorem fixedPoint_identity (selected : Finset G.Deviation)
-    (weights : MixedSimplex G.Player (G.ApproxAction selected))
+    (weights : G.ApproxProfile selected)
     (hfixed : G.nashMap selected weights = weights)
     (who : G.Player) (action : G.ApproxAction selected who) :
     weights who action * (1 + G.gainSum selected weights who) =
       weights who action + G.pospart (G.pointGain selected weights who action) := by
-  have hcoordinate := congrArg Subtype.val (congrFun hfixed who)
-  have hvalue := congrFun hcoordinate action
+  have hvalue : G.nashMap selected weights who action = weights who action := by
+    exact congrFun (congrArg Subtype.val (congrFun hfixed who)) action
   rw [G.nashMap_apply] at hvalue
   have hden : 1 + G.gainSum selected weights who ≠ 0 := by
     linarith [G.gainSum_nonneg selected weights who]
-  apply (eq_div_iff hden).mp
-  exact hvalue.symm
+  exact ((div_eq_iff hden).mp hvalue).symm
 
-/-- Every point in every selected finite family has nonpositive gain at a
-fixed point of the positive-gain map. -/
+/-- Every selected finite point has nonpositive gain at a fixed point. -/
 theorem pointGain_nonpos_of_fixedPoint (selected : Finset G.Deviation)
-    (weights : MixedSimplex G.Player (G.ApproxAction selected))
+    (weights : G.ApproxProfile selected)
     (hfixed : G.nashMap selected weights = weights)
     (who : G.Player) (action : G.ApproxAction selected who) :
     G.pointGain selected weights who action ≤ 0 := by
@@ -334,25 +318,25 @@ theorem pointGain_nonpos_of_fixedPoint (selected : Finset G.Deviation)
   have hweighted : ∑ a, w a * g a = 0 := by
     simpa [w, g] using G.weighted_pointGain_sum_zero selected weights who
   exact Math.Optimization.LocalGlobal.all_nonpos_of_weighted_pospart_fixedPoint
-    hfp hweighted action
+    (w := w) (g := g) hfp hweighted action
 
-/-- A selected deviation appears literally as a point of its owner's finite
-strategy family. -/
+/-- The finite index of a selected deviation. -/
 def selectedAction {selected : Finset G.Deviation}
     (deviation : G.Deviation) (hdeviation : deviation ∈ selected) :
     G.ApproxAction selected deviation.1 :=
-  some ⟨⟨deviation, hdeviation⟩, rfl⟩
+  Fin.succ (selected.equivFin ⟨deviation, hdeviation⟩)
 
 @[simp] theorem selectedPoint_selectedAction
     {selected : Finset G.Deviation}
     (deviation : G.Deviation) (hdeviation : deviation ∈ selected) :
     G.selectedPoint selected deviation.1
       (G.selectedAction deviation hdeviation) = deviation.2 := by
-  rfl
+  classical
+  simp [selectedPoint, selectedAction, indexedDeviation]
 
 @[simp] theorem pointGain_selectedAction
     {selected : Finset G.Deviation}
-    (weights : MixedSimplex G.Player (G.ApproxAction selected))
+    (weights : G.ApproxProfile selected)
     (deviation : G.Deviation) (hdeviation : deviation ∈ selected) :
     G.pointGain selected weights deviation.1
       (G.selectedAction deviation hdeviation) =
@@ -364,13 +348,12 @@ barycentric continuous game has a Nash equilibrium. -/
 theorem exists_nash : ∃ profile : G.Profile, G.IsNash profile := by
   classical
   by_contra hnone
-  simp only [not_exists] at hnone
   have hprofitable : ∀ profile : G.Profile,
       ∃ deviation : G.Deviation, 0 < G.deviationGain profile deviation := by
     intro profile
-    have hnash := hnone profile
+    have hnash : ¬G.IsNash profile := fun h => hnone ⟨profile, h⟩
     unfold IsNash at hnash
-    push_neg at hnash
+    push Not at hnash
     obtain ⟨who, deviation, hgain⟩ := hnash
     exact ⟨⟨who, deviation⟩, sub_pos.mpr hgain⟩
   let profitable : G.Deviation → Set G.Profile :=
