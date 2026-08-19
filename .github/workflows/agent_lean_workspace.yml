@@ -1,0 +1,38 @@
+name: Agent Lean workspace
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - run: lake build
+      - name: Package Lean workspace
+        run: |
+          tar -C "$HOME" -cf /tmp/elan.tar .elan
+          tar -cf /tmp/lake-workspace.tar .lake
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-workspace
+          retention-days: 1
+          compression-level: 1
+          path: |
+            /tmp/elan.tar
+            /tmp/lake-workspace.tar
