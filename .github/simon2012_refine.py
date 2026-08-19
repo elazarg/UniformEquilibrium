@@ -16,5 +16,5 @@ assert sha256(joined.encode()).hexdigest() == (
 assert sha256(patch).hexdigest() == (
     "a3d04766babbfda6136f50dbbb11e48d825e85a369dce4710c05a3368f279d46"
 )
-run(["git", "apply", "--check", "-"], input=patch, check=True)
-run(["git", "apply", "-"], input=patch, check=True)
+run(["git", "apply", "-p0", "--check", "-"], input=patch, check=True)
+run(["git", "apply", "-p0", "-"], input=patch, check=True)
