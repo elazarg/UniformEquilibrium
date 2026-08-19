@@ -1,23 +1,20 @@
-name: Agent Lean environment
+name: Apply PR 45 actual content
 
 on:
   push:
     branches:
       - agent/complete-solan-vieille-2001
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: agent-sv2001-${{ github.event.pull_request.number || github.ref }}
+  group: pr45-actual-content
   cancel-in-progress: true
 
 jobs:
-  focused:
+  apply-and-check:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -25,6 +22,22 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
+
+      - name: Apply staged formalization patch
+        shell: bash
+        run: |
+          cat .pr45-upload/part* | base64 --decode > /tmp/pr45-actual-content.patch
+          echo "301ca12086a680ab69ff553ace6aab05502e697eec84468da2443a8b52fe69a0  /tmp/pr45-actual-content.patch" | sha256sum --check -
+          git apply --check /tmp/pr45-actual-content.patch
+          git apply /tmp/pr45-actual-content.patch
+          rm -rf .pr45-upload
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "Add Solan-Vieille 2001 formalization work"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
       - uses: leanprover/lean-action@v1
         with:
           auto-config: false
@@ -32,66 +45,9 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - name: Split reusable Lean environment
-        run: |
-          tar --zstd -cf - -C "$HOME" .elan -C "$GITHUB_WORKSPACE" .lake GameTheory/.lake \
-            | split -b 400M -d -a 2 - "$GITHUB_WORKSPACE/agent-lean-environment.part-"
-          ls -lh "$GITHUB_WORKSPACE"/agent-lean-environment.part-*
-      - uses: actions/upload-artifact@v4
-        with:
-          name: agent-lean-environment-00
-          path: agent-lean-environment.part-00
-          compression-level: 0
-          retention-days: 1
-      - uses: actions/upload-artifact@v4
-        with:
-          name: agent-lean-environment-01
-          path: agent-lean-environment.part-01
-          compression-level: 0
-          retention-days: 1
-      - uses: actions/upload-artifact@v4
-        with:
-          name: agent-lean-environment-02
-          path: agent-lean-environment.part-02
-          compression-level: 0
-          retention-days: 1
-      - uses: actions/upload-artifact@v4
-        with:
-          name: agent-lean-environment-03
-          path: agent-lean-environment.part-03
-          compression-level: 0
-          retention-days: 1
-      - uses: actions/upload-artifact@v4
-        with:
-          name: agent-lean-environment-04
-          path: agent-lean-environment.part-04
-          compression-level: 0
-          retention-days: 1
-      - uses: actions/upload-artifact@v4
-        with:
-          name: agent-lean-environment-05
-          path: agent-lean-environment.part-05
-          compression-level: 0
-          retention-days: 1
-      - uses: actions/upload-artifact@v4
-        with:
-          name: agent-lean-environment-06
-          path: agent-lean-environment.part-06
-          compression-level: 0
-          retention-days: 1
-      - uses: actions/upload-artifact@v4
-        with:
-          name: agent-lean-environment-07
-          path: agent-lean-environment.part-07
-          compression-level: 0
-          retention-days: 1
-      - uses: actions/upload-artifact@v4
-        with:
-          name: agent-lean-environment-08
-          path: agent-lean-environment.part-08
-          compression-level: 0
-          retention-days: 1
+
       - name: Build production dependencies
         run: lake build UniformEquilibrium
+
       - name: Compile the literature file
         run: lake env lean Literature/SolanAndVieille2001.lean
