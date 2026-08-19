@@ -31,6 +31,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic.LiminfAverageBridge
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.AsymptoticPayoffEquivalence
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.ExpectedPotentialShaping
