@@ -424,10 +424,11 @@ def effectiveProfile
 
 /-- Extend one local action to a complete contingent plan using fixed actions
 at every other state. -/
-open Classical in
 def extendAction (P : Game ι) (s : P.State) (i : ι)
-    (a : P.Act s i) : P.AmbientAct i :=
-  fun t => if h : t = s then h.symm ▸ a else Classical.choice (P.act_nonempty t i)
+    (a : P.Act s i) : P.AmbientAct i := by
+  classical
+  exact fun t =>
+    if h : t = s then h.symm ▸ a else Classical.choice (P.act_nonempty t i)
 
 @[simp] theorem extendAction_apply_same
     (P : Game ι) (s : P.State) (i : ι) (a : P.Act s i) :
