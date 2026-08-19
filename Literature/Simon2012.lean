@@ -24,9 +24,14 @@ Two corrections made explicitly on page 185 are controlling:
 The source leaves the symbol `δ` free in the definitions of stationarily
 generated and instant approximate equilibria.  We therefore first define the
 notions at a fixed punishment accuracy `δ`, and then use the arbitrarily-small
-`δ` closure in the numbered results.  This records the only quantification
-compatible with the compactness argument immediately following Lemma 2.1;
-it is not hidden in prose.
+`δ` closure in the numbered results.  This is the quantification used by the
+compactness argument immediately following Lemma 2.1; it is not hidden in
+prose.
+
+`Payoff N = N → ℝ` inherits mathlib's finite product norm.  Thus the topological
+claims are represented in an equivalent finite-dimensional norm, while every
+quantitative estimate below is explicitly a claim in that chosen norm.  No
+unmentioned identification with the Euclidean two-norm is used.
 
 A `sorry` below is preceded by the exact missing argument.  In particular, the
 large 2007 and 2012 correspondence/orbit theorems are not treated as proved
@@ -63,6 +68,10 @@ def IsSimonPayoffScale (G : QuittingGame) (M : ℝ) : Prop :=
   1 ≤ M ∧
     (∀ A n, |G.reward A n| ≤ M / 3) ∧
     ∀ A B n, 3 * |G.reward A n - G.reward B n| ≤ M
+
+/-- The standing assumption `|N| ≥ 3` made at the start of Section 2.1. -/
+def HasAtLeastThreePlayers (G : QuittingGame) : Prop :=
+  3 ≤ Fintype.card G.Player
 
 /-- The graph of a set-valued correspondence. -/
 def correspondenceGraph {X Y : Type} (F : Correspondence X Y) : Set (X × Y) :=
@@ -242,10 +251,10 @@ theorem question1_with_no_escape : Question1NoEscapeAffirmative := by
 
 /-! ### 2.3. The challenge and the correction to Simon 2007 -/
 
-/-- Use a fixed row through stage `M`, then switch to the punishment profile. -/
+/-- Use a fixed row for `M` stages, then switch to the punishment profile. -/
 def StationaryPrefixThenPunish (G : QuittingGame) (p : QuitRow G)
     (M : ℕ) (punishment : QuitProfile G) : QuitProfile G :=
-  fun t => if t ≤ M then p else punishment (t - (M + 1))
+  fun t => if t < M then p else punishment (t - M)
 
 /-- The punishment profile holds player `j` to `χʲ + δ`. -/
 def IsPunishmentWithin (G : QuittingGame) (j : G.Player) (δ : ℝ)
@@ -351,6 +360,20 @@ def SatisfiesCompactMotionBound (G : QuittingGame)
       let y := QuittingOneStagePayoff G r p
       ρ * QuitProbability G p ≤ ‖r - y‖ ∧
         QuitProbability G p ≤ 1 - ρ
+
+/--
+The compact-set form of Lemma 2.1(2).  This is the corrected statement behind
+the displayed distance-one application: the common parameter may depend on
+`K`.  The proof is the compact-subsequence argument in the paper; neither the
+uncorrected Simon 2007 declaration nor the production quitting-game library
+contains this uniformization.
+-/
+theorem lemma2_1_part2_compact (G : QuittingGame)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (K : Set (Payoff G.Player)) (hK : IsCompact K) :
+    SatisfiesCompactMotionBound G K := by
+  sorry
 
 /-- Lemma 2.1(1), isolated from the corrected compactness clause. -/
 theorem lemma2_1_part1 (G : QuittingGame)
@@ -561,7 +584,7 @@ def IsQuitStraightLineHomotopy (G : QuittingGame)
 /-- The rational upper box occurring in Theorem 3.1(v). -/
 def StructureTargetBox (G : QuittingGame) (M ρ : ℝ)
     (x : Payoff G.Player) : Prop :=
-  ∀ j, MinMaxQuit G j - ρ / 2 < x j ∧ x j ≤ M
+  ∀ j, MinMaxQuit G j - ρ / 2 ≤ x j ∧ x j ≤ M
 
 /-- The closed cube `[-R,R]ᴺ`. -/
 def InClosedPayoffBox {N : Type} [Fintype N] (R : ℝ)
@@ -569,14 +592,18 @@ def InClosedPayoffBox {N : Type} [Fintype N] (R : ℝ)
   ∀ j, -R ≤ x j ∧ x j ≤ R
 
 /--
-A parameter strong enough for both motion inequalities used in Theorem 3.1.
-The second clause is deliberately global; the theorem only invokes the
-structure result after selecting such a parameter on its bounded working set.
+A single `ρ` satisfying the two motion estimates on the bounded continuation
+region used in Sections 3--4.  Lemma 2.3 is pointwise (`∀ r, ∃ ρ`); compactness
+is therefore essential before one speaks of a common `ρ` in Theorem 3.1.
 -/
-def IsStructureMotionParameter (G : QuittingGame) (ρ : ℝ) : Prop :=
+def IsStructureMotionParameter (G : QuittingGame) (M ρ : ℝ) : Prop :=
   SatisfiesCorrectedLemma2_1Parameter G ρ ∧
-  0 < ρ ∧ ρ ≤ 1 ∧ ∀ r p, p ∈ EpsilonRow G ρ r →
-    ρ * QuitProbability G p ≤ ‖r - QuittingOneStagePayoff G r p‖
+  0 < ρ ∧ ρ ≤ 1 ∧
+  ∀ r : Payoff G.Player,
+    (∀ j, MinMaxQuit G j - ρ ≤ r j ∧
+      r j ≤ 2 * (Fintype.card G.Player : ℝ) * M) →
+    ∀ p, p ∈ EpsilonRow G ρ r →
+      ρ * QuitProbability G p ≤ ‖r - QuittingOneStagePayoff G r p‖
 
 /-- The full five-part conclusion of Theorem 3.1. -/
 def StructureTheoremConclusion (G : QuittingGame) (M : ℝ) : Prop :=
@@ -585,7 +612,10 @@ def StructureTheoremConclusion (G : QuittingGame) (M : ℝ) : Prop :=
     (∀ x, H x 0 = (x, zeroQuitRow G)) ∧
     {z | ∃ x, H x 1 = z} = EZeroTilde G ∧
     (∀ x ∈ closure ((WSet G)ᶜ), ∀ t, H x t = (x, zeroQuitRow G)) ∧
-    ∀ ρ, IsStructureMotionParameter G ρ →
+    ∀ (_hnormal : ∀ n, IsNormalPlayer G n)
+      (_hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+      (_hinstant : ¬HasInstantApproximateEquilibria G)
+      (ρ : ℝ), IsStructureMotionParameter G M ρ →
       (∀ x, x ∈ FRow G 0 x → x ∈ closure ((WSet G)ᶜ)) ∧
       ∃ R : ℝ, 0 < R ∧ ∀ x,
         ¬InClosedPayoffBox R x → ∀ t,
@@ -636,6 +666,7 @@ def AreSection3Constants (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
 /-- Lemma 3.4, retaining all three displayed conclusions. -/
 theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
     (hM : IsSimonPayoffScale G M)
+    (hmotion : IsStructureMotionParameter G M ρ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G)
@@ -694,6 +725,7 @@ def IsNonsingularPerturbation (G : QuittingGame)
     (reward' : {A : Finset G.Player // A.Nonempty} → Payoff G.Player)
     (tol : ℝ) : Prop :=
   (∀ A n, |reward' A n - G.reward A n| ≤ tol) ∧
+  (∀ A, A.1.card ≠ 1 → reward' A = G.reward A) ∧
   (∀ i, reward' ⟨{i}, Finset.singleton_nonempty i⟩ i = SoloPayoff G i) ∧
   (∀ i j, i ≠ j →
     reward' ⟨{j}, Finset.singleton_nonempty j⟩ i ≤
@@ -851,18 +883,36 @@ def Section4J (G : QuittingGame) {M d : ℝ}
   HomotopyTerminalImage (TruncatedW G R) (Section4H G inverse cutoff) ∪
     correspondenceGraph (GluedFiber G R ε δ)
 
-/-- Lemma 4.2: the upper glue is contained in `F_ε`. -/
+/--
+Lemma 4.2: the upper glue is contained in `F_ε`.  Membership of `x` in the
+upper neighborhood is explicit; without it `UpperGlueFiber` contains the
+all-continue image even outside the domain intended in the paper.
+-/
 theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
     (hM : IsSimonPayoffScale G M)
     (hδ : δ = ε / (2 * (Fintype.card G.Player : ℝ) * M)) :
-    ∀ x y, y ∈ UpperGlueFiber G R ε δ x → y ∈ FRow G ε x := by
+    ∀ x, x ∈ UpperNeighborhood G R ε → ∀ y,
+      y ∈ UpperGlueFiber G R ε δ x → y ∈ FRow G ε x := by
   sorry
 
-/-- Lemma 4.3's coordinate drift statement. -/
-theorem lemma4_3 (G : QuittingGame) (M d ρ R : ℝ)
+/--
+Lemma 4.3's coordinate drift statement, under the standing Section 3--4
+choices used in its proof.  These hypotheses are not optional: the paper uses
+normality, exclusion of the two simple equilibrium classes, the common motion
+parameter, the constants `ξ,R`, and the support properties of the cutoff.
+-/
+theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
     (inverse : PhiInverseData G M d)
     (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R δ cutoff)
     (a : Payoff G.Player)
     (haC : a ∈ TruncatedW G R)
     (hcutoff0 : 0 < (cutoff a : ℝ)) (hcutoff1 : (cutoff a : ℝ) < 1)
@@ -876,9 +926,15 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ R : ℝ)
           Section4Y G inverse cutoff a j) := by
   sorry
 
-/-- Lemma 4.4's boundedness of the continuation coordinate `β`. -/
-theorem lemma4_4 (G : QuittingGame) (M d R : ℝ)
-    (hM : IsSimonPayoffScale G M) (z : EZeroTilde G)
+/--
+Lemma 4.4's boundedness of the continuation coordinate `β`, with the `d,ξ,R`
+relations from the preceding construction made explicit.
+-/
+theorem lemma4_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (z : EZeroTilde G)
     (ha : Phi G M d z ∈ TruncatedW G R) :
     (∀ j, -R / 2 ≤ z.1.1 j ∧ z.1.1 j ≤ R + 1) ∧
       ∀ j, 0 < (z.1.2 j : ℝ) → |z.1.1 j| ≤ R / 2 := by
@@ -890,17 +946,21 @@ them by a vague “viability” predicate.  Its proof contains the paper's long
 contractibility/Jacobian and lower-boundary case analysis; no corresponding
 production theorem exists.
 -/
-theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
     (hnormal : ∀ n, IsNormalPlayer G n)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
     (hnonsingular : HasNonsingularSingletonDifferences G)
+    (hη : Corollary4_1Statement G η)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (inverse : PhiInverseData G M d)
     (cutoff : Payoff G.Player → UnitInterval)
     (hcutoff : IsSection4Cutoff G R δ cutoff)
-    (hε : 0 < ε)
+    (hε : 0 < ε) (hεη : ε < η / 3) (hερ : ε < ρ / 3)
     (hδ : δ = ε / (2 * (Fintype.card G.Player : ℝ) * M)) :
     Question1Hypotheses
       (TruncatedW G R)
