@@ -1,6 +1,7 @@
 name: Compile FTV literature
 
 on:
+  pull_request:
   push:
     branches: [agent/promote-ftv-1997]
   workflow_dispatch:
@@ -9,7 +10,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: compile-ftv-literature-${{ github.ref }}
+  group: compile-ftv-literature-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
