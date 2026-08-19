@@ -24,4 +24,9 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - run: lake env lean Literature/Simon2012.lean
+      - name: Compile literature dependency and promoted file
+        run: |
+          mkdir -p .lake/build/lib/lean/Literature
+          lake env lean Literature/Simon2007.lean \
+            -o .lake/build/lib/lean/Literature/Simon2007.olean
+          lake env lean Literature/Simon2012.lean
