@@ -727,11 +727,13 @@ absolute value at most `B`. -/
 def valueCube (P : Game ι) (B : ℝ) : Set P.R :=
   Set.Icc (fun _ _ => -B) (fun _ _ => B)
 
+set_option maxHeartbeats 800000 in
 theorem valueCube_isCompact
     (P : Game ι) [Fintype P.State] [Fintype ι] (B : ℝ) :
-    IsCompact (P.valueCube B) :=
-  isCompact_Icc
+    IsCompact (P.valueCube B) := by
+  exact isCompact_Icc
 
+set_option maxHeartbeats 800000 in
 /-- **Lemma 3, first part.** For fixed `v`, `S_v` is continuous on `X`. -/
 theorem lemma_3_continuous
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
@@ -742,6 +744,7 @@ theorem lemma_3_continuous
     continuous_id.prodMk continuous_const
   exact P.continuous_T.comp hpair
 
+set_option maxHeartbeats 800000 in
 /-- **Lemma 3, second part.** On every bounded value cube, the family
 `{S_v}` is equicontinuous.  `TendstoUniformly` is the paper's uniform-in-`v`
 formulation. -/
@@ -762,6 +765,7 @@ theorem lemma_3_equicontinuous
     (P.continuous_T.comp
       (continuous_fst.prodMk (continuous_subtype_val.comp continuous_snd))) x
 
+set_option maxHeartbeats 800000 in
 /-- The fixed point `β(x)` depends continuously on the profile.  This is the
 uniform-contraction parameter theorem specialized to Fink's `T_x`. -/
 theorem continuous_beta
@@ -805,6 +809,7 @@ theorem continuous_beta
       (div_lt_div_iff_of_pos_right hden).2 hres
     _ = ε := by field_simp [ne_of_gt hden]
 
+set_option maxHeartbeats 800000 in
 /-- **Lemma 4.** The graph of `β` is sequentially closed. -/
 theorem lemma_4
     (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
@@ -818,6 +823,7 @@ theorem lemma_4
     P.continuous_beta.continuousAt.tendsto.comp hx
   exact tendsto_nhds_unique hβ hv
 
+set_option maxHeartbeats 800000 in
 /-- **Lemma 5.** The graph of the best-response correspondence `φ` is
 sequentially closed. -/
 theorem lemma_5
@@ -1018,7 +1024,19 @@ theorem reward_discountedAuxEU_eq_fCoord_effectiveProfile
           (P.effectiveProfile x (s, who)) =
         P.effectiveMixedAction x s who := by
     exact (stdSimplexEquiv (α := P.Act s who)).symm_apply_apply _
-  rw [hbase, hown, Function.update_self]
+  have hmarg :
+      (fun i => (x s i).map (fun plan => plan s)) =
+        fun i => P.effectiveMixedAction x s i := rfl
+  have hupdate :
+      Function.update (fun i => P.effectiveMixedAction x s i) who
+          (P.effectiveMixedAction x s who) =
+        fun i => P.effectiveMixedAction x s i := by
+    funext i
+    by_cases hi : i = who
+    · subst i
+      simp
+    · simp [Function.update_of_ne hi]
+  rw [hmarg, hbase, hown, hupdate]
 
 /-- The bridge specialized to a literal one-state deviation lifted to a
 contingent plan. -/
@@ -1035,19 +1053,39 @@ theorem reward_discountedAuxEU_lift_eq_fCoord
             ((stdSimplexEquiv (α := P.Act s who)).symm y))) who =
       -(1 - P.discount who) *
         P.fCoord (P.effectiveProfile x) s who y e := by
-  rw [P.reward_discountedAuxEU_eq_fCoord
-    (Function.update (x s) who
-      (P.liftMixedAction s who
-        ((stdSimplexEquiv (α := P.Act s who)).symm y))) e s who]
-  apply congrArg (fun z : ℝ => -(1 - P.discount who) * z)
-  unfold fCoord
-  rw [P.map_update_eval]
-  have hbase :
-      (fun i => P.actionPMF (P.effectiveProfile x) s i) =
-        fun i => P.effectiveMixedAction x s i := by
-    funext i
-    exact P.actionPMF_effectiveProfile x s i
-  rw [hbase]
+  let d : PMF (P.Act s who) :=
+    (stdSimplexEquiv (α := P.Act s who)).symm y
+  let m' : ∀ i, PMF (P.AmbientAct i) :=
+    Function.update (x s) who (P.liftMixedAction s who d)
+  change P.rewardGame.discountedAuxEU (P.discount who)
+      (P.normalizedRewardValue e) s m' who = _
+  calc
+    _ = -(1 - P.discount who) *
+        expect (pmfPi (fun i => (m' i).map (fun plan => plan s)))
+          (fun a => P.oneStepCost e s a who) :=
+      P.reward_discountedAuxEU_eq_fCoord m' e s who
+    _ = -(1 - P.discount who) *
+        expect (pmfPi
+          (Function.update (fun i => P.effectiveMixedAction x s i) who d))
+          (fun a => P.oneStepCost e s a who) := by
+      apply congrArg (fun z : ℝ => -(1 - P.discount who) * z)
+      apply congrArg (fun μ =>
+        expect μ (fun a => P.oneStepCost e s a who))
+      apply congrArg pmfPi
+      dsimp [m']
+      rw [P.map_update_eval]
+      rfl
+    _ = -(1 - P.discount who) *
+        P.fCoord (P.effectiveProfile x) s who y e := by
+      apply congrArg (fun z : ℝ => -(1 - P.discount who) * z)
+      unfold fCoord
+      have hbase :
+          (fun i => P.actionPMF (P.effectiveProfile x) s i) =
+            fun i => P.effectiveMixedAction x s i := by
+        funext i
+        exact P.actionPMF_effectiveProfile x s i
+      rw [hbase]
+      rfl
 
 /-- The production reward table is bounded by the literal cost-table bound. -/
 theorem abs_rewardGame_stagePayoff_le_costBound
