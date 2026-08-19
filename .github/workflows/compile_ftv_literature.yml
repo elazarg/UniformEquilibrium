@@ -1,16 +1,15 @@
 name: Compile FTV literature
 
 on:
-  pull_request:
   push:
     branches: [agent/promote-ftv-1997]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: compile-ftv-literature-${{ github.event.pull_request.number || github.ref }}
+  group: compile-ftv-literature-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -20,8 +19,80 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: agent/promote-ftv-1997
           fetch-depth: 0
           submodules: recursive
+      - name: Apply first compile repairs
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("Literature/FleschThuijsmanAndVrieze1997.lean")
+          text = path.read_text()
+          replacements = [
+              (
+                  "  rw [expect_eq_sum, Fintype.sum_bool, paperCoin_true_toReal,\n"
+                  "    paperCoin_false_toReal]\n"
+                  "  ring\n",
+                  "  rw [expect_eq_sum, Fintype.sum_bool, paperCoin_true_toReal,\n"
+                  "    paperCoin_false_toReal]\n",
+              ),
+              (
+                  "  dsimp [IsPaperStationaryEpsilonEquilibrium]\n"
+                  "  linarith\n",
+                  "  linarith\n",
+              ),
+              (
+                  "  · simpa [paperCyclicProfile] using\n"
+                  "      quittingTerminalPayoff_paperCyclicPhaseProfile 0\n",
+                  "  · simpa [paperCyclicProfile, paperCyclicPhaseProfile,\n"
+                  "      GameTheory.FTVCyclicAdmissibleCycle.ftvCyclicProfile] using\n"
+                  "      GameTheory.FTVCyclicAdmissibleCycle."
+                  "quittingTerminalPayoff_ftvCyclicProfile\n",
+              ),
+              (
+                  "  simpa [paperCyclicProfile, paperCyclicPhaseProfile] using\n"
+                  "    GameTheory.FTVCyclicAdmissibleCycle."
+                  "tendsto_finiteAveragePayoff_ftvCyclicProfile\n"
+                  "      who\n",
+                  "  simpa [paperCyclicProfile, paperCyclicPhaseProfile,\n"
+                  "    GameTheory.FTVCyclicAdmissibleCycle.ftvCyclicProfile] using\n"
+                  "    GameTheory.FTVCyclicAdmissibleCycle."
+                  "tendsto_finiteAveragePayoff_ftvCyclicProfile\n"
+                  "      who\n",
+              ),
+              (
+                  "      paperEdgeTarget owner α := by\n"
+                  "  rw [paperEdgeProfile, quittingTerminalPayoff_rootThenContinuation_eq,\n"
+                  "    quittingTerminalPayoff_paperCyclicPhaseProfile]\n"
+                  "  change quittingRootSuccessorPayoff\n"
+                  "      GameTheory.FTVCyclicAdmissibleCycle.ftvReward\n"
+                  "      (GameTheory.FTVCyclicMinimality.ExactCyclicPacket."
+                  "standardPromise\n"
+                  "        (GameTheory.FTVCyclicMinimality.nextThree owner))\n"
+                  "      (paperSoloRoot owner (halfHazard α)) = _\n"
+                  "  rw [quittingRootSuccessorPayoff_paperSoloRoot]\n"
+                  "  rfl\n",
+                  "      paperEdgeTarget owner α := by\n"
+                  "  funext who\n"
+                  "  rw [paperEdgeProfile, quittingTerminalPayoff_rootThenContinuation_eq,\n"
+                  "    quittingTerminalPayoff_paperCyclicPhaseProfile]\n"
+                  "  change quittingRootSuccessorPayoff\n"
+                  "      GameTheory.FTVCyclicAdmissibleCycle.ftvReward\n"
+                  "      (GameTheory.FTVCyclicMinimality.ExactCyclicPacket."
+                  "standardPromise\n"
+                  "        (GameTheory.FTVCyclicMinimality.nextThree owner))\n"
+                  "      (paperSoloRoot owner (halfHazard α)) who = _\n"
+                  "  rw [quittingRootSuccessorPayoff_paperSoloRoot]\n"
+                  "  rfl\n",
+              ),
+          ]
+          for old, new in replacements:
+              if old not in text:
+                  raise SystemExit(f"missing expected replacement:\n{old}")
+              text = text.replace(old, new, 1)
+          path.write_text(text)
+          PY
       - uses: leanprover/lean-action@v1
         with:
           auto-config: false
@@ -30,3 +101,13 @@ jobs:
           use-mathlib-cache: true
           use-github-cache: true
       - run: lake env lean Literature/FleschThuijsmanAndVrieze1997.lean
+      - name: Commit compiled repair
+        run: |
+          if git diff --quiet -- Literature/FleschThuijsmanAndVrieze1997.lean; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add Literature/FleschThuijsmanAndVrieze1997.lean
+          git commit -m "Fix initial FTV literature compilation errors"
+          git push origin HEAD:agent/promote-ftv-1997
