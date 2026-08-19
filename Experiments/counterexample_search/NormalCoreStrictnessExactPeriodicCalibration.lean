@@ -5,7 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCoreStrictnessExample
-import Research.Quitting.AnchoredCyclicRenewal
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicRenewal
+import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
 
 /-!
 # An exact interior anchored solo-periodic calibration of the strictness table

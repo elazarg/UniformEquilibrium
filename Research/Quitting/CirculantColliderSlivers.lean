@@ -4,7 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.CirculantColliderCompletion
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Circulant.ColliderCompletion
+import UniformEquilibrium.Quitting.Classification.Circulant.ColliderCompletion
 
 /-!
 # The two vanishing-margin slabs of the collider completion

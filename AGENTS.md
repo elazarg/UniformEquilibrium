@@ -80,8 +80,9 @@ When a more precise description is needed, give it.
 - `MathUE/`: game-independent mathematics owned by this project.
 - `UniformEquilibrium/`: integrated game-semantic development.
 - `Theorems/`: reader-facing restatements delegating to original proofs.
-- `Literature/`: paper-by-paper Lean audit records and catalog infrastructure;
-  inspect its umbrella for actual coverage.
+- `Literature/`: one Lean audit record per paper of the bibliography, flat,
+  with active claim work inside the paper's own file; nothing imports this
+  lane, and its manifest exists for tooling reachability only.
 - `Research/`: compileable work not yet integrated.
 - `Experiments/`: reproducible systematic searches and generated evidence.
 - `Reverse/`: backward proof-search questions and evidence.
@@ -93,9 +94,12 @@ language or provenance. A reusable, human-maintained Lean declaration, checker,
 or interface whose meaning survives replacing an experimental instance belongs
 in Research until integration. A producer, configuration, concrete input or
 output, generated payload, report, or integrity record tied to a bounded run or
-instance belongs in Experiments. Thus an experiment may import Research, but
-Research must never import Experiments. A kernel-checked experimental instance
-is bounded checked evidence, not an integrated or general theorem.
+instance belongs in Experiments. Research is imported nowhere outside Research:
+anything important enough to be imported is important enough to reside under
+`UniformEquilibrium` or `MathUE`, so an experiment consuming a Research
+interface forces that interface's promotion. Research must never import
+Experiments or Literature. A kernel-checked experimental instance is bounded
+checked evidence, not an integrated or general theorem.
 
 An experiment record is durable only when its tracked source, reproduction
 command, assumptions, and limitations are recorded together. A migrated

@@ -5,7 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import Experiments.counterexample_search.RegularTournamentFiveSeed
-import Research.Quitting.AnchoredCyclicRenewal
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicRenewal
+import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
 
 /-!
 # Player zero's singleton row against the seed's anchored cyclic route

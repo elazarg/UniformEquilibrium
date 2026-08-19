@@ -295,7 +295,7 @@ Solan–Vieille 2025.
 arXiv:1803.00878 (v2, 5 Aug 2019). `—`
 
 **Solan & Solan 2020** — *Quitting Games and Linear Complementarity Problems*.
-Mathematics of Operations Research **45**(2), 626–651, arXiv:1707.02598.
+Mathematics of Operations Research **45**(2), 434–454, arXiv:1707.02598.
 DOI [`10.1287/moor.2019.0996`](https://doi.org/10.1287/moor.2019.0996). `—`
 ⚠ The preprint and the final manuscript number their results differently and
 define "normal player" differently; the preprint's normal set is the recursion

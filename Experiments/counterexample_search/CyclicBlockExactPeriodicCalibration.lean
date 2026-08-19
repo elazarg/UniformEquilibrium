@@ -5,7 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.StandardQSideExample
-import Research.Quitting.AnchoredCyclicRenewal
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicRenewal
+import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
 
 /-!
 # An exact interior anchored solo-periodic calibration of the cyclic block

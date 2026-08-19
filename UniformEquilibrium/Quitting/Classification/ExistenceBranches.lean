@@ -16,7 +16,7 @@ import UniformEquilibrium.Quitting.Stationary.Root
 Ashkenazi-Golan, Krasikov, Rainer and Solan, *Absorption paths and equilibria
 in quitting games*, Mathematical Programming (2022), Theorem 3.4, state that a
 quitting game admits an `ε`-equilibrium for every `ε > 0` if and only if at
-least one of three statements holds.  Their sources for the three branches are
+least one of three statements holds.  The branches are attributed there to
 Simon, *The structure of non-zero-sum stochastic games*, Adv. Appl. Math. 38
 (2007), Theorem 3, and Solan and Vieille, *Quitting games*, Math. Oper. Res. 26
 (2001).  This file states the three branches as ordinary propositions in the
@@ -34,22 +34,25 @@ itself: the equivalence is not formalized anywhere in this development.
 
 ## Quantifier and shape conventions
 
-The source quantifies each branch over "every `ε > 0` sufficiently small";
+The paper quantifies each branch over "every `ε > 0` sufficiently small";
 approximate Nash is monotone in its error
 (`GameTheory.StochasticGame.IsεAsymptoticNash.mono`), so the two readings agree
 and the definitions below quantify over every positive `ε`.
 `quittingStationaryεEquilibriumExistence_of_forall_lt` records that transfer
 for the stationary branch.
 
-Two restrictions are deliberate and are not transparent.
+Two presentation choices are deliberate and are not transparent.
 
 * `QuittingInstantPunishmentεEquilibriumExistence` fixes the punishment
-  continuation to a constant row played from the second stage on.  By
-  `GameTheory.quittingPunishmentValue_eq_stationaryPunishmentValue` constant
-  rows already realize the exact min-max, so the restriction costs no
-  punishment power, but the profile shape is narrower than the source's.  The
-  predicate is therefore a sufficient condition for the source's `S.2`, not a
-  restatement of it.
+  continuation to a constant row played from the second stage on, where the
+  paper leaves it an arbitrary behavior profile.  At the level of the
+  existence statement the two shapes are equivalent, by
+  `GameTheory.quittingInstantPunishmentεEquilibriumExistence_iff_profilePunishment` in
+  `UniformEquilibrium/Quitting/Classification/InstantPunishmentEquivalence.lean`,
+  which also states the paper's shape as
+  `GameTheory.QuittingProfilePunishmentεEquilibriumExistence`.  The
+  constant-row form is therefore the canonical one here and the
+  arbitrary-profile form is derived from it.
 * Branch `S.3` is stated over root sequences rather than over arbitrary
   behavior profiles.  In a quitting game the only history that carries a
   continuation is the all-continue prefix, and
@@ -57,10 +60,10 @@ Two restrictions are deliberate and are not transparent.
   any behavior profile's terminal payoff through its live rows, so this is a
   change of presentation rather than a restriction of the strategy class.
   Absorption is `GameTheory.IsCompletelyAbsorbing`, the vanishing of the
-  survival product, which is the source's `P_x(θ < ∞) = 1`.
+  survival product, which is the paper's `P_x(θ < ∞) = 1`.
 
 The one-stage test `QuittingRowεPerfect` writes out the two inequalities of
-the source's Definition 3.1, borrowed there from Solan and Vieille: every
+the paper's Definition 3.1, borrowed there from Solan and Vieille: every
 action is worth at most the row's own value plus `ε`, and every action in the
 support is worth at least that value minus `ε`.  Both clauses are needed.  A
 player quitting with small probability has its continue deviation weighted by
@@ -89,7 +92,7 @@ def QuittingStationaryεEquilibriumExistence
     (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward) ε
       (quittingStationaryProfile reward root)
 
-/-- The source's "for every sufficiently small `ε`" reading of `S.1` gives the
+/-- The paper's "for every sufficiently small `ε`" reading of `S.1` gives the
 reading used here, because approximate Nash is monotone in its error. -/
 theorem quittingStationaryεEquilibriumExistence_of_forall_lt
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {bound : ℝ}
@@ -112,8 +115,9 @@ row played from the second stage on that holds that player within the tolerance
 of its exact min-max, such that the resulting profile is a terminal approximate
 equilibrium.
 
-This implies the source's branch and is not implied by it: the source leaves
-the punishment continuation arbitrary. -/
+The paper leaves the punishment continuation arbitrary; the two existence
+statements nevertheless agree, by
+`quittingInstantPunishmentεEquilibriumExistence_iff_profilePunishment`. -/
 def QuittingInstantPunishmentεEquilibriumExistence
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ (quitter : ι) (root punishRow : ι → PMF Bool),
@@ -143,7 +147,7 @@ theorem exists_punishRow_stationaryUnilateralCap_le
 /-! ## S.3: sequentially perfect absorbing profiles -/
 
 /-- **One-stage `ε`-perfectness of a product row at a continuation vector**,
-written out from the source's Definition 3.1: no action beats the row's own
+written out from the paper's Definition 3.1: no action beats the row's own
 value by more than `ε`, and no action in the row's support falls below it by
 more than `ε`. -/
 def QuittingRowεPerfect

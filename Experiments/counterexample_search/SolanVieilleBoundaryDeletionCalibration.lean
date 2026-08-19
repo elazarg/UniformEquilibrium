@@ -4,7 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.BlockDeletionInequality
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSmallSurvivorDeletionExcessBound
+import UniformEquilibrium.Quitting.Classification.BlockDeletionInequality
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable

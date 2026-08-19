@@ -469,3 +469,17 @@ not retained as current documentation.
 - Every period-eleven implementation module is reachable from its umbrella.
 - All 44 evidence paths in the frontier ledger resolve.
 - No full project build was run.
+
+## Literature lane flattened (2026-08-19)
+
+`Research.Literature` was renamed to `Literature` and the lane flattened: the
+`Literature/Papers/` directory was removed with each paper record moving to
+`Literature/<Paper>.lean`, namespaces `Literature.Papers.*` and
+`Research.Literature.*` becoming `Literature.*`; the aggregate `All.lean` and
+`Coverage.lean` were deleted with the generated manifest `Literature.lean`
+taking reachability duty; and the active claim-consumer modules
+(`Research/Literature/SolanAndVieille2001/`, `Research/Literature/Sorin1986/`)
+were merged into their paper files. In the same restructuring Research became
+a terminal lane (imported nowhere outside itself), forcing the promotion of
+the Experiments-consumed Research closure into `UniformEquilibrium` and the
+demotion of the K11 conditional chain into `Experiments`.

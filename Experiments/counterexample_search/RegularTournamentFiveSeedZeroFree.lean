@@ -5,7 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import Experiments.counterexample_search.RegularTournamentFiveSeed
-import Research.Quitting.DiffuseTailSoloStructure
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.DiffuseTailSoloStructure
+import UniformEquilibrium.Quitting.Cycles.DiffuseTailSoloStructure
 
 /-!
 # Zero-free calibration: the regular five-player tournament seed

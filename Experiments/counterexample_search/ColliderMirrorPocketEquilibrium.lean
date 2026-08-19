@@ -4,7 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.CirculantColliderClosure
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Circulant.ColliderClosure
+import UniformEquilibrium.Quitting.Classification.Circulant.ColliderClosure
 
 /-!
 # One distant-pocket collider completion, in the branch only step four reaches

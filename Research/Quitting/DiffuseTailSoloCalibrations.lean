@@ -4,7 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.DiffuseTailSoloStructure
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.DiffuseTailSoloStructure
+import UniformEquilibrium.Quitting.Cycles.DiffuseTailSoloStructure
 import Research.Quitting.PairActiveSoloPhase
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 
