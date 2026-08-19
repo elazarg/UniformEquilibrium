@@ -26,4 +26,4 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - run: lake env lean UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Discounted/FinkHeterogeneous.lean
+      - run: lake build +UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
