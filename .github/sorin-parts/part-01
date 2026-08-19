@@ -1,0 +1,180 @@
+def IsDiscountedNash [Fintype ι] [DecidableEq ι]
+    (λ : G.DiscountRate) (profile : G.BehaviorProfile) : Prop :=
+  G.standardMonitoring.IsDiscountedPublicNash (1 - λ.1) profile
+
+/-- Nash equilibrium in the `L`-infinitely repeated game. -/
+def IsBanachNash [Fintype ι] [DecidableEq ι] (L : BanachLimit)
+    (profile : G.BehaviorProfile) : Prop :=
+  IsNash G.standardMonitoring.monitoredForm
+    (euPreference (G.banachUtility L)) profile
+
+/-- Feasible payoff set of the `n`-stage game (`D_n`). -/
+def finiteFeasiblePayoffs [Fintype ι] (n : G.Horizon) : Set (ι → ℝ) :=
+  Set.range (G.finitePayoffVector n)
+
+/-- Equilibrium payoff set of the `n`-stage game (`E_n`). -/
+def finiteEquilibriumPayoffs [Fintype ι] [DecidableEq ι]
+    (n : G.Horizon) : Set (ι → ℝ) :=
+  {payoff | ∃ profile, G.IsFiniteNash n profile ∧
+    G.finitePayoffVector n profile = payoff}
+
+/-- Feasible payoff set of the `λ`-discounted game (`D_λ`). -/
+def discountedFeasiblePayoffs [Fintype ι]
+    (λ : G.DiscountRate) : Set (ι → ℝ) :=
+  Set.range (G.discountedPayoffVector λ)
+
+/-- Equilibrium payoff set of the `λ`-discounted game (`E_λ`). -/
+def discountedEquilibriumPayoffs [Fintype ι] [DecidableEq ι]
+    (λ : G.DiscountRate) : Set (ι → ℝ) :=
+  {payoff | ∃ profile, G.IsDiscountedNash λ profile ∧
+    G.discountedPayoffVector λ profile = payoff}
+
+/-- Feasible payoff set of the `L`-infinitely repeated game (`D_∞`). -/
+def banachFeasiblePayoffs [Fintype ι] (L : BanachLimit) : Set (ι → ℝ) :=
+  Set.range (G.banachPayoffVector L)
+
+/-- Equilibrium payoff set of the `L`-infinitely repeated game (`E_∞`). -/
+def banachEquilibriumPayoffs [Fintype ι] [DecidableEq ι]
+    (L : BanachLimit) : Set (ι → ℝ) :=
+  {payoff | ∃ profile, G.IsBanachNash L profile ∧
+    G.banachPayoffVector L profile = payoff}
+
+/-- Pure one-stage payoff vectors (`F` in the paper). -/
+def purePayoffSet : Set (ι → ℝ) :=
+  Set.range G.payoff
+
+/-- The correlated feasible polytope `C = co F`. -/
+def correlatedFeasibleSet : Set (ι → ℝ) :=
+  convexHull ℝ G.purePayoffSet
+
+/-- Expected one-stage payoff of an independent mixed profile. -/
+def mixedStagePayoff [Fintype ι]
+    (profile : G.MixedProfile) (who : ι) : ℝ :=
+  G.mixedUtilityGame.stagePayoff profile who
+
+/-- Player `who`'s individually rational level.  The opponents choose an
+independent mixed profile, and the player's own coordinate is overwritten by a
+pure best response, exactly as in the displayed definition on page 148. -/
+def individuallyRationalLevel [Fintype ι] [DecidableEq ι]
+    (who : ι) : ℝ :=
+  ⨅ opponents : G.MixedProfile,
+    ⨆ own : G.Action who,
+      G.mixedStagePayoff
+        (Profile.update opponents who (FinDist.pure own)) who
+
+/-- Individually rational feasible payoff set `Δ`. -/
+def individuallyRationalFeasibleSet [Fintype ι] [DecidableEq ι] :
+    Set (ι → ℝ) :=
+  {payoff | payoff ∈ G.correlatedFeasibleSet ∧
+    ∀ who, G.individuallyRationalLevel who ≤ payoff who}
+
+end StageGame
+
+/-- Symmetric Hausdorff `ε`-closeness, written without choosing a particular
+Hausdorff-distance API. -/
+def HausdorffClose {α : Type*} [PseudoMetricSpace α]
+    (ε : ℝ) (first second : Set α) : Prop :=
+  (∀ x ∈ first, ∃ y ∈ second, dist x y < ε) ∧
+  (∀ y ∈ second, ∃ x ∈ first, dist x y < ε)
+
+/-- Hausdorff convergence of a sequence of sets. -/
+def HausdorffConvergesAtTop {α : Type*} [PseudoMetricSpace α]
+    (sets : ℕ → Set α) (limit : Set α) : Prop :=
+  ∀ ε : ℝ, 0 < ε → ∃ N : ℕ, ∀ n, N ≤ n →
+    HausdorffClose ε (sets n) limit
+
+/-- Hausdorff convergence of a family indexed by positive real parameters as
+the parameter tends to zero from the right. -/
+def HausdorffConvergesAtZero {α : Type*} [PseudoMetricSpace α]
+    (sets : ℝ → Set α) (limit : Set α) : Prop :=
+  ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
+    ∀ λ : ℝ, 0 < λ → λ < δ → HausdorffClose ε (sets λ) limit
+
+/-- Scalar multiplication of a payoff set. -/
+def scaleSet {ι : Type*} (t : ℝ) (set : Set (ι → ℝ)) : Set (ι → ℝ) :=
+  {payoff | ∃ x ∈ set, payoff = t • x}
+
+/-- The `m`-fold Minkowski sum `m * X` used before Lemma 3. -/
+def minkowskiNSum {ι : Type*} (m : ℕ) (set : Set (ι → ℝ)) :
+    Set (ι → ℝ) :=
+  {payoff | ∃ points : Fin m → ι → ℝ,
+    (∀ k, points k ∈ set) ∧ payoff = ∑ k, points k}
+
+/-- Face predicate used in Propositions 7--9. -/
+def IsFaceOf {ι : Type*} (face ambient : Set (ι → ℝ)) : Prop :=
+  face ⊆ ambient ∧
+  ∀ ⦃x y : ι → ℝ⦄, x ∈ ambient → y ∈ ambient →
+    ∀ ⦃t : ℝ⦄, 0 < t → t < 1 →
+      t • x + (1 - t) • y ∈ face → x ∈ face ∧ y ∈ face
+
+/-- Affine dimension of a payoff set. -/
+noncomputable def affineDimension {ι : Type*} [Fintype ι]
+    (set : Set (ι → ℝ)) : ℕ :=
+  Module.finrank ℝ (affineSpan ℝ set).direction
+
+/-- A one-dimensional face. -/
+def IsOneDimensionalFace {ι : Type*} [Fintype ι]
+    (face ambient : Set (ι → ℝ)) : Prop :=
+  IsFaceOf face ambient ∧ affineDimension face = 1
+
+/-! ## Section 1: generic compact mixed games -/
+
+/-- Feasible payoff set of an already-mixed normal-form game. -/
+def genericFeasiblePayoffs {ι Strategy : Type*}
+    (payoff : Strategy → ι → ℝ) : Set (ι → ℝ) :=
+  Set.range payoff
+
+/-- Nash payoff set for an already-mixed normal-form game, with unilateral
+replacement supplied by the model. -/
+def genericEquilibriumPayoffs {ι Strategy : Type*}
+    (payoff : Strategy → ι → ℝ)
+    (isNash : Strategy → Prop) : Set (ι → ℝ) :=
+  {value | ∃ profile, isNash profile ∧ payoff profile = value}
+
+/-- Paper property (1): a continuous image of a nonempty compact,
+path-connected mixed-profile space is nonempty, compact, and path-connected. -/
+theorem genericFeasiblePayoffs_nonempty_compact_pathConnected
+    {ι Strategy : Type*} [TopologicalSpace Strategy]
+    [Nonempty Strategy] [CompactSpace Strategy] [PathConnectedSpace Strategy]
+    (payoff : Strategy → ι → ℝ) (hpayoff : Continuous payoff) :
+    (genericFeasiblePayoffs payoff).Nonempty ∧
+      IsCompact (genericFeasiblePayoffs payoff) ∧
+      IsPathConnected (genericFeasiblePayoffs payoff) := by
+  constructor
+  · exact Set.range_nonempty payoff
+  constructor
+  · exact isCompact_univ.image_of_continuousOn hpayoff.continuousOn
+  · simpa [genericFeasiblePayoffs] using
+      (isPathConnected_univ.image payoff hpayoff.continuousOn)
+
+/-! **Paper property (2).** The Nash payoff set of the compact mixed extension
+is nonempty and compact.  Its proof is Nash--Glicksberg existence plus closedness
+of the Nash-profile set and continuity of the payoff map.  The current game
+library has finite-support mixed extensions but no weak-topology space of
+regular probabilities on an arbitrary compact strategy space, so the exact
+regular-probability theorem is retained here as this explained `sorry`. -/
+theorem genericEquilibriumPayoffs_nonempty_compact
+    {ι Strategy : Type*} [TopologicalSpace Strategy]
+    [CompactSpace Strategy]
+    (payoff : Strategy → ι → ℝ) (isNash : Strategy → Prop)
+    (hpayoff : Continuous payoff)
+    (hnash_nonempty : Set.Nonempty {profile | isNash profile})
+    (hnash_closed : IsClosed {profile | isNash profile}) :
+    (genericEquilibriumPayoffs payoff isNash).Nonempty ∧
+      IsCompact (genericEquilibriumPayoffs payoff isNash) := by
+  constructor
+  · rcases hnash_nonempty with ⟨profile, hprofile⟩
+    exact ⟨payoff profile, profile, hprofile, rfl⟩
+  · have hcompact : IsCompact {profile | isNash profile} :=
+      hnash_closed.isCompact
+    simpa [genericEquilibriumPayoffs, Set.image_image] using
+      hcompact.image hpayoff
+
+
+/-! The specialization of properties (1) and (2) to the two repeated
+finite/disounted evaluations.  Establishing compactness directly needs the
+Tychonoff topology on behavioral profiles and continuity of the infinite
+geometric payoff.  Those instances are not part of the current monitoring
+API, so the exact specializations are retained as explained `sorry`s. -/
+
+theorem finiteFeasiblePayoffs_nonempty_compact_pathConnected
