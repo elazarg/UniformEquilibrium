@@ -1,0 +1,29 @@
+name: Fink 1964 validation
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fink-1964-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - run: lake env lean UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Discounted/FinkHeterogeneous.lean
