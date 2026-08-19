@@ -87,7 +87,7 @@ def Game.rewardGame (P : Game ι) [Fintype ι] [DecidableEq ι] :
 
 /-- A stationary mixed profile, represented on the finite padded action
 carriers. Its semantic marginal on `J^i(s)` is `effectiveMixedAction`. -/
-abbrev StationaryMixedProfile (P : Game ι) [Fintype ι] [DecidableEq ι] :=
+abbrev Game.StationaryMixedProfile (P : Game ι) [Fintype ι] [DecidableEq ι] :=
   P.rewardGame.StationaryMixedProfile
 
 /-- The actual legal alternative selected by an ambient action label. -/
@@ -99,14 +99,14 @@ def Game.effectiveAction (P : Game ι) [Fintype ι] [DecidableEq ι]
 
 /-- The probability vector on the paper's literal alternative set `J^i(s)`
 induced by a padded stationary strategy. -/
-def effectiveMixedAction (P : Game ι) [Fintype ι] [DecidableEq ι]
+def Game.effectiveMixedAction (P : Game ι) [Fintype ι] [DecidableEq ι]
     (x : P.StationaryMixedProfile) (s : P.State) (i : ι) :
     PMF {a : P.Act i // P.Legal s i a} :=
   (x s i).map (P.effectiveAction s i)
 
 /-- Fink's unnormalized value vector `e_{hi}` is encoded as a normalized
 reward vector. -/
-def normalizedRewardValue (P : Game ι)
+def Game.normalizedRewardValue (P : Game ι)
     (e : P.State → Payoff ι) : P.State → Payoff ι :=
   fun s who => -(1 - P.discount who) * e s who
 
@@ -117,7 +117,7 @@ reward adapter:
 `f(x,y,e) = - EU_reward(x_{-h},y; -(1-α_h)e) / (1-α_h)`.
 Because `α_h < 1`, this expands to
 `E[C_h + α_h E[e_h(next)]]`. -/
-def f (P : Game ι) [Fintype ι] [DecidableEq ι]
+def Game.f (P : Game ι) [Fintype ι] [DecidableEq ι]
     (x : P.StationaryMixedProfile) (y : PMF (P.Act who))
     (e : P.State → Payoff ι) (s : P.State) (who : ι) : ℝ :=
   -P.rewardGame.discountedAuxEU (P.discount who)
@@ -125,29 +125,29 @@ def f (P : Game ι) [Fintype ι] [DecidableEq ι]
     (1 - P.discount who)
 
 /-- Equation (4): `e(x)` is a value vector for the stationary profile `x`. -/
-def IsValueVector (P : Game ι) [Fintype ι] [DecidableEq ι]
+def Game.IsValueVector (P : Game ι) [Fintype ι] [DecidableEq ι]
     (x : P.StationaryMixedProfile) (e : P.State → Payoff ι) : Prop :=
   ∀ s who, P.f x (x s who) e s who = e s who
 
 /-- Equation (5): at every state and for every player, the prescribed mixed
 alternative minimizes the one-stage cost plus discounted continuation cost. -/
-def IsEquilibriumPoint (P : Game ι) [Fintype ι] [DecidableEq ι]
+def Game.IsEquilibriumPoint (P : Game ι) [Fintype ι] [DecidableEq ι]
     (x : P.StationaryMixedProfile) (e : P.State → Payoff ι) : Prop :=
   P.IsValueVector x e ∧
     ∀ s who (y : PMF (P.Act who)),
       P.f x (x s who) e s who ≤ P.f x y e s who
 
-theorem one_sub_discount_pos (P : Game ι) (who : ι) :
+theorem Game.one_sub_discount_pos (P : Game ι) (who : ι) :
     0 < 1 - P.discount who :=
   sub_pos.mpr (P.discount_lt_one who)
 
-theorem one_sub_discount_ne (P : Game ι) (who : ι) :
+theorem Game.one_sub_discount_ne (P : Game ι) (who : ι) :
     1 - P.discount who ≠ 0 :=
   ne_of_gt (P.one_sub_discount_pos who)
 
 /-- The normalized-reward Bellman certificate is exactly the paper's
 cost-minimizing equilibrium condition. -/
-theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
+theorem Game.isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
     (P : Game ι) [Fintype ι] [DecidableEq ι]
     (x : P.StationaryMixedProfile) (e : P.State → Payoff ι) :
     P.IsEquilibriumPoint x e ↔
@@ -159,13 +159,13 @@ theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
     · intro s who y
       have hpos := P.one_sub_discount_pos who
       have hmin' := hmin s who y
-      unfold f at hmin'
+      unfold Game.f at hmin'
       dsimp only at hmin'
       nlinarith
     · intro s who
       have h := hvalue s who
-      unfold f at h
-      dsimp [normalizedRewardValue]
+      unfold Game.f at h
+      dsimp [Game.normalizedRewardValue]
       have hne := P.one_sub_discount_ne who
       apply (div_eq_iff hne).mp at h
       nlinarith
@@ -173,56 +173,48 @@ theorem isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq
     constructor
     · intro s who
       have h := hvalue s who
-      unfold f
+      unfold Game.f
       rw [h]
-      simp only [normalizedRewardValue]
+      simp only [Game.normalizedRewardValue]
       field_simp [P.one_sub_discount_ne who]
       ring
     · intro s who y
       have h := hnash s who y
-      unfold f
+      unfold Game.f
       have hpos := P.one_sub_discount_pos who
       nlinarith
 
-/-- A uniform bound on the finite reward table, obtained from the sup norm of
-the finite payoff array. -/
-def Game.rewardBound (P : Game ι) [Fintype P.State] [Fintype ι]
-    [DecidableEq ι] [∀ i, Fintype (P.Act i)] : ℝ :=
-  ‖fun s : P.rewardGame.State =>
-      fun a : P.rewardGame.JointAct =>
-        fun who : ι => P.rewardGame.stagePayoff s a who‖
+/-- A chosen uniform upper bound on the absolute finite reward table. -/
+noncomputable def Game.rewardBound (P : Game ι) [Finite P.State]
+    [Fintype ι] [DecidableEq ι] [∀ i, Finite (P.Act i)] : ℝ :=
+  max 0 (Classical.choose (Finite.bddAbove_range
+    (fun p : P.rewardGame.State × P.rewardGame.JointAct × ι =>
+      |P.rewardGame.stagePayoff p.1 p.2.1 p.2.2|)))
 
-theorem Game.rewardBound_nonneg (P : Game ι) [Fintype P.State] [Fintype ι]
-    [DecidableEq ι] [∀ i, Fintype (P.Act i)] :
-    0 ≤ P.rewardBound :=
-  norm_nonneg _
+theorem Game.rewardBound_nonneg (P : Game ι) [Finite P.State]
+    [Fintype ι] [DecidableEq ι] [∀ i, Finite (P.Act i)] :
+    0 ≤ P.rewardBound := by
+  exact le_max_left 0 _
 
 theorem Game.abs_reward_le_rewardBound
-    (P : Game ι) [Fintype P.State] [Fintype ι]
-    [DecidableEq ι] [∀ i, Fintype (P.Act i)]
+    (P : Game ι) [Finite P.State] [Fintype ι]
+    [DecidableEq ι] [∀ i, Finite (P.Act i)]
     (s : P.rewardGame.State) (a : P.rewardGame.JointAct) (who : ι) :
     |P.rewardGame.stagePayoff s a who| ≤ P.rewardBound := by
-  rw [← Real.norm_eq_abs]
-  exact
-    (norm_le_pi_norm
-      (fun who : ι => P.rewardGame.stagePayoff s a who) who).trans
-      ((norm_le_pi_norm
-        (fun a : P.rewardGame.JointAct =>
-          fun who : ι => P.rewardGame.stagePayoff s a who) a).trans
-        (norm_le_pi_norm
-          (fun s : P.rewardGame.State =>
-            fun a : P.rewardGame.JointAct =>
-              fun who : ι => P.rewardGame.stagePayoff s a who) s))
+  let F : P.rewardGame.State × P.rewardGame.JointAct × ι → ℝ :=
+    fun p => |P.rewardGame.stagePayoff p.1 p.2.1 p.2.2|
+  have hb : BddAbove (Set.range F) := Finite.bddAbove_range F
+  have hchosen : F (s, a, who) ≤ Classical.choose hb :=
+    Classical.choose_spec hb ⟨(s, a, who), rfl⟩
+  exact hchosen.trans (le_max_right 0 (Classical.choose hb))
 
 /-- Theorem 2: every finite stochastic `n`-person cost game has a stationary
 equilibrium point, with the discount factor allowed to depend on the player. -/
-theorem exists_equilibriumPoint
+theorem Game.exists_equilibriumPoint
     (P : Game ι) [Finite P.State] [Fintype ι] [DecidableEq ι]
     [∀ i, Finite (P.Act i)] [∀ i, Nonempty (P.Act i)] :
     ∃ (x : P.StationaryMixedProfile) (e : P.State → Payoff ι),
       P.IsEquilibriumPoint x e := by
-  letI : Fintype P.State := Fintype.ofFinite P.State
-  letI : ∀ i, Fintype (P.Act i) := fun i => Fintype.ofFinite (P.Act i)
   obtain ⟨x, V, hcert⟩ :=
     P.rewardGame.exists_isPlayerDiscountedStationaryBellmanEq
       P.discount P.rewardBound P.rewardBound_nonneg
@@ -232,12 +224,13 @@ theorem exists_equilibriumPoint
     fun s who => -V s who / (1 - P.discount who)
   have hencode : P.normalizedRewardValue e = V := by
     funext s who
-    dsimp [normalizedRewardValue, e]
+    dsimp [Game.normalizedRewardValue, e]
     field_simp [P.one_sub_discount_ne who]
     ring
   refine ⟨x, e,
     (P.isEquilibriumPoint_iff_isPlayerDiscountedStationaryBellmanEq x e).2 ?_⟩
-  simpa [hencode] using hcert
+  rw [hencode]
+  exact hcert
 
 /-!
 ## Paper proof route
