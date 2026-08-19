@@ -19,12 +19,26 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Pack current source
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Pack current source and fixed-point dependency
         run: |
           tar --exclude=.git --exclude=.lake --exclude='GameTheory/.git' -czf /tmp/pr45-current-source.tgz .
+          tar -czf /tmp/pr45-fixed-point-package.tgz -C .lake/packages fixed-point-theorems
       - uses: actions/upload-artifact@v4
         with:
           name: pr45-current-source
           path: /tmp/pr45-current-source.tgz
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr45-fixed-point-package
+          path: /tmp/pr45-fixed-point-package.tgz
           compression-level: 0
           retention-days: 1
