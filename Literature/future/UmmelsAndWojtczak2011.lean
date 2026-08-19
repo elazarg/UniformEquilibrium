@@ -16,12 +16,12 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Ummels & Wojtczak 2011"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Ummels & Wojtczak 2011"
   role := .finiteMemoryAlgorithms
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "finite_memory_nash_undecidable"
-        sourceLocator := "Theorem 4.14"
+        paperLocator := "Theorem 4.14"
         summary := "FinNE and PureFinNE are undecidable for 14-player SSMGs."
-        status := .sourceOnly } ]
+        status := .paperOnly } ]
 
 end Literature.UmmelsAndWojtczak2011

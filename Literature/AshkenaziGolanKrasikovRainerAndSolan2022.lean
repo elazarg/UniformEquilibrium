@@ -13,11 +13,11 @@ and equilibria in quitting games*, Mathematical Programming (2022),
 arXiv:2012.04369.  This file is pinned to the supplied arXiv v1 archive
 (`AKRS.tex`), rather than silently combining it with the published version.
 
-The v1 source uses an arbitrary payoff at never terminating.  The repository
+The v1 paper uses an arbitrary payoff at never terminating.  The repository
 quitting-game adapter has zero as its default, so `never` is carried explicitly
-where a source statement needs it.  Unproved paper claims are `sorry`; source
+where a paper statement needs it.  Unproved paper claims are `sorry`; paper
 statements whose topology or probability interface is genuinely unavailable
-are retained verbatim in comments at their source position.
+are retained verbatim in comments at their paper position.
 -/
 
 namespace Literature.AshkenaziGolanKrasikovRainerAndSolan2022
@@ -30,7 +30,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 /-! ## Section 2 (model)
 
-**Definition 2.1 (source).** A quitting game is a pair `Γ=(I,r)`, where `I`
+**Definition 2.1 (paper).** A quitting game is a pair `Γ=(I,r)`, where `I`
 is a finite player set and `r : ∏ᵢ{Cᶦ,Qᶦ} → ℝᴵ` is the payoff function.
 At each stage players choose continue or quit; the first stage with at least
 one quitter ends the game and pays `r(a)`, while never quitting pays
@@ -45,7 +45,7 @@ the explicit `never` argument in the statements below. -/
 
 /-! ## Section 3 -/
 
-/-! **Definition 3.1 (exact source statement).** For a finite strategic-form
+/-! **Definition 3.1 (exact paper statement).** For a finite strategic-form
 game `G=(I,(Aᶦ),r)`, player `i` is ε-perfect at a mixed profile `ξ` iff, for
 every action `aᶦ`,
 `rᶦ(aᶦ,ξ⁻ᶦ) ≤ rᶦ(ξ)+ε` and
@@ -53,7 +53,7 @@ every action `aᶦ`,
 
 The general strategic-form expected-payoff interface is absent from the
 current dependencies, so the exact definition is intentionally retained here
-as a source comment.  The following is the faithful playerwise quitting-row
+as a paper comment.  The following is the faithful playerwise quitting-row
 specialization used by Remark 3.3. -/
 def PlayerEpsilonPerfectRow
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -81,7 +81,7 @@ theorem epsilonPerfectRow_iff
       QuittingRowεPerfect reward continuation root ε := by
   rfl
 
-/-! **Definition 3.2 (exact source statement).** For a quitting game Γ and
+/-! **Definition 3.2 (exact paper statement).** For a quitting game Γ and
 player i, player i is sequentially ε-perfect at a behavior profile x iff for
 every stage n she is ε-perfect at xₙ in `G_Γ(γₙ₊₁(x))`.  The next definition is
 the faithful root-sequence adapter used in Theorem 3.4's S.3 branch. -/
@@ -145,9 +145,9 @@ theorem paper_thm3_4
           SmallSequentialBranch ⟨reward, never⟩ := by
   sorry
 
-/-! **Theorem 3.5 (source statement).** For sufficiently small ε, every
+/-! **Theorem 3.5 (paper statement).** For sufficiently small ε, every
 absorbing profile at which all players are sequentially ε-perfect is an
-`ε^(1/6)`-equilibrium.  The source has arbitrary `r(⃗C)`; this printed claim is
+`ε^(1/6)`-equilibrium.  The paper has arbitrary `r(⃗C)`; this printed claim is
 false because it omits the stationary alternative of Solan--Vieille. -/
 def ErrorExponentBound : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
@@ -199,7 +199,7 @@ theorem paper_thm3_5 : ¬ ErrorExponentBound := by
   rw [hpayoff] at hnash
   exact hnash
 
-/-! **Corrected Solan--Vieille alternative.** The source cited for Theorem 3.5
+/-! **Corrected Solan--Vieille alternative.** The paper cited for Theorem 3.5
 gives a disjunction: under the same hypotheses, either the generated profile
 is an `ε^(1/6)`-equilibrium, or the game has a stationary ε-equilibrium for
 every positive ε.  This is an open proposition here; no placeholder `True`
@@ -207,7 +207,7 @@ proposition is introduced. -/
 
 /-! ## Section 4: Definition 4.1 -/
 
-/-! **Definition 4.1 (source).** The source's `𝔽` consists of cadlag,
+/-! **Definition 4.1 (paper).** The paper's `𝔽` consists of cadlag,
 coordinatewise nondecreasing
 subprobability paths `π : [0,1] → [0,1]^{A*}`: in addition to coordinate
 bounds, `π̂_t=∑ₐπ_t(a)≤1` is the total absorption mass.  The following
@@ -245,7 +245,7 @@ noncomputable def pathRightDerivative (path : CadlagPath (ι := ι)) (t : ℝ)
     (nhdsWithin t (Ioo t 1))
 
 /-! (A.2) is stated directly using connected components of the complement of
-`S(π) ∪ T(π)`.  The `sSup` endpoint is the source's right endpoint. -/
+`S(π) ∪ T(π)`.  The `sSup` endpoint is the paper's right endpoint. -/
 def AbsorptionPathA2 (path : CadlagPath (ι := ι)) : Prop :=
   ∀ t ∈ Icc (0 : ℝ) 1 \ (pathJumps path ∪ pathTimes path),
     ∀ s ∈ connectedComponentIn
@@ -262,7 +262,7 @@ def IsAbsorptionPath (path : CadlagPath (ι := ι)) : Prop :=
 
 def AbsorptionPath := {path : CadlagPath (ι := ι) // IsAbsorptionPath path}
 
-/-! **Payoff path.** For `t<1`, the source defines
+/-! **Payoff path.** For `t<1`, the paper defines
 `γ_t(π) = (∑ₐ(π₁(a)-π_t(a))r(a))/(1-π̂_t)`, and defines it as zero when
 `π̂_t=1`. -/
 noncomputable def absorptionPathPayoff
@@ -324,28 +324,28 @@ def IsSequentiallyPerfectAbsorptionPath
     (path : AbsorptionPath (ι := ι)) (ε : ℝ) : Prop :=
   ∀ who, IsPlayerSequentiallyPerfectAbsorptionPath reward path who ε
 
-/-! **Proposition 4.6 (source).** For every absorption path `π` there is a
+/-! **Proposition 4.6 (paper).** For every absorption path `π` there is a
 sequence of absorbing behavior profiles `(xᵏ)` whose induced paths `πˣᵏ`
 converge weakly to `π`.
 
-**Lemma 4.7 (source).** Let `ε>0` be sufficiently small and let `y∈Δ(A)`
+**Lemma 4.7 (paper).** Let `ε>0` be sufficiently small and let `y∈Δ(A)`
 satisfy `p(y)≤ε` and `y(a)≤ε y(Qᶦ,C⁻ᶦ)` for every `i` and every
 `a∈A*_{≥2}` with `aᶦ=Qᶦ`.  There is a unique `ξ∈[0,1]^I` such that
 `p(ξ)=p(y)` and
 `ξᶦ/ξʲ=y(Qᶦ,C⁻ᶦ)/y(Qʲ,C⁻ʲ)` (with `0/0=1`), and
 `|ξ(a)-y(a)| ≤ 2^{|I|}(|I|+1)εp(y)` for every `a∈A*`.
 
-**Proposition 4.9 (source).** `𝔄` is sequentially compact for the weak
+**Proposition 4.9 (paper).** `𝔄` is sequentially compact for the weak
 topology: every sequence in `𝔄` has a weakly convergent subsequence with
 limit in `𝔄`; moreover at every jump of the limit one can choose convergent
 jump times and convergent mixed-action witnesses satisfying (A.3).
 
-**Proposition 4.12 (source).** If `πᵏ⇒π`, `εᵏ→0`, and player `i` is
+**Proposition 4.12 (paper).** If `πᵏ⇒π`, `εᵏ→0`, and player `i` is
 sequentially `εᵏ`-perfect at `πᵏ` for every `k`, then player `i` is
 sequentially 0-perfect at `π`.  The statement is playerwise; the collective
 version follows by quantifying this result over `i`.
 
-The source also gives the payoff-path convergence assertion as a remark, not
+The paper also gives the payoff-path convergence assertion as a remark, not
 a numbered proposition.  These statements remain comments because no weak
 Stieltjes-path topology or full behavior-profile decoder is available. -/
 
@@ -359,7 +359,7 @@ proxy or missing hypothesis. -/
 
 /-! ## Section 5 -/
 
-/-! **Definition 5.1 (source v1).** For an `n×n` matrix `R` and `q∈ℝⁿ`,
+/-! **Definition 5.1 (paper v1).** For an `n×n` matrix `R` and `q∈ℝⁿ`,
 `LCP(R,q)` asks for `w≥0` and `z=(z₀,…,zₙ)∈Δ({0,…,n})` with
 `w=z₀q+∑ᵢzᵢRᶦ` and `zᵢ=0` or `wᵢ=0`. -/
 def LinearComplementarityProblemSolution (M : ι → ι → ℝ) (q : ι → ℝ) : Type :=
@@ -369,29 +369,29 @@ def IsQMatrix (M : ι → ι → ℝ) : Prop :=
   ∀ q : ι → ℝ, Nonempty (LinearComplementarityProblemSolution M q)
 
 /-! Theorem 5.2 assumes that `R` and all its principal submatrices are
-`Q`-matrices.  The source has no numbered Definition 5.2 and no `Q̄`
+`Q`-matrices.  The paper has no numbered Definition 5.2 and no `Q̄`
 definition; that later published notation is deliberately not introduced. -/
 /-! Adapter for the principal-submatrix hypothesis in Theorem 5.2; this is
-not an additional source definition. -/
+not an additional paper definition. -/
 def PrincipalQCondition (M : ι → ι → ℝ) : Prop :=
   IsQMatrix M ∧ ∀ players : Finset ι, players.Nonempty →
     IsQMatrix (fun i j : players => M i.1 j.1)
 
-/-! **Remark 5.3 (source).** The condition in Theorem 5.2 is not tight:
+/-! **Remark 5.3 (paper).** The condition in Theorem 5.2 is not tight:
 continuous equilibria may exist when the matrix condition fails (for example,
 when a restriction to a subset of players satisfies it).  It is unknown
 whether existence of a continuous equilibrium along which all players quit
 with positive probability implies that `R` and all principal submatrices are
 `Q`-matrices. -/
 
-/-! **Theorem 5.2 (source v1, open here).** If `R(Γ)` and every principal
+/-! **Theorem 5.2 (paper v1, open here).** If `R(Γ)` and every principal
 submatrix are `Q`-matrices, then a continuous equilibrium exists, i.e. there
 is a continuous, sequentially 0-perfect absorption path.  No exact proof is
 present in this repository: the missing boundary is the paper's viability-
-theory construction of a path in the source's weak absorption-path space,
+theory construction of a path in the paper's weak absorption-path space,
 including its limiting and sequential-perfectness arguments.  The faithful
 path predicates above are therefore retained, but this theorem is deliberately
-kept as an open source statement rather than an assumed or proxy Lean result.
+kept as an open paper statement rather than an assumed or proxy Lean result.
 -/
 theorem paper_thm5_2
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

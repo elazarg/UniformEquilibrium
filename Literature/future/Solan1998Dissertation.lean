@@ -17,12 +17,12 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Solan 1998 (dissertation)"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan 1998 (dissertation)"
   role := .nonzeroSumExistence
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "three_player_absorbing_uniform_equilibrium"
-        sourceLocator := "Definition 3.9, Theorem 4.23, and the chapter convention"
+        paperLocator := "Definition 3.9, Theorem 4.23, and the chapter convention"
         summary := "Every three-player absorbing game has a uniform equilibrium payoff."
-        status := .sourceOnly } ]
+        status := .paperOnly } ]
 
 end Literature.Solan1998Dissertation

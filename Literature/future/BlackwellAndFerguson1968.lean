@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Blackwell & Ferguson 1968
 
-The primary paper supplies the source statements recorded below. Their
+The primary paper supplies the paper statements recorded below. Their
 limiting-average criterion is distinct from the later uniform-value notion.
 -/
 
@@ -17,16 +17,16 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Blackwell & Ferguson 1968"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Blackwell & Ferguson 1968"
   role := .zeroSumUniformValue
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "theorem_1_big_match_value"
-        sourceLocator := "Theorem 1"
+        paperLocator := "Theorem 1"
         summary := "The Big Match has limiting-average value one half."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "player_one_has_no_optimal_strategy"
-        sourceLocator := "argument following Theorem 1"
+        paperLocator := "argument following Theorem 1"
         summary := "Player one has no optimal limiting-average strategy."
-        status := .sourceOnly } ]
+        status := .paperOnly } ]
 
 end Literature.BlackwellAndFerguson1968

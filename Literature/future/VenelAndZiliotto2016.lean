@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Venel & Ziliotto 2016
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Venel & Ziliotto 2016"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Venel & Ziliotto 2016"
   role := .zeroSumBoundary
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

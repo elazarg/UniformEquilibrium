@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Vieille 2000c
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Vieille 2000c"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Vieille 2000c"
   role := .nonzeroSumExistence
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Hölzl & Nipkow 2012
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Hölzl & Nipkow 2012"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Hölzl & Nipkow 2012"
   role := .formalization
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

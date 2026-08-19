@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Jointly Controlled Lotteries with Biased Coins
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -19,7 +19,7 @@ def record : Literature.PaperRecord where
     "docs/references/00_BIBLIOGRAPHY.md :: " ++
       "Jointly Controlled Lotteries with Biased Coins"
   role := .recentNonzeroSum
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

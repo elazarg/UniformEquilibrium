@@ -16,7 +16,7 @@ statements, not by proving them — `sorry` is permitted in both places.
 
 Nothing imports the literature lane, and the lane never imports `Research`
 or `Experiments`. It is not a `lean_lib`: no build target compiles it, and
-no source under `Literature/` enters the compiled axiom audit. Files there
+no paper under `Literature/` enters the compiled axiom audit. Files there
 are read, not built.
 
 The no-PDF policy: a paper file carries its citation and public locator; no

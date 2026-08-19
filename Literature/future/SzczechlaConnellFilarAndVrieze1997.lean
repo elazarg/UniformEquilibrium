@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Szczechla, Connell, Filar & Vrieze 1997
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -19,7 +19,7 @@ def record : Literature.PaperRecord where
     "docs/references/00_BIBLIOGRAPHY.md :: " ++
       "Szczechla, Connell, Filar & Vrieze 1997"
   role := .zeroSumUniformValue
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

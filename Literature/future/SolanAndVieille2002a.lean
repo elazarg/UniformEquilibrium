@@ -63,11 +63,11 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Solan & Vieille 2002a"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan & Vieille 2002a"
   role := .nonzeroSumExistence
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "period_two_equilibrium_exists"
-        sourceLocator := "Section 3 and the period-two calculation"
+        paperLocator := "Section 3 and the period-two calculation"
         summary :=
           "The displayed table admits an equilibrium payoff built from a \
 period-two two-quitter profile."
@@ -75,23 +75,23 @@ period-two two-quitter profile."
           "Literature.SolanAndVieille2002a.PeriodTwoEquilibriumClaim"
           "Literature.SolanAndVieille2002a.periodTwoEquilibriumClaim" },
       { claimId := "no_stationary_equilibrium"
-        sourceLocator := "Section 3.2"
+        paperLocator := "Section 3.2"
         summary := "The example has no stationary limiting-average equilibrium."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "no_stationary_epsilon_equilibrium"
-        sourceLocator := "Section 3.2"
+        paperLocator := "Section 3.2"
         summary := "The example has no stationary epsilon-equilibrium for small errors."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "no_perturbed_epsilon_equilibrium"
-        sourceLocator := "Section 3.3"
+        paperLocator := "Section 3.3"
         summary := "The example excludes the perturbed epsilon-equilibrium fallback."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "no_solo_convex_hull_equilibrium_payoff"
-        sourceLocator := "Section 3"
+        paperLocator := "Section 3"
         summary := "No equilibrium payoff lies in the convex hull of the solo payoffs."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "printed_period_two_packet"
-        sourceLocator := "Figure 2 and the period-two calculation"
+        paperLocator := "Figure 2 and the period-two calculation"
         summary :=
           "The printed primary continuation probability is the exact selected parameter."
         status := .refutedInLean

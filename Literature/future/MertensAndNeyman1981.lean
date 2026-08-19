@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Mertens & Neyman 1981
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Mertens & Neyman 1981"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Mertens & Neyman 1981"
   role := .zeroSumUniformValue
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

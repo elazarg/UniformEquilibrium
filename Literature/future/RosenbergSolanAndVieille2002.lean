@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Rosenberg, Solan & Vieille 2002
 
-The primary paper supplies the source statement recorded below.
+The primary paper supplies the paper statement recorded below.
 -/
 
 namespace Literature.RosenbergSolanAndVieille2002
@@ -16,12 +16,12 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Rosenberg, Solan & Vieille 2002"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Rosenberg, Solan & Vieille 2002"
   role := .zeroSumBoundary
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "pomdp_uniform_expected_average_value"
-        sourceLocator := "Theorem 1"
+        paperLocator := "Theorem 1"
         summary := "Every finite POMDP has a uniform expected-average value."
-        status := .sourceOnly } ]
+        status := .paperOnly } ]
 
 end Literature.RosenbergSolanAndVieille2002

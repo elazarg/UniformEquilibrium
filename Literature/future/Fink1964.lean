@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Fink 1964
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Fink 1964"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Fink 1964"
   role := .foundations
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

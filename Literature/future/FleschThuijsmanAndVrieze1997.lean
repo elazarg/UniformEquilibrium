@@ -31,19 +31,19 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Flesch, Thuijsman & Vrieze 1997"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Flesch, Thuijsman & Vrieze 1997"
   role := .nonzeroSumExistence
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "no_stationary_equilibrium"
-        sourceLocator := "Lemma 3.1"
+        paperLocator := "Lemma 3.1"
         summary := "The displayed game has no stationary equilibrium."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "small_error_stationary_impossibility"
-        sourceLocator := "Theorem 3.2 and its proof"
+        paperLocator := "Theorem 3.2 and its proof"
         summary := "Stationary epsilon-equilibria fail for all sufficiently small errors."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "cyclic_markov_payoff"
-        sourceLocator := "Theorem 3.3"
+        paperLocator := "Theorem 3.3"
         summary := "The displayed cyclic Markov profile has payoff (1,2,1)."
         status := .provedInLean
           "Literature.FleschThuijsmanAndVrieze1997.\
@@ -51,8 +51,8 @@ tendsto_cyclicMarkovProfile_payoff"
           "GameTheory.FTVCyclicAdmissibleCycle.\
 tendsto_finiteAveragePayoff_ftvCyclicProfile" },
       { claimId := "one_randomizer_per_stage"
-        sourceLocator := "Theorem 3.4"
+        paperLocator := "Theorem 3.4"
         summary := "Every equilibrium has one player randomizing at each stage."
-        status := .sourceOnly } ]
+        status := .paperOnly } ]
 
 end Literature.FleschThuijsmanAndVrieze1997

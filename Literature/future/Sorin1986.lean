@@ -15,7 +15,7 @@ namespace Literature.Sorin1986
 
 open GameTheory StochasticGame
 
-/-! The source's `E(∞)` is the set of semantic uniform-equilibrium
+/-! The paper's `E(∞)` is the set of semantic uniform-equilibrium
 payoffs from the live state.  The bounds in the parametrization are part of
 the claim; the affine equation alone is strictly weaker. -/
 
@@ -49,31 +49,31 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Sorin 1986"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Sorin 1986"
   role := .counterexamples
-  sourceEvidence := .primaryInspected
+  paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress
   claims :=
     [ { claimId := "finite_and_discounted_payoff_sets"
-        sourceLocator := "Theorem 1"
+        paperLocator := "Theorem 1"
         summary := "Every finite-horizon and discounted equilibrium payoff set is {V}."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "uniform_equilibrium_payoff_set"
-        sourceLocator := "Theorem 2"
+        paperLocator := "Theorem 2"
         summary := "The uniform equilibrium payoff set is the bounded Pareto segment F."
         status := .openInLean
           "Literature.Sorin1986.UniformEquilibriumPayoffSetClaim" },
       { claimId := "approximation_sets_disjoint_from_uniform_set"
-        sourceLocator := "separation statement on page 107"
+        paperLocator := "separation statement on page 107"
         summary := "The constant approximation payoff set is disjoint from F."
-        status := .sourceOnly },
+        status := .paperOnly },
       { claimId := "discounted_endpoint_not_uniform"
-        sourceLocator := "separation statement on page 107"
+        paperLocator := "separation statement on page 107"
         summary := "The discount-constant endpoint (1/2, 2/3) is not a uniform payoff."
         status := .provedInLean
           "Literature.Sorin1986.discountedEndpoint_not_isUniformEquilibriumPayoff"
           "GameTheory.StochasticGame.SorinAbsorbingGame.\
 discountedEndpoint_not_isUniformEquilibriumPayoff" },
       { claimId := "uniform_payoffs_satisfy_affine_line"
-        sourceLocator := "Theorem 2"
+        paperLocator := "Theorem 2"
         summary := "Every uniform payoff lies on 2 w1 + w2 = 2."
         status := .provedInLean
           "Literature.Sorin1986.uniformEquilibriumPayoff_weighted_eq_two"
@@ -96,7 +96,7 @@ namespace Literature.Sorin1986
 open GameTheory StochasticGame
 open Literature.Sorin1986
 
-theorem uniformPayoff_mem_sorinSegment_of_source_claim
+theorem uniformPayoff_mem_sorinSegment_of_paper_claim
     (hclaim : Literature.Sorin1986.UniformEquilibriumPayoffSetClaim)
     (payoff : Payoff SorinAbsorbingGame.Player)
     (hpayoff : SorinAbsorbingGame.game.IsUniformEquilibriumPayoff

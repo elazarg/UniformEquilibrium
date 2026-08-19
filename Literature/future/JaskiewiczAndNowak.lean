@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Jaśkiewicz & Nowak
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Jaśkiewicz & Nowak"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Jaśkiewicz & Nowak"
   role := .surveys
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 

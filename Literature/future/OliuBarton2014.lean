@@ -5,7 +5,7 @@ import Literature.Catalog
 
 Bibliography label: Oliu-Barton 2014
 
-This record contains bibliographic coverage and no source-claim
+This record contains bibliographic coverage and no paper-claim
 correspondence.
 -/
 
@@ -17,7 +17,7 @@ def record : Literature.PaperRecord where
   bibliographyLabel := "Oliu-Barton 2014"
   bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Oliu-Barton 2014"
   role := .zeroSumUniformValue
-  sourceEvidence := .bibliographic
+  paperEvidence := .bibliographic
   auditStatus := .catalogued
   claims := []
 
