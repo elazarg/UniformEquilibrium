@@ -7,13 +7,69 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: lean-ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  repair-ftv-review:
+    if: github.event_name == 'pull_request' && github.head_ref == 'agent/promote-ftv-1997'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/promote-ftv-1997
+          fetch-depth: 0
+          submodules: recursive
+      - name: Apply review patch from temporary workflow
+        run: |
+          if grep -q '^def paperMarkovization' Literature/FleschThuijsmanAndVrieze1997.lean; then
+            exit 0
+          fi
+          python3 - <<'PY'
+          from pathlib import Path
+
+          lines = Path('.github/workflows/repair_ftv_codex_review.yml').read_text().splitlines()
+          start = next(i for i, line in enumerate(lines) if line.strip() == "python3 - <<'PY'") + 1
+          end = next(i for i in range(start, len(lines)) if lines[i] == '          PY')
+          code = '\n'.join(line[10:] if line.startswith('          ') else line
+                           for line in lines[start:end]) + '\n'
+          Path('/tmp/repair_ftv.py').write_text(code)
+          PY
+          python3 /tmp/repair_ftv.py
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Build imported dependencies
+        run: |
+          lake build \
+            UniformEquilibrium.Quitting.Classification.PlayerReindex \
+            UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle \
+            UniformEquilibrium.Quitting.Paths.InfinitePathCompiler \
+            UniformEquilibrium.Quitting.Root.ApproximateFirstBranch \
+            UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier \
+            UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot \
+            UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
+      - name: Compile FTV audit
+        run: lake env lean Literature/FleschThuijsmanAndVrieze1997.lean
+      - name: Commit repaired audit
+        run: |
+          if git diff --quiet -- Literature/FleschThuijsmanAndVrieze1997.lean; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add Literature/FleschThuijsmanAndVrieze1997.lean
+          git commit -m "Address FTV literature review findings"
+          git push origin HEAD:agent/promote-ftv-1997
+
   ci:
     runs-on: ubuntu-latest
     timeout-minutes: 120
