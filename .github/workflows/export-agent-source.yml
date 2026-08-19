@@ -32,20 +32,18 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - name: Build production dependencies
-        run: lake build UniformEquilibrium
-      - name: Compile the literature file
-        run: lake env lean Literature/SolanAndVieille2001.lean
       - name: Archive reusable Lean environment
-        if: always()
         run: >-
           tar --zstd -cf /tmp/agent-lean-environment.tar.zst
           -C "$HOME" .elan
           -C "$GITHUB_WORKSPACE" .lake GameTheory/.lake
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
           name: agent-lean-environment
           path: /tmp/agent-lean-environment.tar.zst
           compression-level: 0
           retention-days: 1
+      - name: Build production dependencies
+        run: lake build UniformEquilibrium
+      - name: Compile the literature file
+        run: lake env lean Literature/SolanAndVieille2001.lean
