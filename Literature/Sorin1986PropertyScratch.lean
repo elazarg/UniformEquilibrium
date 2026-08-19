@@ -41,6 +41,7 @@ theorem paper_property_1_proved (G : CompactContinuousGame) :
         exact G.mix_one i (profileY i) (profileX i)
       · intro t _
         exact ⟨fun i => G.mix i t (profileY i) (profileX i), rfl⟩
-  · exact isCompact_univ.image_of_continuousOn hpayoff.continuousOn
+  · simpa [CompactContinuousGame.feasiblePayoffs] using
+      isCompact_univ.image_of_continuousOn hpayoff.continuousOn
 
 end Literature.Sorin1986
