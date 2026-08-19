@@ -120,7 +120,6 @@ def paperCoin (p : Hazard) : PMF Bool :=
     expect (paperCoin p) f = p.1 * f true + (1 - p.1) * f false := by
   rw [expect_eq_sum, Fintype.sum_bool, paperCoin_true_toReal,
     paperCoin_false_toReal]
-  ring
 
 /-- A Markov profile is the paper's sequence of quit probabilities, indexed
 from repository time zero rather than paper stage one. -/
@@ -362,7 +361,6 @@ theorem exists_positive_stationaryEpsilonEquilibrium :
       -M ≤ quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
           (paperStationaryBehaviorProfile profile) who := by
     exact (abs_le.mp (by simpa [M] using hbase)).1
-  dsimp [IsPaperStationaryEpsilonEquilibrium]
   linarith
 
 /-- Refutation of the abstract's literal all-positive-`ε` reading. -/
@@ -451,8 +449,9 @@ theorem paper_theorem3_3 :
         GameTheory.FTVCyclicMinimality.namedTarget := by
   constructor
   · exact paperCyclicPhaseProfile_isEquilibrium 0
-  · simpa [paperCyclicProfile] using
-      quittingTerminalPayoff_paperCyclicPhaseProfile 0
+  · simpa [paperCyclicProfile, paperCyclicPhaseProfile,
+      GameTheory.FTVCyclicAdmissibleCycle.ftvCyclicProfile] using
+      GameTheory.FTVCyclicAdmissibleCycle.quittingTerminalPayoff_ftvCyclicProfile
 
 /-- The expected finite-horizon averages of the displayed profile converge
 coordinatewise to `(1,2,1)`. -/
@@ -462,7 +461,8 @@ theorem tendsto_paperCyclicProfile_payoff (who : Player) :
         (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).finiteAveragePayoff
           none horizon paperCyclicProfile who)
       atTop (nhds (GameTheory.FTVCyclicMinimality.namedTarget who)) := by
-  simpa [paperCyclicProfile, paperCyclicPhaseProfile] using
+  simpa [paperCyclicProfile, paperCyclicPhaseProfile,
+    GameTheory.FTVCyclicAdmissibleCycle.ftvCyclicProfile] using
     GameTheory.FTVCyclicAdmissibleCycle.tendsto_finiteAveragePayoff_ftvCyclicProfile
       who
 
@@ -693,13 +693,14 @@ theorem quittingTerminalPayoff_paperEdgeProfile
     quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
         (paperEdgeProfile owner α) =
       paperEdgeTarget owner α := by
+  funext who
   rw [paperEdgeProfile, quittingTerminalPayoff_rootThenContinuation_eq,
     quittingTerminalPayoff_paperCyclicPhaseProfile]
   change quittingRootSuccessorPayoff
       GameTheory.FTVCyclicAdmissibleCycle.ftvReward
       (GameTheory.FTVCyclicMinimality.ExactCyclicPacket.standardPromise
         (GameTheory.FTVCyclicMinimality.nextThree owner))
-      (paperSoloRoot owner (halfHazard α)) = _
+      (paperSoloRoot owner (halfHazard α)) who = _
   rw [quittingRootSuccessorPayoff_paperSoloRoot]
   rfl
 
