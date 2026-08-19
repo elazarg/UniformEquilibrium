@@ -28,7 +28,7 @@ theorem actionMass_update_mix {G : FiniteStageGame}
   rw [Fintype.prod_eq_mul_prod_subtype_ne _ who]
   rw [Fintype.prod_eq_mul_prod_subtype_ne _ who]
   rw [Fintype.prod_eq_mul_prod_subtype_ne _ who]
-  simp only [Function.update_same]
+  simp
   have hotherMix :
       (∏ j : {j // j ≠ who},
         ↑((Function.update profile who (RealizationPlan.mix t x y) j.1).1.2 h
@@ -86,10 +86,9 @@ theorem stagePayoff_update_mix (G : FiniteStageGame)
   classical
   unfold stagePayoff
   simp_rw [actionMass_update_mix profile who x y t _ _ ht0 ht1]
-  simp only [add_mul, Finset.sum_add_distrib]
-  rw [← Finset.mul_sum, ← Finset.mul_sum]
-  congr 1 <;> apply Finset.sum_congr rfl <;> intro h _ <;>
-    rw [← Finset.mul_sum]
+  simp_rw [add_mul, mul_assoc]
+  simp_rw [Finset.sum_add_distrib]
+  simp_rw [← Finset.mul_sum]
 
 /-- Average payoff through a finite horizon, in realization-plan form. -/
 def finiteRealizationPayoff (G : FiniteStageGame) (n : ℕ)
