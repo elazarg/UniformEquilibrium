@@ -2,6 +2,18 @@ name: Lean feedback and exact source
 
 on:
   pull_request:
+    paths:
+      - "**/*.lean"
+      - ".gitmodules"
+      - "GameTheory"
+      - "lake-manifest.json"
+      - "lakefile.lean"
+      - "lakefile.toml"
+      - "lean-toolchain"
+      - "scripts/ci_changed_lean_targets.py"
+      - "scripts/test_ci_changed_lean_targets.py"
+      - "scripts/check_trust.py"
+      - ".github/workflows/lean-feedback.yml"
   workflow_dispatch:
 
 permissions:
@@ -50,7 +62,17 @@ jobs:
                 python3 scripts/ci_changed_lean_targets.py --targets "$BASE_SHA" "$HEAD_SHA"
               )
               printf 'Building changed Lean targets:\n  %s\n' "${targets[@]}"
-              lake build "${targets[@]}"
+
+              focused_lakefile="$RUNNER_TEMP/lakefile.focused.lean"
+              cp lakefile.lean "$focused_lakefile"
+              cat >> "$focused_lakefile" <<'EOF'
+
+          lean_lib Literature where
+            srcDir := "."
+            leanOptions := uniformEquilibriumLeanOptions
+          EOF
+              lake --dir "$GITHUB_WORKSPACE" --file "$focused_lakefile" \
+                build "${targets[@]}"
               ;;
             full)
               echo "Structural Lean change; running the full build."
