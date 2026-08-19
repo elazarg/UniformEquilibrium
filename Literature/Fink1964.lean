@@ -872,6 +872,7 @@ theorem continuous_beta
       (div_lt_div_iff_of_pos_right hden).2 hres
     _ = ε := by field_simp [ne_of_gt hden]
 
+set_option maxHeartbeats 800000 in
 /-- **Lemma 4.** The graph of `β` is sequentially closed. -/
 theorem lemma_4
     (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
@@ -892,6 +893,7 @@ theorem lemma_4
     heval.continuousAt.tendsto.comp hv
   exact tendsto_nhds_unique hβ hv'
 
+set_option maxHeartbeats 800000 in
 /-- **Lemma 5.** The graph of the best-response correspondence `φ` is
 sequentially closed. -/
 theorem lemma_5
@@ -1153,6 +1155,7 @@ theorem reward_discountedAuxEU_lift_eq_fCoord
       apply congrArg pmfPi
       dsimp [m']
       rw [P.map_update_eval]
+      rfl
     _ = -(1 - P.discount who) *
         P.fCoord (P.effectiveProfile x) s who y e := by
       apply congrArg (fun z : ℝ => -(1 - P.discount who) * z)
@@ -1163,7 +1166,6 @@ theorem reward_discountedAuxEU_lift_eq_fCoord
         funext i
         exact P.actionPMF_effectiveProfile x s i
       rw [hbase]
-      rfl
 
 /-- The production reward table is bounded by the literal cost-table bound. -/
 theorem abs_rewardGame_stagePayoff_le_costBound
