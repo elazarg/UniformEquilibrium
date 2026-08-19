@@ -2,16 +2,19 @@ from base64 import b64decode
 from gzip import decompress
 from hashlib import sha256
 from pathlib import Path
+from subprocess import run
 
-names = ["0", "1", "2a", "2b", "3"]
 parts = [
-    Path(f".github/simon2012_payload_{name}.txt").read_text().strip()
-    for name in names
+    Path(f".github/simon2012_patch_{i}.txt").read_text().strip()
+    for i in range(8)
 ]
-for name, part in zip(names, parts):
-    print(name, len(part), sha256(part.encode()).hexdigest())
 joined = "".join(parts)
-print("joined", len(joined), sha256(joined.encode()).hexdigest())
-raw = decompress(b64decode(joined))
-print("source", len(raw), sha256(raw).hexdigest())
-Path("Literature/Simon2012.lean").write_bytes(raw)
+patch = decompress(b64decode(joined))
+assert sha256(joined.encode()).hexdigest() == (
+    "9d9c384a0daa93b15436dbd38c1c83dbe297a06f7e4df36df4e3ea40af81e7c5"
+)
+assert sha256(patch).hexdigest() == (
+    "a3d04766babbfda6136f50dbbb11e48d825e85a369dce4710c05a3368f279d46"
+)
+run(["git", "apply", "--check", "-"], input=patch, check=True)
+run(["git", "apply", "-"], input=patch, check=True)
