@@ -20,18 +20,25 @@ jobs:
         with:
           ref: agent/promote-ftv-1997
           fetch-depth: 0
-      - name: Fix Lean syntax and commit source
+      - name: Fix Theorem 3.2 comment and formatting
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
           path = Path("Literature/FleschThuijsmanAndVrieze1997.lean")
           text = path.read_text()
-          old = """          (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).
-            BehaviorStrategy who,"""
-          new = """          (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorStrategy who,"""
-          if old in text:
-              text = text.replace(old, new)
+          text = text.replace(
+              "/-! ### Theorem 3.2: stationary approximate equilibria\n\n",
+              "/-! ### Theorem 3.2: stationary approximate equilibria -/\n\n",
+          )
+          text = text.replace(
+              "      quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward\n(Function.update (paperStationaryBehaviorProfile profile) who deviation) who ≤",
+              "      quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward\n          (Function.update (paperStationaryBehaviorProfile profile) who deviation) who ≤",
+          )
+          text = text.replace(
+              "      -M ≤ quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward\n(paperStationaryBehaviorProfile profile) who := by",
+              "      -M ≤ quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward\n          (paperStationaryBehaviorProfile profile) who := by",
+          )
           path.write_text(text)
           PY
           if git diff --quiet -- Literature/FleschThuijsmanAndVrieze1997.lean; then
@@ -40,5 +47,5 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add Literature/FleschThuijsmanAndVrieze1997.lean
-          git commit -m "Fix FTV audit source syntax"
+          git commit -m "Fix FTV Theorem 3.2 comment boundary"
           git push origin HEAD:agent/promote-ftv-1997
