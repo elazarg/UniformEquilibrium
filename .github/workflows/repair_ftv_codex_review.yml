@@ -1,0 +1,534 @@
+name: Repair FTV Codex review
+
+on:
+  push:
+    branches: [agent/promote-ftv-1997]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repair-ftv-codex-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/promote-ftv-1997
+          fetch-depth: 0
+          submodules: recursive
+      - name: Apply review repairs
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("Literature/FleschThuijsmanAndVrieze1997.lean")
+          text = path.read_text()
+
+          def replace_once(old: str, new: str) -> None:
+              global text
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"expected one occurrence, found {count}:\n{old[:300]}")
+              text = text.replace(old, new, 1)
+
+          def replace_section(start: str, end: str, new: str) -> None:
+              global text
+              i = text.index(start)
+              j = text.index(end, i)
+              text = text[:i] + new + text[j:]
+
+          replace_once(
+              "import UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle\n"
+              "import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch\n"
+              "import UniformEquilibrium.Quitting.Stationary.BestResponse\n",
+              "import UniformEquilibrium.Quitting.Classification.PlayerReindex\n"
+              "import UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle\n"
+              "import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler\n"
+              "import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch\n"
+              "import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier\n"
+              "import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot\n"
+              "import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection\n",
+          )
+
+          replace_once(
+              "J. Flesch, F. Thuijsman and O. J. Vrieze, *Cyclic Markov Equilibria in\n"
+              "Stochastic Games*, International Journal of Game Theory 26 (1997), 303--314.\n",
+              "J. Flesch, F. Thuijsman and O. J. Vrieze, *Cyclic Markov Equilibria in\n"
+              "Stochastic Games*, International Journal of Game Theory 26 (1997), 303--314.\n"
+              "DOI: `10.1007/BF01263273`.  Public author-hosted copy:\n"
+              "`https://dke.maastrichtuniversity.nl/f.thuijsman/cyclic%20Markov%20equilibria.pdf`.\n",
+          )
+
+          old_markov_def = '''/-- Exact terminal `ε`-equilibrium for a paper Markov profile. -/
+          def IsPaperMarkovEpsilonEquilibrium (ε : ℝ)
+              (profile : PaperMarkovProfile) : Prop :=
+            (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
+              (quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward) ε
+              (paperMarkovBehaviorProfile profile)
+          '''.replace("          ", "")
+
+          new_markov_def = old_markov_def + '''
+
+          /-- Read an arbitrary behavior profile on the unique live public history as
+          a paper Markov hazard sequence. -/
+          def paperMarkovization
+              (profile :
+                (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorProfile) :
+              PaperMarkovProfile :=
+            fun time who =>
+              ⟨(quittingProfileLiveRoot
+                  GameTheory.FTVCyclicAdmissibleCycle.ftvReward profile
+                  time who true).toReal,
+                ENNReal.toReal_nonneg,
+                by
+                  have hsum := pmf_toReal_sum_one
+                    (quittingProfileLiveRoot
+                      GameTheory.FTVCyclicAdmissibleCycle.ftvReward profile time who)
+                  rw [Fintype.sum_bool] at hsum
+                  nlinarith [ENNReal.toReal_nonneg
+                    (quittingProfileLiveRoot
+                      GameTheory.FTVCyclicAdmissibleCycle.ftvReward profile
+                      time who false)]⟩
+
+          /-- The Markovization has exactly the original live-path product roots. -/
+          theorem paperMarkovRoot_markovization
+              (profile :
+                (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorProfile) :
+              paperMarkovRoot (paperMarkovization profile) =
+                quittingProfileLiveRoot
+                  GameTheory.FTVCyclicAdmissibleCycle.ftvReward profile := by
+            funext time who
+            let marginal := quittingProfileLiveRoot
+              GameTheory.FTVCyclicAdmissibleCycle.ftvReward profile time who
+            have hp0 : 0 ≤ (marginal true).toReal := ENNReal.toReal_nonneg
+            have hp1 : (marginal true).toReal ≤ 1 := by
+              have hsum := pmf_toReal_sum_one marginal
+              rw [Fintype.sum_bool] at hsum
+              nlinarith [ENNReal.toReal_nonneg (marginal false)]
+            have hcoin :=
+              GameTheory.QuittingBoundedSurgeryDescentCounterexample.
+                pmf_bool_eq_coin_of_apply_true_toReal_eq
+                  marginal (marginal true).toReal hp0 hp1 rfl
+            simpa [paperMarkovRoot, paperMarkovization, paperCoin, marginal] using
+              hcoin.symm
+
+          /-- Markovization preserves the complete live-root sequence. -/
+          theorem quittingProfileLiveRoot_paperMarkovBehaviorProfile_markovization
+              (profile :
+                (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorProfile) :
+              quittingProfileLiveRoot GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                  (paperMarkovBehaviorProfile (paperMarkovization profile)) =
+                quittingProfileLiveRoot
+                  GameTheory.FTVCyclicAdmissibleCycle.ftvReward profile := by
+            change quittingProfileLiveRoot GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                (quittingInfinitePathProfile
+                  GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                  (paperMarkovRoot (paperMarkovization profile))) = _
+            rw [quittingProfileLiveRoot_infinitePathProfile,
+              paperMarkovRoot_markovization]
+
+          /-- Markovization preserves the terminal payoff vector. -/
+          theorem quittingTerminalPayoff_paperMarkovization
+              (profile :
+                (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorProfile) :
+              quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                  (paperMarkovBehaviorProfile (paperMarkovization profile)) =
+                quittingTerminalPayoff
+                  GameTheory.FTVCyclicAdmissibleCycle.ftvReward profile := by
+            funext who
+            rw [quittingTerminalPayoff_eq_rootSequence_profileLiveRoot,
+              quittingTerminalPayoff_eq_rootSequence_profileLiveRoot,
+              quittingProfileLiveRoot_paperMarkovBehaviorProfile_markovization]
+
+          /-- Markovization preserves every unilateral terminal value and hence
+          every terminal `ε`-equilibrium inequality. -/
+          theorem isPaperMarkovEpsilonEquilibrium_markovization
+              (profile :
+                (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorProfile)
+              {ε : ℝ}
+              (h : (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).
+                IsεAsymptoticNash
+                  (quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward)
+                  ε profile) :
+              IsPaperMarkovEpsilonEquilibrium ε (paperMarkovization profile) := by
+            unfold IsPaperMarkovEpsilonEquilibrium
+            intro who deviation
+            have hdev := h who deviation
+            rw [quittingTerminalPayoff_paperMarkovization]
+            rw [quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
+              quittingProfileLiveRoot_paperMarkovBehaviorProfile_markovization]
+            rw [← quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue
+              GameTheory.FTVCyclicAdmissibleCycle.ftvReward profile who deviation]
+            exact hdev
+          '''.replace("          ", "")
+          replace_once(old_markov_def, new_markov_def)
+
+          best_reply_section = '''/-! ### The pure stationary best-reply reduction
+
+          The paper uses the unconditional fact that against stationary opponents a
+          pure stationary best reply exists.  In this one-live-state game the two
+          pure stationary alternatives are Quit immediately and Never quit.  The
+          next theorem states that dichotomy in its type and compares it with every
+          behavioral deviation; no opponent-contraction hypothesis is retained. -/
+
+          theorem stationary_bestReply_is_quitNow_or_never
+              (root : Player → PMF Bool) (who : Player) :
+              ∃ choice : Option ℕ,
+                (choice = none ∨ choice = some 0) ∧
+                  ∀ deviation :
+                    (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).
+                      BehaviorStrategy who,
+                    quittingTerminalPayoff
+                        GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                        (Function.update
+                          (quittingStationaryProfile
+                            GameTheory.FTVCyclicAdmissibleCycle.ftvReward root)
+                          who deviation) who ≤
+                      quittingTerminalPayoff
+                        GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                        (Function.update
+                          (quittingStationaryProfile
+                            GameTheory.FTVCyclicAdmissibleCycle.ftvReward root)
+                          who
+                          (quittingPureTimeBehaviorStrategy
+                            GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                            who choice)) who := by
+            let reward := GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+            by_cases hcontracts :
+                quittingStationaryFixedOpponentsContinueMass root who < 1
+            · let quitValue :=
+                quittingStationaryFixedOpponentsQuitValue reward root who
+              let continueReward :=
+                quittingStationaryFixedOpponentsContinueReward reward root who
+              let continueMass :=
+                quittingStationaryFixedOpponentsContinueMass root who
+              by_cases hnever : quitValue ≤
+                  quittingStationaryNeverValue continueReward continueMass
+              · refine ⟨none, Or.inl rfl, ?_⟩
+                intro deviation
+                have hcap :=
+                  quittingTerminalPayoff_update_stationary_le_fullRateUnilateralCap
+                    reward root who deviation
+                rw [quittingStationaryFullRateUnilateralCap_of_lt
+                  reward root who hcontracts] at hcap
+                have hattain :
+                    quittingTerminalPayoff reward
+                        (Function.update (quittingStationaryProfile reward root) who
+                          (quittingPureTimeBehaviorStrategy reward who none)) who =
+                      quittingStationaryUnilateralCap reward root who := by
+                  rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
+                    quittingProfileLiveRoot_stationary,
+                    quittingRootSequencePureTimeTerminalValue_const
+                      reward root who hcontracts]
+                  change quittingStationaryNeverValue continueReward continueMass =
+                    quittingStationarySelectedCap
+                      quitValue continueReward continueMass
+                  exact (max_eq_right hnever).symm
+                rw [← hattain] at hcap
+                exact hcap
+              · refine ⟨some 0, Or.inr rfl, ?_⟩
+                intro deviation
+                have hcap :=
+                  quittingTerminalPayoff_update_stationary_le_fullRateUnilateralCap
+                    reward root who deviation
+                rw [quittingStationaryFullRateUnilateralCap_of_lt
+                  reward root who hcontracts] at hcap
+                have hattain :
+                    quittingTerminalPayoff reward
+                        (Function.update (quittingStationaryProfile reward root) who
+                          (quittingPureTimeBehaviorStrategy reward who (some 0))) who =
+                      quittingStationaryUnilateralCap reward root who := by
+                  rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
+                    quittingProfileLiveRoot_stationary,
+                    quittingRootSequencePureTimeTerminalValue_const
+                      reward root who hcontracts]
+                  change quittingStationaryPureTimeValue
+                      quitValue continueReward continueMass 0 =
+                    quittingStationarySelectedCap
+                      quitValue continueReward continueMass
+                  rw [quittingStationaryPureTimeValue]
+                  exact (max_eq_left (le_of_not_ge hnever)).symm
+                rw [← hattain] at hcap
+                exact hcap
+            · have hmass :
+                  quittingStationaryFixedOpponentsContinueMass root who = 1 := by
+                have hle :
+                    quittingStationaryFixedOpponentsContinueMass root who ≤ 1 :=
+                  quittingStationaryContinueMass_le_one
+                    (Function.update root who (PMF.pure false))
+                exact le_antisymm hle (not_lt.mp hcontracts)
+              refine ⟨some 0, Or.inr rfl, ?_⟩
+              intro deviation
+              have hcap :=
+                quittingTerminalPayoff_update_stationary_le_fullRateUnilateralCap
+                  reward root who deviation
+              rw [quittingStationaryFullRateUnilateralCap_of_not_lt
+                reward root who hcontracts] at hcap
+              have hsolo :
+                  reward (quittingSingletonTerminal who) who = 1 := by
+                dsimp [reward]
+                rw [GameTheory.FTVCyclicAdmissibleCycle.ftvReward_singletonTerminal]
+                fin_cases who <;> rfl
+              rw [hsolo, max_eq_right (by norm_num)] at hcap
+              have hothers :=
+                opponents_pure_continue_of_fixedOpponentsContinueMass_eq_one
+                  root who hmass
+              have hroot :
+                  Function.update root who (PMF.pure true) =
+                    quittingSoloStationaryRoot who (PMF.pure true) := by
+                funext player
+                by_cases hp : player = who
+                · subst player
+                  simp [quittingSoloStationaryRoot]
+                · rw [Function.update_of_ne hp, hothers player hp]
+                  simp [quittingSoloStationaryRoot, hp]
+              have hattain :
+                  quittingTerminalPayoff reward
+                      (Function.update (quittingStationaryProfile reward root) who
+                        (quittingPureTimeBehaviorStrategy reward who (some 0))) who =
+                    1 := by
+                rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
+                  quittingProfileLiveRoot_stationary,
+                  quittingRootSequencePureTimeTerminalValue_some_self_eq_fixedOpponents]
+                change quittingRootAbsorbingContribution reward
+                    (Function.update root who (PMF.pure true)) who = 1
+                rw [hroot, quittingRootAbsorbingContribution_solo]
+                simp [quittingSoloReward, hsolo]
+              rw [hattain]
+              exact hcap
+
+          '''.replace("          ", "")
+          replace_section(
+              "/-! ### The pure stationary best-reply reduction",
+              "/-! ### Lemma 3.1: no stationary equilibrium -/",
+              best_reply_section,
+          )
+
+          theorem32_section = '''/-! ### Theorem 3.2: stationary approximate equilibria
+
+          The paper prints “There is no stationary ε-equilibrium in Γ” (page 307)
+          without a small-error qualifier.  Read literally for every positive `ε`,
+          that claim is false: bounded payoffs make every profile an
+          `ε`-equilibrium once `ε` is sufficiently large.  We therefore record and
+          refute the printed universal reading before stating the conclusion that
+          its proof actually establishes. -/
+
+          /-- Literal all-positive-error reading of the printed Theorem 3.2. -/
+          def PaperTheorem3_2Printed : Prop :=
+            ∀ ε : ℝ, 0 < ε →
+              ¬ ∃ profile : PaperStationaryProfile,
+                IsPaperStationaryEpsilonEquilibrium ε profile
+
+          /-- A stationary profile is an approximate equilibrium at one positive,
+          possibly large, error. -/
+          theorem exists_positive_stationaryEpsilonEquilibrium :
+              ∃ ε : ℝ, 0 < ε ∧
+                ∃ profile : PaperStationaryProfile,
+                  IsPaperStationaryEpsilonEquilibrium ε profile := by
+            let zeroHazard : Hazard := ⟨0, by norm_num⟩
+            let profile : PaperStationaryProfile := fun _ => zeroHazard
+            let M := quittingRewardBound GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+            have hM : 0 < M := by
+              have hthree :=
+                GameTheory.FTVCyclicAdmissibleCycle.three_le_quittingRewardBound
+              dsimp [M]
+              linarith
+            refine ⟨2 * M, by positivity, profile, ?_⟩
+            intro who deviation
+            have hdev := abs_quittingTerminalPayoff_le_quittingRewardBound
+              GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+              (Function.update (paperStationaryBehaviorProfile profile) who deviation)
+              who
+            have hbase := abs_quittingTerminalPayoff_le_quittingRewardBound
+              GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+              (paperStationaryBehaviorProfile profile) who
+            have hdev_le :
+                quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                    (Function.update (paperStationaryBehaviorProfile profile)
+                      who deviation) who ≤ M := by
+              exact (le_abs_self _).trans (by simpa [M] using hdev)
+            have hbase_le :
+                -M ≤ quittingTerminalPayoff
+                    GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                    (paperStationaryBehaviorProfile profile) who := by
+              exact (abs_le.mp (by simpa [M] using hbase)).1
+            linarith
+
+          /-- The printed all-positive-error statement is false. -/
+          theorem not_paperTheorem3_2Printed : ¬ PaperTheorem3_2Printed := by
+            rintro h
+            obtain ⟨ε, hε, profile, hprofile⟩ :=
+              exists_positive_stationaryEpsilonEquilibrium
+            exact (h ε hε) ⟨profile, hprofile⟩
+
+          /-- The proof-supported conclusion: stationary equilibria fail below one
+          positive error threshold. -/
+          def NoSmallStationaryEpsilonEquilibrium : Prop :=
+            ∃ threshold : ℝ, 0 < threshold ∧
+              ∀ ε : ℝ, 0 < ε → ε < threshold →
+                ¬ ∃ profile : PaperStationaryProfile,
+                  IsPaperStationaryEpsilonEquilibrium ε profile
+
+          /-! The proof takes stationary `ε`-equilibria with `ε ↓ 0`, extracts a
+          convergent subsequence of their three hazards, and separates an absorbing
+          limit from the all-Continue limit.  The absorbing case passes equilibrium
+          inequalities to an exact stationary equilibrium.  At the recurrent limit,
+          one cyclic singleton absorption mass is selected as maximal and the paper
+          obtains a strict pure deviation in either subcase.
+
+          The current stationary API has the pointwise payoff and best-response
+          formulas, but no packaged continuity theorem across the singular
+          all-Continue root.  The missing proof is exactly that two-case compactness
+          argument; it is not inferred from Lemma 3.1, since terminal stationary
+          payoff is discontinuous at the all-Continue root. -/
+
+          /-- Proof-supported correction of Theorem 3.2. -/
+          theorem paper_theorem3_2_corrected :
+              NoSmallStationaryEpsilonEquilibrium := by
+            sorry
+
+          '''.replace("          ", "")
+          replace_section(
+              "/-! ### Theorem 3.2: a positive stationary exploitability gap",
+              "/-! ### Theorem 3.3: the cyclic Markov equilibrium -/",
+              theorem32_section,
+          )
+
+          old_feasible = '''/-- Equilibrium rewards in the paper's game.  Behavioral profiles are used in
+          this definition because every behavior profile is outcome-equivalent on the
+          unique live history to a Markov sequence. -/
+          def PaperFeasibleEquilibriumRewards : Set (Payoff Player) :=
+            {payoff | ∃ profile :
+                (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorProfile,
+              (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
+                (quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward) 0
+                profile ∧
+              quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                profile = payoff}
+          '''.replace("          ", "")
+          new_feasible = old_feasible + '''
+
+          /-- The same reward set written directly with paper Markov profiles. -/
+          def PaperMarkovFeasibleEquilibriumRewards : Set (Payoff Player) :=
+            {payoff | ∃ profile : PaperMarkovProfile,
+              IsPaperMarkovEpsilonEquilibrium 0 profile ∧
+                quittingTerminalPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+                  (paperMarkovBehaviorProfile profile) = payoff}
+
+          /-- The behavior- and Markov-profile reward sets coincide.  This is the
+          formal version of the paper's observation that before absorption there is
+          only one public history: Markovization preserves the prescribed terminal
+          law and every unilateral terminal value. -/
+          theorem paperFeasibleEquilibriumRewards_eq_markov :
+              PaperFeasibleEquilibriumRewards =
+                PaperMarkovFeasibleEquilibriumRewards := by
+            ext payoff
+            constructor
+            · rintro ⟨profile, hequilibrium, hpayoff⟩
+              refine ⟨paperMarkovization profile,
+                isPaperMarkovEpsilonEquilibrium_markovization profile hequilibrium,
+                ?_⟩
+              rw [quittingTerminalPayoff_paperMarkovization]
+              exact hpayoff
+            · rintro ⟨profile, hequilibrium, hpayoff⟩
+              exact ⟨paperMarkovBehaviorProfile profile, hequilibrium, hpayoff⟩
+          '''.replace("          ", "")
+          replace_once(old_feasible, new_feasible)
+
+          replace_once(
+              '''/-! The necessity half uses Theorem 3.4: once the first active run is fixed,
+          one coordinate equals `1`, the other two are at least `1`, and the row-sum
+          identity gives total reward `4`.  The imported exposed-face lemmas prove the
+          row-sum part for finite exact packets, but the arbitrary-equilibrium cyclic
+          support theorem remains open above.  Consequently this implication has exactly
+          the same missing six-step tail argument, and no additional hidden gap. -/
+          '''.replace("          ", ""),
+              '''/-! By `paperFeasibleEquilibriumRewards_eq_markov`, the behavioral
+          reward set has already been reduced to paper Markov profiles while preserving
+          every unilateral value.  The remaining necessity proof uses Theorem 3.4:
+          once the first active run is fixed, one coordinate equals `1`, the other two
+          are at least `1`, and the row-sum identity gives total reward `4`.  The
+          arbitrary-Markov six-step tail argument and this first-run payoff accounting
+          remain open; there is no longer a behavior-to-Markov semantic gap here. -/
+          '''.replace("          ", ""),
+          )
+
+          replace_section(
+              "/-! ## Final remark",
+              "end Literature.FleschThuijsmanAndVrieze1997",
+              '''/-! ## Final remark
+
+          After Theorem 3.5 the paper states, without supplying the analysis, that
+          every `2×2×2` recursive repeated game with one nonabsorbing entry has
+          `ε`-equilibria.  Relabeling each player's live action as Continue identifies
+          that class with arbitrary three-player quitting reward tables.  The
+          repository now proves the stronger uniform-payoff existence theorem for
+          every three-player quitting game; terminal uniform-payoff selection gives
+          the paper's positive-error conclusion. -/
+          def PaperFinalExistenceRemark : Prop :=
+            ∀ reward : {S : Finset Player // S.Nonempty} → Payoff Player,
+              ∀ ε : ℝ, 0 < ε →
+                ∃ profile : (quittingGame reward).BehaviorProfile,
+                  (quittingGame reward).IsεAsymptoticNash
+                    (quittingTerminalPayoff reward) ε profile
+
+          theorem paper_finalExistenceRemark : PaperFinalExistenceRemark := by
+            intro reward ε hε
+            obtain ⟨target, htarget⟩ :=
+              quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_three
+                (ι := Player) (by norm_num [Player]) reward
+            exact quittingGame_terminalNash_all_errors_of_isUniformEquilibriumPayoff
+              reward target htarget ε hε
+
+          '''.replace("          ", ""),
+          )
+
+          text = text.replace(
+              "[paperSoloRoot, paperTerminalReward,\n"
+              "      GameTheory.FTVCyclicMinimality.terminalReward,",
+              "[paperSoloRoot, GameTheory.FTVCyclicMinimality.terminalReward,",
+          )
+          text = text.replace(
+              "[paperEdgeRoot, paperSoloRoot, halfHazard, paperTerminalReward,\n"
+              "      GameTheory.FTVCyclicMinimality.terminalReward,",
+              "[paperEdgeRoot, paperSoloRoot, halfHazard,\n"
+              "      GameTheory.FTVCyclicMinimality.terminalReward,",
+          )
+
+          path.write_text(text)
+          PY
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Build imported dependencies
+        run: |
+          lake build \
+            UniformEquilibrium.Quitting.Classification.PlayerReindex \
+            UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle \
+            UniformEquilibrium.Quitting.Paths.InfinitePathCompiler \
+            UniformEquilibrium.Quitting.Root.ApproximateFirstBranch \
+            UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier \
+            UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot \
+            UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
+      - name: Compile FTV audit
+        run: lake env lean Literature/FleschThuijsmanAndVrieze1997.lean
+      - name: Commit repaired audit
+        run: |
+          if git diff --quiet -- Literature/FleschThuijsmanAndVrieze1997.lean; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add Literature/FleschThuijsmanAndVrieze1997.lean
+          git commit -m "Address FTV literature review findings"
+          git push origin HEAD:agent/promote-ftv-1997
