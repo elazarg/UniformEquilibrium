@@ -1,0 +1,180 @@
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (G : StageGame ι) (n : G.Horizon) :
+    (G.finiteFeasiblePayoffs n).Nonempty ∧
+      IsCompact (G.finiteFeasiblePayoffs n) ∧
+      IsPathConnected (G.finiteFeasiblePayoffs n) := by
+  sorry
+
+theorem discountedFeasiblePayoffs_nonempty_compact_pathConnected
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (G : StageGame ι) (λ : G.DiscountRate) :
+    (G.discountedFeasiblePayoffs λ).Nonempty ∧
+      IsCompact (G.discountedFeasiblePayoffs λ) ∧
+      IsPathConnected (G.discountedFeasiblePayoffs λ) := by
+  sorry
+
+theorem finiteEquilibriumPayoffs_nonempty_compact
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (G : StageGame ι) (n : G.Horizon) :
+    (G.finiteEquilibriumPayoffs n).Nonempty ∧
+      IsCompact (G.finiteEquilibriumPayoffs n) := by
+  sorry
+
+theorem discountedEquilibriumPayoffs_nonempty_compact
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (G : StageGame ι) (λ : G.DiscountRate) :
+    (G.discountedEquilibriumPayoffs λ).Nonempty ∧
+      IsCompact (G.discountedEquilibriumPayoffs λ) := by
+  sorry
+
+
+/-! ## Asymptotic notation and the elementary inclusions -/
+
+namespace StageGame
+
+variable {ι : Type uι} (G : StageGame ι)
+
+/-- `D_n`, extended at horizon zero by the natural singleton `{0}`.  The zero
+case is used only in the block formula of Lemma 3. -/
+def finiteFeasiblePayoffsAt [Fintype ι] (n : ℕ) : Set (ι → ℝ) :=
+  if h : 0 < n then G.finiteFeasiblePayoffs ⟨n, h⟩ else {0}
+
+/-- `E_n`, with the same harmless zero-horizon convention as `D_n`. -/
+def finiteEquilibriumPayoffsAt [Fintype ι] [DecidableEq ι]
+    (n : ℕ) : Set (ι → ℝ) :=
+  if h : 0 < n then G.finiteEquilibriumPayoffs ⟨n, h⟩ else {0}
+
+/-- `D_λ`, extended by the empty set outside the paper's domain `0 < λ ≤ 1`. -/
+def discountedFeasiblePayoffsAt [Fintype ι] (λ : ℝ) : Set (ι → ℝ) :=
+  if h : 0 < λ ∧ λ ≤ 1 then G.discountedFeasiblePayoffs ⟨λ, h⟩ else ∅
+
+/-- `E_λ`, extended by the empty set outside `0 < λ ≤ 1`. -/
+def discountedEquilibriumPayoffsAt [Fintype ι] [DecidableEq ι]
+    (λ : ℝ) : Set (ι → ℝ) :=
+  if h : 0 < λ ∧ λ ≤ 1 then G.discountedEquilibriumPayoffs ⟨λ, h⟩ else ∅
+
+@[simp]
+theorem finiteFeasiblePayoffsAt_zero [Fintype ι] :
+    G.finiteFeasiblePayoffsAt 0 = {0} := by
+  simp [finiteFeasiblePayoffsAt]
+
+@[simp]
+theorem finiteEquilibriumPayoffsAt_zero [Fintype ι] [DecidableEq ι] :
+    G.finiteEquilibriumPayoffsAt 0 = {0} := by
+  simp [finiteEquilibriumPayoffsAt]
+
+@[simp]
+theorem finiteFeasiblePayoffsAt_eq [Fintype ι] {n : ℕ} (hn : 0 < n) :
+    G.finiteFeasiblePayoffsAt n = G.finiteFeasiblePayoffs ⟨n, hn⟩ := by
+  simp [finiteFeasiblePayoffsAt, hn]
+
+@[simp]
+theorem finiteEquilibriumPayoffsAt_eq [Fintype ι] [DecidableEq ι]
+    {n : ℕ} (hn : 0 < n) :
+    G.finiteEquilibriumPayoffsAt n = G.finiteEquilibriumPayoffs ⟨n, hn⟩ := by
+  simp [finiteEquilibriumPayoffsAt, hn]
+
+@[simp]
+theorem discountedFeasiblePayoffsAt_eq [Fintype ι]
+    {λ : ℝ} (hλ : 0 < λ ∧ λ ≤ 1) :
+    G.discountedFeasiblePayoffsAt λ = G.discountedFeasiblePayoffs ⟨λ, hλ⟩ := by
+  simp [discountedFeasiblePayoffsAt, hλ]
+
+@[simp]
+theorem discountedEquilibriumPayoffsAt_eq [Fintype ι] [DecidableEq ι]
+    {λ : ℝ} (hλ : 0 < λ ∧ λ ≤ 1) :
+    G.discountedEquilibriumPayoffsAt λ =
+      G.discountedEquilibriumPayoffs ⟨λ, hλ⟩ := by
+  simp [discountedEquilibriumPayoffsAt, hλ]
+
+
+/-- Equilibrium payoffs are feasible payoffs, including the zero-horizon
+convention. -/
+theorem finiteEquilibriumPayoffsAt_subset_feasible
+    [Fintype ι] [DecidableEq ι] (n : ℕ) :
+    G.finiteEquilibriumPayoffsAt n ⊆ G.finiteFeasiblePayoffsAt n := by
+  by_cases hn : 0 < n
+  · rw [G.finiteEquilibriumPayoffsAt_eq hn,
+      G.finiteFeasiblePayoffsAt_eq hn]
+    rintro payoff ⟨profile, _, rfl⟩
+    exact ⟨profile, rfl⟩
+  · have hn0 : n = 0 := Nat.eq_zero_of_not_pos hn
+    subst n
+    simp
+
+/-- Discounted equilibrium payoffs are discounted feasible payoffs. -/
+theorem discountedEquilibriumPayoffsAt_subset_feasible
+    [Fintype ι] [DecidableEq ι] (λ : ℝ) :
+    G.discountedEquilibriumPayoffsAt λ ⊆
+      G.discountedFeasiblePayoffsAt λ := by
+  by_cases hλ : 0 < λ ∧ λ ≤ 1
+  · rw [G.discountedEquilibriumPayoffsAt_eq hλ,
+      G.discountedFeasiblePayoffsAt_eq hλ]
+    rintro payoff ⟨profile, _, rfl⟩
+    exact ⟨profile, rfl⟩
+  · simp [discountedEquilibriumPayoffsAt,
+      discountedFeasiblePayoffsAt, hλ]
+
+/-- The paper's full-dimensionality condition from the added-in-proof
+correction to Lemma 2. -/
+def IndividuallyRationalSetFullDimensional [Fintype ι] [DecidableEq ι] : Prop :=
+  affineDimension G.individuallyRationalFeasibleSet = Fintype.card ι
+
+end StageGame
+
+/-- The convex-hull sandwich used in Lemma 1(7). -/
+theorem convex_eq_convexHull_iff_of_subset
+    {V : Type*} [AddCommGroup V] [Module ℝ V]
+    {pure feasible : Set V}
+    (hpure : pure ⊆ feasible)
+    (hfeasible : feasible ⊆ convexHull ℝ pure) :
+    Convex ℝ feasible ↔ feasible = convexHull ℝ pure := by
+  constructor
+  · intro hconvex
+    apply Set.Subset.antisymm hfeasible
+    exact convexHull_min hpure hconvex
+  · rintro rfl
+    exact convex_convexHull ℝ pure
+
+namespace StageGame
+
+variable {ι : Type uι} (G : StageGame ι)
+
+/-! **Property (3), page 148.** The finite and discounted feasible sets
+converge to `C`, and the Banach-limit feasible set is exactly `C`.
+
+The finite and discounted convergence proofs require the complete compact
+behavioral-strategy topology and a finite-cycle approximation theorem.  The
+current repeated-game library deliberately exposes only finite-history laws,
+so these paper-level statements remain `sorry`. -/
+theorem paper_property3_finite [Fintype ι] [DecidableEq ι] :
+    HausdorffConvergesAtTop G.finiteFeasiblePayoffsAt
+      G.correlatedFeasibleSet := by
+  sorry
+
+theorem paper_property3_discounted [Fintype ι] [DecidableEq ι] :
+    HausdorffConvergesAtZero G.discountedFeasiblePayoffsAt
+      G.correlatedFeasibleSet := by
+  sorry
+
+theorem paper_property3_banach [Fintype ι] [DecidableEq ι]
+    (L : BanachLimit) :
+    G.banachFeasiblePayoffs L = G.correlatedFeasibleSet := by
+  sorry
+
+/-! **Property (4), page 148: the infinitely repeated Folk theorem.**  Its
+proof needs public punishment strategies on the Banach-limit evaluator, which
+has not yet been connected to the library's finite-history deviation lemmas. -/
+theorem paper_property4_banach [Fintype ι] [DecidableEq ι]
+    (L : BanachLimit) :
+    G.banachEquilibriumPayoffs L =
+      G.individuallyRationalFeasibleSet := by
+  sorry
+
+/-! **Lemma 1(5)--(8), pages 148--149.**  The inclusions are stated separately
+for finite and discounted repetition.  Their proofs are elementary, but the
+history-pasting and stationary-embedding lemmas for the paper's exact public
+mixed model are not yet in the library; these are the only missing steps. -/
+theorem lemma1_pure_subset_D1 [Fintype ι] [DecidableEq ι] :
+    G.purePayoffSet ⊆ G.finiteFeasiblePayoffsAt 1 := by
+  sorry
