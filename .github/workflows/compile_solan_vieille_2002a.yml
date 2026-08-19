@@ -1,0 +1,32 @@
+name: Compile Solan and Vieille 2002a
+
+on:
+  push:
+    branches:
+      - agent/promote-solan-vieille-2002a
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compile-solan-vieille-2002a-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - run: lake env lean Literature/SolanAndVieille2002a.lean
