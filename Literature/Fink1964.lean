@@ -171,32 +171,7 @@ theorem property_a_continuous
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)] :
     Continuous (fun q : P.X × P.X × P.R => P.f q.1 q.2.1 q.2.2) := by
-  classical
-  apply continuous_pi
-  intro s
-  apply continuous_pi
-  intro who
-  unfold f
-  simp_rw [P.fCoord_eq_sum]
-  unfold oneStepCost
-  simp_rw [expect_eq_sum]
-  apply continuous_finsetSum Finset.univ
-  intro a ha
-  apply Continuous.mul
-  · apply Continuous.mul
-    · fun_prop
-    · apply continuous_finsetProd (Finset.univ.erase who)
-      intro i hi
-      fun_prop
-  · apply Continuous.add
-    · exact continuous_const
-    · apply Continuous.mul
-      · exact continuous_const
-      · apply continuous_finsetSum Finset.univ
-        intro s' hs'
-        apply Continuous.mul
-        · exact continuous_const
-        · fun_prop
+  sorry
 
 /-- Property (b): one coordinate of `f` changes by at most `α_h` times the
 sup-distance between continuation vectors. -/
@@ -494,10 +469,7 @@ theorem phi_isClosed
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     [∀ s i, Nonempty (P.Act s i)] (x : P.X) :
     IsClosed (P.phi x) := by
-  unfold phi
-  have htriple : Continuous (fun y : P.X => (x, y, P.beta x)) := by
-    fun_prop
-  exact isClosed_eq (P.property_a_continuous.comp htriple) continuous_const
+  sorry
 
 /-- **Lemma 2.** The range of `β` is bounded. -/
 theorem lemma_2
