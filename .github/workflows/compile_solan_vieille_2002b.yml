@@ -32,6 +32,47 @@ jobs:
             | gzip --decompress > Literature/future/SolanAndVieille2002b.lean
           echo '6c11ec44fde457fba62a1d4a7ae431878efc2cee662c0d65c7b4d93170863720  Literature/future/SolanAndVieille2002b.lean' \
             | sha256sum --check
+      - name: Apply elaboration fixes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('Literature/future/SolanAndVieille2002b.lean')
+          text = path.read_text()
+          replacements = [
+              ('structure AutonomousDevice where\n',
+               'structure AutonomousDevice (G : PaperGame ι) where\n'),
+              ('structure StationaryDevice where\n',
+               'structure StationaryDevice (G : PaperGame ι) where\n'),
+              ('  simp [G.inducedExitStateProbability, hnext]\n',
+               '  simp [inducedExitStateProbability, hnext]\n'),
+              ('  (∀ k who first second,\n'
+               '    first.IsUnilateral who → second.IsUnilateral who →\n',
+               '  (∀ k who (first second : G.Exit x (block k)),\n'
+               '    Exit.IsUnilateral first who → Exit.IsUnilateral second who →\n'),
+              ('        first.continuationValue value who ≤ value state who) ∧\n'
+               '      second.continuationValue value who ≤\n'
+               '        first.continuationValue value who)\n',
+               '        Exit.continuationValue first value who ≤ value state who) ∧\n'
+               '      Exit.continuationValue second value who ≤\n'
+               '        Exit.continuationValue first value who)\n'),
+              ('      G.badActionClosureAux actionLaw epsilon n\n',
+               '      badActionClosureAux actionLaw epsilon n\n'),
+              ('          G.kernelProbabilityAfter kernel n middle target\n',
+               '          kernelProbabilityAfter kernel n middle target\n'),
+              ('  exact ∑ next in Finset.univ.filter\n'
+               '      (fun next => ∃ who, value next who ≠ value state who),\n',
+               '  exact ∑ next ∈ Finset.univ.filter\n'
+               '      (fun next => ∃ who, value next who ≠ value state who),\n'),
+              ('        atTop (𝓝 (limitLaw source target))\n',
+               '        atTop (nhds (limitLaw source target))\n'),
+          ]
+          for old, new in replacements:
+              if old not in text:
+                  raise SystemExit(f'missing expected source fragment: {old!r}')
+              text = text.replace(old, new)
+          path.write_text(text)
+          PY
       - uses: leanprover/lean-action@v1
         with:
           auto-config: false
