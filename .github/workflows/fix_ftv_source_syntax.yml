@@ -1,0 +1,44 @@
+name: Fix FTV source syntax
+
+on:
+  push:
+    branches: [agent/promote-ftv-1997]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fix-ftv-source-syntax-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/promote-ftv-1997
+          fetch-depth: 0
+      - name: Fix Lean syntax and commit source
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("Literature/FleschThuijsmanAndVrieze1997.lean")
+          text = path.read_text()
+          old = """          (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).
+            BehaviorStrategy who,"""
+          new = """          (quittingGame GameTheory.FTVCyclicAdmissibleCycle.ftvReward).BehaviorStrategy who,"""
+          if old in text:
+              text = text.replace(old, new)
+          path.write_text(text)
+          PY
+          if git diff --quiet -- Literature/FleschThuijsmanAndVrieze1997.lean; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add Literature/FleschThuijsmanAndVrieze1997.lean
+          git commit -m "Fix FTV audit source syntax"
+          git push origin HEAD:agent/promote-ftv-1997
