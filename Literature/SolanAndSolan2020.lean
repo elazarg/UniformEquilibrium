@@ -12,17 +12,16 @@ import Mathlib.LinearAlgebra.AffineSpace.FiniteDimensional
 
 E. Solan and O. N. Solan, *Quitting Games and Linear Complementarity
 Problems*, *Mathematics of Operations Research* 45(2), 434--454. The
-accepted May 2018 manuscript is used where arXiv:1707.02598v1 differs from
-the published result.
+accepted May 2018 manuscript is the authoritative complete text available
+for this audit; it is used where arXiv:1707.02598v1 differs and supplies the
+final theorem numbering.
 
-Two corrections are mathematically material. The arXiv v1 normal-player
-display permits a self-witness and therefore retains every player under the
-standing zero-diagonal assumption; the results require the published
-distinct-witness recursion. The v1 building-block condition (F.1) mentions
-only segments starting at `w`, although its final construction uses a segment
-starting at `y`; the accepted manuscript states the necessary disjunction.
-The literal v1 normal recursion remains as `printedNormalLayer` and
-`printedNormalCore`, with its collapse proved below.
+One correction is mathematically material. The arXiv v1 building-block
+condition (F.1) mentions only segments starting at `w`, although its final
+construction uses a segment starting at `y`; the accepted manuscript states
+the necessary disjunction. The paper's normal players are defined by their
+min--max values. Its distinct-witness recursion occurs only in Section 5,
+where it defines the different, generally smaller set of alpha players.
 
 Public randomization is represented by an actual finite public-signal
 stochastic game, and all payoffs and deviation payoffs below are induced by
@@ -34,6 +33,7 @@ namespace Literature.SolanAndSolan2020
 
 open GameTheory StochasticGame QuittingLCPClassification
 open Math.Probability
+open Math.LinearProgramming
 open Filter
 open scoped BigOperators
 open scoped Topology
@@ -85,18 +85,6 @@ def SoloExitNormalized (table : Table ι) : Prop :=
 def TablePayoffsBounded (table : Table ι) : Prop :=
   (∀ S who, |table.terminal S who| ≤ 1) ∧
     ∀ who, |table.never who| ≤ 1
-
-/-! The singleton-payoff matrix derived from the table. The subtraction by
-the never payoff disappears under the subsequent solo normalization; hence,
-under Assumption 2.1, this is extensionally the source matrix `R`. -/
-abbrev DerivedMatrix (table : Table ι) : ι → ι → ℝ :=
-  normalizedSoloMatrix table.zeroNeverReward
-
-/-! **Lemma 2.2 (paper).** If there is a normal player `i` such that the
-column/vector `r^i` is coordinatewise nonnegative, then a stationary
-`ε`-equilibrium exists for every positive `ε`. The paper's `I*` is introduced
-by the recursion in Section 2.3; the paper-local stationary adapter is stated
-below after that recursive set has been defined. -/
 
 /-! **Definition 2.3 (sunspot ε-equilibrium, paper).** At every stage the
 players observe an independent uniform signal in `[0,1]`; a strategy is a
@@ -282,43 +270,37 @@ theorem theorem2_4 (table : Table ι)
       SunspotEpsilonEquilibrium table ε profile := by
   sorry
 
-/-! ## Section 2.3 — recursively normal players -/
+/-! ## Section 2.3 — normal and abnormal players -/
 
-/-! **Definition 2.5 (paper).** `I₀=I` and
-`I_{l+1}={i∈I_l : ∃j∈I_l, r^j_i ≤ 0}`; `I* = ⋂_l I_l` is the set of normal
-players and its complement is the set of abnormal players. This is the
-literal v1 display, including its omitted distinctness condition. -/
+/-! **Definition 2.5 (paper).** Player `i` is normal when its min--max value
+is nonpositive, and abnormal when that value is positive. -/
+def IsNormalPlayer (table : Table ι) (who : ι) : Prop :=
+  table.punishmentValue who ≤ 0
 
-/-! `I_l` is the intended distinct-witness normal-player layer. -/
-abbrev NormalLayer (M : ι → ι → ℝ) := normalLayer M
-/-! `I* = ⋂_l I_l`, represented as the finite recursive core. -/
-abbrev NormalCore (M : ι → ι → ℝ) := normalCore M
+/-! `I*`, the finite set of normal players. -/
+def NormalPlayers (table : Table ι) : Finset ι := by
+  classical
+  exact Finset.univ.filter (IsNormalPlayer table)
 
-/-! `NormalMatrix M` is the principal matrix on `I*`. -/
-abbrev NormalMatrix (M : ι → ι → ℝ) := normalPlayerMatrix M
+@[simp] theorem mem_normalPlayers_iff (table : Table ι) (who : ι) :
+    who ∈ NormalPlayers table ↔ IsNormalPlayer table who := by
+  classical
+  simp [NormalPlayers]
 
-/-! `I* ≠ ∅`. -/
-abbrev HasNormalPlayers (M : ι → ι → ℝ) : Prop :=
-  QuittingLCPClassification.HasNormalPlayers M
+/-! A normal player, used as the row and column type of the paper's matrix
+`R̂`. -/
+abbrev NormalPlayer (table : Table ι) :=
+  {who : ι // who ∈ NormalPlayers table}
 
-/-! `I* = ∅`, i.e. every player is abnormal. -/
-abbrev AllPlayersAbnormal (M : ι → ι → ℝ) : Prop :=
-  QuittingLCPClassification.AllPlayersAbnormal M
+/-! `R̂`: singleton-quitting payoffs restricted in both coordinates to
+normal players. -/
+def NormalMatrix (table : Table ι) :
+    NormalPlayer table → NormalPlayer table → ℝ :=
+  fun who owner =>
+    table.terminal (quittingProjectiveSingletonTerminal owner.1) who.1
 
-/-! Equation (1) and Equation (2) (paper): if `i` is in a layer/core and
-`j` is outside it, then `r^j_i > 0`. The imported
-`normalCore_entry_pos_of_notMem` proves the corresponding final,
-distinct-witness recursion; the literal v1 recursion collapses under
-`SoloExitNormalized`, as recorded below. -/
-
-/-! Literal v1 recursion on a solo-normalized table retains every player. -/
-theorem printedRecursion_collapse
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    printedNormalCore (normalizedSoloMatrix reward) = Finset.univ :=
-  printedNormalCore_normalized_eq_univ reward
-
-/-! Under Assumption 2.1, the table's singleton-payoff matrix is exactly the
-normalized matrix used by the production LCP classification. -/
+/-! Under Assumption 2.1, the production normalization of the translated
+zero-never table recovers the paper's raw singleton-payoff matrix. -/
 theorem normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
     (table : Table ι) (hnormalized : SoloExitNormalized table) :
     normalizedSoloMatrix table.zeroNeverReward = table.singletonMatrix := by
@@ -331,42 +313,357 @@ theorem normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
   rw [hnormalized who]
   ring
 
-/-! Lemma 2.2 adapter: `∃i∈I*, r^i≥0` implies stationary ε-equilibrium
-existence for every `ε>0`. -/
-theorem lemma2_2
-    (table : Table ι)
-    (hnormal : ∃ i ∈ NormalCore (DerivedMatrix table),
-      ∀ who, 0 ≤ DerivedMatrix table who i) :
-    StationaryEpsilonEquilibria table := by
-  obtain ⟨owner, howner, hcolumn⟩ := hnormal
-  obtain ⟨blocker, _, hne, hblocker⟩ :=
-    exists_core_blocker_of_mem_normalCore (DerivedMatrix table) howner
-  have hvalue :=
-    isQuittingStationaryUniformEquilibriumPayoff_of_nonnegative_column
-      table.zeroNeverReward hne
-        (fun who _ => hcolumn who) hblocker
-  change table.StationaryεEquilibriumExistence
-  rw [QuittingPayoffTable.stationaryεEquilibriumExistence_iff]
-  exact hvalue.hasApproximateEquilibria
+def HasNormalPlayers (table : Table ι) : Prop :=
+  (NormalPlayers table).Nonempty
 
-/-! **Lemma 2.6 (paper).** If all players are abnormal, a stationary
-ε-equilibrium exists for every `ε > 0`. The paper proof also uses Lemma 2.2
-when the last nonempty layer is reached; the exact strategic min-max-to-table
-adapter is not available in this lane. -/
+def AllPlayersAbnormal (table : Table ι) : Prop :=
+  NormalPlayers table = ∅
 
-/-! Lemma 2.6: `I*=∅` implies stationary ε-equilibrium existence. -/
+/-! **Lemma 2.6 (paper).** If `i` is abnormal and `j≠i`, then player `i`
+strictly benefits when `j` quits alone: `rʲ_i>0`. -/
 theorem lemma2_6
-    (table : Table ι)
-    (habnormal : AllPlayersAbnormal (DerivedMatrix table)) :
+    (table : Table ι) (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table) {who owner : ι}
+    (habnormal : ¬IsNormalPlayer table who) (hne : owner ≠ who) :
+    0 < table.terminal (quittingProjectiveSingletonTerminal owner) who := by
+  by_contra hpositive
+  have howner :
+      table.terminal (quittingProjectiveSingletonTerminal owner) who ≤ 0 :=
+    le_of_not_gt hpositive
+  apply habnormal
+  unfold IsNormalPlayer
+  refine le_of_forall_pos_le_add fun ε hε => ?_
+  let p : ℝ := min (ε / 2) 1
+  have hp : 0 < p := by
+    change 0 < min (ε / 2) 1
+    exact lt_min (half_pos hε) zero_lt_one
+  have hp0 : 0 ≤ p := hp.le
+  have hp1 : p ≤ 1 := min_le_right _ _
+  have hpε : 2 * p ≤ ε := by
+    have := min_le_left (ε / 2) 1
+    linarith
+  let hazard := quittingHazardCoin p hp0 hp1
+  have hhazard : 0 < (hazard true).toReal := by
+    simpa only [hazard, quittingHazardCoin_true_toReal] using hp
+  have hcap := quittingPunishmentValue_le_stationaryUnilateralCap
+    table.zeroNeverReward who (quittingSoloStationaryRoot owner hazard)
+  rw [table.punishmentValue_eq_add_never]
+  calc
+    quittingPunishmentValue table.zeroNeverReward who + table.never who ≤
+        quittingStationaryUnilateralCap table.zeroNeverReward
+            (quittingSoloStationaryRoot owner hazard) who +
+          table.never who := by linarith
+    _ ≤ ε := by
+      rw [quittingStationaryUnilateralCap_solo_other table.zeroNeverReward
+          hne.symm hazard hhazard,
+        quittingStationaryFixedOpponentsQuitValue_solo_other_eq_mix
+          table.zeroNeverReward hne.symm hazard]
+      simp only [hazard, quittingHazardCoin_false_toReal,
+        quittingHazardCoin_true_toReal]
+      unfold quittingSoloReward quittingSingletonCollisionReward
+        QuittingPayoffTable.zeroNeverReward
+      have hsolo : table.terminal ⟨{who}, by simp⟩ who = 0 := by
+        simpa only [quittingProjectiveSingletonTerminal] using hnormalized who
+      have howner' : table.terminal ⟨{owner}, by simp⟩ who ≤ 0 := by
+        simpa only [quittingProjectiveSingletonTerminal] using howner
+      rw [hsolo]
+      have hcollision :
+          table.terminal ⟨{owner, who}, by simp⟩ who ≤ 1 :=
+        (le_abs_self _).trans (hbounded.1 _ who)
+      rw [← max_add_add_right, max_le_iff]
+      constructor <;> nlinarith
+    _ = 0 + ε := by ring
+
+/-! **Lemma 2.7 (paper).** If every player is abnormal, a stationary
+`ε`-equilibrium exists for every positive `ε`. -/
+theorem lemma2_7
+    (table : Table ι) (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (habnormal : AllPlayersAbnormal table) :
     StationaryEpsilonEquilibria table := by
+  have hlayer : normalLayer
+      (normalizedSoloMatrix table.zeroNeverReward) 1 = ∅ := by
+    ext who
+    simp only [normalLayer, Finset.mem_filter, Finset.mem_univ, true_and]
+    constructor
+    · rintro ⟨owner, hne, hnonpositive⟩
+      have hnotmem : who ∉ NormalPlayers table := by
+        rw [habnormal]
+        simp
+      have habnormalWho : ¬IsNormalPlayer table who := by
+        simpa only [mem_normalPlayers_iff] using hnotmem
+      have hpositive := lemma2_6 table hnormalized hbounded
+        habnormalWho hne
+      have hmatrix := congr_fun
+        (congr_fun
+          (normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
+            table hnormalized) who) owner
+      rw [hmatrix] at hnonpositive
+      exact False.elim ((not_lt_of_ge hnonpositive) hpositive)
+    · simp
   obtain ⟨value, hvalue⟩ :=
-    exists_stationaryUniformEquilibriumPayoff_of_allPlayersAbnormal
-      table.zeroNeverReward habnormal
+    exists_stationaryUniformEquilibriumPayoff_of_normalLayer_one_eq_empty
+      table.zeroNeverReward hlayer
   change table.StationaryεEquilibriumExistence
   rw [QuittingPayoffTable.stationaryεEquilibriumExistence_iff]
   exact hvalue.hasApproximateEquilibria
 
-/-! **Definition 2.7 (paper remark).** For an `n×n` matrix `R` and `q`, the
+/-! The payoff to `who` from the paper's distribution over unilateral
+quittings by normal players. -/
+def NormalMixturePayoff (table : Table ι)
+    (weight : stdSimplex ℝ (NormalPlayer table)) (who : ι) : ℝ :=
+  wsum weight fun owner =>
+    table.terminal (quittingProjectiveSingletonTerminal owner.1) who
+
+/-! Zero-extension of a distribution on the paper's normal players to all
+players. -/
+def extendNormalPlayerWeight (table : Table ι)
+    (weight : NormalPlayer table → ℝ) : ι → ℝ :=
+  fun who => if hwho : who ∈ NormalPlayers table then
+    weight ⟨who, hwho⟩ else 0
+
+@[simp] theorem extendNormalPlayerWeight_of_mem
+    (table : Table ι) (weight : NormalPlayer table → ℝ)
+    {who : ι} (hwho : who ∈ NormalPlayers table) :
+    extendNormalPlayerWeight table weight who = weight ⟨who, hwho⟩ := by
+  simp [extendNormalPlayerWeight, hwho]
+
+@[simp] theorem extendNormalPlayerWeight_of_notMem
+    (table : Table ι) (weight : NormalPlayer table → ℝ)
+    {who : ι} (hwho : who ∉ NormalPlayers table) :
+    extendNormalPlayerWeight table weight who = 0 := by
+  simp [extendNormalPlayerWeight, hwho]
+
+/-! Zero-extension preserves nonnegativity and total mass one. -/
+def extendNormalPlayerSimplex (table : Table ι)
+    (weight : stdSimplex ℝ (NormalPlayer table)) : stdSimplex ℝ ι := by
+  classical
+  refine ⟨extendNormalPlayerWeight table weight.1, ?_, ?_⟩
+  · intro who
+    by_cases hwho : who ∈ NormalPlayers table
+    · rw [extendNormalPlayerWeight_of_mem table weight.1 hwho]
+      exact weight.2.1 ⟨who, hwho⟩
+    · simp [extendNormalPlayerWeight, hwho]
+  · calc
+      (∑ who, extendNormalPlayerWeight table weight.1 who) =
+          ∑ who ∈ NormalPlayers table,
+            extendNormalPlayerWeight table weight.1 who := by
+        symm
+        apply Finset.sum_subset (Finset.subset_univ _)
+        intro who _ hwho
+        exact extendNormalPlayerWeight_of_notMem table weight.1 hwho
+      _ = ∑ who : NormalPlayer table, weight.1 who := by
+        calc
+          (∑ who ∈ NormalPlayers table,
+              extendNormalPlayerWeight table weight.1 who) =
+              ∑ who : NormalPlayer table,
+                extendNormalPlayerWeight table weight.1 who.1 :=
+            Finset.sum_subtype (NormalPlayers table) (fun _ => Iff.rfl) _
+          _ = ∑ who : NormalPlayer table, weight.1 who := by
+            apply Finset.sum_congr rfl
+            intro who _
+            exact extendNormalPlayerWeight_of_mem table weight.1 who.2
+      _ = 1 := weight.2.2
+
+@[simp] theorem extendNormalPlayerSimplex_apply_of_mem
+    (table : Table ι) (weight : stdSimplex ℝ (NormalPlayer table))
+    {who : ι} (hwho : who ∈ NormalPlayers table) :
+    (extendNormalPlayerSimplex table weight).1 who = weight.1 ⟨who, hwho⟩ := by
+  simp [extendNormalPlayerSimplex, hwho]
+
+@[simp] theorem extendNormalPlayerSimplex_apply_of_notMem
+    (table : Table ι) (weight : stdSimplex ℝ (NormalPlayer table))
+    {who : ι} (hwho : who ∉ NormalPlayers table) :
+    (extendNormalPlayerSimplex table weight).1 who = 0 := by
+  simp [extendNormalPlayerSimplex, hwho]
+
+/-! On a normal coordinate, the full zero-extended singleton residual is
+the mixture appearing in Lemma 2.8. -/
+theorem singletonLCPResidual_extendNormalPlayerSimplex
+    (table : Table ι) (hnormalized : SoloExitNormalized table)
+    (weight : stdSimplex ℝ (NormalPlayer table))
+    (who : NormalPlayer table) :
+    singletonLCPResidual (normalizedSoloMatrix table.zeroNeverReward)
+        (extendNormalPlayerSimplex table weight) who.1 =
+      NormalMixturePayoff table weight who.1 := by
+  classical
+  unfold singletonLCPResidual NormalMixturePayoff wsum
+  rw [normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
+    table hnormalized]
+  calc
+    (∑ owner,
+        (extendNormalPlayerSimplex table weight).1 owner *
+          table.singletonMatrix who.1 owner) =
+        ∑ owner ∈ NormalPlayers table,
+          (extendNormalPlayerSimplex table weight).1 owner *
+            table.singletonMatrix who.1 owner := by
+      symm
+      apply Finset.sum_subset (Finset.subset_univ _)
+      intro owner _ howner
+      rw [extendNormalPlayerSimplex_apply_of_notMem table weight howner,
+        zero_mul]
+    _ = ∑ owner : NormalPlayer table,
+        weight.1 owner * table.singletonMatrix who.1 owner.1 := by
+      calc
+        (∑ owner ∈ NormalPlayers table,
+            (extendNormalPlayerSimplex table weight).1 owner *
+              table.singletonMatrix who.1 owner) =
+            ∑ owner : NormalPlayer table,
+              (extendNormalPlayerSimplex table weight).1 owner.1 *
+                table.singletonMatrix who.1 owner.1 :=
+          Finset.sum_subtype (NormalPlayers table) (fun _ => Iff.rfl) _
+        _ = ∑ owner : NormalPlayer table,
+            weight.1 owner * table.singletonMatrix who.1 owner.1 := by
+          apply Finset.sum_congr rfl
+          intro owner _
+          rw [extendNormalPlayerSimplex_apply_of_mem
+            table weight owner.2]
+    _ = ∑ owner : NormalPlayer table,
+        weight.1 owner *
+          table.terminal (quittingProjectiveSingletonTerminal owner.1)
+            who.1 := by
+      apply Finset.sum_congr rfl
+      intro owner _
+      rfl
+
+/-! **Lemma 2.8 (paper).** A distribution over normal players whose mixture
+payoff is nonnegative in every normal coordinate, and zero on every used
+coordinate, yields stationary approximate equilibria. The displayed proof
+misses the case where the distribution is concentrated on one player: then
+that player's deviation to Continue leaves the game unabsorbed. The final
+hypothesis is the exact missing condition in that case; it is vacuous for a
+nonvertex distribution. -/
+theorem lemma2_8
+    (table : Table ι) (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (weight : stdSimplex ℝ (NormalPlayer table))
+    (hnonnegative : ∀ who : NormalPlayer table,
+      0 ≤ NormalMixturePayoff table weight who.1)
+    (hcomplementary : ∀ who : NormalPlayer table,
+      0 < weight.1 who → NormalMixturePayoff table weight who.1 = 0)
+    (hvertexNever : ∀ owner : NormalPlayer table,
+      weight.1 owner = 1 → table.never owner.1 ≤ 0) :
+    StationaryEpsilonEquilibria table := by
+  classical
+  let fullWeight := extendNormalPlayerSimplex table weight
+  have hfullResidual : ∀ who,
+      0 ≤ singletonLCPResidual
+        (normalizedSoloMatrix table.zeroNeverReward) fullWeight who := by
+    intro who
+    by_cases hwho : who ∈ NormalPlayers table
+    · rw [singletonLCPResidual_extendNormalPlayerSimplex
+        table hnormalized weight ⟨who, hwho⟩]
+      exact hnonnegative ⟨who, hwho⟩
+    · rw [normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
+        table hnormalized]
+      unfold singletonLCPResidual wsum
+      apply Finset.sum_nonneg
+      intro owner _
+      by_cases howner : owner ∈ NormalPlayers table
+      · have hne : owner ≠ who := fun heq => hwho (heq ▸ howner)
+        exact mul_nonneg (fullWeight.2.1 owner)
+          (lemma2_6 table hnormalized hbounded
+            (by simpa only [mem_normalPlayers_iff] using hwho) hne).le
+      · change 0 ≤ (extendNormalPlayerSimplex table weight).1 owner * _
+        rw [extendNormalPlayerSimplex_apply_of_notMem
+          table weight howner, zero_mul]
+  have hfullComplementary : ∀ who,
+      fullWeight.1 who * singletonLCPResidual
+        (normalizedSoloMatrix table.zeroNeverReward) fullWeight who = 0 := by
+    intro who
+    by_cases hwho : who ∈ NormalPlayers table
+    · rw [singletonLCPResidual_extendNormalPlayerSimplex
+        table hnormalized weight ⟨who, hwho⟩,
+      extendNormalPlayerSimplex_apply_of_mem table weight hwho]
+      by_cases hweight : weight.1 ⟨who, hwho⟩ = 0
+      · rw [hweight, zero_mul]
+      · have hpositive : 0 < weight.1 ⟨who, hwho⟩ :=
+          lt_of_le_of_ne (weight.2.1 _) (Ne.symm hweight)
+        rw [hcomplementary ⟨who, hwho⟩ hpositive, mul_zero]
+    · rw [extendNormalPlayerSimplex_apply_of_notMem
+        table weight hwho, zero_mul]
+  change table.StationaryεEquilibriumExistence
+  rw [QuittingPayoffTable.stationaryεEquilibriumExistence_iff]
+  by_cases hvertex : ∃ owner, fullWeight.1 owner = 1
+  · obtain ⟨owner, howner⟩ := hvertex
+    have hownerMem : owner ∈ NormalPlayers table := by
+      by_contra hnot
+      have hzero := extendNormalPlayerSimplex_apply_of_notMem
+        table weight hnot
+      rw [howner] at hzero
+      norm_num at hzero
+    have hownerWeight : weight.1 ⟨owner, hownerMem⟩ = 1 := by
+      rw [← extendNormalPlayerSimplex_apply_of_mem
+        table weight hownerMem]
+      exact howner
+    have hnever : table.never owner ≤ 0 :=
+      hvertexNever ⟨owner, hownerMem⟩ hownerWeight
+    have hcolumn : ∀ who,
+        0 ≤ table.terminal (quittingProjectiveSingletonTerminal owner) who := by
+      intro who
+      have hresidual := hfullResidual who
+      rw [singletonLCPResidual_eq_column_of_weight_eq_one
+        (normalizedSoloMatrix table.zeroNeverReward) fullWeight howner who,
+        normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
+          table hnormalized] at hresidual
+      exact hresidual
+    intro ε hε
+    let p : ℝ := min ε 1
+    have hp : 0 < p := by
+      change 0 < min ε 1
+      exact lt_min hε zero_lt_one
+    have hp1 : p ≤ 1 := min_le_right _ _
+    have hpε : p ≤ ε := min_le_left _ _
+    let hazard := quittingHazardCoin p hp.le hp1
+    have hhazard : 0 < (hazard true).toReal := by
+      simpa only [hazard, quittingHazardCoin_true_toReal] using hp
+    refine ⟨quittingSoloStationaryRoot owner hazard, ?_⟩
+    intro who deviation
+    have hdeviation := quittingTerminalPayoff_update_stationary_le_cap
+      table.zeroNeverReward (quittingSoloStationaryRoot owner hazard)
+        who deviation
+    rw [quittingTerminalPayoff_soloStationary table.zeroNeverReward
+      owner who hazard hhazard]
+    refine hdeviation.trans ?_
+    by_cases hwho : who = owner
+    · subst who
+      rw [quittingStationaryUnilateralCap_solo_owner]
+      unfold quittingSoloReward QuittingPayoffTable.zeroNeverReward
+      have hsolo : table.terminal ⟨{owner}, by simp⟩ owner = 0 := by
+        simpa only [quittingProjectiveSingletonTerminal] using
+          hnormalized owner
+      rw [hsolo]
+      exact max_le (le_add_of_nonneg_right hε.le) (by linarith)
+    · rw [quittingStationaryUnilateralCap_solo_other
+          table.zeroNeverReward hwho hazard hhazard,
+        quittingStationaryFixedOpponentsQuitValue_solo_other_eq_mix
+          table.zeroNeverReward hwho hazard]
+      simp only [hazard, quittingHazardCoin_false_toReal,
+        quittingHazardCoin_true_toReal]
+      unfold quittingSoloReward quittingSingletonCollisionReward
+        QuittingPayoffTable.zeroNeverReward
+      have hsolo : table.terminal ⟨{who}, by simp⟩ who = 0 := by
+        simpa only [quittingProjectiveSingletonTerminal] using
+          hnormalized who
+      have hcollision : table.terminal ⟨{owner, who}, by simp⟩ who ≤ 1 :=
+        (le_abs_self _).trans (hbounded.1 _ who)
+      have hownerColumn : 0 ≤ table.terminal ⟨{owner}, by simp⟩ who := by
+        simpa only [quittingProjectiveSingletonTerminal] using hcolumn who
+      rw [hsolo, max_le_iff]
+      constructor <;> nlinarith
+  · have hnonvertex : ∀ who, fullWeight.1 who < 1 := by
+      intro who
+      have hle : fullWeight.1 who ≤ 1 := by
+        rw [← fullWeight.2.2]
+        exact Finset.single_le_sum
+          (fun owner _ => fullWeight.2.1 owner) (Finset.mem_univ who)
+      exact lt_of_le_of_ne hle (fun heq => hvertex ⟨who, heq⟩)
+    exact
+      (isQuittingStationaryUniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
+        table.zeroNeverReward fullWeight hfullResidual hfullComplementary
+        hnonvertex).hasApproximateEquilibria
+
+/-! **Remark 2.9 (paper).** For an `n×n` matrix `R` and `q`, the
 paper recalls the textbook LCP: find `w,z ≥ 0` with `w=q+Rz` and
 `w_i z_i=0`. -/
 
@@ -374,97 +671,385 @@ paper recalls the textbook LCP: find `w,z ≥ 0` with `w=q+Rz` and
 abbrev LCP (M : ι → ι → ℝ) (q : ι → ℝ) : Prop :=
   HasProjectiveLCPSolution M q
 
-/-! **Definition 2.8 (paper).** `R` is a Q-matrix when the paper's
+/-! **Definition 2.10 (paper).** `R` is a Q-matrix when the paper's
 projective/simplex LCP `LCP(R,q)` has a solution for every `q`. -/
 
 /-! `QMatrix M ↔ ∀q, LCP(M,q)` is solvable. -/
 abbrev QMatrix (M : ι → ι → ℝ) : Prop := IsProjectiveQMatrix M
 
-/-! **Example 2.9 (paper).** For the displayed cyclic `3×3` sign pattern
+/-! **Example 2.11 (paper).** For the displayed cyclic `3×3` sign pattern
 with zero diagonal, Berman--Plemmons implies Q iff the determinant is
 positive. This numerical example is retained here as paper text; no
 repository matrix-example declaration is introduced. -/
 
-/-! **Lemma 2.10 (paper).** If the projective LCP with right-hand side zero
-has a solution with `z₀<1`, then a stationary ε-equilibrium exists for every
-positive ε. -/
+/-! **Lemma 2.12 (paper, repaired vertex case).** If the projective LCP with
+right-hand side zero has a solution with `z₀<1`, then a stationary
+ε-equilibrium exists for every positive ε. As in Lemma 2.8, the manuscript's
+one-vertex construction also needs the nontermination payoff of a normal
+owner to be nonpositive. -/
 
-/-! Lemma 2.10: a zero-LCP solution with cemetery weight `<1` yields
+/-! Lemma 2.12: a zero-LCP solution with cemetery weight `<1` yields
 stationary ε-equilibria for every `ε>0`. -/
-theorem lemma2_10
-    (table : Table ι)
+theorem lemma2_12
+    (table : Table ι) (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (hnormalNever : ∀ owner : NormalPlayer table, table.never owner.1 ≤ 0)
     (h : HasNontrivialZeroProjectiveLCPSolution
-      (NormalMatrix (DerivedMatrix table))) :
+      (NormalMatrix table)) :
     StationaryEpsilonEquilibria table := by
-  have hhomogeneous : HasHomogeneousSimplexSolution
-      (normalizedNormalPlayerMatrix table.zeroNeverReward) := by
-    rw [hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous] at h
-    exact h
-  have hnormal : QuittingLCPClassification.HasNormalPlayers
-      (normalizedSoloMatrix table.zeroNeverReward) := by
-    obtain ⟨weight, _, _⟩ := hhomogeneous
-    by_contra hempty
-    unfold QuittingLCPClassification.HasNormalPlayers at hempty
-    rw [Finset.not_nonempty_iff_eq_empty] at hempty
-    haveI : IsEmpty (normalCore
-        (normalizedSoloMatrix table.zeroNeverReward)) := by
-      rw [hempty]
-      infer_instance
-    have htotal := weight.property.2
-    simp at htotal
-  obtain ⟨value, hvalue⟩ :=
-    exists_stationaryUniformEquilibriumPayoff_of_homogeneousMatrixBranch
-      table.zeroNeverReward
-        { normal_nonempty := hnormal, homogeneous := hhomogeneous }
-  change table.StationaryεEquilibriumExistence
-  rw [QuittingPayoffTable.stationaryεEquilibriumExistence_iff]
-  exact hvalue.hasApproximateEquilibria
+  rw [hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous] at h
+  obtain ⟨weight, hnonnegative, hcomplementary⟩ := h
+  apply lemma2_8 table hnormalized hbounded weight
+  · intro who
+    exact hnonnegative who
+  · intro who hpositive
+    have hproduct := hcomplementary who
+    change weight.1 who * NormalMixturePayoff table weight who.1 = 0 at hproduct
+    exact (mul_eq_zero.mp hproduct).resolve_left hpositive.ne'
+  · intro owner _
+    exact hnormalNever owner
 
-/-! **Theorem 2.11 (paper).** Assume the normal-player set is nonempty and
+/-! Extend a right-hand side on the min--max normal players by the fixed
+positive value one on abnormal coordinates, as in the proof of Theorem
+2.13(1). -/
+def extendNormalPlayerDirection (table : Table ι)
+    (q : NormalPlayer table → ℝ) : ι → ℝ :=
+  fun who => if hwho : who ∈ NormalPlayers table then q ⟨who, hwho⟩ else 1
+
+@[simp] theorem extendNormalPlayerDirection_of_mem
+    (table : Table ι) (q : NormalPlayer table → ℝ)
+    {who : ι} (hwho : who ∈ NormalPlayers table) :
+    extendNormalPlayerDirection table q who = q ⟨who, hwho⟩ := by
+  simp [extendNormalPlayerDirection, hwho]
+
+@[simp] theorem extendNormalPlayerDirection_of_notMem
+    (table : Table ι) (q : NormalPlayer table → ℝ)
+    {who : ι} (hwho : who ∉ NormalPlayers table) :
+    extendNormalPlayerDirection table q who = 1 := by
+  simp [extendNormalPlayerDirection, hwho]
+
+/-! Restrict a full projective solution whose positive singleton support is
+normal to the paper's principal normal-player matrix. -/
+def restrictProjectiveLCPSolutionToNormalPlayers
+    (table : Table ι) (hnormalized : SoloExitNormalized table)
+    (q : NormalPlayer table → ℝ)
+    (solution : ProjectiveLCPSolution
+      (normalizedSoloMatrix table.zeroNeverReward)
+      (extendNormalPlayerDirection table q))
+    (hsupport : ∀ who, 0 < solution.singleton who →
+      who ∈ NormalPlayers table) :
+    ProjectiveLCPSolution (NormalMatrix table) q := by
+  classical
+  have hzeroOff : ∀ who, who ∉ NormalPlayers table →
+      solution.singleton who = 0 := by
+    intro who hwho
+    by_contra hne
+    have hpositive : 0 < solution.singleton who :=
+      lt_of_le_of_ne (solution.singleton_nonneg who) (Ne.symm hne)
+    exact hwho (hsupport who hpositive)
+  have hsumRestrict (f : ι → ℝ)
+      (hoff : ∀ who, who ∉ NormalPlayers table → f who = 0) :
+      (∑ who, f who) = ∑ who : NormalPlayer table, f who.1 := by
+    calc
+      (∑ who, f who) = ∑ who ∈ NormalPlayers table, f who := by
+        symm
+        apply Finset.sum_subset (Finset.subset_univ _)
+        intro who _ hwho
+        exact hoff who hwho
+      _ = ∑ who : NormalPlayer table, f who.1 :=
+        Finset.sum_subtype (NormalPlayers table) (fun _ => Iff.rfl) f
+  refine
+    { cemetery := solution.cemetery
+      singleton := fun who => solution.singleton who.1
+      cemetery_nonneg := solution.cemetery_nonneg
+      singleton_nonneg := fun who => solution.singleton_nonneg who.1
+      total := ?_
+      residual_nonneg := ?_
+      complementary := ?_ }
+  · calc
+      solution.cemetery +
+          ∑ who : NormalPlayer table, solution.singleton who.1 =
+          solution.cemetery + ∑ who, solution.singleton who := by
+        rw [hsumRestrict solution.singleton hzeroOff]
+      _ = 1 := solution.total
+  · intro who
+    have h := solution.residual_nonneg who.1
+    rw [extendNormalPlayerDirection_of_mem table q who.2] at h
+    have hmatrix (row owner : ι) :
+        normalizedSoloMatrix table.zeroNeverReward row owner =
+          table.singletonMatrix row owner := by
+      exact congr_fun (congr_fun
+        (normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
+          table hnormalized) row) owner
+    simp_rw [hmatrix] at h
+    change 0 ≤ solution.cemetery * q who +
+      ∑ owner : NormalPlayer table,
+        solution.singleton owner.1 *
+          table.singletonMatrix who.1 owner.1
+    calc
+      0 ≤ solution.cemetery * q who +
+          ∑ owner, solution.singleton owner *
+            table.singletonMatrix who.1 owner := h
+      _ = solution.cemetery * q who +
+          ∑ owner : NormalPlayer table,
+            solution.singleton owner.1 *
+              table.singletonMatrix who.1 owner.1 := by
+        congr 1
+        exact hsumRestrict
+          (fun owner => solution.singleton owner *
+            table.singletonMatrix who.1 owner)
+          (fun owner howner => by rw [hzeroOff owner howner, zero_mul])
+  · intro who
+    have h := solution.complementary who.1
+    rw [extendNormalPlayerDirection_of_mem table q who.2] at h
+    have hmatrix (row owner : ι) :
+        normalizedSoloMatrix table.zeroNeverReward row owner =
+          table.singletonMatrix row owner := by
+      exact congr_fun (congr_fun
+        (normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
+          table hnormalized) row) owner
+    simp_rw [hmatrix] at h
+    change solution.singleton who.1 *
+      (solution.cemetery * q who +
+        ∑ owner : NormalPlayer table,
+          solution.singleton owner.1 *
+            table.singletonMatrix who.1 owner.1) = 0
+    rw [← hsumRestrict
+      (fun owner => solution.singleton owner *
+        table.singletonMatrix who.1 owner)
+      (fun owner howner => by rw [hzeroOff owner howner, zero_mul])]
+    exact h
+
+/-! **Theorem 2.13 (paper).** Assume the normal-player set is nonempty and
 the zero-right-hand-side projective LCP has no nontrivial solution. If the
-normal-player matrix is not Q, then stationary ε-equilibria exist for every
+normal-player matrix is not Q, then ordinary ε-equilibria exist for every
 positive ε. If it is Q, then a sunspot ε-equilibrium exists for every
 positive ε in which at most one player quits with positive probability at
 each stage. The paper-local public-signal relation is the
 `SunspotProfile` relation above. -/
 
-/-! Theorem 2.11(1): the non-Q branch yields stationary ε-equilibria. -/
-theorem theorem2_11_stationary
-    (table : Table ι)
-    (hnormal : HasNormalPlayers (DerivedMatrix table))
-    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution
-      (NormalMatrix (DerivedMatrix table)))
-    (hnotQ : ¬QMatrix (NormalMatrix (DerivedMatrix table))) :
-    StationaryEpsilonEquilibria table := by
-  have hnoHomogeneous : ¬HasHomogeneousSimplexSolution
-      (normalizedNormalPlayerMatrix table.zeroNeverReward) := by
-    rw [← hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous]
-    exact hzero
-  have hnotStandard : ¬IsStandardQMatrix
-      (normalizedNormalPlayerMatrix table.zeroNeverReward) := by
-    rw [← isProjectiveQMatrix_iff_standard_of_noHomogeneous
-      (normalizedNormalPlayerMatrix table.zeroNeverReward) hnoHomogeneous]
-    exact hnotQ
-  obtain ⟨value, hvalue⟩ :=
-    exists_stationaryUniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch
-      table.zeroNeverReward
-        { normal_nonempty := hnormal
-          no_homogeneous := hnoHomogeneous
-          normal_not_standardQ := hnotStandard }
-  change table.StationaryεEquilibriumExistence
-  rw [QuittingPayoffTable.stationaryεEquilibriumExistence_iff]
-  exact hvalue.hasApproximateEquilibria
-
-/-! Theorem 2.11(2): the Q branch yields a unilateral-quitting sunspot
-ε-equilibrium for every `ε>0`. -/
-theorem theorem2_11_sunspot
+/-! Theorem 2.13(1): the non-Q branch yields ordinary ε-equilibria. The
+paper does not claim stationarity here; that stronger conclusion belongs to
+the alpha-player variant in Theorem 5.1. -/
+theorem theorem2_13_nonQ
     (table : Table ι)
     (hnormalized : SoloExitNormalized table)
     (hbounded : TablePayoffsBounded table)
-    (hnormal : HasNormalPlayers (DerivedMatrix table))
+    (_hnormal : HasNormalPlayers table)
+    (_hzero : ¬HasNontrivialZeroProjectiveLCPSolution
+      (NormalMatrix table))
+    (hnotQ : ¬QMatrix (NormalMatrix table)) :
+    ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame table.terminal).BehaviorProfile,
+        EpsilonEquilibrium table ε profile := by
+  classical
+  let reward := table.zeroNeverReward
+  obtain ⟨q, hno⟩ := exists_direction_without_projectiveLCPSolution
+    (NormalMatrix table) hnotQ
+  let qfull := extendNormalPlayerDirection table q
+  obtain ⟨g⟩ := nonempty_analyticBellmanGerm_quittingGame
+    (quittingRewardShift reward (fun who =>
+      QuittingLCPClassification.quittingSoloBaseline reward who + qfull who))
+  have hmassLe : quittingStationaryContinueMass
+      (g.endpointProfile none) ≤ 1 :=
+    quittingStationaryContinueMass_le_one (g.endpointProfile none)
+  have hzeroGame : ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame reward).BehaviorProfile,
+        (quittingGame reward).IsεAsymptoticNash
+          (quittingTerminalPayoff reward) ε profile := by
+    intro ε hε
+    rcases lt_or_eq_of_le hmassLe with habsorbs | hcontinue
+    · rcases two_positive_or_isolated_of_continueMass_lt_one
+          (g.endpointProfile none) habsorbs with htwo | hisolated
+      · have hcontracts := fixedOpponents_contract_of_two_positive
+          (g.endpointProfile none) htwo
+        have hvalue :=
+          isQuittingStationaryUniformEquilibriumPayoff_of_shiftedGerm_absorbingEndpoint
+            reward (fun who =>
+              QuittingLCPClassification.quittingSoloBaseline reward who +
+                qfull who) g habsorbs hcontracts
+        obtain ⟨root, hnash, _⟩ := hvalue ε hε
+        exact ⟨quittingStationaryProfile reward root, hnash⟩
+      · obtain ⟨owner, howner, hother⟩ := hisolated
+        have hownerNormal : IsNormalPlayer table owner := by
+          by_contra habnormal
+          have hownerNotMem : owner ∉ NormalPlayers table := by
+            simpa only [mem_normalPlayers_iff]
+          have hqfull : 0 < qfull owner := by
+            rw [show qfull owner = 1 by
+              exact extendNormalPlayerDirection_of_notMem
+                table q hownerNotMem]
+            norm_num
+          obtain ⟨blocker, hne, hentry⟩ :=
+            exists_normalizedSoloMatrix_blocker_of_isolated_endpoint
+              reward qfull g owner howner hother hqfull
+          have hmatrix := congr_fun (congr_fun
+            (normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
+              table hnormalized) owner) blocker
+          rw [show reward = table.zeroNeverReward by rfl, hmatrix] at hentry
+          have hpositive := lemma2_6 table hnormalized hbounded
+            habnormal hne
+          exact (not_lt_of_ge hentry) hpositive
+        let root := g.endpointProfile none
+        let hazard := root owner
+        have hroot : root = quittingSoloStationaryRoot owner hazard :=
+          eq_quittingSoloStationaryRoot_of_others_continue hother
+        let target := quittingPayoffUnshift (fun who =>
+          QuittingLCPClassification.quittingSoloBaseline reward who +
+            qfull who) (quittingGermValue g 0)
+        have hfixedShift := quittingGerm_endpoint_fixedPoint g
+        have hfixed : target =
+            quittingRootSuccessorPayoff reward target root :=
+          quittingRootFixedPoint_unshift reward (fun who =>
+            QuittingLCPClassification.quittingSoloBaseline reward who +
+              qfull who)
+            (quittingGermValue g 0) root hfixedShift
+        have hnashEndpoint : IsεQuittingRootEndpointNash
+            reward target 0 root :=
+          (isεQuittingRootEndpointNash_zero_shift_iff reward (fun who =>
+            QuittingLCPClassification.quittingSoloBaseline reward who +
+              qfull who)
+            (quittingGermValue g 0) root).mp
+              (quittingGerm_endpoint_endpointNash g)
+        have hnashRoot : IsεQuittingRootNash reward target 0 root :=
+          (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
+            reward target root).mp hnashEndpoint
+        let cycle : Fin 1 → ι → PMF Bool := fun _ => root
+        let value : Fin 1 → Payoff ι := fun _ => target
+        have hpolicy : ∀ phase : Fin 1,
+            value phase = quittingRootSuccessorPayoff reward
+              (value (finRotate 1 phase)) (cycle phase) := by
+          intro phase
+          simpa only [value, cycle] using hfixed
+        have hnash : ∀ phase : Fin 1,
+            IsεQuittingRootNash reward
+              (value (finRotate 1 phase)) 0 (cycle phase) := by
+          intro phase
+          simpa only [value, cycle] using hnashRoot
+        have hcycleAbsorbs :
+            (∏ phase : Fin 1,
+              quittingStationaryContinueMass (cycle phase)) < 1 := by
+          simpa only [cycle, Fin.prod_univ_one] using habsorbs
+        have hadmissible :
+            IsQuittingCyclePunishmentAdmissible reward cycle := by
+          intro who
+          unfold IsQuittingCyclePunishmentAdmissibleAt
+          by_cases hwho : who = owner
+          · subst who
+            right
+            have hpunishment := hownerNormal
+            unfold IsNormalPlayer at hpunishment
+            rw [table.punishmentValue_eq_add_never] at hpunishment
+            change quittingPunishmentValue table.zeroNeverReward owner ≤
+              table.zeroNeverReward
+                (quittingSingletonTerminal owner) owner
+            unfold QuittingPayoffTable.zeroNeverReward
+            have hsolo : table.terminal
+                (quittingSingletonTerminal owner) owner = 0 := by
+              simpa [quittingSingletonTerminal,
+                quittingProjectiveSingletonTerminal] using hnormalized owner
+            rw [hsolo]
+            change quittingPunishmentValue
+                (fun S who => table.terminal S who - table.never who)
+                owner + table.never owner ≤ 0 at hpunishment
+            linarith
+          · left
+            have hpositive : 0 < (hazard true).toReal := howner
+            have hcontract :=
+              quittingStationaryFixedOpponentsContinueMass_solo_other_lt_one
+                hwho hazard hpositive
+            rw [← hroot] at hcontract
+            simpa only [cycle, Fin.prod_univ_one] using hcontract
+        obtain ⟨profile, hnashProfile, _⟩ :=
+          exists_isεAsymptoticNash_close_of_punishmentAdmissibleCycle
+            reward cycle value 0 hpolicy hnash hcycleAbsorbs
+              hadmissible hε
+        exact ⟨profile, hnashProfile⟩
+    · obtain ⟨normalOwner, hqnegative⟩ :=
+        exists_negative_of_no_projectiveLCPSolution
+          (NormalMatrix table) q hno
+      have hnegative : qfull normalOwner.1 < 0 := by
+        simpa only [qfull, extendNormalPlayerDirection_of_mem
+          table q normalOwner.2] using hqnegative
+      have hnotZero : ¬IsQuittingZeroSolo
+          (quittingRewardShift reward (fun who =>
+            QuittingLCPClassification.quittingSoloBaseline reward who +
+              qfull who)) :=
+        not_isQuittingZeroSolo_baselineShift_of_negative
+          reward qfull hnegative
+      rcases quittingGerm_allContinue_zeroSolo_or_supportedProjectivePacket
+          (quittingRewardShift reward (fun who =>
+            QuittingLCPClassification.quittingSoloBaseline reward who +
+              qfull who)) g hcontinue with
+        hzeroSolo | hsupported
+      · exact False.elim (hnotZero hzeroSolo)
+      · let solution : ProjectiveLCPSolution
+            (normalizedSoloMatrix reward) qfull :=
+          projectiveLCPSolutionOfBaselineShiftedPacket
+            reward qfull hsupported.some.packet
+        have hsupport : ∀ who, 0 < solution.singleton who →
+            who ∈ NormalPlayers table := by
+          intro who hpositive
+          by_contra hnotNormal
+          have habnormal : ¬IsNormalPlayer table who := by
+            simpa only [mem_normalPlayers_iff] using hnotNormal
+          have hactive : QuittingGermEventuallyActive g who :=
+            hsupported.some.positive_eventuallyActive who (by
+              simpa only [solution,
+                projectiveLCPSolutionOfBaselineShiftedPacket_singleton]
+                using hpositive)
+          have hfixed : quittingStationaryFixedOpponentsContinueMass
+              (g.endpointProfile none) who = 1 := by
+            have hlower :=
+              quittingStationaryContinueMass_le_fixedOpponentsContinueMass
+                (g.endpointProfile none) who
+            have hupper := quittingStationaryContinueMass_le_one
+              (Function.update (g.endpointProfile none) who
+                (PMF.pure false))
+            change quittingStationaryFixedOpponentsContinueMass
+              (g.endpointProfile none) who ≤ 1 at hupper
+            linarith
+          obtain ⟨data⟩ :=
+            nonempty_quittingGermOpponentLeadingData g who
+          have hqfull : 0 < qfull who := by
+            rw [show qfull who = 1 by
+              exact extendNormalPlayerDirection_of_notMem
+                table q hnotNormal]
+            norm_num
+          obtain ⟨blocker, hweight, hentry⟩ :=
+            exists_weighted_nonpositive_normalizedSoloMatrix_of_eventuallyActive
+              reward qfull g who hfixed hactive data hqfull
+          have hne : blocker ≠ who := by
+            intro heq
+            subst blocker
+            rw [data.singletonWeight_self] at hweight
+            exact (lt_irrefl 0) hweight
+          have hmatrix := congr_fun (congr_fun
+            (normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
+              table hnormalized) who) blocker
+          rw [show reward = table.zeroNeverReward by rfl, hmatrix] at hentry
+          have hpositiveEntry := lemma2_6 table hnormalized hbounded
+            habnormal hne
+          exact (not_lt_of_ge hentry) hpositiveEntry
+        have hrestricted := restrictProjectiveLCPSolutionToNormalPlayers
+          table hnormalized q solution (by
+            simpa only [reward] using hsupport)
+        exact False.elim (hno ⟨hrestricted⟩)
+  intro ε hε
+  obtain ⟨profile, hnash⟩ := hzeroGame ε hε
+  refine ⟨profile, ?_⟩
+  exact (table.isεAsymptoticNash_iff ε profile).2 hnash
+
+/-! Theorem 2.13(2): the Q branch yields a unilateral-quitting sunspot
+ε-equilibrium for every `ε>0`. -/
+theorem theorem2_13_sunspot
+    (table : Table ι)
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (hnormal : HasNormalPlayers table)
     (hzero : ¬HasNontrivialZeroProjectiveLCPSolution
-      (NormalMatrix (DerivedMatrix table)))
-    (hQ : QMatrix (NormalMatrix (DerivedMatrix table))) :
+      (NormalMatrix table))
+    (hQ : QMatrix (NormalMatrix table)) :
     ∀ ε : ℝ, 0 < ε → ∃ profile : SunspotProfile table,
       SunspotEpsilonEquilibrium table ε profile ∧
       AtMostOneQuitter profile := by
@@ -480,7 +1065,7 @@ identities (5)--(8), and concludes that the first construction is a sunspot
 construction-specific probability statements, so they remain paper notes
 rather than generic repository declarations. -/
 
-/-! ## Section 3 — proof of Theorem 2.11 -/
+/-! ## Section 3 — proof of Theorem 2.13 -/
 
 /-! **Section 3.1 (paper definitions).** The paper defines the
 `λ`-discounted quitting game, its payoff `γ^λ`, stationary payoff formula (9),
@@ -651,10 +1236,22 @@ private theorem endpoint_not_mem_tail_segment
     (smul_eq_zero.mp hv).resolve_left (ne_of_gt hcoeff)
   exact hcy (sub_eq_zero.mp hcsub)
 
+/-! **Lemma 3.1 (paper).** If the homogeneous projective LCP has no
+nontrivial solution, no singleton column lies in the nonnegative orthant. -/
+omit [DecidableEq ι] in
+theorem lemma3_1
+    (M : ι → ι → ℝ) (hdiag : ∀ who, M who who = 0)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M) (owner : ι) :
+    (fun who => M who owner) ∉ NonnegativeOrthant ι := by
+  intro hcolumn
+  apply hzero
+  rw [hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous]
+  exact singletonLCPFeasible_of_diag_eq_zero owner (hdiag owner) hcolumn
+
 /-! Lemma 3.2: `q∈conv{r̂ᶦ} ∖ ℝⁿ_≥0` forces every LCP residual into
 `D₀`. -/
 omit [DecidableEq ι] in
-theorem lemma3_1
+theorem lemma3_2
     (M : ι → ι → ℝ) (q : ι → ℝ)
     (hq : q ∈ ColumnConvexHull M)
     (hqNegative : q ∉ NonnegativeOrthant ι)
@@ -784,8 +1381,8 @@ structure BuildingBlock (M : ι → ι → ℝ) (y : ι → ℝ) (ε : ℝ) wher
   complementary : ∀ i, z.singleton i > 0 → wi i i = 0
   nontrivial : 0 < ∑ i, z.singleton i
 
-/-! The existential conclusion of Theorem 3.2. -/
-def Theorem32Conclusion (M : ι → ι → ℝ) (y : ι → ℝ) (ε : ℝ) : Prop :=
+/-! The existential conclusion of Theorem 3.3. -/
+def Theorem33Conclusion (M : ι → ι → ℝ) (y : ι → ℝ) (ε : ℝ) : Prop :=
   Nonempty (BuildingBlock M y ε)
 
 private theorem subfamilyHull_weights
@@ -885,14 +1482,14 @@ private theorem column_not_mem_D_of_no_nontrivial_zero_solution
         · simp [hwho] }
   exact ⟨solution, by simp [solution]⟩
 
-/-! The first case in the proof of Theorem 3.2: `y` already lies in the
+/-! The first case in the proof of Theorem 3.3: `y` already lies in the
 convex hull of the columns whose own coordinate vanishes. -/
-theorem theorem32Conclusion_of_mem_subfamilyHull
+theorem theorem33Conclusion_of_mem_subfamilyHull
     (M : ι → ι → ℝ) {y : ι → ℝ} (hy : DZero M y)
     (hbound : MatrixPayoffsBounded M) (hdiag : ∀ i, M i i = 0)
     (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M)
     (hmember : y ∈ SubfamilyHull M (ZeroCoordinates y))
-    {ε : ℝ} (hε : 0 < ε) : Theorem32Conclusion M y ε := by
+    {ε : ℝ} (hε : 0 < ε) : Theorem33Conclusion M y ε := by
   let δ := min ε 1
   have hδpos : 0 < δ := lt_min hε zero_lt_one
   have hδnonneg : 0 ≤ δ := hδpos.le
@@ -966,13 +1563,13 @@ theorem theorem32Conclusion_of_mem_subfamilyHull
 
 /-! The first subcase of Lemma 3.4: a segment from `y` to a zero-coordinate
 column reaches a second boundary point of `D`. -/
-theorem theorem32Conclusion_of_segment_boundary
+theorem theorem33Conclusion_of_segment_boundary
     (M : ι → ι → ℝ) {y w : ι → ℝ}
     (hbound : MatrixPayoffsBounded M) (hdiag : ∀ i, M i i = 0)
     (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M)
     (i : ι) (hyi : y i = 0) (hw : DZero M w)
     (hsegment : Segment y (fun who => M who i) w) (hwy : w ≠ y)
-    {ε : ℝ} (hε : 0 < ε) : Theorem32Conclusion M y ε := by
+    {ε : ℝ} (hε : 0 < ε) : Theorem33Conclusion M y ε := by
   obtain ⟨a, ha0, ha1, haw⟩ := hsegment
   let δ := 1 - a
   have hδ0 : 0 ≤ δ := sub_nonneg.mpr ha1
@@ -1090,7 +1687,7 @@ theorem theorem32Conclusion_of_segment_boundary
 point of the small slice `(1-η)y+ηS(J_y)`. Its extreme points approach
 the singleton columns from `y`, which is the second alternative in the
 published condition (F.1). -/
-theorem theorem32Conclusion_of_slice_boundary
+theorem theorem33Conclusion_of_slice_boundary
     (M : ι → ι → ℝ) {y w : ι → ℝ}
     (hy : DZero M y) (hw : DZero M w)
     (hbound : MatrixPayoffsBounded M) (hdiag : ∀ i, M i i = 0)
@@ -1099,7 +1696,7 @@ theorem theorem32Conclusion_of_slice_boundary
     (hwSlice : w ∈ SubfamilyHull
       (fun who owner => (1 - η) * y who + η * M who owner)
       (ZeroCoordinates y)) :
-    Theorem32Conclusion M y ε := by
+    Theorem33Conclusion M y ε := by
   have hyD : y ∈ D M := mem_D_of_DZero hy
   obtain ⟨weight, hweight, htotal, hsupport, haverage⟩ :=
     subfamilyHull_weights
@@ -1157,7 +1754,7 @@ theorem theorem32Conclusion_of_slice_boundary
 
 /-! Rescaling a nontrivial projective complementarity packet gives the
 first construction in the published Lemma 3.4. -/
-theorem theorem32Conclusion_of_projective_packet
+theorem theorem33Conclusion_of_projective_packet
     (M : ι → ι → ℝ) {y w : ι → ℝ}
     (hw : DZero M w) (hbound : MatrixPayoffsBounded M)
     (hdiag : ∀ i, M i i = 0)
@@ -1169,7 +1766,7 @@ theorem theorem32Conclusion_of_projective_packet
       ∑ i, singleton i * M who i)
     (hcomplementary : ∀ i, singleton i > 0 → w i = 0)
     (hnontrivial : 0 < ∑ i, singleton i)
-    {ε : ℝ} (hε : 0 < ε) : Theorem32Conclusion M y ε := by
+    {ε : ℝ} (hε : 0 < ε) : Theorem33Conclusion M y ε := by
   let η := min ε 1
   have hηpos : 0 < η := lt_min hε zero_lt_one
   have hηnonneg : 0 ≤ η := hηpos.le
@@ -1265,7 +1862,7 @@ theorem theorem32Conclusion_of_projective_packet
 /-! **Lemmas 3.3 and 3.4 (paper).** Put `J_y={i:y_i=0}` and
 `S(J_y)=conv{r̂^i:i∈J_y}`. In the two geometric cases
 `conv(S(J_y),y)∩D={y}` and `conv(S(J_y),y)∩D ⊋ {y}`, respectively, the
-paper proves the same `Theorem32Conclusion` represented above. -/
+paper proves the same `Theorem33Conclusion` represented above. -/
 
 /-! `conv(S(J),y)`, the convex hull after adjoining `y`. -/
 def AugmentedHull (M : ι → ι → ℝ) (J : Finset ι)
@@ -1377,15 +1974,15 @@ private theorem endpoint_not_mem_augmentedHull
       linear_combination hya who + (1 - a) * (hqb who)
   exact hy <| hC.segment_subset hc hs (mem_segment_of_Segment hySegmentCS)
 
-/-! Lemma 3.3: the singleton-intersection case yields (F.1)--(F.5). -/
-theorem lemma3_3
+/-! Lemma 3.4: the singleton-intersection case yields (F.1)--(F.5). -/
+theorem lemma3_4
     (M : ι → ι → ℝ) {y : ι → ℝ} (hy : DZero M y)
     (hbound : MatrixPayoffsBounded M) (hdiag : ∀ i, M i i = 0) (hzero :
       ¬HasNontrivialZeroProjectiveLCPSolution M) (hQ : QMatrix M)
     (hnot : y ∉ SubfamilyHull M (ZeroCoordinates y))
     (hpoint : AugmentedHull M (ZeroCoordinates y) y ∩
       D M = {y}) {ε : ℝ} (hε : 0 < ε) :
-    Theorem32Conclusion M y ε := by
+    Theorem33Conclusion M y ε := by
   let J := ZeroCoordinates y
   let C := SubfamilyHull M J
   obtain ⟨pivot, hpivotZero⟩ := hy.2
@@ -1447,7 +2044,7 @@ theorem lemma3_3
     (solution n).cemetery * q n who +
       ∑ owner, (solution n).singleton owner * M who owner
   have hresidualDZero (n : ℕ) : DZero M (residual n) :=
-    lemma3_1 M (q n) (hqHull n) (hqNegative n) (solution n)
+    lemma3_2 M (q n) (hqHull n) (hqNegative n) (solution n)
   let coefficient (n : ℕ) : Option ι → ℝ
     | none => (solution n).cemetery
     | some owner => (solution n).singleton owner
@@ -1665,7 +2262,7 @@ theorem lemma3_3
     apply hwy
     funext who
     simp [w, hcemeteryOne, hsingleZero]
-  apply theorem32Conclusion_of_projective_packet M hw hbound hdiag hzero
+  apply theorem33Conclusion_of_projective_packet M hw hbound hdiag hzero
     cemetery singleton hcemeteryNonneg hsingletonNonneg htotal
   · exact fun who => rfl
   · intro owner howner
@@ -1674,15 +2271,15 @@ theorem lemma3_3
   · exact hnontrivial
   · exact hε
 
-/-! Lemma 3.4: the strict-intersection case yields (F.1)--(F.5). -/
-theorem lemma3_4
+/-! Lemma 3.5: the strict-intersection case yields (F.1)--(F.5). -/
+theorem lemma3_5
     (M : ι → ι → ℝ) {y : ι → ℝ} (hy : DZero M y)
     (hbound : MatrixPayoffsBounded M) (hdiag : ∀ i, M i i = 0) (hzero :
       ¬HasNontrivialZeroProjectiveLCPSolution M) (_hQ : QMatrix M)
     (_hnot : y ∉ SubfamilyHull M (ZeroCoordinates y))
     (hstrict : AugmentedHull M (ZeroCoordinates y) y ∩
       D M ≠ {y}) {ε : ℝ} (hε : 0 < ε) :
-    Theorem32Conclusion M y ε := by
+    Theorem33Conclusion M y ε := by
   have hyD : y ∈ D M := mem_D_of_DZero hy
   have hyAugmented : y ∈ AugmentedHull M (ZeroCoordinates y) y := by
     apply subset_convexHull ℝ
@@ -1749,7 +2346,7 @@ theorem lemma3_4
       exact endpoint_not_mem_tail_segment hpSegment hpy hcolumnNe (hwy ▸ hwTail)
     have hyowner : y owner = 0 := by
       simpa [ZeroCoordinates] using howner
-    exact theorem32Conclusion_of_segment_boundary M hbound hdiag hzero
+    exact theorem33Conclusion_of_segment_boundary M hbound hdiag hzero
       owner hyowner hwDZero (segment_of_mem_segment hwFull) hwy hε
   · push Not at hsegmentCase
     obtain ⟨a, ha0, ha1, hq⟩ := segment_of_mem_segment hqSegment
@@ -1840,26 +2437,26 @@ theorem lemma3_4
         (ZeroCoordinates y) :=
       (convex_convexHull ℝ _).segment_subset
         hinsideSlice hextremeSlice hwSegment
-    exact theorem32Conclusion_of_slice_boundary M hy hwDZero hbound
+    exact theorem33Conclusion_of_slice_boundary M hy hwDZero hbound
       hdiag hzero hηpos hηone hηε hwSlice
 
-/-! Theorem 3.3, under Theorem 2.11(2)'s standing hypotheses: the derived
+/-! Theorem 3.3, under Theorem 2.13(2)'s standing hypotheses: the derived
 matrix has zero diagonal, is Q, and its homogeneous projective problem has no
 nontrivial solution. Every `y∈D₀` and `ε>0` then admits a building block. -/
-theorem theorem3_2
+theorem theorem3_3
     (M : ι → ι → ℝ) {y : ι → ℝ} (hy : DZero M y)
     (hbound : MatrixPayoffsBounded M) (hdiag : ∀ i, M i i = 0) (hzero :
       ¬HasNontrivialZeroProjectiveLCPSolution M) (hQ : QMatrix M)
-    {ε : ℝ} (hε : 0 < ε) : Theorem32Conclusion M y ε := by
+    {ε : ℝ} (hε : 0 < ε) : Theorem33Conclusion M y ε := by
   by_cases hmember : y ∈ SubfamilyHull M (ZeroCoordinates y)
-  · exact theorem32Conclusion_of_mem_subfamilyHull M hy hbound hdiag
+  · exact theorem33Conclusion_of_mem_subfamilyHull M hy hbound hdiag
       hzero hmember hε
   · by_cases hintersection :
         AugmentedHull M (ZeroCoordinates y) y ∩ D M = {y}
-    · exact lemma3_3 M hy hbound hdiag hzero hQ hmember hintersection hε
     · exact lemma3_4 M hy hbound hdiag hzero hQ hmember hintersection hε
+    · exact lemma3_5 M hy hbound hdiag hzero hQ hmember hintersection hε
 
-/-! **Theorem 3.5 (paper, corrected endpoint).** If `(X,d)` is a nonempty
+/-! **Theorem 3.6 (paper, corrected endpoint).** If `(X,d)` is a nonempty
 complete metric space and `f:X→X` has no fixed point, then for every `c>0`
 and `C≥0` there are `K` and `x¹,…,xᴷ` with
 `Σ_k d(xᵏ,f(xᵏ))>C` and `Σ_{k<K}d(xᵏ⁺¹,f(xᵏ))<c`. The paper proof uses
@@ -1890,7 +2487,7 @@ theorem pathTrackingFrom_nonneg {X : Type*} [PseudoMetricSpace X]
       simp only [PathTrackingFrom]
       exact add_nonneg dist_nonneg (ih (f x))
 
-/-! The finite-sequence conclusion of Theorem 3.5. The head is `x¹`; the
+/-! The finite-sequence conclusion of Theorem 3.6. The head is `x¹`; the
 list contains `x²,…,xᵏ`, so its tracking error starts at `f(x¹)`. -/
 def ApproximationWitness {X : Type*} [PseudoMetricSpace X]
     (f : X → X) (c C : ℝ) : Prop :=
@@ -1900,16 +2497,16 @@ def ApproximationWitness {X : Type*} [PseudoMetricSpace X]
 
 /-! Supremum of the displacement attainable from `anchor` while spending
 less than half of the tracking budget. This is the Caristi potential in the
-short proof of Theorem 3.5. -/
+short proof of Theorem 3.6. -/
 def RemainingDisplacement {X : Type*} [PseudoMetricSpace X]
     (f : X → X) (c : ℝ) (anchor : X) : ℝ :=
   sSup {value | ∃ xs : List X,
     PathTrackingFrom f anchor xs < c / 2 ∧
     value = PathDisplacement f xs}
 
-/-! Theorem 3.5: a fixed-point-free map admits large displacement with small
+/-! Theorem 3.6: a fixed-point-free map admits large displacement with small
 tracking error on a finite sequence. -/
-theorem theorem3_5 {X : Type*} [MetricSpace X] [Nonempty X]
+theorem theorem3_6 {X : Type*} [MetricSpace X] [Nonempty X]
     [CompleteSpace X] (f : X → X) (hfixed : ∀ x, f x ≠ x)
     (c C : ℝ) (hc : 0 < c) (hC : 0 ≤ C) :
     ApproximationWitness f c C := by
@@ -1983,53 +2580,93 @@ theorem theorem3_5 {X : Type*} [MetricSpace X] [Nonempty X]
     f φ hφ_lsc hφ_bdd hcaristi
   exact hfixed x hx
 
-/-! **Lemmas 3.6--3.8 (paper).** For the kiloblock strategy `ξ*` built from
-Theorem 3.2 and Theorem 3.5, the paper proves (i) its payoff is within
+/-! **Lemmas 3.8--3.10 (paper).** For the kiloblock strategy `ξ*` built from
+Theorem 3.3 and Theorem 3.6, the paper proves (i) its payoff is within
 `2ε` of `w(yᴷ)` for normal players, (ii) continuation by any normal player
 still terminates with probability at least `1-ε` before the final kiloblock,
-and (iii) every pure deviation gains at most `5ε`. The following record is a
-paper-local carrier for the induced quantities used in those statements. -/
+and (iii) every pure deviation gains at most `5ε`. -/
 
-/-! Induced payoff, deviation payoff, and continuation-termination data for
-the paper's kiloblock strategy `ξ*`. -/
-structure KiloblockProfile (ι : Type) [Fintype ι] [DecidableEq ι] where
-  payoff : Payoff ι
-  unilateralPayoff : ι → ℝ
-  continueTermination : ι → ℝ
-
-/-! A kiloblock construction generated from a Theorem 3.2 building block. -/
+/-! A kiloblock construction carries the actual public-signal behavior
+profile, its finite chain of Theorem 3.3 blocks, and the history event that the
+final kiloblock has not started. It carries no asserted payoff or deviation
+bound. -/
 structure KiloblockConstruction
-    (M : ι → ι → ℝ) (ε : ℝ) where
-  profile : KiloblockProfile ι
+    (table : Table ι) (ε : ℝ) where
+  profile : SunspotProfile table
+  blockCount : ℕ
+  point : Fin (blockCount + 1) → NormalPlayer table → ℝ
+  point_boundary : ∀ k, DZero (NormalMatrix table) (point k)
+  buildingBlock : ∀ k,
+    BuildingBlock (NormalMatrix table) (point k) ε
   target : Payoff ι
-  buildingBlock : ∃ y, DZero M y ∧ Theorem32Conclusion M y ε
+  target_normal : ∀ who : NormalPlayer table,
+    target who.1 = (buildingBlock (Fin.last blockCount)).w who
+  beforeFinal : ∀ t,
+    (publicQuittingGame table profile.signalLaw).Hist t → Prop
 
-/-! Lemma 3.6: for normal `i`, `|γ_i(ξ*)-w_i(yᴷ)|<2ε`. -/
-theorem lemma3_6
-    (M : ι → ι → ℝ) {ε : ℝ} (hε : 0 < ε)
-    (construction : KiloblockConstruction M ε) :
-    ∀ i ∈ NormalCore M,
-      |construction.profile.payoff i - construction.target i| < 2 * ε := by
-  sorry
+/-! Indicator that absorption has occurred while the construction's history
+marker still lies before the final kiloblock. -/
+def absorbedBeforeFinalIndicator
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (t : ℕ)
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t) : ℝ := by
+  classical
+  exact match history.2 with
+    | .active _ => 0
+    | .absorbed _ => if construction.beforeFinal t history then 1 else 0
 
-/-! Lemma 3.7: continuing by a normal player still terminates with probability
-at least `1-ε` before the last kiloblock. -/
-theorem lemma3_7
-    (M : ι → ι → ℝ) {ε : ℝ} (hε : 0 < ε)
-    (construction : KiloblockConstruction M ε) :
-    ∀ i ∈ NormalCore M,
-      construction.profile.continueTermination i ≥ 1 - ε := by
-  sorry
+/-! Probability of absorption before the final kiloblock under a supplied
+public behavior profile, represented as the supremum of its finite-horizon
+event masses. -/
+def absorptionBeforeFinalProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (strategy : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorProfile) : ℝ :=
+  ⨆ t, expect
+    ((publicQuittingGame table construction.profile.signalLaw).histDist
+      strategy (.active 0) t)
+    (absorbedBeforeFinalIndicator construction t)
 
-/-! Lemma 3.8: every pure deviation gains at most `5ε`. -/
+/-! Lemma 3.9's induced probability after player `who` is forced to Continue
+at every public history. -/
+def continueTerminationBeforeFinal
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (who : ι) : ℝ :=
+  absorptionBeforeFinalProbability construction
+    (Function.update construction.profile.strategy who
+      (fun _ _ => PMF.pure false))
+
+/-! Lemma 3.8: for normal `i`, `|γ_i(ξ*)-w_i(yᴷ)|<2ε`. -/
 theorem lemma3_8
-    {M : ι → ι → ℝ} {ε : ℝ} (hε : 0 < ε)
-    (construction : KiloblockConstruction M ε) :
-    ∀ i, construction.profile.unilateralPayoff i ≤
-      construction.target i + 5 * ε := by
+    (table : Table ι) {ε : ℝ} (hε : 0 < ε)
+    (construction : KiloblockConstruction table ε) :
+    ∀ i : NormalPlayer table,
+      |construction.profile.payoff i.1 - construction.target i.1| < 2 * ε := by
   sorry
 
-/-! Section 3.4 concludes from Lemmas 3.6--3.8 that the constructed profile
+/-! Lemma 3.9: continuing by a normal player still terminates with probability
+at least `1-ε` before the last kiloblock. -/
+theorem lemma3_9
+    (table : Table ι) {ε : ℝ} (hε : 0 < ε)
+    (construction : KiloblockConstruction table ε) :
+    ∀ i : NormalPlayer table,
+      continueTerminationBeforeFinal construction i.1 ≥ 1 - ε := by
+  sorry
+
+/-! Lemma 3.10: every pure deviation gains at most `5ε`. -/
+theorem lemma3_10
+    {table : Table ι} {ε : ℝ} (hε : 0 < ε)
+    (construction : KiloblockConstruction table ε) :
+    ∀ i (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy i),
+      publicQuittingPayoff table construction.profile.signalLaw
+          (Function.update construction.profile.strategy i deviation) i ≤
+        construction.target i + 5 * ε := by
+  sorry
+
+/-! Section 3.4 concludes from Lemmas 3.8--3.10 that the constructed profile
 is a sunspot `7ε`-equilibrium. -/
 
 /-! Section 3.4: the constructed profile is a sunspot `7ε`-equilibrium. -/
@@ -2076,26 +2713,89 @@ def MMatrix (M : ι → ι → ℝ) : Prop :=
 
 /-! `conv{rⁱ : i∈I*}` in the full payoff space of all players. -/
 def NormalSingletonHull (table : Table ι) : Set (Payoff ι) :=
-  convexHull ℝ (Set.range fun owner : NormalCore (DerivedMatrix table) =>
+  convexHull ℝ (Set.range fun owner : NormalPlayer table =>
     fun who => table.terminal (quittingProjectiveSingletonTerminal owner) who)
 
 /-! `D̃ = conv{rⁱ : i∈I*} ∩ ℝ^N_{≥0}` from Section 4. -/
 def TildeD (table : Table ι) : Set (Payoff ι) :=
   NormalSingletonHull table ∩ {value | ∀ who, 0 ≤ value who}
 
-/-! **Theorem 4.1 (paper).** If `R̂` is an M-matrix, every vector in
+/-! **Theorem 4.3 (paper).** If `R̂` is an M-matrix, every vector in
 `D~ = conv(r¹,…,rⁿ)∩ℝⁿ_≥0` is a sunspot equilibrium payoff. -/
 
-/-! Theorem 4.1: an M-matrix makes every `v∈D~` a sunspot equilibrium payoff. -/
-theorem theorem4_1
+/-! Theorem 4.3: an M-matrix makes every `v∈D~` a sunspot equilibrium payoff. -/
+theorem theorem4_3
     (table : Table ι)
     (hnormalized : SoloExitNormalized table)
     (hbounded : TablePayoffsBounded table)
-    (hM : MMatrix (NormalMatrix (DerivedMatrix table))) :
+    (hM : MMatrix (NormalMatrix table)) :
     ∀ value ∈ TildeD table, SunspotEquilibriumPayoff table value := by
   sorry
 
 /-! ## Section 5 — discussion and open problems -/
+
+/-! **Section 5.1 (paper).** The alpha players are the intersection of the
+decreasing recursion
+`I₀=I`,
+`Iₗ₊₁={i∈Iₗ | ∃j∈Iₗ\{i}, rʲ_i≤0}`.
+This is different from the min--max normal-player set in Section 2.3. Under
+Assumption 2.1 it is exactly the production `normalCore` below. -/
+
+abbrev AlphaPlayers (table : Table ι) :=
+  normalCore (normalizedSoloMatrix table.zeroNeverReward)
+
+abbrev AlphaMatrix (table : Table ι) :=
+  normalizedNormalPlayerMatrix table.zeroNeverReward
+
+def HasAlphaPlayers (table : Table ι) : Prop :=
+  (AlphaPlayers table).Nonempty
+
+/-! Every alpha player is normal, as the paper notes after equation (19). -/
+theorem alphaPlayer_isNormal
+    (table : Table ι) (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table) (who : AlphaPlayers table) :
+    IsNormalPlayer table who.1 := by
+  by_contra habnormal
+  obtain ⟨owner, hne, hnonpositive⟩ :=
+    exists_blocker_of_mem_normalCore
+      (normalizedSoloMatrix table.zeroNeverReward) who.2
+  have hmatrix := congr_fun
+    (congr_fun
+      (normalizedSoloMatrix_zeroNeverReward_eq_singletonMatrix
+        table hnormalized) who.1) owner
+  rw [hmatrix] at hnonpositive
+  have hpositive := lemma2_6 table hnormalized hbounded habnormal hne
+  exact (not_lt_of_ge hnonpositive) hpositive
+
+/-! **Theorem 5.1(1) (paper).** If the alpha-player matrix has no
+nontrivial homogeneous solution and is not Q, stationary approximate
+equilibria exist. The checked production theorem proves the stronger claim
+that these equilibria approach one fixed payoff. -/
+theorem theorem5_1_nonQ
+    (table : Table ι)
+    (hnormal : HasAlphaPlayers table)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution (AlphaMatrix table))
+    (hnotQ : ¬QMatrix (AlphaMatrix table)) :
+    StationaryEpsilonEquilibria table := by
+  rw [hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous] at hzero
+  have hnotStandard : ¬IsStandardQMatrix (AlphaMatrix table) := by
+    rw [← isProjectiveQMatrix_iff_standard_of_noHomogeneous
+      (AlphaMatrix table) hzero]
+    exact hnotQ
+  let branch : OrdinaryNonQMatrixBranch table.zeroNeverReward :=
+    { normal_nonempty := hnormal
+      no_homogeneous := hzero
+      normal_not_standardQ := hnotStandard }
+  obtain ⟨value, hvalue⟩ :=
+    exists_stationaryUniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch
+      table.zeroNeverReward branch
+  change table.StationaryεEquilibriumExistence
+  rw [QuittingPayoffTable.stationaryεEquilibriumExistence_iff]
+  exact hvalue.hasApproximateEquilibria
+
+/-! Theorem 5.1(2) repeats the Q-side public-signal conclusion of Theorem
+2.13 with alpha players. Its semantic proof is the same kiloblock compiler
+isolated in Sections 3.3--3.4 above. -/
 
 /-! The paper discusses stopping games, absorbing games, the need for a
 uniform lower bound on quitting probabilities, finite-range recursions, the
