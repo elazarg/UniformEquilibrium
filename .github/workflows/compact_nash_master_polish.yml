@@ -1,0 +1,109 @@
+name: Compact Nash master polish
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_master_polish.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-master-polish
+  cancel-in-progress: false
+
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Wait for integrated theorem
+        run: |
+          for attempt in $(seq 1 180); do
+            git fetch origin agent/promote-sorin1986
+            git reset --hard origin/agent/promote-sorin1986
+            git submodule update --init --recursive
+            if grep -q 'exact CompactNash.compact_nash_existence G' Literature/Sorin1986.lean; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo 'Integrated compact Nash theorem did not appear' >&2
+          exit 1
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Correct documentation and clean scaffolding
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986.lean')
+          s=p.read_text()
+          old='''/-! Property (2) is Glicksberg--Fan Nash existence plus closedness of the
+          equilibrium relation.  The compact sequence-form games above satisfy its
+          hypotheses, but the required infinite-dimensional fixed-point theorem is not
+          yet in the imported library. -/'''
+          old2='''/-! Property (2) is Glicksberg--Fan Nash existence plus closedness of the
+          equilibrium relation.  The compact sequence-form games above satisfy its
+          hypotheses, but the required infinite-dimensional fixed-point theorem is not
+          yet in the imported library. -/'''.replace('          ','')
+          new='''/-! Property (2).  Finite Nash existence supplies every finite family of
+          unilateral inequalities after finite barycentric realization.  Compactness
+          then upgrades finite satisfiability to a profile satisfying all deviations;
+          closedness of that profile set gives compactness of its payoff image. -/'''
+          if old in s:
+              s=s.replace(old,new,1)
+          elif old2 in s:
+              s=s.replace(old2,new,1)
+          else:
+              start=s.find('/-! Property (2)')
+              theorem=s.find('theorem paper_property_2',start)
+              if start>=0 and theorem>start:
+                  end=s.rfind('-/',start,theorem)
+                  if end>=0:
+                      s=s[:start]+new+'\n'+s[end+2:]
+          p.write_text(s)
+          PY
+          rm -f Literature/Sorin1986/CompactNash*.lean
+          rm -f Literature/Sorin1986/CompactNash*.log
+          rm -f Literature/Sorin1986/CompactNash*.ok
+          rm -f .github/workflows/compact_nash*.yml
+      - name: Assert honest closure
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('Literature/Sorin1986.lean').read_text()
+          i=s.index('theorem paper_property_2 (G : CompactContinuousGame)')
+          j=s.index('theorem paper_property_1_finite',i)
+          block=s[i:j]
+          assert 'sorry' not in block
+          assert 'CompactNash.compact_nash_existence G' in block
+          assert 'theorem compact_nash_existence' in s
+          PY
+      - name: Compile and validate exact clean tree
+        run: |
+          lake env lean Literature/Sorin1986.lean
+          lake env lean Literature/Sorin1986/SequenceForm.lean
+          python3 scripts/check_docs.py
+          python3 scripts/check_import_graph.py
+          python3 scripts/check_trust.py
+          lake build
+      - name: Commit polished validated source
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add -A
+          git commit -m 'Polish general compact Nash proof' || true
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
