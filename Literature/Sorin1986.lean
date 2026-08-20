@@ -2967,7 +2967,74 @@ theorem lemma_1_Dlambda_subset_C (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.discountedFeasiblePayoffsOnRate lam ⊆
       G.correlatedFeasiblePayoffs := by
-  sorry
+  rintro _ ⟨profile, rfl⟩
+  letI (who : G.Player) : Fintype (G.repeatedGame.Act who) :=
+    G.finiteAction who
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let parameter : unitInterval := ⟨lam.1, lam.2.1.le, lam.2.2⟩
+  let timeLaw : PMF ℕ :=
+    (ProbabilityTheory.geometricMeasure parameter).toPMF
+  let actionLaw : ℕ → PMF G.repeatedGame.JointAct := fun time ↦
+    (G.repeatedGame.histDist profile PUnit.unit time).bind
+      (G.repeatedGame.stageActionDist profile)
+  let discountedActionLaw : PMF G.repeatedGame.JointAct :=
+    timeLaw.bind actionLaw
+  have hhull :=
+    Math.ProbabilityMassFunction.coordinateExpectation_mem_convexHull_range
+      discountedActionLaw G.payoff
+  change G.discountedPayoff lam.1 profile ∈
+    convexHull ℝ (Set.range G.payoff)
+  have heq : G.discountedPayoff lam.1 profile =
+      fun who ↦ Math.Probability.expect discountedActionLaw
+        (fun action ↦ G.payoff action who) := by
+    funext who
+    have hstage : ∀ time,
+        Math.Probability.expect (actionLaw time)
+          (fun action ↦ G.payoff action who) =
+        G.repeatedGame.expectedStagePayoff
+          profile PUnit.unit time who := by
+      intro time
+      rw [show actionLaw time =
+        (G.repeatedGame.histDist profile PUnit.unit time).bind
+          (G.repeatedGame.stageActionDist profile) by rfl]
+      rw [Math.Probability.expect_bind]
+      unfold StochasticGame.expectedStagePayoff StochasticGame.stageEUAt
+      congr 1
+      funext history
+      congr 1
+      funext action
+      simp [FiniteStageGame.repeatedGame,
+        KernelGame.realizedActionStochasticGame,
+        FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+    rw [show Math.Probability.expect discountedActionLaw
+        (fun action ↦ G.payoff action who) =
+      Math.Probability.expect timeLaw (fun time ↦
+        Math.Probability.expect (actionLaw time)
+          (fun action ↦ G.payoff action who)) by
+      exact Math.Probability.expect_bind _ _ _]
+    simp_rw [hstage]
+    unfold FiniteStageGame.discountedPayoff
+    unfold StochasticGame.discountedPayoff
+    rw [show Math.Probability.expect timeLaw (fun time ↦
+        G.repeatedGame.expectedStagePayoff profile PUnit.unit time who) =
+      ∑' time : ℕ, (1 - lam.1) ^ time * lam.1 *
+        G.repeatedGame.expectedStagePayoff profile PUnit.unit time who by
+      unfold Math.Probability.expect timeLaw
+      apply tsum_congr
+      intro time
+      rw [MeasureTheory.Measure.toPMF_apply]
+      rw [← MeasureTheory.measureReal_def]
+      rw [ProbabilityTheory.geometricMeasure_real_singleton]
+      intro hzero
+      have := congrArg ((↑) : unitInterval → ℝ) hzero
+      simp [parameter] at this
+      linarith [lam.2.1]]
+    rw [← tsum_mul_left]
+    apply tsum_congr
+    intro time
+    ring
+  rw [heq]
+  exact hhull
 
 /-- A convex set squeezed between `pure` and its convex hull is exactly
 that convex hull. -/
