@@ -1,0 +1,75 @@
+name: Compact Nash rescue substitutions
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_rescue_subst.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Repair substitution targets
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashScratch.lean')
+          s=p.read_text()
+          s=s.replace('''by_cases h : k = j
+              · subst h''','''by_cases h : k = j
+              · subst k''')
+          s=s.replace('''by_cases h : i = who
+            · subst h''','''by_cases h : i = who
+            · subst i''')
+          s=s.replace('''by_cases hk : k = j
+              · subst hk''','''by_cases hk : k = j
+              · subst k''')
+          p.write_text(s)
+          PY
+      - name: Compile repaired current stage
+        id: compile
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          lake build Literature.Sorin1986.CompactNashScratch 2>&1 | tee /tmp/compact-nash-rescue-subst.log
+      - name: Record and advance successful stage
+        run: |
+          cp /tmp/compact-nash-rescue-subst.log Literature/Sorin1986/CompactNashRescueSubst.log
+          if [ "${{ steps.compile.outcome }}" = success ]; then
+            if grep -q 'theorem compact_nash_existence' Literature/Sorin1986/CompactNashScratch.lean; then
+              printf 'success\n' > Literature/Sorin1986/CompactNashStage5.ok
+            elif grep -q 'theorem exists_satisfies_finset' Literature/Sorin1986/CompactNashScratch.lean; then
+              printf 'success\n' > Literature/Sorin1986/CompactNashStage4.ok
+            elif grep -q 'theorem restricted_mixedPayoff_eq_realized' Literature/Sorin1986/CompactNashScratch.lean; then
+              printf 'success\n' > Literature/Sorin1986/CompactNashStage3.ok
+            elif grep -q 'theorem multiAffine_barycenter' Literature/Sorin1986/CompactNashScratch.lean; then
+              printf 'success\n' > Literature/Sorin1986/CompactNashStage2.ok
+            else
+              printf 'success\n' > Literature/Sorin1986/CompactNashStage1Fix.ok
+            fi
+          fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashScratch.lean Literature/Sorin1986/CompactNashRescueSubst.log Literature/Sorin1986/CompactNashStage*.ok
+          git commit -m 'Repair compact Nash dependent substitutions' || exit 0
+          git push origin HEAD:agent/promote-sorin1986
+      - name: Fail if still invalid
+        if: steps.compile.outcome != 'success'
+        run: exit 1
