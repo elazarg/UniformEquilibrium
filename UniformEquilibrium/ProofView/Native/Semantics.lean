@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
+import GameTheory.Stochastic.Kuhn
 import UniformEquilibrium.ProofView.Native.History
 
 /-!
@@ -119,6 +120,61 @@ theorem native_publicHistoryLaw_eq_compiled
       simpa only [toNativeBehaviorProfile] using
         ih (G.shiftProfile profile (initial, actions)) target
 
+/-- Predraw the translated proof-view profile at every counterfactual public
+history through `horizon`. Unlike a bare existence result, this is the explicit
+mixed public-policy witness supplied by bounded stochastic Kuhn correspondence.
+-/
+def toNativeMixedPublicProfile (profile : G.BehaviorProfile)
+    (initial : G.State) (horizon : ℕ) : G.toNative.MixedPublicProfile := by
+  letI (i : ι) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
+  exact fun i =>
+    Stochastic.Game.PublicPolicy.toMixed G.toNative initial horizon
+      (toNativePublicProfile G initial profile i)
+
+/-- The explicit bounded mixed public profile has exactly the translated
+proof-view behavioral history law. -/
+theorem nativeMixedPublicProfile_play_eq_toNativeBehaviorProfile
+    (profile : G.BehaviorProfile) (initial : G.State) (horizon : ℕ) :
+    ((G.toNative.pureHorizonForm initial horizon).mixed).play
+        (toNativeMixedPublicProfile G profile initial horizon) =
+      (G.toNative.perfectMonitoring initial).runBehavioral
+        (toNativeBehaviorProfile G initial profile) horizon := by
+  letI (i : ι) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
+  unfold toNativeMixedPublicProfile
+  rw [G.toNative.kuhn_behavioral_to_mixed initial
+    (toNativePublicProfile G initial profile) horizon]
+  exact G.toNative.publicHorizonForm_play initial horizon
+    (toNativePublicProfile G initial profile)
+
+/-- Relabel the explicit mixed public profile as Protocol's certified mixed
+policies, without changing its induced bounded law. -/
+def toNativeMixedProfile (profile : G.BehaviorProfile)
+    (initial : G.State) (horizon : ℕ) :
+    (i : ι) → (G.toNative.perfectMonitoring initial).MixedPolicy i :=
+  fun i => FinDist.map (G.toNative.purePolicyEquiv initial i).symm
+    (toNativeMixedPublicProfile G profile initial horizon i)
+
+/-- The explicit certified mixed profile has exactly the translated
+proof-view behavioral history law. -/
+theorem nativeMixed_runMixed_eq_toNativeBehaviorProfile
+    (profile : G.BehaviorProfile) (initial : G.State) (horizon : ℕ) :
+    (G.toNative.perfectMonitoring initial).runMixed
+        (toNativeMixedProfile G profile initial horizon) horizon =
+      (G.toNative.perfectMonitoring initial).runBehavioral
+        (toNativeBehaviorProfile G initial profile) horizon := by
+  letI (i : ι) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
+  calc
+    (G.toNative.perfectMonitoring initial).runMixed
+          (toNativeMixedProfile G profile initial horizon) horizon =
+        ((G.toNative.pureHorizonForm initial horizon).mixed).play
+          (toNativeMixedPublicProfile G profile initial horizon) := by
+      exact (GameTheory.mixed_relabelStrategies_play
+        ((G.toNative.perfectMonitoring initial).toGameForm horizon)
+        (G.toNative.purePolicyEquiv initial)
+        (toNativeMixedPublicProfile G profile initial horizon)).symm
+    _ = _ := nativeMixedPublicProfile_play_eq_toNativeBehaviorProfile
+      G profile initial horizon
+
 /-- Every bounded proof-view behavioral run has an exactly equivalent native
 mixed contingent-policy run. The mixed witness is profile- and horizon-local;
 this does not supply one mixed profile valid at all large horizons. -/
@@ -129,11 +185,21 @@ theorem exists_nativeMixed_runMixed_eq_toNativeBehaviorProfile
       (G.toNative.perfectMonitoring initial).runMixed mixed horizon =
         (G.toNative.perfectMonitoring initial).runBehavioral
           (toNativeBehaviorProfile G initial profile) horizon := by
-  apply
-    (G.toNative.perfectMonitoring initial).exists_mixed_runMixed_eq_runBehavioral
-  exact
-    (G.toNative.perfectMonitoring initial).actsOnceWhereItMatters_of_perfectRecall
-      (toNative_perfectMonitoring_perfectRecall G initial)
+  exact ⟨toNativeMixedProfile G profile initial horizon,
+    nativeMixed_runMixed_eq_toNativeBehaviorProfile
+      G profile initial horizon⟩
+
+/-- Projecting the explicit bounded mixed witness to public histories recovers
+the proof view's compiled public-history law exactly. -/
+theorem nativeMixed_publicHistoryLaw_eq_compiled
+    (profile : G.BehaviorProfile) (initial : G.State) (horizon : ℕ) :
+    FinDist.map
+        (fun history => G.toNative.publicHistoryOfTrace initial history.trace)
+        ((G.toNative.perfectMonitoring initial).runMixed
+          (toNativeMixedProfile G profile initial horizon) horizon) =
+      compiledPublicHistoryLaw G profile initial horizon := by
+  rw [nativeMixed_runMixed_eq_toNativeBehaviorProfile]
+  exact native_publicHistoryLaw_eq_compiled G profile initial horizon
 
 /-- The bounded mixed witness also realizes the proof view's compiled public
 history law exactly. -/
@@ -146,12 +212,8 @@ theorem exists_nativeMixed_publicHistoryLaw_eq_compiled
             G.toNative.publicHistoryOfTrace initial history.trace)
           ((G.toNative.perfectMonitoring initial).runMixed mixed horizon) =
         compiledPublicHistoryLaw G profile initial horizon := by
-  obtain ⟨mixed, hmixed⟩ :=
-    exists_nativeMixed_runMixed_eq_toNativeBehaviorProfile
-      G profile initial horizon
-  refine ⟨mixed, ?_⟩
-  rw [hmixed]
-  exact native_publicHistoryLaw_eq_compiled G profile initial horizon
+  exact ⟨toNativeMixedProfile G profile initial horizon,
+    nativeMixed_publicHistoryLaw_eq_compiled G profile initial horizon⟩
 
 /-- Total proof-view payoff read from a native public history. -/
 def publicHistoryTotalPayoff (history : G.toNative.PublicHistory)

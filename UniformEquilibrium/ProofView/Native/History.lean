@@ -289,64 +289,6 @@ theorem stageRecordOfEvent_target_mem_proofView_transition_support
     GameTheory.Stochastic.Game.stageRecordOfEvent_target_mem_transition_support
       G.toNative initial event
 
-/-- Full public monitoring has perfect recall: equality of the complete public
-record determines every player's own information/action record. -/
-theorem toNative_perfectMonitoring_perfectRecall (initial : G.State)
-    [∀ i, Nonempty (G.Act i)] :
-    (G.toNative.perfectMonitoring initial).PerfectRecall := by
-  intro i first second firstTrace
-  induction firstTrace generalizing second with
-  | start =>
-      intro secondTrace hinfo
-      cases secondTrace with
-      | start => rfl
-      | extend prior joint isLegal realized =>
-          rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace,
-            G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace] at hinfo
-          simp at hinfo
-  | @extend source target prior joint isLegal realized ih =>
-      intro secondTrace hinfo
-      cases secondTrace with
-      | start =>
-          rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace,
-            G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace] at hinfo
-          simp at hinfo
-      | @extend secondSource secondTarget secondPrior secondJoint
-          secondIsLegal secondRealized =>
-          rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace,
-            G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace] at hinfo
-          have hrecords := (List.cons.inj hinfo).1
-          have hpriorPublic := (List.cons.inj hinfo).2
-          have hpriorInfo :
-              (G.toNative.perfectMonitoring initial).infoOf i prior =
-                (G.toNative.perfectMonitoring initial).infoOf i secondPrior := by
-            rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace,
-              G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace]
-            exact hpriorPublic
-          have hfirstJoint :=
-            G.toNative.event_joint_eq_some_stageRecordOfEvent_joint initial
-              ⟨source, joint, isLegal, target, realized⟩
-          have hsecondJoint :=
-            G.toNative.event_joint_eq_some_stageRecordOfEvent_joint initial
-              ⟨secondSource, secondJoint, secondIsLegal,
-                second, secondRealized⟩
-          have haction :
-              (G.toNative.stageRecordOfEvent initial
-                  ⟨source, joint, isLegal, target, realized⟩).joint i =
-                (G.toNative.stageRecordOfEvent initial
-                  ⟨secondSource, secondJoint, secondIsLegal,
-                    second, secondRealized⟩).joint i :=
-            congrArg (fun record => record.joint i) hrecords
-          have hfirstJointAt := congrFun hfirstJoint i
-          have hsecondJointAt := congrFun hsecondJoint i
-          change joint i = _ at hfirstJointAt
-          change secondJoint i = _ at hsecondJointAt
-          rw [GameTheory.Protocol.InfoSignals.ownPlay_extend,
-            GameTheory.Protocol.InfoSignals.ownPlay_extend,
-            hfirstJointAt, hsecondJointAt]
-          exact congrArg₂ List.cons (Prod.ext hpriorInfo haction)
-            (ih secondPrior hpriorInfo)
-
 /-- Every public history projected from GameTheory's Protocol runner is a
 source-coherent path of positive-support proof-view transitions. -/
 theorem isRealizablePublicHistory_publicHistoryOfTrace (initial : G.State)
