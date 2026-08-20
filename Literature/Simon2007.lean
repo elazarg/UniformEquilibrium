@@ -3996,9 +3996,12 @@ def KohlbergMertensStatement : Prop :=
     ∀ C : Set (MatrixParameterSpace D), IsCompact C → ∃ R : ℝ, 0 < R ∧
       ∀ x, R < MatrixNorm D x → ∀ t, (H x t).1 ∉ C
 
-/-- The Kohlberg--Mertens structure theorem recalled in Section 5.3. -/
-theorem kohlbergMertensStructureTheorem : KohlbergMertensStatement := by
-  sorry
+/-!
+`KohlbergMertensStatement` is the paper's imported structure theorem.  Its proof is not
+repeated in Simon 2007, and the project has no formalization of the cited
+Kohlberg--Mertens theory from which to derive it.  It therefore remains an explicit source
+claim rather than being hidden behind a theorem whose conclusion merely unfolds that claim.
+-/
 
 /-! ### 5.4. Finitely repeated quitting games -/
 
