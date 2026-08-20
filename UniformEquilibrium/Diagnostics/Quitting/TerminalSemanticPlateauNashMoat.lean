@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
+import MathUE.ProbabilityMassFunction.Simplex
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Root.NashDefect
 
@@ -32,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.Probability Math.PMFProduct
+open Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -92,6 +93,39 @@ theorem continuous_quittingRootTotalNashDefect_simplex
   unfold quittingRootTotalNashDefect
   exact continuous_finsetSum _ fun who _ =>
     continuous_quittingRootCoordinateNashDefect_simplex reward who
+
+/-- One-coordinate Nash defect is continuous in the tail payoff when the
+product root is fixed. -/
+theorem continuous_quittingRootCoordinateNashDefect_fixedRoot
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (who : ι) :
+    Continuous (fun tail : Payoff ι =>
+      quittingRootCoordinateNashDefect reward tail root who) := by
+  let simplexRoot : QuittingRootSimplex ι :=
+    fun player => stdSimplexEquiv (root player)
+  have hroot : quittingRootOfSimplex simplexRoot = root := by
+    funext player
+    exact (stdSimplexEquiv (α := Bool)).symm_apply_apply (root player)
+  have hmap : Continuous (fun tail : Payoff ι => (tail, simplexRoot)) :=
+    continuous_id.prodMk continuous_const
+  have hcontinuous :=
+    (continuous_quittingRootCoordinateNashDefect_simplex reward who).comp hmap
+  change Continuous (fun tail : Payoff ι =>
+    quittingRootCoordinateNashDefect reward tail
+      (quittingRootOfSimplex simplexRoot) who) at hcontinuous
+  rw [hroot] at hcontinuous
+  exact hcontinuous
+
+/-- Total Nash defect is continuous in the tail payoff when the product root
+is fixed. -/
+theorem continuous_quittingRootTotalNashDefect_fixedRoot
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) :
+    Continuous (fun tail : Payoff ι =>
+      quittingRootTotalNashDefect reward tail root) := by
+  unfold quittingRootTotalNashDefect
+  exact continuous_finsetSum _ fun who _ =>
+    continuous_quittingRootCoordinateNashDefect_fixedRoot reward root who
 
 /-- The all-Continue root has zero total opponent incidence. -/
 @[simp] theorem quittingRootTotalOpponentIncidenceMass_allContinueRoot
