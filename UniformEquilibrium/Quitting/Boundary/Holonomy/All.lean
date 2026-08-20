@@ -15,6 +15,7 @@ import UniformEquilibrium.Quitting.Boundary.Holonomy.AggregatePrefixConsumption
 import UniformEquilibrium.Quitting.Boundary.Holonomy.AggregateTerminalAnchor
 import UniformEquilibrium.Quitting.Boundary.Holonomy.QuantitativeAggregateTerminalAnchor
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Transport
+import UniformEquilibrium.Quitting.Boundary.Holonomy.TransportGraph
 
 /-!
 # Boundary holonomy for finite quitting blocks
@@ -37,6 +38,9 @@ The directed-transport adapter embeds prescribed and best-response summaries
 as generic max-affine labels. It preserves evaluation and realized block
 composition, exposes the actual opponent-survival slope and its unit bound,
 and records that Bellman transport runs from a block's exit back to its entry.
+The source-matched transport graph retains literal entry and exit times;
+strict time descent excludes nonempty closed walks, so every finite graph of
+unquotiented chronological blocks has a playerwise lax best-response section.
 
 The fixed-prefix repair interface evaluates a bounded prescribed/best-response
 boundary pair through the affine/max-affine holonomy.  Its gain modulus is
