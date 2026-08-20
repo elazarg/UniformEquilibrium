@@ -5703,13 +5703,577 @@ theorem equation_15 :
 the current-stage weight: playing `(1,0)` once and `(0,1)` forever
 afterwards gives `(λ,1-λ)`.  Thus the displayed payoff belongs to
 `E_{7/8}`, not `E_{1/8}`. -/
+
+/-- Play one of Example 1's two diagonal stage equilibria according to a
+deterministic time schedule. -/
+noncomputable def example1DiagonalScheduleProfile
+    (schedule : ℕ → Bool) : example1.BehaviorProfile :=
+  fun _ time _ ↦ PMF.pure (schedule time)
+
+/-- A diagonal schedule earns the corresponding pure diagonal payoff at
+every stage. -/
+theorem example1_expectedStagePayoff_diagonalSchedule
+    (schedule : ℕ → Bool) (time : ℕ) (who : Bool) :
+    example1.repeatedGame.expectedStagePayoff
+        (example1DiagonalScheduleProfile schedule) PUnit.unit time who =
+      if schedule time then pair 0 1 who else pair 1 0 who := by
+  letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (example1.finiteAction player)
+  letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  rw [← Math.Probability.expect_const
+    (example1.repeatedGame.histDist
+      (example1DiagonalScheduleProfile schedule) PUnit.unit time)
+    (if schedule time then pair 0 1 who else pair 1 0 who)]
+  congr 1
+  funext history
+  rw [example1_stageEUAt_eq_mixedPayoff,
+    show (fun player ↦ example1DiagonalScheduleProfile schedule
+      player time history) =
+        example1.kernel.pureMixedProfile (fun _ ↦ schedule time) by rfl]
+  change example1.kernel.mixedExtension.payoffVector
+      (example1.kernel.pureMixedProfile (fun _ ↦ schedule time)) who = _
+  rw [example1.kernel.mixedExtension_payoffVector_pureMixedProfile]
+  cases hs : schedule time <;> cases who <;>
+    norm_num [FiniteStageGame.kernel, KernelGame.eu_ofPureEU,
+      binaryPayoff, hs, pair]
+
+/-- Every diagonal schedule is discounted Nash: at every history its current
+pure diagonal action is a one-stage Nash equilibrium. -/
+theorem example1_diagonalSchedule_isDiscountedNash
+    (schedule : ℕ → Bool) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1) :
+    example1.repeatedGame.IsDiscountedεNash beta PUnit.unit 0
+      (example1DiagonalScheduleProfile schedule) := by
+  intro who deviation
+  simp only [add_zero]
+  have hbound : ∀ state action,
+      |example1.repeatedGame.stagePayoff state action who| ≤ 1 := by
+    intro state action
+    cases who <;> cases hrow : action false <;>
+      cases hcolumn : action true <;>
+      norm_num [FiniteStageGame.repeatedGame,
+        KernelGame.realizedActionStochasticGame,
+        FiniteStageGame.kernel, KernelGame.eu_ofPureEU,
+        binaryPayoff, hrow, hcolumn, pair]
+  have hstage : ∀ time,
+      example1.repeatedGame.expectedStagePayoff
+          (Function.update (example1DiagonalScheduleProfile schedule)
+            who deviation) PUnit.unit time who ≤
+        example1.repeatedGame.expectedStagePayoff
+          (example1DiagonalScheduleProfile schedule)
+            PUnit.unit time who := by
+    intro time
+    letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+      @Finite.of_fintype _ (example1.finiteAction player)
+    letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+    rw [example1_expectedStagePayoff_diagonalSchedule]
+    unfold StochasticGame.expectedStagePayoff
+    rw [← Math.Probability.expect_const
+      (example1.repeatedGame.histDist
+        (Function.update (example1DiagonalScheduleProfile schedule)
+          who deviation) PUnit.unit time)
+      (if schedule time then pair 0 1 who else pair 1 0 who)]
+    apply Math.Probability.expect_mono
+    intro history
+    rw [example1_stageEUAt_eq_mixedPayoff,
+      binaryGame_mixedPayoff_apply]
+    cases who
+    · have hother :
+          (Function.update (example1DiagonalScheduleProfile schedule)
+            false deviation) true time history =
+            PMF.pure (schedule time) := by
+        simp [example1DiagonalScheduleProfile]
+        rfl
+      rw [hother]
+      have hprob0 : 0 ≤ (deviation time history true).toReal :=
+        ENNReal.toReal_nonneg
+      have hprob1 : (deviation time history true).toReal ≤ 1 :=
+        ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+      cases hs : schedule time
+      · norm_num [Function.update_self, hs, pair, PMF.pure_apply]
+      · norm_num [Function.update_self, hs, pair, PMF.pure_apply]
+    · have hother :
+          (Function.update (example1DiagonalScheduleProfile schedule)
+            true deviation) false time history =
+            PMF.pure (schedule time) := by
+        simp [example1DiagonalScheduleProfile]
+        rfl
+      rw [hother]
+      have hprob0 : 0 ≤ (deviation time history true).toReal :=
+        ENNReal.toReal_nonneg
+      have hprob1 : (deviation time history true).toReal ≤ 1 :=
+        ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+      cases hs : schedule time
+      · norm_num [Function.update_self, hs, pair, PMF.pure_apply]
+      · norm_num [Function.update_self, hs, pair, PMF.pure_apply]
+        convert hprob1 using 1
+        rfl
+  have hbetaAbs : |beta| < 1 := by rwa [abs_of_nonneg hbeta0]
+  have hdeviationSummable :=
+    example1.repeatedGame.summable_discounted_expectedStagePayoff
+      hbound
+      (Function.update (example1DiagonalScheduleProfile schedule)
+        who deviation) PUnit.unit hbetaAbs
+  have hprofileSummable :=
+    example1.repeatedGame.summable_discounted_expectedStagePayoff
+      hbound (example1DiagonalScheduleProfile schedule)
+        PUnit.unit hbetaAbs
+  unfold StochasticGame.discountedPayoff
+  apply mul_le_mul_of_nonneg_left _ (by linarith)
+  exact hdeviationSummable.tsum_le_tsum
+    (fun time ↦ mul_le_mul_of_nonneg_left
+      (hstage time) (pow_nonneg hbeta0 time))
+    hprofileSummable
+
+/-- Every correlated-feasible payoff of Example 1 is nonnegative,
+coordinatewise at most one, and has total payoff at most one. -/
+theorem example1_correlated_bounds {v : Payoff Bool}
+    (hv : v ∈ example1.correlatedFeasiblePayoffs) :
+    0 ≤ v false ∧ v false ≤ 1 ∧
+      0 ≤ v true ∧ v true ≤ 1 ∧
+        v false + v true ≤ 1 := by
+  apply (convexHull_min (t := {w : Payoff Bool |
+      0 ≤ w false ∧ w false ≤ 1 ∧
+        0 ≤ w true ∧ w true ≤ 1 ∧
+          w false + w true ≤ 1}) ?_ ?_) hv
+  · rintro _ ⟨action, rfl⟩
+    change (Bool → Bool) at action
+    cases hrow : action false <;> cases hcolumn : action true <;>
+      norm_num [binaryPayoff, hrow, hcolumn, pair]
+  · intro x hx y hy a b ha hb hab
+    rcases hx with ⟨hx0, hx1, hx2, hx3, hx4⟩
+    rcases hy with ⟨hy0, hy1, hy2, hy3, hy4⟩
+    change 0 ≤ a * x false + b * y false ∧
+      a * x false + b * y false ≤ 1 ∧
+      0 ≤ a * x true + b * y true ∧
+      a * x true + b * y true ≤ 1 ∧
+      (a * x false + b * y false) +
+        (a * x true + b * y true) ≤ 1
+    constructor
+    · positivity
+    constructor
+    · nlinarith
+    constructor
+    · positivity
+    constructor <;> nlinarith
+
+/-- Every player's normalized discounted payoff in Example 1 lies in
+`[0,1]`. -/
+theorem example1_discountedPayoff_mem_Icc
+    (profile : example1.BehaviorProfile) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1) (who : Bool) :
+    example1.repeatedGame.discountedPayoff beta profile PUnit.unit who ∈
+      Set.Icc 0 1 := by
+  have hbound : ∀ state action,
+      |example1.repeatedGame.stagePayoff state action who| ≤ 1 := by
+    intro state action
+    cases who <;> cases hrow : action false <;>
+      cases hcolumn : action true <;>
+      norm_num [FiniteStageGame.repeatedGame,
+        KernelGame.realizedActionStochasticGame,
+        FiniteStageGame.kernel, KernelGame.eu_ofPureEU,
+        binaryPayoff, hrow, hcolumn, pair]
+  have hstage (time : ℕ) :=
+    example1_correlated_bounds
+      (expectedStagePayoff_mem_correlatedFeasiblePayoffs
+        example1 profile time)
+  constructor
+  · apply example1.repeatedGame.discountedPayoff_ge_of_forall_expectedStagePayoff_ge
+      hbound (fun time ↦ ?_) hbeta0 hbeta1
+    cases who
+    · exact (hstage time).1
+    · exact (hstage time).2.2.1
+  · apply example1.repeatedGame.discountedPayoff_le_of_forall_expectedStagePayoff_le
+      hbound (fun time ↦ ?_) hbeta0 hbeta1
+    cases who
+    · exact (hstage time).2.1
+    · exact (hstage time).2.2.2.1
+
+/-- Example 1's normalized discounted aggregate payoff is at most one. -/
+theorem example1_discountedTotal_le_one
+    (profile : example1.BehaviorProfile) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1) :
+    example1.repeatedGame.discountedPayoff beta profile PUnit.unit false +
+      example1.repeatedGame.discountedPayoff beta profile PUnit.unit true ≤ 1 := by
+  letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (example1.finiteAction player)
+  letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  have hbound (who : Bool) : ∀ state action,
+      |example1.repeatedGame.stagePayoff state action who| ≤ 1 := by
+    intro state action
+    cases who <;> cases hrow : action false <;>
+      cases hcolumn : action true <;>
+      norm_num [FiniteStageGame.repeatedGame,
+        KernelGame.realizedActionStochasticGame,
+        FiniteStageGame.kernel, KernelGame.eu_ofPureEU,
+        binaryPayoff, hrow, hcolumn, pair]
+  have hbetaAbs : |beta| < 1 := by rwa [abs_of_nonneg hbeta0]
+  have hrowSummable :=
+    example1.repeatedGame.summable_discounted_expectedStagePayoff
+      (hbound false) profile PUnit.unit hbetaAbs
+  have hcolumnSummable :=
+    example1.repeatedGame.summable_discounted_expectedStagePayoff
+      (hbound true) profile PUnit.unit hbetaAbs
+  have hgeom : Summable (fun time : ℕ ↦ beta ^ time) :=
+    summable_geometric_of_lt_one hbeta0 hbeta1
+  unfold StochasticGame.discountedPayoff
+  rw [← mul_add, ← hrowSummable.tsum_add hcolumnSummable]
+  calc
+    (1 - beta) *
+        (∑' time : ℕ,
+          (beta ^ time *
+            example1.repeatedGame.expectedStagePayoff profile
+              PUnit.unit time false +
+          beta ^ time *
+            example1.repeatedGame.expectedStagePayoff profile
+              PUnit.unit time true)) ≤
+      (1 - beta) * (∑' time : ℕ, beta ^ time) := by
+        apply mul_le_mul_of_nonneg_left _ (by linarith)
+        apply (hrowSummable.add hcolumnSummable).tsum_le_tsum _ hgeom
+        intro time
+        rw [← mul_add]
+        exact mul_le_of_le_one_right (pow_nonneg hbeta0 time)
+          (example1_expectedStageTotal_le_one profile time)
+    _ = 1 := by
+      rw [tsum_geometric_of_lt_one hbeta0 hbeta1]
+      exact div_self (by linarith)
+
 theorem example1_discounted_nonmonotone :
     pair (7 / 8) (1 / 8) ∈
         example1.discountedEquilibriumPayoffs (7 / 8) ∧
       pair (7 / 8) (1 / 8) ∉ example1.oneStageFeasiblePayoffs ∧
       pair (7 / 8) (1 / 8) ∉
         example1.discountedFeasiblePayoffs (3 / 4) := by
-  sorry
+  let schedule : ℕ → Bool
+    | 0 => false
+    | _ + 1 => true
+  let profile := example1DiagonalScheduleProfile schedule
+  constructor
+  · refine ⟨profile, ?_, ?_⟩
+    · dsimp only [profile]
+      have hnash := example1_diagonalSchedule_isDiscountedNash
+        schedule (1 / 8) (by norm_num) (by norm_num)
+      norm_num at hnash ⊢
+      exact hnash
+    · funext who
+      change example1.repeatedGame.discountedPayoff (1 - 7 / 8)
+        (example1DiagonalScheduleProfile schedule) PUnit.unit who = _
+      unfold StochasticGame.discountedPayoff
+      rw [show (∑' time : ℕ, (1 - 7 / 8) ^ time *
+            example1.repeatedGame.expectedStagePayoff
+              (example1DiagonalScheduleProfile schedule)
+                PUnit.unit time who) =
+          ∑' time : ℕ, (1 - 7 / 8) ^ time *
+            (if schedule time then pair 0 1 who else pair 1 0 who) by
+        apply tsum_congr
+        intro time
+        rw [example1_expectedStagePayoff_diagonalSchedule]]
+      cases who
+      · change (1 - (1 - 7 / 8)) *
+          (∑' time : ℕ, (1 - 7 / 8) ^ time *
+            (if schedule time then 0 else 1)) = 7 / 8
+        have hsum : Summable (fun time : ℕ ↦
+            (1 / 8 : ℝ) ^ time *
+              (if schedule time then 0 else 1)) := by
+          have hgeom : Summable (fun time : ℕ ↦ (1 / 8 : ℝ) ^ time) :=
+            summable_geometric_of_lt_one (by norm_num) (by norm_num)
+          apply Summable.of_norm_bounded hgeom
+          intro time
+          rw [Real.norm_eq_abs, abs_of_nonneg
+            (mul_nonneg (pow_nonneg (by norm_num) time) (by positivity))]
+          apply mul_le_of_le_one_right (pow_nonneg (by norm_num) time)
+          split <;> norm_num
+        rw [show (1 - 7 / 8 : ℝ) = 1 / 8 by norm_num]
+        rw [hsum.tsum_eq_zero_add]
+        simp [schedule]
+        norm_num
+      · change (1 - (1 - 7 / 8)) *
+          (∑' time : ℕ, (1 - 7 / 8) ^ time *
+            (if schedule time then 1 else 0)) = 1 / 8
+        have hsum : Summable (fun time : ℕ ↦
+            (1 / 8 : ℝ) ^ time *
+              (if schedule time then 1 else 0)) := by
+          have hgeom : Summable (fun time : ℕ ↦ (1 / 8 : ℝ) ^ time) :=
+            summable_geometric_of_lt_one (by norm_num) (by norm_num)
+          apply Summable.of_norm_bounded hgeom
+          intro time
+          rw [Real.norm_eq_abs, abs_of_nonneg
+            (mul_nonneg (pow_nonneg (by norm_num) time) (by positivity))]
+          apply mul_le_of_le_one_right (pow_nonneg (by norm_num) time)
+          split <;> norm_num
+        rw [show (1 - 7 / 8 : ℝ) = 1 / 8 by norm_num]
+        rw [hsum.tsum_eq_zero_add]
+        simp only [schedule, if_true, mul_one, pow_succ']
+        rw [tsum_mul_left, tsum_geometric_of_lt_one (by norm_num) (by norm_num)]
+        norm_num
+  · constructor
+    · rintro ⟨mixed, hmixed⟩
+      have htotal :
+          example1.mixedPayoff mixed false +
+            example1.mixedPayoff mixed true = 1 := by
+        rw [congrFun hmixed false, congrFun hmixed true]
+        norm_num [pair]
+      obtain ⟨diagonal, hfalse, htrue⟩ :=
+        example1_mixedProfile_pure_diagonal_of_total_eq_one mixed htotal
+      have hrow := congrFun hmixed false
+      rw [binaryGame_mixedPayoff_apply, hfalse, htrue] at hrow
+      cases diagonal <;> norm_num [pair, PMF.pure_apply] at hrow
+    · rintro ⟨candidate, hcandidate⟩
+      letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+        @Finite.of_fintype _ (example1.finiteAction player)
+      letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+      have hrow := congrFun hcandidate false
+      have hcolumn := congrFun hcandidate true
+      change example1.repeatedGame.discountedPayoff (1 - 3 / 4)
+        candidate PUnit.unit false = pair (7 / 8) (1 / 8) false at hrow
+      change example1.repeatedGame.discountedPayoff (1 - 3 / 4)
+        candidate PUnit.unit true = pair (7 / 8) (1 / 8) true at hcolumn
+      norm_num [pair] at hrow hcolumn
+      have hbound (who : Bool) : ∀ state action,
+          |example1.repeatedGame.stagePayoff state action who| ≤ 1 := by
+        intro state action
+        cases who <;> cases hrowAction : action false <;>
+          cases hcolumnAction : action true <;>
+          norm_num [FiniteStageGame.repeatedGame,
+            KernelGame.realizedActionStochasticGame,
+            FiniteStageGame.kernel, KernelGame.eu_ofPureEU,
+            binaryPayoff, hrowAction, hcolumnAction, pair]
+      have htransition (action : example1.repeatedGame.JointAct) :
+          example1.repeatedGame.transition PUnit.unit action =
+            PMF.pure PUnit.unit := rfl
+      have hexpectTransition (action : example1.repeatedGame.JointAct)
+          (f : example1.repeatedGame.State → ℝ) :
+          Math.Probability.expect
+              (example1.repeatedGame.transition PUnit.unit action) f =
+            f PUnit.unit := by
+        rw [htransition]
+        exact Math.Probability.expect_pure f PUnit.unit
+      have hshiftRow := example1.repeatedGame.discountedPayoff_shift
+        (hbound false) candidate PUnit.unit (β := 1 / 4)
+          (by norm_num) (by norm_num)
+      have hshiftColumn := example1.repeatedGame.discountedPayoff_shift
+        (hbound true) candidate PUnit.unit (β := 1 / 4)
+          (by norm_num) (by norm_num)
+      let empty := example1.repeatedGame.emptyHist PUnit.unit
+      let actionLaw := example1.repeatedGame.stageActionDist candidate empty
+      let continuation (who : Bool) :=
+        Math.Probability.expect actionLaw fun action ↦
+          example1.repeatedGame.discountedPayoff (1 / 4)
+            (example1.repeatedGame.shiftProfile
+              candidate (PUnit.unit, action)) PUnit.unit who
+      have hcontinuation : continuation false + continuation true ≤ 1 := by
+        dsimp only [continuation]
+        calc
+          Math.Probability.expect actionLaw (fun action ↦
+                example1.repeatedGame.discountedPayoff (1 / 4)
+                  (example1.repeatedGame.shiftProfile
+                    candidate (PUnit.unit, action)) PUnit.unit false) +
+              Math.Probability.expect actionLaw (fun action ↦
+                example1.repeatedGame.discountedPayoff (1 / 4)
+                  (example1.repeatedGame.shiftProfile
+                    candidate (PUnit.unit, action)) PUnit.unit true) =
+            Math.Probability.expect actionLaw (fun action ↦
+              example1.repeatedGame.discountedPayoff (1 / 4)
+                  (example1.repeatedGame.shiftProfile
+                    candidate (PUnit.unit, action)) PUnit.unit false +
+                example1.repeatedGame.discountedPayoff (1 / 4)
+                  (example1.repeatedGame.shiftProfile
+                    candidate (PUnit.unit, action)) PUnit.unit true) := by
+              rw [Math.Probability.expect_add]
+          _ ≤ Math.Probability.expect actionLaw (fun _ ↦ (1 : ℝ)) := by
+              apply Math.Probability.expect_mono
+              intro action
+              exact example1_discountedTotal_le_one
+                (example1.repeatedGame.shiftProfile
+                  candidate (PUnit.unit, action)) (1 / 4)
+                    (by norm_num) (by norm_num)
+          _ = 1 := Math.Probability.expect_const actionLaw 1
+      have hstageTotal :
+          example1.repeatedGame.stageEUAt candidate empty false +
+            example1.repeatedGame.stageEUAt candidate empty true = 1 := by
+        have hstageLe := example1_expectedStageTotal_le_one candidate 0
+        rw [example1.repeatedGame.expectedStagePayoff_zero,
+          example1.repeatedGame.expectedStagePayoff_zero] at hstageLe
+        change example1.repeatedGame.stageEUAt candidate empty false +
+          example1.repeatedGame.stageEUAt candidate empty true ≤ 1 at hstageLe
+        simp_rw [hexpectTransition] at hshiftRow hshiftColumn
+        norm_num at hshiftRow hshiftColumn
+        have hcontinuationRaw := hcontinuation
+        dsimp only [continuation, actionLaw, empty] at hcontinuationRaw
+        dsimp only [empty] at hstageLe ⊢
+        rw [hrow] at hshiftRow
+        rw [hcolumn] at hshiftColumn
+        nlinarith [hcontinuationRaw]
+      let current : Bool → PMF Bool :=
+        fun player ↦ candidate player 0 empty
+      have hcurrentTotal :
+          example1.mixedPayoff current false +
+            example1.mixedPayoff current true = 1 := by
+        rw [← example1_stageEUAt_eq_mixedPayoff candidate empty false,
+          ← example1_stageEUAt_eq_mixedPayoff candidate empty true]
+        exact hstageTotal
+      obtain ⟨diagonal0, hcurrentFalse, hcurrentTrue⟩ :=
+        example1_mixedProfile_pure_diagonal_of_total_eq_one
+          current hcurrentTotal
+      let action0 : example1.repeatedGame.JointAct := fun _ ↦ diagonal0
+      have haction0 : actionLaw = PMF.pure action0 := by
+        unfold actionLaw StochasticGame.stageActionDist
+        have hcurrent : (fun player ↦ candidate player 0 empty) =
+            fun player ↦ PMF.pure (action0 player) := by
+          funext player
+          cases player
+          · exact hcurrentFalse
+          · exact hcurrentTrue
+        change Math.PMFProduct.pmfPi
+          (fun player : Bool ↦ candidate player 0 empty) = PMF.pure action0
+        rw [hcurrent]
+        exact Math.PMFProduct.pmfPi_pure action0
+      let candidate1 := example1.repeatedGame.shiftProfile
+        candidate (PUnit.unit, action0)
+      have hshiftRow' :
+          7 / 8 = 3 / 4 *
+              example1.repeatedGame.stageEUAt candidate empty false +
+            1 / 4 * example1.repeatedGame.discountedPayoff
+              (1 / 4) candidate1 PUnit.unit false := by
+        rw [hrow] at hshiftRow
+        norm_num at hshiftRow
+        rw [show example1.repeatedGame.stageActionDist candidate
+            (example1.repeatedGame.emptyHist PUnit.unit) = PMF.pure action0 by
+          simpa [actionLaw, empty] using haction0] at hshiftRow
+        simpa [candidate1, FiniteStageGame.repeatedGame,
+          KernelGame.realizedActionStochasticGame, empty] using hshiftRow
+      have hshiftColumn' :
+          1 / 8 = 3 / 4 *
+              example1.repeatedGame.stageEUAt candidate empty true +
+            1 / 4 * example1.repeatedGame.discountedPayoff
+              (1 / 4) candidate1 PUnit.unit true := by
+        rw [hcolumn] at hshiftColumn
+        norm_num at hshiftColumn
+        rw [show example1.repeatedGame.stageActionDist candidate
+            (example1.repeatedGame.emptyHist PUnit.unit) = PMF.pure action0 by
+          simpa [actionLaw, empty] using haction0] at hshiftColumn
+        simpa [candidate1, FiniteStageGame.repeatedGame,
+          KernelGame.realizedActionStochasticGame, empty] using hshiftColumn
+      have hcandidate1Total :
+          example1.repeatedGame.discountedPayoff
+              (1 / 4) candidate1 PUnit.unit false +
+            example1.repeatedGame.discountedPayoff
+              (1 / 4) candidate1 PUnit.unit true = 1 := by
+        nlinarith [hstageTotal]
+      let empty1 := example1.repeatedGame.emptyHist PUnit.unit
+      have hstage1Le := example1_expectedStageTotal_le_one candidate1 0
+      rw [example1.repeatedGame.expectedStagePayoff_zero,
+        example1.repeatedGame.expectedStagePayoff_zero] at hstage1Le
+      let actionLaw1 := example1.repeatedGame.stageActionDist candidate1 empty1
+      let continuation1 (who : Bool) :=
+        Math.Probability.expect actionLaw1 fun action ↦
+          example1.repeatedGame.discountedPayoff (1 / 4)
+            (example1.repeatedGame.shiftProfile
+              candidate1 (PUnit.unit, action)) PUnit.unit who
+      have hcontinuation1 : continuation1 false + continuation1 true ≤ 1 := by
+        dsimp only [continuation1]
+        calc
+          Math.Probability.expect actionLaw1 (fun action ↦
+                example1.repeatedGame.discountedPayoff (1 / 4)
+                  (example1.repeatedGame.shiftProfile
+                    candidate1 (PUnit.unit, action)) PUnit.unit false) +
+              Math.Probability.expect actionLaw1 (fun action ↦
+                example1.repeatedGame.discountedPayoff (1 / 4)
+                  (example1.repeatedGame.shiftProfile
+                    candidate1 (PUnit.unit, action)) PUnit.unit true) =
+            Math.Probability.expect actionLaw1 (fun action ↦
+              example1.repeatedGame.discountedPayoff (1 / 4)
+                  (example1.repeatedGame.shiftProfile
+                    candidate1 (PUnit.unit, action)) PUnit.unit false +
+                example1.repeatedGame.discountedPayoff (1 / 4)
+                  (example1.repeatedGame.shiftProfile
+                    candidate1 (PUnit.unit, action)) PUnit.unit true) := by
+              rw [Math.Probability.expect_add]
+          _ ≤ Math.Probability.expect actionLaw1 (fun _ ↦ (1 : ℝ)) := by
+              apply Math.Probability.expect_mono
+              intro action
+              exact example1_discountedTotal_le_one
+                (example1.repeatedGame.shiftProfile
+                  candidate1 (PUnit.unit, action)) (1 / 4)
+                    (by norm_num) (by norm_num)
+          _ = 1 := Math.Probability.expect_const actionLaw1 1
+      have hshift1Row := example1.repeatedGame.discountedPayoff_shift
+        (hbound false) candidate1 PUnit.unit (β := 1 / 4)
+          (by norm_num) (by norm_num)
+      have hshift1Column := example1.repeatedGame.discountedPayoff_shift
+        (hbound true) candidate1 PUnit.unit (β := 1 / 4)
+          (by norm_num) (by norm_num)
+      have hstage1Total :
+          example1.repeatedGame.stageEUAt candidate1 empty1 false +
+            example1.repeatedGame.stageEUAt candidate1 empty1 true = 1 := by
+        change example1.repeatedGame.stageEUAt candidate1 empty1 false +
+          example1.repeatedGame.stageEUAt candidate1 empty1 true ≤ 1 at hstage1Le
+        simp_rw [hexpectTransition] at hshift1Row hshift1Column
+        norm_num at hshift1Row hshift1Column
+        have hcontinuation1Raw := hcontinuation1
+        dsimp only [continuation1, actionLaw1, empty1] at hcontinuation1Raw
+        dsimp only [empty1] at hstage1Le ⊢
+        nlinarith [hcandidate1Total, hcontinuation1Raw]
+      let current1 : Bool → PMF Bool :=
+        fun player ↦ candidate1 player 0 empty1
+      have hcurrent1Total :
+          example1.mixedPayoff current1 false +
+            example1.mixedPayoff current1 true = 1 := by
+        rw [← example1_stageEUAt_eq_mixedPayoff candidate1 empty1 false,
+          ← example1_stageEUAt_eq_mixedPayoff candidate1 empty1 true]
+        exact hstage1Total
+      obtain ⟨diagonal1, hcurrent1False, hcurrent1True⟩ :=
+        example1_mixedProfile_pure_diagonal_of_total_eq_one
+          current1 hcurrent1Total
+      let action1 : example1.repeatedGame.JointAct := fun _ ↦ diagonal1
+      have haction1 : actionLaw1 = PMF.pure action1 := by
+        unfold actionLaw1 StochasticGame.stageActionDist
+        have hcurrent : (fun player ↦ candidate1 player 0 empty1) =
+            fun player ↦ PMF.pure (action1 player) := by
+          funext player
+          cases player
+          · exact hcurrent1False
+          · exact hcurrent1True
+        change Math.PMFProduct.pmfPi
+          (fun player : Bool ↦ candidate1 player 0 empty1) = PMF.pure action1
+        rw [hcurrent]
+        exact Math.PMFProduct.pmfPi_pure action1
+      let candidate2 := example1.repeatedGame.shiftProfile
+        candidate1 (PUnit.unit, action1)
+      have hshift1Row' :
+          example1.repeatedGame.discountedPayoff
+              (1 / 4) candidate1 PUnit.unit false =
+            3 / 4 * example1.repeatedGame.stageEUAt
+              candidate1 empty1 false +
+            1 / 4 * example1.repeatedGame.discountedPayoff
+              (1 / 4) candidate2 PUnit.unit false := by
+        norm_num at hshift1Row
+        rw [show example1.repeatedGame.stageActionDist candidate1
+            (example1.repeatedGame.emptyHist PUnit.unit) = PMF.pure action1 by
+          simpa [actionLaw1, empty1] using haction1] at hshift1Row
+        simpa [candidate2, FiniteStageGame.repeatedGame,
+          KernelGame.realizedActionStochasticGame, empty1] using hshift1Row
+      have htailBounds := example1_discountedPayoff_mem_Icc
+        candidate2 (1 / 4) (by norm_num) (by norm_num) false
+      have hstageRow :
+          example1.repeatedGame.stageEUAt candidate empty false =
+            if diagonal0 then 0 else 1 := by
+        rw [example1_stageEUAt_eq_mixedPayoff]
+        change example1.mixedPayoff current false = _
+        rw [binaryGame_mixedPayoff_apply, hcurrentFalse, hcurrentTrue]
+        cases diagonal0 <;> norm_num [pair, PMF.pure_apply]
+      have hstage1Row :
+          example1.repeatedGame.stageEUAt candidate1 empty1 false =
+            if diagonal1 then 0 else 1 := by
+        rw [example1_stageEUAt_eq_mixedPayoff]
+        change example1.mixedPayoff current1 false = _
+        rw [binaryGame_mixedPayoff_apply, hcurrent1False, hcurrent1True]
+        cases diagonal1 <;> norm_num [pair, PMF.pure_apply]
+      rw [hstageRow] at hshiftRow'
+      rw [hstage1Row] at hshift1Row'
+      cases diagonal0 <;> cases diagonal1 <;> norm_num at hshiftRow' hshift1Row' ⊢ <;>
+        nlinarith [htailBounds.1, htailBounds.2]
 
 /-- Equation (16): the discounted feasible and equilibrium nets need not be
 monotone.  Example 1 revisited uses `δ = 3/4 < λ = 7/8` and supplies a
