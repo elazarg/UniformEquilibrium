@@ -6,13 +6,13 @@ Authors: GameTheory contributors
 
 import MathUE.BackwardOrbitSelection
 import MathUE.MeshContraction
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleOneShotPerfection
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRow
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 import UniformEquilibrium.Quitting.Root.TailStability
 import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix
 
 /-!
-# The self-consistent perfect row sequence of Solan and Vieille
+# Self-consistent perfect absorbing root sequences
 
 Proposition 2.3 of Solan and Vieille, *Quitting games*, Math. Oper. Res. 26
 (2001), in this development's root-sequence vocabulary.  Under unit solo exit

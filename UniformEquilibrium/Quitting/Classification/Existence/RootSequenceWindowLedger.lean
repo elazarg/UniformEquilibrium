@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleDeviationLedger
+import UniformEquilibrium.Quitting.Classification.Existence.PureTimeDeviationLedger
 import UniformEquilibrium.Quitting.Boundary.Repair.JointComplementarity
 
 /-!

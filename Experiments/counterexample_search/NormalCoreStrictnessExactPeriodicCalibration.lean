@@ -140,15 +140,15 @@ theorem prod_one_sub_calibrationHazard_ne_one {p : ℝ} (hppos : 0 < p) :
 /-- **The on-path value of the calibration schedule, pointwise.**  At any
 interior hazard the anchored cyclic on-path value at every phase is exactly
 player `2`'s own singleton row. -/
-theorem quittingAnchoredCyclicOnPathValue_eq_calibration {p : ℝ} (hp0 : 0 ≤ p)
-    (hp1 : p ≤ 1) (hppos : 0 < p) (phase : Fin 1) :
+theorem quittingAnchoredCyclicOnPathValue_eq_calibration {p : ℝ}
+    (hppos : 0 < p) (hp1 : p ≤ 1) (phase : Fin 1) :
     quittingAnchoredCyclicOnPathValue reward calibrationSchedule (calibrationHazard p)
-        (calibrationHazard_nonneg hp0) (calibrationHazard_le_one hp1) phase =
+        (calibrationHazard_nonneg hppos.le) (calibrationHazard_le_one hp1) phase =
       reward (quittingSingletonTerminal (2 : Player)) :=
   congrFun
     (eq_of_isAnchoredCyclicRenewalSolution
       (quittingAnchoredCyclicOnPathValue_isAnchoredCyclicRenewalSolution reward
-        calibrationSchedule (calibrationHazard p) (calibrationHazard_nonneg hp0)
+        calibrationSchedule (calibrationHazard p) (calibrationHazard_nonneg hppos.le)
         (calibrationHazard_le_one hp1))
       (isAnchoredCyclicRenewalSolution_calibration p)
       (prod_one_sub_calibrationHazard_ne_one hppos))
@@ -159,19 +159,20 @@ theorem quittingAnchoredCyclicOnPathValue_eq_calibration {p : ℝ} (hp0 : 0 ≤ 
 /-- **An exact interior anchored solo-periodic calibration, for every interior
 hazard.**  Period one, player `2` scheduled at every phase, is exactly Nash
 against its own on-path value at every hazard strictly between `0` and `1`. -/
-theorem isExactAnchoredSoloPeriodic_calibration {p : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1)
-    (hppos : 0 < p) :
+theorem isExactAnchoredSoloPeriodic_calibration {p : ℝ}
+    (hppos : 0 < p) (hp1 : p ≤ 1) :
     IsExactAnchoredSoloPeriodic reward calibrationSchedule (calibrationHazard p)
-      (calibrationHazard_nonneg hp0) (calibrationHazard_le_one hp1) := by
+      (calibrationHazard_nonneg hppos.le) (calibrationHazard_le_one hp1) := by
   intro phase
   show IsεQuittingRootEndpointNash reward
       (quittingAnchoredCyclicOnPathValue reward calibrationSchedule
-        (calibrationHazard p) (calibrationHazard_nonneg hp0)
+        (calibrationHazard p) (calibrationHazard_nonneg hppos.le)
         (calibrationHazard_le_one hp1) (finRotate 1 phase))
       0 (quittingSoloMixedRoot (calibrationSchedule phase)
-        (quittingHazardCoin (calibrationHazard p phase) (calibrationHazard_nonneg hp0 phase)
+        (quittingHazardCoin (calibrationHazard p phase)
+          (calibrationHazard_nonneg hppos.le phase)
           (calibrationHazard_le_one hp1 phase)))
-  rw [quittingAnchoredCyclicOnPathValue_eq_calibration hp0 hp1 hppos,
+  rw [quittingAnchoredCyclicOnPathValue_eq_calibration hppos hp1,
     show calibrationSchedule phase = 2 from rfl]
   refine isZeroQuittingRootEndpointNash_soloMixedRoot reward
     (reward (quittingSingletonTerminal (2 : Player))) 2 _ rfl fun who hwho ↦ ?_
@@ -195,7 +196,7 @@ theorem isExactAnchoredSoloPeriodic_calibration {p : ℝ} (hp0 : 0 ≤ p) (hp1 :
 theorem isExactAnchoredSoloPeriodic_calibration_half :
     IsExactAnchoredSoloPeriodic reward calibrationSchedule (calibrationHazard (1 / 2))
       (calibrationHazard_nonneg (by norm_num)) (calibrationHazard_le_one (by norm_num)) :=
-  isExactAnchoredSoloPeriodic_calibration (by norm_num) (by norm_num) (by norm_num)
+  isExactAnchoredSoloPeriodic_calibration (by norm_num) (by norm_num)
 
 end NormalCoreStrictnessExample
 end QuittingLCPClassification

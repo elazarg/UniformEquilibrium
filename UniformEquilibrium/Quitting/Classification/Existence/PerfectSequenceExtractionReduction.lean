@@ -4,11 +4,11 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieillePeriodicSelection
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRootSequence
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 
 /-!
-# Reduction of the Solan–Vieille existence law to sequence extraction
+# Reduction to perfect-sequence extraction
 
 The proof of the quitting existence theorem of Solan and Vieille, *Quitting
 games*, Math. Oper. Res. 26 (2001), Theorem 1.2, factors here into three

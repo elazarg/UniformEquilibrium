@@ -14,7 +14,7 @@ import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSele
 theorem of Solan and Vieille, *Quitting games*, Math. Oper. Res. 26 (2001),
 Theorem 1.2, in this development's semantics.  It is proved in Lean by
 `quittingCappedJointExitUniformεExistence_holds` in
-`UniformEquilibrium/Quitting/Classification/Existence/SolanVieilleSequenceExtraction.lean`.
+`UniformEquilibrium/Quitting/Classification/Existence/PerfectSequenceExtraction.lean`.
 
 Its conclusion is the source's, namely a uniform `ε`-equilibrium for each
 positive `ε`, with the profile and its payoff vector free to move with `ε`.
@@ -40,7 +40,7 @@ Math. Oper. Res. 26 (2001), Theorem 1.2, restricted to the profile-level
 equilibrium property and dropping the source's additional cyclic
 subgame-perfection.  It is proved in Lean by
 `quittingCappedJointExitUniformεExistence_holds` in
-`UniformEquilibrium/Quitting/Classification/Existence/SolanVieilleSequenceExtraction.lean`. -/
+`UniformEquilibrium/Quitting/Classification/Existence/PerfectSequenceExtraction.lean`. -/
 def QuittingCappedJointExitUniformεExistence
     (ι : Type) [Fintype ι] [DecidableEq ι] : Prop :=
   ∀ reward : {S : Finset ι // S.Nonempty} → Payoff ι,

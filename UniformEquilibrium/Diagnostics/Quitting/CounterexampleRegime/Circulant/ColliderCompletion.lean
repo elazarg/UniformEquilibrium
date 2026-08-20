@@ -22,7 +22,7 @@ the neighbour pocket, the census up to the distant pocket, and the
 solo-exit-preference exclusion, now unconditional because
 `isEmpty_quittingCounterexampleRegime_of_cappedJointExit` no longer carries an
 existence-law hypothesis — the Solan-Vieille law it once needed is proved in
-`UniformEquilibrium/Quitting/Classification/Existence/SolanVieilleSequenceExtraction.lean`.
+`UniformEquilibrium/Quitting/Classification/Existence/PerfectSequenceExtraction.lean`.
 
 ## Main results
 

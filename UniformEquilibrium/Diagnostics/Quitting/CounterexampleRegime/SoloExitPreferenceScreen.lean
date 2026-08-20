@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleSequenceExtraction
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 
 /-!
@@ -14,7 +14,7 @@ import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 `QuittingCappedJointExitUniformεExistence`, the existence law of Solan and
 Vieille, *Quitting games*, Math. Oper. Res. 26 (2001), Theorem 1.2, is proved
 in Lean by `quittingCappedJointExitUniformεExistence_holds` in
-`UniformEquilibrium/Quitting/Classification/Existence/SolanVieilleSequenceExtraction.lean`.
+`UniformEquilibrium/Quitting/Classification/Existence/PerfectSequenceExtraction.lean`.
 The theorems below discharge it internally, so each is an unconditional
 restriction on the counterexample regime.
 

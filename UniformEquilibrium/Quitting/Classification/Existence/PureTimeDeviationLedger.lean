@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleOneShotPerfection
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRow
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanQuitEndpointLimit
 import UniformEquilibrium.Quitting.Cycles.InfinitePureTimeExtremality
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
