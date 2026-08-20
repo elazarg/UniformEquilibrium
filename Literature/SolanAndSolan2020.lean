@@ -4078,6 +4078,279 @@ def KiloblockConstruction.normalTarget
     NormalPlayer table → ℝ :=
   (construction.buildingBlock (Fin.last construction.blockCount)).w
 
+def KiloblockConstruction.macroTrackingAt
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (j : ℕ)
+    (who : NormalPlayer table) : ℝ :=
+  if hj : j < construction.blockCount + 1 then
+    construction.trackingCorrection ⟨j, hj⟩ who
+  else 0
+
+/-! Expected corrected normal payoff after crossing blocks
+`fuel-1,...,0`, with the final endpoint `y⁰` if all blocks advance. -/
+def KiloblockConstruction.macroCorrectedValueFuel
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) : ℕ → ℝ
+  | 0 => construction.point ⟨0, by omega⟩ who
+  | fuel + 1 =>
+      construction.macroAdvanceAt fuel *
+          construction.macroCorrectedValueFuel who fuel +
+        ∑ owner, construction.macroAbsorbAt fuel owner *
+          (NormalMatrix table who owner +
+            construction.macroTrackingAt fuel who)
+
+private theorem KiloblockConstruction.macroCorrectedValueFuel_step
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) (j : ℕ)
+    (hj : j < construction.blockCount + 1)
+    (hprevious : construction.macroCorrectedValueFuel who j =
+      construction.point ⟨j, hj⟩ who +
+        construction.trackingCorrection ⟨j, hj⟩ who) :
+    construction.macroCorrectedValueFuel who (j + 1) =
+      (construction.buildingBlock ⟨j, hj⟩).w who +
+        construction.trackingCorrection ⟨j, hj⟩ who := by
+  rw [KiloblockConstruction.macroCorrectedValueFuel, hprevious]
+  have hadvance : construction.macroAdvanceAt j =
+      construction.macroAdvanceProbability ⟨j, hj⟩ := by
+    simp only [KiloblockConstruction.macroAdvanceAt, dif_pos hj]
+  have habsorb : ∀ owner, construction.macroAbsorbAt j owner =
+      construction.macroAbsorbProbability ⟨j, hj⟩ owner := by
+    intro owner
+    simp only [KiloblockConstruction.macroAbsorbAt, dif_pos hj]
+  have htracking : construction.macroTrackingAt j who =
+      construction.trackingCorrection ⟨j, hj⟩ who := by
+    simp only [KiloblockConstruction.macroTrackingAt, dif_pos hj]
+  rw [hadvance]
+  simp_rw [habsorb, htracking, mul_add]
+  rw [Finset.sum_add_distrib, ← Finset.sum_mul]
+  have hbalance := construction.macro_balance ⟨j, hj⟩ who
+  have htotal := construction.macroProbability_total ⟨j, hj⟩
+  linear_combination -hbalance +
+    htotal * construction.trackingCorrection ⟨j, hj⟩ who
+
+theorem KiloblockConstruction.macroCorrectedValueFuel_eq
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) (j : ℕ)
+    (hj : j < construction.blockCount + 1) :
+    construction.macroCorrectedValueFuel who (j + 1) =
+      (construction.buildingBlock ⟨j, hj⟩).w who +
+        construction.trackingCorrection ⟨j, hj⟩ who := by
+  induction j with
+  | zero =>
+      apply construction.macroCorrectedValueFuel_step who 0 hj
+      rw [KiloblockConstruction.macroCorrectedValueFuel,
+        construction.trackingCorrection_zero]
+      simp
+  | succ j ih =>
+      apply construction.macroCorrectedValueFuel_step who (j + 1) hj
+      have hjcount : j < construction.blockCount := by omega
+      have hvalue := ih (by omega)
+      have htelescope := construction.point_add_trackingCorrection_succ
+        j hjcount who
+      exact hvalue.trans htelescope.symm
+
+theorem KiloblockConstruction.macroCorrectedValueFuel_full
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) :
+    construction.macroCorrectedValueFuel who
+        (construction.blockCount + 1) =
+      construction.normalTarget who +
+        construction.trackingCorrection
+          (Fin.last construction.blockCount) who := by
+  unfold KiloblockConstruction.normalTarget
+  let last : Fin (construction.blockCount + 1) :=
+    ⟨construction.blockCount, by omega⟩
+  have hlast : Fin.last construction.blockCount = last := by
+    apply Fin.ext
+    rfl
+  rw [hlast]
+  exact construction.macroCorrectedValueFuel_eq who construction.blockCount
+    (by omega)
+
+theorem KiloblockConstruction.macroTrackingAt_abs_lt
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (j : ℕ) (hj : j < construction.blockCount + 1)
+    (who : NormalPlayer table) :
+    |construction.macroTrackingAt j who| < ε := by
+  rw [show construction.macroTrackingAt j who =
+      construction.trackingCorrection ⟨j, hj⟩ who by
+    simp only [KiloblockConstruction.macroTrackingAt, dif_pos hj]]
+  exact construction.abs_trackingCorrection_lt ⟨j, hj⟩ who
+
+private theorem KiloblockConstruction.macro_terminal_sum_le
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded negative : NormalPlayer table)
+    (hnegative : NormalMatrix table negative excluded <
+      -construction.negativeMargin)
+    (j : ℕ) (hj : j < construction.blockCount + 1) :
+    (∑ owner, construction.macroAbsorbAt j owner *
+        (NormalMatrix table negative owner +
+          construction.macroTrackingAt j negative)) ≤
+      construction.macroAbsorbAt j excluded *
+          (-construction.negativeMargin + ε) +
+        (∑ owner ∈ Finset.univ.erase excluded,
+          construction.macroAbsorbAt j owner) * (1 + ε) := by
+  have htracking := construction.macroTrackingAt_abs_lt j hj negative
+  calc
+    (∑ owner, construction.macroAbsorbAt j owner *
+        (NormalMatrix table negative owner +
+          construction.macroTrackingAt j negative)) =
+        construction.macroAbsorbAt j excluded *
+            (NormalMatrix table negative excluded +
+              construction.macroTrackingAt j negative) +
+          ∑ owner ∈ Finset.univ.erase excluded,
+            construction.macroAbsorbAt j owner *
+              (NormalMatrix table negative owner +
+                construction.macroTrackingAt j negative) := by
+      rw [← Finset.sum_erase_add _ _ (Finset.mem_univ excluded)]
+      ring
+    _ ≤ construction.macroAbsorbAt j excluded *
+          (-construction.negativeMargin + ε) +
+        ∑ owner ∈ Finset.univ.erase excluded,
+          construction.macroAbsorbAt j owner * (1 + ε) := by
+      apply add_le_add
+      · apply mul_le_mul_of_nonneg_left _
+          (construction.macroAbsorbAt_nonneg j excluded)
+        linarith [(abs_lt.mp htracking).2]
+      · apply Finset.sum_le_sum
+        intro owner _
+        apply mul_le_mul_of_nonneg_left _
+          (construction.macroAbsorbAt_nonneg j owner)
+        have hmatrix := (abs_le.mp
+          (construction.normalMatrix_bounded negative owner)).2
+        linarith [(abs_lt.mp htracking).2]
+    _ = construction.macroAbsorbAt j excluded *
+          (-construction.negativeMargin + ε) +
+        (∑ owner ∈ Finset.univ.erase excluded,
+          construction.macroAbsorbAt j owner) * (1 + ε) := by
+      congr 1
+      rw [Finset.sum_mul]
+
+private theorem KiloblockConstruction.macroCorrectedValueFuel_upper
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded negative : NormalPlayer table)
+    (hnegative : NormalMatrix table negative excluded <
+      -construction.negativeMargin) :
+    ∀ fuel, fuel ≤ construction.blockCount + 1 →
+      construction.macroCorrectedValueFuel negative fuel ≤
+        (-construction.negativeMargin + ε) *
+            construction.macroOwnerMassFuel excluded fuel +
+          (1 + ε) * construction.macroOtherMassFuel excluded fuel +
+          construction.macroSurvivalFuel fuel
+  | 0, _ => by
+      simp only [KiloblockConstruction.macroCorrectedValueFuel,
+        KiloblockConstruction.macroOwnerMassFuel,
+        KiloblockConstruction.macroOtherMassFuel,
+        KiloblockConstruction.macroSurvivalFuel, mul_zero, add_zero]
+      simpa only [zero_add] using
+        (abs_le.mp (abs_le_one_of_mem_D construction.normalMatrix_bounded
+          (construction.point_boundary ⟨0, by omega⟩).1 negative)).2
+  | fuel + 1, hfuel => by
+      have hfuelLt : fuel < construction.blockCount + 1 := by omega
+      have hprevious := construction.macroCorrectedValueFuel_upper
+        excluded negative hnegative fuel (by omega)
+      have hterminal := construction.macro_terminal_sum_le
+        excluded negative hnegative fuel hfuelLt
+      rw [KiloblockConstruction.macroCorrectedValueFuel]
+      calc
+        construction.macroAdvanceAt fuel *
+              construction.macroCorrectedValueFuel negative fuel +
+            ∑ owner, construction.macroAbsorbAt fuel owner *
+              (NormalMatrix table negative owner +
+                construction.macroTrackingAt fuel negative) ≤
+            construction.macroAdvanceAt fuel *
+                ((-construction.negativeMargin + ε) *
+                    construction.macroOwnerMassFuel excluded fuel +
+                  (1 + ε) *
+                    construction.macroOtherMassFuel excluded fuel +
+                  construction.macroSurvivalFuel fuel) +
+              (construction.macroAbsorbAt fuel excluded *
+                  (-construction.negativeMargin + ε) +
+                (∑ owner ∈ Finset.univ.erase excluded,
+                  construction.macroAbsorbAt fuel owner) * (1 + ε)) := by
+          exact add_le_add
+            (mul_le_mul_of_nonneg_left hprevious
+              (construction.macroAdvanceAt_nonneg fuel))
+            hterminal
+        _ = (-construction.negativeMargin + ε) *
+                construction.macroOwnerMassFuel excluded (fuel + 1) +
+              (1 + ε) *
+                construction.macroOtherMassFuel excluded (fuel + 1) +
+              construction.macroSurvivalFuel (fuel + 1) := by
+          rw [KiloblockConstruction.macroOwnerMassFuel,
+            KiloblockConstruction.macroOtherMassFuel,
+            KiloblockConstruction.macroSurvivalFuel]
+          ring
+
+theorem KiloblockConstruction.negativeMargin_lt_one
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    construction.negativeMargin < 1 := by
+  let k : Fin (construction.blockCount + 1) := ⟨0, by omega⟩
+  obtain ⟨owner, _, _⟩ :=
+    (Finset.sum_pos_iff_of_nonneg (fun owner _ =>
+      (construction.buildingBlock k).z.singleton_nonneg owner)).mp
+      (construction.buildingBlock k).nontrivial
+  obtain ⟨negative, hnegative⟩ := construction.column_negative owner
+  have hlower := (abs_le.mp
+    (construction.normalMatrix_bounded negative owner)).1
+  linarith
+
+theorem KiloblockConstruction.epsilon_lt_macroOther_add_survival
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    ε < construction.macroOtherMassFuel excluded
+          (construction.blockCount + 1) +
+        construction.macroSurvivalFuel (construction.blockCount + 1) := by
+  obtain ⟨negative, hnegative⟩ := construction.column_negative excluded
+  let fuel := construction.blockCount + 1
+  have hupper := construction.macroCorrectedValueFuel_upper
+    excluded negative hnegative fuel le_rfl
+  have hvalue := construction.macroCorrectedValueFuel_full negative
+  rw [hvalue] at hupper
+  have htarget : 0 ≤ construction.normalTarget negative :=
+    (construction.buildingBlock (Fin.last construction.blockCount)).w_boundary.1.2
+      negative
+  have hcorrection := construction.abs_trackingCorrection_lt
+    (Fin.last construction.blockCount) negative
+  have hlower : -ε < construction.normalTarget negative +
+      construction.trackingCorrection (Fin.last construction.blockCount) negative := by
+    linarith [(abs_lt.mp hcorrection).1]
+  have howner := construction.macroOwnerMassFuel_nonneg excluded fuel
+  have hother := construction.macroOtherMassFuel_nonneg excluded fuel
+  have hsurvival := construction.macroSurvivalFuel_nonneg fuel
+  have htotal := construction.macroMassFuel_total fuel le_rfl
+  rw [← construction.macroOwner_add_otherMassFuel excluded fuel] at htotal
+  have hmarginOne := construction.negativeMargin_lt_one
+  have hcoefficient : (5 : ℝ) ≤
+      ((2 * Fintype.card (NormalPlayer table) + 1 : ℕ) : ℝ) := by
+    have hcard := construction.two_le_normalPlayer_card
+    exact_mod_cast (show 5 ≤ 2 * Fintype.card (NormalPlayer table) + 1 by omega)
+  have hmarginFive : 5 * ε < construction.negativeMargin := by
+    have hmul := mul_le_mul_of_nonneg_right hcoefficient
+      construction.epsilon_pos.le
+    exact lt_of_le_of_lt hmul construction.accuracy_below_margin
+  have hownerCoefficient :
+      (construction.negativeMargin + 1) *
+          construction.macroOtherMassFuel excluded fuel ≤
+        2 * construction.macroOtherMassFuel excluded fuel := by
+    exact mul_le_mul_of_nonneg_right (by linarith) hother
+  have hsurvivalCoefficient :
+      (construction.negativeMargin - ε + 1) *
+          construction.macroSurvivalFuel fuel ≤
+        2 * construction.macroSurvivalFuel fuel := by
+    exact mul_le_mul_of_nonneg_right (by linarith [construction.epsilon_pos])
+      hsurvival
+  nlinarith
+
 /-! The operational schedule itself implies the unilateral-quitting clause:
 at an active history either one selected owner uses the mesh coin or everyone
 continues. -/
