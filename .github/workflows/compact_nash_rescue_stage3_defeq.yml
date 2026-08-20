@@ -1,0 +1,92 @@
+name: Compact Nash rescue stage 3 definitional
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_rescue_stage3_defeq.yml
+      - Literature/Sorin1986/CompactNashStage2.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-rescue-stage3-defeq
+  cancel-in-progress: true
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+      - name: Determine need
+        id: need
+        run: |
+          if test -f Literature/Sorin1986/CompactNashStage3.ok; then echo value=no >> "$GITHUB_OUTPUT"; else echo value=yes >> "$GITHUB_OUTPUT"; fi
+      - uses: leanprover/lean-action@v1
+        if: steps.need.outputs.value == 'yes'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Replace mixed-payoff bridge proof
+        if: steps.need.outputs.value == 'yes'
+        run: |
+          test -f Literature/Sorin1986/CompactNashStage2.ok
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('Literature/Sorin1986/CompactNashScratch.lean')
+          s=p.read_text()
+          start=s.find('theorem mixedPayoff_eq_productExpectation')
+          end=s.find('/-- Reindexing a dependent profile', start)
+          if end < 0: end=s.find('theorem piCongrLeft_update', start)
+          assert start >= 0 and end > start
+          theorem=r'''theorem mixedPayoff_eq_productExpectation (H : FiniteStageGame)
+              (profile : H.MixedProfile) (observer : H.Player) :
+              H.mixedPayoff profile observer =
+                productExpectation profile
+                  (fun actions => H.payoff actions observer) := by
+            classical
+            change Math.Probability.expect
+                ((Math.PMFProduct.pmfPi profile).bind PMF.pure)
+                (fun actions => H.payoff actions observer) = _
+            rw [PMF.bind_pure]
+            rw [Math.Probability.expect_eq_sum]
+            rfl
+
+          '''
+          s=s[:start]+theorem+s[end:]
+          s=s.replace('''by_cases h : i = who
+            · subst h''','''by_cases h : i = who
+            · subst i''')
+          p.write_text(s)
+          PY
+      - name: Compile
+        if: steps.need.outputs.value == 'yes'
+        id: compile
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          lake build Literature.Sorin1986.CompactNashScratch 2>&1 | tee /tmp/compact-nash-rescue-stage3-defeq.log
+      - name: Record
+        if: steps.need.outputs.value == 'yes'
+        run: |
+          cp /tmp/compact-nash-rescue-stage3-defeq.log Literature/Sorin1986/CompactNashRescueStage3Defeq.log
+          if [ "${{ steps.compile.outcome }}" = success ]; then printf 'success\n' > Literature/Sorin1986/CompactNashStage3.ok; fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashScratch.lean Literature/Sorin1986/CompactNashRescueStage3Defeq.log Literature/Sorin1986/CompactNashStage3.ok
+          git commit -m 'Use definitional finite mixed-payoff bridge' || exit 0
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
+      - name: Fail if invalid
+        if: steps.need.outputs.value == 'yes' && steps.compile.outcome != 'success'
+        run: exit 1
