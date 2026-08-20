@@ -2799,6 +2799,44 @@ theorem HasInstantApproximateEquilibria.hasQuitApproximateEquilibria
   convert hequilibrium using 1
   ring
 
+/-- If stationary approximate equilibria fail, some normal player has positive solo payoff. -/
+private theorem exists_positive_normalPlayer_of_not_stationary
+    (G : QuittingGame) (hstationary : ¬HasStationaryApproximateEquilibria G) :
+    ∃ n, IsNormalPlayer G n ∧ 0 < SoloPayoff G n := by
+  classical
+  by_contra hpositive
+  push Not at hpositive
+  have hsolo : ∀ n, SoloPayoff G n ≤ 0 := by
+    intro n
+    by_cases hnormal : IsNormalPlayer G n
+    · exact hpositive n hnormal
+    · exact (lemma3 G n hnormal).1.le
+  apply hstationary
+  intro ε hε
+  let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
+  refine ⟨zeroRow, ?_⟩
+  intro n q
+  let deviation : QuitProfile G :=
+    QuitProfile.replace G (fun _ : ℕ => zeroRow) n q
+  have hrow : ∀ t, deviation t = zeroRow.replace G n (q t) := fun _ => rfl
+  have hreward : ∀ t,
+      quittingRewardPart G (deviation t) n ≤ 0 * QuitProbability G (deviation t) := by
+    intro t
+    rw [hrow, quittingRewardPart_allContinue_replace]
+    simpa only [zero_mul] using
+      mul_nonpos_of_nonneg_of_nonpos (q t).property.1 (hsolo n)
+  have hdeviation : QuitPayoff G deviation n ≤ 0 :=
+    quitPayoff_le_of_nonnegative_rewardPart_le G deviation n 0 (by norm_num) hreward
+  have hzeroPayoff : QuitPayoff G (fun _ => zeroRow) n = 0 := by
+    change (∑' k, tailSurvival G (fun _ => zeroRow) 0 k *
+      quittingRewardPart G zeroRow n) = 0
+    rw [show quittingRewardPart G zeroRow n = 0 by
+      simpa only [zeroRow] using quittingRewardPart_allContinue G n]
+    simp
+  change QuitPayoff G deviation n ≤ QuitPayoff G (fun _ => zeroRow) n + ε
+  rw [hzeroPayoff]
+  linarith
+
 /--
 Lemma 5.  Without stationary or instant approximate equilibria there is a positive normal
 solo payoff, every normal solo quitter harms another normal player, and one uniform `ρ`
@@ -2817,6 +2855,7 @@ theorem lemma5 (G : QuittingGame)
       IsRational G ρ r → p ∈ EpsilonRow G ρ r →
       let y := QuittingOneStagePayoff G r p
       ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ := by
+  refine ⟨exists_positive_normalPlayer_of_not_stationary G hstationary, ?_⟩
   sorry
 
 /-! ### 4.4. Equivalences -/
