@@ -1,0 +1,55 @@
+name: Compact Nash stage 1
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - Literature/Sorin1986/CompactNashScratch.lean
+      - .github/workflows/compact_nash_stage1.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-stage1
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Compile
+        id: compile
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          lake build Literature.Sorin1986.CompactNashScratch 2>&1 | tee /tmp/compact-nash-stage1.log
+      - name: Record result
+        run: |
+          cp /tmp/compact-nash-stage1.log Literature/Sorin1986/CompactNashStage1.log
+          if [ "${{ steps.compile.outcome }}" = success ]; then
+            printf 'success\n' > Literature/Sorin1986/CompactNashStage1.ok
+          else
+            rm -f Literature/Sorin1986/CompactNashStage1.ok
+          fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashStage1.log Literature/Sorin1986/CompactNashStage1.ok
+          git commit -m 'Record compact Nash stage 1 result' || exit 0
+          git push origin HEAD:agent/promote-sorin1986
+      - name: Fail if compilation failed
+        if: steps.compile.outcome != 'success'
+        run: exit 1
