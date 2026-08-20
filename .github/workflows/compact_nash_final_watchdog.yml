@@ -1,0 +1,84 @@
+name: Compact Nash final watchdog
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_final_watchdog.yml
+      - Literature/Sorin1986/CompactNashStage5.ok
+      - Literature/Sorin1986.lean
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-final-watchdog
+  cancel-in-progress: false
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Inspect state
+        id: state
+        run: |
+          if grep -q 'exact CompactNash.compact_nash_existence G' Literature/Sorin1986.lean; then echo done=yes >> "$GITHUB_OUTPUT"; else echo done=no >> "$GITHUB_OUTPUT"; fi
+          if test -f Literature/Sorin1986/CompactNashStage5.ok; then echo ready=yes >> "$GITHUB_OUTPUT"; else echo ready=no >> "$GITHUB_OUTPUT"; fi
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no' && steps.state.outputs.ready == 'yes'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Integrate
+        if: steps.state.outputs.done == 'no' && steps.state.outputs.ready == 'yes'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          scratch=Path('Literature/Sorin1986/CompactNashScratch.lean').read_text()
+          body=scratch[scratch.index('namespace CompactNash\n'):scratch.rindex('\nend CompactNash')+len('\nend CompactNash')]+'\n\n'
+          p=Path('Literature/Sorin1986.lean'); s=p.read_text()
+          imp='import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed\n'
+          if imp not in s:
+              k=s.find('\n',s.find('import '))+1
+              s=s[:k]+imp+s[k:]
+          marker='/-! Property (2) is Glicksberg--Fan Nash existence plus closedness of the\n'
+          if 'namespace CompactNash\n' not in s: s=s.replace(marker,body+marker,1)
+          pat=re.compile(r'theorem paper_property_2 \(G : CompactContinuousGame\) :\n\s+G\.equilibriumPayoffs\.Nonempty ∧ IsCompact G\.equilibriumPayoffs := by\n\s+sorry')
+          assert pat.search(s)
+          s=pat.sub('''theorem paper_property_2 (G : CompactContinuousGame) :
+              G.equilibriumPayoffs.Nonempty ∧ IsCompact G.equilibriumPayoffs := by
+            exact CompactNash.compact_nash_existence G''',s,count=1)
+          p.write_text(s)
+          PY
+      - name: Validate exact tree
+        if: steps.state.outputs.done == 'no' && steps.state.outputs.ready == 'yes'
+        run: |
+          lake env lean Literature/Sorin1986.lean
+          lake env lean Literature/Sorin1986/SequenceForm.lean
+          python3 scripts/check_docs.py
+          python3 scripts/check_import_graph.py
+          python3 scripts/check_trust.py
+          lake build
+      - name: Commit clean result
+        if: steps.state.outputs.done == 'no' && steps.state.outputs.ready == 'yes'
+        run: |
+          rm -f Literature/Sorin1986/CompactNashScratch.lean
+          rm -f Literature/Sorin1986/CompactNashStage*.log Literature/Sorin1986/CompactNashStage*.ok Literature/Sorin1986/CompactNashRescue*.log Literature/Sorin1986/CompactNashWatchdog.log
+          rm -f .github/workflows/compact_nash*.yml
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add -A
+          git commit -m 'Prove general compact Nash existence'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
