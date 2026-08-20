@@ -2896,6 +2896,36 @@ theorem lemma_1_pure_subset_D1 (G : FiniteStageGame) :
   change G.kernel.eu profile who = G.payoff profile who
   simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
 
+/-- The mixed profile prescribed by a behavioral profile at the unique empty
+history. -/
+def FiniteStageGame.initialMixedProfile
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) : G.MixedProfile :=
+  fun who ↦ profile who 0 (G.repeatedGame.emptyHist PUnit.unit)
+
+/-- At horizon one, the behavioral payoff is exactly the payoff of the mixed
+profile prescribed at the empty history. -/
+theorem finitePayoff_one_eq_mixedPayoff_initial
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) :
+    G.finitePayoff 1 profile = G.mixedPayoff (G.initialMixedProfile profile) := by
+  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  funext who
+  unfold FiniteStageGame.finitePayoff
+  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  simp only [Finset.sum_range_succ, Finset.sum_range_zero, zero_add,
+    Nat.cast_one, inv_one, one_mul]
+  rw [G.repeatedGame.expectedStagePayoff_zero]
+  unfold StochasticGame.stageEUAt FiniteStageGame.mixedPayoff
+  change Math.Probability.expect
+      (Math.PMFProduct.pmfPi (G.initialMixedProfile profile))
+        (fun action ↦ G.kernel.eu action who) =
+    G.kernel.mixedExtension.eu (G.initialMixedProfile profile) who
+  exact (G.kernel.mixedExtension_eu _ _).symm
+
 /-! **Lemma 1(5), finite-horizon clause.**  Stationary repetition of a
 mixed one-stage profile gives the same payoff at every positive horizon.
 The exact public-history embedding is not yet packaged for this adapter. -/
@@ -2921,6 +2951,17 @@ theorem lemma_1_D1_subset_Dn (G : FiniteStageGame)
   rw [GameTheory.KernelGame.RealizedActionRepeatedAdapter.finiteAveragePayoff_toBehaviorProfile]
   exact G.kernel.realizedActionMonitoring.finiteAveragePayoff_stationaryMonitoredProfile
     (Nat.ne_of_gt n.2) profile who
+
+/-- The one-period behavioral feasible set is the one-stage mixed feasible
+set. -/
+theorem finiteFeasiblePayoffs_one_eq_oneStageFeasiblePayoffs
+    (G : FiniteStageGame) :
+    G.finiteFeasiblePayoffs 1 = G.oneStageFeasiblePayoffs := by
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨profile, rfl⟩
+    exact ⟨G.initialMixedProfile profile,
+      (finitePayoff_one_eq_mixedPayoff_initial G profile).symm⟩
+  · exact lemma_1_D1_subset_Dn G ⟨1, by omega⟩
 
 /-! **Lemma 1(5), discounted clause.**  The same stationary profile has
 its one-stage payoff under every paper discount rate. -/
@@ -3193,6 +3234,37 @@ theorem lemma_1_E1_subset_En (G : FiniteStageGame)
       |>.finiteAveragePayoff_stationaryMonitoredProfile
         (Nat.ne_of_gt n.2) profile who
 
+/-- At horizon one, behavioral and mixed equilibrium payoff sets coincide. -/
+theorem finiteEquilibriumPayoffs_one_eq_oneStageEquilibriumPayoffs
+    (G : FiniteStageGame) :
+    G.finiteEquilibriumPayoffs 1 = G.oneStageEquilibriumPayoffs := by
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨behavior, hnash, rfl⟩
+    let profile := G.initialMixedProfile behavior
+    refine ⟨profile, ?_, ?_⟩
+    · intro who deviation
+      let behaviorDeviation : G.BehaviorStrategy who :=
+        fun _time _history ↦ deviation
+      have hequilibrium := hnash who behaviorDeviation
+      have hupdate :
+          G.initialMixedProfile
+              (Function.update behavior who behaviorDeviation) =
+            Function.update profile who deviation := by
+        funext player
+        by_cases hplayer : player = who
+        · subst player
+          simp [FiniteStageGame.initialMixedProfile, behaviorDeviation]
+        · simp [FiniteStageGame.initialMixedProfile, profile, hplayer]
+      change G.finitePayoff 1 behavior who + 0 ≥
+        G.finitePayoff 1
+          (Function.update behavior who behaviorDeviation) who at hequilibrium
+      rw [finitePayoff_one_eq_mixedPayoff_initial G behavior,
+        finitePayoff_one_eq_mixedPayoff_initial G
+          (Function.update behavior who behaviorDeviation), hupdate] at hequilibrium
+      simpa [FiniteStageGame.mixedPayoff, profile] using hequilibrium
+    · exact (finitePayoff_one_eq_mixedPayoff_initial G behavior).symm
+  · exact lemma_1_E1_subset_En G ⟨1, by omega⟩
+
 /-! **Lemma 1(8), discounted inclusion.** -/
 theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
     (lam : G.DiscountRate) :
@@ -3459,6 +3531,19 @@ theorem lemma_1_equilibrium (G : FiniteStageGame)
   · exact ⟨lemma_1_E1_subset_Elambda G lam,
       lemma_1_Elambda_subset_Delta G lam⟩
 
+/-- If independent one-stage mixing already fills the correlated feasible
+hull, then every positive finite horizon has that same feasible set. -/
+theorem finiteFeasiblePayoffs_eq_correlated_of_oneStage_eq
+    (G : FiniteStageGame)
+    (hone : G.oneStageFeasiblePayoffs = G.correlatedFeasiblePayoffs)
+    (horizon : G.Horizon) :
+    G.finiteFeasiblePayoffsOnHorizon horizon =
+      G.correlatedFeasiblePayoffs := by
+  apply Set.Subset.antisymm
+  · exact lemma_1_Dn_subset_C G horizon
+  · rw [← hone]
+    exact lemma_1_D1_subset_Dn G horizon
+
 /-! Lemma 2 is precisely Property (4)'s vanishing-discount assertion.  The
 paper's printed unrestricted statement is withdrawn by its added-in-proof
 note, so no unrestricted theorem is declared. -/
@@ -3705,7 +3790,16 @@ theorem equation_11 :
         G.finiteFeasiblePayoffs (n.1 + 1)) ∧
       (¬G.finiteEquilibriumPayoffsOnHorizon n ⊆
         G.finiteEquilibriumPayoffs (n.1 + 1)) := by
-  sorry
+  refine ⟨example1, ⟨2, by omega⟩, ?_, ?_⟩
+  · intro hinclusion
+    apply example1_half_not_mem_D3
+    rcases example1_half_mem_E2 with ⟨profile, _hnash, hpayoff⟩
+    exact hinclusion ⟨profile, hpayoff⟩
+  · intro hinclusion
+    apply example1_half_not_mem_D3
+    rcases hinclusion example1_half_mem_E2 with
+      ⟨profile, _hnash, hpayoff⟩
+    exact ⟨profile, hpayoff⟩
 
 theorem example2_D1_eq_C :
     example2.oneStageFeasiblePayoffs = example2.correlatedFeasiblePayoffs := by
@@ -3726,7 +3820,29 @@ theorem equation_12 :
           G.finiteFeasiblePayoffs (n.1 + 1) ∧
         G.finiteEquilibriumPayoffsOnHorizon n ≠
           G.finiteEquilibriumPayoffs (n.1 + 1) := by
-  sorry
+  let n : example2.Horizon := ⟨1, by omega⟩
+  refine ⟨example2, n, ?_, ?_⟩
+  · calc
+      example2.finiteFeasiblePayoffsOnHorizon n =
+          example2.finiteFeasiblePayoffs 1 := rfl
+      _ =
+          example2.oneStageFeasiblePayoffs :=
+        finiteFeasiblePayoffs_one_eq_oneStageFeasiblePayoffs example2
+      _ = example2.correlatedFeasiblePayoffs := example2_D1_eq_C
+      _ = example2.finiteFeasiblePayoffs 2 :=
+        (finiteFeasiblePayoffs_eq_correlated_of_oneStage_eq
+          example2 example2_D1_eq_C ⟨2, by omega⟩).symm
+      _ = example2.finiteFeasiblePayoffs (n.1 + 1) := rfl
+  · intro heq
+    have hone : pair 1 1 ∈ example2.finiteEquilibriumPayoffs 1 := by
+      change pair 1 1 ∈ example2.finiteEquilibriumPayoffsOnHorizon n
+      rw [heq]
+      simpa [n] using example2_one_one_mem_E2
+    rw [finiteEquilibriumPayoffs_one_eq_oneStageEquilibriumPayoffs,
+      example2_E1_eq_singleton] at hone
+    have hequal : pair 1 1 = pair 2 2 := Set.mem_singleton_iff.mp hone
+    have hfalse := congrFun hequal false
+    norm_num [pair] at hfalse
 
 theorem example3_En : ∀ n, 0 < n →
     example3.finiteEquilibriumPayoffs n =
@@ -3745,7 +3861,19 @@ theorem equation_13 :
           G.finiteEquilibriumPayoffs (n.1 + 1) ∧
         G.finiteFeasiblePayoffsOnHorizon n ≠
           G.finiteFeasiblePayoffs (n.1 + 1) := by
-  sorry
+  let n : example3.Horizon := ⟨1, by omega⟩
+  refine ⟨example3, n, ?_, ?_⟩
+  · change example3.finiteEquilibriumPayoffs 1 =
+      example3.finiteEquilibriumPayoffs 2
+    rw [example3_En 1 (by omega), example3_En 2 (by omega)]
+  · intro heq
+    have hpair := example3_half_mem_D2_not_D1
+    apply hpair.2
+    rw [← finiteFeasiblePayoffs_one_eq_oneStageFeasiblePayoffs example3]
+    change pair (1 / 2) (1 / 2) ∈
+      example3.finiteFeasiblePayoffsOnHorizon n
+    rw [heq]
+    simpa [n] using hpair.1
 
 /-- Equation (14), at a positive finite horizon. -/
 theorem equation_14 :
@@ -3795,7 +3923,19 @@ theorem equation_16 :
           G.discountedFeasiblePayoffsOnRate δ) ∧
         (¬G.discountedEquilibriumPayoffsOnRate lam ⊆
           G.discountedEquilibriumPayoffsOnRate δ) := by
-  sorry
+  let δ : example1.DiscountRate := ⟨3 / 4, by norm_num⟩
+  let lam : example1.DiscountRate := ⟨7 / 8, by norm_num⟩
+  refine ⟨example1, δ, lam, by norm_num [δ, lam], ?_, ?_⟩
+  · intro hinclusion
+    rcases example1_discounted_nonmonotone with
+      ⟨⟨profile, _hnash, hpayoff⟩, _hD1, hnot⟩
+    apply hnot
+    apply hinclusion
+    exact ⟨profile, hpayoff⟩
+  · intro hinclusion
+    have hmem := hinclusion example1_discounted_nonmonotone.1
+    rcases hmem with ⟨profile, _hnash, hpayoff⟩
+    exact example1_discounted_nonmonotone.2.2 ⟨profile, hpayoff⟩
 
 /-! Proposition 4 uses Fenchel's theorem that a point in the convex hull of a
 connected subset of `ℝᴺ` needs at most `N` terms, followed by an infinite
@@ -4059,7 +4199,9 @@ theorem prisonersDilemma_individuallyRationalPayoffs :
 theorem prisonersDilemma_Dn_eq_C :
     ∀ n, 0 < n → prisonersDilemma.finiteFeasiblePayoffs n =
       prisonersDilemma.correlatedFeasiblePayoffs := by
-  sorry
+  intro n hn
+  exact finiteFeasiblePayoffs_eq_correlated_of_oneStage_eq
+    prisonersDilemma prisonersDilemma_D1_eq_C ⟨n, hn⟩
 
 /-! Proposition 13 is a backward last-deviation argument using the unique
 one-stage equilibrium payoff.  The repository does not yet expose the
