@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
+import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
 import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
@@ -1165,6 +1166,336 @@ def blockRoot (n : ℕ) (α : Hazard) (time : ℕ) : Player → PMF Bool :=
   fun who =>
     if who = Fin.ofNat 3 (time / n) then coin α else PMF.pure false
 
+/-! With `r` dates left in one owner's block, the continuation is the
+survival-weighted segment from that owner's solo reward to the next cyclic
+promise. -/
+private def blockContinuation (owner : Player) (α : Hazard)
+    (remaining : ℕ) : Payoff Player :=
+  fun who =>
+    (1 - (1 - α.1) ^ remaining) *
+        GameTheory.FTVCyclicMinimality.soloReward owner who +
+      (1 - α.1) ^ remaining *
+        GameTheory.FTVCyclicMinimality.ExactCyclicPacket.standardPromise
+          (GameTheory.FTVCyclicMinimality.nextThree owner) who
+
+private theorem blockRoot_eq_soloMixedRoot
+    (n : ℕ) (α : Hazard) (time : ℕ) :
+    blockRoot n α time =
+      quittingSoloMixedRoot (Fin.ofNat 3 (time / n)) (coin α) := by
+  funext who
+  by_cases hwho : who = Fin.ofNat 3 (time / n)
+  · subst who
+    simp [blockRoot, quittingSoloMixedRoot]
+  · rw [show blockRoot n α time who = PMF.pure false by
+          unfold blockRoot
+          split
+          · rename_i heq
+            exact (hwho (by simpa using heq)).elim
+          · rfl,
+        show quittingSoloMixedRoot (Fin.ofNat 3 (time / n)) (coin α) who =
+            PMF.pure false by
+          rw [quittingSoloMixedRoot,
+            Function.update_of_ne (by simpa using hwho)]
+          rfl]
+
+private theorem blockContinuation_zero (owner : Player) (α : Hazard) :
+    blockContinuation owner α 0 =
+      GameTheory.FTVCyclicMinimality.ExactCyclicPacket.standardPromise
+        (GameTheory.FTVCyclicMinimality.nextThree owner) := by
+  funext who
+  simp [blockContinuation]
+
+private theorem blockContinuation_succ
+    (owner : Player) (α : Hazard) (remaining : ℕ) :
+    blockContinuation owner α (remaining + 1) =
+      quittingRootSuccessorPayoff
+        GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+        (blockContinuation owner α remaining)
+        (quittingSoloMixedRoot owner (coin α)) := by
+  funext who
+  rw [quittingRootSuccessorPayoff_soloMixedRoot,
+    GameTheory.FTVCyclicAdmissibleCycle.ftvReward_singletonTerminal]
+  simp only [coin_true_toReal, coin_false_toReal]
+  simp [blockContinuation, pow_succ]
+  ring
+
+private theorem blockContinuation_self
+    (owner : Player) (α : Hazard) (remaining : ℕ) :
+    blockContinuation owner α remaining owner = 1 := by
+  fin_cases owner <;>
+    simp [blockContinuation,
+      GameTheory.FTVCyclicMinimality.soloReward,
+      GameTheory.FTVCyclicMinimality.ExactCyclicPacket.standardPromise,
+      GameTheory.FTVCyclicMinimality.nextThree]
+
+private theorem blockContinuation_rootNash
+    (n : ℕ) (hn : 0 < n) (owner : Player) (α : Hazard)
+    (hα : (1 - α.1) ^ n = (1 / 2 : ℝ))
+    (remaining : ℕ) (hremaining : remaining < n) :
+    IsεQuittingRootEndpointNash
+      GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+      (blockContinuation owner α remaining) 0
+      (quittingSoloMixedRoot owner (coin α)) := by
+  apply isZeroQuittingRootEndpointNash_soloMixedRoot
+  · rw [GameTheory.FTVCyclicAdmissibleCycle.ftvReward_singletonTerminal]
+    rw [GameTheory.FTVCyclicMinimality.soloReward_self,
+      blockContinuation_self]
+  · intro who hwho
+    rw [GameTheory.FTVCyclicAdmissibleCycle.ftvReward_singletonTerminal who,
+      GameTheory.FTVCyclicAdmissibleCycle.ftvReward_singletonTerminal owner]
+    have hq0 : 0 ≤ 1 - α.1 := sub_nonneg.mpr α.2.2
+    have hq1 : 1 - α.1 ≤ 1 := by linarith [α.2.1]
+    have hpow0 : 0 ≤ (1 - α.1) ^ remaining := pow_nonneg hq0 remaining
+    have hpow1 : (1 - α.1) ^ remaining ≤ 1 := by
+      exact pow_le_one₀ hq0 hq1
+    have hhalfPow : (1 / 2 : ℝ) ≤ (1 - α.1) ^ remaining := by
+      rw [← hα]
+      exact pow_le_pow_of_le_one hq0 hq1 hremaining.le
+    have hhalfQ : (1 / 2 : ℝ) ≤ 1 - α.1 := by
+      rw [← hα]
+      exact pow_le_of_le_one hq0 hq1 (Nat.ne_of_gt hn)
+    have hhalfProduct : (1 / 2 : ℝ) ≤
+        (1 - α.1) * (1 - α.1) ^ remaining := by
+      rw [← pow_succ', ← hα]
+      exact pow_le_pow_of_le_one hq0 hq1 (by omega)
+    fin_cases owner <;> fin_cases who <;>
+      simp_all [blockContinuation,
+        GameTheory.FTVCyclicAdmissibleCycle.ftvReward,
+        GameTheory.FTVCyclicMinimality.terminalReward,
+        GameTheory.FTVCyclicMinimality.soloReward,
+        GameTheory.FTVCyclicMinimality.ExactCyclicPacket.standardPromise,
+        GameTheory.FTVCyclicMinimality.nextThree,
+        coin_true_toReal, coin_false_toReal] <;>
+      nlinarith
+
+private theorem nextThree_ofNat (k : ℕ) :
+    GameTheory.FTVCyclicMinimality.nextThree (Fin.ofNat 3 k) =
+      Fin.ofNat 3 (k + 1) := by
+  generalize howner : Fin.ofNat 3 k = owner
+  fin_cases owner <;>
+    apply Fin.ext <;>
+    simp_all [GameTheory.FTVCyclicMinimality.nextThree, Fin.ext_iff,
+      Nat.add_mod]
+
+private theorem blockContinuation_full
+    (n : ℕ) (owner : Player) (α : Hazard)
+    (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) :
+    blockContinuation owner α n =
+      GameTheory.FTVCyclicMinimality.ExactCyclicPacket.standardPromise owner := by
+  rw [GameTheory.FTVCyclicAdmissibleCycle.standardPromise_recursion]
+  funext who
+  simp only [blockContinuation, hα, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+  ring
+
+private theorem div_succ_eq_of_mod_succ_lt
+    {time n : ℕ} (hn : 0 < n) (h : time % n + 1 < n) :
+    (time + 1) / n = time / n := by
+  apply Nat.succ_div_of_mod_ne_zero
+  rw [Nat.add_mod, Nat.mod_eq_of_lt (by omega : 1 < n),
+    Nat.mod_eq_of_lt h]
+  omega
+
+private theorem mod_succ_eq_of_mod_succ_lt
+    {time n : ℕ} (hn : 0 < n) (h : time % n + 1 < n) :
+    (time + 1) % n = time % n + 1 := by
+  rw [Nat.add_mod, Nat.mod_eq_of_lt (by omega : 1 < n),
+    Nat.mod_eq_of_lt h]
+
+private theorem div_succ_eq_of_mod_succ_eq
+    {time n : ℕ} (hn : 0 < n) (h : time % n + 1 = n) :
+    (time + 1) / n = time / n + 1 := by
+  by_cases hone : n = 1
+  · subst n
+    simp
+  have hn : 1 < n := by omega
+  apply Nat.succ_div_of_mod_eq_zero
+  rw [Nat.add_mod, Nat.mod_eq_of_lt hn, h, Nat.mod_self]
+
+private theorem mod_succ_eq_zero_of_mod_succ_eq
+    {time n : ℕ} (hn : 0 < n) (h : time % n + 1 = n) :
+    (time + 1) % n = 0 := by
+  by_cases hone : n = 1
+  · subst n
+    exact Nat.mod_one _
+  have hn : 1 < n := by omega
+  rw [Nat.add_mod, Nat.mod_eq_of_lt hn, h, Nat.mod_self]
+
+private def blockValue (n : ℕ) (α : Hazard) (time : ℕ) : Payoff Player :=
+  blockContinuation (Fin.ofNat 3 (time / n)) α (n - time % n)
+
+private theorem blockValue_policy
+    (n : ℕ) (hn : 0 < n) (α : Hazard)
+    (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (time : ℕ) :
+    blockValue n α time =
+      quittingRootSuccessorPayoff
+        GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+        (blockValue n α (time + 1)) (blockRoot n α time) := by
+  rw [blockRoot_eq_soloMixedRoot]
+  have hmod : time % n < n := Nat.mod_lt time hn
+  rcases lt_or_eq_of_le (show time % n + 1 ≤ n by omega) with hinterior | hboundary
+  · rw [blockValue, blockValue,
+      div_succ_eq_of_mod_succ_lt hn hinterior,
+      mod_succ_eq_of_mod_succ_lt hn hinterior]
+    rw [show n - time % n = n - (time % n + 1) + 1 by omega]
+    exact blockContinuation_succ
+      (Fin.ofNat 3 (time / n)) α (n - (time % n + 1))
+  · rw [blockValue, blockValue,
+      div_succ_eq_of_mod_succ_eq hn hboundary,
+      mod_succ_eq_zero_of_mod_succ_eq hn hboundary]
+    calc
+      blockContinuation (Fin.ofNat 3 (time / n)) α (n - time % n) =
+          blockContinuation (Fin.ofNat 3 (time / n)) α (0 + 1) := by
+            congr 2
+            omega
+      _ = quittingRootSuccessorPayoff
+          GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+          (blockContinuation (Fin.ofNat 3 (time / n)) α 0)
+          (quittingSoloMixedRoot (Fin.ofNat 3 (time / n)) (coin α)) :=
+            blockContinuation_succ _ _ _
+      _ = quittingRootSuccessorPayoff
+          GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+          (blockContinuation (Fin.ofNat 3 (time / n + 1)) α n)
+          (quittingSoloMixedRoot (Fin.ofNat 3 (time / n)) (coin α)) := by
+            rw [blockContinuation_zero, blockContinuation_full n _ α hα,
+              nextThree_ofNat]
+
+private theorem blockValue_endpointNash
+    (n : ℕ) (hn : 0 < n) (α : Hazard)
+    (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (time : ℕ) :
+    IsεQuittingRootEndpointNash
+      GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+      (blockValue n α (time + 1)) 0 (blockRoot n α time) := by
+  rw [blockRoot_eq_soloMixedRoot]
+  have hmod : time % n < n := Nat.mod_lt time hn
+  rcases lt_or_eq_of_le (show time % n + 1 ≤ n by omega) with hinterior | hboundary
+  · rw [blockValue, div_succ_eq_of_mod_succ_lt hn hinterior,
+      mod_succ_eq_of_mod_succ_lt hn hinterior]
+    exact blockContinuation_rootNash n hn (Fin.ofNat 3 (time / n)) α hα
+      (n - (time % n + 1)) (by omega)
+  · rw [blockValue, div_succ_eq_of_mod_succ_eq hn hboundary,
+      mod_succ_eq_zero_of_mod_succ_eq hn hboundary,
+      Nat.sub_zero,
+      blockContinuation_full n _ α hα, ← nextThree_ofNat,
+      ← blockContinuation_zero]
+    exact blockContinuation_rootNash n hn (Fin.ofNat 3 (time / n)) α hα 0 hn
+
+private theorem blockValue_rootNash
+    (n : ℕ) (hn : 0 < n) (α : Hazard)
+    (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (time : ℕ) :
+    IsεQuittingRootNash
+      GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+      (blockValue n α (time + 1)) 0 (blockRoot n α time) := by
+  rw [← isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash]
+  exact blockValue_endpointNash n hn α hα time
+
+private theorem blockRoot_mod_period
+    (n : ℕ) (α : Hazard) (time : ℕ) :
+    blockRoot n α (time % (n * 3)) = blockRoot n α time := by
+  unfold blockRoot
+  rw [Nat.mod_mul_right_div_self]
+  have howner : Fin.ofNat 3 (time / n % 3) = Fin.ofNat 3 (time / n) := by
+    apply Fin.ext
+    simp
+  rw [howner]
+
+private theorem blockValue_mod_period
+    (n : ℕ) (α : Hazard) (time : ℕ) :
+    blockValue n α (time % (n * 3)) = blockValue n α time := by
+  unfold blockValue
+  rw [Nat.mod_mul_right_div_self, Nat.mod_mul_right_mod]
+  have howner : Fin.ofNat 3 (time / n % 3) = Fin.ofNat 3 (time / n) := by
+    apply Fin.ext
+    simp
+  rw [howner]
+
+private def blockCycle (n : ℕ) (α : Hazard) :
+    Fin (n * 3) → Player → PMF Bool :=
+  fun phase => blockRoot n α phase.val
+
+private def blockCycleValue (n : ℕ) (α : Hazard) :
+    Fin (n * 3) → Payoff Player :=
+  fun phase => blockValue n α phase.val
+
+private theorem blockCycle_policy
+    (n : ℕ) (hn : 0 < n) (α : Hazard)
+    (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (phase : Fin (n * 3)) :
+    blockCycleValue n α phase =
+      quittingRootSuccessorPayoff
+        GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+        (blockCycleValue n α (finRotate (n * 3) phase))
+        (blockCycle n α phase) := by
+  letI : NeZero (n * 3) := ⟨by omega⟩
+  have hstep := blockValue_policy n hn α hα phase.val
+  unfold blockCycleValue blockCycle
+  rw [finRotate_apply]
+  have hval : ((phase + 1 : Fin (n * 3))).val =
+      (phase.val + 1) % (n * 3) := by
+    simp [Fin.val_add]
+  rw [hval]
+  rwa [blockValue_mod_period]
+
+private theorem blockCycle_rootNash
+    (n : ℕ) (hn : 0 < n) (α : Hazard)
+    (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (phase : Fin (n * 3)) :
+    IsεQuittingRootNash
+      GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+      (blockCycleValue n α (finRotate (n * 3) phase)) 0
+      (blockCycle n α phase) := by
+  letI : NeZero (n * 3) := ⟨by omega⟩
+  have hstep := blockValue_rootNash n hn α hα phase.val
+  unfold blockCycleValue blockCycle
+  rw [finRotate_apply]
+  have hval : ((phase + 1 : Fin (n * 3))).val =
+      (phase.val + 1) % (n * 3) := by
+    simp [Fin.val_add]
+  rw [hval]
+  rwa [blockValue_mod_period]
+
+private theorem blockCycle_admissible (n : ℕ) (α : Hazard) :
+    IsQuittingCycleAdmissible
+      GameTheory.FTVCyclicAdmissibleCycle.ftvReward (blockCycle n α) := by
+  intro who
+  right
+  rw [GameTheory.FTVCyclicAdmissibleCycle.ftvReward_singletonTerminal,
+    GameTheory.FTVCyclicMinimality.soloReward_self]
+  norm_num
+
+private theorem blockCycle_absorbs
+    (n : ℕ) (hn : 0 < n) (α : Hazard)
+    (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) :
+    (∏ phase : Fin (n * 3),
+      quittingStationaryContinueMass (blockCycle n α phase)) < 1 := by
+  have hαpos : 0 < α.1 := by
+    by_contra hnot
+    have hzero : α.1 = 0 := le_antisymm (le_of_not_gt hnot) α.2.1
+    rw [hzero] at hα
+    norm_num at hα
+  let origin : Fin (n * 3) := ⟨0, by positivity⟩
+  refine Math.Finset.prod_lt_one_of_mem Finset.univ _ origin
+    (Finset.mem_univ origin)
+    (fun phase _ _ => quittingStationaryContinueMass_nonneg
+      (blockCycle n α phase))
+    (fun phase _ _ => quittingStationaryContinueMass_le_one
+      (blockCycle n α phase)) ?_
+  rw [blockCycle, show origin.val = 0 by rfl, blockRoot_eq_soloMixedRoot,
+    quittingStationaryContinueMass_soloMixedRoot, coin_false_toReal]
+  linarith
+
+private theorem blockCyclicProfile_eq
+    (n : ℕ) (hn : 0 < n) (α : Hazard) :
+    quittingCyclicBehaviorProfile
+      GameTheory.FTVCyclicAdmissibleCycle.ftvReward (blockCycle n α)
+        (⟨0, by positivity⟩ : Fin (n * 3)) =
+      quittingRootSequenceProfile
+        GameTheory.FTVCyclicAdmissibleCycle.ftvReward (blockRoot n α) 0 := by
+  have hroots : quittingCyclicRootSequence (blockCycle n α)
+      (⟨0, by positivity⟩ : Fin (n * 3)) = blockRoot n α := by
+    funext time
+    unfold quittingCyclicRootSequence quittingCyclicOrbit blockCycle
+    simp only [zero_add]
+    exact blockRoot_mod_period n α time
+  rw [quittingCyclicBehaviorProfile, hroots]
+
 /-- The paper's block-repeated extension of Theorem 3.3. -/
 theorem blockRepeatedEquilibrium
     (n : ℕ) (hn : 0 < n) (α : Hazard)
@@ -1174,7 +1505,16 @@ theorem blockRepeatedEquilibrium
       (quittingRootSequenceProfile
         GameTheory.FTVCyclicAdmissibleCycle.ftvReward
         (blockRoot n α) 0) := by
-  sorry
+  have hcompiled :=
+    isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_admissible
+      GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+      (blockCycle n α) (blockCycleValue n α)
+      (⟨0, by positivity⟩ : Fin (n * 3))
+      (blockCycle_policy n hn α hα)
+      (blockCycle_rootNash n hn α hα)
+      (blockCycle_absorbs n hn α hα)
+      (blockCycle_admissible n α)
+  rwa [blockCyclicProfile_eq n hn α] at hcompiled
 
 /-! ### Theorem 3.4: all equilibria are cyclic -/
 
