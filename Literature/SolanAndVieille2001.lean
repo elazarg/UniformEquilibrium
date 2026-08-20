@@ -2178,17 +2178,496 @@ theorem lemma2_9 : Lemma2_9 := by
   unfold rho
   nlinarith
 
-/-- **Lemma 2.10.**
-`|γⁱ(x_{n₂-1})-u₁| ≤ 4ρNπ₂* + ε`. -/
+private theorem opponentBlockTerminationProbability_eq_one_sub_survival
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length : ℕ) :
+    opponentBlockTerminationProbability roots who start length =
+      1 - quittingOpponentSurvivalWeight roots who start length := by
+  unfold opponentBlockTerminationProbability
+    quittingOpponentSurvivalWeight
+  apply congrArg (fun probability : ℝ ↦ 1 - probability)
+  apply Finset.prod_congr rfl
+  intro offset _
+  rw [blockFixedContinueMass_eq_one_sub_opponentAbsorption]
+
+private theorem opponentAbsorptionMass_le_block
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length offset : ℕ) (hoffset : offset < length) :
+    quittingRootOpponentAbsorptionMass (roots (start + offset)) who ≤
+      opponentBlockTerminationProbability roots who start length := by
+  have hfactor :
+      quittingOpponentSurvivalWeight roots who start length =
+        quittingOpponentSurvivalWeight roots who start offset *
+          quittingFixedOpponentsContinueMass roots who (start + offset) *
+            quittingOpponentSurvivalWeight roots who (start + offset + 1)
+              (length - offset - 1) := by
+    change Math.survivalProduct
+        (quittingFixedOpponentsContinueMass roots who) start length =
+      Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+          start offset *
+        quittingFixedOpponentsContinueMass roots who (start + offset) *
+          Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+            (start + offset + 1) (length - offset - 1)
+    calc
+      Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+          start length =
+          Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+            start (offset + (length - offset)) := by congr 2; omega
+      _ =
+          Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+              start offset *
+            Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+              (start + offset) (length - offset) :=
+        Math.survivalProduct_add _ _ _ _
+      _ = Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+              start offset *
+            Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+              (start + offset) (1 + (length - offset - 1)) := by
+        congr 2
+        omega
+      _ = Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+              start offset *
+            (quittingFixedOpponentsContinueMass roots who (start + offset) *
+              Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+                (start + offset + 1) (length - offset - 1)) := by
+        congr 1
+        simpa [Nat.add_comm] using Math.survivalProduct_succ_left
+          (quittingFixedOpponentsContinueMass roots who) (start + offset)
+            (length - offset - 1)
+      _ = _ := by ring
+  have hprefixNonneg :=
+    quittingOpponentSurvivalWeight_nonneg roots who start offset
+  have hprefixOne :=
+    quittingOpponentSurvivalWeight_le_one roots who start offset
+  have hsuffixNonneg := quittingOpponentSurvivalWeight_nonneg roots who
+    (start + offset + 1) (length - offset - 1)
+  have hsuffixOne := quittingOpponentSurvivalWeight_le_one roots who
+    (start + offset + 1) (length - offset - 1)
+  have hcontinueNonneg := quittingFixedOpponentsContinueMass_nonneg roots who
+    (start + offset)
+  have hsurvivalLe :
+      quittingOpponentSurvivalWeight roots who start length ≤
+        quittingFixedOpponentsContinueMass roots who (start + offset) := by
+    rw [hfactor]
+    calc
+      quittingOpponentSurvivalWeight roots who start offset *
+          quittingFixedOpponentsContinueMass roots who (start + offset) *
+            quittingOpponentSurvivalWeight roots who (start + offset + 1)
+              (length - offset - 1) ≤
+          quittingFixedOpponentsContinueMass roots who (start + offset) *
+            quittingOpponentSurvivalWeight roots who (start + offset + 1)
+              (length - offset - 1) := by
+        simpa [mul_assoc] using mul_le_of_le_one_left
+          (mul_nonneg hcontinueNonneg hsuffixNonneg) hprefixOne
+      _ ≤ quittingFixedOpponentsContinueMass roots who (start + offset) := by
+        exact mul_le_of_le_one_right hcontinueNonneg hsuffixOne
+  have hcontinueIdentity :=
+    blockFixedContinueMass_eq_one_sub_opponentAbsorption
+      roots who (start + offset)
+  rw [hcontinueIdentity] at hsurvivalLe
+  rw [opponentBlockTerminationProbability_eq_one_sub_survival]
+  linarith
+
+private theorem opponentBlockTerminationProbability_suffix_le
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length offset : ℕ) (hoffset : offset ≤ length) :
+    opponentBlockTerminationProbability roots who (start + offset)
+        (length - offset) ≤
+      opponentBlockTerminationProbability roots who start length := by
+  have hfactor :
+      quittingOpponentSurvivalWeight roots who start length =
+        quittingOpponentSurvivalWeight roots who start offset *
+          quittingOpponentSurvivalWeight roots who (start + offset)
+            (length - offset) := by
+    change Math.survivalProduct
+        (quittingFixedOpponentsContinueMass roots who) start length = _
+    calc
+      Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+          start length =
+          Math.survivalProduct (quittingFixedOpponentsContinueMass roots who)
+            start (offset + (length - offset)) := by congr 2; omega
+      _ = _ := Math.survivalProduct_add _ _ _ _
+  have hprefixOne :=
+    quittingOpponentSurvivalWeight_le_one roots who start offset
+  have hsuffixNonneg := quittingOpponentSurvivalWeight_nonneg roots who
+    (start + offset) (length - offset)
+  have hsurvivalLe :
+      quittingOpponentSurvivalWeight roots who start length ≤
+        quittingOpponentSurvivalWeight roots who (start + offset)
+          (length - offset) := by
+    rw [hfactor]
+    exact mul_le_of_le_one_left hsuffixNonneg hprefixOne
+  rw [opponentBlockTerminationProbability_eq_one_sub_survival,
+    opponentBlockTerminationProbability_eq_one_sub_survival]
+  linarith
+
+private theorem jointSurvival_eq_opponent_of_owner_quit_zero
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length : ℕ)
+    (hzero : ∀ offset, offset < length →
+      (roots (start + offset) who true).toReal = 0) :
+    quittingJointSurvivalWeight roots start length =
+      quittingOpponentSurvivalWeight roots who start length := by
+  rw [quittingJointSurvivalWeight_eq_prod]
+  unfold quittingOpponentSurvivalWeight
+  apply Finset.prod_congr rfl
+  intro offset hoffset
+  have hfalse : (roots (start + offset) who false).toReal = 1 := by
+    have hsum := quittingRoot_continueProbability_add_quitProbability
+      (roots (start + offset)) who
+    rw [hzero offset (Finset.mem_range.mp hoffset)] at hsum
+    linarith
+  rw [quittingStationaryContinueMass_eq_forcedContinue_mul_own,
+    hfalse, mul_one]
+  rfl
+
+omit [DecidableEq ι] in
+private theorem abs_tailValue_sub_end_le_blockTermination
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length : ℕ) :
+    |quittingRootSequenceTerminalValue reward roots who start -
+        quittingRootSequenceTerminalValue reward roots who (start + length)| ≤
+      rho reward * blockTerminationProbability roots start length := by
+  let M := quittingRewardBound reward
+  let survival := quittingJointSurvivalWeight roots start length
+  let contribution := ∑ offset ∈ Finset.range length,
+    quittingJointSurvivalWeight roots start offset *
+      quittingRootAbsorbingContribution reward (roots (start + offset)) who
+  have hM : 0 ≤ M := quittingRewardBound_nonneg reward
+  have hreward : ∀ terminal player, |reward terminal player| ≤ M :=
+    abs_reward_le_quittingRewardBound reward
+  have hsurvivalNonneg : 0 ≤ survival :=
+    quittingJointSurvivalWeight_nonneg roots start length
+  have hsurvivalOne : survival ≤ 1 :=
+    quittingJointSurvivalWeight_le_one roots start length
+  have hendBound :
+      |quittingRootSequenceTerminalValue reward roots who (start + length)| ≤ M :=
+    abs_quittingRootSequenceTerminalValue_le reward roots who
+      (start + length) hM hreward
+  have hcontribution :
+      |contribution| ≤ M * (1 - survival) := by
+    calc
+      |contribution| ≤ ∑ offset ∈ Finset.range length,
+          |quittingJointSurvivalWeight roots start offset *
+            quittingRootAbsorbingContribution reward
+              (roots (start + offset)) who| :=
+        Finset.abs_sum_le_sum_abs _ _
+      _ ≤ ∑ offset ∈ Finset.range length,
+          quittingJointSurvivalWeight roots start offset *
+            (M * quittingRootAbsorptionMass (roots (start + offset))) := by
+        apply Finset.sum_le_sum
+        intro offset _
+        rw [abs_mul, abs_of_nonneg
+          (quittingJointSurvivalWeight_nonneg roots start offset)]
+        exact mul_le_mul_of_nonneg_left
+          (abs_quittingRootAbsorbingContribution_le reward
+            (roots (start + offset)) who M hreward)
+          (quittingJointSurvivalWeight_nonneg roots start offset)
+      _ = M * (∑ offset ∈ Finset.range length,
+          quittingJointSurvivalWeight roots start offset *
+            quittingRootAbsorptionMass (roots (start + offset))) := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro offset _
+        ring
+      _ = M * (1 - survival) := by
+        rw [sum_jointSurvivalWeight_mul_absorptionMass]
+  have hwindow := quittingRootSequenceTerminalValue_eq_window_sum
+    reward roots who length start
+  change quittingRootSequenceTerminalValue reward roots who start =
+      contribution + survival *
+        quittingRootSequenceTerminalValue reward roots who (start + length)
+    at hwindow
+  rw [hwindow]
+  change _ ≤ (2 * M) * (1 - survival)
+  calc
+    |contribution + survival *
+          quittingRootSequenceTerminalValue reward roots who (start + length) -
+        quittingRootSequenceTerminalValue reward roots who (start + length)| =
+        |contribution + (survival - 1) *
+          quittingRootSequenceTerminalValue reward roots who (start + length)| := by
+      congr 1
+      ring
+    _ ≤ |contribution| +
+        |(survival - 1) *
+          quittingRootSequenceTerminalValue reward roots who (start + length)| :=
+      abs_add_le _ _
+    _ ≤ M * (1 - survival) + (1 - survival) * M := by
+      apply add_le_add hcontribution
+      rw [abs_mul, abs_of_nonpos (sub_nonpos.mpr hsurvivalOne)]
+      have hcoefficient : -(survival - 1) = 1 - survival := by ring
+      rw [hcoefficient]
+      exact mul_le_mul_of_nonneg_left hendBound
+        (sub_nonneg.mpr hsurvivalOne)
+    _ = (2 * M) * (1 - survival) := by ring
+
+/-- **Lemma 2.10.** The paper's displayed claim (8):
+`γⁱ(x_{n₂-1})-u₁ ≤ 4ρNπ₂* + ε`. -/
 def Lemma2_10 : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
     (data : MainEstimateContext ι), data.Admissible →
-      |quittingRootSequenceTailVector data.reward data.roots
-          (data.localStart + data.localLength) data.who - data.u₁| ≤
+      quittingRootSequenceTailVector data.reward data.roots
+          (data.localStart + data.localLength) data.who - data.u₁ ≤
         4 * data.ρ * Fintype.card ι * data.π₂star + data.ε
 
 theorem lemma2_10 : Lemma2_10 := by
-  sorry
+  classical
+  intro ι _ _ data hadmissible
+  rcases hadmissible with
+    ⟨hε, hεone, hρ, -, -, -, -, hownerMass, -⟩
+  let start := data.localStart
+  let length := data.localLength
+  let owner := data.who
+  let opponentMass := data.π₂star
+  have hopponentMassNonneg : 0 ≤ opponentMass :=
+    opponentBlockTerminationProbability_nonneg data.roots owner start length
+  have hreward : ∀ terminal player,
+      |data.reward terminal player| ≤ quittingRewardBound data.reward :=
+    abs_reward_le_quittingRewardBound data.reward
+  have hquitFloor : ∀ offset, offset < length →
+      1 - data.ρ * opponentMass ≤
+        quittingRootQuitPayoff data.reward 0
+          (data.roots (start + offset)) owner := by
+    intro offset hoffset
+    have hclose := abs_quittingFixedOpponentsQuitValue_sub_one_le
+      data.unitSoloExit data.roots owner (start + offset) hreward
+    rw [← quittingRootQuitPayoff_eq_fixedOpponentsQuitValue
+      data.reward data.roots owner (0 : Payoff ι) (start + offset)] at hclose
+    have hρdef : 2 * quittingRewardBound data.reward = data.ρ := by
+      rw [data.rho_eq]
+      rfl
+    rw [hρdef] at hclose
+    have hlocal := opponentAbsorptionMass_le_block data.roots owner
+      start length offset hoffset
+    have hlocal' : quittingRootOpponentAbsorptionMass
+        (data.roots (start + offset)) owner ≤ opponentMass := by
+      simpa [opponentMass, MainEstimateContext.π₂star, start, length,
+        owner] using hlocal
+    have hscaled := mul_le_mul_of_nonneg_left hlocal' hρ
+    have hlower := (abs_le.mp hclose).1
+    nlinarith
+  have hu₁Lower : 1 - data.ρ * opponentMass ≤ data.u₁ := by
+    unfold MainEstimateContext.u₁ ownerConditionalBlockPayoff
+    apply (le_div_iff₀ hownerMass).2
+    calc
+      (1 - data.ρ * opponentMass) *
+          ownerFirstAbsorptionProbability data.roots owner start length =
+          ∑ offset ∈ Finset.range length,
+            quittingJointSurvivalWeight data.roots start offset *
+              (data.roots (start + offset) owner true).toReal *
+                (1 - data.ρ * opponentMass) := by
+        unfold ownerFirstAbsorptionProbability
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro offset _
+        ring
+      _ ≤ ∑ offset ∈ Finset.range length,
+          quittingJointSurvivalWeight data.roots start offset *
+            (data.roots (start + offset) owner true).toReal *
+              quittingRootQuitPayoff data.reward 0
+                (data.roots (start + offset)) owner := by
+        apply Finset.sum_le_sum
+        intro offset hoffset
+        exact mul_le_mul_of_nonneg_left
+          (hquitFloor offset (Finset.mem_range.mp hoffset))
+          (mul_nonneg
+            (quittingJointSurvivalWeight_nonneg data.roots start offset)
+            ENNReal.toReal_nonneg)
+  let active := (Finset.range length).filter fun offset ↦
+    0 < (data.roots (start + offset) owner true).toReal
+  have hactiveNonempty : active.Nonempty := by
+    have hsumPositive : 0 < ∑ offset ∈ Finset.range length,
+        quittingJointSurvivalWeight data.roots start offset *
+          (data.roots (start + offset) owner true).toReal := by
+      simpa [ownerFirstAbsorptionProbability] using hownerMass
+    obtain ⟨offset, hoffset, hterm⟩ :=
+      (Finset.sum_pos_iff_of_nonneg fun offset _ ↦
+        mul_nonneg
+          (quittingJointSurvivalWeight_nonneg data.roots start offset)
+          ENNReal.toReal_nonneg).mp hsumPositive
+    have hquit : 0 < (data.roots (start + offset) owner true).toReal := by
+      nlinarith [quittingJointSurvivalWeight_nonneg data.roots start offset,
+        (show 0 ≤ (data.roots (start + offset) owner true).toReal from
+          ENNReal.toReal_nonneg)]
+    exact ⟨offset, Finset.mem_filter.mpr ⟨hoffset, hquit⟩⟩
+  let last := active.max' hactiveNonempty
+  have hlastMem : last ∈ active := Finset.max'_mem active hactiveNonempty
+  have hlastLt : last < length :=
+    Finset.mem_range.mp (Finset.mem_filter.mp hlastMem).1
+  have hlastQuit :
+      0 < (data.roots (start + last) owner true).toReal :=
+    (Finset.mem_filter.mp hlastMem).2
+  have hafterZero : ∀ offset, last < offset → offset < length →
+      (data.roots (start + offset) owner true).toReal = 0 := by
+    intro offset hlastOffset hoffset
+    apply le_antisymm
+    · by_contra hnotLe
+      have hpositive : 0 <
+          (data.roots (start + offset) owner true).toReal :=
+        lt_of_not_ge hnotLe
+      have hmem : offset ∈ active :=
+        Finset.mem_filter.mpr ⟨Finset.mem_range.mpr hoffset, hpositive⟩
+      exact (not_le_of_gt hlastOffset) (Finset.le_max' active offset hmem)
+    · exact ENNReal.toReal_nonneg
+  have hquitUpper :
+      quittingRootQuitPayoff data.reward 0
+          (data.roots (start + last)) owner ≤
+        1 + data.ρ * opponentMass := by
+    have hclose := abs_quittingFixedOpponentsQuitValue_sub_one_le
+      data.unitSoloExit data.roots owner (start + last) hreward
+    rw [← quittingRootQuitPayoff_eq_fixedOpponentsQuitValue
+      data.reward data.roots owner (0 : Payoff ι) (start + last)] at hclose
+    have hρdef : 2 * quittingRewardBound data.reward = data.ρ := by
+      rw [data.rho_eq]
+      rfl
+    rw [hρdef] at hclose
+    have hlocal := opponentAbsorptionMass_le_block data.roots owner
+      start length last hlastLt
+    have hlocal' : quittingRootOpponentAbsorptionMass
+        (data.roots (start + last)) owner ≤ opponentMass := by
+      simpa [opponentMass, MainEstimateContext.π₂star, start, length,
+        owner] using hlocal
+    have hscaled := mul_le_mul_of_nonneg_left hlocal' hρ
+    have hupper := (abs_le.mp hclose).2
+    nlinarith
+  let nextValue := quittingRootSequenceTailVector data.reward data.roots
+    (start + last + 1)
+  have hquitSupport : data.roots (start + last) owner true ≠ 0 := by
+    intro hzero
+    rw [hzero] at hlastQuit
+    simp at hlastQuit
+  have hcontinueLeQuit :
+      quittingRootContinuePayoff data.reward nextValue
+          (data.roots (start + last)) owner ≤
+        quittingRootQuitPayoff data.reward nextValue
+            (data.roots (start + last)) owner + data.ε := by
+    have hperfect := data.rowsPerfect (start + last) owner true
+      hquitSupport false
+    simpa only [nextValue, quittingRootContinuePayoff,
+      quittingRootQuitPayoff, show start + last + 1 =
+        start + last + 1 from rfl] using hperfect
+  have hquitTailIndependent :
+      quittingRootQuitPayoff data.reward nextValue
+          (data.roots (start + last)) owner =
+        quittingRootQuitPayoff data.reward 0
+          (data.roots (start + last)) owner := by
+    rw [quittingRootQuitPayoff_eq_fixedOpponentsQuitValue
+        data.reward data.roots owner nextValue (start + last),
+      quittingRootQuitPayoff_eq_fixedOpponentsQuitValue
+        data.reward data.roots owner (0 : Payoff ι) (start + last)]
+  rw [hquitTailIndependent] at hcontinueLeQuit
+  have hnextBound : |nextValue owner| ≤ quittingRewardBound data.reward := by
+    exact abs_quittingRootSequenceTerminalValue_le data.reward data.roots owner
+      (start + last + 1) (quittingRewardBound_nonneg data.reward) hreward
+  have hcontinueClose :=
+    abs_quittingRootSuccessorPayoff_sub_tail_le_two_mul_absorptionMass
+      data.reward nextValue
+        (Function.update (data.roots (start + last)) owner (PMF.pure false))
+        owner (quittingRewardBound data.reward) hreward hnextBound
+  change |quittingRootContinuePayoff data.reward nextValue
+      (data.roots (start + last)) owner - nextValue owner| ≤
+    2 * quittingRewardBound data.reward *
+      quittingRootOpponentAbsorptionMass
+        (data.roots (start + last)) owner at hcontinueClose
+  have hρdef : 2 * quittingRewardBound data.reward = data.ρ := by
+    rw [data.rho_eq]
+    rfl
+  rw [hρdef] at hcontinueClose
+  have hlastOpponent := opponentAbsorptionMass_le_block data.roots owner
+    start length last hlastLt
+  have hnextUpper :
+      nextValue owner ≤ 1 + data.ε + 2 * data.ρ * opponentMass := by
+    have hcloseDirection : nextValue owner -
+        quittingRootContinuePayoff data.reward nextValue
+          (data.roots (start + last)) owner ≤
+        data.ρ * quittingRootOpponentAbsorptionMass
+          (data.roots (start + last)) owner := by
+      exact (le_abs_self _).trans (by
+        simpa [abs_sub_comm] using hcontinueClose)
+    have hlastOpponent' : quittingRootOpponentAbsorptionMass
+        (data.roots (start + last)) owner ≤ opponentMass := by
+      simpa [opponentMass, MainEstimateContext.π₂star, start, length,
+        owner] using hlastOpponent
+    have hscaled := mul_le_mul_of_nonneg_left hlastOpponent' hρ
+    nlinarith
+  let remaining := length - last - 1
+  have hzeroRemaining : ∀ offset, offset < remaining →
+      (data.roots (start + last + 1 + offset) owner true).toReal = 0 := by
+    intro offset hoffset
+    simpa [Nat.add_assoc] using
+      hafterZero (last + 1 + offset) (by omega) (by
+        dsimp [remaining] at hoffset
+        omega)
+  have hsurvivalRemaining := jointSurvival_eq_opponent_of_owner_quit_zero
+    data.roots owner (start + last + 1) remaining hzeroRemaining
+  have hterminationRemaining :
+      blockTerminationProbability data.roots (start + last + 1) remaining =
+        opponentBlockTerminationProbability data.roots owner
+          (start + last + 1) remaining := by
+    unfold blockTerminationProbability
+    rw [hsurvivalRemaining,
+      opponentBlockTerminationProbability_eq_one_sub_survival]
+  have hremainingOpponent :
+      opponentBlockTerminationProbability data.roots owner
+          (start + last + 1) remaining ≤ opponentMass := by
+    have hsuffix := opponentBlockTerminationProbability_suffix_le
+      data.roots owner start length (last + 1) (by omega)
+    change opponentBlockTerminationProbability data.roots owner
+        (start + last + 1) (length - last - 1) ≤
+      opponentBlockTerminationProbability data.roots owner start length
+    simpa only [Nat.sub_sub, Nat.add_assoc] using hsuffix
+  have htailDrift := abs_tailValue_sub_end_le_blockTermination
+    data.reward data.roots owner (start + last + 1) remaining
+  rw [hterminationRemaining] at htailDrift
+  rw [← data.rho_eq] at htailDrift
+  have hendIndex : start + last + 1 + remaining = start + length := by
+    dsimp [remaining]
+    omega
+  have hendUpper :
+      quittingRootSequenceTerminalValue data.reward data.roots owner
+          (start + length) ≤
+        nextValue owner + data.ρ * opponentMass := by
+    rw [← hendIndex]
+    have hdirection :
+        quittingRootSequenceTerminalValue data.reward data.roots owner
+            (start + last + 1 + remaining) -
+          quittingRootSequenceTerminalValue data.reward data.roots owner
+            (start + last + 1) ≤
+          data.ρ * opponentBlockTerminationProbability data.roots owner
+            (start + last + 1) remaining := by
+      have habsDirection := le_abs_self
+        (quittingRootSequenceTerminalValue data.reward data.roots owner
+            (start + last + 1 + remaining) -
+          quittingRootSequenceTerminalValue data.reward data.roots owner
+            (start + last + 1))
+      rw [abs_sub_comm] at habsDirection
+      exact habsDirection.trans htailDrift
+    change _ ≤ nextValue owner + data.ρ * opponentMass
+    have hscaled := mul_le_mul_of_nonneg_left hremainingOpponent hρ
+    change quittingRootSequenceTerminalValue data.reward data.roots owner
+        (start + last + 1 + remaining) ≤
+      quittingRootSequenceTerminalValue data.reward data.roots owner
+          (start + last + 1) + data.ρ * opponentMass
+    nlinarith
+  have hcard : (1 : ℝ) ≤ Fintype.card ι := by
+    exact_mod_cast Fintype.card_pos_iff.mpr ⟨owner⟩
+  change quittingRootSequenceTerminalValue data.reward data.roots owner
+      (start + length) - data.u₁ ≤
+    4 * data.ρ * Fintype.card ι * opponentMass + data.ε
+  have hbasic :
+      quittingRootSequenceTerminalValue data.reward data.roots owner
+          (start + length) - data.u₁ ≤
+        4 * data.ρ * opponentMass + data.ε := by
+    nlinarith
+  calc
+    quittingRootSequenceTerminalValue data.reward data.roots owner
+        (start + length) - data.u₁ ≤
+        4 * data.ρ * opponentMass + data.ε := hbasic
+    _ ≤ 4 * data.ρ * Fintype.card ι * opponentMass + data.ε := by
+      have hscale := mul_le_mul_of_nonneg_left hcard
+        (mul_nonneg hρ hopponentMassNonneg)
+      nlinarith
 
 /-- **Lemma 2.11.** A pure deviation payoff is bounded by the supremum of
 the block continuation expectations plus `ε + 2ρ ε^a`. -/
