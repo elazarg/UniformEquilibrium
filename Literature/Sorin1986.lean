@@ -4224,6 +4224,47 @@ theorem binaryGame_mixedPayoff_apply
 def example1 : FiniteStageGame :=
   binaryGame (pair 1 0) (pair 0 0) (pair 0 0) (pair 0 1)
 
+/-- The top-left outcome is a one-stage Nash equilibrium of Example 1. -/
+private theorem example1_topLeft_mem_E1 :
+    pair 1 0 ∈ example1.oneStageEquilibriumPayoffs := by
+  let profile : Bool → PMF Bool := fun _ ↦ PMF.pure false
+  refine ⟨profile, ?_, ?_⟩
+  · change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 0 0) (pair 0 0)
+        (pair 0 1))).mixedExtension.IsNash profile
+    intro who deviation
+    cases who
+    · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
+      norm_num [example1, profile, pair]
+    · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
+      norm_num [example1, profile, pair]
+  · change (binaryGame (pair 1 0) (pair 0 0) (pair 0 0)
+      (pair 0 1)).mixedPayoff profile = pair 1 0
+    funext who
+    cases who <;> rw [binaryGame_mixedPayoff_apply] <;>
+      norm_num [example1, profile, pair]
+
+/-- The bottom-right outcome is a one-stage Nash equilibrium of Example 1. -/
+private theorem example1_bottomRight_mem_E1 :
+    pair 0 1 ∈ example1.oneStageEquilibriumPayoffs := by
+  let profile : Bool → PMF Bool := fun _ ↦ PMF.pure true
+  refine ⟨profile, ?_, ?_⟩
+  · change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 0 0) (pair 0 0)
+        (pair 0 1))).mixedExtension.IsNash profile
+    intro who deviation
+    cases who
+    · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
+      norm_num [example1, profile, pair]
+    · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
+      norm_num [example1, profile, pair]
+      exact ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  · change (binaryGame (pair 1 0) (pair 0 0) (pair 0 0)
+      (pair 0 1)).mixedPayoff profile = pair 0 1
+    funext who
+    cases who <;> rw [binaryGame_mixedPayoff_apply] <;>
+      norm_num [example1, profile, pair]
+
 /-- Example 2. -/
 def example2 : FiniteStageGame :=
   binaryGame (pair 1 0) (pair 2 2) (pair 0 0) (pair 0 1)
@@ -4371,7 +4412,31 @@ order; no weaker static surrogate is substituted. -/
 
 theorem example1_half_mem_E2 :
     pair (1 / 2) (1 / 2) ∈ example1.finiteEquilibriumPayoffs 2 := by
-  sorry
+  obtain ⟨firstProfile, hfirstNash, hfirstPayoff⟩ :=
+    lemma_1_E1_subset_En example1 ⟨1, by omega⟩ example1_topLeft_mem_E1
+  obtain ⟨secondProfile, hsecondNash, hsecondPayoff⟩ :=
+    lemma_1_E1_subset_En example1 ⟨1, by omega⟩ example1_bottomRight_mem_E1
+  let joined := example1.appendFiniteProfiles 1 firstProfile secondProfile
+  refine ⟨joined, ?_, ?_⟩
+  · simpa only [joined, Nat.reduceAdd] using
+      appendFiniteProfiles_isHorizonNash example1 1 1 firstProfile secondProfile
+        hfirstNash hsecondNash
+  · have hweighted :=
+      appendFiniteProfiles_weightedPayoff example1 1 1 firstProfile secondProfile
+    rw [hfirstPayoff, hsecondPayoff] at hweighted
+    norm_num at hweighted
+    dsimp only [joined]
+    have hpairs :
+        pair 1 0 + pair 0 1 =
+          (2 : ℝ) • pair (1 / 2) (1 / 2) := by
+      ext who
+      cases who <;> norm_num [Pi.add_apply, Pi.smul_apply, pair, smul_eq_mul]
+    have hsame :
+        (2 : ℝ) • example1.finitePayoff 2
+            (example1.appendFiniteProfiles 1 firstProfile secondProfile) =
+          (2 : ℝ) • pair (1 / 2) (1 / 2) :=
+      hweighted.trans hpairs
+    exact smul_right_injective (Payoff Bool) (by norm_num) hsame
 
 theorem example1_half_not_mem_D3 :
     pair (1 / 2) (1 / 2) ∉ example1.finiteFeasiblePayoffs 3 := by
