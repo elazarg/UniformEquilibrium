@@ -25,6 +25,10 @@ The proof first bounds collision mass by the order-free pair union bound
 absorption, yielding the finite-player coefficient.  An explicit algebraic
 formula is proved equal to the coalition sum; it is used internally to avoid
 introducing any probability model separate from `coalitionMass`.
+
+Collision mass is positive exactly when two distinct coordinates have
+positive acting probability. Equivalently, it vanishes exactly when the
+positive support has cardinality at most one.
 -/
 
 namespace Math.PMFProduct
@@ -267,6 +271,101 @@ theorem collisionMass_nonneg (x : ι → ℝ)
   rw [collisionMass_eq_one_sub_continueMass_sub_singletonMass]
   exact collisionMassFormulaOn_nonneg x Finset.univ
     (fun i _ => h0 i) (fun i _ => h1 i)
+
+/-- Two distinct positive Bernoulli parameters force positive collision
+mass. -/
+theorem collisionMass_pos_of_two_pos (x : ι → ℝ)
+    (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1)
+    {first second : ι} (hne : first ≠ second)
+    (hfirst : 0 < x first) (hsecond : 0 < x second) :
+    0 < collisionMass x := by
+  let support : Finset ι := Finset.univ.filter fun i => 0 < x i
+  have hfirstMem : first ∈ support := by simp [support, hfirst]
+  have hsecondMem : second ∈ support := by simp [support, hsecond]
+  have hcard : 2 ≤ support.card := by
+    have hsubset : ({first, second} : Finset ι) ⊆ support := by
+      intro i hi
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hi
+      rcases hi with rfl | rfl
+      · exact hfirstMem
+      · exact hsecondMem
+    have hpairCard : ({first, second} : Finset ι).card = 2 := by simp [hne]
+    rw [← hpairCard]
+    exact Finset.card_le_card hsubset
+  have hinside : 0 < ∏ i ∈ support, x i :=
+    Finset.prod_pos fun i hi => (Finset.mem_filter.mp hi).2
+  have houtside : 0 < ∏ i ∈ supportᶜ, (1 - x i) := by
+    apply Finset.prod_pos
+    intro i hi
+    have hnot : i ∉ support := by simpa using hi
+    have hzero : x i = 0 := by
+      apply le_antisymm
+      · exact le_of_not_gt (by simpa [support] using hnot)
+      · exact h0 i
+    simp [hzero]
+  have hcoalition : 0 < coalitionMass x support := by
+    unfold coalitionMass
+    exact mul_pos hinside houtside
+  have hmem : support ∈ Finset.univ.filter
+      (fun coalition : Finset ι => 2 ≤ coalition.card) := by
+    simp [hcard]
+  have hle : coalitionMass x support ≤ collisionMass x := by
+    unfold collisionMass
+    exact Finset.single_le_sum
+      (fun coalition _ => coalitionMass_nonneg x h0 h1 coalition) hmem
+  exact hcoalition.trans_le hle
+
+/-- Positive collision mass exposes two distinct positive Bernoulli
+parameters. -/
+theorem exists_two_pos_of_collisionMass_pos (x : ι → ℝ)
+    (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1)
+    (hcollision : 0 < collisionMass x) :
+    ∃ first second, first ≠ second ∧ 0 < x first ∧ 0 < x second := by
+  unfold collisionMass at hcollision
+  obtain ⟨coalition, hcoalition, hmass⟩ :=
+    (Finset.sum_pos_iff_of_nonneg fun candidate _ =>
+      coalitionMass_nonneg x h0 h1 candidate).mp hcollision
+  have hcard : 1 < coalition.card := by
+    have := (Finset.mem_filter.mp hcoalition).2
+    omega
+  obtain ⟨first, hfirstMem, second, hsecondMem, hne⟩ :=
+    Finset.one_lt_card.mp hcard
+  have houtside : 0 ≤ ∏ i ∈ coalitionᶜ, (1 - x i) :=
+    Finset.prod_nonneg fun i _ => sub_nonneg.mpr (h1 i)
+  have hinside : 0 < ∏ i ∈ coalition, x i := by
+    unfold coalitionMass at hmass
+    nlinarith
+  have hpositive : ∀ i ∈ coalition, 0 < x i := by
+    intro i hi
+    by_contra hnot
+    have hzero : x i = 0 := le_antisymm (le_of_not_gt hnot) (h0 i)
+    have hproductZero : (∏ j ∈ coalition, x j) = 0 :=
+      Finset.prod_eq_zero hi hzero
+    rw [hproductZero] at hinside
+    exact (lt_irrefl 0) hinside
+  exact ⟨first, second, hne, hpositive first hfirstMem,
+    hpositive second hsecondMem⟩
+
+/-- Collision mass vanishes exactly when at most one Bernoulli parameter is
+positive. -/
+theorem collisionMass_eq_zero_iff_atMostOne_pos (x : ι → ℝ)
+    (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1) :
+    collisionMass x = 0 ↔
+      ∀ first second, 0 < x first → 0 < x second → first = second := by
+  constructor
+  · intro hzero first second hfirst hsecond
+    by_contra hne
+    have hpositive := collisionMass_pos_of_two_pos
+      x h0 h1 hne hfirst hsecond
+    rw [hzero] at hpositive
+    exact (lt_irrefl 0) hpositive
+  · intro hatMostOne
+    apply le_antisymm
+    · exact le_of_not_gt fun hpositive => by
+        obtain ⟨first, second, hne, hfirst, hsecond⟩ :=
+          exists_two_pos_of_collisionMass_pos x h0 h1 hpositive
+        exact hne (hatMostOne first second hfirst hsecond)
+    · exact collisionMass_nonneg x h0 h1
 
 /-- Collision mass is at most the order-free sum of pair probabilities. -/
 theorem collisionMass_le_pairMulSum (x : ι → ℝ)

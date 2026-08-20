@@ -130,7 +130,6 @@ import Research.Quitting.StoppingLawTwoOutcomePassportSequence
 import Research.Quitting.TerminalAtomPolarityDuality
 import Research.Quitting.TerminalLawTwoOutcomePassport
 import Research.Quitting.TerminalSemanticAuxiliaryNashHandoff
-import Research.Quitting.TerminalSemanticCollisionRankReduction
 import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertion
 import Research.Quitting.TwoResetFourRoleAdapter
 import Research.Quitting.UniqueAllContinueCapStackNoGo
