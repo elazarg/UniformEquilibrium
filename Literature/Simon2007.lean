@@ -3495,6 +3495,241 @@ when every solo payoff is positive, and that Solan showed the minimal cycle leng
 clause (ii) may depend on `ε`.
 -/
 
+/-- A row payoff is the convex combination of its two own-action endpoint payoffs. -/
+private theorem quittingOneStagePayoff_eq_endpointCombination
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G) (n : G.Player) :
+    QuittingOneStagePayoff G r p n =
+      (p n : ℝ) * ForcedQuitPayoff G p n +
+        (1 - (p n : ℝ)) * ForcedContinuePayoff G r p n := by
+  have hself : p.replace G n (p n) = p := QuitRow.replace_self G p n
+  have hsurvival := one_sub_quitProbability_replace G p n (p n)
+  rw [hself] at hsurvival
+  have hreward := quittingRewardPart_replace_affine G p n (p n) n
+  rw [hself] at hreward
+  change (1 - QuitProbability G p) * r n + quittingRewardPart G p n =
+    (p n : ℝ) * ((1 - QuitProbability G (p.replace G n 1)) * 0 +
+      quittingRewardPart G (p.replace G n 1) n) +
+    (1 - (p n : ℝ)) * ((1 - QuitProbability G (p.replace G n 0)) * r n +
+      quittingRewardPart G (p.replace G n 0) n)
+  rw [hsurvival, hreward]
+  ring
+
+/-- When `n` is forced to quit, only `n` quits exactly when every opponent continues. -/
+private theorem coalitionProbability_forcedSolo_eq_survival
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
+    CoalitionProbability G (p.replace G n 1) {n} =
+      1 - QuitProbability G (p.replace G n 0) := by
+  classical
+  simp only [CoalitionProbability, QuitProbability, QuitRow.replace]
+  rw [Finset.prod_singleton]
+  simp only [if_pos, Set.Icc.coe_one, one_mul]
+  ring_nf
+  have hfilter : Finset.univ.filter (fun k : G.Player => k ∉ ({n} : Finset G.Player)) =
+      Finset.univ.erase n := by
+    ext k
+    simp [eq_comm]
+  rw [hfilter]
+  have hprod := Finset.mul_prod_erase Finset.univ
+    (fun k : G.Player => 1 - (((if k = n then (0 : Set.Icc (0 : ℝ) 1) else p k) :
+      Set.Icc (0 : ℝ) 1) : ℝ)) (Finset.mem_univ n)
+  simp only [if_pos, Set.Icc.coe_zero, sub_zero, one_mul] at hprod
+  rw [← hprod]
+  apply Finset.prod_congr rfl
+  intro k hk
+  have hkn : k ≠ n := Finset.ne_of_mem_erase hk
+  simp [hkn]
+
+/-- Forced quitting loses at most `M` times the probability that an opponent also quits. -/
+private theorem forcedQuitPayoff_ge_solo_sub_otherQuitMass
+    (G : QuittingGame) {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (p : QuitRow G) (n : G.Player) :
+    SoloPayoff G n - M * QuitProbability G (p.replace G n 0) ≤
+      ForcedQuitPayoff G p n := by
+  classical
+  let pOne := p.replace G n 1
+  let qOther := QuitProbability G (p.replace G n 0)
+  let singleton : {A : Finset G.Player // A.Nonempty} :=
+    ⟨{n}, Finset.singleton_nonempty n⟩
+  have hqOne : QuitProbability G pOne = 1 := by
+    exact quitProbability_replace_one G p n
+  have hmass :
+      (∑ A ∈ Finset.univ.powerset,
+        if _hA : A.Nonempty then CoalitionProbability G pOne A else 0) = 1 := by
+    rw [nonemptyCoalitionMass_eq_quitProbability, hqOne]
+  have hsingleton : CoalitionProbability G pOne {n} = 1 - qOther := by
+    exact coalitionProbability_forcedSolo_eq_survival G p n
+  have hbound : ∀ A : {A : Finset G.Player // A.Nonempty},
+      singleton.val ≠ A.val → SoloPayoff G n - M ≤ G.reward A n := by
+    intro A hval
+    have hdiff := hM.2.1 A singleton n
+    have hlower := neg_lt_of_abs_lt hdiff
+    dsimp only [singleton, SoloPayoff] at hlower ⊢
+    linarith
+  let massTerm : Finset G.Player → ℝ := fun A =>
+    if _hA : A.Nonempty then CoalitionProbability G pOne A else 0
+  let rewardTerm : Finset G.Player → ℝ := fun A =>
+    if hA : A.Nonempty then CoalitionProbability G pOne A * G.reward ⟨A, hA⟩ n else 0
+  have hnmem : ({n} : Finset G.Player) ∈ Finset.univ.powerset := by simp
+  have hmassDecomp := Finset.sum_erase_add Finset.univ.powerset massTerm hnmem
+  have hotherMass :
+      (∑ A ∈ Finset.univ.powerset.erase {n}, massTerm A) = qOther := by
+    dsimp only [massTerm] at hmassDecomp
+    simp only [Finset.singleton_nonempty, dite_true] at hmassDecomp
+    rw [hmass, hsingleton] at hmassDecomp
+    linarith
+  have hotherReward :
+      qOther * (SoloPayoff G n - M) ≤
+        ∑ A ∈ Finset.univ.powerset.erase {n}, rewardTerm A := by
+    rw [← hotherMass, Finset.sum_mul]
+    apply Finset.sum_le_sum
+    intro A hA
+    have hne : A ≠ {n} := Finset.ne_of_mem_erase hA
+    dsimp only [massTerm, rewardTerm]
+    split_ifs with hnonempty
+    · apply mul_le_mul_of_nonneg_left
+        (hbound ⟨A, hnonempty⟩ (by simpa [singleton] using hne.symm))
+      simp only [CoalitionProbability]
+      exact mul_nonneg
+        (Finset.prod_nonneg fun k _ => (pOne k).property.1)
+        (Finset.prod_nonneg fun k _ => sub_nonneg.mpr (pOne k).property.2)
+    · simp
+  have hrewardDecomp := Finset.sum_erase_add Finset.univ.powerset rewardTerm hnmem
+  have hreward :
+      SoloPayoff G n - M * qOther ≤
+        ∑ A ∈ Finset.univ.powerset, rewardTerm A := by
+    calc
+      SoloPayoff G n - M * qOther =
+          (1 - qOther) * SoloPayoff G n +
+            qOther * (SoloPayoff G n - M) := by ring
+      _ = CoalitionProbability G pOne {n} * SoloPayoff G n +
+          qOther * (SoloPayoff G n - M) := by rw [hsingleton]
+      _ ≤ rewardTerm {n} +
+          ∑ A ∈ Finset.univ.powerset.erase {n}, rewardTerm A := by
+        have hsingleReward : rewardTerm {n} =
+            CoalitionProbability G pOne {n} * SoloPayoff G n := by
+          simp [rewardTerm, SoloPayoff]
+        rw [hsingleReward]
+        linarith
+      _ = _ := by linarith
+  change SoloPayoff G n - M * qOther ≤
+    (1 - QuitProbability G pOne) * (0 : Payoff G.Player) n +
+      quittingRewardPart G pOne n
+  rw [hqOne]
+  norm_num only [sub_self, zero_mul, zero_add]
+  simpa only [quittingRewardPart, rewardTerm] using hreward
+
+/--
+Against fixed stationary opponents who eventually quit, the min-max is capped by the
+better of quitting now and continuing until an opponent quits.
+-/
+private theorem minMaxQuit_le_max_forcedQuit_stationaryContinue
+    (G : QuittingGame) {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (p : QuitRow G) (n : G.Player)
+    (hq : 0 < QuitProbability G (p.replace G n 0)) :
+    MinMaxQuit G n ≤ max (ForcedQuitPayoff G p n)
+      (quittingRewardPart G (p.replace G n 0) n /
+        QuitProbability G (p.replace G n 0)) := by
+  let pZero := p.replace G n 0
+  let qOther := QuitProbability G pZero
+  let d := quittingRewardPart G pZero n / qOther
+  let C := max (ForcedQuitPayoff G p n) d
+  let profile : QuitProfile G := fun _ => pZero
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hpayoffBound : ∀ z : QuitProfile G, |QuitPayoff G z n| ≤ M := fun z =>
+    abs_quitPayoff_le G z n hM0 (fun A => le_of_lt (hM.2.2 A n))
+  have hinnerAbove : ∀ z : QuitProfile G, BddAbove (range fun deviation :
+      ℕ → Set.Icc (0 : ℝ) 1 => QuitPayoff G (z.replace G n deviation) n) := by
+    intro z
+    refine ⟨M, ?_⟩
+    rintro _ ⟨deviation, rfl⟩
+    exact (le_abs_self _).trans (hpayoffBound _)
+  have houterBelow : BddBelow (range fun z : QuitProfile G =>
+      ⨆ deviation : ℕ → Set.Icc (0 : ℝ) 1,
+        QuitPayoff G (z.replace G n deviation) n) := by
+    refine ⟨-M, ?_⟩
+    rintro _ ⟨z, rfl⟩
+    let deviation : ℕ → Set.Icc (0 : ℝ) 1 := fun _ => 0
+    exact (neg_le_of_abs_le (hpayoffBound (z.replace G n deviation))).trans
+      (le_ciSup (hinnerAbove z) deviation)
+  have hpZeroSelf : pZero.replace G n 0 = pZero := by
+    have hn : pZero n = (0 : Set.Icc (0 : ℝ) 1) := by
+      simp [pZero, QuitRow.replace]
+    rw [← hn]
+    exact QuitRow.replace_self G pZero n
+  have hpZeroOne : pZero.replace G n 1 = p.replace G n 1 := by
+    funext k
+    by_cases hkn : k = n
+    · simp [pZero, QuitRow.replace, hkn]
+    · simp [pZero, QuitRow.replace, hkn]
+  have hforcedReward : quittingRewardPart G (pZero.replace G n 1) n =
+      ForcedQuitPayoff G p n := by
+    rw [hpZeroOne]
+    change quittingRewardPart G (p.replace G n 1) n =
+      (1 - QuitProbability G (p.replace G n 1)) * (0 : Payoff G.Player) n +
+        quittingRewardPart G (p.replace G n 1) n
+    rw [quitProbability_replace_one]
+    norm_num
+  have hqOther : qOther ∈ Set.Icc (0 : ℝ) 1 := quitProbability_mem_Icc G pZero
+  have hqPositive : 0 < qOther := by simpa only [qOther, pZero] using hq
+  have hdReward : quittingRewardPart G pZero n = qOther * d := by
+    dsimp only [d]
+    field_simp [ne_of_gt hqPositive]
+  rw [MinMaxQuit]
+  apply le_trans (ciInf_le houterBelow profile)
+  apply ciSup_le
+  intro deviation
+  let deviated := profile.replace G n deviation
+  have hrow : ∀ t, deviated t = pZero.replace G n (deviation t) := fun _ => rfl
+  have hrewards : ∀ t,
+      quittingRewardPart G (deviated t) n ≤ C * QuitProbability G (deviated t) := by
+    intro t
+    have hsurvival := one_sub_quitProbability_replace G pZero n (deviation t)
+    rw [hpZeroSelf] at hsurvival
+    have hquit : QuitProbability G (pZero.replace G n (deviation t)) =
+        (deviation t : ℝ) + (1 - (deviation t : ℝ)) * qOther := by
+      linarith
+    rw [hrow, quittingRewardPart_replace_affine, hforcedReward, hpZeroSelf, hdReward]
+    calc
+      (deviation t : ℝ) * ForcedQuitPayoff G p n +
+          (1 - (deviation t : ℝ)) * (qOther * d) =
+          (deviation t : ℝ) * ForcedQuitPayoff G p n +
+            ((1 - (deviation t : ℝ)) * qOther) * d := by ring
+      _ ≤ (deviation t : ℝ) * C +
+          ((1 - (deviation t : ℝ)) * qOther) * C := by
+        apply add_le_add
+        · exact mul_le_mul_of_nonneg_left (le_max_left _ _) (deviation t).property.1
+        · exact mul_le_mul_of_nonneg_left (le_max_right _ _)
+            (mul_nonneg (sub_nonneg.mpr (deviation t).property.2) hqOther.1)
+      _ = C * QuitProbability G (deviated t) := by
+        change _ = C * QuitProbability G (pZero.replace G n (deviation t))
+        rw [hquit]
+        ring
+  have hvanish : Tendsto (tailSurvival G deviated 0) atTop (nhds 0) := by
+    apply squeeze_zero
+    · intro t
+      exact Finset.prod_nonneg fun k _ =>
+        sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+    · intro t
+      calc
+        tailSurvival G deviated 0 t ≤
+            ∏ k ∈ Finset.range t, (1 - qOther) := by
+          apply Finset.prod_le_prod
+          · intro k hk
+            exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+          · intro k hk
+            rw [hrow]
+            have hs := one_sub_quitProbability_replace G pZero n (deviation k)
+            rw [hpZeroSelf] at hs
+            simp only [Nat.zero_add]
+            rw [hs]
+            exact mul_le_of_le_one_left (sub_nonneg.mpr hqOther.2)
+              (by linarith [(deviation k).property.1])
+        _ = (1 - qOther) ^ t := by simp
+    · exact tendsto_pow_atTop_nhds_zero_of_lt_one (by linarith [hqOther.2])
+        (by linarith)
+  have hmass := tsum_tailSurvival_mul_quitProbability_eq_one G deviated 0 hvanish
+  exact quitPayoff_le_of_rewardPart_le G deviated n C hrewards (by simpa using hmass)
+
 /--
 Lemma 6.  For normal players and `0 < ε ≤ 1`, an
 `F_{ε²/(2M)}` step preserves `3ε`-rationality and otherwise raises the coordinate by
@@ -3502,14 +3737,146 @@ at least `ε²/(2M)`.
 -/
 theorem lemma6 (G : QuittingGame) {M ε : ℝ}
     (hM : IsQuittingPayoffDifferenceBound G M) (hnormal : ∀ n, IsNormalPlayer G n)
-    (hstationary : ¬HasStationaryApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (_hstationary : ¬HasStationaryApproximateEquilibria G)
+    (_hinstant : ¬HasInstantApproximateEquilibria G)
     (hε : 0 < ε) (hε1 : ε ≤ 1) {r s : Payoff G.Player}
     (hstep : s ∈ FRow G (ε ^ 2 / (2 * M)) r) :
     ∀ n,
       (r n ≥ MinMaxQuit G n - 3 * ε → s n ≥ MinMaxQuit G n - 3 * ε) ∧
       (r n < MinMaxQuit G n - 3 * ε → s n ≥ r n + ε ^ 2 / (2 * M)) := by
-  sorry
+  rcases hstep with ⟨p, hp, rfl⟩
+  intro n
+  let δ : ℝ := ε ^ 2 / (2 * M)
+  let y : ℝ := QuittingOneStagePayoff G r p n
+  let a : ℝ := ForcedQuitPayoff G p n
+  let b : ℝ := ForcedContinuePayoff G r p n
+  let q : ℝ := p n
+  let pZero := p.replace G n 0
+  let qOther : ℝ := QuitProbability G pZero
+  have hMpositive : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hδpositive : 0 < δ := by
+    exact div_pos (sq_pos_of_pos hε) (mul_pos (by norm_num) hMpositive)
+  have htwodelta : 2 * δ ≤ ε := by
+    have hεsquare : ε ^ 2 ≤ ε * M := by
+      have hfirst := mul_nonneg hε.le (sub_nonneg.mpr hε1)
+      have hsecond := mul_nonneg hε.le (sub_nonneg.mpr hM.1)
+      nlinarith
+    calc
+      2 * δ = ε ^ 2 / M := by
+        dsimp only [δ]
+        field_simp [ne_of_gt hMpositive]
+      _ ≤ ε := (div_le_iff₀ hMpositive).2 (by simpa [mul_comm] using hεsquare)
+  have haffine : y = q * a + (1 - q) * b := by
+    simpa only [y, q, a, b] using
+      quittingOneStagePayoff_eq_endpointCombination G r p n
+  have hqmem : q ∈ Set.Icc (0 : ℝ) 1 := (p n).property
+  have hcore : y < MinMaxQuit G n - 3 * ε + δ → y < r n + δ → False := by
+    intro hyLow hyMove
+    have haEndpoint : a ≤ y + δ := by
+      by_cases hqZero : q = 0
+      · have hcontinue := hp.2 n (by dsimp only [q] at hqZero ⊢; rw [hqZero]; norm_num)
+        rw [hqZero] at haffine
+        norm_num at haffine
+        linarith
+      · by_cases hqOne : q = 1
+        · rw [hqOne] at haffine
+          norm_num at haffine
+          linarith
+        · have hcontinue := hp.2 n (lt_of_le_of_ne hqmem.2 hqOne)
+          have hweighted := mul_le_mul_of_nonneg_left
+            (show a ≤ b + δ by linarith)
+            (sub_nonneg.mpr hqmem.2)
+          have hqdelta := mul_nonneg hqmem.1 hδpositive.le
+          nlinarith
+    have hbEndpoint : b ≤ y + δ := by
+      by_cases hqZero : q = 0
+      · rw [hqZero] at haffine
+        norm_num at haffine
+        linarith
+      · have hquit := hp.1 n (by
+          dsimp only [q] at hqZero ⊢
+          exact lt_of_le_of_ne (p n).property.1 (Ne.symm hqZero))
+        have hweighted := mul_le_mul_of_nonneg_left
+          (show b ≤ a + δ by linarith) hqmem.1
+        have hremaining := mul_nonneg (sub_nonneg.mpr hqmem.2) hδpositive.le
+        nlinarith
+    have haLow : a < MinMaxQuit G n - 2 * ε := by
+      nlinarith
+    have hbLow : b < MinMaxQuit G n - 2 * ε := by
+      nlinarith
+    have hbMove : b < r n + 2 * δ := by
+      linarith
+    have hqOtherPositive : 2 * ε / M < qOther := by
+      by_contra hnot
+      have hqOtherLe : qOther ≤ 2 * ε / M := le_of_not_gt hnot
+      have hscaled : M * qOther ≤ 2 * ε := by
+        have := (le_div_iff₀ hMpositive).mp hqOtherLe
+        nlinarith
+      have hforced := forcedQuitPayoff_ge_solo_sub_otherQuitMass G hM p n
+      have hnormaln := hnormal n
+      have hforced' : SoloPayoff G n - M * qOther ≤ a := by
+        simpa only [qOther, pZero, a] using hforced
+      have hnormaln' : MinMaxQuit G n ≤ SoloPayoff G n := hnormaln
+      nlinarith
+    have hqOtherPos : 0 < qOther :=
+      lt_trans (div_pos (mul_pos (by norm_num) hε) hMpositive) hqOtherPositive
+    let d : ℝ := quittingRewardPart G pZero n / qOther
+    have hminmaxCap : MinMaxQuit G n ≤ max a d := by
+      simpa only [a, d, pZero, qOther] using
+        minMaxQuit_le_max_forcedQuit_stationaryContinue G hM p n (by
+          simpa only [pZero, qOther] using hqOtherPos)
+    have hminmaxD : MinMaxQuit G n ≤ d := by
+      by_cases had : a ≤ d
+      · simpa [max_eq_right had] using hminmaxCap
+      · have hda : d ≤ a := le_of_not_ge had
+        rw [max_eq_left hda] at hminmaxCap
+        linarith
+    have hpZeroReward : quittingRewardPart G pZero n = qOther * d := by
+      dsimp only [d]
+      field_simp [ne_of_gt hqOtherPos]
+    have hbFormula : b = (1 - qOther) * r n + qOther * d := by
+      change (1 - QuitProbability G pZero) * r n + quittingRewardPart G pZero n = _
+      rw [hpZeroReward]
+    have hqOtherMem : qOther ∈ Set.Icc (0 : ℝ) 1 :=
+      quitProbability_mem_Icc G pZero
+    have hrd : r n < d := by
+      by_contra hnot
+      have hdr : d ≤ r n := le_of_not_gt hnot
+      have hweighted := mul_le_mul_of_nonneg_left hdr
+        (sub_nonneg.mpr hqOtherMem.2)
+      nlinarith
+    have hrb : r n < b := by
+      have hproduct := mul_pos hqOtherPos (sub_pos.mpr hrd)
+      nlinarith [hbFormula]
+    have hqdUpper : qOther * (d - r n) < ε ^ 2 / M := by
+      have hbMove' : b < r n + ε ^ 2 / M := by
+        calc
+          b < r n + 2 * δ := hbMove
+          _ = r n + ε ^ 2 / M := by
+            dsimp only [δ]
+            field_simp [ne_of_gt hMpositive]
+      nlinarith [hbFormula]
+    have hqdLower := mul_lt_mul_of_pos_right hqOtherPositive (sub_pos.mpr hrd)
+    have hfraction : (2 * ε * (d - r n)) / M < ε ^ 2 / M := by
+      calc
+        (2 * ε * (d - r n)) / M = (2 * ε / M) * (d - r n) := by ring
+        _ < qOther * (d - r n) := hqdLower
+        _ < ε ^ 2 / M := hqdUpper
+    rw [div_lt_div_iff_of_pos_right hMpositive] at hfraction
+    have hdClose : d < r n + ε / 2 := by
+      nlinarith
+    nlinarith
+  constructor
+  · intro hr
+    by_contra hs
+    have hslt : y < MinMaxQuit G n - 3 * ε := lt_of_not_ge hs
+    exact hcore (by linarith) (by linarith)
+  · intro hr
+    by_contra hs
+    have hslt : y < r n + δ := by
+      dsimp only [δ, y] at hs ⊢
+      exact lt_of_not_ge hs
+    exact hcore (by linarith) hslt
 
 /-- A scalar process with positive drift below a preserved threshold eventually stays above it. -/
 theorem eventually_ge_of_drift_below {u : ℕ → ℝ} {threshold step : ℝ}
