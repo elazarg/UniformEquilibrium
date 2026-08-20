@@ -1,0 +1,152 @@
+name: Compact Nash master stage 5a
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_master_stage5a.yml
+      - Literature/Sorin1986/CompactNashMaster4.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-master-stage5a
+  cancel-in-progress: false
+
+jobs:
+  prove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Inspect state
+        id: state
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster5.ok || test -f Literature/Sorin1986/CompactNashMaster5a.ok; then echo done=yes >> "$GITHUB_OUTPUT"; else echo done=no >> "$GITHUB_OUTPUT"; fi
+      - name: Wait for stage 4
+        if: steps.state.outputs.done == 'no'
+        run: |
+          for attempt in $(seq 1 120); do
+            git fetch origin agent/promote-sorin1986
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster.lean 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster4.ok 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster5.ok 2>/dev/null || true
+            test -f Literature/Sorin1986/CompactNashMaster5.ok && exit 0
+            test -f Literature/Sorin1986/CompactNashMaster4.ok && exit 0
+            sleep 10
+          done
+          exit 1
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Search continuity variants
+        if: steps.state.outputs.done == 'no'
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster5.ok; then exit 0; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashMaster.lean'); s=p.read_text()
+          candidates=[s.find('/-- Updating one coordinate'),s.find('theorem continuous_update_const')]
+          cuts=[x for x in candidates if x>=0]
+          cut=min(cuts) if cuts else s.rindex('\nend CompactNash')
+          Path('/tmp/master5a-core').write_text(s[:cut].rstrip()+'\n\n')
+          PY
+          cat > /tmp/master5a-rest <<'LEAN'
+
+          def profitableSet (G : CompactContinuousGame) (d : Deviation G) :
+              Set (∀ i, G.Strategy i) :=
+            {profile | G.payoff profile d.1 <
+              G.payoff (Function.update profile d.1 d.2) d.1}
+
+          theorem isOpen_profitableSet (G : CompactContinuousGame)
+              (d : Deviation G) : IsOpen (profitableSet G d) := by
+            exact isOpen_lt (G.payoffContinuous d.1)
+              ((G.payoffContinuous d.1).comp
+                (continuous_update_const G d.1 d.2))
+
+          end CompactNash
+
+          end Literature.Sorin1986
+          LEAN
+          mkdir -p /tmp/master5a-variants
+          cat > /tmp/master5a-variants/1 <<'LEAN'
+          theorem continuous_update_const (G : CompactContinuousGame)
+              (who : G.Player) (strategy : G.Strategy who) :
+              Continuous fun profile : (∀ i, G.Strategy i) =>
+                Function.update profile who strategy := by
+            apply continuous_pi
+            intro i
+            by_cases h : i = who
+            · subst i
+              simpa using (continuous_const :
+                Continuous fun _ : (∀ i, G.Strategy i) => strategy)
+            · simpa [Function.update_of_ne h] using
+                (continuous_apply i :
+                  Continuous fun profile : (∀ i, G.Strategy i) => profile i)
+          LEAN
+          cat > /tmp/master5a-variants/2 <<'LEAN'
+          theorem continuous_update_const (G : CompactContinuousGame)
+              (who : G.Player) (strategy : G.Strategy who) :
+              Continuous fun profile : (∀ i, G.Strategy i) =>
+                Function.update profile who strategy := by
+            fun_prop
+          LEAN
+          cat > /tmp/master5a-variants/3 <<'LEAN'
+          theorem continuous_update_const (G : CompactContinuousGame)
+              (who : G.Player) (strategy : G.Strategy who) :
+              Continuous fun profile : (∀ i, G.Strategy i) =>
+                Function.update profile who strategy := by
+            apply continuous_pi
+            intro i
+            classical
+            by_cases h : i = who
+            · subst i
+              simp only [Function.update_same]
+              exact continuous_const
+            · simp only [Function.update_noteq h]
+              exact continuous_apply i
+          LEAN
+          cat > /tmp/master5a-variants/4 <<'LEAN'
+          theorem continuous_update_const (G : CompactContinuousGame)
+              (who : G.Player) (strategy : G.Strategy who) :
+              Continuous fun profile : (∀ i, G.Strategy i) =>
+                Function.update profile who strategy := by
+            classical
+            apply continuous_pi
+            intro i
+            by_cases h : i = who
+            · subst i
+              convert (continuous_const : Continuous fun _ : (∀ i, G.Strategy i) => strategy) using 1 <;> simp
+            · convert (continuous_apply i : Continuous fun p : (∀ i, G.Strategy i) => p i) using 1 <;> simp [h]
+          LEAN
+          : > Literature/Sorin1986/CompactNashMaster5a.log
+          success=''
+          for proof in /tmp/master5a-variants/*; do
+            variant=$(basename "$proof")
+            echo "===== VARIANT $variant =====" >> Literature/Sorin1986/CompactNashMaster5a.log
+            cat /tmp/master5a-core "$proof" /tmp/master5a-rest > Literature/Sorin1986/CompactNashMaster.lean
+            if lake env lean Literature/Sorin1986/CompactNashMaster.lean >> Literature/Sorin1986/CompactNashMaster5a.log 2>&1; then success="$variant"; break; fi
+          done
+          test -n "$success"
+          printf 'success variant %s\n' "$success" > Literature/Sorin1986/CompactNashMaster5a.ok
+      - name: Commit continuity lemmas
+        if: steps.state.outputs.done == 'no'
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster5.ok; then exit 0; fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashMaster.lean Literature/Sorin1986/CompactNashMaster5a.log Literature/Sorin1986/CompactNashMaster5a.ok
+          git commit -m 'Prove compact Nash deviation sets open'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
