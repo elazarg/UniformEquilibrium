@@ -8,15 +8,15 @@ import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Fintype.Order
 import Mathlib.Data.Real.Basic
 import Mathlib.Order.ConditionallyCompleteLattice.Basic
-import MathUE.BoundedDiscrepancyCirculation
+import MathUE.DirectedGraph
 
 /-!
 # Max-plus potentials on a finite real-weighted digraph
 
-A finite directed multigraph is represented by `Math.BoundedDiscrepancy.EdgeGraph`,
-so parallel edges keep their identities, and its finite walks are the typed walks
-of that development.  Here every edge additionally carries a real weight, and the
-weight of a walk is the sum of the weights of its edges.
+A finite directed multigraph is represented by `Math.BoundedDiscrepancy.EdgeGraph`
+from `MathUE.DirectedGraph`, so parallel edges keep their identities.  Here every
+edge additionally carries a real weight; a walk's weight is the sum of its edge
+weights.
 
 A **potential** is a real function on vertices satisfying the edge increment
 inequality `φ (source e) + weight e ≤ φ (target e)`.  The central result is the

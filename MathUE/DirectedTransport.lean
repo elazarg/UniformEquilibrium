@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Algebra.Group.Action.Defs
 import Mathlib.Order.Monotone.Defs
-import MathUE.BoundedDiscrepancyCirculation
+import MathUE.DirectedGraph
 
 /-!
 # Directed transport on operator-labelled transition graphs
@@ -74,8 +74,8 @@ The same structure can be read in several ways.
 
 ## Relation to neighbouring modules
 
-`MathUE.BoundedDiscrepancyCirculation` supplies the directed multigraph and its
-typed walks.  `MathUE.CycleCoboundary` imports this file and specializes it to
+`MathUE.DirectedGraph` supplies the directed multigraph and its typed walks.
+`MathUE.CycleCoboundary` imports this file and specializes it to
 translation maps: cycle sums are translation holonomy and coboundaries are
 sections.  `MathUE.MaxAffineTransport` specializes it to monotone max-affine
 self-maps of `ℝ`, where the non-additive defect telescope is weighted by suffix
