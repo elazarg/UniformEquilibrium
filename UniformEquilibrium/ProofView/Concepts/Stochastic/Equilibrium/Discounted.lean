@@ -219,6 +219,34 @@ theorem discountedPayoff_le_of_forall_expectedStagePayoff_le
         rw [tsum_mul_right, tsum_geometric_of_lt_one hβ0 hβ1,
           ← mul_assoc, mul_inv_cancel₀ h1β.ne', one_mul]
 
+/-- A uniform lower bound on per-stage expected payoffs also bounds the
+normalized discounted payoff from below. -/
+theorem discountedPayoff_ge_of_forall_expectedStagePayoff_ge
+    (G : StochasticGame ι) [Fintype ι] {σ : G.BehaviorProfile}
+    {s₀ : G.State} {who : ι} {v C : ℝ}
+    (hC : ∀ s a, |G.stagePayoff s a who| ≤ C)
+    (hge : ∀ t, v ≤ G.expectedStagePayoff σ s₀ t who)
+    {β : ℝ} (hβ0 : 0 ≤ β) (hβ1 : β < 1) :
+    v ≤ G.discountedPayoff β σ s₀ who := by
+  have h1β : (0 : ℝ) < 1 - β := by linarith
+  have hsum := G.summable_discounted_expectedStagePayoff hC σ s₀
+    (β := β) (by rwa [abs_of_nonneg hβ0])
+  have hgeom : Summable (fun t : ℕ ↦ β ^ t * v) :=
+    (summable_geometric_of_lt_one hβ0 hβ1).mul_right v
+  have hts : (∑' t : ℕ, β ^ t * v) ≤
+      ∑' t : ℕ, β ^ t * G.expectedStagePayoff σ s₀ t who :=
+    hgeom.tsum_le_tsum
+      (fun t ↦ mul_le_mul_of_nonneg_left (hge t) (pow_nonneg hβ0 t))
+      hsum
+  calc
+    v = (1 - β) * ∑' t : ℕ, β ^ t * v := by
+      rw [tsum_mul_right, tsum_geometric_of_lt_one hβ0 hβ1,
+        ← mul_assoc, mul_inv_cancel₀ h1β.ne', one_mul]
+    _ ≤ (1 - β) * ∑' t : ℕ,
+        β ^ t * G.expectedStagePayoff σ s₀ t who :=
+      mul_le_mul_of_nonneg_left hts h1β.le
+    _ = G.discountedPayoff β σ s₀ who := rfl
+
 /-- **Bellman unrolling of the discounted payoff**: the normalized
 discounted payoff is the convex combination of the first stage's expected
 payoff and the expected discounted payoff of the shifted profile from the

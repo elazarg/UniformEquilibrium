@@ -271,6 +271,88 @@ noncomputable def FiniteStageGame.individualRationalLevel
   ⨅ opponents : G.MixedOpponentProfile who,
     G.bestPureReplyValue who opponents
 
+/-- Against every mixed opponent profile, some pure reply attains at least the
+paper's individual-rational level. -/
+theorem FiniteStageGame.exists_pureReply_ge_individualRationalLevel
+    (G : FiniteStageGame) (who : G.Player)
+    (opponents : G.MixedOpponentProfile who) :
+    ∃ action : G.Action who,
+      G.individualRationalLevel who ≤
+        G.kernel.mixedExtension.eu
+          (G.kernel.mixedExtension.profileWithOpponent who
+            (PMF.pure action) opponents) who := by
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  letI : Finite G.kernel.mixedExtension.Outcome :=
+    G.kernel.finite_mixedExtension_outcome
+  obtain ⟨C, hC⟩ :=
+    G.kernel.mixedExtension.exists_eu_abs_bound_of_finite_outcome who
+  have hbelow : BddBelow (Set.range fun opponent : G.MixedOpponentProfile who ↦
+      G.bestPureReplyValue who opponent) := by
+    refine ⟨-C, ?_⟩
+    rintro _ ⟨opponent, rfl⟩
+    let action : G.Action who := Classical.arbitrary (G.Action who)
+    calc
+      -C ≤ G.kernel.mixedExtension.eu
+          (G.kernel.mixedExtension.profileWithOpponent who
+            (PMF.pure action) opponent) who :=
+        (abs_le.mp (hC _)).1
+      _ ≤ G.bestPureReplyValue who opponent := by
+        unfold FiniteStageGame.bestPureReplyValue
+        have hupper : BddAbove (Set.range fun candidate : G.Action who ↦
+            G.kernel.mixedExtension.eu
+              (G.kernel.mixedExtension.profileWithOpponent who
+                (PMF.pure candidate) opponent) who) :=
+          Finite.bddAbove_range _
+        exact le_ciSup hupper action
+  have hlevel : G.individualRationalLevel who ≤
+      G.bestPureReplyValue who opponents :=
+    ciInf_le hbelow opponents
+  obtain ⟨action, haction⟩ := exists_eq_ciSup_of_finite
+    (f := fun action : G.Action who ↦
+      G.kernel.mixedExtension.eu
+        (G.kernel.mixedExtension.profileWithOpponent who
+          (PMF.pure action) opponents) who)
+  refine ⟨action, ?_⟩
+  exact hlevel.trans_eq haction.symm
+
+/-- The opponents' current mixed action after a repeated-game history. -/
+def FiniteStageGame.opponentsAt
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) {time : ℕ} (history : G.repeatedGame.Hist time) :
+    G.MixedOpponentProfile who :=
+  fun opponent ↦ profile opponent.1 time history
+
+/-- A pure current-stage best reply that reaches the paper's
+individual-rational level. -/
+noncomputable def FiniteStageGame.individualRationalReply
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) {time : ℕ} (history : G.repeatedGame.Hist time) :
+    G.Action who :=
+  Classical.choose
+    (G.exists_pureReply_ge_individualRationalLevel who
+      (G.opponentsAt profile who history))
+
+theorem FiniteStageGame.individualRationalReply_spec
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) {time : ℕ} (history : G.repeatedGame.Hist time) :
+    G.individualRationalLevel who ≤
+      G.kernel.mixedExtension.eu
+        (G.kernel.mixedExtension.profileWithOpponent who
+          (PMF.pure (G.individualRationalReply profile who history))
+          (G.opponentsAt profile who history)) who :=
+  Classical.choose_spec
+    (G.exists_pureReply_ge_individualRationalLevel who
+      (G.opponentsAt profile who history))
+
+/-- At every history, deviate to the pure current-stage reply selected above. -/
+noncomputable def FiniteStageGame.individualRationalDeviation
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) : G.BehaviorStrategy who :=
+  fun _time history ↦
+    PMF.pure (G.individualRationalReply profile who history)
+
 /-- The paper's set `Δ` of feasible individually rational payoffs. -/
 def FiniteStageGame.individuallyRationalPayoffs (G : FiniteStageGame) :
     Set (Payoff G.Player) :=
@@ -3160,6 +3242,123 @@ theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
       G.kernel.mixedExtension.eu profile who
     rw [G.kernel.mixedExtension_eu]
 
+/-- The history-by-history pure best reply earns at least the paper's
+individual-rational level in the current stage. -/
+theorem stageEUAt_individualRationalDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) {time : ℕ} (history : G.repeatedGame.Hist time) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.stageEUAt
+        (Function.update profile who
+          (G.individualRationalDeviation profile who)) history who := by
+  letI (player : G.Player) : Fintype (G.kernel.Strategy player) :=
+    G.finiteAction player
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  let current : G.MixedProfile := fun player ↦
+    (Function.update profile who
+      (G.individualRationalDeviation profile who)) player time history
+  have hcurrent : current =
+      G.kernel.mixedExtension.profileWithOpponent who
+        (PMF.pure (G.individualRationalReply profile who history))
+        (G.opponentsAt profile who history) := by
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp [current, FiniteStageGame.individualRationalDeviation]
+      rfl
+    · simp [current, KernelGame.profileWithOpponent,
+        FiniteStageGame.opponentsAt, hplayer]
+  have hreply := G.individualRationalReply_spec profile who history
+  rw [← hcurrent] at hreply
+  unfold StochasticGame.stageEUAt
+  change G.individualRationalLevel who ≤
+    Math.Probability.expect (Math.PMFProduct.pmfPi current)
+      (fun action ↦ G.kernel.eu action who)
+  rw [← G.kernel.mixedExtension_eu]
+  exact hreply
+
+/-- The selected deviation earns at least the individual-rational level in
+every period. -/
+theorem expectedStagePayoff_individualRationalDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (time : ℕ) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.expectedStagePayoff
+        (Function.update profile who
+          (G.individualRationalDeviation profile who))
+        PUnit.unit time who := by
+  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  rw [← Math.Probability.expect_const
+    (G.repeatedGame.histDist
+      (Function.update profile who
+        (G.individualRationalDeviation profile who))
+      PUnit.unit time) (G.individualRationalLevel who)]
+  apply Math.Probability.expect_mono
+  intro history
+  exact stageEUAt_individualRationalDeviation_ge
+    G profile who history
+
+/-- The deviation's positive-horizon average is at least the
+individual-rational level. -/
+theorem finiteAveragePayoff_individualRationalDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (horizon : G.Horizon) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.finiteAveragePayoff PUnit.unit horizon.1
+        (Function.update profile who
+          (G.individualRationalDeviation profile who)) who := by
+  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  have hnonneg : 0 ≤ (horizon.1 : ℝ)⁻¹ := by positivity
+  calc
+    G.individualRationalLevel who =
+        (horizon.1 : ℝ)⁻¹ * ∑ _time ∈ Finset.range horizon.1,
+          G.individualRationalLevel who := by
+      rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul,
+        ← mul_assoc, inv_mul_cancel₀]
+      · simp
+      · exact_mod_cast Nat.ne_of_gt horizon.2
+    _ ≤ (horizon.1 : ℝ)⁻¹ * ∑ time ∈ Finset.range horizon.1,
+        G.repeatedGame.expectedStagePayoff
+          (Function.update profile who
+            (G.individualRationalDeviation profile who))
+          PUnit.unit time who := by
+      apply mul_le_mul_of_nonneg_left _ hnonneg
+      apply Finset.sum_le_sum
+      intro time _
+      exact expectedStagePayoff_individualRationalDeviation_ge
+        G profile who time
+
+/-- The same deviation earns at least the individual-rational level under
+every paper discount rate. -/
+theorem discountedPayoff_individualRationalDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (lam : G.DiscountRate) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.discountedPayoff (1 - lam.1)
+        (Function.update profile who
+          (G.individualRationalDeviation profile who))
+        PUnit.unit who := by
+  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  obtain ⟨C, hC⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun pair : G.repeatedGame.State × G.repeatedGame.JointAct ↦
+      G.repeatedGame.stagePayoff pair.1 pair.2 who)
+  apply G.repeatedGame.discountedPayoff_ge_of_forall_expectedStagePayoff_ge
+    (fun state action ↦ hC (state, action))
+    (fun time ↦ expectedStagePayoff_individualRationalDeviation_ge
+      G profile who time)
+  · linarith [lam.2.2]
+  · linarith [lam.2.1]
+
 /-! **Lemma 1(8), finite individual-rationality clause.**  At every
 public history a player can switch to a stagewise security strategy;
 the conditional-history construction is not yet packaged. -/
@@ -3167,14 +3366,56 @@ theorem lemma_1_En_subset_Delta (G : FiniteStageGame)
     (n : G.Horizon) :
     G.finiteEquilibriumPayoffsOnHorizon n ⊆
       G.individuallyRationalPayoffs := by
-  sorry
+  rintro payoff ⟨profile, hnash, rfl⟩
+  constructor
+  · exact lemma_1_Dn_subset_C G n ⟨profile, rfl⟩
+  · intro who
+    let deviation := G.individualRationalDeviation profile who
+    have hequilibrium := hnash who deviation
+    have hdeviation :=
+      finiteAveragePayoff_individualRationalDeviation_ge
+        G profile who n
+    change G.individualRationalLevel who ≤
+      G.finitePayoff n.1 profile who
+    change G.finitePayoff n.1 profile who + 0 ≥
+      G.finitePayoff n.1
+        (Function.update profile who deviation) who at hequilibrium
+    have hequilibrium' :
+        G.repeatedGame.finiteAveragePayoff PUnit.unit n.1
+            (Function.update profile who
+              (G.individualRationalDeviation profile who)) who ≤
+          G.finitePayoff n.1 profile who := by
+      simpa [deviation, FiniteStageGame.finitePayoff] using hequilibrium
+    exact hdeviation.trans hequilibrium'
 
 /-! **Lemma 1(8), discounted individual-rationality clause.** -/
 theorem lemma_1_Elambda_subset_Delta (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.discountedEquilibriumPayoffsOnRate lam ⊆
       G.individuallyRationalPayoffs := by
-  sorry
+  rintro payoff ⟨profile, hnash, rfl⟩
+  constructor
+  · exact lemma_1_Dlambda_subset_C G lam ⟨profile, rfl⟩
+  · intro who
+    let deviation := G.individualRationalDeviation profile who
+    have hequilibrium := hnash who deviation
+    have hdeviation :=
+      discountedPayoff_individualRationalDeviation_ge
+        G profile who lam
+    change G.individualRationalLevel who ≤
+      G.discountedPayoff lam.1 profile who
+    change G.repeatedGame.discountedPayoff (1 - lam.1)
+        profile PUnit.unit who + 0 ≥
+      G.repeatedGame.discountedPayoff (1 - lam.1)
+        (Function.update profile who deviation) PUnit.unit who at hequilibrium
+    have hequilibrium' :
+        G.repeatedGame.discountedPayoff (1 - lam.1)
+            (Function.update profile who
+              (G.individualRationalDeviation profile who))
+            PUnit.unit who ≤
+          G.discountedPayoff lam.1 profile who := by
+      simpa [deviation, FiniteStageGame.discountedPayoff] using hequilibrium
+    exact hdeviation.trans hequilibrium'
 
 /-- Aggregate finite/discounted form of Lemma 1(5)--(7).  The positive
 horizon/rate witnesses prevent the zero-horizon collapse present in the
