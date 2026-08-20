@@ -376,7 +376,14 @@ bounds full absorption by the error of any approximate literal Nash root away
 from the vertices of the debt simplex, while
 `exists_complementaryDebt_lt_of_card_mul_lt_kappa_mul_absorption` selects a
 player carrying all but less than `kappa` of the total debt whenever absorption
-is too large for that error bound.
+is too large for that error bound. The carrier-level conclusion has an
+executable adapter:
+`quittingTerminalPayoff_rootBestEndpointDeviation_sub_eq_literalDefect`
+identifies the defect with the exact payoff gain from a concrete behavioral
+root deviation, and
+`exists_executable_rootBestEndpointGain_pos_of_minimum_of_optionMass_lt`
+uses a realizing sequence to produce such a profitable deviation whenever the
+singleton-option criterion holds at the compact carrier point.
 
 `quittingFiniteDynamicDebt_eq_compList_apply` and
 `quittingFiniteDynamicDebt_eq_terminalDebt_iff`
