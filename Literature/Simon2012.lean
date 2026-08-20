@@ -605,10 +605,34 @@ def InfiniteUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ x : ℕ → Payoff G.Player,
     IsInfiniteOrbit (FRow G ε) x ∧ HasUnboundedVariation x
 
+/-- Removing a finite prefix preserves unbounded Euclidean variation. -/
+theorem HasUnboundedVariation.tail {N : Type} [Fintype N]
+    {x : ℕ → Payoff N} (h : HasUnboundedVariation x) (start : ℕ) :
+    HasUnboundedVariation (fun i => x (start + i)) := by
+  intro bound
+  let increment : ℕ → ℝ := fun i => EuclideanDist (x (i + 1)) (x i)
+  let prefixVariation : ℝ := ∑ i ∈ Finset.range start, increment i
+  rcases h (bound + prefixVariation) with ⟨k, hk⟩
+  refine ⟨k, ?_⟩
+  have hmono : (∑ i ∈ Finset.range k, increment i) ≤
+      ∑ i ∈ Finset.range (start + k), increment i := by
+    apply Finset.sum_le_sum_of_subset_of_nonneg
+      (Finset.range_mono (Nat.le_add_left k start))
+    intro i _ _
+    exact Real.sqrt_nonneg _
+  have hbound := hk.trans hmono
+  rw [Finset.sum_range_add] at hbound
+  dsimp only [prefixVariation, increment] at hbound ⊢
+  simp only [Nat.add_assoc] at hbound
+  simpa only [Nat.add_assoc] using (show bound ≤
+    ∑ i ∈ Finset.range k,
+      EuclideanDist (x (start + (i + 1))) (x (start + i)) by
+        linarith)
+
 /--
-Theorem 2.2.  Simon 2007, Corollary 2 is `sorry`-backed; the corrected
-stationarily-generated hypothesis and explicit Euclidean variation are left
-visible here.
+Theorem 2.2.  Rationality can be removed from the infinite-orbit condition by
+discarding the finite prefix before every coordinate reaches its rationality
+floor.
 -/
 theorem theorem2_2 (G : QuittingGame)
     (hnormal : ∀ n, IsNormalPlayer G n)
@@ -616,7 +640,55 @@ theorem theorem2_2 (G : QuittingGame)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     HasQuitApproximateEquilibria G ↔
       InfiniteUnrestrictedOrbitCondition G := by
-  sorry
+  have hfive := theorem2_1 G hgenerated hinstant
+  have hequivalent : HasQuitApproximateEquilibria G ↔ InfiniteOrbitCondition G :=
+    hfive.1.trans (hfive.2.1.trans hfive.2.2.1)
+  constructor
+  · intro hequilibrium ε hε
+    obtain ⟨x, horbit, _, hvariation⟩ := hequivalent.mp hequilibrium ε hε
+    exact ⟨x, horbit, hvariation⟩
+  · intro hunrestricted
+    apply hequivalent.mpr
+    intro ε hε
+    obtain ⟨B, hB⟩ := Literature.Simon2007.exists_quittingPayoffDifferenceBound G
+    have hBpos : 0 < B := zero_lt_one.trans_le hB.1
+    let a : ℝ := min (ε / 3) (1 / 2)
+    have ha : 0 < a := lt_min (div_pos hε (by norm_num)) (by norm_num)
+    have ha1 : a ≤ 1 := (min_le_right _ _).trans (by norm_num)
+    have h3a : 3 * a ≤ ε := by
+      have := min_le_left (ε / 3) (1 / 2)
+      linarith
+    let δ : ℝ := a ^ 2 / (2 * B)
+    have hδ : 0 < δ := div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hBpos)
+    have hδε : δ ≤ ε := by
+      rw [div_le_iff₀ (mul_pos (by norm_num) hBpos)]
+      have haHalf := min_le_right (ε / 3) (1 / 2)
+      have haEps := min_le_left (ε / 3) (1 / 2)
+      nlinarith [sq_nonneg a, hB.1]
+    obtain ⟨x, horbit, hvariation⟩ := hunrestricted δ hδ
+    have heventual : ∀ n : G.Player, ∃ cutoff, ∀ i, cutoff ≤ i →
+        MinMaxQuit G n - 3 * a ≤ x i n := by
+      intro n
+      apply Literature.Simon2007.eventually_ge_of_drift_below hδ
+      intro i
+      exact lemma2_2 G hB hnormal hgenerated hinstant ha ha1 (horbit i) n
+    choose cutoff hcutoff using heventual
+    let start := ∑ n, cutoff n
+    have hcutoffStart : ∀ n, cutoff n ≤ start := by
+      intro n
+      exact Finset.single_le_sum (fun i _ => Nat.zero_le (cutoff i))
+        (Finset.mem_univ n)
+    let y : ℕ → Payoff G.Player := fun i => x (start + i)
+    refine ⟨y, ?_, ?_, ?_⟩
+    · intro i
+      apply FRow.mono G hδε
+      simpa only [y, Nat.add_assoc] using horbit (start + i)
+    · intro i n
+      have hfloor := hcutoff n (start + i)
+        ((hcutoffStart n).trans (Nat.le_add_right start i))
+      dsimp only [y]
+      linarith
+    · exact hvariation.tail start
 
 /-- The unqualified extended-orbit condition in Theorem 2.3. -/
 def ExtendedUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
