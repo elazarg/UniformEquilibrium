@@ -369,11 +369,8 @@ theorem quittingFiniteDynamicDebt_eq_compList_apply
       rw [ih (start + 1) htailWindow, quittingDynamicDebtLabelList]
       symm
       apply Math.MaxAffineTransport.Label.apply_compList_append_singleton
-      · intro label hlabel
-        exact quittingDynamicDebtLabelList_slope_nonneg
-          reward roots who prescribed (start + 1) fuel label hlabel
-      · exact quittingDynamicDebtLabel_slope_nonneg
-          reward roots who prescribed start
+      exact quittingDynamicDebtLabel_slope_nonneg
+        reward roots who prescribed start
 
 /-- Coefficient form of exact dynamic-debt transport.  The path floor records
 the last reset, the path shift records accumulated positive stage gaps, and

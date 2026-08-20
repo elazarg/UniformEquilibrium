@@ -307,11 +307,10 @@ only rewards and absorption.  This is why the static table, which does force
 payoff-cell transport, forces no obstruction from it
 (`UniformEquilibrium/Quitting/Classification/PreemptionTransport.lean`), and why the anchored
 renewal transport
-(`UniformEquilibrium/Quitting/Cycles/AnchoredRenewalTransport.lean`) exists only per profile:
-equilibrium existence quantifies
-over the induced transport systems, so a producer theorem must extract a
-canonical labelled system from an arbitrary chronology rather than analyze a
-given one.
+(`UniformEquilibrium/Quitting/Cycles/AnchoredRenewalTransport.lean`) exists only per profile.
+Consequently, a transport argument about equilibrium existence needs a
+semantic construction from a profile, chronology, or candidate response
+system rather than a graph chosen independently of them.
 
 ## Game-semantic specializations
 
@@ -322,6 +321,24 @@ prescribed and best-response maps of realized boundary blocks and preserve
 their chronological composition.  A boundary label acts from the block's
 exit value back to its entry value.  The adapter does not identify
 coefficient-compatible seams with executable splices.
+
+`quittingCompanionComposite_eq_compList_apply`
+(`UniformEquilibrium/Quitting/Cycles/CompanionTransport.lean`) identifies a
+finite quitting companion recursion with the action of its chronological
+max-affine label product. For a periodic response solution,
+`quittingCyclicResponseSolution_eq_companionLabel_fixedPoint`
+(`UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean`) then
+computes every contractive coordinate from the floor, shift, and slope of its
+one-turn holonomy by the generic scalar fixed-point formula.
+
+`quittingSignedCompanionLabelList_compList` and
+`quittingCompanionComposite_sub_prescribed_eq_compList_apply`
+(`UniformEquilibrium/Quitting/Cycles/RelaxedCycleGain.lean`) recenter this
+transport around an arbitrary consistent prescribed-value path. The
+composite floor is the best finite stopping discrepancy, the shift is the
+full-window continuation discrepancy, and the slope is opponent survival.
+Under strict contraction their maximum-ratio formula is the unique relaxed
+cycle gain.
 
 `QuittingTerminalSemanticPrefixChain.debt_isSection` and
 `QuittingTerminalSemanticPrefixChain.debt_mul_one_sub_reachedWeight_eq_sum_reached_defect_of_return`
@@ -366,27 +383,13 @@ All implemented.
 - **M3**: the cyclewise-completeness refutation and the general Farkas
   duality (`MathUE/DirectedTransport/MaxAffine/Farkas.lean`).
 
-## Sibling-module completions (recorded)
+## Scope boundaries
 
-Scope notes recorded in the five modules' docstrings (literature-only
-citations there, per docstring policy); cross-referenced here:
-
-- `MathUE/DirectedTransport/Additive/Potentials.lean`: potential side only;
-  missing toward max-plus Perron–Frobenius: eigenvector existence, the Collatz–Wielandt
-  attained form of the max cycle mean, the critical graph, the Kleene star
-  (of which `maxIncomingWeight` is one row).  Natural setting: topical maps.
-- `MathUE/TransferSummaryMonoid.lean`: the missing identity is the finite
-  floor; `WithBot` floors (Layer 1) repair it.  Missing on the Lindley side:
-  stationary (Loynes) theory, two-sided reflection.
-- `MathUE/DirectedTransport/Additive/Exact.lean`: criterion and obstruction,
-  not the Hodge decomposition (coboundary + circulation), not `H¹` as a quotient;
-  general-group switching (Zaslavsky) only in the translation case.
-- `MathUE/InverseCoordinateRecurrence.lean`: single steps and two-phase
-  products; the `n`-phase trace trichotomy of the projective action is the
-  completion, and the matrix representation should be identified with the
-  summary monoid (Layer 1, T1).
-- `MathUE/IndependenceModelValuation.lean`: the all-small chart only; the
-  boundary charts where some coordinates approach `1` (cofactors carrying
-  the valuation) are the piece actual schedules need first.  The chamber
-  structure over varying exponents is the normal fan of the family's Newton
-  polytope, not the tropicalization of the model's ideal.
+The library classifies exact and lax sections, additive cycle obstructions,
+finite inequality duals, max-affine scalar and cyclic behavior, gauge
+feasibility, and sparse rational or integral certificates. It does not develop
+a general nonlinear Perron–Frobenius theory for topical maps, stationary
+two-sided reflection, or cohomology as a quotient object. The projective
+matrix and valuation modules expose transport representations used here but
+do not attempt a general spectral classification or all boundary charts of a
+hazard family.
