@@ -361,17 +361,18 @@ option budgets is paid by literal root defects. In particular,
 produces a positive literal defect whenever some positive-debt coordinate's
 own singleton option mass is strictly smaller than total absorption.
 Using the exact singleton/collision partition,
-`minimumTerminalSemantic_literalNash_support_budget`
+`terminalSemantic_literalNash_excess_support_budget`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticLiteralNashDebtSupport.lean`)
-rewrites this as the geometric estimate
+rewrites the general carrier-tail account as the geometric estimate
 
 ```text
 totalDebt * collisionMass
   + sum_i singletonMass_i * (totalDebt - debt_i)
-  <= totalLiteralRootDefect.
+  <= tailDebtExcess + totalLiteralRootDefect.
 ```
 
-Thus `minimumTerminalSemantic_kappa_mul_absorption_le_card_mul_of_isεNash`
+The minimum-tail specialization has zero excess. Thus
+`minimumTerminalSemantic_kappa_mul_absorption_le_card_mul_of_isεNash`
 bounds full absorption by the error of any approximate literal Nash root away
 from the vertices of the debt simplex, while
 `exists_complementaryDebt_lt_of_card_mul_lt_kappa_mul_absorption` selects a

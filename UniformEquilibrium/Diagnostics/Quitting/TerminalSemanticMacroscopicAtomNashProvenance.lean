@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauFractionalResetFloor
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionWindow
-import UniformEquilibrium.Quitting.Root.NashDefect
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLiteralNashDebtSupport
 
 /-!
 # Nash provenance of a macroscopic semantic atom
@@ -27,6 +27,11 @@ near-sure or sure-exit replacement compiler must therefore obtain its Nash
 certificate before returning to the positive minimum tail, or spend a
 macroscopic tail excursion.  Merely Nashifying the marked row while retaining
 the atom is impossible in the relevant limiting regime.
+
+The simultaneous support estimate
+`terminalSemantic_literalNash_excess_support_le_card_mul` contains all
+collision and singleton complementary-debt charges in one inequality. The
+named atom bounds below are projections of that common account.
 -/
 
 noncomputable section
@@ -77,7 +82,6 @@ theorem singletonMass_mul_otherDebt_le_tailExcess_add_card_mul_nashError
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (minimum tail : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool) (owner : ι) (ε : ℝ)
-    (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -92,61 +96,60 @@ theorem singletonMass_mul_otherDebt_le_tailExcess_add_card_mul_nashError
   have htailDebt : ∀ who, 0 ≤ quittingTerminalSemanticDebt tail who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
       reward htail
-  have hcoordinate : ∀ who ∈ (Finset.univ : Finset ι).erase owner,
+  have htailDebtLe : ∀ who,
+      quittingTerminalSemanticDebt tail who ≤
+        quittingTerminalSemanticDebtSum tail := by
+    intro who
+    unfold quittingTerminalSemanticDebtSum
+    exact Finset.single_le_sum
+      (fun player _ => htailDebt player) (Finset.mem_univ who)
+  have hcollisionTerm : 0 ≤
+      quittingTerminalSemanticDebtSum tail *
+        quittingRootCollisionMass root :=
+    mul_nonneg (Finset.sum_nonneg fun who _ => htailDebt who)
+      (quittingRootCollisionMass_nonneg root)
+  have hownerTerm :
       quittingRootCoalitionMass root {owner} *
-          quittingTerminalSemanticDebt tail who ≤
-        quittingRootOpponentAbsorptionMass root who *
-          quittingTerminalSemanticDebt tail who := by
-    intro who hwho
-    have hne : owner ≠ who := (Finset.mem_erase.mp hwho).1.symm
-    exact mul_le_mul_of_nonneg_right
-      (quittingRootCoalitionMass_le_opponentAbsorptionMass_of_other_mem
-        root {owner} who owner (by simp) hne)
-      (htailDebt who)
-  have herase := Finset.sum_le_sum hcoordinate
-  have hownerCharge : 0 ≤
-      quittingRootOpponentAbsorptionMass root owner *
-        quittingTerminalSemanticDebt tail owner :=
-    mul_nonneg (quittingRootOpponentAbsorptionMass_nonneg root owner)
-      (htailDebt owner)
-  have heraseToFull :
+          (quittingTerminalSemanticDebtSum tail -
+            quittingTerminalSemanticDebt tail owner) ≤
+        ∑ who, quittingRootCoalitionMass root {who} *
+          (quittingTerminalSemanticDebtSum tail -
+            quittingTerminalSemanticDebt tail who) :=
+    Finset.single_le_sum
+      (fun who _ => mul_nonneg
+        (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg root {who})
+        (sub_nonneg.mpr (htailDebtLe who)))
+      (Finset.mem_univ owner)
+  have hsupport :=
+    terminalSemantic_literalNash_excess_support_le_card_mul
+      reward minimum tail root ε htail hminimum hnash
+  have herase :
       (∑ who ∈ (Finset.univ : Finset ι).erase owner,
-          quittingRootOpponentAbsorptionMass root who *
-            quittingTerminalSemanticDebt tail who) ≤
-        ∑ who, quittingRootOpponentAbsorptionMass root who *
-          quittingTerminalSemanticDebt tail who := by
-    calc
-      _ ≤ (∑ who ∈ (Finset.univ : Finset ι).erase owner,
-            quittingRootOpponentAbsorptionMass root who *
-              quittingTerminalSemanticDebt tail who) +
-          quittingRootOpponentAbsorptionMass root owner *
-            quittingTerminalSemanticDebt tail owner :=
-        le_add_of_nonneg_right hownerCharge
-      _ = _ := Finset.sum_erase_add _ _ (Finset.mem_univ owner)
-  have hcharge :=
-    minimumTerminalSemantic_sum_opponentAbsorption_charge_le_excess_add_defect
-      reward minimum tail root hminimumCarrier hminimum htail
-  have hdefect :=
-    quittingRootTotalNashDefect_le_card_mul_of_isεQuittingRootNash
-      reward tail.1 root ε hnash
+        quittingTerminalSemanticDebt tail who) =
+      quittingTerminalSemanticDebtSum tail -
+        quittingTerminalSemanticDebt tail owner := by
+    unfold quittingTerminalSemanticDebtSum
+    rw [← Finset.sum_erase_add _ _ (Finset.mem_univ owner)]
+    ring
   calc
     quittingRootCoalitionMass root {owner} *
         (∑ who ∈ (Finset.univ : Finset ι).erase owner,
           quittingTerminalSemanticDebt tail who) =
-      ∑ who ∈ (Finset.univ : Finset ι).erase owner,
-        quittingRootCoalitionMass root {owner} *
-          quittingTerminalSemanticDebt tail who := by rw [Finset.mul_sum]
-    _ ≤ ∑ who ∈ (Finset.univ : Finset ι).erase owner,
-        quittingRootOpponentAbsorptionMass root who *
-          quittingTerminalSemanticDebt tail who := herase
-    _ ≤ ∑ who, quittingRootOpponentAbsorptionMass root who *
-          quittingTerminalSemanticDebt tail who := heraseToFull
+      quittingRootCoalitionMass root {owner} *
+        (quittingTerminalSemanticDebtSum tail -
+          quittingTerminalSemanticDebt tail owner) := by rw [herase]
+    _ ≤ ∑ who, quittingRootCoalitionMass root {who} *
+          (quittingTerminalSemanticDebtSum tail -
+            quittingTerminalSemanticDebt tail who) := hownerTerm
+    _ ≤ quittingTerminalSemanticDebtSum tail *
+          quittingRootCollisionMass root +
+        ∑ who, quittingRootCoalitionMass root {who} *
+          (quittingTerminalSemanticDebtSum tail -
+            quittingTerminalSemanticDebt tail who) :=
+      le_add_of_nonneg_left hcollisionTerm
     _ ≤ (quittingTerminalSemanticDebtSum tail -
           quittingTerminalSemanticDebtSum minimum) +
-        quittingRootTotalNashDefect reward tail.1 root := hcharge
-    _ ≤ (quittingTerminalSemanticDebtSum tail -
-          quittingTerminalSemanticDebtSum minimum) +
-        Fintype.card ι * ε := by linarith
+        Fintype.card ι * ε := hsupport
 
 /-- On the minimum tail itself, a macroscopic approximately Nash singleton
 forces the complementary debt face to be small. -/
@@ -164,8 +167,7 @@ theorem singletonMass_mul_minimumOtherDebt_le_card_mul_nashError
           quittingTerminalSemanticDebt minimum who) ≤
       Fintype.card ι * ε := by
   simpa using singletonMass_mul_otherDebt_le_tailExcess_add_card_mul_nashError
-    reward minimum minimum root owner ε hminimumCarrier hminimum
-      hminimumCarrier hnash
+    reward minimum minimum root owner ε hminimum hminimumCarrier hnash
 
 /-- Strictly more collision charge than tail excursion plus row-Nash error
 rules out an `ε`-Nash certificate on the displayed root. -/

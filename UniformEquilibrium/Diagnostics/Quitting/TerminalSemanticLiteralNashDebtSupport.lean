@@ -11,16 +11,17 @@ import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
 /-!
 # Literal Nash support at minimum terminal debt
 
-At a minimum-total-debt terminal semantic pair, paid own-strategy transport
+Relative to a minimum-total-debt carrier point, paid own-strategy transport
 turns the hidden continuation-option budget into the familiar absorption
-support functional. For every product root, collision mass is charged by total
-debt and each singleton mass is charged by the complementary debt. Their sum
-is bounded by the root's literal one-stage Nash defect.
+support functional. For every carrier tail and product root, collision mass is
+charged by the tail's total debt and each singleton mass is charged by the
+tail's complementary debt. Their sum is bounded by tail debt excess plus the
+root's literal one-stage Nash defect.
 
-This is a quantitative extension of the exact-Nash support geometry. In
-particular, an approximately Nash root with appreciable absorption must put
-singleton mass on a player carrying nearly all terminal debt, unless total
-debt itself is small.
+At the minimum tail the excess vanishes. This gives a quantitative extension
+of the exact-Nash support geometry: an approximately Nash root with
+appreciable absorption must put singleton mass on a player carrying nearly all
+terminal debt, unless total debt itself is small.
 -/
 
 noncomputable section
@@ -32,24 +33,27 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- At a minimum-total-debt semantic pair, collision and complementary
-singleton debt are bounded by the literal root Nash defect. -/
-theorem minimumTerminalSemantic_literalNash_support_budget
+/-- Relative to a minimum carrier point, collision and complementary
+singleton debt are bounded by tail debt excess plus literal root defect. -/
+theorem terminalSemantic_literalNash_excess_support_budget
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (minimum pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
-      quittingTerminalSemanticDebtSum pair ≤
+      quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate) :
     quittingTerminalSemanticDebtSum pair *
           quittingRootCollisionMass root +
         ∑ who, quittingRootCoalitionMass root {who} *
           (quittingTerminalSemanticDebtSum pair -
             quittingTerminalSemanticDebt pair who) ≤
-      quittingRootTotalNashDefect reward pair.1 root := by
+      (quittingTerminalSemanticDebtSum pair -
+          quittingTerminalSemanticDebtSum minimum) +
+        quittingRootTotalNashDefect reward pair.1 root := by
   have htransport :=
-    minimumTerminalSemantic_absorptionDebt_sub_quitOptionBudget_le_literalDefectSum
-      reward pair root hpair hminimum
+    terminalSemantic_netAbsorptionDebt_le_excess_add_literalDefect
+      reward minimum pair root hpair hminimum
   have habsorption :=
     QuittingFiniteRootWindow.quittingRootAbsorptionMass_eq_sum_singletonMass_add_collisionMass
       root
@@ -80,7 +84,53 @@ theorem minimumTerminalSemantic_literalNash_support_budget
       simp_rw [mul_sub]
       rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
       ring
-    _ ≤ quittingRootTotalNashDefect reward pair.1 root := htransport
+    _ ≤ (quittingTerminalSemanticDebtSum pair -
+          quittingTerminalSemanticDebtSum minimum) +
+        quittingRootTotalNashDefect reward pair.1 root := htransport
+
+/-- At an `epsilon`-Nash root, the simultaneous collision and complementary
+singleton support charge is bounded by tail excess plus `card ι * epsilon`. -/
+theorem terminalSemantic_literalNash_excess_support_le_card_mul
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (minimum pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool) (ε : ℝ)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum minimum ≤
+        quittingTerminalSemanticDebtSum candidate)
+    (hnash : IsεQuittingRootNash reward pair.1 ε root) :
+    quittingTerminalSemanticDebtSum pair *
+          quittingRootCollisionMass root +
+        ∑ who, quittingRootCoalitionMass root {who} *
+          (quittingTerminalSemanticDebtSum pair -
+            quittingTerminalSemanticDebt pair who) ≤
+      (quittingTerminalSemanticDebtSum pair -
+          quittingTerminalSemanticDebtSum minimum) +
+        Fintype.card ι * ε := by
+  have hsupport := terminalSemantic_literalNash_excess_support_budget
+    reward minimum pair root hpair hminimum
+  have hdefect :=
+    quittingRootTotalNashDefect_le_card_mul_of_isεQuittingRootNash
+      reward pair.1 root ε hnash
+  linarith
+
+/-- At a minimum-total-debt semantic pair, collision and complementary
+singleton debt are bounded by the literal root Nash defect. -/
+theorem minimumTerminalSemantic_literalNash_support_budget
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum pair ≤
+        quittingTerminalSemanticDebtSum candidate) :
+    quittingTerminalSemanticDebtSum pair *
+          quittingRootCollisionMass root +
+        ∑ who, quittingRootCoalitionMass root {who} *
+          (quittingTerminalSemanticDebtSum pair -
+            quittingTerminalSemanticDebt pair who) ≤
+      quittingRootTotalNashDefect reward pair.1 root := by
+  simpa using terminalSemantic_literalNash_excess_support_budget
+    reward pair pair root hpair hminimum
 
 /-- Total debt times collision mass is bounded by literal root defect. -/
 theorem minimumTerminalSemantic_debtSum_mul_collisionMass_le_literalDefect

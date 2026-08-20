@@ -85,7 +85,6 @@ theorem singletonClock_mul_distinctDebtFloor_le_tailExcess_add_nashError
     (minimum tail : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool) (clockOwner debtOwner : ι)
     (hne : debtOwner ≠ clockOwner) (eta kappa epsilon : ℝ)
-    (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -127,7 +126,7 @@ theorem singletonClock_mul_distinctDebtFloor_le_tailExcess_add_nashError
         Fintype.card ι * epsilon :=
       singletonMass_mul_otherDebt_le_tailExcess_add_card_mul_nashError
         reward minimum tail root clockOwner epsilon
-          hminimumCarrier hminimum htail hnash
+          hminimum htail hnash
 
 /-! ## Actual-profile alignment without a rowwise Nash premise -/
 
@@ -459,7 +458,6 @@ theorem exists_omitted_transferDefectRole_or_clockDebtCharge
     (root : Fin 5 → PMF Bool) (path : ℕ → Fin 5) (time : ℕ)
     (markedPlayer clockOwner : Fin 5)
     (eta kappa epsilon : ℝ)
-    (hminimumCarrier : minimum ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate)
@@ -495,7 +493,7 @@ theorem exists_omitted_transferDefectRole_or_clockDebtCharge
     have hcharge :=
       singletonClock_mul_distinctDebtFloor_le_tailExcess_add_nashError
         reward minimum tail root clockOwner (path time) heq eta kappa epsilon
-          hminimumCarrier hminimum htail hkappa0 hclockRoot
+          hminimum htail hkappa0 hclockRoot
             hdebtFloor hnash
     norm_num at hcharge ⊢
     exact hcharge
