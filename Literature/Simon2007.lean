@@ -5152,8 +5152,6 @@ def InfiniteUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
 /-- The checked deduction of Corollary 2 from the five-way equivalence and Lemma 6. -/
 theorem corollary2_of_equivalentFive (G : QuittingGame)
     (hnormal : ∀ n, IsNormalPlayer G n)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
-    (hstationary : ¬HasStationaryApproximateEquilibria G)
     (hfive : EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
       (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G) (ExtendedOrbitCondition G)) :
     HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G := by
@@ -5187,7 +5185,7 @@ theorem corollary2_of_equivalentFive (G : QuittingGame)
       intro n
       apply eventually_ge_of_drift_below hδ
       intro i
-      exact lemma6 G hM hnormal hstationary hinstant ha ha1 (horbit i) n
+      exact lemma6_quantitative G hM hnormal ha ha1 (horbit i) n
     choose cutoff hcutoff using heventual
     let start := ∑ n, cutoff n
     have hcutoffStart : ∀ n, cutoff n ≤ start := by
@@ -5210,7 +5208,7 @@ theorem corollary2 (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
     (hinstant : ¬HasInstantApproximateEquilibria G)
     (hstationary : ¬HasStationaryApproximateEquilibria G) :
     HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G := by
-  sorry
+  exact corollary2_of_equivalentFive G hnormal (theorem3 G hstationary hinstant)
 
 /-- Simon (2012), Theorem 2.2, with the corrected stationarily-generated hypothesis. -/
 theorem corollary2_corrected_2012 (G : QuittingGame)
@@ -5218,7 +5216,8 @@ theorem corollary2_corrected_2012 (G : QuittingGame)
     (hinstant : ¬HasInstantApproximateEquilibria G)
     (hstationary : ¬HasStationarilyGeneratedApproximateEquilibria G) :
     HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G := by
-  sorry
+  exact corollary2_of_equivalentFive G hnormal
+    (theorem3_corrected_2012 G hstationary hinstant)
 
 /-! ## 5. Escape games -/
 
