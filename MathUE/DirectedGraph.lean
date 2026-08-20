@@ -297,6 +297,8 @@ end VertexSplit
 
 end Walk
 
+end EdgeGraph
+
 end BoundedDiscrepancy
 
 end Math
