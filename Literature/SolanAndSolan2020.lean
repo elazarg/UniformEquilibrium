@@ -1134,6 +1134,22 @@ have lower-dimensional convex hull. -/
 def DZero (M : ι → ι → ℝ) (w : ι → ℝ) : Prop :=
   w ∈ D M ∧ ∃ who, w who = 0
 
+omit [Fintype ι] [DecidableEq ι] in
+theorem abs_le_one_of_mem_D
+    {M : ι → ι → ℝ} (hbound : MatrixPayoffsBounded M)
+    {value : ι → ℝ} (hvalue : value ∈ D M) (who : ι) :
+    |value who| ≤ 1 := by
+  let cube : Set (ι → ℝ) :=
+    Set.univ.pi (fun _ => Set.Icc (-1 : ℝ) 1)
+  have hcubeConvex : Convex ℝ cube := by
+    exact convex_pi fun _ _ => convex_Icc (-1 : ℝ) 1
+  have hcolumns : Set.range (fun owner => fun row => M row owner) ⊆ cube := by
+    rintro value ⟨owner, rfl⟩ row _
+    exact abs_le.mp (hbound row owner)
+  have hcube : value ∈ cube :=
+    convexHull_min hcolumns hcubeConvex hvalue.1
+  exact abs_le.mpr (hcube who (Set.mem_univ who))
+
 /-! The coordinatewise nonnegative orthant. -/
 def NonnegativeOrthant (ι : Type) :=
   {w : ι → ℝ | ∀ who, 0 ≤ w who}
@@ -1419,6 +1435,7 @@ structure BuildingBlock (M : ι → ι → ℝ) (y : ι → ℝ) (ε : ℝ) wher
   w : ι → ℝ
   wi : ι → ι → ℝ
   z : SimplexWeights ι
+  y_boundary : DZero M y
   w_boundary : DZero M w
   approach : ∀ i,
     (Segment w (fun who => M who i) (wi i) ∧ wi i ≠ w) ∨
@@ -1428,6 +1445,103 @@ structure BuildingBlock (M : ι → ι → ℝ) (y : ι → ℝ) (ε : ℝ) wher
     ∑ i, z.singleton i * wi i who
   complementary : ∀ i, z.singleton i > 0 → wi i i = 0
   nontrivial : 0 < ∑ i, z.singleton i
+
+theorem BuildingBlock.wi_abs_le_one
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    (block : BuildingBlock M y ε) (hbound : MatrixPayoffsBounded M)
+    (owner who : ι) :
+    |block.wi owner who| ≤ 1 := by
+  rcases block.approach owner with
+    ⟨⟨weight, hweight0, hweight1, hvalue⟩, _⟩ |
+      ⟨⟨weight, hweight0, hweight1, hvalue⟩, _⟩
+  · have hbase := abs_le_one_of_mem_D hbound block.w_boundary.1 who
+    have hcolumn := hbound who owner
+    rw [hvalue who]
+    calc
+      |weight * block.w who + (1 - weight) * M who owner| ≤
+          |weight * block.w who| + |(1 - weight) * M who owner| :=
+        abs_add_le _ _
+      _ = weight * |block.w who| + (1 - weight) * |M who owner| := by
+        rw [abs_mul, abs_mul, abs_of_nonneg hweight0,
+          abs_of_nonneg (sub_nonneg.mpr hweight1)]
+      _ ≤ weight * 1 + (1 - weight) * 1 := by
+        exact add_le_add
+          (mul_le_mul_of_nonneg_left hbase hweight0)
+          (mul_le_mul_of_nonneg_left hcolumn
+            (sub_nonneg.mpr hweight1))
+      _ = 1 := by ring
+  · have hbase := abs_le_one_of_mem_D hbound block.y_boundary.1 who
+    have hcolumn := hbound who owner
+    rw [hvalue who]
+    calc
+      |weight * y who + (1 - weight) * M who owner| ≤
+          |weight * y who| + |(1 - weight) * M who owner| :=
+        abs_add_le _ _
+      _ = weight * |y who| + (1 - weight) * |M who owner| := by
+        rw [abs_mul, abs_mul, abs_of_nonneg hweight0,
+          abs_of_nonneg (sub_nonneg.mpr hweight1)]
+      _ ≤ weight * 1 + (1 - weight) * 1 := by
+        exact add_le_add
+          (mul_le_mul_of_nonneg_left hbase hweight0)
+          (mul_le_mul_of_nonneg_left hcolumn
+            (sub_nonneg.mpr hweight1))
+      _ = 1 := by ring
+
+/-! Equation (14): `‖w(y)-y‖∞ ≤ 2 ∑ᵢ zᵢ(y)`. -/
+theorem BuildingBlock.displacement_le_twice_singletonMass
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    (block : BuildingBlock M y ε) (hbound : MatrixPayoffsBounded M) :
+    dist y block.w ≤ 2 * ∑ owner, block.z.singleton owner := by
+  have hmass : 0 ≤ ∑ owner, block.z.singleton owner :=
+    Finset.sum_nonneg fun owner _ => block.z.singleton_nonneg owner
+  rw [dist_eq_norm]
+  rw [pi_norm_le_iff_of_nonneg
+    (show 0 ≤ (2 : ℝ) * ∑ owner, block.z.singleton owner by
+      exact mul_nonneg (by norm_num) hmass)]
+  intro who
+  rw [Pi.sub_apply, Real.norm_eq_abs]
+  have hidentity : y who - block.w who =
+      ∑ owner, block.z.singleton owner *
+        (y who - block.wi owner who) := by
+    rw [block.balance who]
+    have htotal := block.z.total
+    calc
+      y who - (block.z.cemetery * y who +
+          ∑ owner, block.z.singleton owner * block.wi owner who) =
+          (1 - block.z.cemetery) * y who -
+            ∑ owner, block.z.singleton owner * block.wi owner who := by
+          ring
+      _ = (∑ owner, block.z.singleton owner) * y who -
+            ∑ owner, block.z.singleton owner * block.wi owner who := by
+          congr 2
+          linarith
+      _ = ∑ owner, block.z.singleton owner *
+            (y who - block.wi owner who) := by
+          rw [Finset.sum_mul, ← Finset.sum_sub_distrib]
+          apply Finset.sum_congr rfl
+          intro owner _
+          ring
+  rw [hidentity]
+  calc
+    |∑ owner, block.z.singleton owner *
+        (y who - block.wi owner who)| ≤
+        ∑ owner, |block.z.singleton owner *
+          (y who - block.wi owner who)| :=
+      Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ owner, block.z.singleton owner * 2 := by
+      apply Finset.sum_le_sum
+      intro owner _
+      rw [abs_mul, abs_of_nonneg (block.z.singleton_nonneg owner)]
+      apply mul_le_mul_of_nonneg_left _ (block.z.singleton_nonneg owner)
+      apply (abs_sub (y who) (block.wi owner who)).trans
+      have hadd := add_le_add
+        (abs_le_one_of_mem_D hbound block.y_boundary.1 who)
+        (block.wi_abs_le_one hbound owner who)
+      norm_num at hadd
+      exact hadd
+    _ = 2 * ∑ owner, block.z.singleton owner := by
+      rw [← Finset.sum_mul]
+      ring
 
 /-! The value assigned to a public type draw: type zero advances directly
 to `y`, while type `i` runs the corresponding attempt with value `wⁱ`. -/
@@ -1759,6 +1873,7 @@ theorem theorem33Conclusion_of_mem_subfamilyHull
     w := y
     wi := wi
     z := z
+    y_boundary := hy
     w_boundary := hy
     approach := ?_
     lower := ?_
@@ -1814,6 +1929,7 @@ theorem theorem33Conclusion_of_mem_subfamilyHull
 column reaches a second boundary point of `D`. -/
 theorem theorem33Conclusion_of_segment_boundary
     (M : ι → ι → ℝ) {y w : ι → ℝ}
+    (hy : DZero M y)
     (hbound : MatrixPayoffsBounded M) (hdiag : ∀ i, M i i = 0)
     (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M)
     (i : ι) (hyi : y i = 0) (hw : DZero M w)
@@ -1880,6 +1996,7 @@ theorem theorem33Conclusion_of_segment_boundary
     w := w
     wi := wi
     z := z
+    y_boundary := hy
     w_boundary := hw
     approach := ?_
     lower := ?_
@@ -1963,6 +2080,7 @@ theorem theorem33Conclusion_of_slice_boundary
     w := w
     wi := wi
     z := z
+    y_boundary := hy
     w_boundary := hw
     approach := ?_
     lower := ?_
@@ -2005,7 +2123,8 @@ theorem theorem33Conclusion_of_slice_boundary
 first construction in the published Lemma 3.4. -/
 theorem theorem33Conclusion_of_projective_packet
     (M : ι → ι → ℝ) {y w : ι → ℝ}
-    (hw : DZero M w) (hbound : MatrixPayoffsBounded M)
+    (hy : DZero M y) (hw : DZero M w)
+    (hbound : MatrixPayoffsBounded M)
     (hdiag : ∀ i, M i i = 0)
     (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M)
     (cemetery : ℝ) (singleton : ι → ℝ)
@@ -2045,6 +2164,7 @@ theorem theorem33Conclusion_of_projective_packet
     w := w
     wi := wi
     z := z
+    y_boundary := hy
     w_boundary := hw
     approach := ?_
     lower := ?_
@@ -2511,7 +2631,7 @@ theorem lemma3_4
     apply hwy
     funext who
     simp [w, hcemeteryOne, hsingleZero]
-  apply theorem33Conclusion_of_projective_packet M hw hbound hdiag hzero
+  apply theorem33Conclusion_of_projective_packet M hy hw hbound hdiag hzero
     cemetery singleton hcemeteryNonneg hsingletonNonneg htotal
   · exact fun who => rfl
   · intro owner howner
@@ -2595,7 +2715,7 @@ theorem lemma3_5
       exact endpoint_not_mem_tail_segment hpSegment hpy hcolumnNe (hwy ▸ hwTail)
     have hyowner : y owner = 0 := by
       simpa [ZeroCoordinates] using howner
-    exact theorem33Conclusion_of_segment_boundary M hbound hdiag hzero
+    exact theorem33Conclusion_of_segment_boundary M hy hbound hdiag hzero
       owner hyowner hwDZero (segment_of_mem_segment hwFull) hwy hε
   · push Not at hsegmentCase
     obtain ⟨a, ha0, ha1, hq⟩ := segment_of_mem_segment hqSegment
@@ -2962,6 +3082,8 @@ def KiloblockDisplacementThreshold (table : Table ι) (ε : ℝ) : ℝ :=
 
 structure KiloblockConstruction
     (table : Table ι) (ε : ℝ) where
+  soloExitNormalized : SoloExitNormalized table
+  payoffsBounded : TablePayoffsBounded table
   profile : SunspotProfile table
   blockCount : ℕ
   point : Fin (blockCount + 1) → NormalPlayer table → ℝ
@@ -2974,7 +3096,8 @@ structure KiloblockConstruction
     KiloblockDisplacement point buildingBlock
   tracking_small : KiloblockTracking point buildingBlock < ε
   column_negative : ∀ owner,
-    ∃ who, NormalMatrix table who owner < -ε
+    ∃ who, NormalMatrix table who owner <
+      -((2 * Fintype.card (NormalPlayer table) + 1 : ℕ) : ℝ) * ε
   attempt : ∀ k owner,
     BuildingAttempt (NormalMatrix table) (point k) ε
       (buildingBlock k) owner
@@ -3019,6 +3142,48 @@ structure KiloblockConstruction
               (attempt k owner).quitWeight_lt_one
           else PMF.pure false
       | _ => PMF.pure false
+
+theorem KiloblockConstruction.normalMatrix_bounded
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    MatrixPayoffsBounded (NormalMatrix table) := by
+  intro who owner
+  exact construction.payoffsBounded.1
+    (quittingProjectiveSingletonTerminal owner.1) who.1
+
+/-! Total type-`i` mass across the finite kiloblock chain. -/
+def KiloblockConstruction.singletonMass
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) : ℝ :=
+  ∑ k, ∑ owner, (construction.buildingBlock k).z.singleton owner
+
+theorem KiloblockConstruction.displacement_le_twice_singletonMass
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    KiloblockDisplacement construction.point construction.buildingBlock ≤
+      2 * construction.singletonMass := by
+  unfold KiloblockDisplacement KiloblockConstruction.singletonMass
+  calc
+    ∑ k, dist (construction.point k)
+        (construction.buildingBlock k).w ≤
+        ∑ k, 2 * ∑ owner,
+          (construction.buildingBlock k).z.singleton owner := by
+      apply Finset.sum_le_sum
+      intro k _
+      exact BuildingBlock.displacement_le_twice_singletonMass
+        (construction.buildingBlock k) construction.normalMatrix_bounded
+    _ = 2 * ∑ k, ∑ owner,
+        (construction.buildingBlock k).z.singleton owner := by
+      rw [Finset.mul_sum]
+
+theorem KiloblockConstruction.half_displacementThreshold_lt_singletonMass
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    KiloblockDisplacementThreshold table ε / 2 <
+      construction.singletonMass := by
+  have hle := construction.displacement_le_twice_singletonMass
+  have hlarge := construction.displacement_large
+  linarith
 
 /-! The coordinate error in (A.2'') between the endpoint of block `j` and
 the next point in the chain. It is zero outside the actual chain, which lets
