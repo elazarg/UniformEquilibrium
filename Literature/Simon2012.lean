@@ -373,17 +373,6 @@ theorem instantApproximateEquilibria_iff_simon2007 (G : QuittingGame) :
       have hmin := min_le_right δ ((δ + ε) / 2)
       nlinarith
 
-/--
-A stationary approximate equilibrium can be truncated and completed by a
-min-max punishment with arbitrarily small survival error.  This compactness
-and tail estimate is used by the 2012 correction but has no proved declaration
-in Simon 2007 or in the production quitting-game library.
--/
-theorem stationary_implies_stationarilyGenerated (G : QuittingGame) :
-    Literature.Simon2007.HasStationaryApproximateEquilibria G →
-      HasStationarilyGeneratedApproximateEquilibria G := by
-  sorry
-
 /-- A vector lies within distance one of the feasible set. -/
 def WithinOneOfFeasible (G : QuittingGame) (r : Payoff G.Player) : Prop :=
   ∃ z, Feasible G z ∧ EuclideanDist r z ≤ 1
