@@ -1,0 +1,137 @@
+name: Compact Nash master stage 4
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_master_stage4.yml
+      - Literature/Sorin1986/CompactNashMaster3c.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-master-stage4
+  cancel-in-progress: false
+
+jobs:
+  prove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Inspect state
+        id: state
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster4.ok; then echo done=yes >> "$GITHUB_OUTPUT"; else echo done=no >> "$GITHUB_OUTPUT"; fi
+      - name: Wait for stage 3c
+        if: steps.state.outputs.done == 'no'
+        run: |
+          for attempt in $(seq 1 120); do
+            git fetch origin agent/promote-sorin1986
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster.lean 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster3c.ok 2>/dev/null || true
+            test -f Literature/Sorin1986/CompactNashMaster3c.ok && exit 0
+            sleep 10
+          done
+          exit 1
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Append finite satisfiability theorem
+        if: steps.state.outputs.done == 'no'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashMaster.lean')
+          s=p.read_text(); end=s.rindex('\nend CompactNash')
+          addition=r'''
+
+          /-- Every finite family of unilateral Nash inequalities is jointly
+          satisfiable.  Apply finite Nash to the restricted game and realize
+          its mixed equilibrium by compact barycenters. -/
+          theorem exists_satisfies_finset (G : CompactContinuousGame)
+              (F : Finset (Deviation G)) :
+              ∃ profile : ∀ i, G.Strategy i,
+                ∀ d ∈ F,
+                  G.payoff (Function.update profile d.1 d.2) d.1 ≤
+                    G.payoff profile d.1 := by
+            classical
+            let n := Fintype.card G.Player
+            let e : Fin n ≃ G.Player := (Fintype.equivFin G.Player).symm
+            obtain ⟨sigma, hsigma⟩ :=
+              (restrictedGame G e F).kernel.mixed_nash_exists
+            let eS : (∀ j : Fin n, G.Strategy (e j)) ≃
+                (∀ i, G.Strategy i) := Equiv.piCongrLeft G.Strategy e
+            let b : ∀ j : Fin n, G.Strategy (e j) := fun j =>
+              barycenter G (e j) (sigma j) (restrictedStrategy G e F j)
+            let profile : ∀ i, G.Strategy i := eS b
+            refine ⟨profile, ?_⟩
+            intro d hd
+            rcases d with ⟨who, strategy⟩
+            let j : Fin n := e.symm who
+            have hj : e j = who := e.apply_symm_apply who
+            cases hj
+            let member : F := ⟨⟨e j, strategy⟩, hd⟩
+            let label : RestrictedAction G e F j := some ⟨member, rfl⟩
+            have hdecode : restrictedStrategy G e F j label = strategy := by
+              simp [label, member, restrictedStrategy]
+            have hnash := hsigma j (PMF.pure label)
+            change (restrictedGame G e F).mixedPayoff
+                (Function.update sigma j (PMF.pure label)) j ≤
+              (restrictedGame G e F).mixedPayoff sigma j at hnash
+            rw [restricted_mixedPayoff_eq_realized G e F
+                  (Function.update sigma j (PMF.pure label)) j,
+                restricted_mixedPayoff_eq_realized G e F sigma j] at hnash
+            let pureBarycenter : G.Strategy (e j) :=
+              barycenter G (e j) (PMF.pure label)
+                (restrictedStrategy G e F j)
+            let bdev : ∀ k : Fin n, G.Strategy (e k) := fun k =>
+              barycenter G (e k)
+                ((Function.update sigma j (PMF.pure label)) k)
+                (restrictedStrategy G e F k)
+            have hbdev : bdev = Function.update b j pureBarycenter := by
+              funext k
+              by_cases hk : k = j
+              · subst k
+                simp [bdev, b, pureBarycenter]
+              · simp [bdev, b, pureBarycenter, Function.update_of_ne, hk]
+            have hpure :
+                G.payoff (Function.update profile (e j) pureBarycenter) (e j) =
+                  G.payoff (Function.update profile (e j) strategy) (e j) := by
+              have h := payoff_update_barycenter G profile (e j) (e j)
+                (PMF.pure label) (restrictedStrategy G e F j)
+              simpa [pureBarycenter, hdecode] using h
+            have hdevRealized :
+                G.payoff (eS bdev) (e j) =
+                  G.payoff (Function.update profile (e j) strategy) (e j) := by
+              rw [hbdev, piCongrLeft_update G.Strategy e b j pureBarycenter]
+              exact hpure
+            change G.payoff (eS bdev) (e j) ≤ G.payoff (eS b) (e j) at hnash
+            rw [hdevRealized] at hnash
+            exact hnash
+          '''
+          p.write_text(s[:end]+addition+s[end:])
+          PY
+          set -o pipefail
+          lake env lean Literature/Sorin1986/CompactNashMaster.lean 2>&1 | tee Literature/Sorin1986/CompactNashMaster4.log
+          printf 'success\n' > Literature/Sorin1986/CompactNashMaster4.ok
+      - name: Commit finite satisfiability theorem
+        if: steps.state.outputs.done == 'no'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashMaster.lean Literature/Sorin1986/CompactNashMaster4.log Literature/Sorin1986/CompactNashMaster4.ok
+          git commit -m 'Prove finite compact Nash constraints satisfiable'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
