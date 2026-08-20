@@ -397,37 +397,18 @@ def SatisfiesCorrectedLemma2_1Parameter (G : QuittingGame) (ρ : ℝ) : Prop :=
       ρ * QuitProbability G p ≤ EuclideanDist r y ∧
         QuitProbability G p ≤ 1 - ρ
 
-/--
-The compact-set form described in the correction paragraph.  The parameter
-may depend on the chosen compact continuation set.
--/
-def SatisfiesCompactMotionBound (G : QuittingGame)
-    (K : Set (Payoff G.Player)) : Prop :=
-  ∃ ρ : ℝ, 0 < ρ ∧ ρ ≤ 1 ∧ ∀ r ∈ K, ∀ p,
-    IsRational G ρ r → p ∈ EpsilonRow G ρ r →
-      let y := QuittingOneStagePayoff G r p
-      ρ * QuitProbability G p ≤ EuclideanDist r y ∧
-        QuitProbability G p ≤ 1 - ρ
+/-- The product norm is bounded by the paper's Euclidean norm. -/
+private theorem norm_le_euclideanNorm {N : Type} [Fintype N] [Nonempty N]
+    (x : Payoff N) : ‖x‖ ≤ EuclideanNorm x := by
+  apply (pi_norm_le_iff_of_nonneg (show 0 ≤ EuclideanNorm x by
+    exact Real.sqrt_nonneg _)).2
+  intro i
+  rw [euclideanNorm_eq_norm_toLp]
+  simpa only [Real.norm_eq_abs] using
+    PiLp.norm_apply_le (WithLp.toLp 2 x) i
 
 /--
-The compact-set form of Lemma 2.1(2).  This is the corrected statement behind
-the displayed distance-one application: the common parameter may depend on
-`K`.  The proof is the compact-subsequence argument in the paper; neither the
-uncorrected Simon 2007 declaration nor the production quitting-game library
-contains this uniformization.
--/
-theorem lemma2_1_part2_compact (G : QuittingGame)
-    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
-    (K : Set (Payoff G.Player)) (hK : IsCompact K) :
-    SatisfiesCompactMotionBound G K := by
-  sorry
-
-/--
-Lemma 2.1(1), isolated from the corrected compactness clause.  Simon 2007,
-Lemma 5 contains this clause, but that declaration is itself `sorry`-backed.
-The elementary strategic proof therefore remains visible here rather than
-being hidden behind an open literature dependency.
+Lemma 2.1(1), the sign-pattern clause of the corrected 2007 Lemma 5.
 -/
 theorem lemma2_1_part1 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
@@ -435,86 +416,37 @@ theorem lemma2_1_part1 (G : QuittingGame)
     (∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
       ∀ j, IsNormalPlayer G j → ∃ k, k ≠ j ∧ IsNormalPlayer G k ∧
         G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k := by
-  sorry
+  have hinstant2007 : ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
+    fun hold => hinstant ((instantApproximateEquilibria_iff_simon2007 G).mpr hold)
+  have hcorrected :=
+    Literature.Simon2007.lemma5_corrected_2012 G hgenerated hinstant2007
+  exact ⟨hcorrected.1, hcorrected.2.1⟩
 
 /--
 Lemma 2.1(2), with the two corrections printed on page 185.  Simon 2007's
 `lemma5` declaration cannot prove this honestly: its hypothesis excludes only
 stationary equilibria and its conclusion omits `WithinOneOfFeasible`.
-The distance-one feasible neighborhood is enclosed in one compact coordinate
-cube, so the result follows from the compact form above.
+The corrected 2012 declaration uses the distance-one feasible neighborhood;
+the only adapter here is from the product norm to the paper's Euclidean norm.
 -/
 theorem lemma2_1_part2 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ := by
-  classical
-  let C : ℝ :=
-    ∑ A : {A : Finset G.Player // A.Nonempty},
-      ∑ i : G.Player, |G.reward A i|
-  have C_nonneg : 0 ≤ C :=
-    Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _
-  have rewardEntry_le
-      (A : {A : Finset G.Player // A.Nonempty}) (i : G.Player) :
-      |G.reward A i| ≤ C := by
-    dsimp only [C]
-    calc
-      |G.reward A i| ≤ ∑ j : G.Player, |G.reward A j| := by
-        exact Finset.single_le_sum (f := fun j : G.Player => |G.reward A j|)
-          (fun _ _ => abs_nonneg _) (Finset.mem_univ i)
-      _ ≤ ∑ A' : {A : Finset G.Player // A.Nonempty},
-            ∑ j : G.Player, |G.reward A' j| := by
-        exact Finset.single_le_sum
-          (f := fun A' : {A : Finset G.Player // A.Nonempty} =>
-            ∑ j : G.Player, |G.reward A' j|)
-          (fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _)
-          (Finset.mem_univ A)
-  let feasibleCube : Set (Payoff G.Player) :=
-    Set.univ.pi fun _ => Set.Icc (-C) C
-  have feasibleCube_convex : Convex ℝ feasibleCube := by
-    exact convex_pi fun _ _ => convex_Icc _ _
-  have generators_subset : range G.reward ∪ {0} ⊆ feasibleCube := by
-    intro x hx
-    rcases hx with hx | hx
-    · obtain ⟨A, rfl⟩ := hx
-      intro i _
-      exact abs_le.mp (rewardEntry_le A i)
-    · rw [Set.mem_singleton_iff.mp hx]
-      intro i _
-      simp only [Pi.zero_apply]
-      exact ⟨neg_nonpos.mpr C_nonneg, C_nonneg⟩
-  have feasible_subset : {z | Feasible G z} ⊆ feasibleCube := by
-    intro z hz
-    exact convexHull_min generators_subset feasibleCube_convex hz
-  let compactCube : Set (Payoff G.Player) :=
-    Set.univ.pi fun _ => Set.Icc (-(C + 1)) (C + 1)
-  have compactCube_compact : IsCompact compactCube :=
-    isCompact_univ_pi fun _ => isCompact_Icc
-  obtain ⟨ρ, hρ, hρ1, hbound⟩ :=
-    lemma2_1_part2_compact G hgenerated hinstant compactCube compactCube_compact
-  refine ⟨ρ, hρ, hρ1, ?_⟩
+  have hinstant2007 : ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
+    fun hold => hinstant ((instantApproximateEquilibria_iff_simon2007 G).mpr hold)
+  obtain ⟨_, _, ρ, hρ, hρ1, hbound⟩ :=
+    Literature.Simon2007.lemma5_corrected_2012 G hgenerated hinstant2007
+  refine ⟨ρ, hρ, hρ1.le, ?_⟩
   intro r p hnear hrational hp
-  apply hbound r
-  · obtain ⟨z, hz, hdist⟩ := hnear
-    have hzcube := feasible_subset hz
-    intro i _
-    have hzabs : |z i| ≤ C := abs_le.mpr (hzcube i (Set.mem_univ i))
-    have hcoordinate : |(r - z) i| ≤ EuclideanNorm (r - z) := by
-      rw [euclideanNorm_eq_norm_toLp]
-      simpa only [Pi.sub_apply, Real.norm_eq_abs] using
-        PiLp.norm_apply_le (WithLp.toLp 2 (r - z)) i
-    have hdiff : |r i - z i| ≤ 1 := by
-      exact hcoordinate.trans hdist
-    apply abs_le.mp
-    calc
-      |r i| = |(r i - z i) + z i| := by ring_nf
-      _ ≤ |r i - z i| + |z i| := abs_add_le _ _
-      _ ≤ 1 + C := add_le_add hdiff hzabs
-      _ = C + 1 := add_comm _ _
-  · exact hrational
-  · exact hp
+  have hnear' : Literature.Simon2007.NearFeasible G 1 r := by
+    obtain ⟨z, hz, hdist⟩ := hnear
+    exact ⟨z, hz, (norm_le_euclideanNorm (r - z)).trans hdist⟩
+  obtain ⟨hmotion, hquit⟩ := hbound r hnear' hrational p hp
+  exact ⟨hmotion.trans (norm_le_euclideanNorm (r - QuittingOneStagePayoff G r p)),
+    hquit⟩
 
-/-- Lemma 2.1, combining its strategic and compact-motion clauses. -/
+/-- Lemma 2.1, combining its two corrected clauses. -/
 theorem lemma2_1 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
@@ -524,6 +456,28 @@ theorem lemma2_1 (G : QuittingGame)
       ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ := by
   exact ⟨lemma2_1_part1 G hgenerated hinstant,
     lemma2_1_part2 G hgenerated hinstant⟩
+
+/-- The unnumbered compact-set assertion in the correction paragraph after Lemma 2.1. -/
+def SatisfiesCompactMotionBound (G : QuittingGame)
+    (K : Set (Payoff G.Player)) : Prop :=
+  ∃ ρ : ℝ, 0 < ρ ∧ ρ ≤ 1 ∧ ∀ r ∈ K, ∀ p,
+    IsRational G ρ r → p ∈ EpsilonRow G ρ r →
+      let y := QuittingOneStagePayoff G r p
+      ρ * QuitProbability G p ≤ EuclideanDist r y ∧
+        QuitProbability G p ≤ 1 - ρ
+
+/--
+The correction paragraph says the proof of the old Lemma 5(2) works on each
+fixed compact continuation set, with the parameter depending on that set.
+This unnumbered assertion is used below only for the singleton `{r}` in
+Lemma 2.3.
+-/
+theorem lemma2_1_part2_compact (G : QuittingGame)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (K : Set (Payoff G.Player)) (hK : IsCompact K) :
+    SatisfiesCompactMotionBound G K := by
+  sorry
 
 /-- A vector lies within Euclidean distance `ε` of the feasible vectors. -/
 def NearFeasible (G : QuittingGame) (ε : ℝ)
