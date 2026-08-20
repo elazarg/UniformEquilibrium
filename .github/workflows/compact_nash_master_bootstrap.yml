@@ -1,0 +1,84 @@
+name: Compact Nash master bootstrap
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_master_bootstrap.yml
+      - Literature/Sorin1986/CompactNashStage2.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-master-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Skip completed bootstrap
+        id: state
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster2.ok; then echo done=yes >> "$GITHUB_OUTPUT"; else echo done=no >> "$GITHUB_OUTPUT"; fi
+      - name: Wait for validated stage 2
+        if: steps.state.outputs.done == 'no'
+        run: |
+          for attempt in $(seq 1 90); do
+            git fetch origin agent/promote-sorin1986
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashScratch.lean 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashStage2.ok 2>/dev/null || true
+            test -f Literature/Sorin1986/CompactNashStage2.ok && exit 0
+            sleep 10
+          done
+          echo 'Stage 2 marker did not appear' >&2
+          exit 1
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Extract isolated validated core
+        if: steps.state.outputs.done == 'no'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          src=Path('Literature/Sorin1986/CompactNashScratch.lean').read_text()
+          start=src.index('namespace CompactNash\n')
+          candidates=[
+            src.find('/-- Finite mixed payoff is the independent product expectation', start),
+            src.find('theorem mixedPayoff_eq_productExpectation', start),
+            src.find('/-- Reindexing a dependent profile', start),
+            src.find('theorem piCongrLeft_update', start),
+          ]
+          cuts=[x for x in candidates if x >= 0]
+          cut=min(cuts) if cuts else src.rindex('\nend CompactNash')
+          body=src[start:cut].rstrip()+'\n\nend CompactNash\n\nend Literature.Sorin1986\n'
+          out='''import Literature.Sorin1986\nimport UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed\n\nnoncomputable section\n\nnamespace Literature.Sorin1986\n\nopen GameTheory Set Filter\nopen scoped BigOperators Topology\n\n'''+body
+          Path('Literature/Sorin1986/CompactNashMaster.lean').write_text(out)
+          PY
+      - name: Compile isolated core
+        if: steps.state.outputs.done == 'no'
+        run: |
+          lake env lean Literature/Sorin1986/CompactNashMaster.lean 2>&1 | tee Literature/Sorin1986/CompactNashMaster2.log
+          printf 'success\n' > Literature/Sorin1986/CompactNashMaster2.ok
+      - name: Commit isolated core
+        if: steps.state.outputs.done == 'no'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashMaster.lean Literature/Sorin1986/CompactNashMaster2.log Literature/Sorin1986/CompactNashMaster2.ok
+          git commit -m 'Bootstrap isolated compact Nash proof core'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
