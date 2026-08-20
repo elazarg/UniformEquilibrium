@@ -480,9 +480,15 @@ def IsSelfPerfect (G : NormalStochasticGame) (S : StochasticSemantics G) : Prop 
   ∀ ε : ℝ, 0 < ε → ∃ profile, EpsilonSelfPerfect G S ε profile
 
 /-- Simon [16]: approximate equilibria in a normal stochastic game imply perfection. -/
-theorem approximate_equilibria_imply_perfect (G : NormalStochasticGame)
-    (S : StochasticSemantics G) : HasApproximateEquilibria G S → IsPerfect G S := by
-  sorry
+def ApproximateEquilibriaImplyPerfect : Prop :=
+  ∀ (G : NormalStochasticGame) (S : StochasticSemantics G),
+    HasApproximateEquilibria G S → IsPerfect G S
+
+/-!
+The implication above is cited from Simon [16], not proved in the 2007 paper.  It is kept
+as the reusable statement of that imported result rather than duplicated by a theorem with
+the same proposition as its entire conclusion.
+-/
 
 /-! ## 3. From perfection to approximate equilibria -/
 
