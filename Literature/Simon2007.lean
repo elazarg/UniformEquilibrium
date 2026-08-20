@@ -2799,6 +2799,192 @@ theorem HasInstantApproximateEquilibria.hasQuitApproximateEquilibria
   convert hequilibrium using 1
   ring
 
+/-- A positive stationary solo-quitting probability yields the corresponding solo reward. -/
+private theorem quitPayoff_constant_rareQuitRow (G : QuittingGame) (i n : G.Player)
+    (a : Set.Icc (0 : ℝ) 1) (ha : 0 < (a : ℝ)) :
+    QuitPayoff G (fun _ => rareQuitRow G i a) n =
+      G.reward ⟨{i}, Finset.singleton_nonempty i⟩ n := by
+  let profile : QuitProfile G := fun _ => rareQuitRow G i a
+  have hrowProbability : ∀ t, QuitProbability G (profile t) = a := by
+    intro t
+    have hsurvival := one_sub_quitProbability_rareQuitRow G i a
+    dsimp only [profile]
+    linarith
+  have hvanish : Tendsto (tailSurvival G profile 0) atTop (nhds 0) := by
+    have hbaseNonnegative : 0 ≤ 1 - (a : ℝ) := sub_nonneg.mpr a.property.2
+    have hbaseLess : 1 - (a : ℝ) < 1 := by linarith
+    have heq : tailSurvival G profile 0 = fun k => (1 - (a : ℝ)) ^ k := by
+      funext k
+      simp only [tailSurvival, Nat.zero_add]
+      simp_rw [hrowProbability]
+      simp
+    rw [heq]
+    exact tendsto_pow_atTop_nhds_zero_of_lt_one (by linarith) hbaseLess
+  have hmass := tsum_tailSurvival_mul_quitProbability_eq_one G profile 0 hvanish
+  change (∑' k, tailSurvival G profile 0 k *
+      quittingRewardPart G (profile k) n) = _
+  rw [show (∑' k, tailSurvival G profile 0 k *
+      quittingRewardPart G (profile k) n) =
+      (∑' k, G.reward ⟨{i}, Finset.singleton_nonempty i⟩ n *
+        (tailSurvival G profile 0 k * QuitProbability G (profile k))) by
+    apply tsum_congr
+    intro k
+    rw [quittingRewardPart_rareQuitRow G i n a, hrowProbability k]
+    ring]
+  rw [tsum_mul_left]
+  simp only [Nat.zero_add] at hmass
+  rw [hmass, mul_one]
+
+/-- A nonnegative solo quitter who harms no other solo payoff yields stationary equilibria. -/
+private theorem hasStationaryApproximateEquilibria_of_soloPayoff_nonnegative
+    (G : QuittingGame) (j : G.Player) (hj : 0 ≤ SoloPayoff G j)
+    (hcross : ∀ n, n ≠ j →
+      SoloPayoff G n ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n) :
+    HasStationaryApproximateEquilibria G := by
+  classical
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  intro ε hε
+  let av : ℝ := min (1 / 2) (ε / (4 * M))
+  have hav0 : 0 < av :=
+    lt_min (by norm_num) (div_pos hε (mul_pos (by norm_num) hMpos))
+  have hav1 : av < 1 := (min_le_left _ _).trans_lt (by norm_num)
+  have havError : 2 * M * av ≤ ε := by
+    have havBound := min_le_right (1 / 2) (ε / (4 * M))
+    dsimp only [av]
+    calc
+      2 * M * av ≤ 2 * M * (ε / (4 * M)) :=
+        mul_le_mul_of_nonneg_left havBound (by positivity)
+      _ = ε / 2 := by field_simp; ring
+      _ ≤ ε := by linarith
+  let a : Set.Icc (0 : ℝ) 1 := ⟨av, le_of_lt hav0, le_of_lt hav1⟩
+  let base : QuitRow G := rareQuitRow G j a
+  let profile : QuitProfile G := fun _ => base
+  refine ⟨base, ?_⟩
+  intro n q
+  let deviation := profile.replace G n q
+  have hbasePayoff : QuitPayoff G profile n =
+      G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n := by
+    exact quitPayoff_constant_rareQuitRow G j n a (by simpa [a] using hav0)
+  by_cases hnj : n = j
+  · subst n
+    have hrow : ∀ t, deviation t =
+        QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j (q t) := by
+      intro t
+      funext k
+      by_cases hkj : k = j
+      · subst k
+        simp [deviation, profile, base, rareQuitRow, QuitProfile.replace, QuitRow.replace]
+      · simp [deviation, profile, base, rareQuitRow, QuitProfile.replace,
+          QuitRow.replace, hkj]
+    have hreward : ∀ t,
+        quittingRewardPart G (deviation t) j ≤
+          SoloPayoff G j * QuitProbability G (deviation t) := by
+      intro t
+      rw [hrow, quittingRewardPart_allContinue_replace]
+      rw [quitProbability_allContinue_replace]
+      ring_nf
+      exact le_rfl
+    have hdeviation : QuitPayoff G deviation j ≤ SoloPayoff G j :=
+      quitPayoff_le_of_nonnegative_rewardPart_le G deviation j (SoloPayoff G j) hj
+        hreward
+    rw [hbasePayoff]
+    exact hdeviation.trans (by simp [SoloPayoff]; linarith)
+  · have hbaseN : base n = (0 : Set.Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      simp [base, rareQuitRow, QuitRow.replace, hnj]
+    have hnzero : base.replace G n 0 = base := by
+      rw [← hbaseN]
+      exact QuitRow.replace_self G base n
+    have hrow : ∀ t, deviation t = base.replace G n (q t) := fun _ => rfl
+    have hvanish : Tendsto (tailSurvival G deviation 0) atTop (nhds 0) := by
+      apply squeeze_zero
+      · intro t
+        exact Finset.prod_nonneg fun l _ =>
+          sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+      · intro t
+        calc
+          tailSurvival G deviation 0 t ≤
+              ∏ l ∈ Finset.range t, (1 - av) := by
+            apply Finset.prod_le_prod
+            · intro l hl
+              exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+            · intro l hl
+              rw [hrow]
+              have hs := one_sub_quitProbability_replace G base n (q l)
+              rw [hnzero, one_sub_quitProbability_rareQuitRow] at hs
+              simp only [Nat.zero_add]
+              rw [hs]
+              exact mul_le_of_le_one_left (sub_nonneg.mpr (le_of_lt hav1))
+                (by linarith [(q l).property.1])
+          _ = (1 - av) ^ t := by simp
+      · exact tendsto_pow_atTop_nhds_zero_of_lt_one (by linarith) (by linarith)
+    have hmass := tsum_tailSurvival_mul_quitProbability_eq_one G deviation 0 hvanish
+    let rewardJ := G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n
+    let C := rewardJ + 2 * M * av
+    have hcomm : base.replace G n 1 =
+        (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n 1).replace G j a := by
+      exact QuitRow.replace_comm G _ (Ne.symm hnj) a 1
+    have hforced : quittingRewardPart G (base.replace G n 1) n ≤
+        SoloPayoff G n + 2 * M * av := by
+      rw [hcomm, quittingRewardPart_replace_affine]
+      have hsoloJZero :
+          (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n 1).replace G j 0 =
+            QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n 1 := by
+        have hjzero :
+            QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n 1 j = 0 := by
+          apply Subtype.ext
+          simp [QuitRow.replace, Ne.symm hnj]
+        simpa only [hjzero] using QuitRow.replace_self G
+          (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n 1) j
+      rw [hsoloJZero, QuitRow.zero_replace_one, quittingRewardPart_soloQuitRow]
+      let both :=
+        (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n 1).replace G j 1
+      have hbothAbs : |quittingRewardPart G both n| ≤ M := by
+        calc
+          |quittingRewardPart G both n| ≤ M * QuitProbability G both :=
+            abs_quittingRewardPart_le G both n (fun A => le_of_lt (hM.2.2 A n))
+          _ ≤ M * 1 := mul_le_mul_of_nonneg_left
+            (quitProbability_mem_Icc G both).2 hM0
+          _ = M := mul_one M
+      have hboth : quittingRewardPart G both n ≤ M :=
+        (le_abs_self _).trans hbothAbs
+      have hsoloLower : -M < SoloPayoff G n :=
+        neg_lt_of_abs_lt (hM.2.2 ⟨{n}, Finset.singleton_nonempty n⟩ n)
+      change av * quittingRewardPart G both n +
+          (1 - av) * SoloPayoff G n ≤ SoloPayoff G n + 2 * M * av
+      nlinarith [mul_nonneg (le_of_lt hav0) (le_of_lt hMpos)]
+    have hforcedC : quittingRewardPart G (base.replace G n 1) n ≤ C := by
+      exact hforced.trans (by dsimp only [C, rewardJ]; linarith [hcross n hnj])
+    have hbaseReward : quittingRewardPart G base n = av * rewardJ := by
+      simpa only [base, a] using quittingRewardPart_rareQuitRow G j n a
+    have hbaseC : quittingRewardPart G base n ≤ av * C := by
+      rw [hbaseReward]
+      dsimp only [C]
+      nlinarith [mul_nonneg (le_of_lt hav0) (mul_nonneg hM0 (le_of_lt hav0))]
+    have hrewards : ∀ t,
+        quittingRewardPart G (deviation t) n ≤ C * QuitProbability G (deviation t) := by
+      intro t
+      rw [hrow, quittingRewardPart_replace_affine, hnzero]
+      have hs := one_sub_quitProbability_replace G base n (q t)
+      rw [hnzero, one_sub_quitProbability_rareQuitRow] at hs
+      have hquit : QuitProbability G (base.replace G n (q t)) =
+          (q t : ℝ) + (1 - (q t : ℝ)) * av := by
+        change 1 - QuitProbability G (base.replace G n (q t)) =
+          (1 - (q t : ℝ)) * (1 - av) at hs
+        linarith
+      rw [hquit]
+      have hfirst := mul_le_mul_of_nonneg_left hforcedC (q t).property.1
+      have hsecond := mul_le_mul_of_nonneg_left hbaseC
+        (sub_nonneg.mpr (q t).property.2)
+      nlinarith
+    have hdeviation : QuitPayoff G deviation n ≤ C :=
+      quitPayoff_le_of_rewardPart_le G deviation n C hrewards (by simpa using hmass)
+    rw [hbasePayoff]
+    dsimp only [C, rewardJ] at hdeviation
+    exact hdeviation.trans (by linarith)
+
 /-- If stationary approximate equilibria fail, some normal player has positive solo payoff. -/
 private theorem exists_positive_normalPlayer_of_not_stationary
     (G : QuittingGame) (hstationary : ¬HasStationaryApproximateEquilibria G) :
@@ -2836,6 +3022,24 @@ private theorem exists_positive_normalPlayer_of_not_stationary
   change QuitPayoff G deviation n ≤ QuitPayoff G (fun _ => zeroRow) n + ε
   rw [hzeroPayoff]
   linarith
+
+/-- A positive normal solo quitter must strictly harm another normal player. -/
+private theorem exists_harmed_normalPlayer_of_positive
+    (G : QuittingGame) (hstationary : ¬HasStationaryApproximateEquilibria G)
+    (j : G.Player) (_hjnormal : IsNormalPlayer G j) (hjpositive : 0 < SoloPayoff G j) :
+    ∃ n, n ≠ j ∧ IsNormalPlayer G n ∧
+      G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n < SoloPayoff G n := by
+  by_contra hharmed
+  push Not at hharmed
+  have hcross : ∀ n, n ≠ j →
+      SoloPayoff G n ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n := by
+    intro n hnj
+    by_cases hnnormal : IsNormalPlayer G n
+    · exact hharmed n hnj hnnormal
+    · exact (lt_of_not_ge hnnormal).le.trans
+        ((lemma3 G n hnnormal).2 j (Ne.symm hnj))
+  exact hstationary
+    (hasStationaryApproximateEquilibria_of_soloPayoff_nonnegative G j hjpositive.le hcross)
 
 /--
 Lemma 5.  Without stationary or instant approximate equilibria there is a positive normal
