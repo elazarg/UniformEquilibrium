@@ -1,0 +1,137 @@
+name: Compact Nash rescue stage 4
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_rescue_stage4.yml
+      - Literature/Sorin1986/CompactNashStage3.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-rescue-stage4
+  cancel-in-progress: true
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+      - name: Determine need
+        id: need
+        run: |
+          if test -f Literature/Sorin1986/CompactNashStage4.ok; then echo value=no >> "$GITHUB_OUTPUT"; else echo value=yes >> "$GITHUB_OUTPUT"; fi
+      - uses: leanprover/lean-action@v1
+        if: steps.need.outputs.value == 'yes'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Install robust stage 4
+        if: steps.need.outputs.value == 'yes'
+        run: |
+          test -f Literature/Sorin1986/CompactNashStage3.ok
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashScratch.lean')
+          s=p.read_text()
+          cut=s.find('/-- Every finite family of unilateral Nash inequalities')
+          if cut < 0: cut=s.index('\nend CompactNash')
+          prefix=s[:cut]
+          suffix='\nend CompactNash\n\nend Literature.Sorin1986\n'
+          code=r'''
+          /-- Every finite family of unilateral Nash inequalities is jointly
+          satisfiable. -/
+          theorem exists_satisfies_finset (G : CompactContinuousGame)
+              (F : Finset (Deviation G)) :
+              ∃ profile : ∀ i, G.Strategy i,
+                ∀ d ∈ F,
+                  G.payoff (Function.update profile d.1 d.2) d.1 ≤
+                    G.payoff profile d.1 := by
+            classical
+            let n := Fintype.card G.Player
+            let e : Fin n ≃ G.Player := (Fintype.equivFin G.Player).symm
+            let H : FiniteStageGame := restrictedGame G e F
+            obtain ⟨sigma, hsigma⟩ := H.kernel.mixed_nash_exists
+            let eS : (∀ j : Fin n, G.Strategy (e j)) ≃
+                (∀ i, G.Strategy i) := Equiv.piCongrLeft G.Strategy e
+            let b : ∀ j : Fin n, G.Strategy (e j) := fun j =>
+              barycenter G (e j) (sigma j) (restrictedStrategy G e F j)
+            let profile : ∀ i, G.Strategy i := eS b
+            refine ⟨profile, ?_⟩
+            intro d hd
+            rcases d with ⟨who, strategy⟩
+            let j : Fin n := e.symm who
+            have hj : e j = who := e.apply_symm_apply who
+            subst who
+            let member : F := ⟨⟨e j, strategy⟩, hd⟩
+            let label : RestrictedAction G e F j := some ⟨member, rfl⟩
+            have hdecode : restrictedStrategy G e F j label = strategy := by
+              rfl
+            have hnash := hsigma j (PMF.pure label)
+            change H.mixedPayoff (Function.update sigma j (PMF.pure label)) j ≤
+              H.mixedPayoff sigma j at hnash
+            rw [restricted_mixedPayoff_eq_realized G e F
+                  (Function.update sigma j (PMF.pure label)) j,
+                restricted_mixedPayoff_eq_realized G e F sigma j] at hnash
+            let pureBarycenter : G.Strategy (e j) :=
+              barycenter G (e j) (PMF.pure label)
+                (restrictedStrategy G e F j)
+            let bdev : ∀ k : Fin n, G.Strategy (e k) := fun k =>
+              barycenter G (e k) ((Function.update sigma j (PMF.pure label)) k)
+                (restrictedStrategy G e F k)
+            have hbdev : bdev = Function.update b j pureBarycenter := by
+              funext k
+              by_cases hk : k = j
+              · subst k
+                simp [bdev, b, pureBarycenter]
+              · simp [bdev, b, pureBarycenter, Function.update_of_ne, hk]
+            have hpure :
+                G.payoff (Function.update profile (e j) pureBarycenter) (e j) =
+                  G.payoff (Function.update profile (e j) strategy) (e j) := by
+              have h := payoff_update_barycenter G profile (e j) (e j)
+                (PMF.pure label) (restrictedStrategy G e F j)
+              simpa [pureBarycenter, hdecode] using h
+            have hdevRealized :
+                G.payoff (eS bdev) (e j) =
+                  G.payoff (Function.update profile (e j) strategy) (e j) := by
+              rw [hbdev]
+              have hreindex := piCongrLeft_update G.Strategy e b j pureBarycenter
+              rw [hreindex]
+              exact hpure
+            change G.payoff (eS bdev) (e j) ≤ G.payoff (eS b) (e j) at hnash
+            rw [hdevRealized] at hnash
+            exact hnash
+          '''
+          p.write_text(prefix+code+suffix)
+          PY
+      - name: Compile
+        if: steps.need.outputs.value == 'yes'
+        id: compile
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          lake build Literature.Sorin1986.CompactNashScratch 2>&1 | tee /tmp/compact-nash-rescue-stage4.log
+      - name: Record
+        if: steps.need.outputs.value == 'yes'
+        run: |
+          cp /tmp/compact-nash-rescue-stage4.log Literature/Sorin1986/CompactNashRescueStage4.log
+          if [ "${{ steps.compile.outcome }}" = success ]; then printf 'success\n' > Literature/Sorin1986/CompactNashStage4.ok; fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashScratch.lean Literature/Sorin1986/CompactNashRescueStage4.log Literature/Sorin1986/CompactNashStage4.ok
+          git commit -m 'Repair compact Nash finite constraints' || exit 0
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
+      - name: Fail if invalid
+        if: steps.need.outputs.value == 'yes' && steps.compile.outcome != 'success'
+        run: exit 1
