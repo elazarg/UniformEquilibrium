@@ -33,7 +33,7 @@ noncomputable section
 namespace Literature.Sorin1986
 
 open GameTheory Set Filter
-open scoped BigOperators Topology
+open scoped BigOperators ENNReal NNReal Topology
 
 /-! ## 1. Notation and preliminaries -/
 
@@ -1180,6 +1180,1383 @@ private theorem payoff_fromBehavior {G : FiniteStageGame} {n : G.Horizon}
 
 end FinitePresentation
 
+namespace DiscountedPresentation
+
+open MeasureTheory
+open Stochastic.Game
+open StochasticGame.NativeBridge
+
+private abbrev Native (G : FiniteStageGame) :=
+  G.repeatedGame.toNative
+
+private abbrev Protocol (G : FiniteStageGame) :=
+  (Native G).perfectMonitoring PUnit.unit
+
+/-- A total deterministic contingent plan in the native protocol. -/
+private abbrev Plan (G : FiniteStageGame) (who : G.Player) :=
+  (Protocol G).Policy who
+
+private instance executionHistoryMeasurableSpace (G : FiniteStageGame) :
+    MeasurableSpace ((Native G).toExecution PUnit.unit).History :=
+  ⊤
+
+private instance executionHistoryDiscreteMeasurableSpace
+    (G : FiniteStageGame) :
+    DiscreteMeasurableSpace
+      ((Native G).toExecution PUnit.unit).History :=
+  ⟨fun _ => MeasurableSet.of_discrete⟩
+
+private instance choiceMeasurableSpace (G : FiniteStageGame)
+    (who : G.Player) (info : (Protocol G).InfoState who) :
+    MeasurableSpace ((Protocol G).Choice who info) :=
+  ⊤
+
+private instance choiceDiscreteMeasurableSpace (G : FiniteStageGame)
+    (who : G.Player) (info : (Protocol G).InfoState who) :
+    DiscreteMeasurableSpace ((Protocol G).Choice who info) :=
+  ⟨fun _ => MeasurableSet.of_discrete⟩
+
+private instance choiceTopologicalSpace (G : FiniteStageGame)
+    (who : G.Player) (info : (Protocol G).InfoState who) :
+    TopologicalSpace ((Protocol G).Choice who info) :=
+  ⊥
+
+private instance choiceDiscreteTopology (G : FiniteStageGame)
+    (who : G.Player) (info : (Protocol G).InfoState who) :
+    DiscreteTopology ((Protocol G).Choice who info) :=
+  discreteTopology_bot _
+
+private instance choiceFintype (G : FiniteStageGame)
+    (who : G.Player) (info : (Protocol G).InfoState who) :
+    Fintype ((Protocol G).Choice who info) :=
+  Fintype.ofEquiv (G.Action who)
+    ((Native G).actionChoiceEquiv PUnit.unit who info)
+
+private instance nativeStageRecordFinite (G : FiniteStageGame) :
+    Finite (Native G).StageRecord := by
+  let encode : (Native G).StageRecord →
+      (Native G).State ×
+        ((∀ who, (Native G).Action who) × (Native G).State) :=
+    fun record => (record.source, record.joint, record.target)
+  apply Finite.of_injective encode
+  intro first second heq
+  cases first
+  cases second
+  cases heq
+  rfl
+
+/-- A mixed discounted strategy is an ordinary probability law on total
+contingent plans. -/
+private abbrev Strategy (G : FiniteStageGame) (who : G.Player) :=
+  ProbabilityMeasure (Plan G who)
+
+private instance executionHistoryMeasurableSingletonClass
+    (G : FiniteStageGame) :
+    MeasurableSingletonClass
+      ((Native G).toExecution PUnit.unit).History :=
+  ⟨fun _ => MeasurableSet.of_discrete⟩
+
+private instance infoStateCountable (G : FiniteStageGame)
+    (who : G.Player) : Countable ((Protocol G).InfoState who) := by
+  letI : Countable (Native G).StageRecord := inferInstance
+  letI : Countable (Native G).PublicHistory := inferInstance
+  infer_instance
+
+private noncomputable instance planInhabited (G : FiniteStageGame)
+    (who : G.Player) : Inhabited (Plan G who) :=
+  ⟨fun info => (Native G).actionChoiceEquiv PUnit.unit who info
+    (Classical.choice (G.nonemptyAction who))⟩
+
+private instance planCompact (G : FiniteStageGame) (who : G.Player) :
+    CompactSpace (Plan G who) := by
+  infer_instance
+
+private instance planSecondCountable (G : FiniteStageGame)
+    (who : G.Player) : SecondCountableTopology (Plan G who) := by
+  infer_instance
+
+private instance planPseudoMetrizable (G : FiniteStageGame)
+    (who : G.Player) :
+    TopologicalSpace.PseudoMetrizableSpace (Plan G who) := by
+  infer_instance
+
+private instance planOpensMeasurable (G : FiniteStageGame)
+    (who : G.Player) : OpensMeasurableSpace (Plan G who) := by
+  infer_instance
+
+private instance strategyCompact (G : FiniteStageGame)
+    (who : G.Player) : CompactSpace (Strategy G who) := by
+  infer_instance
+
+private instance strategyNonempty (G : FiniteStageGame)
+    (who : G.Player) : Nonempty (Strategy G who) :=
+  inferInstance
+
+/-- Project a real coefficient to the unit interval. -/
+private def coefficient (t : ℝ) : ℝ :=
+  max 0 (min 1 t)
+
+private theorem coefficient_nonneg (t : ℝ) : 0 ≤ coefficient t :=
+  le_max_left _ _
+
+private theorem coefficient_le_one (t : ℝ) : coefficient t ≤ 1 := by
+  unfold coefficient
+  exact max_le zero_le_one (min_le_left _ _)
+
+private theorem coefficient_eq {t : ℝ} (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) :
+    coefficient t = t := by
+  simp [coefficient, ht₀, ht₁]
+
+private def nnCoefficient (t : ℝ) : ℝ≥0 :=
+  ⟨coefficient t, coefficient_nonneg t⟩
+
+private def complementCoefficient (t : ℝ) : ℝ≥0 :=
+  ⟨1 - coefficient t, sub_nonneg.mpr (coefficient_le_one t)⟩
+
+private theorem nnCoefficient_continuous : Continuous nnCoefficient := by
+  apply Continuous.subtype_mk
+  unfold coefficient
+  exact continuous_const.max (continuous_const.min continuous_id)
+
+private def scaleFiniteMeasure {X : Type} [MeasurableSpace X]
+    (c : ℝ≥0) (law : FiniteMeasure X) : FiniteMeasure X :=
+  c • law
+
+private theorem scaleFiniteMeasure_continuous {X : Type}
+    [MeasurableSpace X] [TopologicalSpace X] [OpensMeasurableSpace X] :
+    Continuous fun p : ℝ≥0 × FiniteMeasure X =>
+      scaleFiniteMeasure p.1 p.2 := by
+  unfold scaleFiniteMeasure
+  exact continuous_smul
+
+@[simp]
+private theorem scaleFiniteMeasure_zero {X : Type} [MeasurableSpace X]
+    (law : FiniteMeasure X) : scaleFiniteMeasure 0 law = 0 := by
+  unfold scaleFiniteMeasure
+  exact zero_smul ℝ≥0 law
+
+@[simp]
+private theorem scaleFiniteMeasure_one {X : Type} [MeasurableSpace X]
+    (law : FiniteMeasure X) : scaleFiniteMeasure 1 law = law := by
+  unfold scaleFiniteMeasure
+  exact one_smul ℝ≥0 law
+
+private def scaleMeasure {X : Type} [MeasurableSpace X]
+    (c : ℝ≥0) (law : Measure X) : Measure X :=
+  c • law
+
+@[simp]
+private theorem scaleMeasure_zero {X : Type} [MeasurableSpace X]
+    (law : Measure X) : scaleMeasure 0 law = 0 := by
+  unfold scaleMeasure
+  exact zero_smul ℝ≥0 law
+
+@[simp]
+private theorem scaleMeasure_one {X : Type} [MeasurableSpace X]
+    (law : Measure X) : scaleMeasure 1 law = law := by
+  unfold scaleMeasure
+  exact one_smul ℝ≥0 law
+
+private def mixedFiniteMeasure {G : FiniteStageGame} (who : G.Player)
+    (t : ℝ) (x y : Strategy G who) : FiniteMeasure (Plan G who) :=
+  scaleFiniteMeasure (nnCoefficient t) x.toFiniteMeasure +
+    scaleFiniteMeasure (complementCoefficient t)
+      y.toFiniteMeasure
+
+/-- Convex combination of probability laws on total contingent plans. -/
+private def mix {G : FiniteStageGame} (who : G.Player)
+    (t : ℝ) (x y : Strategy G who) : Strategy G who := by
+  let c := nnCoefficient t
+  let d := complementCoefficient t
+  refine ⟨scaleMeasure c x + scaleMeasure d y, ?_⟩
+  constructor
+  unfold scaleMeasure
+  simp only [Measure.add_apply, Measure.smul_apply, measure_univ]
+  change (c : ℝ≥0∞) * 1 + (d : ℝ≥0∞) * 1 = 1
+  rw [mul_one, mul_one]
+  rw [← ENNReal.coe_add]
+  congr 1
+  apply NNReal.eq
+  change coefficient t + (1 - coefficient t) = 1
+  ring
+
+private theorem toFiniteMeasure_mix {G : FiniteStageGame} (who : G.Player)
+    (t : ℝ) (x y : Strategy G who) :
+    (mix who t x y).toFiniteMeasure =
+      mixedFiniteMeasure who t x y := by
+  apply FiniteMeasure.toMeasure_injective
+  simp only [mix, mixedFiniteMeasure, scaleFiniteMeasure,
+    scaleMeasure,
+    ProbabilityMeasure.toFiniteMeasure, FiniteMeasure.toMeasure_add,
+    FiniteMeasure.toMeasure_smul]
+  unfold ProbabilityMeasure.toMeasure FiniteMeasure.toMeasure
+  rfl
+
+private theorem mix_continuous {G : FiniteStageGame} (who : G.Player) :
+    Continuous fun p : ℝ × (Strategy G who × Strategy G who) =>
+      mix who p.1 p.2.1 p.2.2 := by
+  apply continuous_induced_rng.2
+  change Continuous fun p : ℝ × (Strategy G who × Strategy G who) =>
+    (mix who p.1 p.2.1 p.2.2).toFiniteMeasure
+  rw [show (fun p : ℝ × (Strategy G who × Strategy G who) =>
+      (mix who p.1 p.2.1 p.2.2).toFiniteMeasure) =
+      fun p => mixedFiniteMeasure who p.1 p.2.1 p.2.2 by
+    funext p
+    exact toFiniteMeasure_mix who p.1 p.2.1 p.2.2]
+  unfold mixedFiniteMeasure
+  have hc : Continuous fun p : ℝ × (Strategy G who × Strategy G who) =>
+      nnCoefficient p.1 :=
+    nnCoefficient_continuous.comp continuous_fst
+  have hd : Continuous fun p : ℝ × (Strategy G who × Strategy G who) =>
+      (⟨1 - coefficient p.1,
+        sub_nonneg.mpr (coefficient_le_one p.1)⟩ : ℝ≥0) := by
+    apply Continuous.subtype_mk
+    exact continuous_const.sub
+      (continuous_subtype_val.comp hc)
+  have hx : Continuous fun p : ℝ × (Strategy G who × Strategy G who) =>
+      p.2.1.toFiniteMeasure :=
+    ProbabilityMeasure.toFiniteMeasure_continuous.comp
+      (continuous_fst.comp continuous_snd)
+  have hy : Continuous fun p : ℝ × (Strategy G who × Strategy G who) =>
+      p.2.2.toFiniteMeasure :=
+    ProbabilityMeasure.toFiniteMeasure_continuous.comp
+      (continuous_snd.comp continuous_snd)
+  have hleft : Continuous fun p :
+      ℝ × (Strategy G who × Strategy G who) =>
+      scaleFiniteMeasure (nnCoefficient p.1) p.2.1.toFiniteMeasure :=
+    scaleFiniteMeasure_continuous.comp (hc.prodMk hx)
+  have hright : Continuous fun p :
+      ℝ × (Strategy G who × Strategy G who) =>
+      scaleFiniteMeasure
+        (⟨1 - coefficient p.1,
+          sub_nonneg.mpr (coefficient_le_one p.1)⟩ : ℝ≥0)
+        p.2.2.toFiniteMeasure :=
+    scaleFiniteMeasure_continuous.comp (hd.prodMk hy)
+  exact hleft.add hright
+
+private theorem mix_zero {G : FiniteStageGame} (who : G.Player)
+    (x y : Strategy G who) : mix who 0 x y = y := by
+  apply ProbabilityMeasure.toMeasure_injective
+  simp only [mix]
+  unfold ProbabilityMeasure.toMeasure
+  change scaleMeasure (nnCoefficient 0) (x : Measure (Plan G who)) +
+    scaleMeasure (⟨1 - coefficient 0,
+      sub_nonneg.mpr (coefficient_le_one 0)⟩ : ℝ≥0)
+        (y : Measure (Plan G who)) = y
+  rw [show nnCoefficient 0 = 0 by
+    apply NNReal.eq
+    change coefficient 0 = (0 : ℝ)
+    exact coefficient_eq (by norm_num) (by norm_num)]
+  rw [show (⟨1 - coefficient 0,
+    sub_nonneg.mpr (coefficient_le_one 0)⟩ : ℝ≥0) = 1 by
+      apply NNReal.eq
+      change 1 - coefficient 0 = (1 : ℝ)
+      rw [coefficient_eq (by norm_num) (by norm_num)]
+      norm_num]
+  unfold scaleMeasure
+  ext s hs
+  rw [Measure.add_apply]
+  change (0 : ℝ≥0∞) * (x : Measure (Plan G who)) s +
+    (1 : ℝ≥0∞) * (y : Measure (Plan G who)) s =
+    (y : Measure (Plan G who)) s
+  rw [zero_mul, zero_add, one_mul]
+
+private theorem mix_one {G : FiniteStageGame} (who : G.Player)
+    (x y : Strategy G who) : mix who 1 x y = x := by
+  apply ProbabilityMeasure.toMeasure_injective
+  simp only [mix]
+  unfold ProbabilityMeasure.toMeasure
+  change scaleMeasure (nnCoefficient 1) (x : Measure (Plan G who)) +
+    scaleMeasure (⟨1 - coefficient 1,
+      sub_nonneg.mpr (coefficient_le_one 1)⟩ : ℝ≥0)
+        (y : Measure (Plan G who)) = x
+  rw [show nnCoefficient 1 = 1 by
+    apply NNReal.eq
+    change coefficient 1 = (1 : ℝ)
+    exact coefficient_eq (by norm_num) (by norm_num)]
+  rw [show (⟨1 - coefficient 1,
+    sub_nonneg.mpr (coefficient_le_one 1)⟩ : ℝ≥0) = 0 by
+      apply NNReal.eq
+      change 1 - coefficient 1 = (0 : ℝ)
+      rw [coefficient_eq (by norm_num) (by norm_num)]
+      norm_num]
+  unfold scaleMeasure
+  ext s hs
+  rw [Measure.add_apply]
+  change (1 : ℝ≥0∞) * (x : Measure (Plan G who)) s +
+    (0 : ℝ≥0∞) * (y : Measure (Plan G who)) s =
+      (x : Measure (Plan G who)) s
+  rw [one_mul, zero_mul, add_zero]
+
+/-- A finite barycenter of laws on total contingent plans. -/
+private def simplexWeight {k : ℕ}
+    (weights : stdSimplex ℝ (Fin (k + 1))) (a : Fin (k + 1)) : ℝ≥0 :=
+  ⟨weights a, weights.2.1 a⟩
+
+private def barycenterFiniteMeasure {G : FiniteStageGame}
+    (who : G.Player) (k : ℕ)
+    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (points : Fin (k + 1) → Strategy G who) :
+    FiniteMeasure (Plan G who) :=
+  ∑ a, scaleFiniteMeasure (simplexWeight weights a)
+    (points a).toFiniteMeasure
+
+private def barycenter {G : FiniteStageGame} (who : G.Player) (k : ℕ)
+    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (points : Fin (k + 1) → Strategy G who) : Strategy G who := by
+  let weight : Fin (k + 1) → ℝ≥0 := simplexWeight weights
+  refine ⟨∑ a, weight a • (points a : Measure (Plan G who)), ?_⟩
+  constructor
+  rw [show (∑ a, weight a •
+      (points a : Measure (Plan G who))) Set.univ =
+      ∑ a, (weight a •
+        (points a : Measure (Plan G who))) Set.univ by
+    rw [Measure.coe_finsetSum]
+    simp only [Finset.sum_apply]]
+  simp only [Measure.smul_apply, measure_univ]
+  change (∑ a, (weight a : ℝ≥0∞) * 1) = 1
+  simp only [mul_one]
+  norm_cast
+  apply NNReal.eq
+  rw [NNReal.coe_sum]
+  change ∑ a, weights a = 1
+  exact weights.2.2
+
+private theorem toFiniteMeasure_barycenter {G : FiniteStageGame}
+    (who : G.Player) (k : ℕ)
+    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (points : Fin (k + 1) → Strategy G who) :
+    (barycenter who k weights points).toFiniteMeasure =
+      barycenterFiniteMeasure who k weights points := by
+  apply FiniteMeasure.toMeasure_injective
+  simp only [barycenter, barycenterFiniteMeasure,
+    scaleFiniteMeasure, ProbabilityMeasure.toFiniteMeasure,
+    FiniteMeasure.toMeasure_sum,
+    FiniteMeasure.toMeasure_smul]
+  unfold ProbabilityMeasure.toMeasure FiniteMeasure.toMeasure
+  rfl
+
+private theorem barycenter_continuous {G : FiniteStageGame}
+    (who : G.Player) (k : ℕ)
+    (points : Fin (k + 1) → Strategy G who) :
+    Continuous fun weights : stdSimplex ℝ (Fin (k + 1)) =>
+      barycenter who k weights points := by
+  apply continuous_induced_rng.2
+  change Continuous fun weights : stdSimplex ℝ (Fin (k + 1)) =>
+    (barycenter who k weights points).toFiniteMeasure
+  rw [show (fun weights : stdSimplex ℝ (Fin (k + 1)) =>
+      (barycenter who k weights points).toFiniteMeasure) =
+      fun weights => barycenterFiniteMeasure who k weights points by
+    funext weights
+    exact toFiniteMeasure_barycenter who k weights points]
+  unfold barycenterFiniteMeasure
+  apply continuous_finsetSum
+  intro a _
+  have hweight : Continuous fun weights :
+      stdSimplex ℝ (Fin (k + 1)) =>
+      (⟨weights a, weights.2.1 a⟩ : ℝ≥0) := by
+    apply Continuous.subtype_mk
+    exact (continuous_apply a).comp continuous_subtype_val
+  have hlaw : Continuous fun _weights :
+      stdSimplex ℝ (Fin (k + 1)) =>
+      (points a).toFiniteMeasure :=
+    continuous_const
+  exact scaleFiniteMeasure_continuous.comp (hweight.prodMk hlaw)
+
+/-- One fixed total pure profile, used only outside a bounded cylinder. -/
+private noncomputable def fallback (G : FiniteStageGame) :
+    (who : G.Player) → Plan G who :=
+  fun _ => default
+
+/-- Expected utility at one stage under a deterministic total-plan profile. -/
+private def pureStagePayoff (G : FiniteStageGame) (observer : G.Player)
+    (time : ℕ) (plans : (who : G.Player) → Plan G who) : ℝ :=
+  ((Protocol G).run plans (time + 1)).expect
+    ((Native G).latestStageUtility PUnit.unit observer)
+
+private theorem pureStagePayoff_continuous (G : FiniteStageGame)
+    (observer : G.Player) (time : ℕ) :
+    Continuous (pureStagePayoff G observer time) := by
+  let sites := (Native G).boundedInformationSites PUnit.unit (time + 1)
+  let restrict := (Protocol G).restrictPolicies sites
+  let assemble := (Protocol G).assemblePolicies sites (fallback G)
+  let finitePayoff := fun draws =>
+    ((Protocol G).run (assemble draws) (time + 1)).expect
+      ((Native G).latestStageUtility PUnit.unit observer)
+  have hrestrict : Continuous restrict := by
+    unfold restrict GameTheory.Protocol.InformationModel.restrictPolicies
+    fun_prop
+  have hfinite : Continuous finitePayoff :=
+    continuous_of_discreteTopology
+  have hfactor : pureStagePayoff G observer time =
+      finitePayoff ∘ restrict := by
+    funext plans
+    change pureStagePayoff G observer time plans =
+      finitePayoff (restrict plans)
+    unfold pureStagePayoff finitePayoff assemble
+    rw [(Protocol G).run_assemble_restrict sites (fallback G) plans
+      (time + 1)
+      ((Native G).boundedInformationSites_cover PUnit.unit (time + 1))]
+  rw [hfactor]
+  exact hfinite.comp hrestrict
+
+/-- A finite bound for one player's stage utility. -/
+private def stageBound (G : FiniteStageGame) (observer : G.Player) : ℝ :=
+  ∑ actions : (who : G.Player) → G.Action who,
+    |G.payoff actions observer|
+
+private theorem stagePayoff_le_stageBound (G : FiniteStageGame)
+    (observer : G.Player) (actions : (who : G.Player) → G.Action who) :
+    |G.payoff actions observer| ≤ stageBound G observer := by
+  unfold stageBound
+  exact Finset.single_le_sum
+    (s := Finset.univ)
+    (f := fun other => |G.payoff other observer|)
+    (fun other _ => abs_nonneg (G.payoff other observer))
+    (Finset.mem_univ actions)
+
+private theorem nativeStageUtility_le_stageBound (G : FiniteStageGame)
+    (observer : G.Player) (state : (Native G).State)
+    (actions : (who : G.Player) → (Native G).Action who) :
+    |(Native G).stageUtility state actions observer| ≤
+      stageBound G observer := by
+  rw [StochasticGame.toNative_stageUtility,
+    KernelGame.realizedActionStochasticGame_stagePayoff]
+  simpa only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU] using
+    stagePayoff_le_stageBound G observer actions
+
+private theorem pureStagePayoff_le_stageBound (G : FiniteStageGame)
+    (observer : G.Player) (time : ℕ)
+    (plans : (who : G.Player) → Plan G who) :
+    |pureStagePayoff G observer time plans| ≤ stageBound G observer := by
+  unfold pureStagePayoff
+  apply GameTheory.Math.Probability.FinDist.abs_expect_le_of_abs_bound
+  intro history _
+  exact (Native G).abs_latestStageUtility_le PUnit.unit observer
+    (stageBound G observer)
+    (nativeStageUtility_le_stageBound G observer) history
+
+private theorem stageBound_nonneg (G : FiniteStageGame)
+    (observer : G.Player) : 0 ≤ stageBound G observer := by
+  unfold stageBound
+  exact Finset.sum_nonneg fun _ _ => abs_nonneg _
+
+private theorem discount_nonneg {G : FiniteStageGame}
+    (lam : G.DiscountRate) : 0 ≤ 1 - lam.1 :=
+  sub_nonneg.mpr lam.2.2
+
+private theorem discount_lt_one {G : FiniteStageGame}
+    (lam : G.DiscountRate) : 1 - lam.1 < 1 :=
+  by linarith [lam.2.1]
+
+/-- The normalized discounted payoff of one deterministic total-plan
+profile. -/
+private def pureDiscountedPayoff (G : FiniteStageGame)
+    (lam : G.DiscountRate) (observer : G.Player)
+    (plans : (who : G.Player) → Plan G who) : ℝ :=
+  GameTheory.Math.normalizedDiscountedSum (1 - lam.1)
+    (fun time => pureStagePayoff G observer time plans)
+
+private theorem pureDiscountedPayoff_continuous (G : FiniteStageGame)
+    (lam : G.DiscountRate) (observer : G.Player) :
+    Continuous (pureDiscountedPayoff G lam observer) := by
+  let discount := 1 - lam.1
+  let bound := stageBound G observer
+  have hdiscount0 : 0 ≤ discount := discount_nonneg lam
+  have hdiscount1 : discount < 1 := discount_lt_one lam
+  have hsummable : Summable fun time : ℕ => bound * discount ^ time :=
+    (summable_geometric_of_lt_one hdiscount0 hdiscount1).mul_left bound
+  have hseries : Continuous fun plans : (who : G.Player) → Plan G who =>
+      ∑' time : ℕ, discount ^ time *
+        pureStagePayoff G observer time plans := by
+    apply continuous_tsum
+    · intro time
+      exact continuous_const.mul
+        (pureStagePayoff_continuous G observer time)
+    · exact hsummable
+    · intro time plans
+      rw [Real.norm_eq_abs, abs_mul,
+        abs_of_nonneg (pow_nonneg hdiscount0 time)]
+      calc
+        discount ^ time * |pureStagePayoff G observer time plans| ≤
+            discount ^ time * bound :=
+          mul_le_mul_of_nonneg_left
+            (pureStagePayoff_le_stageBound G observer time plans)
+            (pow_nonneg hdiscount0 time)
+        _ = bound * discount ^ time := mul_comm _ _
+  unfold pureDiscountedPayoff GameTheory.Math.normalizedDiscountedSum
+  exact continuous_const.mul hseries
+
+private theorem continuous_integrable_of_compact
+    {X : Type} [TopologicalSpace X] [CompactSpace X]
+    [MeasurableSpace X] [OpensMeasurableSpace X]
+    (f : X → ℝ) (hf : Continuous f) (measure : Measure X)
+    [IsFiniteMeasure measure] : Integrable f measure := by
+  let observable : BoundedContinuousFunction X ℝ :=
+    ContinuousMap.equivBoundedOfCompact X ℝ ⟨f, hf⟩
+  convert observable.integrable measure using 1
+  ext x
+  rfl
+
+private theorem pureDiscountedPayoff_integrable (G : FiniteStageGame)
+    (lam : G.DiscountRate) (observer : G.Player)
+    (measure : Measure ((who : G.Player) → Plan G who))
+    [IsFiniteMeasure measure] :
+    Integrable (pureDiscountedPayoff G lam observer) measure :=
+  continuous_integrable_of_compact _
+    (pureDiscountedPayoff_continuous G lam observer) measure
+
+/-- Independent product law of the players' total-plan laws. -/
+private def jointLaw {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who) :
+    ProbabilityMeasure ((who : G.Player) → Plan G who) :=
+  ProbabilityMeasure.pi profile
+
+private theorem jointLaw_continuous (G : FiniteStageGame) :
+    Continuous (jointLaw (G := G)) :=
+  ProbabilityMeasure.continuous_pi
+
+private theorem integratedPureStagePayoff_eq_arbitrary
+    (G : FiniteStageGame) (observer : G.Player) (time : ℕ)
+    (profile : (who : G.Player) → Strategy G who) :
+    (∫ plans, pureStagePayoff G observer time plans
+      ∂(jointLaw profile : Measure ((who : G.Player) → Plan G who))) =
+      (Native G).arbitraryPolicyMeasureStageExpectation PUnit.unit
+        (fun who => (profile who : Measure (Plan G who))) observer time := by
+  let laws : (Native G).ProtocolPolicyMeasureProfile PUnit.unit :=
+    fun who => (profile who : Measure (Plan G who))
+  letI : ∀ who, IsProbabilityMeasure (laws who) := fun who => by
+    dsimp only [laws]
+    infer_instance
+  let sites := (Native G).boundedInformationSites PUnit.unit (time + 1)
+  let restrict := (Protocol G).restrictPolicies sites
+  let assemble := (Protocol G).assemblePolicies sites (fallback G)
+  let draws := (Protocol G).finitePolicyMeasureDraws laws sites
+  let finiteMixed := fun who =>
+    GameTheory.Protocol.InformationModel.PolicyMeasure.toMixedWithin
+      (M := Protocol G) (laws who) (sites who) (fallback G who)
+  let observable := (Native G).latestStageUtility PUnit.unit observer
+  let finitePayoff := fun restricted =>
+    ((Protocol G).run (assemble restricted) (time + 1)).expect observable
+  have hrestrict : Measurable restrict := by
+    unfold restrict GameTheory.Protocol.InformationModel.restrictPolicies
+    fun_prop
+  have hfinite : StronglyMeasurable finitePayoff :=
+    (measurable_of_finite finitePayoff).stronglyMeasurable
+  have hfactor : pureStagePayoff G observer time =
+      finitePayoff ∘ restrict := by
+    funext plans
+    unfold pureStagePayoff
+    dsimp only [Function.comp_apply, finitePayoff, observable]
+    unfold assemble
+    rw [(Protocol G).run_assemble_restrict sites (fallback G) plans
+      (time + 1)
+      ((Native G).boundedInformationSites_cover PUnit.unit (time + 1))]
+  have hmap :
+      (jointLaw profile : Measure ((who : G.Player) → Plan G who)).map
+          restrict = draws.toMeasure := by
+    change ((Protocol G).policyProfileMeasure laws).map restrict =
+      draws.toMeasure
+    exact (Protocol G).policyProfileMeasure_map_restrict laws sites
+  have hfiniteBound : ∀ restricted, ‖finitePayoff restricted‖ ≤
+      stageBound G observer := by
+    intro restricted
+    rw [Real.norm_eq_abs]
+    change |pureStagePayoff G observer time (assemble restricted)| ≤
+      stageBound G observer
+    exact pureStagePayoff_le_stageBound G observer time _
+  have hobservableBound : ∀ history, ‖observable history‖ ≤
+      stageBound G observer := by
+    intro history
+    rw [Real.norm_eq_abs]
+    exact (Native G).abs_latestStageUtility_le PUnit.unit observer
+      (stageBound G observer)
+      (nativeStageUtility_le_stageBound G observer) history
+  have hdrawRun :
+      draws.bind (fun restricted =>
+          (Protocol G).run (assemble restricted) (time + 1)) =
+        (Protocol G).runMixed finiteMixed (time + 1) := by
+    unfold finiteMixed draws
+    unfold GameTheory.Protocol.InformationModel.runMixed
+      GameTheory.Protocol.InformationModel.runMixedFrom
+      GameTheory.Protocol.InformationModel.run
+    rw [← (Protocol G).finitePolicyMeasureDraws_map_assemble
+      laws sites (fallback G),
+      GameTheory.Math.Probability.FinDist.bind_map]
+  rw [hfactor]
+  calc
+    (∫ plans, finitePayoff (restrict plans)
+        ∂(jointLaw profile : Measure ((who : G.Player) → Plan G who))) =
+        ∫ restricted, finitePayoff restricted
+          ∂((jointLaw profile :
+            Measure ((who : G.Player) → Plan G who)).map restrict) :=
+      (integral_map_of_stronglyMeasurable hrestrict hfinite).symm
+    _ = ∫ restricted, finitePayoff restricted ∂draws.toMeasure := by
+      rw [hmap]
+    _ = draws.expect finitePayoff :=
+      GameTheory.Math.Probability.FinDist.integral_toMeasure_eq_expect_of_bound
+        draws finitePayoff hfiniteBound
+    _ = ((Protocol G).runMixed finiteMixed (time + 1)).expect observable := by
+      rw [← hdrawRun,
+        GameTheory.Math.Probability.FinDist.expect_bind]
+    _ = ∫ history, observable history
+        ∂((Protocol G).runMixed finiteMixed (time + 1)).toMeasure :=
+      (GameTheory.Math.Probability.FinDist.integral_toMeasure_eq_expect_of_bound
+        ((Protocol G).runMixed finiteMixed (time + 1)) observable
+        hobservableBound).symm
+    _ = (Native G).arbitraryPolicyMeasureStageExpectation PUnit.unit
+        laws observer time := by
+      unfold Stochastic.Game.arbitraryPolicyMeasureStageExpectation
+        GameTheory.Protocol.InformationModel.policyMeasurePrefixExpectation
+      rw [(Protocol G).runPolicyMeasure_eq_runMixedWithin laws sites
+        (fallback G) (time + 1)
+        ((Native G).boundedInformationSites_cover PUnit.unit (time + 1))]
+
+private theorem integratedPureDiscountedPayoff_eq_arbitrary
+    (G : FiniteStageGame) (lam : G.DiscountRate)
+    (observer : G.Player)
+    (profile : (who : G.Player) → Strategy G who) :
+    (∫ plans, pureDiscountedPayoff G lam observer plans
+      ∂(jointLaw profile : Measure ((who : G.Player) → Plan G who))) =
+      (Native G).arbitraryPolicyMeasureDiscountedPayoff PUnit.unit
+        (1 - lam.1) (fun who =>
+          (profile who : Measure (Plan G who))) observer := by
+  let discount := 1 - lam.1
+  let measure :=
+    (jointLaw profile : Measure ((who : G.Player) → Plan G who))
+  let term := fun time plans =>
+    discount ^ time * pureStagePayoff G observer time plans
+  have htermIntegrable : ∀ time, Integrable (term time) measure := by
+    intro time
+    apply continuous_integrable_of_compact
+    exact continuous_const.mul
+      (pureStagePayoff_continuous G observer time)
+  have htermNormSummable : Summable fun time =>
+      ∫ plans, ‖term time plans‖ ∂measure := by
+    have hgeometric : Summable fun time : ℕ =>
+        stageBound G observer * discount ^ time :=
+      (summable_geometric_of_lt_one (discount_nonneg lam)
+        (discount_lt_one lam)).mul_left (stageBound G observer)
+    apply Summable.of_norm_bounded hgeometric
+    intro time
+    have hintegralNonneg : 0 ≤ ∫ plans, ‖term time plans‖ ∂measure :=
+      integral_nonneg fun _ => norm_nonneg _
+    rw [Real.norm_eq_abs, abs_of_nonneg hintegralNonneg]
+    have hbound := norm_integral_le_of_norm_le_const
+      (f := fun plans => ‖term time plans‖)
+      (C := stageBound G observer * discount ^ time)
+      (μ := measure)
+      (Filter.Eventually.of_forall fun plans => by
+        rw [Real.norm_of_nonneg (norm_nonneg _), Real.norm_eq_abs]
+        dsimp only [term]
+        rw [abs_mul,
+          abs_of_nonneg (pow_nonneg (discount_nonneg lam) time)]
+        calc
+          discount ^ time *
+              |pureStagePayoff G observer time plans| ≤
+              discount ^ time * stageBound G observer :=
+            mul_le_mul_of_nonneg_left
+              (pureStagePayoff_le_stageBound G observer time plans)
+              (pow_nonneg (discount_nonneg lam) time)
+          _ = stageBound G observer * discount ^ time :=
+            mul_comm _ _)
+    rw [Real.norm_eq_abs, abs_of_nonneg hintegralNonneg,
+      probReal_univ, mul_one] at hbound
+    exact hbound
+  have hinterchange :=
+    integral_tsum_of_summable_integral_norm htermIntegrable
+      htermNormSummable
+  unfold pureDiscountedPayoff
+    Stochastic.Game.arbitraryPolicyMeasureDiscountedPayoff
+    GameTheory.Math.normalizedDiscountedSum
+  change (∫ plans, (1 - discount) * ∑' time, term time plans
+      ∂measure) =
+    (1 - discount) * ∑' time,
+      discount ^ time *
+        (Native G).arbitraryPolicyMeasureStageExpectation PUnit.unit
+          (fun who => (profile who : Measure (Plan G who))) observer time
+  rw [integral_const_mul]
+  congr 1
+  rw [← hinterchange]
+  apply tsum_congr
+  intro time
+  rw [integral_const_mul,
+    integratedPureStagePayoff_eq_arbitrary]
+
+private def rectangleProduct {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who)
+    (sets : (who : G.Player) → Set (Plan G who)) : ℝ≥0∞ :=
+  ∏ who, (profile who : Measure (Plan G who)) (sets who)
+
+private theorem jointLaw_pi {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who)
+    (sets : (who : G.Player) → Set (Plan G who)) :
+    (jointLaw profile : Measure ((who : G.Player) → Plan G who))
+        (Set.pi Set.univ sets) = rectangleProduct profile sets := by
+  unfold jointLaw rectangleProduct
+  exact Measure.pi_pi (fun who =>
+    (profile who : Measure (Plan G who))) sets
+
+private theorem rectangleProduct_update {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who)
+    (who : G.Player) (replacement : Strategy G who)
+    (sets : (i : G.Player) → Set (Plan G i)) :
+    rectangleProduct (Function.update profile who replacement) sets =
+      (replacement : Measure (Plan G who)) (sets who) *
+        ∏ i ∈ Finset.univ.erase who,
+          (profile i : Measure (Plan G i)) (sets i) := by
+  unfold rectangleProduct
+  rw [← Finset.mul_prod_erase Finset.univ
+    (fun i => ((Function.update profile who replacement) i :
+      Measure (Plan G i)) (sets i)) (Finset.mem_univ who)]
+  congr 1
+  · rw [Function.update_self]
+  · apply Finset.prod_congr rfl
+    intro i hi
+    rw [Function.update_of_ne]
+    exact Finset.ne_of_mem_erase hi
+
+private theorem mix_apply {G : FiniteStageGame} (who : G.Player)
+    (t : ℝ) (x y : Strategy G who) (set : Set (Plan G who)) :
+    (mix who t x y : Measure (Plan G who)) set =
+      (nnCoefficient t : ℝ≥0∞) *
+          (x : Measure (Plan G who)) set +
+        (complementCoefficient t : ℝ≥0∞) *
+          (y : Measure (Plan G who)) set := by
+  simp only [mix]
+  unfold ProbabilityMeasure.toMeasure scaleMeasure
+  rw [Measure.add_apply]
+  change (nnCoefficient t : ℝ≥0∞) *
+      (x : Measure (Plan G who)) set +
+    (complementCoefficient t : ℝ≥0∞) *
+      (y : Measure (Plan G who)) set = _
+  rfl
+
+private theorem barycenter_apply {G : FiniteStageGame} (who : G.Player)
+    (k : ℕ) (weights : stdSimplex ℝ (Fin (k + 1)))
+    (points : Fin (k + 1) → Strategy G who)
+    (set : Set (Plan G who)) :
+    (barycenter who k weights points : Measure (Plan G who)) set =
+      ∑ a, (simplexWeight weights a : ℝ≥0∞) *
+        (points a : Measure (Plan G who)) set := by
+  simp only [barycenter]
+  unfold ProbabilityMeasure.toMeasure
+  rw [Measure.coe_finsetSum]
+  simp only [Finset.sum_apply, Measure.smul_apply, ENNReal.smul_def,
+    smul_eq_mul]
+
+private theorem jointLaw_update_mix {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who)
+    (who : G.Player) (t : ℝ) (x y : Strategy G who) :
+    (jointLaw (Function.update profile who (mix who t x y)) :
+        Measure ((i : G.Player) → Plan G i)) =
+      scaleMeasure (nnCoefficient t)
+          (jointLaw (Function.update profile who x) :
+            Measure ((i : G.Player) → Plan G i)) +
+        scaleMeasure
+          (complementCoefficient t)
+          (jointLaw (Function.update profile who y) :
+            Measure ((i : G.Player) → Plan G i)) := by
+  change Measure.pi (fun i =>
+      ((Function.update profile who (mix who t x y)) i :
+        Measure (Plan G i))) = _
+  apply Measure.pi_eq
+  intro sets hsets
+  unfold scaleMeasure
+  rw [Measure.add_apply, Measure.smul_apply, Measure.smul_apply]
+  rw [jointLaw_pi, jointLaw_pi]
+  change (nnCoefficient t : ℝ≥0∞) *
+        rectangleProduct (Function.update profile who x) sets +
+      (complementCoefficient t : ℝ≥0∞) *
+        rectangleProduct (Function.update profile who y) sets =
+    rectangleProduct (Function.update profile who (mix who t x y)) sets
+  rw [rectangleProduct_update, rectangleProduct_update,
+    rectangleProduct_update, mix_apply]
+  ring
+
+private theorem jointLaw_update_barycenter {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who)
+    (who : G.Player) (k : ℕ)
+    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (points : Fin (k + 1) → Strategy G who) :
+    (jointLaw (Function.update profile who
+        (barycenter who k weights points)) :
+        Measure ((i : G.Player) → Plan G i)) =
+      ∑ a, scaleMeasure (simplexWeight weights a)
+        (jointLaw (Function.update profile who (points a)) :
+          Measure ((i : G.Player) → Plan G i)) := by
+  change Measure.pi (fun i =>
+      ((Function.update profile who
+        (barycenter who k weights points)) i :
+        Measure (Plan G i))) = _
+  apply Measure.pi_eq
+  intro sets hsets
+  rw [Measure.coe_finsetSum]
+  simp only [Finset.sum_apply, scaleMeasure, Measure.smul_apply,
+    ENNReal.smul_def, smul_eq_mul]
+  simp_rw [jointLaw_pi]
+  change (∑ a, (simplexWeight weights a : ℝ≥0∞) *
+      rectangleProduct (Function.update profile who (points a)) sets) =
+    rectangleProduct
+      (Function.update profile who (barycenter who k weights points)) sets
+  rw [rectangleProduct_update, barycenter_apply, Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro a _
+  rw [rectangleProduct_update]
+  exact (mul_assoc _ _ _).symm
+
+/-- Expected discounted utility after independently drawing one total plan
+for each player. -/
+private def compactPayoff (G : FiniteStageGame) (lam : G.DiscountRate)
+    (profile : (who : G.Player) → Strategy G who) : Payoff G.Player :=
+  fun observer => ∫ plans, pureDiscountedPayoff G lam observer plans
+    ∂(jointLaw profile : Measure ((who : G.Player) → Plan G who))
+
+private theorem compactPayoff_continuous (G : FiniteStageGame)
+    (lam : G.DiscountRate) (observer : G.Player) :
+    Continuous fun profile : (who : G.Player) → Strategy G who =>
+      compactPayoff G lam profile observer := by
+  let observable : C((who : G.Player) → Plan G who, ℝ) :=
+    ⟨pureDiscountedPayoff G lam observer,
+      pureDiscountedPayoff_continuous G lam observer⟩
+  exact (ProbabilityMeasure.continuous_integral_continuousMap
+    observable).comp (jointLaw_continuous G)
+
+private theorem compactPayoff_affine (G : FiniteStageGame)
+    (lam : G.DiscountRate)
+    (profile : (who : G.Player) → Strategy G who)
+    (who : G.Player) (x y : Strategy G who) (t : ℝ)
+    (observer : G.Player) (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) :
+    compactPayoff G lam
+        (Function.update profile who (mix who t x y)) observer =
+      t * compactPayoff G lam (Function.update profile who x) observer +
+        (1 - t) * compactPayoff G lam
+          (Function.update profile who y) observer := by
+  have hx : Integrable (pureDiscountedPayoff G lam observer)
+      (jointLaw (Function.update profile who x) :
+        Measure ((i : G.Player) → Plan G i)) :=
+    pureDiscountedPayoff_integrable G lam observer _
+  have hy : Integrable (pureDiscountedPayoff G lam observer)
+      (jointLaw (Function.update profile who y) :
+        Measure ((i : G.Player) → Plan G i)) :=
+    pureDiscountedPayoff_integrable G lam observer _
+  unfold compactPayoff
+  rw [jointLaw_update_mix]
+  unfold scaleMeasure
+  rw [integral_add_measure (hx.smul_measure_nnreal)
+    (hy.smul_measure_nnreal),
+    integral_smul_nnreal_measure, integral_smul_nnreal_measure]
+  change coefficient t * _ + (1 - coefficient t) * _ =
+    t * _ + (1 - t) * _
+  rw [coefficient_eq ht₀ ht₁]
+
+private theorem compactPayoff_barycentric (G : FiniteStageGame)
+    (lam : G.DiscountRate)
+    (profile : (who : G.Player) → Strategy G who)
+    (who : G.Player) (k : ℕ)
+    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (points : Fin (k + 1) → Strategy G who) :
+    compactPayoff G lam
+        (Function.update profile who (barycenter who k weights points)) who =
+      ∑ a, weights a * compactPayoff G lam
+        (Function.update profile who (points a)) who := by
+  unfold compactPayoff
+  rw [jointLaw_update_barycenter]
+  simp only [scaleMeasure]
+  rw [integral_finsetSum_measure (fun a _ =>
+    (pureDiscountedPayoff_integrable G lam who
+      (jointLaw (Function.update profile who (points a)) :
+        Measure ((i : G.Player) → Plan G i))).smul_measure_nnreal)]
+  simp only [integral_smul_nnreal_measure,
+    NNReal.smul_def, smul_eq_mul, simplexWeight]
+  apply Finset.sum_congr rfl
+  intro a _
+  rfl
+
+/-- Fixed public pure-policy fallbacks used only on zero-mass cylinders. -/
+private def publicFallback (G : FiniteStageGame) :
+    (Native G).PurePublicProfile :=
+  fun who => (Native G).purePolicyEquiv PUnit.unit who (fallback G who)
+
+private def lawProfile {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who) :
+    (Native G).ProtocolPolicyMeasureProfile PUnit.unit :=
+  fun who => (profile who : Measure (Plan G who))
+
+private instance lawProfile_isProbability {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who) :
+    ∀ who, IsProbabilityMeasure (lawProfile profile who) :=
+  fun who => by
+    unfold lawProfile
+    infer_instance
+
+/-- Native conditional reading of independently drawn total plans. -/
+private def nativePublic {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who) :
+    (Native G).PublicProfile PUnit.unit :=
+  (Native G).policyMeasuresToPublicBehavioralWith PUnit.unit
+    (lawProfile profile) (publicFallback G)
+
+/-- Conditioning independently drawn plans is coordinatewise in the player. -/
+private theorem nativePublic_update {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who) (who : G.Player)
+    (deviation : Strategy G who) :
+    nativePublic (Function.update profile who deviation) =
+      Profile.update (nativePublic profile) who
+        ((Native G).ofBehavioralPolicy PUnit.unit
+          (GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith
+            (M := Protocol G) (deviation : Measure (Plan G who))
+            (fallback G who))) := by
+  let initial : (Native G).State := PUnit.unit
+  apply ((Native G).profileEquiv initial).injective
+  change (Native G).toBehaviorProfile initial
+      (nativePublic (Function.update profile who deviation)) =
+    (Native G).toBehaviorProfile initial
+      (Profile.update (nativePublic profile) who
+        ((Native G).ofBehavioralPolicy PUnit.unit
+          (GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith
+            (M := Protocol G) (deviation : Measure (Plan G who))
+            (fallback G who))))
+  rw [(Native G).toBehaviorProfile_update]
+  unfold nativePublic Stochastic.Game.policyMeasuresToPublicBehavioralWith
+  rw [(Native G).toBehaviorProfile_ofBehaviorProfile,
+    (Native G).toBehaviorProfile_ofBehaviorProfile]
+  dsimp only [initial,
+    GameTheory.Protocol.InformationModel.policyMeasureBehavioralWith]
+  simp only [(Native G).toBehavioralPolicy_ofBehavioralPolicy]
+  funext i
+  by_cases hi : i = who
+  · subst i
+    simp only [publicFallback, Profile.update_same]
+    have hmeasure :
+        lawProfile (Function.update profile who deviation) who =
+          (deviation : Measure (Plan G who)) := by
+      simp [lawProfile]
+    exact
+      GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith_congr
+        (M := Protocol G)
+        (lawProfile (Function.update profile who deviation) who)
+        (deviation : Measure (Plan G who)) (fallback G who) hmeasure
+  · simp only [publicFallback, Profile.update_of_ne _ _ hi]
+    have hmeasure :
+        lawProfile (Function.update profile who deviation) i =
+          lawProfile profile i := by
+      simp [lawProfile, hi]
+    exact
+      GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith_congr
+        (M := Protocol G)
+        (lawProfile (Function.update profile who deviation) i)
+        (lawProfile profile i) (fallback G i) hmeasure
+
+/-- Behavioral realization of a compact total-plan-law profile. -/
+private def toBehavior {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who) :
+    G.BehaviorProfile :=
+  StochasticGame.NativeBridge.ofNativePublicProfile G.repeatedGame
+    PUnit.unit (nativePublic profile)
+
+private theorem toBehavior_update {G : FiniteStageGame}
+    (profile : (who : G.Player) → Strategy G who) (who : G.Player)
+    (deviation : Strategy G who) :
+    let publicDeviation :=
+      (Native G).ofBehavioralPolicy PUnit.unit
+        (GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith
+          (M := Protocol G) (deviation : Measure (Plan G who))
+          (fallback G who))
+    toBehavior (Function.update profile who deviation) =
+      Function.update (toBehavior profile) who
+        (StochasticGame.NativeBridge.ofNativePublicPolicy G.repeatedGame
+          publicDeviation) := by
+  dsimp only
+  unfold toBehavior
+  rw [nativePublic_update]
+  funext i
+  by_cases hi : i = who
+  · subst i
+    simp [StochasticGame.NativeBridge.ofNativePublicProfile]
+  · simp [StochasticGame.NativeBridge.ofNativePublicProfile,
+      Profile.update_of_ne, Function.update_of_ne, hi]
+
+private def compiledBehavior {G : FiniteStageGame}
+    (profile : G.BehaviorProfile) :
+    Profile (Protocol G).behavioralSignature :=
+  StochasticGame.NativeBridge.toNativeBehaviorProfile G.repeatedGame
+    PUnit.unit profile
+
+/-- Predraw every coordinate of a proof-view behavioral profile once. -/
+private def fromBehavior {G : FiniteStageGame}
+    (profile : G.BehaviorProfile) :
+    (who : G.Player) → Strategy G who :=
+  fun who => ⟨(compiledBehavior profile who).toPureMeasure, by
+    exact
+      GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
+        (M := Protocol G) (compiledBehavior profile who)⟩
+
+private theorem fromBehavior_update {G : FiniteStageGame}
+    (profile : G.BehaviorProfile) (who : G.Player)
+    (deviation : G.BehaviorStrategy who) :
+    let publicDeviation :=
+      toNativePublicPolicy G.repeatedGame PUnit.unit deviation
+    let strategyDeviation : Strategy G who :=
+      ⟨((Native G).toBehavioralPolicy PUnit.unit
+          publicDeviation).toPureMeasure,
+        GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
+          (M := Protocol G) _⟩
+    fromBehavior (Function.update profile who deviation) =
+      Function.update (fromBehavior profile) who strategyDeviation := by
+  dsimp only
+  let publicDeviation :=
+    toNativePublicPolicy G.repeatedGame PUnit.unit deviation
+  let protocolDeviation :=
+    (Native G).toBehavioralPolicy PUnit.unit publicDeviation
+  have hcompiled :
+      compiledBehavior (Function.update profile who deviation) =
+        Profile.update (compiledBehavior profile) who protocolDeviation := by
+    unfold compiledBehavior
+      StochasticGame.NativeBridge.toNativeBehaviorProfile
+    rw [StochasticGame.NativeBridge.toNativePublicProfile_update,
+      (Native G).toBehaviorProfile_update]
+  funext i
+  apply ProbabilityMeasure.toMeasure_injective
+  by_cases hi : i = who
+  · subst i
+    have hpoint := congrFun hcompiled who
+    simp only [Profile.update_same] at hpoint
+    simp [fromBehavior, hpoint, protocolDeviation, publicDeviation]
+  · have hpoint := congrFun hcompiled i
+    simp only [Profile.update_of_ne _ _ hi] at hpoint
+    simp [fromBehavior, Function.update_of_ne, hi, hpoint]
+
+private theorem compactPayoff_eq_nativePublic {G : FiniteStageGame}
+    (lam : G.DiscountRate)
+    (profile : (who : G.Player) → Strategy G who)
+    (observer : G.Player) :
+    compactPayoff G lam profile observer =
+      (Native G).behavioralDiscountedPayoff PUnit.unit (1 - lam.1)
+        (nativePublic profile) observer := by
+  unfold compactPayoff
+  rw [integratedPureDiscountedPayoff_eq_arbitrary]
+  exact ((Native G).kuhn_arbitraryPolicyMeasure_discountedPayoff
+    PUnit.unit (discount_nonneg lam) (discount_lt_one lam)
+    (lawProfile profile) (publicFallback G) observer
+    (nativeStageUtility_le_stageBound G observer)).2
+
+private theorem payoff_toBehavior {G : FiniteStageGame}
+    (lam : G.DiscountRate)
+    (profile : (who : G.Player) → Strategy G who) :
+    G.discountedPayoffOnRate lam (toBehavior profile) =
+      compactPayoff G lam profile := by
+  funext observer
+  change G.repeatedGame.discountedPayoff (1 - lam.1)
+      (toBehavior profile) PUnit.unit observer =
+    compactPayoff G lam profile observer
+  unfold toBehavior
+  rw [← StochasticGame.NativeBridge.native_behavioralDiscountedPayoff_eq_of_publicProfile
+    G.repeatedGame PUnit.unit (nativePublic profile) (1 - lam.1) observer]
+  exact (compactPayoff_eq_nativePublic lam profile observer).symm
+
+private theorem arbitraryPayoff_fromBehavior_eq_policyMeasure
+    {G : FiniteStageGame} (profile : G.BehaviorProfile)
+    (discount : ℝ) (observer : G.Player) :
+    (Native G).arbitraryPolicyMeasureDiscountedPayoff PUnit.unit discount
+        (lawProfile (fromBehavior profile)) observer =
+      (Native G).policyMeasureDiscountedPayoff PUnit.unit discount
+        (StochasticGame.NativeBridge.toNativePublicProfile G.repeatedGame
+          PUnit.unit profile) observer := by
+  let protocolBehavior := (Native G).toBehaviorProfile PUnit.unit
+    (StochasticGame.NativeBridge.toNativePublicProfile G.repeatedGame
+      PUnit.unit profile)
+  letI : ∀ who, IsProbabilityMeasure
+      ((protocolBehavior who).toPureMeasure) := fun who =>
+    GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
+      (M := Protocol G) (protocolBehavior who)
+  have hlaws : lawProfile (fromBehavior profile) =
+      fun who => (protocolBehavior who).toPureMeasure := by
+    funext who
+    rfl
+  unfold Stochastic.Game.arbitraryPolicyMeasureDiscountedPayoff
+    Stochastic.Game.policyMeasureDiscountedPayoff
+    GameTheory.Math.normalizedDiscountedSum
+  congr 2
+  funext time
+  unfold Stochastic.Game.arbitraryPolicyMeasureStageExpectation
+    Stochastic.Game.policyMeasureStageExpectation
+    GameTheory.Protocol.InformationModel.policyMeasurePrefixExpectation
+    GameTheory.Protocol.InformationModel.pureMeasurePrefixExpectation
+    GameTheory.Protocol.InformationModel.runPolicyMeasure
+    GameTheory.Protocol.InformationModel.runPureMeasure
+    GameTheory.Protocol.InformationModel.policyProfileMeasure
+    GameTheory.Protocol.InformationModel.behavioralProfileMeasure
+  rw [Measure.infinitePi_eq_pi, hlaws]
+
+private theorem payoff_fromBehavior {G : FiniteStageGame}
+    (lam : G.DiscountRate) (profile : G.BehaviorProfile) :
+    compactPayoff G lam (fromBehavior profile) =
+      G.discountedPayoffOnRate lam profile := by
+  funext observer
+  unfold compactPayoff
+  rw [integratedPureDiscountedPayoff_eq_arbitrary]
+  change (Native G).arbitraryPolicyMeasureDiscountedPayoff PUnit.unit
+      (1 - lam.1) (lawProfile (fromBehavior profile)) observer = _
+  rw [
+    arbitraryPayoff_fromBehavior_eq_policyMeasure]
+  rw [((Native G).kuhn_policyMeasure_discountedPayoff PUnit.unit
+    (discount_nonneg lam) (discount_lt_one lam)
+    (StochasticGame.NativeBridge.toNativePublicProfile G.repeatedGame
+      PUnit.unit profile) observer
+    (nativeStageUtility_le_stageBound G observer)).2]
+  exact StochasticGame.NativeBridge.native_behavioralDiscountedPayoff_eq
+    G.repeatedGame profile PUnit.unit (1 - lam.1) observer
+
+/-- Replacing one arbitrary-law player by a behavioral deviation preserves
+the deviating player's discounted payoff. -/
+private theorem compactPayoff_update_behavioral {G : FiniteStageGame}
+    (lam : G.DiscountRate)
+    (profile : (who : G.Player) → Strategy G who) (who : G.Player)
+    (deviation : G.BehaviorStrategy who) :
+    let publicDeviation :=
+      StochasticGame.NativeBridge.toNativePublicPolicy G.repeatedGame
+        PUnit.unit deviation
+    let strategyDeviation : Strategy G who :=
+      ⟨((Native G).toBehavioralPolicy PUnit.unit
+          publicDeviation).toPureMeasure,
+        GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
+          (M := Protocol G) _⟩
+    compactPayoff G lam
+        (Function.update profile who strategyDeviation) who =
+      G.repeatedGame.discountedPayoff (1 - lam.1)
+        (Function.update (toBehavior profile) who deviation)
+        PUnit.unit who := by
+  dsimp only
+  let publicDeviation :=
+    StochasticGame.NativeBridge.toNativePublicPolicy G.repeatedGame
+      PUnit.unit deviation
+  let strategyDeviation : Strategy G who :=
+    ⟨((Native G).toBehavioralPolicy PUnit.unit
+        publicDeviation).toPureMeasure,
+      GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
+        (M := Protocol G) _⟩
+  have hlaws :
+      lawProfile (Function.update profile who strategyDeviation) =
+        Profile.update (sig := (Protocol G).policyMeasureSignature)
+          (lawProfile profile) who
+          ((Native G).toBehavioralPolicy PUnit.unit
+            publicDeviation).toPureMeasure := by
+    funext i
+    by_cases hi : i = who
+    · subst i
+      simp [lawProfile, strategyDeviation]
+    · simp [lawProfile, hi]
+  have hkuhn :=
+    kuhn_arbitraryPolicyMeasure_opponents_behavioralDeviation_discountedPayoff
+      (G := G.repeatedGame.toNative) PUnit.unit
+      (discount_nonneg lam) (discount_lt_one lam) (lawProfile profile)
+      (publicFallback G) who publicDeviation
+      (nativeStageUtility_le_stageBound G who)
+  unfold compactPayoff
+  rw [integratedPureDiscountedPayoff_eq_arbitrary]
+  change (Native G).arbitraryPolicyMeasureDiscountedPayoff PUnit.unit
+      (1 - lam.1)
+      (lawProfile (Function.update profile who strategyDeviation)) who = _
+  rw [hlaws]
+  rw [hkuhn.2]
+  have hagree :=
+    toNativePublicProfile_update_ofProofViewDeviation_agrees
+      G.repeatedGame PUnit.unit (nativePublic profile) who deviation
+  apply native_behavioralDiscountedPayoff_eq_of_coherent
+    G.repeatedGame PUnit.unit
+    (Function.update (toBehavior profile) who deviation)
+    (Profile.update (nativePublic profile) who publicDeviation)
+  simpa only [toBehavior, publicDeviation] using hagree
+
+/-- Replacing one behavioral player by an arbitrary total-plan law preserves
+the deviating player's discounted payoff. -/
+private theorem compactPayoff_fromBehavior_update_arbitrary
+    {G : FiniteStageGame} (lam : G.DiscountRate)
+    (profile : G.BehaviorProfile) (who : G.Player)
+    (deviation : Strategy G who) :
+    let publicDeviation :=
+      (Native G).ofBehavioralPolicy PUnit.unit
+        (GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith
+          (M := Protocol G) (deviation : Measure (Plan G who))
+          ((Native G).purePolicyEquiv PUnit.unit who |>.symm
+            (publicFallback G who)))
+    let proofDeviation :=
+      ofNativePublicPolicy G.repeatedGame publicDeviation
+    compactPayoff G lam
+        (Function.update (fromBehavior profile) who deviation) who =
+      G.repeatedGame.discountedPayoff (1 - lam.1)
+        (Function.update profile who proofDeviation) PUnit.unit who := by
+  dsimp only
+  let publicProfile :=
+    toNativePublicProfile G.repeatedGame PUnit.unit profile
+  let protocolBehavior :=
+    (Native G).toBehaviorProfile PUnit.unit publicProfile
+  let publicDeviation :=
+    (Native G).ofBehavioralPolicy PUnit.unit
+      (GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith
+        (M := Protocol G) (deviation : Measure (Plan G who))
+        ((Native G).purePolicyEquiv PUnit.unit who |>.symm
+          (publicFallback G who)))
+  let proofDeviation :=
+    ofNativePublicPolicy G.repeatedGame publicDeviation
+  have hlaws :
+      lawProfile (Function.update (fromBehavior profile) who deviation) =
+        Profile.update (sig := (Protocol G).policyMeasureSignature)
+          (fun i => ((Native G).toBehavioralPolicy PUnit.unit
+            (publicProfile i)).toPureMeasure) who
+          (deviation : Measure (Plan G who)) := by
+    funext i
+    by_cases hi : i = who
+    · subst i
+      simp [lawProfile]
+    · simp [lawProfile, fromBehavior, compiledBehavior, publicProfile,
+        StochasticGame.NativeBridge.toNativeBehaviorProfile,
+        Stochastic.Game.toBehaviorProfile, hi]
+  have hkuhn :=
+    kuhn_behavioral_opponents_arbitraryPolicyMeasureDeviation_discountedPayoff
+      (G := G.repeatedGame.toNative) PUnit.unit
+      (discount_nonneg lam) (discount_lt_one lam) publicProfile who
+      (deviation : Measure (Plan G who)) (publicFallback G who)
+      (nativeStageUtility_le_stageBound G who)
+  unfold compactPayoff
+  rw [integratedPureDiscountedPayoff_eq_arbitrary]
+  change (Native G).arbitraryPolicyMeasureDiscountedPayoff PUnit.unit
+      (1 - lam.1)
+      (lawProfile (Function.update (fromBehavior profile) who deviation))
+      who = _
+  rw [hlaws, hkuhn.2]
+  have hagree := toNativePublicProfile_update_ofNativeDeviation_agrees
+    G.repeatedGame PUnit.unit profile who publicDeviation
+  apply native_behavioralDiscountedPayoff_eq_of_coherent
+    G.repeatedGame PUnit.unit
+    (Function.update profile who proofDeviation)
+    (Profile.update publicProfile who publicDeviation)
+  simpa only [proofDeviation, publicProfile] using hagree
+
+/- GameTheory's hybrid unilateral Kuhn laws preserve the opponents while the
+deviating player crosses between behavioral policies and arbitrary total-plan
+laws.  This is exactly what transports the full deviation quantifier below. -/
+private theorem nash_toBehavior_iff {G : FiniteStageGame}
+    (lam : G.DiscountRate)
+    (profile : (who : G.Player) → Strategy G who) :
+    (∀ who deviation,
+      compactPayoff G lam profile who ≥
+        compactPayoff G lam
+          (Function.update profile who deviation) who) ↔
+      G.repeatedGame.IsDiscountedεNash (1 - lam.1) PUnit.unit 0
+        (toBehavior profile) := by
+  constructor
+  · intro hcompact who deviation
+    let publicDeviation :=
+      toNativePublicPolicy G.repeatedGame PUnit.unit deviation
+    let strategyDeviation : Strategy G who :=
+      ⟨((Native G).toBehavioralPolicy PUnit.unit
+          publicDeviation).toPureMeasure,
+        by
+          exact
+            GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
+              (M := Protocol G) _⟩
+    have hbound := hcompact who strategyDeviation
+    have hbase := congrFun (payoff_toBehavior lam profile) who
+    change G.repeatedGame.discountedPayoff (1 - lam.1)
+      (toBehavior profile) PUnit.unit who = _ at hbase
+    have hdeviation :=
+      compactPayoff_update_behavioral lam profile who deviation
+    rw [← hbase, hdeviation] at hbound
+    simpa only [add_zero] using hbound
+  · intro hbehavior who deviation
+    let publicDeviation :=
+      (Native G).ofBehavioralPolicy PUnit.unit
+        (GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith
+          (M := Protocol G) (deviation : Measure (Plan G who))
+          (fallback G who))
+    let proofDeviation :=
+      ofNativePublicPolicy G.repeatedGame publicDeviation
+    have hbound := hbehavior who proofDeviation
+    have hprofile :
+        toBehavior (Function.update profile who deviation) =
+          Function.update (toBehavior profile) who proofDeviation := by
+      simpa only [proofDeviation, publicDeviation] using
+        toBehavior_update profile who deviation
+    have hbase := congrFun (payoff_toBehavior lam profile) who
+    change G.repeatedGame.discountedPayoff (1 - lam.1)
+      (toBehavior profile) PUnit.unit who = _ at hbase
+    have hdeviation := congrFun
+      (payoff_toBehavior lam (Function.update profile who deviation)) who
+    rw [hprofile] at hdeviation
+    change G.repeatedGame.discountedPayoff (1 - lam.1)
+      (Function.update (toBehavior profile) who proofDeviation)
+      PUnit.unit who = _ at hdeviation
+    rw [hbase, hdeviation] at hbound
+    simpa only [add_zero] using hbound
+
+private theorem nash_fromBehavior_iff {G : FiniteStageGame}
+    (lam : G.DiscountRate) (profile : G.BehaviorProfile) :
+    (∀ who deviation,
+      compactPayoff G lam (fromBehavior profile) who ≥
+        compactPayoff G lam
+          (Function.update (fromBehavior profile) who deviation) who) ↔
+      G.repeatedGame.IsDiscountedεNash (1 - lam.1) PUnit.unit 0
+        profile := by
+  constructor
+  · intro hcompact who deviation
+    let publicDeviation :=
+      toNativePublicPolicy G.repeatedGame PUnit.unit deviation
+    let strategyDeviation : Strategy G who :=
+      ⟨((Native G).toBehavioralPolicy PUnit.unit
+          publicDeviation).toPureMeasure,
+        by
+          exact
+            GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
+              (M := Protocol G) _⟩
+    have hbound := hcompact who strategyDeviation
+    have hprofile :
+        fromBehavior (Function.update profile who deviation) =
+          Function.update (fromBehavior profile) who strategyDeviation := by
+      simpa only [strategyDeviation, publicDeviation] using
+        fromBehavior_update profile who deviation
+    have hbase := congrFun (payoff_fromBehavior lam profile) who
+    change compactPayoff G lam (fromBehavior profile) who =
+      G.repeatedGame.discountedPayoff (1 - lam.1) profile
+        PUnit.unit who at hbase
+    have hdeviation := congrFun
+      (payoff_fromBehavior lam (Function.update profile who deviation)) who
+    rw [hprofile] at hdeviation
+    change compactPayoff G lam
+        (Function.update (fromBehavior profile) who strategyDeviation) who =
+      G.repeatedGame.discountedPayoff (1 - lam.1)
+        (Function.update profile who deviation) PUnit.unit who at hdeviation
+    rw [hbase, hdeviation] at hbound
+    simpa only [add_zero] using hbound
+  · intro hbehavior who deviation
+    let publicDeviation :=
+      (Native G).ofBehavioralPolicy PUnit.unit
+        (GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith
+          (M := Protocol G) (deviation : Measure (Plan G who))
+          ((Native G).purePolicyEquiv PUnit.unit who |>.symm
+            (publicFallback G who)))
+    let proofDeviation :=
+      ofNativePublicPolicy G.repeatedGame publicDeviation
+    have hbound := hbehavior who proofDeviation
+    have hbase := congrFun (payoff_fromBehavior lam profile) who
+    change compactPayoff G lam (fromBehavior profile) who =
+      G.repeatedGame.discountedPayoff (1 - lam.1) profile
+        PUnit.unit who at hbase
+    have hdeviationRaw :=
+      compactPayoff_fromBehavior_update_arbitrary
+        lam profile who deviation
+    have hdeviation :
+        compactPayoff G lam
+            (Function.update (fromBehavior profile) who deviation) who =
+          G.repeatedGame.discountedPayoff (1 - lam.1)
+            (Function.update profile who proofDeviation) PUnit.unit who := by
+      simpa only [publicDeviation, proofDeviation] using hdeviationRaw
+    rw [← hbase, ← hdeviation] at hbound
+    simpa only [add_zero] using hbound
+
+end DiscountedPresentation
+
 abbrev FiniteCompactPresentation (G : FiniteStageGame) (n : G.Horizon) :=
   CompactRepeatedPresentation G (G.finitePayoffOnHorizon n)
     (fun profile =>
@@ -1194,10 +2571,10 @@ abbrev DiscountedCompactPresentation
 
 /-! These two declarations are the reduction itself.  At a finite horizon the
 carrier is the simplex of laws on bounded contingent plans, and bounded Kuhn
-gives the required behavioral transports.  The discounted construction still
-requires a single probability law on total pure policies, rather than one
-finite predraw for each horizon.  Neither declaration assumes a Nash profile
-exists. -/
+gives the required behavioral transports.  In the discounted case, the
+compact weak-topology carrier, payoff transports, and Nash transports are
+checked above; the last use GameTheory's hybrid unilateral Kuhn laws.  Neither
+declaration assumes a Nash profile exists. -/
 theorem finiteCompactPresentation_exists (G : FiniteStageGame)
     (n : G.Horizon) : Nonempty (FiniteCompactPresentation G n) := by
   exact ⟨{
@@ -1224,7 +2601,31 @@ theorem finiteCompactPresentation_exists (G : FiniteStageGame)
 theorem discountedCompactPresentation_exists (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     Nonempty (DiscountedCompactPresentation G lam) := by
-  sorry
+  exact ⟨{
+    Strategy := DiscountedPresentation.Strategy G
+    mix := DiscountedPresentation.mix
+    mixContinuous := DiscountedPresentation.mix_continuous
+    mix_zero := DiscountedPresentation.mix_zero
+    mix_one := DiscountedPresentation.mix_one
+    compactPayoff := DiscountedPresentation.compactPayoff G lam
+    compactPayoffContinuous :=
+      DiscountedPresentation.compactPayoff_continuous G lam
+    compactPayoffAffine :=
+      DiscountedPresentation.compactPayoff_affine G lam
+    barycenter := DiscountedPresentation.barycenter
+    barycenterContinuous :=
+      DiscountedPresentation.barycenter_continuous
+    compactPayoffBarycentric :=
+      DiscountedPresentation.compactPayoff_barycentric G lam
+    toBehavior := DiscountedPresentation.toBehavior
+    fromBehavior := DiscountedPresentation.fromBehavior
+    payoff_toBehavior := DiscountedPresentation.payoff_toBehavior lam
+    payoff_fromBehavior := DiscountedPresentation.payoff_fromBehavior lam
+    nash_toBehavior_iff :=
+      DiscountedPresentation.nash_toBehavior_iff lam
+    nash_fromBehavior_iff :=
+      DiscountedPresentation.nash_fromBehavior_iff lam
+  }⟩
 
 theorem finiteCompactPresentation_feasiblePayoffs_eq
     {G : FiniteStageGame} {n : G.Horizon}

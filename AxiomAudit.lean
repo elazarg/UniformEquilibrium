@@ -277,6 +277,7 @@ import MathUE.Probability.EntryReachableChargedClass
 import MathUE.Probability.EntryReachableChargedOccupation
 import MathUE.Probability.EntryReachableDistinguishedCirculation
 import MathUE.Probability.ExactRankPositiveScaling
+import MathUE.Probability.FinDistIntegral
 import MathUE.Probability.FiniteClosedCoreReach
 import MathUE.Probability.FiniteControlledStoppingEnvelope
 import MathUE.Probability.FiniteControlledStoppingOptimalPolicy
