@@ -4351,6 +4351,641 @@ theorem KiloblockConstruction.epsilon_lt_macroOther_add_survival
       hsurvival
   nlinarith
 
+def KiloblockConstruction.continueAdvanceProbabilityWeight
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) : ℝ :=
+  construction.macroAdvanceProbability k +
+    if (construction.attempt k excluded).continuation = .advance then
+      construction.macroAbsorbProbability k excluded
+    else 0
+
+def KiloblockConstruction.continueExitProbabilityWeight
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) : ℝ :=
+  construction.continueAdvanceProbabilityWeight k excluded +
+    ∑ owner ∈ Finset.univ.erase excluded,
+      construction.macroAbsorbProbability k owner
+
+theorem KiloblockConstruction.continueAdvanceProbabilityWeight_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    0 ≤ construction.continueAdvanceProbabilityWeight k excluded := by
+  unfold KiloblockConstruction.continueAdvanceProbabilityWeight
+  apply add_nonneg (construction.macroAdvanceProbability_nonneg k)
+  split
+  · exact construction.macroAbsorbProbability_nonneg k excluded
+  · exact le_rfl
+
+theorem KiloblockConstruction.continueExitProbabilityWeight_pos
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    0 < construction.continueExitProbabilityWeight k excluded := by
+  unfold KiloblockConstruction.continueExitProbabilityWeight
+  have hadvance := construction.continueAdvanceProbabilityWeight_nonneg k excluded
+  have hother : 0 ≤ ∑ owner ∈ Finset.univ.erase excluded,
+      construction.macroAbsorbProbability k owner :=
+    Finset.sum_nonneg fun owner _ =>
+      construction.macroAbsorbProbability_nonneg k owner
+  apply lt_of_le_of_ne (add_nonneg hadvance hother)
+  intro hzero
+  have hadvanceZero : construction.continueAdvanceProbabilityWeight k excluded = 0 := by
+    nlinarith
+  have hotherZero : ∑ owner ∈ Finset.univ.erase excluded,
+      construction.macroAbsorbProbability k owner = 0 := by
+    nlinarith
+  cases hbranch : (construction.attempt k excluded).continuation with
+  | advance =>
+      have htotal := construction.macroProbability_total k
+      have hexcluded := construction.macroAbsorbProbability_nonneg k excluded
+      have hadvanceBase := construction.macroAdvanceProbability_nonneg k
+      unfold KiloblockConstruction.continueAdvanceProbabilityWeight at hadvanceZero
+      simp only [hbranch, if_pos] at hadvanceZero
+      have hall : ∑ owner, construction.macroAbsorbProbability k owner =
+          construction.macroAbsorbProbability k excluded +
+            ∑ owner ∈ Finset.univ.erase excluded,
+              construction.macroAbsorbProbability k owner := by
+        rw [← Finset.sum_erase_add _ _ (Finset.mem_univ excluded)]
+        ring
+      rw [hall, hotherZero] at htotal
+      nlinarith
+  | restart =>
+      have htotal := construction.macroProbability_total k
+      unfold KiloblockConstruction.continueAdvanceProbabilityWeight at hadvanceZero
+      simp only [hbranch, reduceCtorEq, if_false, add_zero] at hadvanceZero
+      have hall : ∑ owner, construction.macroAbsorbProbability k owner =
+          construction.macroAbsorbProbability k excluded +
+            ∑ owner ∈ Finset.univ.erase excluded,
+              construction.macroAbsorbProbability k owner := by
+        rw [← Finset.sum_erase_add _ _ (Finset.mem_univ excluded)]
+        ring
+      rw [hall, hotherZero, hadvanceZero, zero_add, add_zero] at htotal
+      obtain ⟨negative, hnegative⟩ := construction.column_negative excluded
+      have hbalance := construction.macro_balance k negative
+      rw [hadvanceZero] at hbalance
+      have hsum : (∑ owner, construction.macroAbsorbProbability k owner *
+          NormalMatrix table negative owner) =
+          construction.macroAbsorbProbability k excluded *
+            NormalMatrix table negative excluded := by
+        rw [← Finset.sum_erase_add _ _ (Finset.mem_univ excluded)]
+        have hzeroOther : ∀ owner ∈ Finset.univ.erase excluded,
+            construction.macroAbsorbProbability k owner = 0 := by
+          intro owner howner
+          exact (Finset.sum_eq_zero_iff_of_nonneg (fun other _ =>
+            construction.macroAbsorbProbability_nonneg k other)).mp
+              hotherZero owner howner
+        rw [Finset.sum_eq_zero fun owner howner => by
+          rw [hzeroOther owner howner, zero_mul], zero_add]
+      rw [hsum, htotal, one_mul] at hbalance
+      have hwNonneg := (construction.buildingBlock k).w_boundary.1.2 negative
+      linarith [construction.negativeMargin_pos]
+
+def KiloblockConstruction.continueMacroAdvanceProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) : ℝ :=
+  construction.continueAdvanceProbabilityWeight k excluded /
+    construction.continueExitProbabilityWeight k excluded
+
+def KiloblockConstruction.continueMacroAbsorbProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded owner : NormalPlayer table) : ℝ :=
+  if owner = excluded then 0 else
+    construction.macroAbsorbProbability k owner /
+      construction.continueExitProbabilityWeight k excluded
+
+theorem KiloblockConstruction.continueMacroProbability_total
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    construction.continueMacroAdvanceProbability k excluded +
+      ∑ owner, construction.continueMacroAbsorbProbability k excluded owner = 1 := by
+  unfold KiloblockConstruction.continueMacroAdvanceProbability
+    KiloblockConstruction.continueMacroAbsorbProbability
+  have hsum : (∑ owner,
+      if owner = excluded then 0 else
+        construction.macroAbsorbProbability k owner /
+          construction.continueExitProbabilityWeight k excluded) =
+      ∑ owner ∈ Finset.univ.erase excluded,
+        construction.macroAbsorbProbability k owner /
+          construction.continueExitProbabilityWeight k excluded := by
+    let summand := fun owner : NormalPlayer table =>
+      if owner = excluded then 0 else
+        construction.macroAbsorbProbability k owner /
+          construction.continueExitProbabilityWeight k excluded
+    calc
+      (∑ owner, summand owner) =
+          ∑ owner ∈ Finset.univ.erase excluded, summand owner :=
+        (Finset.sum_erase (s := Finset.univ) (f := summand) (by
+          simp [summand])).symm
+      _ = _ := by
+        apply Finset.sum_congr rfl
+        intro owner howner
+        simp only [summand, if_neg (Finset.ne_of_mem_erase howner)]
+  rw [hsum, ← Finset.sum_div, ← add_div]
+  exact div_self (ne_of_gt
+    (construction.continueExitProbabilityWeight_pos k excluded))
+
+def KiloblockConstruction.macroOtherAbsorptionProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) : ℝ :=
+  ∑ owner ∈ Finset.univ.erase excluded,
+    construction.macroAbsorbProbability k owner
+
+theorem KiloblockConstruction.negative_owner_charge_le
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded negative : NormalPlayer table)
+    (hnegative : NormalMatrix table negative excluded <
+      -construction.negativeMargin) :
+    construction.negativeMargin *
+        construction.macroAbsorbProbability k excluded ≤
+      construction.point k negative -
+          (construction.buildingBlock k).w negative +
+        construction.macroOtherAbsorptionProbability k excluded := by
+  let p := construction.macroAbsorbProbability k
+  let y := construction.point k negative
+  have htotal := construction.macroProbability_total k
+  have hbalance := construction.macro_balance k negative
+  have hsum : (∑ owner, p owner * NormalMatrix table negative owner) =
+      p excluded * NormalMatrix table negative excluded +
+        ∑ owner ∈ Finset.univ.erase excluded,
+          p owner * NormalMatrix table negative owner := by
+    rw [← Finset.sum_erase_add _ _ (Finset.mem_univ excluded)]
+    ring
+  have hprobability : (∑ owner, p owner) = p excluded +
+      ∑ owner ∈ Finset.univ.erase excluded, p owner := by
+    rw [← Finset.sum_erase_add _ _ (Finset.mem_univ excluded)]
+    ring
+  have hidentity : y - (construction.buildingBlock k).w negative =
+      p excluded * (y - NormalMatrix table negative excluded) +
+        ∑ owner ∈ Finset.univ.erase excluded,
+          p owner * (y - NormalMatrix table negative owner) := by
+    dsimp only [p, y] at htotal hbalance hsum hprobability ⊢
+    rw [hsum] at hbalance
+    simp_rw [mul_sub]
+    rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
+    rw [hprobability] at htotal
+    linear_combination -hbalance - htotal * construction.point k negative
+  have hexcluded : construction.negativeMargin * p excluded ≤
+      p excluded * (y - NormalMatrix table negative excluded) := by
+    rw [mul_comm construction.negativeMargin (p excluded)]
+    apply mul_le_mul_of_nonneg_left _
+      (construction.macroAbsorbProbability_nonneg k excluded)
+    have hyNonneg := (construction.point_boundary k).1.2 negative
+    dsimp only [y]
+    linarith
+  have hother : -(∑ owner ∈ Finset.univ.erase excluded, p owner) ≤
+      ∑ owner ∈ Finset.univ.erase excluded,
+        p owner * (y - NormalMatrix table negative owner) := by
+    rw [← Finset.sum_neg_distrib]
+    apply Finset.sum_le_sum
+    intro owner _
+    have hp := construction.macroAbsorbProbability_nonneg k owner
+    have hyNonneg := (construction.point_boundary k).1.2 negative
+    have hmatrix := (abs_le.mp
+      (construction.normalMatrix_bounded negative owner)).2
+    dsimp only [p, y]
+    nlinarith
+  rw [hidentity]
+  unfold KiloblockConstruction.macroOtherAbsorptionProbability
+  dsimp only [p] at hexcluded hother ⊢
+  linarith
+
+def KiloblockConstruction.totalMacroOtherAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) : ℝ :=
+  ∑ k, construction.macroOtherAbsorptionProbability k excluded
+
+def KiloblockConstruction.totalMacroOwnerAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (owner : NormalPlayer table) : ℝ :=
+  ∑ k, construction.macroAbsorbProbability k owner
+
+theorem KiloblockConstruction.totalMacroAbsorption_decompose
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    construction.totalMacroAbsorption =
+      construction.totalMacroOwnerAbsorption excluded +
+        construction.totalMacroOtherAbsorption excluded := by
+  unfold KiloblockConstruction.totalMacroAbsorption
+    KiloblockConstruction.totalMacroOwnerAbsorption
+    KiloblockConstruction.totalMacroOtherAbsorption
+    KiloblockConstruction.macroOtherAbsorptionProbability
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro k _
+  rw [← Finset.sum_erase_add _ _ (Finset.mem_univ excluded)]
+  ring
+
+theorem KiloblockConstruction.sum_point_sub_w_eq
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) :
+    (∑ k, (construction.point k who -
+        (construction.buildingBlock k).w who)) =
+      construction.point ⟨0, by omega⟩ who -
+        (construction.buildingBlock (Fin.last construction.blockCount)).w who -
+        construction.trackingCorrection
+          (Fin.last construction.blockCount) who := by
+  let y : ℕ → ℝ := fun j =>
+    if hj : j < construction.blockCount + 1 then
+      construction.point ⟨j, hj⟩ who
+    else 0
+  let w : ℕ → ℝ := fun j =>
+    if hj : j < construction.blockCount + 1 then
+      (construction.buildingBlock ⟨j, hj⟩).w who
+    else 0
+  have hgap : (∑ k, (construction.point k who -
+      (construction.buildingBlock k).w who)) =
+      ∑ j ∈ Finset.range (construction.blockCount + 1),
+        (y j - w j) := by
+    rw [← Fin.sum_univ_eq_sum_range]
+    apply Finset.sum_congr rfl
+    intro k _
+    simp only [y, w, dif_pos k.isLt]
+  have htracking : construction.trackingCorrection
+      (Fin.last construction.blockCount) who =
+      ∑ j ∈ Finset.range construction.blockCount,
+        (w j - y (j + 1)) := by
+    unfold KiloblockConstruction.trackingCorrection
+    change (∑ j ∈ Finset.range construction.blockCount,
+      construction.trackingIncrement j who) = _
+    apply Finset.sum_congr rfl
+    intro j hj
+    have hjcount := Finset.mem_range.mp hj
+    simp only [KiloblockConstruction.trackingIncrement, hjcount,
+      dif_pos, y, w]
+    rw [dif_pos (by omega), dif_pos (by omega)]
+  have hfinite :
+      (∑ j ∈ Finset.range (construction.blockCount + 1), (y j - w j)) +
+          ∑ j ∈ Finset.range construction.blockCount, (w j - y (j + 1)) =
+        y 0 - w construction.blockCount := by
+    rw [Finset.sum_range_succ]
+    have hterm : (∑ j ∈ Finset.range construction.blockCount,
+        ((y j - w j) + (w j - y (j + 1)))) =
+        ∑ j ∈ Finset.range construction.blockCount,
+          (y j - y (j + 1)) := by
+      apply Finset.sum_congr rfl
+      intro j _
+      ring
+    calc
+      ((∑ j ∈ Finset.range construction.blockCount, (y j - w j)) +
+            (y construction.blockCount - w construction.blockCount)) +
+          ∑ j ∈ Finset.range construction.blockCount,
+            (w j - y (j + 1)) =
+          ((∑ j ∈ Finset.range construction.blockCount, (y j - w j)) +
+            ∑ j ∈ Finset.range construction.blockCount,
+              (w j - y (j + 1))) +
+            (y construction.blockCount - w construction.blockCount) := by
+        ring
+      _ = (∑ j ∈ Finset.range construction.blockCount,
+            ((y j - w j) + (w j - y (j + 1)))) +
+          (y construction.blockCount - w construction.blockCount) := by
+        rw [Finset.sum_add_distrib]
+      _ = (∑ j ∈ Finset.range construction.blockCount,
+            (y j - y (j + 1))) +
+          (y construction.blockCount - w construction.blockCount) := by
+        rw [hterm]
+      _ = y 0 - w construction.blockCount := by
+        rw [Finset.sum_range_sub']
+        ring
+  rw [hgap, htracking]
+  have hyzero : y 0 = construction.point ⟨0, by omega⟩ who := by
+    simp [y]
+  have hwlast : w construction.blockCount =
+      (construction.buildingBlock (Fin.last construction.blockCount)).w who := by
+    dsimp only [w]
+    rw [dif_pos (by omega)]
+    congr 2
+  rw [hyzero, hwlast] at hfinite
+  linarith
+
+theorem KiloblockConstruction.sum_point_sub_w_lt_one_add_epsilon
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) :
+    (∑ k, (construction.point k who -
+      (construction.buildingBlock k).w who)) < 1 + ε := by
+  rw [construction.sum_point_sub_w_eq who]
+  have hpoint := (abs_le.mp (abs_le_one_of_mem_D
+    construction.normalMatrix_bounded
+    (construction.point_boundary ⟨0, by omega⟩).1 who)).2
+  have hw := (construction.buildingBlock
+    (Fin.last construction.blockCount)).w_boundary.1.2 who
+  have htracking := construction.abs_trackingCorrection_lt
+    (Fin.last construction.blockCount) who
+  linarith [(abs_lt.mp htracking).1]
+
+theorem KiloblockConstruction.five_mul_epsilon_lt_negativeMargin
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    5 * ε < construction.negativeMargin := by
+  have hcard := construction.two_le_normalPlayer_card
+  have hcoefficient : (5 : ℝ) ≤
+      ((2 * Fintype.card (NormalPlayer table) + 1 : ℕ) : ℝ) := by
+    exact_mod_cast (show 5 ≤ 2 * Fintype.card (NormalPlayer table) + 1 by omega)
+  have hmul := mul_le_mul_of_nonneg_right hcoefficient
+    construction.epsilon_pos.le
+  exact lt_of_le_of_lt hmul construction.accuracy_below_margin
+
+theorem KiloblockConstruction.ownerCharge_le_gap_add_other
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded negative : NormalPlayer table)
+    (hnegative : NormalMatrix table negative excluded <
+      -construction.negativeMargin) :
+    construction.negativeMargin *
+        construction.totalMacroOwnerAbsorption excluded ≤
+      (∑ k, (construction.point k negative -
+        (construction.buildingBlock k).w negative)) +
+        construction.totalMacroOtherAbsorption excluded := by
+  have hsum := Finset.sum_le_sum (s := Finset.univ) fun k _ =>
+    construction.negative_owner_charge_le k excluded negative hnegative
+  change construction.negativeMargin *
+      (∑ k, construction.macroAbsorbProbability k excluded) ≤
+    (∑ k, (construction.point k negative -
+      (construction.buildingBlock k).w negative)) +
+      ∑ k, construction.macroOtherAbsorptionProbability k excluded
+  calc
+    construction.negativeMargin *
+        (∑ k, construction.macroAbsorbProbability k excluded) =
+        ∑ k, construction.negativeMargin *
+          construction.macroAbsorbProbability k excluded := by
+      rw [Finset.mul_sum]
+    _ ≤ ∑ k, (construction.point k negative -
+        (construction.buildingBlock k).w negative +
+          construction.macroOtherAbsorptionProbability k excluded) := hsum
+    _ = (∑ k, (construction.point k negative -
+        (construction.buildingBlock k).w negative)) +
+          ∑ k, construction.macroOtherAbsorptionProbability k excluded := by
+      rw [Finset.sum_add_distrib]
+
+theorem KiloblockConstruction.inv_epsilon_lt_totalMacroOtherAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    ε⁻¹ < construction.totalMacroOtherAbsorption excluded := by
+  obtain ⟨negative, hnegative⟩ := construction.column_negative excluded
+  have hcharge := construction.ownerCharge_le_gap_add_other
+    excluded negative hnegative
+  have hgap := construction.sum_point_sub_w_lt_one_add_epsilon negative
+  have htotal := construction.inv_epsilon_sq_lt_totalMacroAbsorption
+  rw [construction.totalMacroAbsorption_decompose excluded] at htotal
+  have hmargin := construction.five_mul_epsilon_lt_negativeMargin
+  have hmarginOne := construction.negativeMargin_lt_one
+  let r := ε⁻¹
+  have hrpos : 0 < r := inv_pos.mpr construction.epsilon_pos
+  have her : ε * r = 1 := by
+    dsimp only [r]
+    simpa only [mul_comm] using
+      inv_mul_cancel₀ (ne_of_gt construction.epsilon_pos)
+  have hrsq : (ε ^ 2)⁻¹ = r ^ 2 := by
+    dsimp only [r]
+    rw [inv_pow]
+  rw [hrsq] at htotal
+  by_contra hnot
+  have hother : construction.totalMacroOtherAbsorption excluded ≤ r :=
+    le_of_not_gt hnot
+  have howner : r ^ 2 - r <
+      construction.totalMacroOwnerAbsorption excluded := by
+    linarith
+  have hrFive : 5 < r := by
+    have hεfifth : ε < (1 : ℝ) / 5 := by linarith
+    have := one_div_lt_one_div_of_lt construction.epsilon_pos hεfifth
+    norm_num at this ⊢
+    simpa only [r, one_div] using this
+  have hrgap : 0 < r ^ 2 - r := by nlinarith
+  have hownerPos : 0 < construction.totalMacroOwnerAbsorption excluded :=
+    hrgap.trans howner
+  have hproduct : (5 * ε) * (r ^ 2 - r) <
+      construction.negativeMargin *
+        construction.totalMacroOwnerAbsorption excluded := by
+    exact mul_lt_mul_of_pos hmargin howner
+      (mul_pos (by norm_num) construction.epsilon_pos) hownerPos
+  have hlower : 1 + ε + r < (5 * ε) * (r ^ 2 - r) := by
+    nlinarith
+  linarith
+
+theorem KiloblockConstruction.continueExitProbabilityWeight_le_one
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    construction.continueExitProbabilityWeight k excluded ≤ 1 := by
+  have htotal := construction.macroProbability_total k
+  have hall : (∑ owner, construction.macroAbsorbProbability k owner) =
+      construction.macroAbsorbProbability k excluded +
+        ∑ owner ∈ Finset.univ.erase excluded,
+          construction.macroAbsorbProbability k owner := by
+    rw [← Finset.sum_erase_add _ _ (Finset.mem_univ excluded)]
+    ring
+  rw [hall] at htotal
+  unfold KiloblockConstruction.continueExitProbabilityWeight
+    KiloblockConstruction.continueAdvanceProbabilityWeight
+  split
+  · linarith
+  · linarith [construction.macroAbsorbProbability_nonneg k excluded]
+
+theorem KiloblockConstruction.continueMacroAdvanceProbability_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    0 ≤ construction.continueMacroAdvanceProbability k excluded := by
+  exact div_nonneg
+    (construction.continueAdvanceProbabilityWeight_nonneg k excluded)
+    (construction.continueExitProbabilityWeight_pos k excluded).le
+
+theorem KiloblockConstruction.continueMacroAbsorbProbability_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded owner : NormalPlayer table) :
+    0 ≤ construction.continueMacroAbsorbProbability k excluded owner := by
+  unfold KiloblockConstruction.continueMacroAbsorbProbability
+  split
+  · exact le_rfl
+  · exact div_nonneg (construction.macroAbsorbProbability_nonneg k owner)
+      (construction.continueExitProbabilityWeight_pos k excluded).le
+
+def KiloblockConstruction.continueMacroAbsorptionProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) : ℝ :=
+  ∑ owner, construction.continueMacroAbsorbProbability k excluded owner
+
+theorem KiloblockConstruction.continueMacroAbsorptionProbability_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    0 ≤ construction.continueMacroAbsorptionProbability k excluded :=
+  Finset.sum_nonneg fun owner _ =>
+    construction.continueMacroAbsorbProbability_nonneg k excluded owner
+
+theorem KiloblockConstruction.continueMacroAbsorptionProbability_le_one
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    construction.continueMacroAbsorptionProbability k excluded ≤ 1 := by
+  have htotal := construction.continueMacroProbability_total k excluded
+  have hadvance := construction.continueMacroAdvanceProbability_nonneg k excluded
+  unfold KiloblockConstruction.continueMacroAbsorptionProbability
+  linarith
+
+theorem KiloblockConstruction.macroOther_le_continueMacroAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    construction.macroOtherAbsorptionProbability k excluded ≤
+      construction.continueMacroAbsorptionProbability k excluded := by
+  have hsum : construction.continueMacroAbsorptionProbability k excluded =
+      construction.macroOtherAbsorptionProbability k excluded /
+        construction.continueExitProbabilityWeight k excluded := by
+    unfold KiloblockConstruction.continueMacroAbsorptionProbability
+      KiloblockConstruction.continueMacroAbsorbProbability
+      KiloblockConstruction.macroOtherAbsorptionProbability
+    let summand := fun owner : NormalPlayer table =>
+      if owner = excluded then 0 else
+        construction.macroAbsorbProbability k owner /
+          construction.continueExitProbabilityWeight k excluded
+    have herase : (∑ owner, summand owner) =
+        ∑ owner ∈ Finset.univ.erase excluded,
+          construction.macroAbsorbProbability k owner /
+            construction.continueExitProbabilityWeight k excluded := by
+      calc
+        (∑ owner, summand owner) =
+            ∑ owner ∈ Finset.univ.erase excluded, summand owner :=
+          (Finset.sum_erase (s := Finset.univ) (f := summand) (by
+            simp [summand])).symm
+        _ = _ := by
+          apply Finset.sum_congr rfl
+          intro owner howner
+          simp only [summand, if_neg (Finset.ne_of_mem_erase howner)]
+    rw [herase, ← Finset.sum_div]
+  rw [hsum]
+  exact (le_div_iff₀
+    (construction.continueExitProbabilityWeight_pos k excluded)).2
+      (mul_le_of_le_one_right
+        (Finset.sum_nonneg fun owner _ =>
+          construction.macroAbsorbProbability_nonneg k owner)
+        (construction.continueExitProbabilityWeight_le_one k excluded))
+
+def KiloblockConstruction.totalContinueMacroAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) : ℝ :=
+  ∑ k, construction.continueMacroAbsorptionProbability k excluded
+
+theorem KiloblockConstruction.inv_epsilon_lt_totalContinueMacroAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    ε⁻¹ < construction.totalContinueMacroAbsorption excluded := by
+  exact (construction.inv_epsilon_lt_totalMacroOtherAbsorption excluded).trans_le
+    (Finset.sum_le_sum fun k _ =>
+      construction.macroOther_le_continueMacroAbsorption k excluded)
+
+def KiloblockConstruction.continueMacroSurvivalProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) : ℝ :=
+  ∏ k, construction.continueMacroAdvanceProbability k excluded
+
+theorem KiloblockConstruction.continueMacroAdvance_eq_one_sub_absorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    construction.continueMacroAdvanceProbability k excluded =
+      1 - construction.continueMacroAbsorptionProbability k excluded := by
+  have htotal := construction.continueMacroProbability_total k excluded
+  unfold KiloblockConstruction.continueMacroAbsorptionProbability
+  linarith
+
+theorem KiloblockConstruction.continueMacroSurvivalProbability_lt_epsilon
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    construction.continueMacroSurvivalProbability excluded < ε := by
+  let charge : ℕ → ℝ := fun j =>
+    if hj : j < construction.blockCount + 1 then
+      construction.continueMacroAbsorptionProbability ⟨j, hj⟩ excluded
+    else 0
+  have hcharge0 : ∀ j, 0 ≤ charge j := by
+    intro j
+    simp only [charge]
+    split
+    · exact construction.continueMacroAbsorptionProbability_nonneg _ excluded
+    · exact le_rfl
+  have hcharge1 : ∀ j, charge j ≤ 1 := by
+    intro j
+    simp only [charge]
+    split
+    · exact construction.continueMacroAbsorptionProbability_le_one _ excluded
+    · exact zero_le_one
+  have hmain := Math.prod_one_sub_mul_one_add_sum_range_le_one
+    charge hcharge0 hcharge1 0 (construction.blockCount + 1)
+  have hsum : (∑ j ∈ Finset.range (construction.blockCount + 1), charge j) =
+      construction.totalContinueMacroAbsorption excluded := by
+    rw [← Fin.sum_univ_eq_sum_range]
+    unfold KiloblockConstruction.totalContinueMacroAbsorption
+    apply Finset.sum_congr rfl
+    intro k _
+    rw [show charge k.1 =
+        construction.continueMacroAbsorptionProbability k excluded by
+      simp only [charge, dif_pos k.isLt]]
+  have hprod : (∏ j ∈ Finset.range (construction.blockCount + 1),
+      (1 - charge j)) =
+      construction.continueMacroSurvivalProbability excluded := by
+    rw [← Fin.prod_univ_eq_prod_range]
+    unfold KiloblockConstruction.continueMacroSurvivalProbability
+    apply Finset.prod_congr rfl
+    intro k _
+    simp only [charge, dif_pos k.isLt]
+    exact (construction.continueMacroAdvance_eq_one_sub_absorption
+      k excluded).symm
+  simp only [zero_add] at hmain
+  rw [hsum, hprod] at hmain
+  have hfactor : 0 < 1 + construction.totalContinueMacroAbsorption excluded := by
+    have hinv : 0 < ε⁻¹ := inv_pos.mpr construction.epsilon_pos
+    linarith [construction.inv_epsilon_lt_totalContinueMacroAbsorption excluded]
+  have hepsilonFactor : 1 < ε *
+      (1 + construction.totalContinueMacroAbsorption excluded) := by
+    have hmul : 1 < ε *
+        construction.totalContinueMacroAbsorption excluded := by
+      rw [← inv_mul_cancel₀ (ne_of_gt construction.epsilon_pos)]
+      simpa only [mul_comm] using mul_lt_mul_of_pos_left
+        (construction.inv_epsilon_lt_totalContinueMacroAbsorption excluded)
+        construction.epsilon_pos
+    nlinarith [construction.epsilon_pos]
+  by_contra hnot
+  have hεle : ε ≤ construction.continueMacroSurvivalProbability excluded :=
+    le_of_not_gt hnot
+  have := mul_le_mul_of_nonneg_right hεle hfactor.le
+  linarith
+
 /-! The operational schedule itself implies the unilateral-quitting clause:
 at an active history either one selected owner uses the mesh coin or everyone
 continues. -/
