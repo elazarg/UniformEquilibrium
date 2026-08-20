@@ -1,6 +1,7 @@
 import MathUE.Topology.CompactSerialRelation
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
+import UniformEquilibrium.Quitting.Cycles.PeriodicJointSurvival
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
@@ -634,8 +635,206 @@ def Proposition2_3 : Prop :=
           (quittingRootSequenceTailVector reward roots (start + 1))
           ((rho reward + 2) * ε) (roots start)
 
+/-- Moving the continuation vector coordinatewise by at most `c` widens the
+paper's support-perfect tolerance by at most `2c`: both compared pure-action
+payoffs are `1`-Lipschitz in that player's continuation coordinate. -/
+private theorem oneShotPerfectEpsilonEquilibrium_of_continuation_close
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {first second : Payoff ι} {ε c : ℝ} {root : ι → PMF Bool}
+    (hperfect : oneShotPerfectEpsilonEquilibrium reward first ε root)
+    (hc : 0 ≤ c) (hclose : ∀ who, |first who - second who| ≤ c) :
+    oneShotPerfectEpsilonEquilibrium reward second (ε + 2 * c) root := by
+  intro who action hsupport alternative
+  have hfirst := hperfect who action hsupport alternative
+  have halt := abs_quittingRootExpectedPayoff_sub_of_tail_close reward
+    second first (Function.update root who (PMF.pure alternative)) who hc
+    (by rw [abs_sub_comm]; exact hclose who)
+  have hact := abs_quittingRootExpectedPayoff_sub_of_tail_close reward
+    second first (Function.update root who (PMF.pure action)) who hc
+    (by rw [abs_sub_comm]; exact hclose who)
+  have haltBounds := abs_le.mp halt
+  have hactBounds := abs_le.mp hact
+  linarith
+
 theorem proposition2_3 : Proposition2_3 (ι := ι) := by
-  sorry
+  classical
+  intro reward carrier ε hε hcarrierNonempty hcarrierCompact hcorrespondence
+  -- Nonemptiness of the correspondence forces the advertised absorption
+  -- floor to lie in the probability interval.
+  obtain ⟨anchor, hanchor⟩ := hcarrierNonempty
+  obtain ⟨anchorCurrent, -, anchorRoot, -, hanchorFloor, -⟩ :=
+    hcorrespondence anchor hanchor
+  have hε1 : ε ≤ 1 := by
+    have hmass0 := quittingStationaryContinueMass_nonneg anchorRoot
+    unfold oneShotTerminationProbability quittingRootAbsorptionMass at hanchorFloor
+    linarith
+  set η := ε ^ 2 with hηdef
+  have hη0 : 0 < η := by positivity
+  -- Choose a correspondence root at every carrier point.
+  have hrowExists : ∀ tail : Payoff ι, ∃ root : ι → PMF Bool,
+      tail ∈ carrier →
+        oneShotPerfectEpsilonEquilibrium reward tail (rho reward * ε) root ∧
+          ε ≤ quittingRootAbsorptionMass root ∧
+          quittingRootSuccessorPayoff reward tail root ∈ carrier := by
+    intro tail
+    by_cases htail : tail ∈ carrier
+    · obtain ⟨current, hcurrent, root, hperfect, hfloor, hvalue⟩ :=
+        hcorrespondence tail htail
+      refine ⟨root, fun _ ↦ ⟨hperfect, hfloor, ?_⟩⟩
+      change oneShotExpectedPayoff reward tail root ∈ carrier
+      rw [hvalue]
+      exact hcurrent
+    · exact ⟨fun _ ↦ PMF.pure false, fun hcontra ↦ absurd hcontra htail⟩
+  choose rowOf hrowOf using hrowExists
+  -- Give every mesh key a representative carrier point whenever that key
+  -- is realized; unrealized keys use one harmless anchor.
+  have hrepExists : ∀ key : ι → ℤ, ∃ tail : Payoff ι,
+      tail ∈ carrier ∧
+        ((∃ tail' ∈ carrier, ∀ who, ⌊tail' who / η⌋ = key who) →
+          ∀ who, ⌊tail who / η⌋ = key who) := by
+    intro key
+    by_cases hkey : ∃ tail' ∈ carrier, ∀ who, ⌊tail' who / η⌋ = key who
+    · obtain ⟨tail, htail, htailKey⟩ := hkey
+      exact ⟨tail, htail, fun _ ↦ htailKey⟩
+    · exact ⟨anchor, hanchor, fun hcontra ↦ absurd hcontra hkey⟩
+  choose rep hrepCarrier hrepKey using hrepExists
+  -- Compactness supplies a common coordinate bound, hence only finitely
+  -- many mesh keys can be produced.
+  obtain ⟨radius, hradius⟩ :=
+    hcarrierCompact.isBounded.subset_closedBall (0 : Payoff ι)
+  set R := max (quittingRewardBound reward) (max 0 radius) with hRdef
+  have hR0 : 0 ≤ R := le_trans (le_max_left 0 radius)
+    (le_max_right (quittingRewardBound reward) (max 0 radius))
+  have hcarrierBound : ∀ tail ∈ carrier, ∀ who, |tail who| ≤ R := by
+    intro tail htail who
+    have hnorm : ‖tail‖ ≤ radius :=
+      mem_closedBall_zero_iff.mp (hradius htail)
+    have hcoordinate : |tail who| ≤ ‖tail‖ := by
+      rw [← Real.norm_eq_abs, Pi.norm_def]
+      exact_mod_cast Finset.le_sup (f := fun player ↦ ‖tail player‖₊)
+        (Finset.mem_univ who)
+    exact hcoordinate.trans (hnorm.trans
+      (le_trans (le_max_right 0 radius)
+        (le_max_right (quittingRewardBound reward) (max 0 radius))))
+  set dynamics : (ι → ℤ) → (ι → ℤ) := fun key who ↦
+    ⌊quittingRootSuccessorPayoff reward (rep key) (rowOf (rep key)) who / η⌋
+    with hdynamics
+  have hdynamicsBound : ∀ key who,
+      |quittingRootSuccessorPayoff reward (rep key) (rowOf (rep key)) who| ≤
+        R := by
+    intro key who
+    exact hcarrierBound _
+      ((hrowOf (rep key) (hrepCarrier key)).2.2) who
+  have hdynamicsRange : ∀ key, dynamics key ∈
+      {boundedKey : ι → ℤ |
+        ∀ who, boundedKey who ∈ Set.Icc ⌊(-R) / η⌋ ⌊R / η⌋} := by
+    intro key who
+    obtain ⟨hlower, hupper⟩ := abs_le.mp (hdynamicsBound key who)
+    constructor
+    · exact Int.floor_le_floor (by gcongr)
+    · exact Int.floor_le_floor (by gcongr)
+  have hkeyRangeFinite :
+      ({boundedKey : ι → ℤ |
+        ∀ who, boundedKey who ∈ Set.Icc ⌊(-R) / η⌋ ⌊R / η⌋}).Finite := by
+    apply Set.Finite.subset
+      (Set.Finite.pi fun _ : ι ↦ Set.finite_Icc ⌊(-R) / η⌋ ⌊R / η⌋)
+    intro key hkey
+    rw [Set.mem_pi]
+    exact fun who _ ↦ hkey who
+  obtain ⟨period, keyChain, hperiod, hkeyPeriodic, hkeyChain⟩ :=
+    Math.exists_periodic_backward_orbit dynamics (fun _ ↦ 0)
+      hkeyRangeFinite hdynamicsRange
+  set plan : ℕ → Payoff ι := fun n ↦ rep (keyChain n) with hplan
+  set roots : RootSequence (ι := ι) :=
+    fun n ↦ rowOf (plan (n + 1)) with hroots
+  have hplanCarrier : ∀ n, plan n ∈ carrier :=
+    fun n ↦ hrepCarrier (keyChain n)
+  have hrowSpec : ∀ n,
+      oneShotPerfectEpsilonEquilibrium reward (plan (n + 1))
+          (rho reward * ε) (roots n) ∧
+        ε ≤ quittingRootAbsorptionMass (roots n) ∧
+        quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) ∈
+          carrier :=
+    fun n ↦ hrowOf (plan (n + 1)) (hplanCarrier (n + 1))
+  have hvalueKey : ∀ n who,
+      ⌊quittingRootSuccessorPayoff reward (plan (n + 1))
+          (roots n) who / η⌋ = keyChain n who := by
+    intro n who
+    have h := congrFun (hkeyChain n) who
+    rw [hdynamics] at h
+    rw [hroots, hplan]
+    exact h.symm
+  have hplanKey : ∀ n who, ⌊plan n who / η⌋ = keyChain n who := by
+    intro n who
+    apply hrepKey (keyChain n)
+    exact ⟨quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n),
+      (hrowSpec n).2.2, hvalueKey n⟩
+  have hclose : ∀ n who,
+      |plan n who -
+        quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who| ≤
+        η := by
+    intro n who
+    exact Math.abs_sub_le_of_floor_div_eq hη0
+      ((hplanKey n who).trans (hvalueKey n who).symm)
+  have hmass : ∀ n,
+      quittingStationaryContinueMass (roots n) ≤ 1 - ε := by
+    intro n
+    have hfloor := (hrowSpec n).2.1
+    unfold quittingRootAbsorptionMass at hfloor
+    linarith
+  have hrewardBound : ∀ terminal player, |reward terminal player| ≤ R := by
+    intro terminal player
+    exact (abs_reward_le_quittingRewardBound reward terminal player).trans
+      (le_max_left _ _)
+  have hplanBound : ∀ n who, |plan n who| ≤ R :=
+    fun n who ↦ hcarrierBound (plan n) (hplanCarrier n) who
+  have hcontraction :=
+    abs_terminalValue_sub_successor_le_of_approximate_chain_sharp reward
+      roots plan hR0 hε hε1 hη0.le hrewardBound hplanBound hmass hclose
+  have hrootsPeriodic : ∀ n, roots (n + period) = roots n := by
+    intro n
+    simp only [hroots, hplan]
+    rw [show n + period + 1 = (n + 1) + period by omega,
+      hkeyPeriodic (n + 1)]
+  refine ⟨roots, ⟨period, hperiod, hrootsPeriodic⟩, ?_, ?_⟩
+  · intro start
+    unfold terminating tailProfile
+    rw [quittingLiveMassLimit_rootSequence_eq_jointSurvivalLimit]
+    apply quittingJointSurvivalLimit_eq_zero_of_periodic roots
+      hrootsPeriodic (date := 0) (Nat.zero_lt_of_lt hperiod)
+    have hfloor := (hrowSpec start).2.1
+    unfold quittingRootAbsorptionMass at hfloor
+    simpa using (show quittingStationaryContinueMass (roots start) < 1 by
+      linarith)
+  · intro start
+    have hplanActual : ∀ who,
+        |plan (start + 1) who -
+          quittingRootSequenceTailVector reward roots (start + 1) who| ≤ ε := by
+      intro who
+      have hstepClose := hclose (start + 1) who
+      have hstepContraction := hcontraction (start + 1) who
+      rw [abs_sub_comm] at hstepContraction
+      calc
+        |plan (start + 1) who -
+            quittingRootSequenceTailVector reward roots (start + 1) who| ≤
+          |plan (start + 1) who -
+              quittingRootSuccessorPayoff reward (plan (start + 2))
+                (roots (start + 1)) who| +
+            |quittingRootSuccessorPayoff reward (plan (start + 2))
+                (roots (start + 1)) who -
+              quittingRootSequenceTailVector reward roots (start + 1) who| :=
+          abs_sub_le _ _ _
+        _ ≤ η + (1 - ε) * η / ε :=
+          add_le_add hstepClose hstepContraction
+        _ = ε := by
+          rw [hηdef]
+          field_simp [hε.ne']
+          ring
+    have htransfer :=
+      oneShotPerfectEpsilonEquilibrium_of_continuation_close
+        (hrowSpec start).1 hε.le hplanActual
+    convert htransfer using 1
+    ring
 
 /-- **Proposition 2.4.** Under A.1 and for sufficiently small `ε`, a profile
 with terminating tails and rows that are perfect `ε`-equilibria against the
