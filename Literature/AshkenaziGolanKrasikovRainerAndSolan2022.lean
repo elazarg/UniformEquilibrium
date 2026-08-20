@@ -15,9 +15,9 @@ arXiv:2012.04369.  This file is pinned to the supplied arXiv v1 archive
 
 The v1 paper uses an arbitrary payoff at never terminating.  The repository
 quitting-game adapter has zero as its default, so `never` is carried explicitly
-where a paper statement needs it. Unproved source results are exact named
-propositions; statements whose topology or probability interface is genuinely
-unavailable are retained verbatim in comments at their paper position.
+where a paper statement needs it.  Unproved paper claims are `sorry`; paper
+statements whose topology or probability interface is genuinely unavailable
+are retained verbatim in comments at their paper position.
 -/
 
 namespace Literature.AshkenaziGolanKrasikovRainerAndSolan2022
@@ -137,13 +137,13 @@ positive ε.  The branch predicates above are faithful, but the imported
 classification itself is not formalized.  The missing proof is precisely the
 implication from `EpsilonEquilibriumExistence` to this fixed-disjunct
 small-threshold alternative. -/
-def Theorem3_4Claim : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι),
+theorem theorem3_4
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι) :
     EpsilonEquilibriumExistence reward never →
       SmallStationaryBranch ⟨reward, never⟩ ∨
         SmallPunishmentBranch ⟨reward, never⟩ ∨
-          SmallSequentialBranch ⟨reward, never⟩
+          SmallSequentialBranch ⟨reward, never⟩ := by
+  sorry
 
 /-! **Theorem 3.5 (paper statement).** For sufficiently small ε, every
 absorbing profile at which all players are sequentially ε-perfect is an
@@ -394,12 +394,12 @@ paper's weak absorption-path space, including its limiting and
 sequential-perfectness arguments. The faithful path predicates above are
 therefore retained, but this theorem is deliberately kept as an open paper
 statement rather than an assumed or proxy Lean result. -/
-def Theorem5_2Claim : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
-    PrincipalQCondition (normalizedSoloMatrix reward) →
-      ∃ path : AbsorptionPath (ι := ι),
-        IsContinuousAbsorptionPath path ∧
-        IsSequentiallyPerfectAbsorptionPath reward path 0
+theorem theorem5_2
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hq : PrincipalQCondition (normalizedSoloMatrix reward)) :
+    ∃ path : AbsorptionPath (ι := ι),
+      IsContinuousAbsorptionPath path ∧
+      IsSequentiallyPerfectAbsorptionPath reward path 0 := by
+  sorry
 
 end Literature.AshkenaziGolanKrasikovRainerAndSolan2022
