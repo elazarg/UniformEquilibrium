@@ -1,0 +1,182 @@
+name: Compact Nash rescue stage 3
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_rescue_stage3.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+      - name: Determine need
+        id: need
+        run: |
+          if test -f Literature/Sorin1986/CompactNashStage3.ok; then echo value=no >> "$GITHUB_OUTPUT"; else echo value=yes >> "$GITHUB_OUTPUT"; fi
+      - uses: leanprover/lean-action@v1
+        if: steps.need.outputs.value == 'yes'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Search proof variants
+        if: steps.need.outputs.value == 'yes'
+        run: |
+          test -f Literature/Sorin1986/CompactNashStage2.ok
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashScratch.lean')
+          s=p.read_text()
+          cut=s.find('/-- Finite mixed payoff is the independent product expectation')
+          if cut < 0: cut=s.index('\nend CompactNash')
+          Path('/tmp/stage3-prefix').write_text(s[:cut])
+          PY
+          cat > /tmp/stage3-common <<'LEAN'
+
+          /-- Reindexing a dependent profile commutes with a unilateral update. -/
+          theorem piCongrLeft_update {P Q : Type*} [DecidableEq P]
+              [DecidableEq Q] (S : Q → Type*) (e : P ≃ Q)
+              (profile : ∀ i : P, S (e i)) (who : P) (strategy : S (e who)) :
+              Equiv.piCongrLeft S e (Function.update profile who strategy) =
+                Function.update (Equiv.piCongrLeft S e profile) (e who) strategy := by
+            funext q
+            obtain ⟨i, rfl⟩ := e.surjective q
+            by_cases h : i = who
+            · subst i
+              simp [Equiv.piCongrLeft_apply_apply]
+            · have he : e i ≠ e who := fun h' => h (e.injective h')
+              simp [Equiv.piCongrLeft_apply_apply, Function.update_of_ne,
+                h, he]
+
+          abbrev Deviation (G : CompactContinuousGame) := Σ who, G.Strategy who
+
+          abbrev RestrictedAction (G : CompactContinuousGame)
+              {n : ℕ} (e : Fin n ≃ G.Player) (F : Finset (Deviation G))
+              (j : Fin n) := Option {d : F // d.1.1 = e j}
+
+          noncomputable def restrictedStrategy (G : CompactContinuousGame)
+              {n : ℕ} (e : Fin n ≃ G.Player) (F : Finset (Deviation G))
+              (j : Fin n) : RestrictedAction G e F j → G.Strategy (e j)
+            | none => Classical.choice
+                (inferInstance : Nonempty (G.Strategy (e j)))
+            | some d => by
+                rcases d with ⟨⟨⟨who, strategy⟩, hmem⟩, howner⟩
+                subst who
+                exact strategy
+
+          noncomputable def restrictedGame (G : CompactContinuousGame)
+              {n : ℕ} (e : Fin n ≃ G.Player) (F : Finset (Deviation G)) :
+              FiniteStageGame := by
+            classical
+            let eS : (∀ j : Fin n, G.Strategy (e j)) ≃
+                (∀ i, G.Strategy i) := Equiv.piCongrLeft G.Strategy e
+            exact {
+              Player := Fin n
+              Action := RestrictedAction G e F
+              payoff := fun actions observer =>
+                G.payoff (eS (fun j => restrictedStrategy G e F j (actions j)))
+                  (e observer) }
+
+          theorem restricted_mixedPayoff_eq_realized
+              (G : CompactContinuousGame) {n : ℕ}
+              (e : Fin n ≃ G.Player) (F : Finset (Deviation G))
+              (profile : (restrictedGame G e F).MixedProfile)
+              (observer : Fin n) :
+              (restrictedGame G e F).mixedPayoff profile observer =
+                G.payoff
+                  (Equiv.piCongrLeft G.Strategy e
+                    (fun j => barycenter G (e j) (profile j)
+                      (restrictedStrategy G e F j)))
+                  (e observer) := by
+            classical
+            let eS : (∀ j : Fin n, G.Strategy (e j)) ≃
+                (∀ i, G.Strategy i) := Equiv.piCongrLeft G.Strategy e
+            have hmulti := multiAffine_barycenter n
+              (S := fun j : Fin n => G.Strategy (e j))
+              (A := fun j : Fin n => RestrictedAction G e F j)
+              (mix := fun j => G.mix (e j))
+              (fallback := fun j => Classical.choice
+                (inferInstance : Nonempty (G.Strategy (e j))))
+              (μ := profile)
+              (point := fun j => restrictedStrategy G e F j)
+              (F := fun p => G.payoff (eS p) (e observer))
+              (by
+                intro p j t x y ht0 ht1
+                have h := G.payoffAffine (eS p) (e j) x y t
+                  (e observer) ht0 ht1
+                simpa [eS, piCongrLeft_update] using h)
+            rw [mixedPayoff_eq_productExpectation]
+            change productExpectation profile
+                (fun actions =>
+                  G.payoff (eS (fun j => restrictedStrategy G e F j (actions j)))
+                    (e observer)) = _
+            simpa [barycenter, eS] using hmulti.symm
+
+          end CompactNash
+
+          end Literature.Sorin1986
+          LEAN
+          cat > /tmp/body1 <<'LEAN'
+          theorem mixedPayoff_eq_productExpectation (H : FiniteStageGame)
+              (profile : H.MixedProfile) (observer : H.Player) :
+              H.mixedPayoff profile observer =
+                productExpectation profile (fun actions => H.payoff actions observer) := by
+            classical
+            simp [FiniteStageGame.mixedPayoff, FiniteStageGame.kernel,
+              productExpectation, Math.Probability.expect_eq_sum,
+              Math.PMFProduct.pmfPi_apply]
+          LEAN
+          cat > /tmp/body2 <<'LEAN'
+          theorem mixedPayoff_eq_productExpectation (H : FiniteStageGame)
+              (profile : H.MixedProfile) (observer : H.Player) :
+              H.mixedPayoff profile observer =
+                productExpectation profile (fun actions => H.payoff actions observer) := by
+            classical
+            unfold FiniteStageGame.mixedPayoff
+            simp [FiniteStageGame.kernel, productExpectation,
+              Math.Probability.expect_eq_sum, Math.PMFProduct.pmfPi_apply]
+          LEAN
+          cat > /tmp/body3 <<'LEAN'
+          theorem mixedPayoff_eq_productExpectation (H : FiniteStageGame)
+              (profile : H.MixedProfile) (observer : H.Player) :
+              H.mixedPayoff profile observer =
+                productExpectation profile (fun actions => H.payoff actions observer) := by
+            classical
+            unfold FiniteStageGame.mixedPayoff FiniteStageGame.kernel
+            simp [productExpectation, Math.Probability.expect_eq_sum,
+              Math.PMFProduct.pmfPi_apply]
+          LEAN
+          success=0
+          : > /tmp/compact-nash-rescue-stage3.log
+          for k in 1 2 3; do
+            cat /tmp/stage3-prefix /tmp/body$k /tmp/stage3-common > Literature/Sorin1986/CompactNashScratch.lean
+            echo "===== VARIANT $k =====" >> /tmp/compact-nash-rescue-stage3.log
+            if lake build Literature.Sorin1986.CompactNashScratch >> /tmp/compact-nash-rescue-stage3.log 2>&1; then success=$k; break; fi
+          done
+          echo "$success" > /tmp/stage3-success
+      - name: Record
+        if: steps.need.outputs.value == 'yes'
+        run: |
+          cp /tmp/compact-nash-rescue-stage3.log Literature/Sorin1986/CompactNashRescueStage3.log
+          if [ "$(cat /tmp/stage3-success)" != 0 ]; then printf 'success\n' > Literature/Sorin1986/CompactNashStage3.ok; fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashScratch.lean Literature/Sorin1986/CompactNashRescueStage3.log Literature/Sorin1986/CompactNashStage3.ok
+          git commit -m 'Repair compact Nash restricted-game bridge' || exit 0
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
+      - name: Fail if no variant compiled
+        if: steps.need.outputs.value == 'yes'
+        run: test "$(cat /tmp/stage3-success)" != 0
