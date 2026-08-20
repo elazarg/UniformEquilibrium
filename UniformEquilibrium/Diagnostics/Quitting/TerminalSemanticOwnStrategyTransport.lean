@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLiteralSourceReturnNoGo
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLiteralActualRow
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauPartialResetTransfer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
 
@@ -28,11 +28,12 @@ drift as hidden continuation-option debt. The surcharge is at most opponent
 survival times tail debt, yielding a sharp lower bound on the literal defect
 in terms of the cap defect and the marked player's Quit probability. This
 closes the conversion whenever the cap defect exceeds that explicit budget;
-it does not prove that every returned cap-defect charge does so. At a global
-minimum of total semantic debt, the aggregate cap inequality does dominate
-the sum of all option budgets. Strict domination—and hence a positive literal
-defect—follows whenever one positive-debt coordinate's own singleton option
-mass is strictly below total root absorption.
+it does not prove that every returned cap-defect charge does so. Relative to a
+global minimum of total semantic debt, the aggregate cap inequality dominates
+the sum of all option budgets after paying only the tail's debt excess. At the
+minimum itself, strict domination—and hence a positive literal defect—follows
+whenever one positive-debt coordinate's own singleton option mass is strictly
+below total root absorption.
 -/
 
 noncomputable section
@@ -600,22 +601,25 @@ theorem quittingTerminalSemanticDebt_mem_Icc_zero_two_mul
     have hpayoffLower := neg_le_of_abs_le hpayoff
     linarith
 
-/-- At a global minimum of total semantic debt, every root pays for its
-absorption mass through total cap Nash defect. -/
-theorem minimumTerminalSemantic_absorption_mul_debtSum_le_capDefect
+/-- Relative to a minimum carrier point, every root pays absorption-weighted
+tail debt through the tail's debt excess and total cap Nash defect. -/
+theorem terminalSemantic_absorptionDebt_le_excess_add_capDefect
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (minimum pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
-      quittingTerminalSemanticDebtSum pair ≤
+      quittingTerminalSemanticDebtSum minimum ≤
         quittingTerminalSemanticDebtSum candidate) :
     quittingRootAbsorptionMass root *
         quittingTerminalSemanticDebtSum pair ≤
-      quittingRootTotalNashDefect reward pair.2 root := by
+      (quittingTerminalSemanticDebtSum pair -
+          quittingTerminalSemanticDebtSum minimum) +
+        quittingRootTotalNashDefect reward pair.2 root := by
   let prefixed := quittingTerminalSemanticPrefix reward root pair
   have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPrefix_mem_carrier reward root pair hpair
-  have hminPrefix : quittingTerminalSemanticDebtSum pair ≤
+  have hminPrefix : quittingTerminalSemanticDebtSum minimum ≤
       quittingTerminalSemanticDebtSum prefixed :=
     hminimum prefixed hprefixed
   have hsum : quittingTerminalSemanticDebtSum prefixed =
@@ -631,6 +635,54 @@ theorem minimumTerminalSemantic_absorption_mul_debtSum_le_capDefect
   rw [hsum] at hminPrefix
   nlinarith
 
+/-- Relative to a minimum carrier point, absorption-weighted tail debt after
+subtracting every option budget is paid by tail excess and literal defect. -/
+theorem terminalSemantic_netAbsorptionDebt_le_excess_add_literalDefect
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (minimum pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum minimum ≤
+        quittingTerminalSemanticDebtSum candidate) :
+    quittingRootAbsorptionMass root *
+          quittingTerminalSemanticDebtSum pair -
+        (∑ who : ι, quittingRootOpponentContinueMass root who *
+          (root who true).toReal * quittingTerminalSemanticDebt pair who) ≤
+      (quittingTerminalSemanticDebtSum pair -
+          quittingTerminalSemanticDebtSum minimum) +
+        quittingRootTotalNashDefect reward pair.1 root := by
+  have hcap := terminalSemantic_absorptionDebt_le_excess_add_capDefect
+    reward minimum pair root hpair hminimum
+  have hcoordinate :
+      (∑ who : ι,
+        (quittingRootCoordinateNashDefect reward pair.2 root who -
+          quittingRootOpponentContinueMass root who *
+            (root who true).toReal * quittingTerminalSemanticDebt pair who)) ≤
+      ∑ who : ι, quittingRootCoordinateNashDefect reward pair.1 root who := by
+    apply Finset.sum_le_sum
+    intro who _
+    exact quittingRootCapDefect_sub_quitOptionBudget_le_literalDefect
+      reward pair root who hpair
+  rw [Finset.sum_sub_distrib] at hcoordinate
+  unfold quittingRootTotalNashDefect at hcap ⊢
+  linarith
+
+/-- At a global minimum of total semantic debt, every root pays for its
+absorption mass through total cap Nash defect. -/
+theorem minimumTerminalSemantic_absorption_mul_debtSum_le_capDefect
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum pair ≤
+        quittingTerminalSemanticDebtSum candidate) :
+    quittingRootAbsorptionMass root *
+        quittingTerminalSemanticDebtSum pair ≤
+      quittingRootTotalNashDefect reward pair.2 root := by
+  simpa using terminalSemantic_absorptionDebt_le_excess_add_capDefect
+    reward pair pair root hpair hminimum
+
 /-- At a minimum-total-debt semantic pair, absorption-weighted debt after
 subtracting every player's option budget is paid by literal root defects. -/
 theorem minimumTerminalSemantic_absorptionDebt_sub_quitOptionBudget_le_literalDefectSum
@@ -645,21 +697,8 @@ theorem minimumTerminalSemantic_absorptionDebt_sub_quitOptionBudget_le_literalDe
         (∑ who : ι, quittingRootOpponentContinueMass root who *
           (root who true).toReal * quittingTerminalSemanticDebt pair who) ≤
       quittingRootTotalNashDefect reward pair.1 root := by
-  have hcap := minimumTerminalSemantic_absorption_mul_debtSum_le_capDefect
-    reward pair root hpair hminimum
-  have hcoordinate :
-      (∑ who : ι,
-        (quittingRootCoordinateNashDefect reward pair.2 root who -
-          quittingRootOpponentContinueMass root who *
-            (root who true).toReal * quittingTerminalSemanticDebt pair who)) ≤
-      ∑ who : ι, quittingRootCoordinateNashDefect reward pair.1 root who := by
-    apply Finset.sum_le_sum
-    intro who _
-    exact quittingRootCapDefect_sub_quitOptionBudget_le_literalDefect
-      reward pair root who hpair
-  rw [Finset.sum_sub_distrib] at hcoordinate
-  unfold quittingRootTotalNashDefect at hcap ⊢
-  linarith
+  simpa using terminalSemantic_netAbsorptionDebt_le_excess_add_literalDefect
+    reward pair pair root hpair hminimum
 
 /-- Strict aggregate slack beyond the option budgets forces a positive
 literal root defect at a minimum-total-debt semantic pair. -/
