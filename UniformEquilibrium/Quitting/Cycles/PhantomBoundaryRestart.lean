@@ -450,6 +450,77 @@ theorem abs_quittingRootSequenceTerminalValue_le_one_sub_survivalLimit
       (quittingRootSequenceProfile reward roots start) who hreward
 
 omit [DecidableEq ι] in
+/-- The global survival limit factors through every finite surviving prefix. -/
+theorem quittingJointSurvivalLimit_eq_prefix_mul_tail
+    (roots : ℕ → ι → PMF Bool) (start cutoff : ℕ) :
+    quittingJointSurvivalLimit roots start =
+      quittingJointSurvivalWeight roots start cutoff *
+        quittingJointSurvivalLimit roots (start + cutoff) := by
+  have hleft : Tendsto
+      (fun fuel => quittingJointSurvivalWeight roots start (cutoff + fuel))
+      atTop (nhds (quittingJointSurvivalLimit roots start)) :=
+    by
+      have hadd : Tendsto (fun fuel : ℕ => cutoff + fuel) atTop atTop := by
+        simpa [Nat.add_comm] using tendsto_add_atTop_nat cutoff
+      exact (tendsto_quittingJointSurvivalLimit roots start).comp hadd
+  have hright : Tendsto
+      (fun fuel => quittingJointSurvivalWeight roots start cutoff *
+        quittingJointSurvivalWeight roots (start + cutoff) fuel)
+      atTop
+      (nhds (quittingJointSurvivalWeight roots start cutoff *
+        quittingJointSurvivalLimit roots (start + cutoff))) :=
+    tendsto_const_nhds.mul
+      (tendsto_quittingJointSurvivalLimit roots (start + cutoff))
+  rw [funext fun fuel => quittingJointSurvivalWeight_add roots start cutoff fuel]
+    at hleft
+  exact tendsto_nhds_unique hleft hright
+
+omit [DecidableEq ι] in
+/-- If the initial survival limit is positive, the conditional survival
+probability of tails beginning farther and farther out tends to one. -/
+theorem tendsto_quittingJointSurvivalLimit_tail_one_of_pos
+    (roots : ℕ → ι → PMF Bool) (start : ℕ)
+    (hpositive : 0 < quittingJointSurvivalLimit roots start) :
+    Tendsto (fun cutoff =>
+      quittingJointSurvivalLimit roots (start + cutoff)) atTop (nhds 1) := by
+  have hratio :=
+    tendsto_quittingJointSurvivalWeight_ratio_one_of_tendsto roots start
+      (tendsto_quittingJointSurvivalLimit roots start) hpositive
+  apply hratio.congr'
+  filter_upwards with cutoff
+  have hprefix : quittingJointSurvivalWeight roots start cutoff ≠ 0 := by
+    exact ne_of_gt (lt_of_lt_of_le hpositive
+      (le_quittingJointSurvivalWeight_of_tendsto roots start
+        (tendsto_quittingJointSurvivalLimit roots start) cutoff))
+  rw [quittingJointSurvivalLimit_eq_prefix_mul_tail roots start cutoff]
+  field_simp
+
+omit [DecidableEq ι] in
+/-- With positive probability of never absorbing, the actual terminal payoff
+of tails beginning farther out tends to zero: asymptotically those tails
+absorb with probability zero. -/
+theorem tendsto_quittingRootSequenceTerminalValue_tail_zero_of_survivalLimit_pos
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ) {M : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hpositive : 0 < quittingJointSurvivalLimit roots start) :
+    Tendsto (fun cutoff =>
+      quittingRootSequenceTerminalValue reward roots who (start + cutoff))
+      atTop (nhds 0) := by
+  refine squeeze_zero_norm (a := fun cutoff => M *
+    (1 - quittingJointSurvivalLimit roots (start + cutoff))) ?_ ?_
+  · intro cutoff
+    simpa [Real.norm_eq_abs] using
+      abs_quittingRootSequenceTerminalValue_le_one_sub_survivalLimit
+        reward roots who (start + cutoff) hreward
+  · have htail :=
+      tendsto_quittingJointSurvivalLimit_tail_one_of_pos roots start hpositive
+    have hM : Tendsto (fun _ : ℕ => M) atTop (nhds M) := tendsto_const_nhds
+    have hone : Tendsto (fun _ : ℕ => (1 : ℝ)) atTop (nhds 1) :=
+      tendsto_const_nhds
+    simpa using hM.mul (hone.sub htail)
+
+omit [DecidableEq ι] in
 /-- The eventual absorption probability is at most the unweighted remaining
 sum of one-stage absorption masses. -/
 theorem one_sub_quittingJointSurvivalLimit_le_tailCharge

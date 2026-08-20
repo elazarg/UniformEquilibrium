@@ -1,6 +1,7 @@
 import MathUE.Topology.CompactSerialRelation
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
+import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
 import UniformEquilibrium.Quitting.Cycles.PeriodicJointSurvival
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 import UniformEquilibrium.Quitting.Paths.SureExitSet
@@ -4163,6 +4164,141 @@ theorem figure2_cyclic_equilibrium :
       rw [hcycle]
     rw [hprofile]
     exact FourPlayerPairedSingleton.periodTwoProfile_isExactTerminalNash
+
+private theorem boundaryReward_abs_le_four
+    (terminal : {S : Finset (Fin 4) // S.Nonempty}) (player : Fin 4) :
+    |SolanVieilleBoundary.boundaryReward terminal player| ≤ 4 := by
+  fin_cases terminal <;> fin_cases player <;>
+    simp [SolanVieilleBoundary.boundaryReward]
+
+private theorem quitProbability_lt_of_nearAllContinue
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (time : ℕ) (player : Fin 4) :
+    (roots time player true).toReal < ε := by
+  have hsum := quittingRoot_continueProbability_add_quitProbability
+    (roots time) player
+  have hlower := (abs_lt.mp (hclose time player)).1
+  linarith
+
+private theorem absorptionMass_lt_four_mul_of_nearAllContinue
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (time : ℕ) :
+    quittingRootAbsorptionMass (roots time) < 4 * ε := by
+  rw [quittingRootAbsorptionMass,
+    quittingStationaryContinueMass_eq_prod_continueProbability]
+  have hunion := Math.one_sub_prod_one_sub_le_sum
+    (fun player : Fin 4 => (roots time player true).toReal) Finset.univ
+    (fun _ _ => ENNReal.toReal_nonneg)
+    (fun player _ => ENNReal.toReal_mono ENNReal.one_ne_top
+      (PMF.coe_le_one (roots time player) true))
+  have hsum :
+      (∑ player : Fin 4, (roots time player true).toReal) < 4 * ε := by
+    rw [Fin.sum_univ_four]
+    have hzero := quitProbability_lt_of_nearAllContinue hclose time 0
+    have hone := quitProbability_lt_of_nearAllContinue hclose time 1
+    have htwo := quitProbability_lt_of_nearAllContinue hclose time 2
+    have hthree := quitProbability_lt_of_nearAllContinue hclose time 3
+    linarith
+  have hcontinue :
+      (∏ player : Fin 4, (roots time player false).toReal) =
+        ∏ player : Fin 4, (1 - (roots time player true).toReal) := by
+    apply Finset.prod_congr rfl
+    intro player _
+    have hmass := quittingRoot_continueProbability_add_quitProbability
+      (roots time) player
+    linarith
+  rw [hcontinue]
+  exact hunion.trans_lt hsum
+
+/-- The first estimate in (13): under an all-Continue perturbation, terminal
+`ε`-Nash forces the probability of never quitting below `2ε`. The source uses
+sharper constants; this bound is sufficient for the later argument. -/
+theorem figure2_survivalLimit_le_two_mul
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε0 : 0 < ε) (hεsmall : ε < 1 / 64)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots)) :
+    quittingJointSurvivalLimit roots 0 ≤ 2 * ε := by
+  have hrootNash : IsεQuittingRootSequenceNash
+      SolanVieilleBoundary.boundaryReward ε roots :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      SolanVieilleBoundary.boundaryReward ε roots).mpr hnash
+  by_cases hlimitZero : quittingJointSurvivalLimit roots 0 = 0
+  · rw [hlimitZero]
+    positivity
+  have hlimitPos : 0 < quittingJointSurvivalLimit roots 0 :=
+    lt_of_le_of_ne (quittingJointSurvivalLimit_nonneg roots 0)
+      (Ne.symm hlimitZero)
+  have hvalueTendsto : ∀ who : Fin 4,
+      Tendsto (fun time => quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots who time)
+        atTop (nhds 0) := by
+    intro who
+    simpa using
+      tendsto_quittingRootSequenceTerminalValue_tail_zero_of_survivalLimit_pos
+        SolanVieilleBoundary.boundaryReward roots who 0
+        boundaryReward_abs_le_four hlimitPos
+  let who : Fin 4 := 0
+  have hquitLower : ∀ time,
+      1 - 32 * ε ≤ quittingFixedOpponentsQuitValue
+        SolanVieilleBoundary.boundaryReward roots who time := by
+    intro time
+    have hnear := abs_quittingFixedOpponentsQuitValue_sub_one_le
+      SolanVieilleBoundary.boundaryReward_unitSoloExit roots who time
+      boundaryReward_abs_le_four
+    have hopponent := quittingRootOpponentAbsorptionMass_le_absorptionMass
+      (roots time) who
+    have habsorption :=
+      (absorptionMass_lt_four_mul_of_nearAllContinue hclose time).le
+    have hlower := (abs_le.mp hnear).1
+    linarith
+  have hstage : ∀ time,
+      quittingJointSurvivalWeight roots 0 time *
+        ((1 - 32 * ε) - quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots who time) ≤ ε := by
+    intro time
+    have htransfer := quittingJointSurvivalWeight_mul_stageDeviationGain_le
+      SolanVieilleBoundary.boundaryReward roots hrootNash who time
+      (PMF.pure true) (fun offset => roots (time + 1 + offset) who)
+    have hupdated :
+        quittingRootSuccessorPayoff SolanVieilleBoundary.boundaryReward
+          (fun _ => quittingRootSequenceHazardTerminalValue
+            SolanVieilleBoundary.boundaryReward
+            (fun offset => roots (time + 1 + offset)) who
+            (fun offset => roots (time + 1 + offset) who) 0)
+          (Function.update (roots time) who (PMF.pure true)) who =
+        quittingFixedOpponentsQuitValue
+          SolanVieilleBoundary.boundaryReward roots who time := by
+      rw [quittingRootSuccessorPayoff,
+        quittingRootExpectedPayoff_update_eq_endpointMix]
+      simp
+      exact quittingRootQuitPayoff_eq_fixedOpponentsQuitValue
+        SolanVieilleBoundary.boundaryReward roots who _ time
+    rw [hupdated] at htransfer
+    have hweight := quittingJointSurvivalWeight_nonneg roots 0 time
+    nlinarith [mul_le_mul_of_nonneg_left (hquitLower time) hweight]
+  have hleft : Tendsto
+      (fun time => quittingJointSurvivalWeight roots 0 time *
+        ((1 - 32 * ε) - quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots who time))
+      atTop
+      (nhds (quittingJointSurvivalLimit roots 0 * (1 - 32 * ε))) := by
+    have hsurvival := tendsto_quittingJointSurvivalLimit roots 0
+    have hconstant : Tendsto (fun _ : ℕ => (1 - 32 * ε : ℝ))
+        atTop (nhds (1 - 32 * ε)) := tendsto_const_nhds
+    simpa [who] using hsurvival.mul (hconstant.sub (hvalueTendsto who))
+  have hlimitIneq :
+      quittingJointSurvivalLimit roots 0 * (1 - 32 * ε) ≤ ε :=
+    le_of_tendsto' hleft hstage
+  have hfactor : 1 / 2 < 1 - 32 * ε := by
+    linarith
+  nlinarith [quittingJointSurvivalLimit_nonneg roots 0]
 
 /-- The Figure 2 game has no stationary `ε`-equilibrium for all sufficiently
 small positive `ε`. The paper states this result and refers elsewhere for the
