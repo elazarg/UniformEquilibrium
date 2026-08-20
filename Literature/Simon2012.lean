@@ -627,14 +627,13 @@ payoffs in the two rows, and uses the singular penalty in `φ` to force a strict
 best-response contradiction.  No existing theorem packages that quantitative
 injectivity argument.
 -/
-theorem lemma3_1 (G : QuittingGame) (M d : ℝ)
-    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
+def Lemma3_1Claim (G : QuittingGame) (M d : ℝ) : Prop :=
+    IsSimonPayoffScale G M → 0 < d → d ≤ 1 →
     Function.Injective (Phi G M d) ∧
     (∀ x, ((x, zeroQuitRow G) ∈ EZeroTilde G ↔
       ∀ j, SoloPayoff G j ≤ x j)) ∧
     ∀ x (hx : (x, zeroQuitRow G) ∈ EZeroTilde G),
-      Phi G M d ⟨(x, zeroQuitRow G), hx⟩ = x := by
-  sorry
+      Phi G M d ⟨(x, zeroQuitRow G), hx⟩ = x
 
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
@@ -644,10 +643,9 @@ semicontinuous minimization closes surjectivity.  The generic
 Kohlberg--Mertens declaration in Simon 2007 does not imply this explicit `φ`
 homeomorphism.
 -/
-theorem lemma3_2 (G : QuittingGame) (M d : ℝ)
-    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
-    Function.Surjective (Phi G M d) ∧ Nonempty (PhiInverseData G M d) := by
-  sorry
+def Lemma3_2Claim (G : QuittingGame) (M d : ℝ) : Prop :=
+    IsSimonPayoffScale G M → 0 < d → d ≤ 1 →
+    Function.Surjective (Phi G M d) ∧ Nonempty (PhiInverseData G M d)
 
 /-- The paper's straight-line condition for the structure homotopy. -/
 def IsQuitStraightLineHomotopy (G : QuittingGame)
@@ -708,9 +706,8 @@ No production theorem proves injectivity, surjectivity, properness, or the
 fixed-point exclusion for this `φ`; importing the 2007 Kohlberg--Mertens
 statement would not establish this quitting-specific result.
 -/
-theorem theorem3_1 (G : QuittingGame) (M : ℝ)
-    (hM : IsSimonPayoffScale G M) : StructureTheoremConclusion G M := by
-  sorry
+def Theorem3_1Claim (G : QuittingGame) (M : ℝ) : Prop :=
+  IsSimonPayoffScale G M → StructureTheoremConclusion G M
 
 /-- Lemma 3.3's rounding-to-a-sure-quitter hypotheses and conclusion. -/
 def Lemma3_3Statement (G : QuittingGame) (M ε : ℝ) : Prop :=
@@ -733,9 +730,8 @@ forced-continue payoff by the probability that the realized coalition changes.
 The production library has analogous root inequalities, but no adapter to the
 paper-local `QuittingGame` model or this exact constant package.
 -/
-theorem lemma3_3 (G : QuittingGame) (M ε : ℝ)
-    (hM : IsSimonPayoffScale G M) : Lemma3_3Statement G M ε := by
-  sorry
+def Lemma3_3Claim (G : QuittingGame) (M ε : ℝ) : Prop :=
+  IsSimonPayoffScale G M → Lemma3_3Statement G M ε
 
 /-- The constants selected after Lemma 3.3 and used in Lemma 3.4. -/
 def AreSection3Constants (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
@@ -756,17 +752,17 @@ the properness case split on a large positive or negative coordinate of
 `a = φ(β,p)`, using Lemma 3.3 to exclude an almost-sure quitter in the bounded
 band and the definitions of `ξ` and `R` to control the interpolation.
 -/
-theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
-    (hM : IsSimonPayoffScale G M)
-    (hmotion : IsStructureMotionParameter G M ρ)
-    (hconstants : AreSection3Constants G M d ρ ξ R)
-    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
-    (hnormal : ∀ n, IsNormalPlayer G n)
-    (z : EZeroTilde G) (t : UnitInterval)
-    (a : Payoff G.Player) (ha : a = Phi G M d z)
-    (x : Payoff G.Player)
-    (hx : x = (1 - (t : ℝ)) • z.1.1 + (t : ℝ) • a) :
+def Lemma3_4Claim (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
+    IsSimonPayoffScale G M →
+    IsStructureMotionParameter G M ρ →
+    AreSection3Constants G M d ρ ξ R →
+    ¬HasStationarilyGeneratedApproximateEquilibria G →
+    ¬HasInstantApproximateEquilibria G →
+    (∀ n, IsNormalPlayer G n) →
+    ∀ (z : EZeroTilde G) (t : UnitInterval)
+      (a : Payoff G.Player), a = Phi G M d z →
+    ∀ x : Payoff G.Player,
+      x = (1 - (t : ℝ)) • z.1.1 + (t : ℝ) • a →
     ((∃ j, R ≤ |a j|) → ¬StructureTargetBox G M ρ x) ∧
     (∀ j, R ≤ a j →
       R - (Fintype.card G.Player : ℝ) * M < z.1.1 j ∧
@@ -774,8 +770,7 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
     ∀ j, a j ≤ -R → MinMaxQuit G j - ρ ≤ z.1.1 j →
       1 - (1 / 20 : ℝ) *
         (ρ / (2 * (Fintype.card G.Player : ℝ) * M)) ^
-          Fintype.card G.Player ≤ (z.1.2 j : ℝ) := by
-  sorry
+          Fintype.card G.Player ≤ (z.1.2 j : ℝ)
 
 /--
 Lemma 3.5's two distance estimates.  The missing proof first uses exact
@@ -784,20 +779,19 @@ indifference for every player in positive quit support to place `β` near
 place `a` near the same face.  No reusable distance lemma for these fibers is
 present in the repository.
 -/
-theorem lemma3_5 (G : QuittingGame) (M d : ℝ)
-    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
-    (z : EZeroTilde G)
-    (hqpos : 0 < QuitProbability G z.1.2)
-    (hqsmall : QuitProbability G z.1.2 <
-      1 / (2 * (Fintype.card G.Player : ℝ)))
-    (j : G.Player) (hj : 0 < (z.1.2 j : ℝ)) :
+def Lemma3_5Claim (G : QuittingGame) (M d : ℝ) : Prop :=
+    IsSimonPayoffScale G M → 0 < d → d ≤ 1 →
+    ∀ z : EZeroTilde G,
+    0 < QuitProbability G z.1.2 →
+    QuitProbability G z.1.2 <
+      1 / (2 * (Fintype.card G.Player : ℝ)) →
+    ∀ j : G.Player, 0 < (z.1.2 j : ℝ) →
     EuclideanInfDist z.1.1 (Wj G j ∩ frontier (WSet G)) ≤
       QuitProbability G z.1.2 * (Fintype.card G.Player : ℝ) * M / 3 ∧
     EuclideanInfDist (Phi G M d z)
       (Wj G j ∩ frontier (WSet G)) ≤
       12 * (Fintype.card G.Player : ℝ) ^ 2 * M *
-        QuitProbability G z.1.2 / d := by
-  sorry
+        QuitProbability G z.1.2 / d
 
 /-! ## 4. From the topological question to approximate equilibrium existence -/
 
