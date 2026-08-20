@@ -11,7 +11,7 @@ import Mathlib.Tactic.Abel
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Linarith
 import MathUE.ChargedPathBudget
-import MathUE.DirectedTransport
+import MathUE.DirectedTransport.Basic
 import MathUE.EdgeGraph
 import MathUE.MaxPlusPotential
 

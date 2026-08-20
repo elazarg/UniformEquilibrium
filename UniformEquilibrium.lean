@@ -23,6 +23,7 @@ import UniformEquilibrium.Quitting.Classification.ImmediateSingletonCollision
 import UniformEquilibrium.Quitting.Classification.InstantPunishmentEquivalence
 import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
+import UniformEquilibrium.Quitting.Classification.PreemptionTransport
 import UniformEquilibrium.Quitting.Classification.PreemptionGateDictionary
 import UniformEquilibrium.Quitting.Classification.PreemptionGeometry
 import UniformEquilibrium.Quitting.Classification.SingletonPacketDefectAlgebra
@@ -318,6 +319,7 @@ import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicPatience
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
+import UniformEquilibrium.Quitting.Cycles.AnchoredRenewalTransport
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.DiffuseTailSoloStructure
 import UniformEquilibrium.Quitting.Cycles.PeriodicRootResponseSystem

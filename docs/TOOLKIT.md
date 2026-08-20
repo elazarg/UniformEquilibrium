@@ -34,6 +34,7 @@ without producing a witness.
 
 | Family | Canonical import | What it exports |
 | --- | --- | --- |
+| Directed transport theory | `MathUE/DirectedTransport.lean` | Exact and lax path transport; path-category, SCC, condensation, and categorical-retract normal forms; complete-lattice closure; additive cycle and signed-circulation duality; sparse rational and integral finite-inequality certificates; and max-affine path, slack, gauge, and holonomy theory. |
 | Uniform-payoff consequences | `UniformEquilibrium/Diagnostics/Uniform/Consequences.lean` | Semantic waist dependencies, target equivalence under vanishing payoff gaps, potential shaping, tail-width and bounded-work characterizations, and transition discontinuity. |
 | Adaptive-potential systems | `UniformEquilibrium/Certificates/Adaptive/PotentialSystemTools.lean` | The single `AdaptivePotentialSystemAt` structure together with retargeting, profile transport, ledger conversion, finite-time bounds, and owner-separated assembly. |
 | Quitting terminal selection | `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean` | The equivalence between terminal approximate Nash existence at every accuracy and uniform-payoff existence for finite quitting games. |

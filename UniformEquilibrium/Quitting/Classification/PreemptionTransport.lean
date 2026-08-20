@@ -6,11 +6,10 @@ Authors: GameTheory contributors
 
 import MathUE.MaxAffineFarkasDuality
 import MathUE.MaxPlusPotential
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PreemptionCycle
-import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
+import UniformEquilibrium.Quitting.Classification.PreemptionCycle
 
 /-!
-# The preemption cycle as a max-affine transport graph
+# Static preemption transport on payoff cells and player scalars
 
 `QuittingSoloPreemptionCycle`
 (`UniformEquilibrium/Quitting/Classification/PreemptionCycle.lean`) is a
@@ -95,30 +94,17 @@ the comparison that would license it is refuted
 which on payoff cells is exactly the statement that the observer switches are
 not free.
 
-## Where positive-slope transport already exists
+## Production consumers
 
 `quittingAnchoredCyclicOnPathValue_renewal`
-(`UniformEquilibrium/Quitting/Cycles/AnchoredSoloPeriodic.lean`) is a genuine
-positive-slope transport along *phases* at a fixed spectator coordinate:
-`quittingAnchoredRenewalLabel` has slope `1 - hazard` and the on-path values of
-one fixed player form an exact section of it
-(`isSection_quittingAnchoredRenewalTransport`).  The spectator index is frozen
-there; the observer-switch edges are what would move it.
-
-## The static no-go, and what is not here
+(`UniformEquilibrium/Quitting/Cycles/AnchoredRenewalTransport.lean`) gives
+genuine positive-slope transport along phases at a fixed spectator coordinate.
+The spectator index is frozen there; the observer-switch edges move it.
 
 `QuittingStaticObserverSwitchData` is the class of chargings the regime's own
-solo table justifies, inhabited by the tight one
-(`QuittingSoloPreemptionCycle.tightStaticObserverSwitchData`).  Every member
-makes the payoff cells a potential for the augmented edge weights, so weak
-duality caps one turn of the alternating closed walk
-`QuittingSoloPreemptionCycle.augmentedCellWalk`:
-`QuittingStaticObserverSwitchData.augmentedCycleWeight_nonpos`, in existential
-form `QuittingSoloPreemptionCycle.isEmpty_positiveObserverSwitchData`.  That
-closes the static route rather than leaving an obligation open, and no
-production proposition over these chargings is stated: positivity of the
-augmented weight is impossible for every member of the class, so proposing it
-as a target would be proposing an unsatisfiable one.
+solo table justifies.  The diagnostic adapter and completed no-go live in
+`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionTransport.lean`.
+Every such charging has nonpositive augmented weight.
 
 A transport route that is not closed by the above needs different cells, not a
 different price on these ones.  Its vertices would have to carry values that
@@ -134,41 +120,6 @@ noncomputable section
 
 open Math Math.MaxAffineTransport
 
-namespace Math.MaxAffineTransport
-
-/-- **Slope-zero labellings are feasible.**  A label of slope zero ignores the
-value at the source of its edge, so a constant candidate large enough to
-dominate every edge's value closes every edge inequality at once.  The
-statement is graph-generic and belongs with the rest of
-`Math.MaxAffineTransport`; it is stated here because this file is its first
-consumer. -/
-theorem exists_isLaxSection_of_forall_slope_eq_zero {V E : Type*} [Fintype E]
-    (G : EdgeGraph V E) (label : E → Label) (hslope : ∀ e : E, (label e).slope = 0) :
-    ∃ φ : V → ℝ, IsLaxSection G label φ := by
-  refine ⟨fun _ ↦ ∑ e : E, max 0 ((label e).apply 0), fun e ↦ ?_⟩
-  have hconst : (label e).apply (∑ e' : E, max 0 ((label e').apply 0))
-      = (label e).apply 0 := by
-    rcases (label e).floor_cases with hfloor | ⟨c, hfloor⟩
-    · rw [Label.apply_of_floor_bot hfloor, Label.apply_of_floor_bot hfloor]
-      simp [Label.affinePart, hslope e]
-    · rw [Label.apply_of_floor_coe hfloor, Label.apply_of_floor_coe hfloor]
-      simp [Label.affinePart, hslope e]
-  rw [hconst]
-  calc (label e).apply 0 ≤ max 0 ((label e).apply 0) := le_max_right _ _
-    _ ≤ ∑ e' : E, max 0 ((label e').apply 0) :=
-        Finset.single_le_sum (f := fun e' : E ↦ max 0 ((label e').apply 0))
-          (fun e' _ ↦ le_max_left _ _) (Finset.mem_univ e)
-
-/-- A labelling all of whose slopes vanish admits no Farkas certificate. -/
-theorem not_exists_farkasCertificate_of_forall_slope_eq_zero {V E : Type*}
-    [Fintype V] [DecidableEq V] [Fintype E] (G : EdgeGraph V E) (label : E → Label)
-    (hslope : ∀ e : E, (label e).slope = 0) :
-    ¬∃ coefficient, IsFarkasCertificate G label coefficient :=
-  (exists_isLaxSection_iff_no_farkasCertificate G label).1
-    (exists_isLaxSection_of_forall_slope_eq_zero G label hslope)
-
-end Math.MaxAffineTransport
-
 namespace GameTheory
 
 variable {player : Type} [Fintype player] [DecidableEq player]
@@ -177,7 +128,7 @@ variable {reward : {S : Finset player // S.Nonempty} → Payoff player}
 /-- A wrap-around index shift leaves a sum over an initial segment unchanged.
 Stated for the real line only, which is all the transport candidates below
 need. -/
-theorem sum_range_succ_eq_of_wrap {n : ℕ} (h : ℕ → ℝ) (hwrap : h n = h 0) :
+private theorem sum_range_succ_eq_of_wrap {n : ℕ} (h : ℕ → ℝ) (hwrap : h n = h 0) :
     ∑ time ∈ Finset.range n, h (time + 1) = ∑ time ∈ Finset.range n, h time := by
   have hsub := Finset.sum_range_sub h n
   rw [Finset.sum_sub_distrib, hwrap, sub_self, sub_eq_zero] at hsub
@@ -881,200 +832,6 @@ theorem exists_crossValue_add_gap_le_soloReward_self
   obtain ⟨time, hmem, hle⟩ :=
     Finset.exists_le_of_sum_le ⟨0, Finset.mem_range.mpr cycle.period_pos⟩ hsum
   exact ⟨time, Finset.mem_range.mp hmem, hle⟩
-
-end QuittingSoloPreemptionCycle
-
-/-! ## Layer 1, continued: the transport that does exist
-
-The renewal law of an anchored solo-periodic schedule is a genuine
-positive-slope transport, but it runs along phases with the spectator
-coordinate held fixed. -/
-
-section AnchoredRenewal
-
-variable {ι : Type} [Fintype ι] [DecidableEq ι] {m : ℕ}
-
-/-- The phase graph of an anchored solo-periodic schedule: one vertex and one
-edge per phase, the edge of a phase running from the next phase to it, in the
-direction the renewal law computes. -/
-def quittingAnchoredRenewalGraph (m : ℕ) : EdgeGraph (Fin m) (Fin m) where
-  source phase := finRotate m phase
-  target phase := phase
-
-@[simp] theorem source_quittingAnchoredRenewalGraph (phase : Fin m) :
-    (quittingAnchoredRenewalGraph m).source phase = finRotate m phase := rfl
-
-@[simp] theorem target_quittingAnchoredRenewalGraph (phase : Fin m) :
-    (quittingAnchoredRenewalGraph m).target phase = phase := rfl
-
-/-- The renewal label of a phase in one fixed spectator coordinate: survival
-slope `1 - hazard` and shift the hazard-weighted terminal row.  This is the
-one-step affine map of `quittingAnchoredCyclicOnPathValue_renewal`. -/
-def quittingAnchoredRenewalLabel
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (w : Fin m → ι) (hazard : Fin m → ℝ) (who : ι) (phase : Fin m) : Label :=
-  ⟨⊥, hazard phase * reward (quittingSingletonTerminal (w phase)) who, 1 - hazard phase⟩
-
-omit [Fintype ι] [DecidableEq ι] in
-@[simp] theorem slope_quittingAnchoredRenewalLabel
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (w : Fin m → ι) (hazard : Fin m → ℝ) (who : ι) (phase : Fin m) :
-    (quittingAnchoredRenewalLabel reward w hazard who phase).slope = 1 - hazard phase := rfl
-
-omit [Fintype ι] [DecidableEq ι] in
-@[simp] theorem apply_quittingAnchoredRenewalLabel
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (w : Fin m → ι) (hazard : Fin m → ℝ) (who : ι) (phase : Fin m) (x : ℝ) :
-    (quittingAnchoredRenewalLabel reward w hazard who phase).apply x =
-      hazard phase * reward (quittingSingletonTerminal (w phase)) who
-        + (1 - hazard phase) * x :=
-  Label.apply_mk_bot _ _ x
-
-omit [Fintype ι] [DecidableEq ι] in
-theorem slope_quittingAnchoredRenewalLabel_nonneg
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (w : Fin m → ι) {hazard : Fin m → ℝ} (h1 : ∀ k, hazard k ≤ 1) (who : ι)
-    (phase : Fin m) :
-    0 ≤ (quittingAnchoredRenewalLabel reward w hazard who phase).slope := by
-  simpa using sub_nonneg.mpr (h1 phase)
-
-/-- **The renewal is exact transport at a fixed spectator coordinate.**  The
-on-path values of one fixed player, read phase by phase, are a section of the
-renewal transport: no inequality, no exactness hypothesis and no positivity of
-the hazards is used, only `quittingAnchoredCyclicOnPathValue_renewal`.
-
-The spectator index `who` is a parameter of the labels, not a coordinate the
-transport moves.  A preemption inequality changes that index, and moving it is
-what the observer-switch edges of
-`GameTheory.QuittingSoloPreemptionCycle.augmentedCellGraph` do. -/
-theorem isSection_quittingAnchoredRenewalTransport
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (w : Fin m → ι) (hazard : Fin m → ℝ) (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
-    (who : ι) :
-    (toTransport (quittingAnchoredRenewalGraph m)
-        (quittingAnchoredRenewalLabel reward w hazard who)).IsSection
-      fun phase ↦ quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 phase who := by
-  intro phase
-  show (quittingAnchoredRenewalLabel reward w hazard who phase).apply
-      (quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 (finRotate m phase) who)
-    = quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 phase who
-  rw [apply_quittingAnchoredRenewalLabel]
-  exact (quittingAnchoredCyclicOnPathValue_renewal reward w hazard h0 h1 phase who).symm
-
-/-- The on-path values are in particular a lax section of the renewal
-labelling, so the weak duality of `Math.MaxAffineTransport` applies to them. -/
-theorem isLaxSection_quittingAnchoredRenewalLabel
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (w : Fin m → ι) (hazard : Fin m → ℝ) (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
-    (who : ι) :
-    IsLaxSection (quittingAnchoredRenewalGraph m)
-      (quittingAnchoredRenewalLabel reward w hazard who)
-      fun phase ↦ quittingAnchoredCyclicOnPathValue reward w hazard h0 h1 phase who :=
-  fun phase ↦
-    (isSection_quittingAnchoredRenewalTransport reward w hazard h0 h1 who phase).le
-
-end AnchoredRenewal
-
-/-! ## Layer 5: the static no-go, stated on its class of chargings -/
-
-/-- A charging of the observer-switch edges of a forced preemption cycle that
-the regime's own solo-reward table justifies: every switch is charged at least
-what the table loses on it.
-
-This is the class over which the static no-go is stated, not an interface with
-an open obligation.  Its provenance field is exactly what makes the payoff
-cells a lax section of the joined system
-(`QuittingStaticObserverSwitchData.isLaxSection`), so every member leaves the
-augmented closed walk at nonpositive weight
-(`QuittingStaticObserverSwitchData.augmentedCycleWeight_nonpos`).  The class is
-inhabited by the tight charging
-(`GameTheory.QuittingSoloPreemptionCycle.tightStaticObserverSwitchData`). -/
-structure QuittingStaticObserverSwitchData
-    (regime : QuittingCounterexampleRegime reward)
-    (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) where
-  /-- The weight charged to the observer switch out of each phase's head. -/
-  cost : ℕ → ℝ
-  /-- The regime's solo table pays the charge at every switch. -/
-  observerSwitchCost_le : ∀ time : ℕ, cycle.observerSwitchCost time ≤ cost time
-
-namespace QuittingSoloPreemptionCycle
-
-variable {regime : QuittingCounterexampleRegime reward}
-
-/-- **The tight charging.**  Charging every observer switch exactly what the
-regime's solo table loses on it is the least member of the class, so
-`QuittingStaticObserverSwitchData` is inhabited. -/
-def tightStaticObserverSwitchData (regime : QuittingCounterexampleRegime reward)
-    (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) :
-    QuittingStaticObserverSwitchData regime cycle where
-  cost := cycle.observerSwitchCost
-  observerSwitchCost_le _ := le_rfl
-
-instance nonempty_quittingStaticObserverSwitchData
-    (regime : QuittingCounterexampleRegime reward)
-    (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) :
-    Nonempty (QuittingStaticObserverSwitchData regime cycle) :=
-  ⟨tightStaticObserverSwitchData regime cycle⟩
-
-end QuittingSoloPreemptionCycle
-
-namespace QuittingStaticObserverSwitchData
-
-variable {regime : QuittingCounterexampleRegime reward}
-variable {cycle : QuittingSoloPreemptionCycle reward regime.terminalGap}
-
-/-- **The charged data closes the joined system on the payoff cells.**  This is
-`GameTheory.QuittingSoloPreemptionCycle.isLaxSection_augmentedCellLabel` at the
-charge. -/
-theorem isLaxSection (data : QuittingStaticObserverSwitchData regime cycle) :
-    IsLaxSection cycle.augmentedCellGraph (cycle.augmentedCellLabel data.cost)
-      (quittingPayoffCellValue reward) :=
-  cycle.isLaxSection_augmentedCellLabel data.observerSwitchCost_le
-
-/-- The weight of the augmented closed walk
-`GameTheory.QuittingSoloPreemptionCycle.augmentedCellWalk` at this charge: one
-gap per forced edge, minus the charge of each observer switch. -/
-def augmentedCycleWeight (data : QuittingStaticObserverSwitchData regime cycle) : ℝ :=
-  (cycle.period : ℝ) * regime.terminalGap -
-    ∑ time ∈ Finset.range cycle.period, data.cost time
-
-/-- The defining arithmetic of `augmentedCycleWeight` is the weight of the
-augmented closed walk at the charge. -/
-theorem augmentedCycleWeight_eq_walkWeight (data : QuittingStaticObserverSwitchData regime cycle) :
-    data.augmentedCycleWeight =
-      Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight data.cost)
-        cycle.augmentedCellWalk :=
-  (cycle.walkWeight_augmentedCellWalk data.cost).symm
-
-/-- **The static no-go.**  The payoff cells are a potential for the augmented
-edge weights, so the weak duality of
-`Math.MaxPlusPotential.IsPotential.closedWalk_nonpos` caps the augmented closed
-walk: no charging the solo table justifies leaves it at positive weight. -/
-theorem augmentedCycleWeight_nonpos (data : QuittingStaticObserverSwitchData regime cycle) :
-    data.augmentedCycleWeight ≤ 0 := by
-  rw [data.augmentedCycleWeight_eq_walkWeight]
-  exact (cycle.isPotential_augmentedCellWeight data.observerSwitchCost_le).closedWalk_nonpos
-    cycle.augmentedCellWalk
-
-/-- The contrapositive of `augmentedCycleWeight_nonpos`. -/
-theorem elim (data : QuittingStaticObserverSwitchData regime cycle)
-    (hweight : 0 < data.augmentedCycleWeight) : False :=
-  absurd data.augmentedCycleWeight_nonpos (not_le.2 hweight)
-
-end QuittingStaticObserverSwitchData
-
-namespace QuittingSoloPreemptionCycle
-
-variable {regime : QuittingCounterexampleRegime reward}
-
-/-- **No table-justified charging carries a positive augmented cycle.**  This is
-the static no-go in existential form: the obstruction a transport refutation
-would need cannot come from a charging the static solo table justifies. -/
-theorem isEmpty_positiveObserverSwitchData
-    (regime : QuittingCounterexampleRegime reward)
-    (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) :
-    ¬∃ data : QuittingStaticObserverSwitchData regime cycle, 0 < data.augmentedCycleWeight :=
-  fun ⟨data, hweight⟩ ↦ data.elim hweight
 
 end QuittingSoloPreemptionCycle
 

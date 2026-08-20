@@ -99,7 +99,6 @@ import Research.Quitting.PaidNonexactCapStackAccount
 import Research.Quitting.PairActiveSoloPhase
 import Research.Quitting.PathClosureKernels
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
-import Research.Quitting.PreemptionTransport
 import Research.Quitting.PrefixTruncationExploitability
 import Research.Quitting.PrescribedAtomMinimumAccounting
 import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo

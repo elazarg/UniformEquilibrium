@@ -1,5 +1,11 @@
 # Design: directed transport and max-affine transport graphs
 
+The integrated generic interface is exported by `MathUE/DirectedTransport.lean`.
+`MathUE/DirectedTransport/Basic.lean` owns the computational walk/transport
+core; the dedicated submodules own exact, categorical, order-theoretic,
+additive, polyhedral, and max-affine extensions.  Game-semantic consumers live
+under `UniformEquilibrium/`.
+
 Status: Layers 0 and 1 (milestones M0 and M1) are implemented in
 `MathUE/DirectedTransport.lean` and `MathUE/MaxAffineTransport.lean`, with
 the T6a/T6b duality regimes in `MathUE/MaxAffineSectionDuality.lean`.  Each
@@ -189,7 +195,7 @@ pre-fixed point" give a lax section?
      anchor (slack) vertex done as a constant lift, with no augmented
      graph.  `Fintype V` enters only through the max-plus duality.
   b. *Uniformly contractive* (implemented; `slope < 1` edgewise, no sign
-     condition and no monotonicity): a constant section already closes edge
+     condition and no monotonicity): a constant section closes edge
      by edge, so existence needs no operator iteration and holds for any
      `Finite E`.
   c. *General mixed slopes*: the cyclewise test is REFUTED as a complete
@@ -203,7 +209,7 @@ pre-fixed point" give a lax section?
      each edge contributes the rows `floor_e ≤ φ(target e)` and
      `shift_e + slope_e · φ(source e) ≤ φ(target e)`, a finite linear
      system in `φ` whatever the slope signs, so existence is governed by
-     the Farkas alternative already in
+     the Farkas alternative in
      `MathUE/FiniteInequalityCompatibility.lean`: a lax section exists iff
      no nonnegative balanced combination of the rows is infeasible.  At
      nonnegative slopes the certificate reads as a generalized-flow
@@ -214,7 +220,7 @@ pre-fixed point" give a lax section?
      Farkas instantiation.)  The spectral reading —
      min-max function theory (Gunawardena, Discrete Event Dynamic Systems 4
      (1994)), topical-map Perron–Frobenius (Gaubert–Gunawardena, Trans.
-     Amer. Math. Soc. 356 (2004)) — remains the right frame for eigenvalue
+     Amer. Math. Soc. 356 (2004)) — provides the frame for eigenvalue
      questions, which stay out of scope.
 
 **T7 — periodic certificates (implemented, bridge).**  A fixed point of a
@@ -257,13 +263,13 @@ A variant of Layer 0 with relations in place of functions — edge labels
 `R_e ⊆ Fiber (source e) × Fiber (target e)`, walks composing relations,
 sections satisfying `(s (source e), s (target e)) ∈ R_e` — would faithfully
 carry constraint data that is not functional, and for labels that are finite
-conjunctions of affine inequalities the Farkas layer already covers it: the
+conjunctions of affine inequalities the Farkas layer covers it: the
 row encoding of `MathUE/MaxAffineFarkasDuality.lean` never uses
 functionality.  The variant is nonetheless not written, and the reason has a
 proved core with an honest scope: on the one-real-coordinate-per-player
 vertex set, the constraints the counterexample regime forces on preemption
 edges are floorless constant labels
-(`Research/Quitting/PreemptionTransport.lean`), which compose without
+(`UniformEquilibrium/Quitting/Classification/PreemptionTransport.lean`), which compose without
 obstruction.  That rules out the scalar-per-player compression, not every
 encoding: on the payoff-cell vertex set of ordered player pairs, with
 `(x, y)` carrying `r_y({x})`, each preemption is a genuine unit-slope
@@ -276,7 +282,8 @@ augmented graph, the payoff cells are a potential for its weights at every
 charging the table justifies, and weak duality caps its weight at zero —
 around a forced preemption cycle the switch costs total at least the whole
 period's worth of gap
-(`Research/Quitting/PreemptionTransport.lean`).  The static route is closed,
+(`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionTransport.lean`).
+The static route is closed,
 and no repricing of the same edges reopens it.  A relational or fibered layer
 becomes worth writing for a different object: one combining the static
 terminal cells with vertices carrying values that table does not determine —
@@ -297,8 +304,10 @@ supplies it — a periodic profile is an automaton on phases, and the phase
 counter is the state variable the kernel lacks — while the table supplies
 only rewards and absorption.  This is why the static table, which does force
 payoff-cell transport, forces no obstruction from it
-(`Research/Quitting/PreemptionTransport.lean`), and why the anchored
-renewal transport exists only per profile: equilibrium existence quantifies
+(`UniformEquilibrium/Quitting/Classification/PreemptionTransport.lean`), and why the anchored
+renewal transport
+(`UniformEquilibrium/Quitting/Cycles/AnchoredRenewalTransport.lean`) exists only per profile:
+equilibrium existence quantifies
 over the induced transport systems, so a producer theorem must extract a
 canonical labelled system from an arbitrary chronology rather than analyze a
 given one.
@@ -310,7 +319,7 @@ generic mathematics: exhibit the `#40` preemption lasso as a directed
 transport problem — fibers the players' payoff/debt coordinates, edge maps
 supplied by a producer theorem from the counterexample regime's collision and
 repair data — and ask T2/T4/T5 about its holonomy.
-`UniformEquilibrium.Quitting.Boundary.Holonomy` already composes per-player
+`UniformEquilibrium.Quitting.Boundary.Holonomy` composes per-player
 affine and max-affine block summaries (words in Layer 1's label monoid); its
 documented gap, source-labelled splice admissibility, is that producer
 theorem's game-semantic half and stays game-side.  The debt transport law
