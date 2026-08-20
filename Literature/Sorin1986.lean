@@ -3742,6 +3742,174 @@ private theorem appendFiniteProfiles_weightedPayoff
     exact appendFiniteProfiles_expectedStagePayoff_add
       G prefixLength time prefixProfile suffixProfile who
 
+private theorem sum_expect_comm_range {Ω : Type} [Finite Ω]
+    (law : PMF Ω) (length : ℕ) (value : ℕ → Ω → ℝ) :
+    (∑ time ∈ Finset.range length,
+        Math.Probability.expect law (value time)) =
+      Math.Probability.expect law fun outcome =>
+        ∑ time ∈ Finset.range length, value time outcome := by
+  letI : Fintype Ω := Fintype.ofFinite Ω
+  simp only [Math.Probability.expect_eq_sum]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro outcome _
+  rw [Finset.mul_sum]
+
+private theorem appendFiniteProfiles_isHorizonNash
+    (G : FiniteStageGame) (prefixLength suffixLength : ℕ)
+    (prefixProfile suffixProfile : G.BehaviorProfile)
+    (hprefix : G.repeatedGame.IsεHorizonNash G.repeatedInitial
+      prefixLength 0 prefixProfile)
+    (hsuffix : G.repeatedGame.IsεHorizonNash G.repeatedInitial
+      suffixLength 0 suffixProfile) :
+    G.repeatedGame.IsεHorizonNash G.repeatedInitial
+      (prefixLength + suffixLength) 0
+      (G.appendFiniteProfiles prefixLength prefixProfile suffixProfile) := by
+  intro who deviation
+  simp only [add_zero]
+  let joined := G.appendFiniteProfiles prefixLength prefixProfile suffixProfile
+  let deviated := Function.update joined who deviation
+  let prefixDeviation := Function.update prefixProfile who deviation
+  have hprefixStages :
+      (∑ time ∈ Finset.range prefixLength,
+          G.repeatedGame.expectedStagePayoff
+            deviated G.repeatedInitial time who) =
+        ∑ time ∈ Finset.range prefixLength,
+          G.repeatedGame.expectedStagePayoff
+            prefixDeviation G.repeatedInitial time who := by
+    apply Finset.sum_congr rfl
+    intro time htime
+    exact expectedStagePayoff_eq_of_profilesAgreeBefore G
+      ((appendFiniteProfiles_agreeBefore G prefixLength
+        prefixProfile suffixProfile).update who deviation)
+      (Finset.mem_range.mp htime) who
+  have hprefixBound :
+      (∑ time ∈ Finset.range prefixLength,
+          G.repeatedGame.expectedStagePayoff
+            deviated G.repeatedInitial time who) ≤
+        (prefixLength : ℝ) *
+          G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+            prefixLength prefixProfile who := by
+    have hnash := hprefix who deviation
+    simp only [add_zero] at hnash
+    have hscaled := mul_le_mul_of_nonneg_left hnash
+      (Nat.cast_nonneg prefixLength : (0 : ℝ) ≤ prefixLength)
+    have hdeviation := congrFun
+      (cast_smul_finitePayoff_eq_sum G prefixLength prefixDeviation) who
+    simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hdeviation
+    change (prefixLength : ℝ) *
+      G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+        prefixLength prefixDeviation who = _ at hdeviation
+    rw [hprefixStages, ← hdeviation]
+    exact hscaled
+  let suffixLaw := G.repeatedGame.histDist deviated
+    G.repeatedInitial prefixLength
+  have hsuffixStage : ∀ time,
+      G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial
+          (prefixLength + time) who =
+        Math.Probability.expect suffixLaw fun base =>
+          G.repeatedGame.expectedStagePayoff
+            (Function.update suffixProfile who
+              (G.repeatedGame.afterHistoryStrategy deviation base))
+            G.repeatedInitial time who := by
+    intro time
+    rw [expectedStagePayoff_add_eq_expect_afterHistory]
+    apply Math.ProbabilityMassFunction.expect_congr_on_support
+    intro base _
+    have hprofile :=
+      G.repeatedGame.afterHistoryProfile_update_terminalChildDispatcher_canonical
+        prefixLength prefixProfile (fun _ => suffixProfile) base who deviation
+    change G.repeatedGame.afterHistoryProfile deviated base = _ at hprofile
+    rw [hprofile]
+    rw [G.repeatedGame.expectedStagePayoff_update_canonicalTerminalChildProfile]
+    cases base.2
+    rfl
+  have hsuffixPointwise : ∀ base : G.repeatedGame.Hist prefixLength,
+      (∑ time ∈ Finset.range suffixLength,
+          G.repeatedGame.expectedStagePayoff
+            (Function.update suffixProfile who
+              (G.repeatedGame.afterHistoryStrategy deviation base))
+            G.repeatedInitial time who) ≤
+        (suffixLength : ℝ) *
+          G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+            suffixLength suffixProfile who := by
+    intro base
+    have hnash := hsuffix who
+      (G.repeatedGame.afterHistoryStrategy deviation base)
+    simp only [add_zero] at hnash
+    have hscaled := mul_le_mul_of_nonneg_left hnash
+      (Nat.cast_nonneg suffixLength : (0 : ℝ) ≤ suffixLength)
+    let localDeviation := Function.update suffixProfile who
+      (G.repeatedGame.afterHistoryStrategy deviation base)
+    have hdeviation := congrFun
+      (cast_smul_finitePayoff_eq_sum G suffixLength localDeviation) who
+    simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hdeviation
+    change (suffixLength : ℝ) *
+      G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+        suffixLength localDeviation who = _ at hdeviation
+    change (∑ time ∈ Finset.range suffixLength,
+      G.repeatedGame.expectedStagePayoff
+        localDeviation G.repeatedInitial time who) ≤ _
+    rw [← hdeviation]
+    exact hscaled
+  have hsuffixBound :
+      (∑ time ∈ Finset.range suffixLength,
+          G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial
+            (prefixLength + time) who) ≤
+        (suffixLength : ℝ) *
+          G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+            suffixLength suffixProfile who := by
+    simp_rw [hsuffixStage]
+    rw [sum_expect_comm_range]
+    calc
+      Math.Probability.expect suffixLaw (fun base =>
+          ∑ time ∈ Finset.range suffixLength,
+            G.repeatedGame.expectedStagePayoff
+              (Function.update suffixProfile who
+                (G.repeatedGame.afterHistoryStrategy deviation base))
+              G.repeatedInitial time who) ≤
+          Math.Probability.expect suffixLaw (fun _ =>
+            (suffixLength : ℝ) *
+              G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+                suffixLength suffixProfile who) := by
+        apply Math.Probability.expect_mono
+        exact hsuffixPointwise
+      _ = _ := Math.Probability.expect_const _ _
+  by_cases hzero : prefixLength + suffixLength = 0
+  · have hprefixZero : prefixLength = 0 := by omega
+    have hsuffixZero : suffixLength = 0 := by omega
+    subst prefixLength
+    subst suffixLength
+    rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff,
+      G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+    simp
+  · have hdeviated := congrFun
+      (cast_smul_finitePayoff_eq_sum G (prefixLength + suffixLength) deviated) who
+    have hjoint := congrFun
+      (appendFiniteProfiles_weightedPayoff G prefixLength suffixLength
+        prefixProfile suffixProfile) who
+    simp only [Pi.smul_apply, Pi.add_apply, smul_eq_mul,
+      Finset.sum_apply] at hdeviated hjoint
+    change ((prefixLength + suffixLength : ℕ) : ℝ) *
+      G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+        (prefixLength + suffixLength) deviated who = _ at hdeviated
+    change ((prefixLength + suffixLength : ℕ) : ℝ) *
+      G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+        (prefixLength + suffixLength) joined who = _ at hjoint
+    rw [Finset.sum_range_add] at hdeviated
+    have hweighted :
+        ((prefixLength + suffixLength : ℕ) : ℝ) *
+            G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+              (prefixLength + suffixLength) deviated who ≤
+          ((prefixLength + suffixLength : ℕ) : ℝ) *
+            G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+              (prefixLength + suffixLength) joined who := by
+      rw [hdeviated, hjoint]
+      exact add_le_add hprefixBound hsuffixBound
+    have hpositive : (0 : ℝ) < ((prefixLength + suffixLength : ℕ) : ℝ) := by
+      exact_mod_cast Nat.pos_of_ne_zero hzero
+    nlinarith
+
 /-- Concatenate a list of equal-length blocks in chronological order, then
 play one residual profile. -/
 noncomputable def FiniteStageGame.appendFiniteProfileList
@@ -3775,6 +3943,33 @@ private theorem appendFiniteProfileList_weightedPayoff
         appendFiniteProfiles_weightedPayoff, ih]
       simp only [List.map_cons, List.sum_cons]
       abel
+
+private theorem appendFiniteProfileList_isHorizonNash
+    (G : FiniteStageGame) (blockLength residualLength : ℕ)
+    (profiles : List G.BehaviorProfile) (residual : G.BehaviorProfile)
+    (hprofiles : ∀ profile ∈ profiles,
+      G.repeatedGame.IsεHorizonNash G.repeatedInitial
+        blockLength 0 profile)
+    (hresidual : G.repeatedGame.IsεHorizonNash G.repeatedInitial
+      residualLength 0 residual) :
+    G.repeatedGame.IsεHorizonNash G.repeatedInitial
+      (profiles.length * blockLength + residualLength) 0
+      (G.appendFiniteProfileList blockLength profiles residual) := by
+  induction profiles generalizing residual with
+  | nil =>
+      simpa [FiniteStageGame.appendFiniteProfileList] using hresidual
+  | cons profile profiles ih =>
+      have hlength : (profile :: profiles).length * blockLength + residualLength =
+          blockLength + (profiles.length * blockLength + residualLength) := by
+        simp only [List.length_cons, Nat.succ_mul]
+        omega
+      rw [hlength, FiniteStageGame.appendFiniteProfileList]
+      apply appendFiniteProfiles_isHorizonNash
+      · exact hprofiles profile (by simp)
+      · apply ih
+        · intro candidate hcandidate
+          exact hprofiles candidate (by simp [hcandidate])
+        · exact hresidual
 
 theorem lemma_3_feasible (G : FiniteStageGame)
     (n m p r : ℕ) (hn : n = m * p + r) :
@@ -3824,7 +4019,56 @@ theorem lemma_3_equilibrium (G : FiniteStageGame)
     addSet (iteratedAddSet m (scaleSet (p : ℝ) (G.finiteEquilibriumPayoffs p)))
         (scaleSet (r : ℝ) (G.finiteEquilibriumPayoffs r)) ⊆
       scaleSet (n : ℝ) (G.finiteEquilibriumPayoffs n) := by
-  sorry
+  classical
+  rintro z ⟨blockTotal, hblockTotal, residualTotal, hresidualTotal, hz⟩
+  obtain ⟨blockPayoff, hblockPayoff, hblockTotalEq⟩ := hblockTotal
+  have hexistsBlock : ∀ k, ∃ profile : G.BehaviorProfile,
+      G.repeatedGame.IsεHorizonNash G.repeatedInitial p 0 profile ∧
+        blockPayoff k = (p : ℝ) • G.finitePayoff p profile := by
+    intro k
+    obtain ⟨payoff, hpayoff, hscaled⟩ := hblockPayoff k
+    obtain ⟨profile, hnash, hprofile⟩ := hpayoff
+    refine ⟨profile, hnash, ?_⟩
+    rw [hprofile]
+    exact hscaled
+  choose blockProfile hblockNash hblockProfile using hexistsBlock
+  obtain ⟨residualPayoff, hresidualPayoff, hresidualScaled⟩ :=
+    hresidualTotal
+  obtain ⟨residualProfile, hresidualNash, hresidualProfile⟩ :=
+    hresidualPayoff
+  have hresidual : residualTotal =
+      (r : ℝ) • G.finitePayoff r residualProfile := by
+    rw [hresidualProfile]
+    exact hresidualScaled
+  let profiles := List.ofFn blockProfile
+  let joined := G.appendFiniteProfileList p profiles residualProfile
+  have hprofilesNash : ∀ profile ∈ profiles,
+      G.repeatedGame.IsεHorizonNash G.repeatedInitial p 0 profile := by
+    intro profile hprofile
+    rcases List.mem_ofFn.mp hprofile with ⟨k, rfl⟩
+    exact hblockNash k
+  have hjointNash : G.repeatedGame.IsεHorizonNash G.repeatedInitial
+      (m * p + r) 0 joined := by
+    simpa only [joined, profiles, List.length_ofFn] using
+      appendFiniteProfileList_isHorizonNash G p r profiles residualProfile
+        hprofilesNash hresidualNash
+  have hlist :
+      (profiles.map fun profile =>
+        (p : ℝ) • G.finitePayoff p profile).sum =
+        ∑ k, blockPayoff k := by
+    dsimp only [profiles]
+    rw [List.map_ofFn, List.sum_ofFn]
+    apply Finset.sum_congr rfl
+    intro k _
+    exact (hblockProfile k).symm
+  have hweighted := appendFiniteProfileList_weightedPayoff
+    G p r profiles residualProfile
+  rw [show profiles.length = m by simp [profiles], hlist, ← hresidual] at hweighted
+  refine ⟨G.finitePayoff n joined, ?_, ?_⟩
+  · refine ⟨joined, ?_, rfl⟩
+    rwa [hn]
+  · rw [hz, hblockTotalEq, hn]
+    simpa only [joined] using hweighted.symm
 
 /-! Repeating one positive-horizon block is the zero-residual specialization
 of Lemma 3.  The same scalar-cancellation argument serves feasible and
