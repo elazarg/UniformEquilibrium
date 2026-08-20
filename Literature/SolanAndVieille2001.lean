@@ -3978,9 +3978,9 @@ theorem proposition2_13
   quittingGame_isUniformεEquilibrium_of_terminalNash
     reward profile herror hnash
 
-/-! ### 2.7. General payoff processes -/
+/-! ### 2.4. General payoff processes -/
 
-/-- The random payoff process of Theorem 2.14. -/
+/-- The random payoff process of Theorem 2.8. -/
 structure PayoffProcess (ι : Type) [Fintype ι] [DecidableEq ι] where
   Ω : Type
   measurableSpace : MeasurableSpace Ω
@@ -4003,12 +4003,13 @@ structure PayoffProcess (ι : Type) [Fintype ι] [DecidableEq ι] where
 abbrev ProcessProfile (process : PayoffProcess ι) :=
   ℕ → ι → process.Ω → PMF Bool
 
-/-- The paper's natural filtration `ℱₙ = σ(rₚ : p < n)`. Repository
-time zero represents paper stage one. -/
+/-- The paper's natural filtration `ℱₙ = σ(rₚ : p ≤ n)`. Repository time zero
+represents paper stage one, so the stage-`time` action observes the payoff at
+that stage. -/
 @[reducible] def processFiltration
     (process : PayoffProcess ι) (time : ℕ) :
     MeasurableSpace process.Ω :=
-  ⨆ previous : Fin time, ⨆ terminal, ⨆ who,
+  ⨆ previous : Fin (time + 1), ⨆ terminal, ⨆ who,
     MeasurableSpace.comap
       (fun ω => process.payoff previous ω terminal who) inferInstance
 
@@ -4052,16 +4053,16 @@ def processEpsilonEquilibrium
       processExpectedPayoff process
         (fun time => Function.update (profile time) who (deviation time)) who
 
-/-- **Theorem 2.14.** If the payoff process converges almost surely, has an
+/-- **Theorem 2.8.** If the payoff process converges almost surely, has an
 integrable uniform envelope, and its limit satisfies A.1 and A.2 almost
 surely, then it admits an `ε`-equilibrium for every `ε > 0`. -/
-def Theorem2_14 : Prop :=
+def Theorem2_8 : Prop :=
   ∀ (process : PayoffProcess ι), processAssumptions process →
     ∀ ε : ℝ, 0 < ε → ∃ profile : ProcessProfile process,
       processAdapted process profile ∧
         processEpsilonEquilibrium process profile ε
 
-theorem theorem2_14 : Theorem2_14 (ι := ι) := by
+theorem theorem2_8 : Theorem2_8 (ι := ι) := by
   sorry
 
 /-! ## 3. The four-player example -/
