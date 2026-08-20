@@ -3161,6 +3161,466 @@ theorem lemma2_11 : Lemma2_11 := by
           (Set.mem_range_self block)
       linarith
 
+private theorem continueUntil_terminalValue_sub_eq_ledger_sum
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : RootSequence (ι := ι)) (who : ι) :
+    ∀ (start length : ℕ),
+      quittingRootSequenceTerminalValue reward
+          (continueUntilRoots roots who (start + length)) who start -
+        quittingRootSequenceTerminalValue reward roots who start =
+      ∑ offset ∈ Finset.range length,
+        quittingOpponentSurvivalWeight roots who start offset *
+          quittingLedgerStageAdvantage reward roots who (start + offset) := by
+  intro start length
+  induction length generalizing start with
+  | zero =>
+      have htail : quittingRootSequenceTerminalValue reward
+          (continueUntilRoots roots who start) who start =
+          quittingRootSequenceTerminalValue reward roots who start := by
+        apply quittingRootSequenceTerminalValue_congr
+        intro offset
+        simp [continueUntilRoots]
+      simp [htail]
+  | succ length ih =>
+      let forced := continueUntilRoots roots who (start + (length + 1))
+      have hforcedRoot : forced start =
+          Function.update (roots start) who (PMF.pure false) := by
+        simp [forced, continueUntilRoots]
+      have hforcedTail : quittingRootSequenceTerminalValue reward forced who
+          (start + 1) =
+          quittingRootSequenceTerminalValue reward
+            (continueUntilRoots roots who (start + 1 + length)) who
+              (start + 1) := by
+        dsimp only [forced]
+        rw [show start + (length + 1) = start + 1 + length by omega]
+      have hforcedBellman :=
+        quittingRootSequenceTerminalValue_eq_absorbingContribution_add
+          reward forced who start
+      have htailIdentity := ih (start + 1)
+      have htailEq : quittingRootSequenceTerminalValue reward
+          (continueUntilRoots roots who (start + 1 + length)) who (start + 1) =
+          quittingRootSequenceTerminalValue reward roots who (start + 1) +
+            ∑ offset ∈ Finset.range length,
+              quittingOpponentSurvivalWeight roots who (start + 1) offset *
+                quittingLedgerStageAdvantage reward roots who
+                  (start + 1 + offset) := by
+        linarith
+      have hpeel := Finset.sum_range_succ' (fun offset ↦
+        quittingOpponentSurvivalWeight roots who start offset *
+          quittingLedgerStageAdvantage reward roots who (start + offset)) length
+      have hshift : ∀ offset,
+          quittingOpponentSurvivalWeight roots who start (offset + 1) *
+              quittingLedgerStageAdvantage reward roots who
+                (start + (offset + 1)) =
+            quittingFixedOpponentsContinueMass roots who start *
+              (quittingOpponentSurvivalWeight roots who (start + 1) offset *
+                quittingLedgerStageAdvantage reward roots who
+                  (start + 1 + offset)) := by
+        intro offset
+        rw [quittingOpponentSurvivalWeight_succ_left]
+        rw [show start + (offset + 1) = start + 1 + offset by omega]
+        ring
+      rw [Finset.sum_congr rfl fun offset _ ↦ hshift offset,
+        ← Finset.mul_sum] at hpeel
+      have hzero : quittingOpponentSurvivalWeight roots who start 0 = 1 := by
+        simp [quittingOpponentSurvivalWeight]
+      rw [hforcedBellman, hforcedRoot, hforcedTail, htailEq, hpeel, hzero]
+      change quittingFixedOpponentsContinueReward reward roots who start +
+          quittingFixedOpponentsContinueMass roots who start *
+            (_ + _) - _ = _
+      rw [quittingLedgerStageAdvantage_eq_fixedOpponents]
+      simp only [Nat.add_zero, one_mul]
+      ring
+
+private theorem one_sub_mul_sum_range_le_of_antitone_step
+    (weight : ℕ → ℝ) (step : ℕ) (factor : ℝ)
+    (hstepPos : 0 < step) (hfactorNonneg : 0 ≤ factor)
+    (hfactorOne : factor < 1)
+    (hweightNonneg : ∀ index, 0 ≤ weight index)
+    (hweightOne : ∀ index, weight index ≤ 1)
+    (hweightAntitone : Antitone weight)
+    (hcontraction : ∀ index, weight (index + step) ≤ factor * weight index) :
+    ∀ horizon,
+      (1 - factor) * ∑ index ∈ Finset.range horizon, weight index ≤ step := by
+  have halignedWeight : ∀ turns,
+      weight (turns * step) ≤ factor ^ turns := by
+    intro turns
+    induction turns with
+    | zero => simpa using hweightOne 0
+    | succ turns ih =>
+        rw [Nat.succ_mul]
+        calc
+          weight (turns * step + step) ≤
+              factor * weight (turns * step) := hcontraction _
+          _ ≤ factor * factor ^ turns :=
+            mul_le_mul_of_nonneg_left ih hfactorNonneg
+          _ = factor ^ turns.succ := by rw [pow_succ]; ring
+  have halignedSum : ∀ turns,
+      (∑ index ∈ Finset.range (turns * step), weight index) ≤
+        step * ∑ block ∈ Finset.range turns, factor ^ block := by
+    intro turns
+    induction turns with
+    | zero => simp
+    | succ turns ih =>
+        rw [Nat.succ_mul, Finset.sum_range_add, Finset.sum_range_succ]
+        have hlastBlock : (∑ offset ∈ Finset.range step,
+            weight (turns * step + offset)) ≤ step * factor ^ turns := by
+          calc
+            (∑ offset ∈ Finset.range step,
+                weight (turns * step + offset)) ≤
+              ∑ _offset ∈ Finset.range step, factor ^ turns := by
+                apply Finset.sum_le_sum
+                intro offset _
+                exact (hweightAntitone (Nat.le_add_right _ _)).trans
+                  (halignedWeight turns)
+            _ = step * factor ^ turns := by simp
+        nlinarith
+  intro horizon
+  have hhorizon : horizon ≤ horizon * step := by
+    exact Nat.le_mul_of_pos_right horizon hstepPos
+  have hprefix : (∑ index ∈ Finset.range horizon, weight index) ≤
+      ∑ index ∈ Finset.range (horizon * step), weight index := by
+    apply Finset.sum_le_sum_of_subset_of_nonneg
+      (Finset.range_mono hhorizon)
+    intro index _ _
+    exact hweightNonneg index
+  have hsum := hprefix.trans (halignedSum horizon)
+  have honeSub : 0 ≤ 1 - factor := by linarith
+  have hscaled := mul_le_mul_of_nonneg_left hsum honeSub
+  have hgeom := geom_sum_mul_neg factor horizon
+  have hpowNonneg : 0 ≤ factor ^ horizon := pow_nonneg hfactorNonneg horizon
+  calc
+    (1 - factor) * ∑ index ∈ Finset.range horizon, weight index ≤
+        (1 - factor) *
+          (step * ∑ block ∈ Finset.range horizon, factor ^ block) := hscaled
+    _ = step *
+        ((∑ block ∈ Finset.range horizon, factor ^ block) *
+          (1 - factor)) := by ring
+    _ = step * (1 - factor ^ horizon) := by rw [hgeom]
+    _ ≤ step := by
+      have hstepNonneg : (0 : ℝ) ≤ step := Nat.cast_nonneg step
+      nlinarith
+
+private theorem epsilon_mul_sum_blockReach_le
+    (data : MainEstimateContext ι) (hadmissible : data.Admissible)
+    (horizon : ℕ) :
+    data.ε * ∑ block ∈ Finset.range horizon,
+        quittingOpponentSurvivalWeight data.roots data.who 0
+          (data.blockStart block) ≤
+      2 * data.ε ^ (1 - data.b - data.exponent) := by
+  rcases hadmissible with
+    ⟨hε, hεone, -, ha, haExponent, hbExponent, -, -, -⟩
+  have hexponent : 0 < data.exponent := by linarith
+  have hb : 0 < data.b := by linarith
+  let exponentPower := data.ε ^ data.exponent
+  let delta := data.ε ^ data.b
+  let inverseScale := 1 / exponentPower
+  let step := ⌊inverseScale⌋₊ + 1
+  let factor := 1 - delta
+  let reach : ℕ → ℝ := fun block ↦
+    quittingOpponentSurvivalWeight data.roots data.who 0
+      (data.blockStart block)
+  have hexponentPowerPos : 0 < exponentPower := by
+    exact Real.rpow_pos_of_pos hε data.exponent
+  have hexponentPowerOne : exponentPower < 1 := by
+    exact Real.rpow_lt_one hε.le hεone hexponent
+  have hdeltaPos : 0 < delta := by
+    exact Real.rpow_pos_of_pos hε data.b
+  have hdeltaOne : delta < 1 := by
+    exact Real.rpow_lt_one hε.le hεone hb
+  have hinverseOne : 1 ≤ inverseScale := by
+    dsimp only [inverseScale]
+    exact one_le_one_div hexponentPowerPos hexponentPowerOne.le
+  have hinverseNonneg : 0 ≤ inverseScale := le_trans (by norm_num) hinverseOne
+  have hstepPos : 0 < step := by
+    dsimp only [step]
+    omega
+  have hstepBound : (step : ℝ) ≤ 2 * inverseScale := by
+    dsimp only [step]
+    have hfloor := Nat.floor_le hinverseNonneg
+    push_cast
+    linarith
+  have hfactorNonneg : 0 ≤ factor := by dsimp only [factor]; linarith
+  have hfactorOne : factor < 1 := by dsimp only [factor]; linarith
+  have hreachNonneg : ∀ block, 0 ≤ reach block := fun block ↦
+    quittingOpponentSurvivalWeight_nonneg data.roots data.who 0
+      (data.blockStart block)
+  have hreachOne : ∀ block, reach block ≤ 1 := fun block ↦
+    quittingOpponentSurvivalWeight_le_one data.roots data.who 0
+      (data.blockStart block)
+  have hreachAntitone : Antitone reach := by
+    intro first second hfirstSecond
+    exact antitone_quittingOpponentSurvivalWeight data.roots data.who 0
+      (data.blockStart_strictMono.monotone hfirstSecond)
+  have hcontraction : ∀ block,
+      reach (block + step) ≤ factor * reach block := by
+    intro block
+    obtain ⟨later, hblockLater, hlaterDistance, hlaterType⟩ :=
+      data.typeI_regular block
+    have hdistanceCast : ((later - block : ℕ) : ℝ) ≤ inverseScale := by
+      rw [Nat.cast_sub hblockLater]
+      simpa only [inverseScale] using hlaterDistance
+    have hdistanceNat : later - block ≤ ⌊inverseScale⌋₊ :=
+      Nat.le_floor hdistanceCast
+    have hlaterStep : later + 1 ≤ block + step := by
+      dsimp only [step]
+      omega
+    let laterStart := data.blockStart later
+    let laterLength := data.blockStart (later + 1) - laterStart
+    have hlaterEnd : laterStart + laterLength = data.blockStart (later + 1) := by
+      dsimp only [laterStart, laterLength]
+      exact Nat.add_sub_of_le
+        (data.blockStart_strictMono.monotone (Nat.le_succ later))
+    have hlaterSurvival : quittingOpponentSurvivalWeight data.roots data.who
+        laterStart laterLength ≤ factor := by
+      unfold blockTypeI at hlaterType
+      rw [opponentBlockTerminationProbability_eq_one_sub_survival] at hlaterType
+      dsimp only [laterStart, laterLength, factor, delta]
+      linarith
+    have hreachLater : reach (later + 1) =
+        reach later * quittingOpponentSurvivalWeight data.roots data.who
+          laterStart laterLength := by
+      dsimp only [reach]
+      rw [← hlaterEnd, quittingOpponentSurvivalWeight_add]
+      simp only [Nat.zero_add, laterStart]
+    have hreachLaterBound : reach (later + 1) ≤ factor * reach block := by
+      rw [hreachLater]
+      calc
+        reach later * quittingOpponentSurvivalWeight data.roots data.who
+            laterStart laterLength ≤ reach later * factor :=
+          mul_le_mul_of_nonneg_left hlaterSurvival (hreachNonneg later)
+        _ ≤ reach block * factor :=
+          mul_le_mul_of_nonneg_right (hreachAntitone hblockLater) hfactorNonneg
+        _ = factor * reach block := mul_comm _ _
+    exact (hreachAntitone hlaterStep).trans hreachLaterBound
+  have hsum := one_sub_mul_sum_range_le_of_antitone_step reach step factor
+    hstepPos hfactorNonneg hfactorOne hreachNonneg hreachOne hreachAntitone
+    hcontraction horizon
+  have hdeltaSum : delta * ∑ block ∈ Finset.range horizon, reach block ≤
+      step := by
+    simpa only [factor, sub_sub_cancel, delta] using hsum
+  have hsumDiv : (∑ block ∈ Finset.range horizon, reach block) ≤
+      step / delta := by
+    rw [mul_comm] at hdeltaSum
+    exact (le_div_iff₀ hdeltaPos).2 hdeltaSum
+  have hscaled := mul_le_mul_of_nonneg_left hsumDiv hε.le
+  have hstepScaled : data.ε * (step / delta) ≤
+      2 * data.ε ^ (1 - data.b - data.exponent) := by
+    have hstepDiv := div_le_div_of_nonneg_right hstepBound hdeltaPos.le
+    have hpositiveScale : 0 < exponentPower * delta :=
+      mul_pos hexponentPowerPos hdeltaPos
+    have hpowerProduct : exponentPower * delta =
+        data.ε ^ (data.exponent + data.b) := by
+      dsimp only [exponentPower, delta]
+      rw [Real.rpow_add hε]
+    have hpowerQuotient : data.ε / (exponentPower * delta) =
+        data.ε ^ (1 - data.b - data.exponent) := by
+      calc
+        data.ε / (exponentPower * delta) =
+            data.ε ^ (1 : ℝ) /
+              data.ε ^ (data.exponent + data.b) := by
+          rw [hpowerProduct, Real.rpow_one]
+        _ = data.ε ^ (1 - (data.exponent + data.b)) :=
+          (Real.rpow_sub hε 1 (data.exponent + data.b)).symm
+        _ = data.ε ^ (1 - data.b - data.exponent) := by
+          congr 1
+          ring
+    calc
+      data.ε * (step / delta) ≤
+          data.ε * ((2 * inverseScale) / delta) :=
+        mul_le_mul_of_nonneg_left hstepDiv hε.le
+      _ = 2 * (data.ε / (exponentPower * delta)) := by
+        dsimp only [inverseScale]
+        field_simp [hexponentPowerPos.ne', hdeltaPos.ne']
+      _ = 2 * data.ε ^ (1 - data.b - data.exponent) := by
+        rw [hpowerQuotient]
+  exact hscaled.trans hstepScaled
+
+private theorem sum_ownQuit_lt_two_mul_of_blockTermination_lt
+    (roots : RootSequence (ι := ι)) (who : ι) (start length : ℕ)
+    {δ : ℝ} (hδ : δ < 1 / 2)
+    (htermination : blockTerminationProbability roots start length < δ) :
+    (∑ offset ∈ Finset.range length,
+        (roots (start + offset) who true).toReal) < 2 * δ := by
+  let ownHazard : ℕ → PMF Bool := fun offset ↦ roots (start + offset) who
+  let ownSurvival := quittingHazardSurvival ownHazard length
+  let quitSum := ∑ offset ∈ Finset.range length,
+    (roots (start + offset) who true).toReal
+  have hquitSumNonneg : 0 ≤ quitSum := by
+    dsimp only [quitSum]
+    exact Finset.sum_nonneg fun _ _ ↦ ENNReal.toReal_nonneg
+  have hownSurvivalEq : ownSurvival =
+      blockOwnerSurvivalWeight roots who start length := by
+    unfold ownSurvival ownHazard quittingHazardSurvival
+      blockOwnerSurvivalWeight Math.survivalProduct
+    simp only [Nat.zero_add]
+  have hjoint := blockJointSurvival_eq_opponent_mul_owner
+    roots who start length
+  have hopponentOne := quittingOpponentSurvivalWeight_le_one_of_mass
+    roots who start length
+  have hownNonneg := blockOwnerSurvivalWeight_nonneg roots who start length
+  have hownLower : 1 - δ < ownSurvival := by
+    rw [hownSurvivalEq]
+    unfold blockTerminationProbability at htermination
+    nlinarith [mul_le_of_le_one_left hownNonneg hopponentOne]
+  have hhazard := quittingHazardSurvival_mul_one_add_sum_quit_le_one
+    ownHazard length
+  have hhazard' : ownSurvival * (1 + quitSum) ≤ 1 := by
+    simpa [ownHazard, quitSum] using hhazard
+  have hownHalf : 1 / 2 < ownSurvival := by linarith
+  have hweighted : ownSurvival * quitSum < δ := by nlinarith
+  simpa only [quitSum] using (show quitSum < 2 * δ by nlinarith)
+
+private theorem block_ledger_sum_le
+    (data : MainEstimateContext ι) (hadmissible : data.Admissible)
+    (block : ℕ) (hsmallScale : data.ε ^ data.a < 1 / 2) :
+    (∑ offset ∈ Finset.range
+        (data.blockStart (block + 1) - data.blockStart block),
+      quittingOpponentSurvivalWeight data.roots data.who
+          (data.blockStart block) offset *
+        quittingLedgerStageAdvantage data.reward data.roots data.who
+          (data.blockStart block + offset)) ≤
+      data.ε * (1 + 2 * data.ε ^ data.a) := by
+  rcases hadmissible with ⟨hε, -, -, -, -, -, -, -, -⟩
+  let start := data.blockStart block
+  let length := data.blockStart (block + 1) - start
+  have hlengthPos : 0 < length := by
+    dsimp only [length, start]
+    have := data.blockStart_strictMono (Nat.lt_succ_self block)
+    simp only [Nat.succ_eq_add_one] at this
+    omega
+  let prefixLength := length - 1
+  have hprefixLength : prefixLength < length := by
+    dsimp only [prefixLength]
+    omega
+  have hprefixSmall : blockTerminationProbability data.roots start prefixLength <
+      data.ε ^ data.a := by
+    exact data.blockPrefixSmall block prefixLength (by
+      simpa only [length, start] using hprefixLength)
+  have hquitSum := sum_ownQuit_lt_two_mul_of_blockTermination_lt
+    data.roots data.who start prefixLength hsmallScale hprefixSmall
+  have hsupport : IsQuittingRootSequenceSupportApproxNash
+      data.reward data.roots data.ε := by
+    intro stage
+    exact isQuittingRootSupportApproxNash_of_oneShotPerfect
+      data.reward _ _ (data.rowsPerfect stage)
+  have hstage : ∀ offset,
+      quittingLedgerStageAdvantage data.reward data.roots data.who
+          (start + offset) ≤
+        data.ε * (data.roots (start + offset) data.who true).toReal := by
+    intro offset
+    exact quittingLedgerStageAdvantage_le_delta_mul_ownQuitProbability
+      data.reward data.roots data.who (start + offset) (hsupport (start + offset))
+  have hterm : ∀ offset,
+      quittingOpponentSurvivalWeight data.roots data.who start offset *
+          quittingLedgerStageAdvantage data.reward data.roots data.who
+            (start + offset) ≤
+        data.ε * (data.roots (start + offset) data.who true).toReal := by
+    intro offset
+    exact (mul_le_mul_of_nonneg_left (hstage offset)
+      (quittingOpponentSurvivalWeight_nonneg data.roots data.who start offset)).trans
+      (mul_le_of_le_one_left
+        (mul_nonneg hε.le ENNReal.toReal_nonneg)
+        (quittingOpponentSurvivalWeight_le_one_of_mass
+          data.roots data.who start offset))
+  have hprefix : (∑ offset ∈ Finset.range prefixLength,
+      quittingOpponentSurvivalWeight data.roots data.who start offset *
+        quittingLedgerStageAdvantage data.reward data.roots data.who
+          (start + offset)) ≤
+      data.ε * (2 * data.ε ^ data.a) := by
+    calc
+      _ ≤ ∑ offset ∈ Finset.range prefixLength,
+          data.ε * (data.roots (start + offset) data.who true).toReal := by
+        apply Finset.sum_le_sum
+        intro offset _
+        exact hterm offset
+      _ = data.ε * ∑ offset ∈ Finset.range prefixLength,
+          (data.roots (start + offset) data.who true).toReal := by
+        rw [Finset.mul_sum]
+      _ ≤ data.ε * (2 * data.ε ^ data.a) :=
+        mul_le_mul_of_nonneg_left hquitSum.le hε.le
+  have hlast : quittingOpponentSurvivalWeight data.roots data.who start
+        prefixLength *
+      quittingLedgerStageAdvantage data.reward data.roots data.who
+        (start + prefixLength) ≤ data.ε := by
+    exact (hterm prefixLength).trans (by
+      have hquitOne := ENNReal.toReal_mono ENNReal.one_ne_top
+        (PMF.coe_le_one (data.roots (start + prefixLength) data.who) true)
+      norm_num at hquitOne
+      nlinarith)
+  have hlengthEq : length = prefixLength + 1 := by
+    dsimp only [prefixLength]
+    omega
+  change (∑ offset ∈ Finset.range length,
+      quittingOpponentSurvivalWeight data.roots data.who start offset *
+        quittingLedgerStageAdvantage data.reward data.roots data.who
+          (start + offset)) ≤ _
+  rw [hlengthEq, Finset.sum_range_succ]
+  nlinarith
+
+private theorem blockExpectation_succ_sub_eq
+    (data : MainEstimateContext ι) (block : ℕ) :
+    data.blockExpectation (block + 1) - data.blockExpectation block =
+      quittingOpponentSurvivalWeight data.roots data.who 0
+          (data.blockStart block) *
+        (∑ offset ∈ Finset.range
+            (data.blockStart (block + 1) - data.blockStart block),
+          quittingOpponentSurvivalWeight data.roots data.who
+              (data.blockStart block) offset *
+            quittingLedgerStageAdvantage data.reward data.roots data.who
+              (data.blockStart block + offset)) := by
+  let start := data.blockStart block
+  let length := data.blockStart (block + 1) - start
+  let first := continueUntilRoots data.roots data.who start
+  let second := continueUntilRoots data.roots data.who (start + length)
+  let never := quittingRootSequenceUpdate data.roots data.who
+    quittingAlwaysContinueHazard
+  have hend : start + length = data.blockStart (block + 1) := by
+    dsimp only [start, length]
+    exact Nat.add_sub_of_le
+      (data.blockStart_strictMono.monotone (Nat.le_succ block))
+  have hprefix : ∀ time, time < start → second time = first time := by
+    intro time htime
+    have htimeEnd : time < start + length :=
+      lt_of_lt_of_le htime (Nat.le_add_right start length)
+    simp [second, first, continueUntilRoots, htime, htimeEnd]
+  have hfirstTail : quittingRootSequenceTerminalValue data.reward first
+      data.who start =
+      quittingRootSequenceTerminalValue data.reward data.roots data.who start := by
+    apply quittingRootSequenceTerminalValue_congr
+    intro offset
+    simp [first, continueUntilRoots]
+  have hlocal := continueUntil_terminalValue_sub_eq_ledger_sum
+    data.reward data.roots data.who start length
+  have hsecondTail : quittingRootSequenceTerminalValue data.reward second
+      data.who start =
+      quittingRootSequenceTerminalValue data.reward
+        (continueUntilRoots data.roots data.who (start + length))
+          data.who start := rfl
+  have hsurvivalFirstNever : quittingJointSurvivalWeight first 0 start =
+      quittingJointSurvivalWeight never 0 start := by
+    apply quittingJointSurvivalWeight_congr
+    intro offset hoffset
+    simp [first, never, continueUntilRoots, quittingRootSequenceUpdate,
+      quittingAlwaysContinueHazard, hoffset]
+  have hsurvival : quittingJointSurvivalWeight first 0 start =
+      quittingOpponentSurvivalWeight data.roots data.who 0 start := by
+    rw [hsurvivalFirstNever]
+    exact quittingJointSurvivalWeight_quittingRootSequenceUpdate_alwaysContinue
+      data.roots data.who 0 start
+  have hglobal := quittingRootSequenceTerminalValue_sub_eq_jointSurvivalWeight_mul
+    data.reward second first data.who start hprefix
+  unfold MainEstimateContext.blockExpectation
+  rw [← hend]
+  change quittingRootSequenceTerminalValue data.reward second data.who 0 -
+      quittingRootSequenceTerminalValue data.reward first data.who 0 = _
+  rw [hglobal, hfirstTail, hsurvival, hsecondTail, hlocal]
+  change _ = quittingOpponentSurvivalWeight data.roots data.who 0 start *
+    ∑ offset ∈ Finset.range (start + length - start),
+      quittingOpponentSurvivalWeight data.roots data.who start offset *
+        quittingLedgerStageAdvantage data.reward data.roots data.who
+          (start + offset)
+  rw [show start + length - start = length by omega]
 /-- **Lemma 2.12.** The block expectation supremum is at most the current
 payoff plus `2ε^(1-b-e) + 7ρNε^a`. -/
 def Lemma2_12 : Prop :=
@@ -3172,7 +3632,125 @@ def Lemma2_12 : Prop :=
           7 * data.ρ * Fintype.card ι * data.ε ^ data.a
 
 theorem lemma2_12 : Lemma2_12 := by
-  sorry
+  classical
+  intro ι _ _ data hadmissible
+  have hadmissible' := hadmissible
+  rcases hadmissible' with
+    ⟨hε, hεone, hρ, ha, haExponent, hbExponent, hd, -, -⟩
+  let bound := quittingRewardBound data.reward
+  have hboundNonneg : 0 ≤ bound := quittingRewardBound_nonneg data.reward
+  have hreward : ∀ terminal player, |data.reward terminal player| ≤ bound :=
+    abs_reward_le_quittingRewardBound data.reward
+  have hρdef : data.ρ = 2 * bound := by
+    rw [data.rho_eq]
+    rfl
+  have hboundOne : 1 ≤ bound := by
+    have hsolo := hreward (quittingSingletonTerminal data.who) data.who
+    have hunit : data.reward (quittingSingletonTerminal data.who) data.who = 1 := by
+      change data.reward ⟨{data.who}, Finset.singleton_nonempty data.who⟩
+        data.who = 1
+      exact data.unitSoloExit data.who
+    rw [hunit] at hsolo
+    simpa using hsolo
+  have hcard : (1 : ℝ) ≤ Fintype.card ι := by
+    exact_mod_cast Fintype.card_pos_iff.mpr ⟨data.who⟩
+  have hbase : data.blockExpectation 0 =
+      quittingRootSequenceTerminalValue data.reward data.roots data.who 0 := by
+    unfold MainEstimateContext.blockExpectation
+    rw [data.blockStart_zero]
+    apply quittingRootSequenceTerminalValue_congr
+    intro offset
+    simp [continueUntilRoots]
+  have hcurrentBound := abs_quittingRootSequenceTerminalValue_le
+    data.reward data.roots data.who 0 hboundNonneg hreward
+  by_cases hlarge : 1 / 2 ≤ data.ε ^ data.a
+  · have hsup : sSup (Set.range data.blockExpectation) ≤ bound := by
+      apply csSup_le (Set.range_nonempty data.blockExpectation)
+      rintro value ⟨block, rfl⟩
+      exact (abs_le.mp (abs_quittingRootSequenceTerminalValue_le data.reward
+        (continueUntilRoots data.roots data.who (data.blockStart block))
+        data.who 0 hboundNonneg hreward)).2
+    have hmainError : data.ρ ≤
+        7 * data.ρ * Fintype.card ι * data.ε ^ data.a := by
+      have hcoefficient : 1 ≤ 7 * (Fintype.card ι : ℝ) * data.ε ^ data.a := by
+        nlinarith
+      nlinarith [mul_le_mul_of_nonneg_left hcoefficient hρ]
+    have hpowerNonneg : 0 ≤ data.ε ^
+        (1 - data.b - data.exponent) := Real.rpow_nonneg hε.le _
+    rw [hρdef] at hmainError
+    nlinarith [(abs_le.mp hcurrentBound).1]
+  · have hsmall : data.ε ^ data.a < 1 / 2 := lt_of_not_ge hlarge
+    let reach : ℕ → ℝ := fun block ↦
+      quittingOpponentSurvivalWeight data.roots data.who 0
+        (data.blockStart block)
+    have hreachNonneg : ∀ block, 0 ≤ reach block := fun block ↦
+      quittingOpponentSurvivalWeight_nonneg data.roots data.who 0
+        (data.blockStart block)
+    have hstep : ∀ block,
+        data.blockExpectation (block + 1) - data.blockExpectation block ≤
+          reach block * (data.ε * (1 + 2 * data.ε ^ data.a)) := by
+      intro block
+      rw [blockExpectation_succ_sub_eq data block]
+      exact mul_le_mul_of_nonneg_left
+        (block_ledger_sum_le data hadmissible block hsmall)
+        (hreachNonneg block)
+    have hfinite : ∀ horizon,
+        data.blockExpectation horizon ≤
+          data.blockExpectation 0 +
+            data.ε * (1 + 2 * data.ε ^ data.a) *
+              ∑ block ∈ Finset.range horizon, reach block := by
+      intro horizon
+      induction horizon with
+      | zero => simp
+      | succ horizon ih =>
+          have hnext := hstep horizon
+          rw [Finset.sum_range_succ]
+          nlinarith
+    have hextraPower : data.ε ^ data.a *
+          data.ε ^ (1 - data.b - data.exponent) ≤
+        data.ε ^ data.a := by
+      have hd0 : 0 ≤ 1 - data.b - data.exponent := by linarith
+      have htailPower : data.ε ^ (1 - data.b - data.exponent) ≤ 1 :=
+        Real.rpow_le_one hε.le hεone.le hd0
+      exact mul_le_of_le_one_right (Real.rpow_nonneg hε.le data.a)
+        htailPower
+    have hmainCoefficient : (4 : ℝ) ≤
+        7 * data.ρ * Fintype.card ι := by
+      rw [hρdef]
+      nlinarith
+    apply csSup_le (Set.range_nonempty data.blockExpectation)
+    rintro value ⟨horizon, rfl⟩
+    have hvalue := hfinite horizon
+    rw [hbase] at hvalue
+    have hsmallError : data.ε *
+          ∑ block ∈ Finset.range horizon, reach block ≤
+        2 * data.ε ^ (1 - data.b - data.exponent) :=
+      epsilon_mul_sum_blockReach_le data hadmissible horizon
+    have hextra : 2 * data.ε ^ data.a *
+          (data.ε * ∑ block ∈ Finset.range horizon, reach block) ≤
+        7 * data.ρ * Fintype.card ι * data.ε ^ data.a := by
+      calc
+        2 * data.ε ^ data.a *
+              (data.ε * ∑ block ∈ Finset.range horizon, reach block) ≤
+            2 * data.ε ^ data.a *
+              (2 * data.ε ^ (1 - data.b - data.exponent)) :=
+          mul_le_mul_of_nonneg_left hsmallError
+            (mul_nonneg (by norm_num) (Real.rpow_nonneg hε.le data.a))
+        _ = 4 * (data.ε ^ data.a *
+              data.ε ^ (1 - data.b - data.exponent)) := by ring
+        _ ≤ 4 * data.ε ^ data.a :=
+          mul_le_mul_of_nonneg_left hextraPower (by norm_num)
+        _ ≤ 7 * data.ρ * Fintype.card ι * data.ε ^ data.a :=
+          mul_le_mul_of_nonneg_right hmainCoefficient
+            (Real.rpow_nonneg hε.le data.a)
+    have hrewrite : data.ε * (1 + 2 * data.ε ^ data.a) *
+          ∑ block ∈ Finset.range horizon, reach block =
+        (data.ε * ∑ block ∈ Finset.range horizon, reach block) +
+          2 * data.ε ^ data.a *
+            (data.ε * ∑ block ∈ Finset.range horizon, reach block) := by
+      ring
+    rw [hrewrite] at hvalue
+    linarith
 
 /-! ### 2.6. Equilibrium and uniformity -/
 
