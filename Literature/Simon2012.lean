@@ -1174,16 +1174,14 @@ def Section5ModifiedC (G : QuittingGame) (R : ℝ) :
     ∃ k l, k ≠ l ∧ IsAbnormalPlayer G k ∧ IsAbnormalPlayer G l ∧
       x ∈ TruncatedPiece G R k ∩ TruncatedPiece G R l}
 
-/--
-Lemma 5.1 is Simon 2007, Lemma 4 (numbered Lemma 3 in that paper).  The
-corresponding Lean declaration is `sorry`-backed, so the result remains
-visibly open here.
--/
+/-- Lemma 5.1 is Simon 2007, Lemma 4 (numbered Lemma 3 there): an abnormal
+player has negative solo payoff, and every other player's solo exit gives her
+at least her min--max value. -/
 theorem lemma5_1 (G : QuittingGame) (j : G.Player)
     (habnormal : IsAbnormalPlayer G j) :
     SoloPayoff G j < 0 ∧ ∀ i, i ≠ j →
       G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j ≥ MinMaxQuit G j := by
-  sorry
+  exact Literature.Simon2007.lemma3 G j habnormal
 
 /--
 The unnumbered claim in Section 5: an affirmative answer to Question 1 still
