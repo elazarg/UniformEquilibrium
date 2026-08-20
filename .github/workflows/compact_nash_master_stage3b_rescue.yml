@@ -1,0 +1,192 @@
+name: Compact Nash master stage 3b rescue
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_master_stage3b_rescue.yml
+      - Literature/Sorin1986/CompactNashMaster3a.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-master-stage3b-rescue
+  cancel-in-progress: false
+
+jobs:
+  rescue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Inspect state
+        id: state
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster3b.ok; then echo done=yes >> "$GITHUB_OUTPUT"; else echo done=no >> "$GITHUB_OUTPUT"; fi
+      - name: Wait for stage 3a
+        if: steps.state.outputs.done == 'no'
+        run: |
+          for attempt in $(seq 1 90); do
+            git fetch origin agent/promote-sorin1986
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster.lean 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster3a.ok 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster3b.ok 2>/dev/null || true
+            test -f Literature/Sorin1986/CompactNashMaster3b.ok && exit 0
+            test -f Literature/Sorin1986/CompactNashMaster3a.ok && exit 0
+            sleep 10
+          done
+          exit 1
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Search variants
+        if: steps.state.outputs.done == 'no'
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster3b.ok; then exit 0; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashMaster.lean'); s=p.read_text()
+          candidates=[s.find('/-- Reindexing a dependent profile'),s.find('theorem piCongrLeft_update')]
+          cuts=[x for x in candidates if x>=0]
+          cut=min(cuts) if cuts else s.rindex('\nend CompactNash')
+          Path('/tmp/master3b-core').write_text(s[:cut].rstrip()+'\n\n')
+          PY
+          cat > /tmp/master3b-tail <<'LEAN'
+
+          /-- A unilateral deviation with its owner. -/
+          abbrev Deviation (G : CompactContinuousGame) := Σ who, G.Strategy who
+
+          abbrev RestrictedAction (G : CompactContinuousGame)
+              {n : ℕ} (e : Fin n ≃ G.Player) (F : Finset (Deviation G))
+              (j : Fin n) := Option {d : F // d.1.1 = e j}
+
+          __RESTRICTED_STRATEGY__
+
+          noncomputable def restrictedGame (G : CompactContinuousGame)
+              {n : ℕ} (e : Fin n ≃ G.Player) (F : Finset (Deviation G)) :
+              FiniteStageGame := by
+            classical
+            let eS : (∀ j : Fin n, G.Strategy (e j)) ≃
+                (∀ i, G.Strategy i) := Equiv.piCongrLeft G.Strategy e
+            exact {
+              Player := Fin n
+              Action := RestrictedAction G e F
+              payoff := fun actions observer =>
+                G.payoff (eS (fun j => restrictedStrategy G e F j (actions j)))
+                  (e observer) }
+
+          end CompactNash
+
+          end Literature.Sorin1986
+          LEAN
+          mkdir -p /tmp/master3b-pi /tmp/master3b-rs
+          cat > /tmp/master3b-pi/1 <<'LEAN'
+          theorem piCongrLeft_update {P Q : Type*} [DecidableEq P]
+              [DecidableEq Q] (S : Q → Type*) (e : P ≃ Q)
+              (profile : ∀ i : P, S (e i)) (who : P) (strategy : S (e who)) :
+              Equiv.piCongrLeft S e (Function.update profile who strategy) =
+                Function.update (Equiv.piCongrLeft S e profile) (e who) strategy := by
+            funext q
+            obtain ⟨i, rfl⟩ := e.surjective q
+            by_cases h : i = who
+            · subst i
+              simp [Equiv.piCongrLeft_apply_apply]
+            · have he : e i ≠ e who := fun h' => h (e.injective h')
+              simp [Equiv.piCongrLeft_apply_apply, Function.update_of_ne, h, he]
+          LEAN
+          cat > /tmp/master3b-pi/2 <<'LEAN'
+          theorem piCongrLeft_update {P Q : Type*} [DecidableEq P]
+              [DecidableEq Q] (S : Q → Type*) (e : P ≃ Q)
+              (profile : ∀ i : P, S (e i)) (who : P) (strategy : S (e who)) :
+              Equiv.piCongrLeft S e (Function.update profile who strategy) =
+                Function.update (Equiv.piCongrLeft S e profile) (e who) strategy := by
+            apply funext
+            intro q
+            rcases e.surjective q with ⟨i, rfl⟩
+            by_cases h : i = who
+            · subst i
+              simp
+            · have he : e i ≠ e who := by exact fun h' => h (e.injective h')
+              simp [Function.update_of_ne, h, he,
+                Equiv.piCongrLeft_apply_apply]
+          LEAN
+          cat > /tmp/master3b-pi/3 <<'LEAN'
+          theorem piCongrLeft_update {P Q : Type*} [DecidableEq P]
+              [DecidableEq Q] (S : Q → Type*) (e : P ≃ Q)
+              (profile : ∀ i : P, S (e i)) (who : P) (strategy : S (e who)) :
+              Equiv.piCongrLeft S e (Function.update profile who strategy) =
+                Function.update (Equiv.piCongrLeft S e profile) (e who) strategy := by
+            ext q
+            by_cases hq : q = e who
+            · subst q
+              simp [Equiv.piCongrLeft_apply_apply]
+            · let i := e.symm q
+              have hi : i ≠ who := by
+                intro h
+                apply hq
+                simpa [i, h]
+              have hqi : e i = q := e.apply_symm_apply q
+              subst q
+              simp [Equiv.piCongrLeft_apply_apply, Function.update_of_ne, hi]
+          LEAN
+          cat > /tmp/master3b-rs/1 <<'LEAN'
+          noncomputable def restrictedStrategy (G : CompactContinuousGame)
+              {n : ℕ} (e : Fin n ≃ G.Player) (F : Finset (Deviation G))
+              (j : Fin n) : RestrictedAction G e F j → G.Strategy (e j)
+            | none => Classical.choice
+                (inferInstance : Nonempty (G.Strategy (e j)))
+            | some d => cast (congrArg G.Strategy d.2) d.1.1.2
+          LEAN
+          cat > /tmp/master3b-rs/2 <<'LEAN'
+          noncomputable def restrictedStrategy (G : CompactContinuousGame)
+              {n : ℕ} (e : Fin n ≃ G.Player) (F : Finset (Deviation G))
+              (j : Fin n) : RestrictedAction G e F j → G.Strategy (e j)
+            | none => Classical.choice
+                (inferInstance : Nonempty (G.Strategy (e j)))
+            | some d => by
+                rcases d with ⟨⟨⟨who, strategy⟩, hmem⟩, howner⟩
+                cases howner
+                exact strategy
+          LEAN
+          cat > /tmp/master3b-rs/3 <<'LEAN'
+          noncomputable def restrictedStrategy (G : CompactContinuousGame)
+              {n : ℕ} (e : Fin n ≃ G.Player) (F : Finset (Deviation G))
+              (j : Fin n) : RestrictedAction G e F j → G.Strategy (e j)
+            | none => Classical.choice
+                (inferInstance : Nonempty (G.Strategy (e j)))
+            | some d => hEqRec d.1.1.2 d.2
+          LEAN
+          : > Literature/Sorin1986/CompactNashMaster3bRescue.log
+          success=''
+          for pi in /tmp/master3b-pi/*; do
+            for rs in /tmp/master3b-rs/*; do
+              variant="$(basename "$pi")-$(basename "$rs")"
+              echo "===== VARIANT $variant =====" >> Literature/Sorin1986/CompactNashMaster3bRescue.log
+              sed "s|__RESTRICTED_STRATEGY__|$(sed ':a;N;$!ba;s/\\/\\\\/g;s/&/\\\&/g;s/|/\\|/g;s/\n/\\n/g' "$rs")|" /tmp/master3b-tail > /tmp/master3b-tail-current || true
+              cat /tmp/master3b-core "$pi" /tmp/master3b-tail-current > Literature/Sorin1986/CompactNashMaster.lean
+              if lake env lean Literature/Sorin1986/CompactNashMaster.lean >> Literature/Sorin1986/CompactNashMaster3bRescue.log 2>&1; then success="$variant"; break 2; fi
+            done
+          done
+          test -n "$success"
+          printf 'success variant %s\n' "$success" > Literature/Sorin1986/CompactNashMaster3b.ok
+      - name: Commit rescue result
+        if: steps.state.outputs.done == 'no'
+        run: |
+          if test ! -f Literature/Sorin1986/CompactNashMaster3b.ok; then exit 1; fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashMaster.lean Literature/Sorin1986/CompactNashMaster3bRescue.log Literature/Sorin1986/CompactNashMaster3b.ok
+          git commit -m 'Find robust finite restricted game construction'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
