@@ -21,6 +21,7 @@ import MathUE.BackwardOrbitSelection
 import MathUE.BonferroniProductBounds
 import MathUE.BoundedDiscrepancyCirculation
 import MathUE.CalendarSummability
+import MathUE.CaristiFixedPoint
 import MathUE.ChargedPathBudget
 import MathUE.ChargedPathBudgetCounterexamples
 import MathUE.ChargedPathExecution
