@@ -3603,17 +3603,14 @@ def FiniteStageGame.perfectPublicEquilibriumPayoffs
     G.IsPerfectPublicEquilibrium lam profile ∧
       G.monitoredDiscountedPayoff lam profile = v}
 
-/-! Immediately after Lemma 2 the paper states that its convergence
-result does not extend to perfect equilibria and cites Fudenberg--Maskin
-[5].  The counterexample is not printed in this paper, so the exact
-external existence claim remains an explained `sorry`; it is not
-silently omitted or replaced by a weaker comment. -/
-theorem reported_perfect_equilibrium_failure :
+/-! Immediately after Lemma 2 the paper states that its convergence result
+does not extend to perfect equilibria and cites Fudenberg--Maskin [5]. The
+counterexample is not printed, so this is an exact open citation claim. -/
+def ReportedPerfectEquilibriumFailureClaim : Prop :=
     ∃ G : FiniteStageGame,
       ¬HausdorffConvergesAtZero
         G.perfectPublicEquilibriumPayoffs
-        G.individuallyRationalPayoffs := by
-  sorry
+        G.individuallyRationalPayoffs
 
 /-! Lemma 3 is block concatenation.  The feasible clause uses the exact
 public-history dispatcher below; the equilibrium clause additionally requires
@@ -5690,14 +5687,13 @@ theorem proposition_13 (G : FiniteStageGame) (a : Payoff G.Player)
 
 /-! The paper reports Benoit--Krishna's converse for two players: unless the
 one-stage equilibrium-payoff set is a singleton, the finite-horizon
-equilibrium-payoff sets converge to `Δ`.  That external theorem is not in the
-current library. -/
-theorem benoit_krishna_reported_converse (G : FiniteStageGame)
-    (hplayers : Fintype.card G.Player = 2)
-    (hnonsingleton : ∀ a, G.oneStageEquilibriumPayoffs ≠ {a}) :
+equilibrium-payoff sets converge to `Δ`. The cited theorem is not proved in
+this paper. -/
+def BenoitKrishnaReportedConverseClaim : Prop :=
+  ∀ (G : FiniteStageGame), Fintype.card G.Player = 2 →
+    (∀ a, G.oneStageEquilibriumPayoffs ≠ {a}) →
     HausdorffConvergesAtTop G.finiteEquilibriumPayoffs
-      G.individuallyRationalPayoffs := by
-  sorry
+      G.individuallyRationalPayoffs
 
 /-- Every finite repetition of the Prisoner's Dilemma has only `(1,1)`. -/
 theorem prisonersDilemma_En_eq_singleton :
@@ -5873,11 +5869,9 @@ theorem concluding_remark_4 (α β x y : ℝ)
       G.discountedEquilibriumPayoffs lambar) := by
   sorry
 
-/-! Added in proof: without full dimensionality or two players, Lemma 2 is
-false.  The paper cites a three-player example of Forges, Mertens and Neyman
-with two-dimensional `Δ`.  The counterexample table is not printed, so its
-existence is retained as an explicit external claim rather than fabricated. -/
-
+/-- Added in proof: without full dimensionality or two players, Lemma 2 is
+false. The paper cites this three-player Forges--Mertens--Neyman counterexample
+but does not print its payoff table, so the claim remains open. -/
 def AddedInProofCounterexampleClaim : Prop :=
   ∃ G : FiniteStageGame,
     Fintype.card G.Player = 3 ∧
@@ -5885,11 +5879,5 @@ def AddedInProofCounterexampleClaim : Prop :=
       ¬FullDimensional G.individuallyRationalPayoffs ∧
       ¬HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
         G.individuallyRationalPayoffs
-
-/-- The added-in-proof Forges--Mertens--Neyman counterexample assertion.
-The cited game is external and its payoff table is absent from Sorin's paper. -/
-theorem added_in_proof_counterexample :
-    AddedInProofCounterexampleClaim := by
-  sorry
 
 end Literature.Sorin1986
