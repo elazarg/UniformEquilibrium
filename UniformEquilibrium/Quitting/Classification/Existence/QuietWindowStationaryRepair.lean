@@ -4,8 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleLedgerUnroll
+import UniformEquilibrium.Quitting.Classification.Existence.RootSequenceWindowLedger
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailFallback
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # The quiet-window stationary repair
@@ -216,7 +217,7 @@ reward, coordinatewise: within the window, absorption is essentially the
 owner quitting alone. -/
 theorem abs_quittingRootSequenceTerminalValue_sub_soloReward_le_window
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (owner who : ι) {M : ℝ} (hM : 0 ≤ M)
+    (roots : ℕ → ι → PMF Bool) (owner who : ι) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     ∀ window start,
       |quittingRootSequenceTerminalValue reward roots who start -
@@ -225,6 +226,7 @@ theorem abs_quittingRootSequenceTerminalValue_sub_soloReward_le_window
           quittingJointSurvivalWeight roots start t *
             quittingRootOpponentAbsorptionMass (roots (start + t)) owner) +
         2 * M * quittingJointSurvivalWeight roots start window := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   intro window
   induction window with
   | zero =>
@@ -475,7 +477,7 @@ theorem isεAsymptoticNash_soloStationary_of_quietWindow
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (hunit : QuittingUnitSoloExit reward)
     (roots : ℕ → ι → PMF Bool) (owner : ι) (start window : ℕ)
-    {M εr η : ℝ} (hM : 0 ≤ M) (hεr : 0 ≤ εr)
+    {M εr η : ℝ} (hεr : 0 ≤ εr)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hperfect : QuittingRowεPerfect reward
       (quittingRootSequenceTailVector reward roots (start + 1)) (roots start)
@@ -491,6 +493,7 @@ theorem isεAsymptoticNash_soloStationary_of_quietWindow
       (εr + 4 * M * η)
       (quittingStationaryProfile reward
         (quittingSoloStationaryRoot owner (roots start owner))) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   have hsum0 : 0 ≤ ∑ t ∈ Finset.range window,
       quittingJointSurvivalWeight roots start t *
         quittingRootOpponentAbsorptionMass (roots (start + t)) owner :=
@@ -505,7 +508,7 @@ theorem isεAsymptoticNash_soloStationary_of_quietWindow
         quittingSoloReward reward owner who| ≤ 2 * M * η := by
     intro who
     have hwin := abs_quittingRootSequenceTerminalValue_sub_soloReward_le_window
-      reward roots owner who hM hreward window start
+      reward roots owner who hreward window start
     have hscale := mul_le_mul_of_nonneg_left hη
       (by linarith : (0 : ℝ) ≤ 2 * M)
     linarith

@@ -4,8 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleQuietWindowRepair
+import UniformEquilibrium.Quitting.Classification.Existence.QuietWindowStationaryRepair
 import UniformEquilibrium.Quitting.Cycles.InfinitePureTimeExtremality
+import UniformEquilibrium.Quitting.RewardBound
 
 /-!
 # The active-opponent deviation telescope
@@ -191,8 +192,7 @@ gains at most `3 εr / ρ` by any deterministic pure-time deviation. -/
 theorem quittingRootSequencePureTimeTerminalValue_le_of_active
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {M εr δ ρ : ℝ} (hM : 0 ≤ M) (hεr : 0 ≤ εr) (hδ0 : 0 < δ) (hρ0 : 0 < ρ)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {εr δ ρ : ℝ} (hεr : 0 ≤ εr) (hδ0 : 0 < δ) (hρ0 : 0 < ρ)
     (hfloor : ∀ n, δ ≤ quittingRootAbsorptionMass (roots n))
     (hperfect : ∀ n, QuittingRowεPerfect reward
       (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) εr)
@@ -213,6 +213,10 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_active
   have hρ1 : ρ ≤ 1 := by
     have hstart := hactive 0 0
     simpa using hstart
+  let M := quittingRewardBound reward
+  have hM : 0 ≤ M := quittingRewardBound_nonneg reward
+  have hreward : ∀ terminal player, |reward terminal player| ≤ M :=
+    abs_reward_le_quittingRewardBound reward
   intro quitTime
   -- the nonnegative gap sequence of this deviation and its supremum
   set gap : ℕ → ℝ := fun time =>
@@ -537,8 +541,7 @@ hazard deviation. -/
 theorem isεQuittingRootSequenceNash_of_active
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (roots : ℕ → ι → PMF Bool)
-    {M εr δ ρ : ℝ} (hM : 0 ≤ M) (hεr : 0 ≤ εr) (hδ0 : 0 < δ) (hρ0 : 0 < ρ)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    {εr δ ρ : ℝ} (hεr : 0 ≤ εr) (hδ0 : 0 < δ) (hρ0 : 0 < ρ)
     (hfloor : ∀ n, δ ≤ quittingRootAbsorptionMass (roots n))
     (hperfect : ∀ n, QuittingRowεPerfect reward
       (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) εr)
@@ -554,7 +557,7 @@ theorem isεQuittingRootSequenceNash_of_active
     exists_quittingRootSequencePureTimeTerminalValue_ge_sub reward roots who
       hazard hslack
   have hpure := quittingRootSequencePureTimeTerminalValue_le_of_active roots
-    who hM hεr hδ0 hρ0 hreward hfloor hperfect (hactive who) quitTime
+    who hεr hδ0 hρ0 hfloor hperfect (hactive who) quitTime
   linarith
 
 end GameTheory

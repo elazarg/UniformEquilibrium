@@ -4,11 +4,11 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleActiveTelescope
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleExistenceReduction
+import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtractionReduction
 
 /-!
-# The activity dichotomy and the Solan–Vieille existence theorem
+# Perfect-sequence extraction from the activity dichotomy
 
 The closing arguments of Solan and Vieille, *Quitting games*, Math. Oper.
 Res. 26 (2001), Theorem 1.2, in this development's root-sequence
@@ -303,8 +303,8 @@ theorem quittingPerfectSequenceExtraction_of_soloExitPreference
           quittingJointSurvivalWeight roots start t *
             quittingRootOpponentAbsorptionMass (roots (start + t)) who
   · -- active case: the sequence itself is the equilibrium
-    have hnash := isεQuittingRootSequenceNash_of_active roots hM hεrow0.le
-      hδ0 hρ0 hreward hfloor hperfect hactive
+    have hnash := isεQuittingRootSequenceNash_of_active roots hεrow0.le
+      hδ0 hρ0 hfloor hperfect hactive
     have hsmall : 3 * εrow / ρ ≤ εout := by
       have hεrowρ : εrow ≤ εout * ρ / 3 := min_le_right _ _
       rw [div_le_iff₀ hρ0]
@@ -319,7 +319,7 @@ theorem quittingPerfectSequenceExtraction_of_soloExitPreference
     obtain ⟨anchor, window, hwindow, hanchorPos, hη'⟩ :=
       exists_quietWindow_anchor roots who hρ0 hρhalf start fuel hquiet
     have hrepair := isεAsymptoticNash_soloStationary_of_quietWindow hunit
-      roots who anchor window hM hεrow0.le hreward (hperfect anchor)
+      roots who anchor window hεrow0.le hreward (hperfect anchor)
       hanchorPos hwindow (le_of_le_of_eq hη' hηdef.symm) hMη
     have hεrowHalf : εrow ≤ εout / 2 := min_le_left _ _
     have hsmall : εrow + 4 * M * η ≤ εout := by linarith

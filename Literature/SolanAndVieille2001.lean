@@ -1,4 +1,4 @@
-import UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleSequenceExtraction
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SoloExitPreferenceScreen

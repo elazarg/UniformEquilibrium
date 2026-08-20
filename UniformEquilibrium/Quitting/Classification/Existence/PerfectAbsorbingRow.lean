@@ -11,7 +11,7 @@ import UniformEquilibrium.Quitting.RewardBound
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 
 /-!
-# The perturbed one-shot row of Solan and Vieille
+# Perfect absorbing rows from one-shot perturbation
 
 Proposition 2.2 of Solan and Vieille, *Quitting games*, Math. Oper. Res. 26
 (2001), in this development's one-shot vocabulary.  Under unit solo exit and
