@@ -16,7 +16,7 @@ import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix
 
 Proposition 2.3 of Solan and Vieille, *Quitting games*, Math. Oper. Res. 26
 (2001), in this development's root-sequence vocabulary.  Under unit solo exit
-and capped joint exit, for every `ε > 0` there is an infinite sequence of
+and capped joint exit, for every `ε > 0` there is a periodic sequence of
 product rows and a uniform absorption floor `δ > 0` such that every stage's
 row absorbs with probability at least `δ` and is one-stage `ε`-perfect
 against the sequence's own continuation vector at the next stage.
@@ -209,18 +209,18 @@ theorem abs_terminalValue_sub_successor_le_of_approximate_chain
 
 /-! ## The perfect absorbing sequence -/
 
-/-- **The Solan–Vieille perfect row sequence** (Solan and Vieille, *Quitting
-games*, Math. Oper. Res. 26 (2001), Proposition 2.3).  Under unit solo exit
-and capped joint exit, for every `ε > 0` there are an infinite sequence of
-product rows and an absorption floor `δ > 0` such that every stage absorbs
-with probability at least `δ` and every stage's row is one-stage `ε`-perfect
-against the sequence's own next-stage continuation vector. -/
-theorem exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
+/-- **A periodic perfect absorbing root sequence.**  Under unit solo exit and
+capped joint exit, every positive row tolerance admits a periodic sequence
+with a positive uniform absorption floor whose rows are perfect against their
+actual next-stage continuation values. -/
+theorem exists_periodic_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
     [Nonempty ι] {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (hunit : QuittingUnitSoloExit reward)
     (hcap : QuittingCappedJointExit reward)
     {ε : ℝ} (hε : 0 < ε) :
-    ∃ (roots : ℕ → ι → PMF Bool) (δ : ℝ), 0 < δ ∧
+    ∃ (roots : ℕ → ι → PMF Bool) (δ : ℝ) (period : ℕ),
+      0 < δ ∧ 0 < period ∧
+      (∀ n, roots (n + period) = roots n) ∧
       (∀ n, δ ≤ quittingRootAbsorptionMass (roots n)) ∧
       ∀ n, QuittingRowεPerfect reward
         (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) ε := by
@@ -290,8 +290,9 @@ theorem exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
     intro key hkey
     rw [Set.mem_pi]
     exact fun who _ => hkey who
-  obtain ⟨keyChain, hkeyChain⟩ :=
-    Math.exists_backward_orbit dynamics (fun _ => 0) hrangeFinite hrange
+  obtain ⟨period, keyChain, hperiod0, hkeyPeriodic, hkeyChain⟩ :=
+    Math.exists_periodic_backward_orbit dynamics (fun _ => 0)
+      hrangeFinite hrange
   -- The plan and the row sequence.
   set plan : ℕ → Payoff ι := fun n => rep (keyChain n) with hplan
   set roots : ℕ → ι → PMF Bool := fun n => rowOf (plan (n + 1)) with hrootsdef
@@ -345,7 +346,13 @@ theorem exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
   have hcontraction := abs_terminalValue_sub_successor_le_of_approximate_chain
     reward roots plan hR0 hδ0 hδ1 hη0.le hrewardR
     (fun n who => (hplanCarrier n).1 who) hmass hclose
-  refine ⟨roots, δ, hδ0, fun n => (hrowSpec n).2.1, fun n => ?_⟩
+  have hrootsPeriodic : ∀ n, roots (n + period) = roots n := by
+    intro n
+    simp only [hrootsdef, hplan]
+    rw [show n + period + 1 = (n + 1) + period by omega,
+      hkeyPeriodic (n + 1)]
+  refine ⟨roots, δ, period, hδ0, hperiod0, hrootsPeriodic,
+    fun n => (hrowSpec n).2.1, fun n => ?_⟩
   -- Transfer perfectness from the plan tail to the actual tail.
   have hplanToActual : ∀ who,
       |plan (n + 1) who -
@@ -387,3 +394,19 @@ theorem exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
     nlinarith [mul_nonneg (sub_nonneg.mpr hδ1) hε.le]
   rw [hηδ]
   linarith [hδmul, hηsmall, hδε]
+
+/-- Compatibility wrapper for callers that do not need the periodicity
+supplied by the construction. -/
+theorem exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
+    [Nonempty ι] {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward)
+    (hcap : QuittingCappedJointExit reward)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ (roots : ℕ → ι → PMF Bool) (δ : ℝ), 0 < δ ∧
+      (∀ n, δ ≤ quittingRootAbsorptionMass (roots n)) ∧
+      ∀ n, QuittingRowεPerfect reward
+        (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) ε := by
+  obtain ⟨roots, δ, _period, hδ0, _hperiod0, _hperiodic, hfloor, hperfect⟩ :=
+    exists_periodic_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
+      hunit hcap hε
+  exact ⟨roots, δ, hδ0, hfloor, hperfect⟩

@@ -10,9 +10,9 @@ import Mathlib.Dynamics.PeriodicPts.Defs
 /-!
 # Backward orbits through a finite absorbing range
 
-A self-map whose image lies in a finite set admits an infinite backward
-orbit: a sequence in which every term is the image of its successor.  A
-forward orbit must revisit a value, and reading the revealed cycle backwards,
+A self-map whose image lies in a finite set admits a periodic backward orbit:
+a sequence in which every term is the image of its successor.  A forward
+orbit must revisit a value, and reading the revealed cycle backwards,
 repeated, is such a sequence.
 
 This is the combinatorial substitute for a fixed-point theorem in
@@ -25,11 +25,14 @@ image is finite.
 
 namespace Math
 
-/-- **Backward orbit extraction.**  A self-map whose image lies in a finite
-set admits a sequence in which every term is the image of its successor. -/
-theorem exists_backward_orbit {β : Type*} (f : β → β) (start : β)
+/-- **Periodic backward orbit extraction.**  A self-map whose image lies in a
+finite set admits a periodic sequence in which every term is the image of its
+successor. -/
+theorem exists_periodic_backward_orbit {β : Type*} (f : β → β) (start : β)
     {range : Set β} (hfinite : range.Finite) (hmem : ∀ b, f b ∈ range) :
-    ∃ chain : ℕ → β, ∀ n, chain n = f (chain (n + 1)) := by
+    ∃ (period : ℕ) (chain : ℕ → β), 0 < period ∧
+      (∀ n, chain (n + period) = chain n) ∧
+      ∀ n, chain n = f (chain (n + 1)) := by
   classical
   have hsucc : ∀ j, f^[j + 1] start = f (f^[j] start) := fun j =>
     Function.iterate_succ_apply' f j start
@@ -52,7 +55,11 @@ theorem exists_backward_orbit {β : Type*} (f : β → β) (start : β)
   obtain ⟨low, high, hlt, hcycle⟩ := hpair
   set period := high - low with hperiod
   have hperiod1 : 1 ≤ period := by omega
-  refine ⟨fun n => f^[low + (period - 1) - n % period] start, fun n => ?_⟩
+  let chain : ℕ → β := fun n =>
+    f^[low + (period - 1) - n % period] start
+  refine ⟨period, chain, hperiod1, ?_, fun n => ?_⟩
+  · intro n
+    simp [chain]
   show f^[low + (period - 1) - n % period] start =
     f (f^[low + (period - 1) - (n + 1) % period] start)
   rw [← hsucc (low + (period - 1) - (n + 1) % period)]
@@ -82,5 +89,14 @@ theorem exists_backward_orbit {β : Type*} (f : β → β) (start : β)
     have hindex : low + (period - 1) - (residue + 1) + 1 =
         low + (period - 1) - residue := by omega
     rw [hindex]
+
+/-- **Backward orbit extraction.**  A self-map whose image lies in a finite
+set admits a sequence in which every term is the image of its successor. -/
+theorem exists_backward_orbit {β : Type*} (f : β → β) (start : β)
+    {range : Set β} (hfinite : range.Finite) (hmem : ∀ b, f b ∈ range) :
+    ∃ chain : ℕ → β, ∀ n, chain n = f (chain (n + 1)) := by
+  obtain ⟨_period, chain, _hperiod, _hperiodic, hchain⟩ :=
+    exists_periodic_backward_orbit f start hfinite hmem
+  exact ⟨chain, hchain⟩
 
 end Math
