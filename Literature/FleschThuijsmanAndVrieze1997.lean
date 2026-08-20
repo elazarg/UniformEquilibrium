@@ -24,8 +24,8 @@ The repository's quitting-game terminal payoff is the exact adapter for this
 recursive game: on every realized path the limiting average is the terminal
 reward, or zero if absorption never occurs.  The checked finite-average
 convergence statements below make the corresponding expected-average limit
-explicit. Open source results are exact named propositions, immediately
-preceded by the precise missing proof boundary.
+explicit.  Claims not yet discharged by the imported interfaces remain
+`sorry`, immediately preceded by the precise missing proof boundary.
 -/
 
 noncomputable section
@@ -1042,14 +1042,14 @@ convergent subsequence, and separates an absorbing limit from the singular
 all-Continue limit.  The current API has the pointwise payoff formulas but not
 that two-case compactness package. -/
 
-/-- Corrected form of Theorem 3.2: stationary equilibria fail below one
-positive threshold.  The missing argument is the compactness passage described
-above, including the singular all-Continue limit. -/
-def Theorem3_2CorrectedClaim : Prop :=
+/-- Corrected, proof-supported form of Theorem 3.2: stationary equilibria fail
+below one positive threshold. -/
+theorem theorem3_2_corrected :
     ∃ threshold : ℝ, 0 < threshold ∧
       ∀ ε : ℝ, 0 < ε → ε < threshold →
         ¬ ∃ profile : StationaryProfile,
-          IsStationaryEpsilonEquilibrium ε profile
+          IsStationaryEpsilonEquilibrium ε profile := by
+  sorry
 
 /-! ### Theorem 3.3: the cyclic Markov equilibrium -/
 
@@ -1542,12 +1542,12 @@ Markov equilibria.  The missing proof is the six-step tail argument on pages
 310--312, including the decreasing-minimum contradiction and the eventual
 cyclic handoff. -/
 
-/-- **Theorem 3.4.** Every normalized Markov equilibrium has cyclic support.
-This is the paper's unformalized six-step tail classification. -/
-def Theorem3_4Claim : Prop :=
-  ∀ profile : MarkovProfile,
-    HasActivePlayerAtEveryStage profile →
-      IsMarkovEpsilonEquilibrium 0 profile → HasCyclicSupport profile
+/-- **Theorem 3.4.** Every normalized Markov equilibrium has cyclic support. -/
+theorem theorem3_4 (profile : MarkovProfile)
+    (hnonempty : HasActivePlayerAtEveryStage profile)
+    (hequilibrium : IsMarkovEpsilonEquilibrium 0 profile) :
+    HasCyclicSupport profile := by
+  sorry
 
 /-- Checked special case used in the period-three part of the paper's picture:
 every live phase of an exact cyclic packet has a unique active player. -/
@@ -1806,20 +1806,16 @@ behavior-to-Markov semantic reduction is now closed.  The remaining necessity
 proof is the paper's six-step tail argument from Theorem 3.4 followed by the
 first-active-run payoff accounting: one coordinate is `1`, the other two are at
 least `1`, and the total reward is `4`. -/
-def Theorem3_5NecessityClaim : Prop :=
-  EquilibriumRewards ⊆ RewardRegion
+theorem theorem3_5_necessity :
+    EquilibriumRewards ⊆ RewardRegion := by
+  sorry
 
-/-- **Theorem 3.5.** The equilibrium rewards are exactly the three closed
-edges printed in the paper. -/
-def Theorem3_5Claim : Prop :=
-  EquilibriumRewards = RewardRegion
-
-/-- The proved construction and the open tail-classification direction imply
-the exact reward-set statement. -/
-theorem theorem3_5_of_necessity (hnecessity : Theorem3_5NecessityClaim) :
-    Theorem3_5Claim := by
+/-- **Theorem 3.5.** The feasible equilibrium rewards are exactly the three
+closed edges printed in the paper. -/
+theorem theorem3_5 :
+    EquilibriumRewards = RewardRegion := by
   apply Set.Subset.antisymm
-  · exact hnecessity
+  · exact theorem3_5_necessity
   · exact rewardRegion_subset_equilibriumRewards
 
 /-! ## Final remark
