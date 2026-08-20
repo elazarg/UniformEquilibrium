@@ -5048,7 +5048,16 @@ theorem equation_19 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
     (hstable : ∀ m, n < m →
       G.finiteFeasiblePayoffs m = G.finiteFeasiblePayoffs n) :
     G.finiteFeasiblePayoffs n = G.correlatedFeasiblePayoffs := by
-  sorry
+  let horizon : G.Horizon := ⟨n, hn⟩
+  have hn2 : n < 2 * n := by omega
+  have hreverse : G.finiteFeasiblePayoffs (2 * n) ⊆
+      G.finiteFeasiblePayoffs n := by
+    rw [hstable (2 * n) hn2]
+  have hconvex : Convex ℝ (G.finiteFeasiblePayoffs n) := by
+    simpa only [horizon] using
+      post_lemma_3_D_convex_of_reverse_multiple G horizon
+        (k := 2) (by omega) hreverse
+  exact (lemma_1_Dn_convex_iff G horizon).mp hconvex
 
 /-- Equation (20), witnessed by Example 6. -/
 theorem example6_D1_not_convex_D2_eq_C :
