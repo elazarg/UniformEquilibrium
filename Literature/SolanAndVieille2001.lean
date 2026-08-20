@@ -1505,44 +1505,6 @@ theorem lemma2_5 : Lemma2_5 := by
         Classical.choose_spec (hψnonempty tail htail).1⟩ }
   simpa only [system, relation] using system.exists_infiniteChain
 
-/-- The two-player terminal table in Example 2. Player 1 gets `2` only when
-Player 2 quits alone; every other terminal coordinate is `1`. -/
-def example2Reward
-    (terminal : {S : Finset (Fin 2) // S.Nonempty}) : Payoff (Fin 2) :=
-  fun who => if who = 0 ∧ terminal.1 = {1} then 2 else 1
-
-/-- The profile of Example 2: Player 1 continues with probability `1-η`,
-while Player 2 continues at paper stage `n+1` with probability
-`1-ε/2^(n+1)`. -/
-def example2ProfileCondition
-    (roots : RootSequence (ι := Fin 2)) (ε η : ℝ) : Prop :=
-  ∀ n,
-    (roots n 0 false).toReal = 1 - η ∧
-    (roots n 1 false).toReal = 1 - ε / (2 : ℝ) ^ (n + 1)
-
-/-- A cyclic sequence formed by repeating finitely many stages of another
-root sequence. -/
-def repeatsFiniteStageSelection
-    (source repeated : RootSequence (ι := ι)) : Prop :=
-  cyclicRootSequence repeated ∧
-    ∀ time, ∃ sourceTime, repeated time = source sourceTime
-
-/-- **Example 2.** For `η > ε`, the displayed profile is subgame-perfect
-`ε`, but no cyclic repetition of finitely many of its stages is a
-`1/2`-equilibrium. -/
-def Example2Claim : Prop :=
-  ∀ ε η : ℝ, 0 < ε → ε < η → η < 1 →
-    ∀ roots : RootSequence (ι := Fin 2),
-      example2ProfileCondition roots ε η →
-      subgamePerfectEpsilonEquilibrium example2Reward roots ε ∧
-      ∀ repeated : RootSequence (ι := Fin 2),
-        repeatsFiniteStageSelection roots repeated →
-        ¬ epsilonEquilibrium example2Reward (1 / 2)
-          (profile example2Reward repeated)
-
-theorem example2 : Example2Claim := by
-  sorry
-
 /-! ### 2.5. Proof of the main proposition -/
 
 /-- **Proposition 2.6.** The paper restates Proposition 2.4 before its block
