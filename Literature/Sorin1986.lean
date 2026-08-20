@@ -4517,8 +4517,19 @@ inductive FourColumn
   | c0 | c1 | c2 | c3
   deriving DecidableEq, Fintype
 
+/-- A sum over Example 6's four columns, in table order. -/
+lemma sum_fourColumn {M : Type*} [AddCommMonoid M] (f : FourColumn → M) :
+    ∑ column, f column =
+      f FourColumn.c0 + f FourColumn.c1 + f FourColumn.c2 + f FourColumn.c3 := by
+  classical
+  rw [show Finset.univ =
+      {FourColumn.c0, FourColumn.c1, FourColumn.c2, FourColumn.c3} by
+    ext column
+    cases column <;> simp]
+  simp [add_assoc]
+
 /-- Action spaces of Example 6. -/
-def Example6Action : Bool → Type
+abbrev Example6Action : Bool → Type
   | false => Bool
   | true => FourColumn
 
@@ -4549,10 +4560,56 @@ def example6Payoff (action : ∀ who, Example6Action who) : Payoff Bool :=
   | true, FourColumn.c3 => pair 3 1
 
 /-- Example 6. -/
-def example6 : FiniteStageGame where
+abbrev example6 : FiniteStageGame where
   Player := Bool
   Action := Example6Action
   payoff := example6Payoff
+
+/-- Example 6's row payoff is the mean of the column labels. -/
+theorem example6_mixedPayoff_false
+    (profile : ∀ who, PMF (Example6Action who)) :
+    example6.mixedPayoff profile false =
+      (profile true FourColumn.c1).toReal +
+        2 * (profile true FourColumn.c2).toReal +
+        3 * (profile true FourColumn.c3).toReal := by
+  letI : Finite example6.kernel.Outcome := by
+    change Finite (∀ who, Example6Action who)
+    exact Finite.of_fintype _
+  change example6.kernel.mixedExtension.eu profile false = _
+  rw [KernelGame.mixedExtension_eu]
+  simp only [KernelGame.eu_ofPureEU]
+  change Math.Probability.expect (Math.PMFProduct.pmfPi profile)
+      (fun action ↦ example6Payoff action false) = _
+  rw [Math.PMFProduct.expect_pmfPi_boolFamily]
+  simp only [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+  simp_rw [sum_fourColumn]
+  simp [example6Payoff, Math.PMFProduct.pmfBool_false_toReal]
+  ring
+
+/-- Example 6's column payoff is the probability that row and column block
+agree. -/
+theorem example6_mixedPayoff_true
+    (profile : ∀ who, PMF (Example6Action who)) :
+    example6.mixedPayoff profile true =
+      (1 - (profile false true).toReal) *
+          ((profile true FourColumn.c0).toReal +
+            (profile true FourColumn.c1).toReal) +
+        (profile false true).toReal *
+          ((profile true FourColumn.c2).toReal +
+            (profile true FourColumn.c3).toReal) := by
+  letI : Finite example6.kernel.Outcome := by
+    change Finite (∀ who, Example6Action who)
+    exact Finite.of_fintype _
+  change example6.kernel.mixedExtension.eu profile true = _
+  rw [KernelGame.mixedExtension_eu]
+  simp only [KernelGame.eu_ofPureEU]
+  change Math.Probability.expect (Math.PMFProduct.pmfPi profile)
+      (fun action ↦ example6Payoff action true) = _
+  rw [Math.PMFProduct.expect_pmfPi_boolFamily]
+  simp only [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+  simp_rw [sum_fourColumn]
+  simp [example6Payoff, Math.PMFProduct.pmfBool_false_toReal]
+  ring
 
 /-! The following finite examples require explicit public-history profile
 calculations and universal deviation bounds.  They are stated in the paper's
@@ -5389,11 +5446,89 @@ theorem equation_19 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
         (k := 2) (by omega) hreverse
   exact (lemma_1_Dn_convex_iff G horizon).mp hconvex
 
+/-- In Example 6, `(0,1)` and `(3,1)` are one-stage feasible, but their
+midpoint `(3/2,1)` is not. -/
+theorem example6_D1_not_convex :
+    ¬Convex ℝ example6.oneStageFeasiblePayoffs := by
+  intro hconvex
+  let leftAction : (who : Bool) → Example6Action who
+    | false => false
+    | true => FourColumn.c0
+  let rightAction : (who : Bool) → Example6Action who
+    | false => true
+    | true => FourColumn.c3
+  have hleft : pair 0 1 ∈ example6.oneStageFeasiblePayoffs := by
+    apply lemma_1_pure_subset_D1 example6
+    refine ⟨leftAction, ?_⟩
+    funext who
+    cases who <;> rfl
+  have hright : pair 3 1 ∈ example6.oneStageFeasiblePayoffs := by
+    apply lemma_1_pure_subset_D1 example6
+    refine ⟨rightAction, ?_⟩
+    funext who
+    cases who <;> rfl
+  have hmidpoint := hconvex.midpoint_mem hleft hright
+  have htarget : midpoint ℝ (pair 0 1) (pair 3 1) = pair (3 / 2) 1 := by
+    funext who
+    cases who <;>
+      norm_num [midpoint, AffineMap.lineMap_apply_module, pair,
+        Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+  rw [htarget] at hmidpoint
+  rcases hmidpoint with ⟨profile, hpayoff⟩
+  change ((who : Bool) → PMF (Example6Action who)) at profile
+  have hrow := congrFun hpayoff false
+  have hcolumn := congrFun hpayoff true
+  rw [example6_mixedPayoff_false] at hrow
+  rw [example6_mixedPayoff_true] at hcolumn
+  norm_num [pair] at hrow hcolumn
+  let p := (profile false true).toReal
+  let q0 := (profile true FourColumn.c0).toReal
+  let q1 := (profile true FourColumn.c1).toReal
+  let q2 := (profile true FourColumn.c2).toReal
+  let q3 := (profile true FourColumn.c3).toReal
+  have hp0 : 0 ≤ p := ENNReal.toReal_nonneg
+  have hp1 : p ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  have hq00 : 0 ≤ q0 := ENNReal.toReal_nonneg
+  have hq10 : 0 ≤ q1 := ENNReal.toReal_nonneg
+  have hq20 : 0 ≤ q2 := ENNReal.toReal_nonneg
+  have hq30 : 0 ≤ q3 := ENNReal.toReal_nonneg
+  have hqsum : q0 + q1 + q2 + q3 = 1 := by
+    have hone := Math.Probability.expect_const (profile true) (1 : ℝ)
+    rw [Math.Probability.expect_eq_sum, sum_fourColumn] at hone
+    norm_num at hone
+    exact hone
+  change q1 + 2 * q2 + 3 * q3 = 3 / 2 at hrow
+  change (1 - p) * (q0 + q1) + p * (q2 + q3) = 1 at hcolumn
+  have hzero : (1 - p) * (q2 + q3) + p * (q0 + q1) = 0 := by
+    nlinarith
+  have hfirst0 : (1 - p) * (q2 + q3) = 0 := by
+    have hfirst_nonneg : 0 ≤ (1 - p) * (q2 + q3) :=
+      mul_nonneg (by linarith) (by linarith)
+    have hsecond_nonneg : 0 ≤ p * (q0 + q1) :=
+      mul_nonneg hp0 (by linarith)
+    nlinarith
+  have hsecond0 : p * (q0 + q1) = 0 := by
+    nlinarith [mul_nonneg (by linarith : 0 ≤ 1 - p) (by linarith : 0 ≤ q2 + q3)]
+  by_cases hp : p = 0
+  · rw [hp] at hfirst0
+    norm_num at hfirst0
+    nlinarith
+  · have hq01 : q0 + q1 = 0 := (mul_eq_zero.mp hsecond0).resolve_left hp
+    nlinarith
+
+/-! The second half of Equation (20) is the paper's two-stage
+convexification calculation. -/
+theorem example6_D2_eq_C :
+    example6.finiteFeasiblePayoffs 2 =
+      example6.correlatedFeasiblePayoffs := by
+  sorry
+
 /-- Equation (20), witnessed by Example 6. -/
 theorem example6_D1_not_convex_D2_eq_C :
     ¬Convex ℝ example6.oneStageFeasiblePayoffs ∧
       example6.finiteFeasiblePayoffs 2 = example6.correlatedFeasiblePayoffs := by
-  sorry
+  exact ⟨example6_D1_not_convex, example6_D2_eq_C⟩
 
 /-! The paper's two-by-two dichotomy follows from Proposition 5. -/
 theorem two_by_two_feasible_dichotomy
