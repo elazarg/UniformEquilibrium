@@ -1,4 +1,5 @@
 import Mathlib
+import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter
 import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
 
@@ -74,11 +75,11 @@ abbrev FiniteStageGame.BehaviorStrategy (G : FiniteStageGame)
   G.repeatedGame.BehaviorStrategy who
 
 /-- Positive finite horizons, the domain of the paper's `Gₙ`. -/
-abbrev FiniteStageGame.Horizon (G : FiniteStageGame) :=
+abbrev FiniteStageGame.Horizon (_G : FiniteStageGame) :=
   {n : ℕ // 0 < n}
 
 /-- Discount parameters in the paper's domain `0 < λ ≤ 1`. -/
-abbrev FiniteStageGame.DiscountRate (G : FiniteStageGame) :=
+abbrev FiniteStageGame.DiscountRate (_G : FiniteStageGame) :=
   {lam : ℝ // 0 < lam ∧ lam ≤ 1}
 
 /-- Expected one-stage payoff under a mixed profile. -/
@@ -272,36 +273,22 @@ def FullDimensional {X : Type} [PseudoMetricSpace X] (S : Set X) : Prop :=
 The regular-probability integral is represented here by its resulting compact
 mixed-strategy spaces and continuous expected-payoff map. -/
 
-/-- A compact continuous mixed game. -/
-structure CompactContinuousGame where
-  Player : Type
-  [finitePlayer : Fintype Player]
-  [decidablePlayer : DecidableEq Player]
-  Strategy : Player → Type
-  [strategyTopology : ∀ i, TopologicalSpace (Strategy i)]
-  [compactStrategy : ∀ i, CompactSpace (Strategy i)]
-  [nonemptyStrategy : ∀ i, Nonempty (Strategy i)]
+/-- A compact continuous mixed game.  The inherited barycentre operation is
+the finite mixing operation needed by compact Nash existence. -/
+structure CompactContinuousGame extends GameTheory.CompactBarycentricGame where
   mix : ∀ i, ℝ → Strategy i → Strategy i → Strategy i
   mixContinuous : ∀ i, Continuous fun p : ℝ × (Strategy i × Strategy i) =>
     mix i p.1 p.2.1 p.2.2
   mix_zero : ∀ i x y, mix i 0 x y = y
   mix_one : ∀ i x y, mix i 1 x y = x
-  payoff : (∀ i, Strategy i) → Payoff Player
-  payoffContinuous : ∀ who, Continuous fun profile => payoff profile who
   payoffAffine : ∀ profile i x y t who, 0 ≤ t → t ≤ 1 →
     payoff (Function.update profile i (mix i t x y)) who =
       t * payoff (Function.update profile i x) who +
         (1 - t) * payoff (Function.update profile i y) who
 
-attribute [instance] CompactContinuousGame.finitePlayer
-attribute [instance] CompactContinuousGame.decidablePlayer
-attribute [instance] CompactContinuousGame.strategyTopology
-attribute [instance] CompactContinuousGame.compactStrategy
-attribute [instance] CompactContinuousGame.nonemptyStrategy
-
 /-- A mixed-profile carrier for a compact continuous game. -/
 abbrev CompactContinuousGame.Profile (G : CompactContinuousGame) :=
-  ∀ i, G.Strategy i
+  G.toCompactBarycentricGame.Profile
 
 /-- Feasible payoff set of a compact continuous game. -/
 def CompactContinuousGame.feasiblePayoffs (G : CompactContinuousGame) :
@@ -309,15 +296,14 @@ def CompactContinuousGame.feasiblePayoffs (G : CompactContinuousGame) :
   Set.range G.payoff
 
 /-- Nash equilibrium in a compact continuous game. -/
-def CompactContinuousGame.IsNash (G : CompactContinuousGame)
+abbrev CompactContinuousGame.IsNash (G : CompactContinuousGame)
     (profile : G.Profile) : Prop :=
-  ∀ who (deviation : G.Strategy who),
-    G.payoff profile who ≥ G.payoff (Function.update profile who deviation) who
+  G.toCompactBarycentricGame.IsNash profile
 
 /-- Nash equilibrium payoff set of a compact continuous game. -/
-def CompactContinuousGame.equilibriumPayoffs (G : CompactContinuousGame) :
+abbrev CompactContinuousGame.equilibriumPayoffs (G : CompactContinuousGame) :
     Set (Payoff G.Player) :=
-  {v | ∃ profile : G.Profile, G.IsNash profile ∧ G.payoff profile = v}
+  G.toCompactBarycentricGame.equilibriumPayoffs
 
 /-- Path connectedness, stated without relying on a particular library
 encoding of paths. -/
@@ -371,6 +357,20 @@ structure CompactRepeatedPresentation (G : FiniteStageGame)
     compactPayoff (Function.update profile who (mix who t x y)) observer =
       t * compactPayoff (Function.update profile who x) observer +
         (1 - t) * compactPayoff (Function.update profile who y) observer
+  barycenter : ∀ who (n : ℕ),
+    stdSimplex ℝ (Fin (n + 1)) →
+      (Fin (n + 1) → Strategy who) → Strategy who
+  barycenterContinuous : ∀ who (n : ℕ)
+    (points : Fin (n + 1) → Strategy who),
+    Continuous fun weights : stdSimplex ℝ (Fin (n + 1)) =>
+      barycenter who n weights points
+  compactPayoffBarycentric : ∀ profile who (n : ℕ)
+    (weights : stdSimplex ℝ (Fin (n + 1)))
+    (points : Fin (n + 1) → Strategy who),
+    compactPayoff (Function.update profile who
+        (barycenter who n weights points)) who =
+      ∑ a, weights a *
+        compactPayoff (Function.update profile who (points a)) who
   toBehavior : (∀ who, Strategy who) → G.BehaviorProfile
   fromBehavior : G.BehaviorProfile → (∀ who, Strategy who)
   payoff_toBehavior : ∀ profile,
@@ -399,14 +399,19 @@ noncomputable def CompactRepeatedPresentation.toCompactContinuousGame
     {isNash : G.BehaviorProfile → Prop}
     (presentation : CompactRepeatedPresentation G payoff isNash) :
     CompactContinuousGame where
-  Player := G.Player
-  Strategy := presentation.Strategy
+  toCompactBarycentricGame := {
+    Player := G.Player
+    Strategy := presentation.Strategy
+    payoff := presentation.compactPayoff
+    payoffContinuous := presentation.compactPayoffContinuous
+    barycenter := presentation.barycenter
+    barycenterContinuous := presentation.barycenterContinuous
+    payoffBarycentric := presentation.compactPayoffBarycentric
+  }
   mix := presentation.mix
   mixContinuous := presentation.mixContinuous
   mix_zero := presentation.mix_zero
   mix_one := presentation.mix_one
-  payoff := presentation.compactPayoff
-  payoffContinuous := presentation.compactPayoffContinuous
   payoffAffine := presentation.compactPayoffAffine
 
 /-- The compact mixed presentation and behavioral evaluator have exactly the
@@ -501,60 +506,87 @@ theorem discountedCompactPresentation_equilibriumPayoffs_eq
       G.discountedEquilibriumPayoffsOnRate lam :=
   CompactRepeatedPresentation.equilibriumPayoffs_eq presentation
 
-/-! Property (1) is an application of compactness and continuity of the
-product mixed-strategy space.  Its general topological proof is not present in
-the repository. -/
-theorem paper_property_1 (G : CompactContinuousGame) :
+/-- Property (1): the continuous payoff image of the compact product strategy
+space is nonempty and compact; binary mixing supplies paths. -/
+theorem property_1 (G : CompactContinuousGame) :
     G.feasiblePayoffs.Nonempty ∧
       PathConnectedSet G.feasiblePayoffs ∧ IsCompact G.feasiblePayoffs := by
-  sorry
+  have hpayoff : Continuous G.payoff :=
+    continuous_pi G.payoffContinuous
+  constructor
+  · exact Set.range_nonempty G.payoff
+  constructor
+  · constructor
+    · exact Set.range_nonempty G.payoff
+    · rintro _ ⟨profileX, rfl⟩ _ ⟨profileY, rfl⟩
+      let path : ℝ → Payoff G.Player := fun t =>
+        G.payoff (fun i => G.mix i t (profileY i) (profileX i))
+      have hprofile : Continuous fun t : ℝ =>
+          (fun i => G.mix i t (profileY i) (profileX i)) := by
+        apply continuous_pi
+        intro i
+        exact (G.mixContinuous i).comp
+          (continuous_id.prodMk (continuous_const.prodMk continuous_const))
+      refine ⟨path, hpayoff.comp hprofile, ?_, ?_, ?_⟩
+      · change G.payoff (fun i => G.mix i 0 (profileY i) (profileX i)) =
+          G.payoff profileX
+        congr 1
+        funext i
+        exact G.mix_zero i (profileY i) (profileX i)
+      · change G.payoff (fun i => G.mix i 1 (profileY i) (profileX i)) =
+          G.payoff profileY
+        congr 1
+        funext i
+        exact G.mix_one i (profileY i) (profileX i)
+      · intro t _
+        exact ⟨fun i => G.mix i t (profileY i) (profileX i), rfl⟩
+  · simpa [CompactContinuousGame.feasiblePayoffs] using
+      isCompact_univ.image_of_continuousOn hpayoff.continuousOn
 
-/-! Property (2) is the compact-strategy Nash existence theorem together with
-closedness of the equilibrium relation.  The repository has finite mixed Nash
-existence, but not this compact continuous version. -/
-theorem paper_property_2 (G : CompactContinuousGame) :
+/-- Property (2): Nash payoffs are nonempty and compact. -/
+theorem property_2 (G : CompactContinuousGame) :
     G.equilibriumPayoffs.Nonempty ∧ IsCompact G.equilibriumPayoffs := by
-  sorry
+  exact G.toCompactBarycentricGame.equilibriumPayoffs_nonempty_and_compact
 
 /-! Properties (1) and (2) for `Gₙ` and `G_λ` now genuinely factor
 through the compact-game abstraction above.  No separate nonemptiness
 assumption is inserted: Nash existence is supplied only by Property (2). -/
-theorem paper_property_1_finite (G : FiniteStageGame) (n : G.Horizon) :
+theorem property_1_finite (G : FiniteStageGame) (n : G.Horizon) :
     (G.finiteFeasiblePayoffsOnHorizon n).Nonempty ∧
       PathConnectedSet (G.finiteFeasiblePayoffsOnHorizon n) ∧
         IsCompact (G.finiteFeasiblePayoffsOnHorizon n) := by
   obtain ⟨presentation⟩ := finiteCompactPresentation_exists G n
   rw [← finiteCompactPresentation_feasiblePayoffs_eq presentation]
-  exact paper_property_1 presentation.toCompactContinuousGame
+  exact property_1 presentation.toCompactContinuousGame
 
-theorem paper_property_1_discounted
+theorem property_1_discounted
     (G : FiniteStageGame) (lam : G.DiscountRate) :
     (G.discountedFeasiblePayoffsOnRate lam).Nonempty ∧
       PathConnectedSet (G.discountedFeasiblePayoffsOnRate lam) ∧
         IsCompact (G.discountedFeasiblePayoffsOnRate lam) := by
   obtain ⟨presentation⟩ := discountedCompactPresentation_exists G lam
   rw [← discountedCompactPresentation_feasiblePayoffs_eq presentation]
-  exact paper_property_1 presentation.toCompactContinuousGame
+  exact property_1 presentation.toCompactContinuousGame
 
-theorem paper_property_2_finite (G : FiniteStageGame) (n : G.Horizon) :
+theorem property_2_finite (G : FiniteStageGame) (n : G.Horizon) :
     (G.finiteEquilibriumPayoffsOnHorizon n).Nonempty ∧
       IsCompact (G.finiteEquilibriumPayoffsOnHorizon n) := by
   obtain ⟨presentation⟩ := finiteCompactPresentation_exists G n
   rw [← finiteCompactPresentation_equilibriumPayoffs_eq presentation]
-  exact paper_property_2 presentation.toCompactContinuousGame
+  exact property_2 presentation.toCompactContinuousGame
 
-theorem paper_property_2_discounted
+theorem property_2_discounted
     (G : FiniteStageGame) (lam : G.DiscountRate) :
     (G.discountedEquilibriumPayoffsOnRate lam).Nonempty ∧
       IsCompact (G.discountedEquilibriumPayoffsOnRate lam) := by
   obtain ⟨presentation⟩ := discountedCompactPresentation_exists G lam
   rw [← discountedCompactPresentation_equilibriumPayoffs_eq presentation]
-  exact paper_property_2 presentation.toCompactContinuousGame
+  exact property_2 presentation.toCompactContinuousGame
 
 /-! The asymptotic feasible-payoff statements use block approximation and the
 Banach-limit identification.  The corresponding general repeated-game theorem
 has not been formalized in the repository. -/
-theorem paper_property_3 (G : FiniteStageGame) (L : BanachLimit) :
+theorem property_3 (G : FiniteStageGame) (L : BanachLimit) :
     HausdorffConvergesAtTop G.finiteFeasiblePayoffs
         G.correlatedFeasiblePayoffs ∧
       HausdorffConvergesAtZero G.discountedFeasiblePayoffs
@@ -564,14 +596,14 @@ theorem paper_property_3 (G : FiniteStageGame) (L : BanachLimit) :
 
 /-! The Banach-limit Folk theorem is the unconditional second clause of
 Property (4).  It is not available in the current library. -/
-theorem paper_property_4_banach (G : FiniteStageGame) (L : BanachLimit) :
+theorem property_4_banach (G : FiniteStageGame) (L : BanachLimit) :
     G.banachEquilibriumPayoffs L = G.individuallyRationalPayoffs := by
   sorry
 
 /-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
 stated with the paper's added-in-proof correction: `Δ` must be full
 dimensional or there must be two players. -/
-theorem paper_property_4_discounted (G : FiniteStageGame)
+theorem property_4_discounted (G : FiniteStageGame)
     (hregular : FullDimensional G.individuallyRationalPayoffs ∨
       Fintype.card G.Player = 2) :
     HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
@@ -595,7 +627,7 @@ def iteratedAddSet {ι : Type} (m : ℕ) (A : Set (Payoff ι)) :
 
 /-! **Lemma 1(5), first inclusion.**  Pure stage profiles embed as
 Dirac mixed profiles. -/
-theorem paper_lemma_1_pure_subset_D1 (G : FiniteStageGame) :
+theorem lemma_1_pure_subset_D1 (G : FiniteStageGame) :
     G.purePayoffSet ⊆ G.oneStageFeasiblePayoffs := by
   rintro payoff ⟨profile, rfl⟩
   refine ⟨G.kernel.pureMixedProfile profile, ?_⟩
@@ -610,7 +642,7 @@ theorem paper_lemma_1_pure_subset_D1 (G : FiniteStageGame) :
 /-! **Lemma 1(5), finite-horizon clause.**  Stationary repetition of a
 mixed one-stage profile gives the same payoff at every positive horizon.
 The exact public-history embedding is not yet packaged for this adapter. -/
-theorem paper_lemma_1_D1_subset_Dn (G : FiniteStageGame)
+theorem lemma_1_D1_subset_Dn (G : FiniteStageGame)
     (n : G.Horizon) :
     G.oneStageFeasiblePayoffs ⊆
       G.finiteFeasiblePayoffsOnHorizon n := by
@@ -618,7 +650,7 @@ theorem paper_lemma_1_D1_subset_Dn (G : FiniteStageGame)
 
 /-! **Lemma 1(5), discounted clause.**  The same stationary profile has
 its one-stage payoff under every paper discount rate. -/
-theorem paper_lemma_1_D1_subset_Dlambda (G : FiniteStageGame)
+theorem lemma_1_D1_subset_Dlambda (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.oneStageFeasiblePayoffs ⊆
       G.discountedFeasiblePayoffsOnRate lam := by
@@ -627,7 +659,7 @@ theorem paper_lemma_1_D1_subset_Dlambda (G : FiniteStageGame)
 /-! **Lemma 1(6), finite-horizon clause.**  Every expected average is a
 barycenter of pure stage-payoff vectors.  A reusable convex-hull theorem
 for the public-history adapter is the missing formal ingredient. -/
-theorem paper_lemma_1_Dn_subset_C (G : FiniteStageGame)
+theorem lemma_1_Dn_subset_C (G : FiniteStageGame)
     (n : G.Horizon) :
     G.finiteFeasiblePayoffsOnHorizon n ⊆
       G.correlatedFeasiblePayoffs := by
@@ -635,7 +667,7 @@ theorem paper_lemma_1_Dn_subset_C (G : FiniteStageGame)
 
 /-! **Lemma 1(6), discounted clause.**  The geometric weighted average
 is likewise a barycenter of pure stage-payoff vectors. -/
-theorem paper_lemma_1_Dlambda_subset_C (G : FiniteStageGame)
+theorem lemma_1_Dlambda_subset_C (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.discountedFeasiblePayoffsOnRate lam ⊆
       G.correlatedFeasiblePayoffs := by
@@ -658,40 +690,40 @@ theorem convex_eq_convexHull_iff_of_subset
 
 /-! **Lemma 1(7), finite-horizon clause.**  This is now derived from
 (5) and (6), rather than left as another paper-level gap. -/
-theorem paper_lemma_1_Dn_convex_iff (G : FiniteStageGame)
+theorem lemma_1_Dn_convex_iff (G : FiniteStageGame)
     (n : G.Horizon) :
     Convex ℝ (G.finiteFeasiblePayoffsOnHorizon n) ↔
       G.finiteFeasiblePayoffsOnHorizon n =
         G.correlatedFeasiblePayoffs := by
   apply convex_eq_convexHull_iff_of_subset
-  · exact (paper_lemma_1_pure_subset_D1 G).trans
-      (paper_lemma_1_D1_subset_Dn G n)
-  · exact paper_lemma_1_Dn_subset_C G n
+  · exact (lemma_1_pure_subset_D1 G).trans
+      (lemma_1_D1_subset_Dn G n)
+  · exact lemma_1_Dn_subset_C G n
 
 /-! **Lemma 1(7), discounted clause.** -/
-theorem paper_lemma_1_Dlambda_convex_iff (G : FiniteStageGame)
+theorem lemma_1_Dlambda_convex_iff (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     Convex ℝ (G.discountedFeasiblePayoffsOnRate lam) ↔
       G.discountedFeasiblePayoffsOnRate lam =
         G.correlatedFeasiblePayoffs := by
   apply convex_eq_convexHull_iff_of_subset
-  · exact (paper_lemma_1_pure_subset_D1 G).trans
-      (paper_lemma_1_D1_subset_Dlambda G lam)
-  · exact paper_lemma_1_Dlambda_subset_C G lam
+  · exact (lemma_1_pure_subset_D1 G).trans
+      (lemma_1_D1_subset_Dlambda G lam)
+  · exact lemma_1_Dlambda_subset_C G lam
 
 /-! **Lemma 1(8), first finite inclusion.**  Stationary repetition of a
 one-stage Nash profile resists arbitrary history-dependent deviations.
 The library has the corresponding monitored theorem, but the exact
 bridge from the kernel mixed extension to this stochastic adapter is not
 yet exposed at this evaluator. -/
-theorem paper_lemma_1_E1_subset_En (G : FiniteStageGame)
+theorem lemma_1_E1_subset_En (G : FiniteStageGame)
     (n : G.Horizon) :
     G.oneStageEquilibriumPayoffs ⊆
       G.finiteEquilibriumPayoffsOnHorizon n := by
   sorry
 
 /-! **Lemma 1(8), discounted inclusion.** -/
-theorem paper_lemma_1_E1_subset_Elambda (G : FiniteStageGame)
+theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.oneStageEquilibriumPayoffs ⊆
       G.discountedEquilibriumPayoffsOnRate lam := by
@@ -700,14 +732,14 @@ theorem paper_lemma_1_E1_subset_Elambda (G : FiniteStageGame)
 /-! **Lemma 1(8), finite individual-rationality clause.**  At every
 public history a player can switch to a stagewise security strategy;
 the conditional-history construction is not yet packaged. -/
-theorem paper_lemma_1_En_subset_Delta (G : FiniteStageGame)
+theorem lemma_1_En_subset_Delta (G : FiniteStageGame)
     (n : G.Horizon) :
     G.finiteEquilibriumPayoffsOnHorizon n ⊆
       G.individuallyRationalPayoffs := by
   sorry
 
 /-! **Lemma 1(8), discounted individual-rationality clause.** -/
-theorem paper_lemma_1_Elambda_subset_Delta (G : FiniteStageGame)
+theorem lemma_1_Elambda_subset_Delta (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.discountedEquilibriumPayoffsOnRate lam ⊆
       G.individuallyRationalPayoffs := by
@@ -716,7 +748,7 @@ theorem paper_lemma_1_Elambda_subset_Delta (G : FiniteStageGame)
 /-- Aggregate finite/discounted form of Lemma 1(5)--(7).  The positive
 horizon/rate witnesses prevent the zero-horizon collapse present in the
 earlier branch. -/
-theorem paper_lemma_1_feasible (G : FiniteStageGame)
+theorem lemma_1_feasible (G : FiniteStageGame)
     (evaluation : Set (Payoff G.Player))
     (hevaluation :
       (∃ n : G.Horizon,
@@ -729,18 +761,18 @@ theorem paper_lemma_1_feasible (G : FiniteStageGame)
       (Convex ℝ evaluation ↔
         evaluation = G.correlatedFeasiblePayoffs) := by
   rcases hevaluation with ⟨n, rfl⟩ | ⟨lam, rfl⟩
-  · exact ⟨paper_lemma_1_pure_subset_D1 G,
-      paper_lemma_1_D1_subset_Dn G n,
-      paper_lemma_1_Dn_subset_C G n,
-      paper_lemma_1_Dn_convex_iff G n⟩
-  · exact ⟨paper_lemma_1_pure_subset_D1 G,
-      paper_lemma_1_D1_subset_Dlambda G lam,
-      paper_lemma_1_Dlambda_subset_C G lam,
-      paper_lemma_1_Dlambda_convex_iff G lam⟩
+  · exact ⟨lemma_1_pure_subset_D1 G,
+      lemma_1_D1_subset_Dn G n,
+      lemma_1_Dn_subset_C G n,
+      lemma_1_Dn_convex_iff G n⟩
+  · exact ⟨lemma_1_pure_subset_D1 G,
+      lemma_1_D1_subset_Dlambda G lam,
+      lemma_1_Dlambda_subset_C G lam,
+      lemma_1_Dlambda_convex_iff G lam⟩
 
 /-- Aggregate finite/discounted form of Lemma 1(8), delegated to its
 four source clauses. -/
-theorem paper_lemma_1_equilibrium (G : FiniteStageGame)
+theorem lemma_1_equilibrium (G : FiniteStageGame)
     (evaluation : Set (Payoff G.Player))
     (hevaluation :
       (∃ n : G.Horizon,
@@ -750,20 +782,20 @@ theorem paper_lemma_1_equilibrium (G : FiniteStageGame)
     G.oneStageEquilibriumPayoffs ⊆ evaluation ∧
       evaluation ⊆ G.individuallyRationalPayoffs := by
   rcases hevaluation with ⟨n, rfl⟩ | ⟨lam, rfl⟩
-  · exact ⟨paper_lemma_1_E1_subset_En G n,
-      paper_lemma_1_En_subset_Delta G n⟩
-  · exact ⟨paper_lemma_1_E1_subset_Elambda G lam,
-      paper_lemma_1_Elambda_subset_Delta G lam⟩
+  · exact ⟨lemma_1_E1_subset_En G n,
+      lemma_1_En_subset_Delta G n⟩
+  · exact ⟨lemma_1_E1_subset_Elambda G lam,
+      lemma_1_Elambda_subset_Delta G lam⟩
 
 /-! Lemma 2 is precisely Property (4)'s vanishing-discount assertion.  The
 paper's printed unrestricted statement is withdrawn by its added-in-proof
 note, so no unrestricted theorem is declared. -/
-theorem paper_lemma_2 (G : FiniteStageGame)
+theorem lemma_2 (G : FiniteStageGame)
     (hregular : FullDimensional G.individuallyRationalPayoffs ∨
       Fintype.card G.Player = 2) :
     HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
       G.individuallyRationalPayoffs :=
-  paper_property_4_discounted G hregular
+  property_4_discounted G hregular
 
 /-- Public monitored profiles for the realized-action presentation of the
 finite stage game. -/
@@ -814,7 +846,7 @@ result does not extend to perfect equilibria and cites Fudenberg--Maskin
 [5].  The counterexample is not printed in this paper, so the exact
 external existence claim remains an explained `sorry`; it is not
 silently omitted or replaced by a weaker comment. -/
-theorem paper_reported_perfect_equilibrium_failure :
+theorem reported_perfect_equilibrium_failure :
     ∃ G : FiniteStageGame,
       ¬HausdorffConvergesAtZero
         G.perfectPublicEquilibriumPayoffs
@@ -824,7 +856,7 @@ theorem paper_reported_perfect_equilibrium_failure :
 /-! Lemma 3 is block concatenation.  The repository adapter has profile
 transport but no theorem assembling arbitrary finite-horizon equilibrium
 blocks while preserving all continuation incentives. -/
-theorem paper_lemma_3_feasible (G : FiniteStageGame)
+theorem lemma_3_feasible (G : FiniteStageGame)
     (n m p r : ℕ) (hn : n = m * p + r) :
     addSet (iteratedAddSet m (scaleSet (p : ℝ) (G.finiteFeasiblePayoffs p)))
         (scaleSet (r : ℝ) (G.finiteFeasiblePayoffs r)) ⊆
@@ -832,7 +864,7 @@ theorem paper_lemma_3_feasible (G : FiniteStageGame)
   sorry
 
 /-! Equilibrium-block concatenation is the strategic clause of Lemma 3. -/
-theorem paper_lemma_3_equilibrium (G : FiniteStageGame)
+theorem lemma_3_equilibrium (G : FiniteStageGame)
     (n m p r : ℕ) (hn : n = m * p + r) :
     addSet (iteratedAddSet m (scaleSet (p : ℝ) (G.finiteEquilibriumPayoffs p)))
         (scaleSet (r : ℝ) (G.finiteEquilibriumPayoffs r)) ⊆
@@ -842,13 +874,13 @@ theorem paper_lemma_3_equilibrium (G : FiniteStageGame)
 /-! Immediately after Lemma 3 the paper records the equal-block consequences
 `Dₙ ⊆ Dₖₙ` and `Eₙ ⊆ Eₖₙ`.  Their proofs use the same monitored-profile
 concatenation interface as Lemma 3. -/
-theorem paper_lemma_3_D_subset_multiple (G : FiniteStageGame)
+theorem lemma_3_D_subset_multiple (G : FiniteStageGame)
     (n : G.Horizon) {k : ℕ} (hk : 0 < k) :
     G.finiteFeasiblePayoffsOnHorizon n ⊆
       G.finiteFeasiblePayoffs (k * n.1) := by
   sorry
 
-theorem paper_lemma_3_E_subset_multiple (G : FiniteStageGame)
+theorem lemma_3_E_subset_multiple (G : FiniteStageGame)
     (n : G.Horizon) {k : ℕ} (hk : 0 < k) :
     G.finiteEquilibriumPayoffsOnHorizon n ⊆
       G.finiteEquilibriumPayoffs (k * n.1) := by
@@ -857,14 +889,14 @@ theorem paper_lemma_3_E_subset_multiple (G : FiniteStageGame)
 /-! The paper then notes that a reverse inclusion for one multiplier `k > 1`
 forces convexity of the corresponding finite-horizon payoff set.  The closure
 under equal-weight block averages and compactness argument is not yet packaged. -/
-theorem paper_post_lemma_3_D_convex_of_reverse_multiple
+theorem post_lemma_3_D_convex_of_reverse_multiple
     (G : FiniteStageGame) (n : G.Horizon) {k : ℕ} (hk : 1 < k)
     (hreverse : G.finiteFeasiblePayoffs (k * n.1) ⊆
       G.finiteFeasiblePayoffsOnHorizon n) :
     Convex ℝ (G.finiteFeasiblePayoffsOnHorizon n) := by
   sorry
 
-theorem paper_post_lemma_3_E_convex_of_reverse_multiple
+theorem post_lemma_3_E_convex_of_reverse_multiple
     (G : FiniteStageGame) (n : G.Horizon) {k : ℕ} (hk : 1 < k)
     (hreverse : G.finiteEquilibriumPayoffs (k * n.1) ⊆
       G.finiteEquilibriumPayoffsOnHorizon n) :
@@ -995,7 +1027,7 @@ theorem example1_no_finite_convexification (n : example1.Horizon) :
 
 /-- Equation (11): neither `Dₙ` nor `Eₙ` is monotone in general.
 The paper's Example 1 witnesses both failures for the same positive horizon. -/
-theorem paper_equation_11 :
+theorem equation_11 :
     ∃ G : FiniteStageGame, ∃ n : G.Horizon,
       (¬G.finiteFeasiblePayoffsOnHorizon n ⊆
         G.finiteFeasiblePayoffs (n.1 + 1)) ∧
@@ -1016,7 +1048,7 @@ theorem example2_one_one_mem_E2 :
   sorry
 
 /-- Equation (12), with the paper's positive-horizon domain explicit. -/
-theorem paper_equation_12 :
+theorem equation_12 :
     ∃ G : FiniteStageGame, ∃ n : G.Horizon,
       G.finiteFeasiblePayoffsOnHorizon n =
           G.finiteFeasiblePayoffs (n.1 + 1) ∧
@@ -1035,7 +1067,7 @@ theorem example3_half_mem_D2_not_D1 :
   sorry
 
 /-- Equation (13), with the paper's positive-horizon domain explicit. -/
-theorem paper_equation_13 :
+theorem equation_13 :
     ∃ G : FiniteStageGame, ∃ n : G.Horizon,
       G.finiteEquilibriumPayoffsOnHorizon n =
           G.finiteEquilibriumPayoffs (n.1 + 1) ∧
@@ -1044,7 +1076,7 @@ theorem paper_equation_13 :
   sorry
 
 /-- Equation (14), at a positive finite horizon. -/
-theorem paper_equation_14 :
+theorem equation_14 :
     ∃ G : FiniteStageGame, ∃ n : G.Horizon,
       ¬G.finiteEquilibriumPayoffsOnHorizon n ⊆
         convexHull ℝ G.oneStageEquilibriumPayoffs := by
@@ -1060,7 +1092,7 @@ theorem example4_equilibrium_pattern (m : ℕ) (hm : 0 < m) :
 
 /-- Equation (15): one decreasing step at a positive horizon does not
 force the next one. -/
-theorem paper_equation_15 :
+theorem equation_15 :
     ∃ G : FiniteStageGame, ∃ n : G.Horizon,
       G.finiteEquilibriumPayoffs (n.1 + 1) ⊆
           G.finiteEquilibriumPayoffsOnHorizon n ∧
@@ -1084,7 +1116,7 @@ theorem example1_discounted_nonmonotone :
 monotone.  Example 1 revisited uses `δ = 3/4 < λ = 7/8` and supplies a
 payoff in the larger-rate set that is absent from the smaller-rate set; the
 inclusion direction below follows that printed witness. -/
-theorem paper_equation_16 :
+theorem equation_16 :
     ∃ G : FiniteStageGame, ∃ δ lam : G.DiscountRate,
       δ.1 < lam.1 ∧
         (¬G.discountedFeasiblePayoffsOnRate lam ⊆
@@ -1097,7 +1129,7 @@ theorem paper_equation_16 :
 connected subset of `ℝᴺ` needs at most `N` terms, followed by an infinite
 geometric schedule.  That connected-Carathéodory theorem is not available in
 the current dependencies. -/
-theorem paper_proposition_4 (G : FiniteStageGame) (lam : ℝ)
+theorem proposition_4 (G : FiniteStageGame) (lam : ℝ)
     (hlam : 0 < lam) (hbound : lam < 1 / (Fintype.card G.Player : ℝ)) :
     G.discountedFeasiblePayoffs lam = G.correlatedFeasiblePayoffs := by
   sorry
@@ -1110,7 +1142,7 @@ theorem example5_sharp (N : ℕ) [NeZero N] (lam : ℝ)
   sorry
 
 /-! Proposition 5 is a finite-horizon splice using convexity of `Dₙ`. -/
-theorem paper_proposition_5 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
+theorem proposition_5 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
     (hconvex : Convex ℝ (G.finiteFeasiblePayoffs n)) :
     G.finiteFeasiblePayoffs (n + 1) = G.finiteFeasiblePayoffs n ∧
       ∀ m, n < m →
@@ -1118,7 +1150,7 @@ theorem paper_proposition_5 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
   sorry
 
 /-- Equation (19). -/
-theorem paper_equation_19 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
+theorem equation_19 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
     (hstable : ∀ m, n < m →
       G.finiteFeasiblePayoffs m = G.finiteFeasiblePayoffs n) :
     G.finiteFeasiblePayoffs n = G.correlatedFeasiblePayoffs := by
@@ -1140,7 +1172,7 @@ theorem two_by_two_feasible_dichotomy
   sorry
 
 /-! Proposition 6 is the discounted analogue of Proposition 5. -/
-theorem paper_proposition_6 (G : FiniteStageGame) (lam : ℝ)
+theorem proposition_6 (G : FiniteStageGame) (lam : ℝ)
     (hlam : 0 < lam) (hlam1 : lam ≤ 1)
     (hconvex : Convex ℝ (G.discountedFeasiblePayoffs lam)) :
     ∀ δ : ℝ, 0 < δ → δ < lam →
@@ -1148,7 +1180,7 @@ theorem paper_proposition_6 (G : FiniteStageGame) (lam : ℝ)
   sorry
 
 /-- Equation (22). -/
-theorem paper_equation_22 (G : FiniteStageGame) (lam : ℝ)
+theorem equation_22 (G : FiniteStageGame) (lam : ℝ)
     (hlam : 0 < lam) (hlam1 : lam ≤ 1)
     (hstable : ∀ δ : ℝ, 0 < δ → δ < lam →
       G.discountedFeasiblePayoffs δ = G.discountedFeasiblePayoffs lam) :
@@ -1191,7 +1223,7 @@ theorem relativeFrontier_subset_affineSpan
 /-! Proposition 7's maximal-gap argument and replacement of a positive-
 probability continuation history have not been packaged for the repeated-game
 adapter. -/
-theorem paper_proposition_7 (G : FiniteStageGame)
+theorem proposition_7 (G : FiniteStageGame)
     (L : Set (Payoff G.Player)) (hface : IsFaceOf L G.correlatedFeasiblePayoffs)
     (hdim : affineDimension L = 1) (δ lam : ℝ)
     (hδ : 0 < δ) (hδlam : δ < lam) (hlam : lam ≤ 1)
@@ -1201,7 +1233,7 @@ theorem paper_proposition_7 (G : FiniteStageGame)
   sorry
 
 /-! Proposition 8 is the polytope-face induction built from Proposition 9. -/
-theorem paper_proposition_8 (G : FiniteStageGame)
+theorem proposition_8 (G : FiniteStageGame)
     (n m : G.Horizon)
     (hsize : Fintype.card G.Player * m.1 < n.1)
     (hinclusion : G.finiteFeasiblePayoffs (n.1 + m.1) ⊆
@@ -1211,7 +1243,7 @@ theorem paper_proposition_8 (G : FiniteStageGame)
   sorry
 
 /-! Proposition 9 is the face-dimension induction. -/
-theorem paper_proposition_9 (G : FiniteStageGame)
+theorem proposition_9 (G : FiniteStageGame)
     (P : Set (Payoff G.Player)) (p : ℕ) (n m : G.Horizon)
     (hface : IsFaceOf P G.correlatedFeasiblePayoffs)
     (hdim : affineDimension P = p)
@@ -1238,7 +1270,7 @@ ambient `frontier P` would make every lower-dimensional face equal its
 frontier and collapse the induction.  The remaining missing ingredient is
 the finite-dimensional closest-point/separation argument at this relative
 level. -/
-theorem paper_lemma_10 {ι : Type} [Fintype ι]
+theorem lemma_10 {ι : Type} [Fintype ι]
     (P K : Set (Payoff ι)) (z : Payoff ι)
     (hP : Convex ℝ P) (hPcompact : IsCompact P)
     (hK : IsCompact K) (hKP : K ⊆ P)
@@ -1251,29 +1283,29 @@ theorem paper_lemma_10 {ι : Type} [Fintype ι]
 /-! Proposition 11 is the paper's two-player winding-number argument.  The
 current library has no theorem that the separately affine image of two compact
 convex strategy spaces is simply connected. -/
-theorem paper_proposition_11 (G : CompactContinuousGame)
+theorem proposition_11 (G : CompactContinuousGame)
     (hplayers : Fintype.card G.Player = 2) :
     SimplyConnectedSet G.feasiblePayoffs := by
   sorry
 
 /-! Proposition 11 specializes to both repeated evaluators through the
 compact presentations, rather than remaining an unrelated generic claim. -/
-theorem paper_proposition_11_finite (G : FiniteStageGame)
+theorem proposition_11_finite (G : FiniteStageGame)
     (n : G.Horizon) (hplayers : Fintype.card G.Player = 2) :
     SimplyConnectedSet (G.finiteFeasiblePayoffsOnHorizon n) := by
   obtain ⟨presentation⟩ := finiteCompactPresentation_exists G n
   rw [← finiteCompactPresentation_feasiblePayoffs_eq presentation]
-  exact paper_proposition_11 presentation.toCompactContinuousGame hplayers
+  exact proposition_11 presentation.toCompactContinuousGame hplayers
 
-theorem paper_proposition_11_discounted (G : FiniteStageGame)
+theorem proposition_11_discounted (G : FiniteStageGame)
     (lam : G.DiscountRate) (hplayers : Fintype.card G.Player = 2) :
     SimplyConnectedSet (G.discountedFeasiblePayoffsOnRate lam) := by
   obtain ⟨presentation⟩ := discountedCompactPresentation_exists G lam
   rw [← discountedCompactPresentation_feasiblePayoffs_eq presentation]
-  exact paper_proposition_11 presentation.toCompactContinuousGame hplayers
+  exact proposition_11 presentation.toCompactContinuousGame hplayers
 
 /-! Corollary 12. -/
-theorem paper_corollary_12_discounted (G : FiniteStageGame)
+theorem corollary_12_discounted (G : FiniteStageGame)
     (hplayers : Fintype.card G.Player = 2) (δ lam : ℝ)
     (hδ : 0 < δ) (hδlam : δ < lam) (hlam1 : lam ≤ 1)
     (hinclusion : G.discountedFeasiblePayoffs δ ⊆
@@ -1282,7 +1314,7 @@ theorem paper_corollary_12_discounted (G : FiniteStageGame)
   sorry
 
 /-! Corollary 12, finite-horizon clause. -/
-theorem paper_corollary_12_finite (G : FiniteStageGame)
+theorem corollary_12_finite (G : FiniteStageGame)
     (hplayers : Fintype.card G.Player = 2) (n m : G.Horizon)
     (hinclusion : G.finiteFeasiblePayoffs (n.1 + m.1) ⊆
       G.finiteFeasiblePayoffs n.1) :
@@ -1360,7 +1392,7 @@ theorem prisonersDilemma_Dn_eq_C :
 /-! Proposition 13 is a backward last-deviation argument using the unique
 one-stage equilibrium payoff.  The repository does not yet expose the
 positive-probability conditional-history induction in reusable form. -/
-theorem paper_proposition_13 (G : FiniteStageGame) (a : Payoff G.Player)
+theorem proposition_13 (G : FiniteStageGame) (a : Payoff G.Player)
     (hunique : G.oneStageEquilibriumPayoffs = {a}) :
     ∀ n, 0 < n → G.finiteEquilibriumPayoffs n = {a} := by
   sorry
@@ -1381,12 +1413,12 @@ theorem prisonersDilemma_En_eq_singleton :
     ∀ n, 0 < n →
       prisonersDilemma.finiteEquilibriumPayoffs n = {pair 1 1} := by
   intro n hn
-  exact paper_proposition_13 prisonersDilemma (pair 1 1)
+  exact proposition_13 prisonersDilemma (pair 1 1)
     prisonersDilemma_E1_eq_singleton n hn
 
 /-! Proposition 14's proof is the paper's uniform gain inequality and
 supremum argument.  It is not implied merely by strict dominance. -/
-theorem paper_proposition_14 (lam : ℝ) (hlam : 3 / 4 < lam) (hlam1 : lam ≤ 1) :
+theorem proposition_14 (lam : ℝ) (hlam : 3 / 4 < lam) (hlam1 : lam ≤ 1) :
     prisonersDilemma.discountedEquilibriumPayoffs lam = {pair 1 1} := by
   sorry
 
@@ -1437,7 +1469,7 @@ theorem prisonerCriticalSet_outer_endpoints :
 of `A` and the multiplicative escape argument proving the reverse inclusion.
 The history-dependent strategy construction and best-response continuation
 selection are not yet formalized. -/
-theorem paper_proposition_15 :
+theorem proposition_15 :
     prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) =
       prisonerCriticalSet := by
   sorry
