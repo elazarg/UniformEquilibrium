@@ -124,6 +124,47 @@ theorem expectedStagePayoff_update_stationaryBehaviorProfile_le_of_isAbsorbingSt
   rw [G.stageActionDist_update_stationaryBehaviorProfile, h2]
   exact hm (dev t h)
 
+/-- At an absorbing state, stationary play has its mixed one-stage payoff
+under every admissible discount factor. -/
+theorem discountedPayoff_stationaryBehaviorProfile_of_isAbsorbingState
+    (G : StochasticGame ι) [Fintype ι] {s₀ : G.State}
+    (hAbs : G.IsAbsorbingState s₀) (m : ∀ i, PMF (G.Act i))
+    {discount : ℝ} (hdiscount0 : 0 ≤ discount)
+    (hdiscount1 : discount < 1) (who : ι) :
+    G.discountedPayoff discount (G.stationaryBehaviorProfile m) s₀ who =
+      G.mixedStageEU s₀ m who := by
+  exact G.discountedPayoff_of_forall_expectedStagePayoff_eq
+    (fun time ↦
+      G.expectedStagePayoff_stationaryBehaviorProfile_of_isAbsorbingState
+        hAbs m time who)
+    hdiscount0 hdiscount1
+
+/-- Stationary play of a one-stage Nash mixed action at an absorbing state is
+an exact equilibrium of every admissible discounted game. -/
+theorem stationaryBehaviorProfile_isDiscountedNash_of_isAbsorbingState
+    (G : StochasticGame ι) [Fintype ι] [DecidableEq ι] [Finite G.State]
+    [∀ i, Finite (G.Act i)] {s₀ : G.State}
+    (hAbs : G.IsAbsorbingState s₀) {m : ∀ i, PMF (G.Act i)}
+    (hm : ∀ who (deviation : PMF (G.Act who)),
+      G.mixedStageEU s₀ (Function.update m who deviation) who ≤
+        G.mixedStageEU s₀ m who)
+    {discount : ℝ} (hdiscount0 : 0 ≤ discount)
+    (hdiscount1 : discount < 1) :
+    G.IsDiscountedεNash discount s₀ 0 (G.stationaryBehaviorProfile m) := by
+  intro who deviation
+  obtain ⟨C, hC⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun pair : G.State × G.JointAct ↦
+      G.stagePayoff pair.1 pair.2 who)
+  have hle := G.discountedPayoff_le_of_forall_expectedStagePayoff_le
+    (fun state action ↦ hC (state, action))
+    (fun time ↦
+      G.expectedStagePayoff_update_stationaryBehaviorProfile_le_of_isAbsorbingState
+        hAbs (hm who) deviation time)
+    hdiscount0 hdiscount1
+  rw [G.discountedPayoff_stationaryBehaviorProfile_of_isAbsorbingState
+    hAbs m hdiscount0 hdiscount1 who]
+  linarith
+
 /-- **Uniform equilibrium payoffs exist from absorbing states.**
 
 If the initial state is absorbing, the stationary behavior profile that

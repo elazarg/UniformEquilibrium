@@ -2,6 +2,7 @@ import Mathlib
 import GameTheory.Analysis.Payoff
 import MathUE.ProbabilityMassFunction.Simplex
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter
 import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
 import UniformEquilibrium.ProofView.Native.Equilibrium
@@ -3083,14 +3084,81 @@ theorem lemma_1_E1_subset_En (G : FiniteStageGame)
     (n : G.Horizon) :
     G.oneStageEquilibriumPayoffs ⊆
       G.finiteEquilibriumPayoffsOnHorizon n := by
-  sorry
+  letI (who : G.Player) : Finite (G.kernel.Strategy who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  letI : Finite G.kernel.mixedExtension.Outcome :=
+    G.kernel.finite_mixedExtension_outcome
+  rintro payoff ⟨profile, hnash, rfl⟩
+  let monitored :=
+    G.kernel.realizedActionMonitoring.stationaryMonitoredProfile profile
+  let behavior :=
+    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+      G.kernel monitored
+  refine ⟨behavior, ?_, ?_⟩
+  · apply (KernelGame.RealizedActionRepeatedAdapter.isεFiniteRepeatedNash_iff_isεHorizonNash
+      G.kernel monitored n.1 0).mp
+    exact G.kernel.realizedActionMonitoring
+      |>.stationaryMonitoredProfile_isFiniteRepeatedNash_of_isNash
+        hnash n.2
+  · funext who
+    change G.repeatedGame.finiteAveragePayoff
+      PUnit.unit n.1 behavior who = G.mixedPayoff profile who
+    rw [GameTheory.KernelGame.RealizedActionRepeatedAdapter.finiteAveragePayoff_toBehaviorProfile]
+    exact G.kernel.realizedActionMonitoring
+      |>.finiteAveragePayoff_stationaryMonitoredProfile
+        (Nat.ne_of_gt n.2) profile who
 
 /-! **Lemma 1(8), discounted inclusion.** -/
 theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.oneStageEquilibriumPayoffs ⊆
       G.discountedEquilibriumPayoffsOnRate lam := by
-  sorry
+  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  letI : Subsingleton G.repeatedGame.State :=
+    inferInstanceAs (Subsingleton PUnit)
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  rintro payoff ⟨profile, hnash, rfl⟩
+  let behavior := G.repeatedGame.stationaryBehaviorProfile profile
+  have habs : G.repeatedGame.IsAbsorbingState PUnit.unit :=
+    G.repeatedGame.isAbsorbingState_of_subsingleton PUnit.unit
+  have hstage : ∀ who (deviation : PMF (G.Action who)),
+      G.repeatedGame.mixedStageEU PUnit.unit
+          (Function.update profile who deviation) who ≤
+        G.repeatedGame.mixedStageEU PUnit.unit profile who := by
+    intro who deviation
+    let deviation' : PMF (G.kernel.Strategy who) := deviation
+    change Math.Probability.expect
+        (Math.PMFProduct.pmfPi (Function.update profile who deviation'))
+          (fun action ↦ G.kernel.eu action who) ≤
+      Math.Probability.expect (Math.PMFProduct.pmfPi profile)
+        (fun action ↦ G.kernel.eu action who)
+    calc
+      _ = G.kernel.mixedExtension.eu
+          (Function.update profile who deviation') who :=
+        (G.kernel.mixedExtension_eu
+          (Function.update profile who deviation') who).symm
+      _ ≤ G.kernel.mixedExtension.eu profile who := hnash who deviation'
+      _ = _ := G.kernel.mixedExtension_eu profile who
+  refine ⟨behavior, ?_, ?_⟩
+  · exact G.repeatedGame
+      |>.stationaryBehaviorProfile_isDiscountedNash_of_isAbsorbingState
+        habs hstage (by linarith [lam.2.2]) (by linarith [lam.2.1])
+  · funext who
+    change G.repeatedGame.discountedPayoff (1 - lam.1)
+      behavior PUnit.unit who = G.mixedPayoff profile who
+    rw [G.repeatedGame.discountedPayoff_stationaryBehaviorProfile_of_isAbsorbingState
+      habs profile (by linarith [lam.2.2]) (by linarith [lam.2.1])]
+    change Math.Probability.expect (Math.PMFProduct.pmfPi profile)
+        (fun action ↦ G.kernel.eu action who) =
+      G.kernel.mixedExtension.eu profile who
+    rw [G.kernel.mixedExtension_eu]
 
 /-! **Lemma 1(8), finite individual-rationality clause.**  At every
 public history a player can switch to a stagewise security strategy;
