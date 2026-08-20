@@ -4,6 +4,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import MathUE.CaristiFixedPoint
+import MathUE.ProbabilityMassFunction.Simplex
 import Mathlib.Analysis.Normed.Affine.AddTorsorBases
 import Mathlib.LinearAlgebra.AffineSpace.FiniteDimensional
 
@@ -1373,6 +1374,42 @@ structure SimplexWeights (ι : Type) [Fintype ι] [DecidableEq ι] where
   singleton_nonneg : ∀ i, 0 ≤ singleton i
   total : cemetery + ∑ i, singleton i = 1
 
+/-! The lottery on `{0}∪I` represented by the paper's vector
+`z=(z₀,(zᵢ)ᵢ)`. -/
+def SimplexWeights.toStdSimplex (weight : SimplexWeights ι) :
+    stdSimplex ℝ (Option ι) := by
+  refine ⟨fun choice => match choice with
+    | none => weight.cemetery
+    | some owner => weight.singleton owner, ?_, ?_⟩
+  · intro choice
+    cases choice with
+    | none => exact weight.cemetery_nonneg
+    | some owner => exact weight.singleton_nonneg owner
+  · rw [Fintype.sum_option]
+    exact weight.total
+
+/-! The corresponding finite public lottery. -/
+noncomputable def SimplexWeights.toPMF (weight : SimplexWeights ι) :
+    PMF (Option ι) :=
+  Math.ProbabilityMassFunction.ofVector
+    weight.toStdSimplex.1 weight.toStdSimplex.2
+
+@[simp] theorem SimplexWeights.toPMF_none_toReal
+    (weight : SimplexWeights ι) :
+    (weight.toPMF none).toReal = weight.cemetery := by
+  change ((Math.ProbabilityMassFunction.ofVector
+    weight.toStdSimplex.1 weight.toStdSimplex.2) none).toReal = _
+  rw [Math.ProbabilityMassFunction.ofVector_toReal]
+  rfl
+
+@[simp] theorem SimplexWeights.toPMF_some_toReal
+    (weight : SimplexWeights ι) (owner : ι) :
+    (weight.toPMF (some owner)).toReal = weight.singleton owner := by
+  change ((Math.ProbabilityMassFunction.ofVector
+    weight.toStdSimplex.1 weight.toStdSimplex.2) (some owner)).toReal = _
+  rw [Math.ProbabilityMassFunction.ofVector_toReal]
+  rfl
+
 /-! Conditions (F.1)--(F.5) of the published Theorem 3.3 for `(M,y,ε)`.
 The published condition (F.1) allows the segment containing `wⁱ` to start
 at either `w` or `y`. This disjunction is essential in the second case of the
@@ -1391,6 +1428,133 @@ structure BuildingBlock (M : ι → ι → ℝ) (y : ι → ℝ) (ε : ℝ) wher
     ∑ i, z.singleton i * wi i who
   complementary : ∀ i, z.singleton i > 0 → wi i i = 0
   nontrivial : 0 < ∑ i, z.singleton i
+
+/-! A type-`i` block either returns to the current auxiliary-game root `w`
+after no quit, or exits the auxiliary game to its continuation target `y`.
+This is the operational distinction in the two branches of (F.1). -/
+inductive AttemptContinuation
+  | restart
+  | advance
+deriving DecidableEq
+
+/-! The branch-sensitive data of one type-`i` attempt. The strict upper
+bound on `quitWeight` is what permits the total quit probability to be spread
+over an arbitrarily long finite block. -/
+structure BuildingAttempt (M : ι → ι → ℝ) (y : ι → ℝ)
+    (ε : ℝ) (block : BuildingBlock M y ε) (owner : ι) where
+  continuation : AttemptContinuation
+  quitWeight : ℝ
+  quitWeight_pos : 0 < quitWeight
+  quitWeight_lt_one : quitWeight < 1
+  payoff : ∀ who,
+    block.wi owner who =
+      quitWeight * M who owner + (1 - quitWeight) *
+        match continuation with
+        | .restart => block.w who
+        | .advance => y who
+
+/-! Extract the operational branch and its quit weight from (F.1). The
+negative coordinate required in Section 3.3.5 rules out quit weight one;
+(F.2) would otherwise be violated at that coordinate. -/
+theorem BuildingBlock.exists_attempt
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    (block : BuildingBlock M y ε) (owner : ι)
+    (hnegative : ∃ who, M who owner < -ε) :
+    Nonempty (BuildingAttempt M y ε block owner) := by
+  classical
+  rcases block.approach owner with hrestart | hadvance
+  · obtain ⟨⟨weight, hweight0, hweight1, hpayoff⟩, hne⟩ := hrestart
+    obtain ⟨negative, hnegative⟩ := hnegative
+    have hweightPos : 0 < weight := by
+      apply lt_of_le_of_ne hweight0
+      intro hweight
+      have hlow := block.lower owner negative
+      have hcolumn := hpayoff negative
+      rw [← hweight] at hcolumn
+      norm_num at hcolumn
+      linarith
+    have hweightLt : weight < 1 := by
+      apply lt_of_le_of_ne hweight1
+      intro hweight
+      apply hne
+      funext who
+      rw [hpayoff who, hweight]
+      ring
+    exact ⟨
+      { continuation := .restart
+        quitWeight := 1 - weight
+        quitWeight_pos := sub_pos.mpr hweightLt
+        quitWeight_lt_one := by linarith
+        payoff := by
+          intro who
+          rw [hpayoff who]
+          ring }⟩
+  · obtain ⟨⟨weight, hweight0, hweight1, hpayoff⟩, hne⟩ := hadvance
+    obtain ⟨negative, hnegative⟩ := hnegative
+    have hweightPos : 0 < weight := by
+      apply lt_of_le_of_ne hweight0
+      intro hweight
+      have hlow := block.lower owner negative
+      have hcolumn := hpayoff negative
+      rw [← hweight] at hcolumn
+      norm_num at hcolumn
+      linarith
+    have hweightLt : weight < 1 := by
+      apply lt_of_le_of_ne hweight1
+      intro hweight
+      apply hne
+      funext who
+      rw [hpayoff who, hweight]
+      ring
+    exact ⟨
+      { continuation := .advance
+        quitWeight := 1 - weight
+        quitWeight_pos := sub_pos.mpr hweightLt
+        quitWeight_lt_one := by linarith
+        payoff := by
+          intro who
+          rw [hpayoff who]
+          ring }⟩
+
+noncomputable def BuildingBlock.attempt
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    (block : BuildingBlock M y ε) (owner : ι)
+    (hnegative : ∃ who, M who owner < -ε) :
+    BuildingAttempt M y ε block owner :=
+  Classical.choice (block.exists_attempt owner hnegative)
+
+/-! Any interior total quit weight can be spread over a sufficiently long
+block so that the per-stage quit probability is below a prescribed positive
+accuracy, while preserving the total survival probability exactly. -/
+theorem BuildingAttempt.exists_mesh
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    {block : BuildingBlock M y ε} {owner : ι}
+    (attempt : BuildingAttempt M y ε block owner)
+    {η : ℝ} (hη : 0 < η) :
+    ∃ mesh : ℕ, 0 < mesh ∧
+      quittingMeshHazard attempt.quitWeight mesh < η ∧
+      (1 - quittingMeshHazard attempt.quitWeight mesh) ^ mesh =
+        1 - attempt.quitWeight := by
+  obtain ⟨mesh, hmesh⟩ := exists_nat_gt
+    (max 1 (quittingMeshIntensity attempt.quitWeight / η))
+  have hmeshOne : 1 < (mesh : ℝ) :=
+    (le_max_left 1 _).trans_lt hmesh
+  have hmeshPosReal : 0 < (mesh : ℝ) := zero_lt_one.trans hmeshOne
+  have hmeshPos : 0 < mesh := by exact_mod_cast hmeshPosReal
+  have hratio : quittingMeshIntensity attempt.quitWeight / (mesh : ℝ) < η := by
+    have hquotient :
+        quittingMeshIntensity attempt.quitWeight / η < (mesh : ℝ) :=
+      (le_max_right 1 _).trans_lt hmesh
+    have hintermediate :
+        quittingMeshIntensity attempt.quitWeight < (mesh : ℝ) * η :=
+      (div_lt_iff₀ hη).mp hquotient
+    exact (div_lt_iff₀ hmeshPosReal).mpr (by
+      simpa only [mul_comm] using hintermediate)
+  refine ⟨mesh, hmeshPos, ?_, ?_⟩
+  · exact (quittingMeshHazard_le_intensity_div
+      attempt.quitWeight_lt_one).trans_lt hratio
+  · exact one_sub_quittingMeshHazard_pow
+      attempt.quitWeight_lt_one.le hmeshPos
 
 /-! The existential conclusion of Theorem 3.3. -/
 def Theorem33Conclusion (M : ι → ι → ℝ) (y : ι → ℝ) (ε : ℝ) : Prop :=
@@ -2601,6 +2765,108 @@ and (iii) every pure deviation gains at most `5ε`. -/
 profile, its finite chain of Theorem 3.3 blocks, and the history event that the
 final kiloblock has not started. It carries no asserted payoff or deviation
 bound. -/
+
+/-! The control state between live decisions. `choose k` means that the next
+signal selects a type in kiloblock `k`; `resume` ignores the next signal and
+continues a previously selected type. The source's order is reversed: the
+construction starts at the last index and ends after index zero. -/
+inductive KiloblockPhase (table : Table ι) (lastIndex : ℕ)
+  | choose (k : Fin (lastIndex + 1))
+  | resume (k : Fin (lastIndex + 1))
+      (choice : Option (NormalPlayer table)) (remaining : ℕ)
+  | final
+
+/-! The schedule state at an actual history. Draw and active states are
+separated because the public-signal adapter draws before every decision. -/
+inductive KiloblockMode (table : Table ι) (lastIndex : ℕ)
+  | draw (phase : KiloblockPhase table lastIndex)
+  | active (k : Fin (lastIndex + 1))
+      (choice : Option (NormalPlayer table)) (remaining : ℕ)
+  | finalActive
+  | absorbed (beforeFinal : Bool)
+
+/-! Move from original index `k` to `k-1`, or to the final infinite tail
+when `k=0`. -/
+def precedingKiloblockPhase (table : Table ι) {lastIndex : ℕ}
+    (k : Fin (lastIndex + 1)) : KiloblockPhase table lastIndex :=
+  if hk : k.1 = 0 then .final else .choose ⟨k.1 - 1, by omega⟩
+
+/-! A type-zero draw always advances. A failed type-`i` attempt restarts the
+same auxiliary game in the `w` branch of (F.1), but advances in its `y`
+branch. The latter exit is implicit in Figures 1--2 and is omitted from the
+later prose partition; recording it here is the necessary source correction. -/
+def phaseAfterAttempt (table : Table ι) {lastIndex : ℕ}
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation)
+    (k : Fin (lastIndex + 1)) (choice : Option (NormalPlayer table)) :
+    KiloblockPhase table lastIndex :=
+  match choice with
+  | none => precedingKiloblockPhase table k
+  | some owner =>
+      match continuation k owner with
+      | .restart => .choose k
+      | .advance => precedingKiloblockPhase table k
+
+/-! The schedule mode agrees with the actual public-game state. -/
+def KiloblockMode.MatchesState
+    {table : Table ι} {Signal : Type} [Fintype Signal] {lastIndex : ℕ}
+    (mode : KiloblockMode table lastIndex)
+    (state : PublicQuittingState ι Signal) : Prop :=
+  match mode, state with
+  | .draw _, .draw => True
+  | .active _ _ _, .active _ => True
+  | .finalActive, .active _ => True
+  | .absorbed _, .absorbed _ => True
+  | _, _ => False
+
+/-! Exact one-step automaton of the accepted manuscript's kiloblock
+schedule. A selected player is kept for `mesh k` active decisions. Failure
+then follows the branch-sensitive exit rule above; type zero advances after
+an all-Continue block of the same length. -/
+def KiloblockModeStep
+    {table : Table ι} {Signal : Type} [Fintype Signal] {lastIndex : ℕ}
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (selector : Fin (lastIndex + 1) → Signal →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation)
+    (mode : KiloblockMode table lastIndex) (action : ι → Bool)
+    (nextState : PublicQuittingState ι Signal)
+    (nextMode : KiloblockMode table lastIndex) : Prop := by
+  classical
+  exact match mode with
+  | .draw (.choose k) =>
+      match nextState with
+      | .active signal =>
+          nextMode = .active k (selector k signal) (mesh k)
+      | _ => False
+  | .draw (.resume k choice remaining) =>
+      match nextState with
+      | .active _ => nextMode = .active k choice remaining
+      | _ => False
+  | .draw .final =>
+      match nextState with
+      | .active _ => nextMode = .finalActive
+      | _ => False
+  | .active k choice remaining =>
+      if hquit : ({who | action who = true} : Finset ι).Nonempty then
+        nextState = .absorbed ⟨_, hquit⟩ ∧ nextMode = .absorbed true
+      else if remaining ≤ 1 then
+        nextState = .draw ∧
+          nextMode = .draw
+            (phaseAfterAttempt table continuation k choice)
+      else
+        nextState = .draw ∧
+          nextMode = .draw (.resume k choice (remaining - 1))
+  | .finalActive =>
+      if hquit : ({who | action who = true} : Finset ι).Nonempty then
+        nextState = .absorbed ⟨_, hquit⟩ ∧ nextMode = .absorbed false
+      else nextState = .draw ∧ nextMode = .draw .final
+  | .absorbed beforeFinal =>
+      match nextState with
+      | .absorbed _ => nextMode = .absorbed beforeFinal
+      | _ => False
+
 structure KiloblockConstruction
     (table : Table ι) (ε : ℝ) where
   profile : SunspotProfile table
@@ -2609,11 +2875,108 @@ structure KiloblockConstruction
   point_boundary : ∀ k, DZero (NormalMatrix table) (point k)
   buildingBlock : ∀ k,
     BuildingBlock (NormalMatrix table) (point k) ε
-  target : Payoff ι
-  target_normal : ∀ who : NormalPlayer table,
-    target who.1 = (buildingBlock (Fin.last blockCount)).w who
-  beforeFinal : ∀ t,
-    (publicQuittingGame table profile.signalLaw).Hist t → Prop
+  column_negative : ∀ owner,
+    ∃ who, NormalMatrix table who owner < -ε
+  attempt : ∀ k owner,
+    BuildingAttempt (NormalMatrix table) (point k) ε
+      (buildingBlock k) owner
+  mesh : Fin (blockCount + 1) → ℕ
+  mesh_pos : ∀ k, 0 < mesh k
+  mesh_hazard_small : ∀ k owner,
+    quittingMeshHazard (attempt k owner).quitWeight (mesh k) < ε
+  signalSelector : Fin (blockCount + 1) →
+    Fin (profile.signalCount + 1) → Option (NormalPlayer table)
+  signalSelector_law : ∀ k,
+    profile.signalLaw.map (signalSelector k) = (buildingBlock k).z.toPMF
+  mode : ∀ t,
+    (publicQuittingGame table profile.signalLaw).Hist t →
+      KiloblockMode table blockCount
+  mode_initial : mode 0
+    ((publicQuittingGame table profile.signalLaw).emptyHist
+      (PublicQuittingState.draw)) =
+      .draw (.choose (Fin.last blockCount))
+  mode_state : ∀ t history, (mode t history).MatchesState history.2
+  mode_step : ∀ t history action nextState,
+    nextState ∈ ((publicQuittingGame table profile.signalLaw).transition
+      history.2 action).support →
+    KiloblockModeStep mesh signalSelector
+      (fun k owner => (attempt k owner).continuation)
+      (mode t history) action nextState
+      (mode (t + 1) (Fin.snoc history.1 (history.2, action), nextState))
+  strategy_eq : ∀ who t history,
+    profile.strategy who t history =
+      match mode t history with
+      | .active k (some owner) _ =>
+          if _hwho : who = owner.1 then
+            quittingMeshHazardCoin (attempt k owner).quitWeight (mesh k)
+              (attempt k owner).quitWeight_pos.le
+              (attempt k owner).quitWeight_lt_one
+          else PMF.pure false
+      | _ => PMF.pure false
+
+/-! `w(yᴷ)`, in the normal coordinates where the paper defines it. -/
+def KiloblockConstruction.normalTarget
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    NormalPlayer table → ℝ :=
+  (construction.buildingBlock (Fin.last construction.blockCount)).w
+
+/-! The operational schedule itself implies the unilateral-quitting clause:
+at an active history either one selected owner uses the mesh coin or everyone
+continues. -/
+theorem KiloblockConstruction.atMostOneQuitter
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    AtMostOneQuitter construction.profile := by
+  classical
+  intro t history
+  cases hstate : history.2 with
+  | draw => trivial
+  | absorbed quitters => trivial
+  | active signal =>
+      have hmatches := construction.mode_state t history
+      rw [hstate] at hmatches
+      cases hmode : construction.mode t history with
+      | draw phase => simp [KiloblockMode.MatchesState, hmode] at hmatches
+      | absorbed beforeFinal =>
+          simp [KiloblockMode.MatchesState, hmode] at hmatches
+      | finalActive =>
+          simp [construction.strategy_eq, hmode]
+      | active k choice remaining =>
+          cases choice with
+          | none =>
+              simp [construction.strategy_eq, hmode]
+          | some owner =>
+              calc
+                (Finset.filter (fun who =>
+                    0 < ((construction.profile.strategy who t history)
+                      true).toReal) Finset.univ).card ≤
+                    ({owner.1} : Finset ι).card := by
+                  apply Finset.card_le_card
+                  intro who hwho
+                  simp only [Finset.mem_filter, Finset.mem_univ,
+                    true_and] at hwho
+                  simp only [Finset.mem_singleton]
+                  by_contra hne
+                  have : ¬0 < ((construction.profile.strategy who t history)
+                      true).toReal := by
+                    simp [construction.strategy_eq, hmode, hne]
+                  exact this hwho
+                _ = 1 := Finset.card_singleton owner.1
+
+/-! Whether the schedule has not yet entered its final infinite tail. The
+boolean stored after absorption remembers on which side of that boundary
+absorption occurred. -/
+def KiloblockConstruction.beforeFinal
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (t : ℕ)
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t) : Prop :=
+  match construction.mode t history with
+  | .draw .final => False
+  | .finalActive => False
+  | .absorbed beforeFinal => beforeFinal = true
+  | _ => True
 
 /-! Indicator that absorption has occurred while the construction's history
 marker still lies before the final kiloblock. -/
@@ -2655,7 +3018,8 @@ theorem lemma3_8
     (table : Table ι) {ε : ℝ} (hε : 0 < ε)
     (construction : KiloblockConstruction table ε) :
     ∀ i : NormalPlayer table,
-      |construction.profile.payoff i.1 - construction.target i.1| < 2 * ε := by
+      |construction.profile.payoff i.1 - construction.normalTarget i| <
+        2 * ε := by
   sorry
 
 /-! Lemma 3.9: continuing by a normal player still terminates with probability
@@ -2667,7 +3031,11 @@ theorem lemma3_9
       continueTerminationBeforeFinal construction i.1 ≥ 1 - ε := by
   sorry
 
-/-! Lemma 3.10: every pure deviation gains at most `5ε`. -/
+/-! Lemma 3.10: a normal player's deviation is capped by `wᵢ(yᴷ)+5ε`;
+an abnormal player's gain over the prescribed profile is at most `5ε`.
+The printed abnormal-player paragraph writes `wᵢ(yᴷ)`, although `w`
+has only normal coordinates; its actual argument is the direct gain bound
+recorded by the second branch below. -/
 theorem lemma3_10
     {table : Table ι} {ε : ℝ} (hε : 0 < ε)
     (construction : KiloblockConstruction table ε) :
@@ -2675,7 +3043,9 @@ theorem lemma3_10
       construction.profile.signalLaw).BehaviorStrategy i),
       publicQuittingPayoff table construction.profile.signalLaw
           (Function.update construction.profile.strategy i deviation) i ≤
-        construction.target i + 5 * ε := by
+        if hi : i ∈ NormalPlayers table then
+          construction.normalTarget ⟨i, hi⟩ + 5 * ε
+        else construction.profile.payoff i + 5 * ε := by
   sorry
 
 /-! Section 3.4 concludes from Lemmas 3.8--3.10 that the constructed profile
@@ -2684,19 +3054,27 @@ is a sunspot `7ε`-equilibrium. -/
 /-! Section 3.4: the constructed profile is a sunspot `7ε`-equilibrium. -/
 theorem section3_4
     (table : Table ι) (profile : SunspotProfile table)
-    (target : Payoff ι) (ε : ℝ)
-    (hpayoff : ∀ who, |profile.payoff who - target who| < 2 * ε)
+    (target : NormalPlayer table → ℝ) (ε : ℝ) (hε : 0 ≤ ε)
+    (hpayoff : ∀ who : NormalPlayer table,
+      |profile.payoff who.1 - target who| < 2 * ε)
     (hdeviation : ∀ who
       (deviation : (publicQuittingGame table profile.signalLaw).BehaviorStrategy who),
       publicQuittingPayoff table profile.signalLaw
         (Function.update profile.strategy who deviation) who ≤
-          target who + 5 * ε) :
+          if hwho : who ∈ NormalPlayers table then
+            target ⟨who, hwho⟩ + 5 * ε
+          else profile.payoff who + 5 * ε) :
     SunspotEpsilonEquilibrium table (7 * ε) profile := by
   intro who deviation
-  have hlower := (abs_lt.mp (hpayoff who)).1
   have hupper := hdeviation who deviation
-  dsimp only [SunspotProfile.payoff] at hlower
-  linarith
+  by_cases hwho : who ∈ NormalPlayers table
+  · rw [dif_pos hwho] at hupper
+    have hlower := (abs_lt.mp (hpayoff ⟨who, hwho⟩)).1
+    dsimp only [SunspotProfile.payoff] at hlower
+    linarith
+  · rw [dif_neg hwho] at hupper
+    dsimp only [SunspotProfile.payoff] at hupper
+    linarith
 
 /-! ## Section 4 — sunspot payoff characterization -/
 
