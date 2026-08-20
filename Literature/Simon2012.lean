@@ -440,18 +440,80 @@ theorem lemma2_1_part1 (G : QuittingGame)
 Lemma 2.1(2), with the two corrections printed on page 185.  Simon 2007's
 `lemma5` declaration cannot prove this honestly: its hypothesis excludes only
 stationary equilibria and its conclusion omits `WithinOneOfFeasible`.
-The missing proof is the compact-subsequence argument from the article.
+The distance-one feasible neighborhood is enclosed in one compact coordinate
+cube, so the result follows from the compact form above.
 -/
 theorem lemma2_1_part2 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ := by
-  sorry
+  classical
+  let C : ℝ :=
+    ∑ A : {A : Finset G.Player // A.Nonempty},
+      ∑ i : G.Player, |G.reward A i|
+  have C_nonneg : 0 ≤ C :=
+    Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _
+  have rewardEntry_le
+      (A : {A : Finset G.Player // A.Nonempty}) (i : G.Player) :
+      |G.reward A i| ≤ C := by
+    dsimp only [C]
+    calc
+      |G.reward A i| ≤ ∑ j : G.Player, |G.reward A j| := by
+        exact Finset.single_le_sum (f := fun j : G.Player => |G.reward A j|)
+          (fun _ _ => abs_nonneg _) (Finset.mem_univ i)
+      _ ≤ ∑ A' : {A : Finset G.Player // A.Nonempty},
+            ∑ j : G.Player, |G.reward A' j| := by
+        exact Finset.single_le_sum
+          (f := fun A' : {A : Finset G.Player // A.Nonempty} =>
+            ∑ j : G.Player, |G.reward A' j|)
+          (fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _)
+          (Finset.mem_univ A)
+  let feasibleCube : Set (Payoff G.Player) :=
+    Set.univ.pi fun _ => Set.Icc (-C) C
+  have feasibleCube_convex : Convex ℝ feasibleCube := by
+    exact convex_pi fun _ _ => convex_Icc _ _
+  have generators_subset : range G.reward ∪ {0} ⊆ feasibleCube := by
+    intro x hx
+    rcases hx with hx | hx
+    · obtain ⟨A, rfl⟩ := hx
+      intro i _
+      exact abs_le.mp (rewardEntry_le A i)
+    · rw [Set.mem_singleton_iff.mp hx]
+      intro i _
+      simp only [Pi.zero_apply]
+      exact ⟨neg_nonpos.mpr C_nonneg, C_nonneg⟩
+  have feasible_subset : {z | Feasible G z} ⊆ feasibleCube := by
+    intro z hz
+    exact convexHull_min generators_subset feasibleCube_convex hz
+  let compactCube : Set (Payoff G.Player) :=
+    Set.univ.pi fun _ => Set.Icc (-(C + 1)) (C + 1)
+  have compactCube_compact : IsCompact compactCube :=
+    isCompact_univ_pi fun _ => isCompact_Icc
+  obtain ⟨ρ, hρ, hρ1, hbound⟩ :=
+    lemma2_1_part2_compact G hgenerated hinstant compactCube compactCube_compact
+  refine ⟨ρ, hρ, hρ1, ?_⟩
+  intro r p hnear hrational hp
+  apply hbound r
+  · obtain ⟨z, hz, hdist⟩ := hnear
+    have hzcube := feasible_subset hz
+    intro i _
+    have hzabs : |z i| ≤ C := abs_le.mpr (hzcube i (Set.mem_univ i))
+    have hcoordinate : |(r - z) i| ≤ EuclideanNorm (r - z) := by
+      rw [euclideanNorm_eq_norm_toLp]
+      simpa only [Pi.sub_apply, Real.norm_eq_abs] using
+        PiLp.norm_apply_le (WithLp.toLp 2 (r - z)) i
+    have hdiff : |r i - z i| ≤ 1 := by
+      exact hcoordinate.trans hdist
+    apply abs_le.mp
+    calc
+      |r i| = |(r i - z i) + z i| := by ring_nf
+      _ ≤ |r i - z i| + |z i| := abs_add_le _ _
+      _ ≤ 1 + C := add_le_add hdiff hzabs
+      _ = C + 1 := add_comm _ _
+  · exact hrational
+  · exact hp
 
-/--
-Lemma 2.1, with both corrected clauses.  Both substantive clauses remain open,
-so the numbered lemma is left visibly open as well.
--/
+/-- Lemma 2.1, combining its strategic and compact-motion clauses. -/
 theorem lemma2_1 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
@@ -459,7 +521,8 @@ theorem lemma2_1 (G : QuittingGame)
       ∀ j, IsNormalPlayer G j → ∃ k, k ≠ j ∧ IsNormalPlayer G k ∧
         G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k) ∧
       ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ := by
-  sorry
+  exact ⟨lemma2_1_part1 G hgenerated hinstant,
+    lemma2_1_part2 G hgenerated hinstant⟩
 
 /-- A vector lies within Euclidean distance `ε` of the feasible vectors. -/
 def NearFeasible (G : QuittingGame) (ε : ℝ)
