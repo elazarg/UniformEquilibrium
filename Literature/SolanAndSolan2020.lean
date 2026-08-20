@@ -2783,7 +2783,7 @@ inductive KiloblockMode (table : Table ι) (lastIndex : ℕ)
   | active (k : Fin (lastIndex + 1))
       (choice : Option (NormalPlayer table)) (remaining : ℕ)
   | finalActive
-  | absorbed (beforeFinal : Bool)
+  | absorbed (origin : Option (Fin (lastIndex + 1)))
 
 /-! Move from original index `k` to `k-1`, or to the final infinite tail
 when `k=0`. -/
@@ -2850,7 +2850,7 @@ def KiloblockModeStep
       | _ => False
   | .active k choice remaining =>
       if hquit : ({who | action who = true} : Finset ι).Nonempty then
-        nextState = .absorbed ⟨_, hquit⟩ ∧ nextMode = .absorbed true
+        nextState = .absorbed ⟨_, hquit⟩ ∧ nextMode = .absorbed (some k)
       else if remaining ≤ 1 then
         nextState = .draw ∧
           nextMode = .draw
@@ -2860,12 +2860,31 @@ def KiloblockModeStep
           nextMode = .draw (.resume k choice (remaining - 1))
   | .finalActive =>
       if hquit : ({who | action who = true} : Finset ι).Nonempty then
-        nextState = .absorbed ⟨_, hquit⟩ ∧ nextMode = .absorbed false
+        nextState = .absorbed ⟨_, hquit⟩ ∧ nextMode = .absorbed none
       else nextState = .draw ∧ nextMode = .draw .final
-  | .absorbed beforeFinal =>
+  | .absorbed origin =>
       match nextState with
-      | .absorbed _ => nextMode = .absorbed beforeFinal
+      | .absorbed _ => nextMode = .absorbed origin
       | _ => False
+
+/-! The total displacement in (A.1''). -/
+def KiloblockDisplacement {table : Table ι} {ε : ℝ} {lastIndex : ℕ}
+    (point : Fin (lastIndex + 1) → NormalPlayer table → ℝ)
+    (block : ∀ k, BuildingBlock (NormalMatrix table) (point k) ε) : ℝ :=
+  ∑ k, dist (point k) (block k).w
+
+/-! The adjacent mismatch in (A.2''):
+`Σ_{k<K} ‖y^{k+1}-w(y^k)‖∞`. -/
+def KiloblockTracking {table : Table ι} {ε : ℝ} {lastIndex : ℕ}
+    (point : Fin (lastIndex + 1) → NormalPlayer table → ℝ)
+    (block : ∀ k, BuildingBlock (NormalMatrix table) (point k) ε) : ℝ :=
+  ∑ k : Fin lastIndex,
+    dist (point ⟨k.1 + 1, by omega⟩) (block ⟨k.1, by omega⟩).w
+
+/-! The displacement threshold `C` chosen in Section 3.3.5. -/
+def KiloblockDisplacementThreshold (table : Table ι) (ε : ℝ) : ℝ :=
+  ((Nat.choose (Fintype.card (NormalPlayer table)) 2 : ℕ) : ℝ) *
+    (2 * (1 + ε)) / ε ^ 2
 
 structure KiloblockConstruction
     (table : Table ι) (ε : ℝ) where
@@ -2875,6 +2894,11 @@ structure KiloblockConstruction
   point_boundary : ∀ k, DZero (NormalMatrix table) (point k)
   buildingBlock : ∀ k,
     BuildingBlock (NormalMatrix table) (point k) ε
+  epsilon_pos : 0 < ε
+  epsilon_lt_one : ε < 1
+  displacement_large : KiloblockDisplacementThreshold table ε <
+    KiloblockDisplacement point buildingBlock
+  tracking_small : KiloblockTracking point buildingBlock < ε
   column_negative : ∀ owner,
     ∃ who, NormalMatrix table who owner < -ε
   attempt : ∀ k owner,
@@ -2914,6 +2938,111 @@ structure KiloblockConstruction
           else PMF.pure false
       | _ => PMF.pure false
 
+/-! The coordinate error in (A.2'') between the endpoint of block `j` and
+the next point in the chain. It is zero outside the actual chain, which lets
+the cumulative correction below be indexed by an ordinary natural number. -/
+def KiloblockConstruction.trackingIncrement
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (j : ℕ)
+    (who : NormalPlayer table) : ℝ :=
+  if hj : j < construction.blockCount then
+    (construction.buildingBlock ⟨j, by omega⟩).w who -
+      construction.point ⟨j + 1, by omega⟩ who
+  else 0
+
+def KiloblockConstruction.trackingDistanceIncrement
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (j : ℕ) : ℝ :=
+  if hj : j < construction.blockCount then
+    dist (construction.point ⟨j + 1, by omega⟩)
+      (construction.buildingBlock ⟨j, by omega⟩).w
+  else 0
+
+/-! The accumulated (A.2'') correction below point `yᵏ`. Adding this
+correction makes the prescribed value telescope exactly when the schedule
+advances from kiloblock `k` to `k-1`. -/
+def KiloblockConstruction.trackingCorrection
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (who : NormalPlayer table) : ℝ :=
+  ∑ j ∈ Finset.range k.1, construction.trackingIncrement j who
+
+@[simp]
+theorem KiloblockConstruction.trackingCorrection_zero
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) :
+    construction.trackingCorrection ⟨0, by omega⟩ who = 0 := by
+  simp [KiloblockConstruction.trackingCorrection]
+
+theorem KiloblockConstruction.trackingCorrection_succ
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (j : ℕ) (hj : j < construction.blockCount)
+    (who : NormalPlayer table) :
+    construction.trackingCorrection ⟨j + 1, by omega⟩ who =
+      construction.trackingCorrection ⟨j, by omega⟩ who +
+        (construction.buildingBlock ⟨j, by omega⟩).w who -
+          construction.point ⟨j + 1, by omega⟩ who := by
+  simp [KiloblockConstruction.trackingCorrection,
+    Finset.sum_range_succ, KiloblockConstruction.trackingIncrement, hj]
+  ring
+
+/-! Exact telescope at an advance from index `j+1` to index `j`. -/
+theorem KiloblockConstruction.point_add_trackingCorrection_succ
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (j : ℕ) (hj : j < construction.blockCount)
+    (who : NormalPlayer table) :
+    construction.point ⟨j + 1, by omega⟩ who +
+        construction.trackingCorrection ⟨j + 1, by omega⟩ who =
+      (construction.buildingBlock ⟨j, by omega⟩).w who +
+        construction.trackingCorrection ⟨j, by omega⟩ who := by
+  rw [construction.trackingCorrection_succ j hj who]
+  ring
+
+theorem KiloblockConstruction.abs_trackingCorrection_lt
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (who : NormalPlayer table) :
+    |construction.trackingCorrection k who| < ε := by
+  calc
+    |construction.trackingCorrection k who| ≤
+        ∑ j ∈ Finset.range k.1,
+          |construction.trackingIncrement j who| := by
+      exact Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ j ∈ Finset.range k.1,
+        construction.trackingDistanceIncrement j := by
+      apply Finset.sum_le_sum
+      intro j hj
+      have hjk : j < k.1 := Finset.mem_range.mp hj
+      have hjcount : j < construction.blockCount := by omega
+      simp only [KiloblockConstruction.trackingIncrement,
+        KiloblockConstruction.trackingDistanceIncrement, hjcount,
+        dif_pos]
+      rw [dist_eq_norm]
+      simpa only [Pi.sub_apply, Real.norm_eq_abs, abs_sub_comm] using
+        norm_le_pi_norm
+          (construction.point ⟨j + 1, by omega⟩ -
+            (construction.buildingBlock ⟨j, by omega⟩).w) who
+    _ ≤ ∑ j ∈ Finset.range construction.blockCount,
+        construction.trackingDistanceIncrement j := by
+      apply Finset.sum_le_sum_of_subset_of_nonneg
+      · intro j hj
+        simp only [Finset.mem_range] at hj ⊢
+        omega
+      · intro j hj _
+        simp only [KiloblockConstruction.trackingDistanceIncrement]
+        split <;> positivity
+    _ = KiloblockTracking construction.point construction.buildingBlock := by
+      rw [← Fin.sum_univ_eq_sum_range]
+      apply Finset.sum_congr rfl
+      intro j _
+      simp [KiloblockConstruction.trackingDistanceIncrement]
+    _ < ε := construction.tracking_small
+
 /-! `w(yᴷ)`, in the normal coordinates where the paper defines it. -/
 def KiloblockConstruction.normalTarget
     {table : Table ι} {ε : ℝ}
@@ -2938,7 +3067,7 @@ theorem KiloblockConstruction.atMostOneQuitter
       rw [hstate] at hmatches
       cases hmode : construction.mode t history with
       | draw phase => simp [KiloblockMode.MatchesState, hmode] at hmatches
-      | absorbed beforeFinal =>
+      | absorbed origin =>
           simp [KiloblockMode.MatchesState, hmode] at hmatches
       | finalActive =>
           simp [construction.strategy_eq, hmode]
@@ -2975,7 +3104,7 @@ def KiloblockConstruction.beforeFinal
   match construction.mode t history with
   | .draw .final => False
   | .finalActive => False
-  | .absorbed beforeFinal => beforeFinal = true
+  | .absorbed origin => origin.isSome
   | _ => True
 
 /-! Indicator that absorption has occurred while the construction's history
