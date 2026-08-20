@@ -132,7 +132,7 @@ them is stated.
 
 noncomputable section
 
-open Math.BoundedDiscrepancy Math.MaxAffineTransport
+open Math Math.MaxAffineTransport
 
 namespace Math.MaxAffineTransport
 

@@ -9,7 +9,7 @@ proof remains in `MathUE.BoundedDiscrepancyCirculation`.
 
 namespace Theorems.BoundedDiscrepancy
 
-open Math.BoundedDiscrepancy
+open Math
 
 universe uV uE uκ
 
@@ -17,7 +17,7 @@ universe uV uE uκ
 infinite walk exists exactly when a reachable connected zero-charge integer
 circulation exists. -/
 theorem exists_walk_iff_connectedIntegerCirculation
-    {V : Type uV} {E : Type uE} (G : EdgeGraph V E)
+    {V : Type uV} {E : Type uE} (G : Math.EdgeGraph V E)
     [Finite V] [Fintype E] [DecidableEq V]
     {κ : Type uκ} (edgeCharge : E → κ → ℤ) (start : V) :
     (∃ walk : G.InfiniteWalk start,

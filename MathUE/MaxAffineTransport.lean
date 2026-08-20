@@ -8,9 +8,9 @@ import Mathlib.Algebra.Order.Group.MinMax
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Order.WithBot
-import MathUE.BoundedDiscrepancyCirculation
 import MathUE.CycleCoboundary
 import MathUE.DirectedTransport
+import MathUE.EdgeGraph
 import MathUE.CyclicMaxAffineBound
 import MathUE.InverseCoordinateRecurrence
 import MathUE.MaxPlusPotential
@@ -523,11 +523,9 @@ end Label
 /-! ## The graph layer -/
 section Graph
 
-open Math.BoundedDiscrepancy
-
 universe uV uE
 
-variable {V : Type uV} {E : Type uE} {G : Math.BoundedDiscrepancy.EdgeGraph V E}
+variable {V : Type uV} {E : Type uE} {G : Math.EdgeGraph V E}
 
 /-- A **lax section**: traversing an edge does not increase the
 candidate beyond its value at the head of that edge.  Also called a
@@ -889,11 +887,9 @@ end Cyclic
 /-! ## Specializations -/
 section Specialization
 
-open Math.BoundedDiscrepancy
-
 universe uV uE
 
-variable {V : Type uV} {E : Type uE} {G : Math.BoundedDiscrepancy.EdgeGraph V E}
+variable {V : Type uV} {E : Type uE} {G : Math.EdgeGraph V E}
 
 /-- The floorless translation label of a real edge weight. -/
 def translationLabel (w : ℝ) : Label := ⟨⊥, w, 1⟩
@@ -1000,11 +996,11 @@ and each edge acting by its label.  The identifications below let the
 section and holonomy statements of that module specialize here. -/
 section Transport
 
-open Math.BoundedDiscrepancy Math.DirectedTransport
+open Math.DirectedTransport
 
 universe uV' uE'
 
-variable {V : Type uV'} {E : Type uE'} {G : Math.BoundedDiscrepancy.EdgeGraph V E}
+variable {V : Type uV'} {E : Type uE'} {G : Math.EdgeGraph V E}
 
 /-- The constant-fiber directed transport of a labelled graph: every fiber is
 the line and each edge acts by its label. -/
