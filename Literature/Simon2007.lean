@@ -1675,10 +1675,363 @@ theorem lemma3 (G : QuittingGame) (j : G.Player) (h : ¬IsNormalPlayer G j) :
       G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j ≥ MinMaxQuit G j := by
   sorry
 
+/-- The reward contribution of a quitting row, excluding continuation. -/
+private def quittingRewardPart (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) : ℝ :=
+  ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+    CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0
+
+/-- The total mass of the nonempty exact-quitter coalitions is the quitting probability. -/
+private theorem nonemptyCoalitionMass_eq_quitProbability (G : QuittingGame)
+    (p : QuitRow G) :
+    (∑ A ∈ Finset.univ.powerset,
+        if _hA : A.Nonempty then CoalitionProbability G p A else 0) =
+      QuitProbability G p := by
+  classical
+  have hsum : ∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A = 1 := by
+    simp only [CoalitionProbability]
+    have hcomp : ∀ A : Finset G.Player,
+        Finset.univ.filter (fun n => n ∉ A) = Finset.univ \ A := by
+      intro A
+      ext n
+      simp
+    simp_rw [hcomp]
+    rw [← Finset.prod_add (fun n => (p n : ℝ))
+      (fun n => 1 - (p n : ℝ)) Finset.univ]
+    simp
+  have hempty : CoalitionProbability G p ∅ = 1 - QuitProbability G p := by
+    simp [CoalitionProbability, QuitProbability]
+  calc
+    ∑ A ∈ Finset.univ.powerset,
+        (if A.Nonempty then CoalitionProbability G p A else 0) =
+        (∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A) -
+          CoalitionProbability G p ∅ := by
+      rw [← Finset.sum_filter]
+      have hfilter : Finset.univ.powerset.filter (fun A => A.Nonempty) =
+          Finset.univ.powerset.erase (∅ : Finset G.Player) := by
+        ext A
+        simp [Finset.nonempty_iff_ne_empty]
+      rw [hfilter]
+      have hdecomp := Finset.sum_erase_add Finset.univ.powerset
+        (fun A => CoalitionProbability G p A) (by simp : (∅ : Finset G.Player) ∈
+          Finset.univ.powerset)
+      linarith
+    _ = QuitProbability G p := by rw [hsum, hempty]; ring_nf
+
+/-- The reward part is bounded by the quitting mass times a uniform payoff bound. -/
+private theorem abs_quittingRewardPart_le (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) {M : ℝ} (hbound : ∀ A, |G.reward A n| ≤ M) :
+    |quittingRewardPart G p n| ≤ M * QuitProbability G p := by
+  classical
+  calc
+    |quittingRewardPart G p n| ≤
+        ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+          |CoalitionProbability G p A * G.reward ⟨A, hA⟩ n| else 0 := by
+      dsimp only [quittingRewardPart]
+      exact (Finset.abs_sum_le_sum_abs _ _).trans_eq (by
+        apply Finset.sum_congr rfl
+        intro A hA
+        split_ifs <;> simp)
+    _ ≤ ∑ A ∈ Finset.univ.powerset, if A.Nonempty then
+          CoalitionProbability G p A * M else 0 := by
+      apply Finset.sum_le_sum
+      intro A hA
+      split_ifs with hnonempty
+      · rw [abs_mul]
+        have hprob : 0 ≤ CoalitionProbability G p A := by
+          simp only [CoalitionProbability]
+          exact mul_nonneg
+            (Finset.prod_nonneg fun i _ => (p i).property.1)
+            (Finset.prod_nonneg fun i _ => sub_nonneg.mpr (p i).property.2)
+        rw [abs_of_nonneg hprob]
+        exact mul_le_mul_of_nonneg_left (hbound ⟨A, hnonempty⟩) hprob
+      · exact le_rfl
+    _ = M * QuitProbability G p := by
+      rw [← nonemptyCoalitionMass_eq_quitProbability G p]
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro A hA
+      split_ifs <;> ring_nf
+
+/-- Probability that a quitting profile survives the first `k` stages after `i`. -/
+private def tailSurvival (G : QuittingGame) (p : QuitProfile G)
+    (i k : ℕ) : ℝ :=
+  Finset.prod (Finset.range k) fun j => 1 - QuitProbability G (p (i + j))
+
+/-- Peeling off the first survival factor agrees with shifting the tail start. -/
+private theorem tailSurvival_succ (G : QuittingGame) (p : QuitProfile G)
+    (i k : ℕ) :
+    tailSurvival G p i (k + 1) =
+      (1 - QuitProbability G (p i)) * tailSurvival G p (i + 1) k := by
+  induction k with
+  | zero => simp [tailSurvival]
+  | succ k ih =>
+      simp only [tailSurvival, Finset.prod_range_succ] at ih ⊢
+      rw [ih]
+      rw [show i + (k + 1) = (i + 1) + k by omega]
+      ring_nf
+
+/-- The absorption masses of a quitting tail form a summable sequence. -/
+private theorem summable_tailSurvival_mul_quitProbability (G : QuittingGame)
+    (p : QuitProfile G) (i : ℕ) :
+    Summable fun k => tailSurvival G p i k * QuitProbability G (p (i + k)) := by
+  let q : ℕ → ℝ := fun k => QuitProbability G (p (i + k))
+  let survival : ℕ → ℝ := fun k => tailSurvival G p i k
+  have hq : ∀ k, q k ∈ Set.Icc (0 : ℝ) 1 := fun k => quitProbability_mem_Icc G _
+  have hsurvivalNonnegative : ∀ k, 0 ≤ survival k := by
+    intro k
+    dsimp [survival, tailSurvival]
+    exact Finset.prod_nonneg fun j _ => sub_nonneg.mpr (hq j).2
+  have hsurvivalSucc : ∀ k, survival (k + 1) = survival k * (1 - q k) := by
+    intro k
+    simp [survival, tailSurvival, q, Finset.prod_range_succ]
+  have htelescoping : ∀ n, ∑ k ∈ Finset.range n, survival k * q k = 1 - survival n := by
+    intro n
+    induction n with
+    | zero => simp [survival, tailSurvival]
+    | succ n ih =>
+        rw [Finset.sum_range_succ, ih, hsurvivalSucc]
+        ring_nf
+  have hsummable : Summable fun k => survival k * q k := by
+    apply summable_of_sum_range_le (c := 1)
+    · intro k
+      exact mul_nonneg (hsurvivalNonnegative k) (hq k).1
+    · intro n
+      rw [htelescoping]
+      linarith [hsurvivalNonnegative n]
+  simpa only [survival, q] using hsummable
+
+/-- Every quitting tail payoff series is absolutely summable. -/
+private theorem summable_quitTailPayoff (G : QuittingGame) (p : QuitProfile G)
+    (i : ℕ) (n : G.Player) :
+    Summable fun k => tailSurvival G p i k * quittingRewardPart G (p (i + k)) n := by
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hmass := summable_tailSurvival_mul_quitProbability G p i
+  apply (hmass.mul_left M).of_norm_bounded
+  intro k
+  have hsurvival : 0 ≤ tailSurvival G p i k := by
+    dsimp [tailSurvival]
+    exact Finset.prod_nonneg fun j _ =>
+      sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+  rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg hsurvival]
+  calc
+    tailSurvival G p i k * |quittingRewardPart G (p (i + k)) n| ≤
+        tailSurvival G p i k * (M * QuitProbability G (p (i + k))) :=
+      mul_le_mul_of_nonneg_left
+        (abs_quittingRewardPart_le G _ n (fun A => le_of_lt (hM.2.2 A n))) hsurvival
+    _ = M * (tailSurvival G p i k * QuitProbability G (p (i + k))) := by ring_nf
+
+/-- Quitting tail payoffs satisfy the one-stage Bellman recursion. -/
+private theorem quitTailPayoff_eq_oneStage (G : QuittingGame) (p : QuitProfile G)
+    (i : ℕ) :
+    QuitTailPayoff G p i = QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1)) (p i) := by
+  funext n
+  have hsummable := summable_quitTailPayoff G p i n
+  change (∑' k, tailSurvival G p i k * quittingRewardPart G (p (i + k)) n) =
+    (1 - QuitProbability G (p i)) *
+        ∑' k, tailSurvival G p (i + 1) k *
+          quittingRewardPart G (p ((i + 1) + k)) n + quittingRewardPart G (p i) n
+  rw [hsummable.tsum_eq_zero_add]
+  rw [show tailSurvival G p i 0 = 1 by simp [tailSurvival]]
+  simp only [one_mul, Nat.add_zero]
+  rw [← tsum_mul_left]
+  rw [add_comm (quittingRewardPart G (p i) n)]
+  congr 1
+  apply tsum_congr
+  intro k
+  rw [tailSurvival_succ]
+  ring_nf
+
+/-- The payoff of a finite sequence of quitting rows followed by terminal vector `x`. -/
+private def finiteQuittingPayoff (G : QuittingGame) :
+    (k : ℕ) → Payoff G.Player → (ℕ → QuitRow G) → Payoff G.Player
+  | 0, x, _ => x
+  | k + 1, x, p =>
+      QuittingOneStagePayoff G
+        (finiteQuittingPayoff G k x fun i => p (i + 1)) (p 0)
+
+/-- Iterating the Bellman recursion gives the tail payoff after a finite prefix. -/
+private theorem quitTailPayoff_eq_finiteQuittingPayoff (G : QuittingGame)
+    (p : QuitProfile G) (i k : ℕ) :
+    QuitTailPayoff G p i =
+      finiteQuittingPayoff G k (QuitTailPayoff G p (i + k)) (fun j => p (i + j)) := by
+  induction k generalizing i with
+  | zero => simp [finiteQuittingPayoff]
+  | succ k ih =>
+      rw [quitTailPayoff_eq_oneStage]
+      simp only [finiteQuittingPayoff]
+      congr 1
+      simpa [Nat.add_assoc, Nat.add_comm 1] using ih (i + 1)
+
+/-- Splitting off the first factor of a product over an initial segment. -/
+private theorem prod_range_succ_shift (f : ℕ → ℝ) (k : ℕ) :
+    Finset.prod (Finset.range (k + 1)) f =
+      f 0 * Finset.prod (Finset.range k) (fun j => f (j + 1)) := by
+  rw [Finset.prod_range_succ']
+  ring_nf
+
+/-- Finite quitting payoffs contract terminal-vector differences by finite survival. -/
+private theorem finiteQuittingPayoff_sub (G : QuittingGame) (k : ℕ)
+    (x y : Payoff G.Player) (p : ℕ → QuitRow G) (n : G.Player) :
+    finiteQuittingPayoff G k x p n - finiteQuittingPayoff G k y p n =
+      Finset.prod (Finset.range k) (fun j => 1 - QuitProbability G (p j)) *
+        (x n - y n) := by
+  induction k generalizing p with
+  | zero => simp [finiteQuittingPayoff]
+  | succ k ih =>
+      simp only [finiteQuittingPayoff, QuittingOneStagePayoff]
+      change
+        ((1 - QuitProbability G (p 0)) * finiteQuittingPayoff G k x
+            (fun i => p (i + 1)) n + quittingRewardPart G (p 0) n) -
+          ((1 - QuitProbability G (p 0)) * finiteQuittingPayoff G k y
+            (fun i => p (i + 1)) n + quittingRewardPart G (p 0) n) = _
+      rw [show
+        ((1 - QuitProbability G (p 0)) * finiteQuittingPayoff G k x
+            (fun i => p (i + 1)) n + quittingRewardPart G (p 0) n) -
+          ((1 - QuitProbability G (p 0)) * finiteQuittingPayoff G k y
+            (fun i => p (i + 1)) n + quittingRewardPart G (p 0) n) =
+          (1 - QuitProbability G (p 0)) *
+            (finiteQuittingPayoff G k x (fun i => p (i + 1)) n -
+              finiteQuittingPayoff G k y (fun i => p (i + 1)) n) by ring_nf]
+      rw [ih, prod_range_succ_shift]
+      ring_nf
+
+/-- A finite quitting payoff depends only on the rows before its terminal stage. -/
+private theorem finiteQuittingPayoff_congr (G : QuittingGame) (k : ℕ)
+    (x : Payoff G.Player) (p q : ℕ → QuitRow G)
+    (h : ∀ j < k, p j = q j) :
+    finiteQuittingPayoff G k x p = finiteQuittingPayoff G k x q := by
+  induction k generalizing p q with
+  | zero => rfl
+  | succ k ih =>
+      simp only [finiteQuittingPayoff]
+      rw [h 0 (by omega)]
+      congr 1
+      apply ih
+      intro j hj
+      exact h (j + 1) (by omega)
+
+/-- Reversing the first `j` rows and iterating from `s₀` produces `sⱼ`. -/
+private theorem finiteQuittingPayoff_reverse_eq (G : QuittingGame) {k : ℕ}
+    (p : ℕ → QuitRow G) (s : ℕ → Payoff G.Player)
+    (hstep : ∀ j < k, s (j + 1) = QuittingOneStagePayoff G (s j) (p j)) :
+    ∀ j ≤ k, finiteQuittingPayoff G j (s 0) (fun i => p (j - 1 - i)) = s j := by
+  intro j hj
+  induction j with
+  | zero => simp [finiteQuittingPayoff]
+  | succ j ih =>
+      simp only [finiteQuittingPayoff]
+      have hrows : (fun i => p (j + 1 - 1 - (i + 1))) =
+          fun i => p (j - 1 - i) := by
+        funext i
+        congr 1
+        omega
+      rw [hrows, ih (by omega)]
+      simpa using (hstep j (by omega)).symm
+
 /-- Reverse and periodically repeat a finite block of quitting rows. -/
 def ReverseCycleProfile (G : QuittingGame) (k : ℕ) (_hk : 0 < k)
     (p : ℕ → QuitRow G) : QuitProfile G :=
   fun i => p (k - 1 - i % k)
+
+/-- A reverse-cycle profile repeats after one block. -/
+private theorem reverseCycleProfile_add_period (G : QuittingGame) (k : ℕ)
+    (hk : 0 < k) (p : ℕ → QuitRow G) (i : ℕ) :
+    ReverseCycleProfile G k hk p (i + k) = ReverseCycleProfile G k hk p i := by
+  simp [ReverseCycleProfile, Nat.add_mod_right]
+
+/-- Tail payoffs of a reverse-cycle profile repeat after one block. -/
+private theorem quitTailPayoff_reverseCycle_add_period (G : QuittingGame) (k : ℕ)
+    (hk : 0 < k) (p : ℕ → QuitRow G) (i : ℕ) :
+    QuitTailPayoff G (ReverseCycleProfile G k hk p) (i + k) =
+      QuitTailPayoff G (ReverseCycleProfile G k hk p) i := by
+  funext n
+  apply tsum_congr
+  intro l
+  congr 1
+  · apply Finset.prod_congr rfl
+    intro j hj
+    rw [show i + k + j = (i + j) + k by omega]
+    rw [reverseCycleProfile_add_period]
+  · apply Finset.sum_congr rfl
+    intro A hA
+    split_ifs
+    · rw [show i + k + l = (i + l) + k by omega]
+      rw [reverseCycleProfile_add_period]
+    · rfl
+
+/-- At a block boundary, a reverse-cycle profile starts with the reversed block. -/
+private theorem reverseCycleProfile_mul_add (G : QuittingGame) (k : ℕ)
+    (hk : 0 < k) (p : ℕ → QuitRow G) (m j : ℕ) (hj : j < k) :
+    ReverseCycleProfile G k hk p (m * k + j) = p (k - 1 - j) := by
+  dsimp only [ReverseCycleProfile]
+  rw [show m * k + j = j + m * k by omega]
+  rw [Nat.add_mul_mod_self_right, Nat.mod_eq_of_lt hj]
+
+/-- Every block boundary of a reverse cycle has the same tail payoff. -/
+private theorem quitTailPayoff_reverseCycle_mul (G : QuittingGame) (k : ℕ)
+    (hk : 0 < k) (p : ℕ → QuitRow G) (m : ℕ) :
+    QuitTailPayoff G (ReverseCycleProfile G k hk p) (m * k) =
+      QuitTailPayoff G (ReverseCycleProfile G k hk p) 0 := by
+  induction m with
+  | zero => simp
+  | succ m ih =>
+      rw [Nat.succ_mul]
+      rw [quitTailPayoff_reverseCycle_add_period, ih]
+
+/-- Finite quitting recursion is nonexpansive in its terminal payoff. -/
+private theorem finiteQuittingPayoff_norm_sub_le (G : QuittingGame) (k : ℕ)
+    (x y : Payoff G.Player) (p : ℕ → QuitRow G) :
+    ‖finiteQuittingPayoff G k x p - finiteQuittingPayoff G k y p‖ ≤ ‖x - y‖ := by
+  rw [pi_norm_le_iff_of_nonempty]
+  intro n
+  rw [Real.norm_eq_abs]
+  simp only [Pi.sub_apply]
+  rw [finiteQuittingPayoff_sub, abs_mul]
+  have hfactor0 : ∀ j ∈ Finset.range k,
+      0 ≤ 1 - QuitProbability G (p j) := by
+    intro j hj
+    exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+  have hfactor1 : ∀ j ∈ Finset.range k,
+      1 - QuitProbability G (p j) ≤ 1 := by
+    intro j hj
+    linarith [(quitProbability_mem_Icc G (p j)).1]
+  have hprod0 : 0 ≤ Finset.prod (Finset.range k)
+      (fun j => 1 - QuitProbability G (p j)) := Finset.prod_nonneg hfactor0
+  rw [abs_of_nonneg hprod0]
+  calc
+    Finset.prod (Finset.range k) (fun j => 1 - QuitProbability G (p j)) *
+        |x n - y n| ≤ 1 * |x n - y n| :=
+      mul_le_mul_of_nonneg_right (Finset.prod_le_one hfactor0 hfactor1) (abs_nonneg _)
+    _ ≤ ‖x - y‖ := by
+      simpa [Real.norm_eq_abs] using norm_le_pi_norm (x - y) n
+
+/-- Forced-continuation payoff is one-Lipschitz in the continuation vector. -/
+private theorem abs_forcedContinuePayoff_sub_le (G : QuittingGame)
+    (r s : Payoff G.Player) (p : QuitRow G) (n : G.Player) :
+    |ForcedContinuePayoff G r p n - ForcedContinuePayoff G s p n| ≤ ‖r - s‖ := by
+  change |(1 - QuitProbability G (p.replace G n 0)) * r n +
+      quittingRewardPart G (p.replace G n 0) n -
+    ((1 - QuitProbability G (p.replace G n 0)) * s n +
+      quittingRewardPart G (p.replace G n 0) n)| ≤ _
+  rw [show
+    (1 - QuitProbability G (p.replace G n 0)) * r n +
+        quittingRewardPart G (p.replace G n 0) n -
+      ((1 - QuitProbability G (p.replace G n 0)) * s n +
+        quittingRewardPart G (p.replace G n 0) n) =
+      (1 - QuitProbability G (p.replace G n 0)) * (r n - s n) by ring_nf]
+  rw [abs_mul]
+  have hfactor0 : 0 ≤ 1 - QuitProbability G (p.replace G n 0) :=
+    sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+  rw [abs_of_nonneg hfactor0]
+  calc
+    (1 - QuitProbability G (p.replace G n 0)) * |r n - s n| ≤
+        1 * |r n - s n| := by
+      apply mul_le_mul_of_nonneg_right _ (abs_nonneg _)
+      linarith [(quitProbability_mem_Icc G (p.replace G n 0)).1]
+    _ ≤ ‖r - s‖ := by
+      simpa [Real.norm_eq_abs] using norm_le_pi_norm (r - s) n
 
 /--
 Lemma 4.  Reversing and repeating a block whose continuation vectors return within `δ`
@@ -1687,8 +2040,8 @@ produces tail vectors within `δ/ρ`; `E_ε` membership degrades only to
 -/
 theorem lemma4 (G : QuittingGame) {k : ℕ} (hk : 0 < k)
     (p : ℕ → QuitRow G) (s : ℕ → Payoff G.Player) {ρ δ ε : ℝ}
-    (hρ : 0 < ρ) (hρ1 : ρ < 1)
-    (hprob : ρ = 1 - ∏ j ∈ Finset.range k, 1 - QuitProbability G (p j))
+    (hρ : 0 < ρ) (_hρ1 : ρ < 1)
+    (hprob : ρ = 1 - ∏ j ∈ Finset.range k, (1 - QuitProbability G (p j)))
     (hstep : ∀ j < k, s (j + 1) = QuittingOneStagePayoff G (s j) (p j))
     (hclose : ‖s 0 - s k‖ ≤ δ) :
     let cycle := ReverseCycleProfile G k hk p
@@ -1696,7 +2049,145 @@ theorem lemma4 (G : QuittingGame) {k : ℕ} (hk : 0 < k)
       ‖QuitTailPayoff G cycle i - s (m * k - i)‖ ≤ δ / ρ) ∧
     ((∀ j < k, p j ∈ EpsilonRow G ε (s j)) →
       ∀ i, cycle i ∈ EpsilonRow G (ε + δ / ρ) (QuitTailPayoff G cycle (i + 1))) := by
-  sorry
+  let cycle := ReverseCycleProfile G k hk p
+  change (∀ m i, (m - 1) * k < i → i ≤ m * k →
+      ‖QuitTailPayoff G cycle i - s (m * k - i)‖ ≤ δ / ρ) ∧
+    ((∀ j < k, p j ∈ EpsilonRow G ε (s j)) →
+      ∀ i, cycle i ∈ EpsilonRow G (ε + δ / ρ) (QuitTailPayoff G cycle (i + 1)))
+  have hcycleRows : ∀ j < k, cycle j = p (k - 1 - j) := by
+    intro j hj
+    simpa [cycle] using reverseCycleProfile_mul_add G k hk p 0 j hj
+  have hperiod : QuitTailPayoff G cycle k = QuitTailPayoff G cycle 0 := by
+    simpa [cycle] using quitTailPayoff_reverseCycle_add_period G k hk p 0
+  have hfixed : QuitTailPayoff G cycle 0 =
+      finiteQuittingPayoff G k (QuitTailPayoff G cycle 0)
+        (fun j => p (k - 1 - j)) := by
+    calc
+      QuitTailPayoff G cycle 0 =
+          finiteQuittingPayoff G k (QuitTailPayoff G cycle k) cycle := by
+        simpa using quitTailPayoff_eq_finiteQuittingPayoff G cycle 0 k
+      _ = finiteQuittingPayoff G k (QuitTailPayoff G cycle 0) cycle := by rw [hperiod]
+      _ = finiteQuittingPayoff G k (QuitTailPayoff G cycle 0)
+          (fun j => p (k - 1 - j)) :=
+        finiteQuittingPayoff_congr G k _ _ _ hcycleRows
+  have hsK : finiteQuittingPayoff G k (s 0) (fun j => p (k - 1 - j)) = s k :=
+    finiteQuittingPayoff_reverse_eq G p s hstep k le_rfl
+  have hscaled : ρ • (QuitTailPayoff G cycle 0 - s 0) = s k - s 0 := by
+    funext n
+    have hpoint := finiteQuittingPayoff_sub G k (QuitTailPayoff G cycle 0)
+      (s 0) (fun j => p (k - 1 - j)) n
+    rw [← hfixed, hsK] at hpoint
+    have hreflect := Finset.prod_range_reflect
+      (fun j => 1 - QuitProbability G (p j)) k
+    rw [hreflect] at hpoint
+    have hproduct : Finset.prod (Finset.range k)
+        (fun j => 1 - QuitProbability G (p j)) = 1 - ρ := by
+      rw [hprob]
+      ring_nf
+    rw [hproduct] at hpoint
+    simp only [Pi.smul_apply, Pi.sub_apply, smul_eq_mul]
+    linarith
+  have hboundary : ‖QuitTailPayoff G cycle 0 - s 0‖ ≤ δ / ρ := by
+    apply (le_div_iff₀ hρ).2
+    calc
+      ‖QuitTailPayoff G cycle 0 - s 0‖ * ρ =
+          ‖ρ • (QuitTailPayoff G cycle 0 - s 0)‖ := by
+        rw [norm_smul, Real.norm_eq_abs, abs_of_pos hρ]
+        ring_nf
+      _ = ‖s k - s 0‖ := congrArg norm hscaled
+      _ = ‖s 0 - s k‖ := norm_sub_rev _ _
+      _ ≤ δ := hclose
+  have hfirst : ∀ m i, (m - 1) * k < i → i ≤ m * k →
+      ‖QuitTailPayoff G cycle i - s (m * k - i)‖ ≤ δ / ρ := by
+    intro m i hlo hi
+    have hm : 0 < m := by
+      by_contra hm
+      have : m = 0 := Nat.eq_zero_of_not_pos hm
+      subst m
+      omega
+    have hmk : m * k = (m - 1) * k + k := by
+      rw [show m = (m - 1) + 1 by omega, add_mul]
+      simp
+    let j := m * k - i
+    have hij : i + j = m * k := Nat.add_sub_of_le hi
+    have hj : j < k := by
+      dsimp only [j]
+      omega
+    have hiForm : i = (m - 1) * k + (k - j) := by omega
+    have hrows : ∀ l < j, cycle (i + l) = p (j - 1 - l) := by
+      intro l hl
+      dsimp only [cycle, ReverseCycleProfile]
+      rw [hiForm]
+      rw [show (m - 1) * k + (k - j) + l =
+        (k - j + l) + (m - 1) * k by omega]
+      rw [Nat.add_mul_mod_self_right, Nat.mod_eq_of_lt (by omega : k - j + l < k)]
+      congr 1
+      omega
+    have hboundaryM : QuitTailPayoff G cycle (i + j) =
+        QuitTailPayoff G cycle 0 := by
+      rw [hij]
+      simpa [cycle] using quitTailPayoff_reverseCycle_mul G k hk p m
+    have htail : QuitTailPayoff G cycle i =
+        finiteQuittingPayoff G j (QuitTailPayoff G cycle 0)
+          (fun l => p (j - 1 - l)) := by
+      calc
+        QuitTailPayoff G cycle i =
+            finiteQuittingPayoff G j (QuitTailPayoff G cycle (i + j))
+              (fun l => cycle (i + l)) :=
+          quitTailPayoff_eq_finiteQuittingPayoff G cycle i j
+        _ = finiteQuittingPayoff G j (QuitTailPayoff G cycle 0)
+            (fun l => cycle (i + l)) := by rw [hboundaryM]
+        _ = finiteQuittingPayoff G j (QuitTailPayoff G cycle 0)
+            (fun l => p (j - 1 - l)) :=
+          finiteQuittingPayoff_congr G j _ _ _ hrows
+    have hsj : finiteQuittingPayoff G j (s 0) (fun l => p (j - 1 - l)) = s j :=
+      finiteQuittingPayoff_reverse_eq G p s hstep j (le_of_lt hj)
+    rw [show m * k - i = j by rfl, htail, ← hsj]
+    exact (finiteQuittingPayoff_norm_sub_le G j _ _ _).trans hboundary
+  refine ⟨hfirst, ?_⟩
+  intro hp i
+  let m := i / k + 1
+  let j := k - 1 - i % k
+  have hmod : i % k < k := Nat.mod_lt i hk
+  have hdecomp : i % k + k * (i / k) = i := Nat.mod_add_div i k
+  have hdecomp' : (i / k) * k + i % k = i := by
+    simpa [Nat.add_comm, Nat.mul_comm] using hdecomp
+  have hlower : (m - 1) * k < i + 1 := by
+    dsimp only [m]
+    simp only [Nat.add_sub_cancel]
+    omega
+  have hupper : i + 1 ≤ m * k := by
+    dsimp only [m]
+    rw [add_mul]
+    simp only [one_mul]
+    omega
+  have hdiff : m * k - (i + 1) = j := by
+    dsimp only [m, j]
+    rw [add_mul]
+    simp only [one_mul]
+    omega
+  have hj : j < k := by
+    dsimp only [j]
+    omega
+  have htail : ‖QuitTailPayoff G cycle (i + 1) - s j‖ ≤ δ / ρ := by
+    simpa only [hdiff] using hfirst m (i + 1) hlower hupper
+  have hcycle : cycle i = p j := by
+    rfl
+  rw [hcycle]
+  have hpj := hp j hj
+  constructor
+  · intro n hquit
+    have hfc : |ForcedContinuePayoff G (QuitTailPayoff G cycle (i + 1)) (p j) n -
+        ForcedContinuePayoff G (s j) (p j) n| ≤ δ / ρ :=
+      (abs_forcedContinuePayoff_sub_le G _ _ _ _).trans htail
+    rw [abs_le] at hfc
+    linarith [hpj.1 n hquit]
+  · intro n hcontinue
+    have hfc : |ForcedContinuePayoff G (QuitTailPayoff G cycle (i + 1)) (p j) n -
+        ForcedContinuePayoff G (s j) (p j) n| ≤ δ / ρ :=
+      (abs_forcedContinuePayoff_sub_le G _ _ _ _).trans htail
+    rw [abs_le] at hfc
+    linarith [hpj.2 n hcontinue]
 
 /-- A quitting game has stationary approximate equilibria in the paper's sense. -/
 def HasStationaryApproximateEquilibria (G : QuittingGame) : Prop :=
