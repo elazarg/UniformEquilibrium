@@ -4377,6 +4377,51 @@ theorem example1_mixedProfile_pure_diagonal_of_total_eq_one
     · exact Math.PMFProduct.eq_pure_true_of_true_toReal_eq_one _ hp'
     · exact Math.PMFProduct.eq_pure_true_of_true_toReal_eq_one _ hq
 
+/-- At a public history, Example 1's stochastic stage expectation is its
+one-stage mixed payoff at the current behavioral actions. -/
+theorem example1_stageEUAt_eq_mixedPayoff
+    (profile : example1.BehaviorProfile) {time : ℕ}
+    (history : example1.repeatedGame.Hist time) (who : Bool) :
+    example1.repeatedGame.stageEUAt profile history who =
+      example1.mixedPayoff (fun player ↦ profile player time history) who := by
+  letI : Finite example1.kernel.Outcome := by
+    change Finite (Bool → Bool)
+    exact Finite.of_fintype _
+  unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+  unfold FiniteStageGame.mixedPayoff KernelGame.payoffVector
+  rw [example1.kernel.mixedExtension_eu]
+  rfl
+
+/-- Example 1's expected aggregate payoff is at most one in every stage. -/
+theorem example1_expectedStageTotal_le_one
+    (profile : example1.BehaviorProfile) (time : ℕ) :
+    example1.repeatedGame.expectedStagePayoff profile PUnit.unit time false +
+      example1.repeatedGame.expectedStagePayoff profile PUnit.unit time true ≤ 1 := by
+  letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (example1.finiteAction player)
+  letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  rw [← Math.Probability.expect_add]
+  rw [← Math.Probability.expect_const
+    (example1.repeatedGame.histDist profile PUnit.unit time) (1 : ℝ)]
+  apply Math.Probability.expect_mono
+  intro history
+  rw [example1_stageEUAt_eq_mixedPayoff,
+    example1_stageEUAt_eq_mixedPayoff]
+  rw [binaryGame_mixedPayoff_apply, binaryGame_mixedPayoff_apply]
+  norm_num [pair]
+  let p := (profile false time history true).toReal
+  let q := (profile true time history true).toReal
+  have hp0 : 0 ≤ p := ENNReal.toReal_nonneg
+  have hq0 : 0 ≤ q := ENNReal.toReal_nonneg
+  have hp1 : p ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  have hq1 : q ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  change (1 - p) * (1 - q) + p * q ≤ 1
+  nlinarith [mul_nonneg hp0 (by linarith : 0 ≤ 1 - q),
+    mul_nonneg hq0 (by linarith : 0 ≤ 1 - p)]
+
 /-- Example 2. -/
 abbrev example2 : FiniteStageGame :=
   binaryGame (pair 1 0) (pair 2 2) (pair 0 0) (pair 0 1)
@@ -4741,7 +4786,196 @@ theorem example1_half_mem_E2 :
 
 theorem example1_half_not_mem_D3 :
     pair (1 / 2) (1 / 2) ∉ example1.finiteFeasiblePayoffs 3 := by
-  sorry
+  rintro ⟨profile, hpayoff⟩
+  letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (example1.finiteAction player)
+  letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  have hrow := congrFun hpayoff false
+  have hcolumn := congrFun hpayoff true
+  change example1.repeatedGame.finiteAveragePayoff PUnit.unit 3
+      profile false = 1 / 2 at hrow
+  change example1.repeatedGame.finiteAveragePayoff PUnit.unit 3
+      profile true = 1 / 2 at hcolumn
+  rw [example1.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+    at hrow hcolumn
+  simp only [Finset.sum_range_succ, Finset.sum_range_zero, zero_add]
+    at hrow hcolumn
+  let rowPayoff (time : ℕ) :=
+    example1.repeatedGame.expectedStagePayoff profile PUnit.unit time false
+  let columnPayoff (time : ℕ) :=
+    example1.repeatedGame.expectedStagePayoff profile PUnit.unit time true
+  change (3 : ℝ)⁻¹ * (rowPayoff 0 + rowPayoff 1 + rowPayoff 2) = 1 / 2 at hrow
+  change (3 : ℝ)⁻¹ *
+    (columnPayoff 0 + columnPayoff 1 + columnPayoff 2) = 1 / 2 at hcolumn
+  have htotal0 : rowPayoff 0 + columnPayoff 0 = 1 := by
+    have hle0 := example1_expectedStageTotal_le_one profile 0
+    have hle1 := example1_expectedStageTotal_le_one profile 1
+    have hle2 := example1_expectedStageTotal_le_one profile 2
+    change rowPayoff 0 + columnPayoff 0 ≤ 1 at hle0
+    change rowPayoff 1 + columnPayoff 1 ≤ 1 at hle1
+    change rowPayoff 2 + columnPayoff 2 ≤ 1 at hle2
+    norm_num at hrow hcolumn
+    nlinarith
+  have htotal1 : rowPayoff 1 + columnPayoff 1 = 1 := by
+    have hle0 := example1_expectedStageTotal_le_one profile 0
+    have hle1 := example1_expectedStageTotal_le_one profile 1
+    have hle2 := example1_expectedStageTotal_le_one profile 2
+    change rowPayoff 0 + columnPayoff 0 ≤ 1 at hle0
+    change rowPayoff 1 + columnPayoff 1 ≤ 1 at hle1
+    change rowPayoff 2 + columnPayoff 2 ≤ 1 at hle2
+    norm_num at hrow hcolumn
+    nlinarith
+  have htotal2 : rowPayoff 2 + columnPayoff 2 = 1 := by
+    have hle0 := example1_expectedStageTotal_le_one profile 0
+    have hle1 := example1_expectedStageTotal_le_one profile 1
+    have hle2 := example1_expectedStageTotal_le_one profile 2
+    change rowPayoff 0 + columnPayoff 0 ≤ 1 at hle0
+    change rowPayoff 1 + columnPayoff 1 ≤ 1 at hle1
+    change rowPayoff 2 + columnPayoff 2 ≤ 1 at hle2
+    norm_num at hrow hcolumn
+    nlinarith
+  let history0 := example1.repeatedGame.emptyHist PUnit.unit
+  let current0 : Bool → PMF Bool :=
+    fun player ↦ profile player 0 history0
+  have hcurrent0_total :
+      example1.mixedPayoff current0 false +
+        example1.mixedPayoff current0 true = 1 := by
+    rw [← example1_stageEUAt_eq_mixedPayoff profile history0 false,
+      ← example1_stageEUAt_eq_mixedPayoff profile history0 true]
+    simpa [rowPayoff, columnPayoff, history0] using htotal0
+  obtain ⟨diagonal0, hcurrent0false, hcurrent0true⟩ :=
+    example1_mixedProfile_pure_diagonal_of_total_eq_one
+      current0 hcurrent0_total
+  let action0 : example1.repeatedGame.JointAct := fun _ ↦ diagonal0
+  have haction0 :
+      example1.repeatedGame.stageActionDist profile history0 =
+        PMF.pure action0 := by
+    unfold StochasticGame.stageActionDist
+    have hcurrent : (fun player ↦ profile player 0 history0) =
+        fun player ↦ PMF.pure (action0 player) := by
+      funext player
+      cases player
+      · exact hcurrent0false
+      · exact hcurrent0true
+    change Math.PMFProduct.pmfPi
+      (fun player : Bool ↦ profile player 0 history0) = PMF.pure action0
+    rw [hcurrent]
+    exact Math.PMFProduct.pmfPi_pure action0
+  let history1 : example1.repeatedGame.Hist 1 :=
+    (Fin.snoc history0.1 (PUnit.unit, action0), PUnit.unit)
+  have hhist1 :
+      example1.repeatedGame.histDist profile PUnit.unit 1 =
+        PMF.pure history1 := by
+    simp only [StochasticGame.histDist, PMF.pure_bind]
+    rw [show example1.repeatedGame.emptyHist PUnit.unit = history0 by rfl,
+      haction0, PMF.pure_bind]
+    simp only [history1, history0, StochasticGame.emptyHist]
+    change ((PMF.pure PUnit.unit : PMF PUnit).bind fun state ↦
+      PMF.pure (history1.1, state)) = PMF.pure history1
+    rw [PMF.pure_bind]
+    rfl
+  have hstage1_total :
+      example1.repeatedGame.stageEUAt profile history1 false +
+        example1.repeatedGame.stageEUAt profile history1 true = 1 := by
+    have htotal := htotal1
+    change example1.repeatedGame.expectedStagePayoff profile PUnit.unit 1 false +
+      example1.repeatedGame.expectedStagePayoff profile PUnit.unit 1 true = 1
+      at htotal
+    unfold StochasticGame.expectedStagePayoff at htotal
+    rw [hhist1] at htotal
+    simpa using htotal
+  let current1 : Bool → PMF Bool :=
+    fun player ↦ profile player 1 history1
+  have hcurrent1_total :
+      example1.mixedPayoff current1 false +
+        example1.mixedPayoff current1 true = 1 := by
+    rw [← example1_stageEUAt_eq_mixedPayoff profile history1 false,
+      ← example1_stageEUAt_eq_mixedPayoff profile history1 true]
+    exact hstage1_total
+  obtain ⟨diagonal1, hcurrent1false, hcurrent1true⟩ :=
+    example1_mixedProfile_pure_diagonal_of_total_eq_one
+      current1 hcurrent1_total
+  let action1 : example1.repeatedGame.JointAct := fun _ ↦ diagonal1
+  have haction1 :
+      example1.repeatedGame.stageActionDist profile history1 =
+        PMF.pure action1 := by
+    unfold StochasticGame.stageActionDist
+    have hcurrent : (fun player ↦ profile player 1 history1) =
+        fun player ↦ PMF.pure (action1 player) := by
+      funext player
+      cases player
+      · exact hcurrent1false
+      · exact hcurrent1true
+    change Math.PMFProduct.pmfPi
+      (fun player : Bool ↦ profile player 1 history1) = PMF.pure action1
+    rw [hcurrent]
+    exact Math.PMFProduct.pmfPi_pure action1
+  let history2 : example1.repeatedGame.Hist 2 :=
+    (Fin.snoc history1.1 (PUnit.unit, action1), PUnit.unit)
+  have hhist2 :
+      example1.repeatedGame.histDist profile PUnit.unit 2 =
+        PMF.pure history2 := by
+    change example1.repeatedGame.histDist profile PUnit.unit (1 + 1) =
+      PMF.pure history2
+    rw [example1.repeatedGame.histDist_succ, hhist1, PMF.pure_bind,
+      haction1, PMF.pure_bind]
+    simp only [history2]
+    change ((PMF.pure PUnit.unit : PMF PUnit).bind fun state ↦
+      PMF.pure (history2.1, state)) = PMF.pure history2
+    rw [PMF.pure_bind]
+    rfl
+  have hstage2_total :
+      example1.repeatedGame.stageEUAt profile history2 false +
+        example1.repeatedGame.stageEUAt profile history2 true = 1 := by
+    have htotal := htotal2
+    change example1.repeatedGame.expectedStagePayoff profile PUnit.unit 2 false +
+      example1.repeatedGame.expectedStagePayoff profile PUnit.unit 2 true = 1
+      at htotal
+    unfold StochasticGame.expectedStagePayoff at htotal
+    rw [hhist2] at htotal
+    simpa using htotal
+  let current2 : Bool → PMF Bool :=
+    fun player ↦ profile player 2 history2
+  have hcurrent2_total :
+      example1.mixedPayoff current2 false +
+        example1.mixedPayoff current2 true = 1 := by
+    rw [← example1_stageEUAt_eq_mixedPayoff profile history2 false,
+      ← example1_stageEUAt_eq_mixedPayoff profile history2 true]
+    exact hstage2_total
+  obtain ⟨diagonal2, hcurrent2false, hcurrent2true⟩ :=
+    example1_mixedProfile_pure_diagonal_of_total_eq_one
+      current2 hcurrent2_total
+  have hrow0 : rowPayoff 0 = if diagonal0 then 0 else 1 := by
+    change example1.repeatedGame.expectedStagePayoff
+      profile PUnit.unit 0 false = _
+    rw [example1.repeatedGame.expectedStagePayoff_zero,
+      example1_stageEUAt_eq_mixedPayoff]
+    change example1.mixedPayoff current0 false = _
+    rw [binaryGame_mixedPayoff_apply, hcurrent0false, hcurrent0true]
+    cases diagonal0 <;> norm_num [pair]
+  have hrow1 : rowPayoff 1 = if diagonal1 then 0 else 1 := by
+    change example1.repeatedGame.expectedStagePayoff
+      profile PUnit.unit 1 false = _
+    unfold StochasticGame.expectedStagePayoff
+    rw [hhist1]
+    simp only [Math.Probability.expect_pure]
+    rw [example1_stageEUAt_eq_mixedPayoff]
+    change example1.mixedPayoff current1 false = _
+    rw [binaryGame_mixedPayoff_apply, hcurrent1false, hcurrent1true]
+    cases diagonal1 <;> norm_num [pair]
+  have hrow2 : rowPayoff 2 = if diagonal2 then 0 else 1 := by
+    change example1.repeatedGame.expectedStagePayoff
+      profile PUnit.unit 2 false = _
+    unfold StochasticGame.expectedStagePayoff
+    rw [hhist2]
+    simp only [Math.Probability.expect_pure]
+    rw [example1_stageEUAt_eq_mixedPayoff]
+    change example1.mixedPayoff current2 false = _
+    rw [binaryGame_mixedPayoff_apply, hcurrent2false, hcurrent2true]
+    cases diagonal2 <;> norm_num [pair]
+  rw [hrow0, hrow1, hrow2] at hrow
+  cases diagonal0 <;> cases diagonal1 <;> cases diagonal2 <;>
+    norm_num at hrow
 
 /-- The same payoff is not feasible in one stage. -/
 theorem example1_half_not_mem_D1 :
