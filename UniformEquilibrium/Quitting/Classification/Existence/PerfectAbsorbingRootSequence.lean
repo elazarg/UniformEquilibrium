@@ -100,10 +100,10 @@ omit [DecidableEq ι] in
 /-- **Rounding-error contraction.**  If every stage's row is produced against
 a plan vector within `η` of the previous stage's produced value, and every
 stage absorbs at least `δ`, then the sequence's actual continuation values
-stay within `η / δ` of the produced values: the value recursion's slope is
-the survival mass, at most `1 - δ`, so the rounding errors form a geometric
-series. -/
-theorem abs_terminalValue_sub_successor_le_of_approximate_chain
+stay within `(1 - δ) * η / δ` of the produced values: the successor value at
+a stage differs from the actual terminal value only through survival of that
+stage, so the geometric error bound retains the factor `1 - δ`. -/
+theorem abs_terminalValue_sub_successor_le_of_approximate_chain_sharp
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (plan : ℕ → Payoff ι)
     {R δ η : ℝ} (hR0 : 0 ≤ R) (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hη0 : 0 ≤ η)
@@ -116,7 +116,7 @@ theorem abs_terminalValue_sub_successor_le_of_approximate_chain
     ∀ n who,
       |quittingRootSequenceTerminalValue reward roots who n -
         quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who| ≤
-        η / δ := by
+        (1 - δ) * η / δ := by
   have hηδ0 : 0 ≤ η / δ := div_nonneg hη0 hδ0.le
   have hvalueBound : ∀ n who,
       |quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who| ≤ R :=
@@ -202,10 +202,33 @@ theorem abs_terminalValue_sub_successor_le_of_approximate_chain
     (fun m => honestep m who) n
   have hslope : 1 - (1 - δ) = δ := by ring
   rw [hslope] at hscalar
-  have hweaken : (1 - δ) * η / δ ≤ η / δ := by
+  exact hscalar
+
+omit [DecidableEq ι] in
+/-- Compatibility form of rounding-error contraction, with the survival
+factor weakened away. -/
+theorem abs_terminalValue_sub_successor_le_of_approximate_chain
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (plan : ℕ → Payoff ι)
+    {R δ η : ℝ} (hR0 : 0 ≤ R) (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hη0 : 0 ≤ η)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ R)
+    (hplanBound : ∀ n who, |plan n who| ≤ R)
+    (hmass : ∀ n, quittingStationaryContinueMass (roots n) ≤ 1 - δ)
+    (hclose : ∀ n who,
+      |plan n who -
+        quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who| ≤ η) :
+    ∀ n who,
+      |quittingRootSequenceTerminalValue reward roots who n -
+        quittingRootSuccessorPayoff reward (plan (n + 1)) (roots n) who| ≤
+        η / δ := by
+  intro n who
+  have hsharp :=
+    abs_terminalValue_sub_successor_le_of_approximate_chain_sharp reward roots
+      plan hR0 hδ0 hδ1 hη0 hreward hplanBound hmass hclose n who
+  have hfactor : (1 - δ) * η / δ ≤ η / δ := by
     gcongr
     nlinarith
-  linarith
+  exact hsharp.trans hfactor
 
 /-! ## The perfect absorbing sequence -/
 
