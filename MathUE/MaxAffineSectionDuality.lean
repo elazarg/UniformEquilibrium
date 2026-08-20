@@ -194,11 +194,9 @@ end Label
 
 section Graph
 
-open Math.BoundedDiscrepancy
-
 universe uV uE
 
-variable {V : Type uV} {E : Type uE} {G : Math.BoundedDiscrepancy.EdgeGraph V E}
+variable {V : Type uV} {E : Type uE} {G : Math.EdgeGraph V E}
 
 /-! ### The subunit-slope regime -/
 

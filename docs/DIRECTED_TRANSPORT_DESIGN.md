@@ -35,12 +35,19 @@ weights but *parameters of the edge maps*; survival products arise because
 maps compose, and the valuation module describes the family's degeneration as
 the hazards vanish.
 
-## Two layers, two modules
+## Graph carrier and two semantic layers
+
+### Graph layer — `MathUE/EdgeGraph.lean`
+
+The graph carrier and finite typed-walk calculus live here: explicit edge
+identities, chronological edge lists, endpoint facts, concatenation, edge
+multiplicities, and splitting and splicing at visited vertices. This layer has
+no edge labels, transport, charges, or discrepancy.
 
 ### Layer 0 — `MathUE/DirectedTransport.lean`
 
 Deliberately small; no category-theory library.  Data over
-`Math.BoundedDiscrepancy.EdgeGraph V E`:
+`Math.EdgeGraph V E`:
 
 ```
 Fiber   : V → Type*

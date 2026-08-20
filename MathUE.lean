@@ -78,6 +78,7 @@ import MathUE.CyclicExposure
 import MathUE.CyclicMaxAffineBound
 import MathUE.DirectedTransport
 import MathUE.DivergentChargeRecurrence
+import MathUE.EdgeGraph
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
 import MathUE.FiniteInequalityCompatibility

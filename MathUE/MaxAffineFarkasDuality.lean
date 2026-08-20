@@ -119,7 +119,7 @@ end Label
 
 section Counterexample
 
-open Math.BoundedDiscrepancy
+open Math
 
 /-- One vertex with two loops. -/
 def loopGraph : EdgeGraph Unit Bool where
@@ -242,7 +242,7 @@ end Counterexample
 
 section Farkas
 
-open Math.BoundedDiscrepancy
+open Math
 
 variable {V E : Type*} [Fintype V] [DecidableEq V] {G : EdgeGraph V E} {label : E → Label}
 
