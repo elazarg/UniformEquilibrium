@@ -1,4 +1,5 @@
 import Literature.Simon2007
+import MathUE.BonferroniProductBounds
 import MathUE.LinearAlgebra.UniformNonsingularity
 
 /-!
@@ -1330,6 +1331,187 @@ def Section4J (G : QuittingGame) {M d : ℝ}
   HomotopyTerminalImage (TruncatedW G R) (Section4H G inverse cutoff) ∪
     correspondenceGraph (GluedFiber G R ε δ)
 
+/-- The mass of the nonempty Bernoulli coalitions is the one-stage quit probability. -/
+private theorem nonemptyCoalitionMass_eq_quitProbability
+    (G : QuittingGame) (p : QuitRow G) :
+    (∑ A ∈ Finset.univ.powerset,
+        if A.Nonempty then CoalitionProbability G p A else 0) =
+      QuitProbability G p := by
+  classical
+  have hsum := coalitionProbability_sum G p
+  have hempty : CoalitionProbability G p ∅ = 1 - QuitProbability G p := by
+    simp [CoalitionProbability, QuitProbability]
+  calc
+    ∑ A ∈ Finset.univ.powerset,
+        (if A.Nonempty then CoalitionProbability G p A else 0) =
+        (∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A) -
+          CoalitionProbability G p ∅ := by
+      rw [← Finset.sum_filter]
+      have hfilter : Finset.univ.powerset.filter (fun A => A.Nonempty) =
+          Finset.univ.powerset.erase (∅ : Finset G.Player) := by
+        ext A
+        simp [Finset.nonempty_iff_ne_empty]
+      rw [hfilter]
+      have hdecomp := Finset.sum_erase_add Finset.univ.powerset
+        (fun A => CoalitionProbability G p A)
+        (by simp : (∅ : Finset G.Player) ∈ Finset.univ.powerset)
+      linarith
+    _ = QuitProbability G p := by rw [hsum, hempty]; ring
+
+/-- Centering the immediate reward at one terminal payoff costs at most quit mass. -/
+private theorem centeredRewardPart_mem_Icc
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player)
+    (reference : {A : Finset G.Player // A.Nonempty}) {D : ℝ}
+    (_hD : 0 ≤ D) (hbound : ∀ A, |G.reward A n - G.reward reference n| ≤ D) :
+    (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+        CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0) -
+          QuitProbability G p * G.reward reference n ∈
+      Set.Icc (-D * QuitProbability G p) (D * QuitProbability G p) := by
+  classical
+  let centered : ℝ := ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+    CoalitionProbability G p A * (G.reward ⟨A, hA⟩ n - G.reward reference n) else 0
+  have hcentered :
+      (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+          CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0) -
+            QuitProbability G p * G.reward reference n = centered := by
+    rw [← nonemptyCoalitionMass_eq_quitProbability G p]
+    simp only [Finset.sum_mul]
+    dsimp only [centered]
+    rw [← Finset.sum_sub_distrib]
+    apply Finset.sum_congr rfl
+    intro A hA
+    split_ifs <;> ring
+  rw [hcentered]
+  constructor
+  · rw [← nonemptyCoalitionMass_eq_quitProbability G p, Finset.mul_sum]
+    dsimp only [centered]
+    apply Finset.sum_le_sum
+    intro A hA
+    split_ifs with hnonempty
+    · have hprob := coalitionProbability_nonneg G p A
+      have hreward := neg_le_of_abs_le (hbound ⟨A, hnonempty⟩)
+      simpa only [mul_comm] using mul_le_mul_of_nonneg_left hreward hprob
+    · simp
+  · rw [← nonemptyCoalitionMass_eq_quitProbability G p, Finset.mul_sum]
+    dsimp only [centered]
+    apply Finset.sum_le_sum
+    intro A hA
+    split_ifs with hnonempty
+    · have hprob := coalitionProbability_nonneg G p A
+      simpa only [mul_comm] using
+        mul_le_mul_of_nonneg_left (le_of_abs_le (hbound ⟨A, hnonempty⟩)) hprob
+    · simp
+
+/-- A row whose coordinates are at most `δ` quits with probability at most `|N|δ`. -/
+private theorem quitProbability_le_card_mul
+    (G : QuittingGame) (p : QuitRow G) {δ : ℝ} (hp : ∀ n, (p n : ℝ) ≤ δ) :
+    QuitProbability G p ≤ (Fintype.card G.Player : ℝ) * δ := by
+  calc
+    QuitProbability G p ≤ ∑ n ∈ Finset.univ, (p n : ℝ) := by
+      exact Math.one_sub_prod_one_sub_le_sum (fun n => (p n : ℝ)) Finset.univ
+        (fun n _ => (p n).property.1) (fun n _ => (p n).property.2)
+    _ ≤ ∑ _n ∈ (Finset.univ : Finset G.Player), δ := by
+      exact Finset.sum_le_sum fun n _ => hp n
+    _ = (Fintype.card G.Player : ℝ) * δ := by simp
+
+/-- With one player forced to quit, the singleton atom is opponent survival. -/
+private theorem forcedQuit_singletonProbability
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
+    CoalitionProbability G (p.replace G n 1) {n} =
+      1 - QuitProbability G (p.replace G n 0) := by
+  classical
+  simp only [CoalitionProbability, QuitProbability, QuitRow.replace]
+  rw [Finset.prod_singleton]
+  simp only [if_pos, Set.Icc.coe_one, one_mul]
+  ring_nf
+  have hfilter : Finset.univ.filter (fun k : G.Player => k ∉ ({n} : Finset G.Player)) =
+      Finset.univ.erase n := by
+    ext k
+    simp [eq_comm]
+  rw [hfilter]
+  have hprod := Finset.mul_prod_erase Finset.univ
+    (fun k : G.Player => 1 - (((if k = n then (0 : Set.Icc (0 : ℝ) 1) else p k) :
+      Set.Icc (0 : ℝ) 1) : ℝ)) (Finset.mem_univ n)
+  simp only [if_pos, Set.Icc.coe_zero, sub_zero, one_mul] at hprod
+  rw [← hprod]
+  apply Finset.prod_congr rfl
+  intro k hk
+  have hkn : k ≠ n := Finset.ne_of_mem_erase hk
+  simp [hkn]
+
+/-- Forcing one player to quit changes her solo payoff only through opponent quitting. -/
+private theorem forcedQuitPayoff_sub_solo_mem_Icc
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player) {D : ℝ}
+    (hD : 0 ≤ D)
+    (hbound : ∀ A, |G.reward A n - SoloPayoff G n| ≤ D) :
+    ForcedQuitPayoff G p n - SoloPayoff G n ∈
+      Set.Icc (-D * QuitProbability G (p.replace G n 0))
+        (D * QuitProbability G (p.replace G n 0)) := by
+  classical
+  let pQuit := p.replace G n 1
+  let singleton : Finset G.Player := {n}
+  let centered : Finset G.Player → ℝ := fun A => if hA : A.Nonempty then
+    CoalitionProbability G pQuit A * (G.reward ⟨A, hA⟩ n - SoloPayoff G n) else 0
+  have hpQuit : QuitProbability G pQuit = 1 := quitProbability_replace_one G p n
+  have hcentered : ForcedQuitPayoff G p n - SoloPayoff G n =
+      ∑ A ∈ Finset.univ.powerset, centered A := by
+    change QuittingOneStagePayoff G 0 pQuit n - SoloPayoff G n = _
+    simp only [QuittingOneStagePayoff, hpQuit, sub_self, zero_mul, zero_add]
+    have hmass : (∑ A ∈ Finset.univ.powerset,
+        if A.Nonempty then CoalitionProbability G pQuit A else 0) = 1 := by
+      rw [nonemptyCoalitionMass_eq_quitProbability G pQuit, hpQuit]
+    rw [show SoloPayoff G n = 1 * SoloPayoff G n by ring, ← hmass]
+    simp only [Finset.sum_mul]
+    dsimp only [centered]
+    rw [← Finset.sum_sub_distrib]
+    apply Finset.sum_congr rfl
+    intro A hA
+    split_ifs <;> ring
+  have hsingleton : centered singleton = 0 := by
+    simp [centered, singleton, pQuit, SoloPayoff]
+  have hmass :
+      ∑ A ∈ Finset.univ.powerset.erase singleton,
+          CoalitionProbability G pQuit A = QuitProbability G (p.replace G n 0) := by
+    have hmem : singleton ∈ (Finset.univ.powerset : Finset (Finset G.Player)) := by
+      simp [singleton]
+    have hdecomp := Finset.sum_erase_add Finset.univ.powerset
+      (fun A => CoalitionProbability G pQuit A) hmem
+    rw [coalitionProbability_sum G pQuit] at hdecomp
+    have hsingle : CoalitionProbability G pQuit singleton =
+        1 - QuitProbability G (p.replace G n 0) := by
+      exact forcedQuit_singletonProbability G p n
+    rw [hsingle] at hdecomp
+    linarith
+  rw [hcentered]
+  have herase : ∑ A ∈ Finset.univ.powerset, centered A =
+      ∑ A ∈ Finset.univ.powerset.erase singleton, centered A := by
+    have hmem : singleton ∈ (Finset.univ.powerset : Finset (Finset G.Player)) := by
+      simp [singleton]
+    have hdecomp := Finset.sum_erase_add Finset.univ.powerset centered hmem
+    rw [hsingleton, add_zero] at hdecomp
+    exact hdecomp.symm
+  rw [herase]
+  constructor
+  · rw [← hmass, Finset.mul_sum]
+    apply Finset.sum_le_sum
+    intro A hA
+    dsimp only [centered]
+    split_ifs with hnonempty
+    · simpa only [mul_comm] using mul_le_mul_of_nonneg_left
+        (neg_le_of_abs_le (hbound ⟨A, hnonempty⟩))
+        (coalitionProbability_nonneg G pQuit A)
+    · exact mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.mpr hD)
+        (coalitionProbability_nonneg G pQuit A)
+  · rw [← hmass, Finset.mul_sum]
+    apply Finset.sum_le_sum
+    intro A hA
+    dsimp only [centered]
+    split_ifs with hnonempty
+    · simpa only [mul_comm] using mul_le_mul_of_nonneg_left
+        (le_of_abs_le (hbound ⟨A, hnonempty⟩))
+        (coalitionProbability_nonneg G pQuit A)
+    · exact mul_nonneg hD (coalitionProbability_nonneg G pQuit A)
+
 /--
 Lemma 4.2: the upper glue is contained in `F_ε`.  Membership of `x` in the
 upper neighborhood is explicit; without it `UpperGlueFiber` contains the
@@ -1343,7 +1525,124 @@ theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
     (hδ : δ = Section4Delta G M ε) :
     ∀ x, x ∈ UpperNeighborhood G R ε → ∀ y,
       y ∈ UpperGlueFiber G R ε δ x → y ∈ FRow G ε x := by
-  sorry
+  classical
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hcardNat : 0 < Fintype.card G.Player := Fintype.card_pos
+  have hcard : 0 < (Fintype.card G.Player : ℝ) := by exact_mod_cast hcardNat
+  have hδpos : 0 < δ := by
+    rw [hδ, Section4Delta]
+    positivity
+  have hscale : M / 3 * ((Fintype.card G.Player : ℝ) * δ) = ε / 6 := by
+    rw [hδ, Section4Delta]
+    field_simp
+    ring
+  have hrewardDiff : ∀ n A, |G.reward A n - SoloPayoff G n| ≤ M / 3 := by
+    intro n A
+    have hbound := hM.2.2 A
+      ⟨{n}, Finset.singleton_nonempty n⟩ n
+    dsimp only [SoloPayoff]
+    nlinarith
+  intro x hx y hy
+  rw [UpperNeighborhood] at hx
+  rcases Set.mem_iUnion.mp hx with ⟨witness, hxWitness⟩
+  rcases hy with ⟨p, rfl, hp⟩
+  have hpδ : ∀ n, (p n : ℝ) ≤ δ := by
+    intro n
+    by_cases hn : x ∈ UpperNeighborhoodFor G R ε n
+    · simpa [hn] using hp n
+    · have hzero : (p n : ℝ) = 0 := by simpa [hn] using hp n
+      linarith
+  have hreplaceδ : ∀ n k, ((p.replace G n 0) k : ℝ) ≤ δ := by
+    intro n k
+    by_cases hkn : k = n
+    · subst k
+      simp [QuitRow.replace, hδpos.le]
+    · simpa [QuitRow.replace, hkn] using hpδ k
+  have hquitBound : ∀ n,
+      QuitProbability G (p.replace G n 0) ≤
+        (Fintype.card G.Player : ℝ) * δ := by
+    intro n
+    exact quitProbability_le_card_mul G (p.replace G n 0) (hreplaceδ n)
+  have herror : ∀ n,
+      M / 3 * QuitProbability G (p.replace G n 0) ≤ ε / 6 := by
+    intro n
+    calc
+      M / 3 * QuitProbability G (p.replace G n 0) ≤
+          M / 3 * ((Fintype.card G.Player : ℝ) * δ) :=
+        mul_le_mul_of_nonneg_left (hquitBound n) (by positivity)
+      _ = ε / 6 := hscale
+  have hforced : ∀ n,
+      ForcedQuitPayoff G p n - SoloPayoff G n ∈
+        Set.Icc (-(ε / 6)) (ε / 6) := by
+    intro n
+    have hraw := forcedQuitPayoff_sub_solo_mem_Icc G p n
+      (show 0 ≤ M / 3 by positivity) (hrewardDiff n)
+    constructor <;> nlinarith [herror n, hraw.1, hraw.2]
+  have hcontinueLower : ∀ n,
+      SoloPayoff G n - ε / 2 ≤ ForcedContinuePayoff G x p n := by
+    intro n
+    let row := p.replace G n 0
+    let q := QuitProbability G row
+    have hq := quitProbability_mem_Icc G row
+    have hxLower : SoloPayoff G n - ε / 3 ≤ x n := (hxWitness.1 n).1
+    have hweighted :
+        (1 - q) * (SoloPayoff G n - ε / 3) ≤ (1 - q) * x n :=
+      mul_le_mul_of_nonneg_left hxLower (by linarith [hq.2])
+    have hcentered := centeredRewardPart_mem_Icc G row n
+      ⟨{n}, Finset.singleton_nonempty n⟩
+      (show 0 ≤ M / 3 by positivity) (hrewardDiff n)
+    have hcentered' :
+        (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+            CoalitionProbability G row A * G.reward ⟨A, hA⟩ n else 0) -
+              q * SoloPayoff G n ∈
+          Set.Icc (-(M / 3) * q) (M / 3 * q) := by
+      simpa only [q, SoloPayoff] using hcentered
+    have hqError : M / 3 * q ≤ ε / 6 := by
+      simpa only [row, q] using herror n
+    have hεq : 0 ≤ q * (ε / 3) := mul_nonneg hq.1 (by positivity)
+    change SoloPayoff G n - ε / 2 ≤
+      (1 - q) * x n +
+        ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+          CoalitionProbability G row A * G.reward ⟨A, hA⟩ n else 0
+    dsimp only [q] at hweighted hcentered' hqError hεq ⊢
+    nlinarith [hweighted, hcentered'.1, hεq]
+  have hcontinueUpper : ∀ n, x n ≤ SoloPayoff G n + ε / 3 →
+      ForcedContinuePayoff G x p n ≤ SoloPayoff G n + ε / 2 := by
+    intro n hxUpper
+    let row := p.replace G n 0
+    let q := QuitProbability G row
+    have hq := quitProbability_mem_Icc G row
+    have hweighted :
+        (1 - q) * x n ≤ (1 - q) * (SoloPayoff G n + ε / 3) :=
+      mul_le_mul_of_nonneg_left hxUpper (by linarith [hq.2])
+    have hcentered := centeredRewardPart_mem_Icc G row n
+      ⟨{n}, Finset.singleton_nonempty n⟩
+      (show 0 ≤ M / 3 by positivity) (hrewardDiff n)
+    have hcentered' :
+        (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+            CoalitionProbability G row A * G.reward ⟨A, hA⟩ n else 0) -
+              q * SoloPayoff G n ∈
+          Set.Icc (-(M / 3) * q) (M / 3 * q) := by
+      simpa only [q, SoloPayoff] using hcentered
+    have hqError : M / 3 * q ≤ ε / 6 := by
+      simpa only [row, q] using herror n
+    have hεq : 0 ≤ q * (ε / 3) := mul_nonneg hq.1 (by positivity)
+    change (1 - q) * x n +
+        (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+          CoalitionProbability G row A * G.reward ⟨A, hA⟩ n else 0) ≤
+      SoloPayoff G n + ε / 2
+    dsimp only [q] at hweighted hcentered' hqError hεq ⊢
+    nlinarith [hweighted, hcentered'.2, hεq]
+  refine ⟨p, ⟨?_, ?_⟩, rfl⟩
+  · intro n hnQuit
+    have hnNeighborhood : x ∈ UpperNeighborhoodFor G R ε n := by
+      by_contra hn
+      have hzero : (p n : ℝ) = 0 := by simpa [hn] using hp n
+      linarith
+    have hxUpper : x n ≤ SoloPayoff G n + ε / 3 := hnNeighborhood.2
+    linarith [hforced n |>.1, hcontinueUpper n hxUpper]
+  · intro n _hnContinue
+    linarith [hcontinueLower n, hforced n |>.2]
 
 /--
 Lemma 4.3's coordinate drift statement for `z = f(x,p)`, under the standing
