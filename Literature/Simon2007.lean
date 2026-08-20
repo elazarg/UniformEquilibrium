@@ -1580,6 +1580,17 @@ theorem quitProbability_replace_zero_le (G : QuittingGame) (p : QuitRow G)
       simpa [QuitRow.replace] using (p n).property.1
     · simp [QuitRow.replace, hin]
 
+/-- If one player quits surely, somebody quits with probability one. -/
+theorem quitProbability_replace_one (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) : QuitProbability G (p.replace G n 1) = 1 := by
+  simp only [QuitProbability]
+  have hn : n ∈ Finset.univ := Finset.mem_univ n
+  have hprod : (∏ i, (1 - ((p.replace G n 1) i : ℝ))) = 0 := by
+    apply Finset.prod_eq_zero hn
+    simp [QuitRow.replace]
+  rw [hprod]
+  ring
+
 /-- `aⁿ(p)` is player `n`'s expected payoff when she is forced to quit. -/
 def ForcedQuitPayoff (G : QuittingGame) (p : QuitRow G) (n : G.Player) : ℝ :=
   QuittingOneStagePayoff G 0 (p.replace G n 1) n
@@ -2635,6 +2646,81 @@ theorem quittingOneStagePayoff_zero (G : QuittingGame) (r : Payoff G.Player) :
     simp
   · rfl
 
+/-- The pure row in which exactly player `j` quits. -/
+def SoloQuitRow (G : QuittingGame) (j : G.Player) : QuitRow G :=
+  by
+    classical
+    exact fun k => if k = j then 1 else 0
+
+/-- The designated singleton has probability one under its pure solo-quit row. -/
+theorem coalitionProbability_soloQuitRow_singleton (G : QuittingGame) (j : G.Player) :
+    CoalitionProbability G (SoloQuitRow G j) {j} = 1 := by
+  classical
+  simp only [CoalitionProbability, SoloQuitRow]
+  have hfirst :
+      (∏ n ∈ ({j} : Finset G.Player),
+        (((if n = j then (1 : Set.Icc (0 : ℝ) 1) else 0) :
+          Set.Icc (0 : ℝ) 1) : ℝ)) = 1 := by
+    simp
+  rw [hfirst, one_mul]
+  apply Finset.prod_eq_one
+  intro n hn
+  have hnj : n ≠ j := by simpa using hn
+  simp [hnj]
+
+/-- Every other coalition has probability zero under a pure solo-quit row. -/
+theorem coalitionProbability_soloQuitRow_other (G : QuittingGame) (j : G.Player)
+    (A : Finset G.Player) (hA : A ≠ {j}) :
+    CoalitionProbability G (SoloQuitRow G j) A = 0 := by
+  classical
+  simp only [CoalitionProbability, SoloQuitRow]
+  by_cases hjA : j ∈ A
+  · have hexists : ∃ k ∈ A, k ≠ j := by
+      by_contra hnone
+      push Not at hnone
+      apply hA
+      apply Finset.Subset.antisymm
+      · intro k hk
+        exact Finset.mem_singleton.mpr (hnone k hk)
+      · exact Finset.singleton_subset_iff.mpr hjA
+    rcases hexists with ⟨k, hkA, hkj⟩
+    have hprod : (∏ n ∈ A, (((if n = j then (1 : Set.Icc (0 : ℝ) 1) else 0) :
+        Set.Icc (0 : ℝ) 1) : ℝ)) = 0 := by
+      apply Finset.prod_eq_zero hkA
+      simp [hkj]
+    rw [hprod, zero_mul]
+  · have hjcomp : j ∈ Finset.univ.filter (fun n => n ∉ A) := by simp [hjA]
+    apply mul_eq_zero_of_right
+    apply Finset.prod_eq_zero hjcomp
+    simp
+
+/-- A pure solo-quit row pays the corresponding singleton reward. -/
+theorem quittingOneStagePayoff_soloQuitRow (G : QuittingGame)
+    (r : Payoff G.Player) (j : G.Player) :
+    QuittingOneStagePayoff G r (SoloQuitRow G j) =
+      G.reward ⟨{j}, Finset.singleton_nonempty j⟩ := by
+  classical
+  funext n
+  simp only [QuittingOneStagePayoff]
+  have hq : QuitProbability G (SoloQuitRow G j) = 1 := by
+    simp only [QuitProbability, SoloQuitRow]
+    have hprod :
+        (∏ k, (1 - ((((if k = j then (1 : Set.Icc (0 : ℝ) 1) else 0) :
+          Set.Icc (0 : ℝ) 1)) : ℝ))) = 0 := by
+      apply Finset.prod_eq_zero (Finset.mem_univ j)
+      norm_num
+    rw [hprod]
+    ring
+  rw [hq]
+  norm_num
+  rw [Finset.sum_eq_single_of_mem {j} (by simp)]
+  · simp [coalitionProbability_soloQuitRow_singleton]
+  · intro A hA hne
+    split_ifs with hnonempty
+    · rw [coalitionProbability_soloQuitRow_other G j A hne]
+      simp
+    · rfl
+
 /-- A one-stage payoff is the affine combination of its forced-quit endpoints. -/
 theorem quittingOneStagePayoff_replace_affine (G : QuittingGame)
     (r : Payoff G.Player) (p : QuitRow G) (n : G.Player)
@@ -2684,6 +2770,50 @@ theorem quittingOneStagePayoff_replace_affine (G : QuittingGame)
   rw [hcontinue q, hcontinue 1, hcontinue 0]
   rw [coalitionProbability_replace_affine G p n q ∅, hempty, hreward]
   simp only [zero_mul]
+  ring
+
+/-- Every payoff coordinate is affine in any one player's quitting probability. -/
+theorem quittingOneStagePayoff_replace_affine_coord (G : QuittingGame)
+    (r : Payoff G.Player) (p : QuitRow G) (n : G.Player)
+    (q : Set.Icc (0 : ℝ) 1) (k : G.Player) :
+    QuittingOneStagePayoff G r (p.replace G n q) k =
+      (q : ℝ) * QuittingOneStagePayoff G r (p.replace G n 1) k +
+        (1 - (q : ℝ)) * QuittingOneStagePayoff G r (p.replace G n 0) k := by
+  classical
+  let rewardPart (a : Set.Icc (0 : ℝ) 1) : ℝ :=
+    ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+      CoalitionProbability G (p.replace G n a) A * G.reward ⟨A, hA⟩ k else 0
+  have hcontinue (a : Set.Icc (0 : ℝ) 1) :
+      1 - QuitProbability G (p.replace G n a) =
+        CoalitionProbability G (p.replace G n a) ∅ := by
+    simp [QuitProbability, CoalitionProbability]
+  have hreward : rewardPart q = (q : ℝ) * rewardPart 1 +
+      (1 - (q : ℝ)) * rewardPart 0 := by
+    simp only [rewardPart]
+    calc
+      _ = ∑ A ∈ Finset.univ.powerset,
+          ((q : ℝ) * (if hA : A.Nonempty then
+              CoalitionProbability G (p.replace G n 1) A * G.reward ⟨A, hA⟩ k
+            else 0) +
+          (1 - (q : ℝ)) * (if hA : A.Nonempty then
+              CoalitionProbability G (p.replace G n 0) A * G.reward ⟨A, hA⟩ k
+            else 0)) := by
+        apply Finset.sum_congr rfl
+        intro A hA
+        split_ifs with hnonempty
+        · rw [coalitionProbability_replace_affine G p n q A]
+          ring
+        · ring
+      _ = _ := by
+        simp only [Finset.sum_add_distrib, ← Finset.mul_sum]
+  change (1 - QuitProbability G (p.replace G n q)) * r k + rewardPart q = _
+  simp only [QuittingOneStagePayoff]
+  change _ = (q : ℝ) *
+      ((1 - QuitProbability G (p.replace G n 1)) * r k + rewardPart 1) +
+      (1 - (q : ℝ)) *
+        ((1 - QuitProbability G (p.replace G n 0)) * r k + rewardPart 0)
+  rw [hcontinue q, hcontinue 1, hcontinue 0]
+  rw [coalitionProbability_replace_affine G p n q ∅, hreward]
   ring
 
 /-- The two endpoint conditions in `E₀(r)` imply optimality against every mixed deviation. -/
@@ -2935,6 +3065,28 @@ theorem QuitRow.replace_self (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
     simp [QuitRow.replace]
   · simp [QuitRow.replace, hj]
 
+/-- Replacements at two distinct player coordinates commute. -/
+theorem QuitRow.replace_comm (G : QuittingGame) (p : QuitRow G)
+    {j k : G.Player} (hjk : j ≠ k) (qj qk : Set.Icc (0 : ℝ) 1) :
+    (p.replace G j qj).replace G k qk = (p.replace G k qk).replace G j qj := by
+  funext n
+  by_cases hnj : n = j
+  · subst n
+    simp [QuitRow.replace, hjk]
+  · by_cases hnk : n = k
+    · subst n
+      simp [QuitRow.replace, hnj]
+    · simp [QuitRow.replace, hnj, hnk]
+
+/-- Replacing one coordinate of the all-continue row by one gives the solo-quit row. -/
+theorem QuitRow.zero_replace_one (G : QuittingGame) (j : G.Player) :
+    QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1 = SoloQuitRow G j := by
+  funext k
+  by_cases hkj : k = j
+  · subst k
+    simp [QuitRow.replace, SoloQuitRow]
+  · simp [QuitRow.replace, SoloQuitRow, hkj]
+
 /-- Replacing one player's finite sequence by its current sequence leaves the profile unchanged. -/
 theorem RepeatedQuitProfile.replace_self (G : QuittingGame) {k : ℕ}
     (p : RepeatedQuitProfile G k) (n : G.Player) :
@@ -3139,6 +3291,137 @@ def RestrictedEscapeCorrespondence (G : QuittingGame) (δ ε : ℝ) :
     x ∈ EscapeBand G ε ∧ x j ≤ SoloPayoff G j + ε ∧
       IsSmallSoloRow G δ j p ∧ y = QuittingOneStagePayoff G x p}
 
+/-- The added small solo-quitting moves satisfy the paper's `ε` endpoint conditions. -/
+theorem restrictedEscapeCorrespondence_subset (G : QuittingGame) {M ε : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M) (hε : 0 < ε) :
+    let δ := ε / (10 * M * Fintype.card G.Player)
+    ∀ x, RestrictedEscapeCorrespondence G δ ε x ⊆ FRow G ε x := by
+  classical
+  let δ := ε / (10 * M * Fintype.card G.Player)
+  have hM0 : 0 ≤ M := hM.1.trans' zero_le_one
+  have hMpositive : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hcard : (1 : ℝ) ≤ Fintype.card G.Player := by
+    exact_mod_cast Fintype.card_pos
+  have hdenominator : 0 < 10 * M * (Fintype.card G.Player : ℝ) := by positivity
+  have hδ0 : 0 < δ := div_pos hε hdenominator
+  have hδsmall : 2 * M * δ ≤ ε := by
+    dsimp [δ]
+    rw [div_eq_mul_inv]
+    field_simp
+    nlinarith
+  dsimp only
+  intro x y hy
+  rcases hy with hy | ⟨j, p, hxband, hxj, hp, rfl⟩
+  · exact FRow.mono G (show (0 : ℝ) ≤ ε from le_of_lt hε) x hy
+  · refine ⟨p, ?_, rfl⟩
+    let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
+    have hpZero : p.replace G j 0 = zeroRow := by
+      funext k
+      by_cases hkj : k = j
+      · subst k
+        simp [QuitRow.replace, zeroRow]
+      · apply Subtype.ext
+        simp only [QuitRow.replace, hkj, if_false, zeroRow]
+        exact hp.2 k hkj
+    have hpOne : p.replace G j 1 = SoloQuitRow G j := by
+      funext k
+      by_cases hkj : k = j
+      · subst k
+        simp [QuitRow.replace, SoloQuitRow]
+      · apply Subtype.ext
+        simp only [QuitRow.replace, hkj, if_false, SoloQuitRow]
+        exact hp.2 k hkj
+    have hpFromZero : p = zeroRow.replace G j (p j) := by
+      funext k
+      by_cases hkj : k = j
+      · subst k
+        simp [QuitRow.replace]
+      · apply Subtype.ext
+        simp only [QuitRow.replace, hkj, if_false, zeroRow]
+        exact hp.2 k hkj
+    constructor
+    · intro k hkpositive
+      by_cases hkj : k = j
+      · subst k
+        have hquit : ForcedQuitPayoff G p j = SoloPayoff G j := by
+          rw [ForcedQuitPayoff, hpOne, quittingOneStagePayoff_soloQuitRow]
+          rfl
+        have hcontinue : ForcedContinuePayoff G x p j = x j := by
+          rw [ForcedContinuePayoff, hpZero, quittingOneStagePayoff_zero]
+        rw [hquit, hcontinue]
+        linarith
+      · have hpk : (p k : ℝ) = 0 := hp.2 k hkj
+        linarith
+    · intro k hkcontinue
+      by_cases hkj : k = j
+      · subst k
+        have hquit : ForcedQuitPayoff G p j = SoloPayoff G j := by
+          rw [ForcedQuitPayoff, hpOne, quittingOneStagePayoff_soloQuitRow]
+          rfl
+        have hcontinue : ForcedContinuePayoff G x p j = x j := by
+          rw [ForcedContinuePayoff, hpZero, quittingOneStagePayoff_zero]
+        rw [hquit, hcontinue]
+        exact le_trans (by linarith : SoloPayoff G j - ε ≤ SoloPayoff G j)
+          (hxband.1 j)
+      · have hpk : p k = (0 : Set.Icc (0 : ℝ) 1) := by
+          apply Subtype.ext
+          exact hp.2 k hkj
+        have hpContinue : p.replace G k 0 = p := by
+          rw [← hpk]
+          exact p.replace_self G k
+        let baseQuit : QuitRow G := zeroRow.replace G k 1
+        have hpQuit : p.replace G k 1 = baseQuit.replace G j (p j) := by
+          calc
+            _ = (zeroRow.replace G j (p j)).replace G k 1 :=
+              congrArg (fun row => row.replace G k 1) hpFromZero
+            _ = _ := zeroRow.replace_comm G (Ne.symm hkj) (p j) 1
+        have hbaseQuit : baseQuit = SoloQuitRow G k := by
+          exact QuitRow.zero_replace_one G k
+        have hzeroJ : zeroRow.replace G j 0 = zeroRow := by
+          exact zeroRow.replace_self G j
+        have hcontinueAffine : ForcedContinuePayoff G x p k =
+            (p j : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k +
+              (1 - (p j : ℝ)) * x k := by
+          rw [ForcedContinuePayoff, hpContinue, hpFromZero]
+          rw [quittingOneStagePayoff_replace_affine_coord]
+          rw [QuitRow.zero_replace_one, hzeroJ]
+          rw [quittingOneStagePayoff_soloQuitRow, quittingOneStagePayoff_zero]
+          simp [QuitRow.replace]
+        let bothQuit : QuitRow G := baseQuit.replace G j 1
+        have hbaseZero : baseQuit.replace G j 0 = baseQuit := by
+          have hbasej : baseQuit j = (0 : Set.Icc (0 : ℝ) 1) := by
+            simp [baseQuit, zeroRow, QuitRow.replace, Ne.symm hkj]
+          rw [← hbasej]
+          exact baseQuit.replace_self G j
+        have hquitAffine : ForcedQuitPayoff G p k =
+            (p j : ℝ) * QuittingOneStagePayoff G 0 bothQuit k +
+              (1 - (p j : ℝ)) * SoloPayoff G k := by
+          rw [ForcedQuitPayoff, hpQuit]
+          rw [quittingOneStagePayoff_replace_affine_coord]
+          rw [hbaseZero, hbaseQuit, quittingOneStagePayoff_soloQuitRow]
+          rfl
+        have hsoloBound :
+            -M ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k :=
+          neg_le_of_abs_le (le_of_lt (hM.2.2 _ k))
+        have hbothReward := quittingRewardPart_mem_Icc G bothQuit k hM0
+          (fun A => le_of_lt (hM.2.2 A k))
+        have hbothQuitProbability : QuitProbability G bothQuit = 1 := by
+          exact quitProbability_replace_one G baseQuit j
+        have hbothBound : QuittingOneStagePayoff G 0 bothQuit k ≤ M := by
+          simpa [QuittingOneStagePayoff, hbothQuitProbability] using hbothReward.2
+        have hxsolo : SoloPayoff G k ≤ x k := hxband.1 k
+        have hpj0 : 0 ≤ (p j : ℝ) := (p j).property.1
+        have hpjδ : (p j : ℝ) ≤ δ := hp.1
+        rw [hcontinueAffine, hquitAffine]
+        have hweighted :
+            (p j : ℝ) * QuittingOneStagePayoff G 0 bothQuit k +
+                (1 - (p j : ℝ)) * SoloPayoff G k - ε ≤
+              (p j : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k +
+                (1 - (p j : ℝ)) * x k := by
+          nlinarith [mul_nonneg (sub_nonneg.mpr (p j).property.2)
+            (sub_nonneg.mpr hxsolo)]
+        exact hweighted
+
 /-- The uniform `ρ` conclusion of Lemma 5(2). -/
 def IsUniformRho (G : QuittingGame) (ρ : ℝ) : Prop :=
   0 < ρ ∧ ρ ≤ 1 ∧ ∀ r p, IsRational G ρ r →
@@ -3253,6 +3536,137 @@ def ExtendedOrbitStaysIn {X : Type} [TopologicalSpace X]
   ∀ j, ActiveSegment x.segmentCount j → ∀ i,
     SegmentIndex (x.segmentLength j) i → x.point j i ∈ A
 
+/-- A closed forward-invariant set contains every point of an extended orbit started in it. -/
+theorem extendedOrbitStaysIn_of_closed_forwardInvariant
+    {X : Type} [TopologicalSpace X] {F : Correspondence X X}
+    (x : ExtendedOrbitData F) (A : Set X) (hclosed : IsClosed A)
+    (hforward : ∀ a ∈ A, F a ⊆ A) (hstart : x.point 0 0 ∈ A) :
+    ExtendedOrbitStaysIn x A := by
+  have segment_mem : ∀ j, ActiveSegment x.segmentCount j → x.point j 0 ∈ A →
+      ∀ i, SegmentIndex (x.segmentLength j) i → x.point j i ∈ A := by
+    intro j hj hzero i
+    induction i with
+    | zero => exact fun _ => hzero
+    | succ i hi =>
+        intro hindex
+        have hprevious : SegmentIndex (x.segmentLength j) i := by
+          intro k hk
+          have := hindex k hk
+          omega
+        exact hforward (x.point j i) (hi hprevious)
+          (x.step j hj i hindex)
+  have segment_start : ∀ j, ActiveSegment x.segmentCount j → x.point j 0 ∈ A := by
+    intro j
+    induction j with
+    | zero => exact fun _ => hstart
+    | succ j ih =>
+        intro hjnext
+        have hj : ActiveSegment x.segmentCount j := by
+          intro L hL
+          have := hjnext L hL
+          omega
+        have hall := segment_mem j hj (ih hj)
+        cases hlength : x.segmentLength j with
+        | none =>
+            apply hclosed.mem_of_tendsto (x.infiniteStitch j hjnext hlength)
+            exact Filter.Eventually.of_forall fun i => hall i (by
+              intro k hk
+              simp [hlength] at hk)
+        | some k =>
+            have hkpositive := x.segmentLengthPositive j hj k hlength
+            rw [← x.finiteStitch j hjnext k hlength]
+            apply hall (k - 1)
+            intro l hl
+            have hkl : k = l := Option.some.inj (hlength.symm.trans hl)
+            subst l
+            omega
+  intro j hj i hi
+  exact segment_mem j hj (segment_start j hj) i hi
+
+/--
+An invariant set also contains an extended orbit when every nontrivial step enters a closed
+invariant core contained in that set.
+-/
+theorem extendedOrbitStaysIn_of_closedCore
+    {X : Type} [TopologicalSpace X] [T2Space X] {F : Correspondence X X}
+    (x : ExtendedOrbitData F) (A C : Set X) (hclosedC : IsClosed C)
+    (hCA : C ⊆ A) (hforwardA : ∀ a ∈ A, F a ⊆ A)
+    (hforwardC : ∀ c ∈ C, F c ⊆ C)
+    (hcore : ∀ a ∈ A, ∀ b ∈ F a, b = a ∨ b ∈ C)
+    (hstart : x.point 0 0 ∈ A) : ExtendedOrbitStaysIn x A := by
+  have segment_mem : ∀ j, ActiveSegment x.segmentCount j → x.point j 0 ∈ A →
+      ∀ i, SegmentIndex (x.segmentLength j) i → x.point j i ∈ A := by
+    intro j hj hzero i
+    induction i with
+    | zero => exact fun _ => hzero
+    | succ i hi =>
+        intro hindex
+        have hprevious : SegmentIndex (x.segmentLength j) i := by
+          intro k hk
+          have := hindex k hk
+          omega
+        exact hforwardA (x.point j i) (hi hprevious) (x.step j hj i hindex)
+  have segment_start : ∀ j, ActiveSegment x.segmentCount j → x.point j 0 ∈ A := by
+    intro j
+    induction j with
+    | zero => exact fun _ => hstart
+    | succ j ih =>
+        intro hjnext
+        have hj : ActiveSegment x.segmentCount j := by
+          intro L hL
+          have := hjnext L hL
+          omega
+        have hjstart := ih hj
+        have hall := segment_mem j hj hjstart
+        cases hlength : x.segmentLength j with
+        | some k =>
+            have hkpositive := x.segmentLengthPositive j hj k hlength
+            rw [← x.finiteStitch j hjnext k hlength]
+            apply hall (k - 1)
+            intro l hl
+            have hkl : k = l := Option.some.inj (hlength.symm.trans hl)
+            subst l
+            omega
+        | none =>
+            by_cases hhit : ∃ i, x.point j i ∈ C
+            · rcases hhit with ⟨i, hiC⟩
+              have heventual : ∀ l, i ≤ l → x.point j l ∈ C := by
+                intro l hil
+                induction l, hil using Nat.le_induction with
+                | base => exact hiC
+                | succ l hil hlC =>
+                    apply hforwardC (x.point j l) hlC
+                    apply x.step j hj l
+                    intro q hq
+                    simp [hlength] at hq
+              apply hCA
+              apply hclosedC.mem_of_tendsto (x.infiniteStitch j hjnext hlength)
+              exact Filter.eventually_atTop.mpr ⟨i, heventual⟩
+            · push Not at hhit
+              have hconstant : ∀ i, x.point j i = x.point j 0 := by
+                intro i
+                induction i with
+                | zero => rfl
+                | succ i hi =>
+                    have hindex : SegmentIndex (x.segmentLength j) (i + 1) := by
+                      intro q hq
+                      simp [hlength] at hq
+                    rcases hcore (x.point j i) (hall i (by
+                        intro q hq
+                        simp [hlength] at hq)) (x.point j (i + 1))
+                      (x.step j hj i hindex) with heq | hC
+                    · exact heq.trans hi
+                    · exact (hhit (i + 1) hC).elim
+              have hsingleton : x.point (j + 1) 0 ∈ ({x.point j 0} : Set X) := by
+                apply isClosed_singleton.mem_of_tendsto
+                  (x.infiniteStitch j hjnext hlength)
+                exact Filter.Eventually.of_forall fun i => by simp [hconstant i]
+              rw [Set.mem_singleton_iff] at hsingleton
+              rw [hsingleton]
+              exact hjstart
+  intro j hj i hi
+  exact segment_mem j hj (segment_start j hj) i hi
+
 /--
 Lemma 10.  For `δ=ε/(10M|N|)`, `Ḽ_δ ⊆ F_ε`; extended restricted orbits
 preserve the `ε`-rational region, `Q`, and `Q \ (W ∪ T)` as stated.
@@ -3273,7 +3687,148 @@ theorem lemma10 (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
     ∀ x : ExtendedOrbitData (RestrictedEscapeCorrespondence G δ ε),
       x.point 0 0 ∈ E.Q \ (WSet G ∪ EscapeBand G ε) →
         ExtendedOrbitStaysIn x (E.Q \ (WSet G ∪ EscapeBand G ε)) := by
-  sorry
+  classical
+  let δ := ε / (10 * M * Fintype.card G.Player)
+  have hM0 : 0 ≤ M := hM.1.trans' zero_le_one
+  have hMpositive : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hε1 : ε < 1 := lt_of_lt_of_le hερ hρ.2.1
+  have hcard : (1 : ℝ) ≤ Fintype.card G.Player := by
+    exact_mod_cast Fintype.card_pos
+  have hdenominator : 0 < 10 * M * (Fintype.card G.Player : ℝ) := by positivity
+  have hδ0 : 0 < δ := div_pos hε hdenominator
+  have hδsmall : 2 * M * δ ≤ ε := by
+    dsimp [δ]
+    rw [div_eq_mul_inv]
+    field_simp
+    nlinarith
+  have hsubset : ∀ x, RestrictedEscapeCorrespondence G δ ε x ⊆ FRow G ε x := by
+    exact restrictedEscapeCorrespondence_subset G hM hε
+  have hrationalClosed : IsClosed {r | IsRational G ε r} := by
+    have heq : {r | IsRational G ε r} =
+        ⋂ n, {r | MinMaxQuit G n - ε ≤ r n} := by
+      ext r
+      simp [IsRational]
+    rw [heq]
+    exact isClosed_iInter fun n => isClosed_le continuous_const (continuous_apply n)
+  have hrationalForward : ∀ r ∈ {r | IsRational G ε r},
+      RestrictedEscapeCorrespondence G δ ε r ⊆ {r | IsRational G ε r} := by
+    intro r hr s hs
+    rcases hs with hs | ⟨j, p, hrband, hrj, hp, rfl⟩
+    · let a : ℝ := ε / 3
+      have ha0 : 0 < a := div_pos hε (by norm_num)
+      have ha1 : a ≤ 1 := by dsimp [a]; linarith
+      have herror0 : 0 ≤ a ^ 2 / (2 * M) := by positivity
+      have hstep : s ∈ FRow G (a ^ 2 / (2 * M)) r :=
+        FRow.mono G herror0 r hs
+      intro n
+      have hrA : r n ≥ MinMaxQuit G n - 3 * a := by
+        dsimp [a]
+        convert hr n using 1
+        all_goals ring
+      have hpreserve := (lemma6 G hM hnormal hstationary hinstant ha0 ha1 hstep n).1
+        hrA
+      dsimp [a] at hpreserve
+      convert hpreserve using 1
+      all_goals ring
+    · let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
+      have hpFromZero : p = zeroRow.replace G j (p j) := by
+        funext k
+        by_cases hkj : k = j
+        · subst k
+          simp [QuitRow.replace]
+        · apply Subtype.ext
+          simp only [QuitRow.replace, hkj, if_false, zeroRow]
+          exact (hp.2 k hkj)
+      have hzeroJ : zeroRow.replace G j 0 = zeroRow := zeroRow.replace_self G j
+      intro n
+      have hformula : QuittingOneStagePayoff G r p n =
+          (p j : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n +
+            (1 - (p j : ℝ)) * r n := by
+        rw [hpFromZero]
+        rw [quittingOneStagePayoff_replace_affine_coord]
+        rw [QuitRow.zero_replace_one, hzeroJ]
+        rw [quittingOneStagePayoff_soloQuitRow, quittingOneStagePayoff_zero]
+        simp [QuitRow.replace]
+      rw [hformula]
+      have hrewards : -M ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n :=
+        neg_le_of_abs_le (le_of_lt (hM.2.2 _ n))
+      have hrminmax : MinMaxQuit G n ≤ r n := (hnormal n).trans (hrband.1 n)
+      have hminmaxM : MinMaxQuit G n ≤ M := by
+        exact (hnormal n).trans (le_trans (le_abs_self _)
+          (le_of_lt (hM.2.2 ⟨{n}, Finset.singleton_nonempty n⟩ n)))
+      have hweightedReward := mul_le_mul_of_nonneg_left hrewards (p j).property.1
+      have hweightedContinuation := mul_le_mul_of_nonneg_left hrminmax
+        (sub_nonneg.mpr (p j).property.2)
+      have hpδ : (p j : ℝ) ≤ δ := hp.1
+      have hscaled : 2 * M * (p j : ℝ) ≤ ε := by
+        exact (mul_le_mul_of_nonneg_left hpδ (by positivity : 0 ≤ 2 * M)).trans hδsmall
+      nlinarith [mul_nonneg (p j).property.1 (sub_nonneg.mpr hminmaxM)]
+  have hQForward : ∀ r ∈ E.Q,
+      RestrictedEscapeCorrespondence G δ ε r ⊆ E.Q := by
+    intro r hr s hs
+    apply E.closedUnder r hr s
+    apply FRow.mono G (le_of_lt hεe) r
+    exact hsubset r hs
+  let core : Set (Payoff G.Player) :=
+    E.Q ∩ {r | ∀ n, SoloPayoff G n + E.ebar ≤ r n}
+  have hcoreClosed : IsClosed core := by
+    apply E.Q_closed.inter
+    have heq :
+        ({r : Payoff G.Player | ∀ n, SoloPayoff G n + E.ebar ≤ r n} :
+          Set (Payoff G.Player)) =
+          ⋂ n, {r : Payoff G.Player | SoloPayoff G n + E.ebar ≤ r n} := by
+      ext r
+      simp
+    rw [heq]
+    exact isClosed_iInter fun n => isClosed_le continuous_const (continuous_apply n)
+  have hcoreSubset : core ⊆ E.Q \ (WSet G ∪ EscapeBand G ε) := by
+    rintro r ⟨hrQ, hrstrong⟩
+    refine ⟨hrQ, ?_⟩
+    intro hrUnion
+    rcases hrUnion with hrW | hrT
+    · rcases hrW with ⟨n, hn⟩
+      linarith [hrstrong n, hεe]
+    · rcases hrT.2 with ⟨n, hn⟩
+      linarith [hrstrong n, hεe]
+  have houtsideCore : ∀ r ∈ E.Q \ (WSet G ∪ EscapeBand G ε),
+      ∀ s ∈ RestrictedEscapeCorrespondence G δ ε r, s = r ∨ s ∈ core := by
+    rintro r ⟨hrQ, hrOutside⟩ s hs
+    have hrNotBand : r ∉ EscapeBand G ε := fun hrBand => hrOutside (Or.inr hrBand)
+    have hsF0 : s ∈ FRow G 0 r := by
+      rcases hs with hs | ⟨j, p, hrBand, _hrj, _hp, _hs⟩
+      · exact hs
+      · exact (hrNotBand hrBand).elim
+    by_cases hsr : s = r
+    · exact Or.inl hsr
+    · right
+      refine ⟨hQForward r hrQ (Or.inl hsF0), ?_⟩
+      intro n
+      exact le_of_lt (E.strictEscape r ⟨hrQ, fun hrW => hrOutside (Or.inl hrW)⟩
+        s hsF0 hsr n)
+  have houtsideForward : ∀ r ∈ E.Q \ (WSet G ∪ EscapeBand G ε),
+      RestrictedEscapeCorrespondence G δ ε r ⊆
+        E.Q \ (WSet G ∪ EscapeBand G ε) := by
+    intro r hr s hs
+    rcases houtsideCore r hr s hs with rfl | hscore
+    · exact hr
+    · exact hcoreSubset hscore
+  have hcoreForward : ∀ r ∈ core,
+      RestrictedEscapeCorrespondence G δ ε r ⊆ core := by
+    intro r hr s hs
+    rcases houtsideCore r (hcoreSubset hr) s hs with rfl | hscore
+    · exact hr
+    · exact hscore
+  dsimp only
+  refine ⟨hsubset, ?_, ?_, ?_⟩
+  · intro x hx
+    exact extendedOrbitStaysIn_of_closed_forwardInvariant x _ hrationalClosed
+      hrationalForward hx
+  · intro x hx
+    exact extendedOrbitStaysIn_of_closed_forwardInvariant x E.Q E.Q_closed hQForward hx
+  · intro x hx
+    exact extendedOrbitStaysIn_of_closedCore x
+      (E.Q \ (WSet G ∪ EscapeBand G ε)) core hcoreClosed hcoreSubset
+      houtsideForward hcoreForward houtsideCore hx
 
 /-- A critical point lies on `∂W` and has the two solo coordinates and strict cross-payoff. -/
 def IsCriticalPoint (G : QuittingGame) (x : Payoff G.Player) : Prop :=
