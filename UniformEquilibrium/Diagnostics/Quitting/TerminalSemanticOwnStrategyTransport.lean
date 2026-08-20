@@ -28,7 +28,11 @@ drift as hidden continuation-option debt. The surcharge is at most opponent
 survival times tail debt, yielding a sharp lower bound on the literal defect
 in terms of the cap defect and the marked player's Quit probability. This
 closes the conversion whenever the cap defect exceeds that explicit budget;
-it does not prove that every returned cap-defect charge does so.
+it does not prove that every returned cap-defect charge does so. At a global
+minimum of total semantic debt, the aggregate cap inequality does dominate
+the sum of all option budgets. Strict domination—and hence a positive literal
+defect—follows whenever one positive-debt coordinate's own singleton option
+mass is strictly below total root absorption.
 -/
 
 noncomputable section
@@ -282,6 +286,72 @@ theorem quittingRootCapDefect_sub_quitOptionBudget_le_literalDefect
     ring
   rw [← hbudget]
   linarith
+
+/-- The own-Quit option coefficient is the singleton-absorption probability
+and is bounded by total one-stage absorption. -/
+theorem quittingRootOpponentContinue_mul_quit_le_absorption
+    (root : ι → PMF Bool) (who : ι) :
+    quittingRootOpponentContinueMass root who * (root who true).toReal ≤
+      quittingRootAbsorptionMass root := by
+  have hfactor := quittingStationaryContinueMass_eq_forcedContinue_mul_own
+    root who
+  change quittingStationaryContinueMass root =
+    quittingRootOpponentContinueMass root who * (root who false).toReal at hfactor
+  have hprobability := quittingRoot_continueProbability_add_quitProbability
+    root who
+  have hquitProbability : (root who true).toReal =
+      1 - (root who false).toReal := by
+    linarith
+  have hmass := quittingRootOpponentContinueMass_le_one root who
+  unfold quittingRootAbsorptionMass
+  rw [hfactor, hquitProbability]
+  nlinarith
+
+/-- The sum of all players' option budgets is bounded by absorption times
+total semantic debt. -/
+theorem quittingRootQuitOptionBudgetSum_le_absorption_mul_debtSum
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
+    (∑ who : ι, quittingRootOpponentContinueMass root who *
+        (root who true).toReal * quittingTerminalSemanticDebt pair who) ≤
+      quittingRootAbsorptionMass root *
+        quittingTerminalSemanticDebtSum pair := by
+  unfold quittingTerminalSemanticDebtSum
+  rw [Finset.mul_sum]
+  apply Finset.sum_le_sum
+  intro who _
+  exact mul_le_mul_of_nonneg_right
+    (quittingRootOpponentContinue_mul_quit_le_absorption root who)
+    (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair who)
+
+/-- The aggregate option budget is strictly below absorption-weighted debt
+as soon as one positive-debt coordinate has non-singleton absorption mass
+outside its own option coefficient. -/
+theorem quittingRootQuitOptionBudgetSum_lt_absorption_mul_debtSum_of_exists
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (who : ι) (hdebt : 0 < quittingTerminalSemanticDebt pair who)
+    (hmass : quittingRootOpponentContinueMass root who *
+        (root who true).toReal < quittingRootAbsorptionMass root) :
+    (∑ player : ι, quittingRootOpponentContinueMass root player *
+        (root player true).toReal *
+          quittingTerminalSemanticDebt pair player) <
+      quittingRootAbsorptionMass root *
+        quittingTerminalSemanticDebtSum pair := by
+  unfold quittingTerminalSemanticDebtSum
+  rw [Finset.mul_sum]
+  apply Finset.sum_lt_sum
+  · intro player _
+    exact mul_le_mul_of_nonneg_right
+      (quittingRootOpponentContinue_mul_quit_le_absorption root player)
+      (quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+        reward hpair player)
+  · refine ⟨who, Finset.mem_univ who, ?_⟩
+    exact mul_lt_mul_of_pos_right hmass hdebt
 
 /-- A cap defect exceeding the own-Quit option budget is already a positive
 literal best-endpoint defect. -/
@@ -560,6 +630,109 @@ theorem minimumTerminalSemantic_absorption_mul_debtSum_le_capDefect
   unfold quittingRootAbsorptionMass
   rw [hsum] at hminPrefix
   nlinarith
+
+/-- At a minimum-total-debt semantic pair, absorption-weighted debt after
+subtracting every player's option budget is paid by literal root defects. -/
+theorem minimumTerminalSemantic_absorptionDebt_sub_quitOptionBudget_le_literalDefectSum
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum pair ≤
+        quittingTerminalSemanticDebtSum candidate) :
+    quittingRootAbsorptionMass root *
+          quittingTerminalSemanticDebtSum pair -
+        (∑ who : ι, quittingRootOpponentContinueMass root who *
+          (root who true).toReal * quittingTerminalSemanticDebt pair who) ≤
+      quittingRootTotalNashDefect reward pair.1 root := by
+  have hcap := minimumTerminalSemantic_absorption_mul_debtSum_le_capDefect
+    reward pair root hpair hminimum
+  have hcoordinate :
+      (∑ who : ι,
+        (quittingRootCoordinateNashDefect reward pair.2 root who -
+          quittingRootOpponentContinueMass root who *
+            (root who true).toReal * quittingTerminalSemanticDebt pair who)) ≤
+      ∑ who : ι, quittingRootCoordinateNashDefect reward pair.1 root who := by
+    apply Finset.sum_le_sum
+    intro who _
+    exact quittingRootCapDefect_sub_quitOptionBudget_le_literalDefect
+      reward pair root who hpair
+  rw [Finset.sum_sub_distrib] at hcoordinate
+  unfold quittingRootTotalNashDefect at hcap ⊢
+  linarith
+
+/-- Strict aggregate slack beyond the option budgets forces a positive
+literal root defect at a minimum-total-debt semantic pair. -/
+theorem exists_literalDefect_pos_of_minimum_of_quitOptionBudgetSum_lt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum pair ≤
+        quittingTerminalSemanticDebtSum candidate)
+    (hstrict :
+      (∑ who : ι, quittingRootOpponentContinueMass root who *
+          (root who true).toReal * quittingTerminalSemanticDebt pair who) <
+        quittingRootAbsorptionMass root *
+          quittingTerminalSemanticDebtSum pair) :
+    ∃ who : ι,
+      0 < quittingRootCoordinateNashDefect reward pair.1 root who := by
+  have hlower :=
+    minimumTerminalSemantic_absorptionDebt_sub_quitOptionBudget_le_literalDefectSum
+      reward pair root hpair hminimum
+  have htotal : 0 < quittingRootTotalNashDefect reward pair.1 root := by
+    linarith
+  unfold quittingRootTotalNashDefect at htotal
+  obtain ⟨who, _, hwho⟩ := (Finset.sum_pos_iff_of_nonneg fun player _ ↦
+    quittingRootCoordinateNashDefect_nonneg reward pair.1 root player).mp htotal
+  exact ⟨who, hwho⟩
+
+/-- A concrete sufficient condition: one positive-debt coordinate whose own
+singleton option mass is strictly below total absorption forces a positive
+literal defect somewhere at a minimum-total-debt pair. -/
+theorem exists_literalDefect_pos_of_minimum_of_debt_pos_of_optionMass_lt_absorption
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum pair ≤
+        quittingTerminalSemanticDebtSum candidate)
+    (who : ι) (hdebt : 0 < quittingTerminalSemanticDebt pair who)
+    (hmass : quittingRootOpponentContinueMass root who *
+        (root who true).toReal < quittingRootAbsorptionMass root) :
+    ∃ player : ι,
+      0 < quittingRootCoordinateNashDefect reward pair.1 root player := by
+  apply exists_literalDefect_pos_of_minimum_of_quitOptionBudgetSum_lt
+    reward pair root hpair hminimum
+  exact quittingRootQuitOptionBudgetSum_lt_absorption_mul_debtSum_of_exists
+    reward pair root hpair who hdebt hmass
+
+/-- Equality regime of the aggregate conversion. If every literal root
+defect vanishes at a minimum-total-debt pair, each positive-debt coordinate's
+own singleton option mass equals the entire absorption mass. -/
+theorem quittingRootOptionMass_eq_absorption_of_minimum_of_literalDefects_eq_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum pair ≤
+        quittingTerminalSemanticDebtSum candidate)
+    (hdefect : ∀ player,
+      quittingRootCoordinateNashDefect reward pair.1 root player = 0)
+    (who : ι) (hdebt : 0 < quittingTerminalSemanticDebt pair who) :
+    quittingRootOpponentContinueMass root who * (root who true).toReal =
+      quittingRootAbsorptionMass root := by
+  apply le_antisymm
+  · exact quittingRootOpponentContinue_mul_quit_le_absorption root who
+  · by_contra hnot
+    have hstrict : quittingRootOpponentContinueMass root who *
+        (root who true).toReal < quittingRootAbsorptionMass root :=
+      lt_of_not_ge hnot
+    obtain ⟨player, hpositive⟩ :=
+      exists_literalDefect_pos_of_minimum_of_debt_pos_of_optionMass_lt_absorption
+        reward pair root hpair hminimum who hdebt hstrict
+    rw [hdefect player] at hpositive
+    exact (lt_irrefl 0) hpositive
 
 /-- **Maximal one-step transport/prefix account.**  Relative to an arbitrary
 source semantic state, a changed root and changed tail pay through prescribed
