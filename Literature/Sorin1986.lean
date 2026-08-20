@@ -2849,12 +2849,13 @@ theorem property_2_discounted
 /-! The asymptotic feasible-payoff statements use block approximation and the
 Banach-limit identification.  The corresponding general repeated-game theorem
 has not been formalized in the repository. -/
-theorem property_3 (G : FiniteStageGame) (L : BanachLimit) :
+theorem property_3 (G : FiniteStageGame) :
     HausdorffConvergesAtTop G.finiteFeasiblePayoffs
         G.correlatedFeasiblePayoffs ∧
       HausdorffConvergesAtZero G.discountedFeasiblePayoffs
         G.correlatedFeasiblePayoffs ∧
-      G.banachFeasiblePayoffs L = G.correlatedFeasiblePayoffs := by
+      ∀ L : BanachLimit,
+        G.banachFeasiblePayoffs L = G.correlatedFeasiblePayoffs := by
   sorry
 
 /-! The Banach-limit Folk theorem is the unconditional second clause of
@@ -5212,7 +5213,30 @@ theorem equation_22 (G : FiniteStageGame) (lam : ℝ)
     (hstable : ∀ δ : ℝ, 0 < δ → δ < lam →
       G.discountedFeasiblePayoffs δ = G.discountedFeasiblePayoffs lam) :
     G.discountedFeasiblePayoffs lam = G.correlatedFeasiblePayoffs := by
-  sorry
+  let rate : G.DiscountRate := ⟨lam, hlam, hlam1⟩
+  have hclosed : IsClosed (G.discountedFeasiblePayoffs lam) := by
+    simpa only [rate] using (property_1_discounted G rate).2.2.isClosed
+  apply Set.Subset.antisymm
+  · simpa only [rate] using lemma_1_Dlambda_subset_C G rate
+  · intro payoff hpayoff
+    apply hclosed.closure_subset
+    rw [Metric.mem_closure_iff]
+    intro ε hε
+    obtain ⟨δ₀, hδ₀, hclose⟩ := property_3 G |>.2.1 ε hε
+    let δ := min (lam / 2) (δ₀ / 2)
+    have hδ : 0 < δ := by
+      dsimp only [δ]
+      positivity
+    have hδlam : δ < lam := by
+      dsimp only [δ]
+      exact lt_of_le_of_lt (min_le_left _ _) (half_lt_self hlam)
+    have hδδ₀ : δ < δ₀ := by
+      dsimp only [δ]
+      exact lt_of_le_of_lt (min_le_right _ _) (half_lt_self hδ₀)
+    obtain ⟨nearby, hnearby, hdist⟩ := (hclose δ hδ hδδ₀).2 payoff hpayoff
+    refine ⟨nearby, ?_, ?_⟩
+    · rwa [hstable δ hδ hδlam] at hnearby
+    · simpa only [dist_comm] using hdist
 
 /-! ## Faces of the feasible polytope -/
 
