@@ -7,6 +7,8 @@ Authors: GameTheory contributors
 import MathUE.PMFProduct.CollisionMass
 import MathUE.Probability.WeightedCollisionConcentration
 import UniformEquilibrium.Quitting.AbsorptionPath.RealizedMarkedAbsorptionCylinder
+import UniformEquilibrium.Quitting.Boundary.Repair.JointComplementarity
+import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
 
 /-!
 # Collision concentration along finite quitting windows
@@ -35,7 +37,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.PMFProduct Math.Probability
+open Filter Math.PMFProduct Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -205,6 +207,23 @@ theorem quittingRootCollisionMass_nonneg
       exact ENNReal.toReal_mono ENNReal.one_ne_top
         (PMF.coe_le_one (root who) true)
 
+/-- Collision mass is no greater than total absorption mass. -/
+theorem quittingRootCollisionMass_le_absorptionMass
+    (root : ι → PMF Bool) :
+    quittingRootCollisionMass root ≤ quittingRootAbsorptionMass root := by
+  rw [quittingRootCollisionMass,
+    collisionMass_eq_one_sub_continueMass_sub_singletonMass,
+    continueMass_quittingRootQuitRates, quittingRootAbsorptionMass]
+  apply sub_le_self
+  exact Finset.sum_nonneg fun owner _ ↦
+    mul_nonneg ENNReal.toReal_nonneg
+      (Finset.prod_nonneg fun other _ ↦ by
+        have hle : ((root other) true).toReal ≤ 1 := by
+          simpa using ENNReal.toReal_mono ENNReal.one_ne_top
+            (PMF.coe_le_one (root other) true)
+        unfold quittingRootQuitRates
+        linarith)
+
 /-- Sharp intermediate pair-union bound for a quitting root. -/
 theorem quittingRootCollisionMass_le_pairMulSum
     (root : ι → PMF Bool) :
@@ -232,6 +251,128 @@ theorem quittingRootCollisionMass_le_choose_card_mul_absorption_sq
         (PMF.coe_le_one (root who) true))
   rw [continueMass_quittingRootQuitRates] at h
   simpa [quittingRootCollisionMass, quittingRootAbsorptionMass] using h
+
+/-! ## Infinite survival-weighted collision mass -/
+
+/-- The total probability of first-stage absorption by two or more players
+along a root sequence. -/
+def quittingRootSequenceCollisionMass
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) : ℝ :=
+  ∑' offset : ℕ, quittingJointSurvivalWeight roots start offset *
+    quittingRootCollisionMass (roots (start + offset))
+
+/-- Survival-weighted collision probabilities are summable. -/
+theorem summable_quittingJointSurvivalWeight_mul_quittingRootCollisionMass
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) :
+    Summable (fun offset : ℕ ↦
+      quittingJointSurvivalWeight roots start offset *
+        quittingRootCollisionMass (roots (start + offset))) := by
+  apply summable_of_sum_range_le (c := 1)
+  · intro offset
+    exact mul_nonneg
+      (quittingJointSurvivalWeight_nonneg roots start offset)
+      (quittingRootCollisionMass_nonneg _)
+  · intro fuel
+    calc
+      ∑ offset ∈ Finset.range fuel,
+            quittingJointSurvivalWeight roots start offset *
+              quittingRootCollisionMass (roots (start + offset)) ≤
+          ∑ offset ∈ Finset.range fuel,
+            quittingJointSurvivalWeight roots start offset *
+              (1 - quittingStationaryContinueMass
+                (roots (start + offset))) := by
+        apply Finset.sum_le_sum
+        intro offset _
+        apply mul_le_mul_of_nonneg_left _
+          (quittingJointSurvivalWeight_nonneg roots start offset)
+        exact quittingRootCollisionMass_le_absorptionMass _
+      _ = 1 - quittingJointSurvivalWeight roots start fuel :=
+        sum_quittingJointSurvivalWeight_mul_one_sub_continueMass
+          roots start fuel
+      _ ≤ 1 := by
+        linarith [quittingJointSurvivalWeight_nonneg roots start fuel]
+
+/-- If every row absorbs with probability at most `rho`, then the total
+collision probability is at most the number of player pairs times `rho`
+times the total absorption probability. -/
+theorem quittingRootSequenceCollisionMass_le
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (rho : ℝ)
+    (hcap : ∀ offset,
+      quittingRootAbsorptionMass (roots (start + offset)) ≤ rho) :
+    quittingRootSequenceCollisionMass roots start ≤
+      (Fintype.card ι).choose 2 * rho *
+        (1 - quittingJointSurvivalLimit roots start) := by
+  have hsummable :=
+    summable_quittingJointSurvivalWeight_mul_quittingRootCollisionMass
+      roots start
+  have hpartial : ∀ fuel,
+      (∑ offset ∈ Finset.range fuel,
+          quittingJointSurvivalWeight roots start offset *
+            quittingRootCollisionMass (roots (start + offset))) ≤
+        (Fintype.card ι).choose 2 * rho *
+          (1 - quittingJointSurvivalWeight roots start fuel) := by
+    intro fuel
+    calc
+      ∑ offset ∈ Finset.range fuel,
+            quittingJointSurvivalWeight roots start offset *
+              quittingRootCollisionMass (roots (start + offset)) ≤
+          ∑ offset ∈ Finset.range fuel,
+            quittingJointSurvivalWeight roots start offset *
+              ((Fintype.card ι).choose 2 * rho *
+                quittingRootAbsorptionMass
+                  (roots (start + offset))) := by
+        apply Finset.sum_le_sum
+        intro offset _
+        apply mul_le_mul_of_nonneg_left _
+          (quittingJointSurvivalWeight_nonneg roots start offset)
+        have hcollision :=
+          quittingRootCollisionMass_le_choose_card_mul_absorption_sq
+            (roots (start + offset))
+        have habsorption :=
+          quittingRootAbsorptionMass_nonneg (roots (start + offset))
+        have hpairs : 0 ≤ ((Fintype.card ι).choose 2 : ℝ) := by positivity
+        calc
+          quittingRootCollisionMass (roots (start + offset)) ≤
+              (Fintype.card ι).choose 2 *
+                quittingRootAbsorptionMass (roots (start + offset)) ^ 2 :=
+            hcollision
+          _ = ((Fintype.card ι).choose 2 *
+                quittingRootAbsorptionMass (roots (start + offset))) *
+              quittingRootAbsorptionMass (roots (start + offset)) := by ring
+          _ ≤ ((Fintype.card ι).choose 2 * rho) *
+              quittingRootAbsorptionMass (roots (start + offset)) := by
+            exact mul_le_mul_of_nonneg_right
+              (mul_le_mul_of_nonneg_left (hcap offset) hpairs) habsorption
+          _ = (Fintype.card ι).choose 2 * rho *
+              quittingRootAbsorptionMass (roots (start + offset)) := rfl
+      _ = (Fintype.card ι).choose 2 * rho *
+          (∑ offset ∈ Finset.range fuel,
+            quittingJointSurvivalWeight roots start offset *
+              (1 - quittingStationaryContinueMass
+                (roots (start + offset)))) := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro offset _
+        rw [quittingRootAbsorptionMass]
+        ring
+      _ = (Fintype.card ι).choose 2 * rho *
+          (1 - quittingJointSurvivalWeight roots start fuel) := by
+        rw [sum_quittingJointSurvivalWeight_mul_one_sub_continueMass]
+  have hleft : Tendsto (fun fuel ↦
+      ∑ offset ∈ Finset.range fuel,
+        quittingJointSurvivalWeight roots start offset *
+          quittingRootCollisionMass (roots (start + offset))) atTop
+      (nhds (quittingRootSequenceCollisionMass roots start)) := by
+    unfold quittingRootSequenceCollisionMass
+    exact hsummable.hasSum.tendsto_sum_nat
+  have hright : Tendsto (fun fuel ↦
+      (Fintype.card ι).choose 2 * rho *
+        (1 - quittingJointSurvivalWeight roots start fuel)) atTop
+      (nhds ((Fintype.card ι).choose 2 * rho *
+        (1 - quittingJointSurvivalLimit roots start))) := by
+    exact (tendsto_const_nhds.sub
+      (tendsto_quittingJointSurvivalLimit roots start)).const_mul _
+  exact le_of_tendsto_of_tendsto' hleft hright hpartial
 
 /-- A survival-weighted finite quitting window either has no absorption (and
 hence no collision), or its conditional collision mass is at most
