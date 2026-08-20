@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 
 The `ε`-bonus perturbation (`ε > 0`) of the
 Flesch--Thuijsman--Vrieze three-player table already formalized in
-`FTVCyclicAdmissibleCycle.lean`,
+`FTV.CyclicAdmissibleCycle.lean`,
 
 `r({1}) = (1, 3, 0)`, `r({1,2}) = (1+ε, 0, 1)`,
 `r({2}) = (0, 1, 3)`, `r({2,3}) = (1, 1+ε, 0)`,
@@ -50,7 +50,7 @@ machinery for that shape, so that case is open.
 ## Scope of the period-three result
 
 `not_isQuittingCyclicContinuationBlock_ftvBlock_ftvRewardEps` shows that
-`FTVCyclicAdmissibleCycle.ftvBlock` -- the *exact same* three-phase block data
+`FTV.CyclicAdmissibleCycle.ftvBlock` -- the *exact same* three-phase block data
 that is an admissible cyclic continuation for the unperturbed table -- is
 **not** an `IsQuittingCyclicContinuationBlock` for the `ε`-perturbed table, at
 any `ε > 0`.  This is a statement about *that one block*, reproducing the
@@ -64,20 +64,21 @@ blocks for this weight are not examined here.
 
 noncomputable section
 
-namespace GameTheory
-namespace FTVEpsilonPerturbedCycleExclusion
+open GameTheory
+
+namespace FTV.EpsilonPerturbedCycleExclusion
 
 open Math.Probability Math.ProbabilityMassFunction
-open FTVCyclicMinimality
-open FTVCyclicMinimality.ExactCyclicPacket (standardPromise)
-open FTVCyclicAdmissibleCycle (ftvReward ftvReward_singletonTerminal phaseRoot halfCoin
+open FTV.CyclicMinimality
+open FTV.CyclicMinimality.ExactCyclicPacket (standardPromise)
+open FTV.CyclicAdmissibleCycle (ftvReward ftvReward_singletonTerminal phaseRoot halfCoin
   halfCoin_true_toReal halfCoin_false_toReal phaseSimplexRoot phasePoint ftvBlock
   quittingRootOfSimplex_phaseSimplexRoot)
 
 /-! ## The cyclic predecessor -/
 
 /-- The cyclic predecessor on the three FTV phases: the inverse of
-`FTVCyclicMinimality.nextThree`. -/
+`FTV.CyclicMinimality.nextThree`. -/
 def prevThree : Player → Player := ![2, 0, 1]
 
 @[simp] theorem nextThree_prevThree (i : Player) : nextThree (prevThree i) = i := by
@@ -91,7 +92,7 @@ theorem prevThree_ne (i : Player) : prevThree i ≠ i := by fin_cases i <;> deci
 /-! ## The weight -/
 
 /-- The `ε`-perturbation of the FTV table: the unperturbed weight
-(`FTVCyclicAdmissibleCycle.ftvReward`) plus a bonus `ε` at coordinate `who`
+(`FTV.CyclicAdmissibleCycle.ftvReward`) plus a bonus `ε` at coordinate `who`
 exactly when the quitting coalition is `who`'s own cyclic pair
 `{who, nextThree who}`.  This reproduces the published table: e.g. at
 `quitters = {0,1}` the bonus fires at `who = 0` (since `{0,1} = {0,
@@ -303,7 +304,7 @@ theorem not_isεQuittingRootEndpointNash_phaseRoot_eps
   rw [hcontinueMass, one_mul, hdiff] at hbound
   linarith
 
-/-- **Deliverable 3.**  `FTVCyclicAdmissibleCycle.ftvBlock` -- the *exact
+/-- **Deliverable 3.**  `FTV.CyclicAdmissibleCycle.ftvBlock` -- the *exact
 same* three-phase block that is an admissible cyclic-continuation block for
 the unperturbed table -- is **not** an `IsQuittingCyclicContinuationBlock`
 for the `ε`-perturbed weight, at any `ε > 0`.  Only phase `0`'s edge is
@@ -320,5 +321,4 @@ theorem not_isQuittingCyclicContinuationBlock_ftvBlock_ftvRewardEps
   simp only [phasePoint, quittingRootOfSimplex_phaseSimplexRoot] at hnash
   exact hnash
 
-end FTVEpsilonPerturbedCycleExclusion
-end GameTheory
+end FTV.EpsilonPerturbedCycleExclusion

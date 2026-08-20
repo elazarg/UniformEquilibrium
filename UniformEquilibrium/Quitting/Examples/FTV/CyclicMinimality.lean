@@ -25,8 +25,9 @@ noncomputable section
 
 open scoped BigOperators
 
-namespace GameTheory
-namespace FTVCyclicMinimality
+open GameTheory
+
+namespace FTV.CyclicMinimality
 
 /-- The three FTV players. -/
 abbrev Player := Fin 3
@@ -1001,5 +1002,4 @@ theorem three_phase_rigidity (A : ExactCyclicPacket 3) :
 end ExactCyclicPacket
 
 
-end FTVCyclicMinimality
-end GameTheory
+end FTV.CyclicMinimality

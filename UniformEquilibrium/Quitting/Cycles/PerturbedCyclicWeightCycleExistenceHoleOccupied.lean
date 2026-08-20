@@ -14,7 +14,7 @@ import UniformEquilibrium.Quitting.Cycles.CyclicPeriodicExtension
 
 `PerturbedCyclicWeightNoExactCycle` proves, in the real-hazard encoding
 (`ZMod m` phases, `perturbedWeight ε`), that for `ε ∈ (0, 2]` no `ExactCycle`
-of any period exists. `FTVEpsilonPerturbedCycleExclusion` builds the same
+of any period exists. `FTV.EpsilonPerturbedCycleExclusion` builds the same
 `ε`-bonus table on the `PMF Bool`-mixture side (`ftvRewardEps ε`) that the
 trichotomy of `QuittingThreeBranchDisjunction` is stated against, and shows
 period-one and period-three cycles fail for it, but explicitly stops short of
@@ -31,7 +31,7 @@ that file's docstring names as open.
 
 ## Weight alignment
 
-`Player` (`FTVCyclicMinimality.Player`) and `CyclicIndex`
+`Player` (`FTV.CyclicMinimality.Player`) and `CyclicIndex`
 (`QuittingCyclicWeightRowDichotomy.CyclicIndex`) are both `abbrev _ := Fin 3`,
 hence definitionally the same type, so the two tables can be compared without
 any relabeling map. `weightOfReward_ftvRewardEps_eq_perturbedWeight` decides
@@ -63,9 +63,9 @@ noncomputable section
 namespace GameTheory
 
 open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
-open FTVCyclicMinimality
-open FTVCyclicAdmissibleCycle (ftvReward)
-open FTVEpsilonPerturbedCycleExclusion (ftvRewardEps)
+open FTV.CyclicMinimality
+open FTV.CyclicAdmissibleCycle (ftvReward)
+open FTV.EpsilonPerturbedCycleExclusion (ftvRewardEps)
 
 /-! ## Weight alignment -/
 
