@@ -3752,6 +3752,382 @@ theorem KiloblockConstruction.normalPotential_finalActive
         htransition, Math.Probability.expect_pure]
       rw [KiloblockConstruction.normalPotential, hm]
 
+private theorem KiloblockConstruction.normalPotential_active_some_step
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) (remaining : ℕ)
+    (hmode : construction.mode t history =
+      .active k (some owner) remaining)
+    (continuation : ℝ)
+    (hcontinue : ∀ signal,
+      history.2 = PublicQuittingState.active signal →
+      construction.normalPotential who (t + 1)
+        (Fin.snoc history.1
+            (history.2, singleQuitAction owner.1 false),
+          PublicQuittingState.draw) = continuation) :
+    (publicQuittingGame table
+      construction.profile.signalLaw).historyContinuationEU
+        construction.profile.strategy (construction.normalPotential who)
+      history =
+      quittingMeshHazard (construction.attempt k owner).quitWeight
+          (construction.mesh k) *
+            (NormalMatrix table who owner +
+              construction.trackingCorrection k who) +
+        (1 - quittingMeshHazard (construction.attempt k owner).quitWeight
+          (construction.mesh k)) * continuation := by
+  classical
+  rcases history with ⟨past, state⟩
+  have hmatches := construction.mode_state t (past, state)
+  cases state with
+  | draw => simp [KiloblockMode.MatchesState, hmode] at hmatches
+  | absorbed quitters =>
+      simp [KiloblockMode.MatchesState, hmode] at hmatches
+  | active signal =>
+      let quitState : (publicQuittingGame table
+          construction.profile.signalLaw).State :=
+        PublicQuittingState.absorbed
+          (quittingProjectiveSingletonTerminal owner.1)
+      let drawState : (publicQuittingGame table
+          construction.profile.signalLaw).State := PublicQuittingState.draw
+      have htransitionQuit : (publicQuittingGame table
+          construction.profile.signalLaw).transition
+          (PublicQuittingState.active signal)
+            (singleQuitAction owner.1 true) = PMF.pure quitState := by
+        simpa [quitState] using
+          publicQuittingGame_transition_singleQuitAction table
+            construction.profile.signalLaw signal owner.1
+      have htransitionContinue : (publicQuittingGame table
+          construction.profile.signalLaw).transition
+          (PublicQuittingState.active signal)
+            (singleQuitAction owner.1 false) = PMF.pure drawState := by
+        simpa [drawState] using
+          publicQuittingGame_transition_singleQuitAction_false table
+            construction.profile.signalLaw signal owner.1
+      have hquitSupport : quitState ∈
+          ((publicQuittingGame table
+            construction.profile.signalLaw).transition
+              (PublicQuittingState.active signal)
+              (singleQuitAction owner.1 true)).support := by
+        rw [htransitionQuit, PMF.mem_support_iff]
+        simp
+      have hquitStep := construction.mode_step t
+        (past, PublicQuittingState.active signal)
+        (singleQuitAction owner.1 true) quitState hquitSupport
+      have hquitMode : construction.mode (t + 1)
+          (Fin.snoc past
+            (PublicQuittingState.active signal,
+                singleQuitAction owner.1 true), quitState) =
+          .absorbed (some k) := by
+        simp [KiloblockModeStep, hmode,
+          singleQuitAction_true_quitters] at hquitStep
+        exact hquitStep.2
+      have hquitValue : construction.normalPotential who (t + 1)
+          (Fin.snoc past
+              (PublicQuittingState.active signal,
+                singleQuitAction owner.1 true), quitState) =
+          NormalMatrix table who owner +
+            construction.trackingCorrection k who := by
+        rw [KiloblockConstruction.normalPotential, hquitMode]
+        simp [quitState,
+          KiloblockConstruction.trackingCorrectionAtOrigin, NormalMatrix]
+      have hcontinueValue : construction.normalPotential who (t + 1)
+          (Fin.snoc past
+              (PublicQuittingState.active signal,
+                singleQuitAction owner.1 false), drawState) =
+          continuation := by
+        simpa [drawState] using hcontinue signal rfl
+      let coin := quittingMeshHazardCoin
+        (construction.attempt k owner).quitWeight (construction.mesh k)
+        (construction.attempt k owner).quitWeight_pos.le
+        (construction.attempt k owner).quitWeight_lt_one
+      let actionLaw : PMF ((publicQuittingGame table
+          construction.profile.signalLaw).JointAct) :=
+        coin.bind (fun quits => PMF.pure
+          (singleQuitAction owner.1 quits))
+      have hactionLaw : (publicQuittingGame table
+          construction.profile.signalLaw).stageActionDist
+          construction.profile.strategy
+          (past, PublicQuittingState.active signal) = actionLaw := by
+        unfold actionLaw coin singleQuitAction
+        exact construction.stageActionDist_active_some
+          (past, PublicQuittingState.active signal) k owner remaining hmode
+      letI : Finite ((publicQuittingGame table
+          construction.profile.signalLaw).JointAct) :=
+        inferInstanceAs (Finite (ι → Bool))
+      unfold StochasticGame.historyContinuationEU
+      rw [hactionLaw]
+      unfold actionLaw
+      rw [Math.Probability.expect_bind]
+      simp_rw [Math.Probability.expect_pure]
+      rw [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+      rw [htransitionContinue, Math.Probability.expect_pure,
+        hcontinueValue, htransitionQuit, Math.Probability.expect_pure,
+        hquitValue]
+      unfold coin
+      simp only [quittingMeshHazardCoin_false_toReal,
+        quittingMeshHazardCoin_true_toReal]
+
+theorem KiloblockConstruction.normalPotential_active_some_beforeFinal
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) (remaining : ℕ)
+    (hmode : construction.mode t history =
+      .active k (some owner) remaining)
+    (hnotFinal : (construction.attempt k owner).continuation =
+        .restart ∨ k.1 ≠ 0) :
+    (publicQuittingGame table
+      construction.profile.signalLaw).historyContinuationEU
+        construction.profile.strategy (construction.normalPotential who)
+        history =
+      construction.normalPotential who t history := by
+  classical
+  have hremaining : 0 < remaining :=
+    construction.mode_remaining_pos t history k (some owner) remaining
+      (Or.inl hmode)
+  rcases history with ⟨past, state⟩
+  have hmatches := construction.mode_state t (past, state)
+  cases state with
+  | draw => simp [KiloblockMode.MatchesState, hmode] at hmatches
+  | absorbed quitters =>
+      simp [KiloblockMode.MatchesState, hmode] at hmatches
+  | active signal =>
+      obtain ⟨tail, rfl⟩ := Nat.exists_eq_succ_of_ne_zero
+        (Nat.ne_of_gt hremaining)
+      let drawState : (publicQuittingGame table
+          construction.profile.signalLaw).State := PublicQuittingState.draw
+      have htransition : (publicQuittingGame table
+          construction.profile.signalLaw).transition
+          (PublicQuittingState.active signal)
+            (singleQuitAction owner.1 false) = PMF.pure drawState := by
+        simpa [drawState] using
+          publicQuittingGame_transition_singleQuitAction_false table
+            construction.profile.signalLaw signal owner.1
+      have hsupp : drawState ∈
+          ((publicQuittingGame table
+            construction.profile.signalLaw).transition
+              (PublicQuittingState.active signal)
+              (singleQuitAction owner.1 false)).support := by
+        rw [htransition, PMF.mem_support_iff]
+        simp
+      have hstep := construction.mode_step t
+        (past, PublicQuittingState.active signal)
+        (singleQuitAction owner.1 false) drawState hsupp
+      let continuation := construction.selectedValue k (some owner) tail who +
+        construction.trackingCorrection k who
+      have hcontinueValue : construction.normalPotential who (t + 1)
+          (Fin.snoc past
+              (PublicQuittingState.active signal,
+                singleQuitAction owner.1 false), drawState) =
+          continuation := by
+        cases tail with
+        | succ nextTail =>
+            have hm : construction.mode (t + 1)
+                (Fin.snoc past
+                    (PublicQuittingState.active signal,
+                      singleQuitAction owner.1 false), drawState) =
+                .draw (.resume k (some owner) (nextTail + 1)) := by
+              simpa [KiloblockModeStep, hmode, drawState,
+                singleQuitAction_false] using hstep
+            rw [KiloblockConstruction.normalPotential, hm]
+        | zero =>
+            have hm : construction.mode (t + 1)
+                (Fin.snoc past
+                    (PublicQuittingState.active signal,
+                      singleQuitAction owner.1 false), drawState) =
+                .draw (phaseAfterAttempt table
+                  (fun k owner => (construction.attempt k owner).continuation)
+                  k (some owner)) := by
+              simpa [KiloblockModeStep, hmode, drawState,
+                singleQuitAction_false] using hstep
+            cases hbranch : (construction.attempt k owner).continuation with
+            | restart =>
+              have hm' : construction.mode (t + 1)
+                  (Fin.snoc past
+                      (PublicQuittingState.active signal,
+                        singleQuitAction owner.1 false), drawState) =
+                    .draw (.choose k) := by
+                simpa [phaseAfterAttempt, hbranch] using hm
+              rw [KiloblockConstruction.normalPotential, hm']
+              simp [continuation, KiloblockConstruction.selectedValue,
+                BuildingAttempt.remainingValue_zero, hbranch]
+            | advance =>
+              have hk : k.1 ≠ 0 := hnotFinal.resolve_left (by
+                rw [hbranch]
+                exact AttemptContinuation.noConfusion)
+              have hkpos : 0 < k.1 := Nat.pos_of_ne_zero hk
+              let previous : Fin (construction.blockCount + 1) :=
+                ⟨k.1 - 1, by omega⟩
+              have hprevious : previous.1 < construction.blockCount := by
+                dsimp [previous]
+                omega
+              have hkEq : k = ⟨previous.1 + 1, by omega⟩ := by
+                apply Fin.ext
+                dsimp [previous]
+                omega
+              have hm' : construction.mode (t + 1)
+                  (Fin.snoc past
+                      (PublicQuittingState.active signal,
+                        singleQuitAction owner.1 false), drawState) =
+                    .draw (.choose previous) := by
+                simpa [phaseAfterAttempt, precedingKiloblockPhase,
+                  hbranch, hk, previous] using hm
+              have htelescope :=
+                construction.point_add_trackingCorrection_succ
+                  previous.1 hprevious who
+              rw [← hkEq] at htelescope
+              have htelescope' : construction.point k who +
+                  construction.trackingCorrection k who =
+                    (construction.buildingBlock previous).w who +
+                      construction.trackingCorrection previous who := by
+                convert htelescope using 1
+              have hpotential : construction.normalPotential who (t + 1)
+                  (Fin.snoc past
+                      (PublicQuittingState.active signal,
+                        singleQuitAction owner.1 false), drawState) =
+                    (construction.buildingBlock previous).w who +
+                      construction.trackingCorrection previous who := by
+                rw [KiloblockConstruction.normalPotential, hm']
+              rw [hpotential, ← htelescope']
+              simp [continuation, KiloblockConstruction.selectedValue,
+                BuildingAttempt.remainingValue_zero, hbranch]
+      have hlocal := construction.normalPotential_active_some_step who
+        (past, PublicQuittingState.active signal) k owner (tail + 1) hmode
+        continuation (fun selected hselected => by
+          cases PublicQuittingState.active.inj hselected
+          simpa [drawState] using hcontinueValue)
+      have hcurrent : construction.normalPotential who t
+          (past, PublicQuittingState.active signal) =
+            construction.selectedValue k (some owner) (tail + 1) who +
+              construction.trackingCorrection k who := by
+        rw [KiloblockConstruction.normalPotential, hmode]
+      rw [hlocal, hcurrent]
+      rw [construction.selectedValue_some_succ k owner tail who]
+      dsimp [continuation]
+      ring
+
+theorem KiloblockConstruction.normalPotential_active_none_beforeFinal
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (who : NormalPlayer table) {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t)
+    (k : Fin (construction.blockCount + 1)) (remaining : ℕ)
+    (hmode : construction.mode t history = .active k none remaining)
+    (hnotFinal : remaining ≠ 1 ∨ k.1 ≠ 0) :
+    (publicQuittingGame table
+      construction.profile.signalLaw).historyContinuationEU
+        construction.profile.strategy (construction.normalPotential who)
+        history =
+      construction.normalPotential who t history := by
+  classical
+  have hremaining : 0 < remaining :=
+    construction.mode_remaining_pos t history k none remaining
+      (Or.inl hmode)
+  rcases history with ⟨past, state⟩
+  have hmatches := construction.mode_state t (past, state)
+  cases state with
+  | draw => simp [KiloblockMode.MatchesState, hmode] at hmatches
+  | absorbed quitters =>
+      simp [KiloblockMode.MatchesState, hmode] at hmatches
+  | active signal =>
+      obtain ⟨tail, rfl⟩ := Nat.exists_eq_succ_of_ne_zero
+        (Nat.ne_of_gt hremaining)
+      let continueAction : (publicQuittingGame table
+          construction.profile.signalLaw).JointAct := fun _ => false
+      let base : ∀ player, PMF ((publicQuittingGame table
+          construction.profile.signalLaw).Act player) :=
+        fun _ => PMF.pure false
+      let drawState : (publicQuittingGame table
+          construction.profile.signalLaw).State := PublicQuittingState.draw
+      have hfamily :
+          (fun player => construction.profile.strategy player t
+            (past, PublicQuittingState.active signal)) = base := by
+        funext player
+        rw [construction.strategy_eq]
+        simp [hmode, base]
+      have hproduct : Math.PMFProduct.pmfPi base =
+          PMF.pure continueAction := by
+        exact Math.PMFProduct.pmfPi_pure continueAction
+      have htransition : (publicQuittingGame table
+          construction.profile.signalLaw).transition
+          (PublicQuittingState.active signal) continueAction =
+          PMF.pure drawState := by
+        simp [publicQuittingGame, continueAction, drawState]
+      have hsupp : drawState ∈
+          ((publicQuittingGame table
+            construction.profile.signalLaw).transition
+              (PublicQuittingState.active signal) continueAction).support := by
+        rw [htransition, PMF.mem_support_iff]
+        simp
+      have hstep := construction.mode_step t
+        (past, PublicQuittingState.active signal) continueAction drawState hsupp
+      have hnextValue : construction.normalPotential who (t + 1)
+          (Fin.snoc past
+            (PublicQuittingState.active signal, continueAction), drawState) =
+          construction.point k who +
+            construction.trackingCorrection k who := by
+        cases tail with
+        | succ nextTail =>
+            have hm : construction.mode (t + 1)
+                (Fin.snoc past
+                  (PublicQuittingState.active signal, continueAction),
+                    drawState) =
+                .draw (.resume k none (nextTail + 1)) := by
+              simpa [KiloblockModeStep, hmode, continueAction, drawState]
+                using hstep
+            rw [KiloblockConstruction.normalPotential, hm]
+            rfl
+        | zero =>
+            have hk : k.1 ≠ 0 := hnotFinal.resolve_left (by simp)
+            have hkpos : 0 < k.1 := Nat.pos_of_ne_zero hk
+            let previous : Fin (construction.blockCount + 1) :=
+              ⟨k.1 - 1, by omega⟩
+            have hprevious : previous.1 < construction.blockCount := by
+              dsimp [previous]
+              omega
+            have hkEq : k = ⟨previous.1 + 1, by omega⟩ := by
+              apply Fin.ext
+              dsimp [previous]
+              omega
+            have hm : construction.mode (t + 1)
+                (Fin.snoc past
+                  (PublicQuittingState.active signal, continueAction),
+                    drawState) = .draw (.choose previous) := by
+              simpa [KiloblockModeStep, hmode, continueAction, drawState,
+                phaseAfterAttempt, precedingKiloblockPhase, hk, previous]
+                using hstep
+            have htelescope :=
+              construction.point_add_trackingCorrection_succ
+                previous.1 hprevious who
+            rw [← hkEq] at htelescope
+            have htelescope' : construction.point k who +
+                construction.trackingCorrection k who =
+                  (construction.buildingBlock previous).w who +
+                    construction.trackingCorrection previous who := by
+              convert htelescope using 1
+            rw [KiloblockConstruction.normalPotential, hm]
+            exact htelescope'.symm
+      have hcurrent : construction.normalPotential who t
+          (past, PublicQuittingState.active signal) =
+          construction.point k who +
+            construction.trackingCorrection k who := by
+        rw [KiloblockConstruction.normalPotential, hmode]
+        rfl
+      rw [hcurrent]
+      unfold StochasticGame.historyContinuationEU
+      unfold StochasticGame.stageActionDist
+      rw [hfamily, hproduct, Math.Probability.expect_pure,
+        htransition, Math.Probability.expect_pure]
+      exact hnextValue
+
 /-! Whether the schedule has not yet entered its final infinite tail. The
 boolean stored after absorption remembers on which side of that boundary
 absorption occurred. -/
