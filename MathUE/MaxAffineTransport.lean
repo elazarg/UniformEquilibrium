@@ -9,7 +9,7 @@ import Mathlib.Data.Fintype.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Order.WithBot
 import MathUE.CycleCoboundary
-import MathUE.DirectedTransport
+import MathUE.DirectedTransport.Basic
 import MathUE.EdgeGraph
 import MathUE.CyclicMaxAffineBound
 import MathUE.InverseCoordinateRecurrence
