@@ -1429,6 +1429,27 @@ structure BuildingBlock (M : ι → ι → ℝ) (y : ι → ℝ) (ε : ℝ) wher
   complementary : ∀ i, z.singleton i > 0 → wi i i = 0
   nontrivial : 0 < ∑ i, z.singleton i
 
+/-! The value assigned to a public type draw: type zero advances directly
+to `y`, while type `i` runs the corresponding attempt with value `wⁱ`. -/
+def BuildingBlock.choiceValue
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    (block : BuildingBlock M y ε) (choice : Option ι) (who : ι) : ℝ :=
+  match choice with
+  | none => y who
+  | some owner => block.wi owner who
+
+/-! Condition (F.4) is exactly the harmonicity of the public type draw. -/
+theorem BuildingBlock.expect_choiceValue
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    (block : BuildingBlock M y ε) (who : ι) :
+    expect block.z.toPMF (fun choice => block.choiceValue choice who) =
+      block.w who := by
+  rw [expect_eq_sum, Fintype.sum_option]
+  simp only [BuildingBlock.choiceValue,
+    SimplexWeights.toPMF_none_toReal,
+    SimplexWeights.toPMF_some_toReal]
+  rw [block.balance who]
+
 /-! A type-`i` block either returns to the current auxiliary-game root `w`
 after no quit, or exits the auxiliary game to its continuation target `y`.
 This is the operational distinction in the two branches of (F.1). -/
@@ -1555,6 +1576,59 @@ theorem BuildingAttempt.exists_mesh
       attempt.quitWeight_lt_one).trans_lt hratio
   · exact one_sub_quittingMeshHazard_pow
       attempt.quitWeight_lt_one.le hmeshPos
+
+/-! The continuation value with `remaining` independent stages left in a
+mesh implementation of an attempt. Survival leads to the branch endpoint;
+the first Quit leads to the owner's singleton column. -/
+def BuildingAttempt.remainingValue
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    {block : BuildingBlock M y ε} {owner : ι}
+    (attempt : BuildingAttempt M y ε block owner)
+    (mesh remaining : ℕ) (who : ι) : ℝ :=
+  let survival :=
+    (1 - quittingMeshHazard attempt.quitWeight mesh) ^ remaining
+  survival *
+      (match attempt.continuation with
+      | .restart => block.w who
+      | .advance => y who) +
+    (1 - survival) * M who owner
+
+@[simp]
+theorem BuildingAttempt.remainingValue_zero
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    {block : BuildingBlock M y ε} {owner : ι}
+    (attempt : BuildingAttempt M y ε block owner)
+    (mesh : ℕ) (who : ι) :
+    attempt.remainingValue mesh 0 who =
+      match attempt.continuation with
+      | .restart => block.w who
+      | .advance => y who := by
+  simp [BuildingAttempt.remainingValue]
+
+theorem BuildingAttempt.remainingValue_succ
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    {block : BuildingBlock M y ε} {owner : ι}
+    (attempt : BuildingAttempt M y ε block owner)
+    (mesh remaining : ℕ) (who : ι) :
+    attempt.remainingValue mesh (remaining + 1) who =
+      quittingMeshHazard attempt.quitWeight mesh * M who owner +
+        (1 - quittingMeshHazard attempt.quitWeight mesh) *
+          attempt.remainingValue mesh remaining who := by
+  simp only [BuildingAttempt.remainingValue, pow_succ]
+  ring
+
+theorem BuildingAttempt.remainingValue_mesh
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    {block : BuildingBlock M y ε} {owner : ι}
+    (attempt : BuildingAttempt M y ε block owner)
+    (mesh : ℕ)
+    (hsurvival :
+      (1 - quittingMeshHazard attempt.quitWeight mesh) ^ mesh =
+        1 - attempt.quitWeight)
+    (who : ι) :
+    attempt.remainingValue mesh mesh who = block.wi owner who := by
+  rw [BuildingAttempt.remainingValue, hsurvival, attempt.payoff who]
+  ring
 
 /-! The existential conclusion of Theorem 3.3. -/
 def Theorem33Conclusion (M : ι → ι → ℝ) (y : ι → ℝ) (ε : ℝ) : Prop :=
@@ -2908,6 +2982,10 @@ structure KiloblockConstruction
   mesh_pos : ∀ k, 0 < mesh k
   mesh_hazard_small : ∀ k owner,
     quittingMeshHazard (attempt k owner).quitWeight (mesh k) < ε
+  mesh_survival : ∀ k owner,
+    (1 - quittingMeshHazard (attempt k owner).quitWeight (mesh k)) ^
+        mesh k =
+      1 - (attempt k owner).quitWeight
   signalSelector : Fin (blockCount + 1) →
     Fin (profile.signalCount + 1) → Option (NormalPlayer table)
   signalSelector_law : ∀ k,
@@ -3042,6 +3120,76 @@ theorem KiloblockConstruction.abs_trackingCorrection_lt
       intro j _
       simp [KiloblockConstruction.trackingDistanceIncrement]
     _ < ε := construction.tracking_small
+
+/-! Value of the currently selected type with `remaining` active decisions
+left. Type zero has no Quit hazard and keeps the point value until it
+advances; type `i` uses the exact mesh continuation value above. -/
+def KiloblockConstruction.selectedValue
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) (remaining : ℕ)
+    (who : NormalPlayer table) : ℝ :=
+  match choice with
+  | none => construction.point k who
+  | some owner =>
+      (construction.attempt k owner).remainingValue
+        (construction.mesh k) remaining who
+
+theorem KiloblockConstruction.selectedValue_mesh
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table))
+    (who : NormalPlayer table) :
+    construction.selectedValue k choice (construction.mesh k) who =
+      (construction.buildingBlock k).choiceValue choice who := by
+  cases choice with
+  | none => rfl
+  | some owner =>
+      exact (construction.attempt k owner).remainingValue_mesh
+        (construction.mesh k) (construction.mesh_survival k owner) who
+
+theorem KiloblockConstruction.selectedValue_some_succ
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) (remaining : ℕ)
+    (who : NormalPlayer table) :
+    construction.selectedValue k (some owner) (remaining + 1) who =
+      quittingMeshHazard (construction.attempt k owner).quitWeight
+          (construction.mesh k) * NormalMatrix table who owner +
+        (1 - quittingMeshHazard (construction.attempt k owner).quitWeight
+          (construction.mesh k)) *
+          construction.selectedValue k (some owner) remaining who := by
+  exact (construction.attempt k owner).remainingValue_succ
+    (construction.mesh k) remaining who
+
+/-! The actual public signal realizes the type lottery `z`, so a fresh draw
+has exactly value `w(yᵏ)`. -/
+theorem KiloblockConstruction.expect_selectedValue_mesh
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (who : NormalPlayer table) :
+    expect construction.profile.signalLaw (fun signal =>
+      construction.selectedValue k (construction.signalSelector k signal)
+        (construction.mesh k) who) =
+      (construction.buildingBlock k).w who := by
+  simp_rw [construction.selectedValue_mesh k]
+  calc
+    expect construction.profile.signalLaw (fun signal =>
+        (construction.buildingBlock k).choiceValue
+          (construction.signalSelector k signal) who) =
+        expect (construction.profile.signalLaw.map
+          (construction.signalSelector k))
+          (fun choice => (construction.buildingBlock k).choiceValue
+            choice who) := by
+      symm
+      exact Math.Probability.expect_map _ _ _
+    _ = _ := by
+      rw [construction.signalSelector_law k]
+      exact (construction.buildingBlock k).expect_choiceValue who
 
 /-! `w(yᴷ)`, in the normal coordinates where the paper defines it. -/
 def KiloblockConstruction.normalTarget
