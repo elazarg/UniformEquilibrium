@@ -24,6 +24,11 @@ For a finite survival-weighted window whose one-stage absorption is at most
 The theorem separates the zero-absorption case, where collision mass is also
 zero and no quotient is formed.  A companion estimate transfers this bound
 to any bounded payoff decomposition into singleton and collision parts.
+
+The root-level interface also characterizes zero collision as having at most
+one positive Quit marginal and bounds collision by every player's
+opponent-absorption event. These facts support rank reduction without counting
+coalitions individually.
 -/
 
 noncomputable section
@@ -47,6 +52,113 @@ theorem quittingRootCollisionMass_eq_sum_coalitionMass
           (fun coalition : Finset ι => 2 ≤ coalition.card),
         quittingRootCoalitionMass root coalition := by
   rfl
+
+/-- Collision is contained in every player's opponent-absorption event. -/
+theorem quittingRootCollisionMass_le_opponentAbsorptionMass
+    (root : ι → PMF Bool) (owner : ι) :
+    quittingRootCollisionMass root ≤
+      quittingRootOpponentAbsorptionMass root owner := by
+  let rate : ι → ℝ := quittingRootQuitRates root
+  have hrate0 : ∀ who, 0 ≤ rate who := fun _ => ENNReal.toReal_nonneg
+  have hrate1 : ∀ who, rate who ≤ 1 := fun who =>
+    ENNReal.toReal_mono ENNReal.one_ne_top ((root who).coe_le_one true)
+  let others : Finset ι := Finset.univ.erase owner
+  have hownerNot : owner ∉ others := by simp [others]
+  have huniv : (Finset.univ : Finset ι) = insert owner others :=
+    (Finset.insert_erase (Finset.mem_univ owner)).symm
+  have hcollisionRest0 : 0 ≤ collisionMassFormulaOn rate others :=
+    collisionMassFormulaOn_nonneg rate others
+      (fun who _ => hrate0 who) (fun who _ => hrate1 who)
+  have habsorptionRest0 :
+      0 ≤ 1 - ∏ who ∈ others, (1 - rate who) := by
+    exact sub_nonneg.mpr (Finset.prod_le_one
+      (fun who _ => sub_nonneg.mpr (hrate1 who))
+      (fun who _ => by linarith [hrate0 who]))
+  have hcollisionRestLe : collisionMassFormulaOn rate others ≤
+      1 - ∏ who ∈ others, (1 - rate who) := by
+    unfold collisionMassFormulaOn
+    have hsingle0 : 0 ≤ ∑ who ∈ others,
+        rate who * ∏ other ∈ others.erase who, (1 - rate other) :=
+      Finset.sum_nonneg fun who _ => mul_nonneg (hrate0 who)
+        (Finset.prod_nonneg fun other _ =>
+          sub_nonneg.mpr (hrate1 other))
+    linarith
+  have hformula : collisionMass rate =
+      (1 - rate owner) * collisionMassFormulaOn rate others +
+        rate owner * (1 - ∏ who ∈ others, (1 - rate who)) := by
+    rw [collisionMass_eq_one_sub_continueMass_sub_singletonMass]
+    change collisionMassFormulaOn rate Finset.univ = _
+    rw [huniv, collisionMassFormulaOn_insert rate hownerNot]
+  have hbound : collisionMass rate ≤
+      1 - ∏ who ∈ others, (1 - rate who) := by
+    rw [hformula]
+    calc
+      (1 - rate owner) * collisionMassFormulaOn rate others +
+            rate owner * (1 - ∏ who ∈ others, (1 - rate who)) ≤
+          (1 - rate owner) *
+              (1 - ∏ who ∈ others, (1 - rate who)) +
+            rate owner * (1 - ∏ who ∈ others, (1 - rate who)) := by
+        gcongr
+        exact sub_nonneg.mpr (hrate1 owner)
+      _ = 1 - ∏ who ∈ others, (1 - rate who) := by ring
+  rw [quittingRootOpponentAbsorptionMass_eq_one_sub_prod]
+  simpa only [quittingRootCollisionMass, rate, others,
+    quittingRootQuitRates] using hbound
+
+/-- Collision mass times a nonnegative coordinate sum is bounded by the sum
+of opponent-absorption charges. -/
+theorem quittingRootCollisionMass_mul_sum_le_sum_opponentAbsorptionMass_mul
+    (root : ι → PMF Bool) (weight : ι → ℝ)
+    (hweight : ∀ who, 0 ≤ weight who) :
+    quittingRootCollisionMass root * (∑ who, weight who) ≤
+      ∑ who,
+        quittingRootOpponentAbsorptionMass root who * weight who := by
+  rw [Finset.mul_sum]
+  exact Finset.sum_le_sum fun who _ =>
+    mul_le_mul_of_nonneg_right
+      (quittingRootCollisionMass_le_opponentAbsorptionMass root who)
+      (hweight who)
+
+/-- Two distinct positive Quit marginals force positive collision mass. -/
+theorem quittingRootCollisionMass_pos_of_two_quitProbability_pos
+    (root : ι → PMF Bool) {first second : ι} (hne : first ≠ second)
+    (hfirst : 0 < (root first true).toReal)
+    (hsecond : 0 < (root second true).toReal) :
+    0 < quittingRootCollisionMass root := by
+  apply collisionMass_pos_of_two_pos
+    (quittingRootQuitRates root)
+  · exact fun _ => ENNReal.toReal_nonneg
+  · exact fun who =>
+      ENNReal.toReal_mono ENNReal.one_ne_top ((root who).coe_le_one true)
+  · exact hne
+  · exact hfirst
+  · exact hsecond
+
+/-- Positive collision mass exposes two distinct positive Quit marginals. -/
+theorem exists_two_quitProbability_pos_of_quittingRootCollisionMass_pos
+    (root : ι → PMF Bool) (hcollision : 0 < quittingRootCollisionMass root) :
+    ∃ first second, first ≠ second ∧
+      0 < (root first true).toReal ∧ 0 < (root second true).toReal := by
+  exact exists_two_pos_of_collisionMass_pos
+    (quittingRootQuitRates root)
+    (fun _ => ENNReal.toReal_nonneg)
+    (fun who =>
+      ENNReal.toReal_mono ENNReal.one_ne_top ((root who).coe_le_one true))
+    hcollision
+
+/-- Collision mass vanishes exactly when at most one player has positive Quit
+probability. -/
+theorem quittingRootCollisionMass_eq_zero_iff_atMostOne_quitProbability_pos
+    (root : ι → PMF Bool) :
+    quittingRootCollisionMass root = 0 ↔
+      ∀ first second,
+        0 < (root first true).toReal →
+        0 < (root second true).toReal → first = second := by
+  exact collisionMass_eq_zero_iff_atMostOne_pos
+    (quittingRootQuitRates root)
+    (fun _ => ENNReal.toReal_nonneg)
+    (fun who =>
+      ENNReal.toReal_mono ENNReal.one_ne_top ((root who).coe_le_one true))
 
 omit [DecidableEq ι] in
 /-- The all-continue mass computed from quit rates agrees with the quitting

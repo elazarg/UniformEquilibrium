@@ -199,6 +199,37 @@ def quittingRootOpponentContinueMass
   quittingStationaryContinueMass
     (Function.update root who (PMF.pure false))
 
+/-- Opponent absorption is the union probability of the opponents' Quit
+marginals. -/
+theorem quittingRootOpponentAbsorptionMass_eq_one_sub_prod
+    (root : ι → PMF Bool) (who : ι) :
+    quittingRootOpponentAbsorptionMass root who =
+      1 - ∏ other ∈ Finset.univ.erase who,
+        (1 - (root other true).toReal) := by
+  classical
+  have hproduct :
+      (∏ player,
+          (Function.update root who (PMF.pure false) player false).toReal) =
+        ∏ other ∈ Finset.univ.erase who,
+          (root other false).toReal := by
+    rw [← Finset.mul_prod_erase Finset.univ
+      (fun player =>
+        (Function.update root who (PMF.pure false) player false).toReal)
+      (Finset.mem_univ who)]
+    rw [Function.update_self]
+    simp only [PMF.pure_apply, if_true, ENNReal.toReal_one, one_mul]
+    apply Finset.prod_congr rfl
+    intro other hother
+    rw [Function.update_of_ne (Finset.ne_of_mem_erase hother)]
+  unfold quittingRootOpponentAbsorptionMass quittingRootAbsorptionMass
+  rw [quittingStationaryContinueMass_eq_prod_continueProbability, hproduct]
+  congr 1
+  apply Finset.prod_congr rfl
+  intro other _
+  have hsum : (root other false).toReal + (root other true).toReal = 1 := by
+    simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one (root other)
+  linarith
+
 theorem quittingRootOpponentContinueMass_nonneg
     (root : ι → PMF Bool) (who : ι) :
     0 ≤ quittingRootOpponentContinueMass root who :=

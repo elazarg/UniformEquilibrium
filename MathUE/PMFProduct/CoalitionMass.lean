@@ -106,6 +106,15 @@ coordinate outside `J` stays put. -/
 def coalitionMass (x : ι → ℝ) (J : Finset ι) : ℝ :=
   (∏ i ∈ J, x i) * ∏ i ∈ Jᶜ, (1 - x i)
 
+/-- Coalition mass is nonnegative for Bernoulli parameters. -/
+theorem coalitionMass_nonneg (x : ι → ℝ)
+    (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1) (J : Finset ι) :
+    0 ≤ coalitionMass x J := by
+  unfold coalitionMass
+  exact mul_nonneg
+    (Finset.prod_nonneg fun i _ => h0 i)
+    (Finset.prod_nonneg fun i _ => sub_nonneg.mpr (h1 i))
+
 /-- The coalition mass at the empty coalition is exactly the continuation
 mass: nobody acting is the same event as everyone staying put. -/
 @[simp] lemma coalitionMass_empty (x : ι → ℝ) :
