@@ -360,6 +360,23 @@ option budgets is paid by literal root defects. In particular,
 `exists_literalDefect_pos_of_minimum_of_debt_pos_of_optionMass_lt_absorption`
 produces a positive literal defect whenever some positive-debt coordinate's
 own singleton option mass is strictly smaller than total absorption.
+Using the exact singleton/collision partition,
+`minimumTerminalSemantic_literalNash_support_budget`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticLiteralNashDebtSupport.lean`)
+rewrites this as the geometric estimate
+
+```text
+totalDebt * collisionMass
+  + sum_i singletonMass_i * (totalDebt - debt_i)
+  <= totalLiteralRootDefect.
+```
+
+Thus `minimumTerminalSemantic_kappa_mul_absorption_le_card_mul_of_isεNash`
+bounds full absorption by the error of any approximate literal Nash root away
+from the vertices of the debt simplex, while
+`exists_complementaryDebt_lt_of_card_mul_lt_kappa_mul_absorption` selects a
+player carrying all but less than `kappa` of the total debt whenever absorption
+is too large for that error bound.
 
 `quittingFiniteDynamicDebt_eq_compList_apply` and
 `quittingFiniteDynamicDebt_eq_terminalDebt_iff`
