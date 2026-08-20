@@ -1669,17 +1669,195 @@ def IsNormalPlayer (G : QuittingGame) (n : G.Player) : Prop :=
 def SoloPayoffVector (G : QuittingGame) : Payoff G.Player :=
   SoloPayoff G
 
-/-- Lemma 3.  An abnormal `j` has `vʲ < 0`, and `v({i})ʲ ≥ χʲ` for every `i ≠ j`. -/
-theorem lemma3 (G : QuittingGame) (j : G.Player) (h : ¬IsNormalPlayer G j) :
-    SoloPayoff G j < 0 ∧ ∀ i, i ≠ j →
-      G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j ≥ MinMaxQuit G j := by
-  sorry
+/-- A player's mixed quitting probability makes each coalition probability affine. -/
+theorem coalitionProbability_replace_affine (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) (A : Finset G.Player) :
+    CoalitionProbability G (p.replace G n q) A =
+      (q : ℝ) * CoalitionProbability G (p.replace G n 1) A +
+        (1 - (q : ℝ)) * CoalitionProbability G (p.replace G n 0) A := by
+  classical
+  have hprod_mem (s : Finset G.Player) (hs : n ∈ s)
+      (a : Set.Icc (0 : ℝ) 1) :
+      (∏ x ∈ s, (↑(if x = n then a else p x) : ℝ)) =
+        (a : ℝ) * ∏ x ∈ s.erase n, (p x : ℝ) := by
+    calc
+      _ = (↑(if n = n then a else p n) : ℝ) *
+          ∏ x ∈ s.erase n, (↑(if x = n then a else p x) : ℝ) :=
+        (Finset.mul_prod_erase s
+          (fun x => (↑(if x = n then a else p x) : ℝ)) hs).symm
+      _ = _ := by
+        simp only [if_pos]
+        congr 1
+        apply Finset.prod_congr rfl
+        intro x hx
+        simp [Finset.mem_erase.mp hx |>.1]
+  have hprod_not_mem (s : Finset G.Player) (hs : n ∉ s)
+      (a : Set.Icc (0 : ℝ) 1) :
+      (∏ x ∈ s, (↑(if x = n then a else p x) : ℝ)) =
+        ∏ x ∈ s, (p x : ℝ) := by
+    apply Finset.prod_congr rfl
+    intro x hx
+    by_cases hxn : x = n
+    · exact (hs (hxn ▸ hx)).elim
+    · simp [hxn]
+  have hcprod_mem (s : Finset G.Player) (hs : n ∈ s)
+      (a : Set.Icc (0 : ℝ) 1) :
+      (∏ x ∈ s, (1 - (↑(if x = n then a else p x) : ℝ))) =
+        (1 - (a : ℝ)) * ∏ x ∈ s.erase n, (1 - (p x : ℝ)) := by
+    calc
+      _ = (1 - (↑(if n = n then a else p n) : ℝ)) *
+          ∏ x ∈ s.erase n, (1 - (↑(if x = n then a else p x) : ℝ)) :=
+        (Finset.mul_prod_erase s
+          (fun x => 1 - (↑(if x = n then a else p x) : ℝ)) hs).symm
+      _ = _ := by
+        simp only [if_pos]
+        congr 1
+        apply Finset.prod_congr rfl
+        intro x hx
+        simp [Finset.mem_erase.mp hx |>.1]
+  have hcprod_not_mem (s : Finset G.Player) (hs : n ∉ s)
+      (a : Set.Icc (0 : ℝ) 1) :
+      (∏ x ∈ s, (1 - (↑(if x = n then a else p x) : ℝ))) =
+        ∏ x ∈ s, (1 - (p x : ℝ)) := by
+    apply Finset.prod_congr rfl
+    intro x hx
+    by_cases hxn : x = n
+    · exact (hs (hxn ▸ hx)).elim
+    · simp [hxn]
+  by_cases hnA : n ∈ A
+  · have hncomp : n ∉ Finset.univ.filter (fun x => x ∉ A) := by simp [hnA]
+    simp only [CoalitionProbability, QuitRow.replace]
+    rw [hprod_mem A hnA, hprod_mem A hnA, hprod_mem A hnA]
+    rw [hcprod_not_mem _ hncomp, hcprod_not_mem _ hncomp, hcprod_not_mem _ hncomp]
+    norm_num
+    ring
+  · have hncomp : n ∈ Finset.univ.filter (fun x => x ∉ A) := by simp [hnA]
+    simp only [CoalitionProbability, QuitRow.replace]
+    rw [hprod_not_mem A hnA, hprod_not_mem A hnA, hprod_not_mem A hnA]
+    rw [hcprod_mem _ hncomp, hcprod_mem _ hncomp, hcprod_mem _ hncomp]
+    norm_num
+    ring
 
 /-- The reward contribution of a quitting row, excluding continuation. -/
 private def quittingRewardPart (G : QuittingGame) (p : QuitRow G)
     (n : G.Player) : ℝ :=
   ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
     CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0
+
+/-- The reward contribution is affine in any one player's quitting probability. -/
+private theorem quittingRewardPart_replace_affine (G : QuittingGame) (p : QuitRow G)
+    (j : G.Player) (q : Set.Icc (0 : ℝ) 1) (n : G.Player) :
+    quittingRewardPart G (p.replace G j q) n =
+      (q : ℝ) * quittingRewardPart G (p.replace G j 1) n +
+        (1 - (q : ℝ)) * quittingRewardPart G (p.replace G j 0) n := by
+  classical
+  simp only [quittingRewardPart]
+  calc
+    _ = ∑ A ∈ Finset.univ.powerset,
+        ((q : ℝ) * (if hA : A.Nonempty then
+            CoalitionProbability G (p.replace G j 1) A * G.reward ⟨A, hA⟩ n
+          else 0) +
+        (1 - (q : ℝ)) * (if hA : A.Nonempty then
+            CoalitionProbability G (p.replace G j 0) A * G.reward ⟨A, hA⟩ n
+          else 0)) := by
+      apply Finset.sum_congr rfl
+      intro A hA
+      split_ifs
+      · rw [coalitionProbability_replace_affine]
+        ring
+      · ring
+    _ = _ := by simp only [Finset.sum_add_distrib, ← Finset.mul_sum]
+
+/-- The all-continue row gives every nonempty coalition probability zero. -/
+theorem coalitionProbability_zero_of_nonempty (G : QuittingGame)
+    (A : Finset G.Player) (hA : A.Nonempty) :
+    CoalitionProbability G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) A = 0 := by
+  classical
+  simp only [CoalitionProbability]
+  rcases hA with ⟨n, hn⟩
+  apply mul_eq_zero_of_left
+  apply Finset.prod_eq_zero hn
+  norm_num
+
+/-- The all-continue row has no immediate reward contribution. -/
+private theorem quittingRewardPart_allContinue (G : QuittingGame) (n : G.Player) :
+    quittingRewardPart G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n = 0 := by
+  classical
+  apply Finset.sum_eq_zero
+  intro A hA
+  split_ifs with hnonempty
+  · rw [coalitionProbability_zero_of_nonempty G A hnonempty]
+    simp
+  · rfl
+
+/-- The pure row in which exactly player `j` quits. -/
+def SoloQuitRow (G : QuittingGame) (j : G.Player) : QuitRow G := by
+  classical
+  exact fun k => if k = j then 1 else 0
+
+/-- The designated singleton has probability one under its pure solo-quit row. -/
+theorem coalitionProbability_soloQuitRow_singleton
+    (G : QuittingGame) (j : G.Player) :
+    CoalitionProbability G (SoloQuitRow G j) {j} = 1 := by
+  classical
+  simp only [CoalitionProbability, SoloQuitRow]
+  have hfirst :
+      (∏ n ∈ ({j} : Finset G.Player),
+        (((if n = j then (1 : Set.Icc (0 : ℝ) 1) else 0) :
+          Set.Icc (0 : ℝ) 1) : ℝ)) = 1 := by
+    simp
+  rw [hfirst, one_mul]
+  apply Finset.prod_eq_one
+  intro n hn
+  have hnj : n ≠ j := by simpa using hn
+  simp [hnj]
+
+/-- Every other coalition has probability zero under a pure solo-quit row. -/
+theorem coalitionProbability_soloQuitRow_other
+    (G : QuittingGame) (j : G.Player) (A : Finset G.Player) (hA : A ≠ {j}) :
+    CoalitionProbability G (SoloQuitRow G j) A = 0 := by
+  classical
+  simp only [CoalitionProbability, SoloQuitRow]
+  by_cases hjA : j ∈ A
+  · have hexists : ∃ k ∈ A, k ≠ j := by
+      by_contra hnone
+      push Not at hnone
+      apply hA
+      apply Finset.Subset.antisymm
+      · intro k hk
+        exact Finset.mem_singleton.mpr (hnone k hk)
+      · exact Finset.singleton_subset_iff.mpr hjA
+    rcases hexists with ⟨k, hkA, hkj⟩
+    apply mul_eq_zero_of_left
+    apply Finset.prod_eq_zero hkA
+    simp [hkj]
+  · apply mul_eq_zero_of_right
+    apply Finset.prod_eq_zero (show j ∈ Finset.univ.filter (fun n => n ∉ A) by simp [hjA])
+    simp
+
+/-- A pure solo-quit row contributes the corresponding singleton reward. -/
+private theorem quittingRewardPart_soloQuitRow (G : QuittingGame)
+    (j n : G.Player) :
+    quittingRewardPart G (SoloQuitRow G j) n =
+      G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n := by
+  classical
+  rw [quittingRewardPart]
+  rw [Finset.sum_eq_single_of_mem {j} (by simp)]
+  · simp [coalitionProbability_soloQuitRow_singleton]
+  · intro A hA hne
+    split_ifs with hnonempty
+    · rw [coalitionProbability_soloQuitRow_other G j A hne]
+      simp
+    · rfl
+
+/-- Replacing one coordinate of the all-continue row by one gives the solo-quit row. -/
+theorem QuitRow.zero_replace_one (G : QuittingGame) (j : G.Player) :
+    QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1 = SoloQuitRow G j := by
+  funext k
+  by_cases hkj : k = j
+  · subst k
+    simp [QuitRow.replace, SoloQuitRow]
+  · simp [QuitRow.replace, SoloQuitRow, hkj]
 
 /-- The total mass of the nonempty exact-quitter coalitions is the quitting probability. -/
 private theorem nonemptyCoalitionMass_eq_quitProbability (G : QuittingGame)
@@ -1801,6 +1979,46 @@ private theorem summable_tailSurvival_mul_quitProbability (G : QuittingGame)
       linarith [hsurvivalNonnegative n]
   simpa only [survival, q] using hsummable
 
+/-- Finite absorption masses telescope against survival. -/
+private theorem sum_range_tailSurvival_mul_quitProbability (G : QuittingGame)
+    (p : QuitProfile G) (i m : ℕ) :
+    (∑ k ∈ Finset.range m,
+      tailSurvival G p i k * QuitProbability G (p (i + k))) =
+        1 - tailSurvival G p i m := by
+  induction m with
+  | zero => simp [tailSurvival]
+  | succ m ih =>
+      rw [Finset.sum_range_succ, ih]
+      simp only [tailSurvival, Finset.prod_range_succ]
+      ring_nf
+
+/-- Total absorption mass is at most one. -/
+private theorem tsum_tailSurvival_mul_quitProbability_le_one (G : QuittingGame)
+    (p : QuitProfile G) (i : ℕ) :
+    (∑' k, tailSurvival G p i k * QuitProbability G (p (i + k))) ≤ 1 := by
+  have hsummable := summable_tailSurvival_mul_quitProbability G p i
+  apply le_of_tendsto hsummable.hasSum.tendsto_sum_nat
+  exact Filter.Eventually.of_forall fun m => by
+    rw [sum_range_tailSurvival_mul_quitProbability]
+    have hsurvival : 0 ≤ tailSurvival G p i m := by
+      exact Finset.prod_nonneg fun j _ =>
+        sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+    linarith
+
+/-- If finite survival tends to zero, total absorption mass is one. -/
+private theorem tsum_tailSurvival_mul_quitProbability_eq_one (G : QuittingGame)
+    (p : QuitProfile G) (i : ℕ)
+    (hvanish : Tendsto (tailSurvival G p i) atTop (nhds 0)) :
+    (∑' k, tailSurvival G p i k * QuitProbability G (p (i + k))) = 1 := by
+  apply HasSum.tsum_eq
+  rw [hasSum_iff_tendsto_nat_of_nonneg]
+  · simpa only [sum_range_tailSurvival_mul_quitProbability, sub_zero] using
+      tendsto_const_nhds.sub hvanish
+  · intro k
+    exact mul_nonneg
+      (Finset.prod_nonneg fun j _ => sub_nonneg.mpr (quitProbability_mem_Icc G _).2)
+      (quitProbability_mem_Icc G _).1
+
 /-- Every quitting tail payoff series is absolutely summable. -/
 private theorem summable_quitTailPayoff (G : QuittingGame) (p : QuitProfile G)
     (i : ℕ) (n : G.Player) :
@@ -1821,6 +2039,358 @@ private theorem summable_quitTailPayoff (G : QuittingGame) (p : QuitProfile G)
       mul_le_mul_of_nonneg_left
         (abs_quittingRewardPart_le G _ n (fun A => le_of_lt (hM.2.2 A n))) hsurvival
     _ = M * (tailSurvival G p i k * QuitProbability G (p (i + k))) := by ring_nf
+
+/-- A row replacement by its current coordinate leaves the row unchanged. -/
+theorem QuitRow.replace_self (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) : p.replace G n (p n) = p := by
+  funext j
+  by_cases hj : j = n
+  · subst j
+    simp [QuitRow.replace]
+  · simp [QuitRow.replace, hj]
+
+/-- Replacements at distinct coordinates commute. -/
+theorem QuitRow.replace_comm (G : QuittingGame) (p : QuitRow G)
+    {i j : G.Player} (hij : i ≠ j) (qi qj : Set.Icc (0 : ℝ) 1) :
+    (p.replace G i qi).replace G j qj = (p.replace G j qj).replace G i qi := by
+  funext n
+  by_cases hni : n = i
+  · subst n
+    simp [QuitRow.replace, hij]
+  · by_cases hnj : n = j
+    · subst n
+      simp [QuitRow.replace, hni]
+    · simp [QuitRow.replace, hni, hnj]
+
+/-- Survival is affine in a replaced quitting coordinate. -/
+private theorem one_sub_quitProbability_replace (G : QuittingGame) (p : QuitRow G)
+    (j : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    1 - QuitProbability G (p.replace G j q) =
+      (1 - (q : ℝ)) * (1 - QuitProbability G (p.replace G j 0)) := by
+  have hempty (r : QuitRow G) :
+      1 - QuitProbability G r = CoalitionProbability G r ∅ := by
+    simp [QuitProbability, CoalitionProbability]
+  rw [hempty, coalitionProbability_replace_affine, ← hempty, ← hempty]
+  rw [quitProbability_replace_one]
+  ring_nf
+
+/-- The base row used in Lemma 3: only `i` quits, with fixed probability `a`. -/
+private def rareQuitRow (G : QuittingGame) (i : G.Player)
+    (a : Set.Icc (0 : ℝ) 1) : QuitRow G :=
+  QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) i a
+
+/-- The reward contribution of a rare solo quitter is its probability times its reward. -/
+private theorem quittingRewardPart_rareQuitRow (G : QuittingGame)
+    (i n : G.Player) (a : Set.Icc (0 : ℝ) 1) :
+    quittingRewardPart G (rareQuitRow G i a) n =
+      (a : ℝ) * G.reward ⟨{i}, Finset.singleton_nonempty i⟩ n := by
+  rw [rareQuitRow, quittingRewardPart_replace_affine]
+  rw [QuitRow.zero_replace_one, quittingRewardPart_soloQuitRow]
+  have hzero : QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) i 0 =
+      fun _ => (0 : Set.Icc (0 : ℝ) 1) := QuitRow.replace_self G _ i
+  rw [hzero, quittingRewardPart_allContinue]
+  ring_nf
+
+/-- The survival probability of a rare solo-quitting row is `1-a`. -/
+private theorem one_sub_quitProbability_rareQuitRow (G : QuittingGame)
+    (i : G.Player) (a : Set.Icc (0 : ℝ) 1) :
+    1 - QuitProbability G (rareQuitRow G i a) = 1 - (a : ℝ) := by
+  rw [rareQuitRow, one_sub_quitProbability_replace]
+  have hzero : QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) i 0 =
+      fun _ => (0 : Set.Icc (0 : ℝ) 1) := QuitRow.replace_self G _ i
+  rw [hzero]
+  simp [QuitProbability]
+
+/-- A unilateral row over all-continue play contributes its solo payoff. -/
+private theorem quittingRewardPart_allContinue_replace (G : QuittingGame)
+    (j : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    quittingRewardPart G
+        (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j q) j =
+      (q : ℝ) * SoloPayoff G j := by
+  rw [quittingRewardPart_replace_affine, QuitRow.zero_replace_one]
+  rw [quittingRewardPart_soloQuitRow]
+  have hzero : QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 0 =
+      fun _ => (0 : Set.Icc (0 : ℝ) 1) := QuitRow.replace_self G _ j
+  rw [hzero, quittingRewardPart_allContinue]
+  simp [SoloPayoff]
+
+/-- A unilateral row over all-continue play quits with the deviator's probability. -/
+private theorem quitProbability_allContinue_replace (G : QuittingGame)
+    (j : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    QuitProbability G
+      (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j q) = q := by
+  have hsurvival := one_sub_quitProbability_replace G
+    (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j q
+  have hzero : QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 0 =
+      fun _ => (0 : Set.Icc (0 : ℝ) 1) := QuitRow.replace_self G _ j
+  rw [hzero] at hsurvival
+  simp [QuitProbability] at hsurvival
+  simp only [QuitProbability]
+  rw [hsurvival]
+  ring_nf
+
+/-- If every row's reward is bounded by `C` times its quitting mass, so is the tail payoff. -/
+private theorem quitPayoff_le_of_rewardPart_le (G : QuittingGame) (p : QuitProfile G)
+    (n : G.Player) (C : ℝ)
+    (hreward : ∀ t, quittingRewardPart G (p t) n ≤ C * QuitProbability G (p t))
+    (hmass : (∑' t, tailSurvival G p 0 t * QuitProbability G (p t)) = 1) :
+    QuitPayoff G p n ≤ C := by
+  have hleft := summable_quitTailPayoff G p 0 n
+  have habsorption := summable_tailSurvival_mul_quitProbability G p 0
+  have hright : Summable fun t =>
+      C * (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) :=
+    habsorption.mul_left C
+  change (∑' t, tailSurvival G p 0 t * quittingRewardPart G (p (0 + t)) n) ≤ C
+  calc
+    _ ≤ ∑' t, C * (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) := by
+      apply hleft.tsum_le_tsum _ hright
+      intro t
+      have hsurvival : 0 ≤ tailSurvival G p 0 t :=
+        Finset.prod_nonneg fun l _ => sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+      calc
+        tailSurvival G p 0 t * quittingRewardPart G (p (0 + t)) n ≤
+            tailSurvival G p 0 t * (C * QuitProbability G (p (0 + t))) :=
+          mul_le_mul_of_nonneg_left (by simpa using hreward t) hsurvival
+        _ = C * (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) := by ring_nf
+    _ = C := by
+      rw [tsum_mul_left, show (∑' t,
+        tailSurvival G p 0 t * QuitProbability G (p (0 + t))) = 1 by simpa using hmass]
+      ring_nf
+
+/-- The same bound holds with possible nonabsorption when `C` is nonnegative. -/
+private theorem quitPayoff_le_of_nonnegative_rewardPart_le (G : QuittingGame)
+    (p : QuitProfile G) (n : G.Player) (C : ℝ) (hC : 0 ≤ C)
+    (hreward : ∀ t, quittingRewardPart G (p t) n ≤ C * QuitProbability G (p t)) :
+    QuitPayoff G p n ≤ C := by
+  have hleft := summable_quitTailPayoff G p 0 n
+  have habsorption := summable_tailSurvival_mul_quitProbability G p 0
+  have hright : Summable fun t =>
+      C * (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) :=
+    habsorption.mul_left C
+  change (∑' t, tailSurvival G p 0 t * quittingRewardPart G (p (0 + t)) n) ≤ C
+  calc
+    _ ≤ ∑' t, C * (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) := by
+      apply hleft.tsum_le_tsum _ hright
+      intro t
+      have hsurvival : 0 ≤ tailSurvival G p 0 t :=
+        Finset.prod_nonneg fun l _ => sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+      calc
+        tailSurvival G p 0 t * quittingRewardPart G (p (0 + t)) n ≤
+            tailSurvival G p 0 t * (C * QuitProbability G (p (0 + t))) :=
+          mul_le_mul_of_nonneg_left (by simpa using hreward t) hsurvival
+        _ = C * (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) := by ring_nf
+    _ = C * (∑' t, tailSurvival G p 0 t * QuitProbability G (p (0 + t))) :=
+      tsum_mul_left
+    _ ≤ C * 1 := mul_le_mul_of_nonneg_left
+      (tsum_tailSurvival_mul_quitProbability_le_one G p 0) hC
+    _ = C := mul_one C
+
+/-- Every quitting payoff lies in the uniform absolute reward bound. -/
+private theorem abs_quitPayoff_le (G : QuittingGame) (p : QuitProfile G)
+    (n : G.Player) {M : ℝ} (hM0 : 0 ≤ M) (hbound : ∀ A, |G.reward A n| ≤ M) :
+    |QuitPayoff G p n| ≤ M := by
+  have hsum := summable_quitTailPayoff G p 0 n
+  have hmass := summable_tailSurvival_mul_quitProbability G p 0
+  change |(∑' t, tailSurvival G p 0 t * quittingRewardPart G (p (0 + t)) n)| ≤ M
+  rw [← Real.norm_eq_abs]
+  calc
+    ‖∑' t, tailSurvival G p 0 t * quittingRewardPart G (p (0 + t)) n‖ ≤
+        ∑' t, ‖tailSurvival G p 0 t * quittingRewardPart G (p (0 + t)) n‖ :=
+      norm_tsum_le_tsum_norm hsum.norm
+    _ ≤ ∑' t, M *
+        (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) := by
+      apply hsum.norm.tsum_le_tsum _ (hmass.mul_left M)
+      intro t
+      rw [Real.norm_eq_abs, abs_mul]
+      have hsurvival : 0 ≤ tailSurvival G p 0 t :=
+        Finset.prod_nonneg fun l _ => sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+      rw [abs_of_nonneg hsurvival]
+      calc
+        tailSurvival G p 0 t * |quittingRewardPart G (p (0 + t)) n| ≤
+            tailSurvival G p 0 t * (M * QuitProbability G (p (0 + t))) :=
+          mul_le_mul_of_nonneg_left
+            (abs_quittingRewardPart_le G _ n hbound) hsurvival
+        _ = M * (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) := by ring_nf
+    _ = M * (∑' t, tailSurvival G p 0 t * QuitProbability G (p (0 + t))) :=
+      tsum_mul_left
+    _ ≤ M * 1 := mul_le_mul_of_nonneg_left
+      (tsum_tailSurvival_mul_quitProbability_le_one G p 0) hM0
+    _ = M := mul_one M
+
+/-- Lemma 3.  An abnormal `j` has `vʲ < 0`, and `v({i})ʲ ≥ χʲ` for every `i ≠ j`. -/
+theorem lemma3 (G : QuittingGame) (j : G.Player) (h : ¬IsNormalPlayer G j) :
+    SoloPayoff G j < 0 ∧ ∀ i, i ≠ j →
+      G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j ≥ MinMaxQuit G j := by
+  classical
+  have habnormal : SoloPayoff G j < MinMaxQuit G j := by
+    exact lt_of_not_ge h
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hpayoffBound : ∀ p : QuitProfile G, |QuitPayoff G p j| ≤ M := fun p =>
+    abs_quitPayoff_le G p j hM0 (fun A => le_of_lt (hM.2.2 A j))
+  have hinnerAbove : ∀ p : QuitProfile G, BddAbove (range fun q :
+      ℕ → Set.Icc (0 : ℝ) 1 => QuitPayoff G (p.replace G j q) j) := by
+    intro p
+    refine ⟨M, ?_⟩
+    rintro _ ⟨q, rfl⟩
+    exact (le_abs_self _).trans (hpayoffBound _)
+  have houterBelow : BddBelow (range fun p : QuitProfile G =>
+      ⨆ q : ℕ → Set.Icc (0 : ℝ) 1, QuitPayoff G (p.replace G j q) j) := by
+    refine ⟨-M, ?_⟩
+    rintro _ ⟨p, rfl⟩
+    let q : ℕ → Set.Icc (0 : ℝ) 1 := fun _ => 0
+    exact (neg_le_of_abs_le (hpayoffBound (p.replace G j q))).trans
+      (le_ciSup (hinnerAbove p) q)
+  let zeroProfile : QuitProfile G := fun _ _ => (0 : Set.Icc (0 : ℝ) 1)
+  have hminmaxZero : MinMaxQuit G j ≤ max (SoloPayoff G j) 0 := by
+    rw [MinMaxQuit]
+    apply le_trans (ciInf_le houterBelow zeroProfile)
+    apply ciSup_le
+    intro q
+    let deviation := zeroProfile.replace G j q
+    apply quitPayoff_le_of_nonnegative_rewardPart_le G deviation j
+      (max (SoloPayoff G j) 0) (le_max_right _ _)
+    intro t
+    have hrow : deviation t =
+        QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j (q t) := rfl
+    rw [hrow, quittingRewardPart_allContinue_replace]
+    rw [quitProbability_allContinue_replace]
+    simpa [mul_comm] using
+      mul_le_mul_of_nonneg_left (le_max_left (SoloPayoff G j) 0) (q t).property.1
+  have hsoloNegative : SoloPayoff G j < 0 := by
+    by_contra hnonnegative
+    rw [max_eq_left (le_of_not_gt hnonnegative)] at hminmaxZero
+    linarith
+  refine ⟨hsoloNegative, ?_⟩
+  intro i hij
+  by_contra hreward
+  have hrewardStrict : G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j <
+      MinMaxQuit G j := lt_of_not_ge hreward
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  let gap : ℝ := MinMaxQuit G j -
+    max (SoloPayoff G j) (G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j)
+  have hgap : 0 < gap := by
+    dsimp only [gap]
+    exact sub_pos.mpr (max_lt habnormal hrewardStrict)
+  let av : ℝ := min (1 / 2) (gap / (4 * M))
+  have hav0 : 0 < av := by
+    dsimp only [av]
+    exact lt_min (by norm_num) (div_pos hgap (mul_pos (by norm_num) hMpos))
+  have hav1 : av < 1 := (min_le_left _ _).trans_lt (by norm_num)
+  let a : Set.Icc (0 : ℝ) 1 := ⟨av, le_of_lt hav0, le_of_lt hav1⟩
+  let base : QuitRow G := rareQuitRow G i a
+  let profile : QuitProfile G := fun _ => base
+  let C : ℝ := max (SoloPayoff G j + 2 * M * av)
+    (G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j)
+  have havGap : 2 * M * av ≤ gap / 2 := by
+    have havBound := min_le_right (1 / 2) (gap / (4 * M))
+    dsimp only [av]
+    calc
+      2 * M * av ≤ 2 * M * (gap / (4 * M)) :=
+        mul_le_mul_of_nonneg_left havBound (by positivity)
+      _ = gap / 2 := by field_simp; ring
+  have hC : C < MinMaxQuit G j := by
+    dsimp only [C]
+    apply max_lt
+    · have hsoloMax : SoloPayoff G j ≤
+          max (SoloPayoff G j) (G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j) :=
+        le_max_left _ _
+      dsimp only [gap] at havGap
+      linarith
+    · exact hrewardStrict
+  have hminmaxRare : MinMaxQuit G j ≤ C := by
+    rw [MinMaxQuit]
+    apply le_trans (ciInf_le houterBelow profile)
+    apply ciSup_le
+    intro q
+    let deviation := profile.replace G j q
+    have hrow : ∀ t, deviation t = (base.replace G j (q t)) := fun t => rfl
+    have hbasej : base j = (0 : Set.Icc (0 : ℝ) 1) := by
+      apply Subtype.ext
+      simp [base, rareQuitRow, QuitRow.replace, Ne.symm hij]
+    have hjzero : base.replace G j 0 = base := by
+      rw [← hbasej]
+      exact QuitRow.replace_self G base j
+    have hcomm : base.replace G j 1 =
+        (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1).replace G i a := by
+      exact QuitRow.replace_comm G _ hij a 1
+    have hforced : quittingRewardPart G (base.replace G j 1) j ≤
+        SoloPayoff G j + 2 * M * av := by
+      rw [hcomm, quittingRewardPart_replace_affine]
+      have hsoloi :
+          (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1).replace G i 0 =
+            QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1 := by
+        have hi0 :
+            QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1 i = 0 := by
+          apply Subtype.ext
+          simp [QuitRow.replace, hij]
+        simpa only [hi0] using QuitRow.replace_self G
+          (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1) i
+      rw [hsoloi, QuitRow.zero_replace_one, quittingRewardPart_soloQuitRow]
+      let both :=
+        (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1).replace G i 1
+      have hbothAbs : |quittingRewardPart G both j| ≤ M := by
+        calc
+          |quittingRewardPart G both j| ≤ M * QuitProbability G both :=
+            abs_quittingRewardPart_le G both j (fun A => le_of_lt (hM.2.2 A j))
+          _ ≤ M * 1 := mul_le_mul_of_nonneg_left
+            (quitProbability_mem_Icc G both).2 (le_trans (by norm_num) hM.1)
+          _ = M := mul_one M
+      have hboth : quittingRewardPart G both j ≤ M :=
+        (le_abs_self _).trans hbothAbs
+      have hsoloLower : -M < SoloPayoff G j := by
+        exact (neg_lt_of_abs_lt (hM.2.2 ⟨{j}, Finset.singleton_nonempty j⟩ j))
+      change av * quittingRewardPart G both j +
+          (1 - av) * SoloPayoff G j ≤ SoloPayoff G j + 2 * M * av
+      nlinarith [mul_nonneg (le_of_lt hav0) (le_of_lt hMpos)]
+    have hrewards : ∀ t,
+        quittingRewardPart G (deviation t) j ≤ C * QuitProbability G (deviation t) := by
+      intro t
+      rw [hrow, quittingRewardPart_replace_affine, hjzero]
+      rw [quittingRewardPart_rareQuitRow]
+      have hsurvival := one_sub_quitProbability_replace G base j (q t)
+      rw [hjzero, one_sub_quitProbability_rareQuitRow] at hsurvival
+      have hquit : QuitProbability G (base.replace G j (q t)) =
+          (q t : ℝ) + (1 - (q t : ℝ)) * av := by
+        change 1 - QuitProbability G (base.replace G j (q t)) =
+          (1 - (q t : ℝ)) * (1 - av) at hsurvival
+        linarith
+      rw [hquit]
+      have hforcedC : quittingRewardPart G (base.replace G j 1) j ≤ C :=
+        hforced.trans (le_max_left _ _)
+      have hrewardC : G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j ≤ C :=
+        le_max_right _ _
+      have hfirst := mul_le_mul_of_nonneg_left hforcedC (q t).property.1
+      have hsecondBase := mul_le_mul_of_nonneg_left hrewardC (le_of_lt hav0)
+      have hsecond := mul_le_mul_of_nonneg_left hsecondBase
+        (sub_nonneg.mpr (q t).property.2)
+      nlinarith
+    have hvanish : Tendsto (tailSurvival G deviation 0) atTop (nhds 0) := by
+      apply squeeze_zero
+      · intro t
+        exact Finset.prod_nonneg fun l _ =>
+          sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+      · intro t
+        calc
+          tailSurvival G deviation 0 t ≤
+              ∏ l ∈ Finset.range t, (1 - av) := by
+            apply Finset.prod_le_prod
+            · intro l hl
+              exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+            · intro l hl
+              rw [hrow]
+              have hs := one_sub_quitProbability_replace G base j (q l)
+              rw [hjzero, one_sub_quitProbability_rareQuitRow] at hs
+              simp only [Nat.zero_add]
+              rw [hs]
+              exact mul_le_of_le_one_left (sub_nonneg.mpr (le_of_lt hav1))
+                (by linarith [(q l).property.1])
+          _ = (1 - av) ^ t := by simp
+      · exact tendsto_pow_atTop_nhds_zero_of_lt_one (by linarith) (by linarith)
+    apply quitPayoff_le_of_rewardPart_le G deviation j C hrewards
+    have hmass := tsum_tailSurvival_mul_quitProbability_eq_one G deviation 0 hvanish
+    simpa using hmass
+  linarith
 
 /-- Quitting tail payoffs satisfy the one-stage Bellman recursion. -/
 private theorem quitTailPayoff_eq_oneStage (G : QuittingGame) (p : QuitProfile G)
@@ -2948,75 +3518,6 @@ def Correspondence.iterate {X : Type} (F : Correspondence X X) :
   | 0 => fun x => {x}
   | k + 1 => fun x => ⋃ y ∈ F x, F.iterate k y
 
-/-- A player's mixed quitting probability makes each coalition probability affine. -/
-theorem coalitionProbability_replace_affine (G : QuittingGame) (p : QuitRow G)
-    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) (A : Finset G.Player) :
-    CoalitionProbability G (p.replace G n q) A =
-      (q : ℝ) * CoalitionProbability G (p.replace G n 1) A +
-        (1 - (q : ℝ)) * CoalitionProbability G (p.replace G n 0) A := by
-  classical
-  have hprod_mem (s : Finset G.Player) (hs : n ∈ s)
-      (a : Set.Icc (0 : ℝ) 1) :
-      (∏ x ∈ s, (↑(if x = n then a else p x) : ℝ)) =
-        (a : ℝ) * ∏ x ∈ s.erase n, (p x : ℝ) := by
-    calc
-      _ = (↑(if n = n then a else p n) : ℝ) *
-          ∏ x ∈ s.erase n, (↑(if x = n then a else p x) : ℝ) :=
-        (Finset.mul_prod_erase s
-          (fun x => (↑(if x = n then a else p x) : ℝ)) hs).symm
-      _ = _ := by
-        simp only [if_pos]
-        congr 1
-        apply Finset.prod_congr rfl
-        intro x hx
-        simp [Finset.mem_erase.mp hx |>.1]
-  have hprod_not_mem (s : Finset G.Player) (hs : n ∉ s)
-      (a : Set.Icc (0 : ℝ) 1) :
-      (∏ x ∈ s, (↑(if x = n then a else p x) : ℝ)) =
-        ∏ x ∈ s, (p x : ℝ) := by
-    apply Finset.prod_congr rfl
-    intro x hx
-    by_cases hxn : x = n
-    · exact (hs (hxn ▸ hx)).elim
-    · simp [hxn]
-  have hcprod_mem (s : Finset G.Player) (hs : n ∈ s)
-      (a : Set.Icc (0 : ℝ) 1) :
-      (∏ x ∈ s, (1 - (↑(if x = n then a else p x) : ℝ))) =
-        (1 - (a : ℝ)) * ∏ x ∈ s.erase n, (1 - (p x : ℝ)) := by
-    calc
-      _ = (1 - (↑(if n = n then a else p n) : ℝ)) *
-          ∏ x ∈ s.erase n, (1 - (↑(if x = n then a else p x) : ℝ)) :=
-        (Finset.mul_prod_erase s
-          (fun x => 1 - (↑(if x = n then a else p x) : ℝ)) hs).symm
-      _ = _ := by
-        simp only [if_pos]
-        congr 1
-        apply Finset.prod_congr rfl
-        intro x hx
-        simp [Finset.mem_erase.mp hx |>.1]
-  have hcprod_not_mem (s : Finset G.Player) (hs : n ∉ s)
-      (a : Set.Icc (0 : ℝ) 1) :
-      (∏ x ∈ s, (1 - (↑(if x = n then a else p x) : ℝ))) =
-        ∏ x ∈ s, (1 - (p x : ℝ)) := by
-    apply Finset.prod_congr rfl
-    intro x hx
-    by_cases hxn : x = n
-    · exact (hs (hxn ▸ hx)).elim
-    · simp [hxn]
-  by_cases hnA : n ∈ A
-  · have hncomp : n ∉ Finset.univ.filter (fun x => x ∉ A) := by simp [hnA]
-    simp only [CoalitionProbability, QuitRow.replace]
-    rw [hprod_mem A hnA, hprod_mem A hnA, hprod_mem A hnA]
-    rw [hcprod_not_mem _ hncomp, hcprod_not_mem _ hncomp, hcprod_not_mem _ hncomp]
-    norm_num
-    ring
-  · have hncomp : n ∈ Finset.univ.filter (fun x => x ∉ A) := by simp [hnA]
-    simp only [CoalitionProbability, QuitRow.replace]
-    rw [hprod_not_mem A hnA, hprod_not_mem A hnA, hprod_not_mem A hnA]
-    rw [hcprod_mem _ hncomp, hcprod_mem _ hncomp, hcprod_mem _ hncomp]
-    norm_num
-    ring
-
 /-- Every exact-quitter coalition has nonnegative probability. -/
 theorem coalitionProbability_nonneg (G : QuittingGame) (p : QuitRow G)
     (A : Finset G.Player) : 0 ≤ CoalitionProbability G p A := by
@@ -3109,18 +3610,6 @@ theorem quittingRewardPart_mem_Icc (G : QuittingGame) (p : QuitRow G)
         split_ifs <;> ring
       _ ≤ M := by nlinarith [mul_le_mul_of_nonneg_left hmass.2 hM]
 
-/-- A nonempty coalition has zero probability in the all-continue row. -/
-theorem coalitionProbability_zero_of_nonempty (G : QuittingGame)
-    (A : Finset G.Player) (hA : A.Nonempty) :
-    CoalitionProbability G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) A = 0 := by
-  classical
-  simp only [CoalitionProbability]
-  rcases hA with ⟨n, hn⟩
-  have hprod : (∏ i ∈ A, (((fun _ => (0 : Set.Icc (0 : ℝ) 1)) i : ℝ))) = 0 := by
-    apply Finset.prod_eq_zero hn
-    norm_num
-  rw [hprod, zero_mul]
-
 /-- If every player continues, the one-stage payoff is the continuation vector. -/
 theorem quittingOneStagePayoff_zero (G : QuittingGame) (r : Payoff G.Player) :
     QuittingOneStagePayoff G r (fun _ => (0 : Set.Icc (0 : ℝ) 1)) = r := by
@@ -3136,54 +3625,6 @@ theorem quittingOneStagePayoff_zero (G : QuittingGame) (r : Payoff G.Player) :
   · rw [coalitionProbability_zero_of_nonempty G A hnonempty]
     simp
   · rfl
-
-/-- The pure row in which exactly player `j` quits. -/
-def SoloQuitRow (G : QuittingGame) (j : G.Player) : QuitRow G :=
-  by
-    classical
-    exact fun k => if k = j then 1 else 0
-
-/-- The designated singleton has probability one under its pure solo-quit row. -/
-theorem coalitionProbability_soloQuitRow_singleton (G : QuittingGame) (j : G.Player) :
-    CoalitionProbability G (SoloQuitRow G j) {j} = 1 := by
-  classical
-  simp only [CoalitionProbability, SoloQuitRow]
-  have hfirst :
-      (∏ n ∈ ({j} : Finset G.Player),
-        (((if n = j then (1 : Set.Icc (0 : ℝ) 1) else 0) :
-          Set.Icc (0 : ℝ) 1) : ℝ)) = 1 := by
-    simp
-  rw [hfirst, one_mul]
-  apply Finset.prod_eq_one
-  intro n hn
-  have hnj : n ≠ j := by simpa using hn
-  simp [hnj]
-
-/-- Every other coalition has probability zero under a pure solo-quit row. -/
-theorem coalitionProbability_soloQuitRow_other (G : QuittingGame) (j : G.Player)
-    (A : Finset G.Player) (hA : A ≠ {j}) :
-    CoalitionProbability G (SoloQuitRow G j) A = 0 := by
-  classical
-  simp only [CoalitionProbability, SoloQuitRow]
-  by_cases hjA : j ∈ A
-  · have hexists : ∃ k ∈ A, k ≠ j := by
-      by_contra hnone
-      push Not at hnone
-      apply hA
-      apply Finset.Subset.antisymm
-      · intro k hk
-        exact Finset.mem_singleton.mpr (hnone k hk)
-      · exact Finset.singleton_subset_iff.mpr hjA
-    rcases hexists with ⟨k, hkA, hkj⟩
-    have hprod : (∏ n ∈ A, (((if n = j then (1 : Set.Icc (0 : ℝ) 1) else 0) :
-        Set.Icc (0 : ℝ) 1) : ℝ)) = 0 := by
-      apply Finset.prod_eq_zero hkA
-      simp [hkj]
-    rw [hprod, zero_mul]
-  · have hjcomp : j ∈ Finset.univ.filter (fun n => n ∉ A) := by simp [hjA]
-    apply mul_eq_zero_of_right
-    apply Finset.prod_eq_zero hjcomp
-    simp
 
 /-- A pure solo-quit row pays the corresponding singleton reward. -/
 theorem quittingOneStagePayoff_soloQuitRow (G : QuittingGame)
@@ -3546,37 +3987,6 @@ theorem RepeatedQuitProfile.appendLast_init_last (G : QuittingGame) {k : ℕ}
     RepeatedQuitProfile.appendLast G (Fin.init p) (p (Fin.last k)) = p := by
   change Fin.snoc (Fin.init p) (p (Fin.last k)) = p
   exact Fin.snoc_init_self (q := p)
-
-/-- Replacing a player's quit probability by its current value leaves a row unchanged. -/
-theorem QuitRow.replace_self (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
-    p.replace G n (p n) = p := by
-  funext j
-  by_cases hj : j = n
-  · subst j
-    simp [QuitRow.replace]
-  · simp [QuitRow.replace, hj]
-
-/-- Replacements at two distinct player coordinates commute. -/
-theorem QuitRow.replace_comm (G : QuittingGame) (p : QuitRow G)
-    {j k : G.Player} (hjk : j ≠ k) (qj qk : Set.Icc (0 : ℝ) 1) :
-    (p.replace G j qj).replace G k qk = (p.replace G k qk).replace G j qj := by
-  funext n
-  by_cases hnj : n = j
-  · subst n
-    simp [QuitRow.replace, hjk]
-  · by_cases hnk : n = k
-    · subst n
-      simp [QuitRow.replace, hnj]
-    · simp [QuitRow.replace, hnj, hnk]
-
-/-- Replacing one coordinate of the all-continue row by one gives the solo-quit row. -/
-theorem QuitRow.zero_replace_one (G : QuittingGame) (j : G.Player) :
-    QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1 = SoloQuitRow G j := by
-  funext k
-  by_cases hkj : k = j
-  · subst k
-    simp [QuitRow.replace, SoloQuitRow]
-  · simp [QuitRow.replace, SoloQuitRow, hkj]
 
 /-- Replacing one player's finite sequence by its current sequence leaves the profile unchanged. -/
 theorem RepeatedQuitProfile.replace_self (G : QuittingGame) {k : ℕ}
