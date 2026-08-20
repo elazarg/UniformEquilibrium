@@ -1,0 +1,183 @@
+name: Compact Nash rescue stage 2
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_rescue_stage2.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+      - name: Decide whether repair is needed
+        id: need
+        run: |
+          if test -f Literature/Sorin1986/CompactNashStage2.ok; then echo 'value=no' >> "$GITHUB_OUTPUT"; else echo 'value=yes' >> "$GITHUB_OUTPUT"; fi
+      - uses: leanprover/lean-action@v1
+        if: steps.need.outputs.value == 'yes'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Install stage-2 alternative
+        if: steps.need.outputs.value == 'yes'
+        run: |
+          test -f Literature/Sorin1986/CompactNashStage1Fix.ok
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashScratch.lean')
+          s=p.read_text()
+          cut=s.find('/-- Product expectation for a finite dependent family')
+          if cut < 0:
+              cut=s.index('\nend CompactNash')
+          prefix=s[:cut]
+          suffix='\nend CompactNash\n\nend Literature.Sorin1986\n'
+          code=r'''
+          /-- Product expectation for a finite dependent family of independent
+          probability laws. -/
+          def productExpectation {n : ℕ} {A : Fin n → Type*}
+              [∀ i, Fintype (A i)] (μ : ∀ i, PMF (A i))
+              (f : (∀ i, A i) → ℝ) : ℝ :=
+            ∑ actions, (∏ i, (μ i (actions i)).toReal) * f actions
+
+          theorem productExpectation_succ {n : ℕ}
+              {A : Fin (n + 1) → Type*} [∀ i, Fintype (A i)]
+              (μ : ∀ i, PMF (A i)) (f : (∀ i, A i) → ℝ) :
+              productExpectation μ f =
+                ∑ a0 : A 0, (μ 0 a0).toReal *
+                  productExpectation (fun j : Fin n => μ j.succ)
+                    (fun tail => f (Fin.cons a0 tail)) := by
+            classical
+            unfold productExpectation
+            let e : A 0 × ((j : Fin n) → A j.succ) ≃
+                ((i : Fin (n + 1)) → A i) := Fin.consEquiv A
+            rw [← e.sum_comp]
+            rw [Fintype.sum_prod_type]
+            simp [e, Fin.prod_univ_succ, Finset.mul_sum, mul_assoc]
+
+          private theorem update_zero_eq_cons {n : ℕ}
+              {S : Fin (n + 1) → Type*} (profile : ∀ i, S i) (x : S 0) :
+              Function.update profile 0 x =
+                Fin.cons x (fun j : Fin n => profile j.succ) := by
+            funext i
+            refine Fin.cases ?_ (fun j => ?_) i
+            · simp
+            · simp [Function.update_of_ne]
+
+          private theorem update_cons_succ {n : ℕ}
+              {S : Fin (n + 1) → Type*} (head : S 0)
+              (tail : ∀ j : Fin n, S j.succ) (j : Fin n) (x : S j.succ) :
+              Function.update (Fin.cons head tail) j.succ x =
+                Fin.cons head (Function.update tail j x) := by
+            funext i
+            refine Fin.cases ?_ (fun k => ?_) i
+            · simp [Function.update_of_ne]
+            · by_cases h : k = j
+              · subst k
+                simp
+              · simp [Function.update_of_ne, h]
+
+          theorem multiAffine_barycenter (n : ℕ) :
+              ∀ {S A : Fin n → Type*} [∀ i, Fintype (A i)]
+                (mix : ∀ i, ℝ → S i → S i → S i)
+                (fallback : ∀ i, S i)
+                (μ : ∀ i, PMF (A i))
+                (point : ∀ i, A i → S i)
+                (F : (∀ i, S i) → ℝ),
+                (∀ (profile : ∀ i, S i) i t x y,
+                  0 ≤ t → t ≤ 1 →
+                  F (Function.update profile i (mix i t x y)) =
+                    t * F (Function.update profile i x) +
+                      (1 - t) * F (Function.update profile i y)) →
+                F (fun i => weightedPoint (mix i) (fallback i)
+                    (probabilityEntries (μ i) (point i))) =
+                  productExpectation μ
+                    (fun actions => F (fun i => point i (actions i))) := by
+            induction n with
+            | zero =>
+                intro S A _ mix fallback μ point F haffine
+                classical
+                simp [productExpectation]
+            | succ n ih =>
+                intro S A _ mix fallback μ point F haffine
+                classical
+                let b : ∀ i, S i := fun i =>
+                  weightedPoint (mix i) (fallback i)
+                    (probabilityEntries (μ i) (point i))
+                have hhead :
+                    F b = ∑ a0 : A 0, (μ 0 a0).toReal *
+                      F (Function.update b 0 (point 0 a0)) := by
+                  let f0 : S 0 → ℝ := fun x => F (Function.update b 0 x)
+                  have hs := weightedPoint_spec (mix 0) (fallback 0) f0
+                    (fun t x y ht0 ht1 =>
+                      haffine b 0 t x y ht0 ht1)
+                    (probabilityEntries (μ 0) (point 0))
+                    (probabilityEntries_nonneg (μ 0) (point 0))
+                  have hm := listWeight_probabilityEntries (μ 0) (point 0)
+                  rw [hm, one_mul] at hs
+                  simpa [b, f0, probabilityEntries] using hs
+                rw [productExpectation_succ]
+                rw [hhead]
+                apply Finset.sum_congr rfl
+                intro a0 _ha0
+                let tailB : ∀ j : Fin n, S j.succ := fun j => b j.succ
+                let tailF : (∀ j : Fin n, S j.succ) → ℝ := fun tail =>
+                  F (Fin.cons (point 0 a0) tail)
+                have htailAffine :
+                    ∀ (profile : ∀ j : Fin n, S j.succ) j t x y,
+                      0 ≤ t → t ≤ 1 →
+                      tailF (Function.update profile j (mix j.succ t x y)) =
+                        t * tailF (Function.update profile j x) +
+                          (1 - t) * tailF (Function.update profile j y) := by
+                  intro profile j t x y ht0 ht1
+                  simpa only [tailF, update_cons_succ] using
+                    (haffine (Fin.cons (point 0 a0) profile) j.succ
+                      t x y ht0 ht1)
+                have htail := ih
+                  (S := fun j : Fin n => S j.succ)
+                  (A := fun j : Fin n => A j.succ)
+                  (mix := fun j => mix j.succ)
+                  (fallback := fun j => fallback j.succ)
+                  (μ := fun j => μ j.succ)
+                  (point := fun j => point j.succ)
+                  (F := tailF) htailAffine
+                have hupdate :
+                    Function.update b 0 (point 0 a0) =
+                      Fin.cons (point 0 a0) tailB :=
+                  update_zero_eq_cons b (point 0 a0)
+                rw [hupdate, htail]
+          '''
+          p.write_text(prefix+code+suffix)
+          PY
+      - name: Compile
+        if: steps.need.outputs.value == 'yes'
+        id: compile
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          lake build Literature.Sorin1986.CompactNashScratch 2>&1 | tee /tmp/compact-nash-rescue-stage2.log
+      - name: Record
+        if: steps.need.outputs.value == 'yes'
+        run: |
+          cp /tmp/compact-nash-rescue-stage2.log Literature/Sorin1986/CompactNashRescueStage2.log
+          if [ "${{ steps.compile.outcome }}" = success ]; then printf 'success\n' > Literature/Sorin1986/CompactNashStage2.ok; fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashScratch.lean Literature/Sorin1986/CompactNashRescueStage2.log Literature/Sorin1986/CompactNashStage2.ok
+          git commit -m 'Repair compact Nash finite-product identity' || exit 0
+          git push origin HEAD:agent/promote-sorin1986
+      - name: Fail if invalid
+        if: steps.need.outputs.value == 'yes' && steps.compile.outcome != 'success'
+        run: exit 1
