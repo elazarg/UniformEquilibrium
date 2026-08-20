@@ -1,0 +1,98 @@
+name: Integrate compact Nash theorem v2
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_integrate_v2.yml
+      - Literature/Sorin1986/CompactNashStage5.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: compact-nash-final-integration
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Stop when already integrated
+        id: state
+        run: |
+          if grep -q 'exact CompactNash.compact_nash_existence G' Literature/Sorin1986.lean; then echo 'done=yes' >> "$GITHUB_OUTPUT"; else echo 'done=no' >> "$GITHUB_OUTPUT"; fi
+      - name: Require validated theorem
+        if: steps.state.outputs.done == 'no'
+        run: test -f Literature/Sorin1986/CompactNashStage5.ok
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Integrate source and required import
+        if: steps.state.outputs.done == 'no'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          scratch = Path('Literature/Sorin1986/CompactNashScratch.lean').read_text()
+          start = scratch.index('namespace CompactNash\n')
+          end = scratch.rindex('\nend CompactNash') + len('\nend CompactNash')
+          body = scratch[start:end] + '\n\n'
+          path = Path('Literature/Sorin1986.lean')
+          main = path.read_text()
+          required = 'import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed\n'
+          if required not in main:
+              first_import_end = main.find('\n', main.find('import ')) + 1
+              main = main[:first_import_end] + required + main[first_import_end:]
+          theorem_marker = '/-! Property (2) is Glicksberg--Fan Nash existence plus closedness of the\n'
+          assert theorem_marker in main
+          if 'namespace CompactNash\n' not in main:
+              main = main.replace(theorem_marker, body + theorem_marker, 1)
+          import re
+          pattern = re.compile(r'''theorem paper_property_2 \(G : CompactContinuousGame\) :\n\s+G\.equilibriumPayoffs\.Nonempty ∧ IsCompact G\.equilibriumPayoffs := by\n\s+sorry''')
+          assert pattern.search(main)
+          main = pattern.sub('''theorem paper_property_2 (G : CompactContinuousGame) :
+              G.equilibriumPayoffs.Nonempty ∧ IsCompact G.equilibriumPayoffs := by
+            exact CompactNash.compact_nash_existence G''', main, count=1)
+          path.write_text(main)
+          PY
+      - name: Compile exact promoted sources
+        if: steps.state.outputs.done == 'no'
+        run: |
+          lake env lean Literature/Sorin1986.lean
+          lake env lean Literature/Sorin1986/SequenceForm.lean
+      - name: Run complete repository validation
+        if: steps.state.outputs.done == 'no'
+        run: |
+          python3 scripts/check_docs.py
+          python3 scripts/check_import_graph.py
+          python3 scripts/check_trust.py
+          lake build
+      - name: Remove all development scaffolding
+        if: steps.state.outputs.done == 'no'
+        run: |
+          rm -f Literature/Sorin1986/CompactNashScratch.lean
+          rm -f Literature/Sorin1986/CompactNashStage*.log Literature/Sorin1986/CompactNashStage*.ok
+          rm -f Literature/Sorin1986/CompactNashRescue*.log
+          rm -f .github/workflows/compact_nash*.yml
+      - name: Commit validated implementation
+        if: steps.state.outputs.done == 'no'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add -A
+          git commit -m 'Prove general compact Nash existence'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
