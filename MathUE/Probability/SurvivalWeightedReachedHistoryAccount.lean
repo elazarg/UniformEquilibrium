@@ -54,6 +54,49 @@ theorem reachedHistoryWeight_nonneg
   | zero => exact zero_le_one
   | succ time ih => exact mul_nonneg ih (hsurvival time)
 
+/-- Survival factors at most one give reach weights at most one. -/
+theorem reachedHistoryWeight_le_one
+    {survival : ℕ → ℝ} (hsurvivalNonneg : ∀ time, 0 ≤ survival time)
+    (hsurvivalLeOne : ∀ time, survival time ≤ 1) :
+    ∀ time, reachedHistoryWeight survival time ≤ 1 := by
+  intro time
+  induction time with
+  | zero => exact le_rfl
+  | succ time ih =>
+      rw [reachedHistoryWeight_succ]
+      calc
+        reachedHistoryWeight survival time * survival time ≤
+            reachedHistoryWeight survival time * 1 :=
+          mul_le_mul_of_nonneg_left (hsurvivalLeOne time)
+            (reachedHistoryWeight_nonneg hsurvivalNonneg time)
+        _ ≤ 1 := by simpa using ih
+
+/-- If a finite reach weight is one, every survival factor used to form it is
+one. -/
+theorem survival_eq_one_of_lt_of_reachedHistoryWeight_eq_one
+    {survival : ℕ → ℝ} (hsurvivalNonneg : ∀ time, 0 ≤ survival time)
+    (hsurvivalLeOne : ∀ time, survival time ≤ 1) {cutoff : ℕ}
+    (hweight : reachedHistoryWeight survival cutoff = 1) :
+    ∀ time < cutoff, survival time = 1 := by
+  induction cutoff with
+  | zero => simp
+  | succ cutoff ih =>
+      have hproduct : reachedHistoryWeight survival cutoff * survival cutoff = 1 := by
+        simpa only [reachedHistoryWeight_succ] using hweight
+      have hprefixNonneg := reachedHistoryWeight_nonneg hsurvivalNonneg cutoff
+      have hprefixLeOne := reachedHistoryWeight_le_one
+        hsurvivalNonneg hsurvivalLeOne cutoff
+      have hlastNonneg := hsurvivalNonneg cutoff
+      have hlastLeOne := hsurvivalLeOne cutoff
+      have hprefix : reachedHistoryWeight survival cutoff = 1 := by
+        nlinarith
+      have hlast : survival cutoff = 1 := by
+        nlinarith
+      intro time htime
+      rcases Nat.lt_succ_iff_lt_or_eq.mp htime with hbefore | rfl
+      · exact ih hprefix time hbefore
+      · exact hlast
+
 /-- The one-step account after multiplication by the exact reach weight. -/
 theorem reachedHistoryWeight_mul_debt_eq
     (survival defect debt : ℕ → ℝ)

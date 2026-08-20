@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.Probability.SurvivalWeightedReachedHistoryAccount
 import MathUE.Topology.FiniteLabelSubsequence
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticDirectedTransport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticOwnStrategyTransport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauLocalizedOtherDefect
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionWindow
@@ -41,24 +41,6 @@ variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
 /-! ## Exact literal-spine account -/
 
-omit [DecidableEq iota] in
-/-- The reached-history weight of the literal roots is exactly the
-probability that the original profile remains live at the displayed row. -/
-theorem reachedHistoryWeight_stationaryContinueMass_eq_quittingLiveMass
-    (reward : {S : Finset iota // S.Nonempty} -> Payoff iota)
-    (profile : (quittingGame reward).BehaviorProfile) :
-    ∀ time,
-      reachedHistoryWeight
-          (fun stage => quittingStationaryContinueMass
-            (quittingProfileLiveRoot reward profile stage)) time =
-        quittingLiveMass reward profile time := by
-  intro time
-  induction time with
-  | zero => simp
-  | succ time ih =>
-      rw [reachedHistoryWeight_succ, quittingLiveMass_succ, ih]
-      congr 1
-
 /-- **Exact finite literal-spine account.**  Initial semantic debt equals the
 sum of live-mass-weighted coordinate Nash defects against the successive cap
 vectors, plus the live-mass-weighted debt remaining at the cutoff.  No reward
@@ -80,35 +62,19 @@ theorem quittingTerminalSemanticDebt_eq_sum_liveMass_mul_capDefect_add_liveTailD
           quittingTerminalSemanticDebt
             (quittingTerminalSemanticPair reward
               (quittingAllContinueProfileSpine reward profile cutoff)) who := by
-  let survival : Nat -> Real := fun time =>
-    quittingStationaryContinueMass
-      (quittingProfileLiveRoot reward profile time)
-  let defect : Nat -> Real := fun time =>
-    quittingRootCoordinateNashDefect reward
-      (quittingTerminalSemanticPair reward
-        (quittingAllContinueProfileSpine reward profile (time + 1))).2
-      (quittingProfileLiveRoot reward profile time) who
-  let debt : Nat -> Real := fun time =>
-    quittingTerminalSemanticDebt
-      (quittingTerminalSemanticPair reward
-        (quittingAllContinueProfileSpine reward profile time)) who
-  have haccount : ∀ time,
-      debt time = defect time + survival time * debt (time + 1) := by
-    intro time
-    dsimp only [debt, defect, survival]
-    rw [quittingTerminalSemanticPair_spine_eq_prefix reward profile time]
-    exact quittingTerminalSemanticDebt_prefix_eq_capDefect_add_continueMass_mul
-      reward _ _ who
-  have htelescope :=
-    debt_zero_eq_sum_reachedHistoryWeight_mul_defect_add
-      survival defect debt haccount cutoff
+  let chain := QuittingTerminalSemanticPrefixChain.ofProfile profile
+  have htelescope := chain.debt_zero_eq_sum_reached_defect_add_tail who cutoff
   have hweight : ∀ time,
-      reachedHistoryWeight survival time =
+      reachedHistoryWeight chain.survival time =
         quittingLiveMass reward profile time := by
     intro time
     exact reachedHistoryWeight_stationaryContinueMass_eq_quittingLiveMass
       reward profile time
-  simpa only [survival, defect, debt, hweight,
+  simp_rw [hweight] at htelescope
+  simpa only [chain, QuittingTerminalSemanticPrefixChain.ofProfile,
+    QuittingTerminalSemanticPrefixChain.survival,
+    QuittingTerminalSemanticPrefixChain.defect,
+    QuittingTerminalSemanticPrefixChain.debt, hweight,
     quittingAllContinueProfileSpine] using htelescope
 
 /-! ## Pointwise reached-row localization -/
