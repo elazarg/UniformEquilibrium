@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.DirectedTransport.Additive.Exact
 import MathUE.DirectedTransport.MaxAffine.Duality
 
 /-!

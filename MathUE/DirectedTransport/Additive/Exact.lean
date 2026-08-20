@@ -13,7 +13,7 @@ import Mathlib.Tactic.Linarith
 import MathUE.ChargedPathBudget
 import MathUE.DirectedTransport.Basic
 import MathUE.EdgeGraph
-import MathUE.MaxPlusPotential
+import MathUE.DirectedTransport.Additive.Potentials
 
 /-!
 # Additive exactness on a directed multigraph
@@ -76,7 +76,7 @@ trivial holonomy.
 monoid labels, and holonomy; the generic names live only there, and this file
 opens them where the translation specialization needs them.
 
-`MathUE.MaxPlusPotential` develops the one-sided inequality
+`MathUE.DirectedTransport.Additive.Potentials` develops the one-sided inequality
 `φ (source e) + w e ≤ φ (target e)` and its positive-cycle duality.  Exactness
 is its zero-defect case.  `MathUE.ChargedPathBudget` uses the opposite decrement
 orientation for nonnegative charges and bounded path budgets.
@@ -134,7 +134,7 @@ variable {w : E → A} {start finish middle : V}
 
 end WalkSum
 
-/-- The real walk weight of `MathUE.MaxPlusPotential` is the real instance of
+/-- The real walk weight of `MathUE.DirectedTransport.Additive.Potentials` is the real instance of
 `walkSum`. -/
 theorem walkWeight_eq_walkSum (weight : E → ℝ) {start finish : V}
     (walk : G.Walk start finish) :

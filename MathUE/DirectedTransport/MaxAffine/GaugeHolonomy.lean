@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.DirectedTransport.MaxAffine.GaugeFeasibility
 import MathUE.DirectedTransport.MaxAffine.Relaxation
+import MathUE.DirectedTransport.MaxAffine.Scalar
 
 /-!
 # Raw holonomy formulas on gauge-critical paths

@@ -72,7 +72,6 @@ import MathUE.CurveSelection.SourceSequence
 import MathUE.CurveSelection.SquareLift
 import MathUE.CurveSelection.Termination
 import MathUE.CurveSelection.UltrafilterSubsequence
-import MathUE.CycleCoboundary
 import MathUE.CyclicContraction
 import MathUE.CyclicExposure
 import MathUE.CyclicMaxAffineBound
@@ -81,7 +80,6 @@ import MathUE.DivergentChargeRecurrence
 import MathUE.EdgeGraph
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
-import MathUE.FiniteInequalityCompatibility
 import MathUE.FiniteLinearCompatibility
 import MathUE.FinitePivotOrbit
 import MathUE.FiniteSerialRelation
@@ -151,11 +149,7 @@ import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament
 import MathUE.List
-import MathUE.MaxAffineFarkasDuality
-import MathUE.MaxAffineSectionDuality
 import MathUE.MaxAffineStoppingValue
-import MathUE.MaxAffineTransport
-import MathUE.MaxPlusPotential
 import MathUE.MeanErgodic
 import MathUE.MeshContraction
 import MathUE.Minimax.DiscountedShapleySystem

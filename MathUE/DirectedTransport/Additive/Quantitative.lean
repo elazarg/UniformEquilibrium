@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.DirectedTransport.FiniteInequality.Quantitative
-import MathUE.MaxPlusPotential
+import MathUE.DirectedTransport.Additive.Potentials
 
 /-!
 # Exact quantitative duality for additive transport

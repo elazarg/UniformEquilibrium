@@ -6,8 +6,8 @@ Authors: GameTheory contributors
 
 import Mathlib.Data.Fintype.Order
 import Mathlib.Order.WithBot
-import MathUE.MaxAffineTransport
-import MathUE.MaxPlusPotential
+import MathUE.DirectedTransport.Additive.Potentials
+import MathUE.DirectedTransport.MaxAffine.Basic
 
 /-!
 # Existence of lax sections for max-affine transport graphs
@@ -42,12 +42,6 @@ Wiley, 1992) a floor is a release date, and the usual device is an anchor or
 slack vertex pinned to zero and joined to every floored edge; adding a constant
 achieves the same reduction without enlarging the graph.
 
-## Main definitions
-
-* `Math.MaxAffineTransport.Label.compList` -- the composite of a list of labels,
-  the head acting first, matching the fold of
-  `Math.MaxAffineTransport.holonomyApply_eq_foldl_map`.
-
 ## Main results
 
 * `Math.MaxAffineTransport.Label.apply_const_le` -- the edgewise subunit-slope
@@ -79,23 +73,6 @@ namespace Label
 
 /-! ## Edgewise estimates -/
 
-/-- A label is dominated at a target value exactly when both its floor and its
-affine branch are.  The diagonal case, at the argument itself, is
-`Math.MaxAffineTransport.Label.apply_le_iff`. -/
-theorem apply_le_target_iff (f : Label) (x y : ℝ) :
-    f.apply x ≤ y ↔ f.floor ≤ (y : WithBot ℝ) ∧ f.affinePart x ≤ y := by
-  rcases f.floor_cases with hfloor | ⟨e, hfloor⟩
-  · rw [apply_of_floor_bot hfloor, hfloor]
-    exact ⟨fun h => ⟨bot_le, h⟩, fun h => h.2⟩
-  · rw [apply_of_floor_coe hfloor, hfloor, max_le_iff, WithBot.coe_le_coe]
-
-/-- The affine branch never exceeds the action. -/
-theorem affinePart_le_apply (f : Label) (x : ℝ) : f.affinePart x ≤ f.apply x := by
-  rcases f.floor_cases with hfloor | ⟨e, hfloor⟩
-  · exact le_of_eq (apply_of_floor_bot hfloor x).symm
-  · rw [apply_of_floor_coe hfloor]
-    exact le_max_right _ _
-
 /-- At unit slope the action dominates the translation by the shift. -/
 theorem add_shift_le_apply {f : Label} (hslope : f.slope = 1) (x : ℝ) :
     x + f.shift ≤ f.apply x := by
@@ -119,14 +96,7 @@ theorem apply_const_le {f : Label} (hslope : f.slope < 1) {C : ℝ}
   simp only [affinePart]
   nlinarith
 
-/-! ## Composite labels of a list -/
-
-/-- The composite label of a list of labels, the head acting first.  This is the
-coefficient form of the fold of
-`Math.MaxAffineTransport.holonomyApply_eq_foldl_map`. -/
-def compList (l : List Label) : Label := l.foldl (fun acc f => f.comp acc) Label.id
-
-@[simp] theorem compList_nil : compList [] = Label.id := rfl
+/-! ## Unit-slope composite labels -/
 
 theorem slope_foldl_comp : ∀ (l : List Label), (∀ f ∈ l, f.slope = 1) → ∀ acc : Label,
     (l.foldl (fun a f => f.comp a) acc).slope = acc.slope
@@ -146,18 +116,6 @@ theorem shift_foldl_comp : ∀ (l : List Label), (∀ f ∈ l, f.slope = 1) → 
       simp only [shift_comp, hf, one_mul, List.map_cons, List.sum_cons]
       ring
 
-theorem apply_foldl_comp : ∀ (l : List Label), (∀ f ∈ l, 0 ≤ f.slope) → ∀ acc : Label,
-    0 ≤ acc.slope → ∀ x : ℝ,
-      (l.foldl (fun a f => f.comp a) acc).apply x
-        = l.foldl (fun y f => f.apply y) (acc.apply x)
-  | [], _, _, _, _ => rfl
-  | f :: rest, hslope, acc, hacc, x => by
-      have hrest : ∀ g ∈ rest, 0 ≤ g.slope := fun g hg => hslope g (List.mem_cons_of_mem _ hg)
-      have hf : 0 ≤ f.slope := hslope f (List.mem_cons_self ..)
-      rw [List.foldl_cons, List.foldl_cons,
-        apply_foldl_comp rest hrest (f.comp acc) (slope_comp_nonneg hf hacc) x,
-        apply_comp hf acc x]
-
 /-- A composite of unit-slope labels has unit slope. -/
 theorem slope_compList {l : List Label} (hslope : ∀ f ∈ l, f.slope = 1) :
     (compList l).slope = 1 := by
@@ -167,11 +125,6 @@ theorem slope_compList {l : List Label} (hslope : ∀ f ∈ l, f.slope = 1) :
 theorem shift_compList {l : List Label} (hslope : ∀ f ∈ l, f.slope = 1) :
     (compList l).shift = (l.map Label.shift).sum := by
   rw [compList, shift_foldl_comp l hslope Label.id, shift_id, zero_add]
-
-/-- At nonnegative slopes the composite label acts by the fold of the actions. -/
-theorem apply_compList {l : List Label} (hslope : ∀ f ∈ l, 0 ≤ f.slope) (x : ℝ) :
-    (compList l).apply x = l.foldl (fun y f => f.apply y) x := by
-  rw [compList, apply_foldl_comp l hslope Label.id (by simp) x, apply_id]
 
 /-- **A composite of unit-slope labels has a pre-fixed point exactly when its
 shift sum is nonpositive.**  This is the unit-slope branch of
@@ -283,15 +236,6 @@ theorem exists_isLaxSection_iff_forall_cycle_shift_nonpos [Fintype V] [Finite E]
       have := hlift e
       show (label e).floor.unbotD 0 ≤ base (G.target e) + lift
       linarith
-
-/-- The composite label of a walk acts by transport along that walk. -/
-theorem apply_compList_edges {label : E → Label} (hslope : ∀ e : E, 0 ≤ (label e).slope)
-    {start finish : V} (walk : G.Walk start finish) (x : ℝ) :
-    (Label.compList (walk.edges.map label)).apply x = holonomyApply label walk x := by
-  rw [holonomyApply_eq_foldl_map]
-  refine Label.apply_compList (fun f hf => ?_) x
-  obtain ⟨e, _, rfl⟩ := List.mem_map.mp hf
-  exact hslope e
 
 /-- The shift of the composite label of a walk is the walk's shift sum. -/
 theorem shift_compList_edges {label : E → Label} (hslope : ∀ e : E, (label e).slope = 1)

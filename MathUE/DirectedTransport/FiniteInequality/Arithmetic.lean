@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.LinearAlgebra.FourierMotzkin
-import MathUE.FiniteInequalityCompatibility
+import MathUE.DirectedTransport.FiniteInequality.Basic
 import Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset
 import Mathlib.Data.Rat.BigOperators
 import Mathlib.Data.Rat.Cast.Order

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Algebra.BigOperators.Field
-import MathUE.FiniteInequalityCompatibility
+import MathUE.DirectedTransport.FiniteInequality.Basic
 
 /-!
 # Quantitative normalized duality for finite inequalities

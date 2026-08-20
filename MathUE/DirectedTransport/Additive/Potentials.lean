@@ -14,7 +14,7 @@ import Mathlib.Tactic.Ring
 import MathUE.EdgeGraph
 
 /-!
-# Max-plus potentials on a finite real-weighted digraph
+# Additive potentials on a finite real-weighted digraph
 
 A finite directed multigraph is represented by `Math.EdgeGraph`, so parallel
 edges keep their identities, and its finite walks are endpoint-indexed typed

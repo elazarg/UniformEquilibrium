@@ -7,9 +7,10 @@ additive, polyhedral, and max-affine extensions.  Game-semantic consumers live
 under `UniformEquilibrium/`.
 
 Status: Layers 0 and 1 (milestones M0 and M1) are implemented in
-`MathUE/DirectedTransport.lean` and `MathUE/MaxAffineTransport.lean`, with
-the T6a/T6b duality regimes in `MathUE/MaxAffineSectionDuality.lean`.  Each
-stage below is marked implemented, staged, or refuted.
+`MathUE/DirectedTransport/Basic.lean` and
+`MathUE/DirectedTransport/MaxAffine/Basic.lean`, with the T6a/T6b duality
+regimes in `MathUE/DirectedTransport/MaxAffine/Sections.lean`. Each stage below
+is marked implemented, staged, or refuted.
 
 ## The object, in one sentence
 
@@ -24,8 +25,8 @@ equal:
 
 | Module | Reading inside the transport theory |
 | --- | --- |
-| `MathUE/CycleCoboundary.lean` | translation-valued transport on one fiber; cycle sums are holonomy; exact data is a trivialization |
-| `MathUE/MaxPlusPotential.lean` | lax sections (subsolutions) for ordered translation transport |
+| `MathUE/DirectedTransport/Additive/Exact.lean` | translation-valued transport on one fiber; cycle sums are holonomy; exact data is a trivialization |
+| `MathUE/DirectedTransport/Additive/Potentials.lean` | lax sections (subsolutions) for ordered translation transport |
 | `MathUE/TransferSummaryMonoid.lean` | the label algebra: affine and max-affine endomorphism composition |
 | `MathUE/InverseCoordinateRecurrence.lean` | conjugation of one-dimensional transport inside a projective-linear action |
 | `MathUE/IndependenceModelValuation.lean` | leading-order degeneration of a hazard-parameterized transport family |
@@ -50,7 +51,7 @@ identities, chronological edge lists, endpoint facts, concatenation, edge
 multiplicities, and splitting and splicing at visited vertices. This layer has
 no edge labels, transport, charges, or discrepancy.
 
-### Layer 0 — `MathUE/DirectedTransport.lean`
+### Layer 0 — `MathUE/DirectedTransport/Basic.lean`
 
 Deliberately small; no category-theory library.  Data over
 `Math.EdgeGraph V E`:
@@ -93,7 +94,7 @@ Layer 0's job is vocabulary plus the four or five induction lemmas that every
 specialization would otherwise reprove.  It should stay under a few hundred
 lines.
 
-### Layer 1 — `MathUE/MaxAffineTransport.lean`
+### Layer 1 — `MathUE/DirectedTransport/MaxAffine/Basic.lean`
 
 The first useful specialization: one common fiber `ℝ`, edge maps monotone
 max-affine.  This is where quantitative content lives.
@@ -184,8 +185,8 @@ satisfies `holonomy x ≥ x + γ` at `x = φ base`, some edge has
 hypothesis holds at every `x`, making the obstruction candidate-free.
 
 **T6 — strong duality (a and b implemented in
-`MathUE/MaxAffineSectionDuality.lean`).**  Does "every cycle holonomy has a
-pre-fixed point" give a lax section?
+`MathUE/DirectedTransport/MaxAffine/Sections.lean`).** Does "every cycle
+holonomy has a pre-fixed point" give a lax section?
 
   a. *Slope 1* (implemented; floors may be `⊥` or finite): a lax section
      exists iff no cycle has positive shift-sum, and iff every cycle's
@@ -210,14 +211,14 @@ pre-fixed point" give a lax section?
      `shift_e + slope_e · φ(source e) ≤ φ(target e)`, a finite linear
      system in `φ` whatever the slope signs, so existence is governed by
      the Farkas alternative in
-     `MathUE/FiniteInequalityCompatibility.lean`: a lax section exists iff
-     no nonnegative balanced combination of the rows is infeasible.  At
+     `MathUE/DirectedTransport/FiniteInequality/Basic.lean`: a lax section
+     exists iff no nonnegative balanced combination of the rows is infeasible. At
      nonnegative slopes the certificate reads as a generalized-flow
      (gain-flow) certificate; the classical positive cycle is the
      affine-only case at unit slope product, and floor rows enter for
      expanding cycles.  (Implemented in
-     `MathUE/MaxAffineFarkasDuality.lean`: the counterexample and the
-     Farkas instantiation.)  The spectral reading —
+     `MathUE/DirectedTransport/MaxAffine/Farkas.lean`: the counterexample and
+     the Farkas instantiation.) The spectral reading —
      min-max function theory (Gunawardena, Discrete Event Dynamic Systems 4
      (1994)), topical-map Perron–Frobenius (Gaubert–Gunawardena, Trans.
      Amer. Math. Soc. 356 (2004)) — provides the frame for eigenvalue
@@ -264,7 +265,7 @@ A variant of Layer 0 with relations in place of functions — edge labels
 sections satisfying `(s (source e), s (target e)) ∈ R_e` — would faithfully
 carry constraint data that is not functional, and for labels that are finite
 conjunctions of affine inequalities the Farkas layer covers it: the
-row encoding of `MathUE/MaxAffineFarkasDuality.lean` never uses
+row encoding of `MathUE/DirectedTransport/MaxAffine/Farkas.lean` never uses
 functionality.  The variant is nonetheless not written, and the reason has a
 proved core with an honest scope: on the one-real-coordinate-per-player
 vertex set, the constraints the counterexample regime forces on preemption
@@ -331,28 +332,29 @@ cyclic mismatch corresponds to T4's `a = 1, t ≤ 0` boundary.
 
 All implemented.
 
-- **M0**: Layer 0 (`MathUE/DirectedTransport.lean`).
-- **M1**: Layer 1 label algebra + T2 + T3 + T4 + T5 + T7 + specialization
-  theorems + the `AffineSummary →* Matrix` identification
-  (`MathUE/MaxAffineTransport.lean`).
-- **M2**: T6a and T6b (`MathUE/MaxAffineSectionDuality.lean`).
+- **M0**: Layer 0 (`MathUE/DirectedTransport/Basic.lean`).
+- **M1**: Layer 1 label algebra + T2 + T3 + T4 + T5 + T7 + the
+  `AffineSummary →* Matrix` identification
+  (`MathUE/DirectedTransport/MaxAffine/Basic.lean`), with the additive bridge
+  in `MathUE/DirectedTransport/MaxAffine/Additive.lean`.
+- **M2**: T6a and T6b (`MathUE/DirectedTransport/MaxAffine/Sections.lean`).
 - **M3**: the cyclewise-completeness refutation and the general Farkas
-  duality (`MathUE/MaxAffineFarkasDuality.lean`).
+  duality (`MathUE/DirectedTransport/MaxAffine/Farkas.lean`).
 
 ## Sibling-module completions (recorded)
 
 Scope notes recorded in the five modules' docstrings (literature-only
 citations there, per docstring policy); cross-referenced here:
 
-- `MathUE/MaxPlusPotential.lean`: potential side only; missing toward
-  max-plus Perron–Frobenius: eigenvector existence, the Collatz–Wielandt
+- `MathUE/DirectedTransport/Additive/Potentials.lean`: potential side only;
+  missing toward max-plus Perron–Frobenius: eigenvector existence, the Collatz–Wielandt
   attained form of the max cycle mean, the critical graph, the Kleene star
   (of which `maxIncomingWeight` is one row).  Natural setting: topical maps.
 - `MathUE/TransferSummaryMonoid.lean`: the missing identity is the finite
   floor; `WithBot` floors (Layer 1) repair it.  Missing on the Lindley side:
   stationary (Loynes) theory, two-sided reflection.
-- `MathUE/CycleCoboundary.lean`: criterion and obstruction, not the Hodge
-  decomposition (coboundary + circulation), not `H¹` as a quotient;
+- `MathUE/DirectedTransport/Additive/Exact.lean`: criterion and obstruction,
+  not the Hodge decomposition (coboundary + circulation), not `H¹` as a quotient;
   general-group switching (Zaslavsky) only in the translation case.
 - `MathUE/InverseCoordinateRecurrence.lean`: single steps and two-phase
   products; the `n`-phase trace trichotomy of the projective action is the

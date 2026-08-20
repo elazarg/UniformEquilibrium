@@ -10,7 +10,7 @@ import Mathlib.LinearAlgebra.Dual.Lemmas
 import Mathlib.LinearAlgebra.Pi
 
 /-!
-# Compatibility of finite linear inequalities
+# Finite linear-inequality compatibility
 
 This file transports the Fourier--Motzkin theorem of alternatives from
 `Fin (Fintype.card State)` to an arbitrary finite state type.
