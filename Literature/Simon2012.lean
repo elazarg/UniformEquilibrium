@@ -68,7 +68,7 @@ def EuclideanInfDist {N : Type} [Fintype N]
   sInf (EuclideanDist x '' S)
 
 /-- Unbounded total variation measured in the paper's Euclidean norm. -/
-def HasUnboundedPaperExtendedVariation {N : Type} [Fintype N]
+def HasUnboundedExtendedVariation {N : Type} [Fintype N]
     {F : Correspondence (Payoff N) (Payoff N)}
     (orbit : ExtendedOrbitData F) : Prop := by
   classical
@@ -204,7 +204,7 @@ def Question1Hypotheses {N : Type} [Fintype N] {k : ℕ}
 def Question1Conclusion {N : Type} [Fintype N]
     (J : Set (Payoff N × Payoff N)) : Prop :=
   ∃ orbit : ExtendedOrbitData (graphCorrespondence J),
-    HasUnboundedPaperExtendedVariation orbit
+    HasUnboundedExtendedVariation orbit
 
 /-- An affirmative answer to Question 1, uniformly in its finite dimension. -/
 def Question1Affirmative : Prop :=
@@ -472,7 +472,7 @@ def FiniteNearOrbitCondition (G : QuittingGame) : Prop :=
       B ≤ FiniteOrbitVariation x
 
 /-- Unbounded Euclidean variation of an infinite orbit. -/
-def HasUnboundedPaperVariation {N : Type} [Fintype N]
+def HasUnboundedVariation {N : Type} [Fintype N]
     (x : ℕ → Payoff N) : Prop :=
   ∀ B : ℝ, ∃ k,
     B ≤ ∑ i ∈ Finset.range k, EuclideanDist (x (i + 1)) (x i)
@@ -481,14 +481,14 @@ def HasUnboundedPaperVariation {N : Type} [Fintype N]
 def InfiniteOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ x : ℕ → Payoff G.Player,
     IsInfiniteOrbit (FRow G ε) x ∧
-      (∀ i, IsRational G ε (x i)) ∧ HasUnboundedPaperVariation x
+      (∀ i, IsRational G ε (x i)) ∧ HasUnboundedVariation x
 
 /-- Theorem 2.1(v), with the paper's Euclidean norm. -/
 def ExtendedOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ x : ExtendedOrbitData (FRow G ε),
     (∀ j, ActiveSegment x.segmentCount j → ∀ i,
       SegmentIndex (x.segmentLength j) i → IsRational G ε (x.point j i)) ∧
-    HasUnboundedPaperExtendedVariation x
+    HasUnboundedExtendedVariation x
 
 /--
 Theorem 2.1.  Simon 2007, Theorem 3 has the same mathematical content, but its
@@ -547,7 +547,7 @@ theorem lemma2_2_of_simon2007_bound (G : QuittingGame) {B ε : ℝ}
 /-- The unqualified Euclidean infinite-orbit condition in Theorem 2.2. -/
 def InfiniteUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ x : ℕ → Payoff G.Player,
-    IsInfiniteOrbit (FRow G ε) x ∧ HasUnboundedPaperVariation x
+    IsInfiniteOrbit (FRow G ε) x ∧ HasUnboundedVariation x
 
 /--
 Theorem 2.2.  Simon 2007, Corollary 2 is `sorry`-backed; the corrected
@@ -565,7 +565,7 @@ theorem theorem2_2 (G : QuittingGame)
 /-- The unqualified extended-orbit condition in Theorem 2.3. -/
 def ExtendedUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ orbit : ExtendedOrbitData (FRow G ε),
-    HasUnboundedPaperExtendedVariation orbit
+    HasUnboundedExtendedVariation orbit
 
 /--
 Theorem 2.3.  Removing rationality from an extended orbit uses Lemma 2.2 to
