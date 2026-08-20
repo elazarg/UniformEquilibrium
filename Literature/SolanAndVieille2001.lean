@@ -23,9 +23,8 @@ nonempty quitting coalition `S`, and actions `c^i` and `q^i`. A profile is a
 time-indexed sequence of mixed action vectors conditional on survival. The
 game pays zero if nobody ever quits.
 
-Open source claims are stated as propositions. Checked production
-reformulations are kept separate from the exact source statements and never
-replace them.
+Unproved source claims remain `sorry`. Checked production reformulations are
+kept separate from the exact source statements and never replace them.
 -/
 
 namespace Literature.SolanAndVieille2001
@@ -4062,13 +4061,13 @@ surely, then it admits an `ε`-equilibrium for every `ε > 0`.
 
 The paper invokes the Kuratowski--Ryll-Nardzewski measurable-selection
 theorem in its backward induction. The repository currently has neither that
-selection theorem nor measurable finite-game Nash correspondences, so this
-source result remains an open proposition rather than a checked theorem. -/
-def Theorem2_14 : Prop :=
-  ∀ (process : PayoffProcess ι), processAssumptions process →
+selection theorem nor measurable finite-game Nash correspondences. -/
+theorem theorem2_14 (process : PayoffProcess ι)
+    (hprocess : processAssumptions process) :
     ∀ ε : ℝ, 0 < ε → ∃ profile : ProcessProfile process,
       processAdapted process profile ∧
-        processEpsilonEquilibrium process profile ε
+        processEpsilonEquilibrium process profile ε := by
+  sorry
 
 /-! ## 3. The four-player example -/
 
@@ -4324,23 +4323,25 @@ theorem figure2_collisionMass_le_twentyFour_mul
 /-- The first omitted Figure 2 assertion: for all sufficiently small positive
 `ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
 the technical proof and refers to Solan and Vieille (2000). -/
-def Figure2NoStationaryEpsilonClaim : Prop :=
+theorem figure2_no_stationary_epsilon :
   ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε, 0 < ε → ε < ε₀ →
     ¬ ∃ root : Fin 4 → PMF Bool,
       epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
-        (stationaryProfile SolanVieilleBoundary.boundaryReward root)
+        (stationaryProfile SolanVieilleBoundary.boundaryReward root) := by
+  sorry
 
 /-- The second omitted Figure 2 assertion: for all sufficiently small
 positive `ε`, no `ε`-equilibrium remains `ε`-close to all-Continue at every
 stage. The paper again refers to Solan and Vieille (2000) for the omitted
 technical proof. -/
-def Figure2NoPerturbedEpsilonClaim : Prop :=
+theorem figure2_no_perturbed_epsilon :
   ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε, 0 < ε → ε < ε₀ →
     ¬ ∃ roots : RootSequence (ι := Fin 4),
       (∀ time player,
         |(roots time player false).toReal - 1| < ε) ∧
       epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
-        (profile SolanVieilleBoundary.boundaryReward roots)
+        (profile SolanVieilleBoundary.boundaryReward roots) := by
+  sorry
 
 /-- The repository's Figure 2 terminal table satisfies A.1 and A.2. -/
 theorem boundaryReward_assumptions :
