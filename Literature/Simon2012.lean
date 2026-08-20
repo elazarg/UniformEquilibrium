@@ -574,34 +574,19 @@ theorem theorem2_1 (G : QuittingGame)
       (ExtendedOrbitCondition G) := by
   sorry
 
-/-- A positive bound on the differences between terminal payoffs. -/
+/--
+A positive bound on differences between all payoffs, including the zero
+nontermination payoff, with Simon's standing normalization `1 ≤ B`.
+-/
 def IsPositivePayoffDifferenceBound (G : QuittingGame) (B : ℝ) : Prop :=
-  0 < B ∧ ∀ A C n, |G.reward A n - G.reward C n| ≤ B
+  IsQuittingPayoffDifferenceBound G B
 
 /--
-Lemma 2.2 in its exact 2012 normalization.  The missing proof is the direct
-min-max estimate separating the cases `rⁿ ≥ χⁿ-3ε` and `rⁿ < χⁿ-3ε`.
-Simon 2007 contains only a declaration under its stricter payoff-bound package;
-the exact positive-`B` statement below is not a formal consequence of that
-interface without reproving the quantitative estimate.
+Lemma 2.2.  An `F_{ε²/(2B)}` step preserves `3ε`-rationality and otherwise
+raises the coordinate by at least `ε²/(2B)`.
 -/
 theorem lemma2_2 (G : QuittingGame) {B ε : ℝ}
     (hB : IsPositivePayoffDifferenceBound G B)
-    (hnormal : ∀ n, IsNormalPlayer G n)
-    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
-    (hε : 0 < ε) (hε1 : ε ≤ 1) {r s : Payoff G.Player}
-    (hstep : s ∈ FRow G (ε ^ 2 / (2 * B)) r) :
-    ∀ n,
-      (r n ≥ MinMaxQuit G n - 3 * ε →
-        s n ≥ MinMaxQuit G n - 3 * ε) ∧
-      (r n < MinMaxQuit G n - 3 * ε →
-        s n ≥ r n + ε ^ 2 / (2 * B)) := by
-  sorry
-
-/-- The specialization under Simon 2007's stronger payoff-bound package. -/
-theorem lemma2_2_of_simon2007_bound (G : QuittingGame) {B ε : ℝ}
-    (hB : IsQuittingPayoffDifferenceBound G B)
     (hnormal : ∀ n, IsNormalPlayer G n)
     (_hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (_hinstant : ¬HasInstantApproximateEquilibria G)
