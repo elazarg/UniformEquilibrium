@@ -254,8 +254,8 @@ def Question2Affirmative : Prop :=
           IsInfiniteOrbit
             (graphCorrespondence (GraphHomotopyTerminalImage G H)) orbit
 
-/--
-The paper reports a counterexample to Question 2 and points to a similar
+/-!
+The paper reports that `Question2Affirmative` is false and points to a similar
 Gobbino--Simon construction, but does not print it.  The external blueprint is
 Gobbino--Simon, Example 4.9: in `ℝ²`, take the square `[0,2]²` with the segment
 from `(2,0)` to `(3,0)` attached, use the convex segment from `(1,1)` to `(3,0)`
@@ -264,8 +264,6 @@ as the exceptional fiber at `(2,0)`, and send the remaining square points to
 the displayed homotopy and proving that it has only four iterations are the
 missing formal obligations; no claim in the present repository supplies them.
 -/
-theorem question2_is_false : ¬Question2Affirmative := by
-  sorry
 
 /--
 The paragraph after Question 2 says that adding
@@ -282,15 +280,13 @@ def Question1NoEscapeAffirmative : Prop :=
       (∀ z ∈ HomotopyTerminalImage C H, z.1 ∈ C) →
       Question1Conclusion J
 
-/--
+/-!
 The strengthened version discussed immediately after Question 2.  The omitted
 proof is the escape-game spanning construction: it needs the Cech-homology
 restriction and connected-component lemmas that remain `sorry` in
 `Literature.Simon2007`, so no checked topological argument is currently
 available to instantiate this statement.
 -/
-theorem question1_with_no_escape : Question1NoEscapeAffirmative := by
-  sorry
 
 /-! ### 2.3. The challenge and the correction to Simon 2007 -/
 
