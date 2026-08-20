@@ -27,7 +27,9 @@ Besides the exact section and finite telescope, the main results describe a
 return of the debt coordinate.  Any survival loss on a positive-debt return
 must be paid by a positive reached Nash defect.  If every intervening defect
 vanishes, a positive-debt return forces every intervening root to have joint
-Continue mass one.
+Continue mass one. The positive reached charge either gives an actual
+best-endpoint behavioral gain or is covered by the exact continuation-option
+budget isolated in `TerminalSemanticOwnStrategyTransport`.
 -/
 
 noncomputable section
@@ -297,6 +299,52 @@ theorem exists_liveMass_mul_capDefect_pos_of_terminalSemanticDebt_return
   simp_rw [hweight] at hwitness
   simpa only [literalChain, ofProfile, defect,
     quittingAllContinueProfileSpine] using hwitness
+
+/-- A positive-debt return with survival loss yields either an actual reached
+best-endpoint gain or a positively charged row whose cap defect is entirely
+covered by the explicit continuation-option budget. -/
+theorem exists_actualRowGain_pos_or_capDefect_le_quitOptionBudget_of_return
+    (profile : (quittingGame reward).BehaviorProfile) (who : iota) (cutoff : ℕ)
+    (hdebt : 0 < quittingTerminalSemanticDebt
+      (quittingTerminalSemanticPair reward profile) who)
+    (hreturn : quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward
+          (quittingAllContinueProfileSpine reward profile cutoff)) who =
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward profile) who)
+    (hlive : quittingLiveMass reward profile cutoff < 1) :
+    ∃ time ∈ Finset.range cutoff,
+      let pair := quittingLiteralActualRowTail reward profile time
+      let root := quittingLiteralActualRowRoot reward profile time
+      0 < quittingLiteralActualRowBestEndpointGain reward profile who time ∨
+        (0 < quittingLiveMass reward profile time *
+            quittingRootCoordinateNashDefect reward pair.2 root who ∧
+          quittingRootCoordinateNashDefect reward pair.2 root who ≤
+            quittingRootOpponentContinueMass root who *
+              (root who true).toReal *
+                quittingTerminalSemanticDebt pair who) := by
+  obtain ⟨time, htime, hcharge⟩ :=
+    exists_liveMass_mul_capDefect_pos_of_terminalSemanticDebt_return
+      profile who cutoff hdebt hreturn hlive
+  refine ⟨time, htime, ?_⟩
+  let pair := quittingLiteralActualRowTail reward profile time
+  let root := quittingLiteralActualRowRoot reward profile time
+  change 0 < quittingLiveMass reward profile time *
+    quittingRootCoordinateNashDefect reward pair.2 root who at hcharge
+  have hliveNonneg : 0 ≤ quittingLiveMass reward profile time :=
+    quittingLiveMass_nonneg reward profile time
+  have hlivePos : 0 < quittingLiveMass reward profile time := by
+    rcases (mul_pos_iff.mp hcharge) with hpos | hneg
+    · exact hpos.1
+    · exact (not_lt_of_ge hliveNonneg hneg.1).elim
+  by_cases hstrict : quittingRootOpponentContinueMass root who *
+      (root who true).toReal * quittingTerminalSemanticDebt pair who <
+        quittingRootCoordinateNashDefect reward pair.2 root who
+  · left
+    exact quittingLiteralActualRowBestEndpointGain_pos_of_capDefect_gt_quitOptionBudget
+      reward profile who time hlivePos hstrict
+  · right
+    exact ⟨hcharge, le_of_not_gt hstrict⟩
 
 /-- On a positive literal-spine debt return, zero intervening cap defects
 force every intervening root to Continue jointly with probability one. -/
