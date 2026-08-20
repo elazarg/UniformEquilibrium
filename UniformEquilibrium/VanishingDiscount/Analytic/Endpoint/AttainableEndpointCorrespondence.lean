@@ -54,7 +54,7 @@ proves no part of the restarted-coherence theorem itself.
   presentation: a `RestartedChildGerm` here is a germ of the ambient game
   read at a designated state, which is the weakest faithful reading of
   "restart".  The genuine restarted-child system, with its own public
-  configuration space and legacy interface `Ξ_C`, is future work.
+  configuration space and public interface `Ξ_C`, is future work.
 * Consequently `attainableEndpoint` is the *unconstrained* restarted
   correspondence: it carries no face, forbidden-row, quotient, account, or
   rank constraint.  It is therefore an over-approximation of
@@ -90,7 +90,7 @@ designation of the coordinate at which its endpoint vector is read.  This is
 the lightest faithful bundling the repository supports, and it is
 deliberately weaker than the correspondence's restarted child: a genuine
 restarted child would be a germ of a *child continuation presentation* with
-its own public configuration space and legacy interface, which does not
+its own public configuration space and continuation interface, which does not
 exist here.
 -/
 structure RestartedChildGerm (entry : G.State) where

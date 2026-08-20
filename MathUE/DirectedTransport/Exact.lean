@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.GroupTheory.DedekindFinite
-import MathUE.CycleCoboundary
+import MathUE.DirectedTransport.Additive.Exact
 import MathUE.DirectedTransport.Basic
 
 /-!

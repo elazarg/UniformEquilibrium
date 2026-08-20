@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.VanishingDiscount.Fink.ConstraintPublicResponse
-import MathUE.FiniteInequalityCompatibility
+import MathUE.DirectedTransport.FiniteInequality.Basic
 
 /-!
 # Rectangular mixed-player continuation compatibility

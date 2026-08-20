@@ -5,13 +5,14 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Data.Fintype.Sum
-import MathUE.FiniteInequalityCompatibility
-import MathUE.MaxAffineSectionDuality
+import MathUE.DirectedTransport.FiniteInequality.Basic
+import MathUE.DirectedTransport.MaxAffine.Basic
 
 /-!
 # Lax sections at mixed slopes: the cyclewise test fails, the linear test does not
 
-`Math.MaxAffineSectionDuality` settles existence of a lax section in two
+`MathUE.DirectedTransport.MaxAffine.Sections` settles existence of a lax
+section in two
 regimes -- all slopes below one, and all slopes equal to one -- and in the
 unit-slope regime the criterion is cyclewise: a lax section exists exactly when
 the composite label of every closed walk has a pre-fixed point

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.MaxAffineFarkasDuality
+import MathUE.DirectedTransport.MaxAffine.Farkas
 import MathUE.DirectedTransport.FiniteInequality.Quantitative
 
 /-!

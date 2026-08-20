@@ -4,8 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.MaxAffineFarkasDuality
-import MathUE.MaxPlusPotential
+import MathUE.DirectedTransport.Additive.Potentials
+import MathUE.DirectedTransport.MaxAffine.Additive
+import MathUE.DirectedTransport.MaxAffine.Farkas
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
 
 /-!

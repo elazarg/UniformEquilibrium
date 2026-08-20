@@ -4,545 +4,1036 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.MaxAffineTransport
-import Mathlib.Data.List.Rotate
+import Mathlib.Algebra.Order.Group.MinMax
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.LinearAlgebra.Matrix.Notation
+import Mathlib.Order.WithBot
+import MathUE.DirectedTransport.Basic
+import MathUE.EdgeGraph
+import MathUE.CyclicMaxAffineBound
+import MathUE.InverseCoordinateRecurrence
+import MathUE.TransferSummaryMonoid
 
 /-!
-# Complete scalar and pathwise max-affine transport theory
+# Max-affine transport on a directed multigraph
 
-Max-affine transport admits the following scalar and cyclic classifications:
+A finite directed multigraph whose edges are labelled by max-affine self-maps
+of the line, monotone at the nonnegative slopes used below.  A walk transports
+a real number by composing its edge maps in chronological order; a closed walk
+therefore acts on the line by an endomorphism.  The obstruction theory of that
+action is the subject of this file.
 
-* complete descriptions of the pre-fixed and fixed sets of one label;
-* an attained/unbounded classification of the exact scalar residual margin;
-* the weighted edge obstruction for nonnegative slopes; and
-* forward rotation of exact and lax cyclic certificates without inverse maps.
+The label of an edge is a triple `(floor, shift, slope)` acting by
+`x ↦ max floor (shift + slope * x)`, with the floor allowed to be `⊥`, in which
+case the action is the affine map `x ↦ shift + slope * x`.  Admitting `⊥`
+supplies the identity `(⊥, 0, 1)` that the finite-floor class of
+`Math.TransferSummary.MaxAffineSummary` lacks
+(`Math.TransferSummary.MaxAffineSummary.not_exists_apply_eq_id`), so the
+nonnegative-slope labels form a monoid acting on `ℝ`, and it embeds both the
+affine summaries (at floor `⊥`) and the max-affine summaries (at coerced
+floors).
 
-The residual-margin theorems are stated without an unsafe real-valued `sInf`:
-the unbounded cases explicitly produce a witness below every real threshold,
-and the finite cases prove a universal lower bound together with an attaining
-point.  These statements determine the extended-real infimum exactly.
+## Vocabulary
+
+The labelled graph is a monoid-valued generalization of the group-labelled
+gain graphs of Zaslavsky, whose labels invert under edge reversal while these
+generally do not, and the composite label of a walk is its holonomy.  The vertex
+operator `φ v ↦ sup over incoming edges of the label actions` is the max-only
+corner of a *min-max function network* (Gunawardena, *Min-max functions*,
+Discrete Event Dynamic Systems 4 (1994)); its slope-`1` sublattice consists of
+*topical* maps (Gaubert and Gunawardena, *The Perron--Frobenius theorem for
+homogeneous, monotone functions*, Trans. Amer. Math. Soc. 356 (2004)), and the
+slope-`1` translation case is the theory of *timed event graphs* of max-plus
+discrete-event systems (Baccelli, Cohen, Olsder and Quadrat,
+*Synchronization and Linearity*, Wiley, 1992).  Per vertex, a label action is a
+one-step Bellman or Snell operator of a scalar optimal-stopping problem.  With
+general nonnegative slopes the object is monotone but not additively
+homogeneous, and appears to carry no established name.
+
+## Main definitions
+
+* `Math.MaxAffineTransport.Label`, its `apply`, `comp`, `id`, the `Monoid`
+  instance on nonnegative-slope labels and the `MulAction` on `ℝ`.
+* `Math.MaxAffineTransport.ofAffine`, `ofAffineHom`, `ofMaxAffine` -- the two
+  embeddings of `Math.TransferSummary`'s classes.
+* `Math.MaxAffineTransport.toTransferMatrix` -- affine summaries as
+  `2 × 2` transfer matrices.
+* `Math.MaxAffineTransport.IsLaxSection`, `defect` -- the lax section and
+  its edgewise residual.
+* `Math.MaxAffineTransport.holonomyApply` -- chronological transport along a
+  walk.
+* `Math.MaxAffineTransport.slopeProd`, `suffixWeight`, `suffixWeightSum`,
+  `weightedDefect` -- the survival-weighted accounting along an edge list.
+* `Math.MaxAffineTransport.cyclicLabel`, `cyclicChain`, `cyclicHolonomy` -- one
+  turn of a cyclic max-affine system read as a composite label action.
+
+## Main results
+
+* `Math.MaxAffineTransport.Label.apply_comp`,
+  `Math.MaxAffineTransport.Label.comp_assoc` -- the composition law, at
+  nonnegative outer slope.
+* `Math.MaxAffineTransport.Label.apply_add_le` -- the one-sided Lipschitz
+  estimate `apply f (x + d) ≤ apply f x + slope * d` for `0 ≤ d`.
+* `Math.MaxAffineTransport.holonomyApply_le_add_weightedDefect` -- the
+  **weighted-defect telescope**: transport along a walk is bounded by the value
+  of the candidate at the far end plus the positive parts of the edge defects,
+  each weighted by the product of the slopes traversed after it.
+* `Math.MaxAffineTransport.holonomyApply_cycle_le` -- a lax section makes
+  its value at the base vertex a pre-fixed point of every cycle's composite
+  action.
+* `Math.MaxAffineTransport.Label.exists_apply_le_self_iff` -- the expansivity
+  trichotomy: a single label has a pre-fixed point exactly when its slope is
+  below one, or is one with nonpositive shift, or exceeds one with the floor
+  below the affine fixed point.
+* `Math.MaxAffineTransport.exists_edge_defect_ge` -- the quantitative
+  obstruction dual to the telescope.
+* `Math.MaxAffineTransport.cyclicSolution_cyclicChain` -- a fixed point of one
+  turn of the cyclic labels is a `Math.CyclicMaxAffine.CyclicSolution`.
+
+## Relation to the rest of `MathUE`
+
+`MathUE.DirectedTransport.MaxAffine.Additive` identifies unit-slope
+translation labels with additive potentials and coboundaries. At reflected
+labels `(↑0, -g, a)` the transport along a path is the Lindley orbit
+`Math.TransferSummary.reflectedIter`
+(`holonomyApply_eq_reflectedIter`), whose survival-weighted representation is
+`Math.TransferSummary.reflectedIter_eq_sup'`.
+
+`MathUE.DirectedTransport` is the generic semantic layer.  `toTransport`
+reads a max-affine labelling as a constant-fiber transport on `ℝ`, and
+`holonomyApply` is `Math.DirectedTransport.transport` at those edge actions.
+The theorem `holonomyApply_eq_walkLabel_smul` identifies it with
+`Math.DirectedTransport.walkLabel` in the nonnegative-slope label monoid.
+The affine part of a composite label is represented by the transfer matrices of
+`Math.InverseCoordinate.affineTransferMatrix` through `toTransferMatrix`.
+
+## Scope
+
+This file develops the label algebra, walk semantics, weak duality, and the
+quantitative obstruction.  `MathUE.DirectedTransport.MaxAffine.Sections` proves section
+existence in the subunit-slope and slope-one regimes;
+`MathUE.DirectedTransport.MaxAffine.Farkas` gives the finite linear-system alternative for
+general labels.  Eigenvalue problems for the vertex operator remain outside
+this file; their natural setting is the fixed-point theory of topical maps.
 -/
 
 noncomputable section
 
-namespace Math
-namespace MaxAffineTransport
+namespace Math.MaxAffineTransport
 
-open scoped BigOperators
+/-! ## The label algebra -/
+
+/-- Coefficients of a max-affine self-map of the line with a floor in
+`WithBot ℝ`, monotone exactly when the slope is nonnegative.  The map is
+`x ↦ max floor (shift + slope * x)`, read as the affine
+map `x ↦ shift + slope * x` when the floor is `⊥`. -/
+@[ext] structure Label where
+  /-- The floor the map never falls below, or `⊥` for no floor at all. -/
+  floor : WithBot ℝ
+  /-- The additive part of the affine branch. -/
+  shift : ℝ
+  /-- The multiplicative part of the affine branch. -/
+  slope : ℝ
 
 namespace Label
 
-/-! ## Complete pre-fixed-set classification -/
+/-- The affine branch of a label. -/
+def affinePart (f : Label) (x : ℝ) : ℝ := f.shift + f.slope * x
 
-/-- In the contractive regime, pre-fixed points form the upper ray cut out by
-the floor and the affine fixed point.  The `WithBot` floor statement uniformly
-covers a missing floor. -/
-theorem apply_le_self_iff_of_slope_lt_one (f : Label) (hslope : f.slope < 1)
-    (x : ℝ) :
-    f.apply x ≤ x ↔
-      f.floor ≤ (x : WithBot ℝ) ∧ f.shift / (1 - f.slope) ≤ x := by
-  rw [f.apply_le_iff]
-  refine and_congr_right fun _ ↦ ?_
-  rw [div_le_iff₀ (sub_pos.mpr hslope)]
-  simp only [affinePart]
-  constructor <;> intro h <;> nlinarith
+/-- The action of a label, computed in `WithBot ℝ`. -/
+def applyBot (f : Label) (x : ℝ) : WithBot ℝ :=
+  f.floor ⊔ ((f.affinePart x : ℝ) : WithBot ℝ)
 
-/-- At unit slope, pre-fixed points exist precisely when the translation is
-nonpositive, with the floor imposing the only bound on the point. -/
-theorem apply_le_self_iff_of_slope_eq_one (f : Label) (hslope : f.slope = 1)
-    (x : ℝ) :
-    f.apply x ≤ x ↔ f.floor ≤ (x : WithBot ℝ) ∧ f.shift ≤ 0 := by
-  rw [f.apply_le_iff]
-  simp only [affinePart, hslope, one_mul]
-  constructor
-  · rintro ⟨hfloor, hshift⟩
-    exact ⟨hfloor, by linarith⟩
-  · rintro ⟨hfloor, hshift⟩
-    exact ⟨hfloor, by linarith⟩
+/-- The action of a label on the line.  The affine branch is never `⊥`, so the
+action lands in `ℝ` whatever the floor. -/
+def apply (f : Label) (x : ℝ) : ℝ := (f.applyBot x).unbotD 0
 
-/-- In the expansive regime, pre-fixed points form the interval between the
-floor (if present) and the affine fixed point. -/
-theorem apply_le_self_iff_of_one_lt_slope (f : Label) (hslope : 1 < f.slope)
-    (x : ℝ) :
-    f.apply x ≤ x ↔
-      f.floor ≤ (x : WithBot ℝ) ∧ x ≤ -f.shift / (f.slope - 1) := by
-  rw [f.apply_le_iff]
-  refine and_congr_right fun _ ↦ ?_
-  rw [le_div_iff₀ (sub_pos.mpr hslope)]
-  simp only [affinePart]
-  constructor <;> intro h <;> nlinarith
+/-- Every floor is either absent or a real number. -/
+theorem floor_cases (f : Label) : f.floor = ⊥ ∨ ∃ e : ℝ, f.floor = (e : WithBot ℝ) := by
+  rcases Option.eq_none_or_eq_some f.floor with hfloor | ⟨e, hfloor⟩
+  · exact Or.inl hfloor
+  · exact Or.inr ⟨e, hfloor⟩
 
-/-! ## Complete fixed-set classification -/
+theorem apply_of_floor_bot {f : Label} (hfloor : f.floor = ⊥) (x : ℝ) :
+    f.apply x = f.affinePart x := by
+  simp [apply, applyBot, hfloor]
 
-private theorem affine_fixed_point (f : Label) (hslope : f.slope ≠ 1) :
-    f.affinePart (f.shift / (1 - f.slope)) = f.shift / (1 - f.slope) := by
-  simp only [affinePart]
-  field_simp
-  ring
+theorem apply_of_floor_coe {f : Label} {e : ℝ} (hfloor : f.floor = (e : WithBot ℝ)) (x : ℝ) :
+    f.apply x = max e (f.affinePart x) := by
+  simp [apply, applyBot, hfloor, ← WithBot.coe_sup]
 
-/-- A contractive nonnegative-slope label has one fixed point.  `unbotD` uses
-the affine fixed point itself when no floor is present, so one formula covers
-both cases. -/
-theorem apply_eq_self_iff_of_slope_lt_one
-    (f : Label) (hslope : f.slope < 1) (x : ℝ) :
-    f.apply x = x ↔
-      x = max (f.floor.unbotD (f.shift / (1 - f.slope)))
-        (f.shift / (1 - f.slope)) := by
-  let q := f.shift / (1 - f.slope)
-  have hq : f.affinePart q = q := f.affine_fixed_point (ne_of_lt hslope)
+@[simp] theorem apply_mk_bot (t a x : ℝ) : (mk ⊥ t a).apply x = t + a * x :=
+  apply_of_floor_bot rfl x
+
+@[simp] theorem apply_mk_coe (e t a x : ℝ) :
+    (mk (e : WithBot ℝ) t a).apply x = max e (t + a * x) :=
+  apply_of_floor_coe rfl x
+
+/-- The real action is the `WithBot`-valued action: the latter never takes the
+value `⊥`. -/
+theorem coe_apply (f : Label) (x : ℝ) : ((f.apply x : ℝ) : WithBot ℝ) = f.applyBot x := by
+  rcases f.floor_cases with hfloor | ⟨e, hfloor⟩
+  · rw [apply_of_floor_bot hfloor, applyBot, hfloor, bot_sup_eq]
+  · rw [apply_of_floor_coe hfloor, applyBot, hfloor, ← WithBot.coe_sup]
+
+/-- The floor is never undercut. -/
+theorem floor_le_coe_apply (f : Label) (x : ℝ) :
+    f.floor ≤ ((f.apply x : ℝ) : WithBot ℝ) := by
+  rw [coe_apply]
+  exact le_sup_left
+
+/-- A label is dominated by a point exactly when both its floor and its affine
+branch are. -/
+theorem apply_le_iff (f : Label) (x : ℝ) :
+    f.apply x ≤ x ↔ f.floor ≤ (x : WithBot ℝ) ∧ f.affinePart x ≤ x := by
+  rcases f.floor_cases with hfloor | ⟨e, hfloor⟩
+  · rw [apply_of_floor_bot hfloor, hfloor]
+    exact ⟨fun h => ⟨bot_le, h⟩, fun h => h.2⟩
+  · rw [apply_of_floor_coe hfloor, hfloor, max_le_iff, WithBot.coe_le_coe]
+
+/-- A label is dominated at a target value exactly when both its floor and its
+affine branch are. -/
+theorem apply_le_target_iff (f : Label) (x y : ℝ) :
+    f.apply x ≤ y ↔ f.floor ≤ (y : WithBot ℝ) ∧ f.affinePart x ≤ y := by
+  rcases f.floor_cases with hfloor | ⟨e, hfloor⟩
+  · rw [apply_of_floor_bot hfloor, hfloor]
+    exact ⟨fun h => ⟨bot_le, h⟩, fun h => h.2⟩
+  · rw [apply_of_floor_coe hfloor, hfloor, max_le_iff, WithBot.coe_le_coe]
+
+/-- The affine branch never exceeds the action. -/
+theorem affinePart_le_apply (f : Label) (x : ℝ) : f.affinePart x ≤ f.apply x := by
   rcases f.floor_cases with hfloor | ⟨floor, hfloor⟩
-  · rw [f.apply_of_floor_bot hfloor, hfloor]
-    simp only [WithBot.unbotD_bot, max_self]
-    constructor
-    · intro hx
-      simp only [affinePart] at hx
-      have hne : 1 - f.slope ≠ 0 := (sub_pos.mpr hslope).ne'
-      field_simp
-      nlinarith
-    · rintro rfl
-      exact hq
-  · rw [f.apply_of_floor_coe hfloor, hfloor]
-    simp only [WithBot.unbotD_coe]
-    constructor
-    · intro hx
-      have hfloorx : floor ≤ x := by
-        have := le_max_left floor (f.affinePart x)
-        linarith
-      have hqx : q ≤ x := by
-        have hbranch : f.affinePart x ≤ x := by
-          have := le_max_right floor (f.affinePart x)
-          linarith
-        rw [div_le_iff₀ (sub_pos.mpr hslope)]
-        simp only [affinePart] at hbranch
-        nlinarith
-      apply le_antisymm
-      · by_cases hbranch : f.affinePart x ≤ floor
-        · have : x = floor := by simpa [max_eq_left hbranch] using hx.symm
-          subst x
-          exact le_max_left _ _
-        · have hfloorbranch : floor ≤ f.affinePart x := le_of_not_ge hbranch
-          have hxaffine : f.affinePart x = x := by
-            simpa [max_eq_right hfloorbranch] using hx
-          have hne : 1 - f.slope ≠ 0 := (sub_pos.mpr hslope).ne'
-          have : x = q := by
-            simp only [affinePart] at hxaffine
-            dsimp [q]
-            field_simp
-            nlinarith
-          rw [this]
-          exact le_max_right _ _
-      · exact max_le hfloorx hqx
-    · rintro rfl
-      by_cases hfloorq : floor ≤ q
-      · rw [max_eq_right hfloorq, hq, max_eq_right hfloorq]
-      · have hqfloor : q ≤ floor := le_of_not_ge hfloorq
-        rw [max_eq_left hqfloor]
-        have hbranch : f.affinePart floor ≤ floor := by
-          have hiff := (f.apply_le_self_iff_of_slope_lt_one hslope floor).mpr
-            ⟨by simp [hfloor], hqfloor⟩
-          rw [f.apply_of_floor_coe hfloor, max_le_iff] at hiff
-          exact hiff.2
-        rw [max_eq_left hbranch]
+  · exact le_of_eq (apply_of_floor_bot hfloor x).symm
+  · rw [apply_of_floor_coe hfloor]
+    exact le_max_right floor (f.affinePart x)
 
-/-- At unit slope and zero shift, the fixed set is exactly the ray above the
-floor; with no floor this is all of `ℝ`. -/
-theorem apply_eq_self_iff_of_slope_eq_one_of_shift_eq_zero
-    (f : Label) (hslope : f.slope = 1) (hshift : f.shift = 0) (x : ℝ) :
-    f.apply x = x ↔ f.floor ≤ (x : WithBot ℝ) := by
-  constructor
-  · intro h
-    exact f.floor_le_coe_apply x |>.trans_eq (congrArg WithBot.some h)
-  · intro hfloor
-    apply le_antisymm
-    · exact (f.apply_le_self_iff_of_slope_eq_one hslope x).mpr
-        ⟨hfloor, hshift.le⟩
-    · rcases f.floor_cases with hbot | ⟨floor, hfloor⟩
-      · rw [f.apply_of_floor_bot hbot, affinePart, hslope, hshift]
-        simp
-      · rw [f.apply_of_floor_coe hfloor]
-        calc
-          x = f.affinePart x := by simp [affinePart, hslope, hshift]
-          _ ≤ max floor (f.affinePart x) := le_max_right _ _
-
-/-- A positive unit-slope translation has no fixed point. -/
-theorem not_exists_apply_eq_self_of_slope_eq_one_of_shift_pos
-    (f : Label) (hslope : f.slope = 1) (hshift : 0 < f.shift) :
-    ¬∃ x : ℝ, f.apply x = x := by
-  rintro ⟨x, hx⟩
-  have hprefixed := (f.apply_le_self_iff_of_slope_eq_one hslope x).mp hx.le
-  linarith
-
-/-- A negative unit-slope label has a fixed point exactly when its floor is
-finite, and then the floor is the unique fixed point. -/
-theorem apply_eq_self_iff_of_slope_eq_one_of_shift_neg_of_floor_coe
-    (f : Label) (hslope : f.slope = 1) (hshift : f.shift < 0)
-    {floor x : ℝ} (hfloor : f.floor = (floor : WithBot ℝ)) :
-    f.apply x = x ↔ x = floor := by
-  rw [f.apply_of_floor_coe hfloor, affinePart, hslope, one_mul]
-  constructor
-  · intro hx
-    by_cases hbranch : f.shift + x ≤ floor
-    · simpa [max_eq_left hbranch] using hx.symm
-    · have := (max_eq_right (le_of_not_ge hbranch)).symm.trans hx
-      linarith
-  · rintro rfl
-    rw [max_eq_left]
+/-- The action is monotone at nonnegative slope. -/
+theorem monotone_apply {f : Label} (hslope : 0 ≤ f.slope) : Monotone f.apply := by
+  intro x y hxy
+  have hbranch : f.affinePart x ≤ f.affinePart y := by
+    have := mul_le_mul_of_nonneg_left hxy hslope
+    simp only [affinePart]
     linarith
+  rcases f.floor_cases with hfloor | ⟨e, hfloor⟩
+  · rw [apply_of_floor_bot hfloor, apply_of_floor_bot hfloor]
+    exact hbranch
+  · rw [apply_of_floor_coe hfloor, apply_of_floor_coe hfloor]
+    exact max_le_max le_rfl hbranch
 
-theorem not_exists_apply_eq_self_of_slope_eq_one_of_shift_neg_of_floor_bot
-    (f : Label) (hslope : f.slope = 1) (hshift : f.shift < 0)
-    (hfloor : f.floor = ⊥) :
-    ¬∃ x : ℝ, f.apply x = x := by
-  rintro ⟨x, hx⟩
-  rw [f.apply_of_floor_bot hfloor, affinePart, hslope, one_mul] at hx
-  linarith
+/-- **The one-sided Lipschitz estimate.**  Moving the argument up by `d` moves
+the value up by at most `slope * d`.  This is what makes the walk telescope of
+`holonomyApply_le_add_weightedDefect` weight the edge residuals by slope
+products. -/
+theorem apply_add_le {f : Label} (hslope : 0 ≤ f.slope) (x : ℝ) {d : ℝ} (hd : 0 ≤ d) :
+    f.apply (x + d) ≤ f.apply x + f.slope * d := by
+  have hbranch : f.affinePart (x + d) = f.affinePart x + f.slope * d := by
+    simp only [affinePart]
+    ring
+  have hmul : 0 ≤ f.slope * d := mul_nonneg hslope hd
+  rcases f.floor_cases with hfloor | ⟨e, hfloor⟩
+  · rw [apply_of_floor_bot hfloor, apply_of_floor_bot hfloor, hbranch]
+  · rw [apply_of_floor_coe hfloor, apply_of_floor_coe hfloor, hbranch]
+    exact max_le (by have := le_max_left e (f.affinePart x); linarith)
+      (by have := le_max_right e (f.affinePart x); linarith)
 
-/-- A floorless expansive affine map has exactly its affine fixed point. -/
-theorem apply_eq_self_iff_of_one_lt_slope_of_floor_bot
-    (f : Label) (hslope : 1 < f.slope) (hfloor : f.floor = ⊥) (x : ℝ) :
-    f.apply x = x ↔ x = -f.shift / (f.slope - 1) := by
-  rw [f.apply_of_floor_bot hfloor, affinePart]
-  constructor <;> intro h
-  · rw [eq_div_iff (sub_pos.mpr hslope).ne']
-    nlinarith
-  · subst x
-    have hne : f.slope - 1 ≠ 0 := (sub_pos.mpr hslope).ne'
-    field_simp [hne]
+/-! ### Composition -/
+
+/-- The image of a floor under an affine map, with the absent floor preserved.
+`WithBot` arithmetic is avoided deliberately: at slope `0` the product of the
+slope with an absent floor is not the absent floor. -/
+def pushFloor (shift slope : ℝ) (b : WithBot ℝ) : WithBot ℝ :=
+  b.map fun e => shift + slope * e
+
+@[simp] theorem pushFloor_bot (shift slope : ℝ) : pushFloor shift slope ⊥ = ⊥ := rfl
+
+@[simp] theorem pushFloor_coe (shift slope e : ℝ) :
+    pushFloor shift slope (e : WithBot ℝ) = ((shift + slope * e : ℝ) : WithBot ℝ) := rfl
+
+@[simp] theorem pushFloor_id (b : WithBot ℝ) : pushFloor 0 1 b = b := by
+  cases b with
+  | bot => rfl
+  | coe e => simp
+
+/-- A nonnegative slope pushes floors through suprema. -/
+theorem pushFloor_sup {slope : ℝ} (hslope : 0 ≤ slope) (shift : ℝ) (b c : WithBot ℝ) :
+    pushFloor shift slope (b ⊔ c) = pushFloor shift slope b ⊔ pushFloor shift slope c := by
+  cases b with
+  | bot => simp
+  | coe u =>
+      cases c with
+      | bot => simp
+      | coe v =>
+          rw [← WithBot.coe_sup, pushFloor_coe, pushFloor_coe, pushFloor_coe, ← WithBot.coe_sup,
+            WithBot.coe_inj]
+          show shift + slope * max u v = max (shift + slope * u) (shift + slope * v)
+          rw [mul_max_of_nonneg _ _ hslope, ← max_add_add_left]
+
+theorem pushFloor_pushFloor (t a t' a' : ℝ) (b : WithBot ℝ) :
+    pushFloor t a (pushFloor t' a' b) = pushFloor (t + a * t') (a * a') b := by
+  cases b with
+  | bot => simp
+  | coe e =>
+      rw [pushFloor_coe, pushFloor_coe, pushFloor_coe, WithBot.coe_inj]
+      ring
+
+/-- Chronological composition: `outer.comp inner` passes the state through
+`inner` first.  The floor of the composite is the outer floor joined with the
+inner floor pushed through the outer affine branch. -/
+def comp (outer inner : Label) : Label where
+  floor := outer.floor ⊔ pushFloor outer.shift outer.slope inner.floor
+  shift := outer.shift + outer.slope * inner.shift
+  slope := outer.slope * inner.slope
+
+@[simp] theorem floor_comp (outer inner : Label) :
+    (outer.comp inner).floor = outer.floor ⊔ pushFloor outer.shift outer.slope inner.floor := rfl
+
+@[simp] theorem shift_comp (outer inner : Label) :
+    (outer.comp inner).shift = outer.shift + outer.slope * inner.shift := rfl
+
+@[simp] theorem slope_comp (outer inner : Label) :
+    (outer.comp inner).slope = outer.slope * inner.slope := rfl
+
+theorem applyBot_comp {outer : Label} (hslope : 0 ≤ outer.slope) (inner : Label) (x : ℝ) :
+    (outer.comp inner).applyBot x = outer.applyBot (inner.apply x) := by
+  have hpush : pushFloor outer.shift outer.slope ((inner.affinePart x : ℝ) : WithBot ℝ)
+      = (((outer.comp inner).affinePart x : ℝ) : WithBot ℝ) := by
+    rw [pushFloor_coe, WithBot.coe_inj]
+    simp only [affinePart, shift_comp, slope_comp]
+    ring
+  calc (outer.comp inner).applyBot x
+      = (outer.floor ⊔ pushFloor outer.shift outer.slope inner.floor)
+          ⊔ (((outer.comp inner).affinePart x : ℝ) : WithBot ℝ) := rfl
+    _ = outer.floor ⊔ (pushFloor outer.shift outer.slope inner.floor
+          ⊔ pushFloor outer.shift outer.slope ((inner.affinePart x : ℝ) : WithBot ℝ)) := by
+        rw [hpush, sup_assoc]
+    _ = outer.floor ⊔ pushFloor outer.shift outer.slope (inner.applyBot x) := by
+        rw [applyBot, pushFloor_sup hslope]
+    _ = outer.applyBot (inner.apply x) := by rw [← coe_apply]; rfl
+
+/-- **Coefficient composition represents composition of the actions**, under the
+nonnegativity of the outer slope that lets it be pushed through the inner
+supremum. -/
+theorem apply_comp {outer : Label} (hslope : 0 ≤ outer.slope) (inner : Label) (x : ℝ) :
+    (outer.comp inner).apply x = outer.apply (inner.apply x) := by
+  simp only [apply, applyBot_comp hslope]
+
+/-- Composition is associative as soon as the outermost slope is nonnegative;
+the inner slopes are unconstrained. -/
+theorem comp_assoc {first : Label} (hfirst : 0 ≤ first.slope) (second third : Label) :
+    (first.comp second).comp third = first.comp (second.comp third) := by
+  refine Label.ext ?_ ?_ ?_
+  · simp only [floor_comp, shift_comp, slope_comp]
+    rw [pushFloor_sup hfirst, pushFloor_pushFloor, sup_assoc]
+  · simp only [shift_comp, slope_comp]
+    ring
+  · simp only [slope_comp]
     ring
 
-/-- With a finite floor and expansive slope, the fixed set consists of the
-affine fixed point and the floor, provided the floor does not exceed the
-affine fixed point.  This single formula includes the one- and two-point
-boundary cases. -/
-theorem apply_eq_self_iff_of_one_lt_slope_of_floor_coe
-    (f : Label) (hslope : 1 < f.slope) {floor x : ℝ}
-    (hfloor : f.floor = (floor : WithBot ℝ)) :
-    f.apply x = x ↔
-      (x = -f.shift / (f.slope - 1) ∧
-        floor ≤ -f.shift / (f.slope - 1)) ∨
-      (x = floor ∧ floor ≤ -f.shift / (f.slope - 1)) := by
-  let q := -f.shift / (f.slope - 1)
-  have hq : f.affinePart q = q := by
-    have hne : f.slope - 1 ≠ 0 := (sub_pos.mpr hslope).ne'
-    simp only [affinePart, q]
-    field_simp [hne]
-    ring
-  rw [f.apply_of_floor_coe hfloor]
+/-- The identity label: no floor, no shift, unit slope. -/
+def id : Label := ⟨⊥, 0, 1⟩
+
+@[simp] theorem floor_id : id.floor = ⊥ := rfl
+
+@[simp] theorem shift_id : id.shift = 0 := rfl
+
+@[simp] theorem slope_id : id.slope = 1 := rfl
+
+@[simp] theorem apply_id (x : ℝ) : id.apply x = x := by
+  rw [apply_of_floor_bot rfl]
+  simp [affinePart]
+
+theorem id_comp (f : Label) : id.comp f = f := by
+  refine Label.ext ?_ ?_ ?_ <;> simp
+
+theorem comp_id (f : Label) : f.comp id = f := by
+  refine Label.ext ?_ ?_ ?_ <;> simp
+
+theorem slope_comp_pos {outer inner : Label} (houter : 0 < outer.slope)
+    (hinner : 0 < inner.slope) : 0 < (outer.comp inner).slope :=
+  mul_pos houter hinner
+
+theorem slope_comp_nonneg {outer inner : Label} (houter : 0 ≤ outer.slope)
+    (hinner : 0 ≤ inner.slope) : 0 ≤ (outer.comp inner).slope :=
+  mul_nonneg houter hinner
+
+/-- **Nonnegative-slope labels form a monoid.**  The identity is `(⊥, 0, 1)`;
+the finite-floor class of `Math.TransferSummary.MaxAffineSummary` has none.
+Slope zero is admitted: the composite then ignores its inner label, exactly as
+the constant action does. -/
+instance instMonoid : Monoid {f : Label // 0 ≤ f.slope} where
+  mul outer inner := ⟨outer.1.comp inner.1, slope_comp_nonneg outer.2 inner.2⟩
+  one := ⟨id, by simp⟩
+  mul_assoc first second third := Subtype.ext (comp_assoc first.2 second.1 third.1)
+  one_mul f := Subtype.ext (id_comp f.1)
+  mul_one f := Subtype.ext (comp_id f.1)
+
+@[simp] theorem val_mul (outer inner : {f : Label // 0 ≤ f.slope}) :
+    (outer * inner).1 = outer.1.comp inner.1 := rfl
+
+@[simp] theorem val_one : (1 : {f : Label // 0 ≤ f.slope}).1 = id := rfl
+
+instance instSMul : SMul {f : Label // 0 ≤ f.slope} ℝ where
+  smul f x := f.1.apply x
+
+@[simp] theorem smul_eq_apply (f : {f : Label // 0 ≤ f.slope}) (x : ℝ) :
+    f • x = f.1.apply x := rfl
+
+/-- Nonnegative-slope labels act on the line by their max-affine maps. -/
+instance instMulAction : MulAction {f : Label // 0 ≤ f.slope} ℝ where
+  one_smul x := apply_id x
+  mul_smul outer inner x := apply_comp outer.2 inner.1 x
+
+/-! ### Composite labels of a list -/
+
+/-- The composite label of a list of labels, the head acting first. This is the
+coefficient form of the fold of
+`Math.MaxAffineTransport.holonomyApply_eq_foldl_map`. -/
+def compList (labels : List Label) : Label :=
+  labels.foldl (fun accumulated next => next.comp accumulated) Label.id
+
+@[simp] theorem compList_nil : compList [] = Label.id := rfl
+
+theorem apply_foldl_comp : ∀ (labels : List Label),
+    (∀ label ∈ labels, 0 ≤ label.slope) → ∀ accumulated : Label,
+      0 ≤ accumulated.slope → ∀ point : ℝ,
+        (labels.foldl (fun result next => next.comp result) accumulated).apply point =
+          labels.foldl (fun value label => label.apply value) (accumulated.apply point)
+  | [], _, _, _, _ => rfl
+  | first :: rest, hslope, accumulated, haccumulated, point => by
+      have hrest : ∀ label ∈ rest, 0 ≤ label.slope :=
+        fun label hlabel => hslope label (List.mem_cons_of_mem _ hlabel)
+      have hfirst : 0 ≤ first.slope := hslope first (List.mem_cons_self ..)
+      rw [List.foldl_cons, List.foldl_cons,
+        apply_foldl_comp rest hrest (first.comp accumulated)
+          (slope_comp_nonneg hfirst haccumulated) point,
+        apply_comp hfirst accumulated point]
+
+/-- At nonnegative slopes the composite label acts by the fold of the actions. -/
+theorem apply_compList {labels : List Label}
+    (hslope : ∀ label ∈ labels, 0 ≤ label.slope) (point : ℝ) :
+    (compList labels).apply point =
+      labels.foldl (fun value label => label.apply value) point := by
+  rw [compList, apply_foldl_comp labels hslope Label.id (by simp) point, apply_id]
+
+/-! ### The two embeddings -/
+
+/-- An affine summary as a label with no floor. -/
+def ofAffine (f : Math.TransferSummary.AffineSummary) : Label := ⟨⊥, f.shift, f.slope⟩
+
+@[simp] theorem floor_ofAffine (f : Math.TransferSummary.AffineSummary) :
+    (ofAffine f).floor = ⊥ := rfl
+
+@[simp] theorem slope_ofAffine (f : Math.TransferSummary.AffineSummary) :
+    (ofAffine f).slope = f.slope := rfl
+
+/-- The floorless embedding preserves the action. -/
+@[simp] theorem apply_ofAffine (f : Math.TransferSummary.AffineSummary) (x : ℝ) :
+    (ofAffine f).apply x = f.apply x :=
+  apply_of_floor_bot rfl x
+
+/-- The floorless embedding preserves composition, at every slope. -/
+theorem ofAffine_comp (outer inner : Math.TransferSummary.AffineSummary) :
+    ofAffine (outer.comp inner) = (ofAffine outer).comp (ofAffine inner) := by
+  refine Label.ext ?_ rfl rfl
+  simp
+
+theorem ofAffine_one : ofAffine 1 = id := rfl
+
+/-- The nonnegative-slope affine summaries, a submonoid of the `ax + b`
+monoid. -/
+def affineNonnegSubmonoid : Submonoid Math.TransferSummary.AffineSummary where
+  carrier := {f | 0 ≤ f.slope}
+  mul_mem' hf hg := by
+    show (0 : ℝ) ≤ _ * _
+    exact mul_nonneg hf hg
+  one_mem' := by
+    show (0 : ℝ) ≤ 1
+    exact zero_le_one
+
+/-- **The floorless embedding as a monoid homomorphism.**  On nonnegative
+slopes both sides are monoids and the embedding respects their laws. -/
+def ofAffineHom : affineNonnegSubmonoid →* {f : Label // 0 ≤ f.slope} where
+  toFun f := ⟨ofAffine f.1, show (0 : ℝ) ≤ f.1.slope from f.2⟩
+  map_one' := rfl
+  map_mul' outer inner := Subtype.ext (ofAffine_comp outer.1 inner.1)
+
+/-- A max-affine summary as a label with a coerced floor. -/
+def ofMaxAffine (f : Math.TransferSummary.MaxAffineSummary) : Label :=
+  ⟨(f.floor : WithBot ℝ), f.shift, f.slope⟩
+
+@[simp] theorem floor_ofMaxAffine (f : Math.TransferSummary.MaxAffineSummary) :
+    (ofMaxAffine f).floor = (f.floor : WithBot ℝ) := rfl
+
+@[simp] theorem slope_ofMaxAffine (f : Math.TransferSummary.MaxAffineSummary) :
+    (ofMaxAffine f).slope = f.slope := rfl
+
+/-- The finite-floor embedding preserves the action. -/
+@[simp] theorem apply_ofMaxAffine (f : Math.TransferSummary.MaxAffineSummary) (x : ℝ) :
+    (ofMaxAffine f).apply x = f.apply x :=
+  apply_of_floor_coe rfl x
+
+/-- The finite-floor embedding preserves the coefficient composition law.  The
+two composites represent composition of the actions only at nonnegative outer
+slope, where `Math.TransferSummary.MaxAffineSummary.apply_comp` and `apply_comp`
+apply. -/
+theorem ofMaxAffine_comp (outer inner : Math.TransferSummary.MaxAffineSummary) :
+    ofMaxAffine (outer.comp inner) = (ofMaxAffine outer).comp (ofMaxAffine inner) := by
+  refine Label.ext ?_ rfl rfl
+  show ((max outer.floor (outer.shift + outer.slope * inner.floor) : ℝ) : WithBot ℝ)
+    = (outer.floor : WithBot ℝ) ⊔ pushFloor outer.shift outer.slope (inner.floor : WithBot ℝ)
+  rw [pushFloor_coe, ← WithBot.coe_sup, WithBot.coe_inj]
+
+/-- **Affine summaries as transfer matrices.**  The upper-triangular matrices
+of `Math.InverseCoordinate.affineTransferMatrix` carry the composition law of
+the summary monoid, which is
+`Math.InverseCoordinate.affineTransferMatrix_mul`. -/
+def toTransferMatrix : Math.TransferSummary.AffineSummary →* Matrix (Fin 2) (Fin 2) ℝ where
+  toFun f := Math.InverseCoordinate.affineTransferMatrix f.slope f.shift
+  map_one' := by
+    show Math.InverseCoordinate.affineTransferMatrix 1 0 = 1
+    rw [Matrix.one_fin_two]
+    rfl
+  map_mul' outer inner := by
+    show Math.InverseCoordinate.affineTransferMatrix (outer.slope * inner.slope)
+        (outer.shift + outer.slope * inner.shift)
+      = Math.InverseCoordinate.affineTransferMatrix outer.slope outer.shift *
+        Math.InverseCoordinate.affineTransferMatrix inner.slope inner.shift
+    rw [Math.InverseCoordinate.affineTransferMatrix_mul, add_comm]
+
+@[simp] theorem toTransferMatrix_apply (f : Math.TransferSummary.AffineSummary) :
+    toTransferMatrix f = Math.InverseCoordinate.affineTransferMatrix f.slope f.shift := rfl
+
+/-! ### The expansivity trichotomy -/
+theorem le_coe_unbotD (b : WithBot ℝ) (d : ℝ) : b ≤ ((b.unbotD d : ℝ) : WithBot ℝ) := by
+  cases b with
+  | bot => exact bot_le
+  | coe e => simp
+
+/-- **The expansivity trichotomy.**  A label admits a pre-fixed point exactly
+when its slope is below one, or equals one with nonpositive shift, or exceeds
+one with the floor below the fixed point of its affine branch.  The condition
+is decidable in the coefficients, and applied to the composite label of a
+cycle it decides existence of a pre-fixed point for that cycle's action.  No
+sign condition on the slope is needed: a negative slope falls in the first
+case of the trichotomy. -/
+theorem exists_apply_le_self_iff (f : Label) :
+    (∃ x : ℝ, f.apply x ≤ x) ↔
+      f.slope < 1 ∨ (f.slope = 1 ∧ f.shift ≤ 0) ∨
+        (1 < f.slope ∧ f.floor ≤ ((-f.shift / (f.slope - 1) : ℝ) : WithBot ℝ)) := by
   constructor
-  · intro hx
-    have hfloorx : floor ≤ x := le_max_left _ _ |>.trans_eq hx
-    by_cases hbranch : f.affinePart x ≤ floor
-    · have hxfloor : x = floor := hx.symm.trans (max_eq_left hbranch)
-      exact Or.inr ⟨hxfloor, by
-        subst x
-        have hbranchle : f.affinePart floor ≤ floor := by
-          exact (le_max_right floor (f.affinePart floor)).trans_eq hx
-        rw [le_div_iff₀ (sub_pos.mpr hslope)]
-        simp only [affinePart] at hbranchle
-        nlinarith⟩
-    · have hfloorbranch : floor ≤ f.affinePart x := le_of_not_ge hbranch
-      have hxaffine : f.affinePart x = x := (max_eq_right hfloorbranch).symm.trans hx
-      have hxq : x = q := by
-        simp only [affinePart] at hxaffine
-        dsimp [q]
-        rw [eq_div_iff (sub_pos.mpr hslope).ne']
-        nlinarith [hxaffine]
-      have hfloorq : floor ≤ q := hxq ▸ hfloorx
-      exact Or.inl ⟨by simpa [q] using hxq, by simpa [q] using hfloorq⟩
-  · intro hcases
-    rcases hcases with ⟨hxq, hfloorq⟩ | ⟨hxfloor, hfloorq⟩
-    · subst x
-      change max floor (f.affinePart q) = q
-      rw [hq, max_eq_right]
-      simpa [q] using hfloorq
-    · subst x
-      have hprefixed : f.apply floor ≤ floor :=
-        (f.apply_le_self_iff_of_one_lt_slope hslope floor).mpr
-          ⟨by simp [hfloor], hfloorq⟩
-      rw [f.apply_of_floor_coe hfloor, max_le_iff] at hprefixed
-      rw [max_eq_left hprefixed.2]
-
-/-! ## Exact residual margin without unsafe real infima -/
-
-/-- Scalar residual of a label at a candidate point. -/
-def residual (f : Label) (x : ℝ) : ℝ := f.apply x - x
-
-/-- Contractive residuals are unbounded below as the candidate tends upward. -/
-theorem exists_residual_le_of_slope_lt_one (f : Label) (hslope : f.slope < 1)
-    (level : ℝ) : ∃ x : ℝ, f.residual x ≤ level := by
-  rcases f.floor_cases with hfloor | ⟨floor, hfloor⟩
-  · let x := (f.shift - level) / (1 - f.slope)
-    refine ⟨x, ?_⟩
-    rw [residual, f.apply_of_floor_bot hfloor, affinePart]
-    have hpos : 0 < 1 - f.slope := sub_pos.mpr hslope
-    dsimp [x]
-    field_simp
-    nlinarith
-  · let x := max (floor - level) ((f.shift - level) / (1 - f.slope))
-    refine ⟨x, ?_⟩
-    rw [residual, f.apply_of_floor_coe hfloor]
-    have hfloorx : floor - level ≤ x := le_max_left _ _
-    have hx : (f.shift - level) / (1 - f.slope) ≤ x := le_max_right _ _
-    have hpos : 0 < 1 - f.slope := sub_pos.mpr hslope
-    have haffine : f.shift + f.slope * x - x ≤ level := by
-      rw [div_le_iff₀ hpos] at hx
-      nlinarith
-    rw [← max_sub_sub_right]
-    exact max_le (by linarith) haffine
-
-/-- At unit slope the residual has exact minimum `shift`, regardless of the
-floor. -/
-theorem shift_le_residual_of_slope_eq_one
-    (f : Label) (hslope : f.slope = 1) (x : ℝ) :
-    f.shift ≤ f.residual x := by
-  rw [residual]
-  have := le_max_right f.floor (f.affinePart x)
-  have happly : f.affinePart x ≤ f.apply x := by
-    rcases f.floor_cases with hfloor | ⟨floor, hfloor⟩
-    · rw [f.apply_of_floor_bot hfloor]
-    · rw [f.apply_of_floor_coe hfloor]
-      exact le_max_right _ _
-  simp only [affinePart, hslope, one_mul] at happly
-  linarith
-
-theorem exists_residual_eq_shift_of_slope_eq_one
-    (f : Label) (hslope : f.slope = 1) :
-    ∃ x : ℝ, f.residual x = f.shift := by
-  rcases f.floor_cases with hfloor | ⟨floor, hfloor⟩
-  · exact ⟨0, by simp [residual, f.apply_of_floor_bot hfloor, affinePart, hslope]⟩
-  · let x := max floor (floor - f.shift)
-    refine ⟨x, ?_⟩
-    rw [residual, f.apply_of_floor_coe hfloor, affinePart, hslope, one_mul]
-    have : floor ≤ f.shift + x := by
-      have := le_max_right floor (floor - f.shift)
+  · rintro ⟨x, hx⟩
+    rw [apply_le_iff] at hx
+    obtain ⟨hfloor, hbranch⟩ := hx
+    rw [affinePart] at hbranch
+    rcases lt_trichotomy f.slope 1 with hlt | heq | hgt
+    · exact Or.inl hlt
+    · refine Or.inr (Or.inl ⟨heq, ?_⟩)
+      rw [heq] at hbranch
       linarith
-    rw [max_eq_right this]
-    ring
-
-/-- A floorless expansive residual is unbounded below as the candidate tends
-downward. -/
-theorem exists_residual_le_of_one_lt_slope_of_floor_bot
-    (f : Label) (hslope : 1 < f.slope) (hfloor : f.floor = ⊥)
-    (level : ℝ) : ∃ x : ℝ, f.residual x ≤ level := by
-  let x := (level - f.shift) / (f.slope - 1)
-  refine ⟨x, ?_⟩
-  rw [residual, f.apply_of_floor_bot hfloor, affinePart]
-  have hpos : 0 < f.slope - 1 := sub_pos.mpr hslope
-  dsimp [x]
-  field_simp
-  nlinarith
-
-/-- Exact minimum of the residual for an expansive label with a finite floor. -/
-theorem residual_margin_of_one_lt_slope_of_floor_coe
-    (f : Label) (hslope : 1 < f.slope) {floor : ℝ}
-    (hfloor : f.floor = (floor : WithBot ℝ)) :
-    (∀ x : ℝ, ((f.slope - 1) * floor + f.shift) / f.slope ≤ f.residual x) ∧
-      f.residual ((floor - f.shift) / f.slope) =
-        ((f.slope - 1) * floor + f.shift) / f.slope := by
-  have hapos : 0 < f.slope := lt_trans zero_lt_one hslope
-  have hbranch :
-      f.shift + f.slope * ((floor - f.shift) / f.slope) = floor := by
-    field_simp
-    ring
-  constructor
-  · intro x
-    rw [residual, f.apply_of_floor_coe hfloor, ← max_sub_sub_right]
-    by_cases hcenter : x ≤ (floor - f.shift) / f.slope
-    · apply le_max_of_le_left
-      rw [div_le_iff₀ hapos]
-      rw [le_div_iff₀ hapos] at hcenter
-      nlinarith
-    · apply le_max_of_le_right
-      rw [div_le_iff₀ hapos]
-      have hcenter' : (floor - f.shift) / f.slope ≤ x := le_of_not_ge hcenter
-      rw [div_le_iff₀ hapos] at hcenter'
+    · refine Or.inr (Or.inr ⟨hgt, ?_⟩)
+      have hpos : 0 < f.slope - 1 := by linarith
+      have hx' : x ≤ -f.shift / (f.slope - 1) := by
+        rw [le_div_iff₀ hpos]
+        nlinarith
+      exact hfloor.trans (WithBot.coe_le_coe.mpr hx')
+  · intro htrichotomy
+    rcases htrichotomy with hlt | ⟨heq, hshift⟩ | ⟨hgt, hfloor⟩
+    · have hpos : 0 < 1 - f.slope := by linarith
+      refine ⟨max (f.floor.unbotD 0) (f.shift / (1 - f.slope)), ?_⟩
+      rw [apply_le_iff]
+      refine ⟨(le_coe_unbotD f.floor 0).trans (WithBot.coe_le_coe.mpr (le_max_left _ _)), ?_⟩
+      have hge := (div_le_iff₀ hpos).mp (le_max_right (f.floor.unbotD 0)
+        (f.shift / (1 - f.slope)))
       simp only [affinePart]
       nlinarith
-  · rw [residual, f.apply_of_floor_coe hfloor, affinePart, hbranch, max_self]
-    field_simp
-    ring
+    · refine ⟨f.floor.unbotD 0, ?_⟩
+      rw [apply_le_iff]
+      refine ⟨le_coe_unbotD f.floor 0, ?_⟩
+      simp only [affinePart, heq]
+      linarith
+    · have hne : f.slope - 1 ≠ 0 := by intro hcon; linarith
+      refine ⟨-f.shift / (f.slope - 1), ?_⟩
+      rw [apply_le_iff]
+      refine ⟨hfloor, le_of_eq ?_⟩
+      simp only [affinePart]
+      field_simp
+      ring
 
 end Label
 
-/-! ## Nonnegative-slope quantitative telescope -/
-
+/-! ## The graph layer -/
 section Graph
 
 universe uV uE
 
-variable {V : Type uV} {E : Type uE} {G : EdgeGraph V E}
+variable {V : Type uV} {E : Type uE} {G : Math.EdgeGraph V E}
 
-/-- Nonnegative slopes already make every nonempty suffix-weight sum positive:
-the final edge always has suffix weight one. -/
-theorem suffixWeightSum_pos_of_nonempty {label : E → Label}
-    (hslope : ∀ edge : E, 0 ≤ (label edge).slope) :
-    ∀ edges : List E, edges ≠ [] → 0 < suffixWeightSum label edges
-  | [], hne => (hne rfl).elim
-  | [_], _ => by simp
-  | edge :: next :: rest, _ => by
-      rw [suffixWeightSum_cons]
-      exact add_pos_of_nonneg_of_pos (slopeProd_nonneg hslope _)
-        (suffixWeightSum_pos_of_nonempty hslope (next :: rest) (by simp))
+/-- A **lax section**: traversing an edge does not increase the
+candidate beyond its value at the head of that edge.  Also called a
+subsolution, a subinvariant family, a superharmonic section, or an
+inductive invariant. -/
+def IsLaxSection (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) : Prop :=
+  ∀ e : E, (label e).apply (φ (G.source e)) ≤ φ (G.target e)
 
-/-- Uniform strict residual bounds control the weighted sum even when some
-suffix weights vanish.  Strictness survives because the last suffix weight is
-one. -/
-theorem weightedDefect_lt_of_nonnegative_slopes {label : E → Label}
-    (hslope : ∀ edge : E, 0 ≤ (label edge).slope)
-    (φ : V → ℝ) {bound : ℝ} :
-    ∀ edges : List E, edges ≠ [] →
-      (∀ edge ∈ edges, max 0 (defect G label φ edge) < bound) →
-      weightedDefect G label φ edges < bound * suffixWeightSum label edges
-  | [], hne, _ => (hne rfl).elim
-  | [edge], _, hbound => by
-      have hedge := hbound edge (by simp)
-      simpa using hedge
-  | edge :: next :: rest, _, hbound => by
-      have hedge := hbound edge (by simp)
-      have hprod := slopeProd_nonneg hslope (next :: rest)
-      have hfirst : slopeProd label (next :: rest) *
-          max 0 (defect G label φ edge) ≤
-        slopeProd label (next :: rest) * bound :=
-        mul_le_mul_of_nonneg_left hedge.le hprod
-      have htail := weightedDefect_lt_of_nonnegative_slopes hslope φ
-        (next :: rest) (by simp)
-        (fun candidate hmem ↦ hbound candidate (by simp [hmem]))
-      rw [weightedDefect_cons, suffixWeightSum_cons]
-      nlinarith
+/-- The amount by which a candidate fails the edge inequality.  Also called the
+edge slack or the residual of the edge. -/
+def defect (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) (e : E) : ℝ :=
+  (label e).apply (φ (G.source e)) - φ (G.target e)
 
-/-- **Sharp nonnegative-slope edge obstruction.**  Zero slopes are allowed;
-only nonnegativity and nonemptiness are needed. -/
-theorem exists_edge_defect_ge_of_nonnegative_slopes
+theorem isLaxSection_iff_forall_defect_nonpos (G : EdgeGraph V E) (label : E → Label)
+    (φ : V → ℝ) : IsLaxSection G label φ ↔ ∀ e : E, defect G label φ e ≤ 0 := by
+  simp [IsLaxSection, defect]
+
+/-! ### Transport along a walk -/
+
+/-- Transport along a walk: the actions of the traversed edges composed in
+chronological order.  For a closed walk this is the action of the walk's
+holonomy. -/
+def holonomyApply (label : E → Label) {start finish : V}
+    (walk : G.Walk start finish) : ℝ → ℝ :=
+  Math.DirectedTransport.transport (fun e x => (label e).apply x) walk
+
+@[simp] theorem holonomyApply_nil (label : E → Label) {start : V} (x : ℝ) :
+    holonomyApply label (.nil : G.Walk start start) x = x := rfl
+
+@[simp] theorem holonomyApply_concat (label : E → Label) {start finish : V}
+    (walk : G.Walk start finish) (edge : E) (legal : G.source edge = finish) (x : ℝ) :
+    holonomyApply label (walk.concat edge legal) x
+      = (label edge).apply (holonomyApply label walk x) := rfl
+
+theorem holonomyApply_eq_foldl (label : E → Label) {start finish : V}
+    (walk : G.Walk start finish) (x : ℝ) :
+    holonomyApply label walk x = walk.edges.foldl (fun y e => (label e).apply y) x := by
+  induction walk with
+  | nil => rfl
+  | concat walkSoFar edge legal ih =>
+      rw [holonomyApply_concat, EdgeGraph.Walk.edges_concat, List.foldl_append, ih]
+      rfl
+
+theorem holonomyApply_eq_foldl_map (label : E → Label) {start finish : V}
+    (walk : G.Walk start finish) (x : ℝ) :
+    holonomyApply label walk x = (walk.edges.map label).foldl (fun y f => f.apply y) x := by
+  rw [holonomyApply_eq_foldl, List.foldl_map]
+
+/-- The composite label of a walk acts by transport along that walk. -/
+theorem apply_compList_edges
     {label : E → Label} (hslope : ∀ edge : E, 0 ≤ (label edge).slope)
-    (φ : V → ℝ) {base : V} (cycle : G.Walk base base) {gain : ℝ}
-    (hgain : 0 < gain)
-    (hcycle : φ base + gain ≤ holonomyApply label cycle (φ base)) :
-    ∃ edge ∈ cycle.edges,
-      gain / suffixWeightSum label cycle.edges ≤ defect G label φ edge := by
+    {start finish : V} (walk : G.Walk start finish) (point : ℝ) :
+    (Label.compList (walk.edges.map label)).apply point =
+      holonomyApply label walk point := by
+  rw [holonomyApply_eq_foldl_map]
+  refine Label.apply_compList (fun candidate hcandidate => ?_) point
+  obtain ⟨edge, _, rfl⟩ := List.mem_map.mp hcandidate
+  exact hslope edge
+
+/-- At nonnegative slopes the transport is the action of the gain-graph
+holonomy `Math.DirectedTransport.walkLabel` in the label monoid. -/
+theorem holonomyApply_eq_walkLabel_smul
+    (label : E → {f : Label // 0 ≤ f.slope}) {start finish : V}
+    (walk : G.Walk start finish) (x : ℝ) :
+    holonomyApply (fun e => (label e).1) walk x =
+      Math.DirectedTransport.walkLabel label walk • x :=
+  Math.DirectedTransport.transport_eq_smul (G := G) (label := label) walk x
+
+/-! ### Survival-weighted accounting along an edge list -/
+
+/-- The product of the slopes of a list of edges. -/
+def slopeProd (label : E → Label) (l : List E) : ℝ := (l.map fun e => (label e).slope).prod
+
+@[simp] theorem slopeProd_nil (label : E → Label) : slopeProd label ([] : List E) = 1 := rfl
+
+@[simp] theorem slopeProd_cons (label : E → Label) (e : E) (rest : List E) :
+    slopeProd label (e :: rest) = (label e).slope * slopeProd label rest := rfl
+
+@[simp] theorem slopeProd_append (label : E → Label) (first second : List E) :
+    slopeProd label (first ++ second) = slopeProd label first * slopeProd label second := by
+  simp [slopeProd, List.map_append, List.prod_append]
+
+theorem slopeProd_nonneg {label : E → Label} (hslope : ∀ e : E, 0 ≤ (label e).slope) :
+    ∀ l : List E, 0 ≤ slopeProd label l
+  | [] => zero_le_one
+  | e :: rest => mul_nonneg (hslope e) (slopeProd_nonneg hslope rest)
+
+theorem slopeProd_pos {label : E → Label} (hslope : ∀ e : E, 0 < (label e).slope) :
+    ∀ l : List E, 0 < slopeProd label l
+  | [] => zero_lt_one
+  | e :: rest => mul_pos (hslope e) (slopeProd_pos hslope rest)
+
+/-- The **suffix weight** at a position of an edge list: the product of the
+slopes of the edges strictly after that position.  This is the abstract form of
+the survival weighting that a later slope applies to an earlier discrepancy. -/
+def suffixWeight (label : E → Label) (l : List E) (i : ℕ) : ℝ :=
+  slopeProd label (l.drop (i + 1))
+
+/-- The sum of the suffix weights of an edge list. -/
+def suffixWeightSum (label : E → Label) : List E → ℝ
+  | [] => 0
+  | _ :: rest => slopeProd label rest + suffixWeightSum label rest
+
+@[simp] theorem suffixWeightSum_nil (label : E → Label) :
+    suffixWeightSum label ([] : List E) = 0 := rfl
+
+@[simp] theorem suffixWeightSum_cons (label : E → Label) (e : E) (rest : List E) :
+    suffixWeightSum label (e :: rest) = slopeProd label rest + suffixWeightSum label rest := rfl
+
+/-- The suffix-weighted sum of the positive parts of the edge residuals. -/
+def weightedDefect (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) : List E → ℝ
+  | [] => 0
+  | e :: rest =>
+      slopeProd label rest * max 0 (defect G label φ e) + weightedDefect G label φ rest
+
+@[simp] theorem weightedDefect_nil (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) :
+    weightedDefect G label φ ([] : List E) = 0 := rfl
+
+@[simp] theorem weightedDefect_cons (G : EdgeGraph V E) (label : E → Label)
+    (φ : V → ℝ) (e : E)
+    (rest : List E) :
+    weightedDefect G label φ (e :: rest)
+      = slopeProd label rest * max 0 (defect G label φ e) + weightedDefect G label φ rest := rfl
+
+/-- The sum of the suffix weights is the sum over the positions of the list. -/
+theorem suffixWeightSum_eq_sum (label : E → Label) : ∀ l : List E,
+    suffixWeightSum label l = ∑ i : Fin l.length, suffixWeight label l i
+  | [] => by simp
+  | e :: rest => by
+      have hsplit : ∑ i : Fin (e :: rest).length, suffixWeight label (e :: rest) i
+          = suffixWeight label (e :: rest) 0
+            + ∑ i : Fin rest.length, suffixWeight label (e :: rest) (i.succ : ℕ) :=
+        Fin.sum_univ_succ fun i : Fin (rest.length + 1) => suffixWeight label (e :: rest) i
+      have htail : ∑ i : Fin rest.length, suffixWeight label (e :: rest) (i.succ : ℕ)
+          = ∑ i : Fin rest.length, suffixWeight label rest i :=
+        Finset.sum_congr rfl fun i _ => by simp [suffixWeight]
+      rw [suffixWeightSum_cons, suffixWeightSum_eq_sum label rest, hsplit, htail]
+      simp [suffixWeight]
+
+/-- **The weighted defect sum is the suffix-weighted sum of the positive parts
+of the edge residuals. -/
+theorem weightedDefect_eq_sum (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ) :
+    ∀ l : List E, weightedDefect G label φ l
+      = ∑ i : Fin l.length, suffixWeight label l i * max 0 (defect G label φ (l.get i))
+  | [] => by simp
+  | e :: rest => by
+      have hsplit : ∑ i : Fin (e :: rest).length,
+            suffixWeight label (e :: rest) i * max 0 (defect G label φ ((e :: rest).get i))
+          = suffixWeight label (e :: rest) 0 * max 0 (defect G label φ ((e :: rest).get 0))
+            + ∑ i : Fin rest.length, suffixWeight label (e :: rest) (i.succ : ℕ)
+                * max 0 (defect G label φ ((e :: rest).get i.succ)) :=
+        Fin.sum_univ_succ fun i : Fin (rest.length + 1) =>
+          suffixWeight label (e :: rest) i * max 0 (defect G label φ ((e :: rest).get i))
+      have htail : ∑ i : Fin rest.length, suffixWeight label (e :: rest) (i.succ : ℕ)
+              * max 0 (defect G label φ ((e :: rest).get i.succ))
+          = ∑ i : Fin rest.length,
+              suffixWeight label rest i * max 0 (defect G label φ (rest.get i)) :=
+        Finset.sum_congr rfl fun i _ => by simp [suffixWeight]
+      rw [weightedDefect_cons, weightedDefect_eq_sum G label φ rest, hsplit, htail]
+      simp [suffixWeight]
+
+theorem suffixWeightSum_append_singleton (label : E → Label) (e : E) : ∀ l : List E,
+    suffixWeightSum label (l ++ [e]) = (label e).slope * suffixWeightSum label l + 1
+  | [] => by simp
+  | a :: rest => by
+      rw [List.cons_append, suffixWeightSum_cons, suffixWeightSum_append_singleton label e rest,
+        suffixWeightSum_cons, slopeProd_append]
+      simp only [slopeProd_cons, slopeProd_nil]
+      ring
+
+theorem weightedDefect_append_singleton (G : EdgeGraph V E) (label : E → Label) (φ : V → ℝ)
+    (e : E) : ∀ l : List E, weightedDefect G label φ (l ++ [e])
+      = (label e).slope * weightedDefect G label φ l + max 0 (defect G label φ e)
+  | [] => by simp
+  | a :: rest => by
+      rw [List.cons_append, weightedDefect_cons,
+        weightedDefect_append_singleton G label φ e rest, weightedDefect_cons, slopeProd_append]
+      simp only [slopeProd_cons, slopeProd_nil]
+      ring
+
+theorem suffixWeightSum_nonneg {label : E → Label} (hslope : ∀ e : E, 0 ≤ (label e).slope) :
+    ∀ l : List E, 0 ≤ suffixWeightSum label l
+  | [] => le_rfl
+  | _ :: rest =>
+      add_nonneg (slopeProd_nonneg hslope rest) (suffixWeightSum_nonneg hslope rest)
+
+theorem suffixWeightSum_pos {label : E → Label} (hslope : ∀ e : E, 0 < (label e).slope) :
+    ∀ l : List E, l ≠ [] → 0 < suffixWeightSum label l
+  | [], hne => absurd rfl hne
+  | _ :: rest, _ => by
+      have hprod := slopeProd_pos hslope rest
+      have hrest := suffixWeightSum_nonneg (fun e => (hslope e).le) rest
+      rw [suffixWeightSum_cons]
+      linarith
+
+theorem weightedDefect_nonneg {label : E → Label} (hslope : ∀ e : E, 0 ≤ (label e).slope)
+    (φ : V → ℝ) : ∀ l : List E, 0 ≤ weightedDefect G label φ l
+  | [] => le_rfl
+  | e :: rest => by
+      have hprod := slopeProd_nonneg hslope rest
+      have hmax : 0 ≤ max 0 (defect G label φ e) := le_max_left _ _
+      have hrest := weightedDefect_nonneg hslope φ rest
+      rw [weightedDefect_cons]
+      have := mul_nonneg hprod hmax
+      linarith
+
+/-- A uniform strict bound on the positive parts of the residuals caps the
+weighted sum by that bound times the total suffix weight. -/
+theorem weightedDefect_lt {label : E → Label} (hslope : ∀ e : E, 0 < (label e).slope)
+    (φ : V → ℝ) {c : ℝ} : ∀ l : List E, l ≠ [] →
+      (∀ e ∈ l, max 0 (defect G label φ e) < c) →
+      weightedDefect G label φ l < c * suffixWeightSum label l
+  | [], hne, _ => absurd rfl hne
+  | [e], _, hbound => by
+      have he := hbound e (List.mem_cons_self ..)
+      simp only [weightedDefect_cons, weightedDefect_nil, suffixWeightSum_cons,
+        suffixWeightSum_nil, slopeProd_nil]
+      linarith
+  | e :: a :: rest, _, hbound => by
+      have he := hbound e (List.mem_cons_self ..)
+      have hprod := slopeProd_pos hslope (a :: rest)
+      have hrec := weightedDefect_lt hslope φ (a :: rest) (by simp)
+        fun e' he' => hbound e' (List.mem_cons_of_mem _ he')
+      rw [weightedDefect_cons, suffixWeightSum_cons]
+      nlinarith [mul_lt_mul_of_pos_left he hprod]
+
+/-! ### The weighted-defect telescope -/
+
+/-- **The weighted-defect telescope.**  Transport of a candidate along a walk is
+bounded by the candidate at the far end plus the positive parts of the edge
+residuals, each weighted by the product of the slopes traversed after it.  The
+inequalities of successive edges do not telescope additively; they telescope
+with slope-product weights. -/
+theorem holonomyApply_le_add_weightedDefect {label : E → Label}
+    (hslope : ∀ e : E, 0 ≤ (label e).slope) (φ : V → ℝ) {start finish : V}
+    (walk : G.Walk start finish) :
+    holonomyApply label walk (φ start) ≤ φ finish + weightedDefect G label φ walk.edges := by
+  induction walk with
+  | nil => simp
+  | @concat middle walkSoFar edge legal ih =>
+      subst legal
+      have hW : 0 ≤ weightedDefect G label φ walkSoFar.edges :=
+        weightedDefect_nonneg hslope φ walkSoFar.edges
+      have hmono := Label.monotone_apply (f := label edge) (hslope edge) ih
+      have hlip := Label.apply_add_le (f := label edge) (hslope edge)
+        (φ (G.source edge)) hW
+      have hdefect : (label edge).apply (φ (G.source edge))
+          = defect G label φ edge + φ (G.target edge) := by
+        rw [defect]
+        ring
+      have hmax := le_max_right 0 (defect G label φ edge)
+      rw [holonomyApply_concat, EdgeGraph.Walk.edges_concat, weightedDefect_append_singleton]
+      linarith
+
+/-- A lax section transports laxly: its value can only be undercut. -/
+theorem holonomyApply_le_of_isLaxSection {label : E → Label}
+    (hslope : ∀ e : E, 0 ≤ (label e).slope) {φ : V → ℝ}
+    (hφ : IsLaxSection G label φ) {start finish : V} (walk : G.Walk start finish) :
+    holonomyApply label walk (φ start) ≤ φ finish := by
+  induction walk with
+  | nil => simp
+  | @concat middle walkSoFar edge legal ih =>
+      subst legal
+      have hmono := Label.monotone_apply (f := label edge) (hslope edge) ih
+      exact hmono.trans (hφ edge)
+
+/-- **Weak duality.**  A lax section makes its value at a vertex a
+pre-fixed point of the composite action of every closed walk there. -/
+theorem holonomyApply_cycle_le {label : E → Label} (hslope : ∀ e : E, 0 ≤ (label e).slope)
+    {φ : V → ℝ} (hφ : IsLaxSection G label φ) {base : V} (cycle : G.Walk base base) :
+    holonomyApply label cycle (φ base) ≤ φ base :=
+  holonomyApply_le_of_isLaxSection hslope hφ cycle
+
+/-- **The quantitative obstruction.**  A closed walk whose composite action
+moves the candidate up by at least `γ > 0` forces one of its edges to fail the
+section inequality by at least `γ` divided by the total suffix weight of the
+walk.  At all slopes `1` the total suffix weight is the length of the walk, and
+the statement becomes that of `Math.MaxPlusPotential.exists_edge_defect_ge`. -/
+theorem exists_edge_defect_ge {label : E → Label} (hslope : ∀ e : E, 0 < (label e).slope)
+    (φ : V → ℝ) {base : V} (cycle : G.Walk base base) {γ : ℝ} (hγ : 0 < γ)
+    (hcycle : φ base + γ ≤ holonomyApply label cycle (φ base)) :
+    ∃ e ∈ cycle.edges, γ / suffixWeightSum label cycle.edges ≤ defect G label φ e := by
   have hne : cycle.edges ≠ [] := by
-    intro hempty
-    rw [holonomyApply_eq_foldl, hempty, List.foldl_nil] at hcycle
+    intro hnil
+    rw [holonomyApply_eq_foldl, hnil, List.foldl_nil] at hcycle
     linarith
-  have hsum : 0 < suffixWeightSum label cycle.edges :=
-    suffixWeightSum_pos_of_nonempty hslope _ hne
-  by_contra hnone
-  have hstrict : ∀ edge ∈ cycle.edges,
-      max 0 (defect G label φ edge) <
-        gain / suffixWeightSum label cycle.edges := by
-    intro edge hedge
-    refine max_lt (div_pos hgain hsum) ?_
+  have hsum : 0 < suffixWeightSum label cycle.edges := suffixWeightSum_pos hslope _ hne
+  by_contra hcon
+  have hstrict : ∀ e ∈ cycle.edges,
+      max 0 (defect G label φ e) < γ / suffixWeightSum label cycle.edges := by
+    intro e he
+    refine max_lt (div_pos hγ hsum) ?_
     by_contra hle
-    exact hnone ⟨edge, hedge, not_lt.mp hle⟩
-  have hweighted := weightedDefect_lt_of_nonnegative_slopes hslope φ
-    cycle.edges hne hstrict
-  rw [div_mul_cancel₀ _ hsum.ne'] at hweighted
-  have htelescope := holonomyApply_le_add_weightedDefect
-    (G := G) hslope φ cycle
+    exact hcon ⟨e, he, not_lt.mp hle⟩
+  have hlt := weightedDefect_lt (G := G) hslope φ cycle.edges hne hstrict
+  rw [div_mul_cancel₀ _ hsum.ne'] at hlt
+  have htel := holonomyApply_le_add_weightedDefect (G := G) (fun e => (hslope e).le) φ cycle
   linarith
 
 end Graph
 
-/-! ## Forward rotation without inverses -/
+/-! ## Cyclic max-affine systems -/
+section Cyclic
 
-section Rotation
+/-- One phase of a cyclic max-affine system as a label: the equation
+`C k = max (1 - p k) (q k * C (k + 1) + p k)` of
+`Math.CyclicMaxAffine.CyclicSolution` is the action of this label on
+`C (k + 1)`. -/
+def cyclicLabel (p q : ℕ → ℝ) (k : ℕ) : Label :=
+  ⟨((1 - p k : ℝ) : WithBot ℝ), p k, q k⟩
 
-variable {X : Type*}
+@[simp] theorem apply_cyclicLabel (p q : ℕ → ℝ) (k : ℕ) (x : ℝ) :
+    (cyclicLabel p q k).apply x = max (1 - p k) (p k + q k * x) :=
+  Label.apply_of_floor_coe rfl x
 
-/-- A fixed point of `outer ∘ inner` rotates forward to a fixed point of
-`inner ∘ outer`; no inverse map is required. -/
-theorem isFixedPt_comp_rotate {outer inner : X → X} {point : X}
-    (hfixed : outer (inner point) = point) :
-    inner (outer (inner point)) = inner point := by
-  rw [hfixed]
+/-- The backward chain of the cyclic labels: `cyclicChain p q L x d` is the
+value `d` phases before the end of the unrolled cycle, started from `x`. -/
+def cyclicChain (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) : ℕ → ℝ
+  | 0 => x
+  | d + 1 => (cyclicLabel p q (L - (d + 1))).apply (cyclicChain p q L x d)
 
-variable [Preorder X]
+@[simp] theorem cyclicChain_zero (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) :
+    cyclicChain p q L x 0 = x := rfl
 
-/-- A pre-fixed point rotates forward through a monotone prefix. -/
-theorem isPrefixed_comp_rotate {outer inner : X → X}
-    (hinner : Monotone inner) {point : X}
-    (hprefixed : outer (inner point) ≤ point) :
-    inner (outer (inner point)) ≤ inner point :=
-  hinner hprefixed
+theorem cyclicChain_succ (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) (d : ℕ) :
+    cyclicChain p q L x (d + 1)
+      = (cyclicLabel p q (L - (d + 1))).apply (cyclicChain p q L x d) := rfl
 
-variable {A : Type*}
+/-- The composite action of one full turn of the cycle. -/
+def cyclicHolonomy (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) : ℝ := cyclicChain p q L x L
 
-omit [Preorder X] in
-/-- A fixed point of a whole list propagates to a fixed point after every
-prefix/suffix rotation. -/
-theorem isFixedPt_foldl_split_rotate (step : X → A → X)
-    (front back : List A) (point : X)
-    (hfixed : (front ++ back).foldl step point = point) :
-    (back ++ front).foldl step (front.foldl step point) =
-      front.foldl step point := by
-  simp only [List.foldl_append] at hfixed ⊢
-  rw [hfixed]
+/-- One turn of the cycle composes the phase labels in decreasing index order:
+the last phase acts first. -/
+theorem cyclicChain_eq_foldl (p q : ℕ → ℝ) (L : ℕ) (x : ℝ) : ∀ d : ℕ,
+    cyclicChain p q L x d
+      = ((List.range d).map fun j => cyclicLabel p q (L - 1 - j)).foldl
+          (fun y f => f.apply y) x
+  | 0 => rfl
+  | d + 1 => by
+      rw [cyclicChain_succ, cyclicChain_eq_foldl p q L x d, List.range_succ, List.map_append,
+        List.foldl_append]
+      simp only [List.map_cons, List.map_nil, List.foldl_cons, List.foldl_nil]
+      congr 2
+      omega
 
-private theorem monotone_foldl_step (step : X → A → X)
-    {items : List A}
-    (hmono : ∀ item ∈ items, Monotone fun point => step point item) :
-    Monotone fun point => items.foldl step point := by
-  intro first second hle
-  induction items generalizing first second with
-  | nil => exact hle
-  | cons item rest ih =>
-      simp only [List.foldl_cons]
-      apply ih
-      · exact fun candidate hc => hmono candidate (List.mem_cons_of_mem _ hc)
-      · exact hmono item (List.mem_cons_self ..) hle
+/-- **The periodic certificate.**  A fixed point of one turn of the cyclic
+labels is the terminal value of a solution of the corresponding cyclic
+max-affine system, whose survival-weighted bounds are
+`Math.CyclicMaxAffine.CyclicSolution.weightedRate_bounds`. -/
+theorem cyclicSolution_cyclicChain {p q : ℕ → ℝ} (hp : ∀ k, 0 ≤ p k)
+    (hq0 : ∀ k, 0 ≤ q k)
+    (hq1 : ∀ k, q k ≤ 1) {L : ℕ} {x : ℝ} (hx : cyclicHolonomy p q L x = x) :
+    Math.CyclicMaxAffine.CyclicSolution p q (fun k => cyclicChain p q L x (L - k)) L where
+  rate_nonneg := hp
+  survival_nonneg := hq0
+  survival_le_one := hq1
+  eq_max k hk := by
+    have hsplit : L - k = (L - (k + 1)) + 1 := by omega
+    have hindex : L - (L - (k + 1) + 1) = k := by omega
+    show cyclicChain p q L x (L - k)
+      = max (1 - p k) (q k * cyclicChain p q L x (L - (k + 1)) + p k)
+    rw [hsplit, cyclicChain_succ, hindex, apply_cyclicLabel, add_comm (p k)]
+  wrap := by
+    show cyclicChain p q L x (L - L) = cyclicChain p q L x (L - 0)
+    rw [Nat.sub_self, Nat.sub_zero, cyclicChain_zero]
+    exact hx.symm
 
-/-- A pre-fixed point of a whole list propagates to a pre-fixed point after
-every prefix/suffix rotation when the prefix maps are monotone. -/
-theorem isPrefixed_foldl_split_rotate (step : X → A → X)
-    (front back : List A) (point : X)
-    (hmono : ∀ item ∈ front, Monotone fun value => step value item)
-    (hprefixed : (front ++ back).foldl step point ≤ point) :
-    (back ++ front).foldl step (front.foldl step point) ≤
-      front.foldl step point := by
-  simp only [List.foldl_append] at hprefixed ⊢
-  exact monotone_foldl_step step hmono hprefixed
+end Cyclic
 
-omit [Preorder X] in
-/-- List-level fixed-point rotation for the split after `index` entries. -/
-theorem isFixedPt_foldl_rotate (step : X → A → X)
-    (items : List A) (point : X) (index : ℕ) (hindex : index ≤ items.length)
-    (hfixed : items.foldl step point = point) :
-    (items.rotate index).foldl step (items.take index |>.foldl step point) =
-      (items.take index).foldl step point := by
-  rw [List.rotate_eq_drop_append_take hindex]
-  apply isFixedPt_foldl_split_rotate
-  simpa only [List.take_append_drop] using hfixed
+/-! ## Specializations -/
+section Specialization
 
-/-- List-level pre-fixed-point rotation for the split after `index` entries. -/
-theorem isPrefixed_foldl_rotate (step : X → A → X)
-    (items : List A) (point : X) (index : ℕ) (hindex : index ≤ items.length)
-    (hmono : ∀ item ∈ items, Monotone fun value => step value item)
-    (hprefixed : items.foldl step point ≤ point) :
-    (items.rotate index).foldl step (items.take index |>.foldl step point) ≤
-      (items.take index).foldl step point := by
-  rw [List.rotate_eq_drop_append_take hindex]
-  apply isPrefixed_foldl_split_rotate
-  · intro item hitem
-    exact hmono item (List.mem_of_mem_take hitem)
-  · simpa only [List.take_append_drop] using hprefixed
+universe uV uE
 
-/-- Every cyclic rotation of a nonnegative-slope max-affine list inherits the
-propagated pre-fixed witness. -/
-theorem isPrefixed_foldl_apply_rotate (labels : List Label) (point : ℝ)
-    (hslope : ∀ label ∈ labels, 0 ≤ label.slope)
-    (hprefixed : labels.foldl (fun value label => label.apply value) point ≤ point)
-    (index : ℕ) (hindex : index ≤ labels.length) :
-    (labels.rotate index).foldl (fun value label => label.apply value)
-        (labels.take index |>.foldl (fun value label => label.apply value) point) ≤
-      (labels.take index |>.foldl (fun value label => label.apply value) point) := by
-  apply isPrefixed_foldl_rotate
-  · exact hindex
-  · intro label hlabel
-    exact Label.monotone_apply (hslope label hlabel)
-  · exact hprefixed
+variable {V : Type uV} {E : Type uE} {G : Math.EdgeGraph V E}
 
-end Rotation
+/-- The floorless translation label of a real edge weight. -/
+def translationLabel (w : ℝ) : Label := ⟨⊥, w, 1⟩
 
-end MaxAffineTransport
-end Math
+@[simp] theorem slope_translationLabel (w : ℝ) : (translationLabel w).slope = 1 := rfl
 
-end
+@[simp] theorem apply_translationLabel (w x : ℝ) : (translationLabel w).apply x = w + x := by
+  rw [Label.apply_of_floor_bot rfl]
+  simp [Label.affinePart, translationLabel]
+
+/-- The reflected (Lindley) label `x ↦ max 0 (a * x - g)`. -/
+def reflectedLabel (a g : ℝ) : Label :=
+  Label.ofMaxAffine (Math.TransferSummary.reflectedSummary a g)
+
+@[simp] theorem apply_reflectedLabel (a g x : ℝ) :
+    (reflectedLabel a g).apply x = max 0 (a * x - g) := by
+  rw [reflectedLabel, Label.apply_ofMaxAffine, Math.TransferSummary.apply_reflectedSummary]
+
+theorem foldl_reflectedLabel (a g : ℕ → ℝ) (x : ℝ) : ∀ n : ℕ,
+    ((List.range n).map fun i => reflectedLabel (a i) (g i)).foldl (fun y f => f.apply y) x
+      = Math.TransferSummary.reflectedIter a g x n
+  | 0 => rfl
+  | n + 1 => by
+      rw [List.range_succ, List.map_append, List.foldl_append, foldl_reflectedLabel a g x n]
+      simp [Math.TransferSummary.reflectedIter]
+
+/-- **Reflected labels recover the Lindley recursion.**  Transport along a path
+whose edges carry the reflected labels of the sequences `a` and `g`, in order,
+is the reflected orbit `Math.TransferSummary.reflectedIter`. -/
+theorem holonomyApply_eq_reflectedIter {label : E → Label} (a g : ℕ → ℝ) {n : ℕ}
+    {start finish : V} (walk : G.Walk start finish)
+    (hmatch : walk.edges.map label = (List.range n).map fun i => reflectedLabel (a i) (g i))
+    (x : ℝ) : holonomyApply label walk x = Math.TransferSummary.reflectedIter a g x n := by
+  rw [holonomyApply_eq_foldl_map, hmatch, foldl_reflectedLabel]
+
+/-- Transport along a closed walk whose labels are the phases of a cyclic
+max-affine system, in decreasing phase order, is one turn of that system. -/
+theorem holonomyApply_eq_cyclicHolonomy {label : E → Label} (p q : ℕ → ℝ) {L : ℕ}
+    {start finish : V} (walk : G.Walk start finish)
+    (hmatch : walk.edges.map label = (List.range L).map fun j => cyclicLabel p q (L - 1 - j))
+    (x : ℝ) : holonomyApply label walk x = cyclicHolonomy p q L x := by
+  rw [holonomyApply_eq_foldl_map, hmatch, cyclicHolonomy, cyclicChain_eq_foldl]
+
+/-- **The periodic certificate on a closed walk.**  A closed walk labelled by
+the phases of a cyclic max-affine system, in decreasing phase order, whose
+composite action fixes a point, exhibits that point as the terminal value of a
+solution of the system. -/
+theorem cyclicSolution_of_holonomyApply_eq {label : E → Label} {p q : ℕ → ℝ}
+    (hp : ∀ k, 0 ≤ p k) (hq0 : ∀ k, 0 ≤ q k) (hq1 : ∀ k, q k ≤ 1) {L : ℕ} {base : V}
+    (cycle : G.Walk base base)
+    (hmatch : cycle.edges.map label = (List.range L).map fun j => cyclicLabel p q (L - 1 - j))
+    {x : ℝ} (hx : holonomyApply label cycle x = x) :
+    Math.CyclicMaxAffine.CyclicSolution p q (fun k => cyclicChain p q L x (L - k)) L :=
+  cyclicSolution_cyclicChain hp hq0 hq1
+    (by rw [← holonomyApply_eq_cyclicHolonomy p q cycle hmatch]; exact hx)
+
+end Specialization
+
+/-! ## The directed-transport reading
+`Math.DirectedTransport` develops transport with vertex-indexed fibers; a
+max-affine transport graph is its constant-fiber case, with every fiber the line
+and each edge acting by its label.  The identifications below let the
+
+section and holonomy statements of that module specialize here. -/
+section Transport
+
+open Math.DirectedTransport
+
+universe uV' uE'
+
+variable {V : Type uV'} {E : Type uE'} {G : Math.EdgeGraph V E}
+
+/-- The constant-fiber directed transport of a labelled graph: every fiber is
+the line and each edge acts by its label. -/
+def toTransport (G : EdgeGraph V E) (label : E → Label) :
+    Transport G fun _ : V => ℝ :=
+  ofEdgeAct G ℝ fun e => (label e).apply
+
+/-- Walk transport of the constant-fiber reading is the composite label
+action. -/
+theorem walkMap_toTransport (label : E → Label) {start finish : V}
+    (walk : G.Walk start finish) (x : ℝ) :
+    (toTransport G label).walkMap walk x = holonomyApply label walk x :=
+  walkMap_ofEdgeAct _ walk x
+
+/-- A lax section of a labelled graph is a lax section of its constant-fiber
+directed transport. -/
+theorem isLaxSection_iff_toTransport_isLaxSection (G : EdgeGraph V E) (label : E → Label)
+    (φ : V → ℝ) :
+    IsLaxSection G label φ ↔ (toTransport G label).IsLaxSection φ :=
+  Iff.rfl
+
+end Transport
+
+end Math.MaxAffineTransport

@@ -4,8 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.MaxAffine.Slopes
 import MathUE.DirectedTransport.Additive.Cycles
+import MathUE.DirectedTransport.MaxAffine.Additive
+import MathUE.DirectedTransport.MaxAffine.Slopes
 
 /-!
 # Gauge-critical cycle criteria for max-affine feasibility

@@ -5,13 +5,13 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.DirectedTransport.JoinSemidirect
-import MathUE.MaxAffineTransport
+import MathUE.DirectedTransport.MaxAffine.Basic
 
 /-!
 # Max-affine labels as a join-semidirect product
 
 Nonnegative affine summaries act on `WithBot ℝ` by pushing finite floors
-forward and preserving `⊥`.  The corresponding join-semidirect labels are
+forward and preserving `⊥`.  The resulting join-semidirect labels are
 multiplicatively equivalent to max-affine labels with nonnegative slope.  Under
 this equivalence, the join-semidirect action agrees with max-affine evaluation
 on finite points.

@@ -5,7 +5,6 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.DirectedTransport.MaxAffine.Basic
-import MathUE.MaxAffineSectionDuality
 
 /-!
 # Exact coefficients and defect normal forms for max-affine paths

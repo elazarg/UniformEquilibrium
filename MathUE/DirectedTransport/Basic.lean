@@ -75,9 +75,9 @@ The same structure can be read in several ways.
 ## Relation to neighbouring modules
 
 `MathUE.EdgeGraph` supplies the directed multigraph and its typed walks.
-`MathUE.CycleCoboundary` imports this file and specializes it to
+`MathUE.DirectedTransport.Additive.Exact` imports this file and specializes it to
 translation maps: cycle sums are translation holonomy and coboundaries are
-sections.  `MathUE.MaxAffineTransport` specializes it to monotone max-affine
+sections.  `MathUE.DirectedTransport.MaxAffine.Basic` specializes it to monotone max-affine
 self-maps of `ℝ`, where the non-additive defect telescope is weighted by suffix
 products of slopes.
 
