@@ -34,6 +34,9 @@ one divergent infinite path.
 `Theorems.CollisionMass.collisionMass_le_choose_card_mul_absorption_sq`
 bounds the mass of two or more independent successes quadratically in total
 absorption, with the finite pair count as coefficient.
+`Theorems.CollisionMass.collisionMass_pos_iff_exists_two_pos` and
+`Theorems.CollisionMass.collisionMass_eq_zero_iff_atMostOne_pos` identify its
+positive and zero regimes exactly from the positive coordinate support.
 
 ## Finite phase-occupation duality
 
