@@ -4317,7 +4317,7 @@ theorem equation_14 :
 
 /-- Example 4 and Equation (15). -/
 theorem example4_equilibrium_pattern (m : ℕ) (hm : 0 < m) :
-    (∀ n, 0 < n → n < m →
+    (∀ n, 0 < n → n ≤ m →
       (example4 m).finiteEquilibriumPayoffs n =
         {pair (m + 1) (m + 1)}) ∧
       pair m m ∈ (example4 m).finiteEquilibriumPayoffs (m + 1) := by
@@ -4331,7 +4331,21 @@ theorem equation_15 :
           G.finiteEquilibriumPayoffsOnHorizon n ∧
         ¬G.finiteEquilibriumPayoffs (n.1 + 2) ⊆
           G.finiteEquilibriumPayoffsOnHorizon n := by
-  sorry
+  let n : (example4 2).Horizon := ⟨1, by omega⟩
+  have hpattern := example4_equilibrium_pattern 2 (by omega)
+  refine ⟨example4 2, n, ?_, ?_⟩
+  · change (example4 2).finiteEquilibriumPayoffs 2 ⊆
+      (example4 2).finiteEquilibriumPayoffs 1
+    rw [hpattern.1 2 (by omega) (by omega),
+      hpattern.1 1 (by omega) (by omega)]
+  · intro hinclusion
+    have hmem := hinclusion hpattern.2
+    change pair (2 : ℝ) 2 ∈
+      (example4 2).finiteEquilibriumPayoffs 1 at hmem
+    rw [hpattern.1 1 (by omega) (by omega)] at hmem
+    have hequal := Set.mem_singleton_iff.mp hmem
+    have hfalse := congrFun hequal false
+    norm_num [pair] at hfalse
 
 /-! **Example 1 revisited, page 150.**  The paper's `λ` is
 the current-stage weight: playing `(1,0)` once and `(0,1)` forever
