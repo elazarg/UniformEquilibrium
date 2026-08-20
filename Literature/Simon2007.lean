@@ -2420,10 +2420,322 @@ def Correspondence.iterate {X : Type} (F : Correspondence X X) :
   | 0 => fun x => {x}
   | k + 1 => fun x => ⋃ y ∈ F x, F.iterate k y
 
+/-- A player's mixed quitting probability makes each coalition probability affine. -/
+theorem coalitionProbability_replace_affine (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) (A : Finset G.Player) :
+    CoalitionProbability G (p.replace G n q) A =
+      (q : ℝ) * CoalitionProbability G (p.replace G n 1) A +
+        (1 - (q : ℝ)) * CoalitionProbability G (p.replace G n 0) A := by
+  classical
+  have hprod_mem (s : Finset G.Player) (hs : n ∈ s)
+      (a : Set.Icc (0 : ℝ) 1) :
+      (∏ x ∈ s, (↑(if x = n then a else p x) : ℝ)) =
+        (a : ℝ) * ∏ x ∈ s.erase n, (p x : ℝ) := by
+    calc
+      _ = (↑(if n = n then a else p n) : ℝ) *
+          ∏ x ∈ s.erase n, (↑(if x = n then a else p x) : ℝ) :=
+        (Finset.mul_prod_erase s
+          (fun x => (↑(if x = n then a else p x) : ℝ)) hs).symm
+      _ = _ := by
+        simp only [if_pos]
+        congr 1
+        apply Finset.prod_congr rfl
+        intro x hx
+        simp [Finset.mem_erase.mp hx |>.1]
+  have hprod_not_mem (s : Finset G.Player) (hs : n ∉ s)
+      (a : Set.Icc (0 : ℝ) 1) :
+      (∏ x ∈ s, (↑(if x = n then a else p x) : ℝ)) =
+        ∏ x ∈ s, (p x : ℝ) := by
+    apply Finset.prod_congr rfl
+    intro x hx
+    by_cases hxn : x = n
+    · exact (hs (hxn ▸ hx)).elim
+    · simp [hxn]
+  have hcprod_mem (s : Finset G.Player) (hs : n ∈ s)
+      (a : Set.Icc (0 : ℝ) 1) :
+      (∏ x ∈ s, (1 - (↑(if x = n then a else p x) : ℝ))) =
+        (1 - (a : ℝ)) * ∏ x ∈ s.erase n, (1 - (p x : ℝ)) := by
+    calc
+      _ = (1 - (↑(if n = n then a else p n) : ℝ)) *
+          ∏ x ∈ s.erase n, (1 - (↑(if x = n then a else p x) : ℝ)) :=
+        (Finset.mul_prod_erase s
+          (fun x => 1 - (↑(if x = n then a else p x) : ℝ)) hs).symm
+      _ = _ := by
+        simp only [if_pos]
+        congr 1
+        apply Finset.prod_congr rfl
+        intro x hx
+        simp [Finset.mem_erase.mp hx |>.1]
+  have hcprod_not_mem (s : Finset G.Player) (hs : n ∉ s)
+      (a : Set.Icc (0 : ℝ) 1) :
+      (∏ x ∈ s, (1 - (↑(if x = n then a else p x) : ℝ))) =
+        ∏ x ∈ s, (1 - (p x : ℝ)) := by
+    apply Finset.prod_congr rfl
+    intro x hx
+    by_cases hxn : x = n
+    · exact (hs (hxn ▸ hx)).elim
+    · simp [hxn]
+  by_cases hnA : n ∈ A
+  · have hncomp : n ∉ Finset.univ.filter (fun x => x ∉ A) := by simp [hnA]
+    simp only [CoalitionProbability, QuitRow.replace]
+    rw [hprod_mem A hnA, hprod_mem A hnA, hprod_mem A hnA]
+    rw [hcprod_not_mem _ hncomp, hcprod_not_mem _ hncomp, hcprod_not_mem _ hncomp]
+    norm_num
+    ring
+  · have hncomp : n ∈ Finset.univ.filter (fun x => x ∉ A) := by simp [hnA]
+    simp only [CoalitionProbability, QuitRow.replace]
+    rw [hprod_not_mem A hnA, hprod_not_mem A hnA, hprod_not_mem A hnA]
+    rw [hcprod_mem _ hncomp, hcprod_mem _ hncomp, hcprod_mem _ hncomp]
+    norm_num
+    ring
+
+/-- A one-stage payoff is the affine combination of its forced-quit endpoints. -/
+theorem quittingOneStagePayoff_replace_affine (G : QuittingGame)
+    (r : Payoff G.Player) (p : QuitRow G) (n : G.Player)
+    (q : Set.Icc (0 : ℝ) 1) :
+    QuittingOneStagePayoff G r (p.replace G n q) n =
+      (q : ℝ) * ForcedQuitPayoff G p n +
+        (1 - (q : ℝ)) * ForcedContinuePayoff G r p n := by
+  classical
+  let rewardPart (a : Set.Icc (0 : ℝ) 1) : ℝ :=
+    ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+      CoalitionProbability G (p.replace G n a) A * G.reward ⟨A, hA⟩ n else 0
+  have hcontinue (a : Set.Icc (0 : ℝ) 1) :
+      1 - QuitProbability G (p.replace G n a) =
+        CoalitionProbability G (p.replace G n a) ∅ := by
+    simp [QuitProbability, CoalitionProbability]
+  have hempty : CoalitionProbability G (p.replace G n 1) ∅ = 0 := by
+    simp only [CoalitionProbability, QuitRow.replace, Finset.prod_empty, one_mul]
+    have hn : n ∈ Finset.univ.filter (fun x => x ∉ (∅ : Finset G.Player)) := by simp
+    apply Finset.prod_eq_zero hn
+    norm_num
+  have hreward : rewardPart q = (q : ℝ) * rewardPart 1 +
+      (1 - (q : ℝ)) * rewardPart 0 := by
+    simp only [rewardPart]
+    calc
+      _ = ∑ A ∈ Finset.univ.powerset,
+          ((q : ℝ) * (if hA : A.Nonempty then
+              CoalitionProbability G (p.replace G n 1) A * G.reward ⟨A, hA⟩ n
+            else 0) +
+          (1 - (q : ℝ)) * (if hA : A.Nonempty then
+              CoalitionProbability G (p.replace G n 0) A * G.reward ⟨A, hA⟩ n
+            else 0)) := by
+        apply Finset.sum_congr rfl
+        intro A hA
+        split_ifs with hnonempty
+        · rw [coalitionProbability_replace_affine G p n q A]
+          ring
+        · ring
+      _ = _ := by
+        simp only [Finset.sum_add_distrib, ← Finset.mul_sum]
+  change (1 - QuitProbability G (p.replace G n q)) * r n + rewardPart q = _
+  simp only [ForcedQuitPayoff, ForcedContinuePayoff, QuittingOneStagePayoff]
+  change _ = (q : ℝ) *
+      ((1 - QuitProbability G (p.replace G n 1)) * (0 : Payoff G.Player) n +
+        rewardPart 1) +
+      (1 - (q : ℝ)) *
+        ((1 - QuitProbability G (p.replace G n 0)) * r n + rewardPart 0)
+  rw [hcontinue q, hcontinue 1, hcontinue 0]
+  rw [coalitionProbability_replace_affine G p n q ∅, hempty, hreward]
+  simp only [zero_mul]
+  ring
+
+/-- The two endpoint conditions in `E₀(r)` imply optimality against every mixed deviation. -/
+theorem quittingOneStagePayoff_deviation_le (G : QuittingGame)
+    (r : Payoff G.Player) (p : QuitRow G) (hp : p ∈ EpsilonRow G 0 r)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    QuittingOneStagePayoff G r (p.replace G n q) n ≤
+      QuittingOneStagePayoff G r p n := by
+  have hself : p.replace G n (p n) = p := by
+    funext k
+    by_cases hkn : k = n
+    · subst k
+      simp [QuitRow.replace]
+    · simp [QuitRow.replace, hkn]
+  have hcurrent := quittingOneStagePayoff_replace_affine G r p n (p n)
+  rw [hself] at hcurrent
+  rw [quittingOneStagePayoff_replace_affine G r p n q, hcurrent]
+  rcases hp with ⟨hquit, hcontinue⟩
+  by_cases hp0 : (p n : ℝ) = 0
+  · have hb := hcontinue n (by rw [hp0]; norm_num)
+    rw [hp0]
+    norm_num at hb ⊢
+    calc
+      (q : ℝ) * ForcedQuitPayoff G p n +
+          (1 - (q : ℝ)) * ForcedContinuePayoff G r p n ≤
+          (q : ℝ) * ForcedContinuePayoff G r p n +
+            (1 - (q : ℝ)) * ForcedContinuePayoff G r p n :=
+        add_le_add (mul_le_mul_of_nonneg_left hb q.property.1) le_rfl
+      _ = ForcedContinuePayoff G r p n := by ring
+  · have ha := hquit n (lt_of_le_of_ne (p n).property.1 (Ne.symm hp0))
+    by_cases hp1 : (p n : ℝ) = 1
+    · have hq0 := q.property.1
+      rw [hp1]
+      norm_num at ha ⊢
+      calc
+        (q : ℝ) * ForcedQuitPayoff G p n +
+            (1 - (q : ℝ)) * ForcedContinuePayoff G r p n ≤
+            (q : ℝ) * ForcedQuitPayoff G p n +
+              (1 - (q : ℝ)) * ForcedQuitPayoff G p n :=
+          add_le_add le_rfl
+            (mul_le_mul_of_nonneg_left ha (sub_nonneg.mpr q.property.2))
+        _ = ForcedQuitPayoff G p n := by ring
+    · have hb := hcontinue n (lt_of_le_of_ne (p n).property.2 hp1)
+      norm_num at ha hb
+      have heq : ForcedQuitPayoff G p n = ForcedContinuePayoff G r p n :=
+        le_antisymm hb ha
+      rw [heq]
+      have hq : (q : ℝ) * ForcedContinuePayoff G r p n +
+          (1 - (q : ℝ)) * ForcedContinuePayoff G r p n =
+          ForcedContinuePayoff G r p n := by ring
+      have hp : (p n : ℝ) * ForcedContinuePayoff G r p n +
+          (1 - (p n : ℝ)) * ForcedContinuePayoff G r p n =
+          ForcedContinuePayoff G r p n := by ring
+      rw [hq, hp]
+
+/-- A one-stage payoff is monotone in the player's continuation coordinate. -/
+theorem quittingOneStagePayoff_mono (G : QuittingGame) (r s : Payoff G.Player)
+    (p : QuitRow G) (n : G.Player) (h : r n ≤ s n) :
+    QuittingOneStagePayoff G r p n ≤ QuittingOneStagePayoff G s p n := by
+  simp only [QuittingOneStagePayoff]
+  apply add_le_add
+  · apply mul_le_mul_of_nonneg_left h
+    have hq : 1 - QuitProbability G p = ∏ i, (1 - (p i : ℝ)) := by
+      simp [QuitProbability]
+    rw [hq]
+    exact Finset.prod_nonneg fun i _ => sub_nonneg.mpr (p i).property.2
+  · exact le_rfl
+
+/-- A repeated payoff is monotone in the player's terminal continuation coordinate. -/
+theorem repeatedPayoff_mono (G : QuittingGame) (k : ℕ) (r s : Payoff G.Player)
+    (p : RepeatedQuitProfile G k) (n : G.Player) (h : r n ≤ s n) :
+    RepeatedPayoff G k r p n ≤ RepeatedPayoff G k s p n := by
+  induction k with
+  | zero => simpa [RepeatedPayoff] using h
+  | succ k ih =>
+      simp only [RepeatedPayoff]
+      apply quittingOneStagePayoff_mono
+      exact ih (fun i => p i.succ)
+
+/-- Add one last-stage row after a finite repeated quitting profile. -/
+def RepeatedQuitProfile.appendLast (G : QuittingGame) {k : ℕ}
+    (p : RepeatedQuitProfile G k) (r : QuitRow G) : RepeatedQuitProfile G (k + 1) :=
+  Fin.snoc p r
+
+/-- The last entry of a profile with an appended row is that row. -/
+@[simp]
+theorem RepeatedQuitProfile.appendLast_last (G : QuittingGame) {k : ℕ}
+    (p : RepeatedQuitProfile G k) (r : QuitRow G) :
+    p.appendLast G r (Fin.last k) = r := by
+  simp [RepeatedQuitProfile.appendLast]
+
+/-- Appending a row preserves every earlier entry. -/
+@[simp]
+theorem RepeatedQuitProfile.appendLast_castSucc (G : QuittingGame) {k : ℕ}
+    (p : RepeatedQuitProfile G k) (r : QuitRow G) (i : Fin k) :
+    p.appendLast G r i.castSucc = p i := by
+  simp [RepeatedQuitProfile.appendLast]
+
+/-- A nonempty profile with an appended row retains its first entry. -/
+@[simp]
+theorem RepeatedQuitProfile.appendLast_zero (G : QuittingGame) {k : ℕ}
+    (p : RepeatedQuitProfile G (k + 1)) (r : QuitRow G) :
+    p.appendLast G r 0 = p 0 := by
+  simp [RepeatedQuitProfile.appendLast]
+
+/-- Removing the first row commutes with appending a last row. -/
+theorem RepeatedQuitProfile.appendLast_tail (G : QuittingGame) {k : ℕ}
+    (p : RepeatedQuitProfile G (k + 1)) (r : QuitRow G) :
+    (fun i : Fin (k + 1) => p.appendLast G r i.succ) =
+      RepeatedQuitProfile.appendLast G (fun i : Fin k => p i.succ) r := by
+  funext i
+  refine Fin.lastCases ?_ (fun j => ?_) i
+  · simp [RepeatedQuitProfile.appendLast]
+  · rw [show j.castSucc.succ = j.succ.castSucc by rfl]
+    rw [RepeatedQuitProfile.appendLast_castSucc]
+    rw [RepeatedQuitProfile.appendLast_castSucc]
+
+/-- Appending a last row replaces the repeated game's terminal vector by its row payoff. -/
+theorem repeatedPayoff_appendLast (G : QuittingGame) (k : ℕ)
+    (x : Payoff G.Player) (p : RepeatedQuitProfile G k) (r : QuitRow G) :
+    RepeatedPayoff G (k + 1) x (p.appendLast G r) =
+      RepeatedPayoff G k (QuittingOneStagePayoff G x r) p := by
+  induction k with
+  | zero =>
+      funext n
+      have hrow : p.appendLast G r 0 = r := by
+        rw [show (0 : Fin 1) = Fin.last 0 by rfl]
+        exact p.appendLast_last G r
+      simp only [RepeatedPayoff, hrow]
+  | succ k ih =>
+      change QuittingOneStagePayoff G
+        (RepeatedPayoff G (k + 1) x
+          (fun i => RepeatedQuitProfile.appendLast G p r i.succ))
+        (RepeatedQuitProfile.appendLast G p r 0) =
+        QuittingOneStagePayoff G
+          (RepeatedPayoff G k (QuittingOneStagePayoff G x r) (fun i => p i.succ))
+          (p 0)
+      rw [RepeatedQuitProfile.appendLast_zero]
+      rw [RepeatedQuitProfile.appendLast_tail]
+      rw [ih]
+
+/-- Appending a row commutes with unilateral replacement, split at the last stage. -/
+theorem RepeatedQuitProfile.appendLast_replace (G : QuittingGame) {k : ℕ}
+    (p : RepeatedQuitProfile G k) (r : QuitRow G) (n : G.Player)
+    (q : Fin (k + 1) → Set.Icc (0 : ℝ) 1) :
+    (p.appendLast G r).replace G n q =
+      (p.replace G n (fun i => q i.castSucc)).appendLast G
+        (r.replace G n (q (Fin.last k))) := by
+  funext i j
+  refine Fin.lastCases ?_ (fun t => ?_) i
+  · simp [RepeatedQuitProfile.replace, RepeatedQuitProfile.appendLast, QuitRow.replace]
+  · simp [RepeatedQuitProfile.replace, RepeatedQuitProfile.appendLast]
+
+/-- An equilibrium can be extended by a last-stage equilibrium for its terminal vector. -/
+theorem RepeatedEquilibriumCorrespondence.appendLast (G : QuittingGame) {k : ℕ}
+    (x y : Payoff G.Player) (p : RepeatedQuitProfile G k) (r : QuitRow G)
+    (hy : y = QuittingOneStagePayoff G x r)
+    (hp : p ∈ RepeatedEquilibriumCorrespondence G k y)
+    (hr : r ∈ EpsilonRow G 0 x) :
+    p.appendLast G r ∈ RepeatedEquilibriumCorrespondence G (k + 1) x := by
+  intro n q
+  let qInit : Fin k → Set.Icc (0 : ℝ) 1 := fun i => q i.castSucc
+  let qLast : Set.Icc (0 : ℝ) 1 := q (Fin.last k)
+  have hlocal := quittingOneStagePayoff_deviation_le G x r hr n qLast
+  have hterminal : QuittingOneStagePayoff G x (r.replace G n qLast) n ≤ y n := by
+    simpa only [hy] using hlocal
+  rw [RepeatedQuitProfile.appendLast_replace]
+  rw [repeatedPayoff_appendLast, repeatedPayoff_appendLast]
+  calc
+    RepeatedPayoff G k (QuittingOneStagePayoff G x (r.replace G n qLast))
+        (p.replace G n qInit) n ≤
+        RepeatedPayoff G k y (p.replace G n qInit) n :=
+      repeatedPayoff_mono G k _ _ _ n hterminal
+    _ ≤ RepeatedPayoff G k y p n := hp n qInit
+    _ = RepeatedPayoff G k (QuittingOneStagePayoff G x r) p n := by rw [← hy]
+
 /-- `F^k` contains the `k`th iterate of `F₀`. -/
 theorem repeatedF_contains_iterate (G : QuittingGame) (k : ℕ) (x : Payoff G.Player) :
     (FRow G 0).iterate k x ⊆ RepeatedF G k x := by
-  sorry
+  induction k generalizing x with
+  | zero =>
+      intro z hz
+      simp only [Correspondence.iterate, Set.mem_singleton_iff] at hz
+      subst z
+      let p : RepeatedQuitProfile G 0 := fun i => Fin.elim0 i
+      refine ⟨p, ?_, ?_⟩
+      · intro n q
+        simp [RepeatedPayoff]
+      · rfl
+  | succ k ih =>
+      intro z hz
+      simp only [Correspondence.iterate, Set.mem_iUnion] at hz
+      rcases hz with ⟨y, hy, hzk⟩
+      rcases hy with ⟨r, hr, hyr⟩
+      rcases ih y hzk with ⟨p, hp, hzp⟩
+      refine ⟨p.appendLast G r, ?_, ?_⟩
+      · exact RepeatedEquilibriumCorrespondence.appendLast G x y p r hyr.symm hp hr
+      · rw [repeatedPayoff_appendLast, hyr, hzp]
 
 /-- Where no finite-game equilibrium quits surely, `F^k` equals the `k`th iterate of `F₀`. -/
 theorem repeatedF_eq_iterate_of_no_sure_quit (G : QuittingGame) (k : ℕ)
