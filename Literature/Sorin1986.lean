@@ -4349,6 +4349,54 @@ def OpenProblemHigherPlayerContractibility : Prop :=
 def prisonersDilemma : FiniteStageGame :=
   binaryGame (pair 4 4) (pair 0 5) (pair 5 0) (pair 1 1)
 
+/-- The row player's one-stage payoff is affine in the two defection
+probabilities. -/
+theorem prisonersDilemma_mixedEU_false (profile : Bool → PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+        (pair 1 1))).mixedExtension.eu profile false =
+      4 + (profile false true).toReal - 4 * (profile true true).toReal := by
+  rw [binaryKernel_mixedEU_apply]
+  simp only [pair_false]
+  ring
+
+/-- The column player's one-stage payoff is affine in the two defection
+probabilities. -/
+theorem prisonersDilemma_mixedEU_true (profile : Bool → PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+        (pair 1 1))).mixedExtension.eu profile true =
+      4 + (profile true true).toReal - 4 * (profile false true).toReal := by
+  rw [binaryKernel_mixedEU_apply]
+  simp only [pair_true]
+  ring
+
+/-- A row deviation in the Prisoner's Dilemma changes only its own defection
+probability. -/
+theorem prisonersDilemma_mixedEU_update_false
+    (profile : Bool → PMF Bool) (deviation : PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+        (pair 1 1))).mixedExtension.eu
+          (Function.update profile false deviation) false =
+      4 + (deviation true).toReal - 4 * (profile true true).toReal := by
+  rw [prisonersDilemma_mixedEU_false]
+  change 4 + (deviation true).toReal - 4 * (profile true true).toReal = _
+  rfl
+
+/-- A column deviation in the Prisoner's Dilemma changes only its own
+defection probability. -/
+theorem prisonersDilemma_mixedEU_update_true
+    (profile : Bool → PMF Bool) (deviation : PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+        (pair 1 1))).mixedExtension.eu
+          (Function.update profile true deviation) true =
+      4 + (deviation true).toReal - 4 * (profile false true).toReal := by
+  rw [prisonersDilemma_mixedEU_true]
+  change 4 + (deviation true).toReal - 4 * (profile false true).toReal = _
+  rfl
+
 /-- Bottom strictly dominates Top for player `false`. -/
 theorem prisonersDilemma_bottom_strictly_dominates :
     ∀ column : Bool,
@@ -4374,11 +4422,143 @@ finite mixed-extension geometry. -/
 theorem prisonersDilemma_D1_eq_C :
     prisonersDilemma.oneStageFeasiblePayoffs =
       prisonersDilemma.correlatedFeasiblePayoffs := by
-  sorry
+  have hconvex : Convex ℝ
+      ((binaryGame (pair 4 4) (pair 0 5) (pair 5 0)
+        (pair 1 1)).oneStageFeasiblePayoffs) := by
+    rintro _ ⟨first, rfl⟩ _ ⟨second, rfl⟩ a b ha hb hab
+    change (Bool → PMF Bool) at first second
+    let probability (who : Bool) :=
+      a * (first who true).toReal + b * (second who true).toReal
+    have hprob0 (who : Bool) : 0 ≤ probability who :=
+      add_nonneg (mul_nonneg ha ENNReal.toReal_nonneg)
+        (mul_nonneg hb ENNReal.toReal_nonneg)
+    have hprob1 (who : Bool) : probability who ≤ 1 := by
+      have hfirst : (first who true).toReal ≤ 1 :=
+        ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+      have hsecond : (second who true).toReal ≤ 1 :=
+        ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+      calc
+        probability who ≤ a * 1 + b * 1 :=
+          add_le_add (mul_le_mul_of_nonneg_left hfirst ha)
+            (mul_le_mul_of_nonneg_left hsecond hb)
+        _ = 1 := by linarith
+    let profile : Bool → PMF Bool := fun who ↦
+      Math.ProbabilityMassFunction.bernoulliBool
+        (probability who) (hprob0 who) (hprob1 who)
+    refine ⟨profile, ?_⟩
+    change (fun who ↦
+        (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+          (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+            (pair 1 1))).mixedExtension.eu profile who) =
+      a • (fun who ↦
+        (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+          (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+            (pair 1 1))).mixedExtension.eu first who) +
+      b • (fun who ↦
+        (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+          (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+            (pair 1 1))).mixedExtension.eu second who)
+    funext who
+    cases who
+    · simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+      rw [prisonersDilemma_mixedEU_false,
+        prisonersDilemma_mixedEU_false,
+        prisonersDilemma_mixedEU_false]
+      simp only [profile,
+        Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
+      simp only [probability]
+      ring_nf
+      linarith
+    · simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+      rw [prisonersDilemma_mixedEU_true,
+        prisonersDilemma_mixedEU_true,
+        prisonersDilemma_mixedEU_true]
+      simp only [profile,
+        Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
+      simp only [probability]
+      ring_nf
+      linarith
+  change (binaryGame (pair 4 4) (pair 0 5) (pair 5 0)
+      (pair 1 1)).oneStageFeasiblePayoffs =
+    (binaryGame (pair 4 4) (pair 0 5) (pair 5 0)
+      (pair 1 1)).correlatedFeasiblePayoffs
+  apply Set.Subset.antisymm
+  · rintro _ ⟨profile, rfl⟩
+    exact FiniteStageGame.mixedPayoff_mem_correlatedFeasiblePayoffs _ profile
+  · exact convexHull_min (lemma_1_pure_subset_D1 _) hconvex
 
 theorem prisonersDilemma_E1_eq_singleton :
     prisonersDilemma.oneStageEquilibriumPayoffs = {pair 1 1} := by
-  sorry
+  change (binaryGame (pair 4 4) (pair 0 5) (pair 5 0)
+      (pair 1 1)).oneStageEquilibriumPayoffs =
+    ({pair 1 1} : Set (Payoff Bool))
+  apply Set.Subset.antisymm
+  · rintro _ ⟨profile, hnash, rfl⟩
+    change (Bool → PMF Bool) at profile
+    change (binaryGame (pair 4 4) (pair 0 5) (pair 5 0)
+      (pair 1 1)).mixedPayoff profile ∈ ({pair 1 1} : Set (Payoff Bool))
+    change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+        (pair 1 1))).mixedExtension.IsNash profile at hnash
+    have hrow := hnash false (PMF.pure true)
+    have hcolumn := hnash true (PMF.pure true)
+    rw [prisonersDilemma_mixedEU_false,
+      prisonersDilemma_mixedEU_update_false] at hrow
+    rw [prisonersDilemma_mixedEU_true,
+      prisonersDilemma_mixedEU_update_true] at hcolumn
+    norm_num at hrow hcolumn
+    let p := (profile false true).toReal
+    let q := (profile true true).toReal
+    have hp1 : p ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hq1 : q ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hrow' : 1 ≤ p := by simpa [p] using hrow
+    have hcolumn' : 1 ≤ q := by simpa [q] using hcolumn
+    have hp : p = 1 := by linarith
+    have hq : q = 1 := by linarith
+    apply Set.mem_singleton_iff.mpr
+    funext who
+    cases who
+    · change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+          (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+            (pair 1 1))).mixedExtension.eu profile false = _
+      rw [prisonersDilemma_mixedEU_false]
+      norm_num [p, q, hp, hq, pair]
+    · change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+          (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+            (pair 1 1))).mixedExtension.eu profile true = _
+      rw [prisonersDilemma_mixedEU_true]
+      norm_num [p, q, hp, hq, pair]
+  · rintro _ rfl
+    let profile : Bool → PMF Bool := fun _ ↦ PMF.pure true
+    refine ⟨profile, ?_, ?_⟩
+    · change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+        (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+          (pair 1 1))).mixedExtension.IsNash profile
+      intro who deviation
+      change PMF Bool at deviation
+      cases who
+      · rw [prisonersDilemma_mixedEU_false,
+          prisonersDilemma_mixedEU_update_false]
+        norm_num [profile]
+        exact ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+      · rw [prisonersDilemma_mixedEU_true,
+          prisonersDilemma_mixedEU_update_true]
+        norm_num [profile]
+        exact ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    · funext who
+      cases who
+      · change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+            (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+              (pair 1 1))).mixedExtension.eu profile false = _
+        rw [prisonersDilemma_mixedEU_false]
+        norm_num [profile, pair]
+      · change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+            (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+              (pair 1 1))).mixedExtension.eu profile true = _
+        rw [prisonersDilemma_mixedEU_true]
+        norm_num [profile, pair]
 
 /-- The paper's explicit description of `Δ` for the Prisoner's Dilemma. -/
 theorem prisonersDilemma_individuallyRationalPayoffs :
