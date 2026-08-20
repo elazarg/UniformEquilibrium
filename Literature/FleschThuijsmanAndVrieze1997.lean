@@ -24,8 +24,8 @@ The repository's quitting-game terminal payoff is the exact adapter for this
 recursive game: on every realized path the limiting average is the terminal
 reward, or zero if absorption never occurs.  The checked finite-average
 convergence statements below make the corresponding expected-average limit
-explicit.  Claims not yet discharged by the imported interfaces remain
-`sorry`, immediately preceded by the precise missing proof boundary.
+explicit. Open source results are exact named propositions, immediately
+preceded by the precise missing proof boundary.
 -/
 
 noncomputable section
