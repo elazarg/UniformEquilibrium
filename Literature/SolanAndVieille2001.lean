@@ -353,7 +353,270 @@ def Proposition2_2 : Prop :=
         (oneShotCorrespondence reward (W reward) ε value).Nonempty
 
 theorem proposition2_2 : Proposition2_2 (ι := ι) := by
-  sorry
+  classical
+  intro reward hunit hexact
+  refine ⟨1, by norm_num, ?_⟩
+  intro ε hε0 hε1 value hvalue
+  obtain ⟨base, hbaseNash, hbaseShape⟩ := hexact value hvalue
+  have hbaseEndpoint :
+      IsεQuittingRootEndpointNash reward value 0 base :=
+    (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
+      reward value base).2 hbaseNash
+  obtain ⟨chosen, hchosen, hbaseLow⟩ : ∃ chosen : ι,
+      ((base chosen true).toReal = 1 ∨
+        quittingRootQuitPayoff reward value base chosen =
+          quittingRootContinuePayoff reward value base chosen) ∧
+      oneShotExpectedPayoff reward value base chosen ≤ 1 := by
+    rcases hbaseShape with hcontinue | ⟨chosen, hcontinueLt, hlow⟩
+    · obtain ⟨chosen, hlow⟩ := hvalue.2
+      refine ⟨chosen, Or.inr ?_, ?_⟩
+      · have hquitLe :=
+          quittingRootQuitPayoff_le_successorPayoff_of_isZeroEndpointNash
+            hbaseEndpoint chosen
+        rw [hcontinue, quittingRootQuitPayoff_allContinueRoot,
+          quittingRootSuccessorPayoff_allContinueRoot_eq] at hquitLe
+        have hsolo : reward (quittingSingletonTerminal chosen) chosen = 1 :=
+          hunit chosen
+        rw [hcontinue, quittingRootQuitPayoff_allContinueRoot,
+          quittingRootContinuePayoff_allContinueRoot, hsolo]
+        linarith
+      · rwa [hcontinue, oneShotExpectedPayoff,
+          quittingRootSuccessorPayoff_allContinueRoot_eq]
+    · have hsum :=
+          quittingRoot_continueProbability_add_quitProbability base chosen
+      have hquitPos : 0 < (base chosen true).toReal := by linarith
+      have hquitNe : base chosen true ≠ 0 :=
+        ENNReal.toReal_ne_zero.mp (ne_of_gt hquitPos) |>.1
+      by_cases hcontinueZero : (base chosen false).toReal = 0
+      · refine ⟨chosen, Or.inl ?_, hlow⟩
+        linarith
+      · refine ⟨chosen, Or.inr ?_, hlow⟩
+        have hcontinuePos : 0 < (base chosen false).toReal :=
+          lt_of_le_of_ne ENNReal.toReal_nonneg (Ne.symm hcontinueZero)
+        have hcontinueNe : base chosen false ≠ 0 :=
+          ENNReal.toReal_ne_zero.mp (ne_of_gt hcontinuePos) |>.1
+        have hquitEq :=
+          quittingRootSuccessorPayoff_eq_quitPayoff_of_isZeroEndpointNash
+            hbaseEndpoint chosen hquitNe
+        have hcontinueEq :=
+          quittingRootSuccessorPayoff_eq_continuePayoff_of_isZeroEndpointNash
+            hbaseEndpoint chosen hcontinueNe
+        exact hquitEq.symm.trans hcontinueEq
+  set q := (base chosen true).toReal with hqdef
+  have hq0 : 0 ≤ q := ENNReal.toReal_nonneg
+  have hq1 : q ≤ 1 := by
+    have hle := ENNReal.toReal_mono ENNReal.one_ne_top
+      ((base chosen).coe_le_one true)
+    simpa using hle
+  set q' := ε + (1 - ε) * q with hq'def
+  have hq'0 : 0 ≤ q' := by nlinarith
+  have hq'1 : q' ≤ 1 := by nlinarith
+  have hεq' : ε ≤ q' := by nlinarith
+  set coin := quittingHazardCoin q' hq'0 hq'1 with hcoindef
+  set perturbed := Function.update base chosen coin with hperturbed
+  have hcoinTrue : (coin true).toReal = q' := by
+    rw [hcoindef, quittingHazardCoin_true_toReal]
+  have hcoinFalse : (coin false).toReal = 1 - q' := by
+    rw [hcoindef, quittingHazardCoin_false_toReal]
+  have hperturbedChosen : perturbed chosen = coin := by
+    rw [hperturbed, Function.update_self]
+  have hperturbedOther : ∀ who, who ≠ chosen → perturbed who = base who := by
+    intro who hne
+    rw [hperturbed, Function.update_of_ne hne]
+  have hchosenEndpoints :
+      quittingRootQuitPayoff reward value perturbed chosen =
+          quittingRootQuitPayoff reward value base chosen ∧
+        quittingRootContinuePayoff reward value perturbed chosen =
+          quittingRootContinuePayoff reward value base chosen := by
+    constructor
+    · unfold quittingRootQuitPayoff
+      rw [hperturbed, Function.update_idem]
+    · unfold quittingRootContinuePayoff
+      rw [hperturbed, Function.update_idem]
+  have hcurrentLow :
+      oneShotExpectedPayoff reward value perturbed chosen ≤ 1 := by
+    rw [oneShotExpectedPayoff,
+      quittingRootSuccessorPayoff_eq_endpointMix, hperturbedChosen,
+      hcoinTrue, hcoinFalse, hchosenEndpoints.1, hchosenEndpoints.2]
+    rcases hchosen with hpure | hindifferent
+    · have hqOne : q = 1 := hqdef.symm.trans hpure
+      have hq'One : q' = 1 := by rw [hq'def, hqOne]; ring
+      rw [hq'One]
+      have hquitEq :=
+        quittingRootSuccessorPayoff_eq_quitPayoff_of_isZeroEndpointNash
+          hbaseEndpoint chosen
+          (ENNReal.toReal_ne_zero.mp (by rw [← hqdef, hpure]; norm_num) |>.1)
+      norm_num
+      rw [← hquitEq]
+      exact hbaseLow
+    · rw [hindifferent]
+      have hbaseEq : oneShotExpectedPayoff reward value base chosen =
+          quittingRootContinuePayoff reward value base chosen := by
+        rw [oneShotExpectedPayoff,
+          quittingRootSuccessorPayoff_eq_endpointMix, hindifferent]
+        have hsum :=
+          quittingRoot_continueProbability_add_quitProbability base chosen
+        calc
+          (base chosen true).toReal *
+                quittingRootContinuePayoff reward value base chosen +
+              (base chosen false).toReal *
+                quittingRootContinuePayoff reward value base chosen =
+            ((base chosen false).toReal + (base chosen true).toReal) *
+              quittingRootContinuePayoff reward value base chosen := by ring
+          _ = quittingRootContinuePayoff reward value base chosen := by
+            rw [hsum, one_mul]
+      calc
+        q' * quittingRootContinuePayoff reward value base chosen +
+            (1 - q') * quittingRootContinuePayoff reward value base chosen =
+          quittingRootContinuePayoff reward value base chosen := by ring
+        _ = oneShotExpectedPayoff reward value base chosen := hbaseEq.symm
+        _ ≤ 1 := hbaseLow
+  have hendpointAffine : ∀ (who : ι), who ≠ chosen → ∀ action : Bool,
+      quittingRootExpectedPayoff reward value
+          (Function.update perturbed who (PMF.pure action)) who =
+        ε * quittingRootExpectedPayoff reward value
+            (Function.update (Function.update base who (PMF.pure action))
+              chosen (PMF.pure true)) who +
+          (1 - ε) * quittingRootExpectedPayoff reward value
+            (Function.update base who (PMF.pure action)) who := by
+    intro who hne action
+    have hcomm : Function.update perturbed who (PMF.pure action) =
+        Function.update (Function.update base who (PMF.pure action)) chosen coin := by
+      rw [hperturbed]
+      exact Function.update_comm (Ne.symm hne) coin (PMF.pure action) base
+    have hbaseChosen :
+        Function.update base who (PMF.pure action) chosen = base chosen :=
+      Function.update_of_ne (Ne.symm hne) (PMF.pure action) base
+    have hbaseMix :=
+      quittingRootExpectedPayoff_update_coord_eq_mix reward value
+        (Function.update base who (PMF.pure action)) chosen (base chosen) who
+    have hreplace :
+        Function.update (Function.update base who (PMF.pure action)) chosen
+            (base chosen) =
+          Function.update base who (PMF.pure action) := by
+      funext player
+      by_cases hplayer : player = chosen
+      · subst player
+        rw [Function.update_self, hbaseChosen]
+      · rw [Function.update_of_ne hplayer]
+    rw [hreplace] at hbaseMix
+    rw [hcomm,
+      quittingRootExpectedPayoff_update_coord_eq_mix reward value
+        (Function.update base who (PMF.pure action)) chosen coin who,
+      hbaseMix, hcoinTrue, hcoinFalse]
+    have hbaseFalse : (base chosen false).toReal = 1 - q := by
+      have hsum :=
+        quittingRoot_continueProbability_add_quitProbability base chosen
+      rw [← hqdef] at hsum
+      linarith
+    rw [← hqdef, hbaseFalse, hq'def]
+    ring
+  have hsureBound : ∀ (who : ι) (action : Bool),
+      |quittingRootExpectedPayoff reward value
+          (Function.update (Function.update base who (PMF.pure action))
+            chosen (PMF.pure true)) who| ≤ quittingRewardBound reward := by
+    intro who action
+    let forced := Function.update (Function.update base who (PMF.pure action))
+      chosen (PMF.pure true)
+    have hsure : QuittingRootHasSureQuitter forced :=
+      quittingRootHasSureQuitter_update_pure_true
+        (Function.update base who (PMF.pure action)) chosen
+    rw [quittingRootExpectedPayoff_eq_of_hasSureQuitter reward forced hsure
+      value (0 : Payoff ι) who]
+    exact abs_quittingRootExpectedPayoff_le_bound reward (0 : Payoff ι)
+      forced who (abs_reward_le_quittingRewardBound reward) (by
+        intro player
+        simpa using quittingRewardBound_nonneg reward)
+  have hperfect : oneShotPerfectEpsilonEquilibrium reward value
+      (rho reward * ε) perturbed := by
+    intro who action hsupport alternative
+    by_cases hwho : who = chosen
+    · subst hwho
+      rw [hperturbed, Function.update_idem, Function.update_idem]
+      rcases hchosen with hpure | hindifferent
+      · have hqOne : q = 1 := hqdef.symm.trans hpure
+        have hq'One : q' = 1 := by rw [hq'def, hqOne]; ring
+        have hcoinPure : coin = PMF.pure true := by
+          ext observed
+          cases observed <;>
+            simp [hcoindef, quittingHazardCoin, PMF.ofFintype_apply, hq'One]
+        rw [hperturbedChosen, hcoinPure] at hsupport
+        have haction : action = true :=
+          (PMF.mem_support_pure_iff true action).mp hsupport
+        subst haction
+        have hbaseQuit : base who true ≠ 0 :=
+          ENNReal.toReal_ne_zero.mp (by rw [← hqdef, hpure]; norm_num) |>.1
+        have hquitEq :=
+          quittingRootSuccessorPayoff_eq_quitPayoff_of_isZeroEndpointNash
+            hbaseEndpoint who hbaseQuit
+        have hdeviation := hbaseNash who (PMF.pure alternative)
+        have htol : 0 ≤ rho reward * ε :=
+          mul_nonneg (mul_nonneg (by norm_num)
+            (quittingRewardBound_nonneg reward)) hε0.le
+        calc
+          quittingRootExpectedPayoff reward value
+              (Function.update base who (PMF.pure alternative)) who ≤
+            quittingRootSuccessorPayoff reward value base who := by
+              change quittingRootExpectedPayoff reward value
+                (Function.update base who (PMF.pure alternative)) who ≤
+                  quittingRootExpectedPayoff reward value base who
+              linarith
+          _ = quittingRootExpectedPayoff reward value
+              (Function.update base who (PMF.pure true)) who := hquitEq
+          _ ≤ _ + rho reward * ε := le_add_of_nonneg_right htol
+      · have hactionsEq : ∀ first second : Bool,
+            quittingRootExpectedPayoff reward value
+                (Function.update base who (PMF.pure first)) who =
+              quittingRootExpectedPayoff reward value
+                (Function.update base who (PMF.pure second)) who := by
+          intro first second
+          cases first <;> cases second
+          · rfl
+          · exact hindifferent.symm
+          · exact hindifferent
+          · rfl
+        rw [hactionsEq alternative action]
+        exact le_add_of_nonneg_right
+          (mul_nonneg (mul_nonneg (by norm_num)
+            (quittingRewardBound_nonneg reward)) hε0.le)
+    · rw [hperturbedOther who hwho] at hsupport
+      rw [hendpointAffine who hwho alternative,
+        hendpointAffine who hwho action]
+      have hbase := hbaseNash who (PMF.pure alternative)
+      have hsupportedEq :
+          quittingRootExpectedPayoff reward value
+              (Function.update base who (PMF.pure action)) who =
+            quittingRootExpectedPayoff reward value base who := by
+        cases action
+        · exact
+            (quittingRootSuccessorPayoff_eq_continuePayoff_of_isZeroEndpointNash
+              hbaseEndpoint who hsupport).symm
+        · exact
+            (quittingRootSuccessorPayoff_eq_quitPayoff_of_isZeroEndpointNash
+              hbaseEndpoint who hsupport).symm
+      rw [hsupportedEq] at *
+      have haltBound := hsureBound who alternative
+      have hactBound := hsureBound who action
+      have halt := abs_le.mp haltBound
+      have hact := abs_le.mp hactBound
+      rw [rho]
+      nlinarith [hbase]
+  refine ⟨oneShotExpectedPayoff reward value perturbed, ?_, perturbed,
+    hperfect, ?_, rfl⟩
+  · constructor
+    · intro who
+      exact (abs_quittingRootExpectedPayoff_le_bound reward value perturbed who
+        (fun terminal player ↦
+          (abs_reward_le_quittingRewardBound reward terminal player).trans
+            (by unfold rho; nlinarith [quittingRewardBound_nonneg reward]))
+        hvalue.1)
+    · exact ⟨chosen, hcurrentLow⟩
+  · have hmassLe : quittingStationaryContinueMass perturbed ≤
+        (perturbed chosen false).toReal :=
+      quittingStationaryContinueMass_le_ownContinueProbability perturbed chosen
+    unfold oneShotTerminationProbability quittingRootAbsorptionMass
+    rw [hperturbedChosen, hcoinFalse] at hmassLe
+    linarith
 
 /-- **Proposition 2.3.** If `ψ` has nonempty values on a compact `W`, there
 is a cyclic profile whose every tail terminates and whose rows are perfect
