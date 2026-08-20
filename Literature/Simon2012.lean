@@ -396,6 +396,24 @@ private theorem norm_le_euclideanNorm {N : Type} [Fintype N] [Nonempty N]
   simpa only [Real.norm_eq_abs] using
     PiLp.norm_apply_le (WithLp.toLp 2 x) i
 
+/-- On a nonempty finite product, the Euclidean norm is at most `card` times the max norm. -/
+private theorem euclideanNorm_le_card_mul_norm {N : Type} [Fintype N] [Nonempty N]
+    (x : Payoff N) :
+    EuclideanNorm x ≤ (Fintype.card N : ℝ) * ‖x‖ := by
+  classical
+  calc
+    EuclideanNorm x ≤ ∑ i, |x i| := by
+      rw [EuclideanNorm]
+      rw [← sq_le_sq₀ (Real.sqrt_nonneg _) (Finset.sum_nonneg fun _ _ => abs_nonneg _)]
+      rw [Real.sq_sqrt]
+      · simpa only [sq_abs] using
+          (Finset.sum_sq_le_sq_sum_of_nonneg (s := Finset.univ)
+            (f := fun i => |x i|) fun _ _ => abs_nonneg _)
+      · exact Finset.sum_nonneg fun _ _ => sq_nonneg _
+    _ ≤ (Fintype.card N : ℝ) * ‖x‖ := by
+      simpa only [Real.norm_eq_abs, nsmul_eq_mul] using
+        (Pi.sum_norm_apply_le_norm (f := x))
+
 /--
 Lemma 2.1(1), the sign-pattern clause of the corrected 2007 Lemma 5.
 -/
@@ -505,10 +523,203 @@ def ExtendedOrbitCondition (G : QuittingGame) : Prop :=
       SegmentIndex (x.segmentLength j) i → IsRational G ε (x.point j i)) ∧
     HasUnboundedExtendedVariation x
 
+private theorem positive_card (G : QuittingGame) :
+    0 < (Fintype.card G.Player : ℝ) := by
+  exact_mod_cast Fintype.card_pos
+
+private theorem one_le_card (G : QuittingGame) :
+    1 ≤ (Fintype.card G.Player : ℝ) := by
+  exact_mod_cast Fintype.card_pos
+
+private theorem finiteVariation_simon2007_le_euclidean
+    {N : Type} [Fintype N] [Nonempty N] {k : ℕ}
+    (x : Fin (k + 1) → Payoff N) :
+    Literature.Simon2007.FiniteOrbitVariation x ≤ FiniteOrbitVariation x := by
+  apply Finset.sum_le_sum
+  intro i _
+  exact norm_le_euclideanNorm _
+
+private theorem finiteVariation_euclidean_le_card_mul
+    {N : Type} [Fintype N] [Nonempty N] {k : ℕ}
+    (x : Fin (k + 1) → Payoff N) :
+    FiniteOrbitVariation x ≤
+      (Fintype.card N : ℝ) * Literature.Simon2007.FiniteOrbitVariation x := by
+  calc
+    FiniteOrbitVariation x ≤
+        ∑ i : Fin k, (Fintype.card N : ℝ) * ‖x i.succ - x i.castSucc‖ := by
+      apply Finset.sum_le_sum
+      intro i _
+      exact euclideanNorm_le_card_mul_norm _
+    _ = (Fintype.card N : ℝ) *
+        Literature.Simon2007.FiniteOrbitVariation x := by
+      rw [Literature.Simon2007.FiniteOrbitVariation, Finset.mul_sum]
+
+private theorem unboundedVariation_simon2007_to_euclidean
+    {N : Type} [Fintype N] [Nonempty N] {x : ℕ → Payoff N}
+    (h : Literature.Simon2007.HasUnboundedVariation x) :
+    HasUnboundedVariation x := by
+  intro B
+  obtain ⟨k, hk⟩ := h B
+  refine ⟨k, hk.trans ?_⟩
+  apply Finset.sum_le_sum
+  intro i _
+  exact norm_le_euclideanNorm _
+
+private theorem unboundedVariation_euclidean_to_simon2007
+    {N : Type} [Fintype N] [Nonempty N] {x : ℕ → Payoff N}
+    (h : HasUnboundedVariation x) :
+    Literature.Simon2007.HasUnboundedVariation x := by
+  intro B
+  let c : ℝ := Fintype.card N
+  have hc : 0 < c := by
+    dsimp only [c]
+    exact_mod_cast Fintype.card_pos
+  obtain ⟨k, hk⟩ := h (c * B)
+  refine ⟨k, ?_⟩
+  have hupper :
+      (∑ i ∈ Finset.range k, EuclideanDist (x (i + 1)) (x i)) ≤
+        c * ∑ i ∈ Finset.range k, ‖x (i + 1) - x i‖ := by
+    calc
+      (∑ i ∈ Finset.range k, EuclideanDist (x (i + 1)) (x i)) ≤
+          ∑ i ∈ Finset.range k, c * ‖x (i + 1) - x i‖ := by
+        apply Finset.sum_le_sum
+        intro i _
+        exact euclideanNorm_le_card_mul_norm _
+      _ = c * ∑ i ∈ Finset.range k, ‖x (i + 1) - x i‖ := by
+        rw [Finset.mul_sum]
+  nlinarith
+
+private theorem unboundedExtendedVariation_simon2007_to_euclidean
+    {N : Type} [Fintype N] [Nonempty N]
+    {F : Correspondence (Payoff N) (Payoff N)} {x : ExtendedOrbitData F}
+    (h : Literature.Simon2007.HasUnboundedExtendedVariation x) :
+    HasUnboundedExtendedVariation x := by
+  classical
+  intro B
+  obtain ⟨J, I, hJI⟩ := h B
+  refine ⟨J, I, hJI.trans ?_⟩
+  apply Finset.sum_le_sum
+  intro j _
+  apply Finset.sum_le_sum
+  intro i _
+  split_ifs
+  · exact norm_le_euclideanNorm _
+  · exact le_rfl
+
+private theorem unboundedExtendedVariation_euclidean_to_simon2007
+    {N : Type} [Fintype N] [Nonempty N]
+    {F : Correspondence (Payoff N) (Payoff N)} {x : ExtendedOrbitData F}
+    (h : HasUnboundedExtendedVariation x) :
+    Literature.Simon2007.HasUnboundedExtendedVariation x := by
+  classical
+  intro B
+  let c : ℝ := Fintype.card N
+  have hc : 0 < c := by
+    dsimp only [c]
+    exact_mod_cast Fintype.card_pos
+  obtain ⟨J, I, hJI⟩ := h (c * B)
+  refine ⟨J, I, ?_⟩
+  have hupper :
+      Finset.sum (Finset.range J) (fun j =>
+        Finset.sum (Finset.range I) fun i =>
+          if ActiveSegment x.segmentCount j ∧
+              SegmentIndex (x.segmentLength j) (i + 1)
+          then EuclideanDist (x.point j (i + 1)) (x.point j i)
+          else 0) ≤
+        c * Finset.sum (Finset.range J) (fun j =>
+          Finset.sum (Finset.range I) fun i =>
+            if ActiveSegment x.segmentCount j ∧
+                SegmentIndex (x.segmentLength j) (i + 1)
+            then ‖x.point j (i + 1) - x.point j i‖
+            else 0) := by
+    calc
+      _ ≤ Finset.sum (Finset.range J) (fun j =>
+          Finset.sum (Finset.range I) fun i =>
+            c * if ActiveSegment x.segmentCount j ∧
+                SegmentIndex (x.segmentLength j) (i + 1)
+              then ‖x.point j (i + 1) - x.point j i‖
+              else 0) := by
+        apply Finset.sum_le_sum
+        intro j _
+        apply Finset.sum_le_sum
+        intro i _
+        split_ifs
+        · exact euclideanNorm_le_card_mul_norm _
+        · simp
+      _ = _ := by
+        rw [Finset.mul_sum]
+        congr 1
+        ext j
+        rw [Finset.mul_sum]
+  nlinarith
+
+private theorem finiteNearOrbitCondition_iff_simon2007 (G : QuittingGame) :
+    FiniteNearOrbitCondition G ↔
+      Literature.Simon2007.FiniteNearOrbitCondition G := by
+  let c : ℝ := Fintype.card G.Player
+  have hc : 0 < c := positive_card G
+  have hc1 : 1 ≤ c := one_le_card G
+  constructor
+  · intro h ε hε B hB
+    obtain ⟨k, x, horbit, hpoints, hvariation⟩ := h ε hε (c * B) (by nlinarith)
+    refine ⟨k, x, horbit, ?_, ?_⟩
+    · intro i
+      exact ⟨hpoints i |>.1, by
+        obtain ⟨z, hz, hdist⟩ := (hpoints i).2
+        exact ⟨z, hz, (norm_le_euclideanNorm _).trans hdist⟩⟩
+    · have hupper := finiteVariation_euclidean_le_card_mul x
+      nlinarith
+  · intro h ε hε B hB
+    let δ := ε / c
+    have hδ : 0 < δ := div_pos hε hc
+    have hδε : δ ≤ ε := by
+      dsimp only [δ]
+      rw [div_le_iff₀ hc]
+      nlinarith
+    obtain ⟨k, x, horbit, hpoints, hvariation⟩ := h δ hδ B hB
+    refine ⟨k, x, ?_, ?_, hvariation.trans (finiteVariation_simon2007_le_euclidean x)⟩
+    · intro i
+      exact FRow.mono G hδε _ (horbit i)
+    · intro i
+      refine ⟨fun n => (show MinMaxQuit G n - ε ≤ MinMaxQuit G n - δ by
+        linarith) |>.trans ((hpoints i).1 n), ?_⟩
+      obtain ⟨z, hz, hdist⟩ := (hpoints i).2
+      refine ⟨z, hz, (euclideanNorm_le_card_mul_norm _).trans ?_⟩
+      change c * ‖x i - z‖ ≤ ε
+      calc
+        c * ‖x i - z‖ ≤ c * (ε / c) :=
+          mul_le_mul_of_nonneg_left hdist hc.le
+        _ = ε := by field_simp
+
+private theorem infiniteOrbitCondition_iff_simon2007 (G : QuittingGame) :
+    InfiniteOrbitCondition G ↔ Literature.Simon2007.InfiniteOrbitCondition G := by
+  constructor
+  · intro h ε hε
+    obtain ⟨x, horbit, hrational, hvariation⟩ := h ε hε
+    exact ⟨x, horbit, hrational,
+      unboundedVariation_euclidean_to_simon2007 hvariation⟩
+  · intro h ε hε
+    obtain ⟨x, horbit, hrational, hvariation⟩ := h ε hε
+    exact ⟨x, horbit, hrational,
+      unboundedVariation_simon2007_to_euclidean hvariation⟩
+
+private theorem extendedOrbitCondition_iff_simon2007 (G : QuittingGame) :
+    ExtendedOrbitCondition G ↔ Literature.Simon2007.ExtendedOrbitCondition G := by
+  constructor
+  · intro h ε hε
+    obtain ⟨x, hrational, hvariation⟩ := h ε hε
+    exact ⟨x, hrational,
+      unboundedExtendedVariation_euclidean_to_simon2007 hvariation⟩
+  · intro h ε hε
+    obtain ⟨x, hrational, hvariation⟩ := h ε hε
+    exact ⟨x, hrational,
+      unboundedExtendedVariation_simon2007_to_euclidean hvariation⟩
+
 /--
-Theorem 2.1.  Simon 2007, Theorem 3 has the same mathematical content, but its
-Lean declaration is `sorry`-backed and uses the inherited product norm.  This
-source-exact Euclidean statement therefore remains visibly open.
+Theorem 2.1.  This is the corrected Simon 2007 five-way theorem transported
+from the max norm to the paper's Euclidean norm by finite-dimensional norm
+comparison.  Its remaining mathematical dependency is the corrected 2007
+theorem itself.
 -/
 theorem theorem2_1 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
@@ -516,7 +727,18 @@ theorem theorem2_1 (G : QuittingGame)
     EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
       (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G)
       (ExtendedOrbitCondition G) := by
-  sorry
+  have hgenerated2007 :
+      ¬Literature.Simon2007.HasStationarilyGeneratedApproximateEquilibria G := by
+    intro hold
+    apply hgenerated
+    intro δ hδ
+    exact hold δ hδ
+  have hinstant2007 : ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
+    fun hold => hinstant ((instantApproximateEquilibria_iff_simon2007 G).mpr hold)
+  rw [finiteNearOrbitCondition_iff_simon2007,
+    infiniteOrbitCondition_iff_simon2007,
+    extendedOrbitCondition_iff_simon2007]
+  exact Literature.Simon2007.theorem3_corrected_2012 G hgenerated2007 hinstant2007
 
 /--
 A positive bound on differences between all payoffs, including the zero
