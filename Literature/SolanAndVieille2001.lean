@@ -23,8 +23,9 @@ nonempty quitting coalition `S`, and actions `c^i` and `q^i`. A profile is a
 time-indexed sequence of mixed action vectors conditional on survival. The
 game pays zero if nobody ever quits.
 
-Unproved source claims remain `sorry`. Checked production reformulations are
-kept separate from the exact source statements and never replace them.
+Open source claims are stated as propositions. Checked production
+reformulations are kept separate from the exact source statements and never
+replace them.
 -/
 
 namespace Literature.SolanAndVieille2001
@@ -4320,22 +4321,19 @@ theorem figure2_collisionMass_le_twentyFour_mul
   norm_num [Nat.choose] at hcollision
   nlinarith
 
-/-- The Figure 2 game has no stationary `ε`-equilibrium for all sufficiently
-small positive `ε`. The paper states this result and refers elsewhere for the
-omitted technical details. -/
+/-- The first omitted Figure 2 assertion: for all sufficiently small positive
+`ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
+the technical proof and refers to Solan and Vieille (2000). -/
 def Figure2NoStationaryEpsilonClaim : Prop :=
   ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε, 0 < ε → ε < ε₀ →
     ¬ ∃ root : Fin 4 → PMF Bool,
       epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
         (stationaryProfile SolanVieilleBoundary.boundaryReward root)
 
-theorem figure2_no_stationary_epsilon :
-    Figure2NoStationaryEpsilonClaim := by
-  sorry
-
-/-- The Figure 2 game has no `ε`-equilibrium whose time-dependent mixed root
-stays `ε`-close to all-Continue at every stage. This is not restricted to
-stationary roots. -/
+/-- The second omitted Figure 2 assertion: for all sufficiently small
+positive `ε`, no `ε`-equilibrium remains `ε`-close to all-Continue at every
+stage. The paper again refers to Solan and Vieille (2000) for the omitted
+technical proof. -/
 def Figure2NoPerturbedEpsilonClaim : Prop :=
   ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε, 0 < ε → ε < ε₀ →
     ¬ ∃ roots : RootSequence (ι := Fin 4),
@@ -4343,10 +4341,6 @@ def Figure2NoPerturbedEpsilonClaim : Prop :=
         |(roots time player false).toReal - 1| < ε) ∧
       epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
         (profile SolanVieilleBoundary.boundaryReward roots)
-
-theorem figure2_no_perturbed_epsilon :
-    Figure2NoPerturbedEpsilonClaim := by
-  sorry
 
 /-- The repository's Figure 2 terminal table satisfies A.1 and A.2. -/
 theorem boundaryReward_assumptions :
