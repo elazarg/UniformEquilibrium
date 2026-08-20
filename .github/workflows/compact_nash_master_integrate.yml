@@ -1,0 +1,120 @@
+name: Compact Nash master integration
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_master_integrate.yml
+      - Literature/Sorin1986/CompactNashMaster5.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-master-integration
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Inspect final state
+        id: state
+        run: |
+          if grep -q 'exact CompactNash.compact_nash_existence G' Literature/Sorin1986.lean 2>/dev/null; then echo done=yes >> "$GITHUB_OUTPUT"; else echo done=no >> "$GITHUB_OUTPUT"; fi
+      - name: Wait for validated compact theorem
+        if: steps.state.outputs.done == 'no'
+        run: |
+          for attempt in $(seq 1 150); do
+            git fetch origin agent/promote-sorin1986
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster.lean 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster5.ok 2>/dev/null || true
+            test -f Literature/Sorin1986/CompactNashMaster5.ok && exit 0
+            sleep 10
+          done
+          echo 'Validated master theorem did not appear' >&2
+          exit 1
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Integrate theorem into promoted paper
+        if: steps.state.outputs.done == 'no'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          master_path=Path('Literature/Sorin1986/CompactNashMaster.lean')
+          master=master_path.read_text()
+          b0=master.index('namespace CompactNash\n')
+          b1=master.rindex('\nend CompactNash')+len('\nend CompactNash')
+          body=master[b0:b1]+'\n\n'
+          path=Path('Literature/Sorin1986.lean')
+          source=path.read_text()
+          required='import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed\n'
+          if required not in source:
+              first=source.find('import ')
+              assert first >= 0
+              end=source.find('\n', first)+1
+              source=source[:end]+required+source[end:]
+          marker='/-! Property (2) is Glicksberg--Fan Nash existence plus closedness of the\n'
+          assert marker in source
+          ns=source.find('namespace CompactNash\n')
+          if ns >= 0:
+              ne=source.find('\nend CompactNash',ns)
+              assert ne >= 0
+              ne += len('\nend CompactNash')
+              source=source[:ns]+body.rstrip()+source[ne:]
+          else:
+              source=source.replace(marker,body+marker,1)
+          pattern=re.compile(
+              r'theorem paper_property_2 \(G : CompactContinuousGame\) :\n'
+              r'\s+G\.equilibriumPayoffs\.Nonempty ∧ IsCompact G\.equilibriumPayoffs := by\n'
+              r'\s+(?:sorry|exact CompactNash\.compact_nash_existence G)')
+          assert pattern.search(source)
+          source=pattern.sub(
+              'theorem paper_property_2 (G : CompactContinuousGame) :\n'
+              '    G.equilibriumPayoffs.Nonempty ∧ IsCompact G.equilibriumPayoffs := by\n'
+              '  exact CompactNash.compact_nash_existence G',
+              source,count=1)
+          path.write_text(source)
+          PY
+      - name: Remove development scaffolding before full build
+        if: steps.state.outputs.done == 'no'
+        run: |
+          rm -f Literature/Sorin1986/CompactNash*.lean
+          rm -f Literature/Sorin1986/CompactNash*.log
+          rm -f Literature/Sorin1986/CompactNash*.ok
+          rm -f .github/workflows/compact_nash*.yml
+      - name: Compile exact promoted sources
+        if: steps.state.outputs.done == 'no'
+        run: |
+          lake env lean Literature/Sorin1986.lean
+          lake env lean Literature/Sorin1986/SequenceForm.lean
+      - name: Run repository validation
+        if: steps.state.outputs.done == 'no'
+        run: |
+          python3 scripts/check_docs.py
+          python3 scripts/check_import_graph.py
+          python3 scripts/check_trust.py
+          lake build
+      - name: Commit validated clean implementation
+        if: steps.state.outputs.done == 'no'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add -A
+          git commit -m 'Prove general compact Nash existence'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
