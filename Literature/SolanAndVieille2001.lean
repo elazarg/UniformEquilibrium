@@ -1428,6 +1428,9 @@ structure MainEstimateContext (ι : Type) [Fintype ι] [DecidableEq ι] where
   blockAbsorbs : ∀ block,
     ε ^ a ≤ blockTerminationProbability roots (blockStart block)
       (blockStart (block + 1) - blockStart block)
+  blockPrefixSmall : ∀ block length,
+    length < blockStart (block + 1) - blockStart block →
+      blockTerminationProbability roots (blockStart block) length < ε ^ a
   typeI_regular : ∀ block, ∃ later : ℕ,
     block ≤ later ∧ (later : ℝ) - block ≤ 1 / ε ^ exponent ∧
       blockTypeI roots who (blockStart later)
@@ -2669,6 +2672,461 @@ theorem lemma2_10 : Lemma2_10 := by
         (mul_nonneg hρ hopponentMassNonneg)
       nlinarith
 
+private theorem isQuittingRootSupportApproxNash_of_oneShotPerfect
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) {ε : ℝ}
+    (hperfect : oneShotPerfectEpsilonEquilibrium reward tail ε root) :
+    IsQuittingRootSupportApproxNash reward tail ε root := by
+  intro who
+  constructor
+  · intro hquit
+    have hsupport : root who true ≠ 0 := by
+      intro hzero
+      rw [hzero] at hquit
+      simp at hquit
+    have hdeviation := hperfect who true hsupport false
+    simpa [quittingRootEndpointDifference, quittingRootQuitPayoff,
+      quittingRootContinuePayoff] using hdeviation
+  · intro hcontinue
+    have hsupport : root who false ≠ 0 := by
+      intro hzero
+      rw [hzero] at hcontinue
+      simp at hcontinue
+    have hdeviation := hperfect who false hsupport true
+    simpa [quittingRootEndpointDifference, quittingRootQuitPayoff,
+      add_comm,
+      quittingRootContinuePayoff] using hdeviation
+
+private theorem exists_block_containing
+    (blockStart : ℕ → ℕ) (hstartZero : blockStart 0 = 0)
+    (hstrict : StrictMono blockStart) (time : ℕ) :
+    ∃ block, blockStart block ≤ time ∧ time < blockStart (block + 1) := by
+  have hexists : ∃ next, time < blockStart next := by
+    refine ⟨time + 1, lt_of_lt_of_le (Nat.lt_succ_self time) ?_⟩
+    exact hstrict.id_le (time + 1)
+  let next := Nat.find hexists
+  have hnext : time < blockStart next := Nat.find_spec hexists
+  have hnextPos : 0 < next := by
+    by_contra hnot
+    have hnextZero : next = 0 := Nat.eq_zero_of_not_pos hnot
+    rw [hnextZero, hstartZero] at hnext
+    exact (Nat.not_lt_zero time) hnext
+  let block := next - 1
+  have hblockNext : block + 1 = next := by
+    dsimp only [block]
+    omega
+  refine ⟨block, ?_, ?_⟩
+  · exact Nat.le_of_not_gt fun hbefore ↦
+      Nat.find_min hexists (show block < next by omega) hbefore
+  · rwa [hblockNext]
+
+private theorem pureTime_some_le_blockExpectation
+    (data : MainEstimateContext ι) (hadmissible : data.Admissible)
+    (quitTime block : ℕ) (hblock : data.blockStart block ≤ quitTime)
+    (hnext : quitTime < data.blockStart (block + 1)) :
+    quittingRootSequencePureTimeTerminalValue data.reward data.roots data.who
+        (some quitTime) 0 ≤
+      data.blockExpectation block + data.ε + 2 * data.ρ * data.ε ^ data.a := by
+  classical
+  rcases hadmissible with ⟨hε, -, hρ, -, -, -, -, -, -⟩
+  let start := data.blockStart block
+  let length := quitTime - start
+  let bound := quittingRewardBound data.reward
+  let forced := continueUntilRoots data.roots data.who start
+  let deviated := quittingRootSequenceUpdate data.roots data.who
+    (quittingPureTimeHazard (some quitTime))
+  have hquitTime : start + length = quitTime := by
+    dsimp only [start, length]
+    omega
+  have hlength : length < data.blockStart (block + 1) - start := by
+    dsimp only [length, start]
+    omega
+  have hsmall : blockTerminationProbability data.roots start length <
+      data.ε ^ data.a := by
+    simpa only [start] using data.blockPrefixSmall block length hlength
+  have hreward : ∀ terminal player, |data.reward terminal player| ≤ bound :=
+    abs_reward_le_quittingRewardBound data.reward
+  have hboundNonneg : 0 ≤ bound := quittingRewardBound_nonneg data.reward
+  have hρdef : 2 * bound = data.ρ := by
+    rw [data.rho_eq]
+    rfl
+  have hsupport : IsQuittingRootSequenceSupportApproxNash
+      data.reward data.roots data.ε := by
+    intro stage
+    exact isQuittingRootSupportApproxNash_of_oneShotPerfect
+      data.reward _ _ (data.rowsPerfect stage)
+  have hquitRegret : quittingLedgerQuitRegret data.reward data.roots data.who
+      quitTime ≤ data.ε := by
+    exact quittingLedgerQuitRegret_le_of_supportApproxNash
+      data.reward data.roots data.who quitTime hε.le hsupport
+  have hstage : ∀ offset, offset < length →
+      quittingLedgerStageAdvantage data.reward data.roots data.who
+          (start + offset) ≤
+        data.ρ * (data.roots (start + offset) data.who true).toReal := by
+    intro offset _
+    let tail := quittingRootSequenceTailVector data.reward data.roots
+      (start + offset + 1)
+    have htail : ∀ player, |tail player| ≤ bound := by
+      intro player
+      exact abs_quittingRootSequenceTerminalValue_le data.reward data.roots player
+        (start + offset + 1) hboundNonneg hreward
+    have hquit : |quittingRootQuitPayoff data.reward tail
+        (data.roots (start + offset)) data.who| ≤ bound := by
+      exact abs_quittingRootExpectedPayoff_le_bound data.reward tail
+        (Function.update (data.roots (start + offset)) data.who (PMF.pure true))
+        data.who hreward htail
+    have hcontinue : |quittingRootContinuePayoff data.reward tail
+        (data.roots (start + offset)) data.who| ≤ bound := by
+      exact abs_quittingRootExpectedPayoff_le_bound data.reward tail
+        (Function.update (data.roots (start + offset)) data.who (PMF.pure false))
+        data.who hreward htail
+    have hgap : |quittingRootEndpointDifference data.reward tail
+        (data.roots (start + offset)) data.who| ≤ 2 * bound := by
+      unfold quittingRootEndpointDifference
+      exact (abs_sub _ _).trans (by linarith)
+    rw [quittingLedgerStageAdvantage_eq_neg_quitProbability_mul_endpointDifference]
+    have hquitProbability : 0 ≤
+        (data.roots (start + offset) data.who true).toReal :=
+      ENNReal.toReal_nonneg
+    calc
+      -((data.roots (start + offset) data.who true).toReal *
+          quittingRootEndpointDifference data.reward tail
+              (data.roots (start + offset)) data.who) ≤
+          |(data.roots (start + offset) data.who true).toReal *
+            quittingRootEndpointDifference data.reward tail
+              (data.roots (start + offset)) data.who| := neg_le_abs _
+      _ ≤ (data.roots (start + offset) data.who true).toReal * (2 * bound) := by
+        rw [abs_mul, abs_of_nonneg hquitProbability]
+        exact mul_le_mul_of_nonneg_left hgap hquitProbability
+      _ = data.ρ * (data.roots (start + offset) data.who true).toReal := by
+        rw [hρdef]
+        ring
+  have hlocalIdentity :=
+    quittingRootSequencePureTimeTerminalValue_some_sub_eq
+      data.reward data.roots data.who length start
+  rw [hquitTime] at hlocalIdentity
+  have hopponentWeightNonneg : ∀ offset,
+      0 ≤ quittingOpponentSurvivalWeight data.roots data.who start offset :=
+    fun offset ↦ quittingOpponentSurvivalWeight_nonneg
+      data.roots data.who start offset
+  have hopponentWeightOne : ∀ offset,
+      quittingOpponentSurvivalWeight data.roots data.who start offset ≤ 1 :=
+    fun offset ↦ quittingOpponentSurvivalWeight_le_one_of_mass
+      data.roots data.who start offset
+  have hlocal :
+      quittingRootSequencePureTimeTerminalValue data.reward data.roots data.who
+          (some quitTime) start -
+        quittingRootSequenceTerminalValue data.reward data.roots data.who start ≤
+      data.ε + 2 * data.ρ * data.ε ^ data.a := by
+    by_cases hlarge : 1 / 2 ≤ data.ε ^ data.a
+    · have hpureBound :
+          |quittingRootSequencePureTimeTerminalValue data.reward data.roots
+              data.who (some quitTime) start| ≤ bound := by
+        exact abs_quittingRootSequenceTerminalValue_le data.reward deviated
+          data.who start hboundNonneg hreward
+      have hplanBound :
+          |quittingRootSequenceTerminalValue data.reward data.roots data.who start| ≤
+            bound :=
+        abs_quittingRootSequenceTerminalValue_le data.reward data.roots
+          data.who start hboundNonneg hreward
+      have hdeviatedBound :
+          |quittingRootSequenceTerminalValue data.reward deviated data.who start| ≤
+            bound := by
+        simpa [deviated, quittingRootSequencePureTimeTerminalValue,
+          quittingRootSequenceHazardTerminalValue] using hpureBound
+      have hdifference :
+          quittingRootSequencePureTimeTerminalValue data.reward data.roots data.who
+              (some quitTime) start -
+            quittingRootSequenceTerminalValue data.reward data.roots data.who start ≤
+          data.ρ := by
+        change quittingRootSequenceTerminalValue data.reward deviated data.who start -
+            quittingRootSequenceTerminalValue data.reward data.roots data.who start ≤ _
+        rw [← hρdef]
+        nlinarith [(abs_le.mp hdeviatedBound).2, (abs_le.mp hplanBound).1]
+      have hdeltaNonneg : 0 ≤ data.ε ^ data.a := by linarith
+      nlinarith [mul_nonneg hρ hdeltaNonneg]
+    · have hdelta : data.ε ^ data.a < 1 / 2 := lt_of_not_ge hlarge
+      let ownHazard : ℕ → PMF Bool := fun offset ↦
+        data.roots (start + offset) data.who
+      let ownSurvival := quittingHazardSurvival ownHazard length
+      let quitSum := ∑ offset ∈ Finset.range length,
+        (data.roots (start + offset) data.who true).toReal
+      have hquitSumNonneg : 0 ≤ quitSum := by
+        dsimp only [quitSum]
+        exact Finset.sum_nonneg fun _ _ ↦ ENNReal.toReal_nonneg
+      have hownSurvivalEq : ownSurvival =
+          blockOwnerSurvivalWeight data.roots data.who start length := by
+        unfold ownSurvival ownHazard quittingHazardSurvival
+          blockOwnerSurvivalWeight Math.survivalProduct
+        simp only [Nat.zero_add]
+      have hjoint := blockJointSurvival_eq_opponent_mul_owner
+        data.roots data.who start length
+      have hopponentOne := hopponentWeightOne length
+      have hownNonneg := blockOwnerSurvivalWeight_nonneg
+        data.roots data.who start length
+      have hjointNonneg := quittingJointSurvivalWeight_nonneg
+        data.roots start length
+      have hownLower : 1 - data.ε ^ data.a < ownSurvival := by
+        rw [hownSurvivalEq]
+        unfold blockTerminationProbability at hsmall
+        nlinarith [mul_le_of_le_one_left hownNonneg hopponentOne]
+      have hhazard := quittingHazardSurvival_mul_one_add_sum_quit_le_one
+        ownHazard length
+      have hhazard' : ownSurvival * (1 + quitSum) ≤ 1 := by
+        simpa [ownHazard, quitSum] using hhazard
+      have hquitSum : quitSum < 2 * data.ε ^ data.a := by
+        have hownHalf : 1 / 2 < ownSurvival := by linarith
+        have hweighted : ownSurvival * quitSum < data.ε ^ data.a := by
+          nlinarith
+        nlinarith
+      have hsumStage :
+          (∑ offset ∈ Finset.range length,
+              quittingOpponentSurvivalWeight data.roots data.who start offset *
+                quittingLedgerStageAdvantage data.reward data.roots data.who
+                  (start + offset)) ≤
+            data.ρ * quitSum := by
+        calc
+          (∑ offset ∈ Finset.range length,
+              quittingOpponentSurvivalWeight data.roots data.who start offset *
+                quittingLedgerStageAdvantage data.reward data.roots data.who
+                  (start + offset)) ≤
+              ∑ offset ∈ Finset.range length,
+                quittingOpponentSurvivalWeight data.roots data.who start offset *
+                  (data.ρ *
+                    (data.roots (start + offset) data.who true).toReal) := by
+            apply Finset.sum_le_sum
+            intro offset hoffset
+            exact mul_le_mul_of_nonneg_left
+              (hstage offset (Finset.mem_range.mp hoffset))
+              (hopponentWeightNonneg offset)
+          _ ≤ ∑ offset ∈ Finset.range length,
+                data.ρ * (data.roots (start + offset) data.who true).toReal := by
+            apply Finset.sum_le_sum
+            intro offset _
+            exact mul_le_of_le_one_left
+              (mul_nonneg hρ ENNReal.toReal_nonneg)
+              (hopponentWeightOne offset)
+          _ = data.ρ * quitSum := by
+            rw [Finset.mul_sum]
+      have hquitTerm :
+          quittingOpponentSurvivalWeight data.roots data.who start length *
+              quittingLedgerQuitRegret data.reward data.roots data.who quitTime ≤
+            data.ε := by
+        calc
+          _ ≤ quittingOpponentSurvivalWeight data.roots data.who start length *
+              data.ε := mul_le_mul_of_nonneg_left hquitRegret
+                (hopponentWeightNonneg length)
+          _ ≤ data.ε := mul_le_of_le_one_left hε.le
+            (hopponentWeightOne length)
+      rw [hlocalIdentity]
+      have hscaled := mul_le_mul_of_nonneg_left hquitSum.le hρ
+      nlinarith
+  have hprefix : ∀ time, time < start → deviated time = forced time := by
+    intro time htime
+    funext player
+    by_cases hplayer : player = data.who
+    · subst player
+      have hne : time ≠ quitTime := by omega
+      simp [deviated, forced, continueUntilRoots, quittingRootSequenceUpdate,
+        htime, quittingPureTimeHazard_some_of_ne hne]
+    · simp [deviated, forced, continueUntilRoots, quittingRootSequenceUpdate,
+        htime, Function.update_of_ne hplayer]
+  have hforcedTail :
+      quittingRootSequenceTerminalValue data.reward forced data.who start =
+        quittingRootSequenceTerminalValue data.reward data.roots data.who start := by
+    apply quittingRootSequenceTerminalValue_congr
+    intro offset
+    simp [forced, continueUntilRoots]
+  have hglobal := quittingRootSequenceTerminalValue_sub_eq_jointSurvivalWeight_mul
+    data.reward deviated forced data.who start hprefix
+  rw [hforcedTail] at hglobal
+  have hsurvivalNonneg := quittingJointSurvivalWeight_nonneg forced 0 start
+  have hsurvivalOne := quittingJointSurvivalWeight_le_one forced 0 start
+  have hscaled : quittingJointSurvivalWeight forced 0 start *
+      (quittingRootSequenceTerminalValue data.reward deviated data.who start -
+        quittingRootSequenceTerminalValue data.reward data.roots data.who start) ≤
+      data.ε + 2 * data.ρ * data.ε ^ data.a := by
+    have herrorNonneg : 0 ≤ data.ε + 2 * data.ρ * data.ε ^ data.a := by
+      positivity
+    exact (mul_le_mul_of_nonneg_left hlocal hsurvivalNonneg).trans
+      (mul_le_of_le_one_left herrorNonneg hsurvivalOne)
+  change quittingRootSequenceTerminalValue data.reward deviated data.who 0 ≤
+    quittingRootSequenceTerminalValue data.reward forced data.who 0 +
+      data.ε + 2 * data.ρ * data.ε ^ data.a
+  linarith
+
+private theorem exists_block_opponentSurvival_le_pow
+    (data : MainEstimateContext ι) (hadmissible : data.Admissible) :
+    ∀ turns : ℕ, ∃ block : ℕ,
+      quittingOpponentSurvivalWeight data.roots data.who 0
+          (data.blockStart block) ≤
+        (1 - data.ε ^ data.b) ^ turns := by
+  rcases hadmissible with
+    ⟨hε, hεone, -, ha, haExponent, hbExponent, -, -, -⟩
+  have hb : 0 < data.b := by linarith
+  have hdeltaPos : 0 < data.ε ^ data.b := Real.rpow_pos_of_pos hε data.b
+  have hdeltaOne : data.ε ^ data.b < 1 :=
+    Real.rpow_lt_one hε.le hεone hb
+  have hfactorNonneg : 0 ≤ 1 - data.ε ^ data.b := by linarith
+  intro turns
+  induction turns with
+  | zero =>
+      refine ⟨0, ?_⟩
+      rw [data.blockStart_zero]
+      simp [quittingOpponentSurvivalWeight]
+  | succ turns ih =>
+      obtain ⟨block, hblock⟩ := ih
+      obtain ⟨later, hblockLater, -, hlaterType⟩ :=
+        data.typeI_regular block
+      let blockStart := data.blockStart block
+      let laterStart := data.blockStart later
+      let laterLength := data.blockStart (later + 1) - laterStart
+      let gap := laterStart - blockStart
+      have hstartLe : blockStart ≤ laterStart := by
+        exact data.blockStart_strictMono.monotone hblockLater
+      have hstartGap : blockStart + gap = laterStart := by
+        dsimp only [gap]
+        omega
+      have hlaterEnd : laterStart + laterLength = data.blockStart (later + 1) := by
+        dsimp only [laterLength]
+        exact Nat.add_sub_of_le
+          (data.blockStart_strictMono.monotone (Nat.le_succ later))
+      have hblockSurvival :
+          quittingOpponentSurvivalWeight data.roots data.who laterStart
+              laterLength ≤
+            1 - data.ε ^ data.b := by
+        unfold blockTypeI at hlaterType
+        rw [opponentBlockTerminationProbability_eq_one_sub_survival] at hlaterType
+        dsimp only [laterStart, laterLength]
+        linarith
+      have hsegment :
+          quittingOpponentSurvivalWeight data.roots data.who blockStart
+              (data.blockStart (later + 1) - blockStart) ≤
+            1 - data.ε ^ data.b := by
+        have hlength : data.blockStart (later + 1) - blockStart =
+            gap + laterLength := by
+          dsimp only [gap, laterLength, laterStart, blockStart]
+          omega
+        rw [hlength, quittingOpponentSurvivalWeight_add, hstartGap]
+        exact (mul_le_of_le_one_left
+          (quittingOpponentSurvivalWeight_nonneg data.roots data.who
+            laterStart laterLength)
+          (quittingOpponentSurvivalWeight_le_one data.roots data.who
+            blockStart gap)).trans hblockSurvival
+      refine ⟨later + 1, ?_⟩
+      have hglobalLength : data.blockStart (later + 1) =
+          data.blockStart block +
+            (data.blockStart (later + 1) - data.blockStart block) := by
+        symm
+        exact Nat.add_sub_of_le
+          (data.blockStart_strictMono.monotone
+            (hblockLater.trans (Nat.le_succ later)))
+      rw [hglobalLength, quittingOpponentSurvivalWeight_add]
+      simp only [Nat.zero_add]
+      calc
+        quittingOpponentSurvivalWeight data.roots data.who 0
+              (data.blockStart block) *
+            quittingOpponentSurvivalWeight data.roots data.who
+              (data.blockStart block)
+                (data.blockStart (later + 1) - data.blockStart block) ≤
+          (1 - data.ε ^ data.b) ^ turns * (1 - data.ε ^ data.b) := by
+            exact mul_le_mul hblock hsegment
+              (quittingOpponentSurvivalWeight_nonneg data.roots data.who
+                (data.blockStart block)
+                  (data.blockStart (later + 1) - data.blockStart block))
+              (pow_nonneg hfactorNonneg turns)
+        _ = (1 - data.ε ^ data.b) ^ turns.succ :=
+          (pow_succ _ turns).symm
+
+private theorem bddAbove_range_blockExpectation
+    (data : MainEstimateContext ι) :
+    BddAbove (Set.range data.blockExpectation) := by
+  refine ⟨quittingRewardBound data.reward, ?_⟩
+  rintro value ⟨block, rfl⟩
+  exact (abs_le.mp (abs_quittingRootSequenceTerminalValue_le data.reward
+    (continueUntilRoots data.roots data.who (data.blockStart block)) data.who 0
+    (quittingRewardBound_nonneg data.reward)
+    (abs_reward_le_quittingRewardBound data.reward))).2
+
+private theorem pureTime_none_le_sSup_blockExpectation
+    (data : MainEstimateContext ι) (hadmissible : data.Admissible) :
+    quittingRootSequencePureTimeTerminalValue data.reward data.roots data.who
+        none 0 ≤
+      sSup (Set.range data.blockExpectation) := by
+  classical
+  have hadmissible' := hadmissible
+  rcases hadmissible' with
+    ⟨hε, hεone, -, ha, haExponent, hbExponent, -, -, -⟩
+  have hb : 0 < data.b := by linarith
+  have hdeltaPos : 0 < data.ε ^ data.b := Real.rpow_pos_of_pos hε data.b
+  have hdeltaOne : data.ε ^ data.b < 1 :=
+    Real.rpow_lt_one hε.le hεone hb
+  let factor := 1 - data.ε ^ data.b
+  have hfactorNonneg : 0 ≤ factor := by dsimp only [factor]; linarith
+  have hfactorOne : factor < 1 := by dsimp only [factor]; linarith
+  have hblocks : ∀ turns : ℕ, ∃ block : ℕ,
+      quittingOpponentSurvivalWeight data.roots data.who 0
+          (data.blockStart block) ≤ factor ^ turns := by
+    simpa only [factor] using
+      exists_block_opponentSurvival_le_pow data hadmissible
+  let selected : ℕ → ℕ := fun turns ↦ Classical.choose (hblocks turns)
+  have hselected : ∀ turns,
+      quittingOpponentSurvivalWeight data.roots data.who 0
+          (data.blockStart (selected turns)) ≤ factor ^ turns :=
+    fun turns ↦ Classical.choose_spec (hblocks turns)
+  let never := quittingRootSequenceUpdate data.roots data.who
+    quittingAlwaysContinueHazard
+  have hreward : ∀ terminal player,
+      |data.reward terminal player| ≤ quittingRewardBound data.reward :=
+    abs_reward_le_quittingRewardBound data.reward
+  have hclose : ∀ turns,
+      |data.blockExpectation (selected turns) -
+          quittingRootSequencePureTimeTerminalValue data.reward data.roots
+            data.who none 0| ≤
+        2 * quittingRewardBound data.reward * factor ^ turns := by
+    intro turns
+    let cutoff := data.blockStart (selected turns)
+    let forced := continueUntilRoots data.roots data.who cutoff
+    have hprefix : ∀ time, time < cutoff → forced time = never time := by
+      intro time htime
+      funext player
+      by_cases hplayer : player = data.who
+      · subst player
+        simp [forced, never, continueUntilRoots, quittingRootSequenceUpdate,
+          htime, quittingAlwaysContinueHazard]
+      · simp [forced, never, continueUntilRoots, quittingRootSequenceUpdate,
+          htime, Function.update_of_ne hplayer]
+    have hprefixBound := abs_quittingRootSequenceTerminalValue_sub_le_of_prefix_eq
+      data.reward forced never data.who cutoff hreward hprefix
+    have hneverSurvival : quittingJointSurvivalWeight never 0 cutoff =
+        quittingOpponentSurvivalWeight data.roots data.who 0 cutoff := by
+      exact quittingJointSurvivalWeight_quittingRootSequenceUpdate_alwaysContinue
+        data.roots data.who 0 cutoff
+    rw [hneverSurvival] at hprefixBound
+    have hscaleNonneg : 0 ≤ 2 * quittingRewardBound data.reward :=
+      mul_nonneg (by norm_num) (quittingRewardBound_nonneg data.reward)
+    have hscaled := mul_le_mul_of_nonneg_left (hselected turns) hscaleNonneg
+    change |quittingRootSequenceTerminalValue data.reward forced data.who 0 -
+        quittingRootSequenceTerminalValue data.reward never data.who 0| ≤
+      2 * quittingRewardBound data.reward * factor ^ turns
+    exact hprefixBound.trans hscaled
+  have hpower : Tendsto (fun turns : ℕ ↦ factor ^ turns) atTop (nhds 0) :=
+    tendsto_pow_atTop_nhds_zero_of_lt_one hfactorNonneg hfactorOne
+  have herror : Tendsto
+      (fun turns : ℕ ↦ 2 * quittingRewardBound data.reward * factor ^ turns)
+      atTop (nhds 0) := by
+    simpa using hpower.const_mul (2 * quittingRewardBound data.reward)
+  have hconverges : Tendsto (fun turns ↦ data.blockExpectation (selected turns))
+      atTop (nhds (quittingRootSequencePureTimeTerminalValue data.reward
+        data.roots data.who none 0)) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    exact squeeze_zero (fun turns ↦ norm_nonneg _) (fun turns ↦ by
+      rw [Real.norm_eq_abs]
+      exact hclose turns) herror
+  exact le_of_tendsto' hconverges fun turns ↦
+    le_csSup (bddAbove_range_blockExpectation data)
+      (Set.mem_range_self (selected turns))
+
 /-- **Lemma 2.11.** A pure deviation payoff is bounded by the supremum of
 the block continuation expectations plus `ε + 2ρ ε^a`. -/
 def Lemma2_11 : Prop :=
@@ -2680,7 +3138,28 @@ def Lemma2_11 : Prop :=
           data.ε + 2 * data.ρ * data.ε ^ data.a
 
 theorem lemma2_11 : Lemma2_11 := by
-  sorry
+  classical
+  intro ι _ _ data hadmissible
+  change quittingRootSequencePureTimeTerminalValue data.reward data.roots
+      data.who data.quitTime 0 ≤ _
+  have herrorNonneg :
+      0 ≤ data.ε + 2 * data.ρ * data.ε ^ data.a := by
+    rcases hadmissible with ⟨hε, -, hρ, -, -, -, -, -, -⟩
+    positivity
+  cases data.quitTime with
+  | none =>
+      have hnever := pureTime_none_le_sSup_blockExpectation data hadmissible
+      linarith
+  | some quitTime =>
+      obtain ⟨block, hblock, hnext⟩ := exists_block_containing
+        data.blockStart data.blockStart_zero data.blockStart_strictMono quitTime
+      have hfinite := pureTime_some_le_blockExpectation
+        data hadmissible quitTime block hblock hnext
+      have hblockLe : data.blockExpectation block ≤
+          sSup (Set.range data.blockExpectation) :=
+        le_csSup (bddAbove_range_blockExpectation data)
+          (Set.mem_range_self block)
+      linarith
 
 /-- **Lemma 2.12.** The block expectation supremum is at most the current
 payoff plus `2ε^(1-b-e) + 7ρNε^a`. -/
