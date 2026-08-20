@@ -1566,6 +1566,20 @@ def QuitRow.replace (G : QuittingGame) (p : QuitRow G) (n : G.Player)
   classical
   exact fun k => if k = n then q else p k
 
+/-- Forcing one player to continue cannot increase the probability that somebody quits. -/
+theorem quitProbability_replace_zero_le (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) : QuitProbability G (p.replace G n 0) ≤ QuitProbability G p := by
+  simp only [QuitProbability]
+  apply sub_le_sub_left
+  apply Finset.prod_le_prod
+  · intro i hi
+    exact sub_nonneg.mpr (p i).property.2
+  · intro i hi
+    by_cases hin : i = n
+    · subst i
+      simpa [QuitRow.replace] using (p n).property.1
+    · simp [QuitRow.replace, hin]
+
 /-- `aⁿ(p)` is player `n`'s expected payoff when she is forced to quit. -/
 def ForcedQuitPayoff (G : QuittingGame) (p : QuitRow G) (n : G.Player) : ℝ :=
   QuittingOneStagePayoff G 0 (p.replace G n 1) n
@@ -1587,6 +1601,18 @@ def EpsilonRow (G : QuittingGame) (ε : ℝ) :
       ForcedContinuePayoff G r p n - ε) ∧
     ∀ n, (p n : ℝ) < 1 → ForcedContinuePayoff G r p n ≥
       ForcedQuitPayoff G p n - ε}
+
+/-- Increasing the one-stage error weakens the endpoint best-response conditions. -/
+theorem EpsilonRow.mono (G : QuittingGame) {δ ε : ℝ} (hδε : δ ≤ ε)
+    (r : Payoff G.Player) : EpsilonRow G δ r ⊆ EpsilonRow G ε r := by
+  rintro p ⟨hquit, hcontinue⟩
+  constructor
+  · intro n hn
+    exact le_trans (by linarith : ForcedContinuePayoff G r p n - ε ≤
+      ForcedContinuePayoff G r p n - δ) (hquit n hn)
+  · intro n hn
+    exact le_trans (by linarith : ForcedQuitPayoff G p n - ε ≤
+      ForcedQuitPayoff G p n - δ) (hcontinue n hn)
 
 /-- `F_ε(r) = {f(r,p) | p ∈ E_ε(r)}`. -/
 def FRow (G : QuittingGame) (ε : ℝ) :
@@ -2489,6 +2515,126 @@ theorem coalitionProbability_replace_affine (G : QuittingGame) (p : QuitRow G)
     norm_num
     ring
 
+/-- Every exact-quitter coalition has nonnegative probability. -/
+theorem coalitionProbability_nonneg (G : QuittingGame) (p : QuitRow G)
+    (A : Finset G.Player) : 0 ≤ CoalitionProbability G p A := by
+  classical
+  simp only [CoalitionProbability]
+  apply mul_nonneg
+  · exact Finset.prod_nonneg fun n _ => (p n).property.1
+  · exact Finset.prod_nonneg fun n _ => sub_nonneg.mpr (p n).property.2
+
+/-- Exact-quitter coalition probabilities sum to one. -/
+theorem coalitionProbability_sum (G : QuittingGame) (p : QuitRow G) :
+    ∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A = 1 := by
+  classical
+  simp only [CoalitionProbability]
+  have hcomp : ∀ A : Finset G.Player,
+      Finset.univ.filter (fun n => n ∉ A) = Finset.univ \ A := by
+    intro A
+    ext n
+    simp
+  simp_rw [hcomp]
+  rw [← Finset.prod_add (fun n => (p n : ℝ))
+    (fun n => 1 - (p n : ℝ)) Finset.univ]
+  simp
+
+/-- The total probability of nonempty quitting coalitions lies in `[0,1]`. -/
+theorem nonemptyCoalitionProbability_sum_mem_Icc (G : QuittingGame) (p : QuitRow G) :
+    (∑ A ∈ Finset.univ.powerset, if A.Nonempty then CoalitionProbability G p A else 0) ∈
+      Set.Icc (0 : ℝ) 1 := by
+  constructor
+  · exact Finset.sum_nonneg fun A _ => by
+      split_ifs
+      · exact coalitionProbability_nonneg G p A
+      · exact le_rfl
+  · calc
+      (∑ A ∈ Finset.univ.powerset,
+          if A.Nonempty then CoalitionProbability G p A else 0) ≤
+          ∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A := by
+        apply Finset.sum_le_sum
+        intro A hA
+        split_ifs
+        · exact le_rfl
+        · exact coalitionProbability_nonneg G p A
+      _ = 1 := coalitionProbability_sum G p
+
+/-- The expected contribution of nonempty coalitions stays within a uniform payoff bound. -/
+theorem quittingRewardPart_mem_Icc (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) {M : ℝ} (hM : 0 ≤ M)
+    (hbound : ∀ A, |G.reward A n| ≤ M) :
+    (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+      CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0) ∈ Set.Icc (-M) M := by
+  let mass : ℝ := ∑ A ∈ Finset.univ.powerset,
+    if A.Nonempty then CoalitionProbability G p A else 0
+  have hmass := nonemptyCoalitionProbability_sum_mem_Icc G p
+  change mass ∈ Set.Icc (0 : ℝ) 1 at hmass
+  constructor
+  · calc
+      -M ≤ -M * mass := by
+        simpa using mul_le_mul_of_nonpos_left hmass.2 (neg_nonpos.mpr hM)
+      _ = ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+          CoalitionProbability G p A * (-M) else 0 := by
+        simp only [mass, Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro A hA
+        split_ifs <;> ring
+      _ ≤ ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+          CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0 := by
+        apply Finset.sum_le_sum
+        intro A hA
+        split_ifs with hnonempty
+        · apply mul_le_mul_of_nonneg_left
+          · exact (neg_le_of_abs_le (hbound ⟨A, hnonempty⟩))
+          · exact coalitionProbability_nonneg G p A
+        · exact le_rfl
+  · calc
+      (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+          CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0) ≤
+          ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+            CoalitionProbability G p A * M else 0 := by
+        apply Finset.sum_le_sum
+        intro A hA
+        split_ifs with hnonempty
+        · apply mul_le_mul_of_nonneg_left
+          · exact (le_of_abs_le (hbound ⟨A, hnonempty⟩))
+          · exact coalitionProbability_nonneg G p A
+        · exact le_rfl
+      _ = M * mass := by
+        simp only [mass, Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro A hA
+        split_ifs <;> ring
+      _ ≤ M := by nlinarith [mul_le_mul_of_nonneg_left hmass.2 hM]
+
+/-- A nonempty coalition has zero probability in the all-continue row. -/
+theorem coalitionProbability_zero_of_nonempty (G : QuittingGame)
+    (A : Finset G.Player) (hA : A.Nonempty) :
+    CoalitionProbability G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) A = 0 := by
+  classical
+  simp only [CoalitionProbability]
+  rcases hA with ⟨n, hn⟩
+  have hprod : (∏ i ∈ A, (((fun _ => (0 : Set.Icc (0 : ℝ) 1)) i : ℝ))) = 0 := by
+    apply Finset.prod_eq_zero hn
+    norm_num
+  rw [hprod, zero_mul]
+
+/-- If every player continues, the one-stage payoff is the continuation vector. -/
+theorem quittingOneStagePayoff_zero (G : QuittingGame) (r : Payoff G.Player) :
+    QuittingOneStagePayoff G r (fun _ => (0 : Set.Icc (0 : ℝ) 1)) = r := by
+  funext n
+  simp only [QuittingOneStagePayoff]
+  have hq : QuitProbability G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) = 0 := by
+    simp [QuitProbability]
+  rw [hq]
+  norm_num
+  apply Finset.sum_eq_zero
+  intro A hA
+  split_ifs with hnonempty
+  · rw [coalitionProbability_zero_of_nonempty G A hnonempty]
+    simp
+  · rfl
+
 /-- A one-stage payoff is the affine combination of its forced-quit endpoints. -/
 theorem quittingOneStagePayoff_replace_affine (G : QuittingGame)
     (r : Payoff G.Player) (p : QuitRow G) (n : G.Player)
@@ -3004,12 +3150,102 @@ def IsUniformRho (G : QuittingGame) (ρ : ℝ) : Prop :=
 Lemma 9.  In the fixed exceptional escape game, sufficiently high continuation vectors have
 only the all-continue equilibrium in `E₀`.
 -/
-theorem lemma9 (G : QuittingGame) (hEscape : IsEscapeGame G)
+theorem lemma9 (G : QuittingGame) (_hEscape : IsEscapeGame G)
     (hstationary : ¬HasStationaryApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     ∃ B : ℝ, 0 < B ∧ ∀ x, (∀ j, x j ≥ B) →
       EpsilonRow G 0 x = {fun _ => (0 : Set.Icc (0 : ℝ) 1)} := by
-  sorry
+  classical
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := hM.1.trans' zero_le_one
+  obtain ⟨_hnormal, _hcross, ρ, hρ0, hρ1, hρuniform⟩ :=
+    lemma5 G hstationary hinstant
+  let valueMass : ℝ := ∑ n, |MinMaxQuit G n|
+  have hvalueMass0 : 0 ≤ valueMass := Finset.sum_nonneg fun n _ => abs_nonneg _
+  have hminmax : ∀ n, MinMaxQuit G n ≤ valueMass := by
+    intro n
+    exact (le_abs_self _).trans (Finset.single_le_sum
+      (fun i _ => abs_nonneg (MinMaxQuit G i)) (Finset.mem_univ n))
+  let B : ℝ := 1 + valueMass + M + (2 * M + 1) / ρ
+  have hnumerator : 0 < 2 * M + 1 := by linarith
+  have hquotient : 0 < (2 * M + 1) / ρ := div_pos hnumerator hρ0
+  have hB0 : 0 < B := by dsimp [B]; linarith
+  have hBvalue : valueMass < B := by dsimp [B]; linarith
+  have hBpayoff : M < B := by dsimp [B]; linarith
+  have hBthreshold : (2 * M + 1) / ρ < B := by dsimp [B]; linarith
+  refine ⟨B, hB0, ?_⟩
+  intro x hx
+  have hxrational : IsRational G ρ x := by
+    intro n
+    have hxn := hx n
+    have hmn := hminmax n
+    linarith
+  apply Set.Subset.antisymm
+  · intro p hp
+    have hpρ : p ∈ EpsilonRow G ρ x :=
+      EpsilonRow.mono G (le_of_lt hρ0) x hp
+    have hquitBound := (hρuniform x p hxrational hpρ).2
+    have hpzero : p = fun _ => (0 : Set.Icc (0 : ℝ) 1) := by
+      funext n
+      apply Subtype.ext
+      change (p n : ℝ) = 0
+      by_contra hnzero
+      have hnpositive : 0 < (p n : ℝ) :=
+        lt_of_le_of_ne (p n).property.1 (Ne.symm hnzero)
+      have hendpoint := hp.1 n hnpositive
+      norm_num at hendpoint
+      have hrewardQuit := quittingRewardPart_mem_Icc G (p.replace G n 1) n hM0
+        (fun A => (le_of_lt (hM.2.2 A n)))
+      have hforcedQuit : ForcedQuitPayoff G p n ≤ M := by
+        simpa [ForcedQuitPayoff, QuittingOneStagePayoff] using hrewardQuit.2
+      have hrewardContinue := quittingRewardPart_mem_Icc G (p.replace G n 0) n hM0
+        (fun A => (le_of_lt (hM.2.2 A n)))
+      have hsurvival : ρ ≤ 1 - QuitProbability G (p.replace G n 0) := by
+        have hbase : ρ ≤ 1 - QuitProbability G p := by linarith
+        have hmonotone := quitProbability_replace_zero_le G p n
+        linarith
+      have hxn0 : 0 ≤ x n := le_trans (le_of_lt hB0) (hx n)
+      have hscaled : ρ * x n ≤
+          (1 - QuitProbability G (p.replace G n 0)) * x n :=
+        mul_le_mul_of_nonneg_right hsurvival hxn0
+      have hforcedContinue : ρ * x n - M ≤ ForcedContinuePayoff G x p n := by
+        simp only [ForcedContinuePayoff, QuittingOneStagePayoff]
+        calc
+          ρ * x n - M ≤
+              (1 - QuitProbability G (p.replace G n 0)) * x n - M :=
+            sub_le_sub_right hscaled M
+          _ ≤ (1 - QuitProbability G (p.replace G n 0)) * x n +
+              ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+                CoalitionProbability G (p.replace G n 0) A * G.reward ⟨A, hA⟩ n
+              else 0 := by linarith [hrewardContinue.1]
+      have hxthreshold : (2 * M + 1) / ρ < x n := hBthreshold.trans_le (hx n)
+      have hlarge : M < ρ * x n - M := by
+        have := (div_lt_iff₀ hρ0).mp hxthreshold
+        linarith
+      linarith
+    exact Set.mem_singleton_iff.mpr hpzero
+  · rintro p hp
+    rw [Set.mem_singleton_iff] at hp
+    subst p
+    constructor
+    · intro n hn
+      norm_num at hn
+    · intro n hn
+      have hrewardQuit := quittingRewardPart_mem_Icc G
+        (QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n 1) n hM0
+        (fun A => (le_of_lt (hM.2.2 A n)))
+      have hforcedQuit :
+          ForcedQuitPayoff G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n ≤ M := by
+        simpa [ForcedQuitPayoff, QuittingOneStagePayoff] using hrewardQuit.2
+      have hforcedContinue :
+          ForcedContinuePayoff G x (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n = x n := by
+        rw [ForcedContinuePayoff]
+        rw [QuitRow.replace_self]
+        rw [quittingOneStagePayoff_zero]
+      rw [hforcedContinue]
+      norm_num
+      have hxn := hx n
+      linarith
 
 /-- Every active point of an extended orbit lies in `A`. -/
 def ExtendedOrbitStaysIn {X : Type} [TopologicalSpace X]
