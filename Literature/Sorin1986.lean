@@ -4611,6 +4611,64 @@ theorem example6_mixedPayoff_true
   simp [example6Payoff, Math.PMFProduct.pmfBool_false_toReal]
   ring
 
+/-- Every payoff in either outer vertical strip of Example 6 is already
+one-stage feasible. -/
+theorem example6_outerStrip_mem_D1 (x y : ℝ)
+    (hx0 : 0 ≤ x) (hx3 : x ≤ 3) (hy0 : 0 ≤ y) (hy1 : y ≤ 1)
+    (houter : x ≤ 1 ∨ 2 ≤ x) :
+    pair x y ∈ example6.oneStageFeasiblePayoffs := by
+  rcases houter with hx1 | hx2
+  · let weights : FourColumn → ℝ
+      | FourColumn.c0 => 1 - x
+      | FourColumn.c1 => x
+      | FourColumn.c2 => 0
+      | FourColumn.c3 => 0
+    have hweights : weights ∈ stdSimplex ℝ FourColumn := by
+      constructor
+      · intro column
+        cases column <;> simp [weights] <;> linarith
+      · rw [sum_fourColumn]
+        simp [weights]
+    let profile : (who : Bool) → PMF (Example6Action who)
+      | false => Math.ProbabilityMassFunction.bernoulliBool
+          (1 - y) (by linarith) (by linarith)
+      | true => Math.ProbabilityMassFunction.ofVector weights hweights
+    refine ⟨profile, ?_⟩
+    funext who
+    cases who
+    · rw [example6_mixedPayoff_false]
+      simp [profile, weights, pair, ENNReal.toReal_ofReal hx0]
+    · rw [example6_mixedPayoff_true]
+      simp [profile, weights, pair, ENNReal.toReal_ofReal hx0,
+        ENNReal.toReal_ofReal (by linarith : 0 ≤ 1 - x)]
+  · let weights : FourColumn → ℝ
+      | FourColumn.c0 => 0
+      | FourColumn.c1 => 0
+      | FourColumn.c2 => 3 - x
+      | FourColumn.c3 => x - 2
+    have hweights : weights ∈ stdSimplex ℝ FourColumn := by
+      constructor
+      · intro column
+        cases column <;> simp [weights] <;> linarith
+      · rw [sum_fourColumn]
+        norm_num [weights]
+    let profile : (who : Bool) → PMF (Example6Action who)
+      | false => Math.ProbabilityMassFunction.bernoulliBool y hy0 hy1
+      | true => Math.ProbabilityMassFunction.ofVector weights hweights
+    refine ⟨profile, ?_⟩
+    funext who
+    cases who
+    · rw [example6_mixedPayoff_false]
+      simp [profile, weights, pair,
+        ENNReal.toReal_ofReal (by linarith : 0 ≤ 3 - x),
+        ENNReal.toReal_ofReal (by linarith : 0 ≤ x - 2)]
+      ring
+    · rw [example6_mixedPayoff_true]
+      simp [profile, weights, pair,
+        ENNReal.toReal_ofReal (by linarith : 0 ≤ 3 - x),
+        ENNReal.toReal_ofReal (by linarith : 0 ≤ x - 2)]
+      norm_num
+
 /-! The following finite examples require explicit public-history profile
 calculations and universal deviation bounds.  They are stated in the paper's
 order; no weaker static surrogate is substituted. -/
@@ -5446,6 +5504,69 @@ theorem equation_19 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
         (k := 2) (by omega) hreverse
   exact (lemma_1_Dn_convex_iff G horizon).mp hconvex
 
+/-- The convex hull of Example 6's pure payoffs lies in its displayed
+rectangle `[0,3] × [0,1]`. -/
+theorem example6_C_bounds {v : Payoff Bool}
+    (hv : v ∈ example6.correlatedFeasiblePayoffs) :
+    0 ≤ v false ∧ v false ≤ 3 ∧ 0 ≤ v true ∧ v true ≤ 1 := by
+  let rectangle : Set (Payoff Bool) :=
+    {w | 0 ≤ w false ∧ w false ≤ 3 ∧ 0 ≤ w true ∧ w true ≤ 1}
+  have hpure : example6.purePayoffSet ⊆ rectangle := by
+    rintro _ ⟨action, rfl⟩
+    change 0 ≤ example6Payoff action false ∧
+      example6Payoff action false ≤ 3 ∧
+      0 ≤ example6Payoff action true ∧
+      example6Payoff action true ≤ 1
+    cases hrow : action false <;> cases hcolumn : action true <;>
+      norm_num [example6Payoff, hrow, hcolumn, pair]
+  have hconvex : Convex ℝ rectangle := by
+    rintro first hfirst second hsecond a b ha hb hab
+    rcases hfirst with ⟨hfirst0, hfirst3, hfirst0', hfirst1⟩
+    rcases hsecond with ⟨hsecond0, hsecond3, hsecond0', hsecond1⟩
+    change 0 ≤ (a • first + b • second) false ∧
+      (a • first + b • second) false ≤ 3 ∧
+      0 ≤ (a • first + b • second) true ∧
+      (a • first + b • second) true ≤ 1
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    constructor
+    · exact add_nonneg (mul_nonneg ha hfirst0) (mul_nonneg hb hsecond0)
+    constructor
+    · nlinarith [mul_nonneg ha (sub_nonneg.mpr hfirst3),
+        mul_nonneg hb (sub_nonneg.mpr hsecond3)]
+    constructor
+    · exact add_nonneg (mul_nonneg ha hfirst0') (mul_nonneg hb hsecond0')
+    · nlinarith [mul_nonneg ha (sub_nonneg.mpr hfirst1),
+        mul_nonneg hb (sub_nonneg.mpr hsecond1)]
+  exact convexHull_min hpure hconvex hv
+
+/-- Appending two one-stage profiles realizes the midpoint of their payoffs
+in two stages. -/
+theorem midpoint_mem_D2_of_mem_D1 (G : FiniteStageGame)
+    {first second : Payoff G.Player}
+    (hfirst : first ∈ G.oneStageFeasiblePayoffs)
+    (hsecond : second ∈ G.oneStageFeasiblePayoffs) :
+    midpoint ℝ first second ∈ G.finiteFeasiblePayoffs 2 := by
+  obtain ⟨firstProfile, hfirstPayoff⟩ :=
+    lemma_1_D1_subset_Dn G ⟨1, by omega⟩ hfirst
+  obtain ⟨secondProfile, hsecondPayoff⟩ :=
+    lemma_1_D1_subset_Dn G ⟨1, by omega⟩ hsecond
+  let joined := G.appendFiniteProfiles 1 firstProfile secondProfile
+  refine ⟨joined, ?_⟩
+  have hweighted :=
+    appendFiniteProfiles_weightedPayoff G 1 1 firstProfile secondProfile
+  rw [hfirstPayoff, hsecondPayoff] at hweighted
+  norm_num at hweighted
+  dsimp only [joined]
+  apply smul_right_injective (Payoff G.Player) (by norm_num : (2 : ℝ) ≠ 0)
+  change (2 : ℝ) • G.finitePayoff 2
+      (G.appendFiniteProfiles 1 firstProfile secondProfile) =
+    (2 : ℝ) • midpoint ℝ first second
+  rw [hweighted]
+  funext who
+  simp [midpoint, AffineMap.lineMap_apply_module, Pi.add_apply,
+    Pi.smul_apply, smul_eq_mul]
+  ring
+
 /-- In Example 6, `(0,1)` and `(3,1)` are one-stage feasible, but their
 midpoint `(3/2,1)` is not. -/
 theorem example6_D1_not_convex :
@@ -5522,7 +5643,64 @@ convexification calculation. -/
 theorem example6_D2_eq_C :
     example6.finiteFeasiblePayoffs 2 =
       example6.correlatedFeasiblePayoffs := by
-  sorry
+  apply Set.Subset.antisymm
+  · exact lemma_1_Dn_subset_C example6 ⟨2, by omega⟩
+  · intro payoff hpayoff
+    obtain ⟨hx0, hx3, hy0, hy1⟩ := example6_C_bounds hpayoff
+    let x := payoff false
+    let y := payoff true
+    have hpayoff_eq : payoff = pair x y := by
+      funext who
+      cases who <;> rfl
+    rw [hpayoff_eq]
+    change 0 ≤ x at hx0
+    change x ≤ 3 at hx3
+    change 0 ≤ y at hy0
+    change y ≤ 1 at hy1
+    by_cases hx1 : x ≤ 1
+    · exact lemma_1_D1_subset_Dn example6 ⟨2, by omega⟩
+        (example6_outerStrip_mem_D1 x y hx0 hx3 hy0 hy1 (Or.inl hx1))
+    by_cases hx2 : 2 ≤ x
+    · exact lemma_1_D1_subset_Dn example6 ⟨2, by omega⟩
+        (example6_outerStrip_mem_D1 x y hx0 hx3 hy0 hy1 (Or.inr hx2))
+    by_cases hhalf : x ≤ 3 / 2
+    · have hleft : pair (2 * x - 2) y ∈
+          example6.oneStageFeasiblePayoffs := by
+        apply example6_outerStrip_mem_D1
+        · linarith
+        · linarith
+        · exact hy0
+        · exact hy1
+        · left
+          linarith
+      have hright : pair 2 y ∈ example6.oneStageFeasiblePayoffs := by
+        exact example6_outerStrip_mem_D1 2 y (by norm_num) (by norm_num)
+          hy0 hy1 (Or.inr le_rfl)
+      have hmidpoint :=
+        midpoint_mem_D2_of_mem_D1 example6 hleft hright
+      convert hmidpoint using 1
+      funext who
+      cases who <;>
+        simp [midpoint, AffineMap.lineMap_apply_module, pair,
+          Pi.add_apply, Pi.smul_apply, smul_eq_mul] <;> ring
+    · have hleft : pair 1 y ∈ example6.oneStageFeasiblePayoffs := by
+        apply example6_outerStrip_mem_D1 1 y <;> simp_all
+      have hright : pair (2 * x - 1) y ∈
+          example6.oneStageFeasiblePayoffs := by
+        apply example6_outerStrip_mem_D1
+        · linarith
+        · linarith
+        · exact hy0
+        · exact hy1
+        · right
+          linarith
+      have hmidpoint :=
+        midpoint_mem_D2_of_mem_D1 example6 hleft hright
+      convert hmidpoint using 1
+      funext who
+      cases who <;>
+        simp [midpoint, AffineMap.lineMap_apply_module, pair,
+          Pi.add_apply, Pi.smul_apply, smul_eq_mul] <;> ring
 
 /-- Equation (20), witnessed by Example 6. -/
 theorem example6_D1_not_convex_D2_eq_C :
