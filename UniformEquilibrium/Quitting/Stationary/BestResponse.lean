@@ -204,6 +204,47 @@ theorem exists_pureTimeBehaviorStrategy_terminalPayoff_eq_unilateralCap
     rw [quittingStationaryPureTimeValue]
     exact (max_eq_left (le_of_not_ge hnever)).symm
 
+/-- Under strict opponent contraction, the selected stationary cap is attained
+by one of the two outcome-relevant pure stationary replies: Never or immediate
+Quit. -/
+theorem exists_quitNow_or_never_terminalPayoff_eq_unilateralCap
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (who : ι)
+    (hcontracts :
+      quittingStationaryFixedOpponentsContinueMass root who < 1) :
+    ∃ choice : Option ℕ,
+      (choice = none ∨ choice = some 0) ∧
+        quittingTerminalPayoff reward
+            (Function.update (quittingStationaryProfile reward root) who
+              (quittingPureTimeBehaviorStrategy reward who choice)) who =
+          quittingStationaryUnilateralCap reward root who := by
+  let quitValue :=
+    quittingStationaryFixedOpponentsQuitValue reward root who
+  let continueReward :=
+    quittingStationaryFixedOpponentsContinueReward reward root who
+  let continueMass :=
+    quittingStationaryFixedOpponentsContinueMass root who
+  by_cases hnever : quitValue ≤
+      quittingStationaryNeverValue continueReward continueMass
+  · refine ⟨none, Or.inl rfl, ?_⟩
+    rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
+      quittingProfileLiveRoot_stationary,
+      quittingRootSequencePureTimeTerminalValue_const
+        reward root who hcontracts]
+    change quittingStationaryNeverValue continueReward continueMass =
+      quittingStationarySelectedCap quitValue continueReward continueMass
+    exact (max_eq_right hnever).symm
+  · refine ⟨some 0, Or.inr rfl, ?_⟩
+    rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
+      quittingProfileLiveRoot_stationary,
+      quittingRootSequencePureTimeTerminalValue_const
+        reward root who hcontracts]
+    change quittingStationaryPureTimeValue
+        quitValue continueReward continueMass 0 =
+      quittingStationarySelectedCap quitValue continueReward continueMass
+    rw [quittingStationaryPureTimeValue]
+    exact (max_eq_left (le_of_not_ge hnever)).symm
+
 /-- For a playerwise-contracting stationary root, the pointwise cap
 criterion is also necessary for terminal approximate Nash. -/
 theorem isεAsymptoticNash_stationary_iff_unilateralCap_le

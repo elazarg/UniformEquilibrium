@@ -2,6 +2,7 @@ import UniformEquilibrium.Quitting.Classification.PlayerReindex
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
 import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
+import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
@@ -205,10 +206,7 @@ theorem quittingProfileLiveRoot_markovization
     quittingProfileLiveRoot GameTheory.FTVCyclicAdmissibleCycle.ftvReward
         (markovBehaviorProfile (markovization profile)) =
       markovRoot (markovization profile) := by
-        simpa [markovBehaviorProfile, quittingInfinitePathProfile] using
-(quittingProfileLiveRoot_infinitePathProfile
-  GameTheory.FTVCyclicAdmissibleCycle.ftvReward
-  (markovRoot (markovization profile)))
+        simp [markovBehaviorProfile]
     _ = quittingProfileLiveRoot
         GameTheory.FTVCyclicAdmissibleCycle.ftvReward profile :=
       markovRoot_markovization profile
@@ -320,10 +318,9 @@ stationary best reply exists. In this one-live-state game the two
 outcome-relevant pure stationary alternatives are immediate Quit and Never
 quit. The theorem below retains that restriction in its type. -/
 
-/-! The full-rate stationary verifier proves attainment by one of the same two
-outcome classes, but its exported witness is an unrestricted behavior strategy.
-The remaining proof obligation here is the small witness-identification adapter
-on the saturated opponent face. -/
+/-! The contracting case is the two-endpoint stationary Snell calculation.  On
+the saturated face, all opponents continue forever, so the full-rate cap is the
+maximum of zero and the player's singleton reward. -/
 /-- Against stationary opponents, immediate Quit or Never is a best reply. -/
 theorem pureStationaryBestReply
     (root : Player → PMF Bool) (who : Player) :
@@ -343,7 +340,85 @@ theorem pureStationaryBestReply
                 who
                 (quittingPureTimeBehaviorStrategy
                   GameTheory.FTVCyclicAdmissibleCycle.ftvReward who choice)) who := by
-  sorry
+  classical
+  let reward := GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+  by_cases hcontracts :
+      quittingStationaryFixedOpponentsContinueMass root who < 1
+  · obtain ⟨choice, hchoice, hattains⟩ :=
+      exists_quitNow_or_never_terminalPayoff_eq_unilateralCap
+        reward root who hcontracts
+    refine ⟨choice, hchoice, fun deviation ↦ ?_⟩
+    calc
+      quittingTerminalPayoff reward
+          (Function.update (quittingStationaryProfile reward root) who
+            deviation) who ≤
+          quittingStationaryUnilateralCap reward root who :=
+        quittingTerminalPayoff_update_stationary_le_unilateralCap
+          reward root who deviation hcontracts
+      _ = quittingTerminalPayoff reward
+          (Function.update (quittingStationaryProfile reward root) who
+            (quittingPureTimeBehaviorStrategy reward who choice)) who :=
+        hattains.symm
+  · have hmass : quittingStationaryFixedOpponentsContinueMass root who = 1 := by
+      have hle : quittingStationaryFixedOpponentsContinueMass root who ≤ 1 :=
+        quittingStationaryContinueMass_le_one
+          (Function.update root who (PMF.pure false))
+      exact le_antisymm hle (not_lt.mp hcontracts)
+    by_cases hsolo : reward (quittingSingletonTerminal who) who ≤ 0
+    · refine ⟨none, Or.inl rfl, fun deviation ↦ ?_⟩
+      have hcap := quittingTerminalPayoff_update_stationary_le_fullRateUnilateralCap
+        reward root who deviation
+      rw [quittingStationaryFullRateUnilateralCap_of_not_lt
+        reward root who hcontracts, max_eq_left hsolo] at hcap
+      calc
+        quittingTerminalPayoff reward
+            (Function.update (quittingStationaryProfile reward root) who
+              deviation) who ≤ 0 := hcap
+        _ = quittingTerminalPayoff reward
+            (Function.update (quittingStationaryProfile reward root) who
+              (quittingPureTimeBehaviorStrategy reward who none)) who := by
+          rw [update_stationaryProfile_eq_update_alwaysContinue_of_fixedMass_eq_one
+            reward root who _ hmass]
+          rw [show quittingPureTimeBehaviorStrategy reward who none =
+              quittingAlwaysContinueStrategy reward who by
+            funext time history
+            rfl]
+          have hupdate : Function.update (quittingAlwaysContinueProfile reward) who
+              (quittingAlwaysContinueStrategy reward who) =
+                quittingAlwaysContinueProfile reward := by
+            apply Function.update_eq_self
+          rw [hupdate, quittingTerminalPayoff_quittingAlwaysContinue]
+    · refine ⟨some 0, Or.inr rfl, fun deviation ↦ ?_⟩
+      have hcap := quittingTerminalPayoff_update_stationary_le_fullRateUnilateralCap
+        reward root who deviation
+      rw [quittingStationaryFullRateUnilateralCap_of_not_lt
+        reward root who hcontracts,
+        max_eq_right (le_of_not_ge hsolo)] at hcap
+      calc
+        quittingTerminalPayoff reward
+            (Function.update (quittingStationaryProfile reward root) who
+              deviation) who ≤ reward (quittingSingletonTerminal who) who := hcap
+        _ = quittingTerminalPayoff reward
+            (Function.update (quittingStationaryProfile reward root) who
+              (quittingPureTimeBehaviorStrategy reward who (some 0))) who := by
+          rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
+            quittingProfileLiveRoot_stationary,
+            quittingRootSequencePureTimeTerminalValue_some_self_eq_fixedOpponents]
+          have hclose :=
+            abs_quittingFixedOpponentsQuitValue_sub_continueMass_mul_solo_le
+              reward (fun _ ↦ root) who 0 (quittingRewardBound reward)
+              (quittingRewardBound_nonneg reward)
+              (fun terminal ↦ abs_reward_le_quittingRewardBound reward terminal who)
+          change |quittingFixedOpponentsQuitValue reward (fun _ ↦ root) who 0 -
+              quittingStationaryFixedOpponentsContinueMass root who *
+                reward (quittingSingletonTerminal who) who| ≤
+            quittingRewardBound reward *
+              (1 - quittingStationaryFixedOpponentsContinueMass root who) at hclose
+          rw [hmass, one_mul, sub_self, mul_zero] at hclose
+          have hzero : quittingFixedOpponentsQuitValue reward (fun _ ↦ root) who 0 -
+              reward (quittingSingletonTerminal who) who = 0 :=
+            abs_eq_zero.mp (le_antisymm hclose (abs_nonneg _))
+          linarith
 
 /-- Under strict opponent contraction the selected Snell cap is attained by
 literal `Never` or immediate Quit; the restriction is retained in the theorem
@@ -388,6 +463,77 @@ theorem stationary_bestReply_is_quitNow_or_never_of_contracting
       quittingStationarySelectedCap quitValue continueReward continueMass
     rw [quittingStationaryPureTimeValue]
     exact (max_eq_left (le_of_not_ge hnever)).symm
+
+/-! The following formulas are the paper's one-stage stationary calculations,
+expanded from the exact product root. -/
+
+theorem stationaryRoot_quitPayoff_zero
+    (profile : StationaryProfile) (value : Payoff Player) :
+    quittingRootQuitPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+        value (stationaryRoot profile) 0 = 1 - (profile 2).1 := by
+  unfold quittingRootQuitPayoff quittingRootExpectedPayoff
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [stationaryRoot, GameTheory.FTVCyclicMinimality.terminalReward,
+    expect_coin, expect_pure, Matrix.cons_val_two]
+  all_goals ring
+
+theorem stationaryRoot_quitPayoff_one
+    (profile : StationaryProfile) (value : Payoff Player) :
+    quittingRootQuitPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+        value (stationaryRoot profile) 1 = 1 - (profile 0).1 := by
+  unfold quittingRootQuitPayoff quittingRootExpectedPayoff
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [stationaryRoot, GameTheory.FTVCyclicMinimality.terminalReward,
+    expect_coin, expect_pure, Matrix.cons_val_two]
+
+theorem stationaryRoot_quitPayoff_two
+    (profile : StationaryProfile) (value : Payoff Player) :
+    quittingRootQuitPayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+        value (stationaryRoot profile) 2 = 1 - (profile 1).1 := by
+  unfold quittingRootQuitPayoff quittingRootExpectedPayoff
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [stationaryRoot, GameTheory.FTVCyclicMinimality.terminalReward,
+    expect_coin, expect_pure, Matrix.cons_val_two]
+  all_goals ring
+
+theorem stationaryRoot_continuePayoff_zero
+    (profile : StationaryProfile) (value : Payoff Player) :
+    quittingRootContinuePayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+        value (stationaryRoot profile) 0 =
+      (1 - (profile 1).1) * (1 - (profile 2).1) * value 0 +
+        3 * (1 - (profile 1).1) * (profile 2).1 +
+          (profile 1).1 * (profile 2).1 := by
+  unfold quittingRootContinuePayoff quittingRootExpectedPayoff
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [stationaryRoot, GameTheory.FTVCyclicMinimality.terminalReward,
+    expect_coin, expect_pure, Matrix.cons_val_two]
+  all_goals ring
+
+theorem stationaryRoot_continuePayoff_one
+    (profile : StationaryProfile) (value : Payoff Player) :
+    quittingRootContinuePayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+        value (stationaryRoot profile) 1 =
+      (1 - (profile 0).1) * (1 - (profile 2).1) * value 1 +
+        3 * (profile 0).1 * (1 - (profile 2).1) +
+          (profile 0).1 * (profile 2).1 := by
+  unfold quittingRootContinuePayoff quittingRootExpectedPayoff
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [stationaryRoot, GameTheory.FTVCyclicMinimality.terminalReward,
+    expect_coin, expect_pure, Matrix.cons_val_two]
+  all_goals ring
+
+theorem stationaryRoot_continuePayoff_two
+    (profile : StationaryProfile) (value : Payoff Player) :
+    quittingRootContinuePayoff GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+        value (stationaryRoot profile) 2 =
+      (1 - (profile 0).1) * (1 - (profile 1).1) * value 2 +
+        3 * (1 - (profile 0).1) * (profile 1).1 +
+          (profile 0).1 * (profile 1).1 := by
+  unfold quittingRootContinuePayoff quittingRootExpectedPayoff
+  rw [Math.PMFProduct.expect_pmfPi_fin3]
+  simp [stationaryRoot, GameTheory.FTVCyclicMinimality.terminalReward,
+    expect_coin, expect_pure, Matrix.cons_val_two]
+  all_goals ring
 
 /-! ### Lemma 3.1: no stationary equilibrium -/
 
@@ -464,18 +610,378 @@ theorem not_exists_stationaryNecessaryConditions :
     nlinarith [h.player_two_indifference hzpos hzlt]
   linarith
 
-/-! The generic stationary files already provide the exact payoff fixed point,
-root-Nash extraction, pure-time best-response cap, and stationary gain
-factorization.  What is not yet assembled is the table-specific computation
-that converts those generic inequalities, including the zero-absorption corner,
-into every field of `StationaryNecessaryConditions`.  That explicit adapter is
-the sole `sorry` used by Lemma 3.1 below. -/
+/-! The proof below combines the generic stationary payoff fixed point and
+endpoint-Nash characterization with the table's six boundary implications and
+three interior indifference equations. -/
 theorem stationaryEquilibrium_implies_necessaryConditions
     (profile : StationaryProfile)
     (h : IsStationaryEpsilonEquilibrium 0 profile) :
     StationaryNecessaryConditions
       (profile 0).1 (profile 1).1 (profile 2).1 := by
-  sorry
+  let reward := GameTheory.FTVCyclicAdmissibleCycle.ftvReward
+  let root := stationaryRoot profile
+  let value : Payoff Player := fun who ↦
+    quittingTerminalPayoff reward (quittingStationaryProfile reward root) who
+  have hnash : (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) 0
+      (quittingStationaryProfile reward root) := by
+    simpa [IsStationaryEpsilonEquilibrium, stationaryBehaviorProfile,
+      reward, root] using h
+  have hroot :=
+    (isZeroAsymptoticNash_stationary_iff_endpointNash_and_boundary
+      reward root).mp hnash |>.1
+  let x : ℝ := (profile 0).1
+  let y : ℝ := (profile 1).1
+  let z : ℝ := (profile 2).1
+  let d0 : ℝ := 1 - z -
+    ((1 - y) * (1 - z) * value 0 + 3 * (1 - y) * z + y * z)
+  let d1 : ℝ := 1 - x -
+    ((1 - x) * (1 - z) * value 1 + 3 * x * (1 - z) + x * z)
+  let d2 : ℝ := 1 - y -
+    ((1 - x) * (1 - y) * value 2 + 3 * (1 - x) * y + x * y)
+  have hd0 : quittingRootEndpointDifference reward value root 0 = d0 := by
+    rw [quittingRootEndpointDifference]
+    simpa [reward, root, x, y, z, d0] using
+      congrArg₂ (· - ·)
+        (stationaryRoot_quitPayoff_zero profile value)
+        (stationaryRoot_continuePayoff_zero profile value)
+  have hd1 : quittingRootEndpointDifference reward value root 1 = d1 := by
+    rw [quittingRootEndpointDifference]
+    simpa [reward, root, x, y, z, d1] using
+      congrArg₂ (· - ·)
+        (stationaryRoot_quitPayoff_one profile value)
+        (stationaryRoot_continuePayoff_one profile value)
+  have hd2 : quittingRootEndpointDifference reward value root 2 = d2 := by
+    rw [quittingRootEndpointDifference]
+    simpa [reward, root, x, y, z, d2] using
+      congrArg₂ (· - ·)
+        (stationaryRoot_quitPayoff_two profile value)
+        (stationaryRoot_continuePayoff_two profile value)
+  have he0 : (1 - x) * d0 ≤ 0 ∧ 0 ≤ x * d0 := by
+    have hzero := hroot 0
+    simp only [neg_zero] at hzero
+    change (root 0 false).toReal *
+          quittingRootEndpointDifference reward value root 0 ≤ 0 ∧
+        0 ≤ (root 0 true).toReal *
+          quittingRootEndpointDifference reward value root 0 at hzero
+    rw [hd0] at hzero
+    simpa [root, stationaryRoot, x] using hzero
+  have he1 : (1 - y) * d1 ≤ 0 ∧ 0 ≤ y * d1 := by
+    have hone := hroot 1
+    simp only [neg_zero] at hone
+    change (root 1 false).toReal *
+          quittingRootEndpointDifference reward value root 1 ≤ 0 ∧
+        0 ≤ (root 1 true).toReal *
+          quittingRootEndpointDifference reward value root 1 at hone
+    rw [hd1] at hone
+    simpa [root, stationaryRoot, y] using hone
+  have he2 : (1 - z) * d2 ≤ 0 ∧ 0 ≤ z * d2 := by
+    have htwo := hroot 2
+    simp only [neg_zero] at htwo
+    change (root 2 false).toReal *
+          quittingRootEndpointDifference reward value root 2 ≤ 0 ∧
+        0 ≤ (root 2 true).toReal *
+          quittingRootEndpointDifference reward value root 2 at htwo
+    rw [hd2] at htwo
+    simpa [root, stationaryRoot, z] using htwo
+  have hv0 : value 0 =
+      x * (1 - z) + (1 - x) *
+        ((1 - y) * (1 - z) * value 0 + 3 * (1 - y) * z + y * z) := by
+    calc
+      value 0 = quittingRootSuccessorPayoff reward value root 0 :=
+        quittingTerminalPayoff_stationary_eq_rootExpectedPayoff reward root 0
+      _ = _ := by
+        rw [quittingRootSuccessorPayoff_eq_endpointMix]
+        simp only [root, stationaryRoot, coin_true_toReal, coin_false_toReal]
+        rw [show quittingRootQuitPayoff reward value (stationaryRoot profile) 0 =
+              1 - z by simpa [reward, z] using
+                stationaryRoot_quitPayoff_zero profile value,
+          show quittingRootContinuePayoff reward value (stationaryRoot profile) 0 =
+              (1 - y) * (1 - z) * value 0 + 3 * (1 - y) * z + y * z by
+            simpa [reward, y, z] using
+              stationaryRoot_continuePayoff_zero profile value]
+  have hv1 : value 1 =
+      y * (1 - x) + (1 - y) *
+        ((1 - x) * (1 - z) * value 1 + 3 * x * (1 - z) + x * z) := by
+    calc
+      value 1 = quittingRootSuccessorPayoff reward value root 1 :=
+        quittingTerminalPayoff_stationary_eq_rootExpectedPayoff reward root 1
+      _ = _ := by
+        rw [quittingRootSuccessorPayoff_eq_endpointMix]
+        simp only [root, stationaryRoot, coin_true_toReal, coin_false_toReal]
+        rw [show quittingRootQuitPayoff reward value (stationaryRoot profile) 1 =
+              1 - x by simpa [reward, x] using
+                stationaryRoot_quitPayoff_one profile value,
+          show quittingRootContinuePayoff reward value (stationaryRoot profile) 1 =
+              (1 - x) * (1 - z) * value 1 + 3 * x * (1 - z) + x * z by
+            simpa [reward, x, z] using
+              stationaryRoot_continuePayoff_one profile value]
+  have hv2 : value 2 =
+      z * (1 - y) + (1 - z) *
+        ((1 - x) * (1 - y) * value 2 + 3 * (1 - x) * y + x * y) := by
+    calc
+      value 2 = quittingRootSuccessorPayoff reward value root 2 :=
+        quittingTerminalPayoff_stationary_eq_rootExpectedPayoff reward root 2
+      _ = _ := by
+        rw [quittingRootSuccessorPayoff_eq_endpointMix]
+        simp only [root, stationaryRoot, coin_true_toReal, coin_false_toReal]
+        rw [show quittingRootQuitPayoff reward value (stationaryRoot profile) 2 =
+              1 - y by simpa [reward, y] using
+                stationaryRoot_quitPayoff_two profile value,
+          show quittingRootContinuePayoff reward value (stationaryRoot profile) 2 =
+              (1 - x) * (1 - y) * value 2 + 3 * (1 - x) * y + x * y by
+            simpa [reward, x, y] using
+              stationaryRoot_continuePayoff_two profile value]
+  have hx0 : 0 ≤ x := (profile 0).2.1
+  have hx1 : x ≤ 1 := (profile 0).2.2
+  have hy0 : 0 ≤ y := (profile 1).2.1
+  have hy1 : y ≤ 1 := (profile 1).2.2
+  have hz0 : 0 ≤ z := (profile 2).2.1
+  have hz1 : z ≤ 1 := (profile 2).2.2
+  have hnotAllZero : ¬(x = 0 ∧ y = 0 ∧ z = 0) := by
+    rintro ⟨hx, hy, hz⟩
+    have hrootAll : root = quittingAllContinueRoot := by
+      funext who
+      apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
+      fin_cases who
+      · simpa [root, stationaryRoot, x] using hx
+      · simpa [root, stationaryRoot, y] using hy
+      · simpa [root, stationaryRoot, z] using hz
+    have hprofileAll : quittingStationaryProfile reward root =
+        quittingAlwaysContinueProfile reward := by
+      rw [hrootAll]
+      rfl
+    have hvalueZero : value 0 = 0 := by
+      change quittingTerminalPayoff reward
+        (quittingStationaryProfile reward root) 0 = 0
+      rw [hprofileAll]
+      exact quittingTerminalPayoff_quittingAlwaysContinue reward 0
+    dsimp [d0] at he0
+    rw [hx, hy, hz, hvalueZero] at he0
+    norm_num at he0
+  have hxyImpliesZ (hx : x = 0) (hy : y < 1) : z = 0 := by
+    have hydiff : 0 < 1 - y := sub_pos.mpr hy
+    have hd1nonpos : d1 ≤ 0 := by
+      by_contra hpositive
+      have : 0 < (1 - y) * d1 :=
+        mul_pos hydiff (lt_of_not_ge hpositive)
+      linarith [he1.1]
+    have hweighted : 1 ≤ (1 - z) * value 1 := by
+      dsimp [d1] at hd1nonpos
+      rw [hx] at hd1nonpos
+      linarith
+    have hvaluePos : 0 < value 1 := by
+      by_contra hnonpos
+      have hfactor : 0 ≤ 1 - z := sub_nonneg.mpr hz1
+      have := mul_nonpos_of_nonneg_of_nonpos hfactor (le_of_not_gt hnonpos)
+      linarith
+    have hbalance : z * value 1 = y * d1 := by
+      dsimp [d1]
+      rw [hx] at hv1 ⊢
+      linear_combination hv1
+    have hleft : 0 ≤ z * value 1 := mul_nonneg hz0 hvaluePos.le
+    have hright : y * d1 ≤ 0 :=
+      mul_nonpos_of_nonneg_of_nonpos hy0 hd1nonpos
+    have hproduct : z * value 1 = 0 := by linarith
+    exact (mul_eq_zero.mp hproduct).resolve_right hvaluePos.ne'
+  have hyzImpliesX (hy : y = 0) (hz : z < 1) : x = 0 := by
+    have hzdiff : 0 < 1 - z := sub_pos.mpr hz
+    have hd2nonpos : d2 ≤ 0 := by
+      by_contra hpositive
+      have : 0 < (1 - z) * d2 :=
+        mul_pos hzdiff (lt_of_not_ge hpositive)
+      linarith [he2.1]
+    have hweighted : 1 ≤ (1 - x) * value 2 := by
+      dsimp [d2] at hd2nonpos
+      rw [hy] at hd2nonpos
+      linarith
+    have hvaluePos : 0 < value 2 := by
+      by_contra hnonpos
+      have hfactor : 0 ≤ 1 - x := sub_nonneg.mpr hx1
+      have := mul_nonpos_of_nonneg_of_nonpos hfactor (le_of_not_gt hnonpos)
+      linarith
+    have hbalance : x * value 2 = z * d2 := by
+      dsimp [d2]
+      rw [hy] at hv2 ⊢
+      linear_combination hv2
+    have hleft : 0 ≤ x * value 2 := mul_nonneg hx0 hvaluePos.le
+    have hright : z * d2 ≤ 0 :=
+      mul_nonpos_of_nonneg_of_nonpos hz0 hd2nonpos
+    have hproduct : x * value 2 = 0 := by linarith
+    exact (mul_eq_zero.mp hproduct).resolve_right hvaluePos.ne'
+  have hzxImpliesY (hz : z = 0) (hx : x < 1) : y = 0 := by
+    have hxdiff : 0 < 1 - x := sub_pos.mpr hx
+    have hd0nonpos : d0 ≤ 0 := by
+      by_contra hpositive
+      have : 0 < (1 - x) * d0 :=
+        mul_pos hxdiff (lt_of_not_ge hpositive)
+      linarith [he0.1]
+    have hweighted : 1 ≤ (1 - y) * value 0 := by
+      dsimp [d0] at hd0nonpos
+      rw [hz] at hd0nonpos
+      linarith
+    have hvaluePos : 0 < value 0 := by
+      by_contra hnonpos
+      have hfactor : 0 ≤ 1 - y := sub_nonneg.mpr hy1
+      have := mul_nonpos_of_nonneg_of_nonpos hfactor (le_of_not_gt hnonpos)
+      linarith
+    have hbalance : y * value 0 = x * d0 := by
+      dsimp [d0]
+      rw [hz] at hv0 ⊢
+      linear_combination hv0
+    have hleft : 0 ≤ y * value 0 := mul_nonneg hy0 hvaluePos.le
+    have hright : x * d0 ≤ 0 :=
+      mul_nonpos_of_nonneg_of_nonpos hx0 hd0nonpos
+    have hproduct : y * value 0 = 0 := by linarith
+    exact (mul_eq_zero.mp hproduct).resolve_right hvaluePos.ne'
+  refine
+    { x_nonneg := hx0
+      x_le_one := hx1
+      y_nonneg := hy0
+      y_le_one := hy1
+      z_nonneg := hz0
+      z_le_one := hz1
+      y_eq_one_of_x_eq_zero := ?_
+      z_eq_zero_of_y_eq_one := ?_
+      x_eq_one_of_z_eq_zero := ?_
+      y_eq_zero_of_x_eq_one := ?_
+      z_eq_one_of_y_eq_zero := ?_
+      x_eq_zero_of_z_eq_one := ?_
+      player_zero_indifference := ?_
+      player_one_indifference := ?_
+      player_two_indifference := ?_ }
+  · change x = 0 → y = 1
+    intro hx
+    apply le_antisymm hy1
+    by_contra hylt
+    have hz := hxyImpliesZ hx (lt_of_not_ge hylt)
+    have hy := hzxImpliesY hz (by linarith)
+    exact hnotAllZero ⟨hx, hy, hz⟩
+  · change y = 1 → z = 0
+    intro hy
+    have hd2neg : d2 < 0 := by
+      dsimp [d2]
+      rw [hy]
+      ring_nf
+      linarith only [hx1]
+    by_cases hzZero : z = 0
+    · exact hzZero
+    · have hzpos : 0 < z := lt_of_le_of_ne hz0 (Ne.symm hzZero)
+      have : z * d2 < 0 := mul_neg_of_pos_of_neg hzpos hd2neg
+      linarith [he2.2]
+  · change z = 0 → x = 1
+    intro hz
+    apply le_antisymm hx1
+    by_contra hxlt
+    have hy := hzxImpliesY hz (lt_of_not_ge hxlt)
+    have hx := hyzImpliesX hy (by linarith)
+    exact hnotAllZero ⟨hx, hy, hz⟩
+  · change x = 1 → y = 0
+    intro hx
+    have hd1neg : d1 < 0 := by
+      dsimp [d1]
+      rw [hx]
+      ring_nf
+      linarith only [hz1]
+    by_cases hyZero : y = 0
+    · exact hyZero
+    · have hypos : 0 < y := lt_of_le_of_ne hy0 (Ne.symm hyZero)
+      have : y * d1 < 0 := mul_neg_of_pos_of_neg hypos hd1neg
+      linarith [he1.2]
+  · change y = 0 → z = 1
+    intro hy
+    apply le_antisymm hz1
+    by_contra hzlt
+    have hx := hyzImpliesX hy (lt_of_not_ge hzlt)
+    have hz := hxyImpliesZ hx (by linarith)
+    exact hnotAllZero ⟨hx, hy, hz⟩
+  · change z = 1 → x = 0
+    intro hz
+    have hd0neg : d0 < 0 := by
+      dsimp [d0]
+      rw [hz]
+      ring_nf
+      linarith only [hy1]
+    by_cases hxZero : x = 0
+    · exact hxZero
+    · have hxpos : 0 < x := lt_of_le_of_ne hx0 (Ne.symm hxZero)
+      have : x * d0 < 0 := mul_neg_of_pos_of_neg hxpos hd0neg
+      linarith [he0.2]
+  · change 0 < x → x < 1 → y * (z ^ 2 + 1) = z ^ 2 + 2 * z
+    intro hxp hxlt
+    have hd0nonpos : d0 ≤ 0 := by
+      by_contra hpositive
+      have : 0 < (1 - x) * d0 :=
+        mul_pos (sub_pos.mpr hxlt) (lt_of_not_ge hpositive)
+      linarith [he0.1]
+    have hd0nonneg : 0 ≤ d0 := by
+      by_contra hnegative
+      have : x * d0 < 0 := mul_neg_of_pos_of_neg hxp (lt_of_not_ge hnegative)
+      linarith [he0.2]
+    have hd0zero : d0 = 0 := le_antisymm hd0nonpos hd0nonneg
+    have hcontinue :
+        (1 - y) * (1 - z) * value 0 + 3 * (1 - y) * z + y * z =
+          1 - z := by
+      dsimp [d0] at hd0zero
+      linarith
+    have hvalue : value 0 = 1 - z := by
+      rw [hcontinue] at hv0
+      calc
+        value 0 = x * (1 - z) + (1 - x) * (1 - z) := hv0
+        _ = 1 - z := by ring
+    dsimp [d0] at hd0zero
+    rw [hvalue] at hd0zero
+    linear_combination hd0zero
+  · change 0 < y → y < 1 → z * (x ^ 2 + 1) = x ^ 2 + 2 * x
+    intro hyp hylt
+    have hd1nonpos : d1 ≤ 0 := by
+      by_contra hpositive
+      have : 0 < (1 - y) * d1 :=
+        mul_pos (sub_pos.mpr hylt) (lt_of_not_ge hpositive)
+      linarith [he1.1]
+    have hd1nonneg : 0 ≤ d1 := by
+      by_contra hnegative
+      have : y * d1 < 0 := mul_neg_of_pos_of_neg hyp (lt_of_not_ge hnegative)
+      linarith [he1.2]
+    have hd1zero : d1 = 0 := le_antisymm hd1nonpos hd1nonneg
+    have hcontinue :
+        (1 - x) * (1 - z) * value 1 + 3 * x * (1 - z) + x * z =
+          1 - x := by
+      dsimp [d1] at hd1zero
+      linarith
+    have hvalue : value 1 = 1 - x := by
+      rw [hcontinue] at hv1
+      calc
+        value 1 = y * (1 - x) + (1 - y) * (1 - x) := hv1
+        _ = 1 - x := by ring
+    dsimp [d1] at hd1zero
+    rw [hvalue] at hd1zero
+    linear_combination hd1zero
+  · change 0 < z → z < 1 → x * (y ^ 2 + 1) = y ^ 2 + 2 * y
+    intro hzp hzlt
+    have hd2nonpos : d2 ≤ 0 := by
+      by_contra hpositive
+      have : 0 < (1 - z) * d2 :=
+        mul_pos (sub_pos.mpr hzlt) (lt_of_not_ge hpositive)
+      linarith [he2.1]
+    have hd2nonneg : 0 ≤ d2 := by
+      by_contra hnegative
+      have : z * d2 < 0 := mul_neg_of_pos_of_neg hzp (lt_of_not_ge hnegative)
+      linarith [he2.2]
+    have hd2zero : d2 = 0 := le_antisymm hd2nonpos hd2nonneg
+    have hcontinue :
+        (1 - x) * (1 - y) * value 2 + 3 * (1 - x) * y + x * y =
+          1 - y := by
+      dsimp [d2] at hd2zero
+      linarith
+    have hvalue : value 2 = 1 - y := by
+      rw [hcontinue] at hv2
+      calc
+        value 2 = z * (1 - y) + (1 - z) * (1 - y) := hv2
+        _ = 1 - y := by ring
+    dsimp [d2] at hd2zero
+    rw [hvalue] at hd2zero
+    linear_combination hd2zero
 
 /-- **Lemma 3.1.** There is no stationary equilibrium in `Γ`. -/
 theorem lemma3_1 :
@@ -811,7 +1317,7 @@ theorem quittingRootSuccessorPayoff_soloRoot
     simp [soloRoot,
       GameTheory.FTVCyclicMinimality.terminalReward,
       GameTheory.FTVCyclicMinimality.soloReward,
-      Matrix.cons_val_two, expect_pure] <;> ring
+      Matrix.cons_val_two, expect_pure]
 
 /-- Endpoint differences at the perturbed first row. -/
 theorem endpointDifference_edgeRoot
