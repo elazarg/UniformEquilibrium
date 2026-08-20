@@ -3731,14 +3731,12 @@ private theorem minMaxQuit_le_max_forcedQuit_stationaryContinue
   exact quitPayoff_le_of_rewardPart_le G deviated n C hrewards (by simpa using hmass)
 
 /--
-Lemma 6.  For normal players and `0 < ε ≤ 1`, an
+The quantitative core of Lemma 6: for normal players and `0 < ε ≤ 1`, an
 `F_{ε²/(2M)}` step preserves `3ε`-rationality and otherwise raises the coordinate by
-at least `ε²/(2M)`.
+at least `ε²/(2M)`.  This estimate does not use either global nonexistence hypothesis.
 -/
-theorem lemma6 (G : QuittingGame) {M ε : ℝ}
+theorem lemma6_quantitative (G : QuittingGame) {M ε : ℝ}
     (hM : IsQuittingPayoffDifferenceBound G M) (hnormal : ∀ n, IsNormalPlayer G n)
-    (_hstationary : ¬HasStationaryApproximateEquilibria G)
-    (_hinstant : ¬HasInstantApproximateEquilibria G)
     (hε : 0 < ε) (hε1 : ε ≤ 1) {r s : Payoff G.Player}
     (hstep : s ∈ FRow G (ε ^ 2 / (2 * M)) r) :
     ∀ n,
@@ -3877,6 +3875,21 @@ theorem lemma6 (G : QuittingGame) {M ε : ℝ}
       dsimp only [δ, y] at hs ⊢
       exact lt_of_not_ge hs
     exact hcore (by linarith) hslt
+
+/--
+Lemma 6 as stated in the paper.  Its stationary and instant hypotheses are not needed for
+the displayed one-step estimate.
+-/
+theorem lemma6 (G : QuittingGame) {M ε : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M) (hnormal : ∀ n, IsNormalPlayer G n)
+    (_hstationary : ¬HasStationaryApproximateEquilibria G)
+    (_hinstant : ¬HasInstantApproximateEquilibria G)
+    (hε : 0 < ε) (hε1 : ε ≤ 1) {r s : Payoff G.Player}
+    (hstep : s ∈ FRow G (ε ^ 2 / (2 * M)) r) :
+    ∀ n,
+      (r n ≥ MinMaxQuit G n - 3 * ε → s n ≥ MinMaxQuit G n - 3 * ε) ∧
+      (r n < MinMaxQuit G n - 3 * ε → s n ≥ r n + ε ^ 2 / (2 * M)) :=
+  lemma6_quantitative G hM hnormal hε hε1 hstep
 
 /-- A scalar process with positive drift below a preserved threshold eventually stays above it. -/
 theorem eventually_ge_of_drift_below {u : ℕ → ℝ} {threshold step : ℝ}
