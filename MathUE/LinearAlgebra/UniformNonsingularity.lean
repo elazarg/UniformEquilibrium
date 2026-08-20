@@ -20,32 +20,77 @@ compact family used here.
 noncomputable section
 
 open Set
-open scoped Matrix.Norms.L2Operator
+open Filter
 
 namespace Math.LinearAlgebra
+
+/-- A nonsingular real matrix remains uniformly separated from singularity
+under sufficiently small entrywise perturbations. -/
+theorem exists_entrywise_perturbation_radius_det_lower_bound
+    {n : Type} [Fintype n] [DecidableEq n]
+    (A : Matrix n n ℝ) (hdet : A.det ≠ 0) :
+    ∃ η : ℝ, 0 < η ∧ ∀ d : Matrix n n ℝ,
+      (∀ i j, |d i j| ≤ η) → |A.det| / 2 < |(A + d).det| := by
+  by_contra hη
+  push Not at hη
+  have hchoice (k : ℕ) :
+      ∃ d : Matrix n n ℝ,
+        (∀ i j, |d i j| ≤ ((k : ℝ) + 1)⁻¹) ∧
+          |(A + d).det| ≤ |A.det| / 2 := by
+    exact hη (((k : ℝ) + 1)⁻¹) (by positivity)
+  choose d hd hbad using hchoice
+  have hscale : Tendsto (fun k : ℕ => ((k : ℝ) + 1)⁻¹)
+      atTop (nhds 0) := by
+    simpa only [one_div] using
+      (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+  have hdTendsto : Tendsto d atTop (nhds 0) := by
+    apply tendsto_pi_nhds.2
+    intro i
+    apply tendsto_pi_nhds.2
+    intro j
+    have hcoordinate : Tendsto (fun k => d k i j) atTop (nhds 0) :=
+      (tendsto_zero_iff_abs_tendsto_zero _).2 <|
+        squeeze_zero (fun k => abs_nonneg (d k i j))
+          (fun k => hd k i j) hscale
+    convert hcoordinate using 1
+    simp
+  have hsumTendsto : Tendsto (fun k => A + d k) atTop (nhds A) := by
+    simpa only [add_zero] using tendsto_const_nhds.add hdTendsto
+  have hdetTendsto :
+      Tendsto (fun k => |(A + d k).det|) atTop (nhds |A.det|) :=
+    (continuous_abs.comp continuous_id.matrix_det).continuousAt.tendsto.comp
+      hsumTendsto
+  have hlimit : |A.det| ≤ |A.det| / 2 :=
+    isClosed_Iic.mem_of_tendsto hdetTendsto
+      (Filter.Eventually.of_forall hbad)
+  have hpositive : 0 < |A.det| := abs_pos.mpr hdet
+  linarith
+
+open scoped Matrix.Norms.L2Operator
 
 /-- Bounded entries and a determinant separated from zero give one common
 lower Euclidean bound for matrix-vector multiplication. -/
 theorem exists_uniform_mulVec_lower_bound_of_entry_det_bounds
-    {n : ℕ} {B ε : ℝ} (hε : 0 < ε) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ A : Matrix (Fin n) (Fin n) ℝ,
+    {n : Type} [Fintype n] [DecidableEq n]
+    {B ε : ℝ} (hε : 0 < ε) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ A : Matrix n n ℝ,
       (∀ i j, |A i j| ≤ B) → ε ≤ |A.det| →
-      ∀ v : Fin n → ℝ,
+      ∀ v : n → ℝ,
         δ * ‖WithLp.toLp 2 v‖ ≤
           ‖WithLp.toLp 2 (Matrix.mulVec A v)‖ := by
   classical
-  let box : Set (Matrix (Fin n) (Fin n) ℝ) :=
+  let box : Set (Matrix n n ℝ) :=
     Set.univ.pi fun _ => Set.univ.pi fun _ => Set.Icc (-B) B
-  let family : Set (Matrix (Fin n) (Fin n) ℝ) :=
+  let family : Set (Matrix n n ℝ) :=
     box ∩ {A | ε ≤ |A.det|}
   have hbox : IsCompact box := by
     exact isCompact_univ_pi fun _ =>
       isCompact_univ_pi fun _ => isCompact_Icc
-  have hdetClosed : IsClosed {A : Matrix (Fin n) (Fin n) ℝ | ε ≤ |A.det|} := by
+  have hdetClosed : IsClosed {A : Matrix n n ℝ | ε ≤ |A.det|} := by
     exact isClosed_Ici.preimage (continuous_abs.comp continuous_id.matrix_det)
   have hfamily : IsCompact family := hbox.inter_right hdetClosed
   by_cases hnonempty : family.Nonempty
-  · have hinverse : ContinuousOn (fun A : Matrix (Fin n) (Fin n) ℝ => ‖A⁻¹‖) family := by
+  · have hinverse : ContinuousOn (fun A : Matrix n n ℝ => ‖A⁻¹‖) family := by
       intro A hA
       have hdet : A.det ≠ 0 := by
         have habs : ε ≤ |A.det| := hA.2
