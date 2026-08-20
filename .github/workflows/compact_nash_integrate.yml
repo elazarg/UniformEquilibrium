@@ -1,0 +1,92 @@
+name: Integrate compact Nash theorem
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_integrate.yml
+      - Literature/Sorin1986/CompactNashStage5.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Require validated theorem
+        run: test -f Literature/Sorin1986/CompactNashStage5.ok
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Integrate proof into paper
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          scratch = Path('Literature/Sorin1986/CompactNashScratch.lean').read_text()
+          start = scratch.index('namespace CompactNash\n')
+          end = scratch.rindex('\nend CompactNash') + len('\nend CompactNash')
+          body = scratch[start:end] + '\n\n'
+          main_path = Path('Literature/Sorin1986.lean')
+          main = main_path.read_text()
+          theorem_marker = '/-! Property (2) is Glicksberg--Fan Nash existence plus closedness of the\n'
+          assert theorem_marker in main
+          if 'namespace CompactNash\n' not in main:
+              main = main.replace(theorem_marker, body + theorem_marker, 1)
+          old = '''theorem paper_property_2 (G : CompactContinuousGame) :
+              G.equilibriumPayoffs.Nonempty ∧ IsCompact G.equilibriumPayoffs := by
+            sorry'''
+          if old not in main:
+              import re
+              pattern = re.compile(r'''theorem paper_property_2 \(G : CompactContinuousGame\) :\n\s+G\.equilibriumPayoffs\.Nonempty ∧ IsCompact G\.equilibriumPayoffs := by\n\s+sorry''')
+              assert pattern.search(main)
+              main = pattern.sub('''theorem paper_property_2 (G : CompactContinuousGame) :
+              G.equilibriumPayoffs.Nonempty ∧ IsCompact G.equilibriumPayoffs := by
+            exact CompactNash.compact_nash_existence G''', main, count=1)
+          else:
+              main = main.replace(old, '''theorem paper_property_2 (G : CompactContinuousGame) :
+              G.equilibriumPayoffs.Nonempty ∧ IsCompact G.equilibriumPayoffs := by
+            exact CompactNash.compact_nash_existence G''', 1)
+          main_path.write_text(main)
+          PY
+      - name: Compile exact paper source
+        run: |
+          lake env lean Literature/Sorin1986.lean
+          lake env lean Literature/Sorin1986/SequenceForm.lean
+      - name: Repository checks
+        run: |
+          python3 scripts/check_docs.py
+          python3 scripts/check_import_graph.py
+          python3 scripts/check_trust.py
+          lake build
+      - name: Remove development scaffolding
+        run: |
+          rm -f Literature/Sorin1986/CompactNashScratch.lean
+          rm -f Literature/Sorin1986/CompactNashStage*.log
+          rm -f Literature/Sorin1986/CompactNashStage*.ok
+          rm -f .github/workflows/compact_nash_scratch.yml
+          rm -f .github/workflows/compact_nash_stage1.yml
+          rm -f .github/workflows/compact_nash_stage1_fix.yml
+          rm -f .github/workflows/compact_nash_stage2.yml
+          rm -f .github/workflows/compact_nash_stage3.yml
+          rm -f .github/workflows/compact_nash_stage4.yml
+          rm -f .github/workflows/compact_nash_stage5.yml
+          rm -f .github/workflows/compact_nash_integrate.yml
+      - name: Commit final source
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add -A
+          git commit -m 'Prove general compact Nash existence'
+          git push origin HEAD:agent/promote-sorin1986
