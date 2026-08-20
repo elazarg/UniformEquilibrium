@@ -37,7 +37,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open Filter Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -184,16 +184,18 @@ theorem quitWeight_mul_pureTimeEdge_le
 
 /-! ## The supremum telescope -/
 
-/-- **The active telescope** (Solan and Vieille, *Quitting games*, Math.
-Oper. Res. 26 (2001), Section 2.5.4).  Along a root sequence with a
-per-stage absorption floor whose every row is one-stage `εr`-perfect against
-the plan's own continuation, a player for whom the sequence is `ρ`-active
-gains at most `3 εr / ρ` by any deterministic pure-time deviation. -/
-theorem quittingRootSequencePureTimeTerminalValue_le_of_active
+/-- **The active telescope with vanishing tails** (Solan and Vieille,
+*Quitting games*, Math. Oper. Res. 26 (2001), Section 2.5.4). Along a root
+sequence whose survival probability vanishes from every restart and whose
+rows are one-stage `εr`-perfect against the plan's own continuation, a player
+for whom the sequence is `ρ`-active gains at most `3 εr / ρ` by any
+deterministic pure-time deviation. -/
+theorem quittingRootSequencePureTimeTerminalValue_le_of_active_of_tendsto
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (roots : ℕ → ι → PMF Bool) (who : ι)
-    {εr δ ρ : ℝ} (hεr : 0 ≤ εr) (hδ0 : 0 < δ) (hρ0 : 0 < ρ)
-    (hfloor : ∀ n, δ ≤ quittingRootAbsorptionMass (roots n))
+    {εr ρ : ℝ} (hεr : 0 ≤ εr) (hρ0 : 0 < ρ)
+    (hvanish : ∀ start,
+      Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0))
     (hperfect : ∀ n, QuittingRowεPerfect reward
       (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) εr)
     (hactive : ∀ start fuel,
@@ -204,12 +206,6 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_active
     ∀ quitTime : Option ℕ,
       quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0 ≤
         quittingRootSequenceTerminalValue reward roots who 0 + 3 * εr / ρ := by
-  have hδ1 : δ ≤ 1 := by
-    have h0 := hfloor 0
-    have h1 : quittingRootAbsorptionMass (roots 0) ≤ 1 := by
-      unfold quittingRootAbsorptionMass
-      linarith [quittingStationaryContinueMass_nonneg (roots 0)]
-    linarith
   have hρ1 : ρ ≤ 1 := by
     have hstart := hactive 0 0
     simpa using hstart
@@ -392,22 +388,29 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_active
       apply max_le _ hRHS0
       refine le_of_forall_pos_le_add fun slack hslack => ?_
       have hshrunk : 0 < slack / (2 * M + 1) := by positivity
-      obtain ⟨fuel, hfuel⟩ := exists_pow_lt_of_lt_one hshrunk
-        (by linarith : 1 - δ < 1)
+      have heventually : ∀ᶠ fuel in atTop,
+          quittingJointSurvivalWeight roots tstar fuel <
+            slack / (2 * M + 1) :=
+        (tendsto_order.1 (hvanish tstar)).2 _ hshrunk
+      obtain ⟨fuel, hfuel⟩ := eventually_atTop.1 heventually
+      have hsurvivalSmall := hfuel fuel le_rfl
       have hwindow := hestimate tstar fuel (fun offset _ => by simp [hcase])
       have hjsw0 := quittingJointSurvivalWeight_nonneg roots tstar fuel
-      have hjswPow := quittingJointSurvivalWeight_le_pow roots hδ1 hfloor
-        tstar fuel
       have hendGap : quittingRootSequencePureTimeTerminalValue reward roots
           who quitTime (tstar + fuel) -
           quittingRootSequenceTerminalValue reward roots who
             (tstar + fuel) ≤ 2 * M :=
         le_trans (hgapRaw _) (hgapBound _)
+      have hmul := mul_le_mul_of_nonneg_right hsurvivalSmall.le
+        (by linarith : (0 : ℝ) ≤ 2 * M)
+      have hcancel : slack / (2 * M + 1) * (2 * M + 1) = slack :=
+        div_mul_cancel₀ slack (by linarith : (2 : ℝ) * M + 1 ≠ 0)
+      have hshrunk0 : 0 ≤ slack / (2 * M + 1) := hshrunk.le
       have hboundary : quittingJointSurvivalWeight roots tstar fuel *
           (quittingRootSequencePureTimeTerminalValue reward roots who
               quitTime (tstar + fuel) -
             quittingRootSequenceTerminalValue reward roots who
-              (tstar + fuel)) ≤ (1 - δ) ^ fuel * (2 * M) := by
+              (tstar + fuel)) ≤ slack := by
         calc quittingJointSurvivalWeight roots tstar fuel *
             (quittingRootSequencePureTimeTerminalValue reward roots who
                 quitTime (tstar + fuel) -
@@ -415,16 +418,7 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_active
                 (tstar + fuel)) ≤
             quittingJointSurvivalWeight roots tstar fuel * (2 * M) :=
               mul_le_mul_of_nonneg_left hendGap hjsw0
-          _ ≤ (1 - δ) ^ fuel * (2 * M) :=
-              mul_le_mul_of_nonneg_right hjswPow (by linarith)
-      have hpow : (1 - δ) ^ fuel * (2 * M) ≤ slack := by
-        have hcancel : slack / (2 * M + 1) * (2 * M + 1) = slack :=
-          div_mul_cancel₀ slack (by linarith : (2 : ℝ) * M + 1 ≠ 0)
-        have hpow0 : (0 : ℝ) ≤ (1 - δ) ^ fuel := pow_nonneg (by linarith) _
-        have hmul := mul_le_mul_of_nonneg_right hfuel.le
-          (by linarith : (0 : ℝ) ≤ 2 * M)
-        have hshrunk0 : 0 ≤ slack / (2 * M + 1) := hshrunk.le
-        calc (1 - δ) ^ fuel * (2 * M) ≤
+          _ ≤
             slack / (2 * M + 1) * (2 * M) := hmul
           _ ≤ slack := by linarith
       linarith
@@ -478,8 +472,12 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_active
         apply max_le _ hRHS0
         refine le_of_forall_pos_le_add fun slack hslack => ?_
         have hshrunk : 0 < slack / (2 * M + 1) := by positivity
-        obtain ⟨fuel, hfuel⟩ := exists_pow_lt_of_lt_one hshrunk
-          (by linarith : 1 - δ < 1)
+        have heventually : ∀ᶠ fuel in atTop,
+            quittingJointSurvivalWeight roots tstar fuel <
+              slack / (2 * M + 1) :=
+          (tendsto_order.1 (hvanish tstar)).2 _ hshrunk
+        obtain ⟨fuel, hfuel⟩ := eventually_atTop.1 heventually
+        have hsurvivalSmall := hfuel fuel le_rfl
         have hne : ∀ offset, offset < fuel →
             quitTime ≠ some (tstar + offset) := by
           intro offset _ heq
@@ -488,18 +486,21 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_active
           omega
         have hwindow := hestimate tstar fuel hne
         have hjsw0 := quittingJointSurvivalWeight_nonneg roots tstar fuel
-        have hjswPow := quittingJointSurvivalWeight_le_pow roots hδ1 hfloor
-          tstar fuel
         have hendGap : quittingRootSequencePureTimeTerminalValue reward
             roots who quitTime (tstar + fuel) -
             quittingRootSequenceTerminalValue reward roots who
               (tstar + fuel) ≤ 2 * M :=
           le_trans (hgapRaw _) (hgapBound _)
+        have hmul := mul_le_mul_of_nonneg_right hsurvivalSmall.le
+          (by linarith : (0 : ℝ) ≤ 2 * M)
+        have hcancel : slack / (2 * M + 1) * (2 * M + 1) = slack :=
+          div_mul_cancel₀ slack (by linarith : (2 : ℝ) * M + 1 ≠ 0)
+        have hshrunk0 : 0 ≤ slack / (2 * M + 1) := hshrunk.le
         have hboundary : quittingJointSurvivalWeight roots tstar fuel *
             (quittingRootSequencePureTimeTerminalValue reward roots who
                 quitTime (tstar + fuel) -
               quittingRootSequenceTerminalValue reward roots who
-                (tstar + fuel)) ≤ (1 - δ) ^ fuel * (2 * M) := by
+                (tstar + fuel)) ≤ slack := by
           calc quittingJointSurvivalWeight roots tstar fuel *
               (quittingRootSequencePureTimeTerminalValue reward roots who
                   quitTime (tstar + fuel) -
@@ -507,16 +508,7 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_active
                   (tstar + fuel)) ≤
               quittingJointSurvivalWeight roots tstar fuel * (2 * M) :=
                 mul_le_mul_of_nonneg_left hendGap hjsw0
-            _ ≤ (1 - δ) ^ fuel * (2 * M) :=
-                mul_le_mul_of_nonneg_right hjswPow (by linarith)
-        have hpow : (1 - δ) ^ fuel * (2 * M) ≤ slack := by
-          have hcancel : slack / (2 * M + 1) * (2 * M + 1) = slack :=
-            div_mul_cancel₀ slack (by linarith : (2 : ℝ) * M + 1 ≠ 0)
-          have hpow0 : (0 : ℝ) ≤ (1 - δ) ^ fuel := pow_nonneg (by linarith) _
-          have hmul := mul_le_mul_of_nonneg_right hfuel.le
-            (by linarith : (0 : ℝ) ≤ 2 * M)
-          have hshrunk0 : 0 ≤ slack / (2 * M + 1) := hshrunk.le
-          calc (1 - δ) ^ fuel * (2 * M) ≤
+            _ ≤
               slack / (2 * M + 1) * (2 * M) := hmul
             _ ≤ slack := by linarith
         linarith
@@ -532,7 +524,68 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_active
   have hzero := le_trans (hgapRaw 0) (le_trans (hsupAt 0) hsupSolve)
   linarith
 
+/-- A uniform positive absorption floor is a sufficient, but not necessary,
+way to discharge the vanishing-tail hypothesis of the active telescope. -/
+theorem quittingRootSequencePureTimeTerminalValue_le_of_active
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    {εr δ ρ : ℝ} (hεr : 0 ≤ εr) (hδ0 : 0 < δ) (hρ0 : 0 < ρ)
+    (hfloor : ∀ n, δ ≤ quittingRootAbsorptionMass (roots n))
+    (hperfect : ∀ n, QuittingRowεPerfect reward
+      (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) εr)
+    (hactive : ∀ start fuel,
+      ρ ≤ quittingJointSurvivalWeight roots start fuel +
+        ∑ t ∈ Finset.range fuel,
+          quittingJointSurvivalWeight roots start t *
+            quittingRootOpponentAbsorptionMass (roots (start + t)) who) :
+    ∀ quitTime : Option ℕ,
+      quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0 ≤
+        quittingRootSequenceTerminalValue reward roots who 0 + 3 * εr / ρ := by
+  have hδ1 : δ ≤ 1 := by
+    have h0 := hfloor 0
+    have h1 : quittingRootAbsorptionMass (roots 0) ≤ 1 := by
+      unfold quittingRootAbsorptionMass
+      linarith [quittingStationaryContinueMass_nonneg (roots 0)]
+    linarith
+  have hbase0 : 0 ≤ 1 - δ := by linarith
+  have hbase1 : 1 - δ < 1 := by linarith
+  have hvanish : ∀ start,
+      Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0) := by
+    intro start
+    exact squeeze_zero
+      (fun fuel ↦ quittingJointSurvivalWeight_nonneg roots start fuel)
+      (fun fuel ↦ quittingJointSurvivalWeight_le_pow roots hδ1 hfloor start fuel)
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hbase0 hbase1)
+  exact quittingRootSequencePureTimeTerminalValue_le_of_active_of_tendsto
+    roots who hεr hρ0 hvanish hperfect hactive
+
 /-! ## Global activity gives the sequence equilibrium -/
+
+/-- Vanishing survival from every restart, perfect rows, and `ρ`-activity for
+every player imply a global `3 εr / ρ` root-sequence equilibrium. -/
+theorem isεQuittingRootSequenceNash_of_active_of_tendsto
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (roots : ℕ → ι → PMF Bool)
+    {εr ρ : ℝ} (hεr : 0 ≤ εr) (hρ0 : 0 < ρ)
+    (hvanish : ∀ start,
+      Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0))
+    (hperfect : ∀ n, QuittingRowεPerfect reward
+      (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) εr)
+    (hactive : ∀ (who : ι) (start fuel : ℕ),
+      ρ ≤ quittingJointSurvivalWeight roots start fuel +
+        ∑ t ∈ Finset.range fuel,
+          quittingJointSurvivalWeight roots start t *
+            quittingRootOpponentAbsorptionMass (roots (start + t)) who) :
+    IsεQuittingRootSequenceNash reward (3 * εr / ρ) roots := by
+  intro who hazard
+  refine le_of_forall_pos_le_add fun slack hslack => ?_
+  obtain ⟨quitTime, hquitTime⟩ :=
+    exists_quittingRootSequencePureTimeTerminalValue_ge_sub reward roots who
+      hazard hslack
+  have hpure :=
+    quittingRootSequencePureTimeTerminalValue_le_of_active_of_tendsto roots
+      who hεr hρ0 hvanish hperfect (hactive who) quitTime
+  linarith
 
 /-- A root sequence with a per-stage absorption floor, perfect rows, and
 `ρ`-activity for every player is a global `3 εr / ρ` root-sequence

@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame Filter Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -109,6 +109,77 @@ theorem isεAsymptoticNash_quittingRootSequenceProfile_of_active
     simpa [hsurvivalShift, shifted, Nat.add_assoc] using h
   have hnash := isεQuittingRootSequenceNash_of_active shifted hεr hδ0 hρ0
     hfloorShift hperfectShift hactiveShift
+  have hprofile :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash reward
+      (3 * εr / ρ) shifted).1 hnash
+  rw [quittingRootSequenceProfile_eq_shift]
+  simpa [shifted] using hprofile
+
+/-- Global activity and vanishing survival from every restart certify every
+tail, without requiring a uniform one-stage absorption floor. -/
+theorem isεAsymptoticNash_quittingRootSequenceProfile_of_active_of_tendsto
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (roots : ℕ → ι → PMF Bool)
+    {εr ρ : ℝ} (hεr : 0 ≤ εr) (hρ0 : 0 < ρ)
+    (hvanish : ∀ start,
+      Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0))
+    (hperfect : ∀ n, QuittingRowεPerfect reward
+      (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) εr)
+    (hactive : ∀ (who : ι) (start fuel : ℕ),
+      ρ ≤ quittingJointSurvivalWeight roots start fuel +
+        ∑ t ∈ Finset.range fuel,
+          quittingJointSurvivalWeight roots start t *
+            quittingRootOpponentAbsorptionMass (roots (start + t)) who)
+    (start : ℕ) :
+    (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) (3 * εr / ρ)
+      (quittingRootSequenceProfile reward roots start) := by
+  let shifted : ℕ → ι → PMF Bool := fun n => roots (start + n)
+  have hsurvivalShift : ∀ s fuel,
+      quittingJointSurvivalWeight shifted s fuel =
+        quittingJointSurvivalWeight roots (start + s) fuel := by
+    intro s fuel
+    rw [quittingJointSurvivalWeight_eq_prod,
+      quittingJointSurvivalWeight_eq_prod]
+    apply Finset.prod_congr rfl
+    intro offset _
+    simp [shifted, Nat.add_assoc]
+  have htailShift : ∀ s,
+      quittingRootSequenceTailVector reward shifted s =
+        quittingRootSequenceTailVector reward roots (start + s) := by
+    intro s
+    have hprofile : quittingRootSequenceProfile reward shifted s =
+        quittingRootSequenceProfile reward roots (start + s) := by
+      funext player time history
+      simp [quittingRootSequenceProfile, shifted, Nat.add_assoc]
+    funext who
+    unfold quittingRootSequenceTailVector quittingRootSequenceTerminalValue
+    rw [hprofile]
+  have hvanishShift : ∀ s,
+      Tendsto (quittingJointSurvivalWeight shifted s) atTop (nhds 0) := by
+    intro s
+    have heq : quittingJointSurvivalWeight shifted s =
+        quittingJointSurvivalWeight roots (start + s) := by
+      funext fuel
+      exact hsurvivalShift s fuel
+    rw [heq]
+    exact hvanish (start + s)
+  have hperfectShift : ∀ n, QuittingRowεPerfect reward
+      (quittingRootSequenceTailVector reward shifted (n + 1))
+      (shifted n) εr := by
+    intro n
+    rw [htailShift]
+    simpa [shifted, Nat.add_assoc] using hperfect (start + n)
+  have hactiveShift : ∀ (who : ι) (s fuel : ℕ),
+      ρ ≤ quittingJointSurvivalWeight shifted s fuel +
+        ∑ t ∈ Finset.range fuel,
+          quittingJointSurvivalWeight shifted s t *
+            quittingRootOpponentAbsorptionMass (shifted (s + t)) who := by
+    intro who s fuel
+    have h := hactive who (start + s) fuel
+    simpa [hsurvivalShift, shifted, Nat.add_assoc] using h
+  have hnash := isεQuittingRootSequenceNash_of_active_of_tendsto shifted
+    hεr hρ0 hvanishShift hperfectShift hactiveShift
   have hprofile :=
     (isεQuittingRootSequenceNash_iff_isεAsymptoticNash reward
       (3 * εr / ρ) shifted).1 hnash
@@ -307,17 +378,19 @@ theorem exists_quietWindow_anchor
       2 * (ρ / (1 - ρ)) + ρ / (1 - ρ) := by linarith
     _ = 3 * ρ / (1 - ρ) := by ring
 
-/-- **Quantitative subgame dichotomy.** For every target tolerance, a small
-enough row tolerance makes every uniformly absorbing perfect root sequence
-either an approximate terminal Nash profile after every restart or yields a
-stationary solo repair. This is the production form of the activity argument
-in Solan--Vieille's Propositions 2.4 and 2.6. -/
-theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
+/-- **Quantitative subgame dichotomy with terminating tails.** For every
+target tolerance, a small enough row tolerance makes every perfect root
+sequence whose survival vanishes after every restart either an approximate
+terminal Nash profile after every restart or yields a stationary solo repair.
+This is the production form of the activity argument in Solan--Vieille's
+Lemmas 2.2 and 2.6. -/
+theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference_of_tendsto
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (hunit : QuittingUnitSoloExit reward) :
     ∀ εout : ℝ, 0 < εout → ∃ εrow : ℝ, 0 < εrow ∧
-      ∀ (roots : ℕ → ι → PMF Bool) (δ : ℝ), 0 < δ →
-        (∀ n, δ ≤ quittingRootAbsorptionMass (roots n)) →
+      ∀ (roots : ℕ → ι → PMF Bool),
+        (∀ start,
+          Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0)) →
         (∀ n, QuittingRowεPerfect reward
           (quittingRootSequenceTailVector reward roots (n + 1)) (roots n)
           εrow) →
@@ -369,7 +442,7 @@ theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
     nlinarith
   refine ⟨min (εout / 2) (εout * ρ / 3), lt_min (by positivity)
     (by positivity), ?_⟩
-  intro roots δ hδ0 hfloor hperfect
+  intro roots hvanish hperfect
   set εrow := min (εout / 2) (εout * ρ / 3) with hεrowdef
   have hεrow0 : 0 < εrow := lt_min (by positivity) (by positivity)
   by_cases hactive : ∀ (who : ι) (start fuel : ℕ),
@@ -382,8 +455,8 @@ theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
       rw [div_le_iff₀ hρ0]
       nlinarith
     exact Or.inl fun start =>
-      (isεAsymptoticNash_quittingRootSequenceProfile_of_active roots
-        hεrow0.le hδ0 hρ0 hfloor hperfect hactive start).mono hsmall
+      (isεAsymptoticNash_quittingRootSequenceProfile_of_active_of_tendsto
+        roots hεrow0.le hρ0 hvanish hperfect hactive start).mono hsmall
   · push Not at hactive
     obtain ⟨who, start, fuel, hquiet⟩ := hactive
     obtain ⟨anchor, window, hwindow, hanchorPos, hη'⟩ :=
@@ -395,6 +468,48 @@ theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
     have hsmall : εrow + 4 * M * η ≤ εout := by linarith
     exact Or.inr ⟨quittingSoloStationaryRoot who (roots anchor who),
       hrepair.mono hsmall⟩
+
+/-- A uniform positive one-stage absorption floor implies the terminating-tail
+hypothesis of the quantitative subgame dichotomy. -/
+theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward) :
+    ∀ εout : ℝ, 0 < εout → ∃ εrow : ℝ, 0 < εrow ∧
+      ∀ (roots : ℕ → ι → PMF Bool) (δ : ℝ), 0 < δ →
+        (∀ n, δ ≤ quittingRootAbsorptionMass (roots n)) →
+        (∀ n, QuittingRowεPerfect reward
+          (quittingRootSequenceTailVector reward roots (n + 1)) (roots n)
+          εrow) →
+        (∀ start,
+          (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) εout
+            (quittingRootSequenceProfile reward roots start)) ∨
+          ∃ root : ι → PMF Bool,
+            (quittingGame reward).IsεAsymptoticNash
+              (quittingTerminalPayoff reward) εout
+              (quittingStationaryProfile reward root) := by
+  intro εout hεout
+  obtain ⟨εrow, hεrow, hdichotomy⟩ :=
+    quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference_of_tendsto
+      hunit εout hεout
+  refine ⟨εrow, hεrow, ?_⟩
+  intro roots δ hδ0 hfloor hperfect
+  have hδ1 : δ ≤ 1 := by
+    have h0 := hfloor 0
+    have h1 : quittingRootAbsorptionMass (roots 0) ≤ 1 := by
+      unfold quittingRootAbsorptionMass
+      linarith [quittingStationaryContinueMass_nonneg (roots 0)]
+    linarith
+  have hbase0 : 0 ≤ 1 - δ := by linarith
+  have hbase1 : 1 - δ < 1 := by linarith
+  have hvanish : ∀ start,
+      Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0) := by
+    intro start
+    exact squeeze_zero
+      (fun fuel ↦ quittingJointSurvivalWeight_nonneg roots start fuel)
+      (fun fuel ↦ quittingJointSurvivalWeight_le_pow roots hδ1 hfloor start fuel)
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hbase0 hbase1)
+  exact hdichotomy roots hvanish hperfect
 
 /-- **Perfect-sequence extraction under unit solo exit.** A uniformly
 absorbing perfect sequence yields a terminal approximate equilibrium. Capped

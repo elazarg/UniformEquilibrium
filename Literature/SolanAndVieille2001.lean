@@ -1156,6 +1156,144 @@ theorem proposition2_3 : Proposition2_3 (ι := ι) := by
     convert htransfer using 1
     ring
 
+/-- The paper's support-by-support formulation of one-shot perfection is
+equivalent to the endpoint-and-mixture formulation used by the production
+activity argument. -/
+private theorem quittingRowεPerfect_of_oneShotPerfect
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {tail : Payoff ι} {ε : ℝ} {root : ι → PMF Bool}
+    (hperfect : oneShotPerfectEpsilonEquilibrium reward tail ε root) :
+    QuittingRowεPerfect reward tail root ε := by
+  intro who
+  have hmass := quittingRoot_continueProbability_add_quitProbability root who
+  have hmass' : (root who true).toReal + (root who false).toReal = 1 := by
+    linarith
+  have hfalse0 := ENNReal.toReal_nonneg (a := root who false)
+  have htrue0 := ENNReal.toReal_nonneg (a := root who true)
+  have hmix := quittingRootSuccessorPayoff_eq_endpointMix reward tail root who
+  have hpure (action alternative : Bool) (hsupport : root who action ≠ 0) :
+      quittingRootExpectedPayoff reward tail
+          (Function.update root who (PMF.pure alternative)) who ≤
+        quittingRootExpectedPayoff reward tail
+            (Function.update root who (PMF.pure action)) who + ε :=
+    hperfect who action hsupport alternative
+  have haltUpper (alternative : Bool) :
+      quittingRootExpectedPayoff reward tail
+          (Function.update root who (PMF.pure alternative)) who ≤
+        quittingRootSuccessorPayoff reward tail root who + ε := by
+    by_cases hfalse : root who false = 0
+    · have htrue : root who true ≠ 0 := by
+        intro hzero
+        rw [hfalse, hzero] at hmass
+        norm_num at hmass
+      have hpure' := hpure true alternative htrue
+      change quittingRootExpectedPayoff reward tail
+          (Function.update root who (PMF.pure alternative)) who ≤
+        quittingRootQuitPayoff reward tail root who + ε at hpure'
+      rw [hfalse] at hmix hmass
+      simp only [ENNReal.toReal_zero, zero_add, zero_mul] at hmix hmass
+      have htrueOne : (root who true).toReal = 1 := by linarith
+      rw [htrueOne, one_mul] at hmix
+      rw [hmix]
+      simpa using hpure'
+    · by_cases htrue : root who true = 0
+      · have hpure' := hpure false alternative hfalse
+        change quittingRootExpectedPayoff reward tail
+            (Function.update root who (PMF.pure alternative)) who ≤
+          quittingRootContinuePayoff reward tail root who + ε at hpure'
+        rw [htrue] at hmix hmass
+        simp only [ENNReal.toReal_zero, add_zero, zero_mul] at hmix hmass
+        have hfalseOne : (root who false).toReal = 1 := by linarith
+        rw [hfalseOne, one_mul] at hmix
+        rw [hmix]
+        simpa using hpure'
+      · have hfromFalse := hpure false alternative hfalse
+        have hfromTrue := hpure true alternative htrue
+        change quittingRootExpectedPayoff reward tail
+            (Function.update root who (PMF.pure alternative)) who ≤
+          quittingRootContinuePayoff reward tail root who + ε at hfromFalse
+        change quittingRootExpectedPayoff reward tail
+            (Function.update root who (PMF.pure alternative)) who ≤
+          quittingRootQuitPayoff reward tail root who + ε at hfromTrue
+        rw [hmix]
+        have hfalseScale := mul_le_mul_of_nonneg_left hfromFalse hfalse0
+        have htrueScale := mul_le_mul_of_nonneg_left hfromTrue htrue0
+        calc
+          quittingRootExpectedPayoff reward tail
+                (Function.update root who (PMF.pure alternative)) who =
+              (root who false).toReal *
+                  quittingRootExpectedPayoff reward tail
+                    (Function.update root who (PMF.pure alternative)) who +
+                (root who true).toReal *
+                  quittingRootExpectedPayoff reward tail
+                    (Function.update root who (PMF.pure alternative)) who := by
+            rw [← add_mul, hmass, one_mul]
+          _ ≤ (root who false).toReal *
+                  (quittingRootContinuePayoff reward tail root who + ε) +
+                (root who true).toReal *
+                  (quittingRootQuitPayoff reward tail root who + ε) :=
+            add_le_add hfalseScale htrueScale
+          _ = (root who true).toReal *
+                  quittingRootQuitPayoff reward tail root who +
+                (root who false).toReal *
+                  quittingRootContinuePayoff reward tail root who + ε := by
+            calc
+              _ = (root who true).toReal *
+                      quittingRootQuitPayoff reward tail root who +
+                    (root who false).toReal *
+                      quittingRootContinuePayoff reward tail root who +
+                    ((root who false).toReal +
+                      (root who true).toReal) * ε := by ring
+              _ = _ := by rw [hmass, one_mul]
+  have hsupportLower (action : Bool) (hsupport : root who action ≠ 0) :
+      quittingRootSuccessorPayoff reward tail root who - ε ≤
+        quittingRootExpectedPayoff reward tail
+          (Function.update root who (PMF.pure action)) who := by
+    have hfalse := hpure action false hsupport
+    have htrue := hpure action true hsupport
+    change quittingRootContinuePayoff reward tail root who ≤
+        quittingRootExpectedPayoff reward tail
+          (Function.update root who (PMF.pure action)) who + ε at hfalse
+    change quittingRootQuitPayoff reward tail root who ≤
+        quittingRootExpectedPayoff reward tail
+          (Function.update root who (PMF.pure action)) who + ε at htrue
+    rw [hmix]
+    have hfalseScale := mul_le_mul_of_nonneg_left hfalse hfalse0
+    have htrueScale := mul_le_mul_of_nonneg_left htrue htrue0
+    have hbound :
+        (root who true).toReal *
+              quittingRootQuitPayoff reward tail root who +
+            (root who false).toReal *
+              quittingRootContinuePayoff reward tail root who ≤
+          quittingRootExpectedPayoff reward tail
+              (Function.update root who (PMF.pure action)) who + ε := by
+      calc
+        (root who true).toReal *
+              quittingRootQuitPayoff reward tail root who +
+            (root who false).toReal *
+              quittingRootContinuePayoff reward tail root who ≤
+            (root who true).toReal *
+                (quittingRootExpectedPayoff reward tail
+                  (Function.update root who (PMF.pure action)) who + ε) +
+              (root who false).toReal *
+                (quittingRootExpectedPayoff reward tail
+                  (Function.update root who (PMF.pure action)) who + ε) :=
+          add_le_add htrueScale hfalseScale
+        _ = quittingRootExpectedPayoff reward tail
+              (Function.update root who (PMF.pure action)) who + ε := by
+          calc
+            _ = ((root who true).toReal + (root who false).toReal) *
+                (quittingRootExpectedPayoff reward tail
+                  (Function.update root who (PMF.pure action)) who + ε) := by
+              ring
+            _ = _ := by rw [hmass', one_mul]
+    linarith
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · exact haltUpper true
+  · exact haltUpper false
+  · exact fun hsupport ↦ hsupportLower true hsupport
+  · exact fun hsupport ↦ hsupportLower false hsupport
+
 /-- **Proposition 2.4.** Under A.1 and for sufficiently small `ε`, a profile
 with terminating tails and rows that are perfect `ε`-equilibria against the
 actual next-tail values is either a subgame-perfect `ε^(1/6)`-equilibrium or
@@ -1177,7 +1315,113 @@ def Proposition2_4 : Prop :=
                 (stationaryProfile reward root)
 
 theorem proposition2_4 : Proposition2_4 (ι := ι) := by
-  sorry
+  classical
+  intro reward hunit
+  cases isEmpty_or_nonempty ι with
+  | inl hempty =>
+      letI : IsEmpty ι := hempty
+      refine ⟨1, by norm_num, ?_⟩
+      intro roots ε _ _ _ _
+      left
+      intro start who
+      exact isEmptyElim who
+  | inr hnonempty =>
+      letI : Nonempty ι := hnonempty
+      let M := quittingRewardBound reward
+      have hM : 0 ≤ M := quittingRewardBound_nonneg reward
+      let k := min (1 / 2 : ℝ) (1 / (48 * M + 1))
+      have hdenom : 0 < 48 * M + 1 := by positivity
+      have hk : 0 < k := by
+        dsimp only [k]
+        exact lt_min (by norm_num) (by positivity)
+      refine ⟨k ^ 6, pow_pos hk 6, ?_⟩
+      intro roots ε hε hεsmall hterminate hrows
+      let x := ε ^ (1 / 6 : ℝ)
+      have hx : 0 < x := Real.rpow_pos_of_pos hε _
+      have hxpow : x ^ 6 = ε := by
+        dsimp only [x]
+        convert Real.rpow_inv_natCast_pow hε.le
+          (by norm_num : (6 : ℕ) ≠ 0) using 1
+        norm_num
+      have hxk : x < k := by
+        apply lt_of_pow_lt_pow_left₀ 6 hk.le
+        rwa [hxpow]
+      have hxhalf : x < 1 / 2 :=
+        lt_of_lt_of_le hxk (min_le_left _ _)
+      have hxdenom : x < 1 / (48 * M + 1) :=
+        lt_of_lt_of_le hxk (min_le_right _ _)
+      have hxscaled : (48 * M + 1) * x < 1 := by
+        rw [lt_div_iff₀ hdenom] at hxdenom
+        simpa [mul_comm] using hxdenom
+      have hvanish : ∀ start,
+          Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0) := by
+        intro start
+        have hlimit : quittingJointSurvivalLimit roots start = 0 := by
+          rw [← quittingLiveMassLimit_rootSequence_eq_jointSurvivalLimit]
+          exact hterminate start
+        simpa [hlimit] using tendsto_quittingJointSurvivalLimit roots start
+      have hperfect : ∀ time, QuittingRowεPerfect reward
+          (quittingRootSequenceTailVector reward roots (time + 1))
+          (roots time) ε := fun time ↦
+        quittingRowεPerfect_of_oneShotPerfect (hrows time)
+      let ρ := x ^ 2
+      have hρ : 0 < ρ := by positivity
+      have hρhalf : ρ ≤ 1 / 2 := by
+        dsimp only [ρ]
+        nlinarith [sq_nonneg x]
+      by_cases hactive : ∀ (who : ι) (start fuel : ℕ),
+          ρ ≤ quittingJointSurvivalWeight roots start fuel +
+            ∑ time ∈ Finset.range fuel,
+              quittingJointSurvivalWeight roots start time *
+                quittingRootOpponentAbsorptionMass
+                  (roots (start + time)) who
+      · left
+        intro start
+        have hnash :=
+          isεAsymptoticNash_quittingRootSequenceProfile_of_active_of_tendsto
+            roots hε.le hρ hvanish hperfect hactive start
+        apply hnash.mono
+        change 3 * ε / ρ ≤ x
+        rw [← hxpow]
+        dsimp only [ρ]
+        field_simp [hx.ne']
+        nlinarith [sq_nonneg x]
+      · push Not at hactive
+        obtain ⟨who, start, fuel, hquiet⟩ := hactive
+        obtain ⟨anchor, window, hwindow, hanchorPos, hη⟩ :=
+          exists_quietWindow_anchor roots who hρ hρhalf start fuel hquiet
+        let η := 3 * ρ / (1 - ρ)
+        have hone : 0 < 1 - ρ := by linarith
+        have hηle : η ≤ 4 * x ^ 2 := by
+          rw [show η = 3 * ρ / (1 - ρ) from rfl, div_le_iff₀ hone]
+          dsimp only [ρ]
+          have hfactor : 0 ≤ x ^ 2 * (1 - 4 * x ^ 2) := by
+            exact mul_nonneg (sq_nonneg x) (by nlinarith [sq_nonneg x])
+          nlinarith
+        have hMη : M * η ≤ 1 := by
+          have hscale := mul_le_mul_of_nonneg_left hηle hM
+          nlinarith [mul_nonneg hM hx.le, sq_nonneg x]
+        have hreward : ∀ terminal player, |reward terminal player| ≤ M :=
+          abs_reward_le_quittingRewardBound reward
+        have hrepair := isεAsymptoticNash_soloStationary_of_quietWindow
+          hunit roots who anchor window hε.le hreward (hperfect anchor)
+          hanchorPos hwindow (le_trans hη (le_rfl : η ≤ η)) hMη
+        right
+        refine ⟨quittingSoloStationaryRoot who (roots anchor who), ?_⟩
+        apply hrepair.mono
+        change ε + 4 * M * η ≤ x
+        have hx5 : x ^ 5 ≤ (1 / 2 : ℝ) ^ 5 :=
+          pow_le_pow_left₀ hx.le hxhalf.le 5
+        have hx6 : x ^ 6 ≤ x / 2 := by
+          rw [pow_succ']
+          have hscaled := mul_le_mul_of_nonneg_left hx5 hx.le
+          norm_num at hscaled ⊢
+          linarith
+        have hscale := mul_le_mul_of_nonneg_left hηle hM
+        have hMx : 48 * M * x ≤ 1 := by linarith
+        have hMxScaled := mul_le_mul_of_nonneg_right hMx hx.le
+        rw [← hxpow]
+        nlinarith [mul_nonneg hM hx.le, sq_nonneg x]
 
 /-! ### 2.4. The correspondence lemma and noncyclic construction -/
 
