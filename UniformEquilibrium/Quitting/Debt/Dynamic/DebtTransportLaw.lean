@@ -4,17 +4,11 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.DirectedTransport.MaxAffine.Paths
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebt
 
 /-!
-# The exact transport law for the finite dynamic debt
-
-`quittingFiniteDynamicDebt` is defined by a raw Bellman maximum, and
-`QuittingFiniteDynamicDebtChains.lean` records only the coarse upper bound
-`debt ≤ opponentSurvivalWeight * terminalDebt` obtained by discarding local
-strictness.  This file records the exact backward recursion and its
-unrolled closed form, valid under the same one-step residual-zero
-hypothesis used by that bound.
+# Reflected directed transport of finite dynamic debt
 
 At a live stage, define the *stage gap* `quittingStageGap` as how much the
 fixed-opponents quit value exceeds the fixed-opponents continue value under
@@ -24,17 +18,23 @@ collapses to
 `debt start (fuel + 1) = max 0 (continueMass * debt (start + 1) fuel -
   max 0 (stageGap start))`,
 
-which is `quittingFiniteDynamicDebt_succ_eq_max_zero_stageGap`.  Unrolling
-this from the terminal boundary gives the closed form
+This is the action of `quittingDynamicDebtLabel`, a reflected max-affine label
+with floor zero, shift minus the positive part of the stage gap, and slope the
+opponents' Continue mass.  `quittingDynamicDebtLabelList` orders a finite
+window backward from its terminal boundary.  Its composite label acts exactly
+as `quittingFiniteDynamicDebt`, and its path slope is exactly the finite
+opponent-survival weight.
+
+Unrolling the action from the terminal boundary gives the closed form
 
 `debt start fuel = max 0 (survivalWeight * terminalDebt -
   Σ survivalWeight * max 0 stageGap)`,
 
-which is `quittingFiniteDynamicDebt_eq_max_zero_sub_accumulatedStageGaps`.
-Since the subtracted sum is nonnegative, this closed form immediately
-implies the coarse survival-weighted bound; that implication is recorded as
-a consistency check on the closed form, not as a replacement for the
-existing theorem.
+proved by `quittingFiniteDynamicDebt_eq_max_zero_sub_accumulatedStageGaps`.
+The return classification
+`quittingFiniteDynamicDebt_eq_terminalDebt_iff` says that a positive terminal
+debt returns unchanged precisely when every traversed opponent-survival factor
+is one and every traversed stage gap is nonpositive.
 -/
 
 noncomputable section
@@ -56,6 +56,171 @@ def quittingStageGap
   quittingFixedOpponentsQuitValue reward roots who time -
     (quittingFixedOpponentsContinueReward reward roots who time +
       quittingFixedOpponentsContinueMass roots who time * prescribed (time + 1))
+
+/-- The reflected max-affine label of one exact dynamic-debt step. -/
+def quittingDynamicDebtLabel
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (time : ℕ) :
+    Math.MaxAffineTransport.Label :=
+  Math.MaxAffineTransport.reflectedLabel
+    (quittingFixedOpponentsContinueMass roots who time)
+    (max 0 (quittingStageGap reward roots who prescribed time))
+
+@[simp] theorem quittingDynamicDebtLabel_floor
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (time : ℕ) :
+    (quittingDynamicDebtLabel reward roots who prescribed time).floor =
+      (0 : WithBot ℝ) := rfl
+
+@[simp] theorem quittingDynamicDebtLabel_shift
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (time : ℕ) :
+    (quittingDynamicDebtLabel reward roots who prescribed time).shift =
+      -max 0 (quittingStageGap reward roots who prescribed time) := rfl
+
+@[simp] theorem quittingDynamicDebtLabel_slope
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (time : ℕ) :
+    (quittingDynamicDebtLabel reward roots who prescribed time).slope =
+      quittingFixedOpponentsContinueMass roots who time := rfl
+
+@[simp] theorem quittingDynamicDebtLabel_apply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (time : ℕ) (debt : ℝ) :
+    (quittingDynamicDebtLabel reward roots who prescribed time).apply debt =
+      max 0 (quittingFixedOpponentsContinueMass roots who time * debt -
+        max 0 (quittingStageGap reward roots who prescribed time)) := by
+  exact Math.MaxAffineTransport.apply_reflectedLabel _ _ _
+
+theorem quittingDynamicDebtLabel_slope_nonneg
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (time : ℕ) :
+    0 ≤ (quittingDynamicDebtLabel reward roots who prescribed time).slope := by
+  rw [quittingDynamicDebtLabel_slope]
+  exact quittingStationaryContinueMass_nonneg
+    (Function.update (roots time) who (PMF.pure false))
+
+theorem quittingDynamicDebtLabel_slope_le_one
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (time : ℕ) :
+    (quittingDynamicDebtLabel reward roots who prescribed time).slope ≤ 1 := by
+  rw [quittingDynamicDebtLabel_slope]
+  exact quittingStationaryContinueMass_le_one
+    (Function.update (roots time) who (PMF.pure false))
+
+/-- A reflected dynamic-debt step cannot increase a nonnegative debt. -/
+theorem quittingDynamicDebtLabel_apply_le_self
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (time : ℕ) {debt : ℝ}
+    (hdebt : 0 ≤ debt) :
+    (quittingDynamicDebtLabel reward roots who prescribed time).apply debt ≤ debt := by
+  rw [quittingDynamicDebtLabel_apply, max_le_iff]
+  constructor
+  · exact hdebt
+  · have hslope := quittingDynamicDebtLabel_slope_le_one
+      reward roots who prescribed time
+    rw [quittingDynamicDebtLabel_slope] at hslope
+    have hgap : 0 ≤ max 0 (quittingStageGap reward roots who prescribed time) :=
+      le_max_left _ _
+    nlinarith
+
+/-- A positive debt is fixed by one reflected step exactly when opponent
+survival is one and the stage gap is nonpositive. -/
+theorem quittingDynamicDebtLabel_apply_eq_self_iff_of_pos
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (time : ℕ) {debt : ℝ}
+    (hdebt : 0 < debt) :
+    (quittingDynamicDebtLabel reward roots who prescribed time).apply debt = debt ↔
+      quittingFixedOpponentsContinueMass roots who time = 1 ∧
+        quittingStageGap reward roots who prescribed time ≤ 0 := by
+  rw [quittingDynamicDebtLabel_apply]
+  constructor
+  · intro hfixed
+    have hins : 0 <
+        quittingFixedOpponentsContinueMass roots who time * debt -
+          max 0 (quittingStageGap reward roots who prescribed time) := by
+      by_contra hnonpos
+      have hmax : max 0
+          (quittingFixedOpponentsContinueMass roots who time * debt -
+            max 0 (quittingStageGap reward roots who prescribed time)) = 0 :=
+        max_eq_left (le_of_not_gt hnonpos)
+      rw [hmax] at hfixed
+      linarith
+    rw [max_eq_right hins.le] at hfixed
+    have hslope := quittingDynamicDebtLabel_slope_le_one
+      reward roots who prescribed time
+    rw [quittingDynamicDebtLabel_slope] at hslope
+    have hgapNonneg :
+        0 ≤ max 0 (quittingStageGap reward roots who prescribed time) :=
+      le_max_left _ _
+    have hslopeEq : quittingFixedOpponentsContinueMass roots who time = 1 := by
+      nlinarith
+    have hgapEq : max 0 (quittingStageGap reward roots who prescribed time) = 0 := by
+      nlinarith
+    exact ⟨hslopeEq, (le_max_right 0 _).trans_eq hgapEq⟩
+  · rintro ⟨hslope, hgap⟩
+    rw [hslope, max_eq_left hgap, sub_zero, one_mul, max_eq_right hdebt.le]
+
+/-- Backward chronological labels of a dynamic-debt window.  The last game
+stage acts first on the terminal debt. -/
+def quittingDynamicDebtLabelList
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) (start : ℕ) : ℕ →
+    List Math.MaxAffineTransport.Label
+  | 0 => []
+  | fuel + 1 =>
+      quittingDynamicDebtLabelList reward roots who prescribed (start + 1) fuel ++
+        [quittingDynamicDebtLabel reward roots who prescribed start]
+
+theorem quittingDynamicDebtLabelList_slope_nonneg
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) : ∀ start fuel label,
+    label ∈ quittingDynamicDebtLabelList reward roots who prescribed start fuel →
+      0 ≤ label.slope := by
+  intro start fuel
+  induction fuel generalizing start with
+  | zero => simp [quittingDynamicDebtLabelList]
+  | succ fuel ih =>
+      intro label hlabel
+      rw [quittingDynamicDebtLabelList] at hlabel
+      rcases List.mem_append.mp hlabel with htail | hlast
+      · exact ih (start + 1) label htail
+      · simp only [List.mem_singleton] at hlast
+        subst label
+        exact quittingDynamicDebtLabel_slope_nonneg
+          reward roots who prescribed start
+
+/-- The slope of the composite dynamic-debt label is exactly opponent
+survival through the window. -/
+theorem quittingDynamicDebtLabelList_pathSlope
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ) : ∀ start fuel,
+    Math.MaxAffineTransport.Label.pathSlope
+        (quittingDynamicDebtLabelList reward roots who prescribed start fuel) =
+      quittingOpponentSurvivalWeight roots who start fuel := by
+  intro start fuel
+  induction fuel generalizing start with
+  | zero => simp [quittingDynamicDebtLabelList, quittingOpponentSurvivalWeight]
+  | succ fuel ih =>
+      rw [quittingDynamicDebtLabelList,
+        Math.MaxAffineTransport.Label.pathSlope_append,
+        ih (start + 1), quittingOpponentSurvivalWeight_succ_left]
+      simp only [Math.MaxAffineTransport.Label.pathSlope_cons,
+        Math.MaxAffineTransport.Label.pathSlope_nil,
+        quittingDynamicDebtLabel_slope, mul_one]
+      ring
 
 /-- Shifting a common summand `Γ` out of a difference of two maxima. -/
 theorem max_sub_max_eq_of_add_eq (Q Γ y : ℝ) :
@@ -153,6 +318,91 @@ theorem quittingFiniteDynamicDebt_succ_eq_max_zero_stageGap
     _ = max 0 (q * d' - max 0 (quittingStageGap reward roots who prescribed start)) := by
         rw [hgap]
 
+/-- Under residual zero, the exact one-step dynamic-debt recursion is the
+action of its reflected transport label. -/
+theorem quittingFiniteDynamicDebt_succ_eq_label_apply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ)
+    (hprescribed : IsQuittingLivePrescribedValue reward roots who prescribed)
+    {terminalDebt : ℝ} (hterminalDebt : 0 ≤ terminalDebt)
+    (start fuel : ℕ)
+    (hresidual :
+      quittingPrescribedOneStepResidual reward roots who prescribed start = 0) :
+    quittingFiniteDynamicDebt reward roots who prescribed terminalDebt
+        start (fuel + 1) =
+      (quittingDynamicDebtLabel reward roots who prescribed start).apply
+        (quittingFiniteDynamicDebt reward roots who prescribed terminalDebt
+          (start + 1) fuel) := by
+  rw [quittingDynamicDebtLabel_apply]
+  exact quittingFiniteDynamicDebt_succ_eq_max_zero_stageGap
+    reward roots who prescribed hprescribed hterminalDebt start fuel hresidual
+
+/-- Exact finite dynamic debt is the action of the composite reflected label
+of the traversed window. -/
+theorem quittingFiniteDynamicDebt_eq_compList_apply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ)
+    (hprescribed : IsQuittingLivePrescribedValue reward roots who prescribed)
+    {terminalDebt : ℝ} (hterminalDebt : 0 ≤ terminalDebt)
+    (bound : ℕ)
+    (hresidual : ∀ time, time < bound →
+      quittingPrescribedOneStepResidual reward roots who prescribed time = 0) :
+    ∀ start fuel, start + fuel ≤ bound →
+      quittingFiniteDynamicDebt reward roots who prescribed terminalDebt start fuel =
+        (Math.MaxAffineTransport.Label.compList
+          (quittingDynamicDebtLabelList reward roots who prescribed start fuel)).apply
+            terminalDebt := by
+  intro start fuel
+  induction fuel generalizing start with
+  | zero =>
+      intro _
+      simp [quittingDynamicDebtLabelList]
+  | succ fuel ih =>
+      intro hwindow
+      have hstart : start < bound := by omega
+      have htailWindow : start + 1 + fuel ≤ bound := by omega
+      rw [quittingFiniteDynamicDebt_succ_eq_label_apply
+        reward roots who prescribed hprescribed hterminalDebt start fuel
+          (hresidual start hstart)]
+      rw [ih (start + 1) htailWindow, quittingDynamicDebtLabelList]
+      symm
+      apply Math.MaxAffineTransport.Label.apply_compList_append_singleton
+      · intro label hlabel
+        exact quittingDynamicDebtLabelList_slope_nonneg
+          reward roots who prescribed (start + 1) fuel label hlabel
+      · exact quittingDynamicDebtLabel_slope_nonneg
+          reward roots who prescribed start
+
+/-- Coefficient form of exact dynamic-debt transport.  The path floor records
+the last reset, the path shift records accumulated positive stage gaps, and
+the path slope is cumulative opponent survival. -/
+theorem quittingFiniteDynamicDebt_eq_pathCoefficients_apply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ)
+    (hprescribed : IsQuittingLivePrescribedValue reward roots who prescribed)
+    {terminalDebt : ℝ} (hterminalDebt : 0 ≤ terminalDebt)
+    (bound : ℕ)
+    (hresidual : ∀ time, time < bound →
+      quittingPrescribedOneStepResidual reward roots who prescribed time = 0)
+    (start fuel : ℕ) (hwindow : start + fuel ≤ bound) :
+    quittingFiniteDynamicDebt reward roots who prescribed terminalDebt start fuel =
+      (⟨Math.MaxAffineTransport.Label.pathFloor
+          (quittingDynamicDebtLabelList reward roots who prescribed start fuel),
+        Math.MaxAffineTransport.Label.pathShift
+          (quittingDynamicDebtLabelList reward roots who prescribed start fuel),
+        Math.MaxAffineTransport.Label.pathSlope
+          (quittingDynamicDebtLabelList reward roots who prescribed start fuel)⟩ :
+        Math.MaxAffineTransport.Label).apply terminalDebt := by
+  rw [quittingFiniteDynamicDebt_eq_compList_apply
+    reward roots who prescribed hprescribed hterminalDebt bound hresidual
+      start fuel hwindow]
+  exact Math.MaxAffineTransport.Label.apply_compList_eq_pathCoefficients
+    (fun label hlabel ↦ quittingDynamicDebtLabelList_slope_nonneg
+      reward roots who prescribed start fuel label hlabel) terminalDebt
+
 /-- The unrolled exact dynamic-debt law: the transported terminal debt
 minus the accumulated survival-weighted positive stage gaps, floored at
 zero.  Only residual-zero on the traversed window `[start, start + fuel)`
@@ -246,12 +496,10 @@ theorem quittingFiniteDynamicDebt_eq_max_zero_sub_accumulatedStageGaps
       rw [hW, hS]
       ring
 
-/-- **Consistency check.**  The unrolled closed form implies the coarse
-survival-weighted bound of `quittingFiniteDynamicDebt_le_survival_mul_terminalDebt_on`,
+/-- The unrolled closed form implies the coarse survival-weighted bound of
+`quittingFiniteDynamicDebt_le_survival_mul_terminalDebt_on`,
 since the accumulated stage-gap sum being subtracted is nonnegative.  This
-is not a restatement of that theorem: it is proved independently from the
-closed form above, and its agreement with the earlier one-sided theorem is
-the intended faithfulness check on the closed form. -/
+is a direct coefficient consequence of the exact reflected action. -/
 theorem quittingFiniteDynamicDebt_le_survival_mul_terminalDebt_on_of_transportLaw
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
@@ -282,6 +530,115 @@ theorem quittingFiniteDynamicDebt_le_survival_mul_terminalDebt_on_of_transportLa
   apply max_le
   · exact mul_nonneg hweight_nonneg hterminalDebt
   · linarith
+
+/-- Exact reflected transport never exceeds its nonnegative terminal debt. -/
+theorem quittingFiniteDynamicDebt_le_terminalDebt_of_transportLaw
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ)
+    (hprescribed : IsQuittingLivePrescribedValue reward roots who prescribed)
+    {terminalDebt : ℝ} (hterminalDebt : 0 ≤ terminalDebt)
+    (bound : ℕ)
+    (hresidual : ∀ time, time < bound →
+      quittingPrescribedOneStepResidual reward roots who prescribed time = 0)
+    (start fuel : ℕ) (hwindow : start + fuel ≤ bound) :
+    quittingFiniteDynamicDebt reward roots who prescribed terminalDebt
+        start fuel ≤ terminalDebt := by
+  have htransport :=
+    quittingFiniteDynamicDebt_le_survival_mul_terminalDebt_on_of_transportLaw
+      reward roots who prescribed hprescribed hterminalDebt bound hresidual
+        start fuel hwindow
+  have hweight := quittingOpponentSurvivalWeight_le_one roots who start fuel
+  have hweightNonneg := quittingOpponentSurvivalWeight_nonneg roots who start fuel
+  nlinarith
+
+/-- A positive terminal debt returns unchanged across a residual-zero window
+exactly when every traversed opponent-survival factor is one and every stage
+gap is nonpositive. -/
+theorem quittingFiniteDynamicDebt_eq_terminalDebt_iff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι)
+    (prescribed : ℕ → ℝ)
+    (hprescribed : IsQuittingLivePrescribedValue reward roots who prescribed)
+    {terminalDebt : ℝ} (hterminalDebt : 0 < terminalDebt)
+    (bound : ℕ)
+    (hresidual : ∀ time, time < bound →
+      quittingPrescribedOneStepResidual reward roots who prescribed time = 0) :
+    ∀ start fuel, start + fuel ≤ bound →
+      (quittingFiniteDynamicDebt reward roots who prescribed terminalDebt
+          start fuel = terminalDebt ↔
+        ∀ offset < fuel,
+          quittingFixedOpponentsContinueMass roots who (start + offset) = 1 ∧
+            quittingStageGap reward roots who prescribed (start + offset) ≤ 0) := by
+  intro start fuel
+  induction fuel generalizing start with
+  | zero => simp
+  | succ fuel ih =>
+      intro hwindow
+      have hstart : start < bound := by omega
+      have htailWindow : start + 1 + fuel ≤ bound := by omega
+      let nextDebt := quittingFiniteDynamicDebt reward roots who prescribed
+        terminalDebt (start + 1) fuel
+      have hnextNonneg : 0 ≤ nextDebt :=
+        quittingFiniteDynamicDebt_nonneg reward roots who prescribed
+          hprescribed hterminalDebt.le (start + 1) fuel
+      have hnextLe : nextDebt ≤ terminalDebt := by
+        exact quittingFiniteDynamicDebt_le_terminalDebt_of_transportLaw
+          reward roots who prescribed hprescribed hterminalDebt.le bound hresidual
+            (start + 1) fuel htailWindow
+      have hstep : quittingFiniteDynamicDebt reward roots who prescribed terminalDebt
+          start (fuel + 1) =
+        (quittingDynamicDebtLabel reward roots who prescribed start).apply nextDebt := by
+        exact quittingFiniteDynamicDebt_succ_eq_label_apply
+          reward roots who prescribed hprescribed hterminalDebt.le start fuel
+            (hresidual start hstart)
+      constructor
+      · intro hreturn
+        have hcurrentLeNext :
+            quittingFiniteDynamicDebt reward roots who prescribed terminalDebt
+                start (fuel + 1) ≤ nextDebt := by
+          rw [hstep]
+          exact quittingDynamicDebtLabel_apply_le_self
+            reward roots who prescribed start hnextNonneg
+        have hnextEq : nextDebt = terminalDebt := by
+          rw [hreturn] at hcurrentLeNext
+          exact le_antisymm hnextLe hcurrentLeNext
+        have hstage :
+            quittingFixedOpponentsContinueMass roots who start = 1 ∧
+              quittingStageGap reward roots who prescribed start ≤ 0 := by
+          apply (quittingDynamicDebtLabel_apply_eq_self_iff_of_pos
+            reward roots who prescribed start hterminalDebt).mp
+          calc
+            (quittingDynamicDebtLabel reward roots who prescribed start).apply
+                terminalDebt =
+              (quittingDynamicDebtLabel reward roots who prescribed start).apply
+                nextDebt := congrArg _ hnextEq.symm
+            _ = quittingFiniteDynamicDebt reward roots who prescribed terminalDebt
+                start (fuel + 1) := hstep.symm
+            _ = terminalDebt := hreturn
+        have htail := (ih (start + 1) htailWindow).mp hnextEq
+        intro offset hoffset
+        cases offset with
+        | zero => simpa using hstage
+        | succ offset =>
+            have htailOffset := htail offset (by omega)
+            rw [show start + (offset + 1) = start + 1 + offset by omega]
+            exact htailOffset
+      · intro hphases
+        have hstage := hphases 0 (by omega)
+        simp only [Nat.add_zero] at hstage
+        have htailPhases : ∀ offset < fuel,
+            quittingFixedOpponentsContinueMass roots who (start + 1 + offset) = 1 ∧
+              quittingStageGap reward roots who prescribed (start + 1 + offset) ≤ 0 := by
+          intro offset hoffset
+          have hphase := hphases (offset + 1) (by omega)
+          rw [show start + 1 + offset = start + (offset + 1) by omega]
+          exact hphase
+        have hnextEq : nextDebt = terminalDebt :=
+          (ih (start + 1) htailWindow).mpr htailPhases
+        rw [hstep, hnextEq]
+        exact (quittingDynamicDebtLabel_apply_eq_self_iff_of_pos
+          reward roots who prescribed start hterminalDebt).mpr hstage
 
 /-! ## Corollaries of the transport law -/
 

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.VanishingDiscount.Fink.ConstraintPublicResponse
-import MathUE.DirectedTransport.FiniteInequality.Basic
+import MathUE.DirectedTransport.FiniteInequality.Sparse
 
 /-!
 # Rectangular mixed-player continuation compatibility
@@ -79,6 +79,12 @@ def SimultaneouslyFeasible
         dotProduct (S.delta player constraint)
           (fun state => continuation state player)
 
+/-- Every continuation coordinate is permitted.  This is the natural case
+when the rectangular system records only its explicit linear rows. -/
+def HasUnrestrictedCoordinates
+    (S : RectangularContinuationSystem State Player Constraint) : Prop :=
+  ∀ player coordinate, S.coordinatePermitted player coordinate
+
 omit [Fintype Player] [∀ player, Fintype (Constraint player)] in
 /-- Rectangularity turns separate coordinate witnesses into one simultaneous
 whole-vector continuation without loss or an additional compatibility
@@ -110,6 +116,69 @@ theorem finiteInequalityFeasible_of_simultaneouslyFeasible
   obtain ⟨continuation, -, inequalities⟩ := simultaneous
   exact ⟨fun state => continuation state player,
     inequalities player⟩
+
+omit [Fintype Player] [∀ player, Fintype (Constraint player)] in
+/-- With unrestricted coordinate factors, simultaneous infeasibility is
+already infeasibility of one player's finite inequality block. -/
+theorem exists_infeasiblePlayer_of_not_simultaneouslyFeasible
+    (S : RectangularContinuationSystem State Player Constraint)
+    (hunrestricted : S.HasUnrestrictedCoordinates)
+    (hinfeasible : ¬S.SimultaneouslyFeasible) :
+    ∃ player, ¬∃ coordinate : State → ℝ,
+      ∀ constraint,
+        S.rhs player constraint ≤
+          dotProduct (S.delta player constraint) coordinate := by
+  classical
+  by_contra hnone
+  push Not at hnone
+  apply hinfeasible
+  apply S.simultaneouslyFeasible_of_playerwise
+  intro player
+  obtain ⟨coordinate, hrows⟩ := hnone player
+  exact ⟨coordinate, hunrestricted player coordinate, hrows⟩
+
+omit [Fintype Player] in
+/-- Simultaneous infeasibility has a positive-circuit certificate in one
+player's row block. -/
+theorem exists_player_positiveCircuit_of_not_simultaneouslyFeasible
+    (S : RectangularContinuationSystem State Player Constraint)
+    (hunrestricted : S.HasUnrestrictedCoordinates)
+    (hinfeasible : ¬S.SimultaneouslyFeasible) :
+    ∃ (player : Player) (coefficient : Constraint player → ℝ),
+      Math.FiniteInequality.IsPositiveCircuit
+          (S.delta player) coefficient ∧
+        0 < Math.FiniteInequality.certificateValue
+          (S.rhs player) coefficient := by
+  obtain ⟨player, hplayer⟩ :=
+    S.exists_infeasiblePlayer_of_not_simultaneouslyFeasible
+      hunrestricted hinfeasible
+  obtain ⟨coefficient, hcircuit, hpositive⟩ :=
+    Math.FiniteInequality.exists_positiveCircuit_of_infeasible
+      (S.delta player) (S.rhs player) hplayer
+  exact ⟨player, coefficient, hcircuit, hpositive⟩
+
+omit [Fintype Player] in
+/-- Simultaneous infeasibility is witnessed by one player and at most one
+more row than the rank of that player's row normals. -/
+theorem exists_player_rankSparseCertificate_of_not_simultaneouslyFeasible
+    (S : RectangularContinuationSystem State Player Constraint)
+    (hunrestricted : S.HasUnrestrictedCoordinates)
+    (hinfeasible : ¬S.SimultaneouslyFeasible) :
+    ∃ (player : Player) (coefficient : Constraint player → ℝ),
+      Math.FiniteInequality.IsNormalizedCertificate
+          (S.delta player) coefficient ∧
+        0 < Math.FiniteInequality.certificateValue
+          (S.rhs player) coefficient ∧
+        Fintype.card {constraint : Constraint player //
+          coefficient constraint ≠ 0} ≤
+          (Set.range (S.delta player)).finrank ℝ + 1 := by
+  obtain ⟨player, hplayer⟩ :=
+    S.exists_infeasiblePlayer_of_not_simultaneouslyFeasible
+      hunrestricted hinfeasible
+  obtain ⟨coefficient, hcertificate, hpositive, hcard⟩ :=
+    Math.FiniteInequality.exists_positive_normalizedCertificate_support_card_le_rank_add_one
+      (S.delta player) (S.rhs player) hplayer
+  exact ⟨player, coefficient, hcertificate, hpositive, hcard⟩
 
 end RectangularContinuationSystem
 

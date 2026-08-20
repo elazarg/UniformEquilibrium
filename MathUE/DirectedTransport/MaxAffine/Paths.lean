@@ -63,6 +63,20 @@ def pathFloor : List Label → WithBot ℝ
     pathShift (first :: rest) =
       pathShift rest + pathSlope rest * first.shift := rfl
 
+@[simp] theorem pathSlope_append (first second : List Label) :
+    pathSlope (first ++ second) = pathSlope first * pathSlope second := by
+  simp [pathSlope, List.map_append, List.prod_append]
+
+/-- Chronological concatenation composes path shifts semidirectly. -/
+theorem pathShift_append (first second : List Label) :
+    pathShift (first ++ second) =
+      pathShift second + pathSlope second * pathShift first := by
+  induction first with
+  | nil => simp
+  | cons label rest ih =>
+      simp only [List.cons_append, pathShift_cons, ih, pathSlope_append]
+      ring
+
 @[simp] theorem weightedShiftTerms_nil : weightedShiftTerms [] = [] := rfl
 
 @[simp] theorem weightedShiftTerms_cons (first : Label) (rest : List Label) :

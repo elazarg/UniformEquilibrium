@@ -415,6 +415,36 @@ theorem apply_compList {labels : List Label}
       labels.foldl (fun value label => label.apply value) point := by
   rw [compList, apply_foldl_comp labels hslope Label.id (by simp) point, apply_id]
 
+/-- Appending chronological label lists first applies the first composite and
+then the second composite. -/
+theorem apply_compList_append (first second : List Label)
+    (hslope : ∀ label ∈ first ++ second, 0 ≤ label.slope) (point : ℝ) :
+    (compList (first ++ second)).apply point =
+      (compList second).apply ((compList first).apply point) := by
+  have hfirst : ∀ label ∈ first, 0 ≤ label.slope :=
+    fun label hlabel ↦ hslope label (List.mem_append_left second hlabel)
+  have hsecond : ∀ label ∈ second, 0 ≤ label.slope :=
+    fun label hlabel ↦ hslope label (List.mem_append_right first hlabel)
+  rw [apply_compList hslope, List.foldl_append,
+    apply_compList hfirst, apply_compList hsecond]
+
+/-- A final chronological label acts after the composite of the preceding
+labels. -/
+theorem apply_compList_append_singleton (labels : List Label) (last : Label)
+    (hslope : ∀ label ∈ labels, 0 ≤ label.slope)
+    (hlast : 0 ≤ last.slope) (point : ℝ) :
+    (compList (labels ++ [last])).apply point =
+      last.apply ((compList labels).apply point) := by
+  rw [apply_compList_append labels [last]]
+  · rw [apply_compList (labels := [last]) (by simpa using hlast)]
+    rfl
+  · intro label hlabel
+    rcases List.mem_append.mp hlabel with hbefore | hfinal
+    · exact hslope label hbefore
+    · simp only [List.mem_singleton] at hfinal
+      subst label
+      exact hlast
+
 /-! ### The two embeddings -/
 
 /-- An affine summary as a label with no floor. -/

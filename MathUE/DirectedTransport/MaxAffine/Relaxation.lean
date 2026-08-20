@@ -40,20 +40,6 @@ def pathRelaxationMass : List Label → ℝ
     pathRelaxationMass (first :: rest) =
       pathRelaxationMass rest + pathSlope rest := rfl
 
-@[simp] theorem pathSlope_append (first second : List Label) :
-    pathSlope (first ++ second) = pathSlope first * pathSlope second := by
-  simp [pathSlope, List.map_append, List.prod_append]
-
-/-- Chronological concatenation composes path shifts semidirectly. -/
-theorem pathShift_append (first second : List Label) :
-    pathShift (first ++ second) =
-      pathShift second + pathSlope second * pathShift first := by
-  induction first with
-  | nil => simp
-  | cons label rest ih =>
-      simp only [List.cons_append, pathShift_cons, ih, pathSlope_append]
-      ring
-
 /-- The common-relaxation coefficient obeys the same semidirect law as the
 path shift. -/
 theorem pathRelaxationMass_append (first second : List Label) :
