@@ -367,8 +367,13 @@ the explicit row system.
 The open game-semantic producer problem is to exhibit the `#40` preemption
 lasso as a nontrivial source-matched, splice-admissible transport graph whose
 fibers carry payoff or debt coordinates.  A graph made only from literal
-time-adjacent blocks of one finite chain is acyclic; quotienting equal-looking
-boundary data is not a substitute for a splice theorem.
+time-adjacent blocks of one finite chain is acyclic: this is proved by
+`QuittingAnchoredBoundaryTransportGraph.closedWalk_edges_eq_nil`, and
+`QuittingAnchoredBoundaryTransportGraph.exists_bestResponseLaxSection`
+(`UniformEquilibrium/Quitting/Boundary/Holonomy/TransportGraph.lean`) shows
+that every finite such graph admits a playerwise lax best-response section.
+Quotienting equal-looking boundary data is not a substitute for a splice
+theorem.
 
 ## Milestones
 

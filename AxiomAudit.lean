@@ -912,6 +912,7 @@ import UniformEquilibrium.Quitting.Boundary.Holonomy.Tangent
 import UniformEquilibrium.Quitting.Boundary.Holonomy.TargetClosedPunishmentTailRepair
 import UniformEquilibrium.Quitting.Boundary.Holonomy.TerminalExploitabilityRepair
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Transport
+import UniformEquilibrium.Quitting.Boundary.Holonomy.TransportGraph
 import UniformEquilibrium.Quitting.Boundary.Holonomy.TwoEndedAnchorPersistenceCounterexample
 import UniformEquilibrium.Quitting.Boundary.Holonomy.TwoOwnerCommonWordRealization
 import UniformEquilibrium.Quitting.Boundary.Holonomy.WeightedBounds
