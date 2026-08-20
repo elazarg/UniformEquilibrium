@@ -62,7 +62,7 @@ attribute [instance] FiniteStageGame.decidableAction
 attribute [instance] FiniteStageGame.nonemptyAction
 
 /-- Deterministic kernel presentation of the one-stage game. -/
-noncomputable def FiniteStageGame.kernel (G : FiniteStageGame) :
+noncomputable abbrev FiniteStageGame.kernel (G : FiniteStageGame) :
     KernelGame G.Player :=
   KernelGame.ofPureEU G.Action G.payoff
 
@@ -4248,7 +4248,7 @@ def binaryPayoff (topLeft topRight bottomLeft bottomRight : Payoff Bool)
   | true, true => bottomRight
 
 /-- A two-player, two-action game from four payoff vectors. -/
-def binaryGame (topLeft topRight bottomLeft bottomRight : Payoff Bool) :
+abbrev binaryGame (topLeft topRight bottomLeft bottomRight : Payoff Bool) :
     FiniteStageGame where
   Player := Bool
   Action := fun _ => Bool
@@ -4340,7 +4340,7 @@ private theorem example1_bottomRight_mem_E1 :
       norm_num [example1, profile, pair]
 
 /-- Example 2. -/
-def example2 : FiniteStageGame :=
+abbrev example2 : FiniteStageGame :=
   binaryGame (pair 1 0) (pair 2 2) (pair 0 0) (pair 0 1)
 
 /-- Player `false`'s mixed payoff in Example 2. -/
@@ -4888,9 +4888,214 @@ theorem example2_E1_eq_singleton :
       cases who <;> rw [binaryGame_mixedPayoff_apply] <;>
         norm_num [profile, pair]
 
+/-- Every one-stage payoff of Example 2 lies between zero and two. -/
+private theorem example2_eu_bounds
+    (profile : Bool → PMF Bool) (who : Bool) :
+    0 ≤ example2.kernel.mixedExtension.eu profile who ∧
+      example2.kernel.mixedExtension.eu profile who ≤ 2 := by
+  have hp0 : 0 ≤ (profile false true).toReal := ENNReal.toReal_nonneg
+  have hq0 : 0 ≤ (profile true true).toReal := ENNReal.toReal_nonneg
+  have hp1 : (profile false true).toReal ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  have hq1 : (profile true true).toReal ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  cases who
+  · change 0 ≤ (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+        (pair 0 1))).mixedExtension.eu profile false ∧
+      (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+        (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+          (pair 0 1))).mixedExtension.eu profile false ≤ 2
+    rw [example2_mixedEU_false]
+    constructor <;> nlinarith
+  · change 0 ≤ (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+        (pair 0 1))).mixedExtension.eu profile true ∧
+      (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+        (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+          (pair 0 1))).mixedExtension.eu profile true ≤ 2
+    rw [example2_mixedEU_true]
+    constructor <;> nlinarith
+
+/-- Example 2's two-stage strategy: Bottom/Left, then copy the opponent's
+first action. -/
+private def example2TwoStageProfile : example2.StandardMonitoredProfile :=
+  fun who time history ↦
+    match time with
+    | 0 => PMF.pure (if who = true then false else true)
+    | _ + 1 => PMF.pure (history 0 (!who))
+
+/-- The prescribed two-stage path gives each player average payoff one. -/
+private theorem example2TwoStageProfile_payoff (who : Bool) :
+    example2.kernel.realizedActionMonitoring.finiteAveragePayoff
+      2 example2TwoStageProfile who = 1 := by
+  let M := example2.kernel.realizedActionMonitoring
+  rw [show M.finiteAveragePayoff 2 example2TwoStageProfile who =
+      2⁻¹ * (M.stageEU example2TwoStageProfile 0 who +
+        M.stageEU example2TwoStageProfile 1 who) by
+    simp [KernelGame.PublicMonitoring.finiteAveragePayoff,
+      Finset.sum_range_succ]]
+  rw [M.stageEU_zero]
+  rw [M.stageEU_succ_eq_expect_afterSignal
+    (C := 2) (hbd := fun profile ↦ by
+      rw [abs_le]
+      have hbounds := example2_eu_bounds profile who
+      exact ⟨by linarith [hbounds.1], hbounds.2⟩)]
+  simp only [M, KernelGame.PublicMonitoring.stageEU_zero,
+    KernelGame.PublicMonitoring.afterSignal_apply]
+  let initial : Bool → PMF Bool :=
+    fun i ↦ example2TwoStageProfile i 0 (fun k ↦ k.elim0)
+  let second : (Bool → Bool) → Bool → PMF Bool := fun signal i ↦
+    example2TwoStageProfile i 1 (Fin.cons signal fun k ↦ k.elim0)
+  change 2⁻¹ * (example2.kernel.mixedExtension.eu initial who +
+    Math.Probability.expect (Math.PMFProduct.pmfPi initial)
+      (fun signal ↦ example2.kernel.mixedExtension.eu (second signal) who)) = 1
+  cases who
+  · rw [example2_mixedEU_false]
+    rw [Math.PMFProduct.expect_pmfPi_bool]
+    simp [initial, second, example2TwoStageProfile,
+      Math.Probability.expect_pure, PMF.pure_apply]
+    rw [example2_mixedEU_false]
+    norm_num [PMF.pure_apply]
+  · rw [example2_mixedEU_true]
+    rw [Math.PMFProduct.expect_pmfPi_bool]
+    simp [initial, second, example2TwoStageProfile,
+      Math.Probability.expect_pure, PMF.pure_apply]
+    rw [example2_mixedEU_true]
+    norm_num [PMF.pure_apply]
+
+/-- No unilateral two-stage deviation earns more than total payoff two. -/
+private theorem example2TwoStageProfile_deviation_bound
+    (who : Bool) (deviation : example2.StandardMonitoredStrategy who) :
+    example2.kernel.realizedActionMonitoring.finiteAveragePayoff 2
+      (Function.update example2TwoStageProfile who deviation) who ≤ 1 := by
+  letI : Finite example2.kernel.Outcome := by
+    change Finite (∀ _ : Bool, Bool)
+    exact Finite.of_fintype _
+  let M := example2.kernel.realizedActionMonitoring
+  let deviated := Function.update example2TwoStageProfile who deviation
+  rw [show M.finiteAveragePayoff 2 deviated who =
+      2⁻¹ * (M.stageEU deviated 0 who + M.stageEU deviated 1 who) by
+    simp [KernelGame.PublicMonitoring.finiteAveragePayoff,
+      Finset.sum_range_succ]]
+  rw [M.stageEU_zero]
+  rw [M.stageEU_succ_eq_expect_afterSignal
+    (C := 2) (hbd := fun profile ↦ by
+      rw [abs_le]
+      have hbounds := example2_eu_bounds profile who
+      exact ⟨by linarith [hbounds.1], hbounds.2⟩)]
+  simp only [M, KernelGame.PublicMonitoring.stageEU_zero,
+    KernelGame.PublicMonitoring.afterSignal_apply]
+  let initial : Bool → PMF Bool := fun i ↦ deviated i 0 (fun k ↦ k.elim0)
+  have hinitial : example2.kernel.mixedExtension.eu initial who =
+      Math.Probability.expect (Math.PMFProduct.pmfPi initial)
+        (fun action ↦ example2.payoff action who) := by
+    rw [example2.kernel.mixedExtension_eu]
+    congr 1
+    funext action
+    simp [example2, FiniteStageGame.kernel, binaryGame,
+      KernelGame.eu_ofPureEU]
+  change 2⁻¹ * (example2.kernel.mixedExtension.eu initial who +
+    Math.Probability.expect (Math.PMFProduct.pmfPi initial)
+      (fun signal ↦ example2.kernel.mixedExtension.eu
+        (fun i ↦ deviated i 1 (Fin.cons signal fun k ↦ k.elim0)) who)) ≤ 1
+  rw [hinitial, ← Math.Probability.expect_add]
+  have htotal : Math.Probability.expect (Math.PMFProduct.pmfPi initial)
+      (fun signal ↦ example2.payoff signal who +
+        example2.kernel.mixedExtension.eu
+          (fun i ↦ deviated i 1 (Fin.cons signal fun k ↦ k.elim0)) who) ≤ 2 := by
+    change Bool at who
+    cases who
+    · rw [Math.PMFProduct.expect_pmfPi_bool]
+      change (t : ℕ) → (Fin t → Bool → Bool) → PMF Bool at deviation
+      simp [initial, deviated, example2TwoStageProfile,
+        Math.Probability.expect_pure]
+      calc
+        _ ≤ Math.Probability.expect (deviation 0 (fun k ↦ k.elim0))
+            (fun _ ↦ 2) := by
+          apply Math.Probability.expect_mono
+          intro action
+          let signal : Bool → Bool := fun coordinate ↦ !coordinate && action
+          let second : Bool → PMF Bool :=
+            fun i ↦ Function.update example2TwoStageProfile false deviation i 1
+              (Fin.cons signal fun k ↦ k.elim0)
+          change binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+              (pair 0 1) signal false +
+            (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+              (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+                (pair 0 1))).mixedExtension.eu second false ≤ 2
+          rw [example2_mixedEU_false]
+          let devAt : PMF Bool :=
+            deviation 1 (Fin.cons signal fun k ↦ k.elim0)
+          have hself : second false = devAt := rfl
+          have hother : second true = PMF.pure action := by
+            simp [second, example2TwoStageProfile, signal]
+          rw [hself, hother]
+          have hp0 : 0 ≤ (devAt true).toReal := ENNReal.toReal_nonneg
+          have hp1 : (devAt true).toReal ≤ 1 :=
+            ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+          cases action <;>
+            simp [signal, binaryPayoff, pair, PMF.pure_apply] <;> nlinarith
+        _ = 2 := Math.Probability.expect_const _ 2
+    · rw [Math.PMFProduct.expect_pmfPi_bool]
+      change (t : ℕ) → (Fin t → Bool → Bool) → PMF Bool at deviation
+      simp [initial, deviated, example2TwoStageProfile,
+        Math.Probability.expect_pure]
+      calc
+        _ ≤ Math.Probability.expect (deviation 0 (fun k ↦ k.elim0))
+            (fun _ ↦ 2) := by
+          apply Math.Probability.expect_mono
+          intro action
+          let signal : Bool → Bool := fun coordinate ↦ !coordinate || action
+          let second : Bool → PMF Bool :=
+            fun i ↦ Function.update example2TwoStageProfile true deviation i 1
+              (Fin.cons signal fun k ↦ k.elim0)
+          change binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+              (pair 0 1) signal true +
+            (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+              (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+                (pair 0 1))).mixedExtension.eu second true ≤ 2
+          rw [example2_mixedEU_true]
+          let devAt : PMF Bool :=
+            deviation 1 (Fin.cons signal fun k ↦ k.elim0)
+          have hself : second true = devAt := rfl
+          have hother : second false = PMF.pure action := by
+            simp [second, example2TwoStageProfile, signal]
+          rw [hself, hother]
+          have hq0 : 0 ≤ (devAt true).toReal := ENNReal.toReal_nonneg
+          have hq1 : (devAt true).toReal ≤ 1 :=
+            ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+          cases action <;>
+            simp [signal, binaryPayoff, pair, PMF.pure_apply] <;> nlinarith
+        _ = 2 := Math.Probability.expect_const _ 2
+  norm_num
+  linarith
+
 theorem example2_one_one_mem_E2 :
     pair 1 1 ∈ example2.finiteEquilibriumPayoffs 2 := by
-  sorry
+  letI : Finite example2.kernel.Outcome := by
+    change Finite (∀ _ : Bool, Bool)
+    exact Finite.of_fintype _
+  letI (who : Bool) : Finite (example2.kernel.Strategy who) := by
+    change Finite Bool
+    exact Finite.of_fintype _
+  let behavior :=
+    KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+      example2.kernel example2TwoStageProfile
+  refine ⟨behavior, ?_, ?_⟩
+  · apply (KernelGame.RealizedActionRepeatedAdapter.isεFiniteRepeatedNash_iff_isεHorizonNash
+      example2.kernel example2TwoStageProfile 2 0).mp
+    intro who deviation
+    rw [add_zero, example2TwoStageProfile_payoff]
+    exact example2TwoStageProfile_deviation_bound who deviation
+  · funext who
+    rw [show example2.finitePayoff 2 behavior who =
+        example2.kernel.realizedActionMonitoring.finiteAveragePayoff
+          2 example2TwoStageProfile who from
+      KernelGame.RealizedActionRepeatedAdapter.finiteAveragePayoff_toBehaviorProfile
+        example2.kernel example2TwoStageProfile 2 who]
+    rw [example2TwoStageProfile_payoff]
+    cases who <;> rfl
 
 /-- Equation (12), with the paper's positive-horizon domain explicit. -/
 theorem equation_12 :
