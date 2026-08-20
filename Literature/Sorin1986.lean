@@ -4783,7 +4783,60 @@ theorem example3_En : ∀ n, 0 < n →
 theorem example3_half_mem_D2_not_D1 :
     pair (1 / 2) (1 / 2) ∈ example3.finiteFeasiblePayoffs 2 ∧
       pair (1 / 2) (1 / 2) ∉ example3.oneStageFeasiblePayoffs := by
-  sorry
+  constructor
+  · let topRight : (who : Bool) → Bool := fun who ↦ who
+    have htopRightPure : pair 1 1 ∈ example3.purePayoffSet := by
+      refine ⟨topRight, ?_⟩
+      funext who
+      cases who <;> rfl
+    let bottomLeft : (who : Bool) → Bool
+      | false => true
+      | true => false
+    have hbottomLeftPure : pair 0 0 ∈ example3.purePayoffSet := by
+      refine ⟨bottomLeft, ?_⟩
+      funext who
+      cases who <;> rfl
+    obtain ⟨firstProfile, hfirstPayoff⟩ :=
+      lemma_1_D1_subset_Dn example3 ⟨1, by omega⟩
+        (lemma_1_pure_subset_D1 example3 htopRightPure)
+    obtain ⟨secondProfile, hsecondPayoff⟩ :=
+      lemma_1_D1_subset_Dn example3 ⟨1, by omega⟩
+        (lemma_1_pure_subset_D1 example3 hbottomLeftPure)
+    let joined := example3.appendFiniteProfiles 1 firstProfile secondProfile
+    refine ⟨joined, ?_⟩
+    have hweighted :=
+      appendFiniteProfiles_weightedPayoff example3 1 1 firstProfile secondProfile
+    rw [hfirstPayoff, hsecondPayoff] at hweighted
+    norm_num at hweighted
+    dsimp only [joined]
+    have hpairs :
+        pair 1 1 + pair 0 0 =
+          (2 : ℝ) • pair (1 / 2) (1 / 2) := by
+      ext who
+      cases who <;> norm_num [Pi.add_apply, Pi.smul_apply, pair, smul_eq_mul]
+    apply smul_right_injective (Payoff Bool) (by norm_num : (2 : ℝ) ≠ 0)
+    exact hweighted.trans hpairs
+  · rintro ⟨profile, hpayoff⟩
+    change (Bool → PMF Bool) at profile
+    have hrow := congrFun hpayoff false
+    have hcolumn := congrFun hpayoff true
+    change (binaryGame (pair 1 0) (pair 1 1) (pair 0 0)
+      (pair 1 0)).mixedPayoff profile false = pair (1 / 2) (1 / 2) false at hrow
+    change (binaryGame (pair 1 0) (pair 1 1) (pair 0 0)
+      (pair 1 0)).mixedPayoff profile true = pair (1 / 2) (1 / 2) true at hcolumn
+    rw [binaryGame_mixedPayoff_apply] at hrow hcolumn
+    norm_num [pair] at hrow hcolumn
+    let p := (profile false true).toReal
+    let q := (profile true true).toReal
+    have hp0 : 0 ≤ p := ENNReal.toReal_nonneg
+    have hq0 : 0 ≤ q := ENNReal.toReal_nonneg
+    have hp1 : p ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hq1 : q ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    change p * q + (1 - p) = 1 / 2 at hrow
+    change (1 - p) * q = 1 / 2 at hcolumn
+    nlinarith [sq_nonneg (p - 1 / 2)]
 
 /-- Equation (13), with the paper's positive-horizon domain explicit. -/
 theorem equation_13 :
