@@ -14,6 +14,7 @@ import UniformEquilibrium.Quitting.Boundary.Holonomy.InfiniteBehavioralTailEvalu
 import UniformEquilibrium.Quitting.Boundary.Holonomy.AggregatePrefixConsumption
 import UniformEquilibrium.Quitting.Boundary.Holonomy.AggregateTerminalAnchor
 import UniformEquilibrium.Quitting.Boundary.Holonomy.QuantitativeAggregateTerminalAnchor
+import UniformEquilibrium.Quitting.Boundary.Holonomy.Transport
 
 /-!
 # Boundary holonomy for finite quitting blocks
@@ -31,6 +32,11 @@ strategic source but does not cover escaping block length.  Tangent-coordinate
 compactness covers coefficient projections but does not prove that the
 limiting coordinates are realized by a strategic block, retain a source path,
 or admit a strategic decoder.
+
+The directed-transport adapter embeds prescribed and best-response summaries
+as generic max-affine labels. It preserves evaluation and realized block
+composition, exposes the actual opponent-survival slope and its unit bound,
+and records that Bellman transport runs from a block's exit back to its entry.
 
 The fixed-prefix repair interface evaluates a bounded prescribed/best-response
 boundary pair through the affine/max-affine holonomy.  Its gain modulus is
