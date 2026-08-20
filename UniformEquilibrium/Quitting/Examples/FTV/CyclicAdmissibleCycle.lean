@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 /-!
 # The canonical three-player quitting table goes through the cycle reduction
 
-`FTVCyclicMinimality` carries the Flesch--Thuijsman--Vrieze three-player
+`FTV.CyclicMinimality` carries the Flesch--Thuijsman--Vrieze three-player
 quitting table
 
 `r({0}) = (1, 3, 0)`, `r({1}) = (0, 1, 3)`, `r({2}) = (3, 0, 1)`,
@@ -73,26 +73,27 @@ table is interesting, not a hypothesis or a conclusion of anything below.
 
 noncomputable section
 
-namespace GameTheory
-namespace FTVCyclicAdmissibleCycle
+open GameTheory
+
+namespace FTV.CyclicAdmissibleCycle
 
 open StochasticGame Filter Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
-open FTVCyclicMinimality
-open FTVCyclicMinimality.ExactCyclicPacket (standardPacket standardPromise
+open FTV.CyclicMinimality
+open FTV.CyclicMinimality.ExactCyclicPacket (standardPacket standardPromise
   standardQuitProb nextPhase_three survivalProbability_singleRole
   terminalExpectation_singleRole)
 
 /-! ## The table as a quitting weight -/
 
 /-- The FTV terminal table presented on nonempty quitter sets, the shape the
-quitting game consumes.  It is `FTVCyclicMinimality.terminalReward` read
+quitting game consumes.  It is `FTV.CyclicMinimality.terminalReward` read
 through the indicator of the quitter set. -/
 def ftvReward (quitters : {S : Finset Player // S.Nonempty}) : Payoff Player :=
   terminalReward fun who ↦ decide (who ∈ quitters.1)
 
 /-- The presentation is faithful: on the quitter set of a pure action row the
-weight is the original `FTVCyclicMinimality` row. -/
+weight is the original `FTV.CyclicMinimality` row. -/
 theorem ftvReward_quitters (action : Player → Bool)
     (h : (quittingQuitters action).Nonempty) :
     ftvReward ⟨quittingQuitters action, h⟩ = terminalReward action := by
@@ -450,7 +451,7 @@ equilibrium payoff `(1, 2, 1)`.**
 
 `HEADLINE` — the first instance of the Flesch--Thuijsman--Vrieze table being
 discharged through the absorbing-cycle carrier: the three-phase cycle of
-`FTVCyclicMinimality.standardPacket` is an absorbing exact Nash--Bellman block
+`FTV.CyclicMinimality.standardPacket` is an absorbing exact Nash--Bellman block
 whose deviation mismatch vanishes automatically (every solo weight is `1 > 0`),
 so the named-target admissible-cycle compiler applies directly to the packet's
 named target.
@@ -473,5 +474,4 @@ theorem exists_uniformEquilibriumPayoff_ftvReward :
   exists_uniformEquilibriumPayoff_of_zeroSolo_or_admissibleCycle ftvReward
     (Or.inr hasAdmissibleAbsorbingQuittingCycle_ftvReward)
 
-end FTVCyclicAdmissibleCycle
-end GameTheory
+end FTV.CyclicAdmissibleCycle

@@ -27,8 +27,9 @@ is made here.
 
 noncomputable section
 
-namespace GameTheory
-namespace FTVCyclicCredibility
+open GameTheory
+
+namespace FTV.CyclicCredibility
 
 open Math.Probability Math.PMFProduct StochasticGame
 
@@ -472,5 +473,4 @@ theorem isAdaptivePotentialCertificateAt
   architecture.isAdaptivePotentialCertificateAt_of_isGlobalCredibilityCriterion
     isGlobalCredibilityCriterion initialTarget target_start herr
 
-end FTVCyclicCredibility
-end GameTheory
+end FTV.CyclicCredibility

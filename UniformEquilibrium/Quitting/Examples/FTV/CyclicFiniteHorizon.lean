@@ -23,8 +23,9 @@ argument or credibility converse is used.
 
 noncomputable section
 
-namespace GameTheory
-namespace FTVCyclicCredibility
+open GameTheory
+
+namespace FTV.CyclicCredibility
 
 open Math.Probability StochasticGame
 
@@ -186,5 +187,4 @@ theorem abs_finiteAveragePayoff_sub_initialTarget_le_twentyTwo_sevenths
       apply (div_le_div_iff_of_pos_right hTreal).2
       fin_cases who <;> norm_num [deliveryConstant]
 
-end FTVCyclicCredibility
-end GameTheory
+end FTV.CyclicCredibility
