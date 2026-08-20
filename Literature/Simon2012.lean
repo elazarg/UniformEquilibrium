@@ -645,16 +645,63 @@ def SatisfiesLemma2_3At (G : QuittingGame) (r : Payoff G.Player)
 /--
 Lemma 2.3.  The quantifier is `∀ r, ∃ ρ`; a single global parameter is not
 claimed.  Its proof combines the compact-set version of Lemma 2.1 with the
-coordinate increase in Lemma 2.2.  The exact compact-set lemma remains open
-above, so this result is not imported from the stronger, incorrect 2007 text.
+coordinate increase in Lemma 2.2.
 -/
 theorem lemma2_3 (G : QuittingGame)
-    (M : ℝ) (hM : IsSimonPayoffScale G M)
+    (M : ℝ) (_hM : IsSimonPayoffScale G M)
     (hnormal : ∀ n, IsNormalPlayer G n)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     ∀ r, ∃ ρ, SatisfiesLemma2_3At G r ρ := by
-  sorry
+  intro r
+  obtain ⟨κ, hκ, hκ1, hcompact⟩ := lemma2_1_part2_compact G hgenerated hinstant
+    {r} isCompact_singleton
+  obtain ⟨B, hB⟩ := Literature.Simon2007.exists_quittingPayoffDifferenceBound G
+  let ε₀ : ℝ := κ / 3
+  let ρ : ℝ := ε₀ ^ 2 / (2 * B)
+  have hBpos : 0 < B := zero_lt_one.trans_le hB.1
+  have hε₀ : 0 < ε₀ := div_pos hκ (by norm_num)
+  have hε₀1 : ε₀ ≤ 1 := by
+    dsimp only [ε₀]
+    linarith
+  have hρ : 0 < ρ := div_pos (sq_pos_of_pos hε₀) (mul_pos (by norm_num) hBpos)
+  have hρ_le_κ : ρ ≤ κ := by
+    have hκsquare : κ ^ 2 ≤ κ := by nlinarith
+    have hdenominator : 6 ≤ 18 * B := by nlinarith [hB.1]
+    dsimp only [ρ, ε₀]
+    rw [div_pow]
+    calc
+      κ ^ 2 / 3 ^ 2 / (2 * B) = κ ^ 2 / (18 * B) := by ring
+      _ ≤ κ ^ 2 / 6 := by
+        exact div_le_div_of_nonneg_left (sq_nonneg κ) (by norm_num) hdenominator
+      _ ≤ κ := by linarith
+  refine ⟨ρ, hρ, hρ_le_κ.trans hκ1, ?_⟩
+  intro p hp
+  let y := QuittingOneStagePayoff G r p
+  by_cases hrational : IsRational G κ r
+  · have hpκ : p ∈ EpsilonRow G κ r :=
+      EpsilonRow.mono G hρ_le_κ r hp
+    have hmotion := hcompact r (Set.mem_singleton r) p hrational hpκ
+    have hquitNonneg : 0 ≤ QuitProbability G p :=
+      (quitProbability_mem_Icc G p).1
+    exact (mul_le_mul_of_nonneg_right hρ_le_κ hquitNonneg).trans hmotion.1
+  · simp only [IsRational, not_forall, not_le] at hrational
+    obtain ⟨n, hn⟩ := hrational
+    have hstep : y ∈ FRow G ρ r := ⟨p, hp, rfl⟩
+    have hincrease :=
+      (lemma2_2 G hB hnormal hgenerated hinstant hε₀ hε₀1 hstep n).2
+        (by dsimp only [ε₀]; linarith)
+    have hcoordinate : |(r - y) n| ≤ EuclideanDist r y := by
+      rw [EuclideanDist, euclideanNorm_eq_norm_toLp]
+      simpa only [Pi.sub_apply, Real.norm_eq_abs] using
+        PiLp.norm_apply_le (WithLp.toLp 2 (r - y)) n
+    have hρcoordinate : ρ ≤ |(r - y) n| := by
+      rw [Pi.sub_apply, abs_of_nonpos (by linarith)]
+      linarith
+    have hρdist : ρ ≤ EuclideanDist r y := hρcoordinate.trans hcoordinate
+    have hquitUpper : QuitProbability G p ≤ 1 :=
+      (quitProbability_mem_Icc G p).2
+    exact (mul_le_of_le_one_right hρ.le hquitUpper).trans hρdist
 
 /-! ## 3. The structure theorem for quitting games -/
 
