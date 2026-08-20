@@ -4561,11 +4561,90 @@ theorem prisonersDilemma_E1_eq_singleton :
         norm_num [profile, pair]
 
 /-- The paper's explicit description of `Δ` for the Prisoner's Dilemma. -/
+theorem prisonersDilemma_individualRationalLevel (who : Bool) :
+    prisonersDilemma.individualRationalLevel who = 1 := by
+  let K := KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+    (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0) (pair 1 1))
+  change (⨅ opponents : K.mixedExtension.OpponentProfile who,
+      ⨆ action : Bool,
+        K.mixedExtension.eu
+          (K.mixedExtension.profileWithOpponent who (PMF.pure action) opponents)
+          who) = 1
+  have hlower (opponents : K.mixedExtension.OpponentProfile who) :
+      1 ≤ ⨆ action : Bool,
+        K.mixedExtension.eu
+          (K.mixedExtension.profileWithOpponent who (PMF.pure action) opponents)
+          who := by
+    apply le_ciSup_of_le (Finite.bddAbove_range _) true
+    let profile : Bool → PMF Bool :=
+      K.mixedExtension.profileWithOpponent who (PMF.pure true) opponents
+    change 1 ≤ K.mixedExtension.eu profile who
+    cases who
+    · rw [prisonersDilemma_mixedEU_false]
+      have hp : (profile false true).toReal = 1 := by
+        simp [profile, K]
+      have hq := ENNReal.toReal_mono ENNReal.one_ne_top
+        (PMF.coe_le_one (profile true) true)
+      rw [hp]
+      norm_num at hq
+      linarith
+    · rw [prisonersDilemma_mixedEU_true]
+      have hq : (profile true true).toReal = 1 := by
+        simp [profile, K]
+      have hp := ENNReal.toReal_mono ENNReal.one_ne_top
+        (PMF.coe_le_one (profile false) true)
+      rw [hq]
+      norm_num at hp
+      linarith
+  have hbelow : BddBelow (Set.range fun opponents :
+      K.mixedExtension.OpponentProfile who ↦
+        ⨆ action : Bool,
+          K.mixedExtension.eu
+            (K.mixedExtension.profileWithOpponent who (PMF.pure action) opponents)
+            who) := by
+    refine ⟨1, ?_⟩
+    rintro _ ⟨opponents, rfl⟩
+    exact hlower opponents
+  apply le_antisymm
+  · let opponents : K.mixedExtension.OpponentProfile who :=
+      fun _ ↦ PMF.pure true
+    apply ciInf_le_of_le hbelow opponents
+    apply ciSup_le
+    intro action
+    let profile : Bool → PMF Bool :=
+      K.mixedExtension.profileWithOpponent who (PMF.pure action) opponents
+    change K.mixedExtension.eu profile who ≤ 1
+    cases who <;> cases action
+    · rw [prisonersDilemma_mixedEU_false]
+      simp [profile, K, opponents]
+    · rw [prisonersDilemma_mixedEU_false]
+      simp [profile, K, opponents]
+    · rw [prisonersDilemma_mixedEU_true]
+      simp [profile, K, opponents]
+    · rw [prisonersDilemma_mixedEU_true]
+      simp [profile, K, opponents]
+  · letI : Nonempty (K.mixedExtension.OpponentProfile who) :=
+      ⟨fun _ ↦ PMF.pure false⟩
+    exact le_ciInf hlower
+
 theorem prisonersDilemma_individuallyRationalPayoffs :
     prisonersDilemma.individuallyRationalPayoffs =
       prisonersDilemma.correlatedFeasiblePayoffs ∩
         {v | 1 ≤ v false ∧ 1 ≤ v true} := by
-  sorry
+  ext v
+  constructor
+  · rintro ⟨hv, hlevel⟩
+    refine ⟨hv, ?_⟩
+    constructor
+    · simpa [prisonersDilemma_individualRationalLevel] using hlevel false
+    · simpa [prisonersDilemma_individualRationalLevel] using hlevel true
+  · rintro ⟨hv, hfalse, htrue⟩
+    refine ⟨hv, ?_⟩
+    intro who
+    rw [prisonersDilemma_individualRationalLevel]
+    cases who
+    · exact hfalse
+    · exact htrue
 
 /-- Since `D₁ = C`, every positive finite repetition has feasible set `C`. -/
 theorem prisonersDilemma_Dn_eq_C :
