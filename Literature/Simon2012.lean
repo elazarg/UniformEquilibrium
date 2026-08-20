@@ -879,7 +879,8 @@ theorem lemma4_1 {n : ℕ} (_hn : 0 < n) {B ε : ℝ}
       MatrixEntriesBounded A B → ε ≤ |A.det| →
       ∀ v : Fin n → ℝ, δ * EuclideanNorm v ≤ EuclideanNorm (A.mulVec v) := by
   obtain ⟨δ, hδ, hbound⟩ :=
-    Math.LinearAlgebra.exists_uniform_mulVec_lower_bound_of_entry_det_bounds hε
+    Math.LinearAlgebra.exists_uniform_mulVec_lower_bound_of_entry_det_bounds
+      (n := Fin n) hε
   refine ⟨δ, hδ, ?_⟩
   intro A hentries hdet v
   simpa only [euclideanNorm_eq_norm_toLp] using
@@ -895,15 +896,148 @@ def Corollary4_1Statement (G : QuittingGame) (η : ℝ) : Prop :=
           EuclideanNorm ((SingletonDifferenceMatrix G Q + d).mulVec r)
 
 /--
-Corollary 4.1.  The missing proof takes a minimum over the finitely many
-nonempty principal player sets, uses continuity of determinant to preserve a
-uniform determinant gap under entrywise perturbation, and then applies Lemma
-4.1.  The finite minimum and subtype-matrix transport have not been assembled.
+Corollary 4.1.  One perturbation radius and one lower singular-value bound work
+for every principal player set of cardinality at least two.
 -/
 theorem corollary4_1 (G : QuittingGame)
     (hnonsingular : HasNonsingularSingletonDifferences G) :
     ∃ η, Corollary4_1Statement G η := by
-  sorry
+  classical
+  let eligible : Finset (Finset G.Player) :=
+    Finset.univ.filter fun Q => 2 ≤ Q.card
+  let baseBound : ℝ :=
+    ∑ i : G.Player, ∑ j : G.Player,
+      |G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i|
+  have baseEntry_le (i j : G.Player) :
+      |G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i| ≤
+        baseBound := by
+    dsimp only [baseBound]
+    calc
+      |G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i| ≤
+          ∑ j' : G.Player,
+            |G.reward ⟨{j'}, Finset.singleton_nonempty j'⟩ i -
+              SoloPayoff G i| := by
+        exact Finset.single_le_sum
+          (f := fun j' : G.Player =>
+            |G.reward ⟨{j'}, Finset.singleton_nonempty j'⟩ i -
+              SoloPayoff G i|)
+          (fun _ _ => abs_nonneg _)
+          (Finset.mem_univ j)
+      _ ≤ ∑ i' : G.Player, ∑ j' : G.Player,
+            |G.reward ⟨{j'}, Finset.singleton_nonempty j'⟩ i' -
+              SoloPayoff G i'| := by
+        exact Finset.single_le_sum
+          (f := fun i' : G.Player => ∑ j' : G.Player,
+            |G.reward ⟨{j'}, Finset.singleton_nonempty j'⟩ i' -
+              SoloPayoff G i'|)
+          (fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _)
+          (Finset.mem_univ i)
+  have gap_pos (Q : Finset G.Player) (hQ : 2 ≤ Q.card) :
+      0 < |(SingletonDifferenceMatrix G Q).det| / 2 := by
+    exact half_pos (abs_pos.mpr (hnonsingular Q hQ))
+  have localRadiusExists (Q : Finset G.Player) (hQ : 2 ≤ Q.card) :
+      ∃ radius : ℝ, 0 < radius ∧
+        ∀ d : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ,
+          (∀ i j, |d i j| ≤ radius) →
+          |(SingletonDifferenceMatrix G Q).det| / 2 <
+            |(SingletonDifferenceMatrix G Q + d).det| :=
+    Math.LinearAlgebra.exists_entrywise_perturbation_radius_det_lower_bound
+      (SingletonDifferenceMatrix G Q) (hnonsingular Q hQ)
+  let radius (Q : Finset G.Player) : ℝ :=
+    if hQ : 2 ≤ Q.card then
+      Classical.choose (localRadiusExists Q hQ)
+    else 1
+  have radius_pos (Q : Finset G.Player) : 0 < radius Q := by
+    by_cases hQ : 2 ≤ Q.card
+    · simp only [radius, dif_pos hQ]
+      exact (Classical.choose_spec (localRadiusExists Q hQ)).1
+    · simp only [radius, dif_neg hQ]
+      exact zero_lt_one
+  have radius_spec (Q : Finset G.Player) (hQ : 2 ≤ Q.card) :
+      ∀ d : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ,
+        (∀ i j, |d i j| ≤ radius Q) →
+        |(SingletonDifferenceMatrix G Q).det| / 2 <
+          |(SingletonDifferenceMatrix G Q + d).det| := by
+    simp only [radius, dif_pos hQ]
+    exact (Classical.choose_spec (localRadiusExists Q hQ)).2
+  have localStrengthExists (Q : Finset G.Player) (hQ : 2 ≤ Q.card) :
+      ∃ strength : ℝ, 0 < strength ∧
+        ∀ A : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ,
+          (∀ i j, |A i j| ≤ baseBound + 1) →
+          |(SingletonDifferenceMatrix G Q).det| / 2 ≤ |A.det| →
+          ∀ v : {i // i ∈ Q} → ℝ,
+            strength * ‖WithLp.toLp 2 v‖ ≤
+              ‖WithLp.toLp 2 (Matrix.mulVec A v)‖ :=
+    Math.LinearAlgebra.exists_uniform_mulVec_lower_bound_of_entry_det_bounds
+      (gap_pos Q hQ)
+  let strength (Q : Finset G.Player) : ℝ :=
+    if hQ : 2 ≤ Q.card then
+      Classical.choose (localStrengthExists Q hQ)
+    else 1
+  have strength_pos (Q : Finset G.Player) : 0 < strength Q := by
+    by_cases hQ : 2 ≤ Q.card
+    · simp only [strength, dif_pos hQ]
+      exact (Classical.choose_spec (localStrengthExists Q hQ)).1
+    · simp only [strength, dif_neg hQ]
+      exact zero_lt_one
+  have strength_spec (Q : Finset G.Player) (hQ : 2 ≤ Q.card) :
+      ∀ A : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ,
+        (∀ i j, |A i j| ≤ baseBound + 1) →
+        |(SingletonDifferenceMatrix G Q).det| / 2 ≤ |A.det| →
+        ∀ v : {i // i ∈ Q} → ℝ,
+          strength Q * ‖WithLp.toLp 2 v‖ ≤
+            ‖WithLp.toLp 2 (Matrix.mulVec A v)‖ := by
+    simp only [strength, dif_pos hQ]
+    exact (Classical.choose_spec (localStrengthExists Q hQ)).2
+  let threshold (Q : Finset G.Player) : ℝ := min (radius Q) (strength Q)
+  let candidates : Finset ℝ := insert 1 (eligible.image threshold)
+  have candidates_nonempty : candidates.Nonempty :=
+    ⟨1, Finset.mem_insert_self 1 _⟩
+  let η : ℝ := candidates.min' candidates_nonempty
+  have η_mem : η ∈ candidates := Finset.min'_mem candidates candidates_nonempty
+  have η_pos : 0 < η := by
+    rcases Finset.mem_insert.mp η_mem with hη | hη
+    · simpa only [hη] using zero_lt_one
+    · obtain ⟨Q, _, hQ⟩ := Finset.mem_image.mp hη
+      rw [← hQ]
+      exact lt_min (radius_pos Q) (strength_pos Q)
+  have η_le_one : η ≤ 1 :=
+    Finset.min'_le candidates 1 (Finset.mem_insert_self 1 _)
+  refine ⟨η, η_pos, ?_⟩
+  intro Q hQ d hd v
+  have hQeligible : Q ∈ eligible := by
+    simp only [eligible, Finset.mem_filter, Finset.mem_univ, true_and]
+    exact hQ
+  have hthresholdMem : threshold Q ∈ candidates := by
+    apply Finset.mem_insert_of_mem
+    exact Finset.mem_image.mpr ⟨Q, hQeligible, rfl⟩
+  have η_le_threshold : η ≤ threshold Q :=
+    Finset.min'_le candidates (threshold Q) hthresholdMem
+  have η_le_radius : η ≤ radius Q :=
+    η_le_threshold.trans (min_le_left _ _)
+  have η_le_strength : η ≤ strength Q :=
+    η_le_threshold.trans (min_le_right _ _)
+  have hdet := radius_spec Q hQ d fun i j =>
+    (hd i j).trans η_le_radius
+  have hentries : ∀ i j,
+      |(SingletonDifferenceMatrix G Q + d) i j| ≤ baseBound + 1 := by
+    intro i j
+    rw [Matrix.add_apply]
+    calc
+      |SingletonDifferenceMatrix G Q i j + d i j| ≤
+          |SingletonDifferenceMatrix G Q i j| + |d i j| := abs_add_le _ _
+      _ ≤ baseBound + η := by
+        apply add_le_add (baseEntry_le i.1 j.1) (hd i j)
+      _ ≤ baseBound + 1 := add_le_add le_rfl η_le_one
+  have vNorm_nonneg : 0 ≤ EuclideanNorm v := by
+    exact Real.sqrt_nonneg _
+  calc
+    η * EuclideanNorm v ≤ strength Q * EuclideanNorm v :=
+      mul_le_mul_of_nonneg_right η_le_strength vNorm_nonneg
+    _ ≤ EuclideanNorm ((SingletonDifferenceMatrix G Q + d).mulVec v) := by
+      simpa only [euclideanNorm_eq_norm_toLp] using
+        strength_spec Q hQ (SingletonDifferenceMatrix G Q + d)
+          hentries hdet.le v
 
 /-! ### 4.3. The compact set and the glued correspondence -/
 
