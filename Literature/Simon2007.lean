@@ -2617,6 +2617,88 @@ theorem repeatedPayoff_mono (G : QuittingGame) (k : ℕ) (r s : Payoff G.Player)
       apply quittingOneStagePayoff_mono
       exact ih (fun i => p i.succ)
 
+/-- The change in one-stage payoff is survival probability times continuation change. -/
+theorem quittingOneStagePayoff_sub (G : QuittingGame) (r s : Payoff G.Player)
+    (p : QuitRow G) (n : G.Player) :
+    QuittingOneStagePayoff G r p n - QuittingOneStagePayoff G s p n =
+      (1 - QuitProbability G p) * (r n - s n) := by
+  simp only [QuittingOneStagePayoff]
+  ring
+
+/-- The probability that play survives all `k` rows of a repeated profile. -/
+def RepeatedSurvivalProbability (G : QuittingGame) :
+    (k : ℕ) → RepeatedQuitProfile G k → ℝ
+  | 0, _ => 1
+  | k + 1, p =>
+      (1 - QuitProbability G (p 0)) *
+        RepeatedSurvivalProbability G k (fun i => p i.succ)
+
+/-- Repeated payoff differences scale by the probability of reaching the terminal vector. -/
+theorem repeatedPayoff_sub (G : QuittingGame) (k : ℕ) (r s : Payoff G.Player)
+    (p : RepeatedQuitProfile G k) (n : G.Player) :
+    RepeatedPayoff G k r p n - RepeatedPayoff G k s p n =
+      RepeatedSurvivalProbability G k p * (r n - s n) := by
+  induction k with
+  | zero => simp [RepeatedPayoff, RepeatedSurvivalProbability]
+  | succ k ih =>
+      simp only [RepeatedPayoff]
+      rw [quittingOneStagePayoff_sub]
+      rw [ih]
+      simp only [RepeatedSurvivalProbability]
+      ring
+
+/--
+If every player continues with positive probability in every row, finite survival is positive.
+-/
+theorem repeatedSurvivalProbability_pos (G : QuittingGame) (k : ℕ)
+    (p : RepeatedQuitProfile G k) (h : ∀ i n, (p i n : ℝ) < 1) :
+    0 < RepeatedSurvivalProbability G k p := by
+  induction k with
+  | zero => simp [RepeatedSurvivalProbability]
+  | succ k ih =>
+      simp only [RepeatedSurvivalProbability]
+      apply mul_pos
+      · have heq : 1 - QuitProbability G (p 0) =
+            ∏ n, (1 - (p 0 n : ℝ)) := by
+          simp [QuitProbability]
+        rw [heq]
+        exact Finset.prod_pos fun n _ => sub_pos.mpr (h 0 n)
+      · apply ih
+        exact fun i n => h i.succ n
+
+/-- Optimality against all mixed deviations is equivalent to the two support conditions. -/
+theorem mem_epsilonRow_zero_of_deviation_le (G : QuittingGame)
+    (r : Payoff G.Player) (p : QuitRow G)
+    (h : ∀ n q, QuittingOneStagePayoff G r (p.replace G n q) n ≤
+      QuittingOneStagePayoff G r p n) :
+    p ∈ EpsilonRow G 0 r := by
+  have hself : ∀ n, p.replace G n (p n) = p := by
+    intro n
+    funext k
+    by_cases hkn : k = n
+    · subst k
+      simp [QuitRow.replace]
+    · simp [QuitRow.replace, hkn]
+  constructor
+  · intro n hn
+    have hzero := h n 0
+    rw [quittingOneStagePayoff_replace_affine] at hzero
+    have hcurrent := quittingOneStagePayoff_replace_affine G r p n (p n)
+    rw [hself n] at hcurrent
+    norm_num at hzero
+    rw [hcurrent] at hzero
+    norm_num
+    nlinarith
+  · intro n hn
+    have hone := h n 1
+    rw [quittingOneStagePayoff_replace_affine] at hone
+    have hcurrent := quittingOneStagePayoff_replace_affine G r p n (p n)
+    rw [hself n] at hcurrent
+    norm_num at hone
+    rw [hcurrent] at hone
+    norm_num
+    nlinarith
+
 /-- Add one last-stage row after a finite repeated quitting profile. -/
 def RepeatedQuitProfile.appendLast (G : QuittingGame) {k : ℕ}
     (p : RepeatedQuitProfile G k) (r : QuitRow G) : RepeatedQuitProfile G (k + 1) :=
@@ -2691,6 +2773,94 @@ theorem RepeatedQuitProfile.appendLast_replace (G : QuittingGame) {k : ℕ}
   · simp [RepeatedQuitProfile.replace, RepeatedQuitProfile.appendLast, QuitRow.replace]
   · simp [RepeatedQuitProfile.replace, RepeatedQuitProfile.appendLast]
 
+/-- Every nonempty repeated profile is its initial segment followed by its last row. -/
+theorem RepeatedQuitProfile.appendLast_init_last (G : QuittingGame) {k : ℕ}
+    (p : RepeatedQuitProfile G (k + 1)) :
+    RepeatedQuitProfile.appendLast G (Fin.init p) (p (Fin.last k)) = p := by
+  change Fin.snoc (Fin.init p) (p (Fin.last k)) = p
+  exact Fin.snoc_init_self (q := p)
+
+/-- Replacing a player's quit probability by its current value leaves a row unchanged. -/
+theorem QuitRow.replace_self (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
+    p.replace G n (p n) = p := by
+  funext j
+  by_cases hj : j = n
+  · subst j
+    simp [QuitRow.replace]
+  · simp [QuitRow.replace, hj]
+
+/-- Replacing one player's finite sequence by its current sequence leaves the profile unchanged. -/
+theorem RepeatedQuitProfile.replace_self (G : QuittingGame) {k : ℕ}
+    (p : RepeatedQuitProfile G k) (n : G.Player) :
+    p.replace G n (fun i => p i n) = p := by
+  funext i j
+  by_cases hj : j = n
+  · subst j
+    simp [RepeatedQuitProfile.replace]
+  · simp [RepeatedQuitProfile.replace, hj]
+
+/-- The initial segment of a repeated equilibrium is an equilibrium at the last-row payoff. -/
+theorem RepeatedEquilibriumCorrespondence.init (G : QuittingGame) {k : ℕ}
+    (x : Payoff G.Player) (p : RepeatedQuitProfile G (k + 1))
+    (hp : p ∈ RepeatedEquilibriumCorrespondence G (k + 1) x) :
+    Fin.init p ∈ RepeatedEquilibriumCorrespondence G k
+      (QuittingOneStagePayoff G x (p (Fin.last k))) := by
+  intro n q
+  let r : QuitRow G := p (Fin.last k)
+  let qFull : Fin (k + 1) → Set.Icc (0 : ℝ) 1 := Fin.snoc q (r n)
+  have hdecomp : RepeatedQuitProfile.appendLast G (Fin.init p) r = p := by
+    exact p.appendLast_init_last G
+  have hequilibrium := hp n qFull
+  rw [← hdecomp] at hequilibrium
+  rw [RepeatedQuitProfile.appendLast_replace] at hequilibrium
+  have hqinit : (fun i : Fin k => qFull i.castSucc) = q := by
+    funext i
+    simp [qFull]
+  have hqlast : qFull (Fin.last k) = r n := by simp [qFull]
+  rw [hqinit, hqlast, QuitRow.replace_self] at hequilibrium
+  rw [repeatedPayoff_appendLast, repeatedPayoff_appendLast] at hequilibrium
+  exact hequilibrium
+
+/-- With positive finite survival, the last row of a repeated equilibrium lies in `E₀`. -/
+theorem RepeatedEquilibriumCorrespondence.last_mem_epsilonRow_zero
+    (G : QuittingGame) {k : ℕ} (x : Payoff G.Player)
+    (p : RepeatedQuitProfile G (k + 1))
+    (hp : p ∈ RepeatedEquilibriumCorrespondence G (k + 1) x)
+    (hnoSure : ∀ i n, (p i n : ℝ) < 1) :
+    p (Fin.last k) ∈ EpsilonRow G 0 x := by
+  let pInit : RepeatedQuitProfile G k := Fin.init p
+  let r : QuitRow G := p (Fin.last k)
+  let y : Payoff G.Player := QuittingOneStagePayoff G x r
+  have hdecomp : RepeatedQuitProfile.appendLast G pInit r = p := by
+    exact p.appendLast_init_last G
+  have hsurvival : 0 < RepeatedSurvivalProbability G k pInit := by
+    apply repeatedSurvivalProbability_pos
+    intro i n
+    exact hnoSure i.castSucc n
+  apply mem_epsilonRow_zero_of_deviation_le
+  intro n q
+  let qFull : Fin (k + 1) → Set.Icc (0 : ℝ) 1 :=
+    Fin.snoc (fun i => pInit i n) q
+  have hequilibrium := hp n qFull
+  rw [← hdecomp] at hequilibrium
+  rw [RepeatedQuitProfile.appendLast_replace] at hequilibrium
+  have hqinit : (fun i : Fin k => qFull i.castSucc) = fun i => pInit i n := by
+    funext i
+    simp [qFull]
+  have hqlast : qFull (Fin.last k) = q := by simp [qFull]
+  rw [hqinit, hqlast, RepeatedQuitProfile.replace_self] at hequilibrium
+  rw [repeatedPayoff_appendLast, repeatedPayoff_appendLast] at hequilibrium
+  change RepeatedPayoff G k (QuittingOneStagePayoff G x (r.replace G n q)) pInit n ≤
+    RepeatedPayoff G k y pInit n at hequilibrium
+  have hdifference := repeatedPayoff_sub G k
+    (QuittingOneStagePayoff G x (r.replace G n q)) y pInit n
+  have hproduct : RepeatedSurvivalProbability G k pInit *
+      (QuittingOneStagePayoff G x (r.replace G n q) n - y n) ≤ 0 := by
+    rw [← hdifference]
+    linarith
+  change QuittingOneStagePayoff G x (r.replace G n q) n ≤ y n
+  nlinarith
+
 /-- An equilibrium can be extended by a last-stage equilibrium for its terminal vector. -/
 theorem RepeatedEquilibriumCorrespondence.appendLast (G : QuittingGame) {k : ℕ}
     (x y : Payoff G.Player) (p : RepeatedQuitProfile G k) (r : QuitRow G)
@@ -2742,7 +2912,43 @@ theorem repeatedF_eq_iterate_of_no_sure_quit (G : QuittingGame) (k : ℕ)
     (x : Payoff G.Player)
     (h : ∀ p ∈ RepeatedEquilibriumCorrespondence G k x, ∀ i n, (p i n : ℝ) < 1) :
     RepeatedF G k x = (FRow G 0).iterate k x := by
-  sorry
+  apply Set.Subset.antisymm
+  · induction k generalizing x with
+    | zero =>
+        rintro z ⟨p, _hp, hpay⟩
+        simp only [Correspondence.iterate, Set.mem_singleton_iff]
+        simpa [RepeatedPayoff] using hpay.symm
+    | succ k ih =>
+        rintro z ⟨p, hp, hpay⟩
+        let pInit : RepeatedQuitProfile G k := Fin.init p
+        let r : QuitRow G := p (Fin.last k)
+        let y : Payoff G.Player := QuittingOneStagePayoff G x r
+        have hr : r ∈ EpsilonRow G 0 x := by
+          exact RepeatedEquilibriumCorrespondence.last_mem_epsilonRow_zero G x p hp
+            (h p hp)
+        have hpInit : pInit ∈ RepeatedEquilibriumCorrespondence G k y := by
+          exact RepeatedEquilibriumCorrespondence.init G x p hp
+        have hprefixNoSure :
+            ∀ q ∈ RepeatedEquilibriumCorrespondence G k y,
+              ∀ i n, (q i n : ℝ) < 1 := by
+          intro q hq i n
+          have hqFull : RepeatedQuitProfile.appendLast G q r ∈
+              RepeatedEquilibriumCorrespondence G (k + 1) x := by
+            exact RepeatedEquilibriumCorrespondence.appendLast G x y q r rfl hq hr
+          simpa only [RepeatedQuitProfile.appendLast_castSucc] using
+            h (RepeatedQuitProfile.appendLast G q r) hqFull i.castSucc n
+        have hpayout : RepeatedPayoff G k y pInit ∈ RepeatedF G k y :=
+          ⟨pInit, hpInit, rfl⟩
+        have hiter : RepeatedPayoff G k y pInit ∈ (FRow G 0).iterate k y := by
+          exact ih y hprefixNoSure hpayout
+        have hz : RepeatedPayoff G k y pInit = z := by
+          rw [← hpay]
+          rw [← p.appendLast_init_last G]
+          rw [repeatedPayoff_appendLast]
+        simp only [Correspondence.iterate, Set.mem_iUnion]
+        refine ⟨y, ⟨r, hr, rfl⟩, ?_⟩
+        rwa [hz] at hiter
+  · exact repeatedF_contains_iterate G k x
 
 /-- Two points lie in one connected component of the repeated-equilibrium graph over `D`. -/
 def SameRepeatedEquilibriumComponent (G : QuittingGame) (k : ℕ)
