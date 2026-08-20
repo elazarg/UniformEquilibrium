@@ -1,0 +1,262 @@
+name: Compact Nash master stage 4 rescue
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_master_stage4_rescue.yml
+      - Literature/Sorin1986/CompactNashMaster3c.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-master-stage4-rescue
+  cancel-in-progress: false
+
+jobs:
+  rescue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 210
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Inspect state
+        id: state
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster4.ok; then echo done=yes >> "$GITHUB_OUTPUT"; else echo done=no >> "$GITHUB_OUTPUT"; fi
+      - name: Wait for stage 3c
+        if: steps.state.outputs.done == 'no'
+        run: |
+          for attempt in $(seq 1 120); do
+            git fetch origin agent/promote-sorin1986
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster.lean 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster3c.ok 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster4.ok 2>/dev/null || true
+            test -f Literature/Sorin1986/CompactNashMaster4.ok && exit 0
+            test -f Literature/Sorin1986/CompactNashMaster3c.ok && exit 0
+            sleep 10
+          done
+          exit 1
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Search proof variants
+        if: steps.state.outputs.done == 'no'
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster4.ok; then exit 0; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashMaster.lean'); s=p.read_text()
+          candidates=[s.find('/-- Every finite family of unilateral Nash inequalities'),s.find('theorem exists_satisfies_finset')]
+          cuts=[x for x in candidates if x>=0]
+          cut=min(cuts) if cuts else s.rindex('\nend CompactNash')
+          Path('/tmp/master4-core').write_text(s[:cut].rstrip()+'\n\n')
+          PY
+          cat > /tmp/master4-tail <<'LEAN'
+
+          end CompactNash
+
+          end Literature.Sorin1986
+          LEAN
+          mkdir -p /tmp/master4-variants
+          cat > /tmp/master4-variants/1 <<'LEAN'
+          theorem exists_satisfies_finset (G : CompactContinuousGame)
+              (F : Finset (Deviation G)) :
+              ∃ profile : ∀ i, G.Strategy i,
+                ∀ d ∈ F,
+                  G.payoff (Function.update profile d.1 d.2) d.1 ≤
+                    G.payoff profile d.1 := by
+            classical
+            let n := Fintype.card G.Player
+            let e : Fin n ≃ G.Player := (Fintype.equivFin G.Player).symm
+            obtain ⟨sigma, hsigma⟩ := (restrictedGame G e F).kernel.mixed_nash_exists
+            let eS : (∀ j : Fin n, G.Strategy (e j)) ≃ (∀ i, G.Strategy i) :=
+              Equiv.piCongrLeft G.Strategy e
+            let b : ∀ j : Fin n, G.Strategy (e j) := fun j =>
+              barycenter G (e j) (sigma j) (restrictedStrategy G e F j)
+            let profile : ∀ i, G.Strategy i := eS b
+            refine ⟨profile, ?_⟩
+            intro d hd
+            rcases d with ⟨who, strategy⟩
+            let j : Fin n := e.symm who
+            have hj : e j = who := e.apply_symm_apply who
+            cases hj
+            let member : F := ⟨⟨e j, strategy⟩, hd⟩
+            let label : RestrictedAction G e F j := some ⟨member, rfl⟩
+            have hdecode : restrictedStrategy G e F j label = strategy := by
+              simp [label, member, restrictedStrategy]
+            have hnash := hsigma j (PMF.pure label)
+            change (restrictedGame G e F).mixedPayoff
+                (Function.update sigma j (PMF.pure label)) j ≤
+              (restrictedGame G e F).mixedPayoff sigma j at hnash
+            rw [restricted_mixedPayoff_eq_realized G e F
+                  (Function.update sigma j (PMF.pure label)) j,
+                restricted_mixedPayoff_eq_realized G e F sigma j] at hnash
+            let pureBarycenter : G.Strategy (e j) :=
+              barycenter G (e j) (PMF.pure label) (restrictedStrategy G e F j)
+            let bdev : ∀ k : Fin n, G.Strategy (e k) := fun k =>
+              barycenter G (e k) ((Function.update sigma j (PMF.pure label)) k)
+                (restrictedStrategy G e F k)
+            have hbdev : bdev = Function.update b j pureBarycenter := by
+              funext k
+              by_cases hk : k = j
+              · subst k; simp [bdev, b, pureBarycenter]
+              · simp [bdev, b, pureBarycenter, Function.update_of_ne, hk]
+            have hpure :
+                G.payoff (Function.update profile (e j) pureBarycenter) (e j) =
+                  G.payoff (Function.update profile (e j) strategy) (e j) := by
+              have h := payoff_update_barycenter G profile (e j) (e j)
+                (PMF.pure label) (restrictedStrategy G e F j)
+              simpa [pureBarycenter, hdecode] using h
+            have hdevRealized :
+                G.payoff (eS bdev) (e j) =
+                  G.payoff (Function.update profile (e j) strategy) (e j) := by
+              rw [hbdev, piCongrLeft_update G.Strategy e b j pureBarycenter]
+              exact hpure
+            have hnash' : G.payoff (eS bdev) (e j) ≤ G.payoff (eS b) (e j) := by
+              simpa [bdev, b, eS] using hnash
+            rw [hdevRealized] at hnash'
+            exact hnash'
+          LEAN
+          cat > /tmp/master4-variants/2 <<'LEAN'
+          theorem exists_satisfies_finset (G : CompactContinuousGame)
+              (F : Finset (Deviation G)) :
+              ∃ profile : ∀ i, G.Strategy i,
+                ∀ d ∈ F,
+                  G.payoff (Function.update profile d.1 d.2) d.1 ≤
+                    G.payoff profile d.1 := by
+            classical
+            let n := Fintype.card G.Player
+            let e : Fin n ≃ G.Player := (Fintype.equivFin G.Player).symm
+            let H := restrictedGame G e F
+            obtain ⟨sigma, hsigma⟩ := H.kernel.mixed_nash_exists
+            let eS : (∀ j : Fin n, G.Strategy (e j)) ≃ (∀ i, G.Strategy i) :=
+              Equiv.piCongrLeft G.Strategy e
+            let b : ∀ j : Fin n, G.Strategy (e j) := fun j =>
+              barycenter G (e j) (sigma j) (restrictedStrategy G e F j)
+            let profile := eS b
+            refine ⟨profile, ?_⟩
+            rintro ⟨who, strategy⟩ hd
+            let j := e.symm who
+            have hj : who = e j := (e.apply_symm_apply who).symm
+            subst who
+            let member : F := ⟨⟨e j, strategy⟩, hd⟩
+            let label : RestrictedAction G e F j := some ⟨member, rfl⟩
+            have hdecode : restrictedStrategy G e F j label = strategy := by
+              rfl
+            have hnash : H.mixedPayoff (Function.update sigma j (PMF.pure label)) j ≤
+                H.mixedPayoff sigma j := by
+              simpa [H, FiniteStageGame.mixedPayoff] using hsigma j (PMF.pure label)
+            rw [show H = restrictedGame G e F from rfl,
+              restricted_mixedPayoff_eq_realized G e F
+                (Function.update sigma j (PMF.pure label)) j,
+              restricted_mixedPayoff_eq_realized G e F sigma j] at hnash
+            let pureBarycenter := barycenter G (e j) (PMF.pure label)
+              (restrictedStrategy G e F j)
+            let bdev : ∀ k : Fin n, G.Strategy (e k) := fun k =>
+              barycenter G (e k) ((Function.update sigma j (PMF.pure label)) k)
+                (restrictedStrategy G e F k)
+            have hbdev : bdev = Function.update b j pureBarycenter := by
+              funext k
+              by_cases hk : k = j
+              · subst k; simp [bdev, b, pureBarycenter]
+              · simp [bdev, b, pureBarycenter, hk, Function.update_of_ne]
+            have hpure := payoff_update_barycenter G profile (e j) (e j)
+              (PMF.pure label) (restrictedStrategy G e F j)
+            have hpure' :
+                G.payoff (Function.update profile (e j) pureBarycenter) (e j) =
+                  G.payoff (Function.update profile (e j) strategy) (e j) := by
+              simpa [pureBarycenter, hdecode] using hpure
+            have hreindex := piCongrLeft_update G.Strategy e b j pureBarycenter
+            have hdev : G.payoff (eS bdev) (e j) =
+                G.payoff (Function.update profile (e j) strategy) (e j) := by
+              rw [hbdev, hreindex]
+              exact hpure'
+            have hnash' : G.payoff (eS bdev) (e j) ≤ G.payoff profile (e j) := by
+              simpa [bdev, b, profile, eS] using hnash
+            simpa [hdev] using hnash'
+          LEAN
+          cat > /tmp/master4-variants/3 <<'LEAN'
+          theorem exists_satisfies_finset (G : CompactContinuousGame)
+              (F : Finset (Deviation G)) :
+              ∃ profile : ∀ i, G.Strategy i,
+                ∀ d ∈ F,
+                  G.payoff (Function.update profile d.1 d.2) d.1 ≤
+                    G.payoff profile d.1 := by
+            classical
+            let n := Fintype.card G.Player
+            let e : Fin n ≃ G.Player := (Fintype.equivFin G.Player).symm
+            obtain ⟨sigma, hsigma⟩ := (restrictedGame G e F).kernel.mixed_nash_exists
+            let b : ∀ j : Fin n, G.Strategy (e j) := fun j =>
+              barycenter G (e j) (sigma j) (restrictedStrategy G e F j)
+            let profile := Equiv.piCongrLeft G.Strategy e b
+            refine ⟨profile, ?_⟩
+            rintro ⟨who, strategy⟩ hd
+            let j : Fin n := e.symm who
+            have hj : e j = who := e.apply_symm_apply who
+            cases hj
+            let member : F := ⟨⟨e j, strategy⟩, hd⟩
+            let label : RestrictedAction G e F j := some ⟨member, rfl⟩
+            have hnash := hsigma j (PMF.pure label)
+            change (restrictedGame G e F).mixedPayoff
+                (Function.update sigma j (PMF.pure label)) j ≤
+              (restrictedGame G e F).mixedPayoff sigma j at hnash
+            rw [restricted_mixedPayoff_eq_realized G e F
+                  (Function.update sigma j (PMF.pure label)) j,
+                restricted_mixedPayoff_eq_realized G e F sigma j] at hnash
+            have hpure := payoff_update_barycenter G profile (e j) (e j)
+              (PMF.pure label) (restrictedStrategy G e F j)
+            simp [label, member, restrictedStrategy] at hpure
+            let bdev : ∀ k : Fin n, G.Strategy (e k) := fun k =>
+              barycenter G (e k) ((Function.update sigma j (PMF.pure label)) k)
+                (restrictedStrategy G e F k)
+            have hbdev : bdev = Function.update b j
+                (barycenter G (e j) (PMF.pure label) (restrictedStrategy G e F j)) := by
+              funext k
+              by_cases hk : k = j
+              · subst k; simp [bdev, b]
+              · simp [bdev, b, hk, Function.update_of_ne]
+            have hreindex := piCongrLeft_update G.Strategy e b j
+              (barycenter G (e j) (PMF.pure label) (restrictedStrategy G e F j))
+            have hdev :
+                G.payoff (Equiv.piCongrLeft G.Strategy e bdev) (e j) =
+                  G.payoff (Function.update profile (e j) strategy) (e j) := by
+              rw [hbdev, hreindex]
+              exact hpure
+            have hnash' :
+                G.payoff (Equiv.piCongrLeft G.Strategy e bdev) (e j) ≤
+                  G.payoff profile (e j) := by
+              simpa [bdev, b, profile] using hnash
+            rw [hdev] at hnash'
+            exact hnash'
+          LEAN
+          : > Literature/Sorin1986/CompactNashMaster4Rescue.log
+          success=''
+          for proof in /tmp/master4-variants/*; do
+            variant=$(basename "$proof")
+            echo "===== VARIANT $variant =====" >> Literature/Sorin1986/CompactNashMaster4Rescue.log
+            cat /tmp/master4-core "$proof" /tmp/master4-tail > Literature/Sorin1986/CompactNashMaster.lean
+            if lake env lean Literature/Sorin1986/CompactNashMaster.lean >> Literature/Sorin1986/CompactNashMaster4Rescue.log 2>&1; then success="$variant"; break; fi
+          done
+          test -n "$success"
+          printf 'success variant %s\n' "$success" > Literature/Sorin1986/CompactNashMaster4.ok
+      - name: Commit rescue proof
+        if: steps.state.outputs.done == 'no'
+        run: |
+          if test ! -f Literature/Sorin1986/CompactNashMaster4.ok; then exit 1; fi
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashMaster.lean Literature/Sorin1986/CompactNashMaster4Rescue.log Literature/Sorin1986/CompactNashMaster4.ok
+          git commit -m 'Find robust finite compact Nash constraint proof'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
