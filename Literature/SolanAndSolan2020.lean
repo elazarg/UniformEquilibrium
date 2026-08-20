@@ -3,6 +3,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
+import MathUE.CaristiFixedPoint
 import Mathlib.Analysis.Normed.Affine.AddTorsorBases
 import Mathlib.LinearAlgebra.AffineSpace.FiniteDimensional
 
@@ -1866,12 +1867,45 @@ transfinite recursion. The printed `c≥0` cannot include `c=0`, because the
 second conclusion is then a strict inequality between a nonnegative sum and
 zero. -/
 
-/-! The finite-sequence conclusion of Theorem 3.5. -/
+/-! The displacement along a finite list `x¹,…,xᵏ`. -/
+def PathDisplacement {X : Type*} [PseudoMetricSpace X]
+    (f : X → X) : List X → ℝ
+  | [] => 0
+  | x :: xs => dist x (f x) + PathDisplacement f xs
+
+/-! The tracking error of a finite list whose first point is intended to
+follow `anchor`; subsequent points are intended to follow their predecessor
+under `f`. -/
+def PathTrackingFrom {X : Type*} [PseudoMetricSpace X]
+    (f : X → X) (anchor : X) : List X → ℝ
+  | [] => 0
+  | x :: xs => dist x anchor + PathTrackingFrom f (f x) xs
+
+theorem pathTrackingFrom_nonneg {X : Type*} [PseudoMetricSpace X]
+    (f : X → X) (anchor : X) (xs : List X) :
+    0 ≤ PathTrackingFrom f anchor xs := by
+  induction xs generalizing anchor with
+  | nil => simp [PathTrackingFrom]
+  | cons x xs ih =>
+      simp only [PathTrackingFrom]
+      exact add_nonneg dist_nonneg (ih (f x))
+
+/-! The finite-sequence conclusion of Theorem 3.5. The head is `x¹`; the
+list contains `x²,…,xᵏ`, so its tracking error starts at `f(x¹)`. -/
 def ApproximationWitness {X : Type*} [PseudoMetricSpace X]
     (f : X → X) (c C : ℝ) : Prop :=
-  ∃ K : ℕ, 0 < K ∧ ∃ x : ℕ → X,
-    C < (∑ k ∈ Finset.Icc 1 K, dist (x k) (f (x k))) ∧
-    (∑ k ∈ Finset.Icc 1 (K - 1), dist (x (k + 1)) (f (x k))) < c
+  ∃ x : X, ∃ xs : List X,
+    C < dist x (f x) + PathDisplacement f xs ∧
+    PathTrackingFrom f (f x) xs < c
+
+/-! Supremum of the displacement attainable from `anchor` while spending
+less than half of the tracking budget. This is the Caristi potential in the
+short proof of Theorem 3.5. -/
+def RemainingDisplacement {X : Type*} [PseudoMetricSpace X]
+    (f : X → X) (c : ℝ) (anchor : X) : ℝ :=
+  sSup {value | ∃ xs : List X,
+    PathTrackingFrom f anchor xs < c / 2 ∧
+    value = PathDisplacement f xs}
 
 /-! Theorem 3.5: a fixed-point-free map admits large displacement with small
 tracking error on a finite sequence. -/
@@ -1879,7 +1913,75 @@ theorem theorem3_5 {X : Type*} [MetricSpace X] [Nonempty X]
     [CompleteSpace X] (f : X → X) (hfixed : ∀ x, f x ≠ x)
     (c C : ℝ) (hc : 0 < c) (hC : 0 ≤ C) :
     ApproximationWitness f c C := by
-  sorry
+  by_contra hno
+  have hpathBound {x : X} {xs : List X}
+      (htracking : PathTrackingFrom f (f x) xs < c) :
+      dist x (f x) + PathDisplacement f xs ≤ C := by
+    by_contra hnot
+    exact hno ⟨x, xs, lt_of_not_ge hnot, htracking⟩
+  have hset_nonempty (anchor : X) :
+      {value | ∃ xs : List X,
+        PathTrackingFrom f anchor xs < c / 2 ∧
+        value = PathDisplacement f xs}.Nonempty := by
+    refine ⟨0, [], ?_, rfl⟩
+    simp [PathTrackingFrom, hc]
+  have hset_bdd (anchor : X) : BddAbove
+      {value | ∃ xs : List X,
+        PathTrackingFrom f anchor xs < c / 2 ∧
+        value = PathDisplacement f xs} := by
+    refine ⟨C, ?_⟩
+    rintro value ⟨xs, htracking, rfl⟩
+    cases xs with
+    | nil => simpa [PathDisplacement] using hC
+    | cons x xs =>
+        apply hpathBound
+        have htail := pathTrackingFrom_nonneg f (f x) xs
+        have hdistance : 0 ≤ dist x anchor := dist_nonneg
+        simp only [PathTrackingFrom] at htracking
+        linarith
+  let φ : X → ℝ := RemainingDisplacement f c
+  have hφ_nonneg (anchor : X) : 0 ≤ φ anchor := by
+    apply le_csSup (hset_bdd anchor)
+    exact ⟨[], by simp [PathTrackingFrom, hc], rfl⟩
+  have hφ_bdd : BddBelow (Set.range φ) := by
+    exact ⟨0, by rintro _ ⟨anchor, rfl⟩; exact hφ_nonneg anchor⟩
+  have hφ_lsc : LowerSemicontinuous φ := by
+    rw [lowerSemicontinuous_iff]
+    intro anchor y hy
+    dsimp [φ, RemainingDisplacement] at hy ⊢
+    obtain ⟨value, hvalue, hyvalue⟩ := exists_lt_of_lt_csSup
+      (hset_nonempty anchor) hy
+    obtain ⟨xs, htracking, rfl⟩ := hvalue
+    have hcontinuous : ContinuousAt
+        (fun nextAnchor => PathTrackingFrom f nextAnchor xs) anchor := by
+      cases xs with
+      | nil => simpa [PathTrackingFrom] using continuousAt_const
+      | cons x xs =>
+          simp only [PathTrackingFrom]
+          fun_prop
+    filter_upwards [hcontinuous.eventually (gt_mem_nhds htracking)]
+      with nextAnchor hnext
+    exact hyvalue.trans_le
+      (le_csSup (hset_bdd nextAnchor) ⟨xs, hnext, rfl⟩)
+  have hcaristi (x : X) : dist x (f x) ≤ φ x - φ (f x) := by
+    have hsuple : φ (f x) ≤ φ x - dist x (f x) := by
+      apply csSup_le (hset_nonempty (f x))
+      intro value hvalue
+      obtain ⟨xs, htracking, rfl⟩ := hvalue
+      have hmem : dist x (f x) + PathDisplacement f xs ∈
+          {value | ∃ ys : List X,
+            PathTrackingFrom f x ys < c / 2 ∧
+            value = PathDisplacement f ys} := by
+        refine ⟨x :: xs, ?_, ?_⟩
+        · simpa [PathTrackingFrom] using htracking
+        · simp [PathDisplacement]
+      have hupper := le_csSup (hset_bdd x) hmem
+      dsimp [φ, RemainingDisplacement]
+      linarith
+    linarith
+  obtain ⟨x, hx⟩ := MathUE.exists_fixedPoint_of_caristi
+    f φ hφ_lsc hφ_bdd hcaristi
+  exact hfixed x hx
 
 /-! **Lemmas 3.6--3.8 (paper).** For the kiloblock strategy `ξ*` built from
 Theorem 3.2 and Theorem 3.5, the paper proves (i) its payoff is within
