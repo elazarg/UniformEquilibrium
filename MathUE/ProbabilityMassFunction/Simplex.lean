@@ -160,5 +160,25 @@ theorem ofVector_eq_iff_eq_toVector [Fintype α]
     subst h
     exact ofVector_toVector μ
 
+/-! ## Boolean Bernoulli laws -/
+
+/-- The Boolean PMF assigning real probability `p` to `true`. -/
+def bernoulliBool (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) : PMF Bool :=
+  ofVector (fun value ↦ if value then p else 1 - p) <| by
+    constructor
+    · intro value
+      cases value <;> simp_all
+    · simp
+
+@[simp] theorem bernoulliBool_true_toReal
+    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) :
+    (bernoulliBool p hp0 hp1 true).toReal = p := by
+  apply ofVector_toReal
+
+@[simp] theorem bernoulliBool_false_toReal
+    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) :
+    (bernoulliBool p hp0 hp1 false).toReal = 1 - p := by
+  apply ofVector_toReal
+
 end ProbabilityMassFunction
 end Math
