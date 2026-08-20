@@ -3939,7 +3939,196 @@ theorem equation_11 :
 
 theorem example2_D1_eq_C :
     example2.oneStageFeasiblePayoffs = example2.correlatedFeasiblePayoffs := by
-  sorry
+  have hconvex : Convex ℝ example2.oneStageFeasiblePayoffs := by
+    change Convex ℝ ((binaryGame (pair 1 0) (pair 2 2) (pair 0 0)
+      (pair 0 1)).oneStageFeasiblePayoffs)
+    rintro _ ⟨first, rfl⟩ _ ⟨second, rfl⟩ a b ha hb hab
+    change (Bool → PMF Bool) at first second
+    let p₁ := (first false true).toReal
+    let q₁ := (first true true).toReal
+    let p₂ := (second false true).toReal
+    let q₂ := (second true true).toReal
+    have hp₁₀ : 0 ≤ p₁ := ENNReal.toReal_nonneg
+    have hq₁₀ : 0 ≤ q₁ := ENNReal.toReal_nonneg
+    have hp₂₀ : 0 ≤ p₂ := ENNReal.toReal_nonneg
+    have hq₂₀ : 0 ≤ q₂ := ENNReal.toReal_nonneg
+    have hp₁₁ : p₁ ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hq₁₁ : q₁ ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hp₂₁ : p₂ ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hq₂₁ : q₂ ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    let x₁ := (1 - p₁) * (1 + q₁)
+    let y₁ := q₁ * (2 - p₁)
+    let x₂ := (1 - p₂) * (1 + q₂)
+    let y₂ := q₂ * (2 - p₂)
+    have hfirstFalse :
+        (binaryGame (pair 1 0) (pair 2 2) (pair 0 0)
+          (pair 0 1)).mixedPayoff first false = x₁ := by
+      rw [binaryGame_mixedPayoff_apply]
+      simp only [pair_false]
+      dsimp [x₁, p₁, q₁]
+      ring
+    have hfirstTrue :
+        (binaryGame (pair 1 0) (pair 2 2) (pair 0 0)
+          (pair 0 1)).mixedPayoff first true = y₁ := by
+      rw [binaryGame_mixedPayoff_apply]
+      simp only [pair_true]
+      dsimp [y₁, p₁, q₁]
+      ring
+    have hsecondFalse :
+        (binaryGame (pair 1 0) (pair 2 2) (pair 0 0)
+          (pair 0 1)).mixedPayoff second false = x₂ := by
+      rw [binaryGame_mixedPayoff_apply]
+      simp only [pair_false]
+      dsimp [x₂, p₂, q₂]
+      ring
+    have hsecondTrue :
+        (binaryGame (pair 1 0) (pair 2 2) (pair 0 0)
+          (pair 0 1)).mixedPayoff second true = y₂ := by
+      rw [binaryGame_mixedPayoff_apply]
+      simp only [pair_true]
+      dsimp [y₂, p₂, q₂]
+      ring
+    let x := a * x₁ + b * x₂
+    let y := a * y₁ + b * y₂
+    let s := 1 - x + y
+    have hx₁₀ : 0 ≤ x₁ := by
+      exact mul_nonneg (sub_nonneg.mpr hp₁₁) (by linarith)
+    have hy₁₀ : 0 ≤ y₁ := by
+      exact mul_nonneg hq₁₀ (by linarith)
+    have hx₂₀ : 0 ≤ x₂ := by
+      exact mul_nonneg (sub_nonneg.mpr hp₂₁) (by linarith)
+    have hy₂₀ : 0 ≤ y₂ := by
+      exact mul_nonneg hq₂₀ (by linarith)
+    have hx0 : 0 ≤ x :=
+      add_nonneg (mul_nonneg ha hx₁₀) (mul_nonneg hb hx₂₀)
+    have hy0 : 0 ≤ y :=
+      add_nonneg (mul_nonneg ha hy₁₀) (mul_nonneg hb hy₂₀)
+    have hsEq : s = a * (p₁ + q₁) + b * (p₂ + q₂) := by
+      dsimp [s, x, y, x₁, y₁, x₂, y₂]
+      nlinarith
+    have hs0 : 0 ≤ s := by
+      rw [hsEq]
+      exact add_nonneg (mul_nonneg ha (add_nonneg hp₁₀ hq₁₀))
+        (mul_nonneg hb (add_nonneg hp₂₀ hq₂₀))
+    have hs2 : s ≤ 2 := by
+      rw [hsEq]
+      have hsum₁ : p₁ + q₁ ≤ 2 := by linarith
+      have hsum₂ : p₂ + q₂ ≤ 2 := by linarith
+      calc
+        a * (p₁ + q₁) + b * (p₂ + q₂) ≤ a * 2 + b * 2 :=
+          add_le_add (mul_le_mul_of_nonneg_left hsum₁ ha)
+            (mul_le_mul_of_nonneg_left hsum₂ hb)
+        _ = 2 := by linarith
+    have hedgeLower₁ : 2 * x₁ - y₁ ≤ 2 := by
+      dsimp [x₁, y₁]
+      nlinarith [mul_nonneg hp₁₀ (by linarith : 0 ≤ 2 + q₁)]
+    have hedgeLower₂ : 2 * x₂ - y₂ ≤ 2 := by
+      dsimp [x₂, y₂]
+      nlinarith [mul_nonneg hp₂₀ (by linarith : 0 ≤ 2 + q₂)]
+    have hedgeLower : 2 * x - y ≤ 2 := by
+      dsimp [x, y]
+      nlinarith
+    have hedgeUpper₁ : 2 * y₁ - x₁ ≤ 2 := by
+      dsimp [x₁, y₁]
+      nlinarith [mul_nonneg (sub_nonneg.mpr hq₁₁)
+        (sub_nonneg.mpr (hp₁₁.trans (by norm_num : (1 : ℝ) ≤ 3)))]
+    have hedgeUpper₂ : 2 * y₂ - x₂ ≤ 2 := by
+      dsimp [x₂, y₂]
+      nlinarith [mul_nonneg (sub_nonneg.mpr hq₂₁)
+        (sub_nonneg.mpr (hp₂₁.trans (by norm_num : (1 : ℝ) ≤ 3)))]
+    have hedgeUpper : 2 * y - x ≤ 2 := by
+      dsimp [x, y]
+      nlinarith
+    let f : ℝ → ℝ := fun q ↦ q * (2 - s + q)
+    have hf : Continuous f := by
+      fun_prop
+    obtain ⟨q, hq0, hq1, hp0, hp1, hqeq⟩ :
+        ∃ q : ℝ, 0 ≤ q ∧ q ≤ 1 ∧ 0 ≤ s - q ∧ s - q ≤ 1 ∧ f q = y := by
+      by_cases hs1 : s ≤ 1
+      · have hyUpper : y ≤ f s := by
+          calc
+            y ≤ 2 * s := by
+              dsimp [s]
+              linarith [hedgeLower]
+            _ = f s := by
+              dsimp [f]
+              ring
+        have hyIcc : y ∈ Set.Icc (f 0) (f s) := by
+          constructor
+          · simpa [f] using hy0
+          · exact hyUpper
+        obtain ⟨q, hq, hqy⟩ :=
+          intermediate_value_Icc hs0 hf.continuousOn hyIcc
+        exact ⟨q, hq.1, hq.2.trans hs1, sub_nonneg.mpr hq.2,
+          by linarith [hq.1], hqy⟩
+      · have hs1' : 1 ≤ s := le_of_not_ge hs1
+        have hyLower : f (s - 1) ≤ y := by
+          calc
+            f (s - 1) = s - 1 := by
+              dsimp [f]
+              ring
+            _ ≤ y := by
+              dsimp [s]
+              linarith
+        have hyUpper : y ≤ f 1 := by
+          calc
+            y ≤ 3 - s := by
+              dsimp [s]
+              linarith [hedgeUpper]
+            _ = f 1 := by
+              dsimp [f]
+              ring
+        have hyIcc : y ∈ Set.Icc (f (s - 1)) (f 1) :=
+          ⟨hyLower, hyUpper⟩
+        obtain ⟨q, hq, hqy⟩ :=
+          intermediate_value_Icc (by linarith) hf.continuousOn hyIcc
+        exact ⟨q, (by linarith [hq.1]), hq.2,
+          (by linarith [hq.2]), (by linarith [hq.1]), hqy⟩
+    let p := s - q
+    let profile : Bool → PMF Bool := fun who ↦
+      if who then
+        Math.ProbabilityMassFunction.bernoulliBool q hq0 hq1
+      else
+        Math.ProbabilityMassFunction.bernoulliBool p hp0 hp1
+    refine ⟨profile, ?_⟩
+    funext who
+    cases who
+    · simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+      change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+          (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+            (pair 0 1))).mixedExtension.eu profile false = _
+      rw [example2_mixedEU_false, hfirstFalse, hsecondFalse]
+      simp only [profile, Bool.false_eq_true, if_false, if_true,
+        Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
+      change (1 - p) * (1 + q) = x
+      have hxFromSY : x = 1 - s + y := by
+        dsimp [s]
+        ring
+      rw [hxFromSY]
+      dsimp [f] at hqeq
+      calc
+        (1 - p) * (1 + q) = 1 - s + q * (2 - s + q) := by
+          dsimp [p]
+          ring
+        _ = 1 - s + y := by rw [hqeq]
+    · simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+      change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+          (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+            (pair 0 1))).mixedExtension.eu profile true = _
+      rw [example2_mixedEU_true, hfirstTrue, hsecondTrue]
+      simp only [profile, if_true, Bool.false_eq_true, if_false,
+        Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
+      change q * (2 - p) = y
+      rw [show 2 - p = 2 - s + q by dsimp [p]; ring]
+      simpa only [f] using hqeq
+  apply Set.Subset.antisymm
+  · rintro _ ⟨profile, rfl⟩
+    exact FiniteStageGame.mixedPayoff_mem_correlatedFeasiblePayoffs _ profile
+  · exact convexHull_min (lemma_1_pure_subset_D1 _) hconvex
 
 theorem example2_E1_eq_singleton :
     example2.oneStageEquilibriumPayoffs = {pair 2 2} := by
