@@ -407,11 +407,12 @@ the displayed distance-one application: the common parameter may depend on
 uncorrected Simon 2007 declaration nor the production quitting-game library
 contains this uniformization.
 -/
-def Lemma2_1Part2CompactClaim (G : QuittingGame) : Prop :=
-  ¬HasStationarilyGeneratedApproximateEquilibria G →
-    ¬HasInstantApproximateEquilibria G →
-      ∀ K : Set (Payoff G.Player), IsCompact K →
-        SatisfiesCompactMotionBound G K
+theorem lemma2_1_part2_compact (G : QuittingGame)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (K : Set (Payoff G.Player)) (hK : IsCompact K) :
+    SatisfiesCompactMotionBound G K := by
+  sorry
 
 /--
 Lemma 2.1(1), isolated from the corrected compactness clause.  Simon 2007,
@@ -419,12 +420,13 @@ Lemma 5 contains this clause, but that declaration is itself `sorry`-backed.
 The elementary strategic proof therefore remains visible here rather than
 being hidden behind an open literature dependency.
 -/
-def Lemma2_1Part1Claim (G : QuittingGame) : Prop :=
-  ¬HasStationarilyGeneratedApproximateEquilibria G →
-    ¬HasInstantApproximateEquilibria G →
-      (∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
+theorem lemma2_1_part1 (G : QuittingGame)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    (∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
       ∀ j, IsNormalPlayer G j → ∃ k, k ≠ j ∧ IsNormalPlayer G k ∧
-        G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k
+        G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k := by
+  sorry
 
 /--
 Lemma 2.1(2), with the two corrections printed on page 185.  Simon 2007's
@@ -432,17 +434,24 @@ Lemma 2.1(2), with the two corrections printed on page 185.  Simon 2007's
 stationary equilibria and its conclusion omits `WithinOneOfFeasible`.
 The missing proof is the compact-subsequence argument from the article.
 -/
-def Lemma2_1Part2Claim (G : QuittingGame) : Prop :=
-  ¬HasStationarilyGeneratedApproximateEquilibria G →
-    ¬HasInstantApproximateEquilibria G →
-      ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ
+theorem lemma2_1_part2 (G : QuittingGame)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ := by
+  sorry
 
 /--
 Lemma 2.1, with both corrected clauses.  Both substantive clauses remain open,
 so the numbered lemma is left visibly open as well.
 -/
-def Lemma2_1Claim (G : QuittingGame) : Prop :=
-  Lemma2_1Part1Claim G ∧ Lemma2_1Part2Claim G
+theorem lemma2_1 (G : QuittingGame)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ((∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
+      ∀ j, IsNormalPlayer G j → ∃ k, k ≠ j ∧ IsNormalPlayer G k ∧
+        G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k) ∧
+      ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ := by
+  sorry
 
 /-- A vector lies within Euclidean distance `ε` of the feasible vectors. -/
 def NearFeasible (G : QuittingGame) (ε : ℝ)
@@ -486,12 +495,13 @@ Theorem 2.1.  Simon 2007, Theorem 3 has the same mathematical content, but its
 Lean declaration is `sorry`-backed and uses the inherited product norm.  This
 source-exact Euclidean statement therefore remains visibly open.
 -/
-def Theorem2_1Claim (G : QuittingGame) : Prop :=
-  ¬HasStationarilyGeneratedApproximateEquilibria G →
-    ¬HasInstantApproximateEquilibria G →
-      EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
-        (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G)
-        (ExtendedOrbitCondition G)
+theorem theorem2_1 (G : QuittingGame)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
+      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G)
+      (ExtendedOrbitCondition G) := by
+  sorry
 
 /-- A positive bound on the differences between terminal payoffs. -/
 def IsPositivePayoffDifferenceBound (G : QuittingGame) (B : ℝ) : Prop :=
@@ -544,12 +554,13 @@ Theorem 2.2.  Simon 2007, Corollary 2 is `sorry`-backed; the corrected
 stationarily-generated hypothesis and explicit Euclidean variation are left
 visible here.
 -/
-def Theorem2_2Claim (G : QuittingGame) : Prop :=
-  (∀ n, IsNormalPlayer G n) →
-    ¬HasStationarilyGeneratedApproximateEquilibria G →
-      ¬HasInstantApproximateEquilibria G →
-        (HasQuitApproximateEquilibria G ↔
-          InfiniteUnrestrictedOrbitCondition G)
+theorem theorem2_2 (G : QuittingGame)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    HasQuitApproximateEquilibria G ↔
+      InfiniteUnrestrictedOrbitCondition G := by
+  sorry
 
 /-- The unqualified extended-orbit condition in Theorem 2.3. -/
 def ExtendedUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
@@ -561,11 +572,12 @@ Theorem 2.3.  Removing rationality from an extended orbit uses Lemma 2.2 to
 show eventual entry into, and permanence in, the rational region.  The
 repository has no checked extended-orbit tail/reindexing implementation.
 -/
-def Theorem2_3Claim (G : QuittingGame) : Prop :=
-  (∀ n, IsNormalPlayer G n) →
-    ¬HasStationarilyGeneratedApproximateEquilibria G →
-      ¬HasInstantApproximateEquilibria G →
-        (HasQuitApproximateEquilibria G ↔ ExtendedUnrestrictedOrbitCondition G)
+theorem theorem2_3 (G : QuittingGame)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    HasQuitApproximateEquilibria G ↔ ExtendedUnrestrictedOrbitCondition G := by
+  sorry
 
 /-- Lemma 2.3's pointwise small parameter. -/
 def SatisfiesLemma2_3At (G : QuittingGame) (r : Payoff G.Player)
@@ -580,12 +592,13 @@ claimed.  Its proof combines the compact-set version of Lemma 2.1 with the
 coordinate increase in Lemma 2.2.  The exact compact-set lemma remains open
 above, so this result is not imported from the stronger, incorrect 2007 text.
 -/
-def Lemma2_3Claim (G : QuittingGame) (M : ℝ) : Prop :=
-  IsSimonPayoffScale G M →
-    (∀ n, IsNormalPlayer G n) →
-      ¬HasStationarilyGeneratedApproximateEquilibria G →
-        ¬HasInstantApproximateEquilibria G →
-          ∀ r, ∃ ρ, SatisfiesLemma2_3At G r ρ
+theorem lemma2_3 (G : QuittingGame)
+    (M : ℝ) (hM : IsSimonPayoffScale G M)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∀ r, ∃ ρ, SatisfiesLemma2_3At G r ρ := by
+  sorry
 
 /-! ## 3. The structure theorem for quitting games -/
 
@@ -627,13 +640,14 @@ payoffs in the two rows, and uses the singular penalty in `φ` to force a strict
 best-response contradiction.  No existing theorem packages that quantitative
 injectivity argument.
 -/
-def Lemma3_1Claim (G : QuittingGame) (M d : ℝ) : Prop :=
-    IsSimonPayoffScale G M → 0 < d → d ≤ 1 →
+theorem lemma3_1 (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
     Function.Injective (Phi G M d) ∧
     (∀ x, ((x, zeroQuitRow G) ∈ EZeroTilde G ↔
       ∀ j, SoloPayoff G j ≤ x j)) ∧
     ∀ x (hx : (x, zeroQuitRow G) ∈ EZeroTilde G),
-      Phi G M d ⟨(x, zeroQuitRow G), hx⟩ = x
+      Phi G M d ⟨(x, zeroQuitRow G), hx⟩ = x := by
+  sorry
 
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
@@ -643,9 +657,10 @@ semicontinuous minimization closes surjectivity.  The generic
 Kohlberg--Mertens declaration in Simon 2007 does not imply this explicit `φ`
 homeomorphism.
 -/
-def Lemma3_2Claim (G : QuittingGame) (M d : ℝ) : Prop :=
-    IsSimonPayoffScale G M → 0 < d → d ≤ 1 →
-    Function.Surjective (Phi G M d) ∧ Nonempty (PhiInverseData G M d)
+theorem lemma3_2 (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
+    Function.Surjective (Phi G M d) ∧ Nonempty (PhiInverseData G M d) := by
+  sorry
 
 /-- The paper's straight-line condition for the structure homotopy. -/
 def IsQuitStraightLineHomotopy (G : QuittingGame)
@@ -706,8 +721,9 @@ No production theorem proves injectivity, surjectivity, properness, or the
 fixed-point exclusion for this `φ`; importing the 2007 Kohlberg--Mertens
 statement would not establish this quitting-specific result.
 -/
-def Theorem3_1Claim (G : QuittingGame) (M : ℝ) : Prop :=
-  IsSimonPayoffScale G M → StructureTheoremConclusion G M
+theorem theorem3_1 (G : QuittingGame) (M : ℝ)
+    (hM : IsSimonPayoffScale G M) : StructureTheoremConclusion G M := by
+  sorry
 
 /-- Lemma 3.3's rounding-to-a-sure-quitter hypotheses and conclusion. -/
 def Lemma3_3Statement (G : QuittingGame) (M ε : ℝ) : Prop :=
@@ -730,8 +746,9 @@ forced-continue payoff by the probability that the realized coalition changes.
 The production library has analogous root inequalities, but no adapter to the
 paper-local `QuittingGame` model or this exact constant package.
 -/
-def Lemma3_3Claim (G : QuittingGame) (M ε : ℝ) : Prop :=
-  IsSimonPayoffScale G M → Lemma3_3Statement G M ε
+theorem lemma3_3 (G : QuittingGame) (M ε : ℝ)
+    (hM : IsSimonPayoffScale G M) : Lemma3_3Statement G M ε := by
+  sorry
 
 /-- The constants selected after Lemma 3.3 and used in Lemma 3.4. -/
 def AreSection3Constants (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
@@ -752,17 +769,17 @@ the properness case split on a large positive or negative coordinate of
 `a = φ(β,p)`, using Lemma 3.3 to exclude an almost-sure quitter in the bounded
 band and the definitions of `ξ` and `R` to control the interpolation.
 -/
-def Lemma3_4Claim (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
-    IsSimonPayoffScale G M →
-    IsStructureMotionParameter G M ρ →
-    AreSection3Constants G M d ρ ξ R →
-    ¬HasStationarilyGeneratedApproximateEquilibria G →
-    ¬HasInstantApproximateEquilibria G →
-    (∀ n, IsNormalPlayer G n) →
-    ∀ (z : EZeroTilde G) (t : UnitInterval)
-      (a : Payoff G.Player), a = Phi G M d z →
-    ∀ x : Payoff G.Player,
-      x = (1 - (t : ℝ)) • z.1.1 + (t : ℝ) • a →
+theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (z : EZeroTilde G) (t : UnitInterval)
+    (a : Payoff G.Player) (ha : a = Phi G M d z)
+    (x : Payoff G.Player)
+    (hx : x = (1 - (t : ℝ)) • z.1.1 + (t : ℝ) • a) :
     ((∃ j, R ≤ |a j|) → ¬StructureTargetBox G M ρ x) ∧
     (∀ j, R ≤ a j →
       R - (Fintype.card G.Player : ℝ) * M < z.1.1 j ∧
@@ -770,7 +787,8 @@ def Lemma3_4Claim (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
     ∀ j, a j ≤ -R → MinMaxQuit G j - ρ ≤ z.1.1 j →
       1 - (1 / 20 : ℝ) *
         (ρ / (2 * (Fintype.card G.Player : ℝ) * M)) ^
-          Fintype.card G.Player ≤ (z.1.2 j : ℝ)
+          Fintype.card G.Player ≤ (z.1.2 j : ℝ) := by
+  sorry
 
 /--
 Lemma 3.5's two distance estimates.  The missing proof first uses exact
@@ -779,19 +797,20 @@ indifference for every player in positive quit support to place `β` near
 place `a` near the same face.  No reusable distance lemma for these fibers is
 present in the repository.
 -/
-def Lemma3_5Claim (G : QuittingGame) (M d : ℝ) : Prop :=
-    IsSimonPayoffScale G M → 0 < d → d ≤ 1 →
-    ∀ z : EZeroTilde G,
-    0 < QuitProbability G z.1.2 →
-    QuitProbability G z.1.2 <
-      1 / (2 * (Fintype.card G.Player : ℝ)) →
-    ∀ j : G.Player, 0 < (z.1.2 j : ℝ) →
+theorem lemma3_5 (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (z : EZeroTilde G)
+    (hqpos : 0 < QuitProbability G z.1.2)
+    (hqsmall : QuitProbability G z.1.2 <
+      1 / (2 * (Fintype.card G.Player : ℝ)))
+    (j : G.Player) (hj : 0 < (z.1.2 j : ℝ)) :
     EuclideanInfDist z.1.1 (Wj G j ∩ frontier (WSet G)) ≤
       QuitProbability G z.1.2 * (Fintype.card G.Player : ℝ) * M / 3 ∧
     EuclideanInfDist (Phi G M d z)
       (Wj G j ∩ frontier (WSet G)) ≤
       12 * (Fintype.card G.Player : ℝ) ^ 2 * M *
-        QuitProbability G z.1.2 / d
+        QuitProbability G z.1.2 / d := by
+  sorry
 
 /-! ## 4. From the topological question to approximate equilibrium existence -/
 
