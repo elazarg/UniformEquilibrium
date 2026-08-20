@@ -1,7 +1,9 @@
 import Mathlib
+import GameTheory.Analysis.Payoff
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter
 import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
+import UniformEquilibrium.ProofView.Native.Equilibrium
 
 /-!
 # Sorin (1986), *On Repeated Games with Complete Information*
@@ -450,6 +452,734 @@ theorem CompactRepeatedPresentation.equilibriumPayoffs_eq
       (presentation.nash_fromBehavior_iff profile).mpr hprofile, ?_⟩
     exact presentation.payoff_fromBehavior profile
 
+namespace FinitePresentation
+
+open GameTheory.Math.Probability
+
+private instance repeatedStateFinite (G : FiniteStageGame) :
+    Finite G.repeatedGame.State := by
+  change Finite PUnit
+  infer_instance
+
+private instance repeatedActionFintype (G : FiniteStageGame) (who : G.Player) :
+    Fintype (G.repeatedGame.toNative.Action who) := by
+  change Fintype (G.Action who)
+  infer_instance
+
+private instance repeatedActionNonempty (G : FiniteStageGame) (who : G.Player) :
+    Nonempty (G.repeatedGame.toNative.Action who) := by
+  change Nonempty (G.Action who)
+  infer_instance
+
+/-- The canonical perfect-monitoring protocol for the repeated stage game. -/
+private abbrev Protocol (G : FiniteStageGame) :=
+  G.repeatedGame.toNative.perfectMonitoring PUnit.unit
+
+/-- The finite set of counterfactual information states relevant through the
+chosen horizon. -/
+private abbrev Sites (G : FiniteStageGame) (n : G.Horizon) (who : G.Player) :=
+  G.repeatedGame.toNative.boundedInformationSites PUnit.unit n.1 who
+
+private instance choiceFintype (G : FiniteStageGame) (n : G.Horizon)
+    (who : G.Player) (info : Sites G n who) :
+    Fintype ((Protocol G).Choice who info) :=
+  G.repeatedGame.toNative.perfectMonitoringChoiceFintype
+    PUnit.unit who info
+
+/-- A pure contingent plan restricted to the finitely many information states
+that can matter through the chosen horizon. -/
+private abbrev Plan (G : FiniteStageGame) (n : G.Horizon) (who : G.Player) :=
+  (info : Sites G n who) → (Protocol G).Choice who info
+
+private instance planFintype (G : FiniteStageGame) (n : G.Horizon)
+    (who : G.Player) : Fintype (Plan G n who) := by
+  classical
+  exact Fintype.ofEquiv ((info : Sites G n who) → G.Action who)
+    (Equiv.piCongrRight fun info =>
+      G.repeatedGame.toNative.actionChoiceEquiv PUnit.unit who info)
+
+/-- One fixed legal total policy used only outside the bounded site set. -/
+private noncomputable def fallback (G : FiniteStageGame) (who : G.Player) :
+    (Protocol G).Policy who :=
+  (G.repeatedGame.toNative.purePolicyEquiv PUnit.unit who).symm
+    (fun _ => Classical.choice (G.nonemptyAction who))
+
+/-- Extend a bounded contingent plan to a total deterministic policy. -/
+private noncomputable def assemble (G : FiniteStageGame) (n : G.Horizon)
+    (who : G.Player) (plan : Plan G n who) : (Protocol G).Policy who :=
+  GameTheory.Protocol.InformationModel.Policy.assembleWithin
+    (Protocol G) (fallback G who) (Sites G n who) plan
+
+/-- The finite pure normal form obtained by executing assembled bounded plans
+with the canonical Protocol runner. -/
+private noncomputable abbrev form (G : FiniteStageGame) (n : G.Horizon) :
+    GameForm G.Player where
+  sig := {
+    Strategy := Plan G n
+    Outcome := (G.repeatedGame.toNative.toExecution PUnit.unit).History
+  }
+  play profile :=
+    (Protocol G).run (fun who => assemble G n who (profile who)) n.1
+
+/-- A compact strategy is a probability vector on the finite pure-plan
+carrier. -/
+private abbrev Strategy (G : FiniteStageGame) (n : G.Horizon)
+    (who : G.Player) :=
+  stdSimplex ℝ (Plan G n who)
+
+/-- Read a simplex point as the corresponding finite-support plan law. -/
+private noncomputable def law {G : FiniteStageGame} {n : G.Horizon}
+    {who : G.Player} (strategy : Strategy G n who) : FinDist (Plan G n who) :=
+  FinDist.ofSimplex strategy.2
+
+/-- Convert a simplex profile coordinatewise to finite plan laws. -/
+private noncomputable def laws {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) :
+    Profile (form G n).sig.mixed :=
+  fun who => law (profile who)
+
+/-- Embed finite plan laws into laws over total Protocol policies. -/
+private noncomputable def mixedPolicies {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who) :
+    Profile (Protocol G).strategicSignature.mixed :=
+  fun who => FinDist.map (assemble G n who) (law (profile who))
+
+private theorem form_mixed_play {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) :
+    (form G n).mixed.play (laws profile) =
+      (Protocol G).runMixed (mixedPolicies profile) n.1 := by
+  let extend : (∀ who, Plan G n who) → (∀ who, (Protocol G).Policy who) :=
+    fun plans who => assemble G n who (plans who)
+  have hpi : FinDist.pi (mixedPolicies profile) =
+      FinDist.map extend (FinDist.pi (laws profile)) := by
+    exact FinDist.pi_map (fun who => assemble G n who) (laws profile)
+  have hbind := congrArg
+    (fun distribution => distribution.bind fun policies =>
+      (Protocol G).run policies n.1) hpi
+  exact (hbind.trans (FinDist.bind_map extend (FinDist.pi (laws profile))
+    (fun policies => (Protocol G).run policies n.1))).symm
+
+private instance planNonempty (G : FiniteStageGame) (n : G.Horizon)
+    (who : G.Player) : Nonempty (Plan G n who) :=
+  ⟨fun info => G.repeatedGame.toNative.actionChoiceEquiv
+    PUnit.unit who info (Classical.choice (G.nonemptyAction who))⟩
+
+/-- Project an arbitrary real coefficient to the unit interval. -/
+private def coefficient (t : ℝ) : ℝ := max 0 (min 1 t)
+
+private theorem coefficient_nonneg (t : ℝ) : 0 ≤ coefficient t :=
+  le_max_left _ _
+
+private theorem coefficient_le_one (t : ℝ) : coefficient t ≤ 1 := by
+  unfold coefficient
+  exact max_le zero_le_one (min_le_left _ _)
+
+private theorem coefficient_eq {t : ℝ} (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) :
+    coefficient t = t := by
+  simp [coefficient, ht₀, ht₁]
+
+/-- The usual convex combination on plan laws, extended continuously to all
+real coefficients by projection to `[0,1]`. -/
+private def mix {G : FiniteStageGame} {n : G.Horizon} (who : G.Player)
+    (t : ℝ) (x y : Strategy G n who) : Strategy G n who := by
+  let c := coefficient t
+  refine ⟨c • x.1 + (1 - c) • y.1, ?_⟩
+  refine ⟨fun plan => add_nonneg
+    (mul_nonneg (coefficient_nonneg t) (x.2.1 plan))
+    (mul_nonneg (sub_nonneg.mpr (coefficient_le_one t)) (y.2.1 plan)), ?_⟩
+  change (∑ plan, (c * x.1 plan + (1 - c) * y.1 plan)) = 1
+  rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
+    x.2.2, y.2.2]
+  ring
+
+private theorem mix_continuous {G : FiniteStageGame} {n : G.Horizon}
+    (who : G.Player) : Continuous fun p :
+      ℝ × (Strategy G n who × Strategy G n who) =>
+        mix who p.1 p.2.1 p.2.2 := by
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro plan
+  let domain := ℝ × (Strategy G n who × Strategy G n who)
+  have hc : Continuous fun p : domain => coefficient p.1 := by
+    unfold coefficient
+    exact continuous_const.max (continuous_const.min continuous_fst)
+  have hx : Continuous fun p : domain => p.2.1 plan :=
+    (continuous_apply plan).comp
+      (continuous_subtype_val.comp (continuous_fst.comp continuous_snd))
+  have hy : Continuous fun p : domain => p.2.2 plan :=
+    (continuous_apply plan).comp
+      (continuous_subtype_val.comp (continuous_snd.comp continuous_snd))
+  exact (hc.mul hx).add ((continuous_const.sub hc).mul hy)
+
+private theorem mix_zero {G : FiniteStageGame} {n : G.Horizon}
+    (who : G.Player) (x y : Strategy G n who) : mix who 0 x y = y := by
+  ext plan
+  simp [mix, coefficient]
+
+private theorem mix_one {G : FiniteStageGame} {n : G.Horizon}
+    (who : G.Player) (x y : Strategy G n who) : mix who 1 x y = x := by
+  ext plan
+  simp [mix, coefficient]
+
+/-- Finite barycentres of plan laws are computed coordinatewise. -/
+private def barycenter {G : FiniteStageGame} {n : G.Horizon}
+    (who : G.Player) (k : ℕ) (weights : stdSimplex ℝ (Fin (k + 1)))
+    (points : Fin (k + 1) → Strategy G n who) : Strategy G n who := by
+  refine ⟨fun plan => ∑ a, weights a * points a plan, ?_⟩
+  constructor
+  · intro plan
+    exact Finset.sum_nonneg fun a _ =>
+      mul_nonneg (weights.2.1 a) ((points a).2.1 plan)
+  · rw [Finset.sum_comm]
+    simp_rw [← Finset.mul_sum]
+    simp
+
+private theorem barycenter_continuous {G : FiniteStageGame}
+    {n : G.Horizon} (who : G.Player) (k : ℕ)
+    (points : Fin (k + 1) → Strategy G n who) :
+    Continuous fun weights : stdSimplex ℝ (Fin (k + 1)) =>
+      barycenter who k weights points := by
+  apply Continuous.subtype_mk
+  apply continuous_pi
+  intro plan
+  apply continuous_finsetSum
+  intro a _
+  exact ((continuous_apply a).comp continuous_subtype_val).mul continuous_const
+
+/-- The ambient weight profile underlying a compact simplex profile. -/
+private def weights {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) :
+    Profile (form G n).sig.weights :=
+  fun who plan => profile who plan
+
+private theorem probs_laws {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) :
+    GameTheory.probs (form G n).sig (laws profile) = weights profile := by
+  funext who plan
+  exact congrFun (FinDist.prob_ofSimplex (profile who).2) plan
+
+private theorem weights_update {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) (who : G.Player)
+    (strategy : Strategy G n who) :
+    weights (Function.update profile who strategy) =
+      Profile.update (weights profile) who strategy.1 := by
+  funext i
+  unfold weights
+  by_cases hi : i = who
+  · subst i
+    simp only [Function.update_self, Profile.update_same]
+    apply funext
+    intro plan
+    rfl
+  · simp [Function.update_of_ne, Profile.update_of_ne, hi]
+
+/-- The polynomial expected payoff of the finite mixed normal form. -/
+private def compactPayoff {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) : Payoff G.Player :=
+  letI : ∀ who, Fintype ((form G n).sig.Strategy who) :=
+    fun who => planFintype G n who
+  fun observer => GameTheory.payoff (form G n)
+      (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer
+      (weights profile)
+
+private theorem compactPayoff_continuous {G : FiniteStageGame}
+    {n : G.Horizon} (observer : G.Player) :
+    Continuous fun profile : ∀ who, Strategy G n who =>
+      compactPayoff profile observer := by
+  letI : ∀ who, Fintype ((form G n).sig.Strategy who) :=
+    fun who => planFintype G n who
+  apply (GameTheory.continuous_payoff
+    (F := form G n)
+    (utility := G.repeatedGame.toNative.horizonUtility PUnit.unit n.1)
+    observer).comp
+  apply continuous_pi
+  intro who
+  apply continuous_pi
+  intro plan
+  exact (continuous_apply plan).comp
+    (continuous_subtype_val.comp (continuous_apply who))
+
+private theorem compactPayoff_affine {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who)
+    (who : G.Player) (x y : Strategy G n who) (t : ℝ)
+    (observer : G.Player) (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) :
+    compactPayoff (Function.update profile who (mix who t x y)) observer =
+      t * compactPayoff (Function.update profile who x) observer +
+        (1 - t) * compactPayoff (Function.update profile who y) observer := by
+  letI : ∀ i, Fintype ((form G n).sig.Strategy i) :=
+    fun i => planFintype G n i
+  let utility := G.repeatedGame.toNative.horizonUtility PUnit.unit n.1
+  have h := GameTheory.payoff_update_mix
+    (F := form G n)
+    (utility := fun history _ => utility history observer)
+    (x := weights profile) who x.1 y.1 t (1 - t)
+  have hpay (z : Profile (form G n).sig.weights) :
+      GameTheory.payoff (form G n)
+          (fun history _ => utility history observer) who z =
+        GameTheory.payoff (form G n) utility observer z := by
+    rfl
+  rw [compactPayoff, compactPayoff, compactPayoff,
+    weights_update, weights_update, weights_update]
+  change GameTheory.payoff (form G n) utility observer
+      (Profile.update (weights profile) who
+        (mix who t x y).1) = _
+  rw [show (mix who t x y).1 = t • x.1 + (1 - t) • y.1 by
+    ext plan
+    simp [mix, coefficient_eq ht₀ ht₁]]
+  rw [← hpay, ← hpay, ← hpay]
+  exact h
+
+private theorem compactPayoff_barycentric {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who)
+    (who : G.Player) (k : ℕ)
+    (simplexWeights : stdSimplex ℝ (Fin (k + 1)))
+    (points : Fin (k + 1) → Strategy G n who) :
+    compactPayoff (Function.update profile who
+        (barycenter who k simplexWeights points)) who =
+      ∑ a, simplexWeights a *
+        compactPayoff (Function.update profile who (points a)) who := by
+  letI : ∀ i, Fintype ((form G n).sig.Strategy i) :=
+    fun i => planFintype G n i
+  simp only [compactPayoff, weights_update]
+  rw [GameTheory.payoff_update]
+  simp_rw [GameTheory.payoff_update]
+  let c (s : Profile (form G n).sig) : ℝ :=
+    (∏ i ∈ Finset.univ.erase who, weights profile i (s i)) *
+      expectedUtility
+        (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1)
+        who ((form G n).play s)
+  change (∑ s : Profile (form G n).sig,
+      (∑ a, simplexWeights a * points a (s who)) * c s) =
+    ∑ a, simplexWeights a *
+      ∑ s : Profile (form G n).sig, points a (s who) * c s
+  simp_rw [Finset.sum_mul, Finset.mul_sum]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro a _
+  apply Finset.sum_congr rfl
+  intro s _
+  ring
+
+private theorem compactPayoff_eq_runMixed {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who)
+    (observer : G.Player) :
+    compactPayoff profile observer =
+      expectedUtility
+        (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1)
+        observer ((Protocol G).runMixed (mixedPolicies profile) n.1) := by
+  letI : ∀ i, Fintype ((form G n).sig.Strategy i) :=
+    fun i => planFintype G n i
+  calc
+    compactPayoff profile observer =
+        GameTheory.payoff (form G n)
+          (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1)
+          observer (GameTheory.probs (form G n).sig (laws profile)) := by
+      rw [compactPayoff, probs_laws]
+    _ = expectedUtility
+        (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1)
+        observer ((form G n).mixed.play (laws profile)) :=
+      GameTheory.payoff_probs (laws profile) observer
+    _ = _ := congrArg
+      (expectedUtility
+        (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer)
+      (form_mixed_play profile)
+
+/-- Regard any finite law on bounded plans as its simplex point. -/
+private def strategyOfLaw {G : FiniteStageGame} {n : G.Horizon}
+    {who : G.Player} (distribution : FinDist (Plan G n who)) :
+    Strategy G n who :=
+  ⟨distribution.prob, distribution.prob_mem_stdSimplex⟩
+
+private theorem law_strategyOfLaw {G : FiniteStageGame} {n : G.Horizon}
+    {who : G.Player} (distribution : FinDist (Plan G n who)) :
+    law (strategyOfLaw distribution) = distribution := by
+  exact FinDist.ofSimplex_prob distribution
+
+/-- Independently predraw a behavioral policy on every bounded information
+site and record the resulting law as a simplex point. -/
+private def strategyOfPolicy {G : FiniteStageGame} {n : G.Horizon}
+    (who : G.Player) (policy : (Protocol G).BehavioralPolicy who) :
+    Strategy G n who :=
+  strategyOfLaw (FinDist.pi fun info : Sites G n who => policy info)
+
+private theorem mixedPolicy_strategyOfPolicy {G : FiniteStageGame}
+    {n : G.Horizon} (who : G.Player)
+    (policy : (Protocol G).BehavioralPolicy who) :
+    FinDist.map (assemble G n who) (law (strategyOfPolicy who policy)) =
+      policy.toMixedWithin (Sites G n who) (fallback G who) := by
+  calc
+    _ = FinDist.map (assemble G n who)
+        (FinDist.pi fun info : Sites G n who => policy info) :=
+      congrArg (FinDist.map (assemble G n who))
+        (law_strategyOfLaw
+          (FinDist.pi fun info : Sites G n who => policy info))
+    _ = _ := (GameTheory.Protocol.InformationModel.BehavioralPolicy.toMixedWithin_eq_map_pi
+      (M := Protocol G) policy
+        (Sites G n who) (fallback G who)).symm
+
+/-- Conditional behavioral reading of a compact mixed-plan profile. -/
+private def protocolBehavior {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) :
+    Profile (Protocol G).behavioralSignature :=
+  fun who => GameTheory.Protocol.InformationModel.MixedPolicy.toBehavioral
+    (M := Protocol G) (mixedPolicies profile who)
+
+/-- Decode that Protocol profile to ordinary native public policies. -/
+private def nativePublic {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) :
+    G.repeatedGame.toNative.PublicProfile PUnit.unit :=
+  G.repeatedGame.toNative.ofBehaviorProfile PUnit.unit
+    (protocolBehavior profile)
+
+/-- Behavioral realization of a compact plan-law profile. -/
+private def toBehavior {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) : G.BehaviorProfile :=
+  StochasticGame.NativeBridge.ofNativePublicProfile G.repeatedGame
+    PUnit.unit (nativePublic profile)
+
+/-- Compile a proof-view profile to the canonical Protocol presentation. -/
+private def compiledBehavior {G : FiniteStageGame}
+    (profile : G.BehaviorProfile) :
+    Profile (Protocol G).behavioralSignature :=
+  StochasticGame.NativeBridge.toNativeBehaviorProfile G.repeatedGame
+    PUnit.unit profile
+
+/-- Predraw a proof-view behavioral profile on all bounded sites. -/
+private def fromBehavior {G : FiniteStageGame} {n : G.Horizon}
+    (profile : G.BehaviorProfile) : ∀ who, Strategy G n who :=
+  fun who => strategyOfPolicy who (compiledBehavior profile who)
+
+private theorem mixedPolicies_fromBehavior {G : FiniteStageGame}
+    {n : G.Horizon} (profile : G.BehaviorProfile) :
+    mixedPolicies (fromBehavior (n := n) profile) =
+      fun who => (compiledBehavior profile who).toMixedWithin
+        (Sites G n who) (fallback G who) := by
+  funext who
+  exact mixedPolicy_strategyOfPolicy who (compiledBehavior profile who)
+
+private theorem mixedPolicies_update {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who)
+    (who : G.Player) (strategy : Strategy G n who) :
+    mixedPolicies (Function.update profile who strategy) =
+      Profile.update (mixedPolicies profile) who
+        (FinDist.map (assemble G n who) (law strategy)) := by
+  funext i
+  unfold mixedPolicies
+  by_cases hi : i = who
+  · subst i
+    simp
+  · simp [Function.update_of_ne, Profile.update_of_ne, hi]
+
+/-- Expected finite-horizon payoff of a canonical Protocol profile. -/
+private def behaviorPayoff {G : FiniteStageGame} {n : G.Horizon}
+    (profile : Profile (Protocol G).behavioralSignature)
+    (observer : G.Player) : ℝ :=
+  expectedUtility
+    (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer
+    ((Protocol G).runBehavioral profile n.1)
+
+private theorem compactPayoff_eq_behaviorPayoff {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who)
+    (observer : G.Player) :
+    compactPayoff profile observer =
+      behaviorPayoff (n := n) (protocolBehavior profile) observer := by
+  rw [compactPayoff_eq_runMixed]
+  exact congrArg
+    (expectedUtility
+      (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer)
+    ((Protocol G).runMixed_toBehavioral
+      (GameTheory.Protocol.InformationModel.constrainsAlike_of_perfectRecall
+        (G.repeatedGame.toNative.perfectMonitoring_perfectRecall PUnit.unit))
+      n.1 (mixedPolicies profile))
+
+private theorem protocolBehavior_update {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who)
+    (who : G.Player) (strategy : Strategy G n who) :
+    protocolBehavior (Function.update profile who strategy) =
+      Profile.update (protocolBehavior profile) who
+        (GameTheory.Protocol.InformationModel.MixedPolicy.toBehavioral
+          (M := Protocol G)
+          (FinDist.map (assemble G n who) (law strategy))) := by
+  funext i
+  unfold protocolBehavior
+  rw [mixedPolicies_update]
+  by_cases hi : i = who
+  · subst i
+    simp
+  · simp [Profile.update_of_ne, hi]
+
+private theorem compactPayoff_update_strategyOfPolicy {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who)
+    (who : G.Player) (deviation : (Protocol G).BehavioralPolicy who) :
+    compactPayoff
+        (Function.update profile who (strategyOfPolicy who deviation)) who =
+      behaviorPayoff
+        (n := n)
+        (Profile.update (protocolBehavior profile) who deviation) who := by
+  rw [compactPayoff_eq_runMixed, mixedPolicies_update,
+    mixedPolicy_strategyOfPolicy]
+  unfold behaviorPayoff
+  exact congrArg
+    (expectedUtility
+      (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) who)
+    ((Protocol G).kuhn_mixed_update_toBehavioralWithin
+      (G.repeatedGame.toNative.perfectMonitoring_perfectRecall PUnit.unit)
+      (Sites G n) n.1
+      (G.repeatedGame.toNative.boundedInformationSites_cover
+        PUnit.unit n.1)
+      (mixedPolicies profile) who deviation (fallback G who)).symm
+
+private theorem compactNash_iff_protocolNash {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who) :
+    (∀ who deviation,
+      compactPayoff profile who ≥
+        compactPayoff (Function.update profile who deviation) who) ↔
+      G.repeatedGame.toNative.IsεHorizonNash PUnit.unit n.1 0
+        (protocolBehavior profile) := by
+  rw [G.repeatedGame.toNative.isεHorizonNash_iff]
+  constructor
+  · intro hcompact who deviation
+    have hbound := hcompact who (strategyOfPolicy who deviation)
+    rw [compactPayoff_eq_behaviorPayoff,
+      compactPayoff_update_strategyOfPolicy] at hbound
+    simpa [behaviorPayoff] using hbound
+  · intro hbehavioral who deviation
+    let behavioralDeviation :=
+      GameTheory.Protocol.InformationModel.MixedPolicy.toBehavioral
+        (M := Protocol G)
+        (FinDist.map (assemble G n who) (law deviation))
+    have hbound := hbehavioral who behavioralDeviation
+    have hbase := compactPayoff_eq_behaviorPayoff profile who
+    have hdeviation := compactPayoff_eq_behaviorPayoff
+      (Function.update profile who deviation) who
+    rw [protocolBehavior_update] at hdeviation
+    rw [hbase, hdeviation]
+    simpa [behaviorPayoff, behavioralDeviation] using hbound
+
+private theorem nash_toBehavior_iff {G : FiniteStageGame}
+    {n : G.Horizon} (profile : ∀ who, Strategy G n who) :
+    (∀ who deviation,
+      compactPayoff profile who ≥
+        compactPayoff (Function.update profile who deviation) who) ↔
+      G.repeatedGame.IsεHorizonNash PUnit.unit n.1 0
+        (toBehavior profile) := by
+  rw [compactNash_iff_protocolNash]
+  have hprofile :
+      G.repeatedGame.toNative.toBehaviorProfile PUnit.unit
+          (nativePublic profile) = protocolBehavior profile := by
+    unfold nativePublic
+    exact G.repeatedGame.toNative.toBehaviorProfile_ofBehaviorProfile
+      PUnit.unit (protocolBehavior profile)
+  have hbridge :=
+    StochasticGame.NativeBridge.isεHorizonNash_publicProfile_iff
+      G.repeatedGame PUnit.unit n.1 0 (nativePublic profile)
+  rw [hprofile] at hbridge
+  exact hbridge
+
+private theorem runMixed_fromBehavior_update_policy {G : FiniteStageGame}
+    {n : G.Horizon} (profile : G.BehaviorProfile) (who : G.Player)
+    (deviation : (Protocol G).BehavioralPolicy who) :
+    (Protocol G).runMixed
+        (mixedPolicies (Function.update (fromBehavior (n := n) profile) who
+          (strategyOfPolicy who deviation))) n.1 =
+      (Protocol G).runBehavioral
+        (Profile.update (compiledBehavior profile) who deviation) n.1 := by
+  rw [mixedPolicies_update, mixedPolicies_fromBehavior,
+    mixedPolicy_strategyOfPolicy]
+  let updatedBehavior :=
+    Profile.update (compiledBehavior profile) who deviation
+  let updatedFallback :=
+    Profile.update (sig := (Protocol G).strategicSignature)
+      (fallback G) who (fallback G who)
+  have hpolicies :
+      Profile.update (sig := (Protocol G).strategicSignature.mixed)
+          (fun i => (compiledBehavior profile i).toMixedWithin
+            (Sites G n i) (fallback G i)) who
+          (deviation.toMixedWithin (Sites G n who) (fallback G who)) =
+        fun i => (updatedBehavior i).toMixedWithin
+          (Sites G n i) (updatedFallback i) := by
+    funext i
+    by_cases hi : i = who
+    · subst i
+      simp [updatedBehavior, updatedFallback]
+    · simp [updatedBehavior, updatedFallback, Profile.update_of_ne, hi]
+  rw [hpolicies]
+  exact (Protocol G).runMixed_toMixedWithin
+    (G.repeatedGame.toNative.perfectMonitoring_actsOnceWhereItMatters
+      PUnit.unit)
+    (Sites G n) updatedBehavior updatedFallback n.1
+    (G.repeatedGame.toNative.boundedInformationSites_cover
+      PUnit.unit n.1)
+
+private theorem runMixed_fromBehavior_update_mixed {G : FiniteStageGame}
+    {n : G.Horizon} (profile : G.BehaviorProfile) (who : G.Player)
+    (replacement : (Protocol G).MixedPolicy who) :
+    (Protocol G).runMixed
+        (Profile.update (mixedPolicies (fromBehavior (n := n) profile))
+          who replacement) n.1 =
+      (Protocol G).runBehavioral
+        (Profile.update (compiledBehavior profile) who
+          (GameTheory.Protocol.InformationModel.MixedPolicy.toBehavioral
+            (M := Protocol G) replacement)) n.1 := by
+  rw [mixedPolicies_fromBehavior]
+  exact (Protocol G).kuhn_behavioral_update_toMixedWithin
+    (G.repeatedGame.toNative.perfectMonitoring_perfectRecall PUnit.unit)
+    (Sites G n) n.1
+    (G.repeatedGame.toNative.boundedInformationSites_cover
+      PUnit.unit n.1)
+    (compiledBehavior profile) (fallback G) who replacement
+
+private theorem compactPayoff_fromBehavior_eq_behaviorPayoff
+    {G : FiniteStageGame} {n : G.Horizon} (profile : G.BehaviorProfile)
+    (observer : G.Player) :
+    compactPayoff (fromBehavior (n := n) profile) observer =
+      behaviorPayoff (n := n) (compiledBehavior profile) observer := by
+  rw [compactPayoff_eq_runMixed, mixedPolicies_fromBehavior]
+  unfold behaviorPayoff
+  exact congrArg
+    (expectedUtility
+      (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer)
+    ((Protocol G).runMixed_toMixedWithin
+      (G.repeatedGame.toNative.perfectMonitoring_actsOnceWhereItMatters
+        PUnit.unit)
+      (Sites G n) (compiledBehavior profile) (fallback G) n.1
+      (G.repeatedGame.toNative.boundedInformationSites_cover
+        PUnit.unit n.1))
+
+private theorem compactPayoff_fromBehavior_update_policy
+    {G : FiniteStageGame} {n : G.Horizon} (profile : G.BehaviorProfile)
+    (who : G.Player) (deviation : (Protocol G).BehavioralPolicy who) :
+    compactPayoff
+        (Function.update (fromBehavior (n := n) profile) who
+          (strategyOfPolicy who deviation)) who =
+      behaviorPayoff (n := n)
+        (Profile.update (compiledBehavior profile) who deviation) who := by
+  rw [compactPayoff_eq_runMixed]
+  unfold behaviorPayoff
+  exact congrArg
+    (expectedUtility
+      (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) who)
+    (runMixed_fromBehavior_update_policy profile who deviation)
+
+private theorem compactPayoff_fromBehavior_update_mixed
+    {G : FiniteStageGame} {n : G.Horizon} (profile : G.BehaviorProfile)
+    (who : G.Player) (deviation : Strategy G n who) :
+    compactPayoff
+        (Function.update (fromBehavior (n := n) profile) who deviation) who =
+      behaviorPayoff (n := n)
+        (Profile.update (compiledBehavior profile) who
+          (GameTheory.Protocol.InformationModel.MixedPolicy.toBehavioral
+            (M := Protocol G)
+            (FinDist.map (assemble G n who) (law deviation)))) who := by
+  rw [compactPayoff_eq_runMixed, mixedPolicies_update]
+  unfold behaviorPayoff
+  exact congrArg
+    (expectedUtility
+      (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) who)
+    (runMixed_fromBehavior_update_mixed profile who
+      (FinDist.map (assemble G n who) (law deviation)))
+
+private theorem compactNash_fromBehavior_iff_protocolNash
+    {G : FiniteStageGame} {n : G.Horizon} (profile : G.BehaviorProfile) :
+    (∀ who deviation,
+      compactPayoff (fromBehavior (n := n) profile) who ≥
+        compactPayoff
+          (Function.update (fromBehavior (n := n) profile) who deviation)
+          who) ↔
+      G.repeatedGame.toNative.IsεHorizonNash PUnit.unit n.1 0
+        (compiledBehavior profile) := by
+  rw [G.repeatedGame.toNative.isεHorizonNash_iff]
+  constructor
+  · intro hcompact who deviation
+    have hbound := hcompact who (strategyOfPolicy who deviation)
+    rw [compactPayoff_fromBehavior_eq_behaviorPayoff,
+      compactPayoff_fromBehavior_update_policy] at hbound
+    simpa [behaviorPayoff] using hbound
+  · intro hbehavioral who deviation
+    let mixedDeviation :=
+      FinDist.map (assemble G n who) (law deviation)
+    have hbound := hbehavioral who
+      (GameTheory.Protocol.InformationModel.MixedPolicy.toBehavioral
+        (M := Protocol G) mixedDeviation)
+    have hbase := compactPayoff_fromBehavior_eq_behaviorPayoff
+      (n := n) profile who
+    have hdeviation := compactPayoff_fromBehavior_update_mixed
+      profile who deviation
+    rw [hbase, hdeviation]
+    simpa [behaviorPayoff, mixedDeviation] using hbound
+
+private theorem nash_fromBehavior_iff {G : FiniteStageGame}
+    {n : G.Horizon} (profile : G.BehaviorProfile) :
+    (∀ who deviation,
+      compactPayoff (fromBehavior (n := n) profile) who ≥
+        compactPayoff
+          (Function.update (fromBehavior (n := n) profile) who deviation)
+          who) ↔
+      G.repeatedGame.IsεHorizonNash PUnit.unit n.1 0 profile := by
+  rw [compactNash_fromBehavior_iff_protocolNash]
+  exact StochasticGame.NativeBridge.isεHorizonNash_toNative_iff
+    G.repeatedGame PUnit.unit n.1 0 profile
+
+private theorem payoff_toBehavior {G : FiniteStageGame} {n : G.Horizon}
+    (profile : ∀ who, Strategy G n who) :
+    G.finitePayoffOnHorizon n (toBehavior profile) =
+      compactPayoff profile := by
+  funext observer
+  change G.repeatedGame.finiteAveragePayoff PUnit.unit n.1
+      (toBehavior profile) observer = compactPayoff profile observer
+  unfold toBehavior
+  rw [← StochasticGame.NativeBridge.native_finiteAveragePayoff_eq_of_publicProfile
+    G.repeatedGame PUnit.unit (nativePublic profile) n.1 observer]
+  change expectedUtility
+      (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer
+      ((Protocol G).runBehavioral
+        (G.repeatedGame.toNative.toBehaviorProfile PUnit.unit
+          (nativePublic profile)) n.1) = compactPayoff profile observer
+  have hprofile :
+      G.repeatedGame.toNative.toBehaviorProfile PUnit.unit
+          (nativePublic profile) = protocolBehavior profile := by
+    unfold nativePublic
+    exact G.repeatedGame.toNative.toBehaviorProfile_ofBehaviorProfile
+      PUnit.unit (protocolBehavior profile)
+  have hbehavioral := (Protocol G).runMixed_toBehavioral
+    (GameTheory.Protocol.InformationModel.constrainsAlike_of_perfectRecall
+      (G.repeatedGame.toNative.perfectMonitoring_perfectRecall PUnit.unit))
+    n.1 (mixedPolicies profile)
+  calc
+    _ = expectedUtility
+        (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer
+        ((Protocol G).runBehavioral (protocolBehavior profile) n.1) :=
+      congrArg
+        (expectedUtility
+          (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer)
+        (congrArg (fun policies =>
+          (Protocol G).runBehavioral policies n.1) hprofile)
+    _ = expectedUtility
+        (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer
+        ((Protocol G).runMixed (mixedPolicies profile) n.1) :=
+      congrArg
+        (expectedUtility
+          (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer)
+        hbehavioral.symm
+    _ = _ := (compactPayoff_eq_runMixed profile observer).symm
+
+private theorem payoff_fromBehavior {G : FiniteStageGame} {n : G.Horizon}
+    (profile : G.BehaviorProfile) :
+    compactPayoff (fromBehavior (n := n) profile) =
+      G.finitePayoffOnHorizon n profile := by
+  funext observer
+  rw [compactPayoff_eq_runMixed, mixedPolicies_fromBehavior]
+  rw [(Protocol G).runMixed_toMixedWithin
+    (G.repeatedGame.toNative.perfectMonitoring_actsOnceWhereItMatters
+      PUnit.unit)
+    (Sites G n) (compiledBehavior profile) (fallback G) n.1
+    (G.repeatedGame.toNative.boundedInformationSites_cover
+      PUnit.unit n.1)]
+  exact StochasticGame.NativeBridge.native_finiteAveragePayoff_eq
+    G.repeatedGame profile PUnit.unit n.1 observer
+
+end FinitePresentation
+
 abbrev FiniteCompactPresentation (G : FiniteStageGame) (n : G.Horizon) :=
   CompactRepeatedPresentation G (G.finitePayoffOnHorizon n)
     (fun profile =>
@@ -462,16 +1192,34 @@ abbrev DiscountedCompactPresentation
       G.repeatedGame.IsDiscountedεNash
         (1 - lam.1) PUnit.unit 0 profile)
 
-/-! These two declarations are the reduction itself.  They construct the
-compact regular-probability/realization-plan carrier and the perfect-recall
-transports to and from behavioral strategies, proving continuity, affinity,
-payoff preservation, and deviation preservation.  The current repository has
-finite-support PMFs but not regular probabilities on the infinite compact pure
-strategy spaces, so the two constructions remain the precise explained gaps.
-They do not assume a Nash profile exists. -/
+/-! These two declarations are the reduction itself.  At a finite horizon the
+carrier is the simplex of laws on bounded contingent plans, and bounded Kuhn
+gives the required behavioral transports.  The discounted construction still
+requires a single probability law on total pure policies, rather than one
+finite predraw for each horizon.  Neither declaration assumes a Nash profile
+exists. -/
 theorem finiteCompactPresentation_exists (G : FiniteStageGame)
     (n : G.Horizon) : Nonempty (FiniteCompactPresentation G n) := by
-  sorry
+  exact ⟨{
+    Strategy := fun who => FinitePresentation.Strategy G n who
+    mix := FinitePresentation.mix
+    mixContinuous := FinitePresentation.mix_continuous
+    mix_zero := FinitePresentation.mix_zero
+    mix_one := FinitePresentation.mix_one
+    compactPayoff := FinitePresentation.compactPayoff
+    compactPayoffContinuous := FinitePresentation.compactPayoff_continuous
+    compactPayoffAffine := FinitePresentation.compactPayoff_affine
+    barycenter := FinitePresentation.barycenter
+    barycenterContinuous := FinitePresentation.barycenter_continuous
+    compactPayoffBarycentric :=
+      FinitePresentation.compactPayoff_barycentric
+    toBehavior := FinitePresentation.toBehavior
+    fromBehavior := FinitePresentation.fromBehavior
+    payoff_toBehavior := FinitePresentation.payoff_toBehavior
+    payoff_fromBehavior := FinitePresentation.payoff_fromBehavior
+    nash_toBehavior_iff := FinitePresentation.nash_toBehavior_iff
+    nash_fromBehavior_iff := FinitePresentation.nash_fromBehavior_iff
+  }⟩
 
 theorem discountedCompactPresentation_exists (G : FiniteStageGame)
     (lam : G.DiscountRate) :
