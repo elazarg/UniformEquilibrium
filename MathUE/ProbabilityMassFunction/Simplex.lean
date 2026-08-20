@@ -128,6 +128,20 @@ theorem expect_stdSimplexEquiv_symm_eq_wsum [Fintype α]
   simp only [stdSimplexEquiv_symm_apply, ofVector_toReal]
   rfl
 
+/-- The coordinatewise expectation of vectors lies in the convex hull of
+their range. -/
+theorem coordinateExpectation_mem_convexHull_range [Fintype α]
+    {ι : Type*} (μ : PMF α) (f : α → ι → ℝ) :
+    (fun i ↦ Math.Probability.expect μ (fun a ↦ f a i)) ∈
+      convexHull ℝ (Set.range f) := by
+  refine mem_convexHull_of_exists_fintype (s := Set.range f)
+    (ι := α) (fun a ↦ (μ a).toReal) f (fun _ ↦ ENNReal.toReal_nonneg) ?_ ?_ ?_
+  · exact Math.Probability.pmf_toReal_sum_one μ
+  · exact fun a ↦ ⟨a, rfl⟩
+  · funext i
+    simp only [Math.Probability.expect_eq_sum, Finset.sum_apply,
+      Pi.smul_apply, smul_eq_mul]
+
 /-- A simplex point represents a given finite `PMF` exactly when its coordinate
 vector is that PMF's coordinate vector. -/
 theorem ofVector_eq_iff_eq_toVector [Fintype α]
