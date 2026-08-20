@@ -15,9 +15,9 @@ arXiv:2012.04369.  This file is pinned to the supplied arXiv v1 archive
 
 The v1 paper uses an arbitrary payoff at never terminating.  The repository
 quitting-game adapter has zero as its default, so `never` is carried explicitly
-where a paper statement needs it.  Unproved paper claims are `sorry`; paper
-statements whose topology or probability interface is genuinely unavailable
-are retained verbatim in comments at their paper position.
+where a paper statement needs it. Unproved source results are exact named
+propositions; statements whose topology or probability interface is genuinely
+unavailable are retained verbatim in comments at their paper position.
 -/
 
 namespace Literature.AshkenaziGolanKrasikovRainerAndSolan2022
