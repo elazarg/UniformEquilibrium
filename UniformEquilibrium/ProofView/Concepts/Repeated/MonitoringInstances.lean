@@ -223,18 +223,14 @@ theorem isUniformEquilibrium_profileMonitoring
     KernelGame.IsUniformEquilibrium, hasLongRunAveragePayoff_profileMonitoring,
     isUniformεEquilibrium_profileMonitoring]
 
-/-- Stationary repetition of a stage-game Nash equilibrium is a uniform
-equilibrium under every public monitoring structure.  The proof integrates the
-stage Nash inequality over the deviator's random public-history distribution;
-finite outcomes provide the boundedness needed for countable `expect`
-monotonicity. -/
-theorem stationaryMonitoredProfile_isUniformEquilibrium_of_isNash
+/-- Stationary repetition of a stage-game Nash equilibrium is an exact Nash
+equilibrium at every positive finite horizon under every public monitoring
+structure. -/
+theorem stationaryMonitoredProfile_isFiniteRepeatedNash_of_isNash
     {G : KernelGame ι} (M : G.PublicMonitoring) [DecidableEq ι] [Finite G.Outcome]
-    {σ : Profile G} (hN : G.IsNash σ) :
-    M.IsUniformEquilibrium (M.stationaryMonitoredProfile σ) := by
-  refine ⟨⟨G.eu σ, M.hasLongRunAveragePayoff_stationaryMonitoredProfile σ⟩,
-    fun ε hε => ?_⟩
-  refine ⟨1, fun T hT who dev => ?_⟩
+    {σ : Profile G} (hN : G.IsNash σ) {T : ℕ} (hT : 0 < T) :
+    M.IsεFiniteRepeatedNash T 0 (M.stationaryMonitoredProfile σ) := by
+  intro who dev
   have hT0 : T ≠ 0 := by omega
   rw [M.finiteAveragePayoff_stationaryMonitoredProfile hT0]
   obtain ⟨C, hC⟩ := G.exists_eu_abs_bound_of_finite_outcome who
@@ -265,6 +261,21 @@ theorem stationaryMonitoredProfile_isUniformEquilibrium_of_isNash
           G.eu σ who :=
     M.finiteAveragePayoff_le_of_forall_stageEU_le hstage hT0
   linarith
+
+/-- Stationary repetition of a stage-game Nash equilibrium is a uniform
+equilibrium under every public monitoring structure.  The proof integrates the
+stage Nash inequality over the deviator's random public-history distribution;
+finite outcomes provide the boundedness needed for countable `expect`
+monotonicity. -/
+theorem stationaryMonitoredProfile_isUniformEquilibrium_of_isNash
+    {G : KernelGame ι} (M : G.PublicMonitoring) [DecidableEq ι] [Finite G.Outcome]
+    {σ : Profile G} (hN : G.IsNash σ) :
+    M.IsUniformEquilibrium (M.stationaryMonitoredProfile σ) := by
+  refine ⟨⟨G.eu σ, M.hasLongRunAveragePayoff_stationaryMonitoredProfile σ⟩,
+    fun ε hε => ?_⟩
+  refine ⟨1, fun T hT => ?_⟩
+  exact (M.stationaryMonitoredProfile_isFiniteRepeatedNash_of_isNash
+    hN hT).mono hε.le
 
 end PublicMonitoring
 
