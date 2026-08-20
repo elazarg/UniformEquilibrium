@@ -192,12 +192,16 @@ def oneShotExpectedPayoff
   quittingRootSuccessorPayoff reward continuationValue root
 
 /-- **Definition 2.1.** A one-shot root is a perfect `ε`-equilibrium when
-every action in each player's support is an `ε`-best reply. -/
+every action in each player's support is within `ε` of every pure reply. -/
 def oneShotPerfectEpsilonEquilibrium
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (continuationValue : Payoff ι) (ε : ℝ)
     (root : ι → PMF Bool) : Prop :=
-  QuittingRowεPerfect reward continuationValue root ε
+  ∀ who action, root who action ≠ 0 → ∀ alternative,
+    quittingRootExpectedPayoff reward continuationValue
+        (Function.update root who (PMF.pure alternative)) who ≤
+      quittingRootExpectedPayoff reward continuationValue
+          (Function.update root who (PMF.pure action)) who + ε
 
 /-! ### 2.2. The three propositions implying Theorem 1.2 -/
 
@@ -264,23 +268,25 @@ def Proposition2_3 : Prop :=
 theorem proposition2_3 : Proposition2_3 (ι := ι) := by
   sorry
 
-/-- **Proposition 2.4.** Under A.1, a profile with terminating tails and rows
-that are perfect `ε`-equilibria against the actual next-tail values is either a
-subgame-perfect `ε^(1/6)`-equilibrium or yields a stationary
-`ε^(1/6)`-equilibrium. -/
+/-- **Proposition 2.4.** Under A.1 and for sufficiently small `ε`, a profile
+with terminating tails and rows that are perfect `ε`-equilibria against the
+actual next-tail values is either a subgame-perfect `ε^(1/6)`-equilibrium or
+yields a stationary `ε^(1/6)`-equilibrium. -/
 def Proposition2_4 : Prop :=
-  ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : RootSequence (ι := ι)) (ε : ℝ),
-    QuittingUnitSoloExit reward → 0 < ε →
-    (∀ start, terminating reward roots start) →
-    (∀ start, oneShotPerfectEpsilonEquilibrium reward
-      (quittingRootSequenceTailVector reward roots (start + 1))
-      ε (roots start)) →
-      subgamePerfectEpsilonEquilibrium reward roots
-          (ε ^ (1 / 6 : ℝ)) ∨
-        ∃ root : ι → PMF Bool,
-          epsilonEquilibrium reward (ε ^ (1 / 6 : ℝ))
-            (stationaryProfile reward root)
+  ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
+    QuittingUnitSoloExit reward →
+    ∃ ε₀ : ℝ, 0 < ε₀ ∧
+      ∀ (roots : RootSequence (ι := ι)) (ε : ℝ),
+        0 < ε → ε < ε₀ →
+        (∀ start, terminating reward roots start) →
+        (∀ start, oneShotPerfectEpsilonEquilibrium reward
+          (quittingRootSequenceTailVector reward roots (start + 1))
+          ε (roots start)) →
+          subgamePerfectEpsilonEquilibrium reward roots
+              (ε ^ (1 / 6 : ℝ)) ∨
+            ∃ root : ι → PMF Bool,
+              epsilonEquilibrium reward (ε ^ (1 / 6 : ℝ))
+                (stationaryProfile reward root)
 
 theorem proposition2_4 : Proposition2_4 (ι := ι) := by
   sorry
@@ -356,6 +362,13 @@ def Proposition2_6 : Prop := Proposition2_4 (ι := ι)
 theorem proposition2_6 : Proposition2_6 (ι := ι) := by
   exact proposition2_4
 
+/-! **Facts 1--3 (paper).** If `u` is bounded in absolute value by `ρ`, then
+`|𝔼[u]| ≤ ρ ℙ(Aᶜ) + supₐ∈ᴬ |u(a)|`. For every profile `y` and stage
+`n`, its payoff decomposes into absorption before `n` and the surviving
+tail payoff. Finally, the payoff from forcing player `i` to Quit is
+independent of the one-shot continuation vector `w` and equals the quitting-
+game payoff of that pure deviation. -/
+
 /-- The probability that some opponent of `who` quits in a block. -/
 def opponentBlockTerminationProbability
     (roots : RootSequence (ι := ι)) (who : ι)
@@ -364,7 +377,7 @@ def opponentBlockTerminationProbability
     (1 - quittingRootOpponentAbsorptionMass (roots (start + time)) who)
 
 /-- **Definition 2.7.** A block is Type I for player `i` when the probability
-that another player quits in it exceeds `ε^b`; otherwise it is Type II. -/
+that another player quits in it is at least `ε^b`; otherwise it is Type II. -/
 def blockTypeI
     (roots : RootSequence (ι := ι)) (who : ι)
     (start length : ℕ) (ε b : ℝ) : Prop :=
@@ -386,6 +399,14 @@ def opponentFirstAbsorptionProbability
       (roots (start + time) who false).toReal *
         quittingRootOpponentAbsorptionMass (roots (start + time)) who
 
+/-- Probability that the first absorption in a block contains `who`. -/
+def ownerFirstAbsorptionProbability
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length : ℕ) : ℝ :=
+  ∑ time ∈ Finset.range length,
+    quittingJointSurvivalWeight roots start time *
+      (roots (start + time) who true).toReal
+
 /-- Conditional payoff when the first absorption in the block contains
 `who`. This is the paper's `u₁`. -/
 def ownerConditionalBlockPayoff
@@ -396,9 +417,7 @@ def ownerConditionalBlockPayoff
       quittingJointSurvivalWeight roots start time *
         (roots (start + time) who true).toReal *
           quittingRootQuitPayoff reward 0 (roots (start + time)) who) /
-    (∑ time ∈ Finset.range length,
-      quittingJointSurvivalWeight roots start time *
-        (roots (start + time) who true).toReal)
+    ownerFirstAbsorptionProbability roots who start length
 
 /-- Conditional payoff when an opponent causes the first absorption in the
 block under the prescribed profile. This is `u₂`. -/
@@ -476,6 +495,8 @@ def MainEstimateContext.Admissible
   1 / 5 < data.a ∧ data.a < data.exponent ∧
   1 / 5 < data.b - data.exponent ∧
   1 / 5 < 1 - data.b - data.exponent ∧
+  0 < ownerFirstAbsorptionProbability data.roots data.who
+      data.localStart data.localLength ∧
   blockTerminationProbability data.roots data.localStart
       data.localLength < data.ε ^ data.a
 
@@ -516,31 +537,31 @@ def MainEstimateContext.blockExpectation
     (continueUntilRoots data.roots data.who (data.blockStart block))
     data.who 0
 
-/-- **Lemma 2.8.** `|π₂-π₂*| < ε^a π₂*`. -/
+/-- **Lemma 2.8.** `|π₂-π₂*| ≤ ε^a π₂*`. -/
 def Lemma2_8 : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
     (data : MainEstimateContext ι), data.Admissible →
-      |data.π₂ - data.π₂star| < data.ε ^ data.a * data.π₂star
+      |data.π₂ - data.π₂star| ≤ data.ε ^ data.a * data.π₂star
 
 theorem lemma2_8 : Lemma2_8 := by
   sorry
 
-/-- **Lemma 2.9.** `|u₂-u₂*| < 2ρ ε^a`. -/
+/-- **Lemma 2.9.** `|u₂-u₂*| ≤ 2ρ ε^a`. -/
 def Lemma2_9 : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
     (data : MainEstimateContext ι), data.Admissible →
-      |data.u₂ - data.u₂star| < 2 * data.ρ * data.ε ^ data.a
+      |data.u₂ - data.u₂star| ≤ 2 * data.ρ * data.ε ^ data.a
 
 theorem lemma2_9 : Lemma2_9 := by
   sorry
 
 /-- **Lemma 2.10.**
-`|γⁱ(x_{n₂-1})-u₁| < 4ρNπ₂* + ε`. -/
+`|γⁱ(x_{n₂-1})-u₁| ≤ 4ρNπ₂* + ε`. -/
 def Lemma2_10 : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
     (data : MainEstimateContext ι), data.Admissible →
       |quittingRootSequenceTailVector data.reward data.roots
-          (data.localStart + data.localLength) data.who - data.u₁| <
+          (data.localStart + data.localLength) data.who - data.u₁| ≤
         4 * data.ρ * Fintype.card ι * data.π₂star + data.ε
 
 theorem lemma2_10 : Lemma2_10 := by
@@ -552,7 +573,7 @@ def Lemma2_11 : Prop :=
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
     (data : MainEstimateContext ι), data.Admissible →
       quittingRootSequenceHazardTerminalValue data.reward data.roots data.who
-          (quittingPureTimeHazard data.quitTime) 0 <
+          (quittingPureTimeHazard data.quitTime) 0 ≤
         sSup (Set.range data.blockExpectation) +
           data.ε + 2 * data.ρ * data.ε ^ data.a
 
@@ -574,6 +595,13 @@ theorem lemma2_12 : Lemma2_12 := by
 
 /-! ### 2.6. Equilibrium and uniformity -/
 
+/-- The paper's uniform `ε`-equilibrium: the profile is an `ε`-equilibrium
+for every sufficiently long finite-average payoff. -/
+def uniformEpsilonEquilibrium
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (ε : ℝ) (profile : (quittingGame reward).BehaviorProfile) : Prop :=
+  (quittingGame reward).IsUniformεEquilibrium none ε profile
+
 /-- **Proposition 2.13.** A terminal `ε`-equilibrium is a uniform
 `ε'`-equilibrium whenever `ε < ε'`. -/
 theorem proposition2_13
@@ -581,7 +609,7 @@ theorem proposition2_13
     (profile : (quittingGame reward).BehaviorProfile)
     {ε ε' : ℝ} (herror : ε < ε')
     (hnash : epsilonEquilibrium reward ε profile) :
-    (quittingGame reward).IsUniformεEquilibrium none ε' profile :=
+    uniformEpsilonEquilibrium reward ε' profile :=
   quittingGame_isUniformεEquilibrium_of_terminalNash
     reward profile herror hnash
 
@@ -592,8 +620,13 @@ structure PayoffProcess (ι : Type) [Fintype ι] [DecidableEq ι] where
   Ω : Type
   measurableSpace : MeasurableSpace Ω
   μ : @Measure Ω measurableSpace
+  probability : IsProbabilityMeasure μ
   payoff : ℕ → Ω → ({S : Finset ι // S.Nonempty} → Payoff ι)
   limit : Ω → ({S : Finset ι // S.Nonempty} → Payoff ι)
+  payoff_measurable : ∀ n terminal who,
+    Measurable (fun ω => payoff n ω terminal who)
+  limit_measurable : ∀ terminal who,
+    Measurable (fun ω => limit ω terminal who)
   integrableEnvelope : ∃ bound : Ω → ℝ,
     Integrable bound μ ∧ ∀ n ω terminal who,
       |payoff n ω terminal who| ≤ bound ω
@@ -799,7 +832,7 @@ def Lemma3_1 : Prop :=
       (firstBeforeSecondEvent first₁ first₂ N) →
       probability.prob (beforeEvent first₁ N) -
           probability.prob
-            (firstBeforeSecondEvent first₁ first₂ N) <
+            (firstBeforeSecondEvent first₁ first₂ N) ≤
         probability.prob (beforeEvent first₁ N) *
           probability.prob (beforeEvent first₂ N) ∧
       (∑ n ∈ Finset.range N,
@@ -809,7 +842,7 @@ def Lemma3_1 : Prop :=
               (firstAtEvent first₁ n ∩
                 firstBeforeSecondEvent first₁ first₂ N) /
             probability.prob
-              (firstBeforeSecondEvent first₁ first₂ N)|) <
+              (firstBeforeSecondEvent first₁ first₂ N)|) ≤
         2 * probability.prob (beforeEvent first₂ N)
 
 theorem lemma3_1 : Lemma3_1 := by
