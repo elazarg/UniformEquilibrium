@@ -86,6 +86,12 @@ def HistoryTo.length {F : StochasticGameForm} {s : F.State} : HistoryTo F s → 
   | .root => 0
   | .snoc h _ _ _ => h.length + 1
 
+/-- Transporting the terminal-state index does not change history length. -/
+theorem HistoryTo.length_transport {F : StochasticGameForm} {s t : F.State}
+    (e : s = t) (h : HistoryTo F s) : (e ▸ h).length = h.length := by
+  cases e
+  rfl
+
 /-- The number of action stages in a finite history. -/
 def FiniteHistory.length {F : StochasticGameForm} (h : FiniteHistory F) : ℕ := h.2.length
 
@@ -453,6 +459,18 @@ def EpsilonSelfPerfect (G : NormalStochasticGame) (S : StochasticSemantics G)
   ∃ B, EpsilonPerfectWithWitness G S ε profile
     (fun n h => ContinuationValue G S profile n h) B
 
+/-- Increasing the error tolerance preserves self-perfection. -/
+theorem EpsilonSelfPerfect.mono (G : NormalStochasticGame) (S : StochasticSemantics G)
+    {ε δ : ℝ} (hεδ : ε ≤ δ) {profile : Profile G}
+    (h : EpsilonSelfPerfect G S ε profile) : EpsilonSelfPerfect G S δ profile := by
+  rcases h with ⟨B, hmeasure, hlocal⟩
+  refine ⟨B, le_trans hmeasure (ENNReal.ofReal_le_ofReal hεδ), ?_⟩
+  intro n history hhistory
+  rcases hlocal n history hhistory with ⟨hjump, hcontinuation, haction⟩
+  refine ⟨by linarith, by linarith, ?_⟩
+  intro action hpositive
+  exact le_trans (haction action hpositive) hεδ
+
 /-- A stochastic game is perfect if it has an `ε`-perfect profile for every positive `ε`. -/
 def IsPerfect (G : NormalStochasticGame) (S : StochasticSemantics G) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ profile, EpsilonPerfect G S ε profile
@@ -492,6 +510,16 @@ def EpsilonViable (G : NormalStochasticGame) (S : StochasticSemantics G)
   ∃ f, Viable G S f ∧ ∀ n h, ReachedWithPositiveProbability G S profile h →
     ContinuationValue G S profile n h ≥ f h n - δ
 
+/-- Increasing the error tolerance preserves viability of a profile. -/
+theorem EpsilonViable.mono (G : NormalStochasticGame) (S : StochasticSemantics G)
+    {ε δ : ℝ} (hεδ : ε ≤ δ) {profile : Profile G}
+    (h : EpsilonViable G S ε profile) : EpsilonViable G S δ profile := by
+  rcases h with ⟨f, hf, hbound⟩
+  refine ⟨f, hf, ?_⟩
+  intro n history hreached
+  exact le_trans (by linarith : f history n - δ ≤ f history n - ε)
+    (hbound n history hreached)
+
 /-- `W_σⁿ(h)` is player `n`'s cumulative one-stage action advantage along `h`. -/
 def HistoryTo.cumulativeAdvantage (G : NormalStochasticGame)
     (S : StochasticSemantics G) (profile : Profile G) (n : G.Player) :
@@ -502,6 +530,15 @@ def HistoryTo.cumulativeAdvantage (G : NormalStochasticGame)
         OneStageValue G profile n ⟨s, h⟩
           (fun h' => ContinuationValue G S profile n h') (a n) -
         ContinuationValue G S profile n ⟨s, h⟩
+
+/-- A zero-stage history has no accumulated action advantage. -/
+theorem HistoryTo.cumulativeAdvantage_eq_zero_of_length_eq_zero
+    (G : NormalStochasticGame) (S : StochasticSemantics G) (profile : Profile G)
+    (n : G.Player) {s : G.State} (h : HistoryTo G.toStochasticGameForm s)
+    (hlength : h.length = 0) : h.cumulativeAdvantage G S profile n = 0 := by
+  cases h with
+  | root => rfl
+  | snoc h a t positive => simp [HistoryTo.length] at hlength
 
 /-- The paper's cumulative advantage `W_σⁿ(h)` on a finite history. -/
 def CumulativeAdvantage (G : NormalStochasticGame) (S : StochasticSemantics G)
@@ -589,12 +626,37 @@ structure DDPFinitePath (P : DiscreteDecisionProcess) (k : ℕ) where
   y : (i : Fin k) → P.Y (x i.castSucc)
   movePositive : ∀ i, 0 < P.move (x i.castSucc) (y i) (x i.succ)
 
+/-- Finite possible paths form a countable type when states and actions are countable. -/
+instance ddpFinitePathCountable (P : DiscreteDecisionProcess) (k : ℕ) :
+    Countable (DDPFinitePath P k) :=
+  (show Function.Injective
+      (fun h : DDPFinitePath P k =>
+        (h.x, fun i => Sigma.mk (h.x i.castSucc) (h.y i))) from by
+      intro a b hab
+      cases a with
+      | mk ax ay ap =>
+        cases b with
+        | mk bx byy bp =>
+          simp only [Prod.mk.injEq] at hab
+          cases hab.1
+          have : ay = byy := by
+            funext i
+            exact eq_of_heq (Sigma.mk.inj_iff.mp (congrFun hab.2 i) |>.2)
+          cases this
+          rfl).countable
+
 /-- The `k`-action prefix of a possible infinite decision-process path. -/
 def DDPPath.prefix (P : DiscreteDecisionProcess) (p : DDPPath P)
     (k : ℕ) : DDPFinitePath P k where
   x i := p.x i
   y i := p.y i
   movePositive i := p.movePositive i
+
+/-- The advantage read from a finite path containing `l+1` chosen actions. -/
+def DDPFinitePath.advantage (P : DiscreteDecisionProcess) {l : ℕ}
+    (h : DDPFinitePath P (l + 1)) : ℝ :=
+  ∑ i : Fin (l + 1),
+    (P.valueY (h.x i.castSucc) (h.y i) - P.valueX (h.x i.castSucc))
 
 /-- The cylinder determined by a finite decision-process path. -/
 def DDPCylinder (P : DiscreteDecisionProcess) {k : ℕ}
@@ -618,6 +680,11 @@ def DDPFinitePath.afterActionProbability (P : DiscreteDecisionProcess) {k : ℕ}
 instance ddpPathMeasurableSpace (P : DiscreteDecisionProcess) :
     MeasurableSpace (DDPPath P) :=
   MeasurableSpace.generateFrom {U | ∃ k, ∃ h : DDPFinitePath P k, U = DDPCylinder P h}
+
+/-- Every finite-path cylinder belongs to the generated path sigma algebra. -/
+theorem measurableSet_ddpCylinder (P : DiscreteDecisionProcess) {k : ℕ}
+    (h : DDPFinitePath P k) : MeasurableSet (DDPCylinder P h) :=
+  MeasurableSpace.measurableSet_generateFrom ⟨k, h, rfl⟩
 
 /--
 The induced path law and the laws obtained after forcing a start/action, constrained by all
@@ -653,6 +720,39 @@ theorem ddpSemantics_exists (P : DiscreteDecisionProcess) : Nonempty (DDPSemanti
 def DDPAdvantage (P : DiscreteDecisionProcess) (p : DDPPath P) (l : ℕ) : ℝ :=
   Finset.sum (Finset.range (l + 1)) fun i =>
     P.valueY (p.x i) (p.y i) - P.valueX (p.x i)
+
+@[simp]
+theorem DDPFinitePath.advantage_prefix (P : DiscreteDecisionProcess) (p : DDPPath P)
+    (l : ℕ) : (p.prefix P (l + 1)).advantage P = DDPAdvantage P p l := by
+  rw [DDPFinitePath.advantage, DDPAdvantage]
+  change (∑ i : Fin (l + 1),
+    (P.valueY (p.x i) (p.y i) - P.valueX (p.x i))) = _
+  rw [
+    Fin.sum_univ_eq_sum_range (fun i =>
+      P.valueY (p.x i) (p.y i) - P.valueX (p.x i))]
+
+/-- Crossing events are measurable in the finite-cylinder sigma algebra. -/
+theorem measurableSet_ddpAdvantage_crossing (P : DiscreteDecisionProcess) (ε : ℝ) :
+    MeasurableSet {p | ∃ l, DDPAdvantage P p l ≥ ε} := by
+  let E : Set (DDPPath P) := ⋃ l, ⋃ h : DDPFinitePath P (l + 1),
+    if h.advantage P ≥ ε then DDPCylinder P h else ∅
+  have hE : {p | ∃ l, DDPAdvantage P p l ≥ ε} = E := by
+    ext p
+    simp only [E, mem_setOf_eq, mem_iUnion, mem_ite_empty_right]
+    constructor
+    · rintro ⟨l, hl⟩
+      refine ⟨l, p.prefix P (l + 1), ?_, rfl⟩
+      simpa using hl
+    · rintro ⟨l, h, hh, hp⟩
+      refine ⟨l, ?_⟩
+      change p.prefix P (l + 1) = h at hp
+      rw [← hp] at hh
+      simpa using hh
+  rw [hE]
+  exact MeasurableSet.iUnion fun l => MeasurableSet.iUnion fun h => by
+    split_ifs
+    · exact measurableSet_ddpCylinder P h
+    · exact MeasurableSet.empty
 
 /-- The probability that a cumulative advantage ever reaches `ε`. -/
 def PositiveCrossingProbability (P : DiscreteDecisionProcess) (S : DDPSemantics P)
@@ -701,7 +801,37 @@ theorem corollary1 (G : NormalStochasticGame) (GS : StochasticSemantics G)
         PositiveCrossingProbability P PS ε ≤ ENNReal.ofReal ε) :
     ∃ equilibrium, IsEpsilonEquilibrium G GS
       (3 * ε * (G.payoffDifferenceBound * PlayerCount G + 2)) equilibrium := by
-  sorry
+  have hcross : ∀ n, InducedMeasure G GS profile
+      (AdvantageCrossingEvent G GS profile n ε) ≤ ENNReal.ofReal ε := by
+    intro n
+    rcases hprocess n with ⟨P, PS, ⟨generated⟩, hprobability⟩
+    let A : Set (DDPPath P) := {p | ∃ l, DDPAdvantage P p l ≥ ε}
+    have hA : MeasurableSet A := measurableSet_ddpAdvantage_crossing P ε
+    have hsubset : AdvantageCrossingEvent G GS profile n ε ⊆ generated.pathMap ⁻¹' A := by
+      rintro omega ⟨i, hi⟩
+      rcases i with _ | l
+      · have hzero : CumulativeAdvantage G GS profile n (omega.prefix 0) = 0 :=
+          HistoryTo.cumulativeAdvantage_eq_zero_of_length_eq_zero G GS profile n
+            (omega.prefix 0).2 (by
+              exact HistoryTo.length_transport omega.starts.symm HistoryTo.root)
+        rw [hzero] at hi
+        linarith
+      · exact ⟨l, by
+          rw [generated.advantage_eq]
+          exact hi.le⟩
+    calc
+      InducedMeasure G GS profile (AdvantageCrossingEvent G GS profile n ε) ≤
+          InducedMeasure G GS profile (generated.pathMap ⁻¹' A) := measure_mono hsubset
+      _ = Measure.map generated.pathMap (InducedMeasure G GS profile) A :=
+        (Measure.map_apply generated.measurable_pathMap hA).symm
+      _ = PS.law A := by rw [generated.law_eq]
+      _ = PositiveCrossingProbability P PS ε := rfl
+      _ ≤ ENNReal.ofReal ε := hprobability
+  obtain ⟨equilibrium, hequilibrium⟩ :=
+    theorem1 G GS hε hε1 profile hperfect hviable hcross
+  refine ⟨equilibrium, ?_⟩
+  convert hequilibrium using 1
+  ring
 
 /-- Total variation `w̄(p) = Σ |v(y_{i+1}) - v(x_i)|`, possibly infinite. -/
 def DDPTotalVariation (P : DiscreteDecisionProcess) (p : DDPPath P) : ℝ≥0∞ :=
@@ -811,6 +941,20 @@ def HasProcessRank (P : DiscreteDecisionProcess) (S : DDPSemantics P)
 def HasProcessRankAtMost (P : DiscreteDecisionProcess) (S : DDPSemantics P)
     (R : ReturnValueData P S) (k : ℕ) : Prop :=
   ∃ n, n ≤ k ∧ Nonempty (RankPartitionWitness P S R n)
+
+/-- A finite rank witness has a least size, hence an exact rank no larger than the witness. -/
+theorem exists_processRank_of_rankAtMost (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (R : ReturnValueData P S) {k : ℕ} (h : HasProcessRankAtMost P S R k) :
+    ∃ n, n ≤ k ∧ HasProcessRank P S R n := by
+  classical
+  rcases h with ⟨m, hmk, hm⟩
+  let hexists : ∃ n, Nonempty (RankPartitionWitness P S R n) := ⟨m, hm⟩
+  let n := Nat.find hexists
+  have hn : Nonempty (RankPartitionWitness P S R n) := Nat.find_spec hexists
+  have hleast : ∀ q, Nonempty (RankPartitionWitness P S R q) → n ≤ q := by
+    intro q hq
+    exact Nat.find_min' hexists hq
+  exact ⟨n, (hleast m hm).trans hmk, hn, hleast⟩
 
 /-- Proposition 2.  A rank-`n` DDP has expected total variation at most `2nM`. -/
 theorem proposition2 (P : DiscreteDecisionProcess) (S : DDPSemantics P)
@@ -1032,13 +1176,94 @@ theorem theorem2 (G : NormalStochasticGame) (GS : StochasticSemantics G)
     (h : ∀ ε : ℝ, 0 < ε → ∃ profile : Profile G,
       EpsilonSelfPerfect G GS ε profile ∧ EpsilonViable G GS ε profile ∧
       ∀ n : G.Player, ∃ (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
-        (generated : GeneratedDecisionProcess G GS profile n P PS)
+        (_generated : GeneratedDecisionProcess G GS profile n P PS)
         (S T : Set P.X) (CR : ChainReductionData P PS S T)
         (RV : ReturnValueData CR.reduced CR.semantics),
           IsBalanced CR.reduced ε ∧
             HasProcessRankAtMost CR.reduced CR.semantics RV k) :
     HasApproximateEquilibria G GS := by
-  sorry
+  intro target htarget
+  let C : ℝ := G.payoffDifferenceBound * PlayerCount G + 2
+  have hplayers : 0 < PlayerCount G := Fintype.card_pos
+  have hC : 0 < C := by
+    dsimp [C, PlayerCount]
+    have hM := G.payoffDifferenceBound_one
+    positivity
+  let e : ℝ := min (1 / 2) (target / (6 * C))
+  have he : 0 < e := by
+    dsimp [e]
+    exact lt_min (by norm_num) (div_pos htarget (mul_pos (by norm_num) hC))
+  have he1 : e ≤ 1 := le_trans (min_le_left _ _) (by norm_num)
+  have heTarget : 3 * e * C ≤ target := by
+    have heBound : e ≤ target / (6 * C) := min_le_right _ _
+    rw [le_div_iff₀ (mul_pos (by norm_num) hC)] at heBound
+    nlinarith
+  let B : ℝ := 2 * k * G.payoffDifferenceBound
+  have hB : 0 < B := by
+    dsimp [B]
+    have hkreal : (0 : ℝ) < k := by exact_mod_cast hk
+    have hM : 0 < G.payoffDifferenceBound := lt_of_lt_of_le zero_lt_one
+      G.payoffDifferenceBound_one
+    positivity
+  let d : ℝ := min (e / 4) (e ^ 3 / (8 * B))
+  have hd : 0 < d := by
+    dsimp [d]
+    exact lt_min (div_pos he (by norm_num))
+      (div_pos (pow_pos he 3) (mul_pos (by norm_num) hB))
+  have hde : d ≤ e := le_trans (min_le_left _ _) (by linarith [he])
+  have hdHalf : d < e / 2 :=
+    lt_of_le_of_lt (min_le_left _ _) (by linarith [he])
+  have hdSmall : d ≤ (e / 2) ^ 2 * e / B := by
+    have hdBound : d ≤ e ^ 3 / (8 * B) := min_le_right _ _
+    rw [le_div_iff₀ (mul_pos (by norm_num) hB)] at hdBound
+    rw [le_div_iff₀ hB]
+    nlinarith [sq_nonneg e, pow_pos he 3]
+  rcases h d hd with ⟨profile, hperfect, hviable, hreductions⟩
+  have hprocess : ∀ n : G.Player, ∃ (P : DiscreteDecisionProcess)
+      (PS : DDPSemantics P), Nonempty (GeneratedDecisionProcess G GS profile n P PS) ∧
+        PositiveCrossingProbability P PS e ≤ ENNReal.ofReal e := by
+    intro n
+    rcases hreductions n with ⟨P, PS, generated, S, T, CR, RV, hbalanced, hrankAtMost⟩
+    rcases exists_processRank_of_rankAtMost CR.reduced CR.semantics RV hrankAtMost with
+      ⟨rank, hrankk, hrank⟩
+    have hvariation : ExpectedDDPVariation CR.reduced CR.semantics ≤ ENNReal.ofReal B := by
+      refine (proposition2 CR.reduced CR.semantics RV hrank).trans ?_
+      apply ENNReal.ofReal_le_ofReal
+      have hrankReal : (rank : ℝ) ≤ k := by exact_mod_cast hrankk
+      have hbound : CR.reduced.valueDifferenceBound ≤ G.payoffDifferenceBound :=
+        CR.valueDifferenceBound_le.trans generated.valueDifferenceBound_le
+      have hrankNonnegative : (0 : ℝ) ≤ rank := Nat.cast_nonneg rank
+      have hReducedNonnegative : 0 ≤ CR.reduced.valueDifferenceBound :=
+        (zero_le_one.trans CR.reduced.valueDifferenceBound_one)
+      dsimp [B]
+      nlinarith
+    have habsolute := proposition1 CR.reduced CR.semantics
+      hd (half_pos he) he hB hbalanced hvariation hdSmall
+    have htransfer := lemma1 P PS S T CR hd hbalanced (e / 2) (half_pos he)
+    refine ⟨P, PS, ⟨generated⟩, ?_⟩
+    change PS.law {p | ∃ l, DDPAdvantage P p l ≥ e} ≤ ENNReal.ofReal e
+    calc
+      PS.law {p | ∃ l, DDPAdvantage P p l ≥ e} ≤
+          PS.law {p | ∃ l, DDPAdvantage P p l > e / 2 + d} := by
+        apply measure_mono
+        rintro p ⟨l, hl⟩
+        exact ⟨l, by linarith⟩
+      _ ≤ CR.semantics.law {p | ∃ l, DDPAdvantage CR.reduced p l > e / 2} :=
+        htransfer
+      _ ≤ CR.semantics.law {p | ∃ l, |DDPAdvantage CR.reduced p l| ≥ e / 2} := by
+        apply measure_mono
+        rintro p ⟨l, hl⟩
+        refine ⟨l, ?_⟩
+        rw [abs_of_pos (lt_trans (half_pos he) hl)]
+        exact hl.le
+      _ ≤ ENNReal.ofReal e := habsolute
+  obtain ⟨equilibrium, hequilibrium⟩ := corollary1 G GS he he1 profile
+    (hperfect.mono G GS hde) (hviable.mono G GS hde) hprocess
+  refine ⟨equilibrium, ?_⟩
+  intro n deviation
+  exact (hequilibrium n deviation).trans (by
+    dsimp [C] at heTarget
+    linarith)
 
 /-- The full transition/value and three-state chain-reduction data of Example 2. -/
 structure Example2Data (n : ℕ) (hn : 0 < n) where
@@ -1175,6 +1400,21 @@ abbrev QuitProfile (G : QuittingGame) := ℕ → QuitRow G
 def QuitProbability (G : QuittingGame) (p : QuitRow G) : ℝ :=
   1 - ∏ n, (1 - (p n : ℝ))
 
+/-- The one-row quitting probability lies in the unit interval. -/
+theorem quitProbability_mem_Icc (G : QuittingGame) (p : QuitRow G) :
+    QuitProbability G p ∈ Set.Icc (0 : ℝ) 1 := by
+  have hfactor0 : ∀ n ∈ Finset.univ, 0 ≤ 1 - (p n : ℝ) := by
+    intro n _
+    exact sub_nonneg.mpr (p n).property.2
+  have hfactor1 : ∀ n ∈ Finset.univ, 1 - (p n : ℝ) ≤ 1 := by
+    intro n _
+    linarith [(p n).property.1]
+  constructor
+  · exact sub_nonneg.mpr (Finset.prod_le_one hfactor0 hfactor1)
+  · have := Finset.prod_nonneg hfactor0
+    simp only [QuitProbability]
+    linarith
+
 /-- The probability that exactly the coalition `A` quits in a row. -/
 def CoalitionProbability (G : QuittingGame) (p : QuitRow G)
     (A : Finset G.Player) : ℝ := by
@@ -1221,6 +1461,29 @@ def HasQuitApproximateEquilibria (G : QuittingGame) : Prop :=
 def IsQuittingPayoffDifferenceBound (G : QuittingGame) (M : ℝ) : Prop :=
   1 ≤ M ∧ (∀ A B n, |G.reward A n - G.reward B n| < M) ∧
     ∀ A n, |G.reward A n| < M
+
+/-- Every finite quitting table has a strict payoff-difference bound. -/
+theorem exists_quittingPayoffDifferenceBound (G : QuittingGame) :
+    ∃ M : ℝ, IsQuittingPayoffDifferenceBound G M := by
+  classical
+  let total : ℝ := ∑ A : {A : Finset G.Player // A.Nonempty}, ∑ n, |G.reward A n|
+  have hentry : ∀ A n, |G.reward A n| ≤ total := by
+    intro A n
+    refine (Finset.single_le_sum (fun i _ => abs_nonneg (G.reward A i))
+      (Finset.mem_univ n)).trans ?_
+    exact Finset.single_le_sum
+      (fun B _ => Finset.sum_nonneg fun i _ => abs_nonneg (G.reward B i))
+      (Finset.mem_univ A)
+  have htotal : 0 ≤ total := Finset.sum_nonneg fun C _ =>
+    Finset.sum_nonneg fun i _ => abs_nonneg (G.reward C i)
+  refine ⟨1 + 2 * total, by linarith, ?_, ?_⟩
+  · intro A B n
+    calc
+      |G.reward A n - G.reward B n| ≤ |G.reward A n| + |G.reward B n| := abs_sub _ _
+      _ ≤ total + total := add_le_add (hentry A n) (hentry B n)
+      _ < 1 + 2 * total := by linarith
+  · intro A n
+    exact lt_of_le_of_lt (hentry A n) (by linarith)
 
 /-! ### 4.2. Correspondences and orbits -/
 
@@ -1330,6 +1593,18 @@ def FRow (G : QuittingGame) (ε : ℝ) :
     Correspondence (Payoff G.Player) (Payoff G.Player) :=
   fun r => {QuittingOneStagePayoff G r p | p ∈ EpsilonRow G ε r}
 
+/-- Increasing the one-stage error enlarges the quitting payoff correspondence. -/
+theorem FRow.mono (G : QuittingGame) {δ ε : ℝ} (hδε : δ ≤ ε) (r : Payoff G.Player) :
+    FRow G δ r ⊆ FRow G ε r := by
+  rintro y ⟨p, hp, rfl⟩
+  refine ⟨p, ⟨?_, ?_⟩, rfl⟩
+  · intro n hquit
+    exact le_trans (by linarith : ForcedContinuePayoff G r p n - ε ≤
+      ForcedContinuePayoff G r p n - δ) (hp.1 n hquit)
+  · intro n hcontinue
+    exact le_trans (by linarith : ForcedQuitPayoff G p n - ε ≤
+      ForcedQuitPayoff G p n - δ) (hp.2 n hcontinue)
+
 /-! ### 4.3. Normal players, instant equilibria, and stationary equilibria -/
 
 /-- A vector is feasible if it lies in the convex hull of the quitting payoffs and zero. -/
@@ -1408,6 +1683,24 @@ def HasInstantApproximateEquilibria (G : QuittingGame) : Prop :=
         QuitPayoff G (punishment.replace G j q) j ≤ MinMaxQuit G j + ε) ∧
       IsQuitEpsilonEquilibrium G (2 * ε) (InstantProfile G p punishment)
 
+/-- Stationary approximate equilibria are, in particular, quitting-game equilibria. -/
+theorem HasStationaryApproximateEquilibria.hasQuitApproximateEquilibria
+    (G : QuittingGame) (h : HasStationaryApproximateEquilibria G) :
+    HasQuitApproximateEquilibria G := by
+  intro ε hε
+  rcases h ε hε with ⟨p, hp⟩
+  exact ⟨fun _ => p, hp⟩
+
+/-- The instant construction supplies approximate equilibria after halving the input error. -/
+theorem HasInstantApproximateEquilibria.hasQuitApproximateEquilibria
+    (G : QuittingGame) (h : HasInstantApproximateEquilibria G) :
+    HasQuitApproximateEquilibria G := by
+  intro ε hε
+  rcases h (ε / 2) (half_pos hε) with ⟨p, j, punishment, _hj, _hpunish, hequilibrium⟩
+  refine ⟨InstantProfile G p punishment, ?_⟩
+  convert hequilibrium using 1
+  ring
+
 /--
 Lemma 5.  Without stationary or instant approximate equilibria there is a positive normal
 solo payoff, every normal solo quitter harms another normal player, and one uniform `ρ`
@@ -1455,6 +1748,43 @@ def CycleProfile (G : QuittingGame) (k : ℕ) (hk : 0 < k)
     (block : Fin k → QuitRow G) : QuitProfile G :=
   fun i => block ⟨i % k, Nat.mod_lt i hk⟩
 
+/-- A positive-mass finite quitting block has unbounded mass when repeated periodically. -/
+theorem CycleProfile.hasUnboundedQuitMass (G : QuittingGame) {k : ℕ} (hk : 0 < k)
+    (block : Fin k → QuitRow G) (hpositive : ∃ i, 0 < QuitProbability G (block i)) :
+    HasUnboundedQuitMass G (CycleProfile G k hk block) := by
+  let cycle := CycleProfile G k hk block
+  let blockMass : ℝ := ∑ i ∈ Finset.range k, QuitProbability G (cycle i)
+  have hnonnegative : ∀ i, 0 ≤ QuitProbability G (cycle i) := fun i =>
+    (quitProbability_mem_Icc G (cycle i)).1
+  have hblockMass : 0 < blockMass := by
+    apply Finset.sum_pos' (fun i _ => hnonnegative i)
+    rcases hpositive with ⟨i, hi⟩
+    refine ⟨i, Finset.mem_range.mpr i.2, ?_⟩
+    simpa [cycle, CycleProfile, Nat.mod_eq_of_lt i.2] using hi
+  have hsum : ∀ m : ℕ,
+      (∑ i ∈ Finset.range (m * k), QuitProbability G (cycle i)) = m * blockMass := by
+    intro m
+    induction m with
+    | zero => simp
+    | succ m hm =>
+      rw [Nat.succ_mul, Finset.sum_range_add, hm]
+      have hperiod : ∀ i, cycle (m * k + i) = cycle i := by
+        intro i
+        simp only [cycle, CycleProfile]
+        apply congrArg block
+        apply Fin.ext
+        simp [Nat.add_comm]
+      simp_rw [hperiod]
+      dsimp [blockMass]
+      push_cast
+      ring
+  intro bound
+  obtain ⟨m, hm⟩ := exists_nat_gt (bound / blockMass)
+  refine ⟨m * k, ?_⟩
+  rw [hsum]
+  rw [div_lt_iff₀ hblockMass] at hm
+  exact hm.le
+
 /-- Theorem 3(ii): cyclic `ε`-rational `F_ε` tails with positive quit mass in the period. -/
 def CyclicOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ (k : ℕ) (hk : 0 < k) (block : Fin k → QuitRow G),
@@ -1462,6 +1792,41 @@ def CyclicOrbitCondition (G : QuittingGame) : Prop :=
     (∀ i, QuitTailPayoff G p i ∈ FRow G ε (QuitTailPayoff G p (i + 1))) ∧
     (∀ i, IsRational G ε (QuitTailPayoff G p i)) ∧
     ∃ i : Fin k, 0 < QuitProbability G (block i)
+
+/-- The cyclic clause of Theorem 3 yields approximate equilibria via Proposition 3. -/
+theorem CyclicOrbitCondition.hasQuitApproximateEquilibria
+    (G : QuittingGame) (h : CyclicOrbitCondition G) : HasQuitApproximateEquilibria G := by
+  intro target htarget
+  rcases exists_quittingPayoffDifferenceBound G with ⟨M, hM⟩
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  let e : ℝ := min (target / 3) 1
+  have he : 0 < e := lt_min (div_pos htarget (by norm_num)) zero_lt_one
+  have he1 : e ≤ 1 := min_le_right _ _
+  have h3e : 3 * e ≤ target := by
+    have := min_le_left (target / 3) 1
+    linarith
+  let δ : ℝ := min (e / 2) (e ^ 4 / (4 * M ^ 3))
+  have hδ : 0 < δ := lt_min (div_pos he (by norm_num))
+    (div_pos (pow_pos he 4) (mul_pos (by norm_num) (pow_pos hMpos 3)))
+  have hδε : δ ≤ e := (min_le_left _ _).trans (by linarith [he])
+  have hδsmall : δ < e ^ 4 / (2 * M ^ 3) := by
+    have hbound := min_le_right (e / 2) (e ^ 4 / (4 * M ^ 3))
+    have hpow : 0 < M ^ 3 := pow_pos hMpos 3
+    dsimp [δ]
+    exact hbound.trans_lt (div_lt_div_of_pos_left (pow_pos he 4)
+      (mul_pos (by norm_num) hpow) (by nlinarith))
+  rcases h δ hδ with ⟨k, hk, block, horbit, hrational, hpositive⟩
+  let profile := CycleProfile G k hk block
+  have hequilibrium : IsQuitEpsilonEquilibrium G (3 * e) profile := by
+    apply proposition3 G hM he he1 hδ hδsmall profile
+    · intro i n
+      exact le_trans (by linarith : MinMaxQuit G n - e ≤ MinMaxQuit G n - δ)
+        (hrational i n)
+    · exact CycleProfile.hasUnboundedQuitMass G hk block hpositive
+    · exact horbit
+  refine ⟨profile, ?_⟩
+  intro n deviation
+  exact (hequilibrium n deviation).trans (by linarith)
 
 /-- A vector lies within `ε` of the feasible vectors. -/
 def NearFeasible (G : QuittingGame) (ε : ℝ) (r : Payoff G.Player) : Prop :=
@@ -1536,6 +1901,58 @@ theorem lemma6 (G : QuittingGame) {M ε : ℝ}
       (r n < MinMaxQuit G n - 3 * ε → s n ≥ r n + ε ^ 2 / (2 * M)) := by
   sorry
 
+/-- A scalar process with positive drift below a preserved threshold eventually stays above it. -/
+theorem eventually_ge_of_drift_below {u : ℕ → ℝ} {threshold step : ℝ}
+    (hstep : 0 < step)
+    (h : ∀ i, (threshold ≤ u i → threshold ≤ u (i + 1)) ∧
+      (u i < threshold → u i + step ≤ u (i + 1))) :
+    ∃ N, ∀ i, N ≤ i → threshold ≤ u i := by
+  have hpersist : ∀ {i}, threshold ≤ u i → ∀ j, i ≤ j → threshold ≤ u j := by
+    intro i hi j hij
+    induction j, hij using Nat.le_induction with
+    | base => exact hi
+    | succ j hij hj => exact (h j).1 hj
+  by_cases hreach : ∃ i, threshold ≤ u i
+  · rcases hreach with ⟨i, hi⟩
+    exact ⟨i, hpersist hi⟩
+  · push Not at hreach
+    have hgrowth : ∀ i, u 0 + i * step ≤ u i := by
+      intro i
+      induction i with
+      | zero => simp
+      | succ i hi =>
+        have hdrift := (h i).2 (hreach i)
+        norm_num [Nat.cast_add, Nat.cast_one]
+        nlinarith
+    obtain ⟨N, hN⟩ := exists_nat_gt ((threshold - u 0) / step)
+    have hlarge : threshold < u 0 + N * step := by
+      rw [div_lt_iff₀ hstep] at hN
+      nlinarith
+    nlinarith [hgrowth N, hreach N, hlarge]
+
+/-- Removing a finite prefix preserves unbounded total variation. -/
+theorem HasUnboundedVariation.tail {N : Type} [Fintype N]
+    {x : ℕ → Payoff N} (h : HasUnboundedVariation x) (start : ℕ) :
+    HasUnboundedVariation (fun i => x (start + i)) := by
+  intro bound
+  let increment : ℕ → ℝ := fun i => ‖x (i + 1) - x i‖
+  let prefixVariation : ℝ := ∑ i ∈ Finset.range start, increment i
+  rcases h (bound + prefixVariation) with ⟨k, hk⟩
+  refine ⟨k, ?_⟩
+  have hmono : (∑ i ∈ Finset.range k, increment i) ≤
+      ∑ i ∈ Finset.range (start + k), increment i := by
+    apply Finset.sum_le_sum_of_subset_of_nonneg
+      (Finset.range_mono (Nat.le_add_left k start))
+    intro i _ _
+    exact norm_nonneg _
+  have hbound := hk.trans hmono
+  rw [Finset.sum_range_add] at hbound
+  dsimp [prefixVariation, increment] at hbound ⊢
+  simp only [Nat.add_assoc] at hbound
+  simpa [Nat.add_assoc] using (show bound ≤
+    ∑ i ∈ Finset.range k, ‖x (start + (i + 1)) - x (start + i)‖ by
+      linarith)
+
 /-- The unqualified infinite-orbit condition used in Corollary 2. -/
 def InfiniteUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
   ∀ δ : ℝ, 0 < δ → ∃ x : ℕ → Payoff G.Player,
@@ -1549,7 +1966,54 @@ theorem corollary2 (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
     (hinstant : ¬HasInstantApproximateEquilibria G)
     (hstationary : ¬HasStationaryApproximateEquilibria G) :
     HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G := by
-  sorry
+  have hfive := theorem3 G hstationary hinstant
+  have hEquiv : HasQuitApproximateEquilibria G ↔ InfiniteOrbitCondition G :=
+    hfive.1.trans (hfive.2.1.trans hfive.2.2.1)
+  constructor
+  · intro hequilibrium δ hδ
+    rcases hEquiv.mp hequilibrium δ hδ with ⟨x, horbit, _hrational, hvariation⟩
+    exact ⟨x, horbit, hvariation⟩
+  · intro hunrestricted
+    apply hEquiv.mpr
+    intro ε hε
+    rcases exists_quittingPayoffDifferenceBound G with ⟨M, hM⟩
+    have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+    let a : ℝ := min (ε / 3) (1 / 2)
+    have ha : 0 < a := lt_min (div_pos hε (by norm_num)) (by norm_num)
+    have ha1 : a ≤ 1 := le_trans (min_le_right _ _) (by norm_num)
+    have h3a : 3 * a ≤ ε := by
+      have := min_le_left (ε / 3) (1 / 2)
+      linarith
+    let δ : ℝ := a ^ 2 / (2 * M)
+    have hδ : 0 < δ := div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hMpos)
+    have hδε : δ ≤ ε := by
+      rw [div_le_iff₀ (mul_pos (by norm_num) hMpos)]
+      have haHalf := min_le_right (ε / 3) (1 / 2)
+      have haEps := min_le_left (ε / 3) (1 / 2)
+      nlinarith [sq_nonneg a, hM.1]
+    rcases hunrestricted δ hδ with ⟨x, horbit, hvariation⟩
+    have heventual : ∀ n : G.Player, ∃ cutoff, ∀ i, cutoff ≤ i →
+        MinMaxQuit G n - 3 * a ≤ x i n := by
+      intro n
+      apply eventually_ge_of_drift_below hδ
+      intro i
+      exact lemma6 G hM hnormal hstationary hinstant ha ha1 (horbit i) n
+    choose cutoff hcutoff using heventual
+    let start := ∑ n, cutoff n
+    have hcutoffStart : ∀ n, cutoff n ≤ start := by
+      intro n
+      exact Finset.single_le_sum (fun i _ => Nat.zero_le (cutoff i)) (Finset.mem_univ n)
+    let y : ℕ → Payoff G.Player := fun i => x (start + i)
+    refine ⟨y, ?_, ?_, ?_⟩
+    · intro i
+      apply FRow.mono G hδε
+      simpa [y, Nat.add_assoc] using horbit (start + i)
+    · intro i n
+      have hfloor := hcutoff n (start + i)
+        ((hcutoffStart n).trans (Nat.le_add_right start i))
+      dsimp [y]
+      linarith
+    · exact hvariation.tail start
 
 /-! ## 5. Escape games -/
 
@@ -1602,11 +2066,17 @@ def IsCompactManifoldWithBoundary {n : ℕ} (C : Set (Fin n → ℝ)) : Prop :=
     ∃ e : V ≃ₜ Metric.closedBall (0 : Fin n → ℝ) 1,
       e ⟨x, hxV⟩ = ⟨0, by simp⟩ ∨ ‖(e ⟨x, hxV⟩ : Fin n → ℝ)‖ = 1
 
+/-- The boundary inclusion into the ambient Euclidean space with an interior point removed. -/
+def BoundaryToPunctured {n : ℕ} (C : Set (Fin n → ℝ)) (x : Fin n → ℝ)
+    (hx : x ∉ frontier C) : C(frontier C, {y : Fin n → ℝ // y ≠ x}) where
+  toFun y := ⟨y, fun hy => hx (hy ▸ y.2)⟩
+  continuous_toFun := continuous_subtype_val.subtype_mk _
+
 /--
 A paper-local reduced Cech-homology functor with coefficients in a nontrivial compact
 Abelian group.  Its maps are functorial continuous-map induced homomorphisms.
 -/
-structure CechHomologyTheory where
+structure CechHomologyCore where
   Coeff : Type
   [coeffGroup : AddCommGroup Coeff]
   [coeffTopology : TopologicalSpace Coeff]
@@ -1629,12 +2099,17 @@ structure CechHomologyTheory where
     (f : C(X, Y)) (g : C(Y, Z)),
       @induced d X Z tX tZ (g.comp f) =
         @induced d X Y tX tY f ≫ @induced d Y Z tY tZ g
+  /-- The boundary fundamental class remains nonzero after deleting an interior point. -/
+  puncturedBoundaryClass_ne_zero : ∀ {n : ℕ} (C : Set (Fin n → ℝ))
+    (hC : IsCompactManifoldWithBoundary C) (x : Fin n → ℝ), x ∈ C →
+      (hx : x ∉ frontier C) →
+      (induced (BoundaryToPunctured C x hx)).hom (fundamentalBoundaryClass C hC) ≠ 0
 
-attribute [instance] CechHomologyTheory.coeffGroup
-attribute [instance] CechHomologyTheory.coeffTopology
-attribute [instance] CechHomologyTheory.coeffTopologicalGroup
-attribute [instance] CechHomologyTheory.coeffCompact
-attribute [instance] CechHomologyTheory.coeffNontrivial
+attribute [instance] CechHomologyCore.coeffGroup
+attribute [instance] CechHomologyCore.coeffTopology
+attribute [instance] CechHomologyCore.coeffTopologicalGroup
+attribute [instance] CechHomologyCore.coeffCompact
+attribute [instance] CechHomologyCore.coeffNontrivial
 
 /-- The graph of a correspondence as a topological subspace of the product. -/
 abbrev CorrespondenceGraph {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
@@ -1647,7 +2122,7 @@ abbrev RestrictedGraph {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
   {p : CorrespondenceGraph F // p.1.1 ∈ A}
 
 /-- The oriented nonzero boundary fundamental class in reduced degree `n-1`. -/
-structure BoundaryClassData (H : CechHomologyTheory) {n : ℕ}
+structure BoundaryClassData (H : CechHomologyCore) {n : ℕ}
     (C : Set (Fin n → ℝ)) where
   manifold : IsCompactManifoldWithBoundary C
   boundaryClass : H.reduced (n - 1) (frontier C)
@@ -1657,7 +2132,7 @@ structure BoundaryClassData (H : CechHomologyTheory) {n : ℕ}
 The class `z ∈ H̃_{n-1}(F|∂Ū)` witnessing the spanning property, with the
 projection and inclusion maps and their two required homology equations.
 -/
-structure SpanningWitness (H : CechHomologyTheory) {n : ℕ} {Y : Type}
+structure SpanningWitness (H : CechHomologyCore) {n : ℕ} {Y : Type}
     [TopologicalSpace Y] (F : Correspondence (Fin n → ℝ) Y)
     (U : Set (Fin n → ℝ)) (boundary : BoundaryClassData H (closure U)) where
   projection : C(RestrictedGraph F (frontier (closure U)), frontier (closure U))
@@ -1672,7 +2147,7 @@ structure SpanningWitness (H : CechHomologyTheory) {n : ℕ} {Y : Type}
 A compact correspondence has the spanning property for nonempty open bounded `U` when
 its restricted boundary graph carries Simon's Cech-homology witness.
 -/
-def SpanningProperty (H : CechHomologyTheory) {n : ℕ} {Y : Type}
+def SpanningProperty (H : CechHomologyCore) {n : ℕ} {Y : Type}
     [TopologicalSpace Y] (F : Correspondence (Fin n → ℝ) Y)
     (U : Set (Fin n → ℝ)) : Prop :=
   U.Nonempty ∧ IsOpen U ∧ Bornology.IsBounded U ∧
@@ -1681,17 +2156,79 @@ def SpanningProperty (H : CechHomologyTheory) {n : ℕ} {Y : Type}
       Nonempty (SpanningWitness H F U boundary)
 
 /-- A spanning correspondence has a nonempty fiber over every point of `U`. -/
-theorem spanning_has_nonempty_fiber (H : CechHomologyTheory) {n : ℕ} {Y : Type}
+theorem spanning_has_nonempty_fiber (H : CechHomologyCore) {n : ℕ} {Y : Type}
     [TopologicalSpace Y] (F : Correspondence (Fin n → ℝ) Y)
     (U : Set (Fin n → ℝ)) (h : SpanningProperty H F U) :
     ∀ x ∈ U, (F x).Nonempty := by
-  sorry
+  rintro x hxU
+  rcases h with ⟨_hU, hUopen, _hUbounded, _hGraphCompact, boundary, ⟨witness⟩⟩
+  have hxClosure : x ∈ closure U := subset_closure hxU
+  have hxInterior : x ∈ interior (closure U) := by
+    rw [mem_interior_iff_mem_nhds]
+    exact mem_of_superset (hUopen.mem_nhds hxU) subset_closure
+  have hxNotFrontier : x ∉ frontier (closure U) := by
+    rw [frontier]
+    exact fun hx => hx.2 hxInterior
+  by_contra hxFiber
+  have hgraphAvoids : ∀ p : CorrespondenceGraph F, p.1.1 ≠ x := by
+    intro p hp
+    apply hxFiber
+    refine ⟨p.1.2, ?_⟩
+    simpa [hp] using p.2
+  let graphProjection :
+      C(CorrespondenceGraph F, {y : Fin n → ℝ // y ≠ x}) :=
+    { toFun := fun p => ⟨p.1.1, hgraphAvoids p⟩
+      continuous_toFun :=
+        (continuous_fst.comp continuous_subtype_val).subtype_mk hgraphAvoids }
+  let boundaryProjection := BoundaryToPunctured (closure U) x hxNotFrontier
+  have hmaps : graphProjection.comp witness.inclusion =
+      boundaryProjection.comp witness.projection := by
+    apply ContinuousMap.ext
+    intro p
+    apply Subtype.ext
+    funext i
+    change (witness.inclusion p).1.1 i = (witness.projection p : Fin n → ℝ) i
+    rw [witness.inclusion_eq, witness.projection_eq]
+  have hzero :
+      (H.induced (graphProjection.comp witness.inclusion)).hom witness.cycle = 0 := by
+    rw [H.map_comp]
+    simp [witness.inclusion_cycle]
+  have hnonzero :
+      (H.induced (boundaryProjection.comp witness.projection)).hom witness.cycle ≠ 0 := by
+    rw [H.map_comp]
+    change (H.induced boundaryProjection).hom
+      ((H.induced witness.projection).hom witness.cycle) ≠ 0
+    rw [witness.projection_cycle]
+    rw [boundary.isFundamental]
+    exact H.puncturedBoundaryClass_ne_zero (closure U) boundary.manifold x hxClosure
+      hxNotFrontier
+  rw [hmaps] at hzero
+  exact hnonzero hzero
 
 /-- Two graph points lie in the same connected component of `F|C`. -/
 def SameGraphComponent {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
     (F : Correspondence X Y) (C : Set X) (p q : X × Y) : Prop :=
   ∃ K : Set (X × Y), _root_.IsConnected K ∧ p ∈ K ∧ q ∈ K ∧
     ∀ z ∈ K, z.1 ∈ C ∧ z.2 ∈ F z.1
+
+/--
+The Čech theory used by Simon, including the compact connected restriction theorem
+quoted from Simon--Spież--Toruńczyk.  The core records functoriality and the punctured
+fundamental-class fact; this additional field is the precise external continuity result
+needed for Lemma 7.
+-/
+structure CechHomologyTheory extends CechHomologyCore where
+  compactConnectedRestriction : ∀ {n : ℕ} {Y : Type} [TopologicalSpace Y]
+    (F : Correspondence (Fin n → ℝ) Y) (U C : Set (Fin n → ℝ)),
+      SpanningProperty toCechHomologyCore F U →
+      _root_.IsConnected C → IsCompact C → C ⊆ U →
+      ∃ K : Set ((Fin n → ℝ) × Y),
+        _root_.IsConnected K ∧
+        (∀ z ∈ K, z.1 ∈ C ∧ z.2 ∈ F z.1) ∧
+        ∀ x ∈ C, ∃ y, (x, y) ∈ K
+
+instance : Coe CechHomologyTheory CechHomologyCore :=
+  ⟨CechHomologyTheory.toCechHomologyCore⟩
 
 /--
 Lemma 7.  If `F` spans an open bounded `U` and `C ⊆ U` is compact connected, then
@@ -1703,7 +2240,13 @@ theorem lemma7 (H : CechHomologyTheory) {n : ℕ} {Y : Type}
     (hC : _root_.IsConnected C ∧ IsCompact C) (hCU : C ⊆ U) :
     ∀ x ∈ C, ∀ y ∈ C, ∃ z₁ ∈ F x, ∃ z₂ ∈ F y,
       SameGraphComponent F C (x, z₁) (y, z₂) := by
-  sorry
+  rcases H.compactConnectedRestriction F U C hspan hC.1 hC.2 hCU with
+    ⟨K, hKconnected, hKgraph, hKfiber⟩
+  intro x hx y hy
+  rcases hKfiber x hx with ⟨z₁, hz₁⟩
+  rcases hKfiber y hy with ⟨z₂, hz₂⟩
+  exact ⟨z₁, (hKgraph (x, z₁) hz₁).2, z₂, (hKgraph (y, z₂) hz₂).2,
+    K, hKconnected, hz₁, hz₂, hKgraph⟩
 
 /--
 The Brouwer illustration: a disk self-map fixing its boundary is surjective; likewise the
