@@ -346,6 +346,17 @@ theorem exists_two_pos_of_collisionMass_pos (x : ι → ℝ)
   exact ⟨first, second, hne, hpositive first hfirstMem,
     hpositive second hsecondMem⟩
 
+/-- Collision mass is positive exactly when two distinct Bernoulli parameters
+are positive. -/
+theorem collisionMass_pos_iff_exists_two_pos (x : ι → ℝ)
+    (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1) :
+    0 < collisionMass x ↔
+      ∃ first second, first ≠ second ∧ 0 < x first ∧ 0 < x second := by
+  constructor
+  · exact exists_two_pos_of_collisionMass_pos x h0 h1
+  · rintro ⟨first, second, hne, hfirst, hsecond⟩
+    exact collisionMass_pos_of_two_pos x h0 h1 hne hfirst hsecond
+
 /-- Collision mass vanishes exactly when at most one Bernoulli parameter is
 positive. -/
 theorem collisionMass_eq_zero_iff_atMostOne_pos (x : ι → ℝ)

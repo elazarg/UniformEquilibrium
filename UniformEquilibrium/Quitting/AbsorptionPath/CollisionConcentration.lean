@@ -146,6 +146,19 @@ theorem exists_two_quitProbability_pos_of_quittingRootCollisionMass_pos
       ENNReal.toReal_mono ENNReal.one_ne_top ((root who).coe_le_one true))
     hcollision
 
+/-- Collision mass is positive exactly when two distinct players have
+positive Quit probability. -/
+theorem quittingRootCollisionMass_pos_iff_exists_two_quitProbability_pos
+    (root : ι → PMF Bool) :
+    0 < quittingRootCollisionMass root ↔
+      ∃ first second, first ≠ second ∧
+        0 < (root first true).toReal ∧ 0 < (root second true).toReal := by
+  constructor
+  · exact exists_two_quitProbability_pos_of_quittingRootCollisionMass_pos root
+  · rintro ⟨first, second, hne, hfirst, hsecond⟩
+    exact quittingRootCollisionMass_pos_of_two_quitProbability_pos
+      root hne hfirst hsecond
+
 /-- Collision mass vanishes exactly when at most one player has positive Quit
 probability. -/
 theorem quittingRootCollisionMass_eq_zero_iff_atMostOne_quitProbability_pos
