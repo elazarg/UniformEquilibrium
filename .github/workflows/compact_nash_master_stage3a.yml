@@ -1,0 +1,185 @@
+name: Compact Nash master stage 3a
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_master_stage3a.yml
+      - Literature/Sorin1986/CompactNashMaster2.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-master-stage3a
+  cancel-in-progress: false
+
+jobs:
+  prove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Inspect state
+        id: state
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster3a.ok; then echo done=yes >> "$GITHUB_OUTPUT"; else echo done=no >> "$GITHUB_OUTPUT"; fi
+      - name: Wait for isolated core
+        if: steps.state.outputs.done == 'no'
+        run: |
+          for attempt in $(seq 1 90); do
+            git fetch origin agent/promote-sorin1986
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster.lean 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster2.ok 2>/dev/null || true
+            test -f Literature/Sorin1986/CompactNashMaster2.ok && exit 0
+            sleep 10
+          done
+          exit 1
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Search mixed-payoff proof variants
+        if: steps.state.outputs.done == 'no'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashMaster.lean')
+          s=p.read_text()
+          end=s.rindex('\nend CompactNash')
+          core=s[:end].rstrip()+'\n\n'
+          Path('/tmp/master3a-core').write_text(core)
+          PY
+          cat > /tmp/master3a-head <<'LEAN'
+          /-- Finite mixed payoff is the independent product expectation of
+          pure payoff. -/
+          theorem mixedPayoff_eq_productExpectation (H : FiniteStageGame)
+              (profile : H.MixedProfile) (observer : H.Player) :
+              H.mixedPayoff profile observer =
+                productExpectation profile
+                  (fun actions => H.payoff actions observer) := by
+          LEAN
+          cat > /tmp/master3a-tail <<'LEAN'
+
+          end CompactNash
+
+          end Literature.Sorin1986
+          LEAN
+          mkdir -p /tmp/master3a-bodies
+          cat > /tmp/master3a-bodies/01 <<'LEAN'
+            classical
+            simp [FiniteStageGame.mixedPayoff, FiniteStageGame.kernel,
+              productExpectation, Math.Probability.expect_eq_sum,
+              Math.PMFProduct.pmfPi_apply]
+          LEAN
+          cat > /tmp/master3a-bodies/02 <<'LEAN'
+            classical
+            unfold FiniteStageGame.mixedPayoff
+            simp [FiniteStageGame.kernel, productExpectation,
+              Math.Probability.expect_eq_sum, Math.PMFProduct.pmfPi_apply]
+          LEAN
+          cat > /tmp/master3a-bodies/03 <<'LEAN'
+            classical
+            change Math.Probability.expect
+                ((Math.PMFProduct.pmfPi profile).bind PMF.pure)
+                (fun actions => H.payoff actions observer) = _
+            rw [PMF.bind_pure]
+            simp [productExpectation, Math.Probability.expect_eq_sum,
+              Math.PMFProduct.pmfPi_apply]
+          LEAN
+          cat > /tmp/master3a-bodies/04 <<'LEAN'
+            classical
+            change Math.Probability.expect
+                ((Math.PMFProduct.pmfPi profile).bind (fun actions => PMF.pure actions))
+                (fun actions => H.payoff actions observer) = _
+            simp [productExpectation, Math.Probability.expect_eq_sum,
+              Math.PMFProduct.pmfPi_apply]
+          LEAN
+          cat > /tmp/master3a-bodies/05 <<'LEAN'
+            classical
+            unfold FiniteStageGame.mixedPayoff
+            rw [Math.Probability.expect_eq_sum]
+            simp [FiniteStageGame.kernel, productExpectation,
+              Math.PMFProduct.pmfPi_apply]
+          LEAN
+          cat > /tmp/master3a-bodies/06 <<'LEAN'
+            classical
+            simp only [FiniteStageGame.mixedPayoff]
+            change Math.Probability.expect
+                ((Math.PMFProduct.pmfPi profile).bind PMF.pure)
+                (fun actions => H.payoff actions observer) = _
+            rw [PMF.bind_pure, Math.Probability.expect_eq_sum]
+            apply Finset.sum_congr rfl
+            intro actions _
+            simp [productExpectation, Math.PMFProduct.pmfPi_apply]
+          LEAN
+          cat > /tmp/master3a-bodies/07 <<'LEAN'
+            classical
+            simp only [FiniteStageGame.mixedPayoff]
+            change Math.Probability.expect
+                ((Math.PMFProduct.pmfPi profile).bind PMF.pure)
+                (fun actions => H.payoff actions observer) = _
+            rw [PMF.bind_pure, Math.Probability.expect_eq_sum]
+            unfold productExpectation
+            apply Finset.sum_congr rfl
+            intro actions _
+            rw [Math.PMFProduct.pmfPi_apply]
+            simp
+          LEAN
+          cat > /tmp/master3a-bodies/08 <<'LEAN'
+            classical
+            simp [FiniteStageGame.mixedPayoff, FiniteStageGame.kernel,
+              KernelGame.mixedExtension, productExpectation,
+              Math.Probability.expect_eq_sum, Math.PMFProduct.pmfPi_apply]
+          LEAN
+          cat > /tmp/master3a-bodies/09 <<'LEAN'
+            classical
+            simp only [FiniteStageGame.mixedPayoff]
+            change Math.Probability.expect
+                ((Math.PMFProduct.pmfPi profile).bind PMF.pure)
+                (fun actions => H.payoff actions observer) = _
+            simp only [PMF.bind_pure]
+            rw [Math.Probability.expect_eq_sum]
+            unfold productExpectation
+            congr 1
+            funext actions
+            rw [Math.PMFProduct.pmfPi_apply]
+            simp
+          LEAN
+          cat > /tmp/master3a-bodies/10 <<'LEAN'
+            classical
+            simp_all [FiniteStageGame.mixedPayoff, FiniteStageGame.kernel,
+              productExpectation, Math.Probability.expect_eq_sum,
+              Math.PMFProduct.pmfPi_apply]
+          LEAN
+          : > Literature/Sorin1986/CompactNashMaster3a.log
+          success=''
+          for body in /tmp/master3a-bodies/*; do
+            name=$(basename "$body")
+            echo "===== VARIANT $name =====" >> Literature/Sorin1986/CompactNashMaster3a.log
+            cat /tmp/master3a-core /tmp/master3a-head "$body" /tmp/master3a-tail > Literature/Sorin1986/CompactNashMaster.lean
+            if lake env lean Literature/Sorin1986/CompactNashMaster.lean >> Literature/Sorin1986/CompactNashMaster3a.log 2>&1; then
+              success="$name"
+              break
+            fi
+          done
+          test -n "$success"
+          printf 'success variant %s\n' "$success" > Literature/Sorin1986/CompactNashMaster3a.ok
+      - name: Commit proved identity
+        if: steps.state.outputs.done == 'no'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashMaster.lean Literature/Sorin1986/CompactNashMaster3a.log Literature/Sorin1986/CompactNashMaster3a.ok
+          git commit -m 'Prove finite mixed payoff product identity'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
