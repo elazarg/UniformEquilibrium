@@ -2,6 +2,7 @@ import Mathlib
 import GameTheory.Analysis.Payoff
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.PMFProduct.Bool
+import MathUE.FixedRatioConvexity
 import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer
 import UniformEquilibrium.Certificates.Public.FixedPrefixAccounting
 import UniformEquilibrium.Certificates.Public.TerminalChildLawTransfer
@@ -4137,22 +4138,97 @@ theorem lemma_3_E_subset_multiple (G : FiniteStageGame)
     (fun total m p r htotal =>
       lemma_3_equilibrium G total m p r htotal) n.1 k n.2 hk
 
+/-- A reverse block inclusion makes the original set stable under the fixed
+ratio `1 / k`. -/
+private theorem fixedRatio_mem_of_reverse_block_concatenation
+    {Player : Type} (sets : ℕ → Set (Payoff Player))
+    (concat : ∀ total m p r : ℕ, total = m * p + r →
+      addSet (iteratedAddSet m (scaleSet (p : ℝ) (sets p)))
+          (scaleSet (r : ℝ) (sets r)) ⊆
+        scaleSet (total : ℝ) (sets total))
+    (n k : ℕ) (hn : 0 < n) (hk : 1 < k)
+    (hreverse : sets (k * n) ⊆ sets n) {x y : Payoff Player}
+    (hx : x ∈ sets n) (hy : y ∈ sets n) :
+    (k : ℝ)⁻¹ • x + (1 - (k : ℝ)⁻¹) • y ∈ sets n := by
+  let xBlock : Payoff Player := (n : ℝ) • x
+  let yBlock : Payoff Player := (n : ℝ) • y
+  have hxBlock : xBlock ∈ scaleSet (n : ℝ) (sets n) :=
+    ⟨x, hx, rfl⟩
+  have hyBlock : yBlock ∈ scaleSet (n : ℝ) (sets n) :=
+    ⟨y, hy, rfl⟩
+  have hyBlocks : ((k - 1 : ℕ) : ℝ) • yBlock ∈
+      iteratedAddSet (k - 1) (scaleSet (n : ℝ) (sets n)) := by
+    refine ⟨fun _ ↦ yBlock, fun _ ↦ hyBlock, ?_⟩
+    ext who
+    simp [Finset.sum_const, nsmul_eq_mul]
+  have hjoined : ((k - 1 : ℕ) : ℝ) • yBlock + xBlock ∈
+      addSet (iteratedAddSet (k - 1) (scaleSet (n : ℝ) (sets n)))
+        (scaleSet (n : ℝ) (sets n)) :=
+    ⟨((k - 1 : ℕ) : ℝ) • yBlock, hyBlocks, xBlock, hxBlock, rfl⟩
+  have hkone : 1 ≤ k := hk.le
+  have hdecomp : k * n = (k - 1) * n + n := by
+    calc
+      k * n = ((k - 1) + 1) * n := by rw [Nat.sub_add_cancel hkone]
+      _ = (k - 1) * n + n := by rw [Nat.add_mul, one_mul]
+  obtain ⟨w, hw, heq⟩ :=
+    concat (k * n) (k - 1) n n hdecomp hjoined
+  let blend : Payoff Player :=
+    (k : ℝ)⁻¹ • x + (1 - (k : ℝ)⁻¹) • y
+  have hkReal : (k : ℝ) ≠ 0 := by positivity
+  have htotal : ((k * n : ℕ) : ℝ) • blend =
+      ((k - 1 : ℕ) : ℝ) • yBlock + xBlock := by
+    ext who
+    simp only [blend, xBlock, yBlock, Pi.smul_apply, Pi.add_apply, smul_eq_mul]
+    rw [Nat.cast_mul, Nat.cast_sub hkone, Nat.cast_one]
+    field_simp
+    ring
+  have hscaled : ((k * n : ℕ) : ℝ) • blend =
+      ((k * n : ℕ) : ℝ) • w := htotal.trans heq
+  have hblend : blend = w :=
+    smul_right_injective (Payoff Player) (by positivity) hscaled
+  rw [show (k : ℝ)⁻¹ • x + (1 - (k : ℝ)⁻¹) • y = blend by rfl,
+    hblend]
+  exact hreverse hw
+
 /-! The paper then notes that a reverse inclusion for one multiplier `k > 1`
 forces convexity of the corresponding finite-horizon payoff set.  The closure
-under equal-weight block averages and compactness argument is not yet packaged. -/
+under a fixed nontrivial block ratio and closedness is supplied by
+`MathUE.convex_of_isClosed_of_fixedRatio`. -/
 theorem post_lemma_3_D_convex_of_reverse_multiple
     (G : FiniteStageGame) (n : G.Horizon) {k : ℕ} (hk : 1 < k)
     (hreverse : G.finiteFeasiblePayoffs (k * n.1) ⊆
       G.finiteFeasiblePayoffsOnHorizon n) :
     Convex ℝ (G.finiteFeasiblePayoffsOnHorizon n) := by
-  sorry
+  apply MathUE.convex_of_isClosed_of_fixedRatio
+      (property_1_finite G n).2.2.isClosed
+      (c := (k : ℝ)⁻¹)
+  · positivity
+  · have hkpos : 0 < (k : ℝ) := by exact_mod_cast (by omega : 0 < k)
+    rw [inv_lt_one₀ hkpos]
+    exact_mod_cast hk
+  · intro x hx y hy
+    exact fixedRatio_mem_of_reverse_block_concatenation
+      G.finiteFeasiblePayoffs
+      (fun total m p r htotal ↦ lemma_3_feasible G total m p r htotal)
+      n.1 k n.2 hk hreverse hx hy
 
 theorem post_lemma_3_E_convex_of_reverse_multiple
     (G : FiniteStageGame) (n : G.Horizon) {k : ℕ} (hk : 1 < k)
     (hreverse : G.finiteEquilibriumPayoffs (k * n.1) ⊆
       G.finiteEquilibriumPayoffsOnHorizon n) :
     Convex ℝ (G.finiteEquilibriumPayoffsOnHorizon n) := by
-  sorry
+  apply MathUE.convex_of_isClosed_of_fixedRatio
+      (property_2_finite G n).2.isClosed
+      (c := (k : ℝ)⁻¹)
+  · positivity
+  · have hkpos : 0 < (k : ℝ) := by exact_mod_cast (by omega : 0 < k)
+    rw [inv_lt_one₀ hkpos]
+    exact_mod_cast hk
+  · intro x hx y hy
+    exact fixedRatio_mem_of_reverse_block_concatenation
+      G.finiteEquilibriumPayoffs
+      (fun total m p r htotal ↦ lemma_3_equilibrium G total m p r htotal)
+      n.1 k n.2 hk hreverse hx hy
 
 /-! ## Examples 1--6 -/
 

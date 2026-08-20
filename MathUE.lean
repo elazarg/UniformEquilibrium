@@ -84,6 +84,7 @@ import MathUE.FiniteDeflationIteration
 import MathUE.FiniteLinearCompatibility
 import MathUE.FinitePivotOrbit
 import MathUE.FiniteSerialRelation
+import MathUE.FixedRatioConvexity
 import MathUE.Finset.CubicalResetIntegrability
 import MathUE.Finset.EscrowDrawdown
 import MathUE.Finset.FinThree
