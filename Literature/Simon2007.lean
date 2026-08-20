@@ -3463,16 +3463,25 @@ def ExtendedOrbitCondition (G : QuittingGame) : Prop :=
 def EquivalentFive (A B C D E : Prop) : Prop :=
   (A ↔ B) ∧ (B ↔ C) ∧ (C ↔ D) ∧ (D ↔ E)
 
-/--
-Theorem 3.  For a quitting game with neither stationary nor instant approximate equilibria,
-clauses (i)--(v) are equivalent.
--/
-theorem theorem3 (G : QuittingGame)
-    (hstationary : ¬HasStationaryApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G) :
+/-- Theorem 3 as printed in 2007. -/
+def Theorem3Claim (G : QuittingGame) : Prop :=
+  ¬HasStationaryApproximateEquilibria G →
+    ¬HasInstantApproximateEquilibria G →
     EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
-      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G) (ExtendedOrbitCondition G) := by
-  sorry
+      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G) (ExtendedOrbitCondition G)
+
+/-- Theorem 3 with the strategic correction stated by Simon in 2012. -/
+def CorrectedTheorem3Claim (G : QuittingGame) : Prop :=
+  ¬HasStationarilyGeneratedApproximateEquilibria G →
+    ¬HasInstantApproximateEquilibria G →
+    EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
+      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G) (ExtendedOrbitCondition G)
+
+/-!
+The printed proof of Theorem 3 invokes Lemma 5.  Simon's 2012 correction says that this
+argument requires the nonexistence of stationarily generated approximate equilibria, so
+the old hypothesis cannot be silently used to produce a checked theorem here.
+-/
 
 /-!
 The remark after Theorem 3 records that Solan--Vieille had proved `(iv) → (i),(ii)`
@@ -3553,15 +3562,14 @@ def InfiniteUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
   ∀ δ : ℝ, 0 < δ → ∃ x : ℕ → Payoff G.Player,
     IsInfiniteOrbit (FRow G δ) x ∧ HasUnboundedVariation x
 
-/--
-Corollary 2.  If all players are normal and there are neither instant nor stationary
-approximate equilibria, existence is equivalent to an unbounded `F_δ` orbit for every `δ>0`.
--/
-theorem corollary2 (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
+/-- The checked deduction of Corollary 2 from the five-way equivalence and Lemma 6. -/
+theorem corollary2_of_equivalentFive (G : QuittingGame)
+    (hnormal : ∀ n, IsNormalPlayer G n)
     (hinstant : ¬HasInstantApproximateEquilibria G)
-    (hstationary : ¬HasStationaryApproximateEquilibria G) :
+    (hstationary : ¬HasStationaryApproximateEquilibria G)
+    (hfive : EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
+      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G) (ExtendedOrbitCondition G)) :
     HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G := by
-  have hfive := theorem3 G hstationary hinstant
   have hEquiv : HasQuitApproximateEquilibria G ↔ InfiniteOrbitCondition G :=
     hfive.1.trans (hfive.2.1.trans hfive.2.2.1)
   constructor
@@ -3609,6 +3617,20 @@ theorem corollary2 (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
       dsimp [y]
       linarith
     · exact hvariation.tail start
+
+/-- Corollary 2 as printed in 2007. -/
+def Corollary2Claim (G : QuittingGame) : Prop :=
+  (∀ n, IsNormalPlayer G n) →
+    ¬HasInstantApproximateEquilibria G →
+    ¬HasStationaryApproximateEquilibria G →
+    HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G
+
+/-- Corollary 2 with the strategic correction stated in 2012. -/
+def CorrectedCorollary2Claim (G : QuittingGame) : Prop :=
+  (∀ n, IsNormalPlayer G n) →
+    ¬HasInstantApproximateEquilibria G →
+    ¬HasStationarilyGeneratedApproximateEquilibria G →
+    HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G
 
 /-! ## 5. Escape games -/
 
