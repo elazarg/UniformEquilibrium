@@ -1489,8 +1489,198 @@ def Lemma2_8 : Prop :=
     (data : MainEstimateContext ι), data.Admissible →
       |data.π₂ - data.π₂star| ≤ data.ε ^ data.a * data.π₂star
 
+private def blockOwnerSurvivalWeight
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start fuel : ℕ) : ℝ :=
+  Math.survivalProduct
+    (fun time ↦ (roots time who false).toReal) start fuel
+
+private theorem blockFixedContinueMass_eq_one_sub_opponentAbsorption
+    (roots : RootSequence (ι := ι)) (who : ι) (time : ℕ) :
+    quittingFixedOpponentsContinueMass roots who time =
+      1 - quittingRootOpponentAbsorptionMass (roots time) who := by
+  unfold quittingFixedOpponentsContinueMass
+    quittingRootOpponentAbsorptionMass quittingRootAbsorptionMass
+  ring
+
+private theorem blockJointSurvival_eq_opponent_mul_owner
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start fuel : ℕ) :
+    quittingJointSurvivalWeight roots start fuel =
+      quittingOpponentSurvivalWeight roots who start fuel *
+        blockOwnerSurvivalWeight roots who start fuel := by
+  rw [quittingJointSurvivalWeight_eq_prod]
+  unfold quittingOpponentSurvivalWeight blockOwnerSurvivalWeight
+    Math.survivalProduct
+  rw [← Finset.prod_mul_distrib]
+  apply Finset.prod_congr rfl
+  intro offset _
+  rw [quittingStationaryContinueMass_eq_forcedContinue_mul_own]
+  rfl
+
+omit [Fintype ι] [DecidableEq ι] in
+private theorem blockOwnerSurvivalWeight_succ
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start fuel : ℕ) :
+    blockOwnerSurvivalWeight roots who start (fuel + 1) =
+      blockOwnerSurvivalWeight roots who start fuel *
+        (roots (start + fuel) who false).toReal := by
+  exact Math.survivalProduct_succ _ start fuel
+
+omit [Fintype ι] [DecidableEq ι] in
+private theorem blockOwnerSurvivalWeight_nonneg
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start fuel : ℕ) :
+    0 ≤ blockOwnerSurvivalWeight roots who start fuel :=
+  Math.survivalProduct_nonneg _
+    (fun _ ↦ ENNReal.toReal_nonneg) start fuel
+
+omit [Fintype ι] [DecidableEq ι] in
+private theorem blockOwnerSurvivalWeight_le_one
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start fuel : ℕ) :
+    blockOwnerSurvivalWeight roots who start fuel ≤ 1 := by
+  apply Math.survivalProduct_le_one _
+    (fun _ ↦ ENNReal.toReal_nonneg)
+  intro time
+  exact ENNReal.toReal_mono ENNReal.one_ne_top
+    (PMF.coe_le_one _ _)
+
+omit [Fintype ι] [DecidableEq ι] in
+private theorem antitone_blockOwnerSurvivalWeight
+    (roots : RootSequence (ι := ι)) (who : ι) (start : ℕ) :
+    Antitone (blockOwnerSurvivalWeight roots who start) := by
+  apply antitone_nat_of_succ_le
+  intro fuel
+  rw [blockOwnerSurvivalWeight_succ]
+  exact mul_le_of_le_one_right
+    (blockOwnerSurvivalWeight_nonneg roots who start fuel)
+    (ENNReal.toReal_mono ENNReal.one_ne_top
+      (PMF.coe_le_one _ _))
+
+private theorem opponentBlockTerminationProbability_eq_sum
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length : ℕ) :
+    opponentBlockTerminationProbability roots who start length =
+      ∑ time ∈ Finset.range length,
+        quittingOpponentSurvivalWeight roots who start time *
+          quittingRootOpponentAbsorptionMass
+            (roots (start + time)) who := by
+  have htelescope :=
+    sum_quittingOpponentSurvivalWeight_mul_one_sub_continueMass
+      roots who start length
+  have hproduct :
+      (∏ time ∈ Finset.range length,
+        (1 - quittingRootOpponentAbsorptionMass
+          (roots (start + time)) who)) =
+      quittingOpponentSurvivalWeight roots who start length := by
+    unfold quittingOpponentSurvivalWeight
+    apply Finset.prod_congr rfl
+    intro time _
+    rw [blockFixedContinueMass_eq_one_sub_opponentAbsorption]
+  unfold opponentBlockTerminationProbability
+  rw [hproduct, ← htelescope]
+  apply Finset.sum_congr rfl
+  intro time _
+  rw [blockFixedContinueMass_eq_one_sub_opponentAbsorption]
+  ring
+
+private theorem opponentFirstAbsorptionProbability_eq_sum_mul_owner
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length : ℕ) :
+    opponentFirstAbsorptionProbability roots who start length =
+      ∑ time ∈ Finset.range length,
+        quittingOpponentSurvivalWeight roots who start time *
+          quittingRootOpponentAbsorptionMass
+            (roots (start + time)) who *
+          blockOwnerSurvivalWeight roots who start (time + 1) := by
+  unfold opponentFirstAbsorptionProbability
+  apply Finset.sum_congr rfl
+  intro time _
+  rw [blockJointSurvival_eq_opponent_mul_owner,
+    blockOwnerSurvivalWeight_succ]
+  ring
+
+private theorem blockOwnerAbsorption_le_blockTerminationProbability
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length time : ℕ) (htime : time < length) :
+    1 - blockOwnerSurvivalWeight roots who start (time + 1) ≤
+      blockTerminationProbability roots start length := by
+  have hprefix : blockOwnerSurvivalWeight roots who start length ≤
+      blockOwnerSurvivalWeight roots who start (time + 1) :=
+    antitone_blockOwnerSurvivalWeight roots who start (by omega)
+  have hjointOwner : quittingJointSurvivalWeight roots start length ≤
+      blockOwnerSurvivalWeight roots who start length := by
+    rw [blockJointSurvival_eq_opponent_mul_owner]
+    exact mul_le_of_le_one_left
+      (blockOwnerSurvivalWeight_nonneg roots who start length)
+      (quittingOpponentSurvivalWeight_le_one roots who start length)
+  unfold blockTerminationProbability
+  linarith
+
+private theorem abs_opponentFirst_sub_opponentBlock_le
+    (roots : RootSequence (ι := ι)) (who : ι)
+    (start length : ℕ) {bound : ℝ}
+    (hsmall : blockTerminationProbability roots start length < bound) :
+    |opponentFirstAbsorptionProbability roots who start length -
+        opponentBlockTerminationProbability roots who start length| ≤
+      bound * opponentBlockTerminationProbability roots who start length := by
+  rw [opponentFirstAbsorptionProbability_eq_sum_mul_owner,
+    opponentBlockTerminationProbability_eq_sum]
+  let base : ℕ → ℝ := fun time ↦
+    quittingOpponentSurvivalWeight roots who start time *
+      quittingRootOpponentAbsorptionMass (roots (start + time)) who
+  change |(∑ time ∈ Finset.range length,
+      base time * blockOwnerSurvivalWeight roots who start (time + 1)) -
+      ∑ time ∈ Finset.range length, base time| ≤
+    bound * ∑ time ∈ Finset.range length, base time
+  have hbase : ∀ time, 0 ≤ base time := fun time ↦ mul_nonneg
+    (quittingOpponentSurvivalWeight_nonneg roots who start time)
+    (quittingRootOpponentAbsorptionMass_nonneg _ _)
+  have hle :
+      (∑ time ∈ Finset.range length,
+          base time * blockOwnerSurvivalWeight roots who start (time + 1)) ≤
+        ∑ time ∈ Finset.range length, base time := by
+    apply Finset.sum_le_sum
+    intro time _
+    exact mul_le_of_le_one_right (hbase time)
+      (blockOwnerSurvivalWeight_le_one roots who start (time + 1))
+  rw [abs_of_nonpos (sub_nonpos.mpr hle), neg_sub]
+  calc
+    (∑ time ∈ Finset.range length, base time) -
+        ∑ time ∈ Finset.range length,
+          base time * blockOwnerSurvivalWeight roots who start (time + 1) =
+      ∑ time ∈ Finset.range length,
+        base time *
+          (1 - blockOwnerSurvivalWeight roots who start (time + 1)) := by
+            rw [← Finset.sum_sub_distrib]
+            apply Finset.sum_congr rfl
+            intro time _
+            ring
+    _ ≤ ∑ time ∈ Finset.range length,
+        base time * blockTerminationProbability roots start length := by
+      apply Finset.sum_le_sum
+      intro time htime
+      exact mul_le_mul_of_nonneg_left
+        (blockOwnerAbsorption_le_blockTerminationProbability roots who
+          start length time (Finset.mem_range.mp htime))
+        (hbase time)
+    _ = blockTerminationProbability roots start length *
+        ∑ time ∈ Finset.range length, base time := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro time _
+      ring
+    _ ≤ bound * ∑ time ∈ Finset.range length, base time := by
+      apply mul_le_mul_of_nonneg_right hsmall.le
+      exact Finset.sum_nonneg fun time _ ↦ hbase time
+
 theorem lemma2_8 : Lemma2_8 := by
-  sorry
+  intro ι _ _ data hadmissible
+  rcases hadmissible with ⟨-, -, -, -, -, -, -, -, hsmall⟩
+  simpa [MainEstimateContext.π₂, MainEstimateContext.π₂star] using
+    (abs_opponentFirst_sub_opponentBlock_le data.roots data.who
+      data.localStart data.localLength hsmall)
 
 /-- **Lemma 2.9.** `|u₂-u₂*| ≤ 2ρ ε^a`. -/
 def Lemma2_9 : Prop :=
