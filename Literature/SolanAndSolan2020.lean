@@ -99,15 +99,16 @@ by a law on `ℕ`; its atoms are the publicly observed labels. -/
 
 inductive PublicQuittingState (ι : Type) [Fintype ι] [DecidableEq ι]
     (Signal : Type) [Fintype Signal]
+  | draw
   | active (signal : Signal)
   | absorbed (quitters : {S : Finset ι // S.Nonempty})
 deriving Fintype
 
-/-! The induced public-signal quitting game. The current public label is the
-live state. If everyone continues, the next label is sampled independently
-from `signalLaw`; a nonempty quitter set is absorbing. The fixed initial label
-only supplies a root before the first random draw and has no asymptotic payoff
-effect. -/
+/-! The induced public-signal quitting game. The action-irrelevant `draw`
+state samples a label before every live decision, including the first one.
+At an `active` state a nonempty quitter set absorbs, while unanimous Continue
+returns to `draw`. Thus no strategic decision is made before the first public
+signal, exactly as in Definition 2.3. -/
 def publicQuittingGame {Signal : Type} [Fintype Signal] (table : Table ι)
     (signalLaw : PMF Signal) :
     StochasticGame ι where
@@ -115,15 +116,17 @@ def publicQuittingGame {Signal : Type} [Fintype Signal] (table : Table ι)
   Act := fun _ => Bool
   stagePayoff := fun state _ who =>
     match state with
+    | .draw => table.never who
     | .active _ => table.never who
     | .absorbed quitters => table.terminal quitters who
   transition := fun state action =>
     match state with
+    | .draw => signalLaw.map PublicQuittingState.active
     | .active _ =>
         if h : ({who | action who = true} : Finset ι).Nonempty then
           PMF.pure (.absorbed ⟨_, h⟩)
         else
-          signalLaw.map PublicQuittingState.active
+          PMF.pure .draw
     | .absorbed quitters => PMF.pure (.absorbed quitters)
   discount := 0
   discount_nonneg := le_rfl
@@ -142,7 +145,7 @@ def publicAbsorbedMass
     (strategy : (publicQuittingGame table signalLaw).BehaviorProfile)
     (t : ℕ) (quitters : {S : Finset ι // S.Nonempty}) : ℝ :=
   (publicQuittingGame table signalLaw).expectedStateValue strategy
-    (.active 0) t (publicAbsorbedIndicator quitters)
+    .draw t (publicAbsorbedIndicator quitters)
 
 /-! Limiting probability of absorption at one quitter set. -/
 def publicAbsorbedMassLimit
@@ -169,6 +172,13 @@ theorem publicAbsorbedMass_succ_ge
   apply expect_mono
   intro history
   cases hstate : history.2 with
+  | draw =>
+      rw [show publicAbsorbedIndicator quitters .draw = 0 by
+        simp [publicAbsorbedIndicator]]
+      exact expect_nonneg _ _ fun action =>
+        expect_nonneg _ _ fun state => by
+          unfold publicAbsorbedIndicator
+          split <;> norm_num
   | active signal =>
       rw [show publicAbsorbedIndicator quitters (.active signal) = 0 by
         simp [publicAbsorbedIndicator]]
@@ -192,10 +202,10 @@ theorem publicAbsorbedMass_le_one
   unfold publicAbsorbedMass StochasticGame.expectedStateValue
   calc
     expect ((publicQuittingGame table signalLaw).histDist strategy
-        (.active 0) t)
+        .draw t)
         (fun history => publicAbsorbedIndicator quitters history.2) ≤
         expect ((publicQuittingGame table signalLaw).histDist strategy
-          (.active 0) t) (fun _ => 1) := by
+          .draw t) (fun _ => 1) := by
       apply expect_mono
       intro history
       unfold publicAbsorbedIndicator
@@ -254,6 +264,7 @@ def AtMostOneQuitter {table : Table ι}
     (profile : SunspotProfile table) : Prop :=
   ∀ t (history : (publicQuittingGame table profile.signalLaw).Hist t),
     match history.2 with
+    | .draw => True
     | .active _ =>
         (Finset.filter (fun who =>
           0 < ((profile.strategy who t history) true).toReal)
@@ -2613,6 +2624,7 @@ def absorbedBeforeFinalIndicator
       construction.profile.signalLaw).Hist t) : ℝ := by
   classical
   exact match history.2 with
+    | .draw => 0
     | .active _ => 0
     | .absorbed _ => if construction.beforeFinal t history then 1 else 0
 
@@ -2626,7 +2638,7 @@ def absorptionBeforeFinalProbability
       construction.profile.signalLaw).BehaviorProfile) : ℝ :=
   ⨆ t, expect
     ((publicQuittingGame table construction.profile.signalLaw).histDist
-      strategy (.active 0) t)
+      strategy .draw t)
     (absorbedBeforeFinalIndicator construction t)
 
 /-! Lemma 3.9's induced probability after player `who` is forced to Continue
