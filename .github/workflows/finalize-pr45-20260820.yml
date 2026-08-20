@@ -1,0 +1,135 @@
+name: Finalize PR 45 validated source
+
+on:
+  push:
+    branches:
+      - agent/complete-solan-vieille-2001
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: finalize-pr45-validated-source
+  cancel-in-progress: false
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/complete-solan-vieille-2001
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Merge authoritative main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git merge --no-edit origin/main
+
+      - name: Apply preserved locally validated source
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/pr45-payload
+          mkdir -p /tmp/pr45-payload
+          curl --retry 4 --connect-timeout 20 --max-time 240 -fsS \
+            https://filebin.net/ue-pr45-20260820-9e7c6b4f/payload.tgz \
+            -o /tmp/pr45-payload.tgz
+          tar -xzf /tmp/pr45-payload.tgz -C /tmp/pr45-payload
+          bash /tmp/pr45-payload/APPLY_PAYLOAD.sh
+          rm -f .github/workflows/export-pr45-source.yml
+          rm -f .github/workflows/finalize-pr45-20260820.yml
+          git diff --check
+
+      - name: Audit Literature visibility policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path("Literature/SolanAndVieille2001.lean")
+          source = path.read_text()
+
+          for forbidden in ("paperFigure2", "figure2_", "PaperFigure2"):
+              if forbidden in source:
+                  raise SystemExit(
+                      f"misattributed Solan–Vieille 2002 example material remains: {forbidden}"
+                  )
+
+          claim_defs = [
+              match.group(1)
+              for match in re.finditer(
+                  r"(?m)^def\s+(paper(?:Theorem|Lemma|Proposition)[A-Za-z0-9_]*)"
+                  r"(?:\s[^:]*)?\s*:\s*Prop\s*:=",
+                  source,
+              )
+          ]
+          missing = []
+          for name in claim_defs:
+              stem = name.removeprefix("paper")
+              normalized = re.sub(r"(?<!^)(?=[A-Z])", "_", stem).lower()
+              typed_witness = re.search(
+                  rf"(?ms)^theorem\s+[^\n:]+[^:]*:\s*[^:=\n]*\b{re.escape(name)}\b",
+                  source,
+              )
+              named_witness = re.search(
+                  rf"(?m)^theorem\s+(?:not_|open_|corrected_)?{re.escape(normalized)}\b",
+                  source,
+              )
+              if not (typed_witness or named_witness):
+                  missing.append(name)
+
+          if missing:
+              raise SystemExit("paper propositions hidden as definitions: " + ", ".join(missing))
+          if re.search(r"(?m)^(?:axiom|opaque)\s+", source):
+              raise SystemExit("Literature audit contains a hidden axiom/opaque obligation")
+
+          print(f"visible paper claims: {len(claim_defs)}")
+          print(f"explicit sorry tokens: {len(re.findall(r'\bsorry\b', source))}")
+          PY
+
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+
+      - name: Compile Solan–Vieille production frontier
+        run: |
+          lake build UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleSequenceExtraction
+
+      - name: Compile complete paper audit
+        run: |
+          lake env lean Literature/SolanAndVieille2001.lean
+
+      - name: Run repository ratchets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_docs.py
+          python3 scripts/check_reward_bounds.py --check --max-nonnegative 0
+          python3 scripts/check_redundant_order_hypotheses.py --check
+          python3 scripts/check_derivable_telescope_hypotheses.py --check
+
+      - name: Commit and publish validated result
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No source change to publish."
+            exit 0
+          fi
+          git commit -m "Complete transparent Solan–Vieille 2001 audit"
+          git push origin HEAD:agent/complete-solan-vieille-2001
