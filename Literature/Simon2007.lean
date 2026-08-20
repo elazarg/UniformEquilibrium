@@ -2217,6 +2217,43 @@ private theorem abs_quitPayoff_le (G : QuittingGame) (p : QuitProfile G)
       (tsum_tailSurvival_mul_quitProbability_le_one G p 0) hM0
     _ = M := mul_one M
 
+/-- Every player's min-max is at most the better of quitting alone and never quitting. -/
+private theorem minMaxQuit_le_max_solo_zero (G : QuittingGame) (j : G.Player) :
+    MinMaxQuit G j ≤ max (SoloPayoff G j) 0 := by
+  classical
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hpayoffBound : ∀ p : QuitProfile G, |QuitPayoff G p j| ≤ M := fun p =>
+    abs_quitPayoff_le G p j hM0 (fun A => le_of_lt (hM.2.2 A j))
+  have hinnerAbove : ∀ p : QuitProfile G, BddAbove (range fun q :
+      ℕ → Set.Icc (0 : ℝ) 1 => QuitPayoff G (p.replace G j q) j) := by
+    intro p
+    refine ⟨M, ?_⟩
+    rintro _ ⟨q, rfl⟩
+    exact (le_abs_self _).trans (hpayoffBound _)
+  have houterBelow : BddBelow (range fun p : QuitProfile G =>
+      ⨆ q : ℕ → Set.Icc (0 : ℝ) 1, QuitPayoff G (p.replace G j q) j) := by
+    refine ⟨-M, ?_⟩
+    rintro _ ⟨p, rfl⟩
+    let q : ℕ → Set.Icc (0 : ℝ) 1 := fun _ => 0
+    exact (neg_le_of_abs_le (hpayoffBound (p.replace G j q))).trans
+      (le_ciSup (hinnerAbove p) q)
+  let zeroProfile : QuitProfile G := fun _ _ => (0 : Set.Icc (0 : ℝ) 1)
+  rw [MinMaxQuit]
+  apply le_trans (ciInf_le houterBelow zeroProfile)
+  apply ciSup_le
+  intro q
+  let deviation := zeroProfile.replace G j q
+  apply quitPayoff_le_of_nonnegative_rewardPart_le G deviation j
+    (max (SoloPayoff G j) 0) (le_max_right _ _)
+  intro t
+  have hrow : deviation t =
+      QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j (q t) := rfl
+  rw [hrow, quittingRewardPart_allContinue_replace]
+  rw [quitProbability_allContinue_replace]
+  simpa [mul_comm] using
+    mul_le_mul_of_nonneg_left (le_max_left (SoloPayoff G j) 0) (q t).property.1
+
 /-- Lemma 3.  An abnormal `j` has `vʲ < 0`, and `v({i})ʲ ≥ χʲ` for every `i ≠ j`. -/
 theorem lemma3 (G : QuittingGame) (j : G.Player) (h : ¬IsNormalPlayer G j) :
     SoloPayoff G j < 0 ∧ ∀ i, i ≠ j →
@@ -2241,22 +2278,8 @@ theorem lemma3 (G : QuittingGame) (j : G.Player) (h : ¬IsNormalPlayer G j) :
     let q : ℕ → Set.Icc (0 : ℝ) 1 := fun _ => 0
     exact (neg_le_of_abs_le (hpayoffBound (p.replace G j q))).trans
       (le_ciSup (hinnerAbove p) q)
-  let zeroProfile : QuitProfile G := fun _ _ => (0 : Set.Icc (0 : ℝ) 1)
-  have hminmaxZero : MinMaxQuit G j ≤ max (SoloPayoff G j) 0 := by
-    rw [MinMaxQuit]
-    apply le_trans (ciInf_le houterBelow zeroProfile)
-    apply ciSup_le
-    intro q
-    let deviation := zeroProfile.replace G j q
-    apply quitPayoff_le_of_nonnegative_rewardPart_le G deviation j
-      (max (SoloPayoff G j) 0) (le_max_right _ _)
-    intro t
-    have hrow : deviation t =
-        QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j (q t) := rfl
-    rw [hrow, quittingRewardPart_allContinue_replace]
-    rw [quitProbability_allContinue_replace]
-    simpa [mul_comm] using
-      mul_le_mul_of_nonneg_left (le_max_left (SoloPayoff G j) 0) (q t).property.1
+  have hminmaxZero : MinMaxQuit G j ≤ max (SoloPayoff G j) 0 :=
+    minMaxQuit_le_max_solo_zero G j
   have hsoloNegative : SoloPayoff G j < 0 := by
     by_contra hnonnegative
     rw [max_eq_left (le_of_not_gt hnonnegative)] at hminmaxZero
@@ -3041,26 +3064,257 @@ private theorem exists_harmed_normalPlayer_of_positive
   exact hstationary
     (hasStationaryApproximateEquilibria_of_soloPayoff_nonnegative G j hjpositive.le hcross)
 
-/--
-Lemma 5.  Without stationary or instant approximate equilibria there is a positive normal
-solo payoff, every normal solo quitter harms another normal player, and one uniform `ρ`
-controls both motion and quitting probability.
+/-- Under failure of stationarity, a normal player harming no normal player is negative. -/
+private theorem soloPayoff_negative_of_no_harmed_normalPlayer
+    (G : QuittingGame) (hstationary : ¬HasStationaryApproximateEquilibria G)
+    (j : G.Player)
+    (hnoHarm : ∀ n, n ≠ j → IsNormalPlayer G n →
+      SoloPayoff G n ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n) :
+    SoloPayoff G j < 0 := by
+  by_contra hjnegative
+  have hjnonnegative : 0 ≤ SoloPayoff G j := le_of_not_gt hjnegative
+  have hcross : ∀ n, n ≠ j →
+      SoloPayoff G n ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n := by
+    intro n hnj
+    by_cases hnnormal : IsNormalPlayer G n
+    · exact hnoHarm n hnj hnnormal
+    · exact (lt_of_not_ge hnnormal).le.trans
+        ((lemma3 G n hnnormal).2 j (Ne.symm hnj))
+  exact hstationary
+    (hasStationaryApproximateEquilibria_of_soloPayoff_nonnegative G j hjnonnegative hcross)
 
-The printed part (2a) has the free vector `x`; the hypothesis and proof use `r`, so the
-statement below records the repaired norm `‖r-y‖`.
--/
-theorem lemma5 (G : QuittingGame)
-    (hstationary : ¬HasStationaryApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G) :
+/-- Every normal solo quitter strictly harms another normal player. -/
+def EveryNormalSoloQuitterHarmsNormal (G : QuittingGame) : Prop :=
+  ∀ j, IsNormalPlayer G j → ∃ k, k ≠ j ∧ IsNormalPlayer G k ∧
+    G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k
+
+/-- The uniform `ρ` conclusion printed in Lemma 5(2). -/
+def IsUniformRho (G : QuittingGame) (ρ : ℝ) : Prop :=
+  0 < ρ ∧ ρ ≤ 1 ∧ ∀ r p, IsRational G ρ r →
+    p ∈ EpsilonRow G ρ r →
+    let y := QuittingOneStagePayoff G r p
+    ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ
+
+/-- Use one stationary row through stage `M`, then switch to a punishment profile. -/
+def StationaryPrefixThenPunish (G : QuittingGame) (p : QuitRow G)
+    (M : ℕ) (punishment : QuitProfile G) : QuitProfile G :=
+  fun t => if t ≤ M then p else punishment (t - (M + 1))
+
+/-- The punishment profile holds player `j` to `χʲ + δ`. -/
+def IsPunishmentWithin (G : QuittingGame) (j : G.Player) (δ : ℝ)
+    (punishment : QuitProfile G) : Prop :=
+  ∀ q : ℕ → Set.Icc (0 : ℝ) 1,
+    QuitPayoff G (punishment.replace G j q) j ≤ MinMaxQuit G j + δ
+
+/-- Approximate equilibria made from a stationary prefix and a min-max punishment. -/
+def HasStationarilyGeneratedApproximateEquilibria (G : QuittingGame) : Prop :=
+  ∀ δ : ℝ, 0 < δ → ∀ ε : ℝ, 0 < ε → ∃ (p : QuitRow G) (M : ℕ)
+    (j : G.Player) (punishment : QuitProfile G),
+      1 < M ∧ IsPunishmentWithin G j δ punishment ∧
+      IsQuitEpsilonEquilibrium G (ε + δ)
+        (StationaryPrefixThenPunish G p M punishment)
+
+/-- Lemma 5 exactly as printed in 2007, with its free `x` repaired to `r`. -/
+def Lemma5Claim (G : QuittingGame) : Prop :=
+  ¬HasStationaryApproximateEquilibria G →
+    ¬HasInstantApproximateEquilibria G →
     (∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
-    (∀ j, IsNormalPlayer G j → ∃ k, k ≠ j ∧ IsNormalPlayer G k ∧
-      G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k) ∧
-    ∃ ρ : ℝ, 0 < ρ ∧ ρ ≤ 1 ∧ ∀ r p,
-      IsRational G ρ r → p ∈ EpsilonRow G ρ r →
-      let y := QuittingOneStagePayoff G r p
-      ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ := by
-  refine ⟨exists_positive_normalPlayer_of_not_stationary G hstationary, ?_⟩
-  sorry
+    EveryNormalSoloQuitterHarmsNormal G ∧
+    ∃ ρ, IsUniformRho G ρ
+
+/-- A fixed compact continuation set has one common motion parameter. -/
+def HasCompactUniformRho (G : QuittingGame)
+    (K : Set (Payoff G.Player)) : Prop :=
+  ∃ ρ : ℝ, 0 < ρ ∧ ρ ≤ 1 ∧ ∀ r ∈ K, ∀ p,
+    IsRational G ρ r → p ∈ EpsilonRow G ρ r →
+    let y := QuittingOneStagePayoff G r p
+    ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ
+
+/--
+The corrected form described by Simon (2012, p. 185): the strategic hypothesis excludes
+stationarily generated approximate equilibria, and the motion parameter is uniform only
+on one fixed compact set of continuation vectors.
+-/
+def CorrectedLemma5Claim (G : QuittingGame) : Prop :=
+  ¬HasStationarilyGeneratedApproximateEquilibria G →
+    ¬HasInstantApproximateEquilibria G →
+    (∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
+    EveryNormalSoloQuitterHarmsNormal G ∧
+    ∀ K : Set (Payoff G.Player), IsCompact K → HasCompactUniformRho G K
+
+/-!
+Simon (2012, p. 185) explicitly says that the 2007 statement wrote "stationary
+approximate equilibria" although its proof uses the stronger stationarily generated
+notion.  It also supplies the omitted compact-set restriction in part (2).  Accordingly,
+`Lemma5Claim` and `CorrectedLemma5Claim` record claims rather than checked theorems.
+-/
+
+namespace NegativeQuitterVertex
+
+/-- The two-player table in which every terminal payoff is `(-1,1)`. -/
+abbrev game : QuittingGame where
+  Player := Bool
+  reward := fun _ n => if n then 1 else -1
+
+/-- The terminal payoff vector, also used as the continuation vector. -/
+abbrev continuation : Payoff game.Player := fun n => if n then 1 else -1
+
+/-- The negative-payoff player quits surely while the other player continues. -/
+abbrev row : QuitRow game := SoloQuitRow game false
+
+private theorem reward_eq_continuation
+    (A : {A : Finset game.Player // A.Nonempty}) :
+    game.reward A = continuation := by
+  funext n
+  rfl
+
+/-- In this table, any surely absorbing row pays the fixed terminal vector. -/
+private theorem oneStagePayoff_eq_continuation_of_sureQuit
+    (r : Payoff game.Player) (p : QuitRow game)
+    (hp : QuitProbability game p = 1) :
+    QuittingOneStagePayoff game r p = continuation := by
+  funext n
+  simp only [QuittingOneStagePayoff]
+  rw [hp]
+  simp only [sub_self, zero_mul, zero_add]
+  calc
+    (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+        CoalitionProbability game p A * game.reward ⟨A, hA⟩ n else 0) =
+        (∑ A ∈ Finset.univ.powerset, if _hA : A.Nonempty then
+          CoalitionProbability game p A else 0) * continuation n := by
+      rw [Finset.sum_mul]
+      apply Finset.sum_congr rfl
+      intro A _hA
+      split_ifs with hnonempty
+      · rw [reward_eq_continuation ⟨A, hnonempty⟩]
+      · simp
+    _ = QuitProbability game p * continuation n := by
+      rw [nonemptyCoalitionMass_eq_quitProbability]
+    _ = continuation n := by rw [hp, one_mul]
+
+private theorem oneStagePayoff_allContinue :
+    QuittingOneStagePayoff game continuation
+      (fun _ => (0 : Set.Icc (0 : ℝ) 1)) = continuation := by
+  funext n
+  change (1 - QuitProbability game (fun _ => (0 : Set.Icc (0 : ℝ) 1))) *
+    continuation n +
+      quittingRewardPart game (fun _ => (0 : Set.Icc (0 : ℝ) 1)) n = continuation n
+  rw [quittingRewardPart_allContinue]
+  simp [QuitProbability]
+
+/-- The displayed row is a fixed point of the one-stage correspondence. -/
+theorem oneStagePayoff_eq_continuation :
+    QuittingOneStagePayoff game continuation row = continuation := by
+  apply oneStagePayoff_eq_continuation_of_sureQuit
+  have h := quitProbability_replace_one game
+    (fun _ => (0 : Set.Icc (0 : ℝ) 1)) false
+  simpa [row, QuitRow.zero_replace_one] using h
+
+/-- The displayed row belongs to `E₀` at the fixed continuation vector. -/
+theorem row_mem_epsilonRow_zero : row ∈ EpsilonRow game 0 continuation := by
+  constructor
+  · intro n hn
+    cases n with
+    | false =>
+        have hpSelf : row.replace game false 1 = row := by
+          simpa [row, SoloQuitRow] using QuitRow.replace_self game row false
+        have hpZero : row.replace game false 0 =
+            fun _ => (0 : Set.Icc (0 : ℝ) 1) := by
+          funext k
+          cases k <;> simp [row, SoloQuitRow, QuitRow.replace]
+        have hpSure : QuitProbability game row = 1 := by
+          have h := quitProbability_replace_one game
+            (fun _ => (0 : Set.Icc (0 : ℝ) 1)) false
+          simpa [row, QuitRow.zero_replace_one] using h
+        rw [ForcedQuitPayoff, ForcedContinuePayoff, hpSelf, hpZero]
+        rw [oneStagePayoff_eq_continuation_of_sureQuit 0 row hpSure]
+        rw [oneStagePayoff_allContinue]
+        norm_num [continuation]
+    | true => simp [row, SoloQuitRow] at hn
+  · intro n hn
+    cases n with
+    | false => simp [row, SoloQuitRow] at hn
+    | true =>
+        have hpSelf : row.replace game true 0 = row := by
+          simpa [row, SoloQuitRow] using QuitRow.replace_self game row true
+        have hpSure : QuitProbability game (row.replace game true 1) = 1 :=
+          quitProbability_replace_one game row true
+        rw [ForcedContinuePayoff, ForcedQuitPayoff, hpSelf]
+        rw [oneStagePayoff_eq_continuation]
+        rw [oneStagePayoff_eq_continuation_of_sureQuit 0 _ hpSure]
+        norm_num [continuation]
+
+/-- At tolerance one, the continuation vector satisfies the rationality hypothesis. -/
+theorem continuation_rational_one : IsRational game 1 continuation := by
+  intro n
+  have hminmax := minMaxQuit_le_max_solo_zero game n
+  cases n with
+  | false => simpa [continuation, SoloPayoff, game] using hminmax
+  | true =>
+      have h : MinMaxQuit game true ≤ 1 := by
+        simpa [SoloPayoff, game] using hminmax
+      norm_num [continuation]
+      linarith
+
+/-- The row absorbs surely. -/
+theorem quitProbability_row : QuitProbability game row = 1 := by
+  have h := quitProbability_replace_one game
+    (fun _ => (0 : Set.Icc (0 : ℝ) 1)) false
+  simpa [row, QuitRow.zero_replace_one] using h
+
+/-- Repeating the negative fixed-point row is not a `1/2`-equilibrium. -/
+theorem repeated_row_not_half_equilibrium :
+    ¬IsQuitEpsilonEquilibrium game (1 / 2 : ℝ) (fun _ => row) := by
+  intro hequilibrium
+  let zeroProfile : QuitProfile game := fun _ _ => (0 : Set.Icc (0 : ℝ) 1)
+  have hdeviation : QuitProfile.replace game (fun _ => row) false
+      (fun _ => (0 : Set.Icc (0 : ℝ) 1)) = zeroProfile := by
+    funext t n
+    cases n <;> simp [zeroProfile, row, SoloQuitRow, QuitProfile.replace]
+  have hzero : QuitPayoff game zeroProfile false = 0 := by
+    change (∑' k, tailSurvival game zeroProfile 0 k *
+      quittingRewardPart game (zeroProfile k) false) = 0
+    have hreward : ∀ k, quittingRewardPart game (zeroProfile k) false = 0 := by
+      intro k
+      exact quittingRewardPart_allContinue game false
+    simp_rw [hreward]
+    simp
+  have hbase : QuitPayoff game (fun _ => row) false = -1 := by
+    have hrare : rareQuitRow game false 1 = row := by
+      exact QuitRow.zero_replace_one game false
+    rw [← hrare]
+    simpa [game] using quitPayoff_constant_rareQuitRow game false false 1 (by norm_num)
+  have hprofitable := hequilibrium false (fun _ => (0 : Set.Icc (0 : ℝ) 1))
+  rw [hdeviation, hzero, hbase] at hprofitable
+  norm_num at hprofitable
+
+/-- This local witness does not satisfy Lemma 5's global nonstationarity hypothesis. -/
+theorem hasStationaryApproximateEquilibria :
+    HasStationaryApproximateEquilibria game := by
+  apply hasStationaryApproximateEquilibria_of_soloPayoff_nonnegative game true
+  · norm_num [SoloPayoff, game]
+  · intro n hne
+    cases n with
+    | false => norm_num [SoloPayoff, game]
+    | true => exact (hne rfl).elim
+
+/--
+Thus the local vertex inference used in the printed proof is false: even at a rational
+`E₀` fixed point, repeating the row need not be an approximate equilibrium.  The game
+itself does have another stationary equilibrium, as the preceding theorem records, so this
+is not presented as a counterexample to all of `Lemma5Claim`.
+-/
+theorem printed_vertex_inference_fails :
+    IsRational game 1 continuation ∧ row ∈ EpsilonRow game 0 continuation ∧
+      QuittingOneStagePayoff game continuation row = continuation ∧
+      QuitProbability game row = 1 ∧
+      ¬IsQuitEpsilonEquilibrium game (1 / 2 : ℝ) (fun _ => row) ∧
+      HasStationaryApproximateEquilibria game :=
+  ⟨continuation_rational_one, row_mem_epsilonRow_zero,
+    oneStagePayoff_eq_continuation, quitProbability_row, repeated_row_not_half_equilibrium,
+    hasStationaryApproximateEquilibria⟩
+
+end NegativeQuitterVertex
 
 /-! ### 4.4. Equivalences -/
 
@@ -4566,27 +4820,18 @@ theorem restrictedEscapeCorrespondence_subset (G : QuittingGame) {M ε : ℝ}
             (sub_nonneg.mpr hxsolo)]
         exact hweighted
 
-/-- The uniform `ρ` conclusion of Lemma 5(2). -/
-def IsUniformRho (G : QuittingGame) (ρ : ℝ) : Prop :=
-  0 < ρ ∧ ρ ≤ 1 ∧ ∀ r p, IsRational G ρ r →
-    p ∈ EpsilonRow G ρ r →
-    let y := QuittingOneStagePayoff G r p
-    ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ
-
 /--
-Lemma 9.  In the fixed exceptional escape game, sufficiently high continuation vectors have
-only the all-continue equilibrium in `E₀`.
+The checked content of Lemma 9, conditional on the uniform parameter claimed by the
+corrected Lemma 5.
 -/
-theorem lemma9 (G : QuittingGame) (_hEscape : IsEscapeGame G)
-    (hstationary : ¬HasStationaryApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G) :
+theorem lemma9_of_uniformRho (G : QuittingGame) (_hEscape : IsEscapeGame G)
+    {ρ : ℝ} (hρ : IsUniformRho G ρ) :
     ∃ B : ℝ, 0 < B ∧ ∀ x, (∀ j, x j ≥ B) →
       EpsilonRow G 0 x = {fun _ => (0 : Set.Icc (0 : ℝ) 1)} := by
   classical
   obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
   have hM0 : 0 ≤ M := hM.1.trans' zero_le_one
-  obtain ⟨_hnormal, _hcross, ρ, hρ0, hρ1, hρuniform⟩ :=
-    lemma5 G hstationary hinstant
+  obtain ⟨hρ0, hρ1, hρuniform⟩ := hρ
   let valueMass : ℝ := ∑ n, |MinMaxQuit G n|
   have hvalueMass0 : 0 ≤ valueMass := Finset.sum_nonneg fun n _ => abs_nonneg _
   have hminmax : ∀ n, MinMaxQuit G n ≤ valueMass := by
@@ -5295,14 +5540,13 @@ def IsCriticalPoint (G : QuittingGame) (x : Payoff G.Player) : Prop :=
     G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k
 
 /--
-Lemma 11.  From every point of `T` there is a finite `Ḽ_δ` orbit staying in `T`
-and ending at a critical point.
+The checked orbit construction in Lemma 11, conditional on its cross-harm input from the
+corrected Lemma 5.
 -/
-theorem lemma11 (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
+theorem lemma11_of_crossHarm (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
     (hM : IsQuittingPayoffDifferenceBound G M)
     (hρ : IsUniformRho G ρ) (hnormal : ∀ n, IsNormalPlayer G n)
-    (hstationary : ¬HasStationaryApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G) (hε : 0 < ε)
+    (hcross : EveryNormalSoloQuitterHarmsNormal G) (hε : 0 < ε)
     (_hεe : ε < E.ebar) (hερ : ε < ρ) :
     let δ := ε / (10 * M * Fintype.card G.Player)
     ∀ x ∈ EscapeBand G ε, ∃ (k : ℕ)
@@ -5330,7 +5574,6 @@ theorem lemma11 (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
   have hdelta1 : delta < 1 := by
     dsimp [delta]
     exact (div_lt_one hdenominator).2 (hε1.trans hdenominatorOne)
-  have hcross := (lemma5 G hstationary hinstant).2.1
   dsimp only
   intro x hxBand
   have hfirst : ∃ (k : ℕ) (z : Fin (k + 1) → Payoff G.Player) (a : G.Player),
