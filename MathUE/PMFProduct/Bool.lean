@@ -62,6 +62,32 @@ lemma expect_pmfPi_bool (m : Bool → PMF Bool)
     cases coordinate <;> simp
   rw [hpure, pmfPi_pure, expect_pure]
 
+/-- Fubini expansion of a dependent product over the two Boolean coordinates. -/
+lemma expect_pmfPi_boolFamily {A : Bool → Type*} [∀ i, Fintype (A i)]
+    (m : ∀ i, PMF (A i)) (f : (∀ i, A i) → ℝ) :
+    expect (pmfPi m) f =
+      expect (m false) (fun a ↦
+        expect (m true) (fun b ↦ f (fun i ↦ Bool.rec a b i))) := by
+  classical
+  have hfalse : Function.update m false (m false) = m :=
+    Function.update_eq_self false m
+  rw [← hfalse, pmfPi_update_bind, expect_bind]
+  apply congrArg (expect (m false))
+  funext a
+  have htrue : Function.update (Function.update m false (PMF.pure a))
+      true (m true) = Function.update m false (PMF.pure a) := by
+    funext coordinate
+    cases coordinate <;> simp
+  rw [← htrue, pmfPi_update_bind, expect_bind]
+  apply congrArg (expect (m true))
+  funext b
+  have hpure : Function.update (Function.update m false (PMF.pure a))
+        true (PMF.pure b) =
+      fun coordinate ↦ PMF.pure (Bool.rec a b coordinate) := by
+    funext coordinate
+    cases coordinate <;> simp
+  rw [hpure, pmfPi_pure, expect_pure]
+
 /-! ## Powerset expansion of a Boolean product expectation -/
 
 /-- **Powerset expansion of a Boolean product expectation.** Peeling the
