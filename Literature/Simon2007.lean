@@ -620,17 +620,15 @@ structure DiscreteDecisionProcess where
 attribute [instance] DiscreteDecisionProcess.countableX
 attribute [instance] DiscreteDecisionProcess.countableY
 
-/-- A possible infinite path `x₀,y₁,x₂,y₃,…` of a decision process. -/
+/-- An infinite path `x₀,y₁,x₂,y₃,…`; zero-mass transitions occur on null paths. -/
 structure DDPPath (P : DiscreteDecisionProcess) where
   x : ℕ → P.X
   y : (i : ℕ) → P.Y (x i)
-  movePositive : ∀ i, 0 < P.move (x i) (y i) (x (i + 1))
 
-/-- A possible finite decision-process path containing `k` chosen actions. -/
+/-- A finite decision-process path containing `k` chosen actions. -/
 structure DDPFinitePath (P : DiscreteDecisionProcess) (k : ℕ) where
   x : Fin (k + 1) → P.X
   y : (i : Fin k) → P.Y (x i.castSucc)
-  movePositive : ∀ i, 0 < P.move (x i.castSucc) (y i) (x i.succ)
 
 /-- Finite possible paths form a countable type when states and actions are countable. -/
 instance ddpFinitePathCountable (P : DiscreteDecisionProcess) (k : ℕ) :
@@ -640,9 +638,9 @@ instance ddpFinitePathCountable (P : DiscreteDecisionProcess) (k : ℕ) :
         (h.x, fun i => Sigma.mk (h.x i.castSucc) (h.y i))) from by
       intro a b hab
       cases a with
-      | mk ax ay ap =>
+      | mk ax ay =>
         cases b with
-        | mk bx byy bp =>
+        | mk bx byy =>
           simp only [Prod.mk.injEq] at hab
           cases hab.1
           have : ay = byy := by
@@ -656,7 +654,6 @@ def DDPPath.prefix (P : DiscreteDecisionProcess) (p : DDPPath P)
     (k : ℕ) : DDPFinitePath P k where
   x i := p.x i
   y i := p.y i
-  movePositive i := p.movePositive i
 
 /-- The advantage read from a finite path containing `l+1` chosen actions. -/
 def DDPFinitePath.advantage (P : DiscreteDecisionProcess) {l : ℕ}
@@ -692,6 +689,858 @@ theorem measurableSet_ddpCylinder (P : DiscreteDecisionProcess) {k : ℕ}
     (h : DDPFinitePath P k) : MeasurableSet (DDPCylinder P h) :=
   MeasurableSpace.measurableSet_generateFrom ⟨k, h, rfl⟩
 
+/-- One sampled DDP stage records the current state and the action selected there. -/
+private abbrev DDPStage (P : DiscreteDecisionProcess) := (x : P.X) × P.Y x
+
+/-- The stage alphabet is countable and carries its discrete sigma algebra. -/
+private instance ddpStageMeasurableSpace (P : DiscreteDecisionProcess) :
+    MeasurableSpace (DDPStage P) := ⊤
+
+/-- Draw the action at the initial state. -/
+private def DiscreteDecisionProcess.initialStagePMF (P : DiscreteDecisionProcess)
+    (x : P.X) : PMF (DDPStage P) :=
+  (P.choose x).map fun y => ⟨x, y⟩
+
+/-- Move from the current state/action and then draw the action at the next state. -/
+private def DiscreteDecisionProcess.stepStagePMF (P : DiscreteDecisionProcess)
+    (stage : DDPStage P) : PMF (DDPStage P) :=
+  (P.move stage.1 stage.2).bind fun x =>
+    (P.choose x).map fun y => ⟨x, y⟩
+
+/-- The initial-stage law evaluates to the action-selection probability. -/
+private theorem DiscreteDecisionProcess.initialStagePMF_apply
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) :
+    P.initialStagePMF x ⟨x, y⟩ = P.choose x y := by
+  classical
+  rw [DiscreteDecisionProcess.initialStagePMF, PMF.map_apply]
+  rw [tsum_eq_single y]
+  · simp
+  · intro other hother
+    rw [if_neg]
+    intro heq
+    have : other = y := eq_of_heq (Sigma.mk.inj_iff.mp heq.symm).2
+    exact hother this
+
+/-- An initial-stage law has no mass on a different state fiber. -/
+private theorem DiscreteDecisionProcess.initialStagePMF_apply_of_ne
+    (P : DiscreteDecisionProcess) {x z : P.X} (y : P.Y z) (h : x ≠ z) :
+    P.initialStagePMF x ⟨z, y⟩ = 0 := by
+  classical
+  rw [DiscreteDecisionProcess.initialStagePMF, PMF.map_apply]
+  calc
+    _ = ∑' _action : P.Y x, (0 : ℝ≥0∞) := by
+      apply tsum_congr
+      intro action
+      rw [if_neg]
+      intro heq
+      exact h (Sigma.mk.inj_iff.mp heq).1.symm
+    _ = 0 := tsum_zero
+
+/-- A stage transition has the product of its move and next-action probabilities. -/
+private theorem DiscreteDecisionProcess.stepStagePMF_apply
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x)
+    (z : P.X) (next : P.Y z) :
+    P.stepStagePMF ⟨x, y⟩ ⟨z, next⟩ = P.move x y z * P.choose z next := by
+  rw [DiscreteDecisionProcess.stepStagePMF, PMF.bind_apply]
+  change (∑' state, P.move x y state * P.initialStagePMF state ⟨z, next⟩) = _
+  calc
+    _ = P.move x y z * P.initialStagePMF z ⟨z, next⟩ := by
+      apply tsum_eq_single z
+      intro other hother
+      rw [P.initialStagePMF_apply_of_ne next hother]
+      simp
+    _ = P.move x y z * P.choose z next := by rw [P.initialStagePMF_apply]
+
+/-- The homogeneous Ionescu--Tulcea kernel associated with the DDP stage transition. -/
+private def DiscreteDecisionProcess.stageKernel (P : DiscreteDecisionProcess) (n : ℕ) :
+    Kernel (∀ _ : Finset.Iic n, DDPStage P) (DDPStage P) where
+  toFun history :=
+    (P.stepStagePMF (history ⟨n, Finset.mem_Iic.mpr le_rfl⟩)).toMeasure
+  measurable' := Measurable.of_discrete
+
+private instance DiscreteDecisionProcess.isMarkovKernel_stageKernel
+    (P : DiscreteDecisionProcess) (n : ℕ) : IsMarkovKernel (P.stageKernel n) :=
+  ⟨fun _ => PMF.toMeasure.isProbabilityMeasure _⟩
+
+/-- The raw infinite stage law generated from an arbitrary initial stage distribution. -/
+private def DiscreteDecisionProcess.rawLawWithInitial
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
+    Measure (ℕ → DDPStage P) :=
+  Kernel.trajMeasure (X := fun _ : ℕ => DDPStage P)
+    initial.toMeasure P.stageKernel
+
+private instance DiscreteDecisionProcess.isProbabilityMeasure_rawLawWithInitial
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
+    IsProbabilityMeasure (P.rawLawWithInitial initial) := by
+  unfold DiscreteDecisionProcess.rawLawWithInitial
+  infer_instance
+
+/-- The raw infinite stage law of the DDP started at `x`. -/
+private def DiscreteDecisionProcess.rawLawFrom
+    (P : DiscreteDecisionProcess) (x : P.X) : Measure (ℕ → DDPStage P) :=
+  P.rawLawWithInitial (P.initialStagePMF x)
+
+private instance DiscreteDecisionProcess.isProbabilityMeasure_rawLawFrom
+    (P : DiscreteDecisionProcess) (x : P.X) :
+    IsProbabilityMeasure (P.rawLawFrom x) := by
+  unfold DiscreteDecisionProcess.rawLawFrom
+  infer_instance
+
+/-- The time-zero marginal of a raw DDP law is its supplied initial-stage distribution. -/
+private theorem DiscreteDecisionProcess.map_prefix_zero_rawLawWithInitial
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
+    (P.rawLawWithInitial initial).map
+        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) 0) =
+      initial.toMeasure.map
+        (MeasurableEquiv.piUnique (fun _ : Finset.Iic 0 => DDPStage P)).symm := by
+  unfold DiscreteDecisionProcess.rawLawWithInitial Kernel.trajMeasure
+  rw [Measure.map_comp _ _ (by fun_prop)]
+  rw [Kernel.traj_map_frestrictLe, Kernel.partialTraj_self]
+  rw [Measure.id_comp]
+
+/-- Reindex a finite exact stage string as an Ionescu--Tulcea prefix. -/
+private def DiscreteDecisionProcess.stagePrefixOfFin
+    (P : DiscreteDecisionProcess) {k : ℕ}
+    (stage : Fin (k + 1) → DDPStage P) : ∀ _ : Finset.Iic k, DDPStage P :=
+  fun i => stage ⟨i.1, Nat.lt_succ_of_le (Finset.mem_Iic.mp i.2)⟩
+
+/-- An exact finite stage cylinder is the preimage of its finite prefix. -/
+private theorem DiscreteDecisionProcess.rawStageCylinder_eq_prefixPreimage
+    (P : DiscreteDecisionProcess) (k : ℕ)
+    (stage : Fin (k + 1) → DDPStage P) :
+    {w | ∀ i : Fin (k + 1), w i = stage i} =
+      Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k ⁻¹'
+        {P.stagePrefixOfFin stage} := by
+  ext w
+  simp only [mem_setOf_eq, mem_preimage, mem_singleton_iff]
+  constructor
+  · intro h
+    funext i
+    exact h ⟨i.1, Nat.lt_succ_of_le (Finset.mem_Iic.mp i.2)⟩
+  · intro h i
+    have hi := congrFun h ⟨i.1, Finset.mem_Iic.mpr (Nat.lt_succ_iff.mp i.2)⟩
+    exact hi
+
+/-- Exact finite raw-stage cylinders are measurable. -/
+private theorem DiscreteDecisionProcess.measurableSet_rawStageCylinder
+    (P : DiscreteDecisionProcess) (k : ℕ)
+    (stage : Fin (k + 1) → DDPStage P) :
+    MeasurableSet {w : ℕ → DDPStage P | ∀ i : Fin (k + 1), w i = stage i} := by
+  rw [P.rawStageCylinder_eq_prefixPreimage k stage]
+  exact (measurableSet_singleton (P.stagePrefixOfFin stage)).preimage
+    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) k)
+
+/-- A raw DDP law has the expected exact finite-stage cylinder products. -/
+private theorem DiscreteDecisionProcess.rawLawWithInitial_exactStageCylinder
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) : ∀ (k : ℕ)
+    (stage : Fin (k + 1) → DDPStage P),
+    P.rawLawWithInitial initial
+        {w : ℕ → DDPStage P | ∀ i : Fin (k + 1), w i = stage i} =
+      initial (stage 0) *
+        ∏ i : Fin k, P.stepStagePMF (stage i.castSucc) (stage i.succ) := by
+  intro k
+  induction k with
+  | zero =>
+      intro stage
+      rw [P.rawStageCylinder_eq_prefixPreimage]
+      rw [← Measure.map_apply
+        (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) 0)
+        (measurableSet_singleton (P.stagePrefixOfFin stage))]
+      rw [P.map_prefix_zero_rawLawWithInitial]
+      rw [Measure.map_apply (MeasurableEquiv.measurable _)
+        (measurableSet_singleton (P.stagePrefixOfFin stage))]
+      have hevent :
+          (MeasurableEquiv.piUnique (fun _ : Finset.Iic 0 => DDPStage P)).symm ⁻¹'
+              {P.stagePrefixOfFin stage} = {stage 0} := by
+        ext z
+        simp only [mem_preimage, mem_singleton_iff]
+        have hprefix : P.stagePrefixOfFin stage (default : Finset.Iic 0) = stage 0 := by
+          apply congrArg stage
+          apply Fin.ext
+          exact Nat.eq_zero_of_le_zero
+            (Finset.mem_Iic.mp (default : Finset.Iic 0).2)
+        constructor
+        · intro hz
+          have hcoord := congrFun hz (default : Finset.Iic 0)
+          rw [MeasurableEquiv.piUnique_symm_apply] at hcoord
+          change z = P.stagePrefixOfFin stage default at hcoord
+          simpa only [hprefix] using hcoord
+        · intro hz
+          subst z
+          funext i
+          have hi : i = (default : Finset.Iic 0) := Subsingleton.elim _ _
+          subst i
+          change stage 0 = P.stagePrefixOfFin stage default
+          rw [hprefix]
+      rw [hevent, PMF.toMeasure_apply_singleton _ _ MeasurableSet.of_discrete]
+      simp
+  | succ k ih =>
+      intro stage
+      let old : Fin (k + 1) → DDPStage P := Fin.init stage
+      let pref := P.stagePrefixOfFin old
+      let next := stage (Fin.last (k + 1))
+      have hrec := Kernel.map_frestrictLe_trajMeasure_compProd_eq_map_trajMeasure
+        (X := fun _ : ℕ => DDPStage P) (κ := P.stageKernel)
+        (μ₀ := initial.toMeasure) (a := k)
+      have hpre :
+          (fun w : ℕ → DDPStage P =>
+            (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k w,
+              w (k + 1))) ⁻¹' ({pref} ×ˢ {next}) =
+            {w | ∀ i : Fin (k + 2), w i = stage i} := by
+        ext w
+        simp only [mem_preimage, mem_prod, mem_singleton_iff, mem_setOf_eq]
+        constructor
+        · rintro ⟨hpref, hnext⟩ i
+          by_cases hi : i.1 ≤ k
+          · have hcoord := congrFun hpref ⟨i.1, Finset.mem_Iic.mpr hi⟩
+            change w i.1 = old ⟨i.1, Nat.lt_succ_of_le hi⟩ at hcoord
+            rw [hcoord]
+            apply congrArg stage
+            apply Fin.ext
+            rfl
+          · have hii : i = Fin.last (k + 1) := by
+              apply Fin.ext
+              simp only [Fin.val_last]
+              omega
+            subst i
+            exact hnext
+        · intro hw
+          constructor
+          · funext i
+            have hi : i.1 ≤ k := Finset.mem_Iic.mp i.2
+            change w i.1 = old ⟨i.1, Nat.lt_succ_of_le hi⟩
+            rw [hw ⟨i.1, by omega⟩]
+            apply congrArg stage
+            apply Fin.ext
+            rfl
+          · exact hw (Fin.last (k + 1))
+      have hleft :
+          ((P.rawLawWithInitial initial).map
+              (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k) ⊗ₘ
+              P.stageKernel k) ({pref} ×ˢ {next}) =
+            P.stepStagePMF (old (Fin.last k)) next *
+              P.rawLawWithInitial initial
+                {w | ∀ i : Fin (k + 1), w i = old i} := by
+        rw [Measure.compProd_apply_prod (measurableSet_singleton pref)
+          (measurableSet_singleton next)]
+        rw [setLIntegral_congr_fun (measurableSet_singleton pref) (g := fun _ =>
+          P.stepStagePMF (old (Fin.last k)) next)]
+        · rw [MeasureTheory.setLIntegral_const]
+          rw [Measure.map_apply
+            (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) k)
+            (measurableSet_singleton pref)]
+          rw [← P.rawStageCylinder_eq_prefixPreimage k old]
+        · intro history hhistory
+          simp only [mem_singleton_iff] at hhistory
+          subst history
+          change (P.stepStagePMF
+              (pref ⟨k, Finset.mem_Iic.mpr le_rfl⟩)).toMeasure {next} = _
+          rw [PMF.toMeasure_apply_singleton _ _ MeasurableSet.of_discrete]
+          congr 2
+      have hright :
+          (P.rawLawWithInitial initial).map (fun w : ℕ → DDPStage P =>
+            (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k w,
+              w (k + 1))) ({pref} ×ˢ {next}) =
+            P.rawLawWithInitial initial
+              {w | ∀ i : Fin (k + 2), w i = stage i} := by
+        rw [Measure.map_apply]
+        · rw [hpre]
+        · fun_prop
+        · exact (measurableSet_singleton pref).prod (measurableSet_singleton next)
+      change
+        ((P.rawLawWithInitial initial).map
+            (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k) ⊗ₘ
+            P.stageKernel k) =
+          (P.rawLawWithInitial initial).map (fun w : ℕ → DDPStage P =>
+            (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k w,
+              w (k + 1))) at hrec
+      rw [← hright, ← hrec, hleft, ih old]
+      rw [Fin.prod_univ_castSucc]
+      have hlast : old (Fin.last k) = stage (Fin.last k).castSucc := by
+        rfl
+      have hproduct :
+          (∏ i : Fin k, P.stepStagePMF (old i.castSucc) (old i.succ)) =
+            ∏ i : Fin k,
+              P.stepStagePMF (stage i.castSucc.castSucc) (stage i.castSucc.succ) := by
+        apply Finset.prod_congr rfl
+        intro i _
+        congr 2
+      have hnext : next = stage (Fin.last k).succ := by
+        apply congrArg stage
+        apply Fin.ext
+        rfl
+      rw [hlast, hproduct, hnext]
+      have hzero : old 0 = stage 0 := rfl
+      rw [hzero]
+      ring
+
+/-- The state-started raw DDP law has the corresponding finite-stage products. -/
+private theorem DiscreteDecisionProcess.rawLawFrom_exactStageCylinder
+    (P : DiscreteDecisionProcess) (start : P.X) (k : ℕ)
+    (stage : Fin (k + 1) → DDPStage P) :
+    P.rawLawFrom start
+        {w : ℕ → DDPStage P | ∀ i : Fin (k + 1), w i = stage i} =
+      P.initialStagePMF start (stage 0) *
+        ∏ i : Fin k, P.stepStagePMF (stage i.castSucc) (stage i.succ) := by
+  exact P.rawLawWithInitial_exactStageCylinder (P.initialStagePMF start) k stage
+
+/-- Bundle a raw sequence of sampled stages as a DDP path. -/
+private def DDPPath.ofRaw (P : DiscreteDecisionProcess)
+    (stage : ℕ → DDPStage P) : DDPPath P where
+  x i := (stage i).1
+  y i := (stage i).2
+
+/-- Extend a `k`-action path by an arbitrary sampled action at its final state. -/
+private def DDPFinitePath.extendWithFinalStage
+    (P : DiscreteDecisionProcess) {k : ℕ} (h : DDPFinitePath P k)
+    (last : DDPStage P) : Fin (k + 1) → DDPStage P :=
+  Fin.lastCases last fun i => ⟨h.x i.castSucc, h.y i⟩
+
+/-- The complete action string obtained by supplying the unconstrained final action. -/
+private def DDPFinitePath.actionsWithFinal
+    (P : DiscreteDecisionProcess) {k : ℕ} (h : DDPFinitePath P k)
+    (last : P.Y (h.x (Fin.last k))) : (i : Fin (k + 1)) → P.Y (h.x i) :=
+  Fin.lastCases last h.y
+
+@[simp] private theorem DDPFinitePath.actionsWithFinal_castSucc
+    (P : DiscreteDecisionProcess) {k : ℕ} (h : DDPFinitePath P k)
+    (last : P.Y (h.x (Fin.last k))) (i : Fin k) :
+    h.actionsWithFinal P last i.castSucc = h.y i := by
+  simp [DDPFinitePath.actionsWithFinal]
+
+@[simp] private theorem DDPFinitePath.actionsWithFinal_last
+    (P : DiscreteDecisionProcess) {k : ℕ} (h : DDPFinitePath P k)
+    (last : P.Y (h.x (Fin.last k))) :
+    h.actionsWithFinal P last (Fin.last k) = last := by
+  simp [DDPFinitePath.actionsWithFinal]
+
+/-- The exact sampled stage string obtained by supplying the final action. -/
+private def DDPFinitePath.stagesWithFinal
+    (P : DiscreteDecisionProcess) {k : ℕ} (h : DDPFinitePath P k)
+    (last : P.Y (h.x (Fin.last k))) : Fin (k + 1) → DDPStage P :=
+  fun i => ⟨h.x i, h.actionsWithFinal P last i⟩
+
+/-- A correctly based final sampled stage is the stage string built from its action. -/
+private theorem DDPFinitePath.extendWithFinalStage_mk
+    (P : DiscreteDecisionProcess) {k : ℕ} (h : DDPFinitePath P k)
+    (last : P.Y (h.x (Fin.last k))) :
+    h.extendWithFinalStage P ⟨h.x (Fin.last k), last⟩ =
+      h.stagesWithFinal P last := by
+  funext i
+  induction i using Fin.lastCases with
+  | last =>
+      simp [DDPFinitePath.extendWithFinalStage,
+        DDPFinitePath.stagesWithFinal]
+  | cast i =>
+      simp [DDPFinitePath.extendWithFinalStage,
+        DDPFinitePath.stagesWithFinal]
+
+/-- Splitting successive factors from a full string leaves the final factor outside. -/
+private theorem prod_start_mul_successors {M : Type*} [CommMonoid M] {k : ℕ}
+    (a : Fin (k + 1) → M) (b : Fin k → M) :
+    a 0 * ∏ i : Fin k, b i * a i.succ =
+      (∏ i : Fin k, a i.castSucc * b i) * a (Fin.last k) := by
+  calc
+    a 0 * ∏ i : Fin k, b i * a i.succ =
+        (a 0 * ∏ i : Fin k, a i.succ) * ∏ i : Fin k, b i := by
+      rw [Finset.prod_mul_distrib]
+      ac_rfl
+    _ = (∏ i : Fin (k + 1), a i) * ∏ i : Fin k, b i := by
+      rw [Fin.prod_univ_succ]
+    _ = ((∏ i : Fin k, a i.castSucc) * a (Fin.last k)) *
+        ∏ i : Fin k, b i := by
+      rw [Fin.prod_univ_castSucc]
+    _ = (∏ i : Fin k, a i.castSucc * b i) * a (Fin.last k) := by
+      rw [Finset.prod_mul_distrib]
+      ac_rfl
+
+/-- The exact raw probability of a finite DDP path and a specified final action. -/
+private theorem DiscreteDecisionProcess.rawLawFrom_stagesWithFinal
+    (P : DiscreteDecisionProcess) (start : P.X) {k : ℕ}
+    (h : DDPFinitePath P k) (hstart : h.x 0 = start)
+    (last : P.Y (h.x (Fin.last k))) :
+    P.rawLawFrom start
+        {stage | ∀ i : Fin (k + 1), stage i = h.stagesWithFinal P last i} =
+      h.probability P * P.choose (h.x (Fin.last k)) last := by
+  rw [P.rawLawFrom_exactStageCylinder]
+  have hinitial :
+      P.initialStagePMF start (h.stagesWithFinal P last 0) =
+        P.choose (h.x 0) (h.actionsWithFinal P last 0) := by
+    rw [← hstart]
+    exact P.initialStagePMF_apply _ _
+  rw [hinitial]
+  have hstep : ∀ i : Fin k,
+      P.stepStagePMF (h.stagesWithFinal P last i.castSucc)
+          (h.stagesWithFinal P last i.succ) =
+        P.move (h.x i.castSucc) (h.y i) (h.x i.succ) *
+          P.choose (h.x i.succ) (h.actionsWithFinal P last i.succ) := by
+    intro i
+    change P.stepStagePMF
+        ⟨h.x i.castSucc, h.actionsWithFinal P last i.castSucc⟩
+        ⟨h.x i.succ, h.actionsWithFinal P last i.succ⟩ = _
+    rw [show h.actionsWithFinal P last i.castSucc = h.y i by
+      simp [DDPFinitePath.actionsWithFinal]]
+    exact P.stepStagePMF_apply _ _ _ _
+  simp_rw [hstep]
+  simpa only [DDPFinitePath.probability,
+    DDPFinitePath.actionsWithFinal_castSucc,
+    DDPFinitePath.actionsWithFinal_last] using
+      prod_start_mul_successors
+        (fun i => P.choose (h.x i) (h.actionsWithFinal P last i))
+        (fun i => P.move (h.x i.castSucc) (h.y i) (h.x i.succ))
+
+/-- The raw DDP law after forcing the initial state and action. -/
+private def DiscreteDecisionProcess.rawLawAfterAction
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) :
+    Measure (ℕ → DDPStage P) :=
+  P.rawLawWithInitial (PMF.pure ⟨x, y⟩)
+
+private instance DiscreteDecisionProcess.isProbabilityMeasure_rawLawAfterAction
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) :
+    IsProbabilityMeasure (P.rawLawAfterAction x y) := by
+  unfold DiscreteDecisionProcess.rawLawAfterAction
+  infer_instance
+
+/-- A forced first action removes exactly its action-selection factor. -/
+private theorem DiscreteDecisionProcess.rawLawAfterAction_stagesWithFinal
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) {k : ℕ}
+    (h : DDPFinitePath P (k + 1)) (hstart : h.x 0 = x)
+    (haction : HEq (h.y 0) y) (last : P.Y (h.x (Fin.last (k + 1)))) :
+    P.rawLawAfterAction x y
+        {stage | ∀ i : Fin (k + 2), stage i = h.stagesWithFinal P last i} =
+      h.afterActionProbability P * P.choose (h.x (Fin.last (k + 1))) last := by
+  rw [DiscreteDecisionProcess.rawLawAfterAction,
+    P.rawLawWithInitial_exactStageCylinder]
+  have hfirst : h.stagesWithFinal P last 0 = (⟨x, y⟩ : DDPStage P) := by
+    apply Sigma.ext hstart
+    have hzero : h.actionsWithFinal P last 0 = h.y 0 := by
+      simpa using h.actionsWithFinal_castSucc P last (0 : Fin (k + 1))
+    simpa [DDPFinitePath.stagesWithFinal, hzero] using haction
+  rw [PMF.pure_apply, if_pos hfirst, one_mul]
+  have hstep : ∀ i : Fin (k + 1),
+      P.stepStagePMF (h.stagesWithFinal P last i.castSucc)
+          (h.stagesWithFinal P last i.succ) =
+        P.move (h.x i.castSucc) (h.y i) (h.x i.succ) *
+          P.choose (h.x i.succ) (h.actionsWithFinal P last i.succ) := by
+    intro i
+    change P.stepStagePMF
+        ⟨h.x i.castSucc, h.actionsWithFinal P last i.castSucc⟩
+        ⟨h.x i.succ, h.actionsWithFinal P last i.succ⟩ = _
+    rw [show h.actionsWithFinal P last i.castSucc = h.y i by
+      simp [DDPFinitePath.actionsWithFinal]]
+    exact P.stepStagePMF_apply _ _ _ _
+  simp_rw [hstep]
+  rw [Fin.prod_univ_succ]
+  change
+    (P.move (h.x 0) (h.y 0) (h.x 1) *
+        P.choose (h.x 1) (h.actionsWithFinal P last 1)) *
+        (∏ i : Fin k,
+          P.move (h.x i.succ.castSucc) (h.y i.succ) (h.x i.succ.succ) *
+            P.choose (h.x i.succ.succ)
+              (h.actionsWithFinal P last i.succ.succ)) = _
+  have htail :
+      P.choose (h.x (Fin.succ 0)) (h.actionsWithFinal P last (Fin.succ 0)) *
+          ∏ i : Fin k,
+            P.move (h.x i.succ.castSucc) (h.y i.succ) (h.x i.succ.succ) *
+              P.choose (h.x i.succ.succ)
+                (h.actionsWithFinal P last i.succ.succ) =
+        (∏ i : Fin k,
+          P.choose (h.x i.succ.castSucc) (h.y i.succ) *
+            P.move (h.x i.succ.castSucc) (h.y i.succ) (h.x i.succ.succ)) *
+          P.choose (h.x (Fin.last (k + 1))) last := by
+    convert prod_start_mul_successors
+        (fun i : Fin (k + 1) =>
+          P.choose (h.x i.succ) (h.actionsWithFinal P last i.succ))
+        (fun i : Fin k =>
+          P.move (h.x i.succ.castSucc) (h.y i.succ) (h.x i.succ.succ)) using 1
+    all_goals
+      simp only [DDPFinitePath.actionsWithFinal_castSucc,
+        DDPFinitePath.actionsWithFinal_last, Fin.succ_castSucc,
+        Fin.succ_last, Nat.succ_eq_add_one]
+    · congr 1
+  rw [DDPFinitePath.afterActionProbability]
+  calc
+    _ = P.move (h.x 0) (h.y 0) (h.x 1) *
+        (P.choose (h.x 1) (h.actionsWithFinal P last 1) *
+          ∏ i : Fin k,
+            P.move (h.x i.succ.castSucc) (h.y i.succ) (h.x i.succ.succ) *
+              P.choose (h.x i.succ.succ)
+                (h.actionsWithFinal P last i.succ.succ)) := by rw [mul_assoc]
+    _ = P.move (h.x 0) (h.y 0) (h.x 1) *
+        ((∏ i : Fin k,
+          P.choose (h.x i.succ.castSucc) (h.y i.succ) *
+            P.move (h.x i.succ.castSucc) (h.y i.succ) (h.x i.succ.succ)) *
+          P.choose (h.x (Fin.last (k + 1))) last) := by
+            congr 1
+    _ = _ := by rw [mul_assoc]
+
+/-- Equality of all state coordinates and sampled-action stages determines a finite DDP path. -/
+private theorem DDPFinitePath.ext_of_stages
+    (P : DiscreteDecisionProcess) {k : ℕ} {a b : DDPFinitePath P k}
+    (hx : ∀ i, a.x i = b.x i)
+    (hstage : ∀ i : Fin k,
+      (⟨a.x i.castSucc, a.y i⟩ : DDPStage P) = ⟨b.x i.castSucc, b.y i⟩) :
+    a = b := by
+  cases a with
+  | mk ax ay =>
+      cases b with
+      | mk bx byy =>
+          have hxeq : ax = bx := funext hx
+          subst bx
+          have hyeq : ay = byy := by
+            funext i
+            exact eq_of_heq (Sigma.mk.inj_iff.mp (hstage i)).2
+          subst byy
+          rfl
+
+/-- A raw stage sequence belongs to a DDP cylinder exactly when its constrained prefix agrees. -/
+private theorem DDPPath.preimage_ddpCylinder_eq_iUnion
+    (P : DiscreteDecisionProcess) {k : ℕ} (h : DDPFinitePath P k) :
+    DDPPath.ofRaw P ⁻¹' DDPCylinder P h =
+      ⋃ last : DDPStage P,
+        {stage | last.1 = h.x (Fin.last k) ∧ ∀ i : Fin (k + 1),
+          stage i = h.extendWithFinalStage P last i} := by
+  ext stage
+  simp only [mem_preimage, mem_iUnion, mem_setOf_eq]
+  constructor
+  · intro hp
+    change (DDPPath.ofRaw P stage).prefix P k = h at hp
+    subst h
+    refine ⟨stage k, ?_, ?_⟩
+    · rfl
+    · intro i
+      induction i using Fin.lastCases with
+      | last =>
+          simp [DDPFinitePath.extendWithFinalStage, DDPPath.prefix,
+            DDPPath.ofRaw]
+      | cast i =>
+          simp [DDPFinitePath.extendWithFinalStage, DDPPath.prefix,
+            DDPPath.ofRaw]
+  · rintro ⟨last, hlast, hp⟩
+    change (DDPPath.ofRaw P stage).prefix P k = h
+    apply DDPFinitePath.ext_of_stages P
+    · intro i
+      induction i using Fin.lastCases with
+      | last =>
+          change (stage k).1 = h.x (Fin.last k)
+          have hcoord : (stage k).1 = last.1 := by
+            simpa [DDPFinitePath.extendWithFinalStage] using
+              congrArg Sigma.fst (hp (Fin.last k))
+          exact hcoord.trans hlast
+      | cast i =>
+          change (stage i).1 = h.x i.castSucc
+          simpa [DDPFinitePath.extendWithFinalStage] using
+            congrArg Sigma.fst (hp i.castSucc)
+    · intro i
+      change stage i = ⟨h.x i.castSucc, h.y i⟩
+      simpa [DDPFinitePath.extendWithFinalStage] using hp i.castSucc
+
+/-- The raw preimage of every DDP cylinder is measurable. -/
+private theorem DDPPath.measurableSet_preimage_ddpCylinder
+    (P : DiscreteDecisionProcess) {k : ℕ} (h : DDPFinitePath P k) :
+    MeasurableSet (DDPPath.ofRaw P ⁻¹' DDPCylinder P h) := by
+  rw [DDPPath.preimage_ddpCylinder_eq_iUnion]
+  apply MeasurableSet.iUnion
+  intro last
+  by_cases hlast : last.1 = h.x (Fin.last k)
+  · have heq : {stage : ℕ → DDPStage P |
+        last.1 = h.x (Fin.last k) ∧ ∀ i : Fin (k + 1),
+        stage i = h.extendWithFinalStage P last i} =
+        {stage : ℕ → DDPStage P | ∀ i : Fin (k + 1),
+          stage i = h.extendWithFinalStage P last i} := by
+      ext stage
+      simp [hlast]
+    rw [heq]
+    exact P.measurableSet_rawStageCylinder k (h.extendWithFinalStage P last)
+  · have heq : {stage : ℕ → DDPStage P |
+        last.1 = h.x (Fin.last k) ∧ ∀ i : Fin (k + 1),
+        stage i = h.extendWithFinalStage P last i} = ∅ := by
+      ext stage
+      simp [hlast]
+    rw [heq]
+    exact MeasurableSet.empty
+
+/-- The raw-to-DDP path map is measurable for the finite-cylinder sigma algebra. -/
+private theorem DDPPath.measurable_ofRaw (P : DiscreteDecisionProcess) :
+    Measurable (DDPPath.ofRaw P) := by
+  apply measurable_generateFrom
+  intro U hU
+  rcases hU with ⟨k, h, rfl⟩
+  exact DDPPath.measurableSet_preimage_ddpCylinder P h
+
+/-- The raw law assigns each finite DDP cylinder its displayed product probability. -/
+private theorem DiscreteDecisionProcess.rawLawFrom_ddpCylinder
+    (P : DiscreteDecisionProcess) (start : P.X) {k : ℕ}
+    (h : DDPFinitePath P k) (hstart : h.x 0 = start) :
+    P.rawLawFrom start (DDPPath.ofRaw P ⁻¹' DDPCylinder P h) = h.probability P := by
+  rw [DDPPath.preimage_ddpCylinder_eq_iUnion]
+  have hmeasurable : ∀ last : DDPStage P,
+      MeasurableSet {stage : ℕ → DDPStage P | last.1 = h.x (Fin.last k) ∧
+        ∀ i : Fin (k + 1), stage i = h.extendWithFinalStage P last i} := by
+    intro last
+    by_cases hlast : last.1 = h.x (Fin.last k)
+    · have heq : {stage : ℕ → DDPStage P | last.1 = h.x (Fin.last k) ∧
+          ∀ i : Fin (k + 1), stage i = h.extendWithFinalStage P last i} =
+          {stage : ℕ → DDPStage P | ∀ i : Fin (k + 1),
+            stage i = h.extendWithFinalStage P last i} := by
+        ext stage
+        simp [hlast]
+      rw [heq]
+      exact P.measurableSet_rawStageCylinder k (h.extendWithFinalStage P last)
+    · have heq : {stage : ℕ → DDPStage P | last.1 = h.x (Fin.last k) ∧
+          ∀ i : Fin (k + 1), stage i = h.extendWithFinalStage P last i} = ∅ := by
+        ext stage
+        simp [hlast]
+      rw [heq]
+      exact MeasurableSet.empty
+  have hdisjoint : Pairwise (Function.onFun Disjoint fun last : DDPStage P =>
+      {stage : ℕ → DDPStage P | last.1 = h.x (Fin.last k) ∧
+        ∀ i : Fin (k + 1), stage i = h.extendWithFinalStage P last i}) := by
+    intro first second hne
+    simp only [Function.onFun]
+    rw [Set.disjoint_left]
+    intro stage hfirst hsecond
+    have hfirstLast := hfirst.2 (Fin.last k)
+    have hsecondLast := hsecond.2 (Fin.last k)
+    have : first = second := by
+      simpa [DDPFinitePath.extendWithFinalStage] using
+        hfirstLast.symm.trans hsecondLast
+    exact hne this
+  rw [measure_iUnion hdisjoint hmeasurable]
+  rw [ENNReal.tsum_sigma']
+  rw [tsum_eq_single (h.x (Fin.last k))]
+  · have heq (last : P.Y (h.x (Fin.last k))) :
+        {stage : ℕ → DDPStage P |
+          (⟨h.x (Fin.last k), last⟩ : DDPStage P).1 = h.x (Fin.last k) ∧
+          ∀ i : Fin (k + 1),
+            stage i = h.extendWithFinalStage P ⟨h.x (Fin.last k), last⟩ i} =
+        {stage : ℕ → DDPStage P | ∀ i : Fin (k + 1),
+          stage i = h.stagesWithFinal P last i} := by
+      ext stage
+      simp [h.extendWithFinalStage_mk P]
+    calc
+      (∑' last : P.Y (h.x (Fin.last k)),
+          P.rawLawFrom start
+            {stage : ℕ → DDPStage P |
+              (⟨h.x (Fin.last k), last⟩ : DDPStage P).1 = h.x (Fin.last k) ∧
+              ∀ i : Fin (k + 1),
+                stage i = h.extendWithFinalStage P
+                  ⟨h.x (Fin.last k), last⟩ i}) =
+          ∑' last : P.Y (h.x (Fin.last k)),
+            P.rawLawFrom start
+              {stage : ℕ → DDPStage P | ∀ i : Fin (k + 1),
+                stage i = h.stagesWithFinal P last i} := by
+            apply tsum_congr
+            intro last
+            rw [heq last]
+      _ = ∑' last : P.Y (h.x (Fin.last k)),
+          h.probability P * P.choose (h.x (Fin.last k)) last := by
+            apply tsum_congr
+            intro last
+            rw [P.rawLawFrom_stagesWithFinal start h hstart]
+      _ = h.probability P := by
+            rw [ENNReal.tsum_mul_left, PMF.tsum_coe, mul_one]
+  · intro state hstate
+    have heq (last : P.Y state) :
+        {stage : ℕ → DDPStage P |
+          (⟨state, last⟩ : DDPStage P).1 = h.x (Fin.last k) ∧
+          ∀ i : Fin (k + 1),
+            stage i = h.extendWithFinalStage P ⟨state, last⟩ i} = ∅ := by
+      ext stage
+      simp [hstate]
+    simp_rw [heq]
+    simp
+
+/-- A forced-action raw law assigns the displayed forced-action cylinder probability. -/
+private theorem DiscreteDecisionProcess.rawLawAfterAction_ddpCylinder
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) {k : ℕ}
+    (h : DDPFinitePath P (k + 1)) (hstart : h.x 0 = x)
+    (haction : HEq (h.y 0) y) :
+    P.rawLawAfterAction x y (DDPPath.ofRaw P ⁻¹' DDPCylinder P h) =
+      h.afterActionProbability P := by
+  rw [DDPPath.preimage_ddpCylinder_eq_iUnion]
+  have hmeasurable : ∀ last : DDPStage P,
+      MeasurableSet {stage : ℕ → DDPStage P |
+        last.1 = h.x (Fin.last (k + 1)) ∧
+          ∀ i : Fin (k + 2), stage i = h.extendWithFinalStage P last i} := by
+    intro last
+    by_cases hlast : last.1 = h.x (Fin.last (k + 1))
+    · have heq : {stage : ℕ → DDPStage P |
+          last.1 = h.x (Fin.last (k + 1)) ∧
+            ∀ i : Fin (k + 2), stage i = h.extendWithFinalStage P last i} =
+          {stage : ℕ → DDPStage P | ∀ i : Fin (k + 2),
+            stage i = h.extendWithFinalStage P last i} := by
+        ext stage
+        simp [hlast]
+      rw [heq]
+      exact P.measurableSet_rawStageCylinder (k + 1) (h.extendWithFinalStage P last)
+    · have heq : {stage : ℕ → DDPStage P |
+          last.1 = h.x (Fin.last (k + 1)) ∧
+            ∀ i : Fin (k + 2), stage i = h.extendWithFinalStage P last i} = ∅ := by
+        ext stage
+        simp [hlast]
+      rw [heq]
+      exact MeasurableSet.empty
+  have hdisjoint : Pairwise (Function.onFun Disjoint fun last : DDPStage P =>
+      {stage : ℕ → DDPStage P | last.1 = h.x (Fin.last (k + 1)) ∧
+        ∀ i : Fin (k + 2), stage i = h.extendWithFinalStage P last i}) := by
+    intro first second hne
+    simp only [Function.onFun]
+    rw [Set.disjoint_left]
+    intro stage hfirst hsecond
+    have hfirstLast := hfirst.2 (Fin.last (k + 1))
+    have hsecondLast := hsecond.2 (Fin.last (k + 1))
+    have : first = second := by
+      simpa [DDPFinitePath.extendWithFinalStage] using
+        hfirstLast.symm.trans hsecondLast
+    exact hne this
+  rw [measure_iUnion hdisjoint hmeasurable]
+  rw [ENNReal.tsum_sigma']
+  rw [tsum_eq_single (h.x (Fin.last (k + 1)))]
+  · have heq (last : P.Y (h.x (Fin.last (k + 1)))) :
+        {stage : ℕ → DDPStage P |
+          (⟨h.x (Fin.last (k + 1)), last⟩ : DDPStage P).1 =
+              h.x (Fin.last (k + 1)) ∧
+            ∀ i : Fin (k + 2), stage i = h.extendWithFinalStage P
+              ⟨h.x (Fin.last (k + 1)), last⟩ i} =
+          {stage : ℕ → DDPStage P | ∀ i : Fin (k + 2),
+            stage i = h.stagesWithFinal P last i} := by
+      ext stage
+      simp [h.extendWithFinalStage_mk P]
+    calc
+      (∑' last : P.Y (h.x (Fin.last (k + 1))),
+          P.rawLawAfterAction x y
+            {stage : ℕ → DDPStage P |
+              (⟨h.x (Fin.last (k + 1)), last⟩ : DDPStage P).1 =
+                  h.x (Fin.last (k + 1)) ∧
+                ∀ i : Fin (k + 2), stage i = h.extendWithFinalStage P
+                  ⟨h.x (Fin.last (k + 1)), last⟩ i}) =
+          ∑' last : P.Y (h.x (Fin.last (k + 1))),
+            P.rawLawAfterAction x y
+              {stage : ℕ → DDPStage P | ∀ i : Fin (k + 2),
+                stage i = h.stagesWithFinal P last i} := by
+            apply tsum_congr
+            intro last
+            rw [heq last]
+      _ = ∑' last : P.Y (h.x (Fin.last (k + 1))),
+          h.afterActionProbability P * P.choose (h.x (Fin.last (k + 1))) last := by
+            apply tsum_congr
+            intro last
+            rw [P.rawLawAfterAction_stagesWithFinal x y h hstart haction last]
+      _ = h.afterActionProbability P := by
+            rw [ENNReal.tsum_mul_left, PMF.tsum_coe, mul_one]
+  · intro state hstate
+    have heq (last : P.Y state) :
+        {stage : ℕ → DDPStage P |
+          (⟨state, last⟩ : DDPStage P).1 = h.x (Fin.last (k + 1)) ∧
+            ∀ i : Fin (k + 2),
+              stage i = h.extendWithFinalStage P ⟨state, last⟩ i} = ∅ := by
+      ext stage
+      simp [hstate]
+    simp_rw [heq]
+    simp
+
+/-- The one-step finite path with prescribed initial state, action, and successor. -/
+private def DDPFinitePath.firstStep (P : DiscreteDecisionProcess)
+    (x : P.X) (y : P.Y x) (z : P.X) : DDPFinitePath P 1 where
+  x i := Fin.cases x (fun _ => z) i
+  y i := by
+    have hi : i = 0 := Subsingleton.elim _ _
+    subst i
+    exact y
+
+@[simp] private theorem DDPFinitePath.firstStep_x_zero
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) (z : P.X) :
+    (DDPFinitePath.firstStep P x y z).x 0 = x := rfl
+
+@[simp] private theorem DDPFinitePath.firstStep_x_one
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) (z : P.X) :
+    (DDPFinitePath.firstStep P x y z).x 1 = z := by
+  rfl
+
+/-- A one-step cylinder fixes exactly its initial state/action and successor state. -/
+private theorem DDPFinitePath.mem_firstStepCylinder_iff
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) (z : P.X)
+    (p : DDPPath P) :
+    p ∈ DDPCylinder P (DDPFinitePath.firstStep P x y z) ↔
+      p.x 0 = x ∧ HEq (p.y 0) y ∧ p.x 1 = z := by
+  change p.prefix P 1 = DDPFinitePath.firstStep P x y z ↔ _
+  constructor
+  · intro hp
+    have hx0 := congrArg (fun q : DDPFinitePath P 1 => q.x 0) hp
+    have hx1 := congrArg (fun q : DDPFinitePath P 1 => q.x 1) hp
+    have hstage := congrArg (fun q : DDPFinitePath P 1 =>
+      (⟨q.x 0, q.y 0⟩ : DDPStage P)) hp
+    refine ⟨?_, ?_, ?_⟩
+    · simpa [DDPPath.prefix] using hx0
+    · exact (Sigma.mk.inj_iff.mp hstage).2
+    · simpa [DDPPath.prefix] using hx1
+  · rintro ⟨hx0, hy0, hx1⟩
+    apply DDPFinitePath.ext_of_stages P
+    · intro i
+      fin_cases i
+      · simpa [DDPPath.prefix] using hx0
+      · simpa [DDPPath.prefix] using hx1
+    · intro i
+      have hi : i = 0 := Subsingleton.elim _ _
+      subst i
+      exact Sigma.ext hx0 hy0
+
+/-- Fixing the initial DDP state and action is measurable in the cylinder sigma algebra. -/
+private theorem measurableSet_ddpInitialStateAction
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) :
+    MeasurableSet {p : DDPPath P | p.x 0 = x ∧ HEq (p.y 0) y} := by
+  have heq : {p : DDPPath P | p.x 0 = x ∧ HEq (p.y 0) y} =
+      ⋃ z : P.X, DDPCylinder P (DDPFinitePath.firstStep P x y z) := by
+    ext p
+    simp only [mem_setOf_eq, mem_iUnion]
+    constructor
+    · rintro ⟨hx, hy⟩
+      refine ⟨p.x 1, ?_⟩
+      exact (DDPFinitePath.mem_firstStepCylinder_iff P x y (p.x 1) p).2
+        ⟨hx, hy, rfl⟩
+    · rintro ⟨z, hz⟩
+      have hp := (DDPFinitePath.mem_firstStepCylinder_iff P x y z p).1 hz
+      exact ⟨hp.1, hp.2.1⟩
+  rw [heq]
+  exact MeasurableSet.iUnion fun z => measurableSet_ddpCylinder P
+    (DDPFinitePath.firstStep P x y z)
+
+/-- The zero-action finite path at a prescribed state. -/
+private def DDPFinitePath.atState
+    (P : DiscreteDecisionProcess) (x : P.X) : DDPFinitePath P 0 where
+  x _ := x
+  y i := Fin.elim0 i
+
+/-- A zero-action cylinder fixes exactly the initial state. -/
+private theorem DDPFinitePath.mem_atStateCylinder_iff
+    (P : DiscreteDecisionProcess) (x : P.X) (p : DDPPath P) :
+    p ∈ DDPCylinder P (DDPFinitePath.atState P x) ↔ p.x 0 = x := by
+  change p.prefix P 0 = DDPFinitePath.atState P x ↔ _
+  constructor
+  · intro hp
+    have hx := congrArg (fun q : DDPFinitePath P 0 => q.x 0) hp
+    simpa [DDPPath.prefix, DDPFinitePath.atState] using hx
+  · intro hx
+    apply DDPFinitePath.ext_of_stages P
+    · intro i
+      have hi : i = 0 := Fin.eq_zero i
+      subst i
+      simpa [DDPPath.prefix, DDPFinitePath.atState] using hx
+    · intro i
+      exact Fin.elim0 i
+
+/-- Fixing the initial DDP state is measurable. -/
+private theorem measurableSet_ddpInitialState
+    (P : DiscreteDecisionProcess) (x : P.X) :
+    MeasurableSet {p : DDPPath P | p.x 0 = x} := by
+  have heq : {p : DDPPath P | p.x 0 = x} =
+      DDPCylinder P (DDPFinitePath.atState P x) := by
+    ext p
+    exact (DDPFinitePath.mem_atStateCylinder_iff P x p).symm
+  rw [heq]
+  exact measurableSet_ddpCylinder P (DDPFinitePath.atState P x)
+
 /--
 The induced path law and the laws obtained after forcing a start/action, constrained by all
 finite-cylinder products and by support at the prescribed first state and action.
@@ -720,7 +1569,115 @@ structure DDPSemantics (P : DiscreteDecisionProcess) where
 
 /-- Ionescu--Tulcea extension supplies the path, start, and forced-action laws of a DDP. -/
 theorem ddpSemantics_exists (P : DiscreteDecisionProcess) : Nonempty (DDPSemantics P) := by
-  sorry
+  let fromState : P.X → Measure (DDPPath P) := fun x =>
+    Measure.map (DDPPath.ofRaw P) (P.rawLawFrom x)
+  let afterAction : (x : P.X) → P.Y x → Measure (DDPPath P) := fun x y =>
+    Measure.map (DDPPath.ofRaw P) (P.rawLawAfterAction x y)
+  have hfromProbability (x : P.X) : IsProbabilityMeasure (fromState x) := by
+    exact Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+  have hafterProbability (x : P.X) (y : P.Y x) :
+      IsProbabilityMeasure (afterAction x y) := by
+    exact Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+  have hfromCylinder (x : P.X) (k : ℕ) (h : DDPFinitePath P k)
+      (hstart : h.x 0 = x) :
+      fromState x (DDPCylinder P h) = h.probability P := by
+    change Measure.map (DDPPath.ofRaw P) (P.rawLawFrom x) (DDPCylinder P h) = _
+    rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+      (measurableSet_ddpCylinder P h)]
+    exact P.rawLawFrom_ddpCylinder x h hstart
+  have hafterCylinder (x : P.X) (y : P.Y x) (k : ℕ)
+      (h : DDPFinitePath P (k + 1)) (hstart : h.x 0 = x)
+      (haction : HEq (h.y 0) y) :
+      afterAction x y (DDPCylinder P h) = h.afterActionProbability P := by
+    change Measure.map (DDPPath.ofRaw P) (P.rawLawAfterAction x y)
+      (DDPCylinder P h) = _
+    rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+      (measurableSet_ddpCylinder P h)]
+    exact P.rawLawAfterAction_ddpCylinder x y h hstart haction
+  have hfromSupport (x : P.X) : fromState x {p | p.x 0 = x} = 1 := by
+    have heq : {p : DDPPath P | p.x 0 = x} =
+        DDPCylinder P (DDPFinitePath.atState P x) := by
+      ext p
+      exact (DDPFinitePath.mem_atStateCylinder_iff P x p).symm
+    rw [heq]
+    simpa [DDPFinitePath.probability] using
+      hfromCylinder x 0 (DDPFinitePath.atState P x) rfl
+  have hafterSupport (x : P.X) (y : P.Y x) :
+      afterAction x y {p | p.x 0 = x ∧ HEq (p.y 0) y} = 1 := by
+    change Measure.map (DDPPath.ofRaw P) (P.rawLawAfterAction x y)
+      {p | p.x 0 = x ∧ HEq (p.y 0) y} = 1
+    rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+      (measurableSet_ddpInitialStateAction P x y)]
+    have heq : DDPPath.ofRaw P ⁻¹'
+          {p : DDPPath P | p.x 0 = x ∧ HEq (p.y 0) y} =
+        {stage : ℕ → DDPStage P | ∀ _ : Fin 1, stage 0 = (⟨x, y⟩ : DDPStage P)} := by
+      ext stage
+      simp only [mem_preimage, mem_setOf_eq]
+      constructor
+      · rintro ⟨hx, hy⟩ i
+        exact Sigma.ext hx hy
+      · intro hs
+        have hstage := hs 0
+        exact ⟨congrArg Sigma.fst hstage,
+          (Sigma.mk.inj_iff.mp hstage).2⟩
+    rw [heq, DiscreteDecisionProcess.rawLawAfterAction]
+    simpa [PMF.pure_apply] using
+      P.rawLawWithInitial_exactStageCylinder (PMF.pure (⟨x, y⟩ : DDPStage P))
+        0 (fun _ : Fin 1 => (⟨x, y⟩ : DDPStage P))
+  have hafterMove (x : P.X) (y : P.Y x) (z : P.X) :
+      afterAction x y {p | p.x 1 = z} = P.move x y z := by
+    let support : Set (DDPPath P) := {p | p.x 0 = x ∧ HEq (p.y 0) y}
+    let successor : Set (DDPPath P) := {p | p.x 1 = z}
+    let step := DDPFinitePath.firstStep P x y z
+    have hstepStart : step.x 0 = x := rfl
+    have hstepAction : HEq (step.y 0) y := by rfl
+    have hstepProbability : step.afterActionProbability P = P.move x y z := by
+      simp [step, DDPFinitePath.firstStep, DDPFinitePath.afterActionProbability]
+      exact congrArg (P.move x y)
+        (DDPFinitePath.firstStep_x_one P x y z)
+    have hcylinder : afterAction x y (DDPCylinder P step) = P.move x y z := by
+      rw [hafterCylinder x y 0 step hstepStart hstepAction, hstepProbability]
+    have hcylinderSet : DDPCylinder P step = support ∩ successor := by
+      ext p
+      rw [DDPFinitePath.mem_firstStepCylinder_iff]
+      simp only [support, successor, mem_inter_iff, mem_setOf_eq]
+      tauto
+    letI : IsProbabilityMeasure (afterAction x y) := hafterProbability x y
+    have hsupport : afterAction x y support = 1 := hafterSupport x y
+    have hsupportMeasurable : MeasurableSet support :=
+      measurableSet_ddpInitialStateAction P x y
+    have hsupportComplement : afterAction x y supportᶜ = 0 := by
+      rw [measure_compl hsupportMeasurable (by rw [hsupport]; simp)]
+      rw [measure_univ, hsupport]
+      simp
+    have hsupportAE : ∀ᵐ p ∂afterAction x y, p ∈ support := by
+      rw [ae_iff]
+      simpa only [Set.compl_def, mem_setOf_eq] using hsupportComplement
+    calc
+      afterAction x y {p | p.x 1 = z} = afterAction x y (support ∩ successor) := by
+        apply measure_congr
+        filter_upwards [hsupportAE] with p hp
+        change (p.x 1 = z) = (p ∈ support ∧ p.x 1 = z)
+        apply propext
+        exact (and_iff_right hp).symm
+      _ = afterAction x y (DDPCylinder P step) := by rw [hcylinderSet]
+      _ = P.move x y z := hcylinder
+  refine ⟨{
+    law := fromState P.initial
+    probability := hfromProbability P.initial
+    lawSupport := hfromSupport P.initial
+    cylinder := fun k h hstart => hfromCylinder P.initial k h hstart
+    fromState := fromState
+    fromStateProbability := hfromProbability
+    fromStateSupport := hfromSupport
+    fromStateCylinder := hfromCylinder
+    lawFromInitial := rfl
+    afterAction := afterAction
+    afterActionProbability := hafterProbability
+    afterActionSupport := hafterSupport
+    afterActionMove := hafterMove
+    afterActionCylinder := hafterCylinder
+  }⟩
 
 /-- The finite cumulative advantage through the action indexed by `l`. -/
 def DDPAdvantage (P : DiscreteDecisionProcess) (p : DDPPath P) (l : ℕ) : ℝ :=
