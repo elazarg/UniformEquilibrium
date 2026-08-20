@@ -4,6 +4,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import MathUE.CaristiFixedPoint
+import MathUE.DivergentChargeRecurrence
 import MathUE.ProbabilityMassFunction.Simplex
 import Mathlib.Analysis.Normed.Affine.AddTorsorBases
 import Mathlib.LinearAlgebra.AffineSpace.FiniteDimensional
@@ -3092,12 +3093,17 @@ structure KiloblockConstruction
     BuildingBlock (NormalMatrix table) (point k) ε
   epsilon_pos : 0 < ε
   epsilon_lt_one : ε < 1
+  negativeMargin : ℝ
+  negativeMargin_pos : 0 < negativeMargin
+  accuracy_below_margin :
+    ((2 * Fintype.card (NormalPlayer table) + 1 : ℕ) : ℝ) * ε <
+      negativeMargin
   displacement_large : KiloblockDisplacementThreshold table ε <
     KiloblockDisplacement point buildingBlock
   tracking_small : KiloblockTracking point buildingBlock < ε
   column_negative : ∀ owner,
     ∃ who, NormalMatrix table who owner <
-      -((2 * Fintype.card (NormalPlayer table) + 1 : ℕ) : ℝ) * ε
+      -negativeMargin
   attempt : ∀ k owner,
     BuildingAttempt (NormalMatrix table) (point k) ε
       (buildingBlock k) owner
@@ -3184,6 +3190,711 @@ theorem KiloblockConstruction.half_displacementThreshold_lt_singletonMass
   have hle := construction.displacement_le_twice_singletonMass
   have hlarge := construction.displacement_large
   linarith
+
+/-! Unnormalized mass with which a type draw leaves the restart loop of one
+kiloblock. A restart attempt leaves only when its owner quits; an advance
+attempt leaves whether or not its owner quits. -/
+def KiloblockConstruction.attemptExitWeight
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) : ℝ :=
+  match (construction.attempt k owner).continuation with
+  | .restart => (construction.attempt k owner).quitWeight
+  | .advance => 1
+
+def KiloblockConstruction.exitMass
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) : ℝ :=
+  (construction.buildingBlock k).z.cemetery +
+    ∑ owner, (construction.buildingBlock k).z.singleton owner *
+      construction.attemptExitWeight k owner
+
+def KiloblockConstruction.absorbMass
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) : ℝ :=
+  (construction.buildingBlock k).z.singleton owner *
+    (construction.attempt k owner).quitWeight
+
+def KiloblockConstruction.attemptAdvanceWeight
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) : ℝ :=
+  match (construction.attempt k owner).continuation with
+  | .restart => 0
+  | .advance => 1 - (construction.attempt k owner).quitWeight
+
+def KiloblockConstruction.advanceMass
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) : ℝ :=
+  (construction.buildingBlock k).z.cemetery +
+    ∑ owner, (construction.buildingBlock k).z.singleton owner *
+      construction.attemptAdvanceWeight k owner
+
+theorem KiloblockConstruction.exitMass_eq
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    construction.exitMass k = construction.advanceMass k +
+      ∑ owner, construction.absorbMass k owner := by
+  unfold KiloblockConstruction.exitMass
+    KiloblockConstruction.advanceMass
+    KiloblockConstruction.absorbMass
+    KiloblockConstruction.attemptAdvanceWeight
+    KiloblockConstruction.attemptExitWeight
+  rw [add_assoc, ← Finset.sum_add_distrib]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro owner _
+  cases (construction.attempt k owner).continuation <;> ring
+
+theorem KiloblockConstruction.exitMass_pos
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    0 < construction.exitMass k := by
+  obtain ⟨owner, _, howner⟩ :=
+    (Finset.sum_pos_iff_of_nonneg (fun owner _ =>
+      (construction.buildingBlock k).z.singleton_nonneg owner)).mp
+      (construction.buildingBlock k).nontrivial
+  have habsorb : 0 < construction.absorbMass k owner :=
+    mul_pos howner (construction.attempt k owner).quitWeight_pos
+  rw [construction.exitMass_eq k]
+  have hadvance : 0 ≤ construction.advanceMass k := by
+    unfold KiloblockConstruction.advanceMass
+    apply add_nonneg (construction.buildingBlock k).z.cemetery_nonneg
+    apply Finset.sum_nonneg
+    intro other _
+    apply mul_nonneg
+    · exact (construction.buildingBlock k).z.singleton_nonneg other
+    · unfold KiloblockConstruction.attemptAdvanceWeight
+      split
+      · exact le_rfl
+      · exact sub_nonneg.mpr
+          (construction.attempt k other).quitWeight_lt_one.le
+  have hsumAbsorb : 0 < ∑ other, construction.absorbMass k other :=
+    (Finset.sum_pos_iff_of_nonneg (fun other _ =>
+      mul_nonneg ((construction.buildingBlock k).z.singleton_nonneg other)
+        (construction.attempt k other).quitWeight_pos.le)).mpr
+      ⟨owner, Finset.mem_univ owner, habsorb⟩
+  exact add_pos_of_nonneg_of_pos hadvance hsumAbsorb
+
+def KiloblockConstruction.macroAbsorbProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) : ℝ :=
+  construction.absorbMass k owner / construction.exitMass k
+
+def KiloblockConstruction.macroAdvanceProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) : ℝ :=
+  construction.advanceMass k / construction.exitMass k
+
+theorem KiloblockConstruction.macroProbability_total
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    construction.macroAdvanceProbability k +
+      ∑ owner, construction.macroAbsorbProbability k owner = 1 := by
+  unfold KiloblockConstruction.macroAdvanceProbability
+    KiloblockConstruction.macroAbsorbProbability
+  rw [← Finset.sum_div, ← add_div, ← construction.exitMass_eq k]
+  exact div_self (ne_of_gt (construction.exitMass_pos k))
+
+private theorem KiloblockConstruction.attempt_account
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner who : NormalPlayer table) :
+    construction.attemptExitWeight k owner *
+          (construction.buildingBlock k).w who -
+        construction.attemptAdvanceWeight k owner *
+          construction.point k who -
+        (construction.attempt k owner).quitWeight *
+          NormalMatrix table who owner =
+      (construction.buildingBlock k).w who -
+        (construction.buildingBlock k).wi owner who := by
+  unfold KiloblockConstruction.attemptExitWeight
+    KiloblockConstruction.attemptAdvanceWeight
+  cases hbranch : (construction.attempt k owner).continuation with
+  | restart =>
+      rw [(construction.attempt k owner).payoff who]
+      simp only [hbranch]
+      ring
+  | advance =>
+      rw [(construction.attempt k owner).payoff who]
+      simp only [hbranch]
+      ring
+
+/-! Collapsing all restart attempts in one kiloblock gives the exact macro
+balance between singleton absorption and advancement to `y`. -/
+theorem KiloblockConstruction.exitMass_mul_w
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (who : NormalPlayer table) :
+    construction.exitMass k * (construction.buildingBlock k).w who =
+      construction.advanceMass k * construction.point k who +
+        ∑ owner, construction.absorbMass k owner *
+          NormalMatrix table who owner := by
+  have htotal := (construction.buildingBlock k).z.total
+  have hbalance := (construction.buildingBlock k).balance who
+  have haccount :
+      ∑ owner, (construction.buildingBlock k).z.singleton owner *
+          (construction.attemptExitWeight k owner *
+              (construction.buildingBlock k).w who -
+            construction.attemptAdvanceWeight k owner *
+              construction.point k who -
+            (construction.attempt k owner).quitWeight *
+              NormalMatrix table who owner) =
+        ∑ owner, (construction.buildingBlock k).z.singleton owner *
+          ((construction.buildingBlock k).w who -
+            (construction.buildingBlock k).wi owner who) := by
+    apply Finset.sum_congr rfl
+    intro owner _
+    rw [construction.attempt_account k owner who]
+  unfold KiloblockConstruction.exitMass
+    KiloblockConstruction.advanceMass
+    KiloblockConstruction.absorbMass
+  have haccount' := haccount
+  simp only [mul_sub] at haccount'
+  rw [Finset.sum_sub_distrib, Finset.sum_sub_distrib] at haccount'
+  rw [Finset.sum_sub_distrib] at haccount'
+  rw [add_mul, add_mul, Finset.sum_mul, Finset.sum_mul]
+  simp_rw [mul_assoc]
+  have hsingletonMul :
+      ∑ owner, (construction.buildingBlock k).z.singleton owner *
+          (construction.buildingBlock k).w who =
+        (∑ owner, (construction.buildingBlock k).z.singleton owner) *
+          (construction.buildingBlock k).w who := by
+    rw [Finset.sum_mul]
+  linear_combination haccount' +
+    ((construction.buildingBlock k).w who) * htotal + hbalance + hsingletonMul
+
+theorem KiloblockConstruction.macroAbsorbProbability_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) :
+    0 ≤ construction.macroAbsorbProbability k owner := by
+  exact div_nonneg
+    (mul_nonneg ((construction.buildingBlock k).z.singleton_nonneg owner)
+      (construction.attempt k owner).quitWeight_pos.le)
+    (construction.exitMass_pos k).le
+
+theorem KiloblockConstruction.macroAdvanceProbability_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    0 ≤ construction.macroAdvanceProbability k := by
+  unfold KiloblockConstruction.macroAdvanceProbability
+  apply div_nonneg _ (construction.exitMass_pos k).le
+  unfold KiloblockConstruction.advanceMass
+  apply add_nonneg (construction.buildingBlock k).z.cemetery_nonneg
+  apply Finset.sum_nonneg
+  intro owner _
+  apply mul_nonneg ((construction.buildingBlock k).z.singleton_nonneg owner)
+  unfold KiloblockConstruction.attemptAdvanceWeight
+  split
+  · exact le_rfl
+  · exact sub_nonneg.mpr (construction.attempt k owner).quitWeight_lt_one.le
+
+/-! Exact normalized form of the collapsed kiloblock balance. -/
+theorem KiloblockConstruction.macro_balance
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (who : NormalPlayer table) :
+    (construction.buildingBlock k).w who =
+      construction.macroAdvanceProbability k * construction.point k who +
+        ∑ owner, construction.macroAbsorbProbability k owner *
+          NormalMatrix table who owner := by
+  have hbalance := construction.exitMass_mul_w k who
+  have hne : construction.exitMass k ≠ 0 := ne_of_gt (construction.exitMass_pos k)
+  unfold KiloblockConstruction.macroAdvanceProbability
+    KiloblockConstruction.macroAbsorbProbability
+  simp_rw [div_mul_eq_mul_div]
+  rw [← Finset.sum_div, ← add_div]
+  apply (eq_div_iff hne).2
+  simpa only [mul_comm] using hbalance
+
+/-! The collapsed version of Eq. (14): displacement is bounded by twice
+the actual probability of absorption while crossing the kiloblock. Unlike
+the printed `z`-bound, this remains valid for both branches of (F.1). -/
+theorem KiloblockConstruction.blockDisplacement_le_two_mul_macroAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    dist (construction.point k) (construction.buildingBlock k).w ≤
+      2 * ∑ owner, construction.macroAbsorbProbability k owner := by
+  rw [dist_eq_norm]
+  have hright : 0 ≤ 2 *
+      ∑ owner, construction.macroAbsorbProbability k owner :=
+    mul_nonneg (by norm_num) (Finset.sum_nonneg fun owner _ =>
+      construction.macroAbsorbProbability_nonneg k owner)
+  apply (pi_norm_le_iff_of_nonneg hright).2
+  intro who
+  rw [Real.norm_eq_abs, Pi.sub_apply]
+  have htotal := construction.macroProbability_total k
+  have hbalance := construction.macro_balance k who
+  have hidentity : construction.point k who -
+      (construction.buildingBlock k).w who =
+        ∑ owner, construction.macroAbsorbProbability k owner *
+          (construction.point k who - NormalMatrix table who owner) := by
+    calc
+      construction.point k who - (construction.buildingBlock k).w who =
+          construction.point k who -
+            (construction.macroAdvanceProbability k * construction.point k who +
+              ∑ owner, construction.macroAbsorbProbability k owner *
+                NormalMatrix table who owner) := by rw [hbalance]
+      _ = (∑ owner, construction.macroAbsorbProbability k owner) *
+            construction.point k who -
+          ∑ owner, construction.macroAbsorbProbability k owner *
+            NormalMatrix table who owner := by
+          have hcoefficient :
+              1 - construction.macroAdvanceProbability k =
+                ∑ owner, construction.macroAbsorbProbability k owner := by
+            linarith
+          rw [← hcoefficient]
+          ring
+      _ = _ := by
+        rw [Finset.sum_mul, ← Finset.sum_sub_distrib]
+        apply Finset.sum_congr rfl
+        intro owner _
+        ring
+  rw [hidentity]
+  calc
+    |∑ owner, construction.macroAbsorbProbability k owner *
+        (construction.point k who - NormalMatrix table who owner)| ≤
+        ∑ owner, |construction.macroAbsorbProbability k owner *
+          (construction.point k who - NormalMatrix table who owner)| :=
+      Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ owner, construction.macroAbsorbProbability k owner * 2 := by
+      apply Finset.sum_le_sum
+      intro owner _
+      rw [abs_mul, abs_of_nonneg
+        (construction.macroAbsorbProbability_nonneg k owner)]
+      apply mul_le_mul_of_nonneg_left _
+        (construction.macroAbsorbProbability_nonneg k owner)
+      apply (abs_sub _ _).trans
+      have hpoint := abs_le_one_of_mem_D construction.normalMatrix_bounded
+        (construction.point_boundary k).1 who
+      have hmatrix := construction.normalMatrix_bounded who owner
+      linarith
+    _ = 2 * ∑ owner, construction.macroAbsorbProbability k owner := by
+      rw [← Finset.sum_mul]
+      ring
+
+def KiloblockConstruction.totalMacroAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) : ℝ :=
+  ∑ k, ∑ owner, construction.macroAbsorbProbability k owner
+
+theorem KiloblockConstruction.half_displacementThreshold_lt_totalMacroAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    KiloblockDisplacementThreshold table ε / 2 <
+      construction.totalMacroAbsorption := by
+  have hbound : KiloblockDisplacement construction.point
+      construction.buildingBlock ≤ 2 * construction.totalMacroAbsorption := by
+    unfold KiloblockDisplacement KiloblockConstruction.totalMacroAbsorption
+    calc
+      ∑ k, dist (construction.point k) (construction.buildingBlock k).w ≤
+          ∑ k, 2 * ∑ owner,
+            construction.macroAbsorbProbability k owner := by
+        apply Finset.sum_le_sum
+        intro k _
+        exact construction.blockDisplacement_le_two_mul_macroAbsorption k
+      _ = 2 * ∑ k, ∑ owner,
+          construction.macroAbsorbProbability k owner := by
+        rw [Finset.mul_sum]
+  linarith [construction.displacement_large]
+
+def KiloblockConstruction.macroAbsorptionProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) : ℝ :=
+  ∑ owner, construction.macroAbsorbProbability k owner
+
+theorem KiloblockConstruction.macroAbsorptionProbability_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    0 ≤ construction.macroAbsorptionProbability k :=
+  Finset.sum_nonneg fun owner _ =>
+    construction.macroAbsorbProbability_nonneg k owner
+
+theorem KiloblockConstruction.macroAbsorptionProbability_le_one
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    construction.macroAbsorptionProbability k ≤ 1 := by
+  have htotal := construction.macroProbability_total k
+  have hadvance := construction.macroAdvanceProbability_nonneg k
+  unfold KiloblockConstruction.macroAbsorptionProbability
+  linarith
+
+theorem KiloblockConstruction.macroAdvanceProbability_eq_one_sub
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    construction.macroAdvanceProbability k =
+      1 - construction.macroAbsorptionProbability k := by
+  have htotal := construction.macroProbability_total k
+  unfold KiloblockConstruction.macroAbsorptionProbability
+  linarith
+
+def KiloblockConstruction.macroSurvivalProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) : ℝ :=
+  ∏ k, construction.macroAdvanceProbability k
+
+theorem KiloblockConstruction.two_le_normalPlayer_card
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    2 ≤ Fintype.card (NormalPlayer table) := by
+  let k : Fin (construction.blockCount + 1) := ⟨0, by omega⟩
+  obtain ⟨owner, _, howner⟩ :=
+    (Finset.sum_pos_iff_of_nonneg (fun owner _ =>
+      (construction.buildingBlock k).z.singleton_nonneg owner)).mp
+      (construction.buildingBlock k).nontrivial
+  obtain ⟨who, hnegative⟩ := construction.column_negative owner
+  have hne : who ≠ owner := by
+    intro heq
+    subst who
+    have hzero : NormalMatrix table owner owner = 0 :=
+      construction.soloExitNormalized owner.1
+    linarith [construction.negativeMargin_pos]
+  by_contra hcard
+  have hcardOne : Fintype.card (NormalPlayer table) ≤ 1 := by omega
+  exact hne ((Fintype.card_le_one_iff.mp hcardOne) who owner)
+
+theorem KiloblockConstruction.one_le_choose_normalPlayer_two
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    1 ≤ Nat.choose (Fintype.card (NormalPlayer table)) 2 := by
+  have hpositive := Nat.choose_pos construction.two_le_normalPlayer_card
+  omega
+
+theorem KiloblockConstruction.inv_epsilon_lt_totalMacroAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    ε⁻¹ < construction.totalMacroAbsorption := by
+  have hlarge := construction.half_displacementThreshold_lt_totalMacroAbsorption
+  have hchoose : (1 : ℝ) ≤
+      (Nat.choose (Fintype.card (NormalPlayer table)) 2 : ℝ) := by
+    exact_mod_cast construction.one_le_choose_normalPlayer_two
+  have hε := construction.epsilon_pos
+  have hthreshold : ε⁻¹ < KiloblockDisplacementThreshold table ε / 2 := by
+    unfold KiloblockDisplacementThreshold
+    rw [inv_eq_one_div]
+    apply (div_lt_iff₀ hε).2
+    have hεsq : 0 < ε ^ 2 := sq_pos_of_pos hε
+    field_simp [ne_of_gt hε]
+    nlinarith [mul_pos hε hε]
+  exact hthreshold.trans hlarge
+
+theorem KiloblockConstruction.macroSurvival_mul_one_add_total_le_one
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    construction.macroSurvivalProbability *
+      (1 + construction.totalMacroAbsorption) ≤ 1 := by
+  let charge : ℕ → ℝ := fun j =>
+    if hj : j < construction.blockCount + 1 then
+      construction.macroAbsorptionProbability ⟨j, hj⟩
+    else 0
+  have hcharge0 : ∀ j, 0 ≤ charge j := by
+    intro j
+    simp only [charge]
+    split
+    · exact construction.macroAbsorptionProbability_nonneg _
+    · exact le_rfl
+  have hcharge1 : ∀ j, charge j ≤ 1 := by
+    intro j
+    simp only [charge]
+    split
+    · exact construction.macroAbsorptionProbability_le_one _
+    · exact zero_le_one
+  have hmain := Math.prod_one_sub_mul_one_add_sum_range_le_one
+    charge hcharge0 hcharge1 0 (construction.blockCount + 1)
+  have hsum : (∑ j ∈ Finset.range (construction.blockCount + 1), charge j) =
+      construction.totalMacroAbsorption := by
+    rw [← Fin.sum_univ_eq_sum_range]
+    unfold KiloblockConstruction.totalMacroAbsorption
+    apply Finset.sum_congr rfl
+    intro k _
+    rw [show charge k.1 = construction.macroAbsorptionProbability k by
+      simp only [charge, dif_pos k.isLt]]
+    rfl
+  have hprod : (∏ j ∈ Finset.range (construction.blockCount + 1),
+      (1 - charge j)) = construction.macroSurvivalProbability := by
+    rw [← Fin.prod_univ_eq_prod_range]
+    unfold KiloblockConstruction.macroSurvivalProbability
+    apply Finset.prod_congr rfl
+    intro k _
+    simp only [charge, dif_pos k.isLt]
+    exact (construction.macroAdvanceProbability_eq_one_sub k).symm
+  simp only [zero_add] at hmain
+  rw [hsum, hprod] at hmain
+  exact hmain
+
+theorem KiloblockConstruction.inv_epsilon_sq_lt_totalMacroAbsorption
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    (ε ^ 2)⁻¹ < construction.totalMacroAbsorption := by
+  have hlarge := construction.half_displacementThreshold_lt_totalMacroAbsorption
+  have hchoose : (1 : ℝ) ≤
+      (Nat.choose (Fintype.card (NormalPlayer table)) 2 : ℝ) := by
+    exact_mod_cast construction.one_le_choose_normalPlayer_two
+  have hεsq : 0 < ε ^ 2 := sq_pos_of_pos construction.epsilon_pos
+  have hnumerator : (1 : ℝ) <
+      (Nat.choose (Fintype.card (NormalPlayer table)) 2 : ℝ) * (1 + ε) := by
+    nlinarith [construction.epsilon_pos]
+  have hthreshold : (ε ^ 2)⁻¹ <
+      KiloblockDisplacementThreshold table ε / 2 := by
+    calc
+      (ε ^ 2)⁻¹ = (1 : ℝ) / (ε ^ 2) := by simp
+      _ < (Nat.choose (Fintype.card (NormalPlayer table)) 2 : ℝ) *
+          (1 + ε) / (ε ^ 2) :=
+        (div_lt_div_iff_of_pos_right hεsq).2 hnumerator
+      _ = KiloblockDisplacementThreshold table ε / 2 := by
+        unfold KiloblockDisplacementThreshold
+        ring
+  exact hthreshold.trans hlarge
+
+/-! The corrected global estimate. The source applies (14) to the raw type
+mass `z`; the branch-sensitive construction instead applies the collapsed
+identity above to actual macro hazards. The original `1/ε²` displacement
+budget actually gives the stronger survival bound `ε²`. -/
+theorem KiloblockConstruction.macroSurvivalProbability_lt_epsilon_sq
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    construction.macroSurvivalProbability < ε ^ 2 := by
+  have hmain := construction.macroSurvival_mul_one_add_total_le_one
+  have hfactor : 0 < 1 + construction.totalMacroAbsorption := by
+    have hinv : 0 < (ε ^ 2)⁻¹ := inv_pos.mpr
+      (sq_pos_of_pos construction.epsilon_pos)
+    linarith [construction.inv_epsilon_sq_lt_totalMacroAbsorption]
+  have hepsilonFactor :
+      1 < ε ^ 2 * (1 + construction.totalMacroAbsorption) := by
+    have hmul : 1 < ε ^ 2 * construction.totalMacroAbsorption := by
+      rw [← inv_mul_cancel₀ (ne_of_gt (sq_pos_of_pos construction.epsilon_pos))]
+      simpa only [mul_comm] using
+        mul_lt_mul_of_pos_left
+          construction.inv_epsilon_sq_lt_totalMacroAbsorption
+          (sq_pos_of_pos construction.epsilon_pos)
+    nlinarith [sq_pos_of_pos construction.epsilon_pos]
+  by_contra hnot
+  have hεle : ε ^ 2 ≤ construction.macroSurvivalProbability := le_of_not_gt hnot
+  have := mul_le_mul_of_nonneg_right hεle hfactor.le
+  linarith
+
+theorem KiloblockConstruction.macroSurvivalProbability_lt_epsilon
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    construction.macroSurvivalProbability < ε := by
+  exact construction.macroSurvivalProbability_lt_epsilon_sq.trans_le
+    (by nlinarith [construction.epsilon_pos, construction.epsilon_lt_one])
+
+def KiloblockConstruction.macroAdvanceAt
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (j : ℕ) : ℝ :=
+  if hj : j < construction.blockCount + 1 then
+    construction.macroAdvanceProbability ⟨j, hj⟩
+  else 1
+
+def KiloblockConstruction.macroAbsorbAt
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (j : ℕ)
+    (owner : NormalPlayer table) : ℝ :=
+  if hj : j < construction.blockCount + 1 then
+    construction.macroAbsorbProbability ⟨j, hj⟩ owner
+  else 0
+
+/-! Survival after crossing blocks `fuel-1,...,0` in the source's reverse
+order. -/
+def KiloblockConstruction.macroSurvivalFuel
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) : ℕ → ℝ
+  | 0 => 1
+  | fuel + 1 => construction.macroAdvanceAt fuel *
+      construction.macroSurvivalFuel fuel
+
+/-! Total probability that `owner` absorbs while crossing the first `fuel`
+blocks, with block `fuel-1` crossed first. -/
+def KiloblockConstruction.macroOwnerMassFuel
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (owner : NormalPlayer table) : ℕ → ℝ
+  | 0 => 0
+  | fuel + 1 => construction.macroAbsorbAt fuel owner +
+      construction.macroAdvanceAt fuel *
+        construction.macroOwnerMassFuel owner fuel
+
+def KiloblockConstruction.macroOtherMassFuel
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) : ℕ → ℝ
+  | 0 => 0
+  | fuel + 1 =>
+      (∑ owner ∈ Finset.univ.erase excluded,
+        construction.macroAbsorbAt fuel owner) +
+      construction.macroAdvanceAt fuel *
+        construction.macroOtherMassFuel excluded fuel
+
+theorem KiloblockConstruction.macroAdvanceAt_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (j : ℕ) :
+    0 ≤ construction.macroAdvanceAt j := by
+  unfold KiloblockConstruction.macroAdvanceAt
+  split
+  · exact construction.macroAdvanceProbability_nonneg _
+  · exact zero_le_one
+
+theorem KiloblockConstruction.macroAbsorbAt_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (j : ℕ)
+    (owner : NormalPlayer table) :
+    0 ≤ construction.macroAbsorbAt j owner := by
+  unfold KiloblockConstruction.macroAbsorbAt
+  split
+  · exact construction.macroAbsorbProbability_nonneg _ owner
+  · exact le_rfl
+
+theorem KiloblockConstruction.macroSurvivalFuel_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    ∀ fuel, 0 ≤ construction.macroSurvivalFuel fuel
+  | 0 => by simp [KiloblockConstruction.macroSurvivalFuel]
+  | fuel + 1 => by
+      rw [KiloblockConstruction.macroSurvivalFuel]
+      exact mul_nonneg (construction.macroAdvanceAt_nonneg fuel)
+        (construction.macroSurvivalFuel_nonneg fuel)
+
+theorem KiloblockConstruction.macroOwnerMassFuel_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (owner : NormalPlayer table) :
+    ∀ fuel, 0 ≤ construction.macroOwnerMassFuel owner fuel
+  | 0 => by simp [KiloblockConstruction.macroOwnerMassFuel]
+  | fuel + 1 => by
+      rw [KiloblockConstruction.macroOwnerMassFuel]
+      exact add_nonneg (construction.macroAbsorbAt_nonneg fuel owner)
+        (mul_nonneg (construction.macroAdvanceAt_nonneg fuel)
+          (construction.macroOwnerMassFuel_nonneg owner fuel))
+
+theorem KiloblockConstruction.macroOtherMassFuel_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    ∀ fuel, 0 ≤ construction.macroOtherMassFuel excluded fuel
+  | 0 => by simp [KiloblockConstruction.macroOtherMassFuel]
+  | fuel + 1 => by
+      rw [KiloblockConstruction.macroOtherMassFuel]
+      exact add_nonneg
+        (Finset.sum_nonneg fun owner _ =>
+          construction.macroAbsorbAt_nonneg fuel owner)
+        (mul_nonneg (construction.macroAdvanceAt_nonneg fuel)
+          (construction.macroOtherMassFuel_nonneg excluded fuel))
+
+theorem KiloblockConstruction.macroAt_total
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (j : ℕ) (hj : j < construction.blockCount + 1) :
+    construction.macroAdvanceAt j +
+      ∑ owner, construction.macroAbsorbAt j owner = 1 := by
+  simp only [KiloblockConstruction.macroAdvanceAt,
+    KiloblockConstruction.macroAbsorbAt, dif_pos hj]
+  exact construction.macroProbability_total ⟨j, hj⟩
+
+theorem KiloblockConstruction.macroMassFuel_total
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    ∀ fuel, fuel ≤ construction.blockCount + 1 →
+      construction.macroSurvivalFuel fuel +
+        ∑ owner, construction.macroOwnerMassFuel owner fuel = 1
+  | 0, _ => by simp [KiloblockConstruction.macroSurvivalFuel,
+      KiloblockConstruction.macroOwnerMassFuel]
+  | fuel + 1, hfuel => by
+      have hprevious := construction.macroMassFuel_total fuel (by omega)
+      have hlocal := construction.macroAt_total fuel (by omega)
+      rw [KiloblockConstruction.macroSurvivalFuel]
+      simp_rw [KiloblockConstruction.macroOwnerMassFuel]
+      rw [Finset.sum_add_distrib, ← Finset.mul_sum]
+      calc
+        construction.macroAdvanceAt fuel * construction.macroSurvivalFuel fuel +
+              ((∑ owner, construction.macroAbsorbAt fuel owner) +
+                construction.macroAdvanceAt fuel *
+                  ∑ owner, construction.macroOwnerMassFuel owner fuel) =
+            construction.macroAdvanceAt fuel *
+                (construction.macroSurvivalFuel fuel +
+                  ∑ owner, construction.macroOwnerMassFuel owner fuel) +
+              ∑ owner, construction.macroAbsorbAt fuel owner := by ring
+        _ = construction.macroAdvanceAt fuel +
+            ∑ owner, construction.macroAbsorbAt fuel owner := by
+          rw [hprevious, mul_one]
+        _ = 1 := hlocal
+
+theorem KiloblockConstruction.macroOwner_add_otherMassFuel
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    ∀ fuel, construction.macroOwnerMassFuel excluded fuel +
+        construction.macroOtherMassFuel excluded fuel =
+      ∑ owner, construction.macroOwnerMassFuel owner fuel
+  | 0 => by simp [KiloblockConstruction.macroOwnerMassFuel,
+      KiloblockConstruction.macroOtherMassFuel]
+  | fuel + 1 => by
+      rw [KiloblockConstruction.macroOwnerMassFuel,
+        KiloblockConstruction.macroOtherMassFuel]
+      have hdecompose :
+          construction.macroAbsorbAt fuel excluded +
+              ∑ owner ∈ Finset.univ.erase excluded,
+                construction.macroAbsorbAt fuel owner =
+            ∑ owner, construction.macroAbsorbAt fuel owner := by
+        rw [← Finset.sum_erase_add _ _ (Finset.mem_univ excluded)]
+        ring
+      simp_rw [KiloblockConstruction.macroOwnerMassFuel]
+      rw [Finset.sum_add_distrib, ← Finset.mul_sum]
+      rw [← construction.macroOwner_add_otherMassFuel excluded fuel]
+      linear_combination hdecompose
+
+theorem KiloblockConstruction.macroSurvivalFuel_full
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    construction.macroSurvivalFuel (construction.blockCount + 1) =
+      construction.macroSurvivalProbability := by
+  have hprefix : ∀ fuel, fuel ≤ construction.blockCount + 1 →
+      construction.macroSurvivalFuel fuel =
+        ∏ j ∈ Finset.range fuel, construction.macroAdvanceAt j := by
+    intro fuel hfuel
+    induction fuel with
+    | zero => simp [KiloblockConstruction.macroSurvivalFuel]
+    | succ fuel ih =>
+        rw [KiloblockConstruction.macroSurvivalFuel, Finset.prod_range_succ]
+        rw [ih (by omega)]
+        ring
+  calc
+    construction.macroSurvivalFuel (construction.blockCount + 1) =
+        ∏ j ∈ Finset.range (construction.blockCount + 1),
+          construction.macroAdvanceAt j := hprefix _ le_rfl
+    _ = ∏ k : Fin (construction.blockCount + 1),
+        construction.macroAdvanceAt k.1 := by
+      rw [Fin.prod_univ_eq_prod_range]
+    _ = construction.macroSurvivalProbability := by
+      unfold KiloblockConstruction.macroSurvivalProbability
+      apply Finset.prod_congr rfl
+      intro k _
+      rw [show construction.macroAdvanceAt k.1 =
+          construction.macroAdvanceProbability k by
+        simp only [KiloblockConstruction.macroAdvanceAt, dif_pos k.isLt]]
 
 /-! The coordinate error in (A.2'') between the endpoint of block `j` and
 the next point in the chain. It is zero outside the actual chain, which lets
