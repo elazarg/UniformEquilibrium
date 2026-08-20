@@ -346,7 +346,14 @@ cycle gain.
 make terminal-semantic debt an exact affine section.  Literal profile spines
 instantiate the chain.  On a positive-debt return, strict survival loss forces
 a reached positive root Nash defect; zero intervening defects force every
-survival factor to be one.
+survival factor to be one. The cap-to-literal conversion is quantified by
+`quittingRootCapDefect_sub_quitOptionBudget_le_literalDefect`: after
+subtracting opponent survival times the player's Quit probability times tail
+debt, the cap defect is a lower bound for the legal best-endpoint defect.
+Consequently
+`exists_actualRowGain_pos_or_capDefect_le_quitOptionBudget_of_return`
+gives an exact frontier alternative between an actual reached behavioral gain
+and domination by this option budget.
 
 `quittingFiniteDynamicDebt_eq_compList_apply` and
 `quittingFiniteDynamicDebt_eq_terminalDebt_iff`

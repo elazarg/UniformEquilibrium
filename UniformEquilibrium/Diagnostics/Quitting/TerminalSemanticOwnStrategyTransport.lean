@@ -24,10 +24,11 @@ Nash defect of the root plus joint survival times the tail debt.  No Nash
 hypothesis is used.
 
 The opponent-aware surcharge identities localize best-response-envelope
-drift as hidden continuation-option debt and state the
-sharp residual/reserve condition for a paid inequality.  They do not prove
-that arbitrary opponent changes satisfy that condition, and hence are not a
-closure of the opponent-changing frontier branch.
+drift as hidden continuation-option debt. The surcharge is at most opponent
+survival times tail debt, yielding a sharp lower bound on the literal defect
+in terms of the cap defect and the marked player's Quit probability. This
+closes the conversion whenever the cap defect exceeds that explicit budget;
+it does not prove that every returned cap-defect charge does so.
 -/
 
 noncomputable section
@@ -97,6 +98,74 @@ theorem quittingRootContinuationOptionSurcharge_nonneg_of_mem_carrier
   rw [hquit]
   exact sub_nonneg.mpr (max_le (le_max_left _ _) (hcontinue.trans (le_max_right _ _)))
 
+/-- Raising the literal continuation coordinate to its behavioral cap raises
+the pure-Continue endpoint by opponent survival times terminal debt. -/
+theorem quittingRootContinuePayoff_cap_eq_literal_add_opponentMass_mul_debt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool) (who : ι) :
+    quittingRootContinuePayoff reward pair.2 root who =
+      quittingRootContinuePayoff reward pair.1 root who +
+        quittingRootOpponentContinueMass root who *
+          quittingTerminalSemanticDebt pair who := by
+  have hcongr : quittingRootContinuePayoff reward
+      (Function.update pair.1 who (pair.2 who)) root who =
+        quittingRootContinuePayoff reward pair.2 root who := by
+    apply quittingRootExpectedPayoff_continuation_congr
+    simp
+  have hcoordinate : pair.2 who =
+      pair.1 who + quittingTerminalSemanticDebt pair who := by
+    unfold quittingTerminalSemanticDebt
+    ring
+  rw [← hcongr, hcoordinate, quittingRootContinuePayoff_update_add]
+
+/-- Exact max-increment formula for the continuation-option surcharge. -/
+theorem quittingRootContinuationOptionSurcharge_eq_max_increment
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool) (who : ι) :
+    quittingRootContinuationOptionSurcharge reward pair root who =
+      max (quittingRootQuitPayoff reward pair.1 root who)
+          (quittingRootContinuePayoff reward pair.1 root who +
+            quittingRootOpponentContinueMass root who *
+              quittingTerminalSemanticDebt pair who) -
+        max (quittingRootQuitPayoff reward pair.1 root who)
+          (quittingRootContinuePayoff reward pair.1 root who) := by
+  have hquit := quittingRootQuitPayoff_continuation_invariant
+    reward pair.1 pair.2 root who
+  unfold quittingRootContinuationOptionSurcharge
+  rw [← hquit,
+    quittingRootContinuePayoff_cap_eq_literal_add_opponentMass_mul_debt]
+
+/-- The option surcharge is at most opponent survival times tail debt. This
+is the sharp one-stage budget for converting a cap defect into a literal
+best-endpoint defect. -/
+theorem quittingRootContinuationOptionSurcharge_le_opponentMass_mul_debt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool) (who : ι)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
+    quittingRootContinuationOptionSurcharge reward pair root who ≤
+      quittingRootOpponentContinueMass root who *
+        quittingTerminalSemanticDebt pair who := by
+  rw [quittingRootContinuationOptionSurcharge_eq_max_increment]
+  have hdebt : 0 ≤ quittingTerminalSemanticDebt pair who :=
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair who
+  have hmass : 0 ≤ quittingRootOpponentContinueMass root who :=
+    quittingRootOpponentContinueMass_nonneg root who
+  have hdelta : 0 ≤ quittingRootOpponentContinueMass root who *
+      quittingTerminalSemanticDebt pair who := mul_nonneg hmass hdebt
+  rw [sub_le_iff_le_add]
+  apply max_le
+  · have hfloor := le_max_left
+      (quittingRootQuitPayoff reward pair.1 root who)
+      (quittingRootContinuePayoff reward pair.1 root who)
+    linarith
+  · have haffine := le_max_right
+      (quittingRootQuitPayoff reward pair.1 root who)
+      (quittingRootContinuePayoff reward pair.1 root who)
+    linarith
+
 /-- Exact literal-error plus hidden-surcharge decomposition.  This is a
 localization of the opponent-change obstruction, not a bound on it. -/
 theorem quittingTerminalSemanticDebt_prefix_eq_literalDefect_add_surcharge
@@ -122,6 +191,144 @@ theorem quittingTerminalSemanticDebt_prefix_eq_literalDefect_add_surcharge
   dsimp only
   rw [hquit, hcontinue]
   ring
+
+/-- **Exact arbitrary-root cap decomposition.** Prefix debt is the root's
+coordinate Nash defect against the tail cap plus joint Continue mass times
+the tail debt. No Nash hypothesis is used. -/
+theorem quittingTerminalSemanticDebt_prefix_eq_capDefect_add_continueMass_mul
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool) (who : ι) :
+    quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPrefix reward root pair) who =
+      quittingRootCoordinateNashDefect reward pair.2 root who +
+        quittingStationaryContinueMass root *
+          quittingTerminalSemanticDebt pair who := by
+  have hquit : quittingRootQuitPayoff reward pair.1 root who =
+      quittingRootQuitPayoff reward pair.2 root who :=
+    quittingRootQuitPayoff_continuation_invariant
+      reward pair.1 pair.2 root who
+  have hcontinue :
+      quittingRootContinuePayoff reward
+          (Function.update pair.1 who (pair.2 who)) root who =
+        quittingRootContinuePayoff reward pair.2 root who := by
+    apply quittingRootExpectedPayoff_continuation_congr
+    simp
+  have hsuccessor := quittingRootSuccessorPayoff_sub_eq_continueMass_mul
+    reward pair.2 pair.1 root who
+  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPrefix
+    quittingRootCoordinateNashDefect
+  dsimp only
+  rw [hquit, hcontinue]
+  linarith
+
+/-- Exact reconciliation of the literal-defect and cap-defect accounts. -/
+theorem quittingRootLiteralDefect_add_surcharge_eq_capDefect_add_liveDebt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool) (who : ι) :
+    quittingRootCoordinateNashDefect reward pair.1 root who +
+        quittingRootContinuationOptionSurcharge reward pair root who =
+      quittingRootCoordinateNashDefect reward pair.2 root who +
+        quittingStationaryContinueMass root *
+          quittingTerminalSemanticDebt pair who := by
+  have hliteral := quittingTerminalSemanticDebt_prefix_eq_literalDefect_add_surcharge
+    reward pair root who
+  have hcap := quittingTerminalSemanticDebt_prefix_eq_capDefect_add_continueMass_mul
+    reward pair root who
+  linarith
+
+/-- A cap defect controls the literal best-endpoint defect after subtracting
+the precise own-Quit option budget. -/
+theorem quittingRootCapDefect_sub_quitOptionBudget_le_literalDefect
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool) (who : ι)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
+    quittingRootCoordinateNashDefect reward pair.2 root who -
+        quittingRootOpponentContinueMass root who *
+          (root who true).toReal * quittingTerminalSemanticDebt pair who ≤
+      quittingRootCoordinateNashDefect reward pair.1 root who := by
+  have hid := quittingRootLiteralDefect_add_surcharge_eq_capDefect_add_liveDebt
+    reward pair root who
+  have hsurcharge :=
+    quittingRootContinuationOptionSurcharge_le_opponentMass_mul_debt
+      reward pair root who hpair
+  have hfactor := quittingStationaryContinueMass_eq_forcedContinue_mul_own
+    root who
+  change quittingStationaryContinueMass root =
+    quittingRootOpponentContinueMass root who * (root who false).toReal at hfactor
+  have hprobability := quittingRoot_continueProbability_add_quitProbability
+    root who
+  have hquitProbability : 1 - (root who false).toReal =
+      (root who true).toReal := by
+    linarith
+  have hbudget :
+      quittingRootOpponentContinueMass root who *
+          quittingTerminalSemanticDebt pair who -
+        quittingStationaryContinueMass root *
+          quittingTerminalSemanticDebt pair who =
+      quittingRootOpponentContinueMass root who * (root who true).toReal *
+        quittingTerminalSemanticDebt pair who := by
+    rw [hfactor]
+    rw [show quittingRootOpponentContinueMass root who *
+          quittingTerminalSemanticDebt pair who -
+        (quittingRootOpponentContinueMass root who * (root who false).toReal) *
+          quittingTerminalSemanticDebt pair who =
+        quittingRootOpponentContinueMass root who *
+          quittingTerminalSemanticDebt pair who *
+            (1 - (root who false).toReal) by ring,
+      hquitProbability]
+    ring
+  rw [← hbudget]
+  linarith
+
+/-- A cap defect exceeding the own-Quit option budget is already a positive
+literal best-endpoint defect. -/
+theorem quittingRootLiteralDefect_pos_of_capDefect_gt_quitOptionBudget
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (root : ι → PMF Bool) (who : ι)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hstrict : quittingRootOpponentContinueMass root who *
+        (root who true).toReal * quittingTerminalSemanticDebt pair who <
+      quittingRootCoordinateNashDefect reward pair.2 root who) :
+    0 < quittingRootCoordinateNashDefect reward pair.1 root who := by
+  have hlower := quittingRootCapDefect_sub_quitOptionBudget_le_literalDefect
+    reward pair root who hpair
+  linarith
+
+/-- At a reached literal row, the cap-defect criterion gives an actual
+positive unilateral behavioral gain by switching to the better pure
+endpoint. -/
+theorem quittingLiteralActualRowBestEndpointGain_pos_of_capDefect_gt_quitOptionBudget
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (who : ι) (stage : ℕ)
+    (hlive : 0 < quittingLiveMass reward profile stage)
+    (hstrict :
+      let pair := quittingLiteralActualRowTail reward profile stage
+      let root := quittingLiteralActualRowRoot reward profile stage
+      quittingRootOpponentContinueMass root who * (root who true).toReal *
+          quittingTerminalSemanticDebt pair who <
+        quittingRootCoordinateNashDefect reward pair.2 root who) :
+    0 < quittingLiteralActualRowBestEndpointGain reward profile who stage := by
+  let pair := quittingLiteralActualRowTail reward profile stage
+  let root := quittingLiteralActualRowRoot reward profile stage
+  have hpair : pair ∈ quittingTerminalSemanticCarrier reward := by
+    exact quittingTerminalSemanticPair_mem_carrier reward _
+  have hliteral : 0 <
+      quittingRootCoordinateNashDefect reward pair.1 root who :=
+    quittingRootLiteralDefect_pos_of_capDefect_gt_quitOptionBudget
+      reward pair root who hpair hstrict
+  have hgain :=
+    quittingTerminalPayoff_stageBestEndpointDeviation_sub_eq_liveMass_mul_defect
+      reward profile who stage
+  change quittingLiteralActualRowBestEndpointGain reward profile who stage =
+    quittingLiveMass reward profile stage *
+      quittingRootCoordinateNashDefect reward pair.1 root who at hgain
+  rw [hgain]
+  exact mul_pos hlive hliteral
 
 /-- For the debt potential and the displayed row-error account, the residual
 reserve hypothesis is exactly equivalent to the desired paid-transport
@@ -322,37 +529,6 @@ theorem quittingTerminalSemanticDebt_mem_Icc_zero_two_mul
     have hbestUpper := le_of_abs_le hbest
     have hpayoffLower := neg_le_of_abs_le hpayoff
     linarith
-
-/-- **Exact arbitrary-root cap decomposition.**  Prefix debt is the root's
-coordinate Nash defect against the tail cap plus joint Continue mass times
-the tail debt.  This is the exact root-error plus tail-error account used by
-paid root-or-tail transport. -/
-theorem quittingTerminalSemanticDebt_prefix_eq_capDefect_add_continueMass_mul
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (pair : QuittingTerminalSemanticPair ι)
-    (root : ι → PMF Bool) (who : ι) :
-    quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPrefix reward root pair) who =
-      quittingRootCoordinateNashDefect reward pair.2 root who +
-        quittingStationaryContinueMass root *
-          quittingTerminalSemanticDebt pair who := by
-  have hquit : quittingRootQuitPayoff reward pair.1 root who =
-      quittingRootQuitPayoff reward pair.2 root who :=
-    quittingRootQuitPayoff_continuation_invariant
-      reward pair.1 pair.2 root who
-  have hcontinue :
-      quittingRootContinuePayoff reward
-          (Function.update pair.1 who (pair.2 who)) root who =
-        quittingRootContinuePayoff reward pair.2 root who := by
-    apply quittingRootExpectedPayoff_continuation_congr
-    simp
-  have hsuccessor := quittingRootSuccessorPayoff_sub_eq_continueMass_mul
-    reward pair.2 pair.1 root who
-  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPrefix
-    quittingRootCoordinateNashDefect
-  dsimp only
-  rw [hquit, hcontinue]
-  linarith
 
 /-- At a global minimum of total semantic debt, every root pays for its
 absorption mass through total cap Nash defect. -/
