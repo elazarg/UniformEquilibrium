@@ -3830,6 +3830,320 @@ theorem lemma10 (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
       (E.Q \ (WSet G ∪ EscapeBand G ε)) core hcoreClosed hcoreSubset
       houtsideForward hcoreForward houtsideCore hx
 
+/-- A bounded sequence of affine moves reaches the first face hit by a line segment. -/
+private theorem exists_affineBoundaryPath {N : Type} [Fintype N] [Nonempty N]
+    (v u x : N → ℝ) {δ : ℝ} (hδ0 : 0 < δ)
+    (hx : ∀ n, v n ≤ x n) (hfallStrict : ∀ n, u n < v n → v n < x n)
+    (hfall : ∃ n, u n < v n) :
+    ∃ (k : ℕ) (z : Fin (k + 1) → N → ℝ)
+      (q : Fin k → Set.Icc (0 : ℝ) δ),
+      z 0 = x ∧
+      (∀ i, z i.succ = fun n => (q i : ℝ) * u n + (1 - (q i : ℝ)) * z i.castSucc n) ∧
+      (∀ i n, v n ≤ z i n) ∧
+      (∀ i n, z i n ≤ max (x n) (u n)) ∧
+      ∃ n, z ⟨k, Nat.lt_succ_self k⟩ n = v n ∧ u n < v n := by
+  classical
+  let falling : Finset N := Finset.univ.filter fun n => u n < v n
+  have hfalling : falling.Nonempty := by
+    rcases hfall with ⟨n, hn⟩
+    exact ⟨n, Finset.mem_filter.mpr ⟨Finset.mem_univ n, hn⟩⟩
+  let ratio (n : N) : ℝ := (x n - v n) / (x n - u n)
+  have hratioPositive : ∀ n ∈ falling, 0 < ratio n := by
+    intro n hn
+    have hunv : u n < v n := (Finset.mem_filter.mp hn).2
+    exact div_pos (sub_pos.mpr (hfallStrict n hunv))
+      (sub_pos.mpr (hunv.trans (hfallStrict n hunv)))
+  let ratios : Finset ℝ := falling.image ratio
+  have hratios : ratios.Nonempty := hfalling.image ratio
+  let lam : ℝ := ratios.min' hratios
+  have hlammem : lam ∈ ratios := ratios.min'_mem hratios
+  rcases Finset.mem_image.mp hlammem with ⟨n, hnfalling, hnlam⟩
+  have hnfall : u n < v n := (Finset.mem_filter.mp hnfalling).2
+  have hlam0 : 0 < lam := by
+    apply lt_of_lt_of_le (hratioPositive n hnfalling)
+    rw [hnlam]
+  have hlam1 : lam < 1 := by
+    rw [← hnlam]
+    apply (div_lt_one (sub_pos.mpr (hnfall.trans (hfallStrict n hnfall)))).2
+    linarith
+  have hlamratio : ∀ m ∈ falling, lam ≤ ratio m := by
+    intro m hm
+    exact ratios.min'_le (ratio m) (Finset.mem_image.mpr ⟨m, hm, rfl⟩)
+  have hinside : ∀ t ∈ Set.Icc (0 : ℝ) lam, ∀ m,
+      v m ≤ t * u m + (1 - t) * x m := by
+    intro t ht m
+    by_cases hmfall : u m < v m
+    · have hm : m ∈ falling := Finset.mem_filter.mpr ⟨Finset.mem_univ m, hmfall⟩
+      have hden : 0 < x m - u m := sub_pos.mpr (hmfall.trans (hfallStrict m hmfall))
+      have htle : t ≤ ratio m := ht.2.trans (hlamratio m hm)
+      have hmul : t * (x m - u m) ≤ x m - v m := by
+        exact (le_div_iff₀ hden).mp htle
+      nlinarith
+    · have huv : v m ≤ u m := le_of_not_gt hmfall
+      have ht1 : t ≤ 1 := ht.2.trans (le_of_lt hlam1)
+      nlinarith [mul_nonneg ht.1 (sub_nonneg.mpr huv),
+        mul_nonneg (sub_nonneg.mpr ht1) (sub_nonneg.mpr (hx m))]
+  have hendpoint : lam * u n + (1 - lam) * x n = v n := by
+    have hden : x n - u n ≠ 0 :=
+      ne_of_gt (sub_pos.mpr (hnfall.trans (hfallStrict n hnfall)))
+    rw [← hnlam]
+    dsimp [ratio]
+    field_simp
+    ring
+  have hscalePositive : 0 < δ * (1 - lam) := mul_pos hδ0 (sub_pos.mpr hlam1)
+  obtain ⟨k, hk⟩ := exists_nat_gt (lam / (δ * (1 - lam)))
+  have hk0 : 0 < k := by
+    have : 0 < (k : ℝ) := (div_pos hlam0 hscalePositive).trans hk
+    exact_mod_cast this
+  have hlarge : lam < (k : ℝ) * δ * (1 - lam) := by
+    have := (div_lt_iff₀ hscalePositive).mp hk
+    nlinarith
+  let coefficient (i : Fin (k + 1)) : ℝ := (i : ℝ) * lam / k
+  let z : Fin (k + 1) → N → ℝ :=
+    fun i m => coefficient i * u m + (1 - coefficient i) * x m
+  have hdenominator : ∀ i : Fin k, 0 < (k : ℝ) - (i : ℝ) * lam := by
+    intro i
+    have hi : (i : ℝ) < k := by exact_mod_cast i.isLt
+    have himul : (i : ℝ) * lam ≤ i := by
+      nlinarith [mul_nonneg (show (0 : ℝ) ≤ i by positivity)
+        (sub_nonneg.mpr (le_of_lt hlam1))]
+    linarith
+  let q : Fin k → Set.Icc (0 : ℝ) δ := fun i =>
+    ⟨lam / ((k : ℝ) - (i : ℝ) * lam), by
+      constructor
+      · exact le_of_lt (div_pos hlam0 (hdenominator i))
+      · apply (div_le_iff₀ (hdenominator i)).2
+        have hi : (i : ℝ) ≤ k := by exact_mod_cast i.isLt.le
+        have hbase : (k : ℝ) * (1 - lam) ≤ (k : ℝ) - (i : ℝ) * lam := by
+          nlinarith [mul_nonneg (le_of_lt hlam0) (sub_nonneg.mpr hi)]
+        have hscaled := mul_le_mul_of_nonneg_left hbase (le_of_lt hδ0)
+        nlinarith⟩
+  refine ⟨k, z, q, ?_, ?_, ?_, ?_, ?_⟩
+  · funext m
+    simp [z, coefficient]
+  · intro i
+    funext m
+    dsimp [z, q, coefficient]
+    have hkne : (k : ℝ) ≠ 0 := by positivity
+    have hdene : (k : ℝ) - (i : ℝ) * lam ≠ 0 := ne_of_gt (hdenominator i)
+    have hcoefficient : ((i : ℝ) + 1) * lam / k =
+        lam / ((k : ℝ) - (i : ℝ) * lam) +
+          (1 - lam / ((k : ℝ) - (i : ℝ) * lam)) *
+            ((i : ℝ) * lam / k) := by
+      field_simp [hdene, hkne]
+      ring
+    simp only [Nat.cast_add, Nat.cast_one]
+    rw [hcoefficient]
+    ring
+  · intro i m
+    apply hinside (coefficient i)
+    constructor
+    · exact div_nonneg (mul_nonneg (by positivity) (le_of_lt hlam0)) (by positivity)
+    · apply (div_le_iff₀ (show (0 : ℝ) < k by positivity)).2
+      have hiNat : (i : ℕ) ≤ k := by omega
+      have hi : (i : ℝ) ≤ k := by exact_mod_cast hiNat
+      nlinarith [mul_nonneg (le_of_lt hlam0) (sub_nonneg.mpr hi)]
+  · intro i m
+    have hcoefficient := show coefficient i ∈ Set.Icc (0 : ℝ) lam by
+      constructor
+      · exact div_nonneg (mul_nonneg (by positivity) (le_of_lt hlam0)) (by positivity)
+      · apply (div_le_iff₀ (show (0 : ℝ) < k by positivity)).2
+        have hiNat : (i : ℕ) ≤ k := by omega
+        have hi : (i : ℝ) ≤ k := by exact_mod_cast hiNat
+        nlinarith [mul_nonneg (le_of_lt hlam0) (sub_nonneg.mpr hi)]
+    have hcoefficient1 : coefficient i ≤ 1 :=
+      hcoefficient.2.trans (le_of_lt hlam1)
+    dsimp [z]
+    by_cases hxu : x m ≤ u m
+    · rw [max_eq_right hxu]
+      nlinarith [mul_nonneg (sub_nonneg.mpr hcoefficient1) (sub_nonneg.mpr hxu)]
+    · have hux : u m ≤ x m := le_of_not_ge hxu
+      rw [max_eq_left hux]
+      nlinarith [mul_nonneg hcoefficient.1 (sub_nonneg.mpr hux)]
+  · refine ⟨n, ?_⟩
+    refine ⟨?_, hnfall⟩
+    simpa [z, coefficient, hk0.ne'] using hendpoint
+
+/-- The quitting row in which only `j` quits, with the prescribed probability. -/
+private def soloProbabilityRow (G : QuittingGame) (j : G.Player)
+    (t : Set.Icc (0 : ℝ) 1) : QuitRow G :=
+  QuitRow.replace G (fun _ : G.Player => (0 : Set.Icc (0 : ℝ) 1)) j t
+
+/-- A solo-probability move is the affine segment toward the singleton reward. -/
+private theorem quittingOneStagePayoff_soloProbabilityRow (G : QuittingGame)
+    (x : Payoff G.Player) (j : G.Player) (t : Set.Icc (0 : ℝ) 1) :
+    QuittingOneStagePayoff G x (soloProbabilityRow G j t) =
+      fun n => (t : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n +
+        (1 - (t : ℝ)) * x n := by
+  funext n
+  rw [soloProbabilityRow, quittingOneStagePayoff_replace_affine_coord]
+  rw [QuitRow.zero_replace_one, QuitRow.replace_self]
+  rw [quittingOneStagePayoff_soloQuitRow, quittingOneStagePayoff_zero]
+
+/-- Repeated sufficiently small solo moves reach the first face of `W` without entering `W`. -/
+private theorem exists_soloBoundaryOrbit (G : QuittingGame) {delta epsilon : ℝ}
+    (hdelta0 : 0 < delta) (hdelta1 : delta < 1) (j : G.Player)
+    (x : Payoff G.Player) (hx : ∀ n, SoloPayoff G n ≤ x n)
+    (hxj : x j ≤ SoloPayoff G j + epsilon)
+    (hfallStrict : ∀ n, G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n < SoloPayoff G n →
+      SoloPayoff G n < x n)
+    (hfall : ∃ n, G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n < SoloPayoff G n) :
+    ∃ (k : ℕ) (z : Fin (k + 1) → Payoff G.Player),
+      z 0 = x ∧ IsFiniteOrbit (RestrictedEscapeCorrespondence G delta epsilon) z ∧
+      (∀ i, z i ∈ EscapeBand G epsilon) ∧
+      (∀ i, z i j ≤ x j) ∧
+      ∃ n, z ⟨k, Nat.lt_succ_self k⟩ n = SoloPayoff G n ∧
+        G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n < SoloPayoff G n := by
+  classical
+  obtain ⟨k, z, q, hz0, hstep, hlower, hupper, hend⟩ :=
+    exists_affineBoundaryPath (SoloPayoff G)
+      (G.reward ⟨{j}, Finset.singleton_nonempty j⟩) x hdelta0 hx hfallStrict hfall
+  have hband : ∀ i, z i ∈ EscapeBand G epsilon := by
+    intro i
+    refine ⟨hlower i, ⟨j, ?_⟩⟩
+    calc
+      z i j ≤ max (x j) (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ j) := hupper i j
+      _ = x j := max_eq_left (hx j)
+      _ ≤ SoloPayoff G j + epsilon := hxj
+  refine ⟨k, z, hz0, ?_, hband, ?_, hend⟩
+  intro i
+  let t : Set.Icc (0 : ℝ) 1 :=
+    ⟨q i, (q i).property.1, (q i).property.2.trans (le_of_lt hdelta1)⟩
+  let p : QuitRow G := soloProbabilityRow G j t
+  right
+  refine ⟨j, p, hband i.castSucc, ?_, ?_, ?_⟩
+  · calc
+      z i.castSucc j ≤
+          max (x j) (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ j) :=
+        hupper i.castSucc j
+      _ = x j := max_eq_left (hx j)
+      _ ≤ SoloPayoff G j + epsilon := hxj
+  · constructor
+    · change ((soloProbabilityRow G j t) j : ℝ) ≤ delta
+      simp only [soloProbabilityRow, QuitRow.replace, if_pos]
+      exact (q i).property.2
+    · intro n hnj
+      change ((soloProbabilityRow G j t) n : ℝ) = 0
+      simp [soloProbabilityRow, QuitRow.replace, hnj]
+  · rw [hstep i]
+    exact (quittingOneStagePayoff_soloProbabilityRow G (z i.castSucc) j t).symm
+  · intro i
+    calc
+      z i j ≤ max (x j) (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ j) := hupper i j
+      _ = x j := max_eq_left (hx j)
+
+/-- Two finite correspondence orbits with a common endpoint concatenate. -/
+private theorem exists_appendFiniteOrbit {X : Type} {F : Correspondence X X}
+    {A : Set X} {k l : ℕ} (z : Fin (k + 1) → X) (w : Fin (l + 1) → X)
+    (hz : IsFiniteOrbit F z) (hw : IsFiniteOrbit F w)
+    (hstitch : z ⟨k, Nat.lt_succ_self k⟩ = w 0)
+    (hzA : ∀ i, z i ∈ A) (hwA : ∀ i, w i ∈ A) :
+    ∃ c : Fin (k + l + 1) → X, c 0 = z 0 ∧ IsFiniteOrbit F c ∧
+      (∀ i, c i ∈ A) ∧ c ⟨k + l, Nat.lt_succ_self (k + l)⟩ =
+        w ⟨l, Nat.lt_succ_self l⟩ := by
+  let c : Fin (k + l + 1) → X := fun i =>
+    if h : (i : ℕ) ≤ k then z ⟨i, by omega⟩ else w ⟨(i : ℕ) - k, by omega⟩
+  refine ⟨c, ?_, ?_, ?_, ?_⟩
+  · simp [c]
+  · intro i
+    by_cases hik : (i : ℕ) < k
+    · let iz : Fin k := ⟨i, hik⟩
+      have hsource : c i.castSucc = z iz.castSucc := by
+        dsimp only [c]
+        simp only [Fin.val_castSucc]
+        rw [dif_pos hik.le]
+        apply congrArg z
+        apply Fin.ext
+        rfl
+      have htarget : c i.succ = z iz.succ := by
+        dsimp only [c]
+        simp only [Fin.val_succ]
+        rw [dif_pos (Nat.succ_le_iff.mpr hik)]
+        apply congrArg z
+        apply Fin.ext
+        rfl
+      rw [hsource, htarget]
+      exact hz iz
+    · have hki : k ≤ (i : ℕ) := Nat.le_of_not_gt hik
+      by_cases hieq : (i : ℕ) = k
+      · have hl0 : 0 < l := by omega
+        let iw : Fin l := ⟨0, hl0⟩
+        have hsource : c i.castSucc = z ⟨k, Nat.lt_succ_self k⟩ := by
+          dsimp only [c]
+          simp only [Fin.val_castSucc]
+          rw [dif_pos (hieq.le)]
+          apply congrArg z
+          exact Fin.ext hieq
+        have htarget : c i.succ = w iw.succ := by
+          dsimp only [c]
+          simp only [Fin.val_succ]
+          rw [dif_neg (by omega)]
+          apply congrArg w
+          apply Fin.ext
+          dsimp only [iw]
+          simp only [Fin.val_succ]
+          omega
+        rw [hsource, htarget, hstitch]
+        exact hw iw
+      · have hkiStrict : k < (i : ℕ) := hki.lt_of_ne (Ne.symm hieq)
+        let iw : Fin l := ⟨(i : ℕ) - k, by omega⟩
+        have hsource : c i.castSucc = w iw.castSucc := by
+          dsimp only [c]
+          simp only [Fin.val_castSucc]
+          rw [dif_neg (by omega)]
+          apply congrArg w
+          apply Fin.ext
+          rfl
+        have htarget : c i.succ = w iw.succ := by
+          dsimp only [c]
+          simp only [Fin.val_succ]
+          rw [dif_neg (by omega)]
+          apply congrArg w
+          apply Fin.ext
+          dsimp only [iw]
+          simp only [Fin.val_succ]
+          omega
+        rw [hsource, htarget]
+        exact hw iw
+  · intro i
+    by_cases hi : (i : ℕ) ≤ k
+    · simpa only [c, dif_pos hi] using hzA ⟨i, by omega⟩
+    · simpa only [c, dif_neg hi] using hwA ⟨(i : ℕ) - k, by omega⟩
+  · by_cases hl : l = 0
+    · subst l
+      simpa [c] using hstitch
+    · have hl0 : 0 < l := Nat.pos_of_ne_zero hl
+      dsimp only [c]
+      rw [dif_neg (by omega)]
+      apply congrArg w
+      apply Fin.ext
+      simp
+
+/-- A point weakly above every solo payoff and equal to one lies on `∂W`. -/
+private theorem mem_frontier_WSet_of (G : QuittingGame) (x : Payoff G.Player)
+    (hx : ∀ n, SoloPayoff G n ≤ x n) (j : G.Player)
+    (hxj : x j = SoloPayoff G j) : x ∈ frontier (WSet G) := by
+  rw [frontier_eq_closure_inter_closure]
+  constructor
+  · apply subset_closure
+    exact ⟨j, hxj.le⟩
+  · let y : ℕ → Payoff G.Player := fun m n => x n + 1 / ((m : ℝ) + 1)
+    apply mem_closure_of_tendsto (b := atTop) (f := y)
+    · apply tendsto_pi_nhds.mpr
+      intro n
+      have ht : Tendsto (fun m : ℕ => x n + 1 / ((m : ℝ) + 1)) atTop
+          (nhds (x n + 0)) :=
+        tendsto_const_nhds.add
+          (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+      simpa only [y, add_zero] using ht
+    · exact Filter.Eventually.of_forall fun m => by
+        rw [Set.mem_compl_iff]
+        intro hm
+        rcases hm with ⟨n, hn⟩
+        have hpositive : 0 < 1 / ((m : ℝ) + 1) := by positivity
+        dsimp only [y] at hn
+        linarith [hx n]
+
 /-- A critical point lies on `∂W` and has the two solo coordinates and strict cross-payoff. -/
 def IsCriticalPoint (G : QuittingGame) (x : Payoff G.Player) : Prop :=
   x ∈ frontier (WSet G) ∧ ∃ j k, j ≠ k ∧ x j = SoloPayoff G j ∧
@@ -3845,14 +4159,98 @@ theorem lemma11 (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
     (hρ : IsUniformRho G ρ) (hnormal : ∀ n, IsNormalPlayer G n)
     (hstationary : ¬HasStationaryApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) (hε : 0 < ε)
-    (hεe : ε < E.ebar) (hερ : ε < ρ) :
+    (_hεe : ε < E.ebar) (hερ : ε < ρ) :
     let δ := ε / (10 * M * Fintype.card G.Player)
     ∀ x ∈ EscapeBand G ε, ∃ (k : ℕ)
       (z : Fin (k + 1) → Payoff G.Player), z 0 = x ∧
         IsFiniteOrbit (RestrictedEscapeCorrespondence G δ ε) z ∧
         (∀ i, z i ∈ EscapeBand G ε) ∧
         IsCriticalPoint G (z ⟨k, Nat.lt_succ_self k⟩) := by
-  sorry
+  classical
+  let delta := ε / (10 * M * Fintype.card G.Player)
+  have hMpositive : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hcard : (1 : ℝ) ≤ Fintype.card G.Player := by
+    exact_mod_cast Fintype.card_pos
+  have hdenominator : 0 < 10 * M * (Fintype.card G.Player : ℝ) := by positivity
+  have hdelta0 : 0 < delta := div_pos hε hdenominator
+  have hdenominatorOne : 1 < 10 * M * (Fintype.card G.Player : ℝ) := by
+    have hten : (10 : ℝ) ≤ 10 * M * Fintype.card G.Player := by
+      calc
+        (10 : ℝ) = 10 * 1 := by ring
+        _ ≤ 10 * M := mul_le_mul_of_nonneg_left hM.1 (by norm_num)
+        _ = 10 * M * 1 := by ring
+        _ ≤ 10 * M * Fintype.card G.Player :=
+          mul_le_mul_of_nonneg_left hcard (by positivity)
+    linarith
+  have hε1 : ε < 1 := hερ.trans_le hρ.2.1
+  have hdelta1 : delta < 1 := by
+    dsimp [delta]
+    exact (div_lt_one hdenominator).2 (hε1.trans hdenominatorOne)
+  have hcross := (lemma5 G hstationary hinstant).2.1
+  dsimp only
+  intro x hxBand
+  have hfirst : ∃ (k : ℕ) (z : Fin (k + 1) → Payoff G.Player) (a : G.Player),
+      z 0 = x ∧ IsFiniteOrbit (RestrictedEscapeCorrespondence G delta ε) z ∧
+      (∀ i, z i ∈ EscapeBand G ε) ∧
+      z ⟨k, Nat.lt_succ_self k⟩ a = SoloPayoff G a := by
+    by_cases hboundary : ∃ a, x a = SoloPayoff G a
+    · rcases hboundary with ⟨a, ha⟩
+      let z : Fin (0 + 1) → Payoff G.Player := fun _ => x
+      refine ⟨0, z, a, rfl, ?_, ?_, ha⟩
+      · intro i
+        exact Fin.elim0 i
+      · intro i
+        exact hxBand
+    · push Not at hboundary
+      rcases hxBand.2 with ⟨j, hxj⟩
+      rcases hcross j (hnormal j) with ⟨k, hkj, _hknormal, hreward⟩
+      have hstrict : ∀ n, SoloPayoff G n < x n := by
+        intro n
+        exact (hxBand.1 n).lt_of_ne (Ne.symm (hboundary n))
+      obtain ⟨m, z, hz0, hzorbit, hzband, _hzj, n, hn, _hnreward⟩ :=
+        exists_soloBoundaryOrbit G hdelta0 hdelta1 j x hxBand.1 hxj
+          (fun n _ => hstrict n) ⟨k, hreward⟩
+      exact ⟨m, z, n, hz0, hzorbit, hzband, hn⟩
+  rcases hfirst with ⟨k, z, a, hz0, hzorbit, hzband, ha⟩
+  let y := z ⟨k, Nat.lt_succ_self k⟩
+  by_cases hyCritical : IsCriticalPoint G y
+  · exact ⟨k, z, hz0, hzorbit, hzband, hyCritical⟩
+  · rcases hcross a (hnormal a) with ⟨b, hba, _hbnormal, hab⟩
+    have hyBand : y ∈ EscapeBand G ε := hzband ⟨k, Nat.lt_succ_self k⟩
+    have hyFrontier : y ∈ frontier (WSet G) :=
+      mem_frontier_WSet_of G y hyBand.1 a ha
+    have hfallStrict : ∀ n,
+        G.reward ⟨{a}, Finset.singleton_nonempty a⟩ n < SoloPayoff G n →
+          SoloPayoff G n < y n := by
+      intro n hnfall
+      have hna : n ≠ a := by
+        intro hna
+        subst n
+        exact (lt_irrefl _ hnfall)
+      apply (hyBand.1 n).lt_of_ne
+      intro hne
+      apply hyCritical
+      exact ⟨hyFrontier, a, n, Ne.symm hna, ha, hne.symm, hnfall⟩
+    have hya : y a ≤ SoloPayoff G a + ε := by linarith
+    obtain ⟨l, w, hw0, hworbit, hwband, hwaUpper, n, hn, han⟩ :=
+      exists_soloBoundaryOrbit G hdelta0 hdelta1 a y hyBand.1 hya
+        hfallStrict ⟨b, hab⟩
+    have hwa : w ⟨l, Nat.lt_succ_self l⟩ a = SoloPayoff G a := by
+      apply le_antisymm
+      · exact (hwaUpper ⟨l, Nat.lt_succ_self l⟩).trans_eq ha
+      · exact (hwband ⟨l, Nat.lt_succ_self l⟩).1 a
+    have hnLower := (hwband ⟨l, Nat.lt_succ_self l⟩).1
+    have hlastCritical : IsCriticalPoint G (w ⟨l, Nat.lt_succ_self l⟩) := by
+      refine ⟨mem_frontier_WSet_of G _ hnLower a hwa, a, n, ?_, hwa, hn, han⟩
+      intro hanEq
+      subst n
+      exact (lt_irrefl _ han)
+    obtain ⟨c, hc0, hcorbit, hcband, hclast⟩ :=
+      exists_appendFiniteOrbit z w hzorbit hworbit (by simpa [y] using hw0.symm)
+        hzband hwband
+    refine ⟨k + l, c, hc0.trans hz0, hcorbit, hcband, ?_⟩
+    rw [hclast]
+    exact hlastCritical
 
 /-- Theorem 4.  Every escape game has approximate equilibria. -/
 theorem theorem4 (G : QuittingGame) (h : IsEscapeGame G) :
