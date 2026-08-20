@@ -1,4 +1,5 @@
 import MathUE.Topology.CompactSerialRelation
+import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
@@ -4299,6 +4300,23 @@ theorem figure2_survivalLimit_le_two_mul
   have hfactor : 1 / 2 < 1 - 32 * ε := by
     linarith
   nlinarith [quittingJointSurvivalLimit_nonneg roots 0]
+
+/-- The second estimate in (13), with a deliberately loose constant: under
+an all-Continue perturbation, the probability that the first quitting
+coalition contains at least two players is at most `24ε`. -/
+theorem figure2_collisionMass_le_twentyFour_mul
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε0 : 0 < ε)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε) :
+    quittingRootSequenceCollisionMass roots 0 ≤ 24 * ε := by
+  have hcollision := quittingRootSequenceCollisionMass_le
+    roots 0 (4 * ε) fun offset ↦ by
+      simpa using
+        (absorptionMass_lt_four_mul_of_nearAllContinue hclose offset).le
+  have hlimit := quittingJointSurvivalLimit_nonneg roots 0
+  norm_num [Nat.choose] at hcollision
+  nlinarith
 
 /-- The Figure 2 game has no stationary `ε`-equilibrium for all sufficiently
 small positive `ε`. The paper states this result and refers elsewhere for the
