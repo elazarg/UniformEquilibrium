@@ -74,6 +74,20 @@ actions. A candidate mechanism is complete only after it supplies the uniform
 finite-horizon delivery and unilateral-deviation bounds encoded by that
 semantic waist.
 
+The native bridge also retains source data below payoff equivalence.
+`IsRealizablePublicHistory` and
+`isRealizablePublicHistory_publicHistoryOfTrace`
+(`UniformEquilibrium/ProofView/Native/History.lean`) record that every
+canonical public stage is source-coherent and belongs to the support of the
+actual proof-view transition.  For bounded comparison,
+`native_runBehavioral_eq_of_support_agreement` and
+`exists_nativeMixed_publicHistoryLaw_eq_compiled`
+(`UniformEquilibrium/ProofView/Native/Semantics.lean`) respectively require
+profile agreement only on histories exposed by the run and realize the exact
+compiled public-history law by a mixed contingent policy.  The mixed witness
+depends on the profile and horizon; it is not one mixed profile valid at all
+large horizons and therefore is not by itself a uniform-equilibrium compiler.
+
 For finite quitting games, a producer that already names its payoff target
 should retain that target through the terminal-to-uniform bridge.
 `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalTargetSemantics.lean`

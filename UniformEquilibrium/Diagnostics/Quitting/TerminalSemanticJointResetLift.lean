@@ -588,8 +588,7 @@ theorem quittingJointResetProjection_pure_identity
 def quittingJointResetTaggedLaw
     (root : ι → PMF Bool) (law : FinDist (QuittingJointResetMode ι)) :
     FinDist (QuittingJointResetMode ι × (ι → Bool)) :=
-  law.bind fun mode =>
-    (quittingJointActionLaw root).map fun action => (mode, action)
+  FinDist.product law (quittingJointActionLaw root)
 
 omit [DecidableEq ι] in
 /-- The tagged law has exactly the product point masses. -/
@@ -598,8 +597,8 @@ theorem quittingJointResetTaggedLaw_prob
     (mode : QuittingJointResetMode ι) (action : ι → Bool) :
     (quittingJointResetTaggedLaw root law).prob (mode, action) =
       law.prob mode * (quittingJointActionLaw root).prob action := by
-  exact FinDist.prob_bind_map_prod law
-    (fun _ => quittingJointActionLaw root) mode action
+  classical
+  exact FinDist.prob_product law (quittingJointActionLaw root) (mode, action)
 
 /-- Apply the elementary reset outside each mode in a tagged law. -/
 def quittingJointResetTransition
@@ -620,8 +619,7 @@ theorem quittingJointResetTransition_payoffIdentityMass
         law.probOf {mode | mode.payoff = none} := by
   rw [← FinDist.expect_indicator_eq_probOf]
   unfold quittingJointResetTransition quittingJointResetTaggedLaw
-  rw [FinDist.expect_map, FinDist.expect_bind]
-  simp_rw [FinDist.expect_map]
+  rw [FinDist.expect_map, FinDist.expect_product]
   calc
     law.expect (fun mode => (quittingJointActionLaw root).expect fun action =>
         if ((quittingElementaryJointReset selector action).comp mode) ∈
@@ -679,8 +677,7 @@ theorem quittingJointResetTransition_capIdentityMass
         law.probOf {mode | mode.cap who = none} := by
   rw [← FinDist.expect_indicator_eq_probOf]
   unfold quittingJointResetTransition quittingJointResetTaggedLaw
-  rw [FinDist.expect_map, FinDist.expect_bind]
-  simp_rw [FinDist.expect_map]
+  rw [FinDist.expect_map, FinDist.expect_product]
   let retained := if selector who then 0 else
     quittingRootOpponentContinueMass root who
   calc
@@ -841,8 +838,7 @@ theorem quittingJointResetProjection_transition
         (fun mode => (mode.apply reward anchor).1 who) = _
     rw [quittingJointResetTransition, FinDist.expect_map]
     unfold quittingJointResetTaggedLaw
-    rw [FinDist.expect_bind]
-    simp_rw [FinDist.expect_map]
+    rw [FinDist.expect_product]
     rw [FinDist.expect_comm]
     apply FinDist.expect_congr
     intro action _
@@ -853,8 +849,7 @@ theorem quittingJointResetProjection_transition
         (fun mode => (mode.apply reward anchor).2 who) = _
     rw [quittingJointResetTransition, FinDist.expect_map]
     unfold quittingJointResetTaggedLaw
-    rw [FinDist.expect_bind]
-    simp_rw [FinDist.expect_map]
+    rw [FinDist.expect_product]
     rw [FinDist.expect_comm]
     apply FinDist.expect_congr
     intro action _

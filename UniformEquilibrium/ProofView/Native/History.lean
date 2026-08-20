@@ -230,6 +230,26 @@ def IsCoherentPublicHistory (initial : G.State) :
       IsCoherentPublicHistory initial history ∧
         record.source = (packedHistOfPublicHistory G initial history).2.2
 
+/-- Successive public records form a path from `initial`, and every recorded
+transition has positive mass in the proof-view kernel. -/
+def IsRealizablePublicHistory (initial : G.State) :
+    G.toNative.PublicHistory → Prop
+  | [] => True
+  | record :: history =>
+      IsRealizablePublicHistory initial history ∧
+        record.source = (packedHistOfPublicHistory G initial history).2.2 ∧
+        record.target ∈ (G.transition record.source record.joint).support
+
+/-- Realizability strengthens source coherence. -/
+theorem isCoherentPublicHistory_of_isRealizablePublicHistory
+    (initial : G.State) (history : G.toNative.PublicHistory)
+    (hrealizable : IsRealizablePublicHistory G initial history) :
+    IsCoherentPublicHistory G initial history := by
+  induction history with
+  | nil => trivial
+  | cons record history ih =>
+      exact ⟨ih hrealizable.1, hrealizable.2.1⟩
+
 /-- Encoding a coherent decoded public history recovers it exactly. -/
 theorem publicHistoryOfPackedHist_packedHistOfPublicHistory
     (initial : G.State) (history : G.toNative.PublicHistory)
@@ -253,6 +273,96 @@ theorem packedHistOfPublicHistory_trace_current (initial : G.State)
   | _, .start => rfl
   | _, .extend _ _ _ _ => rfl
 
+/-- Erasing a canonical Protocol event to a stochastic stage record preserves
+its positive-support transition witness in the PMF proof view. -/
+theorem stageRecordOfEvent_target_mem_proofView_transition_support
+    (initial : G.State) [∀ i, Nonempty (G.Act i)]
+    (event : (G.toNative.toExecution initial).StepEvent) :
+    (G.toNative.stageRecordOfEvent initial event).target ∈
+      (G.transition
+        (G.toNative.stageRecordOfEvent initial event).source
+        (G.toNative.stageRecordOfEvent initial event).joint).support := by
+  change event.target ∈
+    (G.toNative.transition event.source
+      (G.toNative.stageRecordOfEvent initial event).joint).support
+  exact
+    GameTheory.Stochastic.Game.stageRecordOfEvent_target_mem_transition_support
+      G.toNative initial event
+
+/-- Full public monitoring has perfect recall: equality of the complete public
+record determines every player's own information/action record. -/
+theorem toNative_perfectMonitoring_perfectRecall (initial : G.State)
+    [∀ i, Nonempty (G.Act i)] :
+    (G.toNative.perfectMonitoring initial).PerfectRecall := by
+  intro i first second firstTrace
+  induction firstTrace generalizing second with
+  | start =>
+      intro secondTrace hinfo
+      cases secondTrace with
+      | start => rfl
+      | extend prior joint isLegal realized =>
+          rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace,
+            G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace] at hinfo
+          simp at hinfo
+  | @extend source target prior joint isLegal realized ih =>
+      intro secondTrace hinfo
+      cases secondTrace with
+      | start =>
+          rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace,
+            G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace] at hinfo
+          simp at hinfo
+      | @extend secondSource secondTarget secondPrior secondJoint
+          secondIsLegal secondRealized =>
+          rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace,
+            G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace] at hinfo
+          have hrecords := (List.cons.inj hinfo).1
+          have hpriorPublic := (List.cons.inj hinfo).2
+          have hpriorInfo :
+              (G.toNative.perfectMonitoring initial).infoOf i prior =
+                (G.toNative.perfectMonitoring initial).infoOf i secondPrior := by
+            rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace,
+              G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace]
+            exact hpriorPublic
+          have hfirstJoint :=
+            G.toNative.event_joint_eq_some_stageRecordOfEvent_joint initial
+              ⟨source, joint, isLegal, target, realized⟩
+          have hsecondJoint :=
+            G.toNative.event_joint_eq_some_stageRecordOfEvent_joint initial
+              ⟨secondSource, secondJoint, secondIsLegal,
+                second, secondRealized⟩
+          have haction :
+              (G.toNative.stageRecordOfEvent initial
+                  ⟨source, joint, isLegal, target, realized⟩).joint i =
+                (G.toNative.stageRecordOfEvent initial
+                  ⟨secondSource, secondJoint, secondIsLegal,
+                    second, secondRealized⟩).joint i :=
+            congrArg (fun record => record.joint i) hrecords
+          have hfirstJointAt := congrFun hfirstJoint i
+          have hsecondJointAt := congrFun hsecondJoint i
+          change joint i = _ at hfirstJointAt
+          change secondJoint i = _ at hsecondJointAt
+          rw [GameTheory.Protocol.InfoSignals.ownPlay_extend,
+            GameTheory.Protocol.InfoSignals.ownPlay_extend,
+            hfirstJointAt, hsecondJointAt]
+          exact congrArg₂ List.cons (Prod.ext hpriorInfo haction)
+            (ih secondPrior hpriorInfo)
+
+/-- Every public history projected from GameTheory's Protocol runner is a
+source-coherent path of positive-support proof-view transitions. -/
+theorem isRealizablePublicHistory_publicHistoryOfTrace (initial : G.State)
+    [∀ i, Nonempty (G.Act i)] :
+    ∀ {state : G.State}
+      (trace : (G.toNative.toExecution initial).Trace state),
+      IsRealizablePublicHistory G initial
+        (G.toNative.publicHistoryOfTrace initial trace)
+  | _, .start => trivial
+  | _, .extend prior joint isLegal realized => by
+      rw [G.toNative.publicHistoryOfTrace_extend]
+      refine ⟨isRealizablePublicHistory_publicHistoryOfTrace initial prior,
+        (packedHistOfPublicHistory_trace_current G initial prior).symm, ?_⟩
+      exact stageRecordOfEvent_target_mem_proofView_transition_support
+        G initial ⟨_, joint, isLegal, _, realized⟩
+
 /-- Every public history projected from GameTheory's Protocol runner is
 coherent. -/
 theorem isCoherentPublicHistory_publicHistoryOfTrace (initial : G.State)
@@ -261,12 +371,9 @@ theorem isCoherentPublicHistory_publicHistoryOfTrace (initial : G.State)
       (trace : (G.toNative.toExecution initial).Trace state),
       IsCoherentPublicHistory G initial
         (G.toNative.publicHistoryOfTrace initial trace)
-  | _, .start => trivial
-  | _, .extend prior joint isLegal realized => by
-      rw [G.toNative.publicHistoryOfTrace_extend]
-      constructor
-      · exact isCoherentPublicHistory_publicHistoryOfTrace initial prior
-      · exact (packedHistOfPublicHistory_trace_current G initial prior).symm
+  | _, trace =>
+      isCoherentPublicHistory_of_isRealizablePublicHistory G initial _
+        (isRealizablePublicHistory_publicHistoryOfTrace G initial trace)
 
 /-- Decode an encoded indexed history at its statically known horizon. -/
 def decodedEncodedHist (initial : G.State) {horizon : ℕ}

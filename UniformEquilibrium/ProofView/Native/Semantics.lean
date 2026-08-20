@@ -119,6 +119,40 @@ theorem native_publicHistoryLaw_eq_compiled
       simpa only [toNativeBehaviorProfile] using
         ih (G.shiftProfile profile (initial, actions)) target
 
+/-- Every bounded proof-view behavioral run has an exactly equivalent native
+mixed contingent-policy run. The mixed witness is profile- and horizon-local;
+this does not supply one mixed profile valid at all large horizons. -/
+theorem exists_nativeMixed_runMixed_eq_toNativeBehaviorProfile
+    (profile : G.BehaviorProfile) (initial : G.State) (horizon : ℕ) :
+    ∃ mixed : (i : ι) →
+        (G.toNative.perfectMonitoring initial).MixedPolicy i,
+      (G.toNative.perfectMonitoring initial).runMixed mixed horizon =
+        (G.toNative.perfectMonitoring initial).runBehavioral
+          (toNativeBehaviorProfile G initial profile) horizon := by
+  apply
+    (G.toNative.perfectMonitoring initial).exists_mixed_runMixed_eq_runBehavioral
+  exact
+    (G.toNative.perfectMonitoring initial).actsOnceWhereItMatters_of_perfectRecall
+      (toNative_perfectMonitoring_perfectRecall G initial)
+
+/-- The bounded mixed witness also realizes the proof view's compiled public
+history law exactly. -/
+theorem exists_nativeMixed_publicHistoryLaw_eq_compiled
+    (profile : G.BehaviorProfile) (initial : G.State) (horizon : ℕ) :
+    ∃ mixed : (i : ι) →
+        (G.toNative.perfectMonitoring initial).MixedPolicy i,
+      FinDist.map
+          (fun history =>
+            G.toNative.publicHistoryOfTrace initial history.trace)
+          ((G.toNative.perfectMonitoring initial).runMixed mixed horizon) =
+        compiledPublicHistoryLaw G profile initial horizon := by
+  obtain ⟨mixed, hmixed⟩ :=
+    exists_nativeMixed_runMixed_eq_toNativeBehaviorProfile
+      G profile initial horizon
+  refine ⟨mixed, ?_⟩
+  rw [hmixed]
+  exact native_publicHistoryLaw_eq_compiled G profile initial horizon
+
 /-- Total proof-view payoff read from a native public history. -/
 def publicHistoryTotalPayoff (history : G.toNative.PublicHistory)
     (who : ι) : ℝ :=
@@ -210,6 +244,37 @@ theorem native_finiteAveragePayoff_eq
   unfold StochasticGame.finiteAveragePayoff
   ring
 
+/-- Agreement on the public histories actually exposed by one bounded
+proof-view run is enough for exact agreement of the canonical Protocol laws.
+No agreement is required at unsupported counterfactual histories. -/
+theorem native_runBehavioral_eq_of_support_agreement
+    (initial : G.State) (proofProfile : G.BehaviorProfile)
+    (nativeProfile : G.toNative.PublicProfile initial)
+    (horizon : ℕ)
+    (hagree : ∀ elapsed, elapsed ≤ horizon → ∀ later,
+      later ∈ ((G.toNative.perfectMonitoring initial).runBehavioralFrom
+        (toNativeBehaviorProfile G initial proofProfile) elapsed
+        (G.toNative.toExecution initial).initHistory).support →
+      ∀ i,
+        toNativePublicProfile G initial proofProfile i
+            (G.toNative.publicHistoryOfTrace initial later.trace) =
+          nativeProfile i
+            (G.toNative.publicHistoryOfTrace initial later.trace)) :
+    (G.toNative.perfectMonitoring initial).runBehavioral
+        (toNativeBehaviorProfile G initial proofProfile) horizon =
+      (G.toNative.perfectMonitoring initial).runBehavioral
+        (G.toNative.toBehaviorProfile initial nativeProfile) horizon := by
+  unfold InformationModel.runBehavioral
+  apply InformationModel.runBehavioralFrom_congr_on_support
+  intro elapsed helapsed history hhistory _ i
+  rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace]
+  unfold toNativeBehaviorProfile Stochastic.Game.toBehaviorProfile
+    Stochastic.Game.toBehavioralPolicy
+  apply congrArg (FinDist.map
+    (G.toNative.actionChoiceEquiv initial i
+      (G.toNative.publicHistoryOfTrace initial history.trace)))
+  exact hagree elapsed helapsed history hhistory i
+
 /-- Coherent-history agreement with a proof-view profile is enough for exact
 agreement of the canonical Protocol laws. -/
 theorem native_runBehavioral_eq_of_coherent
@@ -223,15 +288,8 @@ theorem native_runBehavioral_eq_of_coherent
         (toNativeBehaviorProfile G initial proofProfile) horizon =
       (G.toNative.perfectMonitoring initial).runBehavioral
         (G.toNative.toBehaviorProfile initial nativeProfile) horizon := by
-  unfold InformationModel.runBehavioral
-  apply InformationModel.runBehavioralFrom_congr
-  intro history _ _ i
-  rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace]
-  unfold toNativeBehaviorProfile Stochastic.Game.toBehaviorProfile
-    Stochastic.Game.toBehavioralPolicy
-  apply congrArg (FinDist.map
-    (G.toNative.actionChoiceEquiv initial i
-      (G.toNative.publicHistoryOfTrace initial history.trace)))
+  apply native_runBehavioral_eq_of_support_agreement
+  intro _ _ history _ i
   exact hagree i _
     (isCoherentPublicHistory_publicHistoryOfTrace G initial history.trace)
 
