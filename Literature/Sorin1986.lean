@@ -1,6 +1,7 @@
 import Mathlib
 import GameTheory.Analysis.Payoff
 import MathUE.ProbabilityMassFunction.Simplex
+import MathUE.PMFProduct.Bool
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter
@@ -3686,6 +3687,46 @@ def binaryGame (topLeft topRight bottomLeft bottomRight : Payoff Bool) :
   Action := fun _ => Bool
   payoff := binaryPayoff topLeft topRight bottomLeft bottomRight
 
+/-- The independent mixed expected utility of a binary kernel, in the two
+probabilities of playing `true`. -/
+theorem binaryKernel_mixedEU_apply
+    (topLeft topRight bottomLeft bottomRight : Payoff Bool)
+    (profile : Bool → PMF Bool)
+    (who : Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+        (binaryPayoff topLeft topRight bottomLeft bottomRight)).mixedExtension.eu
+      profile who =
+      (profile false true).toReal *
+          ((profile true true).toReal * bottomRight who +
+            (1 - (profile true true).toReal) * bottomLeft who) +
+        (1 - (profile false true).toReal) *
+          ((profile true true).toReal * topRight who +
+            (1 - (profile true true).toReal) * topLeft who) := by
+  letI : Finite ((KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff topLeft topRight bottomLeft bottomRight)).Outcome) := by
+    unfold KernelGame.ofPureEU
+    infer_instance
+  rw [KernelGame.mixedExtension_eu]
+  simp only [KernelGame.eu_ofPureEU]
+  change Math.Probability.expect (Math.PMFProduct.pmfPi profile)
+      (fun action ↦ binaryPayoff topLeft topRight bottomLeft bottomRight action who) = _
+  rw [Math.PMFProduct.expect_pmfPi_bool]
+  simp [Math.Probability.expect_eq_sum,
+    Math.PMFProduct.pmfBool_false_toReal, binaryPayoff]
+
+/-- Paper-facing version of `binaryKernel_mixedEU_apply`. -/
+theorem binaryGame_mixedPayoff_apply
+    (topLeft topRight bottomLeft bottomRight : Payoff Bool)
+    (profile : Bool → PMF Bool) (who : Bool) :
+    (binaryGame topLeft topRight bottomLeft bottomRight).mixedPayoff profile who =
+      (profile false true).toReal *
+          ((profile true true).toReal * bottomRight who +
+            (1 - (profile true true).toReal) * bottomLeft who) +
+        (1 - (profile false true).toReal) *
+          ((profile true true).toReal * topRight who +
+            (1 - (profile true true).toReal) * topLeft who) :=
+  binaryKernel_mixedEU_apply topLeft topRight bottomLeft bottomRight profile who
+
 /-- Example 1. -/
 def example1 : FiniteStageGame :=
   binaryGame (pair 1 0) (pair 0 0) (pair 0 0) (pair 0 1)
@@ -3693,6 +3734,81 @@ def example1 : FiniteStageGame :=
 /-- Example 2. -/
 def example2 : FiniteStageGame :=
   binaryGame (pair 1 0) (pair 2 2) (pair 0 0) (pair 0 1)
+
+/-- Player `false`'s mixed payoff in Example 2. -/
+theorem example2_mixedEU_false (profile : Bool → PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+        (pair 0 1))).mixedExtension.eu profile false =
+      (1 - (profile false true).toReal) *
+        (1 + (profile true true).toReal) := by
+  rw [binaryKernel_mixedEU_apply]
+  simp only [pair_false]
+  ring
+
+/-- Player `true`'s mixed payoff in Example 2. -/
+theorem example2_mixedEU_true (profile : Bool → PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+        (pair 0 1))).mixedExtension.eu profile true =
+      (profile true true).toReal * (2 - (profile false true).toReal) := by
+  rw [binaryKernel_mixedEU_apply]
+  simp only [pair_true]
+  ring
+
+/-- A pure-`false` row deviation in Example 2 earns `1 + q`. -/
+theorem example2_mixedEU_update_false_pure
+    (profile : Bool → PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+        (pair 0 1))).mixedExtension.eu
+          (Function.update profile false (PMF.pure false)) false =
+      1 + (profile true true).toReal := by
+  rw [example2_mixedEU_false]
+  change (1 - ((PMF.pure false) true).toReal) *
+    (1 + (profile true true).toReal) = _
+  simp
+
+/-- A pure-`true` column deviation in Example 2 earns `2 - p`. -/
+theorem example2_mixedEU_update_true_pure
+    (profile : Bool → PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+        (pair 0 1))).mixedExtension.eu
+          (Function.update profile true (PMF.pure true)) true =
+      2 - (profile false true).toReal := by
+  rw [example2_mixedEU_true]
+  change ((PMF.pure true) true).toReal *
+    (2 - (profile false true).toReal) = _
+  simp
+
+/-- An arbitrary row deviation changes only the row mixing probability. -/
+theorem example2_mixedEU_update_false
+    (profile : Bool → PMF Bool) (deviation : PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+        (pair 0 1))).mixedExtension.eu
+          (Function.update profile false deviation) false =
+      (1 - (deviation true).toReal) *
+        (1 + (profile true true).toReal) := by
+  rw [example2_mixedEU_false]
+  change (1 - (deviation true).toReal) *
+    (1 + (profile true true).toReal) = _
+  rfl
+
+/-- An arbitrary column deviation changes only the column mixing probability. -/
+theorem example2_mixedEU_update_true
+    (profile : Bool → PMF Bool) (deviation : PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+        (pair 0 1))).mixedExtension.eu
+          (Function.update profile true deviation) true =
+      (deviation true).toReal *
+        (2 - (profile false true).toReal) := by
+  rw [example2_mixedEU_true]
+  change (deviation true).toReal *
+    (2 - (profile false true).toReal) = _
+  rfl
 
 /-- Example 3. -/
 def example3 : FiniteStageGame :=
@@ -3771,7 +3887,27 @@ theorem example1_half_not_mem_D3 :
 /-- The same payoff is not feasible in one stage. -/
 theorem example1_half_not_mem_D1 :
     pair (1 / 2) (1 / 2) ∉ example1.oneStageFeasiblePayoffs := by
-  sorry
+  rintro ⟨profile, hpayoff⟩
+  change (Bool → PMF Bool) at profile
+  have hrow := congrFun hpayoff false
+  have hcolumn := congrFun hpayoff true
+  change (binaryGame (pair 1 0) (pair 0 0) (pair 0 0)
+      (pair 0 1)).mixedPayoff profile false = pair (1 / 2) (1 / 2) false at hrow
+  change (binaryGame (pair 1 0) (pair 0 0) (pair 0 0)
+      (pair 0 1)).mixedPayoff profile true = pair (1 / 2) (1 / 2) true at hcolumn
+  rw [binaryGame_mixedPayoff_apply] at hrow hcolumn
+  norm_num [pair] at hrow hcolumn
+  let p := (profile false true).toReal
+  let q := (profile true true).toReal
+  have hp0 : 0 ≤ p := ENNReal.toReal_nonneg
+  have hq0 : 0 ≤ q := ENNReal.toReal_nonneg
+  have hp1 : p ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  have hq1 : q ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  change (1 - p) * (1 - q) = 1 / 2 at hrow
+  change p * q = 1 / 2 at hcolumn
+  nlinarith [sq_nonneg (p - q)]
 
 /-! The paper also notes that no positive finite horizon convexifies Example 1.
 Its Pareto-boundary argument requires a reusable characterization of equality
@@ -3807,7 +3943,55 @@ theorem example2_D1_eq_C :
 
 theorem example2_E1_eq_singleton :
     example2.oneStageEquilibriumPayoffs = {pair 2 2} := by
-  sorry
+  change (binaryGame (pair 1 0) (pair 2 2) (pair 0 0)
+      (pair 0 1)).oneStageEquilibriumPayoffs =
+    ({pair 2 2} : Set (Payoff Bool))
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨profile, hnash, rfl⟩
+    change (Bool → PMF Bool) at profile
+    change (binaryGame (pair 1 0) (pair 2 2) (pair 0 0)
+      (pair 0 1)).mixedPayoff profile ∈ ({pair 2 2} : Set (Payoff Bool))
+    change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+        (pair 0 1))).mixedExtension.IsNash profile at hnash
+    have hrow := hnash false (PMF.pure false)
+    have hcolumn := hnash true (PMF.pure true)
+    rw [example2_mixedEU_false, example2_mixedEU_update_false_pure] at hrow
+    rw [example2_mixedEU_true, example2_mixedEU_update_true_pure] at hcolumn
+    let p := (profile false true).toReal
+    let q := (profile true true).toReal
+    have hp0 : 0 ≤ p := ENNReal.toReal_nonneg
+    have hq0 : 0 ≤ q := ENNReal.toReal_nonneg
+    have hp1 : p ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hq1 : q ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    change (1 - p) * (1 + q) ≥ 1 + q at hrow
+    change q * (2 - p) ≥ 2 - p at hcolumn
+    have hp : p = 0 := by nlinarith
+    have hq : q = 1 := by nlinarith
+    apply Set.mem_singleton_iff.mpr
+    funext who
+    cases who <;> rw [binaryGame_mixedPayoff_apply] <;>
+      norm_num [pair, p, q, hp, hq]
+  · rintro _ rfl
+    let profile : Bool → PMF Bool :=
+      fun who ↦ PMF.pure (if who then true else false)
+    refine ⟨profile, ?_, ?_⟩
+    · change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+        (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
+          (pair 0 1))).mixedExtension.IsNash profile
+      intro who deviation
+      change PMF Bool at deviation
+      cases who
+      · rw [example2_mixedEU_false, example2_mixedEU_update_false]
+        norm_num [profile]
+      · rw [example2_mixedEU_true, example2_mixedEU_update_true]
+        norm_num [profile]
+        exact ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    · funext who
+      cases who <;> rw [binaryGame_mixedPayoff_apply] <;>
+        norm_num [profile, pair]
 
 theorem example2_one_one_mem_E2 :
     pair 1 1 ∈ example2.finiteEquilibriumPayoffs 2 := by
@@ -3880,7 +4064,15 @@ theorem equation_14 :
     ∃ G : FiniteStageGame, ∃ n : G.Horizon,
       ¬G.finiteEquilibriumPayoffsOnHorizon n ⊆
         convexHull ℝ G.oneStageEquilibriumPayoffs := by
-  sorry
+  refine ⟨example2, ⟨2, by omega⟩, ?_⟩
+  intro hinclusion
+  have hone := hinclusion example2_one_one_mem_E2
+  rw [example2_E1_eq_singleton] at hone
+  change pair 1 1 ∈ convexHull ℝ ({pair 2 2} : Set (Payoff Bool)) at hone
+  rw [convexHull_singleton] at hone
+  have hequal : pair 1 1 = pair 2 2 := Set.mem_singleton_iff.mp hone
+  have hfalse := congrFun hequal false
+  norm_num [pair] at hfalse
 
 /-- Example 4 and Equation (15). -/
 theorem example4_equilibrium_pattern (m : ℕ) (hm : 0 < m) :
