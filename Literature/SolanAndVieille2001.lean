@@ -3980,9 +3980,9 @@ theorem proposition2_13
   quittingGame_isUniformεEquilibrium_of_terminalNash
     reward profile herror hnash
 
-/-! ### 2.4. General payoff processes -/
+/-! ### 2.7. General payoff processes -/
 
-/-- The random payoff process of Theorem 2.8. -/
+/-- The random payoff process of Theorem 2.14. -/
 structure PayoffProcess (ι : Type) [Fintype ι] [DecidableEq ι] where
   Ω : Type
   measurableSpace : MeasurableSpace Ω
@@ -4055,17 +4055,19 @@ def processEpsilonEquilibrium
       processExpectedPayoff process
         (fun time => Function.update (profile time) who (deviation time)) who
 
-/-- **Theorem 2.8.** If the payoff process converges almost surely, has an
+/-- **Theorem 2.14.** If the payoff process converges almost surely, has an
 integrable uniform envelope, and its limit satisfies A.1 and A.2 almost
-surely, then it admits an `ε`-equilibrium for every `ε > 0`. -/
-def Theorem2_8 : Prop :=
+surely, then it admits an `ε`-equilibrium for every `ε > 0`.
+
+The paper invokes the Kuratowski--Ryll-Nardzewski measurable-selection
+theorem in its backward induction. The repository currently has neither that
+selection theorem nor measurable finite-game Nash correspondences, so this
+source result remains an open proposition rather than a checked theorem. -/
+def Theorem2_14 : Prop :=
   ∀ (process : PayoffProcess ι), processAssumptions process →
     ∀ ε : ℝ, 0 < ε → ∃ profile : ProcessProfile process,
       processAdapted process profile ∧
         processEpsilonEquilibrium process profile ε
-
-theorem theorem2_8 : Theorem2_8 (ι := ι) := by
-  sorry
 
 /-! ## 3. The four-player example -/
 
