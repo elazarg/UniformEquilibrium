@@ -11,6 +11,8 @@ import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.PeriodicPureTimeBellman
 import UniformEquilibrium.Quitting.Terminal.TargetTail.FiniteChainTerminalCompiler
+import UniformEquilibrium.Quitting.Cycles.CompanionTransport
+import MathUE.DirectedTransport.MaxAffine.Scalar
 
 /-!
 # The max-linear response system of a periodic root cycle
@@ -217,6 +219,61 @@ theorem quittingCompanionComposite_of_isQuittingCyclicResponseSolution
             quittingCyclicOrbit_succ phase start]
       exact quittingRootCompanionMap_of_isQuittingCyclicResponseSolution hW
         (quittingCyclicOrbit phase start) who
+
+/-- A finite segment of a periodic response solution is transported exactly
+by the composite of its one-stage companion labels. -/
+theorem quittingCompanionLabelList_apply_of_isQuittingCyclicResponseSolution
+    (hW : IsQuittingCyclicResponseSolution reward cycle W) (phase : Fin K)
+    (who : ι) (start fuel : ℕ) :
+    (Math.MaxAffineTransport.Label.compList
+      (quittingCompanionLabelList reward
+        (quittingCyclicRootSequence cycle phase) who start fuel)).apply
+          (W (quittingCyclicOrbit phase (start + fuel)) who) =
+      W (quittingCyclicOrbit phase start) who := by
+  rw [← quittingCompanionComposite_eq_compList_apply]
+  exact quittingCompanionComposite_of_isQuittingCyclicResponseSolution
+    hW phase who start fuel
+
+/-- Every coordinate of a periodic response solution is a fixed point of its
+one-turn max-affine holonomy. -/
+theorem quittingCompanionLabelCycle_fixed_of_isQuittingCyclicResponseSolution
+    (hW : IsQuittingCyclicResponseSolution reward cycle W) (phase : Fin K)
+    (who : ι) :
+    (Math.MaxAffineTransport.Label.compList
+      (quittingCompanionLabelList reward
+        (quittingCyclicRootSequence cycle phase) who 0 K)).apply
+          (W phase who) = W phase who := by
+  simpa only [zero_add, quittingCyclicOrbit_zero, quittingCyclicOrbit_card] using
+    (quittingCompanionLabelList_apply_of_isQuittingCyclicResponseSolution
+      hW phase who 0 K)
+
+/-- On a contractive coordinate, the generic scalar max-affine formula gives
+the response value explicitly from the one-turn companion label. -/
+theorem quittingCyclicResponseSolution_eq_companionLabel_fixedPoint
+    (hW : IsQuittingCyclicResponseSolution reward cycle W) (phase : Fin K)
+    (who : ι)
+    (hcontract : (∏ cyclePhase : Fin K,
+      quittingStationaryFixedOpponentsContinueMass (cycle cyclePhase) who) < 1) :
+    let label := Math.MaxAffineTransport.Label.compList
+      (quittingCompanionLabelList reward
+        (quittingCyclicRootSequence cycle phase) who 0 K)
+    W phase who =
+      max (label.floor.unbotD (label.shift / (1 - label.slope)))
+        (label.shift / (1 - label.slope)) := by
+  dsimp only
+  let label := Math.MaxAffineTransport.Label.compList
+    (quittingCompanionLabelList reward
+      (quittingCyclicRootSequence cycle phase) who 0 K)
+  have hfixed : label.apply (W phase who) = W phase who :=
+    quittingCompanionLabelCycle_fixed_of_isQuittingCyclicResponseSolution
+      hW phase who
+  have hslope : label.slope < 1 := by
+    rw [Math.MaxAffineTransport.Label.slope_compList_eq_pathSlope,
+      quittingCompanionLabelList_pathSlope,
+      quittingOpponentSurvivalWeight_cyclic_period]
+    exact hcontract
+  exact (Math.MaxAffineTransport.Label.apply_eq_self_iff_of_slope_lt_one
+    label hslope (W phase who)).mp hfixed
 
 /-- **Never quitting is capped by a response solution.**  The hypothesis is
 that the deviator's opponents absorb with positive probability over one turn of

@@ -393,6 +393,12 @@ def compList (labels : List Label) : Label :=
 
 @[simp] theorem compList_nil : compList [] = Label.id := rfl
 
+/-- Appending one chronological label composes it outside the preceding
+composite.  No slope hypothesis is needed for this definitional fold law. -/
+@[simp] theorem compList_append_singleton (labels : List Label) (last : Label) :
+    compList (labels ++ [last]) = last.comp (compList labels) := by
+  simp [compList, List.foldl_append]
+
 theorem apply_foldl_comp : ∀ (labels : List Label),
     (∀ label ∈ labels, 0 ≤ label.slope) → ∀ accumulated : Label,
       0 ≤ accumulated.slope → ∀ point : ℝ,
@@ -431,19 +437,10 @@ theorem apply_compList_append (first second : List Label)
 /-- A final chronological label acts after the composite of the preceding
 labels. -/
 theorem apply_compList_append_singleton (labels : List Label) (last : Label)
-    (hslope : ∀ label ∈ labels, 0 ≤ label.slope)
     (hlast : 0 ≤ last.slope) (point : ℝ) :
     (compList (labels ++ [last])).apply point =
       last.apply ((compList labels).apply point) := by
-  rw [apply_compList_append labels [last]]
-  · rw [apply_compList (labels := [last]) (by simpa using hlast)]
-    rfl
-  · intro label hlabel
-    rcases List.mem_append.mp hlabel with hbefore | hfinal
-    · exact hslope label hbefore
-    · simp only [List.mem_singleton] at hfinal
-      subst label
-      exact hlast
+  rw [compList_append_singleton, apply_comp hlast]
 
 /-! ### The two embeddings -/
 

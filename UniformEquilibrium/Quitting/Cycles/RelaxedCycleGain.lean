@@ -4,101 +4,41 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Cycles.CycleMismatchContraction
+import UniformEquilibrium.Quitting.Cycles.CompanionTransport
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
+import MathUE.DirectedTransport.MaxAffine.Paths
 
 /-!
-# The signed phasewise accumulation is the companion-map gain of a relaxed cycle
+# Signed max-affine transport of relaxed cycle gain
 
-Fix a coordinate `who` and a periodic root sequence `roots : ℕ → ι → PMF Bool` together
-with a *prescribed* scalar payoff sequence `prescribed : ℕ → ℝ` that is self-consistent
-(`IsQuittingLivePrescribedValue`) but is **not** assumed to be any kind of Nash
-equilibrium.  `QuittingCycleMismatchContraction.lean` already treats the case where
-`prescribed` is *exactly* endpoint-Nash against itself: there the companion map's own
-cyclic fixed point coincides with `prescribed`, so the anchored mismatch is zero
-(`quittingCyclicContinuationBlock_mismatch_eq_zero`).  This file drops that hypothesis
-entirely and computes the *gap* between the companion map's cyclic fixed point and
-`prescribed` in closed form.
+Fix a coordinate, a sequence of quitting roots, and a scalar prescribed-value
+path satisfying `IsQuittingLivePrescribedValue`. Recenter each companion map
+around the prescribed path. Its two branches have signed intercepts
 
-This file formalizes the claim that the signed phasewise
-accumulation of the local gaps ... equals the gain exactly.  The **local gap** at phase
-`k` is `quittingRootEndpointDifference reward (fun _ => prescribed (k + 1)) (roots k) who`
-(`g_k` below), and the **gain** is identified here with the amount
-by which the companion map's own cyclic fixed point exceeds `prescribed 0` -- this is
-exactly what "gain of a relaxed cycle" means once the companion-map machinery already
-proved in `QuittingCycleMismatchContraction.lean` is applied without the exact-Nash
-hypothesis.
+`αₖ = (1 - pₖ) gₖ` and `βₖ = -pₖ gₖ`,
 
-## Re-derivation, and where it strengthens the reported claim
+and slope equal to the opponents' one-stage survival probability. These data
+form `quittingSignedCompanionLabel`; a finite backward recursion is exactly the
+action of the chronological composite of these labels.
 
-The claim above states the identity under a *relaxed complementarity* hypothesis
-(`IsεQuittingRootEndpointNash` at some defect `ε`, matched exactly against the source's
-own equations (5)-(6) once the two one-sided defect inequalities are read jointly).  The
-re-derivation carried out to build this file establishes the identity **without any
-complementarity hypothesis at all**: it is a statement purely about the companion-map
-recursion versus the value recursion `quittingRootSuccessorPayoff`, and complementarity
-is only what a *separate* argument would need to bound the local gaps by `ε` (the
-`ε C₁` envelope of the reported claim, reusing `Math/CyclicMaxAffineBound.lean`, not
-reproved here).  So the identity below is strictly more general than what was asked for.
+For a window of `m + 1` phases, the composite label has floor
+`quittingSignedStopGap`, shift `quittingSignedContinueGap`, and slope
+`quittingOpponentSurvivalWeight`. Thus the entire phasewise recursion reduces
+to one scalar max-affine equation. When the survival product is below one, its
+unique fixed discrepancy is
 
-The re-derivation also rechecked the reported closed form's outer `max {0, ...}` term
-(reported equations (13), (18), (38)).  That "0" branch is *not* part of the abstract
-max-affine recursion's solution -- solving the bare two-branch recursion
-`d_k = max {α_k, β_k + q_k d_{k+1}}` around the cycle gives `max {stopGap, contGap}`
-with **no** outer `0`.  The reported text calls the "0" "redundant... once one uses K2"
-without pinning down why.  The reason is elementary and does not need the pure-time
-reduction K2 at all: since `p_k := (roots k who true).toReal` and
-`q_k := quittingRootDeletedContinueMass (roots k) who` both lie in `[0, 1]`, the two
-local weights `α_k = (1 - p_k) * g_k` and `β_k = -p_k * g_k` always have `α_k * β_k ≤ 0`
-(a probability weight and its complement cannot both make the same-signed local gap
-strictly worse), so `max {α_k, β_k} ≥ 0` at every phase; chaining this around a cycle
-with survival product `< 1` forces the whole cyclic solution to be `≥ 0`.  So the outer
-`0` is true but genuinely redundant, for a reason internal to the recursion, not an
-appeal to feasibility of "not deviating."  This fact is not needed for the identity
-below (which only needs the base-point value, not its sign), so it is not formalized
-here, but it is recorded as a checked correction to the reported proof sketch.
+`max {stopGap, continueGap / (1 - survival)}`.
 
-## What is proved
+This quantity is `quittingRelaxedCycleGain`. The fixed-point identity and its
+uniqueness require only prescribed-value consistency and cyclic wraparound;
+no complementarity or Nash hypothesis enters the algebra. In particular,
+`quittingRelaxedCycleGain_eq_zero_iff` characterizes exactly when the prescribed
+base value is already fixed by the one-period companion composite.
 
-* `quittingSignedStopWeight`, `quittingSignedContinueWeight` -- the two signed local
-  weights `α_k = (1 - p_k) g_k` and `β_k = -p_k g_k` of the reported equations (9)-(10).
-* `quittingSignedStopGap`, `quittingSignedContinueGap` -- the finite unrolled stop and
-  continuation excess over a window of `m + 1` phases (reported equations (11)-(19)).
-* `quittingRelaxedCycleGain` -- the **signed phasewise accumulation**
-  `max {stopGap, contGap / (1 - P)}`, the reported `Q_{i,1}` (equations (23)-(26)).
-* `quittingCompanionComposite_sub_prescribed_eq` -- the exact finite identity
-  expressing `quittingCompanionComposite` applied at any continuation, minus
-  `prescribed`, as this signed max-affine expression.  Purely algebraic; consumes only
-  the value recursion `IsQuittingLivePrescribedValue`, no complementarity.
-* `quittingCompanionComposite_prescribed_add_gain_eq` -- **the main identity**: adding
-  `quittingRelaxedCycleGain` to `prescribed 0` gives a fixed point of the one-period
-  companion composite.
-* `quittingRelaxedCycleGain_unique` -- that fixed point, and hence the gain, is unique.
-* `quittingRelaxedCycleGain_eq_zero_iff` -- **necessary and sufficient**: the signed
-  accumulation vanishes iff the companion composite's cyclic fixed point already equals
-  `prescribed 0`, i.e. iff there is no deviation incentive to correct.
-
-## The behavioral supremum
-
-Identifying `quittingRelaxedCycleGain` with the literal supremum over *all* behavioral
-deviations (`quittingTerminalPayoff` over `Function.update profile who deviation`) needs
-two further ingredients: (1) the pure-time reduction of that supremum to pure quit-time
-deviations (`sSup_range_quittingTerminalPayoff_update_eq_pureTime` in
-`QuittingBehaviorPureTimeExtremality.lean`), and (2) the fact that the supremum over pure
-quit-time deviations of a periodic live root sequence equals the companion composite's
-cyclic fixed point constructed here -- a "value of an infinite-horizon optimal-stopping
-problem equals its Bellman fixed point" argument.  Both are proved in
-`QuittingPeriodicPureTimeBellman.lean`
-(`sSup_range_quittingRootSequencePureTimeTerminalValue_eq_of_fixed` supplies (2)); its
-closing theorem `sSup_range_quittingTerminalPayoff_update_eq_prescribed_add_gain` composes
-them with `quittingCompanionComposite_prescribed_add_gain_eq` below to identify the
-supremum over all unilateral behavioral deviations, for a profile whose live root sequence
-is periodic, with `prescribed 0 + quittingRelaxedCycleGain`.  Consequently "gain" in this
-file already means exactly the literal supremum over behavioral deviations under that
-periodicity hypothesis, matching what `QuittingCycleMismatchContraction.lean`'s existing
-"mismatch" means in the exact-Nash case (there `prescribed` itself is the fixed point, so
-the gap is `0`); this file's identity is the strict generalization of that gap to the
-case where `prescribed` need not be any kind of Nash value.
+The behavioral interpretation uses the pure-time extremality and periodic
+Bellman theorems in `PeriodicPureTimeBellman`: for a periodic live-root
+profile, the literal supremum over unilateral behavioral deviations is the
+prescribed base value plus this gain.
 -/
 
 noncomputable section
@@ -129,6 +69,42 @@ def quittingSignedContinueWeight
   -(roots k who true).toReal *
     quittingRootEndpointDifference reward (fun _ => prescribed (k + 1)) (roots k) who
 
+/-- The signed max-affine label of one companion step recentered around the
+prescribed path. -/
+def quittingSignedCompanionLabel
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (prescribed : ℕ → ℝ)
+    (who : ι) (time : ℕ) : Math.MaxAffineTransport.Label :=
+  ⟨(quittingSignedStopWeight reward roots prescribed who time : WithBot ℝ),
+    quittingSignedContinueWeight reward roots prescribed who time,
+    quittingRootDeletedContinueMass (roots time) who⟩
+
+@[simp] theorem quittingSignedCompanionLabel_apply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (prescribed : ℕ → ℝ)
+    (who : ι) (time : ℕ) (discrepancy : ℝ) :
+    (quittingSignedCompanionLabel reward roots prescribed who time).apply discrepancy =
+      max (quittingSignedStopWeight reward roots prescribed who time)
+        (quittingSignedContinueWeight reward roots prescribed who time +
+          quittingRootDeletedContinueMass (roots time) who * discrepancy) := rfl
+
+theorem quittingSignedCompanionLabel_slope_nonneg
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (prescribed : ℕ → ℝ)
+    (who : ι) (time : ℕ) :
+    0 ≤ (quittingSignedCompanionLabel reward roots prescribed who time).slope :=
+  quittingRootDeletedContinueMass_nonneg (roots time) who
+
+/-- Backward chronological signed labels of a companion window. -/
+def quittingSignedCompanionLabelList
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (prescribed : ℕ → ℝ)
+    (who : ι) (start : ℕ) : ℕ → List Math.MaxAffineTransport.Label
+  | 0 => []
+  | fuel + 1 =>
+      quittingSignedCompanionLabelList reward roots prescribed who (start + 1) fuel ++
+        [quittingSignedCompanionLabel reward roots prescribed who start]
+
 /-! ## The finite unrolled stop and continuation excess -/
 
 /-- The best signed excess obtainable by continuing for some `ℓ ≤ m` phases starting at
@@ -155,6 +131,47 @@ def quittingSignedContinueGap
       quittingSignedContinueWeight reward roots prescribed who k +
         quittingRootDeletedContinueMass (roots k) who *
           quittingSignedContinueGap reward roots prescribed who (k + 1) m
+
+/-- Exact coefficient normal form of a nonempty signed companion window. -/
+theorem quittingSignedCompanionLabelList_compList
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (prescribed : ℕ → ℝ)
+    (who : ι) : ∀ (m k : ℕ),
+    Math.MaxAffineTransport.Label.compList
+        (quittingSignedCompanionLabelList reward roots prescribed who k (m + 1)) =
+      ⟨(quittingSignedStopGap reward roots prescribed who k m : WithBot ℝ),
+        quittingSignedContinueGap reward roots prescribed who k m,
+        quittingOpponentSurvivalWeight roots who k (m + 1)⟩ := by
+  intro m
+  induction m with
+  | zero =>
+      intro k
+      simp only [quittingSignedCompanionLabelList]
+      rw [
+        Math.MaxAffineTransport.Label.compList_append_singleton,
+        Math.MaxAffineTransport.Label.compList_nil,
+        Math.MaxAffineTransport.Label.comp_id]
+      apply Math.MaxAffineTransport.Label.ext <;>
+        simp [quittingSignedCompanionLabel, quittingSignedStopGap,
+          quittingSignedContinueGap, quittingOpponentSurvivalWeight,
+          quittingRootDeletedContinueMass_eq_fixedOpponents]
+  | succ m ih =>
+      intro k
+      rw [quittingSignedCompanionLabelList,
+        Math.MaxAffineTransport.Label.compList_append_singleton,
+        ih (k + 1)]
+      apply Math.MaxAffineTransport.Label.ext
+      · simp only [Math.MaxAffineTransport.Label.floor_comp,
+          quittingSignedCompanionLabel, Math.MaxAffineTransport.Label.pushFloor_coe,
+          quittingSignedStopGap]
+        rw [← WithBot.coe_sup]
+      · simp only [Math.MaxAffineTransport.Label.shift_comp,
+          quittingSignedCompanionLabel, quittingSignedContinueGap]
+      · simp only [Math.MaxAffineTransport.Label.slope_comp,
+          quittingSignedCompanionLabel]
+        rw [quittingRootDeletedContinueMass_eq_fixedOpponents]
+        exact (quittingOpponentSurvivalWeight_succ_left
+          roots who k (m + 1)).symm
 
 /-! ## The signed phasewise accumulation -/
 
@@ -194,6 +211,25 @@ theorem quittingRootCompanionMap_sub_prescribed_eq
   congr 1
   · linear_combination -hp
   · linear_combination -hp
+
+/-- One companion step recentered around the prescribed path is exactly the
+action of its signed max-affine label. -/
+theorem quittingRootCompanionMap_sub_prescribed_eq_signedLabel_apply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (prescribed : ℕ → ℝ)
+    (hprescribed : IsQuittingLivePrescribedValue reward roots who prescribed)
+    (time : ℕ) (discrepancy : ℝ) :
+    quittingRootCompanionMap reward (roots time) who
+          (prescribed (time + 1) + discrepancy) - prescribed time =
+      (quittingSignedCompanionLabel reward roots prescribed who time).apply
+        discrepancy := by
+  rw [quittingSignedCompanionLabel_apply]
+  have hstep := quittingRootCompanionMap_sub_prescribed_eq
+    reward roots who prescribed hprescribed time
+      (prescribed (time + 1) + discrepancy)
+  rw [show prescribed (time + 1) + discrepancy - prescribed (time + 1) =
+    discrepancy by ring] at hstep
+  exact hstep
 
 /-! ## The finite unrolled identity -/
 
@@ -251,6 +287,23 @@ theorem quittingCompanionComposite_sub_prescribed_eq
         add_max, ← max_assoc, mul_add, ← mul_assoc, hweight, hindex]
       congr 1
       ring
+
+/-- The recentered finite companion composite is the action of the composite
+signed label. -/
+theorem quittingCompanionComposite_sub_prescribed_eq_compList_apply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (prescribed : ℕ → ℝ)
+    (hprescribed : IsQuittingLivePrescribedValue reward roots who prescribed)
+    (m k : ℕ) (continuation : ℝ) :
+    quittingCompanionComposite reward roots who k (m + 1) continuation -
+        prescribed k =
+      (Math.MaxAffineTransport.Label.compList
+        (quittingSignedCompanionLabelList reward roots prescribed who k (m + 1))).apply
+          (continuation - prescribed (k + (m + 1))) := by
+  rw [quittingCompanionComposite_sub_prescribed_eq
+      reward roots who prescribed hprescribed m k continuation,
+    quittingSignedCompanionLabelList_compList]
+  rfl
 
 /-! ## Solving the single self-referential equation -/
 

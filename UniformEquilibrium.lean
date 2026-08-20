@@ -445,6 +445,7 @@ import UniformEquilibrium.Quitting.Examples.FTV.EpsilonPerturbedCycleExclusion
 import UniformEquilibrium.Quitting.Debt.Dynamic.CyclePinnedDebt
 import UniformEquilibrium.Quitting.Cycles.CyclicPeriodicExtension
 import UniformEquilibrium.Quitting.Cycles.CycleMismatchContraction
+import UniformEquilibrium.Quitting.Cycles.CompanionTransport
 import UniformEquilibrium.Quitting.Cycles.RelaxedCycleGain
 import UniformEquilibrium.Quitting.Cycles.PeriodicPureTimeBellman
 import UniformEquilibrium.Quitting.Cycles.CycleIsolatedCoordinate

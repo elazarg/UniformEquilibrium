@@ -167,6 +167,124 @@ theorem bestResponseLabel_compose
 
 end QuittingBoundaryHolonomy
 
+/-! ## Companion-map paths -/
+
+variable {iota : Type} [Fintype iota] [DecidableEq iota]
+
+/-- The max-affine label of one root's scalar companion map. -/
+def quittingCompanionLabel
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) (time : ℕ) :
+    Math.MaxAffineTransport.Label :=
+  (quittingBoundaryStageHolonomy reward roots time).bestResponseLabel who
+
+@[simp] theorem quittingCompanionLabel_floor
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) (time : ℕ) :
+    (quittingCompanionLabel reward roots who time).floor =
+      (quittingFixedOpponentsQuitValue reward roots who time : WithBot ℝ) := rfl
+
+@[simp] theorem quittingCompanionLabel_shift
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) (time : ℕ) :
+    (quittingCompanionLabel reward roots who time).shift =
+      quittingFixedOpponentsContinueReward reward roots who time := rfl
+
+@[simp] theorem quittingCompanionLabel_slope
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) (time : ℕ) :
+    (quittingCompanionLabel reward roots who time).slope =
+      quittingFixedOpponentsContinueMass roots who time := rfl
+
+theorem quittingCompanionLabel_slope_nonneg
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) (time : ℕ) :
+    0 ≤ (quittingCompanionLabel reward roots who time).slope := by
+  rw [quittingCompanionLabel_slope]
+  exact quittingStationaryContinueMass_nonneg
+    (Function.update (roots time) who (PMF.pure false))
+
+theorem quittingCompanionLabel_slope_le_one
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) (time : ℕ) :
+    (quittingCompanionLabel reward roots who time).slope ≤ 1 := by
+  rw [quittingCompanionLabel_slope]
+  exact quittingStationaryContinueMass_le_one
+    (Function.update (roots time) who (PMF.pure false))
+
+/-- Backward chronological labels for a finite companion-map window. -/
+def quittingCompanionLabelList
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) (start : ℕ) : ℕ →
+    List Math.MaxAffineTransport.Label
+  | 0 => []
+  | fuel + 1 =>
+      quittingCompanionLabelList reward roots who (start + 1) fuel ++
+        [quittingCompanionLabel reward roots who start]
+
+theorem quittingCompanionLabelList_slope_nonneg
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) : ∀ start fuel label,
+    label ∈ quittingCompanionLabelList reward roots who start fuel →
+      0 ≤ label.slope := by
+  intro start fuel
+  induction fuel generalizing start with
+  | zero => simp [quittingCompanionLabelList]
+  | succ fuel ih =>
+      intro label hlabel
+      rw [quittingCompanionLabelList] at hlabel
+      rcases List.mem_append.mp hlabel with htail | hlast
+      · exact ih (start + 1) label htail
+      · simp only [List.mem_singleton] at hlast
+        subst label
+        exact quittingCompanionLabel_slope_nonneg reward roots who start
+
+/-- The path slope of a companion window is its opponent-survival weight. -/
+theorem quittingCompanionLabelList_pathSlope
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) : ∀ start fuel,
+    Math.MaxAffineTransport.Label.pathSlope
+        (quittingCompanionLabelList reward roots who start fuel) =
+      quittingOpponentSurvivalWeight roots who start fuel := by
+  intro start fuel
+  induction fuel generalizing start with
+  | zero => simp [quittingCompanionLabelList, quittingOpponentSurvivalWeight]
+  | succ fuel ih =>
+      rw [quittingCompanionLabelList,
+        Math.MaxAffineTransport.Label.pathSlope_append,
+        ih (start + 1), quittingOpponentSurvivalWeight_succ_left]
+      simp only [Math.MaxAffineTransport.Label.pathSlope_cons,
+        Math.MaxAffineTransport.Label.pathSlope_nil,
+        quittingCompanionLabel_slope, mul_one]
+      ring
+
+/-- The best-response label of a finite boundary holonomy is the composite of
+its one-stage companion labels. -/
+theorem quittingFiniteBoundaryHolonomy_bestResponseLabel_eq_compList
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (roots : ℕ → iota → PMF Bool) (who : iota) : ∀ start extra,
+    (quittingFiniteBoundaryHolonomy reward roots start extra).bestResponseLabel who =
+      Math.MaxAffineTransport.Label.compList
+        (quittingCompanionLabelList reward roots who start (extra + 1)) := by
+  intro start extra
+  induction extra generalizing start with
+  | zero =>
+      change (quittingCompanionLabel reward roots who start) =
+        Math.MaxAffineTransport.Label.compList
+          [quittingCompanionLabel reward roots who start]
+      rw [show [quittingCompanionLabel reward roots who start] =
+          [] ++ [quittingCompanionLabel reward roots who start] by rfl,
+        Math.MaxAffineTransport.Label.compList_append_singleton,
+        Math.MaxAffineTransport.Label.compList_nil,
+        Math.MaxAffineTransport.Label.comp_id]
+  | succ extra ih =>
+      rw [quittingFiniteBoundaryHolonomy_succ,
+        QuittingBoundaryHolonomy.bestResponseLabel_mul,
+        quittingCompanionLabelList,
+        Math.MaxAffineTransport.Label.compList_append_singleton,
+        ← ih (start + 1)]
+      rfl
+
 namespace QuittingAnchoredBoundaryBlock
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -228,6 +346,18 @@ theorem bestResponseLabel_slope_le_one
     (block.bestResponseLabel who).slope ≤ 1 := by
   rw [bestResponseLabel_slope]
   exact quittingOpponentSurvivalWeight_le_one _ _ _ _
+
+/-- The realized block label is the chronological composite of its one-stage
+companion labels. -/
+theorem bestResponseLabel_eq_compList
+    {anchor : QuittingCalibratedTerminalAnchor reward}
+    (block : QuittingAnchoredBoundaryBlock anchor) (who : ι) :
+    block.bestResponseLabel who =
+      Math.MaxAffineTransport.Label.compList
+        (quittingCompanionLabelList reward anchor.roots who
+          block.start block.length) := by
+  exact quittingFiniteBoundaryHolonomy_bestResponseLabel_eq_compList
+    reward anchor.roots who block.start block.extra
 
 /-- Concatenation of adjacent realized blocks is generic label composition. -/
 theorem prescribedLabel_concat
