@@ -1,0 +1,155 @@
+name: Verify PR 45 paper audit
+
+on:
+  push:
+    branches:
+      - agent/complete-solan-vieille-2001
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: verify-pr45-paper-audit
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/complete-solan-vieille-2001
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Verify transparent paper record
+        shell: bash
+        run: |
+          set -euo pipefail
+          file=Literature/SolanAndVieille2001.lean
+          test -f "$file"
+          grep -Eq '^theorem[[:space:]]+not_paperLemma2_7\b' "$file"
+          grep -Eq '^theorem[[:space:]]+(lemma2_7_corrected|paperLemma2_7_corrected)\b' "$file"
+          grep -Eq '^theorem[[:space:]]+not_paperTheorem2_8\b' "$file"
+          grep -Eq '^theorem[[:space:]]+theorem2_8_deterministic_specialization\b' "$file"
+          ! grep -Eq 'paperFigure2|figure2_|PaperFigure2' "$file"
+          ! grep -Eq '^(axiom|opaque)[[:space:]]+' "$file"
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          source = Path('Literature/SolanAndVieille2001.lean').read_text()
+          claims = [m.group(1) for m in re.finditer(
+              r'(?m)^def\s+(paper(?:Theorem|Lemma|Proposition)[A-Za-z0-9_]*)'
+              r'(?:\s[^:]*)?\s*:\s*Prop\s*:=', source)]
+          missing = []
+          for name in claims:
+              stem = name.removeprefix('paper')
+              normalized = re.sub(r'(?<!^)(?=[A-Z])', '_', stem).lower()
+              typed = re.search(
+                  rf'(?ms)^theorem\s+[^\n:]+[^:]*:\s*[^:=\n]*\b{re.escape(name)}\b',
+                  source)
+              named = re.search(
+                  rf'(?m)^theorem\s+(?:not_|open_|corrected_)?{re.escape(normalized)}\b',
+                  source)
+              if not (typed or named):
+                  missing.append(name)
+          if missing:
+              raise SystemExit('hidden paper propositions: ' + ', '.join(missing))
+          print('claim definitions with theorem status:', len(claims))
+          print('explicit sorry tokens:', len(re.findall(r'\bsorry\b', source)))
+          PY
+
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+
+      - name: Compile production frontier and paper
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake build UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleSequenceExtraction
+          lake env lean Literature/SolanAndVieille2001.lean
+
+      - name: Run relevant repository checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_docs.py
+          python3 scripts/check_reward_bounds.py --check --max-nonnegative 0
+          python3 scripts/check_redundant_order_hypotheses.py --check
+          python3 scripts/check_derivable_telescope_hypotheses.py --check
+
+      - name: Update PR description from checked source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          file=Literature/SolanAndVieille2001.lean
+          sorry_count=$(grep -ow '\bsorry\b' "$file" | wc -l | tr -d ' ')
+          sorry_lines=$(grep -n '\bsorry\b' "$file" || true)
+          changed=$(gh api repos/${GITHUB_REPOSITORY}/pulls/45/files --paginate --jq '.[].filename')
+          cat > /tmp/pr-body.md <<EOF
+          ## Solan–Vieille 2001 paper audit
+
+          This branch contains the checked paper record and the supporting periodic-selection / sequence-extraction results used by its proved declarations.
+
+          ### Audit policy
+
+          - Every paper proposition has theorem status.
+          - A proposition not proved in this formalization is exposed by an explicit theorem declaration containing \`sorry\`; no open claim is hidden merely as a \`def : Prop\`.
+          - Malformed local encodings are retained only together with proved negations and separately named corrected/specialized statements.
+          - The later Figure-2 / near-all-Continue example package has been removed from this 2001 audit because it belongs to the separate Solan–Vieille example paper.
+
+          ### Checked declarations added for the remaining section
+
+          - \`not_paperLemma2_7\`
+          - \`lemma2_7_corrected\` (or the equivalent paper-prefixed spelling in source)
+          - \`not_paperTheorem2_8\`
+          - \`theorem2_8_deterministic_specialization\`
+
+          ### Explicit open obligations
+
+          The checked source contains **${sorry_count}** explicit \`sorry\` token(s):
+
+          \`\`\`
+          ${sorry_lines}
+          \`\`\`
+
+          ### Changed files
+
+          \`\`\`
+          ${changed}
+          \`\`\`
+
+          ### Validation
+
+          At this branch head, GitHub Actions successfully ran:
+
+          - \`lake build UniformEquilibrium.Quitting.Classification.Existence.SolanVieilleSequenceExtraction\`
+          - \`lake env lean Literature/SolanAndVieille2001.lean\`
+          - the documentation, reward-bound, redundant-order-hypothesis, and derivable-telescope-hypothesis checks.
+          EOF
+          gh pr edit 45 --body-file /tmp/pr-body.md
+
+      - name: Remove temporary publication workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f .github/workflows/export-pr45-source.yml
+          rm -f .github/workflows/finalize-pr45-20260820.yml
+          rm -f .github/workflows/verify-pr45-audit-20260820.yml
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Remove temporary PR 45 publication workflows"
+            git push origin HEAD:agent/complete-solan-vieille-2001
+          fi
