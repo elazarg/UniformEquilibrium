@@ -2,6 +2,9 @@ import Mathlib
 import GameTheory.Analysis.Payoff
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.PMFProduct.Bool
+import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer
+import UniformEquilibrium.Certificates.Public.FixedPrefixAccounting
+import UniformEquilibrium.Certificates.Public.TerminalChildLawTransfer
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter
@@ -3611,15 +3614,209 @@ theorem reported_perfect_equilibrium_failure :
         G.individuallyRationalPayoffs := by
   sorry
 
-/-! Lemma 3 is block concatenation.  The repository adapter has profile
-transport but no theorem assembling arbitrary finite-horizon equilibrium
-blocks while preserving all continuation incentives. -/
+/-! Lemma 3 is block concatenation.  The feasible clause uses the exact
+public-history dispatcher below; the equilibrium clause additionally requires
+the corresponding decomposition of unilateral deviations. -/
+
+/-- Play `prefix` for `fuel` periods and then restart `suffix` after the
+realized public prefix. -/
+noncomputable def FiniteStageGame.appendFiniteProfiles
+    (G : FiniteStageGame) (fuel : ℕ)
+    (prefixProfile suffixProfile : G.BehaviorProfile) : G.BehaviorProfile :=
+  G.repeatedGame.terminalChildDispatcher fuel prefixProfile
+    (fun _ => suffixProfile)
+
+private abbrev FiniteStageGame.repeatedInitial (G : FiniteStageGame) :
+    G.repeatedGame.State :=
+  PUnit.unit
+
+private theorem appendFiniteProfiles_agreeBefore
+    (G : FiniteStageGame) (fuel : ℕ)
+    (prefixProfile suffixProfile : G.BehaviorProfile) :
+    G.repeatedGame.ProfilesAgreeBefore
+      (G.appendFiniteProfiles fuel prefixProfile suffixProfile)
+      prefixProfile fuel := by
+  intro who time history htime
+  exact G.repeatedGame.terminalChildDispatcher_before
+    prefixProfile (fun _ => suffixProfile) htime who history
+
+private theorem expectedStagePayoff_eq_of_profilesAgreeBefore
+    (G : FiniteStageGame) {left right : G.BehaviorProfile}
+    {fuel time : ℕ}
+    (hagree : G.repeatedGame.ProfilesAgreeBefore left right fuel)
+    (htime : time < fuel) (who : G.Player) :
+    G.repeatedGame.expectedStagePayoff left G.repeatedInitial time who =
+      G.repeatedGame.expectedStagePayoff right G.repeatedInitial time who := by
+  unfold StochasticGame.expectedStagePayoff
+  rw [G.repeatedGame.histDist_eq_of_profilesAgreeBefore
+    hagree time htime.le]
+  apply Math.ProbabilityMassFunction.expect_congr_on_support
+  intro history _
+  unfold StochasticGame.stageEUAt
+  rw [G.repeatedGame.stageActionDist_eq_of_profilesAgreeBefore
+    hagree history htime]
+
+private theorem expectedStagePayoff_add_eq_expect_afterHistory
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (prefixLength suffixLength : ℕ) (who : G.Player) :
+    G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+        (prefixLength + suffixLength) who =
+      Math.Probability.expect
+        (G.repeatedGame.histDist profile G.repeatedInitial prefixLength) fun base =>
+          G.repeatedGame.expectedStagePayoff
+            (G.repeatedGame.afterHistoryProfile profile base) base.2
+            suffixLength who := by
+  unfold StochasticGame.expectedStagePayoff
+  rw [G.repeatedGame.histDist_add_eq_bind_histDistAfter,
+    Math.Probability.expect_bind]
+  apply congrArg
+  funext base
+  unfold StochasticGame.histDistAfter
+  rw [Math.Probability.expect_map]
+  rfl
+
+private theorem appendFiniteProfiles_expectedStagePayoff_add
+    (G : FiniteStageGame) (fuel time : ℕ)
+    (prefixProfile suffixProfile : G.BehaviorProfile) (who : G.Player) :
+    G.repeatedGame.expectedStagePayoff
+        (G.appendFiniteProfiles fuel prefixProfile suffixProfile)
+        G.repeatedInitial
+        (fuel + time) who =
+      G.repeatedGame.expectedStagePayoff suffixProfile
+        G.repeatedInitial time who := by
+  rw [expectedStagePayoff_add_eq_expect_afterHistory]
+  have hpoint : ∀ base : G.repeatedGame.Hist fuel,
+      G.repeatedGame.expectedStagePayoff
+          (G.repeatedGame.afterHistoryProfile
+            (G.appendFiniteProfiles fuel prefixProfile suffixProfile) base)
+          base.2 time who =
+        G.repeatedGame.expectedStagePayoff suffixProfile
+          G.repeatedInitial time who := by
+    intro base
+    unfold FiniteStageGame.appendFiniteProfiles
+    rw [G.repeatedGame.afterHistoryProfile_terminalChildDispatcher_canonical]
+    rw [G.repeatedGame.expectedStagePayoff_canonicalTerminalChildProfile]
+    cases base.2
+    rfl
+  simp_rw [hpoint]
+  exact Math.Probability.expect_const _ _
+
+private theorem cast_smul_finitePayoff_eq_sum
+    (G : FiniteStageGame) (horizon : ℕ)
+    (profile : G.BehaviorProfile) :
+    (horizon : ℝ) • G.finitePayoff horizon profile =
+      ∑ time ∈ Finset.range horizon,
+        (fun who => G.repeatedGame.expectedStagePayoff
+          profile G.repeatedInitial time who) := by
+  funext who
+  change (horizon : ℝ) *
+      G.repeatedGame.finiteAveragePayoff PUnit.unit horizon profile who = _
+  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  simp only [Finset.sum_apply]
+  by_cases hzero : horizon = 0
+  · subst horizon
+    simp
+  · rw [← mul_assoc, mul_inv_cancel₀ (by exact_mod_cast hzero), one_mul]
+
+private theorem appendFiniteProfiles_weightedPayoff
+    (G : FiniteStageGame) (prefixLength suffixLength : ℕ)
+    (prefixProfile suffixProfile : G.BehaviorProfile) :
+    ((prefixLength + suffixLength : ℕ) : ℝ) •
+        G.finitePayoff (prefixLength + suffixLength)
+          (G.appendFiniteProfiles prefixLength prefixProfile suffixProfile) =
+      (prefixLength : ℝ) • G.finitePayoff prefixLength prefixProfile +
+        (suffixLength : ℝ) • G.finitePayoff suffixLength suffixProfile := by
+  rw [cast_smul_finitePayoff_eq_sum, cast_smul_finitePayoff_eq_sum,
+    cast_smul_finitePayoff_eq_sum, Finset.sum_range_add]
+  congr 1
+  · apply Finset.sum_congr rfl
+    intro time htime
+    funext who
+    exact expectedStagePayoff_eq_of_profilesAgreeBefore G
+      (appendFiniteProfiles_agreeBefore G prefixLength
+        prefixProfile suffixProfile)
+      (Finset.mem_range.mp htime) who
+  · apply Finset.sum_congr rfl
+    intro time _
+    funext who
+    exact appendFiniteProfiles_expectedStagePayoff_add
+      G prefixLength time prefixProfile suffixProfile who
+
+/-- Concatenate a list of equal-length blocks in chronological order, then
+play one residual profile. -/
+noncomputable def FiniteStageGame.appendFiniteProfileList
+    (G : FiniteStageGame) (blockLength : ℕ) :
+    List G.BehaviorProfile → G.BehaviorProfile → G.BehaviorProfile
+  | [], residual => residual
+  | profile :: profiles, residual =>
+      G.appendFiniteProfiles blockLength profile
+        (G.appendFiniteProfileList blockLength profiles residual)
+
+private theorem appendFiniteProfileList_weightedPayoff
+    (G : FiniteStageGame) (blockLength residualLength : ℕ)
+    (profiles : List G.BehaviorProfile) (residual : G.BehaviorProfile) :
+    ((profiles.length * blockLength + residualLength : ℕ) : ℝ) •
+        G.finitePayoff (profiles.length * blockLength + residualLength)
+          (G.appendFiniteProfileList blockLength profiles residual) =
+      (profiles.map fun profile =>
+        (blockLength : ℝ) • G.finitePayoff blockLength profile).sum +
+        (residualLength : ℝ) •
+          G.finitePayoff residualLength residual := by
+  induction profiles with
+  | nil =>
+      simp only [List.length_nil, zero_mul, zero_add, List.map_nil,
+        List.sum_nil, zero_add, FiniteStageGame.appendFiniteProfileList]
+  | cons profile profiles ih =>
+      have hlength : (profile :: profiles).length * blockLength + residualLength =
+          blockLength + (profiles.length * blockLength + residualLength) := by
+        simp only [List.length_cons, Nat.succ_mul]
+        omega
+      rw [hlength, FiniteStageGame.appendFiniteProfileList,
+        appendFiniteProfiles_weightedPayoff, ih]
+      simp only [List.map_cons, List.sum_cons]
+      abel
+
 theorem lemma_3_feasible (G : FiniteStageGame)
     (n m p r : ℕ) (hn : n = m * p + r) :
     addSet (iteratedAddSet m (scaleSet (p : ℝ) (G.finiteFeasiblePayoffs p)))
         (scaleSet (r : ℝ) (G.finiteFeasiblePayoffs r)) ⊆
       scaleSet (n : ℝ) (G.finiteFeasiblePayoffs n) := by
-  sorry
+  classical
+  rintro z ⟨blockTotal, hblockTotal, residualTotal, hresidualTotal, hz⟩
+  obtain ⟨blockPayoff, hblockPayoff, hblockTotalEq⟩ := hblockTotal
+  have hexistsBlock : ∀ k, ∃ profile : G.BehaviorProfile,
+      blockPayoff k = (p : ℝ) • G.finitePayoff p profile := by
+    intro k
+    obtain ⟨payoff, hpayoff, hscaled⟩ := hblockPayoff k
+    obtain ⟨profile, hprofile⟩ := hpayoff
+    refine ⟨profile, ?_⟩
+    rw [hprofile]
+    exact hscaled
+  choose blockProfile hblockProfile using hexistsBlock
+  obtain ⟨residualPayoff, hresidualPayoff, hresidualScaled⟩ :=
+    hresidualTotal
+  obtain ⟨residualProfile, hresidualProfile⟩ := hresidualPayoff
+  have hresidual : residualTotal =
+      (r : ℝ) • G.finitePayoff r residualProfile := by
+    rw [hresidualProfile]
+    exact hresidualScaled
+  let profiles := List.ofFn blockProfile
+  let joined := G.appendFiniteProfileList p profiles residualProfile
+  have hlist :
+      (profiles.map fun profile =>
+        (p : ℝ) • G.finitePayoff p profile).sum =
+        ∑ k, blockPayoff k := by
+    dsimp only [profiles]
+    rw [List.map_ofFn, List.sum_ofFn]
+    apply Finset.sum_congr rfl
+    intro k _
+    exact (hblockProfile k).symm
+  have hweighted := appendFiniteProfileList_weightedPayoff
+    G p r profiles residualProfile
+  rw [show profiles.length = m by simp [profiles], hlist, ← hresidual] at hweighted
+  refine ⟨G.finitePayoff n joined, ⟨joined, rfl⟩, ?_⟩
+  rw [hz, hblockTotalEq, hn]
+  simpa only [joined] using hweighted.symm
 
 /-! Equilibrium-block concatenation is the strategic clause of Lemma 3. -/
 theorem lemma_3_equilibrium (G : FiniteStageGame)
