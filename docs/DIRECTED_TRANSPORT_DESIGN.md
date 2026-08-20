@@ -353,7 +353,13 @@ debt, the cap defect is a lower bound for the legal best-endpoint defect.
 Consequently
 `exists_actualRowGain_pos_or_capDefect_le_quitOptionBudget_of_return`
 gives an exact frontier alternative between an actual reached behavioral gain
-and domination by this option budget.
+and domination by this option budget. At a minimum-total-debt carrier point,
+`minimumTerminalSemantic_absorptionDebt_sub_quitOptionBudget_le_literalDefectSum`
+aggregates the conversion: absorption-weighted total debt minus all singleton
+option budgets is paid by literal root defects. In particular,
+`exists_literalDefect_pos_of_minimum_of_debt_pos_of_optionMass_lt_absorption`
+produces a positive literal defect whenever some positive-debt coordinate's
+own singleton option mass is strictly smaller than total absorption.
 
 `quittingFiniteDynamicDebt_eq_compList_apply` and
 `quittingFiniteDynamicDebt_eq_terminalDebt_iff`
