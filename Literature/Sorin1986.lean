@@ -4424,6 +4424,80 @@ theorem example2_mixedEU_update_true
 def example3 : FiniteStageGame :=
   binaryGame (pair 1 0) (pair 1 1) (pair 0 0) (pair 1 0)
 
+/-- Every correlated-feasible payoff of Example 3 has row payoff at most one
+and column payoff between zero and one. -/
+private theorem example3_correlated_bounds {v : Payoff Bool}
+    (hv : v ∈ example3.correlatedFeasiblePayoffs) :
+    v false ≤ 1 ∧ 0 ≤ v true ∧ v true ≤ 1 := by
+  apply (convexHull_min (t := {w : Payoff Bool |
+      w false ≤ 1 ∧ 0 ≤ w true ∧ w true ≤ 1}) ?_ ?_) hv
+  · rintro _ ⟨action, rfl⟩
+    change (Bool → Bool) at action
+    change binaryPayoff (pair 1 0) (pair 1 1) (pair 0 0)
+      (pair 1 0) action false ≤ 1 ∧
+        0 ≤ binaryPayoff (pair 1 0) (pair 1 1) (pair 0 0)
+          (pair 1 0) action true ∧
+        binaryPayoff (pair 1 0) (pair 1 1) (pair 0 0)
+          (pair 1 0) action true ≤ 1
+    cases hrow : action false <;> cases hcolumn : action true <;>
+      norm_num [binaryPayoff, hrow, hcolumn, pair]
+  · intro x hx y hy a b ha hb hab
+    rcases hx with ⟨hxrow, hxcolumn0, hxcolumn1⟩
+    rcases hy with ⟨hyrow, hycolumn0, hycolumn1⟩
+    constructor
+    · change a * x false + b * y false ≤ 1
+      nlinarith
+    · constructor
+      · change 0 ≤ a * x true + b * y true
+        nlinarith
+      · change a * x true + b * y true ≤ 1
+        nlinarith
+
+/-- The row player's one-stage security level in Example 3 is one. -/
+private theorem example3_individualRationalLevel_false :
+    example3.individualRationalLevel false = 1 := by
+  let K := KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+    (binaryPayoff (pair 1 0) (pair 1 1) (pair 0 0) (pair 1 0))
+  change (⨅ opponents : K.mixedExtension.OpponentProfile false,
+      ⨆ action : Bool,
+        K.mixedExtension.eu
+          (K.mixedExtension.profileWithOpponent false
+            (PMF.pure action) opponents) false) = 1
+  have hlower (opponents : K.mixedExtension.OpponentProfile false) :
+      1 ≤ ⨆ action : Bool,
+        K.mixedExtension.eu
+          (K.mixedExtension.profileWithOpponent false
+            (PMF.pure action) opponents) false := by
+    apply le_ciSup_of_le (Finite.bddAbove_range _) false
+    let profile : Bool → PMF Bool :=
+      K.mixedExtension.profileWithOpponent false (PMF.pure false) opponents
+    change 1 ≤ K.mixedExtension.eu profile false
+    rw [binaryKernel_mixedEU_apply]
+    simp [profile, K, pair]
+  have hbelow : BddBelow (Set.range fun opponents :
+      K.mixedExtension.OpponentProfile false ↦
+        ⨆ action : Bool,
+          K.mixedExtension.eu
+            (K.mixedExtension.profileWithOpponent false
+              (PMF.pure action) opponents) false) := by
+    refine ⟨1, ?_⟩
+    rintro _ ⟨opponents, rfl⟩
+    exact hlower opponents
+  apply le_antisymm
+  · let opponents : K.mixedExtension.OpponentProfile false :=
+      fun _ ↦ PMF.pure false
+    apply ciInf_le_of_le hbelow opponents
+    apply ciSup_le
+    intro action
+    let profile : Bool → PMF Bool :=
+      K.mixedExtension.profileWithOpponent false (PMF.pure action) opponents
+    change K.mixedExtension.eu profile false ≤ 1
+    rw [binaryKernel_mixedEU_apply]
+    cases action <;> simp [profile, opponents, K, pair]
+  · letI : Nonempty (K.mixedExtension.OpponentProfile false) :=
+      ⟨fun _ ↦ PMF.pure false⟩
+    exact le_ciInf hlower
+
 /-- Example 4, parameterized by the paper's positive integer `m`. -/
 def example4 (m : ℕ) : FiniteStageGame :=
   binaryGame (pair m 0) (pair (m + 1) (m + 1))
@@ -4854,7 +4928,60 @@ theorem equation_12 :
 theorem example3_En : ∀ n, 0 < n →
     example3.finiteEquilibriumPayoffs n =
       {v | v false = 1 ∧ 0 ≤ v true ∧ v true ≤ 1} := by
-  sorry
+  intro n hn
+  let horizon : example3.Horizon := ⟨n, hn⟩
+  apply Set.Subset.antisymm
+  · rintro v ⟨profile, hnash, rfl⟩
+    have hdelta := lemma_1_En_subset_Delta example3 horizon
+      ⟨profile, hnash, rfl⟩
+    have hbounds := example3_correlated_bounds hdelta.1
+    have hrowLower := hdelta.2 false
+    rw [example3_individualRationalLevel_false] at hrowLower
+    exact ⟨le_antisymm hbounds.1 hrowLower, hbounds.2⟩
+  · rintro v ⟨hvrow, hvcolumn0, hvcolumn1⟩
+    let p := 1 - v true
+    have hp0 : 0 ≤ p := by dsimp only [p]; linarith
+    have hp1 : p ≤ 1 := by dsimp only [p]; linarith
+    let profile : Bool → PMF Bool := fun who ↦
+      if who then PMF.pure true else
+        Math.ProbabilityMassFunction.bernoulliBool p hp0 hp1
+    have honeStage : v ∈ example3.oneStageEquilibriumPayoffs := by
+      refine ⟨profile, ?_, ?_⟩
+      · change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+          (binaryPayoff (pair 1 0) (pair 1 1) (pair 0 0)
+            (pair 1 0))).mixedExtension.IsNash profile
+        intro who deviation
+        cases who
+        · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
+          simp only [profile, Bool.false_eq_true, if_false, if_true,
+            Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
+          norm_num [pair]
+        · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
+          change PMF Bool at deviation
+          have hdeviation0 : 0 ≤ (deviation true).toReal := ENNReal.toReal_nonneg
+          have hdeviation1 : (deviation true).toReal ≤ 1 :=
+            ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+          simp only [profile, if_true, Bool.false_eq_true, if_false,
+            Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
+          norm_num [pair]
+          dsimp only [p] at *
+          nlinarith [mul_le_mul_of_nonneg_right hdeviation1 hvcolumn0]
+      · change (binaryGame (pair 1 0) (pair 1 1) (pair 0 0)
+          (pair 1 0)).mixedPayoff profile = v
+        funext who
+        cases who
+        · rw [binaryGame_mixedPayoff_apply]
+          simp only [profile, Bool.false_eq_true, if_false, if_true,
+            Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
+          norm_num [pair]
+          exact hvrow.symm
+        · rw [binaryGame_mixedPayoff_apply]
+          simp only [profile, if_true, Bool.false_eq_true, if_false,
+            Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
+          norm_num [pair]
+          dsimp only [p]
+          ring
+    exact lemma_1_E1_subset_En example3 horizon honeStage
 
 theorem example3_half_mem_D2_not_D1 :
     pair (1 / 2) (1 / 2) ∈ example3.finiteFeasiblePayoffs 2 ∧
