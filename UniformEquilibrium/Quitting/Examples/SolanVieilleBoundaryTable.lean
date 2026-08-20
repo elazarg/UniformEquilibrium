@@ -29,11 +29,12 @@ therefore an instance of that theorem and not evidence against it.
 
 The source paper proves that this table admits an approximate equilibrium
 through a period-two two-quitter architecture, and admits neither a
-stationary approximate equilibrium nor one in which at most one player quits
-per stage.  The checked content of this module is the table itself together
-with the collision and preemption-cycle geometry that its explicit data
-realizes.  Any terminal-gap conclusion therefore requires an additional
-checked argument beyond the realized configuration itself.
+stationary approximate equilibrium nor one whose mixed action remains
+uniformly close to all-Continue at every stage. The checked content of this
+module is the table itself together with the collision and preemption-cycle
+geometry that its explicit data realizes. Any terminal-gap conclusion
+therefore requires an additional checked argument beyond the realized
+configuration itself.
 
 -/
 

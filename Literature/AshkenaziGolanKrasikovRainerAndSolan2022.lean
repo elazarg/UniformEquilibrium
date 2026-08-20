@@ -118,7 +118,7 @@ def SmallPunishmentBranch (table : QuittingPayoffTable ι) : Prop :=
     ∃ (quitter : ι) (root : ι → PMF Bool)
       (punish : (quittingGame table.terminal).BehaviorProfile),
       root quitter = PMF.pure true ∧
-        table.bestReplyValue punish quitter ≤ table.punishmentValue quitter + ε ∧
+        table.bestReplyValue punish quitter = table.punishmentValue quitter ∧
         (quittingGame table.terminal).IsεAsymptoticNash table.terminalPayoff ε
           (quittingRootThenContinuationProfile table.terminal root punish)
 
@@ -137,7 +137,7 @@ positive ε.  The branch predicates above are faithful, but the imported
 classification itself is not formalized.  The missing proof is precisely the
 implication from `EpsilonEquilibriumExistence` to this fixed-disjunct
 small-threshold alternative. -/
-theorem paper_thm3_4
+theorem theorem3_4
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι) :
     EpsilonEquilibriumExistence reward never →
       SmallStationaryBranch ⟨reward, never⟩ ∨
@@ -163,7 +163,7 @@ def ErrorExponentBound : Prop :=
             (QuittingPayoffTable.terminalPayoff ⟨reward, never⟩)
             (ε ^ ((1 : ℝ) / 6)) (quittingRootSequenceProfile reward roots 0)
 
-theorem paper_thm3_5 : ¬ ErrorExponentBound := by
+theorem theorem3_5 : ¬ ErrorExponentBound := by
   intro hbound
   apply not_quittingSequentialPerfectionErrorExponent
   intro κ hF hD reward
@@ -199,26 +199,25 @@ theorem paper_thm3_5 : ¬ ErrorExponentBound := by
   rw [hpayoff] at hnash
   exact hnash
 
-/-! **Corrected Solan--Vieille alternative.** The paper cited for Theorem 3.5
-gives a disjunction: under the same hypotheses, either the generated profile
-is an `ε^(1/6)`-equilibrium, or the game has a stationary ε-equilibrium for
-every positive ε.  This is an open proposition here; no placeholder `True`
-proposition is introduced. -/
+/-! **Solan--Vieille's actual per-`ε` alternative.** Proposition 2.4 of
+the paper cited for Theorem 3.5 gives a disjunction for each sufficiently
+small `ε`: either the generated profile is an `ε^(1/6)`-equilibrium, or the
+game has a stationary `ε^(1/6)`-equilibrium. It does not state Theorem 3.5's
+unconditional first disjunct. -/
 
 /-! ## Section 4: Definition 4.1 -/
 
-/-! **Definition 4.1 (paper).** The paper's `𝔽` consists of cadlag,
-coordinatewise nondecreasing
-subprobability paths `π : [0,1] → [0,1]^{A*}`: in addition to coordinate
-bounds, `π̂_t=∑ₐπ_t(a)≤1` is the total absorption mass.  The following
-structure stores the exact path and the two one-sided limit clauses. -/
+/-! **Definition 4.1 (paper).** The paper's ambient `𝔽` consists of cadlag,
+coordinatewise nondecreasing paths `π : [0,1] → [0,1]^{A*}`. The bound
+`π̂_t=∑ₐπ_t(a)≤1` is subsequently derived for absorption paths; it is not
+part of the definition of `𝔽`. The following structure therefore stores only
+the coordinate bounds, monotonicity, and the two one-sided limit clauses. -/
 structure CadlagPath where
   /- The carrier is `ℝ` for convenient filters; all mathematical constraints
   and all AP predicates below restrict times to `Icc 0 1`. -/
   value : ℝ → {S : Finset ι // S.Nonempty} → ℝ
   leftValue : ℝ → {S : Finset ι // S.Nonempty} → ℝ
   value_mem : ∀ t ∈ Icc (0 : ℝ) 1, ∀ a, 0 ≤ value t a ∧ value t a ≤ 1
-  total_le_one : ∀ t ∈ Icc (0 : ℝ) 1, ∑ a, value t a ≤ 1
   monotone : ∀ a, MonotoneOn (fun t => value t a) (Icc 0 1)
   right_continuous : ∀ a t, t ∈ Icc (0 : ℝ) 1 →
     Tendsto (fun s => value s a) (nhdsWithin t (Icc t 1)) (𝓝 (value t a))
@@ -368,9 +367,11 @@ def LinearComplementarityProblemSolution (M : ι → ι → ℝ) (q : ι → ℝ
 def IsQMatrix (M : ι → ι → ℝ) : Prop :=
   ∀ q : ι → ℝ, Nonempty (LinearComplementarityProblemSolution M q)
 
-/-! Theorem 5.2 assumes that `R` and all its principal submatrices are
-`Q`-matrices.  The paper has no numbered Definition 5.2 and no `Q̄`
-definition; that later published notation is deliberately not introduced. -/
+/-! Theorem 5.2 says that `R` and all its "principal minors" are
+`Q`-matrices. Since the `Q` predicate applies to matrices rather than scalar
+minors, the adapter below records the intended principal submatrices. The
+paper has no numbered Definition 5.2 and no `Q̄` definition; that later
+published notation is deliberately not introduced. -/
 /-! Adapter for the principal-submatrix hypothesis in Theorem 5.2; this is
 not an additional paper definition. -/
 def PrincipalQCondition (M : ι → ι → ℝ) : Prop :=
@@ -385,15 +386,15 @@ with positive probability implies that `R` and all principal submatrices are
 `Q`-matrices. -/
 
 /-! **Theorem 5.2 (paper v1, open here).** If `R(Γ)` and every principal
-submatrix are `Q`-matrices, then a continuous equilibrium exists, i.e. there
-is a continuous, sequentially 0-perfect absorption path.  No exact proof is
-present in this repository: the missing boundary is the paper's viability-
-theory construction of a path in the paper's weak absorption-path space,
-including its limiting and sequential-perfectness arguments.  The faithful
-path predicates above are therefore retained, but this theorem is deliberately
-kept as an open paper statement rather than an assumed or proxy Lean result.
--/
-theorem paper_thm5_2
+"minor" (read: principal submatrix) are `Q`-matrices, then a continuous
+equilibrium exists, i.e. there is a continuous, sequentially 0-perfect
+absorption path. No exact proof is present in this repository: the missing
+boundary is the paper's viability-theory construction of a path in the
+paper's weak absorption-path space, including its limiting and
+sequential-perfectness arguments. The faithful path predicates above are
+therefore retained, but this theorem is deliberately kept as an open paper
+statement rather than an assumed or proxy Lean result. -/
+theorem theorem5_2
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hq : PrincipalQCondition (normalizedSoloMatrix reward)) :
     ∃ path : AbsorptionPath (ι := ι),
