@@ -138,6 +138,7 @@ import MathUE.Finset.PowersetBernoulliWeight
 import MathUE.Finset.ProdLtOne
 import MathUE.Finset.RetainedRoleClockArithmetic
 import MathUE.Finset.SupNonexpansive
+import MathUE.FixedRatioConvexity
 import MathUE.GradedConvolution
 import MathUE.GroupAction.CyclicKofNArithmetic
 import MathUE.GroupAction.CyclicKofNBlockCosets
