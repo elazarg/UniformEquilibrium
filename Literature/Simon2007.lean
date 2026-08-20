@@ -4530,8 +4530,10 @@ def HasUnboundedQuitMass (G : QuittingGame) (p : QuitProfile G) : Prop :=
 
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
-`F_δ` profile with unbounded quit mass is a `3ε`-equilibrium.  Here `M` is explicitly
-the paper's payoff-difference bound.
+`F_δ` profile with unbounded quit mass generates a `3ε`-equilibrium.  The generated
+profile follows the supplied profile up to a stopping stage and then switches to a
+min-max punishment; the proposition only asserts the resulting equilibrium's existence.
+Here `M` is explicitly the paper's payoff-difference bound.
 -/
 theorem proposition3 (G : QuittingGame) {M ε δ : ℝ}
     (hM : IsQuittingPayoffDifferenceBound G M) (hε : 0 < ε) (hε1 : ε ≤ 1)
@@ -4539,7 +4541,8 @@ theorem proposition3 (G : QuittingGame) {M ε δ : ℝ}
     (hrational : ∀ i, IsRational G ε (QuitTailPayoff G p i))
     (hmass : HasUnboundedQuitMass G p)
     (horbit : ∀ i, QuitTailPayoff G p i ∈ FRow G δ (QuitTailPayoff G p (i + 1))) :
-    IsQuitEpsilonEquilibrium G (3 * ε) p := by
+    ∃ equilibrium : QuitProfile G,
+      IsQuitEpsilonEquilibrium G (3 * ε) equilibrium := by
   sorry
 
 /-- A periodic repetition of a positive-length block of quitting rows. -/
@@ -4616,14 +4619,14 @@ theorem CyclicOrbitCondition.hasQuitApproximateEquilibria
       (mul_pos (by norm_num) hpow) (by nlinarith))
   rcases h δ hδ with ⟨k, hk, block, horbit, hrational, hpositive⟩
   let profile := CycleProfile G k hk block
-  have hequilibrium : IsQuitEpsilonEquilibrium G (3 * e) profile := by
+  obtain ⟨equilibrium, hequilibrium⟩ := by
     apply proposition3 G hM he he1 hδ hδsmall profile
     · intro i n
       exact le_trans (by linarith : MinMaxQuit G n - e ≤ MinMaxQuit G n - δ)
         (hrational i n)
     · exact CycleProfile.hasUnboundedQuitMass G hk block hpositive
     · exact horbit
-  refine ⟨profile, ?_⟩
+  refine ⟨equilibrium, ?_⟩
   intro n deviation
   exact (hequilibrium n deviation).trans (by linarith)
 
