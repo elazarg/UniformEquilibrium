@@ -313,20 +313,45 @@ over the induced transport systems, so a producer theorem must extract a
 canonical labelled system from an arbitrary chronology rather than analyze a
 given one.
 
-## Intended consumers (game side; not part of these modules)
+## Game-semantic specializations
 
-The adapter that would make this progress on the open frontier rather than
-generic mathematics: exhibit the `#40` preemption lasso as a directed
-transport problem — fibers the players' payoff/debt coordinates, edge maps
-supplied by a producer theorem from the counterexample regime's collision and
-repair data — and ask T2/T4/T5 about its holonomy.
-`UniformEquilibrium.Quitting.Boundary.Holonomy` composes per-player
-affine and max-affine block summaries (words in Layer 1's label monoid); its
-documented gap, source-labelled splice admissibility, is that producer
-theorem's game-semantic half and stays game-side.  The debt transport law
-(`UniformEquilibrium/Quitting/Debt/Dynamic/DebtTransportLaw.lean`) is the
-reflected specialization on a path, and its documented refusal to compute
-cyclic mismatch corresponds to T4's `a = 1, t ≤ 0` boundary.
+`QuittingMaxAffineSummary.toLabel` and
+`QuittingAnchoredBoundaryBlock.bestResponseLabel_concat`
+(`UniformEquilibrium/Quitting/Boundary/Holonomy/Transport.lean`) embed the
+prescribed and best-response maps of realized boundary blocks and preserve
+their chronological composition.  A boundary label acts from the block's
+exit value back to its entry value.  The adapter does not identify
+coefficient-compatible seams with executable splices.
+
+`QuittingTerminalSemanticPrefixChain.debt_isSection` and
+`QuittingTerminalSemanticPrefixChain.debt_mul_one_sub_reachedWeight_eq_sum_reached_defect_of_return`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticDirectedTransport.lean`)
+make terminal-semantic debt an exact affine section.  Literal profile spines
+instantiate the chain.  On a positive-debt return, strict survival loss forces
+a reached positive root Nash defect; zero intervening defects force every
+survival factor to be one.
+
+`quittingFiniteDynamicDebt_eq_compList_apply` and
+`quittingFiniteDynamicDebt_eq_terminalDebt_iff`
+(`UniformEquilibrium/Quitting/Debt/Dynamic/DebtTransportLaw.lean`) identify
+finite dynamic debt with a composite reflected label.  Its path slope is
+opponent survival.  A positive terminal debt returns unchanged exactly when
+each opponent-survival factor is one and each stage gap is nonpositive.
+
+`exists_player_positiveCircuit_of_not_simultaneouslyFeasible` and
+`exists_player_rankSparseCertificate_of_not_simultaneouslyFeasible`
+(`UniformEquilibrium/Architectures/PublicResponse/RectangularContinuationCompatibility.lean`)
+compress failure of an unrestricted rectangular continuation system to one
+player's positive circuit, supported on at most the rank of that player's row
+normals plus one.  The unrestricted-coordinate premise is essential: an
+opaque nonlinear coordinate-permission failure is not a Farkas obstruction to
+the explicit row system.
+
+The open game-semantic producer problem is to exhibit the `#40` preemption
+lasso as a nontrivial source-matched, splice-admissible transport graph whose
+fibers carry payoff or debt coordinates.  A graph made only from literal
+time-adjacent blocks of one finite chain is acyclic; quotienting equal-looking
+boundary data is not a substitute for a splice theorem.
 
 ## Milestones
 
