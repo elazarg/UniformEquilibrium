@@ -528,16 +528,12 @@ theorem lemma2_2 (G : QuittingGame) {B ε : ℝ}
         s n ≥ r n + ε ^ 2 / (2 * B)) := by
   sorry
 
-/--
-The specialization under Simon 2007's stronger payoff-bound package.  The
-reduction is mathematically immediate, but `Literature.Simon2007.lemma6` is
-itself `sorry`-backed, so this statement is not advertised as a checked proof.
--/
+/-- The specialization under Simon 2007's stronger payoff-bound package. -/
 theorem lemma2_2_of_simon2007_bound (G : QuittingGame) {B ε : ℝ}
     (hB : IsQuittingPayoffDifferenceBound G B)
     (hnormal : ∀ n, IsNormalPlayer G n)
-    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (_hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (_hinstant : ¬HasInstantApproximateEquilibria G)
     (hε : 0 < ε) (hε1 : ε ≤ 1) {r s : Payoff G.Player}
     (hstep : s ∈ FRow G (ε ^ 2 / (2 * B)) r) :
     ∀ n,
@@ -545,7 +541,8 @@ theorem lemma2_2_of_simon2007_bound (G : QuittingGame) {B ε : ℝ}
         s n ≥ MinMaxQuit G n - 3 * ε) ∧
       (r n < MinMaxQuit G n - 3 * ε →
         s n ≥ r n + ε ^ 2 / (2 * B)) := by
-  sorry
+  exact Literature.Simon2007.lemma6_quantitative
+    G hB hnormal hε hε1 hstep
 
 /-- The unqualified Euclidean infinite-orbit condition in Theorem 2.2. -/
 def InfiniteUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
