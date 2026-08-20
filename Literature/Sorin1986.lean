@@ -4295,7 +4295,7 @@ theorem binaryGame_mixedPayoff_apply
   binaryKernel_mixedEU_apply topLeft topRight bottomLeft bottomRight profile who
 
 /-- Example 1. -/
-def example1 : FiniteStageGame :=
+abbrev example1 : FiniteStageGame :=
   binaryGame (pair 1 0) (pair 0 0) (pair 0 0) (pair 0 1)
 
 /-- The top-left outcome is a one-stage Nash equilibrium of Example 1. -/
@@ -4330,6 +4330,7 @@ private theorem example1_bottomRight_mem_E1 :
     cases who
     · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
       norm_num [example1, profile, pair]
+
     · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
       norm_num [example1, profile, pair]
       exact ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
@@ -4338,6 +4339,43 @@ private theorem example1_bottomRight_mem_E1 :
     funext who
     cases who <;> rw [binaryGame_mixedPayoff_apply] <;>
       norm_num [example1, profile, pair]
+
+/-- In Example 1, an independently mixed stage with total expected payoff one
+must be one of the two pure diagonal outcomes. -/
+theorem example1_mixedProfile_pure_diagonal_of_total_eq_one
+    (profile : Bool → PMF Bool)
+    (htotal :
+      example1.mixedPayoff profile false +
+        example1.mixedPayoff profile true = 1) :
+    ∃ diagonal : Bool,
+      profile false = PMF.pure diagonal ∧
+        profile true = PMF.pure diagonal := by
+  rw [binaryGame_mixedPayoff_apply, binaryGame_mixedPayoff_apply] at htotal
+  norm_num [pair] at htotal
+  let p := (profile false true).toReal
+  let q := (profile true true).toReal
+  have hp0 : 0 ≤ p := ENNReal.toReal_nonneg
+  have hq0 : 0 ≤ q := ENNReal.toReal_nonneg
+  have hp1 : p ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  have hq1 : q ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  change (1 - p) * (1 - q) + p * q = 1 at htotal
+  have hpq0 : p * (1 - q) = 0 := by
+    nlinarith [mul_nonneg hp0 (by linarith : 0 ≤ 1 - q),
+      mul_nonneg hq0 (by linarith : 0 ≤ 1 - p)]
+  by_cases hp : p = 0
+  · have hq : q = 0 := by nlinarith
+    refine ⟨false, ?_, ?_⟩
+    · exact Math.PMFProduct.eq_pure_false_of_true_toReal_eq_zero _ hp
+    · exact Math.PMFProduct.eq_pure_false_of_true_toReal_eq_zero _ hq
+  · have hq : q = 1 := by
+      have := (mul_eq_zero.mp hpq0).resolve_left hp
+      linarith
+    have hp' : p = 1 := by nlinarith
+    refine ⟨true, ?_, ?_⟩
+    · exact Math.PMFProduct.eq_pure_true_of_true_toReal_eq_one _ hp'
+    · exact Math.PMFProduct.eq_pure_true_of_true_toReal_eq_one _ hq
 
 /-- Example 2. -/
 abbrev example2 : FiniteStageGame :=

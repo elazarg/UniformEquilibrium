@@ -35,6 +35,28 @@ lemma pmfBool_false_toReal (mu : PMF Bool) :
   norm_num at h ⊢
   linarith
 
+/-- A Boolean PMF with zero real mass at `true` is concentrated at `false`. -/
+lemma eq_pure_false_of_true_toReal_eq_zero (mu : PMF Bool)
+    (h : (mu true).toReal = 0) : mu = PMF.pure false := by
+  apply PMF.ext
+  intro value
+  apply (ENNReal.toReal_eq_toReal_iff'
+    (PMF.apply_ne_top mu value) (PMF.apply_ne_top (PMF.pure false) value)).mp
+  cases value
+  · simp [pmfBool_false_toReal, h]
+  · simpa using h
+
+/-- A Boolean PMF with full real mass at `true` is concentrated at `true`. -/
+lemma eq_pure_true_of_true_toReal_eq_one (mu : PMF Bool)
+    (h : (mu true).toReal = 1) : mu = PMF.pure true := by
+  apply PMF.ext
+  intro value
+  apply (ENNReal.toReal_eq_toReal_iff'
+    (PMF.apply_ne_top mu value) (PMF.apply_ne_top (PMF.pure true) value)).mp
+  cases value
+  · simp [pmfBool_false_toReal, h]
+  · simpa using h
+
 /-- Fubini expansion of a product of two Boolean PMFs. -/
 lemma expect_pmfPi_bool (m : Bool → PMF Bool)
     (f : (Bool → Bool) → ℝ) :
