@@ -1,0 +1,114 @@
+name: Compact Nash master stage 5c
+
+on:
+  push:
+    branches: [agent/promote-sorin1986]
+    paths:
+      - .github/workflows/compact_nash_master_stage5c.yml
+      - Literature/Sorin1986/CompactNashMaster5b.ok
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-nash-master-stage5c
+  cancel-in-progress: false
+
+jobs:
+  prove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: agent/promote-sorin1986
+          fetch-depth: 0
+      - name: Inspect state
+        id: state
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster5.ok; then echo done=yes >> "$GITHUB_OUTPUT"; else echo done=no >> "$GITHUB_OUTPUT"; fi
+      - name: Wait for stage 5b
+        if: steps.state.outputs.done == 'no'
+        run: |
+          for attempt in $(seq 1 120); do
+            git fetch origin agent/promote-sorin1986
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster.lean 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster5b.ok 2>/dev/null || true
+            git checkout origin/agent/promote-sorin1986 -- Literature/Sorin1986/CompactNashMaster5.ok 2>/dev/null || true
+            test -f Literature/Sorin1986/CompactNashMaster5.ok && exit 0
+            test -f Literature/Sorin1986/CompactNashMaster5b.ok && exit 0
+            sleep 10
+          done
+          exit 1
+      - uses: leanprover/lean-action@v1
+        if: steps.state.outputs.done == 'no'
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+      - name: Append final existence and compactness proof
+        if: steps.state.outputs.done == 'no'
+        run: |
+          if test -f Literature/Sorin1986/CompactNashMaster5.ok; then exit 0; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('Literature/Sorin1986/CompactNashMaster.lean'); s=p.read_text()
+          end=s.rindex('\nend CompactNash')
+          addition=r'''
+
+          /-- Every compact continuous game in the paper's interface has a
+          Nash equilibrium. -/
+          theorem exists_isNash (G : CompactContinuousGame) :
+              ∃ profile : ∀ i, G.Strategy i, G.IsNash profile := by
+            obtain ⟨profile, hprofile⟩ := exists_all_nash_inequalities G
+            exact ⟨profile, fun who deviation => hprofile ⟨who, deviation⟩⟩
+
+          /-- The Nash-profile set is closed. -/
+          theorem isClosed_isNash (G : CompactContinuousGame) :
+              IsClosed {profile : (∀ i, G.Strategy i) | G.IsNash profile} := by
+            rw [show {profile : (∀ i, G.Strategy i) | G.IsNash profile} =
+                ⋂ who, ⋂ deviation,
+                  {profile | G.payoff
+                      (Function.update profile who deviation) who ≤
+                    G.payoff profile who} by
+              ext profile
+              simp [CompactContinuousGame.IsNash]]
+            exact isClosed_iInter fun who => isClosed_iInter fun deviation =>
+              isClosed_le
+                ((G.payoffContinuous who).comp
+                  (continuous_update_const G who deviation))
+                (G.payoffContinuous who)
+
+          /-- General compact Nash existence and compactness of equilibrium
+          payoffs. -/
+          theorem compact_nash_existence (G : CompactContinuousGame) :
+              G.equilibriumPayoffs.Nonempty ∧ IsCompact G.equilibriumPayoffs := by
+            constructor
+            · obtain ⟨profile, hprofile⟩ := exists_isNash G
+              exact ⟨G.payoff profile, ⟨profile, hprofile, rfl⟩⟩
+            · have hprofiles :
+                  IsCompact {profile : (∀ i, G.Strategy i) | G.IsNash profile} :=
+                (isClosed_isNash G).isCompact
+              have hpayoff : Continuous G.payoff :=
+                continuous_pi G.payoffContinuous
+              simpa [CompactContinuousGame.equilibriumPayoffs] using
+                hprofiles.image_of_continuousOn hpayoff.continuousOn
+          '''
+          p.write_text(s[:end]+addition+s[end:])
+          PY
+          set -o pipefail
+          lake env lean Literature/Sorin1986/CompactNashMaster.lean 2>&1 | tee Literature/Sorin1986/CompactNashMaster5c.log
+          printf 'success\n' > Literature/Sorin1986/CompactNashMaster5.ok
+      - name: Commit final compact theorem
+        if: steps.state.outputs.done == 'no'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add Literature/Sorin1986/CompactNashMaster.lean Literature/Sorin1986/CompactNashMaster5c.log Literature/Sorin1986/CompactNashMaster5.ok
+          git commit -m 'Close general compact Nash existence theorem'
+          git pull --rebase origin agent/promote-sorin1986
+          git push origin HEAD:agent/promote-sorin1986
