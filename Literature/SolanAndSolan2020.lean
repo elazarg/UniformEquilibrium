@@ -3275,6 +3275,33 @@ theorem KiloblockConstruction.finiteMode_modeOfFinite
         simp [KiloblockConstruction.finiteMode,
           KiloblockConstruction.modeOfFinite, hremaining]
 
+theorem KiloblockConstruction.modeOfFinite_finiteMode_of_le_totalMesh
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (mode : KiloblockMode table construction.blockCount)
+    (hremaining : ∀ k choice remaining,
+      mode = .active k choice remaining ∨
+        mode = .draw (.resume k choice remaining) →
+          remaining ≤ construction.totalMesh) :
+    construction.modeOfFinite (construction.finiteMode mode) = mode := by
+  cases mode with
+  | draw phase =>
+      cases phase with
+      | choose k => rfl
+      | final => rfl
+      | resume k choice remaining =>
+          have hle := hremaining k choice remaining (Or.inr rfl)
+          cases choice <;>
+            simp [KiloblockConstruction.finiteMode,
+              KiloblockConstruction.modeOfFinite, min_eq_left hle]
+  | active k choice remaining =>
+      have hle := hremaining k choice remaining (Or.inl rfl)
+      cases choice <;>
+        simp [KiloblockConstruction.finiteMode,
+          KiloblockConstruction.modeOfFinite, min_eq_left hle]
+  | finalActive => rfl
+  | absorbed origin => rfl
+
 theorem KiloblockConstruction.modeOfFinite_finiteMode
     {table : Table ι} {ε : ℝ}
     (construction : KiloblockConstruction table ε)
@@ -3284,25 +3311,10 @@ theorem KiloblockConstruction.modeOfFinite_finiteMode
         mode = .draw (.resume k choice remaining) →
           remaining ≤ construction.mesh k) :
     construction.modeOfFinite (construction.finiteMode mode) = mode := by
-  cases mode with
-  | draw phase =>
-      cases phase with
-      | choose k => rfl
-      | final => rfl
-      | resume k choice remaining =>
-          have hle := (hremaining k choice remaining (Or.inr rfl)).trans
-            (construction.mesh_le_totalMesh k)
-          cases choice <;>
-            simp [KiloblockConstruction.finiteMode,
-              KiloblockConstruction.modeOfFinite, min_eq_left hle]
-  | active k choice remaining =>
-      have hle := (hremaining k choice remaining (Or.inl rfl)).trans
-        (construction.mesh_le_totalMesh k)
-      cases choice <;>
-        simp [KiloblockConstruction.finiteMode,
-          KiloblockConstruction.modeOfFinite, min_eq_left hle]
-  | finalActive => rfl
-  | absorbed origin => rfl
+  apply construction.modeOfFinite_finiteMode_of_le_totalMesh
+  intro k choice remaining hmode
+  exact (hremaining k choice remaining hmode).trans
+    (construction.mesh_le_totalMesh k)
 
 theorem KiloblockConstruction.normalMatrix_bounded
     {table : Table ι} {ε : ℝ}
@@ -5977,6 +5989,602 @@ theorem KiloblockConstruction.modeDist_continue_eq_iter
   | succ t ih =>
       rw [construction.modeDist_succ_continue excluded t, ih,
         Math.PMFIter.iter_succ']
+
+def KiloblockConstruction.exitCapableChoice
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) : Option (NormalPlayer table) → Prop
+  | none => True
+  | some owner =>
+      (construction.attempt k owner).continuation = .advance ∨
+        owner ≠ excluded
+
+private theorem KiloblockConstruction.exists_exitCapableChoice
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table) :
+    ∃ choice, 0 < (match choice with
+        | none => (construction.buildingBlock k).z.cemetery
+        | some owner => (construction.buildingBlock k).z.singleton owner) ∧
+      construction.exitCapableChoice k excluded choice := by
+  by_contra hnot
+  push Not at hnot
+  have hcemetery : (construction.buildingBlock k).z.cemetery = 0 := by
+    have hnonneg := (construction.buildingBlock k).z.cemetery_nonneg
+    by_contra hne
+    have hpos : 0 < (construction.buildingBlock k).z.cemetery :=
+      lt_of_le_of_ne hnonneg (Ne.symm hne)
+    exact (hnot none hpos) trivial
+  have hother : ∀ owner : NormalPlayer table, owner ≠ excluded →
+      (construction.buildingBlock k).z.singleton owner = 0 := by
+    intro owner howner
+    have hnonneg := (construction.buildingBlock k).z.singleton_nonneg owner
+    by_contra hne
+    have hpos : 0 < (construction.buildingBlock k).z.singleton owner :=
+      lt_of_le_of_ne hnonneg (Ne.symm hne)
+    exact (hnot (some owner) hpos) (Or.inr howner)
+  obtain ⟨owner, _, hownerPos⟩ :=
+    (Finset.sum_pos_iff_of_nonneg (fun other _ =>
+      (construction.buildingBlock k).z.singleton_nonneg other)).mp
+      (construction.buildingBlock k).nontrivial
+  have howner : owner = excluded := by
+    by_contra hne
+    rw [hother owner hne] at hownerPos
+    linarith
+  subst owner
+  have hbranch : (construction.attempt k excluded).continuation = .restart := by
+    cases hcontinuation : (construction.attempt k excluded).continuation with
+    | restart => rfl
+    | advance =>
+        exact False.elim ((hnot (some excluded) hownerPos) (Or.inl hcontinuation))
+  have hadvanceMass : construction.advanceMass k = 0 := by
+    unfold KiloblockConstruction.advanceMass
+      KiloblockConstruction.attemptAdvanceWeight
+    rw [hcemetery, zero_add]
+    apply Finset.sum_eq_zero
+    intro other _
+    by_cases hotherExcluded : other = excluded
+    · subst other
+      simp [hbranch]
+    · rw [hother other hotherExcluded, zero_mul]
+  have hadvance : construction.macroAdvanceProbability k = 0 := by
+    simp [KiloblockConstruction.macroAdvanceProbability, hadvanceMass]
+  have habsorbOther : ∀ other ∈ Finset.univ.erase excluded,
+      construction.macroAbsorbProbability k other = 0 := by
+    intro other hmem
+    have hne := Finset.ne_of_mem_erase hmem
+    unfold KiloblockConstruction.macroAbsorbProbability
+      KiloblockConstruction.absorbMass
+    rw [hother other hne, zero_mul, zero_div]
+  have hzero : construction.continueExitProbabilityWeight k excluded = 0 := by
+    unfold KiloblockConstruction.continueExitProbabilityWeight
+      KiloblockConstruction.continueAdvanceProbabilityWeight
+    rw [hadvance]
+    simp only [hbranch, reduceCtorEq, if_false, zero_add]
+    rw [Finset.sum_eq_zero habsorbOther]
+  linarith [construction.continueExitProbabilityWeight_pos k excluded]
+
+private theorem KiloblockConstruction.exists_signal_of_choice_weight_pos
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table))
+    (hchoice : 0 < match choice with
+      | none => (construction.buildingBlock k).z.cemetery
+      | some owner => (construction.buildingBlock k).z.singleton owner) :
+    ∃ signal ∈ construction.profile.signalLaw.support,
+      construction.signalSelector k signal = choice := by
+  have hmass : (construction.buildingBlock k).z.toPMF choice ≠ 0 := by
+    intro hzero
+    have hreal : ((construction.buildingBlock k).z.toPMF choice).toReal = 0 := by
+      simp [hzero]
+    cases choice with
+    | none =>
+        rw [SimplexWeights.toPMF_none_toReal] at hreal
+        linarith
+    | some owner =>
+        rw [SimplexWeights.toPMF_some_toReal] at hreal
+        linarith
+  have hsupport : choice ∈
+      (construction.profile.signalLaw.map
+        (construction.signalSelector k)).support := by
+    rw [construction.signalSelector_law k]
+    rw [PMF.mem_support_iff]
+    exact hmass
+  rw [PMF.mem_support_map_iff] at hsupport
+  exact hsupport
+
+private theorem KiloblockConstruction.continueKernel_drawChoose_step
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1))
+    (signal : Fin (construction.profile.signalCount + 1))
+    (hsignal : signal ∈ construction.profile.signalLaw.support) :
+    Math.Probability.PMFSupportStep
+      (construction.continueFiniteModeKernel excluded)
+      (.drawChoose k)
+      (construction.finiteMode (.active k
+        (construction.signalSelector k signal) (construction.mesh k))) := by
+  rw [Math.Probability.PMFSupportStep, ← PMF.mem_support_iff]
+  unfold KiloblockConstruction.continueFiniteModeKernel
+    KiloblockConstruction.modeOfFinite
+    KiloblockConstruction.continueModeKernel
+  rw [PMF.mem_support_map_iff]
+  refine ⟨.active k (construction.signalSelector k signal)
+    (construction.mesh k), ?_, rfl⟩
+  rw [PMF.mem_support_map_iff]
+  exact ⟨signal, hsignal, rfl⟩
+
+private theorem KiloblockConstruction.continueKernel_drawResume_step
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) (remaining : ℕ)
+    (hremaining : remaining ≤ construction.totalMesh) :
+    Math.Probability.PMFSupportStep
+      (construction.continueFiniteModeKernel excluded)
+      (construction.finiteMode (.draw (.resume k choice remaining)))
+      (construction.finiteMode (.active k choice remaining)) := by
+  rw [Math.Probability.PMFSupportStep, ← PMF.mem_support_iff]
+  unfold KiloblockConstruction.continueFiniteModeKernel
+  rw [construction.modeOfFinite_finiteMode_of_le_totalMesh]
+  · unfold KiloblockConstruction.continueModeKernel
+    rw [PMF.mem_support_map_iff]
+    exact ⟨.active k choice remaining,
+      (PMF.mem_support_pure_iff _ _).2 rfl, rfl⟩
+  · intro other otherChoice otherRemaining hmode
+    rcases hmode with hmode | hmode
+    · cases hmode
+    · cases hmode
+      exact hremaining
+
+private theorem KiloblockConstruction.meshCoin_false_mem_support
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) :
+    false ∈ (quittingMeshHazardCoin
+      (construction.attempt k owner).quitWeight (construction.mesh k)
+      (construction.attempt k owner).quitWeight_pos.le
+      (construction.attempt k owner).quitWeight_lt_one).support := by
+  rw [PMF.mem_support_iff]
+  intro hzero
+  have hreal : ((quittingMeshHazardCoin
+      (construction.attempt k owner).quitWeight (construction.mesh k)
+      (construction.attempt k owner).quitWeight_pos.le
+      (construction.attempt k owner).quitWeight_lt_one) false).toReal = 0 := by
+    simp [hzero]
+  rw [quittingMeshHazardCoin_false_toReal] at hreal
+  have hlt := quittingMeshHazard_lt_one
+    (construction.attempt k owner).quitWeight_lt_one (construction.mesh k)
+  linarith
+
+private theorem KiloblockConstruction.continueKernel_active_continue_step
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) (remaining : ℕ)
+    (hremaining : remaining ≤ construction.totalMesh) :
+    Math.Probability.PMFSupportStep
+      (construction.continueFiniteModeKernel excluded)
+      (construction.finiteMode (.active k choice remaining))
+      (construction.finiteMode
+        (if remaining ≤ 1 then
+          .draw (phaseAfterAttempt table
+            (fun block owner =>
+              (construction.attempt block owner).continuation)
+            k choice)
+        else .draw (.resume k choice (remaining - 1)))) := by
+  rw [Math.Probability.PMFSupportStep, ← PMF.mem_support_iff]
+  unfold KiloblockConstruction.continueFiniteModeKernel
+  rw [construction.modeOfFinite_finiteMode_of_le_totalMesh]
+  · unfold KiloblockConstruction.continueModeKernel
+    cases choice with
+    | none =>
+        rw [PMF.mem_support_map_iff]
+        exact ⟨_, (PMF.mem_support_pure_iff _ _).2 rfl, rfl⟩
+    | some owner =>
+        by_cases howner : owner = excluded
+        · subst owner
+          simp only [ite_true]
+          rw [PMF.mem_support_map_iff]
+          exact ⟨_, (PMF.mem_support_pure_iff _ _).2 rfl, rfl⟩
+        · simp only [howner, ite_false]
+          rw [PMF.mem_support_map_iff]
+          refine ⟨_, ?_, rfl⟩
+          rw [PMF.mem_support_bind_iff]
+          refine ⟨false, construction.meshCoin_false_mem_support k owner, ?_⟩
+          exact (PMF.mem_support_pure_iff _ _).2 rfl
+  · intro other otherChoice otherRemaining hmode
+    rcases hmode with hmode | hmode
+    · cases hmode
+      exact hremaining
+    · cases hmode
+
+private theorem KiloblockConstruction.meshCoin_true_mem_support
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) :
+    true ∈ (quittingMeshHazardCoin
+      (construction.attempt k owner).quitWeight (construction.mesh k)
+      (construction.attempt k owner).quitWeight_pos.le
+      (construction.attempt k owner).quitWeight_lt_one).support := by
+  rw [PMF.mem_support_iff]
+  intro hzero
+  have hreal : ((quittingMeshHazardCoin
+      (construction.attempt k owner).quitWeight (construction.mesh k)
+      (construction.attempt k owner).quitWeight_pos.le
+      (construction.attempt k owner).quitWeight_lt_one) true).toReal = 0 := by
+    simp [hzero]
+  rw [quittingMeshHazardCoin_true_toReal] at hreal
+  have hpow : (1 - (construction.attempt k owner).quitWeight) ^
+      (((construction.mesh k : ℕ) : ℝ)⁻¹ : ℝ) < 1 := by
+    apply Real.rpow_lt_one
+    · exact sub_nonneg.mpr
+        (construction.attempt k owner).quitWeight_lt_one.le
+    · linarith [(construction.attempt k owner).quitWeight_pos]
+    · exact inv_pos.mpr (Nat.cast_pos.mpr (construction.mesh_pos k))
+  unfold quittingMeshHazard at hreal
+  linarith
+
+private theorem KiloblockConstruction.continueKernel_active_quit_step
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded owner : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1)) (remaining : ℕ)
+    (hremaining : remaining ≤ construction.totalMesh)
+    (howner : owner ≠ excluded) :
+    Math.Probability.PMFSupportStep
+      (construction.continueFiniteModeKernel excluded)
+      (construction.finiteMode (.active k (some owner) remaining))
+      (.absorbed (some k)) := by
+  rw [Math.Probability.PMFSupportStep, ← PMF.mem_support_iff]
+  unfold KiloblockConstruction.continueFiniteModeKernel
+  rw [construction.modeOfFinite_finiteMode_of_le_totalMesh]
+  · unfold KiloblockConstruction.continueModeKernel
+    simp only [howner, ite_false]
+    rw [PMF.mem_support_map_iff]
+    refine ⟨.absorbed (some k), ?_, rfl⟩
+    rw [PMF.mem_support_bind_iff]
+    refine ⟨true, construction.meshCoin_true_mem_support k owner, ?_⟩
+    exact (PMF.mem_support_pure_iff _ _).2 rfl
+  · intro other otherChoice otherRemaining hmode
+    rcases hmode with hmode | hmode
+    · cases hmode
+      exact hremaining
+    · cases hmode
+
+private theorem KiloblockConstruction.continueKernel_active_reaches_after
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) (remaining : ℕ)
+    (hremaining : remaining ≤ construction.totalMesh) :
+    Math.Probability.PMFReachable
+      (construction.continueFiniteModeKernel excluded)
+      (construction.finiteMode (.active k choice remaining))
+      (construction.finiteMode (.draw
+        (phaseAfterAttempt table
+          (fun block owner =>
+            (construction.attempt block owner).continuation)
+          k choice))) := by
+  induction remaining using Nat.strong_induction_on with
+  | h remaining ih =>
+      by_cases hsmall : remaining ≤ 1
+      · have hstep := construction.continueKernel_active_continue_step
+          excluded k choice remaining hremaining
+        simpa only [Math.Probability.PMFReachable, if_pos hsmall] using
+          (Relation.ReflTransGen.single hstep)
+      · have hremainingPred : remaining - 1 ≤ construction.totalMesh := by
+          omega
+        have hactive := construction.continueKernel_active_continue_step
+          excluded k choice remaining hremaining
+        have hdraw := construction.continueKernel_drawResume_step
+          excluded k choice (remaining - 1) hremainingPred
+        have htail := ih (remaining - 1) (by omega) hremainingPred
+        simp only [if_neg hsmall] at hactive
+        exact Relation.ReflTransGen.head hactive
+          (Relation.ReflTransGen.head hdraw htail)
+
+private theorem KiloblockConstruction.continueKernel_drawResume_reaches_after
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) (remaining : ℕ)
+    (hremaining : remaining ≤ construction.totalMesh) :
+    Math.Probability.PMFReachable
+      (construction.continueFiniteModeKernel excluded)
+      (construction.finiteMode (.draw (.resume k choice remaining)))
+      (construction.finiteMode (.draw
+        (phaseAfterAttempt table
+          (fun block owner =>
+            (construction.attempt block owner).continuation)
+          k choice))) := by
+  exact Relation.ReflTransGen.head
+    (construction.continueKernel_drawResume_step
+      excluded k choice remaining hremaining)
+    (construction.continueKernel_active_reaches_after
+      excluded k choice remaining hremaining)
+
+/-! Final-tail and absorbed modes form the closed boundary of the finite
+schedule chain. -/
+def KiloblockConstruction.continueBoundary
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    Set (KiloblockFiniteMode construction)
+  | .drawFinal => True
+  | .finalActive => True
+  | .absorbed _ => True
+  | _ => False
+
+theorem KiloblockConstruction.continueBoundary_closed
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    Math.Probability.IsClosedCore
+      (construction.continueFiniteModeKernel excluded)
+      construction.continueBoundary := by
+  intro source hsource destination hdestination
+  cases source with
+  | drawChoose k => contradiction
+  | drawResume k choice remaining => contradiction
+  | active k choice remaining => contradiction
+  | drawFinal =>
+      unfold KiloblockConstruction.continueFiniteModeKernel
+        KiloblockConstruction.modeOfFinite
+        KiloblockConstruction.continueModeKernel at hdestination
+      have heq : destination = .finalActive := by
+        simpa [KiloblockConstruction.finiteMode] using hdestination
+      subst destination
+      trivial
+  | finalActive =>
+      unfold KiloblockConstruction.continueFiniteModeKernel
+        KiloblockConstruction.modeOfFinite
+        KiloblockConstruction.continueModeKernel at hdestination
+      have heq : destination = .drawFinal := by
+        simpa [KiloblockConstruction.finiteMode] using hdestination
+      subst destination
+      trivial
+  | absorbed origin =>
+      unfold KiloblockConstruction.continueFiniteModeKernel
+        KiloblockConstruction.modeOfFinite
+        KiloblockConstruction.continueModeKernel at hdestination
+      have heq : destination = .absorbed origin := by
+        simpa [KiloblockConstruction.finiteMode] using hdestination
+      subst destination
+      trivial
+
+private theorem KiloblockConstruction.exitChoice_reaches_exit
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table))
+    (hchoice : construction.exitCapableChoice k excluded choice) :
+    ∃ target,
+      (target = construction.finiteMode (.draw
+          (precedingKiloblockPhase table k)) ∨
+        target = .absorbed (some k)) ∧
+      Math.Probability.PMFReachable
+        (construction.continueFiniteModeKernel excluded)
+        (construction.finiteMode
+          (.active k choice (construction.mesh k))) target := by
+  cases choice with
+  | none =>
+      refine ⟨construction.finiteMode
+        (.draw (precedingKiloblockPhase table k)), Or.inl rfl, ?_⟩
+      simpa [phaseAfterAttempt] using
+        construction.continueKernel_active_reaches_after excluded k none
+          (construction.mesh k) (construction.mesh_le_totalMesh k)
+  | some owner =>
+      rcases hchoice with hadvance | howner
+      · refine ⟨construction.finiteMode
+          (.draw (precedingKiloblockPhase table k)), Or.inl rfl, ?_⟩
+        simpa [phaseAfterAttempt, hadvance] using
+          construction.continueKernel_active_reaches_after excluded k
+            (some owner) (construction.mesh k)
+            (construction.mesh_le_totalMesh k)
+      · refine ⟨.absorbed (some k), Or.inr rfl, ?_⟩
+        exact Relation.ReflTransGen.single
+          (construction.continueKernel_active_quit_step excluded owner k
+            (construction.mesh k) (construction.mesh_le_totalMesh k) howner)
+
+private theorem KiloblockConstruction.continueKernel_drawChoose_reaches_boundary
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1)) :
+    ∃ target, target ∈ construction.continueBoundary ∧
+      Math.Probability.PMFReachable
+        (construction.continueFiniteModeKernel excluded)
+        (.drawChoose k) target := by
+  induction k using Fin.induction with
+  | zero =>
+      obtain ⟨choice, hweight, hcapable⟩ :=
+        construction.exists_exitCapableChoice 0 excluded
+      obtain ⟨signal, hsignal, hselect⟩ :=
+        construction.exists_signal_of_choice_weight_pos 0 choice hweight
+      obtain ⟨target, htarget, hreach⟩ :=
+        construction.exitChoice_reaches_exit excluded 0 choice hcapable
+      have hchoose := construction.continueKernel_drawChoose_step
+        excluded 0 signal hsignal
+      rw [hselect] at hchoose
+      rcases htarget with hpreceding | habsorbed
+      · have hfinal : target = .drawFinal := by
+          simpa [precedingKiloblockPhase,
+            KiloblockConstruction.finiteMode] using hpreceding
+        subst target
+        exact ⟨.drawFinal, trivial,
+          Relation.ReflTransGen.head hchoose hreach⟩
+      · subst target
+        exact ⟨.absorbed (some 0), trivial,
+          Relation.ReflTransGen.head hchoose hreach⟩
+  | succ index ih =>
+      obtain ⟨choice, hweight, hcapable⟩ :=
+        construction.exists_exitCapableChoice index.succ excluded
+      obtain ⟨signal, hsignal, hselect⟩ :=
+        construction.exists_signal_of_choice_weight_pos
+          index.succ choice hweight
+      obtain ⟨target, htarget, hreach⟩ :=
+        construction.exitChoice_reaches_exit
+          excluded index.succ choice hcapable
+      have hchoose := construction.continueKernel_drawChoose_step
+        excluded index.succ signal hsignal
+      rw [hselect] at hchoose
+      rcases htarget with hpreceding | habsorbed
+      · obtain ⟨boundary, hboundary, htail⟩ := ih
+        have hindex :
+            (⟨index.1, by omega⟩ :
+              Fin (construction.blockCount + 1)) = index.castSucc := by
+          apply Fin.ext
+          rfl
+        have hprevious : target = .drawChoose index.castSucc := by
+          simpa [precedingKiloblockPhase,
+            KiloblockConstruction.finiteMode, hindex] using hpreceding
+        subst target
+        exact ⟨boundary, hboundary,
+          Relation.ReflTransGen.head hchoose (hreach.trans htail)⟩
+      · subst target
+        exact ⟨.absorbed (some index.succ), trivial,
+          Relation.ReflTransGen.head hchoose hreach⟩
+
+private theorem KiloblockConstruction.continueKernel_preceding_reaches_boundary
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1)) :
+    ∃ target, target ∈ construction.continueBoundary ∧
+      Math.Probability.PMFReachable
+        (construction.continueFiniteModeKernel excluded)
+        (construction.finiteMode
+          (.draw (precedingKiloblockPhase table k))) target := by
+  induction k using Fin.induction with
+  | zero =>
+      refine ⟨.drawFinal, trivial, ?_⟩
+      simpa [precedingKiloblockPhase,
+        KiloblockConstruction.finiteMode,
+        Math.Probability.PMFReachable] using
+          (Relation.ReflTransGen.refl :
+            Math.Probability.PMFReachable
+              (construction.continueFiniteModeKernel excluded)
+              (.drawFinal) (.drawFinal))
+  | succ index ih =>
+      obtain ⟨target, htarget, hreach⟩ :=
+        construction.continueKernel_drawChoose_reaches_boundary
+          excluded index.castSucc
+      refine ⟨target, htarget, ?_⟩
+      have hindex :
+          (⟨index.1, by omega⟩ :
+            Fin (construction.blockCount + 1)) = index.castSucc := by
+        apply Fin.ext
+        rfl
+      simpa [precedingKiloblockPhase,
+        KiloblockConstruction.finiteMode, hindex] using hreach
+
+private theorem KiloblockConstruction.continueKernel_after_reaches_boundary
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) :
+    ∃ target, target ∈ construction.continueBoundary ∧
+      Math.Probability.PMFReachable
+        (construction.continueFiniteModeKernel excluded)
+        (construction.finiteMode (.draw
+          (phaseAfterAttempt table
+            (fun block owner =>
+              (construction.attempt block owner).continuation)
+            k choice))) target := by
+  cases choice with
+  | none =>
+      simpa [phaseAfterAttempt] using
+        construction.continueKernel_preceding_reaches_boundary excluded k
+  | some owner =>
+      cases hcontinuation : (construction.attempt k owner).continuation with
+      | restart =>
+          simpa [phaseAfterAttempt, hcontinuation,
+            KiloblockConstruction.finiteMode] using
+              construction.continueKernel_drawChoose_reaches_boundary
+                excluded k
+      | advance =>
+          simpa [phaseAfterAttempt, hcontinuation] using
+            construction.continueKernel_preceding_reaches_boundary excluded k
+
+theorem KiloblockConstruction.continueKernel_reaches_boundary
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    ∀ source, ∃ target, target ∈ construction.continueBoundary ∧
+      Math.Probability.PMFReachable
+        (construction.continueFiniteModeKernel excluded) source target := by
+  intro source
+  cases source with
+  | drawChoose k =>
+      exact construction.continueKernel_drawChoose_reaches_boundary excluded k
+  | drawFinal =>
+      exact ⟨.drawFinal, trivial, Relation.ReflTransGen.refl⟩
+  | finalActive =>
+      exact ⟨.finalActive, trivial, Relation.ReflTransGen.refl⟩
+  | absorbed origin =>
+      exact ⟨.absorbed origin, trivial, Relation.ReflTransGen.refl⟩
+  | drawResume k choice remaining =>
+      let rawChoice := choice.map construction.ownerOfCode
+      obtain ⟨target, htarget, htail⟩ :=
+        construction.continueKernel_after_reaches_boundary
+          excluded k rawChoice
+      refine ⟨target, htarget, ?_⟩
+      have hhead := construction.continueKernel_drawResume_reaches_after
+        excluded k rawChoice remaining.1 (by omega)
+      have hsource : construction.finiteMode
+          (.draw (.resume k rawChoice remaining.1)) =
+          .drawResume k choice remaining := by
+        change construction.finiteMode
+          (construction.modeOfFinite (.drawResume k choice remaining)) = _
+        exact construction.finiteMode_modeOfFinite _
+      rw [hsource] at hhead
+      exact hhead.trans htail
+  | active k choice remaining =>
+      let rawChoice := choice.map construction.ownerOfCode
+      obtain ⟨target, htarget, htail⟩ :=
+        construction.continueKernel_after_reaches_boundary
+          excluded k rawChoice
+      refine ⟨target, htarget, ?_⟩
+      have hhead := construction.continueKernel_active_reaches_after
+        excluded k rawChoice remaining.1 (by omega)
+      have hsource : construction.finiteMode
+          (.active k rawChoice remaining.1) =
+          .active k choice remaining := by
+        change construction.finiteMode
+          (construction.modeOfFinite (.active k choice remaining)) = _
+        exact construction.finiteMode_modeOfFinite _
+      rw [hsource] at hhead
+      exact hhead.trans htail
+
+/-! The explicit finite-mode kernel is transient off its final/absorbed
+boundary. This compiles the source's informal "the block eventually ends"
+argument into a quantitative finite-chain certificate. -/
+theorem KiloblockConstruction.continueKernel_transienceCertificate
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    Nonempty (Math.Probability.ClosedCoreTransienceCertificate
+      (construction.continueFiniteModeKernel excluded)
+      construction.continueBoundary) := by
+  letI : Nonempty (KiloblockFiniteMode construction) :=
+    ⟨FiniteKiloblockMode.drawFinal⟩
+  exact Math.Probability.exists_closedCoreTransienceCertificate
+    (construction.continueFiniteModeKernel excluded)
+    construction.continueBoundary
+    (construction.continueBoundary_closed excluded)
+    (construction.continueKernel_reaches_boundary excluded)
 
 /-! The operational schedule itself implies the unilateral-quitting clause:
 at an active history either one selected owner uses the mesh coin or everyone
