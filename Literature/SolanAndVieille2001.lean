@@ -1,7 +1,8 @@
 import MathUE.Topology.CompactSerialRelation
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
-import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
 
 noncomputable section
@@ -26,6 +27,7 @@ kept separate from the exact source statements and never replace them.
 namespace Literature.SolanAndVieille2001
 
 open GameTheory StochasticGame MeasureTheory Filter Set
+open GameTheory.QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -148,8 +150,112 @@ def Theorem1_3 : Prop :=
       ∃ root : ι → PMF Bool, pureRoot root ∧
         epsilonEquilibrium reward 0 (stationaryProfile reward root)
 
+private theorem exists_symmetricExitCard
+    (players : ℕ) (quitterPayoff nonquitterPayoff : ℕ → ℝ)
+    (hplayers : 0 < players) :
+    ∃ card : ℕ,
+      1 ≤ card ∧ card ≤ players ∧
+        (card = 1 ∨
+          nonquitterPayoff (card - 1) ≤ quitterPayoff card) ∧
+        (card = players ∨
+          quitterPayoff (card + 1) ≤ nonquitterPayoff card) := by
+  let boundary : ℕ → Prop := fun card ↦
+    1 ≤ card ∧ card ≤ players ∧
+      (card = players ∨
+        quitterPayoff (card + 1) ≤ nonquitterPayoff card)
+  have hexists : ∃ card, boundary card := by
+    exact ⟨players, hplayers, le_rfl, Or.inl rfl⟩
+  let card := Nat.find hexists
+  have hcard := Nat.find_spec hexists
+  refine ⟨card, hcard.1, hcard.2.1, ?_, hcard.2.2⟩
+  by_cases hcardOne : card = 1
+  · exact Or.inl hcardOne
+  · right
+    have hpredLt : card - 1 < card := by omega
+    have hpredNot := Nat.find_min hexists hpredLt
+    have hpredOne : 1 ≤ card - 1 := by omega
+    have hpredPlayers : card - 1 ≤ players := by omega
+    have hpredNe : card - 1 ≠ players := by omega
+    have hnotLe : ¬ quitterPayoff ((card - 1) + 1) ≤
+        nonquitterPayoff (card - 1) := by
+      intro hle
+      exact hpredNot ⟨hpredOne, hpredPlayers, Or.inr hle⟩
+    have hsucc : (card - 1) + 1 = card := by omega
+    rw [hsucc] at hnotLe
+    exact le_of_lt (lt_of_not_ge hnotLe)
+
 theorem theorem1_3 : Theorem1_3 (ι := ι) := by
-  sorry
+  intro reward hsymmetry
+  obtain ⟨quitterPayoff, nonquitterPayoff, hreward⟩ := hsymmetry
+  by_cases hplayers : Fintype.card ι = 0
+  · haveI : IsEmpty ι := Fintype.card_eq_zero_iff.mp hplayers
+    let root : ι → PMF Bool := fun who ↦ isEmptyElim who
+    refine ⟨root, fun who ↦ isEmptyElim who, ?_⟩
+    intro who
+    exact isEmptyElim who
+  · have hplayersPos : 0 < Fintype.card ι := Nat.pos_of_ne_zero hplayers
+    by_cases hsolo : quitterPayoff 1 ≤ 0
+    · refine ⟨quittingPureSetRoot ∅, ?_, ?_⟩
+      · intro who
+        exact Or.inl (by simp [quittingPureSetRoot, quittingSetAction])
+      · exact (isεAsymptoticNash_pureSetRoot_iff_isQuittingSureExitSet
+          reward ∅).mpr
+          ((isQuittingSureExitSet_empty_iff reward).mpr fun who ↦ by
+            rw [quittingSoloReward, hreward]
+            simp
+            exact hsolo)
+    · obtain ⟨card, hcardOne, hcardPlayers, hmember, houtsider⟩ :=
+        exists_symmetricExitCard (Fintype.card ι) quitterPayoff
+          nonquitterPayoff hplayersPos
+      obtain ⟨exitSet, -, hexitCard⟩ :=
+        Finset.exists_subset_card_eq (s := (Finset.univ : Finset ι))
+          hcardPlayers
+      have hexitNonempty : exitSet.Nonempty :=
+        Finset.card_pos.mp (by omega)
+      refine ⟨quittingPureSetRoot exitSet, ?_, ?_⟩
+      · intro who
+        by_cases hwho : who ∈ exitSet
+        · exact Or.inr (by simp [quittingPureSetRoot, quittingSetAction, hwho])
+        · exact Or.inl (by simp [quittingPureSetRoot, quittingSetAction, hwho])
+      · apply (isεAsymptoticNash_pureSetRoot_iff_isQuittingSureExitSet
+          reward exitSet).mpr
+        constructor
+        · intro member hmemberSet
+          rw [quittingSetReward_of_nonempty reward hexitNonempty,
+            hreward]
+          simp only [hmemberSet, ↓reduceIte]
+          by_cases herase : (exitSet.erase member).Nonempty
+          · rw [quittingSetReward_of_nonempty reward herase, hreward]
+            simp only [Finset.mem_erase, ne_eq, not_true_eq_false]
+            rw [Finset.card_erase_of_mem hmemberSet, hexitCard]
+            exact hmember.resolve_left fun hcardEq ↦ by
+              have heraseCard := Finset.card_erase_of_mem hmemberSet
+              have herasePos := Finset.card_pos.mpr herase
+              rw [hexitCard, hcardEq] at heraseCard
+              omega
+          · have heraseEmpty : exitSet.erase member = ∅ :=
+              Finset.not_nonempty_iff_eq_empty.mp herase
+            have hcardEq : card = 1 := by
+              have := Finset.card_erase_of_mem hmemberSet
+              rw [heraseEmpty, Finset.card_empty, hexitCard] at this
+              omega
+            simp [quittingSetReward, heraseEmpty]
+            rw [hexitCard, hcardEq]
+            exact le_of_lt (lt_of_not_ge hsolo)
+        · intro outsider houtsiderSet
+          rw [quittingSetReward_of_nonempty reward hexitNonempty, hreward]
+          simp only [houtsiderSet, ↓reduceIte]
+          have hinsertNonempty : (insert outsider exitSet).Nonempty :=
+            Finset.insert_nonempty outsider exitSet
+          rw [quittingSetReward_of_nonempty reward hinsertNonempty, hreward]
+          simp only [Finset.mem_insert, true_or, ↓reduceIte]
+          rw [Finset.card_insert_of_notMem houtsiderSet, hexitCard]
+          exact houtsider.resolve_left fun h ↦ by
+            apply houtsiderSet
+            have hexitUniv : exitSet = Finset.univ :=
+              exitSet.card_eq_iff_eq_univ.mp (hexitCard.trans h)
+            rw [hexitUniv]
+            simp
 
 /-! ### Example 1: a symmetric game without symmetric approximate equilibria -/
 
@@ -299,21 +405,79 @@ def upperSemicontinuous {α : Type*} [TopologicalSpace α]
   ∀ x ∈ K, ∀ U : Set α, IsOpen U → ψ x ⊆ U →
     ∃ V : Set α, IsOpen V ∧ x ∈ V ∧ ∀ y ∈ V ∩ K, ψ y ⊆ U
 
-/-- **Lemma 2.5.** A nonempty-valued upper-semicontinuous correspondence
-`φ : K → K` on a nonempty compact space admits an inverse iterative chain
-`k_i ∈ φ(k_{i+1})`. -/
+/-- **Lemma 2.5.** A nonempty compact-valued upper-semicontinuous
+correspondence `φ : K → K` on a nonempty compact Hausdorff space admits an
+inverse iterative chain `k_i ∈ φ(k_{i+1})`.
+
+The paper works with a compact subset of Euclidean space and calls `φ` a
+correspondence.  We expose the otherwise implicit Hausdorff and closed-value
+hypotheses: without closed values, upper semicontinuity in the displayed
+neighborhood formulation does not provide the closed graph used by the
+compact inverse-limit argument. -/
 def Lemma2_5 : Prop :=
-  ∀ (α : Type*) [TopologicalSpace α] (K : Set α),
+  ∀ (α : Type*) [TopologicalSpace α] [T2Space α] (K : Set α),
     K.Nonempty → IsCompact K →
     ∀ ψ : α → Set α,
       (∀ x ∈ K, (ψ x).Nonempty ∧ ψ x ⊆ K) →
+      (∀ x ∈ K, IsClosed (ψ x)) →
       upperSemicontinuous K ψ →
         ∃ sequence : ℕ → α,
           (∀ i, sequence i ∈ K) ∧
           ∀ i, sequence i ∈ ψ (sequence (i + 1))
 
 theorem lemma2_5 : Lemma2_5 := by
-  sorry
+  intro α _ _ K hKnonempty hKcompact ψ hψnonempty hψclosed hψusc
+  let relation : α → α → Prop := fun current tail ↦ current ∈ ψ tail
+  have hgraph : IsClosed
+      {pair : α × α |
+        pair.1 ∈ K ∧ pair.2 ∈ K ∧ relation pair.1 pair.2} := by
+    rw [← isOpen_compl_iff]
+    apply isOpen_iff_forall_mem_open.mpr
+    rintro ⟨current, tail⟩ houtside
+    by_cases hcurrentK : current ∈ K
+    · by_cases htailK : tail ∈ K
+      · have hedge : current ∉ ψ tail := by
+          intro hedge
+          exact houtside ⟨hcurrentK, htailK, hedge⟩
+        have hψcompact : IsCompact (ψ tail) :=
+          hKcompact.of_isClosed_subset (hψclosed tail htailK)
+            (hψnonempty tail htailK).2
+        obtain ⟨imageNhd, currentNhd, himageOpen, hcurrentOpen,
+            himage, hcurrent, hdisjoint⟩ :=
+          hψcompact.separation_of_notMem hedge
+        obtain ⟨tailNhd, htailOpen, htailMem, hnearby⟩ :=
+          hψusc tail htailK imageNhd himageOpen himage
+        refine ⟨currentNhd ×ˢ tailNhd, ?_,
+          hcurrentOpen.prod htailOpen, ⟨hcurrent, htailMem⟩⟩
+        rintro ⟨current', tail'⟩ ⟨hcurrent', htail'⟩
+        simp only [Set.mem_compl_iff, Set.mem_setOf_eq]
+        rintro ⟨_, htailK', hrelation⟩
+        exact Set.disjoint_left.1 hdisjoint
+          (hnearby tail' ⟨htail', htailK'⟩ hrelation) hcurrent'
+      · refine ⟨Set.univ ×ˢ Kᶜ, ?_,
+          isOpen_univ.prod hKcompact.isClosed.isOpen_compl,
+          ⟨Set.mem_univ current, htailK⟩⟩
+        rintro ⟨current', tail'⟩ ⟨_, htail'⟩
+        simp only [Set.mem_compl_iff, Set.mem_setOf_eq]
+        exact fun h ↦ htail' h.2.1
+    · refine ⟨Kᶜ ×ˢ Set.univ, ?_,
+        hKcompact.isClosed.isOpen_compl.prod isOpen_univ,
+        ⟨hcurrentK, Set.mem_univ tail⟩⟩
+      rintro ⟨current', tail'⟩ ⟨hcurrent', _⟩
+      simp only [Set.mem_compl_iff, Set.mem_setOf_eq]
+      exact fun h ↦ hcurrent' h.1
+  let system : Math.Topology.CompactSerialRelation α := {
+    box := K
+    relation := relation
+    box_nonempty := hKnonempty
+    box_compact := hKcompact
+    relationGraph_closed := hgraph
+    predecessor_exists := fun tail htail ↦
+      ⟨Classical.choose (hψnonempty tail htail).1,
+        (hψnonempty tail htail).2
+          (Classical.choose_spec (hψnonempty tail htail).1),
+        Classical.choose_spec (hψnonempty tail htail).1⟩ }
+  simpa only [system, relation] using system.exists_infiniteChain
 
 /-- The two-player terminal table in Example 2. Player 1 gets `2` only when
 Player 2 quits alone; every other terminal coordinate is `1`. -/
@@ -701,39 +865,102 @@ theorem theorem2_14 : Theorem2_14 (ι := ι) := by
 
 /-! ## 3. The four-player example -/
 
-/-- The quartic appearing in Equation (30). -/
-def figure2Polynomial (h : ℝ) : ℝ :=
-  h ^ 4 + 3 * h ^ 3 - 2 * h ^ 2 - 9 * h + 4
+/-- The quartic selecting the corrected primary continuation probability. -/
+def figure2Polynomial (a : ℝ) : ℝ :=
+  44 * a ^ 4 - 7 * a ^ 3 - 26 * a ^ 2 + a + 3
 
-/-- The exact period-two roots in Section 3. Lean time zero represents the
-paper's first odd stage. The mixing parameters are `x=1/h` and `z=1/g`. -/
+/-- The paper's printed symmetric probability fails player 4's displayed
+Bellman equation. With `p = 1 / √2`, the Figure 2 table gives player 4 the
+one-step value `4p(1-p) + p²`, which is strictly below `√2`. -/
+theorem printedFigure2_playerFour_bellman_mismatch :
+    let p : ℝ := 1 / Real.sqrt 2
+    4 * p * (1 - p) + p ^ 2 < Real.sqrt 2 := by
+  dsimp only
+  have hsqrtPos : 0 < Real.sqrt (2 : ℝ) := Real.sqrt_pos.2 (by norm_num)
+  have hsqrtSq : Real.sqrt (2 : ℝ) ^ 2 = 2 :=
+    Real.sq_sqrt (by norm_num)
+  field_simp [hsqrtPos.ne']
+  nlinarith
+
+/-- The exact period-two roots for the Figure 2 terminal table. The symmetric
+`1 / √2` probabilities printed in the paper do not satisfy that table's
+Bellman equations: the two active players must instead use the distinct
+continuation probabilities `a` and `b` selected below. -/
 def figure2PhaseRootCondition
-    (g h : ℝ) (roots : RootSequence (ι := Fin 4)) : Prop :=
-  1 < g ∧ 1 < h ∧ h < 2 ∧ g = 3 / (4 - h ^ 2) ∧
-  figure2Polynomial h = 0 ∧
+    (a b : ℝ) (roots : RootSequence (ι := Fin 4)) : Prop :=
+  0 < a ∧ a < 1 ∧ 0 < b ∧ b < 1 ∧
+  b = (4 * a ^ 2 - 1) / (3 * a ^ 2) ∧
+  figure2Polynomial a = 0 ∧
   ∀ time,
     (time % 2 = 0 →
       roots time 1 = PMF.pure false ∧
       roots time 3 = PMF.pure false ∧
-      (roots time 0 false).toReal = 1 / h ∧
-      (roots time 2 false).toReal = 1 / g) ∧
+      (roots time 0 false).toReal = a ∧
+      (roots time 2 false).toReal = b) ∧
     (time % 2 = 1 →
       roots time 0 = PMF.pure false ∧
       roots time 2 = PMF.pure false ∧
-      (roots time 1 false).toReal = 1 / h ∧
-      (roots time 3 false).toReal = 1 / g)
+      (roots time 1 false).toReal = a ∧
+      (roots time 3 false).toReal = b)
 
-/-- Section 3's displayed profile is a period-two equilibrium. -/
+/-- The corrected Figure 2 profile is a period-two equilibrium. -/
 def Figure2CyclicEquilibriumClaim : Prop :=
-  ∃ g h : ℝ, ∃ roots : RootSequence (ι := Fin 4),
+  ∃ a b : ℝ, ∃ roots : RootSequence (ι := Fin 4),
     cyclicRootSequence roots ∧
-    figure2PhaseRootCondition g h roots ∧
+    figure2PhaseRootCondition a b roots ∧
     epsilonEquilibrium SolanVieilleBoundary.boundaryReward 0
       (profile SolanVieilleBoundary.boundaryReward roots)
 
 theorem figure2_cyclic_equilibrium :
     Figure2CyclicEquilibriumClaim := by
-  sorry
+  let a := FourPlayerPairedSingleton.periodTwoParameter
+  let b := FourPlayerPairedSingleton.periodTwoSecondary
+  let cycle : Fin 2 → Fin 4 → PMF Bool :=
+    ![FourPlayerPairedSingleton.oddRoot,
+      FourPlayerPairedSingleton.evenRoot]
+  let roots : RootSequence (ι := Fin 4) :=
+    quittingCyclicRootSequence cycle 0
+  refine ⟨a, b, roots, ?_, ?_, ?_⟩
+  · refine ⟨2, by norm_num, ?_⟩
+    intro time
+    unfold roots quittingCyclicRootSequence quittingCyclicOrbit
+    congr 2
+    omega
+  · refine ⟨FourPlayerPairedSingleton.periodTwoParameter_pos,
+      FourPlayerPairedSingleton.periodTwoParameter_lt_one,
+      FourPlayerPairedSingleton.periodTwoSecondary_pos,
+      FourPlayerPairedSingleton.periodTwoSecondary_lt_one, rfl, ?_, ?_⟩
+    · exact FourPlayerPairedSingleton.periodTwoParameter_root
+    · intro time
+      unfold roots quittingCyclicRootSequence quittingCyclicOrbit cycle
+      have hmod : time % 2 = 0 ∨ time % 2 = 1 := by omega
+      rcases hmod with hzero | hone
+      · constructor
+        · intro _
+          simp [hzero, a, b,
+            FourPlayerPairedSingleton.oddRoot]
+        · omega
+      · constructor
+        · omega
+        · intro _
+          simp [hone, a, b,
+            FourPlayerPairedSingleton.evenRoot]
+  · change epsilonEquilibrium SolanVieilleBoundary.boundaryReward 0
+      (quittingRootSequenceProfile SolanVieilleBoundary.boundaryReward roots 0)
+    have hcycle : cycle = quittingCyclicContinuationBlockCycle 1
+        FourPlayerPairedSingleton.periodTwoBlock := by
+      funext stage
+      symm
+      exact FourPlayerPairedSingleton.quittingCyclicContinuationBlockCycle_periodTwoBlock
+        stage
+    have hprofile : quittingRootSequenceProfile
+        SolanVieilleBoundary.boundaryReward roots 0 =
+        FourPlayerPairedSingleton.periodTwoProfile := by
+      unfold roots FourPlayerPairedSingleton.periodTwoProfile
+        quittingCyclicContinuationBlockProfile quittingCyclicBehaviorProfile
+      rw [hcycle]
+    rw [hprofile]
+    exact FourPlayerPairedSingleton.periodTwoProfile_isExactTerminalNash
 
 /-- The Figure 2 game has no stationary `ε`-equilibrium for all sufficiently
 small positive `ε`. The paper states this result and refers elsewhere for the
@@ -782,25 +1009,30 @@ structure Probability (Ω : Type*) where
     Disjoint first second →
       prob (first ∪ second) = prob first + prob second
 
+/-- The first `true` coordinate of a finite Boolean vector, or infinity if
+the vector has no success. -/
+def firstSuccessVector {N : ℕ} (bits : Fin N → Bool) : WithTop ℕ :=
+  if hsuccess : (Finset.univ.filter fun n => bits n = true).Nonempty then
+    ((Finset.univ.filter fun n => bits n = true).min' hsuccess : ℕ)
+  else ⊤
+
 /-- The first `true` value of a finite Boolean clock, or infinity if the
 clock has no success. -/
 def firstSuccessTime {N : ℕ} { Ω : Type* }
     (bits : Fin N → Ω → Bool) (ω : Ω) : WithTop ℕ :=
-  if hsuccess : (Finset.univ.filter fun n => bits n ω = true).Nonempty then
-    ((Finset.univ.filter fun n => bits n ω = true).min' hsuccess : ℕ)
-  else ⊤
+  firstSuccessVector (fun n ↦ bits n ω)
 
-/-- Mutual independence of the two finite families of Bernoulli variables,
-expressed by factorization of every joint atom. -/
+/-- Mutual independence of the two finite Bernoulli vectors. This is the
+part of the paper's independence hypothesis used by the clock estimate. -/
 def independentBernoulliSequences {N : ℕ} { Ω : Type* }
     (probability : Probability Ω)
     (first second : Fin N → Ω → Bool) : Prop :=
-  ∀ firstValues secondValues : Fin N → Bool,
+  ∀ firstValues secondValues : Set (Fin N → Bool),
     probability.prob
-        {ω | (∀ n, first n ω = firstValues n) ∧
-          ∀ n, second n ω = secondValues n} =
-      (∏ n, probability.prob {ω | first n ω = firstValues n}) *
-        ∏ n, probability.prob {ω | second n ω = secondValues n}
+        {ω | (fun n ↦ first n ω) ∈ firstValues ∧
+          (fun n ↦ second n ω) ∈ secondValues} =
+      probability.prob {ω | (fun n ↦ first n ω) ∈ firstValues} *
+        probability.prob {ω | (fun n ↦ second n ω) ∈ secondValues}
 
 /-- The event that a first-success time is strictly before `N`. -/
 def beforeEvent {Ω : Type*}
@@ -817,6 +1049,120 @@ strictly before the second clock. -/
 def firstBeforeSecondEvent {Ω : Type*}
     (first₁ first₂ : Ω → WithTop ℕ) (N : ℕ) : Set Ω :=
   {ω | first₁ ω < N ∧ first₁ ω < first₂ ω}
+
+private theorem Probability.mono { Ω : Type* } (probability : Probability Ω)
+    {first second : Set Ω} (hsubset : first ⊆ second) :
+    probability.prob first ≤ probability.prob second := by
+  have hdecomp : second = first ∪ (second \ first) := by
+    ext ω
+    constructor
+    · intro hω
+      by_cases hfirst : ω ∈ first
+      · exact Or.inl hfirst
+      · exact Or.inr ⟨hω, hfirst⟩
+    · rintro (hfirst | hrest)
+      · exact hsubset hfirst
+      · exact hrest.1
+  have hdisjoint : Disjoint first (second \ first) := by
+    exact Set.disjoint_left.2 fun _ hfirst hrest ↦ hrest.2 hfirst
+  rw [hdecomp, probability.add_of_disjoint first (second \ first) hdisjoint]
+  exact le_add_of_nonneg_right (probability.nonneg _)
+
+private theorem Probability.prob_diff { Ω : Type* }
+    (probability : Probability Ω) {first second : Set Ω}
+    (hsubset : first ⊆ second) :
+    probability.prob (second \ first) =
+      probability.prob second - probability.prob first := by
+  have hdecomp : second = first ∪ (second \ first) := by
+    ext ω
+    constructor
+    · intro hω
+      by_cases hfirst : ω ∈ first
+      · exact Or.inl hfirst
+      · exact Or.inr ⟨hω, hfirst⟩
+    · rintro (hfirst | hrest)
+      · exact hsubset hfirst
+      · exact hrest.1
+  have hdisjoint : Disjoint first (second \ first) := by
+    exact Set.disjoint_left.2 fun _ hfirst hrest ↦ hrest.2 hfirst
+  have hadd : probability.prob second =
+      probability.prob first + probability.prob (second \ first) := by
+    calc
+      probability.prob second = probability.prob (first ∪ (second \ first)) :=
+        congrArg probability.prob hdecomp
+      _ = probability.prob first + probability.prob (second \ first) :=
+        probability.add_of_disjoint first (second \ first) hdisjoint
+  linarith
+
+private theorem Probability.prob_biUnion_finset { Ω κ : Type* }
+    (probability : Probability Ω) (indices : Finset κ)
+    (events : κ → Set Ω)
+    (hdisjoint : Set.PairwiseDisjoint (↑indices) events) :
+    probability.prob (⋃ index ∈ indices, events index) =
+      ∑ index ∈ indices, probability.prob (events index) := by
+  classical
+  induction indices using Finset.induction with
+  | empty => simp [probability.empty]
+  | insert index indices hindex ih =>
+      simp only [Finset.mem_insert, iUnion_iUnion_eq_or_left, hindex,
+        not_false_eq_true, Finset.sum_insert]
+      rw [probability.add_of_disjoint, ih]
+      · exact hdisjoint.subset (by simp)
+      · simp only [Set.disjoint_iUnion_right]
+        exact fun other hother ↦ hdisjoint (by simp) (by simp [hother]) (by aesop)
+
+private theorem firstAtEvent_pairwiseDisjoint { Ω : Type* }
+    (first : Ω → WithTop ℕ) (indices : Finset ℕ) :
+    Set.PairwiseDisjoint (↑indices) (firstAtEvent first) := by
+  intro firstIndex _ secondIndex _ hne
+  exact Set.disjoint_left.2 fun ω hfirst hsecond ↦
+    hne (by exact_mod_cast hfirst.symm.trans hsecond)
+
+private theorem firstAtEvent_inter_pairwiseDisjoint { Ω : Type* }
+    (first : Ω → WithTop ℕ) (event : Set Ω) (indices : Finset ℕ) :
+    Set.PairwiseDisjoint (↑indices)
+      (fun index ↦ firstAtEvent first index ∩ event) := by
+  intro firstIndex hfirst secondIndex hsecond hne
+  exact (firstAtEvent_pairwiseDisjoint first indices hfirst hsecond hne).mono
+    inter_subset_left inter_subset_left
+
+private theorem iUnion_firstAtEvent_range { Ω : Type* }
+    (first : Ω → WithTop ℕ) (N : ℕ) :
+    (⋃ index ∈ Finset.range N, firstAtEvent first index) =
+      beforeEvent first N := by
+  ext ω
+  simp only [Set.mem_iUnion, Finset.mem_range, firstAtEvent, beforeEvent,
+    Set.mem_setOf_eq]
+  constructor
+  · rintro ⟨index, ⟨hindex, heq⟩⟩
+    rw [heq]
+    exact_mod_cast hindex
+  · intro hbefore
+    cases hvalue : first ω with
+    | top => simp [hvalue] at hbefore
+    | coe index =>
+        refine ⟨index, ?_, ?_⟩
+        · simpa [hvalue] using hbefore
+        · rfl
+
+private theorem iUnion_firstAtEvent_inter_range { Ω : Type* }
+    (first : Ω → WithTop ℕ) (event : Set Ω) (N : ℕ)
+    (hsubset : event ⊆ beforeEvent first N) :
+    (⋃ index ∈ Finset.range N, firstAtEvent first index ∩ event) = event := by
+  ext ω
+  constructor
+  · simp only [Set.mem_iUnion, Set.mem_inter_iff]
+    rintro ⟨index, ⟨_, ⟨_, hω⟩⟩⟩
+    exact hω
+  · intro hω
+    have hbefore := hsubset hω
+    have hunion : ω ∈ ⋃ index ∈ Finset.range N,
+        firstAtEvent first index := by
+      rw [iUnion_firstAtEvent_range]
+      exact hbefore
+    simp only [Set.mem_iUnion] at hunion ⊢
+    obtain ⟨index, hindex, hfirst⟩ := hunion
+    exact ⟨index, hindex, hfirst, hω⟩
 
 /-- **Appendix Lemma 3.1.** For independent first-success clocks, the loss
 from requiring clock 1 to ring before clock 2 is bounded by the product of
@@ -846,7 +1192,110 @@ def Lemma3_1 : Prop :=
         2 * probability.prob (beforeEvent first₂ N)
 
 theorem lemma3_1 : Lemma3_1 := by
-  sorry
+  intro Ω probability N firstBits secondBits hindependence
+  dsimp only
+  intro hjointPos
+  let first₁ := firstSuccessTime firstBits
+  let first₂ := firstSuccessTime secondBits
+  let firstBefore := beforeEvent first₁ N
+  let secondBefore := beforeEvent first₂ N
+  let ordered := firstBeforeSecondEvent first₁ first₂ N
+  have horderedSubset : ordered ⊆ firstBefore := by
+    intro ω hω
+    exact hω.1
+  have hfailureSubset : firstBefore \ ordered ⊆
+      firstBefore ∩ secondBefore := by
+    rintro ω ⟨hfirst, hnotOrdered⟩
+    refine ⟨hfirst, ?_⟩
+    have hnotLt : ¬ first₁ ω < first₂ ω := by
+      intro hlt
+      exact hnotOrdered ⟨hfirst, hlt⟩
+    exact lt_of_le_of_lt (le_of_not_gt hnotLt) hfirst
+  let firstVectorEvent : Set (Fin N → Bool) :=
+    {values | firstSuccessVector values < N}
+  let secondVectorEvent : Set (Fin N → Bool) :=
+    {values | firstSuccessVector values < N}
+  have hindependentBefore :
+      probability.prob (firstBefore ∩ secondBefore) =
+        probability.prob firstBefore * probability.prob secondBefore := by
+    have hfactor := hindependence firstVectorEvent secondVectorEvent
+    exact hfactor
+  have hfailure : probability.prob firstBefore -
+        probability.prob ordered ≤
+      probability.prob firstBefore * probability.prob secondBefore := by
+    rw [← probability.prob_diff horderedSubset]
+    exact (probability.mono hfailureSubset).trans_eq hindependentBefore
+  refine ⟨hfailure, ?_⟩
+  let firstMass : ℕ → ℝ := fun index ↦
+    probability.prob (firstAtEvent first₁ index)
+  let orderedMass : ℕ → ℝ := fun index ↦
+    probability.prob (firstAtEvent first₁ index ∩ ordered)
+  let total := probability.prob firstBefore
+  let orderedTotal := probability.prob ordered
+  let loss := total - orderedTotal
+  have htotalPos : 0 < total :=
+    lt_of_lt_of_le hjointPos (probability.mono horderedSubset)
+  have horderedTotalPos : 0 < orderedTotal := hjointPos
+  have hlossNonneg : 0 ≤ loss := by
+    exact sub_nonneg.mpr (probability.mono horderedSubset)
+  have hfirstMassNonneg (index : ℕ) : 0 ≤ firstMass index :=
+    probability.nonneg _
+  have horderedMassNonneg (index : ℕ) : 0 ≤ orderedMass index :=
+    probability.nonneg _
+  have horderedMassLe (index : ℕ) :
+      orderedMass index ≤ firstMass index := by
+    exact probability.mono inter_subset_left
+  have hsumFirst : ∑ index ∈ Finset.range N, firstMass index = total := by
+    unfold firstMass total firstBefore
+    rw [← probability.prob_biUnion_finset (Finset.range N)
+      (firstAtEvent first₁) (firstAtEvent_pairwiseDisjoint first₁ _)]
+    rw [iUnion_firstAtEvent_range]
+  have hsumOrdered :
+      ∑ index ∈ Finset.range N, orderedMass index = orderedTotal := by
+    unfold orderedMass orderedTotal
+    rw [← probability.prob_biUnion_finset (Finset.range N)
+      (fun index ↦ firstAtEvent first₁ index ∩ ordered)
+      (firstAtEvent_inter_pairwiseDisjoint first₁ ordered _)]
+    rw [iUnion_firstAtEvent_inter_range first₁ ordered N horderedSubset]
+  have hpoint (index : ℕ) :
+      |firstMass index / total - orderedMass index / orderedTotal| ≤
+        (orderedTotal * (firstMass index - orderedMass index) +
+          orderedMass index * loss) / (total * orderedTotal) := by
+    have htotalNe : total ≠ 0 := ne_of_gt htotalPos
+    have horderedNe : orderedTotal ≠ 0 := ne_of_gt horderedTotalPos
+    have hdiffNonneg : 0 ≤ firstMass index - orderedMass index :=
+      sub_nonneg.mpr (horderedMassLe index)
+    have hidentity : firstMass index / total -
+        orderedMass index / orderedTotal =
+        (orderedTotal * (firstMass index - orderedMass index) -
+          orderedMass index * loss) / (total * orderedTotal) := by
+      field_simp [htotalNe, horderedNe]
+      unfold loss
+      ring
+    rw [hidentity, abs_div, abs_of_pos (mul_pos htotalPos horderedTotalPos)]
+    apply div_le_div_of_nonneg_right _ (mul_pos htotalPos horderedTotalPos).le
+    exact (abs_sub _ _).trans (by
+      rw [abs_of_nonneg (mul_nonneg horderedTotalPos.le hdiffNonneg),
+        abs_of_nonneg (mul_nonneg (horderedMassNonneg index) hlossNonneg)])
+  calc
+    ∑ index ∈ Finset.range N,
+        |firstMass index / total - orderedMass index / orderedTotal| ≤
+        ∑ index ∈ Finset.range N,
+          (orderedTotal * (firstMass index - orderedMass index) +
+            orderedMass index * loss) / (total * orderedTotal) := by
+      exact Finset.sum_le_sum fun index _ ↦ hpoint index
+    _ = 2 * loss / total := by
+      rw [← Finset.sum_div, Finset.sum_add_distrib, ← Finset.mul_sum,
+        ← Finset.sum_mul, Finset.sum_sub_distrib, hsumFirst, hsumOrdered]
+      field_simp [ne_of_gt htotalPos, ne_of_gt horderedTotalPos]
+      unfold loss
+      ring
+    _ ≤ 2 * probability.prob secondBefore := by
+      rw [div_le_iff₀ htotalPos]
+      have hlossBound : loss ≤
+          total * probability.prob secondBefore := by
+        exact hfailure
+      nlinarith [probability.nonneg secondBefore]
 
 /-! ## Checked downstream correspondences -/
 
