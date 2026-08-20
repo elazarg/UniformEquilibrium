@@ -4313,39 +4313,44 @@ def HasStationarilyGeneratedApproximateEquilibria (G : QuittingGame) : Prop :=
       IsQuitEpsilonEquilibrium G (ε + δ)
         (StationaryPrefixThenPunish G p M punishment)
 
-/-- Lemma 5 exactly as printed in 2007, with its free `x` repaired to `r`. -/
-def Lemma5Claim (G : QuittingGame) : Prop :=
-  ¬HasStationaryApproximateEquilibria G →
-    ¬HasInstantApproximateEquilibria G →
-    (∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
-    EveryNormalSoloQuitterHarmsNormal G ∧
-    ∃ ρ, IsUniformRho G ρ
-
-/-- A fixed compact continuation set has one common motion parameter. -/
-def HasCompactUniformRho (G : QuittingGame)
-    (K : Set (Payoff G.Player)) : Prop :=
-  ∃ ρ : ℝ, 0 < ρ ∧ ρ ≤ 1 ∧ ∀ r ∈ K, ∀ p,
-    IsRational G ρ r → p ∈ EpsilonRow G ρ r →
-    let y := QuittingOneStagePayoff G r p
-    ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ
+/-- A vector lies within `ε` of the feasible vectors. -/
+def NearFeasible (G : QuittingGame) (ε : ℝ) (r : Payoff G.Player) : Prop :=
+  ∃ z, Feasible G z ∧ ‖r - z‖ ≤ ε
 
 /--
-The corrected form described by Simon (2012, p. 185): the strategic hypothesis excludes
-stationarily generated approximate equilibria, and the motion parameter is uniform only
-on one fixed compact set of continuation vectors.
+Lemma 5 as printed in 2007, with its free `x` repaired to `r`: excluding stationary
+and instant approximate equilibria gives the sign pattern in (1) and one global `ρ` in (2).
 -/
-def CorrectedLemma5Claim (G : QuittingGame) : Prop :=
-  ¬HasStationarilyGeneratedApproximateEquilibria G →
-    ¬HasInstantApproximateEquilibria G →
+theorem lemma5 (G : QuittingGame)
+    (hstationary : ¬HasStationaryApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
     (∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
-    EveryNormalSoloQuitterHarmsNormal G ∧
-    ∀ K : Set (Payoff G.Player), IsCompact K → HasCompactUniformRho G K
+      EveryNormalSoloQuitterHarmsNormal G ∧
+      ∃ ρ, IsUniformRho G ρ := by
+  sorry
+
+/--
+Simon (2012), Lemma 2.1, correcting the 2007 Lemma 5: the strategic hypothesis excludes
+stationarily generated approximate equilibria, and `ρ < 1` is uniform for continuation
+vectors within distance one of the feasible set.
+-/
+theorem lemma5_corrected_2012 (G : QuittingGame)
+    (hstationary : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    (∃ l, IsNormalPlayer G l ∧ 0 < SoloPayoff G l) ∧
+      EveryNormalSoloQuitterHarmsNormal G ∧
+      ∃ ρ : ℝ, 0 < ρ ∧ ρ < 1 ∧ ∀ r, NearFeasible G 1 r →
+        IsRational G ρ r → ∀ p, p ∈ EpsilonRow G ρ r →
+          let y := QuittingOneStagePayoff G r p
+          ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ := by
+  sorry
 
 /-!
 Simon (2012, p. 185) explicitly says that the 2007 statement wrote "stationary
 approximate equilibria" although its proof uses the stronger stationarily generated
-notion.  It also supplies the omitted compact-set restriction in part (2).  Accordingly,
-`Lemma5Claim` and `CorrectedLemma5Claim` record claims rather than checked theorems.
+notion. It also restores the omitted restriction to the compact set of vectors within
+distance one of the feasible vectors. The local Bool example below refutes one inference
+from the old proof; it does not refute the full conclusion of `lemma5`.
 -/
 
 namespace NegativeQuitterVertex
@@ -4501,7 +4506,7 @@ theorem hasStationaryApproximateEquilibria :
 Thus the local vertex inference used in the printed proof is false: even at a rational
 `E₀` fixed point, repeating the row need not be an approximate equilibrium.  The game
 itself does have another stationary equilibrium, as the preceding theorem records, so this
-is not presented as a counterexample to all of `Lemma5Claim`.
+is not presented as a counterexample to the full conclusion of `lemma5`.
 -/
 theorem printed_vertex_inference_fails :
     IsRational game 1 continuation ∧ row ∈ EpsilonRow game 0 continuation ∧
@@ -4622,10 +4627,6 @@ theorem CyclicOrbitCondition.hasQuitApproximateEquilibria
   intro n deviation
   exact (hequilibrium n deviation).trans (by linarith)
 
-/-- A vector lies within `ε` of the feasible vectors. -/
-def NearFeasible (G : QuittingGame) (ε : ℝ) (r : Payoff G.Player) : Prop :=
-  ∃ z, Feasible G z ∧ ‖r - z‖ ≤ ε
-
 /-- The total variation of a finite vector sequence. -/
 def FiniteOrbitVariation {N : Type} [Fintype N] {k : ℕ}
     (x : Fin (k + 1) → Payoff N) : ℝ :=
@@ -4662,24 +4663,31 @@ def ExtendedOrbitCondition (G : QuittingGame) : Prop :=
 def EquivalentFive (A B C D E : Prop) : Prop :=
   (A ↔ B) ∧ (B ↔ C) ∧ (C ↔ D) ∧ (D ↔ E)
 
-/-- Theorem 3 as printed in 2007. -/
-def Theorem3Claim (G : QuittingGame) : Prop :=
-  ¬HasStationaryApproximateEquilibria G →
-    ¬HasInstantApproximateEquilibria G →
+/--
+Theorem 3 as printed in 2007: in the absence of stationary and instant approximate
+equilibria, approximate equilibrium and the four orbit conditions are equivalent.
+-/
+theorem theorem3 (G : QuittingGame)
+    (hstationary : ¬HasStationaryApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
     EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
-      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G) (ExtendedOrbitCondition G)
+      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G)
+      (ExtendedOrbitCondition G) := by
+  sorry
 
-/-- Theorem 3 with the strategic correction stated by Simon in 2012. -/
-def CorrectedTheorem3Claim (G : QuittingGame) : Prop :=
-  ¬HasStationarilyGeneratedApproximateEquilibria G →
-    ¬HasInstantApproximateEquilibria G →
+/-- Simon (2012), Theorem 2.1, with the corrected stationarily-generated hypothesis. -/
+theorem theorem3_corrected_2012 (G : QuittingGame)
+    (hstationary : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
     EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
-      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G) (ExtendedOrbitCondition G)
+      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G)
+      (ExtendedOrbitCondition G) := by
+  sorry
 
 /-!
-The printed proof of Theorem 3 invokes Lemma 5.  Simon's 2012 correction says that this
-argument requires the nonexistence of stationarily generated approximate equilibria, so
-the old hypothesis cannot be silently used to produce a checked theorem here.
+The printed proof of Theorem 3 invokes Lemma 5. Simon's 2012 correction says that this
+argument requires nonexistence of stationarily generated approximate equilibria. This
+repairs the proof's hypothesis; it does not by itself refute the old theorem statement.
 -/
 
 /-!
@@ -5198,18 +5206,19 @@ theorem corollary2_of_equivalentFive (G : QuittingGame)
     · exact hvariation.tail start
 
 /-- Corollary 2 as printed in 2007. -/
-def Corollary2Claim (G : QuittingGame) : Prop :=
-  (∀ n, IsNormalPlayer G n) →
-    ¬HasInstantApproximateEquilibria G →
-    ¬HasStationaryApproximateEquilibria G →
-    HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G
+theorem corollary2 (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hstationary : ¬HasStationaryApproximateEquilibria G) :
+    HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G := by
+  sorry
 
-/-- Corollary 2 with the strategic correction stated in 2012. -/
-def CorrectedCorollary2Claim (G : QuittingGame) : Prop :=
-  (∀ n, IsNormalPlayer G n) →
-    ¬HasInstantApproximateEquilibria G →
-    ¬HasStationarilyGeneratedApproximateEquilibria G →
-    HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G
+/-- Simon (2012), Theorem 2.2, with the corrected stationarily-generated hypothesis. -/
+theorem corollary2_corrected_2012 (G : QuittingGame)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hstationary : ¬HasStationarilyGeneratedApproximateEquilibria G) :
+    HasQuitApproximateEquilibria G ↔ InfiniteUnrestrictedOrbitCondition G := by
+  sorry
 
 /-! ## 5. Escape games -/
 
