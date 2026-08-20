@@ -29,6 +29,7 @@ namespace Literature.SolanAndVieille2001
 
 open GameTheory StochasticGame MeasureTheory Filter Set
 open GameTheory.QuittingSureSetOwnerRepair
+open Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -281,8 +282,327 @@ def Example1Claim : Prop :=
         epsilonEquilibrium example1Reward ε
           (profile example1Reward roots)
 
+private theorem expect_pmfPi_finTwo (root : Fin 2 → PMF Bool)
+    (f : (Fin 2 → Bool) → ℝ) :
+    expect (Math.PMFProduct.pmfPi root) f =
+      expect (root 0) (fun first ↦
+        expect (root 1) (fun second ↦ f ![first, second])) := by
+  have hzero : Function.update root 0 (root 0) = root :=
+    Function.update_eq_self 0 root
+  rw [← hzero, Math.PMFProduct.pmfPi_update_bind, expect_bind]
+  apply congrArg (expect (root 0))
+  funext first
+  have hone : Function.update (Function.update root 0 (PMF.pure first))
+      1 (root 1) = Function.update root 0 (PMF.pure first) := by
+    funext who
+    fin_cases who <;> simp
+  rw [← hone, Math.PMFProduct.pmfPi_update_bind, expect_bind]
+  apply congrArg (expect (root 1))
+  funext second
+  have hpure : Function.update (Function.update root 0 (PMF.pure first))
+      1 (PMF.pure second) = fun who ↦ PMF.pure (![first, second] who) := by
+    funext who
+    fin_cases who <;> simp
+  rw [hpure, Math.PMFProduct.pmfPi_pure, expect_pure]
+
+@[simp] private theorem quittingQuitters_finTwo (first second : Bool) :
+    quittingQuitters ![first, second] =
+      (if first then {0} else ∅) ∪ (if second then {1} else ∅) := by
+  ext who
+  fin_cases who <;> cases first <;> cases second <;>
+    simp [quittingQuitters]
+
+private theorem example1_pmfBool_sum (marginal : PMF Bool) :
+    (marginal false).toReal + (marginal true).toReal = 1 := by
+  simpa [Fintype.sum_bool, add_comm] using
+    Math.Probability.pmf_toReal_sum_one marginal
+
+private theorem example1_absorbingContribution
+    (root : Fin 2 → PMF Bool) (hsym : root 0 = root 1) :
+    quittingRootAbsorbingContribution example1Reward root 0 =
+      3 * (root 0 false).toReal * (root 0 true).toReal +
+        (root 0 true).toReal ^ 2 := by
+  unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff
+  rw [expect_pmfPi_finTwo]
+  rw [expect_eq_sum, Fintype.sum_bool]
+  simp_rw [expect_eq_sum, Fintype.sum_bool]
+  rw [← hsym]
+  simp [quittingRootPayoff, example1Reward]
+  ring
+
+private theorem example1_jointContinueMass
+    (root : Fin 2 → PMF Bool) (hsym : root 0 = root 1) :
+    quittingStationaryContinueMass root = (root 0 false).toReal ^ 2 := by
+  rw [quittingStationaryContinueMass_eq_prod_continueProbability,
+    Fin.prod_univ_two, ← hsym]
+  ring
+
+private theorem example1_fixedContinueMass
+    (roots : ℕ → Fin 2 → PMF Bool) (time : ℕ) :
+    quittingFixedOpponentsContinueMass roots 0 time =
+      (roots time 1 false).toReal := by
+  unfold quittingFixedOpponentsContinueMass
+  rw [quittingStationaryContinueMass_eq_prod_continueProbability,
+    Fin.prod_univ_two]
+  simp
+
+private theorem example1_fixedQuitValue
+    (roots : ℕ → Fin 2 → PMF Bool) (time : ℕ) :
+    quittingFixedOpponentsQuitValue example1Reward roots 0 time = 1 := by
+  unfold quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
+    quittingRootExpectedPayoff
+  rw [expect_pmfPi_finTwo]
+  rw [expect_eq_sum, Fintype.sum_bool]
+  simp_rw [expect_eq_sum, Fintype.sum_bool]
+  simp [quittingRootPayoff, example1Reward]
+  have hsum := example1_pmfBool_sum (roots time 1)
+  linarith
+
+private theorem example1_fixedContinueReward
+    (roots : ℕ → Fin 2 → PMF Bool) (time : ℕ) :
+    quittingFixedOpponentsContinueReward example1Reward roots 0 time =
+      2 * (1 - quittingFixedOpponentsContinueMass roots 0 time) := by
+  unfold quittingFixedOpponentsContinueReward
+    quittingRootAbsorbingContribution quittingRootExpectedPayoff
+  rw [expect_pmfPi_finTwo]
+  rw [expect_eq_sum, Fintype.sum_bool]
+  simp_rw [expect_eq_sum, Fintype.sum_bool]
+  simp [quittingRootPayoff, example1Reward, example1_fixedContinueMass]
+  have hsum := example1_pmfBool_sum (roots time 1)
+  linarith
+
+private theorem example1_pureTimeValue
+    (roots : ℕ → Fin 2 → PMF Bool) (time : ℕ) :
+    quittingRootSequencePureTimeTerminalValue example1Reward roots 0
+        (some time) 0 =
+      2 - quittingOpponentSurvivalWeight roots 0 0 time := by
+  rw [quittingRootSequencePureTimeTerminalValue_some_eq,
+    example1_fixedQuitValue]
+  unfold quittingLiveLedgerAccum
+  simp_rw [example1_fixedContinueReward]
+  simp only [Nat.zero_add, mul_one]
+  calc
+    (∑ x ∈ Finset.range time,
+        quittingOpponentSurvivalWeight roots 0 0 x *
+          (2 * (1 - quittingFixedOpponentsContinueMass roots 0 x))) +
+          quittingOpponentSurvivalWeight roots 0 0 time =
+        2 * (∑ x ∈ Finset.range time,
+          quittingOpponentSurvivalWeight roots 0 0 x *
+            (1 - quittingFixedOpponentsContinueMass roots 0 x)) +
+          quittingOpponentSurvivalWeight roots 0 0 time := by
+            rw [Finset.mul_sum]
+            apply congrArg (fun z ↦ z +
+              quittingOpponentSurvivalWeight roots 0 0 time)
+            apply Finset.sum_congr rfl
+            intro x _
+            ring
+    _ = 2 * (1 - quittingOpponentSurvivalWeight roots 0 0 time) +
+          quittingOpponentSurvivalWeight roots 0 0 time := by
+      have htelescope :=
+        sum_quittingOpponentSurvivalWeight_mul_one_sub_continueMass
+          roots 0 0 time
+      simp only [Nat.zero_add] at htelescope
+      rw [htelescope]
+    _ = 2 - quittingOpponentSurvivalWeight roots 0 0 time := by ring
+
+private theorem example1_jointSurvival_eq_opponentSurvival_sq
+    (roots : ℕ → Fin 2 → PMF Bool)
+    (hsym : symmetricRootSequence roots) :
+    ∀ time, quittingJointSurvivalWeight roots 0 time =
+      quittingOpponentSurvivalWeight roots 0 0 time ^ 2 := by
+  intro time
+  induction time with
+  | zero =>
+      simp [quittingJointSurvivalWeight, quittingFiniteContinueWeight,
+        quittingOpponentSurvivalWeight]
+  | succ time ih =>
+      rw [quittingJointSurvivalWeight_succ,
+        quittingOpponentSurvivalWeight_succ, ih]
+      simp only [Nat.zero_add]
+      rw [example1_jointContinueMass (roots time) (hsym time 0 1),
+        example1_fixedContinueMass, hsym time 0 1]
+      ring
+
+private theorem example1_contribution_bound
+    (root : Fin 2 → PMF Bool) (hsym : root 0 = root 1) :
+    2 * quittingRootAbsorbingContribution example1Reward root 0 ≤
+      3 * (1 - quittingStationaryContinueMass root) := by
+  rw [example1_absorbingContribution root hsym,
+    example1_jointContinueMass root hsym]
+  have hsum := example1_pmfBool_sum (root 0)
+  nlinarith [sq_nonneg (root 0 true).toReal]
+
+private theorem example1_finiteOwnPayoff_eq_sum
+    (roots : ℕ → Fin 2 → PMF Bool) :
+    ∀ fuel start,
+      quittingFiniteRootPayoff example1Reward roots 0
+          (fun time ↦ roots time 0) start fuel =
+        ∑ offset ∈ Finset.range fuel,
+          quittingJointSurvivalWeight roots start offset *
+            quittingRootAbsorbingContribution example1Reward
+              (roots (start + offset)) 0 := by
+  intro fuel
+  induction fuel with
+  | zero =>
+      intro start
+      simp [quittingFiniteRootPayoff]
+  | succ fuel ih =>
+      intro start
+      rw [quittingFiniteRootPayoff]
+      have hupdate : Function.update (roots start) 0 (roots start 0) =
+          roots start := Function.update_eq_self 0 (roots start)
+      rw [hupdate, quittingRootExpectedPayoff_eq_absorbingContribution_add,
+        ih (start + 1)]
+      have hpeel : ∀ f : ℕ → ℝ,
+          ∑ offset ∈ Finset.range (fuel + 1), f offset =
+            (∑ offset ∈ Finset.range fuel, f (offset + 1)) + f 0 :=
+        fun f ↦ Finset.sum_range_succ' f fuel
+      rw [hpeel]
+      have hshift : ∀ offset : ℕ,
+          quittingJointSurvivalWeight roots start (offset + 1) *
+              quittingRootAbsorbingContribution example1Reward
+                (roots (start + (offset + 1))) 0 =
+            quittingStationaryContinueMass (roots start) *
+              (quittingJointSurvivalWeight roots (start + 1) offset *
+                quittingRootAbsorbingContribution example1Reward
+                  (roots (start + 1 + offset)) 0) := by
+        intro offset
+        rw [quittingJointSurvivalWeight_succ_left,
+          show start + (offset + 1) = start + 1 + offset from by omega]
+        ring
+      rw [Finset.sum_congr rfl fun offset _ ↦ hshift offset,
+        ← Finset.mul_sum]
+      have hzero : quittingJointSurvivalWeight roots start 0 = 1 :=
+        quittingJointSurvivalWeight_zero_fuel roots start
+      rw [hzero]
+      simp only [Nat.add_zero, one_mul]
+      ring
+
+private theorem example1_finiteOwnPayoff_bound
+    (roots : ℕ → Fin 2 → PMF Bool)
+    (hsym : symmetricRootSequence roots) (fuel : ℕ) :
+    2 * quittingFiniteRootPayoff example1Reward roots 0
+        (fun time ↦ roots time 0) 0 fuel ≤
+      3 * (1 - quittingJointSurvivalWeight roots 0 fuel) := by
+  rw [example1_finiteOwnPayoff_eq_sum roots fuel 0]
+  calc
+    2 * (∑ offset ∈ Finset.range fuel,
+        quittingJointSurvivalWeight roots 0 offset *
+          quittingRootAbsorbingContribution example1Reward
+            (roots (0 + offset)) 0) =
+      ∑ offset ∈ Finset.range fuel,
+        quittingJointSurvivalWeight roots 0 offset *
+          (2 * quittingRootAbsorbingContribution example1Reward
+            (roots offset) 0) := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro offset _
+        simp only [Nat.zero_add]
+        ring
+    _ ≤ ∑ offset ∈ Finset.range fuel,
+        quittingJointSurvivalWeight roots 0 offset *
+          (3 * (1 - quittingStationaryContinueMass (roots offset))) := by
+        apply Finset.sum_le_sum
+        intro offset _
+        exact mul_le_mul_of_nonneg_left
+          (example1_contribution_bound (roots offset) (hsym offset 0 1))
+          (quittingJointSurvivalWeight_nonneg roots 0 offset)
+    _ = 3 * (∑ offset ∈ Finset.range fuel,
+        quittingJointSurvivalWeight roots 0 offset *
+          (1 - quittingStationaryContinueMass (roots offset))) := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro offset _
+      ring
+    _ = 3 * (1 - quittingJointSurvivalWeight roots 0 fuel) := by
+      have htelescope :=
+        sum_quittingJointSurvivalWeight_mul_one_sub_continueMass roots 0 fuel
+      simp only [Nat.zero_add] at htelescope
+      rw [htelescope]
+
+private theorem example1_rootSequenceUpdate_self
+    (roots : ℕ → Fin 2 → PMF Bool) :
+    quittingRootSequenceUpdate roots 0 (fun time ↦ roots time 0) =
+      roots := by
+  funext time who
+  by_cases hwho : who = 0
+  · subst who
+    simp [quittingRootSequenceUpdate]
+  · simp [quittingRootSequenceUpdate, hwho]
+
+private theorem example1_terminalValue_bound
+    (roots : ℕ → Fin 2 → PMF Bool)
+    (hsym : symmetricRootSequence roots) :
+    2 * quittingRootSequenceTerminalValue example1Reward roots 0 0 ≤
+      3 * (1 - quittingJointSurvivalLimit roots 0) := by
+  have hfinite := tendsto_quittingFiniteRootPayoff_terminal
+    example1Reward roots 0 (fun time ↦ roots time 0) 0
+  have hfinite' : Tendsto (fun fuel ↦
+      quittingFiniteRootPayoff example1Reward roots 0
+        (fun time ↦ roots time 0) 0 fuel) atTop
+      (nhds (quittingRootSequenceTerminalValue example1Reward roots 0 0)) := by
+    simpa [quittingRootSequenceTerminalValue,
+      example1_rootSequenceUpdate_self] using hfinite
+  have hleft := hfinite'.const_mul 2
+  have hjoint := tendsto_quittingJointSurvivalLimit roots 0
+  have hright : Tendsto (fun fuel ↦
+      3 * (1 - quittingJointSurvivalWeight roots 0 fuel)) atTop
+      (nhds (3 * (1 - quittingJointSurvivalLimit roots 0))) := by
+    exact (tendsto_const_nhds.sub hjoint).const_mul 3
+  exact le_of_tendsto_of_tendsto' hleft hright
+    (example1_finiteOwnPayoff_bound roots hsym)
+
+private theorem example1_tendsto_opponentSurvival_sqrt_jointLimit
+    (roots : ℕ → Fin 2 → PMF Bool)
+    (hsym : symmetricRootSequence roots) :
+    Tendsto (quittingOpponentSurvivalWeight roots 0 0) atTop
+      (nhds (Real.sqrt (quittingJointSurvivalLimit roots 0))) := by
+  have hjoint := tendsto_quittingJointSurvivalLimit roots 0
+  have hsqrt : Tendsto (fun fuel ↦
+      Real.sqrt (quittingJointSurvivalWeight roots 0 fuel)) atTop
+      (nhds (Real.sqrt (quittingJointSurvivalLimit roots 0))) :=
+    (Real.continuous_sqrt.tendsto _).comp hjoint
+  convert hsqrt using 1
+  funext fuel
+  rw [example1_jointSurvival_eq_opponentSurvival_sq roots hsym fuel]
+  exact (Real.sqrt_sq
+    (quittingOpponentSurvivalWeight_nonneg roots 0 0 fuel)).symm
+
 theorem example1 : Example1Claim := by
-  sorry
+  intro ε hε hsmall
+  rintro ⟨roots, hsym, hnash⟩
+  have hcap : IsεQuittingRootSequenceNash example1Reward ε roots :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      example1Reward ε roots).2 hnash
+  have hdev : ∀ time,
+      quittingRootSequencePureTimeTerminalValue example1Reward roots 0
+          (some time) 0 ≤
+        quittingRootSequenceTerminalValue example1Reward roots 0 0 + ε := by
+    intro time
+    exact hcap 0 (quittingPureTimeHazard (some time))
+  have hopponent :=
+    example1_tendsto_opponentSurvival_sqrt_jointLimit roots hsym
+  have hpureLimit : Tendsto (fun time ↦
+      2 - quittingOpponentSurvivalWeight roots 0 0 time) atTop
+      (nhds (2 - Real.sqrt (quittingJointSurvivalLimit roots 0))) :=
+    tendsto_const_nhds.sub hopponent
+  have hdeviationBound :
+      2 - Real.sqrt (quittingJointSurvivalLimit roots 0) ≤
+        quittingRootSequenceTerminalValue example1Reward roots 0 0 + ε := by
+    apply le_of_tendsto' hpureLimit
+    intro time
+    rw [← example1_pureTimeValue roots time]
+    exact hdev time
+  have hplan := example1_terminalValue_bound roots hsym
+  have hlimitNonneg := quittingJointSurvivalLimit_nonneg roots 0
+  have hsqrtNonneg := Real.sqrt_nonneg (quittingJointSurvivalLimit roots 0)
+  have hsqrtSq := Real.sq_sqrt hlimitNonneg
+  have hthird : (1 : ℝ) / 3 ≤ ε := by
+    nlinarith [sq_nonneg
+      (3 * Real.sqrt (quittingJointSurvivalLimit roots 0) - 1)]
+  have hsqrtEpsilonNonneg := Real.sqrt_nonneg ε
+  have hsqrtEpsilonSq := Real.sq_sqrt hε
+  nlinarith
 
 /-! ## 2. Existence result -/
 
