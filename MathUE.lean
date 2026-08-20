@@ -244,6 +244,7 @@ import MathUE.Probability.FiniteControlledStoppingOptimalPolicy
 import MathUE.Probability.FiniteDiscountedFlow
 import MathUE.Probability.FiniteKernelRegeneration
 import MathUE.Probability.FiniteLawRepair
+import MathUE.Probability.FinDistIntegral
 import MathUE.Probability.FinitePMF
 import MathUE.Probability.FiniteProductFlowKinematics
 import MathUE.Probability.FiniteProductFlowTwoStateRegression

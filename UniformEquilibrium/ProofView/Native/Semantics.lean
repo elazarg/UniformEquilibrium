@@ -5,6 +5,8 @@ Authors: UniformEquilibrium contributors
 -/
 
 import GameTheory.Stochastic.Kuhn
+import MathUE.Probability.FinDistIntegral
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 import UniformEquilibrium.ProofView.Native.History
 
 /-!
@@ -280,6 +282,189 @@ theorem expect_compiledPublicHistoryLaw_totalPayoff_eq
         _root_.Math.Probability.expect_const]
       ac_rfl
 
+/-- The payoff of the latest stage in a reverse-chronological native public
+history.  The empty branch only totalizes the observable off support. -/
+def publicHistoryLatestPayoff (history : G.toNative.PublicHistory)
+    (who : ι) : ℝ :=
+  match history with
+  | [] => 0
+  | record :: _ => G.stagePayoff record.source record.joint who
+
+omit [Fintype ι] [∀ i, Finite (G.Act i)]
+  [∀ i, Nonempty (G.Act i)] in
+@[simp]
+theorem publicHistoryLatestPayoff_nil (who : ι) :
+    publicHistoryLatestPayoff G [] who = 0 :=
+  rfl
+
+omit [Fintype ι] [∀ i, Finite (G.Act i)]
+  [∀ i, Nonempty (G.Act i)] in
+@[simp]
+theorem publicHistoryLatestPayoff_singleton
+    (record : G.toNative.StageRecord) (who : ι) :
+    publicHistoryLatestPayoff G [record] who =
+      G.stagePayoff record.source record.joint who :=
+  rfl
+
+omit [Fintype ι] [∀ i, Finite (G.Act i)]
+  [∀ i, Nonempty (G.Act i)] in
+theorem publicHistoryLatestPayoff_append_singleton_of_ne_nil
+    (history : G.toNative.PublicHistory) (record : G.toNative.StageRecord)
+    (who : ι) (hhistory : history ≠ []) :
+    publicHistoryLatestPayoff G (history ++ [record]) who =
+      publicHistoryLatestPayoff G history who := by
+  cases history with
+  | nil => exact (hhistory rfl).elim
+  | cons head tail => rfl
+
+/-- The latest-stage observable on the compiled native prefix is exactly the
+proof view's expected payoff at that stage. -/
+theorem expect_compiledPublicHistoryLaw_latestPayoff_eq
+    (profile : G.BehaviorProfile) (initial : G.State) (who : ι) :
+    ∀ time,
+      FinDist.expect (compiledPublicHistoryLaw G profile initial (time + 1))
+          (fun history => publicHistoryLatestPayoff G history who) =
+        G.expectedStagePayoff profile initial time who := by
+  intro time
+  induction time generalizing profile initial with
+  | zero =>
+      rw [compiledPublicHistoryLaw_succ]
+      simp only [FinDist.bindOnSupport_eq_bind, FinDist.expect_bind,
+        FinDist.expect_map, compiledPublicHistoryLaw_zero,
+        FinDist.expect_pure, List.nil_append,
+        publicHistoryLatestPayoff_singleton,
+        _root_.Math.Probability.expect_finDistOfPMF,
+        _root_.Math.Probability.expect_const]
+      rw [G.expectedStagePayoff_zero]
+      rfl
+  | succ time ih =>
+      rw [compiledPublicHistoryLaw_succ]
+      simp only [FinDist.bindOnSupport_eq_bind, FinDist.expect_bind,
+        FinDist.expect_map]
+      rw [G.expectedStagePayoff_succ_shift]
+      change _root_.Math.Probability.expect
+          (G.stageActionDist profile (G.emptyHist initial)) _ =
+        _root_.Math.Probability.expect
+          (G.stageActionDist profile (G.emptyHist initial)) _
+      apply congrArg (_root_.Math.Probability.expect
+        (G.stageActionDist profile (G.emptyHist initial)))
+      funext actions
+      rw [_root_.Math.Probability.expect_finDistOfPMF]
+      apply congrArg (_root_.Math.Probability.expect
+        (G.transition initial actions))
+      funext target
+      let continuation := compiledPublicHistoryLaw G
+        (G.shiftProfile profile (initial, actions)) target (time + 1)
+      have hpointwise : ∀ history ∈ continuation.support,
+          publicHistoryLatestPayoff G
+              (history ++ [{
+                source := initial
+                joint := actions
+                target := target }]) who =
+            publicHistoryLatestPayoff G history who := by
+        intro history hhistory
+        apply publicHistoryLatestPayoff_append_singleton_of_ne_nil
+        intro hempty
+        subst history
+        have hnative := native_publicHistoryLaw_eq_compiled G
+          (G.shiftProfile profile (initial, actions)) target (time + 1)
+        have hmem : [] ∈ (G.toNative.publicHistoryLaw target
+            (G.toNative.toBehaviorProfile target
+              (toNativePublicProfile G target
+                (G.shiftProfile profile (initial, actions))))
+            (time + 1)).support := by
+          change [] ∈ (G.toNative.publicHistoryLaw target
+            (toNativeBehaviorProfile G target
+              (G.shiftProfile profile (initial, actions)))
+            (time + 1)).support
+          rw [hnative]
+          exact hhistory
+        have hlength := G.toNative.length_eq_of_mem_support_publicHistoryLaw
+          target
+          (G.toNative.toBehaviorProfile target
+            (toNativePublicProfile G target
+              (G.shiftProfile profile (initial, actions))))
+          (time + 1) hmem
+        simp at hlength
+      rw [FinDist.expect_congr hpointwise]
+      exact ih (G.shiftProfile profile (initial, actions)) target
+
+/-- Native finite-prefix stage expectation is exactly the proof-view expected
+stage payoff under compilation. -/
+theorem native_behavioralStageExpectation_eq
+    (profile : G.BehaviorProfile) (initial : G.State)
+    [MeasurableSpace (G.toNative.toExecution initial).History]
+    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
+    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
+    (who : ι) (time : ℕ) :
+    G.toNative.behavioralStageExpectation initial
+        (toNativePublicProfile G initial profile) who time =
+      G.expectedStagePayoff profile initial time who := by
+  classical
+  let run := (G.toNative.perfectMonitoring initial).runBehavioral
+    (toNativeBehaviorProfile G initial profile) (time + 1)
+  obtain ⟨bound, hbound⟩ :=
+    _root_.Math.Probability.exists_abs_bound_of_finite
+      (fun x : G.State × G.JointAct =>
+        G.stagePayoff x.1 x.2 who)
+  have hlatest : ∀ history : (G.toNative.toExecution initial).History,
+      ‖G.toNative.latestStageUtility initial who history‖ ≤ bound := by
+    intro history
+    rw [Real.norm_eq_abs]
+    apply G.toNative.abs_latestStageUtility_le initial who bound
+    intro state actions
+    exact hbound (state, actions)
+  unfold Stochastic.Game.behavioralStageExpectation
+    Protocol.InformationModel.behavioralPrefixExpectation
+  change (∫ history,
+      G.toNative.latestStageUtility initial who history ∂run.toMeasure) = _
+  rw [FinDist.integral_toMeasure_eq_expect_of_bound run _ hlatest]
+  have hobservable : G.toNative.latestStageUtility initial who =
+      fun history => publicHistoryLatestPayoff G
+        (G.toNative.publicHistoryOfTrace initial history.trace) who := by
+    funext history
+    unfold Stochastic.Game.latestStageUtility publicHistoryLatestPayoff
+    generalize hhistory :
+      G.toNative.publicHistoryOfTrace initial history.trace = publicHistory
+    cases publicHistory with
+    | nil => rfl
+    | cons record tail =>
+        unfold Stochastic.Game.stageRecordUtility
+        rfl
+  rw [hobservable]
+  change run.expect (fun history =>
+      publicHistoryLatestPayoff G
+        (G.toNative.publicHistoryOfTrace initial history.trace) who) = _
+  rw [← FinDist.expect_map
+    (f := fun history =>
+      G.toNative.publicHistoryOfTrace initial history.trace)
+    (μ := run)
+    (u := fun history => publicHistoryLatestPayoff G history who)]
+  change (G.toNative.publicHistoryLaw initial
+      (toNativeBehaviorProfile G initial profile) (time + 1)).expect
+        (fun history => publicHistoryLatestPayoff G history who) = _
+  rw [native_publicHistoryLaw_eq_compiled]
+  exact expect_compiledPublicHistoryLaw_latestPayoff_eq
+    G profile initial who time
+
+/-- Native and proof-view normalized discounted payoffs agree exactly under
+compilation. -/
+theorem native_behavioralDiscountedPayoff_eq
+    (profile : G.BehaviorProfile) (initial : G.State)
+    [MeasurableSpace (G.toNative.toExecution initial).History]
+    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
+    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
+    (discount : ℝ) (who : ι) :
+    G.toNative.behavioralDiscountedPayoff initial discount
+        (toNativePublicProfile G initial profile) who =
+      G.discountedPayoff discount profile initial who := by
+  unfold Stochastic.Game.behavioralDiscountedPayoff
+    StochasticGame.discountedPayoff
+    GameTheory.Math.normalizedDiscountedSum
+  congr 2
+  funext time
+  rw [native_behavioralStageExpectation_eq]
+
 /-- Finite-average payoff is preserved exactly by compilation to
 GameTheory's canonical behavioral runner. -/
 theorem native_finiteAveragePayoff_eq
@@ -369,6 +554,68 @@ theorem native_runBehavioral_roundtrip
   exact fun i history hcoherent =>
     toNativePublicProfile_ofNativePublicProfile_of_coherent
       G initial profile i history hcoherent
+
+/-- Every native public profile has the same finite-prefix stage expectation
+as its decoded proof-view profile. -/
+theorem native_behavioralStageExpectation_eq_of_publicProfile
+    (initial : G.State) (profile : G.toNative.PublicProfile initial)
+    [MeasurableSpace (G.toNative.toExecution initial).History]
+    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
+    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
+    (who : ι) (time : ℕ) :
+    G.toNative.behavioralStageExpectation initial profile who time =
+      G.expectedStagePayoff
+        (ofNativePublicProfile G initial profile) initial time who := by
+  rw [← native_behavioralStageExpectation_eq G
+    (ofNativePublicProfile G initial profile) initial who time]
+  unfold Stochastic.Game.behavioralStageExpectation
+    Protocol.InformationModel.behavioralPrefixExpectation
+  rw [← native_runBehavioral_roundtrip G initial profile (time + 1)]
+  rfl
+
+/-- Every native public profile has exactly the discounted payoff of its
+decoded proof-view profile. -/
+theorem native_behavioralDiscountedPayoff_eq_of_publicProfile
+    (initial : G.State) (profile : G.toNative.PublicProfile initial)
+    [MeasurableSpace (G.toNative.toExecution initial).History]
+    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
+    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
+    (discount : ℝ) (who : ι) :
+    G.toNative.behavioralDiscountedPayoff initial discount profile who =
+      G.discountedPayoff discount
+        (ofNativePublicProfile G initial profile) initial who := by
+  unfold Stochastic.Game.behavioralDiscountedPayoff
+    StochasticGame.discountedPayoff
+    GameTheory.Math.normalizedDiscountedSum
+  congr 2
+  funext time
+  rw [native_behavioralStageExpectation_eq_of_publicProfile]
+
+/-- A native public profile and a proof-view profile that agree on coherent
+histories have exactly the same normalized discounted payoff. -/
+theorem native_behavioralDiscountedPayoff_eq_of_coherent
+    (initial : G.State) (proofProfile : G.BehaviorProfile)
+    (nativeProfile : G.toNative.PublicProfile initial)
+    (hagree : ∀ i history, IsCoherentPublicHistory G initial history →
+      toNativePublicProfile G initial proofProfile i history =
+        nativeProfile i history)
+    [MeasurableSpace (G.toNative.toExecution initial).History]
+    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
+    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
+    (discount : ℝ) (who : ι) :
+    G.toNative.behavioralDiscountedPayoff initial discount nativeProfile who =
+      G.discountedPayoff discount proofProfile initial who := by
+  rw [← native_behavioralDiscountedPayoff_eq G proofProfile initial
+    discount who]
+  unfold Stochastic.Game.behavioralDiscountedPayoff
+    GameTheory.Math.normalizedDiscountedSum
+  congr 2
+  funext time
+  unfold Stochastic.Game.behavioralStageExpectation
+    Protocol.InformationModel.behavioralPrefixExpectation
+  rw [← native_runBehavioral_eq_of_coherent G initial proofProfile
+    nativeProfile (time + 1) hagree]
+  rfl
 
 /-- A native public profile and a proof-view profile that agree on coherent
 histories have exactly the same finite-average payoff. -/
