@@ -1,0 +1,126 @@
+/-
+Copyright (c) 2026 GameTheory contributors. All rights reserved.
+Released under the MIT license as described in the file LICENSE.
+Authors: GameTheory contributors
+-/
+
+import UniformEquilibrium.Quitting.Cycles.ConditionedDiffuseCompiler
+import UniformEquilibrium.Quitting.Boundary.Repair.SupportEnlargementAlternative
+
+/-!
+# Own-marginal repair charge after conditioned diffuse rescaling
+
+An endpoint gap has a direct predecessor-payoff consequence. At a
+source-pure-false date, any approximate endpoint-Nash repair that changes only
+that player's marginal gains at least the full supplied endpoint-gap lower
+bound minus its Nash tolerance, relative to pure Continue. The conditioned
+diffuse rescaling estimate then charges the discrepancy between pure Continue
+and the conditioned predecessor by the existing joint absorption error.
+
+This is intentionally a one-player repair theorem.  It does not compare two
+roots that alter several marginals, and it does not provide state matching or
+an actual continuation profile.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open Filter Math.Probability
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι]
+variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+
+/-- At a source-pure-false conditioned date, an own-marginal endpoint-Nash
+repair shifts the outsider's predecessor coordinate by the positive endpoint
+gap minus its Nash tolerance and the diffuse joint-charge error. -/
+theorem conditionedDiffuse_ownMarginalEndpointRepair_ge_jointCharge_shift
+    (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
+    (boundary : Payoff ι) (time : ℕ) (who : ι)
+    (gap epsilon M rho : ℝ)
+    (hpolicy : ∀ date, value date =
+      quittingRootSuccessorPayoff reward (value (date + 1)) (roots date))
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hconditionedBound : ∀ date player,
+      |quittingTailConditionedValue roots value boundary date player| ≤ M)
+    (hcurrent : 0 < quittingTailEventualAbsorption roots time)
+    (hnext : 0 < quittingTailEventualAbsorption roots (time + 1))
+    (hinactive : roots time who = PMF.pure false)
+    (hmesh : quittingTailConditionedAbsorptionWeight roots time ≤ rho)
+    (hsmall : Fintype.card ι *
+      quittingTailConditionedAbsorptionWeight roots time ≤ 1)
+    (marginal : PMF Bool)
+    (hnash : IsεQuittingRootEndpointNash reward
+      (quittingTailConditionedValue roots value boundary (time + 1)) epsilon
+      (Function.update
+        (quittingTailDiffuseRescaledRoot roots time hcurrent) who marginal))
+    (hgap : gap ≤ quittingRootEndpointDifference reward
+      (quittingTailConditionedValue roots value boundary (time + 1))
+      (quittingTailDiffuseRescaledRoot roots time hcurrent) who) :
+    quittingRootExpectedPayoff reward
+        (quittingTailConditionedValue roots value boundary (time + 1))
+        (Function.update
+          (quittingTailDiffuseRescaledRoot roots time hcurrent) who marginal)
+        who ≥
+      quittingTailConditionedValue roots value boundary time who +
+        gap - epsilon -
+          (4 * M * Fintype.card ι * rho) *
+            quittingRootOpponentAbsorptionMass
+              (quittingTailDiffuseRescaledRoot roots time hcurrent) who := by
+  let targetRoot := quittingTailDiffuseRescaledRoot roots time hcurrent
+  let next := quittingTailConditionedValue roots value boundary (time + 1)
+  let current := quittingTailConditionedValue roots value boundary time
+  have htargetInactive : targetRoot who = PMF.pure false := by
+    exact quittingTailDiffuseRescaledRoot_eq_pure_false_of_source_eq_pure_false
+      roots time who hcurrent hinactive
+  have hcharge :=
+    abs_conditionedValue_sub_rescaledSuccessorPayoff_le_jointCharge
+      (reward := reward) roots value boundary hpolicy hreward
+      hconditionedBound time who hcurrent hnext hmesh hsmall
+  have hrepair :=
+    quittingRootExpectedPayoff_update_ownMarginal_ge_pureContinue_add_gap_sub
+      reward next targetRoot who marginal hnash
+  have hrootEq :
+      Function.update targetRoot who (PMF.pure false) = targetRoot := by
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp [htargetInactive]
+    · simp [Function.update_of_ne hplayer]
+  have hcontinue :
+      quittingRootExpectedPayoff reward next
+          (Function.update targetRoot who (PMF.pure false)) who =
+        quittingRootExpectedPayoff reward next targetRoot who := by
+    rw [hrootEq]
+  have habseq : quittingRootAbsorptionMass targetRoot =
+      quittingRootOpponentAbsorptionMass targetRoot who := by
+    unfold quittingRootOpponentAbsorptionMass
+    rw [hrootEq]
+  have habseq' : quittingRootAbsorptionMass
+      (quittingTailDiffuseRescaledRoot roots time hcurrent) =
+      quittingRootOpponentAbsorptionMass
+        (quittingTailDiffuseRescaledRoot roots time hcurrent) who := by
+    simpa [targetRoot] using habseq
+  have hlower :
+      quittingRootExpectedPayoff reward next targetRoot who ≥
+        current who -
+          (4 * M * Fintype.card ι * rho) *
+            quittingRootOpponentAbsorptionMass targetRoot who := by
+    have hcharge' := hcharge
+    dsimp [targetRoot, next, current] at hcharge' ⊢
+    rw [habseq'] at hcharge'
+    have hcharge'' :
+        |quittingTailConditionedValue roots value boundary time who -
+            quittingRootExpectedPayoff reward
+              (quittingTailConditionedValue roots value boundary (time + 1))
+              (quittingTailDiffuseRescaledRoot roots time hcurrent) who| ≤
+          4 * M * Fintype.card ι * rho *
+            quittingRootOpponentAbsorptionMass
+              (quittingTailDiffuseRescaledRoot roots time hcurrent) who := by
+      simpa only [quittingRootSuccessorPayoff] using hcharge'
+    have habs := (abs_le.mp hcharge'').2
+    linarith
+  dsimp [targetRoot, next, current] at hrepair hcontinue hlower ⊢
+  linarith [hrepair, hcontinue, hlower]
+
+end GameTheory

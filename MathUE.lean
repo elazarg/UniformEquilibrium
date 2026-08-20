@@ -76,7 +76,6 @@ import MathUE.CycleCoboundary
 import MathUE.CyclicContraction
 import MathUE.CyclicExposure
 import MathUE.CyclicMaxAffineBound
-import MathUE.DirectedGraph
 import MathUE.DirectedTransport
 import MathUE.DivergentChargeRecurrence
 import MathUE.FiniteChargedReturn

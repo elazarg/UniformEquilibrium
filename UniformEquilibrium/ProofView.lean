@@ -1,0 +1,87 @@
+import UniformEquilibrium.ProofView.Basic
+import UniformEquilibrium.ProofView.Concepts.Classes.TeamGame
+import UniformEquilibrium.ProofView.Concepts.Correlation.CorrelatedEqProperties
+import UniformEquilibrium.ProofView.Concepts.Correlation.CorrelatedNashMixed
+import UniformEquilibrium.ProofView.Concepts.Correlation.CorrelationRegimes
+import UniformEquilibrium.ProofView.Concepts.Equilibrium.ApproximateNash
+import UniformEquilibrium.ProofView.Concepts.Equilibrium.GameFormSolutionConcepts
+import UniformEquilibrium.ProofView.Concepts.Equilibrium.SolutionConcepts
+import UniformEquilibrium.ProofView.Concepts.Equilibrium.StrictNashProperties
+import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed
+import UniformEquilibrium.ProofView.Concepts.Existence.ProductSimplexBrouwer
+import UniformEquilibrium.ProofView.Concepts.Foundations.Convergence
+import UniformEquilibrium.ProofView.Concepts.Foundations.Deviation
+import UniformEquilibrium.ProofView.Concepts.Mixed.MixedExtension
+import UniformEquilibrium.ProofView.Concepts.Potential.MixedPotential
+import UniformEquilibrium.ProofView.Concepts.Potential.PotentialGame
+import UniformEquilibrium.ProofView.Concepts.Potential.PotentialTeam
+import UniformEquilibrium.ProofView.Concepts.Repeated.Basic
+import UniformEquilibrium.ProofView.Concepts.Repeated.Discounted
+import UniformEquilibrium.ProofView.Concepts.Repeated.Monitoring
+import UniformEquilibrium.ProofView.Concepts.Repeated.MonitoringInstances
+import UniformEquilibrium.ProofView.Concepts.Repeated.MonitoringRank
+import UniformEquilibrium.ProofView.Concepts.Repeated.Uniform
+import UniformEquilibrium.ProofView.Concepts.Stochastic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.TransitionIndependent
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Basic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayMeasure
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.StageGame
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic.LiminfAverageBridge
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.AsymptoticPayoffEquivalence
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.ExpectedPotentialShaping
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.PayoffExistenceClosure
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Asymptotic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Game
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.PunishmentLevel
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootContinuation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.UniformPayoffExistenceClosure
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Controller.MemoryController
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.BehaviorTransfer
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Disintegration
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.MarkovConverse
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Normalization
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.NormalizedHistory
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Payoff.AffinePayoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.Feasible
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.PunishmentLevel
+import UniformEquilibrium.ProofView.Concepts.Stochastic.ZeroSum.Basic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.ZeroSum.DiscountedShapleyAlgebraic
+import UniformEquilibrium.ProofView.Concepts.Stochastic.ZeroSum.ValueAPI
+import UniformEquilibrium.ProofView.Concepts.Transport.Deviation
+import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Discounting
+import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
+import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Periodic
+import UniformEquilibrium.ProofView.Concepts.ZeroSum.ConstantSum
+import UniformEquilibrium.ProofView.Concepts.ZeroSum.SecurityStrategy
+import UniformEquilibrium.ProofView.Concepts.ZeroSum.ZeroSum
+import UniformEquilibrium.ProofView.Cooperative.CoalitionalGame.Core
+import UniformEquilibrium.ProofView.Cooperative.CoalitionalGame.MultilinearExtension
+import UniformEquilibrium.ProofView.Cooperative.CoalitionalGame.Shapley
+import UniformEquilibrium.ProofView.Core.Coalition
+import UniformEquilibrium.ProofView.Core.GameProperties
+import UniformEquilibrium.ProofView.Core.KernelGame
+import UniformEquilibrium.ProofView.Core.PMFGameForm
+import UniformEquilibrium.ProofView.Languages.MultiRound.StochasticGame
+import UniformEquilibrium.ProofView.Native.Basic
+import UniformEquilibrium.ProofView.Native.Equilibrium
+import UniformEquilibrium.ProofView.Native.History
+import UniformEquilibrium.ProofView.Native.Semantics
+
+/-!
+# UniformEquilibrium proof view
+
+This umbrella contains project-owned PMF proof interfaces together with their
+exact semantic bridge to GameTheory's canonical stochastic-game runner.
+Execution semantics belong in GameTheory; project-specific derived interfaces
+belong here.
+-/

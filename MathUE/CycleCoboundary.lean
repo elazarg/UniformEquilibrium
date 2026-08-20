@@ -7,8 +7,8 @@ Authors: GameTheory contributors
 import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Algebra.Order.BigOperators.Group.List
 import Mathlib.Data.Real.Basic
+import MathUE.BoundedDiscrepancyCirculation
 import MathUE.ChargedPathBudget
-import MathUE.DirectedGraph
 import MathUE.DirectedTransport
 import MathUE.MaxPlusPotential
 
@@ -130,6 +130,13 @@ variable {w : E → A} {start finish middle : V}
     (hfinish : finish = finish') :
     walkSum w (walk.castFinish hfinish) = walkSum w walk := by
   simp [walkSum]
+
+/-- The integer walk charge of `MathUE.BoundedDiscrepancyCirculation` is the
+walk sum of the same edge data. -/
+theorem charge_eq_walkSum {κ : Type*} (edgeCharge : E → κ → ℤ)
+    (walk : G.Walk start finish) :
+    walk.charge edgeCharge = walkSum edgeCharge walk :=
+  walk.charge_eq_sum_map edgeCharge
 
 end WalkSum
 

@@ -1,0 +1,280 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=23mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[compact]{titlesec}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{4pt plus 2pt}
+\setlength{\belowdisplayshortskip}{4pt plus 2pt minus 2pt}
+
+\theoremstyle{definition}
+\newtheorem{proposition}{Proposition}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\Cont}{\mathsf C}
+\newcommand{\Quit}{\mathsf Q}
+
+\title{4PPS: A Four-Player Paired-Singleton Calibration\\
+\large Two exact completions with common LCP data}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-1.5em}
+
+\begin{abstract}
+The four-player paired-singleton family (4PPS) fixes the normalized
+single-quitter comparison matrix of a four-player quitting game.  This matrix
+has full corrected core, is standard $Q$, has no homogeneous simplex solution,
+and is not projective $\overline Q$.  Two explicit completions share it: one
+has an exact pure stationary equilibrium, while the other has no stationary
+exact terminal Nash equilibrium but has an exact absorbing period-two terminal
+Nash profile and a uniform-equilibrium payoff.  Both lie in the same
+residual-hard LCP class, and both have zero infimum of maximum positive
+terminal deviation gain.
+\end{abstract}
+
+\section{The 4PPS family}
+
+Let $I=\{0,1,2,3\}$, with paired blocks $\{0,1\}$ and $\{2,3\}$.
+A quitting game assigns a payoff vector $r(S)\in\R^4$ to every nonempty
+coalition $S\subseteq I$ of players who quit at the first quitting stage.
+Perpetual continuation has payoff $0$.
+
+The normalized singleton matrix of $r$ is
+\begin{equation}
+\label{eq:normalized-solo}
+ A^r_{ij}=r_i(\{j\})-r_i(\{i\}).
+\end{equation}
+The 4PPS family is the class of tables for which
+\begin{equation}
+\label{eq:M}
+ A^r=M,
+ \qquad
+ M=
+ \begin{pmatrix}
+ 0&3&-1&-1\\
+ 3&0&-1&-1\\
+ -1&-1&0&3\\
+ -1&-1&3&0
+ \end{pmatrix}.
+\end{equation}
+Thus a sole quitter exceeds the same player's own singleton benchmark by
+$0$ for the quitter, by $3$ for the quitter's partner, and by $-1$ for either
+member of the other pair.  Rewards for coalitions of size at least two are
+not fixed by membership in 4PPS.
+
+\section{The common matrix}
+
+For a matrix $A$ on a finite player set, define the corrected layers by
+\[
+ I_0=I,
+ \qquad
+ I_{n+1}=\{i\in I_n:\exists j\in I_n,\ j\ne i,\ A_{ij}\le0\},
+ \qquad
+ I_*=\bigcap_{n\ge0}I_n.
+\]
+A homogeneous simplex solution is a vector $z\ge0$ satisfying
+\[
+ \sum_i z_i=1,
+ \qquad Mz\ge0,
+ \qquad z_i(Mz)_i=0\quad(i\in I).
+\]
+The matrix $M$ is standard $Q$ when, for every $q\in\R^4$, the
+complementarity problem
+\[
+ w=q+Mz,
+ \qquad w,z\ge0,
+ \qquad z_iw_i=0\quad(i\in I)
+\]
+has a solution.
+
+For a nonempty principal submatrix $M_J$, the projective problem replaces
+$w=q+M_Jz$ by
+\[
+ w=cq+M_Jz,
+ \qquad c\ge0,\quad z\ge0,\quad c+\sum_{i\in J}z_i=1,
+ \qquad w\ge0,\quad z_iw_i=0.
+\]
+Projective $\overline Q$ means that this problem is solvable for every $q$
+on every nonempty principal submatrix.
+
+\begin{proposition}[Algebraic position of the paired matrix]
+For the matrix $M$ in \eqref{eq:M},
+\[
+ I_*=I.
+\]
+Moreover, $M$ is standard $Q$, has no homogeneous simplex solution, and is
+not projective $\overline Q$.
+\end{proposition}
+
+Standard $Q$ is proved by explicit complementary supports after ordering
+within each pair and using pair swaps.
+
+The last failure already occurs on $J=\{0,2\}$: for
+$M_J=\bigl(\begin{smallmatrix}0&-1\\-1&0\end{smallmatrix}\bigr)$ and
+$q=(-1,-1)$, the inequalities $-c-z_2\ge0$ and $-c-z_0\ge0$ force
+$c=z_0=z_2=0$, contradicting $c+z_0+z_2=1$.
+
+The residual-hard LCP class consists of tables whose corrected core is
+nonempty, whose corrected-core matrix is standard $Q$ and has no homogeneous
+simplex solution, and whose full normalized singleton matrix is not
+projective $\overline Q$.  It is tracked as the residual half of the
+full-matrix projective-$\overline Q$ split inside the necessary standard-$Q$
+side; residual-hardness itself is not forced of every counterexample.
+
+\section{An exact stationary completion}
+
+Define $G^{(\mathrm s)}$ by the singleton rewards
+\[
+ r^{(\mathrm s)}(\{j\})=M_{\bullet j}
+\]
+and, for every coalition $S$ with $|S|\ge2$, by
+\begin{equation}
+\label{eq:stationary-completion}
+ r^{(\mathrm s)}(S)=(-2,-2,-2,-2).
+\end{equation}
+Its normalized singleton matrix is $M$.
+
+\begin{proposition}[Stationary 4PPS completion]
+In $G^{(\mathrm s)}$, the pure stationary profile
+\[
+ (\Quit,\Cont,\Cont,\Cont)
+\]
+is an exact terminal Nash equilibrium against arbitrary behavioral
+deviations.  Its terminal payoff is
+\[
+ (0,3,-1,-1),
+\]
+and this vector is a uniform-equilibrium payoff for the finite-horizon
+average-payoff games.  The table $G^{(\mathrm s)}$ belongs to the residual-hard
+LCP class.
+\end{proposition}
+
+\section{An exact period-two completion}
+
+Define $G^{(2)}$ by the following complete terminal reward table.  The table
+uses the normalization in which perpetual continuation has payoff $0$.
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{c>{\(}l<{\)}@{\qquad}c>{\(}l<{\)}}
+\toprule
+$S$ & \multicolumn{1}{c}{$r^{(2)}(S)$}
+    & $S$ & \multicolumn{1}{c}{$r^{(2)}(S)$}\\
+\midrule
+$\{0\}$ &(1,4,0,0)       &$\{1\}$ &(4,1,0,0)\\
+$\{2\}$ &(0,0,1,4)       &$\{3\}$ &(0,0,4,1)\\
+$\{0,1\}$ &(1,1,1,1)     &$\{0,2\}$ &(1,1,1,0)\\
+$\{0,3\}$ &(1,0,1,1)     &$\{1,2\}$ &(0,1,1,1)\\
+$\{1,3\}$ &(1,1,0,1)     &$\{2,3\}$ &(1,1,1,1)\\
+$\{0,1,2\}$ &(1,0,0,0)   &$\{0,1,3\}$ &(0,1,0,0)\\
+$\{0,2,3\}$ &(0,0,0,1)   &$\{1,2,3\}$ &(0,0,1,0)\\
+$I$ &(-1,-1,-1,-1)        &&\\
+\bottomrule
+\end{tabular}
+\end{center}
+The diagonal singleton rewards all equal $1$, and subtraction of those
+diagonal entries gives the same normalized matrix $M$ in \eqref{eq:M}.
+
+A \emph{product root} is a one-stage independent mixed-action profile.  We
+identify it with its vector of Quit probabilities.  For a product root $q$
+and a continuation vector $v$, let $F(q;v)$ be the one-stage expected payoff,
+using $r^{(2)}(S)$ when the realized quitting set $S$ is nonempty and $v$ when
+every player Continues.
+
+Let
+\begin{equation}
+\label{eq:parameters}
+ f(x)=44x^4-7x^3-26x^2+x+3.
+\end{equation}
+There is a unique $a\in(1/2,1)$ with $f(a)=0$.  Select that root and set
+\begin{equation}
+\label{eq:secondary}
+ b=\frac{4a^2-1}{3a^2}.
+\end{equation}
+The certified bounds are
+\begin{equation}
+\label{eq:parameter-bounds}
+ \frac{37}{50}<a<\frac34,
+ \qquad
+ \frac12<b<1.
+\end{equation}
+Here $b>1/2$ gives $b^{-1}<2$, the phase-value bound used below.
+
+The odd and even roots are
+\begin{equation}
+\label{eq:roots}
+ q^{\mathrm o}=(1-a,0,1-b,0),
+ \qquad
+ q^{\mathrm e}=(0,1-a,0,1-b),
+\end{equation}
+and their continuation values are
+\begin{equation}
+\label{eq:values}
+ v^{\mathrm o}=(1,b^{-1},1,a^{-1}),
+ \qquad
+ v^{\mathrm e}=(b^{-1},1,a^{-1},1).
+\end{equation}
+Both the displayed phase roots and the displayed continuation values are
+genuinely different.
+The parameter equations come directly from the odd Bellman identity
+$F(q^{\mathrm o};v^{\mathrm e})=v^{\mathrm o}$: coordinate $3$ gives
+$4a-3ab=a^{-1}$ and hence \eqref{eq:secondary}; coordinate $1$ gives
+$b^2(3-2a)+b(1-a)-1=0$; eliminating $b$ yields
+$(a-1)f(a)=0$.  The branch $a=1$ is the nonabsorbing all-Continue algebraic
+branch.
+
+\begin{proposition}[Exact two-phase Nash--Bellman block]
+The displayed roots and values satisfy
+\[
+ F(q^{\mathrm o};v^{\mathrm e})=v^{\mathrm o},
+ \qquad
+ F(q^{\mathrm e};v^{\mathrm o})=v^{\mathrm e}.
+\]
+The Quit-minus-Continue endpoint differences at the odd and even phases are,
+respectively,
+\[
+ \left(0, a+b-ab-b^{-1}, 0, 1-a^{-1}\right)
+\]
+and
+\[
+ \left(a+b-ab-b^{-1}, 0, 1-a^{-1}, 0\right).
+\]
+Both nonzero expressions are strictly negative.  The zeros occur at the
+mixing players---$0,2$ in the odd phase and $1,3$ in the even phase---where
+equality is required; the strict negatives occur at the sure-Continue players,
+where the Nash inequality suffices.  Hence each root is exact Nash against its
+displayed continuation value.  The Continue mass at each phase is $ab<1$, and
+the two phases form an absorbing exact Nash--Bellman cycle.
+\end{proposition}
+
+Let $\sigma^{(2)}$ be the behavioral profile that alternates the odd and even
+roots in \eqref{eq:roots}, beginning with the odd root.
+
+\begin{proposition}[Period-two terminal and uniform equilibrium]
+The profile $\sigma^{(2)}$ is an exact terminal Nash equilibrium against
+arbitrary behavioral deviations, with terminal payoff
+\[
+ U(\sigma^{(2)})=v^{\mathrm o}=(1,b^{-1},1,a^{-1}).
+\]
+The same vector is a uniform-equilibrium payoff for the finite-horizon
+average-payoff games.
+
+There is no stationary product root whose stationary behavioral profile is
+an exact terminal Nash equilibrium of $G^{(2)}$.  For absorbing roots this is
+a finite complementarity classification; all-Continue fails because player
+$0$ gains $1$ by quitting alone.  The table $G^{(2)}$ belongs to the
+residual-hard LCP class.
+\end{proposition}
+
+\end{document}

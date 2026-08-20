@@ -1,0 +1,26 @@
+import Experiments.Base.SemanticFinalRegimeArithmetic
+import Experiments.certsearch.block_pair.K11
+import Experiments.counterexample_search.BlockPeriodicMultiVisit
+import Experiments.counterexample_search.ColliderMirrorPocketEquilibrium
+import Experiments.counterexample_search.ColliderNonnegativeMarginEquilibrium
+import Experiments.counterexample_search.ColliderPocketCandidateEquilibrium
+import Experiments.counterexample_search.ColliderThreeNegativeEquilibrium
+import Experiments.counterexample_search.CyclicBlockExactPeriodicCalibration
+import Experiments.counterexample_search.FlatNeighbourPocketEquilibrium
+import Experiments.counterexample_search.HardenedPentagonCyclicEquilibrium
+import Experiments.counterexample_search.HardenedPentagonSoloPeriodicWitness
+import Experiments.counterexample_search.NormalCoreStrictnessExactPeriodicCalibration
+import Experiments.counterexample_search.RegularTournamentFiveSeed
+import Experiments.counterexample_search.RegularTournamentFiveSeedSoloExits
+import Experiments.counterexample_search.RegularTournamentFiveSeedSureExit
+import Experiments.counterexample_search.RegularTournamentFiveSeedZeroFree
+import Experiments.counterexample_search.RegularTournamentFiveSeedZeroOrbitGap
+import Experiments.counterexample_search.SolanVieilleBoundaryDeletionCalibration
+
+/-!
+# Reproducible experimental evidence
+
+Concrete Lean evidence packages are imported here when their durable output is
+specific to a recorded experimental instance. Reusable theorem and checker
+interfaces belong in `Research`, `MathUE`, or `UniformEquilibrium`.
+-/

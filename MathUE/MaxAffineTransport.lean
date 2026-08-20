@@ -8,10 +8,10 @@ import Mathlib.Algebra.Order.Group.MinMax
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Order.WithBot
+import MathUE.BoundedDiscrepancyCirculation
 import MathUE.CycleCoboundary
-import MathUE.CyclicMaxAffineBound
-import MathUE.DirectedGraph
 import MathUE.DirectedTransport
+import MathUE.CyclicMaxAffineBound
 import MathUE.InverseCoordinateRecurrence
 import MathUE.MaxPlusPotential
 import MathUE.TransferSummaryMonoid
