@@ -3629,6 +3629,54 @@ theorem lemma_3_equilibrium (G : FiniteStageGame)
       scaleSet (n : ℝ) (G.finiteEquilibriumPayoffs n) := by
   sorry
 
+/-! Repeating one positive-horizon block is the zero-residual specialization
+of Lemma 3.  The same scalar-cancellation argument serves feasible and
+equilibrium payoff sets. -/
+private theorem subset_multiple_of_block_concatenation
+    {ι : Type} (sets : ℕ → Set (Payoff ι))
+    (concat : ∀ total m p r : ℕ, total = m * p + r →
+      addSet (iteratedAddSet m (scaleSet (p : ℝ) (sets p)))
+          (scaleSet (r : ℝ) (sets r)) ⊆
+        scaleSet (total : ℝ) (sets total))
+    (n k : ℕ) (hn : 0 < n) (hk : 0 < k) :
+    sets n ⊆ sets (k * n) := by
+  intro z hz
+  let block : Payoff ι := (n : ℝ) • z
+  have hblock : block ∈ scaleSet (n : ℝ) (sets n) :=
+    ⟨z, hz, rfl⟩
+  have hblocks : ((k - 1 : ℕ) : ℝ) • block ∈
+      iteratedAddSet (k - 1) (scaleSet (n : ℝ) (sets n)) := by
+    refine ⟨fun _ => block, fun _ => hblock, ?_⟩
+    ext who
+    simp [Finset.sum_const, nsmul_eq_mul]
+  have hjoined : ((k - 1 : ℕ) : ℝ) • block + block ∈
+      addSet (iteratedAddSet (k - 1) (scaleSet (n : ℝ) (sets n)))
+        (scaleSet (n : ℝ) (sets n)) :=
+    ⟨((k - 1 : ℕ) : ℝ) • block, hblocks, block, hblock, rfl⟩
+  have hkone : 1 ≤ k := by omega
+  have hdecomp : k * n = (k - 1) * n + n := by
+    calc
+      k * n = ((k - 1) + 1) * n := by rw [Nat.sub_add_cancel hkone]
+      _ = (k - 1) * n + n := by rw [Nat.add_mul, one_mul]
+  obtain ⟨w, hw, heq⟩ :=
+    concat (k * n) (k - 1) n n hdecomp hjoined
+  have hkcast : (k : ℝ) = ((k - 1 : ℕ) : ℝ) + 1 := by
+    exact_mod_cast (Nat.sub_add_cancel hkone).symm
+  have htotal : ((k * n : ℕ) : ℝ) • z =
+      ((k - 1 : ℕ) : ℝ) • block + block := by
+    dsimp [block]
+    ext who
+    simp only [Pi.smul_apply, Pi.add_apply, smul_eq_mul]
+    rw [Nat.cast_mul, hkcast]
+    ring
+  have hsmul : ((k * n : ℕ) : ℝ) • z =
+      ((k * n : ℕ) : ℝ) • w :=
+    htotal.trans heq
+  have hwz : w = z := by
+    apply Eq.symm
+    exact smul_right_injective (Payoff ι) (by positivity) hsmul
+  rwa [← hwz]
+
 /-! Immediately after Lemma 3 the paper records the equal-block consequences
 `Dₙ ⊆ Dₖₙ` and `Eₙ ⊆ Eₖₙ`.  Their proofs use the same monitored-profile
 concatenation interface as Lemma 3. -/
@@ -3636,13 +3684,17 @@ theorem lemma_3_D_subset_multiple (G : FiniteStageGame)
     (n : G.Horizon) {k : ℕ} (hk : 0 < k) :
     G.finiteFeasiblePayoffsOnHorizon n ⊆
       G.finiteFeasiblePayoffs (k * n.1) := by
-  sorry
+  apply subset_multiple_of_block_concatenation G.finiteFeasiblePayoffs
+    (fun total m p r htotal =>
+      lemma_3_feasible G total m p r htotal) n.1 k n.2 hk
 
 theorem lemma_3_E_subset_multiple (G : FiniteStageGame)
     (n : G.Horizon) {k : ℕ} (hk : 0 < k) :
     G.finiteEquilibriumPayoffsOnHorizon n ⊆
       G.finiteEquilibriumPayoffs (k * n.1) := by
-  sorry
+  apply subset_multiple_of_block_concatenation G.finiteEquilibriumPayoffs
+    (fun total m p r htotal =>
+      lemma_3_equilibrium G total m p r htotal) n.1 k n.2 hk
 
 /-! The paper then notes that a reverse inclusion for one multiplier `k > 1`
 forces convexity of the corresponding finite-horizon payoff set.  The closure
