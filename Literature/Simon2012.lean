@@ -1,4 +1,5 @@
 import Literature.Simon2007
+import MathUE.LinearAlgebra.UniformNonsingularity
 
 /-!
 # Robert Samuel Simon, *A Topological Approach to Quitting Games* (2012)
@@ -56,6 +57,13 @@ abbrev UnitInterval := Set.Icc (0 : ℝ) 1
 def EuclideanNorm {N : Type} [Fintype N] (x : Payoff N) : ℝ := by
   classical
   exact Real.sqrt (∑ i, (x i) ^ 2)
+
+/-- The paper's explicit Euclidean norm is the standard finite `L²` norm. -/
+theorem euclideanNorm_eq_norm_toLp {N : Type} [Fintype N]
+    (x : Payoff N) :
+    EuclideanNorm x = ‖WithLp.toLp 2 x‖ := by
+  classical
+  simp only [EuclideanNorm, EuclideanSpace.norm_eq, Real.norm_eq_abs, sq_abs]
 
 /-- Euclidean distance on the paper's payoff space. -/
 def EuclideanDist {N : Type} [Fintype N]
@@ -862,16 +870,20 @@ def MatrixEntriesBounded {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ)
   ∀ i j, |A i j| ≤ B
 
 /--
-Lemma 4.1.  This is the compactness of the bounded, determinant-separated
-matrix family times the unit sphere.  Mathlib has all ingredients, but the
-uniform minimum proof has not been assembled in this repository.
+Lemma 4.1.  A bounded, determinant-separated family of matrices has a common
+positive lower bound on its least singular value.
 -/
-theorem lemma4_1 {n : ℕ} (hn : 0 < n) {B ε : ℝ}
-    (hB : 0 < B) (hε : 0 < ε) :
+theorem lemma4_1 {n : ℕ} (_hn : 0 < n) {B ε : ℝ}
+    (_hB : 0 < B) (hε : 0 < ε) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ A : Matrix (Fin n) (Fin n) ℝ,
       MatrixEntriesBounded A B → ε ≤ |A.det| →
       ∀ v : Fin n → ℝ, δ * EuclideanNorm v ≤ EuclideanNorm (A.mulVec v) := by
-  sorry
+  obtain ⟨δ, hδ, hbound⟩ :=
+    Math.LinearAlgebra.exists_uniform_mulVec_lower_bound_of_entry_det_bounds hε
+  refine ⟨δ, hδ, ?_⟩
+  intro A hentries hdet v
+  simpa only [euclideanNorm_eq_norm_toLp] using
+    hbound A hentries hdet v
 
 /-- The uniform perturbation corollary to Lemma 4.1. -/
 def Corollary4_1Statement (G : QuittingGame) (η : ℝ) : Prop :=
