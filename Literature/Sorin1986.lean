@@ -7904,16 +7904,500 @@ theorem prisonersDilemma_Dn_eq_C :
   exact finiteFeasiblePayoffs_eq_correlated_of_oneStage_eq
     prisonersDilemma prisonersDilemma_D1_eq_C ⟨n, hn⟩
 
+private noncomputable instance repeatedHistDecidableEq
+    (G : FiniteStageGame) (length : ℕ) :
+    DecidableEq (G.repeatedGame.Hist length) :=
+  Classical.decEq _
+
+/-- Follow `profile` until `base`; on that public branch, replace one player's
+continuation by `deviation`. -/
+private noncomputable def deviationAfterHistory
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) {prefixLength : ℕ}
+    (base : G.repeatedGame.Hist prefixLength)
+    (deviation : G.BehaviorStrategy who) : G.BehaviorStrategy who := by
+  classical
+  exact fun time history =>
+    if htime : prefixLength ≤ time then
+      if G.repeatedGame.terminalPrefixLE htime history = base then
+        deviation (time - prefixLength)
+          (G.repeatedGame.terminalSuffixLE htime history)
+      else
+        profile who time history
+    else
+      profile who time history
+
+private theorem repeatedHist_startsAt
+    (G : FiniteStageGame) {prefixLength suffixLength : ℕ}
+    (base : G.repeatedGame.Hist prefixLength)
+    (suffix : G.repeatedGame.Hist suffixLength) :
+    suffix.StartsAt base.2 := by
+  cases base.2
+  cases suffixLength with
+  | zero =>
+      simp only [StochasticGame.Hist.StartsAt]
+      rfl
+  | succ suffixLength =>
+      simp only [StochasticGame.Hist.StartsAt]
+      rfl
+
+private theorem afterHistoryProfile_update_deviationAfterHistory
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) {prefixLength : ℕ}
+    (selected base : G.repeatedGame.Hist prefixLength)
+    (deviation : G.BehaviorStrategy who) :
+    G.repeatedGame.afterHistoryProfile
+        (Function.update profile who
+          (deviationAfterHistory G profile who selected deviation)) base =
+      if base = selected then
+        Function.update (G.repeatedGame.afterHistoryProfile profile base)
+          who deviation
+      else
+        G.repeatedGame.afterHistoryProfile profile base := by
+  classical
+  funext player suffixLength suffix
+  by_cases hplayer : player = who
+  · subst player
+    rw [G.repeatedGame.afterHistoryProfile_apply]
+    rw [Function.update_self]
+    unfold deviationAfterHistory
+    rw [dif_pos (Nat.le_add_right prefixLength suffixLength)]
+    have hstart := repeatedHist_startsAt G base suffix
+    rw [G.repeatedGame.terminalPrefixLE_appendHist base suffix hstart]
+    by_cases hbase : base = selected
+    · subst selected
+      simp only [ite_true]
+      rw [Function.update_self]
+      congr 1
+      · exact Nat.add_sub_cancel_left prefixLength suffixLength
+      · exact G.repeatedGame.terminalSuffixLE_appendHist_heq base suffix
+    · simp [hbase]
+  · split_ifs <;> simp [Function.update_of_ne hplayer]
+
+private theorem update_deviationAfterHistory_agreeBefore
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) {prefixLength : ℕ}
+    (base : G.repeatedGame.Hist prefixLength)
+    (deviation : G.BehaviorStrategy who) :
+    G.repeatedGame.ProfilesAgreeBefore
+      (Function.update profile who
+        (deviationAfterHistory G profile who base deviation))
+      profile prefixLength := by
+  intro player time history htime
+  by_cases hplayer : player = who
+  · subst player
+    simp only [Function.update_self]
+    unfold deviationAfterHistory
+    simp [Nat.not_le_of_lt htime]
+  · simp [Function.update_of_ne hplayer]
+
+/-- A Nash continuation is inherited at every positive-probability public
+history.  A profitable continuation deviation could be installed only on
+that branch, improving the root payoff by its positive reach probability. -/
+private theorem afterHistoryProfile_isHorizonNash_of_mem_support
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    {prefixLength suffixLength : ℕ}
+    (hnash : G.repeatedGame.IsεHorizonNash G.repeatedInitial
+      (prefixLength + suffixLength) 0 profile)
+    (base : G.repeatedGame.Hist prefixLength)
+    (hbase : base ∈
+      (G.repeatedGame.histDist profile G.repeatedInitial prefixLength).support) :
+    G.repeatedGame.IsεHorizonNash base.2 suffixLength 0
+      (G.repeatedGame.afterHistoryProfile profile base) := by
+  intro who deviation
+  simp only [add_zero]
+  by_cases hsuffixZero : suffixLength = 0
+  · subst suffixLength
+    rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff,
+      G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+    simp
+  let rootDeviation := deviationAfterHistory G profile who base deviation
+  let deviated := Function.update profile who rootDeviation
+  let prefixLaw := G.repeatedGame.histDist profile
+    G.repeatedInitial prefixLength
+  let originalTotal : G.repeatedGame.Hist prefixLength → ℝ :=
+    fun reached => ∑ time ∈ Finset.range suffixLength,
+      G.repeatedGame.expectedStagePayoff
+        (G.repeatedGame.afterHistoryProfile profile reached)
+        reached.2 time who
+  let deviatedTotal : ℝ :=
+    ∑ time ∈ Finset.range suffixLength,
+      G.repeatedGame.expectedStagePayoff
+        (Function.update (G.repeatedGame.afterHistoryProfile profile base)
+          who deviation) base.2 time who
+  have hagree := update_deviationAfterHistory_agreeBefore
+    G profile who base deviation
+  have hroot := hnash who rootDeviation
+  have hscaled := mul_le_mul_of_nonneg_left hroot
+    (by positivity : (0 : ℝ) ≤ prefixLength + suffixLength)
+  have hdeviated := congrFun
+    (cast_smul_finitePayoff_eq_sum G
+      (prefixLength + suffixLength) deviated) who
+  have horiginal := congrFun
+    (cast_smul_finitePayoff_eq_sum G
+      (prefixLength + suffixLength) profile) who
+  simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hdeviated horiginal
+  change ((prefixLength + suffixLength : ℕ) : ℝ) *
+      G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+        (prefixLength + suffixLength) deviated who = _ at hdeviated
+  change ((prefixLength + suffixLength : ℕ) : ℝ) *
+      G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+        (prefixLength + suffixLength) profile who = _ at horiginal
+  rw [← Nat.cast_add] at hscaled
+  simp only [add_zero] at hscaled
+  change ((prefixLength + suffixLength : ℕ) : ℝ) *
+      G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+        (prefixLength + suffixLength) deviated who ≤
+    ((prefixLength + suffixLength : ℕ) : ℝ) *
+      G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+        (prefixLength + suffixLength) profile who at hscaled
+  rw [hdeviated, horiginal, Finset.sum_range_add,
+    Finset.sum_range_add] at hscaled
+  have hprefix :
+      (∑ time ∈ Finset.range prefixLength,
+          G.repeatedGame.expectedStagePayoff
+            deviated G.repeatedInitial time who) =
+        ∑ time ∈ Finset.range prefixLength,
+          G.repeatedGame.expectedStagePayoff
+            profile G.repeatedInitial time who := by
+    apply Finset.sum_congr rfl
+    intro time htime
+    exact expectedStagePayoff_eq_of_profilesAgreeBefore G hagree
+      (Finset.mem_range.mp htime) who
+  rw [hprefix] at hscaled
+  have hsuffix :
+      (∑ time ∈ Finset.range suffixLength,
+          G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial
+            (prefixLength + time) who) ≤
+        ∑ time ∈ Finset.range suffixLength,
+          G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+            (prefixLength + time) who := by
+    linarith
+  have hdeviatedSuffix :
+      (∑ time ∈ Finset.range suffixLength,
+          G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial
+            (prefixLength + time) who) =
+        Math.Probability.expect prefixLaw fun reached =>
+          if reached = base then deviatedTotal else originalTotal reached := by
+    simp_rw [expectedStagePayoff_add_eq_expect_afterHistory]
+    rw [sum_expect_comm_range]
+    unfold prefixLaw
+    rw [G.repeatedGame.histDist_eq_of_profilesAgreeBefore
+      hagree prefixLength le_rfl]
+    apply Math.ProbabilityMassFunction.expect_congr_on_support
+    intro reached _
+    unfold deviatedTotal originalTotal
+    dsimp only [deviated, rootDeviation]
+    rw [afterHistoryProfile_update_deviationAfterHistory]
+    split_ifs with hreached
+    · subst reached
+      rfl
+    · rfl
+  have horiginalSuffix :
+      (∑ time ∈ Finset.range suffixLength,
+          G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+            (prefixLength + time) who) =
+        Math.Probability.expect prefixLaw originalTotal := by
+    simp_rw [expectedStagePayoff_add_eq_expect_afterHistory]
+    rw [sum_expect_comm_range]
+  rw [hdeviatedSuffix, horiginalSuffix] at hsuffix
+  have htotal : deviatedTotal ≤ originalTotal base := by
+    by_contra hnot
+    have hstrict : originalTotal base < deviatedTotal := lt_of_not_ge hnot
+    have hexpect := Math.Probability.expect_lt_of_le_of_exists_lt prefixLaw
+      originalTotal
+      (fun reached => if reached = base then deviatedTotal else originalTotal reached)
+      (fun reached => by
+        by_cases hreached : reached = base
+        · subst reached
+          simp [hstrict.le]
+        · simp [hreached])
+      ⟨base, by simpa [prefixLaw, PMF.mem_support_iff] using hbase, by
+        simpa using hstrict⟩
+    exact (not_lt_of_ge hsuffix) hexpect
+  have hscale : (0 : ℝ) < suffixLength := by
+    exact_mod_cast Nat.pos_of_ne_zero hsuffixZero
+  have hdeviationPayoff := congrFun
+    (cast_smul_finitePayoff_eq_sum G suffixLength
+      (Function.update (G.repeatedGame.afterHistoryProfile profile base)
+        who deviation)) who
+  have horiginalPayoff := congrFun
+    (cast_smul_finitePayoff_eq_sum G suffixLength
+      (G.repeatedGame.afterHistoryProfile profile base)) who
+  simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hdeviationPayoff
+  simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at horiginalPayoff
+  change (suffixLength : ℝ) *
+      G.repeatedGame.finiteAveragePayoff base.2 suffixLength
+        (Function.update (G.repeatedGame.afterHistoryProfile profile base)
+          who deviation) who = deviatedTotal at hdeviationPayoff
+  change (suffixLength : ℝ) *
+      G.repeatedGame.finiteAveragePayoff base.2 suffixLength
+        (G.repeatedGame.afterHistoryProfile profile base) who =
+      originalTotal base at horiginalPayoff
+  rw [← hdeviationPayoff, ← horiginalPayoff] at htotal
+  nlinarith
+
+/-- Use a prescribed mixed action initially, then switch to the stagewise
+security deviation after every nonempty history. -/
+private noncomputable def firstThenSecurity
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (first : PMF (G.Action who)) :
+    G.BehaviorStrategy who :=
+  fun time history =>
+    if time = 0 then first else
+      G.individualRationalDeviation profile who time history
+
+private theorem expectedStagePayoff_zero_eq_mixedPayoff_initial
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) :
+    G.repeatedGame.expectedStagePayoff profile G.repeatedInitial 0 who =
+      G.mixedPayoff (G.initialMixedProfile profile) who := by
+  have h := congrFun (finitePayoff_one_eq_mixedPayoff_initial G profile) who
+  unfold FiniteStageGame.finitePayoff at h
+  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff] at h
+  simpa using h
+
+private theorem expectedStagePayoff_firstThenSecurity_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (first : PMF (G.Action who))
+    {time : ℕ} (htime : 0 < time) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.expectedStagePayoff
+        (Function.update profile who
+          (firstThenSecurity G profile who first))
+        G.repeatedInitial time who := by
+  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  rw [← Math.Probability.expect_const
+    (G.repeatedGame.histDist
+      (Function.update profile who
+        (firstThenSecurity G profile who first))
+      G.repeatedInitial time) (G.individualRationalLevel who)]
+  apply Math.Probability.expect_mono
+  intro history
+  have hstage :
+      G.repeatedGame.stageEUAt
+          (Function.update profile who
+            (firstThenSecurity G profile who first)) history who =
+        G.repeatedGame.stageEUAt
+          (Function.update profile who
+            (G.individualRationalDeviation profile who)) history who := by
+    unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+    congr 1
+    apply congrArg Math.PMFProduct.pmfPi
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp [firstThenSecurity, Nat.ne_of_gt htime]
+    · simp [Function.update_of_ne hplayer]
+  rw [hstage]
+  exact stageEUAt_individualRationalDeviation_ge G profile who history
+
+/-- Proposition 13's backward-induction core: every positive finite-horizon
+Nash profile has the unique one-stage equilibrium payoff `a`. -/
+private theorem finitePayoff_eq_of_unique_security
+    (G : FiniteStageGame) (a : Payoff G.Player)
+    (hsecurity : ∀ who, G.individualRationalLevel who = a who)
+    (hunique : G.oneStageEquilibriumPayoffs = {a}) :
+    ∀ k (profile : G.BehaviorProfile),
+      G.repeatedGame.IsεHorizonNash G.repeatedInitial (k + 1) 0 profile →
+        G.finitePayoff (k + 1) profile = a := by
+  intro k
+  induction k with
+  | zero =>
+      intro profile hnash
+      have hmem : G.finitePayoff 1 profile ∈
+          G.finiteEquilibriumPayoffs 1 := ⟨profile, by simpa using hnash, rfl⟩
+      rw [finiteEquilibriumPayoffs_one_eq_oneStageEquilibriumPayoffs,
+        hunique] at hmem
+      exact Set.mem_singleton_iff.mp hmem
+  | succ k ih =>
+      intro profile hnash
+      let tailLength := k + 1
+      have hhorizon : k + 1 + 1 = 1 + tailLength := by
+        simp [tailLength, Nat.add_comm]
+      have hnash' : G.repeatedGame.IsεHorizonNash G.repeatedInitial
+          (1 + tailLength) 0 profile := by
+        rwa [← hhorizon]
+      have htail (base : G.repeatedGame.Hist 1)
+          (hbase : base ∈
+            (G.repeatedGame.histDist profile G.repeatedInitial 1).support) :
+          G.finitePayoff tailLength
+              (G.repeatedGame.afterHistoryProfile profile base) = a := by
+        apply ih
+        exact afterHistoryProfile_isHorizonNash_of_mem_support
+          G profile hnash' base hbase
+      have htailTotal (who : G.Player) :
+          (∑ time ∈ Finset.range tailLength,
+              G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+                (1 + time) who) =
+            (tailLength : ℝ) * a who := by
+        simp_rw [expectedStagePayoff_add_eq_expect_afterHistory]
+        rw [sum_expect_comm_range]
+        calc
+          Math.Probability.expect
+              (G.repeatedGame.histDist profile G.repeatedInitial 1)
+              (fun base => ∑ time ∈ Finset.range tailLength,
+                G.repeatedGame.expectedStagePayoff
+                  (G.repeatedGame.afterHistoryProfile profile base)
+                  base.2 time who) =
+              Math.Probability.expect
+                (G.repeatedGame.histDist profile G.repeatedInitial 1)
+                (fun _ => (tailLength : ℝ) * a who) := by
+            apply Math.ProbabilityMassFunction.expect_congr_on_support
+            intro base hbase
+            have hweighted := congrFun
+              (cast_smul_finitePayoff_eq_sum G tailLength
+                (G.repeatedGame.afterHistoryProfile profile base)) who
+            simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hweighted
+            cases base.2
+            rw [← hweighted, htail base hbase]
+          _ = (tailLength : ℝ) * a who :=
+            Math.Probability.expect_const _ _
+      let current := G.initialMixedProfile profile
+      have hcurrentNash : G.kernel.mixedExtension.IsNash current := by
+        intro who first
+        let rootDeviation := firstThenSecurity G profile who first
+        let deviated := Function.update profile who rootDeviation
+        have hroot := hnash who rootDeviation
+        simp only [add_zero] at hroot
+        have hscaled := mul_le_mul_of_nonneg_left hroot
+          (by positivity : (0 : ℝ) ≤ k + 1 + 1)
+        have hdeviated := congrFun
+          (cast_smul_finitePayoff_eq_sum G (k + 1 + 1) deviated) who
+        have horiginal := congrFun
+          (cast_smul_finitePayoff_eq_sum G (k + 1 + 1) profile) who
+        simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hdeviated
+        simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at horiginal
+        have hscaled' : ((k + 1 + 1 : ℕ) : ℝ) *
+              G.finitePayoff (k + 1 + 1) deviated who ≤
+            ((k + 1 + 1 : ℕ) : ℝ) *
+              G.finitePayoff (k + 1 + 1) profile who := by
+          change ((k + 1 + 1 : ℕ) : ℝ) *
+                G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+                  (k + 1 + 1) deviated who ≤
+              ((k + 1 + 1 : ℕ) : ℝ) *
+                G.repeatedGame.finiteAveragePayoff G.repeatedInitial
+                  (k + 1 + 1) profile who
+          norm_num [Nat.cast_add, deviated, rootDeviation] at hscaled ⊢
+          exact hscaled
+        rw [hdeviated, horiginal] at hscaled'
+        have horiginalTotal :
+            (∑ time ∈ Finset.range (k + 1 + 1),
+                G.repeatedGame.expectedStagePayoff profile
+                  G.repeatedInitial time who) =
+              G.mixedPayoff current who + (tailLength : ℝ) * a who := by
+          rw [show k + 1 + 1 = tailLength + 1 by simp [tailLength],
+            Finset.sum_range_succ']
+          rw [expectedStagePayoff_zero_eq_mixedPayoff_initial,
+            show (∑ time ∈ Finset.range tailLength,
+              G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+                (time + 1) who) = (tailLength : ℝ) * a who by
+                simpa [Nat.add_comm] using htailTotal who]
+          dsimp only [current]
+          ring
+        have hdeviatedLower :
+            G.mixedPayoff (Function.update current who first) who +
+                (tailLength : ℝ) * a who ≤
+              ∑ time ∈ Finset.range (k + 1 + 1),
+                G.repeatedGame.expectedStagePayoff deviated
+                  G.repeatedInitial time who := by
+          have hfirst :
+              G.mixedPayoff (Function.update current who first) who ≤
+                G.repeatedGame.expectedStagePayoff deviated
+                  G.repeatedInitial 0 who := by
+            rw [expectedStagePayoff_zero_eq_mixedPayoff_initial]
+            have hinitial : G.initialMixedProfile deviated =
+                Function.update current who first := by
+              funext player
+              by_cases hplayer : player = who
+              · subst player
+                simp [FiniteStageGame.initialMixedProfile, deviated,
+                  rootDeviation, firstThenSecurity, current]
+              · simp [FiniteStageGame.initialMixedProfile, deviated,
+                  hplayer, current]
+            rw [hinitial]
+          have hlater : (tailLength : ℝ) * a who ≤
+              ∑ time ∈ Finset.range tailLength,
+                G.repeatedGame.expectedStagePayoff deviated
+                  G.repeatedInitial (time + 1) who := by
+            calc
+              (tailLength : ℝ) * a who =
+                  ∑ _time ∈ Finset.range tailLength, a who := by simp
+              _ ≤ _ := by
+                apply Finset.sum_le_sum
+                intro time _
+                have hstage := expectedStagePayoff_firstThenSecurity_ge
+                  G profile who first (time := time + 1) (by omega)
+                rw [hsecurity who] at hstage
+                simpa [deviated, rootDeviation, Nat.add_comm] using hstage
+          calc
+            G.mixedPayoff (Function.update current who first) who +
+                (tailLength : ℝ) * a who ≤
+              G.repeatedGame.expectedStagePayoff deviated
+                  G.repeatedInitial 0 who +
+                ∑ time ∈ Finset.range tailLength,
+                  G.repeatedGame.expectedStagePayoff deviated
+                    G.repeatedInitial (time + 1) who :=
+              add_le_add hfirst hlater
+            _ = _ := by
+              rw [show k + 1 + 1 = tailLength + 1 by simp [tailLength]]
+              calc
+                _ = (∑ time ∈ Finset.range tailLength,
+                      G.repeatedGame.expectedStagePayoff deviated
+                        G.repeatedInitial (time + 1) who) +
+                    G.repeatedGame.expectedStagePayoff deviated
+                      G.repeatedInitial 0 who := add_comm _ _
+                _ = _ := (Finset.sum_range_succ'
+                  (fun time => G.repeatedGame.expectedStagePayoff deviated
+                    G.repeatedInitial time who) tailLength).symm
+        rw [horiginalTotal] at hscaled'
+        exact le_of_add_le_add_right (hdeviatedLower.trans hscaled')
+      have hcurrentPayoff : G.mixedPayoff current = a := by
+        have hmem : G.mixedPayoff current ∈ G.oneStageEquilibriumPayoffs :=
+          ⟨current, hcurrentNash, rfl⟩
+        rw [hunique] at hmem
+        exact Set.mem_singleton_iff.mp hmem
+      funext who
+      unfold FiniteStageGame.finitePayoff
+      rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+      rw [show k + 1 + 1 = tailLength + 1 by simp [tailLength],
+        Finset.sum_range_succ']
+      rw [expectedStagePayoff_zero_eq_mixedPayoff_initial,
+        hcurrentPayoff]
+      rw [show (∑ time ∈ Finset.range tailLength,
+          G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+            (time + 1) who) = (tailLength : ℝ) * a who by
+        simpa [Nat.add_comm] using htailTotal who]
+      have hpositive : (0 : ℝ) < tailLength + 1 := by positivity
+      field_simp
+      push_cast
+      ring
+
 /-! Proposition 13 is a backward last-deviation argument.  Here `a` is the
 security-level vector recalled immediately before the proposition in the
 paper; uniqueness of the one-stage equilibrium payoff alone is insufficient.
-The repository does not yet expose the positive-probability
-conditional-history induction in reusable form. -/
+Positive-probability continuations inherit Nash optimality, while the
+security strategy controls continuations reached only by a deviation. -/
 theorem proposition_13 (G : FiniteStageGame) (a : Payoff G.Player)
     (hsecurity : ∀ who, G.individualRationalLevel who = a who)
     (hunique : G.oneStageEquilibriumPayoffs = {a}) :
     ∀ n, 0 < n → G.finiteEquilibriumPayoffs n = {a} := by
-  sorry
+  intro n hn
+  obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hn)
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨profile, hnash, rfl⟩
+    rw [finitePayoff_eq_of_unique_security G a hsecurity hunique k profile hnash]
+    exact Set.mem_singleton a
+  · rintro payoff hpayoff
+    rw [Set.mem_singleton_iff] at hpayoff
+    subst payoff
+    obtain ⟨profile, hnash, hpayoff⟩ :=
+      lemma_1_E1_subset_En G ⟨k + 1, by omega⟩
+        (by rw [hunique]; exact Set.mem_singleton a)
+    exact ⟨profile, hnash, hpayoff⟩
 
 /-! The paper reports Benoit--Krishna's converse for two players: unless the
 one-stage equilibrium-payoff set is a singleton, the finite-horizon
