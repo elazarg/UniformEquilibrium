@@ -57,6 +57,16 @@ omit [Fintype ι] [DecidableEq ι] in
   funext who
   exact quittingRootOfHazardRow_true_toReal row who
 
+omit [Fintype ι] [DecidableEq ι] in
+/-- A coordinate of the associated root depends only on the corresponding real hazard. -/
+theorem quittingRootOfHazardRow_apply_congr
+    {row other : QuittingHazardRow ι} {who : ι}
+    (h : row who = other who) :
+    quittingRootOfHazardRow row who = quittingRootOfHazardRow other who := by
+  unfold quittingRootOfHazardRow rootOfHazard
+  congr 1
+  exact congrArg Subtype.val h
+
 /-- The probability that at least one player quits in a real hazard row. -/
 def quittingHazardRowExitProbability (row : QuittingHazardRow ι) : ℝ :=
   1 - ∏ who, (1 - (row who : ℝ))
@@ -103,6 +113,51 @@ theorem quittingHazardOneStagePayoff_eq_coalitionSum
     quittingRootExpectedPayoff_eq_sum_coalitionMass]
   simp only [quittingHazardCoalitionProbability,
     hazardOfRoot_quittingRootOfHazardRow]
+
+/-- Expanded real-hazard formula: all players Continue with the continuation payoff, and
+every nonempty quitting coalition receives its terminal reward. -/
+theorem quittingHazardOneStagePayoff_eq_expanded
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (continuation : Payoff ι) (row : QuittingHazardRow ι) (who : ι) :
+    quittingHazardOneStagePayoff reward continuation row who =
+      (1 - quittingHazardRowExitProbability row) * continuation who +
+        ∑ coalition ∈ Finset.univ.powerset,
+          if hcoalition : coalition.Nonempty then
+            quittingHazardCoalitionProbability row coalition *
+              reward ⟨coalition, hcoalition⟩ who
+          else 0 := by
+  rw [quittingHazardOneStagePayoff_eq_coalitionSum]
+  let term : Finset ι → ℝ := fun coalition =>
+    quittingHazardCoalitionProbability row coalition *
+      quittingStageCoalitionPayoff reward continuation coalition who
+  have hfilter :
+      (Finset.univ : Finset (Finset ι)).filter Finset.Nonempty =
+        Finset.univ.erase ∅ := by
+    ext coalition
+    simp [Finset.nonempty_iff_ne_empty]
+  have hrewardSum :
+      (∑ coalition ∈ Finset.univ.powerset,
+          if hcoalition : coalition.Nonempty then
+            quittingHazardCoalitionProbability row coalition *
+              reward ⟨coalition, hcoalition⟩ who
+          else 0) =
+        ∑ coalition ∈ (Finset.univ : Finset (Finset ι)).erase ∅,
+          term coalition := by
+    rw [show (Finset.univ : Finset ι).powerset =
+        (Finset.univ : Finset (Finset ι)) by ext coalition; simp]
+    rw [← hfilter, Finset.sum_filter]
+    apply Finset.sum_congr rfl
+    intro coalition _
+    by_cases hcoalition : coalition.Nonempty
+    · simp [hcoalition, term, quittingStageCoalitionPayoff]
+    · simp [hcoalition]
+  rw [hrewardSum]
+  change (∑ coalition, term coalition) = _
+  rw [← Finset.add_sum_erase (Finset.univ : Finset (Finset ι)) term
+    (Finset.mem_univ ∅)]
+  simp [term, quittingStageCoalitionPayoff,
+    quittingHazardRowExitProbability, quittingHazardCoalitionProbability,
+    coalitionMass]
 
 /-- Convert a time-indexed real hazard profile into production product roots. -/
 def quittingRootsOfHazardProfile
