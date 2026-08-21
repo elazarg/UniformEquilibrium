@@ -8701,6 +8701,147 @@ theorem lemma4 (G : QuittingGame) {k : ℕ} (hk : 0 < k)
     rw [abs_le] at hfc
     linarith [hpj.2 n hcontinue]
 
+/-- One-stage quitting payoff is nonexpansive in its continuation vector. -/
+private theorem norm_quittingOneStagePayoff_sub_quittingOneStagePayoff_le
+    (G : QuittingGame) (r s : Payoff G.Player) (p : QuitRow G) :
+    ‖QuittingOneStagePayoff G r p - QuittingOneStagePayoff G s p‖ ≤ ‖r - s‖ := by
+  simpa [finiteQuittingPayoff] using
+    finiteQuittingPayoff_norm_sub_le G 1 r s (fun _ => p)
+
+/-- Lemma 4 with finitely many approximate seams.  The total seam error is paid
+twice before division by the block absorption probability. -/
+theorem lemma4_approximate (G : QuittingGame) {k : ℕ} (hk : 0 < k)
+    (p : ℕ → QuitRow G) (s : ℕ → Payoff G.Player) (seamError : ℕ → ℝ)
+    {ρ δ E ε : ℝ} (hρ : 0 < ρ) (hρ1 : ρ < 1)
+    (hprob : ρ = 1 - ∏ j ∈ Finset.range k, (1 - QuitProbability G (p j)))
+    (_hδ : 0 ≤ δ) (hE : 0 ≤ E)
+    (hseam0 : ∀ j < k, 0 ≤ seamError j)
+    (hseam : ∀ j < k,
+      ‖s (j + 1) - QuittingOneStagePayoff G (s j) (p j)‖ ≤ seamError j)
+    (hseamSum : (∑ j ∈ Finset.range k, seamError j) ≤ E)
+    (hclose : ‖s 0 - s k‖ ≤ δ) :
+    let cycle := ReverseCycleProfile G k hk p
+    (∀ m i, (m - 1) * k < i → i ≤ m * k →
+      ‖QuitTailPayoff G cycle i - s (m * k - i)‖ ≤ (δ + 2 * E) / ρ) ∧
+    ((∀ j < k, p j ∈ EpsilonRow G ε (s j)) →
+      ∀ i, cycle i ∈ EpsilonRow G (ε + (δ + 2 * E) / ρ)
+        (QuitTailPayoff G cycle (i + 1))) := by
+  let t : ℕ → Payoff G.Player := fun j =>
+    Nat.rec (s 0) (fun l value => QuittingOneStagePayoff G value (p l)) j
+  have ht0 : t 0 = s 0 := rfl
+  have htstep : ∀ j, t (j + 1) = QuittingOneStagePayoff G (t j) (p j) := by
+    intro j
+    rfl
+  have htClose : ∀ j ≤ k,
+      ‖t j - s j‖ ≤ ∑ l ∈ Finset.range j, seamError l := by
+    intro j hj
+    induction j with
+    | zero => simp [ht0]
+    | succ j ih =>
+        have hjk : j < k := by omega
+        rw [Finset.sum_range_succ]
+        calc
+          ‖t (j + 1) - s (j + 1)‖ ≤
+              ‖QuittingOneStagePayoff G (t j) (p j) -
+                QuittingOneStagePayoff G (s j) (p j)‖ +
+                ‖QuittingOneStagePayoff G (s j) (p j) - s (j + 1)‖ := by
+            rw [htstep]
+            exact norm_sub_le_norm_sub_add_norm_sub _ _ _
+          _ ≤ ‖t j - s j‖ + seamError j := by
+            apply add_le_add
+            · exact norm_quittingOneStagePayoff_sub_quittingOneStagePayoff_le G _ _ _
+            · rw [norm_sub_rev]
+              exact hseam j hjk
+          _ ≤ (∑ l ∈ Finset.range j, seamError l) + seamError j :=
+            add_le_add (ih (by omega)) le_rfl
+  have htEndpoint : ‖t 0 - t k‖ ≤ δ + E := by
+    calc
+      ‖t 0 - t k‖ = ‖s 0 - t k‖ := by rw [ht0]
+      _ ≤ ‖s 0 - s k‖ + ‖s k - t k‖ :=
+        norm_sub_le_norm_sub_add_norm_sub _ _ _
+      _ = ‖s 0 - s k‖ + ‖t k - s k‖ := by rw [norm_sub_rev (s k) (t k)]
+      _ ≤ δ + E := add_le_add hclose ((htClose k le_rfl).trans hseamSum)
+  have hexact := lemma4 G hk p t (ρ := ρ) (δ := δ + E) (ε := 0)
+    hρ hρ1 hprob (fun j _hj => htstep j) htEndpoint
+  let cycle := ReverseCycleProfile G k hk p
+  have htPrefix (j : ℕ) (hj : j ≤ k) : ‖t j - s j‖ ≤ E :=
+    (htClose j hj).trans <| hseamSum.trans' <| by
+      apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono hj)
+      intro l hmem _
+      exact hseam0 l (Finset.mem_range.mp hmem)
+  have hEdiv : E ≤ E / ρ := by
+    rw [le_div_iff₀ hρ]
+    nlinarith
+  have hfirst : ∀ m i, (m - 1) * k < i → i ≤ m * k →
+      ‖QuitTailPayoff G cycle i - s (m * k - i)‖ ≤ (δ + 2 * E) / ρ := by
+    intro m i hlo hi
+    have hj : m * k - i ≤ k := by
+      by_cases hm : m = 0
+      · subst m
+        simp
+      · have hmpos : 0 < m := Nat.pos_of_ne_zero hm
+        have hmk : m * k = (m - 1) * k + k := by
+          rw [show m = (m - 1) + 1 by omega, add_mul]
+          simp
+        omega
+    calc
+      ‖QuitTailPayoff G cycle i - s (m * k - i)‖ ≤
+          ‖QuitTailPayoff G cycle i - t (m * k - i)‖ +
+            ‖t (m * k - i) - s (m * k - i)‖ :=
+        norm_sub_le_norm_sub_add_norm_sub _ _ _
+      _ ≤ (δ + E) / ρ + E := add_le_add (hexact.1 m i hlo hi) (htPrefix _ hj)
+      _ ≤ (δ + E) / ρ + E / ρ := add_le_add le_rfl hEdiv
+      _ = (δ + 2 * E) / ρ := by
+        rw [← add_div]
+        congr 1
+        ring_nf
+  refine ⟨hfirst, ?_⟩
+  intro hp i
+  let m := i / k + 1
+  let j := k - 1 - i % k
+  have hmod : i % k < k := Nat.mod_lt i hk
+  have hdecomp : i % k + k * (i / k) = i := Nat.mod_add_div i k
+  have hdecomp' : (i / k) * k + i % k = i := by
+    simpa [Nat.add_comm, Nat.mul_comm] using hdecomp
+  have hlower : (m - 1) * k < i + 1 := by
+    dsimp only [m]
+    simp only [Nat.add_sub_cancel]
+    omega
+  have hupper : i + 1 ≤ m * k := by
+    dsimp only [m]
+    rw [add_mul]
+    simp only [one_mul]
+    omega
+  have hdiff : m * k - (i + 1) = j := by
+    dsimp only [m, j]
+    rw [add_mul]
+    simp only [one_mul]
+    omega
+  have hj : j < k := by
+    dsimp only [j]
+    omega
+  have htail : ‖QuitTailPayoff G cycle (i + 1) - s j‖ ≤
+      (δ + 2 * E) / ρ := by
+    simpa only [hdiff] using hfirst m (i + 1) hlower hupper
+  have hcycle : cycle i = p j := by rfl
+  change cycle i ∈ EpsilonRow G (ε + (δ + 2 * E) / ρ)
+    (QuitTailPayoff G cycle (i + 1))
+  rw [hcycle]
+  have hpj := hp j hj
+  constructor
+  · intro n hquit
+    have hfc : |ForcedContinuePayoff G (QuitTailPayoff G cycle (i + 1)) (p j) n -
+        ForcedContinuePayoff G (s j) (p j) n| ≤ (δ + 2 * E) / ρ :=
+      (abs_forcedContinuePayoff_sub_le G _ _ _ _).trans htail
+    rw [abs_le] at hfc
+    linarith [hpj.1 n hquit]
+  · intro n hcontinue
+    have hfc : |ForcedContinuePayoff G (QuitTailPayoff G cycle (i + 1)) (p j) n -
+        ForcedContinuePayoff G (s j) (p j) n| ≤ (δ + 2 * E) / ρ :=
+      (abs_forcedContinuePayoff_sub_le G _ _ _ _).trans htail
+    rw [abs_le] at hfc
+    linarith [hpj.2 n hcontinue]
+
 /-- A quitting game has stationary approximate equilibria in the paper's sense. -/
 def HasStationaryApproximateEquilibria (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ p : QuitRow G,
