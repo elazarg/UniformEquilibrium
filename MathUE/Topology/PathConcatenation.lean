@@ -82,4 +82,70 @@ def transAt (first : Path x y) (second : Path y z) (split : ℝ)
     else second.extend (((time : ℝ) - split) / (1 - split))) = _
   rw [if_neg (not_le_of_gt htime)]
 
+/-- The normalized parameter in the first path before the prescribed split. -/
+def transAtLeftParameter {split : ℝ} (hsplitPos : 0 < split)
+    (time : unitInterval) (htime : (time : ℝ) ≤ split) : unitInterval :=
+  ⟨(time : ℝ) / split,
+    div_nonneg time.property.1 hsplitPos.le,
+    (div_le_one hsplitPos).2 htime⟩
+
+/-- The normalized parameter in the second path after the prescribed split. -/
+def transAtRightParameter {split : ℝ} (hsplitOne : split < 1)
+    (time : unitInterval) (htime : split ≤ (time : ℝ)) : unitInterval :=
+  ⟨((time : ℝ) - split) / (1 - split),
+    div_nonneg (sub_nonneg.mpr htime) (sub_nonneg.mpr hsplitOne.le),
+    (div_le_one (sub_pos.mpr hsplitOne)).2 (by linarith [time.property.2])⟩
+
+@[simp] theorem transAt_apply_leftParameter
+    (first : Path x y) (second : Path y z) {split : ℝ}
+    (hsplitPos : 0 < split) (hsplitOne : split < 1)
+    (time : unitInterval) (htime : (time : ℝ) ≤ split) :
+    first.transAt second split hsplitPos hsplitOne time =
+      first (transAtLeftParameter hsplitPos time htime) := by
+  rw [transAt_apply_of_le first second hsplitPos hsplitOne time htime]
+  exact Path.extend_apply first _
+
+@[simp] theorem transAt_apply_rightParameter
+    (first : Path x y) (second : Path y z) {split : ℝ}
+    (hsplitPos : 0 < split) (hsplitOne : split < 1)
+    (time : unitInterval) (htime : split < (time : ℝ)) :
+    first.transAt second split hsplitPos hsplitOne time =
+      second (transAtRightParameter hsplitOne time htime.le) := by
+  rw [transAt_apply_of_lt first second hsplitPos hsplitOne time htime]
+  exact Path.extend_apply second _
+
+/-- Concatenating monotone paths at any interior split preserves
+monotonicity. -/
+theorem monotone_transAt [Preorder X]
+    (first : Path x y) (second : Path y z) {split : ℝ}
+    (hsplitPos : 0 < split) (hsplitOne : split < 1)
+    (hfirst : Monotone first) (hsecond : Monotone second) :
+    Monotone (first.transAt second split hsplitPos hsplitOne) := by
+  intro earlier later hel
+  by_cases hlater : (later : ℝ) ≤ split
+  · rw [transAt_apply_leftParameter first second hsplitPos hsplitOne later hlater,
+      transAt_apply_leftParameter first second hsplitPos hsplitOne earlier
+        (le_trans (show (earlier : ℝ) ≤ later from hel) hlater)]
+    apply hfirst
+    exact div_le_div_of_nonneg_right
+      (show (earlier : ℝ) ≤ later from hel) hsplitPos.le
+  · have hlater' : split < (later : ℝ) := lt_of_not_ge hlater
+    by_cases hearlier : (earlier : ℝ) ≤ split
+    · rw [transAt_apply_leftParameter first second hsplitPos hsplitOne earlier hearlier,
+        transAt_apply_rightParameter first second hsplitPos hsplitOne later hlater']
+      calc
+        first (transAtLeftParameter hsplitPos earlier hearlier) ≤ first 1 :=
+          hfirst (unitInterval.le_one _)
+        _ = y := first.target
+        _ = second 0 := second.source.symm
+        _ ≤ second (transAtRightParameter hsplitOne later hlater'.le) :=
+          hsecond (unitInterval.nonneg _)
+    · have hearlier' : split < (earlier : ℝ) := lt_of_not_ge hearlier
+      rw [transAt_apply_rightParameter first second hsplitPos hsplitOne earlier hearlier',
+        transAt_apply_rightParameter first second hsplitPos hsplitOne later hlater']
+      apply hsecond
+      exact div_le_div_of_nonneg_right
+        (sub_le_sub_right (show (earlier : ℝ) ≤ later from hel) split)
+        (sub_nonneg.mpr hsplitOne.le)
+
 end Path
