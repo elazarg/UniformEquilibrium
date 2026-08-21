@@ -3908,6 +3908,92 @@ private theorem quittingOneStagePayoff_le_of_coordinate_le
       · simpa [GameTheory.quittingRootPayoff, hquit] using hbeta
     _ = bound := Math.Probability.expect_const _ _
 
+/-- The exact one-stage equilibrium graph is closed.  The support implications
+are written as unions with the zero and one faces, so no strict support set is
+mistaken for a closed condition. -/
+private theorem isClosed_epsilonEquilibriumGraph_zero (G : QuittingGame) :
+    IsClosed (EpsilonEquilibriumGraph G 0) := by
+  classical
+  let quitCondition : G.Player → Set (Payoff G.Player × QuitRow G) := fun n =>
+    {z | (z.2 n : ℝ) = 0} ∪
+      {z | ForcedContinuePayoff G z.1 z.2 n ≤ ForcedQuitPayoff G z.2 n}
+  let continueCondition : G.Player → Set (Payoff G.Player × QuitRow G) := fun n =>
+    {z | (z.2 n : ℝ) = 1} ∪
+      {z | ForcedQuitPayoff G z.2 n ≤ ForcedContinuePayoff G z.1 z.2 n}
+  have hp : Continuous (fun z : Payoff G.Player × QuitRow G => z.2) :=
+    continuous_snd
+  have hr : Continuous (fun z : Payoff G.Player × QuitRow G => z.1) :=
+    continuous_fst
+  have hreplace (n : G.Player) (q : UnitInterval) :
+      Continuous (fun z : Payoff G.Player × QuitRow G => z.2.replace G n q) := by
+    rw [continuous_pi_iff]
+    intro k
+    by_cases hkn : k = n
+    · subst k
+      simpa [QuitRow.replace] using
+        (continuous_const : Continuous
+          (fun _ : Payoff G.Player × QuitRow G => q))
+    · simpa [QuitRow.replace, hkn, Function.comp_def] using
+        (continuous_apply k).comp hp
+  have hforced (n : G.Player) : Continuous
+      (fun z : Payoff G.Player × QuitRow G => ForcedQuitPayoff G z.2 n) := by
+    exact continuous_quittingOneStagePayoff_comp G
+      (fun _ : Payoff G.Player × QuitRow G => (0 : Payoff G.Player))
+      (fun z : Payoff G.Player × QuitRow G => z.2.replace G n 1)
+      continuous_const (hreplace n 1) n
+  have hcontinue (n : G.Player) : Continuous
+      (fun z : Payoff G.Player × QuitRow G =>
+        ForcedContinuePayoff G z.1 z.2 n) := by
+    exact continuous_quittingOneStagePayoff_comp G
+      (fun z : Payoff G.Player × QuitRow G => z.1)
+      (fun z : Payoff G.Player × QuitRow G => z.2.replace G n 0)
+      hr (hreplace n 0) n
+  have hquitClosed (n : G.Player) : IsClosed (quitCondition n) := by
+    apply IsClosed.union
+    · exact isClosed_eq ((continuous_subtype_val.comp
+        ((continuous_apply n).comp hp))) continuous_const
+    · exact isClosed_le (hcontinue n) (hforced n)
+  have hcontinueClosed (n : G.Player) : IsClosed (continueCondition n) := by
+    apply IsClosed.union
+    · exact isClosed_eq ((continuous_subtype_val.comp
+        ((continuous_apply n).comp hp))) continuous_const
+    · exact isClosed_le (hforced n) (hcontinue n)
+  have heq : EpsilonEquilibriumGraph G 0 =
+      ⋂ n, quitCondition n ∩ continueCondition n := by
+    ext z
+    simp only [Set.mem_iInter, Set.mem_inter_iff]
+    constructor
+    · intro hz n
+      have hpRow : z.2 ∈ EpsilonRow G 0 z.1 := hz
+      constructor
+      · by_cases hn : (z.2 n : ℝ) = 0
+        · exact Set.mem_union_left _ hn
+        · apply Set.mem_union_right
+          have hnpos : 0 < (z.2 n : ℝ) :=
+            lt_of_le_of_ne (z.2 n).property.1 (Ne.symm hn)
+          simpa using hpRow.1 n hnpos
+      · by_cases hn : (z.2 n : ℝ) = 1
+        · exact Set.mem_union_left _ hn
+        · apply Set.mem_union_right
+          have hnlt : (z.2 n : ℝ) < 1 :=
+            lt_of_le_of_ne (z.2 n).property.2 hn
+          simpa using hpRow.2 n hnlt
+    · intro hz
+      change _ ∈ EpsilonRow G 0 _
+      constructor
+      · intro n hnpos
+        rcases (hz n).1 with hnzero | hnineq
+        · change (z.2 n : ℝ) = 0 at hnzero
+          linarith
+        · simpa using hnineq
+      · intro n hnlt
+        rcases (hz n).2 with hnone | hnineq
+        · change (z.2 n : ℝ) = 1 at hnone
+          linarith
+        · simpa using hnineq
+  rw [heq]
+  exact isClosed_iInter fun n => (hquitClosed n).inter (hcontinueClosed n)
+
 /-- The constants selected after Lemma 3.3 and used in Lemma 3.4. -/
 def AreSection3Constants (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
   0 < ξ ∧
