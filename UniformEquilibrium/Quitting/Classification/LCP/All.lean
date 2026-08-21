@@ -25,6 +25,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQClosure
 import UniformEquilibrium.Quitting.Classification.LCP.CounterexampleNecessary
 import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.All
+import UniformEquilibrium.Quitting.Classification.LCP.FullCore.All
 
 /-!
 # LCP normalization and algebraic classification for finite quitting games
@@ -48,6 +49,8 @@ This umbrella exports the theorem-bearing infrastructure proved in this folder:
   orientations together with positive determinant;
 * the elimination of every quitting game whose normal core has
   exactly three players, so every four-player counterexample has full core;
+* the exact carrier fixed point and `1/14` global-debt upper bound for every
+  completion of the displayed four-player full-core deadlock matrix;
 * the unconditional algebraic matrix-regime gate with its precise residual
   class; and
 * the complete all-abnormal producer, including the later-layer

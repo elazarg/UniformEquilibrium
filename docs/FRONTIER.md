@@ -77,6 +77,18 @@ counterexample to one certificate language closes that route; it does not prove
 nonexistence of equilibrium unless it reaches the all-behavior terminal-gap
 interface.
 
+The full-core deadlock completion family has a sharper integrated carrier
+constraint.
+[`IsFullCoreDeadlockCompletion.globalDebtFloor_le_one_fourteenth`](../UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockGlobalContraction.lean)
+constructs an actual carrier point of total semantic debt exactly `1/14` and
+therefore bounds every global debt floor by `1/14`. The counterexample-regime
+consumer
+[`HasTerminalExploitabilityGap.fullCoreDeadlock_le_one_fourteenth`](../UniformEquilibrium/Diagnostics/Quitting/FullCoreDeadlockDebtBound.lean)
+then bounds every terminal exploitability gap on this family by `1/14`, with
+the stored gap of a counterexample regime as a direct corollary. Neither
+the minimum debt nor the gap is proved to vanish, and no uniform-equilibrium
+payoff is produced.
+
 ## Live formal leaves
 
 The quitting counterexample-regime search is maintained as an explicit finite

@@ -275,6 +275,36 @@
       ]
     },
     {
+      "id": "NOGO-FULL-CORE-DEADLOCK-DEBT-ABOVE-ONE-FOURTEENTH",
+      "kind": "architectural_nogo",
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "For every four-player reward table in the full-core deadlock completion family, the four singleton blocks define a globally contractive semantic return. Its unique fixed pair lies in the actual compact terminal-semantic carrier and has total debt exactly 1/14. Consequently no global debt barrier for this family can have floor greater than 1/14. This does not prove that the minimum debt is zero, produce a uniform-equilibrium payoff, or eliminate the family.",
+      "evidence": [
+        "UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockChargedReturn.lean",
+        "UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockGlobalContraction.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/FullCoreDeadlockDebtBound.lean"
+      ],
+      "cover_clause_ids": [
+        "FAMILY-CLOSURES"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A",
+        "C"
+      ],
+      "declarations": [
+        "GameTheory.FullCoreDeadlock.IsFullCoreDeadlockCompletion.normalCore_eq_univ",
+        "GameTheory.FullCoreDeadlock.chargedReturn_eq_self_iff",
+        "GameTheory.FullCoreDeadlock.IsFullCoreDeadlockCompletion.exists_carrierPair_debtSum_eq_one_fourteenth",
+        "GameTheory.FullCoreDeadlock.IsFullCoreDeadlockCompletion.globalDebtFloor_le_one_fourteenth",
+        "GameTheory.HasTerminalExploitabilityGap.fullCoreDeadlock_le_one_fourteenth",
+        "GameTheory.QuittingCounterexampleRegime.fullCoreDeadlock_terminalGap_le_one_fourteenth"
+      ]
+    },
+    {
       "id": "DROP-COUNTEREXAMPLE-PREFIX-CAPACITY-FIELD",
       "kind": "hypothesis_dropped",
       "target_ids": [

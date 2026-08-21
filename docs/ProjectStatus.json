@@ -54,6 +54,15 @@
       "source": "UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean",
       "umbrella": "UniformEquilibrium.lean",
       "scope": "A counterexample must quantify over every behavioral profile."
+    },
+    {
+      "id": "full-core-deadlock-debt-bound",
+      "subject": "Terminal exploitability gaps for four-player full-core deadlock completions",
+      "kind": "Unconditional family theorem",
+      "declaration": "HasTerminalExploitabilityGap.fullCoreDeadlock_le_one_fourteenth",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/FullCoreDeadlockDebtBound.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "For arbitrary nonsingleton coalition rewards, every terminal exploitability gap over a completion of the displayed normalized singleton matrix is at most 1/14; this does not prove that the gap vanishes or produce a uniform equilibrium."
     }
   ],
   "quitting_frontier": {
