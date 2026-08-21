@@ -7191,7 +7191,7 @@ theorem coalitionProbability_replace_affine (G : QuittingGame) (p : QuitRow G)
     ring
 
 /-- The reward contribution of a quitting row, excluding continuation. -/
-private def quittingRewardPart (G : QuittingGame) (p : QuitRow G)
+def quittingRewardPart (G : QuittingGame) (p : QuitRow G)
     (n : G.Player) : ℝ :=
   ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
     CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0
@@ -8744,6 +8744,72 @@ private theorem quitPayoff_prefixDeviation_sub_eq_sum
   intro j hj
   have hjT : j < T := (Finset.mem_range.mp hj).trans hiT
   simp [QuitProfile.prefixDeviation, hjT]
+
+/-- At this row, player `n`'s supported Quit action is more than `eta` worse than
+continuing against the prescribed opponents. -/
+private def IsBadQuitAction (G : QuittingGame) (eta : ℝ)
+    (r : Payoff G.Player) (p : QuitRow G) (n : G.Player) : Prop :=
+  ForcedQuitPayoff G p n < ForcedContinuePayoff G r p n - eta
+
+/-- Delete exactly the player's badly supported Quit probabilities. -/
+private noncomputable def deleteBadQuit (G : QuittingGame) (eta : ℝ)
+    (p : QuitProfile G) (n : G.Player) (i : ℕ) : Set.Icc (0 : ℝ) 1 := by
+  classical
+  exact if IsBadQuitAction G eta (QuitTailPayoff G p (i + 1)) (p i) n then 0
+    else p i n
+
+/-- The mass removed from one player's row by bad-Quit deletion. -/
+private noncomputable def badQuitMass (G : QuittingGame) (eta : ℝ)
+    (p : QuitProfile G) (n : G.Player) (i : ℕ) : ℝ := by
+  classical
+  exact if IsBadQuitAction G eta (QuitTailPayoff G p (i + 1)) (p i) n then
+    p i n else 0
+
+/-- Bad-Quit deletion only decreases the player's quitting probability. -/
+private theorem deleteBadQuit_le (G : QuittingGame) (eta : ℝ)
+    (p : QuitProfile G) (n : G.Player) (i : ℕ) :
+    (deleteBadQuit G eta p n i : ℝ) ≤ p i n := by
+  classical
+  by_cases hbad : IsBadQuitAction G eta (QuitTailPayoff G p (i + 1)) (p i) n
+  · simp [deleteBadQuit, hbad, (p i n).property.1]
+  · simp [deleteBadQuit, hbad]
+
+/-- The local gain from deleting a bad Quit action pays at least `eta` times the
+deleted mass; unchanged rows contribute zero. -/
+private theorem localGain_deleteBadQuit_ge (G : QuittingGame) (eta : ℝ)
+    (p : QuitProfile G) (n : G.Player) (i : ℕ) :
+    eta * badQuitMass G eta p n i ≤
+      QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1))
+          ((p i).replace G n (deleteBadQuit G eta p n i)) n -
+        QuitTailPayoff G p i n := by
+  classical
+  let r := QuitTailPayoff G p (i + 1)
+  let row := p i
+  have hcurrent := quittingOneStagePayoff_replace_eq_endpoints G r row n (row n)
+  rw [QuitRow.replace_self] at hcurrent
+  have htail : QuitTailPayoff G p i = QuittingOneStagePayoff G r row := by
+    exact quitTailPayoff_eq_oneStage G p i
+  by_cases hbad : IsBadQuitAction G eta r row n
+  · have hdeleted : deleteBadQuit G eta p n i = 0 := by
+      simp [deleteBadQuit, r, row, hbad]
+    have hmass : badQuitMass G eta p n i = row n := by
+      simp [badQuitMass, r, row, hbad]
+    rw [hdeleted, hmass, htail, quittingOneStagePayoff_replace_eq_endpoints,
+      hcurrent]
+    simp only [Set.Icc.coe_zero, zero_mul]
+    have hp0 := (row n).property.1
+    have hp1 := (row n).property.2
+    dsimp only [IsBadQuitAction] at hbad
+    nlinarith
+  · have hdeleted : deleteBadQuit G eta p n i = row n := by
+      simp [deleteBadQuit, r, row, hbad]
+    have hmass : badQuitMass G eta p n i = 0 := by
+      simp [badQuitMass, r, row, hbad]
+    rw [hdeleted, hmass, mul_zero]
+    change 0 ≤ QuittingOneStagePayoff G r (row.replace G n (row n)) n -
+      QuitTailPayoff G p i n
+    rw [QuitRow.replace_self, htail]
+    simp
 
 /-- Reversing the first `j` rows and iterating from `s₀` produces `sⱼ`. -/
 private theorem finiteQuittingPayoff_reverse_eq (G : QuittingGame) {k : ℕ}
