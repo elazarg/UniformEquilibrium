@@ -196,6 +196,32 @@ theorem isCompact_principalQVelocities (M : ι → ι → ℝ) (q : ι → ℝ) 
   exact (isCompact_principalQSupportControls q).image hcontinuous
 
 omit [DecidableEq ι] in
+/-- The induced velocity correspondence is upper hemicontinuous.  Compactness
+of the common simplex control space turns its closed graph into a closed bad-
+control projection. -/
+theorem upperHemicontinuous_principalQVelocities (M : ι → ι → ℝ) :
+    UpperHemicontinuous (principalQVelocities M) := by
+  rw [upperHemicontinuous_iff_forall_isOpen]
+  intro q u hopen hu
+  let bad : Set ((ι → ℝ) × stdSimplex ℝ ι) :=
+    {point | point.2 ∈ principalQSupportControls point.1} ∩
+      {point | (fun i => singletonLCPResidual M point.2 i - point.1 i) ∉ u}
+  have hbad : IsClosed bad := by
+    apply isClosed_graph_principalQSupportControls.inter
+    apply hopen.isClosed_compl.preimage
+    unfold singletonLCPResidual
+    fun_prop
+  have hprojection : IsClosed (Prod.fst '' bad) :=
+    isClosedMap_fst_of_compactSpace _ hbad
+  have hq : q ∉ Prod.fst '' bad := by
+    rintro ⟨point, ⟨hcontrol, hnotu⟩, rfl⟩
+    exact hnotu (hu ⟨point.2, hcontrol, rfl⟩)
+  filter_upwards [hprojection.isOpen_compl.mem_nhds hq] with q' hq'
+  rintro velocity ⟨z, hz, rfl⟩
+  by_contra hnotu
+  exact hq' ⟨(q', z), ⟨hz, hnotu⟩, rfl⟩
+
+omit [DecidableEq ι] in
 /-- Every velocity fiber is convex.  Complementarity is linear in the
 control once the state is fixed, and the residual velocity is affine. -/
 theorem convex_principalQVelocities (M : ι → ι → ℝ) (q : ι → ℝ) :
@@ -236,6 +262,24 @@ theorem convex_principalQVelocities (M : ι → ι → ℝ) (q : ι → ℝ) :
         b * ∑ owner, w owner * M i owner - (a + b) * q i := by ring
     _ = a * ∑ owner, z owner * M i owner +
         b * ∑ owner, w owner * M i owner - q i := by rw [hab, one_mul]
+
+omit [DecidableEq ι] in
+/-- Every induced velocity has the coordinatewise linear-growth bound
+`|vᵢ| ≤ ∑ⱼ |Mᵢⱼ| + |qᵢ|`. -/
+theorem abs_le_of_mem_principalQVelocities
+    (M : ι → ι → ℝ) (q velocity : ι → ℝ)
+    (hvelocity : velocity ∈ principalQVelocities M q) (i : ι) :
+    |velocity i| ≤ (∑ owner, |M i owner|) + |q i| := by
+  obtain ⟨z, _hz, rfl⟩ := hvelocity
+  unfold singletonLCPResidual
+  refine (abs_sub _ _).trans (add_le_add ?_ le_rfl)
+  refine (Finset.abs_sum_le_sum_abs _ _).trans ?_
+  apply Finset.sum_le_sum
+  intro owner _
+  rw [abs_mul]
+  have hzabs : |z owner| = z owner := abs_of_nonneg (z.property.1 owner)
+  rw [hzabs]
+  exact mul_le_of_le_one_left (abs_nonneg _) (stdSimplex.le_one z owner)
 
 /-- Principal-Q tangency says precisely that the velocity fiber meets the
 Bouligand tangent cone at every nonnegative boundary point. -/
