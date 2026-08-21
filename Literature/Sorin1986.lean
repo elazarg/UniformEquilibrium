@@ -74,6 +74,11 @@ abbrev FiniteStageGame.MixedProfile (G : FiniteStageGame) :=
 abbrev FiniteStageGame.repeatedGame (G : FiniteStageGame) :=
   G.kernel.realizedActionStochasticGame
 
+/-- The unique state from which the repeated game starts. -/
+private abbrev FiniteStageGame.repeatedInitial (G : FiniteStageGame) :
+    G.repeatedGame.State :=
+  PUnit.unit
+
 /-- A behavioral profile in the repeated game. -/
 abbrev FiniteStageGame.BehaviorProfile (G : FiniteStageGame) :=
   G.repeatedGame.BehaviorProfile
@@ -104,7 +109,7 @@ noncomputable def FiniteStageGame.finitePayoff (G : FiniteStageGame)
 /-- The paper's `λ`-discounted payoff.  Repository continuation is `1 - λ`. -/
 noncomputable def FiniteStageGame.discountedPayoff (G : FiniteStageGame)
     (lam : ℝ) (profile : G.BehaviorProfile) : Payoff G.Player :=
-  fun who => G.repeatedGame.discountedPayoff (1 - lam) profile PUnit.unit who
+  fun who => G.repeatedGame.discountedPayoff (1 - lam) profile G.repeatedInitial who
 
 
 /-- Finite payoff with the paper's positive-horizon domain exposed in
@@ -3624,10 +3629,6 @@ noncomputable def FiniteStageGame.appendFiniteProfiles
     (prefixProfile suffixProfile : G.BehaviorProfile) : G.BehaviorProfile :=
   G.repeatedGame.terminalChildDispatcher fuel prefixProfile
     (fun _ => suffixProfile)
-
-private abbrev FiniteStageGame.repeatedInitial (G : FiniteStageGame) :
-    G.repeatedGame.State :=
-  PUnit.unit
 
 private theorem appendFiniteProfiles_agreeBefore
     (G : FiniteStageGame) (fuel : ℕ)
@@ -7795,7 +7796,7 @@ def OpenProblemHigherPlayerContractibility : Prop :=
 /-! ## 3. The Prisoner's Dilemma -/
 
 /-- The paper's Prisoner's Dilemma. -/
-def prisonersDilemma : FiniteStageGame :=
+abbrev prisonersDilemma : FiniteStageGame :=
   binaryGame (pair 4 4) (pair 0 5) (pair 5 0) (pair 1 1)
 
 /-- The row player's one-stage payoff is affine in the two defection
@@ -7845,6 +7846,36 @@ theorem prisonersDilemma_mixedEU_update_true
   rw [prisonersDilemma_mixedEU_true]
   change 4 + (deviation true).toReal - 4 * (profile false true).toReal = _
   rfl
+
+/-- A pure Bottom deviation gives the row player payoff
+`5 - 4 q`, where `q` is the column player's Bottom probability. -/
+private theorem prisonersDilemma_mixedEU_update_false_pure
+    (profile : Bool → PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+        (pair 1 1))).mixedExtension.eu
+          (Function.update profile false (PMF.pure true)) false =
+      5 - 4 * (profile true true).toReal := by
+  rw [prisonersDilemma_mixedEU_update_false]
+  change 4 + ((PMF.pure true : PMF Bool) true).toReal -
+    4 * (profile true true).toReal = _
+  simp
+  ring
+
+/-- A pure Right deviation gives the column player payoff
+`5 - 4 p`, where `p` is the row player's Bottom probability. -/
+private theorem prisonersDilemma_mixedEU_update_true_pure
+    (profile : Bool → PMF Bool) :
+    (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0)
+        (pair 1 1))).mixedExtension.eu
+          (Function.update profile true (PMF.pure true)) true =
+      5 - 4 * (profile false true).toReal := by
+  rw [prisonersDilemma_mixedEU_update_true]
+  change 4 + ((PMF.pure true : PMF Bool) true).toReal -
+    4 * (profile false true).toReal = _
+  simp
+  ring
 
 /-- Bottom strictly dominates Top for player `false`. -/
 theorem prisonersDilemma_bottom_strictly_dominates :
@@ -8619,11 +8650,787 @@ theorem prisonersDilemma_En_eq_singleton :
       cases who <;> rfl)
     prisonersDilemma_E1_eq_singleton n hn
 
+/-- Keep the prescribed strategy before `start`, then play one fixed action. -/
+private abbrev monitoredMixedProfileAt
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    {time : ℕ} (history : G.repeatedGame.Hist time) : G.MixedProfile :=
+  fun player =>
+    (GameTheory.KernelGame.RealizedActionRepeatedAdapter.toMonitoredProfile
+      G.kernel profile) player time
+        (GameTheory.KernelGame.RealizedActionRepeatedAdapter.actionHistory
+          G.kernel history)
+
+@[simp] private theorem monitoredMixedProfileAt_apply
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    {time : ℕ} (history : G.repeatedGame.Hist time) (player : G.Player) :
+    monitoredMixedProfileAt G profile history player =
+      profile player time history := by
+  simp [monitoredMixedProfileAt,
+    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toMonitoredProfile,
+    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toMonitoredStrategy]
+
+private theorem stageEUAt_eq_monitoredMixedProfileAt
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    {time : ℕ} (history : G.repeatedGame.Hist time) (who : G.Player) :
+    G.repeatedGame.stageEUAt profile history who =
+      G.kernel.mixedExtension.eu
+        (monitoredMixedProfileAt G profile history) who := by
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  let monitored :=
+    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toMonitoredProfile
+      G.kernel profile
+  rw [← GameTheory.KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile_toMonitoredProfile
+    G.kernel profile]
+  exact GameTheory.KernelGame.RealizedActionRepeatedAdapter.stageEUAt_toBehaviorProfile
+    G.kernel monitored history who
+
+private noncomputable abbrev prisonersDilemmaMixedProfileAt
+    (profile : prisonersDilemma.BehaviorProfile)
+    {time : ℕ} (history : prisonersDilemma.repeatedGame.Hist time) :
+    Bool → PMF Bool :=
+  fun player => by
+    exact monitoredMixedProfileAt prisonersDilemma profile history player
+
+private theorem prisonersDilemma_stageEUAt_eq_mixedEU
+    (profile : prisonersDilemma.BehaviorProfile)
+    {time : ℕ} (history : prisonersDilemma.repeatedGame.Hist time)
+    (who : Bool) :
+    prisonersDilemma.repeatedGame.stageEUAt profile history who =
+      (KernelGame.ofPureEU (fun _ : Bool => Bool)
+        (binaryPayoff (pair 4 4) (pair 0 5) (pair 5 0) (pair 1 1))).mixedExtension.eu
+          (prisonersDilemmaMixedProfileAt profile history) who := by
+  rw [stageEUAt_eq_monitoredMixedProfileAt]
+
+/-- Keep the prescribed strategy before `start`, then play one fixed action. -/
+private noncomputable def constantActionFrom
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (start : ℕ) (action : G.Action who) :
+    G.BehaviorStrategy who :=
+  fun time history =>
+    if time < start then profile who time history else PMF.pure action
+
+private theorem update_constantActionFrom_agreeBefore
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (start : ℕ) (action : G.Action who) :
+    G.repeatedGame.ProfilesAgreeBefore
+      (Function.update profile who
+        (constantActionFrom G profile who start action))
+      profile start := by
+  intro player time history htime
+  by_cases hplayer : player = who
+  · subst player
+    simp [constantActionFrom, htime]
+  · simp [Function.update_of_ne hplayer]
+
+/-- In the Prisoner's Dilemma, permanent defection from `start` earns at
+least one in every stage from `start` onward. -/
+private theorem expectedStagePayoff_constantTrueFrom_ge_one
+    (profile : prisonersDilemma.BehaviorProfile) (who : Bool)
+    (start time : ℕ) (htime : start ≤ time) :
+    1 ≤ prisonersDilemma.repeatedGame.expectedStagePayoff
+      (Function.update profile who
+        (constantActionFrom prisonersDilemma profile who start true))
+      prisonersDilemma.repeatedInitial time who := by
+  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
+  letI (player : Bool) : DecidableEq
+      (prisonersDilemma.repeatedGame.Act player) :=
+    prisonersDilemma.decidableAction player
+  letI : Finite prisonersDilemma.repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  rw [← Math.Probability.expect_const
+    (prisonersDilemma.repeatedGame.histDist
+      (Function.update profile who
+        (constantActionFrom prisonersDilemma profile who start true))
+      prisonersDilemma.repeatedInitial time) 1]
+  apply Math.Probability.expect_mono
+  intro history
+  let deviated := Function.update profile who
+    (constantActionFrom prisonersDilemma profile who start true)
+  let current := prisonersDilemmaMixedProfileAt profile history
+  have hstage : prisonersDilemma.repeatedGame.stageEUAt
+      deviated history who =
+      prisonersDilemma.kernel.mixedExtension.eu
+        (Function.update current who (PMF.pure true)) who := by
+    rw [prisonersDilemma_stageEUAt_eq_mixedEU]
+    congr 1
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp [deviated, current, prisonersDilemmaMixedProfileAt,
+        monitoredMixedProfileAt_apply, constantActionFrom,
+        Nat.not_lt.mpr htime]
+      rfl
+    · simp [deviated, current, prisonersDilemmaMixedProfileAt,
+        monitoredMixedProfileAt_apply, Function.update_of_ne hplayer]
+  change 1 ≤ prisonersDilemma.repeatedGame.stageEUAt deviated history who
+  rw [hstage]
+  cases who
+  · rw [prisonersDilemma_mixedEU_update_false_pure]
+    have hq := ENNReal.toReal_mono ENNReal.one_ne_top
+      (PMF.coe_le_one (current true) true)
+    have hq' : (current true true).toReal ≤ 1 := by simpa using hq
+    linarith
+  · rw [prisonersDilemma_mixedEU_update_true_pure]
+    have hp := ENNReal.toReal_mono ENNReal.one_ne_top
+      (PMF.coe_le_one (current false) true)
+    have hp' : (current false true).toReal ≤ 1 := by simpa using hp
+    linarith
+
+/-- The paper's `γ̄ₙ = ℙ[aₙ+bₙ-2]`, the expected aggregate surplus
+over mutual defection in period `time`. -/
+private noncomputable def prisonersDilemmaCooperationMass
+    (profile : prisonersDilemma.BehaviorProfile) (time : ℕ) : ℝ :=
+  prisonersDilemma.repeatedGame.expectedStagePayoff profile
+      prisonersDilemma.repeatedInitial time false +
+    prisonersDilemma.repeatedGame.expectedStagePayoff profile
+      prisonersDilemma.repeatedInitial time true - 2
+
+/-- In one period, aggregate surplus is three times the sum of the two
+players' gains from switching that period to their dominant action. -/
+private theorem prisonersDilemmaCooperationMass_eq_three_mul_deviationGain
+    (profile : prisonersDilemma.BehaviorProfile) (time : ℕ) :
+    prisonersDilemmaCooperationMass profile time = 3 *
+      ((prisonersDilemma.repeatedGame.expectedStagePayoff
+          (Function.update profile false
+            (constantActionFrom prisonersDilemma profile false time true))
+          prisonersDilemma.repeatedInitial time false -
+        prisonersDilemma.repeatedGame.expectedStagePayoff profile
+          prisonersDilemma.repeatedInitial time false) +
+       (prisonersDilemma.repeatedGame.expectedStagePayoff
+          (Function.update profile true
+            (constantActionFrom prisonersDilemma profile true time true))
+          prisonersDilemma.repeatedInitial time true -
+        prisonersDilemma.repeatedGame.expectedStagePayoff profile
+          prisonersDilemma.repeatedInitial time true)) := by
+  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
+  letI (player : Bool) : DecidableEq
+      (prisonersDilemma.repeatedGame.Act player) :=
+    prisonersDilemma.decidableAction player
+  letI : Finite prisonersDilemma.repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let rowDeviated := Function.update profile false
+    (constantActionFrom prisonersDilemma profile false time true)
+  let columnDeviated := Function.update profile true
+    (constantActionFrom prisonersDilemma profile true time true)
+  let law := prisonersDilemma.repeatedGame.histDist profile
+    prisonersDilemma.repeatedInitial time
+  have hrowLaw : prisonersDilemma.repeatedGame.histDist rowDeviated
+      prisonersDilemma.repeatedInitial time = law := by
+    exact prisonersDilemma.repeatedGame.histDist_eq_of_profilesAgreeBefore
+      (update_constantActionFrom_agreeBefore prisonersDilemma profile
+        false time true) time le_rfl
+  have hcolumnLaw : prisonersDilemma.repeatedGame.histDist columnDeviated
+      prisonersDilemma.repeatedInitial time = law := by
+    exact prisonersDilemma.repeatedGame.histDist_eq_of_profilesAgreeBefore
+      (update_constantActionFrom_agreeBefore prisonersDilemma profile
+        true time true) time le_rfl
+  unfold prisonersDilemmaCooperationMass StochasticGame.expectedStagePayoff
+  change Math.Probability.expect law
+      (fun history => prisonersDilemma.repeatedGame.stageEUAt profile history false) +
+      Math.Probability.expect law
+        (fun history => prisonersDilemma.repeatedGame.stageEUAt profile history true) - 2 = _
+  change _ = 3 *
+    ((Math.Probability.expect
+          (prisonersDilemma.repeatedGame.histDist rowDeviated
+            prisonersDilemma.repeatedInitial time)
+          (fun history => prisonersDilemma.repeatedGame.stageEUAt
+            rowDeviated history false) -
+        Math.Probability.expect law
+          (fun history => prisonersDilemma.repeatedGame.stageEUAt
+            profile history false)) +
+      (Math.Probability.expect
+          (prisonersDilemma.repeatedGame.histDist columnDeviated
+            prisonersDilemma.repeatedInitial time)
+          (fun history => prisonersDilemma.repeatedGame.stageEUAt
+            columnDeviated history true) -
+        Math.Probability.expect law
+          (fun history => prisonersDilemma.repeatedGame.stageEUAt
+            profile history true)))
+  rw [hrowLaw, hcolumnLaw]
+  rw [← Math.Probability.expect_add, ← Math.Probability.expect_sub,
+    ← Math.Probability.expect_sub, ← Math.Probability.expect_add,
+    ← Math.Probability.expect_const law 2,
+    ← Math.Probability.expect_const_mul]
+  rw [← Math.Probability.expect_sub]
+  apply congrArg (Math.Probability.expect law)
+  funext history
+  let current := prisonersDilemmaMixedProfileAt profile history
+  have hrow : prisonersDilemma.repeatedGame.stageEUAt
+      rowDeviated history false =
+      prisonersDilemma.kernel.mixedExtension.eu
+        (Function.update current false (PMF.pure true)) false := by
+    rw [prisonersDilemma_stageEUAt_eq_mixedEU]
+    congr 1
+    funext player
+    by_cases hplayer : player = false
+    · subst player
+      simp [rowDeviated, prisonersDilemmaMixedProfileAt,
+        monitoredMixedProfileAt_apply, constantActionFrom]
+      rfl
+    · simp [rowDeviated, current, prisonersDilemmaMixedProfileAt,
+        monitoredMixedProfileAt_apply, Function.update_of_ne hplayer]
+  have hcolumn : prisonersDilemma.repeatedGame.stageEUAt
+      columnDeviated history true =
+      prisonersDilemma.kernel.mixedExtension.eu
+        (Function.update current true (PMF.pure true)) true := by
+    rw [prisonersDilemma_stageEUAt_eq_mixedEU]
+    congr 1
+    funext player
+    by_cases hplayer : player = true
+    · subst player
+      simp [columnDeviated, prisonersDilemmaMixedProfileAt,
+        monitoredMixedProfileAt_apply, constantActionFrom]
+      rfl
+    · simp [columnDeviated, current, prisonersDilemmaMixedProfileAt,
+        monitoredMixedProfileAt_apply, Function.update_of_ne hplayer]
+  have horiginal (who : Bool) :
+      prisonersDilemma.repeatedGame.stageEUAt profile history who =
+        prisonersDilemma.kernel.mixedExtension.eu current who := by
+    exact prisonersDilemma_stageEUAt_eq_mixedEU profile history who
+  rw [hrow, hcolumn, horiginal false, horiginal true,
+    prisonersDilemma_mixedEU_false,
+    prisonersDilemma_mixedEU_true]
+  rw [prisonersDilemma_mixedEU_update_false_pure,
+    prisonersDilemma_mixedEU_update_true_pure]
+  ring
+
+/-- The cooperation mass lies in `[0,6]`: it is three times the total
+probability of Top and Left. -/
+private theorem prisonersDilemmaCooperationMass_mem_Icc
+    (profile : prisonersDilemma.BehaviorProfile) (time : ℕ) :
+    prisonersDilemmaCooperationMass profile time ∈ Set.Icc 0 6 := by
+  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
+  letI : Finite prisonersDilemma.repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let law := prisonersDilemma.repeatedGame.histDist profile
+    prisonersDilemma.repeatedInitial time
+  have hpointwise (history : prisonersDilemma.repeatedGame.Hist time) :
+      0 ≤ prisonersDilemma.repeatedGame.stageEUAt profile history false +
+          prisonersDilemma.repeatedGame.stageEUAt profile history true - 2 ∧
+        prisonersDilemma.repeatedGame.stageEUAt profile history false +
+          prisonersDilemma.repeatedGame.stageEUAt profile history true - 2 ≤ 6 := by
+    let current := prisonersDilemmaMixedProfileAt profile history
+    have horiginal (who : Bool) :
+        prisonersDilemma.repeatedGame.stageEUAt profile history who =
+          prisonersDilemma.kernel.mixedExtension.eu current who := by
+      exact prisonersDilemma_stageEUAt_eq_mixedEU profile history who
+    rw [horiginal false, horiginal true,
+      prisonersDilemma_mixedEU_false, prisonersDilemma_mixedEU_true]
+    have hp0 : 0 ≤ (current false true).toReal := ENNReal.toReal_nonneg
+    have hq0 : 0 ≤ (current true true).toReal := ENNReal.toReal_nonneg
+    have hp1 : (current false true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hq1 : (current true true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    constructor <;> linarith
+  unfold prisonersDilemmaCooperationMass StochasticGame.expectedStagePayoff
+  change Math.Probability.expect law
+      (fun history => prisonersDilemma.repeatedGame.stageEUAt profile history false) +
+      Math.Probability.expect law
+        (fun history => prisonersDilemma.repeatedGame.stageEUAt profile history true) - 2
+      ∈ Set.Icc 0 6
+  rw [← Math.Probability.expect_add,
+    ← Math.Probability.expect_const law 2,
+    ← Math.Probability.expect_sub]
+  constructor
+  · rw [← Math.Probability.expect_const law 0]
+    apply Math.Probability.expect_mono
+    exact fun history => (hpointwise history).1
+  · rw [← Math.Probability.expect_const law 6]
+    apply Math.Probability.expect_mono
+    exact fun history => (hpointwise history).2
+
+/-- A root discounted Nash inequality can be cancelled through any
+deterministic prefix on which the deviation agrees with the profile. -/
+private theorem discountedTail_le_of_nash_of_agreeBefore
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (hnash : G.repeatedGame.IsDiscountedεNash
+      (1 - (lam : ℝ)) G.repeatedInitial 0 profile)
+    (who : G.Player) (deviation : G.BehaviorStrategy who) (start : ℕ)
+    (hagree : G.repeatedGame.ProfilesAgreeBefore
+      (Function.update profile who deviation) profile start)
+    (hlam : 0 < lam) (hlam1 : lam < 1) :
+    (∑' offset : ℕ, (1 - lam) ^ offset *
+        G.repeatedGame.expectedStagePayoff
+          (Function.update profile who deviation) G.repeatedInitial
+          (start + offset) who) ≤
+      ∑' offset : ℕ, (1 - lam) ^ offset *
+        G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+          (start + offset) who := by
+  let beta := 1 - lam
+  let deviated := Function.update profile who deviation
+  have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
+  have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
+  obtain ⟨bound, hbound⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun data : G.repeatedGame.State × G.repeatedGame.JointAct =>
+      G.repeatedGame.stagePayoff data.1 data.2 who)
+  have horiginalSummable : Summable fun time : ℕ =>
+      beta ^ time * G.repeatedGame.expectedStagePayoff
+        profile G.repeatedInitial time who :=
+    G.repeatedGame.summable_discounted_expectedStagePayoff
+      (fun state action => hbound (state, action)) profile G.repeatedInitial
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+  have hdeviatedSummable : Summable fun time : ℕ =>
+      beta ^ time * G.repeatedGame.expectedStagePayoff
+        deviated G.repeatedInitial time who :=
+    G.repeatedGame.summable_discounted_expectedStagePayoff
+      (fun state action => hbound (state, action)) deviated G.repeatedInitial
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+  have hnash' := hnash who deviation
+  simp only [add_zero] at hnash'
+  unfold StochasticGame.discountedPayoff at hnash'
+  rw [show 1 - (1 - lam) = lam by ring] at hnash'
+  change lam * (∑' time : ℕ, beta ^ time *
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial time who) ≥
+    lam * (∑' time : ℕ, beta ^ time *
+      G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial time who) at hnash'
+  have htotal : (∑' time : ℕ, beta ^ time *
+      G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial time who) ≤
+    ∑' time : ℕ, beta ^ time *
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial time who := by
+    nlinarith
+  have hprefix :
+      (∑ time ∈ Finset.range start, beta ^ time *
+          G.repeatedGame.expectedStagePayoff deviated
+            G.repeatedInitial time who) =
+        ∑ time ∈ Finset.range start, beta ^ time *
+          G.repeatedGame.expectedStagePayoff profile
+            G.repeatedInitial time who := by
+    apply Finset.sum_congr rfl
+    intro time htime
+    rw [expectedStagePayoff_eq_of_profilesAgreeBefore G hagree
+      (Finset.mem_range.mp htime) who]
+  have htailsWeighted :
+      (∑' offset : ℕ, beta ^ (offset + start) *
+          G.repeatedGame.expectedStagePayoff deviated
+            G.repeatedInitial (offset + start) who) ≤
+        ∑' offset : ℕ, beta ^ (offset + start) *
+          G.repeatedGame.expectedStagePayoff profile
+            G.repeatedInitial (offset + start) who := by
+    rw [← hdeviatedSummable.sum_add_tsum_nat_add start,
+      ← horiginalSummable.sum_add_tsum_nat_add start] at htotal
+    rw [hprefix] at htotal
+    linarith
+  have hfactor (selected : G.BehaviorProfile) :
+      (∑' offset : ℕ, beta ^ (offset + start) *
+          G.repeatedGame.expectedStagePayoff selected
+            G.repeatedInitial (offset + start) who) =
+        beta ^ start *
+          ∑' offset : ℕ, beta ^ offset *
+            G.repeatedGame.expectedStagePayoff selected
+              G.repeatedInitial (start + offset) who := by
+    rw [← tsum_mul_left]
+    apply tsum_congr
+    intro offset
+    rw [add_comm offset start, pow_add]
+    ring
+  rw [hfactor deviated, hfactor profile] at htailsWeighted
+  have hbetaPow : 0 < beta ^ start := by
+    positivity
+  nlinarith
+
+/-- Nash's inequality against permanent defection bounds the current gain by
+the discounted future aggregate surplus above the security payoff one. -/
+private theorem prisonersDilemma_deviationGain_le_futureSurplus
+    (profile : prisonersDilemma.BehaviorProfile)
+    (hnash : prisonersDilemma.repeatedGame.IsDiscountedεNash
+      (1 - lam) prisonersDilemma.repeatedInitial 0 profile)
+    (who : Bool) (start : ℕ) (hlam : 0 < lam) (hlam1 : lam < 1) :
+    prisonersDilemma.repeatedGame.expectedStagePayoff
+        (Function.update profile who
+          (constantActionFrom prisonersDilemma profile who start true))
+        prisonersDilemma.repeatedInitial start who -
+      prisonersDilemma.repeatedGame.expectedStagePayoff profile
+        prisonersDilemma.repeatedInitial start who ≤
+      ∑' offset : ℕ, (1 - lam) ^ (offset + 1) *
+        (prisonersDilemma.repeatedGame.expectedStagePayoff profile
+          prisonersDilemma.repeatedInitial (start + (offset + 1)) who - 1) := by
+  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
+  letI : Finite prisonersDilemma.repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let beta := 1 - lam
+  let deviation := constantActionFrom prisonersDilemma profile who start true
+  let deviated := Function.update profile who deviation
+  have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
+  have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
+  have htail := discountedTail_le_of_nash_of_agreeBefore
+    prisonersDilemma profile hnash who deviation start
+      (update_constantActionFrom_agreeBefore prisonersDilemma profile
+        who start true) hlam hlam1
+  change (∑' offset : ℕ, beta ^ offset *
+      prisonersDilemma.repeatedGame.expectedStagePayoff deviated
+        prisonersDilemma.repeatedInitial (start + offset) who) ≤
+    ∑' offset : ℕ, beta ^ offset *
+      prisonersDilemma.repeatedGame.expectedStagePayoff profile
+        prisonersDilemma.repeatedInitial (start + offset) who at htail
+  obtain ⟨bound, hbound⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun data : prisonersDilemma.repeatedGame.State ×
+        prisonersDilemma.repeatedGame.JointAct =>
+      prisonersDilemma.repeatedGame.stagePayoff data.1 data.2 who)
+  have horiginalSummable : Summable fun offset : ℕ =>
+      beta ^ offset * prisonersDilemma.repeatedGame.expectedStagePayoff
+        profile prisonersDilemma.repeatedInitial (start + offset) who := by
+    apply summable_pow_mul_of_abs_le
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+    intro offset
+    exact prisonersDilemma.repeatedGame.abs_expectedStagePayoff_le
+      (fun state action => hbound (state, action)) profile
+      prisonersDilemma.repeatedInitial (start + offset)
+  have hdeviatedSummable : Summable fun offset : ℕ =>
+      beta ^ offset * prisonersDilemma.repeatedGame.expectedStagePayoff
+        deviated prisonersDilemma.repeatedInitial (start + offset) who := by
+    apply summable_pow_mul_of_abs_le
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+    intro offset
+    exact prisonersDilemma.repeatedGame.abs_expectedStagePayoff_le
+      (fun state action => hbound (state, action)) deviated
+      prisonersDilemma.repeatedInitial (start + offset)
+  rw [horiginalSummable.tsum_eq_zero_add,
+    hdeviatedSummable.tsum_eq_zero_add] at htail
+  simp only [pow_zero, one_mul, Nat.add_zero] at htail
+  have hfutureDeviation :
+      (∑' offset : ℕ, beta ^ (offset + 1)) ≤
+        ∑' offset : ℕ, beta ^ (offset + 1) *
+          prisonersDilemma.repeatedGame.expectedStagePayoff deviated
+            prisonersDilemma.repeatedInitial (start + (offset + 1)) who := by
+    have hgeom : Summable fun offset : ℕ => beta ^ (offset + 1) := by
+      simpa [pow_succ'] using
+        (summable_geometric_of_lt_one hbeta0 hbeta1).mul_left beta
+    have hdev : Summable fun offset : ℕ => beta ^ (offset + 1) *
+        prisonersDilemma.repeatedGame.expectedStagePayoff deviated
+          prisonersDilemma.repeatedInitial (start + (offset + 1)) who :=
+      hdeviatedSummable.comp_injective Nat.succ_injective
+    exact hgeom.tsum_le_tsum (fun offset => by
+      simpa only [mul_one] using mul_le_mul_of_nonneg_left
+        (expectedStagePayoff_constantTrueFrom_ge_one
+          profile who start (start + (offset + 1)) (by omega))
+        (pow_nonneg hbeta0 (offset + 1))) hdev
+  have horiginalFuture : Summable fun offset : ℕ =>
+      beta ^ (offset + 1) *
+        prisonersDilemma.repeatedGame.expectedStagePayoff profile
+          prisonersDilemma.repeatedInitial (start + (offset + 1)) who :=
+    horiginalSummable.comp_injective Nat.succ_injective
+  have hgeomFuture : Summable fun offset : ℕ => beta ^ (offset + 1) := by
+    simpa [pow_succ'] using
+      (summable_geometric_of_lt_one hbeta0 hbeta1).mul_left beta
+  have hdifference :
+      (∑' offset : ℕ, beta ^ (offset + 1) *
+        (prisonersDilemma.repeatedGame.expectedStagePayoff profile
+          prisonersDilemma.repeatedInitial (start + (offset + 1)) who - 1)) =
+      (∑' offset : ℕ, beta ^ (offset + 1) *
+        prisonersDilemma.repeatedGame.expectedStagePayoff profile
+          prisonersDilemma.repeatedInitial (start + (offset + 1)) who) -
+        ∑' offset : ℕ, beta ^ (offset + 1) := by
+    rw [← horiginalFuture.tsum_sub hgeomFuture]
+    apply tsum_congr
+    intro offset
+    ring
+  change _ ≤ (∑' offset : ℕ, beta ^ (offset + 1) *
+    (prisonersDilemma.repeatedGame.expectedStagePayoff profile
+      prisonersDilemma.repeatedInitial (start + (offset + 1)) who - 1))
+  rw [hdifference]
+  dsimp only [deviated, deviation] at htail
+  linarith
+
+/-- A uniformly bounded sequence remains summable after geometric weighting
+starting at exponent one. -/
+private theorem summable_pow_succ_mul_of_abs_le
+    {ratio bound : ℝ} {values : ℕ → ℝ} (hratio : |ratio| < 1)
+    (hbound : ∀ index, |values index| ≤ bound) :
+    Summable fun index : ℕ => ratio ^ (index + 1) * values index := by
+  have hbase := summable_pow_mul_of_abs_le hratio hbound
+  have hscaled := hbase.mul_left ratio
+  refine hscaled.congr ?_
+  intro index
+  rw [pow_succ']
+  ring
+
+/-- Inequality (**) after integration: one third of today's cooperation mass
+is bounded by the discounted future cooperation mass. -/
+private theorem prisonersDilemma_one_third_mass_le_futureMass
+    (profile : prisonersDilemma.BehaviorProfile)
+    (hnash : prisonersDilemma.repeatedGame.IsDiscountedεNash
+      (1 - lam) prisonersDilemma.repeatedInitial 0 profile)
+    (start : ℕ) (hlam : 0 < lam) (hlam1 : lam < 1) :
+    (1 / 3 : ℝ) * prisonersDilemmaCooperationMass profile start ≤
+      ∑' offset : ℕ, (1 - lam) ^ (offset + 1) *
+        prisonersDilemmaCooperationMass profile (start + (offset + 1)) := by
+  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
+  letI : Finite prisonersDilemma.repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let beta := 1 - lam
+  have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
+  have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
+  have hrow := prisonersDilemma_deviationGain_le_futureSurplus
+    profile hnash false start hlam hlam1
+  have hcolumn := prisonersDilemma_deviationGain_le_futureSurplus
+    profile hnash true start hlam hlam1
+  let rowTerm : ℕ → ℝ := fun offset => beta ^ (offset + 1) *
+    (prisonersDilemma.repeatedGame.expectedStagePayoff profile
+      prisonersDilemma.repeatedInitial (start + (offset + 1)) false - 1)
+  let columnTerm : ℕ → ℝ := fun offset => beta ^ (offset + 1) *
+    (prisonersDilemma.repeatedGame.expectedStagePayoff profile
+      prisonersDilemma.repeatedInitial (start + (offset + 1)) true - 1)
+  obtain ⟨bound, hbound⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun data : prisonersDilemma.repeatedGame.State ×
+        prisonersDilemma.repeatedGame.JointAct × Bool =>
+      prisonersDilemma.repeatedGame.stagePayoff data.1 data.2.1 data.2.2)
+  have hsurplusSummable (who : Bool) : Summable fun offset : ℕ =>
+      beta ^ (offset + 1) *
+        (prisonersDilemma.repeatedGame.expectedStagePayoff profile
+          prisonersDilemma.repeatedInitial (start + (offset + 1)) who - 1) := by
+    apply summable_pow_succ_mul_of_abs_le (bound := bound + 1)
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+    intro offset
+    have hpayoff := prisonersDilemma.repeatedGame.abs_expectedStagePayoff_le
+      (fun state action => hbound (state, action, who)) profile
+      prisonersDilemma.repeatedInitial (start + (offset + 1))
+    have htriangle := abs_sub
+      (prisonersDilemma.repeatedGame.expectedStagePayoff profile
+        prisonersDilemma.repeatedInitial (start + (offset + 1)) who) 1
+    norm_num at htriangle
+    linarith
+  have hrowSummable : Summable rowTerm := by
+    simpa only [rowTerm] using hsurplusSummable false
+  have hcolumnSummable : Summable columnTerm := by
+    simpa only [columnTerm] using hsurplusSummable true
+  have hsum :
+      (∑' offset, rowTerm offset) + ∑' offset, columnTerm offset =
+        ∑' offset, beta ^ (offset + 1) *
+          prisonersDilemmaCooperationMass profile (start + (offset + 1)) := by
+    rw [← hrowSummable.tsum_add hcolumnSummable]
+    apply tsum_congr
+    intro offset
+    dsimp only [rowTerm, columnTerm, prisonersDilemmaCooperationMass]
+    ring
+  have hgainIdentity :=
+    prisonersDilemmaCooperationMass_eq_three_mul_deviationGain profile start
+  change _ ≤ ∑' offset, beta ^ (offset + 1) *
+    prisonersDilemmaCooperationMass profile (start + (offset + 1))
+  rw [← hsum]
+  change _ ≤ _ at hrow hcolumn
+  nlinarith
+
+/-- Above the critical current-stage weight `3/4`, inequality (**) forces the
+supremum of the cooperation masses to vanish. -/
+private theorem prisonersDilemmaCooperationMass_eq_zero_of_nash
+    (profile : prisonersDilemma.BehaviorProfile)
+    (hnash : prisonersDilemma.repeatedGame.IsDiscountedεNash
+      (1 - lam) prisonersDilemma.repeatedInitial 0 profile)
+    (hlam : 3 / 4 < lam) (hlam1 : lam < 1) :
+    ∀ time, prisonersDilemmaCooperationMass profile time = 0 := by
+  let beta := 1 - lam
+  let mass : ℕ → ℝ := prisonersDilemmaCooperationMass profile
+  let y := sSup (Set.range mass)
+  have hlam0 : 0 < lam := by linarith
+  have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
+  have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
+  have hbetaQuarter : beta < 1 / 4 := by dsimp only [beta]; linarith
+  have hrangeNonempty : (Set.range mass).Nonempty := Set.range_nonempty mass
+  have hrangeBdd : BddAbove (Set.range mass) := by
+    refine ⟨6, ?_⟩
+    rintro _ ⟨time, rfl⟩
+    exact (prisonersDilemmaCooperationMass_mem_Icc profile time).2
+  have hmassLe (time : ℕ) : mass time ≤ y :=
+    le_csSup hrangeBdd ⟨time, rfl⟩
+  have hy0 : 0 ≤ y := by
+    have hzero := (prisonersDilemmaCooperationMass_mem_Icc profile 0).1
+    exact hzero.trans (hmassLe 0)
+  have hfutureBound (start : ℕ) :
+      (∑' offset : ℕ, beta ^ (offset + 1) * mass (start + (offset + 1))) ≤
+        y * (beta / (1 - beta)) := by
+    have hmassSummable : Summable fun offset : ℕ =>
+        beta ^ (offset + 1) * mass (start + (offset + 1)) := by
+      apply summable_pow_succ_mul_of_abs_le (bound := 6)
+        (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+      intro offset
+      have hmass := prisonersDilemmaCooperationMass_mem_Icc
+        profile (start + (offset + 1))
+      rw [abs_of_nonneg hmass.1]
+      exact hmass.2
+    have hySummable : Summable fun offset : ℕ => beta ^ (offset + 1) * y := by
+      apply summable_pow_succ_mul_of_abs_le (bound := |y|)
+        (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+      exact fun _ => le_rfl
+    calc
+      (∑' offset : ℕ, beta ^ (offset + 1) * mass (start + (offset + 1))) ≤
+          ∑' offset : ℕ, beta ^ (offset + 1) * y :=
+        hmassSummable.tsum_le_tsum (fun offset =>
+          mul_le_mul_of_nonneg_left (hmassLe _) (pow_nonneg hbeta0 _)) hySummable
+      _ = y * (beta / (1 - beta)) := by
+        rw [show (∑' offset : ℕ, beta ^ (offset + 1) * y) =
+            beta * ((∑' offset : ℕ, beta ^ offset) * y) by
+          rw [← tsum_mul_right, ← tsum_mul_left]
+          apply tsum_congr
+          intro offset
+          rw [pow_succ']
+          ring]
+        rw [tsum_geometric_of_lt_one hbeta0 hbeta1]
+        field_simp [sub_ne_zero.mpr hbeta1.ne]
+  have hmassUpper (time : ℕ) :
+      mass time ≤ 3 * (y * (beta / (1 - beta))) := by
+    have hpaper := prisonersDilemma_one_third_mass_le_futureMass
+      profile hnash time hlam0 hlam1
+    change (1 / 3 : ℝ) * mass time ≤ _ at hpaper
+    change _ ≤ _
+    nlinarith [hpaper.trans (hfutureBound time)]
+  have hyUpper : y ≤ 3 * (y * (beta / (1 - beta))) :=
+    csSup_le hrangeNonempty (by
+      rintro _ ⟨time, rfl⟩
+      exact hmassUpper time)
+  have hratio : 3 * (beta / (1 - beta)) < 1 := by
+    have hdenom : 0 < 1 - beta := by linarith
+    rw [show 3 * (beta / (1 - beta)) = (3 * beta) / (1 - beta) by ring]
+    exact (div_lt_iff₀ hdenom).2 (by nlinarith)
+  have hy : y = 0 := by
+    nlinarith
+  intro time
+  apply le_antisymm
+  · simpa [hy] using hmassLe time
+  · exact (prisonersDilemmaCooperationMass_mem_Icc profile time).1
+
+private theorem prisonersDilemma_discountedPayoff_sum_eq_two_of_mass_zero
+    (profile : prisonersDilemma.BehaviorProfile)
+    (lam : ℝ) (hlam : 0 < lam) (hlam1 : lam < 1)
+    (hmass : ∀ time, prisonersDilemmaCooperationMass profile time = 0) :
+    prisonersDilemma.discountedPayoff lam profile false +
+      prisonersDilemma.discountedPayoff lam profile true = 2 := by
+  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
+  letI : Finite prisonersDilemma.repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let beta := 1 - lam
+  have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
+  have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
+  obtain ⟨bound, hbound⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun data : prisonersDilemma.repeatedGame.State ×
+        prisonersDilemma.repeatedGame.JointAct × Bool =>
+      prisonersDilemma.repeatedGame.stagePayoff data.1 data.2.1 data.2.2)
+  have hs (who : Bool) : Summable fun time : ℕ => beta ^ time *
+      prisonersDilemma.repeatedGame.expectedStagePayoff profile
+        prisonersDilemma.repeatedInitial time who :=
+    prisonersDilemma.repeatedGame.summable_discounted_expectedStagePayoff
+      (fun state action => hbound (state, action, who)) profile
+      prisonersDilemma.repeatedInitial
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+  unfold FiniteStageGame.discountedPayoff StochasticGame.discountedPayoff
+  rw [show 1 - (1 - lam) = lam by ring]
+  change lam * (∑' time : ℕ, beta ^ time *
+      prisonersDilemma.repeatedGame.expectedStagePayoff profile
+        prisonersDilemma.repeatedInitial time false) +
+    lam * (∑' time : ℕ, beta ^ time *
+      prisonersDilemma.repeatedGame.expectedStagePayoff profile
+        prisonersDilemma.repeatedInitial time true) = 2
+  rw [← mul_add, ← (hs false).tsum_add (hs true)]
+  have hstage (time : ℕ) :
+      prisonersDilemma.repeatedGame.expectedStagePayoff profile
+          prisonersDilemma.repeatedInitial time false +
+        prisonersDilemma.repeatedGame.expectedStagePayoff profile
+          prisonersDilemma.repeatedInitial time true = 2 := by
+    have := hmass time
+    unfold prisonersDilemmaCooperationMass at this
+    linarith
+  simp_rw [← mul_add, hstage, tsum_mul_right,
+    tsum_geometric_of_lt_one hbeta0 hbeta1]
+  have hne : lam ≠ 0 := ne_of_gt hlam
+  change lam * ((1 - beta)⁻¹ * 2) = 2
+  rw [show 1 - beta = lam by dsimp only [beta]; ring]
+  field_simp
+
+/-- With current-stage weight one, only the initial expected stage matters. -/
+private theorem discountedPayoff_one_eq_mixedPayoff_initial
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (who : G.Player) :
+    G.discountedPayoff 1 profile who =
+      G.mixedPayoff (G.initialMixedProfile profile) who := by
+  unfold FiniteStageGame.discountedPayoff
+  rw [show 1 - (1 : ℝ) = 0 by ring]
+  unfold StochasticGame.discountedPayoff
+  rw [show (∑' time : ℕ, 0 ^ time *
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial time who) =
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial 0 who by
+    rw [tsum_eq_single 0]
+    · simp
+    · intro time htime
+      have hpositive : 0 < time := Nat.pos_of_ne_zero htime
+      simp [Nat.ne_of_gt hpositive]]
+  simpa using expectedStagePayoff_zero_eq_mixedPayoff_initial G profile who
+
 /-! Proposition 14's proof is the paper's uniform gain inequality and
 supremum argument.  It is not implied merely by strict dominance. -/
 theorem proposition_14 (lam : ℝ) (hlam : 3 / 4 < lam) (hlam1 : lam ≤ 1) :
     prisonersDilemma.discountedEquilibriumPayoffs lam = {pair 1 1} := by
-  sorry
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨profile, hnash, hpayoff⟩
+    have hlam0 : 0 < lam := by linarith
+    have hcoordinates : payoff false = 1 ∧ payoff true = 1 := by
+      by_cases hcritical : lam = 1
+      · subst lam
+        let current := prisonersDilemma.initialMixedProfile profile
+        have hcurrentNash : prisonersDilemma.kernel.mixedExtension.IsNash current := by
+          intro who deviation
+          let behaviorDeviation : prisonersDilemma.BehaviorStrategy who :=
+            fun _time _history => deviation
+          have hequilibrium := hnash who behaviorDeviation
+          simp only [add_zero] at hequilibrium
+          change prisonersDilemma.discountedPayoff 1 profile who ≥
+            prisonersDilemma.discountedPayoff 1
+              (Function.update profile who behaviorDeviation) who at hequilibrium
+          rw [discountedPayoff_one_eq_mixedPayoff_initial,
+            discountedPayoff_one_eq_mixedPayoff_initial] at hequilibrium
+          have hupdate : prisonersDilemma.initialMixedProfile
+              (Function.update profile who behaviorDeviation) =
+              Function.update current who deviation := by
+            funext player
+            by_cases hplayer : player = who
+            · subst player
+              simp [FiniteStageGame.initialMixedProfile, behaviorDeviation]
+            · simp [FiniteStageGame.initialMixedProfile, current,
+                Function.update_of_ne hplayer]
+          rwa [hupdate] at hequilibrium
+        have hmem : prisonersDilemma.mixedPayoff current ∈
+            prisonersDilemma.oneStageEquilibriumPayoffs :=
+          ⟨current, hcurrentNash, rfl⟩
+        rw [prisonersDilemma_E1_eq_singleton] at hmem
+        have hcurrent := Set.mem_singleton_iff.mp hmem
+        rw [← hpayoff]
+        constructor <;>
+          rw [discountedPayoff_one_eq_mixedPayoff_initial, hcurrent] <;> rfl
+      · have hlamLt : lam < 1 := lt_of_le_of_ne hlam1 hcritical
+        have hmass := prisonersDilemmaCooperationMass_eq_zero_of_nash
+          profile hnash hlam hlamLt
+        have hsum := prisonersDilemma_discountedPayoff_sum_eq_two_of_mass_zero
+          profile lam hlam0 hlamLt hmass
+        let rate : prisonersDilemma.DiscountRate := ⟨lam, hlam0, hlam1⟩
+        have hir := lemma_1_Elambda_subset_Delta prisonersDilemma rate
+          ⟨profile, hnash, hpayoff⟩
+        have hfalse : 1 ≤ payoff false := by
+          have := hir.2 false
+          simpa [prisonersDilemma_individualRationalLevel] using this
+        have htrue : 1 ≤ payoff true := by
+          have := hir.2 true
+          simpa [prisonersDilemma_individualRationalLevel] using this
+        rw [hpayoff] at hsum
+        constructor <;> linarith
+    apply Set.mem_singleton_iff.mpr
+    funext who
+    cases who
+    · exact hcoordinates.1
+    · exact hcoordinates.2
+  · intro payoff hpayoff
+    rw [Set.mem_singleton_iff] at hpayoff
+    subst payoff
+    let rate : prisonersDilemma.DiscountRate :=
+      ⟨lam, by linarith, hlam1⟩
+    exact lemma_1_E1_subset_Elambda prisonersDilemma rate
+      (by rw [prisonersDilemma_E1_eq_singleton]; exact Set.mem_singleton _)
 
 /-- The square `S` with vertices `(1,1),(1,4),(4,4),(4,1)`. -/
 def prisonerSquare : Set (Payoff Bool) :=
