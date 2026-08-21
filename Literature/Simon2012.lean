@@ -4432,7 +4432,7 @@ abbrev game : QuittingGame where
   Player := Bool
   reward := fun _ _ => 0
 
-abbrev beta : Payoff game.Player := fun j => if j then 0 else 4
+abbrev beta : Payoff game.Player := fun j => if j then 0 else 40
 
 abbrev row : QuitRow game := fun j => if j then ⟨1 / 2, by norm_num⟩ else 0
 
@@ -4453,7 +4453,7 @@ private theorem forcedQuitPayoff_eq (n : game.Player) :
   simp [ForcedQuitPayoff, QuittingOneStagePayoff, game]
 
 private theorem forcedContinuePayoff_eq (n : game.Player) :
-    ForcedContinuePayoff game beta row n = if n then 0 else 2 := by
+    ForcedContinuePayoff game beta row n = if n then 0 else 20 := by
   cases n
   · rw [ForcedContinuePayoff, QuittingOneStagePayoff, QuitProbability, univ_bool]
     simp [CoalitionProbability, QuitRow.replace, row, beta, game]
@@ -4475,9 +4475,14 @@ private theorem pair_mem : (beta, row) ∈ EZeroTilde game := by
 
 abbrev point : EZeroTilde game := ⟨(beta, row), pair_mem⟩
 
-private theorem phi_false_eq : Phi game 1 1 point false = 5 / 2 := by
+private theorem phi_false_eq : Phi game 1 1 point false = 41 / 2 := by
   rw [Phi, oneStagePayoff_eq, univ_bool]
   norm_num [point, row, beta, game]
+
+private theorem phi_true_eq : Phi game 1 1 point true = -20 := by
+  have hcard : Fintype.card game.Player = 2 := Fintype.card_bool
+  rw [Phi, oneStagePayoff_eq, univ_bool]
+  norm_num [point, row, beta, game, hcard]
 
 /-- The zero-quitting-coordinate inference used in the printed proof of
 Lemma 4.4 is false without the remaining standing assumptions. -/
@@ -4486,6 +4491,30 @@ theorem zero_quitter_inference_fails :
       ¬ point.1.1 false ≤ Phi game 1 1 point false := by
   rw [phi_false_eq]
   norm_num [point, row, beta]
+
+private theorem phi_mem_truncatedW : Phi game 1 1 point ∈ TruncatedW game 20 := by
+  constructor
+  · refine ⟨true, ?_⟩
+    rw [phi_true_eq]
+    norm_num [SoloPayoff, game]
+  · intro j
+    cases j
+    · rw [phi_false_eq]
+      norm_num
+    · rw [phi_true_eq]
+      norm_num
+
+/-- Even with `φ(β,p) ∈ C`, the displayed conclusion of Lemma 4.4 is
+false if the preceding Section 3 assumptions are omitted. -/
+theorem boundedness_conclusion_fails_without_standing_assumptions :
+    Phi game 1 1 point ∈ TruncatedW game 20 ∧
+      ¬ ((∀ j, -(20 : ℝ) / 2 ≤ point.1.1 j ∧
+          point.1.1 j ≤ 20 + 1) ∧
+        ∀ j, 0 < (point.1.2 j : ℝ) → |point.1.1 j| ≤ 20 / 2) := by
+  refine ⟨phi_mem_truncatedW, ?_⟩
+  rintro ⟨hbeta, _hquit⟩
+  have := (hbeta false).2
+  norm_num [point, beta] at this
 
 end Lemma44ZeroQuitterInference
 
