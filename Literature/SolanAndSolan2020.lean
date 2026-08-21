@@ -15466,6 +15466,202 @@ private theorem KiloblockConstruction.profileTransience_pureQuit_le
         (congrArg construction.finiteMode
           (hquitStep'.trans hcontinueStep'.symm))).le
 
+theorem KiloblockConstruction.profileTransienceHistoryPotential_deviation_drift
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι) (habnormal : excluded ∉ NormalPlayers table)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t) :
+    (publicQuittingGame table
+      construction.profile.signalLaw).historyContinuationEU
+        (Function.update construction.profile.strategy excluded deviation)
+        construction.profileTransienceHistoryPotential history +
+      Math.Probability.transientCharge construction.continueBoundary
+        (construction.finiteMode (construction.mode t history)) ≤
+      construction.profileTransienceHistoryPotential t history := by
+  have hpure : (publicQuittingGame table
+      construction.profile.signalLaw).historyContinuationEU
+        (Function.update construction.profile.strategy excluded deviation)
+        construction.profileTransienceHistoryPotential history ≤
+      (publicQuittingGame table
+        construction.profile.signalLaw).historyContinuationEU
+          construction.profile.strategy
+          construction.profileTransienceHistoryPotential history := by
+    rw [historyContinuationEU_update_eq_expect_pure table
+      construction.profile.signalLaw construction.profile.strategy excluded
+        deviation construction.profileTransienceHistoryPotential history]
+    calc
+      expect (deviation t history) (fun action =>
+          (publicQuittingGame table
+            construction.profile.signalLaw).historyContinuationEU
+              (Function.update construction.profile.strategy excluded
+                (fun _ _ => PMF.pure action))
+              construction.profileTransienceHistoryPotential history) ≤
+          expect (deviation t history) (fun _ =>
+            (publicQuittingGame table
+              construction.profile.signalLaw).historyContinuationEU
+                construction.profile.strategy
+                construction.profileTransienceHistoryPotential history) := by
+        apply Math.Probability.expect_mono
+        intro action
+        cases action with
+        | false =>
+            rw [construction.update_abnormal_continue_eq_profile
+              excluded habnormal]
+        | true =>
+            exact construction.profileTransience_pureQuit_le
+              excluded habnormal history
+      _ = _ := Math.Probability.expect_const _ _
+  linarith [construction.profileTransienceHistoryPotential_drift history]
+
+def KiloblockConstruction.abnormalDeviationTransientMass
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded)
+    (t : ℕ) : ℝ :=
+  expect ((publicQuittingGame table
+      construction.profile.signalLaw).histDist
+    (Function.update construction.profile.strategy excluded deviation)
+      .draw t)
+    (fun history => Math.Probability.transientCharge
+      construction.continueBoundary
+        (construction.finiteMode (construction.mode t history)))
+
+def KiloblockConstruction.expectedProfileTransiencePotential
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded)
+    (t : ℕ) : ℝ :=
+  expect ((publicQuittingGame table
+      construction.profile.signalLaw).histDist
+    (Function.update construction.profile.strategy excluded deviation)
+      .draw t)
+    (construction.profileTransienceHistoryPotential t)
+
+theorem KiloblockConstruction.expectedProfileTransiencePotential_drift
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι) (habnormal : excluded ∉ NormalPlayers table)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded)
+    (t : ℕ) :
+    construction.expectedProfileTransiencePotential excluded deviation (t + 1) +
+      construction.abnormalDeviationTransientMass excluded deviation t ≤
+    construction.expectedProfileTransiencePotential excluded deviation t := by
+  unfold KiloblockConstruction.expectedProfileTransiencePotential
+    KiloblockConstruction.abnormalDeviationTransientMass
+  change (publicQuittingGame table
+      construction.profile.signalLaw).expectedHistoryValue
+        (Function.update construction.profile.strategy excluded deviation)
+        .draw construction.profileTransienceHistoryPotential (t + 1) + _ ≤ _
+  rw [(publicQuittingGame table
+    construction.profile.signalLaw).expectedHistoryValue_succ]
+  rw [← Math.Probability.expect_add]
+  apply Math.Probability.expect_mono
+  intro history
+  exact construction.profileTransienceHistoryPotential_deviation_drift
+    excluded habnormal deviation history
+
+theorem KiloblockConstruction.sum_abnormalDeviationTransientMass_add_le
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι) (habnormal : excluded ∉ NormalPlayers table)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded) : ∀ steps,
+    (∑ t ∈ Finset.range steps,
+        construction.abnormalDeviationTransientMass excluded deviation t) +
+      construction.expectedProfileTransiencePotential
+        excluded deviation steps ≤
+      construction.profileTransienceHistoryPotential 0
+        ((publicQuittingGame table
+          construction.profile.signalLaw).emptyHist .draw)
+  | 0 => by
+      simp [KiloblockConstruction.expectedProfileTransiencePotential]
+  | steps + 1 => by
+      rw [Finset.sum_range_succ]
+      have hinduction :=
+        construction.sum_abnormalDeviationTransientMass_add_le
+          excluded habnormal deviation steps
+      have hdrift :=
+        construction.expectedProfileTransiencePotential_drift
+          excluded habnormal deviation steps
+      linarith
+
+theorem KiloblockConstruction.abnormalDeviationTransientMass_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded)
+    (t : ℕ) :
+    0 ≤ construction.abnormalDeviationTransientMass excluded deviation t := by
+  unfold KiloblockConstruction.abnormalDeviationTransientMass
+  exact expect_nonneg _ _ fun history =>
+    Math.Probability.transientCharge_nonneg construction.continueBoundary
+      (construction.finiteMode (construction.mode t history))
+
+theorem KiloblockConstruction.exists_abnormalDeviationTransientMass_lt_after
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι) (habnormal : excluded ∉ NormalPlayers table)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded)
+    {threshold : ℝ} (hthreshold : 0 < threshold) (start : ℕ) :
+    ∃ t, start ≤ t ∧
+      construction.abnormalDeviationTransientMass excluded deviation t <
+        threshold := by
+  let initial := construction.profileTransienceHistoryPotential 0
+    ((publicQuittingGame table
+      construction.profile.signalLaw).emptyHist .draw)
+  obtain ⟨span, hspan⟩ := exists_nat_gt (initial / threshold)
+  have hlarge : initial < (span : ℝ) * threshold := by
+    exact (div_lt_iff₀ hthreshold).mp hspan
+  by_contra hnot
+  push Not at hnot
+  have hlower : (span : ℝ) * threshold ≤
+      ∑ t ∈ Finset.Ico start (start + span),
+        construction.abnormalDeviationTransientMass excluded deviation t := by
+    calc
+      (span : ℝ) * threshold =
+          ∑ _t ∈ Finset.Ico start (start + span), threshold := by simp
+      _ ≤ _ := Finset.sum_le_sum fun t ht =>
+        hnot t (Finset.mem_Ico.mp ht).1
+  have hsubset : Finset.Ico start (start + span) ⊆
+      Finset.range (start + span) := by
+    intro t ht
+    exact Finset.mem_range.mpr (Finset.mem_Ico.mp ht).2
+  have hsumSubset : (∑ t ∈ Finset.Ico start (start + span),
+      construction.abnormalDeviationTransientMass excluded deviation t) ≤
+      ∑ t ∈ Finset.range (start + span),
+        construction.abnormalDeviationTransientMass excluded deviation t := by
+    apply Finset.sum_le_sum_of_subset_of_nonneg hsubset
+    intro t _ _
+    exact construction.abnormalDeviationTransientMass_nonneg
+      excluded deviation t
+  have hpotentialNonneg : 0 ≤
+      construction.expectedProfileTransiencePotential
+        excluded deviation (start + span) := by
+    unfold KiloblockConstruction.expectedProfileTransiencePotential
+    exact expect_nonneg _ _ fun history =>
+      construction.profileTransiencePotential_nonneg
+        (construction.finiteMode
+          (construction.mode (start + span) history))
+  have hsum := construction.sum_abnormalDeviationTransientMass_add_le
+    excluded habnormal deviation (start + span)
+  have hupper : (∑ t ∈ Finset.range (start + span),
+      construction.abnormalDeviationTransientMass excluded deviation t) ≤
+      initial := by
+    dsimp only [initial] at hsum ⊢
+    linarith
+  exact (not_lt_of_ge (hlower.trans (hsumSubset.trans hupper))) hlarge
+
 /-! Lemma 3.8: for normal `i`, `|γ_i(ξ*)-w_i(yᴷ)|<2ε`. -/
 theorem lemma3_8
     (table : Table ι) {ε : ℝ} (_hε : 0 < ε)
