@@ -4065,6 +4065,86 @@ private theorem DiscreteDecisionProcess.boundedFirstReturn_decomposition
       (integral_add_compl hmeasurableE hFIntegrable).symm
     _ = _ := by rw [hhitIntegral, hresidualIntegral]
 
+/-- Centering the residual path at any state costs at most its mass times the value bound. -/
+private theorem DiscreteDecisionProcess.boundedFirstReturn_centered_bound
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x c : P.X) (y : P.Y x) (A : Set P.X) (N : ℕ) (hN : 1 ≤ N) :
+    |P.valueY x y -
+        (∑' z, (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z) -
+        (P.rawLawAfterAction x y
+          (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ).toReal * P.valueX c| ≤
+      P.valueDifferenceBound *
+        (P.rawLawAfterAction x y
+          (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ).toReal := by
+  let E := (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ
+  let mu := P.rawLawAfterAction x y
+  let cAction := Classical.choose (P.choose c).support_nonempty
+  have hrawIntegrable : Integrable (P.rawStageValue N) mu := by
+    exact P.integrable_rawStageValue (PMF.pure (⟨x, y⟩ : DDPStage P)) N
+  have hconstIntegrable : Integrable (fun _stage : ℕ → DDPStage P => P.valueX c)
+      (mu.restrict E) := integrable_const _
+  have hcenter :
+      (∫ stage in E, P.rawStageValue N stage - P.valueX c ∂mu) =
+        (∫ stage in E, P.rawStageValue N stage ∂mu) -
+          (mu E).toReal * P.valueX c := by
+    rw [integral_sub hrawIntegrable.integrableOn hconstIntegrable]
+    rw [setIntegral_const, Measure.real_def]
+    rfl
+  have hbound (stage : ℕ → DDPStage P) :
+    ‖P.rawStageValue N stage - P.valueX c‖ ≤ P.valueDifferenceBound := by
+    simpa only [DiscreteDecisionProcess.rawStageValue, Real.norm_eq_abs] using
+      (P.valueDifference (stage N).1 c (stage N).2 cAction).2.1
+  have hcenterBound :
+      ‖∫ stage in E, P.rawStageValue N stage - P.valueX c ∂mu‖ ≤
+        P.valueDifferenceBound * (mu E).toReal := by
+    exact norm_setIntegral_le_of_norm_le_const (measure_lt_top mu E)
+      (fun stage _hstage => hbound stage)
+  rw [hcenter] at hcenterBound
+  have hdecomposition := P.boundedFirstReturn_decomposition S x y A N hN
+  change P.valueY x y =
+      (∑' z, (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z) +
+        ∫ stage in E, P.rawStageValue N stage ∂mu at hdecomposition
+  rw [hdecomposition]
+  simpa only [add_sub_cancel_left, Real.norm_eq_abs] using hcenterBound
+
+/-- The raw residual mass is one minus the semantic return-before-horizon probability. -/
+private theorem DiscreteDecisionProcess.rawNotReturnsBefore_toReal
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) (y : P.Y x) (A : Set P.X) (N : ℕ) :
+    (P.rawLawAfterAction x y
+      (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ).toReal =
+        1 - (S.afterAction x y (ReturnsBefore P A N)).toReal := by
+  have hmeasurable : MeasurableSet (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N) :=
+    (DDPPath.measurable_ofRaw P) (measurableSet_returnsBefore P A N)
+  have hcanonical := congrArg
+    (fun mu : Measure (DDPPath P) => mu (ReturnsBefore P A N))
+    (S.afterAction_eq_rawLaw P x y)
+  rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+    (measurableSet_returnsBefore P A N)] at hcanonical
+  rw [measure_compl hmeasurable (measure_ne_top _ _)]
+  rw [ENNReal.toReal_sub_of_le]
+  · rw [show (P.rawLawAfterAction x y Set.univ).toReal = 1 by
+      letI : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
+        P.isProbabilityMeasure_rawLawAfterAction x y
+      simp]
+    rw [← hcanonical]
+  · exact measure_mono (subset_univ _)
+  · letI : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
+      P.isProbabilityMeasure_rawLawAfterAction x y
+    simp
+
+/-- The centered finite-return bound written entirely with semantic probabilities. -/
+private theorem DiscreteDecisionProcess.boundedFirstReturn_centered_bound_semantic
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x c : P.X) (y : P.Y x) (A : Set P.X) (N : ℕ) (hN : 1 ≤ N) :
+    |P.valueY x y -
+        (∑' z, (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z) -
+        (1 - (S.afterAction x y (ReturnsBefore P A N)).toReal) * P.valueX c| ≤
+      P.valueDifferenceBound *
+        (1 - (S.afterAction x y (ReturnsBefore P A N)).toReal) := by
+  simpa only [P.rawNotReturnsBefore_toReal S x y A N] using
+    P.boundedFirstReturn_centered_bound S x c y A N hN
+
 /-- The return event is measurable as a countable union of first-return events. -/
 private theorem measurableSet_returnsTo (P : DiscreteDecisionProcess) (A : Set P.X) :
     MeasurableSet (ReturnsTo P A) := by
