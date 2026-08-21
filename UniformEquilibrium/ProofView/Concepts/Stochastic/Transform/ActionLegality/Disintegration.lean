@@ -330,20 +330,6 @@ theorem normOneStage_eq_of_component_eq
   funext s'
   rw [PMF.pure_map, PMF.pure_map, G.normalizeHist_snoc, G.normalizeHist_snoc, hnorm]
 
-/-- A joint action drawn with player `who`'s coordinate pinned to `a` has
-`who`-coordinate exactly `a` wherever it has positive probability. -/
-theorem eq_of_mem_support_pmfPi_update_pure {A : ι → Type} (σ : ∀ i, PMF (A i))
-    (who : ι) (a : A who) {act : ∀ i, A i}
-    (hact : act ∈ (pmfPi (Function.update σ who (PMF.pure a))).support) :
-    act who = a := by
-  classical
-  by_contra hne
-  have hzero : pmfPi (Function.update σ who (PMF.pure a)) act = 0 := by
-    rw [pmfPi_apply]
-    apply Finset.prod_eq_zero (Finset.mem_univ who)
-    rw [Function.update_self, PMF.pure_apply, if_neg hne]
-  exact (PMF.mem_support_iff _ act).mp hact hzero
-
 omit [Finite G.State] [∀ i, Finite (G.Act i)] in
 /-- **The crux of deliverable (3).** Binding a product law with player
 `who`'s coordinate pinned to a raw action `a`, through `normOneStage`,
@@ -360,7 +346,8 @@ theorem pmfPi_update_bind_normOneStage_eq_legalizeAct
         G.normOneStage Legal hLegal h
           (Function.update act who (G.legalizeAct Legal hLegal h.2 who a)) := by
     intro act hact
-    have hactWho : act who = a := eq_of_mem_support_pmfPi_update_pure σ who a hact
+    have hactWho : act who = a :=
+      Math.PMFProduct.eq_of_mem_support_pmfPi_update_pure σ who a hact
     apply G.normOneStage_eq_of_component_eq
     · intro i hi
       rw [Function.update_of_ne hi]

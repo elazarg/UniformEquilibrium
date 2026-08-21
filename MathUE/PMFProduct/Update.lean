@@ -96,6 +96,21 @@ lemma pmfPi_update_family_mul (σ : ∀ i, PMF (A i)) (j : ι) (τ : PMF (A j))
   simp [mul_comm, mul_left_comm]
 
 open Classical in
+/-- A supported draw from a product law with one coordinate pinned to a
+Dirac mass has exactly that coordinate. -/
+theorem eq_of_mem_support_pmfPi_update_pure
+    (σ : ∀ i, PMF (A i)) (j : ι) (value : A j) {draw : ∀ i, A i}
+    (hdraw : draw ∈
+      (pmfPi (Function.update σ j (PMF.pure value))).support) :
+    draw j = value := by
+  by_contra hne
+  have hzero : pmfPi (Function.update σ j (PMF.pure value)) draw = 0 := by
+    rw [pmfPi_apply]
+    apply Finset.prod_eq_zero (Finset.mem_univ j)
+    rw [Function.update_self, PMF.pure_apply, if_neg hne]
+  exact (PMF.mem_support_iff _ draw).mp hdraw hzero
+
+open Classical in
 /-- The product PMF with one component replaced by a mixture `d` equals the mixture of
     products with that component set to pure values. This is the "Fubini" identity for `pmfPi`. -/
 theorem pmfPi_update_bind (σ : ∀ i, PMF (A i)) (j : ι) (d : PMF (A j)) :
