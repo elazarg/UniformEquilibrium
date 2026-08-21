@@ -4000,6 +4000,100 @@ theorem theorem3_4 (profile : MarkovProfile)
       exact (lt_irrefl 0 hpos).elim
     exact heq
 
+/-! Empty calendar dates do not affect the terminal continuation value.  The
+following paper-local lemmas make precise the harmless deletion of those
+dates used in the necessity half of Theorem 3.5. -/
+
+private def IsActiveStage (profile : MarkovProfile) (time : ℕ) : Prop :=
+  ∃ who, 0 < (profile time who).1
+
+private theorem hazard_eq_zero_of_not_active
+    (profile : MarkovProfile) (time : ℕ)
+    (hinactive : ¬ IsActiveStage profile time) (who : Player) :
+    (profile time who).1 = 0 := by
+  apply le_antisymm (le_of_not_gt ?_) (profile time who).2.1
+  exact fun hpos ↦ hinactive ⟨who, hpos⟩
+
+private theorem markovRoot_eq_allContinue_of_not_active
+    (profile : MarkovProfile) (time : ℕ)
+    (hinactive : ¬ IsActiveStage profile time) :
+    markovRoot profile time =
+      (quittingAllContinueRoot : Player → PMF Bool) := by
+  funext who
+  exact markovRoot_eq_pure_false_of_hazard_zero profile time who
+    (hazard_eq_zero_of_not_active profile time hinactive who)
+
+private theorem continuationPayoff_eq_next_of_not_active
+    (profile : MarkovProfile) (time : ℕ)
+    (hinactive : ¬ IsActiveStage profile time) :
+    continuationPayoff profile time = continuationPayoff profile (time + 1) := by
+  funext who
+  have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
+    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+  change continuationPayoff profile time who =
+    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1))
+      (markovRoot profile time) who at hbell
+  rw [markovRoot_eq_allContinue_of_not_active profile time hinactive] at hbell
+  exact hbell.trans (congrFun
+    (quittingRootSuccessorPayoff_allContinueRoot_eq
+      FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1))) who)
+
+private theorem exists_active_stage_at_or_after
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (start : ℕ) :
+    ∃ time, start ≤ time ∧ IsActiveStage profile time := by
+  by_contra hexists
+  push Not at hexists
+  have htail : ∀ time, start ≤ time →
+      markovRoot profile time =
+        (quittingAllContinueRoot : Player → PMF Bool) := by
+    intro time htime
+    exact markovRoot_eq_allContinue_of_not_active profile time
+      (hexists time htime)
+  have hvalue : continuationPayoff profile start 0 = 0 := by
+    exact quittingRootSequenceTerminalValue_eq_zero_of_allContinue_from
+      FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) 0 start htail
+  have hlower := quitPayoff_le_continuationPayoff
+    profile hnash hlt start 0
+  rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_zero]
+    at hlower
+  have hz : (profile start 2).1 = 0 :=
+    hazard_eq_zero_of_not_active profile start (hexists start le_rfl) 2
+  simp [hz, hvalue] at hlower
+  norm_num at hlower
+
+private theorem exists_active_stage_after
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) :
+    ∃ later, time < later ∧ IsActiveStage profile later := by
+  obtain ⟨later, hlater, hactive⟩ :=
+    exists_active_stage_at_or_after profile hnash hlt (time + 1)
+  exact ⟨later, by omega, hactive⟩
+
+private theorem continuationPayoff_eq_of_inactive_interval
+    (profile : MarkovProfile) {start finish : ℕ}
+    (hle : start ≤ finish)
+    (hinactive : ∀ time, start ≤ time → time < finish →
+      ¬ IsActiveStage profile time) :
+    continuationPayoff profile start = continuationPayoff profile finish := by
+  exact Nat.le_induction
+    (P := fun time _ ↦ time ≤ finish →
+      continuationPayoff profile start = continuationPayoff profile time)
+    (fun _ ↦ rfl)
+    (fun time hstart ih hfinish ↦
+      (ih (by omega)).trans
+        (continuationPayoff_eq_next_of_not_active profile time
+          (hinactive time hstart (by omega))))
+    finish hle le_rfl
+
 /-- Checked special case used in the period-three part of the paper's picture:
 every live phase of an exact cyclic packet has a unique active player. -/
 theorem exactCyclicPacket_existsUnique_activeRole
