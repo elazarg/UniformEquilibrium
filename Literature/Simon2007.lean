@@ -9287,6 +9287,162 @@ private theorem quitProbability_sub_le_sum_coord_sub
       intro n _hn
       ring
 
+/-- A one-stage quitting payoff is affine in any one player's quitting probability. -/
+theorem quittingOneStagePayoff_row_replace_affine
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G)
+    (j : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    QuittingOneStagePayoff G r (p.replace G j q) =
+      (q : ℝ) • QuittingOneStagePayoff G r (p.replace G j 1) +
+        (1 - (q : ℝ)) • QuittingOneStagePayoff G r (p.replace G j 0) := by
+  funext n
+  change (1 - QuitProbability G (p.replace G j q)) * r n +
+      quittingRewardPart G (p.replace G j q) n =
+    (q : ℝ) * ((1 - QuitProbability G (p.replace G j 1)) * r n +
+      quittingRewardPart G (p.replace G j 1) n) +
+    (1 - (q : ℝ)) * ((1 - QuitProbability G (p.replace G j 0)) * r n +
+      quittingRewardPart G (p.replace G j 0) n)
+  rw [one_sub_quitProbability_replace, quitProbability_replace_one,
+    quittingRewardPart_replace_affine]
+  ring
+
+/-- A common coordinate bound on the continuation and terminal rewards bounds every
+coordinate of a one-stage quitting payoff. -/
+theorem abs_quittingOneStagePayoff_le
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G) {M : ℝ}
+    (hreward : ∀ A n, |G.reward A n| ≤ M)
+    (hr : ∀ n, |r n| ≤ M) (n : G.Player) :
+    |QuittingOneStagePayoff G r p n| ≤ M := by
+  let q := QuitProbability G p
+  have hq0 : 0 ≤ q := (quitProbability_mem_Icc G p).1
+  have hq1 : q ≤ 1 := (quitProbability_mem_Icc G p).2
+  have habsorb := abs_quittingRewardPart_le G p n (fun A => hreward A n)
+  change |(1 - q) * r n + quittingRewardPart G p n| ≤ M
+  calc
+    |(1 - q) * r n + quittingRewardPart G p n| ≤
+        |(1 - q) * r n| + |quittingRewardPart G p n| := abs_add_le _ _
+    _ = (1 - q) * |r n| + |quittingRewardPart G p n| := by
+      rw [abs_mul, abs_of_nonneg (sub_nonneg.mpr hq1)]
+    _ ≤ (1 - q) * M + M * q :=
+      add_le_add (mul_le_mul_of_nonneg_left (hr n) (sub_nonneg.mpr hq1)) habsorb
+    _ = M := by ring
+
+/-- Changing one player's quitting probability perturbs the full one-stage payoff by
+at most twice the common payoff bound times the changed probability mass. -/
+theorem norm_quittingOneStagePayoff_replace_sub_le
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G)
+    (j : G.Player) (a b : Set.Icc (0 : ℝ) 1) {M : ℝ}
+    (hreward : ∀ A n, |G.reward A n| ≤ M)
+    (hr : ∀ n, |r n| ≤ M) :
+    ‖QuittingOneStagePayoff G r (p.replace G j a) -
+        QuittingOneStagePayoff G r (p.replace G j b)‖ ≤
+      2 * M * |(a : ℝ) - b| := by
+  have haffine := quittingOneStagePayoff_row_replace_affine G r p j a
+  have hbffine := quittingOneStagePayoff_row_replace_affine G r p j b
+  rw [pi_norm_le_iff_of_nonempty]
+  intro n
+  rw [Real.norm_eq_abs]
+  have hone := abs_quittingOneStagePayoff_le G r (p.replace G j 1)
+    hreward hr n
+  have hzero := abs_quittingOneStagePayoff_le G r (p.replace G j 0)
+    hreward hr n
+  have hdiff :
+      |QuittingOneStagePayoff G r (p.replace G j 1) n -
+        QuittingOneStagePayoff G r (p.replace G j 0) n| ≤ 2 * M := by
+    calc
+      |_ - _| ≤ |QuittingOneStagePayoff G r (p.replace G j 1) n| +
+          |QuittingOneStagePayoff G r (p.replace G j 0) n| := abs_sub _ _
+      _ ≤ M + M := add_le_add hone hzero
+      _ = 2 * M := by ring
+  have hcoordinate :
+      QuittingOneStagePayoff G r (p.replace G j a) n -
+          QuittingOneStagePayoff G r (p.replace G j b) n =
+        ((a : ℝ) - b) *
+          (QuittingOneStagePayoff G r (p.replace G j 1) n -
+            QuittingOneStagePayoff G r (p.replace G j 0) n) := by
+    rw [haffine, hbffine]
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    ring
+  rw [Pi.sub_apply, hcoordinate, abs_mul]
+  nlinarith [mul_le_mul_of_nonneg_left hdiff (abs_nonneg ((a : ℝ) - b))]
+
+/-- Replace the coordinates in `s` by the corresponding coordinates of `q`. -/
+private noncomputable def replaceOn (G : QuittingGame) (p q : QuitRow G)
+    (s : Finset G.Player) : QuitRow G := by
+  classical
+  exact fun n => if n ∈ s then q n else p n
+
+/-- Replacing all row coordinates yields the target row. -/
+private theorem replaceOn_univ (G : QuittingGame) (p q : QuitRow G) :
+    replaceOn G p q Finset.univ = q := by
+  funext n
+  simp [replaceOn]
+
+/-- Replacing no row coordinates leaves the source row. -/
+private theorem replaceOn_empty (G : QuittingGame) (p q : QuitRow G) :
+    replaceOn G p q ∅ = p := by
+  funext n
+  simp [replaceOn]
+
+/-- Adding one new coordinate to the replaced set is one row replacement. -/
+private theorem replaceOn_cons (G : QuittingGame) (p q : QuitRow G)
+    (s : Finset G.Player) (n : G.Player) (hn : n ∉ s) :
+    replaceOn G p q (s.cons n hn) =
+      (replaceOn G p q s).replace G n (q n) := by
+  funext j
+  by_cases hjn : j = n
+  · subst j
+    simp [replaceOn, QuitRow.replace, Finset.mem_cons]
+  · by_cases hjs : j ∈ s
+    · have hjcons : j ∈ s.cons n hn := Finset.mem_cons.mpr (Or.inr hjs)
+      simp [replaceOn, QuitRow.replace, hjn, hjs, hjcons]
+    · have hjcons : j ∉ s.cons n hn := by
+        simpa [Finset.mem_cons, hjn] using hjs
+      simp [replaceOn, QuitRow.replace, hjn, hjs, hjcons]
+
+/-- A row obtained by partial replacement still has its old value at an unreplaced
+coordinate. -/
+private theorem replaceOn_not_mem (G : QuittingGame) (p q : QuitRow G)
+    (s : Finset G.Player) (n : G.Player) (hn : n ∉ s) :
+    (replaceOn G p q s).replace G n (p n) = replaceOn G p q s := by
+  have hnvalue : replaceOn G p q s n = p n := by simp [replaceOn, hn]
+  simpa only [hnvalue] using QuitRow.replace_self G (replaceOn G p q s) n
+
+/-- The one-stage payoff is Lipschitz in the row for the coordinatewise `ℓ1` distance. -/
+theorem norm_quittingOneStagePayoff_row_sub_le
+    (G : QuittingGame) (r : Payoff G.Player) (p q : QuitRow G) {M : ℝ}
+    (hreward : ∀ A n, |G.reward A n| ≤ M)
+    (hr : ∀ n, |r n| ≤ M) :
+    ‖QuittingOneStagePayoff G r q - QuittingOneStagePayoff G r p‖ ≤
+      2 * M * ∑ n, |(q n : ℝ) - p n| := by
+  classical
+  have hpartial : ∀ s : Finset G.Player,
+      ‖QuittingOneStagePayoff G r (replaceOn G p q s) -
+          QuittingOneStagePayoff G r p‖ ≤
+        2 * M * ∑ n ∈ s, |(q n : ℝ) - p n| := by
+    intro s
+    induction s using Finset.induction_on with
+    | empty => simp [replaceOn_empty]
+    | @insert n s hn ih =>
+        rw [← Finset.cons_eq_insert n s hn]
+        rw [replaceOn_cons G p q s n hn, Finset.sum_cons hn]
+        have hsingle := norm_quittingOneStagePayoff_replace_sub_le G r
+          (replaceOn G p q s) n (q n) (p n) hreward hr
+        rw [replaceOn_not_mem G p q s n hn] at hsingle
+        calc
+          ‖QuittingOneStagePayoff G r ((replaceOn G p q s).replace G n (q n)) -
+              QuittingOneStagePayoff G r p‖ ≤
+            ‖QuittingOneStagePayoff G r ((replaceOn G p q s).replace G n (q n)) -
+                QuittingOneStagePayoff G r (replaceOn G p q s)‖ +
+              ‖QuittingOneStagePayoff G r (replaceOn G p q s) -
+                QuittingOneStagePayoff G r p‖ := by
+              exact norm_sub_le_norm_sub_add_norm_sub _ _ _
+          _ ≤ 2 * M * |(q n : ℝ) - p n| +
+              2 * M * ∑ j ∈ s, |(q j : ℝ) - p j| :=
+            add_le_add hsingle ih
+          _ = 2 * M *
+              (|(q n : ℝ) - p n| + ∑ j ∈ s, |(q j : ℝ) - p j|) := by ring
+  simpa only [replaceOn_univ] using hpartial Finset.univ
+
 /-- Reversing the first `j` rows and iterating from `s₀` produces `sⱼ`. -/
 private theorem finiteQuittingPayoff_reverse_eq (G : QuittingGame) {k : ℕ}
     (p : ℕ → QuitRow G) (s : ℕ → Payoff G.Player)
