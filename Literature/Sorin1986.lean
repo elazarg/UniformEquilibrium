@@ -3224,7 +3224,8 @@ stochastic history through GameTheory's generic first-mismatch monitor. -/
 
 /-- A payoff-irrelevant utility game whose profiles are the stage game's
 joint actions.  It lets us reuse the generic public first-mismatch grammar. -/
-private def FiniteStageGame.actionMonitoringGame (G : FiniteStageGame) :
+@[reducible] private def FiniteStageGame.actionMonitoringGame
+    (G : FiniteStageGame) :
     UtilityGame G.Player where
   form := {
     sig := {
@@ -3449,6 +3450,107 @@ private theorem FiniteStageGame.finitePayoff_triggerBehaviorProfile
   unfold KernelGame.PublicMonitoring.finiteAveragePayoff
   simp_rw [G.stageEU_triggerMonitoredProfile path punishment]
   simp only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul]
+
+/-- Calendar payoff convergence is therefore exact Banach-limit delivery by
+the stochastic trigger implementation. -/
+private theorem FiniteStageGame.banachPayoff_triggerBehaviorProfile_eq
+    (G : FiniteStageGame) (L : BanachLimit)
+    (path : ℕ → (∀ who, G.Action who))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
+    (target : Payoff G.Player)
+    (hpath : Tendsto
+      (fun step ↦ ((step + 1 : ℕ) : ℝ)⁻¹ •
+        ∑ time ∈ Finset.range (step + 1), G.payoff (path time))
+      atTop (nhds target)) :
+    G.banachPayoff L (G.triggerBehaviorProfile path punishment) = target := by
+  change L.evalPi (fun step ↦
+    G.finitePayoff (step + 1)
+      (G.triggerBehaviorProfile path punishment)) = target
+  apply L.evalPi_eq_of_tendsto
+  convert hpath using 1
+  funext step
+  exact G.finitePayoff_triggerBehaviorProfile path punishment (step + 1)
+
+/-- The error used for the date-`t` punishment approaches zero. -/
+private def vanishingPunishmentError (time : ℕ) : ℝ :=
+  (time + 1 : ℝ)⁻¹
+
+private theorem vanishingPunishmentError_pos (time : ℕ) :
+    0 < vanishingPunishmentError time := by
+  exact inv_pos.mpr (by positivity)
+
+private theorem tendsto_vanishingPunishmentError :
+    Tendsto vanishingPunishmentError atTop (nhds 0) := by
+  change Tendsto (fun time : ℕ ↦ ((time : ℝ) + 1)⁻¹)
+    atTop (nhds 0)
+  simpa only [one_div] using
+    (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+
+/-- Simultaneous date-dependent approximate min--max punishments. -/
+private noncomputable def FiniteStageGame.vanishingPunishments
+    (G : FiniteStageGame) (time : ℕ) :
+    ∀ culprit, G.MixedOpponentProfile culprit :=
+  Classical.choose
+    (G.exists_approx_punishmentOpponents
+      (vanishingPunishmentError_pos time))
+
+private theorem FiniteStageGame.vanishingPunishments_spec
+    (G : FiniteStageGame) (time : ℕ) (who : G.Player) :
+    G.bestPureReplyValue who (G.vanishingPunishments time who) <
+      G.individualRationalLevel who + vanishingPunishmentError time :=
+  Classical.choose_spec
+    (G.exists_approx_punishmentOpponents
+      (vanishingPunishmentError_pos time)) who
+
+/-- Once the first public mismatch names `who`, every later mixed action of
+that player is capped by the date-dependent approximate min--max level. -/
+private theorem FiniteStageGame.stageEUAt_update_trigger_le
+    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
+    (who : G.Player) (deviation : G.BehaviorStrategy who)
+    {time : ℕ} (history : G.repeatedGame.Hist time)
+    (hstatus : G.publicTriggerStatus path history = some who) :
+    G.repeatedGame.stageEUAt
+        (Function.update
+          (G.triggerBehaviorProfile path G.vanishingPunishments)
+          who deviation) history who ≤
+      G.individualRationalLevel who + vanishingPunishmentError time := by
+  letI (player : G.Player) : Fintype (G.kernel.Strategy player) :=
+    G.finiteAction player
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  let behavior := G.triggerBehaviorProfile path G.vanishingPunishments
+  let current : G.MixedProfile := fun player ↦
+    (Function.update behavior who deviation) player time history
+  have hstatus' : G.actionMonitoringGame.triggerStatus path
+      (List.ofFn (KernelGame.RealizedActionRepeatedAdapter.actionHistory
+        G.kernel history)) = some who := by
+    change G.actionMonitoringGame.triggerStatus path
+      (List.ofFn (fun k ↦ (history.1 k).2)) = some who
+    exact hstatus
+  have hcurrent : current =
+      G.kernel.mixedExtension.profileWithOpponent who
+        (deviation time history) (G.vanishingPunishments time who) := by
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp [current, behavior]
+    · rw [G.kernel.mixedExtension.profileWithOpponent_ne hplayer]
+      simp only [current, Function.update_of_ne hplayer]
+      unfold behavior FiniteStageGame.triggerBehaviorProfile
+        KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+        KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
+      rw [G.triggerMonitoredProfile_of_culprit path
+        G.vanishingPunishments who player _ hstatus']
+      exact G.punishmentMixedAction_of_ne
+        (G.vanishingPunishments time) hplayer
+  unfold StochasticGame.stageEUAt
+  change Math.Probability.expect (Math.PMFProduct.pmfPi current)
+      (fun action ↦ G.kernel.eu action who) ≤ _
+  rw [← G.kernel.mixedExtension_eu, hcurrent]
+  exact (G.mixedEU_profileWithOpponent_le_bestPureReplyValue who
+    (G.vanishingPunishments time who) (deviation time history)).trans
+      (G.vanishingPunishments_spec time who).le
 
 private theorem stageEUAt_securityDeviation_ge
     (G : FiniteStageGame) (profile : G.BehaviorProfile)
