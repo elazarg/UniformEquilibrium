@@ -9659,6 +9659,47 @@ private theorem quittingDDP_live_actionVariation_le
     _ ≤ 2 * q * M := mul_le_mul_of_nonneg_left hscaled (by positivity)
     _ = 2 * M * q := by ring
 
+private theorem quittingDDPRawStateVariation_live_le
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T i : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM)) (hi : i < T) :
+    (quittingDecisionProcess G p n T M hM).rawStateVariation (0, ∅) i (i, ∅) ≤
+      ENNReal.ofReal (2 * M) *
+        (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+          (QuittingDDPOwnQuitEvent G p n T M hM i) := by
+  let P := quittingDecisionProcess G p n T M hM
+  let μ := P.rawLawFrom (0, ∅) {stages | (stages i).1 = (i, ∅)}
+  let average : ℝ := ∑' action : Bool,
+    (quittingDDPChoose G p n T (i, ∅) action).toReal *
+      |quittingDDPValueY G p n T (i, ∅) action -
+        quittingDDPValueX G p n T (i, ∅)|
+  have haverage : average ≤ 2 * M * (p i n : ℝ) := by
+    change (∑' action : Bool,
+      (quittingDDPChoose G p n T (i, ∅) action).toReal *
+        |quittingDDPValueY G p n T (i, ∅) action -
+          quittingDDPValueX G p n T (i, ∅)|) ≤ 2 * M * (p i n : ℝ)
+    exact quittingDDP_live_actionVariation_le G p n T i M hM hi
+  have hμtop : μ ≠ ⊤ := by
+    letI : IsProbabilityMeasure (P.rawLawFrom (0, ∅)) :=
+      P.isProbabilityMeasure_rawLawFrom (0, ∅)
+    exact measure_ne_top _ _
+  rw [P.rawStateVariation_eq_ofReal]
+  change ENNReal.ofReal (μ.toReal * average) ≤ _
+  calc
+    ENNReal.ofReal (μ.toReal * average) ≤
+        ENNReal.ofReal (μ.toReal * (2 * M * (p i n : ℝ))) := by
+      exact ENNReal.ofReal_le_ofReal
+        (mul_le_mul_of_nonneg_left haverage ENNReal.toReal_nonneg)
+    _ = ENNReal.ofReal (2 * M) * (μ * ENNReal.ofReal (p i n : ℝ)) := by
+      rw [show μ.toReal * (2 * M * (p i n : ℝ)) =
+        (2 * M) * (μ.toReal * (p i n : ℝ)) by ring]
+      rw [ENNReal.ofReal_mul (by linarith [hM.1] : 0 ≤ 2 * M)]
+      rw [ENNReal.ofReal_mul ENNReal.toReal_nonneg]
+      rw [ENNReal.ofReal_toReal hμtop]
+    _ = ENNReal.ofReal (2 * M) * P.rawLawFrom (0, ∅)
+        (QuittingDDPOwnQuitEvent G p n T M hM i) := by
+      rw [quittingDDPRawLaw_ownQuitEvent G p n T M hM S hi]
+
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
 `F_δ` profile with unbounded quit mass generates a `3ε`-equilibrium.  The generated
