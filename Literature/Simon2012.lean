@@ -7169,6 +7169,245 @@ theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
   · intro n _hnContinue
     linarith [hcontinueLower n, hforced n |>.2]
 
+/-- The one-stage value differs from the terminal reward conditional on
+absorption only through the all-Continue branch. -/
+private theorem quittingOneStagePayoff_sub_conditionalReward
+    (G : QuittingGame) (x : Payoff G.Player) (p : QuitRow G)
+    (n : G.Player) (hquit : 0 < QuitProbability G p) :
+    QuittingOneStagePayoff G x p n -
+        quittingRewardPart G p n / QuitProbability G p =
+      (1 - QuitProbability G p) *
+        (x n - quittingRewardPart G p n / QuitProbability G p) := by
+  change ((1 - QuitProbability G p) * x n + quittingRewardPart G p n) -
+      quittingRewardPart G p n / QuitProbability G p = _
+  field_simp [ne_of_gt hquit]
+  ring
+
+/-- The paper's three-times-difference normalization gives the smaller
+positive bound used in Lemma 4.3's application of Lemma 2.2. -/
+private theorem simonPayoffScale_twoFifthsPositiveBound
+    (G : QuittingGame) {M : ℝ} (hM : IsSimonPayoffScale G M) :
+    IsPositiveQuittingPayoffDifferenceBound G (2 * M / 5) := by
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  refine ⟨by positivity, ?_, ?_⟩
+  · intro A B n
+    have h := hM.2.2 A B n
+    nlinarith
+  · intro A n
+    have h := hM.2.1 A n
+    nlinarith
+
+/-- The Section 3 scale makes `ρ/18` smaller than the positive two-fifths
+payoff bound. -/
+private theorem section4_eta_le_twoFifths_scale {M ρ : ℝ}
+    (hM : 1 ≤ M) (hρ : ρ ≤ 1) : ρ / 18 ≤ 2 * M / 5 := by
+  nlinarith
+
+private theorem quadraticStep_nonneg {B eta : ℝ} (hB : 0 < B) :
+    0 ≤ eta ^ 2 / (2 * B) :=
+  div_nonneg (sq_nonneg eta) (mul_nonneg (by norm_num) hB.le)
+
+private theorem section4_card_error_le {N ρ : ℝ}
+    (hN : 3 ≤ N) (hρ : 0 ≤ ρ) : ρ / (6 * N) ≤ ρ / 18 := by
+  have hNpos : 0 < N := by linarith
+  have hscaled := mul_le_mul_of_nonneg_left hN hρ
+  rw [div_le_iff₀ (mul_pos (by norm_num) hNpos)]
+  field_simp
+  nlinarith
+
+private theorem section4_three_eta (ρ : ℝ) : 3 * (ρ / 18) = ρ / 6 := by
+  ring
+
+private theorem section4_case2_stageBeta_lower
+    {χ ρ beta stage : ℝ}
+    (hbeta : χ - ρ / 6 ≤ beta)
+    (hstage : χ - 3 * (ρ / 18) ≤ beta →
+      χ - 3 * (ρ / 18) ≤ stage) :
+    χ - ρ / 6 ≤ stage := by
+  rw [← section4_three_eta ρ] at hbeta ⊢
+  exact hstage hbeta
+
+private theorem section4_quadratic_le_linear {M ρ : ℝ}
+    (hM : 1 ≤ M) (hρ0 : 0 ≤ ρ) (hρM : ρ ≤ M) :
+    ρ ^ 2 / (500 * M) ≤ ρ / 500 := by
+  have hsq : ρ ^ 2 ≤ ρ * M := by
+    simpa only [pow_two] using mul_le_mul_of_nonneg_left hρM hρ0
+  calc
+    ρ ^ 2 / (500 * M) ≤ (ρ * M) / (500 * M) :=
+      div_le_div_of_nonneg_right hsq (by positivity)
+    _ = ρ / 500 := by field_simp
+
+private theorem section4_case2_conditional_lower
+    {χ ρ stage conditional N : ℝ}
+    (hstage : χ - ρ / 6 ≤ stage)
+    (hdistance : |conditional - stage| ≤ ρ / (6 * N))
+    (hN : 3 ≤ N) (hρ : 0 ≤ ρ) :
+    χ - 2 * ρ / 9 ≤ conditional := by
+  have hlower := (abs_le.mp hdistance).1
+  have herror := section4_card_error_le hN hρ
+  linarith
+
+private theorem section4_case2_conclusion
+    {M ρ N χ beta conditional x stage : ℝ}
+    (hM : 1 ≤ M) (hρ : 0 < ρ) (hρM : ρ ≤ M) (hN : 3 ≤ N)
+    (hbeta : χ - ρ / 6 ≤ beta)
+    (hconditional : |conditional - beta| ≤ ρ / (6 * N))
+    (hstage : |stage - conditional| ≤ ρ / 20) :
+    (χ - ρ / 3 ≤ x → χ - ρ / 3 ≤ stage) ∧
+      (x < χ - ρ / 3 → x + ρ ^ 2 / (500 * M) ≤ stage) := by
+  have hconditionalLower : χ - 2 * ρ / 9 ≤ conditional :=
+    section4_case2_conditional_lower hbeta hconditional hN hρ.le
+  have hstageCloseLower : -(ρ / 20) ≤ stage - conditional :=
+    (abs_le.mp hstage).1
+  have hstageLower : χ - 49 * ρ / 180 ≤ stage := by
+    linarith only [hconditionalLower, hstageCloseLower]
+  have hquadratic : ρ ^ 2 / (500 * M) ≤ ρ / 500 :=
+    section4_quadratic_le_linear hM hρ.le hρM
+  constructor
+  · intro _
+    linarith only [hstageLower, hρ]
+  · intro hx
+    linarith only [hstageLower, hx, hquadratic, hρ]
+
+/-- Lemma 4.3, Case 2: a player who quits with high probability and whose
+continuation value is sufficiently rational satisfies both required bounds. -/
+private theorem lemma4_3_high_probability_case2
+    (G : QuittingGame) (M ρ ξ : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hξ : 0 < ξ)
+    (hN : 3 ≤ (Fintype.card G.Player : ℝ))
+    (hNM : 3 ≤ (Fintype.card G.Player : ℝ) * M)
+    (hxiError :
+      ξ * (((Fintype.card G.Player : ℝ) + 1) * M) ≤ ρ / 20)
+    (z : EZeroTilde G) (x : Payoff G.Player) (hxBox : InClosedPayoffBox M x)
+    (dominant j : G.Player)
+    (hpDominant : 1 - ξ < (z.1.2 dominant : ℝ))
+    (hjHigh :
+      1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) <
+        (z.1.2 j : ℝ))
+    (hbetaRational : MinMaxQuit G j - ρ / 6 ≤ z.1.1 j) :
+    (MinMaxQuit G j - ρ / 3 ≤ x j →
+      MinMaxQuit G j - ρ / 3 ≤
+        QuittingOneStagePayoff G x z.1.2 j) ∧
+      (x j < MinMaxQuit G j - ρ / 3 →
+        x j + ρ ^ 2 / (500 * M) ≤
+          QuittingOneStagePayoff G x z.1.2 j) := by
+  let p : QuitRow G := z.1.2
+  let beta : Payoff G.Player := z.1.1
+  let q : ℝ := QuitProbability G p
+  let stageBeta : ℝ := QuittingOneStagePayoff G beta p j
+  let stageX : ℝ := QuittingOneStagePayoff G x p j
+  let conditionalReward : ℝ := quittingRewardPart G p j / q
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hjPos : 0 < (p j : ℝ) := by
+    have hthresholdNonneg :
+        0 ≤ 1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) := by
+      have hfraction :
+          ρ / (2 * (Fintype.card G.Player : ℝ) * M) ≤ 1 := by
+        rw [div_le_one (by positivity :
+          0 < 2 * (Fintype.card G.Player : ℝ) * M)]
+        nlinarith [hmotion.2.2.1, hNM]
+      linarith
+    simpa only [p] using hthresholdNonneg.trans_lt hjHigh
+  have hqMem : q ∈ Set.Icc (0 : ℝ) 1 := quitProbability_mem_Icc G p
+  have hqPos : 0 < q := hjPos.trans_le (quitProbability_apply_le G p j)
+  have hqHigh : 1 - ξ < q := by
+    have hdominant := quitProbability_apply_le G p dominant
+    have hpDominant' : 1 - ξ < (p dominant : ℝ) := by
+      simpa only [p] using hpDominant
+    exact hpDominant'.trans_le hdominant
+  have hstageBetaForced : stageBeta = ForcedQuitPayoff G p j := by
+    simpa only [stageBeta, beta, p] using
+      oneStagePayoff_eq_forcedQuit_of_positive G z.1.1 z.1.2
+        z.2.1 z.2.2 j (by simpa only [p] using hjPos)
+  have hconditionalDistance :
+      |conditionalReward - stageBeta| ≤
+        (M / 3) * (q - (p j : ℝ)) / q := by
+    rw [hstageBetaForced]
+    simpa only [conditionalReward, q] using
+      abs_quittingRewardPart_div_sub_forcedQuitPayoff_le G
+        (D := M / 3) (fun A B n => by
+          have h := hM.2.2 A B n
+          nlinarith) p j hqPos
+  have hconditionalSmall :
+      |conditionalReward - stageBeta| ≤
+        ρ / (6 * (Fintype.card G.Player : ℝ)) := by
+    let N : ℝ := Fintype.card G.Player
+    have hqMinus : q - (p j : ℝ) ≤ q * (1 - (p j : ℝ)) := by
+      have hscaled := mul_le_mul_of_nonneg_left hqMem.2 (p j).property.1
+      nlinarith
+    have hjGap : 1 - (p j : ℝ) < ρ / (2 * N * M) := by
+      dsimp only [N]
+      have hjHigh' :
+          1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) <
+            (p j : ℝ) := by
+        simpa only [p] using hjHigh
+      linarith only [hjHigh']
+    have hscaledGap :
+        (M / 3) * (q - (p j : ℝ)) ≤ q * (ρ / (6 * N)) := by
+      have hfirst := mul_le_mul_of_nonneg_left hqMinus
+        (show 0 ≤ M / 3 by positivity)
+      have hsecond := mul_lt_mul_of_pos_left hjGap
+        (show 0 < q * (M / 3) by positivity)
+      apply le_of_lt
+      calc
+        (M / 3) * (q - (p j : ℝ)) ≤
+            (M / 3) * (q * (1 - (p j : ℝ))) := hfirst
+        _ = (q * (M / 3)) * (1 - (p j : ℝ)) := by ring
+        _ < (q * (M / 3)) * (ρ / (2 * N * M)) := hsecond
+        _ = (M / 3) * (q * (ρ / (2 * N * M))) := by ring
+        _ = q * (ρ / (6 * N)) := by field_simp; ring
+    apply hconditionalDistance.trans
+    rw [div_le_iff₀ hqPos]
+    simpa only [N, mul_comm] using hscaledGap
+  have hconditionalAbs : |conditionalReward| ≤ M / 3 := by
+    dsimp only [conditionalReward]
+    rw [abs_div, abs_of_pos hqPos, div_le_iff₀ hqPos]
+    simpa only [q] using
+      abs_quittingRewardPart_le G p j (fun A => hM.2.1 A j)
+  have hstageXClose : |stageX - conditionalReward| ≤ ρ / 20 := by
+    have hcoordinateDistance :
+        |x j - conditionalReward| ≤
+          ((Fintype.card G.Player : ℝ) + 1) * M := by
+      calc
+        |x j - conditionalReward| ≤ |x j| + |conditionalReward| := abs_sub _ _
+        _ ≤ M + M / 3 := add_le_add (abs_le.mpr (hxBox j)) hconditionalAbs
+        _ ≤ ((Fintype.card G.Player : ℝ) + 1) * M := by
+          nlinarith only [hN, hMpos.le]
+    have hsurvival : 0 ≤ 1 - q := sub_nonneg.mpr hqMem.2
+    have hsurvivalLe : 1 - q ≤ ξ := by linarith only [hqHigh]
+    have hidentity : stageX - conditionalReward =
+        (1 - q) * (x j - conditionalReward) := by
+      simpa only [stageX, conditionalReward, q, p] using
+        quittingOneStagePayoff_sub_conditionalReward G x z.1.2 j hqPos
+    rw [hidentity, abs_mul, abs_of_nonneg hsurvival]
+    exact (mul_le_mul hsurvivalLe hcoordinateDistance
+      (abs_nonneg _) hξ.le).trans hxiError
+  have hB : IsPositiveQuittingPayoffDifferenceBound G (2 * M / 5) :=
+    simonPayoffScale_twoFifthsPositiveBound G hM
+  have hetaPos : 0 < ρ / 18 := div_pos hmotion.2.1 (by norm_num)
+  have hetaB : ρ / 18 ≤ 2 * M / 5 :=
+    section4_eta_le_twoFifths_scale hM.1 hmotion.2.2.1
+  have hdeltaNonneg : 0 ≤ (ρ / 18) ^ 2 / (2 * (2 * M / 5)) :=
+    quadraticStep_nonneg (eta := ρ / 18) hB.1
+  have hstageStep :
+      (fun who => QuittingOneStagePayoff G beta p who) ∈
+        FRow G ((ρ / 18) ^ 2 / (2 * (2 * M / 5))) beta := by
+    refine ⟨p, EpsilonRow.mono G hdeltaNonneg beta ?_, rfl⟩
+    simpa only [beta, p] using z.2.1
+  have hlemma6 := lemma6_quantitative_of_positiveBound G hB hnormal
+    hetaPos hetaB hstageStep j
+  have hstageBetaLower : MinMaxQuit G j - ρ / 6 ≤ stageBeta := by
+    apply section4_case2_stageBeta_lower (by simpa only [beta] using hbetaRational)
+    intro hrationalEta
+    simpa only [stageBeta] using hlemma6.1 hrationalEta
+  simpa only [stageX, p] using
+    section4_case2_conclusion hM.1 hmotion.2.1
+      (hmotion.2.2.1.trans hM.1) hN hstageBetaLower
+      hconditionalSmall hstageXClose
+
 /-- In Lemma 4.3's low-own-hazard case, one dominant opponent makes the
 stationary continuation payoff an effective min-max cap. -/
 private theorem lowHazard_minMax_le_stagePayoff_add
@@ -7247,7 +7486,8 @@ private theorem lowHazard_minMax_le_stagePayoff_add
       MinMaxQuit G j ≤ max (ForcedQuitPayoff G p j) conditionalReward := by
     simpa only [pZero, qOther, conditionalReward] using
       minMaxQuit_le_max_forcedQuit_stationaryContinue
-        G hpayoffBound p j (by simpa only [qOther, pZero] using hqOtherPos)
+        G (hpayoffBound.toPositive G) p j
+          (by simpa only [qOther, pZero] using hqOtherPos)
   have hminmaxBeta : MinMaxQuit G j ≤ stageBeta + ρ / 20 := by
     apply hminmaxCap.trans
     apply max_le
@@ -7514,7 +7754,16 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
           by simpa only [add_comm] using add_le_add_left hquadratic (x j)
         _ ≤ stageX := by
           linarith [hminmaxX, hmotion.2.1]
-  · sorry
+  · have hjHigh :
+        1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) <
+          (z.1.2 j : ℝ) := by
+      simpa only [threshold, p] using lt_of_not_ge hjLow
+    by_cases hbetaRational : MinMaxQuit G j - ρ / 6 ≤ z.1.1 j
+    · rw [hsectionZ]
+      exact lemma4_3_high_probability_case2 G M ρ ξ hM hnormal hmotion
+        hξ hN hNM hxiError z x hxBox' dominant j hpDominant hjHigh
+        hbetaRational
+    · sorry
 
 /-!
 The proof of Lemma 4.4 uses the local inference that `pⱼ = 0` implies
