@@ -11623,16 +11623,20 @@ def InfiniteOrbitCondition (G : QuittingGame) : Prop :=
     IsInfiniteOrbit (FRow G ε) x ∧ (∀ i, IsRational G ε (x i)) ∧
       HasUnboundedVariation x
 
-/--
-The uniform motion estimate in Lemma 5 turns every positive-mass generated cycle into
-the unbounded infinite orbit of Theorem 3(iv).
--/
-theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_uniformRho
+/-- A uniform tail-motion estimate turns every positive-mass generated cycle into the
+unbounded infinite orbit of Theorem 3(iv). -/
+theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_tail_motion
     (G : QuittingGame) (hcycle : CyclicOrbitCondition G)
-    {ρ : ℝ} (hρ : IsUniformRho G ρ) : InfiniteOrbitCondition G := by
+    {ρ : ℝ} (hρ : 0 < ρ)
+    (hmotion : ∀ (profile : QuitProfile G) i,
+      IsRational G ρ (QuitTailPayoff G profile (i + 1)) →
+      profile i ∈ EpsilonRow G ρ (QuitTailPayoff G profile (i + 1)) →
+      ρ * QuitProbability G (profile i) ≤
+        ‖QuitTailPayoff G profile (i + 1) - QuitTailPayoff G profile i‖) :
+    InfiniteOrbitCondition G := by
   intro ε hε
   let δ := min ε ρ
-  have hδ : 0 < δ := lt_min hε hρ.1
+  have hδ : 0 < δ := lt_min hε hρ
   have hδε : δ ≤ ε := min_le_left _ _
   have hδρ : δ ≤ ρ := min_le_right _ _
   rcases hcycle δ hδ with ⟨k, hk, block, hgenerated, hrational, b, hb⟩
@@ -11643,17 +11647,15 @@ theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_uniformRho
     IsRational.mono G hδρ (hrational i)
   have hrow : block b ∈ EpsilonRow G ρ (QuitTailPayoff G cycle (b + 1)) := by
     simpa [cycle, CycleProfile, Nat.mod_eq_of_lt b.2] using hgeneratedρ b
-  have hmotion := (hρ.2.2 (QuitTailPayoff G cycle (b + 1)) (block b)
-    (hrationalρ (b + 1)) hrow).1
-  have honeStage : QuittingOneStagePayoff G (QuitTailPayoff G cycle (b + 1))
-      (block b) = QuitTailPayoff G cycle b := by
-    have htail := quitTailPayoff_eq_oneStage G cycle b
-    simpa [cycle, CycleProfile, Nat.mod_eq_of_lt b.2] using htail.symm
-  rw [honeStage] at hmotion
+  have hcycleRow : cycle b = block b := by
+    simp [cycle, CycleProfile, Nat.mod_eq_of_lt b.2]
+  have hmotionAtB := hmotion cycle b (hrationalρ (b + 1)) (by
+    simpa [cycle, CycleProfile, Nat.mod_eq_of_lt b.2] using hrow)
+  rw [hcycleRow] at hmotionAtB
   have htailNe : QuitTailPayoff G cycle (b + 1) ≠ QuitTailPayoff G cycle b := by
     intro heq
-    rw [heq, sub_self, norm_zero] at hmotion
-    nlinarith [mul_pos hρ.1 hb]
+    rw [heq, sub_self, norm_zero] at hmotionAtB
+    nlinarith [mul_pos hρ hb]
   have hne : ∃ i, i < k ∧ ReverseCycleTailOrbit G hk block (i + 1) ≠
       ReverseCycleTailOrbit G hk block i := by
     refine ⟨k - 1 - b, by omega, ?_⟩
@@ -11669,6 +11671,18 @@ theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_uniformRho
     exact FRow.mono G hδε _ (horbit i)
   · intro i
     exact IsRational.mono G hδε (hxRational i)
+
+/-- The uniform motion estimate in the printed Lemma 5 supplies the cyclic-to-infinite
+implication. -/
+theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_uniformRho
+    (G : QuittingGame) (hcycle : CyclicOrbitCondition G)
+    {ρ : ℝ} (hρ : IsUniformRho G ρ) : InfiniteOrbitCondition G := by
+  apply hcycle.toInfiniteOrbitCondition_of_tail_motion G hρ.1
+  intro profile i hrational hrow
+  have hbound := (hρ.2.2 (QuitTailPayoff G profile (i + 1)) (profile i)
+    hrational hrow).1
+  rw [(quitTailPayoff_eq_oneStage G profile i).symm] at hbound
+  exact hbound
 
 /-- Theorem 3(v): infinite extended `ε`-rational `F_ε` orbits of unbounded variation. -/
 def ExtendedOrbitCondition (G : QuittingGame) : Prop :=
@@ -12692,6 +12706,143 @@ theorem coalitionProbability_sum (G : QuittingGame) (p : QuitRow G) :
   rw [← Finset.prod_add (fun n => (p n : ℝ))
     (fun n => 1 - (p n : ℝ)) Finset.univ]
   simp
+
+/-- A one-stage quitting payoff with a feasible continuation is feasible. -/
+theorem QuittingOneStagePayoff.feasible (G : QuittingGame)
+    {r : Payoff G.Player} (hr : Feasible G r) (p : QuitRow G) :
+    Feasible G (QuittingOneStagePayoff G r p) := by
+  classical
+  change QuittingOneStagePayoff G r p ∈ convexHull ℝ (range G.reward ∪ {0})
+  change r ∈ convexHull ℝ (range G.reward ∪ {0}) at hr
+  let point : Finset G.Player → Payoff G.Player := fun A =>
+    if hA : A.Nonempty then G.reward ⟨A, hA⟩ else r
+  have hpayoff : QuittingOneStagePayoff G r p =
+      ∑ A : Finset G.Player, CoalitionProbability G p A • point A := by
+    funext n
+    rw [Finset.sum_apply]
+    change (1 - QuitProbability G p) * r n +
+        (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+          CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0) =
+      ∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A * point A n
+    have hempty : CoalitionProbability G p ∅ = 1 - QuitProbability G p := by
+      simp [CoalitionProbability, QuitProbability]
+    rw [← Finset.add_sum_erase Finset.univ.powerset
+      (fun A => CoalitionProbability G p A * point A n) (by simp :
+        (∅ : Finset G.Player) ∈ Finset.univ.powerset)]
+    rw [hempty]
+    simp only [point, Finset.not_nonempty_empty, dite_false]
+    congr 1
+    let rewardTerm : Finset G.Player → ℝ := fun A =>
+      if hA : A.Nonempty then
+        CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0
+    change (∑ A ∈ Finset.univ.powerset, rewardTerm A) = _
+    rw [← Finset.sum_erase_add Finset.univ.powerset rewardTerm
+      (by simp : (∅ : Finset G.Player) ∈ Finset.univ.powerset)]
+    simp only [rewardTerm, Finset.not_nonempty_empty, dite_false, add_zero]
+    apply Finset.sum_congr rfl
+    intro A hA
+    have hnonempty : A.Nonempty := by
+      simpa [Finset.nonempty_iff_ne_empty] using hA
+    simp [hnonempty]
+  rw [hpayoff]
+  apply Convex.sum_mem (convex_convexHull ℝ _)
+  · intro A _hA
+    exact coalitionProbability_nonneg G p A
+  · exact coalitionProbability_sum G p
+  · intro A _hA
+    by_cases hA : A.Nonempty
+    · apply subset_convexHull ℝ _
+      exact Or.inl ⟨⟨A, hA⟩, by simp [point, hA]⟩
+    · simpa only [point, dif_neg hA] using hr
+
+/-- Every finite quitting recursion preserves feasibility of its terminal vector. -/
+theorem finiteQuittingPayoff_feasible (G : QuittingGame) (k : ℕ)
+    {r : Payoff G.Player} (hr : Feasible G r) (p : QuitProfile G) :
+    Feasible G (finiteQuittingPayoff G k r p) := by
+  induction k generalizing p with
+  | zero => simpa [finiteQuittingPayoff] using hr
+  | succ k ih =>
+      exact QuittingOneStagePayoff.feasible G
+        (ih (fun i => p (i + 1))) (p 0)
+
+/-- Finite recursion with terminal value zero is the corresponding partial tail sum. -/
+theorem finiteQuittingPayoff_zero_eq_sum_range (G : QuittingGame)
+    (p : QuitProfile G) (i k : ℕ) :
+    finiteQuittingPayoff G k 0 (fun j => p (i + j)) = fun n =>
+      ∑ m ∈ Finset.range k,
+        tailSurvival G p i m * quittingRewardPart G (p (i + m)) n := by
+  induction k generalizing i with
+  | zero =>
+      funext n
+      simp [finiteQuittingPayoff]
+  | succ k ih =>
+      funext n
+      simp only [finiteQuittingPayoff, QuittingOneStagePayoff]
+      have hshift : (fun j => p (i + (j + 1))) = fun j => p ((i + 1) + j) := by
+        funext j
+        congr 1
+        omega
+      rw [hshift]
+      rw [ih (i + 1)]
+      rw [Finset.sum_range_succ']
+      simp only [tailSurvival, Finset.prod_range_zero, one_mul, Nat.add_zero]
+      rw [Finset.mul_sum]
+      congr 1
+      apply Finset.sum_congr rfl
+      intro m _hm
+      rw [show i + (m + 1) = (i + 1) + m by omega]
+      rw [show ∏ j ∈ Finset.range (m + 1),
+          (1 - QuitProbability G (p (i + j))) =
+        (1 - QuitProbability G (p i)) * tailSurvival G p (i + 1) m by
+          simpa only [tailSurvival] using tailSurvival_succ G p i m]
+      simp only [tailSurvival, Nat.add_comm i 1]
+      ring
+
+/-- Every quitting-profile tail payoff is a feasible payoff vector. -/
+theorem QuitTailPayoff.feasible (G : QuittingGame) (p : QuitProfile G) (i : ℕ) :
+    Feasible G (QuitTailPayoff G p i) := by
+  classical
+  change QuitTailPayoff G p i ∈ convexHull ℝ (range G.reward ∪ {0})
+  have hsourceFinite : (range G.reward ∪ {(0 : Payoff G.Player)}).Finite :=
+    (Set.finite_range G.reward).union (Set.finite_singleton 0)
+  apply (hsourceFinite.isClosed_convexHull ℝ).mem_of_tendsto
+    (b := atTop) (f := fun k => finiteQuittingPayoff G k 0 (fun j => p (i + j)))
+  · apply tendsto_pi_nhds.mpr
+    intro n
+    rw [show (fun k => finiteQuittingPayoff G k 0 (fun j => p (i + j)) n) =
+        fun k => ∑ m ∈ Finset.range k,
+          tailSurvival G p i m * quittingRewardPart G (p (i + m)) n by
+      funext k
+      rw [finiteQuittingPayoff_zero_eq_sum_range]]
+    change Tendsto (fun k => ∑ m ∈ Finset.range k,
+        tailSurvival G p i m * quittingRewardPart G (p (i + m)) n) atTop
+      (nhds (∑' m, tailSurvival G p i m *
+        quittingRewardPart G (p (i + m)) n))
+    exact (summable_quitTailPayoff G p i n).hasSum.tendsto_sum_nat
+  · exact Filter.Eventually.of_forall fun k => by
+      apply finiteQuittingPayoff_feasible
+      change (0 : Payoff G.Player) ∈ convexHull ℝ (range G.reward ∪ {0})
+      exact subset_convexHull ℝ _ (Or.inr (Set.mem_singleton 0))
+
+/-- The compact-set motion estimate of the corrected 2012 Lemma 5 supplies the same
+cyclic-to-infinite implication, because every quitting tail is feasible. -/
+theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_corrected_motion
+    (G : QuittingGame) (hcycle : CyclicOrbitCondition G) {ρ : ℝ}
+    (hρ : 0 < ρ ∧ ρ < 1 ∧ ∀ r, NearFeasible G 1 r →
+      IsRational G ρ r → ∀ p, p ∈ EpsilonRow G ρ r →
+        let y := QuittingOneStagePayoff G r p
+        ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ) :
+    InfiniteOrbitCondition G := by
+  apply hcycle.toInfiniteOrbitCondition_of_tail_motion G hρ.1
+  intro profile i hrational hrow
+  have hnear : NearFeasible G 1 (QuitTailPayoff G profile (i + 1)) := by
+    refine ⟨QuitTailPayoff G profile (i + 1),
+      QuitTailPayoff.feasible G profile (i + 1), ?_⟩
+    simp
+  have hbound := (hρ.2.2 (QuitTailPayoff G profile (i + 1)) hnear
+    hrational (profile i) hrow).1
+  rw [(quitTailPayoff_eq_oneStage G profile i).symm] at hbound
+  exact hbound
 
 /-- The total probability of nonempty quitting coalitions lies in `[0,1]`. -/
 theorem nonemptyCoalitionProbability_sum_mem_Icc (G : QuittingGame) (p : QuitRow G) :
