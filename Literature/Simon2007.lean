@@ -8317,6 +8317,209 @@ Divergence of `Σ_i q(p_i)` is expressed by unbounded finite partial sums.
 def HasUnboundedQuitMass (G : QuittingGame) (p : QuitProfile G) : Prop :=
   ∀ B : ℝ, ∃ k, B ≤ ∑ i ∈ Finset.range k, QuitProbability G (p i)
 
+/-- The supplied rows themselves generate the displayed orbit of `F_η`. -/
+def GeneratesFRowOrbit (G : QuittingGame) (η : ℝ) (p : QuitProfile G) : Prop :=
+  ∀ i, p i ∈ EpsilonRow G η (QuitTailPayoff G p (i + 1))
+
+/-- A generated row orbit has the corresponding set-valued `F_η` orbit relation. -/
+theorem GeneratesFRowOrbit.tail_mem_fRow
+    (G : QuittingGame) {η : ℝ} {p : QuitProfile G}
+    (h : GeneratesFRowOrbit G η p) (i : ℕ) :
+    QuitTailPayoff G p i ∈ FRow G η (QuitTailPayoff G p (i + 1)) := by
+  refine ⟨p i, h i, ?_⟩
+  exact (quitTailPayoff_eq_oneStage G p i).symm
+
+/-- The probability that player `n` follows the prescribed continue action through stage `i`. -/
+private def PlayerContinueProbability (G : QuittingGame) (p : QuitProfile G)
+    (n : G.Player) (i : ℕ) : ℝ :=
+  ∏ k ∈ Finset.range i, (1 - (p k n : ℝ))
+
+/-- The probability of a union of independent quits is at most the sum of their marginals. -/
+private theorem one_sub_prod_one_sub_le_sum {N : Type} (s : Finset N)
+    (a : N → ℝ) (ha0 : ∀ n ∈ s, 0 ≤ a n) (ha1 : ∀ n ∈ s, a n ≤ 1) :
+    1 - ∏ n ∈ s, (1 - a n) ≤ ∑ n ∈ s, a n := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp
+  | @insert n s hn ih =>
+      rw [Finset.prod_insert hn, Finset.sum_insert hn]
+      have hfactor0 : ∀ j ∈ s, 0 ≤ 1 - a j := fun j hj =>
+        sub_nonneg.mpr (ha1 j (Finset.mem_insert_of_mem hj))
+      have hfactor1 : ∀ j ∈ s, 1 - a j ≤ 1 := fun j hj => by
+        linarith [ha0 j (Finset.mem_insert_of_mem hj)]
+      have hprod0 : 0 ≤ ∏ j ∈ s, (1 - a j) := Finset.prod_nonneg hfactor0
+      have hprod1 : ∏ j ∈ s, (1 - a j) ≤ 1 :=
+        Finset.prod_le_one hfactor0 hfactor1
+      have hrest := ih (fun j hj => ha0 j (Finset.mem_insert_of_mem hj))
+        (fun j hj => ha1 j (Finset.mem_insert_of_mem hj))
+      have hn0 := ha0 n (Finset.mem_insert_self n s)
+      nlinarith
+
+/-- Finite continue products are controlled by the sum of quitting probabilities. -/
+private theorem prod_one_sub_mul_one_add_sum_le_one {N : Type} (s : Finset N)
+    (a : N → ℝ) (ha0 : ∀ n ∈ s, 0 ≤ a n) (ha1 : ∀ n ∈ s, a n ≤ 1) :
+    (∏ n ∈ s, (1 - a n)) * (1 + ∑ n ∈ s, a n) ≤ 1 := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp
+  | @insert n s hn ih =>
+      rw [Finset.prod_insert hn, Finset.sum_insert hn]
+      have hfactor0 : ∀ j ∈ s, 0 ≤ 1 - a j := fun j hj =>
+        sub_nonneg.mpr (ha1 j (Finset.mem_insert_of_mem hj))
+      have hprod0 : 0 ≤ ∏ j ∈ s, (1 - a j) := Finset.prod_nonneg hfactor0
+      have hsum0 : 0 ≤ ∑ j ∈ s, a j := Finset.sum_nonneg fun j hj =>
+        ha0 j (Finset.mem_insert_of_mem hj)
+      have hrest := ih (fun j hj => ha0 j (Finset.mem_insert_of_mem hj))
+        (fun j hj => ha1 j (Finset.mem_insert_of_mem hj))
+      have hn0 := ha0 n (Finset.mem_insert_self n s)
+      have hn1 := ha1 n (Finset.mem_insert_self n s)
+      have hfactor : (1 - a n) * (1 + ∑ j ∈ s, a j + a n) ≤
+          1 + ∑ j ∈ s, a j := by nlinarith [mul_nonneg hn0 hsum0]
+      calc
+        (1 - a n) * (∏ j ∈ s, (1 - a j)) *
+            (1 + (a n + ∑ j ∈ s, a j)) =
+            (∏ j ∈ s, (1 - a j)) *
+              ((1 - a n) * (1 + ∑ j ∈ s, a j + a n)) := by ring
+        _ ≤ (∏ j ∈ s, (1 - a j)) * (1 + ∑ j ∈ s, a j) :=
+          mul_le_mul_of_nonneg_left hfactor hprod0
+        _ ≤ 1 := hrest
+
+/-- Unbounded total quit mass eventually makes one player's continue probability small. -/
+private theorem exists_playerContinueProbability_le
+    (G : QuittingGame) {p : QuitProfile G} (hmass : HasUnboundedQuitMass G p)
+    {M ε : ℝ} (hM : 0 < M) (hε : 0 < ε) :
+    ∃ (i : ℕ) (n : G.Player), PlayerContinueProbability G p n i ≤ ε / M := by
+  classical
+  let threshold := M / ε
+  obtain ⟨i, hi⟩ := hmass (Fintype.card G.Player * threshold)
+  have hquit (k : ℕ) : QuitProbability G (p k) ≤ ∑ n, (p k n : ℝ) := by
+    exact one_sub_prod_one_sub_le_sum Finset.univ (fun n => (p k n : ℝ))
+      (fun n _ => (p k n).property.1) (fun n _ => (p k n).property.2)
+  have htotal : Fintype.card G.Player * threshold ≤
+      ∑ n : G.Player, ∑ k ∈ Finset.range i, (p k n : ℝ) := by
+    calc
+      Fintype.card G.Player * threshold ≤
+          ∑ k ∈ Finset.range i, QuitProbability G (p k) := hi
+      _ ≤ ∑ k ∈ Finset.range i, ∑ n, (p k n : ℝ) := by
+        exact Finset.sum_le_sum fun k _ => hquit k
+      _ = ∑ n : G.Player, ∑ k ∈ Finset.range i, (p k n : ℝ) := by
+        rw [Finset.sum_comm]
+  have hexists : ∃ n : G.Player,
+      threshold ≤ ∑ k ∈ Finset.range i, (p k n : ℝ) := by
+    by_contra hall
+    push Not at hall
+    let n₀ : G.Player := Classical.choice inferInstance
+    have hstrict : (∑ n : G.Player, ∑ k ∈ Finset.range i, (p k n : ℝ)) <
+        ∑ _n : G.Player, threshold := by
+      apply Finset.sum_lt_sum
+      · intro n _hn
+        exact (hall n).le
+      · exact ⟨n₀, Finset.mem_univ n₀, hall n₀⟩
+    rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul] at hstrict
+    exact (not_lt_of_ge htotal) hstrict
+  rcases hexists with ⟨n, hn⟩
+  have hproduct := prod_one_sub_mul_one_add_sum_le_one (Finset.range i)
+    (fun k => (p k n : ℝ)) (fun k _ => (p k n).property.1)
+      (fun k _ => (p k n).property.2)
+  have hcontinue0 : 0 ≤ PlayerContinueProbability G p n i :=
+    Finset.prod_nonneg fun k _ => sub_nonneg.mpr (p k n).property.2
+  have hscaled : PlayerContinueProbability G p n i * threshold ≤ 1 := by
+    calc
+      PlayerContinueProbability G p n i * threshold ≤
+          PlayerContinueProbability G p n i *
+            (1 + ∑ k ∈ Finset.range i, (p k n : ℝ)) := by
+        apply mul_le_mul_of_nonneg_left _ hcontinue0
+        linarith
+      _ ≤ 1 := hproduct
+  refine ⟨i, n, ?_⟩
+  dsimp only [threshold] at hscaled
+  have hMε : 0 < M / ε := div_pos hM hε
+  have hbound : PlayerContinueProbability G p n i ≤ 1 / (M / ε) := by
+    exact (le_div_iff₀ hMε).2 hscaled
+  convert hbound using 1
+  field_simp
+
+/-- The paper's `W_i^n`, cumulative gain from choosing Continue before stage `i`. -/
+private def ContinueLedger (G : QuittingGame) (p : QuitProfile G)
+    (n : G.Player) (i : ℕ) : ℝ :=
+  ∑ k ∈ Finset.range i,
+    (ForcedContinuePayoff G (QuitTailPayoff G p (k + 1)) (p k) n -
+      QuitTailPayoff G p k n)
+
+@[simp] private theorem ContinueLedger.zero
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) :
+    ContinueLedger G p n 0 = 0 := by
+  simp [ContinueLedger]
+
+private theorem ContinueLedger.succ
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (i : ℕ) :
+    ContinueLedger G p n (i + 1) = ContinueLedger G p n i +
+      (ForcedContinuePayoff G (QuitTailPayoff G p (i + 1)) (p i) n -
+        QuitTailPayoff G p i n) := by
+  rw [ContinueLedger, ContinueLedger, Finset.sum_range_succ]
+
+/-- Before the first `ε` crossing, the next ledger value overshoots by at most `δ`. -/
+private theorem ContinueLedger.succ_lt_add_of_generated
+    (G : QuittingGame) {p : QuitProfile G} {δ ε : ℝ}
+    (horbit : GeneratesFRowOrbit G δ p) (hδ : 0 ≤ δ)
+    (n : G.Player) (i : ℕ) (hi : ContinueLedger G p n i < ε) :
+    ContinueLedger G p n (i + 1) < ε + δ := by
+  rw [ContinueLedger.succ]
+  have hincrement := EpsilonRow.forcedContinue_sub_oneStage_le G (horbit i) hδ n
+  rw [← quitTailPayoff_eq_oneStage G p i] at hincrement
+  linarith
+
+/-- A stage triggers punishment when some ledger crosses or some own survival becomes small. -/
+private def IsPunishmentTrigger (G : QuittingGame) (p : QuitProfile G)
+    (M ε : ℝ) (i : ℕ) : Prop :=
+  ∃ n : G.Player, ε ≤ ContinueLedger G p n i ∨
+    PlayerContinueProbability G p n i ≤ ε / M
+
+/-- Unbounded quit mass makes the paper's punishment clock finite. -/
+private theorem exists_punishmentTrigger
+    (G : QuittingGame) {p : QuitProfile G} (hmass : HasUnboundedQuitMass G p)
+    {M ε : ℝ} (hM : 0 < M) (hε : 0 < ε) :
+    ∃ i, IsPunishmentTrigger G p M ε i := by
+  rcases exists_playerContinueProbability_le G hmass hM hε with ⟨i, n, hn⟩
+  exact ⟨i, n, Or.inr hn⟩
+
+/-- The first stage at which the paper's punishment clock triggers. -/
+private noncomputable def firstPunishmentTrigger
+    (G : QuittingGame) (p : QuitProfile G) (M ε : ℝ)
+    (hexists : ∃ i, IsPunishmentTrigger G p M ε i) : ℕ := by
+  classical
+  exact Nat.find hexists
+
+/-- Every ledger is below `ε` strictly before the first punishment trigger. -/
+private theorem ledger_lt_of_lt_firstPunishmentTrigger
+    (G : QuittingGame) {p : QuitProfile G} {M ε : ℝ}
+    (hexists : ∃ i, IsPunishmentTrigger G p M ε i)
+    {i : ℕ} (hi : i < firstPunishmentTrigger G p M ε hexists) (n : G.Player) :
+    ContinueLedger G p n i < ε := by
+  classical
+  change i < Nat.find hexists at hi
+  have hnot := Nat.find_min hexists hi
+  rw [IsPunishmentTrigger] at hnot
+  push Not at hnot
+  exact (hnot n).1
+
+/-- At the first trigger, each ledger is below `ε + δ`. -/
+private theorem ledger_firstPunishmentTrigger_lt_add
+    (G : QuittingGame) {p : QuitProfile G} {M δ ε : ℝ}
+    (horbit : GeneratesFRowOrbit G δ p) (hδ : 0 ≤ δ) (hε : 0 < ε)
+    (hexists : ∃ i, IsPunishmentTrigger G p M ε i) (n : G.Player) :
+    ContinueLedger G p n (firstPunishmentTrigger G p M ε hexists) < ε + δ := by
+  classical
+  let T := firstPunishmentTrigger G p M ε hexists
+  change ContinueLedger G p n T < ε + δ
+  by_cases hzero : T = 0
+  · rw [hzero, ContinueLedger.zero]
+    linarith
+  · obtain ⟨i, hi⟩ := Nat.exists_eq_succ_of_ne_zero hzero
+    rw [hi]
+    exact ContinueLedger.succ_lt_add_of_generated G horbit hδ n i
+      (ledger_lt_of_lt_firstPunishmentTrigger G hexists (show i < T by omega) n)
+
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
 `F_δ` profile with unbounded quit mass generates a `3ε`-equilibrium.  The generated
@@ -8329,7 +8532,7 @@ theorem proposition3 (G : QuittingGame) {M ε δ : ℝ}
     (hδ : 0 < δ) (hsmall : δ < ε ^ 4 / (2 * M ^ 3)) (p : QuitProfile G)
     (hrational : ∀ i, IsRational G ε (QuitTailPayoff G p i))
     (hmass : HasUnboundedQuitMass G p)
-    (horbit : ∀ i, QuitTailPayoff G p i ∈ FRow G δ (QuitTailPayoff G p (i + 1))) :
+    (horbit : GeneratesFRowOrbit G δ p) :
     ∃ equilibrium : QuitProfile G,
       IsQuitEpsilonEquilibrium G (3 * ε) equilibrium := by
   sorry
@@ -8380,7 +8583,7 @@ theorem CycleProfile.hasUnboundedQuitMass (G : QuittingGame) {k : ℕ} (hk : 0 <
 def CyclicOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ (k : ℕ) (hk : 0 < k) (block : Fin k → QuitRow G),
     let p := CycleProfile G k hk block
-    (∀ i, QuitTailPayoff G p i ∈ FRow G ε (QuitTailPayoff G p (i + 1))) ∧
+    GeneratesFRowOrbit G ε p ∧
     (∀ i, IsRational G ε (QuitTailPayoff G p i)) ∧
     ∃ i : Fin k, 0 < QuitProbability G (block i)
 
