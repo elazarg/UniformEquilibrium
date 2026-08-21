@@ -126,7 +126,8 @@ theorem exists_sourceMatchedChattering
   have hcoefficientNonneg : ∀ mover,
       0 ≤ chatteringCoefficient mass N mover := by
     intro mover
-    positivity
+    unfold chatteringCoefficient
+    exact div_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _)
   have hcoefficientLe : ∀ mover,
       chatteringCoefficient mass N mover ≤ mass mover := by
     intro mover
@@ -254,7 +255,15 @@ theorem exists_sourceMatchedChattering
       intro mover _
       rw [abs_neg]
     rw [habs] at hroundCharge
-    linarith
+    calc
+      1 - ((∑ mover, |frontier.tangent mover mover.1|) + budget) / N =
+          (1 - (∑ mover, |frontier.tangent mover mover.1|) / N) -
+            budget / N := by ring
+      _ ≤ (∑ mover, chatteringCoefficient mass N mover *
+          (-frontier.tangent mover mover.1)) - budget / N :=
+        sub_le_sub_right hroundCharge _
+      _ ≤ ∑ mover, chatteringCoefficient mass N mover *
+          frontier.actualGain rank mover := by linarith
   refine ⟨rank, hrankN, count, ?_, ?_⟩
   · intro observer
     simpa only [count, ← chatteringCoefficient_eq_count_div] using
