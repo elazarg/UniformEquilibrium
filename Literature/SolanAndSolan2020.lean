@@ -1402,6 +1402,37 @@ theorem exists_mem_DZero [Nonempty ι]
       ∑ other, solution.singleton other * M who other,
     lemma3_2 M q hqHull hqNegative solution⟩
 
+/-! Finitely many strictly negative column witnesses admit one uniform
+positive margin, as used in Section 3.3.5. -/
+omit [DecidableEq ι] in
+theorem exists_uniformNegativeMargin [Nonempty ι]
+    (M : ι → ι → ℝ) (hdiag : ∀ who, M who who = 0)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M) :
+    ∃ margin : ℝ, 0 < margin ∧
+      ∀ owner, ∃ who, M who owner < -margin := by
+  classical
+  rw [hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous] at hzero
+  choose negative hnegative using
+    fun owner => exists_negative_entry_in_column_of_noHomogeneous
+      M hdiag hzero owner
+  let magnitudes : Finset ℝ :=
+    Finset.univ.image fun owner => -M (negative owner) owner
+  have hmagnitudes : magnitudes.Nonempty := by
+    exact Finset.image_nonempty.mpr Finset.univ_nonempty
+  let minimum := magnitudes.min' hmagnitudes
+  have hminimumPos : 0 < minimum := by
+    have hmember : minimum ∈ magnitudes := magnitudes.min'_mem hmagnitudes
+    obtain ⟨owner, _, howner⟩ := Finset.mem_image.mp hmember
+    rw [← howner]
+    linarith [hnegative owner]
+  refine ⟨minimum / 2, half_pos hminimumPos, ?_⟩
+  intro owner
+  refine ⟨negative owner, ?_⟩
+  have hminimumLe : minimum ≤ -M (negative owner) owner :=
+    magnitudes.min'_le _ <| Finset.mem_image.mpr
+      ⟨owner, Finset.mem_univ owner, rfl⟩
+  linarith
+
 /-! **Theorem 3.3 (published paper).** For every `y∈D₀` and `ε>0`,
 there are `w∈D₀`, vectors `w¹,…,wⁿ`, and simplex weights `z`
 satisfying (F.1)--(F.5).
@@ -3091,6 +3122,66 @@ def PathTrackingFrom {X : Type*} [PseudoMetricSpace X]
   | [] => 0
   | x :: xs => dist x anchor + PathTrackingFrom f (f x) xs
 
+/-! Turn the head and tail of a finite path into its canonical finite-index
+presentation. -/
+def pathPoint {X : Type*} (x : X) (xs : List X) :
+    Fin (xs.length + 1) → X :=
+  Fin.cases x xs.get
+
+theorem pathPoint_castSucc_eq_get_cons
+    {X : Type*} (x : X) (xs : List X) (k : Fin xs.length) :
+    pathPoint x xs ⟨k.1, by omega⟩ =
+      (x :: xs).get ⟨k.1, by simp only [List.length_cons]; omega⟩ := by
+  let k' : Fin (xs.length + 1) := ⟨k.1, by omega⟩
+  change Fin.cases x xs.get k' = (x :: xs).get k'
+  refine Fin.cases ?_ (fun j => ?_) k'
+  · simp
+  · rw [Fin.cases_succ]
+    symm
+    exact List.get_cons_succ
+
+private theorem pathDisplacement_eq_sum_get
+    {X : Type*} [PseudoMetricSpace X] (f : X → X) (xs : List X) :
+    PathDisplacement f xs =
+      ∑ k, dist (xs.get k) (f (xs.get k)) := by
+  induction xs with
+  | nil => simp [PathDisplacement]
+  | cons y ys ih =>
+      simp only [List.length_cons]
+      rw [PathDisplacement, Fin.sum_univ_succ]
+      simp only [List.get_cons_zero]
+      rw [ih]
+      congr 1
+
+theorem pathDisplacement_eq_sum_pathPoint
+    {X : Type*} [PseudoMetricSpace X] (f : X → X)
+    (x : X) (xs : List X) :
+    dist x (f x) + PathDisplacement f xs =
+      ∑ k, dist (pathPoint x xs k) (f (pathPoint x xs k)) := by
+  rw [Fin.sum_univ_succ]
+  simp only [pathPoint, Fin.cases_zero, Fin.cases_succ]
+  rw [← pathDisplacement_eq_sum_get]
+
+theorem pathTrackingFrom_eq_sum_pathPoint
+    {X : Type*} [PseudoMetricSpace X] (f : X → X)
+    (x : X) (xs : List X) :
+    PathTrackingFrom f (f x) xs =
+      ∑ k : Fin xs.length,
+        dist (pathPoint x xs ⟨k.1 + 1, by omega⟩)
+          (f (pathPoint x xs ⟨k.1, by omega⟩)) := by
+  induction xs generalizing x with
+  | nil => simp [PathTrackingFrom]
+  | cons y ys ih =>
+      rw [PathTrackingFrom, ih]
+      simp only [List.length_cons]
+      rw [Fin.sum_univ_succ]
+      congr 1
+      simp [pathPoint]
+      apply Finset.sum_congr rfl
+      intro k _
+      congr 2
+      exact pathPoint_castSucc_eq_get_cons y ys k
+
 theorem pathTrackingFrom_nonneg {X : Type*} [PseudoMetricSpace X]
     (f : X → X) (anchor : X) (xs : List X) :
     0 ≤ PathTrackingFrom f anchor xs := by
@@ -3344,6 +3435,60 @@ def KiloblockTracking {table : Table ι} {ε : ℝ} {lastIndex : ℕ}
 def KiloblockDisplacementThreshold (table : Table ι) (ε : ℝ) : ℝ :=
   ((Nat.choose (Fintype.card (NormalPlayer table)) 2 : ℕ) : ℝ) *
     (2 * (1 + ε)) / ε ^ 2
+
+/-! The finite sequence furnished by Theorems 3.3 and 3.6, with the two
+quantitative estimates (A.1'') and (A.2'') used by the kiloblock schedule. -/
+structure KiloblockChain (table : Table ι) (ε : ℝ) where
+  blockCount : ℕ
+  point : Fin (blockCount + 1) → NormalPlayer table → ℝ
+  point_boundary : ∀ k, DZero (NormalMatrix table) (point k)
+  buildingBlock : ∀ k,
+    BuildingBlock (NormalMatrix table) (point k) ε
+  displacement_large : KiloblockDisplacementThreshold table ε <
+    KiloblockDisplacement point buildingBlock
+  tracking_small : KiloblockTracking point buildingBlock < ε
+
+/-! Choose the paper's finite kiloblock chain from its fixed-point-free
+building-block map. -/
+theorem exists_kiloblockChain
+    (table : Table ι) [Nonempty (NormalPlayer table)]
+    (hbound : MatrixPayoffsBounded (NormalMatrix table))
+    (hdiag : ∀ who, NormalMatrix table who who = 0)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution
+      (NormalMatrix table))
+    (hQ : QMatrix (NormalMatrix table)) {ε : ℝ} (hε : 0 < ε)
+    (hnegative : ∀ owner, ∃ who,
+      NormalMatrix table who owner < -ε) :
+    Nonempty (KiloblockChain table ε) := by
+  let M := NormalMatrix table
+  let f := buildingBlockMap M hbound hdiag hzero hQ hε
+  have hthreshold : 0 ≤ KiloblockDisplacementThreshold table ε := by
+    unfold KiloblockDisplacementThreshold
+    positivity
+  obtain ⟨x, xs, hdisplacement, htracking⟩ :=
+    exists_buildingBlock_approximationWitness M hbound hdiag hzero hQ
+      hε hnegative ε (KiloblockDisplacementThreshold table ε)
+      hε hthreshold
+  let boundaryPoint : Fin (xs.length + 1) →
+      {value // DZero M value} := pathPoint x xs
+  let point : Fin (xs.length + 1) → NormalPlayer table → ℝ :=
+    fun k => (boundaryPoint k).1
+  let block : ∀ k, BuildingBlock M (point k) ε :=
+    fun k => selectedBuildingBlock M hbound hdiag hzero hQ hε
+      (boundaryPoint k)
+  refine ⟨{
+    blockCount := xs.length
+    point := point
+    point_boundary := fun k => (boundaryPoint k).2
+    buildingBlock := block
+    displacement_large := ?_
+    tracking_small := ?_ }⟩
+  · rw [pathDisplacement_eq_sum_pathPoint] at hdisplacement
+    simpa only [KiloblockDisplacement, point, block, boundaryPoint, f,
+      buildingBlockMap, Subtype.dist_eq] using hdisplacement
+  · rw [pathTrackingFrom_eq_sum_pathPoint] at htracking
+    simpa only [KiloblockTracking, point, block, boundaryPoint, f,
+      buildingBlockMap, Subtype.dist_eq] using htracking
 
 structure KiloblockConstruction
     (table : Table ι) (ε : ℝ) where
