@@ -191,8 +191,11 @@ jobs:
           rm "$out/lake-cache.tar.zst"
           tar --zstd -cf "$out/lean-toolchain.tar.zst" \
             -C "$(dirname "$toolchain_path")" "$(basename "$toolchain_path")"
+          split -b 400M -d -a 2 \
+            "$out/lean-toolchain.tar.zst" "$out/lean-toolchain.part-"
+          rm "$out/lean-toolchain.tar.zst"
           sha256sum "$out"/lake-cache.part-* \
-            "$out/lean-toolchain.tar.zst" > "$out/SHA256SUMS"
+            "$out"/lean-toolchain.part-* > "$out/SHA256SUMS"
           cat > "$out/manifest.txt" <<EOF_MANIFEST
           source_sha=$(git rev-parse HEAD)
           game_theory_sha=$(git -C GameTheory rev-parse HEAD)
@@ -213,8 +216,16 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: local-lean-toolchain-${{ github.event.pull_request.head.sha || github.sha }}
-          path: ${{ runner.temp }}/local-lean-environment/lean-toolchain.tar.zst
+          name: local-lean-toolchain-00-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lean-toolchain.part-00
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-toolchain-01-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lean-toolchain.part-01
           retention-days: 1
           compression-level: 0
           if-no-files-found: error
@@ -273,7 +284,7 @@ jobs:
           path: ${{ runner.temp }}/local-lean-environment/lake-cache.part-06
           retention-days: 1
           compression-level: 0
-          if-no-files-found: error
+          if-no-files-found: ignore
 
       - uses: actions/upload-artifact@v4
         with:
