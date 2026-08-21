@@ -1799,6 +1799,354 @@ def Phi (G : QuittingGame) (M d : ℝ) : EZeroTilde G → Payoff G.Player := by
           (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player) +
       M * ∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ)
 
+/-- The production Bernoulli root represented by a paper-local quitting row. -/
+private abbrev quitRowMarginals (G : QuittingGame) (p : QuitRow G) :
+    G.Player → PMF Bool :=
+  GameTheory.quittingRootOfHazardRow p
+
+@[simp] private theorem quitRowMarginals_true_toReal
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
+    ((quitRowMarginals G p n) true).toReal = (p n : ℝ) := by
+  exact GameTheory.quittingRootOfHazardRow_true_toReal p n
+
+@[simp] private theorem quitRowMarginals_false_toReal
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
+    ((quitRowMarginals G p n) false).toReal = 1 - (p n : ℝ) := by
+  exact GameTheory.quittingRootOfHazardRow_false_toReal p n
+
+@[simp] private theorem hazardOfRoot_quitRowMarginals
+    (G : QuittingGame) (p : QuitRow G) :
+    GameTheory.hazardOfRoot (quitRowMarginals G p) = fun n => (p n : ℝ) := by
+  exact GameTheory.hazardOfRoot_quittingRootOfHazardRow p
+
+private theorem coalitionProbability_eq_coalitionMass
+    (G : QuittingGame) (p : QuitRow G) (A : Finset G.Player) :
+    CoalitionProbability G p A =
+      (by
+        classical
+        exact Math.PMFProduct.coalitionMass (fun n => (p n : ℝ)) A) := by
+  classical
+  simp only [CoalitionProbability]
+  rw [Math.PMFProduct.coalitionMass, Finset.compl_eq_univ_sdiff]
+  congr 1
+  apply Finset.prod_congr
+  · ext n
+    simp
+  · intro n hn
+    rfl
+
+private theorem quittingOneStagePayoff_eq_rootExpectedPayoff
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G) (n : G.Player) :
+    QuittingOneStagePayoff G r p n =
+      GameTheory.quittingRootExpectedPayoff G.reward r (quitRowMarginals G p) n := by
+  classical
+  change QuittingOneStagePayoff G r p n =
+    GameTheory.quittingHazardOneStagePayoff G.reward r p n
+  rw [GameTheory.quittingHazardOneStagePayoff_eq_expanded]
+  unfold QuittingOneStagePayoff
+  simp only [QuitProbability, GameTheory.quittingHazardRowExitProbability]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro A _
+  by_cases hA : A.Nonempty
+  · simp only [hA, ↓reduceDIte]
+    rw [coalitionProbability_eq_coalitionMass]
+    rfl
+  · simp [hA]
+
+private theorem quitRowMarginals_replace_one (G : QuittingGame)
+    [DecidableEq G.Player] (p : QuitRow G) (n : G.Player) :
+    quitRowMarginals G (p.replace G n 1) =
+      Function.update (quitRowMarginals G p) n (PMF.pure true) := by
+  classical
+  funext k
+  by_cases hkn : k = n
+  · subst k
+    rw [Function.update_self]
+    apply Math.ProbabilityMassFunction.toVector_injective
+    funext value
+    cases value <;>
+      simp [quitRowMarginals, QuitRow.replace,
+        Math.ProbabilityMassFunction.toVector]
+  · rw [Function.update_of_ne hkn]
+    apply GameTheory.quittingRootOfHazardRow_apply_congr
+    simp [QuitRow.replace, hkn]
+
+private theorem quitRowMarginals_replace_zero (G : QuittingGame)
+    [DecidableEq G.Player] (p : QuitRow G) (n : G.Player) :
+    quitRowMarginals G (p.replace G n 0) =
+      Function.update (quitRowMarginals G p) n (PMF.pure false) := by
+  classical
+  funext k
+  by_cases hkn : k = n
+  · subst k
+    rw [Function.update_self]
+    apply Math.ProbabilityMassFunction.toVector_injective
+    funext value
+    cases value <;>
+      simp [quitRowMarginals, QuitRow.replace,
+        Math.ProbabilityMassFunction.toVector]
+  · rw [Function.update_of_ne hkn]
+    apply GameTheory.quittingRootOfHazardRow_apply_congr
+    simp [QuitRow.replace, hkn]
+
+/-- Total variation between two Bernoulli quitting marginals is the absolute
+difference of their hazards. -/
+private theorem pmfTV_quitRowMarginals_apply (G : QuittingGame)
+    (p q : QuitRow G) (n : G.Player) :
+    Math.Probability.pmfTV (quitRowMarginals G p n)
+      (quitRowMarginals G q n) = |(p n : ℝ) - (q n : ℝ)| := by
+  change Math.Probability.pmfPositiveVariation (quitRowMarginals G p n)
+      (quitRowMarginals G q n) = _
+  rw [Math.Probability.pmfPositiveVariation_eq_half_sum_abs]
+  rw [Fintype.sum_bool]
+  simp only [quitRowMarginals_true_toReal, quitRowMarginals_false_toReal]
+  rw [show |(1 - (p n : ℝ)) - (1 - (q n : ℝ))| =
+      |(p n : ℝ) - (q n : ℝ)| by
+        rw [show (1 - (p n : ℝ)) - (1 - (q n : ℝ)) =
+          -((p n : ℝ) - (q n : ℝ)) by ring, abs_neg]]
+  ring
+
+/-- Forcing Quit under uniformly close rows changes the terminal expectation
+by at most the product-law total-variation estimate. -/
+private theorem abs_forcedQuitPayoff_sub_le_of_row_close
+    (G : QuittingGame) (M t : ℝ) (hM : IsSimonPayoffScale G M)
+    (p q : QuitRow G) (n : G.Player)
+    (hclose : ∀ k, |(p k : ℝ) - (q k : ℝ)| ≤ t) :
+    |ForcedQuitPayoff G p n - ForcedQuitPayoff G q n| ≤
+      (2 * (M / 3)) * (Fintype.card G.Player : ℝ) * t := by
+  classical
+  let rootP := Function.update (quitRowMarginals G p) n (PMF.pure true)
+  let rootQ := Function.update (quitRowMarginals G q) n (PMF.pure true)
+  have ht : 0 ≤ t := (abs_nonneg ((p n : ℝ) - (q n : ℝ))).trans (hclose n)
+  have hM0 : 0 ≤ M := zero_le_one.trans hM.1
+  have htv :
+      Math.Probability.pmfTV (Math.PMFProduct.pmfPi rootP)
+          (Math.PMFProduct.pmfPi rootQ) ≤
+        (Fintype.card G.Player : ℝ) * t := by
+    have hproduct := Math.PMFProduct.pmfTV_pmfPi_replaceOn_le_sum
+      rootP rootQ (Finset.univ : Finset G.Player)
+    simp only [Finset.mem_univ, ↓reduceIte] at hproduct
+    refine hproduct.trans ?_
+    calc
+      ∑ k, Math.Probability.pmfTV (rootP k) (rootQ k) ≤
+          ∑ _k : G.Player, t := by
+        apply Finset.sum_le_sum
+        intro k _
+        by_cases hkn : k = n
+        · subst k
+          simpa [rootP, rootQ] using ht
+        · simp only [rootP, rootQ]
+          rw [Function.update_of_ne hkn, Function.update_of_ne hkn]
+          rw [pmfTV_quitRowMarginals_apply]
+          exact hclose k
+      _ = (Fintype.card G.Player : ℝ) * t := by simp
+  rw [ForcedQuitPayoff, ForcedQuitPayoff,
+    quittingOneStagePayoff_eq_rootExpectedPayoff,
+    quittingOneStagePayoff_eq_rootExpectedPayoff,
+    quitRowMarginals_replace_one, quitRowMarginals_replace_one]
+  change |Math.Probability.expect (Math.PMFProduct.pmfPi rootP)
+      (fun action => GameTheory.quittingRootPayoff G.reward 0 action n) -
+    Math.Probability.expect (Math.PMFProduct.pmfPi rootQ)
+      (fun action => GameTheory.quittingRootPayoff G.reward 0 action n)| ≤ _
+  calc
+    _ ≤ (2 * (M / 3)) *
+        Math.Probability.pmfTV (Math.PMFProduct.pmfPi rootP)
+          (Math.PMFProduct.pmfPi rootQ) := by
+      exact Math.Probability.abs_expect_sub_le_two_mul_pmfTV _ _ _
+        (fun action => GameTheory.abs_quittingRootPayoff_le G.reward 0
+          hM.2.1 (fun _ => by simp; linarith [hM.1]) action n)
+    _ ≤ (2 * (M / 3)) * ((Fintype.card G.Player : ℝ) * t) :=
+      mul_le_mul_of_nonneg_left htv (by positivity)
+    _ = (2 * (M / 3)) * (Fintype.card G.Player : ℝ) * t := by ring
+
+/-- At an exact equilibrium row, positive Quit support identifies the row
+value with the forced-Quit endpoint. -/
+private theorem oneStagePayoff_eq_forcedQuit_of_positive
+    (G : QuittingGame) (beta : Payoff G.Player) (p : QuitRow G)
+    (hp : p ∈ EpsilonRow G 0 beta) (hq : QuitProbability G p < 1)
+    (n : G.Player) (hn : 0 < (p n : ℝ)) :
+    QuittingOneStagePayoff G beta p n = ForcedQuitPayoff G p n := by
+  have hpnLt : (p n : ℝ) < 1 := by
+    by_contra hnot
+    have hpnOne : (p n : ℝ) = 1 := le_antisymm (p n).property.2 (le_of_not_gt hnot)
+    rw [quitProbability_eq_one_of_coord_eq_one G p n hpnOne] at hq
+    linarith
+  have hquit := hp.1 n hn
+  have hcontinue := hp.2 n hpnLt
+  have heq : ForcedQuitPayoff G p n = ForcedContinuePayoff G beta p n := by
+    exact le_antisymm (by simpa using hcontinue) (by simpa using hquit)
+  have haffine := quittingOneStagePayoff_replace_affine G beta p n (p n)
+  rw [QuitRow.replace_self] at haffine
+  calc
+    QuittingOneStagePayoff G beta p n =
+        (p n : ℝ) * ForcedQuitPayoff G p n +
+          (1 - (p n : ℝ)) * ForcedContinuePayoff G beta p n := haffine
+    _ = ForcedQuitPayoff G p n := by rw [← heq]; ring
+
+/-- At an exact equilibrium row, positive Continue support identifies the row
+value with the forced-Continue endpoint. -/
+private theorem oneStagePayoff_eq_forcedContinue_of_lt_one
+    (G : QuittingGame) (beta : Payoff G.Player) (p : QuitRow G)
+    (hp : p ∈ EpsilonRow G 0 beta) (n : G.Player)
+    (hn : (p n : ℝ) < 1) :
+    QuittingOneStagePayoff G beta p n = ForcedContinuePayoff G beta p n := by
+  have haffine := quittingOneStagePayoff_replace_affine G beta p n (p n)
+  rw [QuitRow.replace_self] at haffine
+  by_cases hp0 : (p n : ℝ) = 0
+  · simpa [hp0] using haffine
+  · have hpPos : 0 < (p n : ℝ) :=
+      lt_of_le_of_ne (p n).property.1 (Ne.symm hp0)
+    have hquit := hp.1 n hpPos
+    have hcontinue := hp.2 n hn
+    have heq : ForcedQuitPayoff G p n = ForcedContinuePayoff G beta p n := by
+      exact le_antisymm (by simpa using hcontinue) (by simpa using hquit)
+    calc
+      QuittingOneStagePayoff G beta p n =
+          (p n : ℝ) * ForcedQuitPayoff G p n +
+            (1 - (p n : ℝ)) * ForcedContinuePayoff G beta p n := haffine
+      _ = ForcedContinuePayoff G beta p n := by rw [heq]; ring
+
+/-- The singular penalty increases by at least the increase in its hazard. -/
+private theorem singularQuitPenalty_sub_ge_sub {N : ℕ} {u v : UnitInterval}
+    (hvu : (v : ℝ) ≤ (u : ℝ)) (hu : (u : ℝ) < 1) :
+    (u : ℝ) / (1 - (u : ℝ)) ^ N -
+        (v : ℝ) / (1 - (v : ℝ)) ^ N ≥
+      (u : ℝ) - (v : ℝ) := by
+  have hv : (v : ℝ) < 1 := hvu.trans_lt hu
+  have hpowU : 0 < (1 - (u : ℝ)) ^ N := pow_pos (by linarith) _
+  have hpowV : 0 < (1 - (v : ℝ)) ^ N := pow_pos (by linarith) _
+  have hpowUV : (1 - (u : ℝ)) ^ N ≤ (1 - (v : ℝ)) ^ N :=
+    pow_le_pow_left₀ (by linarith) (by linarith) _
+  have huvDiv :
+      (v : ℝ) / (1 - (v : ℝ)) ^ N ≤
+        (v : ℝ) / (1 - (u : ℝ)) ^ N :=
+    div_le_div_of_nonneg_left v.property.1 hpowU hpowUV
+  have hpowOne : (1 - (u : ℝ)) ^ N ≤ 1 :=
+    pow_le_one₀ (sub_nonneg.mpr u.property.2) (by linarith [u.property.1])
+  have hdiffDiv : (u : ℝ) - (v : ℝ) ≤
+      ((u : ℝ) - (v : ℝ)) / (1 - (u : ℝ)) ^ N := by
+    rw [le_div_iff₀ hpowU]
+    nlinarith [mul_le_mul_of_nonneg_left hpowOne (sub_nonneg.mpr hvu)]
+  calc
+    (u : ℝ) / (1 - (u : ℝ)) ^ N -
+          (v : ℝ) / (1 - (v : ℝ)) ^ N ≥
+        (u : ℝ) / (1 - (u : ℝ)) ^ N -
+          (v : ℝ) / (1 - (u : ℝ)) ^ N := by linarith
+    _ = ((u : ℝ) - (v : ℝ)) / (1 - (u : ℝ)) ^ N := by ring
+    _ ≥ (u : ℝ) - (v : ℝ) := hdiffDiv
+
+/-- At a coordinate with maximal hazard change, increasing the hazard makes
+the singular penalty too large for two exact-equilibrium points to have the
+same `φ` image. -/
+private theorem phi_ne_of_maximal_hazard_increase
+    (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (z w : EZeroTilde G) (j : G.Player)
+    (hgt : (w.1.2 j : ℝ) < (z.1.2 j : ℝ))
+    (hmax : ∀ k, |(z.1.2 k : ℝ) - (w.1.2 k : ℝ)| ≤
+      (z.1.2 j : ℝ) - (w.1.2 j : ℝ)) :
+    Phi G M d z ≠ Phi G M d w := by
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let t : ℝ := (z.1.2 j : ℝ) - (w.1.2 j : ℝ)
+  have hN : 1 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast Fintype.card_pos
+  have hN0 : 0 < N := zero_lt_one.trans_le hN
+  have hM0 : 0 < M := zero_lt_one.trans_le hM.1
+  have ht : 0 < t := by dsimp only [t]; linarith
+  have hzjLt : (z.1.2 j : ℝ) < 1 := by
+    by_contra hnot
+    have hjOne : (z.1.2 j : ℝ) = 1 :=
+      le_antisymm (z.1.2 j).property.2 (le_of_not_gt hnot)
+    have hquit := z.2.2
+    rw [quitProbability_eq_one_of_coord_eq_one G z.1.2 j hjOne] at hquit
+    linarith
+  have hwjLt : (w.1.2 j : ℝ) < 1 := hgt.trans hzjLt
+  have hzStage := oneStagePayoff_eq_forcedQuit_of_positive G z.1.1 z.1.2
+    z.2.1 z.2.2 j (by linarith [(w.1.2 j).property.1])
+  have hwStage := oneStagePayoff_eq_forcedContinue_of_lt_one G w.1.1 w.1.2
+    w.2.1 j hwjLt
+  have hwEndpoint : ForcedQuitPayoff G w.1.2 j ≤
+      ForcedContinuePayoff G w.1.1 w.1.2 j := by
+    simpa using w.2.1.2 j hwjLt
+  have hforced := abs_forcedQuitPayoff_sub_le_of_row_close
+    G M t hM z.1.2 w.1.2 j hmax
+  have hstageDiff :
+      QuittingOneStagePayoff G z.1.1 z.1.2 j -
+          QuittingOneStagePayoff G w.1.1 w.1.2 j ≤
+        (2 * (M / 3)) * N * t := by
+    rw [hzStage, hwStage]
+    linarith [le_abs_self (ForcedQuitPayoff G z.1.2 j -
+      ForcedQuitPayoff G w.1.2 j)]
+  have hsumDiff :
+      (∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ)) -
+          ∑ k ∈ Finset.univ.erase j, (w.1.2 k : ℝ) ≤ N * t := by
+    calc
+      (∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ)) -
+            ∑ k ∈ Finset.univ.erase j, (w.1.2 k : ℝ) =
+          ∑ k ∈ Finset.univ.erase j,
+            ((z.1.2 k : ℝ) - (w.1.2 k : ℝ)) := by
+        rw [Finset.sum_sub_distrib]
+      _ ≤ ∑ _k ∈ Finset.univ.erase j, t := by
+        apply Finset.sum_le_sum
+        intro k _
+        exact (le_abs_self _).trans (hmax k)
+      _ = ((Finset.univ.erase j).card : ℝ) * t := by simp
+      _ ≤ N * t := by
+        apply mul_le_mul_of_nonneg_right _ ht.le
+        dsimp only [N]
+        exact_mod_cast (Finset.card_erase_le :
+          (Finset.univ.erase j).card ≤ (Finset.univ : Finset G.Player).card)
+  have hpenalty := singularQuitPenalty_sub_ge_sub
+    (N := Fintype.card G.Player) (u := z.1.2 j) (v := w.1.2 j)
+    (by linarith) hzjLt
+  have hcoefficient : 5 * N * M ≤ 5 * N * M / d := by
+    rw [le_div_iff₀ hd]
+    calc
+      5 * N * M * d ≤ 5 * N * M * 1 :=
+        mul_le_mul_of_nonneg_left hd1 (by positivity)
+      _ = 5 * N * M := by ring
+  intro hphi
+  have hcoordinate := congrFun hphi j
+  change QuittingOneStagePayoff G z.1.1 z.1.2 j -
+        (5 * N * M / d) *
+          ((z.1.2 j : ℝ) /
+            (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player) +
+        M * ∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ) =
+      QuittingOneStagePayoff G w.1.1 w.1.2 j -
+        (5 * N * M / d) *
+          ((w.1.2 j : ℝ) /
+            (1 - (w.1.2 j : ℝ)) ^ Fintype.card G.Player) +
+        M * ∑ k ∈ Finset.univ.erase j, (w.1.2 k : ℝ) at hcoordinate
+  have hlower : 5 * N * M * t ≤
+      (5 * N * M / d) *
+        ((z.1.2 j : ℝ) /
+            (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player -
+          (w.1.2 j : ℝ) /
+            (1 - (w.1.2 j : ℝ)) ^ Fintype.card G.Player) := by
+    calc
+      5 * N * M * t ≤ (5 * N * M / d) * t :=
+        mul_le_mul_of_nonneg_right hcoefficient ht.le
+      _ ≤ _ := mul_le_mul_of_nonneg_left hpenalty (by positivity)
+  have hupper :
+      (5 * N * M / d) *
+          ((z.1.2 j : ℝ) /
+              (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player -
+            (w.1.2 j : ℝ) /
+              (1 - (w.1.2 j : ℝ)) ^ Fintype.card G.Player) ≤
+        (2 * (M / 3)) * N * t + M * (N * t) := by
+    nlinarith [mul_le_mul_of_nonneg_left hsumDiff hM0.le]
+  have hbound : 5 * (N * M * t) ≤ (5 / 3 : ℝ) * (N * M * t) := by
+    calc
+      5 * (N * M * t) = 5 * N * M * t := by ring
+      _ ≤ _ := hlower
+      _ ≤ _ := hupper
+      _ = (5 / 3 : ℝ) * (N * M * t) := by ring
+  have hpositive : 0 < N * M * t := by positivity
+  nlinarith
+
 /-- A concrete inverse/homeomorphism package for `φ`. -/
 structure PhiInverseData (G : QuittingGame) (M d : ℝ) where
   inv : Payoff G.Player → EZeroTilde G
@@ -1807,11 +2155,9 @@ structure PhiInverseData (G : QuittingGame) (M d : ℝ) where
   continuousInv : Continuous inv
 
 /--
-Lemma 3.1: injectivity and the all-continue fiber.  The missing argument chooses
-a player with maximal change in quitting probability, compares her forced-quit
-payoffs in the two rows, and uses the singular penalty in `φ` to force a strict
-best-response contradiction.  No existing theorem packages that quantitative
-injectivity argument.
+Lemma 3.1: injectivity and the all-Continue fiber.  At a coordinate with
+maximal hazard change, product-law total variation bounds the change in the
+forced-Quit payoff, while the singular term in `φ` grows strictly faster.
 -/
 theorem lemma3_1 (G : QuittingGame) (M d : ℝ)
     (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
@@ -1820,7 +2166,102 @@ theorem lemma3_1 (G : QuittingGame) (M d : ℝ)
       ∀ j, SoloPayoff G j ≤ x j)) ∧
     ∀ x (hx : (x, zeroQuitRow G) ∈ EZeroTilde G),
       Phi G M d ⟨(x, zeroQuitRow G), hx⟩ = x := by
-  sorry
+  classical
+  refine ⟨?_, ?_, ?_⟩
+  · rintro ⟨⟨x, p⟩, hp⟩ ⟨⟨y, q⟩, hq⟩ hphi
+    by_cases hpq : p = q
+    · subst q
+      apply Subtype.ext
+      apply Prod.ext
+      · funext j
+        have hcoordinate := congrFun hphi j
+        change QuittingOneStagePayoff G x p j -
+              (5 * (Fintype.card G.Player : ℝ) * M / d) *
+                ((p j : ℝ) / (1 - (p j : ℝ)) ^ Fintype.card G.Player) +
+              M * ∑ k ∈ Finset.univ.erase j, (p k : ℝ) =
+            QuittingOneStagePayoff G y p j -
+              (5 * (Fintype.card G.Player : ℝ) * M / d) *
+                ((p j : ℝ) / (1 - (p j : ℝ)) ^ Fintype.card G.Player) +
+              M * ∑ k ∈ Finset.univ.erase j, (p k : ℝ) at hcoordinate
+        have hsurvival : 0 < 1 - QuitProbability G p := by linarith [hp.2]
+        simp only [QuittingOneStagePayoff] at hcoordinate
+        have hmul :
+            (1 - QuitProbability G p) * x j =
+              (1 - QuitProbability G p) * y j := by
+          linear_combination hcoordinate
+        exact mul_left_cancel₀ hsurvival.ne' hmul
+      · rfl
+    · obtain ⟨j, _hj, hmax⟩ := Finset.exists_max_image Finset.univ
+        (fun k : G.Player => |(p k : ℝ) - (q k : ℝ)|)
+        Finset.univ_nonempty
+      have hmaxPos : 0 < |(p j : ℝ) - (q j : ℝ)| := by
+        by_contra hnot
+        have hmaxZero : |(p j : ℝ) - (q j : ℝ)| = 0 :=
+          le_antisymm (le_of_not_gt hnot) (abs_nonneg _)
+        apply hpq
+        funext k
+        apply Subtype.ext
+        have hkZero : |(p k : ℝ) - (q k : ℝ)| = 0 :=
+          le_antisymm (by simpa [hmaxZero] using hmax k (Finset.mem_univ k))
+            (abs_nonneg _)
+        exact sub_eq_zero.mp (abs_eq_zero.mp hkZero)
+      rcases lt_or_gt_of_ne (sub_ne_zero.mp (abs_ne_zero.mp hmaxPos.ne')) with
+        hpj | hqj
+      · exact (phi_ne_of_maximal_hazard_increase G M d hM hd hd1
+          ⟨(y, q), hq⟩ ⟨(x, p), hp⟩ j hpj
+          (fun k => by
+            simpa [abs_sub_comm, abs_of_neg (sub_neg.mpr hpj)] using
+              hmax k (Finset.mem_univ k)) hphi.symm).elim
+      · exact (phi_ne_of_maximal_hazard_increase G M d hM hd hd1
+          ⟨(x, p), hp⟩ ⟨(y, q), hq⟩ j hqj
+          (fun k => by
+            simpa [abs_of_pos (sub_pos.mpr hqj)] using
+              hmax k (Finset.mem_univ k)) hphi).elim
+  · intro x
+    change (zeroQuitRow G ∈ EpsilonRow G 0 x ∧
+        QuitProbability G (zeroQuitRow G) < 1) ↔ _
+    constructor
+    · rintro ⟨hrow, _⟩ j
+      have hcontinue := hrow.2 j (by simp [zeroQuitRow])
+      have hzero : (zeroQuitRow G).replace G j 0 = zeroQuitRow G :=
+        QuitRow.replace_self G (zeroQuitRow G) j
+      have hone : (zeroQuitRow G).replace G j 1 = SoloQuitRow G j := by
+        change QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1 = _
+        exact QuitRow.zero_replace_one G j
+      rw [ForcedContinuePayoff, hzero, ForcedQuitPayoff,
+        hone, quittingOneStagePayoff_soloQuitRow] at hcontinue
+      change QuittingOneStagePayoff G x (fun _ => 0) j ≥ SoloPayoff G j - 0
+        at hcontinue
+      rw [quittingOneStagePayoff_zero] at hcontinue
+      simpa using hcontinue
+    · intro hx
+      constructor
+      · constructor
+        · intro j hj
+          simp [zeroQuitRow] at hj
+        · intro j _hj
+          have hzero : (zeroQuitRow G).replace G j 0 = zeroQuitRow G :=
+            QuitRow.replace_self G (zeroQuitRow G) j
+          have hone : (zeroQuitRow G).replace G j 1 = SoloQuitRow G j := by
+            change QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) j 1 = _
+            exact QuitRow.zero_replace_one G j
+          rw [ForcedContinuePayoff, hzero, ForcedQuitPayoff,
+            hone, quittingOneStagePayoff_soloQuitRow]
+          change QuittingOneStagePayoff G x (fun _ => 0) j ≥ SoloPayoff G j - 0
+          rw [quittingOneStagePayoff_zero]
+          simpa using hx j
+      · simp [QuitProbability, zeroQuitRow]
+  · intro x hx
+    funext j
+    change QuittingOneStagePayoff G x (fun _ => 0) j -
+          (5 * (Fintype.card G.Player : ℝ) * M / d) *
+            (((fun _ => (0 : Set.Icc (0 : ℝ) 1)) j : ℝ) /
+              (1 - ((fun _ => (0 : Set.Icc (0 : ℝ) 1)) j : ℝ)) ^
+                Fintype.card G.Player) +
+          M * ∑ k ∈ Finset.univ.erase j,
+            ((fun _ => (0 : Set.Icc (0 : ℝ) 1)) k : ℝ) = x j
+    rw [quittingOneStagePayoff_zero]
+    simp
 
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
@@ -1953,97 +2394,6 @@ statement would not establish this quitting-specific result.
 theorem theorem3_1 (G : QuittingGame) (M : ℝ)
     (hM : IsSimonPayoffScale G M) : StructureTheoremConclusion G M := by
   sorry
-
-/-- The production Bernoulli root represented by a paper-local quitting row. -/
-private abbrev quitRowMarginals (G : QuittingGame) (p : QuitRow G) :
-    G.Player → PMF Bool :=
-  GameTheory.quittingRootOfHazardRow p
-
-@[simp] private theorem quitRowMarginals_true_toReal
-    (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
-    ((quitRowMarginals G p n) true).toReal = (p n : ℝ) := by
-  exact GameTheory.quittingRootOfHazardRow_true_toReal p n
-
-@[simp] private theorem quitRowMarginals_false_toReal
-    (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
-    ((quitRowMarginals G p n) false).toReal = 1 - (p n : ℝ) := by
-  exact GameTheory.quittingRootOfHazardRow_false_toReal p n
-
-@[simp] private theorem hazardOfRoot_quitRowMarginals
-    (G : QuittingGame) (p : QuitRow G) :
-    GameTheory.hazardOfRoot (quitRowMarginals G p) = fun n => (p n : ℝ) := by
-  exact GameTheory.hazardOfRoot_quittingRootOfHazardRow p
-
-private theorem coalitionProbability_eq_coalitionMass
-    (G : QuittingGame) (p : QuitRow G) (A : Finset G.Player) :
-    CoalitionProbability G p A =
-      (by
-        classical
-        exact Math.PMFProduct.coalitionMass (fun n => (p n : ℝ)) A) := by
-  classical
-  simp only [CoalitionProbability]
-  rw [Math.PMFProduct.coalitionMass, Finset.compl_eq_univ_sdiff]
-  congr 1
-  apply Finset.prod_congr
-  · ext n
-    simp
-  · intro n hn
-    rfl
-
-private theorem quittingOneStagePayoff_eq_rootExpectedPayoff
-    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G) (n : G.Player) :
-    QuittingOneStagePayoff G r p n =
-      GameTheory.quittingRootExpectedPayoff G.reward r (quitRowMarginals G p) n := by
-  classical
-  change QuittingOneStagePayoff G r p n =
-    GameTheory.quittingHazardOneStagePayoff G.reward r p n
-  rw [GameTheory.quittingHazardOneStagePayoff_eq_expanded]
-  unfold QuittingOneStagePayoff
-  simp only [QuitProbability, GameTheory.quittingHazardRowExitProbability]
-  congr 1
-  apply Finset.sum_congr rfl
-  intro A _
-  by_cases hA : A.Nonempty
-  · simp only [hA, ↓reduceDIte]
-    rw [coalitionProbability_eq_coalitionMass]
-    rfl
-  · simp [hA]
-
-private theorem quitRowMarginals_replace_one (G : QuittingGame)
-    [DecidableEq G.Player] (p : QuitRow G) (n : G.Player) :
-    quitRowMarginals G (p.replace G n 1) =
-      Function.update (quitRowMarginals G p) n (PMF.pure true) := by
-  classical
-  funext k
-  by_cases hkn : k = n
-  · subst k
-    rw [Function.update_self]
-    apply Math.ProbabilityMassFunction.toVector_injective
-    funext value
-    cases value <;>
-      simp [quitRowMarginals, QuitRow.replace,
-        Math.ProbabilityMassFunction.toVector]
-  · rw [Function.update_of_ne hkn]
-    apply GameTheory.quittingRootOfHazardRow_apply_congr
-    simp [QuitRow.replace, hkn]
-
-private theorem quitRowMarginals_replace_zero (G : QuittingGame)
-    [DecidableEq G.Player] (p : QuitRow G) (n : G.Player) :
-    quitRowMarginals G (p.replace G n 0) =
-      Function.update (quitRowMarginals G p) n (PMF.pure false) := by
-  classical
-  funext k
-  by_cases hkn : k = n
-  · subst k
-    rw [Function.update_self]
-    apply Math.ProbabilityMassFunction.toVector_injective
-    funext value
-    cases value <;>
-      simp [quitRowMarginals, QuitRow.replace,
-        Math.ProbabilityMassFunction.toVector]
-  · rw [Function.update_of_ne hkn]
-    apply GameTheory.quittingRootOfHazardRow_apply_congr
-    simp [QuitRow.replace, hkn]
 
 /-- Round precisely the displayed players' quitting probabilities to one. -/
 private def roundedQuitRow (G : QuittingGame) [DecidableEq G.Player]
@@ -2586,29 +2936,6 @@ private theorem abs_forcedQuitPayoff_le_scale
     (quitRowMarginals G (p.replace G n 1)) n hM.2.1 (fun _ => by
       simp only [Pi.zero_apply, abs_zero]
       linarith [hM.1])
-
-/-- At an exact equilibrium row, every action used with positive probability has the row value. -/
-private theorem oneStagePayoff_eq_forcedQuit_of_positive
-    (G : QuittingGame) (beta : Payoff G.Player) (p : QuitRow G)
-    (hp : p ∈ EpsilonRow G 0 beta) (hq : QuitProbability G p < 1)
-    (n : G.Player) (hn : 0 < (p n : ℝ)) :
-    QuittingOneStagePayoff G beta p n = ForcedQuitPayoff G p n := by
-  have hpnLt : (p n : ℝ) < 1 := by
-    by_contra hnot
-    have hpnOne : (p n : ℝ) = 1 := le_antisymm (p n).property.2 (le_of_not_gt hnot)
-    rw [quitProbability_eq_one_of_apply_eq_one G p n hpnOne] at hq
-    linarith
-  have hquit := hp.1 n hn
-  have hcontinue := hp.2 n hpnLt
-  have heq : ForcedQuitPayoff G p n = ForcedContinuePayoff G beta p n := by
-    exact le_antisymm (by simpa using hcontinue) (by simpa using hquit)
-  have haffine := quittingOneStagePayoff_replace_affine G beta p n (p n)
-  rw [QuitRow.replace_self] at haffine
-  calc
-    QuittingOneStagePayoff G beta p n =
-        (p n : ℝ) * ForcedQuitPayoff G p n +
-          (1 - (p n : ℝ)) * ForcedContinuePayoff G beta p n := haffine
-    _ = ForcedQuitPayoff G p n := by rw [← heq]; ring
 
 /-- A common coordinatewise ceiling for continuation and absorption bounds the row value. -/
 private theorem quittingOneStagePayoff_le_of_coordinate_le
