@@ -3743,6 +3743,61 @@ private theorem firstReturnAt_eq_iUnion_time (P : DiscreteDecisionProcess)
   ext p
   simp only [FirstReturnAt, FirstReturnAtTime, mem_setOf_eq, mem_iUnion]
 
+/-- Return to `A` at `z` strictly before the displayed horizon. -/
+private def FirstReturnBefore (P : DiscreteDecisionProcess) (A : Set P.X)
+    (z : P.X) (N : ℕ) : Set (DDPPath P) :=
+  ⋃ k : {k : ℕ // k + 1 < N}, FirstReturnAtTime P A z (k.1 + 1)
+
+/-- Return to `A` strictly before the displayed horizon. -/
+private def ReturnsBefore (P : DiscreteDecisionProcess) (A : Set P.X)
+    (N : ℕ) : Set (DDPPath P) :=
+  ⋃ z, FirstReturnBefore P A z N
+
+/-- Fixed-state return before a horizon is measurable. -/
+private theorem measurableSet_firstReturnBefore (P : DiscreteDecisionProcess)
+    (A : Set P.X) (z : P.X) (N : ℕ) : MeasurableSet (FirstReturnBefore P A z N) := by
+  exact MeasurableSet.iUnion fun k =>
+    measurableSet_firstReturnAtTime P A z (k.1 + 1)
+
+/-- Return before a horizon is measurable. -/
+private theorem measurableSet_returnsBefore (P : DiscreteDecisionProcess)
+    (A : Set P.X) (N : ℕ) : MeasurableSet (ReturnsBefore P A N) := by
+  exact MeasurableSet.iUnion fun z => measurableSet_firstReturnBefore P A z N
+
+/-- A first return at a fixed state has only one time. -/
+private theorem pairwise_disjoint_firstReturnAtTime (P : DiscreteDecisionProcess)
+    (A : Set P.X) (z : P.X) :
+    Pairwise (Function.onFun Disjoint (FirstReturnAtTime P A z)) := by
+  intro k l hkl
+  rw [Function.onFun, Set.disjoint_left]
+  intro p hpk hpl
+  rcases hpk with ⟨hk, hxk, hzk, hbeforeK⟩
+  rcases hpl with ⟨hl, hxl, hzl, hbeforeL⟩
+  rcases lt_or_gt_of_ne hkl with hlt | hgt
+  · exact (hbeforeL k hk hlt) (hxk.symm ▸ hzk)
+  · exact (hbeforeK l hl hgt) (hxl.symm ▸ hzl)
+
+/-- Distinct first-return states remain disjoint after truncating the return time. -/
+private theorem pairwise_disjoint_firstReturnBefore (P : DiscreteDecisionProcess)
+    (A : Set P.X) (N : ℕ) :
+    Pairwise (Function.onFun Disjoint fun z => FirstReturnBefore P A z N) := by
+  intro z w hzw
+  rw [Function.onFun, Set.disjoint_left]
+  intro p hpz hpw
+  rw [FirstReturnBefore] at hpz hpw
+  simp only [mem_iUnion] at hpz hpw
+  rcases hpz with ⟨k, hpk⟩
+  rcases hpw with ⟨l, hpl⟩
+  rcases hpk with ⟨_hk, hxk, hzk, hbeforeK⟩
+  rcases hpl with ⟨_hl, hxl, hwl, hbeforeL⟩
+  have htime : k.1 + 1 = l.1 + 1 := by
+    by_contra hne
+    rcases lt_or_gt_of_ne hne with hlt | hgt
+    · exact (hbeforeL (k.1 + 1) (Nat.succ_pos k.1) hlt) (hxk.symm ▸ hzk)
+    · exact (hbeforeK (l.1 + 1) (Nat.succ_pos l.1) hgt) (hxl.symm ▸ hwl)
+  apply hzw
+  rw [← hxk, htime, hxl]
+
 /-- At a fixed first-return time, the sampled terminal action averages to the return-state value. -/
 private theorem DiscreteDecisionProcess.integral_rawStageValue_firstReturnAtTime
     (P : DiscreteDecisionProcess) (S : DDPSemantics P)
@@ -3826,6 +3881,189 @@ private theorem DiscreteDecisionProcess.integral_rawStageValue_firstReturnAtTime
   rw [hcanonical, hevent, measure_iUnion hpairwise hmeasurable]
   exact (ENNReal.tsum_toReal_eq fun h =>
     measure_ne_top (P.rawLawAfterAction x y) (C h)).symm
+
+/-- Before the horizon, bounded hitting stops exactly at the displayed first-return time. -/
+private theorem DiscreteDecisionProcess.stoppedValue_eq_on_firstReturnAtTime
+    (P : DiscreteDecisionProcess) (A : Set P.X) (N : ℕ)
+    (z : P.X) (k : {k : ℕ // k + 1 < N}) (stage : ℕ → DDPStage P)
+    (hstage : stage ∈ DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k.1 + 1)) :
+    stoppedValue P.rawStageValue
+        (fun path => ((hittingBtwn
+          (fun (n : ℕ) (path : ℕ → DDPStage P) => (path n).1) A 1 N path : ℕ) : ℕ∞))
+        stage = P.rawStageValue (k.1 + 1) stage := by
+  let rawState : ℕ → (ℕ → DDPStage P) → P.X := fun n path => (path n).1
+  let tau := hittingBtwn rawState A (1 : ℕ) N stage
+  change DDPPath.ofRaw P stage ∈ FirstReturnAtTime P A z (k.1 + 1) at hstage
+  rcases hstage with ⟨_hpositive, hstate, hmem, hbefore⟩
+  have hhit : rawState (k.1 + 1) stage ∈ A := by
+    change rawState (k.1 + 1) stage = z at hstate
+    rw [hstate]
+    exact hmem
+  have hexists : ∃ j ∈ Set.Icc (1 : ℕ) N, rawState j stage ∈ A :=
+    ⟨k.1 + 1, ⟨Nat.succ_le_succ (Nat.zero_le k.1), k.2.le⟩, hhit⟩
+  have htau_le : tau ≤ k.1 + 1 :=
+    hittingBtwn_le_of_mem (Nat.succ_le_succ (Nat.zero_le k.1)) k.2.le hhit
+  have htau_ge : k.1 + 1 ≤ tau := by
+    by_contra hnot
+    have htau_lt : tau < k.1 + 1 := Nat.lt_of_not_ge hnot
+    have htau_mem : rawState tau stage ∈ A := hittingBtwn_mem_set hexists
+    have htau_pos : 0 < tau := lt_of_lt_of_le Nat.zero_lt_one
+      (le_hittingBtwn (by omega) stage)
+    exact (hbefore tau htau_pos htau_lt) htau_mem
+  have htau : tau = k.1 + 1 := le_antisymm htau_le htau_ge
+  simp only [stoppedValue]
+  change P.rawStageValue tau stage = P.rawStageValue (k.1 + 1) stage
+  rw [htau]
+
+/-- With no return strictly before the horizon, bounded hitting stops at the horizon. -/
+private theorem DiscreteDecisionProcess.stoppedValue_eq_on_not_returnsBefore
+    (P : DiscreteDecisionProcess) (A : Set P.X) (N : ℕ) (hN : 1 ≤ N)
+    (stage : ℕ → DDPStage P)
+    (hstage : stage ∈ (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ) :
+    stoppedValue P.rawStageValue
+        (fun path => ((hittingBtwn
+          (fun (n : ℕ) (path : ℕ → DDPStage P) => (path n).1) A 1 N path : ℕ) : ℕ∞))
+        stage = P.rawStageValue N stage := by
+  let rawState : ℕ → (ℕ → DDPStage P) → P.X := fun n path => (path n).1
+  let tau := hittingBtwn rawState A (1 : ℕ) N stage
+  have htau : tau = N := by
+    apply le_antisymm (hittingBtwn_le stage)
+    by_contra hnot
+    have htau_lt : tau < N := Nat.lt_of_not_ge hnot
+    have htau_mem : rawState tau stage ∈ A :=
+      hittingBtwn_mem_set_of_hittingBtwn_lt htau_lt
+    have htau_pos : 0 < tau := lt_of_lt_of_le Nat.zero_lt_one
+      (le_hittingBtwn hN stage)
+    obtain ⟨k, hk⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt htau_pos)
+    apply hstage
+    change DDPPath.ofRaw P stage ∈ ReturnsBefore P A N
+    rw [ReturnsBefore]
+    apply mem_iUnion.2
+    refine ⟨rawState tau stage, ?_⟩
+    rw [FirstReturnBefore]
+    apply mem_iUnion.2
+    let index : {k : ℕ // k + 1 < N} := ⟨k, by omega⟩
+    refine ⟨index, ?_⟩
+    change DDPPath.ofRaw P stage ∈
+      FirstReturnAtTime P A (rawState tau stage) (k + 1)
+    refine ⟨Nat.succ_pos k, ?_, htau_mem, ?_⟩
+    · change rawState (k + 1) stage = rawState tau stage
+      rw [hk]
+    · intro i hi hik
+      have hitau : i < tau := by omega
+      exact notMem_of_lt_hittingBtwn (u := rawState) (s := A) (n := 1) (m := N)
+        (k := i) (ω := stage) hitau (Nat.succ_le_iff.2 hi)
+  simp only [stoppedValue]
+  change P.rawStageValue tau stage = P.rawStageValue N stage
+  rw [htau]
+
+/-- Bounded optional stopping splits into first returns before the horizon and the residual path. -/
+private theorem DiscreteDecisionProcess.boundedFirstReturn_decomposition
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) (y : P.Y x) (A : Set P.X) (N : ℕ) (hN : 1 ≤ N) :
+    P.valueY x y =
+      (∑' z, (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z) +
+        ∫ stage in (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ,
+          P.rawStageValue N stage ∂P.rawLawAfterAction x y := by
+  classical
+  let rawState : ℕ → (ℕ → DDPStage P) → P.X := fun n stage => (stage n).1
+  let tau : (ℕ → DDPStage P) → ℕ∞ := fun stage =>
+    ((hittingBtwn rawState A (1 : ℕ) N stage : ℕ) : ℕ∞)
+  let F := stoppedValue P.rawStageValue tau
+  let E := DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N
+  have hmeasurableE : MeasurableSet E :=
+    (DDPPath.measurable_ofRaw P) (measurableSet_returnsBefore P A N)
+  have htauStopping : IsStoppingTime
+      (Filtration.piLE (X := fun _ : ℕ => DDPStage P)) tau := by
+    exact P.rawState_adapted.isStoppingTime_hittingBtwn MeasurableSet.of_discrete
+  have htauBound (stage : ℕ → DDPStage P) : tau stage ≤ (N : ℕ∞) := by
+    change ((hittingBtwn rawState A (1 : ℕ) N stage : ℕ) : ℕ∞) ≤ (N : ℕ∞)
+    exact_mod_cast (hittingBtwn_le (u := rawState) (s := A) (n := 1) (m := N) stage)
+  have hFIntegrable : Integrable F (P.rawLawAfterAction x y) := by
+    exact (P.rawStageValue_martingale
+      (PMF.pure (⟨x, y⟩ : DDPStage P))).submartingale.integrable_stoppedValue
+        htauStopping htauBound
+  have hstateSets : E =
+      ⋃ z, DDPPath.ofRaw P ⁻¹' FirstReturnBefore P A z N := by
+    ext stage
+    simp only [E, ReturnsBefore, mem_preimage, mem_iUnion]
+  have hstateMeasurable (z : P.X) :
+      MeasurableSet (DDPPath.ofRaw P ⁻¹' FirstReturnBefore P A z N) :=
+    (DDPPath.measurable_ofRaw P) (measurableSet_firstReturnBefore P A z N)
+  have hstatePairwise : Pairwise (Function.onFun Disjoint fun z =>
+      DDPPath.ofRaw P ⁻¹' FirstReturnBefore P A z N) := by
+    intro z w hzw
+    exact (pairwise_disjoint_firstReturnBefore P A N hzw).preimage (DDPPath.ofRaw P)
+  have htimePairwise (z : P.X) : Pairwise (Function.onFun Disjoint fun
+      k : {k : ℕ // k + 1 < N} =>
+        DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k.1 + 1)) := by
+    intro first second hne
+    apply Disjoint.preimage (DDPPath.ofRaw P)
+    apply pairwise_disjoint_firstReturnAtTime P A z
+    intro heq
+    apply hne
+    apply Subtype.ext
+    omega
+  have htimeMeasurable (z : P.X) (k : {k : ℕ // k + 1 < N}) :
+      MeasurableSet (DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k.1 + 1)) :=
+    (DDPPath.measurable_ofRaw P)
+      (measurableSet_firstReturnAtTime P A z (k.1 + 1))
+  have hhitIntegral :
+      (∫ stage in E, F stage ∂P.rawLawAfterAction x y) =
+        ∑' z, (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z := by
+    rw [hstateSets, integral_iUnion hstateMeasurable hstatePairwise
+      hFIntegrable.integrableOn]
+    apply tsum_congr
+    intro z
+    have htimeSets : DDPPath.ofRaw P ⁻¹' FirstReturnBefore P A z N =
+        ⋃ k : {k : ℕ // k + 1 < N},
+          DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k.1 + 1) := by
+      ext stage
+      simp only [FirstReturnBefore, mem_preimage, mem_iUnion]
+    rw [htimeSets, integral_iUnion (htimeMeasurable z) (htimePairwise z)
+      hFIntegrable.integrableOn]
+    have hcell (k : {k : ℕ // k + 1 < N}) :
+        (∫ stage in DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k.1 + 1),
+            F stage ∂P.rawLawAfterAction x y) =
+          (S.afterAction x y (FirstReturnAtTime P A z (k.1 + 1))).toReal *
+            P.valueX z := by
+      calc
+        (∫ stage in DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k.1 + 1),
+            F stage ∂P.rawLawAfterAction x y) =
+            ∫ stage in DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k.1 + 1),
+              P.rawStageValue (k.1 + 1) stage ∂P.rawLawAfterAction x y := by
+                apply integral_congr_ae
+                filter_upwards [ae_restrict_mem (htimeMeasurable z k)] with stage hstage
+                exact P.stoppedValue_eq_on_firstReturnAtTime A N z k stage hstage
+        _ = _ := P.integral_rawStageValue_firstReturnAtTime S x y A z k.1
+    simp_rw [hcell]
+    rw [tsum_mul_right]
+    congr 1
+    rw [FirstReturnBefore, measure_iUnion]
+    · exact (ENNReal.tsum_toReal_eq fun k => by
+          letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+          exact measure_ne_top _ _).symm
+    · intro first second hne
+      apply pairwise_disjoint_firstReturnAtTime P A z
+      intro heq
+      apply hne
+      apply Subtype.ext
+      omega
+    · intro k
+      exact measurableSet_firstReturnAtTime P A z (k.1 + 1)
+  have hresidualIntegral :
+      (∫ stage in Eᶜ, F stage ∂P.rawLawAfterAction x y) =
+        ∫ stage in Eᶜ, P.rawStageValue N stage ∂P.rawLawAfterAction x y := by
+    apply integral_congr_ae
+    filter_upwards [ae_restrict_mem hmeasurableE.compl] with stage hstage
+    exact P.stoppedValue_eq_on_not_returnsBefore A N hN stage hstage
+  calc
+    P.valueY x y = ∫ stage, F stage ∂P.rawLawAfterAction x y := by
+      exact (P.integral_stoppedValue_hittingBtwn_eq x y A N).symm
+    _ = (∫ stage in E, F stage ∂P.rawLawAfterAction x y) +
+        ∫ stage in Eᶜ, F stage ∂P.rawLawAfterAction x y :=
+      (integral_add_compl hmeasurableE hFIntegrable).symm
+    _ = _ := by rw [hhitIntegral, hresidualIntegral]
 
 /-- The return event is measurable as a countable union of first-return events. -/
 private theorem measurableSet_returnsTo (P : DiscreteDecisionProcess) (A : Set P.X) :
