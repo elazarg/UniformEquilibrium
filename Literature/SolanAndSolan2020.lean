@@ -6976,6 +6976,564 @@ theorem KiloblockConstruction.profileKernel_transienceCertificate
     construction.profileBoundary_closed
     construction.profileKernel_reaches_boundary
 
+/-! Probability of reaching the final tail from a selected prescribed
+attempt, conditional on the downstream final-tail probability. -/
+def KiloblockConstruction.profileSelectedSurvival
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table))
+    (remaining : ℕ) (downstream : ℝ) : ℝ :=
+  match choice with
+  | none => downstream
+  | some owner =>
+      let endpoint :=
+        match (construction.attempt k owner).continuation with
+        | .restart =>
+            construction.macroAdvanceProbability k * downstream
+        | .advance => downstream
+      (1 - quittingMeshHazard
+        (construction.attempt k owner).quitWeight
+        (construction.mesh k)) ^ (max remaining 1) * endpoint
+
+def KiloblockConstruction.profileChoiceAdvanceProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    Option (NormalPlayer table) → ℝ
+  | none => 1
+  | some owner => construction.attemptAdvanceWeight k owner
+
+def KiloblockConstruction.profileChoiceAbsorbProbability
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    Option (NormalPlayer table) → ℝ
+  | none => 0
+  | some owner => (construction.attempt k owner).quitWeight
+
+theorem KiloblockConstruction.profileSelectedSurvival_mesh
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) (downstream : ℝ) :
+    construction.profileSelectedSurvival k choice
+        (construction.mesh k) downstream =
+      construction.profileChoiceAdvanceProbability k choice * downstream +
+        (1 - (construction.profileChoiceAdvanceProbability k choice +
+          construction.profileChoiceAbsorbProbability k choice)) *
+          (construction.macroAdvanceProbability k * downstream) := by
+  cases choice with
+  | none =>
+      simp [KiloblockConstruction.profileSelectedSurvival,
+        KiloblockConstruction.profileChoiceAdvanceProbability,
+        KiloblockConstruction.profileChoiceAbsorbProbability]
+  | some owner =>
+      cases hcontinuation : (construction.attempt k owner).continuation <;>
+        rw [KiloblockConstruction.profileSelectedSurvival,
+          KiloblockConstruction.profileChoiceAdvanceProbability,
+          KiloblockConstruction.profileChoiceAbsorbProbability,
+          KiloblockConstruction.attemptAdvanceWeight, hcontinuation,
+          max_eq_left (construction.mesh_pos k),
+          construction.mesh_survival k owner]
+      <;> ring
+
+theorem KiloblockConstruction.expect_profileChoiceAdvance_eq
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    expect (construction.buildingBlock k).z.toPMF
+        (construction.profileChoiceAdvanceProbability k) =
+      construction.advanceMass k := by
+  rw [expect_eq_sum, Fintype.sum_option]
+  simp only [SimplexWeights.toPMF_none_toReal,
+    SimplexWeights.toPMF_some_toReal,
+    KiloblockConstruction.profileChoiceAdvanceProbability, mul_one]
+  rfl
+
+theorem KiloblockConstruction.expect_profileChoiceAbsorb_eq
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    expect (construction.buildingBlock k).z.toPMF
+        (construction.profileChoiceAbsorbProbability k) =
+      ∑ owner, construction.absorbMass k owner := by
+  rw [expect_eq_sum, Fintype.sum_option]
+  simp only [SimplexWeights.toPMF_none_toReal,
+    SimplexWeights.toPMF_some_toReal,
+    KiloblockConstruction.profileChoiceAbsorbProbability, mul_zero,
+    zero_add, KiloblockConstruction.absorbMass]
+
+theorem KiloblockConstruction.expect_profileSelectedSurvival_mesh
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) (downstream : ℝ) :
+    expect (construction.buildingBlock k).z.toPMF (fun choice =>
+        construction.profileSelectedSurvival k choice
+          (construction.mesh k) downstream) =
+      construction.macroAdvanceProbability k * downstream := by
+  let law := (construction.buildingBlock k).z.toPMF
+  let advance := construction.profileChoiceAdvanceProbability k
+  let absorb := construction.profileChoiceAbsorbProbability k
+  let entry := construction.macroAdvanceProbability k * downstream
+  have hunfold : expect law (fun choice =>
+      construction.profileSelectedSurvival k choice
+        (construction.mesh k) downstream) =
+      expect law (fun choice =>
+        advance choice * downstream +
+          (1 - (advance choice + absorb choice)) * entry) := by
+    apply Math.ProbabilityMassFunction.expect_congr_on_support
+    intro choice _
+    exact construction.profileSelectedSurvival_mesh k choice downstream
+  have hadvance : expect law advance = construction.advanceMass k :=
+    construction.expect_profileChoiceAdvance_eq k
+  have habsorb : expect law absorb =
+      ∑ owner, construction.absorbMass k owner :=
+    construction.expect_profileChoiceAbsorb_eq k
+  have hfirst : expect law (fun choice => advance choice * downstream) =
+      construction.advanceMass k * downstream := by
+    calc
+      expect law (fun choice => advance choice * downstream) =
+          downstream * expect law advance := by
+        simpa only [mul_comm] using
+          Math.Probability.expect_const_mul law downstream advance
+      _ = _ := by rw [hadvance]; ring
+  have hsecond : expect law (fun choice =>
+      (1 - (advance choice + absorb choice)) * entry) =
+      (1 - construction.exitMass k) * entry := by
+    calc
+      expect law (fun choice =>
+          (1 - (advance choice + absorb choice)) * entry) =
+          entry * expect law (fun choice =>
+            1 - (advance choice + absorb choice)) := by
+        simpa only [mul_comm] using
+          Math.Probability.expect_const_mul law entry
+            (fun choice => 1 - (advance choice + absorb choice))
+      _ = entry * (1 - (construction.advanceMass k +
+          ∑ owner, construction.absorbMass k owner)) := by
+        rw [Math.Probability.expect_sub, Math.Probability.expect_const,
+          Math.Probability.expect_add, hadvance, habsorb]
+      _ = (1 - construction.exitMass k) * entry := by
+        rw [construction.exitMass_eq]
+        ring
+  rw [hunfold, Math.Probability.expect_add, hfirst, hsecond]
+  dsimp only [entry]
+  unfold KiloblockConstruction.macroAdvanceProbability
+  field_simp [ne_of_gt (construction.exitMass_pos k)]
+  ring
+
+theorem KiloblockConstruction.expect_signal_profileSelectedSurvival_mesh
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) (downstream : ℝ) :
+    expect construction.profile.signalLaw (fun signal =>
+        construction.profileSelectedSurvival k
+          (construction.signalSelector k signal) (construction.mesh k)
+          downstream) =
+      construction.macroAdvanceProbability k * downstream := by
+  calc
+    expect construction.profile.signalLaw (fun signal =>
+        construction.profileSelectedSurvival k
+          (construction.signalSelector k signal) (construction.mesh k)
+          downstream) =
+        expect (construction.profile.signalLaw.map
+          (construction.signalSelector k)) (fun choice =>
+            construction.profileSelectedSurvival k choice
+              (construction.mesh k) downstream) := by
+      symm
+      exact Math.Probability.expect_map _ _ _
+    _ = _ := by
+      rw [construction.signalSelector_law k]
+      exact construction.expect_profileSelectedSurvival_mesh k downstream
+
+theorem KiloblockConstruction.macroSurvivalFuel_succ
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    construction.macroSurvivalFuel (k.1 + 1) =
+      construction.macroAdvanceProbability k *
+        construction.macroSurvivalFuel k.1 := by
+  rw [KiloblockConstruction.macroSurvivalFuel]
+  have hk : construction.macroAdvanceAt k.1 =
+      construction.macroAdvanceProbability k := by
+    simp only [KiloblockConstruction.macroAdvanceAt, dif_pos k.isLt]
+  rw [hk]
+
+/-! Hitting probability of the final all-Continue tail under the prescribed
+finite schedule kernel. -/
+def KiloblockConstruction.profileFinalPotential
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    KiloblockFiniteMode construction → ℝ
+  | .drawChoose k => construction.macroSurvivalFuel (k.1 + 1)
+  | .drawResume k choice remaining =>
+      construction.profileSelectedSurvival k
+        (choice.map construction.ownerOfCode) remaining.1
+        (construction.macroSurvivalFuel k.1)
+  | .drawFinal => 1
+  | .active k choice remaining =>
+      construction.profileSelectedSurvival k
+        (choice.map construction.ownerOfCode) remaining.1
+        (construction.macroSurvivalFuel k.1)
+  | .finalActive => 1
+  | .absorbed origin => if origin.isNone then 1 else 0
+
+@[simp]
+theorem KiloblockConstruction.profileFinalPotential_finiteMode_active
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) (remaining : ℕ)
+    (hremaining : remaining ≤ construction.totalMesh) :
+    construction.profileFinalPotential
+        (construction.finiteMode (.active k choice remaining)) =
+      construction.profileSelectedSurvival k choice remaining
+        (construction.macroSurvivalFuel k.1) := by
+  cases choice <;>
+    simp [KiloblockConstruction.profileFinalPotential,
+      KiloblockConstruction.finiteMode, min_eq_left hremaining]
+
+@[simp]
+theorem KiloblockConstruction.profileFinalPotential_finiteMode_drawResume
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) (remaining : ℕ)
+    (hremaining : remaining ≤ construction.totalMesh) :
+    construction.profileFinalPotential
+        (construction.finiteMode (.draw (.resume k choice remaining))) =
+      construction.profileSelectedSurvival k choice remaining
+        (construction.macroSurvivalFuel k.1) := by
+  cases choice <;>
+    simp [KiloblockConstruction.profileFinalPotential,
+      KiloblockConstruction.finiteMode, min_eq_left hremaining]
+
+theorem KiloblockConstruction.profileFinalPotential_preceding
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1)) :
+    construction.profileFinalPotential
+        (construction.finiteMode
+          (.draw (precedingKiloblockPhase table k))) =
+      construction.macroSurvivalFuel k.1 := by
+  induction k using Fin.induction with
+  | zero =>
+      simp [precedingKiloblockPhase,
+        KiloblockConstruction.profileFinalPotential,
+        KiloblockConstruction.finiteMode,
+        KiloblockConstruction.macroSurvivalFuel]
+  | succ index ih =>
+      have hindex :
+          (⟨index.1, by omega⟩ :
+            Fin (construction.blockCount + 1)) = index.castSucc := by
+        apply Fin.ext
+        rfl
+      simp [precedingKiloblockPhase,
+        KiloblockConstruction.profileFinalPotential,
+        KiloblockConstruction.finiteMode, hindex]
+
+theorem KiloblockConstruction.profileFinalPotential_after
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (choice : Option (NormalPlayer table)) :
+    construction.profileFinalPotential
+        (construction.finiteMode (.draw
+          (phaseAfterAttempt table
+            (fun block owner =>
+              (construction.attempt block owner).continuation)
+            k choice))) =
+      match choice with
+      | none => construction.macroSurvivalFuel k.1
+      | some owner =>
+          match (construction.attempt k owner).continuation with
+          | .restart =>
+              construction.macroAdvanceProbability k *
+                construction.macroSurvivalFuel k.1
+          | .advance => construction.macroSurvivalFuel k.1 := by
+  cases choice with
+  | none =>
+      simpa [phaseAfterAttempt] using
+        construction.profileFinalPotential_preceding k
+  | some owner =>
+      cases hcontinuation : (construction.attempt k owner).continuation with
+      | restart =>
+          simpa [phaseAfterAttempt, hcontinuation,
+            KiloblockConstruction.profileFinalPotential,
+            KiloblockConstruction.finiteMode] using
+              construction.macroSurvivalFuel_succ k
+      | advance =>
+          simpa [phaseAfterAttempt, hcontinuation] using
+            construction.profileFinalPotential_preceding k
+
+private theorem KiloblockConstruction.profileSelectedSurvival_step
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) (remaining : ℕ) (downstream : ℝ) :
+    construction.profileSelectedSurvival k (some owner)
+        remaining downstream =
+      (1 - quittingMeshHazard
+        (construction.attempt k owner).quitWeight (construction.mesh k)) *
+        if remaining ≤ 1 then
+          match (construction.attempt k owner).continuation with
+          | .restart => construction.macroAdvanceProbability k * downstream
+          | .advance => downstream
+        else construction.profileSelectedSurvival k (some owner)
+          (remaining - 1) downstream := by
+  by_cases hsmall : remaining ≤ 1
+  · cases hcontinuation : (construction.attempt k owner).continuation <;>
+      simp [KiloblockConstruction.profileSelectedSurvival, hsmall,
+        hcontinuation]
+  · have hmax : max remaining 1 = remaining := by omega
+    have hmaxPred : max (remaining - 1) 1 = remaining - 1 := by omega
+    have hremaining : remaining = remaining - 1 + 1 := by omega
+    have hsub : remaining - 1 + 1 - 1 = remaining - 1 := by omega
+    cases hcontinuation : (construction.attempt k owner).continuation <;>
+      simp only [KiloblockConstruction.profileSelectedSurvival,
+        hsmall, if_false, hmax, hmaxPred, hcontinuation]
+    <;> rw [hremaining, pow_succ, hsub]
+    <;> ring
+
+private theorem KiloblockConstruction.expect_profileMeshCoin_zero_else
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (owner : NormalPlayer table) (value : ℝ) :
+    expect (quittingMeshHazardCoin
+        (construction.attempt k owner).quitWeight (construction.mesh k)
+        (construction.attempt k owner).quitWeight_pos.le
+        (construction.attempt k owner).quitWeight_lt_one)
+      (fun quits => if quits then 0 else value) =
+    (1 - quittingMeshHazard
+      (construction.attempt k owner).quitWeight (construction.mesh k)) *
+        value := by
+  rw [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+  simp [quittingMeshHazardCoin_false_toReal,
+    quittingMeshHazardCoin_true_toReal]
+
+private theorem
+    KiloblockConstruction.profileModeOfFinite_remaining_le_totalMesh
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (mode : KiloblockFiniteMode construction) :
+    ∀ k choice remaining,
+      construction.modeOfFinite mode = .active k choice remaining ∨
+        construction.modeOfFinite mode =
+          .draw (.resume k choice remaining) →
+            remaining ≤ construction.totalMesh := by
+  intro k choice remaining hmode
+  cases mode <;> simp only [KiloblockConstruction.modeOfFinite] at hmode
+  · rcases hmode with hmode | hmode <;> cases hmode
+  · rcases hmode with hmode | hmode
+    · cases hmode
+    · cases hmode
+      omega
+  · rcases hmode with hmode | hmode <;> cases hmode
+  · rcases hmode with hmode | hmode
+    · cases hmode
+      omega
+    · cases hmode
+  · rcases hmode with hmode | hmode <;> cases hmode
+  · rcases hmode with hmode | hmode <;> cases hmode
+
+private theorem KiloblockConstruction.profileRawFinalPotential_harmonic
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (mode : KiloblockMode table construction.blockCount)
+    (hremaining : ∀ k choice remaining,
+      mode = .active k choice remaining ∨
+        mode = .draw (.resume k choice remaining) →
+          remaining ≤ construction.totalMesh) :
+    expect (construction.profileModeKernel mode) (fun next =>
+        construction.profileFinalPotential
+          (construction.finiteMode next)) =
+      construction.profileFinalPotential
+        (construction.finiteMode mode) := by
+  cases mode with
+  | draw phase =>
+      cases phase with
+      | choose k =>
+          unfold KiloblockConstruction.profileModeKernel
+          rw [Math.Probability.expect_map]
+          simp_rw [construction.profileFinalPotential_finiteMode_active
+            k _ (construction.mesh k)
+            (construction.mesh_le_totalMesh k)]
+          rw [construction.expect_signal_profileSelectedSurvival_mesh
+            k (construction.macroSurvivalFuel k.1)]
+          simpa [KiloblockConstruction.finiteMode,
+            KiloblockConstruction.profileFinalPotential] using
+              (construction.macroSurvivalFuel_succ k).symm
+      | resume k choice remaining =>
+          have hle := hremaining k choice remaining (Or.inr rfl)
+          unfold KiloblockConstruction.profileModeKernel
+          rw [Math.Probability.expect_pure,
+            construction.profileFinalPotential_finiteMode_active
+              k choice remaining hle,
+            construction.profileFinalPotential_finiteMode_drawResume
+              k choice remaining hle]
+      | final =>
+          simp [KiloblockConstruction.profileModeKernel,
+            KiloblockConstruction.profileFinalPotential,
+            KiloblockConstruction.finiteMode]
+  | finalActive =>
+      simp [KiloblockConstruction.profileModeKernel,
+        KiloblockConstruction.profileFinalPotential,
+        KiloblockConstruction.finiteMode]
+  | absorbed origin =>
+      simp [KiloblockConstruction.profileModeKernel,
+        KiloblockConstruction.profileFinalPotential,
+        KiloblockConstruction.finiteMode]
+  | active k choice remaining =>
+      have hle := hremaining k choice remaining (Or.inl rfl)
+      have hcurrent := construction.profileFinalPotential_finiteMode_active
+        k choice remaining hle
+      let downstream := construction.macroSurvivalFuel k.1
+      cases choice with
+      | none =>
+          by_cases hsmall : remaining ≤ 1
+          · simp only [KiloblockConstruction.profileModeKernel,
+              if_pos hsmall]
+            rw [Math.Probability.expect_pure,
+              construction.profileFinalPotential_after k none,
+              hcurrent]
+            rfl
+          · have hpred : remaining - 1 ≤ construction.totalMesh := by
+              omega
+            simp only [KiloblockConstruction.profileModeKernel,
+              if_neg hsmall]
+            rw [Math.Probability.expect_pure,
+              construction.profileFinalPotential_finiteMode_drawResume
+                k none (remaining - 1) hpred,
+              hcurrent]
+            rfl
+      | some owner =>
+          by_cases hsmall : remaining ≤ 1
+          · simp only [KiloblockConstruction.profileModeKernel,
+              if_pos hsmall]
+            let coin := quittingMeshHazardCoin
+              (construction.attempt k owner).quitWeight
+              (construction.mesh k)
+              (construction.attempt k owner).quitWeight_pos.le
+              (construction.attempt k owner).quitWeight_lt_one
+            let afterMode : KiloblockMode table construction.blockCount :=
+              .draw (phaseAfterAttempt table
+                (fun block selected =>
+                  (construction.attempt block selected).continuation)
+                k (some owner))
+            change expect (coin.bind fun quits => if quits = true then
+                PMF.pure (KiloblockMode.absorbed (some k))
+              else PMF.pure afterMode) (fun next =>
+                construction.profileFinalPotential
+                  (construction.finiteMode next)) = _
+            have hkernel : (coin.bind fun quits => if quits = true then
+                  PMF.pure (KiloblockMode.absorbed (some k))
+                else PMF.pure afterMode) =
+                coin.map fun quits => if quits = true then
+                  KiloblockMode.absorbed (some k) else afterMode := by
+              rw [← PMF.bind_pure_comp]
+              congr 1
+              funext quits
+              cases quits <;> rfl
+            rw [hkernel, Math.Probability.expect_map]
+            rw [show (fun quits => construction.profileFinalPotential
+                  (construction.finiteMode
+                    (if quits = true then
+                      KiloblockMode.absorbed (some k) else afterMode))) =
+                fun quits => if quits = true then 0 else
+                  match (construction.attempt k owner).continuation with
+                  | .restart =>
+                      construction.macroAdvanceProbability k * downstream
+                  | .advance => downstream by
+              funext quits
+              cases quits with
+              | false =>
+                  dsimp only [afterMode]
+                  exact construction.profileFinalPotential_after
+                    k (some owner)
+              | true => rfl]
+            change expect coin _ = _
+            rw [construction.expect_profileMeshCoin_zero_else]
+            rw [hcurrent]
+            dsimp only [downstream]
+            simpa only [if_pos hsmall] using
+              (construction.profileSelectedSurvival_step
+                k owner remaining
+                  (construction.macroSurvivalFuel k.1)).symm
+          · have hpred : remaining - 1 ≤
+                construction.totalMesh := by omega
+            simp only [KiloblockConstruction.profileModeKernel,
+              if_neg hsmall]
+            let coin := quittingMeshHazardCoin
+              (construction.attempt k owner).quitWeight
+              (construction.mesh k)
+              (construction.attempt k owner).quitWeight_pos.le
+              (construction.attempt k owner).quitWeight_lt_one
+            let afterMode : KiloblockMode table construction.blockCount :=
+              .draw (.resume k (some owner) (remaining - 1))
+            change expect (coin.bind fun quits => if quits = true then
+                PMF.pure (KiloblockMode.absorbed (some k))
+              else PMF.pure afterMode) (fun next =>
+                construction.profileFinalPotential
+                  (construction.finiteMode next)) = _
+            have hkernel : (coin.bind fun quits => if quits = true then
+                  PMF.pure (KiloblockMode.absorbed (some k))
+                else PMF.pure afterMode) =
+                coin.map fun quits => if quits = true then
+                  KiloblockMode.absorbed (some k) else afterMode := by
+              rw [← PMF.bind_pure_comp]
+              congr 1
+              funext quits
+              cases quits <;> rfl
+            rw [hkernel, Math.Probability.expect_map]
+            rw [show (fun quits => construction.profileFinalPotential
+                  (construction.finiteMode
+                    (if quits = true then
+                      KiloblockMode.absorbed (some k) else afterMode))) =
+                fun quits => if quits = true then 0 else
+                  construction.profileSelectedSurvival k (some owner)
+                    (remaining - 1) downstream by
+              funext quits
+              cases quits with
+              | false =>
+                  dsimp only [afterMode, downstream]
+                  exact
+                    construction.profileFinalPotential_finiteMode_drawResume
+                      k (some owner) (remaining - 1) hpred
+              | true => rfl]
+            change expect coin _ = _
+            rw [construction.expect_profileMeshCoin_zero_else]
+            rw [hcurrent]
+            dsimp only [downstream]
+            simpa only [if_neg hsmall] using
+              (construction.profileSelectedSurvival_step
+                k owner remaining
+                  (construction.macroSurvivalFuel k.1)).symm
+
+theorem KiloblockConstruction.profileFinalPotential_harmonic
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (mode : KiloblockFiniteMode construction) :
+    expect (construction.profileFiniteModeKernel mode)
+        construction.profileFinalPotential =
+      construction.profileFinalPotential mode := by
+  unfold KiloblockConstruction.profileFiniteModeKernel
+  rw [Math.Probability.expect_map]
+  rw [construction.profileRawFinalPotential_harmonic
+    (construction.modeOfFinite mode)
+    (construction.profileModeOfFinite_remaining_le_totalMesh mode)]
+  rw [construction.finiteMode_modeOfFinite]
+
+theorem KiloblockConstruction.profileFinalPotential_initial
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    construction.profileFinalPotential
+        (.drawChoose (Fin.last construction.blockCount)) =
+      construction.macroSurvivalProbability := by
+  change construction.macroSurvivalFuel
+      (construction.blockCount + 1) = _
+  exact construction.macroSurvivalFuel_full
+
 /-! One fresh type draw under the forced-Continue profile may advance,
 absorb at another player, or restart. These are its unnormalized masses. -/
 def KiloblockConstruction.continueRawAdvanceMass
