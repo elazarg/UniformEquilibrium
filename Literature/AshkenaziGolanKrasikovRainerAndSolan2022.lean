@@ -5,6 +5,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeByThreeZeroDiagonalQ
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
 import UniformEquilibrium.Quitting.AbsorptionPath.HomogeneousContinuousPath
+import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQControlledTrajectory
 
 /-!
 # Ashkenazi--Golan--Krasikov--Rainer--Solan (2022)

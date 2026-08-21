@@ -320,4 +320,5 @@ import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
+import MathUE.Viability.ControlledIntegralTrajectory
 import MathUE.WeierstrassCurve
