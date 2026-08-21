@@ -33,15 +33,16 @@ jobs:
           out="$RUNNER_TEMP/local-lean-environment"
           mkdir -p "$out"
           toolchain="$(tr -d '\r\n' < lean-toolchain)"
-          toolchain_dir="${toolchain//:/---}"
+          toolchain_path="$(dirname "$(dirname "$(elan which lean)")")"
           tar --zstd -cf "$out/lake-cache.tar.zst" .lake
           tar --zstd -cf "$out/lean-toolchain.tar.zst" \
-            -C "$HOME/.elan/toolchains" "$toolchain_dir"
+            -C "$(dirname "$toolchain_path")" "$(basename "$toolchain_path")"
           sha256sum "$out"/*.tar.zst > "$out/SHA256SUMS"
           cat > "$out/manifest.txt" <<EOF
           source_sha=$(git rev-parse HEAD)
           game_theory_sha=$(git -C GameTheory rev-parse HEAD)
           lean_toolchain=$toolchain
+          toolchain_dir=$(basename "$toolchain_path")
           lake_manifest_sha256=$(sha256sum lake-manifest.json | cut -d' ' -f1)
           EOF
 
