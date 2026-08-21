@@ -4760,11 +4760,10 @@ private theorem DiscreteDecisionProcess.rawLawFrom_state_mul_noReturn_eq_tsum
   · simp
 
 /-- Last exits from `A`, indexed by their time and sampled stage, have total mass at most one. -/
-private theorem DiscreteDecisionProcess.tsum_rawLastExitAtStage_le_one
+private theorem DiscreteDecisionProcess.tsum_rawLastExitAtStage_le_one_ennreal
     (P : DiscreteDecisionProcess) (start : P.X) (A : Set P.X) :
     (∑' index : ℕ × {current : DDPStage P // current.1 ∈ A},
-      (P.rawLawFrom start
-        (P.rawLastExitAtStage A index.1 index.2.1)).toReal) ≤ 1 := by
+      P.rawLawFrom start (P.rawLastExitAtStage A index.1 index.2.1)) ≤ 1 := by
   classical
   let K := ℕ × {current : DDPStage P // current.1 ∈ A}
   let L : K → Set (ℕ → DDPStage P) := fun index =>
@@ -4800,19 +4799,77 @@ private theorem DiscreteDecisionProcess.tsum_rawLastExitAtStage_le_one
         change (stage (second.1 + (first.1 - second.1))).1 ∈ A
         rw [Nat.add_sub_of_le hgt.le]
         exact hfirstStage.symm ▸ first.2.2
+  rw [← measure_iUnion hpairwise hmeasurable]
+  letI : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
+  calc
+    P.rawLawFrom start (⋃ index, L index) ≤ P.rawLawFrom start Set.univ :=
+      measure_mono (subset_univ _)
+    _ = 1 := measure_univ
+
+/-- The real last-exit masses are summable and their sum is at most one. -/
+private theorem DiscreteDecisionProcess.summable_rawLastExitAtStage_and_tsum_le_one
+    (P : DiscreteDecisionProcess) (start : P.X) (A : Set P.X) :
+    Summable (fun index : ℕ × {current : DDPStage P // current.1 ∈ A} =>
+      (P.rawLawFrom start
+        (P.rawLastExitAtStage A index.1 index.2.1)).toReal) ∧
+      (∑' index : ℕ × {current : DDPStage P // current.1 ∈ A},
+        (P.rawLawFrom start
+          (P.rawLastExitAtStage A index.1 index.2.1)).toReal) ≤ 1 := by
+  let K := ℕ × {current : DDPStage P // current.1 ∈ A}
+  let L : K → Set (ℕ → DDPStage P) := fun index =>
+    P.rawLastExitAtStage A index.1 index.2.1
   have hmeasure : (∑' index : K, P.rawLawFrom start (L index)) ≤ 1 := by
-    rw [← measure_iUnion hpairwise hmeasurable]
-    letI : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
-    calc
-      P.rawLawFrom start (⋃ index, L index) ≤ P.rawLawFrom start Set.univ :=
-        measure_mono (subset_univ _)
-      _ = 1 := measure_univ
+    simpa only [K, L] using P.tsum_rawLastExitAtStage_le_one_ennreal start A
+  have hneTop : (∑' index : K, P.rawLawFrom start (L index)) ≠ ⊤ := by
+    exact ne_top_of_le_ne_top (by simp) hmeasure
   have hfinite (index : K) : P.rawLawFrom start (L index) ≠ ⊤ := by
     letI : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
     exact measure_ne_top _ _
+  refine ⟨ENNReal.summable_toReal hneTop, ?_⟩
   have hreal := ENNReal.toReal_mono (by simp : (1 : ℝ≥0∞) ≠ ⊤) hmeasure
   rw [ENNReal.tsum_toReal_eq hfinite] at hreal
   simpa only [ENNReal.toReal_one, K, L] using hreal
+
+/-- Reindex last exits by time, state in `A`, and the action sampled there. -/
+private def DiscreteDecisionProcess.rawLastExitIndexEquiv
+    (P : DiscreteDecisionProcess) (A : Set P.X) :
+    (Σ index : ℕ × {x : P.X // x ∈ A}, P.Y index.2.1) ≃
+      ℕ × {current : DDPStage P // current.1 ∈ A} where
+  toFun index := ⟨index.1.1, ⟨⟨index.1.2.1, index.2⟩, index.1.2.2⟩⟩
+  invFun index := ⟨⟨index.1, ⟨index.2.1.1, index.2.2⟩⟩, index.2.1.2⟩
+  left_inv index := by cases index; rfl
+  right_inv index := by cases index; rfl
+
+/-- Nested state/action last-exit masses are summable and have total mass at most one. -/
+private theorem DiscreteDecisionProcess.summable_nested_rawLastExit_and_tsum_le_one
+    (P : DiscreteDecisionProcess) (start : P.X) (A : Set P.X) :
+    Summable (fun index : ℕ × {x : P.X // x ∈ A} =>
+      ∑' y : P.Y index.2.1,
+        (P.rawLawFrom start
+          (P.rawLastExitAtStage A index.1 ⟨index.2.1, y⟩)).toReal) ∧
+      (∑' index : ℕ × {x : P.X // x ∈ A},
+        ∑' y : P.Y index.2.1,
+          (P.rawLawFrom start
+            (P.rawLastExitAtStage A index.1 ⟨index.2.1, y⟩)).toReal) ≤ 1 := by
+  let K := ℕ × {current : DDPStage P // current.1 ∈ A}
+  let f : K → ℝ := fun index =>
+    (P.rawLawFrom start (P.rawLastExitAtStage A index.1 index.2.1)).toReal
+  let J := Σ index : ℕ × {x : P.X // x ∈ A}, P.Y index.2.1
+  let g : J → ℝ := fun index =>
+    (P.rawLawFrom start
+      (P.rawLastExitAtStage A index.1.1 ⟨index.1.2.1, index.2⟩)).toReal
+  have hf : Summable f ∧ (∑' index, f index) ≤ 1 := by
+    simpa only [K, f] using P.summable_rawLastExitAtStage_and_tsum_le_one start A
+  have hg : Summable g := by
+    change Summable (f ∘ P.rawLastExitIndexEquiv A)
+    exact (P.rawLastExitIndexEquiv A).summable_iff.2 hf.1
+  refine ⟨?_, ?_⟩
+  · simpa only [J, g] using hg.sigma
+  · rw [← hg.tsum_sigma]
+    change (∑' index : J, g index) ≤ 1
+    change (∑' index : J, f (P.rawLastExitIndexEquiv A index)) ≤ 1
+    rw [(P.rawLastExitIndexEquiv A).tsum_eq]
+    exact hf.2
 
 /-- A lower bound for all values in a decision process. -/
 def IsDDPValueLowerBound (P : DiscreteDecisionProcess) (L : ℝ) : Prop :=
@@ -5112,6 +5169,65 @@ private theorem ReturnValueData.tsum_choose_mul_abs_increment_le
       rw [habSum]
       linarith
     _ = 2 * P.valueDifferenceBound * NoReturnProbability P S A x := by ring
+
+/-- The expected variation accumulated while visiting one rank cell is at most `2M`. -/
+private theorem ReturnValueData.tsum_state_actionVariation_le
+    {P : DiscreteDecisionProcess} {S : DDPSemantics P} (R : ReturnValueData P S)
+    (A : Set P.X) (hcommon : ∀ x, x ∈ A → ∃ r : ℝ, ∀ y : P.Y x, R.value A x y = r) :
+    (∑' index : ℕ × {x : P.X // x ∈ A},
+      (P.rawLawFrom P.initial {stage | (stage index.1).1 = index.2.1}).toReal *
+        (∑' y : P.Y index.2.1,
+          (P.choose index.2.1 y).toReal *
+            |DDPStage.increment P ⟨index.2.1, y⟩|)) ≤
+      2 * P.valueDifferenceBound := by
+  let lastExit : ℕ × {x : P.X // x ∈ A} → ℝ := fun index =>
+    ∑' y : P.Y index.2.1,
+      (P.rawLawFrom P.initial
+        (P.rawLastExitAtStage A index.1 ⟨index.2.1, y⟩)).toReal
+  have hlast : Summable lastExit ∧ (∑' index, lastExit index) ≤ 1 := by
+    simpa only [lastExit] using P.summable_nested_rawLastExit_and_tsum_le_one P.initial A
+  let variation : ℕ × {x : P.X // x ∈ A} → ℝ := fun index =>
+    (P.rawLawFrom P.initial {stage | (stage index.1).1 = index.2.1}).toReal *
+      (∑' y : P.Y index.2.1,
+        (P.choose index.2.1 y).toReal *
+          |DDPStage.increment P ⟨index.2.1, y⟩|)
+  have hvariationNonneg (index : ℕ × {x : P.X // x ∈ A}) :
+      0 ≤ variation index := by
+    apply mul_nonneg ENNReal.toReal_nonneg
+    exact tsum_nonneg fun _ => mul_nonneg ENNReal.toReal_nonneg (abs_nonneg _)
+  have hpoint (index : ℕ × {x : P.X // x ∈ A}) :
+      variation index ≤ 2 * P.valueDifferenceBound * lastExit index := by
+    calc
+      variation index ≤
+          (P.rawLawFrom P.initial
+            {stage | (stage index.1).1 = index.2.1}).toReal *
+            (2 * P.valueDifferenceBound *
+              NoReturnProbability P S A index.2.1) := by
+        apply mul_le_mul_of_nonneg_left
+        · exact R.tsum_choose_mul_abs_increment_le A index.2.1
+            (hcommon index.2.1 index.2.2)
+        · exact ENNReal.toReal_nonneg
+      _ = 2 * P.valueDifferenceBound *
+          ((P.rawLawFrom P.initial
+            {stage | (stage index.1).1 = index.2.1}).toReal *
+              NoReturnProbability P S A index.2.1) := by ring
+      _ = 2 * P.valueDifferenceBound * lastExit index := by
+        rw [P.rawLawFrom_state_mul_noReturn_eq_tsum S P.initial A index.1 index.2.1]
+  have hcoefficientNonneg : 0 ≤ 2 * P.valueDifferenceBound := by
+    exact mul_nonneg (by norm_num) (le_trans zero_le_one P.valueDifferenceBound_one)
+  have hright : Summable fun index => 2 * P.valueDifferenceBound * lastExit index :=
+    hlast.1.mul_left (2 * P.valueDifferenceBound)
+  have hvariation : Summable variation :=
+    Summable.of_nonneg_of_le hvariationNonneg hpoint hright
+  change (∑' index, variation index) ≤ _
+  calc
+    (∑' index, variation index) ≤
+        ∑' index, 2 * P.valueDifferenceBound * lastExit index :=
+      Summable.tsum_le_tsum hpoint hvariation hright
+    _ = 2 * P.valueDifferenceBound * ∑' index, lastExit index := tsum_mul_left
+    _ ≤ 2 * P.valueDifferenceBound * 1 :=
+      mul_le_mul_of_nonneg_left hlast.2 hcoefficientNonneg
+    _ = 2 * P.valueDifferenceBound := mul_one _
 
 /-- A state is varied if one of its actions has a value different from the state value. -/
 def IsVaried (P : DiscreteDecisionProcess) (x : P.X) : Prop :=
