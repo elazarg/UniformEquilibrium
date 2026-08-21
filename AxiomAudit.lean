@@ -18,6 +18,7 @@ import MathUE.AnalyticMixedObstruction
 import MathUE.AnalyticOrderComparison
 import MathUE.AnalyticPowerNormalization
 import MathUE.BackwardOrbitSelection
+import MathUE.BanachLimit
 import MathUE.BonferroniProductBounds
 import MathUE.BoundedDiscrepancyCirculation
 import MathUE.CalendarSummability
