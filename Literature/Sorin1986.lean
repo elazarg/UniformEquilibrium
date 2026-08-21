@@ -4594,6 +4594,309 @@ def example5 (N : ℕ) [NeZero N] : FiniteStageGame where
       if action who = who then 1 else 0
     else 0
 
+/-- In Example 5 the aggregate pure payoff is one exactly at unanimous
+profiles, and is zero otherwise. -/
+private theorem example5_sum_payoff (N : ℕ) [NeZero N]
+    (action : Fin N → Fin N) :
+    ∑ who, (example5 N).payoff action who =
+      if ∃ label, ∀ who, action who = label then 1 else 0 := by
+  classical
+  change (∑ who : Fin N,
+      if _h : ∀ i, action i = action who then
+        if action who = who then 1 else 0
+      else 0) = _
+  by_cases hunanimous : ∃ label, ∀ who, action who = label
+  · obtain ⟨label, hlabel⟩ := hunanimous
+    rw [if_pos ⟨label, hlabel⟩]
+    have hconstant (who : Fin N) : ∀ i, action i = action who := by
+      intro i
+      rw [hlabel i, hlabel who]
+    simp_rw [dif_pos (hconstant _), hlabel]
+    simp
+  · rw [if_neg hunanimous]
+    apply Finset.sum_eq_zero
+    intro who _
+    rw [dif_neg]
+    intro hconstant
+    exact hunanimous ⟨action who, hconstant⟩
+
+/-- Every pure payoff in Example 5 is nonnegative. -/
+private theorem example5_payoff_nonneg (N : ℕ) [NeZero N]
+    (action : Fin N → Fin N) (who : Fin N) :
+    0 ≤ (example5 N).payoff action who := by
+  change 0 ≤ if _h : ∀ i, action i = action who then
+    if action who = who then 1 else 0
+  else 0
+  split_ifs <;> norm_num
+
+/-- An independent product supported on unanimous profiles has common pure
+marginals, provided that there are at least two coordinates. -/
+private theorem pmfPi_eq_common_pure_of_unanimous_support
+    (N : ℕ) [NeZero N] (hN : 2 ≤ N) (profile : Fin N → PMF (Fin N))
+    (hsupport : ∀ action ∈ (Math.PMFProduct.pmfPi profile).support,
+      ∃ label, ∀ who, action who = label) :
+    ∃ label, ∀ who, profile who = PMF.pure label := by
+  classical
+  let base : Fin N → Fin N := fun who => (profile who).support_nonempty.choose
+  have hbaseSupport (who : Fin N) : base who ∈ (profile who).support :=
+    (profile who).support_nonempty.choose_spec
+  have hjointSupport (action : Fin N → Fin N)
+      (haction : ∀ who, action who ∈ (profile who).support) :
+      action ∈ (Math.PMFProduct.pmfPi profile).support := by
+    rw [PMF.mem_support_iff, Math.PMFProduct.pmfPi_apply]
+    exact Finset.prod_ne_zero_iff.mpr fun who _ =>
+      (PMF.mem_support_iff _ _).mp (haction who)
+  obtain ⟨label, hlabel⟩ := hsupport base
+    (hjointSupport base hbaseSupport)
+  refine ⟨label, fun who => ?_⟩
+  have hsupportWho : (profile who).support = {label} := by
+    apply Set.Subset.antisymm
+    · intro action haction
+      let zero : Fin N := ⟨0, by omega⟩
+      let one : Fin N := ⟨1, by omega⟩
+      let other : Fin N := if who = zero then one else zero
+      have hzeroOne : zero ≠ one := by
+        intro h
+        have : (0 : ℕ) = 1 := by simpa [zero, one] using congrArg Fin.val h
+        omega
+      have hother : other ≠ who := by
+        by_cases hwho : who = zero
+        · simp [other, hwho, hzeroOne.symm]
+        · simp [other, hwho, Ne.symm hwho]
+      let updated := Function.update base who action
+      have hupdatedSupport : ∀ i, updated i ∈ (profile i).support := by
+        intro i
+        by_cases hi : i = who
+        · subst i
+          simpa [updated] using haction
+        · simpa [updated, hi] using hbaseSupport i
+      obtain ⟨common, hcommon⟩ := hsupport updated
+        (hjointSupport updated hupdatedSupport)
+      have hactionCommon : action = common := by
+        simpa [updated] using hcommon who
+      have hotherCommon : base other = common := by
+        simpa [updated, hother] using hcommon other
+      rw [hactionCommon, ← hotherCommon, hlabel other]
+      simp
+    · intro action haction
+      subst action
+      rw [← hlabel who]
+      exact hbaseSupport who
+  have hone : profile who label = 1 :=
+    (PMF.apply_eq_one_iff (profile who) label).mpr hsupportWho
+  apply PMF.ext
+  intro action
+  by_cases ha : action = label
+  · subst action
+    simp [hone]
+  · have hzero : profile who action = 0 := by
+      rw [PMF.apply_eq_zero_iff]
+      simp [hsupportWho, ha]
+    simp [hzero, ha]
+
+/-- Every correlated-feasible payoff of Example 5 is coordinatewise
+nonnegative and has aggregate payoff at most one. -/
+private theorem example5_correlated_bounds (N : ℕ) [NeZero N]
+    {payoff : Payoff (Fin N)}
+    (hpayoff : payoff ∈ (example5 N).correlatedFeasiblePayoffs) :
+    (∀ who, 0 ≤ payoff who) ∧ ∑ who, payoff who ≤ 1 := by
+  apply (convexHull_min (t := {v : Payoff (Fin N) |
+      (∀ who, 0 ≤ v who) ∧ ∑ who, v who ≤ 1}) ?_ ?_) hpayoff
+  · rintro _ ⟨action, rfl⟩
+    change (Fin N → Fin N) at action
+    constructor
+    · exact example5_payoff_nonneg N action
+    · change (∑ who : Fin N,
+          if _h : ∀ i, action i = action who then
+            if action who = who then 1 else 0
+          else 0) ≤ 1
+      have htotal := example5_sum_payoff N action
+      change (∑ who : Fin N,
+          if _h : ∀ i, action i = action who then
+            if action who = who then 1 else 0
+          else 0) = _ at htotal
+      rw [htotal]
+      split_ifs <;> norm_num
+  · intro x hx y hy a b ha hb hab
+    constructor
+    · intro who
+      exact add_nonneg (mul_nonneg ha (hx.1 who))
+        (mul_nonneg hb (hy.1 who))
+    · change (∑ who, (a * x who + b * y who)) ≤ 1
+      rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum]
+      nlinarith [hx.2, hy.2]
+
+/-- At a public history, Example 5's stage expectation is its independently
+mixed one-stage payoff at the current behavioral actions. -/
+private theorem example5_stageEUAt_eq_mixedPayoff
+    (N : ℕ) [NeZero N] (profile : (example5 N).BehaviorProfile)
+    {time : ℕ} (history : (example5 N).repeatedGame.Hist time)
+    (who : Fin N) :
+    (example5 N).repeatedGame.stageEUAt profile history who =
+      (example5 N).mixedPayoff
+        (fun player => profile player time history) who := by
+  letI : Finite (example5 N).kernel.Outcome := by
+    change Finite (Fin N → Fin N)
+    exact Finite.of_fintype _
+  unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+  unfold FiniteStageGame.mixedPayoff KernelGame.payoffVector
+  rw [(example5 N).kernel.mixedExtension_eu]
+  rfl
+
+/-- Equality in Example 5's aggregate mixed-payoff bound forces all players
+to use the same pure action. -/
+private theorem example5_mixedProfile_common_pure_of_total_eq_one
+    (N : ℕ) [NeZero N] (hN : 2 ≤ N)
+    (profile : (example5 N).MixedProfile)
+    (htotal : ∑ who, (example5 N).mixedPayoff profile who = 1) :
+    ∃ label, ∀ who, profile who = PMF.pure label := by
+  letI (who : (example5 N).Player) :
+      Fintype ((example5 N).kernel.Strategy who) :=
+    (example5 N).finiteAction who
+  letI : Finite (example5 N).kernel.Outcome := by
+    change Finite (Fin N → Fin N)
+    exact Finite.of_fintype _
+  let joint := Math.PMFProduct.pmfPi profile
+  have hmixed (who : Fin N) :
+      (example5 N).mixedPayoff profile who =
+        Math.Probability.expect joint
+          (fun action => (example5 N).payoff action who) := by
+    change (example5 N).kernel.mixedExtension.eu profile who = _
+    rw [(example5 N).kernel.mixedExtension_eu]
+    congr 1
+    funext action
+    simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+  have hexpect : Math.Probability.expect joint
+      (fun action => ∑ who, (example5 N).payoff action who) = 1 := by
+    rw [← Math.Probability.expect_sum_comm]
+    simpa only [hmixed] using htotal
+  apply pmfPi_eq_common_pure_of_unanimous_support N hN profile
+  intro action haction
+  by_contra hnot
+  have hstrict : Math.Probability.expect joint
+      (fun pure => ∑ who, (example5 N).payoff pure who) < 1 := by
+    apply Math.Probability.expect_lt_const_of_le_of_exists_lt
+    · intro pure
+      have hsum := example5_sum_payoff N pure
+      rw [hsum]
+      split_ifs <;> norm_num
+    · refine ⟨action, (PMF.mem_support_iff _ _).mp haction, ?_⟩
+      have hsum := example5_sum_payoff N action
+      rw [hsum, if_neg hnot]
+      norm_num
+  linarith
+
+/-- If Example 5 attains the maximal aggregate discounted payoff, then its
+first-stage independently mixed payoff already has aggregate one. -/
+private theorem example5_initial_total_eq_one_of_discounted_total_eq_one
+    (N : ℕ) [NeZero N] (rate : (example5 N).DiscountRate)
+    (profile : (example5 N).BehaviorProfile)
+    (htotal : ∑ who,
+      (example5 N).discountedPayoffOnRate rate profile who = 1) :
+    ∑ who, (example5 N).mixedPayoff
+      ((example5 N).initialMixedProfile profile) who = 1 := by
+  letI (who : Fin N) : Finite ((example5 N).repeatedGame.Act who) :=
+    @Finite.of_fintype _ ((example5 N).finiteAction who)
+  letI : Finite (example5 N).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let beta := 1 - rate.1
+  let empty := (example5 N).repeatedGame.emptyHist PUnit.unit
+  let actionLaw := (example5 N).repeatedGame.stageActionDist profile empty
+  let continuation (action : (example5 N).repeatedGame.JointAct)
+      (who : Fin N) :=
+    (example5 N).repeatedGame.discountedPayoff beta
+      ((example5 N).repeatedGame.shiftProfile
+        profile (PUnit.unit, action)) PUnit.unit who
+  have hbeta0 : 0 ≤ beta := by
+    dsimp only [beta]
+    linarith [rate.2.2]
+  have hbeta1 : beta < 1 := by
+    dsimp only [beta]
+    linarith [rate.2.1]
+  have hbound (who : Fin N) : ∀ state action,
+      |(example5 N).repeatedGame.stagePayoff state action who| ≤ 1 := by
+    intro state action
+    simp only [FiniteStageGame.repeatedGame,
+      KernelGame.realizedActionStochasticGame,
+      FiniteStageGame.kernel, KernelGame.eu_ofPureEU, example5]
+    split_ifs <;> norm_num
+  have htransition (action : (example5 N).repeatedGame.JointAct) :
+      (example5 N).repeatedGame.transition PUnit.unit action =
+        PMF.pure PUnit.unit := rfl
+  have hexpectTransition (action : (example5 N).repeatedGame.JointAct)
+      (f : (example5 N).repeatedGame.State → ℝ) :
+      Math.Probability.expect
+          ((example5 N).repeatedGame.transition PUnit.unit action) f =
+        f PUnit.unit := by
+    rw [htransition]
+    exact Math.Probability.expect_pure f PUnit.unit
+  have hinitial : (example5 N).initialMixedProfile profile =
+      fun player => profile player 0 empty := rfl
+  have hshift (who : Fin N) :
+      (example5 N).discountedPayoffOnRate rate profile who =
+        rate.1 * (example5 N).repeatedGame.stageEUAt profile empty who +
+          beta * Math.Probability.expect actionLaw
+            (fun action => continuation action who) := by
+    have h := (example5 N).repeatedGame.discountedPayoff_shift
+      (hbound who) profile PUnit.unit (β := beta) hbeta0 hbeta1
+    simp_rw [hexpectTransition] at h
+    simpa [FiniteStageGame.discountedPayoffOnRate,
+      FiniteStageGame.discountedPayoff, beta, empty, actionLaw,
+      continuation] using h
+  have hcontinuation : Math.Probability.expect actionLaw
+      (fun action => ∑ who, continuation action who) ≤ 1 := by
+    calc
+      Math.Probability.expect actionLaw
+          (fun action => ∑ who, continuation action who) ≤
+          Math.Probability.expect actionLaw (fun _ => (1 : ℝ)) := by
+        apply Math.Probability.expect_mono
+        intro action
+        have hmem : (fun who => continuation action who) ∈
+            (example5 N).correlatedFeasiblePayoffs := by
+          apply lemma_1_Dlambda_subset_C (example5 N) rate
+          exact ⟨(example5 N).repeatedGame.shiftProfile
+            profile (PUnit.unit, action), rfl⟩
+        exact (example5_correlated_bounds N hmem).2
+      _ = 1 := Math.Probability.expect_const actionLaw 1
+  have hstageLe : ∑ who,
+      (example5 N).repeatedGame.stageEUAt profile empty who ≤ 1 := by
+    have hmem := (example5 N).mixedPayoff_mem_correlatedFeasiblePayoffs
+      ((example5 N).initialMixedProfile profile)
+    have hle := (example5_correlated_bounds N hmem).2
+    rw [hinitial] at hle
+    calc
+      (∑ who, (example5 N).repeatedGame.stageEUAt profile empty who) =
+          ∑ who, (example5 N).mixedPayoff
+            (fun player => profile player 0 empty) who := by
+        apply Finset.sum_congr rfl
+        intro who _
+        exact example5_stageEUAt_eq_mixedPayoff N profile empty who
+      _ ≤ 1 := hle
+  have hsumShift :
+      (∑ who, (example5 N).discountedPayoffOnRate rate profile who) =
+        rate.1 * (∑ who,
+          (example5 N).repeatedGame.stageEUAt profile empty who) +
+          beta * Math.Probability.expect actionLaw
+            (fun action => ∑ who, continuation action who) := by
+    simp_rw [hshift]
+    rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
+      Math.Probability.expect_sum_comm]
+    rfl
+  have hstageEq : ∑ who,
+      (example5 N).repeatedGame.stageEUAt profile empty who = 1 := by
+    rw [htotal] at hsumShift
+    dsimp only [beta] at hsumShift hcontinuation
+    nlinarith [rate.2.1, rate.2.2]
+  rw [hinitial]
+  calc
+    (∑ who, (example5 N).mixedPayoff
+        (fun player => profile player 0 empty) who) =
+        ∑ who, (example5 N).repeatedGame.stageEUAt profile empty who := by
+      apply Finset.sum_congr rfl
+      intro who _
+      exact (example5_stageEUAt_eq_mixedPayoff N profile empty who).symm
+    _ = 1 := hstageEq
+
 /-- Example 6.  Player `false` has two rows and player `true` has four
 columns. -/
 inductive FourColumn
@@ -6309,12 +6612,106 @@ theorem proposition_4 (G : FiniteStageGame) (lam : ℝ)
     G.discountedFeasiblePayoffs lam = G.correlatedFeasiblePayoffs := by
   sorry
 
-/-! Example 5 proves the constant `1/N` sharp. -/
-theorem example5_sharp (N : ℕ) [NeZero N] (lam : ℝ)
-    (hlam : 1 / (N : ℝ) < lam) :
+/-! Example 5 proves the constant `1/N` sharp for the paper's discount
+domain `0 < λ ≤ 1`. -/
+theorem example5_sharp (N : ℕ) [NeZero N]
+    (rate : (example5 N).DiscountRate)
+    (hlam : 1 / (N : ℝ) < rate.1) :
     (fun _ : Fin N => 1 / (N : ℝ)) ∉
-      (example5 N).discountedFeasiblePayoffs lam := by
-  sorry
+      (example5 N).discountedFeasiblePayoffsOnRate rate := by
+  rintro ⟨profile, hpayoff⟩
+  have hNpos : 0 < N := Nat.pos_of_ne_zero (NeZero.ne N)
+  have hN : 2 ≤ N := by
+    by_contra hnot
+    have hNone : N = 1 := by omega
+    subst N
+    norm_num at hlam
+    linarith [rate.2.2]
+  have hNcast : (N : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hNpos)
+  have htotal : ∑ who,
+      (example5 N).discountedPayoffOnRate rate profile who = 1 := by
+    change ∑ who, (example5 N).discountedPayoff rate.1 profile who = 1
+    rw [hpayoff]
+    change (∑ _who : Fin N, 1 / (N : ℝ)) = 1
+    rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin]
+    rw [nsmul_eq_mul]
+    rw [div_eq_mul_inv, one_mul]
+    exact mul_inv_cancel₀ hNcast
+  have hinitialTotal :=
+    example5_initial_total_eq_one_of_discounted_total_eq_one
+      N rate profile htotal
+  obtain ⟨label, hpure⟩ :=
+    example5_mixedProfile_common_pure_of_total_eq_one
+      N hN ((example5 N).initialMixedProfile profile) hinitialTotal
+  let constantAction : Fin N → Fin N := fun _ => label
+  have hinitialPure : (example5 N).initialMixedProfile profile =
+      (example5 N).kernel.pureMixedProfile constantAction := by
+    funext who
+    exact hpure who
+  let empty := (example5 N).repeatedGame.emptyHist PUnit.unit
+  have hcurrent : (fun player => profile player 0 empty) =
+      (example5 N).initialMixedProfile profile := rfl
+  have hstage :
+      (example5 N).repeatedGame.stageEUAt profile empty label = 1 := by
+    rw [example5_stageEUAt_eq_mixedPayoff N profile empty label,
+      hcurrent, hinitialPure]
+    change (example5 N).kernel.mixedExtension.payoffVector
+      ((example5 N).kernel.pureMixedProfile constantAction) label = 1
+    rw [(example5 N).kernel.mixedExtension_payoffVector_pureMixedProfile]
+    simp [constantAction, example5]
+  let beta := 1 - rate.1
+  have hbeta0 : 0 ≤ beta := by
+    dsimp only [beta]
+    linarith [rate.2.2]
+  have hbeta1 : beta < 1 := by
+    dsimp only [beta]
+    linarith [rate.2.1]
+  letI (who : Fin N) : Finite ((example5 N).repeatedGame.Act who) :=
+    @Finite.of_fintype _ ((example5 N).finiteAction who)
+  letI : Finite (example5 N).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  letI : Subsingleton (example5 N).repeatedGame.State := by
+    change Subsingleton PUnit
+    infer_instance
+  have hbound : ∀ state action,
+      |(example5 N).repeatedGame.stagePayoff state action label| ≤ 1 := by
+    intro state action
+    simp only [FiniteStageGame.repeatedGame,
+      KernelGame.realizedActionStochasticGame,
+      FiniteStageGame.kernel, KernelGame.eu_ofPureEU, example5]
+    split_ifs <;> norm_num
+  let actionLaw := (example5 N).repeatedGame.stageActionDist profile empty
+  have htailNonneg : 0 ≤ Math.Probability.expect actionLaw fun action =>
+      Math.Probability.expect
+        ((example5 N).repeatedGame.transition PUnit.unit action) fun state =>
+          (example5 N).repeatedGame.discountedPayoff beta
+            ((example5 N).repeatedGame.shiftProfile
+              profile (PUnit.unit, action)) state label := by
+    apply Math.Probability.expect_nonneg
+    intro action
+    apply Math.Probability.expect_nonneg
+    intro state
+    have hstate : state = PUnit.unit := Subsingleton.elim _ _
+    subst state
+    have hmem : (fun who =>
+        (example5 N).repeatedGame.discountedPayoff beta
+          ((example5 N).repeatedGame.shiftProfile
+            profile (PUnit.unit, action)) PUnit.unit who) ∈
+        (example5 N).correlatedFeasiblePayoffs := by
+      apply lemma_1_Dlambda_subset_C (example5 N) rate
+      exact ⟨(example5 N).repeatedGame.shiftProfile
+        profile (PUnit.unit, action), rfl⟩
+    exact (example5_correlated_bounds N hmem).1 label
+  have hshift := (example5 N).repeatedGame.discountedPayoff_shift
+    hbound profile PUnit.unit (β := beta) hbeta0 hbeta1
+  have hpayoffLabel := congrFun hpayoff label
+  change (example5 N).repeatedGame.discountedPayoff beta
+      profile PUnit.unit label = 1 / (N : ℝ) at hpayoffLabel
+  dsimp only [empty, actionLaw] at htailNonneg
+  rw [hstage] at hshift
+  dsimp only [beta] at hshift hpayoffLabel htailNonneg
+  rw [hpayoffLabel] at hshift
+  nlinarith
 
 /-! Proposition 5 is a finite-horizon splice using convexity of `Dₙ`. -/
 private theorem finiteFeasiblePayoffs_succ_eq_of_convex
