@@ -7105,13 +7105,310 @@ theorem two_by_two_feasible_dichotomy
         G.correlatedFeasiblePayoffs := by
   sorry
 
+/-- A bounded affine recursion is realized by its normalized geometric
+series.  This is the scalar telescoping step in Proposition 6. -/
+private theorem discounted_sum_eq_of_affine_recurrence
+    (δ : ℝ) (hδ : 0 < δ) (hδ1 : δ ≤ 1)
+    (state stage : ℕ → ℝ) (bound : ℝ)
+    (hbound : ∀ time, |state time| ≤ bound)
+    (hrec : ∀ time,
+      state time = δ * stage time + (1 - δ) * state (time + 1)) :
+    δ * ∑' time : ℕ, (1 - δ) ^ time * stage time = state 0 := by
+  let beta := 1 - δ
+  have hbeta0 : 0 ≤ beta := by
+    dsimp only [beta]
+    linarith
+  have hbeta1 : beta < 1 := by
+    dsimp only [beta]
+    linarith
+  have hbound0 : 0 ≤ bound :=
+    (abs_nonneg (state 0)).trans (hbound 0)
+  have hgeom : Summable (fun time : ℕ => beta ^ time) :=
+    summable_geometric_of_lt_one hbeta0 hbeta1
+  let weightedState : ℕ → ℝ :=
+    fun time => beta ^ time * state time
+  have hweightedState : Summable weightedState := by
+    apply Summable.of_norm_bounded (hgeom.mul_left bound)
+    intro time
+    dsimp only [weightedState]
+    rw [Real.norm_eq_abs, abs_mul, abs_pow, abs_of_nonneg hbeta0]
+    simpa [mul_comm] using
+      mul_le_mul_of_nonneg_left (hbound time) (pow_nonneg hbeta0 time)
+  have hweightedTail : Summable (fun time => weightedState (time + 1)) :=
+    hweightedState.comp_injective Nat.succ_injective
+  rw [← tsum_mul_left]
+  calc
+    (∑' time : ℕ, δ * ((1 - δ) ^ time * stage time)) =
+        ∑' time : ℕ, (weightedState time - weightedState (time + 1)) := by
+      apply tsum_congr
+      intro time
+      have h := hrec time
+      dsimp only [weightedState, beta]
+      rw [pow_succ']
+      calc
+        δ * ((1 - δ) ^ time * stage time) =
+            (1 - δ) ^ time * (δ * stage time) := by ring
+        _ = (1 - δ) ^ time *
+            (state time - (1 - δ) * state (time + 1)) := by
+          congr 1
+          linarith
+        _ = (1 - δ) ^ time * state time -
+            (1 - δ) * (1 - δ) ^ time * state (time + 1) := by
+          ring
+    _ = (∑' time : ℕ, weightedState time) -
+        ∑' time : ℕ, weightedState (time + 1) :=
+      hweightedState.tsum_sub hweightedTail
+    _ = state 0 := by
+      rw [hweightedState.tsum_eq_zero_add]
+      simp [weightedState]
+
+/-- Play a prescribed independently mixed stage profile at each date,
+independently of the public history. -/
+private noncomputable def mixedSequenceBehavior (G : FiniteStageGame)
+    (sequence : ℕ → G.MixedProfile) : G.BehaviorProfile :=
+  fun who time _history => sequence time who
+
+/-- A history-independent mixed-profile sequence has the prescribed expected
+stage payoff at every date. -/
+private theorem expectedStagePayoff_mixedSequenceBehavior
+    (G : FiniteStageGame) (sequence : ℕ → G.MixedProfile) (time : ℕ) :
+    (fun who => G.repeatedGame.expectedStagePayoff
+      (mixedSequenceBehavior G sequence) PUnit.unit time who) =
+      G.mixedPayoff (sequence time) := by
+  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  funext who
+  unfold StochasticGame.expectedStagePayoff
+  rw [show (fun history => G.repeatedGame.stageEUAt
+      (mixedSequenceBehavior G sequence) history who) =
+      fun _history => G.mixedPayoff (sequence time) who by
+    funext history
+    unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+    unfold mixedSequenceBehavior FiniteStageGame.mixedPayoff
+      KernelGame.payoffVector
+    exact (G.kernel.mixedExtension_eu (sequence time) who).symm]
+  exact Math.Probability.expect_const _ _
+
 /-! Proposition 6 is the discounted analogue of Proposition 5. -/
 theorem proposition_6 (G : FiniteStageGame) (lam : ℝ)
     (hlam : 0 < lam) (hlam1 : lam ≤ 1)
     (hconvex : Convex ℝ (G.discountedFeasiblePayoffs lam)) :
     ∀ δ : ℝ, 0 < δ → δ < lam →
       G.discountedFeasiblePayoffs δ = G.correlatedFeasiblePayoffs := by
-  sorry
+  intro δ hδ hδlam
+  have hδ1 : δ ≤ 1 := (le_of_lt hδlam).trans hlam1
+  let lamRate : G.DiscountRate := ⟨lam, hlam, hlam1⟩
+  let deltaRate : G.DiscountRate := ⟨δ, hδ, hδ1⟩
+  have hC : G.discountedFeasiblePayoffs lam =
+      G.correlatedFeasiblePayoffs := by
+    exact (lemma_1_Dlambda_convex_iff G lamRate).mp hconvex
+  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  letI : Subsingleton G.repeatedGame.State :=
+    inferInstanceAs (Subsingleton PUnit)
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  obtain ⟨rawBound, hrawBound⟩ :=
+    Math.Probability.exists_abs_bound_of_finite
+      (fun data : G.repeatedGame.State ×
+          G.repeatedGame.JointAct × G.Player =>
+        G.repeatedGame.stagePayoff data.1 data.2.1 data.2.2)
+  let bound := max rawBound 0
+  have hbound0 : 0 ≤ bound := le_max_right _ _
+  have hstageBound : ∀ state action who,
+      |G.repeatedGame.stagePayoff state action who| ≤ bound := by
+    intro state action who
+    exact (hrawBound (state, action, who)).trans (le_max_left _ _)
+  have hCbound (who : G.Player) {payoff : Payoff G.Player}
+      (hpayoff : payoff ∈ G.correlatedFeasiblePayoffs) :
+      |payoff who| ≤ bound := by
+    apply (convexHull_min (t := {v : Payoff G.Player |
+      |v who| ≤ bound}) ?_ ?_) hpayoff
+    · rintro _ ⟨action, rfl⟩
+      simpa [FiniteStageGame.repeatedGame,
+        KernelGame.realizedActionStochasticGame,
+        FiniteStageGame.kernel, KernelGame.eu_ofPureEU] using
+          hstageBound PUnit.unit action who
+    · intro x hx y hy a b ha hb hab
+      change |a * x who + b * y who| ≤ bound
+      calc
+        |a * x who + b * y who| ≤
+            |a * x who| + |b * y who| := abs_add_le _ _
+        _ = a * |x who| + b * |y who| := by
+          rw [abs_mul, abs_mul, abs_of_nonneg ha, abs_of_nonneg hb]
+        _ ≤ a * bound + b * bound := by
+          exact add_le_add
+            (mul_le_mul_of_nonneg_left hx ha)
+            (mul_le_mul_of_nonneg_left hy hb)
+        _ = bound := by rw [← add_mul, hab, one_mul]
+  have hdecompose (payoff : Payoff G.Player)
+      (hpayoff : payoff ∈ G.correlatedFeasiblePayoffs) :
+      ∃ next : Payoff G.Player,
+        next ∈ G.correlatedFeasiblePayoffs ∧
+          ∃ current : G.MixedProfile,
+            payoff = δ • G.mixedPayoff current + (1 - δ) • next := by
+    have hpayoffLam : payoff ∈ G.discountedFeasiblePayoffs lam := by
+      rw [hC]
+      exact hpayoff
+    obtain ⟨profile, hprofile⟩ := hpayoffLam
+    let empty := G.repeatedGame.emptyHist PUnit.unit
+    let current := G.initialMixedProfile profile
+    let actionLaw := G.repeatedGame.stageActionDist profile empty
+    let continuation (action : G.repeatedGame.JointAct) :
+        Payoff G.Player := fun who =>
+      G.repeatedGame.discountedPayoff (1 - lam)
+        (G.repeatedGame.shiftProfile profile (PUnit.unit, action))
+          PUnit.unit who
+    let tail : Payoff G.Player := fun who =>
+      Math.Probability.expect actionLaw fun action => continuation action who
+    have hcontinuation (action : G.repeatedGame.JointAct) :
+        continuation action ∈ G.correlatedFeasiblePayoffs := by
+      apply lemma_1_Dlambda_subset_C G lamRate
+      exact ⟨G.repeatedGame.shiftProfile profile (PUnit.unit, action), rfl⟩
+    have htail : tail ∈ G.correlatedFeasiblePayoffs := by
+      have hhull :=
+        Math.ProbabilityMassFunction.coordinateExpectation_mem_convexHull_range
+          actionLaw continuation
+      apply convexHull_min ?_ G.correlatedFeasiblePayoffs_convex hhull
+      rintro _ ⟨action, rfl⟩
+      exact hcontinuation action
+    have hstage (who : G.Player) :
+        G.repeatedGame.stageEUAt profile empty who =
+          G.mixedPayoff current who := by
+      unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+      unfold FiniteStageGame.mixedPayoff KernelGame.payoffVector
+      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
+          (fun action => G.kernel.eu action who) =
+        G.kernel.mixedExtension.eu current who
+      exact (G.kernel.mixedExtension_eu current who).symm
+    have hbellman : payoff =
+        lam • G.mixedPayoff current + (1 - lam) • tail := by
+      funext who
+      have hshift := G.repeatedGame.discountedPayoff_shift
+        (hstageBound · · who) profile PUnit.unit
+        (β := 1 - lam) (by linarith) (by linarith)
+      simp_rw [show ∀ action (f : G.repeatedGame.State → ℝ),
+          Math.Probability.expect
+              (G.repeatedGame.transition PUnit.unit action) f =
+            f PUnit.unit by
+        intro action f
+        have htransition : G.repeatedGame.transition PUnit.unit action =
+            PMF.pure PUnit.unit := rfl
+        rw [htransition]
+        exact Math.Probability.expect_pure f PUnit.unit] at hshift
+      have hcoordinate := congrFun hprofile who
+      change G.repeatedGame.discountedPayoff (1 - lam)
+        profile PUnit.unit who = payoff who at hcoordinate
+      rw [← hcoordinate]
+      change G.repeatedGame.discountedPayoff (1 - lam)
+          profile PUnit.unit who =
+        lam * G.mixedPayoff current who + (1 - lam) * tail who
+      simpa [hstage who, tail, continuation, actionLaw, empty,
+        Pi.add_apply, Pi.smul_apply, smul_eq_mul] using hshift
+    by_cases hlamOne : lam = 1
+    · refine ⟨payoff, hpayoff, current, ?_⟩
+      have hcurrentEq : G.mixedPayoff current = payoff := by
+        rw [hlamOne] at hbellman
+        simpa using hbellman.symm
+      rw [hcurrentEq]
+      module
+    · have hlamLt : lam < 1 := lt_of_le_of_ne hlam1 hlamOne
+      have hδLt : δ < 1 := hδlam.trans_le hlam1
+      have hdenom : 1 - δ ≠ 0 := ne_of_gt (sub_pos.mpr hδLt)
+      let firstWeight := (lam - δ) / (1 - δ)
+      let tailWeight := (1 - lam) / (1 - δ)
+      let next := firstWeight • G.mixedPayoff current + tailWeight • tail
+      have hfirst0 : 0 ≤ firstWeight := by
+        dsimp only [firstWeight]
+        positivity
+      have htail0 : 0 ≤ tailWeight := by
+        dsimp only [tailWeight]
+        positivity
+      have hweights : firstWeight + tailWeight = 1 := by
+        dsimp only [firstWeight, tailWeight]
+        field_simp [hdenom]
+        ring
+      have hfirstMem := G.mixedPayoff_mem_correlatedFeasiblePayoffs current
+      have hnext : next ∈ G.correlatedFeasiblePayoffs :=
+        G.correlatedFeasiblePayoffs_convex hfirstMem htail
+          hfirst0 htail0 hweights
+      refine ⟨next, hnext, current, ?_⟩
+      funext who
+      have hcoord := congrFun hbellman who
+      dsimp only [next, firstWeight, tailWeight]
+      simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hcoord ⊢
+      calc
+        payoff who =
+            lam * G.mixedPayoff current who + (1 - lam) * tail who := hcoord
+        _ = δ * G.mixedPayoff current who +
+            (1 - δ) *
+              ((lam - δ) / (1 - δ) * G.mixedPayoff current who +
+                (1 - lam) / (1 - δ) * tail who) := by
+          field_simp [hdenom]
+          ring
+  apply Set.Subset.antisymm
+  · simpa only [deltaRate] using lemma_1_Dlambda_subset_C G deltaRate
+  · intro payoff hpayoff
+    let Carrier := {v : Payoff G.Player //
+      v ∈ G.correlatedFeasiblePayoffs}
+    let nextValue (state : Carrier) : Payoff G.Player :=
+      Classical.choose (hdecompose state.1 state.2)
+    have nextValue_spec (state : Carrier) :
+        nextValue state ∈ G.correlatedFeasiblePayoffs ∧
+          ∃ current : G.MixedProfile,
+            state.1 = δ • G.mixedPayoff current +
+              (1 - δ) • nextValue state :=
+      Classical.choose_spec (hdecompose state.1 state.2)
+    let next (state : Carrier) : Carrier :=
+      ⟨nextValue state, (nextValue_spec state).1⟩
+    let current (state : Carrier) : G.MixedProfile :=
+      Classical.choose (nextValue_spec state).2
+    have current_spec (state : Carrier) :
+        state.1 = δ • G.mixedPayoff (current state) +
+          (1 - δ) • (next state).1 := by
+      exact Classical.choose_spec (nextValue_spec state).2
+    let state : ℕ → Carrier := fun time =>
+      Nat.rec ⟨payoff, hpayoff⟩ (fun _ previous => next previous) time
+    let stages : ℕ → G.MixedProfile := fun time => current (state time)
+    have hrec (time : ℕ) :
+        (state time).1 = δ • G.mixedPayoff (stages time) +
+          (1 - δ) • (state (time + 1)).1 := by
+      simpa [state, stages] using current_spec (state time)
+    let behavior := mixedSequenceBehavior G stages
+    refine ⟨behavior, ?_⟩
+    funext who
+    change G.repeatedGame.discountedPayoff (1 - δ)
+      behavior PUnit.unit who = payoff who
+    unfold StochasticGame.discountedPayoff
+    have hstage (time : ℕ) :
+        G.repeatedGame.expectedStagePayoff behavior
+            PUnit.unit time who =
+          G.mixedPayoff (stages time) who := by
+      have h := congrFun
+        (expectedStagePayoff_mixedSequenceBehavior G stages time) who
+      exact h
+    simp_rw [hstage]
+    rw [show 1 - (1 - δ) = δ by ring]
+    have hscalarRec (time : ℕ) :
+        (state time).1 who =
+          δ * G.mixedPayoff (stages time) who +
+            (1 - δ) * (state (time + 1)).1 who := by
+      have h := congrFun (hrec time) who
+      simpa only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] using h
+    have hstateBound (time : ℕ) :
+        |(state time).1 who| ≤ bound :=
+      hCbound who (state time).2
+    rw [discounted_sum_eq_of_affine_recurrence
+      δ hδ hδ1 (fun time => (state time).1 who)
+        (fun time => G.mixedPayoff (stages time) who)
+        bound hstateBound hscalarRec]
+    rfl
 
 /-- Equation (22). -/
 theorem equation_22 (G : FiniteStageGame) (lam : ℝ)
