@@ -63,7 +63,7 @@ def principalQClockProgressNext
           M hdiag hQ hstepBound node target with
       | .reaches index _ => .reached
           (principalQClockOrbit M hdiag hQ hstepBound node index)
-      | .restarts restart _ _ =>
+      | .restarts restart _ _ _ =>
           if target ≤ restart.time then .reached restart else .active restart
 
 /-- From an active node, the next epoch either reaches the target or remains
@@ -86,7 +86,7 @@ theorem principalQClockProgressNext_active
       exact Or.inl (by
         simp [principalQClockProgressNext, houtcome,
           PrincipalQClockProgress.IsReached])
-  | restarts restart hstrict htendsto =>
+  | restarts restart hstrict htendsto hdistance =>
       by_cases htarget : target ≤ restart.time
       · exact Or.inl (by
           simp [principalQClockProgressNext, houtcome, htarget,
@@ -95,6 +95,59 @@ theorem principalQClockProgressNext_active
         simpa [principalQClockProgressNext, houtcome, htarget,
           PrincipalQClockProgress.node] using
           And.intro hstrict (lt_of_not_ge htarget)
+
+/-- One completed epoch satisfies the same scaled-state displacement bound
+as its underlying finite or Zeno orbit. -/
+theorem dist_principalQClockProgressNext_active_scaledState_le
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
+    (hstepBound : 0 < stepBound) (target : ℝ)
+    (node : PrincipalQClockNode ι) :
+    dist (principalQClockScaledState node)
+        (principalQClockScaledState
+          (principalQClockProgressNext M hdiag hQ hstepBound
+            target (.active node)).node) ≤
+      principalQMatrixSpeedBound M *
+        ((principalQClockProgressNext M hdiag hQ hstepBound
+          target (.active node)).node.time - node.time) := by
+  cases houtcome : chosenPrincipalQClockEpochOutcome
+      M hdiag hQ hstepBound node target with
+  | reaches index htarget =>
+      simpa [principalQClockProgressNext, houtcome,
+        PrincipalQClockProgress.node] using
+        dist_principalQClockOrbit_scaledState_le
+          M hdiag hQ hstepBound node index
+  | restarts restart hstrict htendsto hdistance =>
+      by_cases htarget : target ≤ restart.time
+      · simpa [principalQClockProgressNext, houtcome, htarget,
+          PrincipalQClockProgress.node] using hdistance
+      · simpa [principalQClockProgressNext, houtcome, htarget,
+          PrincipalQClockProgress.node] using hdistance
+
+/-- Completing an epoch never moves its carried clock backwards. -/
+theorem principalQClockProgressNext_time_mono
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
+    (hstepBound : 0 < stepBound) (target : ℝ)
+    (progress : PrincipalQClockProgress ι) :
+    progress.node.time ≤
+      (principalQClockProgressNext M hdiag hQ hstepBound target progress).node.time := by
+  cases progress with
+  | reached node => simp [principalQClockProgressNext, PrincipalQClockProgress.node]
+  | active node =>
+      cases houtcome : chosenPrincipalQClockEpochOutcome
+          M hdiag hQ hstepBound node target with
+      | reaches index htarget =>
+          simpa [principalQClockProgressNext, houtcome,
+            PrincipalQClockProgress.node] using
+            (strictMono_principalQClockOrbit_time
+              M hdiag hQ hstepBound node).monotone (Nat.zero_le index)
+      | restarts restart hstrict htendsto hdistance =>
+          by_cases htarget : target ≤ restart.time
+          · simpa [principalQClockProgressNext, houtcome, htarget,
+              PrincipalQClockProgress.node] using hstrict.le
+          · simpa [principalQClockProgressNext, houtcome, htarget,
+              PrincipalQClockProgress.node] using hstrict.le
 
 /-- The countable sequence obtained by repeatedly completing one epoch. -/
 def principalQClockProgressOrbit
@@ -198,5 +251,139 @@ theorem principalQClockProgressOrbit_reaches_or_zeno
       rw [heq]
       exact hlimit.sub hconst
     exact ⟨limit, hlimit, hsum.summable⟩
+
+/-- Successive countable-epoch nodes obey the matrix speed bound, including
+the absorbing reached status where both sides vanish. -/
+theorem dist_principalQClockProgressOrbit_scaledState_succ_le
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
+    (hstepBound : 0 < stepBound) (target : ℝ)
+    (initial : PrincipalQClockNode ι) (n : ℕ) :
+    dist (principalQClockScaledState
+        (principalQClockProgressOrbit M hdiag hQ hstepBound
+          target initial n).node)
+      (principalQClockScaledState
+        (principalQClockProgressOrbit M hdiag hQ hstepBound
+          target initial (n + 1)).node) ≤
+      principalQMatrixSpeedBound M *
+        ((principalQClockProgressOrbit M hdiag hQ hstepBound
+          target initial (n + 1)).node.time -
+        (principalQClockProgressOrbit M hdiag hQ hstepBound
+          target initial n).node.time) := by
+  let progress := principalQClockProgressOrbit
+    M hdiag hQ hstepBound target initial
+  change dist (principalQClockScaledState (progress n).node)
+      (principalQClockScaledState (progress (n + 1)).node) ≤
+    principalQMatrixSpeedBound M *
+      ((progress (n + 1)).node.time - (progress n).node.time)
+  have hsucc : progress (n + 1) =
+      principalQClockProgressNext M hdiag hQ hstepBound target (progress n) :=
+    rfl
+  rw [hsucc]
+  cases hprogress : progress n with
+  | active node =>
+      exact dist_principalQClockProgressNext_active_scaledState_le
+        M hdiag hQ hstepBound target node
+  | reached node =>
+      simp [principalQClockProgressNext, PrincipalQClockProgress.node]
+
+/-- If countable epoch iteration has a second-order Zeno clock, its scaled
+states also converge to the closed nonnegative boundary. -/
+theorem principalQClockProgressOrbit_reaches_or_zenoEndpoint
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
+    (hstepBound : 0 < stepBound) (target : ℝ)
+    (initial : PrincipalQClockNode ι) :
+    (∃ n, (principalQClockProgressOrbit
+      M hdiag hQ hstepBound target initial n).IsReached) ∨
+      ∃ (timeLimit : ℝ) (scaledStateLimit : ι → ℝ),
+        Tendsto (fun n => (principalQClockProgressOrbit
+          M hdiag hQ hstepBound target initial n).node.time)
+            atTop (nhds timeLimit) ∧
+        scaledStateLimit ∈ nonnegativeBoundary ∧
+        Tendsto (fun n => principalQClockScaledState
+          (principalQClockProgressOrbit M hdiag hQ hstepBound
+            target initial n).node) atTop (nhds scaledStateLimit) := by
+  rcases principalQClockProgressOrbit_reaches_or_zeno
+      M hdiag hQ hstepBound target initial with hreach |
+        ⟨timeLimit, htime, hsum⟩
+  · exact Or.inl hreach
+  · right
+    obtain ⟨scaledStateLimit, hscaledMem, hscaled⟩ :=
+      Math.Viability.exists_tendsto_mem_of_summable_step_bound
+        isClosed_nonnegativeBoundary
+        (fun n => principalQClockScaledState
+          (principalQClockProgressOrbit M hdiag hQ hstepBound
+            target initial n).node)
+        (fun n => principalQClockScaledState_mem
+          (principalQClockProgressOrbit M hdiag hQ hstepBound
+            target initial n).node)
+        (fun n =>
+          (principalQClockProgressOrbit M hdiag hQ hstepBound
+            target initial (n + 1)).node.time -
+          (principalQClockProgressOrbit M hdiag hQ hstepBound
+            target initial n).node.time)
+        (principalQMatrixSpeedBound M)
+        (dist_principalQClockProgressOrbit_scaledState_succ_le
+          M hdiag hQ hstepBound target initial) hsum
+    exact ⟨timeLimit, scaledStateLimit, htime, hscaledMem, hscaled⟩
+
+/-- A second-order Zeno endpoint of countable epoch iteration rescales to a
+new positive-clock boundary node, just as a first-order orbit endpoint does. -/
+theorem exists_principalQClockProgressOrbit_zenoRestart
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
+    (hstepBound : 0 < stepBound) (target : ℝ)
+    (initial : PrincipalQClockNode ι)
+    {timeLimit : ℝ} {scaledStateLimit : ι → ℝ}
+    (htime : Tendsto (fun n => (principalQClockProgressOrbit
+      M hdiag hQ hstepBound target initial n).node.time)
+        atTop (nhds timeLimit))
+    (hscaledMem : scaledStateLimit ∈ nonnegativeBoundary)
+    (hscaled : Tendsto (fun n => principalQClockScaledState
+      (principalQClockProgressOrbit M hdiag hQ hstepBound
+        target initial n).node) atTop (nhds scaledStateLimit)) :
+    ∃ restart : PrincipalQClockNode ι,
+      restart.time = timeLimit ∧
+      Tendsto (fun n => (principalQClockProgressOrbit
+        M hdiag hQ hstepBound target initial n).node.state)
+          atTop (nhds restart.state) := by
+  let progress := principalQClockProgressOrbit
+    M hdiag hQ hstepBound target initial
+  have hmono : Monotone (fun n => (progress n).node.time) := by
+    apply monotone_nat_of_le_succ
+    intro n
+    change (progress n).node.time ≤
+      (principalQClockProgressNext M hdiag hQ hstepBound
+        target (progress n)).node.time
+    exact principalQClockProgressNext_time_mono
+      M hdiag hQ hstepBound target (progress n)
+  have hinitialLe : initial.time ≤ timeLimit := by
+    apply ge_of_tendsto htime
+    exact Eventually.of_forall fun n => by
+      simpa only [progress, principalQClockProgressOrbit_zero,
+        PrincipalQClockProgress.node] using hmono (Nat.zero_le n)
+  have htimeLimitPos : 0 < timeLimit := initial.time_pos.trans_le hinitialLe
+  let restartState : ι → ℝ := timeLimit⁻¹ • scaledStateLimit
+  have hrestartMem : IsNonnegativeBoundary restartState := by
+    constructor
+    · intro i
+      exact mul_nonneg (inv_nonneg.mpr htimeLimitPos.le) (hscaledMem.1 i)
+    · obtain ⟨i, hi⟩ := hscaledMem.2
+      exact ⟨i, by simp [restartState, hi]⟩
+  let restart : PrincipalQClockNode ι :=
+    { time := timeLimit
+      time_pos := htimeLimitPos
+      state := restartState
+      state_mem := hrestartMem }
+  refine ⟨restart, rfl, ?_⟩
+  have hreconstructed : (fun n => ((progress n).node.time)⁻¹ •
+      principalQClockScaledState (progress n).node) =
+      fun n => (progress n).node.state := by
+    funext n i
+    simp [principalQClockScaledState, (progress n).node.time_pos.ne']
+  have hrescaled := (htime.inv₀ htimeLimitPos.ne').smul hscaled
+  rw [hreconstructed] at hrescaled
+  exact hrescaled
 
 end GameTheory.QuittingLCPClassification

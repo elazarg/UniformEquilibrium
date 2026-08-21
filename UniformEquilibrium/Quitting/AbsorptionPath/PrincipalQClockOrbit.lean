@@ -252,6 +252,46 @@ theorem dist_principalQClockOrbit_scaledState_succ_le
         (norm_singletonLCPResidual_le_speedBound M step.direction.weight) hdelta
     _ = principalQMatrixSpeedBound M * (step.endTime - node.time) := mul_comm _ _
 
+/-- The total scaled-state displacement along any finite orbit prefix is
+bounded by elapsed clock time times the same matrix-only speed bound. -/
+theorem dist_principalQClockOrbit_scaledState_le
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
+    (hstepBound : 0 < stepBound) (initial : PrincipalQClockNode ι) (n : ℕ) :
+    dist (principalQClockScaledState initial)
+        (principalQClockScaledState
+          (principalQClockOrbit M hdiag hQ hstepBound initial n)) ≤
+      principalQMatrixSpeedBound M *
+        ((principalQClockOrbit M hdiag hQ hstepBound initial n).time -
+          initial.time) := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      calc
+        dist (principalQClockScaledState initial)
+            (principalQClockScaledState
+              (principalQClockOrbit M hdiag hQ hstepBound initial (n + 1))) ≤
+          dist (principalQClockScaledState initial)
+              (principalQClockScaledState
+                (principalQClockOrbit M hdiag hQ hstepBound initial n)) +
+            dist
+              (principalQClockScaledState
+                (principalQClockOrbit M hdiag hQ hstepBound initial n))
+              (principalQClockScaledState
+                (principalQClockOrbit M hdiag hQ hstepBound initial (n + 1))) :=
+          dist_triangle _ _ _
+        _ ≤ principalQMatrixSpeedBound M *
+              ((principalQClockOrbit M hdiag hQ hstepBound initial n).time -
+                initial.time) +
+            principalQMatrixSpeedBound M *
+              ((principalQClockOrbit M hdiag hQ hstepBound initial (n + 1)).time -
+                (principalQClockOrbit M hdiag hQ hstepBound initial n).time) :=
+          add_le_add ih (dist_principalQClockOrbit_scaledState_succ_le
+            M hdiag hQ hstepBound initial n)
+        _ = principalQMatrixSpeedBound M *
+            ((principalQClockOrbit M hdiag hQ hstepBound initial (n + 1)).time -
+              initial.time) := by ring
+
 /-- Summable clock increments force the scaled orbit states to converge to a
 point of the closed nonnegative boundary. -/
 theorem exists_principalQClockOrbit_scaledState_limit
