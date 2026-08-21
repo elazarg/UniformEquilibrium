@@ -304,4 +304,54 @@ theorem principalQClockOrbit_escape_or_zenoEndpoint
         M hdiag hQ hstepBound initial hsum
     exact ⟨timeLimit, scaledStateLimit, htime, hscaledMem, hscaled⟩
 
+/-- A finite Zeno endpoint canonically rescales to a new positive-clock
+boundary node, and the original orbit states converge to that restart state. -/
+theorem exists_principalQClockOrbit_zenoRestart
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
+    (hstepBound : 0 < stepBound) (initial : PrincipalQClockNode ι)
+    {timeLimit : ℝ} {scaledStateLimit : ι → ℝ}
+    (htime : Tendsto (fun n =>
+      (principalQClockOrbit M hdiag hQ hstepBound initial n).time)
+        atTop (nhds timeLimit))
+    (hscaledMem : scaledStateLimit ∈ nonnegativeBoundary)
+    (hscaled : Tendsto (fun n => principalQClockScaledState
+      (principalQClockOrbit M hdiag hQ hstepBound initial n))
+        atTop (nhds scaledStateLimit)) :
+    ∃ restart : PrincipalQClockNode ι,
+      restart.time = timeLimit ∧
+      Tendsto (fun n =>
+        (principalQClockOrbit M hdiag hQ hstepBound initial n).state)
+          atTop (nhds restart.state) := by
+  let orbit := principalQClockOrbit M hdiag hQ hstepBound initial
+  have hmono : Monotone (fun n => (orbit n).time) :=
+    (strictMono_principalQClockOrbit_time
+      M hdiag hQ hstepBound initial).monotone
+  have hinitialLe : initial.time ≤ timeLimit := by
+    apply ge_of_tendsto htime
+    exact Eventually.of_forall fun n => by
+      simpa only [orbit, principalQClockOrbit_zero] using hmono (Nat.zero_le n)
+  have htimeLimitPos : 0 < timeLimit := initial.time_pos.trans_le hinitialLe
+  let restartState : ι → ℝ := timeLimit⁻¹ • scaledStateLimit
+  have hrestartMem : IsNonnegativeBoundary restartState := by
+    constructor
+    · intro i
+      exact mul_nonneg (inv_nonneg.mpr htimeLimitPos.le) (hscaledMem.1 i)
+    · obtain ⟨i, hi⟩ := hscaledMem.2
+      exact ⟨i, by simp [restartState, hi]⟩
+  let restart : PrincipalQClockNode ι :=
+    { time := timeLimit
+      time_pos := htimeLimitPos
+      state := restartState
+      state_mem := hrestartMem }
+  refine ⟨restart, rfl, ?_⟩
+  have hreconstructed : (fun n =>
+      ((orbit n).time)⁻¹ • principalQClockScaledState (orbit n)) =
+      fun n => (orbit n).state := by
+    funext n i
+    simp [principalQClockScaledState, (orbit n).time_pos.ne']
+  have hrescaled := (htime.inv₀ htimeLimitPos.ne').smul hscaled
+  rw [hreconstructed] at hrescaled
+  exact hrescaled
+
 end GameTheory.QuittingLCPClassification
