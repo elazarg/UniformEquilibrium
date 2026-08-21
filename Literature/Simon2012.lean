@@ -4493,58 +4493,12 @@ private theorem lemma3_4_high_probability_coordinate_lt_minMax_sub_half
   have hpk : 0 < (p k : ℝ) := by
     dsimp only [p]
     linarith
-  have hpkLt : (p k : ℝ) < 1 := by
-    by_contra hnot
-    have hpkOne : (p k : ℝ) = 1 :=
-      le_antisymm (p k).property.2 (le_of_not_gt hnot)
-    have hquit := z.2.2
-    rw [quitProbability_eq_one_of_apply_eq_one G p k hpkOne] at hquit
-    linarith
-  have hdenPos : 0 < (1 - (p k : ℝ)) ^ Fintype.card G.Player :=
-    pow_pos (by linarith) _
-  have hdenOne : (1 - (p k : ℝ)) ^ Fintype.card G.Player ≤ 1 := by
-    exact pow_le_one₀ (sub_nonneg.mpr (p k).property.2) (by linarith)
-  have hfraction : (p k : ℝ) ≤
-      (p k : ℝ) / (1 - (p k : ℝ)) ^ Fintype.card G.Player := by
-    rw [le_div_iff₀ hdenPos]
-    nlinarith [mul_le_mul_of_nonneg_left hdenOne (p k).property.1]
-  have hcoefficient : 5 * N * M ≤ 5 * N * M / d := by
-    rw [le_div_iff₀ hd]
-    nlinarith
-  have hpenalty : 5 * N * M * (p k : ℝ) ≤
-      (5 * N * M / d) *
-        ((p k : ℝ) / (1 - (p k : ℝ)) ^ Fintype.card G.Player) := by
-    calc
-      5 * N * M * (p k : ℝ) ≤
-          (5 * N * M / d) * (p k : ℝ) :=
-        mul_le_mul_of_nonneg_right hcoefficient (p k).property.1
-      _ ≤ _ := mul_le_mul_of_nonneg_left hfraction (by positivity)
-  have hstage := oneStagePayoff_eq_forcedQuit_of_positive G beta p
-    z.2.1 z.2.2 k hpk
-  have hforced := abs_forcedQuitPayoff_le_scale G M hM p k
-  have hsum : ∑ l ∈ Finset.univ.erase k, (p l : ℝ) ≤ N := by
-    calc
-      ∑ l ∈ Finset.univ.erase k, (p l : ℝ) ≤
-          ∑ _l ∈ Finset.univ.erase k, (1 : ℝ) := by
-        apply Finset.sum_le_sum
-        intro l _
-        exact (p l).property.2
-      _ = ((Finset.univ.erase k).card : ℝ) := by simp
-      _ ≤ N := by
-        dsimp only [N]
-        exact_mod_cast (Finset.card_erase_le :
-          (Finset.univ.erase k).card ≤ (Finset.univ : Finset G.Player).card)
   have hchi := abs_minMaxQuit_le_of_reward_bound G k (by positivity)
     (fun outcome => hM.2.1 outcome k)
   have hphiUpper : Phi G M d z k ≤
       M / 3 - 5 * N * M * (p k : ℝ) + N * M := by
-    change QuittingOneStagePayoff G beta p k -
-        (5 * N * M / d) *
-          ((p k : ℝ) / (1 - (p k : ℝ)) ^ Fintype.card G.Player) +
-        M * ∑ l ∈ Finset.univ.erase k, (p l : ℝ) ≤ _
-    rw [hstage]
-    nlinarith [le_abs_self (ForcedQuitPayoff G p k),
-      mul_le_mul_of_nonneg_left hsum hMpos.le]
+    simpa only [N, p] using
+      phi_le_scale_sub_hazard_penalty G M d hM hd hd1 z k hpk
   have hpkLower : 1 - ρ / (2 * N * M) ≤ (p k : ℝ) := by
     simpa only [N, p] using hk
   have hscaledPk : 5 * N * M - 5 * ρ / 2 ≤
@@ -4698,15 +4652,16 @@ private theorem abs_forcedContinue_solo_le_scale
       (fun k => hM.2.1 ⟨{k}, Finset.singleton_nonempty k⟩ k)
 
 /-- If `m` maximizes the quitting probability, the probability that every
-other player continues is at least `(1-p_m)^(|N|-1)`. -/
-private theorem maximalQuitter_opponentSurvival_lower
-    (G : QuittingGame) (p : QuitRow G) (m : G.Player)
+player other than any specified owner continues is at least
+`(1-p_m)^(|N|-1)`. -/
+private theorem maximalQuitter_opponentSurvival_lower_at
+    (G : QuittingGame) (p : QuitRow G) (m owner : G.Player)
     (hm : ∀ k, (p k : ℝ) ≤ (p m : ℝ)) :
     (1 - (p m : ℝ)) ^ (Fintype.card G.Player - 1) ≤
-      1 - OthersQuitProbability G p m := by
+      1 - OthersQuitProbability G p owner := by
   classical
   rw [OthersQuitProbability, sub_sub_cancel]
-  have hcard : (Finset.univ.erase m).card = Fintype.card G.Player - 1 := by
+  have hcard : (Finset.univ.erase owner).card = Fintype.card G.Player - 1 := by
     simp
   rw [← hcard, ← Finset.prod_const]
   apply Finset.prod_le_prod
@@ -4714,6 +4669,14 @@ private theorem maximalQuitter_opponentSurvival_lower
     exact sub_nonneg.mpr (p m).property.2
   · intro k _
     linarith [hm k]
+
+/-- The owner-maximal specialization of the preceding survival bound. -/
+private theorem maximalQuitter_opponentSurvival_lower
+    (G : QuittingGame) (p : QuitRow G) (m : G.Player)
+    (hm : ∀ k, (p k : ℝ) ≤ (p m : ℝ)) :
+    (1 - (p m : ℝ)) ^ (Fintype.card G.Player - 1) ≤
+      1 - OthersQuitProbability G p m :=
+  maximalQuitter_opponentSurvival_lower_at G p m m hm
 
 /-- The supported maximal quitter's continuation coordinate is controlled
 by the reciprocal probability that all other players continue. -/
