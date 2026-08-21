@@ -649,6 +649,10 @@ instance ddpFinitePathCountable (P : DiscreteDecisionProcess) (k : ℕ) :
           cases this
           rfl).countable
 
+/-- Finite DDP paths carry the discrete sigma algebra. -/
+private instance ddpFinitePathMeasurableSpace (P : DiscreteDecisionProcess) (k : ℕ) :
+    MeasurableSpace (DDPFinitePath P k) := ⊤
+
 /-- The `k`-action prefix of a possible infinite decision-process path. -/
 def DDPPath.prefix (P : DiscreteDecisionProcess) (p : DDPPath P)
     (k : ℕ) : DDPFinitePath P k where
@@ -688,6 +692,14 @@ instance ddpPathMeasurableSpace (P : DiscreteDecisionProcess) :
 theorem measurableSet_ddpCylinder (P : DiscreteDecisionProcess) {k : ℕ}
     (h : DDPFinitePath P k) : MeasurableSet (DDPCylinder P h) :=
   MeasurableSpace.measurableSet_generateFrom ⟨k, h, rfl⟩
+
+/-- Every finite-prefix projection is measurable for the cylinder sigma algebra. -/
+private theorem DDPPath.measurable_prefix (P : DiscreteDecisionProcess) (k : ℕ) :
+    Measurable (fun p : DDPPath P => p.prefix P k) := by
+  apply measurable_to_countable'
+  intro h
+  change MeasurableSet (DDPCylinder P h)
+  exact measurableSet_ddpCylinder P h
 
 /-- One sampled DDP stage records the current state and the action selected there. -/
 private abbrev DDPStage (P : DiscreteDecisionProcess) := (x : P.X) × P.Y x
@@ -762,6 +774,102 @@ private instance DiscreteDecisionProcess.isMarkovKernel_stageKernel
     (P : DiscreteDecisionProcess) (n : ℕ) : IsMarkovKernel (P.stageKernel n) :=
   ⟨fun _ => PMF.toMeasure.isProbabilityMeasure _⟩
 
+/-- The martingale-difference contribution attached to one sampled DDP stage. -/
+private def DDPStage.increment (P : DiscreteDecisionProcess) (stage : DDPStage P) : ℝ :=
+  P.valueY stage.1 stage.2 - P.valueX stage.1
+
+/-- Every sampled-stage increment is bounded by the process's displayed value bound. -/
+private theorem DDPStage.norm_increment_le (P : DiscreteDecisionProcess)
+    (stage : DDPStage P) :
+    ‖stage.increment P‖ ≤ P.valueDifferenceBound := by
+  simpa only [DDPStage.increment, Real.norm_eq_abs] using
+    (P.valueDifference stage.1 stage.1 stage.2 stage.2).2.1
+
+/-- A bounded real function is summable against the real weights of a PMF. -/
+private theorem PMF.summable_toReal_mul_of_norm_le {A : Type*}
+    (p : PMF A) (f : A → ℝ) {C : ℝ} (hf : ∀ a, ‖f a‖ ≤ C) :
+    Summable fun a => (p a).toReal * f a := by
+  have hweights : Summable fun a => (p a).toReal :=
+    ENNReal.summable_toReal (by rw [PMF.tsum_coe]; simp)
+  apply Summable.of_norm_bounded (hweights.mul_right C)
+  intro a
+  rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg]
+  exact mul_le_mul_of_nonneg_left (hf a) ENNReal.toReal_nonneg
+
+/-- The real weights of a PMF sum to one. -/
+private theorem PMF.tsum_toReal {A : Type*} (p : PMF A) :
+    ∑' a, (p a).toReal = 1 := by
+  have h := ENNReal.tsum_toReal_eq (f := fun a => p a)
+    (PMF.apply_ne_top p)
+  rw [PMF.tsum_coe] at h
+  simpa using h.symm
+
+/-- Harmonicity at an `X`-state says that the sampled decision increment has mean zero. -/
+private theorem DiscreteDecisionProcess.tsum_choose_mul_increment_eq_zero
+    (P : DiscreteDecisionProcess) (x : P.X) :
+    ∑' y, (P.choose x y).toReal *
+      (P.valueY x y - P.valueX x) = 0 := by
+  have hvalueY : ∀ y : P.Y x,
+      ‖P.valueY x y‖ ≤ ‖P.valueX x‖ + P.valueDifferenceBound := by
+    intro y
+    calc
+      ‖P.valueY x y‖ ≤ ‖P.valueY x y - P.valueX x‖ + ‖P.valueX x‖ := by
+        simpa only [sub_add_cancel] using
+          norm_add_le (P.valueY x y - P.valueX x) (P.valueX x)
+      _ ≤ P.valueDifferenceBound + ‖P.valueX x‖ := by
+        gcongr
+        simpa only [Real.norm_eq_abs] using
+          (P.valueDifference x x y y).2.1
+      _ = ‖P.valueX x‖ + P.valueDifferenceBound := by ring
+  have hweightedValue := PMF.summable_toReal_mul_of_norm_le
+    (P.choose x) (fun y => P.valueY x y) hvalueY
+  have hweights : Summable fun y => (P.choose x y).toReal :=
+    ENNReal.summable_toReal (by rw [PMF.tsum_coe]; simp)
+  simp_rw [mul_sub]
+  rw [hweightedValue.tsum_sub (hweights.mul_right (P.valueX x))]
+  rw [← P.harmonicX x]
+  rw [Summable.tsum_mul_right (P.valueX x) hweights]
+  rw [PMF.tsum_toReal (P.choose x)]
+  ring
+
+/-- Under the stage kernel, the next sampled decision increment has conditional mean zero. -/
+private theorem DiscreteDecisionProcess.integral_increment_stageKernel_eq_zero
+    (P : DiscreteDecisionProcess) (n : ℕ)
+    (history : ∀ _ : Finset.Iic n, DDPStage P) :
+    ∫ stage, stage.increment P ∂P.stageKernel n history = 0 := by
+  let current := history ⟨n, Finset.mem_Iic.mpr le_rfl⟩
+  have hintegrable : Integrable (DDPStage.increment P)
+      (P.stepStagePMF current).toMeasure := by
+    letI : IsProbabilityMeasure (P.stepStagePMF current).toMeasure :=
+      PMF.toMeasure.isProbabilityMeasure _
+    exact Integrable.of_bound Measurable.of_discrete.aestronglyMeasurable
+      P.valueDifferenceBound
+      (ae_of_all _ fun stage => stage.norm_increment_le P)
+  have hsummable : Summable fun stage : DDPStage P =>
+      (P.stepStagePMF current stage).toReal * stage.increment P :=
+    PMF.summable_toReal_mul_of_norm_le (P.stepStagePMF current)
+      (DDPStage.increment P) (fun stage => stage.norm_increment_le P)
+  change ∫ stage, stage.increment P ∂(P.stepStagePMF current).toMeasure = 0
+  rw [PMF.integral_eq_tsum _ _ hintegrable]
+  simp only [smul_eq_mul]
+  rw [hsummable.tsum_sigma]
+  have hzero : ∀ x, (∑' y : P.Y x,
+      (P.stepStagePMF current ⟨x, y⟩).toReal *
+        DDPStage.increment P ⟨x, y⟩) = 0 := by
+    intro x
+    have hinner : Summable fun y : P.Y x =>
+        (P.choose x y).toReal * (P.valueY x y - P.valueX x) :=
+      PMF.summable_toReal_mul_of_norm_le (P.choose x)
+        (fun y => P.valueY x y - P.valueX x) (fun y => by
+          simpa only [Real.norm_eq_abs] using
+            (P.valueDifference x x y y).2.1)
+    simp_rw [P.stepStagePMF_apply, ENNReal.toReal_mul, DDPStage.increment]
+    simp_rw [mul_assoc]
+    rw [Summable.tsum_mul_left (P.move current.1 current.2 x).toReal hinner]
+    rw [P.tsum_choose_mul_increment_eq_zero x, mul_zero]
+  simp_rw [hzero]
+  simp
+
 /-- The raw infinite stage law generated from an arbitrary initial stage distribution. -/
 private def DiscreteDecisionProcess.rawLawWithInitial
     (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
@@ -785,6 +893,216 @@ private instance DiscreteDecisionProcess.isProbabilityMeasure_rawLawFrom
     IsProbabilityMeasure (P.rawLawFrom x) := by
   unfold DiscreteDecisionProcess.rawLawFrom
   infer_instance
+
+/-- The sampled-stage type is inhabited because its initial-stage PMF has nonempty support. -/
+private instance ddpStageNonempty (P : DiscreteDecisionProcess) : Nonempty (DDPStage P) :=
+  ⟨Classical.choose (P.initialStagePMF P.initial).support_nonempty⟩
+
+/-- Cumulative sampled-stage increments through stage `n` on the raw trajectory space. -/
+private def DiscreteDecisionProcess.rawAdvantage
+    (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) (n : ℕ) : ℝ :=
+  ∑ i ∈ Finset.range (n + 1), DDPStage.increment P (stage i)
+
+/-- The raw cumulative advantage is strongly adapted to the finite-coordinate filtration. -/
+private theorem DiscreteDecisionProcess.rawAdvantage_stronglyAdapted
+    (P : DiscreteDecisionProcess) :
+    StronglyAdapted (Filtration.piLE (X := fun _ : ℕ => DDPStage P))
+      (fun n stage => P.rawAdvantage stage n) := by
+  intro n
+  change StronglyMeasurable[Filtration.piLE (X := fun _ : ℕ => DDPStage P) n]
+    (fun stage => ∑ i ∈ Finset.range (n + 1), DDPStage.increment P (stage i))
+  have hsum : StronglyMeasurable[Filtration.piLE (X := fun _ : ℕ => DDPStage P) n]
+      (∑ i ∈ Finset.range (n + 1),
+        fun stage : ℕ → DDPStage P => DDPStage.increment P (stage i)) := by
+    refine Finset.stronglyMeasurable_sum (M := ℝ)
+      (f := fun i (stage : ℕ → DDPStage P) => DDPStage.increment P (stage i))
+      (Finset.range (n + 1)) ?_
+    intro i hi
+    rw [Finset.mem_range] at hi
+    rw [Filtration.piLE_eq_comap_frestrictLe]
+    apply Measurable.stronglyMeasurable
+    have hincrement : Measurable (DDPStage.increment P) :=
+      Measurable.of_discrete
+    exact hincrement.comp
+      ((measurable_pi_apply (X := fun _ : Finset.Iic n => DDPStage P)
+          ⟨i, Finset.mem_Iic.mpr (Nat.le_of_lt_succ hi)⟩).comp
+        (comap_measurable
+          (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n)))
+  convert hsum using 1
+  ext stage
+  simp only [Finset.sum_apply]
+
+/-- The next raw cumulative-advantage increment is the next sampled-stage increment. -/
+private theorem DiscreteDecisionProcess.rawAdvantage_succ_sub
+    (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) (n : ℕ) :
+    P.rawAdvantage stage (n + 1) - P.rawAdvantage stage n =
+      DDPStage.increment P (stage (n + 1)) := by
+  rw [DiscreteDecisionProcess.rawAdvantage, DiscreteDecisionProcess.rawAdvantage]
+  rw [Finset.sum_range_succ]
+  ring
+
+/-- A finite raw cumulative advantage is bounded by the number of sampled increments. -/
+private theorem DiscreteDecisionProcess.norm_rawAdvantage_le
+    (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) (n : ℕ) :
+    ‖P.rawAdvantage stage n‖ ≤ (n + 1) * P.valueDifferenceBound := by
+  rw [DiscreteDecisionProcess.rawAdvantage]
+  calc
+    ‖∑ i ∈ Finset.range (n + 1), DDPStage.increment P (stage i)‖ ≤
+        ∑ i ∈ Finset.range (n + 1), ‖DDPStage.increment P (stage i)‖ :=
+      norm_sum_le _ _
+    _ ≤ ∑ _i ∈ Finset.range (n + 1), P.valueDifferenceBound := by
+      gcongr with i hi
+      exact (stage i).norm_increment_le P
+    _ = (n + 1) * P.valueDifferenceBound := by
+      rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+      push_cast
+      rfl
+
+/-- Every finite raw cumulative advantage is integrable. -/
+private theorem DiscreteDecisionProcess.integrable_rawAdvantage
+    (P : DiscreteDecisionProcess) (n : ℕ) :
+    Integrable (fun stage => P.rawAdvantage stage n) (P.rawLawFrom P.initial) := by
+  exact Integrable.of_bound
+    ((P.rawAdvantage_stronglyAdapted n).mono
+      (Filtration.le (Filtration.piLE (X := fun _ : ℕ => DDPStage P)) n)
+        |>.aestronglyMeasurable)
+    ((n + 1) * P.valueDifferenceBound)
+    (ae_of_all _ fun stage => P.norm_rawAdvantage_le stage n)
+
+/-- The raw cumulative advantages form the martingale used in Proposition 1. -/
+private theorem DiscreteDecisionProcess.rawAdvantage_martingale
+    (P : DiscreteDecisionProcess) :
+    Martingale (fun n stage => P.rawAdvantage stage n)
+      (Filtration.piLE (X := fun _ : ℕ => DDPStage P))
+      (P.rawLawFrom P.initial) := by
+  let filtration := Filtration.piLE (X := fun _ : ℕ => DDPStage P)
+  apply martingale_of_condExp_sub_eq_zero_nat P.rawAdvantage_stronglyAdapted
+    P.integrable_rawAdvantage
+  intro n
+  have hdifference :
+      ((fun stage : ℕ → DDPStage P => P.rawAdvantage stage (n + 1)) -
+        fun stage => P.rawAdvantage stage n) =
+      fun stage => DDPStage.increment P (stage (n + 1)) := by
+    funext stage
+    exact P.rawAdvantage_succ_sub stage n
+  have hincrement : Integrable
+      (fun stage : ℕ → DDPStage P => DDPStage.increment P (stage (n + 1)))
+      (P.rawLawFrom P.initial) := by
+    apply Integrable.congr
+      ((P.integrable_rawAdvantage (n + 1)).sub (P.integrable_rawAdvantage n))
+    exact ae_of_all _ fun stage => P.rawAdvantage_succ_sub stage n
+  have hconditional := condExp_ae_eq_integral_condDistrib
+    (μ := P.rawLawFrom P.initial)
+    (X := Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n)
+    (Y := fun stage : ℕ → DDPStage P => stage (n + 1))
+    (f := DDPStage.increment P)
+    (Preorder.measurable_frestrictLe
+      (X := fun _ : ℕ => DDPStage P) n)
+    (measurable_pi_apply (n + 1)).aemeasurable
+    Measurable.of_discrete.stronglyMeasurable hincrement
+  have hkernel := Kernel.condDistrib_trajMeasure
+    (X := fun _ : ℕ => DDPStage P)
+    (μ₀ := (P.initialStagePMF P.initial).toMeasure)
+    (κ := P.stageKernel) (a := n)
+  have hkernelOnPath := ae_of_ae_map
+    (Preorder.measurable_frestrictLe
+      (X := fun _ : ℕ => DDPStage P) n).aemeasurable hkernel
+  rw [show filtration n =
+      MeasurableSpace.comap
+        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) inferInstance by
+    exact Filtration.piLE_eq_comap_frestrictLe n]
+  filter_upwards [hconditional, hkernelOnPath] with stage hconditional' hkernel'
+  rw [hdifference]
+  rw [hconditional']
+  change (condDistrib (fun path : ℕ → DDPStage P => path (n + 1))
+      (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n)
+      (P.rawLawFrom P.initial))
+      (Preorder.frestrictLe n stage) =
+        P.stageKernel n (Preorder.frestrictLe n stage) at hkernel'
+  rw [hkernel', P.integral_increment_stageKernel_eq_zero]
+  rfl
+
+/-- Squaring an integrable square-integrable real martingale gives a submartingale. -/
+private theorem martingale_square_submartingale
+    {Omega : Type*} {m : MeasurableSpace Omega} {mu : Measure Omega}
+    {F : Filtration ℕ m} {f : ℕ → Omega → ℝ} [IsFiniteMeasure mu]
+    (hf : Martingale f F mu)
+    (hsq : ∀ n, Integrable (fun w => (f n w) ^ 2) mu) :
+    Submartingale (fun n w => (f n w) ^ 2) F mu := by
+  refine ⟨fun n => (hf.stronglyMeasurable n).pow 2, ?_, hsq⟩
+  intro i j hij
+  have hjensen := (even_two.convexOn_pow (𝕜 := ℝ)).map_condExp_le_univ
+    (F.le i) (continuous_id.pow 2).lowerSemicontinuous (hf.integrable j) (hsq j)
+  filter_upwards [hf.2 i j hij, hjensen] with w hmart hjensen'
+  rw [← hmart]
+  exact hjensen'
+
+/-- The square expectation of a real martingale is the sum of increment variances. -/
+private theorem martingale_square_integral_eq
+    {Omega : Type*} {m : MeasurableSpace Omega} {mu : Measure Omega}
+    {F : Filtration ℕ m} {f : ℕ → Omega → ℝ} [IsFiniteMeasure mu]
+    (hf : Martingale f F mu)
+    (hsq : ∀ n, Integrable (fun w => (f n w) ^ 2) mu)
+    (hcross : ∀ n, Integrable (fun w => f n w * f (n + 1) w) mu)
+    (n : ℕ) :
+    (∫ w, (f n w) ^ 2 ∂mu) =
+      (∫ w, (f 0 w) ^ 2 ∂mu) +
+        ∑ i ∈ Finset.range n, ∫ w, (f (i + 1) w - f i w) ^ 2 ∂mu := by
+  induction n with
+  | zero => simp only [Finset.range_zero, Finset.sum_empty, add_zero]
+  | succ n ih =>
+      have hmul :
+          (∫ w, f n w * f (n + 1) w ∂mu) = ∫ w, (f n w) ^ 2 ∂mu := by
+        calc
+          _ = ∫ w, mu[fun z => f n z * f (n + 1) z | F n] w ∂mu :=
+            (integral_condExp (F.le n)).symm
+          _ = ∫ w, f n w * mu[f (n + 1) | F n] w ∂mu := by
+            apply integral_congr_ae
+            exact condExp_mul_of_stronglyMeasurable_left (m := F n)
+              (hf.stronglyMeasurable n) (hcross n) (hf.integrable (n + 1))
+          _ = ∫ w, (f n w) ^ 2 ∂mu := by
+            apply integral_congr_ae
+            filter_upwards [hf.2 n (n + 1) n.le_succ] with w hw
+            rw [hw, pow_two]
+      have hincrement :
+          (∫ w, (f (n + 1) w - f n w) ^ 2 ∂mu) =
+            (∫ w, (f (n + 1) w) ^ 2 ∂mu) -
+              2 * (∫ w, f n w * f (n + 1) w ∂mu) +
+                ∫ w, (f n w) ^ 2 ∂mu := by
+        have hpoint : (fun w => (f (n + 1) w - f n w) ^ 2) =
+            fun w => (f (n + 1) w) ^ 2 -
+              2 * (f n w * f (n + 1) w) + (f n w) ^ 2 := by
+          funext w
+          ring
+        rw [hpoint]
+        change (∫ w, (((fun z => (f (n + 1) z) ^ 2) -
+          (fun z => 2 * (f n z * f (n + 1) z))) +
+            fun z => (f n z) ^ 2) w ∂mu) = _
+        calc
+          _ = (∫ w, ((fun z => (f (n + 1) z) ^ 2) -
+                (fun z => 2 * (f n z * f (n + 1) z))) w ∂mu) +
+              ∫ w, (f n w) ^ 2 ∂mu :=
+            integral_add ((hsq (n + 1)).sub ((hcross n).const_mul 2)) (hsq n)
+          _ = _ := by
+            have hsub := integral_sub (hsq (n + 1)) ((hcross n).const_mul 2)
+            have hmul2 := integral_const_mul (μ := mu) (r := 2)
+              (f := fun w => f n w * f (n + 1) w)
+            change (∫ w, (f (n + 1) w) ^ 2 -
+              2 * (f n w * f (n + 1) w) ∂mu) +
+                ∫ w, (f n w) ^ 2 ∂mu = _
+            rw [hsub, hmul2]
+      rw [Finset.sum_range_succ]
+      calc
+        (∫ w, (f (n + 1) w) ^ 2 ∂mu) =
+            (∫ w, (f n w) ^ 2 ∂mu) +
+              ∫ w, (f (n + 1) w - f n w) ^ 2 ∂mu := by
+                rw [hincrement, hmul]
+                ring
+        _ = ((∫ w, (f 0 w) ^ 2 ∂mu) +
+              ∑ i ∈ Finset.range n,
+                ∫ w, (f (i + 1) w - f i w) ^ 2 ∂mu) +
+              ∫ w, (f (n + 1) w - f n w) ^ 2 ∂mu := by rw [ih]
+        _ = _ := by ring
 
 /-- The time-zero marginal of a raw DDP law is its supplied initial-stage distribution. -/
 private theorem DiscreteDecisionProcess.map_prefix_zero_rawLawWithInitial
@@ -1192,6 +1510,22 @@ private theorem DDPFinitePath.ext_of_stages
             exact eq_of_heq (Sigma.mk.inj_iff.mp (hstage i)).2
           subst byy
           rfl
+
+/-- Agreement of two infinite paths through a later prefix implies agreement earlier. -/
+private theorem DDPPath.prefix_eq_of_prefix_eq_of_le
+    (P : DiscreteDecisionProcess) {p q : DDPPath P} {k l : ℕ}
+    (hkl : k ≤ l) (h : p.prefix P l = q.prefix P l) :
+    p.prefix P k = q.prefix P k := by
+  apply DDPFinitePath.ext_of_stages P
+  · intro i
+    let j : Fin (l + 1) := Fin.castLE (Nat.add_le_add_right hkl 1) i
+    have hj := congrArg (fun r : DDPFinitePath P l => r.x j) h
+    simpa [j, DDPPath.prefix] using hj
+  · intro i
+    let j : Fin l := Fin.castLE hkl i
+    have hj := congrArg (fun r : DDPFinitePath P l =>
+      (⟨r.x j.castSucc, r.y j⟩ : DDPStage P)) h
+    simpa [j, DDPPath.prefix] using hj
 
 /-- A raw stage sequence belongs to a DDP cylinder exactly when its constrained prefix agrees. -/
 private theorem DDPPath.preimage_ddpCylinder_eq_iUnion
@@ -1679,6 +2013,88 @@ theorem ddpSemantics_exists (P : DiscreteDecisionProcess) : Nonempty (DDPSemanti
     afterActionCylinder := hafterCylinder
   }⟩
 
+/-- Finite DDP cylinders form a π-system: intersecting compatible prefixes keeps the longer one. -/
+private theorem isPiSystem_ddpCylinders (P : DiscreteDecisionProcess) :
+    IsPiSystem {U | ∃ k, ∃ h : DDPFinitePath P k, U = DDPCylinder P h} := by
+  rintro _ ⟨k, h, rfl⟩ _ ⟨l, g, rfl⟩ ⟨p, hp, pg⟩
+  by_cases hkl : k ≤ l
+  · refine ⟨l, g, ?_⟩
+    ext q
+    simp only [mem_inter_iff]
+    constructor
+    · exact fun hq => hq.2
+    · intro hqg
+      refine ⟨?_, hqg⟩
+      change q.prefix P k = h
+      have hlate : q.prefix P l = p.prefix P l := hqg.trans pg.symm
+      exact (DDPPath.prefix_eq_of_prefix_eq_of_le P hkl hlate).trans hp
+  · have hlk : l ≤ k := Nat.le_of_not_ge hkl
+    refine ⟨k, h, ?_⟩
+    ext q
+    simp only [mem_inter_iff]
+    constructor
+    · exact fun hq => hq.1
+    · intro hqh
+      refine ⟨hqh, ?_⟩
+      change q.prefix P l = g
+      have hlate : q.prefix P k = p.prefix P k := hqh.trans hp.symm
+      exact (DDPPath.prefix_eq_of_prefix_eq_of_le P hlk hlate).trans pg
+
+/-- Cylinder probabilities uniquely determine the DDP law carried by a semantics bundle. -/
+private theorem DDPSemantics.law_eq_rawLaw (P : DiscreteDecisionProcess)
+    (S : DDPSemantics P) :
+    S.law = Measure.map (DDPPath.ofRaw P) (P.rawLawFrom P.initial) := by
+  let canonical := Measure.map (DDPPath.ofRaw P) (P.rawLawFrom P.initial)
+  letI : IsProbabilityMeasure S.law := S.probability
+  letI : IsProbabilityMeasure canonical :=
+    Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+  let support : Set (DDPPath P) := {p | p.x 0 = P.initial}
+  have hcanonicalSupport : canonical support = 1 := by
+    have heq : support = DDPCylinder P (DDPFinitePath.atState P P.initial) := by
+      ext p
+      exact (DDPFinitePath.mem_atStateCylinder_iff P P.initial p).symm
+    rw [heq]
+    dsimp only [canonical]
+    rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+      (measurableSet_ddpCylinder P (DDPFinitePath.atState P P.initial))]
+    simpa [DDPFinitePath.probability] using
+      P.rawLawFrom_ddpCylinder P.initial (DDPFinitePath.atState P P.initial) rfl
+  have cylinder_zero_of_wrong_start (mu : Measure (DDPPath P))
+      [IsProbabilityMeasure mu] (hsupport : mu support = 1)
+      {k : ℕ} (h : DDPFinitePath P k) (hwrong : h.x 0 ≠ P.initial) :
+      mu (DDPCylinder P h) = 0 := by
+    have hsupportMeasurable : MeasurableSet support :=
+      measurableSet_ddpInitialState P P.initial
+    have hsupportComplement : mu supportᶜ = 0 := by
+      rw [measure_compl hsupportMeasurable (by rw [hsupport]; simp)]
+      rw [measure_univ, hsupport]
+      simp
+    apply nonpos_iff_eq_zero.mp
+    exact calc
+      mu (DDPCylinder P h) ≤ mu supportᶜ := by
+        apply measure_mono
+        intro p hp
+        simp only [support, mem_compl_iff, mem_setOf_eq]
+        intro hpstart
+        apply hwrong
+        change p.prefix P k = h at hp
+        have hx := congrArg (fun q : DDPFinitePath P k => q.x 0) hp
+        simpa [DDPPath.prefix, hpstart] using hx.symm
+      _ = 0 := hsupportComplement
+  apply ext_of_generate_finite
+    {U | ∃ k, ∃ h : DDPFinitePath P k, U = DDPCylinder P h}
+    rfl (isPiSystem_ddpCylinders P)
+  · intro U hU
+    rcases hU with ⟨k, h, rfl⟩
+    by_cases hstart : h.x 0 = P.initial
+    · rw [S.cylinder k h hstart]
+      rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+        (measurableSet_ddpCylinder P h)]
+      exact (P.rawLawFrom_ddpCylinder P.initial h hstart).symm
+    · rw [cylinder_zero_of_wrong_start S.law S.lawSupport h hstart]
+      exact (cylinder_zero_of_wrong_start canonical hcanonicalSupport h hstart).symm
+  · simp
+
 /-- The finite cumulative advantage through the action indexed by `l`. -/
 def DDPAdvantage (P : DiscreteDecisionProcess) (p : DDPPath P) (l : ℕ) : ℝ :=
   Finset.sum (Finset.range (l + 1)) fun i =>
@@ -1800,6 +2216,165 @@ theorem corollary1 (G : NormalStochasticGame) (GS : StochasticSemantics G)
 def DDPTotalVariation (P : DiscreteDecisionProcess) (p : DDPPath P) : ℝ≥0∞ :=
   ∑' i, ENNReal.ofReal |P.valueY (p.x i) (p.y i) - P.valueX (p.x i)|
 
+/-- Each finite cumulative advantage is measurable in the cylinder sigma algebra. -/
+private theorem DDPAdvantage.measurable (P : DiscreteDecisionProcess) (l : ℕ) :
+    Measurable (DDPAdvantage P · l) := by
+  have hmeasurable : Measurable (fun h : DDPFinitePath P (l + 1) => h.advantage P) :=
+    Measurable.of_discrete
+  convert hmeasurable.comp (DDPPath.measurable_prefix P (l + 1)) using 1
+  funext p
+  exact (DDPFinitePath.advantage_prefix P p l).symm
+
+/-- Each individual value increment is measurable in the cylinder sigma algebra. -/
+private theorem DDPPath.measurable_increment (P : DiscreteDecisionProcess) (i : ℕ) :
+    Measurable (fun p : DDPPath P =>
+      P.valueY (p.x i) (p.y i) - P.valueX (p.x i)) := by
+  cases i with
+  | zero => simpa [DDPAdvantage] using DDPAdvantage.measurable P 0
+  | succ i =>
+      have heq : (fun p : DDPPath P =>
+          P.valueY (p.x (i + 1)) (p.y (i + 1)) - P.valueX (p.x (i + 1))) =
+          fun p => DDPAdvantage P p (i + 1) - DDPAdvantage P p i := by
+        funext p
+        simp only [DDPAdvantage, Finset.sum_range_succ]
+        ring
+      rw [heq]
+      exact (DDPAdvantage.measurable P (i + 1)).sub (DDPAdvantage.measurable P i)
+
+/-- Total variation is measurable as a countable sum of measurable increments. -/
+private theorem DDPTotalVariation.measurable (P : DiscreteDecisionProcess) :
+    Measurable (DDPTotalVariation P) := by
+  apply Measurable.tsum
+  intro i
+  exact (DDPPath.measurable_increment P i).abs.ennreal_ofReal
+
+/-- Absolute cumulative-advantage crossing is a measurable event. -/
+private theorem measurableSet_ddpAbsoluteAdvantage_crossing
+    (P : DiscreteDecisionProcess) (epsilon : ℝ) :
+    MeasurableSet {p | ∃ l, |DDPAdvantage P p l| ≥ epsilon} := by
+  rw [show {p | ∃ l, |DDPAdvantage P p l| ≥ epsilon} =
+      ⋃ l, {p | epsilon ≤ |DDPAdvantage P p l|} by ext; simp]
+  exact MeasurableSet.iUnion fun l =>
+    ((DDPAdvantage.measurable P l).abs measurableSet_Ici)
+
+/-- On raw sampled stages, the displayed and raw cumulative advantages coincide. -/
+@[simp] private theorem DiscreteDecisionProcess.advantage_ofRaw
+    (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) (l : ℕ) :
+    DDPAdvantage P (DDPPath.ofRaw P stage) l = P.rawAdvantage stage l := rfl
+
+/-- On raw sampled stages, the displayed total variation is the increment sum. -/
+@[simp] private theorem DiscreteDecisionProcess.totalVariation_ofRaw
+    (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) :
+    DDPTotalVariation P (DDPPath.ofRaw P stage) =
+      ∑' i, ENNReal.ofReal |DDPStage.increment P (stage i)| := rfl
+
+/-- Total absolute increment through time `n` on the raw trajectory space. -/
+private def DiscreteDecisionProcess.rawPartialVariation
+    (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) (n : ℕ) : ℝ :=
+  ∑ i ∈ Finset.range (n + 1), |DDPStage.increment P (stage i)|
+
+/-- A finite raw variation is measurable and nonnegative. -/
+private theorem DiscreteDecisionProcess.measurable_rawPartialVariation
+    (P : DiscreteDecisionProcess) (n : ℕ) :
+    Measurable (fun stage => P.rawPartialVariation stage n) := by
+  refine Finset.measurable_sum (f := fun i (stage : ℕ → DDPStage P) =>
+    |DDPStage.increment P (stage i)|) (Finset.range (n + 1)) ?_
+  intro i _hi
+  have hincrement : Measurable (DDPStage.increment P) := Measurable.of_discrete
+  exact (hincrement.comp
+    (measurable_pi_apply (X := fun _ : ℕ => DDPStage P) i)).abs
+
+private theorem DiscreteDecisionProcess.rawPartialVariation_nonneg
+    (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) (n : ℕ) :
+    0 ≤ P.rawPartialVariation stage n := by
+  exact Finset.sum_nonneg fun _ _ => abs_nonneg _
+
+/-- A finite raw variation is bounded by the displayed increment bound. -/
+private theorem DiscreteDecisionProcess.rawPartialVariation_le
+    (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) (n : ℕ) :
+    P.rawPartialVariation stage n ≤ (n + 1) * P.valueDifferenceBound := by
+  calc
+    P.rawPartialVariation stage n ≤
+        ∑ _i ∈ Finset.range (n + 1), P.valueDifferenceBound := by
+      apply Finset.sum_le_sum
+      intro i _hi
+      simpa only [Real.norm_eq_abs] using (stage i).norm_increment_le P
+    _ = (n + 1) * P.valueDifferenceBound := by
+      rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+      push_cast
+      rfl
+
+/-- Every finite raw variation is integrable. -/
+private theorem DiscreteDecisionProcess.integrable_rawPartialVariation
+    (P : DiscreteDecisionProcess) (n : ℕ) :
+    Integrable (fun stage => P.rawPartialVariation stage n) (P.rawLawFrom P.initial) := by
+  apply Integrable.of_bound (P.measurable_rawPartialVariation n).aestronglyMeasurable
+    ((n + 1) * P.valueDifferenceBound)
+  exact ae_of_all _ fun stage => by
+    rw [Real.norm_eq_abs, abs_of_nonneg (P.rawPartialVariation_nonneg stage n)]
+    exact P.rawPartialVariation_le stage n
+
+/-- Finite raw cumulative-advantage squares are integrable. -/
+private theorem DiscreteDecisionProcess.integrable_rawAdvantage_sq
+    (P : DiscreteDecisionProcess) (n : ℕ) :
+    Integrable (fun stage => (P.rawAdvantage stage n) ^ 2)
+      (P.rawLawFrom P.initial) := by
+  apply Integrable.of_bound
+    (((P.rawAdvantage_stronglyAdapted n).mono
+      (Filtration.le (Filtration.piLE (X := fun _ : ℕ => DDPStage P)) n)).pow 2
+        |>.aestronglyMeasurable)
+    (((n + 1) * P.valueDifferenceBound) ^ 2)
+  exact ae_of_all _ fun stage => by
+    change ‖P.rawAdvantage stage n ^ 2‖ ≤ _
+    rw [norm_pow]
+    exact pow_le_pow_left₀ (norm_nonneg _) (P.norm_rawAdvantage_le stage n) 2
+
+/-- Products at two successive times of the raw martingale are integrable. -/
+private theorem DiscreteDecisionProcess.integrable_rawAdvantage_mul_succ
+    (P : DiscreteDecisionProcess) (n : ℕ) :
+    Integrable (fun stage => P.rawAdvantage stage n * P.rawAdvantage stage (n + 1))
+      (P.rawLawFrom P.initial) := by
+  apply Integrable.of_bound
+    ((((P.rawAdvantage_stronglyAdapted n).mono
+      (Filtration.le (Filtration.piLE (X := fun _ : ℕ => DDPStage P)) n)).mul
+      ((P.rawAdvantage_stronglyAdapted (n + 1)).mono
+        (Filtration.le (Filtration.piLE (X := fun _ : ℕ => DDPStage P)) (n + 1))))
+          |>.aestronglyMeasurable)
+    (((n + 1) * P.valueDifferenceBound) * ((n + 2) * P.valueDifferenceBound))
+  exact ae_of_all _ fun stage => by
+    change ‖P.rawAdvantage stage n * P.rawAdvantage stage (n + 1)‖ ≤ _
+    rw [norm_mul]
+    exact mul_le_mul (P.norm_rawAdvantage_le stage n)
+      (by
+        calc
+          ‖P.rawAdvantage stage (n + 1)‖ ≤
+              ((n + 1 : ℕ) + 1) * P.valueDifferenceBound :=
+            P.norm_rawAdvantage_le stage (n + 1)
+          _ = (n + 2) * P.valueDifferenceBound := by
+            congr 1
+            rw [Nat.cast_add, Nat.cast_one]
+            ring)
+      (norm_nonneg _)
+      (mul_nonneg (by positivity) (le_trans zero_le_one P.valueDifferenceBound_one))
+
+/-- The squares of the raw cumulative advantages form a submartingale. -/
+private theorem DiscreteDecisionProcess.rawAdvantage_square_submartingale
+    (P : DiscreteDecisionProcess) :
+    Submartingale (fun n stage => (P.rawAdvantage stage n) ^ 2)
+      (Filtration.piLE (X := fun _ : ℕ => DDPStage P))
+      (P.rawLawFrom P.initial) :=
+  martingale_square_submartingale P.rawAdvantage_martingale
+    P.integrable_rawAdvantage_sq
+
+/-- Finite raw variation is bounded by the corresponding infinite variation. -/
+private theorem DiscreteDecisionProcess.ofReal_rawPartialVariation_le
+    (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) (n : ℕ) :
+    ENNReal.ofReal (P.rawPartialVariation stage n) ≤
+      ∑' i, ENNReal.ofReal |DDPStage.increment P (stage i)| := by
+  rw [DiscreteDecisionProcess.rawPartialVariation]
+  rw [ENNReal.ofReal_sum_of_nonneg fun _ _ => abs_nonneg _]
+  exact ENNReal.sum_le_tsum (Finset.range (n + 1))
+
 /-- A decision process is `δ`-balanced when every chosen-action value is within `δ`. -/
 def IsBalanced (P : DiscreteDecisionProcess) (δ : ℝ) : Prop :=
   ∀ x y, |P.valueY x y - P.valueX x| ≤ δ
@@ -1813,6 +2388,207 @@ def AbsoluteCrossingProbability (P : DiscreteDecisionProcess) (S : DDPSemantics 
 def ExpectedDDPVariation (P : DiscreteDecisionProcess) (S : DDPSemantics P) : ℝ≥0∞ :=
   ∫⁻ p, DDPTotalVariation P p ∂S.law
 
+/-- An expected-total-variation bound controls every finite raw partial variation. -/
+private theorem DiscreteDecisionProcess.integral_rawPartialVariation_le
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) {B : ℝ} (hB : 0 < B)
+    (hvariation : ExpectedDDPVariation P S ≤ ENNReal.ofReal B) (n : ℕ) :
+    ∫ stage, P.rawPartialVariation stage n ∂P.rawLawFrom P.initial ≤ B := by
+  have hfinite : ENNReal.ofReal
+      (∫ stage, P.rawPartialVariation stage n ∂P.rawLawFrom P.initial) ≤
+      ExpectedDDPVariation P S := by
+    rw [ofReal_integral_eq_lintegral_ofReal (P.integrable_rawPartialVariation n)
+      (ae_of_all _ fun stage => P.rawPartialVariation_nonneg stage n)]
+    rw [ExpectedDDPVariation, S.law_eq_rawLaw]
+    rw [lintegral_map (DDPTotalVariation.measurable P) (DDPPath.measurable_ofRaw P)]
+    apply lintegral_mono
+    intro stage
+    simpa only [P.totalVariation_ofRaw] using P.ofReal_rawPartialVariation_le stage n
+  exact (ENNReal.ofReal_le_ofReal_iff hB.le).mp (hfinite.trans hvariation)
+
+/-- Orthogonality identifies the raw martingale square expectation with increment squares. -/
+private theorem DiscreteDecisionProcess.integral_rawAdvantage_sq_eq_sum
+    (P : DiscreteDecisionProcess) (n : ℕ) :
+    (∫ stage, (P.rawAdvantage stage n) ^ 2 ∂P.rawLawFrom P.initial) =
+      ∑ i ∈ Finset.range (n + 1),
+        ∫ stage, (DDPStage.increment P (stage i)) ^ 2 ∂P.rawLawFrom P.initial := by
+  have h := martingale_square_integral_eq P.rawAdvantage_martingale
+    P.integrable_rawAdvantage_sq P.integrable_rawAdvantage_mul_succ n
+  simp_rw [P.rawAdvantage_succ_sub] at h
+  have hzero : ∀ stage : ℕ → DDPStage P,
+      P.rawAdvantage stage 0 = DDPStage.increment P (stage 0) := by
+    intro stage
+    simp [DiscreteDecisionProcess.rawAdvantage]
+  simp_rw [hzero] at h
+  rw [Finset.sum_range_succ']
+  simpa only [add_comm] using h
+
+/-- Balance and expected variation bound every raw martingale square expectation. -/
+private theorem DiscreteDecisionProcess.integral_rawAdvantage_sq_le
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) {delta B : ℝ}
+    (hdelta : 0 < delta) (hB : 0 < B) (hbalanced : IsBalanced P delta)
+    (hvariation : ExpectedDDPVariation P S ≤ ENNReal.ofReal B) (n : ℕ) :
+    ∫ stage, (P.rawAdvantage stage n) ^ 2 ∂P.rawLawFrom P.initial ≤ delta * B := by
+  have habsIntegrable (i : ℕ) : Integrable
+      (fun stage : ℕ → DDPStage P => |DDPStage.increment P (stage i)|)
+      (P.rawLawFrom P.initial) := by
+    have hincrement : Measurable (DDPStage.increment P) := Measurable.of_discrete
+    apply Integrable.of_bound
+      ((hincrement.comp
+        (measurable_pi_apply (X := fun _ : ℕ => DDPStage P) i)).abs.aestronglyMeasurable)
+      delta
+    exact ae_of_all _ fun stage => by
+      rw [Real.norm_eq_abs, abs_abs]
+      exact hbalanced (stage i).1 (stage i).2
+  have hsquareIntegrable (i : ℕ) : Integrable
+      (fun stage : ℕ → DDPStage P => (DDPStage.increment P (stage i)) ^ 2)
+      (P.rawLawFrom P.initial) := by
+    have hincrement : Measurable (DDPStage.increment P) := Measurable.of_discrete
+    apply Integrable.of_bound
+      (((hincrement.comp
+        (measurable_pi_apply (X := fun _ : ℕ => DDPStage P) i)).pow_const 2)
+          |>.aestronglyMeasurable)
+      (delta ^ 2)
+    exact ae_of_all _ fun stage => by
+      rw [norm_pow, Real.norm_eq_abs]
+      exact pow_le_pow_left₀ (abs_nonneg _)
+        (hbalanced (stage i).1 (stage i).2) 2
+  calc
+    (∫ stage, (P.rawAdvantage stage n) ^ 2 ∂P.rawLawFrom P.initial) =
+        ∑ i ∈ Finset.range (n + 1),
+          ∫ stage, (DDPStage.increment P (stage i)) ^ 2
+            ∂P.rawLawFrom P.initial := P.integral_rawAdvantage_sq_eq_sum n
+    _ ≤ ∑ i ∈ Finset.range (n + 1),
+        ∫ stage, delta * |DDPStage.increment P (stage i)|
+          ∂P.rawLawFrom P.initial := by
+      apply Finset.sum_le_sum
+      intro i _hi
+      apply integral_mono (hsquareIntegrable i) ((habsIntegrable i).const_mul delta)
+      intro stage
+      have hi := hbalanced (stage i).1 (stage i).2
+      calc
+        (DDPStage.increment P (stage i)) ^ 2 =
+            |DDPStage.increment P (stage i)| * |DDPStage.increment P (stage i)| := by
+          rw [← sq_abs, pow_two]
+        _ ≤ |DDPStage.increment P (stage i)| * delta :=
+          mul_le_mul_of_nonneg_left hi (abs_nonneg _)
+        _ = delta * |DDPStage.increment P (stage i)| := mul_comm _ _
+    _ = delta *
+        ∫ stage, P.rawPartialVariation stage n ∂P.rawLawFrom P.initial := by
+      simp_rw [integral_const_mul]
+      rw [← Finset.mul_sum]
+      rw [← integral_finsetSum (Finset.range (n + 1)) fun i _ => habsIntegrable i]
+      rfl
+    _ ≤ delta * B := mul_le_mul_of_nonneg_left
+      (P.integral_rawPartialVariation_le S hB hvariation n) hdelta.le
+
+/-- The event that the raw cumulative advantage crosses `epsilon` by time `n`. -/
+private def DiscreteDecisionProcess.rawAbsoluteCrossingUpTo
+    (P : DiscreteDecisionProcess) (epsilon : ℝ) (n : ℕ) :
+    Set (ℕ → DDPStage P) :=
+  {stage | ∃ l, l ≤ n ∧ epsilon ≤ |P.rawAdvantage stage l|}
+
+/-- Doob's inequality bounds each finite-horizon raw crossing event. -/
+private theorem DiscreteDecisionProcess.rawAbsoluteCrossingUpTo_le
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) {delta epsilon rho B : ℝ}
+    (hdelta : 0 < delta) (hepsilon : 0 < epsilon) (hrho : 0 < rho) (hB : 0 < B)
+    (hbalanced : IsBalanced P delta)
+    (hvariation : ExpectedDDPVariation P S ≤ ENNReal.ofReal B)
+    (hsmall : delta ≤ epsilon ^ 2 * rho / B) (n : ℕ) :
+    P.rawLawFrom P.initial (P.rawAbsoluteCrossingUpTo epsilon n) ≤ ENNReal.ofReal rho := by
+  let threshold : NNReal := ⟨epsilon ^ 2, sq_nonneg epsilon⟩
+  let maximumEvent : Set (ℕ → DDPStage P) :=
+    {stage | (threshold : ℝ) ≤
+      (Finset.range (n + 1)).sup' Finset.nonempty_range_add_one
+        fun k => (P.rawAdvantage stage k) ^ 2}
+  have hsubset : P.rawAbsoluteCrossingUpTo epsilon n ⊆ maximumEvent := by
+    rintro stage ⟨l, hl, hcross⟩
+    have hlrange : l ∈ Finset.range (n + 1) := Finset.mem_range.mpr (Nat.lt_succ_of_le hl)
+    have hsquare : epsilon ^ 2 ≤ (P.rawAdvantage stage l) ^ 2 := by
+      calc
+        epsilon ^ 2 ≤ |P.rawAdvantage stage l| ^ 2 :=
+          pow_le_pow_left₀ hepsilon.le hcross 2
+        _ = (P.rawAdvantage stage l) ^ 2 := sq_abs _
+    exact hsquare.trans (Finset.le_sup'
+      (fun k => (P.rawAdvantage stage k) ^ 2) hlrange)
+  have hdoob := maximal_ineq P.rawAdvantage_square_submartingale
+    (fun _ _ => sq_nonneg _) (ε := threshold) n
+  change (threshold : ℝ≥0∞) * P.rawLawFrom P.initial maximumEvent ≤
+    ENNReal.ofReal
+      (∫ stage in maximumEvent, (P.rawAdvantage stage n) ^ 2
+        ∂P.rawLawFrom P.initial) at hdoob
+  have hsetIntegral :
+      ∫ stage in maximumEvent, (P.rawAdvantage stage n) ^ 2
+          ∂P.rawLawFrom P.initial ≤
+        ∫ stage, (P.rawAdvantage stage n) ^ 2 ∂P.rawLawFrom P.initial :=
+    setIntegral_le_integral (P.integrable_rawAdvantage_sq n)
+      (ae_of_all _ fun stage => sq_nonneg (P.rawAdvantage stage n))
+  have hdoobBound : (threshold : ℝ≥0∞) *
+      P.rawLawFrom P.initial maximumEvent ≤ ENNReal.ofReal (delta * B) :=
+    hdoob.trans <| (ENNReal.ofReal_le_ofReal hsetIntegral).trans <|
+      ENNReal.ofReal_le_ofReal (P.integral_rawAdvantage_sq_le S hdelta hB
+        hbalanced hvariation n)
+  have hreal : delta * B ≤ epsilon ^ 2 * rho := by
+    calc
+      delta * B ≤ (epsilon ^ 2 * rho / B) * B :=
+        mul_le_mul_of_nonneg_right hsmall hB.le
+      _ = epsilon ^ 2 * rho := by field_simp
+  have hmaximum : P.rawLawFrom P.initial maximumEvent ≤ ENNReal.ofReal rho := by
+    have hmul : ENNReal.ofReal (epsilon ^ 2) *
+        P.rawLawFrom P.initial maximumEvent ≤
+          ENNReal.ofReal (epsilon ^ 2) * ENNReal.ofReal rho := by
+      calc
+        ENNReal.ofReal (epsilon ^ 2) * P.rawLawFrom P.initial maximumEvent =
+            (threshold : ℝ≥0∞) * P.rawLawFrom P.initial maximumEvent := by
+          rw [ENNReal.coe_nnreal_eq]
+          rfl
+        _ ≤ ENNReal.ofReal (delta * B) := hdoobBound
+        _ ≤ ENNReal.ofReal (epsilon ^ 2 * rho) := ENNReal.ofReal_le_ofReal hreal
+        _ = ENNReal.ofReal (epsilon ^ 2) * ENNReal.ofReal rho :=
+          ENNReal.ofReal_mul (sq_nonneg epsilon)
+    have hthresholdZero : ENNReal.ofReal (epsilon ^ 2) ≠ 0 :=
+      ne_of_gt (ENNReal.ofReal_pos.mpr (sq_pos_of_pos hepsilon))
+    have hthresholdTop : ENNReal.ofReal (epsilon ^ 2) ≠ ⊤ := ENNReal.ofReal_ne_top
+    calc
+      P.rawLawFrom P.initial maximumEvent =
+          (ENNReal.ofReal (epsilon ^ 2))⁻¹ *
+            (ENNReal.ofReal (epsilon ^ 2) * P.rawLawFrom P.initial maximumEvent) :=
+        (ENNReal.inv_mul_cancel_left hthresholdZero hthresholdTop).symm
+      _ ≤ (ENNReal.ofReal (epsilon ^ 2))⁻¹ *
+          (ENNReal.ofReal (epsilon ^ 2) * ENNReal.ofReal rho) :=
+        mul_le_mul_right hmul _
+      _ = ENNReal.ofReal rho :=
+        ENNReal.inv_mul_cancel_left hthresholdZero hthresholdTop
+  exact (measure_mono hsubset).trans hmaximum
+
+/-- The same bound holds for ever crossing on the infinite raw trajectory. -/
+private theorem DiscreteDecisionProcess.rawAbsoluteCrossing_le
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) {delta epsilon rho B : ℝ}
+    (hdelta : 0 < delta) (hepsilon : 0 < epsilon) (hrho : 0 < rho) (hB : 0 < B)
+    (hbalanced : IsBalanced P delta)
+    (hvariation : ExpectedDDPVariation P S ≤ ENNReal.ofReal B)
+    (hsmall : delta ≤ epsilon ^ 2 * rho / B) :
+    P.rawLawFrom P.initial {stage | ∃ l, epsilon ≤ |P.rawAdvantage stage l|} ≤
+      ENNReal.ofReal rho := by
+  have hmonotone : Monotone (P.rawAbsoluteCrossingUpTo epsilon) := by
+    intro n m hnm stage
+    rintro ⟨l, hl, hcross⟩
+    exact ⟨l, hl.trans hnm, hcross⟩
+  have hunion : (⋃ n, P.rawAbsoluteCrossingUpTo epsilon n) =
+      {stage | ∃ l, epsilon ≤ |P.rawAdvantage stage l|} := by
+    ext stage
+    simp only [mem_iUnion, DiscreteDecisionProcess.rawAbsoluteCrossingUpTo,
+      mem_setOf_eq]
+    constructor
+    · rintro ⟨n, l, _hl, hcross⟩
+      exact ⟨l, hcross⟩
+    · rintro ⟨l, hcross⟩
+      exact ⟨l, l, le_rfl, hcross⟩
+  rw [← hunion]
+  apply le_of_tendsto' (tendsto_measure_iUnion_atTop hmonotone)
+  intro n
+  exact P.rawAbsoluteCrossingUpTo_le S hdelta hepsilon hrho hB hbalanced
+    hvariation hsmall n
+
 /--
 Proposition 1.  If a DDP is `δ`-balanced, has expected total variation at most `B > 0`,
 and `0 < δ ≤ ε²ρ/B` for positive `ε,ρ`, then its absolute crossing probability
@@ -1824,7 +2600,11 @@ theorem proposition1 (P : DiscreteDecisionProcess) (S : DDPSemantics P)
     (hvariation : ExpectedDDPVariation P S ≤ ENNReal.ofReal B)
     (hsmall : δ ≤ ε ^ 2 * ρ / B) :
     AbsoluteCrossingProbability P S ε ≤ ENNReal.ofReal ρ := by
-  sorry
+  rw [AbsoluteCrossingProbability, S.law_eq_rawLaw]
+  rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+    (measurableSet_ddpAbsoluteAdvantage_crossing P ε)]
+  simpa only [Set.preimage_setOf_eq, P.advantage_ofRaw] using
+    P.rawAbsoluteCrossing_le S hδ hε hρ hB hbalanced hvariation hsmall
 
 /-! ### 3.3. Rank -/
 
