@@ -52,6 +52,25 @@ private theorem one_sub_sum_le_prod_one_sub
 def quittingStationaryTotalHazard (root : ι → PMF Bool) : ℝ :=
   ∑ i, (root i true).toReal
 
+/-- The normalized direction of a positive stationary hazard vector. -/
+def quittingStationaryHazardDirection (root : ι → PMF Bool)
+    (hpositive : 0 < quittingStationaryTotalHazard root) :
+    stdSimplex ℝ ι := by
+  refine ⟨fun who ↦ (root who true).toReal /
+    quittingStationaryTotalHazard root, ?_, ?_⟩
+  · intro who
+    positivity
+  · rw [← Finset.sum_div]
+    exact div_self hpositive.ne'
+
+omit [DecidableEq ι] in
+@[simp] theorem quittingStationaryHazardDirection_apply
+    (root : ι → PMF Bool)
+    (hpositive : 0 < quittingStationaryTotalHazard root) (who : ι) :
+    (quittingStationaryHazardDirection root hpositive).val who =
+      (root who true).toReal / quittingStationaryTotalHazard root :=
+  rfl
+
 /-- Barycenter of singleton rewards under the normalized stationary hazard
 direction.  This definition is intended for positive total hazard; at the
 zero-hazard apex its divisions are left at Lean's totalized value. -/
@@ -61,6 +80,41 @@ def quittingStationarySingletonDirectionBarycenter
   fun who ↦
     ∑ i, ((root i true).toReal / quittingStationaryTotalHazard root) *
       quittingSoloReward reward i who
+
+omit [DecidableEq ι] in
+/-- The one-stage absorption probability is at most the sum of the marginal
+quit hazards. -/
+theorem quittingRootAbsorptionMass_le_stationaryTotalHazard
+    (root : ι → PMF Bool) :
+    quittingRootAbsorptionMass root ≤ quittingStationaryTotalHazard root := by
+  let hazard : ι → ℝ := fun who ↦ (root who true).toReal
+  have hcontinue : ∀ who, (root who false).toReal = 1 - hazard who := by
+    intro who
+    linarith [quittingRoot_continueProbability_add_quitProbability root who]
+  rw [quittingRootAbsorptionMass,
+    quittingStationaryContinueMass_eq_prod_continueProbability]
+  simpa [quittingStationaryTotalHazard, hazard, hcontinue] using
+    (Math.one_sub_prod_one_sub_le_sum hazard Finset.univ
+      (fun who _ ↦ ENNReal.toReal_nonneg)
+      (fun who _ ↦ by
+        have := ENNReal.toReal_nonneg (a := root who false)
+        rw [hcontinue who] at this
+        linarith))
+
+omit [DecidableEq ι] in
+/-- Positive total stationary hazard forces strict one-stage contraction. -/
+theorem quittingStationaryContinueMass_lt_one_of_totalHazard_pos
+    (root : ι → PMF Bool)
+    (hpositive : 0 < quittingStationaryTotalHazard root) :
+    quittingStationaryContinueMass root < 1 := by
+  unfold quittingStationaryTotalHazard at hpositive
+  obtain ⟨owner, _, howner⟩ :=
+    (Finset.sum_pos_iff_of_nonneg
+      (fun player _ ↦ ENNReal.toReal_nonneg)).mp hpositive
+  have hle := quittingStationaryContinueMass_le_ownContinueProbability
+    root owner
+  have hsum := quittingRoot_continueProbability_add_quitProbability root owner
+  linarith
 
 omit [DecidableEq ι] in
 /-- **Direction-barycenter chart.**  For a stationary root with total hazard

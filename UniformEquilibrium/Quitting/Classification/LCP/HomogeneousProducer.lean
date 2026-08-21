@@ -433,35 +433,6 @@ theorem quittingStationarySingletonDirectionBarycenter_update_scaled_eq_mixture
         rw [hpin]
         field_simp [sub_ne_zero.mpr (ne_of_gt hweight)]
 
-omit [DecidableEq ι] in
-/-- The one-stage absorption probability of a product root is at most the sum
-of its marginal quit hazards. -/
-theorem quittingRootAbsorptionMass_le_stationaryTotalHazard
-    (root : ι → PMF Bool) :
-    quittingRootAbsorptionMass root ≤ quittingStationaryTotalHazard root := by
-  rw [← rootOfHazard_hazardOfRoot root,
-    quittingRootAbsorptionMass_rootOfHazard]
-  simpa [quittingStationaryTotalHazard, rootOfHazard,
-    Math.PMFProduct.continueMass] using
-      (Math.one_sub_prod_one_sub_le_sum (hazardOfRoot root) Finset.univ
-        (fun owner _ => hazardOfRoot_nonneg root owner)
-        (fun owner _ => hazardOfRoot_le_one root owner))
-
-omit [DecidableEq ι] in
-/-- Positive total stationary hazard forces strict one-stage contraction. -/
-theorem quittingStationaryContinueMass_lt_one_of_totalHazard_pos
-    (root : ι → PMF Bool)
-    (hpositive : 0 < quittingStationaryTotalHazard root) :
-    quittingStationaryContinueMass root < 1 := by
-  unfold quittingStationaryTotalHazard at hpositive
-  obtain ⟨owner, _, howner⟩ :=
-    (Finset.sum_pos_iff_of_nonneg
-      (fun player _ => ENNReal.toReal_nonneg)).mp hpositive
-  have hle := quittingStationaryContinueMass_le_ownContinueProbability
-    root owner
-  have hsum := quittingRoot_continueProbability_add_quitProbability root owner
-  linarith
-
 /-- Every player faces contraction along a non-vertex simplex direction. -/
 theorem homogeneousScaledRoot_fixedOpponents_contracts
     (weight : stdSimplex ℝ ι) {scale : ℝ}
