@@ -9700,6 +9700,98 @@ private theorem quittingDDPRawStateVariation_live_le
         (QuittingDDPOwnQuitEvent G p n T M hM i) := by
       rw [quittingDDPRawLaw_ownQuitEvent G p n T M hM S hi]
 
+private theorem quittingDDPRawStateVariation_eq_zero_of_unreachable
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T i : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM))
+    (state : QuittingDDPState G) (hunreachable : ¬IsQuittingDDPReachable T i state) :
+    (quittingDecisionProcess G p n T M hM).rawStateVariation (0, ∅) i state = 0 := by
+  rw [DiscreteDecisionProcess.rawStateVariation]
+  rw [quittingDDPRawLaw_state_eq_zero_of_unreachable G p n T M hM S i state
+    hunreachable]
+  simp
+
+private theorem quittingDDP_tsum_stateVariation_le
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T i : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM)) :
+    (∑' state : QuittingDDPState G,
+      (quittingDecisionProcess G p n T M hM).rawStateVariation (0, ∅) i state) ≤
+        if i < T then ENNReal.ofReal (2 * M) *
+          (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+            (QuittingDDPOwnQuitEvent G p n T M hM i) else 0 := by
+  let P := quittingDecisionProcess G p n T M hM
+  by_cases hi : i < T
+  · rw [if_pos hi]
+    rw [tsum_eq_single (i, ∅)]
+    · exact quittingDDPRawStateVariation_live_le G p n T i M hM S hi
+    · intro state hstate
+      by_cases hlive : IsQuittingDDPLive T state
+      · apply quittingDDPRawStateVariation_eq_zero_of_unreachable G p n T i M hM S
+        intro hreachable
+        rcases hreachable with hcurrent | hterminal
+        · apply hstate
+          apply Prod.ext
+          · simpa [min_eq_left hi.le] using hcurrent.2
+          · exact hcurrent.1
+        · rw [hlive.2] at hterminal
+          exact Finset.not_nonempty_empty hterminal.1
+      · exact quittingDDPRawStateVariation_eq_zero_of_not_live G p n T i M hM state hlive
+  · rw [if_neg hi]
+    calc
+      (∑' state : QuittingDDPState G, P.rawStateVariation (0, ∅) i state) =
+          ∑' _state : QuittingDDPState G, 0 := by
+        apply tsum_congr
+        intro state
+        by_cases hlive : IsQuittingDDPLive T state
+        · apply quittingDDPRawStateVariation_eq_zero_of_unreachable G p n T i M hM S
+          intro hreachable
+          rcases hreachable with hcurrent | hterminal
+          · have hmin : min i T = T := min_eq_right (le_of_not_gt hi)
+            have htime : state.1 = T := hcurrent.2.trans hmin
+            linarith [hlive.1]
+          · rw [hlive.2] at hterminal
+            exact Finset.not_nonempty_empty hterminal.1
+        · exact quittingDDPRawStateVariation_eq_zero_of_not_live G p n T i M hM state hlive
+      _ = 0 := tsum_zero
+      _ ≤ 0 := le_rfl
+
+/-- The finite quitting DDP has expected total variation at most `2M`. -/
+private theorem quittingDDP_expectedVariation_le
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM)) :
+    ExpectedDDPVariation (quittingDecisionProcess G p n T M hM) S ≤
+      ENNReal.ofReal (2 * M) := by
+  let P := quittingDecisionProcess G p n T M hM
+  let c := ENNReal.ofReal (2 * M)
+  let mass : ℕ → ℝ≥0∞ := fun i =>
+    (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+      (QuittingDDPOwnQuitEvent G p n T M hM i)
+  rw [ExpectedDDPVariation.eq_tsum_rawStateVariation P S]
+  rw [ENNReal.tsum_prod]
+  calc
+    (∑' i : ℕ, ∑' state : QuittingDDPState G,
+        P.rawStateVariation (0, ∅) i state) ≤
+        ∑' i : ℕ, if i < T then c * mass i else 0 := by
+      exact ENNReal.tsum_le_tsum fun i =>
+        quittingDDP_tsum_stateVariation_le G p n T i M hM S
+    _ = ∑ i ∈ Finset.range T, c * mass i := by
+      rw [tsum_eq_sum (s := Finset.range T) (fun i hi => by
+        rw [Finset.mem_range, not_lt] at hi
+        rw [if_neg (not_lt_of_ge hi)])]
+      apply Finset.sum_congr rfl
+      intro i hi
+      rw [if_pos (Finset.mem_range.mp hi)]
+    _ = ∑ i : Fin T, c * mass i := by
+      exact (Fin.sum_univ_eq_sum_range (fun i : ℕ => c * mass i) T).symm
+    _ = c * ∑' i : Fin T, mass i := by
+      rw [tsum_fintype, Finset.mul_sum]
+    _ ≤ c * 1 := by
+      gcongr
+      exact quittingDDPOwnQuitEvent_totalMass_le_one G p n T M hM S
+    _ = ENNReal.ofReal (2 * M) := by simp [c]
+
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
 `F_δ` profile with unbounded quit mass generates a `3ε`-equilibrium.  The generated
