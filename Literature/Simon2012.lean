@@ -3054,6 +3054,122 @@ private theorem phi_maximalQuitter_le (G : QuittingGame) (M d : ℝ)
     mul_le_mul_of_nonneg_left hpenalty hcoefficient,
     mul_le_mul_of_nonneg_left hsum hMpos.le]
 
+private theorem othersQuitProbability_eq_replace_zero (G : QuittingGame)
+    (p : QuitRow G) (n : G.Player) :
+    OthersQuitProbability G p n = QuitProbability G (p.replace G n 0) := by
+  classical
+  rw [OthersQuitProbability, QuitProbability]
+  simp only [QuitRow.replace]
+  congr 1
+  symm
+  calc
+    ∏ k, (1 - ((((if k = n then (0 : UnitInterval) else p k) :
+          UnitInterval)) : ℝ)) =
+        (1 - (((if n = n then (0 : UnitInterval) else p n) :
+          UnitInterval) : ℝ)) *
+          ∏ k ∈ Finset.univ.erase n,
+            (1 - (((if k = n then (0 : UnitInterval) else p k) :
+              UnitInterval) : ℝ)) :=
+      (Finset.mul_prod_erase Finset.univ _ (Finset.mem_univ n)).symm
+    _ = ∏ k ∈ Finset.univ.erase n, (1 - (p k : ℝ)) := by
+      simp only [if_pos, Set.Icc.coe_zero, sub_zero, one_mul]
+      apply Finset.prod_congr rfl
+      intro k hk
+      simp [Finset.ne_of_mem_erase hk]
+
+private theorem forcedContinue_sub_solo (G : QuittingGame) (p : QuitRow G)
+    (beta : Payoff G.Player) (n : G.Player) :
+    ForcedContinuePayoff G beta p n -
+        ForcedContinuePayoff G (SoloPayoff G) p n =
+      (1 - OthersQuitProbability G p n) *
+        (beta n - SoloPayoff G n) := by
+  rw [ForcedContinuePayoff, ForcedContinuePayoff,
+    quittingOneStagePayoff_sub, othersQuitProbability_eq_replace_zero]
+
+/-- With the solo vector as continuation, a forced-Continue payoff remains
+inside the terminal payoff scale. -/
+private theorem abs_forcedContinue_solo_le_scale
+    (G : QuittingGame) (M : ℝ) (hM : IsSimonPayoffScale G M)
+    (p : QuitRow G) (n : G.Player) :
+    |ForcedContinuePayoff G (SoloPayoff G) p n| ≤ M / 3 := by
+  classical
+  rw [ForcedContinuePayoff, quittingOneStagePayoff_eq_rootExpectedPayoff]
+  exact GameTheory.abs_quittingRootExpectedPayoff_le_bound G.reward
+    (SoloPayoff G) (quitRowMarginals G (p.replace G n 0)) n hM.2.1
+      (fun k => hM.2.1 ⟨{k}, Finset.singleton_nonempty k⟩ k)
+
+/-- If `m` maximizes the quitting probability, the probability that every
+other player continues is at least `(1-p_m)^(|N|-1)`. -/
+private theorem maximalQuitter_opponentSurvival_lower
+    (G : QuittingGame) (p : QuitRow G) (m : G.Player)
+    (hm : ∀ k, (p k : ℝ) ≤ (p m : ℝ)) :
+    (1 - (p m : ℝ)) ^ (Fintype.card G.Player - 1) ≤
+      1 - OthersQuitProbability G p m := by
+  classical
+  rw [OthersQuitProbability, sub_sub_cancel]
+  have hcard : (Finset.univ.erase m).card = Fintype.card G.Player - 1 := by
+    simp
+  rw [← hcard, ← Finset.prod_const]
+  apply Finset.prod_le_prod
+  · intro k _
+    exact sub_nonneg.mpr (p m).property.2
+  · intro k _
+    linarith [hm k]
+
+/-- The supported maximal quitter's continuation coordinate is controlled
+by the reciprocal probability that all other players continue. -/
+private theorem beta_maximalQuitter_le (G : QuittingGame) (M : ℝ)
+    (hM : IsSimonPayoffScale G M) (z : EZeroTilde G) (m : G.Player)
+    (hpm : 0 < (z.1.2 m : ℝ))
+    (hm : ∀ k, (z.1.2 k : ℝ) ≤ (z.1.2 m : ℝ)) :
+    z.1.1 m ≤ M +
+      M / (1 - (z.1.2 m : ℝ)) ^ (Fintype.card G.Player - 1) := by
+  let beta := z.1.1
+  let p := z.1.2
+  let survival := 1 - OthersQuitProbability G p m
+  let floor := (1 - (p m : ℝ)) ^ (Fintype.card G.Player - 1)
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hpmLt : (p m : ℝ) < 1 :=
+    (quitProbability_apply_le G p m).trans_lt z.2.2
+  have hfloorPos : 0 < floor := by
+    dsimp only [floor]
+    positivity
+  have hsurvivalLower : floor ≤ survival := by
+    simpa only [floor, survival, p] using
+      maximalQuitter_opponentSurvival_lower G p m hm
+  have hquit := z.2.1.1 m hpm
+  have hcontinue := z.2.1.2 m hpmLt
+  have heq : ForcedQuitPayoff G p m = ForcedContinuePayoff G beta p m :=
+    le_antisymm (by simpa only [sub_zero] using hcontinue)
+      (by simpa only [sub_zero] using hquit)
+  have hidentity := forcedContinue_sub_solo G p beta m
+  rw [← heq] at hidentity
+  have hforced := abs_forcedQuitPayoff_le_scale G M hM p m
+  have hsolo := abs_forcedContinue_solo_le_scale G M hM p m
+  have hscaled : survival * (beta m - SoloPayoff G m) ≤ 2 * M / 3 := by
+    rw [← hidentity]
+    nlinarith [le_abs_self (ForcedQuitPayoff G p m),
+      neg_le_of_abs_le hsolo]
+  have hdiff : beta m - SoloPayoff G m ≤ (2 * M / 3) / floor := by
+    by_cases hnonneg : 0 ≤ beta m - SoloPayoff G m
+    · have hmul := mul_le_mul_of_nonneg_right hsurvivalLower hnonneg
+      rw [le_div_iff₀ hfloorPos]
+      simpa only [mul_comm] using hmul.trans hscaled
+    · exact le_trans (le_of_not_ge hnonneg) (div_nonneg (by positivity) hfloorPos.le)
+  have hsoloUpper : SoloPayoff G m ≤ M / 3 :=
+    (le_abs_self (SoloPayoff G m)).trans
+      (hM.2.1 ⟨{m}, Finset.singleton_nonempty m⟩ m)
+  dsimp only [beta, p, floor] at hdiff ⊢
+  have hinvNonneg : 0 ≤ M /
+      (1 - (z.1.2 m : ℝ)) ^ (Fintype.card G.Player - 1) := by
+    positivity
+  have hfraction : (2 * M / 3) /
+        (1 - (z.1.2 m : ℝ)) ^ (Fintype.card G.Player - 1) ≤
+      M / (1 - (z.1.2 m : ℝ)) ^ (Fintype.card G.Player - 1) := by
+    apply div_le_div_of_nonneg_right (by nlinarith)
+    exact pow_nonneg (sub_nonneg.mpr (z.1.2 m).property.2) _
+  linarith
+
 /--
 Lemma 3.4.  For `a = φ(β,p)` and a point strictly inside the segment from
 `β` to `a`, a coordinate of `a` outside `[-R,R]` forces the segment point
@@ -3225,42 +3341,10 @@ private theorem endpointDifference_eq_forced (G : QuittingGame)
     quittingOneStagePayoff_eq_rootExpectedPayoff,
     quitRowMarginals_replace_one, quitRowMarginals_replace_zero]
 
-private theorem othersQuitProbability_eq_replace_zero (G : QuittingGame)
-    (p : QuitRow G) (n : G.Player) :
-    OthersQuitProbability G p n = QuitProbability G (p.replace G n 0) := by
-  classical
-  rw [OthersQuitProbability, QuitProbability]
-  simp only [QuitRow.replace]
-  congr 1
-  symm
-  calc
-    ∏ k, (1 - ((((if k = n then (0 : UnitInterval) else p k) :
-          UnitInterval)) : ℝ)) =
-        (1 - (((if n = n then (0 : UnitInterval) else p n) :
-          UnitInterval) : ℝ)) *
-          ∏ k ∈ Finset.univ.erase n,
-            (1 - (((if k = n then (0 : UnitInterval) else p k) :
-              UnitInterval) : ℝ)) :=
-      (Finset.mul_prod_erase Finset.univ _ (Finset.mem_univ n)).symm
-    _ = ∏ k ∈ Finset.univ.erase n, (1 - (p k : ℝ)) := by
-      simp only [if_pos, Set.Icc.coe_zero, sub_zero, one_mul]
-      apply Finset.prod_congr rfl
-      intro k hk
-      simp [Finset.ne_of_mem_erase hk]
-
 private theorem othersQuitProbability_le (G : QuittingGame) (p : QuitRow G)
     (n : G.Player) : OthersQuitProbability G p n ≤ QuitProbability G p := by
   rw [othersQuitProbability_eq_replace_zero]
   exact quitProbability_replace_zero_le G p n
-
-private theorem forcedContinue_sub_solo (G : QuittingGame) (p : QuitRow G)
-    (beta : Payoff G.Player) (n : G.Player) :
-    ForcedContinuePayoff G beta p n -
-        ForcedContinuePayoff G (SoloPayoff G) p n =
-      (1 - OthersQuitProbability G p n) *
-        (beta n - SoloPayoff G n) := by
-  rw [ForcedContinuePayoff, ForcedContinuePayoff,
-    quittingOneStagePayoff_sub, othersQuitProbability_eq_replace_zero]
 
 /-- At the solo continuation coordinate, the pure-action endpoint gap is
 carried only by nonempty opponent coalitions. -/
