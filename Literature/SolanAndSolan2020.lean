@@ -16249,6 +16249,534 @@ theorem KiloblockConstruction.expect_abnormalDeviationPastFinal_lt_epsilon
         excluded habnormal deviation t
     _ < ε := construction.macroSurvivalProbability_lt_epsilon
 
+/-! Under the prescribed profile, every pre-final absorption is a singleton
+quit by the selected normal player.  Lemma 2.6 therefore makes its payoff
+strictly positive for every abnormal player. -/
+theorem KiloblockConstruction.profile_preFinal_payoff_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι) (habnormal : excluded ∉ NormalPlayers table) :
+    ∀ t (history : (publicQuittingGame table
+        construction.profile.signalLaw).Hist t),
+      history ∈ ((publicQuittingGame table
+        construction.profile.signalLaw).histDist
+          construction.profile.strategy .draw t).support →
+      ∀ k, construction.mode t history = .absorbed (some k) →
+        0 ≤ match history.2 with
+          | .absorbed quitters => table.terminal quitters excluded
+          | _ => 0
+  | 0, history, hhistory, k, hmode => by
+      rw [(publicQuittingGame table
+        construction.profile.signalLaw).histDist_zero,
+          PMF.mem_support_pure_iff] at hhistory
+      subst history
+      rw [construction.mode_initial] at hmode
+      cases hmode
+  | t + 1, nextHistory, hnextHistory, targetBlock, htargetMode => by
+      rw [(publicQuittingGame table
+        construction.profile.signalLaw).mem_support_histDist_succ]
+        at hnextHistory
+      obtain ⟨history, hhistory, action, haction, nextState,
+        hnextState, rfl⟩ := hnextHistory
+      have hstep := construction.mode_step t history action
+        nextState hnextState
+      cases hmode : construction.mode t history with
+      | draw phase =>
+          cases phase <;> cases nextState <;>
+            simp [KiloblockModeStep, hmode] at hstep
+          all_goals rw [hstep] at htargetMode
+      | active block choice remaining =>
+          simp only [KiloblockModeStep, hmode] at hstep
+          split at hstep
+          case isFalse hnoQuit =>
+            split at hstep <;> rw [hstep.2] at htargetMode <;>
+              cases htargetMode
+          case isTrue hquit =>
+            cases choice with
+            | none =>
+                have hdist := construction.stageActionDist_profile_continue_all
+                  history (by
+                    intro other owner rest hselected
+                    simp [hmode] at hselected)
+                rw [hdist, PMF.mem_support_pure_iff] at haction
+                subst action
+                exfalso
+                obtain ⟨who, hwho⟩ := hquit
+                simp [publicAllContinueAction] at hwho
+            | some owner =>
+                have hdist := construction.stageActionDist_active_some_core
+                  history block owner remaining hmode
+                rw [hdist, PMF.mem_support_bind_iff] at haction
+                obtain ⟨quits, _hquits, haction⟩ := haction
+                rw [PMF.mem_support_pure_iff] at haction
+                subst action
+                cases quits with
+                | false =>
+                    exfalso
+                    obtain ⟨who, hwho⟩ := hquit
+                    simp [publicSingleQuitAction_apply_eq_raw,
+                      rawSingleQuitAction] at hwho
+                | true =>
+                    have hstate : ∃ signal, history.2 =
+                        PublicQuittingState.active signal := by
+                      have hmatches := construction.mode_state t history
+                      cases hs : history.2 <;>
+                        simp [KiloblockMode.MatchesState, hmode, hs]
+                          at hmatches
+                      exact ⟨_, rfl⟩
+                    obtain ⟨signal, hstate⟩ := hstate
+                    have htransition :=
+                      publicQuittingGame_transition_publicSingleQuitAction
+                        table construction.profile.signalLaw signal owner.1
+                    rw [hstate, htransition, PMF.mem_support_pure_iff]
+                      at hnextState
+                    subst nextState
+                    have hne : owner.1 ≠ excluded := by
+                      intro heq
+                      subst excluded
+                      exact habnormal owner.2
+                    exact (lemma2_6 table construction.soloExitNormalized
+                      construction.payoffsBounded
+                      (by simpa only [mem_normalPlayers_iff] using habnormal)
+                      hne).le
+      | finalActive =>
+          simp only [KiloblockModeStep, hmode] at hstep
+          split at hstep <;> rw [hstep.2] at htargetMode <;>
+            cases htargetMode
+      | absorbed origin =>
+          have hstate : ∃ quitters, history.2 =
+              PublicQuittingState.absorbed quitters := by
+            have hmatches := construction.mode_state t history
+            cases hs : history.2 <;>
+              simp [KiloblockMode.MatchesState, hmode, hs] at hmatches
+            exact ⟨_, rfl⟩
+          obtain ⟨quitters, hstate⟩ := hstate
+          have htransition : (publicQuittingGame table
+              construction.profile.signalLaw).transition history.2 action =
+              PMF.pure (PublicQuittingState.absorbed quitters :
+                (publicQuittingGame table
+                  construction.profile.signalLaw).State) := by
+            rw [hstate]
+            simp [publicQuittingGame]
+          have hnextState' : nextState ∈ (PMF.pure
+              (PublicQuittingState.absorbed quitters :
+                (publicQuittingGame table
+                  construction.profile.signalLaw).State)).support := by
+            rw [← htransition]
+            exact hnextState
+          have hnextEq := (PMF.mem_support_pure_iff _ _).mp hnextState'
+          subst nextState
+          have hnextOrigin : construction.mode (t + 1)
+              (Fin.snoc history.1
+                (history.2, action), PublicQuittingState.absorbed quitters) =
+              .absorbed origin := by
+            simpa [KiloblockModeStep, hmode] using hstep
+          have horigin : origin = some targetBlock := by
+            exact KiloblockMode.absorbed.inj
+              (hnextOrigin.symm.trans htargetMode)
+          subst origin
+          simpa only [hstate] using
+            construction.profile_preFinal_payoff_nonneg
+              excluded habnormal t history hhistory targetBlock hmode
+
+private theorem KiloblockConstruction.publicHistoryPayoff_le_positiveTail
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t) :
+    (match history.2 with
+      | .absorbed quitters => table.terminal quitters excluded
+      | _ => table.never excluded) ≤
+      construction.positiveTruncatedPayoff excluded t history +
+        construction.continuePastFinalIndicator
+          (construction.finiteMode (construction.mode t history)) +
+        Math.Probability.transientCharge construction.continueBoundary
+          (construction.finiteMode (construction.mode t history)) := by
+  by_cases habsorbed : ∃ k, construction.mode t history =
+      .absorbed (some k)
+  · obtain ⟨k, hmode⟩ := habsorbed
+    have hstate : ∃ quitters, history.2 =
+        PublicQuittingState.absorbed quitters := by
+      have hmatches := construction.mode_state t history
+      cases hs : history.2 <;>
+        simp [KiloblockMode.MatchesState, hmode, hs] at hmatches
+      exact ⟨_, rfl⟩
+    obtain ⟨quitters, hstate⟩ := hstate
+    have hboundary : (.absorbed (some k) :
+        KiloblockFiniteMode construction) ∈ construction.continueBoundary :=
+      trivial
+    have hpast : construction.continuePastFinalIndicator
+        (construction.finiteMode (construction.mode t history)) = 0 := by
+      simp [hmode, KiloblockConstruction.finiteMode,
+        KiloblockConstruction.continuePastFinalIndicator]
+    have htransient : Math.Probability.transientCharge
+        construction.continueBoundary
+          (construction.finiteMode (construction.mode t history)) = 0 := by
+      rw [hmode]
+      simpa only [KiloblockConstruction.finiteMode] using
+        Math.Probability.transientCharge_of_mem hboundary
+    rw [hmode] at hpast htransient
+    simp only [KiloblockConstruction.positiveTruncatedPayoff, hmode, hstate]
+    rw [hpast, htransient]
+    linarith [le_max_left (table.terminal quitters excluded) 0]
+  · have hactual : (match history.2 with
+        | .absorbed quitters => table.terminal quitters excluded
+        | _ => table.never excluded) ≤ 1 := by
+      cases history.2 with
+      | draw =>
+          exact (le_abs_self _).trans
+            (construction.payoffsBounded.2 excluded)
+      | active signal =>
+          exact (le_abs_self _).trans
+            (construction.payoffsBounded.2 excluded)
+      | absorbed quitters =>
+          exact (le_abs_self _).trans
+            (construction.payoffsBounded.1 quitters excluded)
+    have hpositive : construction.positiveTruncatedPayoff
+        excluded t history = 0 := by
+      unfold KiloblockConstruction.positiveTruncatedPayoff
+      cases hmode : construction.mode t history with
+      | draw phase => rfl
+      | active k choice remaining => rfl
+      | finalActive => rfl
+      | absorbed origin =>
+          cases origin with
+          | none => rfl
+          | some k => exact False.elim (habsorbed ⟨k, hmode⟩)
+    have habsorbedZero : construction.continueAbsorbedIndicator
+        (construction.finiteMode (construction.mode t history)) = 0 := by
+      cases hmode : construction.mode t history with
+      | draw phase => cases phase <;> rfl
+      | active k choice remaining => rfl
+      | finalActive => rfl
+      | absorbed origin =>
+          cases origin with
+          | none => rfl
+          | some k => exact False.elim (habsorbed ⟨k, hmode⟩)
+    have hpartition := construction.continueIndicators_partition
+      (construction.finiteMode (construction.mode t history))
+    rw [habsorbedZero, zero_add] at hpartition
+    rw [hpositive]
+    linarith
+
+private theorem KiloblockConstruction.positiveTail_le_publicHistoryPayoff
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι) (habnormal : excluded ∉ NormalPlayers table)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t)
+    (hhistory : history ∈ ((publicQuittingGame table
+      construction.profile.signalLaw).histDist
+        construction.profile.strategy .draw t).support) :
+    construction.positiveTruncatedPayoff excluded t history ≤
+      (match history.2 with
+        | .absorbed quitters => table.terminal quitters excluded
+        | _ => table.never excluded) +
+        construction.continuePastFinalIndicator
+          (construction.finiteMode (construction.mode t history)) +
+        Math.Probability.transientCharge construction.continueBoundary
+          (construction.finiteMode (construction.mode t history)) := by
+  by_cases habsorbed : ∃ k, construction.mode t history =
+      .absorbed (some k)
+  · obtain ⟨k, hmode⟩ := habsorbed
+    have hstate : ∃ quitters, history.2 =
+        PublicQuittingState.absorbed quitters := by
+      have hmatches := construction.mode_state t history
+      cases hs : history.2 <;>
+        simp [KiloblockMode.MatchesState, hmode, hs] at hmatches
+      exact ⟨_, rfl⟩
+    obtain ⟨quitters, hstate⟩ := hstate
+    have hpayoff := construction.profile_preFinal_payoff_nonneg
+      excluded habnormal t history hhistory k hmode
+    have hboundary : (.absorbed (some k) :
+        KiloblockFiniteMode construction) ∈ construction.continueBoundary :=
+      trivial
+    have hpast : construction.continuePastFinalIndicator
+        (construction.finiteMode (.absorbed (some k))) = 0 := by
+      simp [KiloblockConstruction.finiteMode,
+        KiloblockConstruction.continuePastFinalIndicator]
+    have htransient : Math.Probability.transientCharge
+        construction.continueBoundary
+          (construction.finiteMode (.absorbed (some k))) = 0 := by
+      simpa only [KiloblockConstruction.finiteMode] using
+        Math.Probability.transientCharge_of_mem hboundary
+    simp only [KiloblockConstruction.positiveTruncatedPayoff, hmode, hstate]
+    have hpayoff' : 0 ≤ table.terminal quitters excluded := by
+      simpa only [hstate] using hpayoff
+    rw [max_eq_left hpayoff', hpast, htransient]
+    linarith
+  · have hactual : -1 ≤ (match history.2 with
+        | .absorbed quitters => table.terminal quitters excluded
+        | _ => table.never excluded) := by
+      cases history.2 with
+      | draw =>
+          exact neg_le_of_abs_le
+            (construction.payoffsBounded.2 excluded)
+      | active signal =>
+          exact neg_le_of_abs_le
+            (construction.payoffsBounded.2 excluded)
+      | absorbed quitters =>
+          exact neg_le_of_abs_le
+            (construction.payoffsBounded.1 quitters excluded)
+    have hpositive : construction.positiveTruncatedPayoff
+        excluded t history = 0 := by
+      unfold KiloblockConstruction.positiveTruncatedPayoff
+      cases hmode : construction.mode t history with
+      | draw phase => rfl
+      | active k choice remaining => rfl
+      | finalActive => rfl
+      | absorbed origin =>
+          cases origin with
+          | none => rfl
+          | some k => exact False.elim (habsorbed ⟨k, hmode⟩)
+    have habsorbedZero : construction.continueAbsorbedIndicator
+        (construction.finiteMode (construction.mode t history)) = 0 := by
+      cases hmode : construction.mode t history with
+      | draw phase => cases phase <;> rfl
+      | active k choice remaining => rfl
+      | finalActive => rfl
+      | absorbed origin =>
+          cases origin with
+          | none => rfl
+          | some k => exact False.elim (habsorbed ⟨k, hmode⟩)
+    have hpartition := construction.continueIndicators_partition
+      (construction.finiteMode (construction.mode t history))
+    rw [habsorbedZero, zero_add] at hpartition
+    rw [hpositive]
+    linarith
+
+theorem KiloblockConstruction.publicFinitePayoff_abnormalDeviation_le
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded)
+    (t : ℕ) :
+    publicFinitePayoff table construction.profile.signalLaw
+        (Function.update construction.profile.strategy excluded deviation)
+        t excluded ≤
+      expect ((publicQuittingGame table
+          construction.profile.signalLaw).histDist
+        (Function.update construction.profile.strategy excluded deviation)
+          .draw t)
+        (construction.positiveTruncatedPayoff excluded t) +
+      expect ((publicQuittingGame table
+          construction.profile.signalLaw).histDist
+        (Function.update construction.profile.strategy excluded deviation)
+          .draw t)
+        (fun history => construction.continuePastFinalIndicator
+          (construction.finiteMode (construction.mode t history))) +
+      construction.abnormalDeviationTransientMass excluded deviation t := by
+  rw [← expect_publicHistoryPayoff_eq_publicFinitePayoff table
+    construction.profile.signalLaw
+    (Function.update construction.profile.strategy excluded deviation)
+    t excluded]
+  let distribution := (publicQuittingGame table
+    construction.profile.signalLaw).histDist
+      (Function.update construction.profile.strategy excluded deviation)
+        .draw t
+  have hmono : expect distribution (fun history => match history.2 with
+        | .absorbed quitters => table.terminal quitters excluded
+        | _ => table.never excluded) ≤
+      expect distribution (fun history =>
+        construction.positiveTruncatedPayoff excluded t history +
+          construction.continuePastFinalIndicator
+            (construction.finiteMode (construction.mode t history)) +
+          Math.Probability.transientCharge construction.continueBoundary
+            (construction.finiteMode (construction.mode t history))) := by
+    apply Math.Probability.expect_mono
+    exact fun history =>
+      construction.publicHistoryPayoff_le_positiveTail excluded history
+  rw [Math.Probability.expect_add, Math.Probability.expect_add] at hmono
+  unfold KiloblockConstruction.abnormalDeviationTransientMass
+  dsimp only [distribution] at hmono
+  convert hmono using 1
+  congr 1
+  funext history
+  cases history.2 <;> rfl
+
+theorem KiloblockConstruction.profilePositiveTail_le_publicFinitePayoff
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι) (habnormal : excluded ∉ NormalPlayers table)
+    (t : ℕ) :
+    expect ((publicQuittingGame table
+        construction.profile.signalLaw).histDist
+      construction.profile.strategy .draw t)
+      (construction.positiveTruncatedPayoff excluded t) ≤
+      publicFinitePayoff table construction.profile.signalLaw
+        construction.profile.strategy t excluded +
+      expect ((publicQuittingGame table
+          construction.profile.signalLaw).histDist
+        construction.profile.strategy .draw t)
+        (fun history => construction.continuePastFinalIndicator
+          (construction.finiteMode (construction.mode t history))) +
+      expect ((publicQuittingGame table
+          construction.profile.signalLaw).histDist
+        construction.profile.strategy .draw t)
+        (fun history => Math.Probability.transientCharge
+          construction.continueBoundary
+            (construction.finiteMode (construction.mode t history))) := by
+  rw [← expect_publicHistoryPayoff_eq_publicFinitePayoff table
+    construction.profile.signalLaw construction.profile.strategy t excluded]
+  let distribution := (publicQuittingGame table
+    construction.profile.signalLaw).histDist
+      construction.profile.strategy .draw t
+  have hmono : expect distribution
+      (construction.positiveTruncatedPayoff excluded t) ≤
+      expect distribution (fun history =>
+        (match history.2 with
+          | .absorbed quitters => table.terminal quitters excluded
+          | _ => table.never excluded) +
+        construction.continuePastFinalIndicator
+          (construction.finiteMode (construction.mode t history)) +
+        Math.Probability.transientCharge construction.continueBoundary
+          (construction.finiteMode (construction.mode t history))) := by
+    apply expect_le_expect_of_le_on_support
+    intro history hhistory
+    exact construction.positiveTail_le_publicHistoryPayoff
+      excluded habnormal history hhistory
+  rw [Math.Probability.expect_add, Math.Probability.expect_add] at hmono
+  dsimp only [distribution] at hmono
+  convert hmono using 1
+  congr 1
+  congr 1
+  congr 1
+  funext history
+  cases history.2 <;> rfl
+
+theorem KiloblockConstruction.abnormalDeviationPayoff_le
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : ι) (habnormal : excluded ∉ NormalPlayers table)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded) :
+    publicQuittingPayoff table construction.profile.signalLaw
+        (Function.update construction.profile.strategy excluded deviation)
+        excluded ≤
+      construction.profile.payoff excluded + 5 * ε := by
+  apply le_of_forall_pos_le_add
+  intro δ hδ
+  let deviationProfile :=
+    Function.update construction.profile.strategy excluded deviation
+  let deviationPayoff := publicQuittingPayoff table
+    construction.profile.signalLaw deviationProfile excluded
+  let profilePayoff := publicQuittingPayoff table
+    construction.profile.signalLaw construction.profile.strategy excluded
+  let deviationFinite := fun t => publicFinitePayoff table
+    construction.profile.signalLaw deviationProfile t excluded
+  let profileFinite := fun t => publicFinitePayoff table
+    construction.profile.signalLaw construction.profile.strategy t excluded
+  let threshold := δ / 4
+  have hthreshold : 0 < threshold := by
+    dsimp only [threshold]
+    positivity
+  have hdeviationEventually : ∀ᶠ t in atTop,
+      |deviationFinite t - deviationPayoff| < threshold := by
+    have htendsto : Tendsto deviationFinite atTop (nhds deviationPayoff) := by
+      dsimp only [deviationFinite, deviationPayoff, deviationProfile]
+      exact tendsto_publicFinitePayoff table construction.profile.signalLaw
+        (Function.update construction.profile.strategy excluded deviation)
+        excluded
+    have hevent := htendsto.eventually
+      (Metric.ball_mem_nhds _ hthreshold)
+    filter_upwards [hevent] with t ht
+    simpa only [Metric.mem_ball, Real.dist_eq] using ht
+  have hprofileEventually : ∀ᶠ t in atTop,
+      |profileFinite t - profilePayoff| < threshold := by
+    have htendsto : Tendsto profileFinite atTop (nhds profilePayoff) := by
+      dsimp only [profileFinite, profilePayoff]
+      exact tendsto_publicFinitePayoff table construction.profile.signalLaw
+        construction.profile.strategy excluded
+    have hevent := htendsto.eventually
+      (Metric.ball_mem_nhds _ hthreshold)
+    filter_upwards [hevent] with t ht
+    simpa only [Metric.mem_ball, Real.dist_eq] using ht
+  let initial : KiloblockFiniteMode construction :=
+    .drawChoose (Fin.last construction.blockCount)
+  let transient := Math.Probability.transientCharge
+    construction.continueBoundary
+  obtain ⟨steps, hstepsTransient⟩ :=
+    construction.exists_iter_profile_transientCharge_lt
+      hthreshold initial
+  have hstepsEventually : ∀ᶠ t in atTop, steps ≤ t :=
+    eventually_ge_atTop steps
+  have hall : ∀ᶠ t in atTop,
+      |deviationFinite t - deviationPayoff| < threshold ∧
+      |profileFinite t - profilePayoff| < threshold ∧ steps ≤ t :=
+    hdeviationEventually.and (hprofileEventually.and hstepsEventually)
+  obtain ⟨start, hstart⟩ := eventually_atTop.1 hall
+  obtain ⟨t, ht, hdeviationTransient⟩ :=
+    construction.exists_abnormalDeviationTransientMass_lt_after
+      excluded habnormal deviation hthreshold start
+  obtain ⟨hdeviationClose, hprofileClose, hsteps⟩ := hstart t ht
+  have hpad := Math.Probability.expect_iter_add_transientCharge_le
+    construction.profileBoundary_closed steps (t - steps) initial
+  rw [Nat.add_sub_of_le hsteps] at hpad
+  have hprofileTransientIter : expect
+      (Math.PMFIter.iter construction.profileFiniteModeKernel t initial)
+      transient < threshold := hpad.trans_lt hstepsTransient
+  have hprofileTransient : expect ((publicQuittingGame table
+      construction.profile.signalLaw).histDist
+        construction.profile.strategy .draw t)
+      (fun history => transient
+        (construction.finiteMode (construction.mode t history))) <
+      threshold := by
+    have hmodeExpect : expect ((publicQuittingGame table
+        construction.profile.signalLaw).histDist
+          construction.profile.strategy .draw t)
+        (fun history => transient
+          (construction.finiteMode (construction.mode t history))) =
+        expect (construction.modeDist
+          construction.profile.strategy t) transient := by
+      unfold KiloblockConstruction.modeDist
+      rw [Math.Probability.expect_map]
+    rw [hmodeExpect]
+    rw [construction.modeDist_profile_eq_iter t]
+    exact hprofileTransientIter
+  have hpastDeviation :=
+    construction.expect_abnormalDeviationPastFinal_lt_epsilon
+      excluded habnormal deviation t
+  have hpastProfileRaw :=
+    construction.expect_abnormalDeviationPastFinal_lt_epsilon
+      excluded habnormal (construction.profile.strategy excluded) t
+  have hpastProfile : expect ((publicQuittingGame table
+      construction.profile.signalLaw).histDist
+        construction.profile.strategy .draw t)
+      (fun history => construction.continuePastFinalIndicator
+        (construction.finiteMode (construction.mode t history))) < ε := by
+    simpa only [Function.update_eq_self] using hpastProfileRaw
+  have htruncated :=
+    construction.finiteTruncatedDeviation_le_profile_add
+      excluded habnormal deviation t 0
+        ((publicQuittingGame table
+          construction.profile.signalLaw).emptyHist .draw)
+  rw [construction.finiteTruncatedContinuation_initial
+      deviationProfile excluded t,
+    construction.finiteTruncatedContinuation_initial
+      construction.profile.strategy excluded t] at htruncated
+  have hdeviationFinite :=
+    construction.publicFinitePayoff_abnormalDeviation_le
+      excluded deviation t
+  have hprofilePositive :=
+    construction.profilePositiveTail_le_publicFinitePayoff
+      excluded habnormal t
+  have hfinite : deviationFinite t ≤
+      profileFinite t + 3 * ε + 2 * threshold := by
+    dsimp only [deviationFinite, profileFinite, deviationProfile]
+      at hdeviationFinite ⊢
+    dsimp only [deviationProfile] at htruncated
+    linarith
+  unfold SunspotProfile.payoff
+  dsimp only [deviationFinite, profileFinite, deviationPayoff,
+    profilePayoff, deviationProfile] at hdeviationClose hprofileClose
+  have hε : 0 < ε := construction.epsilon_pos
+  dsimp only [threshold] at hfinite hdeviationClose hprofileClose ⊢
+  linarith [(abs_lt.mp hdeviationClose).1,
+    (abs_lt.mp hprofileClose).2]
+
 /-! Lemma 3.8: for normal `i`, `|γ_i(ξ*)-w_i(yᴷ)|<2ε`. -/
 theorem lemma3_8
     (table : Table ι) {ε : ℝ} (_hε : 0 < ε)
@@ -16535,7 +17063,7 @@ The printed abnormal-player paragraph writes `wᵢ(yᴷ)`, although `w`
 has only normal coordinates; its actual argument is the direct gain bound
 recorded by the second branch below. -/
 theorem lemma3_10
-    {table : Table ι} {ε : ℝ} (hε : 0 < ε)
+    {table : Table ι} {ε : ℝ} (_hε : 0 < ε)
     (construction : KiloblockConstruction table ε) :
     ∀ i (deviation : (publicQuittingGame table
       construction.profile.signalLaw).BehaviorStrategy i),
@@ -16544,7 +17072,12 @@ theorem lemma3_10
         if hi : i ∈ NormalPlayers table then
           construction.normalTarget ⟨i, hi⟩ + 5 * ε
         else construction.profile.payoff i + 5 * ε := by
-  sorry
+  intro i deviation
+  by_cases hi : i ∈ NormalPlayers table
+  · rw [dif_pos hi]
+    exact construction.normalDeviationPayoff_le ⟨i, hi⟩ deviation
+  · rw [dif_neg hi]
+    exact construction.abnormalDeviationPayoff_le i hi deviation
 
 /-! Section 3.4 concludes from Lemmas 3.8--3.10 that the constructed profile
 is a sunspot `7ε`-equilibrium. -/
