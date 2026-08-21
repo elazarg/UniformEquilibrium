@@ -873,6 +873,79 @@ theorem exists_limit_residual_nonpos_of_playerMass_increase
       (Eventually.of_forall fun n => hwitnessInterval (witnessSubsequence n))
   · exact le_of_tendsto_of_tendsto' hresidual herror hbound
 
+/-- At a time where a player's limiting singleton mass has positive lower
+right derivative, that player's limiting singleton-matrix residual is
+nonpositive. -/
+theorem limit_residual_nonpos_of_pathRightDerivative_pos
+    [Nonempty ι]
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι)
+    {terminal : ι → ℝ} (limitPath : Path (0 : ι → ℝ) terminal)
+    (subsequence : ℕ → ℕ) (hsubsequence : StrictMono subsequence)
+    (htendsto : Tendsto (fun n => boundedFunctionOfPath
+      (principalQVanishingPlayerPath M hdiag hQ weight (subsequence n)))
+        atTop (nhds (boundedFunctionOfPath limitPath)))
+    (hmono : ∀ who, Monotone fun time => limitPath time who)
+    (htotal : ∀ time, ∑ who, limitPath time who = (time : ℝ))
+    (who : ι) (time : unitInterval) (htimeOne : time ≠ 1)
+    (hderivative : 0 < pathRightDerivative
+      (singletonCadlagPathOfPlayerPath limitPath hmono htotal) (time : ℝ)
+        (quittingProjectiveSingletonTerminal who)) :
+    ∑ owner, (limitPath 1 owner - limitPath time owner) * M who owner ≤ 0 := by
+  have htimeLt : (time : ℝ) < 1 :=
+    lt_of_le_of_ne time.property.2 fun heq => htimeOne (Subtype.ext heq)
+  let upper (n : ℕ) : ℝ :=
+    (time : ℝ) + (1 - (time : ℝ)) * principalQVanishingScale n
+  have htimeUpper (n : ℕ) : (time : ℝ) < upper n := by
+    dsimp [upper]
+    exact lt_add_of_pos_right _
+      (mul_pos (sub_pos.mpr htimeLt) (principalQVanishingScale_pos n))
+  have hupperOne (n : ℕ) : upper n < 1 := by
+    dsimp [upper]
+    nlinarith [principalQVanishingScale_pos n,
+      principalQVanishingScale_lt_one n]
+  choose second htimeSecond hsecondUpper hincrease using fun n =>
+    exists_playerMass_increase_of_pathRightDerivative_pos limitPath hmono htotal
+      who (time : ℝ) (upper n) time.property htimeLt (htimeUpper n) hderivative
+  have hsecondOne (n : ℕ) : (second n : ℝ) < 1 :=
+    (hsecondUpper n).trans (hupperOne n)
+  choose witness hwitnessInterval hwitnessResidual using fun n =>
+    exists_limit_residual_nonpos_of_playerMass_increase
+      M hdiag hQ weight limitPath subsequence hsubsequence htendsto who time
+        (second n) (htimeSecond n).le (hsecondOne n) (hincrease n)
+  have hupperTendsto : Tendsto upper atTop (nhds (time : ℝ)) := by
+    dsimp [upper]
+    convert (tendsto_const_nhds.add
+      ((tendsto_const_nhds.sub tendsto_const_nhds).mul
+        tendsto_principalQVanishingScale)) using 1
+    ring_nf
+  have hwitnessUpper (n : ℕ) : (witness n : ℝ) ≤ upper n := by
+    calc
+      (witness n : ℝ) ≤ (second n : ℝ) := (hwitnessInterval n).2
+      _ ≤ upper n := (hsecondUpper n).le
+  have hwitnessReal : Tendsto (fun n => (witness n : ℝ)) atTop
+      (nhds (time : ℝ)) :=
+    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
+      hupperTendsto
+      (fun n => (hwitnessInterval n).1)
+      hwitnessUpper
+  have hwitnessTendsto : Tendsto witness atTop (nhds time) :=
+    tendsto_subtype_rng.mpr hwitnessReal
+  have hmassWitness : Tendsto (fun n => limitPath (witness n)) atTop
+      (nhds (limitPath time)) :=
+    (limitPath.continuous.tendsto time).comp hwitnessTendsto
+  have hresidual : Tendsto
+      (fun n => ∑ owner,
+        (limitPath 1 owner - limitPath (witness n) owner) * M who owner)
+      atTop
+      (nhds (∑ owner,
+        (limitPath 1 owner - limitPath time owner) * M who owner)) := by
+    apply tendsto_finsetSum
+    intro owner _
+    exact (tendsto_const_nhds.sub
+      (((continuous_apply owner).tendsto _).comp hmassWitness)).mul_const _
+  exact le_of_tendsto' hresidual hwitnessResidual
+
 /-- Bundle the reversed clock mass and terminal filler as a continuous
 singleton absorption path. -/
 def PrincipalQClockMassPath.toContinuousAbsorptionPath
