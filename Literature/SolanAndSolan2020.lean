@@ -1192,6 +1192,20 @@ theorem isClosed_D (M : ι → ι → ℝ) : IsClosed (D M) := by
       (continuous_const : Continuous (fun _ : (ι → ℝ) => (0 : ℝ)))
       (continuous_apply who)
 
+/-! The corrected boundary carrier `D₀` is closed. Finiteness is essential:
+the zero-coordinate condition is a finite union of closed hyperplanes. -/
+omit [DecidableEq ι] in
+theorem isClosed_DZero (M : ι → ι → ℝ) :
+    IsClosed {w | DZero M w} := by
+  rw [show {w | DZero M w} =
+      ⋃ who, D M ∩ {w | w who = 0} by
+    ext w
+    simp only [DZero, Set.mem_setOf_eq, Set.mem_iUnion, Set.mem_inter_iff]
+    aesop]
+  exact isClosed_iUnion_of_finite fun who =>
+    (isClosed_D M).inter <| isClosed_eq
+      (continuous_apply who) continuous_const
+
 omit [Fintype ι] [DecidableEq ι] in
 theorem convex_D (M : ι → ι → ℝ) : Convex ℝ (D M) := by
   apply (convex_convexHull ℝ _).inter
@@ -1368,6 +1382,25 @@ theorem lemma3_2
   refine ⟨hwD, who, ?_⟩
   exact (mul_eq_zero.mp (solution.complementary who)).resolve_left
     (ne_of_gt hwho)
+
+/-! Under the Q and no-homogeneous-solution hypotheses, `D₀` is nonempty:
+solve the projective LCP in the direction of any (necessarily nonpositive)
+matrix column and apply Lemmas 3.1--3.2. -/
+omit [DecidableEq ι] in
+theorem exists_mem_DZero [Nonempty ι]
+    (M : ι → ι → ℝ) (hdiag : ∀ who, M who who = 0)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M)
+    (hQ : QMatrix M) : ∃ y, DZero M y := by
+  let owner : ι := Classical.arbitrary ι
+  let q : ι → ℝ := fun who => M who owner
+  have hqHull : q ∈ ColumnConvexHull M :=
+    subset_convexHull ℝ _ ⟨owner, rfl⟩
+  have hqNegative : q ∉ NonnegativeOrthant ι :=
+    lemma3_1 M hdiag hzero owner
+  obtain ⟨solution⟩ := hQ q
+  exact ⟨fun who => solution.cemetery * q who +
+      ∑ other, solution.singleton other * M who other,
+    lemma3_2 M q hqHull hqNegative solution⟩
 
 /-! **Theorem 3.3 (published paper).** For every `y∈D₀` and `ε>0`,
 there are `w∈D₀`, vectors `w¹,…,wⁿ`, and simplex weights `z`
@@ -1685,6 +1718,155 @@ noncomputable def BuildingBlock.attempt
     (hnegative : ∃ who, M who owner < -ε) :
     BuildingAttempt M y ε block owner :=
   Classical.choice (block.exists_attempt owner hnegative)
+
+/-! Under the negative-column margin used in Section 3.3.5, a building
+block cannot return its input boundary point. Otherwise the effective quit
+weights in its balance equation give a nontrivial homogeneous LCP solution. -/
+theorem BuildingBlock.w_ne_y_of_column_negative
+    {M : ι → ι → ℝ} {y : ι → ℝ} {ε : ℝ}
+    (block : BuildingBlock M y ε)
+    (hdiag : ∀ who, M who who = 0)
+    (hnegative : ∀ owner, ∃ who, M who owner < -ε)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M) :
+    block.w ≠ y := by
+  intro hwy
+  apply hzero
+  rw [hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous]
+  let attempt : ∀ owner, BuildingAttempt M y ε block owner :=
+    fun owner => block.attempt owner (hnegative owner)
+  let mass : ι → ℝ := fun owner =>
+    block.z.singleton owner * (attempt owner).quitWeight
+  let totalMass : ℝ := ∑ owner, mass owner
+  have hmassNonneg (owner : ι) : 0 ≤ mass owner := by
+    exact mul_nonneg (block.z.singleton_nonneg owner)
+      (attempt owner).quitWeight_pos.le
+  have htotalMassPos : 0 < totalMass := by
+    have hsingletonPos : 0 < ∑ owner, block.z.singleton owner :=
+      block.nontrivial
+    obtain ⟨owner, _, howner⟩ :=
+      (Finset.sum_pos_iff_of_nonneg
+        (fun i _ => block.z.singleton_nonneg i)).mp hsingletonPos
+    apply Finset.sum_pos'
+    · exact fun i _ => hmassNonneg i
+    · exact ⟨owner, Finset.mem_univ owner,
+        mul_pos howner (attempt owner).quitWeight_pos⟩
+  let weight : stdSimplex ℝ ι :=
+    ⟨fun owner => mass owner * totalMass⁻¹,
+      fun owner => mul_nonneg (hmassNonneg owner)
+        (inv_nonneg.mpr htotalMassPos.le), by
+        rw [← Finset.sum_mul]
+        exact mul_inv_cancel₀ (ne_of_gt htotalMassPos)⟩
+  have hbalance (who : ι) :
+      ∑ owner, mass owner * M who owner = totalMass * y who := by
+    have hblock := block.balance who
+    rw [hwy] at hblock
+    have htotal := block.z.total
+    have hattempt (owner : ι) :
+        block.wi owner who =
+          (attempt owner).quitWeight * M who owner +
+            (1 - (attempt owner).quitWeight) * y who := by
+      have hpayoff := (attempt owner).payoff who
+      cases hcontinuation : (attempt owner).continuation <;>
+        simp only [hcontinuation, hwy] at hpayoff ⊢ <;>
+        exact hpayoff
+    calc
+      ∑ owner, mass owner * M who owner =
+          ∑ owner, block.z.singleton owner *
+            ((attempt owner).quitWeight * M who owner) := by
+        apply Finset.sum_congr rfl
+        intro owner _
+        simp only [mass]
+        ring
+      _ = ∑ owner, block.z.singleton owner *
+            (block.wi owner who -
+              (1 - (attempt owner).quitWeight) * y who) := by
+        apply Finset.sum_congr rfl
+        intro owner _
+        rw [hattempt owner]
+        ring
+      _ = totalMass * y who := by
+        simp only [totalMass, mass]
+        have hmassExpand :
+            ∑ owner,
+                block.z.singleton owner * (attempt owner).quitWeight =
+              ∑ owner, block.z.singleton owner -
+                ∑ owner, block.z.singleton owner *
+                  (1 - (attempt owner).quitWeight) := by
+          rw [← Finset.sum_sub_distrib]
+          apply Finset.sum_congr rfl
+          intro owner _
+          ring
+        rw [hmassExpand]
+        calc
+          ∑ owner, block.z.singleton owner *
+                (block.wi owner who -
+                  (1 - (attempt owner).quitWeight) * y who) =
+              ∑ owner, block.z.singleton owner * block.wi owner who -
+                (∑ owner, block.z.singleton owner *
+                  (1 - (attempt owner).quitWeight)) * y who := by
+            rw [Finset.sum_mul, ← Finset.sum_sub_distrib]
+            apply Finset.sum_congr rfl
+            intro owner _
+            ring
+          _ = (1 - block.z.cemetery) * y who -
+                (∑ owner, block.z.singleton owner *
+                  (1 - (attempt owner).quitWeight)) * y who := by
+            congr 2
+            linarith
+          _ = (∑ owner, block.z.singleton owner -
+                ∑ owner, block.z.singleton owner *
+                  (1 - (attempt owner).quitWeight)) * y who := by
+            rw [show 1 - block.z.cemetery =
+                ∑ owner, block.z.singleton owner by linarith]
+            ring
+          _ = _ := by ring
+  refine ⟨weight, ?_, ?_⟩
+  · intro who
+    change 0 ≤ ∑ owner,
+      (mass owner * totalMass⁻¹) * M who owner
+    calc
+      0 ≤ totalMass⁻¹ * (totalMass * y who) := by
+        exact mul_nonneg (inv_nonneg.mpr htotalMassPos.le)
+          (mul_nonneg htotalMassPos.le (block.y_boundary.1.2 who))
+      _ = ∑ owner,
+          (mass owner * totalMass⁻¹) * M who owner := by
+        rw [← hbalance who, Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro owner _
+        ring
+  · intro owner
+    change (mass owner * totalMass⁻¹) *
+      (∑ other, (mass other * totalMass⁻¹) * M owner other) = 0
+    by_cases hsingleton : block.z.singleton owner = 0
+    · simp [mass, hsingleton]
+    · have hsingletonPos : 0 < block.z.singleton owner :=
+        lt_of_le_of_ne (block.z.singleton_nonneg owner)
+          (Ne.symm hsingleton)
+      have hwiZero := block.complementary owner hsingletonPos
+      have hattempt : block.wi owner owner =
+          (1 - (attempt owner).quitWeight) * y owner := by
+        have hpayoff := (attempt owner).payoff owner
+        rw [hdiag owner, mul_zero, zero_add] at hpayoff
+        cases hcontinuation : (attempt owner).continuation <;>
+          simp only [hcontinuation, hwy] at hpayoff ⊢ <;>
+          exact hpayoff
+      have hyZero : y owner = 0 := by
+        rw [hattempt] at hwiZero
+        exact (mul_eq_zero.mp hwiZero).resolve_left
+          (sub_ne_zero.mpr (ne_of_gt (attempt owner).quitWeight_lt_one))
+      have hresidualZero :
+          ∑ other, (mass other * totalMass⁻¹) * M owner other = 0 := by
+        calc
+          ∑ other, (mass other * totalMass⁻¹) * M owner other =
+              totalMass⁻¹ * (∑ other, mass other * M owner other) := by
+            rw [Finset.mul_sum]
+            apply Finset.sum_congr rfl
+            intro other _
+            ring
+          _ = totalMass⁻¹ * (totalMass * y owner) := by
+            rw [hbalance owner]
+          _ = 0 := by rw [hyZero, mul_zero, mul_zero]
+      rw [hresidualZero, mul_zero]
 
 /-! Any interior total quit weight can be spread over a sufficiently long
 block so that the per-stage quit probability is below a prescribed positive
@@ -2853,6 +3035,40 @@ theorem theorem3_3
     · exact lemma3_4 M hy hbound hdiag hzero hQ hmember hintersection hε
     · exact lemma3_5 M hy hbound hdiag hzero hQ hmember hintersection hε
 
+/-! The source chooses one Theorem 3.3 block at every point of `D₀` and
+then applies Theorem 3.6 to the resulting endpoint map `y ↦ w(y)`. -/
+noncomputable def selectedBuildingBlock
+    (M : ι → ι → ℝ) (hbound : MatrixPayoffsBounded M)
+    (hdiag : ∀ who, M who who = 0)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M)
+    (hQ : QMatrix M) {ε : ℝ} (hε : 0 < ε)
+    (y : {value // DZero M value}) : BuildingBlock M y.1 ε :=
+  Classical.choice <| theorem3_3 M y.2 hbound hdiag hzero hQ hε
+
+/-! The selected endpoint map `w : D₀ → D₀`. -/
+noncomputable def buildingBlockMap
+    (M : ι → ι → ℝ) (hbound : MatrixPayoffsBounded M)
+    (hdiag : ∀ who, M who who = 0)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M)
+    (hQ : QMatrix M) {ε : ℝ} (hε : 0 < ε) :
+    {value // DZero M value} → {value // DZero M value} :=
+  fun y =>
+    ⟨(selectedBuildingBlock M hbound hdiag hzero hQ hε y).w,
+      (selectedBuildingBlock M hbound hdiag hzero hQ hε y).w_boundary⟩
+
+theorem buildingBlockMap_ne
+    (M : ι → ι → ℝ) (hbound : MatrixPayoffsBounded M)
+    (hdiag : ∀ who, M who who = 0)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M)
+    (hQ : QMatrix M) {ε : ℝ} (hε : 0 < ε)
+    (hnegative : ∀ owner, ∃ who, M who owner < -ε)
+    (y : {value // DZero M value}) :
+    buildingBlockMap M hbound hdiag hzero hQ hε y ≠ y := by
+  intro heq
+  have hvalue := congrArg Subtype.val heq
+  exact (selectedBuildingBlock M hbound hdiag hzero hQ hε y).w_ne_y_of_column_negative
+    hdiag hnegative hzero hvalue
+
 /-! **Theorem 3.6 (paper, corrected endpoint).** If `(X,d)` is a nonempty
 complete metric space and `f:X→X` has no fixed point, then for every `c>0`
 and `C≥0` there are `K` and `x¹,…,xᴷ` with
@@ -2976,6 +3192,27 @@ theorem theorem3_6 {X : Type*} [MetricSpace X] [Nonempty X]
   obtain ⟨x, hx⟩ := MathUE.exists_fixedPoint_of_caristi
     f φ hφ_lsc hφ_bdd hcaristi
   exact hfixed x hx
+
+/-! Applying Theorem 3.6 to the selected endpoint map gives the finite
+boundary-point chain used to assemble the paper's kiloblocks. -/
+theorem exists_buildingBlock_approximationWitness [Nonempty ι]
+    (M : ι → ι → ℝ) (hbound : MatrixPayoffsBounded M)
+    (hdiag : ∀ who, M who who = 0)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution M)
+    (hQ : QMatrix M) {ε : ℝ} (hε : 0 < ε)
+    (hnegative : ∀ owner, ∃ who, M who owner < -ε)
+    (c C : ℝ) (hc : 0 < c) (hC : 0 ≤ C) :
+    ApproximationWitness
+      (buildingBlockMap M hbound hdiag hzero hQ hε) c C := by
+  letI : Nonempty {value // DZero M value} := by
+    obtain ⟨value, hvalue⟩ := exists_mem_DZero M hdiag hzero hQ
+    exact ⟨⟨value, hvalue⟩⟩
+  letI : CompleteSpace {value // DZero M value} :=
+    (isClosed_DZero M).completeSpace_coe
+  exact theorem3_6
+    (buildingBlockMap M hbound hdiag hzero hQ hε)
+    (buildingBlockMap_ne M hbound hdiag hzero hQ hε hnegative)
+    c C hc hC
 
 /-! **Lemmas 3.8--3.10 (paper).** For the kiloblock strategy `ξ*` built from
 Theorem 3.3 and Theorem 3.6, the paper proves (i) its payoff is within
