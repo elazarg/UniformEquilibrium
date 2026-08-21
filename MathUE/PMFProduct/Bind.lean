@@ -251,6 +251,50 @@ theorem pmfPi_coord_mass_mul_indicator
       (pmfPi σ) s * (if s j = a then 1 else 0)) = σ j a := by
   simpa [mul_ite] using pmfPi_coord_mass σ j a
 
+/-! A single finite signal realizes any finite family of finite marginals:
+sample their product and reveal the requested coordinate. The extra `Fin`
+point has zero mass and avoids subtraction in the signal encoding. -/
+structure CommonFiniteSignal
+    (κ B : Type) [Fintype κ] [Fintype B] [Nonempty B]
+    (marginal : κ → PMF B) where
+  signalCount : ℕ
+  law : PMF (Fin (signalCount + 1))
+  selector : κ → Fin (signalCount + 1) → B
+  selector_law : ∀ k, law.map (selector k) = marginal k
+
+noncomputable def commonFiniteSignal
+    (κ B : Type) [Fintype κ] [DecidableEq κ]
+    [Fintype B] [Nonempty B] (marginal : κ → PMF B) :
+    CommonFiniteSignal κ B marginal := by
+  let Raw := κ → B
+  let encoding : Raw → Fin (Fintype.card Raw + 1) :=
+    fun value => (Fintype.equivFin Raw value).castSucc
+  let joint : PMF Raw := pmfPi marginal
+  let selector : κ → Fin (Fintype.card Raw + 1) → B :=
+    fun k signal =>
+      if hsignal : signal.1 < Fintype.card Raw then
+        (Fintype.equivFin Raw).symm ⟨signal.1, hsignal⟩ k
+      else Classical.arbitrary B
+  refine {
+    signalCount := Fintype.card Raw
+    law := joint.map encoding
+    selector := selector
+    selector_law := ?_ }
+  intro k
+  rw [PMF.map_comp]
+  have hselector : selector k ∘ encoding = fun value : Raw => value k := by
+    funext value
+    simp only [Function.comp_apply, selector, encoding]
+    have hlt : ((Fintype.equivFin Raw value).castSucc).1 <
+        Fintype.card Raw := (Fintype.equivFin Raw value).isLt
+    rw [dif_pos hlt]
+    have hfin :
+        ⟨((Fintype.equivFin Raw value).castSucc).1, hlt⟩ =
+          Fintype.equivFin Raw value := Fin.ext rfl
+    rw [hfin, Equiv.symm_apply_apply]
+  rw [hselector]
+  simpa only [pushforward] using pmfPi_push_coord marginal k
+
 end Pushforward
 
 end PMFProduct

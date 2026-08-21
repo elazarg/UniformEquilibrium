@@ -1081,19 +1081,8 @@ theorem theorem2_13_nonQ
   exact (table.isεAsymptoticNash_iff ε profile).2 hnash
 
 /-! Theorem 2.13(2): the Q branch yields a unilateral-quitting sunspot
-ε-equilibrium for every `ε>0`. -/
-theorem theorem2_13_sunspot
-    (table : Table ι)
-    (hnormalized : SoloExitNormalized table)
-    (hbounded : TablePayoffsBounded table)
-    (hnormal : HasNormalPlayers table)
-    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution
-      (NormalMatrix table))
-    (hQ : QMatrix (NormalMatrix table)) :
-    ∀ ε : ℝ, 0 < ε → ∃ profile : SunspotProfile table,
-      SunspotEpsilonEquilibrium table ε profile ∧
-      AtMostOneQuitter profile := by
-  sorry
+ε-equilibrium for every `ε>0`. Its checked declaration follows the
+Section 3 compiler and estimates on which its proof depends. -/
 
 /-! ## Section 2.5 — example -/
 
@@ -1154,6 +1143,18 @@ def D (M : ι → ι → ℝ) : Set (ι → ℝ) :=
 /-! The source normalizes every payoff coordinate to `[-1,1]`. -/
 def MatrixPayoffsBounded (M : ι → ι → ℝ) : Prop :=
   ∀ who owner, |M who owner| ≤ 1
+
+theorem normalMatrix_payoffsBounded
+    (table : Table ι) (hbounded : TablePayoffsBounded table) :
+    MatrixPayoffsBounded (NormalMatrix table) := by
+  intro who owner
+  exact hbounded.1 _ _
+
+theorem normalMatrix_diagonal_zero
+    (table : Table ι) (hnormalized : SoloExitNormalized table) :
+    ∀ who, NormalMatrix table who who = 0 := by
+  intro who
+  exact hnormalized who.1
 
 /-! `D₀` consists of the points of `D` with a zero coordinate. The paper
 only observes that this set lies in the relative boundary of `D`; replacing
@@ -3490,6 +3491,591 @@ theorem exists_kiloblockChain
     simpa only [KiloblockTracking, point, block, boundaryPoint, f,
       buildingBlockMap, Subtype.dist_eq] using htracking
 
+/-! The internal accuracy is chosen below the requested `ε/7`, below one,
+and below the dimension-scaled negative-column margin. -/
+theorem exists_kiloblockInternalAccuracy
+    (table : Table ι) [Nonempty (NormalPlayer table)]
+    {requested margin : ℝ} (hrequested : 0 < requested)
+    (hmargin : 0 < margin) :
+    ∃ ε : ℝ, 0 < ε ∧ ε < 1 ∧
+      ((2 * Fintype.card (NormalPlayer table) + 1 : ℕ) : ℝ) * ε <
+        margin ∧
+      7 * ε ≤ requested := by
+  let factor : ℝ :=
+    ((2 * Fintype.card (NormalPlayer table) + 1 : ℕ) : ℝ)
+  have hfactor : 0 < factor := by
+    dsimp only [factor]
+    positivity
+  let ε := min (requested / 7) (min (margin / (2 * factor)) (1 / 2))
+  have hε : 0 < ε := by
+    dsimp only [ε]
+    exact lt_min (by positivity) (lt_min (by positivity) (by norm_num))
+  have hrequestedBound : ε ≤ requested / 7 := by
+    exact min_le_left _ _
+  have hmarginBound : ε ≤ margin / (2 * factor) := by
+    exact (min_le_right _ _).trans (min_le_left _ _)
+  have hhalf : ε ≤ 1 / 2 := by
+    exact (min_le_right _ _).trans (min_le_right _ _)
+  have hscaled : factor * ε < margin := by
+    have htwice : 2 * factor * ε ≤ margin := by
+      have hbound := (le_div_iff₀
+        (show 0 < 2 * factor by positivity)).mp hmarginBound
+      nlinarith
+    nlinarith
+  refine ⟨ε, hε, by linarith, ?_, by linarith⟩
+  simpa only [factor] using hscaled
+
+/-! The quantitative data fixed before compiling the public-signal history
+automaton: a chain, its attempts, and one sufficiently fine mesh per block. -/
+structure KiloblockBlueprint (table : Table ι) (ε : ℝ) where
+  soloExitNormalized : SoloExitNormalized table
+  payoffsBounded : TablePayoffsBounded table
+  chain : KiloblockChain table ε
+  epsilon_pos : 0 < ε
+  epsilon_lt_one : ε < 1
+  negativeMargin : ℝ
+  negativeMargin_pos : 0 < negativeMargin
+  accuracy_below_margin :
+    ((2 * Fintype.card (NormalPlayer table) + 1 : ℕ) : ℝ) * ε <
+      negativeMargin
+  column_negative : ∀ owner,
+    ∃ who, NormalMatrix table who owner < -negativeMargin
+  attempt : ∀ k owner,
+    BuildingAttempt (NormalMatrix table) (chain.point k) ε
+      (chain.buildingBlock k) owner
+  mesh : Fin (chain.blockCount + 1) → ℕ
+  mesh_pos : ∀ k, 0 < mesh k
+  mesh_hazard_small : ∀ k owner,
+    quittingMeshHazard (attempt k owner).quitWeight (mesh k) < ε
+  mesh_survival : ∀ k owner,
+    (1 - quittingMeshHazard (attempt k owner).quitWeight (mesh k)) ^
+        mesh k =
+      1 - (attempt k owner).quitWeight
+
+/-! Assemble all quantitative kiloblock data at an internal accuracy whose
+eventual `7ε` equilibrium error is below the requested tolerance. -/
+theorem exists_kiloblockBlueprint
+    (table : Table ι)
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (hnormal : HasNormalPlayers table)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution
+      (NormalMatrix table))
+    (hQ : QMatrix (NormalMatrix table))
+    {requested : ℝ} (hrequested : 0 < requested) :
+    ∃ ε : ℝ, 7 * ε ≤ requested ∧
+      Nonempty (KiloblockBlueprint table ε) := by
+  letI : Nonempty (NormalPlayer table) := hnormal.to_subtype
+  let M := NormalMatrix table
+  have hmatrixBound : MatrixPayoffsBounded M :=
+    normalMatrix_payoffsBounded table hbounded
+  have hdiag : ∀ who, M who who = 0 :=
+    normalMatrix_diagonal_zero table hnormalized
+  obtain ⟨margin, hmargin, hcolumn⟩ :=
+    exists_uniformNegativeMargin M hdiag hzero
+  obtain ⟨ε, hε, hεone, hscaled, hrequestedBound⟩ :=
+    exists_kiloblockInternalAccuracy table hrequested hmargin
+  have hεmargin : ε < margin := by
+    have hfactor : 1 ≤
+        ((2 * Fintype.card (NormalPlayer table) + 1 : ℕ) : ℝ) := by
+      norm_num
+    nlinarith [mul_le_mul_of_nonneg_right hfactor hε.le]
+  have hcolumnε : ∀ owner, ∃ who, M who owner < -ε := by
+    intro owner
+    obtain ⟨who, hwho⟩ := hcolumn owner
+    exact ⟨who, by linarith⟩
+  obtain ⟨chain⟩ := exists_kiloblockChain table hmatrixBound hdiag
+    hzero hQ hε hcolumnε
+  let attempt : ∀ k owner,
+      BuildingAttempt M (chain.point k) ε
+        (chain.buildingBlock k) owner :=
+    fun k owner => (chain.buildingBlock k).attempt owner (hcolumnε owner)
+  let intensityBound : Fin (chain.blockCount + 1) → ℝ :=
+    fun k => ∑ owner,
+      quittingMeshIntensity (attempt k owner).quitWeight
+  choose mesh hmesh using fun k : Fin (chain.blockCount + 1) =>
+    exists_nat_gt (max 1 (intensityBound k / ε))
+  have hmeshPos (k) : 0 < mesh k := by
+    have hone : 1 < (mesh k : ℝ) :=
+      (le_max_left 1 _).trans_lt (hmesh k)
+    exact_mod_cast (zero_lt_one.trans hone)
+  have hintensity (k) (owner) :
+      quittingMeshIntensity (attempt k owner).quitWeight ≤
+        intensityBound k := by
+    dsimp only [intensityBound]
+    exact Finset.single_le_sum
+      (s := Finset.univ)
+      (f := fun other =>
+        quittingMeshIntensity (attempt k other).quitWeight)
+      (fun other _ => quittingMeshIntensity_nonneg
+        (attempt k other).quitWeight_pos.le
+        (attempt k other).quitWeight_lt_one.le)
+      (Finset.mem_univ owner)
+  have hratio (k) : intensityBound k / (mesh k : ℝ) < ε := by
+    have hmeshReal : 0 < (mesh k : ℝ) := by
+      exact_mod_cast hmeshPos k
+    have hquotient : intensityBound k / ε < (mesh k : ℝ) :=
+      (le_max_right 1 _).trans_lt (hmesh k)
+    have hintermediate : intensityBound k < (mesh k : ℝ) * ε :=
+      (div_lt_iff₀ hε).mp hquotient
+    exact (div_lt_iff₀ hmeshReal).mpr (by
+      simpa only [mul_comm] using hintermediate)
+  refine ⟨ε, hrequestedBound, ⟨{
+    soloExitNormalized := hnormalized
+    payoffsBounded := hbounded
+    chain := chain
+    epsilon_pos := hε
+    epsilon_lt_one := hεone
+    negativeMargin := margin
+    negativeMargin_pos := hmargin
+    accuracy_below_margin := hscaled
+    column_negative := hcolumn
+    attempt := attempt
+    mesh := mesh
+    mesh_pos := hmeshPos
+    mesh_hazard_small := ?_
+    mesh_survival := ?_ }⟩⟩
+  · intro k owner
+    exact (quittingMeshHazard_le_intensity_div
+      (attempt k owner).quitWeight_lt_one).trans_lt <|
+        (div_le_div_of_nonneg_right (hintensity k owner)
+          (Nat.cast_nonneg (mesh k))).trans_lt (hratio k)
+  · intro k owner
+    exact one_sub_quittingMeshHazard_pow
+      (attempt k owner).quitWeight_lt_one.le (hmeshPos k)
+
+/-! A state-matching fallback only defines the compiler on histories that
+cannot arise from the public game. It never changes an on-support transition. -/
+def fallbackKiloblockMode
+    {table : Table ι} {Signal : Type} {lastIndex : ℕ}
+    (state : PublicQuittingState ι Signal) :
+    KiloblockMode table lastIndex :=
+  match state with
+  | .draw => .draw .final
+  | .active _ => .finalActive
+  | .absorbed _ => .absorbed none
+
+/-! Deterministic update of the kiloblock control state. -/
+def nextKiloblockMode
+    {table : Table ι} {Signal : Type} [Fintype Signal]
+    {lastIndex : ℕ}
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (selector : Fin (lastIndex + 1) → Signal →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation)
+    (mode : KiloblockMode table lastIndex) (action : ι → Bool)
+    (nextState : PublicQuittingState ι Signal) :
+    KiloblockMode table lastIndex := by
+  classical
+  exact match mode with
+  | .draw (.choose k) =>
+      match nextState with
+      | .active signal => .active k (selector k signal) (mesh k)
+      | state => fallbackKiloblockMode state
+  | .draw (.resume k choice remaining) =>
+      match nextState with
+      | .active _ => .active k choice remaining
+      | state => fallbackKiloblockMode state
+  | .draw .final =>
+      match nextState with
+      | .active _ => .finalActive
+      | state => fallbackKiloblockMode state
+  | .active k choice remaining =>
+      if hquit : ({who | action who = true} : Finset ι).Nonempty then
+        match nextState with
+        | .absorbed _ => .absorbed (some k)
+        | state => fallbackKiloblockMode state
+      else if remaining ≤ 1 then
+        match nextState with
+        | .draw => .draw (phaseAfterAttempt table continuation k choice)
+        | state => fallbackKiloblockMode state
+      else
+        match nextState with
+        | .draw => .draw (.resume k choice (remaining - 1))
+        | state => fallbackKiloblockMode state
+  | .finalActive =>
+      if hquit : ({who | action who = true} : Finset ι).Nonempty then
+        match nextState with
+        | .absorbed _ => .absorbed none
+        | state => fallbackKiloblockMode state
+      else
+        match nextState with
+        | .draw => .draw .final
+        | state => fallbackKiloblockMode state
+  | .absorbed origin =>
+      match nextState with
+      | .absorbed _ => .absorbed origin
+      | state => fallbackKiloblockMode state
+
+theorem nextKiloblockMode_matchesState
+    {table : Table ι} {Signal : Type} [Fintype Signal]
+    {lastIndex : ℕ}
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (selector : Fin (lastIndex + 1) → Signal →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation)
+    (mode : KiloblockMode table lastIndex) (action : ι → Bool)
+    (nextState : PublicQuittingState ι Signal) :
+    (nextKiloblockMode mesh selector continuation mode action nextState).MatchesState
+      nextState := by
+  classical
+  cases mode with
+  | draw phase =>
+      cases phase <;> cases nextState <;>
+        simp [nextKiloblockMode, fallbackKiloblockMode,
+          KiloblockMode.MatchesState]
+  | active k choice remaining =>
+      by_cases hquit : ({who | action who = true} : Finset ι).Nonempty
+      · cases nextState <;>
+          simp [nextKiloblockMode, fallbackKiloblockMode,
+            KiloblockMode.MatchesState, hquit]
+      · by_cases hremaining : remaining ≤ 1
+        · cases nextState <;>
+            simp [nextKiloblockMode, fallbackKiloblockMode,
+              KiloblockMode.MatchesState, hquit, hremaining]
+        · cases nextState <;>
+            simp [nextKiloblockMode, fallbackKiloblockMode,
+              KiloblockMode.MatchesState, hquit, hremaining]
+  | finalActive =>
+      by_cases hquit : ({who | action who = true} : Finset ι).Nonempty
+      · cases nextState <;>
+          simp [nextKiloblockMode, fallbackKiloblockMode,
+            KiloblockMode.MatchesState, hquit]
+      · cases nextState <;>
+          simp [nextKiloblockMode, fallbackKiloblockMode,
+            KiloblockMode.MatchesState, hquit]
+  | absorbed =>
+      cases nextState <;>
+        simp [nextKiloblockMode, fallbackKiloblockMode,
+          KiloblockMode.MatchesState]
+
+/-! Every active or pending-resume counter is positive and bounded by its
+block's common mesh. -/
+def KiloblockMode.ValidRemaining
+    {table : Table ι} {lastIndex : ℕ}
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (mode : KiloblockMode table lastIndex) : Prop :=
+  match mode with
+  | .active k _ remaining => 0 < remaining ∧ remaining ≤ mesh k
+  | .draw (.resume k _ remaining) =>
+      0 < remaining ∧ remaining ≤ mesh k
+  | _ => True
+
+theorem precedingKiloblockPhase_validRemaining
+    {table : Table ι} {lastIndex : ℕ}
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (k : Fin (lastIndex + 1)) :
+    (KiloblockMode.draw
+      (precedingKiloblockPhase table k)).ValidRemaining mesh := by
+  unfold precedingKiloblockPhase
+  split <;> trivial
+
+theorem nextKiloblockMode_validRemaining
+    {table : Table ι} {Signal : Type} [Fintype Signal]
+    {lastIndex : ℕ}
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (hmesh : ∀ k, 0 < mesh k)
+    (selector : Fin (lastIndex + 1) → Signal →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation)
+    (mode : KiloblockMode table lastIndex) (action : ι → Bool)
+    (nextState : PublicQuittingState ι Signal)
+    (hvalid : mode.ValidRemaining mesh) :
+    (nextKiloblockMode mesh selector continuation mode action nextState).ValidRemaining
+      mesh := by
+  classical
+  cases mode with
+  | draw phase =>
+      cases phase <;> cases nextState <;>
+        simp_all [KiloblockMode.ValidRemaining, nextKiloblockMode,
+          fallbackKiloblockMode]
+  | active k choice remaining =>
+      by_cases hquit : ({who | action who = true} : Finset ι).Nonempty
+      · cases nextState <;>
+          simp [KiloblockMode.ValidRemaining, nextKiloblockMode,
+            fallbackKiloblockMode, hquit]
+      · by_cases hremaining : remaining ≤ 1
+        · cases nextState with
+          | draw =>
+              simp only [nextKiloblockMode, hquit, ↓reduceDIte,
+                hremaining, KiloblockMode.ValidRemaining]
+              cases choice with
+              | none =>
+                  exact precedingKiloblockPhase_validRemaining
+                    (table := table) mesh k
+              | some owner =>
+                  cases hcontinuation : continuation k owner with
+                  | restart =>
+                      simp [phaseAfterAttempt, hcontinuation]
+                  | advance =>
+                      simp only [if_pos True.intro, phaseAfterAttempt,
+                        hcontinuation]
+                      change (KiloblockMode.draw
+                        (precedingKiloblockPhase table k)).ValidRemaining mesh
+                      exact precedingKiloblockPhase_validRemaining mesh k
+          | active =>
+              simp [nextKiloblockMode, fallbackKiloblockMode, hquit,
+                hremaining, KiloblockMode.ValidRemaining]
+          | absorbed =>
+              simp [nextKiloblockMode, fallbackKiloblockMode, hquit,
+                KiloblockMode.ValidRemaining]
+        · cases nextState with
+          | draw =>
+              simp only [nextKiloblockMode, hquit, ↓reduceDIte,
+                hremaining, KiloblockMode.ValidRemaining]
+              exact ⟨by omega, (Nat.sub_le remaining 1).trans hvalid.2⟩
+          | active =>
+              simp [nextKiloblockMode, fallbackKiloblockMode, hquit,
+                hremaining, KiloblockMode.ValidRemaining]
+          | absorbed =>
+              simp [nextKiloblockMode, fallbackKiloblockMode, hquit,
+                KiloblockMode.ValidRemaining]
+  | finalActive =>
+      by_cases hquit : ({who | action who = true} : Finset ι).Nonempty <;>
+        cases nextState <;>
+        simp_all [KiloblockMode.ValidRemaining, nextKiloblockMode,
+          fallbackKiloblockMode]
+  | absorbed =>
+      cases nextState <;>
+        simp [KiloblockMode.ValidRemaining, nextKiloblockMode,
+          fallbackKiloblockMode]
+
+theorem nextKiloblockMode_step
+    {table : Table ι} {Signal : Type} [Fintype Signal]
+    {lastIndex : ℕ}
+    (signalLaw : PMF Signal)
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (selector : Fin (lastIndex + 1) → Signal →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation)
+    (mode : KiloblockMode table lastIndex)
+    (state : PublicQuittingState ι Signal) (action : ι → Bool)
+    (nextState : PublicQuittingState ι Signal)
+    (hmatch : mode.MatchesState state)
+    (hsupport : nextState ∈
+      ((publicQuittingGame table signalLaw).transition state action).support) :
+    KiloblockModeStep mesh selector continuation mode action nextState
+      (nextKiloblockMode mesh selector continuation mode action nextState) := by
+  classical
+  cases mode with
+  | draw phase =>
+      cases state with
+      | draw =>
+          simp only [publicQuittingGame, PMF.support_map] at hsupport
+          obtain ⟨signal, _, rfl⟩ := hsupport
+          cases phase <;>
+            simp [KiloblockModeStep, nextKiloblockMode]
+      | active => simp [KiloblockMode.MatchesState] at hmatch
+      | absorbed => simp [KiloblockMode.MatchesState] at hmatch
+  | active k choice remaining =>
+      cases state with
+      | draw => simp [KiloblockMode.MatchesState] at hmatch
+      | active signal =>
+          by_cases hquit :
+              ({who | action who = true} : Finset ι).Nonempty
+          · have hnext : nextState = .absorbed ⟨_, hquit⟩ := by
+              simp only [publicQuittingGame, dif_pos hquit,
+                PMF.support_pure] at hsupport
+              exact Set.mem_singleton_iff.mp hsupport
+            subst nextState
+            simp [KiloblockModeStep, nextKiloblockMode, hquit]
+          · by_cases hremaining : remaining ≤ 1
+            · have hnext : nextState = .draw := by
+                simp only [publicQuittingGame, dif_neg hquit,
+                  PMF.support_pure] at hsupport
+                exact Set.mem_singleton_iff.mp hsupport
+              subst nextState
+              simp [KiloblockModeStep, nextKiloblockMode, hquit,
+                hremaining]
+            · have hnext : nextState = .draw := by
+                simp only [publicQuittingGame, dif_neg hquit,
+                  PMF.support_pure] at hsupport
+                exact Set.mem_singleton_iff.mp hsupport
+              subst nextState
+              simp [KiloblockModeStep, nextKiloblockMode, hquit,
+                hremaining]
+      | absorbed => simp [KiloblockMode.MatchesState] at hmatch
+  | finalActive =>
+      cases state with
+      | draw => simp [KiloblockMode.MatchesState] at hmatch
+      | active signal =>
+          by_cases hquit :
+              ({who | action who = true} : Finset ι).Nonempty
+          · have hnext : nextState = .absorbed ⟨_, hquit⟩ := by
+              simp only [publicQuittingGame, dif_pos hquit,
+                PMF.support_pure] at hsupport
+              exact Set.mem_singleton_iff.mp hsupport
+            subst nextState
+            simp [KiloblockModeStep, nextKiloblockMode, hquit]
+          · have hnext : nextState = .draw := by
+              simp only [publicQuittingGame, dif_neg hquit,
+                PMF.support_pure] at hsupport
+              exact Set.mem_singleton_iff.mp hsupport
+            subst nextState
+            simp [KiloblockModeStep, nextKiloblockMode, hquit]
+      | absorbed => simp [KiloblockMode.MatchesState] at hmatch
+  | absorbed origin =>
+      cases state with
+      | draw => simp [KiloblockMode.MatchesState] at hmatch
+      | active => simp [KiloblockMode.MatchesState] at hmatch
+      | absorbed quitters =>
+          have hnext : nextState = .absorbed quitters := by
+            simp only [publicQuittingGame, PMF.support_pure] at hsupport
+            exact Set.mem_singleton_iff.mp hsupport
+          subst nextState
+          simp [KiloblockModeStep, nextKiloblockMode]
+
+/-! Remove the last transition record from a nonempty stochastic-game
+history; its recorded source state becomes the preceding terminal state. -/
+def publicHistoryInit
+    {table : Table ι} {Signal : Type} [Finite Signal]
+    (signalLaw : PMF Signal) {t : ℕ}
+    (history : (publicQuittingGame table signalLaw).Hist (t + 1)) :
+    (publicQuittingGame table signalLaw).Hist t :=
+  ⟨Fin.init history.1, (history.1 (Fin.last t)).1⟩
+
+@[simp] theorem publicHistoryInit_snoc
+    {table : Table ι} {Signal : Type} [Finite Signal]
+    (signalLaw : PMF Signal) {t : ℕ}
+    (history : (publicQuittingGame table signalLaw).Hist t)
+    (action : ι → Bool) (nextState : PublicQuittingState ι Signal) :
+    publicHistoryInit signalLaw
+      ⟨Fin.snoc history.1 (history.2, action), nextState⟩ = history := by
+  simp [publicHistoryInit]
+
+def initialKiloblockMode
+    {table : Table ι} {Signal : Type} {lastIndex : ℕ}
+    (state : PublicQuittingState ι Signal) :
+    KiloblockMode table lastIndex :=
+  match state with
+  | .draw => .draw (.choose (Fin.last lastIndex))
+  | .active _ => .finalActive
+  | .absorbed _ => .absorbed none
+
+theorem initialKiloblockMode_validRemaining
+    {table : Table ι} {Signal : Type} {lastIndex : ℕ}
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (state : PublicQuittingState ι Signal) :
+    (initialKiloblockMode (table := table) (lastIndex := lastIndex)
+      state).ValidRemaining mesh := by
+  cases state <;>
+    simp [initialKiloblockMode, KiloblockMode.ValidRemaining]
+
+/-! The schedule mode is reconstructed from every literal public history.
+This makes the compiler a genuine behavior strategy rather than an external
+state machine whose relation to histories is postulated. -/
+def compiledKiloblockMode
+    {table : Table ι} {signalCount lastIndex : ℕ}
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (selector : Fin (lastIndex + 1) → Fin (signalCount + 1) →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation) :
+    ∀ t, (publicQuittingGame table signalLaw).Hist t →
+      KiloblockMode table lastIndex
+  | 0, history => initialKiloblockMode history.2
+  | t + 1, history =>
+      nextKiloblockMode mesh selector continuation
+        (compiledKiloblockMode signalLaw mesh selector continuation t
+          (publicHistoryInit signalLaw history))
+        (history.1 (Fin.last t)).2 history.2
+
+theorem compiledKiloblockMode_matchesState
+    {table : Table ι} {signalCount lastIndex : ℕ}
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (selector : Fin (lastIndex + 1) → Fin (signalCount + 1) →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation)
+    (t : ℕ) (history : (publicQuittingGame table signalLaw).Hist t) :
+    (compiledKiloblockMode signalLaw mesh selector continuation t history).MatchesState
+      history.2 := by
+  cases t with
+  | zero =>
+      cases hstate : history.2 <;>
+        simp [compiledKiloblockMode, initialKiloblockMode,
+          KiloblockMode.MatchesState, hstate]
+  | succ t =>
+      exact nextKiloblockMode_matchesState mesh selector continuation _ _ _
+
+theorem compiledKiloblockMode_validRemaining
+    {table : Table ι} {signalCount lastIndex : ℕ}
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (hmesh : ∀ k, 0 < mesh k)
+    (selector : Fin (lastIndex + 1) → Fin (signalCount + 1) →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation) :
+    ∀ t (history : (publicQuittingGame table signalLaw).Hist t),
+      (compiledKiloblockMode signalLaw mesh selector continuation
+        t history).ValidRemaining mesh := by
+  intro t
+  induction t with
+  | zero =>
+      intro history
+      exact initialKiloblockMode_validRemaining mesh history.2
+  | succ t ih =>
+      intro history
+      exact nextKiloblockMode_validRemaining mesh hmesh selector continuation
+        (compiledKiloblockMode signalLaw mesh selector continuation t
+          (publicHistoryInit signalLaw history))
+        (history.1 (Fin.last t)).2 history.2
+        (ih (publicHistoryInit signalLaw history))
+
+theorem compiledKiloblockMode_remaining_bounds
+    {table : Table ι} {signalCount lastIndex : ℕ}
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (hmesh : ∀ k, 0 < mesh k)
+    (selector : Fin (lastIndex + 1) → Fin (signalCount + 1) →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation)
+    (t : ℕ) (history : (publicQuittingGame table signalLaw).Hist t)
+    (k : Fin (lastIndex + 1)) (choice : Option (NormalPlayer table))
+    (remaining : ℕ)
+    (hmode : compiledKiloblockMode signalLaw mesh selector continuation
+          t history = .active k choice remaining ∨
+        compiledKiloblockMode signalLaw mesh selector continuation
+          t history = .draw (.resume k choice remaining)) :
+    0 < remaining ∧ remaining ≤ mesh k := by
+  have hvalid := compiledKiloblockMode_validRemaining
+    signalLaw mesh hmesh selector continuation t history
+  rcases hmode with hmode | hmode <;> rw [hmode] at hvalid <;> exact hvalid
+
+theorem compiledKiloblockMode_step
+    {table : Table ι} {signalCount lastIndex : ℕ}
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (mesh : Fin (lastIndex + 1) → ℕ)
+    (selector : Fin (lastIndex + 1) → Fin (signalCount + 1) →
+      Option (NormalPlayer table))
+    (continuation : Fin (lastIndex + 1) → NormalPlayer table →
+      AttemptContinuation)
+    (t : ℕ) (history : (publicQuittingGame table signalLaw).Hist t)
+    (action : ι → Bool)
+    (nextState : PublicQuittingState ι (Fin (signalCount + 1)))
+    (hsupport : nextState ∈
+      ((publicQuittingGame table signalLaw).transition
+        history.2 action).support) :
+    KiloblockModeStep mesh selector continuation
+      (compiledKiloblockMode signalLaw mesh selector continuation t history)
+      action nextState
+      (compiledKiloblockMode signalLaw mesh selector continuation (t + 1)
+        ⟨Fin.snoc history.1 (history.2, action), nextState⟩) := by
+  rw [compiledKiloblockMode, publicHistoryInit_snoc]
+  simpa using nextKiloblockMode_step signalLaw mesh selector continuation
+    (compiledKiloblockMode signalLaw mesh selector continuation t history)
+    history.2 action nextState
+    (compiledKiloblockMode_matchesState signalLaw mesh selector continuation
+      t history) hsupport
+
 structure KiloblockConstruction
     (table : Table ι) (ε : ℝ) where
   soloExitNormalized : SoloExitNormalized table
@@ -3561,6 +4147,147 @@ structure KiloblockConstruction
               (attempt k owner).quitWeight_lt_one
           else PMF.pure false
       | _ => PMF.pure false
+
+def KiloblockBlueprint.continuation
+    {table : Table ι} {ε : ℝ}
+    (blueprint : KiloblockBlueprint table ε) :
+    Fin (blueprint.chain.blockCount + 1) → NormalPlayer table →
+      AttemptContinuation :=
+  fun k owner => (blueprint.attempt k owner).continuation
+
+noncomputable def KiloblockBlueprint.signalData
+    {table : Table ι} {ε : ℝ}
+    (blueprint : KiloblockBlueprint table ε) :
+    Math.PMFProduct.CommonFiniteSignal
+      (Fin (blueprint.chain.blockCount + 1))
+      (Option (NormalPlayer table))
+      (fun k => (blueprint.chain.buildingBlock k).z.toPMF) :=
+  Math.PMFProduct.commonFiniteSignal _ _ _
+
+noncomputable def KiloblockBlueprint.mode
+    {table : Table ι} {ε : ℝ}
+    (blueprint : KiloblockBlueprint table ε) :
+    ∀ t,
+      (publicQuittingGame table blueprint.signalData.law).Hist t →
+        KiloblockMode table blueprint.chain.blockCount :=
+  compiledKiloblockMode blueprint.signalData.law blueprint.mesh
+    blueprint.signalData.selector blueprint.continuation
+
+noncomputable def KiloblockBlueprint.strategy
+    {table : Table ι} {ε : ℝ}
+    (blueprint : KiloblockBlueprint table ε) :
+    (publicQuittingGame table blueprint.signalData.law).BehaviorProfile :=
+  fun who t history =>
+    match blueprint.mode t history with
+    | .active k (some owner) _ =>
+        if _hwho : who = owner.1 then
+          quittingMeshHazardCoin
+            (blueprint.attempt k owner).quitWeight (blueprint.mesh k)
+            (blueprint.attempt k owner).quitWeight_pos.le
+            (blueprint.attempt k owner).quitWeight_lt_one
+        else PMF.pure false
+    | _ => PMF.pure false
+
+noncomputable def KiloblockBlueprint.profile
+    {table : Table ι} {ε : ℝ}
+    (blueprint : KiloblockBlueprint table ε) : SunspotProfile table :=
+  { signalCount := blueprint.signalData.signalCount
+    signalLaw := blueprint.signalData.law
+    strategy := blueprint.strategy }
+
+/-! Compile the quantitative blueprint into the literal public-signal
+behavior profile and history automaton consumed by Lemmas 3.8--3.10. -/
+noncomputable def KiloblockBlueprint.toConstruction
+    {table : Table ι} {ε : ℝ}
+    (blueprint : KiloblockBlueprint table ε) :
+    KiloblockConstruction table ε := by
+  let profile := blueprint.profile
+  refine {
+    soloExitNormalized := blueprint.soloExitNormalized
+    payoffsBounded := blueprint.payoffsBounded
+    profile := profile
+    blockCount := blueprint.chain.blockCount
+    point := blueprint.chain.point
+    point_boundary := blueprint.chain.point_boundary
+    buildingBlock := blueprint.chain.buildingBlock
+    epsilon_pos := blueprint.epsilon_pos
+    epsilon_lt_one := blueprint.epsilon_lt_one
+    negativeMargin := blueprint.negativeMargin
+    negativeMargin_pos := blueprint.negativeMargin_pos
+    accuracy_below_margin := blueprint.accuracy_below_margin
+    displacement_large := blueprint.chain.displacement_large
+    tracking_small := blueprint.chain.tracking_small
+    column_negative := blueprint.column_negative
+    attempt := blueprint.attempt
+    mesh := blueprint.mesh
+    mesh_pos := blueprint.mesh_pos
+    mesh_hazard_small := blueprint.mesh_hazard_small
+    mesh_survival := blueprint.mesh_survival
+    signalSelector := blueprint.signalData.selector
+    signalSelector_law := blueprint.signalData.selector_law
+    mode := blueprint.mode
+    mode_initial := ?_
+    mode_state := ?_
+    mode_remaining_pos := ?_
+    mode_remaining_le_mesh := ?_
+    mode_step := ?_
+    strategy_eq := ?_ }
+  · rfl
+  · intro t history
+    exact compiledKiloblockMode_matchesState
+      blueprint.signalData.law blueprint.mesh blueprint.signalData.selector
+      blueprint.continuation t history
+  · intro t history k choice remaining hmode
+    exact (compiledKiloblockMode_remaining_bounds
+      blueprint.signalData.law blueprint.mesh blueprint.mesh_pos
+      blueprint.signalData.selector blueprint.continuation t history
+      k choice remaining hmode).1
+  · intro t history k choice remaining hmode
+    exact (compiledKiloblockMode_remaining_bounds
+      blueprint.signalData.law blueprint.mesh blueprint.mesh_pos
+      blueprint.signalData.selector blueprint.continuation t history
+      k choice remaining hmode).2
+  · intro t history action nextState hsupport
+    exact compiledKiloblockMode_step
+      blueprint.signalData.law blueprint.mesh blueprint.signalData.selector
+      blueprint.continuation t history action nextState hsupport
+  · intro who t history
+    change blueprint.strategy who t history = _
+    cases hmode : blueprint.mode t history with
+    | draw =>
+        simp [KiloblockBlueprint.strategy, hmode]
+        rfl
+    | active k choice remaining =>
+        cases choice with
+        | none =>
+            simp [KiloblockBlueprint.strategy, hmode]
+            rfl
+        | some owner =>
+            by_cases hwho : who = owner.1
+            · simp [KiloblockBlueprint.strategy, hmode, hwho]
+            · simp [KiloblockBlueprint.strategy, hmode, hwho]
+              rfl
+    | finalActive =>
+        simp [KiloblockBlueprint.strategy, hmode]
+        rfl
+    | absorbed =>
+        simp [KiloblockBlueprint.strategy, hmode]
+        rfl
+
+theorem exists_kiloblockConstruction
+    (table : Table ι)
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (hnormal : HasNormalPlayers table)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution
+      (NormalMatrix table))
+    (hQ : QMatrix (NormalMatrix table))
+    {requested : ℝ} (hrequested : 0 < requested) :
+    ∃ ε : ℝ, 7 * ε ≤ requested ∧
+      Nonempty (KiloblockConstruction table ε) := by
+  obtain ⟨ε, hε, ⟨blueprint⟩⟩ := exists_kiloblockBlueprint
+    table hnormalized hbounded hnormal hzero hQ hrequested
+  exact ⟨ε, hε, ⟨blueprint.toConstruction⟩⟩
 
 /-! A finite schedule-state shape. Normal-player values and remaining
 counters are represented by finite indices. -/
@@ -17488,6 +18215,32 @@ theorem section3_4
   · rw [dif_neg hwho] at hupper
     dsimp only [SunspotProfile.payoff] at hupper
     linarith
+
+/-! Theorem 2.13(2): the Q branch yields a unilateral-quitting sunspot
+`ε`-equilibrium for every `ε>0`. The declaration occurs here because its
+proof consumes the literal Section 3 compiler and Lemmas 3.8--3.10. -/
+theorem theorem2_13_sunspot
+    (table : Table ι)
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (hnormal : HasNormalPlayers table)
+    (hzero : ¬HasNontrivialZeroProjectiveLCPSolution
+      (NormalMatrix table))
+    (hQ : QMatrix (NormalMatrix table)) :
+    ∀ requested : ℝ, 0 < requested → ∃ profile : SunspotProfile table,
+      SunspotEpsilonEquilibrium table requested profile ∧
+      AtMostOneQuitter profile := by
+  intro requested hrequested
+  obtain ⟨ε, hscale, ⟨construction⟩⟩ := exists_kiloblockConstruction
+    table hnormalized hbounded hnormal hzero hQ hrequested
+  refine ⟨construction.profile, ?_, construction.atMostOneQuitter⟩
+  have hseven := section3_4 table construction.profile
+    construction.normalTarget ε construction.epsilon_pos.le
+    (lemma3_8 table construction.epsilon_pos construction)
+    (lemma3_10 construction.epsilon_pos construction)
+  intro who deviation
+  have hbound := hseven who deviation
+  linarith
 
 /-! ## Section 4 — sunspot payoff characterization -/
 
