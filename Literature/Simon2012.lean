@@ -2695,17 +2695,16 @@ private theorem lemma3_4_positive_coordinate (G : QuittingGame)
     linarith
   simpa only [N, beta, p] using ⟨hbetaLower, hpjZero⟩
 
-/-- The negative-coordinate estimate used in Lemma 3.4: `φ_j < -R` forces `p_j` near one. -/
-private theorem lemma3_4_negative_coordinate_probability
+/-- The strict estimate behind Lemma 3.4: `φ_j < -R` forces
+`p_j > 1-ξ`. -/
+private theorem lemma3_4_negative_coordinate_probability_gt_one_sub_xi
     (G : QuittingGame) (M d ρ ξ R : ℝ)
     (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
     (hmotion : IsStructureMotionParameter G M ρ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (z : EZeroTilde G) (j : G.Player) (hj : Phi G M d z j < -R) :
-    1 - (1 / 20 : ℝ) *
-        (ρ / (2 * (Fintype.card G.Player : ℝ) * M)) ^
-          Fintype.card G.Player ≤ (z.1.2 j : ℝ) := by
+    1 - ξ < (z.1.2 j : ℝ) := by
   classical
   let N : ℝ := Fintype.card G.Player
   let beta := z.1.1
@@ -2719,9 +2718,6 @@ private theorem lemma3_4_negative_coordinate_probability
     hplayers hM hd hd1 hmotion hconstants
   have hNM : 3 * M ≤ N * M :=
     mul_le_mul_of_nonneg_right hN hMpos.le
-  have htarget : ξ ≤ (1 / 20 : ℝ) *
-      (ρ / (2 * N * M)) ^ Fintype.card G.Player := by
-    simpa only [N] using hconstants.2.1
   have hpLarge : 1 - ξ < (p j : ℝ) := by
     by_contra hnot
     have hpUpper : (p j : ℝ) ≤ 1 - ξ := le_of_not_gt hnot
@@ -2776,10 +2772,23 @@ private theorem lemma3_4_negative_coordinate_probability
     have hstrict : -R < -M / 3 - R / 2 := by
       nlinarith
     linarith
-  dsimp only [p] at hpLarge ⊢
-  simpa only [N] using hpLarge.le.trans' (by linarith :
+  simpa only [p] using hpLarge
+
+/-- The displayed weak probability estimate in Lemma 3.4(iii). -/
+private theorem lemma3_4_negative_coordinate_probability
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (z : EZeroTilde G) (j : G.Player) (hj : Phi G M d z j < -R) :
     1 - (1 / 20 : ℝ) *
-      (ρ / (2 * N * M)) ^ Fintype.card G.Player ≤ 1 - ξ)
+        (ρ / (2 * (Fintype.card G.Player : ℝ) * M)) ^
+          Fintype.card G.Player ≤ (z.1.2 j : ℝ) := by
+  have hstrict := lemma3_4_negative_coordinate_probability_gt_one_sub_xi
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z j hj
+  have hxi := hconstants.2.1
+  linarith
 
 /--
 Lemma 3.4.  For `a = φ(β,p)` and a point strictly inside the segment from
@@ -2839,7 +2848,16 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
       have haWeighted := mul_lt_mul_of_pos_left haLower ht0
       have hxUpper := (htarget j).2
       nlinarith
-    · sorry
+    · by_cases hbetaBox : ∀ k,
+          MinMaxQuit G k - ρ ≤ z.1.1 k ∧
+            z.1.1 k ≤ 2 * (Fintype.card G.Player : ℝ) * M
+      · have hpUpper := hconstants.2.2.2 z.1.1 z.1.2 z.2 hbetaBox j
+        have hpLower :=
+          lemma3_4_negative_coordinate_probability_gt_one_sub_xi
+            G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z j
+              (by rw [← ha]; linarith)
+        linarith
+      · sorry
   · intro j hj
     exact lemma3_4_positive_coordinate G M d ρ ξ R hplayers hM hd hd1
       hmotion hconstants z j (by simpa only [ha] using hj)
