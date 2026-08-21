@@ -14,6 +14,7 @@ import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
 import UniformEquilibrium.Quitting.AbsorptionPath.FiniteWindowRefusalReweighting
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQDirection
+import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQBoundaryDirection
 
 /-!
 # Marked absorption-path semantic layer
