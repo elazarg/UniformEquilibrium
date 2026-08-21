@@ -4,8 +4,7 @@ import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeByThreeZeroDiagonalQ
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
-import UniformEquilibrium.Quitting.AbsorptionPath.HomogeneousContinuousPath
-import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQControlledTrajectory
+import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQContinuousPath
 
 /-!
 # Ashkenazi--Golan--Krasikov--Rainer--Solan (2022)
@@ -382,16 +381,13 @@ theorem no_absorptionPath_empty : IsEmpty (AbsorptionPath (ι := Empty)) := by
   rw [pathTotal, Finset.sum_of_isEmpty] at hone
   norm_num at hone
 
-/-! **Theorem 5.2 (paper v1, open here).** If `R(Γ)` and every principal
+/-! **Theorem 5.2 (paper v1).** If `R(Γ)` and every principal
 "minor" (read: principal submatrix) are `Q`-matrices, then a continuous
 equilibrium exists, i.e. there is a continuous, sequentially 0-perfect
 absorption path. The paper implicitly assumes that the finite player set is
 nonempty; without that assumption (A.1) makes the conclusion false at every
-positive time. No exact proof is present in this repository: the missing
-boundary is now confined to the standard-`Q` side of the exact projective-`Q`
-split.  The homogeneous side is proved by the explicit linear path
-`exists_continuous_zeroPerfect_of_homogeneous`; the remaining side is the
-paper's viability-theory construction, whose printed control correspondence
+positive time. The projective-Q-bar construction uses a corrected
+support-indexed control correspondence; the paper's printed correspondence
 does not have the claimed closed-graph property. -/
 theorem theorem5_2
     [Nonempty ι]
@@ -400,10 +396,8 @@ theorem theorem5_2
     ∃ path : AbsorptionPath (ι := ι),
       IsContinuousAbsorptionPath path ∧
       IsSequentiallyPerfectAbsorptionPath reward path 0 := by
-  have hprojective : IsProjectiveQMatrix (normalizedSoloMatrix reward) := hq.1
-  rw [isProjectiveQMatrix_iff_standard_or_homogeneous] at hprojective
-  rcases hprojective with hstandard | hhomogeneous
-  · sorry
-  · exact exists_continuous_zeroPerfect_of_homogeneous reward hhomogeneous
+  apply exists_continuous_zeroPerfect_of_projectiveQBar reward
+  intro players hplayers
+  exact hq.2 players hplayers
 
 end Literature.AshkenaziGolanKrasikovRainerAndSolan2022
