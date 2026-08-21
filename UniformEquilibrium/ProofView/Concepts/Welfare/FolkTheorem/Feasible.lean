@@ -235,6 +235,78 @@ theorem eu_profileWithOpponent_lt_of_bestResponseValue_lt
     G.eu (G.profileWithOpponent who own opp) who < b :=
   (G.eu_profileWithOpponent_le_bestResponseValueAgainstOpponents who opp hbdd own).trans_lt hopp
 
+/-- Against fixed mixed opponents, randomizing one's own pure strategy cannot
+beat the supremum over pure replies. -/
+theorem mixedExtension_eu_profileWithOpponent_le_iSup_pure
+    (G : KernelGame ι) [Fintype ι] [DecidableEq ι]
+    [∀ i, Fintype (G.Strategy i)] [Finite G.Outcome]
+    (who : ι) (opponents : G.mixedExtension.OpponentProfile who)
+    (own : PMF (G.Strategy who)) :
+    G.mixedExtension.eu
+        (G.mixedExtension.profileWithOpponent who own opponents) who ≤
+      ⨆ action : G.Strategy who,
+    G.mixedExtension.eu
+          (G.mixedExtension.profileWithOpponent who
+            (PMF.pure action) opponents) who := by
+  letI : Finite (∀ player, G.Strategy player) := Finite.of_fintype _
+  let fallback : G.Strategy who := Classical.choose own.support_nonempty
+  let base : ∀ player, PMF (G.Strategy player) := fun player ↦
+    G.mixedExtension.profileWithOpponent who
+      (PMF.pure fallback) opponents player
+  have hprofile : G.mixedExtension.profileWithOpponent who own opponents =
+      Function.update base who own := by
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp [base]
+    · simp [base, profileWithOpponent, hplayer]
+  have hbdd : BddAbove (Set.range fun action : G.Strategy who ↦
+      G.mixedExtension.eu
+        (G.mixedExtension.profileWithOpponent who
+          (PMF.pure action) opponents) who) :=
+    Finite.bddAbove_range _
+  rw [hprofile, G.mixedExtension_eu]
+  rw [Math.PMFProduct.pmfPi_update_bind]
+  rw [Math.Probability.expect_bind]
+  calc
+    Math.Probability.expect own (fun action ↦
+        Math.Probability.expect
+          (Math.PMFProduct.pmfPi
+            (Function.update base who (PMF.pure action)))
+          (fun outcome ↦ G.eu outcome who)) ≤
+        Math.Probability.expect own (fun _action ↦
+          ⨆ candidate : G.Strategy who,
+            G.mixedExtension.eu
+              (G.mixedExtension.profileWithOpponent who
+                (PMF.pure candidate) opponents) who) := by
+      apply Math.Probability.expect_mono
+      intro action
+      calc
+        Math.Probability.expect
+            (Math.PMFProduct.pmfPi
+              (Function.update base who (PMF.pure action)))
+            (fun outcome ↦ G.eu outcome who) =
+          G.mixedExtension.eu
+            (G.mixedExtension.profileWithOpponent who
+              (PMF.pure action) opponents) who := by
+            rw [G.mixedExtension_eu]
+            congr 2
+            funext player
+            by_cases hplayer : player = who
+            · subst player
+              simp [base]
+            · simp [base, profileWithOpponent, hplayer]
+        _ ≤ ⨆ candidate : G.Strategy who,
+            G.mixedExtension.eu
+              (G.mixedExtension.profileWithOpponent who
+                (PMF.pure candidate) opponents) who :=
+          le_ciSup hbdd action
+    _ = ⨆ candidate : G.Strategy who,
+        G.mixedExtension.eu
+          (G.mixedExtension.profileWithOpponent who
+            (PMF.pure candidate) opponents) who :=
+      Math.Probability.expect_const _ _
+
 /-- Choose approximate punishment opponent profiles for every player. -/
 theorem exists_approx_punishmentProfiles (G : KernelGame ι) [DecidableEq ι]
     [∀ who, Nonempty (G.OpponentProfile who)]
