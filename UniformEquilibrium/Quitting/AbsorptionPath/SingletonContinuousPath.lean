@@ -434,4 +434,36 @@ theorem absorptionPathPayoff_singletonAbsorptionPathOfPlayerPath
     sum_singletonCoalitionMass_mul,
     Finset.sum_sub_distrib]
 
+/-- The payoff excess over solo quitting, multiplied by remaining time, is
+the singleton comparison matrix applied to the remaining player masses. -/
+theorem one_sub_mul_absorptionPathPayoff_sub_solo
+    {terminal : ι → ℝ} (mass : Path (0 : ι → ℝ) terminal)
+    (hmono : ∀ who, Monotone fun time => mass time who)
+    (htotal : ∀ time, ∑ who, mass time who = (time : ℝ))
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (time : unitInterval) (htimeOne : time ≠ 1) (who : ι) :
+    (1 - (time : ℝ)) *
+        (absorptionPathPayoff reward
+            (singletonAbsorptionPathOfPlayerPath mass hmono htotal)
+            (time : ℝ) who -
+          reward (quittingProjectiveSingletonTerminal who) who) =
+      ∑ owner, (mass 1 owner - mass time owner) *
+        quittingProjectiveLCPMatrix reward who owner := by
+  rw [absorptionPathPayoff_singletonAbsorptionPathOfPlayerPath
+    mass hmono htotal reward time htimeOne who]
+  have hdenom : 1 - (time : ℝ) ≠ 0 := by
+    apply sub_ne_zero.mpr
+    intro hone
+    apply htimeOne
+    exact Subtype.ext hone.symm
+  rw [mul_sub, mul_div_cancel₀ _ hdenom]
+  unfold quittingProjectiveLCPMatrix
+  simp_rw [mul_sub]
+  rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
+  have hremaining : ∑ owner, (mass 1 owner - mass time owner) =
+      1 - (time : ℝ) := by
+    rw [Finset.sum_sub_distrib, htotal, htotal]
+    norm_num
+  rw [hremaining]
+
 end GameTheory.QuittingAbsorptionPath
