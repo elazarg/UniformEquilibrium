@@ -9172,6 +9172,106 @@ private noncomputable def quittingDecisionProcess
       abs_sub_le_of_mem_coordinateInterval G n hM hy hz,
       abs_sub_le_of_mem_coordinateInterval G n hM hy hw⟩
 
+private theorem PMF.mem_range_of_map_ne_zero {A B : Type*}
+    (μ : PMF A) (f : A → B) {b : B} (hb : μ.map f b ≠ 0) : b ∈ Set.range f := by
+  classical
+  by_contra hrange
+  apply hb
+  rw [PMF.map_apply]
+  calc
+    (∑' a, if b = f a then μ a else 0) = ∑' _a : A, 0 := by
+      apply tsum_congr
+      intro a
+      rw [if_neg]
+      exact fun h => hrange ⟨a, h.symm⟩
+    _ = 0 := tsum_zero
+
+/-- States reachable at time `i` are either the current live state or an earlier terminal state. -/
+private def IsQuittingDDPReachable (T i : ℕ) (state : QuittingDDPState G) : Prop :=
+  (state.2 = ∅ ∧ state.1 = min i T) ∨
+    (state.2.Nonempty ∧ state.1 ≤ min i T)
+
+private theorem quittingDDPMove_reachable
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T i : ℕ)
+    {state next : QuittingDDPState G} (hstate : IsQuittingDDPReachable T i state)
+    (action : Bool) (hmove : quittingDDPMove G p n T state action next ≠ 0) :
+    IsQuittingDDPReachable T (i + 1) next := by
+  classical
+  by_cases hlive : IsQuittingDDPLive T state
+  · have hrange := PMF.mem_range_of_map_ne_zero
+      (coalitionPMF G ((p state.1).replace G n (if action = true then 1 else 0)))
+      (fun A => (state.1 + 1, A)) (by
+        simpa only [quittingDDPMove, hlive, if_pos] using hmove)
+    rcases hrange with ⟨A, rfl⟩
+    obtain ⟨_hempty, htimeMin⟩ := hstate.resolve_right fun hterminal => by
+      rw [hlive.2] at hterminal
+      exact Finset.not_nonempty_empty hterminal.1
+    have hiT : i < T := by
+      have hminlt : min i T < T := by
+        rw [← htimeMin]
+        exact hlive.1
+      by_contra hi
+      rw [min_eq_right (le_of_not_gt hi)] at hminlt
+      exact (lt_irrefl T hminlt).elim
+    have htime : state.1 = i := htimeMin.trans (min_eq_left hiT.le)
+    by_cases hA : A = ∅
+    · left
+      exact ⟨hA, by rw [htime, min_eq_left (Nat.succ_le_iff.mpr hiT)]⟩
+    · right
+      refine ⟨Finset.nonempty_iff_ne_empty.2 hA, ?_⟩
+      rw [htime, min_eq_left (Nat.succ_le_iff.mpr hiT)]
+  · have hnext : next = state := by
+      have hpure : PMF.pure state next ≠ 0 := by
+        simpa only [quittingDDPMove, hlive, if_false] using hmove
+      rw [PMF.pure_apply] at hpure
+      split at hpure
+      · assumption
+      · exact (hpure rfl).elim
+    rw [hnext]
+    rcases hstate with ⟨hempty, htime⟩ | ⟨hnonempty, htime⟩
+    · left
+      refine ⟨hempty, ?_⟩
+      rw [htime]
+      have hnotlt : ¬min i T < T := by
+        intro hlt
+        exact hlive ⟨by rwa [htime], hempty⟩
+      have hmin : min i T = T := by omega
+      rw [hmin, min_eq_right (by omega)]
+    · right
+      exact ⟨hnonempty, htime.trans (min_le_min_right T (Nat.le_succ i))⟩
+
+private theorem quittingDDPFinitePath_reachable
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) {k : ℕ}
+    (path : DDPFinitePath (quittingDecisionProcess G p n T M hM) k)
+    (hstart : path.x 0 = (0, ∅)) (hprobability : path.probability
+      (quittingDecisionProcess G p n T M hM) ≠ 0) (j : Fin (k + 1)) :
+    IsQuittingDDPReachable T j.1 (path.x j) := by
+  let P := quittingDecisionProcess G p n T M hM
+  have hfactor : ∀ t : Fin k,
+      P.move (path.x t.castSucc) (path.y t) (path.x t.succ) ≠ 0 := by
+    intro t hzero
+    apply hprobability
+    rw [DDPFinitePath.probability]
+    apply Finset.prod_eq_zero (Finset.mem_univ t)
+    rw [hzero, mul_zero]
+  have go : ∀ m (hm : m ≤ k),
+      IsQuittingDDPReachable T m (path.x ⟨m, by omega⟩) := by
+    intro m hm
+    induction m with
+    | zero =>
+        change IsQuittingDDPReachable T 0 (path.x 0)
+        rw [hstart]
+        left
+        simp
+    | succ m ih =>
+        apply quittingDDPMove_reachable G p n T m (ih (by omega))
+          (path.y ⟨m, by omega⟩)
+        change quittingDDPMove G p n T (path.x ⟨m, by omega⟩)
+          (path.y ⟨m, by omega⟩) (path.x ⟨m + 1, by omega⟩) ≠ 0
+        exact hfactor ⟨m, by omega⟩
+  exact go j.1 (by omega)
+
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
 `F_δ` profile with unbounded quit mass generates a `3ε`-equilibrium.  The generated
