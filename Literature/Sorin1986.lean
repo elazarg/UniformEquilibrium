@@ -3087,6 +3087,80 @@ theorem property_3_discounted (G : FiniteStageGame) :
     rw [hpayoff, Real.dist_eq]
     exact hcycle who
 
+/-- Property (3), Banach-limit clause: `D∞ = C`. -/
+theorem property_3_banach (G : FiniteStageGame) (L : BanachLimit) :
+    G.banachFeasiblePayoffs L = G.correlatedFeasiblePayoffs := by
+  let ActionProfile := ∀ who, G.Action who
+  letI : Nonempty ActionProfile := inferInstance
+  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  letI : Fintype G.repeatedGame.State := inferInstanceAs (Fintype PUnit)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨profile, rfl⟩
+    have hstage : ∀ state action,
+        (fun who ↦ G.repeatedGame.stagePayoff state action who) ∈
+          G.correlatedFeasiblePayoffs := by
+      intro state action
+      exact subset_convexHull ℝ G.purePayoffSet ⟨action, by
+        funext who
+        simp [FiniteStageGame.repeatedGame,
+          KernelGame.realizedActionStochasticGame,
+          FiniteStageGame.kernel, KernelGame.eu_ofPureEU]⟩
+    have hfinite (step : ℕ) : G.finitePayoff (step + 1) profile ∈
+        G.correlatedFeasiblePayoffs := by
+      unfold FiniteStageGame.finitePayoff
+      exact G.repeatedGame.finiteAveragePayoff_mem_of_stagePayoff_mem_convex
+        G.correlatedFeasiblePayoffs G.correlatedFeasiblePayoffs_convex
+        hstage profile PUnit.unit (by omega)
+    change L.evalPi (fun step ↦ G.finitePayoff (step + 1) profile) ∈
+      G.correlatedFeasiblePayoffs
+    exact L.evalPi_mem_convexHull_range G.payoff
+      (fun step ↦ G.finitePayoff (step + 1) profile) hfinite
+  · intro target htarget
+    obtain ⟨sample, hsample⟩ :=
+      MathUE.exists_sequence_tendsto_average_of_mem_convexHull_range
+        (fun action : ActionProfile ↦ G.payoff action) htarget
+    let stages : ℕ → G.MixedProfile := fun time ↦
+      G.kernel.pureMixedProfile (sample time)
+    let behavior := mixedSequenceBehavior G stages
+    have hstage (time : ℕ) :
+        (fun who ↦ G.repeatedGame.expectedStagePayoff
+          behavior PUnit.unit time who) = G.payoff (sample time) := by
+      rw [show behavior = mixedSequenceBehavior G stages by rfl,
+        expectedStagePayoff_mixedSequenceBehavior]
+      dsimp only [stages]
+      change G.kernel.mixedExtension.payoffVector
+          (G.kernel.pureMixedProfile (sample time)) = G.payoff (sample time)
+      rw [G.kernel.mixedExtension_payoffVector_pureMixedProfile]
+      funext who
+      change G.kernel.eu (sample time) who = G.payoff (sample time) who
+      simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+    have hpayoff (step : ℕ) :
+        G.finitePayoff (step + 1) behavior =
+          ((step + 1 : ℕ) : ℝ)⁻¹ •
+            ∑ time ∈ Finset.range (step + 1), G.payoff (sample time) := by
+      funext who
+      unfold FiniteStageGame.finitePayoff
+      rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+      simp only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul]
+      congr 1
+      apply Finset.sum_congr rfl
+      intro time _htime
+      exact congrFun (hstage time) who
+    have hpayoffTendsto :
+        Tendsto (fun step ↦ G.finitePayoff (step + 1) behavior)
+          atTop (nhds target) := by
+      rw [show (fun step ↦ G.finitePayoff (step + 1) behavior) =
+          fun step ↦ ((step + 1 : ℕ) : ℝ)⁻¹ •
+            ∑ time ∈ Finset.range (step + 1), G.payoff (sample time) by
+        funext step
+        exact hpayoff step]
+      exact hsample
+    refine ⟨behavior, ?_⟩
+    change L.evalPi (fun step ↦ G.finitePayoff (step + 1) behavior) = target
+    exact L.evalPi_eq_of_tendsto hpayoffTendsto
+
 theorem property_3 (G : FiniteStageGame) :
     HausdorffConvergesAtTop G.finiteFeasiblePayoffs
         G.correlatedFeasiblePayoffs ∧
@@ -3094,7 +3168,8 @@ theorem property_3 (G : FiniteStageGame) :
         G.correlatedFeasiblePayoffs ∧
       ∀ L : BanachLimit,
         G.banachFeasiblePayoffs L = G.correlatedFeasiblePayoffs := by
-  sorry
+  exact ⟨property_3_finite G, property_3_discounted G,
+    property_3_banach G⟩
 
 /-! The Banach-limit Folk theorem is the unconditional second clause of
 Property (4).  It is not available in the current library. -/
