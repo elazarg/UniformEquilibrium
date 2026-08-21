@@ -662,6 +662,89 @@ def PrincipalQClockMassPath.append
   scaledState_mem := path.scaledState_appendMass_mem step
   scaledState_one := path.scaledState_appendMass_one step
 
+/-! ## Exact clock truncation -/
+
+omit [DecidableEq ι] in
+/-- The node visited by a cumulative-mass path at a normalized parameter. -/
+def PrincipalQClockMassPath.nodeAt
+    {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (cut : unitInterval) : PrincipalQClockNode ι :=
+  principalQClockNodeOfScaledState
+    (principalQNormalizedClock initial node cut)
+    (add_pos_of_pos_of_nonneg initial.time_pos
+      (mul_nonneg cut.property.1 path.duration_nonneg))
+    (principalQClockScaledState initial + principalQMassImage M (path.mass cut))
+    (path.scaledState_mem cut)
+
+omit [DecidableEq ι] in
+@[simp] theorem PrincipalQClockMassPath.nodeAt_time
+    {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (cut : unitInterval) :
+    (path.nodeAt cut).time = principalQNormalizedClock initial node cut :=
+  rfl
+
+omit [DecidableEq ι] in
+@[simp] theorem PrincipalQClockMassPath.scaledState_nodeAt
+    {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (cut : unitInterval) :
+    principalQClockScaledState (path.nodeAt cut) =
+      principalQClockScaledState initial +
+        principalQMassImage M (path.mass cut) := by
+  exact principalQClockNodeOfScaledState_scaledState _ _ _ _
+
+/-- The cumulative mass up to `cut`, reparameterized over the unit interval. -/
+def PrincipalQClockMassPath.initialSegmentMass
+    {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (cut : unitInterval) : BoundedContinuousFunction unitInterval (ι → ℝ) :=
+  BoundedContinuousFunction.mkOfCompact
+    (path.toPath.initialSegment cut).toContinuousMap
+
+omit [DecidableEq ι] in
+@[simp] theorem PrincipalQClockMassPath.initialSegmentMass_apply
+    {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (cut parameter : unitInterval) :
+    path.initialSegmentMass cut parameter =
+      path.mass ⟨(parameter : ℝ) * (cut : ℝ), by
+        constructor
+        · exact mul_nonneg parameter.property.1 cut.property.1
+        · nlinarith [parameter.property.1, parameter.property.2,
+            cut.property.1, cut.property.2]⟩ :=
+  rfl
+
+omit [DecidableEq ι] in
+/-- Restrict a cumulative-mass path to an exact intermediate clock. -/
+def PrincipalQClockMassPath.initialSegment
+    {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (cut : unitInterval) : PrincipalQClockMassPath M initial (path.nodeAt cut) where
+  mass := path.initialSegmentMass cut
+  mass_zero := by simp [path.mass_zero]
+  coordinate_monotone := by
+    intro who first second hle
+    exact path.coordinate_monotone who
+      (mul_le_mul_of_nonneg_right
+        (show (first : ℝ) ≤ (second : ℝ) from hle) cut.property.1)
+  total_mass := by
+    intro parameter
+    rw [path.initialSegmentMass_apply, path.total_mass]
+    simp only [principalQClockDuration, path.nodeAt_time,
+      principalQNormalizedClock]
+    ring
+  scaledState_mem := by
+    intro parameter
+    rw [path.initialSegmentMass_apply]
+    exact path.scaledState_mem _
+  scaledState_one := by
+    rw [path.initialSegmentMass_apply, path.scaledState_nodeAt]
+    congr 3
+    ext
+    simp
+
 /-! ## Compact limits of normalized clock mass paths -/
 
 omit [DecidableEq ι] in
@@ -844,5 +927,41 @@ theorem PrincipalQClockReachable.exists_massPath
       exact exists_principalQClockMassPath_limit node
         (fun n => Classical.choice (ih n)) timeLimit htimeLimit
         scaledStateLimit hscaledStateLimit htime hscaledState
+
+omit [DecidableEq ι] in
+/-- From any positive boundary clock, the principal-Q construction supplies
+an exact cumulative-mass path to every prescribed later finite clock. -/
+theorem exists_principalQClockMassPath_at_time
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
+    (hstepBound : 0 < stepBound) (initial : PrincipalQClockNode ι)
+    (target : ℝ) (hinitialTarget : initial.time ≤ target) :
+    ∃ node : PrincipalQClockNode ι, node.time = target ∧
+      Nonempty (PrincipalQClockMassPath M initial node) := by
+  classical
+  rcases eq_or_lt_of_le hinitialTarget with htarget | htarget
+  · subst target
+    exact ⟨initial, rfl, ⟨initialPrincipalQClockMassPath M initial⟩⟩
+  · obtain ⟨later, hlaterReachable, htargetLater⟩ :=
+      exists_principalQClockReachable_time_ge M hdiag hQ hstepBound
+        initial target
+    obtain ⟨path⟩ := hlaterReachable.exists_massPath
+    have hlaterDuration : 0 < principalQClockDuration initial later := by
+      exact sub_pos.mpr (htarget.trans_le htargetLater)
+    let cut : unitInterval :=
+      ⟨(target - initial.time) / principalQClockDuration initial later,
+        div_nonneg (sub_nonneg.mpr htarget.le) hlaterDuration.le,
+        (div_le_one hlaterDuration).2 (by
+          simpa only [principalQClockDuration] using
+            sub_le_sub_right htargetLater initial.time)⟩
+    have hnodeTime : (path.nodeAt cut).time = target := by
+      rw [path.nodeAt_time]
+      change initial.time +
+          ((target - initial.time) /
+            principalQClockDuration initial later) *
+              principalQClockDuration initial later = target
+      rw [div_mul_cancel₀ _ hlaterDuration.ne']
+      ring
+    exact ⟨path.nodeAt cut, hnodeTime, ⟨path.initialSegment cut⟩⟩
 
 end GameTheory.QuittingLCPClassification
