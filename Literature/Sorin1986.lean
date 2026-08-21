@@ -2,6 +2,7 @@ import Mathlib
 import GameTheory.Analysis.Payoff
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.PMFProduct.Bool
+import MathUE.BanachLimit
 import MathUE.FixedRatioConvexity
 import MathUE.FiniteEmpiricalConvexity
 import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer
@@ -43,7 +44,7 @@ noncomputable section
 
 namespace Literature.Sorin1986
 
-open GameTheory Set Filter
+open GameTheory Set Filter MathUE
 open scoped BigOperators ENNReal NNReal Topology
 
 /-! ## 1. Notation and preliminaries -/
@@ -183,24 +184,6 @@ abbrev FiniteStageGame.discountedFeasiblePayoffsOnRate
 abbrev FiniteStageGame.discountedEquilibriumPayoffsOnRate
     (G : FiniteStageGame) (lam : G.DiscountRate) : Set (Payoff G.Player) :=
   G.discountedEquilibriumPayoffs lam.1
-
-/-- A real sequence is bounded. -/
-def IsBoundedSequence (sequence : ℕ → ℝ) : Prop :=
-  ∃ C : ℝ, ∀ n, |sequence n| ≤ C
-
-/-- A Banach limit on bounded sequences, extended arbitrarily outside the
-bounded sequences.  Every axiom is restricted to bounded inputs. -/
-structure BanachLimit where
-  eval : (ℕ → ℝ) → ℝ
-  map_add : ∀ f g, IsBoundedSequence f → IsBoundedSequence g →
-    eval (fun n => f n + g n) = eval f + eval g
-  map_smul : ∀ c f, IsBoundedSequence f →
-    eval (fun n => c * f n) = c * eval f
-  positive : ∀ f, IsBoundedSequence f → (∀ n, 0 ≤ f n) → 0 ≤ eval f
-  constant : ∀ c, eval (fun _ => c) = c
-  shift : ∀ f, IsBoundedSequence f → eval (fun n => f (n + 1)) = eval f
-  agreesWithLimit : ∀ f x, IsBoundedSequence f →
-    Tendsto f atTop (𝓝 x) → eval f = x
 
 /-- The payoff in the paper's `L`-infinitely repeated game. -/
 noncomputable def FiniteStageGame.banachPayoff (G : FiniteStageGame)
