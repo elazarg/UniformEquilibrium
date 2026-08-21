@@ -7928,6 +7928,172 @@ private theorem quitPayoff_prefixThenPunish_eq_finite
   simp only [Nat.zero_add]
   exact PrefixThenPunish.apply_of_lt G p T punishment hi
 
+/-- Unilateral replacement of a spliced profile splits into prefix and shifted-tail replacements. -/
+private theorem PrefixThenPunish.replace (G : QuittingGame) (p : QuitProfile G)
+    (T : ℕ) (punishment : QuitProfile G) (n : G.Player)
+    (deviation : ℕ → Set.Icc (0 : ℝ) 1) :
+    (PrefixThenPunish G p T punishment).replace G n deviation =
+      PrefixThenPunish G (fun i => (p i).replace G n (deviation i)) T
+        (punishment.replace G n fun i => deviation (T + i)) := by
+  funext i k
+  by_cases hi : i < T
+  · simp [PrefixThenPunish, QuitProfile.replace, QuitRow.replace, hi]
+  · have hsplit : T + (i - T) = i := by omega
+    simp only [PrefixThenPunish, hi, if_false, QuitProfile.replace]
+    split_ifs with hkn
+    · subst k
+      rw [hsplit]
+    · rfl
+
+/-- A unilateral deviation from the generated profile has the exact finite-prefix evaluation. -/
+private theorem quitPayoff_prefixThenPunish_replace_eq_finite
+    (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
+    (punishment : QuitProfile G) (n : G.Player)
+    (deviation : ℕ → Set.Icc (0 : ℝ) 1) :
+    QuitPayoff G ((PrefixThenPunish G p T punishment).replace G n deviation) =
+      finiteQuittingPayoff G T
+        (QuitPayoff G (punishment.replace G n fun i => deviation (T + i)))
+        (fun i => (p i).replace G n (deviation i)) := by
+  rw [PrefixThenPunish.replace]
+  exact quitPayoff_prefixThenPunish_eq_finite G _ T _
+
+/-- A unilateral mixed quitting decision is the affine mixture of its two pure endpoints. -/
+private theorem quittingOneStagePayoff_replace_eq_endpoints
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    QuittingOneStagePayoff G r (p.replace G n q) n =
+      (q : ℝ) * ForcedQuitPayoff G p n +
+        (1 - (q : ℝ)) * ForcedContinuePayoff G r p n := by
+  change (1 - QuitProbability G (p.replace G n q)) * r n +
+      quittingRewardPart G (p.replace G n q) n =
+    (q : ℝ) * ((1 - QuitProbability G (p.replace G n 1)) * 0 +
+      quittingRewardPart G (p.replace G n 1) n) +
+    (1 - (q : ℝ)) * ((1 - QuitProbability G (p.replace G n 0)) * r n +
+      quittingRewardPart G (p.replace G n 0) n)
+  rw [one_sub_quitProbability_replace, quitProbability_replace_one]
+  rw [quittingRewardPart_replace_affine]
+  ring_nf
+
+/-- In an `η`-equilibrium row, forcing quit gains at most `η` over its mixed value. -/
+private theorem EpsilonRow.forcedQuitPayoff_le_oneStage_add
+    (G : QuittingGame) {r : Payoff G.Player} {p : QuitRow G} {η : ℝ}
+    (hp : p ∈ EpsilonRow G η r) (hη : 0 ≤ η) (n : G.Player) :
+    ForcedQuitPayoff G p n ≤ QuittingOneStagePayoff G r p n + η := by
+  have hcurrent := quittingOneStagePayoff_replace_eq_endpoints G r p n (p n)
+  rw [QuitRow.replace_self] at hcurrent
+  by_cases hone : (p n : ℝ) = 1
+  · rw [hone] at hcurrent
+    norm_num at hcurrent
+    linarith
+  · have hlt : (p n : ℝ) < 1 := lt_of_le_of_ne (p n).property.2 hone
+    have hendpoint := hp.2 n hlt
+    have hp0 := (p n).property.1
+    have hp1 := (p n).property.2
+    nlinarith
+
+/-- The forced-continue increment in an `η`-equilibrium row is at most `η`. -/
+private theorem EpsilonRow.forcedContinue_sub_oneStage_le
+    (G : QuittingGame) {r : Payoff G.Player} {p : QuitRow G} {η : ℝ}
+    (hp : p ∈ EpsilonRow G η r) (hη : 0 ≤ η) (n : G.Player) :
+    ForcedContinuePayoff G r p n - QuittingOneStagePayoff G r p n ≤ η := by
+  have hcurrent := quittingOneStagePayoff_replace_eq_endpoints G r p n (p n)
+  rw [QuitRow.replace_self] at hcurrent
+  by_cases hzero : (p n : ℝ) = 0
+  · rw [hzero] at hcurrent
+    norm_num at hcurrent
+    linarith
+  · have hpos : 0 < (p n : ℝ) := lt_of_le_of_ne (p n).property.1 (Ne.symm hzero)
+    have hendpoint := hp.1 n hpos
+    have hp0 := (p n).property.1
+    have hp1 := (p n).property.2
+    nlinarith
+
+/-- Changing the continuation vector changes a forced-continue payoff by its survival factor. -/
+private theorem forcedContinuePayoff_sub
+    (G : QuittingGame) (r s : Payoff G.Player) (p : QuitRow G) (n : G.Player) :
+    ForcedContinuePayoff G r p n - ForcedContinuePayoff G s p n =
+      (1 - QuitProbability G (p.replace G n 0)) * (r n - s n) := by
+  simp only [ForcedContinuePayoff, QuittingOneStagePayoff]
+  ring_nf
+
+/-- A cumulative forced-continue ledger is a supermartingale budget for every deviation. -/
+private theorem finiteQuittingPayoff_replace_le_of_ledger
+    (G : QuittingGame) (n : G.Player) {k : ℕ} {η K : ℝ}
+    (hη : 0 ≤ η) (r : ℕ → Payoff G.Player) (p : QuitProfile G)
+    (deviation : ℕ → Set.Icc (0 : ℝ) 1) (terminal : Payoff G.Player)
+    (ledger : ℕ → ℝ)
+    (hrow : ∀ i, i < k → p i ∈ EpsilonRow G η (r (i + 1)))
+    (hvalue : ∀ i, i < k → r i = QuittingOneStagePayoff G (r (i + 1)) (p i))
+    (hledger : ∀ i, i < k → ledger (i + 1) = ledger i +
+      (ForcedContinuePayoff G (r (i + 1)) (p i) n - r i n))
+    (hcontinueBudget : ∀ i, i ≤ k → 0 ≤ K - ledger i)
+    (hquitBudget : ∀ i, i < k → η ≤ K - ledger i)
+    (hterminal : terminal n ≤ r k n + K - ledger k) :
+    finiteQuittingPayoff G k terminal
+        (fun i => (p i).replace G n (deviation i)) n ≤
+      r 0 n + K - ledger 0 := by
+  induction k generalizing r p deviation ledger with
+  | zero =>
+      simpa [finiteQuittingPayoff] using hterminal
+  | succ k ih =>
+      let tail : Payoff G.Player := finiteQuittingPayoff G k terminal
+        (fun i => (p (i + 1)).replace G n (deviation (i + 1)))
+      have htail : tail n ≤ r 1 n + K - ledger 1 := by
+        apply ih (r := fun i => r (i + 1)) (p := fun i => p (i + 1))
+          (deviation := fun i => deviation (i + 1)) (ledger := fun i => ledger (i + 1))
+        · intro i hi
+          exact hrow (i + 1) (by omega)
+        · intro i hi
+          simpa only [Nat.add_assoc] using hvalue (i + 1) (by omega)
+        · intro i hi
+          simpa only [Nat.add_assoc] using hledger (i + 1) (by omega)
+        · intro i hi
+          exact hcontinueBudget (i + 1) (by omega)
+        · intro i hi
+          exact hquitBudget (i + 1) (by omega)
+        · simpa only [Nat.add_assoc] using hterminal
+      have hstage := hrow 0 (by omega)
+      have hstageValue := hvalue 0 (by omega)
+      have hquit : ForcedQuitPayoff G (p 0) n ≤ r 0 n + K - ledger 0 := by
+        calc
+          ForcedQuitPayoff G (p 0) n ≤
+              QuittingOneStagePayoff G (r 1) (p 0) n + η :=
+            EpsilonRow.forcedQuitPayoff_le_oneStage_add G hstage hη n
+          _ = r 0 n + η := by rw [← hstageValue]
+          _ ≤ r 0 n + K - ledger 0 := by
+            linarith [hquitBudget 0 (by omega)]
+      let survival := 1 - QuitProbability G ((p 0).replace G n 0)
+      have hsurvival0 : 0 ≤ survival := by
+        exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+      have hsurvival1 : survival ≤ 1 := by
+        linarith [(quitProbability_mem_Icc G ((p 0).replace G n 0)).1]
+      have hcontinue : ForcedContinuePayoff G tail (p 0) n ≤
+          r 0 n + K - ledger 0 := by
+        have htailDifference : tail n - r 1 n ≤ K - ledger 1 := by
+          linarith
+        have hscaled : survival * (tail n - r 1 n) ≤ K - ledger 1 := by
+          exact (mul_le_mul_of_nonneg_left htailDifference hsurvival0).trans
+            (mul_le_of_le_one_left (hcontinueBudget 1 (by omega)) hsurvival1)
+        have hshift := forcedContinuePayoff_sub G tail (r 1) (p 0) n
+        change ForcedContinuePayoff G tail (p 0) n -
+          ForcedContinuePayoff G (r 1) (p 0) n =
+            survival * (tail n - r 1 n) at hshift
+        have hledgerZero := hledger 0 (by omega)
+        linarith
+      simp only [finiteQuittingPayoff]
+      change QuittingOneStagePayoff G tail ((p 0).replace G n (deviation 0)) n ≤ _
+      rw [quittingOneStagePayoff_replace_eq_endpoints]
+      calc
+        (deviation 0 : ℝ) * ForcedQuitPayoff G (p 0) n +
+            (1 - (deviation 0 : ℝ)) * ForcedContinuePayoff G tail (p 0) n ≤
+            (deviation 0 : ℝ) * (r 0 n + K - ledger 0) +
+              (1 - (deviation 0 : ℝ)) * (r 0 n + K - ledger 0) := by
+          exact add_le_add
+            (mul_le_mul_of_nonneg_left hquit (deviation 0).property.1)
+            (mul_le_mul_of_nonneg_left hcontinue
+              (sub_nonneg.mpr (deviation 0).property.2))
+        _ = r 0 n + K - ledger 0 := by ring
+
 /-- Approximate equilibria made from a stationary prefix and a min-max punishment. -/
 def HasStationarilyGeneratedApproximateEquilibria (G : QuittingGame) : Prop :=
   ∀ δ : ℝ, 0 < δ → ∀ ε : ℝ, 0 < ε → ∃ (p : QuitRow G) (M : ℕ)
