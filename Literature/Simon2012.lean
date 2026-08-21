@@ -4354,6 +4354,113 @@ private theorem lemma3_4_negative_coordinate_probability
   have hxi := hconstants.2.1
   linarith
 
+/-- The singular part of `φ` controls a coordinate by its own quitting
+hazard, uniformly over the other coordinates. -/
+private theorem phi_le_scale_sub_hazard_penalty
+    (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (z : EZeroTilde G) (k : G.Player) (hpk : 0 < (z.1.2 k : ℝ)) :
+    Phi G M d z k ≤
+      M / 3 -
+        5 * (Fintype.card G.Player : ℝ) * M * (z.1.2 k : ℝ) +
+        (Fintype.card G.Player : ℝ) * M := by
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let beta := z.1.1
+  let p := z.1.2
+  have hN : 1 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast Fintype.card_pos
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hpkLt : (p k : ℝ) < 1 := by
+    by_contra hnot
+    have hpkOne : (p k : ℝ) = 1 :=
+      le_antisymm (p k).property.2 (le_of_not_gt hnot)
+    have hquit := z.2.2
+    rw [quitProbability_eq_one_of_apply_eq_one G p k hpkOne] at hquit
+    linarith
+  have hdenPos : 0 < (1 - (p k : ℝ)) ^ Fintype.card G.Player :=
+    pow_pos (by linarith) _
+  have hdenOne : (1 - (p k : ℝ)) ^ Fintype.card G.Player ≤ 1 :=
+    pow_le_one₀ (sub_nonneg.mpr (p k).property.2) (by linarith)
+  have hfraction : (p k : ℝ) ≤
+      (p k : ℝ) / (1 - (p k : ℝ)) ^ Fintype.card G.Player := by
+    rw [le_div_iff₀ hdenPos]
+    nlinarith [mul_le_mul_of_nonneg_left hdenOne (p k).property.1]
+  have hcoefficient : 5 * N * M ≤ 5 * N * M / d := by
+    rw [le_div_iff₀ hd]
+    exact mul_le_of_le_one_right (by positivity) hd1
+  have hpenalty : 5 * N * M * (p k : ℝ) ≤
+      (5 * N * M / d) *
+        ((p k : ℝ) / (1 - (p k : ℝ)) ^ Fintype.card G.Player) := by
+    calc
+      5 * N * M * (p k : ℝ) ≤ (5 * N * M / d) * (p k : ℝ) :=
+        mul_le_mul_of_nonneg_right hcoefficient (p k).property.1
+      _ ≤ _ := mul_le_mul_of_nonneg_left hfraction (by positivity)
+  have hstage := oneStagePayoff_eq_forcedQuit_of_positive G beta p
+    z.2.1 z.2.2 k (by simpa only [p] using hpk)
+  have hforced := abs_forcedQuitPayoff_le_scale G M hM p k
+  have hsum : ∑ l ∈ Finset.univ.erase k, (p l : ℝ) ≤ N := by
+    calc
+      ∑ l ∈ Finset.univ.erase k, (p l : ℝ) ≤
+          ∑ _l ∈ Finset.univ.erase k, (1 : ℝ) := by
+        apply Finset.sum_le_sum
+        intro l _
+        exact (p l).property.2
+      _ = ((Finset.univ.erase k).card : ℝ) := by simp
+      _ ≤ N := by
+        dsimp only [N]
+        exact_mod_cast (Finset.card_erase_le :
+          (Finset.univ.erase k).card ≤ (Finset.univ : Finset G.Player).card)
+  change QuittingOneStagePayoff G beta p k -
+      (5 * N * M / d) *
+        ((p k : ℝ) / (1 - (p k : ℝ)) ^ Fintype.card G.Player) +
+      M * ∑ l ∈ Finset.univ.erase k, (p l : ℝ) ≤ _
+  rw [hstage]
+  dsimp only [N, p]
+  nlinarith [le_abs_self (ForcedQuitPayoff G z.1.2 k),
+    mul_le_mul_of_nonneg_left hsum hMpos.le]
+
+/-- A quitting probability above the Section 3 threshold forces the
+corresponding `φ` coordinate below the negative continuation scale. -/
+private theorem phi_lt_neg_card_mul_scale_of_high_probability
+    (G : QuittingGame) (M d ρ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (z : EZeroTilde G) (k : G.Player)
+    (hk : 1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) ≤
+      (z.1.2 k : ℝ)) :
+    Phi G M d z k < -(Fintype.card G.Player : ℝ) * M := by
+  let N : ℝ := Fintype.card G.Player
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hNM : 3 * M ≤ N * M :=
+    mul_le_mul_of_nonneg_right hN hMpos.le
+  have hpk : 0 < (z.1.2 k : ℝ) := by
+    have hthreshold : 0 < 1 - ρ / (2 * N * M) := by
+      have hfraction : ρ / (2 * N * M) ≤ 1 / 6 := by
+        rw [div_le_iff₀ (by positivity : 0 < 2 * N * M)]
+        nlinarith [hmotion.2.2.1, hNM, hM.1]
+      linarith
+    dsimp only [N] at hthreshold
+    exact hthreshold.trans_le hk
+  have hphi := phi_le_scale_sub_hazard_penalty G M d hM hd hd1 z k hpk
+  have hpkLower : 1 - ρ / (2 * N * M) ≤ (z.1.2 k : ℝ) := by
+    simpa only [N] using hk
+  have hscaledPk : 5 * N * M - 5 * ρ / 2 ≤
+      5 * N * M * (z.1.2 k : ℝ) := by
+    have hscale := mul_le_mul_of_nonneg_left hpkLower
+      (show 0 ≤ 5 * N * M by positivity)
+    calc
+      5 * N * M - 5 * ρ / 2 =
+          5 * N * M * (1 - ρ / (2 * N * M)) := by field_simp
+      _ ≤ 5 * N * M * (z.1.2 k : ℝ) := hscale
+  dsimp only [N] at hNM hscaledPk
+  nlinarith [hmotion.2.2.1, hM.1]
+
 /-- In Case 2A, a near-certain quitter has a `\phi`-coordinate below her
 min--max floor. -/
 private theorem lemma3_4_high_probability_coordinate_lt_minMax_sub_half
@@ -7237,6 +7344,75 @@ private theorem section4_quadratic_le_linear {M ρ : ℝ}
       div_le_div_of_nonneg_right hsq (by positivity)
     _ = ρ / 500 := by field_simp
 
+private theorem section4_quadratic_drift_le {M ρ : ℝ} (hM : 0 < M) :
+    ρ ^ 2 / (500 * M) ≤
+      (ρ / 18) ^ 2 / (2 * (2 * M / 5)) := by
+  field_simp
+  nlinarith [sq_nonneg ρ]
+
+private theorem quittingOneStagePayoff_drift_ge_of_continuation_lt
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player)
+    (x beta : Payoff G.Player) {target drift : ℝ}
+    (hxbeta : x n < beta n)
+    (hbetaDrift : beta n + drift ≤ QuittingOneStagePayoff G beta p n)
+    (htarget : target ≤ drift) :
+    x n + target ≤ QuittingOneStagePayoff G x p n := by
+  have hq : 0 ≤ QuitProbability G p := (quitProbability_mem_Icc G p).1
+  have hidentity :
+      QuittingOneStagePayoff G x p n - x n =
+        (QuittingOneStagePayoff G beta p n - beta n) +
+          QuitProbability G p * (beta n - x n) := by
+    simp only [QuittingOneStagePayoff]
+    ring
+  have hnonnegative : 0 ≤ QuitProbability G p * (beta n - x n) :=
+    mul_nonneg hq (sub_nonneg.mpr hxbeta.le)
+  linarith
+
+/-- A near-certain quitter's singular `φ` penalty lies below its continuation
+coordinate once the interpolation point remains inside the payoff box. -/
+private theorem high_probability_phi_lt_continuation_of_interpolation_box
+    (G : QuittingGame) (M d ρ lambda : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hlambda0 : 0 < lambda) (hlambda1 : lambda < 1)
+    (z : EZeroTilde G) (x : Payoff G.Player)
+    (hxFormula : x = (1 - lambda) • z.1.1 + lambda • Phi G M d z)
+    (hxBox : InClosedPayoffBox M x) (j : G.Player)
+    (hjHigh : 1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) ≤
+      (z.1.2 j : ℝ)) :
+    Phi G M d z j < z.1.1 j := by
+  let N : ℝ := Fintype.card G.Player
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hNM : M ≤ N * M := by nlinarith
+  have hphi : Phi G M d z j < -N * M := by
+    simpa only [N] using
+      phi_lt_neg_card_mul_scale_of_high_probability
+        G M d ρ hplayers hM hd hd1 hmotion z j hjHigh
+  have hbeta : -N * M < z.1.1 j := by
+    by_contra hnot
+    have hbetaUpper : z.1.1 j ≤ -N * M := le_of_not_gt hnot
+    have hleft :
+        (1 - lambda) * z.1.1 j ≤ (1 - lambda) * (-N * M) :=
+      mul_le_mul_of_nonneg_left hbetaUpper (by linarith)
+    have hright : lambda * Phi G M d z j < lambda * (-N * M) :=
+      mul_lt_mul_of_pos_left hphi hlambda0
+    have hxCoord := congrFun hxFormula j
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxCoord
+    have hxUpper : x j < -N * M := by
+      rw [hxCoord]
+      calc
+        (1 - lambda) * z.1.1 j + lambda * Phi G M d z j <
+            (1 - lambda) * (-N * M) + lambda * (-N * M) :=
+          add_lt_add_of_le_of_lt hleft hright
+        _ = -N * M := by ring
+    have hxLower := (hxBox j).1
+    linarith
+  exact hphi.trans hbeta
+
 private theorem section4_case2_conditional_lower
     {χ ρ stage conditional N : ℝ}
     (hstage : χ - ρ / 6 ≤ stage)
@@ -7269,9 +7445,9 @@ private theorem section4_case2_conclusion
   · intro hx
     linarith only [hstageLower, hx, hquadratic, hρ]
 
-/-- Lemma 4.3, Case 2: a player who quits with high probability and whose
-continuation value is sufficiently rational satisfies both required bounds. -/
-private theorem lemma4_3_high_probability_case2
+/-- Lemma 4.3's common high-probability calculation, split into the paper's
+rational Case 2 and irrational Case 3. -/
+private theorem lemma4_3_high_probability_cases
     (G : QuittingGame) (M ρ ξ : ℝ)
     (hM : IsSimonPayoffScale G M)
     (hnormal : ∀ n, IsNormalPlayer G n)
@@ -7286,14 +7462,18 @@ private theorem lemma4_3_high_probability_case2
     (hpDominant : 1 - ξ < (z.1.2 dominant : ℝ))
     (hjHigh :
       1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) <
-        (z.1.2 j : ℝ))
-    (hbetaRational : MinMaxQuit G j - ρ / 6 ≤ z.1.1 j) :
-    (MinMaxQuit G j - ρ / 3 ≤ x j →
-      MinMaxQuit G j - ρ / 3 ≤
-        QuittingOneStagePayoff G x z.1.2 j) ∧
-      (x j < MinMaxQuit G j - ρ / 3 →
-        x j + ρ ^ 2 / (500 * M) ≤
-          QuittingOneStagePayoff G x z.1.2 j) := by
+        (z.1.2 j : ℝ)) :
+    (MinMaxQuit G j - ρ / 6 ≤ z.1.1 j →
+      (MinMaxQuit G j - ρ / 3 ≤ x j →
+        MinMaxQuit G j - ρ / 3 ≤
+          QuittingOneStagePayoff G x z.1.2 j) ∧
+        (x j < MinMaxQuit G j - ρ / 3 →
+          x j + ρ ^ 2 / (500 * M) ≤
+            QuittingOneStagePayoff G x z.1.2 j)) ∧
+      (z.1.1 j < MinMaxQuit G j - ρ / 6 →
+        x j < z.1.1 j →
+          x j + ρ ^ 2 / (500 * M) ≤
+            QuittingOneStagePayoff G x z.1.2 j) := by
   let p : QuitRow G := z.1.2
   let beta : Payoff G.Player := z.1.1
   let q : ℝ := QuitProbability G p
@@ -7399,14 +7579,29 @@ private theorem lemma4_3_high_probability_case2
     simpa only [beta, p] using z.2.1
   have hlemma6 := lemma6_quantitative_of_positiveBound G hB hnormal
     hetaPos hetaB hstageStep j
-  have hstageBetaLower : MinMaxQuit G j - ρ / 6 ≤ stageBeta := by
-    apply section4_case2_stageBeta_lower (by simpa only [beta] using hbetaRational)
-    intro hrationalEta
-    simpa only [stageBeta] using hlemma6.1 hrationalEta
-  simpa only [stageX, p] using
-    section4_case2_conclusion hM.1 hmotion.2.1
-      (hmotion.2.2.1.trans hM.1) hN hstageBetaLower
-      hconditionalSmall hstageXClose
+  constructor
+  · intro hbetaRational
+    have hstageBetaLower : MinMaxQuit G j - ρ / 6 ≤ stageBeta := by
+      apply section4_case2_stageBeta_lower
+        (by simpa only [beta] using hbetaRational)
+      intro hrationalEta
+      simpa only [stageBeta] using hlemma6.1 hrationalEta
+    simpa only [stageX, p] using
+      section4_case2_conclusion hM.1 hmotion.2.1
+        (hmotion.2.2.1.trans hM.1) hN hstageBetaLower
+        hconditionalSmall hstageXClose
+  · intro hbetaIrrational hxbeta
+    have hstageBetaDrift :
+        beta j + (ρ / 18) ^ 2 / (2 * (2 * M / 5)) ≤ stageBeta := by
+      have hbetaIrrationalEta :
+          beta j < MinMaxQuit G j - 3 * (ρ / 18) := by
+        rw [section4_three_eta]
+        simpa only [beta] using hbetaIrrational
+      simpa only [beta, stageBeta] using
+        hlemma6.2 hbetaIrrationalEta
+    apply quittingOneStagePayoff_drift_ge_of_continuation_lt
+      G p j x beta hxbeta hstageBetaDrift
+    exact section4_quadratic_drift_le hMpos
 
 /-- In Lemma 4.3's low-own-hazard case, one dominant opponent makes the
 stationary continuation payoff an effective min-max cap. -/
@@ -7522,18 +7717,18 @@ Section 3--4 choices used in its proof.  The deformed graph coordinate is the
 separate vector `y = λx + (1-λ)z`.  The hypotheses are not optional: the paper
 uses normality, exclusion of the two simple equilibrium classes, the common
 motion parameter, the constants `ξ,R`, the accuracy restriction `ε < ρ/3`, and
-the cutoff supported in the radius `ω` defined in Section 4.3.  The missing proof
-is the paper's three-way split according to the
-player's quitting probability and continuation coordinate, with Lemma 2.2
-supplying the strict coordinate increase in the low-rationality case.
+the cutoff supported in the radius `ω` defined in Section 4.3.  The proof uses
+the paper's three-way split according to the player's quitting probability and
+continuation coordinate, with Lemma 2.2 supplying the strict coordinate
+increase in the low-rationality case.
 -/
 theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
     (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M)
     (hd : 0 < d) (hd1 : d ≤ 1)
     (hnormal : ∀ n, IsNormalPlayer G n)
-    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (_hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (_hinstant : ¬HasInstantApproximateEquilibria G)
     (hmotion : IsStructureMotionParameter G M ρ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (inverse : PhiInverseData G M d)
@@ -7541,7 +7736,7 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
     (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
     (hε : 0 < ε) (hερ : ε < ρ / 3)
     (a : Payoff G.Player)
-    (haC : a ∈ TruncatedW G R)
+    (_haC : a ∈ TruncatedW G R)
     (hcutoff0 : 0 < (cutoff a : ℝ)) (hcutoff1 : (cutoff a : ℝ) < 1)
     (hxbox : ∀ j, -M ≤ Section4X G inverse cutoff a j ∧
       Section4X G inverse cutoff a j ≤ M) :
@@ -7758,12 +7953,33 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
         1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) <
           (z.1.2 j : ℝ) := by
       simpa only [threshold, p] using lt_of_not_ge hjLow
+    have hhighCases := lemma4_3_high_probability_cases
+      G M ρ ξ hM hnormal hmotion hξ hN hNM hxiError
+      z x hxBox' dominant j hpDominant hjHigh
     by_cases hbetaRational : MinMaxQuit G j - ρ / 6 ≤ z.1.1 j
     · rw [hsectionZ]
-      exact lemma4_3_high_probability_case2 G M ρ ξ hM hnormal hmotion
-        hξ hN hNM hxiError z x hxBox' dominant j hpDominant hjHigh
-        hbetaRational
-    · sorry
+      exact hhighCases.1 hbetaRational
+    · have hphiBeta : Phi G M d z j < z.1.1 j :=
+        high_probability_phi_lt_continuation_of_interpolation_box
+          G M d ρ (cutoff a : ℝ) hplayers hM hd hd1 hmotion
+          hcutoff0 hcutoff1 z x hxPhi hxBox' j hjHigh.le
+      have hxBeta : x j < z.1.1 j := by
+        have hxCoord := congrFun hxPhi j
+        simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxCoord
+        have hnegative :
+            (cutoff a : ℝ) * (Phi G M d z j - z.1.1 j) < 0 :=
+          mul_neg_of_pos_of_neg hcutoff0 (sub_neg.mpr hphiBeta)
+        rw [hxCoord]
+        nlinarith
+      rw [hsectionZ]
+      have hdrift := hhighCases.2 (lt_of_not_ge hbetaRational) hxBeta
+      have hstepNonneg : 0 ≤ ρ ^ 2 / (500 * M) := by positivity
+      constructor
+      · intro hxRational
+        exact hxRational.trans
+          ((le_add_of_nonneg_right hstepNonneg).trans hdrift)
+      · intro _
+        exact hdrift
 
 /-!
 The proof of Lemma 4.4 uses the local inference that `pⱼ = 0` implies
