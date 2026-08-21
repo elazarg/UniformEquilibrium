@@ -657,7 +657,7 @@ def oneShotCorrespondence
 which is either all-Continue or has a positive-probability quitter receiving
 at most `1`, then `ψ` has nonempty values for all sufficiently small
 positive `ε`. -/
-def Proposition2_2 : Prop :=
+theorem proposition2_2 :
   ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
     QuittingUnitSoloExit reward →
     (∀ value ∈ W reward, ∃ root : ι → PMF Bool,
@@ -667,9 +667,7 @@ def Proposition2_2 : Prop :=
             oneShotExpectedPayoff reward value root who ≤ 1)) →
     ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε : ℝ, 0 < ε → ε < ε₀ →
       ∀ value ∈ W reward,
-        (oneShotCorrespondence reward (W reward) ε value).Nonempty
-
-theorem proposition2_2 : Proposition2_2 (ι := ι) := by
+        (oneShotCorrespondence reward (W reward) ε value).Nonempty := by
   classical
   intro reward hunit hexact
   refine ⟨1, by norm_num, ?_⟩
@@ -935,22 +933,6 @@ theorem proposition2_2 : Proposition2_2 (ι := ι) := by
     rw [hperturbedChosen, hcoinFalse] at hmassLe
     linarith
 
-/-- **Proposition 2.3.** If `ψ` has nonempty values on a compact `W`, there
-is a cyclic profile whose every tail terminates and whose rows are perfect
-`(ρ+2)ε`-equilibria against their actual next-tail values. -/
-def Proposition2_3 : Prop :=
-  ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (W : Set (Payoff ι)) (ε : ℝ),
-    0 < ε → W.Nonempty → IsCompact W →
-    (∀ value ∈ W,
-      (oneShotCorrespondence reward W ε value).Nonempty) →
-      ∃ roots : RootSequence (ι := ι),
-        cyclicRootSequence roots ∧
-        (∀ start, terminating reward roots start) ∧
-        ∀ start, oneShotPerfectEpsilonEquilibrium reward
-          (quittingRootSequenceTailVector reward roots (start + 1))
-          ((rho reward + 2) * ε) (roots start)
-
 /-- Moving the continuation vector coordinatewise by at most `c` widens the
 paper's support-perfect tolerance by at most `2c`: both compared pure-action
 payoffs are `1`-Lipschitz in that player's continuation coordinate. -/
@@ -972,7 +954,21 @@ private theorem oneShotPerfectEpsilonEquilibrium_of_continuation_close
   have hactBounds := abs_le.mp hact
   linarith
 
-theorem proposition2_3 : Proposition2_3 (ι := ι) := by
+/-- **Proposition 2.3.** If `ψ` has nonempty values on a compact `W`, there
+is a cyclic profile whose every tail terminates and whose rows are perfect
+`(ρ+2)ε`-equilibria against their actual next-tail values. -/
+theorem proposition2_3 :
+    ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+      (W : Set (Payoff ι)) (ε : ℝ),
+      0 < ε → W.Nonempty → IsCompact W →
+      (∀ value ∈ W,
+        (oneShotCorrespondence reward W ε value).Nonempty) →
+        ∃ roots : RootSequence (ι := ι),
+          cyclicRootSequence roots ∧
+          (∀ start, terminating reward roots start) ∧
+          ∀ start, oneShotPerfectEpsilonEquilibrium reward
+            (quittingRootSequenceTailVector reward roots (start + 1))
+            ((rho reward + 2) * ε) (roots start) := by
   classical
   intro reward carrier ε hε hcarrierNonempty hcarrierCompact hcorrespondence
   -- Nonemptiness of the correspondence forces the advertised absorption
@@ -1294,7 +1290,7 @@ private theorem quittingRowεPerfect_of_oneShotPerfect
 with terminating tails and rows that are perfect `ε`-equilibria against the
 actual next-tail values is either a subgame-perfect `ε^(1/6)`-equilibrium or
 yields a stationary `ε^(1/6)`-equilibrium. -/
-def Proposition2_4 : Prop :=
+theorem proposition2_4 :
   ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
     QuittingUnitSoloExit reward →
     ∃ ε₀ : ℝ, 0 < ε₀ ∧
@@ -1308,9 +1304,7 @@ def Proposition2_4 : Prop :=
               (ε ^ (1 / 6 : ℝ)) ∨
             ∃ root : ι → PMF Bool,
               epsilonEquilibrium reward (ε ^ (1 / 6 : ℝ))
-                (stationaryProfile reward root)
-
-theorem proposition2_4 : Proposition2_4 (ι := ι) := by
+                (stationaryProfile reward root) := by
   classical
   intro reward hunit
   cases isEmpty_or_nonempty ι with
@@ -1436,7 +1430,7 @@ correspondence.  We expose the otherwise implicit Hausdorff and closed-value
 hypotheses: without closed values, upper semicontinuity in the displayed
 neighborhood formulation does not provide the closed graph used by the
 compact inverse-limit argument. -/
-def Lemma2_5 : Prop :=
+theorem lemma2_5 :
   ∀ (α : Type*) [TopologicalSpace α] [T2Space α] (K : Set α),
     K.Nonempty → IsCompact K →
     ∀ ψ : α → Set α,
@@ -1445,9 +1439,7 @@ def Lemma2_5 : Prop :=
       upperSemicontinuous K ψ →
         ∃ sequence : ℕ → α,
           (∀ i, sequence i ∈ K) ∧
-          ∀ i, sequence i ∈ ψ (sequence (i + 1))
-
-theorem lemma2_5 : Lemma2_5 := by
+          ∀ i, sequence i ∈ ψ (sequence (i + 1)) := by
   intro α _ _ K hKnonempty hKcompact ψ hψnonempty hψclosed hψusc
   let relation : α → α → Prop := fun current tail ↦ current ∈ ψ tail
   have hgraph : IsClosed
@@ -1505,9 +1497,21 @@ theorem lemma2_5 : Lemma2_5 := by
 
 /-- **Proposition 2.6.** The paper restates Proposition 2.4 before its block
 proof. -/
-def Proposition2_6 : Prop := Proposition2_4 (ι := ι)
-
-theorem proposition2_6 : Proposition2_6 (ι := ι) := by
+theorem proposition2_6 :
+    ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
+      QuittingUnitSoloExit reward →
+      ∃ ε₀ : ℝ, 0 < ε₀ ∧
+        ∀ (roots : RootSequence (ι := ι)) (ε : ℝ),
+          0 < ε → ε < ε₀ →
+          (∀ start, terminating reward roots start) →
+          (∀ start, oneShotPerfectEpsilonEquilibrium reward
+            (quittingRootSequenceTailVector reward roots (start + 1))
+            ε (roots start)) →
+            subgamePerfectEpsilonEquilibrium reward roots
+                (ε ^ (1 / 6 : ℝ)) ∨
+              ∃ root : ι → PMF Bool,
+                epsilonEquilibrium reward (ε ^ (1 / 6 : ℝ))
+                  (stationaryProfile reward root) := by
   exact proposition2_4
 
 /-! **Facts 1--3 (paper).** If `u` is bounded in absolute value by `ρ`, then
