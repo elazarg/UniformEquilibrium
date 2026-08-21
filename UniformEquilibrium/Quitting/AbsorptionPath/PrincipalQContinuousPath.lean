@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory.QuittingLCPClassification
 
-open Finset Math Math.LinearProgramming Set unitInterval
+open Filter Finset Math Math.LinearProgramming Set unitInterval
 open GameTheory.QuittingAbsorptionPath
 open scoped unitInterval
 
@@ -80,6 +80,45 @@ theorem exists_principalQAbsorptionApproximation [Nonempty ι]
     node_time := hnodeTime
     mass := mass
     mesh_supported := hsupported }⟩
+
+/-- Canonical simultaneous start and mesh scale for the compact passage. -/
+def principalQVanishingScale (n : ℕ) : ℝ :=
+  1 / (n + 2 : ℝ)
+
+theorem principalQVanishingScale_pos (n : ℕ) :
+    0 < principalQVanishingScale n := by
+  apply one_div_pos.mpr
+  positivity
+
+theorem principalQVanishingScale_lt_one (n : ℕ) :
+    principalQVanishingScale n < 1 := by
+  rw [principalQVanishingScale]
+  apply (div_lt_one (by positivity)).2
+  have hn : 0 ≤ (n : ℝ) := Nat.cast_nonneg n
+  linarith
+
+theorem tendsto_principalQVanishingScale :
+    Tendsto principalQVanishingScale atTop (nhds 0) := by
+  have hsucc : StrictMono Nat.succ := fun _ _ h => Nat.succ_lt_succ h
+  have h := (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)).comp
+    hsucc.tendsto_atTop
+  convert h using 1
+  funext n
+  simp only [principalQVanishingScale, Function.comp_apply, Nat.cast_succ,
+    one_div]
+  congr 1
+  ring
+
+/-- A chosen principal-Q approximation at the canonical vanishing scale. -/
+noncomputable def principalQVanishingApproximation [Nonempty ι]
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) (n : ℕ) :
+    PrincipalQAbsorptionApproximation M
+      (principalQVanishingScale n) (principalQVanishingScale n) :=
+  Classical.choice (exists_principalQAbsorptionApproximation M hdiag hQ
+    (principalQVanishingScale n) (principalQVanishingScale n)
+    (principalQVanishingScale_pos n) (principalQVanishingScale_lt_one n)
+    (principalQVanishingScale_pos n))
 
 /-- Reverse accumulated clock mass into cumulative absorption mass. -/
 def PrincipalQClockMassPath.absorptionPrefixPath
@@ -255,6 +294,57 @@ theorem PrincipalQClockMassPath.sum_absorptionPlayerPath
     have hdenom : 1 - split = initial.time := by simp [split]
     rw [hduration, hdenom, div_mul_cancel₀ _ initial.time_pos.ne']
     ring
+
+/-- The normalized reversed player-mass path of the canonical approximation. -/
+noncomputable def principalQVanishingPlayerPath [Nonempty ι]
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι) (n : ℕ) :
+    Path (0 : ι → ℝ)
+      ((principalQVanishingApproximation M hdiag hQ n).mass.mass 1 +
+        principalQVanishingScale n • (weight : ι → ℝ)) :=
+  (principalQVanishingApproximation M hdiag hQ n).mass.absorptionPlayerPath
+    weight (principalQVanishingApproximation M hdiag hQ n).start_lt_one
+
+omit [DecidableEq ι] in
+/-- The reversed player-mass paths at vanishing start and mesh have a
+uniformly convergent subsequence with normalized monotone limit. -/
+theorem exists_tendsto_subsequence_principalQAbsorptionPlayerPath
+    [Nonempty ι]
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι) :
+    ∃ limit : BoundedContinuousFunction unitInterval (ι → ℝ),
+      ∃ subsequence : ℕ → ℕ, StrictMono subsequence ∧
+        Tendsto (fun n => boundedFunctionOfPath
+          (principalQVanishingPlayerPath M hdiag hQ weight (subsequence n)))
+            atTop (nhds limit) ∧
+        limit 0 = 0 ∧
+        (∀ who, Monotone fun time => limit time who) ∧
+        ∀ time, ∑ who, limit time who = (time : ℝ) := by
+  let terminal : ℕ → ι → ℝ := fun n =>
+    (principalQVanishingApproximation M hdiag hQ n).mass.mass 1 +
+      principalQVanishingScale n • (weight : ι → ℝ)
+  let playerPath : ∀ n, Path (0 : ι → ℝ) (terminal n) := fun n =>
+    principalQVanishingPlayerPath M hdiag hQ weight n
+  have hmono (n : ℕ) (who : ι) :
+      Monotone fun time => playerPath n time who :=
+    by
+      dsimp only [playerPath]
+      unfold principalQVanishingPlayerPath
+      exact (principalQVanishingApproximation M hdiag hQ n).mass
+        |>.monotone_absorptionPlayerPath weight
+          (principalQVanishingApproximation M hdiag hQ n).start_lt_one who
+  have htotal (n : ℕ) (time : unitInterval) :
+      ∑ who, playerPath n time who = (time : ℝ) :=
+    by
+      dsimp only [playerPath]
+      unfold principalQVanishingPlayerPath
+      exact (principalQVanishingApproximation M hdiag hQ n).mass
+        |>.sum_absorptionPlayerPath weight
+          (principalQVanishingApproximation M hdiag hQ n).start_lt_one
+          (principalQVanishingApproximation M hdiag hQ n).node_time time
+  simpa only [playerPath, terminal] using
+    exists_tendsto_subsequence_monotone_playerMass terminal playerPath
+      hmono htotal
 
 omit [DecidableEq ι] in
 /-- Reversal carries clock mesh support into the absorption prefix: whenever
