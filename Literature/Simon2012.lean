@@ -2533,27 +2533,31 @@ def AreSection3Constants (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
     ∀ j, (p j : ℝ) ≤ 1 - ξ
 
 /--
-Lemma 3.4, retaining all three displayed conclusions.  Its missing proof is
-the properness case split on a large positive or negative coordinate of
-`a = φ(β,p)`, using Lemma 3.3 to exclude an almost-sure quitter in the bounded
-band and the definitions of `ξ` and `R` to control the interpolation.
+Lemma 3.4.  For `a = φ(β,p)` and a point strictly inside the segment from
+`β` to `a`, a coordinate of `a` outside `[-R,R]` forces the segment point
+outside the rational target box.  A large positive coordinate has `pⱼ = 0`
+and a large continuation value; a large negative coordinate with
+`βⱼ ≥ χⱼ-ρ` has `pⱼ` close to one.
 -/
 theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
     (hmotion : IsStructureMotionParameter G M ρ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G)
     (hnormal : ∀ n, IsNormalPlayer G n)
     (z : EZeroTilde G) (t : UnitInterval)
+    (ht0 : 0 < (t : ℝ)) (ht1 : (t : ℝ) < 1)
     (a : Payoff G.Player) (ha : a = Phi G M d z)
     (x : Payoff G.Player)
     (hx : x = (1 - (t : ℝ)) • z.1.1 + (t : ℝ) • a) :
-    ((∃ j, R ≤ |a j|) → ¬StructureTargetBox G M ρ x) ∧
-    (∀ j, R ≤ a j →
+    ((∃ j, R < |a j|) → ¬StructureTargetBox G M ρ x) ∧
+    (∀ j, R < a j →
       R - (Fintype.card G.Player : ℝ) * M < z.1.1 j ∧
         (z.1.2 j : ℝ) = 0) ∧
-    ∀ j, a j ≤ -R → MinMaxQuit G j - ρ ≤ z.1.1 j →
+    ∀ j, a j < -R → MinMaxQuit G j - ρ ≤ z.1.1 j →
       1 - (1 / 20 : ℝ) *
         (ρ / (2 * (Fintype.card G.Player : ℝ) * M)) ^
           Fintype.card G.Player ≤ (z.1.2 j : ℝ) := by
