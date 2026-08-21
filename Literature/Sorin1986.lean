@@ -314,6 +314,53 @@ theorem FiniteStageGame.exists_pureReply_ge_individualRationalLevel
   refine ⟨action, ?_⟩
   exact hlevel.trans_eq haction.symm
 
+/-- The infimum defining the individual-rational level admits an arbitrarily
+accurate mixed-opponent punishment. -/
+theorem FiniteStageGame.exists_opponents_bestPureReplyValue_lt_add
+    (G : FiniteStageGame) (who : G.Player) {ε : ℝ} (hε : 0 < ε) :
+    ∃ opponents : G.MixedOpponentProfile who,
+      G.bestPureReplyValue who opponents <
+        G.individualRationalLevel who + ε := by
+  letI (player : G.Player) : Nonempty (G.kernel.Strategy player) :=
+    G.nonemptyAction player
+  letI : Nonempty (G.MixedOpponentProfile who) :=
+    G.kernel.nonempty_mixedExtension_opponentProfile who
+  have hlt : G.individualRationalLevel who <
+      G.individualRationalLevel who + ε := lt_add_of_pos_right _ hε
+  simpa [FiniteStageGame.individualRationalLevel] using
+    (exists_lt_of_ciInf_lt
+      (f := fun opponents : G.MixedOpponentProfile who ↦
+        G.bestPureReplyValue who opponents) hlt)
+
+/-- Mixing the punished player's own action cannot beat the best pure reply
+against fixed mixed opponents. -/
+theorem FiniteStageGame.mixedEU_profileWithOpponent_le_bestPureReplyValue
+    (G : FiniteStageGame) (who : G.Player)
+    (opponents : G.MixedOpponentProfile who)
+    (own : PMF (G.kernel.Strategy who)) :
+    G.kernel.mixedExtension.eu
+        (G.kernel.mixedExtension.profileWithOpponent who own opponents) who ≤
+      G.bestPureReplyValue who opponents := by
+  unfold FiniteStageGame.bestPureReplyValue
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  letI (player : G.Player) : Fintype (G.kernel.Strategy player) :=
+    G.finiteAction player
+  exact G.kernel.mixedExtension_eu_profileWithOpponent_le_iSup_pure
+    who opponents own
+
+/-- Choose simultaneous approximate mixed-opponent punishments for all
+players. -/
+theorem FiniteStageGame.exists_approx_punishmentOpponents
+    (G : FiniteStageGame) {ε : ℝ} (hε : 0 < ε) :
+    ∃ punish : ∀ who, G.MixedOpponentProfile who,
+      ∀ who, G.bestPureReplyValue who (punish who) <
+        G.individualRationalLevel who + ε := by
+  choose punish hpunish using fun who ↦
+    G.exists_opponents_bestPureReplyValue_lt_add who hε
+  exact ⟨punish, hpunish⟩
+
 /-- The opponents' current mixed action after a repeated-game history. -/
 def FiniteStageGame.opponentsAt
     (G : FiniteStageGame) (profile : G.BehaviorProfile)
