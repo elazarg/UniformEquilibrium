@@ -2811,7 +2811,35 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
         (ρ / (2 * (Fintype.card G.Player : ℝ) * M)) ^
           Fintype.card G.Player ≤ (z.1.2 j : ℝ) := by
   refine ⟨?_, ?_, ?_⟩
-  · sorry
+  · rintro ⟨j, hj⟩ htarget
+    rw [lt_abs] at hj
+    rcases hj with hjPositive | hjNegative
+    · obtain ⟨hbeta, _hpZero⟩ :=
+        lemma3_4_positive_coordinate G M d ρ ξ R hplayers hM hd hd1
+          hmotion hconstants z j (by simpa only [ha] using hjPositive)
+      obtain ⟨_, _, hR⟩ := section3Constants_radius_bound G M d ρ ξ R
+        hplayers hM hd hd1 hmotion hconstants
+      have hN : 3 ≤ (Fintype.card G.Player : ℝ) := by
+        exact_mod_cast hplayers
+      have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+      have hNM : 3 * M ≤ (Fintype.card G.Player : ℝ) * M :=
+        mul_le_mul_of_nonneg_right hN hMpos.le
+      have hlowerM :
+          M < R - (Fintype.card G.Player : ℝ) * M := by
+        nlinarith
+      have hxj := congrFun hx j
+      simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxj
+      have htComplement : 0 < 1 - (t : ℝ) := by linarith
+      have hbetaWeighted := mul_lt_mul_of_pos_left hbeta htComplement
+      have haLower :
+          R - (Fintype.card G.Player : ℝ) * M < a j := by
+        have hNMnonneg : 0 ≤ (Fintype.card G.Player : ℝ) * M := by
+          positivity
+        linarith
+      have haWeighted := mul_lt_mul_of_pos_left haLower ht0
+      have hxUpper := (htarget j).2
+      nlinarith
+    · sorry
   · intro j hj
     exact lemma3_4_positive_coordinate G M d ρ ξ R hplayers hM hd hd1
       hmotion hconstants z j (by simpa only [ha] using hj)
