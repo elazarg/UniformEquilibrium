@@ -8431,6 +8431,24 @@ private theorem quitTailPayoff_eq_quitPayoff_shift (G : QuittingGame)
   intro k
   simp only [Nat.zero_add]
 
+/-- A uniform terminal-reward bound also bounds every conditional tail payoff. -/
+private theorem abs_quitTailPayoff_le (G : QuittingGame) (p : QuitProfile G)
+    (i : ℕ) (n : G.Player) {M : ℝ} (hM0 : 0 ≤ M)
+    (hbound : ∀ A, |G.reward A n| ≤ M) :
+    |QuitTailPayoff G p i n| ≤ M := by
+  rw [quitTailPayoff_eq_quitPayoff_shift]
+  exact abs_quitPayoff_le G (fun k => p (i + k)) n hM0 hbound
+
+/-- A common terminal-reward bound controls the norm of every conditional tail. -/
+private theorem norm_quitTailPayoff_le (G : QuittingGame) (p : QuitProfile G)
+    (i : ℕ) {M : ℝ} (hM0 : 0 ≤ M)
+    (hbound : ∀ A n, |G.reward A n| ≤ M) :
+    ‖QuitTailPayoff G p i‖ ≤ M := by
+  rw [pi_norm_le_iff_of_nonempty]
+  intro n
+  simpa [Real.norm_eq_abs] using
+    abs_quitTailPayoff_le G p i n hM0 (fun A => hbound A n)
+
 /-- A deviation that begins at stage `i` and agrees with the profile beforehand. -/
 private def QuitProfile.deviationFrom (G : QuittingGame) (p : QuitProfile G)
     (n : G.Player) (i : ℕ) (q : ℕ → Set.Icc (0 : ℝ) 1) :
@@ -9034,6 +9052,36 @@ private theorem survival_mul_eta_mul_sum_badQuitMass_le
             (localGain_deleteBadQuit_ge G eta p n i) hsurvivalNonnegative
     _ ≤ alpha := hsumUpper
 
+/-- Divide the reached bad-Quit estimate by its positive reach-and-regret scale. -/
+private theorem sum_badQuitMass_le_of_equilibrium
+    (G : QuittingGame) {alpha beta s : ℝ} (p : QuitProfile G)
+    (hequilibrium : IsQuitEpsilonEquilibrium G alpha p)
+    (T : ℕ) (n : G.Player) (hbeta : 0 ≤ beta) (hsbeta : 0 < s * beta)
+    (hreach : ∀ i, i < T → s ≤ tailSurvival G p 0 i) :
+    (∑ i ∈ Finset.range T, badQuitMass G beta p n i) ≤ alpha / (s * beta) := by
+  rw [le_div_iff₀ hsbeta]
+  calc
+    (∑ i ∈ Finset.range T, badQuitMass G beta p n i) * (s * beta) =
+        s * beta * ∑ i ∈ Finset.range T, badQuitMass G beta p n i := by ring
+    _ ≤ alpha :=
+      survival_mul_eta_mul_sum_badQuitMass_le G p hequilibrium T n hbeta hreach
+
+/-- Summing over the finite player set bounds the full bad-Quit mass on the prefix. -/
+private theorem sum_sum_badQuitMass_le_of_equilibrium
+    (G : QuittingGame) {alpha beta s : ℝ} (p : QuitProfile G)
+    (hequilibrium : IsQuitEpsilonEquilibrium G alpha p)
+    (T : ℕ) (hbeta : 0 ≤ beta) (hsbeta : 0 < s * beta)
+    (hreach : ∀ i, i < T → s ≤ tailSurvival G p 0 i) :
+    (∑ i ∈ Finset.range T, ∑ n, badQuitMass G beta p n i) ≤
+      Fintype.card G.Player * (alpha / (s * beta)) := by
+  rw [Finset.sum_comm]
+  calc
+    (∑ n, ∑ i ∈ Finset.range T, badQuitMass G beta p n i) ≤
+        ∑ _n : G.Player, alpha / (s * beta) :=
+      Finset.sum_le_sum fun n _hn =>
+        sum_badQuitMass_le_of_equilibrium G p hequilibrium T n hbeta hsbeta hreach
+    _ = Fintype.card G.Player * (alpha / (s * beta)) := by simp
+
 /-- On a prefix of uniformly positive reach, sufficiently small global equilibrium
 error makes every support-purified row uniformly close to its original row. -/
 private theorem dist_supportPurifiedRow_lt_of_equilibrium
@@ -9220,6 +9268,38 @@ private theorem supportPurifiedRow_le_of_no_badContinue
   by_cases hbadQuit : IsBadQuitAction G beta r p n
   · simp [supportPurifiedRow, hbadQuit, (p n).property.1]
   · simp [supportPurifiedRow, hbadQuit, hcontinue n]
+
+/-- Once bad Continue actions are absent, purification removes exactly the recorded
+bad-Quit mass from each coordinate. -/
+private theorem supportPurifiedRow_coord_sub_eq_badQuitMass
+    (G : QuittingGame) {beta : ℝ} (p : QuitProfile G) (i : ℕ)
+    (hcontinue : ∀ n,
+      ¬IsBadContinueAction G beta (QuitTailPayoff G p (i + 1)) (p i) n)
+    (n : G.Player) :
+    (p i n : ℝ) - supportPurifiedRow G beta (QuitTailPayoff G p (i + 1)) (p i) n =
+      badQuitMass G beta p n i := by
+  classical
+  by_cases hbad :
+      IsBadQuitAction G beta (QuitTailPayoff G p (i + 1)) (p i) n
+  · simp [supportPurifiedRow, badQuitMass, hbad]
+  · simp [supportPurifiedRow, badQuitMass, hbad, hcontinue n]
+
+/-- Under the same one-sided purification, its coordinatewise `ℓ1` displacement is
+the total bad-Quit mass. -/
+private theorem sum_abs_supportPurifiedRow_sub_eq_sum_badQuitMass
+    (G : QuittingGame) {beta : ℝ} (p : QuitProfile G) (i : ℕ)
+    (hcontinue : ∀ n,
+      ¬IsBadContinueAction G beta (QuitTailPayoff G p (i + 1)) (p i) n) :
+    (∑ n, |(supportPurifiedRow G beta (QuitTailPayoff G p (i + 1)) (p i) n : ℝ) -
+        p i n|) = ∑ n, badQuitMass G beta p n i := by
+  classical
+  apply Finset.sum_congr rfl
+  intro n _hn
+  have hle := supportPurifiedRow_le_of_no_badContinue G
+    (QuitTailPayoff G p (i + 1)) (p i) hcontinue n
+  rw [abs_of_nonpos (sub_nonpos.mpr hle)]
+  simpa only [neg_sub] using
+    supportPurifiedRow_coord_sub_eq_badQuitMass G p i hcontinue n
 
 /-- For two coordinatewise ordered vectors in the unit cube, the difference of their
 products is at most the sum of the coordinate differences. -/
@@ -10587,6 +10667,61 @@ def IsUniformRho (G : QuittingGame) (ρ : ℝ) : Prop :=
     p ∈ EpsilonRow G ρ r →
     let y := QuittingOneStagePayoff G r p
     ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ
+
+/-- At every smaller scale, the uniform `ρ` bound excludes a sure quitter from an
+approximately optimal rational row. -/
+private theorem epsilonRow_coord_ne_one_of_uniformRho
+    (G : QuittingGame) {η ρ : ℝ} (hηρ : η ≤ ρ) (hρ : IsUniformRho G ρ)
+    (r : Payoff G.Player) (p : QuitRow G)
+    (hrational : IsRational G η r) (hrow : p ∈ EpsilonRow G η r)
+    (n : G.Player) : (p n : ℝ) ≠ 1 := by
+  intro hsure
+  have hquit := (hρ.2.2 r p (IsRational.mono G hηρ hrational)
+    (EpsilonRow.mono G hηρ r hrow)).2
+  rw [quitProbability_eq_one_of_coord_eq_one G p n hsure] at hquit
+  linarith [hρ.1]
+
+/-- On a uniformly reached prefix, sufficiently accurate equilibrium purification
+produces rational `F_η` rows and cannot delete any Continue action. -/
+private theorem supportPurifiedRow_mem_and_no_badContinue_of_equilibrium
+    (G : QuittingGame) {alpha beta eta ρ s d e M : ℝ}
+    (halpha : 0 ≤ alpha) (hbeta : 0 < beta) (hd : 0 < d)
+    (hsmall : alpha < s * beta * d) (hslack : beta + 2 * e ≤ eta)
+    (hηρ : eta ≤ ρ) (hρ : IsUniformRho G ρ)
+    (hreward : ∀ A n, |G.reward A n| ≤ M)
+    (hstable : ∀ r : Payoff G.Player, ‖r‖ ≤ M → ∀ p q : QuitRow G,
+      dist q p < d →
+        (∀ n, |ForcedQuitPayoff G q n - ForcedQuitPayoff G p n| < e) ∧
+        ∀ n, |ForcedContinuePayoff G r q n - ForcedContinuePayoff G r p n| < e)
+    (p : QuitProfile G) (hequilibrium : IsQuitEpsilonEquilibrium G alpha p)
+    (T : ℕ) (hreach : ∀ i, i < T → s ≤ tailSurvival G p 0 i)
+    (hrational : ∀ i, i ≤ T → IsRational G eta (QuitTailPayoff G p i)) :
+    ∀ i, i < T →
+      let q := supportPurifiedRow G beta (QuitTailPayoff G p (i + 1)) (p i)
+      q ∈ EpsilonRow G eta (QuitTailPayoff G p (i + 1)) ∧
+        (∀ n, (q n : ℝ) ≠ 1) ∧
+        ∀ n, ¬IsBadContinueAction G beta (QuitTailPayoff G p (i + 1)) (p i) n := by
+  have hM0 : 0 ≤ M := by
+    let n : G.Player := Classical.choice inferInstance
+    let A : {A : Finset G.Player // A.Nonempty} :=
+      ⟨{n}, Finset.singleton_nonempty n⟩
+    exact (abs_nonneg (G.reward A n)).trans (hreward A n)
+  intro i hiT
+  let q := supportPurifiedRow G beta (QuitTailPayoff G p (i + 1)) (p i)
+  have hdist : dist q (p i) < d :=
+    dist_supportPurifiedRow_lt_of_equilibrium G halpha hbeta hd hsmall p
+      hequilibrium T hreach i hiT
+  have htailBound : ‖QuitTailPayoff G p (i + 1)‖ ≤ M :=
+    norm_quitTailPayoff_le G p (i + 1) hM0 hreward
+  have hmove := hstable (QuitTailPayoff G p (i + 1)) htailBound (p i) q hdist
+  have hrow : q ∈ EpsilonRow G eta (QuitTailPayoff G p (i + 1)) :=
+    supportPurifiedRow_mem_epsilonRow_of_endpoint_close G hbeta.le hslack _ _
+      (fun n => (hmove.1 n).le) (fun n => (hmove.2 n).le)
+  have hqRational := hrational (i + 1) (by omega)
+  have hne : ∀ n, (q n : ℝ) ≠ 1 :=
+    fun n => epsilonRow_coord_ne_one_of_uniformRho G hηρ hρ _ q hqRational hrow n
+  exact ⟨hrow, hne,
+    not_badContinue_of_supportPurifiedRow_ne_one G hbeta.le _ _ hne⟩
 
 /-- Use one stationary row through stage `M`, then switch to a punishment profile. -/
 def StationaryPrefixThenPunish (G : QuittingGame) (p : QuitRow G)
