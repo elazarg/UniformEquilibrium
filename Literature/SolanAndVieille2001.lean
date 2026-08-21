@@ -5125,6 +5125,63 @@ theorem figure2_no_stationary_epsilon :
         (stationaryProfile SolanVieilleBoundary.boundaryReward root) := by
   sorry
 
+private theorem figure2_shifted_opposite_pair_contradiction
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε0 : 0 < ε) (hεsmall : ε < 1 / 1000000000000)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4) (drop : ℕ)
+    (hreach : 1 / 8 ≤ quittingJointSurvivalWeight roots 0 drop)
+    (hfirstHigh : 1 + 1 / 100 ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots (figure2OppositeFirst who) drop)
+    (hsecondHigh : 1 + 1 / 100 ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots (figure2OppositeSecond who) drop) :
+    False := by
+  let shifted : RootSequence (ι := Fin 4) := fun offset => roots (drop + offset)
+  have hrootNash : IsεQuittingRootSequenceNash
+      SolanVieilleBoundary.boundaryReward ε roots :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      SolanVieilleBoundary.boundaryReward ε roots).mpr hnash
+  have hshiftRootNash : IsεQuittingRootSequenceNash
+      SolanVieilleBoundary.boundaryReward (8 * ε) shifted := by
+    have hshift := isεQuittingRootSequenceNash_shift_of_survival_ge
+      SolanVieilleBoundary.boundaryReward roots hε0.le
+      (by norm_num : (0 : ℝ) < 1 / 8) hrootNash drop hreach
+    simpa [shifted, mul_comm] using hshift
+  have hshiftNash : epsilonEquilibrium
+      SolanVieilleBoundary.boundaryReward (8 * ε)
+      (profile SolanVieilleBoundary.boundaryReward shifted) :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      SolanVieilleBoundary.boundaryReward (8 * ε) shifted).mp hshiftRootNash
+  have hshiftClose : ∀ time player,
+      |(shifted time player false).toReal - 1| < 8 * ε := by
+    intro time player
+    have := hclose (drop + time) player
+    dsimp only [shifted]
+    linarith
+  have hshiftSmall : 8 * ε < 1 / 10000 := by linarith
+  have hsqrtEightSq : Real.sqrt (8 * ε) ^ 2 = 8 * ε :=
+    Real.sq_sqrt (mul_nonneg (by norm_num) hε0.le)
+  have hsqrtEight0 : 0 ≤ Real.sqrt (8 * ε) := Real.sqrt_nonneg _
+  have htailNotBoth := figure2_not_both_partners_high
+    (mul_pos (by norm_num) hε0) hshiftSmall hshiftClose hshiftNash
+    (figure2OppositeFirst who) (α := 1 / 100) (by nlinarith)
+  apply htailNotBoth
+  constructor
+  · change 1 + 1 / 100 ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward (fun offset => roots (drop + offset))
+        (figure2OppositeFirst who) 0
+    rw [← quittingRootSequenceTerminalValue_eq_shift]
+    exact hfirstHigh
+  · rw [figure2Partner_oppositeFirst]
+    change 1 + 1 / 100 ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward (fun offset => roots (drop + offset))
+        (figure2OppositeSecond who) 0
+    rw [← quittingRootSequenceTerminalValue_eq_shift]
+    exact hsecondHigh
+
 /-- The second omitted Figure 2 assertion: for all sufficiently small
 positive `ε`, no `ε`-equilibrium remains `ε`-close to all-Continue at every
 stage. The paper again refers to Solan and Vieille (2000) for the omitted
@@ -5136,7 +5193,179 @@ theorem figure2_no_perturbed_epsilon :
         |(roots time player false).toReal - 1| < ε) ∧
       epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
         (profile SolanVieilleBoundary.boundaryReward roots) := by
-  sorry
+  refine ⟨1 / 1000000000000, by norm_num, ?_⟩
+  intro ε hε0 hεsmall
+  rintro ⟨roots, hclose, hnash⟩
+  have hsqrtPos : 0 < Real.sqrt ε := Real.sqrt_pos.2 hε0
+  have hsqrtSq : Real.sqrt ε ^ 2 = ε := Real.sq_sqrt hε0.le
+  have hsqrtSmall : Real.sqrt ε < 1 / 1000000 := by
+    nlinarith
+  have hεmillion : ε < 1 / 1000000 := by linarith
+  obtain ⟨who, hwhoHigh⟩ := figure2_exists_player_value_ge
+    hε0 (by linarith : ε < 1 / 64) hclose hnash
+  let α : ℝ := 1 / 4 - 129 * ε
+  have hwhoInitial : 1 + α ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who 0 := by
+    dsimp only [α]
+    linarith
+  have hmargin : Real.sqrt ε <
+      (α - 2 * Real.sqrt ε - 96 * ε) / 4 := by
+    dsimp only [α]
+    nlinarith
+  obtain ⟨drop, hpartnerLow, hownSmall, hpartnerMass, hreach⟩ :=
+    figure2_exists_partnerDrop_with_retained_mass hε0 hεmillion hclose hnash
+      who hwhoInitial hmargin
+  let window : QuittingFiniteRootWindow roots := ⟨0, drop⟩
+  let ownMass := window.singletonMass who
+  let partnerMass := window.singletonMass (figure2Partner who)
+  let firstOppositeMass := window.singletonMass (figure2OppositeFirst who)
+  let secondOppositeMass := window.singletonMass (figure2OppositeSecond who)
+  let collisionMass := window.collisionMass
+  let survival := quittingJointSurvivalWeight roots 0 drop
+  have hownMass : ownMass ≤ Real.sqrt ε := by
+    simpa [window, ownMass] using hownSmall
+  have hpartnerMass' :
+      (α - 38 * Real.sqrt ε - 100 * ε) / 4 ≤ partnerMass := by
+    simpa [window, partnerMass] using hpartnerMass
+  have hcollision : collisionMass ≤ 24 * ε := by
+    dsimp only [collisionMass, window]
+    exact (finiteWindow_collisionMass_le_sequenceCollisionMass roots 0 drop).trans
+      (figure2_collisionMass_le_twentyFour_mul hε0 hclose)
+  have hcollision0 : 0 ≤ collisionMass := window.collisionMass_nonneg
+  have hsurvival0 : 0 ≤ survival :=
+    quittingJointSurvivalWeight_nonneg roots 0 drop
+  have hsurvival1 : survival ≤ 1 :=
+    quittingJointSurvivalWeight_le_one roots 0 drop
+  have hfirstOpposite0 : 0 ≤ firstOppositeMass :=
+    window.singletonMass_nonneg _
+  have hsecondOpposite0 : 0 ≤ secondOppositeMass :=
+    window.singletonMass_nonneg _
+  have hown0 : 0 ≤ ownMass := window.singletonMass_nonneg _
+  have hpartner0 : 0 ≤ partnerMass := window.singletonMass_nonneg _
+  have hmass : ownMass + partnerMass + firstOppositeMass +
+      secondOppositeMass + collisionMass + survival = 1 := by
+    have habsorption := window.absorptionMass_eq_one_sub_survivalWeight
+    have hsplit := window.absorptionMass_eq_singletonTotal_add_collisionMass
+    have hroles := finiteWindow_singletonTotal_eq_four_roles window who
+    dsimp only [window] at habsorption
+    dsimp only [ownMass, partnerMass, firstOppositeMass,
+      secondOppositeMass, collisionMass, survival]
+    linarith
+  have hpartnerDecomp :=
+    window.terminalValue_eq_singleton_add_collision_add_survival_mul
+      SolanVieilleBoundary.boundaryReward (figure2Partner who)
+  have hpartnerSingleton :=
+    finiteWindow_singletonRewardContribution_eq_pairMass
+      window (figure2Partner who)
+  rw [figure2Partner_partner] at hpartnerSingleton
+  rw [hpartnerSingleton] at hpartnerDecomp
+  have hpartnerCollisionAbs := window.abs_collisionRewardContribution_le
+    SolanVieilleBoundary.boundaryReward (figure2Partner who)
+      boundaryReward_abs_le_four
+  have hpartnerCollision := (abs_le.mp hpartnerCollisionAbs).2
+  have hpartnerTail : survival *
+      quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots (figure2Partner who) drop ≤
+      survival * (1 + Real.sqrt ε) :=
+    mul_le_mul_of_nonneg_left hpartnerLow.le hsurvival0
+  have hpartnerFloor :=
+    figure2_terminalValue_ge_one_sub_thirtyThree_mul
+      hclose hnash (figure2Partner who)
+  have hoppositeMass : firstOppositeMass + secondOppositeMass ≤
+      4 * Real.sqrt ε + 105 * ε := by
+    have hsurvivalSqrt : survival * Real.sqrt ε ≤ Real.sqrt ε :=
+      mul_le_of_le_one_left (Real.sqrt_nonneg ε) hsurvival1
+    change quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots (figure2Partner who) 0 = _
+      at hpartnerDecomp
+    dsimp only [window] at hpartnerDecomp
+    simp only [Nat.zero_add] at hpartnerDecomp
+    change quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots (figure2Partner who) 0 =
+      partnerMass + 4 * ownMass +
+        (⟨0, drop⟩ : QuittingFiniteRootWindow roots).collisionRewardContribution
+          SolanVieilleBoundary.boundaryReward
+          (figure2Partner who) +
+        survival * quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots (figure2Partner who) drop
+      at hpartnerDecomp
+    change window.collisionRewardContribution
+        SolanVieilleBoundary.boundaryReward (figure2Partner who) ≤
+      4 * collisionMass at hpartnerCollision
+    nlinarith
+  have hoppositeHigh (target other : Fin 4)
+      (htarget : target = figure2OppositeFirst who ∧
+          other = figure2OppositeSecond who ∨
+        target = figure2OppositeSecond who ∧
+          other = figure2OppositeFirst who)
+      (hpartners : figure2Partner target = other) :
+      1 + 1 / 100 ≤ quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots target drop := by
+    have htargetFloor := figure2_terminalValue_ge_one_sub_thirtyThree_mul
+      hclose hnash target
+    have htargetDecomp :=
+      window.terminalValue_eq_singleton_add_collision_add_survival_mul
+        SolanVieilleBoundary.boundaryReward target
+    have htargetSingleton :=
+      finiteWindow_singletonRewardContribution_eq_pairMass window target
+    rw [hpartners] at htargetSingleton
+    rw [htargetSingleton] at htargetDecomp
+    have htargetCollisionAbs := window.abs_collisionRewardContribution_le
+      SolanVieilleBoundary.boundaryReward target boundaryReward_abs_le_four
+    have htargetCollision := (abs_le.mp htargetCollisionAbs).2
+    have htargetMassBound :
+        window.singletonMass target + 4 * window.singletonMass other ≤
+          4 * (firstOppositeMass + secondOppositeMass) := by
+      rcases htarget with hforward | hbackward
+      · rw [hforward.1, hforward.2]
+        change firstOppositeMass + 4 * secondOppositeMass ≤
+          4 * (firstOppositeMass + secondOppositeMass)
+        linarith
+      · rw [hbackward.1, hbackward.2]
+        change secondOppositeMass + 4 * firstOppositeMass ≤
+          4 * (firstOppositeMass + secondOppositeMass)
+        linarith
+    by_contra hnotHigh
+    have htargetLow : quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots target drop < 1 + 1 / 100 :=
+      lt_of_not_ge hnotHigh
+    have hsurvivalPartner : survival ≤ 1 - partnerMass := by
+      linarith
+    have htailUpper : survival *
+        quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots target drop <
+        (1 - partnerMass) * (1 + 1 / 100) := by
+      calc
+        _ < survival * (1 + 1 / 100) :=
+          mul_lt_mul_of_pos_left htargetLow
+            (lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1 / 8) hreach)
+        _ ≤ (1 - partnerMass) * (1 + 1 / 100) :=
+          mul_le_mul_of_nonneg_right hsurvivalPartner (by norm_num)
+    change quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots target 0 = _ at htargetDecomp
+    dsimp only [window] at htargetDecomp
+    simp only [Nat.zero_add] at htargetDecomp
+    change quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots target 0 =
+      (⟨0, drop⟩ : QuittingFiniteRootWindow roots).singletonMass target +
+        4 * (⟨0, drop⟩ : QuittingFiniteRootWindow roots).singletonMass other +
+        (⟨0, drop⟩ : QuittingFiniteRootWindow roots).collisionRewardContribution
+          SolanVieilleBoundary.boundaryReward target +
+        survival * quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots target drop at htargetDecomp
+    change window.collisionRewardContribution
+        SolanVieilleBoundary.boundaryReward target ≤
+      4 * collisionMass at htargetCollision
+    dsimp only [α] at hpartnerMass'
+    nlinarith
+  have hfirstHigh := hoppositeHigh
+    (figure2OppositeFirst who) (figure2OppositeSecond who)
+    (Or.inl ⟨rfl, rfl⟩) (figure2Partner_oppositeFirst who)
+  have hsecondHigh := hoppositeHigh
+    (figure2OppositeSecond who) (figure2OppositeFirst who)
+    (Or.inr ⟨rfl, rfl⟩) (figure2Partner_oppositeSecond who)
+  exact figure2_shifted_opposite_pair_contradiction hε0 hεsmall hclose hnash
+    who drop hreach hfirstHigh hsecondHigh
 
 /-- The repository's Figure 2 terminal table satisfies A.1 and A.2. -/
 theorem boundaryReward_assumptions :
