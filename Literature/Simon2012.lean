@@ -2400,6 +2400,23 @@ private theorem forcedContinue_indifferentContinuation
   rw [mul_div_cancel₀ _ hs]
   ring
 
+/-- Increasing a player's own continuation coordinate increases that
+player's forced-Continue payoff. -/
+private theorem forcedContinue_mono_continuation_coord
+    (G : QuittingGame) (p : QuitRow G) (r s : Payoff G.Player)
+    (n : G.Player) (h : r n ≤ s n) :
+    ForcedContinuePayoff G r p n ≤ ForcedContinuePayoff G s p n := by
+  simp only [ForcedContinuePayoff, QuittingOneStagePayoff]
+  gcongr
+  exact sub_nonneg.mpr (quitProbability_mem_Icc G (p.replace G n 0)).2
+
+private theorem forcedContinue_eq_of_continuation_coord_eq
+    (G : QuittingGame) (p : QuitRow G) (r s : Payoff G.Player)
+    (n : G.Player) (h : r n = s n) :
+    ForcedContinuePayoff G r p n = ForcedContinuePayoff G s p n := by
+  simp only [ForcedContinuePayoff, QuittingOneStagePayoff]
+  rw [h]
+
 /-- The indifference continuation realizes every strictly interior row as an
 exact one-stage equilibrium with noncertain absorption. -/
 private def indifferentGraphPoint (G : QuittingGame) (p : QuitRow G)
@@ -2626,6 +2643,315 @@ private theorem exists_cappedPhi_upperFace_lt
     _ < -S := by nlinarith [hstrict]
     _ ≤ y j := hyLower
 
+/-- The ambient closed cube used for Brouwer's theorem. -/
+private def closedQuitCube (G : QuittingGame) (t : ℝ) :
+    Set (Payoff G.Player) :=
+  Set.univ.pi fun _ => Set.Icc 0 t
+
+private theorem convex_closedQuitCube (G : QuittingGame) (t : ℝ) :
+    Convex ℝ (closedQuitCube G t) :=
+  convex_pi fun _ _ => convex_Icc 0 t
+
+private theorem isCompact_closedQuitCube (G : QuittingGame) (t : ℝ) :
+    IsCompact (closedQuitCube G t) :=
+  isCompact_univ_pi fun _ => isCompact_Icc
+
+private theorem nonempty_closedQuitCube (G : QuittingGame) {t : ℝ}
+    (ht : 0 ≤ t) :
+    (closedQuitCube G t).Nonempty := by
+  refine ⟨0, ?_⟩
+  intro j _hj
+  exact ⟨le_rfl, ht⟩
+
+/-- Convert an ambient cube point to the row subtype used by `cappedPhi`. -/
+private def cappedQuitRowOfCube (G : QuittingGame) (t : ℝ)
+    (_ht : 0 ≤ t) (ht1 : t ≤ 1) (p : closedQuitCube G t) :
+    CappedQuitRow G t := by
+  refine ⟨(fun j => ⟨p.1 j, (p.2 j (Set.mem_univ j)).1,
+    (p.2 j (Set.mem_univ j)).2.trans ht1⟩), ?_⟩
+  intro j
+  exact (p.2 j (Set.mem_univ j)).2
+
+private theorem continuous_cappedQuitRowOfCube
+    (G : QuittingGame) (t : ℝ) (ht : 0 ≤ t) (ht1 : t ≤ 1) :
+    Continuous (cappedQuitRowOfCube G t ht ht1) := by
+  apply Continuous.subtype_mk
+  rw [continuous_pi_iff]
+  intro j
+  apply Continuous.subtype_mk
+  simpa only [Function.comp_def] using
+    (continuous_apply j).comp continuous_subtype_val
+
+/-- The coordinatewise clipped excess map used for Brouwer's theorem. -/
+private def cappedTargetMap (G : QuittingGame) (M d t : ℝ)
+    (ht : 0 ≤ t) (ht1 : t < 1) (y : Payoff G.Player) :
+    closedQuitCube G t → closedQuitCube G t := fun p => by
+  let row := cappedQuitRowOfCube G t ht ht1.le p
+  refine ⟨fun j => max 0 (min t
+    (p.1 j + (cappedPhi G M d t ht1 row j - y j))), ?_⟩
+  intro j _hj
+  exact ⟨le_max_left _ _, max_le ht (min_le_left _ _)⟩
+
+private theorem continuous_cappedTargetMap
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 ≤ t)
+    (ht1 : t < 1) (y : Payoff G.Player) :
+    Continuous (cappedTargetMap G M d t ht ht1 y) := by
+  let row := cappedQuitRowOfCube G t ht ht1.le
+  have hrow : Continuous row :=
+    continuous_cappedQuitRowOfCube G t ht ht1.le
+  have hphi : Continuous (fun p : closedQuitCube G t =>
+      cappedPhi G M d t ht1 (row p)) :=
+    (continuous_cappedPhi G M d t ht1).comp hrow
+  apply Continuous.subtype_mk
+  rw [continuous_pi_iff]
+  intro j
+  change Continuous (fun p : closedQuitCube G t =>
+    max 0 (min t (p.1 j +
+      (cappedPhi G M d t ht1 (row p) j - y j))))
+  exact continuous_const.max (continuous_const.min
+    (((continuous_apply j).comp continuous_subtype_val).add
+      (((continuous_apply j).comp hphi).sub continuous_const)))
+
+/-- Brouwer supplies a fixed point of the clipped target map. -/
+private theorem exists_cappedTargetMap_fixedPoint
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 < t)
+    (ht1 : t < 1) (y : Payoff G.Player) :
+    ∃ p : closedQuitCube G t, cappedTargetMap G M d t ht.le ht1 y p = p := by
+  exact brouwer_fixed_point (closedQuitCube G t)
+    (convex_closedQuitCube G t) (isCompact_closedQuitCube G t)
+    (nonempty_closedQuitCube G ht.le)
+    ⟨cappedTargetMap G M d t ht.le ht1 y,
+      continuous_cappedTargetMap G M d t ht.le ht1 y⟩
+
+/-- A fixed point cannot lie on an upper face on which `cappedPhi` points
+strictly below the target. -/
+private theorem cappedTargetMap_fixedPoint_lt_upper
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 < t) (ht1 : t < 1)
+    (y : Payoff G.Player) (p : closedQuitCube G t)
+    (hfixed : cappedTargetMap G M d t ht.le ht1 y p = p)
+    (hface : ∀ (q : CappedQuitRow G t) (j : G.Player),
+      (q.1 j : ℝ) = t → cappedPhi G M d t ht1 q j < y j)
+    (j : G.Player) : p.1 j < t := by
+  let row := cappedQuitRowOfCube G t ht.le ht1.le p
+  have hpUpper : p.1 j ≤ t := (p.2 j (Set.mem_univ j)).2
+  by_contra hnot
+  have hpEq : p.1 j = t := le_antisymm hpUpper (le_of_not_gt hnot)
+  have hrowEq : (row.1 j : ℝ) = t := by
+    exact hpEq
+  have hbelow := hface row j hrowEq
+  have hcoordinate := congrArg (fun q : closedQuitCube G t => q.1 j) hfixed
+  change max 0 (min t
+      (p.1 j + (cappedPhi G M d t ht1 row j - y j))) = p.1 j at hcoordinate
+  have haddLt : p.1 j + (cappedPhi G M d t ht1 row j - y j) < t := by
+    linarith
+  have hmaxLt : max 0 (min t
+      (p.1 j + (cappedPhi G M d t ht1 row j - y j))) < t := by
+    apply max_lt ht
+    exact (min_le_right _ _).trans_lt haddLt
+  linarith
+
+/-- At a positive coordinate of a clipped fixed point, no clipping is active,
+so the capped map equals the target. -/
+private theorem cappedPhi_eq_target_of_fixedPoint_positive
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 < t) (ht1 : t < 1)
+    (y : Payoff G.Player) (p : closedQuitCube G t)
+    (hfixed : cappedTargetMap G M d t ht.le ht1 y p = p)
+    (hlt : ∀ j, p.1 j < t) (j : G.Player) (hpj : 0 < p.1 j) :
+    cappedPhi G M d t ht1
+      (cappedQuitRowOfCube G t ht.le ht1.le p) j = y j := by
+  let row := cappedQuitRowOfCube G t ht.le ht1.le p
+  let u := p.1 j + (cappedPhi G M d t ht1 row j - y j)
+  have hcoordinate := congrArg (fun q : closedQuitCube G t => q.1 j) hfixed
+  change max 0 (min t u) = p.1 j at hcoordinate
+  have hminPos : 0 < min t u := by
+    by_contra hnot
+    have hmaxZero : max 0 (min t u) = 0 := max_eq_left (le_of_not_gt hnot)
+    linarith
+  have hminEq : min t u = p.1 j := by
+    rw [max_eq_right hminPos.le] at hcoordinate
+    exact hcoordinate
+  have huLt : u < t := by
+    by_contra hnot
+    have hminT : min t u = t := min_eq_left (le_of_not_gt hnot)
+    rw [hminT] at hminEq
+    linarith [hlt j]
+  have huEq : u = p.1 j := by
+    rw [min_eq_right huLt.le] at hminEq
+    exact hminEq
+  dsimp only [u] at huEq
+  linarith
+
+/-- At a zero coordinate of a clipped fixed point, the capped map is below
+the target. -/
+private theorem cappedPhi_le_target_of_fixedPoint_zero
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 < t) (ht1 : t < 1)
+    (y : Payoff G.Player) (p : closedQuitCube G t)
+    (hfixed : cappedTargetMap G M d t ht.le ht1 y p = p)
+    (j : G.Player) (hpj : p.1 j = 0) :
+    cappedPhi G M d t ht1
+      (cappedQuitRowOfCube G t ht.le ht1.le p) j ≤ y j := by
+  let row := cappedQuitRowOfCube G t ht.le ht1.le p
+  let u := p.1 j + (cappedPhi G M d t ht1 row j - y j)
+  have hcoordinate := congrArg (fun q : closedQuitCube G t => q.1 j) hfixed
+  change max 0 (min t u) = p.1 j at hcoordinate
+  rw [hpj] at hcoordinate
+  have hminNonpos : min t u ≤ 0 := by
+    by_contra hnot
+    have hpositive : 0 < max 0 (min t u) := lt_max_iff.mpr (Or.inr (lt_of_not_ge hnot))
+    linarith
+  have huNonpos : u ≤ 0 := by
+    by_contra hnot
+    have hminPos : 0 < min t u := lt_min ht (lt_of_not_ge hnot)
+    linarith
+  dsimp only [u] at huNonpos
+  linarith
+
+/-- Increase continuation coordinates just enough to turn the complementary
+fixed-point inequalities into the requested exact `Phi` value. -/
+private def targetAdjustedContinuation
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 ≤ t) (ht1 : t < 1)
+    (y : Payoff G.Player) (p : closedQuitCube G t) : Payoff G.Player :=
+  let row := cappedQuitRowOfCube G t ht ht1.le p
+  fun j => indifferentContinuation G row.1 j +
+    (y j - cappedPhi G M d t ht1 row j) /
+      (1 - QuitProbability G row.1)
+
+/-- The target adjustment is coordinatewise nonnegative at a clipped fixed
+point away from the upper faces. -/
+private theorem indifferentContinuation_le_targetAdjusted
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 < t) (ht1 : t < 1)
+    (y : Payoff G.Player) (p : closedQuitCube G t)
+    (hfixed : cappedTargetMap G M d t ht.le ht1 y p = p)
+    (hlt : ∀ j, p.1 j < t) (j : G.Player) :
+    indifferentContinuation G
+        (cappedQuitRowOfCube G t ht.le ht1.le p).1 j ≤
+      targetAdjustedContinuation G M d t ht.le ht1 y p j := by
+  let row := cappedQuitRowOfCube G t ht.le ht1.le p
+  have hphi : cappedPhi G M d t ht1 row j ≤ y j := by
+    by_cases hpj : 0 < p.1 j
+    · exact (cappedPhi_eq_target_of_fixedPoint_positive G M d t ht ht1
+        y p hfixed hlt j hpj).le
+    · have hpzero : p.1 j = 0 :=
+        le_antisymm (le_of_not_gt hpj) (p.2 j (Set.mem_univ j)).1
+      exact cappedPhi_le_target_of_fixedPoint_zero G M d t ht ht1
+        y p hfixed j hpzero
+  have hsurvival : 0 < 1 - QuitProbability G row.1 :=
+    one_sub_quitProbability_pos_of_forall_lt_one G row.1
+      (fun k => (row.2 k).trans_lt ht1)
+  change indifferentContinuation G row.1 j ≤
+    indifferentContinuation G row.1 j +
+      (y j - cappedPhi G M d t ht1 row j) /
+        (1 - QuitProbability G row.1)
+  exact le_add_of_nonneg_right (div_nonneg (sub_nonneg.mpr hphi) hsurvival.le)
+
+/-- Positive quitting support is not adjusted, because complementarity already
+gives equality with the target there. -/
+private theorem targetAdjustedContinuation_eq_of_positive
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 < t) (ht1 : t < 1)
+    (y : Payoff G.Player) (p : closedQuitCube G t)
+    (hfixed : cappedTargetMap G M d t ht.le ht1 y p = p)
+    (hlt : ∀ j, p.1 j < t) (j : G.Player) (hpj : 0 < p.1 j) :
+      targetAdjustedContinuation G M d t ht.le ht1 y p j =
+      indifferentContinuation G
+        (cappedQuitRowOfCube G t ht.le ht1.le p).1 j := by
+  let row := cappedQuitRowOfCube G t ht.le ht1.le p
+  have hphi := cappedPhi_eq_target_of_fixedPoint_positive G M d t ht ht1
+    y p hfixed hlt j hpj
+  change indifferentContinuation G row.1 j +
+      (y j - cappedPhi G M d t ht1 row j) /
+        (1 - QuitProbability G row.1) = indifferentContinuation G row.1 j
+  rw [hphi]
+  simp
+
+/-- The adjusted continuation and fixed quitting row remain an exact
+one-stage equilibrium below certain absorption. -/
+private def targetAdjustedGraphPoint
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 < t) (ht1 : t < 1)
+    (y : Payoff G.Player) (p : closedQuitCube G t)
+    (hfixed : cappedTargetMap G M d t ht.le ht1 y p = p)
+    (hlt : ∀ j, p.1 j < t) : EZeroTilde G := by
+  let row := cappedQuitRowOfCube G t ht.le ht1.le p
+  refine ⟨(targetAdjustedContinuation G M d t ht.le ht1 y p, row.1), ?_⟩
+  have hstrict : ∀ j, (row.1 j : ℝ) < 1 := fun j => (row.2 j).trans_lt ht1
+  change row.1 ∈ EpsilonRow G 0
+      (targetAdjustedContinuation G M d t ht.le ht1 y p) ∧
+    QuitProbability G row.1 < 1
+  constructor
+  · constructor
+    · intro j hj
+      have hadjust := targetAdjustedContinuation_eq_of_positive
+        G M d t ht ht1 y p hfixed hlt j hj
+      have hcontinue := forcedContinue_eq_of_continuation_coord_eq G row.1
+        (targetAdjustedContinuation G M d t ht.le ht1 y p)
+        (indifferentContinuation G row.1) j hadjust
+      rw [hcontinue, forcedContinue_indifferentContinuation G row.1 hstrict j]
+      simp
+    · intro j _hj
+      have hmono := forcedContinue_mono_continuation_coord G row.1
+        (indifferentContinuation G row.1)
+        (targetAdjustedContinuation G M d t ht.le ht1 y p) j
+        (indifferentContinuation_le_targetAdjusted G M d t ht ht1
+          y p hfixed hlt j)
+      rw [forcedContinue_indifferentContinuation G row.1 hstrict j] at hmono
+      simpa using hmono
+  · linarith [one_sub_quitProbability_pos_of_forall_lt_one G row.1 hstrict]
+
+/-- The adjustment changes `Phi` by exactly the target residual. -/
+private theorem phi_targetAdjustedGraphPoint
+    (G : QuittingGame) (M d t : ℝ) (ht : 0 < t) (ht1 : t < 1)
+    (y : Payoff G.Player) (p : closedQuitCube G t)
+    (hfixed : cappedTargetMap G M d t ht.le ht1 y p = p)
+    (hlt : ∀ j, p.1 j < t) :
+    Phi G M d (targetAdjustedGraphPoint G M d t ht ht1 y p hfixed hlt) = y := by
+  classical
+  let row := cappedQuitRowOfCube G t ht.le ht1.le p
+  have hsurvival : 0 < 1 - QuitProbability G row.1 :=
+    one_sub_quitProbability_pos_of_forall_lt_one G row.1
+      (fun j => (row.2 j).trans_lt ht1)
+  funext j
+  have hstage : QuittingOneStagePayoff G
+      (targetAdjustedContinuation G M d t ht.le ht1 y p) row.1 j =
+      QuittingOneStagePayoff G (indifferentContinuation G row.1) row.1 j +
+        (y j - cappedPhi G M d t ht1 row j) := by
+    change QuittingOneStagePayoff G
+      (fun k => indifferentContinuation G row.1 k +
+        (y k - cappedPhi G M d t ht1 row k) /
+          (1 - QuitProbability G row.1)) row.1 j = _
+    simp only [QuittingOneStagePayoff]
+    field_simp [hsurvival.ne']; ring
+  simp only [targetAdjustedGraphPoint]
+  change QuittingOneStagePayoff G
+      (targetAdjustedContinuation G M d t ht.le ht1 y p) row.1 j -
+        (5 * (Fintype.card G.Player : ℝ) * M / d) *
+          ((row.1 j : ℝ) /
+            (1 - (row.1 j : ℝ)) ^ Fintype.card G.Player) +
+        M * ∑ k ∈ Finset.univ.erase j, (row.1 k : ℝ) = y j
+  rw [hstage]
+  have hcapped : QuittingOneStagePayoff G
+      (indifferentContinuation G row.1) row.1 j -
+        (5 * (Fintype.card G.Player : ℝ) * M / d) *
+          ((row.1 j : ℝ) /
+            (1 - (row.1 j : ℝ)) ^ Fintype.card G.Player) +
+        M * ∑ k ∈ Finset.univ.erase j, (row.1 k : ℝ) =
+      cappedPhi G M d t ht1 row j := rfl
+  linear_combination hcapped
+
+/-- Brouwer's clipped excess map and the target adjustment prove the
+surjectivity half of Lemma 3.2. -/
+private theorem phi_surjective (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
+    Function.Surjective (Phi G M d) := by
+  intro y
+  obtain ⟨t, ht, ht1, hface⟩ :=
+    exists_cappedPhi_upperFace_lt G M d hM hd hd1 y
+  obtain ⟨p, hfixed⟩ :=
+    exists_cappedTargetMap_fixedPoint G M d t ht ht1 y
+  have hlt : ∀ j, p.1 j < t :=
+    cappedTargetMap_fixedPoint_lt_upper G M d t ht ht1
+      y p hfixed hface
+  exact ⟨targetAdjustedGraphPoint G M d t ht ht1 y p hfixed hlt,
+    phi_targetAdjustedGraphPoint G M d t ht ht1 y p hfixed hlt⟩
+
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
 the paper's Jacobian argument: strict diagonal dominance gives local openness
@@ -2637,6 +2963,7 @@ homeomorphism.
 theorem lemma3_2 (G : QuittingGame) (M d : ℝ)
     (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
     Function.Surjective (Phi G M d) ∧ Nonempty (PhiInverseData G M d) := by
+  refine ⟨phi_surjective G M d hM hd hd1, ?_⟩
   sorry
 
 /-- The paper's straight-line condition for the structure homotopy. -/
@@ -3012,14 +3339,6 @@ private theorem quitProbability_eq_one_of_apply_eq_one
     linarith
   rw [hzero]
   ring
-
-private theorem forcedContinue_mono_continuation_coord
-    (G : QuittingGame) (p : QuitRow G) (r s : Payoff G.Player)
-    (n : G.Player) (h : r n ≤ s n) :
-    ForcedContinuePayoff G r p n ≤ ForcedContinuePayoff G s p n := by
-  simp only [ForcedContinuePayoff, QuittingOneStagePayoff]
-  gcongr
-  exact sub_nonneg.mpr (quitProbability_mem_Icc G (p.replace G n 0)).2
 
 private theorem forcedContinue_eq_of_sure_other
     (G : QuittingGame) (p : QuitRow G) (r s : Payoff G.Player)
