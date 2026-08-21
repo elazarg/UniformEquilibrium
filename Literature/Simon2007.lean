@@ -9314,6 +9314,55 @@ private theorem quittingDDPRawLaw_state_eq_zero_of_unreachable
       measure_iUnion_le _
     _ = 0 := by simp_rw [hmeasure]; simp
 
+/-- At a live state, the Bernoulli action variation is at most twice own quit mass times `M`. -/
+private theorem quittingDDP_live_actionVariation_le
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T i : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) (hi : i < T) :
+    ∑' action : Bool,
+        ((quittingDecisionProcess G p n T M hM).choose (i, ∅) action).toReal *
+          |DDPStage.increment (quittingDecisionProcess G p n T M hM)
+            ⟨(i, ∅), action⟩| ≤ 2 * M * (p i n : ℝ) := by
+  let P := quittingDecisionProcess G p n T M hM
+  let q : ℝ := p i n
+  let a := quittingDDPValueY G p n T (i, ∅) true
+  let b := quittingDDPValueY G p n T (i, ∅) false
+  let x := quittingDDPValueX G p n T (i, ∅)
+  have hlive : IsQuittingDDPLive T (i, (∅ : Finset G.Player)) := ⟨hi, rfl⟩
+  have hq0 : 0 ≤ q := (p i n).property.1
+  have hq1 : q ≤ 1 := (p i n).property.2
+  have haverage : x = q * a + (1 - q) * b := by
+    have h := quittingDDPHarmonicX G p n T (i, ∅)
+    rw [tsum_fintype, Fintype.sum_bool] at h
+    simpa only [P, q, a, b, x, quittingDDPChoose, hlive, if_pos,
+      quittingBernoulli_apply_true_toReal, quittingBernoulli_apply_false_toReal]
+      using h
+  have habs : |a - b| ≤ M := by
+    exact abs_sub_le_of_mem_coordinateInterval G n hM
+      (quittingDDPValueY_mem_coordinateInterval G p n T (i, ∅) true)
+      (quittingDDPValueY_mem_coordinateInterval G p n T (i, ∅) false)
+  have hscaled : (1 - q) * |a - b| ≤ M := by
+    calc
+      (1 - q) * |a - b| ≤ 1 * |a - b| := by
+        exact mul_le_mul_of_nonneg_right (by linarith) (abs_nonneg _)
+      _ ≤ M := by simpa using habs
+  change ∑' action : Bool, (quittingDDPChoose G p n T (i, ∅) action).toReal *
+    |quittingDDPValueY G p n T (i, ∅) action -
+      quittingDDPValueX G p n T (i, ∅)| ≤ _
+  rw [tsum_fintype, Fintype.sum_bool]
+  simp only [quittingDDPChoose, hlive, if_pos, quittingBernoulli_apply_true_toReal,
+    quittingBernoulli_apply_false_toReal]
+  change q * |a - x| + (1 - q) * |b - x| ≤ 2 * M * q
+  rw [haverage]
+  rw [show b - (q * a + (1 - q) * b) = -q * (a - b) by ring]
+  rw [show a - (q * a + (1 - q) * b) = (1 - q) * (a - b) by ring]
+  rw [abs_mul, abs_mul, abs_neg, abs_of_nonneg hq0,
+    abs_of_nonneg (sub_nonneg.mpr hq1)]
+  calc
+    q * ((1 - q) * |a - b|) + (1 - q) * (q * |a - b|) =
+        2 * q * ((1 - q) * |a - b|) := by ring
+    _ ≤ 2 * q * M := mul_le_mul_of_nonneg_left hscaled (by positivity)
+    _ = 2 * M * q := by ring
+
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
 `F_δ` profile with unbounded quit mass generates a `3ε`-equilibrium.  The generated
