@@ -322,15 +322,22 @@ def SunspotEpsilonEquilibrium
 def trivialSignalLaw : PMF (Fin 1) :=
   PMF.pure 0
 
-/-! A live-root sequence lifted to the alternating draw/decision clock.
-At public time `2n+1`, the active decision uses root `n`; actions at the
-intervening draw states are immaterial and fixed to Continue. -/
-def rootSequenceSunspotStrategy (table : Table ι)
+/-! A live-root sequence lifted through an arbitrary action-independent
+public-signal law. At public time `2n+1`, the active decision uses root `n`;
+actions at the intervening draw states are immaterial and fixed to Continue. -/
+def rootSequencePublicStrategy {Signal : Type} [Finite Signal]
+    (table : Table ι) (signalLaw : PMF Signal)
     (roots : ℕ → ι → PMF Bool) :
-    (publicQuittingGame table trivialSignalLaw).BehaviorProfile :=
+    (publicQuittingGame table signalLaw).BehaviorProfile :=
   fun who time history => match history.2 with
     | .active _ => roots (time / 2) who
     | _ => PMF.pure false
+
+/-! The one-label specialization used to compare ordinary and sunspot play. -/
+def rootSequenceSunspotStrategy (table : Table ι)
+    (roots : ℕ → ι → PMF Bool) :
+    (publicQuittingGame table trivialSignalLaw).BehaviorProfile :=
+  rootSequencePublicStrategy table trivialSignalLaw roots
 
 /-! The one-label sunspot profile induced by a sequence of ordinary live
 roots. -/
@@ -13255,7 +13262,7 @@ private theorem rootSequenceFinitePotential_active_pure
           simp only [Function.update_self]
           rfl
         · rw [Function.update_of_ne hplayer]
-          simp [rootSequenceSunspotStrategy,
+          simp [rootSequenceSunspotStrategy, rootSequencePublicStrategy,
             Function.update_of_ne hplayer]
       unfold StochasticGame.historyContinuationEU
       rw [hactionDist]
@@ -13671,7 +13678,8 @@ private theorem rootSequencePrescribedFinitePotential_active_harmonic
     unfold StochasticGame.stageActionDist
     congr 1
     funext player
-    simp only [rootSequenceSunspotStrategy, hstate]
+    simp only [rootSequenceSunspotStrategy, rootSequencePublicStrategy,
+      hstate]
   have hround : time / 2 < horizon := by omega
   have hfuel : horizon - time / 2 =
       horizon - (time / 2 + 1) + 1 := by omega
@@ -19438,7 +19446,7 @@ theorem positiveRow_positiveOwner {M : ι → ι → ℝ}
       (fun candidate => 0 < M candidate (hM.positiveOwner who))
       Finset.univ := Finset.mem_filter.mpr ⟨Finset.mem_univ _, hpos⟩
   rw [hM.positiveRow_filter (hM.positiveOwner who)] at hmem
-  simpa using hmem
+  exact (Finset.mem_singleton.mp hmem).symm
 
 /-! The positive-entry pattern is a permutation between rows and columns. -/
 noncomputable def positiveOwnerEquiv {M : ι → ι → ℝ}
@@ -19504,21 +19512,23 @@ private theorem standardSolution_columnAction_eq_neg_of_negative_direction
 calibration `p` with `Mp=1`. -/
 noncomputable def positiveCalibration {M : ι → ι → ℝ}
     (hM : MMatrix M) : ι → ℝ :=
-  Classical.choose (hM.1 (fun _ => -1)) |>.weight
+  (Classical.choice (hM.1 (fun _ => -1))).weight
 
 theorem positiveCalibration_pos {M : ι → ι → ℝ}
     (hM : MMatrix M) : ∀ owner, 0 < hM.positiveCalibration owner := by
-  let solution := Classical.choose (hM.1 (fun _ => -1))
+  let solution := Classical.choice (hM.1 (fun _ => -1))
   exact standardSolution_weight_pos_of_negative_direction hM
     (fun _ => by norm_num) solution
 
 theorem columnAction_positiveCalibration {M : ι → ι → ℝ}
     (hM : MMatrix M) :
     columnAction M hM.positiveCalibration = fun _ => 1 := by
-  let solution := Classical.choose (hM.1 (fun _ => -1))
+  let solution := Classical.choice (hM.1 (fun _ => -1))
   have heq := standardSolution_columnAction_eq_neg_of_negative_direction hM
     (fun _ => by norm_num) solution
-  simpa [positiveCalibration, solution] using heq
+  funext who
+  have hcoordinate := congrFun heq who
+  simpa [positiveCalibration, solution] using hcoordinate
 
 /-! A permutation M-matrix is inverse monotone: `Mx≥0` implies `x≥0`.
 This is the finite minimum-ratio proof, avoiding any determinant API. -/
@@ -19548,7 +19558,7 @@ theorem columnAction_nonneg_imp_nonneg [Nonempty ι]
     · subst candidate
       have hcalibrationPos := hM.positiveCalibration_pos owner
       dsimp only [ratio]
-      field_simp [ne_of_gt hcalibrationPos]
+      rw [div_mul_cancel₀ _ (ne_of_gt hcalibrationPos)]
     · have hratio : ratio * hM.positiveCalibration candidate ≤
           x candidate := by
         apply (le_div_iff₀ (hM.positiveCalibration_pos candidate)).mp
@@ -19564,6 +19574,7 @@ theorem columnAction_nonneg_imp_nonneg [Nonempty ι]
           ratio * hM.positiveCalibration candidate * M row candidate :=
         Finset.sum_le_sum fun candidate _ => hterm candidate
       _ = ratio * columnAction M hM.positiveCalibration row := by
+        simp only [columnAction]
         rw [Finset.mul_sum]
         apply Finset.sum_congr rfl
         intro candidate _
@@ -19580,32 +19591,42 @@ theorem columnAction_injective [Nonempty ι]
   have hsub : columnAction M (x - y) = 0 := by
     funext who
     have hcoordinate := congrFun hxy who
-    simp only [columnAction, Pi.sub_apply, Pi.zero_apply]
-    rw [Finset.sum_sub_distrib]
-    convert sub_eq_zero.mpr hcoordinate using 1 <;>
-      apply Finset.sum_congr rfl <;> intro owner _ <;> ring
+    change (∑ owner, (x owner - y owner) * M who owner) = 0
+    rw [show (∑ owner, (x owner - y owner) * M who owner) =
+        (∑ owner, x owner * M who owner) -
+          ∑ owner, y owner * M who owner by
+      simpa only [sub_mul] using
+        (Finset.sum_sub_distrib (s := Finset.univ)
+          (fun owner : ι => x owner * M who owner)
+          (fun owner : ι => y owner * M who owner))]
+    exact sub_eq_zero.mpr hcoordinate
   have hsubNonneg : ∀ owner, 0 ≤ (x - y) owner := by
     apply hM.columnAction_nonneg_imp_nonneg
     intro who
-    rw [hsub]
-  have hnegSubNonneg : ∀ owner, 0 ≤ -(x - y) owner := by
+    have hzero := congrFun hsub who
+    change columnAction M (x - y) who = (0 : ℝ) at hzero
+    linarith
+  have hnegSubNonneg : ∀ owner, 0 ≤ -((x - y) owner) := by
     apply hM.columnAction_nonneg_imp_nonneg
     intro who
-    have hneg : columnAction M (-(x - y)) = 0 := by
+    have hneg : columnAction M (fun owner => -((x - y) owner)) = 0 := by
       funext row
-      rw [show columnAction M (-(x - y)) row =
+      rw [show columnAction M (fun owner => -((x - y) owner)) row =
           -columnAction M (x - y) row by
-        simp only [columnAction, Pi.neg_apply, Finset.sum_neg_distrib]
-        apply Finset.sum_congr rfl
-        intro owner _
-        ring,
+        simp only [columnAction]
+        simpa only [neg_mul] using
+          (Finset.sum_neg_distrib (s := Finset.univ)
+            (fun owner : ι => (x - y) owner * M row owner)),
         hsub]
       simp
-    rw [hneg]
+    have hzero := congrFun hneg who
+    change columnAction M (fun owner => -((x - y) owner)) who =
+      (0 : ℝ) at hzero
+    linarith
   funext owner
   have hle := hsubNonneg owner
   have hge := hnegSubNonneg owner
-  simp only [Pi.sub_apply, Pi.neg_apply] at hle hge
+  simp only [Pi.sub_apply] at hle hge
   linarith
 
 /-! The inverse-positive conclusion used in Eq. (20): for each `i` there is
@@ -19631,9 +19652,20 @@ theorem exists_unitColumnSolution [Nonempty ι]
     dsimp only [qOne] at hone
     simp only [Pi.neg_apply] at hone
     dsimp only [x, columnAction]
-    rw [Finset.sum_sub_distrib]
-    change (∑ owner, oneSolution.weight owner * M who owner) -
-      (∑ owner, hM.positiveCalibration owner * M who owner) = _
+    rw [show (∑ owner,
+        (oneSolution.weight owner - hM.positiveCalibration owner) *
+          M who owner) =
+        (∑ owner, oneSolution.weight owner * M who owner) -
+          ∑ owner, hM.positiveCalibration owner * M who owner by
+      simpa only [sub_mul] using
+        (Finset.sum_sub_distrib (s := Finset.univ)
+          (fun owner : ι => oneSolution.weight owner * M who owner)
+          (fun owner : ι =>
+            hM.positiveCalibration owner * M who owner))]
+    change (∑ owner, oneSolution.weight owner * M who owner) =
+      -(-unitVector target who - 1) at hone
+    change (∑ owner, hM.positiveCalibration owner * M who owner) = 1
+      at hcalibration
     linarith
   have hxNonneg : ∀ owner, 0 ≤ x owner := by
     intro owner
@@ -19642,7 +19674,8 @@ theorem exists_unitColumnSolution [Nonempty ι]
     let δ := -x owner / (2 * hM.positiveCalibration owner)
     have hδ : 0 < δ := by
       dsimp only [δ]
-      positivity
+      exact div_pos (neg_pos.mpr hxNegative)
+        (mul_pos (by norm_num) (hM.positiveCalibration_pos owner))
     let qδ : ι → ℝ := fun who => -unitVector target who - δ
     obtain ⟨δSolution⟩ := hM.1 qδ
     have hqδ : ∀ who, qδ who < 0 := by
@@ -19661,11 +19694,18 @@ theorem exists_unitColumnSolution [Nonempty ι]
       have hp := congrFun hM.columnAction_positiveCalibration who
       dsimp only [qδ] at hleft
       simp only [Pi.neg_apply] at hleft
-      simp only [columnAction]
-      rw [Finset.sum_add_distrib]
-      change (∑ candidate, x candidate * M who candidate) +
-        (∑ candidate,
-          (δ * hM.positiveCalibration candidate) * M who candidate) = _
+      change (∑ candidate, δSolution.weight candidate * M who candidate) =
+        ∑ candidate,
+          (x candidate + δ * hM.positiveCalibration candidate) *
+            M who candidate
+      rw [show (∑ candidate,
+          (x candidate + δ * hM.positiveCalibration candidate) *
+            M who candidate) =
+          (∑ candidate, x candidate * M who candidate) +
+            ∑ candidate,
+              (δ * hM.positiveCalibration candidate) * M who candidate by
+        simp_rw [add_mul]
+        rw [Finset.sum_add_distrib]]
       rw [show (∑ candidate,
           (δ * hM.positiveCalibration candidate) * M who candidate) =
           δ * (∑ candidate,
@@ -19674,7 +19714,13 @@ theorem exists_unitColumnSolution [Nonempty ι]
         apply Finset.sum_congr rfl
         intro candidate _
         ring]
-      linarith
+      change (∑ candidate, δSolution.weight candidate * M who candidate) =
+        -(-unitVector target who - δ) at hleft
+      change (∑ candidate, x candidate * M who candidate) =
+        unitVector target who at hx
+      change (∑ candidate,
+        hM.positiveCalibration candidate * M who candidate) = 1 at hp
+      linear_combination hleft - hx - δ * hp
     have hcoordinate := congrFun haffine owner
     have hcalibrationPos := hM.positiveCalibration_pos owner
     have hδNonneg := δSolution.weight_nonneg owner
@@ -19682,8 +19728,11 @@ theorem exists_unitColumnSolution [Nonempty ι]
     rw [hcoordinate] at hδNonneg
     field_simp [ne_of_gt hcalibrationPos] at hδNonneg
     nlinarith
-  exact ⟨{ weight := x, weight_nonneg := hxNonneg,
-    equation := hxEquation }⟩
+  exact ⟨{
+    weight := x
+    weight_nonneg := hxNonneg
+    equation := hxEquation
+  }⟩
 
 end MMatrix
 
@@ -19695,6 +19744,1078 @@ def NormalSingletonHull (table : Table ι) : Set (Payoff ι) :=
 /-! `D̃ = conv{rⁱ : i∈I*} ∩ ℝ^N_{≥0}` from Section 4. -/
 def TildeD (table : Table ι) : Set (Payoff ι) :=
   NormalSingletonHull table ∩ {value | ∀ who, 0 ≤ value who}
+
+/-! ## Section 4.1 — inverse-positive axis geometry -/
+
+namespace MMatrix
+
+noncomputable def axisSolution [Nonempty ι] {M : ι → ι → ℝ}
+    (hM : MMatrix M) (target : ι) : UnitColumnSolution M target :=
+  Classical.choice (hM.exists_unitColumnSolution target)
+
+def axisMass [Nonempty ι] {M : ι → ι → ℝ}
+    (hM : MMatrix M) (target : ι) : ℝ :=
+  ∑ owner, (hM.axisSolution target).weight owner
+
+theorem axisMass_pos [Nonempty ι] {M : ι → ι → ℝ}
+    (hM : MMatrix M) (target : ι) : 0 < hM.axisMass target := by
+  have hnonneg : 0 ≤ hM.axisMass target :=
+    Finset.sum_nonneg fun owner _ =>
+      (hM.axisSolution target).weight_nonneg owner
+  by_contra hnot
+  have hsumZero : hM.axisMass target = 0 :=
+    le_antisymm (le_of_not_gt hnot) hnonneg
+  have hweightZero : ∀ owner,
+      (hM.axisSolution target).weight owner = 0 := by
+    intro owner
+    exact (Finset.sum_eq_zero_iff_of_nonneg
+      (fun candidate _ =>
+        (hM.axisSolution target).weight_nonneg candidate)).mp
+      hsumZero owner (Finset.mem_univ owner)
+  have hequation := congrFun (hM.axisSolution target).equation target
+  simp [columnAction, hweightZero, unitVector] at hequation
+
+/-! The normalized inverse column `λ̂ᵢ` in Eq. (20). -/
+noncomputable def axisWeight [Nonempty ι] {M : ι → ι → ℝ}
+    (hM : MMatrix M) (target : ι) : stdSimplex ℝ ι := by
+  let mass := hM.axisMass target
+  refine ⟨fun owner => (hM.axisSolution target).weight owner / mass,
+    fun owner => div_nonneg ((hM.axisSolution target).weight_nonneg owner)
+      (hM.axisMass_pos target).le, ?_⟩
+  rw [← Finset.sum_div]
+  exact div_self (ne_of_gt (hM.axisMass_pos target))
+
+theorem axisWeight_apply [Nonempty ι] {M : ι → ι → ℝ}
+    (hM : MMatrix M) (target owner : ι) :
+    hM.axisWeight target owner =
+      (hM.axisSolution target).weight owner / hM.axisMass target := rfl
+
+theorem columnAction_axisWeight [Nonempty ι]
+    {M : ι → ι → ℝ} (hM : MMatrix M) (target : ι) :
+    columnAction M (hM.axisWeight target) = fun who =>
+      (hM.axisMass target)⁻¹ * unitVector target who := by
+  funext who
+  have hequation := congrFun (hM.axisSolution target).equation who
+  calc
+    columnAction M (hM.axisWeight target) who =
+        (hM.axisMass target)⁻¹ *
+          columnAction M (hM.axisSolution target).weight who := by
+      simp only [columnAction, axisWeight_apply]
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro owner _
+      field_simp [ne_of_gt (hM.axisMass_pos target)]
+    _ = (hM.axisMass target)⁻¹ * unitVector target who := by
+      rw [hequation]
+
+theorem axisWeight_designated_pos [Nonempty ι]
+    {M : ι → ι → ℝ} (hM : MMatrix M) (target : ι) :
+    0 < hM.axisWeight target (hM.positiveOwner target) := by
+  have hequation := congrFun (hM.axisSolution target).equation target
+  have hnonpos : ∀ owner, owner ≠ hM.positiveOwner target →
+      (hM.axisSolution target).weight owner * M target owner ≤ 0 := by
+    intro owner howner
+    exact mul_nonpos_of_nonneg_of_nonpos
+      ((hM.axisSolution target).weight_nonneg owner)
+      (hM.nonpos_of_ne_positiveOwner howner)
+  have hpositiveWeight : 0 <
+      (hM.axisSolution target).weight (hM.positiveOwner target) := by
+    by_contra hnot
+    have hzero : (hM.axisSolution target).weight
+        (hM.positiveOwner target) = 0 := le_antisymm
+      (le_of_not_gt hnot)
+      ((hM.axisSolution target).weight_nonneg _)
+    have hsum : columnAction M (hM.axisSolution target).weight target ≤ 0 := by
+      simp only [columnAction]
+      apply Finset.sum_nonpos
+      intro owner _
+      by_cases howner : owner = hM.positiveOwner target
+      · subst owner
+        simp [hzero]
+      · exact hnonpos owner howner
+    rw [hequation] at hsum
+    norm_num [unitVector] at hsum
+  rw [axisWeight_apply]
+  exact div_pos hpositiveWeight (hM.axisMass_pos target)
+
+end MMatrix
+
+section Section4Geometry
+
+variable (table : Table ι) [Nonempty (NormalPlayer table)]
+  (hM : MMatrix (NormalMatrix table))
+
+/-! The full-payoff lift of the normal-coordinate axis `wᵢ`. -/
+noncomputable def mAxisPayoff
+    (target : NormalPlayer table) : Payoff ι :=
+  fun who => ∑ owner,
+    hM.axisWeight target owner *
+      table.terminal (quittingProjectiveSingletonTerminal owner.1) who
+
+theorem mAxisPayoff_normal
+    (target who : NormalPlayer table) :
+    mAxisPayoff table hM target who.1 =
+      (hM.axisMass target)⁻¹ * MMatrix.unitVector target who := by
+  have heq := congrFun (hM.columnAction_axisWeight target) who
+  exact heq
+
+theorem mAxisPayoff_target_pos (target : NormalPlayer table) :
+    0 < mAxisPayoff table hM target target.1 := by
+  rw [mAxisPayoff_normal]
+  simp [MMatrix.unitVector]
+  exact hM.axisMass_pos target
+
+theorem mAxisPayoff_other_normal_zero
+    (target who : NormalPlayer table) (hne : who ≠ target) :
+    mAxisPayoff table hM target who.1 = 0 := by
+  rw [mAxisPayoff_normal]
+  simp [MMatrix.unitVector, hne]
+
+theorem mAxisPayoff_mem_normalSingletonHull
+    (target : NormalPlayer table) :
+    mAxisPayoff table hM target ∈ NormalSingletonHull table := by
+  apply mem_convexHull_of_exists_fintype
+    (hM.axisWeight target)
+    (fun owner : NormalPlayer table => fun who =>
+      table.terminal (quittingProjectiveSingletonTerminal owner.1) who)
+  · exact fun owner => (hM.axisWeight target).property.1 owner
+  · exact (hM.axisWeight target).property.2
+  · exact fun owner => ⟨owner, rfl⟩
+  · funext who
+    simp [mAxisPayoff, Pi.smul_apply, smul_eq_mul]
+
+theorem mAxisPayoff_nonneg
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (target : NormalPlayer table) :
+    ∀ who, 0 ≤ mAxisPayoff table hM target who := by
+  intro who
+  by_cases hnormal : who ∈ NormalPlayers table
+  · let normalWho : NormalPlayer table := ⟨who, hnormal⟩
+    by_cases hsame : normalWho = target
+    · have hwho : who = target.1 := congrArg Subtype.val hsame
+      rw [hwho]
+      exact (mAxisPayoff_target_pos table hM target).le
+    · rw [show who = normalWho.1 by rfl,
+        mAxisPayoff_other_normal_zero table hM target normalWho hsame]
+  · unfold mAxisPayoff
+    apply Finset.sum_nonneg
+    intro owner _
+    apply mul_nonneg ((hM.axisWeight target).property.1 owner)
+    exact (lemma2_6 table hnormalized hbounded
+      (by simpa [mem_normalPlayers_iff] using hnormal)
+      (by
+        intro hsame
+        subst who
+        exact hnormal owner.2)).le
+
+theorem mAxisPayoff_mem_tildeD
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (target : NormalPlayer table) :
+    mAxisPayoff table hM target ∈ TildeD table :=
+  ⟨mAxisPayoff_mem_normalSingletonHull table hM target,
+    mAxisPayoff_nonneg table hM hnormalized hbounded target⟩
+
+/-! A simplex representation of a full payoff by normal singleton columns. -/
+structure NormalSingletonRepresentation (value : Payoff ι) where
+  weight : stdSimplex ℝ (NormalPlayer table)
+  equation : ∀ who, value who = ∑ owner,
+    weight owner *
+      table.terminal (quittingProjectiveSingletonTerminal owner.1) who
+
+theorem exists_normalSingletonRepresentation
+    {value : Payoff ι} (hvalue : value ∈ NormalSingletonHull table) :
+    Nonempty (NormalSingletonRepresentation table value) := by
+  rw [NormalSingletonHull,
+    convexHull_range_eq_exists_affineCombination] at hvalue
+  obtain ⟨support, weight, hweightNonneg, hweightTotal, hcombination⟩ := hvalue
+  let fullWeight : NormalPlayer table → ℝ := fun owner =>
+    if owner ∈ support then weight owner else 0
+  have hfullNonneg : ∀ owner, 0 ≤ fullWeight owner := by
+    intro owner
+    dsimp only [fullWeight]
+    split
+    · exact hweightNonneg owner (by assumption)
+    · exact le_rfl
+  have hfullTotal : ∑ owner, fullWeight owner = 1 := by
+    have hinter : (NormalPlayers table).attach ∩ support = support :=
+      Finset.inter_eq_right.mpr fun owner _ =>
+        by simpa using owner.property
+    simpa [fullWeight, hinter] using hweightTotal
+  let simplex : stdSimplex ℝ (NormalPlayer table) :=
+    ⟨fullWeight, hfullNonneg, hfullTotal⟩
+  refine ⟨{ weight := simplex, equation := ?_ }⟩
+  intro who
+  rw [Finset.affineCombination_eq_linear_combination _ _ _ hweightTotal]
+      at hcombination
+  have hcoordinate := congrFun hcombination who
+  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul] at hcoordinate
+  change value who = ∑ owner, fullWeight owner *
+    table.terminal (quittingProjectiveSingletonTerminal owner.1) who
+  rw [← hcoordinate]
+  have hinter : (NormalPlayers table).attach ∩ support = support :=
+    Finset.inter_eq_right.mpr fun owner _ =>
+      by simpa using owner.property
+  simp [fullWeight, hinter]
+
+/-! Coefficients of a nonnegative normal value in the axis basis. -/
+noncomputable def mAxisCoefficient
+    (normalValue : NormalPlayer table → ℝ)
+    (target : NormalPlayer table) : ℝ :=
+  normalValue target * hM.axisMass target
+
+/-! Expanding axis coefficients back into singleton-column weights. -/
+noncomputable def mAxisExpandedWeight
+    (normalValue : NormalPlayer table → ℝ)
+    (owner : NormalPlayer table) : ℝ :=
+  ∑ target, mAxisCoefficient table hM normalValue target *
+    hM.axisWeight target owner
+
+theorem mAxisExpandedWeight_eq_of_columnAction
+    (normalValue : NormalPlayer table → ℝ)
+    (weight : NormalPlayer table → ℝ)
+    (hequation : MMatrix.columnAction (NormalMatrix table) weight =
+      normalValue) :
+    mAxisExpandedWeight table hM normalValue = weight := by
+  apply hM.columnAction_injective
+  funext who
+  rw [hequation]
+  simp only [MMatrix.columnAction, mAxisExpandedWeight,
+    mAxisCoefficient]
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  calc
+    _ = ∑ target, normalValue target * hM.axisMass target *
+          MMatrix.columnAction (NormalMatrix table)
+            (hM.axisWeight target) who := by
+      apply Finset.sum_congr rfl
+      intro target _
+      simp only [MMatrix.columnAction]
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro owner _
+      ring
+    _ = ∑ target, normalValue target * hM.axisMass target *
+          ((hM.axisMass target)⁻¹ *
+            MMatrix.unitVector target who) := by
+      apply Finset.sum_congr rfl
+      intro target _
+      rw [hM.columnAction_axisWeight]
+    _ = normalValue who := by
+      rw [Finset.sum_eq_single who]
+      · simp only [MMatrix.unitVector, if_pos]
+        field_simp [ne_of_gt (hM.axisMass_pos who)]
+      · intro target _ hne
+        simp [MMatrix.unitVector, Ne.symm hne]
+      · simp
+
+theorem mAxisCoefficient_nonneg
+    {normalValue : NormalPlayer table → ℝ}
+    (hnonneg : ∀ who, 0 ≤ normalValue who) :
+    ∀ target, 0 ≤ mAxisCoefficient table hM normalValue target := by
+  intro target
+  exact mul_nonneg (hnonneg target) (hM.axisMass_pos target).le
+
+theorem sum_mAxisCoefficient_eq_one
+    {value : Payoff ι}
+    (representation : NormalSingletonRepresentation table value) :
+    ∑ target, mAxisCoefficient table hM
+      (fun who => value who.1) target = 1 := by
+  have hnormalEquation : MMatrix.columnAction (NormalMatrix table)
+      representation.weight = fun who => value who.1 := by
+    funext who
+    have heq := representation.equation who.1
+    exact heq.symm
+  have hexpanded := mAxisExpandedWeight_eq_of_columnAction table hM
+    (fun who => value who.1) representation.weight hnormalEquation
+  calc
+    ∑ target, mAxisCoefficient table hM
+        (fun who => value who.1) target =
+        ∑ owner, mAxisExpandedWeight table hM
+          (fun who => value who.1) owner := by
+      simp only [mAxisExpandedWeight]
+      rw [Finset.sum_comm]
+      apply Finset.sum_congr rfl
+      intro target _
+      rw [← Finset.mul_sum]
+      have hsum := (hM.axisWeight target).property.2
+      change (∑ owner, hM.axisWeight target owner) = 1 at hsum
+      rw [hsum, mul_one]
+    _ = ∑ owner, representation.weight owner := by rw [hexpanded]
+    _ = 1 := representation.weight.property.2
+
+theorem mAxisPayoff_combination_eq
+    {value : Payoff ι}
+    (representation : NormalSingletonRepresentation table value) :
+    (∑ target, mAxisCoefficient table hM
+      (fun who => value who.1) target • mAxisPayoff table hM target) =
+      value := by
+  have hnormalEquation : MMatrix.columnAction (NormalMatrix table)
+      representation.weight = fun who => value who.1 := by
+    funext who
+    exact (representation.equation who.1).symm
+  have hexpanded := mAxisExpandedWeight_eq_of_columnAction table hM
+    (fun who => value who.1) representation.weight hnormalEquation
+  funext who
+  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul,
+    mAxisPayoff]
+  simp_rw [Finset.mul_sum]
+  rw [Finset.sum_comm]
+  calc
+    _ = ∑ owner, mAxisExpandedWeight table hM
+          (fun normal => value normal.1) owner *
+            table.terminal
+              (quittingProjectiveSingletonTerminal owner.1) who := by
+      apply Finset.sum_congr rfl
+      intro owner _
+      simp only [mAxisExpandedWeight]
+      rw [Finset.sum_mul]
+      apply Finset.sum_congr rfl
+      intro target _
+      ring
+    _ = ∑ owner, representation.weight owner *
+          table.terminal
+            (quittingProjectiveSingletonTerminal owner.1) who := by
+      rw [hexpanded]
+    _ = value who := (representation.equation who).symm
+
+/-! A strictly positive part of the designated owner's axis weight.  The
+second bound is the paper's requirement that removing this exit branch leave
+the target coordinate nonnegative. -/
+noncomputable def mExitProbability
+    (target : NormalPlayer table) : ℝ :=
+  min (hM.axisWeight target (hM.positiveOwner target) / 2)
+    (mAxisPayoff table hM target target.1 /
+      (2 * NormalMatrix table target (hM.positiveOwner target)))
+
+theorem mExitProbability_pos (target : NormalPlayer table) :
+    0 < mExitProbability table hM target := by
+  unfold mExitProbability
+  apply lt_min (half_pos (hM.axisWeight_designated_pos target))
+  exact div_pos (mAxisPayoff_target_pos table hM target)
+    (mul_pos zero_lt_two (hM.positive_positiveOwner target))
+
+theorem mExitProbability_lt_one (target : NormalPlayer table) :
+    mExitProbability table hM target < 1 := by
+  have hcoordinateLe : hM.axisWeight target
+      (hM.positiveOwner target) ≤ 1 := by
+    calc
+      hM.axisWeight target (hM.positiveOwner target) ≤
+          ∑ owner, hM.axisWeight target owner :=
+        Finset.single_le_sum
+          (fun owner _ => (hM.axisWeight target).property.1 owner)
+          (Finset.mem_univ _)
+      _ = 1 := (hM.axisWeight target).property.2
+  unfold mExitProbability
+  have hhalf : hM.axisWeight target (hM.positiveOwner target) / 2 < 1 := by
+    linarith [hM.axisWeight_designated_pos target]
+  exact (min_le_left _ _).trans_lt hhalf
+
+theorem mExitProbability_mul_designated_le_axis
+    (target : NormalPlayer table) :
+    mExitProbability table hM target *
+        NormalMatrix table target (hM.positiveOwner target) ≤
+      mAxisPayoff table hM target target.1 := by
+  have hcolumnPos := hM.positive_positiveOwner target
+  have hle := min_le_right
+    (hM.axisWeight target (hM.positiveOwner target) / 2)
+    (mAxisPayoff table hM target target.1 /
+      (2 * NormalMatrix table target (hM.positiveOwner target)))
+  change mExitProbability table hM target ≤
+    mAxisPayoff table hM target target.1 /
+      (2 * NormalMatrix table target (hM.positiveOwner target)) at hle
+  have hratio :
+      (mAxisPayoff table hM target target.1 /
+          (2 * NormalMatrix table target (hM.positiveOwner target))) *
+          NormalMatrix table target (hM.positiveOwner target) =
+        mAxisPayoff table hM target target.1 / 2 := by
+    field_simp [ne_of_gt hcolumnPos]
+  have haxisPos := mAxisPayoff_target_pos table hM target
+  nlinarith
+
+/-! Singleton-column weights of the continuation `y^[i]` after the
+designated owner survives the block. -/
+noncomputable def mContinuationOwnerWeight
+    (target owner : NormalPlayer table) : ℝ :=
+  (hM.axisWeight target owner -
+      if owner = hM.positiveOwner target then
+        mExitProbability table hM target else 0) /
+    (1 - mExitProbability table hM target)
+
+theorem mContinuationOwnerWeight_nonneg
+    (target owner : NormalPlayer table) :
+    0 ≤ mContinuationOwnerWeight table hM target owner := by
+  apply div_nonneg
+  · by_cases howner : owner = hM.positiveOwner target
+    · rw [if_pos howner]
+      subst owner
+      have hle : mExitProbability table hM target ≤
+          hM.axisWeight target (hM.positiveOwner target) / 2 := by
+        unfold mExitProbability
+        exact min_le_left _ _
+      linarith [hM.axisWeight_designated_pos target]
+    · rw [if_neg howner, sub_zero]
+      exact (hM.axisWeight target).property.1 owner
+  · linarith [mExitProbability_lt_one table hM target]
+
+theorem sum_mContinuationOwnerWeight (target : NormalPlayer table) :
+    ∑ owner, mContinuationOwnerWeight table hM target owner = 1 := by
+  let designated := hM.positiveOwner target
+  have hdenominator : 1 - mExitProbability table hM target ≠ 0 :=
+    ne_of_gt (sub_pos.mpr (mExitProbability_lt_one table hM target))
+  simp only [mContinuationOwnerWeight]
+  rw [← Finset.sum_div]
+  have hindicator : (∑ owner,
+      if owner = designated then mExitProbability table hM target else 0) =
+      mExitProbability table hM target := by
+    rw [Finset.sum_eq_single designated]
+    · simp
+    · intro owner _ hne
+      simp [hne]
+    · simp
+  have hsum := (hM.axisWeight target).property.2
+  change (∑ owner, hM.axisWeight target owner) = 1 at hsum
+  rw [Finset.sum_sub_distrib, hsum, hindicator]
+  exact div_self hdenominator
+
+noncomputable def mContinuationOwnerSimplex
+    (target : NormalPlayer table) :
+    stdSimplex ℝ (NormalPlayer table) :=
+  ⟨mContinuationOwnerWeight table hM target,
+    mContinuationOwnerWeight_nonneg table hM target,
+    sum_mContinuationOwnerWeight table hM target⟩
+
+/-! The full continuation payoff `y^[i]`. -/
+noncomputable def mContinuationPayoff
+    (target : NormalPlayer table) : Payoff ι :=
+  fun who => ∑ owner,
+    mContinuationOwnerWeight table hM target owner *
+      table.terminal (quittingProjectiveSingletonTerminal owner.1) who
+
+noncomputable def mContinuationRepresentation
+    (target : NormalPlayer table) :
+    NormalSingletonRepresentation table
+      (mContinuationPayoff table hM target) where
+  weight := mContinuationOwnerSimplex table hM target
+  equation := fun _ => rfl
+
+theorem mAxisPayoff_exit_balance
+    (target : NormalPlayer table) :
+    mAxisPayoff table hM target =
+      mExitProbability table hM target •
+          (fun who => table.terminal
+            (quittingProjectiveSingletonTerminal
+              (hM.positiveOwner target).1) who) +
+        (1 - mExitProbability table hM target) •
+          mContinuationPayoff table hM target := by
+  funext who
+  simp only [mAxisPayoff, mContinuationPayoff, Pi.add_apply,
+    Pi.smul_apply, smul_eq_mul]
+  let designated := hM.positiveOwner target
+  have hdenominator : 1 - mExitProbability table hM target ≠ 0 :=
+    ne_of_gt (sub_pos.mpr (mExitProbability_lt_one table hM target))
+  calc
+    ∑ owner, hM.axisWeight target owner *
+          table.terminal (quittingProjectiveSingletonTerminal owner.1) who =
+        ∑ owner,
+          (if owner = designated then
+              mExitProbability table hM target else 0) *
+            table.terminal
+              (quittingProjectiveSingletonTerminal owner.1) who +
+          ∑ owner,
+            (hM.axisWeight target owner -
+              if owner = designated then
+                mExitProbability table hM target else 0) *
+              table.terminal
+                (quittingProjectiveSingletonTerminal owner.1) who := by
+      rw [← Finset.sum_add_distrib]
+      apply Finset.sum_congr rfl
+      intro owner _
+      ring
+    _ = mExitProbability table hM target *
+          table.terminal
+            (quittingProjectiveSingletonTerminal designated.1) who +
+        ∑ owner,
+          (hM.axisWeight target owner -
+            if owner = designated then
+              mExitProbability table hM target else 0) *
+            table.terminal
+              (quittingProjectiveSingletonTerminal owner.1) who := by
+      congr 1
+      rw [Finset.sum_eq_single designated]
+      · simp
+      · intro owner _ hne
+        simp [hne]
+      · simp
+    _ = mExitProbability table hM target *
+          table.terminal
+            (quittingProjectiveSingletonTerminal designated.1) who +
+        (1 - mExitProbability table hM target) *
+          ∑ owner, mContinuationOwnerWeight table hM target owner *
+            table.terminal
+              (quittingProjectiveSingletonTerminal owner.1) who := by
+      dsimp only [designated]
+      congr 1
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro owner _
+      simp only [mContinuationOwnerWeight]
+      field_simp [hdenominator]
+
+theorem mContinuationPayoff_normal_nonneg
+    (target who : NormalPlayer table) :
+    0 ≤ mContinuationPayoff table hM target who.1 := by
+  have hbalance := congrFun (mAxisPayoff_exit_balance table hM target) who.1
+  simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hbalance
+  have hdenominator : 0 < 1 - mExitProbability table hM target :=
+    sub_pos.mpr (mExitProbability_lt_one table hM target)
+  by_cases hsame : who = target
+  · subst who
+    change mAxisPayoff table hM target target.1 =
+      mExitProbability table hM target *
+          NormalMatrix table target (hM.positiveOwner target) +
+        (1 - mExitProbability table hM target) *
+          mContinuationPayoff table hM target target.1 at hbalance
+    have hcoefficient :=
+      mExitProbability_mul_designated_le_axis table hM target
+    nlinarith
+  · have haxisZero := mAxisPayoff_other_normal_zero
+      table hM target who hsame
+    change mAxisPayoff table hM target who.1 =
+      mExitProbability table hM target *
+          NormalMatrix table who (hM.positiveOwner target) +
+        (1 - mExitProbability table hM target) *
+          mContinuationPayoff table hM target who.1 at hbalance
+    have hcolumnNonpos : NormalMatrix table who
+        (hM.positiveOwner target) ≤ 0 := by
+      have hrowNe : who ≠ target := hsame
+      have hpositiveRow := hM.positiveRow_positiveOwner target
+      apply le_of_not_gt
+      intro hpos
+      have hrow := hM.positiveRow_filter (hM.positiveOwner target)
+      have hmem : who ∈ Finset.filter
+          (fun candidate => 0 < NormalMatrix table candidate
+            (hM.positiveOwner target)) Finset.univ :=
+        Finset.mem_filter.mpr ⟨Finset.mem_univ _, hpos⟩
+      rw [hrow] at hmem
+      exact hrowNe (by simpa [hpositiveRow] using hmem)
+    rw [haxisZero] at hbalance
+    nlinarith [mExitProbability_pos table hM target]
+
+theorem mContinuationPayoff_nonneg
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (target : NormalPlayer table) :
+    ∀ who, 0 ≤ mContinuationPayoff table hM target who := by
+  intro who
+  by_cases hnormal : who ∈ NormalPlayers table
+  · exact mContinuationPayoff_normal_nonneg table hM target ⟨who, hnormal⟩
+  · unfold mContinuationPayoff
+    apply Finset.sum_nonneg
+    intro owner _
+    apply mul_nonneg
+      (mContinuationOwnerWeight_nonneg table hM target owner)
+    exact (lemma2_6 table hnormalized hbounded
+      (by simpa [mem_normalPlayers_iff] using hnormal)
+      (by
+        intro hsame
+        subst who
+        exact hnormal owner.2)).le
+
+/-! The paper's transition distribution `βᵢ`: it expands `y^[i]` in the
+axis basis. -/
+noncomputable def mTransitionWeight
+    (target : NormalPlayer table)
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table) :
+    stdSimplex ℝ (NormalPlayer table) := by
+  let normalValue : NormalPlayer table → ℝ := fun who =>
+    mContinuationPayoff table hM target who.1
+  refine ⟨mAxisCoefficient table hM normalValue,
+    mAxisCoefficient_nonneg table hM
+      (fun who => mContinuationPayoff_normal_nonneg table hM target who), ?_⟩
+  have hsum := sum_mAxisCoefficient_eq_one table hM
+    (mContinuationRepresentation table hM target)
+  exact hsum
+
+theorem mTransitionWeight_axis_balance
+    (target : NormalPlayer table)
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table) :
+    (∑ next, mTransitionWeight table hM target hnormalized hbounded next •
+      mAxisPayoff table hM next) =
+      mContinuationPayoff table hM target := by
+  exact mAxisPayoff_combination_eq table hM
+    (mContinuationRepresentation table hM target)
+
+theorem mDesignatedOwner_ne_target
+    (hnormalized : SoloExitNormalized table)
+    (target : NormalPlayer table) :
+    hM.positiveOwner target ≠ target := by
+  intro heq
+  have hpositive := hM.positive_positiveOwner target
+  rw [heq, normalMatrix_diagonal_zero table hnormalized target] at hpositive
+  exact (lt_irrefl 0) hpositive
+
+theorem mAxisPayoff_designatedOwner_zero
+    (hnormalized : SoloExitNormalized table)
+    (target : NormalPlayer table) :
+    mAxisPayoff table hM target (hM.positiveOwner target).1 = 0 :=
+  mAxisPayoff_other_normal_zero table hM target
+    (hM.positiveOwner target)
+    (mDesignatedOwner_ne_target table hM hnormalized target)
+
+/-! For an `η`-equilibrium the same axis decomposition may use a smaller
+one-stage exit probability.  This replaces a long fine-mesh block by its
+equivalent small total hazard and makes collision error at most `η/2`. -/
+noncomputable def mFineExitProbability
+    (target : NormalPlayer table) (accuracy : ℝ) : ℝ :=
+  min (mExitProbability table hM target) (accuracy / 2)
+
+theorem mFineExitProbability_pos
+    (target : NormalPlayer table) {accuracy : ℝ} (haccuracy : 0 < accuracy) :
+    0 < mFineExitProbability table hM target accuracy := by
+  exact lt_min (mExitProbability_pos table hM target) (half_pos haccuracy)
+
+theorem mFineExitProbability_lt_one
+    (target : NormalPlayer table) {accuracy : ℝ} (haccuracy : 0 < accuracy) :
+    mFineExitProbability table hM target accuracy < 1 :=
+  (min_le_left _ _).trans_lt (mExitProbability_lt_one table hM target)
+
+theorem mFineExitProbability_lt_accuracy
+    (target : NormalPlayer table) {accuracy : ℝ} (haccuracy : 0 < accuracy) :
+    mFineExitProbability table hM target accuracy < accuracy := by
+  have hle : mFineExitProbability table hM target accuracy ≤ accuracy / 2 :=
+    min_le_right _ _
+  linarith
+
+noncomputable def mFineContinuationOwnerWeight
+    (target owner : NormalPlayer table) (accuracy : ℝ) : ℝ :=
+  (hM.axisWeight target owner -
+      if owner = hM.positiveOwner target then
+        mFineExitProbability table hM target accuracy else 0) /
+    (1 - mFineExitProbability table hM target accuracy)
+
+theorem mFineContinuationOwnerWeight_nonneg
+    (target owner : NormalPlayer table) {accuracy : ℝ}
+    (haccuracy : 0 < accuracy) :
+    0 ≤ mFineContinuationOwnerWeight table hM target owner accuracy := by
+  apply div_nonneg
+  · by_cases howner : owner = hM.positiveOwner target
+    · rw [if_pos howner]
+      subst owner
+      have hfineLe : mFineExitProbability table hM target accuracy ≤
+          mExitProbability table hM target := min_le_left _ _
+      have hexitLe : mExitProbability table hM target ≤
+          hM.axisWeight target (hM.positiveOwner target) / 2 := by
+        unfold mExitProbability
+        exact min_le_left _ _
+      linarith [hM.axisWeight_designated_pos target]
+    · rw [if_neg howner, sub_zero]
+      exact (hM.axisWeight target).property.1 owner
+  · linarith [mFineExitProbability_lt_one table hM target haccuracy]
+
+theorem sum_mFineContinuationOwnerWeight
+    (target : NormalPlayer table) {accuracy : ℝ}
+    (haccuracy : 0 < accuracy) :
+    ∑ owner, mFineContinuationOwnerWeight table hM target owner accuracy = 1 := by
+  let probability := mFineExitProbability table hM target accuracy
+  let designated := hM.positiveOwner target
+  have hdenominator : 1 - probability ≠ 0 :=
+    ne_of_gt (sub_pos.mpr
+      (mFineExitProbability_lt_one table hM target haccuracy))
+  simp only [mFineContinuationOwnerWeight]
+  rw [← Finset.sum_div]
+  have hindicator : (∑ owner,
+      if owner = designated then probability else 0) = probability := by
+    rw [Finset.sum_eq_single designated]
+    · simp
+    · intro owner _ hne
+      simp [hne]
+    · simp
+  have hsum := (hM.axisWeight target).property.2
+  change (∑ owner, hM.axisWeight target owner) = 1 at hsum
+  rw [Finset.sum_sub_distrib, hsum, hindicator]
+  exact div_self hdenominator
+
+noncomputable def mFineContinuationOwnerSimplex
+    (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
+    stdSimplex ℝ (NormalPlayer table) :=
+  ⟨fun owner => mFineContinuationOwnerWeight table hM target owner accuracy,
+    fun owner => mFineContinuationOwnerWeight_nonneg
+      table hM target owner haccuracy,
+    sum_mFineContinuationOwnerWeight table hM target haccuracy⟩
+
+noncomputable def mFineContinuationPayoff
+    (target : NormalPlayer table) (accuracy : ℝ) : Payoff ι :=
+  fun who => ∑ owner,
+    mFineContinuationOwnerWeight table hM target owner accuracy *
+      table.terminal (quittingProjectiveSingletonTerminal owner.1) who
+
+noncomputable def mFineContinuationRepresentation
+    (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
+    NormalSingletonRepresentation table
+      (mFineContinuationPayoff table hM target accuracy) where
+  weight := mFineContinuationOwnerSimplex table hM target accuracy haccuracy
+  equation := fun _ => rfl
+
+theorem mAxisPayoff_fine_exit_balance
+    (target : NormalPlayer table) {accuracy : ℝ}
+    (haccuracy : 0 < accuracy) :
+    mAxisPayoff table hM target =
+      mFineExitProbability table hM target accuracy •
+          (fun who => table.terminal
+            (quittingProjectiveSingletonTerminal
+              (hM.positiveOwner target).1) who) +
+        (1 - mFineExitProbability table hM target accuracy) •
+          mFineContinuationPayoff table hM target accuracy := by
+  funext who
+  simp only [mAxisPayoff, mFineContinuationPayoff, Pi.add_apply,
+    Pi.smul_apply, smul_eq_mul]
+  let probability := mFineExitProbability table hM target accuracy
+  let designated := hM.positiveOwner target
+  have hdenominator : 1 - probability ≠ 0 :=
+    ne_of_gt (sub_pos.mpr
+      (mFineExitProbability_lt_one table hM target haccuracy))
+  calc
+    ∑ owner, hM.axisWeight target owner *
+          table.terminal (quittingProjectiveSingletonTerminal owner.1) who =
+        ∑ owner,
+          (if owner = designated then probability else 0) *
+            table.terminal
+              (quittingProjectiveSingletonTerminal owner.1) who +
+          ∑ owner,
+            (hM.axisWeight target owner -
+              if owner = designated then probability else 0) *
+              table.terminal
+                (quittingProjectiveSingletonTerminal owner.1) who := by
+      rw [← Finset.sum_add_distrib]
+      apply Finset.sum_congr rfl
+      intro owner _
+      ring
+    _ = probability * table.terminal
+          (quittingProjectiveSingletonTerminal designated.1) who +
+        ∑ owner,
+          (hM.axisWeight target owner -
+            if owner = designated then probability else 0) *
+            table.terminal
+              (quittingProjectiveSingletonTerminal owner.1) who := by
+      congr 1
+      rw [Finset.sum_eq_single designated]
+      · simp
+      · intro owner _ hne
+        simp [hne]
+      · simp
+    _ = probability * table.terminal
+          (quittingProjectiveSingletonTerminal designated.1) who +
+        (1 - probability) *
+          ∑ owner, mFineContinuationOwnerWeight
+            table hM target owner accuracy *
+              table.terminal
+                (quittingProjectiveSingletonTerminal owner.1) who := by
+      dsimp only [probability, designated]
+      congr 1
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro owner _
+      simp only [mFineContinuationOwnerWeight]
+      have hdenominator' :
+          1 - mFineExitProbability table hM target accuracy ≠ 0 :=
+        hdenominator
+      field_simp [hdenominator']
+
+theorem mFineContinuationPayoff_normal_nonneg
+    (target who : NormalPlayer table) {accuracy : ℝ}
+    (haccuracy : 0 < accuracy) :
+    0 ≤ mFineContinuationPayoff table hM target accuracy who.1 := by
+  have hbalance := congrFun
+    (mAxisPayoff_fine_exit_balance table hM target haccuracy) who.1
+  simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hbalance
+  have hdenominator : 0 <
+      1 - mFineExitProbability table hM target accuracy :=
+    sub_pos.mpr (mFineExitProbability_lt_one table hM target haccuracy)
+  by_cases hsame : who = target
+  · subst who
+    change mAxisPayoff table hM target target.1 =
+      mFineExitProbability table hM target accuracy *
+          NormalMatrix table target (hM.positiveOwner target) +
+        (1 - mFineExitProbability table hM target accuracy) *
+          mFineContinuationPayoff table hM target accuracy target.1 at hbalance
+    have hfineLe : mFineExitProbability table hM target accuracy ≤
+        mExitProbability table hM target := min_le_left _ _
+    have hcolumnPos := hM.positive_positiveOwner target
+    have hcoefficient :=
+      mExitProbability_mul_designated_le_axis table hM target
+    nlinarith
+  · have haxisZero := mAxisPayoff_other_normal_zero
+      table hM target who hsame
+    change mAxisPayoff table hM target who.1 =
+      mFineExitProbability table hM target accuracy *
+          NormalMatrix table who (hM.positiveOwner target) +
+        (1 - mFineExitProbability table hM target accuracy) *
+          mFineContinuationPayoff table hM target accuracy who.1 at hbalance
+    have hcolumnNonpos : NormalMatrix table who
+        (hM.positiveOwner target) ≤ 0 := by
+      apply le_of_not_gt
+      intro hpos
+      have hrow := hM.positiveRow_filter (hM.positiveOwner target)
+      have hmem : who ∈ Finset.filter
+          (fun candidate => 0 < NormalMatrix table candidate
+            (hM.positiveOwner target)) Finset.univ :=
+        Finset.mem_filter.mpr ⟨Finset.mem_univ _, hpos⟩
+      rw [hrow] at hmem
+      exact hsame (by
+        simpa [hM.positiveRow_positiveOwner target] using hmem)
+    rw [haxisZero] at hbalance
+    nlinarith [mFineExitProbability_pos table hM target haccuracy]
+
+theorem mFineContinuationPayoff_nonneg
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (target : NormalPlayer table) {accuracy : ℝ}
+    (haccuracy : 0 < accuracy) :
+    ∀ who, 0 ≤ mFineContinuationPayoff table hM target accuracy who := by
+  intro who
+  by_cases hnormal : who ∈ NormalPlayers table
+  · exact mFineContinuationPayoff_normal_nonneg
+      table hM target ⟨who, hnormal⟩ haccuracy
+  · unfold mFineContinuationPayoff
+    apply Finset.sum_nonneg
+    intro owner _
+    apply mul_nonneg
+      (mFineContinuationOwnerWeight_nonneg
+        table hM target owner haccuracy)
+    exact (lemma2_6 table hnormalized hbounded
+      (by simpa [mem_normalPlayers_iff] using hnormal)
+      (by
+        intro hsame
+        subst who
+        exact hnormal owner.2)).le
+
+noncomputable def mFineTransitionWeight
+    (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
+    stdSimplex ℝ (NormalPlayer table) := by
+  let normalValue : NormalPlayer table → ℝ := fun who =>
+    mFineContinuationPayoff table hM target accuracy who.1
+  refine ⟨mAxisCoefficient table hM normalValue,
+    mAxisCoefficient_nonneg table hM
+      (fun who => mFineContinuationPayoff_normal_nonneg
+        table hM target who haccuracy), ?_⟩
+  exact sum_mAxisCoefficient_eq_one table hM
+    (mFineContinuationRepresentation table hM target accuracy haccuracy)
+
+theorem mFineTransitionWeight_axis_balance
+    (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
+    (∑ next, mFineTransitionWeight table hM target accuracy haccuracy next •
+      mAxisPayoff table hM next) =
+      mFineContinuationPayoff table hM target accuracy := by
+  exact mAxisPayoff_combination_eq table hM
+    (mFineContinuationRepresentation table hM target accuracy haccuracy)
+
+end Section4Geometry
+
+/-! ## Section 4.2 — finite public axis compiler -/
+
+structure MMatrixPayoffBlueprint
+    (table : Table ι) [Nonempty (NormalPlayer table)]
+    (hM : MMatrix (NormalMatrix table))
+    (value : Payoff ι) (accuracy : ℝ) where
+  soloExitNormalized : SoloExitNormalized table
+  payoffsBounded : TablePayoffsBounded table
+  representation : NormalSingletonRepresentation table value
+  value_nonneg : ∀ who, 0 ≤ value who
+  accuracy_pos : 0 < accuracy
+
+namespace MMatrixPayoffBlueprint
+
+variable {table : Table ι} [Nonempty (NormalPlayer table)]
+  {hM : MMatrix (NormalMatrix table)} {value : Payoff ι} {accuracy : ℝ}
+
+noncomputable def initialWeight
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    stdSimplex ℝ (NormalPlayer table) :=
+  ⟨mAxisCoefficient table hM (fun who => value who.1),
+    mAxisCoefficient_nonneg table hM (fun who => blueprint.value_nonneg who.1),
+    sum_mAxisCoefficient_eq_one table hM blueprint.representation⟩
+
+theorem initialWeight_axis_balance
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    (∑ target, blueprint.initialWeight target •
+      mAxisPayoff table hM target) = value :=
+  mAxisPayoff_combination_eq table hM blueprint.representation
+
+noncomputable def signalMarginal
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    Option (NormalPlayer table) → PMF (NormalPlayer table)
+  | none => Math.ProbabilityMassFunction.ofVector
+      blueprint.initialWeight blueprint.initialWeight.property
+  | some target => Math.ProbabilityMassFunction.ofVector
+      (mFineTransitionWeight table hM target accuracy blueprint.accuracy_pos)
+      (mFineTransitionWeight table hM target accuracy
+        blueprint.accuracy_pos).property
+
+noncomputable def signalData
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    Math.PMFProduct.CommonFiniteSignal
+      (Option (NormalPlayer table)) (NormalPlayer table)
+      blueprint.signalMarginal :=
+  Math.PMFProduct.commonFiniteSignal _ _ blueprint.signalMarginal
+
+@[simp] theorem signalMarginal_none_toReal
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (target : NormalPlayer table) :
+    (blueprint.signalMarginal none target).toReal =
+      blueprint.initialWeight target := by
+  exact Math.ProbabilityMassFunction.ofVector_toReal
+    blueprint.initialWeight.property target
+
+@[simp] theorem signalMarginal_some_toReal
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (source target : NormalPlayer table) :
+    (blueprint.signalMarginal (some source) target).toReal =
+      mFineTransitionWeight table hM source accuracy
+        blueprint.accuracy_pos target := by
+  exact Math.ProbabilityMassFunction.ofVector_toReal
+    (mFineTransitionWeight table hM source accuracy
+      blueprint.accuracy_pos).property target
+
+end MMatrixPayoffBlueprint
+
+inductive MMatrixPayoffMode (table : Table ι)
+  | draw (source : Option (NormalPlayer table))
+  | active (target : NormalPlayer table)
+  | absorbed
+
+def MMatrixPayoffMode.MatchesState
+    {table : Table ι} {Signal : Type}
+    (mode : MMatrixPayoffMode table)
+    (state : PublicQuittingState ι Signal) : Prop :=
+  match mode, state with
+  | .draw _, .draw => True
+  | .active _, .active _ => True
+  | .absorbed, .absorbed _ => True
+  | _, _ => False
+
+def nextMMatrixPayoffMode
+    {table : Table ι} {Signal : Type}
+    (selector : Option (NormalPlayer table) → Signal → NormalPlayer table)
+    (mode : MMatrixPayoffMode table) (_action : ι → Bool)
+    (nextState : PublicQuittingState ι Signal) :
+    MMatrixPayoffMode table :=
+  match nextState with
+  | .draw =>
+      match mode with
+      | .active target => .draw (some target)
+      | .draw source => .draw source
+      | .absorbed => .draw none
+  | .active signal =>
+      match mode with
+      | .draw source => .active (selector source signal)
+      | _ => .active (selector none signal)
+  | .absorbed _ => .absorbed
+
+def compiledMMatrixPayoffMode
+    {table : Table ι} {signalCount : ℕ}
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (selector : Option (NormalPlayer table) →
+      Fin (signalCount + 1) → NormalPlayer table) :
+    ∀ t, (publicQuittingGame table signalLaw).Hist t →
+      MMatrixPayoffMode table
+  | 0, history =>
+      match history.2 with
+      | .draw => .draw none
+      | .active signal => .active (selector none signal)
+      | .absorbed _ => .absorbed
+  | t + 1, history =>
+      nextMMatrixPayoffMode selector
+        (compiledMMatrixPayoffMode signalLaw selector t
+          (publicHistoryInit signalLaw history))
+        (history.1 (Fin.last t)).2 history.2
+
+theorem nextMMatrixPayoffMode_matchesState
+    {table : Table ι} {Signal : Type}
+    (selector : Option (NormalPlayer table) → Signal → NormalPlayer table)
+    (mode : MMatrixPayoffMode table)
+    (action : ι → Bool) (nextState : PublicQuittingState ι Signal) :
+    (nextMMatrixPayoffMode selector mode action nextState).MatchesState
+      nextState := by
+  cases nextState <;> cases mode <;>
+    simp [nextMMatrixPayoffMode, MMatrixPayoffMode.MatchesState]
+
+theorem compiledMMatrixPayoffMode_matchesState
+    {table : Table ι} {signalCount : ℕ}
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (selector : Option (NormalPlayer table) →
+      Fin (signalCount + 1) → NormalPlayer table) :
+    ∀ t (history : (publicQuittingGame table signalLaw).Hist t),
+      (compiledMMatrixPayoffMode signalLaw selector t history).MatchesState
+        history.2 := by
+  intro t
+  cases t with
+  | zero =>
+      intro history
+      rcases history with ⟨past, state⟩
+      cases state <;> simp [compiledMMatrixPayoffMode,
+        MMatrixPayoffMode.MatchesState]
+  | succ t =>
+      intro history
+      exact nextMMatrixPayoffMode_matchesState selector
+        (compiledMMatrixPayoffMode signalLaw selector t
+          (publicHistoryInit signalLaw history))
+        (history.1 (Fin.last t)).2 history.2
+
+namespace MMatrixPayoffBlueprint
+
+variable {table : Table ι} [Nonempty (NormalPlayer table)]
+  {hM : MMatrix (NormalMatrix table)} {value : Payoff ι} {accuracy : ℝ}
+
+noncomputable def mode
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    ∀ t,
+      (publicQuittingGame table blueprint.signalData.law).Hist t →
+        MMatrixPayoffMode table :=
+  compiledMMatrixPayoffMode blueprint.signalData.law
+    blueprint.signalData.selector
+
+noncomputable def strategy
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    (publicQuittingGame table blueprint.signalData.law).BehaviorProfile :=
+  fun who t history =>
+    match blueprint.mode t history with
+    | .active target =>
+        if _hwho : who = (hM.positiveOwner target).1 then
+          quittingHazardCoin
+            (mFineExitProbability table hM target accuracy)
+            (mFineExitProbability_pos table hM target
+              blueprint.accuracy_pos).le
+            (mFineExitProbability_lt_one table hM target
+              blueprint.accuracy_pos).le
+        else PMF.pure false
+    | _ => PMF.pure false
+
+noncomputable def profile
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    SunspotProfile table :=
+  { signalCount := blueprint.signalData.signalCount
+    signalLaw := blueprint.signalData.law
+    strategy := blueprint.strategy }
+
+theorem mode_initial
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    blueprint.mode 0
+      ((publicQuittingGame table blueprint.signalData.law).emptyHist .draw) =
+      .draw none := rfl
+
+theorem mode_state
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (t : ℕ)
+    (history : (publicQuittingGame table blueprint.signalData.law).Hist t) :
+    (blueprint.mode t history).MatchesState history.2 :=
+  compiledMMatrixPayoffMode_matchesState
+    blueprint.signalData.law blueprint.signalData.selector t history
+
+end MMatrixPayoffBlueprint
 
 /-! **Theorem 4.3 (paper).** If `R̂` is an M-matrix, every vector in
 `D~ = conv(r¹,…,rⁿ)∩ℝⁿ_≥0` is a sunspot equilibrium payoff. -/
