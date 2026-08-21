@@ -1321,6 +1321,7 @@ import UniformEquilibrium.Quitting.Root.FaceGeometry
 import UniformEquilibrium.Quitting.Root.FirstBranch
 import UniformEquilibrium.Quitting.Root.FirstStageAdapter
 import UniformEquilibrium.Quitting.Root.FleschSuccessor
+import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 import UniformEquilibrium.Quitting.Root.NashDefect
 import UniformEquilibrium.Quitting.Root.NearSureProfile
