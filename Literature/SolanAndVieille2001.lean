@@ -4218,6 +4218,25 @@ private theorem absorptionMass_lt_four_mul_of_nearAllContinue
   rw [hcontinue]
   exact hunion.trans_lt hsum
 
+/-- Under a near-all-Continue row, quitting immediately pays its owner at
+least `1 - 32ε`. -/
+private theorem figure2_fixedOpponentsQuitValue_ge
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (who : Fin 4) (time : ℕ) :
+    1 - 32 * ε ≤ quittingFixedOpponentsQuitValue
+      SolanVieilleBoundary.boundaryReward roots who time := by
+  have hnear := abs_quittingFixedOpponentsQuitValue_sub_one_le
+    SolanVieilleBoundary.boundaryReward_unitSoloExit roots who time
+    boundaryReward_abs_le_four
+  have hopponent := quittingRootOpponentAbsorptionMass_le_absorptionMass
+    (roots time) who
+  have habsorption :=
+    (absorptionMass_lt_four_mul_of_nearAllContinue hclose time).le
+  have hlower := (abs_le.mp hnear).1
+  linarith
+
 /-- The first estimate in (13): under an all-Continue perturbation, terminal
 `ε`-Nash forces the probability of never quitting below `2ε`. The source uses
 sharper constants; this bound is sufficient for the later argument. -/
@@ -4251,17 +4270,8 @@ theorem figure2_survivalLimit_le_two_mul
   let who : Fin 4 := 0
   have hquitLower : ∀ time,
       1 - 32 * ε ≤ quittingFixedOpponentsQuitValue
-        SolanVieilleBoundary.boundaryReward roots who time := by
-    intro time
-    have hnear := abs_quittingFixedOpponentsQuitValue_sub_one_le
-      SolanVieilleBoundary.boundaryReward_unitSoloExit roots who time
-      boundaryReward_abs_le_four
-    have hopponent := quittingRootOpponentAbsorptionMass_le_absorptionMass
-      (roots time) who
-    have habsorption :=
-      (absorptionMass_lt_four_mul_of_nearAllContinue hclose time).le
-    have hlower := (abs_le.mp hnear).1
-    linarith
+        SolanVieilleBoundary.boundaryReward roots who time :=
+    figure2_fixedOpponentsQuitValue_ge hclose who
   have hstage : ∀ time,
       quittingJointSurvivalWeight roots 0 time *
         ((1 - 32 * ε) - quittingRootSequenceTerminalValue
@@ -4457,6 +4467,114 @@ theorem figure2_terminalValue_pairMass_approx
   exact abs_quittingRootSequenceCollisionRewardContribution_le
     SolanVieilleBoundary.boundaryReward roots 0 who
       boundaryReward_abs_le_four
+
+/-- Immediate Quit and `ε`-Nash give every Figure 2 player the value floor
+`1 - 33ε`. -/
+theorem figure2_terminalValue_ge_one_sub_thirtyThree_mul
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4) :
+    1 - 33 * ε ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who 0 := by
+  have hrootNash : IsεQuittingRootSequenceNash
+      SolanVieilleBoundary.boundaryReward ε roots :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      SolanVieilleBoundary.boundaryReward ε roots).mpr hnash
+  have htransfer :=
+    quittingJointSurvivalWeight_mul_stageDeviationGain_le
+      SolanVieilleBoundary.boundaryReward roots hrootNash who 0
+      (PMF.pure true) (fun offset => roots (1 + offset) who)
+  have hupdated :
+      quittingRootSuccessorPayoff SolanVieilleBoundary.boundaryReward
+        (fun _ => quittingRootSequenceHazardTerminalValue
+          SolanVieilleBoundary.boundaryReward
+          (fun offset => roots (1 + offset)) who
+          (fun offset => roots (1 + offset) who) 0)
+        (Function.update (roots 0) who (PMF.pure true)) who =
+      quittingFixedOpponentsQuitValue
+        SolanVieilleBoundary.boundaryReward roots who 0 := by
+    rw [quittingRootSuccessorPayoff,
+      quittingRootExpectedPayoff_update_eq_endpointMix]
+    simp
+    exact quittingRootQuitPayoff_eq_fixedOpponentsQuitValue
+      SolanVieilleBoundary.boundaryReward roots who _ 0
+  rw [hupdated] at htransfer
+  have hquit := figure2_fixedOpponentsQuitValue_ge hclose who 0
+  simp only [quittingJointSurvivalWeight_zero_fuel, one_mul] at htransfer
+  linarith
+
+/-- The singleton-mass lower bound following (13), again with loose
+constants: every player is the unique first quitter with probability at
+least `2/15 - 61ε`. -/
+theorem figure2_singletonMass_ge_two_fifteenths_sub_sixtyOne_mul
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε0 : 0 < ε)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4) :
+    2 / 15 - 61 * ε ≤
+      quittingRootSequenceSingletonMass roots 0 who := by
+  have hcollision := figure2_collisionMass_le_twentyFour_mul
+    hε0 hclose
+  have hpair : ∀ player : Fin 4,
+      1 - 129 * ε ≤
+        quittingRootSequenceSingletonMass roots 0 player +
+          4 * quittingRootSequenceSingletonMass roots 0
+            (figure2Partner player) := by
+    intro player
+    have hvalue :=
+      figure2_terminalValue_ge_one_sub_thirtyThree_mul
+        hclose hnash player
+    have happ := figure2_terminalValue_pairMass_approx roots player
+    have hupper := (abs_le.mp happ).2
+    linarith
+  have hmass :=
+    sum_quittingRootSequenceSingletonMass_add_collisionMass roots 0
+  have hcollision0 := quittingRootSequenceCollisionMass_nonneg roots 0
+  have hsurvival0 := quittingJointSurvivalLimit_nonneg roots 0
+  have hsum :
+      (∑ player : Fin 4,
+        quittingRootSequenceSingletonMass roots 0 player) ≤ 1 := by
+    linarith
+  have hzero := hpair 0
+  have hone := hpair 1
+  have htwo := hpair 2
+  have hthree := hpair 3
+  change 1 - 129 * ε ≤
+    quittingRootSequenceSingletonMass roots 0 0 +
+      4 * quittingRootSequenceSingletonMass roots 0 1 at hzero
+  change 1 - 129 * ε ≤
+    quittingRootSequenceSingletonMass roots 0 1 +
+      4 * quittingRootSequenceSingletonMass roots 0 0 at hone
+  change 1 - 129 * ε ≤
+    quittingRootSequenceSingletonMass roots 0 2 +
+      4 * quittingRootSequenceSingletonMass roots 0 3 at htwo
+  change 1 - 129 * ε ≤
+    quittingRootSequenceSingletonMass roots 0 3 +
+      4 * quittingRootSequenceSingletonMass roots 0 2 at hthree
+  rw [Fin.sum_univ_four] at hsum
+  have hzeroLower : 2 / 15 - 61 * ε ≤
+      quittingRootSequenceSingletonMass roots 0 0 := by
+    linarith
+  have honeLower : 2 / 15 - 61 * ε ≤
+      quittingRootSequenceSingletonMass roots 0 1 := by
+    linarith
+  have htwoLower : 2 / 15 - 61 * ε ≤
+      quittingRootSequenceSingletonMass roots 0 2 := by
+    linarith
+  have hthreeLower : 2 / 15 - 61 * ε ≤
+      quittingRootSequenceSingletonMass roots 0 3 := by
+    linarith
+  fin_cases who
+  · exact hzeroLower
+  · exact honeLower
+  · exact htwoLower
+  · exact hthreeLower
 
 /-- The first omitted Figure 2 assertion: for all sufficiently small positive
 `ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
