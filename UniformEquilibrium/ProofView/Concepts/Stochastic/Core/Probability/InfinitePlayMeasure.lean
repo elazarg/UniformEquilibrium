@@ -22,12 +22,10 @@ together with the projection property identifying its finite-horizon marginals w
 ## Measurable-space choice
 
 `StochasticGame.State` and `StochasticGame.Act` are bare `Type`s with no `MeasurableSpace`
-instance. The uniform-equilibrium program only needs this construction for games with
-finitely many states and actions, so this file equips both with the **discrete** (`⊤`)
-measurable-space structure
-under `[Fintype G.State]` / `[∀ i, Fintype (G.Act i)]` hypotheses, added here rather than as
-fields of `StochasticGame` itself. Every set is measurable in this structure, so every
-function out of a finite power of these spaces is automatically measurable
+instance. This file equips countable state and action spaces with the **discrete** (`⊤`)
+measurable-space structure, added here rather than as fields of `StochasticGame` itself.
+Every set is measurable in this structure, so every function out of a finite power of these
+spaces is automatically measurable
 (`Measurable.of_discrete`), which is what makes the Ionescu-Tulcea kernel family trivial to
 build: no separate measurability side conditions are needed anywhere below.
 
@@ -123,14 +121,13 @@ def initialPMF (σ : G.BehaviorProfile) (s₀ : G.State) : PMF G.StageOutcome :=
 
 section Measure
 
-variable [Fintype G.State] [DecidableEq G.State] [∀ i, Fintype (G.Act i)]
-  [∀ i, DecidableEq (G.Act i)]
+variable [Countable G.State] [∀ i, Countable (G.Act i)]
 
-/-- The discrete (`⊤`) measurable-space structure on the game's finite state space: every
+/-- The discrete (`⊤`) measurable-space structure on the game's countable state space: every
 subset is measurable. See the module docstring for why this choice is legitimate here. -/
 instance instMeasurableSpaceState : MeasurableSpace G.State := ⊤
 
-/-- The discrete measurable-space structure on each player's finite action set. -/
+/-- The discrete measurable-space structure on each player's countable action set. -/
 instance instMeasurableSpaceAct (i : ι) : MeasurableSpace (G.Act i) := ⊤
 
 /-- `stepPMF`, bundled as a kernel from the trajectory so far to the next stage outcome — the
@@ -202,8 +199,7 @@ end BindToMeasure
 
 section ProjectiveFamily
 
-variable [Fintype G.State] [DecidableEq G.State] [∀ i, Fintype (G.Act i)]
-  [∀ i, DecidableEq (G.Act i)]
+variable [Countable G.State] [∀ i, Countable (G.Act i)]
 
 /-- Extend the trajectory `x` up to time `n` by one fresh stage outcome `z` at time `n + 1`,
 keeping every earlier coordinate as recorded in `x`. This is the concrete shape of Mathlib's
@@ -222,8 +218,7 @@ def coordsDist (σ : G.BehaviorProfile) (s₀ : G.State) :
   fun t => Nat.rec ((G.initialPMF σ s₀).map fun z (_ : Finset.Iic 0) => z)
     (fun n ih => ih.bind fun x => (G.stepPMF σ n x).map (G.extendCoords x)) t
 
-omit [DecidableEq ι] [Fintype G.State] [DecidableEq G.State] [∀ i, Fintype (G.Act i)]
-  [∀ i, DecidableEq (G.Act i)] in
+omit [DecidableEq ι] [Countable G.State] [∀ i, Countable (G.Act i)] in
 /-- Unfold `coordsDist` at a successor time: bind the previous stage's distribution and step
 forward via `stepPMF`/`extendCoords`. -/
 theorem coordsDist_succ (σ : G.BehaviorProfile) (s₀ : G.State) (t : ℕ) :
@@ -247,7 +242,7 @@ private theorem partialTraj_succ_self_apply {X : ℕ → Type*} [∀ n, Measurab
     Measure.map_map (by fun_prop) (MeasurableEquiv.piSingleton n).measurable]
   rfl
 
-omit [DecidableEq ι] [DecidableEq G.State] [∀ i, DecidableEq (G.Act i)] in
+omit [DecidableEq ι] in
 /-- One step of `partialTraj` along `stepKernel` agrees with the corresponding step of
 `stepPMF`, glued on via `extendCoords`: the specialization of `partialTraj_succ_self_apply` to
 the constant family `X n := G.StageOutcome`, with the `IicProdIoc`/`piSingleton` gluing
@@ -285,8 +280,7 @@ def startMeasure (σ : G.BehaviorProfile) (s₀ : G.State) :
   (G.initialMeasure σ s₀).map (MeasurableEquiv.piUnique
     (fun _ : Finset.Iic 0 => G.StageOutcome)).symm
 
-omit [DecidableEq ι] [Fintype G.State] [DecidableEq G.State] [∀ i, Fintype (G.Act i)]
-  [∀ i, DecidableEq (G.Act i)] in
+omit [DecidableEq ι] [Countable G.State] [∀ i, Countable (G.Act i)] in
 /-- `startMeasure` is `initialMeasure` transported along the (trivial, single-coordinate)
 gluing map, matching `coordsDist`'s own stage-`0` distribution. -/
 theorem startMeasure_eq (σ : G.BehaviorProfile) (s₀ : G.State) :
@@ -299,7 +293,7 @@ theorem startMeasure_eq (σ : G.BehaviorProfile) (s₀ : G.State) :
     rfl
   rw [startMeasure, hfun]
 
-omit [DecidableEq ι] [DecidableEq G.State] [∀ i, DecidableEq (G.Act i)] in
+omit [DecidableEq ι] in
 /-- **The key projective-family identity.** Binding `startMeasure` against `partialTraj`
 along `stepKernel`, up to time `t`, agrees with `coordsDist σ s₀ t`'s measure: the
 Ionescu-Tulcea recursion and the hand-rolled `coordsDist` recursion compute the same
@@ -341,8 +335,7 @@ end ProjectiveFamily
 
 section HistDistBridge
 
-variable [Fintype G.State] [DecidableEq G.State] [∀ i, Fintype (G.Act i)]
-  [∀ i, DecidableEq (G.Act i)]
+variable [Countable G.State] [∀ i, Countable (G.Act i)]
 
 /-- Rebuild a full `t + 1`-stage-outcome trajectory (indexed by `Finset.Iic t`) from the
 `Hist t` it should read off via `histOfIic`, together with a chosen action `a` for stage `t`:
@@ -354,8 +347,7 @@ def reconstructCoords (t : ℕ) (h : G.Hist t) (a : G.JointAct) :
     ∀ _ : Finset.Iic t, G.StageOutcome :=
   fun k => if hk : k.1 < t then h.1 ⟨k.1, hk⟩ else (h.2, a)
 
-omit [Fintype ι] [DecidableEq ι] [Fintype G.State] [DecidableEq G.State]
-  [∀ i, Fintype (G.Act i)] [∀ i, DecidableEq (G.Act i)] in
+omit [Fintype ι] [DecidableEq ι] [Countable G.State] [∀ i, Countable (G.Act i)] in
 /-- `reconstructCoords` really does invert `histOfIic`, for any choice of the stage-`t`
 action. -/
 theorem histOfIic_reconstructCoords (t : ℕ) (h : G.Hist t) (a : G.JointAct) :
@@ -366,8 +358,7 @@ theorem histOfIic_reconstructCoords (t : ℕ) (h : G.Hist t) (a : G.JointAct) :
     simp
   · simp
 
-omit [Fintype ι] [DecidableEq ι] [Fintype G.State] [DecidableEq G.State]
-  [∀ i, Fintype (G.Act i)] [∀ i, DecidableEq (G.Act i)] in
+omit [Fintype ι] [DecidableEq ι] [Countable G.State] [∀ i, Countable (G.Act i)] in
 /-- Extending `reconstructCoords t h a` by one fresh state and action reproduces
 `histOfCoords` at the record `Fin.snoc h.1 (h.2, a)`: this is the one-step bridge
 between `reconstructCoords`'s reindexing and `stepPMF`'s history-lookup. -/
@@ -381,8 +372,7 @@ theorem histOfCoords_reconstructCoords (t : ℕ) (h : G.Hist t) (a : G.JointAct)
   | last => simp [reconstructCoords]
   | cast j => simp [reconstructCoords, j.2, Fin.snoc_castSucc]
 
-omit [Fintype ι] [DecidableEq ι] [Fintype G.State] [DecidableEq G.State]
-  [∀ i, Fintype (G.Act i)] [∀ i, DecidableEq (G.Act i)] in
+omit [Fintype ι] [DecidableEq ι] [Countable G.State] [∀ i, Countable (G.Act i)] in
 /-- `extendCoords` after `reconstructCoords` reproduces `reconstructCoords` one stage later,
 at the record `Fin.snoc h.1 (h.2, a)` and the fresh action from `z`: the two "extend by one
 stage" operations (Ionescu-Tulcea's `extendCoords` and `histDist`'s own record extension)
@@ -413,8 +403,7 @@ theorem extendCoords_reconstructCoords (t : ℕ) (h : G.Hist t) (a : G.JointAct)
     rw [dif_pos hle, dif_neg hnlt, dif_pos hlt1, hcast]
   · rw [dif_neg (by omega), dif_neg (by omega)]
 
-omit [DecidableEq ι] [Fintype G.State] [DecidableEq G.State] [∀ i, Fintype (G.Act i)]
-  [∀ i, DecidableEq (G.Act i)] in
+omit [DecidableEq ι] [Countable G.State] [∀ i, Countable (G.Act i)] in
 /-- **`coordsDist` unfolds through `histDist` plus one fresh action draw.** The recursive
 `coordsDist` family — which carries the action already decided for stage `t` — equals
 `histDist t`'s distribution over histories, followed by drawing that stage-`t` action from
@@ -473,8 +462,7 @@ theorem coordsDist_eq_histDist_bind (σ : G.BehaviorProfile) (s₀ : G.State) (t
     funext h
     exact hstep h
 
-omit [DecidableEq ι] [Fintype G.State] [DecidableEq G.State] [∀ i, Fintype (G.Act i)]
-  [∀ i, DecidableEq (G.Act i)] in
+omit [DecidableEq ι] [Countable G.State] [∀ i, Countable (G.Act i)] in
 /-- **The projection property, at the level of `coordsDist`.** Forgetting the extra
 stage-`t` action `coordsDist` carries (via `histOfIic`) recovers `histDist` exactly. -/
 theorem map_histOfIic_coordsDist (σ : G.BehaviorProfile) (s₀ : G.State) (t : ℕ) :
@@ -489,8 +477,7 @@ theorem map_histOfIic_coordsDist (σ : G.BehaviorProfile) (s₀ : G.State) (t : 
   change (G.stageActionDist σ h).map (Function.const G.JointAct h) = _
   exact PMF.map_const (p := G.stageActionDist σ h) (b := h)
 
-omit [Fintype ι] [DecidableEq ι] [Fintype G.State] [DecidableEq G.State]
-  [∀ i, Fintype (G.Act i)] [∀ i, DecidableEq (G.Act i)] in
+omit [Fintype ι] [DecidableEq ι] [Countable G.State] [∀ i, Countable (G.Act i)] in
 /-- `histOfPlay` factors through restricting a play to its first `t + 1` coordinates: read off
 the same `Hist t` either directly from the play, or from its `Finset.Iic t`-indexed
 restriction via `histOfIic`. -/
@@ -499,25 +486,18 @@ theorem histOfPlay_eq_histOfIic_frestrictLe (t : ℕ) (p : G.Play) :
       G.histOfIic t (Preorder.frestrictLe (π := fun _ : ℕ => G.StageOutcome) t p) :=
   rfl
 
-omit [DecidableEq ι] [DecidableEq G.State] [∀ i, DecidableEq (G.Act i)] [Fintype ι]
-  [Fintype G.State] [∀ i, Fintype (G.Act i)] in
-/-- `histOfPlay t` is measurable: it factors as the (discrete-domain, automatically measurable)
-map `histOfIic t` composed with the (Ionescu-Tulcea-supplied) measurable restriction
-`frestrictLe t`. Only finiteness (not the concrete `Fintype` data the surrounding section
-otherwise needs) is required here. -/
-theorem measurable_histOfPlay [Finite ι] [Finite G.State] [∀ i, Finite (G.Act i)] (t : ℕ) :
+omit [DecidableEq ι] in
+/-- `histOfPlay t` is measurable: it factors as the discrete, automatically measurable map
+`histOfIic t` composed with the Ionescu-Tulcea measurable restriction `frestrictLe t`. -/
+theorem measurable_histOfPlay (t : ℕ) :
     Measurable (G.histOfPlay t) := by
-  classical
-  haveI : Fintype ι := Fintype.ofFinite ι
-  haveI : Fintype G.State := Fintype.ofFinite G.State
-  haveI : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
   have hfactor : G.histOfPlay t =
       G.histOfIic t ∘ Preorder.frestrictLe (π := fun _ : ℕ => G.StageOutcome) t := rfl
   rw [hfactor]
   exact Measurable.of_discrete.comp
     (Preorder.measurable_frestrictLe (X := fun _ : ℕ => G.StageOutcome) t)
 
-omit [DecidableEq ι] [DecidableEq G.State] [∀ i, DecidableEq (G.Act i)] in
+omit [DecidableEq ι] in
 /-- **The projection property.** The pushforward of `infinitePlayMeasure` along `histOfPlay t`
 is `(histDist σ s₀ t).toMeasure`: `infinitePlayMeasure`'s finite-horizon marginals agree with
 the finite-horizon history distribution `histDist` that `finiteAveragePayoff` is
@@ -550,20 +530,29 @@ theorem map_histOfPlay_infinitePlayMeasure (σ : G.BehaviorProfile) (s₀ : G.St
         PMF.toMeasure_map (p := G.coordsDist σ s₀ t) (hf := Measurable.of_discrete)
     _ = (G.histDist σ s₀ t).toMeasure := by rw [G.map_histOfIic_coordsDist]
 
-omit [DecidableEq ι] [DecidableEq G.State] [∀ i, DecidableEq (G.Act i)] in
-/-- **Integrating a bounded function of the `Hist t` implicit in a play against
-`infinitePlayMeasure` agrees with its `expect`-ation against `histDist`.** This transports the
-projection property through integration, and is what lets `finiteAveragePayoff` be realized
-pathwise by `infinitePlayMeasure`. -/
-theorem integral_histOfPlay_infinitePlayMeasure (σ : G.BehaviorProfile) (s₀ : G.State)
+omit [DecidableEq ι] in
+/-- Integrating an integrable function of the finite history implicit in a play agrees with
+its `expect`-ation against `histDist`. -/
+theorem integral_histOfPlay_infinitePlayMeasure_of_integrable
+    (σ : G.BehaviorProfile) (s₀ : G.State) (t : ℕ) (f : G.Hist t → ℝ)
+    (hf : Integrable f (G.histDist σ s₀ t).toMeasure) :
+    ∫ p, f (G.histOfPlay t p) ∂(G.infinitePlayMeasure σ s₀) =
+      Math.Probability.expect (G.histDist σ s₀ t) f := by
+  rw [← integral_map (G.measurable_histOfPlay t).aemeasurable
+      Measurable.of_discrete.aestronglyMeasurable,
+    G.map_histOfPlay_infinitePlayMeasure, PMF.integral_eq_tsum _ _ hf]
+  simp [Math.Probability.expect, smul_eq_mul]
+
+omit [DecidableEq ι] in
+/-- For finite games, every function of a finite history is integrable, so the integral
+against `infinitePlayMeasure` is its `histDist` expectation. -/
+theorem integral_histOfPlay_infinitePlayMeasure [Fintype G.State]
+    [∀ i, Fintype (G.Act i)] (σ : G.BehaviorProfile) (s₀ : G.State)
     (t : ℕ) (f : G.Hist t → ℝ) :
     ∫ p, f (G.histOfPlay t p) ∂(G.infinitePlayMeasure σ s₀) =
       Math.Probability.expect (G.histDist σ s₀ t) f := by
-  classical
-  rw [← integral_map (G.measurable_histOfPlay t).aemeasurable
-      Measurable.of_discrete.aestronglyMeasurable,
-    G.map_histOfPlay_infinitePlayMeasure, PMF.integral_eq_sum, Math.Probability.expect_eq_sum]
-  simp [smul_eq_mul]
+  exact G.integral_histOfPlay_infinitePlayMeasure_of_integrable σ s₀ t f
+    Integrable.of_finite
 
 end HistDistBridge
 
