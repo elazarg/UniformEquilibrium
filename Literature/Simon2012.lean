@@ -7258,6 +7258,80 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
       G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z dominant
     rw [hphi]
     exact hadominant
+  let threshold : ℝ :=
+    1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M)
+  have hxBox' : InClosedPayoffBox M x := by
+    intro j
+    simpa only [x] using hxbox j
+  have hxPhi : x = (1 - (cutoff a : ℝ)) • z.1.1 +
+      (cutoff a : ℝ) • Phi G M d z := by
+    rw [hphi]
+    exact hxFormula
+  have hbetaLow : ∀ j, (z.1.2 j : ℝ) ≤ threshold →
+      |z.1.1 j| ≤ (Fintype.card G.Player : ℝ) * M := by
+    intro j hj
+    by_contra hnot
+    obtain ⟨maximal, hmaximal⟩ := exists_maximalQuitter G z.1.2
+    have hout := lowProbability_largeContinuation_not_box
+      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+      z dominant maximal j hmaximal (by rw [hphi]; exact hadominant)
+      (by simpa only [threshold] using hj) (lt_of_not_ge hnot)
+      (cutoff a) hcutoff0 hcutoff1 x hxPhi
+    exact hout hxBox'
+  have hxiThreshold :
+      ξ ≤ ρ / (2 * (Fintype.card G.Player : ℝ) * M) := by
+    let base : ℝ := ρ / (2 * (Fintype.card G.Player : ℝ) * M)
+    have hbasePos : 0 < base := by
+      dsimp only [base]
+      apply div_pos hmotion.2.1
+      exact mul_pos
+        (mul_pos (by norm_num) (by exact_mod_cast Fintype.card_pos)) hMpos
+    have hbaseOne : base ≤ 1 := by
+      dsimp only [base]
+      rw [div_le_one (by
+        exact mul_pos
+          (mul_pos (by norm_num) (by exact_mod_cast Fintype.card_pos)) hMpos)]
+      nlinarith [hmotion.2.2.1, hNM]
+    have hpower : base ^ Fintype.card G.Player ≤ base := by
+      exact pow_le_of_le_one hbasePos.le hbaseOne
+        (Nat.ne_of_gt Fintype.card_pos)
+    have hraw := hconstants.2.1
+    change ξ ≤ (1 / 20 : ℝ) * base ^ Fintype.card G.Player at hraw
+    change ξ ≤ base
+    nlinarith
+  have hxiError :
+      ξ * (((Fintype.card G.Player : ℝ) + 1) * M) ≤ ρ / 20 := by
+    let N : ℝ := Fintype.card G.Player
+    let base : ℝ := ρ / (2 * N * M)
+    have hNpos : 0 < N := by dsimp only [N]; linarith
+    have hbasePos : 0 < base := by
+      dsimp only [base, N]
+      apply div_pos hmotion.2.1
+      exact mul_pos (mul_pos (by norm_num) (by exact_mod_cast Fintype.card_pos))
+        hMpos
+    have hbaseOne : base ≤ 1 := by
+      dsimp only [base]
+      rw [div_le_one (by exact mul_pos (mul_pos (by norm_num) hNpos) hMpos)]
+      nlinarith [hmotion.2.2.1, hNM]
+    have hcard : 1 ≤ Fintype.card G.Player := Fintype.card_pos
+    have hpower : base ^ Fintype.card G.Player ≤ base := by
+      exact pow_le_of_le_one hbasePos.le hbaseOne (Nat.ne_of_gt hcard)
+    have hxiBase : ξ ≤ base / 20 := by
+      have hraw := hconstants.2.1
+      change ξ ≤ (1 / 20 : ℝ) * base ^ Fintype.card G.Player at hraw
+      nlinarith
+    have hscale := mul_le_mul_of_nonneg_right hxiBase
+      (show 0 ≤ (N + 1) * M by positivity)
+    calc
+      ξ * (((Fintype.card G.Player : ℝ) + 1) * M) ≤
+          (base / 20) * ((N + 1) * M) := by simpa only [N] using hscale
+      _ = ρ * (N + 1) / (40 * N) := by
+        dsimp only [base]
+        field_simp
+        ring
+      _ ≤ ρ / 20 := by
+        rw [div_le_iff₀ (by positivity : 0 < 40 * N)]
+        nlinarith [mul_nonneg hmotion.2.1.le (by linarith : 0 ≤ N - 1)]
   sorry
 
 /-!
