@@ -98,6 +98,14 @@ structure QuittingCounterexampleStoppingLawFrontier
   subseq_strictMono : StrictMono subseq
   lambda_subseq_tendsto_zero :
     Tendsto (fun rank ↦ lambda (subseq rank)) atTop (nhds 0)
+  /-- Along the selected tangent subsequence, source excess above the exact
+  semantic minimum is negligible relative to the reset scale. -/
+  source_excess_over_lambda_tendsto_zero :
+    Tendsto (fun rank ↦
+      (quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward (profiles (subseq rank))) -
+        quittingTerminalSemanticDebtSum base) /
+          lambda (subseq rank)) atTop (nhds 0)
   tangent_tendsto : ∀ mover observer,
     Tendsto (fun rank ↦
       quittingStoppingLawNormalizedDebtDirection reward
@@ -364,6 +372,9 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
     active_iff := hactive
     subseq_strictMono := hsubseq
     lambda_subseq_tendsto_zero := hlambdaSubseq
+    source_excess_over_lambda_tendsto_zero := by
+      simpa only [epsilon] using
+        hepsilonRate.comp hsubseq.tendsto_atTop
     tangent_tendsto := htangent
     tangent_diagonal := hdiagonal
     tangent_inactive_nonneg := htangentInactive
