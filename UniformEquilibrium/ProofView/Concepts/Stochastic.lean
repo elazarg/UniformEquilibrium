@@ -10,6 +10,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Payoff.AffineP
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Basic
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.FiniteHorizonContinuation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.ZeroSum.DiscountedShapleyAlgebraic
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.Feasible
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
