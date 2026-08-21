@@ -2036,17 +2036,17 @@ private theorem singularQuitPenalty_sub_ge_sub {N : ℕ} {u v : UnitInterval}
     _ = ((u : ℝ) - (v : ℝ)) / (1 - (u : ℝ)) ^ N := by ring
     _ ≥ (u : ℝ) - (v : ℝ) := hdiffDiv
 
-/-- At a coordinate with maximal hazard change, increasing the hazard makes
-the singular penalty too large for two exact-equilibrium points to have the
-same `φ` image. -/
-private theorem phi_ne_of_maximal_hazard_increase
+/-- At a coordinate with maximal hazard change, the singular penalty controls
+that hazard change by the distance between the two `φ` images. -/
+private theorem maximal_hazard_sub_le_phi_norm
     (G : QuittingGame) (M d : ℝ)
     (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
     (z w : EZeroTilde G) (j : G.Player)
     (hgt : (w.1.2 j : ℝ) < (z.1.2 j : ℝ))
     (hmax : ∀ k, |(z.1.2 k : ℝ) - (w.1.2 k : ℝ)| ≤
       (z.1.2 j : ℝ) - (w.1.2 j : ℝ)) :
-    Phi G M d z ≠ Phi G M d w := by
+    (z.1.2 j : ℝ) - (w.1.2 j : ℝ) ≤
+      ‖Phi G M d z - Phi G M d w‖ := by
   classical
   let N : ℝ := Fintype.card G.Player
   let t : ℝ := (z.1.2 j : ℝ) - (w.1.2 j : ℝ)
@@ -2108,18 +2108,6 @@ private theorem phi_ne_of_maximal_hazard_increase
       5 * N * M * d ≤ 5 * N * M * 1 :=
         mul_le_mul_of_nonneg_left hd1 (by positivity)
       _ = 5 * N * M := by ring
-  intro hphi
-  have hcoordinate := congrFun hphi j
-  change QuittingOneStagePayoff G z.1.1 z.1.2 j -
-        (5 * N * M / d) *
-          ((z.1.2 j : ℝ) /
-            (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player) +
-        M * ∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ) =
-      QuittingOneStagePayoff G w.1.1 w.1.2 j -
-        (5 * N * M / d) *
-          ((w.1.2 j : ℝ) /
-            (1 - (w.1.2 j : ℝ)) ^ Fintype.card G.Player) +
-        M * ∑ k ∈ Finset.univ.erase j, (w.1.2 k : ℝ) at hcoordinate
   have hlower : 5 * N * M * t ≤
       (5 * N * M / d) *
         ((z.1.2 j : ℝ) /
@@ -2130,22 +2118,97 @@ private theorem phi_ne_of_maximal_hazard_increase
       5 * N * M * t ≤ (5 * N * M / d) * t :=
         mul_le_mul_of_nonneg_right hcoefficient ht.le
       _ ≤ _ := mul_le_mul_of_nonneg_left hpenalty (by positivity)
-  have hupper :
+  have hphiFormula : (Phi G M d z - Phi G M d w) j =
+      (QuittingOneStagePayoff G z.1.1 z.1.2 j -
+        QuittingOneStagePayoff G w.1.1 w.1.2 j) -
       (5 * N * M / d) *
-          ((z.1.2 j : ℝ) /
-              (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player -
-            (w.1.2 j : ℝ) /
-              (1 - (w.1.2 j : ℝ)) ^ Fintype.card G.Player) ≤
-        (2 * (M / 3)) * N * t + M * (N * t) := by
-    nlinarith [mul_le_mul_of_nonneg_left hsumDiff hM0.le]
-  have hbound : 5 * (N * M * t) ≤ (5 / 3 : ℝ) * (N * M * t) := by
-    calc
-      5 * (N * M * t) = 5 * N * M * t := by ring
-      _ ≤ _ := hlower
-      _ ≤ _ := hupper
-      _ = (5 / 3 : ℝ) * (N * M * t) := by ring
-  have hpositive : 0 < N * M * t := by positivity
-  nlinarith
+        ((z.1.2 j : ℝ) /
+            (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player -
+          (w.1.2 j : ℝ) /
+            (1 - (w.1.2 j : ℝ)) ^ Fintype.card G.Player) +
+      M * ((∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ)) -
+        ∑ k ∈ Finset.univ.erase j, (w.1.2 k : ℝ)) := by
+    simp only [Phi, Pi.sub_apply]
+    ring
+  have hsumMul := mul_le_mul_of_nonneg_left hsumDiff hM0.le
+  have hphiUpper : (Phi G M d z - Phi G M d w) j ≤
+      -(10 / 3 : ℝ) * (N * M * t) := by
+    rw [hphiFormula]
+    nlinarith [hlower]
+  have hphiNeg : (Phi G M d z - Phi G M d w) j < 0 := by
+    have : 0 < N * M * t := by positivity
+    nlinarith
+  have habs : t ≤ |(Phi G M d z - Phi G M d w) j| := by
+    rw [abs_of_neg hphiNeg]
+    have hNsub : 0 ≤ N - 1 := by linarith
+    have hMsub : 0 ≤ M - 1 := sub_nonneg.mpr hM.1
+    have hNM : 1 ≤ N * M := by
+      nlinarith [mul_nonneg hNsub hMsub]
+    have hscaled : t ≤ N * M * t := by
+      simpa only [one_mul] using mul_le_mul_of_nonneg_right hNM ht.le
+    exact hscaled.trans (by nlinarith [hphiUpper])
+  simpa only [t] using habs.trans (by
+    simpa only [Real.norm_eq_abs, Pi.sub_apply] using
+      (norm_le_pi_norm (Phi G M d z - Phi G M d w) j))
+
+/-- In particular, two exact-equilibrium points with different hazards have
+different `φ` images. -/
+private theorem phi_ne_of_maximal_hazard_increase
+    (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (z w : EZeroTilde G) (j : G.Player)
+    (hgt : (w.1.2 j : ℝ) < (z.1.2 j : ℝ))
+    (hmax : ∀ k, |(z.1.2 k : ℝ) - (w.1.2 k : ℝ)| ≤
+      (z.1.2 j : ℝ) - (w.1.2 j : ℝ)) :
+    Phi G M d z ≠ Phi G M d w := by
+  intro hphi
+  have hcontrol := maximal_hazard_sub_le_phi_norm
+    G M d hM hd hd1 z w j hgt hmax
+  rw [hphi, sub_self, norm_zero] at hcontrol
+  linarith
+
+/-- Every individual hazard coordinate is nonexpansive with respect to the
+`Phi` image. -/
+private theorem abs_hazard_sub_le_phi_norm
+    (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (z w : EZeroTilde G) (k : G.Player) :
+    |(z.1.2 k : ℝ) - (w.1.2 k : ℝ)| ≤
+      ‖Phi G M d z - Phi G M d w‖ := by
+  classical
+  by_cases hpq : z.1.2 = w.1.2
+  · rw [hpq]
+    simp
+  · obtain ⟨j, _hj, hmax⟩ := Finset.exists_max_image Finset.univ
+      (fun i : G.Player => |(z.1.2 i : ℝ) - (w.1.2 i : ℝ)|)
+      Finset.univ_nonempty
+    have hmaxPos : 0 < |(z.1.2 j : ℝ) - (w.1.2 j : ℝ)| := by
+      by_contra hnot
+      have hmaxZero : |(z.1.2 j : ℝ) - (w.1.2 j : ℝ)| = 0 :=
+        le_antisymm (le_of_not_gt hnot) (abs_nonneg _)
+      apply hpq
+      funext i
+      apply Subtype.ext
+      have hiZero : |(z.1.2 i : ℝ) - (w.1.2 i : ℝ)| = 0 :=
+        le_antisymm (by simpa [hmaxZero] using hmax i (Finset.mem_univ i))
+          (abs_nonneg _)
+      exact sub_eq_zero.mp (abs_eq_zero.mp hiZero)
+    have hkmax := hmax k (Finset.mem_univ k)
+    rcases lt_or_gt_of_ne (sub_ne_zero.mp (abs_ne_zero.mp hmaxPos.ne')) with
+      hz | hw
+    · have hcontrol := maximal_hazard_sub_le_phi_norm G M d hM hd hd1
+        w z j hz (fun i => by
+          simpa [abs_sub_comm, abs_of_neg (sub_neg.mpr hz)] using
+            hmax i (Finset.mem_univ i))
+      rw [norm_sub_rev] at hcontrol
+      exact hkmax.trans (by
+        simpa [abs_of_neg (sub_neg.mpr hz)] using hcontrol)
+    · have hcontrol := maximal_hazard_sub_le_phi_norm G M d hM hd hd1
+        z w j hw (fun i => by
+          simpa [abs_of_pos (sub_pos.mpr hw)] using
+            hmax i (Finset.mem_univ i))
+      exact hkmax.trans (by
+        simpa [abs_of_pos (sub_pos.mpr hw)] using hcontrol)
 
 /-- A concrete inverse/homeomorphism package for `φ`. -/
 structure PhiInverseData (G : QuittingGame) (M d : ℝ) where
