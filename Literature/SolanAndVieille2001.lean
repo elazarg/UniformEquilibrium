@@ -4714,6 +4714,35 @@ private theorem figure2Partner_partner (who : Fin 4) :
     figure2Partner (figure2Partner who) = who := by
   fin_cases who <;> rfl
 
+/-- The two players in the pair opposite to `who` and its partner. -/
+def figure2OppositeFirst : Fin 4 → Fin 4 := ![2, 2, 0, 0]
+
+def figure2OppositeSecond : Fin 4 → Fin 4 := ![3, 3, 1, 1]
+
+private theorem figure2Partner_oppositeFirst (who : Fin 4) :
+    figure2Partner (figure2OppositeFirst who) =
+      figure2OppositeSecond who := by
+  fin_cases who <;> rfl
+
+private theorem figure2Partner_oppositeSecond (who : Fin 4) :
+    figure2Partner (figure2OppositeSecond who) =
+      figure2OppositeFirst who := by
+  fin_cases who <;> rfl
+
+private theorem finiteWindow_singletonTotal_eq_four_roles
+    {roots : RootSequence (ι := Fin 4)}
+    (window : QuittingFiniteRootWindow roots) (who : Fin 4) :
+    window.singletonTotal =
+      window.singletonMass who +
+        window.singletonMass (figure2Partner who) +
+        window.singletonMass (figure2OppositeFirst who) +
+        window.singletonMass (figure2OppositeSecond who) := by
+  unfold QuittingFiniteRootWindow.singletonTotal
+  rw [Fin.sum_univ_four]
+  fin_cases who <;>
+    simp [figure2Partner, figure2OppositeFirst, figure2OppositeSecond] <;>
+    ring
+
 /-- Corollary 13, with constants adapted to the collision allowance: two
 partners cannot both begin more than `7√ε` above their solo-quitting value. -/
 theorem figure2_not_both_partners_high
@@ -4750,6 +4779,73 @@ theorem figure2_not_both_partners_high
   · have hmono := finiteWindow_singletonMass_mono_fuel
       roots 0 who hcutoffs
     nlinarith
+
+/-- The second stopping-time preparation from the companion proof. Before
+the first high player's drop, its partner must itself have a low continuation
+value; that earlier stage is still reached with probability at least `1/8`. -/
+theorem figure2_exists_partnerDrop_before_with_reach
+    {roots : RootSequence (ι := Fin 4)} {ε α : ℝ}
+    (hε0 : 0 < ε) (hεsmall : ε < 1 / 1000000)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4)
+    (hinitial : 1 + α ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who 0)
+    (hmargin : Real.sqrt ε <
+      (α - 2 * Real.sqrt ε - 96 * ε) / 4) :
+    ∃ firstDrop partnerDrop : ℕ,
+      partnerDrop < firstDrop ∧
+      quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots
+          (figure2Partner who) partnerDrop < 1 + Real.sqrt ε ∧
+      (⟨0, firstDrop⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤
+        Real.sqrt ε ∧
+      (α - 2 * Real.sqrt ε - 96 * ε) / 4 ≤
+        (⟨0, firstDrop⟩ : QuittingFiniteRootWindow roots).singletonMass
+          (figure2Partner who) ∧
+      1 / 8 ≤ quittingJointSurvivalWeight roots 0 partnerDrop := by
+  have hεsmall' : ε < 1 / 10000 := by linarith
+  have hsqrtPos : 0 < Real.sqrt ε := Real.sqrt_pos.2 hε0
+  obtain ⟨firstDrop, _, _, hownSmall, hpartnerLarge⟩ :=
+    figure2_exists_firstDrop_with_partnerMass hε0 hεsmall' hclose hnash who
+      hinitial (by linarith)
+  have hexistsLow : ∃ partnerDrop, partnerDrop < firstDrop ∧
+      quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots
+          (figure2Partner who) partnerDrop < 1 + Real.sqrt ε := by
+    by_contra hnone
+    push Not at hnone
+    have hfloor : ∀ offset, offset < firstDrop →
+        1 + Real.sqrt ε ≤ quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots
+            (figure2Partner who) offset := by
+      intro offset hoffset
+      exact hnone offset hoffset
+    have hchronology := figure2_delta_mul_finiteSingletonMass_le_epsilon
+      (by linarith : ε < 1) (Real.sqrt_nonneg ε) hclose hnash
+      (figure2Partner who) firstDrop hfloor
+    have hsqrtSq : Real.sqrt ε ^ 2 = ε := Real.sq_sqrt hε0.le
+    have hmass0 :=
+      (⟨0, firstDrop⟩ : QuittingFiniteRootWindow roots).singletonMass_nonneg
+        (figure2Partner who)
+    nlinarith [mul_pos hsqrtPos (sub_pos.mpr
+      (lt_of_lt_of_le hmargin hpartnerLarge))]
+  obtain ⟨partnerDrop, hpartnerBefore, hpartnerLow⟩ := hexistsLow
+  have hprefixOwn := finiteWindow_singletonMass_mono_fuel
+    roots 0 who hpartnerBefore.le
+  have htotalOwn :=
+    figure2_singletonMass_ge_two_fifteenths_sub_sixtyOne_mul
+      hε0 hclose hnash who
+  have hreach := sequenceSingletonMass_sub_finiteWindow_le_survivalWeight
+    roots 0 partnerDrop who
+  have hsqrtSq : Real.sqrt ε ^ 2 = ε := Real.sq_sqrt hε0.le
+  have hsqrtSmall : Real.sqrt ε < 1 / 1000 := by
+    nlinarith
+  refine ⟨firstDrop, partnerDrop, hpartnerBefore, hpartnerLow,
+    hownSmall, hpartnerLarge, ?_⟩
+  nlinarith
 
 /-- The first omitted Figure 2 assertion: for all sufficiently small positive
 `ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
