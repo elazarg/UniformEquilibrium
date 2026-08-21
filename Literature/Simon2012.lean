@@ -1947,6 +1947,286 @@ private theorem quittingOneStagePayoff_eq_rootExpectedPayoff
       (Finset.mem_univ ∅) using 1
   all_goals simp [term, GameTheory.quittingStageCoalitionPayoff]
 
+/-- Round precisely the displayed players' quitting probabilities to one. -/
+private def roundedQuitRow (G : QuittingGame) [DecidableEq G.Player]
+    (A : Finset G.Player)
+    (p : QuitRow G) : QuitRow G := fun n =>
+  if n ∈ A then 1 else p n
+
+@[simp] private theorem roundedQuitRow_apply_mem (G : QuittingGame)
+    [DecidableEq G.Player]
+    (A : Finset G.Player) (p : QuitRow G) {n : G.Player} (hn : n ∈ A) :
+    (roundedQuitRow G A p n : ℝ) = 1 := by
+  simp [roundedQuitRow, hn]
+
+@[simp] private theorem roundedQuitRow_apply_not_mem (G : QuittingGame)
+    [DecidableEq G.Player]
+    (A : Finset G.Player) (p : QuitRow G) {n : G.Player} (hn : n ∉ A) :
+    roundedQuitRow G A p n = p n := by
+  simp [roundedQuitRow, hn]
+
+/-- After one player is forced, rounding the others is exactly replacement
+of the Bernoulli factors indexed by `A \ {n}` with point masses at Quit. -/
+@[simp] private theorem bernoulliBool_one_eq_pure_true
+    (h0 : (0 : ℝ) ≤ 1) (h1 : (1 : ℝ) ≤ 1) :
+    Math.ProbabilityMassFunction.bernoulliBool 1 h0 h1 = PMF.pure true := by
+  apply Math.ProbabilityMassFunction.toVector_injective
+  funext value
+  cases value <;> simp [Math.ProbabilityMassFunction.toVector]
+
+private theorem quitRowMarginals_eq_pure_true_of_apply_eq_one
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player)
+    (hn : (p n : ℝ) = 1) : quitRowMarginals G p n = PMF.pure true := by
+  apply Math.ProbabilityMassFunction.toVector_injective
+  funext value
+  cases value <;>
+    simp [quitRowMarginals, Math.ProbabilityMassFunction.toVector, hn]
+
+private theorem quitRowMarginals_rounded_replace
+    (G : QuittingGame) [DecidableEq G.Player]
+    (A : Finset G.Player) (p : QuitRow G)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    quitRowMarginals G ((roundedQuitRow G A p).replace G n q) =
+      fun i => if i ∈ A.erase n then PMF.pure true
+        else quitRowMarginals G (p.replace G n q) i := by
+  classical
+  funext i
+  by_cases hin : i = n
+  · subst i
+    simp [quitRowMarginals, QuitRow.replace]
+  · by_cases hiA : i ∈ A
+    · have hierase : i ∈ A.erase n := Finset.mem_erase.mpr ⟨hin, hiA⟩
+      simp [hierase, quitRowMarginals, QuitRow.replace, roundedQuitRow, hin, hiA]
+    · have hierase : i ∉ A.erase n := fun hi => hiA (Finset.mem_of_mem_erase hi)
+      simp [hierase, quitRowMarginals, QuitRow.replace, roundedQuitRow, hin, hiA]
+
+/-- The law of the forced rounded row differs by at most the sum of the
+Continue probabilities of the rounded players other than the forced one. -/
+private theorem pmfTV_forced_roundedQuitRow_le_sum
+    (G : QuittingGame) [DecidableEq G.Player]
+    (A : Finset G.Player) (p : QuitRow G)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    Math.Probability.pmfTV
+        (Math.PMFProduct.pmfPi (quitRowMarginals G (p.replace G n q)))
+        (Math.PMFProduct.pmfPi
+          (quitRowMarginals G ((roundedQuitRow G A p).replace G n q))) ≤
+      ∑ i ∈ A.erase n, (1 - (p i : ℝ)) := by
+  classical
+  rw [quitRowMarginals_rounded_replace]
+  refine (Math.PMFProduct.pmfTV_pmfPi_replaceOn_le_sum
+    (quitRowMarginals G (p.replace G n q)) (fun _ => PMF.pure true)
+    (A.erase n)).trans_eq ?_
+  apply Finset.sum_congr rfl
+  intro i hi
+  have hin : i ≠ n := (Finset.mem_erase.mp hi).1
+  have hpi : (p i : ℝ) ≤ 1 := (p i).property.2
+  simp [quitRowMarginals, QuitRow.replace, hin, hpi,
+    Math.ProbabilityMassFunction.bernoulliBool]
+
+/-- Rounding a forced row changes a one-stage payoff by the payoff
+oscillation times the summed Continue mass of the rounded coordinates. -/
+private theorem abs_forced_roundedQuitRow_payoff_sub_le
+    (G : QuittingGame) [DecidableEq G.Player]
+    (A : Finset G.Player) (p : QuitRow G) (r : Payoff G.Player)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) {C : ℝ}
+    (hosc : ∀ a b : G.Player → Bool,
+      |GameTheory.quittingRootPayoff G.reward r a n -
+        GameTheory.quittingRootPayoff G.reward r b n| ≤ C) :
+    |QuittingOneStagePayoff G r ((roundedQuitRow G A p).replace G n q) n -
+        QuittingOneStagePayoff G r (p.replace G n q) n| ≤
+      C * ∑ i ∈ A.erase n, (1 - (p i : ℝ)) := by
+  rw [quittingOneStagePayoff_eq_rootExpectedPayoff,
+    quittingOneStagePayoff_eq_rootExpectedPayoff]
+  rw [abs_sub_comm]
+  exact (Math.Probability.abs_expect_sub_le_pairwise_mul_pmfTV
+    (Math.PMFProduct.pmfPi (quitRowMarginals G (p.replace G n q)))
+    (Math.PMFProduct.pmfPi
+      (quitRowMarginals G ((roundedQuitRow G A p).replace G n q)))
+    (fun action => GameTheory.quittingRootPayoff G.reward r action n) hosc).trans
+      (mul_le_mul_of_nonneg_left
+        (pmfTV_forced_roundedQuitRow_le_sum G A p n q)
+        (le_trans (abs_nonneg _) (hosc (fun _ => false) (fun _ => false))))
+
+private theorem action_true_of_pmfPi_ne_zero_of_marginal_eq_pure_true
+    {ι : Type*} [Fintype ι] (root : ι → PMF Bool) (k : ι)
+    (hk : root k = PMF.pure true) (action : ι → Bool)
+    (ha : Math.PMFProduct.pmfPi root action ≠ 0) : action k = true := by
+  classical
+  by_contra hfalse
+  have hak : action k = false := by cases h : action k <;> simp_all
+  apply ha
+  rw [Math.PMFProduct.pmfPi_apply]
+  apply Finset.prod_eq_zero (Finset.mem_univ k)
+  rw [hk, hak]
+  simp
+
+/-- The same estimate with oscillation required only on the common support
+where an already-rounded player quits surely. -/
+private theorem abs_forced_roundedQuitRow_payoff_sub_le_of_sure_quitter
+    (G : QuittingGame) [DecidableEq G.Player]
+    (A : Finset G.Player) (p : QuitRow G) (r : Payoff G.Player)
+    (n k : G.Player) (q : Set.Icc (0 : ℝ) 1) {C : ℝ}
+    (hkn : k ≠ n) (hk : (p k : ℝ) = 1)
+    (hosc : ∀ a b : G.Player → Bool, a k = true → b k = true →
+      |GameTheory.quittingRootPayoff G.reward r a n -
+        GameTheory.quittingRootPayoff G.reward r b n| ≤ C) :
+    |QuittingOneStagePayoff G r ((roundedQuitRow G A p).replace G n q) n -
+        QuittingOneStagePayoff G r (p.replace G n q) n| ≤
+      C * ∑ i ∈ A.erase n, (1 - (p i : ℝ)) := by
+  let oldRoot := quitRowMarginals G (p.replace G n q)
+  let newRoot := quitRowMarginals G ((roundedQuitRow G A p).replace G n q)
+  have holdK : oldRoot k = PMF.pure true := by
+    apply quitRowMarginals_eq_pure_true_of_apply_eq_one
+    simp [QuitRow.replace, hkn, hk]
+  have hnewK : newRoot k = PMF.pure true := by
+    apply quitRowMarginals_eq_pure_true_of_apply_eq_one
+    simp only [QuitRow.replace]
+    rw [if_neg hkn]
+    by_cases hkA : k ∈ A
+    · exact roundedQuitRow_apply_mem G A p hkA
+    · simpa [roundedQuitRow_apply_not_mem G A p hkA] using hk
+  rw [quittingOneStagePayoff_eq_rootExpectedPayoff,
+    quittingOneStagePayoff_eq_rootExpectedPayoff]
+  change |Math.Probability.expect (Math.PMFProduct.pmfPi newRoot)
+      (fun action => GameTheory.quittingRootPayoff G.reward r action n) -
+    Math.Probability.expect (Math.PMFProduct.pmfPi oldRoot)
+      (fun action => GameTheory.quittingRootPayoff G.reward r action n)| ≤ _
+  rw [abs_sub_comm]
+  refine (Math.Probability.abs_expect_sub_le_pairwise_on_common_support_mul_pmfTV
+    (Math.PMFProduct.pmfPi oldRoot) (Math.PMFProduct.pmfPi newRoot)
+    (fun action => GameTheory.quittingRootPayoff G.reward r action n)
+    (fun action => action k = true) (C := C) ?_ ?_ ?_).trans ?_
+  · intro action haction
+    exact action_true_of_pmfPi_ne_zero_of_marginal_eq_pure_true
+      oldRoot k holdK action haction
+  · intro action haction
+    exact action_true_of_pmfPi_ne_zero_of_marginal_eq_pure_true
+      newRoot k hnewK action haction
+  · exact fun a ha b hb => hosc a b ha hb
+  · apply mul_le_mul_of_nonneg_left
+    · simpa only [oldRoot, newRoot] using
+        pmfTV_forced_roundedQuitRow_le_sum G A p n q
+    · exact le_trans (abs_nonneg _)
+        (hosc (fun _ => true) (fun _ => true) rfl rfl)
+
+/-- Under Simon's scale, the all-continue value zero and all quitting
+outcomes have payoff oscillation at most `M / 3`. -/
+private theorem quittingRootPayoff_zero_osc_le
+    (G : QuittingGame) (M : ℝ) (hM : IsSimonPayoffScale G M)
+    (n : G.Player) (a b : G.Player → Bool) :
+    |GameTheory.quittingRootPayoff G.reward 0 a n -
+      GameTheory.quittingRootPayoff G.reward 0 b n| ≤ M / 3 := by
+  classical
+  simp only [GameTheory.quittingRootPayoff]
+  split_ifs with ha hb
+  · linarith [hM.2.2
+      ⟨GameTheory.quittingQuitters a, ha⟩
+      ⟨GameTheory.quittingQuitters b, hb⟩ n]
+  · simpa using hM.2.1 ⟨GameTheory.quittingQuitters a, ha⟩ n
+  · simpa only [Pi.zero_apply, zero_sub, abs_neg] using
+      hM.2.1 ⟨GameTheory.quittingQuitters b, by assumption⟩ n
+  · have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+    norm_num
+    positivity
+
+/-- When both profiles contain one common sure quitter, only terminal rewards
+occur and their oscillation is at most `M / 3`. -/
+private theorem quittingRootPayoff_osc_le_of_common_quitter
+    (G : QuittingGame) (M : ℝ) (hM : IsSimonPayoffScale G M)
+    (r : Payoff G.Player) (n k : G.Player) (a b : G.Player → Bool)
+    (hak : a k = true) (hbk : b k = true) :
+    |GameTheory.quittingRootPayoff G.reward r a n -
+      GameTheory.quittingRootPayoff G.reward r b n| ≤ M / 3 := by
+  classical
+  have ha : (GameTheory.quittingQuitters a).Nonempty := by
+    refine ⟨k, ?_⟩
+    simp [GameTheory.quittingQuitters, hak]
+  have hb : (GameTheory.quittingQuitters b).Nonempty := by
+    refine ⟨k, ?_⟩
+    simp [GameTheory.quittingQuitters, hbk]
+  simp only [GameTheory.quittingRootPayoff, ha, hb, dif_pos]
+  linarith [hM.2.2
+    ⟨GameTheory.quittingQuitters a, ha⟩
+    ⟨GameTheory.quittingQuitters b, hb⟩ n]
+
+/-- A bounded continuation coordinate enlarges the one-stage payoff
+oscillation by at most its absolute bound. -/
+private theorem quittingRootPayoff_osc_le_of_continuation_bound
+    (G : QuittingGame) (M B : ℝ) (hM : IsSimonPayoffScale G M)
+    (r : Payoff G.Player) (n : G.Player) (hr : |r n| ≤ B)
+    (a b : G.Player → Bool) :
+    |GameTheory.quittingRootPayoff G.reward r a n -
+      GameTheory.quittingRootPayoff G.reward r b n| ≤ B + M / 3 := by
+  classical
+  have hB : 0 ≤ B := (abs_nonneg (r n)).trans hr
+  simp only [GameTheory.quittingRootPayoff]
+  split_ifs with ha hb
+  · have hterminal := hM.2.2
+      ⟨GameTheory.quittingQuitters a, ha⟩
+      ⟨GameTheory.quittingQuitters b, hb⟩ n
+    nlinarith
+  · exact (abs_sub _ _).trans <| by
+      linarith [hM.2.1 ⟨GameTheory.quittingQuitters a, ha⟩ n]
+  · rw [abs_sub_comm]
+    exact (abs_sub _ _).trans <| by
+      linarith [hM.2.1 ⟨GameTheory.quittingQuitters b, by assumption⟩ n]
+  · have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+    norm_num
+    positivity
+
+private theorem roundedQuitRow_round_singleton_eq
+    (G : QuittingGame) [DecidableEq G.Player]
+    (A : Finset G.Player) (p : QuitRow G) {k : G.Player} (hk : k ∈ A) :
+    roundedQuitRow G A (roundedQuitRow G {k} p) = roundedQuitRow G A p := by
+  funext n
+  by_cases hn : n ∈ A
+  · simp [roundedQuitRow, hn]
+  · have hnk : n ≠ k := fun h => hn (h ▸ hk)
+    simp [roundedQuitRow, hn, hnk]
+
+private theorem quitProbability_eq_one_of_apply_eq_one
+    (G : QuittingGame) (p : QuitRow G) (k : G.Player)
+    (hk : (p k : ℝ) = 1) : QuitProbability G p = 1 := by
+  simp only [QuitProbability]
+  have hzero : (∏ n, (1 - (p n : ℝ))) = 0 := by
+    apply Finset.prod_eq_zero (Finset.mem_univ k)
+    linarith
+  rw [hzero]
+  ring
+
+private theorem forcedContinue_mono_continuation_coord
+    (G : QuittingGame) (p : QuitRow G) (r s : Payoff G.Player)
+    (n : G.Player) (h : r n ≤ s n) :
+    ForcedContinuePayoff G r p n ≤ ForcedContinuePayoff G s p n := by
+  simp only [ForcedContinuePayoff, QuittingOneStagePayoff]
+  gcongr
+  exact sub_nonneg.mpr (quitProbability_mem_Icc G (p.replace G n 0)).2
+
+private theorem forcedContinue_eq_of_sure_other
+    (G : QuittingGame) (p : QuitRow G) (r s : Payoff G.Player)
+    (n k : G.Player) (hkn : k ≠ n) (hk : (p k : ℝ) = 1) :
+    ForcedContinuePayoff G r p n = ForcedContinuePayoff G s p n := by
+  have hkReplace : ((p.replace G n 0) k : ℝ) = 1 := by
+    simp [QuitRow.replace, hkn, hk]
+  have hquit := quitProbability_eq_one_of_apply_eq_one G (p.replace G n 0) k hkReplace
+  simp [ForcedContinuePayoff, QuittingOneStagePayoff, hquit]
+
+private theorem sum_continue_le_card_mul
+    (G : QuittingGame) [DecidableEq G.Player]
+    (A : Finset G.Player) (p : QuitRow G) (δ : ℝ)
+    (hδ : 0 ≤ δ) (hA : ∀ i ∈ A, 1 - (p i : ℝ) ≤ δ) (n : G.Player) :
+    ∑ i ∈ A.erase n, (1 - (p i : ℝ)) ≤
+      (Fintype.card G.Player : ℝ) * δ := by
+  calc
+    (∑ i ∈ A.erase n, (1 - (p i : ℝ))) ≤ ∑ _i ∈ A.erase n, δ := by
+      apply Finset.sum_le_sum
+      intro i hi
+      exact hA i (Finset.mem_of_mem_erase hi)
+    _ = (A.erase n).card * δ := by simp
+    _ ≤ (Fintype.card G.Player : ℝ) * δ := by
+      gcongr
+      exact_mod_cast Finset.card_le_univ (s := A.erase n)
+
 /-- Lemma 3.3's rounding-to-a-sure-quitter hypotheses and conclusion. -/
 def Lemma3_3Statement (G : QuittingGame) (M ε : ℝ) : Prop :=
   ∀ (β : Payoff G.Player) (p : QuitRow G),
@@ -1969,8 +2249,226 @@ The production library has analogous root inequalities, but no adapter to the
 paper-local `QuittingGame` model or this exact constant package.
 -/
 theorem lemma3_3 (G : QuittingGame) (M ε : ℝ)
-    (hM : IsSimonPayoffScale G M) : Lemma3_3Statement G M ε := by
-  sorry
+    (hM : IsSimonPayoffScale G M) (hplayers : HasAtLeastThreePlayers G) :
+    Lemma3_3Statement G M ε := by
+  classical
+  intro β p hp hε hε1 hβLower k hk hβk hβUpper
+  let N : ℝ := Fintype.card G.Player
+  let δ : ℝ := ε / (2 * N * M)
+  let A : Finset G.Player := Finset.univ.filter fun n =>
+    1 - δ ≤ (p n : ℝ) ∧ MinMaxQuit G n - ε / 2 ≤ β n
+  let r : Payoff G.Player := fun n => MinMaxQuit G n - ε
+  let p' : QuitRow G := roundedQuitRow G A p
+  have hMpos : 0 < M := lt_of_lt_of_le (by norm_num) hM.1
+  have hplayersNat : 3 ≤ Fintype.card G.Player := by
+    simpa only [HasAtLeastThreePlayers] using hplayers
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayersNat
+  have hNpos : 0 < N := lt_of_lt_of_le (by norm_num) hN
+  have hNM : 3 ≤ N * M := by
+    have hprod := mul_nonneg (sub_nonneg.mpr hN) (sub_nonneg.mpr hM.1)
+    have hMone : 1 ≤ M := hM.1
+    ring_nf at hprod
+    linarith
+  have hδ : 0 ≤ δ := by positivity
+  have hδlt : δ < 1 := by
+    dsimp only [δ]
+    rw [div_lt_one (by positivity : 0 < 2 * N * M)]
+    nlinarith
+  have hkA : k ∈ A := by
+    simp only [A, Finset.mem_filter, Finset.mem_univ, true_and]
+    exact ⟨hk, hβk⟩
+  have hAContinue : ∀ i ∈ A, 1 - (p i : ℝ) ≤ δ := by
+    intro i hi
+    linarith [(Finset.mem_filter.mp hi).2.1]
+  have hsum : ∀ n, ∑ i ∈ A.erase n, (1 - (p i : ℝ)) ≤ N * δ := by
+    intro n
+    exact sum_continue_le_card_mul G A p δ hδ hAContinue n
+  have hscale : M / 3 * (N * δ) = ε / 6 := by
+    dsimp only [δ, N]
+    field_simp
+    all_goals ring
+  have hscaleFive : (5 * M / 3) * (N * δ) = 5 * ε / 6 := by
+    rw [show 5 * M / 3 = 5 * (M / 3) by ring, mul_assoc, hscale]
+    ring
+  have hscaleTwo : (N * M + M) * δ ≤ 2 * ε / 3 := by
+    have heq : (N * M + M) * δ = ε * ((N + 1) / (2 * N)) := by
+      dsimp only [δ]
+      field_simp
+    have hratio : (N + 1) / (2 * N) ≤ (2 : ℝ) / 3 := by
+      rw [div_le_iff₀ (by positivity : 0 < 2 * N)]
+      nlinarith
+    rw [heq]
+    calc
+      ε * ((N + 1) / (2 * N)) ≤ ε * ((2 : ℝ) / 3) :=
+        mul_le_mul_of_nonneg_left hratio hε.le
+      _ = 2 * ε / 3 := by ring
+  refine ⟨r, p', ?_, ?_, ?_⟩
+  · intro n
+    simp [r]
+  · exact roundedQuitRow_apply_mem G A p hkA
+  · have hchi : ∀ n, |MinMaxQuit G n| ≤ M / 3 := by
+      intro n
+      apply abs_minMaxQuit_le_of_reward_bound G n
+      · positivity
+      · exact fun outcome => hM.2.1 outcome n
+    have haClose : ∀ n,
+        |ForcedQuitPayoff G p' n - ForcedQuitPayoff G p n| ≤ ε / 6 := by
+      intro n
+      calc
+        |ForcedQuitPayoff G p' n - ForcedQuitPayoff G p n| ≤
+            (M / 3) * ∑ i ∈ A.erase n, (1 - (p i : ℝ)) := by
+          exact abs_forced_roundedQuitRow_payoff_sub_le G A p 0 n 1
+            (quittingRootPayoff_zero_osc_le G M hM n)
+        _ ≤ (M / 3) * (N * δ) := by
+          exact mul_le_mul_of_nonneg_left (hsum n) (by positivity)
+        _ = ε / 6 := hscale
+    have hrBound : ∀ n, |r n| ≤ 4 * M / 3 := by
+      intro n
+      change |MinMaxQuit G n - ε| ≤ 4 * M / 3
+      calc
+        |MinMaxQuit G n - ε| ≤ |MinMaxQuit G n| + |ε| := abs_sub _ _
+        _ ≤ M / 3 + M := by
+          rw [abs_of_pos hε]
+          exact add_le_add (hchi n) (hε1.trans hM.1)
+        _ = 4 * M / 3 := by ring
+    have hbCloseA : ∀ n,
+        |ForcedContinuePayoff G r p' n - ForcedContinuePayoff G r p n| ≤
+          5 * ε / 6 := by
+      intro n
+      calc
+        |ForcedContinuePayoff G r p' n - ForcedContinuePayoff G r p n| ≤
+            (4 * M / 3 + M / 3) *
+              ∑ i ∈ A.erase n, (1 - (p i : ℝ)) := by
+          exact abs_forced_roundedQuitRow_payoff_sub_le G A p r n 0
+            (quittingRootPayoff_osc_le_of_continuation_bound
+              G M (4 * M / 3) hM r n (hrBound n))
+        _ = (5 * M / 3) * ∑ i ∈ A.erase n, (1 - (p i : ℝ)) := by ring
+        _ ≤ (5 * M / 3) * (N * δ) := by
+          exact mul_le_mul_of_nonneg_left (hsum n) (by positivity)
+        _ = 5 * ε / 6 := hscaleFive
+    have hBetaBound : ∀ n, n ∉ A → |β n| ≤ N * M := by
+      intro n hnA
+      have hnA' : ¬(1 - δ ≤ (p n : ℝ) ∧
+          MinMaxQuit G n - ε / 2 ≤ β n) := by
+        simpa only [A, Finset.mem_filter, Finset.mem_univ, true_and] using hnA
+      have hupper : β n ≤ N * M := by
+        by_cases hprob : 1 - δ ≤ (p n : ℝ)
+        · have hpay : β n < MinMaxQuit G n - ε / 2 := by
+            exact lt_of_not_ge fun h => hnA' ⟨hprob, h⟩
+          have hchiUpper : MinMaxQuit G n ≤ M / 3 :=
+            (le_abs_self _).trans (hchi n)
+          have hNM : M / 3 ≤ N * M := by nlinarith
+          linarith
+        · apply hβUpper n
+          simpa only [δ, N] using le_of_not_ge hprob
+      have hlower : -(N * M) ≤ β n := by
+        simpa only [N, neg_mul] using hβLower n
+      exact abs_le.mpr ⟨hlower, hupper⟩
+    have hbCloseNotA : ∀ n, n ∉ A →
+        |ForcedContinuePayoff G r p' n - ForcedContinuePayoff G β p n| ≤
+          5 * ε / 6 := by
+      intro n hnA
+      have hkn : k ≠ n := fun h => hnA (h ▸ hkA)
+      let pK : QuitRow G := roundedQuitRow G {k} p
+      have hpKk : (pK k : ℝ) = 1 := by
+        exact roundedQuitRow_apply_mem G {k} p (by simp)
+      have hfirst :
+          |ForcedContinuePayoff G β pK n - ForcedContinuePayoff G β p n| ≤
+            2 * ε / 3 := by
+        calc
+          |ForcedContinuePayoff G β pK n - ForcedContinuePayoff G β p n| ≤
+              (N * M + M / 3) * (1 - (p k : ℝ)) := by
+            have hraw := abs_forced_roundedQuitRow_payoff_sub_le
+              G {k} p β n 0
+              (quittingRootPayoff_osc_le_of_continuation_bound
+                G M (N * M) hM β n (hBetaBound n hnA))
+            simpa [pK, ForcedContinuePayoff, hkn, Ne.symm hkn] using hraw
+          _ ≤ (N * M + M) * (1 - (p k : ℝ)) := by
+            apply mul_le_mul_of_nonneg_right
+            · nlinarith
+            · exact sub_nonneg.mpr (p k).property.2
+          _ ≤ (N * M + M) * δ := by
+            exact mul_le_mul_of_nonneg_left (hAContinue k hkA) (by positivity)
+          _ ≤ 2 * ε / 3 := hscaleTwo
+      have hAContinueK : ∀ i ∈ A, 1 - (pK i : ℝ) ≤ δ := by
+        intro i hi
+        by_cases hik : i = k
+        · subst i
+          rw [hpKk]
+          linarith
+        · simpa [pK, roundedQuitRow, hik] using hAContinue i hi
+      have hsumK : ∑ i ∈ A.erase n, (1 - (pK i : ℝ)) ≤ N * δ :=
+        sum_continue_le_card_mul G A pK δ hδ hAContinueK n
+      have hsecond :
+          |ForcedContinuePayoff G β p' n - ForcedContinuePayoff G β pK n| ≤
+            ε / 6 := by
+        have hround : roundedQuitRow G A pK = p' := by
+          change roundedQuitRow G A (roundedQuitRow G {k} p) = roundedQuitRow G A p
+          exact roundedQuitRow_round_singleton_eq G A p hkA
+        calc
+          |ForcedContinuePayoff G β p' n - ForcedContinuePayoff G β pK n| ≤
+              (M / 3) * ∑ i ∈ A.erase n, (1 - (pK i : ℝ)) := by
+            rw [← hround]
+            exact abs_forced_roundedQuitRow_payoff_sub_le_of_sure_quitter
+              G A pK β n k 0 hkn hpKk
+              (quittingRootPayoff_osc_le_of_common_quitter G M hM β n k)
+          _ ≤ (M / 3) * (N * δ) :=
+            mul_le_mul_of_nonneg_left hsumK (by positivity)
+          _ = ε / 6 := hscale
+      have hrβ : ForcedContinuePayoff G r p' n =
+          ForcedContinuePayoff G β p' n := by
+        apply forcedContinue_eq_of_sure_other G p' r β n k hkn
+        exact roundedQuitRow_apply_mem G A p hkA
+      rw [hrβ]
+      calc
+        |ForcedContinuePayoff G β p' n - ForcedContinuePayoff G β p n| ≤
+            |ForcedContinuePayoff G β p' n - ForcedContinuePayoff G β pK n| +
+              |ForcedContinuePayoff G β pK n - ForcedContinuePayoff G β p n| :=
+          abs_sub_le _ _ _
+        _ ≤ ε / 6 + 2 * ε / 3 := add_le_add hsecond hfirst
+        _ = 5 * ε / 6 := by ring
+    have hpExact : p ∈ EpsilonRow G 0 β := hp.1
+    constructor
+    · intro n hp'Pos
+      by_cases hnA : n ∈ A
+      · have hpPos : 0 < (p n : ℝ) := by
+          have hnLarge := (Finset.mem_filter.mp hnA).2.1
+          linarith
+        have hold := hpExact.1 n hpPos
+        have hrβ : ForcedContinuePayoff G r p n ≤
+            ForcedContinuePayoff G β p n := by
+          apply forcedContinue_mono_continuation_coord
+          have hnRational := (Finset.mem_filter.mp hnA).2.2
+          change MinMaxQuit G n - ε ≤ β n
+          linarith
+        have ha := (abs_le.mp (haClose n)).1
+        have hb := (abs_le.mp (hbCloseA n)).2
+        linarith
+      · have hpEq : p' n = p n := by
+          exact roundedQuitRow_apply_not_mem G A p hnA
+        have hpPos : 0 < (p n : ℝ) := by
+          rw [← hpEq]
+          exact hp'Pos
+        have hold := hpExact.1 n hpPos
+        have ha := (abs_le.mp (haClose n)).1
+        have hb := (abs_le.mp (hbCloseNotA n hnA)).2
+        linarith
+    · intro n hp'Lt
+      have hnA : n ∉ A := by
+        intro hnA
+        have hpOne := roundedQuitRow_apply_mem G A p hnA
+        change (p' n : ℝ) = 1 at hpOne
+        linarith
+      have hpEq : p' n = p n := roundedQuitRow_apply_not_mem G A p hnA
+      have hpLt : (p n : ℝ) < 1 := by
+        rw [← hpEq]
+        exact hp'Lt
+      have hold := hpExact.2 n hpLt
+      have ha := (abs_le.mp (haClose n)).2
+      have hb := (abs_le.mp (hbCloseNotA n hnA)).1
+      linarith
 
 /-- The constants selected after Lemma 3.3 and used in Lemma 3.4. -/
 def AreSection3Constants (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=

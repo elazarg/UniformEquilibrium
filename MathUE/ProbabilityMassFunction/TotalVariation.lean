@@ -232,6 +232,73 @@ theorem abs_expect_sub_le_range_mul_pmfTV {Ω : Type*} [Fintype Ω]
   rw [abs_le]
   constructor <;> linarith
 
+/-- If a finite observable has pairwise oscillation at most `C`, changing the
+law changes its expectation by at most `C` times total variation. -/
+theorem abs_expect_sub_le_pairwise_mul_pmfTV {Ω : Type*}
+    [Fintype Ω] [Nonempty Ω] (μ ν : PMF Ω) (f : Ω → ℝ) {C : ℝ}
+    (hf : ∀ x y, |f x - f y| ≤ C) :
+    |expect μ f - expect ν f| ≤ C * pmfTV μ ν := by
+  classical
+  let values : Finset ℝ := Finset.univ.image f
+  have hvalues : values.Nonempty := Finset.univ_nonempty.image f
+  let lower := values.min' hvalues
+  let upper := values.max' hvalues
+  have hrange : ∀ x, lower ≤ f x ∧ f x ≤ upper := by
+    intro x
+    have hx : f x ∈ values := Finset.mem_image.mpr ⟨x, Finset.mem_univ x, rfl⟩
+    exact ⟨Finset.min'_le values (f x) hx, Finset.le_max' values (f x) hx⟩
+  have hwidth : upper - lower ≤ C := by
+    have hlower := Finset.min'_mem values hvalues
+    have hupper := Finset.max'_mem values hvalues
+    obtain ⟨x, _, hx⟩ := Finset.mem_image.mp hlower
+    obtain ⟨y, _, hy⟩ := Finset.mem_image.mp hupper
+    change values.max' hvalues - values.min' hvalues ≤ C
+    rw [← hx, ← hy]
+    exact (le_abs_self (f y - f x)).trans (hf y x)
+  exact (abs_expect_sub_le_range_mul_pmfTV μ ν f
+    (fun x => (hrange x).1) (fun x => (hrange x).2)).trans
+      (mul_le_mul_of_nonneg_right hwidth (pmfTV_nonneg μ ν))
+
+/-- The oscillation bound need only hold on a common support containing both
+laws. Values of the observable outside that support are immaterial. -/
+theorem abs_expect_sub_le_pairwise_on_common_support_mul_pmfTV
+    {Ω : Type*} [Fintype Ω] (μ ν : PMF Ω) (f : Ω → ℝ)
+    (P : Ω → Prop) {C : ℝ}
+    (hμ : ∀ x, μ x ≠ 0 → P x) (hν : ∀ x, ν x ≠ 0 → P x)
+    (hf : ∀ x, P x → ∀ y, P y → |f x - f y| ≤ C) :
+    |expect μ f - expect ν f| ≤ C * pmfTV μ ν := by
+  classical
+  obtain ⟨base, hbaseSupport⟩ := μ.support_nonempty
+  have hbase : P base := hμ base (by simpa [PMF.mem_support_iff] using hbaseSupport)
+  let g : Ω → ℝ := fun x => if P x then f x else f base
+  have hμeq : expect μ f = expect μ g := by
+    rw [expect_eq_sum, expect_eq_sum]
+    apply Finset.sum_congr rfl
+    intro x _
+    by_cases hx : μ x = 0
+    · simp [hx]
+    · simp [g, hμ x hx]
+  have hνeq : expect ν f = expect ν g := by
+    rw [expect_eq_sum, expect_eq_sum]
+    apply Finset.sum_congr rfl
+    intro x _
+    by_cases hx : ν x = 0
+    · simp [hx]
+    · simp [g, hν x hx]
+  rw [hμeq, hνeq]
+  letI : Nonempty Ω := ⟨base⟩
+  apply abs_expect_sub_le_pairwise_mul_pmfTV
+  intro x y
+  by_cases hx : P x
+  · by_cases hy : P y
+    · simpa [g, hx, hy] using hf x hx y hy
+    · simpa [g, hx, hy] using hf x hx base hbase
+  · by_cases hy : P y
+    · rw [abs_sub_comm]
+      simpa [g, hx, hy] using hf y hy base hbase
+    · simp only [g, hx, hy, ↓reduceIte, sub_self, abs_zero]
+      exact (abs_nonneg _).trans (hf base hbase base hbase)
+
 theorem abs_expect_sub_le_two_mul_pmfTV {Ω : Type*} [Fintype Ω]
     (μ ν : PMF Ω) (f : Ω → ℝ) {C : ℝ}
     (hf : ∀ ω, |f ω| ≤ C) :
