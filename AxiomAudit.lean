@@ -366,6 +366,7 @@ import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
+import MathUE.Viability.AdaptiveEulerLimit
 import MathUE.Viability.ControlledIntegralTrajectory
 import MathUE.Viability.LipschitzCompactness
 import MathUE.WeierstrassCurve
