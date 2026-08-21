@@ -3015,6 +3015,78 @@ private theorem phi_surjective (G : QuittingGame) (M d : ℝ)
   exact ⟨targetAdjustedGraphPoint G M d t ht ht1 y p hfixed hlt,
     phi_targetAdjustedGraphPoint G M d t ht ht1 y p hfixed hlt⟩
 
+/-- Recover the continuation vector from a `Phi` value and its quitting row. -/
+private def recoveredContinuation (G : QuittingGame) (M d : ℝ)
+    (a : Payoff G.Player) (p : QuitRow G) : Payoff G.Player := fun j =>
+  (a j + (5 * (Fintype.card G.Player : ℝ) * M / d) *
+      ((p j : ℝ) / (1 - (p j : ℝ)) ^ Fintype.card G.Player) -
+      M * ((∑ k, (p k : ℝ)) - (p j : ℝ)) -
+      QuittingOneStagePayoff G 0 p j) /
+    (1 - QuitProbability G p)
+
+/-- On the exact-equilibrium graph, the recovery formula returns the original
+continuation vector. -/
+private theorem recoveredContinuation_phi
+    (G : QuittingGame) (M d : ℝ) (z : EZeroTilde G) :
+    recoveredContinuation G M d (Phi G M d z) z.1.2 = z.1.1 := by
+  classical
+  have hsurvival : 1 - QuitProbability G z.1.2 ≠ 0 := by
+    linarith [z.2.2]
+  funext j
+  have hsum := Finset.sum_erase_add Finset.univ
+    (fun k => (z.1.2 k : ℝ)) (Finset.mem_univ j)
+  simp only [recoveredContinuation, Phi, QuittingOneStagePayoff,
+    Pi.zero_apply, mul_zero, zero_add]
+  field_simp [hsurvival]
+  rw [← hsum]
+  ring
+
+/-- The recovery formula is continuous whenever the supplied rows have
+positive survival. -/
+private theorem continuous_recoveredContinuation_comp {X : Type}
+    [TopologicalSpace X] (G : QuittingGame) (M d : ℝ)
+    (a : X → Payoff G.Player) (p : X → QuitRow G)
+    (ha : Continuous a) (hp : Continuous p)
+    (hsurvival : ∀ x, QuitProbability G (p x) < 1) :
+    Continuous (fun x => recoveredContinuation G M d (a x) (p x)) := by
+  classical
+  rw [continuous_pi_iff]
+  intro j
+  have hcoord (k : G.Player) : Continuous (fun x => ((p x) k : ℝ)) :=
+    continuous_subtype_val.comp ((continuous_apply k).comp hp)
+  have htotal : Continuous (fun x => ∑ k, ((p x) k : ℝ)) := by
+    apply continuous_finsetSum
+    intro k _hk
+    exact hcoord k
+  have hcoordDenom : ∀ x, 1 - ((p x) j : ℝ) ≠ 0 := by
+    intro x hzero
+    have hjOne : ((p x) j : ℝ) = 1 := by linarith
+    have hquitOne := quitProbability_eq_one_of_coord_eq_one G (p x) j hjOne
+    linarith [hsurvival x]
+  have hsingular : Continuous (fun x =>
+      ((p x) j : ℝ) /
+        (1 - ((p x) j : ℝ)) ^ Fintype.card G.Player) := by
+    exact (hcoord j).div ((continuous_const.sub (hcoord j)).pow _)
+      (fun x => pow_ne_zero _ (hcoordDenom x))
+  have hstage : Continuous (fun x =>
+      QuittingOneStagePayoff G 0 (p x) j) :=
+    continuous_quittingOneStagePayoff_comp G (fun _ => 0) p
+      continuous_const hp j
+  have hquit := continuous_quitProbability_comp G p hp
+  have hpositive : ∀ x, 1 - QuitProbability G (p x) ≠ 0 := by
+    intro x
+    linarith [hsurvival x]
+  have hnumerator : Continuous (fun x =>
+      a x j + (5 * (Fintype.card G.Player : ℝ) * M / d) *
+          (((p x) j : ℝ) /
+            (1 - ((p x) j : ℝ)) ^ Fintype.card G.Player) -
+        M * ((∑ k, ((p x) k : ℝ)) - ((p x) j : ℝ)) -
+        QuittingOneStagePayoff G 0 (p x) j) := by
+    exact ((((continuous_apply j).comp ha).add
+      (continuous_const.mul hsingular)).sub
+        (continuous_const.mul (htotal.sub (hcoord j)))).sub hstage
+  exact hnumerator.div (continuous_const.sub hquit) hpositive
+
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
 the paper's Jacobian argument: strict diagonal dominance gives local openness
@@ -3026,8 +3098,50 @@ homeomorphism.
 theorem lemma3_2 (G : QuittingGame) (M d : ℝ)
     (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
     Function.Surjective (Phi G M d) ∧ Nonempty (PhiInverseData G M d) := by
-  refine ⟨phi_surjective G M d hM hd hd1, ?_⟩
-  sorry
+  let hsurjective := phi_surjective G M d hM hd hd1
+  refine ⟨hsurjective, ?_⟩
+  letI : Nonempty (EZeroTilde G) := ⟨(hsurjective 0).choose⟩
+  let inv : Payoff G.Player → EZeroTilde G := Function.invFun (Phi G M d)
+  have hinjective : Function.Injective (Phi G M d) :=
+    (lemma3_1 G M d hM hd hd1).1
+  have hleft : Function.LeftInverse inv (Phi G M d) := by
+    simpa only [inv] using Function.leftInverse_invFun hinjective
+  have hright : Function.RightInverse inv (Phi G M d) := by
+    simpa only [inv] using Function.rightInverse_invFun hsurjective
+  have hhazardLip (j : G.Player) : LipschitzWith 1
+      (fun a : Payoff G.Player => (((inv a).1.2 j : UnitInterval) : ℝ)) := by
+    rw [lipschitzWith_iff_dist_le_mul]
+    intro a b
+    have hbound := abs_hazard_sub_le_phi_norm
+      G M d hM hd hd1 (inv a) (inv b) j
+    rw [hright a, hright b] at hbound
+    simpa only [NNReal.coe_one, one_mul, Real.dist_eq, Real.norm_eq_abs,
+      dist_eq_norm] using hbound
+  have hpInv : Continuous (fun a : Payoff G.Player => (inv a).1.2) := by
+    rw [continuous_pi_iff]
+    intro j
+    apply Continuous.subtype_mk
+    exact (hhazardLip j).continuous
+  have hrecovered : Continuous (fun a : Payoff G.Player =>
+      recoveredContinuation G M d a (inv a).1.2) :=
+    continuous_recoveredContinuation_comp G M d _ _ continuous_id hpInv
+      (fun a => (inv a).2.2)
+  have hxInv : Continuous (fun a : Payoff G.Player => (inv a).1.1) := by
+    have hformula (a : Payoff G.Player) :
+        recoveredContinuation G M d a (inv a).1.2 = (inv a).1.1 := by
+      nth_rewrite 1 [← hright a]
+      exact recoveredContinuation_phi G M d (inv a)
+    rw [show (fun a : Payoff G.Player => (inv a).1.1) =
+        (fun a => recoveredContinuation G M d a (inv a).1.2) by
+      funext a
+      exact (hformula a).symm]
+    exact hrecovered
+  have hinvContinuous : Continuous inv := by
+    apply Continuous.subtype_mk
+    change Continuous (fun a : Payoff G.Player =>
+      ((inv a).1.1, (inv a).1.2))
+    exact hxInv.prodMk hpInv
+  exact ⟨⟨inv, hleft, hright, hinvContinuous⟩⟩
 
 /-- The paper's straight-line condition for the structure homotopy. -/
 def IsQuitStraightLineHomotopy (G : QuittingGame)
