@@ -9518,6 +9518,56 @@ private theorem quittingDDPOwnQuitEvent_totalMass_le_one
           (quittingDDPOwnQuitEvent_pairwise_aedisjoint G p n T M hM S)
     _ = 1 := measure_univ
 
+private theorem quittingDDPRawLaw_ownQuitEvent
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM))
+    {i : ℕ} (hi : i < T) :
+    (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+        (QuittingDDPOwnQuitEvent G p n T M hM i) =
+      (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+          {stages | (stages i).1 = (i, ∅)} * ENNReal.ofReal (p i n : ℝ) := by
+  let P := quittingDecisionProcess G p n T M hM
+  have hevent : QuittingDDPOwnQuitEvent G p n T M hM i =
+      {stages : ℕ → DDPStage P | stages i = ⟨(i, ∅), true⟩} := by
+    ext stages
+    simp only [QuittingDDPOwnQuitEvent, mem_setOf_eq]
+    constructor
+    · rintro ⟨hstate, haction⟩
+      apply Sigma.ext hstate
+      exact haction
+    · intro hstage
+      exact ⟨congrArg Sigma.fst hstage, (Sigma.mk.inj_iff.mp hstage).2⟩
+  rw [hevent]
+  have hstage := P.rawLawFrom_stage_eq_state_mul_choose S (0, ∅) i (i, ∅) true
+  rw [hstage]
+  congr 1
+  change quittingDDPChoose G p n T (i, ∅) true = ENNReal.ofReal (p i n : ℝ)
+  have hlive : IsQuittingDDPLive T (i, (∅ : Finset G.Player)) := ⟨hi, rfl⟩
+  simp [quittingDDPChoose, hlive, quittingBernoulli, PMF.ofFintype_apply]
+
+private theorem quittingDDPRawStateVariation_eq_zero_of_not_live
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T i : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (state : QuittingDDPState G) (hlive : ¬IsQuittingDDPLive T state) :
+    (quittingDecisionProcess G p n T M hM).rawStateVariation (0, ∅) i state = 0 := by
+  let P := quittingDecisionProcess G p n T M hM
+  rw [DiscreteDecisionProcess.rawStateVariation]
+  apply mul_eq_zero_of_right
+  calc
+    (∑' action, P.choose state action *
+        ENNReal.ofReal |DDPStage.increment P ⟨state, action⟩|) =
+        ∑' _action : Bool, 0 := by
+      apply tsum_congr
+      intro action
+      have hincrement : DDPStage.increment P ⟨state, action⟩ = 0 := by
+        change quittingDDPValueY G p n T state action -
+          quittingDDPValueX G p n T state = 0
+        simp [quittingDDPValueY, hlive]
+      rw [hincrement]
+      simp
+    _ = 0 := tsum_zero
+
 /-- An unreachable state has zero mass under the raw law of the quitting DDP. -/
 private theorem quittingDDPRawLaw_state_eq_zero_of_unreachable
     (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
