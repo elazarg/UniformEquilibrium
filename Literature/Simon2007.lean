@@ -9519,6 +9519,69 @@ private def PlayerContinueProbability (G : QuittingGame) (p : QuitProfile G)
     (n : G.Player) (i : ℕ) : ℝ :=
   ∏ k ∈ Finset.range i, (1 - (p k n : ℝ))
 
+/-- The probability that every player other than `n` continues through the finite prefix. -/
+private def OpponentContinueProbability (G : QuittingGame) (p : QuitProfile G)
+    (n : G.Player) (i : ℕ) : ℝ :=
+  ∏ k ∈ Finset.range i, (1 - QuitProbability G ((p k).replace G n 0))
+
+/-- Finite survival factors into own continuation and all opponents' continuation. -/
+private theorem tailSurvival_eq_playerContinue_mul_opponent
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (i : ℕ) :
+    tailSurvival G p 0 i = PlayerContinueProbability G p n i *
+      OpponentContinueProbability G p n i := by
+  simp only [tailSurvival, PlayerContinueProbability, OpponentContinueProbability, zero_add]
+  rw [← Finset.prod_mul_distrib]
+  apply Finset.prod_congr rfl
+  intro k _hk
+  have h := one_sub_quitProbability_replace G (p k) n (p k n)
+  rw [QuitRow.replace_self] at h
+  exact h
+
+/-- Both finite own- and opponent-continuation probabilities lie in the unit interval. -/
+private theorem continueProbabilities_mem_Icc
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (i : ℕ) :
+    PlayerContinueProbability G p n i ∈ Set.Icc (0 : ℝ) 1 ∧
+      OpponentContinueProbability G p n i ∈ Set.Icc (0 : ℝ) 1 := by
+  constructor
+  · exact ⟨Finset.prod_nonneg fun k _ => sub_nonneg.mpr (p k n).property.2,
+      Finset.prod_le_one (fun k _ => sub_nonneg.mpr (p k n).property.2)
+        (fun k _ => by linarith [(p k n).property.1])⟩
+  · exact ⟨Finset.prod_nonneg fun k _ =>
+        sub_nonneg.mpr (quitProbability_mem_Icc G _).2,
+      Finset.prod_le_one
+        (fun k _ => sub_nonneg.mpr (quitProbability_mem_Icc G _).2)
+        (fun k _ => by linarith [(quitProbability_mem_Icc G
+          ((p k).replace G n 0)).1])⟩
+
+/-- Finite survival is at most any one player's prescribed continuation probability. -/
+private theorem tailSurvival_le_playerContinueProbability
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (i : ℕ) :
+    tailSurvival G p 0 i ≤ PlayerContinueProbability G p n i := by
+  rw [tailSurvival_eq_playerContinue_mul_opponent G p n i]
+  exact mul_le_of_le_one_right (continueProbabilities_mem_Icc G p n i).1.1
+    (continueProbabilities_mem_Icc G p n i).2.2
+
+/-- A unilateral deviation can only reduce survival relative to the opponents-only factor. -/
+private theorem tailSurvival_replace_le_opponentContinueProbability
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player)
+    (deviation : ℕ → Set.Icc (0 : ℝ) 1) (i : ℕ) :
+    tailSurvival G (p.replace G n deviation) 0 i ≤
+      OpponentContinueProbability G p n i := by
+  have hfactor : tailSurvival G (p.replace G n deviation) 0 i =
+      (∏ k ∈ Finset.range i, (1 - (deviation k : ℝ))) *
+        OpponentContinueProbability G p n i := by
+    simp only [tailSurvival, OpponentContinueProbability, zero_add]
+    rw [← Finset.prod_mul_distrib]
+    apply Finset.prod_congr rfl
+    intro k _hk
+    change 1 - QuitProbability G ((p k).replace G n (deviation k)) = _
+    exact one_sub_quitProbability_replace G (p k) n (deviation k)
+  rw [hfactor]
+  have hown : (∏ k ∈ Finset.range i, (1 - (deviation k : ℝ))) ≤ 1 :=
+    Finset.prod_le_one (fun k _ => sub_nonneg.mpr (deviation k).property.2)
+      (fun k _ => by linarith [(deviation k).property.1])
+  exact mul_le_of_le_one_left (continueProbabilities_mem_Icc G p n i).2.1 hown
+
 /-- The probability of a union of independent quits is at most the sum of their marginals. -/
 private theorem one_sub_prod_one_sub_le_sum {N : Type} (s : Finset N)
     (a : N → ℝ) (ha0 : ∀ n ∈ s, 0 ≤ a n) (ha1 : ∀ n ∈ s, a n ≤ 1) :
@@ -9675,6 +9738,29 @@ private noncomputable def firstPunishmentTrigger
   classical
   exact Nat.find hexists
 
+/-- At the first trigger, prefer a player with small own survival; otherwise choose a
+ledger-crossing player, in which case every player's own survival is still large. -/
+private theorem exists_punishmentPlayer_at_firstTrigger
+    (G : QuittingGame) (p : QuitProfile G) {M ε : ℝ}
+    (hexists : ∃ i, IsPunishmentTrigger G p M ε i) :
+    ∃ j : G.Player,
+      PlayerContinueProbability G p j (firstPunishmentTrigger G p M ε hexists) ≤ ε / M ∨
+      (ε ≤ ContinueLedger G p j (firstPunishmentTrigger G p M ε hexists) ∧
+        ∀ m, ε / M < PlayerContinueProbability G p m
+          (firstPunishmentTrigger G p M ε hexists)) := by
+  classical
+  let T := firstPunishmentTrigger G p M ε hexists
+  by_cases hsmall : ∃ j : G.Player, PlayerContinueProbability G p j T ≤ ε / M
+  · rcases hsmall with ⟨j, hj⟩
+    exact ⟨j, Or.inl hj⟩
+  · have hall : ∀ m : G.Player, ε / M < PlayerContinueProbability G p m T := by
+      intro m
+      exact lt_of_not_ge fun hm => hsmall ⟨m, hm⟩
+    have hspec : IsPunishmentTrigger G p M ε T := Nat.find_spec hexists
+    rcases hspec with ⟨j, hledger | hsurvival⟩
+    · exact ⟨j, Or.inr ⟨hledger, hall⟩⟩
+    · exact (not_lt_of_ge hsurvival (hall j)).elim
+
 /-- Every ledger is below `ε` strictly before the first punishment trigger. -/
 private theorem ledger_lt_of_lt_firstPunishmentTrigger
     (G : QuittingGame) {p : QuitProfile G} {M ε : ℝ}
@@ -9704,6 +9790,44 @@ private theorem ledger_firstPunishmentTrigger_lt_add
     rw [hi]
     exact ContinueLedger.succ_lt_add_of_generated G horbit hδ n i
       (ledger_lt_of_lt_firstPunishmentTrigger G hexists (show i < T by omega) n)
+
+/-- Before the first punishment trigger, arbitrary play against the finite prefix gains at
+most `ε + δ` when the original tail vector is used at the switching stage. -/
+private theorem finiteQuittingPayoff_replace_tail_le_at_firstPunishmentTrigger
+    (G : QuittingGame) {p : QuitProfile G} {M ε δ : ℝ}
+    (horbit : GeneratesFRowOrbit G δ p) (hδ : 0 < δ) (hε : 0 < ε)
+    (hexists : ∃ i, IsPunishmentTrigger G p M ε i)
+    (n : G.Player) (deviation : ℕ → Set.Icc (0 : ℝ) 1) :
+    finiteQuittingPayoff G (firstPunishmentTrigger G p M ε hexists)
+        (QuitTailPayoff G p (firstPunishmentTrigger G p M ε hexists))
+        (fun i => (p i).replace G n (deviation i)) n ≤
+      QuitTailPayoff G p 0 n + ε + δ := by
+  let T := firstPunishmentTrigger G p M ε hexists
+  have hbound := finiteQuittingPayoff_replace_le_of_ledger G n (k := T) hδ.le
+    (fun i => QuitTailPayoff G p i) p deviation (QuitTailPayoff G p T)
+      (ContinueLedger G p n) (K := ε + δ)
+      (fun i _hi => horbit i)
+      (fun i _hi => quitTailPayoff_eq_oneStage G p i)
+      (fun i _hi => ContinueLedger.succ G p n i)
+      (by
+        intro i hi
+        by_cases hiT : i < T
+        · have hledger := ledger_lt_of_lt_firstPunishmentTrigger G hexists hiT n
+          linarith
+        · have hiEq : i = T := by omega
+          subst i
+          have hledger := ledger_firstPunishmentTrigger_lt_add
+            G horbit hδ.le hε hexists n
+          linarith)
+      (by
+        intro i hi
+        have hledger := ledger_lt_of_lt_firstPunishmentTrigger G hexists hi n
+        linarith)
+      (by
+        have hledger := ledger_firstPunishmentTrigger_lt_add
+          G horbit hδ.le hε hexists n
+        linarith)
+  simpa only [T, ContinueLedger.zero, sub_zero, add_assoc] using hbound
 
 /-! The finite-horizon rank-one decision process used in Proposition 3. -/
 
@@ -9804,6 +9928,50 @@ private theorem abs_sub_le_of_mem_coordinateInterval
   have hwidth := quittingCoordinate_width_lt G n hM
   rw [abs_le]
   constructor <;> linarith [hx.1, hx.2, hy.1, hy.2]
+
+/-- Two terminal corrections with coefficients bounded by `c` cost at most `cM` when all
+three terminal values lie in one coordinate interval of width at most `M`. -/
+private theorem weighted_terminal_correction_le
+    (G : QuittingGame) (n : G.Player) {M c a b x y r : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M) (hc : 0 ≤ c)
+    (ha : a ∈ Set.Icc (0 : ℝ) c) (hb : b ∈ Set.Icc (0 : ℝ) c)
+    (hx : x ∈ Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n))
+    (hy : y ∈ Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n))
+    (hr : r ∈ Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n)) :
+    a * (x - r) - b * (y - r) ≤ c * M := by
+  have hxr := abs_sub_le_of_mem_coordinateInterval G n hM hx hr
+  have hry := abs_sub_le_of_mem_coordinateInterval G n hM hr hy
+  have hxy := abs_sub_le_of_mem_coordinateInterval G n hM hx hy
+  by_cases hxrSign : x ≤ r
+  · by_cases hrySign : r ≤ y
+    · have hleft : a * (x - r) ≤ 0 := mul_nonpos_of_nonneg_of_nonpos ha.1 (by linarith)
+      have hright : 0 ≤ b * (y - r) := mul_nonneg hb.1 (by linarith)
+      have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+      nlinarith
+    · have hryPos : 0 ≤ r - y := by linarith
+      have hleft : a * (x - r) ≤ 0 := mul_nonpos_of_nonneg_of_nonpos ha.1 (by linarith)
+      have hright : b * (r - y) ≤ c * (r - y) :=
+        mul_le_mul_of_nonneg_right hb.2 hryPos
+      have hwidth : r - y ≤ M := (le_abs_self _).trans hry
+      have hlast : c * (r - y) ≤ c * M := mul_le_mul_of_nonneg_left hwidth hc
+      linarith
+  · by_cases hrySign : r ≤ y
+    · have hxrPos : 0 ≤ x - r := by linarith
+      have hleft : a * (x - r) ≤ c * (x - r) :=
+        mul_le_mul_of_nonneg_right ha.2 hxrPos
+      have hright : 0 ≤ b * (y - r) := mul_nonneg hb.1 (by linarith)
+      have hwidth : x - r ≤ M := (le_abs_self _).trans hxr
+      have hlast : c * (x - r) ≤ c * M := mul_le_mul_of_nonneg_left hwidth hc
+      linarith
+    · have hxrPos : 0 ≤ x - r := by linarith
+      have hryPos : 0 ≤ r - y := by linarith
+      have hleft : a * (x - r) ≤ c * (x - r) :=
+        mul_le_mul_of_nonneg_right ha.2 hxrPos
+      have hright : b * (r - y) ≤ c * (r - y) :=
+        mul_le_mul_of_nonneg_right hb.2 hryPos
+      have hwidth : x - y ≤ M := (le_abs_self _).trans hxy
+      have hlast : c * (x - y) ≤ c * M := mul_le_mul_of_nonneg_left hwidth hc
+      nlinarith
 
 @[simp] private theorem quittingBernoulli_apply_true_toReal
     (q : Set.Icc (0 : ℝ) 1) : (quittingBernoulli q true).toReal = q := by
@@ -10757,6 +10925,79 @@ private theorem tailSurvival_le_of_continueLedger_crossing
       exact (ENNReal.ofReal_le_ofReal_iff
         (div_nonneg (sq_nonneg ε) (sq_nonneg M))).mp hbound
 
+/-- In either source case, another player's deviation reaches the punishment stage with
+probability at most `ε / M`. -/
+private theorem tailSurvival_replace_le_of_punishmentTrigger
+    (G : QuittingGame) (p : QuitProfile G) (j : G.Player) (T : ℕ)
+    {M ε δ : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (hε : 0 < ε) (hδ : 0 < δ) (hsmall : δ < ε ^ 4 / (2 * M ^ 3))
+    (horbit : GeneratesFRowOrbit G δ p)
+    (htrigger : PlayerContinueProbability G p j T ≤ ε / M ∨
+      (ε ≤ ContinueLedger G p j T ∧
+        ∀ m, ε / M < PlayerContinueProbability G p m T))
+    (m : G.Player) (hmj : m ≠ j) (deviation : ℕ → Set.Icc (0 : ℝ) 1) :
+    tailSurvival G (p.replace G m deviation) 0 T ≤ ε / M := by
+  rcases htrigger with hsurvival | ⟨hledger, hall⟩
+  · calc
+      tailSurvival G (p.replace G m deviation) 0 T ≤
+          PlayerContinueProbability G (p.replace G m deviation) j T :=
+        tailSurvival_le_playerContinueProbability G _ j T
+      _ = PlayerContinueProbability G p j T := by
+        apply Finset.prod_congr rfl
+        intro k _hk
+        simp [QuitProfile.replace, Ne.symm hmj]
+      _ ≤ ε / M := hsurvival
+  · have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+    have hbase := tailSurvival_le_of_continueLedger_crossing
+      G p j T hM hε hδ hsmall horbit hledger
+    have hplayer0 := (continueProbabilities_mem_Icc G p m T).1.1
+    have hdeviation0 : 0 ≤ tailSurvival G (p.replace G m deviation) 0 T := by
+      apply Finset.prod_nonneg
+      intro k _hk
+      exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+    have hscaled : PlayerContinueProbability G p m T *
+        tailSurvival G (p.replace G m deviation) 0 T ≤
+          tailSurvival G p 0 T := by
+      calc
+        PlayerContinueProbability G p m T *
+            tailSurvival G (p.replace G m deviation) 0 T ≤
+            PlayerContinueProbability G p m T * OpponentContinueProbability G p m T :=
+          mul_le_mul_of_nonneg_left
+            (tailSurvival_replace_le_opponentContinueProbability G p m deviation T)
+            hplayer0
+        _ = tailSurvival G p 0 T :=
+          (tailSurvival_eq_playerContinue_mul_opponent G p m T).symm
+    have hratioSq : (ε / M) ^ 2 = ε ^ 2 / M ^ 2 := by field_simp
+    have hscaled' : PlayerContinueProbability G p m T *
+        tailSurvival G (p.replace G m deviation) 0 T ≤ (ε / M) ^ 2 := by
+      rw [hratioSq]
+      exact hscaled.trans hbase
+    have hratioPos : 0 < ε / M := div_pos hε hMpos
+    nlinarith [hall m]
+
+/-- Either punishment trigger also makes the prescribed prefix itself sufficiently unlikely. -/
+private theorem tailSurvival_le_of_punishmentTrigger
+    (G : QuittingGame) (p : QuitProfile G) (j : G.Player) (T : ℕ)
+    {M ε δ : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (hε : 0 < ε) (hεone : ε ≤ 1) (hδ : 0 < δ)
+    (hsmall : δ < ε ^ 4 / (2 * M ^ 3)) (horbit : GeneratesFRowOrbit G δ p)
+    (htrigger : PlayerContinueProbability G p j T ≤ ε / M ∨
+      (ε ≤ ContinueLedger G p j T ∧
+        ∀ m, ε / M < PlayerContinueProbability G p m T)) :
+    tailSurvival G p 0 T ≤ ε / M := by
+  rcases htrigger with hsurvival | ⟨hledger, _hall⟩
+  · exact (tailSurvival_le_playerContinueProbability G p j T).trans hsurvival
+  · have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+    have hcross := tailSurvival_le_of_continueLedger_crossing
+      G p j T hM hε hδ hsmall horbit hledger
+    have hratio0 : 0 ≤ ε / M := (div_pos hε hMpos).le
+    have hratio1 : ε / M ≤ 1 := (div_le_one hMpos).2 (hεone.trans hM.1)
+    have hsquare : ε ^ 2 / M ^ 2 = (ε / M) ^ 2 := by field_simp
+    rw [hsquare] at hcross
+    have hsquareLe : (ε / M) ^ 2 ≤ ε / M := by
+      nlinarith [mul_nonneg hratio0 (sub_nonneg.mpr hratio1)]
+    exact hcross.trans hsquareLe
+
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
 `F_δ` profile with unbounded quit mass generates a `3ε`-equilibrium.  The generated
@@ -10772,7 +11013,168 @@ theorem proposition3 (G : QuittingGame) {M ε δ : ℝ}
     (horbit : GeneratesFRowOrbit G δ p) :
     ∃ equilibrium : QuitProfile G,
       IsQuitEpsilonEquilibrium G (3 * ε) equilibrium := by
-  sorry
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hεM : ε ≤ M := hε1.trans hM.1
+  have hcube : ε ^ 3 ≤ M ^ 3 := pow_le_pow_left₀ hε.le hεM 3
+  have hfourth : ε ^ 4 ≤ ε * M ^ 3 := by
+    rw [show ε ^ 4 = ε * ε ^ 3 by ring]
+    exact mul_le_mul_of_nonneg_left hcube hε.le
+  have hfraction : ε ^ 4 / (2 * M ^ 3) ≤ ε / 2 := by
+    rw [div_le_iff₀ (mul_pos (by norm_num) (pow_pos hMpos 3))]
+    calc
+      ε ^ 4 ≤ ε * M ^ 3 := hfourth
+      _ = ε / 2 * (2 * M ^ 3) := by ring
+  have hδhalf : δ < ε / 2 := hsmall.trans_le hfraction
+  let κ : ℝ := (ε - δ) / 4
+  have hκ : 0 < κ := div_pos (by linarith) (by norm_num)
+  have hslack : δ + 2 * κ ≤ ε := by
+    dsimp only [κ]
+    linarith
+  obtain ⟨triggerStage, htriggerStage⟩ := exists_punishmentTrigger G hmass hMpos hε
+  let hexists : ∃ i, IsPunishmentTrigger G p M ε i := ⟨triggerStage, htriggerStage⟩
+  let T := firstPunishmentTrigger G p M ε hexists
+  obtain ⟨j, hjTrigger⟩ := exists_punishmentPlayer_at_firstTrigger G p hexists
+  obtain ⟨punishment, hpunishment⟩ := exists_calibratedPunishmentWithin G j hκ
+  let equilibrium := PrefixThenPunish G p T punishment
+  refine ⟨equilibrium, ?_⟩
+  intro m deviation
+  let shiftedDeviation : ℕ → Set.Icc (0 : ℝ) 1 := fun i => deviation (T + i)
+  let terminalDeviation : Payoff G.Player :=
+    QuitPayoff G (punishment.replace G m shiftedDeviation)
+  let terminalBase : Payoff G.Player := QuitPayoff G punishment
+  let reference : Payoff G.Player := QuitTailPayoff G p T
+  let deviatedPrefix : QuitProfile G := fun i => (p i).replace G m (deviation i)
+  let a := tailSurvival G (p.replace G m deviation) 0 T
+  let b := tailSurvival G p 0 T
+  have hdevSplit : finiteQuittingPayoff G T terminalDeviation deviatedPrefix m =
+      finiteQuittingPayoff G T reference deviatedPrefix m +
+        a * (terminalDeviation m - reference m) := by
+    have hsub := finiteQuittingPayoff_sub G T terminalDeviation reference deviatedPrefix m
+    have hproduct : (∏ i ∈ Finset.range T,
+        (1 - QuitProbability G (deviatedPrefix i))) = a := by
+      simp only [a, tailSurvival, zero_add, deviatedPrefix]
+      congr 1
+    rw [hproduct] at hsub
+    linarith
+  have hbaseSplit : finiteQuittingPayoff G T terminalBase p m =
+      finiteQuittingPayoff G T reference p m +
+        b * (terminalBase m - reference m) := by
+    have hsub := finiteQuittingPayoff_sub G T terminalBase reference p m
+    have hproduct : (∏ i ∈ Finset.range T, (1 - QuitProbability G (p i))) = b := by
+      simp only [b, tailSurvival, zero_add]
+    rw [hproduct] at hsub
+    linarith
+  have hreference : finiteQuittingPayoff G T reference p = QuitTailPayoff G p 0 := by
+    simpa only [reference, zero_add] using
+      (quitTailPayoff_eq_finiteQuittingPayoff G p 0 T).symm
+  have hrefBound : finiteQuittingPayoff G T reference deviatedPrefix m ≤
+      QuitTailPayoff G p 0 m + ε + δ := by
+    simpa only [T, reference, deviatedPrefix] using
+      finiteQuittingPayoff_replace_tail_le_at_firstPunishmentTrigger
+        G horbit hδ hε hexists m deviation
+  have hbBound : b ≤ ε / M := by
+    exact tailSurvival_le_of_punishmentTrigger
+      G p j T hM hε hε1 hδ hsmall horbit hjTrigger
+  have hsurvivalNonnegative (profile : QuitProfile G) :
+      0 ≤ tailSurvival G profile 0 T := by
+    apply Finset.prod_nonneg
+    intro i _hi
+    exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+  have hb0 : 0 ≤ b := hsurvivalNonnegative p
+  have hb1 : b ≤ 1 := by
+    apply Finset.prod_le_one
+    · intro i _hi
+      exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+    · intro i _hi
+      exact sub_le_self 1 (quitProbability_mem_Icc G _).1
+  have hterminalDeviationRange := quitPayoff_mem_coordinateInterval
+    G (punishment.replace G m shiftedDeviation) m
+  have hterminalBaseRange := quitPayoff_mem_coordinateInterval G punishment m
+  have hreferenceRange := quitTailPayoff_mem_coordinateInterval G p T m
+  have hcorrection : a * (terminalDeviation m - reference m) -
+      b * (terminalBase m - reference m) ≤ 2 * ε - δ := by
+    by_cases hmj : m = j
+    · subst m
+      have ha0 : 0 ≤ a := hsurvivalNonnegative (p.replace G j deviation)
+      have ha1 : a ≤ 1 := by
+        apply Finset.prod_le_one
+        · intro i _hi
+          exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+        · intro i _hi
+          exact sub_le_self 1 (quitProbability_mem_Icc G _).1
+      have hxUpper : terminalDeviation j ≤ MinMaxQuit G j + κ :=
+        hpunishment.1 shiftedDeviation
+      have hyLower : MinMaxQuit G j - κ ≤ terminalBase j := hpunishment.2
+      let self : ℕ → Set.Icc (0 : ℝ) 1 := fun i => punishment i j
+      have hself : punishment.replace G j self = punishment := by
+        funext i n
+        by_cases hnj : n = j
+        · subst n
+          simp [QuitProfile.replace, self]
+        · simp [QuitProfile.replace, hnj]
+      have hyUpper : terminalBase j ≤ MinMaxQuit G j + κ := by
+        have := hpunishment.1 self
+        simpa only [terminalBase, hself] using this
+      have hrLower : MinMaxQuit G j - ε ≤ reference j := hrational T j
+      have hbM : b * M ≤ ε := by
+        calc
+          b * M ≤ (ε / M) * M := mul_le_mul_of_nonneg_right hbBound hMpos.le
+          _ = ε := by field_simp
+      have hry : |reference j - terminalBase j| ≤ M :=
+        abs_sub_le_of_mem_coordinateInterval G j hM hreferenceRange hterminalBaseRange
+      by_cases hyReference : terminalBase j ≤ reference j
+      · have hxReference : terminalDeviation j - reference j ≤ 2 * κ := by
+          linarith
+        have hdevTerm : a * (terminalDeviation j - reference j) ≤ 2 * κ := by
+          by_cases hnonnegative : 0 ≤ terminalDeviation j - reference j
+          · calc
+              a * (terminalDeviation j - reference j) ≤
+                  1 * (terminalDeviation j - reference j) :=
+                mul_le_mul_of_nonneg_right ha1 hnonnegative
+              _ ≤ 2 * κ := by linarith
+          · exact (mul_nonpos_of_nonneg_of_nonpos ha0 (le_of_not_ge hnonnegative)).trans
+              (by linarith [hκ.le])
+        have hbaseTerm : b * (reference j - terminalBase j) ≤ ε := by
+          calc
+            b * (reference j - terminalBase j) ≤ b * M :=
+              mul_le_mul_of_nonneg_left ((le_abs_self _).trans hry) hb0
+            _ ≤ ε := hbM
+        nlinarith
+      · have hyReference' : reference j ≤ terminalBase j := le_of_not_ge hyReference
+        have hxReference : terminalDeviation j - reference j ≤ ε + κ := by
+          linarith
+        have hdevTerm : a * (terminalDeviation j - reference j) ≤ ε + κ := by
+          by_cases hnonnegative : 0 ≤ terminalDeviation j - reference j
+          · calc
+              a * (terminalDeviation j - reference j) ≤
+                  1 * (terminalDeviation j - reference j) :=
+                mul_le_mul_of_nonneg_right ha1 hnonnegative
+              _ ≤ ε + κ := by linarith
+          · exact (mul_nonpos_of_nonneg_of_nonpos ha0 (le_of_not_ge hnonnegative)).trans
+              (by linarith [hε, hκ])
+        have hbaseTerm : 0 ≤ b * (terminalBase j - reference j) :=
+          mul_nonneg hb0 (sub_nonneg.mpr hyReference')
+        nlinarith
+    · have haBound : a ≤ ε / M := by
+        exact tailSurvival_replace_le_of_punishmentTrigger
+          G p j T hM hε hδ hsmall horbit hjTrigger m hmj deviation
+      have ha0 : 0 ≤ a := hsurvivalNonnegative (p.replace G m deviation)
+      have hc0 : 0 ≤ ε / M := (div_pos hε hMpos).le
+      have hweighted := weighted_terminal_correction_le G m hM hc0
+        ⟨ha0, haBound⟩ ⟨hb0, hbBound⟩ hterminalDeviationRange
+          hterminalBaseRange hreferenceRange
+      have hratio : (ε / M) * M = ε := by field_simp
+      rw [hratio] at hweighted
+      linarith
+  change QuitPayoff G (equilibrium.replace G m deviation) m ≤
+    QuitPayoff G equilibrium m + 3 * ε
+  rw [show equilibrium = PrefixThenPunish G p T punishment by rfl]
+  rw [quitPayoff_prefixThenPunish_replace_eq_finite,
+    quitPayoff_prefixThenPunish_eq_finite]
+  change finiteQuittingPayoff G T terminalDeviation deviatedPrefix m ≤
+    finiteQuittingPayoff G T terminalBase p m + 3 * ε
+  have hreferenceAtM := congrFun hreference m
+  linarith
 
 /-- A periodic repetition of a positive-length block of quitting rows. -/
 def CycleProfile (G : QuittingGame) (k : ℕ) (hk : 0 < k)
