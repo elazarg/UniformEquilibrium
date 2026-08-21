@@ -8026,6 +8026,81 @@ def KiloblockConstruction.continueFinalPotential
   | .finalActive => 1
   | .absorbed origin => if origin.isNone then 1 else 0
 
+theorem KiloblockConstruction.continueMacroSurvivalFuel_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) : ∀ fuel,
+    0 ≤ construction.continueMacroSurvivalFuel excluded fuel := by
+  intro fuel
+  induction fuel with
+  | zero => simp [KiloblockConstruction.continueMacroSurvivalFuel]
+  | succ fuel ih =>
+      rw [KiloblockConstruction.continueMacroSurvivalFuel]
+      apply mul_nonneg _ ih
+      unfold KiloblockConstruction.continueMacroAdvanceAt
+      split
+      · exact construction.continueMacroAdvanceProbability_nonneg _ excluded
+      · exact zero_le_one
+
+theorem KiloblockConstruction.continueSelectedSurvival_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (k : Fin (construction.blockCount + 1))
+    (excluded : NormalPlayer table)
+    (choice : Option (NormalPlayer table)) (remaining : ℕ)
+    {downstream : ℝ} (hdownstream : 0 ≤ downstream) :
+    0 ≤ construction.continueSelectedSurvival k excluded choice remaining
+      downstream := by
+  cases choice with
+  | none =>
+      simpa [KiloblockConstruction.continueSelectedSurvival] using
+        hdownstream
+  | some owner =>
+      have hendpoint : 0 ≤
+          match (construction.attempt k owner).continuation with
+          | .restart =>
+              construction.continueMacroAdvanceProbability k excluded *
+                downstream
+          | .advance => downstream := by
+        cases (construction.attempt k owner).continuation
+        · exact mul_nonneg
+            (construction.continueMacroAdvanceProbability_nonneg k excluded)
+            hdownstream
+        · exact hdownstream
+      by_cases howner : owner = excluded
+      · simpa [KiloblockConstruction.continueSelectedSurvival, howner]
+          using hendpoint
+      · simp only [KiloblockConstruction.continueSelectedSurvival,
+          howner, if_false]
+        apply mul_nonneg (pow_nonneg _ _) hendpoint
+        have hhazard := quittingMeshHazard_le_one
+          (construction.mesh k)
+          (construction.attempt k owner).quitWeight_lt_one.le
+        linarith
+
+theorem KiloblockConstruction.continueFinalPotential_nonneg
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (mode : KiloblockFiniteMode construction) :
+    0 ≤ construction.continueFinalPotential excluded mode := by
+  cases mode with
+  | drawChoose k =>
+      exact construction.continueMacroSurvivalFuel_nonneg excluded (k.1 + 1)
+  | drawResume k choice remaining =>
+      exact construction.continueSelectedSurvival_nonneg k excluded
+        (choice.map construction.ownerOfCode) remaining.1
+        (construction.continueMacroSurvivalFuel_nonneg excluded k.1)
+  | drawFinal => exact zero_le_one
+  | active k choice remaining =>
+      exact construction.continueSelectedSurvival_nonneg k excluded
+        (choice.map construction.ownerOfCode) remaining.1
+        (construction.continueMacroSurvivalFuel_nonneg excluded k.1)
+  | finalActive => exact zero_le_one
+  | absorbed origin =>
+      cases origin <;>
+        simp [KiloblockConstruction.continueFinalPotential]
+
 @[simp]
 theorem KiloblockConstruction.continueFinalPotential_finiteMode_active
     {table : Table ι} {ε : ℝ}
@@ -8436,6 +8511,25 @@ def KiloblockConstruction.continuePastFinalIndicator
   | .finalActive => 1
   | .absorbed none => 1
   | _ => 0
+
+theorem KiloblockConstruction.continuePastFinalIndicator_le_finalPotential
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (mode : KiloblockFiniteMode construction) :
+    construction.continuePastFinalIndicator mode ≤
+      construction.continueFinalPotential excluded mode := by
+  cases mode with
+  | drawChoose k =>
+      exact construction.continueFinalPotential_nonneg excluded _
+  | drawResume k choice remaining =>
+      exact construction.continueFinalPotential_nonneg excluded _
+  | active k choice remaining =>
+      exact construction.continueFinalPotential_nonneg excluded _
+  | drawFinal => exact le_rfl
+  | finalActive => exact le_rfl
+  | absorbed origin =>
+      cases origin <;> exact le_rfl
 
 theorem KiloblockConstruction.continueIndicators_partition
     {table : Table ι} {ε : ℝ}
@@ -11381,6 +11475,412 @@ def continueTerminationBeforeFinal
   absorptionBeforeFinalProbability construction
     (Function.update construction.profile.strategy who
       (fun _ _ => PMF.pure false))
+
+def KiloblockConstruction.continueFinalHistoryPotential
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) :
+    (publicQuittingGame table
+      construction.profile.signalLaw).HistoryPotential :=
+  fun t history => construction.continueFinalPotential excluded
+    (construction.finiteMode (construction.mode t history))
+
+theorem KiloblockConstruction.continueFinalHistoryPotential_harmonic
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t) :
+    (publicQuittingGame table
+      construction.profile.signalLaw).historyContinuationEU
+        (construction.continueProfile excluded)
+        (construction.continueFinalHistoryPotential excluded) history =
+      construction.continueFinalHistoryPotential excluded t history := by
+  unfold StochasticGame.historyContinuationEU
+    KiloblockConstruction.continueFinalHistoryPotential
+  rw [← construction.continueFinalPotential_harmonic excluded
+    (construction.finiteMode (construction.mode t history))]
+  rw [← construction.finiteHistoryModeStepDist_continue_eq excluded history]
+  unfold KiloblockConstruction.historyModeStepDist
+  rw [PMF.map_bind, Math.Probability.expect_bind]
+  apply congrArg (expect ((publicQuittingGame table
+    construction.profile.signalLaw).stageActionDist
+      (construction.continueProfile excluded) history))
+  funext action
+  rw [PMF.map_comp, Math.Probability.expect_map]
+  rfl
+
+private theorem historyContinuationEU_update_eq_expect_pure
+    {Signal : Type} [Fintype Signal]
+    (table : Table ι) (signalLaw : PMF Signal)
+    (profile : (publicQuittingGame table signalLaw).BehaviorProfile)
+    (who : ι)
+    (deviation : (publicQuittingGame table signalLaw).BehaviorStrategy who)
+    (potential : (publicQuittingGame table signalLaw).HistoryPotential)
+    {t : ℕ}
+    (history : (publicQuittingGame table signalLaw).Hist t) :
+    (publicQuittingGame table signalLaw).historyContinuationEU
+        (Function.update profile who deviation) potential history =
+      expect (deviation t history) (fun action =>
+        (publicQuittingGame table signalLaw).historyContinuationEU
+          (Function.update profile who (fun _ _ => PMF.pure action))
+          potential history) := by
+  let actions : ∀ player,
+      PMF ((publicQuittingGame table signalLaw).Act player) :=
+    fun player => profile player t history
+  have hactionDist :
+      (publicQuittingGame table signalLaw).stageActionDist
+          (Function.update profile who deviation) history =
+        Math.PMFProduct.pmfPi
+          (Function.update actions who (deviation t history)) := by
+    unfold StochasticGame.stageActionDist
+    congr 1
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp [actions]
+    · simp [actions, Function.update_of_ne hplayer]
+  unfold StochasticGame.historyContinuationEU
+  rw [hactionDist, Math.PMFProduct.pmfPi_update_bind,
+    Math.Probability.expect_bind]
+  apply congrArg (expect (deviation t history))
+  funext action
+  unfold StochasticGame.stageActionDist
+  rw [show Function.update actions who (PMF.pure action) =
+      (fun player => Function.update profile who
+        (fun _ _ => PMF.pure action) player t history) by
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp [actions]
+    · simp [actions, Function.update_of_ne hplayer]]
+
+private theorem KiloblockConstruction.continueFinal_pureQuit_le_continue
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table) {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t) :
+    (publicQuittingGame table
+      construction.profile.signalLaw).historyContinuationEU
+        (Function.update construction.profile.strategy excluded.1
+          (fun _ _ => PMF.pure true))
+        (construction.continueFinalHistoryPotential excluded) history ≤
+      (publicQuittingGame table
+        construction.profile.signalLaw).historyContinuationEU
+          (construction.continueProfile excluded)
+          (construction.continueFinalHistoryPotential excluded) history := by
+  classical
+  let actions : ∀ player,
+      PMF ((publicQuittingGame table
+        construction.profile.signalLaw).Act player) :=
+    fun player => construction.profile.strategy player t history
+  have hquitDist : (publicQuittingGame table
+      construction.profile.signalLaw).stageActionDist
+        (Function.update construction.profile.strategy excluded.1
+          (fun _ _ => PMF.pure true)) history =
+      Math.PMFProduct.pmfPi
+        (Function.update actions excluded.1 (PMF.pure true)) := by
+    unfold StochasticGame.stageActionDist
+    congr 1
+    funext player
+    by_cases hplayer : player = excluded.1
+    · subst player
+      simp [actions]
+    · simp [actions, Function.update_of_ne hplayer]
+  have hcontinueDist : (publicQuittingGame table
+      construction.profile.signalLaw).stageActionDist
+        (construction.continueProfile excluded) history =
+      Math.PMFProduct.pmfPi
+        (Function.update actions excluded.1 (PMF.pure false)) := by
+    unfold StochasticGame.stageActionDist
+      KiloblockConstruction.continueProfile
+    congr 1
+    funext player
+    by_cases hplayer : player = excluded.1
+    · subst player
+      simp [actions]
+    · simp [actions, Function.update_of_ne hplayer]
+  unfold StochasticGame.historyContinuationEU
+  rw [hquitDist, hcontinueDist,
+    ← Math.PMFProduct.pmfPi_bind_update_pure actions excluded.1 true,
+    ← Math.PMFProduct.pmfPi_bind_update_pure actions excluded.1 false,
+    Math.Probability.expect_bind, Math.Probability.expect_bind]
+  simp_rw [Math.Probability.expect_pure]
+  apply Math.Probability.expect_mono
+  intro action
+  let quitAction : (publicQuittingGame table
+      construction.profile.signalLaw).JointAct :=
+    Function.update action excluded.1 true
+  let continueAction : (publicQuittingGame table
+      construction.profile.signalLaw).JointAct :=
+    Function.update action excluded.1 false
+  cases hmode : construction.mode t history with
+  | active k choice remaining =>
+      have hquitValue : expect ((publicQuittingGame table
+          construction.profile.signalLaw).transition history.2 quitAction)
+          (fun nextState => construction.continueFinalHistoryPotential
+            excluded (t + 1)
+              (Fin.snoc history.1 (history.2, quitAction), nextState)) = 0 := by
+        rw [← Math.Probability.expect_const _ 0]
+        apply Math.ProbabilityMassFunction.expect_congr_on_support
+        intro nextState hnext
+        have hstep := construction.mode_step t history quitAction
+          nextState hnext
+        have hnextMode : construction.mode (t + 1)
+            (Fin.snoc history.1 (history.2, quitAction), nextState) =
+              .absorbed (some k) := by
+          simp only [KiloblockModeStep, hmode] at hstep
+          split at hstep
+          case isTrue => exact hstep.2
+          case isFalse hfalse =>
+            exfalso
+            apply hfalse
+            refine ⟨excluded.1, ?_⟩
+            simp [quitAction]
+        unfold KiloblockConstruction.continueFinalHistoryPotential
+        rw [hnextMode]
+        rfl
+      rw [hquitValue]
+      exact expect_nonneg _ _ fun nextState =>
+        construction.continueFinalPotential_nonneg excluded
+          (construction.finiteMode (construction.mode (t + 1)
+            (Fin.snoc history.1 (history.2, continueAction), nextState)))
+  | finalActive =>
+      have hleft : expect ((publicQuittingGame table
+          construction.profile.signalLaw).transition history.2 quitAction)
+          (fun nextState => construction.continueFinalHistoryPotential
+            excluded (t + 1)
+              (Fin.snoc history.1 (history.2, quitAction), nextState)) = 1 := by
+        rw [← Math.Probability.expect_const _ 1]
+        apply Math.ProbabilityMassFunction.expect_congr_on_support
+        intro nextState hnext
+        have hstep := construction.mode_step t history quitAction
+          nextState hnext
+        unfold KiloblockConstruction.continueFinalHistoryPotential
+        simp only [KiloblockModeStep, hmode] at hstep
+        split at hstep
+        · rw [hstep.2]
+          rfl
+        · rw [hstep.2]
+          rfl
+      have hright : expect ((publicQuittingGame table
+          construction.profile.signalLaw).transition history.2 continueAction)
+          (fun nextState => construction.continueFinalHistoryPotential
+            excluded (t + 1)
+              (Fin.snoc history.1 (history.2, continueAction), nextState)) =
+          1 := by
+        rw [← Math.Probability.expect_const _ 1]
+        apply Math.ProbabilityMassFunction.expect_congr_on_support
+        intro nextState hnext
+        have hstep := construction.mode_step t history continueAction
+          nextState hnext
+        unfold KiloblockConstruction.continueFinalHistoryPotential
+        simp only [KiloblockModeStep, hmode] at hstep
+        split at hstep
+        · rw [hstep.2]
+          rfl
+        · rw [hstep.2]
+          rfl
+      rw [hleft, hright]
+  | draw phase =>
+      have hstate : history.2 = PublicQuittingState.draw := by
+        have hmatches := construction.mode_state t history
+        cases hs : history.2 <;>
+          simp [KiloblockMode.MatchesState, hmode, hs] at hmatches ⊢
+      rw [hstate]
+      apply le_of_eq
+      apply Math.ProbabilityMassFunction.expect_congr_on_support
+      intro nextState hnext
+      have hquitStep := construction.mode_step t history quitAction
+        nextState (by simpa [hstate, publicQuittingGame] using hnext)
+      have hcontinueStep := construction.mode_step t history continueAction
+        nextState (by simpa [hstate, publicQuittingGame] using hnext)
+      have hm : construction.mode (t + 1)
+          (Fin.snoc history.1 (history.2, quitAction), nextState) =
+          construction.mode (t + 1)
+            (Fin.snoc history.1 (history.2, continueAction), nextState) := by
+        cases phase <;> cases hsnext : nextState <;>
+          simp [KiloblockModeStep, hmode, hsnext] at hquitStep hcontinueStep
+        all_goals rw [hquitStep, hcontinueStep]
+      unfold KiloblockConstruction.continueFinalHistoryPotential
+      have hm' : construction.mode (t + 1)
+          (Fin.snoc history.1
+            (PublicQuittingState.draw, quitAction), nextState) =
+          construction.mode (t + 1)
+            (Fin.snoc history.1
+              (PublicQuittingState.draw, continueAction), nextState) := by
+        simpa only [hstate] using hm
+      rw [hm']
+  | absorbed origin =>
+      have hstate : ∃ quitters, history.2 =
+          PublicQuittingState.absorbed quitters := by
+        have hmatches := construction.mode_state t history
+        cases hs : history.2 <;>
+          simp [KiloblockMode.MatchesState, hmode, hs] at hmatches
+        exact ⟨_, rfl⟩
+      obtain ⟨quitters, hstate⟩ := hstate
+      rw [hstate]
+      simp only [publicQuittingGame, Math.Probability.expect_pure]
+      have hquitStep := construction.mode_step t history quitAction
+        (PublicQuittingState.absorbed quitters) (by
+          simp only [hstate, publicQuittingGame]
+          exact (PMF.mem_support_pure_iff _ _).2 rfl)
+      have hcontinueStep := construction.mode_step t history continueAction
+        (PublicQuittingState.absorbed quitters) (by
+          simp only [hstate, publicQuittingGame]
+          exact (PMF.mem_support_pure_iff _ _).2 rfl)
+      simp only [KiloblockModeStep, hmode] at hquitStep hcontinueStep
+      unfold KiloblockConstruction.continueFinalHistoryPotential
+      have hquitStep' : construction.mode (t + 1)
+          (Fin.snoc history.1
+            (PublicQuittingState.absorbed quitters, quitAction),
+              PublicQuittingState.absorbed quitters) = .absorbed origin := by
+        simpa only [hstate] using hquitStep
+      have hcontinueStep' : construction.mode (t + 1)
+          (Fin.snoc history.1
+            (PublicQuittingState.absorbed quitters, continueAction),
+              PublicQuittingState.absorbed quitters) = .absorbed origin := by
+        simpa only [hstate] using hcontinueStep
+      change construction.continueFinalPotential excluded
+          (construction.finiteMode
+            (construction.mode (t + 1)
+              (Fin.snoc history.1
+                (PublicQuittingState.absorbed quitters, quitAction),
+                  PublicQuittingState.absorbed quitters))) ≤
+        construction.continueFinalPotential excluded
+          (construction.finiteMode
+            (construction.mode (t + 1)
+              (Fin.snoc history.1
+                (PublicQuittingState.absorbed quitters, continueAction),
+                  PublicQuittingState.absorbed quitters)))
+      rw [hquitStep', hcontinueStep']
+
+/-! A deviating normal player can only bring the final tail closer by
+quitting.  Thus the forced-Continue final-tail potential is superharmonic
+under every behavioral deviation by that player. -/
+theorem KiloblockConstruction.continueFinalHistoryPotential_superharmonic
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded.1)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t) :
+    (publicQuittingGame table
+      construction.profile.signalLaw).historyContinuationEU
+        (Function.update construction.profile.strategy excluded.1 deviation)
+        (construction.continueFinalHistoryPotential excluded) history ≤
+      construction.continueFinalHistoryPotential excluded t history := by
+  rw [historyContinuationEU_update_eq_expect_pure table
+    construction.profile.signalLaw construction.profile.strategy excluded.1
+      deviation (construction.continueFinalHistoryPotential excluded) history]
+  calc
+    expect (deviation t history) (fun action =>
+        (publicQuittingGame table
+          construction.profile.signalLaw).historyContinuationEU
+            (Function.update construction.profile.strategy excluded.1
+              (fun _ _ => PMF.pure action))
+            (construction.continueFinalHistoryPotential excluded) history) ≤
+        expect (deviation t history) (fun _ =>
+          construction.continueFinalHistoryPotential excluded t history) := by
+      apply Math.Probability.expect_mono
+      intro action
+      cases action with
+      | false =>
+          simpa only [KiloblockConstruction.continueProfile] using
+            (construction.continueFinalHistoryPotential_harmonic
+              excluded history).le
+      | true =>
+          exact (construction.continueFinal_pureQuit_le_continue
+            excluded history).trans_eq
+              (construction.continueFinalHistoryPotential_harmonic
+                excluded history)
+    _ = construction.continueFinalHistoryPotential excluded t history := by
+      exact Math.Probability.expect_const _ _
+
+theorem KiloblockConstruction.expect_continueFinalHistoryPotential_le
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded.1) : ∀ t,
+    expect ((publicQuittingGame table
+        construction.profile.signalLaw).histDist
+      (Function.update construction.profile.strategy excluded.1 deviation)
+        .draw t)
+      (construction.continueFinalHistoryPotential excluded t) ≤
+        construction.continueMacroSurvivalProbability excluded
+  | 0 => by
+      rw [(publicQuittingGame table
+        construction.profile.signalLaw).histDist_zero,
+          Math.Probability.expect_pure]
+      unfold KiloblockConstruction.continueFinalHistoryPotential
+      rw [construction.mode_initial]
+      exact (construction.continueFinalPotential_initial excluded).le
+  | t + 1 => by
+      change (publicQuittingGame table
+        construction.profile.signalLaw).expectedHistoryValue
+          (Function.update construction.profile.strategy excluded.1 deviation)
+          .draw (construction.continueFinalHistoryPotential excluded) (t + 1) ≤ _
+      rw [(publicQuittingGame table
+        construction.profile.signalLaw).expectedHistoryValue_succ]
+      calc
+        expect ((publicQuittingGame table
+            construction.profile.signalLaw).histDist
+          (Function.update construction.profile.strategy excluded.1 deviation)
+            .draw t)
+          (fun history => (publicQuittingGame table
+            construction.profile.signalLaw).historyContinuationEU
+              (Function.update construction.profile.strategy excluded.1 deviation)
+              (construction.continueFinalHistoryPotential excluded) history) ≤
+            expect ((publicQuittingGame table
+                construction.profile.signalLaw).histDist
+              (Function.update construction.profile.strategy excluded.1 deviation)
+                .draw t)
+              (construction.continueFinalHistoryPotential excluded t) := by
+          apply Math.Probability.expect_mono
+          exact fun history =>
+            construction.continueFinalHistoryPotential_superharmonic
+              excluded deviation history
+        _ ≤ construction.continueMacroSurvivalProbability excluded :=
+          construction.expect_continueFinalHistoryPotential_le
+            excluded deviation t
+
+theorem KiloblockConstruction.expect_deviationPastFinal_lt_epsilon
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (deviation : (publicQuittingGame table
+      construction.profile.signalLaw).BehaviorStrategy excluded.1)
+    (t : ℕ) :
+    expect ((publicQuittingGame table
+        construction.profile.signalLaw).histDist
+      (Function.update construction.profile.strategy excluded.1 deviation)
+        .draw t)
+      (fun history => construction.continuePastFinalIndicator
+        (construction.finiteMode (construction.mode t history))) < ε := by
+  calc
+    expect ((publicQuittingGame table
+        construction.profile.signalLaw).histDist
+      (Function.update construction.profile.strategy excluded.1 deviation)
+        .draw t)
+      (fun history => construction.continuePastFinalIndicator
+        (construction.finiteMode (construction.mode t history))) ≤
+      expect ((publicQuittingGame table
+          construction.profile.signalLaw).histDist
+        (Function.update construction.profile.strategy excluded.1 deviation)
+          .draw t)
+        (construction.continueFinalHistoryPotential excluded t) := by
+        apply Math.Probability.expect_mono
+        intro history
+        exact construction.continuePastFinalIndicator_le_finalPotential
+          excluded (construction.finiteMode (construction.mode t history))
+    _ ≤ construction.continueMacroSurvivalProbability excluded :=
+      construction.expect_continueFinalHistoryPotential_le
+        excluded deviation t
+    _ < ε := construction.continueMacroSurvivalProbability_lt_epsilon excluded
 
 /-! Lemma 3.8: for normal `i`, `|γ_i(ξ*)-w_i(yᴷ)|<2ε`. -/
 theorem lemma3_8
