@@ -3990,9 +3990,74 @@ private theorem DiscreteDecisionProcess.ofReal_rawPartialVariation_le
   rw [ENNReal.ofReal_sum_of_nonneg fun _ _ => abs_nonneg _]
   exact ENNReal.sum_le_tsum (Finset.range (n + 1))
 
-/-- A decision process is `δ`-balanced when every chosen-action value is within `δ`. -/
+/-- A stage sampled from the DDP law uses a positive-probability local action almost surely. -/
+private theorem DiscreteDecisionProcess.ae_choose_pos_rawLawFrom
+    (P : DiscreteDecisionProcess) (start : P.X) (i : ℕ) :
+    ∀ᵐ stage ∂P.rawLawFrom start, 0 < P.choose (stage i).1 (stage i).2 := by
+  rw [ae_iff]
+  let H := {pref : Fin (i + 1) → DDPStage P //
+    ¬0 < P.choose (pref (Fin.last i)).1 (pref (Fin.last i)).2}
+  let C : H → Set (ℕ → DDPStage P) := fun pref =>
+    {stage | ∀ j : Fin (i + 1), stage j = pref.1 j}
+  have hbad : {stage : ℕ → DDPStage P |
+      ¬0 < P.choose (stage i).1 (stage i).2} = ⋃ pref, C pref := by
+    ext stage
+    simp only [mem_setOf_eq, mem_iUnion, C]
+    constructor
+    · intro hstage
+      let pref : Fin (i + 1) → DDPStage P := fun j => stage j
+      refine ⟨⟨pref, ?_⟩, fun _ => rfl⟩
+      have hlast : stage (Fin.last i) = stage i := by
+        exact congrArg stage (Fin.val_last i)
+      dsimp only [pref]
+      have hprob := congrArg (fun z : DDPStage P => P.choose z.1 z.2) hlast
+      rw [hprob]
+      exact hstage
+    · rintro ⟨pref, hpref⟩
+      have hlast := hpref (Fin.last i)
+      change ¬0 < P.choose (stage (Fin.last i)).1 (stage (Fin.last i)).2
+      have hprob := congrArg (fun z : DDPStage P => P.choose z.1 z.2) hlast
+      rw [hprob]
+      exact pref.2
+  rw [hbad]
+  apply nonpos_iff_eq_zero.mp
+  calc
+    P.rawLawFrom start (⋃ pref, C pref) ≤
+        ∑' pref, P.rawLawFrom start (C pref) := measure_iUnion_le _
+    _ = 0 := by
+      have hzero (pref : H) : P.rawLawFrom start (C pref) = 0 := by
+        dsimp only [C]
+        rw [P.rawLawFrom_exactStageCylinder]
+        have hchoose : P.choose (pref.1 (Fin.last i)).1
+            (pref.1 (Fin.last i)).2 = 0 :=
+          nonpos_iff_eq_zero.mp (not_lt.mp pref.2)
+        cases i with
+        | zero =>
+            apply mul_eq_zero_of_left
+            have hlast : pref.1 (Fin.last 0) = pref.1 0 := by
+              apply congrArg pref.1
+              exact Fin.ext rfl
+            rw [hlast] at hchoose
+            rcases hstage : pref.1 0 with ⟨state, action⟩
+            have hprob := congrArg (fun z : DDPStage P => P.choose z.1 z.2) hstage
+            by_cases hstateStart : start = state
+            · subst state
+              rw [P.initialStagePMF_apply, ← hprob, hchoose]
+            · rw [P.initialStagePMF_apply_of_ne action hstateStart]
+        | succ k =>
+            apply mul_eq_zero_of_right
+            apply Finset.prod_eq_zero (Finset.mem_univ (Fin.last k))
+            rw [P.stepStagePMF_apply]
+            apply mul_eq_zero_of_right
+            have hlast : (Fin.last k).succ = Fin.last (k + 1) := Fin.ext (by simp)
+            rw [hlast]
+            simpa only [Nat.succ_eq_add_one] using hchoose
+      simp only [hzero, tsum_zero]
+
+/-- A decision process is `δ`-balanced when every positive-probability chosen-action value
+is within `δ` of its state value. -/
 def IsBalanced (P : DiscreteDecisionProcess) (δ : ℝ) : Prop :=
-  ∀ x y, |P.valueY x y - P.valueX x| ≤ δ
+  ∀ x y, 0 < P.choose x y → |P.valueY x y - P.valueX x| ≤ δ
 
 /-- The probability that the absolute cumulative advantage ever reaches `ε`. -/
 def AbsoluteCrossingProbability (P : DiscreteDecisionProcess) (S : DDPSemantics P)
@@ -4050,10 +4115,11 @@ private theorem DiscreteDecisionProcess.integral_rawAdvantage_sq_le
     apply Integrable.of_bound
       ((hincrement.comp
         (measurable_pi_apply (X := fun _ : ℕ => DDPStage P) i)).abs.aestronglyMeasurable)
-      delta
+      P.valueDifferenceBound
     exact ae_of_all _ fun stage => by
       rw [Real.norm_eq_abs, abs_abs]
-      exact hbalanced (stage i).1 (stage i).2
+      change |DDPStage.increment P (stage i)| ≤ P.valueDifferenceBound
+      simpa only [Real.norm_eq_abs] using (stage i).norm_increment_le P
   have hsquareIntegrable (i : ℕ) : Integrable
       (fun stage : ℕ → DDPStage P => (DDPStage.increment P (stage i)) ^ 2)
       (P.rawLawFrom P.initial) := by
@@ -4062,11 +4128,12 @@ private theorem DiscreteDecisionProcess.integral_rawAdvantage_sq_le
       (((hincrement.comp
         (measurable_pi_apply (X := fun _ : ℕ => DDPStage P) i)).pow_const 2)
           |>.aestronglyMeasurable)
-      (delta ^ 2)
+      (P.valueDifferenceBound ^ 2)
     exact ae_of_all _ fun stage => by
       rw [norm_pow, Real.norm_eq_abs]
+      change |DDPStage.increment P (stage i)| ^ 2 ≤ P.valueDifferenceBound ^ 2
       exact pow_le_pow_left₀ (abs_nonneg _)
-        (hbalanced (stage i).1 (stage i).2) 2
+        (by simpa only [Real.norm_eq_abs] using (stage i).norm_increment_le P) 2
   calc
     (∫ stage, (P.rawAdvantage stage n) ^ 2 ∂P.rawLawFrom P.initial) =
         ∑ i ∈ Finset.range (n + 1),
@@ -4077,9 +4144,9 @@ private theorem DiscreteDecisionProcess.integral_rawAdvantage_sq_le
           ∂P.rawLawFrom P.initial := by
       apply Finset.sum_le_sum
       intro i _hi
-      apply integral_mono (hsquareIntegrable i) ((habsIntegrable i).const_mul delta)
-      intro stage
-      have hi := hbalanced (stage i).1 (stage i).2
+      apply integral_mono_ae (hsquareIntegrable i) ((habsIntegrable i).const_mul delta)
+      filter_upwards [P.ae_choose_pos_rawLawFrom P.initial i] with stage hpositive
+      have hi := hbalanced (stage i).1 (stage i).2 hpositive
       calc
         (DDPStage.increment P (stage i)) ^ 2 =
             |DDPStage.increment P (stage i)| * |DDPStage.increment P (stage i)| := by
