@@ -158,7 +158,7 @@ jobs:
           if-no-files-found: error
 
   environment:
-    name: Local Lean environment artifact
+    name: Local Lean environment chunks
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
@@ -186,9 +186,13 @@ jobs:
           toolchain="$(tr -d '\r\n' < lean-toolchain)"
           toolchain_path="$(dirname "$(dirname "$(elan which lean)")")"
           tar --zstd -cf "$out/lake-cache.tar.zst" .lake
+          split -b 400M -d -a 2 \
+            "$out/lake-cache.tar.zst" "$out/lake-cache.part-"
+          rm "$out/lake-cache.tar.zst"
           tar --zstd -cf "$out/lean-toolchain.tar.zst" \
             -C "$(dirname "$toolchain_path")" "$(basename "$toolchain_path")"
-          sha256sum "$out"/*.tar.zst > "$out/SHA256SUMS"
+          sha256sum "$out"/lake-cache.part-* \
+            "$out/lean-toolchain.tar.zst" > "$out/SHA256SUMS"
           cat > "$out/manifest.txt" <<EOF_MANIFEST
           source_sha=$(git rev-parse HEAD)
           game_theory_sha=$(git -C GameTheory rev-parse HEAD)
@@ -199,8 +203,82 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: local-lean-environment-${{ github.event.pull_request.head.sha || github.sha }}
-          path: ${{ runner.temp }}/local-lean-environment
+          name: local-lean-manifest-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/local-lean-environment/manifest.txt
+            ${{ runner.temp }}/local-lean-environment/SHA256SUMS
           retention-days: 1
           compression-level: 0
           if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-toolchain-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lean-toolchain.tar.zst
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-cache-00-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lake-cache.part-00
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-cache-01-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lake-cache.part-01
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-cache-02-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lake-cache.part-02
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-cache-03-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lake-cache.part-03
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-cache-04-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lake-cache.part-04
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-cache-05-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lake-cache.part-05
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-cache-06-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lake-cache.part-06
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-lean-cache-07-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/local-lean-environment/lake-cache.part-07
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: ignore
