@@ -192,6 +192,42 @@ theorem nearFrozenReturn_or_signedSquareAbove
   CubicalResetIntegrability.nearFrozenReturn_or_signedSquareAbove
     (data.value observable) source word threshold hthreshold
 
+/-- Either the endpoint itself is close to the source up to the frozen-star
+size and the accumulated square threshold, or one signed square exceeds the
+threshold. -/
+theorem nearReturn_or_signedSquareAbove
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observable : (quittingGame reward).BehaviorProfile → ℝ)
+    (source : Finset ι) (word : List ι)
+    (threshold : ℝ) (hthreshold : 0 ≤ threshold) :
+    |data.value observable (finalSet source word) -
+        data.value observable source| ≤
+          |frozenEdgeSum (data.value observable) source word| +
+            (squareCount word : ℝ) * threshold ∨
+      HasSquareAboveAlong (data.value observable) threshold source word ∨
+        HasSquareAboveAlong (fun reset ↦ -data.value observable reset)
+          threshold source word := by
+  rcases data.nearFrozenReturn_or_signedSquareAbove observable source word
+      threshold hthreshold with hnear | hpositive | hnegative
+  · left
+    calc
+      |data.value observable (finalSet source word) -
+          data.value observable source| =
+          |(data.value observable (finalSet source word) -
+              data.value observable source -
+                frozenEdgeSum (data.value observable) source word) +
+            frozenEdgeSum (data.value observable) source word| := by ring_nf
+      _ ≤
+          |data.value observable (finalSet source word) -
+              data.value observable source -
+                frozenEdgeSum (data.value observable) source word| +
+            |frozenEdgeSum (data.value observable) source word| := abs_add_le _ _
+      _ ≤ |frozenEdgeSum (data.value observable) source word| +
+            (squareCount word : ℝ) * threshold := by linarith
+  · exact Or.inr (Or.inl hpositive)
+  · exact Or.inr (Or.inr hnegative)
+
 /-- Coordinatewise terminal-debt specialization of the source-matched reset
 cube dichotomy. -/
 theorem terminalSemanticDebt_nearFrozenReturn_or_signedSquareAbove

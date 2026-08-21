@@ -91,15 +91,18 @@ the minimum debt nor the gap is proved to vanish, and no uniform-equilibrium
 payoff is produced.
 
 The flat stopping-law charged-circulation branch now has an actual-source
-adapter.
+variable-scale cube adapter.
 [`exists_sourceMatchedChatteringWithUniformPrefixes`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedChattering.lean)
 uses one late common source and one circulation mass to control every complete
-and partial frozen microcycle by `O(1/N)`. The exact edge adapter
-[`sourceMatchedResetCubeData_debtEdge_eq_scale_mul_actualDirection`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedResetCube.lean)
-places every column in one literal reset cube. The signed curvature and
-orientation routing theorems are integrated, but no theorem currently turns
-the weighted star into a chronological carrier path; the near-return consumer
-therefore remains conditional.
+and partial frozen microcycle by `O(1/N)`. Independently,
+[`exists_boundedRadialSourceMatchedResetCube`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialResetCube.lean)
+absorbs every real circulation coefficient into a legal stopping-law weight
+and places one reset per active player in a single literal cube. Its normalized
+frozen star tends coordinatewise to zero while its normalized mover-diagonal
+charge tends to a positive limit. The cube dichotomy now directly bounds
+endpoint-to-source return unless it localizes signed two-reset curvature.
+No theorem currently turns either branch into a chronological carrier path;
+the chronological and curvature consumers therefore remain conditional.
 
 ## Live formal leaves
 
