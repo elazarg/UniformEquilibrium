@@ -1,0 +1,78 @@
+name: Integrate source-matched chattering
+
+on:
+  push:
+    branches:
+      - research/stopping-law-source-matched-chattering
+    paths:
+      - ".github/workflows/integrate-source-matched-chattering.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/stopping-law-source-matched-chattering
+          fetch-depth: 0
+          submodules: recursive
+
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+
+      - name: Integrate and validate
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path(
+              "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/"
+              "StoppingLaw/DynamicDebtSemanticChronology.lean"
+          )
+          text = path.read_text()
+          frontier = (
+              "import UniformEquilibrium.Diagnostics.Quitting."
+              "CounterexampleRegime.StoppingLaw.Frontier\n"
+          )
+          source_matched = (
+              "import UniformEquilibrium.Diagnostics.Quitting."
+              "CounterexampleRegime.StoppingLaw.SourceMatchedChattering\n"
+          )
+          if source_matched not in text:
+              if frontier not in text:
+                  raise SystemExit("Frontier import not found")
+              text = text.replace(frontier, frontier + source_matched, 1)
+              path.write_text(text)
+          PY
+
+          python3 scripts/generate_axiom_audit.py
+          python3 scripts/check_import_graph.py
+          lake build \
+            UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedChattering
+          lake build \
+            UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.DynamicDebtSemanticChronology
+          python3 scripts/check_trust.py
+
+          rm .github/workflows/integrate-source-matched-chattering.yml
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- \
+            AxiomAudit.lean \
+            UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/DynamicDebtSemanticChronology.lean \
+            .github/workflows/integrate-source-matched-chattering.yml
+          git commit -m "Integrate source-matched stopping-law chattering"
+          git push origin HEAD:research/stopping-law-source-matched-chattering
