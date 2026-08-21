@@ -4436,15 +4436,20 @@ theorem zero_quitter_inference_fails :
 end Lemma44ZeroQuitterInference
 
 /--
-Lemma 4.4's boundedness of the continuation coordinate `β`, with the `d,ξ,R`
-relations from the preceding construction made explicit.  The missing proof
-chooses a player of maximal quit probability, derives upper and lower bounds
-on the corresponding continuation payoff from exact indifference, and then
-uses the singular term in `φ` to contradict `a ∈ C` outside the displayed box.
+Lemma 4.4's boundedness of the continuation coordinate `β`, with the
+standing Section 3 assumptions and the `d,ρ,ξ,R` relations made explicit.
+The printed proof's zero-quitter inference is refuted immediately above; the
+remaining open task is either to derive it from these standing assumptions or
+replace that step while retaining the stated bounds.
 -/
 theorem lemma4_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M)
     (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (z : EZeroTilde G)
     (ha : Phi G M d z ∈ TruncatedW G R) :
