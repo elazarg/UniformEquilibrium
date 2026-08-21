@@ -7859,6 +7859,75 @@ private theorem exists_punishmentWithin (G : QuittingGame) (j : G.Player)
   intro deviation
   exact (le_ciSup (hinnerAbove punishment) deviation).trans hpunishment.le
 
+/-- Follow a supplied quitting profile for `T` stages, then start a punishment profile. -/
+private def PrefixThenPunish (G : QuittingGame) (p : QuitProfile G)
+    (T : ℕ) (punishment : QuitProfile G) : QuitProfile G :=
+  fun i => if i < T then p i else punishment (i - T)
+
+@[simp] private theorem PrefixThenPunish.apply_of_lt
+    (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
+    (punishment : QuitProfile G) {i : ℕ} (hi : i < T) :
+    PrefixThenPunish G p T punishment i = p i := by
+  simp [PrefixThenPunish, hi]
+
+@[simp] private theorem PrefixThenPunish.apply_add
+    (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
+    (punishment : QuitProfile G) (i : ℕ) :
+    PrefixThenPunish G p T punishment (T + i) = punishment i := by
+  simp [PrefixThenPunish]
+
+/-- A finite quitting payoff depends only on the displayed finite prefix. -/
+private theorem finiteQuittingPayoff_congr_prefix (G : QuittingGame) (k : ℕ)
+    (x : Payoff G.Player) (p q : QuitProfile G)
+    (hpq : ∀ i, i < k → p i = q i) :
+    finiteQuittingPayoff G k x p = finiteQuittingPayoff G k x q := by
+  induction k generalizing p q with
+  | zero => rfl
+  | succ k ih =>
+      simp only [finiteQuittingPayoff]
+      rw [hpq 0 (by omega)]
+      congr 1
+      apply ih
+      intro i hi
+      exact hpq (i + 1) (by omega)
+
+/-- At the switching stage, the spliced profile's tail is exactly the punishment payoff. -/
+private theorem quitTailPayoff_prefixThenPunish_at_switch
+    (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
+    (punishment : QuitProfile G) :
+    QuitTailPayoff G (PrefixThenPunish G p T punishment) T =
+      QuitPayoff G punishment := by
+  funext n
+  apply tsum_congr
+  intro k
+  change tailSurvival G (PrefixThenPunish G p T punishment) T k *
+      quittingRewardPart G (PrefixThenPunish G p T punishment (T + k)) n =
+    tailSurvival G punishment 0 k * quittingRewardPart G (punishment (0 + k)) n
+  have hsurvival : tailSurvival G (PrefixThenPunish G p T punishment) T k =
+      tailSurvival G punishment 0 k := by
+    rw [tailSurvival, tailSurvival]
+    apply Finset.prod_congr rfl
+    intro i _hi
+    rw [PrefixThenPunish.apply_add]
+    simp
+  rw [hsurvival, PrefixThenPunish.apply_add]
+  simp
+
+/-- The generated profile has the supplied finite prefix and the punishment as terminal value. -/
+private theorem quitPayoff_prefixThenPunish_eq_finite
+    (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
+    (punishment : QuitProfile G) :
+    QuitPayoff G (PrefixThenPunish G p T punishment) =
+      finiteQuittingPayoff G T (QuitPayoff G punishment) p := by
+  rw [QuitPayoff]
+  rw [quitTailPayoff_eq_finiteQuittingPayoff G
+    (PrefixThenPunish G p T punishment) 0 T]
+  rw [show 0 + T = T by omega, quitTailPayoff_prefixThenPunish_at_switch]
+  apply finiteQuittingPayoff_congr_prefix
+  intro i hi
+  simp only [Nat.zero_add]
+  exact PrefixThenPunish.apply_of_lt G p T punishment hi
+
 /-- Approximate equilibria made from a stationary prefix and a min-max punishment. -/
 def HasStationarilyGeneratedApproximateEquilibria (G : QuittingGame) : Prop :=
   ∀ δ : ℝ, 0 < δ → ∀ ε : ℝ, 0 < ε → ∃ (p : QuitRow G) (M : ℕ)
