@@ -155,6 +155,18 @@ def quittingContinueUntilRoots
     Function.update (roots time) who (PMF.pure false)
   else roots time
 
+omit [Fintype ι] in
+/-- The Continue-until root sequence is the usual unilateral hazard update
+by pure Continue before the cutoff and the prescribed marginal afterwards. -/
+theorem quittingRootSequenceUpdate_continueUntilHazard
+    (roots : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ) :
+    quittingRootSequenceUpdate roots who
+        (fun time => if time < cutoff then PMF.pure false else roots time who) =
+      quittingContinueUntilRoots roots who cutoff := by
+  funext time player
+  by_cases htime : time < cutoff <;>
+    simp [quittingRootSequenceUpdate, quittingContinueUntilRoots, htime]
+
 /-- Forcing one player to Continue over a finite window gains exactly the
 opponent-survival-weighted sum of the row's Continue-minus-plan values. -/
 theorem quittingContinueUntil_terminalValue_sub_eq_sum
