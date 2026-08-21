@@ -2,14 +2,13 @@ import Mathlib
 import GameTheory.Analysis.Payoff
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.PMFProduct.Bool
-import MathUE.PMFProduct.Update
 import MathUE.FixedRatioConvexity
 import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer
 import UniformEquilibrium.Certificates.Public.FixedPrefixAccounting
 import UniformEquilibrium.Certificates.Public.TerminalChildLawTransfer
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
-import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.InitialActionAffineness
 import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
 import UniformEquilibrium.ProofView.Native.Equilibrium
 
@@ -4627,20 +4626,21 @@ private theorem FiniteStageGame.stageEUAt_eq_mixedEU
     G.repeatedGame.stageEUAt profile history who =
       G.kernel.mixedExtension.eu
         (fun player => profile player time history) who := by
+  letI (player : G.Player) : Fintype (G.kernel.Strategy player) := by
+    change Fintype (G.Action player)
+    infer_instance
   letI : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
-  unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
-  rw [G.kernel.mixedExtension_eu]
-  rfl
+  exact G.kernel.realizedAction_stageEUAt_eq_mixedExtension_eu
+    profile history who
 
 /-- Replace only one player's initial randomization by a pure action, leaving
 all continuation behavior unchanged. -/
-private def FiniteStageGame.pinInitialAction
+private abbrev FiniteStageGame.pinInitialAction
     (G : FiniteStageGame) (profile : G.BehaviorProfile)
     (who : G.Player) (action : G.Action who) : G.BehaviorStrategy who :=
-  fun time history =>
-    if time = 0 then PMF.pure action else profile who time history
+  G.kernel.pinRealizedActionInitialAction profile who action
 
 /-- Once the first joint action is fixed, pinning the initial action has no
 effect on the continuation profile. -/
@@ -4653,12 +4653,8 @@ private theorem FiniteStageGame.shiftProfile_update_pinInitialAction
           (G.pinInitialAction profile who action))
         (PUnit.unit, joint) =
       G.repeatedGame.shiftProfile profile (PUnit.unit, joint) := by
-  funext player time history
-  unfold StochasticGame.shiftProfile
-  by_cases hplayer : player = who
-  · subst player
-    simp [FiniteStageGame.pinInitialAction]
-  · simp [Function.update_of_ne hplayer]
+  exact G.kernel.realizedAction_shiftProfile_update_pinInitialAction
+    profile who action joint
 
 /-- The initial joint-action law after pinning one player is the product law
 with that coordinate replaced by the corresponding point mass. -/
@@ -4672,15 +4668,8 @@ private theorem FiniteStageGame.stageActionDist_update_pinInitialAction
       Math.PMFProduct.pmfPi
         (Function.update (G.initialMixedProfile profile)
           who (PMF.pure action)) := by
-  unfold StochasticGame.stageActionDist
-  congr 1
-  funext player
-  by_cases hplayer : player = who
-  · subst player
-    simp [FiniteStageGame.pinInitialAction]
-    rfl
-  · simp [Function.update_of_ne hplayer,
-      FiniteStageGame.initialMixedProfile]
+  exact G.kernel.realizedAction_stageActionDist_update_pinInitialAction
+    profile who action
 
 /-- A one-stage mixed payoff is the expectation of the payoffs obtained by
 pinning one player's own action. -/
@@ -4690,11 +4679,13 @@ private theorem FiniteStageGame.mixedEU_eq_expect_update
       Math.Probability.expect (mixed who) (fun action =>
         G.kernel.mixedExtension.eu
           (Function.update mixed who (PMF.pure action)) who) := by
+  letI (player : G.Player) : Fintype (G.kernel.Strategy player) := by
+    change Fintype (G.Action player)
+    infer_instance
   letI : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
-  simpa only [Function.update_eq_self] using
-    (G.kernel.mixedExtension_eu_update mixed who (mixed who))
+  exact G.kernel.mixedExtension_eu_eq_expect_pure_update mixed who
 
 /-- Each stage expectation is affine in one player's initial mixed action
 when all later behavior is held fixed. -/
@@ -4709,93 +4700,15 @@ private theorem FiniteStageGame.expectedStagePayoff_eq_expect_pinInitialAction
           (Function.update profile who
             (G.pinInitialAction profile who action))
           PUnit.unit time who) := by
-  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
-    @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite (∀ player, G.kernel.Strategy player) := by
+  letI (player : G.Player) : Fintype (G.kernel.Strategy player) := by
+    change Fintype (G.Action player)
+    infer_instance
+  letI : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
-  letI : Finite G.repeatedGame.State :=
-    inferInstanceAs (Finite PUnit)
-  let root := G.initialMixedProfile profile
-  change G.repeatedGame.expectedStagePayoff
-      profile PUnit.unit time who =
-    Math.Probability.expect (root who) (fun action =>
-      G.repeatedGame.expectedStagePayoff
-        (Function.update profile who
-          (G.pinInitialAction profile who action))
-        PUnit.unit time who)
-  cases time with
-  | zero =>
-      rw [G.repeatedGame.expectedStagePayoff_zero]
-      simp_rw [G.repeatedGame.expectedStagePayoff_zero]
-      rw [G.stageEUAt_eq_mixedEU]
-      simp_rw [G.stageEUAt_eq_mixedEU]
-      have hroot :
-          (fun player => profile player 0
-            (G.repeatedGame.emptyHist PUnit.unit)) = root := rfl
-      have hpinned (action : G.Action who) :
-          (fun player => Function.update profile who
-            (G.pinInitialAction profile who action) player 0
-              (G.repeatedGame.emptyHist PUnit.unit)) =
-            Function.update root who (PMF.pure action) := by
-        funext player
-        by_cases hplayer : player = who
-        · subst player
-          simp [FiniteStageGame.pinInitialAction]
-          rfl
-        · simp [Function.update_of_ne hplayer]
-          rfl
-      rw [hroot]
-      simp_rw [hpinned]
-      change G.kernel.mixedExtension.eu root who =
-        Math.Probability.expect (root who) (fun action =>
-          G.kernel.mixedExtension.eu
-            (Function.update root who (PMF.pure action)) who)
-      exact G.mixedEU_eq_expect_update root who
-  | succ time =>
-      rw [G.repeatedGame.expectedStagePayoff_succ_shift]
-      simp_rw [G.repeatedGame.expectedStagePayoff_succ_shift]
-      rw [show G.repeatedGame.stageActionDist profile
-          (G.repeatedGame.emptyHist PUnit.unit) =
-          Math.PMFProduct.pmfPi root by rfl]
-      simp_rw [G.stageActionDist_update_pinInitialAction]
-      simp_rw [KernelGame.realizedActionStochasticGame_transition]
-      change Math.Probability.expect (Math.PMFProduct.pmfPi root)
-          (fun joint : ∀ player, G.Action player => Math.Probability.expect
-            (PMF.pure PUnit.unit : PMF PUnit) (fun state =>
-              G.repeatedGame.expectedStagePayoff
-                (G.repeatedGame.shiftProfile profile
-                  (PUnit.unit, joint)) state time who)) =
-        Math.Probability.expect (root who) (fun action =>
-          Math.Probability.expect
-            (Math.PMFProduct.pmfPi
-              (Function.update root who (PMF.pure action)))
-            (fun joint : ∀ player, G.Action player => Math.Probability.expect
-              (PMF.pure PUnit.unit : PMF PUnit) (fun state =>
-                G.repeatedGame.expectedStagePayoff
-                  (G.repeatedGame.shiftProfile
-                    (Function.update profile who
-                      (G.pinInitialAction profile who action))
-                    (PUnit.unit, joint)) state time who)))
-      simp_rw [Math.Probability.expect_pure,
-        G.shiftProfile_update_pinInitialAction]
-      let value : (∀ player, G.Action player) → ℝ := fun joint =>
-        G.repeatedGame.expectedStagePayoff
-          (G.repeatedGame.shiftProfile profile (PUnit.unit, joint))
-          PUnit.unit time who
-      change Math.Probability.expect (Math.PMFProduct.pmfPi root) value =
-        Math.Probability.expect (root who) (fun action =>
-          Math.Probability.expect
-            (Math.PMFProduct.pmfPi
-              (Function.update root who (PMF.pure action))) value)
-      have hproduct := congrArg
-        (fun law => Math.Probability.expect law value)
-        (Math.PMFProduct.pmfPi_update_bind root who (root who))
-      rw [Function.update_eq_self] at hproduct
-      exact hproduct.trans (Math.Probability.expect_bind
-        (root who)
-        (fun action => Math.PMFProduct.pmfPi
-          (Function.update root who (PMF.pure action))) value)
+  exact G.kernel
+    |>.realizedAction_expectedStagePayoff_eq_expect_pinInitialAction
+      profile who time
 
 /-- A finite repeated payoff is affine in one player's initial mixed action
 when all continuation behavior is held fixed. -/
@@ -4807,32 +4720,226 @@ private theorem FiniteStageGame.finitePayoff_eq_expect_pinInitialAction
         (fun action => G.finitePayoff horizon
           (Function.update profile who
             (G.pinInitialAction profile who action)) who) := by
-  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
-    @Finite.of_fintype _ (G.finiteAction player)
-  letI (player : G.Player) : Finite (G.kernel.Strategy player) := by
-    change Finite (G.Action player)
-    exact Finite.of_fintype _
-  letI : Finite (∀ player, G.kernel.Strategy player) := by
+  letI (player : G.Player) : Fintype (G.kernel.Strategy player) := by
+    change Fintype (G.Action player)
+    infer_instance
+  letI : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
-  letI : Finite G.repeatedGame.State :=
+  unfold FiniteStageGame.finitePayoff
+  exact G.kernel
+    |>.realizedAction_finiteAveragePayoff_eq_expect_pinInitialAction
+      horizon profile who
+
+/-- Example 4's stage payoffs never exceed `m+1`. -/
+private theorem example4_mixedEU_le
+    (m : ℕ) (mixed : Bool → PMF Bool) (who : Bool) :
+    (example4 m).kernel.mixedExtension.eu mixed who ≤ m + 1 := by
+  letI : Finite (example4 m).kernel.Outcome := by
+    change Finite (Bool → Bool)
+    exact Finite.of_fintype _
+  letI : Finite (∀ player, (example4 m).kernel.Strategy player) := by
+    change Finite (Bool → Bool)
+    exact Finite.of_fintype _
+  rw [(example4 m).kernel.mixedExtension_eu]
+  calc
+    _ ≤ Math.Probability.expect (Math.PMFProduct.pmfPi mixed)
+        (fun _action => (m : ℝ) + 1) := by
+      apply Math.Probability.expect_mono
+      intro action
+      simp only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+      cases who <;> cases hrow : action false <;>
+        cases hcolumn : action true <;>
+        simp [binaryPayoff, hrow, hcolumn, pair] <;> positivity
+    _ = _ := Math.Probability.expect_const _ _
+
+/-- Playing Top for row or Right for column guarantees at least `m` in one
+stage of Example 4. -/
+private theorem example4_mixedEU_ge_of_self_pure
+    (m : ℕ) (mixed : Bool → PMF Bool) (who : Bool)
+    (hself : mixed who = PMF.pure who) :
+    (m : ℝ) ≤ (example4 m).kernel.mixedExtension.eu mixed who := by
+  change (m : ℝ) ≤ (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+        (pair 0 0) (pair 0 m))).mixedExtension.eu mixed who
+  rw [binaryKernel_mixedEU_apply]
+  cases who
+  · change mixed false = PMF.pure false at hself
+    rw [hself]
+    simp [PMF.pure_apply, pair]
+    have hprob : (mixed true true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hprob0 : 0 ≤ (mixed true true).toReal := ENNReal.toReal_nonneg
+    nlinarith
+  · change mixed true = PMF.pure true at hself
+    rw [hself]
+    simp [PMF.pure_apply, pair]
+    have hprob : (mixed false true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hprob0 : 0 ≤ (mixed false true).toReal := ENNReal.toReal_nonneg
+    nlinarith
+
+/-- Playing Bottom for row or Left for column gives zero in the first stage,
+regardless of the opponent's mixed action. -/
+private theorem example4_mixedEU_eq_zero_of_self_wrong
+    (m : ℕ) (mixed : Bool → PMF Bool) (who : Bool)
+    (hself : mixed who = PMF.pure (!who)) :
+    (example4 m).kernel.mixedExtension.eu mixed who = 0 := by
+  change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+        (pair 0 0) (pair 0 m))).mixedExtension.eu mixed who = 0
+  rw [binaryKernel_mixedEU_apply]
+  cases who
+  · change mixed false = PMF.pure true at hself
+    rw [hself]
+    simp [PMF.pure_apply, pair]
+  · change mixed true = PMF.pure false at hself
+    rw [hself]
+    simp [PMF.pure_apply, pair]
+
+/-- The stage expectation of every Example 4 profile is at most `m+1`. -/
+private theorem example4_expectedStagePayoff_le
+    (m : ℕ) (profile : (example4 m).BehaviorProfile)
+    (time : ℕ) (who : Bool) :
+    (example4 m).repeatedGame.expectedStagePayoff
+      profile PUnit.unit time who ≤ m + 1 := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  calc
+    _ ≤ Math.Probability.expect
+        ((example4 m).repeatedGame.histDist profile PUnit.unit time)
+        (fun _history => (m : ℝ) + 1) := by
+      apply Math.Probability.expect_mono
+      intro history
+      rw [(example4 m).stageEUAt_eq_mixedEU]
+      exact example4_mixedEU_le m _ who
+    _ = _ := Math.Probability.expect_const _ _
+
+/-- The stationary Top/Right deviation used in the earlier-horizon argument. -/
+private def example4SecurityStrategy
+    (m : ℕ) (who : Bool) : (example4 m).BehaviorStrategy who :=
+  fun _time _history => PMF.pure who
+
+/-- The Top/Right deviation earns at least `m` in every stage. -/
+private theorem example4SecurityStrategy_expectedStagePayoff_ge
+    (m : ℕ) (profile : (example4 m).BehaviorProfile)
+    (time : ℕ) (who : Bool) :
+    (m : ℝ) ≤ (example4 m).repeatedGame.expectedStagePayoff
+      (Function.update profile who (example4SecurityStrategy m who))
+      PUnit.unit time who := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  calc
+    (m : ℝ) = Math.Probability.expect
+        ((example4 m).repeatedGame.histDist
+          (Function.update profile who (example4SecurityStrategy m who))
+          PUnit.unit time) (fun _history => (m : ℝ)) :=
+      (Math.Probability.expect_const _ _).symm
+    _ ≤ _ := by
+      apply Math.Probability.expect_mono
+      intro history
+      rw [(example4 m).stageEUAt_eq_mixedEU]
+      apply example4_mixedEU_ge_of_self_pure
+      simp [example4SecurityStrategy]
+      rfl
+
+/-- Over a positive horizon, the Top/Right deviation guarantees average
+payoff at least `m`. -/
+private theorem example4SecurityStrategy_finitePayoff_ge
+    (m horizon : ℕ) (hhorizon : 0 < horizon)
+    (profile : (example4 m).BehaviorProfile) (who : Bool) :
+    (m : ℝ) ≤ (example4 m).finitePayoff horizon
+      (Function.update profile who (example4SecurityStrategy m who)) who := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   unfold FiniteStageGame.finitePayoff
-  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
-  simp_rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
-  rw [show (∑ time ∈ Finset.range horizon,
-        G.repeatedGame.expectedStagePayoff profile PUnit.unit time who) =
-      ∑ time ∈ Finset.range horizon,
-        Math.Probability.expect (G.initialMixedProfile profile who)
-          (fun action => G.repeatedGame.expectedStagePayoff
-            (Function.update profile who
-              (G.pinInitialAction profile who action))
-            PUnit.unit time who) by
-    apply Finset.sum_congr rfl
+  rw [(example4 m).repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  calc
+    (m : ℝ) = (horizon : ℝ)⁻¹ *
+        ∑ _time ∈ Finset.range horizon, (m : ℝ) := by
+      rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul,
+        ← mul_assoc, inv_mul_cancel₀]
+      · simp
+      · exact_mod_cast Nat.ne_of_gt hhorizon
+    _ ≤ _ := by
+      apply mul_le_mul_of_nonneg_left
+      · apply Finset.sum_le_sum
+        intro time _
+        exact example4SecurityStrategy_expectedStagePayoff_ge
+          m profile time who
+      · positivity
+
+/-- Pinning the wrong initial action makes Example 4's stage-zero payoff
+zero. -/
+private theorem example4_pinWrong_expectedStagePayoff_zero
+    (m : ℕ) (profile : (example4 m).BehaviorProfile) (who : Bool) :
+    (example4 m).repeatedGame.expectedStagePayoff
+      (Function.update profile who
+        ((example4 m).pinInitialAction profile who (!who)))
+      PUnit.unit 0 who = 0 := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  rw [(example4 m).repeatedGame.expectedStagePayoff_zero,
+    (example4 m).stageEUAt_eq_mixedEU]
+  apply example4_mixedEU_eq_zero_of_self_wrong
+  simp [FiniteStageGame.pinInitialAction]
+  rfl
+
+/-- At every positive horizon `n ≤ m`, pinning Bottom/Left initially yields
+strictly less than the security payoff `m`. -/
+private theorem example4_pinWrong_finitePayoff_lt
+    (m horizon : ℕ) (hhorizon : 0 < horizon) (hle : horizon ≤ m)
+    (profile : (example4 m).BehaviorProfile) (who : Bool) :
+    (example4 m).finitePayoff horizon
+      (Function.update profile who
+        ((example4 m).pinInitialAction profile who (!who))) who < m := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  obtain ⟨tail, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hhorizon)
+  unfold FiniteStageGame.finitePayoff
+  rw [(example4 m).repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff,
+    Finset.sum_range_succ']
+  rw [example4_pinWrong_expectedStagePayoff_zero]
+  have hsum :
+      (∑ time ∈ Finset.range tail,
+        (example4 m).repeatedGame.expectedStagePayoff
+          (Function.update profile who
+            ((example4 m).pinInitialAction profile who (!who)))
+          PUnit.unit (time + 1) who) ≤
+        ∑ _time ∈ Finset.range tail, ((m : ℝ) + 1) := by
+    apply Finset.sum_le_sum
     intro time _
-    exact G.expectedStagePayoff_eq_expect_pinInitialAction
-      profile who time]
-  rw [sum_expect_comm_range, ← Math.Probability.expect_const_mul]
+    exact example4_expectedStagePayoff_le m _ (time + 1) who
+  calc
+    ((tail + 1 : ℕ) : ℝ)⁻¹ *
+        ((∑ time ∈ Finset.range tail,
+          (example4 m).repeatedGame.expectedStagePayoff
+            (Function.update profile who
+              ((example4 m).pinInitialAction profile who (!who)))
+            PUnit.unit (time + 1) who) + 0) ≤
+      ((tail + 1 : ℕ) : ℝ)⁻¹ *
+        ∑ _time ∈ Finset.range tail, ((m : ℝ) + 1) := by
+      apply mul_le_mul_of_nonneg_left
+      · simpa using hsum
+      · positivity
+    _ < (m : ℝ) := by
+      simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+      have hdenominator : (0 : ℝ) < ((tail + 1 : ℕ) : ℝ) := by
+        positivity
+      rw [inv_mul_lt_iff₀ hdenominator]
+      norm_num at hle ⊢
+      have hle' : (tail : ℝ) < m := by exact_mod_cast hle
+      nlinarith
 
 /-- After the first action, the nondeviator in the critical profile copies
 the deviator's initial action forever. -/
