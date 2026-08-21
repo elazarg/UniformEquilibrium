@@ -73,6 +73,26 @@ theorem sum_singletonCoalitionMass (mass : ι → ℝ) :
   rw [Finset.sum_comm]
   simp
 
+/-- Integrating a payoff over singleton coalition mass is the corresponding
+player-mass mixture. -/
+theorem sum_singletonCoalitionMass_mul
+    (mass : ι → ℝ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (who : ι) :
+    ∑ coalition, singletonCoalitionMass mass coalition * reward coalition who =
+      ∑ owner, mass owner *
+        reward (quittingProjectiveSingletonTerminal owner) who := by
+  unfold singletonCoalitionMass
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro owner _
+  rw [Finset.sum_eq_single (quittingProjectiveSingletonTerminal owner)]
+  · simp
+  · intro coalition _ hne
+    simp [hne]
+  · simp
+
 /-! ## Compactness of normalized player-mass paths -/
 
 /-- Regard a path into a metric space as a bounded continuous function on
@@ -371,5 +391,47 @@ theorem singletonAbsorptionPathOfPlayerPath_continuous
     IsContinuousAbsorptionPath
       (singletonAbsorptionPathOfPlayerPath mass hmono htotal) :=
   pathTimes_singletonCadlagPathOfPlayerPath mass hmono htotal
+
+/-- Before terminal time, the payoff of a continuous singleton path is the
+normalized mixture of its remaining player masses. -/
+theorem absorptionPathPayoff_singletonAbsorptionPathOfPlayerPath
+    {terminal : ι → ℝ} (mass : Path (0 : ι → ℝ) terminal)
+    (hmono : ∀ who, Monotone fun time => mass time who)
+    (htotal : ∀ time, ∑ who, mass time who = (time : ℝ))
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (time : unitInterval) (htimeOne : time ≠ 1) (who : ι) :
+    absorptionPathPayoff reward
+        (singletonAbsorptionPathOfPlayerPath mass hmono htotal)
+        (time : ℝ) who =
+      (∑ owner, (mass 1 owner - mass time owner) *
+        reward (quittingProjectiveSingletonTerminal owner) who) /
+          (1 - (time : ℝ)) := by
+  have htime : (time : ℝ) ∈ Icc (0 : ℝ) 1 := time.property
+  have htimeLt : (time : ℝ) < 1 :=
+    lt_of_le_of_ne time.property.2 fun heq => htimeOne (Subtype.ext heq)
+  rw [absorptionPathPayoff, if_pos htime]
+  change (if pathTotal
+      (singletonCadlagPathOfPlayerPath mass hmono htotal) (time : ℝ) < 1 then
+      fun owner => (∑ coalition,
+        ((singletonCadlagPathOfPlayerPath mass hmono htotal).value 1 coalition -
+          (singletonCadlagPathOfPlayerPath mass hmono htotal).value
+            (time : ℝ) coalition) * reward coalition owner) /
+              (1 - pathTotal
+                (singletonCadlagPathOfPlayerPath mass hmono htotal)
+                  (time : ℝ)) else 0) who = _
+  rw [pathTotal_singletonCadlagPathOfPlayerPath mass hmono htotal htime,
+    if_pos htimeLt]
+  change (∑ coalition,
+      (singletonCoalitionMass (mass.extend 1) coalition -
+        singletonCoalitionMass (mass.extend time) coalition) *
+          reward coalition who) / (1 - (time : ℝ)) = _
+  rw [show mass.extend 1 = mass 1 from Path.extend_apply mass (by norm_num),
+    show mass.extend (time : ℝ) = mass time from Path.extend_apply mass htime]
+  congr 1
+  simp_rw [sub_mul]
+  rw [Finset.sum_sub_distrib,
+    sum_singletonCoalitionMass_mul,
+    sum_singletonCoalitionMass_mul,
+    Finset.sum_sub_distrib]
 
 end GameTheory.QuittingAbsorptionPath
