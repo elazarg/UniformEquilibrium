@@ -2242,11 +2242,10 @@ def Lemma3_3Statement (G : QuittingGame) (M ε : ℝ) : Prop :=
       IsRational G ε r ∧ (p' k : ℝ) = 1 ∧ p' ∈ EpsilonRow G ε r
 
 /--
-Lemma 3.3.  The missing proof rounds every sufficiently large quitting
-probability to one and bounds the change in each forced-quit and
-forced-continue payoff by the probability that the realized coalition changes.
-The production library has analogous root inequalities, but no adapter to the
-paper-local `QuittingGame` model or this exact constant package.
+Lemma 3.3.  Round to one every `p_m` above the displayed threshold whose
+continuation payoff is at least `χ_m-ε/2`, and replace the continuation vector
+by `χ-ε`.  Product-law total variation bounds the resulting endpoint-payoff
+changes by `ε/6` and `5ε/6`.
 -/
 theorem lemma3_3 (G : QuittingGame) (M ε : ℝ)
     (hM : IsSimonPayoffScale G M) (hplayers : HasAtLeastThreePlayers G) :
