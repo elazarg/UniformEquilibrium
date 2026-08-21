@@ -777,6 +777,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic.L
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.FiniteHorizonContinuation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.AsymptoticPayoffEquivalence
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.ExpectedPotentialShaping
