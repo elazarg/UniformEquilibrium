@@ -4581,9 +4581,386 @@ private theorem example3_individualRationalLevel_false :
     exact le_ciInf hlower
 
 /-- Example 4, parameterized by the paper's positive integer `m`. -/
-def example4 (m : ℕ) : FiniteStageGame :=
+abbrev example4 (m : ℕ) : FiniteStageGame :=
   binaryGame (pair m 0) (pair (m + 1) (m + 1))
     (pair 0 0) (pair 0 m)
+
+/-- Example 4's critical-horizon profile: play Bottom/Left initially, then
+each player copies the opponent's initial action. -/
+private def example4CriticalProfile (m : ℕ) :
+    (example4 m).BehaviorProfile :=
+  fun who time history =>
+    match time with
+    | 0 => PMF.pure (!who)
+    | _ + 1 => PMF.pure ((history.1 0).2 (!who))
+
+/-- If the opponent is pure in Example 4, a player's stage payoff is at most
+`m` when the opponent copied that player, and at most `m+1` otherwise. -/
+private theorem example4_mixedEU_le_of_opponent_pure
+    (m : ℕ) (profile : Bool → PMF Bool) (who action : Bool)
+    (hopponent : profile (!who) = PMF.pure action) :
+    (example4 m).kernel.mixedExtension.eu profile who ≤
+      if action = who then (m : ℝ) else m + 1 := by
+  change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+      (binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+        (pair 0 0) (pair 0 m))).mixedExtension.eu profile who ≤ _
+  cases who <;> cases action <;>
+    rw [binaryKernel_mixedEU_apply] <;>
+    simp only [Bool.not_false, Bool.not_true] at hopponent <;>
+    rw [hopponent] <;>
+    norm_num [PMF.pure_apply, pair] <;>
+    have hp0 : 0 ≤ (profile false true).toReal := ENNReal.toReal_nonneg <;>
+    have hq0 : 0 ≤ (profile true true).toReal := ENNReal.toReal_nonneg <;>
+    have hp1 : (profile false true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _) <;>
+    have hq1 : (profile true true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _) <;>
+    nlinarith
+
+/-- Example 4's stage utility at a public history is the corresponding mixed
+one-stage payoff. -/
+private theorem example4_stageEUAt_eq_mixedEU
+    (m : ℕ) (profile : (example4 m).BehaviorProfile) {time : ℕ}
+    (history : (example4 m).repeatedGame.Hist time) (who : Bool) :
+    (example4 m).repeatedGame.stageEUAt profile history who =
+      (example4 m).kernel.mixedExtension.eu
+        (fun player => profile player time history) who := by
+  letI : Finite (example4 m).kernel.Outcome := by
+    change Finite (Bool → Bool)
+    exact Finite.of_fintype _
+  unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+  rw [(example4 m).kernel.mixedExtension_eu]
+  rfl
+
+/-- After the first action, the nondeviator in the critical profile copies
+the deviator's initial action forever. -/
+private theorem example4CriticalProfile_shift_opponent
+    (m : ℕ) (who : Bool)
+    (deviation : (example4 m).BehaviorStrategy who)
+    (action : Bool → Bool)
+    (time : ℕ) (history : (example4 m).repeatedGame.Hist time) :
+    (example4 m).repeatedGame.shiftProfile
+        (Function.update (example4CriticalProfile m) who deviation)
+        (PUnit.unit, action) (!who) time history =
+      PMF.pure (action who) := by
+  unfold StochasticGame.shiftProfile
+  rw [Function.update_of_ne (Bool.not_ne_self who)]
+  simp [example4CriticalProfile, StochasticGame.consHist]
+  rfl
+
+/-- Conditional on the first joint action, every later expected payoff of a
+deviator against the critical profile has the paper's uniform stage bound. -/
+private theorem example4CriticalProfile_shift_expectedStagePayoff_le
+    (m : ℕ) (who : Bool)
+    (deviation : (example4 m).BehaviorStrategy who)
+    (action : Bool → Bool) (time : ℕ) :
+    (example4 m).repeatedGame.expectedStagePayoff
+        ((example4 m).repeatedGame.shiftProfile
+          (Function.update (example4CriticalProfile m) who deviation)
+          (PUnit.unit, action)) PUnit.unit time who ≤
+      if action who = who then (m : ℝ) else m + 1 := by
+  classical
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let shifted := (example4 m).repeatedGame.shiftProfile
+    (Function.update (example4CriticalProfile m) who deviation)
+    (PUnit.unit, action)
+  unfold StochasticGame.expectedStagePayoff
+  rw [← Math.Probability.expect_const
+    ((example4 m).repeatedGame.histDist shifted PUnit.unit time)
+    (if action who = who then (m : ℝ) else m + 1)]
+  apply Math.Probability.expect_mono
+  intro history
+  rw [example4_stageEUAt_eq_mixedEU]
+  apply example4_mixedEU_le_of_opponent_pure
+  exact example4CriticalProfile_shift_opponent
+    m who deviation action time history
+
+/-- The `m` continuation stages after any first action contribute at most the
+corresponding stage bound times `m`. -/
+private theorem example4CriticalProfile_shift_totalPayoff_le
+    (m : ℕ) (who : Bool)
+    (deviation : (example4 m).BehaviorStrategy who)
+    (action : Bool → Bool) :
+    Math.Probability.expect
+        ((example4 m).repeatedGame.histDist
+          ((example4 m).repeatedGame.shiftProfile
+            (Function.update (example4CriticalProfile m) who deviation)
+            (PUnit.unit, action)) PUnit.unit m)
+        (fun history => (example4 m).repeatedGame.totalPayoff who history) ≤
+      (m : ℝ) * (if action who = who then (m : ℝ) else m + 1) := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  rw [(example4 m).repeatedGame.expect_totalPayoff_eq_sum_expectedStagePayoff]
+  calc
+    (∑ time ∈ Finset.range m,
+        (example4 m).repeatedGame.expectedStagePayoff
+          ((example4 m).repeatedGame.shiftProfile
+            (Function.update (example4CriticalProfile m) who deviation)
+            (PUnit.unit, action)) PUnit.unit time who) ≤
+      ∑ _time ∈ Finset.range m,
+        (if action who = who then (m : ℝ) else m + 1) := by
+          apply Finset.sum_le_sum
+          intro time _
+          exact example4CriticalProfile_shift_expectedStagePayoff_le
+            m who deviation action time
+    _ = (m : ℝ) * (if action who = who then (m : ℝ) else m + 1) := by
+      by_cases haction : action who = who
+      · simp [haction]
+      · simp [haction]
+        ring
+
+/-- A first-stage joint action in the support keeps the nondeviator's
+prescribed pure action. -/
+private theorem example4CriticalProfile_root_opponent_eq_of_mem_support
+    (m : ℕ) (who : Bool)
+    (deviation : (example4 m).BehaviorStrategy who)
+    (action : Bool → Bool)
+    (hsupport : action ∈
+      ((example4 m).repeatedGame.stageActionDist
+        (Function.update (example4CriticalProfile m) who deviation)
+        ((example4 m).repeatedGame.emptyHist PUnit.unit)).support) :
+    action (!who) = who := by
+  classical
+  let mixed : Bool → PMF Bool := fun player =>
+    Function.update (example4CriticalProfile m) who deviation player 0
+      ((example4 m).repeatedGame.emptyHist PUnit.unit)
+  have hmixed : mixed (!who) = PMF.pure who := by
+    simp [mixed, example4CriticalProfile]
+    rfl
+  change action ∈ (Math.PMFProduct.pmfPi mixed).support at hsupport
+  by_contra hne
+  have hzero : Math.PMFProduct.pmfPi mixed action = 0 := by
+    rw [Math.PMFProduct.pmfPi_apply]
+    apply Finset.prod_eq_zero (Finset.mem_univ (!who))
+    rw [hmixed, PMF.pure_apply, if_neg hne]
+  exact (PMF.mem_support_iff _ _).mp hsupport hzero
+
+/-- At the initial stage, a supported deviating action pays `m` precisely
+when it equals the player's label, and zero otherwise. -/
+private theorem example4_stagePayoff_root
+    (m : ℕ) (who : Bool) (action : Bool → Bool)
+    (hopponent : action (!who) = who) :
+    (example4 m).repeatedGame.stagePayoff PUnit.unit action who =
+      if action who = who then (m : ℝ) else 0 := by
+  change (example4 m).kernel.eu action who = _
+  rw [KernelGame.eu_ofPureEU]
+  change binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+    (pair 0 0) (pair 0 m) action who = _
+  cases hfalse : action false <;> cases htrue : action true <;>
+    cases who <;> simp [binaryPayoff, pair, hfalse, htrue] at hopponent ⊢
+
+/-- No unilateral deviation from the critical profile earns more than `m`
+over its `m+1` stages. -/
+private theorem example4CriticalProfile_deviation_bound
+    (m : ℕ) (who : Bool)
+    (deviation : (example4 m).BehaviorStrategy who) :
+    (example4 m).repeatedGame.finiteAveragePayoff PUnit.unit (m + 1)
+      (Function.update (example4CriticalProfile m) who deviation) who ≤ m := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let deviated := Function.update (example4CriticalProfile m) who deviation
+  let rootLaw := (example4 m).repeatedGame.stageActionDist deviated
+    ((example4 m).repeatedGame.emptyHist PUnit.unit)
+  have htotal :
+      Math.Probability.expect
+          ((example4 m).repeatedGame.histDist deviated PUnit.unit (m + 1))
+          (fun history => (example4 m).repeatedGame.totalPayoff who history) ≤
+        (m : ℝ) * (m + 1) := by
+    rw [(example4 m).repeatedGame.histDist_succ_shift deviated PUnit.unit m]
+    rw [Math.Probability.expect_bind]
+    apply Math.ProbabilityMassFunction.expect_le_of_le_on_support
+    intro action haction
+    rw [KernelGame.realizedActionStochasticGame_transition,
+      Math.Probability.expect_bind]
+    let stateValue : (example4 m).repeatedGame.State → ℝ := fun state =>
+      Math.Probability.expect
+        (((example4 m).repeatedGame.histDist
+          ((example4 m).repeatedGame.shiftProfile deviated
+            (PUnit.unit, action)) state m).map
+          ((example4 m).repeatedGame.consHist (PUnit.unit, action)))
+        (fun history => (example4 m).repeatedGame.totalPayoff who history)
+    change Math.Probability.expect (PMF.pure PUnit.unit) stateValue ≤ _
+    have hstate : Math.Probability.expect (PMF.pure PUnit.unit) stateValue =
+        stateValue PUnit.unit := by
+      rw [← Math.Probability.expect_const (PMF.pure PUnit.unit)
+        (stateValue PUnit.unit)]
+      congr 1
+    rw [hstate]
+    dsimp only [stateValue]
+    rw [Math.Probability.expect_map]
+    simp_rw [(example4 m).repeatedGame.totalPayoff_consHist]
+    rw [Math.Probability.expect_add,
+      Math.Probability.expect_const]
+    have hopponent : action (!who) = who :=
+      example4CriticalProfile_root_opponent_eq_of_mem_support
+        m who deviation action haction
+    have hroot := example4_stagePayoff_root m who action hopponent
+    have htail := example4CriticalProfile_shift_totalPayoff_le
+      m who deviation action
+    change Math.Probability.expect
+        ((example4 m).repeatedGame.histDist
+          ((example4 m).repeatedGame.shiftProfile deviated
+            (PUnit.unit, action)) PUnit.unit m)
+        (fun history => (example4 m).repeatedGame.totalPayoff who history) ≤ _
+      at htail
+    rw [hroot]
+    cases who
+    · cases hactionSelf : action false <;>
+        simp [hactionSelf] at htail ⊢ <;> nlinarith
+    · cases hactionSelf : action true <;>
+        simp [hactionSelf] at htail ⊢ <;> nlinarith
+  unfold StochasticGame.finiteAveragePayoff
+  calc
+    ((m + 1 : ℕ) : ℝ)⁻¹ *
+        Math.Probability.expect
+          ((example4 m).repeatedGame.histDist deviated PUnit.unit (m + 1))
+          (fun history => (example4 m).repeatedGame.totalPayoff who history) ≤
+      ((m + 1 : ℕ) : ℝ)⁻¹ * ((m : ℝ) * (m + 1)) :=
+        mul_le_mul_of_nonneg_left htotal (inv_nonneg.mpr (by positivity))
+    _ = m := by
+      have hne : ((m + 1 : ℕ) : ℝ) ≠ 0 := by positivity
+      field_simp
+      norm_num [Nat.cast_add]
+      ring
+
+/-- The on-path continuation of the critical construction plays Top/Right in
+every remaining stage. -/
+private def example4CriticalTailProfile (m : ℕ) :
+    (example4 m).BehaviorProfile :=
+  fun player _time _history => PMF.pure player
+
+/-- The prescribed first-stage law is the pure Bottom/Left action profile. -/
+private theorem example4CriticalProfile_rootLaw
+    (m : ℕ) :
+    (example4 m).repeatedGame.stageActionDist
+        (example4CriticalProfile m)
+        ((example4 m).repeatedGame.emptyHist PUnit.unit) =
+      PMF.pure (fun player : Bool => !player) := by
+  unfold StochasticGame.stageActionDist
+  change Math.PMFProduct.pmfPi (fun player : Bool => PMF.pure (!player)) = _
+  exact Math.PMFProduct.pmfPi_pure _
+
+/-- After the prescribed Bottom/Left first action, the critical profile is
+the stationary Top/Right continuation. -/
+private theorem example4CriticalProfile_shift_onPath
+    (m : ℕ) :
+    (example4 m).repeatedGame.shiftProfile (example4CriticalProfile m)
+        (PUnit.unit, fun player : Bool => !player) =
+      example4CriticalTailProfile m := by
+  funext player time history
+  unfold StochasticGame.shiftProfile example4CriticalProfile
+    example4CriticalTailProfile
+  simp [StochasticGame.consHist]
+
+/-- Every stage of the on-path continuation pays both players `m+1`. -/
+private theorem example4CriticalTailProfile_expectedStagePayoff
+    (m time : ℕ) (who : Bool) :
+    (example4 m).repeatedGame.expectedStagePayoff
+        (example4CriticalTailProfile m) PUnit.unit time who = m + 1 := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  rw [← Math.Probability.expect_const
+    ((example4 m).repeatedGame.histDist
+      (example4CriticalTailProfile m) PUnit.unit time) ((m : ℝ) + 1)]
+  congr 1
+  funext history
+  rw [example4_stageEUAt_eq_mixedEU]
+  change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+    (binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+      (pair 0 0) (pair 0 m))).mixedExtension.eu
+      (fun player : Bool => PMF.pure player) who = m + 1
+  rw [binaryKernel_mixedEU_apply]
+  cases who <;> simp [PMF.pure_apply, pair]
+
+/-- From stage two onward, the critical profile follows its stationary
+Top/Right continuation in expectation. -/
+private theorem example4CriticalProfile_expectedStagePayoff_succ
+    (m time : ℕ) (who : Bool) :
+    (example4 m).repeatedGame.expectedStagePayoff
+        (example4CriticalProfile m) PUnit.unit (time + 1) who = m + 1 := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  rw [(example4 m).repeatedGame.expectedStagePayoff_succ_shift]
+  rw [example4CriticalProfile_rootLaw]
+  change Math.Probability.expect
+    (PMF.pure (fun player : Bool => !player) : PMF (Bool → Bool))
+      (fun action => Math.Probability.expect
+        ((example4 m).repeatedGame.transition PUnit.unit action)
+        (fun state => (example4 m).repeatedGame.expectedStagePayoff
+          ((example4 m).repeatedGame.shiftProfile (example4CriticalProfile m)
+            (PUnit.unit, action)) state time who)) = m + 1
+  rw [Math.Probability.expect_pure]
+  rw [KernelGame.realizedActionStochasticGame_transition]
+  change Math.Probability.expect (PMF.pure PUnit.unit : PMF PUnit)
+    (fun state => (example4 m).repeatedGame.expectedStagePayoff
+      ((example4 m).repeatedGame.shiftProfile (example4CriticalProfile m)
+        (PUnit.unit, fun player : Bool => !player)) state time who) = m + 1
+  rw [Math.Probability.expect_pure]
+  rw [example4CriticalProfile_shift_onPath]
+  exact example4CriticalTailProfile_expectedStagePayoff m time who
+
+/-- The initial Bottom/Left stage pays both players zero. -/
+private theorem example4CriticalProfile_expectedStagePayoff_zero
+    (m : ℕ) (who : Bool) :
+    (example4 m).repeatedGame.expectedStagePayoff
+        (example4CriticalProfile m) PUnit.unit 0 who = 0 := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  rw [(example4 m).repeatedGame.expectedStagePayoff_zero]
+  rw [example4_stageEUAt_eq_mixedEU]
+  change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+    (binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+      (pair 0 0) (pair 0 m))).mixedExtension.eu
+      (fun player : Bool => PMF.pure (!player)) who = 0
+  rw [binaryKernel_mixedEU_apply]
+  cases who <;> simp [PMF.pure_apply, pair]
+
+/-- The critical profile averages one zero stage and `m` Top/Right stages,
+so its `(m+1)`-stage payoff is `(m,m)`. -/
+private theorem example4CriticalProfile_payoff
+    (m : ℕ) :
+    (example4 m).finitePayoff (m + 1) (example4CriticalProfile m) =
+      pair m m := by
+  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+    @Finite.of_fintype _ ((example4 m).finiteAction player)
+  letI : Finite (example4 m).repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  funext who
+  change Bool at who
+  unfold FiniteStageGame.finitePayoff
+  rw [(example4 m).repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  rw [Finset.sum_range_succ']
+  rw [example4CriticalProfile_expectedStagePayoff_zero]
+  have htail :
+      (∑ time ∈ Finset.range m,
+        (example4 m).repeatedGame.expectedStagePayoff
+          (example4CriticalProfile m) PUnit.unit (time + 1) who) =
+        ∑ _time ∈ Finset.range m, ((m : ℝ) + 1) := by
+    apply Finset.sum_congr rfl
+    intro time _
+    exact example4CriticalProfile_expectedStagePayoff_succ m time who
+  rw [htail]
+  simp only [add_zero, Finset.sum_const,
+    Finset.card_range, nsmul_eq_mul]
+  change ((m + 1 : ℕ) : ℝ)⁻¹ * ((m : ℝ) * (m + 1)) = pair m m who
+  cases who <;> simp only [pair_false, pair_true]
+  all_goals
+    have hne : ((m + 1 : ℕ) : ℝ) ≠ 0 := by positivity
+    field_simp
+    norm_num [Nat.cast_add]
+    ring
 
 /-- Example 5: payoff `e_j` when every player announces `j`, and zero
 otherwise. -/
@@ -6170,13 +6547,31 @@ theorem equation_14 :
   have hfalse := congrFun hequal false
   norm_num [pair] at hfalse
 
+/-- Example 4's critical construction gives `(m,m)` at horizon `m+1`. -/
+theorem example4_critical_payoff_mem (m : ℕ) :
+    pair m m ∈ (example4 m).finiteEquilibriumPayoffs (m + 1) := by
+  let profile := example4CriticalProfile m
+  refine ⟨profile, ?_, ?_⟩
+  · intro who deviation
+    simp only [add_zero]
+    have hpayoff := congrFun (example4CriticalProfile_payoff m) who
+    change (example4 m).repeatedGame.finiteAveragePayoff
+        PUnit.unit (m + 1) profile who = pair m m who at hpayoff
+    rw [hpayoff]
+    have hdeviation :=
+      example4CriticalProfile_deviation_bound m who deviation
+    cases who <;> simpa [profile, pair] using hdeviation
+  · exact example4CriticalProfile_payoff m
+
 /-- Example 4 and Equation (15). -/
 theorem example4_equilibrium_pattern (m : ℕ) (hm : 0 < m) :
     (∀ n, 0 < n → n ≤ m →
       (example4 m).finiteEquilibriumPayoffs n =
         {pair (m + 1) (m + 1)}) ∧
       pair m m ∈ (example4 m).finiteEquilibriumPayoffs (m + 1) := by
-  sorry
+  constructor
+  · sorry
+  · exact example4_critical_payoff_mem m
 
 /-- Equation (15): one decreasing step at a positive horizon does not
 force the next one. -/
