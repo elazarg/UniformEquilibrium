@@ -3164,6 +3164,109 @@ def InClosedPayoffBox {N : Type} [Fintype N] (R : ℝ)
     (x : Payoff N) : Prop :=
   ∀ j, -R ≤ x j ∧ x j ≤ R
 
+/-- The straight-line homotopy obtained from the explicit inverse of `Phi`. -/
+private def structureHomotopy (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d)
+    (x : Payoff G.Player) (t : UnitInterval) :
+    Payoff G.Player × QuitRow G :=
+  ((t : ℝ) • (inverse.inv x).1.1 + (1 - (t : ℝ)) • x,
+    fun j => ⟨(t : ℝ) * ((inverse.inv x).1.2 j : ℝ),
+      mul_nonneg t.property.1 ((inverse.inv x).1.2 j).property.1,
+      (mul_le_one₀ t.property.2 ((inverse.inv x).1.2 j).property.1
+        ((inverse.inv x).1.2 j).property.2)⟩)
+
+@[simp] private theorem structureHomotopy_zero (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (x : Payoff G.Player) :
+    structureHomotopy G inverse x 0 = (x, zeroQuitRow G) := by
+  ext j <;> simp [structureHomotopy, zeroQuitRow]
+
+@[simp] private theorem structureHomotopy_one (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (x : Payoff G.Player) :
+    structureHomotopy G inverse x 1 = (inverse.inv x).1 := by
+  ext j <;> simp [structureHomotopy]
+
+/-- Points in the closure of the complement of `W` weakly dominate every
+solo payoff. -/
+private theorem soloPayoff_le_of_mem_closure_compl_WSet (G : QuittingGame)
+    {x : Payoff G.Player} (hx : x ∈ closure ((WSet G)ᶜ)) :
+    ∀ j, SoloPayoff G j ≤ x j := by
+  have hsubset : (WSet G)ᶜ ⊆ {y | ∀ j, SoloPayoff G j ≤ y j} := by
+    intro y hy j
+    by_contra hj
+    exact hy ⟨j, le_of_not_ge hj⟩
+  have hclosed : IsClosed {y : Payoff G.Player | ∀ j, SoloPayoff G j ≤ y j} := by
+    rw [show {y : Payoff G.Player | ∀ j, SoloPayoff G j ≤ y j} =
+        ⋂ j, {y | SoloPayoff G j ≤ y j} by ext y; simp]
+    exact isClosed_iInter fun j =>
+      isClosed_le continuous_const (continuous_apply j)
+  exact closure_minimal hsubset hclosed hx
+
+/-- The inverse-generated homotopy has the four structural properties that
+do not use the properness estimate at infinity. -/
+private theorem structureHomotopy_basic (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (inverse : PhiInverseData G M d) :
+    IsQuitStraightLineHomotopy G (structureHomotopy G inverse) ∧
+    (∀ x, structureHomotopy G inverse x 0 = (x, zeroQuitRow G)) ∧
+    {z | ∃ x, structureHomotopy G inverse x 1 = z} = EZeroTilde G ∧
+    ∀ x ∈ closure ((WSet G)ᶜ), ∀ t,
+      structureHomotopy G inverse x t = (x, zeroQuitRow G) := by
+  classical
+  have hcontinuous : Continuous (fun z : Payoff G.Player × UnitInterval =>
+      structureHomotopy G inverse z.1 z.2) := by
+    have ht : Continuous (fun z : Payoff G.Player × UnitInterval => (z.2 : ℝ)) :=
+      continuous_subtype_val.comp continuous_snd
+    have hinv : Continuous (fun z : Payoff G.Player × UnitInterval =>
+        inverse.inv z.1) := inverse.continuousInv.comp continuous_fst
+    have hinvPair : Continuous (fun z : Payoff G.Player × UnitInterval =>
+        (inverse.inv z.1).1) := continuous_subtype_val.comp hinv
+    have hbeta : Continuous (fun z : Payoff G.Player × UnitInterval =>
+        (inverse.inv z.1).1.1) := continuous_fst.comp hinvPair
+    have hp : Continuous (fun z : Payoff G.Player × UnitInterval =>
+        (inverse.inv z.1).1.2) := continuous_snd.comp hinvPair
+    apply Continuous.prodMk
+    · exact (ht.smul hbeta).add ((continuous_const.sub ht).smul continuous_fst)
+    · rw [continuous_pi_iff]
+      intro j
+      apply Continuous.subtype_mk
+      exact ht.mul (continuous_subtype_val.comp ((continuous_apply j).comp hp))
+  have hstraight : ∀ x t,
+      (structureHomotopy G inverse x t).1 =
+          (t : ℝ) • (structureHomotopy G inverse x 1).1 +
+            (1 - (t : ℝ)) • (structureHomotopy G inverse x 0).1 ∧
+      ∀ j, ((structureHomotopy G inverse x t).2 j : ℝ) =
+        (t : ℝ) * ((structureHomotopy G inverse x 1).2 j : ℝ) +
+          (1 - (t : ℝ)) *
+            ((structureHomotopy G inverse x 0).2 j : ℝ) := by
+    intro x t
+    constructor
+    · simp only [structureHomotopy_one, structureHomotopy_zero]
+      rfl
+    · intro j
+      simp [structureHomotopy]
+  refine ⟨⟨hcontinuous, hstraight⟩, structureHomotopy_zero G inverse, ?_, ?_⟩
+  · ext z
+    constructor
+    · rintro ⟨x, hx⟩
+      rw [structureHomotopy_one] at hx
+      exact hx ▸ (inverse.inv x).2
+    · intro hz
+      let point : EZeroTilde G := ⟨z, hz⟩
+      refine ⟨Phi G M d point, ?_⟩
+      rw [structureHomotopy_one, inverse.leftInverse point]
+  · intro x hx t
+    have hxSolo := soloPayoff_le_of_mem_closure_compl_WSet G hx
+    have hxGraph : (x, zeroQuitRow G) ∈ EZeroTilde G :=
+      ((lemma3_1 G M d hM hd hd1).2.1 x).2 hxSolo
+    let point : EZeroTilde G := ⟨(x, zeroQuitRow G), hxGraph⟩
+    have hphi : Phi G M d point = x :=
+      (lemma3_1 G M d hM hd hd1).2.2 x hxGraph
+    have hinv : inverse.inv x = point := by
+      rw [← hphi, inverse.leftInverse point]
+    ext j
+    · simp [structureHomotopy, hinv, point]
+    · simp [structureHomotopy, hinv, point, zeroQuitRow]
+
 /--
 A single `ρ` satisfying the two motion estimates on the bounded continuation
 region used in Sections 3--4 and excluding the sure rational row ruled out in
