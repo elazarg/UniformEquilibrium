@@ -12688,8 +12688,9 @@ private theorem exists_largeSegmentPrefixPath (G : QuittingGame) {η : ℝ}
     (hvariation : HasUnboundedExtendedVariation x)
     {L : ℕ} (hcount : x.segmentCount = some L)
     {B : ℝ} (hB : 0 < B) :
-    ∃ z : ApproximateFRowPath G η,
-      z.totalError = 0 ∧ B ≤ z.exactVariation := by
+    ∃ (z : ApproximateFRowPath G η) (j : ℕ),
+      ActiveSegment x.segmentCount j ∧ z.point 0 = x.point j 0 ∧
+        z.totalError = 0 ∧ B ≤ z.exactVariation := by
   classical
   have hL : 0 < L := x.segmentCountPositive L hcount
   rcases (hasUnboundedExtendedVariation_iff_prefix x).1 hvariation
@@ -12748,8 +12749,8 @@ private theorem exists_largeSegmentPrefixPath (G : QuittingGame) {η : ℝ}
         injection hl with hl
         omega
       rcases exists_exactSegmentPrefixPath G hrational j hj (k - 1) hvalid with
-        ⟨z, _hz0, hzerror, hzvariation⟩
-      refine ⟨z, hzerror, hjlarge.trans ?_⟩
+        ⟨z, hz0, hzerror, hzvariation⟩
+      refine ⟨z, j, hj, hz0, hzerror, hjlarge.trans ?_⟩
       exact (extendedSegmentPrefixVariation_le_finite x hj hlength).trans_eq
         hzvariation.symm
   | none =>
@@ -12758,8 +12759,8 @@ private theorem exists_largeSegmentPrefixPath (G : QuittingGame) {η : ℝ}
         rw [hlength] at hk
         contradiction
       rcases exists_exactSegmentPrefixPath G hrational j hj I hvalid with
-        ⟨z, _hz0, hzerror, hzvariation⟩
-      refine ⟨z, hzerror, hjlarge.trans ?_⟩
+        ⟨z, hz0, hzerror, hzvariation⟩
+      refine ⟨z, j, hj, hz0, hzerror, hjlarge.trans ?_⟩
       exact (extendedSegmentPrefixVariation_le_infinite x hj hlength le_rfl).trans_eq
         hzvariation.symm
 
@@ -12844,6 +12845,158 @@ private theorem norm_quittingOneStagePayoff_sub_le (G : QuittingGame)
     _ ≤ M * q + q * M := add_le_add habsorb
       (mul_le_mul_of_nonneg_left (hr n) hq0)
     _ = 2 * M * q := by ring
+
+/-- Every active point of an extended orbit lies in `A`. -/
+def ExtendedOrbitStaysIn {X : Type} [TopologicalSpace X]
+    {F : Correspondence X X} (x : ExtendedOrbitData F) (A : Set X) : Prop :=
+  ∀ j, ActiveSegment x.segmentCount j → ∀ i,
+    SegmentIndex (x.segmentLength j) i → x.point j i ∈ A
+
+/-- A closed forward-invariant set contains every point of an extended orbit started in it. -/
+theorem extendedOrbitStaysIn_of_closed_forwardInvariant
+    {X : Type} [TopologicalSpace X] {F : Correspondence X X}
+    (x : ExtendedOrbitData F) (A : Set X) (hclosed : IsClosed A)
+    (hforward : ∀ a ∈ A, F a ⊆ A) (hstart : x.point 0 0 ∈ A) :
+    ExtendedOrbitStaysIn x A := by
+  have segment_mem : ∀ j, ActiveSegment x.segmentCount j → x.point j 0 ∈ A →
+      ∀ i, SegmentIndex (x.segmentLength j) i → x.point j i ∈ A := by
+    intro j hj hzero i
+    induction i with
+    | zero => exact fun _ => hzero
+    | succ i hi =>
+        intro hindex
+        have hprevious : SegmentIndex (x.segmentLength j) i := by
+          intro k hk
+          have := hindex k hk
+          omega
+        exact hforward (x.point j i) (hi hprevious)
+          (x.step j hj i hindex)
+  have segment_start : ∀ j, ActiveSegment x.segmentCount j → x.point j 0 ∈ A := by
+    intro j
+    induction j with
+    | zero => exact fun _ => hstart
+    | succ j ih =>
+        intro hjnext
+        have hj : ActiveSegment x.segmentCount j := by
+          intro L hL
+          have := hjnext L hL
+          omega
+        have hall := segment_mem j hj (ih hj)
+        cases hlength : x.segmentLength j with
+        | none =>
+            apply hclosed.mem_of_tendsto (x.infiniteStitch j hjnext hlength)
+            exact Filter.Eventually.of_forall fun i => hall i (by
+              intro k hk
+              simp [hlength] at hk)
+        | some k =>
+            have hkpositive := x.segmentLengthPositive j hj k hlength
+            rw [← x.finiteStitch j hjnext k hlength]
+            apply hall (k - 1)
+            intro l hl
+            have hkl : k = l := Option.some.inj (hlength.symm.trans hl)
+            subst l
+            omega
+  intro j hj i hi
+  exact segment_mem j hj (segment_start j hj) i hi
+
+/-- A bounded initial point and bounded absorbing rewards uniformly bound an extended
+`F_η` orbit, including across convergent segment stitches. -/
+private theorem extendedFRowOrbit_point_norm_le (G : QuittingGame) {η M : ℝ}
+    (x : ExtendedOrbitData (FRow G η))
+    (hreward : ∀ A n, |G.reward A n| ≤ M) (hstart : ‖x.point 0 0‖ ≤ M) :
+    ∀ j, ActiveSegment x.segmentCount j → ∀ i,
+      SegmentIndex (x.segmentLength j) i → ‖x.point j i‖ ≤ M := by
+  let K : Set (Payoff G.Player) := Metric.closedBall 0 M
+  have hforward : ∀ r ∈ K, FRow G η r ⊆ K := by
+    intro r hr y hy
+    rcases hy with ⟨p, _hp, rfl⟩
+    rw [Metric.mem_closedBall, dist_zero_right, pi_norm_le_iff_of_nonempty]
+    intro n
+    rw [Real.norm_eq_abs]
+    have hr' : ∀ n, |r n| ≤ M := by
+      intro m
+      have hm := norm_le_pi_norm r m
+      rw [Metric.mem_closedBall, dist_zero_right] at hr
+      simpa [Real.norm_eq_abs] using hm.trans hr
+    simpa [finiteQuittingPayoff] using
+      abs_finiteQuittingPayoff_le G 1 r (fun _ => p) hreward hr' n
+  have hstay := extendedOrbitStaysIn_of_closed_forwardInvariant x K
+    Metric.isClosed_closedBall hforward (by
+      simpa [K, Metric.mem_closedBall, dist_zero_right] using hstart)
+  intro j hj i hi
+  have := hstay j hj i hi
+  simpa [K, Metric.mem_closedBall, dist_zero_right] using this
+
+/-- Approximate seams enlarge a common reward/initial-point bound by at most their
+total budget. -/
+private theorem ApproximateFRowPath.point_norm_le_reward_add_totalError
+    (G : QuittingGame) {η M : ℝ} (z : ApproximateFRowPath G η)
+    (hreward : ∀ A n, |G.reward A n| ≤ M)
+    (hstart : ‖z.point 0‖ ≤ M) (i : Fin (z.length + 1)) :
+    ‖z.point i‖ ≤ M + z.totalError := by
+  have hprefix : ∀ t, (ht : t ≤ z.length) →
+      ‖z.point ⟨t, by omega⟩‖ ≤
+        M + ∑ j ∈ Finset.range t,
+          if hj : j < z.length then z.seamError ⟨j, hj⟩ else 0 := by
+    intro t ht
+    induction t with
+    | zero => simpa using hstart
+    | succ t ih =>
+        let j : Fin z.length := ⟨t, by omega⟩
+        let running : ℝ :=
+          ∑ l ∈ Finset.range t,
+            if hl : l < z.length then z.seamError ⟨l, hl⟩ else 0
+        have hprefixNonnegative : 0 ≤ running := by
+          apply Finset.sum_nonneg
+          intro l _hl
+          split
+          · exact z.seamError_nonneg _
+          · exact le_rfl
+        have hsource : ‖z.point j.castSucc‖ ≤ M + running := by
+          simpa [j, running] using ih (by omega)
+        have hreward' : ∀ A n, |G.reward A n| ≤ M + running := fun A n =>
+          (hreward A n).trans (le_add_of_nonneg_right hprefixNonnegative)
+        have hone :
+            ‖QuittingOneStagePayoff G (z.point j.castSucc) (z.row j)‖ ≤
+              M + running := by
+          rw [pi_norm_le_iff_of_nonempty]
+          intro n
+          rw [Real.norm_eq_abs]
+          simpa [finiteQuittingPayoff] using
+            abs_finiteQuittingPayoff_le G 1 (z.point j.castSucc)
+              (fun _ => z.row j) hreward' (fun n => by
+                simpa [Real.norm_eq_abs] using
+                  (norm_le_pi_norm (z.point j.castSucc) n).trans hsource) n
+        have hstep := z.step_error j
+        have htarget :
+            ‖z.point j.succ‖ ≤ z.seamError j +
+              ‖QuittingOneStagePayoff G (z.point j.castSucc) (z.row j)‖ := by
+          have := norm_add_le
+            (z.point j.succ - QuittingOneStagePayoff G (z.point j.castSucc) (z.row j))
+            (QuittingOneStagePayoff G (z.point j.castSucc) (z.row j))
+          simpa only [sub_add_cancel] using this.trans (add_le_add hstep le_rfl)
+        rw [Finset.sum_range_succ]
+        have htlt : t < z.length := by omega
+        calc
+          ‖z.point ⟨t + 1, by omega⟩‖ = ‖z.point j.succ‖ := by
+            congr 2
+          _ ≤ z.seamError j +
+              ‖QuittingOneStagePayoff G (z.point j.castSucc) (z.row j)‖ := htarget
+          _ ≤ z.seamError j + (M + running) := add_le_add le_rfl hone
+          _ = M + (running + z.seamError j) := by ring
+          _ = M +
+              ((∑ l ∈ Finset.range t,
+                if hl : l < z.length then z.seamError ⟨l, hl⟩ else 0) +
+                if ht' : t < z.length then z.seamError ⟨t, ht'⟩ else 0) := by
+            simp [running, j, htlt]
+  have hi := hprefix i i.is_le
+  apply hi.trans
+  gcongr
+  rw [ApproximateFRowPath.totalError, Finset.sum_fin_eq_sum_range]
+  apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono i.is_le)
+  intro j hj _hnot
+  have hjlt := Finset.mem_range.mp hj
+  simpa [hjlt] using z.seamError_nonneg ⟨j, hjlt⟩
 
 /-- An infinite quitting orbit with unbounded variation eventually lies near the feasible
 set, and every tail retains unbounded variation. -/
@@ -12990,6 +13143,292 @@ private theorem quitProbability_lt_one_of_forall_ne_one (G : QuittingGame)
     intro n _hn
     exact sub_pos.mpr (lt_of_le_of_ne (p n).property.2 (h n))
   linarith
+
+/-- A sufficiently long approximate row path with a small total seam budget contains a
+returned block whose reverse periodization is an `ε`-cyclic orbit. -/
+private theorem exists_cyclicOrbit_of_large_approximatePath
+    (G : QuittingGame) {ε η M : ℝ} (hη : 0 < η) (hM : 0 < M)
+    (hηε : 4 * η ≤ ε) (hreward : ∀ A n, |G.reward A n| ≤ M)
+    (hnoSure : ∀ r p n, IsRational G η r → p ∈ EpsilonRow G η r →
+      (p n : ℝ) ≠ 1) :
+    ∃ B : ℝ, 0 < B ∧ ∀ z : ApproximateFRowPath G η,
+      ‖z.point 0‖ ≤ M → z.totalError ≤ η / 4 → B ≤ z.exactVariation →
+      ∃ (k : ℕ) (hk : 0 < k) (block : Fin k → QuitRow G),
+        let p := CycleProfile G k hk block
+        GeneratesFRowOrbit G ε p ∧
+          (∀ i, IsRational G ε (QuitTailPayoff G p i)) ∧
+          ∃ i : Fin k, 0 < QuitProbability G (block i) := by
+  classical
+  let C := M + η / 4
+  have hC : 0 < C := by dsimp only [C]; linarith
+  let K : Set (Payoff G.Player) := Metric.closedBall 0 C
+  have hK : IsCompact K := isCompact_closedBall 0 C
+  obtain ⟨threshold, hthreshold0, hreturn⟩ :=
+    Math.exists_charge_threshold_for_close_pair_of_compact K hK η hη
+  let B := max 1 (2 * C * threshold)
+  refine ⟨B, lt_of_lt_of_le zero_lt_one (le_max_left _ _), ?_⟩
+  intro z hz0 hzerror hzlarge
+  let state : ℕ → Payoff G.Player := fun t =>
+    if ht : t ≤ z.length then z.point ⟨t, by omega⟩
+    else z.point ⟨z.length, Nat.lt_succ_self z.length⟩
+  have hpointBound (i : Fin (z.length + 1)) : ‖z.point i‖ ≤ C := by
+    exact (z.point_norm_le_reward_add_totalError G hreward hz0 i).trans (by
+      dsimp only [C]
+      linarith)
+  have hstateMem : ∀ t, state t ∈ K := by
+    intro t
+    rw [Metric.mem_closedBall, dist_zero_right]
+    by_cases ht : t ≤ z.length
+    · simpa [state, ht] using hpointBound ⟨t, by omega⟩
+    · simpa [state, ht] using
+        hpointBound ⟨z.length, Nat.lt_succ_self z.length⟩
+  let charge : ℕ → ℝ := fun t =>
+    if ht : t < z.length then
+      ‖QuittingOneStagePayoff G
+        (z.point ⟨t, by omega⟩) (z.row ⟨t, ht⟩) - z.point ⟨t, by omega⟩‖ /
+        (2 * C)
+    else 0
+  have hcharge0 : ∀ t, 0 ≤ charge t := by
+    intro t
+    by_cases ht : t < z.length
+    · rw [show charge t =
+          ‖QuittingOneStagePayoff G (z.point ⟨t, by omega⟩) (z.row ⟨t, ht⟩) -
+            z.point ⟨t, by omega⟩‖ / (2 * C) by simp [charge, ht]]
+      positivity
+    · simp [charge, ht]
+  have hcharge1 : ∀ t, charge t ≤ 1 := by
+    intro t
+    by_cases ht : t < z.length
+    · rw [show charge t =
+          ‖QuittingOneStagePayoff G (z.point ⟨t, by omega⟩) (z.row ⟨t, ht⟩) -
+            z.point ⟨t, by omega⟩‖ / (2 * C) by simp [charge, ht]]
+      rw [div_le_one (mul_pos (by norm_num) hC)]
+      calc
+        ‖QuittingOneStagePayoff G (z.point ⟨t, by omega⟩) (z.row ⟨t, ht⟩) -
+            z.point ⟨t, by omega⟩‖ ≤
+            2 * C * QuitProbability G (z.row ⟨t, ht⟩) := by
+          apply norm_quittingOneStagePayoff_sub_le G
+          · intro A n
+            exact (hreward A n).trans (by dsimp only [C]; linarith)
+          · intro n
+            have hn := norm_le_pi_norm (z.point ⟨t, by omega⟩) n
+            simpa [Real.norm_eq_abs] using hn.trans (hpointBound ⟨t, by omega⟩)
+        _ ≤ 2 * C := by
+          simpa only [mul_one] using mul_le_mul_of_nonneg_left
+            (quitProbability_mem_Icc G (z.row ⟨t, ht⟩)).2 (by positivity)
+    · simp [charge, ht]
+  have hchargeSum : (∑ t ∈ Finset.range z.length, charge t) =
+      z.exactVariation / (2 * C) := by
+    rw [ApproximateFRowPath.exactVariation, Finset.sum_fin_eq_sum_range,
+      Finset.sum_div]
+    apply Finset.sum_congr rfl
+    intro t ht
+    simp [charge, Finset.mem_range.mp ht]
+  have hlarge : threshold ≤ ∑ t ∈ Finset.range z.length, charge t := by
+    rw [hchargeSum, le_div_iff₀ (mul_pos (by norm_num) hC)]
+    simpa [mul_comm] using (le_max_right 1 (2 * C * threshold)).trans hzlarge
+  obtain ⟨first, second, hfirstSecond, hsecondLength, hclose, hgap⟩ :=
+    hreturn state charge z.length hstateMem hcharge0 hcharge1 hlarge
+  let L := second - first
+  have hL : 0 < L := Nat.sub_pos_of_lt hfirstSecond
+  let s : ℕ → Payoff G.Player := fun j => state (first + j)
+  let p : ℕ → QuitRow G := fun j =>
+    if hj : first + j < z.length then z.row ⟨first + j, hj⟩ else fun _ => 0
+  let seam : ℕ → ℝ := fun j =>
+    if hj : first + j < z.length then z.seamError ⟨first + j, hj⟩ else 0
+  have hstate_eq (t : ℕ) (ht : t ≤ z.length) :
+      state t = z.point ⟨t, by omega⟩ := by simp [state, ht]
+  have hp (j : ℕ) (hj : j < L) : p j ∈ EpsilonRow G η (s j) := by
+    have hjSecond : first + j < second := by dsimp only [L] at hj; omega
+    have hjLength : first + j < z.length := hjSecond.trans_le hsecondLength
+    rw [show s j = z.point ⟨first + j, by omega⟩ by
+      exact hstate_eq _ hjLength.le]
+    simpa [p, hjLength] using z.row_mem ⟨first + j, hjLength⟩
+  have hseam0 (j : ℕ) (hj : j < L) : 0 ≤ seam j := by
+    have hjSecond : first + j < second := by dsimp only [L] at hj; omega
+    have hjLength : first + j < z.length := hjSecond.trans_le hsecondLength
+    simpa [seam, hjLength] using z.seamError_nonneg ⟨first + j, hjLength⟩
+  have hstep (j : ℕ) (hj : j < L) :
+      ‖s (j + 1) - QuittingOneStagePayoff G (s j) (p j)‖ ≤ seam j := by
+    have hjSecond : first + j < second := by dsimp only [L] at hj; omega
+    have hjLength : first + j < z.length := hjSecond.trans_le hsecondLength
+    have hjNextLength : first + (j + 1) ≤ z.length := by omega
+    rw [show s j = z.point ⟨first + j, by omega⟩ by
+      exact hstate_eq _ hjLength.le]
+    rw [show s (j + 1) = z.point ⟨first + (j + 1), by omega⟩ by
+      exact hstate_eq _ hjNextLength]
+    simpa [p, seam, hjLength, Nat.add_assoc] using
+      z.step_error ⟨first + j, hjLength⟩
+  have hsRational (j : ℕ) (hj : j ≤ L) : IsRational G η (s j) := by
+    have hjLength : first + j ≤ z.length := by dsimp only [L] at hj; omega
+    rw [show s j = z.point ⟨first + j, by omega⟩ by exact hstate_eq _ hjLength]
+    exact z.rational _
+  have hseamSum : (∑ j ∈ Finset.range L, seam j) ≤ η / 4 := by
+    apply le_trans ?_ hzerror
+    rw [ApproximateFRowPath.totalError, Finset.sum_fin_eq_sum_range]
+    let allSeam : ℕ → ℝ := fun j =>
+      if hj : j < z.length then z.seamError ⟨j, hj⟩ else 0
+    calc
+      (∑ j ∈ Finset.range L, seam j) =
+          ∑ j ∈ Finset.range L, allSeam (first + j) := by
+        apply Finset.sum_congr rfl
+        intro j hj
+        have hjL := Finset.mem_range.mp hj
+        have hjLength : first + j < z.length := by
+          dsimp only [L] at hjL
+          omega
+        simp [seam, allSeam, hjLength]
+      _ = ∑ j ∈ Finset.Ico first second, allSeam j := by
+        rw [Finset.sum_Ico_eq_sum_range]
+      _ ≤ ∑ j ∈ Finset.range z.length, allSeam j := by
+        apply Finset.sum_le_sum_of_subset_of_nonneg
+        · intro j hj
+          exact Finset.mem_range.mpr ((Finset.mem_Ico.mp hj).2.trans_le hsecondLength)
+        · intro j hj _hnot
+          have hjLength := Finset.mem_range.mp hj
+          simpa [allSeam, hjLength] using z.seamError_nonneg ⟨j, hjLength⟩
+  have hgap' : 1 ≤ ∑ j ∈ Finset.range L, charge (first + j) := by
+    rw [← Finset.sum_Ico_eq_sum_range]
+    rw [Finset.sum_Ico_eq_sub charge (Nat.le_of_lt hfirstSecond)]
+    exact hgap
+  have hgapScaled : 1 ≤
+      (∑ j ∈ Finset.range L,
+        ‖QuittingOneStagePayoff G (s j) (p j) - s j‖) / (2 * C) := by
+    rw [Finset.sum_div]
+    apply hgap'.trans_eq
+    apply Finset.sum_congr rfl
+    intro j hj
+    have hjL : j < L := Finset.mem_range.mp hj
+    have hjSecond : first + j < second := by dsimp only [L] at hjL; omega
+    have hjLength : first + j < z.length := hjSecond.trans_le hsecondLength
+    rw [show s j = z.point ⟨first + j, by omega⟩ by
+      exact hstate_eq _ hjLength.le]
+    simp [charge, p, hjLength]
+  have hvariationBlock : 2 * C ≤
+      ∑ j ∈ Finset.range L,
+        ‖QuittingOneStagePayoff G (s j) (p j) - s j‖ := by
+    rw [le_div_iff₀ (mul_pos (by norm_num) hC)] at hgapScaled
+    simpa using hgapScaled
+  have hsBound (j : ℕ) (n : G.Player) : |s j n| ≤ C := by
+    have hsMem := hstateMem (first + j)
+    change dist (s j) 0 ≤ C at hsMem
+    rw [dist_zero_right] at hsMem
+    have hn := norm_le_pi_norm (s j) n
+    simpa [Real.norm_eq_abs] using hn.trans hsMem
+  have hmotion (j : ℕ) (hj : j < L) :
+      ‖QuittingOneStagePayoff G (s j) (p j) - s j‖ ≤
+        2 * C * QuitProbability G (p j) := by
+    apply norm_quittingOneStagePayoff_sub_le G
+    · intro A n
+      exact (hreward A n).trans (by dsimp only [C]; linarith)
+    · exact hsBound j
+  have hsumMotion :
+      (∑ j ∈ Finset.range L,
+        ‖QuittingOneStagePayoff G (s j) (p j) - s j‖) ≤
+          2 * C * ∑ j ∈ Finset.range L, QuitProbability G (p j) := by
+    rw [Finset.mul_sum]
+    exact Finset.sum_le_sum fun j hj => hmotion j (Finset.mem_range.mp hj)
+  have hsumQuit : 1 ≤ ∑ j ∈ Finset.range L, QuitProbability G (p j) := by
+    have hscaled := hvariationBlock.trans hsumMotion
+    nlinarith [hscaled]
+  have hqLtOne (j : ℕ) (hj : j < L) : QuitProbability G (p j) < 1 := by
+    apply quitProbability_lt_one_of_forall_ne_one
+    intro n
+    exact hnoSure (s j) (p j) n (hsRational j hj.le) (hp j hj)
+  let ρ := 1 - ∏ j ∈ Finset.range L, (1 - QuitProbability G (p j))
+  have hproductPositive : 0 < ∏ j ∈ Finset.range L,
+      (1 - QuitProbability G (p j)) := by
+    apply Finset.prod_pos
+    intro j hj
+    exact sub_pos.mpr (hqLtOne j (Finset.mem_range.mp hj))
+  have hproductHalf : (∏ j ∈ Finset.range L,
+      (1 - QuitProbability G (p j))) ≤ 1 / 2 := by
+    have hproduct := prod_one_sub_mul_one_add_sum_le_one
+      (Finset.range L) (fun j => QuitProbability G (p j))
+      (fun j _ => (quitProbability_mem_Icc G (p j)).1)
+      (fun j _ => (quitProbability_mem_Icc G (p j)).2)
+    have hproductNonnegative : 0 ≤ ∏ j ∈ Finset.range L,
+        (1 - QuitProbability G (p j)) := hproductPositive.le
+    nlinarith [hproduct]
+  have hρ : 0 < ρ := by dsimp only [ρ]; linarith
+  have hρHalf : 1 / 2 ≤ ρ := by dsimp only [ρ]; linarith
+  have hρOne : ρ < 1 := by dsimp only [ρ]; linarith
+  have hsClose : ‖s 0 - s L‖ ≤ η := by
+    have hsum : first + L = second := by dsimp only [L]; omega
+    change ‖state (first + 0) - state (first + L)‖ ≤ η
+    rw [Nat.add_zero, hsum]
+    simpa [dist_eq_norm] using hclose.le
+  have hperiodization := lemma4_approximate G hL p s seam
+    (ρ := ρ) (δ := η) (E := η / 4) (ε := η)
+    hρ hρOne rfl hη.le (by positivity) hseam0 hstep hseamSum hsClose
+  let cycle := ReverseCycleProfile G L hL p
+  let block : Fin L → QuitRow G := fun j => p (L - 1 - j)
+  have hcycleEq : CycleProfile G L hL block = cycle := by
+    funext i
+    rfl
+  have htailError : (η + 2 * (η / 4)) / ρ ≤ 3 * η := by
+    rw [div_le_iff₀ hρ]
+    nlinarith [hρHalf, mul_pos hρ hη]
+  have herror : η + (η + 2 * (η / 4)) / ρ ≤ ε := by
+    linarith
+  have hgenerated : GeneratesFRowOrbit G ε cycle := by
+    apply GeneratesFRowOrbit.mono G herror
+    exact hperiodization.2 (fun j hj => hp j hj)
+  have hcyclePeriod : Function.Periodic (QuitTailPayoff G cycle) L := by
+    intro i
+    exact quitTailPayoff_reverseCycle_add_period G L hL p i
+  have htailMod (i : ℕ) :
+      QuitTailPayoff G cycle i = QuitTailPayoff G cycle (i % L) := by
+    have hmultiple := hcyclePeriod.nat_mul (i / L) (i % L)
+    simpa [Nat.mul_comm, Nat.mod_add_div] using hmultiple
+  have htailClose : ∀ i, ∃ j ≤ L,
+      ‖QuitTailPayoff G cycle i - s j‖ ≤ (η + 2 * (η / 4)) / ρ := by
+    intro i
+    let r := i % L
+    have hrL : r < L := Nat.mod_lt i hL
+    by_cases hr0 : r = 0
+    · refine ⟨0, Nat.zero_le _, ?_⟩
+      have hlast := hperiodization.1 1 L (by simpa using hL) (by simp)
+      have htailZero : QuitTailPayoff G cycle L = QuitTailPayoff G cycle 0 := by
+        simpa using hcyclePeriod 0
+      rw [htailMod i, show i % L = 0 from hr0, ← htailZero]
+      simpa using hlast
+    · refine ⟨L - r, Nat.sub_le _ _, ?_⟩
+      have hreturned := hperiodization.1 1 r
+        (by simpa using Nat.pos_of_ne_zero hr0) (by simpa using hrL.le)
+      rw [htailMod i]
+      simpa [r] using hreturned
+  have hrationalCycle : ∀ i, IsRational G ε (QuitTailPayoff G cycle i) := by
+    intro i
+    rcases htailClose i with ⟨j, hjL, hjClose⟩
+    intro n
+    have hcoordinate :
+        |QuitTailPayoff G cycle i n - s j n| ≤
+          (η + 2 * (η / 4)) / ρ := by
+      have hn := norm_le_pi_norm (QuitTailPayoff G cycle i - s j) n
+      rw [Real.norm_eq_abs] at hn
+      exact hn.trans hjClose
+    rw [abs_le] at hcoordinate
+    have hsj := hsRational j hjL n
+    linarith [herror]
+  have hpositive : ∃ j : Fin L, 0 < QuitProbability G (block j) := by
+    have hexists : ∃ j ∈ Finset.range L, 0 < QuitProbability G (p j) := by
+      by_contra hnone
+      push Not at hnone
+      have hsumNonpositive :
+          (∑ j ∈ Finset.range L, QuitProbability G (p j)) ≤ 0 :=
+        Finset.sum_nonpos fun j hj => hnone j hj
+      linarith
+    rcases hexists with ⟨j, hjL, hjPositive⟩
+    have hj : j < L := Finset.mem_range.mp hjL
+    let b : Fin L := ⟨L - 1 - j, by omega⟩
+    refine ⟨b, ?_⟩
+    simpa [block, b, show L - 1 - (L - 1 - j) = j by omega] using hjPositive
+  refine ⟨L, hL, block, ?_, ?_, hpositive⟩
+  · simpa [hcycleEq] using hgenerated
+  · intro i
+    rw [hcycleEq]
+    exact hrationalCycle i
 
 /-- A sufficiently long finite near-feasible orbit contains a returned block whose reverse
 periodization gives the cyclic orbit in Theorem 3(ii). -/
@@ -13252,7 +13691,65 @@ theorem theorem3 (G : QuittingGame)
   have hfiniteCyclic : FiniteNearOrbitCondition G → CyclicOrbitCondition G :=
     fun hfinite => hfinite.toCyclicOrbitCondition G hinstant
   have hextendedCyclic : ExtendedOrbitCondition G → CyclicOrbitCondition G := by
-    sorry
+    intro hextended ε hε
+    obtain ⟨σ, hσ, hnoSureσ⟩ :=
+      exists_scale_without_sure_quitter_of_not_instant G hinstant
+    let η := min (ε / 5) σ
+    have hη : 0 < η := lt_min (div_pos hε (by norm_num)) hσ
+    have hηε : 4 * η ≤ ε := by
+      have := min_le_left (ε / 5) σ
+      dsimp only [η]
+      linarith
+    have hησ : η ≤ σ := min_le_right _ _
+    obtain ⟨x, hrational, hvariation⟩ := hextended η hη
+    obtain ⟨R, hR⟩ := exists_quittingPayoffDifferenceBound G
+    let M := max R ‖x.point 0 0‖
+    have hM : 0 < M := lt_of_lt_of_le zero_lt_one (hR.1.trans (le_max_left _ _))
+    have hreward : ∀ A n, |G.reward A n| ≤ M := fun A n =>
+      (le_of_lt (hR.2.2 A n)).trans (le_max_left _ _)
+    have hxstart : ‖x.point 0 0‖ ≤ M := le_max_right _ _
+    have hxbound : ∀ j, ActiveSegment x.segmentCount j → ∀ i,
+        SegmentIndex (x.segmentLength j) i → ‖x.point j i‖ ≤ M :=
+      extendedFRowOrbit_point_norm_le G x hreward hxstart
+    have hnoSure : ∀ r p n, IsRational G η r → p ∈ EpsilonRow G η r →
+        (p n : ℝ) ≠ 1 := by
+      intro r p n hr hp
+      exact hnoSureσ r p n (IsRational.mono G hησ hr)
+        (EpsilonRow.mono G hησ r hp)
+    obtain ⟨B, hB, hcompile⟩ :=
+      exists_cyclicOrbit_of_large_approximatePath G hη hM hηε hreward hnoSure
+    cases hcount : x.segmentCount with
+    | none =>
+        rcases (hasUnboundedExtendedVariation_iff_prefix x).1 hvariation B with
+          ⟨J, I, hlarge⟩
+        have hJ : 0 < J := by
+          by_contra hJ
+          have hJ0 : J = 0 := Nat.eq_zero_of_not_pos hJ
+          subst J
+          simp [extendedPrefixVariation] at hlarge
+          linarith
+        let e := η / (4 * J)
+        have he : 0 < e := div_pos hη (mul_pos (by norm_num) (by exact_mod_cast hJ))
+        rcases exists_extendedPrefixPath G hcount hrational J I he with
+          ⟨z, hz0, _hzlast, hzerror, hzvariation⟩
+        apply hcompile z
+        · rw [hz0]
+          exact hxstart
+        · apply hzerror.trans_eq
+          dsimp only [e]
+          field_simp
+        · exact hlarge.trans hzvariation
+    | some L =>
+        rcases exists_largeSegmentPrefixPath G hrational hvariation hcount hB with
+          ⟨z, j, hj, hz0, hzerror, hzvariation⟩
+        apply hcompile z
+        · rw [hz0]
+          apply hxbound j hj 0
+          intro k hk
+          exact x.segmentLengthPositive j hj k hk
+        · rw [hzerror]
+          positivity
+        · exact hzvariation
   exact ⟨
     ⟨hequilibriumCyclic, CyclicOrbitCondition.hasQuitApproximateEquilibria G⟩,
     ⟨fun hcycle => hcyclicInfinite hcycle |>.toFiniteNearOrbitCondition G, hfiniteCyclic⟩,
@@ -15142,59 +15639,6 @@ theorem lemma9_of_uniformRho (G : QuittingGame) (_hEscape : IsEscapeGame G)
       norm_num
       have hxn := hx n
       linarith
-
-/-- Every active point of an extended orbit lies in `A`. -/
-def ExtendedOrbitStaysIn {X : Type} [TopologicalSpace X]
-    {F : Correspondence X X} (x : ExtendedOrbitData F) (A : Set X) : Prop :=
-  ∀ j, ActiveSegment x.segmentCount j → ∀ i,
-    SegmentIndex (x.segmentLength j) i → x.point j i ∈ A
-
-/-- A closed forward-invariant set contains every point of an extended orbit started in it. -/
-theorem extendedOrbitStaysIn_of_closed_forwardInvariant
-    {X : Type} [TopologicalSpace X] {F : Correspondence X X}
-    (x : ExtendedOrbitData F) (A : Set X) (hclosed : IsClosed A)
-    (hforward : ∀ a ∈ A, F a ⊆ A) (hstart : x.point 0 0 ∈ A) :
-    ExtendedOrbitStaysIn x A := by
-  have segment_mem : ∀ j, ActiveSegment x.segmentCount j → x.point j 0 ∈ A →
-      ∀ i, SegmentIndex (x.segmentLength j) i → x.point j i ∈ A := by
-    intro j hj hzero i
-    induction i with
-    | zero => exact fun _ => hzero
-    | succ i hi =>
-        intro hindex
-        have hprevious : SegmentIndex (x.segmentLength j) i := by
-          intro k hk
-          have := hindex k hk
-          omega
-        exact hforward (x.point j i) (hi hprevious)
-          (x.step j hj i hindex)
-  have segment_start : ∀ j, ActiveSegment x.segmentCount j → x.point j 0 ∈ A := by
-    intro j
-    induction j with
-    | zero => exact fun _ => hstart
-    | succ j ih =>
-        intro hjnext
-        have hj : ActiveSegment x.segmentCount j := by
-          intro L hL
-          have := hjnext L hL
-          omega
-        have hall := segment_mem j hj (ih hj)
-        cases hlength : x.segmentLength j with
-        | none =>
-            apply hclosed.mem_of_tendsto (x.infiniteStitch j hjnext hlength)
-            exact Filter.Eventually.of_forall fun i => hall i (by
-              intro k hk
-              simp [hlength] at hk)
-        | some k =>
-            have hkpositive := x.segmentLengthPositive j hj k hlength
-            rw [← x.finiteStitch j hjnext k hlength]
-            apply hall (k - 1)
-            intro l hl
-            have hkl : k = l := Option.some.inj (hlength.symm.trans hl)
-            subst l
-            omega
-  intro j hj i hi
-  exact segment_mem j hj (segment_start j hj) i hi
 
 /--
 An invariant set also contains an extended orbit when every nontrivial step enters a closed
