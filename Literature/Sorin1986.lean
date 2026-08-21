@@ -6954,14 +6954,190 @@ theorem example4_critical_payoff_mem (m : ℕ) :
     cases who <;> simpa [profile, pair] using hdeviation
   · exact example4CriticalProfile_payoff m
 
+/-- Before the critical horizon, backward induction forces Top/Right at every
+reached history and hence the constant payoff `(m+1,m+1)`. -/
+private theorem example4_finitePayoff_eq_topRight_of_horizonNash
+    (m : ℕ) : ∀ horizon : ℕ, ∀ profile : (example4 m).BehaviorProfile,
+      0 < horizon → horizon ≤ m →
+      (example4 m).repeatedGame.IsεHorizonNash
+        PUnit.unit horizon 0 profile →
+      (example4 m).finitePayoff horizon profile =
+        pair (m + 1) (m + 1) := by
+  intro horizon
+  induction horizon with
+  | zero =>
+      intro _ hpositive
+      omega
+  | succ tail ih =>
+      intro profile _hpositive hle hnash
+      letI (player : Bool) : Fintype ((example4 m).kernel.Strategy player) := by
+        change Fintype Bool
+        infer_instance
+      letI : Finite (example4 m).kernel.Outcome := by
+        change Finite (Bool → Bool)
+        exact Finite.of_fintype _
+      letI (player : Bool) : Finite
+          ((example4 m).repeatedGame.Act player) :=
+        @Finite.of_fintype _ ((example4 m).finiteAction player)
+      letI : Finite (example4 m).repeatedGame.State :=
+        inferInstanceAs (Finite PUnit)
+      have hcurrent : (example4 m).initialMixedProfile profile =
+          fun player : Bool => PMF.pure player := by
+        funext player
+        exact example4_initialMixedProfile_eq_pure_of_horizonNash
+          m (tail + 1) (by omega) hle profile hnash player
+      have hstageZero (who : Bool) :
+          (example4 m).repeatedGame.expectedStagePayoff
+              profile PUnit.unit 0 who = (m : ℝ) + 1 := by
+        rw [(example4 m).repeatedGame.expectedStagePayoff_zero,
+          (example4 m).stageEUAt_eq_mixedEU]
+        change (example4 m).kernel.mixedExtension.eu
+          ((example4 m).initialMixedProfile profile) who = (m : ℝ) + 1
+        rw [hcurrent]
+        change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+          (binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+            (pair 0 0) (pair 0 m))).mixedExtension.eu
+              (fun player : Bool => PMF.pure player) who = (m : ℝ) + 1
+        rw [binaryKernel_mixedEU_apply]
+        cases who <;> simp [PMF.pure_apply, pair]
+      by_cases htailZero : tail = 0
+      · subst tail
+        have hweighted := cast_smul_finitePayoff_eq_sum
+          (example4 m) 1 profile
+        funext who
+        have hcoordinate := congrFun hweighted who
+        simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply,
+          Finset.sum_range_one] at hcoordinate
+        rw [hstageZero] at hcoordinate
+        cases who <;> simpa [pair] using hcoordinate
+      · have htailPositive : 0 < tail := Nat.pos_of_ne_zero htailZero
+        have htailLe : tail ≤ m := by omega
+        have hnash' : (example4 m).repeatedGame.IsεHorizonNash
+            PUnit.unit (1 + tail) 0 profile := by
+          simpa [Nat.add_comm] using hnash
+        have htailPayoff (base : (example4 m).repeatedGame.Hist 1)
+            (hbase : base ∈ ((example4 m).repeatedGame.histDist
+              profile PUnit.unit 1).support) :
+            (example4 m).finitePayoff tail
+                ((example4 m).repeatedGame.afterHistoryProfile profile base) =
+              pair (m + 1) (m + 1) := by
+          apply ih
+          · exact htailPositive
+          · exact htailLe
+          · cases base.2
+            exact (example4 m).kernel
+              |>.realizedAction_afterHistoryProfile_isHorizonNash_of_mem_support
+                profile hnash' base hbase
+        have htailTotal (who : Bool) :
+            (∑ time ∈ Finset.range tail,
+                (example4 m).repeatedGame.expectedStagePayoff
+                  profile PUnit.unit (1 + time) who) =
+              (tail : ℝ) * ((m : ℝ) + 1) := by
+          change (∑ time ∈ Finset.range tail,
+              (example4 m).repeatedGame.expectedStagePayoff
+                profile (example4 m).repeatedInitial (1 + time) who) = _
+          calc
+            (∑ time ∈ Finset.range tail,
+                (example4 m).repeatedGame.expectedStagePayoff
+                  profile (example4 m).repeatedInitial (1 + time) who) =
+                ∑ time ∈ Finset.range tail,
+                  Math.Probability.expect
+                    ((example4 m).repeatedGame.histDist
+                      profile (example4 m).repeatedInitial 1)
+                    (fun base =>
+                      (example4 m).repeatedGame.expectedStagePayoff
+                        ((example4 m).repeatedGame.afterHistoryProfile
+                          profile base) base.2 time who) := by
+              apply Finset.sum_congr rfl
+              intro time _
+              exact expectedStagePayoff_add_eq_expect_afterHistory
+                (example4 m) profile 1 time who
+            _ =
+            Math.Probability.expect
+                ((example4 m).repeatedGame.histDist
+                  profile (example4 m).repeatedInitial 1)
+                (fun base => ∑ time ∈ Finset.range tail,
+                  (example4 m).repeatedGame.expectedStagePayoff
+                    ((example4 m).repeatedGame.afterHistoryProfile profile base)
+                    base.2 time who) :=
+              sum_expect_comm_range _ _ _
+            _ =
+                Math.Probability.expect
+                  ((example4 m).repeatedGame.histDist
+                    profile (example4 m).repeatedInitial 1)
+                  (fun _ => (tail : ℝ) * ((m : ℝ) + 1)) := by
+              apply Math.ProbabilityMassFunction.expect_congr_on_support
+              intro base hbase
+              cases base.2
+              have hweighted := congrFun
+                (cast_smul_finitePayoff_eq_sum (example4 m) tail
+                  ((example4 m).repeatedGame.afterHistoryProfile profile base)) who
+              simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hweighted
+              rw [← hweighted, htailPayoff base hbase]
+              cases who <;> simp [pair]
+            _ = (tail : ℝ) * ((m : ℝ) + 1) :=
+              Math.Probability.expect_const _ _
+        have hweighted := cast_smul_finitePayoff_eq_sum
+          (example4 m) (tail + 1) profile
+        funext who
+        have hcoordinate := congrFun hweighted who
+        simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hcoordinate
+        rw [Finset.sum_range_succ', hstageZero] at hcoordinate
+        have htailCoordinate :
+            (∑ time ∈ Finset.range tail,
+                (example4 m).repeatedGame.expectedStagePayoff
+                  profile PUnit.unit (time + 1) who) =
+              (tail : ℝ) * ((m : ℝ) + 1) := by
+          simpa [Nat.add_comm] using htailTotal who
+        rw [htailCoordinate] at hcoordinate
+        cases who <;> simp only [pair_false, pair_true]
+        all_goals
+          norm_num [Nat.cast_add] at hcoordinate ⊢
+          nlinarith
+
 /-- Example 4 and Equation (15). -/
-theorem example4_equilibrium_pattern (m : ℕ) (hm : 0 < m) :
+theorem example4_equilibrium_pattern (m : ℕ) (_hm : 0 < m) :
     (∀ n, 0 < n → n ≤ m →
       (example4 m).finiteEquilibriumPayoffs n =
         {pair (m + 1) (m + 1)}) ∧
       pair m m ∈ (example4 m).finiteEquilibriumPayoffs (m + 1) := by
   constructor
-  · sorry
+  · intro n hn hnm
+    apply Set.Subset.antisymm
+    · rintro payoff ⟨profile, hnash, rfl⟩
+      rw [example4_finitePayoff_eq_topRight_of_horizonNash
+        m n profile hn hnm hnash]
+      exact Set.mem_singleton _
+    · rintro payoff hpayoff
+      rw [Set.mem_singleton_iff] at hpayoff
+      subst payoff
+      let mixed : (example4 m).MixedProfile :=
+        fun player => PMF.pure player
+      have honeStage : pair (m + 1) (m + 1) ∈
+          (example4 m).oneStageEquilibriumPayoffs := by
+        refine ⟨mixed, ?_, ?_⟩
+        · intro who deviation
+          change PMF Bool at deviation
+          change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+            (binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+              (pair 0 0) (pair 0 m))).mixedExtension.eu mixed who ≥
+            (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+              (binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+                (pair 0 0) (pair 0 m))).mixedExtension.eu
+                  (Function.update mixed who deviation) who
+          rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
+          cases who <;> simp [mixed, PMF.pure_apply, pair] <;>
+            have hprob0 : 0 ≤ (deviation true).toReal := ENNReal.toReal_nonneg <;>
+            have hprob : (deviation true).toReal ≤ 1 :=
+              ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _) <;>
+            nlinarith
+        · funext who
+          change (KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+            (binaryPayoff (pair m 0) (pair (m + 1) (m + 1))
+              (pair 0 0) (pair 0 m))).mixedExtension.eu mixed who = _
+          rw [binaryKernel_mixedEU_apply]
+          cases who <;> simp [mixed, PMF.pure_apply, pair]
+      exact lemma_1_E1_subset_En (example4 m) ⟨n, hn⟩ honeStage
   · exact example4_critical_payoff_mem m
 
 /-- Equation (15): one decreasing step at a positive horizon does not
