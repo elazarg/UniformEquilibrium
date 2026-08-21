@@ -1,5 +1,6 @@
 import MathUE.Topology.CompactSerialRelation
 import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
+import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
@@ -4319,6 +4320,94 @@ theorem figure2_collisionMass_le_twentyFour_mul
   have hlimit := quittingJointSurvivalLimit_nonneg roots 0
   norm_num [Nat.choose] at hcollision
   nlinarith
+
+/-- Every singleton quitter in Figure 2 contributes total social payoff
+`5`. -/
+private theorem sum_boundaryReward_singleton (owner : Fin 4) :
+    ∑ who : Fin 4, SolanVieilleBoundary.boundaryReward
+      (quittingSingletonTerminal owner) who = 5 := by
+  change ∑ who : Fin 4,
+    quittingSoloReward SolanVieilleBoundary.boundaryReward owner who = 5
+  simp_rw [SolanVieilleBoundary.soloReward_eval]
+  fin_cases owner <;>
+    norm_num [Fin.sum_univ_four, Fin.ext_iff]
+
+/-- The social-payoff estimate behind the first paragraph of the omitted
+Figure 2 proof. Singleton absorption contributes `5`; multi-quitter
+absorption costs at most `16` in total, so after rewriting singleton mass the
+loss is at most `21` times collision mass. -/
+theorem figure2_sum_terminalValue_ge
+    (roots : RootSequence (ι := Fin 4)) :
+    5 * (1 - quittingJointSurvivalLimit roots 0) -
+        21 * quittingRootSequenceCollisionMass roots 0 ≤
+      ∑ who : Fin 4, quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots who 0 := by
+  have hdecomp (who : Fin 4) :=
+    quittingRootSequenceTerminalValue_eq_singleton_add_collision
+      SolanVieilleBoundary.boundaryReward roots 0 who
+  have hcollision (who : Fin 4) :
+      -4 * quittingRootSequenceCollisionMass roots 0 ≤
+        quittingRootSequenceCollisionRewardContribution
+          SolanVieilleBoundary.boundaryReward roots 0 who := by
+    have hbound :=
+      abs_quittingRootSequenceCollisionRewardContribution_le
+        SolanVieilleBoundary.boundaryReward roots 0 who
+        boundaryReward_abs_le_four
+    simpa [neg_mul] using neg_le_of_abs_le hbound
+  have hsumCollision :
+      -16 * quittingRootSequenceCollisionMass roots 0 ≤
+        ∑ who : Fin 4, quittingRootSequenceCollisionRewardContribution
+          SolanVieilleBoundary.boundaryReward roots 0 who := by
+    rw [Fin.sum_univ_four]
+    have hzero := hcollision 0
+    have hone := hcollision 1
+    have htwo := hcollision 2
+    have hthree := hcollision 3
+    linarith
+  have hsingleton :
+      (∑ who : Fin 4, ∑ owner : Fin 4,
+        quittingRootSequenceSingletonMass roots 0 owner *
+          SolanVieilleBoundary.boundaryReward
+            (quittingSingletonTerminal owner) who) =
+        5 * ∑ owner : Fin 4,
+          quittingRootSequenceSingletonMass roots 0 owner := by
+    rw [Finset.sum_comm, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro owner _
+    rw [← Finset.mul_sum, sum_boundaryReward_singleton]
+    ring
+  have hmass :=
+    sum_quittingRootSequenceSingletonMass_add_collisionMass roots 0
+  simp_rw [hdecomp, Finset.sum_add_distrib]
+  rw [hsingleton]
+  linarith
+
+/-- The payoff conclusion following (13), with loose constants: under a
+near-all-Continue `ε`-equilibrium, some player receives at least
+`5/4 - 129ε`. -/
+theorem figure2_exists_player_value_ge
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε0 : 0 < ε) (hεsmall : ε < 1 / 64)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots)) :
+    ∃ who : Fin 4,
+      5 / 4 - 129 * ε ≤ quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots who 0 := by
+  have hsurvival := figure2_survivalLimit_le_two_mul
+    hε0 hεsmall hclose hnash
+  have hcollision := figure2_collisionMass_le_twentyFour_mul
+    hε0 hclose
+  have hsocial := figure2_sum_terminalValue_ge roots
+  by_contra hno
+  push Not at hno
+  have hzero := hno 0
+  have hone := hno 1
+  have htwo := hno 2
+  have hthree := hno 3
+  rw [Fin.sum_univ_four] at hsocial
+  linarith
 
 /-- The first omitted Figure 2 assertion: for all sufficiently small positive
 `ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
