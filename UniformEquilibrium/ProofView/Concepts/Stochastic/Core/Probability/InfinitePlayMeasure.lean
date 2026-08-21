@@ -498,26 +498,33 @@ theorem measurable_histOfPlay (t : ℕ) :
     (Preorder.measurable_frestrictLe (X := fun _ : ℕ => G.StageOutcome) t)
 
 omit [DecidableEq ι] in
+/-- Restricting the infinite play to its first `t + 1` state-action coordinates gives the
+finite coordinate law computed by `coordsDist`. -/
+theorem map_frestrictLe_infinitePlayMeasure
+    (σ : G.BehaviorProfile) (s₀ : G.State) (t : ℕ) :
+    (G.infinitePlayMeasure σ s₀).map
+        (Preorder.frestrictLe (π := fun _ : ℕ => G.StageOutcome) t) =
+      (G.coordsDist σ s₀ t).toMeasure := by
+  have hbind : G.infinitePlayMeasure σ s₀ =
+      Measure.bind (G.startMeasure σ s₀)
+        (traj (X := fun _ : ℕ => G.StageOutcome) (G.stepKernel σ) 0) := rfl
+  rw [hbind, bind_map_eq (Kernel.measurable _)
+    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => G.StageOutcome) t)]
+  have hpt : (fun x =>
+      (traj (X := fun _ : ℕ => G.StageOutcome) (G.stepKernel σ) 0 x).map
+        (Preorder.frestrictLe (π := fun _ : ℕ => G.StageOutcome) t)) =
+      partialTraj (X := fun _ : ℕ => G.StageOutcome) (G.stepKernel σ) 0 t :=
+    funext fun x => traj_map_frestrictLe_apply (X := fun _ : ℕ => G.StageOutcome)
+      (κ := G.stepKernel σ) 0 t x
+  rw [hpt, G.bind_partialTraj_eq_coordsDist_toMeasure]
+
+omit [DecidableEq ι] in
 /-- **The projection property.** The pushforward of `infinitePlayMeasure` along `histOfPlay t`
 is `(histDist σ s₀ t).toMeasure`: `infinitePlayMeasure`'s finite-horizon marginals agree with
 the finite-horizon history distribution `histDist` that `finiteAveragePayoff` is
 built from. -/
 theorem map_histOfPlay_infinitePlayMeasure (σ : G.BehaviorProfile) (s₀ : G.State) (t : ℕ) :
     (G.infinitePlayMeasure σ s₀).map (G.histOfPlay t) = (G.histDist σ s₀ t).toMeasure := by
-  have hbind : G.infinitePlayMeasure σ s₀ =
-      Measure.bind (G.startMeasure σ s₀)
-        (traj (X := fun _ : ℕ => G.StageOutcome) (G.stepKernel σ) 0) := rfl
-  have hfrestrict : (G.infinitePlayMeasure σ s₀).map
-      (Preorder.frestrictLe (π := fun _ : ℕ => G.StageOutcome) t) =
-      (G.coordsDist σ s₀ t).toMeasure := by
-    rw [hbind, bind_map_eq (Kernel.measurable _)
-      (Preorder.measurable_frestrictLe (X := fun _ : ℕ => G.StageOutcome) t)]
-    have hpt : (fun x => (traj (X := fun _ : ℕ => G.StageOutcome) (G.stepKernel σ) 0 x).map
-        (Preorder.frestrictLe (π := fun _ : ℕ => G.StageOutcome) t)) =
-        partialTraj (X := fun _ : ℕ => G.StageOutcome) (G.stepKernel σ) 0 t :=
-      funext fun x => traj_map_frestrictLe_apply (X := fun _ : ℕ => G.StageOutcome)
-        (κ := G.stepKernel σ) 0 t x
-    rw [hpt, G.bind_partialTraj_eq_coordsDist_toMeasure]
   calc (G.infinitePlayMeasure σ s₀).map (G.histOfPlay t)
       = (G.infinitePlayMeasure σ s₀).map
           (G.histOfIic t ∘ Preorder.frestrictLe (π := fun _ : ℕ => G.StageOutcome) t) := rfl
@@ -525,7 +532,8 @@ theorem map_histOfPlay_infinitePlayMeasure (σ : G.BehaviorProfile) (s₀ : G.St
           (Preorder.frestrictLe (π := fun _ : ℕ => G.StageOutcome) t)).map (G.histOfIic t) := by
         rw [Measure.map_map Measurable.of_discrete
           (Preorder.measurable_frestrictLe (X := fun _ : ℕ => G.StageOutcome) t)]
-    _ = ((G.coordsDist σ s₀ t).toMeasure).map (G.histOfIic t) := by rw [hfrestrict]
+    _ = ((G.coordsDist σ s₀ t).toMeasure).map (G.histOfIic t) := by
+      rw [G.map_frestrictLe_infinitePlayMeasure]
     _ = ((G.coordsDist σ s₀ t).map (G.histOfIic t)).toMeasure :=
         PMF.toMeasure_map (p := G.coordsDist σ s₀ t) (hf := Measurable.of_discrete)
     _ = (G.histDist σ s₀ t).toMeasure := by rw [G.map_histOfIic_coordsDist]
