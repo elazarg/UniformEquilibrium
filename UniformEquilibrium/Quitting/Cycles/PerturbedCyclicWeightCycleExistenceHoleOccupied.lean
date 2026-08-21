@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Cycles.PerturbedCyclicWeightNoExactCycle
-import UniformEquilibrium.Quitting.Examples.FTV.EpsilonPerturbedCycleExclusion
+import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.PerturbedCycleExclusion
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
 import UniformEquilibrium.Quitting.Cycles.CyclicPeriodicExtension
 
@@ -14,14 +14,14 @@ import UniformEquilibrium.Quitting.Cycles.CyclicPeriodicExtension
 
 `PerturbedCyclicWeightNoExactCycle` proves, in the real-hazard encoding
 (`ZMod m` phases, `perturbedWeight ε`), that for `ε ∈ (0, 2]` no `ExactCycle`
-of any period exists. `FTV.EpsilonPerturbedCycleExclusion` builds the same
-`ε`-bonus table on the `PMF Bool`-mixture side (`ftvRewardEps ε`) that the
+of any period exists. `GameTheory.CyclicThreePlayerQuitting.PerturbedCycleExclusion` builds the same
+`ε`-bonus table on the `PMF Bool`-mixture side (`perturbedReward ε`) that the
 trichotomy of `QuittingThreeBranchDisjunction` is stated against, and shows
 period-one and period-three cycles fail for it, but explicitly stops short of
 the all-periods statement.
 
 This file supplies the missing cycle-level bridge and concludes: for
-`ε ∈ (0, 2]`, `ftvRewardEps ε` admits **no** `IsQuittingCyclicContinuation` of
+`ε ∈ (0, 2]`, `perturbedReward ε` admits **no** `IsQuittingCyclicContinuation` of
 any period. Since the trichotomy `quittingCycle_zeroSolo_or_admissible_or_isolatedNegative`
 of `QuittingThreeBranchDisjunction` is conditioned on
 `∃ terminal, IsQuittingCyclicContinuation reward terminal`, this weight sits
@@ -31,10 +31,10 @@ that file's docstring names as open.
 
 ## Weight alignment
 
-`Player` (`FTV.CyclicMinimality.Player`) and `CyclicIndex`
+`Player` (`GameTheory.CyclicThreePlayerQuitting.Minimality.Player`) and `CyclicIndex`
 (`QuittingCyclicWeightRowDichotomy.CyclicIndex`) are both `abbrev _ := Fin 3`,
 hence definitionally the same type, so the two tables can be compared without
-any relabeling map. `weightOfReward_ftvRewardEps_eq_perturbedWeight` decides
+any relabeling map. `weightOfReward_perturbedReward_eq_perturbedWeight` decides
 the two tables entry by entry (`fin_cases` on the coalition and the
 coordinate, `decide` on which branch of each `if`-chain fires) and finds them
 identical under the identity map on that shared type -- no offset, scaling,
@@ -54,7 +54,7 @@ positive-absorption clause supplies the strict survival bound.
 
 ## The conclusion
 
-`not_isQuittingCyclicContinuation_ftvRewardEps` contraposes the transport
+`not_isQuittingCyclicContinuation_perturbedReward` contraposes the transport
 against `PerturbedCyclicWeightNoExactCycle.no_exactCycle`.
 -/
 
@@ -63,24 +63,24 @@ noncomputable section
 namespace GameTheory
 
 open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
-open FTV.CyclicMinimality
-open FTV.CyclicAdmissibleCycle (ftvReward)
-open FTV.EpsilonPerturbedCycleExclusion (ftvRewardEps)
+open GameTheory.CyclicThreePlayerQuitting.Minimality
+open GameTheory.CyclicThreePlayerQuitting.AdmissibleCycle (reward)
+open GameTheory.CyclicThreePlayerQuitting.PerturbedCycleExclusion (perturbedReward)
 
 /-! ## Weight alignment -/
 
-/-- **Weight alignment.** The PMF-side `ε`-bonus reward `ftvRewardEps ε`,
+/-- **Weight alignment.** The PMF-side `ε`-bonus reward `perturbedReward ε`,
 extended to a real weight by `weightOfReward`, is *exactly*
 `perturbedWeight ε`, under the identity map on the shared type `Fin 3`
 (`Player` and `CyclicIndex` are both `abbrev _ := Fin 3`). No relabeling of
 players or phases and no scaling is used: the two tables were transcribed
 from the same source with the same 0-indexed cyclic convention. -/
-theorem weightOfReward_ftvRewardEps_eq_perturbedWeight (ε : ℝ) :
-    weightOfReward (ftvRewardEps ε) = perturbedWeight ε := by
+theorem weightOfReward_perturbedReward_eq_perturbedWeight (ε : ℝ) :
+    weightOfReward (perturbedReward ε) = perturbedWeight ε := by
   funext S i
   fin_cases S <;> fin_cases i <;>
-    simp (config := { decide := true }) [weightOfReward, perturbedWeight, ftvRewardEps,
-      ftvReward, terminalReward]
+    simp (config := { decide := true }) [weightOfReward, perturbedWeight, perturbedReward,
+      reward, terminalReward]
 
 /-! ## The Bellman translation at a single stage -/
 
@@ -298,34 +298,34 @@ noncomputable def IsQuittingCyclicContinuationBlock.toExactCycle
 /-! ## The conclusion -/
 
 /-- **The trichotomy's cycle-existence hole is occupied.** For `ε ∈ (0, 2]`,
-`ftvRewardEps ε` admits no self-consistent absorbing cyclic continuation of
+`perturbedReward ε` admits no self-consistent absorbing cyclic continuation of
 any period at all -- not merely no period-one or period-three one. By
 contraposition through `IsQuittingCyclicContinuationBlock.toExactCycle` and
 the weight alignment, a cyclic continuation block would produce an
 `ExactCycle (perturbedWeight ε)` of the same period, which
 `PerturbedCyclicWeightNoExactCycle.no_exactCycle` excludes. Consequently
-`ftvRewardEps ε` sits outside the hypothesis of
+`perturbedReward ε` sits outside the hypothesis of
 `quittingCycle_zeroSolo_or_admissible_or_isolatedNegative`
 (`QuittingThreeBranchDisjunction`): it is a genuine occupant of the
 "weights admitting no absorbing complementary cycle of any period" residue
 that trichotomy's own docstring names as open. -/
-theorem not_isQuittingCyclicContinuation_ftvRewardEps (ε : ℝ) (hε : 0 < ε) (hε2 : ε ≤ 2)
+theorem not_isQuittingCyclicContinuation_perturbedReward (ε : ℝ) (hε : 0 < ε) (hε2 : ε ≤ 2)
     (terminal : Payoff Player) :
-    ¬ IsQuittingCyclicContinuation (ftvRewardEps ε) terminal := by
+    ¬ IsQuittingCyclicContinuation (perturbedReward ε) terminal := by
   rintro ⟨period, block, hblock⟩
   have C := hblock.toExactCycle
-  rw [weightOfReward_ftvRewardEps_eq_perturbedWeight] at C
+  rw [weightOfReward_perturbedReward_eq_perturbedWeight] at C
   exact no_exactCycle ε hε hε2 C
 
 /-- **Existential form.** For `ε ∈ (0, 2]`, no terminal vector at all is a
-self-consistent cyclic continuation of `ftvRewardEps ε`. This is the exact
+self-consistent cyclic continuation of `perturbedReward ε`. This is the exact
 negation of the trichotomy's own hypothesis
 (`∃ terminal, IsQuittingCyclicContinuation reward terminal`), stated in the
 trichotomy's own vocabulary. -/
-theorem not_exists_isQuittingCyclicContinuation_ftvRewardEps
+theorem not_exists_isQuittingCyclicContinuation_perturbedReward
     (ε : ℝ) (hε : 0 < ε) (hε2 : ε ≤ 2) :
-    ¬ ∃ terminal, IsQuittingCyclicContinuation (ftvRewardEps ε) terminal := by
+    ¬ ∃ terminal, IsQuittingCyclicContinuation (perturbedReward ε) terminal := by
   rintro ⟨terminal, hterminal⟩
-  exact not_isQuittingCyclicContinuation_ftvRewardEps ε hε hε2 terminal hterminal
+  exact not_isQuittingCyclicContinuation_perturbedReward ε hε hε2 terminal hterminal
 
 end GameTheory

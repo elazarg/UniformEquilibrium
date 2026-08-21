@@ -503,7 +503,7 @@ The trichotomy leaves **two holes**, and these are the open content:
    absorbing complementary cycle **at all**. Weights admitting none of any
    period are outside it entirely. **This hole is occupied, and the occupancy
    is machine-checked end to end (`L`)**: for every `ε ∈ (0, 2]`,
-   `¬∃ terminal, IsQuittingCyclicContinuation (ftvRewardEps ε) terminal` —
+   `¬∃ terminal, IsQuittingCyclicContinuation (perturbedReward ε) terminal` —
    the trichotomy's own predicate — via the label lock in the real encoding
    (all periods, with the `ε = 0` rotation as the in-file boundary witness)
    and the cycle-level transport with entry-for-entry weight alignment

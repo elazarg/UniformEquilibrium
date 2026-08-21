@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Examples.FTV.CyclicMinimality
+import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.Minimality
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 /-!
 # The canonical three-player quitting table goes through the cycle reduction
 
-`FTV.CyclicMinimality` carries the Flesch--Thuijsman--Vrieze three-player
+`GameTheory.CyclicThreePlayerQuitting.Minimality` carries the Flesch--Thuijsman--Vrieze three-player
 quitting table
 
 `r({0}) = (1, 3, 0)`, `r({1}) = (0, 1, 3)`, `r({2}) = (3, 0, 1)`,
@@ -28,14 +28,14 @@ the quitting game itself.
 This file makes the connection and runs the table through the landed
 absorbing-cycle reduction of `QuittingZeroSoloDisjunct`:
 
-* `ftvBlock_isQuittingCyclicContinuationBlock` — the three phases assemble into
+* `standardBlock_isQuittingCyclicContinuationBlock` — the three phases assemble into
   an `IsQuittingCyclicContinuationBlock` for the terminal vector `(1,2,1)`.
   The value clause is the packet's own `q1` (`standardPromise_recursion`); what
   is added here is the per-stage *exact* endpoint-Nash certificate
   (`endpointDifference_phaseRoot`, `isZeroEndpointNash_phaseRoot`) and the
   absorption clause (all-continue mass `1/2` at every phase, so `1/8` around
   the cycle).
-* `isQuittingCycleAdmissible_ftvBlockCycle` — admissibility, on the
+* `isQuittingCycleAdmissible_standardBlockCycle` — admissibility, on the
   nonnegative-solo branch: every solo weight of this table is `1 > 0`.
 * `isUniformEquilibriumPayoff_namedTarget` — the conclusion, with the payoff
   identified as `(1, 2, 1)`.
@@ -58,10 +58,10 @@ No rescaling is used.  Every bound consumed downstream is
 bound, and the cycle notions are scale-homogeneous; nothing in the chain from
 `IsQuittingCyclicContinuationBlock` to `IsUniformEquilibriumPayoff` assumes a
 reward bound of `1`.  The only place a numeric bound is needed is membership in
-`quittingNashBellmanBox (quittingRewardBound ftvReward)`, which asks for
-`|promise| ≤ quittingRewardBound ftvReward`; the promise entries are at most
+`quittingNashBellmanBox (quittingRewardBound reward)`, which asks for
+`|promise| ≤ quittingRewardBound reward`; the promise entries are at most
 `2` and `three_le_quittingRewardBound` supplies `3 ≤ quittingRewardBound
-ftvReward` from a single table entry.
+reward` from a single table entry.
 
 ## What this does not claim
 
@@ -75,28 +75,28 @@ noncomputable section
 
 open GameTheory
 
-namespace FTV.CyclicAdmissibleCycle
+namespace GameTheory.CyclicThreePlayerQuitting.AdmissibleCycle
 
 open StochasticGame Filter Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
-open FTV.CyclicMinimality
-open FTV.CyclicMinimality.ExactCyclicPacket (standardPacket standardPromise
-  standardQuitProb nextPhase_three survivalProbability_singleRole
-  terminalExpectation_singleRole)
+open GameTheory.CyclicThreePlayerQuitting.Minimality
+open GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket
+  (standardPacket standardPromise standardQuitProb nextPhase_three
+    survivalProbability_singleRole terminalExpectation_singleRole)
 
 /-! ## The table as a quitting weight -/
 
 /-- The FTV terminal table presented on nonempty quitter sets, the shape the
-quitting game consumes.  It is `FTV.CyclicMinimality.terminalReward` read
+quitting game consumes.  It is `GameTheory.CyclicThreePlayerQuitting.Minimality.terminalReward` read
 through the indicator of the quitter set. -/
-def ftvReward (quitters : {S : Finset Player // S.Nonempty}) : Payoff Player :=
+def reward (quitters : {S : Finset Player // S.Nonempty}) : Payoff Player :=
   terminalReward fun who ↦ decide (who ∈ quitters.1)
 
 /-- The presentation is faithful: on the quitter set of a pure action row the
-weight is the original `FTV.CyclicMinimality` row. -/
-theorem ftvReward_quitters (action : Player → Bool)
+weight is the original `GameTheory.CyclicThreePlayerQuitting.Minimality` row. -/
+theorem reward_quitters (action : Player → Bool)
     (h : (quittingQuitters action).Nonempty) :
-    ftvReward ⟨quittingQuitters action, h⟩ = terminalReward action := by
+    reward ⟨quittingQuitters action, h⟩ = terminalReward action := by
   have hind : (fun who ↦ decide (who ∈ quittingQuitters action)) = action := by
     funext who
     by_cases hwho : action who
@@ -106,20 +106,20 @@ theorem ftvReward_quitters (action : Player → Bool)
   rw [hind]
 
 /-- Solo quitting pays the original solo reward vector. -/
-@[simp] theorem ftvReward_singletonTerminal (who : Player) :
-    ftvReward (quittingSingletonTerminal who) = soloReward who := by
+@[simp] theorem reward_singletonTerminal (who : Player) :
+    reward (quittingSingletonTerminal who) = soloReward who := by
   fin_cases who <;> rfl
 
 /-- The one-stage row payoff of the FTV weight against a continuation. -/
-theorem quittingRootPayoff_ftv (tail : Payoff Player) (action : Player → Bool)
+theorem quittingRootPayoff_eq (tail : Payoff Player) (action : Player → Bool)
     (who : Player) :
-    quittingRootPayoff ftvReward tail action who =
+    quittingRootPayoff reward tail action who =
       if (quittingQuitters action).Nonempty then terminalReward action who
       else tail who := by
   unfold quittingRootPayoff
   by_cases h : (quittingQuitters action).Nonempty
   · rw [dif_pos h, if_pos h]
-    exact congrFun (ftvReward_quitters action h) who
+    exact congrFun (reward_quitters action h) who
   · rw [dif_neg h, if_neg h]
 
 /-- A displayed three-coordinate action row has a quitter exactly when one of
@@ -136,11 +136,11 @@ theorem quittingQuitters_vec_nonempty (a b d : Bool) :
 
 /-- The one-stage row payoff on a displayed action row, with the absorption
 test already decided.  This is the form the phase computations consume. -/
-@[simp] theorem quittingRootPayoff_ftv_vec (tail : Payoff Player) (a b d : Bool)
+@[simp] theorem quittingRootPayoff_vec (tail : Payoff Player) (a b d : Bool)
     (who : Player) :
-    quittingRootPayoff ftvReward tail ![a, b, d] who =
+    quittingRootPayoff reward tail ![a, b, d] who =
       if a || b || d then terminalReward ![a, b, d] who else tail who := by
-  rw [quittingRootPayoff_ftv]
+  rw [quittingRootPayoff_eq]
   refine if_congr ?_ rfl rfl
   rw [quittingQuitters_vec_nonempty]
   cases a <;> cases b <;> cases d <;> simp
@@ -202,10 +202,10 @@ theorem standardPromise_recursion (c : Player) :
 events have positive probability: coordinate `c` quits alone, or nobody quits,
 each with probability one half. -/
 theorem quittingRootSuccessorPayoff_phaseRoot (c : Player) (tail : Payoff Player) :
-    quittingRootSuccessorPayoff ftvReward tail (phaseRoot c) =
+    quittingRootSuccessorPayoff reward tail (phaseRoot c) =
       (1 / 2 : ℝ) • soloReward c + (1 / 2 : ℝ) • tail := by
   funext who
-  change quittingRootExpectedPayoff ftvReward tail (phaseRoot c) who = _
+  change quittingRootExpectedPayoff reward tail (phaseRoot c) who = _
   unfold quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases c <;> fin_cases who <;>
@@ -221,7 +221,7 @@ indifferent.  All three gaps are `≤ 0`, which is exactly what exact endpoint
 Nash asks of the two silent coordinates, and the active one's gap is `0`, which
 is what it asks of a coordinate mixing strictly inside. -/
 theorem endpointDifference_phaseRoot (c who : Player) :
-    quittingRootEndpointDifference ftvReward (standardPromise (nextThree c))
+    quittingRootEndpointDifference reward (standardPromise (nextThree c))
         (phaseRoot c) who =
       if who = nextThree c then -(3 / 2 : ℝ) else 0 := by
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
@@ -233,14 +233,14 @@ theorem endpointDifference_phaseRoot (c who : Player) :
 
 /-- The gaps are nonpositive at every coordinate. -/
 theorem endpointDifference_phaseRoot_nonpos (c who : Player) :
-    quittingRootEndpointDifference ftvReward (standardPromise (nextThree c))
+    quittingRootEndpointDifference reward (standardPromise (nextThree c))
       (phaseRoot c) who ≤ 0 := by
   rw [endpointDifference_phaseRoot]
   split <;> norm_num
 
 /-- The active coordinate is exactly indifferent. -/
 theorem endpointDifference_phaseRoot_self (c : Player) :
-    quittingRootEndpointDifference ftvReward (standardPromise (nextThree c))
+    quittingRootEndpointDifference reward (standardPromise (nextThree c))
       (phaseRoot c) c = 0 := by
   rw [endpointDifference_phaseRoot]
   fin_cases c <;> simp [nextThree]
@@ -248,7 +248,7 @@ theorem endpointDifference_phaseRoot_self (c : Player) :
 /-- **The phase row is exactly (`ε = 0`) endpoint Nash against the next
 promise.** -/
 theorem isZeroEndpointNash_phaseRoot (c : Player) :
-    IsεQuittingRootEndpointNash ftvReward (standardPromise (nextThree c)) 0
+    IsεQuittingRootEndpointNash reward (standardPromise (nextThree c)) 0
       (phaseRoot c) := by
   intro who
   rw [endpointDifference_phaseRoot]
@@ -291,24 +291,24 @@ def phasePoint (c : Player) : QuittingNashBellmanPoint Player :=
 
 /-- **The length-three cyclic block**: phases `0, 1, 2` and then back to the
 displayed value of phase `0`, which is the anchored terminal vector. -/
-def ftvBlock : QuittingFiniteNashBellmanPath Player 3 :=
+def standardBlock : QuittingFiniteNashBellmanPath Player 3 :=
   ![phasePoint 0, phasePoint 1, phasePoint 2, phasePoint 0]
 
 /-- The table's canonical reward bound dominates `3`, hence dominates every
 promise entry.  Read off one entry of one row; the exact value of the bound is
 irrelevant. -/
-theorem three_le_quittingRewardBound : (3 : ℝ) ≤ quittingRewardBound ftvReward := by
-  have h := abs_reward_le_quittingRewardBound ftvReward
+theorem three_le_quittingRewardBound : (3 : ℝ) ≤ quittingRewardBound reward := by
+  have h := abs_reward_le_quittingRewardBound reward
     (quittingSingletonTerminal 0) 1
-  rw [ftvReward_singletonTerminal] at h
+  rw [reward_singletonTerminal] at h
   simpa [soloReward] using h
 
 theorem phasePoint_mem_box (c : Player) :
-    phasePoint c ∈ quittingNashBellmanBox (quittingRewardBound ftvReward) := by
+    phasePoint c ∈ quittingNashBellmanBox (quittingRewardBound reward) := by
   have h3 := three_le_quittingRewardBound
   change standardPromise c ∈
-    Set.Icc (fun _ : Player ↦ -(quittingRewardBound ftvReward))
-      (fun _ ↦ quittingRewardBound ftvReward)
+    Set.Icc (fun _ : Player ↦ -(quittingRewardBound reward))
+      (fun _ ↦ quittingRewardBound reward)
   constructor
   · intro who
     fin_cases c <;> fin_cases who <;> simp [standardPromise] <;> linarith
@@ -320,22 +320,22 @@ is the packet's recursion, the Nash clause the endpoint certificate. -/
 theorem isEdge_phasePoint (c : Player)
     (tailPoint : QuittingNashBellmanPoint Player)
     (htail : tailPoint.1 = standardPromise (nextThree c)) :
-    IsQuittingNashBellmanEdge ftvReward (phasePoint c) tailPoint := by
+    IsQuittingNashBellmanEdge reward (phasePoint c) tailPoint := by
   constructor
-  · change standardPromise c = quittingRootSuccessorPayoff ftvReward tailPoint.1
+  · change standardPromise c = quittingRootSuccessorPayoff reward tailPoint.1
       (quittingRootOfSimplex (phaseSimplexRoot c))
     rw [htail, quittingRootOfSimplex_phaseSimplexRoot,
       quittingRootSuccessorPayoff_phaseRoot]
     exact standardPromise_recursion c
-  · change IsεQuittingRootEndpointNash ftvReward tailPoint.1 0
+  · change IsεQuittingRootEndpointNash reward tailPoint.1 0
       (quittingRootOfSimplex (phaseSimplexRoot c))
     rw [htail, quittingRootOfSimplex_phaseSimplexRoot]
     exact isZeroEndpointNash_phaseRoot c
 
 /-- **The FTV table's three-phase block is an absorbing cyclic continuation
 block for the named target `(1, 2, 1)`.** -/
-theorem ftvBlock_isQuittingCyclicContinuationBlock :
-    IsQuittingCyclicContinuationBlock ftvReward namedTarget 3 ftvBlock := by
+theorem standardBlock_isQuittingCyclicContinuationBlock :
+    IsQuittingCyclicContinuationBlock reward namedTarget 3 standardBlock := by
   refine ⟨⟨?_, ?_, ?_⟩, rfl, ⟨0, ?_⟩⟩
   · intro time
     fin_cases time <;> exact phasePoint_mem_box _
@@ -352,8 +352,8 @@ theorem ftvBlock_isQuittingCyclicContinuationBlock :
     norm_num
 
 /-- The block's cycle of rows is exactly the three phase rows. -/
-@[simp] theorem quittingCyclicContinuationBlockCycle_ftvBlock (stage : Fin 3) :
-    quittingCyclicContinuationBlockCycle 2 ftvBlock stage = phaseRoot stage := by
+@[simp] theorem quittingCyclicContinuationBlockCycle_standardBlock (stage : Fin 3) :
+    quittingCyclicContinuationBlockCycle 2 standardBlock stage = phaseRoot stage := by
   fin_cases stage <;>
     exact quittingRootOfSimplex_phaseSimplexRoot _
 
@@ -365,38 +365,38 @@ nonzero only at a coordinate whose deleted survival product around the cycle is
 table is `soloReward who who = 1 > 0`, so the second branch of
 `IsQuittingCycleZeroDeviationMismatchAt` closes every coordinate outright and
 the cycle's survival products are never inspected. -/
-theorem isQuittingCycleAdmissible_ftvBlockCycle :
-    IsQuittingCycleAdmissible ftvReward
-      (quittingCyclicContinuationBlockCycle 2 ftvBlock) := by
+theorem isQuittingCycleAdmissible_standardBlockCycle :
+    IsQuittingCycleAdmissible reward
+      (quittingCyclicContinuationBlockCycle 2 standardBlock) := by
   intro who
   refine Or.inr ?_
-  rw [ftvReward_singletonTerminal, soloReward_self]
+  rw [reward_singletonTerminal, soloReward_self]
   norm_num
 
 /-- The joint all-continue mass around the whole cycle is `1/8`: three
 independent stages each surviving with probability `1/2`.  This is the
 quantitative content of the block's absorption clause. -/
-theorem prod_continueMass_ftvBlockCycle :
+theorem prod_continueMass_standardBlockCycle :
     (∏ stage : Fin 3, quittingStationaryContinueMass
-      (quittingCyclicContinuationBlockCycle 2 ftvBlock stage)) = 1 / 8 := by
+      (quittingCyclicContinuationBlockCycle 2 standardBlock stage)) = 1 / 8 := by
   have hmass : ∀ c : Player, quittingStationaryContinueMass (phaseRoot c) = 1 / 2 := by
     intro c
     have h := quittingRootAbsorptionMass_phaseRoot c
     rw [quittingRootAbsorptionMass] at h
     linarith
   rw [Fin.prod_univ_three]
-  simp only [quittingCyclicContinuationBlockCycle_ftvBlock, hmass]
+  simp only [quittingCyclicContinuationBlockCycle_standardBlock, hmass]
   norm_num
 
 /-- The contracting branch happens to hold here as well: the deleted survival
 product at every coordinate is `1/4`.  Recorded for contrast with the surgery
 table of `QuittingAdmissibleCycleTerminalEquilibrium`, where the contracting
 branch genuinely fails and only the solo branch is available. -/
-theorem prod_fixedOpponentsContinueMass_ftvBlockCycle (who : Player) :
+theorem prod_fixedOpponentsContinueMass_standardBlockCycle (who : Player) :
     (∏ stage : Fin 3, quittingStationaryFixedOpponentsContinueMass
-      (quittingCyclicContinuationBlockCycle 2 ftvBlock stage) who) = 1 / 4 := by
+      (quittingCyclicContinuationBlockCycle 2 standardBlock stage) who) = 1 / 4 := by
   rw [Fin.prod_univ_three]
-  simp only [quittingCyclicContinuationBlockCycle_ftvBlock,
+  simp only [quittingCyclicContinuationBlockCycle_standardBlock,
     fixedOpponentsContinueMass_phaseRoot]
   fin_cases who <;> simp <;> norm_num
 
@@ -404,57 +404,57 @@ theorem prod_fixedOpponentsContinueMass_ftvBlockCycle (who : Player) :
 
 /-- The table is **not** zero-solo, so the other disjunct of the reduction does
 not apply to it: every solo weight is `1 > 0`. -/
-theorem not_isQuittingZeroSolo_ftvReward : ¬ IsQuittingZeroSolo ftvReward := by
+theorem not_isQuittingZeroSolo_reward : ¬ IsQuittingZeroSolo reward := by
   intro hzero
   have h := hzero 0
-  rw [ftvReward_singletonTerminal, soloReward_self] at h
+  rw [reward_singletonTerminal, soloReward_self] at h
   norm_num at h
 
 /-- The FTV weight admits an admissible absorbing quitting cycle. -/
-theorem hasAdmissibleAbsorbingQuittingCycle_ftvReward :
-    HasAdmissibleAbsorbingQuittingCycle ftvReward :=
-  ⟨namedTarget, 2, ftvBlock, ftvBlock_isQuittingCyclicContinuationBlock,
-    isQuittingCycleAdmissible_ftvBlockCycle⟩
+theorem hasAdmissibleAbsorbingQuittingCycle_reward :
+    HasAdmissibleAbsorbingQuittingCycle reward :=
+  ⟨namedTarget, 2, standardBlock, standardBlock_isQuittingCyclicContinuationBlock,
+    isQuittingCycleAdmissible_standardBlockCycle⟩
 
 /-- The periodic profile generated by the block, started at phase zero. -/
-def ftvCyclicProfile : (quittingGame ftvReward).BehaviorProfile :=
-  quittingCyclicContinuationBlockProfile ftvReward 2 ftvBlock 0
+def cyclicProfile : (quittingGame reward).BehaviorProfile :=
+  quittingCyclicContinuationBlockProfile reward 2 standardBlock 0
 
 /-- The periodic profile is an *exact* terminal Nash profile, against all
 behavioral deviations. -/
-theorem isZeroAsymptoticNash_ftvCyclicProfile :
-    (quittingGame ftvReward).IsεAsymptoticNash
-      (quittingTerminalPayoff ftvReward) 0 ftvCyclicProfile :=
-  isZeroAsymptoticNash_quittingCyclicContinuationBlockProfile ftvReward
-    namedTarget 2 ftvBlock ftvBlock_isQuittingCyclicContinuationBlock
-    isQuittingCycleAdmissible_ftvBlockCycle 0
+theorem isZeroAsymptoticNash_cyclicProfile :
+    (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) 0 cyclicProfile :=
+  isZeroAsymptoticNash_quittingCyclicContinuationBlockProfile reward
+    namedTarget 2 standardBlock standardBlock_isQuittingCyclicContinuationBlock
+    isQuittingCycleAdmissible_standardBlockCycle 0
 
 /-- Its realized terminal payoff is the named target `(1, 2, 1)`. -/
-theorem quittingTerminalPayoff_ftvCyclicProfile :
-    quittingTerminalPayoff ftvReward ftvCyclicProfile = namedTarget :=
-  quittingTerminalPayoff_quittingCyclicContinuationBlockProfile ftvReward
-    namedTarget 2 ftvBlock ftvBlock_isQuittingCyclicContinuationBlock
+theorem quittingTerminalPayoff_cyclicProfile :
+    quittingTerminalPayoff reward cyclicProfile = namedTarget :=
+  quittingTerminalPayoff_quittingCyclicContinuationBlockProfile reward
+    namedTarget 2 standardBlock standardBlock_isQuittingCyclicContinuationBlock
 
 /-- The displayed cyclic profile's finite-horizon payoff converges
 coordinatewise to its terminal payoff `(1, 2, 1)`. -/
-theorem tendsto_finiteAveragePayoff_ftvCyclicProfile (who : Player) :
+theorem tendsto_finiteAveragePayoff_cyclicProfile (who : Player) :
     Tendsto
       (fun horizon : ℕ =>
-        (quittingGame ftvReward).finiteAveragePayoff none horizon
-          ftvCyclicProfile who)
+        (quittingGame reward).finiteAveragePayoff none horizon
+          cyclicProfile who)
       atTop (nhds (namedTarget who)) := by
-  rw [← quittingTerminalPayoff_ftvCyclicProfile]
-  exact tendsto_finiteAveragePayoff_quittingGame ftvReward ftvCyclicProfile who
+  rw [← quittingTerminalPayoff_cyclicProfile]
+  exact tendsto_finiteAveragePayoff_quittingGame reward cyclicProfile who
 
 /-- **The canonical hard three-player quitting table has the uniform
 equilibrium payoff `(1, 2, 1)`.**
 
 `HEADLINE` — the first instance of the Flesch--Thuijsman--Vrieze table being
 discharged through the absorbing-cycle carrier: the three-phase cycle of
-`FTV.CyclicMinimality.standardPacket` is an absorbing exact Nash--Bellman block
-whose deviation mismatch vanishes automatically (every solo weight is `1 > 0`),
-so the named-target admissible-cycle compiler applies directly to the packet's
-named target.
+`GameTheory.CyclicThreePlayerQuitting.Minimality.standardPacket` is an
+absorbing exact Nash--Bellman block whose deviation mismatch vanishes
+automatically (every solo weight is `1 > 0`), so the named-target
+admissible-cycle compiler applies directly to the packet's named target.
 
 What it does **not** cover: it says nothing about uniqueness of this payoff, it
 does not formalize the classical fact that this table has no stationary
@@ -462,16 +462,16 @@ does not formalize the classical fact that this table has no stationary
 disjunction is not exhaustive, as formalized by
 `not_forall_isQuittingZeroSolo_or_hasAdmissibleAbsorbingQuittingCycle`. -/
 theorem isUniformEquilibriumPayoff_namedTarget :
-    (quittingGame ftvReward).IsUniformEquilibriumPayoff none namedTarget :=
+    (quittingGame reward).IsUniformEquilibriumPayoff none namedTarget :=
   isUniformEquilibriumPayoff_terminal_of_admissible_quittingCyclicContinuationBlock
-    ftvReward namedTarget 2 ftvBlock ftvBlock_isQuittingCyclicContinuationBlock
-    isQuittingCycleAdmissible_ftvBlockCycle
+    reward namedTarget 2 standardBlock standardBlock_isQuittingCyclicContinuationBlock
+    isQuittingCycleAdmissible_standardBlockCycle
 
 /-- Existential form, obtained from the disjunctive reduction itself. -/
-theorem exists_uniformEquilibriumPayoff_ftvReward :
+theorem exists_uniformEquilibriumPayoff_reward :
     ∃ payoff : Payoff Player,
-      (quittingGame ftvReward).IsUniformEquilibriumPayoff none payoff :=
-  exists_uniformEquilibriumPayoff_of_zeroSolo_or_admissibleCycle ftvReward
-    (Or.inr hasAdmissibleAbsorbingQuittingCycle_ftvReward)
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  exists_uniformEquilibriumPayoff_of_zeroSolo_or_admissibleCycle reward
+    (Or.inr hasAdmissibleAbsorbingQuittingCycle_reward)
 
-end FTV.CyclicAdmissibleCycle
+end GameTheory.CyclicThreePlayerQuitting.AdmissibleCycle

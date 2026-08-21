@@ -226,12 +226,12 @@ check("solo_quitter_lp(TWO_PLAYER_COUNTEREXAMPLE, 1)",
       "fails admissibility, a separate check)")
 
 # --- FTV (unperturbed) ------------------------------------------------------
-# Source: UniformEquilibrium/Quitting/Examples/FTV/CyclicAdmissibleCycle.lean.
-# `not_isQuittingZeroSolo_ftvReward`: every solo weight is 1 > 0.
+# Source: UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/AdmissibleCycle.lean.
+# `not_isQuittingZeroSolo_reward`: every solo weight is 1 > 0.
 #
 # The P13 proposal's own validation-gate prose says "the FTV table
 # admissible at p = 1/2" -- but per the file's own docstring, the admissible
-# cycle is the PERIOD-THREE phase-rotation block (`ftvBlock`, three phases,
+# cycle is the PERIOD-THREE phase-rotation block (`standardBlock`, three phases,
 # each quitting at rate 1/2), not a period-one solo-quitter row. Checking
 # the docs first (as instructed): solo_quitter_lp tests only PERIOD-ONE
 # no-join feasibility, and FTV is `G_EPS` at `eps = 0`, where the doc
@@ -240,7 +240,7 @@ check("solo_quitter_lp(TWO_PLAYER_COUNTEREXAMPLE, 1)",
 # INFEASIBLE at every coordinate, matching G_EPS, not "feasible at p=1/2".
 print("-- FTV (unperturbed) --")
 check("is_zero_solo(FTV_WEIGHT)", is_zero_solo(FTV_WEIGHT), False,
-      "Lean: every solo weight is 1 > 0 (not_isQuittingZeroSolo_ftvReward)")
+      "Lean: every solo weight is 1 > 0 (not_isQuittingZeroSolo_reward)")
 for i in range(3):
     check(f"solo_quitter_lp(FTV_WEIGHT, {i})", solo_quitter_lp(FTV_WEIGHT, i), False,
           "FTV = G_EPS at eps=0; doc: period-one fails 'already at eps = 0'; "
@@ -320,7 +320,7 @@ assert cert_admissible_owner0.detail.get("not_applicable") is True
 # The FTV reference weight passes a separate algebraic screen, but its only
 # admissible
 # absorbing cycle is the PERIOD-THREE phase rotation
-# (`UniformEquilibrium/Quitting/Examples/FTV/CyclicAdmissibleCycle.lean`),
+# (`UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/AdmissibleCycle.lean`),
 # never a period-one solo row. Consistent
 # with that: filter (2), the period-one no-join LP, is infeasible at every
 # coordinate for FTV (Part 1 above), so there is no period-one solo row for

@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Examples.FTV.CyclicFiniteHorizon
-import UniformEquilibrium.Quitting.Examples.FTV.CyclicMinimality
+import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.FiniteHorizon
+import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.Minimality
 import UniformEquilibrium.Architectures.PublicResponse.SplitDomainSemanticCredibilityCharacterization
 
 /-!
@@ -17,7 +17,7 @@ three-cycle:
 * the ten-node response architecture is semantically credible from every one
   of its configurations, on the total split domain;
 * its three live mixing rows, promises, and cyclic successor are exactly the
-  data of `FTV.CyclicMinimality.standardPacket`.
+  data of `GameTheory.CyclicThreePlayerQuitting.Minimality.standardPacket`.
 
 The first statement specializes the supplied-architecture semantic
 characterization.  The second exposes the concrete `(Q1)--(Q5)` obligations
@@ -31,9 +31,11 @@ noncomputable section
 
 open GameTheory
 
-namespace FTV.CyclicCredibility
+namespace GameTheory.CyclicThreePlayerQuitting.Credibility
 
 open Math.Probability StochasticGame
+open GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket
+  (nextPhase_three standardPacket)
 
 /-- The total split domain of the concrete ten-node architecture.  Every
 configuration is an entry, a delivery node, and a unilateral node for every
@@ -110,62 +112,54 @@ def architectureQuitProb (c who : Player) : ℝ :=
   (play (Sum.inl c) who true).toReal
 
 /-- The architecture's live mixed rows are exactly the normalized quitting
-matrix used by `FTV.CyclicMinimality.standardPacket`. -/
+matrix used by `GameTheory.CyclicThreePlayerQuitting.Minimality.standardPacket`. -/
 theorem architectureQuitProb_eq_standardQuitProb :
     architectureQuitProb =
-      FTV.CyclicMinimality.ExactCyclicPacket.standardQuitProb := by
+      GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardQuitProb := by
   funext c who
   fin_cases c <;> fin_cases who <;>
     simp [architectureQuitProb, play,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardQuitProb,
+      GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardQuitProb,
       PMF.uniformOfFintype_apply]
 
 /-- The architecture's three live promises are exactly the normalized
-promise word used by `FTV.CyclicMinimality.standardPacket`. -/
+promise word used by `GameTheory.CyclicThreePlayerQuitting.Minimality.standardPacket`. -/
 theorem phaseTarget_eq_standardPromise :
     phaseTarget =
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise := by
+      GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise := by
   funext c who
   fin_cases c <;> fin_cases who <;> rfl
 
 /-- The architecture and packet use the same cyclic successor. -/
 theorem nextPhase_eq_minimality_nextPhase (c : Player) :
-    nextPhase c = FTV.CyclicMinimality.nextPhase 3 c := by
-  rw [FTV.CyclicMinimality.ExactCyclicPacket.nextPhase_three]
+    nextPhase c = GameTheory.CyclicThreePlayerQuitting.Minimality.nextPhase 3 c := by
+  rw [nextPhase_three]
   fin_cases c <;> rfl
 
 /-- The exact `(Q1)--(Q5)` packet obtained by reading the quitting
 probabilities and promises from the concrete response architecture. -/
 def architectureExactCyclicPacket :
-    FTV.CyclicMinimality.ExactCyclicPacket 3 where
+    GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket 3 where
   quitProb := architectureQuitProb
   promise := phaseTarget
   probability_mem := by
-    simpa [architectureQuitProb_eq_standardQuitProb,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket] using
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket.probability_mem
+    simpa [architectureQuitProb_eq_standardQuitProb, standardPacket] using
+      standardPacket.probability_mem
   q1 := by
     simpa [architectureQuitProb_eq_standardQuitProb,
-      phaseTarget_eq_standardPromise,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket] using
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket.q1
+      phaseTarget_eq_standardPromise, standardPacket] using standardPacket.q1
   q4 := by
     simpa [architectureQuitProb_eq_standardQuitProb,
-      phaseTarget_eq_standardPromise,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket] using
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket.q4
+      phaseTarget_eq_standardPromise, standardPacket] using standardPacket.q4
   q5 := by
-    simpa [architectureQuitProb_eq_standardQuitProb,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket] using
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket.q5
+    simpa [architectureQuitProb_eq_standardQuitProb, standardPacket] using
+      standardPacket.q5
   live := by
-    simpa [architectureQuitProb_eq_standardQuitProb,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket] using
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket.live
+    simpa [architectureQuitProb_eq_standardQuitProb, standardPacket] using
+      standardPacket.live
   initial := by
-    simpa [phaseTarget_eq_standardPromise,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket] using
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPacket.initial
+    simpa [phaseTarget_eq_standardPromise, standardPacket] using
+      standardPacket.initial
 
 @[simp] theorem architectureExactCyclicPacket_quitProb :
     architectureExactCyclicPacket.quitProb = architectureQuitProb := rfl
@@ -177,10 +171,9 @@ def architectureExactCyclicPacket :
 standard normalized quitting matrix and promise word. -/
 theorem architectureExactCyclicPacket_data_eq_standard :
     architectureExactCyclicPacket.quitProb =
-        FTV.CyclicMinimality.ExactCyclicPacket.standardPacket.quitProb ∧
-      architectureExactCyclicPacket.promise =
-        FTV.CyclicMinimality.ExactCyclicPacket.standardPacket.promise := by
+        standardPacket.quitProb ∧
+      architectureExactCyclicPacket.promise = standardPacket.promise := by
   exact ⟨architectureQuitProb_eq_standardQuitProb,
     phaseTarget_eq_standardPromise⟩
 
-end FTV.CyclicCredibility
+end GameTheory.CyclicThreePlayerQuitting.Credibility

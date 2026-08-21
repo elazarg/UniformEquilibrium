@@ -200,7 +200,7 @@ check_weight(TWO_PLAYER_COUNTEREXAMPLE)
 
 
 #: The unperturbed Flesch-Thuijsman-Vrieze table:
-#: `UniformEquilibrium/Quitting/Examples/FTV/CyclicAdmissibleCycle.lean`, module
+#: `UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/AdmissibleCycle.lean`, module
 #: docstring.  Players `0, 1, 2` here are the file's `Player` values `0, 1,
 #: 2` directly (no reindexing).  This is `G_EPS` at `epsilon = 0`: the period-
 #: one no-join fence fails identically here (see validate.py), but the
