@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory.QuittingLCPClassification
 
-open Finset Math Math.LinearProgramming Set unitInterval
+open Filter Finset Math Math.LinearProgramming Set unitInterval
 open scoped unitInterval
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -661,5 +661,188 @@ def PrincipalQClockMassPath.append
   total_mass := path.sum_appendMass step
   scaledState_mem := path.scaledState_appendMass_mem step
   scaledState_one := path.scaledState_appendMass_one step
+
+/-! ## Compact limits of normalized clock mass paths -/
+
+omit [DecidableEq ι] in
+/-- Convergence of endpoint clocks gives a uniformly convergent subsequence
+of normalized cumulative-mass paths.  Exact clock mass makes both the common
+Lipschitz constant and the common compact range automatic. -/
+theorem exists_tendsto_subsequence_principalQClockMass
+    {M : ι → ι → ℝ} {initial : PrincipalQClockNode ι}
+    (node : ℕ → PrincipalQClockNode ι)
+    (timeLimit : ℝ)
+    (htime : Tendsto (fun n => (node n).time) atTop (nhds timeLimit))
+    (path : ∀ n, PrincipalQClockMassPath M initial (node n)) :
+    ∃ limit : BoundedContinuousFunction unitInterval (ι → ℝ),
+      ∃ subsequence : ℕ → ℕ, StrictMono subsequence ∧
+        Tendsto (fun n => (path (subsequence n)).mass) atTop (nhds limit) := by
+  let duration : ℕ → ℝ := fun n => principalQClockDuration initial (node n)
+  have hduration : Tendsto duration atTop
+      (nhds (timeLimit - initial.time)) := by
+    exact htime.sub tendsto_const_nhds
+  obtain ⟨bound, hbound⟩ :=
+    Metric.isBounded_range_iff.mp
+      (Metric.isBounded_range_of_tendsto duration hduration)
+  let boundReal := max (duration 0 + bound) 0
+  have hdurationLe (n : ℕ) : duration n ≤ boundReal := by
+    have hdist := hbound n 0
+    have hdiff : duration n - duration 0 ≤ bound := by
+      exact (le_abs_self (duration n - duration 0)).trans (by
+        simpa [Real.dist_eq] using hdist)
+    exact (by linarith : duration n ≤ duration 0 + bound) |>.trans
+      (le_max_left _ _)
+  let boundNNReal : NNReal := ⟨boundReal, le_max_right _ _⟩
+  let rangeSet : Set (ι → ℝ) := Metric.closedBall 0 boundReal
+  have hpath (n : ℕ) : (path n).mass ∈
+      Viability.compactRangeLipschitzFamily boundNNReal rangeSet := by
+    constructor
+    · apply (path n).lipschitzWith_mass.weaken
+      exact hdurationLe n
+    · intro parameter
+      rw [Metric.mem_closedBall]
+      calc
+        dist ((path n).mass parameter) 0 =
+            dist ((path n).mass parameter) ((path n).mass 0) := by
+          rw [(path n).mass_zero]
+        _ ≤ duration n * dist parameter 0 :=
+          (path n).lipschitzWith_mass.dist_le_mul parameter 0
+        _ ≤ duration n := by
+          apply mul_le_of_le_one_right (path n).duration_nonneg
+          change dist (parameter : ℝ) 0 ≤ 1
+          rw [Real.dist_eq, sub_zero, abs_of_nonneg parameter.property.1]
+          exact parameter.property.2
+        _ ≤ boundReal := hdurationLe n
+  obtain ⟨limit, _hlimit, subsequence, hsubsequence, htendsto⟩ :=
+    Viability.exists_tendsto_subsequence_compactRangeLipschitzFamily
+      boundNNReal (isCompact_closedBall (0 : ι → ℝ) boundReal)
+      (fun n => (path n).mass) hpath
+  exact ⟨limit, subsequence, hsubsequence, htendsto⟩
+
+omit [DecidableEq ι] in
+/-- Uniform compactness turns a convergent sequence of endpoint nodes and
+their cumulative-mass paths into a cumulative-mass path to the limit node. -/
+theorem exists_principalQClockMassPath_limit
+    {M : ι → ι → ℝ} {initial : PrincipalQClockNode ι}
+    (node : ℕ → PrincipalQClockNode ι)
+    (path : ∀ n, PrincipalQClockMassPath M initial (node n))
+    (timeLimit : ℝ) (htimeLimit : 0 < timeLimit)
+    (scaledStateLimit : ι → ℝ)
+    (hscaledStateLimit : scaledStateLimit ∈ nonnegativeBoundary)
+    (htime : Tendsto (fun n => (node n).time) atTop (nhds timeLimit))
+    (hscaledState : Tendsto (fun n => principalQClockScaledState (node n))
+      atTop (nhds scaledStateLimit)) :
+    Nonempty (PrincipalQClockMassPath M initial
+      (principalQClockNodeOfScaledState timeLimit htimeLimit
+        scaledStateLimit hscaledStateLimit)) := by
+  obtain ⟨limit, subsequence, hsubsequence, hmass⟩ :=
+    exists_tendsto_subsequence_principalQClockMass
+      node timeLimit htime path
+  have hmassAt (parameter : unitInterval) : Tendsto
+      (fun n => (path (subsequence n)).mass parameter) atTop
+      (nhds (limit parameter)) := by
+    exact ((BoundedContinuousFunction.lipschitz_eval_const parameter).continuous
+      |>.tendsto limit).comp hmass
+  have htimeSubsequence : Tendsto (fun n => (node (subsequence n)).time)
+      atTop (nhds timeLimit) :=
+    htime.comp hsubsequence.tendsto_atTop
+  have hscaledSubsequence : Tendsto
+      (fun n => principalQClockScaledState (node (subsequence n)))
+      atTop (nhds scaledStateLimit) :=
+    hscaledState.comp hsubsequence.tendsto_atTop
+  refine ⟨{
+    mass := limit
+    mass_zero := ?_
+    coordinate_monotone := ?_
+    total_mass := ?_
+    scaledState_mem := ?_
+    scaledState_one := ?_ }⟩
+  · apply tendsto_nhds_unique (hmassAt 0)
+    exact (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ι → ℝ))
+      atTop (nhds 0)) |>.congr' (Eventually.of_forall fun n =>
+        (path (subsequence n)).mass_zero.symm)
+  · intro who first second hle
+    have hfirst : Tendsto
+        (fun n => (path (subsequence n)).mass first who) atTop
+        (nhds (limit first who)) :=
+      ((continuous_apply who).tendsto _).comp (hmassAt first)
+    have hsecond : Tendsto
+        (fun n => (path (subsequence n)).mass second who) atTop
+        (nhds (limit second who)) :=
+      ((continuous_apply who).tendsto _).comp (hmassAt second)
+    exact le_of_tendsto_of_tendsto' hfirst hsecond
+      (fun n => (path (subsequence n)).coordinate_monotone who hle)
+  · intro parameter
+    have hsum : Tendsto
+        (fun n => ∑ who, (path (subsequence n)).mass parameter who)
+        atTop (nhds (∑ who, limit parameter who)) := by
+      apply tendsto_finsetSum
+      intro who _
+      exact ((continuous_apply who).tendsto _).comp (hmassAt parameter)
+    have hright : Tendsto
+        (fun n => (parameter : ℝ) *
+          principalQClockDuration initial (node (subsequence n))) atTop
+        (nhds ((parameter : ℝ) *
+          principalQClockDuration initial
+            (principalQClockNodeOfScaledState timeLimit htimeLimit
+              scaledStateLimit hscaledStateLimit))) := by
+      simpa only [principalQClockDuration,
+        principalQClockNodeOfScaledState_time] using
+        tendsto_const_nhds.mul
+          (htimeSubsequence.sub tendsto_const_nhds)
+    apply tendsto_nhds_unique hsum
+    exact hright.congr' (Eventually.of_forall fun n =>
+      (path (subsequence n)).total_mass parameter |>.symm)
+  · intro parameter
+    have hstate : Tendsto
+        (fun n => principalQClockScaledState initial +
+          principalQMassImage M ((path (subsequence n)).mass parameter))
+        atTop (nhds (principalQClockScaledState initial +
+          principalQMassImage M (limit parameter))) := by
+      have hcontinuous : Continuous (fun mass : ι → ℝ =>
+          principalQClockScaledState initial + principalQMassImage M mass) := by
+        unfold principalQMassImage
+        fun_prop
+      exact (hcontinuous.tendsto _).comp (hmassAt parameter)
+    exact isClosed_nonnegativeBoundary.mem_of_tendsto hstate
+      (Eventually.of_forall fun n =>
+        (path (subsequence n)).scaledState_mem parameter)
+  · have hleft : Tendsto
+        (fun n => principalQClockScaledState initial +
+          principalQMassImage M ((path (subsequence n)).mass 1))
+        atTop (nhds (principalQClockScaledState initial +
+          principalQMassImage M (limit 1))) := by
+      have hcontinuous : Continuous (fun mass : ι → ℝ =>
+          principalQClockScaledState initial + principalQMassImage M mass) := by
+        unfold principalQMassImage
+        fun_prop
+      exact (hcontinuous.tendsto _).comp (hmassAt 1)
+    have hright : Tendsto
+        (fun n => principalQClockScaledState initial +
+          principalQMassImage M ((path (subsequence n)).mass 1))
+        atTop (nhds scaledStateLimit) :=
+      hscaledSubsequence.congr' (Eventually.of_forall fun n =>
+        (path (subsequence n)).scaledState_one.symm)
+    have heq := tendsto_nhds_unique hleft hright
+    simpa only [principalQClockNodeOfScaledState_scaledState] using heq
+
+omit [DecidableEq ι] in
+/-- Every node in the well-founded clock-reachability closure is realized by
+an exact cumulative-mass path. -/
+theorem PrincipalQClockReachable.exists_massPath
+    {M : ι → ι → ℝ} {stepBound : ℝ}
+    {initial node : PrincipalQClockNode ι}
+    (hnode : PrincipalQClockReachable M stepBound initial node) :
+    Nonempty (PrincipalQClockMassPath M initial node) := by
+  induction hnode with
+  | initial => exact ⟨initialPrincipalQClockMassPath M initial⟩
+  | step hnode arc ih =>
+      obtain ⟨path⟩ := ih
+      exact ⟨path.append arc⟩
+  | limit node hnode timeLimit htimeLimit scaledStateLimit
+      hscaledStateLimit htime hscaledState ih =>
+      exact exists_principalQClockMassPath_limit node
+        (fun n => Classical.choice (ih n)) timeLimit htimeLimit
+        scaledStateLimit hscaledStateLimit htime hscaledState
 
 end GameTheory.QuittingLCPClassification
