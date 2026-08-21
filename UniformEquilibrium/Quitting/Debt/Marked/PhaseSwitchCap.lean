@@ -197,7 +197,7 @@ theorem
                 quittingRootSequenceTerminalValue reward plan who switch) := by
               rw [quittingRootSequenceHazardTerminalValue]
               ring
-  have habel := sum_mul_le_initialWeight_mul_of_partialSum_le
+  have habel := MathUE.sum_mul_le_initialWeight_mul_of_partialSum_le
     (weight := quittingOpponentSurvivalWeight plan who 0)
     (summand := quittingLedgerStageAdvantage reward plan who) switch
     (fun stage => antitone_quittingOpponentSurvivalWeight plan who 0

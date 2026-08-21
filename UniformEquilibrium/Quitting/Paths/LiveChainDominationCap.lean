@@ -242,7 +242,7 @@ theorem quittingRootSequencePureTimeTerminalValue_some_le_of_ledger_le
   have hidentity :=
     quittingRootSequencePureTimeTerminalValue_some_sub_eq reward roots who delay 0
   simp only [Nat.zero_add] at hidentity
-  have habel := sum_mul_le_initialWeight_mul_of_partialSum_le
+  have habel := MathUE.sum_mul_le_initialWeight_mul_of_partialSum_le
     (weight := quittingOpponentSurvivalWeight roots who 0)
     (summand := quittingLedgerStageAdvantage reward roots who) delay
     (fun stage => antitone_quittingOpponentSurvivalWeight roots who 0
@@ -411,7 +411,7 @@ theorem quittingRootSequenceHazardTerminalValue_quittingTruncatedRoots_alwaysCon
   rw [quittingRootSequenceHazardTerminalValue_quittingTruncatedRoots_alwaysContinue_eq_zero,
     quittingRootSequenceTerminalValue_quittingTruncatedRoots_cutoff_eq_zero,
     sub_zero, mul_zero, add_zero] at hidentity
-  have habel := sum_mul_le_initialWeight_mul_of_partialSum_le
+  have habel := MathUE.sum_mul_le_initialWeight_mul_of_partialSum_le
     (weight := quittingOpponentSurvivalWeight (quittingTruncatedRoots plan cutoff) who 0)
     (summand := quittingLedgerStageAdvantage reward
       (quittingTruncatedRoots plan cutoff) who) cutoff
