@@ -136,6 +136,36 @@ def publicQuittingGame {Signal : Type} [Finite Signal]
   discount_nonneg := le_rfl
   discount_lt_one := zero_lt_one
 
+@[simp] theorem publicQuittingGame_transition_draw
+    {Signal : Type} [Finite Signal] (table : Table ι)
+    (signalLaw : PMF Signal)
+    (action : (publicQuittingGame table signalLaw).JointAct) :
+    (publicQuittingGame table signalLaw).transition .draw action =
+      signalLaw.map PublicQuittingState.active :=
+  rfl
+
+@[simp] theorem publicQuittingGame_transition_active
+    {Signal : Type} [Finite Signal] (table : Table ι)
+    (signalLaw : PMF Signal) (signal : Signal)
+    (action : (publicQuittingGame table signalLaw).JointAct) :
+    (publicQuittingGame table signalLaw).transition (.active signal) action =
+      if h : (quittingQuitters action).Nonempty then
+        PMF.pure (.absorbed ⟨quittingQuitters action, h⟩)
+      else PMF.pure .draw :=
+  by
+    classical
+    rfl
+
+@[simp] theorem publicQuittingGame_transition_absorbed
+    {Signal : Type} [Finite Signal] (table : Table ι)
+    (signalLaw : PMF Signal)
+    (quitters : {S : Finset ι // S.Nonempty})
+    (action : (publicQuittingGame table signalLaw).JointAct) :
+    (publicQuittingGame table signalLaw).transition (.absorbed quitters)
+        action =
+      PMF.pure (.absorbed quitters) :=
+  rfl
+
 private instance publicQuittingHistFinite
     {Signal : Type} [Fintype Signal]
     (table : Table ι) (signalLaw : PMF Signal) (t : ℕ) :
@@ -288,6 +318,28 @@ def SunspotEpsilonEquilibrium
   (publicQuittingGame table profile.signalLaw).IsεAsymptoticNash
     (publicQuittingPayoff table profile.signalLaw) ε profile.strategy
 
+/-! The trivial public signal used to compare ordinary and sunspot play. -/
+def trivialSignalLaw : PMF (Fin 1) :=
+  PMF.pure 0
+
+/-! A live-root sequence lifted to the alternating draw/decision clock.
+At public time `2n+1`, the active decision uses root `n`; actions at the
+intervening draw states are immaterial and fixed to Continue. -/
+def rootSequenceSunspotStrategy (table : Table ι)
+    (roots : ℕ → ι → PMF Bool) :
+    (publicQuittingGame table trivialSignalLaw).BehaviorProfile :=
+  fun who time history => match history.2 with
+    | .active _ => roots (time / 2) who
+    | _ => PMF.pure false
+
+/-! The one-label sunspot profile induced by a sequence of ordinary live
+roots. -/
+def rootSequenceSunspotProfile (table : Table ι)
+    (roots : ℕ → ι → PMF Bool) : SunspotProfile table where
+  signalCount := 0
+  signalLaw := trivialSignalLaw
+  strategy := rootSequenceSunspotStrategy table roots
+
 /-! At every live public history, at most one player assigns positive
 probability to Quit. -/
 def AtMostOneQuitter {table : Table ι}
@@ -304,12 +356,8 @@ def AtMostOneQuitter {table : Table ι}
 /-! **Theorem 2.4 (paper).** Every quitting game admits a sunspot
 ε-equilibrium for every `ε > 0`. -/
 
-theorem theorem2_4 (table : Table ι)
-    (hnormalized : SoloExitNormalized table)
-    (hbounded : TablePayoffsBounded table) :
-    ∀ ε : ℝ, 0 < ε → ∃ profile : SunspotProfile table,
-      SunspotEpsilonEquilibrium table ε profile := by
-  sorry
+/-! Its checked declaration appears after Theorem 2.13, whose two branches
+are used in the proof. -/
 
 /-! ## Section 2.3 — normal and abnormal players -/
 
@@ -10504,9 +10552,8 @@ private theorem KiloblockConstruction.normalEndpointPotential_active_some
           construction.profile.signalLaw).transition
           (PublicQuittingState.active signal)
             (singleQuitAction owner.1 false) = PMF.pure drawState := by
-        simpa [drawState] using
-          publicQuittingGame_transition_singleQuitAction_false table
-            construction.profile.signalLaw signal owner.1
+        exact publicQuittingGame_transition_singleQuitAction_false table
+          construction.profile.signalLaw signal owner.1
       have hsupp : drawState ∈
           ((publicQuittingGame table
             construction.profile.signalLaw).transition
@@ -12258,9 +12305,8 @@ private theorem KiloblockConstruction.normalPotential_active_some_step
           construction.profile.signalLaw).transition
           (PublicQuittingState.active signal)
             (singleQuitAction owner.1 false) = PMF.pure drawState := by
-        simpa [drawState] using
-          publicQuittingGame_transition_singleQuitAction_false table
-            construction.profile.signalLaw signal owner.1
+        exact publicQuittingGame_transition_singleQuitAction_false table
+          construction.profile.signalLaw signal owner.1
       have hquitSupport : quitState ∈
           ((publicQuittingGame table
             construction.profile.signalLaw).transition
@@ -12361,9 +12407,8 @@ theorem KiloblockConstruction.normalPotential_active_some_beforeFinal
           construction.profile.signalLaw).transition
           (PublicQuittingState.active signal)
             (singleQuitAction owner.1 false) = PMF.pure drawState := by
-        simpa [drawState] using
-          publicQuittingGame_transition_singleQuitAction_false table
-            construction.profile.signalLaw signal owner.1
+        exact publicQuittingGame_transition_singleQuitAction_false table
+          construction.profile.signalLaw signal owner.1
       have hsupp : drawState ∈
           ((publicQuittingGame table
             construction.profile.signalLaw).transition
@@ -12766,6 +12811,7 @@ private theorem historyContinuationEU_update_eq_expect_pure
     · subst player
       simp [actions]
     · simp [actions, Function.update_of_ne hplayer]
+
   unfold StochasticGame.historyContinuationEU
   rw [hactionDist, Math.PMFProduct.pmfPi_update_bind,
     Math.Probability.expect_bind]
@@ -12814,6 +12860,7 @@ private theorem KiloblockConstruction.continueFinal_pureQuit_le_continue
     · subst player
       simp [actions]
     · simp [actions, Function.update_of_ne hplayer]
+
   have hcontinueDist : (publicQuittingGame table
       construction.profile.signalLaw).stageActionDist
         (construction.continueProfile excluded) history =
@@ -12981,6 +13028,900 @@ private theorem KiloblockConstruction.continueFinal_pureQuit_le_continue
                 (PublicQuittingState.absorbed quitters, continueAction),
                   PublicQuittingState.absorbed quitters)))
       rw [hquitStep', hcontinueStep']
+
+/-! The finite Bellman value against fixed opponent roots: the player may
+quit now or continue to the next active public decision, and the value after
+the displayed horizon is zero. This proof-local recursion makes the
+action-irrelevant draw stages explicit. -/
+private def finiteStoppingBest
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) : ℕ → ℕ → ℝ
+  | _, 0 => 0
+  | start, fuel + 1 =>
+      max (quittingFixedOpponentsQuitValue reward roots who start)
+        (quittingFixedOpponentsContinueReward reward roots who start +
+          quittingFixedOpponentsContinueMass roots who start *
+            finiteStoppingBest reward roots who (start + 1) fuel)
+
+/-! Finite public-history Bellman potential. Draw time `t` and the following
+active time `t+1` carry the same value; after an active time, the root index
+advances by one. Absorbed histories carry their realized zero-never reward. -/
+private def rootSequenceFinitePotential (table : Table ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (horizon : ℕ) :
+    (publicQuittingGame table trivialSignalLaw).HistoryPotential :=
+  fun time history => match history.2 with
+    | .draw => finiteStoppingBest table.zeroNeverReward roots who
+        ((time + 1) / 2) (horizon - (time + 1) / 2)
+    | .active _ => finiteStoppingBest table.zeroNeverReward roots who
+        (time / 2) (horizon - time / 2)
+    | .absorbed quitters => table.zeroNeverReward quitters who
+
+private theorem quittingFinitePureTimePayoff_le_finiteStoppingBest
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) :
+    ∀ (start fuel : ℕ) (choice : Fin (fuel + 1)),
+      quittingFinitePureTimePayoff reward roots who start fuel choice ≤
+        finiteStoppingBest reward roots who start fuel := by
+  intro start fuel
+  induction fuel generalizing start with
+  | zero =>
+      intro choice
+      simp [quittingFinitePureTimePayoff, quittingFinitePureTimeValue,
+        finiteStoppingBest]
+  | succ fuel ih =>
+      intro choice
+      refine Fin.cases ?_ (fun later => ?_) choice
+      · simp only [quittingFinitePureTimePayoff,
+          quittingFinitePureTimeValue, finiteStoppingBest, Fin.cases_zero]
+        exact le_max_left _ _
+      · simp only [quittingFinitePureTimePayoff,
+          quittingFinitePureTimeValue, finiteStoppingBest, Fin.cases_succ]
+        apply le_trans _ (le_max_right _ _)
+        change quittingFixedOpponentsContinueReward reward roots who start +
+            quittingFixedOpponentsContinueMass roots who start *
+              quittingFinitePureTimePayoff reward roots who (start + 1)
+                fuel later ≤ _
+        have hmass : 0 ≤
+            quittingFixedOpponentsContinueMass roots who start := by
+          unfold quittingFixedOpponentsContinueMass
+          exact quittingStationaryContinueMass_nonneg _
+        exact add_le_add le_rfl
+          (mul_le_mul_of_nonneg_left (ih (start + 1) later) hmass)
+
+private theorem exists_quittingFinitePureTimePayoff_eq_finiteStoppingBest
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) :
+    ∀ (start fuel : ℕ), ∃ choice : Fin (fuel + 1),
+      quittingFinitePureTimePayoff reward roots who start fuel choice =
+        finiteStoppingBest reward roots who start fuel := by
+  intro start fuel
+  induction fuel generalizing start with
+  | zero =>
+      exact ⟨0, by
+        simp [quittingFinitePureTimePayoff, quittingFinitePureTimeValue,
+          finiteStoppingBest]⟩
+  | succ fuel ih =>
+      let quitValue := quittingFixedOpponentsQuitValue reward roots who start
+      let continueValue := quittingFixedOpponentsContinueReward reward roots
+          who start + quittingFixedOpponentsContinueMass roots who start *
+            finiteStoppingBest reward roots who (start + 1) fuel
+      by_cases hquit : continueValue ≤ quitValue
+      · refine ⟨0, ?_⟩
+        simp only [quittingFinitePureTimePayoff,
+          quittingFinitePureTimeValue, finiteStoppingBest, Fin.cases_zero]
+        exact (max_eq_left hquit).symm
+      · obtain ⟨later, hlater⟩ := ih (start + 1)
+        refine ⟨later.succ, ?_⟩
+        simp only [quittingFinitePureTimePayoff,
+          quittingFinitePureTimeValue, finiteStoppingBest, Fin.cases_succ]
+        change quittingFixedOpponentsContinueReward reward roots who start +
+            quittingFixedOpponentsContinueMass roots who start *
+              quittingFinitePureTimePayoff reward roots who (start + 1)
+                fuel later = _
+        rw [hlater]
+        exact (max_eq_right (le_of_not_ge hquit)).symm
+
+@[simp] private theorem rootSequenceFinitePotential_initial
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ) :
+    rootSequenceFinitePotential table roots who horizon 0
+        ((publicQuittingGame table trivialSignalLaw).emptyHist .draw) =
+      finiteStoppingBest table.zeroNeverReward roots who 0 horizon := by
+  change finiteStoppingBest table.zeroNeverReward roots who 0 horizon = _
+  rfl
+
+@[simp] private theorem rootSequenceFinitePotential_evenHorizon
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ)
+    (history : (publicQuittingGame table trivialSignalLaw).Hist
+      (2 * horizon)) :
+    rootSequenceFinitePotential table roots who horizon (2 * horizon)
+        history =
+      (match history.2 with
+        | .absorbed quitters => table.zeroNeverReward quitters who
+        | _ => 0) := by
+  rcases history with ⟨past, state⟩
+  cases state with
+  | draw =>
+      change finiteStoppingBest table.zeroNeverReward roots who
+          ((2 * horizon + 1) / 2)
+          (horizon - (2 * horizon + 1) / 2) = 0
+      rw [show (2 * horizon + 1) / 2 = horizon by omega]
+      simp [finiteStoppingBest]
+  | active signal =>
+      change finiteStoppingBest table.zeroNeverReward roots who
+          ((2 * horizon) / 2) (horizon - (2 * horizon) / 2) = 0
+      simp [finiteStoppingBest]
+  | absorbed quitters =>
+      rfl
+
+private theorem rootSequenceFinitePotential_draw_harmonic
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ)
+    (strategy : (publicQuittingGame table trivialSignalLaw).BehaviorProfile)
+    {time : ℕ}
+    (history : (publicQuittingGame table trivialSignalLaw).Hist time)
+    (hstate : history.2 = .draw) :
+    (publicQuittingGame table trivialSignalLaw).historyContinuationEU strategy
+        (rootSequenceFinitePotential table roots who horizon) history =
+      rootSequenceFinitePotential table roots who horizon time history := by
+  unfold StochasticGame.historyContinuationEU
+  let activeLaw : PMF
+      (publicQuittingGame table trivialSignalLaw).State :=
+    trivialSignalLaw.map PublicQuittingState.active
+  have htransition (action :
+      (publicQuittingGame table trivialSignalLaw).JointAct) :
+      (publicQuittingGame table trivialSignalLaw).transition history.2
+          action =
+        activeLaw := by
+    rw [hstate]
+    exact publicQuittingGame_transition_draw table trivialSignalLaw action
+  simp_rw [htransition]
+  have hinner (action :
+      (publicQuittingGame table trivialSignalLaw).JointAct) :
+      expect activeLaw
+          (fun nextState => rootSequenceFinitePotential table roots who
+            horizon (time + 1)
+            (Fin.snoc history.1 (history.2, action), nextState)) =
+        finiteStoppingBest table.zeroNeverReward roots who
+          ((time + 1) / 2) (horizon - (time + 1) / 2) := by
+    unfold activeLaw
+    rw [Math.Probability.expect_map]
+    change expect trivialSignalLaw (fun _ =>
+      finiteStoppingBest table.zeroNeverReward roots who
+        ((time + 1) / 2) (horizon - (time + 1) / 2)) = _
+    exact Math.Probability.expect_const _ _
+  simp_rw [hinner]
+  rw [Math.Probability.expect_const]
+  simp only [rootSequenceFinitePotential, hstate]
+
+private theorem rootSequenceFinitePotential_absorbed_harmonic
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ)
+    (strategy : (publicQuittingGame table trivialSignalLaw).BehaviorProfile)
+    {time : ℕ}
+    (history : (publicQuittingGame table trivialSignalLaw).Hist time)
+    (quitters : {S : Finset ι // S.Nonempty})
+    (hstate : history.2 = .absorbed quitters) :
+    (publicQuittingGame table trivialSignalLaw).historyContinuationEU strategy
+        (rootSequenceFinitePotential table roots who horizon) history =
+      rootSequenceFinitePotential table roots who horizon time history := by
+  rcases history with ⟨past, state⟩
+  cases state with
+  | draw => simp at hstate
+  | active signal => simp at hstate
+  | absorbed terminal =>
+      have heq : terminal = quitters := by
+        injection hstate
+      subst terminal
+      unfold StochasticGame.historyContinuationEU
+      simp only [publicQuittingGame_transition_absorbed,
+        Math.Probability.expect_pure, rootSequenceFinitePotential]
+      exact Math.Probability.expect_const _ _
+
+private theorem rootSequenceFinitePotential_active_pure
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ) {time : ℕ}
+    (history : (publicQuittingGame table trivialSignalLaw).Hist time)
+    (signal : Fin 1) (hstate : history.2 = .active signal)
+    (action : Bool) :
+    (publicQuittingGame table trivialSignalLaw).historyContinuationEU
+        (Function.update (rootSequenceSunspotStrategy table roots) who
+          (fun _ _ => PMF.pure action))
+        (rootSequenceFinitePotential table roots who horizon) history =
+      quittingRootExpectedPayoff table.zeroNeverReward
+        (fun _ => finiteStoppingBest table.zeroNeverReward roots who
+          (time / 2 + 1) (horizon - (time / 2 + 1)))
+      (Function.update (roots (time / 2)) who (PMF.pure action)) who := by
+  classical
+  rcases history with ⟨past, state⟩
+  cases state with
+  | draw => simp at hstate
+  | absorbed quitters => simp at hstate
+  | active observed =>
+      have hsignal : observed = signal := Subsingleton.elim _ _
+      subst observed
+      have hactionDist :
+          (publicQuittingGame table trivialSignalLaw).stageActionDist
+              (Function.update (rootSequenceSunspotStrategy table roots) who
+                (fun _ _ => PMF.pure action)) (past, .active signal) =
+            Math.PMFProduct.pmfPi
+              (Function.update (roots (time / 2)) who (PMF.pure action)) := by
+        unfold StochasticGame.stageActionDist
+        congr 1
+        funext player
+        by_cases hplayer : player = who
+        · subst player
+          simp only [Function.update_self]
+          rfl
+        · rw [Function.update_of_ne hplayer]
+          simp [rootSequenceSunspotStrategy,
+            Function.update_of_ne hplayer]
+      unfold StochasticGame.historyContinuationEU
+      rw [hactionDist]
+      unfold quittingRootExpectedPayoff
+      apply congrArg (expect (Math.PMFProduct.pmfPi
+        (Function.update (roots (time / 2)) who (PMF.pure action))))
+      funext jointAction
+      by_cases hquit : (quittingQuitters jointAction).Nonempty
+      · rw [publicQuittingGame_transition_active, dif_pos hquit,
+          Math.Probability.expect_pure]
+        simp only [rootSequenceFinitePotential, quittingRootPayoff,
+          dif_pos hquit]
+      · rw [publicQuittingGame_transition_active, dif_neg hquit,
+          Math.Probability.expect_pure]
+        simp only [rootSequenceFinitePotential, quittingRootPayoff,
+          dif_neg hquit]
+        rw [show (time + 1 + 1) / 2 = time / 2 + 1 by omega]
+
+private theorem rootSequenceFinitePotential_superharmonic
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ)
+    (deviation : (publicQuittingGame table
+      trivialSignalLaw).BehaviorStrategy who)
+    {time : ℕ}
+    (history : (publicQuittingGame table trivialSignalLaw).Hist time)
+    (htime : time < 2 * horizon) :
+    (publicQuittingGame table trivialSignalLaw).historyContinuationEU
+        (Function.update (rootSequenceSunspotStrategy table roots) who
+          deviation)
+        (rootSequenceFinitePotential table roots who horizon) history ≤
+      rootSequenceFinitePotential table roots who horizon time history := by
+  cases hstate : history.2 with
+  | draw =>
+      exact (rootSequenceFinitePotential_draw_harmonic table roots who
+        horizon _ history hstate).le
+  | absorbed quitters =>
+      exact (rootSequenceFinitePotential_absorbed_harmonic table roots who
+        horizon _ history quitters hstate).le
+  | active signal =>
+      rw [historyContinuationEU_update_eq_expect_pure table
+        trivialSignalLaw (rootSequenceSunspotStrategy table roots) who
+        deviation (rootSequenceFinitePotential table roots who horizon)
+        history]
+      calc
+        expect (deviation time history) (fun action =>
+            (publicQuittingGame table
+              trivialSignalLaw).historyContinuationEU
+                (Function.update (rootSequenceSunspotStrategy table roots)
+                  who (fun _ _ => PMF.pure action))
+                (rootSequenceFinitePotential table roots who horizon)
+                history) ≤
+            expect (deviation time history) (fun _ =>
+              rootSequenceFinitePotential table roots who horizon time
+                history) := by
+          apply Math.Probability.expect_mono
+          intro action
+          rw [rootSequenceFinitePotential_active_pure table roots who horizon
+            history signal hstate action,
+            quittingRootExpectedPayoff_update_eq_endpointMix,
+            quittingRootQuitPayoff_eq_fixedOpponentsQuitValue,
+            quittingRootContinuePayoff_eq_fixedOpponents]
+          have hround : time / 2 < horizon := by omega
+          have hfuel : horizon - time / 2 =
+              horizon - (time / 2 + 1) + 1 := by omega
+          rw [show rootSequenceFinitePotential table roots who horizon time
+              history = finiteStoppingBest table.zeroNeverReward roots who
+                (time / 2) (horizon - time / 2) by
+            simp only [rootSequenceFinitePotential, hstate]]
+          rw [hfuel, finiteStoppingBest]
+          cases action with
+          | false =>
+              simp only [PMF.pure_apply,
+                if_neg (by decide : (true : Bool) ≠ false),
+                ENNReal.toReal_zero, if_true, ENNReal.toReal_one,
+                zero_mul, one_mul, zero_add]
+              exact le_max_right _ _
+          | true =>
+              simp only [PMF.pure_apply, if_true, ENNReal.toReal_one,
+                if_neg (by decide : (false : Bool) ≠ true),
+                ENNReal.toReal_zero, one_mul, zero_mul, add_zero]
+              exact le_max_left _ _
+        _ = rootSequenceFinitePotential table roots who horizon time
+              history := Math.Probability.expect_const _ _
+
+private theorem expect_rootSequenceFinitePotential_le_initial
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ)
+    (deviation : (publicQuittingGame table
+      trivialSignalLaw).BehaviorStrategy who) :
+    ∀ time, time ≤ 2 * horizon →
+      expect ((publicQuittingGame table trivialSignalLaw).histDist
+        (Function.update (rootSequenceSunspotStrategy table roots) who
+          deviation) .draw time)
+        (rootSequenceFinitePotential table roots who horizon time) ≤
+      finiteStoppingBest table.zeroNeverReward roots who 0 horizon := by
+  intro time htime
+  induction time with
+  | zero =>
+      rw [(publicQuittingGame table trivialSignalLaw).histDist_zero,
+        Math.Probability.expect_pure,
+        rootSequenceFinitePotential_initial]
+  | succ time ih =>
+      change (publicQuittingGame table
+        trivialSignalLaw).expectedHistoryValue
+          (Function.update (rootSequenceSunspotStrategy table roots) who
+            deviation) .draw
+          (rootSequenceFinitePotential table roots who horizon) (time + 1) ≤
+        _
+      rw [(publicQuittingGame table
+        trivialSignalLaw).expectedHistoryValue_succ]
+      apply le_trans (Math.Probability.expect_mono _ _ _ fun history =>
+        rootSequenceFinitePotential_superharmonic table roots who horizon
+          deviation history (by omega))
+      exact ih (by omega)
+
+/-! The finite payoff after subtracting the nontermination payoff. Live
+states then have value zero, and an absorbed state has value `r_S-r_∅`. -/
+private def publicZeroNeverStateValue
+    {signalCount : ℕ} (table : Table ι)
+    (signalLaw : PMF (Fin (signalCount + 1))) (who : ι) :
+    (publicQuittingGame table signalLaw).State → ℝ :=
+  fun state => match state with
+    | .absorbed quitters => table.zeroNeverReward quitters who
+    | _ => 0
+
+private def publicZeroNeverFinitePayoff
+    {signalCount : ℕ} (table : Table ι)
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (strategy : (publicQuittingGame table signalLaw).BehaviorProfile)
+    (time : ℕ) (who : ι) : ℝ :=
+  expect ((publicQuittingGame table signalLaw).histDist strategy .draw time)
+    (fun history => publicZeroNeverStateValue table signalLaw who history.2)
+
+private theorem publicZeroNeverFinitePayoff_eq_sub
+    {signalCount : ℕ} (table : Table ι)
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (strategy : (publicQuittingGame table signalLaw).BehaviorProfile)
+    (time : ℕ) (who : ι) :
+    publicZeroNeverFinitePayoff table signalLaw strategy time who =
+      publicFinitePayoff table signalLaw strategy time who -
+        table.never who := by
+  let distribution := (publicQuittingGame table signalLaw).histDist
+    strategy .draw time
+  let fullObservable : (publicQuittingGame table signalLaw).Hist time → ℝ :=
+    fun history => match history.2 with
+      | .absorbed quitters => table.terminal quitters who
+      | _ => table.never who
+  let zeroObservable : (publicQuittingGame table signalLaw).Hist time → ℝ :=
+    fun history => publicZeroNeverStateValue table signalLaw who history.2
+  have hpoint (history : (publicQuittingGame table signalLaw).Hist time) :
+      fullObservable history = zeroObservable history + table.never who := by
+    dsimp only [fullObservable, zeroObservable]
+    cases history.2 <;>
+      simp [publicZeroNeverStateValue,
+        QuittingPayoffTable.zeroNeverReward]
+  have hexpect : expect distribution fullObservable =
+      expect distribution zeroObservable + table.never who := by
+    calc
+      expect distribution fullObservable =
+          expect distribution (fun history =>
+            zeroObservable history + table.never who) := by
+        apply congrArg (expect distribution)
+        funext history
+        exact hpoint history
+      _ = expect distribution zeroObservable + table.never who := by
+        rw [Math.Probability.expect_add, Math.Probability.expect_const]
+  change expect distribution zeroObservable =
+    expect distribution fullObservable - table.never who
+  linarith
+
+private theorem publicZeroNeverFinitePayoff_deviation_le_best
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (deviation : (publicQuittingGame table
+      trivialSignalLaw).BehaviorStrategy who)
+    (horizon : ℕ) :
+    publicZeroNeverFinitePayoff table trivialSignalLaw
+        (Function.update (rootSequenceSunspotStrategy table roots) who
+          deviation) (2 * horizon) who ≤
+      finiteStoppingBest table.zeroNeverReward roots who 0 horizon := by
+  let strategy := Function.update (rootSequenceSunspotStrategy table roots)
+    who deviation
+  let distribution := (publicQuittingGame table trivialSignalLaw).histDist
+    strategy .draw (2 * horizon)
+  let observable : (publicQuittingGame table
+      trivialSignalLaw).Hist (2 * horizon) → ℝ :=
+    fun history => publicZeroNeverStateValue table trivialSignalLaw who
+      history.2
+  let potential : (publicQuittingGame table
+      trivialSignalLaw).Hist (2 * horizon) → ℝ :=
+    rootSequenceFinitePotential table roots who horizon (2 * horizon)
+  have heq : observable = potential := by
+    funext history
+    change publicZeroNeverStateValue table trivialSignalLaw who history.2 =
+      rootSequenceFinitePotential table roots who horizon (2 * horizon)
+        history
+    rw [rootSequenceFinitePotential_evenHorizon table roots who horizon
+      history]
+    cases history.2 <;> rfl
+  have hbound : expect distribution potential ≤
+      finiteStoppingBest table.zeroNeverReward roots who 0 horizon := by
+    exact expect_rootSequenceFinitePotential_le_initial table roots who
+      horizon deviation (2 * horizon) le_rfl
+  have hobservable : expect distribution observable ≤
+      finiteStoppingBest table.zeroNeverReward roots who 0 horizon := by
+    rw [heq]
+    exact hbound
+  simpa only [publicZeroNeverFinitePayoff, distribution, strategy,
+    observable] using hobservable
+
+private theorem eventually_finiteStoppingBest_le_of_epsilonEquilibrium
+    (table : Table ι) {ε : ℝ}
+    (profile : (quittingGame table.terminal).BehaviorProfile)
+    (hnash : EpsilonEquilibrium table ε profile) (who : ι)
+    {δ : ℝ} (hδ : 0 < δ) :
+    ∀ᶠ horizon in atTop,
+      finiteStoppingBest table.zeroNeverReward
+          (quittingProfileLiveRoot table.zeroNeverReward profile) who
+          0 horizon ≤
+        quittingTerminalPayoff table.zeroNeverReward profile who + ε + δ := by
+  let roots := quittingProfileLiveRoot table.zeroNeverReward profile
+  let neverValue := quittingRootSequencePureTimeTerminalValue
+    table.zeroNeverReward roots who none 0
+  have hzeroNash : (quittingGame table.terminal).IsεAsymptoticNash
+      (quittingTerminalPayoff table.zeroNeverReward) ε profile := by
+    exact (table.isεAsymptoticNash_iff ε profile).1 hnash
+  have hneverNash := hzeroNash who
+    (quittingPureTimeBehaviorStrategy table.zeroNeverReward who none)
+  have hneverEq :=
+    quittingTerminalPayoff_update_pureTimeBehaviorStrategy
+      table.zeroNeverReward profile who none
+  have hneverBound : neverValue ≤
+      quittingTerminalPayoff table.zeroNeverReward profile who + ε := by
+    dsimp only [neverValue, roots]
+    rw [← hneverEq]
+    exact hneverNash
+  have hneverTendsto : Tendsto (fun horizon =>
+      quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (quittingPureTimeHazard none) 0 horizon) atTop (nhds neverValue) := by
+    simpa [neverValue, roots, quittingRootSequencePureTimeTerminalValue,
+      quittingRootSequenceHazardTerminalValue,
+      quittingRootSequenceTerminalValue] using
+      (tendsto_quittingFiniteRootPayoff_terminal table.zeroNeverReward roots
+        who (quittingPureTimeHazard none) 0)
+  obtain ⟨threshold, hafter⟩ :=
+    (Metric.tendsto_atTop.mp hneverTendsto) δ hδ
+  filter_upwards [eventually_ge_atTop threshold] with horizon hhorizon
+  have hclose := hafter horizon hhorizon
+  rw [Real.dist_eq] at hclose
+  obtain ⟨choice, hchoice⟩ :=
+    exists_quittingFinitePureTimePayoff_eq_finiteStoppingBest
+      table.zeroNeverReward roots who 0 horizon
+  revert hchoice
+  refine Fin.lastCases ?_ (fun earlier => ?_) choice
+  · intro hchoice
+    rw [quittingFinitePureTimePayoff_last_eq_neverFinite] at hchoice
+    dsimp only [roots] at hneverNash hchoice ⊢
+    dsimp only [neverValue, roots] at hclose
+    dsimp only [neverValue, roots] at hneverBound
+    linarith [(abs_lt.mp hclose).2]
+  · intro hchoice
+    rw [quittingFinitePureTimePayoff_castSucc_eq_terminal] at hchoice
+    simp only [Nat.zero_add] at hchoice
+    have hpure := hzeroNash who
+      (quittingPureTimeBehaviorStrategy table.zeroNeverReward who
+        (some earlier.val))
+    have hpureEq :=
+      quittingTerminalPayoff_update_pureTimeBehaviorStrategy
+        table.zeroNeverReward profile who (some earlier.val)
+    have hpureBound :
+        quittingRootSequencePureTimeTerminalValue table.zeroNeverReward
+            (quittingProfileLiveRoot table.zeroNeverReward profile) who
+            (some earlier.val) 0 ≤
+          quittingTerminalPayoff table.zeroNeverReward profile who + ε := by
+      rw [← hpureEq]
+      exact hpure
+    dsimp only [roots] at hchoice ⊢
+    linarith [hpureBound]
+
+/-! Exact finite value of the prescribed root sequence on the doubled public
+clock. This differs from `rootSequenceFinitePotential`, which is the
+best-response Bellman envelope. -/
+private def rootSequencePrescribedFinitePotential (table : Table ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (horizon : ℕ) :
+    (publicQuittingGame table trivialSignalLaw).HistoryPotential :=
+  fun time history => match history.2 with
+    | .draw => quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) ((time + 1) / 2)
+          (horizon - (time + 1) / 2)
+    | .active _ => quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) (time / 2) (horizon - time / 2)
+    | .absorbed quitters => table.zeroNeverReward quitters who
+
+@[simp] private theorem rootSequencePrescribedFinitePotential_initial
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ) :
+    rootSequencePrescribedFinitePotential table roots who horizon 0
+        ((publicQuittingGame table trivialSignalLaw).emptyHist .draw) =
+      quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) 0 horizon := by
+  rfl
+
+@[simp] private theorem rootSequencePrescribedFinitePotential_evenHorizon
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ)
+    (history : (publicQuittingGame table trivialSignalLaw).Hist
+      (2 * horizon)) :
+    rootSequencePrescribedFinitePotential table roots who horizon
+        (2 * horizon) history =
+      match history.2 with
+      | .absorbed quitters => table.zeroNeverReward quitters who
+      | _ => 0 := by
+  rcases history with ⟨past, state⟩
+  cases state with
+  | draw =>
+      change quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) ((2 * horizon + 1) / 2)
+          (horizon - (2 * horizon + 1) / 2) = 0
+      rw [show (2 * horizon + 1) / 2 = horizon by omega]
+      simp [quittingFiniteRootPayoff]
+  | active signal =>
+      change quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) ((2 * horizon) / 2)
+          (horizon - (2 * horizon) / 2) = 0
+      simp [quittingFiniteRootPayoff]
+  | absorbed quitters => rfl
+
+private theorem rootSequencePrescribedFinitePotential_draw_harmonic
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ)
+    (strategy : (publicQuittingGame table trivialSignalLaw).BehaviorProfile)
+    {time : ℕ}
+    (history : (publicQuittingGame table trivialSignalLaw).Hist time)
+    (hstate : history.2 = .draw) :
+    (publicQuittingGame table trivialSignalLaw).historyContinuationEU strategy
+        (rootSequencePrescribedFinitePotential table roots who horizon)
+        history =
+      rootSequencePrescribedFinitePotential table roots who horizon time
+        history := by
+  unfold StochasticGame.historyContinuationEU
+  let activeLaw : PMF
+      (publicQuittingGame table trivialSignalLaw).State :=
+    trivialSignalLaw.map PublicQuittingState.active
+  have htransition (action :
+      (publicQuittingGame table trivialSignalLaw).JointAct) :
+      (publicQuittingGame table trivialSignalLaw).transition history.2
+          action = activeLaw := by
+    rw [hstate]
+    exact publicQuittingGame_transition_draw table trivialSignalLaw action
+  simp_rw [htransition]
+  have hinner (action :
+      (publicQuittingGame table trivialSignalLaw).JointAct) :
+      expect activeLaw (fun nextState =>
+          rootSequencePrescribedFinitePotential table roots who horizon
+            (time + 1)
+            (Fin.snoc history.1 (history.2, action), nextState)) =
+        quittingFiniteRootPayoff table.zeroNeverReward roots who
+          (fun stage => roots stage who) ((time + 1) / 2)
+            (horizon - (time + 1) / 2) := by
+    unfold activeLaw
+    rw [Math.Probability.expect_map]
+    change expect trivialSignalLaw (fun _ =>
+      quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) ((time + 1) / 2)
+          (horizon - (time + 1) / 2)) = _
+    exact Math.Probability.expect_const _ _
+  simp_rw [hinner]
+  rw [Math.Probability.expect_const]
+  simp only [rootSequencePrescribedFinitePotential, hstate]
+
+private theorem rootSequencePrescribedFinitePotential_absorbed_harmonic
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ)
+    (strategy : (publicQuittingGame table trivialSignalLaw).BehaviorProfile)
+    {time : ℕ}
+    (history : (publicQuittingGame table trivialSignalLaw).Hist time)
+    (quitters : {S : Finset ι // S.Nonempty})
+    (hstate : history.2 = .absorbed quitters) :
+    (publicQuittingGame table trivialSignalLaw).historyContinuationEU strategy
+        (rootSequencePrescribedFinitePotential table roots who horizon)
+        history =
+      rootSequencePrescribedFinitePotential table roots who horizon time
+        history := by
+  rcases history with ⟨past, state⟩
+  cases state with
+  | draw => simp at hstate
+  | active signal => simp at hstate
+  | absorbed terminal =>
+      have heq : terminal = quitters := by injection hstate
+      subst terminal
+      unfold StochasticGame.historyContinuationEU
+      simp only [publicQuittingGame_transition_absorbed,
+        Math.Probability.expect_pure,
+        rootSequencePrescribedFinitePotential]
+      exact Math.Probability.expect_const _ _
+
+private theorem rootSequencePrescribedFinitePotential_active_harmonic
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ) {time : ℕ}
+    (history : (publicQuittingGame table trivialSignalLaw).Hist time)
+    (signal : Fin 1) (hstate : history.2 = .active signal)
+    (htime : time < 2 * horizon) :
+    (publicQuittingGame table trivialSignalLaw).historyContinuationEU
+        (rootSequenceSunspotStrategy table roots)
+        (rootSequencePrescribedFinitePotential table roots who horizon)
+        history =
+      rootSequencePrescribedFinitePotential table roots who horizon time
+        history := by
+  classical
+  have hactionDist :
+      (publicQuittingGame table trivialSignalLaw).stageActionDist
+          (rootSequenceSunspotStrategy table roots) history =
+        Math.PMFProduct.pmfPi (roots (time / 2)) := by
+    unfold StochasticGame.stageActionDist
+    congr 1
+    funext player
+    simp only [rootSequenceSunspotStrategy, hstate]
+  have hround : time / 2 < horizon := by omega
+  have hfuel : horizon - time / 2 =
+      horizon - (time / 2 + 1) + 1 := by omega
+  rw [show rootSequencePrescribedFinitePotential table roots who horizon
+      time history = quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) (time / 2)
+          (horizon - time / 2) by
+    simp only [rootSequencePrescribedFinitePotential, hstate]]
+  rw [hfuel, quittingFiniteRootPayoff]
+  rw [Function.update_eq_self]
+  unfold StochasticGame.historyContinuationEU
+  rw [hactionDist]
+  unfold quittingRootExpectedPayoff
+  apply congrArg (expect (Math.PMFProduct.pmfPi (roots (time / 2))))
+  funext jointAction
+  by_cases hquit : (quittingQuitters jointAction).Nonempty
+  · rw [show (publicQuittingGame table
+        trivialSignalLaw).transition history.2 jointAction =
+        PMF.pure (.absorbed ⟨quittingQuitters jointAction, hquit⟩) by
+      rw [hstate, publicQuittingGame_transition_active, dif_pos hquit]]
+    rw [Math.Probability.expect_pure]
+    simp only [rootSequencePrescribedFinitePotential, quittingRootPayoff,
+      dif_pos hquit]
+  · rw [show (publicQuittingGame table
+        trivialSignalLaw).transition history.2 jointAction = PMF.pure .draw by
+      rw [hstate, publicQuittingGame_transition_active, dif_neg hquit]]
+    rw [Math.Probability.expect_pure]
+    simp only [rootSequencePrescribedFinitePotential, quittingRootPayoff,
+      dif_neg hquit]
+    rw [show (time + 1 + 1) / 2 = time / 2 + 1 by omega]
+
+private theorem rootSequencePrescribedFinitePotential_harmonic
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ) {time : ℕ}
+    (history : (publicQuittingGame table trivialSignalLaw).Hist time)
+    (htime : time < 2 * horizon) :
+    (publicQuittingGame table trivialSignalLaw).historyContinuationEU
+        (rootSequenceSunspotStrategy table roots)
+        (rootSequencePrescribedFinitePotential table roots who horizon)
+        history =
+      rootSequencePrescribedFinitePotential table roots who horizon time
+        history := by
+  cases hstate : history.2 with
+  | draw =>
+      exact rootSequencePrescribedFinitePotential_draw_harmonic table roots
+        who horizon _ history hstate
+  | active signal =>
+      exact rootSequencePrescribedFinitePotential_active_harmonic table roots
+        who horizon history signal hstate htime
+  | absorbed quitters =>
+      exact rootSequencePrescribedFinitePotential_absorbed_harmonic table
+        roots who horizon _ history quitters hstate
+
+private theorem expect_rootSequencePrescribedFinitePotential_eq_initial
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ) :
+    ∀ time, time ≤ 2 * horizon →
+      expect ((publicQuittingGame table trivialSignalLaw).histDist
+        (rootSequenceSunspotStrategy table roots) .draw time)
+        (rootSequencePrescribedFinitePotential table roots who horizon time) =
+      quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) 0 horizon := by
+  intro time htime
+  induction time with
+  | zero =>
+      rw [(publicQuittingGame table trivialSignalLaw).histDist_zero,
+        Math.Probability.expect_pure,
+        rootSequencePrescribedFinitePotential_initial]
+  | succ time ih =>
+      change (publicQuittingGame table
+        trivialSignalLaw).expectedHistoryValue
+          (rootSequenceSunspotStrategy table roots) .draw
+          (rootSequencePrescribedFinitePotential table roots who horizon)
+          (time + 1) = _
+      rw [(publicQuittingGame table
+        trivialSignalLaw).expectedHistoryValue_succ]
+      have htimeLt : time < 2 * horizon := by omega
+      have hharmonic (history : (publicQuittingGame table
+          trivialSignalLaw).Hist time) :=
+        rootSequencePrescribedFinitePotential_harmonic table roots who
+          horizon history htimeLt
+      simp_rw [hharmonic]
+      exact ih (by omega)
+
+private theorem publicZeroNeverFinitePayoff_rootSequence_eq
+    (table : Table ι) (roots : ℕ → ι → PMF Bool) (who : ι)
+    (horizon : ℕ) :
+    publicZeroNeverFinitePayoff table trivialSignalLaw
+        (rootSequenceSunspotStrategy table roots) (2 * horizon) who =
+      quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) 0 horizon := by
+  let distribution := (publicQuittingGame table trivialSignalLaw).histDist
+    (rootSequenceSunspotStrategy table roots) .draw (2 * horizon)
+  let observable : (publicQuittingGame table
+      trivialSignalLaw).Hist (2 * horizon) → ℝ :=
+    fun history => publicZeroNeverStateValue table trivialSignalLaw who
+      history.2
+  let potential : (publicQuittingGame table
+      trivialSignalLaw).Hist (2 * horizon) → ℝ :=
+    rootSequencePrescribedFinitePotential table roots who horizon
+      (2 * horizon)
+  have heq : observable = potential := by
+    funext history
+    change publicZeroNeverStateValue table trivialSignalLaw who history.2 =
+      rootSequencePrescribedFinitePotential table roots who horizon
+        (2 * horizon) history
+    rw [rootSequencePrescribedFinitePotential_evenHorizon table roots who
+      horizon history]
+    cases history.2 <;> rfl
+  have hvalue : expect distribution potential =
+      quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) 0 horizon := by
+    exact expect_rootSequencePrescribedFinitePotential_eq_initial table roots
+      who horizon (2 * horizon) le_rfl
+  have hobservable : expect distribution observable =
+      quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) 0 horizon := by
+    rw [heq]
+    exact hvalue
+  simpa only [publicZeroNeverFinitePayoff, distribution, observable] using
+    hobservable
+
+private theorem publicQuittingPayoff_rootSequenceProfile_eq
+    (table : Table ι)
+    (profile : (quittingGame table.terminal).BehaviorProfile)
+    (who : ι) :
+    publicQuittingPayoff table trivialSignalLaw
+        (rootSequenceSunspotStrategy table
+          (quittingProfileLiveRoot table.zeroNeverReward profile)) who =
+      table.terminalPayoff profile who := by
+  let roots := quittingProfileLiveRoot table.zeroNeverReward profile
+  let strategy := rootSequenceSunspotStrategy table roots
+  have heven : Tendsto (fun horizon : ℕ => 2 * horizon) atTop atTop := by
+    apply tendsto_atTop.2
+    intro threshold
+    filter_upwards [eventually_ge_atTop threshold] with horizon hhorizon
+    omega
+  have hpublicFull : Tendsto (fun horizon =>
+      publicFinitePayoff table trivialSignalLaw strategy (2 * horizon) who)
+      atTop (nhds (publicQuittingPayoff table trivialSignalLaw strategy who)) :=
+    (tendsto_publicFinitePayoff table trivialSignalLaw strategy who).comp heven
+  have hpublicZero : Tendsto (fun horizon =>
+      publicZeroNeverFinitePayoff table trivialSignalLaw strategy
+        (2 * horizon) who) atTop
+      (nhds (publicQuittingPayoff table trivialSignalLaw strategy who -
+        table.never who)) := by
+    apply (hpublicFull.sub_const (table.never who)).congr'
+    exact Filter.Eventually.of_forall fun horizon =>
+      (publicZeroNeverFinitePayoff_eq_sub table trivialSignalLaw strategy
+        (2 * horizon) who).symm
+  have hroot : Tendsto (fun horizon =>
+      quittingFiniteRootPayoff table.zeroNeverReward roots who
+        (fun stage => roots stage who) 0 horizon) atTop
+      (nhds (quittingRootSequenceTerminalValue table.zeroNeverReward roots
+        who 0)) :=
+    tendsto_quittingFiniteRootPayoff_self_terminalValue
+      table.zeroNeverReward roots who 0
+  have hrootAsPublic : Tendsto (fun horizon =>
+      publicZeroNeverFinitePayoff table trivialSignalLaw strategy
+        (2 * horizon) who) atTop
+      (nhds (quittingRootSequenceTerminalValue table.zeroNeverReward roots
+        who 0)) := by
+    apply hroot.congr'
+    exact Filter.Eventually.of_forall fun horizon => by
+      exact (publicZeroNeverFinitePayoff_rootSequence_eq table roots who
+        horizon).symm
+  have hlimit := tendsto_nhds_unique hpublicZero hrootAsPublic
+  have hordinary := quittingTerminalPayoff_eq_rootSequence_profileLiveRoot
+    table.zeroNeverReward profile who
+  rw [table.terminalPayoff_eq_add_never]
+  dsimp only [strategy, roots] at hlimit ⊢
+  rw [hordinary]
+  linarith
+
+private theorem tendsto_publicZeroNeverFinitePayoff_even
+    {signalCount : ℕ} (table : Table ι)
+    (signalLaw : PMF (Fin (signalCount + 1)))
+    (strategy : (publicQuittingGame table signalLaw).BehaviorProfile)
+    (who : ι) :
+    Tendsto (fun horizon => publicZeroNeverFinitePayoff table signalLaw
+        strategy (2 * horizon) who) atTop
+      (nhds (publicQuittingPayoff table signalLaw strategy who -
+        table.never who)) := by
+  have heven : Tendsto (fun horizon : ℕ => 2 * horizon) atTop atTop := by
+    apply tendsto_atTop.2
+    intro threshold
+    filter_upwards [eventually_ge_atTop threshold] with horizon hhorizon
+    omega
+  have hfull :=
+    (tendsto_publicFinitePayoff table signalLaw strategy who).comp heven
+  apply (hfull.sub_const (table.never who)).congr'
+  exact Filter.Eventually.of_forall fun horizon =>
+    (publicZeroNeverFinitePayoff_eq_sub table signalLaw strategy
+      (2 * horizon) who).symm
+
+private theorem publicQuittingPayoff_deviation_le_of_epsilonEquilibrium
+    (table : Table ι) {ε : ℝ}
+    (profile : (quittingGame table.terminal).BehaviorProfile)
+    (hnash : EpsilonEquilibrium table ε profile) (who : ι)
+    (deviation : (publicQuittingGame table
+      trivialSignalLaw).BehaviorStrategy who) :
+    publicQuittingPayoff table trivialSignalLaw
+        (Function.update (rootSequenceSunspotStrategy table
+          (quittingProfileLiveRoot table.zeroNeverReward profile)) who
+          deviation) who ≤
+      table.terminalPayoff profile who + ε := by
+  let roots := quittingProfileLiveRoot table.zeroNeverReward profile
+  let strategy := rootSequenceSunspotStrategy table roots
+  let deviated := Function.update strategy who deviation
+  apply le_of_forall_pos_le_add
+  intro δ hδ
+  have hbestEventually :=
+    eventually_finiteStoppingBest_le_of_epsilonEquilibrium table profile
+      hnash who hδ
+  have hfiniteEventually : ∀ᶠ horizon in atTop,
+      publicZeroNeverFinitePayoff table trivialSignalLaw deviated
+          (2 * horizon) who ≤
+        quittingTerminalPayoff table.zeroNeverReward profile who + ε + δ := by
+    filter_upwards [hbestEventually] with horizon hbest
+    exact (publicZeroNeverFinitePayoff_deviation_le_best table roots who
+      deviation horizon).trans hbest
+  have hzeroBound :
+      publicQuittingPayoff table trivialSignalLaw deviated who -
+          table.never who ≤
+        quittingTerminalPayoff table.zeroNeverReward profile who + ε + δ := by
+    apply le_of_tendsto
+      (tendsto_publicZeroNeverFinitePayoff_even table trivialSignalLaw
+        deviated who)
+    exact hfiniteEventually
+  rw [table.terminalPayoff_eq_add_never]
+  dsimp only [deviated, strategy, roots] at hzeroBound ⊢
+  linarith
+
+/-! An ordinary ε-equilibrium remains an ε-equilibrium after inserting
+the action-irrelevant public draw state before every quitting decision. -/
+private theorem rootSequenceSunspotProfile_isEpsilonEquilibrium
+    (table : Table ι) {ε : ℝ}
+    (profile : (quittingGame table.terminal).BehaviorProfile)
+    (hnash : EpsilonEquilibrium table ε profile) :
+    SunspotEpsilonEquilibrium table ε
+      (rootSequenceSunspotProfile table
+        (quittingProfileLiveRoot table.zeroNeverReward profile)) := by
+  intro who deviation
+  have hdeviation :=
+    publicQuittingPayoff_deviation_le_of_epsilonEquilibrium table profile
+      hnash who deviation
+  have hprofile := publicQuittingPayoff_rootSequenceProfile_eq table profile who
+  dsimp only [rootSequenceSunspotProfile, SunspotProfile.payoff]
+  rw [hprofile]
+  linarith
 
 /-! A deviating normal player can only bring the final tail closer by
 quitting.  Thus the forced-Continue final-tail potential is superharmonic
@@ -18358,6 +19299,46 @@ theorem theorem2_13_sunspot
   intro who deviation
   have hbound := hseven who deviation
   linarith
+
+/-! **Theorem 2.4 (paper).** Every normalized quitting game has a sunspot
+`ε`-equilibrium for every `ε>0`. The proof combines the four LCP branches
+above; ordinary equilibria are transported through the checked trivial-signal
+clock-dilation argument. -/
+theorem theorem2_4 (table : Table ι)
+    (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table) :
+    ∀ ε : ℝ, 0 < ε → ∃ profile : SunspotProfile table,
+      SunspotEpsilonEquilibrium table ε profile := by
+  intro ε hε
+  by_cases habnormal : AllPlayersAbnormal table
+  · obtain ⟨root, hnash⟩ := lemma2_7 table hnormalized hbounded
+      habnormal ε hε
+    let ordinary := quittingStationaryProfile table.terminal root
+    refine ⟨rootSequenceSunspotProfile table
+      (quittingProfileLiveRoot table.zeroNeverReward ordinary), ?_⟩
+    exact rootSequenceSunspotProfile_isEpsilonEquilibrium table ordinary
+      hnash
+  · have hnormal : HasNormalPlayers table := by
+      exact Finset.nonempty_iff_ne_empty.mpr habnormal
+    by_cases hzero : HasNontrivialZeroProjectiveLCPSolution
+        (NormalMatrix table)
+    · obtain ⟨ordinary, hnash⟩ :=
+        epsilonEquilibria_of_nontrivialZeroProjectiveLCPSolution table
+          hnormalized hbounded hzero ε hε
+      refine ⟨rootSequenceSunspotProfile table
+        (quittingProfileLiveRoot table.zeroNeverReward ordinary), ?_⟩
+      exact rootSequenceSunspotProfile_isEpsilonEquilibrium table ordinary
+        hnash
+    · by_cases hQ : QMatrix (NormalMatrix table)
+      · obtain ⟨profile, hequilibrium, _⟩ := theorem2_13_sunspot table
+          hnormalized hbounded hnormal hzero hQ ε hε
+        exact ⟨profile, hequilibrium⟩
+      · obtain ⟨ordinary, hnash⟩ := theorem2_13_nonQ table
+          hnormalized hbounded hnormal hzero hQ ε hε
+        refine ⟨rootSequenceSunspotProfile table
+          (quittingProfileLiveRoot table.zeroNeverReward ordinary), ?_⟩
+        exact rootSequenceSunspotProfile_isEpsilonEquilibrium table ordinary
+          hnash
 
 /-! ## Section 4 — sunspot payoff characterization -/
 
