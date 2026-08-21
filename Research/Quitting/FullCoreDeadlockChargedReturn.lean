@@ -134,7 +134,7 @@ theorem secondReach_clearance :
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, reachIntermediate,
       chargedBase, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two, Matrix.cons_val_three]
+      Matrix.cons_val_two, Matrix.cons_val_three] <;> decide
 
 theorem returnFirst_clearance :
     idealSingletonClearance deadlockMatrix 1 (8 / 9) chargedBase =
@@ -152,7 +152,7 @@ theorem returnSecond_clearance :
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, returnFirst,
       returnSecond, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two, Matrix.cons_val_three]
+      Matrix.cons_val_two, Matrix.cons_val_three] <;> decide
 
 theorem returnThird_clearance :
     idealSingletonClearance deadlockMatrix 0 (2 / 3) returnSecond =
@@ -170,7 +170,7 @@ theorem returnBase_clearance :
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, returnThird,
       chargedBase, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two, Matrix.cons_val_three]
+      Matrix.cons_val_two, Matrix.cons_val_three] <;> decide
 
 /-! ## Exact debt accounting -/
 
@@ -179,28 +179,28 @@ theorem returnFirst_debt (D : ℝ) :
       (8 / 9) * D + 2 / 9 := by
   norm_num [idealSingletonDebt, deadlockMatrix, chargedBase,
     Fin.sum_univ_succ, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.cons_val_two, Matrix.cons_val_three] <;> ring
+    Matrix.cons_val_two, Matrix.cons_val_three]
 
 theorem returnSecond_debt (D : ℝ) :
     idealSingletonDebt deadlockMatrix 2 (1 / 2) returnFirst D =
       (1 / 2) * D := by
   norm_num [idealSingletonDebt, deadlockMatrix, returnFirst,
     Fin.sum_univ_succ, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.cons_val_two, Matrix.cons_val_three] <;> ring
+    Matrix.cons_val_two, Matrix.cons_val_three]
 
 theorem returnThird_debt (D : ℝ) :
     idealSingletonDebt deadlockMatrix 0 (2 / 3) returnSecond D =
       (2 / 3) * D := by
   norm_num [idealSingletonDebt, deadlockMatrix, returnSecond,
     Fin.sum_univ_succ, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.cons_val_two, Matrix.cons_val_three] <;> ring
+    Matrix.cons_val_two, Matrix.cons_val_three]
 
 theorem returnBase_debt (D : ℝ) :
     idealSingletonDebt deadlockMatrix 3 (3 / 4) returnThird D =
       (3 / 4) * D := by
   norm_num [idealSingletonDebt, deadlockMatrix, returnThird,
     Fin.sum_univ_succ, Matrix.cons_val_zero, Matrix.cons_val_one,
-    Matrix.cons_val_two, Matrix.cons_val_three] <;> ring
+    Matrix.cons_val_two, Matrix.cons_val_three]
 
 /-! ## Semantic realization -/
 
@@ -394,7 +394,8 @@ theorem chargedReturnOrbit_debt_tendsto
       (fun _ : ℕ => (1 / 14 : ℝ)) atTop (𝓝 (1 / 14))).add
     (hpow.mul_const
       (quittingTerminalSemanticDebtSum start - 1 / 14))
-  exact hlimit.congr' (Eventually.of_forall fun n => (horbit n).2.2.symm)
+  simpa using hlimit.congr'
+    (Eventually.of_forall fun n => (horbit n).2.2.symm)
 
 theorem globalDebtFloor_le_one_fourteenth
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
