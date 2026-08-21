@@ -12533,6 +12533,58 @@ private theorem extendedSegmentPrefixVariation_le_infinite
   intro i _hi _hnot
   exact norm_nonneg _
 
+/-- Any finite valid prefix inside one active segment is an exact approximate-row path. -/
+private theorem exists_exactSegmentPrefixPath (G : QuittingGame) {η : ℝ}
+    {x : ExtendedOrbitData (FRow G η)}
+    (hrational : ∀ j, ActiveSegment x.segmentCount j → ∀ i,
+      SegmentIndex (x.segmentLength j) i → IsRational G η (x.point j i))
+    (j : ℕ) (hj : ActiveSegment x.segmentCount j) (K : ℕ)
+    (hvalid : ∀ i < K, SegmentIndex (x.segmentLength j) (i + 1)) :
+    ∃ z : ApproximateFRowPath G η,
+      z.point 0 = x.point j 0 ∧ z.totalError = 0 ∧
+      z.exactVariation =
+        ∑ i ∈ Finset.range K, ‖x.point j (i + 1) - x.point j i‖ := by
+  classical
+  let row : Fin K → QuitRow G := fun i =>
+    Classical.choose (x.step j hj i (hvalid i i.isLt))
+  have hrowMem (i : Fin K) :
+      row i ∈ EpsilonRow G η (x.point j i) :=
+    (Classical.choose_spec (x.step j hj i (hvalid i i.isLt))).1
+  have hrowPayoff (i : Fin K) :
+      QuittingOneStagePayoff G (x.point j i) (row i) = x.point j (i + 1) :=
+    (Classical.choose_spec (x.step j hj i (hvalid i i.isLt))).2
+  let z : ApproximateFRowPath G η :=
+    { length := K
+      point := fun i => x.point j i
+      row := row
+      seamError := fun _ => 0
+      seamError_nonneg := fun _ => le_rfl
+      row_mem := by
+        intro i
+        simpa only [Fin.val_castSucc] using hrowMem i
+      step_error := by
+        intro i
+        rw [show (i.succ : ℕ) = (i : ℕ) + 1 by rfl]
+        rw [show (i.castSucc : ℕ) = (i : ℕ) by rfl]
+        rw [hrowPayoff i, sub_self, norm_zero]
+      rational := by
+        intro i
+        apply hrational j hj i
+        by_cases hi0 : (i : ℕ) = 0
+        · intro k hk
+          simpa [hi0] using x.segmentLengthPositive j hj k hk
+        · have hprev := hvalid ((i : ℕ) - 1) (by omega)
+          simpa [Nat.sub_add_cancel (Nat.one_le_iff_ne_zero.mpr hi0)] using hprev }
+  refine ⟨z, rfl, ?_, ?_⟩
+  · simp [ApproximateFRowPath.totalError, z]
+  · simp only [ApproximateFRowPath.exactVariation, z,
+      Finset.sum_fin_eq_sum_range]
+    apply Finset.sum_congr rfl
+    intro i hi
+    have hi' : i < K := Finset.mem_range.mp hi
+    simp only [hi', dite_true, Fin.val_castSucc]
+    rw [hrowPayoff ⟨i, hi'⟩]
+
 /-- A finite rectangular prefix of an extended orbit with infinitely many segments
 flattens into one approximate row path.  Each truncated infinite segment spends at most
 the common seam budget. -/
@@ -12626,6 +12678,90 @@ private theorem exists_extendedPrefixPath (G : QuittingGame) {η : ℝ}
         rw [show joined.exactVariation = z.exactVariation + w.exactVariation by
           exact ApproximateFRowPath.exactVariation_append z w hstitch]
         exact add_le_add hzvariation hwvariation
+
+/-- With finitely many active segments, large rectangular variation is already
+concentrated in one segment prefix. -/
+private theorem exists_largeSegmentPrefixPath (G : QuittingGame) {η : ℝ}
+    {x : ExtendedOrbitData (FRow G η)}
+    (hrational : ∀ j, ActiveSegment x.segmentCount j → ∀ i,
+      SegmentIndex (x.segmentLength j) i → IsRational G η (x.point j i))
+    (hvariation : HasUnboundedExtendedVariation x)
+    {L : ℕ} (hcount : x.segmentCount = some L)
+    {B : ℝ} (hB : 0 < B) :
+    ∃ z : ApproximateFRowPath G η,
+      z.totalError = 0 ∧ B ≤ z.exactVariation := by
+  classical
+  have hL : 0 < L := x.segmentCountPositive L hcount
+  rcases (hasUnboundedExtendedVariation_iff_prefix x).1 hvariation
+      ((L : ℝ) * B) with ⟨J, I, hlarge⟩
+  let active := (Finset.range J).filter (ActiveSegment x.segmentCount)
+  have hprefix :
+      extendedPrefixVariation x J I =
+        ∑ j ∈ active, extendedSegmentPrefixVariation x j I := by
+    rw [extendedPrefixVariation]
+    rw [Finset.sum_filter]
+    apply Finset.sum_congr rfl
+    intro j _hj
+    by_cases hj : ActiveSegment x.segmentCount j
+    · simp [hj]
+    · simp [hj, extendedSegmentPrefixVariation]
+  have hactiveNonempty : active.Nonempty := by
+    by_contra hempty
+    rw [Finset.not_nonempty_iff_eq_empty.mp hempty, Finset.sum_empty] at hprefix
+    rw [hprefix] at hlarge
+    have hLreal : 0 < (L : ℝ) := by exact_mod_cast hL
+    linarith [mul_pos hLreal hB]
+  have hexists :
+      ∃ j ∈ active, B ≤ extendedSegmentPrefixVariation x j I := by
+    by_contra hnone
+    push Not at hnone
+    have hsumStrict :
+        (∑ j ∈ active, extendedSegmentPrefixVariation x j I) <
+          ∑ _j ∈ active, B := by
+      apply Finset.sum_lt_sum
+      · intro j hj
+        exact (hnone j hj).le
+      · rcases hactiveNonempty with ⟨j, hj⟩
+        exact ⟨j, hj, hnone j hj⟩
+    have hcard : active.card ≤ L := by
+      have hsubset : active ⊆ Finset.range L := by
+        intro j hj
+        have hjactive : ActiveSegment x.segmentCount j :=
+          (Finset.mem_filter.mp hj).2
+        exact Finset.mem_range.mpr (hjactive L hcount)
+      simpa using Finset.card_le_card hsubset
+    rw [Finset.sum_const, nsmul_eq_mul] at hsumStrict
+    have hcardReal : (active.card : ℝ) ≤ L := by exact_mod_cast hcard
+    have hupper : (active.card : ℝ) * B ≤ L * B :=
+      mul_le_mul_of_nonneg_right hcardReal hB.le
+    rw [hprefix] at hlarge
+    linarith
+  rcases hexists with ⟨j, hjactive, hjlarge⟩
+  have hj : ActiveSegment x.segmentCount j := (Finset.mem_filter.mp hjactive).2
+  cases hlength : x.segmentLength j with
+  | some k =>
+      have hk : 0 < k := x.segmentLengthPositive j hj k hlength
+      have hvalid : ∀ i < k - 1,
+          SegmentIndex (x.segmentLength j) (i + 1) := by
+        intro i hi l hl
+        rw [hlength] at hl
+        injection hl with hl
+        omega
+      rcases exists_exactSegmentPrefixPath G hrational j hj (k - 1) hvalid with
+        ⟨z, _hz0, hzerror, hzvariation⟩
+      refine ⟨z, hzerror, hjlarge.trans ?_⟩
+      exact (extendedSegmentPrefixVariation_le_finite x hj hlength).trans_eq
+        hzvariation.symm
+  | none =>
+      have hvalid : ∀ i < I, SegmentIndex (x.segmentLength j) (i + 1) := by
+        intro i _hi k hk
+        rw [hlength] at hk
+        contradiction
+      rcases exists_exactSegmentPrefixPath G hrational j hj I hvalid with
+        ⟨z, _hz0, hzerror, hzvariation⟩
+      refine ⟨z, hzerror, hjlarge.trans ?_⟩
+      exact (extendedSegmentPrefixVariation_le_infinite x hj hlength le_rfl).trans_eq
+        hzvariation.symm
 
 /-- An ordinary infinite orbit is the one-segment special case of an extended orbit. -/
 theorem InfiniteOrbitCondition.toExtendedOrbitCondition (G : QuittingGame)
