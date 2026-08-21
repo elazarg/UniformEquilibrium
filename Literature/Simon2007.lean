@@ -1,4 +1,5 @@
 import Mathlib
+import MathUE.CompactFiniteChargedReturn
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayMeasure
 import
   UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.DependentActionPadding
@@ -11977,6 +11978,277 @@ theorem InfiniteOrbitCondition.toFiniteNearOrbitCondition
     intro i hi
     simp [Finset.mem_range.mp hi]
 
+/-- Near-feasible vectors lie in one compact ball determined by a terminal-reward bound. -/
+private theorem nearFeasible_mem_closedBall (G : QuittingGame) {η R : ℝ}
+    (hR : 0 ≤ R) (hreward : ∀ A n, |G.reward A n| ≤ R)
+    {r : Payoff G.Player} (hr : NearFeasible G η r) :
+    r ∈ Metric.closedBall 0 (R + η) := by
+  rcases hr with ⟨z, hzFeasible, hrz⟩
+  have hsource : range G.reward ∪ {(0 : Payoff G.Player)} ⊆
+      Metric.closedBall 0 R := by
+    rintro y (⟨A, rfl⟩ | rfl)
+    · rw [Metric.mem_closedBall, dist_zero_right, pi_norm_le_iff_of_nonempty]
+      intro n
+      simpa [Real.norm_eq_abs] using hreward A n
+    · simp [Metric.mem_closedBall, hR]
+  have hzBall : z ∈ Metric.closedBall 0 R :=
+    convexHull_min hsource (convex_closedBall 0 R) hzFeasible
+  rw [Metric.mem_closedBall, dist_zero_right] at hzBall ⊢
+  calc
+    ‖r‖ ≤ ‖r - z‖ + ‖z‖ := by
+      simpa only [sub_add_cancel] using norm_add_le (r - z) z
+    _ ≤ η + R := add_le_add hrz hzBall
+    _ = R + η := add_comm _ _
+
+/-- If no coordinate quits surely, then the total quitting probability is strictly below one. -/
+private theorem quitProbability_lt_one_of_forall_ne_one (G : QuittingGame)
+    (p : QuitRow G) (h : ∀ n, (p n : ℝ) ≠ 1) : QuitProbability G p < 1 := by
+  simp only [QuitProbability]
+  have hcontinue : 0 < ∏ n, (1 - (p n : ℝ)) := by
+    apply Finset.prod_pos
+    intro n _hn
+    exact sub_pos.mpr (lt_of_le_of_ne (p n).property.2 (h n))
+  linarith
+
+/-- A sufficiently long finite near-feasible orbit contains a returned block whose reverse
+periodization gives the cyclic orbit in Theorem 3(ii). -/
+theorem FiniteNearOrbitCondition.toCyclicOrbitCondition
+    (G : QuittingGame) (hinstant : ¬HasInstantApproximateEquilibria G)
+    (h : FiniteNearOrbitCondition G) : CyclicOrbitCondition G := by
+  classical
+  intro ε hε
+  obtain ⟨σ, hσ, hnoSure⟩ := exists_scale_without_sure_quitter_of_not_instant G hinstant
+  let η := min (ε / 5) σ
+  have hη : 0 < η := lt_min (div_pos hε (by norm_num)) hσ
+  have hηε : η ≤ ε / 5 := min_le_left _ _
+  have hησ : η ≤ σ := min_le_right _ _
+  obtain ⟨R, hR⟩ := exists_quittingPayoffDifferenceBound G
+  let C := R + η
+  have hC : 0 < C := by dsimp only [C]; linarith [hR.1]
+  have hreward : ∀ A n, |G.reward A n| ≤ R := fun A n => le_of_lt (hR.2.2 A n)
+  let K : Set (Payoff G.Player) := Metric.closedBall 0 C
+  have hK : IsCompact K := isCompact_closedBall 0 C
+  obtain ⟨threshold, hthreshold0, hreturn⟩ :=
+    Math.exists_charge_threshold_for_close_pair_of_compact K hK η hη
+  let B := max 2 (2 * C * threshold)
+  have hB : 1 < B := lt_of_lt_of_le (by norm_num) (le_max_left _ _)
+  rcases h η hη B hB with ⟨k, x, horbit, hx, hvariation⟩
+  let state : ℕ → Payoff G.Player := fun t =>
+    if ht : t ≤ k then x ⟨t, by omega⟩ else x ⟨k, by omega⟩
+  have hstateMem : ∀ t, state t ∈ K := by
+    intro t
+    by_cases ht : t ≤ k
+    · rw [show state t = x ⟨t, by omega⟩ by simp [state, ht]]
+      exact nearFeasible_mem_closedBall G (zero_le_one.trans hR.1) hreward (hx _).2
+    · rw [show state t = x ⟨k, by omega⟩ by simp [state, ht]]
+      exact nearFeasible_mem_closedBall G (zero_le_one.trans hR.1) hreward (hx _).2
+  let charge : ℕ → ℝ := fun t =>
+    if t < k then ‖state (t + 1) - state t‖ / (2 * C) else 0
+  have hcharge0 : ∀ t, 0 ≤ charge t := by
+    intro t
+    by_cases ht : t < k
+    · rw [show charge t = ‖state (t + 1) - state t‖ / (2 * C) by simp [charge, ht]]
+      exact div_nonneg (norm_nonneg _) (mul_nonneg (by norm_num) hC.le)
+    · simp [charge, ht]
+  have hcharge1 : ∀ t, charge t ≤ 1 := by
+    intro t
+    by_cases ht : t < k
+    · have hnext := hstateMem (t + 1)
+      have hthis := hstateMem t
+      change dist (state (t + 1)) 0 ≤ C at hnext
+      change dist (state t) 0 ≤ C at hthis
+      rw [dist_zero_right] at hnext hthis
+      rw [show charge t = ‖state (t + 1) - state t‖ / (2 * C) by simp [charge, ht]]
+      rw [div_le_one (mul_pos (by norm_num) hC)]
+      exact (norm_sub_le _ _).trans (by linarith)
+    · simp [charge, ht]
+  have hvariationEq : FiniteOrbitVariation x =
+      ∑ t ∈ Finset.range k, ‖state (t + 1) - state t‖ := by
+    rw [FiniteOrbitVariation, Finset.sum_fin_eq_sum_range]
+    apply Finset.sum_congr rfl
+    intro t ht
+    have htk : t < k := Finset.mem_range.mp ht
+    simp [state, htk, htk.le, Nat.succ_le_iff.mpr htk]
+  have hchargeSum : (∑ t ∈ Finset.range k, charge t) =
+      FiniteOrbitVariation x / (2 * C) := by
+    rw [hvariationEq, Finset.sum_div]
+    apply Finset.sum_congr rfl
+    intro t ht
+    simp [charge, Finset.mem_range.mp ht]
+  have hlarge : threshold ≤ ∑ t ∈ Finset.range k, charge t := by
+    rw [hchargeSum, le_div_iff₀ (mul_pos (by norm_num) hC)]
+    simpa [mul_comm] using (le_max_right 2 (2 * C * threshold)).trans hvariation
+  obtain ⟨first, second, hfirstSecond, hsecondK, hclose, hgap⟩ :=
+    hreturn state charge k hstateMem hcharge0 hcharge1 hlarge
+  have hfirstK : first ≤ k := (Nat.le_of_lt hfirstSecond).trans hsecondK
+  let L := second - first
+  have hL : 0 < L := Nat.sub_pos_of_lt hfirstSecond
+  let s : ℕ → Payoff G.Player := fun j => state (first + j)
+  let p : ℕ → QuitRow G := fun j =>
+    if hj : first + j < k then Classical.choose (horbit ⟨first + j, hj⟩)
+    else fun _ => 0
+  have hstate_eq (t : ℕ) (ht : t ≤ k) : state t = x ⟨t, by omega⟩ := by
+    simp [state, ht]
+  have hp (j : ℕ) (hj : j < L) : p j ∈ EpsilonRow G η (s j) := by
+    have hjSecond : first + j < second := by dsimp only [L] at hj; omega
+    have hjk : first + j < k := hjSecond.trans_le hsecondK
+    have hspec := (Classical.choose_spec (horbit ⟨first + j, hjk⟩)).1
+    rw [show s j = x ⟨first + j, by omega⟩ by
+      exact hstate_eq (first + j) hjk.le]
+    simpa [p, hjk, Nat.add_assoc] using hspec
+  have hstep (j : ℕ) (hj : j < L) :
+      s (j + 1) = QuittingOneStagePayoff G (s j) (p j) := by
+    have hjSecond : first + j < second := by dsimp only [L] at hj; omega
+    have hjk : first + j < k := hjSecond.trans_le hsecondK
+    have hjNextK : first + (j + 1) ≤ k := by omega
+    have hspec := (Classical.choose_spec (horbit ⟨first + j, hjk⟩)).2.symm
+    rw [show s j = x ⟨first + j, by omega⟩ by
+      exact hstate_eq (first + j) hjk.le]
+    rw [show s (j + 1) = x ⟨first + (j + 1), by omega⟩ by
+      exact hstate_eq (first + (j + 1)) hjNextK]
+    simpa [p, hjk, Nat.add_assoc] using hspec
+  have hsRational (j : ℕ) (hj : j ≤ L) : IsRational G η (s j) := by
+    have hjK : first + j ≤ k := by dsimp only [L] at hj; omega
+    rw [show s j = x ⟨first + j, by omega⟩ by exact hstate_eq _ hjK]
+    exact (hx _).1
+  have hgap' : 1 ≤ ∑ j ∈ Finset.range L, charge (first + j) := by
+    rw [← Finset.sum_Ico_eq_sum_range]
+    rw [Finset.sum_Ico_eq_sub charge (Nat.le_of_lt hfirstSecond)]
+    exact hgap
+  have hgapScaled : 1 ≤
+      (∑ j ∈ Finset.range L, ‖s (j + 1) - s j‖) / (2 * C) := by
+    rw [Finset.sum_div]
+    apply hgap'.trans_eq
+    apply Finset.sum_congr rfl
+    intro j hj
+    have hjL : j < L := Finset.mem_range.mp hj
+    have hjSecond : first + j < second := by dsimp only [L] at hjL; omega
+    have hjk : first + j < k := hjSecond.trans_le hsecondK
+    simp [charge, hjk, s, Nat.add_assoc]
+  have hvariationBlock : 2 * C ≤
+      ∑ j ∈ Finset.range L, ‖s (j + 1) - s j‖ := by
+    rw [le_div_iff₀ (mul_pos (by norm_num) hC)] at hgapScaled
+    simpa using hgapScaled
+  have hsBound (j : ℕ) (n : G.Player) : |s j n| ≤ C := by
+    have hsMem := hstateMem (first + j)
+    change dist (s j) 0 ≤ C at hsMem
+    rw [dist_zero_right] at hsMem
+    have hn : |s j n| ≤ ‖s j‖ := by
+      simpa [Real.norm_eq_abs] using norm_le_pi_norm (s j) n
+    exact hn.trans hsMem
+  have hmotion (j : ℕ) (hj : j < L) :
+      ‖s (j + 1) - s j‖ ≤ 2 * C * QuitProbability G (p j) := by
+    rw [hstep j hj]
+    apply norm_quittingOneStagePayoff_sub_le G
+    · intro A n
+      exact (hreward A n).trans (by dsimp only [C]; linarith [hη.le])
+    · exact hsBound j
+  have hsumMotion : (∑ j ∈ Finset.range L, ‖s (j + 1) - s j‖) ≤
+      2 * C * ∑ j ∈ Finset.range L, QuitProbability G (p j) := by
+    rw [Finset.mul_sum]
+    exact Finset.sum_le_sum fun j hj => hmotion j (Finset.mem_range.mp hj)
+  have hsumQuit : 1 ≤ ∑ j ∈ Finset.range L, QuitProbability G (p j) := by
+    have hscaled := hvariationBlock.trans hsumMotion
+    nlinarith [hscaled]
+  have hrowNoSure (j : ℕ) (hj : j < L) (n : G.Player) : (p j n : ℝ) ≠ 1 := by
+    exact hnoSure (s j) (p j) n
+      (IsRational.mono G hησ (hsRational j hj.le))
+      (EpsilonRow.mono G hησ _ (hp j hj))
+  have hqLtOne (j : ℕ) (hj : j < L) : QuitProbability G (p j) < 1 :=
+    quitProbability_lt_one_of_forall_ne_one G (p j) (hrowNoSure j hj)
+  let ρ := 1 - ∏ j ∈ Finset.range L, (1 - QuitProbability G (p j))
+  have hproductPositive : 0 < ∏ j ∈ Finset.range L,
+      (1 - QuitProbability G (p j)) := by
+    apply Finset.prod_pos
+    intro j hj
+    exact sub_pos.mpr (hqLtOne j (Finset.mem_range.mp hj))
+  have hproductHalf : (∏ j ∈ Finset.range L,
+      (1 - QuitProbability G (p j))) ≤ 1 / 2 := by
+    have hproduct := prod_one_sub_mul_one_add_sum_le_one
+      (Finset.range L) (fun j => QuitProbability G (p j))
+      (fun j _ => (quitProbability_mem_Icc G (p j)).1)
+      (fun j _ => (quitProbability_mem_Icc G (p j)).2)
+    have hproductNonnegative : 0 ≤ ∏ j ∈ Finset.range L,
+        (1 - QuitProbability G (p j)) := hproductPositive.le
+    nlinarith [hproduct]
+  have hρ : 0 < ρ := by dsimp only [ρ]; linarith
+  have hρHalf : 1 / 2 ≤ ρ := by dsimp only [ρ]; linarith
+  have hρOne : ρ < 1 := by dsimp only [ρ]; linarith
+  have hsClose : ‖s 0 - s L‖ < η := by
+    have hsum : first + L = second := by dsimp only [L]; omega
+    change ‖state (first + 0) - state (first + L)‖ < η
+    rw [Nat.add_zero, hsum]
+    simpa [dist_eq_norm] using hclose
+  have hperiodization := lemma4 G hL p s (ρ := ρ) (δ := η)
+    (ε := η) hρ hρOne (by rfl) (fun j hj => hstep j hj) hsClose.le
+  let cycle := ReverseCycleProfile G L hL p
+  let block : Fin L → QuitRow G := fun j => p (L - 1 - j)
+  have hcycleEq : CycleProfile G L hL block = cycle := by
+    funext i
+    rfl
+  have hratio : η / ρ ≤ 2 * η := by
+    rw [div_le_iff₀ hρ]
+    nlinarith [hρHalf, mul_pos hρ hη]
+  have herror : η + η / ρ ≤ ε := by
+    nlinarith [hηε]
+  have hgenerated : GeneratesFRowOrbit G ε cycle := by
+    apply GeneratesFRowOrbit.mono G herror
+    exact hperiodization.2 (fun j hj => hp j hj)
+  have hcyclePeriod : Function.Periodic (QuitTailPayoff G cycle) L := by
+    intro i
+    exact quitTailPayoff_reverseCycle_add_period G L hL p i
+  have htailMod (i : ℕ) :
+      QuitTailPayoff G cycle i = QuitTailPayoff G cycle (i % L) := by
+    have hmultiple := hcyclePeriod.nat_mul (i / L) (i % L)
+    simpa [Nat.mul_comm, Nat.mod_add_div] using hmultiple
+  have htailClose : ∀ i, ∃ j ≤ L,
+      ‖QuitTailPayoff G cycle i - s j‖ ≤ η / ρ := by
+    intro i
+    let r := i % L
+    have hrL : r < L := Nat.mod_lt i hL
+    by_cases hr0 : r = 0
+    · refine ⟨0, Nat.zero_le _, ?_⟩
+      have hlast := hperiodization.1 1 L (by simpa using hL) (by simp)
+      have htailZero : QuitTailPayoff G cycle L = QuitTailPayoff G cycle 0 :=
+        by simpa using hcyclePeriod 0
+      rw [htailMod i, show i % L = 0 from hr0, ← htailZero]
+      simpa using hlast
+    · refine ⟨L - r, Nat.sub_le _ _, ?_⟩
+      have hreturned := hperiodization.1 1 r
+        (by simpa using Nat.pos_of_ne_zero hr0) (by simpa using hrL.le)
+      rw [htailMod i]
+      simpa [r] using hreturned
+  have hrationalCycle : ∀ i, IsRational G ε (QuitTailPayoff G cycle i) := by
+    intro i
+    rcases htailClose i with ⟨j, hjL, hjClose⟩
+    intro n
+    have hcoordinate :
+        |QuitTailPayoff G cycle i n - s j n| ≤ η / ρ := by
+      have hn := norm_le_pi_norm (QuitTailPayoff G cycle i - s j) n
+      rw [Real.norm_eq_abs] at hn
+      exact hn.trans hjClose
+    rw [abs_le] at hcoordinate
+    have hsj := hsRational j hjL n
+    linarith [herror]
+  have hpositive : ∃ j : Fin L, 0 < QuitProbability G (block j) := by
+    have hexists : ∃ j ∈ Finset.range L, 0 < QuitProbability G (p j) := by
+      by_contra hnone
+      push Not at hnone
+      have hsumNonpositive :
+          (∑ j ∈ Finset.range L, QuitProbability G (p j)) ≤ 0 :=
+        Finset.sum_nonpos fun j hj => hnone j hj
+      linarith
+    rcases hexists with ⟨j, hjL, hjPositive⟩
+    have hj : j < L := Finset.mem_range.mp hjL
+    let b : Fin L := ⟨L - 1 - j, by omega⟩
+    refine ⟨b, ?_⟩
+    simpa [block, b, show L - 1 - (L - 1 - j) = j by omega] using hjPositive
+  refine ⟨L, hL, block, ?_, ?_, hpositive⟩
+  · simpa [hcycleEq] using hgenerated
+  · intro i
+    rw [hcycleEq]
+    exact hrationalCycle i
+
 /-- Five propositions are equivalent when every pair in the displayed chain is equivalent. -/
 def EquivalentFive (A B C D E : Prop) : Prop :=
   (A ↔ B) ∧ (B ↔ C) ∧ (C ↔ D) ∧ (D ↔ E)
@@ -11996,8 +12268,8 @@ theorem theorem3 (G : QuittingGame)
     hcycle.toInfiniteOrbitCondition_of_uniformRho G hρ
   have hequilibriumCyclic : HasQuitApproximateEquilibria G → CyclicOrbitCondition G := by
     sorry
-  have hfiniteCyclic : FiniteNearOrbitCondition G → CyclicOrbitCondition G := by
-    sorry
+  have hfiniteCyclic : FiniteNearOrbitCondition G → CyclicOrbitCondition G :=
+    fun hfinite => hfinite.toCyclicOrbitCondition G hinstant
   have hextendedCyclic : ExtendedOrbitCondition G → CyclicOrbitCondition G := by
     sorry
   exact ⟨
