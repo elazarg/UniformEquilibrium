@@ -1238,8 +1238,9 @@ theorem exists_tendsto_subsequence_principalQClockMass
 
 omit [DecidableEq ι] in
 /-- Uniform compactness turns a convergent sequence of endpoint nodes and
-their cumulative-mass paths into a cumulative-mass path to the limit node. -/
-theorem exists_principalQClockMassPath_limit
+their cumulative-mass paths into a cumulative-mass path to the limit node,
+together with the convergent subsequence that constructs it. -/
+theorem exists_principalQClockMassPath_limit_with_tendsto
     {M : ι → ι → ℝ} {initial : PrincipalQClockNode ι}
     (node : ℕ → PrincipalQClockNode ι)
     (path : ∀ n, PrincipalQClockMassPath M initial (node n))
@@ -1249,9 +1250,12 @@ theorem exists_principalQClockMassPath_limit
     (htime : Tendsto (fun n => (node n).time) atTop (nhds timeLimit))
     (hscaledState : Tendsto (fun n => principalQClockScaledState (node n))
       atTop (nhds scaledStateLimit)) :
-    Nonempty (PrincipalQClockMassPath M initial
-      (principalQClockNodeOfScaledState timeLimit htimeLimit
-        scaledStateLimit hscaledStateLimit)) := by
+    ∃ limitPath : PrincipalQClockMassPath M initial
+        (principalQClockNodeOfScaledState timeLimit htimeLimit
+          scaledStateLimit hscaledStateLimit),
+      ∃ subsequence : ℕ → ℕ, StrictMono subsequence ∧
+        Tendsto (fun n => (path (subsequence n)).mass) atTop
+          (nhds limitPath.mass) := by
   obtain ⟨limit, subsequence, hsubsequence, hmass⟩ :=
     exists_tendsto_subsequence_principalQClockMass
       node timeLimit htime path
@@ -1273,7 +1277,7 @@ theorem exists_principalQClockMassPath_limit
     coordinate_monotone := ?_
     total_mass := ?_
     scaledState_mem := ?_
-    scaledState_one := ?_ }⟩
+    scaledState_one := ?_ }, subsequence, hsubsequence, ?_⟩
   · apply tendsto_nhds_unique (hmassAt 0)
     exact (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ι → ℝ))
       atTop (nhds 0)) |>.congr' (Eventually.of_forall fun n =>
@@ -1342,6 +1346,154 @@ theorem exists_principalQClockMassPath_limit
         (path (subsequence n)).scaledState_one.symm)
     have heq := tendsto_nhds_unique hleft hright
     simpa only [principalQClockNodeOfScaledState_scaledState] using heq
+  · exact hmass
+
+omit [DecidableEq ι] in
+/-- Uniform compactness turns convergent endpoint nodes and their cumulative
+mass paths into a cumulative-mass path to the limit node. -/
+theorem exists_principalQClockMassPath_limit
+    {M : ι → ι → ℝ} {initial : PrincipalQClockNode ι}
+    (node : ℕ → PrincipalQClockNode ι)
+    (path : ∀ n, PrincipalQClockMassPath M initial (node n))
+    (timeLimit : ℝ) (htimeLimit : 0 < timeLimit)
+    (scaledStateLimit : ι → ℝ)
+    (hscaledStateLimit : scaledStateLimit ∈ nonnegativeBoundary)
+    (htime : Tendsto (fun n => (node n).time) atTop (nhds timeLimit))
+    (hscaledState : Tendsto (fun n => principalQClockScaledState (node n))
+      atTop (nhds scaledStateLimit)) :
+    Nonempty (PrincipalQClockMassPath M initial
+      (principalQClockNodeOfScaledState timeLimit htimeLimit
+        scaledStateLimit hscaledStateLimit)) := by
+  obtain ⟨limitPath, _subsequence, _hsubsequence, _hmass⟩ :=
+    exists_principalQClockMassPath_limit_with_tendsto node path timeLimit
+      htimeLimit scaledStateLimit hscaledStateLimit htime hscaledState
+  exact ⟨limitPath⟩
+
+omit [DecidableEq ι] in
+/-- Mesh support passes to the compact limit of cumulative-mass paths.  A
+strict increase on a limit interval persists along a tail; compactness of the
+interval then supplies a convergent subsequence of mesh witnesses. -/
+theorem exists_principalQClockMassPath_limit_isMeshSupported
+    {M : ι → ι → ℝ} {initial : PrincipalQClockNode ι}
+    (node : ℕ → PrincipalQClockNode ι)
+    (path : ∀ n, PrincipalQClockMassPath M initial (node n))
+    (stepBound : ℝ)
+    (hsupported : ∀ n, (path n).IsMeshSupported stepBound)
+    (timeLimit : ℝ) (htimeLimit : 0 < timeLimit)
+    (scaledStateLimit : ι → ℝ)
+    (hscaledStateLimit : scaledStateLimit ∈ nonnegativeBoundary)
+    (htime : Tendsto (fun n => (node n).time) atTop (nhds timeLimit))
+    (hscaledState : Tendsto (fun n => principalQClockScaledState (node n))
+      atTop (nhds scaledStateLimit)) :
+    ∃ limitPath : PrincipalQClockMassPath M initial
+        (principalQClockNodeOfScaledState timeLimit htimeLimit
+          scaledStateLimit hscaledStateLimit),
+      limitPath.IsMeshSupported stepBound := by
+  classical
+  obtain ⟨limitPath, subsequence, hsubsequence, hmass⟩ :=
+    exists_principalQClockMassPath_limit_with_tendsto node path timeLimit
+      htimeLimit scaledStateLimit hscaledStateLimit htime hscaledState
+  refine ⟨limitPath, ?_⟩
+  intro who first second hle hincrease
+  have hmassAt (parameter : unitInterval) : Tendsto
+      (fun n => (path (subsequence n)).mass parameter) atTop
+      (nhds (limitPath.mass parameter)) := by
+    exact ((BoundedContinuousFunction.lipschitz_eval_const parameter).continuous
+      |>.tendsto limitPath.mass).comp hmass
+  have hfirst : Tendsto
+      (fun n => (path (subsequence n)).mass first who) atTop
+      (nhds (limitPath.mass first who)) :=
+    ((continuous_apply who).tendsto _).comp (hmassAt first)
+  have hsecond : Tendsto
+      (fun n => (path (subsequence n)).mass second who) atTop
+      (nhds (limitPath.mass second who)) :=
+    ((continuous_apply who).tendsto _).comp (hmassAt second)
+  obtain ⟨start, hstart⟩ := eventually_atTop.1
+    (hfirst.eventually_lt hsecond hincrease)
+  let tailIndex : ℕ → ℕ := fun n => start + n
+  have htailIndex : StrictMono tailIndex := by
+    intro a b hab
+    dsimp [tailIndex]
+    omega
+  have hincreaseTail (n : ℕ) :
+      (path (subsequence (tailIndex n))).mass first who <
+        (path (subsequence (tailIndex n))).mass second who := by
+    exact hstart (tailIndex n) (by simp [tailIndex])
+  choose witness hwitnessInterval hwitnessBound using fun n =>
+    hsupported (subsequence (tailIndex n)) who first second hle
+      (hincreaseTail n)
+  obtain ⟨witnessLimit, witnessSubsequence, hwitnessSubsequence,
+      hwitnessTendsto⟩ := CompactSpace.tendsto_subseq witness
+  let index : ℕ → ℕ := fun n => tailIndex (witnessSubsequence n)
+  have hindex : StrictMono index :=
+    htailIndex.comp hwitnessSubsequence
+  have hmassIndex : Tendsto
+      (fun n => (path (subsequence (index n))).mass) atTop
+      (nhds limitPath.mass) :=
+    hmass.comp hindex.tendsto_atTop
+  have hmassWitness : Tendsto
+      (fun n => (path (subsequence (index n))).mass
+        (witness (witnessSubsequence n))) atTop
+      (nhds (limitPath.mass witnessLimit)) := by
+    have hpair : Tendsto
+        (fun n => ((path (subsequence (index n))).mass,
+          witness (witnessSubsequence n))) atTop
+        (nhds (limitPath.mass, witnessLimit)) := by
+      rw [nhds_prod_eq]
+      exact hmassIndex.prodMk hwitnessTendsto
+    have := (continuous_eval.tendsto (limitPath.mass, witnessLimit)).comp
+      hpair
+    simpa only [Function.comp_def] using this
+  have hleft : Tendsto
+      (fun n =>
+        (principalQClockScaledState initial +
+          principalQMassImage M
+            ((path (subsequence (index n))).mass
+              (witness (witnessSubsequence n)))) who)
+      atTop
+      (nhds ((principalQClockScaledState initial +
+        principalQMassImage M (limitPath.mass witnessLimit)) who)) := by
+    have hcontinuous : Continuous (fun mass : ι → ℝ =>
+        (principalQClockScaledState initial +
+          principalQMassImage M mass) who) := by
+      unfold principalQMassImage
+      fun_prop
+    exact (hcontinuous.tendsto _).comp hmassWitness
+  have hfullIndex : StrictMono (fun n => subsequence (index n)) :=
+    hsubsequence.comp hindex
+  have htimeIndex : Tendsto
+      (fun n => (node (subsequence (index n))).time) atTop
+      (nhds timeLimit) :=
+    htime.comp hfullIndex.tendsto_atTop
+  have hwitnessReal : Tendsto
+      (fun n => (witness (witnessSubsequence n) : ℝ)) atTop
+      (nhds (witnessLimit : ℝ)) := by
+    exact (continuous_subtype_val.tendsto witnessLimit).comp hwitnessTendsto
+  have hclock : Tendsto
+      (fun n => principalQNormalizedClock initial
+        (node (subsequence (index n)))
+          (witness (witnessSubsequence n))) atTop
+      (nhds (principalQNormalizedClock initial
+        (principalQClockNodeOfScaledState timeLimit htimeLimit
+          scaledStateLimit hscaledStateLimit) witnessLimit)) := by
+    unfold principalQNormalizedClock principalQClockDuration
+    simpa only [principalQClockNodeOfScaledState_time] using
+      tendsto_const_nhds.add
+        (hwitnessReal.mul (htimeIndex.sub tendsto_const_nhds))
+  have hright : Tendsto
+      (fun n => principalQMatrixSpeedBound M *
+        principalQNormalizedClock initial (node (subsequence (index n)))
+          (witness (witnessSubsequence n)) * stepBound) atTop
+      (nhds (principalQMatrixSpeedBound M *
+        principalQNormalizedClock initial
+          (principalQClockNodeOfScaledState timeLimit htimeLimit
+            scaledStateLimit hscaledStateLimit) witnessLimit * stepBound)) :=
+    tendsto_const_nhds.mul hclock |>.mul tendsto_const_nhds
+  refine ⟨witnessLimit, ?_, ?_⟩
+  · exact isClosed_Icc.mem_of_tendsto hwitnessTendsto
+      (Eventually.of_forall fun n => hwitnessInterval (witnessSubsequence n))
+  · exact le_of_tendsto_of_tendsto' hleft hright fun n =>
+      hwitnessBound (witnessSubsequence n)
 
 omit [DecidableEq ι] in
 /-- Every node in the well-founded clock-reachability closure is realized by
@@ -1361,6 +1513,32 @@ theorem PrincipalQClockReachable.exists_massPath
       exact exists_principalQClockMassPath_limit node
         (fun n => Classical.choice (ih n)) timeLimit htimeLimit
         scaledStateLimit hscaledStateLimit htime hscaledState
+
+omit [DecidableEq ι] in
+/-- Every node in the clock-reachability closure has a cumulative-mass path
+whose support obeys the same local mesh bound as the generating steps. -/
+theorem PrincipalQClockReachable.exists_meshSupportedMassPath
+    {M : ι → ι → ℝ} {stepBound : ℝ}
+    {initial node : PrincipalQClockNode ι}
+    (hnode : PrincipalQClockReachable M stepBound initial node) :
+    ∃ path : PrincipalQClockMassPath M initial node,
+      path.IsMeshSupported stepBound := by
+  induction hnode with
+  | initial =>
+      exact ⟨initialPrincipalQClockMassPath M initial,
+        initialPrincipalQClockMassPath_isMeshSupported M initial stepBound⟩
+  | step hnode arc ih =>
+      obtain ⟨path, hsupported⟩ := ih
+      exact ⟨path.append arc, path.isMeshSupported_append arc hsupported⟩
+  | limit node hnode timeLimit htimeLimit scaledStateLimit
+      hscaledStateLimit htime hscaledState ih =>
+      let path : ∀ n, PrincipalQClockMassPath M initial (node n) :=
+        fun n => Classical.choose (ih n)
+      have hsupported (n : ℕ) : (path n).IsMeshSupported stepBound :=
+        Classical.choose_spec (ih n)
+      exact exists_principalQClockMassPath_limit_isMeshSupported node path
+        stepBound hsupported timeLimit htimeLimit scaledStateLimit
+        hscaledStateLimit htime hscaledState
 
 omit [DecidableEq ι] in
 /-- From any positive boundary clock, the principal-Q construction supplies
