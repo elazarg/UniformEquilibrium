@@ -2263,6 +2263,54 @@ theorem lemma3_1 (G : QuittingGame) (M d : ℝ)
     rw [quittingOneStagePayoff_zero]
     simp
 
+/-- Continuity of the absorption probability after a continuously varying
+quitting row. -/
+private theorem continuous_quitProbability_comp {X : Type}
+    [TopologicalSpace X] (G : QuittingGame) (p : X → QuitRow G)
+    (hp : Continuous p) :
+    Continuous (fun x => QuitProbability G (p x)) := by
+  simp only [QuitProbability]
+  apply continuous_const.sub
+  apply continuous_finsetProd
+  intro k _hk
+  exact continuous_const.sub
+    (continuous_subtype_val.comp ((continuous_apply k).comp hp))
+
+/-- Continuity of every fixed coalition probability after a continuously
+varying quitting row. -/
+private theorem continuous_coalitionProbability_comp {X : Type}
+    [TopologicalSpace X] (G : QuittingGame) (p : X → QuitRow G)
+    (hp : Continuous p) (A : Finset G.Player) :
+    Continuous (fun x => CoalitionProbability G (p x) A) := by
+  simp only [CoalitionProbability]
+  have hcoord (k : G.Player) :
+      Continuous (fun x => ((p x) k : ℝ)) :=
+    continuous_subtype_val.comp ((continuous_apply k).comp hp)
+  apply (continuous_finsetProd A fun k _hk => hcoord k).mul
+  apply continuous_finsetProd
+  intro k _hk
+  exact continuous_const.sub (hcoord k)
+
+/-- Joint continuity of a coordinate of the one-stage payoff along
+continuously varying continuation vectors and rows. -/
+private theorem continuous_quittingOneStagePayoff_comp {X : Type}
+    [TopologicalSpace X] (G : QuittingGame)
+    (r : X → Payoff G.Player) (p : X → QuitRow G)
+    (hr : Continuous r) (hp : Continuous p) (j : G.Player) :
+    Continuous (fun x => QuittingOneStagePayoff G (r x) (p x) j) := by
+  classical
+  simp only [QuittingOneStagePayoff]
+  apply ((continuous_const.sub
+    (continuous_quitProbability_comp G p hp)).mul
+      ((continuous_apply j).comp hr)).add
+  apply continuous_finsetSum
+  intro A _hA
+  by_cases hA : A.Nonempty
+  · simp only [hA, ↓reduceDIte]
+    exact (continuous_coalitionProbability_comp G p hp A).mul continuous_const
+  · simp only [hA, ↓reduceDIte]
+    exact continuous_const
+
 /-- The map `φ` is continuous on the exact-equilibrium graph below certain
 absorption. -/
 theorem continuous_phi (G : QuittingGame) (M d : ℝ) :
@@ -2273,31 +2321,12 @@ theorem continuous_phi (G : QuittingGame) (M d : ℝ) :
   have hcoord (k : G.Player) :
       Continuous (fun z : EZeroTilde G => (z.1.2 k : ℝ)) := by
     fun_prop
-  have hquit : Continuous (fun z : EZeroTilde G => QuitProbability G z.1.2) := by
-    simp only [QuitProbability]
-    apply continuous_const.sub
-    apply continuous_finsetProd
-    intro k _hk
-    exact continuous_const.sub (hcoord k)
-  have hcoalition (A : Finset G.Player) :
-      Continuous (fun z : EZeroTilde G => CoalitionProbability G z.1.2 A) := by
-    simp only [CoalitionProbability]
-    apply (continuous_finsetProd A fun k _hk => hcoord k).mul
-    apply continuous_finsetProd
-    intro k hk
-    exact continuous_const.sub (hcoord k)
   have hstage :
       Continuous (fun z : EZeroTilde G =>
         QuittingOneStagePayoff G z.1.1 z.1.2 j) := by
-    simp only [QuittingOneStagePayoff]
-    apply ((continuous_const.sub hquit).mul (by fun_prop)).add
-    apply continuous_finsetSum
-    intro A _hA
-    by_cases hA : A.Nonempty
-    · simp only [hA, ↓reduceDIte]
-      exact (hcoalition A).mul continuous_const
-    · simp only [hA, ↓reduceDIte]
-      exact continuous_const
+    exact continuous_quittingOneStagePayoff_comp G
+      (fun z : EZeroTilde G => z.1.1) (fun z => z.1.2) (by fun_prop)
+        (by fun_prop) j
   have hdenom : ∀ z : EZeroTilde G,
       (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player ≠ 0 := by
     intro z
@@ -2385,6 +2414,66 @@ private def indifferentGraphPoint (G : QuittingGame) (p : QuitRow G)
       rw [forcedContinue_indifferentContinuation G p hp j]
       simp
   · linarith [one_sub_quitProbability_pos_of_forall_lt_one G p hp]
+
+/-- The compact row cube `[0,t]ᴺ` used in the proof of Lemma 3.2. -/
+private abbrev CappedQuitRow (G : QuittingGame) (t : ℝ) :=
+  {p : QuitRow G // ∀ j, (p j : ℝ) ≤ t}
+
+/-- The paper's indifference parametrization of the exact-equilibrium graph
+over a cube bounded away from the sure-Quit faces. -/
+private def cappedIndifferentGraphPoint (G : QuittingGame) (t : ℝ)
+    (ht : t < 1) (p : CappedQuitRow G t) : EZeroTilde G :=
+  indifferentGraphPoint G p.1 fun j => (p.2 j).trans_lt ht
+
+/-- The indifference parametrization is continuous on every capped cube. -/
+private theorem continuous_cappedIndifferentGraphPoint
+    (G : QuittingGame) (t : ℝ) (ht : t < 1) :
+    Continuous (cappedIndifferentGraphPoint G t ht) := by
+  have hp : Continuous (fun p : CappedQuitRow G t => p.1) :=
+    continuous_subtype_val
+  have hreplace (j : G.Player) (q : UnitInterval) :
+      Continuous (fun p : CappedQuitRow G t => p.1.replace G j q) := by
+    rw [continuous_pi_iff]
+    intro k
+    by_cases hkj : k = j
+    · subst k
+      simpa [QuitRow.replace] using
+        (continuous_const : Continuous (fun _ : CappedQuitRow G t => q))
+    · simpa [QuitRow.replace, hkj, Function.comp_def] using
+        (continuous_apply k).comp hp
+  have hbeta : Continuous (fun p : CappedQuitRow G t =>
+      indifferentContinuation G p.1) := by
+    rw [continuous_pi_iff]
+    intro j
+    have hforced : Continuous (fun p : CappedQuitRow G t =>
+        ForcedQuitPayoff G p.1 j) := by
+      simpa only [ForcedQuitPayoff] using
+        (continuous_quittingOneStagePayoff_comp G (fun _ => 0)
+          (fun p : CappedQuitRow G t => p.1.replace G j 1)
+          continuous_const (hreplace j 1) j)
+    have hzero : Continuous (fun p : CappedQuitRow G t =>
+        QuittingOneStagePayoff G 0 (p.1.replace G j 0) j) := by
+      exact continuous_quittingOneStagePayoff_comp G (fun _ => 0)
+        (fun p : CappedQuitRow G t => p.1.replace G j 0)
+        continuous_const (hreplace j 0) j
+    have hsurvival : Continuous (fun p : CappedQuitRow G t =>
+        1 - QuitProbability G (p.1.replace G j 0)) :=
+      continuous_const.sub
+        (continuous_quitProbability_comp G _ (hreplace j 0))
+    have hne : ∀ p : CappedQuitRow G t,
+        1 - QuitProbability G (p.1.replace G j 0) ≠ 0 := by
+      intro p
+      exact (one_sub_quitProbability_replace_zero_pos G p.1
+        (fun k => (p.2 k).trans_lt ht) j).ne'
+    change Continuous (fun p : CappedQuitRow G t =>
+      (ForcedQuitPayoff G p.1 j -
+          QuittingOneStagePayoff G 0 (p.1.replace G j 0) j) /
+        (1 - QuitProbability G (p.1.replace G j 0)))
+    exact (hforced.sub hzero).div hsurvival hne
+  apply Continuous.subtype_mk
+  change Continuous (fun p : CappedQuitRow G t =>
+    (indifferentContinuation G p.1, p.1))
+  exact hbeta.prodMk hp
 
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
