@@ -620,6 +620,10 @@ structure DiscreteDecisionProcess where
 attribute [instance] DiscreteDecisionProcess.countableX
 attribute [instance] DiscreteDecisionProcess.countableY
 
+/-- DDP states carry the discrete sigma algebra. -/
+private instance ddpStateMeasurableSpace (P : DiscreteDecisionProcess) :
+    MeasurableSpace P.X := ⊤
+
 /-- An infinite path `x₀,y₁,x₂,y₃,…`; zero-mass transitions occur on null paths. -/
 structure DDPPath (P : DiscreteDecisionProcess) where
   x : ℕ → P.X
@@ -2801,6 +2805,77 @@ def FirstReturnAt (P : DiscreteDecisionProcess) (A : Set P.X) (z : P.X) :
 def ReturnsTo (P : DiscreteDecisionProcess) (A : Set P.X) : Set (DDPPath P) :=
   ⋃ z ∈ A, FirstReturnAt P A z
 
+/-- State-coordinate projections are measurable in the cylinder sigma algebra. -/
+private theorem DDPPath.measurable_x (P : DiscreteDecisionProcess) (i : ℕ) :
+    Measurable (fun p : DDPPath P => p.x i) := by
+  have hevaluation : Measurable
+      (fun h : DDPFinitePath P i => h.x (Fin.last i)) := Measurable.of_discrete
+  convert hevaluation.comp (DDPPath.measurable_prefix P i) using 1
+  funext p
+  rfl
+
+/-- First-return events are measurable. -/
+private theorem measurableSet_firstReturnAt (P : DiscreteDecisionProcess)
+    (A : Set P.X) (z : P.X) : MeasurableSet (FirstReturnAt P A z) := by
+  by_cases hz : z ∈ A
+  · have heq : FirstReturnAt P A z = ⋃ k, if 0 < k then
+        {p | p.x k = z} ∩ ⋂ i, if 0 < i ∧ i < k then {p | p.x i ∉ A} else Set.univ
+      else ∅ := by
+      ext p
+      simp only [FirstReturnAt, mem_setOf_eq, mem_iUnion, mem_ite_empty_right,
+        mem_inter_iff, mem_iInter]
+      constructor
+      · rintro ⟨k, hk, hx, _hz, hbefore⟩
+        refine ⟨k, hk, hx, ?_⟩
+        intro i
+        by_cases hi : 0 < i ∧ i < k
+        · simpa [hi] using hbefore i hi.1 hi.2
+        · simp [hi]
+      · rintro ⟨k, hk, hx, hbefore⟩
+        refine ⟨k, hk, hx, hz, ?_⟩
+        intro i hi hik
+        simpa [hi, hik] using hbefore i
+    rw [heq]
+    apply MeasurableSet.iUnion
+    intro k
+    split_ifs
+    · apply MeasurableSet.inter
+      · exact (DDPPath.measurable_x P k) (measurableSet_singleton z)
+      · apply MeasurableSet.iInter
+        intro i
+        split_ifs
+        · exact (DDPPath.measurable_x P i)
+            (show MeasurableSet Aᶜ from MeasurableSet.of_discrete)
+        · exact MeasurableSet.univ
+    · exact MeasurableSet.empty
+  · have heq : FirstReturnAt P A z = ∅ := by
+      ext p
+      simp [FirstReturnAt, hz]
+    rw [heq]
+    exact MeasurableSet.empty
+
+/-- The return event is measurable as a countable union of first-return events. -/
+private theorem measurableSet_returnsTo (P : DiscreteDecisionProcess) (A : Set P.X) :
+    MeasurableSet (ReturnsTo P A) := by
+  exact MeasurableSet.iUnion fun z => MeasurableSet.iUnion fun _hz : z ∈ A =>
+    measurableSet_firstReturnAt P A z
+
+/-- Distinct first-return states define disjoint events. -/
+private theorem pairwise_disjoint_firstReturnAt (P : DiscreteDecisionProcess) (A : Set P.X) :
+    Pairwise (Function.onFun Disjoint (FirstReturnAt P A)) := by
+  intro z w hzw
+  rw [Function.onFun, disjoint_left]
+  intro p hpz hpw
+  rcases hpz with ⟨k, hk, hxk, hzk, hbeforeK⟩
+  rcases hpw with ⟨l, hl, hxl, hwl, hbeforeL⟩
+  have hkl : k = l := by
+    by_contra hne
+    rcases lt_or_gt_of_ne hne with hlt | hgt
+    · exact (hbeforeL k hk hlt) (hxk.symm ▸ hzk)
+    · exact (hbeforeK l hl hgt) (hxl.symm ▸ hwl)
+  apply hzw
+  rw [← hxk, hkl, hxl]
+
 /-- The probability `q_y^A` of returning to `A` after forcing action `y` at `x`. -/
 def ReturnProbability (P : DiscreteDecisionProcess) (S : DDPSemantics P)
     (A : Set P.X) (x : P.X) (y : P.Y x) : ℝ≥0∞ :=
@@ -2810,6 +2885,27 @@ def ReturnProbability (P : DiscreteDecisionProcess) (S : DDPSemantics P)
 def FirstReturnProbability (P : DiscreteDecisionProcess) (S : DDPSemantics P)
     (A : Set P.X) (x : P.X) (y : P.Y x) (z : P.X) : ℝ≥0∞ :=
   S.afterAction x y (FirstReturnAt P A z)
+
+/-- The return probability is the sum of its disjoint first-return-state probabilities. -/
+private theorem returnProbability_eq_tsum_firstReturnProbability
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (A : Set P.X) (x : P.X) (y : P.Y x) :
+    ReturnProbability P S A x y =
+      ∑' z, FirstReturnProbability P S A x y z := by
+  have hunion : ReturnsTo P A = ⋃ z, FirstReturnAt P A z := by
+    ext p
+    simp only [ReturnsTo, mem_iUnion]
+    constructor
+    · rintro ⟨z, _hz, hp⟩
+      exact ⟨z, hp⟩
+    · rintro ⟨z, hp⟩
+      rcases hp with ⟨k, hk, hx, hz, hbefore⟩
+      exact ⟨z, hz, ⟨k, hk, hx, hz, hbefore⟩⟩
+  change S.afterAction x y (ReturnsTo P A) =
+    ∑' z, S.afterAction x y (FirstReturnAt P A z)
+  rw [hunion]
+  exact measure_iUnion (pairwise_disjoint_firstReturnAt P A)
+    (fun z => measurableSet_firstReturnAt P A z)
 
 /-- A lower bound for all values in a decision process. -/
 def IsDDPValueLowerBound (P : DiscreteDecisionProcess) (L : ℝ) : Prop :=
