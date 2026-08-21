@@ -68,6 +68,7 @@ import Research.Quitting.ForcedOwnerContinueFaceLossSupportNoGo
 import Research.Quitting.FourByFourQFiniteSupportReduction
 import Research.Quitting.FourPlayerBlockerCirculation
 import Research.Quitting.FourPlayerCyclicPlateauCandidate
+import Research.Quitting.FullCoreDeadlockStrictDescent
 import Research.Quitting.FullCoreDuplicatedCyclicLasso
 import Research.Quitting.HandshakeClub
 import Research.Quitting.HazardSummability
