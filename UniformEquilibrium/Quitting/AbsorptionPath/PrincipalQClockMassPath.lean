@@ -366,6 +366,79 @@ theorem PrincipalQClockMassPath.scaledState_stepSegment_mem
       principalQLocalArcState M node.time node.state step.direction time who = 0
     rw [hwho, mul_zero]
 
+omit [DecidableEq ι] in
+/-- On a mesh arc, every coordinate receiving positive mass has scaled state
+at most `speed · clock · mesh`. This robust support estimate is designed
+to survive a vanishing-mesh compact limit. -/
+theorem PrincipalQClockMassPath.scaledState_stepSegment_le_mesh
+    {M : ι → ι → ℝ} {stepBound : ℝ}
+    {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (step : PrincipalQClockStep M stepBound node.time node.state)
+    (parameter : unitInterval) (who : ι)
+    (hweight : step.direction.weight who ≠ 0) :
+    (principalQClockScaledState initial +
+        principalQMassImage M (path.stepSegment step parameter)) who ≤
+      principalQMatrixSpeedBound M *
+        (node.time + (parameter : ℝ) * (step.endTime - node.time)) *
+          stepBound := by
+  let clock := node.time +
+    (parameter : ℝ) * (step.endTime - node.time)
+  have hclockLower : node.time ≤ clock := by
+    exact le_add_of_nonneg_right (mul_nonneg parameter.property.1
+      (sub_nonneg.mpr step.start_lt_endTime.le))
+  have hclockUpper : clock ≤ step.endTime := by
+    dsimp only [clock]
+    nlinarith [parameter.property.2, step.start_lt_endTime.le]
+  have hclockPos : 0 < clock := node.time_pos.trans_le hclockLower
+  have halphaDenom : 0 < 1 - step.alpha := sub_pos.mpr step.alpha_lt_one
+  have hscaledClock : clock * (1 - step.alpha) ≤ node.time := by
+    apply (le_div_iff₀ halphaDenom).mp
+    simpa [PrincipalQClockStep.endTime, mul_comm] using hclockUpper
+  have hdeltaAlpha : clock - node.time ≤ clock * step.alpha := by
+    linarith
+  have hdeltaNonneg : 0 ≤ clock - node.time := sub_nonneg.mpr hclockLower
+  have hsupport : node.state who = 0 :=
+    step.direction.supported_on_zero who hweight
+  have hbalance := congrFun
+    (principalQLocalArcState_scaled_balance M node.time_pos hclockLower
+      node.state step.direction) who
+  have hstateEq :
+      (clock • principalQLocalArcState M node.time node.state
+        step.direction clock) who =
+        (clock - node.time) *
+          singletonLCPResidual M step.direction.weight who := by
+    simpa [hsupport] using hbalance
+  rw [path.scaledState_stepSegment]
+  change (clock • principalQLocalArcState M node.time node.state
+    step.direction clock) who ≤ _
+  rw [hstateEq]
+  have hresidual : singletonLCPResidual M step.direction.weight who ≤
+      principalQMatrixSpeedBound M := by
+    calc
+      singletonLCPResidual M step.direction.weight who ≤
+          |singletonLCPResidual M step.direction.weight who| := le_abs_self _
+      _ = ‖singletonLCPResidual M step.direction.weight who‖ :=
+        (Real.norm_eq_abs _).symm
+      _ ≤ ‖fun i => singletonLCPResidual M step.direction.weight i‖ :=
+        norm_le_pi_norm _ who
+      _ ≤ principalQMatrixSpeedBound M :=
+        norm_singletonLCPResidual_le_speedBound M step.direction.weight
+  calc
+    (clock - node.time) *
+        singletonLCPResidual M step.direction.weight who ≤
+      (clock - node.time) * principalQMatrixSpeedBound M :=
+        mul_le_mul_of_nonneg_left hresidual hdeltaNonneg
+    _ = principalQMatrixSpeedBound M * (clock - node.time) := mul_comm _ _
+    _ ≤ principalQMatrixSpeedBound M * (clock * step.alpha) :=
+      mul_le_mul_of_nonneg_left hdeltaAlpha
+        (principalQMatrixSpeedBound_nonneg M)
+    _ ≤ principalQMatrixSpeedBound M * (clock * stepBound) :=
+      mul_le_mul_of_nonneg_left
+        (mul_le_mul_of_nonneg_left step.alpha_lt_stepBound.le hclockPos.le)
+        (principalQMatrixSpeedBound_nonneg M)
+    _ = principalQMatrixSpeedBound M * clock * stepBound := by ring
+
 /-- The cumulative mass function obtained by appending one local clock arc.
 The nontrivial-duration branch concatenates at the exact ratio of elapsed
 clock durations; a zero-duration prefix is discarded. -/
