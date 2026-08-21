@@ -155,6 +155,71 @@ theorem stageEUAt_stationaryBehaviorProfile (G : StochasticGame ι) [Fintype ι]
   unfold StochasticGame.stageEUAt StochasticGame.mixedStageEU
   rw [stageActionDist_stationaryBehaviorProfile]
 
+/-! ## Finite-horizon convex-envelope preservation -/
+
+/-- If every stage-payoff vector lies in a convex set, then the expected
+stage-payoff vector at every date lies there too. -/
+theorem expectedStagePayoff_mem_of_stagePayoff_mem_convex
+    (G : StochasticGame ι) [Fintype ι] [Finite G.State]
+    [∀ who, Finite (G.Act who)]
+    (target : Set (Payoff ι)) (hconvex : Convex ℝ target)
+    (hstage : ∀ state action,
+      (fun who ↦ G.stagePayoff state action who) ∈ target)
+    (profile : G.BehaviorProfile) (initial : G.State) (time : ℕ) :
+    (fun who ↦ G.expectedStagePayoff profile initial time who) ∈ target := by
+  letI : Fintype G.State := Fintype.ofFinite G.State
+  letI (who : ι) : Fintype (G.Act who) := Fintype.ofFinite (G.Act who)
+  letI : Finite G.JointAct := inferInstance
+  letI : Fintype G.JointAct := Fintype.ofFinite G.JointAct
+  let realizedLaw : PMF (G.State × G.JointAct) :=
+    (G.histDist profile initial time).bind fun history ↦
+      (G.stageActionDist profile history).map fun action ↦
+        (history.2, action)
+  have hhull :=
+    Math.ProbabilityMassFunction.coordinateExpectation_mem_convexHull_range
+      realizedLaw fun data who ↦ G.stagePayoff data.1 data.2 who
+  have hrange : Set.range (fun data : G.State × G.JointAct ↦
+      fun who ↦ G.stagePayoff data.1 data.2 who) ⊆ target := by
+    rintro _ ⟨data, rfl⟩
+    exact hstage data.1 data.2
+  have hmem := convexHull_min hrange hconvex hhull
+  convert hmem using 1
+  funext who
+  dsimp only [realizedLaw]
+  rw [Math.Probability.expect_bind]
+  unfold StochasticGame.expectedStagePayoff StochasticGame.stageEUAt
+  congr 1
+  funext history
+  rw [Math.Probability.expect_map]
+
+/-- If every stage-payoff vector lies in a convex set, then every positive
+finite-horizon average payoff vector lies there too. -/
+theorem finiteAveragePayoff_mem_of_stagePayoff_mem_convex
+    (G : StochasticGame ι) [Fintype ι] [Finite G.State]
+    [∀ who, Finite (G.Act who)]
+    (target : Set (Payoff ι)) (hconvex : Convex ℝ target)
+    (hstage : ∀ state action,
+      (fun who ↦ G.stagePayoff state action who) ∈ target)
+    (profile : G.BehaviorProfile) (initial : G.State)
+    {horizon : ℕ} (hhorizon : 0 < horizon) :
+    (fun who ↦ G.finiteAveragePayoff initial horizon profile who) ∈ target := by
+  rw [show (fun who ↦ G.finiteAveragePayoff initial horizon profile who) =
+      (horizon : ℝ)⁻¹ • ∑ time ∈ Finset.range horizon,
+        (fun who ↦ G.expectedStagePayoff profile initial time who) by
+    funext who
+    rw [G.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+    simp only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul]]
+  rw [Finset.smul_sum]
+  apply hconvex.sum_mem
+  · intro _time _htime
+    exact inv_nonneg.mpr (Nat.cast_nonneg horizon)
+  · rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+    apply mul_inv_cancel₀
+    exact_mod_cast Nat.ne_of_gt hhorizon
+  · intro time _htime
+    exact G.expectedStagePayoff_mem_of_stagePayoff_mem_convex
+      target hconvex hstage profile initial time
+
 /-! ## Discounted convex-envelope preservation -/
 
 /-- If every stage-payoff vector lies in a convex set, then every normalized
