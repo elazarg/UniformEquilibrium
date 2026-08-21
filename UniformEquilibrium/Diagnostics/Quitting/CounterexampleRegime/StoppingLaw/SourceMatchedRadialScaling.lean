@@ -99,7 +99,7 @@ theorem sourceMatched_totalDebtDirection_eq_sum
     quittingStoppingLawNormalizedDebtDirection
     quittingStoppingLawResetProfile quittingTerminalSemanticDebtChange
     sourceMatchedInnerResetStrategy
-  rw [Finset.sum_div, Finset.sum_sub_distrib]
+  rw [← Finset.sum_sub_distrib, Finset.sum_div]
 
 /-- **Finite-rank radial scaling bound.**
 
@@ -161,11 +161,11 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
           frontier.sourceMatchedRadialDebtDirection rank mover weight
             hweight0 hweight1 observer := by
     dsimp only [sourcePair, endpointPair, radialPair, sourceProfile,
-      endpointProfile, radialProfile]
+      endpointProfile, radialProfile, endpointStrategy]
     unfold actualDebtDirection quittingStoppingLawNormalizedDebtDirection
-      quittingStoppingLawResetProfile quittingTerminalSemanticDebtChange
-      sourceMatchedInnerResetStrategy sourceMatchedRadialDebtDirection
-      sourceMatchedRadialResetProfile
+      sourceMatchedRadialDebtDirection sourceMatchedRadialResetProfile
+      sourceMatchedInnerResetStrategy quittingStoppingLawResetProfile
+      quittingTerminalSemanticDebtChange
     field_simp [ne_of_gt hlambda]
     ring
   have htotalIdentity :
@@ -177,6 +177,20 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
     exact frontier.sourceMatched_totalDebtDirection_eq_sum rank mover
   have hlower := div_nonneg hraw.1 hlambda.le
   have hupper := (div_le_div_iff_of_pos_right hlambda).2 hraw.2
+  change 0 ≤
+    ((1 - weight) * quittingTerminalSemanticDebt sourcePair observer +
+          weight * quittingTerminalSemanticDebt endpointPair observer -
+        quittingTerminalSemanticDebt radialPair observer) /
+      frontier.lambda (frontier.subseq rank) at hlower
+  change
+    ((1 - weight) * quittingTerminalSemanticDebt sourcePair observer +
+          weight * quittingTerminalSemanticDebt endpointPair observer -
+        quittingTerminalSemanticDebt radialPair observer) /
+        frontier.lambda (frontier.subseq rank) ≤
+      (epsilon + weight *
+        (quittingTerminalSemanticDebtSum endpointPair -
+          quittingTerminalSemanticDebtSum sourcePair)) /
+        frontier.lambda (frontier.subseq rank) at hupper
   rw [hgapIdentity] at hlower hupper
   have hupperIdentity :
       (epsilon + weight *
@@ -224,7 +238,7 @@ theorem sourceMatchedRadialDebtDirection_tendsto
       ∑ who, frontier.actualDebtDirection rank mover who) atTop (nhds 0) := by
     have hcoordinate := tendsto_finsetSum Finset.univ fun who _whoMem =>
       frontier.tangent_tendsto mover who
-    simpa only [hflat] using hcoordinate
+    simpa only [actualDebtDirection, hflat] using hcoordinate
   have hweight : Tendsto (fun _rank : ℕ => weight) atTop (nhds weight) :=
     tendsto_const_nhds
   have hupper : Tendsto upper atTop (nhds 0) := by
@@ -242,12 +256,15 @@ theorem sourceMatchedRadialDebtDirection_tendsto
           observer weight hweight0 hweight1).2
     · exact hupper
   have hscaled := hweight.mul (frontier.tangent_tendsto mover observer)
+  change Tendsto (fun rank =>
+    weight * frontier.actualDebtDirection rank mover observer) atTop
+      (nhds (weight * frontier.tangent mover observer)) at hscaled
   have hresult := hscaled.sub herror
   convert hresult using 1
   · funext rank
     dsimp only [error]
     ring
-  · ring
+  · simp
 
 /-- A normalized charged circulation can be rescaled into one literal
 coefficient in `[0, 1]` for each active mover.  Balance is preserved and the

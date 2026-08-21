@@ -42,6 +42,23 @@ def quittingStoppingLawMixtureBehaviorStrategy
       lambda hlambda0 hlambda1 time
 
 omit [DecidableEq iota] in
+/-- The stopping-law mixture depends on the scale, not on the particular
+proofs of its interval bounds. -/
+theorem quittingStoppingLawMixtureBehaviorStrategy_congr_scale
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (who : iota)
+    (source target : (quittingGame reward).BehaviorStrategy who)
+    (lambda mu : ℝ)
+    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
+    (hscale : lambda = mu) :
+    quittingStoppingLawMixtureBehaviorStrategy reward who source target
+        lambda hlambda0 hlambda1 =
+      quittingStoppingLawMixtureBehaviorStrategy reward who source target
+        mu (hscale ▸ hlambda0) (hscale ▸ hlambda1) := by
+  subst mu
+  rfl
+
+omit [DecidableEq iota] in
 @[simp] theorem quittingBehaviorLiveHazard_stoppingLawMixture
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (who : iota)
