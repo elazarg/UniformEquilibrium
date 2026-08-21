@@ -7837,6 +7837,28 @@ def IsPunishmentWithin (G : QuittingGame) (j : G.Player) (δ : ℝ)
   ∀ q : ℕ → Set.Icc (0 : ℝ) 1,
     QuitPayoff G (punishment.replace G j q) j ≤ MinMaxQuit G j + δ
 
+/-- The infimum definition of `χʲ` supplies a punishment within every positive slack. -/
+private theorem exists_punishmentWithin (G : QuittingGame) (j : G.Player)
+    {δ : ℝ} (hδ : 0 < δ) :
+    ∃ punishment : QuitProfile G, IsPunishmentWithin G j δ punishment := by
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hpayoffBound : ∀ profile : QuitProfile G,
+      |QuitPayoff G profile j| ≤ M := fun profile =>
+    abs_quitPayoff_le G profile j hM0 (fun A => le_of_lt (hM.2.2 A j))
+  have hinnerAbove : ∀ profile : QuitProfile G, BddAbove (range fun deviation :
+      ℕ → Set.Icc (0 : ℝ) 1 => QuitPayoff G (profile.replace G j deviation) j) := by
+    intro profile
+    refine ⟨M, ?_⟩
+    rintro _ ⟨deviation, rfl⟩
+    exact (le_abs_self _).trans (hpayoffBound _)
+  have hnear : MinMaxQuit G j < MinMaxQuit G j + δ := by linarith
+  rw [MinMaxQuit] at hnear
+  obtain ⟨punishment, hpunishment⟩ := exists_lt_of_ciInf_lt hnear
+  refine ⟨punishment, ?_⟩
+  intro deviation
+  exact (le_ciSup (hinnerAbove punishment) deviation).trans hpunishment.le
+
 /-- Approximate equilibria made from a stationary prefix and a min-max punishment. -/
 def HasStationarilyGeneratedApproximateEquilibria (G : QuittingGame) : Prop :=
   ∀ δ : ℝ, 0 < δ → ∀ ε : ℝ, 0 < ε → ∃ (p : QuitRow G) (M : ℕ)
