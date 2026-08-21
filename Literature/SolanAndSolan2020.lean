@@ -3,6 +3,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
+import UniformEquilibrium.Quitting.Punishment.ApproximateCompletedCycle
 import MathUE.CaristiFixedPoint
 import MathUE.DivergentChargeRecurrence
 import MathUE.Probability.FiniteClosedCoreReach
@@ -703,6 +704,74 @@ theorem lemma2_8
         table.zeroNeverReward fullWeight hfullResidual hfullComplementary
         hnonvertex).hasApproximateEquilibria
 
+/-! Under the accepted manuscript's min--max definition of normality, the
+singleton case in the printed proof of Lemma 2.8 need not be stationary.
+The conclusion needed by Theorem 2.4 still follows: a rare solo exit makes
+every outsider's joining gain small, while the owner's min--max inequality
+supplies the punishment continuation. -/
+private theorem exists_epsilonEquilibrium_of_normal_nonnegativeColumn
+    (table : Table ι) (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table) (owner : NormalPlayer table)
+    (hcolumn : ∀ who,
+      0 ≤ table.terminal
+        (quittingProjectiveSingletonTerminal owner.1) who) :
+    ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame table.terminal).BehaviorProfile,
+        EpsilonEquilibrium table ε profile := by
+  intro ε hε
+  let p : ℝ := min (ε / 2) (1 / 2)
+  have hp : 0 < p := by
+    dsimp only [p]
+    exact lt_min (half_pos hε) (by norm_num)
+  have hp1 : p ≤ 1 := (min_le_right _ _).trans (by norm_num)
+  have hpε : p < ε := by
+    have := min_le_left (ε / 2) (1 / 2)
+    linarith
+  let hazard := quittingHazardCoin p hp.le hp1
+  have hhazard : 0 < (hazard true).toReal := by
+    simpa only [hazard, quittingHazardCoin_true_toReal] using hp
+  have hcap : ∀ other, other ≠ owner.1 →
+      quittingStationaryUnilateralCap table.zeroNeverReward
+          (quittingSoloStationaryRoot owner.1 hazard) other ≤
+        quittingSoloReward table.zeroNeverReward owner.1 other + p := by
+    intro other hother
+    rw [quittingStationaryUnilateralCap_solo_other
+        table.zeroNeverReward hother hazard hhazard,
+      quittingStationaryFixedOpponentsQuitValue_solo_other_eq_mix
+        table.zeroNeverReward hother hazard]
+    simp only [hazard, quittingHazardCoin_false_toReal,
+      quittingHazardCoin_true_toReal]
+    unfold quittingSoloReward quittingSingletonCollisionReward
+      QuittingPayoffTable.zeroNeverReward
+    have hsolo : table.terminal ⟨{other}, by simp⟩ other = 0 := by
+      simpa only [quittingProjectiveSingletonTerminal] using
+        hnormalized other
+    have howner : 0 ≤ table.terminal ⟨{owner.1}, by simp⟩ other := by
+      simpa only [quittingProjectiveSingletonTerminal] using hcolumn other
+    have hcollision : table.terminal ⟨{owner.1, other}, by simp⟩ other ≤ 1 :=
+      (le_abs_self _).trans (hbounded.1 _ other)
+    rw [hsolo, max_le_iff]
+    constructor <;> nlinarith
+  have hpunishment : quittingPunishmentValue table.zeroNeverReward owner.1 ≤
+      quittingSoloReward table.zeroNeverReward owner.1 owner.1 := by
+    have hnormal := owner.2
+    rw [mem_normalPlayers_iff] at hnormal
+    unfold IsNormalPlayer at hnormal
+    rw [table.punishmentValue_eq_add_never] at hnormal
+    unfold quittingSoloReward
+    have hsolo : table.terminal ⟨{owner.1}, by simp⟩ owner.1 = 0 := by
+      simpa only [quittingProjectiveSingletonTerminal] using
+        hnormalized owner.1
+    change quittingPunishmentValue table.zeroNeverReward owner.1 ≤
+      table.terminal ⟨{owner.1}, by simp⟩ owner.1 - table.never owner.1
+    rw [hsolo]
+    linarith
+  obtain ⟨profile, hnash, _⟩ :=
+    exists_isεAsymptoticNash_close_soloReward_of_cap_of_punishmentIR
+      table.zeroNeverReward owner.1 hazard hhazard hp.le hpε hcap hpunishment
+  refine ⟨profile, ?_⟩
+  exact (table.isεAsymptoticNash_iff ε profile).2 hnash
+
 /-! **Remark 2.9 (paper).** For an `n×n` matrix `R` and `q`, the
 paper recalls the textbook LCP: find `w,z ≥ 0` with `w=q+Rz` and
 `w_i z_i=0`. -/
@@ -748,6 +817,54 @@ theorem lemma2_12
     exact (mul_eq_zero.mp hproduct).resolve_left hpositive.ne'
   · intro owner _
     exact hnormalNever owner
+
+/-! The zero-LCP branch needed by the main theorem.  Away from a simplex
+vertex this is Lemma 2.8.  At a vertex, the accepted manuscript's min--max
+normality supplies a punishment-completed, generally nonstationary profile. -/
+private theorem epsilonEquilibria_of_nontrivialZeroProjectiveLCPSolution
+    (table : Table ι) (hnormalized : SoloExitNormalized table)
+    (hbounded : TablePayoffsBounded table)
+    (h : HasNontrivialZeroProjectiveLCPSolution
+      (NormalMatrix table)) :
+    ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame table.terminal).BehaviorProfile,
+        EpsilonEquilibrium table ε profile := by
+  rw [hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous] at h
+  obtain ⟨weight, hnonnegative, hcomplementary⟩ := h
+  by_cases hvertex : ∃ owner : NormalPlayer table, weight.1 owner = 1
+  · obtain ⟨owner, howner⟩ := hvertex
+    have hcolumn : ∀ who,
+        0 ≤ table.terminal
+          (quittingProjectiveSingletonTerminal owner.1) who := by
+      intro who
+      by_cases hwho : who ∈ NormalPlayers table
+      · have hresidual := hnonnegative ⟨who, hwho⟩
+        rw [singletonLCPResidual_eq_column_of_weight_eq_one
+          (NormalMatrix table) weight howner ⟨who, hwho⟩] at hresidual
+        exact hresidual
+      · have habnormal : ¬IsNormalPlayer table who := by
+          simpa only [mem_normalPlayers_iff] using hwho
+        have hne : owner.1 ≠ who := fun heq => by
+          apply hwho
+          rw [← heq]
+          exact owner.2
+        exact (lemma2_6 table hnormalized hbounded habnormal hne).le
+    exact exists_epsilonEquilibrium_of_normal_nonnegativeColumn
+      table hnormalized hbounded owner hcolumn
+  · have hstationary : StationaryEpsilonEquilibria table := by
+      apply lemma2_8 table hnormalized hbounded weight
+      · intro who
+        exact hnonnegative who
+      · intro who hpositive
+        have hproduct := hcomplementary who
+        change weight.1 who * NormalMixturePayoff table weight who.1 = 0
+          at hproduct
+        exact (mul_eq_zero.mp hproduct).resolve_left hpositive.ne'
+      · intro owner howner
+        exact False.elim (hvertex ⟨owner, howner⟩)
+    intro ε hε
+    obtain ⟨root, hnash⟩ := hstationary ε hε
+    exact ⟨quittingStationaryProfile table.terminal root, hnash⟩
 
 /-! Extend a right-hand side on the min--max normal players by the fixed
 positive value one on abnormal coordinates, as in the proof of Theorem
