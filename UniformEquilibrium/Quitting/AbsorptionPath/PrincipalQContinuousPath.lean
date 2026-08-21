@@ -203,6 +203,115 @@ theorem PrincipalQClockMassPath.sum_absorptionPlayerPath
     rw [hduration, hdenom, div_mul_cancel₀ _ initial.time_pos.ne']
     ring
 
+omit [DecidableEq ι] in
+/-- Reversal carries clock mesh support into the absorption prefix: whenever
+a player's absorption mass increases before the filler interval, some point
+of that interval has scaled continuation state within the mesh error. -/
+theorem PrincipalQClockMassPath.exists_absorptionPrefix_meshSupport_witness
+    {M : ι → ι → ℝ} {stepBound : ℝ}
+    {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (weight : stdSimplex ℝ ι)
+    (hinitialOne : initial.time < 1) (hnodeTime : node.time = 1)
+    (hsupported : path.IsMeshSupported stepBound)
+    (who : ι) (first second : unitInterval) (hle : first ≤ second)
+    (hsecond : (second : ℝ) ≤ 1 - initial.time)
+    (hincrease : path.absorptionPlayerPath weight hinitialOne first who <
+      path.absorptionPlayerPath weight hinitialOne second who) :
+    ∃ witness ∈ Set.Icc first second,
+      (principalQClockScaledState initial +
+          principalQMassImage M
+            (path.mass 1 -
+              path.absorptionPlayerPath weight hinitialOne witness)) who ≤
+        principalQMatrixSpeedBound M * (1 - (witness : ℝ)) * stepBound := by
+  let split := 1 - initial.time
+  have hsplitPos : 0 < split := sub_pos.mpr hinitialOne
+  have hsplitOne : split < 1 := by
+    dsimp [split]
+    linarith [initial.time_pos]
+  have hfirst : (first : ℝ) ≤ split :=
+    (show (first : ℝ) ≤ (second : ℝ) from hle).trans hsecond
+  let first' := Path.transAtLeftParameter hsplitPos first hfirst
+  let second' := Path.transAtLeftParameter hsplitPos second hsecond
+  have hleftFirst :
+      path.absorptionPlayerPath weight hinitialOne first =
+        path.absorptionPrefixPath first' := by
+    exact Path.transAt_apply_leftParameter _ _ hsplitPos hsplitOne first hfirst
+  have hleftSecond :
+      path.absorptionPlayerPath weight hinitialOne second =
+        path.absorptionPrefixPath second' := by
+    exact Path.transAt_apply_leftParameter _ _ hsplitPos hsplitOne second hsecond
+  have hclockIncrease :
+      path.mass (unitInterval.symm second') who <
+        path.mass (unitInterval.symm first') who := by
+    rw [hleftFirst, hleftSecond,
+      path.absorptionPrefixPath_apply,
+      path.absorptionPrefixPath_apply] at hincrease
+    simp only [Pi.sub_apply] at hincrease
+    linarith
+  have hclockOrder : unitInterval.symm second' ≤ unitInterval.symm first' := by
+    apply unitInterval.symm_le_symm.mpr
+    exact div_le_div_of_nonneg_right
+      (show (first : ℝ) ≤ (second : ℝ) from hle) hsplitPos.le
+  obtain ⟨clockWitness, hclockWitness, hclockBound⟩ :=
+    hsupported who (unitInterval.symm second')
+      (unitInterval.symm first') hclockOrder hclockIncrease
+  let witness : unitInterval :=
+    ⟨split * (1 - (clockWitness : ℝ)), by
+      constructor
+      · exact mul_nonneg hsplitPos.le
+          (sub_nonneg.mpr clockWitness.property.2)
+      · nlinarith [clockWitness.property.1,
+          clockWitness.property.2, hsplitOne.le]⟩
+  have hwitnessLeSplit : (witness : ℝ) ≤ split := by
+    dsimp [witness]
+    nlinarith [clockWitness.property.1, hsplitPos.le]
+  have hwitnessParam :
+      Path.transAtLeftParameter hsplitPos witness hwitnessLeSplit =
+        unitInterval.symm clockWitness := by
+    apply Subtype.ext
+    dsimp [witness, Path.transAtLeftParameter]
+    rw [mul_div_cancel_left₀ _ hsplitPos.ne']
+  have habsorptionWitness :
+      path.absorptionPlayerPath weight hinitialOne witness =
+        path.mass 1 - path.mass clockWitness := by
+    rw [PrincipalQClockMassPath.absorptionPlayerPath,
+      Path.transAt_apply_leftParameter _ _ hsplitPos hsplitOne witness
+        hwitnessLeSplit,
+      path.absorptionPrefixPath_apply, hwitnessParam]
+    congr 2
+    exact unitInterval.symm_symm clockWitness
+  refine ⟨witness, ?_, ?_⟩
+  · constructor
+    · have := hclockWitness.2
+      dsimp [first', Path.transAtLeftParameter] at this
+      change (clockWitness : ℝ) ≤ 1 - (first : ℝ) / split at this
+      change (first : ℝ) ≤ split * (1 - (clockWitness : ℝ))
+      have hmul := mul_le_mul_of_nonneg_left this hsplitPos.le
+      field_simp [hsplitPos.ne'] at hmul
+      nlinarith
+    · have := hclockWitness.1
+      dsimp [second', Path.transAtLeftParameter] at this
+      change 1 - (second : ℝ) / split ≤ (clockWitness : ℝ) at this
+      change split * (1 - (clockWitness : ℝ)) ≤ (second : ℝ)
+      have hmul := mul_le_mul_of_nonneg_left this hsplitPos.le
+      field_simp [hsplitPos.ne'] at hmul
+      nlinarith
+  · rw [habsorptionWitness]
+    have hmassRemaining :
+        path.mass 1 - (path.mass 1 - path.mass clockWitness) =
+          path.mass clockWitness := by
+      abel
+    rw [hmassRemaining]
+    have hclock : principalQNormalizedClock initial node clockWitness =
+        1 - (witness : ℝ) := by
+      unfold principalQNormalizedClock principalQClockDuration
+      rw [hnodeTime]
+      dsimp [witness, split]
+      ring
+    rw [hclock] at hclockBound
+    exact hclockBound
+
 /-- Bundle the reversed clock mass and terminal filler as a continuous
 singleton absorption path. -/
 def PrincipalQClockMassPath.toContinuousAbsorptionPath
