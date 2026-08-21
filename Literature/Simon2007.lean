@@ -6904,6 +6904,18 @@ def SegmentIndex (length : Option ℕ) (i : ℕ) : Prop :=
 def ActiveSegment (count : Option ℕ) (j : ℕ) : Prop :=
   ∀ L, count = some L → j < L
 
+/-- Every predecessor of an active segment is active. -/
+theorem ActiveSegment.pred {count : Option ℕ} {j : ℕ}
+    (h : ActiveSegment count (j + 1)) : ActiveSegment count j := by
+  intro L hcount
+  exact (Nat.lt_succ_self j).trans (h L hcount)
+
+/-- Validity of a segment index is inherited by smaller indices. -/
+theorem SegmentIndex.mono {length : Option ℕ} {i j : ℕ}
+    (hij : i ≤ j) (h : SegmentIndex length j) : SegmentIndex length i := by
+  intro k hlength
+  exact lt_of_le_of_lt hij (h k hlength)
+
 /--
 An extended orbit is made of finite or infinite orbit segments, stitched at a finite endpoint
 or by convergence of an infinite segment to the next segment's first point.
@@ -6934,6 +6946,37 @@ def HasUnboundedExtendedVariation {N : Type} [Fintype N]
       Finset.sum (Finset.range I) fun i =>
         if ActiveSegment x.segmentCount j ∧ SegmentIndex (x.segmentLength j) (i + 1)
         then ‖x.point j (i + 1) - x.point j i‖ else 0)
+
+/-- Variation visible in a finite prefix of one extended-orbit segment. -/
+private noncomputable def extendedSegmentPrefixVariation
+    {N : Type} [Fintype N] {F : Correspondence (Payoff N) (Payoff N)}
+    (x : ExtendedOrbitData F) (j I : ℕ) : ℝ := by
+  classical
+  exact ∑ i ∈ Finset.range I,
+    if ActiveSegment x.segmentCount j ∧ SegmentIndex (x.segmentLength j) (i + 1)
+    then ‖x.point j (i + 1) - x.point j i‖ else 0
+
+/-- Rectangular prefix variation of an extended orbit. -/
+private noncomputable def extendedPrefixVariation
+    {N : Type} [Fintype N] {F : Correspondence (Payoff N) (Payoff N)}
+    (x : ExtendedOrbitData F) (J I : ℕ) : ℝ := by
+  classical
+  exact ∑ j ∈ Finset.range J, extendedSegmentPrefixVariation x j I
+
+private theorem hasUnboundedExtendedVariation_iff_prefix
+    {N : Type} [Fintype N] {F : Correspondence (Payoff N) (Payoff N)}
+    (x : ExtendedOrbitData F) :
+    HasUnboundedExtendedVariation x ↔
+      ∀ B : ℝ, ∃ J I : ℕ, B ≤ extendedPrefixVariation x J I := by
+  constructor
+  · intro h B
+    rcases h B with ⟨J, I, hJI⟩
+    exact ⟨J, I, by
+      simpa [extendedPrefixVariation, extendedSegmentPrefixVariation] using hJI⟩
+  · intro h B
+    rcases h B with ⟨J, I, hJI⟩
+    exact ⟨J, I, by
+      simpa [extendedPrefixVariation, extendedSegmentPrefixVariation] using hJI⟩
 
 /-- The one-stage quitting game `Γ_r` pays `r` if every player continues. -/
 def QuittingStageGame (G : QuittingGame) (r : Payoff G.Player) :
@@ -8996,9 +9039,205 @@ def append (G : QuittingGame) {η : ℝ}
 def variation {G : QuittingGame} {η : ℝ} (z : ApproximateFRowPath G η) : ℝ :=
   ∑ i : Fin z.length, ‖z.point i.succ - z.point i.castSucc‖
 
+/-- Total exact one-stage motion of the rows, before paying the displayed seam errors. -/
+def exactVariation {G : QuittingGame} {η : ℝ}
+    (z : ApproximateFRowPath G η) : ℝ :=
+  ∑ i : Fin z.length,
+    ‖QuittingOneStagePayoff G (z.point i.castSucc) (z.row i) -
+      z.point i.castSucc‖
+
 /-- Total budget of all approximate seams in a finite path. -/
 def totalError {G : QuittingGame} {η : ℝ} (z : ApproximateFRowPath G η) : ℝ :=
   ∑ i : Fin z.length, z.seamError i
+
+@[simp] theorem length_append {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0) :
+    (z.append G w hstitch).length = z.length + w.length := rfl
+
+theorem point_append_left {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0)
+    (i : Fin (z.length + 1)) :
+    (z.append G w hstitch).point ⟨i, by dsimp [append]; omega⟩ = z.point i := by
+  simp only [append, appendPoint, dif_pos i.is_le]
+
+theorem point_append_right {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0)
+    (i : Fin (w.length + 1)) :
+    (z.append G w hstitch).point
+      ⟨z.length + i, by dsimp [append]; omega⟩ = w.point i := by
+  by_cases hi : (i : ℕ) = 0
+  · have hi0 : i = 0 := Fin.ext hi
+    subst i
+    change appendPoint z w ⟨z.length + (0 : ℕ), by omega⟩ = w.point 0
+    unfold appendPoint
+    rw [dif_pos (by simp)]
+    simpa only [Nat.add_zero] using hstitch
+  · change appendPoint z w ⟨z.length + (i : ℕ), by omega⟩ = w.point i
+    unfold appendPoint
+    have hnot : ¬z.length + (i : ℕ) ≤ z.length := by omega
+    rw [dif_neg hnot]
+    apply congrArg w.point
+    apply Fin.ext
+    simp
+
+theorem row_append_left {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0)
+    (i : Fin z.length) :
+    (z.append G w hstitch).row ⟨i, by dsimp [append]; omega⟩ = z.row i := by
+  simp only [append, appendRow, dif_pos i.isLt]
+
+theorem row_append_right {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0)
+    (i : Fin w.length) :
+    (z.append G w hstitch).row
+      ⟨z.length + i, by dsimp [append]; omega⟩ = w.row i := by
+  change appendRow z w ⟨z.length + (i : ℕ), by omega⟩ = w.row i
+  unfold appendRow
+  have hnot : ¬z.length + (i : ℕ) < z.length := by omega
+  rw [dif_neg hnot]
+  apply congrArg w.row
+  apply Fin.ext
+  simp
+
+theorem seamError_append_left {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0)
+    (i : Fin z.length) :
+    (z.append G w hstitch).seamError
+      ⟨i, by dsimp [append]; omega⟩ = z.seamError i := by
+  simp only [append, appendSeamError, dif_pos i.isLt]
+
+theorem seamError_append_right {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0)
+    (i : Fin w.length) :
+    (z.append G w hstitch).seamError
+      ⟨z.length + i, by dsimp [append]; omega⟩ =
+      w.seamError i := by
+  change appendSeamError z w ⟨z.length + (i : ℕ), by omega⟩ = w.seamError i
+  unfold appendSeamError
+  have hnot : ¬z.length + (i : ℕ) < z.length := by omega
+  rw [dif_neg hnot]
+  apply congrArg w.seamError
+  apply Fin.ext
+  simp
+
+/-- Variation is additive under path concatenation. -/
+theorem variation_append {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0) :
+    variation (z.append G w hstitch) = variation z + variation w := by
+  unfold variation
+  change (∑ i : Fin (z.length + w.length),
+      ‖(z.append G w hstitch).point i.succ -
+        (z.append G w hstitch).point i.castSucc‖) =
+    (∑ i : Fin z.length, ‖z.point i.succ - z.point i.castSucc‖) +
+      ∑ i : Fin w.length, ‖w.point i.succ - w.point i.castSucc‖
+  rw [Fin.sum_univ_add]
+  congr 1
+  · apply Finset.sum_congr rfl
+    intro i _hi
+    have hsource :
+        (z.append G w hstitch).point (Fin.castAdd w.length i).castSucc =
+          z.point i.castSucc := by
+      rw [show (Fin.castAdd w.length i).castSucc =
+        ⟨(i : ℕ), by omega⟩ by apply Fin.ext; rfl]
+      exact point_append_left z w hstitch i.castSucc
+    have htarget :
+        (z.append G w hstitch).point (Fin.castAdd w.length i).succ =
+          z.point i.succ := by
+      rw [show (Fin.castAdd w.length i).succ =
+        ⟨(i : ℕ) + 1, by omega⟩ by apply Fin.ext; rfl]
+      exact point_append_left z w hstitch i.succ
+    rw [hsource, htarget]
+  · apply Finset.sum_congr rfl
+    intro i _hi
+    have hsource :
+        (z.append G w hstitch).point (Fin.natAdd z.length i).castSucc =
+          w.point i.castSucc := by
+      rw [show (Fin.natAdd z.length i).castSucc =
+        ⟨z.length + (i : ℕ), by omega⟩ by apply Fin.ext; rfl]
+      exact point_append_right z w hstitch i.castSucc
+    have htarget :
+        (z.append G w hstitch).point (Fin.natAdd z.length i).succ =
+          w.point i.succ := by
+      rw [show (Fin.natAdd z.length i).succ =
+        ⟨z.length + (i : ℕ) + 1, by omega⟩ by apply Fin.ext; rfl]
+      exact point_append_right z w hstitch i.succ
+    rw [hsource, htarget]
+
+/-- Exact one-stage motion is additive under path concatenation. -/
+theorem exactVariation_append {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0) :
+    exactVariation (z.append G w hstitch) =
+      exactVariation z + exactVariation w := by
+  unfold exactVariation
+  change (∑ i : Fin (z.length + w.length),
+      ‖QuittingOneStagePayoff G
+          ((z.append G w hstitch).point i.castSucc)
+          ((z.append G w hstitch).row i) -
+        (z.append G w hstitch).point i.castSucc‖) =
+    (∑ i : Fin z.length,
+      ‖QuittingOneStagePayoff G (z.point i.castSucc) (z.row i) -
+        z.point i.castSucc‖) +
+      ∑ i : Fin w.length,
+        ‖QuittingOneStagePayoff G (w.point i.castSucc) (w.row i) -
+          w.point i.castSucc‖
+  rw [Fin.sum_univ_add]
+  congr 1
+  · apply Finset.sum_congr rfl
+    intro i _hi
+    have hpoint :
+        (z.append G w hstitch).point (Fin.castAdd w.length i).castSucc =
+          z.point i.castSucc := by
+      rw [show (Fin.castAdd w.length i).castSucc =
+        ⟨(i : ℕ), by omega⟩ by apply Fin.ext; rfl]
+      exact point_append_left z w hstitch i.castSucc
+    have hrow :
+        (z.append G w hstitch).row (Fin.castAdd w.length i) = z.row i := by
+      rw [show Fin.castAdd w.length i =
+        ⟨(i : ℕ), by omega⟩ by apply Fin.ext; rfl]
+      exact row_append_left z w hstitch i
+    rw [hpoint, hrow]
+  · apply Finset.sum_congr rfl
+    intro i _hi
+    have hpoint :
+        (z.append G w hstitch).point (Fin.natAdd z.length i).castSucc =
+          w.point i.castSucc := by
+      rw [show (Fin.natAdd z.length i).castSucc =
+        ⟨z.length + (i : ℕ), by omega⟩ by apply Fin.ext; rfl]
+      exact point_append_right z w hstitch i.castSucc
+    have hrow :
+        (z.append G w hstitch).row (Fin.natAdd z.length i) = w.row i := by
+      rw [show Fin.natAdd z.length i =
+        ⟨z.length + (i : ℕ), by omega⟩ by apply Fin.ext; rfl]
+      exact row_append_right z w hstitch i
+    rw [hpoint, hrow]
+
+/-- Total seam error is additive under path concatenation. -/
+theorem totalError_append {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0) :
+    totalError (z.append G w hstitch) = totalError z + totalError w := by
+  unfold totalError
+  change (∑ i : Fin (z.length + w.length),
+      (z.append G w hstitch).seamError i) =
+    (∑ i : Fin z.length, z.seamError i) +
+      ∑ i : Fin w.length, w.seamError i
+  rw [Fin.sum_univ_add]
+  congr 1
+  · apply Finset.sum_congr rfl
+    intro i _hi
+    exact seamError_append_left z w hstitch i
+  · apply Finset.sum_congr rfl
+    intro i _hi
+    exact seamError_append_right z w hstitch i
 
 end ApproximateFRowPath
 
@@ -12082,6 +12321,311 @@ def ExtendedOrbitCondition (G : QuittingGame) : Prop :=
     (∀ j, ActiveSegment x.segmentCount j → ∀ i,
       SegmentIndex (x.segmentLength j) i → IsRational G ε (x.point j i)) ∧
     HasUnboundedExtendedVariation x
+
+/-- A finite segment of an extended orbit is one exact approximate-row path to the
+next segment's initial point. -/
+private theorem exists_finiteSegmentPath (G : QuittingGame) {η : ℝ}
+    {x : ExtendedOrbitData (FRow G η)}
+    (hrational : ∀ j, ActiveSegment x.segmentCount j → ∀ i,
+      SegmentIndex (x.segmentLength j) i → IsRational G η (x.point j i))
+    (j : ℕ) (hjnext : ActiveSegment x.segmentCount (j + 1))
+    {k : ℕ} (hlength : x.segmentLength j = some k) :
+    ∃ z : ApproximateFRowPath G η,
+      z.point 0 = x.point j 0 ∧
+      z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = x.point (j + 1) 0 ∧
+      z.totalError = 0 ∧
+      z.exactVariation =
+        ∑ i ∈ Finset.range (k - 1),
+          ‖x.point j (i + 1) - x.point j i‖ := by
+  classical
+  have hj : ActiveSegment x.segmentCount j := hjnext.pred
+  have hk : 0 < k := x.segmentLengthPositive j hj k hlength
+  have hindex (i : Fin (k - 1)) :
+      SegmentIndex (x.segmentLength j) ((i : ℕ) + 1) := by
+    intro l hl
+    rw [hlength] at hl
+    injection hl with hl
+    omega
+  let row : Fin (k - 1) → QuitRow G := fun i =>
+    Classical.choose (x.step j hj i (hindex i))
+  have hrowMem (i : Fin (k - 1)) :
+      row i ∈ EpsilonRow G η (x.point j i) :=
+    (Classical.choose_spec (x.step j hj i (hindex i))).1
+  have hrowPayoff (i : Fin (k - 1)) :
+      QuittingOneStagePayoff G (x.point j i) (row i) = x.point j (i + 1) :=
+    (Classical.choose_spec (x.step j hj i (hindex i))).2
+  let z : ApproximateFRowPath G η :=
+    { length := k - 1
+      point := fun i => x.point j i
+      row := row
+      seamError := fun _ => 0
+      seamError_nonneg := fun _ => le_rfl
+      row_mem := by
+        intro i
+        simpa only [Fin.val_castSucc] using hrowMem i
+      step_error := by
+        intro i
+        rw [show (i.succ : ℕ) = (i : ℕ) + 1 by rfl]
+        rw [show (i.castSucc : ℕ) = (i : ℕ) by rfl]
+        rw [hrowPayoff i, sub_self, norm_zero]
+      rational := by
+        intro i
+        apply hrational j hj i
+        intro l hl
+        rw [hlength] at hl
+        injection hl with hl
+        omega }
+  refine ⟨z, rfl, ?_, ?_, ?_⟩
+  · change x.point j (k - 1) = x.point (j + 1) 0
+    exact x.finiteStitch j hjnext k hlength
+  · simp [ApproximateFRowPath.totalError, z]
+  · simp only [ApproximateFRowPath.exactVariation, z, Finset.sum_fin_eq_sum_range]
+    apply Finset.sum_congr rfl
+    intro i hi
+    have hi' : i < k - 1 := Finset.mem_range.mp hi
+    simp only [hi', dite_true, Fin.val_castSucc]
+    rw [hrowPayoff ⟨i, hi'⟩]
+
+/-- Truncating a convergent infinite segment gives an approximate row path; its only
+possible error is the final stitch to the next segment. -/
+private theorem exists_infiniteSegmentPath (G : QuittingGame) {η : ℝ}
+    {x : ExtendedOrbitData (FRow G η)}
+    (hrational : ∀ j, ActiveSegment x.segmentCount j → ∀ i,
+      SegmentIndex (x.segmentLength j) i → IsRational G η (x.point j i))
+    (j : ℕ) (hjnext : ActiveSegment x.segmentCount (j + 1))
+    (hlength : x.segmentLength j = none) {I : ℕ} (hI : 0 < I)
+    {e : ℝ} (he : 0 ≤ e)
+    (hclose : ‖x.point (j + 1) 0 - x.point j I‖ ≤ e) :
+    ∃ z : ApproximateFRowPath G η,
+      z.point 0 = x.point j 0 ∧
+      z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = x.point (j + 1) 0 ∧
+      z.totalError = e ∧
+      z.exactVariation =
+        ∑ i ∈ Finset.range I, ‖x.point j (i + 1) - x.point j i‖ := by
+  classical
+  have hj : ActiveSegment x.segmentCount j := hjnext.pred
+  have hindex (i : Fin I) :
+      SegmentIndex (x.segmentLength j) ((i : ℕ) + 1) := by
+    intro k hk
+    rw [hlength] at hk
+    contradiction
+  let row : Fin I → QuitRow G := fun i =>
+    Classical.choose (x.step j hj i (hindex i))
+  have hrowMem (i : Fin I) :
+      row i ∈ EpsilonRow G η (x.point j i) :=
+    (Classical.choose_spec (x.step j hj i (hindex i))).1
+  have hrowPayoff (i : Fin I) :
+      QuittingOneStagePayoff G (x.point j i) (row i) = x.point j (i + 1) :=
+    (Classical.choose_spec (x.step j hj i (hindex i))).2
+  let z : ApproximateFRowPath G η :=
+    { length := I
+      point := fun i => if (i : ℕ) < I then x.point j i else x.point (j + 1) 0
+      row := row
+      seamError := fun i => if (i : ℕ) + 1 = I then e else 0
+      seamError_nonneg := by
+        intro i
+        split <;> positivity
+      row_mem := by
+        intro i
+        simpa [Fin.val_castSucc, i.isLt] using hrowMem i
+      step_error := by
+        intro i
+        by_cases hlast : (i : ℕ) + 1 = I
+        · simp only [Fin.val_succ, hlast, lt_self_iff_false, if_false,
+            Fin.val_castSucc, i.isLt, if_true]
+          rw [hrowPayoff i, hlast]
+          exact hclose
+        · have hnext : (i : ℕ) + 1 < I := by omega
+          simp only [Fin.val_succ, hnext, if_true, Fin.val_castSucc, i.isLt]
+          rw [hrowPayoff i, sub_self, norm_zero, if_neg hlast]
+      rational := by
+        intro i
+        by_cases hi : (i : ℕ) < I
+        · rw [show (if (i : ℕ) < I then x.point j i else x.point (j + 1) 0) =
+            x.point j i by simp [hi]]
+          apply hrational j hj i
+          intro k hk
+          rw [hlength] at hk
+          contradiction
+        · rw [show (if (i : ℕ) < I then x.point j i else x.point (j + 1) 0) =
+            x.point (j + 1) 0 by simp [hi]]
+          apply hrational (j + 1) hjnext 0
+          intro k hk
+          exact x.segmentLengthPositive (j + 1) hjnext k hk }
+  refine ⟨z, ?_, ?_, ?_, ?_⟩
+  · simp [z, hI]
+  · simp [z]
+  · change (∑ i : Fin I, if (i : ℕ) + 1 = I then e else 0) = e
+    let last : Fin I := ⟨I - 1, by omega⟩
+    rw [Finset.sum_eq_single last]
+    · have hlastEq : (last : ℕ) + 1 = I := by
+        dsimp only [last]
+        omega
+      rw [if_pos hlastEq]
+    · intro b _hb hblast
+      have hbne : (b : ℕ) + 1 ≠ I := by
+        intro hb
+        apply hblast
+        apply Fin.ext
+        dsimp only [last]
+        omega
+      simp [hbne]
+    · intro hlast
+      exact (hlast (Finset.mem_univ last)).elim
+  · simp only [ApproximateFRowPath.exactVariation, z,
+      Finset.sum_fin_eq_sum_range]
+    apply Finset.sum_congr rfl
+    intro i hi
+    have hi' : i < I := Finset.mem_range.mp hi
+    simp only [hi', dite_true, Fin.val_castSucc, if_true]
+    rw [hrowPayoff ⟨i, hi'⟩]
+
+/-- A finite segment's full variation dominates every rectangular prefix assigned to it. -/
+private theorem extendedSegmentPrefixVariation_le_finite
+    {N : Type} [Fintype N] {F : Correspondence (Payoff N) (Payoff N)}
+    (x : ExtendedOrbitData F) {j I k : ℕ}
+    (hj : ActiveSegment x.segmentCount j)
+    (hlength : x.segmentLength j = some k) :
+    extendedSegmentPrefixVariation x j I ≤
+      ∑ i ∈ Finset.range (k - 1),
+        ‖x.point j (i + 1) - x.point j i‖ := by
+  classical
+  let valid : ℕ → Prop := fun i => SegmentIndex (x.segmentLength j) (i + 1)
+  let selected := (Finset.range I).filter valid
+  calc
+    extendedSegmentPrefixVariation x j I =
+        ∑ i ∈ selected, ‖x.point j (i + 1) - x.point j i‖ := by
+      dsimp only [selected]
+      rw [Finset.sum_filter]
+      simp [extendedSegmentPrefixVariation, valid, hj]
+    _ ≤ ∑ i ∈ Finset.range (k - 1),
+          ‖x.point j (i + 1) - x.point j i‖ := by
+      apply Finset.sum_le_sum_of_subset_of_nonneg
+      · intro i hi
+        have hvalid : SegmentIndex (x.segmentLength j) (i + 1) := by
+          exact (Finset.mem_filter.mp hi).2
+        exact Finset.mem_range.mpr (by
+          have := hvalid k hlength
+          omega)
+      · intro i _hi _hnot
+        exact norm_nonneg _
+
+/-- Increasing the truncation index of an infinite segment only increases its
+captured variation. -/
+private theorem extendedSegmentPrefixVariation_le_infinite
+    {N : Type} [Fintype N] {F : Correspondence (Payoff N) (Payoff N)}
+    (x : ExtendedOrbitData F) {j I K : ℕ}
+    (hj : ActiveSegment x.segmentCount j)
+    (hlength : x.segmentLength j = none) (hIK : I ≤ K) :
+    extendedSegmentPrefixVariation x j I ≤
+      ∑ i ∈ Finset.range K, ‖x.point j (i + 1) - x.point j i‖ := by
+  classical
+  have hvalid : ∀ i, SegmentIndex (x.segmentLength j) (i + 1) := by
+    intro i k hk
+    rw [hlength] at hk
+    contradiction
+  rw [extendedSegmentPrefixVariation]
+  have hcondition (i : ℕ) :
+      ActiveSegment x.segmentCount j ∧
+        SegmentIndex (x.segmentLength j) (i + 1) := ⟨hj, hvalid i⟩
+  simp_rw [if_pos (hcondition _)]
+  apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono hIK)
+  intro i _hi _hnot
+  exact norm_nonneg _
+
+/-- A finite rectangular prefix of an extended orbit with infinitely many segments
+flattens into one approximate row path.  Each truncated infinite segment spends at most
+the common seam budget. -/
+private theorem exists_extendedPrefixPath (G : QuittingGame) {η : ℝ}
+    {x : ExtendedOrbitData (FRow G η)}
+    (hcount : x.segmentCount = none)
+    (hrational : ∀ j, ActiveSegment x.segmentCount j → ∀ i,
+      SegmentIndex (x.segmentLength j) i → IsRational G η (x.point j i))
+    (J I : ℕ) {e : ℝ} (he : 0 < e) :
+    ∃ z : ApproximateFRowPath G η,
+      z.point 0 = x.point 0 0 ∧
+      z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = x.point J 0 ∧
+      z.totalError ≤ (J : ℝ) * e ∧
+      extendedPrefixVariation x J I ≤ z.exactVariation := by
+  classical
+  have hactive (j : ℕ) : ActiveSegment x.segmentCount j := by
+    intro L hL
+    rw [hcount] at hL
+    contradiction
+  induction J with
+  | zero =>
+      have hindex : SegmentIndex (x.segmentLength 0) 0 := by
+        intro k hk
+        exact x.segmentLengthPositive 0 (hactive 0) k hk
+      let z := ApproximateFRowPath.nil G (x.point 0 0)
+        (hrational 0 (hactive 0) 0 hindex)
+      refine ⟨z, rfl, rfl, ?_, ?_⟩
+      · have hzerror : z.totalError = 0 := by
+          rw [ApproximateFRowPath.totalError]
+          exact Finset.sum_empty
+        rw [hzerror]
+        simp
+      · rw [extendedPrefixVariation]
+        simp only [Finset.range_zero, Finset.sum_empty]
+        rw [ApproximateFRowPath.exactVariation]
+        exact Finset.sum_nonneg fun _ _ => norm_nonneg _
+  | succ J ih =>
+      rcases ih with ⟨z, hz0, hzlast, hzerror, hzvariation⟩
+      have hjnext : ActiveSegment x.segmentCount (J + 1) := hactive (J + 1)
+      obtain ⟨w, hw0, hwlast, hwerror, hwvariation⟩ :
+          ∃ w : ApproximateFRowPath G η,
+            w.point 0 = x.point J 0 ∧
+            w.point ⟨w.length, Nat.lt_succ_self w.length⟩ =
+              x.point (J + 1) 0 ∧
+            w.totalError ≤ e ∧
+            extendedSegmentPrefixVariation x J I ≤ w.exactVariation := by
+        cases hlength : x.segmentLength J with
+        | some k =>
+            rcases exists_finiteSegmentPath G hrational J hjnext hlength with
+              ⟨w, hw0, hwlast, hwerror, hwvariation⟩
+            refine ⟨w, hw0, hwlast, ?_, ?_⟩
+            · rw [hwerror]
+              exact he.le
+            · exact (extendedSegmentPrefixVariation_le_finite x
+                (hactive J) hlength).trans_eq hwvariation.symm
+        | none =>
+            obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp
+              (x.infiniteStitch J hjnext hlength) e he
+            let K := max I (max N 1)
+            have hIK : I ≤ K := le_max_left _ _
+            have hNK : N ≤ K := le_trans (le_max_left _ _) (le_max_right _ _)
+            have hK : 0 < K :=
+              lt_of_lt_of_le zero_lt_one
+                (le_trans (le_max_right N 1) (le_max_right I (max N 1)))
+            have hclose : ‖x.point (J + 1) 0 - x.point J K‖ ≤ e := by
+              have := hN K hNK
+              simpa [dist_eq_norm, norm_sub_rev] using this.le
+            rcases exists_infiniteSegmentPath G hrational J hjnext hlength hK he.le
+                hclose with ⟨w, hw0, hwlast, hwerror, hwvariation⟩
+            refine ⟨w, hw0, hwlast, hwerror.le, ?_⟩
+            exact (extendedSegmentPrefixVariation_le_infinite x
+              (hactive J) hlength hIK).trans_eq hwvariation.symm
+      have hstitch :
+          z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0 :=
+        hzlast.trans hw0.symm
+      let joined := z.append G w hstitch
+      refine ⟨joined, ?_, ?_, ?_, ?_⟩
+      · rw [show joined.point 0 = z.point 0 by
+          exact ApproximateFRowPath.point_append_left z w hstitch 0]
+        exact hz0
+      · rw [show joined.point ⟨joined.length, Nat.lt_succ_self joined.length⟩ =
+            w.point ⟨w.length, Nat.lt_succ_self w.length⟩ by
+          simpa [joined] using ApproximateFRowPath.point_append_right z w hstitch
+            ⟨w.length, Nat.lt_succ_self w.length⟩]
+        exact hwlast
+      · rw [show joined.totalError = z.totalError + w.totalError by
+          exact ApproximateFRowPath.totalError_append z w hstitch]
+        push_cast
+        nlinarith [he]
+      · rw [extendedPrefixVariation, Finset.sum_range_succ]
+        rw [show joined.exactVariation = z.exactVariation + w.exactVariation by
+          exact ApproximateFRowPath.exactVariation_append z w hstitch]
+        exact add_le_add hzvariation hwvariation
 
 /-- An ordinary infinite orbit is the one-segment special case of an extended orbit. -/
 theorem InfiniteOrbitCondition.toExtendedOrbitCondition (G : QuittingGame)
