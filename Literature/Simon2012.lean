@@ -3598,7 +3598,7 @@ def HasNonsingularSingletonDifferences (G : QuittingGame) : Prop := by
     (SingletonDifferenceMatrix G Q).det ≠ 0
 
 /-- Replace only the reward table while keeping the player type. -/
-def WithReward (G : QuittingGame)
+abbrev WithReward (G : QuittingGame)
     (reward : {A : Finset G.Player // A.Nonempty} → Payoff G.Player) :
     QuittingGame where
   Player := G.Player
@@ -3615,6 +3615,90 @@ def IsNonsingularPerturbation (G : QuittingGame)
     reward' ⟨{j}, Finset.singleton_nonempty j⟩ i ≤
       G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i) ∧
   HasNonsingularSingletonDifferences (WithReward G reward')
+
+/-- Uniformly decrease exactly the off-diagonal singleton payoffs. -/
+private def perturbedSingletonReward (G : QuittingGame) (η : ℝ)
+    (A : {A : Finset G.Player // A.Nonempty}) (i : G.Player) : ℝ := by
+  classical
+  exact if A.1.card = 1 ∧ i ∉ A.1 then G.reward A i - η else G.reward A i
+
+@[simp] private theorem perturbedSingletonReward_singleton_self
+    (G : QuittingGame) (η : ℝ) (i : G.Player) :
+    perturbedSingletonReward G η
+      ⟨{i}, Finset.singleton_nonempty i⟩ i =
+        G.reward ⟨{i}, Finset.singleton_nonempty i⟩ i := by
+  simp [perturbedSingletonReward]
+
+@[simp] private theorem perturbedSingletonReward_singleton_other
+    (G : QuittingGame) (η : ℝ) {i j : G.Player} (hij : i ≠ j) :
+    perturbedSingletonReward G η
+      ⟨{j}, Finset.singleton_nonempty j⟩ i =
+        G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - η := by
+  simp [perturbedSingletonReward, hij]
+
+private theorem singletonDifferenceMatrix_perturbedSingletonReward
+    (G : QuittingGame) [DecidableEq G.Player]
+    (η : ℝ) (Q : Finset G.Player) :
+    SingletonDifferenceMatrix
+        (WithReward G (perturbedSingletonReward G η)) Q =
+      SingletonDifferenceMatrix G Q -
+        η • Math.LinearAlgebra.offDiagonalOnes {i // i ∈ Q} := by
+  classical
+  ext i j
+  simp only [SingletonDifferenceMatrix, WithReward, SoloPayoff,
+    Matrix.sub_apply, Matrix.smul_apply]
+  by_cases hij : i = j
+  · subst j
+    simp [Math.LinearAlgebra.offDiagonalOnes]
+  · have hvalue : i.1 ≠ j.1 := by
+      intro h
+      apply hij
+      exact Subtype.ext h
+    rw [perturbedSingletonReward_singleton_other G η hvalue,
+      perturbedSingletonReward_singleton_self]
+    simp [hij, Math.LinearAlgebra.offDiagonalOnes]
+    ring
+
+/-- The algebraic part of the generic perturbation: one arbitrarily small
+decrease makes every principal singleton-difference matrix nonsingular. -/
+private theorem exists_reward_nonsingularPerturbation (G : QuittingGame)
+    {tol : ℝ} (htol : 0 < tol) :
+    ∃ η : ℝ, 0 < η ∧ η < tol ∧
+      IsNonsingularPerturbation G (perturbedSingletonReward G η) tol := by
+  classical
+  let Eligible := {Q : Finset G.Player // 2 ≤ Q.card}
+  let polynomial : Eligible → Polynomial ℝ := fun Q =>
+    Math.LinearAlgebra.offDiagonalPerturbationPolynomial
+      (SingletonDifferenceMatrix G Q.1)
+  have hpolynomial : ∀ Q, polynomial Q ≠ 0 := by
+    intro Q
+    apply Math.LinearAlgebra.offDiagonalPerturbationPolynomial_ne_zero
+    simpa using Q.2
+  obtain ⟨η, hη, hηtol, hdet⟩ :=
+    Math.LinearAlgebra.exists_pos_lt_forall_polynomial_eval_ne_zero
+      polynomial hpolynomial htol
+  refine ⟨η, hη, hηtol, ?_, ?_, ?_, ?_, ?_⟩
+  · intro A i
+    rw [perturbedSingletonReward]
+    split_ifs
+    · rw [sub_sub_cancel_left, abs_neg, abs_of_pos hη]
+      exact hηtol.le
+    · simpa only [sub_self, abs_zero] using htol.le
+  · intro A hcard
+    funext i
+    simp [perturbedSingletonReward, hcard]
+  · intro i
+    simp [perturbedSingletonReward, SoloPayoff]
+  · intro i j hij
+    simp [perturbedSingletonReward, hij, hη.le]
+  · change ∀ Q : Finset G.Player, 2 ≤ Q.card →
+      (SingletonDifferenceMatrix
+        (WithReward G (perturbedSingletonReward G η)) Q).det ≠ 0
+    intro Q hQ
+    rw [singletonDifferenceMatrix_perturbedSingletonReward]
+    have hnonsingular := hdet ⟨Q, hQ⟩
+    rw [Math.LinearAlgebra.offDiagonalPerturbationPolynomial_eval] at hnonsingular
+    exact hnonsingular
 
 /--
 The paper's generic perturbation assertion.  A proof must also show that the

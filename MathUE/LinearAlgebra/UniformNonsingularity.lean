@@ -6,6 +6,8 @@ Authors: GameTheory contributors
 
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+import Mathlib.LinearAlgebra.Matrix.Polynomial
+import Mathlib.Order.Interval.Set.Infinite
 import Mathlib.Topology.Instances.Matrix
 import Mathlib.Topology.Order.Compact
 
@@ -23,6 +25,132 @@ open Set
 open Filter
 
 namespace Math.LinearAlgebra
+
+/-- The square matrix with zero diagonal and every off-diagonal entry equal
+to one. -/
+def offDiagonalOnes (n : Type) [DecidableEq n] : Matrix n n ℝ :=
+  fun i j => if i = j then 0 else 1
+
+/-- Multiplication by the off-diagonal-ones matrix subtracts the selected
+coordinate from the sum of all coordinates. -/
+theorem offDiagonalOnes_mulVec_apply {n : Type} [Fintype n] [DecidableEq n]
+    (v : n → ℝ) (i : n) :
+    Matrix.mulVec (offDiagonalOnes n) v i = ∑ j, v j - v i := by
+  rw [Matrix.mulVec, dotProduct]
+  simp only [offDiagonalOnes, ite_mul, zero_mul, one_mul]
+  calc
+    (∑ j, if i = j then 0 else v j) =
+        (∑ j ∈ Finset.univ.erase i, if i = j then 0 else v j) := by
+      rw [Finset.sum_subset (Finset.erase_subset _ _)]
+      intro j _ hj
+      have hji : j = i := by
+        simp only [Finset.mem_erase, Finset.mem_univ, and_true] at hj
+        exact not_ne_iff.mp hj
+      subst j
+      simp
+    _ = (∑ j ∈ Finset.univ.erase i, v j) := by
+      apply Finset.sum_congr rfl
+      intro j hj
+      have hji : j ≠ i := Finset.ne_of_mem_erase hj
+      simp [Ne.symm hji]
+    _ = (∑ j, v j) - v i := by
+      rw [← Finset.sum_erase_add Finset.univ v (Finset.mem_univ i)]
+      ring
+
+/-- For at least two coordinates, the off-diagonal-ones matrix is
+nonsingular. -/
+theorem offDiagonalOnes_det_ne_zero {n : Type} [Fintype n] [DecidableEq n]
+    (hcard : 2 ≤ Fintype.card n) : (offDiagonalOnes n).det ≠ 0 := by
+  have hinjective : Function.Injective (offDiagonalOnes n).mulVec := by
+    intro v w hvw
+    have hcoord (i : n) : (∑ j, v j) - v i = (∑ j, w j) - w i := by
+      simpa only [offDiagonalOnes_mulVec_apply] using congr_fun hvw i
+    let d : n → ℝ := v - w
+    have hd (i : n) : d i = ∑ j, d j := by
+      dsimp only [d]
+      simp only [Pi.sub_apply, Finset.sum_sub_distrib]
+      linarith [hcoord i]
+    have hsum : ∑ j, d j = 0 := by
+      have htotal : ∑ i, d i = (Fintype.card n : ℝ) * ∑ j, d j := by
+        calc
+          ∑ i, d i = ∑ _i : n, ∑ j, d j := Finset.sum_congr rfl fun i _ => hd i
+          _ = (Fintype.card n : ℝ) * ∑ j, d j := by simp
+      have hcardReal : 2 ≤ (Fintype.card n : ℝ) := by exact_mod_cast hcard
+      nlinarith [htotal]
+    funext i
+    have hi := hd i
+    dsimp only [d] at hi
+    rw [hsum] at hi
+    exact sub_eq_zero.mp hi
+  have hunit : IsUnit (offDiagonalOnes n) :=
+    Matrix.mulVec_injective_iff_isUnit.mp hinjective
+  exact isUnit_iff_ne_zero.mp
+    ((Matrix.isUnit_iff_isUnit_det (offDiagonalOnes n)).mp hunit)
+
+/-- The determinant polynomial obtained by subtracting a common scalar from
+every off-diagonal entry of a square matrix. -/
+def offDiagonalPerturbationPolynomial {n : Type} [Fintype n] [DecidableEq n]
+    (A : Matrix n n ℝ) : Polynomial ℝ :=
+  Matrix.det ((Polynomial.X : Polynomial ℝ) •
+    (-offDiagonalOnes n).map Polynomial.C + A.map Polynomial.C)
+
+/-- The off-diagonal perturbation polynomial is nonzero as soon as its index
+type has at least two elements. -/
+theorem offDiagonalPerturbationPolynomial_ne_zero
+    {n : Type} [Fintype n] [DecidableEq n]
+    (A : Matrix n n ℝ) (hcard : 2 ≤ Fintype.card n) :
+    offDiagonalPerturbationPolynomial A ≠ 0 := by
+  intro hzero
+  have hcoeff := congrArg
+    (fun p : Polynomial ℝ => p.coeff (Fintype.card n)) hzero
+  rw [offDiagonalPerturbationPolynomial,
+    Polynomial.coeff_det_X_add_C_card] at hcoeff
+  simp only [Polynomial.coeff_zero] at hcoeff
+  apply offDiagonalOnes_det_ne_zero hcard
+  simpa only [Matrix.det_neg, mul_eq_zero, pow_eq_zero_iff', neg_eq_zero,
+    one_ne_zero, false_and, false_or] using hcoeff
+
+/-- Evaluating the determinant polynomial gives the corresponding common
+off-diagonal perturbation. -/
+theorem offDiagonalPerturbationPolynomial_eval
+    {n : Type} [Fintype n] [DecidableEq n]
+    (A : Matrix n n ℝ) (x : ℝ) :
+    (offDiagonalPerturbationPolynomial A).eval x =
+      (A - x • offDiagonalOnes n).det := by
+  rw [offDiagonalPerturbationPolynomial]
+  change (Polynomial.evalRingHom x)
+    (Matrix.det ((Polynomial.X : Polynomial ℝ) •
+      (-offDiagonalOnes n).map Polynomial.C + A.map Polynomial.C)) = _
+  rw [RingHom.map_det]
+  rw [RingHom.mapMatrix_apply]
+  congr 1
+  ext i j
+  change Polynomial.eval₂ (RingHom.id ℝ) x
+      (Polynomial.X * Polynomial.C (-offDiagonalOnes n i j) +
+        Polynomial.C (A i j)) = A i j - x * offDiagonalOnes n i j
+  rw [Polynomial.eval₂_add, Polynomial.eval₂_mul,
+    Polynomial.eval₂_X, Polynomial.eval₂_C, Polynomial.eval₂_C]
+  simp only [RingHom.id_apply]
+  ring
+
+/-- Finitely many nonzero real polynomials admit one arbitrarily small
+positive common non-root. -/
+theorem exists_pos_lt_forall_polynomial_eval_ne_zero
+    {k : Type} [Fintype k] (p : k → Polynomial ℝ)
+    (hp : ∀ i, p i ≠ 0) {tol : ℝ} (htol : 0 < tol) :
+    ∃ x : ℝ, 0 < x ∧ x < tol ∧ ∀ i, (p i).eval x ≠ 0 := by
+  classical
+  let roots : Finset ℝ :=
+    Finset.univ.biUnion fun i => (p i).roots.toFinset
+  obtain ⟨x, hxIoo, hxroots⟩ :=
+    ((Set.Ioo_infinite htol).sdiff roots.finite_toSet).nonempty
+  refine ⟨x, hxIoo.1, hxIoo.2, ?_⟩
+  intro i heval
+  apply hxroots
+  change x ∈ roots
+  exact Finset.mem_biUnion.mpr ⟨i, Finset.mem_univ i,
+    Multiset.mem_toFinset.mpr <|
+      (Polynomial.mem_roots (hp i)).mpr (Polynomial.IsRoot.def.mpr heval)⟩
 
 /-- A nonsingular real matrix remains uniformly separated from singularity
 under sufficiently small entrywise perturbations. -/
