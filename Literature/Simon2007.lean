@@ -11438,6 +11438,36 @@ def ExtendedOrbitCondition (G : QuittingGame) : Prop :=
       SegmentIndex (x.segmentLength j) i → IsRational G ε (x.point j i)) ∧
     HasUnboundedExtendedVariation x
 
+/-- An ordinary infinite orbit is the one-segment special case of an extended orbit. -/
+theorem InfiniteOrbitCondition.toExtendedOrbitCondition (G : QuittingGame)
+    (h : InfiniteOrbitCondition G) : ExtendedOrbitCondition G := by
+  intro ε hε
+  rcases h ε hε with ⟨x, horbit, hrational, hvariation⟩
+  let extended : ExtendedOrbitData (FRow G ε) :=
+    { segmentCount := some 1
+      segmentCountPositive := by
+        intro L hL
+        injection hL with hL
+        omega
+      segmentLength := fun _ => none
+      segmentLengthPositive := by simp
+      point := fun _ i => x i
+      step := by
+        intro _j _hj i _hi
+        exact horbit i
+      finiteStitch := by simp
+      infiniteStitch := by
+        intro j hj _hLength
+        have := hj 1 rfl
+        omega }
+  refine ⟨extended, ?_, ?_⟩
+  · intro j _hj i _hi
+    exact hrational i
+  · intro B
+    rcases hvariation B with ⟨I, hI⟩
+    refine ⟨1, I, ?_⟩
+    simpa [extended, ActiveSegment, SegmentIndex] using hI
+
 /-- Five propositions are equivalent when every pair in the displayed chain is equivalent. -/
 def EquivalentFive (A B C D E : Prop) : Prop :=
   (A ↔ B) ∧ (B ↔ C) ∧ (C ↔ D) ∧ (D ↔ E)
