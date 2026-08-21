@@ -6948,6 +6948,209 @@ private theorem abs_quitPayoff_le (G : QuittingGame) (p : QuitProfile G)
       (tsum_tailSurvival_mul_quitProbability_le_one G p 0) hM0
     _ = M := mul_one M
 
+/-- A uniform terminal-reward bound also bounds the quitting-game min-max value. -/
+theorem abs_minMaxQuit_le_of_reward_bound (G : QuittingGame) (n : G.Player)
+    {M : ℝ} (hM0 : 0 ≤ M) (hbound : ∀ A, |G.reward A n| ≤ M) :
+    |MinMaxQuit G n| ≤ M := by
+  classical
+  let upper : QuitProfile G → ℝ := fun profile =>
+    ⨆ deviation : ℕ → Set.Icc (0 : ℝ) 1,
+      QuitPayoff G (profile.replace G n deviation) n
+  have hpayoff (profile : QuitProfile G) : |QuitPayoff G profile n| ≤ M :=
+    abs_quitPayoff_le G profile n hM0 hbound
+  have hinnerAbove (profile : QuitProfile G) : BddAbove (range fun deviation :
+      ℕ → Set.Icc (0 : ℝ) 1 => QuitPayoff G (profile.replace G n deviation) n) := by
+    refine ⟨M, ?_⟩
+    rintro _ ⟨deviation, rfl⟩
+    exact (le_abs_self _).trans (hpayoff _)
+  have hlower (profile : QuitProfile G) : -M ≤ upper profile := by
+    let deviation : ℕ → Set.Icc (0 : ℝ) 1 := fun i => profile i n
+    have hself : profile.replace G n deviation = profile := by
+      funext i j
+      by_cases hj : j = n
+      · subst j
+        simp [QuitProfile.replace, deviation]
+      · simp [QuitProfile.replace, hj]
+    calc
+      -M ≤ QuitPayoff G profile n := neg_le_of_abs_le (hpayoff profile)
+      _ = QuitPayoff G (profile.replace G n deviation) n := by rw [hself]
+      _ ≤ upper profile := le_ciSup (hinnerAbove profile) deviation
+  have houterBelow : BddBelow (range upper) := by
+    exact ⟨-M, by rintro _ ⟨profile, rfl⟩; exact hlower profile⟩
+  rw [abs_le]
+  constructor
+  · change -M ≤ ⨅ profile, upper profile
+    exact le_ciInf fun profile => hlower profile
+  · change (⨅ profile, upper profile) ≤ M
+    let profile : QuitProfile G := fun _ _ => 0
+    exact (ciInf_le houterBelow profile).trans
+      (ciSup_le fun deviation => (le_abs_self _).trans (hpayoff _))
+
+/-- Terminal reward coordinates together with the nonabsorption payoff zero. -/
+private def quittingCoordinateValue (G : QuittingGame) (n : G.Player) :
+    Option {A : Finset G.Player // A.Nonempty} → ℝ
+  | none => 0
+  | some A => G.reward A n
+
+private noncomputable def quittingCoordinateRange (G : QuittingGame) (n : G.Player) :
+    Finset ℝ :=
+  Finset.univ.image (quittingCoordinateValue G n)
+
+private theorem quittingCoordinateRange_nonempty (G : QuittingGame) (n : G.Player) :
+    (quittingCoordinateRange G n).Nonempty := by
+  classical
+  refine ⟨0, Finset.mem_image.2 ⟨none, Finset.mem_univ _, ?_⟩⟩
+  rfl
+
+private noncomputable def quittingCoordinateLower (G : QuittingGame) (n : G.Player) : ℝ :=
+  (quittingCoordinateRange G n).min' (quittingCoordinateRange_nonempty G n)
+
+private noncomputable def quittingCoordinateUpper (G : QuittingGame) (n : G.Player) : ℝ :=
+  (quittingCoordinateRange G n).max' (quittingCoordinateRange_nonempty G n)
+
+private theorem quittingCoordinateValue_mem_range (G : QuittingGame) (n : G.Player)
+    (v : Option {A : Finset G.Player // A.Nonempty}) :
+    quittingCoordinateValue G n v ∈ quittingCoordinateRange G n := by
+  classical
+  exact Finset.mem_image.2 ⟨v, Finset.mem_univ v, rfl⟩
+
+private theorem quittingCoordinateLower_le_value (G : QuittingGame) (n : G.Player)
+    (v : Option {A : Finset G.Player // A.Nonempty}) :
+    quittingCoordinateLower G n ≤ quittingCoordinateValue G n v := by
+  exact Finset.min'_le _ _ (quittingCoordinateValue_mem_range G n v)
+
+private theorem quittingCoordinateValue_le_upper (G : QuittingGame) (n : G.Player)
+    (v : Option {A : Finset G.Player // A.Nonempty}) :
+    quittingCoordinateValue G n v ≤ quittingCoordinateUpper G n := by
+  exact Finset.le_max' _ _ (quittingCoordinateValue_mem_range G n v)
+
+private theorem quittingCoordinateLower_nonpos (G : QuittingGame) (n : G.Player) :
+    quittingCoordinateLower G n ≤ 0 := by
+  simpa [quittingCoordinateValue] using
+    quittingCoordinateLower_le_value G n none
+
+private theorem quittingCoordinateUpper_nonneg (G : QuittingGame) (n : G.Player) :
+    0 ≤ quittingCoordinateUpper G n := by
+  simpa [quittingCoordinateValue] using
+    quittingCoordinateValue_le_upper G n none
+
+/-- The interval spanned by terminal rewards and zero has width below the paper's `M`. -/
+private theorem quittingCoordinate_width_lt (G : QuittingGame) (n : G.Player)
+    {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M) :
+    quittingCoordinateUpper G n - quittingCoordinateLower G n < M := by
+  classical
+  obtain ⟨lowVertex, _hlowMem, hlow⟩ := Finset.mem_image.1
+    (Finset.min'_mem (quittingCoordinateRange G n)
+      (quittingCoordinateRange_nonempty G n))
+  obtain ⟨highVertex, _hhighMem, hhigh⟩ := Finset.mem_image.1
+    (Finset.max'_mem (quittingCoordinateRange G n)
+      (quittingCoordinateRange_nonempty G n))
+  have horder : quittingCoordinateLower G n ≤ quittingCoordinateUpper G n :=
+    Finset.min'_le _ _ (Finset.max'_mem _ _)
+  have hvertices :
+      |quittingCoordinateValue G n highVertex - quittingCoordinateValue G n lowVertex| < M := by
+    cases highVertex with
+    | none =>
+        cases lowVertex with
+        | none => simp only [quittingCoordinateValue, sub_self, abs_zero]; linarith [hM.1]
+        | some A => simpa [quittingCoordinateValue, abs_neg] using hM.2.2 A n
+    | some A =>
+        cases lowVertex with
+        | none => simpa [quittingCoordinateValue] using hM.2.2 A n
+        | some B => simpa [quittingCoordinateValue] using hM.2.1 A B n
+  have hvertexOrder : quittingCoordinateValue G n lowVertex ≤
+      quittingCoordinateValue G n highVertex := by
+    rw [hlow, hhigh]
+    exact horder
+  change (quittingCoordinateRange G n).max' _ -
+      (quittingCoordinateRange G n).min' _ < M
+  rw [← hlow, ← hhigh]
+  simpa [abs_of_nonneg (sub_nonneg.mpr hvertexOrder)] using hvertices
+
+private theorem quittingRewardPart_le_upper_mul_quitProbability
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
+    quittingRewardPart G p n ≤
+      quittingCoordinateUpper G n * QuitProbability G p := by
+  classical
+  rw [← nonemptyCoalitionMass_eq_quitProbability G p, Finset.mul_sum]
+  apply Finset.sum_le_sum
+  intro A _hA
+  split_ifs with hnonempty
+  · rw [mul_comm (quittingCoordinateUpper G n)]
+    exact mul_le_mul_of_nonneg_left
+      (by simpa [quittingCoordinateValue] using
+        quittingCoordinateValue_le_upper G n (some ⟨A, hnonempty⟩))
+      (by
+        simp only [CoalitionProbability]
+        exact mul_nonneg
+          (Finset.prod_nonneg fun i _ => (p i).property.1)
+          (Finset.prod_nonneg fun i _ => sub_nonneg.mpr (p i).property.2))
+  · simp
+
+private theorem quittingRewardPart_ge_lower_mul_quitProbability
+    (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
+    quittingCoordinateLower G n * QuitProbability G p ≤ quittingRewardPart G p n := by
+  classical
+  rw [← nonemptyCoalitionMass_eq_quitProbability G p, Finset.mul_sum]
+  apply Finset.sum_le_sum
+  intro A _hA
+  split_ifs with hnonempty
+  · rw [mul_comm (quittingCoordinateLower G n)]
+    exact mul_le_mul_of_nonneg_left
+      (by simpa [quittingCoordinateValue] using
+        quittingCoordinateLower_le_value G n (some ⟨A, hnonempty⟩))
+      (by
+        simp only [CoalitionProbability]
+        exact mul_nonneg
+          (Finset.prod_nonneg fun i _ => (p i).property.1)
+          (Finset.prod_nonneg fun i _ => sub_nonneg.mpr (p i).property.2))
+  · simp
+
+/-- Every quitting-profile payoff lies in the interval spanned by zero and terminal rewards. -/
+private theorem quitPayoff_mem_coordinateInterval (G : QuittingGame)
+    (p : QuitProfile G) (n : G.Player) :
+    QuitPayoff G p n ∈
+      Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n) := by
+  have hsum := summable_quitTailPayoff G p 0 n
+  have hmass := summable_tailSurvival_mul_quitProbability G p 0
+  have hsurvival (t : ℕ) : 0 ≤ tailSurvival G p 0 t :=
+    Finset.prod_nonneg fun i _ => sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+  constructor
+  · change quittingCoordinateLower G n ≤
+      ∑' t, tailSurvival G p 0 t * quittingRewardPart G (p (0 + t)) n
+    calc
+      quittingCoordinateLower G n = quittingCoordinateLower G n * 1 := by ring
+      _ ≤ quittingCoordinateLower G n *
+          (∑' t, tailSurvival G p 0 t * QuitProbability G (p (0 + t))) := by
+        exact mul_le_mul_of_nonpos_left
+          (tsum_tailSurvival_mul_quitProbability_le_one G p 0)
+          (quittingCoordinateLower_nonpos G n)
+      _ = ∑' t, quittingCoordinateLower G n *
+          (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) := tsum_mul_left.symm
+      _ ≤ ∑' t, tailSurvival G p 0 t * quittingRewardPart G (p (0 + t)) n := by
+        apply (hmass.mul_left (quittingCoordinateLower G n)).tsum_le_tsum _ hsum
+        intro t
+        calc
+          quittingCoordinateLower G n *
+              (tailSurvival G p 0 t * QuitProbability G (p (0 + t))) =
+              tailSurvival G p 0 t *
+                (quittingCoordinateLower G n * QuitProbability G (p (0 + t))) := by ring
+          _ ≤ _ := mul_le_mul_of_nonneg_left
+            (quittingRewardPart_ge_lower_mul_quitProbability G _ n) (hsurvival t)
+  · exact quitPayoff_le_of_nonnegative_rewardPart_le G p n
+      (quittingCoordinateUpper G n) (quittingCoordinateUpper_nonneg G n)
+      (fun t => quittingRewardPart_le_upper_mul_quitProbability G (p t) n)
+
+/-- Two quitting-profile payoffs differ by less than the terminal payoff diameter. -/
+private theorem abs_quitPayoff_sub_lt (G : QuittingGame) (p q : QuitProfile G)
+    (n : G.Player) {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M) :
+    |QuitPayoff G p n - QuitPayoff G q n| < M := by
+  rcases quitPayoff_mem_coordinateInterval G p n with ⟨hpLower, hpUpper⟩
+  rcases quitPayoff_mem_coordinateInterval G q n with ⟨hqLower, hqUpper⟩
+  have hwidth := quittingCoordinate_width_lt G n hM
+  rw [abs_lt]
+  constructor <;> linarith
+
 /-- Every player's min-max is at most the better of quitting alone and never quitting. -/
 private theorem minMaxQuit_le_max_solo_zero (G : QuittingGame) (j : G.Player) :
     MinMaxQuit G j ≤ max (SoloPayoff G j) 0 := by
@@ -7858,6 +8061,71 @@ private theorem exists_punishmentWithin (G : QuittingGame) (j : G.Player)
   refine ⟨punishment, ?_⟩
   intro deviation
   exact (le_ciSup (hinnerAbove punishment) deviation).trans hpunishment.le
+
+/-- A calibrated punishment is itself within the same slack below the min-max value. -/
+private def IsCalibratedPunishmentWithin (G : QuittingGame) (j : G.Player) (δ : ℝ)
+    (punishment : QuitProfile G) : Prop :=
+  IsPunishmentWithin G j δ punishment ∧
+    MinMaxQuit G j - δ ≤ QuitPayoff G punishment j
+
+/-- Approximate infimum and supremum choices give a calibrated punishment profile. -/
+private theorem exists_calibratedPunishmentWithin
+    (G : QuittingGame) (j : G.Player) {δ : ℝ} (hδ : 0 < δ) :
+    ∃ punishment : QuitProfile G, IsCalibratedPunishmentWithin G j δ punishment := by
+  classical
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hpayoffBound : ∀ profile : QuitProfile G,
+      |QuitPayoff G profile j| ≤ M := fun profile =>
+    abs_quitPayoff_le G profile j hM0 (fun A => le_of_lt (hM.2.2 A j))
+  let upper : QuitProfile G → ℝ := fun profile =>
+    ⨆ deviation : ℕ → Set.Icc (0 : ℝ) 1,
+      QuitPayoff G (profile.replace G j deviation) j
+  have hinnerAbove : ∀ profile : QuitProfile G, BddAbove (range fun deviation :
+      ℕ → Set.Icc (0 : ℝ) 1 => QuitPayoff G (profile.replace G j deviation) j) := by
+    intro profile
+    refine ⟨M, ?_⟩
+    rintro _ ⟨deviation, rfl⟩
+    exact (le_abs_self _).trans (hpayoffBound _)
+  have houterBelow : BddBelow (range upper) := by
+    refine ⟨-M, ?_⟩
+    rintro _ ⟨profile, rfl⟩
+    let deviation : ℕ → Set.Icc (0 : ℝ) 1 := fun i => profile i j
+    have hself : profile.replace G j deviation = profile := by
+      funext i n
+      by_cases hnj : n = j
+      · subst n
+        simp [QuitProfile.replace, deviation]
+      · simp [QuitProfile.replace, hnj]
+    calc
+      -M ≤ QuitPayoff G profile j := neg_le_of_abs_le (hpayoffBound profile)
+      _ = QuitPayoff G (profile.replace G j deviation) j := by rw [hself]
+      _ ≤ upper profile := le_ciSup (hinnerAbove profile) deviation
+  have hnear : MinMaxQuit G j < MinMaxQuit G j + δ / 2 := by linarith
+  have hnearInf : (⨅ profile, upper profile) < (⨅ profile, upper profile) + δ / 2 := by
+    simpa only [MinMaxQuit, upper] using hnear
+  obtain ⟨base, hbase⟩ := exists_lt_of_ciInf_lt hnearInf
+  have hbase' : upper base < MinMaxQuit G j + δ / 2 := by
+    simpa only [MinMaxQuit, upper] using hbase
+  have hminmaxLe : MinMaxQuit G j ≤ upper base := by
+    rw [MinMaxQuit]
+    exact ciInf_le houterBelow base
+  have hsupNear : upper base - δ / 2 < upper base := by linarith
+  obtain ⟨response, hresponse⟩ := exists_lt_of_lt_ciSup hsupNear
+  let punishment := base.replace G j response
+  have hreplace (deviation : ℕ → Set.Icc (0 : ℝ) 1) :
+      punishment.replace G j deviation = base.replace G j deviation := by
+    funext i n
+    simp only [punishment, QuitProfile.replace]
+    split_ifs <;> rfl
+  refine ⟨punishment, ?_, ?_⟩
+  · intro deviation
+    rw [hreplace]
+    exact (le_ciSup (hinnerAbove base) deviation).trans (hbase'.le.trans (by linarith))
+  · have hpayoff : QuitPayoff G punishment j =
+        QuitPayoff G (base.replace G j response) j := rfl
+    rw [hpayoff]
+    linarith
 
 /-- Follow a supplied quitting profile for `T` stages, then start a punishment profile. -/
 private def PrefixThenPunish (G : QuittingGame) (p : QuitProfile G)
