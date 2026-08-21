@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Analysis.Convex.PathConnected
+import MathUE.Viability.LipschitzCompactness
 import UniformEquilibrium.Quitting.AbsorptionPath.ContinuousPath
 import UniformEquilibrium.Quitting.Projective.SingletonLCP
 
@@ -22,7 +23,7 @@ noncomputable section
 namespace GameTheory.QuittingAbsorptionPath
 
 open Filter Finset Set unitInterval
-open GameTheory
+open GameTheory Math
 open scoped Topology unitInterval
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -71,6 +72,119 @@ theorem sum_singletonCoalitionMass (mass : ι → ℝ) :
   simp only [singletonCoalitionMass]
   rw [Finset.sum_comm]
   simp
+
+/-! ## Compactness of normalized player-mass paths -/
+
+/-- Regard a path into a metric space as a bounded continuous function on
+the compact unit interval. -/
+def boundedFunctionOfPath {terminal : ι → ℝ}
+    (mass : Path (0 : ι → ℝ) terminal) :
+    BoundedContinuousFunction unitInterval (ι → ℝ) :=
+  BoundedContinuousFunction.mkOfCompact mass.toContinuousMap
+
+omit [DecidableEq ι] in
+/-- Coordinatewise monotonicity and exact total mass force a normalized
+player-mass path to be 1-Lipschitz. -/
+theorem lipschitzWith_one_of_monotone_of_sum_eq
+    {terminal : ι → ℝ} (mass : Path (0 : ι → ℝ) terminal)
+    (hmono : ∀ who, Monotone fun time => mass time who)
+    (htotal : ∀ time, ∑ who, mass time who = (time : ℝ)) :
+    LipschitzWith 1 (boundedFunctionOfPath mass) := by
+  rw [lipschitzWith_iff_dist_le_mul]
+  have hordered : ∀ first second : unitInterval, first ≤ second →
+      dist (mass first) (mass second) ≤ dist first second := by
+    intro first second hle
+    have hreal : (first : ℝ) ≤ (second : ℝ) := hle
+    rw [dist_eq_norm]
+    apply (pi_norm_le_iff_of_nonneg dist_nonneg).2
+    intro who
+    simp only [Pi.sub_apply, Real.norm_eq_abs]
+    rw [abs_of_nonpos (sub_nonpos.mpr (hmono who hle))]
+    calc
+      -(mass first who - mass second who) =
+          mass second who - mass first who := by ring
+      _ ≤ ∑ owner, (mass second owner - mass first owner) := by
+        exact Finset.single_le_sum
+          (fun owner _ => sub_nonneg.mpr (hmono owner hle))
+          (Finset.mem_univ who)
+      _ = (second : ℝ) - (first : ℝ) := by
+        rw [Finset.sum_sub_distrib, htotal, htotal]
+      _ = dist first second := by
+        change (second : ℝ) - (first : ℝ) =
+          |(first : ℝ) - (second : ℝ)|
+        rw [abs_of_nonpos (sub_nonpos.mpr hreal)]
+        ring
+  intro first second
+  simp only [NNReal.coe_one, one_mul]
+  change dist (mass first) (mass second) ≤ dist first second
+  rcases le_total first second with hle | hle
+  · exact hordered first second hle
+  · rw [dist_comm]
+    simpa only [dist_comm first second] using hordered second first hle
+
+omit [DecidableEq ι] in
+/-- Every sequence of normalized monotone player-mass paths has a uniformly
+convergent subsequence whose limit is again normalized and monotone. -/
+theorem exists_tendsto_subsequence_monotone_playerMass
+    (terminal : ℕ → ι → ℝ)
+    (mass : ∀ n, Path (0 : ι → ℝ) (terminal n))
+    (hmono : ∀ n who, Monotone fun time => mass n time who)
+    (htotal : ∀ n time, ∑ who, mass n time who = (time : ℝ)) :
+    ∃ limit : BoundedContinuousFunction unitInterval (ι → ℝ),
+      ∃ subsequence : ℕ → ℕ, StrictMono subsequence ∧
+        Tendsto (fun n => boundedFunctionOfPath (mass (subsequence n)))
+          atTop (nhds limit) ∧
+        limit 0 = 0 ∧
+        (∀ who, Monotone fun time => limit time who) ∧
+        ∀ time, ∑ who, limit time who = (time : ℝ) := by
+  let rangeSet : Set (ι → ℝ) := Metric.closedBall 0 1
+  have hfamily (n : ℕ) : boundedFunctionOfPath (mass n) ∈
+      Viability.compactRangeLipschitzFamily 1 rangeSet := by
+    constructor
+    · exact lipschitzWith_one_of_monotone_of_sum_eq
+        (mass n) (hmono n) (htotal n)
+    · intro time
+      rw [Metric.mem_closedBall]
+      have hlipschitz :=
+        (lipschitzWith_one_of_monotone_of_sum_eq
+          (mass n) (hmono n) (htotal n)).dist_le_mul time 0
+      simp only [NNReal.coe_one, one_mul] at hlipschitz
+      change dist (mass n time) (mass n 0) ≤ dist time 0 at hlipschitz
+      calc
+        dist (mass n time) 0 = dist (mass n time) (mass n 0) := by
+          rw [(mass n).source]
+        _ ≤ dist time 0 := hlipschitz
+        _ ≤ 1 := by
+          change |(time : ℝ) - 0| ≤ 1
+          rw [sub_zero, abs_of_nonneg time.property.1]
+          exact time.property.2
+  obtain ⟨limit, _hlimit, subsequence, hsubsequence, htendsto⟩ :=
+    Viability.exists_tendsto_subsequence_compactRangeLipschitzFamily
+      1 (isCompact_closedBall (0 : ι → ℝ) 1)
+      (fun n => boundedFunctionOfPath (mass n)) hfamily
+  have htendstoAt (time : unitInterval) : Tendsto
+      (fun n => mass (subsequence n) time) atTop (nhds (limit time)) := by
+    exact ((BoundedContinuousFunction.lipschitz_eval_const time).continuous
+      |>.tendsto limit).comp htendsto
+  refine ⟨limit, subsequence, hsubsequence, htendsto, ?_, ?_, ?_⟩
+  · apply tendsto_nhds_unique (htendstoAt 0)
+    exact (tendsto_const_nhds : Tendsto
+      (fun _ : ℕ => (0 : ι → ℝ)) atTop (nhds 0)) |>.congr'
+        (Eventually.of_forall fun n => (mass (subsequence n)).source.symm)
+  · intro who first second hle
+    exact le_of_tendsto_of_tendsto'
+      (((continuous_apply who).tendsto _).comp (htendstoAt first))
+      (((continuous_apply who).tendsto _).comp (htendstoAt second))
+      (fun n => hmono (subsequence n) who hle)
+  · intro time
+    have hsum : Tendsto (fun n => ∑ who, mass (subsequence n) time who)
+        atTop (nhds (∑ who, limit time who)) := by
+      apply tendsto_finsetSum
+      intro who _
+      exact ((continuous_apply who).tendsto _).comp (htendstoAt time)
+    apply tendsto_nhds_unique hsum
+    exact tendsto_const_nhds.congr' (Eventually.of_forall fun n =>
+      (htotal (subsequence n) time).symm)
 
 /-- Extend a player-mass path to real time and place every coordinate on its
 singleton quitting coalition. -/
