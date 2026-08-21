@@ -2790,6 +2790,107 @@ private theorem lemma3_4_negative_coordinate_probability
   have hxi := hconstants.2.1
   linarith
 
+/-- In Case 2A, a near-certain quitter has a `\phi`-coordinate below her
+min--max floor. -/
+private theorem lemma3_4_high_probability_coordinate_lt_minMax_sub_half
+    (G : QuittingGame) (M d ρ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (z : EZeroTilde G) (k : G.Player)
+    (hk : 1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) ≤
+      (z.1.2 k : ℝ)) :
+    Phi G M d z k < MinMaxQuit G k - ρ / 2 := by
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let beta := z.1.1
+  let p := z.1.2
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpos : 0 < N := by linarith
+  have hMpos : 0 < M := lt_of_lt_of_le (by norm_num) hM.1
+  have hρpos : 0 < ρ := hmotion.2.1
+  have hρ1 : ρ ≤ 1 := hmotion.2.2.1
+  have hNM : 3 ≤ N * M := by
+    nlinarith [mul_le_mul hN hM.1 (by norm_num) hNpos.le]
+  have hthreshold : (5 : ℝ) / 6 ≤ 1 - ρ / (2 * N * M) := by
+    have hfraction : ρ / (2 * N * M) ≤ 1 / 6 := by
+      rw [div_le_iff₀ (by positivity : 0 < 2 * N * M)]
+      nlinarith
+    nlinarith
+  have hpk : 0 < (p k : ℝ) := by
+    dsimp only [p]
+    linarith
+  have hpkLt : (p k : ℝ) < 1 := by
+    by_contra hnot
+    have hpkOne : (p k : ℝ) = 1 :=
+      le_antisymm (p k).property.2 (le_of_not_gt hnot)
+    have hquit := z.2.2
+    rw [quitProbability_eq_one_of_apply_eq_one G p k hpkOne] at hquit
+    linarith
+  have hdenPos : 0 < (1 - (p k : ℝ)) ^ Fintype.card G.Player :=
+    pow_pos (by linarith) _
+  have hdenOne : (1 - (p k : ℝ)) ^ Fintype.card G.Player ≤ 1 := by
+    exact pow_le_one₀ (sub_nonneg.mpr (p k).property.2) (by linarith)
+  have hfraction : (p k : ℝ) ≤
+      (p k : ℝ) / (1 - (p k : ℝ)) ^ Fintype.card G.Player := by
+    rw [le_div_iff₀ hdenPos]
+    nlinarith [mul_le_mul_of_nonneg_left hdenOne (p k).property.1]
+  have hcoefficient : 5 * N * M ≤ 5 * N * M / d := by
+    rw [le_div_iff₀ hd]
+    nlinarith
+  have hpenalty : 5 * N * M * (p k : ℝ) ≤
+      (5 * N * M / d) *
+        ((p k : ℝ) / (1 - (p k : ℝ)) ^ Fintype.card G.Player) := by
+    calc
+      5 * N * M * (p k : ℝ) ≤
+          (5 * N * M / d) * (p k : ℝ) :=
+        mul_le_mul_of_nonneg_right hcoefficient (p k).property.1
+      _ ≤ _ := mul_le_mul_of_nonneg_left hfraction (by positivity)
+  have hstage := oneStagePayoff_eq_forcedQuit_of_positive G beta p
+    z.2.1 z.2.2 k hpk
+  have hforced := abs_forcedQuitPayoff_le_scale G M hM p k
+  have hsum : ∑ l ∈ Finset.univ.erase k, (p l : ℝ) ≤ N := by
+    calc
+      ∑ l ∈ Finset.univ.erase k, (p l : ℝ) ≤
+          ∑ _l ∈ Finset.univ.erase k, (1 : ℝ) := by
+        apply Finset.sum_le_sum
+        intro l _
+        exact (p l).property.2
+      _ = ((Finset.univ.erase k).card : ℝ) := by simp
+      _ ≤ N := by
+        dsimp only [N]
+        exact_mod_cast (Finset.card_erase_le :
+          (Finset.univ.erase k).card ≤ (Finset.univ : Finset G.Player).card)
+  have hchi := abs_minMaxQuit_le_of_reward_bound G k (by positivity)
+    (fun outcome => hM.2.1 outcome k)
+  have hphiUpper : Phi G M d z k ≤
+      M / 3 - 5 * N * M * (p k : ℝ) + N * M := by
+    change QuittingOneStagePayoff G beta p k -
+        (5 * N * M / d) *
+          ((p k : ℝ) / (1 - (p k : ℝ)) ^ Fintype.card G.Player) +
+        M * ∑ l ∈ Finset.univ.erase k, (p l : ℝ) ≤ _
+    rw [hstage]
+    nlinarith [le_abs_self (ForcedQuitPayoff G p k),
+      mul_le_mul_of_nonneg_left hsum hMpos.le]
+  have hpkLower : 1 - ρ / (2 * N * M) ≤ (p k : ℝ) := by
+    simpa only [N, p] using hk
+  have hscaledPk : 5 * N * M - 5 * ρ / 2 ≤
+      5 * N * M * (p k : ℝ) := by
+    have hscale := mul_le_mul_of_nonneg_left hpkLower
+      (show 0 ≤ 5 * N * M by positivity)
+    calc
+      5 * N * M - 5 * ρ / 2 =
+          5 * N * M * (1 - ρ / (2 * N * M)) := by field_simp
+      _ ≤ 5 * N * M * (p k : ℝ) := hscale
+  have hstrict :
+      M / 3 - 5 * N * M * (p k : ℝ) + N * M <
+        -M / 3 - ρ / 2 := by
+    nlinarith
+  exact lt_of_le_of_lt hphiUpper (hstrict.trans_le (by
+    linarith [neg_le_of_abs_le hchi]))
+
 /--
 Lemma 3.4.  For `a = φ(β,p)` and a point strictly inside the segment from
 `β` to `a`, a coordinate of `a` outside `[-R,R]` forces the segment point
@@ -2848,16 +2949,30 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
       have haWeighted := mul_lt_mul_of_pos_left haLower ht0
       have hxUpper := (htarget j).2
       nlinarith
-    · by_cases hbetaBox : ∀ k,
-          MinMaxQuit G k - ρ ≤ z.1.1 k ∧
-            z.1.1 k ≤ 2 * (Fintype.card G.Player : ℝ) * M
-      · have hpUpper := hconstants.2.2.2 z.1.1 z.1.2 z.2 hbetaBox j
-        have hpLower :=
-          lemma3_4_negative_coordinate_probability_gt_one_sub_xi
-            G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z j
-              (by rw [← ha]; linarith)
-        linarith
-      · sorry
+    · by_cases hcase2A : ∃ k,
+          1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M) ≤
+              (z.1.2 k : ℝ) ∧
+            z.1.1 k < MinMaxQuit G k - ρ / 2
+      · obtain ⟨k, hpk, hbeta⟩ := hcase2A
+        have hak := lemma3_4_high_probability_coordinate_lt_minMax_sub_half
+          G M d ρ hplayers hM hd hd1 hmotion z k hpk
+        have hak' : a k < MinMaxQuit G k - ρ / 2 := by
+          rw [ha]
+          exact hak
+        have hxk := congrFun hx k
+        simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxk
+        have htargetLower := (htarget k).1
+        nlinarith
+      · by_cases hbetaBox : ∀ k,
+            MinMaxQuit G k - ρ ≤ z.1.1 k ∧
+              z.1.1 k ≤ 2 * (Fintype.card G.Player : ℝ) * M
+        · have hpUpper := hconstants.2.2.2 z.1.1 z.1.2 z.2 hbetaBox j
+          have hpLower :=
+            lemma3_4_negative_coordinate_probability_gt_one_sub_xi
+              G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z j
+                (by rw [← ha]; linarith)
+          linarith
+        · sorry
   · intro j hj
     exact lemma3_4_positive_coordinate G M d ρ ξ R hplayers hM hd hd1
       hmotion hconstants z j (by simpa only [ha] using hj)
