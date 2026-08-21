@@ -3226,6 +3226,516 @@ private theorem existsUnique_active_of_some_zero
       · simp [hy] at hother
       · simp [hwho] at hother
 
+private theorem solo_zero_forces_two_zero_next
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hsolo : IsUniqueActiveAt profile time 0) :
+    (profile (time + 1) 2).1 = 0 := by
+  have hy : (profile time 1).1 = 0 := hsolo.2 1 (by decide)
+  have hz : (profile time 2).1 = 0 := hsolo.2 2 (by decide)
+  have hwLower := quitPayoff_le_continuationPayoff
+    profile hnash hlt time 2
+  rw [markovRoot_eq_stationaryRoot] at hwLower
+  have hquit : quittingRootQuitPayoff
+      FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1))
+      (stationaryRoot (profile time)) 2 = 1 := by
+    simpa [hy] using stationaryRoot_quitPayoff_two
+      (profile time) (continuationPayoff profile (time + 1))
+  rw [hquit] at hwLower
+  have hwContinue := continuationPayoff_eq_continue_of_zero
+    profile time 2 hz
+  rw [markovRoot_eq_stationaryRoot] at hwContinue
+  have hcontinue := stationaryRoot_continuePayoff_two
+    (profile time) (continuationPayoff profile (time + 1))
+  have hwRec : continuationPayoff profile time 2 =
+      (1 - (profile time 0).1) *
+        continuationPayoff profile (time + 1) 2 := by
+    rw [hwContinue]
+    simpa [hy] using hcontinue
+  have hwNext : 1 < continuationPayoff profile (time + 1) 2 := by
+    have hxlt := hlt time 0
+    nlinarith [hsolo.1]
+  by_contra hne
+  have hpos : 0 < (profile (time + 1) 2).1 :=
+    lt_of_le_of_ne (profile (time + 1) 2).2.1 (Ne.symm hne)
+  have hvalue := continuationPayoff_eq_quit_of_pos
+    profile hnash hlt (time + 1) 2 hpos
+  rw [markovRoot_eq_stationaryRoot] at hvalue
+  have hformula := stationaryRoot_quitPayoff_two
+    (profile (time + 1)) (continuationPayoff profile (time + 2))
+  have hle : continuationPayoff profile (time + 1) 2 ≤ 1 := by
+    rw [hvalue, hformula]
+    linarith [(profile (time + 1) 1).2.1]
+  linarith
+
+private theorem solo_one_forces_zero_zero_next
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hsolo : IsUniqueActiveAt profile time 1) :
+    (profile (time + 1) 0).1 = 0 := by
+  have hx : (profile time 0).1 = 0 := hsolo.2 0 (by decide)
+  have hz : (profile time 2).1 = 0 := hsolo.2 2 (by decide)
+  have huLower := quitPayoff_le_continuationPayoff
+    profile hnash hlt time 0
+  rw [markovRoot_eq_stationaryRoot] at huLower
+  have hquit : quittingRootQuitPayoff
+      FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1))
+      (stationaryRoot (profile time)) 0 = 1 := by
+    simpa [hz] using stationaryRoot_quitPayoff_zero
+      (profile time) (continuationPayoff profile (time + 1))
+  rw [hquit] at huLower
+  have huContinue := continuationPayoff_eq_continue_of_zero
+    profile time 0 hx
+  rw [markovRoot_eq_stationaryRoot] at huContinue
+  have hcontinue := stationaryRoot_continuePayoff_zero
+    (profile time) (continuationPayoff profile (time + 1))
+  have huRec : continuationPayoff profile time 0 =
+      (1 - (profile time 1).1) *
+        continuationPayoff profile (time + 1) 0 := by
+    rw [huContinue]
+    simpa [hz] using hcontinue
+  have huNext : 1 < continuationPayoff profile (time + 1) 0 := by
+    have hylt := hlt time 1
+    nlinarith [hsolo.1]
+  by_contra hne
+  have hpos : 0 < (profile (time + 1) 0).1 :=
+    lt_of_le_of_ne (profile (time + 1) 0).2.1 (Ne.symm hne)
+  have hvalue := continuationPayoff_eq_quit_of_pos
+    profile hnash hlt (time + 1) 0 hpos
+  rw [markovRoot_eq_stationaryRoot] at hvalue
+  have hformula := stationaryRoot_quitPayoff_zero
+    (profile (time + 1)) (continuationPayoff profile (time + 2))
+  have hle : continuationPayoff profile (time + 1) 0 ≤ 1 := by
+    rw [hvalue, hformula]
+    linarith [(profile (time + 1) 2).2.1]
+  linarith
+
+private theorem solo_two_forces_one_zero_next
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hsolo : IsUniqueActiveAt profile time 2) :
+    (profile (time + 1) 1).1 = 0 := by
+  have hx : (profile time 0).1 = 0 := hsolo.2 0 (by decide)
+  have hy : (profile time 1).1 = 0 := hsolo.2 1 (by decide)
+  have hvLower := quitPayoff_le_continuationPayoff
+    profile hnash hlt time 1
+  rw [markovRoot_eq_stationaryRoot] at hvLower
+  have hquit : quittingRootQuitPayoff
+      FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1))
+      (stationaryRoot (profile time)) 1 = 1 := by
+    simpa [hx] using stationaryRoot_quitPayoff_one
+      (profile time) (continuationPayoff profile (time + 1))
+  rw [hquit] at hvLower
+  have hvContinue := continuationPayoff_eq_continue_of_zero
+    profile time 1 hy
+  rw [markovRoot_eq_stationaryRoot] at hvContinue
+  have hcontinue := stationaryRoot_continuePayoff_one
+    (profile time) (continuationPayoff profile (time + 1))
+  have hvRec : continuationPayoff profile time 1 =
+      (1 - (profile time 2).1) *
+        continuationPayoff profile (time + 1) 1 := by
+    rw [hvContinue]
+    simpa [hx] using hcontinue
+  have hvNext : 1 < continuationPayoff profile (time + 1) 1 := by
+    have hzlt := hlt time 2
+    nlinarith [hsolo.1]
+  by_contra hne
+  have hpos : 0 < (profile (time + 1) 1).1 :=
+    lt_of_le_of_ne (profile (time + 1) 1).2.1 (Ne.symm hne)
+  have hvalue := continuationPayoff_eq_quit_of_pos
+    profile hnash hlt (time + 1) 1 hpos
+  rw [markovRoot_eq_stationaryRoot] at hvalue
+  have hformula := stationaryRoot_quitPayoff_one
+    (profile (time + 1)) (continuationPayoff profile (time + 2))
+  have hle : continuationPayoff profile (time + 1) 1 ≤ 1 := by
+    rw [hvalue, hformula]
+    linarith [(profile (time + 1) 0).2.1]
+  linarith
+
+private theorem exists_isUniqueActiveAt_of_some_zero
+    (profile : MarkovProfile)
+    (hnonempty : HasActivePlayerAtEveryStage profile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hzero : ∃ who, (profile time who).1 = 0) :
+    ∃ owner, IsUniqueActiveAt profile time owner := by
+  obtain ⟨owner, hpos, hunique⟩ :=
+    existsUnique_active_of_some_zero profile hnonempty hnash hlt time hzero
+  refine ⟨owner, hpos, ?_⟩
+  intro who hne
+  apply le_antisymm (le_of_not_gt ?_) (profile time who).2.1
+  exact fun hwho ↦ hne (hunique who hwho)
+
+private theorem uniqueActive_successor
+    (profile : MarkovProfile)
+    (hnonempty : HasActivePlayerAtEveryStage profile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (owner : Player)
+    (hsolo : IsUniqueActiveAt profile time owner) :
+    ∃ nextOwner, IsUniqueActiveAt profile (time + 1) nextOwner ∧
+      (nextOwner = owner ∨
+        nextOwner = FTV.CyclicMinimality.nextThree owner) := by
+  rcases player_eq_zero_or_one_or_two owner with rfl | rfl | rfl
+  · have hzero := solo_zero_forces_two_zero_next profile hnash hlt time hsolo
+    obtain ⟨nextOwner, hnext⟩ := exists_isUniqueActiveAt_of_some_zero
+      profile hnonempty hnash hlt (time + 1) ⟨2, hzero⟩
+    refine ⟨nextOwner, hnext, ?_⟩
+    rcases player_eq_zero_or_one_or_two nextOwner with rfl | rfl | rfl
+    · exact Or.inl rfl
+    · exact Or.inr rfl
+    · have hpos := hnext.1
+      rw [hzero] at hpos
+      exact (lt_irrefl 0 hpos).elim
+  · have hzero := solo_one_forces_zero_zero_next profile hnash hlt time hsolo
+    obtain ⟨nextOwner, hnext⟩ := exists_isUniqueActiveAt_of_some_zero
+      profile hnonempty hnash hlt (time + 1) ⟨0, hzero⟩
+    refine ⟨nextOwner, hnext, ?_⟩
+    rcases player_eq_zero_or_one_or_two nextOwner with rfl | rfl | rfl
+    · have hpos := hnext.1
+      rw [hzero] at hpos
+      exact (lt_irrefl 0 hpos).elim
+    · exact Or.inl rfl
+    · exact Or.inr rfl
+  · have hzero := solo_two_forces_one_zero_next profile hnash hlt time hsolo
+    obtain ⟨nextOwner, hnext⟩ := exists_isUniqueActiveAt_of_some_zero
+      profile hnonempty hnash hlt (time + 1) ⟨1, hzero⟩
+    refine ⟨nextOwner, hnext, ?_⟩
+    rcases player_eq_zero_or_one_or_two nextOwner with rfl | rfl | rfl
+    · exact Or.inr rfl
+    · have hpos := hnext.1
+      rw [hzero] at hpos
+      exact (lt_irrefl 0 hpos).elim
+    · exact Or.inl rfl
+
+private theorem markovRoot_eq_pure_false_of_hazard_zero
+    (profile : MarkovProfile) (time : ℕ) (who : Player)
+    (hzero : (profile time who).1 = 0) :
+    markovRoot profile time who = PMF.pure false := by
+  apply PMF.ext
+  intro action
+  apply (ENNReal.toReal_eq_toReal_iff'
+    (PMF.apply_ne_top _ _) (PMF.apply_ne_top _ _)).mp
+  cases action <;> simp [markovRoot, hzero]
+
+private theorem continuationPayoff_eq_zero_of_permanent_solo
+    (profile : MarkovProfile) (time : ℕ) (owner spectator : Player)
+    (hsolo : ∀ offset, IsUniqueActiveAt profile (time + offset) owner)
+    (hreward : FTV.CyclicMinimality.soloReward owner spectator = 0) :
+    continuationPayoff profile time spectator = 0 := by
+  let shifted : ℕ → Player → PMF Bool :=
+    fun offset ↦ markovRoot profile (time + offset)
+  have hshiftSolo : ∀ offset player, player ≠ owner →
+      shifted offset player = PMF.pure false := by
+    intro offset player hne
+    exact markovRoot_eq_pure_false_of_hazard_zero profile
+      (time + offset) player ((hsolo offset).2 player hne)
+  change quittingRootSequenceTerminalValue
+    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) spectator time = 0
+  rw [quittingRootSequenceTerminalValue_eq_shift]
+  change quittingRootSequenceTerminalValue
+    FTV.CyclicAdmissibleCycle.ftvReward shifted spectator 0 = 0
+  rw [quittingRootSequenceTerminalValue_eq_of_soloRoots
+    FTV.CyclicAdmissibleCycle.ftvReward shifted owner 0 hshiftSolo spectator]
+  apply mul_eq_zero.mpr
+  right
+  change quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward
+    owner spectator = 0
+  have htable := congrFun
+    (FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal owner) spectator
+  exact htable.trans hreward
+
+private theorem exists_later_cyclic_successor
+    (profile : MarkovProfile)
+    (hnonempty : HasActivePlayerAtEveryStage profile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (owner : Player)
+    (hsolo : IsUniqueActiveAt profile time owner) :
+    ∃ later, time < later ∧
+      IsUniqueActiveAt profile later
+        (FTV.CyclicMinimality.nextThree owner) := by
+  by_contra hexists
+  push Not at hexists
+  have hstay : ∀ offset, IsUniqueActiveAt profile (time + offset) owner := by
+    intro offset
+    induction offset with
+    | zero => simpa using hsolo
+    | succ offset ih =>
+        obtain ⟨nextOwner, hnext, hsame | hcyclic⟩ :=
+          uniqueActive_successor profile hnonempty hnash hlt
+            (time + offset) owner ih
+        · subst nextOwner
+          simpa [Nat.add_assoc] using hnext
+        · subst nextOwner
+          have hforbidden := hexists (time + (offset + 1)) (by omega)
+          exact (hforbidden (by simpa [Nat.add_assoc] using hnext)).elim
+  rcases player_eq_zero_or_one_or_two owner with rfl | rfl | rfl
+  · have hvalue := continuationPayoff_eq_zero_of_permanent_solo
+      profile time 0 2 hstay (by rfl)
+    have hlower := quitPayoff_le_continuationPayoff
+      profile hnash hlt time 2
+    rw [markovRoot_eq_stationaryRoot] at hlower
+    have hy : (profile time 1).1 = 0 := (hstay 0).2 1 (by decide)
+    rw [stationaryRoot_quitPayoff_two]
+      at hlower
+    simp [hy, hvalue] at hlower
+    norm_num at hlower
+  · have hvalue := continuationPayoff_eq_zero_of_permanent_solo
+      profile time 1 0 hstay (by rfl)
+    have hlower := quitPayoff_le_continuationPayoff
+      profile hnash hlt time 0
+    rw [markovRoot_eq_stationaryRoot] at hlower
+    have hz : (profile time 2).1 = 0 := (hstay 0).2 2 (by decide)
+    rw [stationaryRoot_quitPayoff_zero]
+      at hlower
+    simp [hz, hvalue] at hlower
+    norm_num at hlower
+  · have hvalue := continuationPayoff_eq_zero_of_permanent_solo
+      profile time 2 1 hstay (by rfl)
+    have hlower := quitPayoff_le_continuationPayoff
+      profile hnash hlt time 1
+    rw [markovRoot_eq_stationaryRoot] at hlower
+    have hx : (profile time 0).1 = 0 := (hstay 0).2 0 (by decide)
+    rw [stationaryRoot_quitPayoff_one]
+      at hlower
+    simp [hx, hvalue] at hlower
+    norm_num at hlower
+
+private theorem uniqueActive_owner_payoff_eq_one
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (owner : Player)
+    (hsolo : IsUniqueActiveAt profile time owner) :
+    continuationPayoff profile time owner = 1 := by
+  have hvalue := continuationPayoff_eq_quit_of_pos
+    profile hnash hlt time owner hsolo.1
+  rw [markovRoot_eq_stationaryRoot] at hvalue
+  rcases player_eq_zero_or_one_or_two owner with rfl | rfl | rfl
+  · have hz : (profile time 2).1 = 0 := hsolo.2 2 (by decide)
+    rw [hvalue, stationaryRoot_quitPayoff_zero]
+    simp [hz]
+  · have hx : (profile time 0).1 = 0 := hsolo.2 0 (by decide)
+    rw [hvalue, stationaryRoot_quitPayoff_one]
+    simp [hx]
+  · have hy : (profile time 1).1 = 0 := hsolo.2 1 (by decide)
+    rw [hvalue, stationaryRoot_quitPayoff_two]
+    simp [hy]
+
+private theorem uniqueActive_minThree_eq_one
+    (profile : MarkovProfile)
+    (hnonempty : HasActivePlayerAtEveryStage profile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (owner : Player)
+    (hsolo : IsUniqueActiveAt profile time owner) :
+    minThree
+      (continuationPayoff profile time 0)
+      (continuationPayoff profile time 1)
+      (continuationPayoff profile time 2) = 1 := by
+  classical
+  let successor := FTV.CyclicMinimality.nextThree owner
+  let P : ℕ → Prop := fun later ↦
+    time < later ∧ IsUniqueActiveAt profile later successor
+  have hfuture : ∃ later, P later := by
+    simpa [P, successor] using
+      exists_later_cyclic_successor profile hnonempty hnash hlt
+        time owner hsolo
+  let later := Nat.find hfuture
+  have hlater : P later := Nat.find_spec hfuture
+  have hbefore : ∀ k, time ≤ k → k < later →
+      IsUniqueActiveAt profile k owner := by
+    intro k htk hklater
+    exact Nat.le_induction (fun _ ↦ hsolo)
+      (fun liveTime htime ih hsuccessorLt ↦ by
+      obtain ⟨nextOwner, hnext, hsame | hcyclic⟩ :=
+        uniqueActive_successor profile hnonempty hnash hlt
+          liveTime owner (ih (by omega))
+      · subst nextOwner
+        simpa using hnext
+      · subst nextOwner
+        have hmember : P (liveTime + 1) :=
+          ⟨by omega, by simpa [successor] using hnext⟩
+        have hminimal := Nat.find_min' hfuture hmember
+        omega
+      ) k htk hklater
+  have hsuccessorValue :
+      continuationPayoff profile later successor = 1 :=
+    uniqueActive_owner_payoff_eq_one profile hnash hlt
+      later successor hlater.2
+  rcases player_eq_zero_or_one_or_two owner with rfl | rfl | rfl
+  · have hbeneficiary : 1 ≤ continuationPayoff profile time 1 := by
+      exact Nat.decreasingInduction (n := later)
+        (motive := fun k _ ↦ time ≤ k →
+          1 ≤ continuationPayoff profile k 1)
+        (fun liveTime hlive ih htime ↦ by
+          have hrow := hbefore liveTime htime hlive
+          have hx : 0 ≤ (profile liveTime 0).1 :=
+            (profile liveTime 0).2.1
+          have hxone : (profile liveTime 0).1 ≤ 1 :=
+            (profile liveTime 0).2.2
+          have hy : (profile liveTime 1).1 = 0 := hrow.2 1 (by decide)
+          have hz : (profile liveTime 2).1 = 0 := hrow.2 2 (by decide)
+          have hcontinue := continuationPayoff_eq_continue_of_zero
+            profile liveTime 1 hy
+          rw [markovRoot_eq_stationaryRoot] at hcontinue
+          have hformula := stationaryRoot_continuePayoff_one
+            (profile liveTime)
+            (continuationPayoff profile (liveTime + 1))
+          rw [hcontinue]
+          rw [hformula]
+          simp only [hz, sub_zero, mul_one]
+          nlinarith [ih (by omega)])
+        (fun _ ↦ by simpa [successor] using hsuccessorValue.ge)
+        (by omega) le_rfl
+    have howner := uniqueActive_owner_payoff_eq_one
+      profile hnash hlt time 0 hsolo
+    have hspectator := quitPayoff_le_continuationPayoff
+      profile hnash hlt time 2
+    rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_two]
+      at hspectator
+    have hy : (profile time 1).1 = 0 := hsolo.2 1 (by decide)
+    simp only [hy, sub_zero] at hspectator
+    simp [minThree, howner, hbeneficiary, hspectator]
+  · have hbeneficiary : 1 ≤ continuationPayoff profile time 2 := by
+      exact Nat.decreasingInduction (n := later)
+        (motive := fun k _ ↦ time ≤ k →
+          1 ≤ continuationPayoff profile k 2)
+        (fun liveTime hlive ih htime ↦ by
+          have hrow := hbefore liveTime htime hlive
+          have hy : 0 ≤ (profile liveTime 1).1 :=
+            (profile liveTime 1).2.1
+          have hyone : (profile liveTime 1).1 ≤ 1 :=
+            (profile liveTime 1).2.2
+          have hx : (profile liveTime 0).1 = 0 := hrow.2 0 (by decide)
+          have hz : (profile liveTime 2).1 = 0 := hrow.2 2 (by decide)
+          have hcontinue := continuationPayoff_eq_continue_of_zero
+            profile liveTime 2 hz
+          rw [markovRoot_eq_stationaryRoot] at hcontinue
+          have hformula := stationaryRoot_continuePayoff_two
+            (profile liveTime)
+            (continuationPayoff profile (liveTime + 1))
+          rw [hcontinue]
+          rw [hformula]
+          simp only [hx, sub_zero, one_mul]
+          nlinarith [ih (by omega)])
+        (fun _ ↦ by simpa [successor] using hsuccessorValue.ge)
+        (by omega) le_rfl
+    have howner := uniqueActive_owner_payoff_eq_one
+      profile hnash hlt time 1 hsolo
+    have hspectator := quitPayoff_le_continuationPayoff
+      profile hnash hlt time 0
+    rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_zero]
+      at hspectator
+    have hz : (profile time 2).1 = 0 := hsolo.2 2 (by decide)
+    simp only [hz, sub_zero] at hspectator
+    simp [minThree, howner, hbeneficiary, hspectator]
+  · have hbeneficiary : 1 ≤ continuationPayoff profile time 0 := by
+      exact Nat.decreasingInduction (n := later)
+        (motive := fun k _ ↦ time ≤ k →
+          1 ≤ continuationPayoff profile k 0)
+        (fun liveTime hlive ih htime ↦ by
+          have hrow := hbefore liveTime htime hlive
+          have hz : 0 ≤ (profile liveTime 2).1 :=
+            (profile liveTime 2).2.1
+          have hzone : (profile liveTime 2).1 ≤ 1 :=
+            (profile liveTime 2).2.2
+          have hx : (profile liveTime 0).1 = 0 := hrow.2 0 (by decide)
+          have hy : (profile liveTime 1).1 = 0 := hrow.2 1 (by decide)
+          have hcontinue := continuationPayoff_eq_continue_of_zero
+            profile liveTime 0 hx
+          rw [markovRoot_eq_stationaryRoot] at hcontinue
+          have hformula := stationaryRoot_continuePayoff_zero
+            (profile liveTime)
+            (continuationPayoff profile (liveTime + 1))
+          rw [hcontinue]
+          rw [hformula]
+          simp only [hy, zero_mul, add_zero]
+          nlinarith [ih (by omega)])
+        (fun _ ↦ by simpa [successor] using hsuccessorValue.ge)
+        (by omega) le_rfl
+    have howner := uniqueActive_owner_payoff_eq_one
+      profile hnash hlt time 2 hsolo
+    have hspectator := quitPayoff_le_continuationPayoff
+      profile hnash hlt time 1
+    rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_one]
+      at hspectator
+    have hx : (profile time 0).1 = 0 := hsolo.2 0 (by decide)
+    simp only [hx, sub_zero] at hspectator
+    simp [minThree, howner, hbeneficiary, hspectator]
+
+private theorem continuation_min_drop_of_all_positive
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hpos : ∀ who, 0 < (profile time who).1) :
+    minThree
+        (continuationPayoff profile (time + 1) 0)
+        (continuationPayoff profile (time + 1) 1)
+        (continuationPayoff profile (time + 1) 2) <
+      minThree
+          (continuationPayoff profile time 0)
+          (continuationPayoff profile time 1)
+          (continuationPayoff profile time 2) -
+        maxThree
+          (profile time 0).1 (profile time 1).1 (profile time 2).1 ^ 2 := by
+  have huQuit := continuationPayoff_eq_quit_of_pos
+    profile hnash hlt time 0 (hpos 0)
+  have hvQuit := continuationPayoff_eq_quit_of_pos
+    profile hnash hlt time 1 (hpos 1)
+  have hwQuit := continuationPayoff_eq_quit_of_pos
+    profile hnash hlt time 2 (hpos 2)
+  have huContinue := continuationPayoff_eq_continue_of_pos
+    profile hnash hlt time 0 (hpos 0)
+  have hvContinue := continuationPayoff_eq_continue_of_pos
+    profile hnash hlt time 1 (hpos 1)
+  have hwContinue := continuationPayoff_eq_continue_of_pos
+    profile hnash hlt time 2 (hpos 2)
+  rw [markovRoot_eq_stationaryRoot]
+    at huQuit hvQuit hwQuit huContinue hvContinue hwContinue
+  have hstep : InteriorMarkovStep
+      (profile time 0).1 (profile time 1).1 (profile time 2).1
+      (1 - continuationPayoff profile (time + 1) 1)
+      (1 - continuationPayoff profile (time + 1) 2)
+      (1 - continuationPayoff profile (time + 1) 0)
+      (continuationPayoff profile time 0)
+      (continuationPayoff profile time 1)
+      (continuationPayoff profile time 2)
+      (continuationPayoff profile (time + 1) 0)
+      (continuationPayoff profile (time + 1) 1)
+      (continuationPayoff profile (time + 1) 2) := by
+    refine ⟨hpos 0, hpos 1, hpos 2, hlt time 0, hlt time 1,
+      hlt time 2, ?_, ?_, ?_, by ring, by ring, by ring, ?_, ?_, ?_⟩
+    · exact huQuit.trans (stationaryRoot_quitPayoff_zero
+        (profile time) (continuationPayoff profile (time + 1)))
+    · exact hvQuit.trans (stationaryRoot_quitPayoff_one
+        (profile time) (continuationPayoff profile (time + 1)))
+    · exact hwQuit.trans (stationaryRoot_quitPayoff_two
+        (profile time) (continuationPayoff profile (time + 1)))
+    · exact huContinue.trans (stationaryRoot_continuePayoff_zero
+        (profile time) (continuationPayoff profile (time + 1)))
+    · exact hvContinue.trans (stationaryRoot_continuePayoff_one
+        (profile time) (continuationPayoff profile (time + 1)))
+    · exact hwContinue.trans (stationaryRoot_continuePayoff_two
+        (profile time) (continuationPayoff profile (time + 1)))
+  exact hstep.min_drop_and_max_grows.1
+
 private theorem exists_zero_hazard_of_lt_one
     (profile : MarkovProfile)
     (hlt : ∀ time who, (profile time who).1 < 1)
@@ -3372,7 +3882,123 @@ theorem theorem3_4 (profile : MarkovProfile)
     (hnonempty : HasActivePlayerAtEveryStage profile)
     (hequilibrium : IsMarkovEpsilonEquilibrium 0 profile) :
     HasCyclicSupport profile := by
-  sorry
+  classical
+  have hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile) := by
+    apply (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile)).2
+    simpa only [IsMarkovEpsilonEquilibrium, markovBehaviorProfile] using
+      hequilibrium
+  have hlt := all_hazards_lt_one_of_exact_rootSequenceNash profile hnash
+  let P : ℕ → Prop := fun time ↦
+    ∃ who, (profile time who).1 = 0
+  have hzeroExists : ∃ time, P time := by
+    simpa [P] using exists_zero_hazard_of_lt_one profile hlt hnash
+  let first := Nat.find hzeroExists
+  have hfirst : P first := Nat.find_spec hzeroExists
+  have hfirst_zero : first = 0 := by
+    by_contra hne
+    have hfirstPos : 0 < first := Nat.pos_of_ne_zero hne
+    let previous := first - 1
+    have hprevious_lt : previous < first := by
+      simp only [previous]
+      omega
+    have hprevious_succ : previous + 1 = first := by
+      simp only [previous]
+      omega
+    have hpositive (who : Player) :
+        0 < (profile previous who).1 := by
+      have hnonzero : (profile previous who).1 ≠ 0 := by
+        intro hzero
+        have hminimal := Nat.find_min' hzeroExists (⟨who, hzero⟩ : P previous)
+        omega
+      exact lt_of_le_of_ne (profile previous who).2.1 (Ne.symm hnonzero)
+    have hdrop := continuation_min_drop_of_all_positive
+      profile hnash hlt previous hpositive
+    rw [hprevious_succ] at hdrop
+    obtain ⟨firstOwner, hfirstSolo⟩ := exists_isUniqueActiveAt_of_some_zero
+      profile hnonempty hnash hlt first hfirst
+    have hminFirst := uniqueActive_minThree_eq_one
+      profile hnonempty hnash hlt first firstOwner hfirstSolo
+    have hu := continuationPayoff_eq_quit_of_pos
+      profile hnash hlt previous 0 (hpositive 0)
+    rw [markovRoot_eq_stationaryRoot] at hu
+    have hminPrevious : minThree
+        (continuationPayoff profile previous 0)
+        (continuationPayoff profile previous 1)
+        (continuationPayoff profile previous 2) < 1 := by
+      calc
+        minThree
+            (continuationPayoff profile previous 0)
+            (continuationPayoff profile previous 1)
+            (continuationPayoff profile previous 2) ≤
+            continuationPayoff profile previous 0 := min_le_left _ _
+        _ = 1 - (profile previous 2).1 :=
+          hu.trans (stationaryRoot_quitPayoff_zero
+            (profile previous)
+            (continuationPayoff profile (previous + 1)))
+        _ < 1 := by linarith [hpositive 2]
+    have hsquare : 0 ≤ maxThree
+        (profile previous 0).1
+        (profile previous 1).1
+        (profile previous 2).1 ^ 2 := sq_nonneg _
+    rw [hminFirst] at hdrop
+    linarith
+  have hzeroAtZero : P 0 := by simpa [hfirst_zero] using hfirst
+  obtain ⟨initialOwner, hinitial⟩ := exists_isUniqueActiveAt_of_some_zero
+    profile hnonempty hnash hlt 0 hzeroAtZero
+  have hexistsOwner : ∀ time, ∃ owner, IsUniqueActiveAt profile time owner := by
+    intro time
+    induction time with
+    | zero => exact ⟨initialOwner, hinitial⟩
+    | succ time ih =>
+        obtain ⟨owner, howner⟩ := ih
+        obtain ⟨nextOwner, hnext, _⟩ := uniqueActive_successor
+          profile hnonempty hnash hlt time owner howner
+        exact ⟨nextOwner, by simpa using hnext⟩
+  let owner : ℕ → Player := fun time ↦ Classical.choose (hexistsOwner time)
+  have howner (time : ℕ) : IsUniqueActiveAt profile time (owner time) :=
+    Classical.choose_spec (hexistsOwner time)
+  refine ⟨owner, ?_, ?_, ?_⟩
+  · intro time who
+    constructor
+    · intro hpos
+      by_contra hne
+      have hzero := (howner time).2 who hne
+      rw [hzero] at hpos
+      exact (lt_irrefl 0 hpos).elim
+    · rintro rfl
+      exact (howner time).1
+  · intro time
+    obtain ⟨nextOwner, hnext, hsame | hcyclic⟩ := uniqueActive_successor
+      profile hnonempty hnash hlt time (owner time) (howner time)
+    · left
+      have heq : owner (time + 1) = nextOwner := by
+        by_contra hne
+        have hzero := hnext.2 (owner (time + 1)) hne
+        have hpos := (howner (time + 1)).1
+        rw [hzero] at hpos
+        exact (lt_irrefl 0 hpos).elim
+      rw [heq, hsame]
+    · right
+      have heq : owner (time + 1) = nextOwner := by
+        by_contra hne
+        have hzero := hnext.2 (owner (time + 1)) hne
+        have hpos := (howner (time + 1)).1
+        rw [hzero] at hpos
+        exact (lt_irrefl 0 hpos).elim
+      rw [heq, hcyclic]
+  · intro time
+    obtain ⟨later, hlater, hnext⟩ := exists_later_cyclic_successor
+      profile hnonempty hnash hlt time (owner time) (howner time)
+    refine ⟨later, hlater, ?_⟩
+    have heq : owner later = FTV.CyclicMinimality.nextThree (owner time) := by
+      by_contra hne
+      have hzero := hnext.2 (owner later) hne
+      have hpos := (howner later).1
+      rw [hzero] at hpos
+      exact (lt_irrefl 0 hpos).elim
+    exact heq
 
 /-- Checked special case used in the period-three part of the paper's picture:
 every live phase of an exact cyclic packet has a unique active player. -/
