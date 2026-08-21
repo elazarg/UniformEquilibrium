@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Frontier
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedChattering
 import UniformEquilibrium.Quitting.Debt.Dynamic.SemanticChronology
 
 /-!
