@@ -8842,6 +8842,166 @@ theorem lemma4_approximate (G : QuittingGame) {k : ℕ} (hk : 0 < k)
     rw [abs_le] at hfc
     linarith [hpj.2 n hcontinue]
 
+/-- A finite `F_η` row path with an explicitly budgeted error at each seam.
+The displayed point after a row need only be close to its exact one-stage payoff. -/
+structure ApproximateFRowPath (G : QuittingGame) (η : ℝ) where
+  length : ℕ
+  point : Fin (length + 1) → Payoff G.Player
+  row : Fin length → QuitRow G
+  seamError : Fin length → ℝ
+  seamError_nonneg : ∀ i, 0 ≤ seamError i
+  row_mem : ∀ i, row i ∈ EpsilonRow G η (point i.castSucc)
+  step_error : ∀ i,
+    ‖point i.succ - QuittingOneStagePayoff G (point i.castSucc) (row i)‖ ≤
+      seamError i
+  rational : ∀ i, IsRational G η (point i)
+
+namespace ApproximateFRowPath
+
+/-- The path consisting of one rational point and no rows. -/
+def nil (G : QuittingGame) {η : ℝ} (r : Payoff G.Player)
+    (hr : IsRational G η r) : ApproximateFRowPath G η where
+  length := 0
+  point _ := r
+  row := Fin.elim0
+  seamError := Fin.elim0
+  seamError_nonneg i := Fin.elim0 i
+  row_mem i := Fin.elim0 i
+  step_error i := Fin.elim0 i
+  rational _ := hr
+
+/-- Points of the concatenation, with the common endpoint represented by the left path. -/
+private def appendPoint {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η) :
+    Fin (z.length + w.length + 1) → Payoff G.Player := fun i =>
+  if h : (i : ℕ) ≤ z.length then z.point ⟨i, by omega⟩
+  else w.point ⟨(i : ℕ) - z.length, by omega⟩
+
+/-- Rows of the concatenation, split at the length of the left path. -/
+private def appendRow {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η) :
+    Fin (z.length + w.length) → QuitRow G := fun i =>
+  if h : (i : ℕ) < z.length then z.row ⟨i, h⟩
+  else w.row ⟨(i : ℕ) - z.length, by omega⟩
+
+/-- Seam errors of the concatenation, split at the length of the left path. -/
+private def appendSeamError {G : QuittingGame} {η : ℝ}
+    (z w : ApproximateFRowPath G η) :
+    Fin (z.length + w.length) → ℝ := fun i =>
+  if h : (i : ℕ) < z.length then z.seamError ⟨i, h⟩
+  else w.seamError ⟨(i : ℕ) - z.length, by omega⟩
+
+/-- Concatenate two approximate row paths whose displayed endpoints agree. -/
+def append (G : QuittingGame) {η : ℝ}
+    (z w : ApproximateFRowPath G η)
+    (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0) :
+    ApproximateFRowPath G η where
+  length := z.length + w.length
+  point := appendPoint z w
+  row := appendRow z w
+  seamError := appendSeamError z w
+  seamError_nonneg i := by
+    by_cases h : (i : ℕ) < z.length
+    · simpa [appendSeamError, h] using z.seamError_nonneg ⟨i, h⟩
+    · simpa [appendSeamError, h] using
+        w.seamError_nonneg ⟨(i : ℕ) - z.length, by omega⟩
+  row_mem i := by
+    by_cases h : (i : ℕ) < z.length
+    · let iz : Fin z.length := ⟨i, h⟩
+      have hsource : appendPoint z w i.castSucc = z.point iz.castSucc := by
+        unfold appendPoint
+        rw [dif_pos (by simpa using h.le)]
+        apply congrArg z.point
+        apply Fin.ext
+        rfl
+      simpa [appendRow, h, hsource, iz] using z.row_mem iz
+    · let iw : Fin w.length := ⟨(i : ℕ) - z.length, by omega⟩
+      have hsource : appendPoint z w i.castSucc = w.point iw.castSucc := by
+        by_cases hi : (i : ℕ) ≤ z.length
+        · have hieq : (i : ℕ) = z.length := by omega
+          unfold appendPoint
+          rw [dif_pos (by simpa using hi)]
+          calc
+            z.point ⟨i, by omega⟩ =
+                z.point ⟨z.length, Nat.lt_succ_self z.length⟩ := by
+              apply congrArg z.point
+              exact Fin.ext hieq
+            _ = w.point 0 := hstitch
+            _ = w.point iw.castSucc := by
+              apply congrArg w.point
+              apply Fin.ext
+              simp [iw, hieq]
+        · unfold appendPoint
+          rw [dif_neg (by simpa using hi)]
+          apply congrArg w.point
+          apply Fin.ext
+          rfl
+      simpa [appendRow, h, hsource, iw] using w.row_mem iw
+  step_error i := by
+    by_cases h : (i : ℕ) < z.length
+    · let iz : Fin z.length := ⟨i, h⟩
+      have hsource : appendPoint z w i.castSucc = z.point iz.castSucc := by
+        unfold appendPoint
+        rw [dif_pos (by simpa using h.le)]
+        apply congrArg z.point
+        apply Fin.ext
+        rfl
+      have htarget : appendPoint z w i.succ = z.point iz.succ := by
+        unfold appendPoint
+        rw [dif_pos (by simpa using Nat.succ_le_iff.mpr h)]
+        apply congrArg z.point
+        apply Fin.ext
+        rfl
+      simpa [appendRow, appendSeamError, h, hsource, htarget, iz] using
+        z.step_error iz
+    · let iw : Fin w.length := ⟨(i : ℕ) - z.length, by omega⟩
+      have hsource : appendPoint z w i.castSucc = w.point iw.castSucc := by
+        by_cases hi : (i : ℕ) ≤ z.length
+        · have hieq : (i : ℕ) = z.length := by omega
+          unfold appendPoint
+          rw [dif_pos (by simpa using hi)]
+          calc
+            z.point ⟨i, by omega⟩ =
+                z.point ⟨z.length, Nat.lt_succ_self z.length⟩ := by
+              apply congrArg z.point
+              exact Fin.ext hieq
+            _ = w.point 0 := hstitch
+            _ = w.point iw.castSucc := by
+              apply congrArg w.point
+              apply Fin.ext
+              simp [iw, hieq]
+        · unfold appendPoint
+          rw [dif_neg (by simpa using hi)]
+          apply congrArg w.point
+          apply Fin.ext
+          rfl
+      have htarget : appendPoint z w i.succ = w.point iw.succ := by
+        unfold appendPoint
+        have hiTarget : ¬(i.succ : ℕ) ≤ z.length := by
+          simp only [Fin.val_succ]
+          omega
+        rw [dif_neg hiTarget]
+        apply congrArg w.point
+        apply Fin.ext
+        simp [iw]
+        omega
+      simpa [appendRow, appendSeamError, h, hsource, htarget, iw] using
+        w.step_error iw
+  rational i := by
+    by_cases h : (i : ℕ) ≤ z.length
+    · simpa [appendPoint, h] using z.rational ⟨i, by omega⟩
+    · simpa [appendPoint, h] using w.rational ⟨(i : ℕ) - z.length, by omega⟩
+
+/-- Total variation of the displayed finite path. -/
+def variation {G : QuittingGame} {η : ℝ} (z : ApproximateFRowPath G η) : ℝ :=
+  ∑ i : Fin z.length, ‖z.point i.succ - z.point i.castSucc‖
+
+/-- Total budget of all approximate seams in a finite path. -/
+def totalError {G : QuittingGame} {η : ℝ} (z : ApproximateFRowPath G η) : ℝ :=
+  ∑ i : Fin z.length, z.seamError i
+
+end ApproximateFRowPath
+
 /-- A quitting game has stationary approximate equilibria in the paper's sense. -/
 def HasStationaryApproximateEquilibria (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ p : QuitRow G,
