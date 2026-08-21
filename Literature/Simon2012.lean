@@ -2475,6 +2475,53 @@ private theorem continuous_cappedIndifferentGraphPoint
     (indifferentContinuation G p.1, p.1))
   exact hbeta.prodMk hp
 
+/-- Forcing one player to Quit still leaves its payoff inside the paper's
+reward scale. -/
+private theorem abs_forcedQuitPayoff_le_scale
+    (G : QuittingGame) (M : ℝ) (hM : IsSimonPayoffScale G M)
+    (p : QuitRow G) (n : G.Player) :
+    |ForcedQuitPayoff G p n| ≤ M / 3 := by
+  classical
+  rw [ForcedQuitPayoff, quittingOneStagePayoff_eq_rootExpectedPayoff]
+  exact GameTheory.abs_quittingRootExpectedPayoff_le_bound G.reward 0
+    (quitRowMarginals G (p.replace G n 1)) n hM.2.1 (fun _ => by
+      simp only [Pi.zero_apply, abs_zero]
+      linarith [hM.1])
+
+/-- The finite-cube map `\bar φ` in the proof of Lemma 3.2. -/
+private def cappedPhi (G : QuittingGame) (M d t : ℝ) (ht : t < 1) :
+    CappedQuitRow G t → Payoff G.Player :=
+  Phi G M d ∘ cappedIndifferentGraphPoint G t ht
+
+/-- The finite-cube map is continuous. -/
+private theorem continuous_cappedPhi
+    (G : QuittingGame) (M d t : ℝ) (ht : t < 1) :
+    Continuous (cappedPhi G M d t ht) :=
+  (continuous_phi G M d).comp
+    (continuous_cappedIndifferentGraphPoint G t ht)
+
+/-- On positive support, the capped map's payoff term is the forced-Quit
+endpoint. -/
+private theorem cappedPhi_apply_of_positive
+    (G : QuittingGame) (M d t : ℝ) (ht : t < 1)
+    (p : CappedQuitRow G t) (j : G.Player) (hpj : 0 < (p.1 j : ℝ)) :
+    cappedPhi G M d t ht p j =
+      ForcedQuitPayoff G p.1 j -
+        (5 * (Fintype.card G.Player : ℝ) * M / d) *
+          ((p.1 j : ℝ) /
+            (1 - (p.1 j : ℝ)) ^ Fintype.card G.Player) +
+        M * ((∑ k, (p.1 k : ℝ)) - (p.1 j : ℝ)) := by
+  classical
+  change QuittingOneStagePayoff G (indifferentContinuation G p.1) p.1 j - _ + _ = _
+  rw [oneStagePayoff_eq_forcedQuit_of_positive G
+    (indifferentContinuation G p.1) p.1
+    (indifferentGraphPoint G p.1 fun k => (p.2 k).trans_lt ht).2.1
+    (indifferentGraphPoint G p.1 fun k => (p.2 k).trans_lt ht).2.2 j hpj]
+  simp only [cappedIndifferentGraphPoint, indifferentGraphPoint]
+  have hsum := Finset.sum_erase_add Finset.univ
+    (fun k => (p.1 k : ℝ)) (Finset.mem_univ j)
+  linear_combination M * hsum
+
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
 the paper's Jacobian argument: strict diagonal dominance gives local openness
@@ -3136,18 +3183,6 @@ theorem lemma3_3 (G : QuittingGame) (M ε : ℝ)
       have ha := (abs_le.mp (haClose n)).2
       have hb := (abs_le.mp (hbCloseNotA n hnA)).1
       linarith
-
-/-- Forcing one player to Quit still leaves its payoff inside the paper's reward scale. -/
-private theorem abs_forcedQuitPayoff_le_scale
-    (G : QuittingGame) (M : ℝ) (hM : IsSimonPayoffScale G M)
-    (p : QuitRow G) (n : G.Player) :
-    |ForcedQuitPayoff G p n| ≤ M / 3 := by
-  classical
-  rw [ForcedQuitPayoff, quittingOneStagePayoff_eq_rootExpectedPayoff]
-  exact GameTheory.abs_quittingRootExpectedPayoff_le_bound G.reward 0
-    (quitRowMarginals G (p.replace G n 1)) n hM.2.1 (fun _ => by
-      simp only [Pi.zero_apply, abs_zero]
-      linarith [hM.1])
 
 /-- A common coordinatewise ceiling for continuation and absorption bounds the row value. -/
 private theorem quittingOneStagePayoff_le_of_coordinate_le
