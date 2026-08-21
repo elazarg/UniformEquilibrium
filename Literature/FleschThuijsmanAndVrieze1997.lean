@@ -4669,6 +4669,101 @@ private theorem uniqueActive_minThree_eq_one_with_idle
     simp only [hx, sub_zero] at hspectator
     simp [minThree, howner, hbeneficiary, hspectator]
 
+private theorem inactive_minThree_ge_one
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hinactive : ¬ IsActiveStage profile time) :
+    1 ≤ minThree
+      (continuationPayoff profile time 0)
+      (continuationPayoff profile time 1)
+      (continuationPayoff profile time 2) := by
+  have hx := hazard_eq_zero_of_not_active profile time hinactive 0
+  have hy := hazard_eq_zero_of_not_active profile time hinactive 1
+  have hz := hazard_eq_zero_of_not_active profile time hinactive 2
+  have hu := quitPayoff_le_continuationPayoff profile hnash hlt time 0
+  have hv := quitPayoff_le_continuationPayoff profile hnash hlt time 1
+  have hw := quitPayoff_le_continuationPayoff profile hnash hlt time 2
+  rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_zero] at hu
+  rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_one] at hv
+  rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_two] at hw
+  simp [hx, hy, hz, minThree] at hu hv hw ⊢
+  exact ⟨hu, hv, hw⟩
+
+private theorem exists_zero_hazard_at_every_time
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) :
+    ∃ who, (profile time who).1 = 0 := by
+  classical
+  let P : ℕ → Prop := fun later ↦
+    time ≤ later ∧ ∃ who, (profile later who).1 = 0
+  have hexists : ∃ later, P later := by
+    simpa [P] using exists_zero_hazard_at_or_after profile hlt hnash time
+  let first := Nat.find hexists
+  have hfirst : P first := Nat.find_spec hexists
+  by_contra hzero
+  push Not at hzero
+  have htimeLt : time < first := by
+    have hne : first ≠ time := by
+      intro heq
+      subst first
+      exact hzero hfirst.2.choose hfirst.2.choose_spec
+    omega
+  let previous := first - 1
+  have hpreviousBounds : time ≤ previous ∧ previous < first := by
+    simp only [previous]
+    omega
+  have hpreviousSucc : previous + 1 = first := by
+    simp only [previous]
+    omega
+  have hpositive (who : Player) : 0 < (profile previous who).1 := by
+    have hnonzero : (profile previous who).1 ≠ 0 := by
+      intro hzeroPrevious
+      have hmember : P previous :=
+        ⟨hpreviousBounds.1, who, hzeroPrevious⟩
+      have hminimal := Nat.find_min' hexists hmember
+      omega
+    exact lt_of_le_of_ne (profile previous who).2.1 (Ne.symm hnonzero)
+  have hminFirst : 1 ≤ minThree
+      (continuationPayoff profile first 0)
+      (continuationPayoff profile first 1)
+      (continuationPayoff profile first 2) := by
+    by_cases hactive : IsActiveStage profile first
+    · obtain ⟨owner, howner⟩ := exists_isUniqueActiveAt_of_some_zero
+        profile hnash hlt first hactive hfirst.2
+      rw [uniqueActive_minThree_eq_one_with_idle
+        profile hnash hlt first owner howner]
+    · exact inactive_minThree_ge_one profile hnash hlt first hactive
+  have hdrop := continuation_min_drop_of_all_positive
+    profile hnash hlt previous hpositive
+  rw [hpreviousSucc] at hdrop
+  have hu := continuationPayoff_eq_quit_of_pos
+    profile hnash hlt previous 0 (hpositive 0)
+  rw [markovRoot_eq_stationaryRoot] at hu
+  have hminPrevious : minThree
+      (continuationPayoff profile previous 0)
+      (continuationPayoff profile previous 1)
+      (continuationPayoff profile previous 2) < 1 := by
+    calc
+      minThree
+          (continuationPayoff profile previous 0)
+          (continuationPayoff profile previous 1)
+          (continuationPayoff profile previous 2) ≤
+          continuationPayoff profile previous 0 := min_le_left _ _
+      _ = 1 - (profile previous 2).1 :=
+        hu.trans (stationaryRoot_quitPayoff_zero
+          (profile previous) (continuationPayoff profile first))
+      _ < 1 := by linarith [hpositive 2]
+  have hsquare : 0 ≤ maxThree
+      (profile previous 0).1
+      (profile previous 1).1
+      (profile previous 2).1 ^ 2 := sq_nonneg _
+  linarith
+
 /-- Checked special case used in the period-three part of the paper's picture:
 every live phase of an exact cyclic packet has a unique active player. -/
 theorem exactCyclicPacket_existsUnique_activeRole
