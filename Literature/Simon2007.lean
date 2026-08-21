@@ -687,6 +687,15 @@ def DDPFinitePath.afterActionProbability (P : DiscreteDecisionProcess) {k : ℕ}
     let j : Fin (k + 1) := i.succ
     P.choose (h.x j.castSucc) (h.y j) * P.move (h.x j.castSucc) (h.y j) (h.x j.succ)
 
+/-- Sampling the first action restores its missing factor in forced-action probability. -/
+private theorem DDPFinitePath.probability_eq_choose_mul_afterActionProbability
+    (P : DiscreteDecisionProcess) {k : ℕ} (h : DDPFinitePath P (k + 1)) :
+    h.probability P = P.choose (h.x 0) (h.y 0) * h.afterActionProbability P := by
+  rw [DDPFinitePath.probability, DDPFinitePath.afterActionProbability]
+  rw [Fin.prod_univ_succ]
+  simp only [Fin.castSucc_zero, Fin.succ_zero_eq_one]
+  ac_rfl
+
 /-- The cylinder sigma algebra on infinite decision-process paths. -/
 instance ddpPathMeasurableSpace (P : DiscreteDecisionProcess) :
     MeasurableSpace (DDPPath P) :=
@@ -2283,6 +2292,123 @@ private theorem DDPSemantics.afterAction_eq_rawLaw (P : DiscreteDecisionProcess)
             (Or.inl hstart)).symm
   · simp
 
+/-- A forced-action cylinder with the wrong initial state or action has zero mass. -/
+private theorem DDPSemantics.afterAction_cylinder_eq_zero_of_wrong
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) (y : P.Y x) {k : ℕ} (h : DDPFinitePath P (k + 1))
+    (hwrong : h.x 0 ≠ x ∨ ¬HEq (h.y 0) y) :
+    S.afterAction x y (DDPCylinder P h) = 0 := by
+  let support : Set (DDPPath P) := {p | p.x 0 = x ∧ HEq (p.y 0) y}
+  letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+  have hsupportMeasurable : MeasurableSet support :=
+    measurableSet_ddpInitialStateAction P x y
+  have hsupportComplement : S.afterAction x y supportᶜ = 0 := by
+    rw [measure_compl hsupportMeasurable (by rw [S.afterActionSupport]; simp)]
+    rw [measure_univ, S.afterActionSupport]
+    simp
+  apply nonpos_iff_eq_zero.mp
+  exact calc
+    S.afterAction x y (DDPCylinder P h) ≤ S.afterAction x y supportᶜ := by
+      apply measure_mono
+      intro p hp
+      simp only [support, mem_compl_iff, mem_setOf_eq]
+      rintro ⟨hpstart, hpaction⟩
+      change p.prefix P (k + 1) = h at hp
+      have hx := congrArg (fun q : DDPFinitePath P (k + 1) => q.x 0) hp
+      have hstage := congrArg (fun q : DDPFinitePath P (k + 1) =>
+        (⟨q.x 0, q.y 0⟩ : DDPStage P)) hp
+      rcases hwrong with hstart | haction
+      · apply hstart
+        simpa [DDPPath.prefix, hpstart] using hx.symm
+      · apply haction
+        exact (Sigma.mk.inj_iff.mp hstage.symm).2.trans hpaction
+    _ = 0 := hsupportComplement
+
+/-- A state-started cylinder with the wrong initial state has zero mass. -/
+private theorem DDPSemantics.fromState_cylinder_eq_zero_of_wrong
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) {k : ℕ} (h : DDPFinitePath P k) (hwrong : h.x 0 ≠ x) :
+    S.fromState x (DDPCylinder P h) = 0 := by
+  let support : Set (DDPPath P) := {p | p.x 0 = x}
+  letI : IsProbabilityMeasure (S.fromState x) := S.fromStateProbability x
+  have hsupportMeasurable : MeasurableSet support := measurableSet_ddpInitialState P x
+  have hsupportComplement : S.fromState x supportᶜ = 0 := by
+    rw [measure_compl hsupportMeasurable (by rw [S.fromStateSupport]; simp)]
+    rw [measure_univ, S.fromStateSupport]
+    simp
+  apply nonpos_iff_eq_zero.mp
+  exact calc
+    S.fromState x (DDPCylinder P h) ≤ S.fromState x supportᶜ := by
+      apply measure_mono
+      intro p hp
+      simp only [support, mem_compl_iff, mem_setOf_eq]
+      intro hpstart
+      apply hwrong
+      change p.prefix P k = h at hp
+      have hx := congrArg (fun q : DDPFinitePath P k => q.x 0) hp
+      simpa [DDPPath.prefix, hpstart] using hx.symm
+    _ = 0 := hsupportComplement
+
+/-- A zero-action DDP cylinder fixes only its initial state. -/
+private theorem ddpCylinder_zero_eq_initialState (P : DiscreteDecisionProcess)
+    (h : DDPFinitePath P 0) : DDPCylinder P h = {p | p.x 0 = h.x 0} := by
+  ext p
+  change p.prefix P 0 = h ↔ p.x 0 = h.x 0
+  constructor
+  · intro hp
+    exact congrArg (fun q : DDPFinitePath P 0 => q.x 0) hp
+  · intro hp
+    apply DDPFinitePath.ext_of_stages P
+    · intro i
+      have hi : i = 0 := Fin.eq_zero i
+      subst i
+      exact hp
+    · exact fun i => Fin.elim0 i
+
+/-- A forced-action law gives its initial-state zero cylinder mass one. -/
+private theorem DDPSemantics.afterAction_zeroCylinder_eq_one
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) (y : P.Y x) (h : DDPFinitePath P 0) (hstart : h.x 0 = x) :
+    S.afterAction x y (DDPCylinder P h) = 1 := by
+  letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+  rw [ddpCylinder_zero_eq_initialState]
+  apply le_antisymm (by
+    calc
+      S.afterAction x y {p | p.x 0 = h.x 0} ≤ S.afterAction x y Set.univ :=
+        measure_mono (subset_univ _)
+      _ = 1 := measure_univ)
+  calc
+    1 = S.afterAction x y {p | p.x 0 = x ∧ HEq (p.y 0) y} :=
+      (S.afterActionSupport x y).symm
+    _ ≤ S.afterAction x y {p | p.x 0 = h.x 0} := by
+      apply measure_mono
+      rintro p ⟨hp, _hy⟩
+      exact hstart.trans hp.symm |>.symm
+
+/-- A forced-action law gives a wrong initial-state zero cylinder mass zero. -/
+private theorem DDPSemantics.afterAction_zeroCylinder_eq_zero
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) (y : P.Y x) (h : DDPFinitePath P 0) (hstart : h.x 0 ≠ x) :
+    S.afterAction x y (DDPCylinder P h) = 0 := by
+  rw [ddpCylinder_zero_eq_initialState]
+  have hsubset : {p : DDPPath P | p.x 0 = h.x 0} ⊆
+      {p | p.x 0 = x ∧ HEq (p.y 0) y}ᶜ := by
+    intro p hp
+    simp only [mem_setOf_eq, mem_compl_iff]
+    intro hs
+    exact hstart (hp.symm.trans hs.1)
+  apply nonpos_iff_eq_zero.mp
+  calc
+    S.afterAction x y {p | p.x 0 = h.x 0} ≤
+        S.afterAction x y {p | p.x 0 = x ∧ HEq (p.y 0) y}ᶜ :=
+      measure_mono hsubset
+    _ = 0 := by
+      rw [measure_compl (measurableSet_ddpInitialStateAction P x y)
+        (by rw [S.afterActionSupport]; simp)]
+      letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+      rw [measure_univ, S.afterActionSupport]
+      simp
+
 /-- The finite cumulative advantage through the action indexed by `l`. -/
 def DDPAdvantage (P : DiscreteDecisionProcess) (p : DDPPath P) (l : ℕ) : ℝ :=
   Finset.sum (Finset.range (l + 1)) fun i =>
@@ -2906,6 +3032,71 @@ private theorem returnProbability_eq_tsum_firstReturnProbability
   rw [hunion]
   exact measure_iUnion (pairwise_disjoint_firstReturnAt P A)
     (fun z => measurableSet_firstReturnAt P A z)
+
+/-- A state-started law first samples the action and then follows its forced-action law. -/
+private theorem DDPSemantics.fromState_eq_initialActionMixture
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) (x : P.X) :
+    S.fromState x = Measure.sum fun y : P.Y x =>
+      (P.choose x y : ℝ≥0∞) • S.afterAction x y := by
+  classical
+  let mixture := Measure.sum fun y : P.Y x =>
+    (P.choose x y : ℝ≥0∞) • S.afterAction x y
+  change S.fromState x = mixture
+  letI : IsProbabilityMeasure (S.fromState x) := S.fromStateProbability x
+  have hmixtureUniv : mixture Set.univ = 1 := by
+    have hafterUniv (y : P.Y x) : S.afterAction x y Set.univ = 1 := by
+      letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+      exact measure_univ
+    dsimp only [mixture]
+    rw [Measure.sum_apply _ MeasurableSet.univ]
+    simp_rw [Measure.smul_apply, hafterUniv, smul_eq_mul, mul_one]
+    exact PMF.tsum_coe (P.choose x)
+  apply ext_of_generate_finite
+    {U | ∃ k, ∃ h : DDPFinitePath P k, U = DDPCylinder P h}
+    rfl (isPiSystem_ddpCylinders P)
+  · intro U hU
+    rcases hU with ⟨k, h, rfl⟩
+    cases k with
+    | zero =>
+        dsimp only [mixture]
+        rw [Measure.sum_apply _ (measurableSet_ddpCylinder P h)]
+        by_cases hstart : h.x 0 = x
+        · rw [S.fromStateCylinder x 0 h hstart]
+          simp_rw [Measure.smul_apply, smul_eq_mul,
+            S.afterAction_zeroCylinder_eq_one P x _ h hstart, mul_one]
+          simp only [DDPFinitePath.probability]
+          rw [PMF.tsum_coe]
+          simp
+        · rw [S.fromState_cylinder_eq_zero_of_wrong P x h hstart]
+          simp_rw [Measure.smul_apply, smul_eq_mul,
+            S.afterAction_zeroCylinder_eq_zero P x _ h hstart, mul_zero]
+          exact tsum_zero.symm
+    | succ k =>
+        dsimp only [mixture]
+        rw [Measure.sum_apply _ (measurableSet_ddpCylinder P h)]
+        simp_rw [Measure.smul_apply, smul_eq_mul]
+        by_cases hstart : h.x 0 = x
+        · cases hstart
+          rw [S.fromStateCylinder (h.x 0) (k + 1) h rfl]
+          have hsum : (∑' other : P.Y (h.x 0),
+              (P.choose (h.x 0) other : ℝ≥0∞) *
+                S.afterAction (h.x 0) other (DDPCylinder P h)) =
+              (P.choose (h.x 0) (h.y 0) : ℝ≥0∞) *
+                S.afterAction (h.x 0) (h.y 0) (DDPCylinder P h) := by
+            apply tsum_eq_single (L := SummationFilter.unconditional _) (h.y 0)
+            intro other hother
+            rw [S.afterAction_cylinder_eq_zero_of_wrong P (h.x 0) other h]
+            · simp
+            · right
+              intro heq
+              exact hother (eq_of_heq heq.symm)
+          rw [hsum, S.afterActionCylinder (h.x 0) (h.y 0) k h rfl (by rfl)]
+          exact h.probability_eq_choose_mul_afterActionProbability P
+        · rw [S.fromState_cylinder_eq_zero_of_wrong P x h hstart]
+          simp_rw [S.afterAction_cylinder_eq_zero_of_wrong P x _ h (Or.inl hstart),
+            mul_zero]
+          exact tsum_zero.symm
+  · rw [measure_univ, hmixtureUniv]
 
 /-- A lower bound for all values in a decision process. -/
 def IsDDPValueLowerBound (P : DiscreteDecisionProcess) (L : ℝ) : Prop :=
