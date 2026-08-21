@@ -298,6 +298,32 @@ theorem total_transientOccupation_le
   exact hsum_le_potential.trans
     (hpoint_le_norm.trans certificate.potential_norm_le)
 
+/-- At some finite time, the probability of remaining outside the closed
+core is smaller than any prescribed positive threshold. -/
+theorem exists_iter_transientCharge_lt
+    (certificate : ClosedCoreTransienceCertificate kernel core)
+    {threshold : ℝ} (hthreshold : 0 < threshold) (source : S) :
+    ∃ steps, expect (Math.PMFIter.iter kernel steps source)
+      (transientCharge core) < threshold := by
+  let occupationBound :=
+    (certificate.horizon : ℝ) / certificate.minorization
+  obtain ⟨horizon, hhorizon⟩ :=
+    exists_nat_gt (occupationBound / threshold)
+  have hlarge : occupationBound < (horizon : ℝ) * threshold :=
+    (div_lt_iff₀ hthreshold).mp hhorizon
+  by_contra hnot
+  push Not at hnot
+  have hlower : (horizon : ℝ) * threshold ≤
+      ∑ time ∈ Finset.range horizon,
+        expect (Math.PMFIter.iter kernel time source)
+          (transientCharge core) := by
+    calc
+      (horizon : ℝ) * threshold =
+          ∑ _time ∈ Finset.range horizon, threshold := by simp
+      _ ≤ _ := Finset.sum_le_sum fun time _ => hnot time
+  have hupper := certificate.total_transientOccupation_le horizon source
+  exact (not_lt_of_ge (hlower.trans hupper)) hlarge
+
 /-- The off-core indicator has zero harmonic component in any
 harmonic-plus-Poisson decomposition. -/
 theorem harmonicComponent_transientCharge_eq_zero
