@@ -9272,6 +9272,48 @@ private theorem quittingDDPFinitePath_reachable
         exact hfactor ⟨m, by omega⟩
   exact go j.1 (by omega)
 
+/-- An unreachable state has zero mass under the raw law of the quitting DDP. -/
+private theorem quittingDDPRawLaw_state_eq_zero_of_unreachable
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM)) (i : ℕ)
+    (state : QuittingDDPState G) (hunreachable : ¬IsQuittingDDPReachable T i state) :
+    (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+        {stages | (stages i).1 = state} = 0 := by
+  let P := quittingDecisionProcess G p n T M hM
+  let H := {path : DDPFinitePath P i // path.x (Fin.last i) = state}
+  let C : H → Set (ℕ → DDPStage P) := fun path =>
+    DDPPath.ofRaw P ⁻¹' DDPCylinder P path.1
+  have hstateUnion : {stages : ℕ → DDPStage P | (stages i).1 = state} = ⋃ path, C path := by
+    ext stages
+    simp only [mem_setOf_eq, mem_iUnion, C]
+    constructor
+    · intro hstate
+      let path := (DDPPath.ofRaw P stages).prefix P i
+      refine ⟨⟨path, ?_⟩, rfl⟩
+      simpa [path, DDPPath.prefix, DDPPath.ofRaw] using hstate
+    · rintro ⟨path, hpath⟩
+      change (DDPPath.ofRaw P stages).prefix P i = path.1 at hpath
+      have hlast := congrArg (fun q : DDPFinitePath P i => q.x (Fin.last i)) hpath
+      exact hlast.trans path.2
+  have hmeasure (path : H) : P.rawLawFrom (0, ∅) (C path) = 0 := by
+    by_cases hstart : path.1.x 0 = (0, ∅)
+    · rw [P.rawLawFrom_ddpCylinder (0, ∅) path.1 hstart]
+      by_contra hprobability
+      apply hunreachable
+      have hreachable := quittingDDPFinitePath_reachable G p n T M hM path.1 hstart
+        hprobability (Fin.last i)
+      rw [path.2] at hreachable
+      simpa [P] using hreachable
+    · exact P.rawLawFrom_ddpCylinder_eq_zero_of_wrong S (0, ∅) path.1 hstart
+  change P.rawLawFrom (0, ∅) {stages | (stages i).1 = state} = 0
+  rw [hstateUnion]
+  apply nonpos_iff_eq_zero.mp
+  calc
+    P.rawLawFrom (0, ∅) (⋃ path, C path) ≤ ∑' path, P.rawLawFrom (0, ∅) (C path) :=
+      measure_iUnion_le _
+    _ = 0 := by simp_rw [hmeasure]; simp
+
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
 `F_δ` profile with unbounded quit mass generates a `3ε`-equilibrium.  The generated
