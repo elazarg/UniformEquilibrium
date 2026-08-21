@@ -3,7 +3,7 @@ import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeByThreeZeroDiagonalQ
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
-import UniformEquilibrium.Quitting.AbsorptionPath.RealizedMarkedAbsorptionCylinder
+import UniformEquilibrium.Quitting.AbsorptionPath.HomogeneousContinuousPath
 
 /-!
 # Ashkenazi--Golan--Krasikov--Rainer--Solan (2022)
@@ -23,6 +23,7 @@ are retained verbatim in comments at their paper position.
 namespace Literature.AshkenaziGolanKrasikovRainerAndSolan2022
 
 open GameTheory QuittingLCPClassification
+open GameTheory.QuittingAbsorptionPath
 open Filter Set
 open scoped Topology
 
@@ -208,120 +209,18 @@ unconditional first disjunct. -/
 /-! ## Section 4: Definition 4.1 -/
 
 /-! **Definition 4.1 (paper).** The paper's ambient `𝔽` consists of cadlag,
-coordinatewise nondecreasing paths `π : [0,1] → [0,1]^{A*}`. The bound
-`π̂_t=∑ₐπ_t(a)≤1` is subsequently derived for absorption paths; it is not
-part of the definition of `𝔽`. The following structure therefore stores only
-the coordinate bounds, monotonicity, and the two one-sided limit clauses. -/
-structure CadlagPath where
-  /- The carrier is `ℝ` for convenient filters; all mathematical constraints
-  and all AP predicates below restrict times to `Icc 0 1`. -/
-  value : ℝ → {S : Finset ι // S.Nonempty} → ℝ
-  leftValue : ℝ → {S : Finset ι // S.Nonempty} → ℝ
-  value_mem : ∀ t ∈ Icc (0 : ℝ) 1, ∀ a, 0 ≤ value t a ∧ value t a ≤ 1
-  monotone : ∀ a, MonotoneOn (fun t => value t a) (Icc 0 1)
-  right_continuous : ∀ a t, t ∈ Icc (0 : ℝ) 1 →
-    Tendsto (fun s => value s a) (nhdsWithin t (Icc t 1)) (𝓝 (value t a))
-  left_limit : ∀ a t, t ∈ Icc (0 : ℝ) 1 →
-    Tendsto (fun s => value s a) (nhdsWithin t (Icc 0 t \ {t}))
-      (𝓝 (leftValue t a))
-  left_zero : ∀ a, leftValue 0 a = 0
+coordinatewise nondecreasing paths `π : [0,1] → [0,1]^{A*}`. The reusable
+`GameTheory.QuittingAbsorptionPath` interface implements this ambient space
+without silently adding the subsequently derived bound `π̂_t≤1`. -/
 
-noncomputable def pathTotal (path : CadlagPath (ι := ι)) (t : ℝ) : ℝ :=
-  ∑ a, path.value t a
+/-! Conditions (A.1)--(A.4), the payoff path
+`γ_t(π) = (∑ₐ(π₁(a)-π_t(a))r(a))/(1-π̂_t)`, and continuity
+`T(π)=[0,1]` are the corresponding definitions in that interface. -/
 
-def pathJump (path : CadlagPath (ι := ι)) (t : ℝ)
-    (a : {S : Finset ι // S.Nonempty}) : ℝ := path.value t a - path.leftValue t a
-
-def pathTimes (path : CadlagPath (ι := ι)) : Set ℝ :=
-  {t | t ∈ Icc 0 1 ∧ pathTotal path t = t}
-
-def pathJumps (path : CadlagPath (ι := ι)) : Set ℝ :=
-  {t | t ∈ Icc 0 1 ∧ ∃ a, pathJump path t a ≠ 0}
-
-noncomputable def pathRightDerivative (path : CadlagPath (ι := ι)) (t : ℝ)
-    (a : {S : Finset ι // S.Nonempty}) : ℝ :=
-  Filter.liminf (fun s => (path.value s a - path.value t a) / (s - t))
-    (nhdsWithin t (Ioo t 1))
-
-/-! (A.2) is stated directly using connected components of the complement of
-`S(π) ∪ T(π)`.  The `sSup` endpoint is the paper's right endpoint. -/
-def AbsorptionPathA2 (path : CadlagPath (ι := ι)) : Prop :=
-  ∀ t ∈ Icc (0 : ℝ) 1 \ (pathJumps path ∪ pathTimes path),
-    ∀ s ∈ connectedComponentIn
-      (Icc 0 1 \ (pathJumps path ∪ pathTimes path)) t,
-      pathTotal path s = sSup
-        (connectedComponentIn (Icc 0 1 \ (pathJumps path ∪ pathTimes path)) t)
-
-def IsAbsorptionPath (path : CadlagPath (ι := ι)) : Prop :=
-  (∀ t ∈ Icc (0 : ℝ) 1, t ≤ pathTotal path t) ∧ AbsorptionPathA2 path ∧
-  (∀ t ∈ pathJumps path, ∃ ξ : ι → PMF Bool, ∀ a,
-    pathJump path t a / (1 - t) = quittingRootCoalitionMass ξ a.1) ∧
-  (∀ t ∈ pathTimes path, t ≠ 1 → ∀ a,
-    pathRightDerivative path t a ≠ 0 → a.1.card = 1)
-
-def AbsorptionPath := {path : CadlagPath (ι := ι) // IsAbsorptionPath path}
-
-/-! **Payoff path.** For `t<1`, the paper defines
-`γ_t(π) = (∑ₐ(π₁(a)-π_t(a))r(a))/(1-π̂_t)`, and defines it as zero when
-`π̂_t=1`. -/
-noncomputable def absorptionPathPayoff
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (path : AbsorptionPath (ι := ι)) (t : ℝ) : Payoff ι :=
-  if t ∈ Icc (0 : ℝ) 1 then
-    if pathTotal path.1 t < 1 then
-      fun who => (∑ a, (path.1.value 1 a - path.1.value t a) * reward a who) /
-        (1 - pathTotal path.1 t)
-    else 0
-  else 0
-
-def IsContinuousAbsorptionPath (path : AbsorptionPath (ι := ι)) : Prop :=
-  pathTimes path.1 = Icc 0 1
-
-/-! **Definition 4.11, SP.1--SP.2.** The next predicate is the actual
-playerwise sequential ε-perfect AP test: at jumps with post-jump mass below
-one it applies the quitting-row ε-perfect test to the ξ witnessing (A.3); on
-continuous portions it states (SP.2a) and (SP.2b), including the positive
-right-derivative implication. -/
-def AbsorptionPathJumpRelation (path : AbsorptionPath (ι := ι))
-    (t : ℝ) (ξ : ι → PMF Bool) : Prop :=
-  ∀ a, pathJump path.1 t a / (1 - t) = quittingRootCoalitionMass ξ a.1
-
-/-! Definition 4.1 supplies one product-row witness at every jump.  We select
-one witness from the path itself, once for each time, so Definition 4.11 uses
-the same `ξₜ` for every player rather than moving the existential quantifier
-inside the player quantifier. -/
-noncomputable def absorptionPathJumpRoot
-    (path : AbsorptionPath (ι := ι)) (t : ℝ) : ι → PMF Bool := by
-  classical
-  exact if ht : t ∈ pathJumps path.1 then
-      Classical.choose (path.property.2.2.1 t ht)
-    else
-      fun _ => PMF.pure false
-
-theorem absorptionPathJumpRoot_relation
-    (path : AbsorptionPath (ι := ι)) {t : ℝ} (ht : t ∈ pathJumps path.1) :
-    AbsorptionPathJumpRelation path t (absorptionPathJumpRoot path t) := by
-  simp only [absorptionPathJumpRoot, dif_pos ht]
-  exact Classical.choose_spec (path.property.2.2.1 t ht)
-
-def IsPlayerSequentiallyPerfectAbsorptionPath
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (path : AbsorptionPath (ι := ι)) (who : ι) (ε : ℝ) : Prop :=
-  (∀ t ∈ pathJumps path.1, pathTotal path.1 t < 1 →
-      PlayerEpsilonPerfectRow reward (absorptionPathPayoff reward path t)
-        (absorptionPathJumpRoot path t) who ε) ∧
-    (∀ t ∈ pathTimes path.1, t ≠ 1 →
-      reward ⟨{who}, Finset.singleton_nonempty who⟩ who - ε ≤
-        absorptionPathPayoff reward path t who ∧
-      (pathRightDerivative path.1 t
-          ⟨{who}, Finset.singleton_nonempty who⟩ > 0 →
-        absorptionPathPayoff reward path t who ≤
-          reward ⟨{who}, Finset.singleton_nonempty who⟩ who + ε))
-
-def IsSequentiallyPerfectAbsorptionPath
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (path : AbsorptionPath (ι := ι)) (ε : ℝ) : Prop :=
-  ∀ who, IsPlayerSequentiallyPerfectAbsorptionPath reward path who ε
+/-! **Definition 4.11, SP.1--SP.2.** The production interface selects one
+product-row witness from (A.3) at every jump and uses that same row for every
+player in (SP.1).  Its playerwise predicate also states both continuous
+conditions (SP.2a)--(SP.2b), including the positive-right-derivative clause. -/
 
 /-! **Proposition 4.6 (paper).** For every absorption path `π` there is a
 sequence of absorbing behavior profiles `(xᵏ)` whose induced paths `πˣᵏ`
@@ -405,11 +304,11 @@ equilibrium exists, i.e. there is a continuous, sequentially 0-perfect
 absorption path. The paper implicitly assumes that the finite player set is
 nonempty; without that assumption (A.1) makes the conclusion false at every
 positive time. No exact proof is present in this repository: the missing
-boundary is the paper's viability-theory construction of a path in the
-paper's weak absorption-path space, including its limiting and
-sequential-perfectness arguments. The faithful path predicates above are
-therefore retained, but this theorem is deliberately kept as an open paper
-statement rather than an assumed or proxy Lean result. -/
+boundary is now confined to the standard-`Q` side of the exact projective-`Q`
+split.  The homogeneous side is proved by the explicit linear path
+`exists_continuous_zeroPerfect_of_homogeneous`; the remaining side is the
+paper's viability-theory construction, whose printed control correspondence
+does not have the claimed closed-graph property. -/
 theorem theorem5_2
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -417,6 +316,10 @@ theorem theorem5_2
     ∃ path : AbsorptionPath (ι := ι),
       IsContinuousAbsorptionPath path ∧
       IsSequentiallyPerfectAbsorptionPath reward path 0 := by
-  sorry
+  have hprojective : IsProjectiveQMatrix (normalizedSoloMatrix reward) := hq.1
+  rw [isProjectiveQMatrix_iff_standard_or_homogeneous] at hprojective
+  rcases hprojective with hstandard | hhomogeneous
+  · sorry
+  · exact exists_continuous_zeroPerfect_of_homogeneous reward hhomogeneous
 
 end Literature.AshkenaziGolanKrasikovRainerAndSolan2022

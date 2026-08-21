@@ -146,15 +146,13 @@ theorem exists_punishRow_stationaryUnilateralCap_le
 
 /-! ## S.3: sequentially perfect absorbing profiles -/
 
-/-- **One-stage `ε`-perfectness of a product row at a continuation vector**,
-written out from the paper's Definition 3.1: no action beats the row's own
-value by more than `ε`, and no action in the row's support falls below it by
-more than `ε`. -/
-def QuittingRowεPerfect
+/-- **One player's one-stage `ε`-perfectness at a product row**: neither pure
+action beats the row's own value by more than `ε`, and every action in that
+player's support is within `ε` from below. -/
+def QuittingPlayerRowεPerfect
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool) (ε : ℝ) : Prop :=
-  ∀ who : ι,
-    quittingRootQuitPayoff reward tail root who ≤
+    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι) (ε : ℝ) : Prop :=
+  quittingRootQuitPayoff reward tail root who ≤
         quittingRootSuccessorPayoff reward tail root who + ε ∧
       quittingRootContinuePayoff reward tail root who ≤
         quittingRootSuccessorPayoff reward tail root who + ε ∧
@@ -164,6 +162,13 @@ def QuittingRowεPerfect
       (root who false ≠ 0 →
         quittingRootSuccessorPayoff reward tail root who - ε ≤
           quittingRootContinuePayoff reward tail root who)
+
+/-- **One-stage `ε`-perfectness of a product row at a continuation vector**,
+written out from the paper's Definition 3.1 for every player. -/
+def QuittingRowεPerfect
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) (ε : ℝ) : Prop :=
+  ∀ who : ι, QuittingPlayerRowεPerfect reward tail root who ε
 
 /-- **Branch S.3.**  For every positive tolerance there is an absorbing root
 sequence at which every stage's row is `ε`-perfect against that sequence's own
