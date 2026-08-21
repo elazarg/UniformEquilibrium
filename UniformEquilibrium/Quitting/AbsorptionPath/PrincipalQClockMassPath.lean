@@ -1179,6 +1179,92 @@ def PrincipalQClockMassPath.initialSegment
     ext
     simp
 
+omit [DecidableEq ι] in
+/-- Restricting a clock mass path to an initial segment preserves its mesh
+support bound. -/
+theorem PrincipalQClockMassPath.isMeshSupported_initialSegment
+    {M : ι → ι → ℝ} {stepBound : ℝ}
+    {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (cut : unitInterval) (hsupported : path.IsMeshSupported stepBound) :
+    (path.initialSegment cut).IsMeshSupported stepBound := by
+  intro who first second hle hincrease
+  by_cases hcutZero : cut = 0
+  · subst cut
+    have hmass (parameter : unitInterval) :
+        (path.initialSegment 0).mass parameter = path.mass 0 := by
+      change path.initialSegmentMass 0 parameter = path.mass 0
+      rw [path.initialSegmentMass_apply]
+      congr 2
+      simp
+    rw [hmass first, hmass second] at hincrease
+    exact (lt_irrefl _ hincrease).elim
+  · have hcutPos : 0 < (cut : ℝ) :=
+      lt_of_le_of_ne cut.property.1 fun heq =>
+        hcutZero (Subtype.ext heq.symm)
+    let first' : unitInterval :=
+      ⟨(first : ℝ) * (cut : ℝ), by
+        constructor
+        · exact mul_nonneg first.property.1 cut.property.1
+        · exact mul_le_one₀ first.property.2 cut.property.1
+            cut.property.2⟩
+    let second' : unitInterval :=
+      ⟨(second : ℝ) * (cut : ℝ), by
+        constructor
+        · exact mul_nonneg second.property.1 cut.property.1
+        · exact mul_le_one₀ second.property.2 cut.property.1
+            cut.property.2⟩
+    have hle' : first' ≤ second' := by
+      exact mul_le_mul_of_nonneg_right
+        (show (first : ℝ) ≤ (second : ℝ) from hle) cut.property.1
+    have hincrease' : path.mass first' who < path.mass second' who := by
+      change path.initialSegmentMass cut first who <
+        path.initialSegmentMass cut second who at hincrease
+      rw [path.initialSegmentMass_apply,
+        path.initialSegmentMass_apply] at hincrease
+      simpa only [first', second'] using hincrease
+    obtain ⟨witness, hwitness, hwitnessBound⟩ :=
+      hsupported who first' second' hle' hincrease'
+    let witness' : unitInterval :=
+      ⟨(witness : ℝ) / (cut : ℝ), by
+        constructor
+        · exact div_nonneg witness.property.1 cut.property.1
+        · exact (div_le_one hcutPos).2
+            (hwitness.2.trans (show second' ≤ cut from by
+              change (second : ℝ) * (cut : ℝ) ≤ (cut : ℝ)
+              nlinarith [second.property.1, second.property.2,
+                cut.property.1]))⟩
+    have hwitnessParam :
+        (⟨(witness' : ℝ) * (cut : ℝ), by
+          constructor
+          · exact mul_nonneg witness'.property.1 cut.property.1
+          · exact mul_le_one₀ witness'.property.2 cut.property.1
+              cut.property.2⟩ : unitInterval) = witness := by
+      apply Subtype.ext
+      dsimp [witness']
+      exact div_mul_cancel₀ _ hcutPos.ne'
+    refine ⟨witness', ?_, ?_⟩
+    · constructor
+      · change (first : ℝ) ≤ (witness : ℝ) / (cut : ℝ)
+        apply (le_div_iff₀ hcutPos).2
+        exact hwitness.1
+      · change (witness : ℝ) / (cut : ℝ) ≤ (second : ℝ)
+        apply (div_le_iff₀ hcutPos).2
+        exact hwitness.2
+    · change (principalQClockScaledState initial +
+          principalQMassImage M (path.initialSegmentMass cut witness')) who ≤ _
+      rw [path.initialSegmentMass_apply, hwitnessParam]
+      have hclock : principalQNormalizedClock initial (path.nodeAt cut) witness' =
+          principalQNormalizedClock initial node witness := by
+        unfold principalQNormalizedClock principalQClockDuration
+        rw [path.nodeAt_time]
+        unfold principalQNormalizedClock principalQClockDuration
+        dsimp [witness']
+        field_simp [hcutPos.ne']
+        ring
+      rw [hclock]
+      exact hwitnessBound
+
 /-! ## Compact limits of normalized clock mass paths -/
 
 omit [DecidableEq ι] in
@@ -1542,22 +1628,26 @@ theorem PrincipalQClockReachable.exists_meshSupportedMassPath
 
 omit [DecidableEq ι] in
 /-- From any positive boundary clock, the principal-Q construction supplies
-an exact cumulative-mass path to every prescribed later finite clock. -/
-theorem exists_principalQClockMassPath_at_time
+an exact mesh-supported cumulative-mass path to every prescribed later
+finite clock. -/
+theorem exists_principalQClockMassPath_at_time_isMeshSupported
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
     (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
     (hstepBound : 0 < stepBound) (initial : PrincipalQClockNode ι)
     (target : ℝ) (hinitialTarget : initial.time ≤ target) :
     ∃ node : PrincipalQClockNode ι, node.time = target ∧
-      Nonempty (PrincipalQClockMassPath M initial node) := by
+      ∃ path : PrincipalQClockMassPath M initial node,
+        path.IsMeshSupported stepBound := by
   classical
   rcases eq_or_lt_of_le hinitialTarget with htarget | htarget
   · subst target
-    exact ⟨initial, rfl, ⟨initialPrincipalQClockMassPath M initial⟩⟩
+    exact ⟨initial, rfl, initialPrincipalQClockMassPath M initial,
+      initialPrincipalQClockMassPath_isMeshSupported M initial stepBound⟩
   · obtain ⟨later, hlaterReachable, htargetLater⟩ :=
       exists_principalQClockReachable_time_ge M hdiag hQ hstepBound
         initial target
-    obtain ⟨path⟩ := hlaterReachable.exists_massPath
+    obtain ⟨path, hsupported⟩ :=
+      hlaterReachable.exists_meshSupportedMassPath
     have hlaterDuration : 0 < principalQClockDuration initial later := by
       exact sub_pos.mpr (htarget.trans_le htargetLater)
     let cut : unitInterval :=
@@ -1574,6 +1664,22 @@ theorem exists_principalQClockMassPath_at_time
               principalQClockDuration initial later = target
       rw [div_mul_cancel₀ _ hlaterDuration.ne']
       ring
-    exact ⟨path.nodeAt cut, hnodeTime, ⟨path.initialSegment cut⟩⟩
+    exact ⟨path.nodeAt cut, hnodeTime, path.initialSegment cut,
+      path.isMeshSupported_initialSegment cut hsupported⟩
+
+omit [DecidableEq ι] in
+/-- From any positive boundary clock, the principal-Q construction supplies
+an exact cumulative-mass path to every prescribed later finite clock. -/
+theorem exists_principalQClockMassPath_at_time
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) {stepBound : ℝ}
+    (hstepBound : 0 < stepBound) (initial : PrincipalQClockNode ι)
+    (target : ℝ) (hinitialTarget : initial.time ≤ target) :
+    ∃ node : PrincipalQClockNode ι, node.time = target ∧
+      Nonempty (PrincipalQClockMassPath M initial node) := by
+  obtain ⟨node, hnodeTime, path, _hsupported⟩ :=
+    exists_principalQClockMassPath_at_time_isMeshSupported M hdiag hQ
+      hstepBound initial target hinitialTarget
+  exact ⟨node, hnodeTime, ⟨path⟩⟩
 
 end GameTheory.QuittingLCPClassification
