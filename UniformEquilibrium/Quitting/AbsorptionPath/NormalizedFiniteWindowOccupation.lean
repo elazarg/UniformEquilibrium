@@ -827,6 +827,39 @@ theorem finiteWindow_singletonMass_mono_fuel
         (quittingJointSurvivalWeight_nonneg roots start phase)
         (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg _ _)
 
+/-- Singleton first-event mass splits into the finite prefix and the surviving
+copy of the same mass in the restarted tail. -/
+theorem sequenceSingletonMass_eq_finiteWindow_add_survival_mul
+    (roots : ℕ → ι → PMF Bool) (start fuel : ℕ) (owner : ι) :
+    quittingRootSequenceSingletonMass roots start owner =
+      (⟨start, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass owner +
+        quittingJointSurvivalWeight roots start fuel *
+          quittingRootSequenceSingletonMass roots (start + fuel) owner := by
+  let term : ℕ → ℝ := fun offset =>
+    quittingJointSurvivalWeight roots start offset *
+      quittingRootCoalitionMass (roots (start + offset)) {owner}
+  have hsummable : Summable term :=
+    summable_quittingJointSurvivalWeight_mul_singletonMass roots start owner
+  have hsplit := hsummable.sum_add_tsum_nat_add fuel
+  unfold quittingRootSequenceSingletonMass
+  unfold QuittingFiniteRootWindow.singletonMass
+    QuittingFiniteRootWindow.survivalWeight QuittingFiniteRootWindow.rootAt
+  rw [Fin.sum_univ_eq_sum_range
+    (fun offset =>
+      quittingJointSurvivalWeight roots start offset *
+        quittingRootCoalitionMass (roots (start + offset)) {owner}) fuel]
+  change (∑' offset, term offset) =
+    (∑ offset ∈ Finset.range fuel, term offset) + _
+  rw [← hsplit]
+  congr 1
+  rw [← tsum_mul_left]
+  apply tsum_congr
+  intro offset
+  dsimp only [term]
+  rw [show offset + fuel = fuel + offset by omega,
+    quittingJointSurvivalWeight_add, Nat.add_assoc]
+  ring
+
 /-- A finite window's collision mass is at most the infinite collision mass
 from the same start. -/
 theorem finiteWindow_collisionMass_le_sequenceCollisionMass
