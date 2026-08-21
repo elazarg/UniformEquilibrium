@@ -385,16 +385,33 @@ whether existence of a continuous equilibrium along which all players quit
 with positive probability implies that `R` and all principal submatrices are
 `Q`-matrices. -/
 
+/-- There is no absorption path with an empty player set: at time `1`, (A.1)
+requires positive total absorption mass, but there are no nonempty quitting
+coalitions.  This records the implicit nonemptiness premise of Theorem 5.2. -/
+theorem no_absorptionPath_empty : IsEmpty (AbsorptionPath (ι := Empty)) := by
+  constructor
+  intro path
+  letI : IsEmpty {S : Finset Empty // S.Nonempty} :=
+    ⟨fun coalition => by
+      obtain ⟨player, _⟩ := coalition.property
+      exact player.elim⟩
+  have hone := path.property.1 1 (by norm_num : (1 : ℝ) ∈ Icc 0 1)
+  rw [pathTotal, Finset.sum_of_isEmpty] at hone
+  norm_num at hone
+
 /-! **Theorem 5.2 (paper v1, open here).** If `R(Γ)` and every principal
 "minor" (read: principal submatrix) are `Q`-matrices, then a continuous
 equilibrium exists, i.e. there is a continuous, sequentially 0-perfect
-absorption path. No exact proof is present in this repository: the missing
+absorption path. The paper implicitly assumes that the finite player set is
+nonempty; without that assumption (A.1) makes the conclusion false at every
+positive time. No exact proof is present in this repository: the missing
 boundary is the paper's viability-theory construction of a path in the
 paper's weak absorption-path space, including its limiting and
 sequential-perfectness arguments. The faithful path predicates above are
 therefore retained, but this theorem is deliberately kept as an open paper
 statement rather than an assumed or proxy Lean result. -/
 theorem theorem5_2
+    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hq : PrincipalQCondition (normalizedSoloMatrix reward)) :
     ∃ path : AbsorptionPath (ι := ι),
