@@ -4726,6 +4726,159 @@ private theorem ReturnValueData.valueY_sub_value_le_noReturn
   rw [hcollapse] at hcenter
   exact hcenter
 
+/-- At a state with action-independent return value, mean decision variation is at most
+`2M` times the state's no-return probability. -/
+private theorem ReturnValueData.tsum_choose_mul_abs_increment_le
+    {P : DiscreteDecisionProcess} {S : DDPSemantics P} (R : ReturnValueData P S)
+    (A : Set P.X) (x : P.X) (hcommon : ∃ r : ℝ, ∀ y : P.Y x, R.value A x y = r) :
+    (∑' y : P.Y x, (P.choose x y).toReal * |DDPStage.increment P ⟨x, y⟩|) ≤
+      2 * P.valueDifferenceBound * NoReturnProbability P S A x := by
+  let a : P.Y x → ℝ := fun y => (P.choose x y).toReal
+  have haSummable : Summable a := ENNReal.summable_toReal (by
+    rw [PMF.tsum_coe]
+    simp)
+  have hqle (y : P.Y x) : (ReturnProbability P S A x y).toReal ≤ 1 := by
+    rw [← ENNReal.toReal_one]
+    apply ENNReal.toReal_mono (by simp)
+    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    calc
+      ReturnProbability P S A x y ≤ S.afterAction x y Set.univ :=
+        measure_mono (subset_univ _)
+      _ = 1 := measure_univ
+  obtain ⟨r, hactionBound⟩ : ∃ r : ℝ, ∀ y : P.Y x,
+      |P.valueY x y - r| ≤ P.valueDifferenceBound *
+        (1 - (ReturnProbability P S A x y).toReal) := by
+    by_cases hpositive : ∃ y : P.Y x, 0 < ReturnProbability P S A x y
+    · rcases hpositive with ⟨positiveAction, hpositive⟩
+      rcases hcommon with ⟨r, hr⟩
+      refine ⟨r, ?_⟩
+      intro y
+      by_cases hy : 0 < ReturnProbability P S A x y
+      · simpa only [hr y] using R.valueY_sub_value_le_noReturn A x y hy
+      · have hyzero : ReturnProbability P S A x y = 0 :=
+          nonpos_iff_eq_zero.mp (not_lt.mp hy)
+        have huniform := R.valueY_sub_value_le_of_positive A x positiveAction
+          hpositive x y
+        rw [hr positiveAction] at huniform
+        simpa [hyzero] using huniform
+    · refine ⟨P.valueX x, ?_⟩
+      intro y
+      have hyzero : ReturnProbability P S A x y = 0 :=
+        nonpos_iff_eq_zero.mp (not_lt.mp (not_exists.mp hpositive y))
+      simpa [hyzero] using (P.valueDifference x x y y).2.1
+  let b : P.Y x → ℝ := fun y => P.valueDifferenceBound *
+    (1 - (ReturnProbability P S A x y).toReal)
+  have hbNonneg (y : P.Y x) : 0 ≤ b y :=
+    mul_nonneg (le_trans zero_le_one P.valueDifferenceBound_one) (sub_nonneg.2 (hqle y))
+  have hbLe (y : P.Y x) : b y ≤ P.valueDifferenceBound := by
+    calc
+      b y ≤ P.valueDifferenceBound * 1 := by
+        apply mul_le_mul_of_nonneg_left _
+          (le_trans zero_le_one P.valueDifferenceBound_one)
+        linarith [show 0 ≤ (ReturnProbability P S A x y).toReal from
+          ENNReal.toReal_nonneg]
+      _ = P.valueDifferenceBound := mul_one _
+  have habSummable : Summable fun y => a y * b y := by
+    apply Summable.of_norm_bounded (haSummable.mul_right P.valueDifferenceBound)
+    intro y
+    rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg,
+      Real.norm_of_nonneg (hbNonneg y)]
+    exact mul_le_mul_of_nonneg_left (hbLe y) ENNReal.toReal_nonneg
+  have habSum : (∑' y, a y * b y) =
+      P.valueDifferenceBound * NoReturnProbability P S A x := by
+    rw [noReturnProbability_eq_tsum P S A x]
+    calc
+      (∑' y, a y * b y) = ∑' y, P.valueDifferenceBound *
+          ((P.choose x y).toReal *
+            (1 - (ReturnProbability P S A x y).toReal)) := by
+        apply tsum_congr
+        intro y
+        simp only [a, b]
+        ring
+      _ = _ := tsum_mul_left
+  have hvalueBound (y : P.Y x) :
+      ‖P.valueY x y‖ ≤ ‖r‖ + P.valueDifferenceBound := by
+    calc
+      ‖P.valueY x y‖ ≤ ‖P.valueY x y - r‖ + ‖r‖ := by
+        simpa only [sub_add_cancel] using norm_add_le (P.valueY x y - r) r
+      _ ≤ b y + ‖r‖ := by
+        gcongr
+        simpa only [Real.norm_eq_abs] using hactionBound y
+      _ ≤ P.valueDifferenceBound + ‖r‖ := by gcongr; exact hbLe y
+      _ = _ := by ring
+  have hvalueSummable : Summable fun y => a y * P.valueY x y :=
+    Summable.of_norm_bounded (haSummable.mul_right (‖r‖ + P.valueDifferenceBound))
+      (fun y => by
+        rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg]
+        exact mul_le_mul_of_nonneg_left (hvalueBound y) ENNReal.toReal_nonneg)
+  have hdiffSummable : Summable fun y => a y * (P.valueY x y - r) := by
+    apply Summable.of_norm_bounded habSummable
+    intro y
+    rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg]
+    exact mul_le_mul_of_nonneg_left
+      (by simpa only [Real.norm_eq_abs] using hactionBound y) ENNReal.toReal_nonneg
+  have hstateEq : P.valueX x - r = ∑' y, a y * (P.valueY x y - r) := by
+    simp_rw [mul_sub]
+    rw [hvalueSummable.tsum_sub (haSummable.mul_right r)]
+    rw [Summable.tsum_mul_right r haSummable, PMF.tsum_toReal]
+    simpa only [a, one_mul] using
+      congrArg (fun value : ℝ => value - r) (P.harmonicX x)
+  have hstateBound : |P.valueX x - r| ≤
+      P.valueDifferenceBound * NoReturnProbability P S A x := by
+    rw [hstateEq]
+    calc
+      |∑' y, a y * (P.valueY x y - r)| ≤
+          ∑' y, ‖a y * (P.valueY x y - r)‖ := by
+        simpa only [Real.norm_eq_abs] using norm_tsum_le_tsum_norm hdiffSummable.norm
+      _ ≤ ∑' y, a y * b y := by
+        apply Summable.tsum_le_tsum
+        · intro y
+          rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg]
+          exact mul_le_mul_of_nonneg_left
+            (by simpa only [Real.norm_eq_abs] using hactionBound y)
+            ENNReal.toReal_nonneg
+        · exact hdiffSummable.norm
+        · exact habSummable
+      _ = _ := habSum
+  have hincrementSummable : Summable fun y =>
+      a y * |DDPStage.increment P ⟨x, y⟩| := by
+    apply Summable.of_norm_bounded
+      (haSummable.mul_right P.valueDifferenceBound)
+    intro y
+    rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg, Real.norm_eq_abs, abs_abs]
+    exact mul_le_mul_of_nonneg_left
+      (by simpa only [Real.norm_eq_abs] using (DDPStage.norm_increment_le P ⟨x, y⟩))
+      ENNReal.toReal_nonneg
+  calc
+    (∑' y, a y * |DDPStage.increment P ⟨x, y⟩|) ≤
+        ∑' y, a y * (b y + |P.valueX x - r|) := by
+      apply Summable.tsum_le_tsum
+      · intro y
+        apply mul_le_mul_of_nonneg_left _ ENNReal.toReal_nonneg
+        calc
+          |DDPStage.increment P ⟨x, y⟩| ≤
+              |P.valueY x y - r| + |P.valueX x - r| := by
+            dsimp only [DDPStage.increment]
+            calc
+              |P.valueY x y - P.valueX x| =
+                  |(P.valueY x y - r) + (r - P.valueX x)| := by ring_nf
+              _ ≤ |P.valueY x y - r| + |r - P.valueX x| := abs_add_le _ _
+              _ = _ := by rw [abs_sub_comm r]
+          _ ≤ b y + |P.valueX x - r| :=
+            add_le_add (hactionBound y) le_rfl
+      · exact hincrementSummable
+      · simpa only [mul_add] using
+          habSummable.add (haSummable.mul_right |P.valueX x - r|)
+    _ = (∑' y, a y * b y) + |P.valueX x - r| := by
+      simp_rw [mul_add]
+      rw [habSummable.tsum_add (haSummable.mul_right |P.valueX x - r|)]
+      rw [Summable.tsum_mul_right |P.valueX x - r| haSummable, PMF.tsum_toReal]
+      simp only [one_mul]
+    _ ≤ 2 * (P.valueDifferenceBound * NoReturnProbability P S A x) := by
+      rw [habSum]
+      linarith
+    _ = 2 * P.valueDifferenceBound * NoReturnProbability P S A x := by ring
+
 /-- A state is varied if one of its actions has a value different from the state value. -/
 def IsVaried (P : DiscreteDecisionProcess) (x : P.X) : Prop :=
   ∃ y, P.valueY x y ≠ P.valueX x
