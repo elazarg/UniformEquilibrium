@@ -123,7 +123,6 @@ import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport
 import Research.Quitting.StoppingLawMixtureFixedPort
 import Research.Quitting.StoppingLawMixtureWitnessStrata
-import Research.Quitting.StoppingLawResetCube
 import Research.Quitting.StoppingLawRetentionChain
 import Research.Quitting.StoppingLawSingletonOrientationNoGo
 import Research.Quitting.StoppingLawTwoOutcomePassportSequence
