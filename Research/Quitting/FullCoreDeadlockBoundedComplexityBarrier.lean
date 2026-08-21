@@ -73,12 +73,83 @@ theorem deadlockMatrix_exists_ne_neg (owner : Player) :
       Matrix.cons_val_zero, Matrix.cons_val_one,
       Matrix.cons_val_two, Matrix.cons_val_three]⟩
 
+/-- Every entry of the deadlock matrix is at most three. -/
+theorem deadlockMatrix_le_three (who owner : Player) :
+    deadlockMatrix who owner ≤ 3 := by
+  fin_cases who <;> fin_cases owner <;>
+    norm_num [deadlockMatrix, Matrix.cons_val_zero,
+      Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three]
+
+@[simp] theorem deadlockMatrix_three_zero :
+    deadlockMatrix 3 0 = -1 := by
+  norm_num [deadlockMatrix, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+
+@[simp] theorem deadlockMatrix_one_zero :
+    deadlockMatrix 1 0 = 2 := by
+  norm_num [deadlockMatrix, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+
+@[simp] theorem deadlockMatrix_two_zero :
+    deadlockMatrix 2 0 = 2 := by
+  norm_num [deadlockMatrix, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+
+@[simp] theorem deadlockMatrix_two_three :
+    deadlockMatrix 2 3 = -1 := by
+  norm_num [deadlockMatrix, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+
+@[simp] theorem deadlockMatrix_one_three :
+    deadlockMatrix 1 3 = -3 := by
+  norm_num [deadlockMatrix, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+
+@[simp] theorem deadlockMatrix_zero_three :
+    deadlockMatrix 0 3 = 3 := by
+  norm_num [deadlockMatrix, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+
+@[simp] theorem deadlockMatrix_zero_two :
+    deadlockMatrix 0 2 = -1 := by
+  norm_num [deadlockMatrix, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+
+@[simp] theorem deadlockMatrix_one_two :
+    deadlockMatrix 1 2 = 1 := by
+  norm_num [deadlockMatrix, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+
+@[simp] theorem deadlockMatrix_three_two :
+    deadlockMatrix 3 2 = 1 := by
+  norm_num [deadlockMatrix, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three]
+
+/-- Above the matrix ceiling, every active nonowner update is strictly below
+that ceiling. -/
+theorem idealSingletonClearance_deadlock_lt
+    {owner who : Player} (hne : who ≠ owner)
+    {α B : ℝ} (hα0 : 0 ≤ α) (hα1 : α < 1)
+    {t : Player → ℝ} (ht : t who ≤ B) (hB : 3 < B) :
+    idealSingletonClearance deadlockMatrix owner α t who < B := by
+  rw [idealSingletonClearance, if_neg hne, max_lt_iff]
+  refine ⟨by linarith, ?_⟩
+  have hfirst : α * t who ≤ α * B :=
+    mul_le_mul_of_nonneg_left ht hα0
+  have hsecond :
+      (1 - α) * deadlockMatrix who owner ≤ (1 - α) * 3 :=
+    mul_le_mul_of_nonneg_left (deadlockMatrix_le_three who owner)
+      (sub_nonneg.mpr hα1.le)
+  calc
+    α * t who + (1 - α) * deadlockMatrix who owner ≤
+        α * B + (1 - α) * 3 := add_le_add hfirst hsecond
+    _ < B := by nlinarith
+
 /-- Every off-diagonal entry of the deadlock matrix is nonzero. -/
 theorem deadlockMatrix_ne_zero_of_ne {who owner : Player}
     (hne : who ≠ owner) :
     deadlockMatrix who owner ≠ 0 := by
-  fin_cases who <;> fin_cases owner <;>
-    norm_num [deadlockMatrix] at hne ⊢
+  fin_cases who <;> fin_cases owner <;> simp_all [deadlockMatrix]
 
 /-- A zero-survival block has strictly positive clipping cost for the deadlock
 matrix, independently of its incoming debt. -/
@@ -98,6 +169,8 @@ theorem idealSingletonDebt_deadlock_pos_of_survival_zero
         ∑ other ∈ Finset.univ.erase owner,
           max 0 (-deadlockMatrix other owner) := by
     exact Finset.single_le_sum
+      (s := Finset.univ.erase owner)
+      (f := fun other => max 0 (-deadlockMatrix other owner))
       (fun other _ => le_max_left (0 : ℝ) _) hmem
   rw [idealSingletonDebt_eq_mul_add_cost]
   simp only [zero_mul, zero_add, idealSingletonCost, sub_zero, one_mul]
@@ -169,7 +242,6 @@ theorem deadlock_three_block_ratio_lt
   have hratio : x' / A' = (x + 2 * A) / (6 * A) := by
     rw [hxForm, hAForm]
     field_simp [ne_of_gt hα0, ne_of_gt hα3, ne_of_gt hα2, ne_of_gt hA]
-    ring
   rw [hratio]
   apply (div_lt_div_iff₀ (mul_pos (by norm_num) hA) hA).2
   nlinarith
@@ -287,8 +359,8 @@ theorem localCost_eq_zero_of_debt_zero
   have hsource := lasso.debt_eq_zero_of_debt_zero hzero phase
   have htarget := lasso.debt_eq_zero_of_debt_zero hzero
     (finRotate (K + 1) phase)
-  rw [lasso.debt_step_eq, hsource, zero_mul, zero_add] at htarget
-  exact htarget
+  rw [lasso.debt_step_eq, hsource] at htarget
+  simpa using htarget
 
 /-- Under a zero-debt cycle every survival factor is strictly positive. -/
 theorem survival_pos_of_debt_zero
@@ -303,8 +375,9 @@ theorem survival_pos_of_debt_zero
   have hpositive := idealSingletonDebt_deadlock_pos_of_survival_zero
     (lasso.owner phase) (lasso.clearance phase) (lasso.debt phase)
     (lasso.clearance_nonneg phase)
-  rw [← hsurvival, ← lasso.debt_step] at hpositive
-  rw [htarget] at hpositive
+  have hstep := lasso.debt_step phase
+  rw [← hsurvival] at hstep
+  rw [← hstep, htarget] at hpositive
   exact (lt_irrefl 0) hpositive
 
 /-- At zero total debt, the active owner's incoming clearance vanishes. -/
@@ -367,6 +440,11 @@ theorem noClip_of_debt_zero
   have htermLe : max 0 (-term) ≤ total := by
     dsimp only [term, total]
     exact Finset.single_le_sum
+      (s := Finset.univ.erase (lasso.owner phase))
+      (f := fun other =>
+        max 0 (-(lasso.survival phase * lasso.clearance phase other +
+          (1 - lasso.survival phase) *
+            deadlockMatrix other (lasso.owner phase))))
       (fun other _ => le_max_left (0 : ℝ) _) hmem
   have htermZero : max 0 (-term) = 0 := by
     apply le_antisymm
@@ -400,6 +478,56 @@ theorem clearance_step_owner_eq (phase : Fin (K + 1)) :
   have hstep := congrFun (lasso.clearance_step phase) (lasso.owner phase)
   simpa [idealSingletonClearance] using hstep
 
+/-- Every clearance coordinate of a reduced lasso is bounded by the largest
+positive matrix entry, namely three. -/
+theorem clearance_le_three (phase : Fin (K + 1)) (who : Player) :
+    lasso.clearance phase who ≤ 3 := by
+  by_contra hnot
+  have hphaseGt : 3 < lasso.clearance phase who := lt_of_not_ge hnot
+  obtain ⟨best, _, hbest⟩ := Finset.exists_max_image
+    (Finset.univ : Finset (Fin (K + 1)))
+    (fun current => lasso.clearance current who)
+    Finset.univ_nonempty
+  have hbestGt : 3 < lasso.clearance best who :=
+    hphaseGt.trans_le (hbest phase (Finset.mem_univ phase))
+  let previous := (finRotate (K + 1)).symm best
+  have hpreviousNext : finRotate (K + 1) previous = best :=
+    (finRotate (K + 1)).apply_symm_apply best
+  have hpreviousLe :
+      lasso.clearance previous who ≤ lasso.clearance best who :=
+    hbest previous (Finset.mem_univ previous)
+  by_cases hpreviousOwner : lasso.owner previous = who
+  · let beforePrevious := (finRotate (K + 1)).symm previous
+    have hbeforeNext : finRotate (K + 1) beforePrevious = previous :=
+      (finRotate (K + 1)).apply_symm_apply previous
+    have hbeforeOwner : lasso.owner beforePrevious ≠ who := by
+      intro heq
+      have hne := lasso.owner_ne_next beforePrevious
+      rw [hbeforeNext, heq, hpreviousOwner] at hne
+      exact hne rfl
+    have hbeforeLe :
+        lasso.clearance beforePrevious who ≤ lasso.clearance best who :=
+      hbest beforePrevious (Finset.mem_univ beforePrevious)
+    have hpreviousEq :
+        lasso.clearance previous who = lasso.clearance best who := by
+      have hstep := lasso.clearance_step_owner_eq previous
+      rw [hpreviousOwner, hpreviousNext] at hstep
+      exact hstep.symm
+    have hstrict := idealSingletonClearance_deadlock_lt hbeforeOwner
+      (lasso.survival_nonneg beforePrevious)
+      (lasso.survival_lt_one beforePrevious) hbeforeLe hbestGt
+    have hstep := congrFun (lasso.clearance_step beforePrevious) who
+    rw [hbeforeNext] at hstep
+    rw [hstep] at hpreviousEq
+    linarith
+  · have hstrict := idealSingletonClearance_deadlock_lt hpreviousOwner
+      (lasso.survival_nonneg previous)
+      (lasso.survival_lt_one previous) hpreviousLe hbestGt
+    have hstep := congrFun (lasso.clearance_step previous) who
+    rw [hpreviousNext] at hstep
+    rw [← hstep] at hstrict
+    exact (lt_irrefl _) hstrict
+
 /-- Consecutive owners in a zero-debt cycle have the strict sign orientation
 `M[next,current] < 0 < M[current,next]`. -/
 theorem owner_transition_signs_of_debt_zero
@@ -417,22 +545,26 @@ theorem owner_transition_signs_of_debt_zero
   have hownerNe : currentOwner ≠ nextOwner := by
     simpa only [currentOwner, nextOwner, next] using lasso.owner_ne_next phase
   have hnextNe : nextOwner ≠ currentOwner := hownerNe.symm
-  have hcurrentZero :=
-    lasso.owner_clearance_eq_zero_of_debt_zero hzero phase
-  have hnextZero :=
-    lasso.owner_clearance_eq_zero_of_debt_zero hzero next
+  have hcurrentZero : lasso.clearance phase currentOwner = 0 := by
+    simpa only [currentOwner] using
+      lasso.owner_clearance_eq_zero_of_debt_zero hzero phase
+  have hnextZero : lasso.clearance next nextOwner = 0 := by
+    simpa only [nextOwner] using
+      lasso.owner_clearance_eq_zero_of_debt_zero hzero next
   have hstepNext := congrFun (lasso.clearance_step phase) nextOwner
+  change lasso.clearance next nextOwner =
+    idealSingletonClearance deadlockMatrix currentOwner
+      (lasso.survival phase) (lasso.clearance phase) nextOwner at hstepNext
+  rw [hnextZero, idealSingletonClearance, if_neg hnextNe] at hstepNext
+  have hnoClip := lasso.noClip_of_debt_zero hzero phase
+    (who := nextOwner) (by simpa only [currentOwner] using hnextNe)
+  change 0 ≤ lasso.survival phase * lasso.clearance phase nextOwner +
+    (1 - lasso.survival phase) *
+      deadlockMatrix nextOwner currentOwner at hnoClip
   have hnextEquation :
       lasso.survival phase * lasso.clearance phase nextOwner +
           (1 - lasso.survival phase) *
             deadlockMatrix nextOwner currentOwner = 0 := by
-    change lasso.clearance next nextOwner = _ at hstepNext
-    rw [hnextZero] at hstepNext
-    simp only [idealSingletonClearance, hnextNe, if_false] at hstepNext
-    have hnoClip := lasso.noClip_of_debt_zero hzero phase hnextNe
-    change 0 ≤ lasso.survival phase * lasso.clearance phase nextOwner +
-      (1 - lasso.survival phase) *
-        deadlockMatrix nextOwner currentOwner at hnoClip
     have hle :
         lasso.survival phase * lasso.clearance phase nextOwner +
             (1 - lasso.survival phase) *
@@ -457,12 +589,13 @@ theorem owner_transition_signs_of_debt_zero
     have hleftNonneg := mul_nonneg (lasso.survival_nonneg phase)
       (lasso.clearance_nonneg phase nextOwner)
     nlinarith
-  have hstepCurrent := congrFun (lasso.clearance_step phase) currentOwner
   have hcurrentNextZero : lasso.clearance next currentOwner = 0 := by
-    change lasso.clearance next currentOwner = _ at hstepCurrent
-    simp only [idealSingletonClearance, if_pos rfl] at hstepCurrent
+    have hstepCurrent := lasso.clearance_step_owner_eq phase
+    change lasso.clearance next currentOwner =
+      lasso.clearance phase currentOwner at hstepCurrent
     rw [hstepCurrent, hcurrentZero]
-  have hnoClipNext := lasso.noClip_of_debt_zero hzero next hownerNe
+  have hnoClipNext := lasso.noClip_of_debt_zero hzero next
+    (who := currentOwner) (by simpa only [nextOwner] using hownerNe)
   change 0 ≤ lasso.survival next * lasso.clearance next currentOwner +
       (1 - lasso.survival next) *
         deadlockMatrix currentOwner nextOwner at hnoClipNext
@@ -478,7 +611,9 @@ theorem owner_transition_signs_of_debt_zero
       have hproductNeg := mul_neg_of_pos_of_neg hfactor hmatrixNeg
       linarith
     exact lt_of_le_of_ne hmatrixNonneg (Ne.symm hmatrixNe)
-  simpa only [currentOwner, nextOwner, next] using ⟨hnegative, hpositive⟩
+  change deadlockMatrix nextOwner currentOwner < 0 ∧
+    0 < deadlockMatrix currentOwner nextOwner
+  exact ⟨hnegative, hpositive⟩
 
 /-- The only consecutive-owner transitions compatible with zero debt are the
 four directed edges displayed in the mathematical proof. -/
@@ -494,9 +629,9 @@ theorem owner_transition_of_debt_zero
       (lasso.owner phase = 3 ∧
         lasso.owner (finRotate (K + 1) phase) = 2) := by
   have hsign := lasso.owner_transition_signs_of_debt_zero hzero phase
-  fin_cases hcurrent : lasso.owner phase <;>
-    fin_cases hnext : lasso.owner (finRotate (K + 1) phase) <;>
-    norm_num [deadlockMatrix, hcurrent, hnext] at hsign ⊢
+  generalize hcurrent : lasso.owner phase = current at hsign ⊢
+  generalize hnext : lasso.owner (finRotate (K + 1) phase) = next at hsign ⊢
+  fin_cases current <;> fin_cases next <;> simp_all [deadlockMatrix]
 
 /-- Deterministic successor map forced by the four allowed owner transitions. -/
 def forcedOwnerNext : Player → Player := ![3, 2, 0, 2]
@@ -508,8 +643,19 @@ theorem owner_next_eq_forcedOwnerNext
     lasso.owner (finRotate (K + 1) phase) =
       forcedOwnerNext (lasso.owner phase) := by
   rcases lasso.owner_transition_of_debt_zero hzero phase with
-    h | h | h | h <;>
-    simp [forcedOwnerNext, h.1, h.2]
+    h | h | h | h
+  · rw [h.1]
+    change lasso.owner (finRotate (K + 1) phase) = 3
+    exact h.2
+  · rw [h.1]
+    change lasso.owner (finRotate (K + 1) phase) = 2
+    exact h.2
+  · rw [h.1]
+    change lasso.owner (finRotate (K + 1) phase) = 0
+    exact h.2
+  · rw [h.1]
+    change lasso.owner (finRotate (K + 1) phase) = 2
+    exact h.2
 
 /-- Every zero-debt owner cycle contains an owner-`0` phase. -/
 theorem exists_owner_zero_of_debt_zero
@@ -522,17 +668,20 @@ theorem exists_owner_zero_of_debt_zero
   have hstep1 := lasso.owner_next_eq_forcedOwnerNext hzero phase1
   change lasso.owner phase1 = forcedOwnerNext (lasso.owner phase0) at hstep0
   change lasso.owner phase2 = forcedOwnerNext (lasso.owner phase1) at hstep1
-  fin_cases howner : lasso.owner phase0
+  let owner := lasso.owner phase0
+  have howner : lasso.owner phase0 = owner := rfl
+  rw [howner] at hstep0
+  fin_cases owner
   · exact ⟨phase0, howner⟩
   · refine ⟨phase2, ?_⟩
-    simp [howner, forcedOwnerNext] at hstep0
-    simp [hstep0, forcedOwnerNext] at hstep1
+    change lasso.owner phase1 = 2 at hstep0
+    rw [hstep0] at hstep1
     exact hstep1
   · refine ⟨phase1, ?_⟩
-    simpa [howner, forcedOwnerNext] using hstep0
+    exact hstep0
   · refine ⟨phase2, ?_⟩
-    simp [howner, forcedOwnerNext] at hstep0
-    simp [hstep0, forcedOwnerNext] at hstep1
+    change lasso.owner phase1 = 2 at hstep0
+    rw [hstep0] at hstep1
     exact hstep1
 
 /-- Every owner-`0` phase in a zero-debt lasso is preceded by owner `2`. -/
@@ -555,16 +704,18 @@ theorem clearance_two_eq_zero_of_owner_zero
     {phase : Fin (K + 1)} (howner : lasso.owner phase = 0) :
     lasso.clearance phase 2 = 0 := by
   let previous := (finRotate (K + 1)).symm phase
-  have hpreviousOwner :=
+  have hpreviousOwner : lasso.owner previous = 2 :=
     lasso.owner_prev_eq_two_of_owner_zero hzero howner
-  have hpreviousZero :=
-    lasso.owner_clearance_eq_zero_of_debt_zero hzero previous
+  have hpreviousZero : lasso.clearance previous 2 = 0 := by
+    have h := lasso.owner_clearance_eq_zero_of_debt_zero hzero previous
+    rw [hpreviousOwner] at h
+    exact h
   have hstep := congrFun (lasso.clearance_step previous) 2
   have hnext : finRotate (K + 1) previous = phase :=
     (finRotate (K + 1)).apply_symm_apply phase
   change lasso.clearance phase 2 = 0
-  rw [← hnext, hstep]
-  simp [idealSingletonClearance, hpreviousOwner, hpreviousZero]
+  rw [← hnext, hstep, idealSingletonClearance,
+    if_pos hpreviousOwner.symm, hpreviousZero]
 
 /-- Three forced zero-cost blocks strictly decrease the projective ratio
 `t₁ / t₃` between successive owner-`0` phases. -/
@@ -582,15 +733,18 @@ theorem owner_zero_three_step_ratio_lt
   have howner1 : lasso.owner phase1 = 3 := by
     have h := lasso.owner_next_eq_forcedOwnerNext hzero phase0
     change lasso.owner phase1 = forcedOwnerNext (lasso.owner phase0) at h
-    simpa [howner0, forcedOwnerNext] using h
+    rw [howner0] at h
+    exact h
   have howner2 : lasso.owner phase2 = 2 := by
     have h := lasso.owner_next_eq_forcedOwnerNext hzero phase1
     change lasso.owner phase2 = forcedOwnerNext (lasso.owner phase1) at h
-    simpa [howner1, forcedOwnerNext] using h
+    rw [howner1] at h
+    exact h
   have howner3 : lasso.owner phase3 = 0 := by
     have h := lasso.owner_next_eq_forcedOwnerNext hzero phase2
     change lasso.owner phase3 = forcedOwnerNext (lasso.owner phase2) at h
-    simpa [howner2, forcedOwnerNext] using h
+    rw [howner2] at h
+    exact h
   have hzero0 := lasso.owner_clearance_eq_zero_of_debt_zero hzero phase0
   have hzero1 := lasso.owner_clearance_eq_zero_of_debt_zero hzero phase1
   have hzero2 := lasso.owner_clearance_eq_zero_of_debt_zero hzero phase2
@@ -611,91 +765,108 @@ theorem owner_zero_three_step_ratio_lt
   let z0 := lasso.clearance phase2 0
   let x' := lasso.clearance phase3 1
   let A' := lasso.clearance phase3 3
+  have hne30 : (3 : Player) ≠ lasso.owner phase0 := by
+    rw [howner0]
+    decide
+  have hne10 : (1 : Player) ≠ lasso.owner phase0 := by
+    rw [howner0]
+    decide
+  have hne20 : (2 : Player) ≠ lasso.owner phase0 := by
+    rw [howner0]
+    decide
+  have hne23 : (2 : Player) ≠ lasso.owner phase1 := by
+    rw [howner1]
+    decide
+  have hne13 : (1 : Player) ≠ lasso.owner phase1 := by
+    rw [howner1]
+    decide
+  have hne03 : (0 : Player) ≠ lasso.owner phase1 := by
+    rw [howner1]
+    decide
+  have hne02 : (0 : Player) ≠ lasso.owner phase2 := by
+    rw [howner2]
+    decide
+  have hne12 : (1 : Player) ≠ lasso.owner phase2 := by
+    rw [howner2]
+    decide
+  have hne32 : (3 : Player) ≠ lasso.owner phase2 := by
+    rw [howner2]
+    decide
   have hbalance0 : α0 * A = 1 - α0 := by
-    have h := lasso.clearance_step_eq_affine_of_ne hzero phase0
-      (who := 3) (by simpa [howner0])
+    have h := lasso.clearance_step_eq_affine_of_ne hzero phase0 hne30
     change lasso.clearance phase1 3 = _ at h
-    rw [hzero1] at h
-    norm_num [α0, A, howner0, deadlockMatrix] at h ⊢
+    rw [howner0, deadlockMatrix_three_zero, hzero1] at h
+    change α0 * A = 1 - α0
+    change 0 = α0 * A + (1 - α0) * (-1) at h
     linarith
   have hA : 0 < A := by
     have hα0lt := lasso.survival_lt_one phase0
-    change lasso.survival phase0 < 1 at hα0lt
-    change lasso.survival phase0 * lasso.clearance phase0 3 =
-      1 - lasso.survival phase0 at hbalance0
-    change 0 < lasso.clearance phase0 3
+    change α0 < 1 at hα0lt
+    have hAnonneg : 0 ≤ A := lasso.clearance_nonneg phase0 3
     by_contra hnot
-    have hAle : lasso.clearance phase0 3 ≤ 0 := le_of_not_gt hnot
-    have hAnonneg := lasso.clearance_nonneg phase0 3
-    have hAzero : lasso.clearance phase0 3 = 0 := le_antisymm hAle hAnonneg
+    have hAzero : A = 0 := le_antisymm (le_of_not_gt hnot) hAnonneg
     rw [hAzero, mul_zero] at hbalance0
     linarith
   have hy1 : y1 = α0 * x + 2 * (1 - α0) := by
-    have h := lasso.clearance_step_eq_affine_of_ne hzero phase0
-      (who := 1) (by simpa [howner0])
+    have h := lasso.clearance_step_eq_affine_of_ne hzero phase0 hne10
     change lasso.clearance phase1 1 = _ at h
-    norm_num [α0, x, y1, howner0, deadlockMatrix] at h ⊢
-    exact h
+    rw [howner0, deadlockMatrix_one_zero] at h
+    change y1 = α0 * x + (1 - α0) * 2 at h
+    nlinarith
   have hy2 : y2 = 2 * (1 - α0) := by
-    have h := lasso.clearance_step_eq_affine_of_ne hzero phase0
-      (who := 2) (by simpa [howner0])
+    have h := lasso.clearance_step_eq_affine_of_ne hzero phase0 hne20
     change lasso.clearance phase1 2 = _ at h
-    rw [htwo0] at h
-    norm_num [α0, y2, howner0, deadlockMatrix] at h ⊢
-    ring_nf at h ⊢
-    exact h
+    rw [howner0, deadlockMatrix_two_zero, htwo0] at h
+    change y2 = α0 * 0 + (1 - α0) * 2 at h
+    nlinarith
   have hbalance3 : α3 * y2 = 1 - α3 := by
-    have h := lasso.clearance_step_eq_affine_of_ne hzero phase1
-      (who := 2) (by simpa [howner1])
+    have h := lasso.clearance_step_eq_affine_of_ne hzero phase1 hne23
     change lasso.clearance phase2 2 = _ at h
-    rw [hzero2] at h
-    norm_num [α3, y2, howner1, deadlockMatrix] at h ⊢
+    rw [howner1, deadlockMatrix_two_three, hzero2] at h
+    change 0 = α3 * y2 + (1 - α3) * (-1) at h
     linarith
   have hz1 : z1 = α3 * y1 - 3 * (1 - α3) := by
-    have h := lasso.clearance_step_eq_affine_of_ne hzero phase1
-      (who := 1) (by simpa [howner1])
+    have h := lasso.clearance_step_eq_affine_of_ne hzero phase1 hne13
     change lasso.clearance phase2 1 = _ at h
-    norm_num [α3, y1, z1, howner1, deadlockMatrix] at h ⊢
-    exact h
+    rw [howner1, deadlockMatrix_one_three] at h
+    change z1 = α3 * y1 + (1 - α3) * (-3) at h
+    nlinarith
   have hphase1Zero0 : lasso.clearance phase1 0 = 0 := by
     have h := lasso.clearance_step_owner_eq phase0
+    change lasso.clearance phase1 (lasso.owner phase0) =
+      lasso.clearance phase0 (lasso.owner phase0) at h
     rw [howner0] at h
-    change lasso.clearance phase1 0 = lasso.clearance phase0 0 at h
-    rw [h, hzero0]
+    exact h.trans hzero0
   have hz0 : z0 = 3 * (1 - α3) := by
-    have h := lasso.clearance_step_eq_affine_of_ne hzero phase1
-      (who := 0) (by simpa [howner1])
+    have h := lasso.clearance_step_eq_affine_of_ne hzero phase1 hne03
     change lasso.clearance phase2 0 = _ at h
-    rw [hphase1Zero0] at h
-    norm_num [α3, z0, howner1, deadlockMatrix] at h ⊢
-    ring_nf at h ⊢
-    exact h
+    rw [howner1, deadlockMatrix_zero_three, hphase1Zero0] at h
+    change z0 = α3 * 0 + (1 - α3) * 3 at h
+    nlinarith
   have hbalance2 : α2 * z0 = 1 - α2 := by
-    have h := lasso.clearance_step_eq_affine_of_ne hzero phase2
-      (who := 0) (by simpa [howner2])
+    have h := lasso.clearance_step_eq_affine_of_ne hzero phase2 hne02
     change lasso.clearance phase3 0 = _ at h
-    rw [hzero3] at h
-    norm_num [α2, z0, howner2, deadlockMatrix] at h ⊢
+    rw [howner2, deadlockMatrix_zero_two, hzero3] at h
+    change 0 = α2 * z0 + (1 - α2) * (-1) at h
     linarith
   have hx' : x' = α2 * z1 + (1 - α2) := by
-    have h := lasso.clearance_step_eq_affine_of_ne hzero phase2
-      (who := 1) (by simpa [howner2])
+    have h := lasso.clearance_step_eq_affine_of_ne hzero phase2 hne12
     change lasso.clearance phase3 1 = _ at h
-    norm_num [α2, z1, x', howner2, deadlockMatrix] at h ⊢
-    exact h
+    rw [howner2, deadlockMatrix_one_two] at h
+    change x' = α2 * z1 + (1 - α2) * 1 at h
+    nlinarith
   have hphase2Zero3 : lasso.clearance phase2 3 = 0 := by
     have h := lasso.clearance_step_owner_eq phase1
+    change lasso.clearance phase2 (lasso.owner phase1) =
+      lasso.clearance phase1 (lasso.owner phase1) at h
     rw [howner1] at h
-    change lasso.clearance phase2 3 = lasso.clearance phase1 3 at h
-    rw [h, hzero1]
+    exact h.trans hzero1
   have hA' : A' = 1 - α2 := by
-    have h := lasso.clearance_step_eq_affine_of_ne hzero phase2
-      (who := 3) (by simpa [howner2])
+    have h := lasso.clearance_step_eq_affine_of_ne hzero phase2 hne32
     change lasso.clearance phase3 3 = _ at h
-    rw [hphase2Zero3] at h
-    norm_num [α2, A', howner2, deadlockMatrix] at h ⊢
-    ring_nf at h ⊢
-    exact h
+    rw [howner2, deadlockMatrix_three_two, hphase2Zero3] at h
+    change A' = α2 * 0 + (1 - α2) * 1 at h
+    nlinarith
   exact deadlock_three_block_ratio_lt
     (lasso.survival_pos_of_debt_zero hzero phase0)
     (lasso.survival_pos_of_debt_zero hzero phase1)
