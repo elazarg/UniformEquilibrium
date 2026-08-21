@@ -783,6 +783,51 @@ theorem quittingRootSequenceSingletonMass_nonneg
     (quittingJointSurvivalWeight_nonneg roots start offset)
     (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg _ _)
 
+/-- A finite window's singleton mass is at most the corresponding infinite
+first-event mass. -/
+theorem finiteWindow_singletonMass_le_sequenceSingletonMass
+    (roots : ℕ → ι → PMF Bool) (start fuel : ℕ) (owner : ι) :
+    (⟨start, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass owner ≤
+      quittingRootSequenceSingletonMass roots start owner := by
+  unfold QuittingFiniteRootWindow.singletonMass
+    QuittingFiniteRootWindow.survivalWeight QuittingFiniteRootWindow.rootAt
+    quittingRootSequenceSingletonMass
+  change (∑ phase : Fin fuel,
+      quittingJointSurvivalWeight roots start phase.val *
+        quittingRootCoalitionMass (roots (start + phase.val)) {owner}) ≤ _
+  rw [Fin.sum_univ_eq_sum_range
+    (fun offset =>
+      quittingJointSurvivalWeight roots start offset *
+        quittingRootCoalitionMass (roots (start + offset)) {owner}) fuel]
+  exact (summable_quittingJointSurvivalWeight_mul_singletonMass
+    roots start owner).sum_le_tsum (Finset.range fuel) fun phase _ =>
+      mul_nonneg
+        (quittingJointSurvivalWeight_nonneg roots start phase)
+        (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg _ _)
+
+/-- A finite window's collision mass is at most the infinite collision mass
+from the same start. -/
+theorem finiteWindow_collisionMass_le_sequenceCollisionMass
+    (roots : ℕ → ι → PMF Bool) (start fuel : ℕ) :
+    (⟨start, fuel⟩ : QuittingFiniteRootWindow roots).collisionMass ≤
+      quittingRootSequenceCollisionMass roots start := by
+  unfold QuittingFiniteRootWindow.collisionMass
+    QuittingFiniteRootWindow.survivalWeight QuittingFiniteRootWindow.rootAt
+    quittingRootSequenceCollisionMass
+  change (∑ phase : Fin fuel,
+      quittingJointSurvivalWeight roots start phase.val *
+        quittingRootCollisionMass (roots (start + phase.val))) ≤ _
+  rw [Fin.sum_univ_eq_sum_range
+    (fun offset =>
+      quittingJointSurvivalWeight roots start offset *
+        quittingRootCollisionMass (roots (start + offset))) fuel]
+  exact
+    (summable_quittingJointSurvivalWeight_mul_quittingRootCollisionMass
+      roots start).sum_le_tsum (Finset.range fuel) fun phase _ =>
+        mul_nonneg
+          (quittingJointSurvivalWeight_nonneg roots start phase)
+          (quittingRootCollisionMass_nonneg _)
+
 /-- Finite singleton occupation converges to its infinite first-event mass. -/
 theorem tendsto_finiteWindow_singletonMass
     (roots : ℕ → ι → PMF Bool) (start : ℕ) (owner : ι) :
