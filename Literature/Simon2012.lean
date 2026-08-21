@@ -2522,6 +2522,110 @@ private theorem cappedPhi_apply_of_positive
     (fun k => (p.1 k : ℝ)) (Finset.mem_univ j)
   linear_combination M * hsum
 
+/-- A cube can be chosen so that the singular term points strictly inward on
+every upper face, as in the first step of Lemma 3.2. -/
+private theorem exists_cappedPhi_upperFace_lt
+    (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (y : Payoff G.Player) :
+    ∃ t : ℝ, ∃ _ht : 0 < t, ∃ ht1 : t < 1,
+      ∀ (p : CappedQuitRow G t) (j : G.Player),
+        (p.1 j : ℝ) = t → cappedPhi G M d t ht1 p j < y j := by
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let S : ℝ := ∑ k, |y k|
+  let a : ℝ := 1 + N * M + S
+  let t : ℝ := a / (1 + a)
+  have hN : 1 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast Fintype.card_pos
+  have hM0 : 1 ≤ M := hM.1
+  have hS : 0 ≤ S := Finset.sum_nonneg fun _ _ => abs_nonneg _
+  have hN0 : 0 ≤ N := zero_le_one.trans hN
+  have hMnonneg : 0 ≤ M := zero_le_one.trans hM0
+  have hP : 1 ≤ N * M := by
+    nlinarith [mul_nonneg (sub_nonneg.mpr hN) (sub_nonneg.mpr hM0)]
+  have ha : 0 < a := by dsimp only [a]; linarith
+  have ht : 0 < t := div_pos ha (by linarith)
+  have ht1 : t < 1 := by
+    dsimp only [t]
+    rw [div_lt_one (by linarith)]
+    linarith
+  refine ⟨t, ht, ht1, ?_⟩
+  intro p j hpj
+  have hjpos : 0 < (p.1 j : ℝ) := by rw [hpj]; exact ht
+  rw [cappedPhi_apply_of_positive G M d t ht1 p j hjpos]
+  have hforced := abs_forcedQuitPayoff_le_scale G M hM p.1 j
+  have hsum : ∑ k, (p.1 k : ℝ) ≤ N := by
+    calc
+      ∑ k, (p.1 k : ℝ) ≤ ∑ _k : G.Player, (1 : ℝ) := by
+        apply Finset.sum_le_sum
+        intro k _hk
+        exact (p.1 k).property.2
+      _ = N := by simp [N]
+  have hothers : (∑ k, (p.1 k : ℝ)) - (p.1 j : ℝ) ≤ N := by
+    linarith [(p.1 j).property.1]
+  have hyS : |y j| ≤ S := by
+    dsimp only [S]
+    exact Finset.single_le_sum (fun k _hk => abs_nonneg (y k))
+      (Finset.mem_univ j)
+  have hsub : 1 - t = 1 / (1 + a) := by
+    dsimp only [t]
+    field_simp
+    ring
+  have hsubPos : 0 < 1 - t := sub_pos.mpr ht1
+  have hsubOne : 1 - t ≤ 1 := by linarith
+  have hcard : Fintype.card G.Player ≠ 0 := Fintype.card_ne_zero
+  have hpow : (1 - t) ^ Fintype.card G.Player ≤ 1 - t :=
+    pow_le_of_le_one hsubPos.le hsubOne hcard
+  have hratio : a ≤ t / (1 - t) ^ Fintype.card G.Player := by
+    have hat : a = t / (1 - t) := by
+      rw [hsub]
+      dsimp only [t]
+      field_simp
+    rw [hat]
+    exact div_le_div_of_nonneg_left ht.le
+      (pow_pos hsubPos _) hpow
+  have hcoefficient : 5 * N * M ≤ 5 * N * M / d := by
+    rw [le_div_iff₀ hd]
+    nlinarith [mul_nonneg (mul_nonneg (by norm_num : (0 : ℝ) ≤ 5) hN0)
+      hMnonneg]
+  have hsingular : 0 ≤ t / (1 - t) ^ Fintype.card G.Player :=
+    div_nonneg ht.le (pow_nonneg hsubPos.le _)
+  have hpenalty : 5 * N * M * a ≤
+      (5 * N * M / d) *
+        (t / (1 - t) ^ Fintype.card G.Player) := by
+    exact mul_le_mul hcoefficient hratio
+      (le_of_lt ha) (div_nonneg
+        (mul_nonneg (mul_nonneg (by norm_num) hN0) hMnonneg) hd.le)
+  have hMa : a ≤ N * M * a := by
+    simpa only [one_mul] using mul_le_mul_of_nonneg_right hP (le_of_lt ha)
+  have hstrict : M / 3 + N * M + S < 5 * N * M * a := by
+    dsimp only [a] at hMa ⊢
+    have hMN : M ≤ N * M := by nlinarith
+    nlinarith
+  rw [hpj]
+  have hothersT : (∑ k, (p.1 k : ℝ)) - t ≤ N := by
+    calc
+      (∑ k, (p.1 k : ℝ)) - t =
+          (∑ k, (p.1 k : ℝ)) - (p.1 j : ℝ) := by
+        congr 1
+        exact hpj.symm
+      _ ≤ N := hothers
+  have hotherMul : M * ((∑ k, (p.1 k : ℝ)) - t) ≤ M * N :=
+    mul_le_mul_of_nonneg_left hothersT hMnonneg
+  have hforcedUpper : ForcedQuitPayoff G p.1 j ≤ M / 3 :=
+    (le_abs_self _).trans hforced
+  have hyLower : -S ≤ y j := neg_le_of_abs_le hyS
+  change ForcedQuitPayoff G p.1 j -
+      (5 * N * M / d) *
+        (t / (1 - t) ^ Fintype.card G.Player) +
+      M * ((∑ k, (p.1 k : ℝ)) - t) < y j
+  calc
+    _ ≤ M / 3 - 5 * N * M * a + M * N := by linarith
+    _ < -S := by nlinarith [hstrict]
+    _ ≤ y j := hyLower
+
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
 the paper's Jacobian argument: strict diagonal dominance gives local openness
