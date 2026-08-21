@@ -1,6 +1,9 @@
 import Literature.Simon2007
 import MathUE.BonferroniProductBounds
 import MathUE.LinearAlgebra.UniformNonsingularity
+import MathUE.PMFProduct.TotalVariation
+import MathUE.ProbabilityMassFunction.Simplex
+import UniformEquilibrium.Quitting.Bellman.Finite.BooleanMobiusAdapter
 
 /-!
 # Robert Samuel Simon, *A Topological Approach to Quitting Games* (2012)
@@ -1876,6 +1879,73 @@ statement would not establish this quitting-specific result.
 theorem theorem3_1 (G : QuittingGame) (M : ℝ)
     (hM : IsSimonPayoffScale G M) : StructureTheoremConclusion G M := by
   sorry
+
+/-- The Bernoulli product law represented by a paper-local quitting row. -/
+private def quitRowMarginals (G : QuittingGame) (p : QuitRow G) :
+    G.Player → PMF Bool := fun n =>
+  Math.ProbabilityMassFunction.bernoulliBool (p n) (p n).property.1 (p n).property.2
+
+@[simp] private theorem hazardOfRoot_quitRowMarginals
+    (G : QuittingGame) (p : QuitRow G) :
+    GameTheory.hazardOfRoot (quitRowMarginals G p) = fun n => (p n : ℝ) := by
+  funext n
+  simp [GameTheory.hazardOfRoot, quitRowMarginals]
+
+private theorem coalitionProbability_eq_coalitionMass
+    (G : QuittingGame) (p : QuitRow G) (A : Finset G.Player) :
+    CoalitionProbability G p A =
+      (by
+        classical
+        exact Math.PMFProduct.coalitionMass (fun n => (p n : ℝ)) A) := by
+  classical
+  simp only [CoalitionProbability]
+  rw [Math.PMFProduct.coalitionMass, Finset.compl_eq_univ_sdiff]
+  congr 1
+  apply Finset.prod_congr
+  · ext n
+    simp
+  · intro n hn
+    rfl
+
+private theorem quittingOneStagePayoff_eq_rootExpectedPayoff
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G) (n : G.Player) :
+    QuittingOneStagePayoff G r p n =
+      GameTheory.quittingRootExpectedPayoff G.reward r (quitRowMarginals G p) n := by
+  classical
+  rw [GameTheory.quittingRootExpectedPayoff_eq_sum_coalitionMass,
+    hazardOfRoot_quitRowMarginals]
+  simp only [QuittingOneStagePayoff, QuitProbability,
+    GameTheory.quittingStageCoalitionPayoff]
+  rw [show 1 - (1 - ∏ i, (1 - (p i : ℝ))) =
+      Math.PMFProduct.coalitionMass (fun i => (p i : ℝ)) ∅ by
+    simp [Math.PMFProduct.coalitionMass]]
+  let term : Finset G.Player → ℝ := fun A =>
+    Math.PMFProduct.coalitionMass (fun i => (p i : ℝ)) A *
+      GameTheory.quittingStageCoalitionPayoff G.reward r A n
+  change _ = ∑ A, term A
+  have hfilter :
+      (Finset.univ : Finset (Finset G.Player)).filter (fun A => A.Nonempty) =
+        Finset.univ.erase ∅ := by
+    ext A
+    simp [Finset.nonempty_iff_ne_empty]
+  have hrewardSum :
+      (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+          CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0) =
+        ∑ A ∈ (Finset.univ : Finset (Finset G.Player)).erase ∅, term A := by
+    rw [show (Finset.univ : Finset G.Player).powerset =
+        (Finset.univ : Finset (Finset G.Player)) by ext A; simp]
+    rw [← hfilter, Finset.sum_filter]
+    apply Finset.sum_congr rfl
+    intro A _
+    by_cases hnonempty : A.Nonempty
+    · simp only [hnonempty, ↓reduceDIte, if_pos, term,
+        GameTheory.quittingStageCoalitionPayoff,
+        coalitionProbability_eq_coalitionMass]
+    · simp [hnonempty]
+  rw [hrewardSum]
+  convert Finset.add_sum_erase (Finset.univ : Finset (Finset G.Player)) term
+      (Finset.mem_univ ∅) using 1
+  all_goals simp [term, GameTheory.quittingStageCoalitionPayoff]
 
 /-- Lemma 3.3's rounding-to-a-sure-quitter hypotheses and conclusion. -/
 def Lemma3_3Statement (G : QuittingGame) (M ε : ℝ) : Prop :=
