@@ -3201,6 +3201,27 @@ private theorem soloPayoff_le_of_mem_closure_compl_WSet (G : QuittingGame)
       isClosed_le continuous_const (continuous_apply j)
   exact closure_minimal hsubset hclosed hx
 
+/-- Conversely, weak solo-payoff dominance is the closure of strict dominance
+over every player. -/
+private theorem mem_closure_compl_WSet_of_soloPayoff_le (G : QuittingGame)
+    {x : Payoff G.Player} (hx : ∀ j, SoloPayoff G j ≤ x j) :
+    x ∈ closure ((WSet G)ᶜ) := by
+  let approximant : ℕ → Payoff G.Player := fun n j =>
+    x j + 1 / ((n : ℝ) + 1)
+  have hmem : ∀ n, approximant n ∈ (WSet G)ᶜ := by
+    intro n hW
+    obtain ⟨j, hj⟩ := hW
+    dsimp only [approximant] at hj
+    have hpositive : 0 < 1 / ((n : ℝ) + 1) := by positivity
+    linarith [hx j]
+  have htendsto : Tendsto approximant atTop (𝓝 x) := by
+    apply tendsto_pi_nhds.2
+    intro j
+    simpa only [approximant, add_zero] using
+      ((tendsto_const_nhds : Tendsto (fun _ : ℕ => x j) atTop (𝓝 (x j))).add
+        (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)))
+  exact mem_closure_iff_seq_limit.mpr ⟨approximant, hmem, htendsto⟩
+
 /-- The inverse-generated homotopy has the four structural properties that
 do not use the properness estimate at infinity. -/
 private theorem structureHomotopy_basic (G : QuittingGame) (M d : ℝ)
@@ -3354,16 +3375,6 @@ def StructureTheoremConclusion (G : QuittingGame) (M : ℝ) : Prop :=
       ∃ R : ℝ, 0 < R ∧ ∀ x,
         ¬InClosedPayoffBox R x → ∀ t,
           ¬StructureTargetBox G M ρ (H x t).1
-
-/--
-Theorem 3.1.  Its proof is the homeomorphism argument in Sections 3.2--3.5.
-No production theorem proves injectivity, surjectivity, properness, or the
-fixed-point exclusion for this `φ`; importing the 2007 Kohlberg--Mertens
-statement would not establish this quitting-specific result.
--/
-theorem theorem3_1 (G : QuittingGame) (M : ℝ)
-    (hM : IsSimonPayoffScale G M) : StructureTheoremConclusion G M := by
-  sorry
 
 /-- Round precisely the displayed players' quitting probabilities to one. -/
 private def roundedQuitRow (G : QuittingGame) [DecidableEq G.Player]
@@ -5325,6 +5336,156 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
     exact lemma3_4_negative_coordinate_probability G M d ρ ξ R
       hplayers hM hd hd1 hmotion hconstants z j
         (by simpa only [ha] using hj)
+
+/-- The radius selected in Section 3 lies beyond every coordinate allowed by
+the rational target box. -/
+private theorem not_structureTargetBox_of_radius_lt_abs
+    (G : QuittingGame) (M ρ R : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hR : 10 * (Fintype.card G.Player : ℝ) * M ≤ R)
+    (x : Payoff G.Player) (j : G.Player) (hj : R < |x j|) :
+    ¬StructureTargetBox G M ρ x := by
+  intro htarget
+  have hcard : 1 ≤ (Fintype.card G.Player : ℝ) := by
+    exact_mod_cast Fintype.card_pos
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hRM : M < R := by nlinarith
+  rw [lt_abs] at hj
+  rcases hj with hj | hj
+  · exact (not_lt_of_ge (htarget j).2) (hRM.trans hj)
+  · have hchi := abs_minMaxQuit_le_of_reward_bound G j (by positivity)
+      (fun outcome => hM.2.1 outcome j)
+    have hchiLower := neg_le_of_abs_le hchi
+    have hρM : ρ ≤ M := hmotion.2.2.1.trans hM.1
+    have hlower := (htarget j).1
+    nlinarith
+
+/--
+Theorem 3.1.  The paper works throughout Sections 2--5 under the standing
+assumption `|N| ≥ 3`; it is made explicit here.  The proof uses the explicit
+homeomorphism from Lemma 3.2, the pointwise motion estimate from Lemma 2.3,
+the compactly chosen Section 3 constants, and Lemma 3.4 at infinity.
+-/
+theorem theorem3_1 (G : QuittingGame) (M : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) : StructureTheoremConclusion G M := by
+  classical
+  obtain ⟨_hsurjective, ⟨inverse⟩⟩ :=
+    lemma3_2 G M 1 hM zero_lt_one le_rfl
+  have hbasic := structureHomotopy_basic G M 1 hM zero_lt_one le_rfl inverse
+  refine ⟨structureHomotopy G inverse, hbasic.1, hbasic.2.1,
+    hbasic.2.2.1, hbasic.2.2.2, ?_⟩
+  intro hnormal hgenerated hinstant ρ hmotion
+  constructor
+  · rintro x ⟨p, hp, hpayoff⟩
+    obtain ⟨κ, hκ, _hκ1, hκmotion⟩ :=
+      lemma2_3 G M hM hnormal hgenerated hinstant x
+    have hrow : p ∈ EpsilonRow G κ x := EpsilonRow.mono G hκ.le x hp
+    have hbound := hκmotion p hrow
+    have hdist : EuclideanDist x (QuittingOneStagePayoff G x p) = 0 := by
+      rw [hpayoff]
+      simp [EuclideanDist, EuclideanNorm]
+    have hquit : QuitProbability G p = 0 := by
+      have hqnonneg := (quitProbability_mem_Icc G p).1
+      rw [hdist] at hbound
+      nlinarith
+    have hpzero : p = zeroQuitRow G := by
+      funext j
+      apply Subtype.ext
+      have hj := quitProbability_apply_le G p j
+      simp only [zeroQuitRow, Set.Icc.coe_zero]
+      linarith [(p j).property.1]
+    rw [hpzero] at hp
+    have hxGraph : (x, zeroQuitRow G) ∈ EZeroTilde G := by
+      refine ⟨hp, ?_⟩
+      simp [QuitProbability, zeroQuitRow]
+    have hxSolo : ∀ j, SoloPayoff G j ≤ x j :=
+      ((lemma3_1 G M 1 hM zero_lt_one le_rfl).2.1 x).1 hxGraph
+    exact mem_closure_compl_WSet_of_soloPayoff_le G hxSolo
+  · obtain ⟨ξ, R, hconstants⟩ :=
+      exists_section3Constants G M 1 ρ hM zero_lt_one hmotion
+    obtain ⟨_hξ, _hξ1, hR⟩ :=
+      section3Constants_radius_bound G M 1 ρ ξ R hplayers hM
+        zero_lt_one le_rfl hmotion hconstants
+    have hRpos : 0 < R := by
+      have hcard : 1 ≤ (Fintype.card G.Player : ℝ) := by
+        exact_mod_cast Fintype.card_pos
+      have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+      nlinarith
+    refine ⟨R, hRpos, ?_⟩
+    intro a haOutside t htarget
+    have haLarge : ∃ j, R < |a j| := by
+      by_contra hnot
+      apply haOutside
+      intro j
+      exact abs_le.mp (le_of_not_gt (fun hj => hnot ⟨j, hj⟩))
+    let z : EZeroTilde G := inverse.inv a
+    have haPhi : Phi G M 1 z = a := inverse.rightInverse a
+    by_cases ht0 : (t : ℝ) = 0
+    · have hzero : t = 0 := Subtype.ext ht0
+      subst t
+      obtain ⟨j, hj⟩ := haLarge
+      have htargetA : StructureTargetBox G M ρ a := by simpa using htarget
+      exact not_structureTargetBox_of_radius_lt_abs
+        G M ρ R hM hmotion hR a j hj htargetA
+    by_cases ht1 : (t : ℝ) = 1
+    · have hone : t = 1 := Subtype.ext ht1
+      subst t
+      have htargetBeta : StructureTargetBox G M ρ z.1.1 := by
+        simpa using htarget
+      obtain ⟨j, hj⟩ := haLarge
+      rw [lt_abs] at hj
+      rcases hj with hjPositive | hjNegative
+      · obtain ⟨hbeta, _hpzero⟩ :=
+          lemma3_4_positive_coordinate G M 1 ρ ξ R hplayers hM
+            zero_lt_one le_rfl hmotion hconstants z j
+              (by rw [haPhi]; exact hjPositive)
+        have hcard : 1 ≤ (Fintype.card G.Player : ℝ) := by
+          exact_mod_cast Fintype.card_pos
+        have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+        have := (htargetBeta j).2
+        nlinarith
+      · by_cases hbeta : z.1.1 j < MinMaxQuit G j - ρ
+        · have := (htargetBeta j).1
+          linarith [hmotion.2.1]
+        · have hpStrict :=
+            lemma3_4_negative_coordinate_probability_gt_one_sub_xi
+              G M 1 ρ ξ R hplayers hM zero_lt_one le_rfl hmotion
+                hconstants z j (by rw [haPhi]; linarith)
+          have hbetaBounds : ∀ k,
+              MinMaxQuit G k - ρ ≤ z.1.1 k ∧
+                z.1.1 k ≤ 2 * (Fintype.card G.Player : ℝ) * M := by
+            intro k
+            have hcard : 1 ≤ (Fintype.card G.Player : ℝ) := by
+              exact_mod_cast Fintype.card_pos
+            exact ⟨by linarith [(htargetBeta k).1, hmotion.2.1],
+              by nlinarith [(htargetBeta k).2, hM.1]⟩
+          have hpUpper := hconstants.2.2.2 z.1.1 z.1.2 z.2 hbetaBounds j
+          linarith
+    · let s : UnitInterval := ⟨1 - (t : ℝ), by
+          constructor <;> linarith [t.property.1, t.property.2]⟩
+      have htpos : 0 < (t : ℝ) :=
+        lt_of_le_of_ne t.property.1 (Ne.symm ht0)
+      have htlt : (t : ℝ) < 1 :=
+        lt_of_le_of_ne t.property.2 ht1
+      have hs0 : 0 < (s : ℝ) := by
+        dsimp only [s]
+        linarith
+      have hs1 : (s : ℝ) < 1 := by
+        dsimp only [s]
+        linarith
+      have hsegment : (structureHomotopy G inverse a t).1 =
+          (1 - (s : ℝ)) • z.1.1 + (s : ℝ) • a := by
+        funext j
+        simp only [structureHomotopy, z, Pi.add_apply, Pi.smul_apply,
+          smul_eq_mul]
+        dsimp only [s]
+        ring
+      have hescape := (lemma3_4 G M 1 ρ ξ R hplayers hM zero_lt_one
+        le_rfl hmotion hconstants hgenerated hinstant hnormal z s hs0 hs1
+          a haPhi.symm (structureHomotopy G inverse a t).1 hsegment).1 haLarge
+      exact hescape htarget
 
 private theorem endpointDifference_eq_forced (G : QuittingGame)
     [DecidableEq G.Player] (r : Payoff G.Player)
