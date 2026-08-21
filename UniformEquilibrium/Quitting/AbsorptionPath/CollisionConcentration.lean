@@ -261,6 +261,14 @@ def quittingRootSequenceCollisionMass
   ∑' offset : ℕ, quittingJointSurvivalWeight roots start offset *
     quittingRootCollisionMass (roots (start + offset))
 
+/-- Infinite survival-weighted collision mass is nonnegative. -/
+theorem quittingRootSequenceCollisionMass_nonneg
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) :
+    0 ≤ quittingRootSequenceCollisionMass roots start := by
+  exact tsum_nonneg fun offset => mul_nonneg
+    (quittingJointSurvivalWeight_nonneg roots start offset)
+    (quittingRootCollisionMass_nonneg _)
+
 /-- Survival-weighted collision probabilities are summable. -/
 theorem summable_quittingJointSurvivalWeight_mul_quittingRootCollisionMass
     (roots : ℕ → ι → PMF Bool) (start : ℕ) :
