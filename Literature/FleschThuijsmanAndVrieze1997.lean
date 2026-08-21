@@ -26,8 +26,7 @@ The repository's quitting-game terminal payoff is the exact adapter for this
 recursive game: on every realized path the limiting average is the terminal
 reward, or zero if absorption never occurs.  The checked finite-average
 convergence statements below make the corresponding expected-average limit
-explicit.  Claims not yet discharged by the imported interfaces remain
-`sorry`, immediately preceded by the precise missing proof boundary.
+explicit.  All paper claims represented in this file are proved below.
 -/
 
 noncomputable section
@@ -3889,12 +3888,15 @@ private theorem exactRootSequenceNash_shift
     rw [quittingRootSequenceTerminalValue_eq_shift reward
       (quittingRootSequenceUpdate (fun time ↦ roots (start + time)) who hazard)
       who 1]
-    congr 2
+    apply congrArg (fun sequence ↦
+      quittingRootSequenceTerminalValue reward sequence who 0)
     funext time player
     by_cases hplayer : player = who
     · subst player
-      simp [quittingRootSequenceUpdate, Nat.add_assoc]
-    · simp [quittingRootSequenceUpdate, hplayer, Nat.add_assoc]
+      simp [quittingRootSequenceUpdate, Nat.add_comm,
+        Nat.add_left_comm]
+    · simp [quittingRootSequenceUpdate, hplayer, Nat.add_comm,
+        Nat.add_left_comm]
   have hdeviation : quittingRootSuccessorPayoff reward
       (fun _ ↦ quittingRootSequenceHazardTerminalValue reward
         (fun time ↦ roots (start + 1 + time)) who
@@ -4710,8 +4712,8 @@ private theorem exists_zero_hazard_at_every_time
   have htimeLt : time < first := by
     have hne : first ≠ time := by
       intro heq
-      subst first
-      exact hzero hfirst.2.choose hfirst.2.choose_spec
+      exact hzero hfirst.2.choose (by
+        simpa [heq] using hfirst.2.choose_spec)
     omega
   let previous := first - 1
   have hpreviousBounds : time ≤ previous ∧ previous < first := by
@@ -4755,8 +4757,9 @@ private theorem exists_zero_hazard_at_every_time
           (continuationPayoff profile previous 2) ≤
           continuationPayoff profile previous 0 := min_le_left _ _
       _ = 1 - (profile previous 2).1 :=
-        hu.trans (stationaryRoot_quitPayoff_zero
-          (profile previous) (continuationPayoff profile first))
+        hu.trans (by
+          simpa [hpreviousSucc] using stationaryRoot_quitPayoff_zero
+            (profile previous) (continuationPayoff profile first))
       _ < 1 := by linarith [hpositive 2]
   have hsquare : 0 ≤ maxThree
       (profile previous 0).1
@@ -5016,6 +5019,303 @@ theorem rewardRegion_subset_equilibriumRewards :
       fin_cases who <;> simp [α] <;> linarith
     simpa only [htarget] using edgeTarget_mem_equilibriumRewards 2 α
 
+private theorem markovRoot_eq_quittingSoloStationaryRoot
+    (profile : MarkovProfile) (time : ℕ) (owner : Player)
+    (hsolo : ∀ who, who ≠ owner → (profile time who).1 = 0) :
+    markovRoot profile time =
+      quittingSoloStationaryRoot owner (coin (profile time owner)) := by
+  funext who
+  by_cases hwho : who = owner
+  · subst who
+    simp [markovRoot, quittingSoloStationaryRoot]
+  · rw [markovRoot_eq_pure_false_of_hazard_zero profile time who
+      (hsolo who hwho)]
+    simp [quittingSoloStationaryRoot, hwho]
+
+private theorem ftv_solo_absorbing_coordinate_sum
+    (owner : Player) (hazard : PMF Bool) :
+    quittingRootAbsorbingContribution
+          FTV.CyclicAdmissibleCycle.ftvReward
+          (quittingSoloStationaryRoot owner hazard) 0 +
+        quittingRootAbsorbingContribution
+          FTV.CyclicAdmissibleCycle.ftvReward
+          (quittingSoloStationaryRoot owner hazard) 1 +
+        quittingRootAbsorbingContribution
+          FTV.CyclicAdmissibleCycle.ftvReward
+          (quittingSoloStationaryRoot owner hazard) 2 =
+      4 * quittingRootAbsorptionMass
+        (quittingSoloStationaryRoot owner hazard) := by
+  rw [quittingRootAbsorbingContribution_solo,
+    quittingRootAbsorbingContribution_solo,
+    quittingRootAbsorbingContribution_solo,
+    quittingRootAbsorptionMass_soloStationaryRoot]
+  have hsum : quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward owner 0 +
+      quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward owner 1 +
+      quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward owner 2 = 4 := by
+    have hsolo : quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward owner =
+        FTV.CyclicMinimality.soloReward owner := by
+      unfold quittingSoloReward
+      exact FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal owner
+    rw [hsolo]
+    fin_cases owner <;>
+      norm_num [FTV.CyclicMinimality.soloReward, Matrix.cons_val_two]
+  linear_combination (hazard true).toReal * hsum
+
+private theorem ftv_stage_absorbing_coordinate_sum
+    (profile : MarkovProfile) (time : ℕ)
+    (hrow : ¬ IsActiveStage profile time ∨
+      ∃ owner, IsUniqueActiveAt profile time owner) :
+    quittingRootAbsorbingContribution
+          FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile time) 0 +
+        quittingRootAbsorbingContribution
+          FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile time) 1 +
+        quittingRootAbsorbingContribution
+          FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile time) 2 =
+      4 * quittingRootAbsorptionMass (markovRoot profile time) := by
+  obtain ⟨owner, hsolo⟩ : ∃ owner, ∀ who, who ≠ owner →
+      (profile time who).1 = 0 := by
+    rcases hrow with hinactive | ⟨owner, howner⟩
+    · exact ⟨0, fun who _ ↦
+        hazard_eq_zero_of_not_active profile time hinactive who⟩
+    · exact ⟨owner, howner.2⟩
+  rw [markovRoot_eq_quittingSoloStationaryRoot profile time owner hsolo]
+  exact ftv_solo_absorbing_coordinate_sum owner (coin (profile time owner))
+
+private theorem ftvReward_abs_le_four
+    (terminal : {S : Finset Player // S.Nonempty}) (who : Player) :
+    |FTV.CyclicAdmissibleCycle.ftvReward terminal who| ≤ 4 := by
+  let action : Player → Bool := fun player ↦ decide (player ∈ terminal.1)
+  change |FTV.CyclicMinimality.terminalReward action who| ≤ 4
+  fin_cases who <;>
+    cases h0 : action 0 <;> cases h1 : action 1 <;> cases h2 : action 2 <;>
+      norm_num [FTV.CyclicMinimality.terminalReward,
+        Matrix.cons_val_two, h0, h1, h2]
+
+private theorem ftv_jointSurvivalLimit_eq_zero
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1) :
+    quittingJointSurvivalLimit (markovRoot profile) 0 = 0 := by
+  apply le_antisymm
+  · apply le_of_not_gt
+    intro hpositive
+    have htend :=
+      tendsto_quittingRootSequenceTerminalValue_tail_zero_of_survivalLimit_pos
+        FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) 0 0
+        ftvReward_abs_le_four hpositive
+    have heventually : ∀ᶠ cutoff : ℕ in atTop,
+        continuationPayoff profile cutoff 0 < 1 / 2 := by
+      simpa only [zero_add, continuationPayoff,
+        quittingRootSequenceTailVector] using
+        (tendsto_order.1 htend).2 (1 / 2) (by norm_num)
+    obtain ⟨threshold, hthreshold⟩ := eventually_atTop.1 heventually
+    obtain ⟨later, hlater, hactive⟩ :=
+      exists_active_stage_at_or_after profile hnash hlt threshold
+    obtain ⟨owner, howner⟩ := exists_isUniqueActiveAt_of_some_zero
+      profile hnash hlt later hactive
+        (exists_zero_hazard_at_every_time profile hnash hlt later)
+    have hmin := uniqueActive_minThree_eq_one_with_idle
+      profile hnash hlt later owner howner
+    have hge : 1 ≤ continuationPayoff profile later 0 := by
+      rw [← hmin]
+      exact min_le_left _ _
+    linarith [hthreshold later hlater]
+  · exact quittingJointSurvivalLimit_nonneg _ _
+
+private theorem ftv_terminal_coordinate_sum_eq_four
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1) :
+    continuationPayoff profile 0 0 +
+        continuationPayoff profile 0 1 +
+        continuationPayoff profile 0 2 = 4 := by
+  let roots := markovRoot profile
+  have hrow (time : ℕ) : ¬ IsActiveStage profile time ∨
+      ∃ owner, IsUniqueActiveAt profile time owner := by
+    by_cases hactive : IsActiveStage profile time
+    · right
+      exact exists_isUniqueActiveAt_of_some_zero profile hnash hlt time hactive
+        (exists_zero_hazard_at_every_time profile hnash hlt time)
+    · exact Or.inl hactive
+  have hstage (time : ℕ) :
+      quittingRootAbsorbingContribution
+            FTV.CyclicAdmissibleCycle.ftvReward (roots time) 0 +
+          quittingRootAbsorbingContribution
+            FTV.CyclicAdmissibleCycle.ftvReward (roots time) 1 +
+          quittingRootAbsorbingContribution
+            FTV.CyclicAdmissibleCycle.ftvReward (roots time) 2 =
+        4 * quittingRootAbsorptionMass (roots time) := by
+    exact ftv_stage_absorbing_coordinate_sum profile time (hrow time)
+  have habsorbing : quittingJointSurvivalLimit roots 0 = 0 := by
+    exact ftv_jointSurvivalLimit_eq_zero profile hnash hlt
+  have haccount (fuel : ℕ) :
+      continuationPayoff profile 0 0 +
+          continuationPayoff profile 0 1 +
+          continuationPayoff profile 0 2 =
+        4 * (1 - quittingJointSurvivalWeight roots 0 fuel) +
+          quittingJointSurvivalWeight roots 0 fuel *
+            (continuationPayoff profile fuel 0 +
+              continuationPayoff profile fuel 1 +
+              continuationPayoff profile fuel 2) := by
+    have hu := eq_sum_jointSurvivalWeight_mul_absorbingContribution_add
+      FTV.CyclicAdmissibleCycle.ftvReward roots 0
+        (fun time ↦ quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 0 time)
+        (isQuittingLivePrescribedValue_quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 0) 0 fuel
+    have hv := eq_sum_jointSurvivalWeight_mul_absorbingContribution_add
+      FTV.CyclicAdmissibleCycle.ftvReward roots 1
+        (fun time ↦ quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 1 time)
+        (isQuittingLivePrescribedValue_quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 1) 0 fuel
+    have hw := eq_sum_jointSurvivalWeight_mul_absorbingContribution_add
+      FTV.CyclicAdmissibleCycle.ftvReward roots 2
+        (fun time ↦ quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 2 time)
+        (isQuittingLivePrescribedValue_quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 2) 0 fuel
+    simp only [zero_add] at hu hv hw
+    have habsSum :
+        (∑ offset ∈ Finset.range fuel,
+            quittingJointSurvivalWeight roots 0 offset *
+              quittingRootAbsorbingContribution
+                FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 0) +
+          (∑ offset ∈ Finset.range fuel,
+            quittingJointSurvivalWeight roots 0 offset *
+              quittingRootAbsorbingContribution
+                FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 1) +
+          (∑ offset ∈ Finset.range fuel,
+            quittingJointSurvivalWeight roots 0 offset *
+              quittingRootAbsorbingContribution
+                FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 2) =
+          4 * (1 - quittingJointSurvivalWeight roots 0 fuel) := by
+      calc
+        _ = ∑ offset ∈ Finset.range fuel,
+              quittingJointSurvivalWeight roots 0 offset *
+                (quittingRootAbsorbingContribution
+                    FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 0 +
+                  quittingRootAbsorbingContribution
+                    FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 1 +
+                  quittingRootAbsorbingContribution
+                    FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 2) := by
+              rw [← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
+              apply Finset.sum_congr rfl
+              intro offset _
+              ring
+        _ = ∑ offset ∈ Finset.range fuel,
+              4 * (quittingJointSurvivalWeight roots 0 offset *
+                quittingRootAbsorptionMass (roots offset)) := by
+              apply Finset.sum_congr rfl
+              intro offset _
+              rw [hstage offset]
+              ring
+        _ = 4 * (1 - quittingJointSurvivalWeight roots 0 fuel) := by
+              have htelescope : ∀ horizon,
+                  (∑ offset ∈ Finset.range horizon,
+                    quittingJointSurvivalWeight roots 0 offset *
+                      quittingRootAbsorptionMass (roots offset)) =
+                    1 - quittingJointSurvivalWeight roots 0 horizon := by
+                intro horizon
+                induction horizon with
+                | zero => simp
+                | succ horizon ih =>
+                    rw [Finset.sum_range_succ, ih,
+                      quittingJointSurvivalWeight_succ]
+                    unfold quittingRootAbsorptionMass
+                    ring
+              rw [← Finset.mul_sum, htelescope fuel]
+    change quittingRootSequenceTerminalValue
+        FTV.CyclicAdmissibleCycle.ftvReward roots 0 0 +
+        quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 1 0 +
+        quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 2 0 =
+      4 * (1 - quittingJointSurvivalWeight roots 0 fuel) +
+        quittingJointSurvivalWeight roots 0 fuel *
+          (quittingRootSequenceTerminalValue
+              FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel +
+            quittingRootSequenceTerminalValue
+              FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel +
+            quittingRootSequenceTerminalValue
+              FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel)
+    rw [hu, hv, hw]
+    linear_combination habsSum
+  have hsurvival : Tendsto
+      (fun fuel ↦ quittingJointSurvivalWeight roots 0 fuel)
+      atTop (nhds 0) := by
+    simpa [habsorbing] using tendsto_quittingJointSurvivalLimit roots 0
+  have htailBound (fuel : ℕ) :
+      |continuationPayoff profile fuel 0 +
+          continuationPayoff profile fuel 1 +
+          continuationPayoff profile fuel 2| ≤ 12 := by
+    have hu := abs_quittingRootSequenceTerminalValue_le
+      FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel (by norm_num)
+        ftvReward_abs_le_four
+    have hv := abs_quittingRootSequenceTerminalValue_le
+      FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel (by norm_num)
+        ftvReward_abs_le_four
+    have hw := abs_quittingRootSequenceTerminalValue_le
+      FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel (by norm_num)
+        ftvReward_abs_le_four
+    change |quittingRootSequenceTerminalValue
+        FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel +
+        quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel +
+        quittingRootSequenceTerminalValue
+          FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel| ≤ 12
+    calc
+      _ ≤ |quittingRootSequenceTerminalValue
+              FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel +
+            quittingRootSequenceTerminalValue
+              FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel| +
+          |quittingRootSequenceTerminalValue
+            FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel| := abs_add_le _ _
+      _ ≤ (|quittingRootSequenceTerminalValue
+              FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel| +
+            |quittingRootSequenceTerminalValue
+              FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel|) +
+          |quittingRootSequenceTerminalValue
+            FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel| := by
+              gcongr
+              exact abs_add_le _ _
+      _ ≤ 12 := by linarith
+  have hresidual : Tendsto (fun fuel ↦
+      quittingJointSurvivalWeight roots 0 fuel *
+        (continuationPayoff profile fuel 0 +
+          continuationPayoff profile fuel 1 +
+          continuationPayoff profile fuel 2)) atTop (nhds 0) := by
+    apply squeeze_zero_norm (a := fun fuel ↦
+      12 * quittingJointSurvivalWeight roots 0 fuel)
+    · intro fuel
+      rw [Real.norm_eq_abs, abs_mul,
+        abs_of_nonneg (quittingJointSurvivalWeight_nonneg roots 0 fuel)]
+      nlinarith [htailBound fuel,
+        quittingJointSurvivalWeight_nonneg roots 0 fuel]
+    · simpa using (tendsto_const_nhds.mul hsurvival : Tendsto
+        (fun fuel : ℕ ↦ 12 * quittingJointSurvivalWeight roots 0 fuel)
+        atTop (nhds (12 * 0)))
+  have hright : Tendsto (fun fuel ↦
+      4 * (1 - quittingJointSurvivalWeight roots 0 fuel) +
+        quittingJointSurvivalWeight roots 0 fuel *
+          (continuationPayoff profile fuel 0 +
+            continuationPayoff profile fuel 1 +
+            continuationPayoff profile fuel 2)) atTop (nhds 4) := by
+    convert (tendsto_const_nhds.mul
+      (tendsto_const_nhds.sub hsurvival)).add hresidual using 1
+    all_goals norm_num
+  have hleft : Tendsto (fun _ : ℕ ↦
+      continuationPayoff profile 0 0 +
+        continuationPayoff profile 0 1 +
+        continuationPayoff profile 0 2) atTop
+      (nhds (continuationPayoff profile 0 0 +
+        continuationPayoff profile 0 1 +
+        continuationPayoff profile 0 2)) := tendsto_const_nhds
+  rw [funext haccount] at hleft
+  exact tendsto_nhds_unique hleft hright
+
 /-! By `equilibriumRewards_eq_markov`, the
 behavior-to-Markov semantic reduction is now closed.  The remaining necessity
 proof is the paper's six-step tail argument from Theorem 3.4 followed by the
@@ -5023,7 +5323,77 @@ first-active-run payoff accounting: one coordinate is `1`, the other two are at
 least `1`, and the total reward is `4`. -/
 theorem theorem3_5_necessity :
     EquilibriumRewards ⊆ RewardRegion := by
-  sorry
+  classical
+  intro payoff hpayoff
+  rw [equilibriumRewards_eq_markov] at hpayoff
+  obtain ⟨profile, hequilibrium, hpayoff⟩ := hpayoff
+  have hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile) := by
+    apply (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile)).2
+    simpa only [IsMarkovEpsilonEquilibrium, markovBehaviorProfile] using
+      hequilibrium
+  have hlt := all_hazards_lt_one_of_exact_rootSequenceNash profile hnash
+  let P : ℕ → Prop := fun time ↦ IsActiveStage profile time
+  have hexists : ∃ time, P time := by
+    obtain ⟨time, _, hactive⟩ :=
+      exists_active_stage_at_or_after profile hnash hlt 0
+    exact ⟨time, hactive⟩
+  let first := Nat.find hexists
+  have hfirst : P first := Nat.find_spec hexists
+  have hbefore : ∀ time, time < first → ¬ IsActiveStage profile time := by
+    intro time htime hactive
+    exact (Nat.not_lt_of_ge (Nat.find_min' hexists hactive)) htime
+  have hbridge : continuationPayoff profile 0 =
+      continuationPayoff profile first :=
+    continuationPayoff_eq_of_inactive_interval profile (Nat.zero_le first)
+      (fun time _ htime ↦ hbefore time htime)
+  obtain ⟨owner, howner⟩ := exists_isUniqueActiveAt_of_some_zero
+    profile hnash hlt first hfirst
+      (exists_zero_hazard_at_every_time profile hnash hlt first)
+  have hminFirst := uniqueActive_minThree_eq_one_with_idle
+    profile hnash hlt first owner howner
+  have hmin : minThree
+      (continuationPayoff profile 0 0)
+      (continuationPayoff profile 0 1)
+      (continuationPayoff profile 0 2) = 1 := by
+    rw [congrFun hbridge 0, congrFun hbridge 1, congrFun hbridge 2]
+    exact hminFirst
+  have hzeroLower : 1 ≤ continuationPayoff profile 0 0 := by
+    rw [← hmin]
+    exact min_le_left _ _
+  have honeLower : 1 ≤ continuationPayoff profile 0 1 := by
+    rw [← hmin]
+    exact (min_le_right _ _).trans (min_le_left _ _)
+  have htwoLower : 1 ≤ continuationPayoff profile 0 2 := by
+    rw [← hmin]
+    exact (min_le_right _ _).trans (min_le_right _ _)
+  have hface : continuationPayoff profile 0 0 = 1 ∨
+      continuationPayoff profile 0 1 = 1 ∨
+      continuationPayoff profile 0 2 = 1 := by
+    rcases le_total (continuationPayoff profile 0 0)
+        (min (continuationPayoff profile 0 1)
+          (continuationPayoff profile 0 2)) with hleft | hright
+    · left
+      simpa [minThree, min_eq_left hleft] using hmin
+    · rw [minThree, min_eq_right hright] at hmin
+      rcases le_total (continuationPayoff profile 0 1)
+          (continuationPayoff profile 0 2) with hleft | hright
+      · right
+        left
+        simpa [min_eq_left hleft] using hmin
+      · right
+        right
+        simpa [min_eq_right hright] using hmin
+  have hsum := ftv_terminal_coordinate_sum_eq_four profile hnash hlt
+  have hterminal : quittingTerminalPayoff
+      FTV.CyclicAdmissibleCycle.ftvReward (markovBehaviorProfile profile) =
+      continuationPayoff profile 0 := by
+    rfl
+  have hpayoffEq : payoff = continuationPayoff profile 0 :=
+    hpayoff.symm.trans hterminal
+  rw [hpayoffEq]
+  exact ⟨hzeroLower, honeLower, htwoLower, hsum, hface⟩
 
 /-- **Theorem 3.5.** The feasible equilibrium rewards are exactly the three
 closed edges printed in the paper. -/
