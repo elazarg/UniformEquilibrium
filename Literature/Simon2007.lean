@@ -766,6 +766,12 @@ private theorem DDPPath.measurable_prefix (P : DiscreteDecisionProcess) (k : ℕ
 /-- One sampled DDP stage records the current state and the action selected there. -/
 private abbrev DDPStage (P : DiscreteDecisionProcess) := (x : P.X) × P.Y x
 
+/-- Reindex a finite exact stage string as a prefix on `Finset.Iic`. -/
+private def DiscreteDecisionProcess.stagePrefixOfFin
+    (P : DiscreteDecisionProcess) {k : ℕ}
+    (stage : Fin (k + 1) → DDPStage P) : ∀ _ : Finset.Iic k, DDPStage P :=
+  fun i => stage ⟨i.1, Nat.lt_succ_of_le (Finset.mem_Iic.mp i.2)⟩
+
 /-- Evaluate a one-coordinate independent product law at its unique coordinate. -/
 private theorem pmfPi_map_eval_punit {A : PUnit → Type} [∀ i, Countable (A i)]
     (law : ∀ i, PMF (A i)) :
@@ -783,12 +789,66 @@ private theorem pmfPi_map_eval_punit {A : PUnit → Type} [∀ i, Countable (A i
     cases i
     exact heval.symm
 
+/-- A one-coordinate product law is the image of its factor under the constant function. -/
+private theorem pmfPi_const_punit_eq_map {A : Type} [Countable A] (law : PMF A) :
+    Math.PMFProduct.pmfPi (fun _ : PUnit => law) =
+      law.map (fun action => fun _ : PUnit => action) := by
+  let eval : (PUnit → A) → A := fun action => action PUnit.unit
+  let constant : A → PUnit → A := fun action _ => action
+  have hinverse : constant ∘ eval = id := by
+    funext action
+    apply funext
+    intro i
+    cases i
+    rfl
+  calc
+    Math.PMFProduct.pmfPi (fun _ : PUnit => law) =
+        (Math.PMFProduct.pmfPi (fun _ : PUnit => law)).map (constant ∘ eval) := by
+      rw [hinverse, PMF.map_id]
+    _ = ((Math.PMFProduct.pmfPi (fun _ : PUnit => law)).map eval).map constant := by
+      rw [PMF.map_comp]
+    _ = law.map constant := by
+      rw [pmfPi_map_eval_punit]
+
+/-- The joint law obtained by binding and remembering the first coordinate has the expected
+point masses. -/
+private theorem pmf_bind_map_pair_apply {A B : Type} (law : PMF A) (next : A → PMF B)
+    (a : A) (b : B) :
+    (law.bind fun x => (next x).map fun y => (x, y)) (a, b) = law a * next a b := by
+  classical
+  rw [PMF.bind_apply]
+  rw [tsum_eq_single a]
+  · congr 1
+    rw [PMF.map_apply, tsum_eq_single b]
+    · simp
+    · intro other hother
+      rw [if_neg]
+      intro h
+      exact hother (congrArg Prod.snd h).symm
+  · intro other hother
+    simp [PMF.map_apply]
+    exact Or.inr (fun h => (hother h.symm).elim)
+
+/-- Encode one local action as the unique player's correctly tagged padded joint action. -/
+private def DiscreteDecisionProcess.encodePaddedJointAction
+    (P : DiscreteDecisionProcess) (x : P.X) (action : P.Y x) :
+    P.paddedGame.JointAct :=
+  fun who => GameTheory.StochasticGame.DependentAction.embed
+    (fun state : P.X => fun _ : PUnit => P.Y state) x who action
+
 /-- Read the unique player's padded action as a local action at the current state. -/
 private def DiscreteDecisionProcess.decodePaddedJointAction
     (P : DiscreteDecisionProcess) (x : P.X) (action : P.paddedGame.JointAct) : P.Y x :=
   GameTheory.StochasticGame.DependentAction.decode
     (fun state : P.X => fun _ : PUnit => P.Y state) P.fallbackAction x PUnit.unit
       (action PUnit.unit)
+
+/-- Encoding and then decoding a local action is the identity. -/
+@[simp] private theorem DiscreteDecisionProcess.decodePaddedJointAction_encode
+    (P : DiscreteDecisionProcess) (x : P.X) (action : P.Y x) :
+    P.decodePaddedJointAction x (P.encodePaddedJointAction x action) = action := by
+  exact GameTheory.StochasticGame.DependentAction.decode_embed
+    (fun state : P.X => fun _ : PUnit => P.Y state) P.fallbackAction x PUnit.unit action
 
 /-- Attaching and then decoding the current-state tag preserves the local action law. -/
 private theorem DiscreteDecisionProcess.map_decode_embed_choice
@@ -815,6 +875,32 @@ private def DiscreteDecisionProcess.decodePaddedStage (P : DiscreteDecisionProce
     (stage : P.paddedGame.StageOutcome) : DDPStage P :=
   ⟨stage.1, P.decodePaddedJointAction stage.1 stage.2⟩
 
+/-- Encode one DDP stage as a correctly tagged padded stochastic-game stage. -/
+private def DiscreteDecisionProcess.encodePaddedStage (P : DiscreteDecisionProcess)
+    (stage : DDPStage P) : P.paddedGame.StageOutcome :=
+  ⟨stage.1, P.encodePaddedJointAction stage.1 stage.2⟩
+
+/-- Decoding an encoded DDP stage is the identity. -/
+@[simp] private theorem DiscreteDecisionProcess.decodePaddedStage_encode
+    (P : DiscreteDecisionProcess) (stage : DDPStage P) :
+    P.decodePaddedStage (P.encodePaddedStage stage) = stage := by
+  cases stage
+  simp [DiscreteDecisionProcess.decodePaddedStage,
+    DiscreteDecisionProcess.encodePaddedStage]
+
+/-- On an encoded legal joint action, the padded game's transition is exactly the DDP move
+law. -/
+private theorem DiscreteDecisionProcess.paddedGame_transition_encode
+    (P : DiscreteDecisionProcess) (x : P.X) (action : P.Y x) :
+    P.paddedGame.transition x (P.encodePaddedJointAction x action) =
+      P.move x action := by
+  convert GameTheory.StochasticGame.DependentAction.game_transition_embed
+    (fun state : P.X => fun _ : PUnit => P.Y state)
+    P.fallbackAction P.paddedStagePayoff P.paddedTransition 0 (by norm_num) (by norm_num)
+    x (fun _ : PUnit => action) using 1
+  · congr
+  · rfl
+
 /-- Decode every stage of a padded stochastic-game play. -/
 private def DiscreteDecisionProcess.decodePaddedPlay (P : DiscreteDecisionProcess)
     (play : P.paddedGame.Play) : ℕ → DDPStage P :=
@@ -827,14 +913,68 @@ private def DiscreteDecisionProcess.decodePaddedCoords
     ∀ _ : Finset.Iic t, DDPStage P :=
   fun i => P.decodePaddedStage (coords i)
 
+/-- Encode a finite DDP prefix coordinatewise. -/
+private def DiscreteDecisionProcess.encodePaddedCoords
+    (P : DiscreteDecisionProcess) (t : ℕ)
+    (coords : ∀ _ : Finset.Iic t, DDPStage P) :
+    ∀ _ : Finset.Iic t, P.paddedGame.StageOutcome :=
+  fun i => P.encodePaddedStage (coords i)
+
+/-- Append one DDP stage to a finite coordinate prefix. -/
+private def DiscreteDecisionProcess.extendDDPCoords
+    (P : DiscreteDecisionProcess) {t : ℕ}
+    (coords : ∀ _ : Finset.Iic t, DDPStage P) (next : DDPStage P) :
+    ∀ _ : Finset.Iic (t + 1), DDPStage P :=
+  fun i => if h : i.1 ≤ t then coords ⟨i.1, Finset.mem_Iic.mpr h⟩ else next
+
+/-- Splitting off the last coordinate is inverse to extending a finite DDP prefix. -/
+private def DiscreteDecisionProcess.extendDDPCoordsEquiv
+    (P : DiscreteDecisionProcess) (t : ℕ) :
+    ((∀ _ : Finset.Iic t, DDPStage P) × DDPStage P) ≃
+      (∀ _ : Finset.Iic (t + 1), DDPStage P) where
+  toFun pair := P.extendDDPCoords pair.1 pair.2
+  invFun coords :=
+    (fun i => coords ⟨i.1, Finset.mem_Iic.mpr (by
+      exact (Finset.mem_Iic.mp i.2).trans (Nat.le_succ t))⟩,
+      coords ⟨t + 1, Finset.mem_Iic.mpr le_rfl⟩)
+  left_inv pair := by
+    apply Prod.ext
+    · funext i
+      simp [DiscreteDecisionProcess.extendDDPCoords, Finset.mem_Iic.mp i.2]
+    · simp [DiscreteDecisionProcess.extendDDPCoords]
+  right_inv coords := by
+    funext i
+    by_cases hi : i.1 ≤ t
+    · simp [DiscreteDecisionProcess.extendDDPCoords, hi]
+    · have hit : i.1 = t + 1 := by
+        have := Finset.mem_Iic.mp i.2
+        omega
+      rw [show i = ⟨t + 1, Finset.mem_Iic.mpr le_rfl⟩ from Subtype.ext hit]
+      simp [DiscreteDecisionProcess.extendDDPCoords]
+
+/-- Coordinatewise decoding is a left inverse to coordinatewise encoding. -/
+@[simp] private theorem DiscreteDecisionProcess.decodePaddedCoords_encode
+    (P : DiscreteDecisionProcess) (t : ℕ)
+    (coords : ∀ _ : Finset.Iic t, DDPStage P) :
+    P.decodePaddedCoords t (P.encodePaddedCoords t coords) = coords := by
+  funext i
+  exact P.decodePaddedStage_encode (coords i)
+
+/-- Encoding commutes with extending a finite coordinate prefix. -/
+private theorem DiscreteDecisionProcess.encodePaddedCoords_extend
+    (P : DiscreteDecisionProcess) {t : ℕ}
+    (coords : ∀ _ : Finset.Iic t, DDPStage P) (next : DDPStage P) :
+    P.encodePaddedCoords (t + 1) (P.extendDDPCoords coords next) =
+      P.paddedGame.extendCoords (P.encodePaddedCoords t coords) (P.encodePaddedStage next) := by
+  funext i
+  by_cases hi : i.1 ≤ t <;>
+    simp [DiscreteDecisionProcess.encodePaddedCoords,
+      DiscreteDecisionProcess.extendDDPCoords,
+      GameTheory.StochasticGame.extendCoords, hi]
+
 /-- The stage alphabet is countable and carries its discrete sigma algebra. -/
 private instance ddpStageMeasurableSpace (P : DiscreteDecisionProcess) :
     MeasurableSpace (DDPStage P) := ⊤
-
-/-- The canonical production infinite-play law, decoded to DDP stages. -/
-private def DiscreteDecisionProcess.productionRawLawFrom
-    (P : DiscreteDecisionProcess) (x : P.X) : Measure (ℕ → DDPStage P) := by
-  exact (P.paddedGame.infinitePlayMeasure P.paddedProfile x).map P.decodePaddedPlay
 
 private theorem DiscreteDecisionProcess.measurable_decodePaddedPlay
     (P : DiscreteDecisionProcess) : Measurable P.decodePaddedPlay := by
@@ -845,29 +985,6 @@ private theorem DiscreteDecisionProcess.measurable_decodePaddedPlay
 private theorem DiscreteDecisionProcess.measurable_decodePaddedCoords
     (P : DiscreteDecisionProcess) (t : ℕ) : Measurable (P.decodePaddedCoords t) :=
   measurable_of_countable _
-
-/-- Every finite marginal of the decoded DDP law is supplied by the production
-`coordsDist` projective family. -/
-private theorem DiscreteDecisionProcess.map_frestrictLe_productionRawLawFrom
-    (P : DiscreteDecisionProcess) (x : P.X) (t : ℕ) :
-    (P.productionRawLawFrom x).map
-        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) t) =
-      ((P.paddedGame.coordsDist P.paddedProfile x t).map
-        (P.decodePaddedCoords t)).toMeasure := by
-  rw [DiscreteDecisionProcess.productionRawLawFrom]
-  rw [Measure.map_map
-    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) t)
-    P.measurable_decodePaddedPlay]
-  have hcommute :
-      Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) t ∘ P.decodePaddedPlay =
-        P.decodePaddedCoords t ∘
-          Preorder.frestrictLe (π := fun _ : ℕ => P.paddedGame.StageOutcome) t := rfl
-  rw [hcommute]
-  rw [← Measure.map_map (P.measurable_decodePaddedCoords t)
-    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => P.paddedGame.StageOutcome) t)]
-  rw [P.paddedGame.map_frestrictLe_infinitePlayMeasure]
-  exact PMF.toMeasure_map (P.decodePaddedCoords t)
-    (P.paddedGame.coordsDist P.paddedProfile x t) (P.measurable_decodePaddedCoords t)
 
 /-- The unique padded action coordinate decodes to the DDP's local choice law. -/
 private theorem DiscreteDecisionProcess.map_decodePaddedJointAction_stageActionDist
@@ -896,16 +1013,43 @@ private theorem DiscreteDecisionProcess.map_decodePaddedJointAction_stageActionD
             decode := rfl
     _ = P.choose history.2 := P.map_decode_embed_choice history.2
 
-private instance DiscreteDecisionProcess.isProbabilityMeasure_productionRawLawFrom
-    (P : DiscreteDecisionProcess) (x : P.X) :
-    IsProbabilityMeasure (P.productionRawLawFrom x) := by
-  unfold DiscreteDecisionProcess.productionRawLawFrom
-  exact Measure.isProbabilityMeasure_map P.measurable_decodePaddedPlay.aemeasurable
+/-- The lifted one-player action law is exactly the image of the local DDP choice law under
+the correctly tagged joint-action encoding. -/
+private theorem DiscreteDecisionProcess.stageActionDist_paddedProfile_eq_map_encode
+    (P : DiscreteDecisionProcess) {t : ℕ} (history : P.paddedGame.Hist t) :
+    P.paddedGame.stageActionDist P.paddedProfile history =
+      (P.choose history.2).map (P.encodePaddedJointAction history.2) := by
+  change Math.PMFProduct.pmfPi
+      (fun who : PUnit => (P.choose history.2).map
+        (GameTheory.StochasticGame.DependentAction.embed
+          (fun state : P.X => fun _ : PUnit => P.Y state) history.2 who)) = _
+  have hfamily :
+      (fun who : PUnit => (P.choose history.2).map
+        (GameTheory.StochasticGame.DependentAction.embed
+          (fun state : P.X => fun _ : PUnit => P.Y state) history.2 who)) =
+      fun _ : PUnit => (P.choose history.2).map
+        (GameTheory.StochasticGame.DependentAction.embed
+          (fun state : P.X => fun _ : PUnit => P.Y state) history.2 PUnit.unit) := by
+    funext who
+    cases who
+    rfl
+  rw [hfamily, pmfPi_const_punit_eq_map, PMF.map_comp]
+  rfl
 
 /-- Draw the action at the initial state. -/
 private def DiscreteDecisionProcess.initialStagePMF (P : DiscreteDecisionProcess)
     (x : P.X) : PMF (DDPStage P) :=
   (P.choose x).map fun y => ⟨x, y⟩
+
+/-- The production game's initial stage law is the encoded DDP initial-stage law. -/
+private theorem DiscreteDecisionProcess.initialPMF_paddedProfile_eq_map_encode
+    (P : DiscreteDecisionProcess) (x : P.X) :
+    P.paddedGame.initialPMF P.paddedProfile x =
+      (P.initialStagePMF x).map P.encodePaddedStage := by
+  rw [GameTheory.StochasticGame.initialPMF]
+  rw [P.stageActionDist_paddedProfile_eq_map_encode]
+  rw [DiscreteDecisionProcess.initialStagePMF, PMF.map_comp, PMF.map_comp]
+  rfl
 
 /-- Decoding the production game's initial stage recovers the DDP's initial-stage law. -/
 private theorem DiscreteDecisionProcess.map_decodePaddedStage_initialPMF
@@ -933,6 +1077,212 @@ private def DiscreteDecisionProcess.stepStagePMF (P : DiscreteDecisionProcess)
     (stage : DDPStage P) : PMF (DDPStage P) :=
   (P.move stage.1 stage.2).bind fun x =>
     (P.choose x).map fun y => ⟨x, y⟩
+
+/-- On an encoded DDP prefix, the production one-step law is exactly the image of the local
+stage-transition law under stage encoding. -/
+private theorem DiscreteDecisionProcess.stepPMF_encodePaddedCoords
+    (P : DiscreteDecisionProcess) (t : ℕ)
+    (coords : ∀ _ : Finset.Iic t, DDPStage P) :
+    P.paddedGame.stepPMF P.paddedProfile t (P.encodePaddedCoords t coords) =
+      (P.stepStagePMF (coords ⟨t, Finset.mem_Iic.mpr le_rfl⟩)).map
+        P.encodePaddedStage := by
+  let current := coords ⟨t, Finset.mem_Iic.mpr le_rfl⟩
+  rw [GameTheory.StochasticGame.stepPMF]
+  change (P.paddedGame.transition current.1 (P.encodePaddedJointAction current.1 current.2)).bind
+      (fun state => (P.paddedGame.stageActionDist P.paddedProfile
+        (P.paddedGame.histOfCoords (P.encodePaddedCoords t coords) state)).map
+          fun action => (state, action)) = _
+  rw [P.paddedGame_transition_encode]
+  rw [DiscreteDecisionProcess.stepStagePMF, PMF.map_bind]
+  apply congrArg (PMF.bind (P.move current.1 current.2))
+  funext state
+  rw [P.stageActionDist_paddedProfile_eq_map_encode]
+  rw [PMF.map_comp, PMF.map_comp]
+  rfl
+
+/-- The finite DDP coordinate law generated by an arbitrary initial sampled-stage law. -/
+private def DiscreteDecisionProcess.ddpCoordsDistFromStagePMF
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
+    (t : ℕ) → PMF (∀ _ : Finset.Iic t, DDPStage P) :=
+  fun t => Nat.rec (initial.map fun stage (_ : Finset.Iic 0) => stage)
+    (fun n previous => previous.bind fun coords =>
+      (P.stepStagePMF (coords ⟨n, Finset.mem_Iic.mpr le_rfl⟩)).map
+        (P.extendDDPCoords coords)) t
+
+/-- The production coordinate family from an encoded initial law is exactly the encoded
+finite DDP coordinate family. -/
+private theorem DiscreteDecisionProcess.coordsDistFromStagePMF_eq_map_encode
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) : ∀ t,
+    P.paddedGame.coordsDistFromStagePMF P.paddedProfile
+        (initial.map P.encodePaddedStage) t =
+      (P.ddpCoordsDistFromStagePMF initial t).map (P.encodePaddedCoords t) := by
+  intro t
+  induction t with
+  | zero =>
+      rw [GameTheory.StochasticGame.coordsDistFromStagePMF]
+      rw [DiscreteDecisionProcess.ddpCoordsDistFromStagePMF]
+      change ((initial.map P.encodePaddedStage).map
+          (fun stage (_ : Finset.Iic 0) => stage)) =
+        (initial.map (fun stage (_ : Finset.Iic 0) => stage)).map
+          (P.encodePaddedCoords 0)
+      rw [PMF.map_comp, PMF.map_comp]
+      rfl
+  | succ t ih =>
+      rw [P.paddedGame.coordsDistFromStagePMF_succ]
+      rw [DiscreteDecisionProcess.ddpCoordsDistFromStagePMF]
+      rw [ih, PMF.bind_map, PMF.map_bind]
+      apply congrArg (PMF.bind (P.ddpCoordsDistFromStagePMF initial t))
+      funext coords
+      change (P.paddedGame.stepPMF P.paddedProfile t (P.encodePaddedCoords t coords)).map
+          (P.paddedGame.extendCoords (P.encodePaddedCoords t coords)) =
+        ((P.stepStagePMF (coords ⟨t, Finset.mem_Iic.mpr le_rfl⟩)).map
+          (P.extendDDPCoords coords)).map (P.encodePaddedCoords (t + 1))
+      rw [P.stepPMF_encodePaddedCoords, PMF.map_comp, PMF.map_comp]
+      congr 1
+      funext next
+      exact (P.encodePaddedCoords_extend coords next).symm
+
+/-- The production infinite-play law from an arbitrary encoded DDP stage law, decoded back to
+DDP stages. -/
+private def DiscreteDecisionProcess.productionRawLawWithInitial
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
+    Measure (ℕ → DDPStage P) :=
+  (P.paddedGame.infinitePlayMeasureFromStagePMF P.paddedProfile
+    (initial.map P.encodePaddedStage)).map P.decodePaddedPlay
+
+private instance DiscreteDecisionProcess.isProbabilityMeasure_productionRawLawWithInitial
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
+    IsProbabilityMeasure (P.productionRawLawWithInitial initial) := by
+  unfold DiscreteDecisionProcess.productionRawLawWithInitial
+  exact Measure.isProbabilityMeasure_map P.measurable_decodePaddedPlay.aemeasurable
+
+/-- Every finite marginal of the arbitrary-initial decoded production law is the finite DDP
+coordinate recursion. -/
+private theorem DiscreteDecisionProcess.map_frestrictLe_productionRawLawWithInitial
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) (t : ℕ) :
+    (P.productionRawLawWithInitial initial).map
+        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) t) =
+      (P.ddpCoordsDistFromStagePMF initial t).toMeasure := by
+  rw [DiscreteDecisionProcess.productionRawLawWithInitial]
+  rw [Measure.map_map
+    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) t)
+    P.measurable_decodePaddedPlay]
+  have hcommute :
+      Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) t ∘ P.decodePaddedPlay =
+        P.decodePaddedCoords t ∘
+          Preorder.frestrictLe (π := fun _ : ℕ => P.paddedGame.StageOutcome) t := rfl
+  rw [hcommute]
+  rw [← Measure.map_map (P.measurable_decodePaddedCoords t)
+    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => P.paddedGame.StageOutcome) t)]
+  rw [P.paddedGame.map_frestrictLe_infinitePlayMeasureFromStagePMF]
+  rw [PMF.toMeasure_map (P.decodePaddedCoords t) _ (P.measurable_decodePaddedCoords t)]
+  rw [P.coordsDistFromStagePMF_eq_map_encode initial t]
+  rw [PMF.map_comp]
+  have hleftInverse :
+      P.decodePaddedCoords t ∘ P.encodePaddedCoords t = id := by
+    funext coords
+    exact P.decodePaddedCoords_encode t coords
+  rw [hleftInverse, PMF.map_id]
+
+/-- The finite DDP coordinate recursion has the usual initial mass times transition-product
+point probabilities. -/
+private theorem DiscreteDecisionProcess.ddpCoordsDistFromStagePMF_apply
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) : ∀ (k : ℕ)
+    (stage : Fin (k + 1) → DDPStage P),
+    P.ddpCoordsDistFromStagePMF initial k (P.stagePrefixOfFin stage) =
+      initial (stage 0) *
+        ∏ i : Fin k, P.stepStagePMF (stage i.castSucc) (stage i.succ) := by
+  intro k
+  induction k with
+  | zero =>
+      intro stage
+      let e : DDPStage P ≃ (∀ _ : Finset.Iic 0, DDPStage P) :=
+        { toFun := fun value _ => value
+          invFun := fun values => values default
+          left_inv := fun _ => rfl
+          right_inv := fun values => by
+            funext i
+            rw [show i = default from Subsingleton.elim _ _] }
+      change (initial.map e) (P.stagePrefixOfFin stage) = _
+      rw [Math.ProbabilityMassFunction.map_equiv_apply]
+      have hinverse : e.symm (P.stagePrefixOfFin stage) = stage 0 := by
+        rfl
+      rw [hinverse]
+      simp
+  | succ k ih =>
+      intro stage
+      let old : Fin (k + 1) → DDPStage P := Fin.init stage
+      let previous := P.ddpCoordsDistFromStagePMF initial k
+      let nextLaw : (∀ _ : Finset.Iic k, DDPStage P) → PMF (DDPStage P) :=
+        fun coords => P.stepStagePMF (coords ⟨k, Finset.mem_Iic.mpr le_rfl⟩)
+      let joint := previous.bind fun coords =>
+        (nextLaw coords).map fun next => (coords, next)
+      have hdist :
+          P.ddpCoordsDistFromStagePMF initial (k + 1) =
+            joint.map (P.extendDDPCoordsEquiv k) := by
+        rw [DiscreteDecisionProcess.ddpCoordsDistFromStagePMF]
+        change previous.bind (fun coords =>
+            (nextLaw coords).map (P.extendDDPCoords coords)) =
+          joint.map (P.extendDDPCoordsEquiv k)
+        dsimp only [joint]
+        rw [PMF.map_bind]
+        apply congrArg (PMF.bind previous)
+        funext coords
+        rw [PMF.map_comp]
+        rfl
+      have hinverse :
+          (P.extendDDPCoordsEquiv k).symm (P.stagePrefixOfFin stage) =
+            (P.stagePrefixOfFin old, stage (Fin.last (k + 1))) := by
+        apply Prod.ext
+        · funext i
+          rfl
+        · rfl
+      rw [hdist, Math.ProbabilityMassFunction.map_equiv_apply, hinverse]
+      rw [pmf_bind_map_pair_apply]
+      change P.ddpCoordsDistFromStagePMF initial k (P.stagePrefixOfFin old) *
+          P.stepStagePMF
+            (P.stagePrefixOfFin old ⟨k, Finset.mem_Iic.mpr le_rfl⟩)
+            (stage (Fin.last (k + 1))) = _
+      rw [ih old]
+      rw [Fin.prod_univ_castSucc]
+      dsimp only [old, Fin.init]
+      simp only [DiscreteDecisionProcess.stagePrefixOfFin, Fin.castSucc_zero,
+        Fin.succ_castSucc, Fin.succ_last]
+      have hcurrent : Fin.init stage ⟨k, by omega⟩ = stage (Fin.last k).castSucc := by
+        rfl
+      have hnext : stage (Fin.last (k + 1)) = stage (Fin.last k.succ) := by
+        rfl
+      rw [hcurrent, hnext]
+      ring
+
+/-- The arbitrary-initial decoded production law has the DDP's exact finite-cylinder
+probabilities. -/
+private theorem DiscreteDecisionProcess.productionRawLawWithInitial_exactStageCylinder
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) (k : ℕ)
+    (stage : Fin (k + 1) → DDPStage P) :
+    P.productionRawLawWithInitial initial
+        {w : ℕ → DDPStage P | ∀ i : Fin (k + 1), w i = stage i} =
+      initial (stage 0) *
+        ∏ i : Fin k, P.stepStagePMF (stage i.castSucc) (stage i.succ) := by
+  have hevent :
+      {w : ℕ → DDPStage P | ∀ i : Fin (k + 1), w i = stage i} =
+        Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k ⁻¹'
+          {P.stagePrefixOfFin stage} := by
+    ext w
+    simp only [mem_setOf_eq, mem_preimage, mem_singleton_iff]
+    constructor
+    · intro h
+      funext i
+      exact h ⟨i.1, Nat.lt_succ_of_le (Finset.mem_Iic.mp i.2)⟩
+    · intro h i
+      exact congrFun h ⟨i.1, Finset.mem_Iic.mpr (Nat.lt_succ_iff.mp i.2)⟩
+  rw [hevent]
+  rw [← Measure.map_apply
+    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) k)
+    (measurableSet_singleton (P.stagePrefixOfFin stage))]
+  rw [P.map_frestrictLe_productionRawLawWithInitial initial k]
+  rw [PMF.toMeasure_apply_singleton _ _ MeasurableSet.of_discrete]
+  exact P.ddpCoordsDistFromStagePMF_apply initial k stage
 
 /-- The initial-stage law evaluates to the action-selection probability. -/
 private theorem DiscreteDecisionProcess.initialStagePMF_apply
@@ -988,6 +1338,172 @@ private def DiscreteDecisionProcess.stageKernel (P : DiscreteDecisionProcess) (n
 private instance DiscreteDecisionProcess.isMarkovKernel_stageKernel
     (P : DiscreteDecisionProcess) (n : ℕ) : IsMarkovKernel (P.stageKernel n) :=
   ⟨fun _ => PMF.toMeasure.isProbabilityMeasure _⟩
+
+/-- Evaluation of one abstract Ionescu--Tulcea step on a finite history. -/
+private theorem partialTraj_succ_self_apply_ddp {Stage : ℕ → Type*}
+    [∀ n, MeasurableSpace (Stage n)]
+    {kernel : (n : ℕ) → Kernel (∀ i : Finset.Iic n, Stage i) (Stage (n + 1))}
+    [∀ n, IsMarkovKernel (kernel n)] (n : ℕ) (coords : ∀ i : Finset.Iic n, Stage i) :
+    Kernel.partialTraj kernel n (n + 1) coords =
+      (kernel n coords).map fun next =>
+        IicProdIoc n (n + 1) (coords, MeasurableEquiv.piSingleton n next) := by
+  rw [Kernel.partialTraj_succ_self, Kernel.map_apply _ measurable_IicProdIoc,
+    Kernel.prod_apply, Kernel.id_apply,
+    Kernel.map_apply _ (MeasurableEquiv.piSingleton n).measurable,
+    Measure.dirac_prod, Measure.map_map measurable_IicProdIoc (by fun_prop),
+    Measure.map_map (by fun_prop) (MeasurableEquiv.piSingleton n).measurable]
+  rfl
+
+/-- One local transition-kernel step is the finite DDP coordinate extension. -/
+private theorem DiscreteDecisionProcess.stageKernel_partialTraj_succ_self
+    (P : DiscreteDecisionProcess) (n : ℕ)
+    (coords : ∀ _ : Finset.Iic n, DDPStage P) :
+    Kernel.partialTraj (X := fun _ : ℕ => DDPStage P) P.stageKernel n (n + 1) coords =
+      ((P.stepStagePMF (coords ⟨n, Finset.mem_Iic.mpr le_rfl⟩)).map
+        (P.extendDDPCoords coords)).toMeasure := by
+  have hfg : (fun next : DDPStage P =>
+      IicProdIoc (X := fun _ : ℕ => DDPStage P) n (n + 1)
+        (coords, MeasurableEquiv.piSingleton
+          (X := fun _ : ℕ => DDPStage P) n next)) = P.extendDDPCoords coords := by
+    funext next i
+    by_cases hi : i.1 ≤ n
+    · simp [IicProdIoc, DiscreteDecisionProcess.extendDDPCoords, hi]
+    · have hlast : i.1 = n + 1 := by
+        have := Finset.mem_Iic.mp i.2
+        omega
+      rw [show i = ⟨n + 1, Finset.mem_Iic.mpr le_rfl⟩ from Subtype.ext hlast]
+      simp [IicProdIoc, MeasurableEquiv.piSingleton,
+        DiscreteDecisionProcess.extendDDPCoords]
+  refine (partialTraj_succ_self_apply_ddp
+    (Stage := fun _ : ℕ => DDPStage P) (kernel := P.stageKernel) n coords).trans ?_
+  change Measure.map (fun next : DDPStage P =>
+      IicProdIoc (X := fun _ : ℕ => DDPStage P) n (n + 1)
+        (coords, MeasurableEquiv.piSingleton
+          (X := fun _ : ℕ => DDPStage P) n next))
+      (P.stepStagePMF (coords ⟨n, Finset.mem_Iic.mpr le_rfl⟩)).toMeasure = _
+  rw [hfg]
+  exact PMF.toMeasure_map (P.extendDDPCoords coords)
+    (P.stepStagePMF (coords ⟨n, Finset.mem_Iic.mpr le_rfl⟩))
+    (measurable_of_countable _)
+
+/-- The singleton-coordinate start measure used by the local transition kernel. -/
+private def DiscreteDecisionProcess.stageKernelStartMeasure
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
+    Measure (∀ _ : Finset.Iic 0, DDPStage P) :=
+  initial.toMeasure.map
+    (MeasurableEquiv.piUnique (fun _ : Finset.Iic 0 => DDPStage P)).symm
+
+/-- The local transition kernel and the finite DDP recursion have the same marginals. -/
+private theorem DiscreteDecisionProcess.bind_partialTraj_stageKernel_eq_ddpCoords
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) (t : ℕ) :
+    Measure.bind (P.stageKernelStartMeasure initial)
+        (Kernel.partialTraj (X := fun _ : ℕ => DDPStage P) P.stageKernel 0 t) =
+      (P.ddpCoordsDistFromStagePMF initial t).toMeasure := by
+  induction t with
+  | zero =>
+      rw [Kernel.partialTraj_self]
+      have hid : (⇑(Kernel.id (α := ∀ _ : Finset.Iic 0, DDPStage P))) =
+          Measure.dirac := by
+        funext coords
+        exact Kernel.id_apply coords
+      rw [hid, Measure.bind_dirac]
+      unfold DiscreteDecisionProcess.stageKernelStartMeasure
+        DiscreteDecisionProcess.ddpCoordsDistFromStagePMF
+      exact PMF.toMeasure_map (fun stage (_ : Finset.Iic 0) => stage) initial
+        (measurable_of_countable _)
+  | succ t ih =>
+      have heq : Kernel.partialTraj (X := fun _ : ℕ => DDPStage P)
+          P.stageKernel 0 (t + 1) =
+          Kernel.partialTraj (X := fun _ : ℕ => DDPStage P)
+              P.stageKernel t (t + 1) ∘ₖ
+            Kernel.partialTraj (X := fun _ : ℕ => DDPStage P) P.stageKernel 0 t :=
+        Kernel.partialTraj_succ_eq_comp (Nat.zero_le t)
+      have hcomp :
+          (⇑(Kernel.partialTraj (X := fun _ : ℕ => DDPStage P)
+              P.stageKernel t (t + 1) ∘ₖ
+            Kernel.partialTraj (X := fun _ : ℕ => DDPStage P) P.stageKernel 0 t)) =
+          fun coords => Measure.bind
+            (Kernel.partialTraj (X := fun _ : ℕ => DDPStage P)
+              P.stageKernel 0 t coords)
+            (Kernel.partialTraj (X := fun _ : ℕ => DDPStage P)
+              P.stageKernel t (t + 1)) :=
+        funext fun coords => Kernel.comp_apply _ _ coords
+      rw [heq, hcomp,
+        ← Measure.bind_bind (Kernel.measurable _).aemeasurable
+          (Kernel.measurable _).aemeasurable, ih]
+      have hfun :
+          (⇑(Kernel.partialTraj (X := fun _ : ℕ => DDPStage P)
+            P.stageKernel t (t + 1))) =
+            fun coords => ((P.stepStagePMF
+              (coords ⟨t, Finset.mem_Iic.mpr le_rfl⟩)).map
+                (P.extendDDPCoords coords)).toMeasure :=
+        funext (P.stageKernel_partialTraj_succ_self t)
+      rw [hfun, GameTheory.StochasticGame.measureBind_toMeasure_eq]
+      rfl
+
+/-- Every finite marginal of the local transition-kernel trajectory is the finite DDP
+coordinate recursion. -/
+private theorem DiscreteDecisionProcess.map_frestrictLe_stageKernelTrajMeasure
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) (t : ℕ) :
+    (Kernel.trajMeasure (X := fun _ : ℕ => DDPStage P)
+        initial.toMeasure P.stageKernel).map
+        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) t) =
+      (P.ddpCoordsDistFromStagePMF initial t).toMeasure := by
+  unfold Kernel.trajMeasure
+  rw [Measure.map_comp _ _ (by fun_prop)]
+  rw [Kernel.traj_map_frestrictLe]
+  exact P.bind_partialTraj_stageKernel_eq_ddpCoords initial t
+
+/-- The decoded production law is exactly the local transition-kernel trajectory law. -/
+private theorem DiscreteDecisionProcess.productionRawLawWithInitial_eq_stageKernelTrajMeasure
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
+    P.productionRawLawWithInitial initial =
+      Kernel.trajMeasure (X := fun _ : ℕ => DDPStage P)
+        initial.toMeasure P.stageKernel := by
+  let finiteLaw : (n : ℕ) → Measure (∀ _ : Finset.Iic n, DDPStage P) :=
+    fun n => (P.ddpCoordsDistFromStagePMF initial n).toMeasure
+  have hprojective : ∀ a b : ℕ, ∀ hab : a ≤ b,
+      (finiteLaw b).map (Preorder.frestrictLe₂ (π := fun _ : ℕ => DDPStage P) hab) =
+        finiteLaw a := by
+    intro a b hab
+    dsimp only [finiteLaw]
+    rw [← P.map_frestrictLe_productionRawLawWithInitial initial b]
+    rw [Measure.map_map (Preorder.measurable_frestrictLe₂ hab)
+      (Preorder.measurable_frestrictLe b)]
+    rw [Preorder.frestrictLe₂_comp_frestrictLe hab]
+    exact P.map_frestrictLe_productionRawLawWithInitial initial a
+  let family : (I : Finset ℕ) → Measure (∀ i : I, DDPStage P) :=
+    MeasureTheory.inducedFamily (X := fun _ : ℕ => DDPStage P) finiteLaw
+  have hfamily : IsProjectiveMeasureFamily
+      (α := fun _ : ℕ => DDPStage P) family := by
+    dsimp only [family]
+    exact MeasureTheory.isProjectiveMeasureFamily_inducedFamily
+      (X := fun _ : ℕ => DDPStage P) finiteLaw hprojective
+  letI : ∀ I, IsFiniteMeasure (family I) := fun I => by
+    dsimp only [family, finiteLaw, MeasureTheory.inducedFamily]
+    infer_instance
+  have hproduction : IsProjectiveLimit (P.productionRawLawWithInitial initial)
+      family :=
+    (MeasureTheory.isProjectiveLimit_nat_iff hfamily _).2 fun n => by
+      change (P.productionRawLawWithInitial initial).map
+          (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) =
+        MeasureTheory.inducedFamily (X := fun _ : ℕ => DDPStage P)
+          finiteLaw (Finset.Iic n)
+      rw [MeasureTheory.inducedFamily_Iic]
+      exact P.map_frestrictLe_productionRawLawWithInitial initial n
+  have hkernel : IsProjectiveLimit
+      (Kernel.trajMeasure (X := fun _ : ℕ => DDPStage P)
+        initial.toMeasure P.stageKernel)
+      family :=
+    (MeasureTheory.isProjectiveLimit_nat_iff hfamily _).2 fun n => by
+      change (Kernel.trajMeasure (X := fun _ : ℕ => DDPStage P)
+          initial.toMeasure P.stageKernel).map
+          (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) =
+        MeasureTheory.inducedFamily (X := fun _ : ℕ => DDPStage P)
+          finiteLaw (Finset.Iic n)
+      rw [MeasureTheory.inducedFamily_Iic]
+      exact P.map_frestrictLe_stageKernelTrajMeasure initial n
+  exact hproduction.unique hkernel
 
 /-- The martingale-difference contribution attached to one sampled DDP stage. -/
 private def DDPStage.increment (P : DiscreteDecisionProcess) (stage : DDPStage P) : ℝ :=
@@ -1148,12 +1664,12 @@ private theorem DiscreteDecisionProcess.integral_valueY_stageKernel
   simp_rw [hinner]
   exact P.harmonicY current.1 current.2 |>.symm
 
-/-- The raw infinite stage law generated from an arbitrary initial stage distribution. -/
+/-- The raw infinite stage law is the decoded production stochastic-game law generated from
+an arbitrary initial sampled-stage distribution. -/
 private def DiscreteDecisionProcess.rawLawWithInitial
     (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
     Measure (ℕ → DDPStage P) :=
-  Kernel.trajMeasure (X := fun _ : ℕ => DDPStage P)
-    initial.toMeasure P.stageKernel
+  P.productionRawLawWithInitial initial
 
 private instance DiscreteDecisionProcess.isProbabilityMeasure_rawLawWithInitial
     (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
@@ -1242,6 +1758,11 @@ private theorem DiscreteDecisionProcess.rawStageValue_martingale
   have hkernelOnPath := ae_of_ae_map
     (Preorder.measurable_frestrictLe
       (X := fun _ : ℕ => DDPStage P) n).aemeasurable hkernel
+  have hraw : Kernel.trajMeasure (X := fun _ : ℕ => DDPStage P)
+      initial.toMeasure P.stageKernel = P.rawLawWithInitial initial := by
+    simpa only [DiscreteDecisionProcess.rawLawWithInitial] using
+      (P.productionRawLawWithInitial_eq_stageKernelTrajMeasure initial).symm
+  simp only [hraw] at hkernelOnPath
   have hfiltration : filtration n = MeasurableSpace.comap
       (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) inferInstance :=
     Filtration.piLE_eq_comap_frestrictLe n
@@ -1410,6 +1931,13 @@ private theorem DiscreteDecisionProcess.rawAdvantage_martingale
   have hkernelOnPath := ae_of_ae_map
     (Preorder.measurable_frestrictLe
       (X := fun _ : ℕ => DDPStage P) n).aemeasurable hkernel
+  have hraw : Kernel.trajMeasure (X := fun _ : ℕ => DDPStage P)
+      (P.initialStagePMF P.initial).toMeasure P.stageKernel = P.rawLawFrom P.initial := by
+    simpa only [DiscreteDecisionProcess.rawLawFrom,
+      DiscreteDecisionProcess.rawLawWithInitial] using
+      (P.productionRawLawWithInitial_eq_stageKernelTrajMeasure
+        (P.initialStagePMF P.initial)).symm
+  simp only [hraw] at hkernelOnPath
   rw [show filtration n =
       MeasurableSpace.comap
         (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) inferInstance by
@@ -1507,24 +2035,6 @@ private theorem martingale_square_integral_eq
               ∫ w, (f (n + 1) w - f n w) ^ 2 ∂mu := by rw [ih]
         _ = _ := by ring
 
-/-- The time-zero marginal of a raw DDP law is its supplied initial-stage distribution. -/
-private theorem DiscreteDecisionProcess.map_prefix_zero_rawLawWithInitial
-    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
-    (P.rawLawWithInitial initial).map
-        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) 0) =
-      initial.toMeasure.map
-        (MeasurableEquiv.piUnique (fun _ : Finset.Iic 0 => DDPStage P)).symm := by
-  unfold DiscreteDecisionProcess.rawLawWithInitial Kernel.trajMeasure
-  rw [Measure.map_comp _ _ (by fun_prop)]
-  rw [Kernel.traj_map_frestrictLe, Kernel.partialTraj_self]
-  rw [Measure.id_comp]
-
-/-- Reindex a finite exact stage string as an Ionescu--Tulcea prefix. -/
-private def DiscreteDecisionProcess.stagePrefixOfFin
-    (P : DiscreteDecisionProcess) {k : ℕ}
-    (stage : Fin (k + 1) → DDPStage P) : ∀ _ : Finset.Iic k, DDPStage P :=
-  fun i => stage ⟨i.1, Nat.lt_succ_of_le (Finset.mem_Iic.mp i.2)⟩
-
 /-- An exact finite stage cylinder is the preimage of its finite prefix. -/
 private theorem DiscreteDecisionProcess.rawStageCylinder_eq_prefixPreimage
     (P : DiscreteDecisionProcess) (k : ℕ)
@@ -1559,141 +2069,7 @@ private theorem DiscreteDecisionProcess.rawLawWithInitial_exactStageCylinder
         {w : ℕ → DDPStage P | ∀ i : Fin (k + 1), w i = stage i} =
       initial (stage 0) *
         ∏ i : Fin k, P.stepStagePMF (stage i.castSucc) (stage i.succ) := by
-  intro k
-  induction k with
-  | zero =>
-      intro stage
-      rw [P.rawStageCylinder_eq_prefixPreimage]
-      rw [← Measure.map_apply
-        (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) 0)
-        (measurableSet_singleton (P.stagePrefixOfFin stage))]
-      rw [P.map_prefix_zero_rawLawWithInitial]
-      rw [Measure.map_apply (MeasurableEquiv.measurable _)
-        (measurableSet_singleton (P.stagePrefixOfFin stage))]
-      have hevent :
-          (MeasurableEquiv.piUnique (fun _ : Finset.Iic 0 => DDPStage P)).symm ⁻¹'
-              {P.stagePrefixOfFin stage} = {stage 0} := by
-        ext z
-        simp only [mem_preimage, mem_singleton_iff]
-        have hprefix : P.stagePrefixOfFin stage (default : Finset.Iic 0) = stage 0 := by
-          apply congrArg stage
-          apply Fin.ext
-          exact Nat.eq_zero_of_le_zero
-            (Finset.mem_Iic.mp (default : Finset.Iic 0).2)
-        constructor
-        · intro hz
-          have hcoord := congrFun hz (default : Finset.Iic 0)
-          rw [MeasurableEquiv.piUnique_symm_apply] at hcoord
-          change z = P.stagePrefixOfFin stage default at hcoord
-          simpa only [hprefix] using hcoord
-        · intro hz
-          subst z
-          funext i
-          have hi : i = (default : Finset.Iic 0) := Subsingleton.elim _ _
-          subst i
-          change stage 0 = P.stagePrefixOfFin stage default
-          rw [hprefix]
-      rw [hevent, PMF.toMeasure_apply_singleton _ _ MeasurableSet.of_discrete]
-      simp
-  | succ k ih =>
-      intro stage
-      let old : Fin (k + 1) → DDPStage P := Fin.init stage
-      let pref := P.stagePrefixOfFin old
-      let next := stage (Fin.last (k + 1))
-      have hrec := Kernel.map_frestrictLe_trajMeasure_compProd_eq_map_trajMeasure
-        (X := fun _ : ℕ => DDPStage P) (κ := P.stageKernel)
-        (μ₀ := initial.toMeasure) (a := k)
-      have hpre :
-          (fun w : ℕ → DDPStage P =>
-            (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k w,
-              w (k + 1))) ⁻¹' ({pref} ×ˢ {next}) =
-            {w | ∀ i : Fin (k + 2), w i = stage i} := by
-        ext w
-        simp only [mem_preimage, mem_prod, mem_singleton_iff, mem_setOf_eq]
-        constructor
-        · rintro ⟨hpref, hnext⟩ i
-          by_cases hi : i.1 ≤ k
-          · have hcoord := congrFun hpref ⟨i.1, Finset.mem_Iic.mpr hi⟩
-            change w i.1 = old ⟨i.1, Nat.lt_succ_of_le hi⟩ at hcoord
-            rw [hcoord]
-            apply congrArg stage
-            apply Fin.ext
-            rfl
-          · have hii : i = Fin.last (k + 1) := by
-              apply Fin.ext
-              simp only [Fin.val_last]
-              omega
-            subst i
-            exact hnext
-        · intro hw
-          constructor
-          · funext i
-            have hi : i.1 ≤ k := Finset.mem_Iic.mp i.2
-            change w i.1 = old ⟨i.1, Nat.lt_succ_of_le hi⟩
-            rw [hw ⟨i.1, by omega⟩]
-            apply congrArg stage
-            apply Fin.ext
-            rfl
-          · exact hw (Fin.last (k + 1))
-      have hleft :
-          ((P.rawLawWithInitial initial).map
-              (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k) ⊗ₘ
-              P.stageKernel k) ({pref} ×ˢ {next}) =
-            P.stepStagePMF (old (Fin.last k)) next *
-              P.rawLawWithInitial initial
-                {w | ∀ i : Fin (k + 1), w i = old i} := by
-        rw [Measure.compProd_apply_prod (measurableSet_singleton pref)
-          (measurableSet_singleton next)]
-        rw [setLIntegral_congr_fun (measurableSet_singleton pref) (g := fun _ =>
-          P.stepStagePMF (old (Fin.last k)) next)]
-        · rw [MeasureTheory.setLIntegral_const]
-          rw [Measure.map_apply
-            (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) k)
-            (measurableSet_singleton pref)]
-          rw [← P.rawStageCylinder_eq_prefixPreimage k old]
-        · intro history hhistory
-          simp only [mem_singleton_iff] at hhistory
-          subst history
-          change (P.stepStagePMF
-              (pref ⟨k, Finset.mem_Iic.mpr le_rfl⟩)).toMeasure {next} = _
-          rw [PMF.toMeasure_apply_singleton _ _ MeasurableSet.of_discrete]
-          congr 2
-      have hright :
-          (P.rawLawWithInitial initial).map (fun w : ℕ → DDPStage P =>
-            (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k w,
-              w (k + 1))) ({pref} ×ˢ {next}) =
-            P.rawLawWithInitial initial
-              {w | ∀ i : Fin (k + 2), w i = stage i} := by
-        rw [Measure.map_apply]
-        · rw [hpre]
-        · fun_prop
-        · exact (measurableSet_singleton pref).prod (measurableSet_singleton next)
-      change
-        ((P.rawLawWithInitial initial).map
-            (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k) ⊗ₘ
-            P.stageKernel k) =
-          (P.rawLawWithInitial initial).map (fun w : ℕ → DDPStage P =>
-            (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k w,
-              w (k + 1))) at hrec
-      rw [← hright, ← hrec, hleft, ih old]
-      rw [Fin.prod_univ_castSucc]
-      have hlast : old (Fin.last k) = stage (Fin.last k).castSucc := by
-        rfl
-      have hproduct :
-          (∏ i : Fin k, P.stepStagePMF (old i.castSucc) (old i.succ)) =
-            ∏ i : Fin k,
-              P.stepStagePMF (stage i.castSucc.castSucc) (stage i.castSucc.succ) := by
-        apply Finset.prod_congr rfl
-        intro i _
-        congr 2
-      have hnext : next = stage (Fin.last k).succ := by
-        apply congrArg stage
-        apply Fin.ext
-        rfl
-      rw [hlast, hproduct, hnext]
-      have hzero : old 0 = stage 0 := rfl
-      rw [hzero]
-      ring
+  exact P.productionRawLawWithInitial_exactStageCylinder initial
 
 /-- The state-started raw DDP law has the corresponding finite-stage products. -/
 private theorem DiscreteDecisionProcess.rawLawFrom_exactStageCylinder
@@ -6323,6 +6699,12 @@ structure QuittingGame where
 attribute [instance] QuittingGame.finitePlayer
 attribute [instance] QuittingGame.nonemptyPlayer
 
+/-- Replace a quitting game's reward table while keeping its player type. -/
+abbrev QuittingGame.withReward (G : QuittingGame)
+    (reward : {A : Finset G.Player // A.Nonempty} → Payoff G.Player) : QuittingGame where
+  Player := G.Player
+  reward := reward
+
 /-- A one-stage quitting row gives each player's conditional probability of quitting. -/
 abbrev QuitRow (G : QuittingGame) := G.Player → Set.Icc (0 : ℝ) 1
 
@@ -6677,6 +7059,23 @@ private def quittingRewardPart (G : QuittingGame) (p : QuitRow G)
   ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
     CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0
 
+/-- Decreasing a player's terminal rewards decreases each row's reward contribution. -/
+private theorem quittingRewardPart_mono_reward (G : QuittingGame)
+    (reward' : {A : Finset G.Player // A.Nonempty} → Payoff G.Player)
+    (p : QuitRow G) (n : G.Player) (hreward : ∀ A, reward' A n ≤ G.reward A n) :
+    quittingRewardPart (G.withReward reward') p n ≤ quittingRewardPart G p n := by
+  classical
+  apply Finset.sum_le_sum
+  intro A _hA
+  split_ifs with hnonempty
+  · have hprob : 0 ≤ CoalitionProbability G p A := by
+      simp only [CoalitionProbability]
+      exact mul_nonneg
+        (Finset.prod_nonneg fun i _ => (p i).property.1)
+        (Finset.prod_nonneg fun i _ => sub_nonneg.mpr (p i).property.2)
+    exact mul_le_mul_of_nonneg_left (hreward ⟨A, hnonempty⟩) hprob
+  · exact le_rfl
+
 /-- The reward contribution is affine in any one player's quitting probability. -/
 private theorem quittingRewardPart_replace_affine (G : QuittingGame) (p : QuitRow G)
     (j : G.Player) (q : Set.Icc (0 : ℝ) 1) (n : G.Player) :
@@ -6973,6 +7372,24 @@ private theorem summable_quitTailPayoff (G : QuittingGame) (p : QuitProfile G)
         (abs_quittingRewardPart_le G _ n (fun A => le_of_lt (hM.2.2 A n))) hsurvival
     _ = M * (tailSurvival G p i k * QuitProbability G (p (i + k))) := by ring_nf
 
+/-- Pointwise decreasing one player's terminal rewards decreases that player's payoff for
+every fixed quitting profile. -/
+theorem quitPayoff_mono_reward (G : QuittingGame)
+    (reward' : {A : Finset G.Player // A.Nonempty} → Payoff G.Player)
+    (p : QuitProfile G) (n : G.Player) (hreward : ∀ A, reward' A n ≤ G.reward A n) :
+    QuitPayoff (G.withReward reward') p n ≤ QuitPayoff G p n := by
+  have hleft := summable_quitTailPayoff (G.withReward reward') p 0 n
+  have hright := summable_quitTailPayoff G p 0 n
+  change (∑' k, tailSurvival G p 0 k *
+      quittingRewardPart (G.withReward reward') (p (0 + k)) n) ≤
+    ∑' k, tailSurvival G p 0 k * quittingRewardPart G (p (0 + k)) n
+  apply hleft.tsum_le_tsum _ hright
+  intro k
+  exact mul_le_mul_of_nonneg_left
+    (quittingRewardPart_mono_reward G reward' (p (0 + k)) n hreward)
+    (Finset.prod_nonneg fun j _ =>
+      sub_nonneg.mpr (quitProbability_mem_Icc G _).2)
+
 /-- A row replacement by its current coordinate leaves the row unchanged. -/
 theorem QuitRow.replace_self (G : QuittingGame) (p : QuitRow G)
     (n : G.Player) : p.replace G n (p n) = p := by
@@ -7187,6 +7604,53 @@ theorem abs_minMaxQuit_le_of_reward_bound (G : QuittingGame) (n : G.Player)
     let profile : QuitProfile G := fun _ _ => 0
     exact (ciInf_le houterBelow profile).trans
       (ciSup_le fun deviation => (le_abs_self _).trans (hpayoff _))
+
+/-- Pointwise decreasing one player's terminal rewards cannot increase that player's
+quitting-game min-max value. -/
+theorem minMaxQuit_mono_reward (G : QuittingGame)
+    (reward' : {A : Finset G.Player // A.Nonempty} → Payoff G.Player)
+    (n : G.Player) (hreward : ∀ A, reward' A n ≤ G.reward A n) :
+    MinMaxQuit (G.withReward reward') n ≤ MinMaxQuit G n := by
+  classical
+  let G' := G.withReward reward'
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  obtain ⟨M', hM'⟩ := exists_quittingPayoffDifferenceBound G'
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hM0' : 0 ≤ M' := le_trans (by norm_num) hM'.1
+  have hpayoff (profile : QuitProfile G) : |QuitPayoff G profile n| ≤ M :=
+    abs_quitPayoff_le G profile n hM0 fun A => (hM.2.2 A n).le
+  have hpayoff' (profile : QuitProfile G') : |QuitPayoff G' profile n| ≤ M' :=
+    abs_quitPayoff_le G' profile n hM0' fun A => (hM'.2.2 A n).le
+  let upper : QuitProfile G → ℝ := fun profile =>
+    ⨆ deviation : ℕ → Set.Icc (0 : ℝ) 1,
+      QuitPayoff G (profile.replace G n deviation) n
+  let upper' : QuitProfile G' → ℝ := fun profile =>
+    ⨆ deviation : ℕ → Set.Icc (0 : ℝ) 1,
+      QuitPayoff G' (profile.replace G' n deviation) n
+  have hinnerAbove (profile : QuitProfile G) : BddAbove
+      (range fun deviation : ℕ → Set.Icc (0 : ℝ) 1 =>
+        QuitPayoff G (profile.replace G n deviation) n) := by
+    refine ⟨M, ?_⟩
+    rintro _ ⟨deviation, rfl⟩
+    exact (le_abs_self _).trans (hpayoff _)
+  have hinnerAbove' (profile : QuitProfile G') : BddAbove
+      (range fun deviation : ℕ → Set.Icc (0 : ℝ) 1 =>
+        QuitPayoff G' (profile.replace G' n deviation) n) := by
+    refine ⟨M', ?_⟩
+    rintro _ ⟨deviation, rfl⟩
+    exact (le_abs_self _).trans (hpayoff' _)
+  have hupper (profile : QuitProfile G) : upper' profile ≤ upper profile := by
+    apply ciSup_mono (hinnerAbove profile)
+    intro deviation
+    exact quitPayoff_mono_reward G reward' (profile.replace G n deviation) n hreward
+  have houterBelow' : BddBelow (range upper') := by
+    refine ⟨-M', ?_⟩
+    rintro _ ⟨profile, rfl⟩
+    let deviation : ℕ → Set.Icc (0 : ℝ) 1 := fun _ => 0
+    exact (neg_le_of_abs_le (hpayoff' (profile.replace G' n deviation))).trans
+      (le_ciSup (hinnerAbove' profile) deviation)
+  change (⨅ profile, upper' profile) ≤ ⨅ profile, upper profile
+  exact ciInf_mono houterBelow' hupper
 
 /-- Terminal reward coordinates together with the nonabsorption payoff zero. -/
 private def quittingCoordinateValue (G : QuittingGame) (n : G.Player) :
