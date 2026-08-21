@@ -4941,6 +4941,87 @@ private theorem example4_pinWrong_finitePayoff_lt
       have hle' : (tail : ℝ) < m := by exact_mod_cast hle
       nlinarith
 
+/-- In every Example 4 equilibrium of a positive horizon `n ≤ m`, row
+starts with Top and column starts with Right with probability one. -/
+private theorem example4_initialMixedProfile_eq_pure_of_horizonNash
+    (m horizon : ℕ) (hhorizon : 0 < horizon) (hle : horizon ≤ m)
+    (profile : (example4 m).BehaviorProfile)
+    (hnash : (example4 m).repeatedGame.IsεHorizonNash
+      PUnit.unit horizon 0 profile) (who : Bool) :
+    (example4 m).initialMixedProfile profile who = PMF.pure who := by
+  let root : PMF Bool := (example4 m).initialMixedProfile profile who
+  let value : Bool → ℝ := fun action =>
+    (example4 m).finitePayoff horizon
+      (Function.update profile who
+        ((example4 m).pinInitialAction profile who action)) who
+  let baseline := (example4 m).finitePayoff horizon profile who
+  change root = PMF.pure who
+  have hpin (action : Bool) : value action ≤ baseline := by
+    have h := hnash who
+      ((example4 m).pinInitialAction profile who action)
+    simpa [value, baseline, FiniteStageGame.finitePayoff] using h
+  have hsecurityNash :
+      (example4 m).finitePayoff horizon
+          (Function.update profile who (example4SecurityStrategy m who)) who ≤
+        baseline := by
+    have h := hnash who (example4SecurityStrategy m who)
+    simpa [baseline, FiniteStageGame.finitePayoff] using h
+  have hbaseline : (m : ℝ) ≤ baseline :=
+    (example4SecurityStrategy_finitePayoff_ge
+      m horizon hhorizon profile who).trans hsecurityNash
+  have hwrong : value (!who) < m := by
+    exact example4_pinWrong_finitePayoff_lt
+      m horizon hhorizon hle profile who
+  have haffine : baseline = Math.Probability.expect root value := by
+    exact (example4 m).finitePayoff_eq_expect_pinInitialAction
+      horizon profile who
+  have hsum := Math.Probability.pmf_toReal_sum_one root
+  rw [Math.Probability.expect_eq_sum, Fintype.sum_bool] at haffine
+  rw [Fintype.sum_bool] at hsum
+  cases who
+  · have hwrongMass : (root true).toReal = 0 := by
+      by_contra hne
+      have hpositive : 0 < (root true).toReal :=
+        lt_of_le_of_ne ENNReal.toReal_nonneg (Ne.symm hne)
+      have hfalse := hpin false
+      have htrue := hpin true
+      change value true < (m : ℝ) at hwrong
+      have hwrongBaseline : value true < baseline :=
+        hwrong.trans_le hbaseline
+      have hweightedWrong :
+          (root true).toReal * value true <
+            (root true).toReal * baseline :=
+        mul_lt_mul_of_pos_left hwrongBaseline hpositive
+      have hweightedCorrect :
+          (root false).toReal * value false ≤
+            (root false).toReal * baseline :=
+        mul_le_mul_of_nonneg_left hfalse ENNReal.toReal_nonneg
+      nlinarith
+    exact Math.PMFProduct.eq_pure_false_of_true_toReal_eq_zero
+      root hwrongMass
+  · have hwrongMass : (root false).toReal = 0 := by
+      by_contra hne
+      have hpositive : 0 < (root false).toReal :=
+        lt_of_le_of_ne ENNReal.toReal_nonneg (Ne.symm hne)
+      have hfalse := hpin false
+      have htrue := hpin true
+      change value false < (m : ℝ) at hwrong
+      have hwrongBaseline : value false < baseline :=
+        hwrong.trans_le hbaseline
+      have hweightedWrong :
+          (root false).toReal * value false <
+            (root false).toReal * baseline :=
+        mul_lt_mul_of_pos_left hwrongBaseline hpositive
+      have hweightedCorrect :
+          (root true).toReal * value true ≤
+            (root true).toReal * baseline :=
+        mul_le_mul_of_nonneg_left htrue ENNReal.toReal_nonneg
+      nlinarith
+    have htrueMass : (root true).toReal = 1 := by
+      nlinarith
+    exact Math.PMFProduct.eq_pure_true_of_true_toReal_eq_one
+      root htrueMass
+
 /-- After the first action, the nondeviator in the critical profile copies
 the deviator's initial action forever. -/
 private theorem example4CriticalProfile_shift_opponent
