@@ -480,15 +480,10 @@ def IsSelfPerfect (G : NormalStochasticGame) (S : StochasticSemantics G) : Prop 
   ∀ ε : ℝ, 0 < ε → ∃ profile, EpsilonSelfPerfect G S ε profile
 
 /-- Simon [16]: approximate equilibria in a normal stochastic game imply perfection. -/
-def ApproximateEquilibriaImplyPerfect : Prop :=
+theorem ApproximateEquilibriaImplyPerfect :
   ∀ (G : NormalStochasticGame) (S : StochasticSemantics G),
-    HasApproximateEquilibria G S → IsPerfect G S
-
-/-!
-The implication above is cited from Simon [16], not proved in the 2007 paper.  It is kept
-as the reusable statement of that imported result rather than duplicated by a theorem with
-the same proposition as its entire conclusion.
--/
+    HasApproximateEquilibria G S → IsPerfect G S := by
+  sorry
 
 /-! ## 3. From perfection to approximate equilibria -/
 
@@ -9419,6 +9414,110 @@ private theorem quittingDDPFinitePath_action_false_of_live_end
   rw [hempty] at hnextTerminal
   exact Finset.not_nonempty_empty hnextTerminal
 
+/-- The raw event that the quitting DDP is live and samples this player's Quit action. -/
+private def QuittingDDPOwnQuitEvent
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) (i : ℕ) :
+    Set (ℕ → DDPStage (quittingDecisionProcess G p n T M hM)) :=
+  {stages | (stages i).1 = (i, ∅) ∧ HEq (stages i).2 true}
+
+private theorem measurableSet_quittingDDPOwnQuitEvent
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) (i : ℕ) :
+    MeasurableSet (QuittingDDPOwnQuitEvent G p n T M hM i) := by
+  let P := quittingDecisionProcess G p n T M hM
+  have heq : QuittingDDPOwnQuitEvent G p n T M hM i =
+      {stages : ℕ → DDPStage P | stages i = ⟨(i, ∅), true⟩} := by
+    ext stages
+    simp only [QuittingDDPOwnQuitEvent, mem_setOf_eq]
+    constructor
+    · rintro ⟨hstate, haction⟩
+      apply Sigma.ext hstate
+      exact haction
+    · intro hstage
+      exact ⟨congrArg Sigma.fst hstage, (Sigma.mk.inj_iff.mp hstage).2⟩
+  rw [heq]
+  exact show MeasurableSet ((fun stages : ℕ → DDPStage P => stages i) ⁻¹'
+      {(⟨(i, ∅), true⟩ : DDPStage P)}) from
+    (measurable_pi_apply i)
+      (measurableSet_singleton (⟨(i, ∅), true⟩ : DDPStage P))
+
+private theorem quittingDDPOwnQuitEvent_inter_eq_zero_of_lt
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM))
+    {i j : ℕ} (hij : i < j) (hjT : j < T) :
+    (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+        (QuittingDDPOwnQuitEvent G p n T M hM i ∩
+          QuittingDDPOwnQuitEvent G p n T M hM j) = 0 := by
+  let P := quittingDecisionProcess G p n T M hM
+  let H := {path : DDPFinitePath P j //
+    path.x (Fin.last j) = (j, ∅) ∧ path.y ⟨i, hij⟩ = true}
+  let C : H → Set (ℕ → DDPStage P) := fun path =>
+    DDPPath.ofRaw P ⁻¹' DDPCylinder P path.1
+  have hsubset : QuittingDDPOwnQuitEvent G p n T M hM i ∩
+      QuittingDDPOwnQuitEvent G p n T M hM j ⊆ ⋃ path, C path := by
+    rintro stages ⟨hi, hj⟩
+    let path := (DDPPath.ofRaw P stages).prefix P j
+    have hend : path.x (Fin.last j) = (j, ∅) := by
+      simpa [path, DDPPath.prefix, DDPPath.ofRaw] using hj.1
+    have haction : path.y ⟨i, hij⟩ = true := by
+      have haction' : HEq (path.y ⟨i, hij⟩) true := by
+        simpa [path, DDPPath.prefix, DDPPath.ofRaw] using hi.2
+      exact eq_of_heq haction'
+    exact mem_iUnion.2 ⟨⟨path, hend, haction⟩, rfl⟩
+  have hmeasure (path : H) : P.rawLawFrom (0, ∅) (C path) = 0 := by
+    by_cases hstart : path.1.x 0 = (0, ∅)
+    · rw [P.rawLawFrom_ddpCylinder (0, ∅) path.1 hstart]
+      by_contra hprobability
+      have hfalse := quittingDDPFinitePath_action_false_of_live_end G p n T M hM
+        path.1 hstart hprobability (Nat.le_of_lt hjT) path.2.1 ⟨i, hij⟩
+      exact Bool.false_ne_true (hfalse.symm.trans path.2.2)
+    · exact P.rawLawFrom_ddpCylinder_eq_zero_of_wrong S (0, ∅) path.1 hstart
+  apply nonpos_iff_eq_zero.mp
+  calc
+    P.rawLawFrom (0, ∅)
+        (QuittingDDPOwnQuitEvent G p n T M hM i ∩
+          QuittingDDPOwnQuitEvent G p n T M hM j) ≤
+        P.rawLawFrom (0, ∅) (⋃ path, C path) := measure_mono hsubset
+    _ ≤ ∑' path, P.rawLawFrom (0, ∅) (C path) := measure_iUnion_le _
+    _ = 0 := by simp_rw [hmeasure]; simp
+
+private theorem quittingDDPOwnQuitEvent_pairwise_aedisjoint
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM)) :
+    Pairwise (Function.onFun
+      (AEDisjoint ((quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)))
+      (fun i : Fin T => QuittingDDPOwnQuitEvent G p n T M hM i)) := by
+  intro i j hij
+  change (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+    (QuittingDDPOwnQuitEvent G p n T M hM i ∩
+      QuittingDDPOwnQuitEvent G p n T M hM j) = 0
+  rcases lt_or_gt_of_ne (fun h => hij (Fin.ext h)) with hij' | hji'
+  · exact quittingDDPOwnQuitEvent_inter_eq_zero_of_lt G p n T M hM S
+      hij' j.2
+  · rw [inter_comm]
+    exact quittingDDPOwnQuitEvent_inter_eq_zero_of_lt G p n T M hM S
+      hji' i.2
+
+/-- A player can sample Quit on a live path at most once. -/
+private theorem quittingDDPOwnQuitEvent_totalMass_le_one
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM)) :
+    ∑' i : Fin T, (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+      (QuittingDDPOwnQuitEvent G p n T M hM i) ≤ 1 := by
+  let P := quittingDecisionProcess G p n T M hM
+  let μ := P.rawLawFrom (0, ∅)
+  letI : IsProbabilityMeasure μ := P.isProbabilityMeasure_rawLawFrom (0, ∅)
+  calc
+    (∑' i : Fin T, μ (QuittingDDPOwnQuitEvent G p n T M hM i)) ≤
+        μ Set.univ := tsum_measure_le_measure_univ
+          (fun i => (measurableSet_quittingDDPOwnQuitEvent G p n T M hM i).nullMeasurableSet)
+          (quittingDDPOwnQuitEvent_pairwise_aedisjoint G p n T M hM S)
+    _ = 1 := measure_univ
+
 /-- An unreachable state has zero mass under the raw law of the quitting DDP. -/
 private theorem quittingDDPRawLaw_state_eq_zero_of_unreachable
     (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
@@ -10554,7 +10653,7 @@ The Kohlberg--Mertens structure theorem in the modified form recalled by Simon: 
 straight-line homotopy starts over each `x`, ends with image exactly `E`, and escapes over
 every compact base set uniformly in `t` as `‖x‖ → ∞`.
 -/
-def KohlbergMertensStatement : Prop :=
+theorem KohlbergMertensStatement :
   ∀ D : MatrixGameForm, ∃ H : MatrixParameterSpace D →
     Set.Icc (0 : ℝ) 1 → MatrixParameterSpace D × MixedStrategySpace D,
     IsHomotopy H ∧
@@ -10566,14 +10665,8 @@ def KohlbergMertensStatement : Prop :=
     (∀ x, (H x 0).1 = x) ∧
     range (fun x => H x 1) = MatrixEquilibriumGraph D ∧
     ∀ C : Set (MatrixParameterSpace D), IsCompact C → ∃ R : ℝ, 0 < R ∧
-      ∀ x, R < MatrixNorm D x → ∀ t, (H x t).1 ∉ C
-
-/-!
-`KohlbergMertensStatement` is the paper's imported structure theorem.  Its proof is not
-repeated in Simon 2007, and the project has no formalization of the cited
-Kohlberg--Mertens theory from which to derive it.  It therefore remains an explicit source
-claim rather than being hidden behind a theorem whose conclusion merely unfolds that claim.
--/
+      ∀ x, R < MatrixNorm D x → ∀ t, (H x t).1 ∉ C := by
+  sorry
 
 /-! ### 5.4. Finitely repeated quitting games -/
 
