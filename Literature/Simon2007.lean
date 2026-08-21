@@ -10723,6 +10723,192 @@ private theorem supportPurifiedRow_mem_and_no_badContinue_of_equilibrium
   exact ⟨hrow, hne,
     not_badContinue_of_supportPurifiedRow_ne_one G hbeta.le _ _ hne⟩
 
+/-- Reverse a uniformly reached equilibrium prefix into an approximate `F_η` path.
+Its seam budget is paid by the aggregate bad-Quit mass, while uniform `ρ` turns the
+surviving quitting mass into exact path variation. -/
+private theorem exists_supportPurifiedPrefixPath
+    (G : QuittingGame) {alpha beta eta ρ s d e M : ℝ}
+    (halpha : 0 ≤ alpha) (hbeta : 0 < beta) (hd : 0 < d)
+    (hsmall : alpha < s * beta * d) (hslack : beta + 2 * e ≤ eta)
+    (hηρ : eta ≤ ρ) (hρ : IsUniformRho G ρ) (hM0 : 0 ≤ M)
+    (hreward : ∀ A n, |G.reward A n| ≤ M)
+    (hstable : ∀ r : Payoff G.Player, ‖r‖ ≤ M → ∀ p q : QuitRow G,
+      dist q p < d →
+        (∀ n, |ForcedQuitPayoff G q n - ForcedQuitPayoff G p n| < e) ∧
+        ∀ n, |ForcedContinuePayoff G r q n - ForcedContinuePayoff G r p n| < e)
+    (p : QuitProfile G) (hequilibrium : IsQuitEpsilonEquilibrium G alpha p)
+    (T : ℕ) (hreach : ∀ i, i < T → s ≤ tailSurvival G p 0 i)
+    (hrational : ∀ i, i ≤ T → IsRational G eta (QuitTailPayoff G p i)) :
+    ∃ z : ApproximateFRowPath G eta,
+      z.point 0 = QuitTailPayoff G p T ∧
+      z.totalError ≤ 2 * M * (Fintype.card G.Player * (alpha / (s * beta))) ∧
+      ρ * ((∑ i ∈ Finset.range T, QuitProbability G (p i)) -
+          Fintype.card G.Player * (alpha / (s * beta))) ≤ z.exactVariation := by
+  classical
+  let q : ℕ → QuitRow G := fun i =>
+    supportPurifiedRow G beta (QuitTailPayoff G p (i + 1)) (p i)
+  have hproperties := supportPurifiedRow_mem_and_no_badContinue_of_equilibrium
+    G halpha hbeta hd hsmall hslack hηρ hρ hreward hstable p hequilibrium T
+      hreach hrational
+  have hrow (i : ℕ) (hi : i < T) : q i ∈
+      EpsilonRow G eta (QuitTailPayoff G p (i + 1)) := (hproperties i hi).1
+  have hcontinue (i : ℕ) (hi : i < T) : ∀ n,
+      ¬IsBadContinueAction G beta (QuitTailPayoff G p (i + 1)) (p i) n :=
+    (hproperties i hi).2.2
+  let z : ApproximateFRowPath G eta :=
+    { length := T
+      point := fun t => QuitTailPayoff G p (T - (t : ℕ))
+      row := fun t => q (T - 1 - (t : ℕ))
+      seamError := fun t =>
+        ‖QuitTailPayoff G p (T - ((t : ℕ) + 1)) -
+          QuittingOneStagePayoff G (QuitTailPayoff G p (T - (t : ℕ)))
+            (q (T - 1 - (t : ℕ)))‖
+      seamError_nonneg := fun _ => norm_nonneg _
+      row_mem := by
+        intro t
+        have hi : T - 1 - (t : ℕ) < T := by omega
+        have hsource : T - (t : ℕ) = T - 1 - (t : ℕ) + 1 := by omega
+        simpa only [Fin.val_castSucc, hsource] using hrow (T - 1 - (t : ℕ)) hi
+      step_error := fun _ => le_rfl
+      rational := by
+        intro t
+        exact hrational (T - (t : ℕ)) (Nat.sub_le T (t : ℕ)) }
+  have hcoord (i : ℕ) (hi : i < T) : ∀ n, (q i n : ℝ) ≤ p i n :=
+    supportPurifiedRow_le_of_no_badContinue G (QuitTailPayoff G p (i + 1))
+      (p i) (hcontinue i hi)
+  have hmassEq (i : ℕ) (hi : i < T) :
+      (∑ n, |(q i n : ℝ) - p i n|) = ∑ n, badQuitMass G beta p n i := by
+    simpa only [q] using
+      sum_abs_supportPurifiedRow_sub_eq_sum_badQuitMass G p i (hcontinue i hi)
+  have hseam (i : ℕ) (hi : i < T) :
+      ‖QuitTailPayoff G p i - QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1))
+          (q i)‖ ≤ 2 * M * ∑ n, badQuitMass G beta p n i := by
+    rw [quitTailPayoff_eq_oneStage G p i]
+    calc
+      ‖QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1)) (p i) -
+          QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1)) (q i)‖ =
+          ‖QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1)) (q i) -
+            QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1)) (p i)‖ :=
+        norm_sub_rev _ _
+      _ ≤ 2 * M * ∑ n, |(q i n : ℝ) - p i n| :=
+        norm_quittingOneStagePayoff_row_sub_le G (QuitTailPayoff G p (i + 1))
+          (p i) (q i) hreward (fun n =>
+            abs_quitTailPayoff_le G p (i + 1) n hM0 (fun A => hreward A n))
+      _ = 2 * M * ∑ n, badQuitMass G beta p n i := by rw [hmassEq i hi]
+  have htotalMass :
+      (∑ i ∈ Finset.range T, ∑ n, badQuitMass G beta p n i) ≤
+        Fintype.card G.Player * (alpha / (s * beta)) := by
+    have hsbeta : 0 < s * beta :=
+      pos_of_mul_pos_left (halpha.trans_lt hsmall) hd.le
+    exact sum_sum_badQuitMass_le_of_equilibrium G p hequilibrium T hbeta.le
+      hsbeta hreach
+  have htotalError : z.totalError ≤
+      2 * M * (Fintype.card G.Player * (alpha / (s * beta))) := by
+    rw [ApproximateFRowPath.totalError, Finset.sum_fin_eq_sum_range]
+    simp only [z]
+    calc
+      (∑ t ∈ Finset.range T, if ht : t < T then
+          ‖QuitTailPayoff G p (T - (t + 1)) -
+            QuittingOneStagePayoff G (QuitTailPayoff G p (T - t))
+              (q (T - 1 - t))‖ else 0) =
+          ∑ t ∈ Finset.range T,
+            ‖QuitTailPayoff G p (T - (t + 1)) -
+              QuittingOneStagePayoff G (QuitTailPayoff G p (T - t))
+                (q (T - 1 - t))‖ := by
+        apply Finset.sum_congr rfl
+        intro t ht
+        rw [dif_pos (Finset.mem_range.mp ht)]
+      _ = ∑ i ∈ Finset.range T,
+          ‖QuitTailPayoff G p i - QuittingOneStagePayoff G
+            (QuitTailPayoff G p (i + 1)) (q i)‖ := by
+        let F : ℕ → ℝ := fun i =>
+          ‖QuitTailPayoff G p i - QuittingOneStagePayoff G
+            (QuitTailPayoff G p (i + 1)) (q i)‖
+        have hpoint : ∀ t ∈ Finset.range T,
+            ‖QuitTailPayoff G p (T - (t + 1)) -
+              QuittingOneStagePayoff G (QuitTailPayoff G p (T - t))
+                (q (T - 1 - t))‖ = F (T - 1 - t) := by
+          intro t ht
+          dsimp only [F]
+          have htT := Finset.mem_range.mp ht
+          have hprev : T - (t + 1) = T - 1 - t := by omega
+          have hnext : T - t = T - 1 - t + 1 := by omega
+          rw [hprev, hnext]
+        rw [Finset.sum_congr rfl hpoint, Finset.sum_range_reflect]
+      _ ≤ ∑ i ∈ Finset.range T, 2 * M * ∑ n, badQuitMass G beta p n i :=
+        Finset.sum_le_sum fun i hi => hseam i (Finset.mem_range.mp hi)
+      _ = 2 * M * ∑ i ∈ Finset.range T, ∑ n, badQuitMass G beta p n i := by
+        rw [Finset.mul_sum]
+      _ ≤ 2 * M * (Fintype.card G.Player * (alpha / (s * beta))) :=
+        mul_le_mul_of_nonneg_left htotalMass (mul_nonneg (by norm_num) hM0)
+  have hquitLoss (i : ℕ) (hi : i < T) :
+      QuitProbability G (p i) - QuitProbability G (q i) ≤
+        ∑ n, badQuitMass G beta p n i := by
+    exact (quitProbability_sub_le_sum_coord_sub G (p i) (q i) (hcoord i hi)).trans_eq
+      (by
+        apply Finset.sum_congr rfl
+        intro n _hn
+        exact supportPurifiedRow_coord_sub_eq_badQuitMass G p i
+          (hcontinue i hi) n)
+  have hquitSum :
+      (∑ i ∈ Finset.range T, QuitProbability G (p i)) -
+          Fintype.card G.Player * (alpha / (s * beta)) ≤
+        ∑ i ∈ Finset.range T, QuitProbability G (q i) := by
+    have hlossSum :
+        (∑ i ∈ Finset.range T,
+            (QuitProbability G (p i) - QuitProbability G (q i))) ≤
+          Fintype.card G.Player * (alpha / (s * beta)) :=
+      (Finset.sum_le_sum fun i hi => hquitLoss i (Finset.mem_range.mp hi)).trans
+        htotalMass
+    rw [Finset.sum_sub_distrib] at hlossSum
+    linarith
+  have hexact (i : ℕ) (hi : i < T) :
+      ρ * QuitProbability G (q i) ≤
+        ‖QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1)) (q i) -
+          QuitTailPayoff G p (i + 1)‖ := by
+    have hmotion := (hρ.2.2 (QuitTailPayoff G p (i + 1)) (q i)
+      (IsRational.mono G hηρ (hrational (i + 1) (by omega)))
+      (EpsilonRow.mono G hηρ _ (hrow i hi))).1
+    simpa only [norm_sub_rev] using hmotion
+  have hexactVariation :
+      ρ * (∑ i ∈ Finset.range T, QuitProbability G (q i)) ≤ z.exactVariation := by
+    rw [Finset.mul_sum, ApproximateFRowPath.exactVariation,
+      Finset.sum_fin_eq_sum_range]
+    simp only [z, Fin.val_castSucc]
+    rw [show (∑ t ∈ Finset.range T, if ht : t < T then
+        ‖QuittingOneStagePayoff G (QuitTailPayoff G p (T - t))
+            (q (T - 1 - t)) - QuitTailPayoff G p (T - t)‖ else 0) =
+      ∑ t ∈ Finset.range T,
+        ‖QuittingOneStagePayoff G (QuitTailPayoff G p (T - t))
+            (q (T - 1 - t)) - QuitTailPayoff G p (T - t)‖ by
+      apply Finset.sum_congr rfl
+      intro t ht
+      rw [dif_pos (Finset.mem_range.mp ht)]]
+    calc
+      (∑ i ∈ Finset.range T, ρ * QuitProbability G (q i)) ≤
+          ∑ i ∈ Finset.range T,
+          ‖QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1)) (q i) -
+            QuitTailPayoff G p (i + 1)‖ :=
+        Finset.sum_le_sum fun i hi => hexact i (Finset.mem_range.mp hi)
+      _ = _ := by
+        symm
+        let F : ℕ → ℝ := fun i =>
+          ‖QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1)) (q i) -
+            QuitTailPayoff G p (i + 1)‖
+        have hpoint : ∀ t ∈ Finset.range T,
+            ‖QuittingOneStagePayoff G (QuitTailPayoff G p (T - t))
+                (q (T - 1 - t)) - QuitTailPayoff G p (T - t)‖ =
+              F (T - 1 - t) := by
+          intro t ht
+          dsimp only [F]
+          have htT := Finset.mem_range.mp ht
+          have hnext : T - t = T - 1 - t + 1 := by omega
+          rw [hnext]
+        rw [Finset.sum_congr rfl hpoint, Finset.sum_range_reflect]
+  refine ⟨z, ?_, htotalError, ?_⟩
+  · simp [z]
+  · exact (mul_le_mul_of_nonneg_left hquitSum hρ.1.le).trans hexactVariation
+
 /-- Use one stationary row through stage `M`, then switch to a punishment profile. -/
 def StationaryPrefixThenPunish (G : QuittingGame) (p : QuitRow G)
     (M : ℕ) (punishment : QuitProfile G) : QuitProfile G :=
