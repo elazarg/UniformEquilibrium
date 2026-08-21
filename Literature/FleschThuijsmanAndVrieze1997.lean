@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
+import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
@@ -995,6 +996,234 @@ theorem lemma3_1 :
 
 /-! ### Theorem 3.2: stationary approximate equilibria -/
 
+/-- One-stage absorption probability of a stationary hazard triple. -/
+private def stationaryAbsorptionDenominator (profile : StationaryProfile) : ℝ :=
+  1 - (1 - (profile 0).1) * (1 - (profile 1).1) * (1 - (profile 2).1)
+
+/-- Unconditional one-stage absorbing payoff of a stationary hazard triple. -/
+private def stationaryPayoffNumerator (profile : StationaryProfile) : Payoff Player :=
+  ![(profile 0).1 * (1 - (profile 2).1) +
+      (1 - (profile 0).1) *
+        (3 * (profile 2).1 - 2 * (profile 1).1 * (profile 2).1),
+    (profile 1).1 * (1 - (profile 0).1) +
+      (1 - (profile 1).1) *
+        (3 * (profile 0).1 - 2 * (profile 0).1 * (profile 2).1),
+    (profile 2).1 * (1 - (profile 1).1) +
+      (1 - (profile 2).1) *
+        (3 * (profile 1).1 - 2 * (profile 0).1 * (profile 1).1)]
+
+@[simp] private theorem stationaryPayoffNumerator_zero
+    (profile : StationaryProfile) :
+    stationaryPayoffNumerator profile 0 =
+      (profile 0).1 * (1 - (profile 2).1) +
+        (1 - (profile 0).1) *
+          (3 * (profile 2).1 - 2 * (profile 1).1 * (profile 2).1) := by
+  rfl
+
+@[simp] private theorem stationaryPayoffNumerator_one
+    (profile : StationaryProfile) :
+    stationaryPayoffNumerator profile 1 =
+      (profile 1).1 * (1 - (profile 0).1) +
+        (1 - (profile 1).1) *
+          (3 * (profile 0).1 - 2 * (profile 0).1 * (profile 2).1) := by
+  rfl
+
+@[simp] private theorem stationaryPayoffNumerator_two
+    (profile : StationaryProfile) :
+    stationaryPayoffNumerator profile 2 =
+      (profile 2).1 * (1 - (profile 1).1) +
+        (1 - (profile 2).1) *
+          (3 * (profile 1).1 - 2 * (profile 0).1 * (profile 1).1) := by
+  rfl
+
+/-- Absorption probability when one designated player always Continues. -/
+private def stationaryOpponentAbsorptionDenominator
+    (profile : StationaryProfile) : Payoff Player :=
+  ![(profile 1).1 + (profile 2).1 - (profile 1).1 * (profile 2).1,
+    (profile 0).1 + (profile 2).1 - (profile 0).1 * (profile 2).1,
+    (profile 0).1 + (profile 1).1 - (profile 0).1 * (profile 1).1]
+
+/-- Unconditional payoff when one designated player always Continues. -/
+private def stationaryNeverNumerator (profile : StationaryProfile) : Payoff Player :=
+  ![3 * (profile 2).1 - 2 * (profile 1).1 * (profile 2).1,
+    3 * (profile 0).1 - 2 * (profile 0).1 * (profile 2).1,
+    3 * (profile 1).1 - 2 * (profile 0).1 * (profile 1).1]
+
+private theorem stationaryContinueMass_formula (profile : StationaryProfile) :
+    quittingStationaryContinueMass (stationaryRoot profile) =
+      1 - stationaryAbsorptionDenominator profile := by
+  rw [quittingStationaryContinueMass_eq_prod_continueProbability]
+  simp [stationaryRoot, stationaryAbsorptionDenominator, Fin.prod_univ_three]
+
+private theorem stationaryPayoffNumerator_formula
+    (profile : StationaryProfile) (who : Player) :
+    quittingRootAbsorbingContribution FTV.CyclicAdmissibleCycle.ftvReward
+        (stationaryRoot profile) who =
+      stationaryPayoffNumerator profile who := by
+  fin_cases who <;>
+    unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff <;>
+    rw [Math.PMFProduct.expect_pmfPi_fin3] <;>
+    simp [stationaryRoot, stationaryPayoffNumerator,
+      FTV.CyclicMinimality.terminalReward, expect_coin,
+      Matrix.cons_val_two] <;> ring
+
+private theorem stationaryOpponentContinueMass_formula
+    (profile : StationaryProfile) (who : Player) :
+    quittingStationaryFixedOpponentsContinueMass
+        (stationaryRoot profile) who =
+      1 - stationaryOpponentAbsorptionDenominator profile who := by
+  fin_cases who <;>
+    simp [quittingStationaryFixedOpponentsContinueMass,
+      quittingFixedOpponentsContinueMass,
+      quittingStationaryContinueMass_eq_prod_continueProbability,
+      stationaryRoot, stationaryOpponentAbsorptionDenominator,
+      Fin.prod_univ_three] <;> ring
+
+private theorem stationaryNeverNumerator_formula
+    (profile : StationaryProfile) (who : Player) :
+    quittingStationaryFixedOpponentsContinueReward
+        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot profile) who =
+      stationaryNeverNumerator profile who := by
+  fin_cases who <;>
+    unfold quittingStationaryFixedOpponentsContinueReward
+      quittingFixedOpponentsContinueReward
+      quittingRootAbsorbingContribution quittingRootExpectedPayoff <;>
+    rw [Math.PMFProduct.expect_pmfPi_fin3] <;>
+    simp [stationaryRoot, stationaryNeverNumerator,
+      FTV.CyclicMinimality.terminalReward, expect_coin,
+      Matrix.cons_val_two] <;> ring
+
+/-- The two division-free inequalities used in the paper's compactness
+argument: immediate Quit and Never are both within the Nash tolerance. -/
+private theorem stationaryEquilibrium_divisionFreeInequalities
+    (profile : StationaryProfile) (ε : ℝ)
+    (hnash : IsStationaryEpsilonEquilibrium ε profile) (who : Player) :
+    quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+          (fun player ↦ quittingTerminalPayoff
+            FTV.CyclicAdmissibleCycle.ftvReward
+            (stationaryBehaviorProfile profile) player)
+          (stationaryRoot profile) who ≤
+        quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+            (stationaryBehaviorProfile profile) who + ε ∧
+      stationaryNeverNumerator profile who ≤
+        stationaryOpponentAbsorptionDenominator profile who *
+          (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+            (stationaryBehaviorProfile profile) who + ε) := by
+  let reward := FTV.CyclicAdmissibleCycle.ftvReward
+  let root := stationaryRoot profile
+  let value : Payoff Player := fun player ↦
+    quittingTerminalPayoff reward (quittingStationaryProfile reward root) player
+  have hnash' : (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) ε
+      (quittingStationaryProfile reward root) := by
+    simpa [IsStationaryEpsilonEquilibrium, stationaryBehaviorProfile,
+      reward, root] using hnash
+  have hrootNash := isεQuittingRootNash_of_isεAsymptoticNash_stationary
+    reward root ε hnash'
+  have hquit := quittingRootQuitPayoff_le_successor_add_of_isεNash
+    reward value ε root who hrootNash
+  have hfixed : quittingRootSuccessorPayoff reward value root who = value who := by
+    exact (quittingTerminalPayoff_stationary_eq_rootExpectedPayoff
+      reward root who).symm
+  rw [hfixed] at hquit
+  have hcap :=
+    (isεAsymptoticNash_stationary_iff_fullRateUnilateralCap_le
+      reward root ε).mp hnash' who
+  constructor
+  · simpa [reward, root, value, stationaryBehaviorProfile] using hquit
+  · by_cases hcontracts :
+        quittingStationaryFixedOpponentsContinueMass root who < 1
+    · rw [quittingStationaryFullRateUnilateralCap_of_lt
+          reward root who hcontracts,
+        quittingStationaryUnilateralCap,
+        quittingStationarySelectedCap] at hcap
+      have hnever : quittingStationaryNeverValue
+          (quittingStationaryFixedOpponentsContinueReward reward root who)
+          (quittingStationaryFixedOpponentsContinueMass root who) ≤
+          value who + ε := (le_max_right _ _).trans hcap
+      have hdenom : 0 <
+          1 - quittingStationaryFixedOpponentsContinueMass root who :=
+        sub_pos.mpr hcontracts
+      rw [quittingStationaryNeverValue,
+        div_le_iff₀ hdenom] at hnever
+      have hopponentDenominator :
+          stationaryOpponentAbsorptionDenominator profile who =
+            1 - quittingStationaryFixedOpponentsContinueMass root who := by
+        have hmassFormula :=
+          stationaryOpponentContinueMass_formula profile who
+        change quittingStationaryFixedOpponentsContinueMass root who = _
+          at hmassFormula
+        linarith
+      rw [← stationaryNeverNumerator_formula profile who,
+        hopponentDenominator]
+      simpa [reward, root, value, stationaryBehaviorProfile, mul_comm] using hnever
+    · have hmass :
+          quittingStationaryFixedOpponentsContinueMass root who = 1 := by
+        exact le_antisymm
+          (quittingStationaryFixedOpponentsContinueMass_le_one root who)
+          (not_lt.mp hcontracts)
+      have hreward :
+          quittingStationaryFixedOpponentsContinueReward reward root who = 0 :=
+        quittingStationaryFixedOpponentsContinueReward_eq_zero_of_mass_eq_one
+          reward hmass
+      have hopponentDenominator :
+          stationaryOpponentAbsorptionDenominator profile who = 0 := by
+        have := stationaryOpponentContinueMass_formula profile who
+        rw [hmass] at this
+        linarith
+      rw [← stationaryNeverNumerator_formula profile who,
+        hopponentDenominator, hreward]
+      norm_num
+
+/-- The normalized first-order quit masses cannot satisfy all six limiting
+best-reply inequalities.  This is the algebraic core of the singular case. -/
+private theorem not_singularStationaryLimit
+    (a b c : ℝ) (ha : 0 ≤ a) (hb : 0 ≤ b) (hc : 0 ≤ c)
+    (hsum : a + b + c = 1)
+    (hq0 : 1 - (a + 3 * c) ≤ 0)
+    (hq1 : 1 - (3 * a + b) ≤ 0)
+    (hq2 : 1 - (3 * b + c) ≤ 0)
+    (hn0 : 3 * c - (b + c) * (a + 3 * c) ≤ 0)
+    (hn1 : 3 * a - (a + c) * (3 * a + b) ≤ 0)
+    (hn2 : 3 * b - (a + b) * (3 * b + c) ≤ 0) : False := by
+  nlinarith [sq_nonneg (a - b), sq_nonneg (b - c), sq_nonneg (c - a)]
+
+private theorem normalizedHazardSum_close
+    (x y z D : ℝ)
+    (hx0 : 0 ≤ x) (_hx1 : x ≤ 1)
+    (hy0 : 0 ≤ y) (_hy1 : y ≤ 1)
+    (hz0 : 0 ≤ z) (hz1 : z ≤ 1)
+    (hD : D = 1 - (1 - x) * (1 - y) * (1 - z))
+    (hDpos : 0 < D) (hxD : x ≤ D) (hyD : y ≤ D) (_hzD : z ≤ D) :
+    0 ≤ x / D + y / D + z / D - 1 ∧
+      x / D + y / D + z / D - 1 ≤ 2 * (x + y + z) := by
+  have hDx : D * (x / D) = x := by field_simp
+  have hDy : D * (y / D) = y := by field_simp
+  have hDz : D * (z / D) = z := by field_simp
+  have hxy : x * y ≤ D * y := mul_le_mul_of_nonneg_right hxD hy0
+  have hxz : x * z ≤ D * z := mul_le_mul_of_nonneg_right hxD hz0
+  have hyz : y * z ≤ D * z := mul_le_mul_of_nonneg_right hyD hz0
+  have hcollision : 0 ≤ x * y + x * z + y * z - x * y * z := by
+    nlinarith [mul_nonneg (mul_nonneg hx0 hy0) (sub_nonneg.mpr hz1),
+      mul_nonneg hx0 hz0, mul_nonneg hy0 hz0]
+  have hidentity :
+      D * (x / D + y / D + z / D - 1) =
+        x * y + x * z + y * z - x * y * z := by
+    nlinarith
+  have hcollisionUpper :
+      x * y + x * z + y * z - x * y * z ≤ D * (y + 2 * z) := by
+    nlinarith [mul_nonneg (mul_nonneg hx0 hy0) hz0]
+  have hcoarse : y + 2 * z ≤ 2 * (x + y + z) := by linarith
+  have hscaledCoarse := mul_le_mul_of_nonneg_left hcoarse hDpos.le
+  constructor
+  · nlinarith
+  · apply le_of_mul_le_mul_left _ hDpos
+    calc
+      D * (x / D + y / D + z / D - 1) =
+          x * y + x * z + y * z - x * y * z := hidentity
+      _ ≤ D * (y + 2 * z) := hcollisionUpper
+      _ ≤ D * (2 * (x + y + z)) := hscaledCoarse
+
 /-- A stationary profile is an approximate equilibrium at one positive,
 possibly large, error. -/
 theorem exists_positive_stationaryEpsilonEquilibrium :
@@ -1039,17 +1268,645 @@ theorem theorem3_2_printed_refuted :
 
 /-! The proof takes stationary `ε`-equilibria with `ε ↓ 0`, extracts a
 convergent subsequence, and separates an absorbing limit from the singular
-all-Continue limit.  The current API has the pointwise payoff formulas but not
-that two-case compactness package. -/
+all-Continue limit.  Closed endpoint complementarity handles the absorbing
+case; normalized first-order quit masses and six limiting deviation bounds
+exclude the singular case. -/
 
-/-- Corrected, proof-supported form of Theorem 3.2: stationary equilibria fail
+/-- Corrected form of Theorem 3.2: stationary equilibria fail
 below one positive threshold. -/
 theorem theorem3_2_corrected :
     ∃ threshold : ℝ, 0 < threshold ∧
       ∀ ε : ℝ, 0 < ε → ε < threshold →
         ¬ ∃ profile : StationaryProfile,
           IsStationaryEpsilonEquilibrium ε profile := by
-  sorry
+  by_contra hthreshold
+  push Not at hthreshold
+  have hscale (n : ℕ) : 0 < (1 / (n + 1 : ℝ)) := by positivity
+  choose ε hεpos hεlt profile hprofile using
+    fun n : ℕ ↦ hthreshold (1 / (n + 1 : ℝ)) (hscale n)
+  have hε : Tendsto ε atTop (nhds 0) := by
+    apply squeeze_zero (fun n ↦ hεpos n |>.le) (fun n ↦ hεlt n |>.le)
+    exact (tendsto_one_div_add_atTop_nhds_zero_nat :
+      Tendsto (fun n : ℕ ↦ 1 / (n + 1 : ℝ)) atTop (nhds 0))
+  obtain ⟨limit, φ, hφ, hprofileLimit⟩ :=
+    CompactSpace.tendsto_subseq profile
+  have hφTop : Tendsto φ atTop atTop := hφ.tendsto_atTop
+  have hεsub : Tendsto (ε ∘ φ) atTop (nhds 0) := hε.comp hφTop
+  have hprofileSub : Tendsto (profile ∘ φ) atTop (nhds limit) :=
+    hprofileLimit
+  let p : ℕ → StationaryProfile := profile ∘ φ
+  let error : ℕ → ℝ := ε ∘ φ
+  let value : ℕ → Payoff Player := fun n who ↦
+    quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (stationaryBehaviorProfile (p n)) who
+  let denominator : ℕ → ℝ := fun n ↦
+    stationaryAbsorptionDenominator (p n)
+  have hp : Tendsto p atTop (nhds limit) := hprofileSub
+  have herr : Tendsto error atTop (nhds 0) := hεsub
+  have hcoord (who : Player) :
+      Tendsto (fun n ↦ ((p n) who).1) atTop (nhds ((limit who).1)) := by
+    exact ((continuous_subtype_val.comp (continuous_apply who)).tendsto limit).comp hp
+  have hdenominator_nonneg (n : ℕ) : 0 ≤ denominator n := by
+    have hmass := quittingStationaryContinueMass_le_one
+      (stationaryRoot (p n))
+    rw [stationaryContinueMass_formula] at hmass
+    change 0 ≤ stationaryAbsorptionDenominator (p n)
+    linarith
+  have herror_lt_one (n : ℕ) : error n < 1 := by
+    have hbound := hεlt (φ n)
+    have hone : (1 / ((φ n : ℝ) + 1)) ≤ 1 := by
+      rw [div_le_iff₀ (by positivity)]
+      norm_num
+    exact hbound.trans_le hone
+  have hdenominator_pos (n : ℕ) : 0 < denominator n := by
+    apply lt_of_le_of_ne (hdenominator_nonneg n)
+    intro hzero
+    have hdenominatorZero : denominator n = 0 := hzero.symm
+    have hmass : quittingStationaryContinueMass
+        (stationaryRoot (p n)) = 1 := by
+      rw [stationaryContinueMass_formula]
+      linarith
+    have hroot : stationaryRoot (p n) = quittingAllContinueRoot := by
+      funext who
+      exact eq_pure_false_of_quittingStationaryContinueMass_eq_one hmass who
+    have hbehavior : stationaryBehaviorProfile (p n) =
+        quittingAlwaysContinueProfile FTV.CyclicAdmissibleCycle.ftvReward := by
+      rw [stationaryBehaviorProfile, hroot]
+      rfl
+    have hvalueZero : value n 0 = 0 := by
+      change quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (stationaryBehaviorProfile (p n)) 0 = 0
+      rw [hbehavior]
+      exact quittingTerminalPayoff_quittingAlwaysContinue
+        FTV.CyclicAdmissibleCycle.ftvReward 0
+    have hzeroHazard : ((p n) 2).1 = 0 := by
+      have hpure := congrArg (fun marginal : PMF Bool ↦
+        (marginal true).toReal)
+        (eq_pure_false_of_quittingStationaryContinueMass_eq_one hmass 2)
+      simpa [stationaryRoot] using hpure
+    have hquit :=
+      (stationaryEquilibrium_divisionFreeInequalities
+        (p n) (error n) (hprofile (φ n)) 0).1
+    rw [stationaryRoot_quitPayoff_zero (p n) (value n),
+      hzeroHazard] at hquit
+    change 1 - 0 ≤ value n 0 + error n at hquit
+    rw [hvalueZero] at hquit
+    linarith [herror_lt_one n]
+  have hcoordinate_le_denominator (n : ℕ) (who : Player) :
+      ((p n) who).1 ≤ denominator n := by
+    have hmass := quittingStationaryContinueMass_le_ownContinueProbability
+      (stationaryRoot (p n)) who
+    rw [stationaryContinueMass_formula] at hmass
+    have hcontinue :
+        ((stationaryRoot (p n) who) false).toReal = 1 - ((p n) who).1 := by
+      simp [stationaryRoot]
+    rw [hcontinue] at hmass
+    change ((p n) who).1 ≤ stationaryAbsorptionDenominator (p n)
+    linarith
+  have hbalance (n : ℕ) (who : Player) :
+      denominator n * value n who = stationaryPayoffNumerator (p n) who := by
+    have h := one_sub_continueMass_mul_quittingTerminalPayoff_stationary
+      FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot (p n)) who
+    rw [stationaryContinueMass_formula,
+      stationaryPayoffNumerator_formula] at h
+    simpa [denominator, value, stationaryBehaviorProfile] using h
+  by_cases hlimitZero : ∀ who, (limit who).1 = 0
+  · let normalized : ℕ → StationaryProfile := fun n who ↦
+      ⟨((p n) who).1 / denominator n, by
+        constructor
+        · exact div_nonneg ((p n) who).2.1 (hdenominator_nonneg n)
+        · exact (div_le_one (hdenominator_pos n)).2
+            (hcoordinate_le_denominator n who)⟩
+    obtain ⟨weightLimit, ψ, hψ, hnormalizedLimit⟩ :=
+      CompactSpace.tendsto_subseq normalized
+    have hψTop : Tendsto ψ atTop atTop := hψ.tendsto_atTop
+    have herrZero : Tendsto (error ∘ ψ) atTop (nhds 0) :=
+      herr.comp hψTop
+    have hnormalizedCoord (who : Player) :
+        Tendsto (fun n ↦ ((normalized (ψ n)) who).1) atTop
+          (nhds ((weightLimit who).1)) := by
+      exact ((continuous_subtype_val.comp (continuous_apply who)).tendsto
+        weightLimit).comp hnormalizedLimit
+    have hpZeroCoord (who : Player) :
+        Tendsto ((fun n ↦ ((p n) who).1) ∘ ψ) atTop (nhds 0) := by
+      have hcomp := (hcoord who).comp hψTop
+      simpa only [hlimitZero who] using hcomp
+    have hdenominatorZero : Tendsto (denominator ∘ ψ) atTop (nhds 0) := by
+      have hone : Tendsto (fun _ : ℕ ↦ (1 : ℝ)) atTop (nhds 1) :=
+        tendsto_const_nhds
+      have h := hone.sub ((hone.sub (hpZeroCoord 0)).mul
+        ((hone.sub (hpZeroCoord 1)).mul (hone.sub (hpZeroCoord 2))))
+      change Tendsto (fun n ↦
+        1 - (1 - (((p ∘ ψ) n) 0).1) * (1 - (((p ∘ ψ) n) 1).1) *
+          (1 - (((p ∘ ψ) n) 2).1)) atTop (nhds 0)
+      have h' := h
+      norm_num only [sub_zero, one_mul, sub_self] at h'
+      convert h' using 1
+      funext n
+      simp only [Function.comp_apply]
+      ring
+    have hhazardSumZero : Tendsto (fun n ↦
+        (((p ∘ ψ) n) 0).1 + (((p ∘ ψ) n) 1).1 +
+          (((p ∘ ψ) n) 2).1)
+        atTop (nhds 0) := by
+      have h := ((hpZeroCoord 0).add (hpZeroCoord 1)).add (hpZeroCoord 2)
+      norm_num only [zero_add] at h
+      simpa only [Function.comp_apply] using h
+    have hnormalizedClose (n : ℕ) :
+        0 ≤ ((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 1).1 +
+            ((normalized (ψ n)) 2).1 - 1 ∧
+          ((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 1).1 +
+              ((normalized (ψ n)) 2).1 - 1 ≤
+            2 * (((p (ψ n)) 0).1 + ((p (ψ n)) 1).1 +
+              ((p (ψ n)) 2).1) := by
+      simpa only [normalized] using normalizedHazardSum_close
+        ((p (ψ n)) 0).1 ((p (ψ n)) 1).1 ((p (ψ n)) 2).1
+        (denominator (ψ n))
+        ((p (ψ n)) 0).2.1 ((p (ψ n)) 0).2.2
+        ((p (ψ n)) 1).2.1 ((p (ψ n)) 1).2.2
+        ((p (ψ n)) 2).2.1 ((p (ψ n)) 2).2.2
+        rfl (hdenominator_pos (ψ n))
+        (hcoordinate_le_denominator (ψ n) 0)
+        (hcoordinate_le_denominator (ψ n) 1)
+        (hcoordinate_le_denominator (ψ n) 2)
+    have hnormalizedGapZero : Tendsto (fun n ↦
+        ((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 1).1 +
+          ((normalized (ψ n)) 2).1 - 1) atTop (nhds 0) := by
+      apply squeeze_zero
+      · exact fun n ↦ (hnormalizedClose n).1
+      · exact fun n ↦ (hnormalizedClose n).2
+      · simpa using hhazardSumZero.const_mul 2
+    have hnormalizedSumOne : Tendsto (fun n ↦
+        ((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 1).1 +
+          ((normalized (ψ n)) 2).1) atTop (nhds 1) := by
+      simpa only [sub_add_cancel, zero_add] using hnormalizedGapZero.add_const 1
+    have hweightSum : (weightLimit 0).1 + (weightLimit 1).1 +
+        (weightLimit 2).1 = 1 := by
+      have hsumLimit := ((hnormalizedCoord 0).add
+        (hnormalizedCoord 1)).add (hnormalizedCoord 2)
+      exact tendsto_nhds_unique hsumLimit hnormalizedSumOne
+    let a : ℝ := (weightLimit 0).1
+    let b : ℝ := (weightLimit 1).1
+    let c : ℝ := (weightLimit 2).1
+    have ha : 0 ≤ a := (weightLimit 0).2.1
+    have hb : 0 ≤ b := (weightLimit 1).2.1
+    have hc : 0 ≤ c := (weightLimit 2).2.1
+    have habc : a + b + c = 1 := hweightSum
+    have hvalueFormula (n : ℕ) (who : Player) :
+        value n who = stationaryPayoffNumerator (p n) who / denominator n := by
+      apply (eq_div_iff (hdenominator_pos n).ne').2
+      simpa [mul_comm] using hbalance n who
+    have hone : Tendsto (fun _ : ℕ ↦ (1 : ℝ)) atTop (nhds 1) :=
+      tendsto_const_nhds
+    have hvalueZeroLimit : Tendsto (fun n ↦ value (ψ n) 0) atTop
+        (nhds (a + 3 * c)) := by
+      have hexpression := (hnormalizedCoord 0).mul
+        (hone.sub (hpZeroCoord 2)) |>.add
+          ((hone.sub (hpZeroCoord 0)).mul
+            ((hnormalizedCoord 2).const_mul (3 : ℝ) |>.sub
+              ((hpZeroCoord 1).mul (hnormalizedCoord 2) |>.const_mul (2 : ℝ))))
+      norm_num only [sub_zero, one_mul, mul_one, zero_mul, sub_zero,
+        add_zero] at hexpression
+      convert hexpression using 1
+      · funext n
+        rw [hvalueFormula]
+        simp only [normalized, stationaryPayoffNumerator,
+          Matrix.cons_val_zero, Function.comp_apply]
+        field_simp [(hdenominator_pos (ψ n)).ne']
+    have hvalueOneLimit : Tendsto (fun n ↦ value (ψ n) 1) atTop
+        (nhds (3 * a + b)) := by
+      have hexpression := (hnormalizedCoord 1).mul
+        (hone.sub (hpZeroCoord 0)) |>.add
+          ((hone.sub (hpZeroCoord 1)).mul
+            ((hnormalizedCoord 0).const_mul (3 : ℝ) |>.sub
+              ((hpZeroCoord 2).mul (hnormalizedCoord 0) |>.const_mul (2 : ℝ))))
+      norm_num only [sub_zero, one_mul, mul_one, zero_mul, sub_zero,
+        add_zero] at hexpression
+      convert hexpression using 1
+      · funext n
+        rw [hvalueFormula]
+        simp only [normalized, stationaryPayoffNumerator,
+          Matrix.cons_val_one, Matrix.cons_val_zero, Function.comp_apply]
+        field_simp [(hdenominator_pos (ψ n)).ne']
+      · simp only [a, b]
+        ring
+    have hvalueTwoLimit : Tendsto (fun n ↦ value (ψ n) 2) atTop
+        (nhds (3 * b + c)) := by
+      have hexpression := (hnormalizedCoord 2).mul
+        (hone.sub (hpZeroCoord 1)) |>.add
+          ((hone.sub (hpZeroCoord 2)).mul
+            ((hnormalizedCoord 1).const_mul (3 : ℝ) |>.sub
+              ((hpZeroCoord 0).mul (hnormalizedCoord 1) |>.const_mul (2 : ℝ))))
+      norm_num only [sub_zero, one_mul, mul_one, zero_mul, sub_zero,
+        add_zero] at hexpression
+      convert hexpression using 1
+      · funext n
+        rw [hvalueFormula]
+        simp [normalized, stationaryPayoffNumerator,
+          Matrix.cons_val_two, Function.comp_apply]
+        field_simp [(hdenominator_pos (ψ n)).ne']
+      · simp only [b, c]
+        ring
+    have hquitZero (n : ℕ) :
+        1 - (((p ∘ ψ) n) 2).1 - value (ψ n) 0 - (error ∘ ψ) n ≤ 0 := by
+      have hquit := (stationaryEquilibrium_divisionFreeInequalities
+        (p (ψ n)) (error (ψ n)) (hprofile (φ (ψ n))) 0).1
+      rw [stationaryRoot_quitPayoff_zero (p (ψ n)) (value (ψ n))] at hquit
+      change 1 - (((p ∘ ψ) n) 2).1 ≤
+        value (ψ n) 0 + (error ∘ ψ) n at hquit
+      linarith
+    have hquitOne (n : ℕ) :
+        1 - (((p ∘ ψ) n) 0).1 - value (ψ n) 1 - (error ∘ ψ) n ≤ 0 := by
+      have hquit := (stationaryEquilibrium_divisionFreeInequalities
+        (p (ψ n)) (error (ψ n)) (hprofile (φ (ψ n))) 1).1
+      rw [stationaryRoot_quitPayoff_one (p (ψ n)) (value (ψ n))] at hquit
+      change 1 - (((p ∘ ψ) n) 0).1 ≤
+        value (ψ n) 1 + (error ∘ ψ) n at hquit
+      linarith
+    have hquitTwo (n : ℕ) :
+        1 - (((p ∘ ψ) n) 1).1 - value (ψ n) 2 - (error ∘ ψ) n ≤ 0 := by
+      have hquit := (stationaryEquilibrium_divisionFreeInequalities
+        (p (ψ n)) (error (ψ n)) (hprofile (φ (ψ n))) 2).1
+      rw [stationaryRoot_quitPayoff_two (p (ψ n)) (value (ψ n))] at hquit
+      change 1 - (((p ∘ ψ) n) 1).1 ≤
+        value (ψ n) 2 + (error ∘ ψ) n at hquit
+      linarith
+    have hq0 : 1 - (a + 3 * c) ≤ 0 := by
+      have hlimit := le_of_tendsto'
+        (((hone.sub (hpZeroCoord 2)).sub hvalueZeroLimit).sub herrZero)
+        hquitZero
+      norm_num only [sub_zero] at hlimit
+      exact hlimit
+    have hq1 : 1 - (3 * a + b) ≤ 0 := by
+      have hlimit := le_of_tendsto'
+        (((hone.sub (hpZeroCoord 0)).sub hvalueOneLimit).sub herrZero)
+        hquitOne
+      norm_num only [sub_zero] at hlimit
+      exact hlimit
+    have hq2 : 1 - (3 * b + c) ≤ 0 := by
+      have hlimit := le_of_tendsto'
+        (((hone.sub (hpZeroCoord 1)).sub hvalueTwoLimit).sub herrZero)
+        hquitTwo
+      norm_num only [sub_zero] at hlimit
+      exact hlimit
+    have hneverScaled (n : ℕ) (who : Player) :
+        stationaryNeverNumerator (p (ψ n)) who / denominator (ψ n) ≤
+          stationaryOpponentAbsorptionDenominator (p (ψ n)) who /
+            denominator (ψ n) * (value (ψ n) who + error (ψ n)) := by
+      have hnever := (stationaryEquilibrium_divisionFreeInequalities
+        (p (ψ n)) (error (ψ n)) (hprofile (φ (ψ n))) who).2
+      have hdiv := div_le_div_of_nonneg_right hnever
+        (hdenominator_pos (ψ n)).le
+      calc
+        stationaryNeverNumerator (p (ψ n)) who / denominator (ψ n) ≤
+            (stationaryOpponentAbsorptionDenominator (p (ψ n)) who *
+              (value (ψ n) who + error (ψ n))) / denominator (ψ n) := hdiv
+        _ = stationaryOpponentAbsorptionDenominator (p (ψ n)) who /
+              denominator (ψ n) * (value (ψ n) who + error (ψ n)) := by
+          ring
+    have hneverZero (n : ℕ) :
+        ((normalized (ψ n)) 2).1 * (3 - 2 * (((p ∘ ψ) n) 1).1) -
+            (((normalized (ψ n)) 1).1 + ((normalized (ψ n)) 2).1 -
+              (((p ∘ ψ) n) 1).1 * ((normalized (ψ n)) 2).1) *
+              (value (ψ n) 0 + (error ∘ ψ) n) ≤ 0 := by
+      apply sub_nonpos.mpr
+      have hscaled := hneverScaled n 0
+      have hleft :
+          ((normalized (ψ n)) 2).1 * (3 - 2 * (((p ∘ ψ) n) 1).1) =
+            stationaryNeverNumerator (p (ψ n)) 0 / denominator (ψ n) := by
+        simp [normalized, stationaryNeverNumerator, Function.comp_apply]
+        field_simp [(hdenominator_pos (ψ n)).ne']
+      have hright :
+          ((normalized (ψ n)) 1).1 + ((normalized (ψ n)) 2).1 -
+              (((p ∘ ψ) n) 1).1 * ((normalized (ψ n)) 2).1 =
+            stationaryOpponentAbsorptionDenominator (p (ψ n)) 0 /
+              denominator (ψ n) := by
+        simp [normalized, stationaryOpponentAbsorptionDenominator,
+          Function.comp_apply]
+        field_simp [(hdenominator_pos (ψ n)).ne']
+      rw [hleft, hright]
+      simpa only [Function.comp_apply] using hscaled
+    have hthree : Tendsto (fun _ : ℕ ↦ (3 : ℝ)) atTop (nhds 3) :=
+      tendsto_const_nhds
+    have hneverZeroLimit : Tendsto (fun n ↦
+        ((normalized (ψ n)) 2).1 * (3 - 2 * (((p ∘ ψ) n) 1).1) -
+          (((normalized (ψ n)) 1).1 + ((normalized (ψ n)) 2).1 -
+            (((p ∘ ψ) n) 1).1 * ((normalized (ψ n)) 2).1) *
+            (value (ψ n) 0 + (error ∘ ψ) n)) atTop
+        (nhds (3 * c - (b + c) * (a + 3 * c))) := by
+      have hlimit := (hnormalizedCoord 2).mul
+        (hthree.sub ((hpZeroCoord 1).const_mul (2 : ℝ))) |>.sub
+          (((hnormalizedCoord 1).add (hnormalizedCoord 2) |>.sub
+            ((hpZeroCoord 1).mul (hnormalizedCoord 2))).mul
+              (hvalueZeroLimit.add herrZero))
+      norm_num only [mul_zero, sub_zero, zero_mul, add_zero] at hlimit
+      convert hlimit using 1
+      · funext n
+        simp only [Function.comp_apply]
+      · simp only [a, b, c]
+        ring
+    have hn0 : 3 * c - (b + c) * (a + 3 * c) ≤ 0 :=
+      le_of_tendsto' hneverZeroLimit hneverZero
+    have hneverOne (n : ℕ) :
+        ((normalized (ψ n)) 0).1 * (3 - 2 * (((p ∘ ψ) n) 2).1) -
+            (((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 2).1 -
+              (((p ∘ ψ) n) 2).1 * ((normalized (ψ n)) 0).1) *
+              (value (ψ n) 1 + (error ∘ ψ) n) ≤ 0 := by
+      apply sub_nonpos.mpr
+      have hscaled := hneverScaled n 1
+      have hleft :
+          ((normalized (ψ n)) 0).1 * (3 - 2 * (((p ∘ ψ) n) 2).1) =
+            stationaryNeverNumerator (p (ψ n)) 1 / denominator (ψ n) := by
+        simp [normalized, stationaryNeverNumerator, Function.comp_apply]
+        field_simp [(hdenominator_pos (ψ n)).ne']
+      have hright :
+          ((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 2).1 -
+              (((p ∘ ψ) n) 2).1 * ((normalized (ψ n)) 0).1 =
+            stationaryOpponentAbsorptionDenominator (p (ψ n)) 1 /
+              denominator (ψ n) := by
+        simp [normalized, stationaryOpponentAbsorptionDenominator,
+          Function.comp_apply]
+        field_simp [(hdenominator_pos (ψ n)).ne']
+      rw [hleft, hright]
+      simpa only [Function.comp_apply] using hscaled
+    have hneverOneLimit : Tendsto (fun n ↦
+        ((normalized (ψ n)) 0).1 * (3 - 2 * (((p ∘ ψ) n) 2).1) -
+          (((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 2).1 -
+            (((p ∘ ψ) n) 2).1 * ((normalized (ψ n)) 0).1) *
+            (value (ψ n) 1 + (error ∘ ψ) n)) atTop
+        (nhds (3 * a - (a + c) * (3 * a + b))) := by
+      have hlimit := (hnormalizedCoord 0).mul
+        (hthree.sub ((hpZeroCoord 2).const_mul (2 : ℝ))) |>.sub
+          (((hnormalizedCoord 0).add (hnormalizedCoord 2) |>.sub
+            ((hpZeroCoord 2).mul (hnormalizedCoord 0))).mul
+              (hvalueOneLimit.add herrZero))
+      norm_num only [mul_zero, sub_zero, zero_mul, add_zero] at hlimit
+      convert hlimit using 1
+      · funext n
+        simp only [Function.comp_apply]
+      · simp only [a, b, c]
+        ring
+    have hn1 : 3 * a - (a + c) * (3 * a + b) ≤ 0 :=
+      le_of_tendsto' hneverOneLimit hneverOne
+    have hneverTwo (n : ℕ) :
+        ((normalized (ψ n)) 1).1 * (3 - 2 * (((p ∘ ψ) n) 0).1) -
+            (((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 1).1 -
+              (((p ∘ ψ) n) 0).1 * ((normalized (ψ n)) 1).1) *
+              (value (ψ n) 2 + (error ∘ ψ) n) ≤ 0 := by
+      apply sub_nonpos.mpr
+      have hscaled := hneverScaled n 2
+      have hleft :
+          ((normalized (ψ n)) 1).1 * (3 - 2 * (((p ∘ ψ) n) 0).1) =
+            stationaryNeverNumerator (p (ψ n)) 2 / denominator (ψ n) := by
+        simp [normalized, stationaryNeverNumerator, Function.comp_apply,
+          Matrix.cons_val_two]
+        field_simp [(hdenominator_pos (ψ n)).ne']
+      have hright :
+          ((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 1).1 -
+              (((p ∘ ψ) n) 0).1 * ((normalized (ψ n)) 1).1 =
+            stationaryOpponentAbsorptionDenominator (p (ψ n)) 2 /
+              denominator (ψ n) := by
+        simp [normalized, stationaryOpponentAbsorptionDenominator,
+          Function.comp_apply, Matrix.cons_val_two]
+        field_simp [(hdenominator_pos (ψ n)).ne']
+      rw [hleft, hright]
+      simpa only [Function.comp_apply] using hscaled
+    have hneverTwoLimit : Tendsto (fun n ↦
+        ((normalized (ψ n)) 1).1 * (3 - 2 * (((p ∘ ψ) n) 0).1) -
+          (((normalized (ψ n)) 0).1 + ((normalized (ψ n)) 1).1 -
+            (((p ∘ ψ) n) 0).1 * ((normalized (ψ n)) 1).1) *
+            (value (ψ n) 2 + (error ∘ ψ) n)) atTop
+        (nhds (3 * b - (a + b) * (3 * b + c))) := by
+      have hlimit := (hnormalizedCoord 1).mul
+        (hthree.sub ((hpZeroCoord 0).const_mul (2 : ℝ))) |>.sub
+          (((hnormalizedCoord 0).add (hnormalizedCoord 1) |>.sub
+            ((hpZeroCoord 0).mul (hnormalizedCoord 1))).mul
+              (hvalueTwoLimit.add herrZero))
+      norm_num only [mul_zero, sub_zero, zero_mul, add_zero] at hlimit
+      convert hlimit using 1
+      · funext n
+        simp only [Function.comp_apply]
+      · simp only [a, b, c]
+        ring
+    have hn2 : 3 * b - (a + b) * (3 * b + c) ≤ 0 :=
+      le_of_tendsto' hneverTwoLimit hneverTwo
+    exact not_singularStationaryLimit a b c ha hb hc habc
+      hq0 hq1 hq2 hn0 hn1 hn2
+  · have hdenominatorLimit : Tendsto denominator atTop
+        (nhds (stationaryAbsorptionDenominator limit)) := by
+      have hone : Tendsto (fun _ : ℕ ↦ (1 : ℝ)) atTop (nhds 1) :=
+        tendsto_const_nhds
+      have hlimit := hone.sub ((hone.sub (hcoord 0)).mul
+        ((hone.sub (hcoord 1)).mul (hone.sub (hcoord 2))))
+      convert hlimit using 1
+      · funext n
+        simp only [denominator, stationaryAbsorptionDenominator]
+        ring
+      · simp only [stationaryAbsorptionDenominator]
+        ring
+    push Not at hlimitZero
+    obtain ⟨active, hactive⟩ := hlimitZero
+    have hlimitCoordinate_le :
+        (limit active).1 ≤ stationaryAbsorptionDenominator limit := by
+      have hresidual := (hcoord active).sub hdenominatorLimit
+      have hbound : ∀ n, ((p n) active).1 - denominator n ≤ 0 :=
+        fun n ↦ sub_nonpos.mpr (hcoordinate_le_denominator n active)
+      exact sub_nonpos.mp (le_of_tendsto' hresidual hbound)
+    have hlimitCoordinate_pos : 0 < (limit active).1 :=
+      lt_of_le_of_ne (limit active).2.1 (Ne.symm hactive)
+    have hlimitDenominator_pos : 0 < stationaryAbsorptionDenominator limit :=
+      hlimitCoordinate_pos.trans_le hlimitCoordinate_le
+    have hlimitAbsorbs :
+        quittingStationaryContinueMass (stationaryRoot limit) < 1 := by
+      rw [stationaryContinueMass_formula]
+      exact sub_lt_self 1 hlimitDenominator_pos
+    let limitValue : Payoff Player := fun who ↦
+      quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (stationaryBehaviorProfile limit) who
+    have hlimitValueFormula (who : Player) :
+        limitValue who = stationaryPayoffNumerator limit who /
+          stationaryAbsorptionDenominator limit := by
+      change quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (quittingStationaryProfile FTV.CyclicAdmissibleCycle.ftvReward
+          (stationaryRoot limit)) who = _
+      rw [quittingTerminalPayoff_stationary_eq_absorbingContribution_div
+        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot limit) who
+        hlimitAbsorbs]
+      rw [stationaryContinueMass_formula,
+        stationaryPayoffNumerator_formula]
+      congr 1
+      ring
+    have hnumeratorLimit (who : Player) : Tendsto
+        (fun n ↦ stationaryPayoffNumerator (p n) who) atTop
+        (nhds (stationaryPayoffNumerator limit who)) := by
+      have hone : Tendsto (fun _ : ℕ ↦ (1 : ℝ)) atTop (nhds 1) :=
+        tendsto_const_nhds
+      fin_cases who
+      · have hlimit := (hcoord 0).mul (hone.sub (hcoord 2)) |>.add
+          ((hone.sub (hcoord 0)).mul
+            ((hcoord 2).const_mul (3 : ℝ) |>.sub
+              ((hcoord 1).mul (hcoord 2) |>.const_mul (2 : ℝ))))
+        change Tendsto (fun n ↦ stationaryPayoffNumerator (p n) 0) atTop
+          (nhds (stationaryPayoffNumerator limit 0))
+        simpa only [stationaryPayoffNumerator_zero, mul_assoc] using hlimit
+      · have hlimit := (hcoord 1).mul (hone.sub (hcoord 0)) |>.add
+          ((hone.sub (hcoord 1)).mul
+            ((hcoord 0).const_mul (3 : ℝ) |>.sub
+              ((hcoord 0).mul (hcoord 2) |>.const_mul (2 : ℝ))))
+        change Tendsto (fun n ↦ stationaryPayoffNumerator (p n) 1) atTop
+          (nhds (stationaryPayoffNumerator limit 1))
+        simpa only [stationaryPayoffNumerator_one, mul_assoc] using hlimit
+      · have hlimit := (hcoord 2).mul (hone.sub (hcoord 1)) |>.add
+          ((hone.sub (hcoord 2)).mul
+            ((hcoord 1).const_mul (3 : ℝ) |>.sub
+              ((hcoord 0).mul (hcoord 1) |>.const_mul (2 : ℝ))))
+        change Tendsto (fun n ↦ stationaryPayoffNumerator (p n) 2) atTop
+          (nhds (stationaryPayoffNumerator limit 2))
+        simpa only [stationaryPayoffNumerator_two, mul_assoc] using hlimit
+    have hvalueFormulaNonzero (n : ℕ) (who : Player) :
+        value n who = stationaryPayoffNumerator (p n) who / denominator n := by
+      apply (eq_div_iff (hdenominator_pos n).ne').2
+      simpa [mul_comm] using hbalance n who
+    have hvalueLimit (who : Player) : Tendsto (fun n ↦ value n who) atTop
+        (nhds (limitValue who)) := by
+      have hquotient := (hnumeratorLimit who).div hdenominatorLimit
+        hlimitDenominator_pos.ne'
+      rw [hlimitValueFormula who]
+      convert hquotient using 1
+      funext n
+      exact hvalueFormulaNonzero n who
+    have hvaluesLimit : Tendsto value atTop (nhds limitValue) := by
+      rw [tendsto_pi_nhds]
+      exact hvalueLimit
+    let simplexRoot : ℕ → QuittingRootSimplex Player := fun n who ↦
+      stdSimplexEquiv (stationaryRoot (p n) who)
+    let limitSimplexRoot : QuittingRootSimplex Player := fun who ↦
+      stdSimplexEquiv (stationaryRoot limit who)
+    have hrootOfSimplex (n : ℕ) :
+        quittingRootOfSimplex (simplexRoot n) = stationaryRoot (p n) := by
+      funext who
+      exact (stdSimplexEquiv (α := Bool)).symm_apply_apply
+        (stationaryRoot (p n) who)
+    have hlimitRootOfSimplex :
+        quittingRootOfSimplex limitSimplexRoot = stationaryRoot limit := by
+      funext who
+      exact (stdSimplexEquiv (α := Bool)).symm_apply_apply
+        (stationaryRoot limit who)
+    have hsimplexRoot : Tendsto simplexRoot atTop (nhds limitSimplexRoot) := by
+      rw [tendsto_pi_nhds]
+      intro who
+      rw [tendsto_subtype_rng, tendsto_pi_nhds]
+      intro action
+      have hcoordinate : ∀ n,
+          ((simplexRoot n who : stdSimplex ℝ Bool) : Bool → ℝ) action =
+            (stationaryRoot (p n) who action).toReal := by
+        intro n
+        exact congrFun (coe_stdSimplexEquiv_apply
+          (stationaryRoot (p n) who)) action
+      have hlimitCoordinate :
+          ((limitSimplexRoot who : stdSimplex ℝ Bool) : Bool → ℝ) action =
+            (stationaryRoot limit who action).toReal := by
+        exact congrFun (coe_stdSimplexEquiv_apply
+          (stationaryRoot limit who)) action
+      have hbase : Tendsto
+          (fun n ↦ (stationaryRoot (p n) who action).toReal) atTop
+          (nhds ((stationaryRoot limit who action).toReal)) := by
+        cases action with
+        | false =>
+            have hone : Tendsto (fun _ : ℕ ↦ (1 : ℝ)) atTop (nhds 1) :=
+              tendsto_const_nhds
+            simpa [stationaryRoot] using hone.sub (hcoord who)
+        | true => simpa [stationaryRoot] using hcoord who
+      have hactual := hbase.congr'
+        (Filter.Eventually.of_forall fun n ↦ (hcoordinate n).symm)
+      convert hactual using 1
+      · rfl
+      · exact congrArg nhds hlimitCoordinate
+    have hendpointApprox (n : ℕ) :
+        IsεQuittingRootEndpointNash FTV.CyclicAdmissibleCycle.ftvReward
+          (value n) (error n) (quittingRootOfSimplex (simplexRoot n)) := by
+      rw [hrootOfSimplex]
+      apply (isεQuittingRootEndpointNash_iff_isεQuittingRootNash
+        FTV.CyclicAdmissibleCycle.ftvReward (value n) (error n)
+          (stationaryRoot (p n))).2
+      apply isεQuittingRootNash_of_isεAsymptoticNash_stationary
+      simpa [p, error, value, IsStationaryEpsilonEquilibrium,
+        stationaryBehaviorProfile] using hprofile (φ n)
+    have hendpointLimit :
+        IsεQuittingRootEndpointNash FTV.CyclicAdmissibleCycle.ftvReward
+          limitValue 0 (stationaryRoot limit) := by
+      have hclosed := isεQuittingRootEndpointNash_of_tendsto
+        FTV.CyclicAdmissibleCycle.ftvReward error value simplexRoot herr
+        hvaluesLimit hsimplexRoot
+        (Filter.Eventually.of_forall hendpointApprox)
+      rwa [hlimitRootOfSimplex] at hclosed
+    have hboundary : IsQuittingStationaryBoundaryAdmissible
+        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot limit)
+          limitValue := by
+      intro who hmass
+      have hotherZero (other : Player) (hne : other ≠ who) :
+          (limit other).1 = 0 := by
+        have hpure :=
+          opponents_pure_continue_of_fixedOpponentsContinueMass_eq_one
+            (stationaryRoot limit) who hmass other hne
+        have hprob := congrArg (fun marginal : PMF Bool ↦
+          (marginal true).toReal) hpure
+        simpa [stationaryRoot] using hprob
+      rw [FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal,
+        FTV.CyclicMinimality.soloReward_self]
+      norm_num only [max_eq_right]
+      fin_cases who
+      · change 1 ≤ limitValue 0
+        have hzeroOne : (limit 1).1 = 0 := hotherZero 1 (by decide)
+        have hzeroTwo : (limit 2).1 = 0 := hotherZero 2 (by decide)
+        have hdenominator : stationaryAbsorptionDenominator limit =
+            (limit 0).1 := by
+          simp [stationaryAbsorptionDenominator, hzeroOne, hzeroTwo]
+        have hpositive : 0 < (limit 0).1 := by
+          rwa [hdenominator] at hlimitDenominator_pos
+        rw [hlimitValueFormula, stationaryPayoffNumerator_zero,
+          hzeroOne, hzeroTwo, hdenominator]
+        field_simp [hpositive.ne']
+        all_goals norm_num
+      · change 1 ≤ limitValue 1
+        have hzeroZero : (limit 0).1 = 0 := hotherZero 0 (by decide)
+        have hzeroTwo : (limit 2).1 = 0 := hotherZero 2 (by decide)
+        have hdenominator : stationaryAbsorptionDenominator limit =
+            (limit 1).1 := by
+          simp [stationaryAbsorptionDenominator, hzeroZero, hzeroTwo]
+        have hpositive : 0 < (limit 1).1 := by
+          rwa [hdenominator] at hlimitDenominator_pos
+        rw [hlimitValueFormula, stationaryPayoffNumerator_one,
+          hzeroZero, hzeroTwo, hdenominator]
+        field_simp [hpositive.ne']
+        all_goals norm_num
+      · change 1 ≤ limitValue 2
+        have hzeroZero : (limit 0).1 = 0 := hotherZero 0 (by decide)
+        have hzeroOne : (limit 1).1 = 0 := hotherZero 1 (by decide)
+        have hdenominator : stationaryAbsorptionDenominator limit =
+            (limit 2).1 := by
+          simp [stationaryAbsorptionDenominator, hzeroZero, hzeroOne]
+        have hpositive : 0 < (limit 2).1 := by
+          rwa [hdenominator] at hlimitDenominator_pos
+        rw [hlimitValueFormula, stationaryPayoffNumerator_two,
+          hzeroZero, hzeroOne, hdenominator]
+        field_simp [hpositive.ne']
+        all_goals norm_num
+    have hfixed : limitValue = quittingRootSuccessorPayoff
+        FTV.CyclicAdmissibleCycle.ftvReward limitValue
+          (stationaryRoot limit) := by
+      funext who
+      exact quittingTerminalPayoff_stationary_eq_rootExpectedPayoff
+        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot limit) who
+    have hexact :
+        (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
+          (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) 0
+          (stationaryBehaviorProfile limit) := by
+      apply (isZeroAsymptoticNash_stationary_iff_boundary_of_fixedPoint_endpointNash
+        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot limit)
+          limitValue hlimitAbsorbs hfixed hendpointLimit).2
+      exact hboundary
+    exact lemma3_1 ⟨limit, hexact⟩
 
 /-! ### Theorem 3.3: the cyclic Markov equilibrium -/
 
