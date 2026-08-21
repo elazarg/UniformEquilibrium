@@ -3170,6 +3170,277 @@ private theorem beta_maximalQuitter_le (G : QuittingGame) (M : ℝ)
     exact pow_nonneg (sub_nonneg.mpr (z.1.2 m).property.2) _
   linarith
 
+/-- The Section 3 choice makes `|N| ξ` at most `1/40`. -/
+private theorem card_mul_xi_le_one_fortieth
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R) :
+    (Fintype.card G.Player : ℝ) * ξ ≤ 1 / 40 := by
+  let N : ℝ := Fintype.card G.Player
+  let delta := ρ / (2 * N * M)
+  have hNpos : 0 < N := by
+    dsimp only [N]
+    exact_mod_cast Fintype.card_pos
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hdeltaPos : 0 < delta := by
+    dsimp only [delta]
+    exact div_pos hmotion.2.1 (by positivity)
+  have hdeltaOne : delta ≤ 1 := by
+    dsimp only [delta]
+    rw [div_le_one (by positivity : 0 < 2 * N * M)]
+    have hNone : 1 ≤ N := by
+      dsimp only [N]
+      exact_mod_cast Fintype.card_pos
+    have hNMraw : 1 * 1 ≤ N * M :=
+      mul_le_mul hNone hM.1 (by norm_num) (by positivity)
+    have hNM : 1 ≤ N * M := by simpa using hNMraw
+    exact hmotion.2.2.1.trans (by nlinarith)
+  have hpowLe : delta ^ Fintype.card G.Player ≤ delta := by
+    obtain ⟨k, hk⟩ := Nat.exists_eq_succ_of_ne_zero
+      (Nat.ne_of_gt (Fintype.card_pos : 0 < Fintype.card G.Player))
+    rw [hk, pow_succ]
+    exact mul_le_of_le_one_left hdeltaPos.le
+      (pow_le_one₀ hdeltaPos.le hdeltaOne)
+  have hxiDelta : ξ ≤ delta / 20 := by
+    have hxi := hconstants.2.1
+    change ξ ≤ (1 / 20 : ℝ) * delta ^ Fintype.card G.Player at hxi
+    nlinarith
+  have hNdelta : N * delta ≤ 1 / 2 := by
+    have hρ := hmotion.2.2.1
+    dsimp only [delta]
+    rw [show N * (ρ / (2 * N * M)) = ρ / (2 * M) by field_simp]
+    rw [div_le_iff₀ (by positivity : 0 < 2 * M)]
+    nlinarith [hmotion.2.2.1, hM.1]
+  dsimp only [N] at hNdelta ⊢
+  have hscale := mul_le_mul_of_nonneg_left hxiDelta hNpos.le
+  nlinarith
+
+/-- At a supported maximal quitter, the displayed definition of `φ` gives
+the paper's singular upper bound. -/
+private theorem phi_maximalQuitter_upper (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (_hd : 0 < d)
+    (z : EZeroTilde G) (m : G.Player) (hpm : 0 < (z.1.2 m : ℝ)) :
+    Phi G M d z m ≤ M / 3 -
+        (5 * (Fintype.card G.Player : ℝ) * M / d) *
+          ((z.1.2 m : ℝ) /
+            (1 - (z.1.2 m : ℝ)) ^ Fintype.card G.Player) +
+      (Fintype.card G.Player : ℝ) * M := by
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let beta := z.1.1
+  let p := z.1.2
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hstage := oneStagePayoff_eq_forcedQuit_of_positive G beta p
+    z.2.1 z.2.2 m hpm
+  have hforced := abs_forcedQuitPayoff_le_scale G M hM p m
+  have hsum : ∑ k ∈ Finset.univ.erase m, (p k : ℝ) ≤ N := by
+    calc
+      ∑ k ∈ Finset.univ.erase m, (p k : ℝ) ≤
+          ∑ _k ∈ Finset.univ.erase m, (1 : ℝ) := by
+        apply Finset.sum_le_sum
+        intro k _
+        exact (p k).property.2
+      _ = ((Finset.univ.erase m).card : ℝ) := by simp
+      _ ≤ N := by
+        dsimp only [N]
+        exact_mod_cast (Finset.card_erase_le :
+          (Finset.univ.erase m).card ≤ (Finset.univ : Finset G.Player).card)
+  change QuittingOneStagePayoff G beta p m -
+      (5 * N * M / d) *
+        ((p m : ℝ) / (1 - (p m : ℝ)) ^ Fintype.card G.Player) +
+      M * ∑ k ∈ Finset.univ.erase m, (p k : ℝ) ≤ _
+  rw [hstage]
+  nlinarith [le_abs_self (ForcedQuitPayoff G p m),
+    mul_le_mul_of_nonneg_left hsum hMpos.le]
+
+/-- The maximal-quitter comparison in Case 2C forces the interpolation
+coefficient below `d(1-p_m)/(3|N|)`. -/
+private theorem interpolation_lt_maximalQuitter
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (z : EZeroTilde G) (j m : G.Player)
+    (hm : ∀ k, (z.1.2 k : ℝ) ≤ (z.1.2 m : ℝ))
+    (haj : Phi G M d z j < -R)
+    (lambda : UnitInterval) (hlambda0 : 0 < (lambda : ℝ))
+    (x : Payoff G.Player)
+    (hx : x = (1 - (lambda : ℝ)) • z.1.1 +
+      (lambda : ℝ) • Phi G M d z)
+    (htarget : StructureTargetBox G M ρ x) :
+    (lambda : ℝ) < d * (1 - (z.1.2 m : ℝ)) /
+      (3 * (Fintype.card G.Player : ℝ)) := by
+  let N : ℝ := Fintype.card G.Player
+  let p := z.1.2
+  let tau : ℝ := 1 - (p m : ℝ)
+  let survivalFloor : ℝ := tau ^ (Fintype.card G.Player - 1)
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpos : 0 < N := by linarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hxiPos : 0 < ξ := hconstants.1
+  have hNxi := card_mul_xi_le_one_fortieth G M d ρ ξ R hM
+    hmotion hconstants
+  have hNxi' : N * ξ ≤ 1 / 40 := by simpa only [N] using hNxi
+  have hxiSmall : ξ ≤ 1 / 120 := by
+    nlinarith
+  have hpj := lemma3_4_negative_coordinate_probability_gt_one_sub_xi
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z j haj
+  have hpjPos : 0 < (p j : ℝ) := by linarith
+  have hpmPos : 0 < (p m : ℝ) := hpjPos.trans_le (hm j)
+  have hpmLt : (p m : ℝ) < 1 :=
+    (quitProbability_apply_le G p m).trans_lt z.2.2
+  have htauPos : 0 < tau := by dsimp only [tau]; linarith
+  have htauXi : tau < ξ := by dsimp only [tau]; linarith [hm j]
+  have htauOne : tau ≤ 1 := by
+    dsimp only [tau]
+    linarith [(p m).property.1]
+  have hfloorPos : 0 < survivalFloor := pow_pos htauPos _
+  have hfloorTau : survivalFloor ≤ tau := by
+    have hNnat : 3 ≤ Fintype.card G.Player := hplayers
+    have hpredPos : 0 < Fintype.card G.Player - 1 := by omega
+    obtain ⟨k, hk⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hpredPos)
+    dsimp only [survivalFloor]
+    rw [hk, pow_succ]
+    exact mul_le_of_le_one_left htauPos.le
+      (pow_le_one₀ htauPos.le htauOne)
+  have hbeta := beta_maximalQuitter_le G M hM z m hpmPos hm
+  have halpha := phi_maximalQuitter_upper G M d hM hd z m hpmPos
+  have hpow : tau ^ Fintype.card G.Player = tau * survivalFloor := by
+    have hNnat : 3 ≤ Fintype.card G.Player := hplayers
+    have hcard : Fintype.card G.Player - 1 + 1 = Fintype.card G.Player := by
+      omega
+    calc
+      tau ^ Fintype.card G.Player =
+          tau ^ (Fintype.card G.Player - 1 + 1) := by rw [hcard]
+      _ = tau ^ (Fintype.card G.Player - 1) * tau := pow_succ _ _
+      _ = tau * survivalFloor := by simp only [survivalFloor, mul_comm]
+  have htargetLower := (htarget m).1
+  have hchi := abs_minMaxQuit_le_of_reward_bound G m (by positivity)
+    (fun outcome => hM.2.1 outcome m)
+  have hxLower : -M ≤ x m := by
+    have hρM : ρ ≤ M := hmotion.2.2.1.trans hM.1
+    nlinarith [neg_le_of_abs_le hchi]
+  by_contra hnot
+  have hlambdaLower : d * tau / (3 * N) ≤ (lambda : ℝ) := by
+    simpa only [tau, p, N] using le_of_not_gt hnot
+  have hcoefficient : 0 < 5 * N * M / d := by positivity
+  have hscaledLambda : 5 * M * tau / 3 ≤
+      (lambda : ℝ) * (5 * N * M / d) := by
+    have hscale := mul_le_mul_of_nonneg_right hlambdaLower hcoefficient.le
+    calc
+      5 * M * tau / 3 = d * tau / (3 * N) * (5 * N * M / d) := by
+        field_simp
+      _ ≤ _ := hscale
+  have halphaScaled : tau * survivalFloor * Phi G M d z m ≤
+      tau * survivalFloor * (M / 3 + N * M) -
+        (5 * N * M / d) * (1 - tau) := by
+    have halpha' : Phi G M d z m ≤ M / 3 -
+        (5 * N * M / d) * ((1 - tau) / (tau * survivalFloor)) +
+          N * M := by
+      dsimp only [N, p, tau, survivalFloor] at hpow ⊢
+      rw [← hpow]
+      simpa only [sub_sub_cancel] using halpha
+    have hscale := mul_le_mul_of_nonneg_left halpha'
+      (mul_nonneg htauPos.le hfloorPos.le)
+    calc
+      tau * survivalFloor * Phi G M d z m ≤
+          tau * survivalFloor *
+            (M / 3 - (5 * N * M / d) *
+              ((1 - tau) / (tau * survivalFloor)) + N * M) := hscale
+      _ = tau * survivalFloor * (M / 3 + N * M) -
+          (5 * N * M / d) * (1 - tau) := by
+        field_simp [ne_of_gt htauPos, ne_of_gt hfloorPos]
+        ring
+  have hbetaScaled : tau * survivalFloor * z.1.1 m ≤
+      tau * survivalFloor * M + tau * M := by
+    have hbeta' : z.1.1 m ≤ M + M / survivalFloor := by
+      simpa only [p, tau, survivalFloor] using hbeta
+    have hscale := mul_le_mul_of_nonneg_left hbeta'
+      (mul_nonneg htauPos.le hfloorPos.le)
+    calc
+      tau * survivalFloor * z.1.1 m ≤
+          tau * survivalFloor * (M + M / survivalFloor) := hscale
+      _ = tau * survivalFloor * M + tau * M := by
+        field_simp [ne_of_gt hfloorPos]
+  have hbetaPart := mul_le_mul_of_nonneg_left hbetaScaled
+    (sub_nonneg.mpr lambda.property.2)
+  have halphaPart := mul_le_mul_of_nonneg_left halphaScaled lambda.property.1
+  have hpenaltyPart := mul_le_mul_of_nonneg_right hscaledLambda
+    (sub_nonneg.mpr htauOne)
+  have hscaledX : tau * survivalFloor * x m ≤
+      tau * survivalFloor * M + tau * M +
+        tau * survivalFloor * (M / 3 + N * M) -
+          5 * M * tau / 3 * (1 - tau) := by
+    have hxm := congrFun hx m
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxm
+    rw [hxm]
+    calc
+      tau * survivalFloor *
+          ((1 - (lambda : ℝ)) * z.1.1 m +
+            (lambda : ℝ) * Phi G M d z m) =
+          (1 - (lambda : ℝ)) * (tau * survivalFloor * z.1.1 m) +
+            (lambda : ℝ) * (tau * survivalFloor * Phi G M d z m) := by ring
+      _ ≤ (1 - (lambda : ℝ)) *
+            (tau * survivalFloor * M + tau * M) +
+          (lambda : ℝ) *
+            (tau * survivalFloor * (M / 3 + N * M) -
+              (5 * N * M / d) * (1 - tau)) :=
+        add_le_add hbetaPart halphaPart
+      _ ≤ (1 - (lambda : ℝ)) *
+            (tau * survivalFloor * M + tau * M) +
+          (lambda : ℝ) * (tau * survivalFloor * (M / 3 + N * M)) -
+            5 * M * tau / 3 * (1 - tau) := by
+        linarith
+      _ ≤ tau * survivalFloor * M + tau * M +
+          tau * survivalFloor * (M / 3 + N * M) -
+            5 * M * tau / 3 * (1 - tau) := by
+        have hfirstNonneg : 0 ≤ tau * survivalFloor * M + tau * M := by
+          positivity
+        have hsecondNonneg :
+            0 ≤ tau * survivalFloor * (M / 3 + N * M) := by positivity
+        nlinarith [mul_le_mul_of_nonneg_right lambda.property.2 hfirstNonneg,
+          mul_le_mul_of_nonneg_right lambda.property.2 hsecondNonneg]
+  have hNt : N * tau < 1 / 40 :=
+    lt_of_lt_of_le (mul_lt_mul_of_pos_left htauXi hNpos) hNxi'
+  have hNs : N * survivalFloor < 1 / 40 :=
+    (mul_le_mul_of_nonneg_left hfloorTau hNpos.le).trans_lt hNt
+  have htauSmall : tau < 1 / 120 := htauXi.trans_le hxiSmall
+  have hfloorSmall : survivalFloor < 1 / 120 := hfloorTau.trans_lt htauSmall
+  have hbracket : survivalFloor + 1 + survivalFloor / 3 +
+      N * survivalFloor - 5 / 3 + 5 * tau / 3 < -survivalFloor := by
+    linarith only [hNs, hfloorSmall, htauSmall]
+  have hstrictScaled := mul_lt_mul_of_pos_left hbracket
+    (mul_pos hMpos htauPos)
+  have hupperStrict :
+      tau * survivalFloor * M + tau * M +
+          tau * survivalFloor * (M / 3 + N * M) -
+            5 * M * tau / 3 * (1 - tau) <
+        -M * tau * survivalFloor := by
+    calc
+      tau * survivalFloor * M + tau * M +
+          tau * survivalFloor * (M / 3 + N * M) -
+            5 * M * tau / 3 * (1 - tau) =
+          (M * tau) * (survivalFloor + 1 + survivalFloor / 3 +
+            N * survivalFloor - 5 / 3 + 5 * tau / 3) := by ring
+      _ < (M * tau) * (-survivalFloor) := hstrictScaled
+      _ = -M * tau * survivalFloor := by ring
+  have hxStrict : tau * survivalFloor * x m <
+      tau * survivalFloor * (-M) := by
+    calc
+      tau * survivalFloor * x m ≤
+          tau * survivalFloor * M + tau * M +
+            tau * survivalFloor * (M / 3 + N * M) -
+              5 * M * tau / 3 * (1 - tau) := hscaledX
+      _ < -M * tau * survivalFloor := hupperStrict
+      _ = tau * survivalFloor * (-M) := by ring
+  exact (not_lt_of_ge
+    (mul_le_mul_of_nonneg_left hxLower
+      (mul_nonneg htauPos.le hfloorPos.le))) hxStrict
+
 /--
 Lemma 3.4.  For `a = φ(β,p)` and a point strictly inside the segment from
 `β` to `a`, a coordinate of `a` outside `[-R,R]` forces the segment point
