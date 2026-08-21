@@ -9034,6 +9034,62 @@ private theorem survival_mul_eta_mul_sum_badQuitMass_le
             (localGain_deleteBadQuit_ge G eta p n i) hsurvivalNonnegative
     _ ≤ alpha := hsumUpper
 
+/-- On a prefix of uniformly positive reach, sufficiently small global equilibrium
+error makes every support-purified row uniformly close to its original row. -/
+private theorem dist_supportPurifiedRow_lt_of_equilibrium
+    (G : QuittingGame) {alpha beta s d : ℝ}
+    (halpha : 0 ≤ alpha) (hbeta : 0 < beta) (hd : 0 < d)
+    (hsmall : alpha < s * beta * d) (p : QuitProfile G)
+    (hequilibrium : IsQuitEpsilonEquilibrium G alpha p) (T : ℕ)
+    (hreach : ∀ i, i < T → s ≤ tailSurvival G p 0 i) :
+    ∀ i, i < T →
+      dist (supportPurifiedRow G beta (QuitTailPayoff G p (i + 1)) (p i)) (p i) < d := by
+  classical
+  have hsbeta : 0 < s * beta :=
+    pos_of_mul_pos_left (halpha.trans_lt hsmall) hd.le
+  intro i hiT
+  apply dist_supportPurifiedRow_lt G hd
+  · intro n hbad
+    have htotal := survival_mul_eta_mul_sum_badQuitMass_le
+      G p hequilibrium T n hbeta.le hreach
+    have hmassNonnegative : ∀ j ∈ Finset.range T,
+        0 ≤ badQuitMass G beta p n j := by
+      intro j _hj
+      by_cases hjbad :
+          IsBadQuitAction G beta (QuitTailPayoff G p (j + 1)) (p j) n
+      · simpa [badQuitMass, hjbad] using (p j n).property.1
+      · simp [badQuitMass, hjbad]
+    have hterm : badQuitMass G beta p n i ≤
+        ∑ j ∈ Finset.range T, badQuitMass G beta p n j :=
+      Finset.single_le_sum hmassNonnegative (Finset.mem_range.mpr hiT)
+    have hsum : (∑ j ∈ Finset.range T, badQuitMass G beta p n j) < d := by
+      have hscaled :
+          s * beta * ∑ j ∈ Finset.range T, badQuitMass G beta p n j <
+            s * beta * d := calc
+        s * beta * ∑ j ∈ Finset.range T, badQuitMass G beta p n j ≤ alpha := htotal
+        _ < s * beta * d := hsmall
+      nlinarith [hsbeta]
+    have hmassi : badQuitMass G beta p n i = p i n := by
+      simp [badQuitMass, hbad]
+    rw [← hmassi]
+    exact hterm.trans_lt hsum
+  · intro n hbad
+    have hbound := survival_mul_eta_mul_badContinueMass_le
+      G (eta := beta) halpha p hequilibrium i n
+    have hreachI := hreach i hiT
+    have hmassNonnegative : 0 ≤ badContinueMass G beta p n i := by
+      simp [badContinueMass, hbad, sub_nonneg.mpr (p i n).property.2]
+    have hscaled : s * beta * badContinueMass G beta p n i ≤ alpha := by
+      calc
+        s * beta * badContinueMass G beta p n i ≤
+            tailSurvival G p 0 i * beta * badContinueMass G beta p n i := by
+          gcongr
+        _ ≤ alpha := hbound
+    have hmass : badContinueMass G beta p n i < d := by
+      have := hscaled.trans_lt hsmall
+      nlinarith [hsbeta]
+    simpa [badContinueMass, hbad] using hmass
+
 /-- A one-stage payoff coordinate varies continuously with its continuation vector and
 mixed row. -/
 private theorem continuous_quittingOneStagePayoff (G : QuittingGame) (n : G.Player) :
@@ -9112,6 +9168,124 @@ private theorem exists_endpointPayoff_stability_radius
   · intro n
     have hn := (dist_pi_lt_iff he).mp hpair.2 n
     simpa [endpoint, Real.dist_eq, abs_sub_comm] using hn
+
+/-- On a bounded continuation set, the full one-stage payoff vector varies uniformly
+with the quitting row. -/
+private theorem exists_oneStagePayoff_stability_radius
+    (G : QuittingGame) {M e : ℝ} (he : 0 < e) :
+    ∃ d : ℝ, 0 < d ∧ ∀ r : Payoff G.Player, ‖r‖ ≤ M → ∀ p q : QuitRow G,
+      dist q p < d →
+        ‖QuittingOneStagePayoff G r q - QuittingOneStagePayoff G r p‖ < e := by
+  have hcontinuous : Continuous fun rp : Payoff G.Player × QuitRow G =>
+      QuittingOneStagePayoff G rp.1 rp.2 := by
+    apply continuous_pi
+    exact continuous_quittingOneStagePayoff G
+  let K : Set (Payoff G.Player × QuitRow G) :=
+    Metric.closedBall 0 M ×ˢ (Set.univ : Set (QuitRow G))
+  have hK : IsCompact K := isCompact_closedBall 0 M |>.prod isCompact_univ
+  have huniform := hK.uniformContinuousOn_of_continuous hcontinuous.continuousOn
+  rw [Metric.uniformContinuousOn_iff] at huniform
+  obtain ⟨d, hd, hstable⟩ := huniform e he
+  refine ⟨d, hd, ?_⟩
+  intro r hr p q hpq
+  have hinput : (r, p) ∈ K ∧ (r, q) ∈ K := by
+    constructor <;> simp [K, Metric.mem_closedBall, dist_zero_right, hr]
+  have hpair := hstable (r, p) hinput.1 (r, q) hinput.2 (by
+    simpa [Prod.dist_eq, dist_comm] using hpq)
+  simpa only [dist_eq_norm, norm_sub_rev] using hpair
+
+/-- If purification cannot create a sure quitter, the original row had no badly
+supported Continue action. -/
+private theorem not_badContinue_of_supportPurifiedRow_ne_one
+    (G : QuittingGame) {beta : ℝ} (hbeta : 0 ≤ beta)
+    (r : Payoff G.Player) (p : QuitRow G)
+    (hne : ∀ n, (supportPurifiedRow G beta r p n : ℝ) ≠ 1) :
+    ∀ n, ¬IsBadContinueAction G beta r p n := by
+  classical
+  intro n hbadContinue
+  by_cases hbadQuit : IsBadQuitAction G beta r p n
+  · dsimp only [IsBadQuitAction] at hbadQuit
+    dsimp only [IsBadContinueAction] at hbadContinue
+    linarith
+  · apply hne n
+    simp [supportPurifiedRow, hbadQuit, hbadContinue]
+
+/-- Without bad Continue actions, purification only lowers quitting probabilities. -/
+private theorem supportPurifiedRow_le_of_no_badContinue
+    (G : QuittingGame) {beta : ℝ} (r : Payoff G.Player) (p : QuitRow G)
+    (hcontinue : ∀ n, ¬IsBadContinueAction G beta r p n) :
+    ∀ n, (supportPurifiedRow G beta r p n : ℝ) ≤ p n := by
+  classical
+  intro n
+  by_cases hbadQuit : IsBadQuitAction G beta r p n
+  · simp [supportPurifiedRow, hbadQuit, (p n).property.1]
+  · simp [supportPurifiedRow, hbadQuit, hcontinue n]
+
+/-- For two coordinatewise ordered vectors in the unit cube, the difference of their
+products is at most the sum of the coordinate differences. -/
+private theorem prod_sub_prod_le_sum_sub {N : Type} (s : Finset N)
+    (a b : N → ℝ) (ha0 : ∀ n ∈ s, 0 ≤ a n) (ha1 : ∀ n ∈ s, a n ≤ 1)
+    (hb0 : ∀ n ∈ s, 0 ≤ b n) (hb1 : ∀ n ∈ s, b n ≤ 1)
+    (hab : ∀ n ∈ s, a n ≤ b n) :
+    (∏ n ∈ s, b n) - ∏ n ∈ s, a n ≤ ∑ n ∈ s, (b n - a n) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp
+  | @insert n s hn ih =>
+      rw [Finset.prod_insert hn, Finset.prod_insert hn, Finset.sum_insert hn]
+      have ha0n := ha0 n (Finset.mem_insert_self n s)
+      have ha1n := ha1 n (Finset.mem_insert_self n s)
+      have hb0n := hb0 n (Finset.mem_insert_self n s)
+      have hb1n := hb1 n (Finset.mem_insert_self n s)
+      have habn := hab n (Finset.mem_insert_self n s)
+      have hA0 : 0 ≤ ∏ j ∈ s, a j :=
+        Finset.prod_nonneg fun j hj => ha0 j (Finset.mem_insert_of_mem hj)
+      have hA1 : (∏ j ∈ s, a j) ≤ 1 :=
+        Finset.prod_le_one
+          (fun j hj => ha0 j (Finset.mem_insert_of_mem hj))
+          (fun j hj => ha1 j (Finset.mem_insert_of_mem hj))
+      have hB0 : 0 ≤ ∏ j ∈ s, b j :=
+        Finset.prod_nonneg fun j hj => hb0 j (Finset.mem_insert_of_mem hj)
+      have hB1 : (∏ j ∈ s, b j) ≤ 1 :=
+        Finset.prod_le_one
+          (fun j hj => hb0 j (Finset.mem_insert_of_mem hj))
+          (fun j hj => hb1 j (Finset.mem_insert_of_mem hj))
+      have hAB : (∏ j ∈ s, a j) ≤ ∏ j ∈ s, b j := by
+        apply Finset.prod_le_prod
+        · intro j hj
+          exact ha0 j (Finset.mem_insert_of_mem hj)
+        · intro j hj
+          exact hab j (Finset.mem_insert_of_mem hj)
+      have hrest := ih
+        (fun j hj => ha0 j (Finset.mem_insert_of_mem hj))
+        (fun j hj => ha1 j (Finset.mem_insert_of_mem hj))
+        (fun j hj => hb0 j (Finset.mem_insert_of_mem hj))
+        (fun j hj => hb1 j (Finset.mem_insert_of_mem hj))
+        (fun j hj => hab j (Finset.mem_insert_of_mem hj))
+      nlinarith [mul_nonneg (sub_nonneg.mpr habn) hB0,
+        mul_nonneg ha0n (sub_nonneg.mpr hAB)]
+
+/-- Lowering coordinates can reduce the probability that somebody quits by at most
+the sum of the removed coordinate masses. -/
+private theorem quitProbability_sub_le_sum_coord_sub
+    (G : QuittingGame) (p q : QuitRow G) (hqp : ∀ n, (q n : ℝ) ≤ p n) :
+    QuitProbability G p - QuitProbability G q ≤ ∑ n, ((p n : ℝ) - q n) := by
+  simp only [QuitProbability]
+  have hproduct := prod_sub_prod_le_sum_sub Finset.univ
+    (fun n => 1 - (p n : ℝ)) (fun n => 1 - (q n : ℝ))
+    (fun n _ => sub_nonneg.mpr (p n).property.2)
+    (fun n _ => by linarith [(p n).property.1])
+    (fun n _ => sub_nonneg.mpr (q n).property.2)
+    (fun n _ => by linarith [(q n).property.1])
+    (fun n _ => by linarith [hqp n])
+  calc
+    (1 - ∏ n, (1 - (p n : ℝ))) - (1 - ∏ n, (1 - (q n : ℝ))) =
+        (∏ n, (1 - (q n : ℝ))) - ∏ n, (1 - (p n : ℝ)) := by ring
+    _ ≤ ∑ n, (1 - (q n : ℝ) - (1 - (p n : ℝ))) := hproduct
+    _ = ∑ n, ((p n : ℝ) - q n) := by
+      apply Finset.sum_congr rfl
+      intro n _hn
+      ring
 
 /-- Reversing the first `j` rows and iterating from `s₀` produces `sⱼ`. -/
 private theorem finiteQuittingPayoff_reverse_eq (G : QuittingGame) {k : ℕ}
