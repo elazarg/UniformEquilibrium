@@ -4,10 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 import Mathlib.Analysis.Convex.Combination
+import Mathlib.Probability.Distributions.Geometric
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.PunishmentLevel
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Game
 import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
 import MathUE.PMFProduct.Bool
+import MathUE.ProbabilityMassFunction.Simplex
 
 /-!
 # Feasible Payoffs for Stochastic Games
@@ -152,6 +154,89 @@ theorem stageEUAt_stationaryBehaviorProfile (G : StochasticGame ι) [Fintype ι]
     G.stageEUAt (G.stationaryBehaviorProfile m) h who = G.mixedStageEU h.2 m who := by
   unfold StochasticGame.stageEUAt StochasticGame.mixedStageEU
   rw [stageActionDist_stationaryBehaviorProfile]
+
+/-! ## Discounted convex-envelope preservation -/
+
+/-- If every stage-payoff vector lies in a convex set, then every normalized
+discounted expected payoff lies there too.  The proof packages the random time,
+history, and current action into one probability law, so no closure assumption
+on the target set is needed. -/
+theorem discountedPayoff_mem_of_stagePayoff_mem_convex
+    (G : StochasticGame ι) [Fintype ι] [Finite G.State]
+    [∀ who, Finite (G.Act who)]
+    (target : Set (Payoff ι)) (hconvex : Convex ℝ target)
+    (hstage : ∀ state action,
+      (fun who ↦ G.stagePayoff state action who) ∈ target)
+    (profile : G.BehaviorProfile) (initial : G.State)
+    {β : ℝ} (hβ0 : 0 ≤ β) (hβ1 : β < 1) :
+    (fun who ↦ G.discountedPayoff β profile initial who) ∈ target := by
+  letI : Fintype G.State := Fintype.ofFinite G.State
+  letI (who : ι) : Fintype (G.Act who) := Fintype.ofFinite (G.Act who)
+  letI : Finite G.JointAct := inferInstance
+  letI : Fintype G.JointAct := Fintype.ofFinite G.JointAct
+  let parameter : unitInterval :=
+    ⟨1 - β, sub_nonneg.mpr hβ1.le, by linarith⟩
+  let timeLaw : PMF ℕ :=
+    (ProbabilityTheory.geometricMeasure parameter).toPMF
+  let realizedLaw : ℕ → PMF (G.State × G.JointAct) := fun time ↦
+    (G.histDist profile initial time).bind fun history ↦
+      (G.stageActionDist profile history).map fun action ↦
+        (history.2, action)
+  let discountedLaw : PMF (G.State × G.JointAct) :=
+    timeLaw.bind realizedLaw
+  have hhull :=
+    Math.ProbabilityMassFunction.coordinateExpectation_mem_convexHull_range
+      discountedLaw fun data who ↦ G.stagePayoff data.1 data.2 who
+  have hrange : Set.range (fun data : G.State × G.JointAct ↦
+      fun who ↦ G.stagePayoff data.1 data.2 who) ⊆ target := by
+    rintro _ ⟨data, rfl⟩
+    exact hstage data.1 data.2
+  have hmem := convexHull_min hrange hconvex hhull
+  suffices heq : (fun who ↦ G.discountedPayoff β profile initial who) =
+      fun who ↦ Math.Probability.expect discountedLaw
+        (fun data ↦ G.stagePayoff data.1 data.2 who) by
+    rwa [heq]
+  funext who
+  have hrealized (time : ℕ) :
+      Math.Probability.expect (realizedLaw time)
+          (fun data ↦ G.stagePayoff data.1 data.2 who) =
+        G.expectedStagePayoff profile initial time who := by
+    dsimp only [realizedLaw]
+    rw [Math.Probability.expect_bind]
+    unfold StochasticGame.expectedStagePayoff
+    congr 1
+    funext history
+    rw [Math.Probability.expect_map]
+    rfl
+  rw [show Math.Probability.expect discountedLaw
+      (fun data ↦ G.stagePayoff data.1 data.2 who) =
+    Math.Probability.expect timeLaw fun time ↦
+      Math.Probability.expect (realizedLaw time)
+        (fun data ↦ G.stagePayoff data.1 data.2 who) by
+    exact Math.Probability.expect_bind _ _ _]
+  simp_rw [hrealized]
+  unfold StochasticGame.discountedPayoff
+  rw [show Math.Probability.expect timeLaw
+      (fun time ↦ G.expectedStagePayoff profile initial time who) =
+    ∑' time : ℕ, β ^ time * (1 - β) *
+      G.expectedStagePayoff profile initial time who by
+    unfold Math.Probability.expect timeLaw
+    apply tsum_congr
+    intro time
+    rw [MeasureTheory.Measure.toPMF_apply]
+    rw [← MeasureTheory.measureReal_def]
+    rw [ProbabilityTheory.geometricMeasure_real_singleton]
+    · congr 1
+      dsimp only [parameter]
+      rw [show 1 - (1 - β) = β by ring]
+    · intro hzero
+      have := congrArg ((↑) : unitInterval → ℝ) hzero
+      simp [parameter] at this
+      linarith]
+  rw [← tsum_mul_left]
+  apply tsum_congr
+  intro time
+  ring
 
 /-! ## The asymptotic feasible set -/
 
