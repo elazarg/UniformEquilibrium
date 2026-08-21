@@ -3060,6 +3060,18 @@ private theorem DDPSemantics.fromState_cylinder_eq_zero_of_wrong
       simpa [DDPPath.prefix, hpstart] using hx.symm
     _ = 0 := hsupportComplement
 
+/-- A wrong state-started cylinder has zero mass under the raw law. -/
+private theorem DiscreteDecisionProcess.rawLawFrom_ddpCylinder_eq_zero_of_wrong
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) (start : P.X)
+    {k : ℕ} (h : DDPFinitePath P k) (hwrong : h.x 0 ≠ start) :
+    P.rawLawFrom start (DDPPath.ofRaw P ⁻¹' DDPCylinder P h) = 0 := by
+  have hcanonical := congrArg (fun mu : Measure (DDPPath P) => mu (DDPCylinder P h))
+    (S.fromState_eq_rawLaw P start)
+  rw [Measure.map_apply (DDPPath.measurable_ofRaw P) (measurableSet_ddpCylinder P h)]
+    at hcanonical
+  rw [← hcanonical]
+  exact S.fromState_cylinder_eq_zero_of_wrong P start h hwrong
+
 /-- A zero-action DDP cylinder fixes only its initial state. -/
 private theorem ddpCylinder_zero_eq_initialState (P : DiscreteDecisionProcess)
     (h : DDPFinitePath P 0) : DDPCylinder P h = {p | p.x 0 = h.x 0} := by
@@ -4579,6 +4591,121 @@ private theorem DiscreteDecisionProcess.rawLawFrom_inter_shift_noReturn_stageAt
   · letI : IsProbabilityMeasure (S.afterAction current.1 current.2) :=
       S.afterActionProbability current.1 current.2
     exact measure_ne_top _ _
+
+/-- Conditional on the state at a sampled stage, its action still has the displayed choice law. -/
+private theorem DiscreteDecisionProcess.rawLawFrom_stage_eq_state_mul_choose
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) (start : P.X)
+    (i : ℕ) (x : P.X) (y : P.Y x) :
+    P.rawLawFrom start {stage | stage i = (⟨x, y⟩ : DDPStage P)} =
+      P.rawLawFrom start {stage | (stage i).1 = x} * P.choose x y := by
+  classical
+  let H := {h : DDPFinitePath P i // h.x (Fin.last i) = x}
+  let C : H → Set (ℕ → DDPStage P) := fun h =>
+    DDPPath.ofRaw P ⁻¹' DDPCylinder P h.1
+  let D : H → Set (ℕ → DDPStage P) := fun h =>
+    {stage | ∀ j : Fin (i + 1),
+      stage j = h.1.extendWithFinalStage P (⟨x, y⟩ : DDPStage P) j}
+  have hstateUnion : {stage : ℕ → DDPStage P | (stage i).1 = x} = ⋃ h, C h := by
+    ext stage
+    simp only [mem_setOf_eq, mem_iUnion, C]
+    constructor
+    · intro hstate
+      let h := (DDPPath.ofRaw P stage).prefix P i
+      refine ⟨⟨h, ?_⟩, rfl⟩
+      simpa [h, DDPPath.prefix, DDPPath.ofRaw] using hstate
+    · rintro ⟨h, hpref⟩
+      change (DDPPath.ofRaw P stage).prefix P i = h.1 at hpref
+      have hlast := congrArg (fun q : DDPFinitePath P i => q.x (Fin.last i)) hpref
+      exact hlast.trans h.2
+  have hactionUnion :
+      {stage : ℕ → DDPStage P | stage i = (⟨x, y⟩ : DDPStage P)} = ⋃ h, D h := by
+    ext stage
+    simp only [mem_setOf_eq, mem_iUnion, D]
+    constructor
+    · intro hstage
+      let h := (DDPPath.ofRaw P stage).prefix P i
+      have hlast : h.x (Fin.last i) = x := by
+        simpa [h, DDPPath.prefix, DDPPath.ofRaw] using congrArg Sigma.fst hstage
+      refine ⟨⟨h, hlast⟩, ?_⟩
+      intro j
+      induction j using Fin.lastCases with
+      | last => simpa [DDPFinitePath.extendWithFinalStage] using hstage
+      | cast j =>
+          simp [DDPFinitePath.extendWithFinalStage, h, DDPPath.prefix,
+            DDPPath.ofRaw]
+    · rintro ⟨h, hprefix⟩
+      simpa [DDPFinitePath.extendWithFinalStage] using hprefix (Fin.last i)
+  have hmeasurableC (h : H) : MeasurableSet (C h) :=
+    (DDPPath.measurable_ofRaw P) (measurableSet_ddpCylinder P h.1)
+  have hmeasurableD (h : H) : MeasurableSet (D h) :=
+    P.measurableSet_rawStageCylinder i (h.1.extendWithFinalStage P ⟨x, y⟩)
+  have hpairwiseC : Pairwise (Function.onFun Disjoint C) := by
+    intro first second hne
+    rw [Function.onFun, Set.disjoint_left]
+    intro stage hfirst hsecond
+    apply hne
+    apply Subtype.ext
+    exact hfirst.symm.trans hsecond
+  have hpairwiseD : Pairwise (Function.onFun Disjoint D) := by
+    intro first second hne
+    rw [Function.onFun, Set.disjoint_left]
+    intro stage hfirst hsecond
+    apply hne
+    apply Subtype.ext
+    apply DDPFinitePath.ext_of_stages P
+    · intro j
+      induction j using Fin.lastCases with
+      | last => exact first.2.trans second.2.symm
+      | cast j =>
+          have hj := (hfirst j.castSucc).symm.trans (hsecond j.castSucc)
+          simpa [D, DDPFinitePath.extendWithFinalStage] using congrArg Sigma.fst hj
+    · intro j
+      have hj := (hfirst j.castSucc).symm.trans (hsecond j.castSucc)
+      simpa [D, DDPFinitePath.extendWithFinalStage] using hj
+  have hmeasure (h : H) : P.rawLawFrom start (D h) =
+      P.rawLawFrom start (C h) * P.choose x y := by
+    by_cases hstart : h.1.x 0 = start
+    · let last : P.Y (h.1.x (Fin.last i)) :=
+        _root_.cast (congrArg P.Y h.2.symm) y
+      have hcurrent : (⟨x, y⟩ : DDPStage P) =
+          ⟨h.1.x (Fin.last i), last⟩ := by
+        apply Sigma.ext h.2.symm
+        simp [last]
+      have hD : D h = {stage | ∀ j : Fin (i + 1),
+          stage j = h.1.stagesWithFinal P last j} := by
+        ext stage
+        simp only [D, mem_setOf_eq]
+        rw [hcurrent, h.1.extendWithFinalStage_mk P last]
+      rw [hD, P.rawLawFrom_stagesWithFinal start h.1 hstart last]
+      rw [show P.choose (h.1.x (Fin.last i)) last = P.choose x y from
+        congrArg (fun current : DDPStage P => P.choose current.1 current.2)
+          hcurrent.symm]
+      rw [P.rawLawFrom_ddpCylinder start h.1 hstart]
+    · have hCzero := P.rawLawFrom_ddpCylinder_eq_zero_of_wrong S start h.1 hstart
+      have hDsubset : D h ⊆ C h := by
+        intro stage hstage
+        change (DDPPath.ofRaw P stage).prefix P i = h.1
+        apply DDPFinitePath.ext_of_stages P
+        · intro j
+          induction j using Fin.lastCases with
+          | last =>
+              have hj := congrArg Sigma.fst (hstage (Fin.last i))
+              have hj' : (stage i).1 = x := by
+                simpa [D, DDPFinitePath.extendWithFinalStage] using hj
+              exact hj'.trans h.2.symm
+          | cast j =>
+              simpa [D, DDPFinitePath.extendWithFinalStage, DDPPath.prefix,
+                DDPPath.ofRaw] using congrArg Sigma.fst (hstage j.castSucc)
+        · intro j
+          simpa [D, DDPFinitePath.extendWithFinalStage, DDPPath.prefix,
+            DDPPath.ofRaw] using hstage j.castSucc
+      have hDzero : P.rawLawFrom start (D h) = 0 :=
+        nonpos_iff_eq_zero.mp ((measure_mono hDsubset).trans_eq hCzero)
+      rw [hDzero, hCzero, zero_mul]
+  rw [hactionUnion, measure_iUnion hpairwiseD hmeasurableD]
+  rw [hstateUnion, measure_iUnion hpairwiseC hmeasurableC]
+  simp_rw [hmeasure]
+  exact ENNReal.tsum_mul_right
 
 /-- A lower bound for all values in a decision process. -/
 def IsDDPValueLowerBound (P : DiscreteDecisionProcess) (L : ℝ) : Prop :=
