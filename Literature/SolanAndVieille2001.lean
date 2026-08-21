@@ -1598,15 +1598,6 @@ def forcedContinueOpponentConditionalBlockPayoff
           (forced (start + time)) who) /
     opponentBlockTerminationProbability roots who start length
 
-/-- The roots obtained when `who` continues until `cutoff` and then resumes
-the prescribed profile. -/
-def continueUntilRoots
-    (roots : RootSequence (ι := ι)) (who : ι) (cutoff : ℕ) :
-    RootSequence (ι := ι) :=
-  fun time => if time < cutoff then
-    Function.update (roots time) who (PMF.pure false)
-  else roots time
-
 /-- The actual proof context of Lemmas 2.8--2.12 in the regularly-scattered
 case. It retains the paper's root sequence, block endpoints, pure deviation,
 and all enclosing hypotheses instead of treating `π₂`, `u₂`, and `X_k` as
@@ -1689,7 +1680,7 @@ def MainEstimateContext.u₂star
 def MainEstimateContext.blockExpectation
     (data : MainEstimateContext ι) (block : ℕ) : ℝ :=
   quittingRootSequenceTerminalValue data.reward
-    (continueUntilRoots data.roots data.who (data.blockStart block))
+    (quittingContinueUntilRoots data.roots data.who (data.blockStart block))
     data.who 0
 
 private def blockOwnerSurvivalWeight
@@ -2932,7 +2923,7 @@ private theorem pureTime_some_le_blockExpectation
   let start := data.blockStart block
   let length := quitTime - start
   let bound := quittingRewardBound data.reward
-  let forced := continueUntilRoots data.roots data.who start
+  let forced := quittingContinueUntilRoots data.roots data.who start
   let deviated := quittingRootSequenceUpdate data.roots data.who
     (quittingPureTimeHazard (some quitTime))
   have hquitTime : start + length = quitTime := by
@@ -3127,16 +3118,16 @@ private theorem pureTime_some_le_blockExpectation
     by_cases hplayer : player = data.who
     · subst player
       have hne : time ≠ quitTime := by omega
-      simp [deviated, forced, continueUntilRoots, quittingRootSequenceUpdate,
+      simp [deviated, forced, quittingContinueUntilRoots, quittingRootSequenceUpdate,
         htime, quittingPureTimeHazard_some_of_ne hne]
-    · simp [deviated, forced, continueUntilRoots, quittingRootSequenceUpdate,
+    · simp [deviated, forced, quittingContinueUntilRoots, quittingRootSequenceUpdate,
         htime, Function.update_of_ne hplayer]
   have hforcedTail :
       quittingRootSequenceTerminalValue data.reward forced data.who start =
         quittingRootSequenceTerminalValue data.reward data.roots data.who start := by
     apply quittingRootSequenceTerminalValue_congr
     intro offset
-    simp [forced, continueUntilRoots]
+    simp [forced, quittingContinueUntilRoots]
   have hglobal := quittingRootSequenceTerminalValue_sub_eq_jointSurvivalWeight_mul
     data.reward deviated forced data.who start hprefix
   rw [hforcedTail] at hglobal
@@ -3244,7 +3235,7 @@ private theorem bddAbove_range_blockExpectation
   refine ⟨quittingRewardBound data.reward, ?_⟩
   rintro value ⟨block, rfl⟩
   exact (abs_le.mp (abs_quittingRootSequenceTerminalValue_le data.reward
-    (continueUntilRoots data.roots data.who (data.blockStart block)) data.who 0
+    (quittingContinueUntilRoots data.roots data.who (data.blockStart block)) data.who 0
     (quittingRewardBound_nonneg data.reward)
     (abs_reward_le_quittingRewardBound data.reward))).2
 
@@ -3286,15 +3277,15 @@ private theorem pureTime_none_le_sSup_blockExpectation
         2 * quittingRewardBound data.reward * factor ^ turns := by
     intro turns
     let cutoff := data.blockStart (selected turns)
-    let forced := continueUntilRoots data.roots data.who cutoff
+    let forced := quittingContinueUntilRoots data.roots data.who cutoff
     have hprefix : ∀ time, time < cutoff → forced time = never time := by
       intro time htime
       funext player
       by_cases hplayer : player = data.who
       · subst player
-        simp [forced, never, continueUntilRoots, quittingRootSequenceUpdate,
+        simp [forced, never, quittingContinueUntilRoots, quittingRootSequenceUpdate,
           htime, quittingAlwaysContinueHazard]
-      · simp [forced, never, continueUntilRoots, quittingRootSequenceUpdate,
+      · simp [forced, never, quittingContinueUntilRoots, quittingRootSequenceUpdate,
           htime, Function.update_of_ne hplayer]
     have hprefixBound := abs_quittingRootSequenceTerminalValue_sub_le_of_prefix_eq
       data.reward forced never data.who cutoff hreward hprefix
@@ -3359,76 +3350,19 @@ theorem lemma2_11 :
           (Set.mem_range_self block)
       linarith
 
-private theorem continueUntil_terminalValue_sub_eq_ledger_sum
+private theorem quittingContinueUntil_terminalValue_sub_eq_ledger_sum
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : RootSequence (ι := ι)) (who : ι) :
     ∀ (start length : ℕ),
       quittingRootSequenceTerminalValue reward
-          (continueUntilRoots roots who (start + length)) who start -
+          (quittingContinueUntilRoots roots who (start + length)) who start -
         quittingRootSequenceTerminalValue reward roots who start =
       ∑ offset ∈ Finset.range length,
         quittingOpponentSurvivalWeight roots who start offset *
           quittingLedgerStageAdvantage reward roots who (start + offset) := by
   intro start length
-  induction length generalizing start with
-  | zero =>
-      have htail : quittingRootSequenceTerminalValue reward
-          (continueUntilRoots roots who start) who start =
-          quittingRootSequenceTerminalValue reward roots who start := by
-        apply quittingRootSequenceTerminalValue_congr
-        intro offset
-        simp [continueUntilRoots]
-      simp [htail]
-  | succ length ih =>
-      let forced := continueUntilRoots roots who (start + (length + 1))
-      have hforcedRoot : forced start =
-          Function.update (roots start) who (PMF.pure false) := by
-        simp [forced, continueUntilRoots]
-      have hforcedTail : quittingRootSequenceTerminalValue reward forced who
-          (start + 1) =
-          quittingRootSequenceTerminalValue reward
-            (continueUntilRoots roots who (start + 1 + length)) who
-              (start + 1) := by
-        dsimp only [forced]
-        rw [show start + (length + 1) = start + 1 + length by omega]
-      have hforcedBellman :=
-        quittingRootSequenceTerminalValue_eq_absorbingContribution_add
-          reward forced who start
-      have htailIdentity := ih (start + 1)
-      have htailEq : quittingRootSequenceTerminalValue reward
-          (continueUntilRoots roots who (start + 1 + length)) who (start + 1) =
-          quittingRootSequenceTerminalValue reward roots who (start + 1) +
-            ∑ offset ∈ Finset.range length,
-              quittingOpponentSurvivalWeight roots who (start + 1) offset *
-                quittingLedgerStageAdvantage reward roots who
-                  (start + 1 + offset) := by
-        linarith
-      have hpeel := Finset.sum_range_succ' (fun offset ↦
-        quittingOpponentSurvivalWeight roots who start offset *
-          quittingLedgerStageAdvantage reward roots who (start + offset)) length
-      have hshift : ∀ offset,
-          quittingOpponentSurvivalWeight roots who start (offset + 1) *
-              quittingLedgerStageAdvantage reward roots who
-                (start + (offset + 1)) =
-            quittingFixedOpponentsContinueMass roots who start *
-              (quittingOpponentSurvivalWeight roots who (start + 1) offset *
-                quittingLedgerStageAdvantage reward roots who
-                  (start + 1 + offset)) := by
-        intro offset
-        rw [quittingOpponentSurvivalWeight_succ_left]
-        rw [show start + (offset + 1) = start + 1 + offset by omega]
-        ring
-      rw [Finset.sum_congr rfl fun offset _ ↦ hshift offset,
-        ← Finset.mul_sum] at hpeel
-      have hzero : quittingOpponentSurvivalWeight roots who start 0 = 1 := by
-        simp [quittingOpponentSurvivalWeight]
-      rw [hforcedBellman, hforcedRoot, hforcedTail, htailEq, hpeel, hzero]
-      change quittingFixedOpponentsContinueReward reward roots who start +
-          quittingFixedOpponentsContinueMass roots who start *
-            (_ + _) - _ = _
-      rw [quittingLedgerStageAdvantage_eq_fixedOpponents]
-      simp only [Nat.add_zero, one_mul]
-      ring
+  simpa [quittingLedgerStageAdvantage] using
+    quittingContinueUntil_terminalValue_sub_eq_sum reward roots who start length
 
 private theorem one_sub_mul_sum_range_le_of_antitone_step
     (weight : ℕ → ℝ) (step : ℕ) (factor : ℝ)
@@ -3769,8 +3703,8 @@ private theorem blockExpectation_succ_sub_eq
               (data.blockStart block + offset)) := by
   let start := data.blockStart block
   let length := data.blockStart (block + 1) - start
-  let first := continueUntilRoots data.roots data.who start
-  let second := continueUntilRoots data.roots data.who (start + length)
+  let first := quittingContinueUntilRoots data.roots data.who start
+  let second := quittingContinueUntilRoots data.roots data.who (start + length)
   let never := quittingRootSequenceUpdate data.roots data.who
     quittingAlwaysContinueHazard
   have hend : start + length = data.blockStart (block + 1) := by
@@ -3781,25 +3715,25 @@ private theorem blockExpectation_succ_sub_eq
     intro time htime
     have htimeEnd : time < start + length :=
       lt_of_lt_of_le htime (Nat.le_add_right start length)
-    simp [second, first, continueUntilRoots, htime, htimeEnd]
+    simp [second, first, quittingContinueUntilRoots, htime, htimeEnd]
   have hfirstTail : quittingRootSequenceTerminalValue data.reward first
       data.who start =
       quittingRootSequenceTerminalValue data.reward data.roots data.who start := by
     apply quittingRootSequenceTerminalValue_congr
     intro offset
-    simp [first, continueUntilRoots]
-  have hlocal := continueUntil_terminalValue_sub_eq_ledger_sum
+    simp [first, quittingContinueUntilRoots]
+  have hlocal := quittingContinueUntil_terminalValue_sub_eq_ledger_sum
     data.reward data.roots data.who start length
   have hsecondTail : quittingRootSequenceTerminalValue data.reward second
       data.who start =
       quittingRootSequenceTerminalValue data.reward
-        (continueUntilRoots data.roots data.who (start + length))
+        (quittingContinueUntilRoots data.roots data.who (start + length))
           data.who start := rfl
   have hsurvivalFirstNever : quittingJointSurvivalWeight first 0 start =
       quittingJointSurvivalWeight never 0 start := by
     apply quittingJointSurvivalWeight_congr
     intro offset hoffset
-    simp [first, never, continueUntilRoots, quittingRootSequenceUpdate,
+    simp [first, never, quittingContinueUntilRoots, quittingRootSequenceUpdate,
       quittingAlwaysContinueHazard, hoffset]
   have hsurvival : quittingJointSurvivalWeight first 0 start =
       quittingOpponentSurvivalWeight data.roots data.who 0 start := by
@@ -3856,7 +3790,7 @@ theorem lemma2_12 :
     rw [data.blockStart_zero]
     apply quittingRootSequenceTerminalValue_congr
     intro offset
-    simp [continueUntilRoots]
+    simp [quittingContinueUntilRoots]
   have hcurrentBound := abs_quittingRootSequenceTerminalValue_le
     data.reward data.roots data.who 0 hboundNonneg hreward
   by_cases hlarge : 1 / 2 ≤ data.ε ^ data.a
@@ -3864,7 +3798,7 @@ theorem lemma2_12 :
       apply csSup_le (Set.range_nonempty data.blockExpectation)
       rintro value ⟨block, rfl⟩
       exact (abs_le.mp (abs_quittingRootSequenceTerminalValue_le data.reward
-        (continueUntilRoots data.roots data.who (data.blockStart block))
+        (quittingContinueUntilRoots data.roots data.who (data.blockStart block))
         data.who 0 hboundNonneg hreward)).2
     have hmainError : data.ρ ≤
         7 * data.ρ * Fintype.card ι * data.ε ^ data.a := by
