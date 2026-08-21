@@ -391,6 +391,22 @@ def SatisfiesCorrectedLemma2_1Parameter (G : QuittingGame) (ρ : ℝ) : Prop :=
       ρ * QuitProbability G p ≤ EuclideanDist r y ∧
         QuitProbability G p ≤ 1 - ρ
 
+/-- At the scale selected under failure of instant approximate equilibria,
+no rational approximate equilibrium row has a sure quitter. -/
+def ExcludesSureRationalRowAt (G : QuittingGame) (ρ : ℝ) : Prop :=
+  ∀ r p j, IsRational G ρ r → p ∈ EpsilonRow G ρ r → (p j : ℝ) ≠ 1
+
+/-- Failure of instant approximate equilibria supplies a positive excluded
+sure-quitter scale. -/
+theorem exists_excludedSureRationalRowScale (G : QuittingGame)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∃ ρ : ℝ, 0 < ρ ∧ ExcludesSureRationalRowAt G ρ := by
+  have hinstant2007 : ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
+    fun hold => hinstant ((instantApproximateEquilibria_iff_simon2007 G).mpr hold)
+  simpa only [ExcludesSureRationalRowAt] using
+    Literature.Simon2007.exists_scale_without_sure_quitter_of_not_instant
+      G hinstant2007
+
 /-- The product norm is bounded by the paper's Euclidean norm. -/
 private theorem norm_le_euclideanNorm {N : Type} [Fintype N] [Nonempty N]
     (x : Payoff N) : ‖x‖ ≤ EuclideanNorm x := by
@@ -1842,19 +1858,75 @@ def InClosedPayoffBox {N : Type} [Fintype N] (R : ℝ)
 
 /--
 A single `ρ` satisfying the two motion estimates on the bounded continuation
-region used in Sections 3--4.  The printed phrase “`ρ` satisfies Lemmas 2.1
-and 2.3” mixes a common parameter with Lemma 2.3's pointwise quantifiers
-`∀ r, ∃ ρ`; this predicate records the bounded uniformization actually used
-by Lemmas 3.3--4.5 rather than silently asserting a global `∃ ρ, ∀ r`.
+region used in Sections 3--4 and excluding the sure rational row ruled out in
+Case 2B of Lemma 3.4.  The latter scale exists by
+`exists_excludedSureRationalRowScale`.  The printed phrase “`ρ` satisfies
+Lemmas 2.1 and 2.3” mixes a common parameter with Lemma 2.3's pointwise
+quantifiers `∀ r, ∃ ρ`; this predicate records the bounded uniformization
+actually used by Lemmas 3.3--4.5 rather than silently asserting a global
+`∃ ρ, ∀ r`.
 -/
 def IsStructureMotionParameter (G : QuittingGame) (M ρ : ℝ) : Prop :=
   SatisfiesCorrectedLemma2_1Parameter G ρ ∧
   0 < ρ ∧ ρ ≤ 1 ∧
-  ∀ r : Payoff G.Player,
-    (∀ j, MinMaxQuit G j - ρ ≤ r j ∧
-      r j ≤ 2 * (Fintype.card G.Player : ℝ) * M) →
-    ∀ p, p ∈ EpsilonRow G ρ r →
-      ρ * QuitProbability G p ≤ EuclideanDist r (QuittingOneStagePayoff G r p)
+  (∀ r : Payoff G.Player,
+      (∀ j, MinMaxQuit G j - ρ ≤ r j ∧
+        r j ≤ 2 * (Fintype.card G.Player : ℝ) * M) →
+      ∀ p, p ∈ EpsilonRow G ρ r →
+        ρ * QuitProbability G p ≤
+          EuclideanDist r (QuittingOneStagePayoff G r p)) ∧
+  ExcludesSureRationalRowAt G ρ
+
+/-- A positive motion scale and the independently extracted no-instant scale
+can be decreased to one common Section 3 parameter. -/
+theorem exists_structureMotionParameter_of_base (G : QuittingGame) (M ρ0 : ℝ)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hρ0 : 0 < ρ0) (hρ01 : ρ0 ≤ 1)
+    (hcorrected : SatisfiesCorrectedLemma2_1Parameter G ρ0)
+    (hglobal : ∀ r : Payoff G.Player,
+      (∀ j, MinMaxQuit G j - ρ0 ≤ r j ∧
+        r j ≤ 2 * (Fintype.card G.Player : ℝ) * M) →
+      ∀ p, p ∈ EpsilonRow G ρ0 r →
+        ρ0 * QuitProbability G p ≤
+          EuclideanDist r (QuittingOneStagePayoff G r p)) :
+    ∃ ρ, IsStructureMotionParameter G M ρ := by
+  obtain ⟨η, hη, hnoSure⟩ := exists_excludedSureRationalRowScale G hinstant
+  let ρ := min ρ0 η
+  have hρ : 0 < ρ := lt_min hρ0 hη
+  have hρρ0 : ρ ≤ ρ0 := min_le_left _ _
+  have hρη : ρ ≤ η := min_le_right _ _
+  refine ⟨ρ, ?_, hρ, hρρ0.trans hρ01, ?_, ?_⟩
+  · refine ⟨hρ, hρρ0.trans hρ01, ?_⟩
+    intro r p hnear hrational hrow
+    have hrational0 : IsRational G ρ0 r := by
+      intro j
+      have := hrational j
+      linarith
+    have hrow0 : p ∈ EpsilonRow G ρ0 r :=
+      EpsilonRow.mono G hρρ0 r hrow
+    obtain ⟨hmotion, hquit⟩ :=
+      hcorrected.2.2 r p hnear hrational0 hrow0
+    constructor
+    · have hq : 0 ≤ QuitProbability G p := (quitProbability_mem_Icc G p).1
+      exact (mul_le_mul_of_nonneg_right hρρ0 hq).trans hmotion
+    · linarith
+  · intro r hr p hrow
+    have hr0 : ∀ j, MinMaxQuit G j - ρ0 ≤ r j ∧
+        r j ≤ 2 * (Fintype.card G.Player : ℝ) * M := by
+      intro j
+      exact ⟨by linarith [(hr j).1], (hr j).2⟩
+    have hrow0 : p ∈ EpsilonRow G ρ0 r :=
+      EpsilonRow.mono G hρρ0 r hrow
+    have hbound := hglobal r hr0 p hrow0
+    have hq : 0 ≤ QuitProbability G p := (quitProbability_mem_Icc G p).1
+    exact (mul_le_mul_of_nonneg_right hρρ0 hq).trans hbound
+  · intro r p j hrational hrow hsure
+    apply hnoSure r p j
+    · intro k
+      have := hrational k
+      linarith
+    · exact EpsilonRow.mono G hρη r hrow
+    · exact hsure
 
 /-- The full five-part conclusion of Theorem 3.1. -/
 def StructureTheoremConclusion (G : QuittingGame) (M : ℝ) : Prop :=
@@ -2963,15 +3035,80 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
         simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxk
         have htargetLower := (htarget k).1
         nlinarith
-      · by_cases hbetaBox : ∀ k,
-            MinMaxQuit G k - ρ ≤ z.1.1 k ∧
-              z.1.1 k ≤ 2 * (Fintype.card G.Player : ℝ) * M
-        · have hpUpper := hconstants.2.2.2 z.1.1 z.1.2 z.2 hbetaBox j
-          have hpLower :=
+      · let N : ℝ := Fintype.card G.Player
+        let threshold : ℝ := 1 - ρ / (2 * N * M)
+        by_cases hcase2B : ∀ l, (z.1.2 l : ℝ) ≤ threshold →
+            |z.1.1 l| ≤ N * M
+        · have hN : 3 ≤ N := by
+            dsimp only [N]
+            exact_mod_cast hplayers
+          have hNpos : 0 < N := by linarith
+          have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+          have hNM : 3 ≤ N * M := by
+            nlinarith [mul_le_mul hN hM.1 (by norm_num) hNpos.le]
+          have hρpos : 0 < ρ := hmotion.2.1
+          have hρ1 : ρ ≤ 1 := hmotion.2.2.1
+          have hchi : ∀ k, |MinMaxQuit G k| ≤ M / 3 := by
+            intro k
+            exact abs_minMaxQuit_le_of_reward_bound G k (by positivity)
+              (fun outcome => hM.2.1 outcome k)
+          have hhighLower : ∀ k, threshold ≤ (z.1.2 k : ℝ) →
+              MinMaxQuit G k - ρ / 2 ≤ z.1.1 k := by
+            intro k hk
+            by_contra hnot
+            apply hcase2A
+            refine ⟨k, ?_, lt_of_not_ge hnot⟩
+            simpa only [threshold, N] using hk
+          have hbetaLower : ∀ k, -(N * M) ≤ z.1.1 k := by
+            intro k
+            by_cases hk : threshold ≤ (z.1.2 k : ℝ)
+            · have hlower := hhighLower k hk
+              have hchiLower := neg_le_of_abs_le (hchi k)
+              nlinarith
+            · exact neg_le_of_abs_le (hcase2B k (le_of_not_ge hk))
+          have hdeltaPos : 0 < ρ / (2 * N * M) := by positivity
+          have hdeltaOne : ρ / (2 * N * M) ≤ 1 := by
+            rw [div_le_one (by positivity : 0 < 2 * N * M)]
+            nlinarith
+          have hpowLe :
+              (ρ / (2 * N * M)) ^ Fintype.card G.Player ≤
+                ρ / (2 * N * M) := by
+            have hcardPos : 0 < Fintype.card G.Player := Fintype.card_pos
+            obtain ⟨card, hcard⟩ :=
+              Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hcardPos)
+            rw [hcard, pow_succ]
+            exact mul_le_of_le_one_left hdeltaPos.le
+              (pow_le_one₀ hdeltaPos.le hdeltaOne)
+          have hxiDelta : ξ ≤ ρ / (2 * N * M) := by
+            have hxi := hconstants.2.1
+            have hpowNonneg : 0 ≤
+                (ρ / (2 * N * M)) ^ Fintype.card G.Player := by positivity
+            have hscaled : (1 / 20 : ℝ) *
+                (ρ / (2 * N * M)) ^ Fintype.card G.Player ≤
+                  (ρ / (2 * N * M)) ^ Fintype.card G.Player := by
+              nlinarith
+            change ξ ≤ (1 / 20 : ℝ) *
+              (ρ / (2 * N * M)) ^ Fintype.card G.Player at hxi
+            exact hxi.trans (hscaled.trans hpowLe)
+          have hpjStrict :=
             lemma3_4_negative_coordinate_probability_gt_one_sub_xi
               G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z j
                 (by rw [← ha]; linarith)
-          linarith
+          have hpj : threshold ≤ (z.1.2 j : ℝ) := by
+            dsimp only [threshold]
+            linarith
+          have hbetaj := hhighLower j hpj
+          obtain ⟨r, p', hrational, hpjOne, hrow⟩ :=
+            lemma3_3 G M ρ hM hplayers z.1.1 z.1.2 z.2 hρpos hρ1
+              (by
+                intro k
+                simpa only [N, neg_mul] using hbetaLower k)
+              j (by simpa only [threshold, N] using hpj) hbetaj
+                (by
+                  intro l hl
+                  exact (le_abs_self _).trans
+                    (hcase2B l (by simpa only [threshold, N] using hl)))
+          exact hmotion.2.2.2.2 r p' j hrational hrow hpjOne
         · sorry
   · intro j hj
     exact lemma3_4_positive_coordinate G M d ρ ξ R hplayers hM hd hd1
