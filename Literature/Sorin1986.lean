@@ -11,7 +11,9 @@ import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.FiniteHorizonContinuation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.InitialActionAffineness
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.Feasible
 import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
+import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Periodic
 import UniformEquilibrium.ProofView.Native.Equilibrium
 
 /-!
@@ -3010,6 +3012,97 @@ theorem property_3_finite (G : FiniteStageGame) :
     refine ⟨G.finitePayoff n behavior, ⟨behavior, rfl⟩, ?_⟩
     rw [hpayoff, dist_eq_norm]
     exact hsample
+
+/-- Property (3), discounted clause: `Dλ` converges to `C` as the current-stage
+weight tends to zero. -/
+theorem property_3_discounted (G : FiniteStageGame) :
+    HausdorffConvergesAtZero G.discountedFeasiblePayoffs
+      G.correlatedFeasiblePayoffs := by
+  intro ε hε
+  letI (who : G.Player) : Fintype (G.kernel.Strategy who) :=
+    G.finiteAction who
+  letI (who : G.Player) : Nonempty (G.kernel.Strategy who) :=
+    G.nonemptyAction who
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  obtain ⟨β₀, hβ₀0, hβ₀1, happrox⟩ :=
+    G.kernel.exists_discountFactor_threshold_periodic_payoff_close_feasibleSet hε
+  refine ⟨1 - β₀, by linarith, ?_⟩
+  intro lam hlam hlamThreshold
+  let β := 1 - lam
+  have hβ0 : 0 ≤ β := by
+    dsimp only [β]
+    linarith
+  have hβ1 : β < 1 := by
+    dsimp only [β]
+    linarith
+  have hβgt : β₀ < β := by
+    dsimp only [β]
+    linarith
+  constructor
+  · rintro payoff ⟨profile, rfl⟩
+    have hstage : ∀ state action,
+        (fun who ↦ G.repeatedGame.stagePayoff state action who) ∈
+          G.correlatedFeasiblePayoffs := by
+      intro state action
+      exact subset_convexHull ℝ G.purePayoffSet ⟨action, by
+        funext who
+        simp [FiniteStageGame.repeatedGame,
+          KernelGame.realizedActionStochasticGame,
+          FiniteStageGame.kernel, KernelGame.eu_ofPureEU]⟩
+    have hmem := G.repeatedGame.discountedPayoff_mem_of_stagePayoff_mem_convex
+      G.correlatedFeasiblePayoffs G.correlatedFeasiblePayoffs_convex
+      hstage profile PUnit.unit hβ0 hβ1
+    refine ⟨G.discountedPayoff lam profile, ?_, ?_⟩
+    · change (fun who ↦ G.repeatedGame.discountedPayoff
+          (1 - lam) profile PUnit.unit who) ∈
+        G.correlatedFeasiblePayoffs
+      exact hmem
+    · exact (dist_self _).trans_lt hε
+  · intro target htarget
+    have htargetKernel : target ∈ G.kernel.feasibleSet := by
+      change target ∈ convexHull ℝ (Set.range G.kernel.payoffVector)
+      change target ∈ convexHull ℝ (Set.range G.payoff) at htarget
+      apply convexHull_mono (𝕜 := ℝ) (t := Set.range G.kernel.payoffVector) ?_
+        htarget
+      rintro _ ⟨action, rfl⟩
+      refine ⟨action, ?_⟩
+      funext who
+      simp [KernelGame.payoffVector, FiniteStageGame.kernel,
+        KernelGame.eu_ofPureEU]
+    obtain ⟨n, hn, cycle, hcycle⟩ :=
+      happrox β hβgt hβ1 target htargetKernel
+    let stages : ℕ → G.MixedProfile := fun time ↦
+      G.kernel.pureMixedProfile (cycle (Fin.ofNat n time))
+    let behavior := mixedSequenceBehavior G stages
+    have hpayoff (who : G.Player) :
+        G.discountedPayoff lam behavior who =
+          G.kernel.discountedContinuationPayoff β
+            (fun time ↦ cycle (Fin.ofNat n time)) 0 who := by
+      unfold FiniteStageGame.discountedPayoff
+        StochasticGame.discountedPayoff KernelGame.discountedContinuationPayoff
+      rw [show 1 - (1 - lam) = lam by ring]
+      rw [show β = 1 - lam by rfl]
+      simp only [zero_add]
+      congr 1
+      apply tsum_congr
+      intro time
+      congr 2
+      have hstage := congrFun
+        (expectedStagePayoff_mixedSequenceBehavior G stages time) who
+      dsimp only [stages] at hstage
+      change G.repeatedGame.expectedStagePayoff behavior PUnit.unit time who =
+        G.kernel.eu (cycle (Fin.ofNat n time)) who
+      rw [hstage]
+      change G.kernel.mixedExtension.eu
+          (G.kernel.pureMixedProfile (cycle (Fin.ofNat n time))) who = _
+      exact G.kernel.mixedExtension_eu_pureMixedProfile _ _
+    refine ⟨G.discountedPayoff lam behavior, ⟨behavior, rfl⟩, ?_⟩
+    rw [dist_pi_lt_iff hε]
+    intro who
+    rw [hpayoff, Real.dist_eq]
+    exact hcycle who
 
 theorem property_3 (G : FiniteStageGame) :
     HausdorffConvergesAtTop G.finiteFeasiblePayoffs
