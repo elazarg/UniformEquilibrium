@@ -3441,6 +3441,244 @@ private theorem interpolation_lt_maximalQuitter
     (mul_le_mul_of_nonneg_left hxLower
       (mul_nonneg htauPos.le hfloorPos.le))) hxStrict
 
+/-- Below the threshold `1-δ`, the singular fraction in `φ` is at most
+`δ^(-|N|)`. -/
+private theorem quitPenalty_le_inv_pow (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) {δ : ℝ} (hδ : 0 < δ)
+    (hn : (p n : ℝ) ≤ 1 - δ) :
+    (p n : ℝ) / (1 - (p n : ℝ)) ^ Fintype.card G.Player ≤
+      1 / δ ^ Fintype.card G.Player := by
+  have hbase : δ ≤ 1 - (p n : ℝ) := by linarith
+  have hpowPos : 0 < δ ^ Fintype.card G.Player := pow_pos hδ _
+  have hdenPos : 0 < (1 - (p n : ℝ)) ^ Fintype.card G.Player :=
+    pow_pos (lt_of_lt_of_le hδ hbase) _
+  have hpow := pow_le_pow_left₀ hδ.le hbase (Fintype.card G.Player)
+  calc
+    (p n : ℝ) / (1 - (p n : ℝ)) ^ Fintype.card G.Player ≤
+        1 / (1 - (p n : ℝ)) ^ Fintype.card G.Player :=
+      div_le_div_of_nonneg_right (p n).property.2 hdenPos.le
+    _ ≤ 1 / δ ^ Fintype.card G.Player :=
+      one_div_le_one_div_of_le hpowPos hpow
+
+/-- If Continue is in support of an exact row, its one-stage value is at
+least its forced-Quit payoff. -/
+private theorem forcedQuit_le_oneStage_of_continue_support
+    (G : QuittingGame) (beta : Payoff G.Player) (p : QuitRow G)
+    (hp : p ∈ EpsilonRow G 0 beta) (n : G.Player)
+    (hn : (p n : ℝ) < 1) :
+    ForcedQuitPayoff G p n ≤ QuittingOneStagePayoff G beta p n := by
+  have hcontinue := hp.2 n hn
+  have haffine := quittingOneStagePayoff_replace_affine G beta p n (p n)
+  rw [QuitRow.replace_self] at haffine
+  have hp0 := (p n).property.1
+  have hp1 := (p n).property.2
+  nlinarith
+
+/-- The low-probability large-continuation alternative contradicts the
+target box.  This proves both the printed positive Case 2C and the negative
+alternative omitted from the paper's displayed case split. -/
+private theorem lowProbability_largeContinuation_not_target
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (z : EZeroTilde G) (j m l : G.Player)
+    (hm : ∀ k, (z.1.2 k : ℝ) ≤ (z.1.2 m : ℝ))
+    (haj : Phi G M d z j < -R)
+    (hlow : (z.1.2 l : ℝ) ≤
+      1 - ρ / (2 * (Fintype.card G.Player : ℝ) * M))
+    (hlarge : (Fintype.card G.Player : ℝ) * M < |z.1.1 l|)
+    (lambda : UnitInterval) (hlambda0 : 0 < (lambda : ℝ))
+    (hlambda1 : (lambda : ℝ) < 1)
+    (x : Payoff G.Player)
+    (hx : x = (1 - (lambda : ℝ)) • z.1.1 +
+      (lambda : ℝ) • Phi G M d z) :
+    ¬StructureTargetBox G M ρ x := by
+  intro htarget
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let p := z.1.2
+  let delta : ℝ := ρ / (2 * N * M)
+  let coefficient : ℝ := 5 * N * M / d
+  let penalty : ℝ := (p l : ℝ) /
+    (1 - (p l : ℝ)) ^ Fintype.card G.Player
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpos : 0 < N := by linarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hdeltaPos : 0 < delta := by
+    dsimp only [delta]
+    exact div_pos hmotion.2.1 (by positivity)
+  have hdeltaPowPos : 0 < delta ^ Fintype.card G.Player :=
+    pow_pos hdeltaPos _
+  have hxiSmallRaw := card_mul_xi_le_one_fortieth G M d ρ ξ R hM
+    hmotion hconstants
+  have hxiSmall : ξ ≤ 1 / 120 := by
+    have hNxi : N * ξ ≤ 1 / 40 := by simpa only [N] using hxiSmallRaw
+    nlinarith
+  have hpj := lemma3_4_negative_coordinate_probability_gt_one_sub_xi
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z j haj
+  have hpmXi : 1 - (p m : ℝ) < ξ := by
+    dsimp only [p]
+    linarith [hm j]
+  have hlambda := interpolation_lt_maximalQuitter G M d ρ ξ R hplayers
+    hM hd hd1 hmotion hconstants z j m hm haj lambda hlambda0 x hx htarget
+  have hlambdaXi : (lambda : ℝ) < d * ξ / (3 * N) := by
+    have hscale := mul_lt_mul_of_pos_left hpmXi hd
+    have hden : 0 < 3 * N := by positivity
+    exact hlambda.trans (div_lt_div_of_pos_right hscale hden)
+  have hdxi : d * ξ ≤ 1 / 120 := by
+    have hxiPos := hconstants.1
+    have := mul_le_mul_of_nonneg_right hd1 hxiPos.le
+    nlinarith
+  have hlambdaNM : (lambda : ℝ) * (N * M) < M / 360 := by
+    have hscale := mul_lt_mul_of_pos_right hlambdaXi (mul_pos hNpos hMpos)
+    calc
+      (lambda : ℝ) * (N * M) <
+          (d * ξ / (3 * N)) * (N * M) := hscale
+      _ = d * ξ * M / 3 := by field_simp
+      _ ≤ M / 360 := by
+        have hmul := mul_le_mul_of_nonneg_right hdxi hMpos.le
+        nlinarith
+  have hpenalty := quitPenalty_le_inv_pow G p l hdeltaPos (by
+    simpa only [delta, p, N] using hlow)
+  have hcoefficientPos : 0 < coefficient := by
+    dsimp only [coefficient]
+    positivity
+  have hpenaltyNonneg : 0 ≤ penalty := by
+    dsimp only [penalty]
+    exact div_nonneg (p l).property.1
+      (pow_nonneg (sub_nonneg.mpr (p l).property.2) _)
+  have hxiPower : ξ ≤ (1 / 20 : ℝ) *
+      delta ^ Fintype.card G.Player := by
+    simpa only [delta, N] using hconstants.2.1
+  have hpenaltyCost : (lambda : ℝ) * coefficient * penalty ≤ M / 12 := by
+    have hbound := mul_le_mul_of_nonneg_left hpenalty
+      (mul_nonneg lambda.property.1 hcoefficientPos.le)
+    have hfactorPos : 0 < coefficient /
+        delta ^ Fintype.card G.Player := div_pos hcoefficientPos hdeltaPowPos
+    have hlambdaBound := mul_le_mul_of_nonneg_right hlambdaXi.le hfactorPos.le
+    have hcost : 5 * M * ξ /
+        (3 * delta ^ Fintype.card G.Player) ≤ M / 12 := by
+      rw [div_le_iff₀ (by positivity : 0 < 3 * delta ^ Fintype.card G.Player)]
+      have hscale := mul_le_mul_of_nonneg_left hxiPower
+        (show 0 ≤ 5 * M by positivity)
+      nlinarith
+    calc
+      (lambda : ℝ) * coefficient * penalty ≤
+          (lambda : ℝ) * coefficient *
+            (1 / delta ^ Fintype.card G.Player) := by
+        simpa only [mul_assoc] using hbound
+      _ = (lambda : ℝ) *
+          (coefficient / delta ^ Fintype.card G.Player) := by ring
+      _ ≤ (d * ξ / (3 * N)) *
+          (coefficient / delta ^ Fintype.card G.Player) := hlambdaBound
+      _ = 5 * M * ξ / (3 * delta ^ Fintype.card G.Player) := by
+        dsimp only [coefficient]
+        field_simp
+      _ ≤ M / 12 := hcost
+  have hplLt : (p l : ℝ) < 1 := by
+    dsimp only [delta] at hdeltaPos
+    dsimp only [p, N] at hlow ⊢
+    linarith
+  have hstageLower : -M / 3 ≤ QuittingOneStagePayoff G z.1.1 p l := by
+    have hquit := forcedQuit_le_oneStage_of_continue_support G z.1.1 p
+      z.2.1 l hplLt
+    have hforced := abs_forcedQuitPayoff_le_scale G M hM p l
+    linarith [neg_le_of_abs_le hforced]
+  have hsumNonneg : 0 ≤ M * ∑ k ∈ Finset.univ.erase l, (p k : ℝ) :=
+    mul_nonneg hMpos.le (Finset.sum_nonneg fun k _ => (p k).property.1)
+  have halphaLower : -M / 3 - coefficient * penalty ≤ Phi G M d z l := by
+    change -M / 3 - coefficient * penalty ≤
+      QuittingOneStagePayoff G z.1.1 p l - coefficient * penalty +
+        M * ∑ k ∈ Finset.univ.erase l, (p k : ℝ)
+    linarith
+  have hlambdaM : (lambda : ℝ) * (M / 3) ≤ M / 3 :=
+    mul_le_of_le_one_left (by positivity) lambda.property.2
+  have hNMbound : 3 * M ≤ N * M :=
+    mul_le_mul_of_nonneg_right hN hMpos.le
+  rw [lt_abs] at hlarge
+  rcases hlarge with hpositive | hnegative
+  · have hbetaWeighted := mul_lt_mul_of_pos_left hpositive
+      (sub_pos.mpr hlambda1)
+    have halphaWeighted := mul_le_mul_of_nonneg_left halphaLower
+      lambda.property.1
+    have hxm := congrFun hx l
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxm
+    have hbaseLarge : M < N * M - (lambda : ℝ) * (N * M) -
+        (lambda : ℝ) * (M / 3) -
+          (lambda : ℝ) * coefficient * penalty := by
+      linarith only [hNMbound, hlambdaNM, hlambdaM, hpenaltyCost, hMpos]
+    have hxLarge : M < x l := by
+      rw [hxm]
+      calc
+        M < N * M - (lambda : ℝ) * (N * M) -
+            (lambda : ℝ) * (M / 3) -
+              (lambda : ℝ) * coefficient * penalty := hbaseLarge
+        _ = (1 - (lambda : ℝ)) * (N * M) +
+            (lambda : ℝ) * (-M / 3 - coefficient * penalty) := by ring
+        _ < (1 - (lambda : ℝ)) * z.1.1 l +
+            (lambda : ℝ) * Phi G M d z l :=
+          add_lt_add_of_lt_of_le hbetaWeighted halphaWeighted
+    exact (not_lt_of_ge (htarget l).2) hxLarge
+  · have hstageUpper : QuittingOneStagePayoff G z.1.1 p l ≤ M / 3 := by
+      apply quittingOneStagePayoff_le_of_coordinate_le G z.1.1 p l (M / 3)
+      · intro A
+        exact (le_abs_self (G.reward A l)).trans (hM.2.1 A l)
+      · nlinarith
+    have hsum : ∑ k ∈ Finset.univ.erase l, (p k : ℝ) ≤ N := by
+      calc
+        ∑ k ∈ Finset.univ.erase l, (p k : ℝ) ≤
+            ∑ _k ∈ Finset.univ.erase l, (1 : ℝ) := by
+          apply Finset.sum_le_sum
+          intro k _
+          exact (p k).property.2
+        _ = ((Finset.univ.erase l).card : ℝ) := by simp
+        _ ≤ N := by
+          dsimp only [N]
+          exact_mod_cast (Finset.card_erase_le :
+            (Finset.univ.erase l).card ≤ (Finset.univ : Finset G.Player).card)
+    have halphaUpper : Phi G M d z l ≤ M / 3 + N * M := by
+      change QuittingOneStagePayoff G z.1.1 p l - coefficient * penalty +
+          M * ∑ k ∈ Finset.univ.erase l, (p k : ℝ) ≤ M / 3 + N * M
+      nlinarith [mul_nonneg hcoefficientPos.le hpenaltyNonneg,
+        mul_le_mul_of_nonneg_left hsum hMpos.le]
+    have hbetaWeighted := mul_lt_mul_of_pos_left hnegative
+      (sub_pos.mpr hlambda1)
+    have hbetaWeighted' :
+        (1 - (lambda : ℝ)) * z.1.1 l <
+          (1 - (lambda : ℝ)) * (-N * M) := by
+      dsimp only [N] at hbetaWeighted ⊢
+      nlinarith only [hbetaWeighted]
+    have halphaWeighted := mul_le_mul_of_nonneg_left halphaUpper
+      lambda.property.1
+    have hxm := congrFun hx l
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxm
+    have hbaseSmall : -N * M + 2 * ((lambda : ℝ) * (N * M)) +
+        (lambda : ℝ) * (M / 3) < -M := by
+      linarith only [hNMbound, hlambdaNM, hlambdaM, hMpos]
+    have hxSmall : x l < -M := by
+      rw [hxm]
+      calc
+        (1 - (lambda : ℝ)) * z.1.1 l +
+            (lambda : ℝ) * Phi G M d z l <
+          (1 - (lambda : ℝ)) * (-N * M) +
+            (lambda : ℝ) * (M / 3 + N * M) :=
+          add_lt_add_of_lt_of_le hbetaWeighted' halphaWeighted
+        _ = -N * M + 2 * ((lambda : ℝ) * (N * M)) +
+            (lambda : ℝ) * (M / 3) := by ring
+        _ < -M := hbaseSmall
+    have hchi := abs_minMaxQuit_le_of_reward_bound G l (by positivity)
+      (fun outcome => hM.2.1 outcome l)
+    have hρM : ρ ≤ M := le_trans hmotion.2.2.1 hM.1
+    have hchiLower := neg_le_of_abs_le hchi
+    have htargetLower := (htarget l).1
+    have hxLower : -M ≤ x l := by
+      linarith only [hchiLower, htargetLower, hρM, hMpos]
+    exact (not_lt_of_ge hxLower) hxSmall
+
 /--
 Lemma 3.4.  For `a = φ(β,p)` and a point strictly inside the segment from
 `β` to `a`, a coordinate of `a` outside `[-R,R]` forces the segment point
@@ -3454,9 +3692,9 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
     (hd : 0 < d) (hd1 : d ≤ 1)
     (hmotion : IsStructureMotionParameter G M ρ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
-    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
-    (hnormal : ∀ n, IsNormalPlayer G n)
+    (_hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (_hinstant : ¬HasInstantApproximateEquilibria G)
+    (_hnormal : ∀ n, IsNormalPlayer G n)
     (z : EZeroTilde G) (t : UnitInterval)
     (ht0 : 0 < (t : ℝ)) (ht1 : (t : ℝ) < 1)
     (a : Payoff G.Player) (ha : a = Phi G M d z)
@@ -3587,7 +3825,18 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
                   exact (le_abs_self _).trans
                     (hcase2B l (by simpa only [threshold, N] using hl)))
           exact hmotion.2.2.2.2 r p' j hrational hrow hpjOne
-        · sorry
+        · push Not at hcase2B
+          obtain ⟨l, hlow, hlarge⟩ := hcase2B
+          obtain ⟨m, hm⟩ := exists_maximalQuitter G z.1.2
+          have haj : Phi G M d z j < -R := by
+            rw [← ha]
+            linarith
+          have hnotTarget := lowProbability_largeContinuation_not_target
+            G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z j m l hm haj
+              (by simpa only [threshold, N] using hlow)
+              (by simpa only [N] using hlarge) t ht0 ht1 x
+              (by simpa only [ha] using hx)
+          exact hnotTarget htarget
   · intro j hj
     exact lemma3_4_positive_coordinate G M d ρ ξ R hplayers hM hd hd1
       hmotion hconstants z j (by simpa only [ha] using hj)
