@@ -8043,6 +8043,202 @@ theorem boundedness_conclusion_fails_without_standing_assumptions :
 
 end Lemma44ZeroQuitterInference
 
+/-- The singular penalty supplies the supported-coordinate half of Lemma 4.4
+without using the printed (false in isolation) zero-quitter inference. -/
+private theorem supportedContinuation_abs_le_half_radius
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (z : EZeroTilde G)
+    (ha : Phi G M d z ∈ TruncatedW G R) :
+    ∀ j, 0 < (z.1.2 j : ℝ) → |z.1.1 j| ≤ R / 2 := by
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let beta := z.1.1
+  let p := z.1.2
+  obtain ⟨_, _, hR⟩ := section3Constants_radius_bound G M d ρ ξ R
+    hplayers hM hd hd1 hmotion hconstants
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hRpos : 0 < R := by nlinarith
+  intro j hpj
+  by_contra hnot
+  have hlarge : R / 2 < |beta j| := by
+    simpa only [beta] using lt_of_not_ge hnot
+  obtain ⟨m, hm⟩ := exists_maximalQuitter G p
+  have hpm : 0 < (p m : ℝ) := hpj.trans_le (hm j)
+  have hpmLt : (p m : ℝ) < 1 :=
+    (quitProbability_apply_le G p m).trans_lt z.2.2
+  let tau : ℝ := 1 - (p m : ℝ)
+  let floor : ℝ := tau ^ (Fintype.card G.Player - 1)
+  let survival : ℝ := 1 - OthersQuitProbability G p j
+  have htauPos : 0 < tau := by dsimp only [tau]; linarith
+  have htauOne : tau ≤ 1 := by
+    dsimp only [tau]
+    linarith [(p m).property.1]
+  have hfloorPos : 0 < floor := pow_pos htauPos _
+  have hsurvivalLower : floor ≤ survival := by
+    simpa only [floor, survival] using
+      maximalQuitter_opponentSurvival_lower_at G p m j hm
+  have hquit := z.2.1.1 j hpj
+  have hcontinue := z.2.1.2 j ((hm j).trans_lt hpmLt)
+  have heq : ForcedQuitPayoff G p j = ForcedContinuePayoff G beta p j :=
+    le_antisymm (by simpa only [sub_zero] using hcontinue)
+      (by simpa only [sub_zero] using hquit)
+  have hidentity := forcedContinue_sub_solo G p beta j
+  rw [← heq] at hidentity
+  have hforced := abs_forcedQuitPayoff_le_scale G M hM p j
+  have hsolo := abs_forcedContinue_solo_le_scale G M hM p j
+  have hscaledDistance :
+      survival * |beta j - SoloPayoff G j| ≤ 2 * M / 3 := by
+    have hsurvivalNonneg : 0 ≤ survival := by
+      dsimp only [survival]
+      rw [othersQuitProbability_eq_replace_zero]
+      linarith [quitProbability_mem_Icc G (p.replace G j 0) |>.2]
+    rw [← abs_of_nonneg hsurvivalNonneg, ← abs_mul, ← hidentity]
+    exact (abs_sub _ _).trans (by nlinarith)
+  have hsoloPay := hM.2.1 ⟨{j}, Finset.singleton_nonempty j⟩ j
+  have hdistance : R / 3 < |beta j - SoloPayoff G j| := by
+    have htriangle : |beta j| ≤
+        |beta j - SoloPayoff G j| + |SoloPayoff G j| := by
+      calc
+        |beta j| = |(beta j - SoloPayoff G j) + SoloPayoff G j| := by ring_nf
+        _ ≤ _ := abs_add_le _ _
+    change |SoloPayoff G j| ≤ M / 3 at hsoloPay
+    nlinarith
+  have hfloorDistance :
+      floor * |beta j - SoloPayoff G j| ≤
+        survival * |beta j - SoloPayoff G j| :=
+    mul_le_mul_of_nonneg_right hsurvivalLower (abs_nonneg _)
+  have hfloorR : floor * R < 2 * M := by
+    nlinarith [hfloorDistance]
+  have htenNFloor : 10 * N * floor < 2 := by
+    have hscaledR := mul_le_mul_of_nonneg_left hR hfloorPos.le
+    have hwithM : (10 * N * floor) * M < 2 * M := by
+      nlinarith [hscaledR]
+    exact lt_of_mul_lt_mul_right hwithM hMpos.le
+  have hfloorSmall : floor < 1 / 15 := by
+    have hfifteen : 15 ≤ 5 * N := by nlinarith
+    have hscaled := mul_le_mul_of_nonneg_right hfifteen hfloorPos.le
+    nlinarith
+  have hbern : 1 - ((Fintype.card G.Player - 1 : ℕ) : ℝ) * (p m : ℝ) ≤
+      floor := by
+    have hraw := one_add_mul_le_pow (a := -(p m : ℝ))
+      (n := Fintype.card G.Player - 1) (by linarith [(p m).property.2])
+    simpa only [floor, tau, sub_eq_add_neg, mul_neg] using hraw
+  have hpred : ((Fintype.card G.Player - 1 : ℕ) : ℝ) ≤ N := by
+    dsimp only [N]
+    exact_mod_cast Nat.sub_le (Fintype.card G.Player) 1
+  have hpredMul :
+      ((Fintype.card G.Player - 1 : ℕ) : ℝ) * (p m : ℝ) ≤
+        N * (p m : ℝ) :=
+    mul_le_mul_of_nonneg_right hpred (p m).property.1
+  have hNpm : 14 / 15 < N * (p m : ℝ) := by nlinarith
+  let den : ℝ := tau ^ Fintype.card G.Player
+  have hdenPos : 0 < den := pow_pos htauPos _
+  have hdenEq : den = tau * floor := by
+    have hcard : Fintype.card G.Player - 1 + 1 = Fintype.card G.Player := by
+      exact Nat.sub_add_cancel Fintype.card_pos
+    calc
+      den = tau ^ (Fintype.card G.Player - 1 + 1) := by rw [hcard]
+      _ = tau ^ (Fintype.card G.Player - 1) * tau := pow_succ _ _
+      _ = tau * floor := by simp only [floor, mul_comm]
+  have hdenLe : den ≤ floor := by
+    rw [hdenEq]
+    exact mul_le_of_le_one_left hfloorPos.le htauOne
+  have hdenR : den * R < 2 * M := by
+    exact (mul_le_mul_of_nonneg_right hdenLe hRpos.le).trans_lt hfloorR
+  have hRdiv : R / 2 < M / den := by
+    rw [lt_div_iff₀ hdenPos]
+    calc
+      R / 2 * den = (den * R) / 2 := by ring
+      _ < (2 * M) / 2 := div_lt_div_of_pos_right hdenR (by norm_num)
+      _ = M := by ring
+  have hnum : 14 * M / 3 < 5 * N * M * (p m : ℝ) := by
+    have hscaled : (5 * M) * (14 / 15) <
+        (5 * M) * (N * (p m : ℝ)) :=
+      mul_lt_mul_of_pos_left hNpm (by positivity)
+    convert hscaled using 1 <;> ring
+  have hbasePenalty : 7 * R / 3 <
+      (5 * N * M * (p m : ℝ)) / den := by
+    have hleft : (14 / 3 : ℝ) * (R / 2) <
+        (14 / 3 : ℝ) * (M / den) :=
+      mul_lt_mul_of_pos_left hRdiv (by norm_num)
+    have hright := div_lt_div_of_pos_right hnum hdenPos
+    calc
+      7 * R / 3 = (14 / 3 : ℝ) * (R / 2) := by ring
+      _ < (14 / 3 : ℝ) * (M / den) := hleft
+      _ = (14 * M / 3) / den := by ring
+      _ < (5 * N * M * (p m : ℝ)) / den := hright
+  have hcoefficient : 5 * N * M ≤ 5 * N * M / d := by
+    rw [le_div_iff₀ hd]
+    exact mul_le_of_le_one_right (by positivity) hd1
+  have hfractionNonneg :
+      0 ≤ (p m : ℝ) / den := div_nonneg (p m).property.1 hdenPos.le
+  have hpenalty : 7 * R / 3 <
+      (5 * N * M / d) * ((p m : ℝ) / den) := by
+    calc
+      7 * R / 3 < (5 * N * M * (p m : ℝ)) / den := hbasePenalty
+      _ = (5 * N * M) * ((p m : ℝ) / den) := by ring
+      _ ≤ _ := mul_le_mul_of_nonneg_right hcoefficient hfractionNonneg
+  have hphiUpper := phi_maximalQuitter_upper G M d hM hd z m hpm
+  have hphiLower : -(R + 1) ≤ Phi G M d z m := (ha.2 m).1
+  have hRlarge : M / 3 + N * M + 1 < 4 * R / 3 := by
+    have hNM : 3 ≤ N * M := by
+      calc
+        3 = 3 * 1 := by ring
+        _ ≤ N * M := mul_le_mul hN hM.1 (by norm_num) (by positivity)
+    have hMNM : M ≤ N * M := by
+      calc
+        M = 1 * M := by ring
+        _ ≤ N * M := mul_le_mul_of_nonneg_right (by linarith [hN]) hMpos.le
+    have hRN : 10 * N * M ≤ R := by
+      exact hR
+    have hsmall : M / 3 + N * M + 1 ≤ 5 * (N * M) / 3 := by
+      have hMthird : M / 3 ≤ (N * M) / 3 :=
+        div_le_div_of_nonneg_right hMNM (by norm_num)
+      have honeThird : 1 ≤ (N * M) / 3 := by
+        rw [le_div_iff₀ (by norm_num)]
+        simpa using hNM
+      calc
+        M / 3 + N * M + 1 ≤
+            (N * M) / 3 + N * M + (N * M) / 3 := by
+          gcongr
+        _ = 5 * (N * M) / 3 := by ring
+    have hstrict : 5 * (N * M) / 3 < 40 * (N * M) / 3 := by
+      have hscaled := mul_lt_mul_of_pos_right
+        (show (5 / 3 : ℝ) < 40 / 3 by norm_num)
+        (show 0 < N * M by linarith [hNM])
+      calc
+        5 * (N * M) / 3 = (5 / 3) * (N * M) := by ring
+        _ < (40 / 3) * (N * M) := hscaled
+        _ = 40 * (N * M) / 3 := by ring
+    have hscaledR : 40 * (N * M) / 3 ≤ 4 * R / 3 := by
+      have hscaled := mul_le_mul_of_nonneg_left hRN (by norm_num : (0 : ℝ) ≤ 4 / 3)
+      calc
+        40 * (N * M) / 3 = (4 / 3) * (10 * N * M) := by ring
+        _ ≤ (4 / 3) * R := hscaled
+        _ = 4 * R / 3 := by ring
+    exact hsmall.trans_lt (hstrict.trans_le hscaledR)
+  dsimp only [N, p, tau, den] at hpenalty
+  have hstrictUpper : Phi G M d z m < -(R + 1) := by
+    calc
+      Phi G M d z m ≤ M / 3 -
+          (5 * (Fintype.card G.Player : ℝ) * M / d) *
+            ((z.1.2 m : ℝ) /
+              (1 - (z.1.2 m : ℝ)) ^ Fintype.card G.Player) +
+          (Fintype.card G.Player : ℝ) * M := hphiUpper
+      _ < M / 3 - 7 * R / 3 + N * M := by
+        dsimp only [N, p, tau, den] at hpenalty ⊢
+        linarith
+      _ < -(R + 1) := by linarith
+  exact (not_lt_of_ge hphiLower hstrictUpper).elim
+
 /--
 Lemma 4.4's boundedness of the continuation coordinate `β`, with the
 standing Section 3 assumptions and the `d,ρ,ξ,R` relations made explicit.
@@ -8063,6 +8259,8 @@ theorem lemma4_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
     (ha : Phi G M d z ∈ TruncatedW G R) :
     (∀ j, -R / 2 ≤ z.1.1 j ∧ z.1.1 j ≤ R + 1) ∧
       ∀ j, 0 < (z.1.2 j : ℝ) → |z.1.1 j| ≤ R / 2 := by
+  refine ⟨?_, supportedContinuation_abs_le_half_radius G M d ρ ξ R
+    hplayers hM hd hd1 hmotion hconstants z ha⟩
   sorry
 
 /--
