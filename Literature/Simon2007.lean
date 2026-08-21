@@ -7214,7 +7214,7 @@ private theorem quittingRewardPart_mono_reward (G : QuittingGame)
   · exact le_rfl
 
 /-- The reward contribution is affine in any one player's quitting probability. -/
-private theorem quittingRewardPart_replace_affine (G : QuittingGame) (p : QuitRow G)
+theorem quittingRewardPart_replace_affine (G : QuittingGame) (p : QuitRow G)
     (j : G.Player) (q : Set.Icc (0 : ℝ) 1) (n : G.Player) :
     quittingRewardPart G (p.replace G j q) n =
       (q : ℝ) * quittingRewardPart G (p.replace G j 1) n +
@@ -8810,6 +8810,135 @@ private theorem localGain_deleteBadQuit_ge (G : QuittingGame) (eta : ℝ)
       QuitTailPayoff G p i n
     rw [QuitRow.replace_self, htail]
     simp
+
+/-- Deleting a player's bad Quit action weakly increases one-row survival. -/
+private theorem one_sub_quitProbability_le_deleteBadQuit
+    (G : QuittingGame) (eta : ℝ) (p : QuitProfile G)
+    (n : G.Player) (i : ℕ) :
+    1 - QuitProbability G (p i) ≤
+      1 - QuitProbability G ((p i).replace G n (deleteBadQuit G eta p n i)) := by
+  have hbase := one_sub_quitProbability_replace G (p i) n (p i n)
+  rw [QuitRow.replace_self] at hbase
+  have hdeleted := one_sub_quitProbability_replace G (p i) n
+    (deleteBadQuit G eta p n i)
+  rw [hbase, hdeleted]
+  apply mul_le_mul_of_nonneg_right
+  · linarith [deleteBadQuit_le G eta p n i]
+  · exact sub_nonneg.mpr (quitProbability_mem_Icc G ((p i).replace G n 0)).2
+
+/-- Deleting one player's bad Quit actions weakly increases every finite survival
+probability. -/
+private theorem tailSurvival_le_deleteBadQuit
+    (G : QuittingGame) (eta : ℝ) (p : QuitProfile G)
+    (n : G.Player) (i : ℕ) :
+    tailSurvival G p 0 i ≤
+      tailSurvival G (fun j => (p j).replace G n (deleteBadQuit G eta p n j)) 0 i := by
+  simp only [tailSurvival, Nat.zero_add]
+  apply Finset.prod_le_prod
+  · intro j _hj
+    exact sub_nonneg.mpr (quitProbability_mem_Icc G (p j)).2
+  · intro j _hj
+    exact one_sub_quitProbability_le_deleteBadQuit G eta p n j
+
+/-- On a prefix reached with probability at least `s`, equilibrium bounds the total
+bad-Quit mass of each player by the survival-weighted error budget. -/
+private theorem survival_mul_eta_mul_sum_badQuitMass_le
+    (G : QuittingGame) {alpha eta s : ℝ} (p : QuitProfile G)
+    (hequilibrium : IsQuitEpsilonEquilibrium G alpha p)
+    (T : ℕ) (n : G.Player) (heta : 0 ≤ eta)
+    (hreach : ∀ i, i < T → s ≤ tailSurvival G p 0 i) :
+    s * eta * ∑ i ∈ Finset.range T, badQuitMass G eta p n i ≤ alpha := by
+  let q : ℕ → Set.Icc (0 : ℝ) 1 := deleteBadQuit G eta p n
+  have hequilibriumDeviation := hequilibrium n (p.prefixDeviation G n T q)
+  have hgain := quitPayoff_prefixDeviation_sub_eq_sum G p n T q
+  have hsumUpper :
+      (∑ i ∈ Finset.range T,
+        tailSurvival G
+            (fun j => (p j).replace G n (p.prefixDeviation G n T q j)) 0 i *
+          (QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1))
+              ((p i).replace G n (q i)) n - QuitTailPayoff G p i n)) ≤ alpha := by
+    rw [← hgain]
+    linarith
+  calc
+    s * eta * ∑ i ∈ Finset.range T, badQuitMass G eta p n i =
+        ∑ i ∈ Finset.range T, s * (eta * badQuitMass G eta p n i) := by
+      rw [Finset.mul_sum]
+      ring_nf
+    _ ≤ ∑ i ∈ Finset.range T,
+        tailSurvival G
+            (fun j => (p j).replace G n (p.prefixDeviation G n T q j)) 0 i *
+          (QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1))
+              ((p i).replace G n (q i)) n - QuitTailPayoff G p i n) := by
+      apply Finset.sum_le_sum
+      intro i hi
+      have hiT := Finset.mem_range.mp hi
+      have hsurvivalEq :
+          tailSurvival G
+              (fun j => (p j).replace G n (p.prefixDeviation G n T q j)) 0 i =
+            tailSurvival G (fun j => (p j).replace G n (q j)) 0 i := by
+        simp only [tailSurvival, Nat.zero_add]
+        apply Finset.prod_congr rfl
+        intro j hj
+        have hjT : j < T := (Finset.mem_range.mp hj).trans hiT
+        simp [QuitProfile.prefixDeviation, hjT]
+      have hsurvival : s ≤
+          tailSurvival G
+            (fun j => (p j).replace G n (p.prefixDeviation G n T q j)) 0 i := by
+        rw [hsurvivalEq]
+        exact (hreach i hiT).trans
+          (tailSurvival_le_deleteBadQuit G eta p n i)
+      have hsurvivalNonnegative : 0 ≤
+          tailSurvival G
+            (fun j => (p j).replace G n (p.prefixDeviation G n T q j)) 0 i := by
+        simp only [tailSurvival]
+        exact Finset.prod_nonneg fun j _hj =>
+          sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+      have hmassNonnegative : 0 ≤ badQuitMass G eta p n i := by
+        classical
+        by_cases hbad : IsBadQuitAction G eta (QuitTailPayoff G p (i + 1)) (p i) n
+        · simpa [badQuitMass, hbad] using (p i n).property.1
+        · simp [badQuitMass, hbad]
+      calc
+        s * (eta * badQuitMass G eta p n i) ≤
+            tailSurvival G
+                (fun j => (p j).replace G n (p.prefixDeviation G n T q j)) 0 i *
+              (eta * badQuitMass G eta p n i) :=
+          mul_le_mul_of_nonneg_right hsurvival (mul_nonneg heta hmassNonnegative)
+        _ ≤ tailSurvival G
+                (fun j => (p j).replace G n (p.prefixDeviation G n T q j)) 0 i *
+              (QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1))
+                  ((p i).replace G n (q i)) n - QuitTailPayoff G p i n) :=
+          mul_le_mul_of_nonneg_left
+            (localGain_deleteBadQuit_ge G eta p n i) hsurvivalNonnegative
+    _ ≤ alpha := hsumUpper
+
+/-- A one-stage payoff coordinate varies continuously with its continuation vector and
+mixed row. -/
+private theorem continuous_quittingOneStagePayoff (G : QuittingGame) (n : G.Player) :
+    Continuous fun rp : Payoff G.Player × QuitRow G =>
+      QuittingOneStagePayoff G rp.1 rp.2 n := by
+  classical
+  unfold QuittingOneStagePayoff QuitProbability CoalitionProbability
+  apply Continuous.add
+  · fun_prop
+  · apply continuous_finsetSum Finset.univ.powerset
+    intro A _hA
+    by_cases hA : A.Nonempty
+    · simp only [dif_pos hA]
+      fun_prop
+    · simp only [dif_neg hA]
+      exact continuous_const
+
+/-- Replacing one fixed coordinate of a mixed row is continuous. -/
+private theorem continuous_quitRow_replace (G : QuittingGame) (n : G.Player)
+    (q : Set.Icc (0 : ℝ) 1) : Continuous fun p : QuitRow G => p.replace G n q := by
+  apply continuous_pi
+  intro i
+  by_cases hi : i = n
+  · subst i
+    simpa [QuitRow.replace] using
+      (continuous_const : Continuous fun _p : QuitRow G => q)
+  · simpa [QuitRow.replace, hi] using continuous_apply i
 
 /-- Reversing the first `j` rows and iterating from `s₀` produces `sⱼ`. -/
 private theorem finiteQuittingPayoff_reverse_eq (G : QuittingGame) {k : ℕ}
