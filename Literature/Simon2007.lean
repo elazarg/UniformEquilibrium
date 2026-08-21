@@ -7151,6 +7151,164 @@ private theorem abs_quitPayoff_sub_lt (G : QuittingGame) (p q : QuitProfile G)
   rw [abs_lt]
   constructor <;> linarith
 
+/-- The exact-quitter coalition weights, including the empty coalition, sum to one. -/
+private theorem coalitionProbability_sum_one (G : QuittingGame) (p : QuitRow G) :
+    ∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A = 1 := by
+  classical
+  simp only [CoalitionProbability]
+  have hcomp : ∀ A : Finset G.Player,
+      Finset.univ.filter (fun n => n ∉ A) = Finset.univ \ A := by
+    intro A
+    ext n
+    simp
+  simp_rw [hcomp]
+  rw [← Finset.prod_add (fun n => (p n : ℝ))
+    (fun n => 1 - (p n : ℝ)) Finset.univ]
+  simp
+
+/-- The finite probability mass function of the exact quitting coalition. -/
+private noncomputable def coalitionPMF (G : QuittingGame) (p : QuitRow G) :
+    PMF (Finset G.Player) := by
+  classical
+  apply PMF.ofFintype (fun A => ENNReal.ofReal (CoalitionProbability G p A))
+  rw [← ENNReal.ofReal_sum_of_nonneg]
+  · rw [show (∑ A, CoalitionProbability G p A) =
+        ∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A by simp]
+    rw [coalitionProbability_sum_one, ENNReal.ofReal_one]
+  · intro A _hA
+    simp only [CoalitionProbability]
+    exact mul_nonneg
+      (Finset.prod_nonneg fun i _ => (p i).property.1)
+      (Finset.prod_nonneg fun i _ => sub_nonneg.mpr (p i).property.2)
+
+@[simp] private theorem coalitionPMF_apply_toReal
+    (G : QuittingGame) (p : QuitRow G) (A : Finset G.Player) :
+    (coalitionPMF G p A).toReal = CoalitionProbability G p A := by
+  classical
+  rw [coalitionPMF, PMF.ofFintype_apply]
+  rw [ENNReal.toReal_ofReal]
+  simp only [CoalitionProbability]
+  exact mul_nonneg
+    (Finset.prod_nonneg fun i _ => (p i).property.1)
+    (Finset.prod_nonneg fun i _ => sub_nonneg.mpr (p i).property.2)
+
+/-- Reindexing a PMF expectation along an injective map does not change its value. -/
+private theorem PMF.tsum_map_toReal_mul_of_injective {A B : Type*}
+    (μ : PMF A) (f : A → B) (hf : Function.Injective f) (v : B → ℝ) :
+    (∑' b, ((μ.map f) b).toReal * v b) = ∑' a, (μ a).toReal * v (f a) := by
+  classical
+  have hmap (a : A) : (μ.map f) (f a) = μ a := by
+    rw [PMF.map_apply, tsum_eq_single a]
+    · simp
+    · intro other hother
+      rw [if_neg]
+      exact fun h => hother (hf h.symm)
+  have hsupport : Function.support (fun b => ((μ.map f) b).toReal * v b) ⊆
+      Set.range f := by
+    intro b hb
+    by_contra hrange
+    have hzero : (μ.map f) b = 0 := by
+      rw [PMF.map_apply]
+      calc
+        (∑' a, if b = f a then μ a else 0) = ∑' _a : A, 0 := by
+          apply tsum_congr
+          intro a
+          rw [if_neg]
+          exact fun h => hrange ⟨a, h.symm⟩
+        _ = 0 := tsum_zero
+    apply hb
+    change ((μ.map f) b).toReal * v b = 0
+    rw [hzero]
+    simp
+  rw [← hf.tsum_eq hsupport]
+  apply tsum_congr
+  intro a
+  rw [hmap]
+
+/-- A one-stage payoff is the full coalition expectation, with continuation at `∅`. -/
+private theorem quittingOneStagePayoff_eq_coalition_sum
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G) (n : G.Player) :
+    QuittingOneStagePayoff G r p n =
+      ∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A *
+        if hA : A.Nonempty then G.reward ⟨A, hA⟩ n else r n := by
+  classical
+  have hempty : CoalitionProbability G p ∅ = 1 - QuitProbability G p := by
+    simp [CoalitionProbability, QuitProbability]
+  change (1 - QuitProbability G p) * r n +
+      (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+        CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0) = _
+  symm
+  calc
+    (∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A *
+        if hA : A.Nonempty then G.reward ⟨A, hA⟩ n else r n) =
+        CoalitionProbability G p ∅ * r n +
+          ∑ A ∈ Finset.univ.powerset.erase ∅, CoalitionProbability G p A *
+            if hA : A.Nonempty then G.reward ⟨A, hA⟩ n else r n := by
+      rw [← Finset.sum_erase_add _ _ (by simp :
+        (∅ : Finset G.Player) ∈ Finset.univ.powerset)]
+      simp
+    _ = (1 - QuitProbability G p) * r n +
+          ∑ A ∈ Finset.univ.powerset.erase ∅, if hA : A.Nonempty then
+            CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0 := by
+      rw [hempty]
+      congr 1
+      apply Finset.sum_congr rfl
+      intro A hA
+      have hnonempty : A.Nonempty := Finset.nonempty_iff_ne_empty.2
+        (Finset.ne_of_mem_erase hA)
+      simp only [hnonempty, dite_true]
+    _ = (1 - QuitProbability G p) * r n +
+          ∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
+            CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0 := by
+      congr 1
+      rw [← Finset.sum_erase_add _ _ (by simp :
+        (∅ : Finset G.Player) ∈ Finset.univ.powerset)]
+      simp
+
+/-- One-stage coalition averaging preserves the terminal-coordinate interval. -/
+private theorem quittingOneStagePayoff_mem_coordinateInterval
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G) (n : G.Player)
+    (hr : r n ∈ Set.Icc (quittingCoordinateLower G n)
+      (quittingCoordinateUpper G n)) :
+    QuittingOneStagePayoff G r p n ∈
+      Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n) := by
+  classical
+  rw [quittingOneStagePayoff_eq_coalition_sum]
+  have hprob (A : Finset G.Player) : 0 ≤ CoalitionProbability G p A := by
+    simp only [CoalitionProbability]
+    exact mul_nonneg
+      (Finset.prod_nonneg fun i _ => (p i).property.1)
+      (Finset.prod_nonneg fun i _ => sub_nonneg.mpr (p i).property.2)
+  have hvalue (A : Finset G.Player) :
+      (if hA : A.Nonempty then G.reward ⟨A, hA⟩ n else r n) ∈
+        Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n) := by
+    split_ifs with hA
+    · constructor
+      · simpa [quittingCoordinateValue] using
+          quittingCoordinateLower_le_value G n (some ⟨A, hA⟩)
+      · simpa [quittingCoordinateValue] using
+          quittingCoordinateValue_le_upper G n (some ⟨A, hA⟩)
+    · exact hr
+  constructor
+  · calc
+      quittingCoordinateLower G n =
+          ∑ A ∈ Finset.univ.powerset,
+            CoalitionProbability G p A * quittingCoordinateLower G n := by
+        rw [← Finset.sum_mul, coalitionProbability_sum_one, one_mul]
+      _ ≤ ∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A *
+          if hA : A.Nonempty then G.reward ⟨A, hA⟩ n else r n := by
+        exact Finset.sum_le_sum fun A _ =>
+          mul_le_mul_of_nonneg_left (hvalue A).1 (hprob A)
+  · calc
+      (∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A *
+          if hA : A.Nonempty then G.reward ⟨A, hA⟩ n else r n) ≤
+          ∑ A ∈ Finset.univ.powerset,
+            CoalitionProbability G p A * quittingCoordinateUpper G n := by
+        exact Finset.sum_le_sum fun A _ =>
+          mul_le_mul_of_nonneg_left (hvalue A).2 (hprob A)
+      _ = quittingCoordinateUpper G n := by
+        rw [← Finset.sum_mul, coalitionProbability_sum_one, one_mul]
+
 /-- Every player's min-max is at most the better of quitting alone and never quitting. -/
 private theorem minMaxQuit_le_max_solo_zero (G : QuittingGame) (j : G.Player) :
     MinMaxQuit G j ≤ max (SoloPayoff G j) 0 := by
@@ -8787,6 +8945,106 @@ private theorem ledger_firstPunishmentTrigger_lt_add
     rw [hi]
     exact ContinueLedger.succ_lt_add_of_generated G horbit hδ n i
       (ledger_lt_of_lt_firstPunishmentTrigger G hexists (show i < T by omega) n)
+
+/-! The finite-horizon rank-one decision process used in Proposition 3. -/
+
+private abbrev QuittingDDPState (G : QuittingGame) := ℕ × Finset G.Player
+
+private def IsQuittingDDPLive (T : ℕ) (state : QuittingDDPState G) : Prop :=
+  state.1 < T ∧ state.2 = ∅
+
+private noncomputable def quittingBernoulli (q : Set.Icc (0 : ℝ) 1) : PMF Bool := by
+  apply PMF.ofFintype fun b =>
+    if b then ENNReal.ofReal (q : ℝ) else ENNReal.ofReal (1 - (q : ℝ))
+  rw [Fintype.sum_bool]
+  simp only [Bool.false_eq_true, if_pos, if_false]
+  rw [← ENNReal.ofReal_add q.property.1 (sub_nonneg.mpr q.property.2)]
+  ring_nf
+  simp
+
+private noncomputable def quittingDDPChoose
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (state : QuittingDDPState G) : PMF Bool := by
+  classical
+  exact if IsQuittingDDPLive T state then quittingBernoulli (p state.1 n)
+    else PMF.pure false
+
+private noncomputable def quittingDDPMove
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (state : QuittingDDPState G) (action : Bool) : PMF (QuittingDDPState G) := by
+  classical
+  exact if IsQuittingDDPLive T state then
+    (coalitionPMF G ((p state.1).replace G n (if action = true then 1 else 0))).map
+      fun A => (state.1 + 1, A)
+  else PMF.pure state
+
+private noncomputable def quittingDDPValueX
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (state : QuittingDDPState G) : ℝ := by
+  classical
+  exact if hA : state.2.Nonempty then G.reward ⟨state.2, hA⟩ n
+    else QuitTailPayoff G p (min state.1 T) n
+
+private noncomputable def quittingDDPValueY
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (state : QuittingDDPState G) (action : Bool) : ℝ := by
+  classical
+  exact if IsQuittingDDPLive T state then
+    if action = true then ForcedQuitPayoff G (p state.1) n
+    else ForcedContinuePayoff G (QuitTailPayoff G p (state.1 + 1)) (p state.1) n
+  else quittingDDPValueX G p n T state
+
+private theorem quitTailPayoff_mem_coordinateInterval
+    (G : QuittingGame) (p : QuitProfile G) (i : ℕ) (n : G.Player) :
+    QuitTailPayoff G p i n ∈
+      Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n) := by
+  let tail : QuitProfile G := fun k => p (i + k)
+  have h := quitPayoff_mem_coordinateInterval G tail n
+  simpa only [QuitPayoff, QuitTailPayoff, tail, zero_add] using h
+
+private theorem quittingDDPValueX_mem_coordinateInterval
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (state : QuittingDDPState G) :
+    quittingDDPValueX G p n T state ∈
+      Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n) := by
+  classical
+  simp only [quittingDDPValueX]
+  split_ifs with hA
+  · constructor
+    · simpa [quittingCoordinateValue] using
+        quittingCoordinateLower_le_value G n (some ⟨state.2, hA⟩)
+    · simpa [quittingCoordinateValue] using
+        quittingCoordinateValue_le_upper G n (some ⟨state.2, hA⟩)
+  · exact quitTailPayoff_mem_coordinateInterval G p (min state.1 T) n
+
+private theorem quittingDDPValueY_mem_coordinateInterval
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (state : QuittingDDPState G) (action : Bool) :
+    quittingDDPValueY G p n T state action ∈
+      Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n) := by
+  classical
+  by_cases hlive : IsQuittingDDPLive T state
+  · cases action with
+    | false =>
+        simp only [quittingDDPValueY, hlive, if_pos, Bool.false_eq_true, if_false]
+        apply quittingOneStagePayoff_mem_coordinateInterval
+        exact quitTailPayoff_mem_coordinateInterval G p (state.1 + 1) n
+    | true =>
+        simp only [quittingDDPValueY, hlive, if_pos]
+        apply quittingOneStagePayoff_mem_coordinateInterval
+        exact ⟨quittingCoordinateLower_nonpos G n, quittingCoordinateUpper_nonneg G n⟩
+  · simp only [quittingDDPValueY, hlive, if_false]
+    exact quittingDDPValueX_mem_coordinateInterval G p n T state
+
+private theorem abs_sub_le_of_mem_coordinateInterval
+    (G : QuittingGame) (n : G.Player) {M x y : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M)
+    (hx : x ∈ Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n))
+    (hy : y ∈ Set.Icc (quittingCoordinateLower G n) (quittingCoordinateUpper G n)) :
+    |x - y| ≤ M := by
+  have hwidth := quittingCoordinate_width_lt G n hM
+  rw [abs_le]
+  constructor <;> linarith [hx.1, hx.2, hy.1, hy.2]
 
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
@@ -11384,7 +11642,7 @@ private theorem exists_appendFiniteOrbit {X : Type} {F : Correspondence X X}
       simp
 
 /-- A point weakly above every solo payoff and equal to one lies on `∂W`. -/
-private theorem mem_frontier_WSet_of (G : QuittingGame) (x : Payoff G.Player)
+theorem mem_frontier_WSet_of (G : QuittingGame) (x : Payoff G.Player)
     (hx : ∀ n, SoloPayoff G n ≤ x n) (j : G.Player)
     (hxj : x j = SoloPayoff G j) : x ∈ frontier (WSet G) := by
   rw [frontier_eq_closure_inter_closure]
