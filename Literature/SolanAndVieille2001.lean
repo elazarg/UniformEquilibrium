@@ -4409,6 +4409,55 @@ theorem figure2_exists_player_value_ge
   rw [Fin.sum_univ_four] at hsocial
   linarith
 
+/-- The partner of a Figure 2 player: `0 ↔ 1` and `2 ↔ 3`. -/
+def figure2Partner : Fin 4 → Fin 4 := ![1, 0, 3, 2]
+
+private theorem boundaryReward_singleton_eq_solo
+    (owner who : Fin 4) :
+    SolanVieilleBoundary.boundaryReward
+      (quittingSingletonTerminal owner) who =
+    quittingSoloReward SolanVieilleBoundary.boundaryReward owner who := rfl
+
+/-- A solo quitter pays `1` to itself, `4` to its partner, and `0` to the
+opposite pair. -/
+private theorem soloReward_eq_self_or_partner (owner who : Fin 4) :
+    quittingSoloReward SolanVieilleBoundary.boundaryReward owner who =
+      if owner = who then 1
+      else if owner = figure2Partner who then 4 else 0 := by
+  fin_cases owner <;> fin_cases who <;> rfl
+
+private theorem singletonReward_sum_eq_pairMass
+    (roots : RootSequence (ι := Fin 4)) (who : Fin 4) :
+    (∑ owner : Fin 4,
+      quittingRootSequenceSingletonMass roots 0 owner *
+        SolanVieilleBoundary.boundaryReward
+          (quittingSingletonTerminal owner) who) =
+      quittingRootSequenceSingletonMass roots 0 who +
+        4 * quittingRootSequenceSingletonMass roots 0
+          (figure2Partner who) := by
+  simp_rw [boundaryReward_singleton_eq_solo,
+    soloReward_eq_self_or_partner]
+  rw [Fin.sum_univ_four]
+  fin_cases who <;> simp [figure2Partner] <;> ring
+
+/-- Figure 2 payoff identity up to multi-quitter outcomes: player `i`'s
+payoff differs from `rᵢ + 4r_partner(i)` by at most four times collision
+mass. -/
+theorem figure2_terminalValue_pairMass_approx
+    (roots : RootSequence (ι := Fin 4)) (who : Fin 4) :
+    |quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots who 0 -
+      (quittingRootSequenceSingletonMass roots 0 who +
+        4 * quittingRootSequenceSingletonMass roots 0
+          (figure2Partner who))| ≤
+      4 * quittingRootSequenceCollisionMass roots 0 := by
+  rw [quittingRootSequenceTerminalValue_eq_singleton_add_collision,
+    singletonReward_sum_eq_pairMass]
+  simp only [add_sub_cancel_left]
+  exact abs_quittingRootSequenceCollisionRewardContribution_le
+    SolanVieilleBoundary.boundaryReward roots 0 who
+      boundaryReward_abs_le_four
+
 /-- The first omitted Figure 2 assertion: for all sufficiently small positive
 `ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
 the technical proof and refers to Solan and Vieille (2000). -/
