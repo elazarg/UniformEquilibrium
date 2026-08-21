@@ -11326,6 +11326,95 @@ def CycleProfile (G : QuittingGame) (k : ℕ) (hk : 0 < k)
     (block : Fin k → QuitRow G) : QuitProfile G :=
   fun i => block ⟨i % k, Nat.mod_lt i hk⟩
 
+/-- A cyclic profile repeats after one block. -/
+@[simp] theorem CycleProfile.add_period (G : QuittingGame) {k : ℕ} (hk : 0 < k)
+    (block : Fin k → QuitRow G) (i : ℕ) :
+    CycleProfile G k hk block (i + k) = CycleProfile G k hk block i := by
+  simp only [CycleProfile]
+  congr 1
+  apply Fin.ext
+  simp
+
+/-- Tail payoffs of a cyclic profile repeat after one block. -/
+theorem CycleProfile.quitTailPayoff_add_period (G : QuittingGame) {k : ℕ}
+    (hk : 0 < k) (block : Fin k → QuitRow G) (i : ℕ) :
+    QuitTailPayoff G (CycleProfile G k hk block) (i + k) =
+      QuitTailPayoff G (CycleProfile G k hk block) i := by
+  funext n
+  apply tsum_congr
+  intro m
+  have hrows : ∀ j, CycleProfile G k hk block ((i + k) + j) =
+      CycleProfile G k hk block (i + j) := by
+    intro j
+    rw [show (i + k) + j = (i + j) + k by omega]
+    exact CycleProfile.add_period G hk block (i + j)
+  congr 1
+  · apply Finset.prod_congr rfl
+    intro j _hj
+    rw [hrows]
+  · rw [hrows]
+
+/-- Read a cyclic tail-payoff sequence in the direction of the correspondence arrows. -/
+def ReverseCycleTailOrbit (G : QuittingGame) {k : ℕ} (hk : 0 < k)
+    (block : Fin k → QuitRow G) : ℕ → Payoff G.Player :=
+  let cycle := CycleProfile G k hk block
+  fun i => QuitTailPayoff G cycle (k - i % k)
+
+/-- The reversed tail orbit has the same period as the underlying row cycle. -/
+@[simp] theorem ReverseCycleTailOrbit.add_period (G : QuittingGame) {k : ℕ}
+    (hk : 0 < k) (block : Fin k → QuitRow G) (i : ℕ) :
+    ReverseCycleTailOrbit G hk block (i + k) =
+      ReverseCycleTailOrbit G hk block i := by
+  simp [ReverseCycleTailOrbit]
+
+/-- The reversed tail values of a generated cycle form an ordinary infinite orbit. -/
+theorem GeneratesFRowOrbit.reverseCycleTailOrbit
+    (G : QuittingGame) {k : ℕ} (hk : 0 < k) (block : Fin k → QuitRow G)
+    {η : ℝ} (hgenerated : GeneratesFRowOrbit G η (CycleProfile G k hk block)) :
+    IsInfiniteOrbit (FRow G η) (ReverseCycleTailOrbit G hk block) := by
+  let cycle := CycleProfile G k hk block
+  intro i
+  let a := i % k
+  have ha : a < k := Nat.mod_lt i hk
+  by_cases hlast : a + 1 = k
+  · have hiNext : (i + 1) % k = 0 := by
+      rw [Nat.add_mod]
+      simp [a, hlast]
+    have hiCurrent : k - i % k = 1 := by
+      dsimp only [a] at hlast
+      omega
+    change QuitTailPayoff G cycle (k - (i + 1) % k) ∈
+      FRow G η (QuitTailPayoff G cycle (k - i % k))
+    rw [hiNext, Nat.sub_zero, hiCurrent]
+    have hperiod : QuitTailPayoff G cycle k = QuitTailPayoff G cycle 0 := by
+      simpa [cycle] using CycleProfile.quitTailPayoff_add_period G hk block 0
+    rw [hperiod]
+    exact hgenerated.tail_mem_fRow G 0
+  · have haNext : a + 1 < k := by omega
+    have hiNext : (i + 1) % k = a + 1 := by
+      rw [Nat.add_mod]
+      simp [a, Nat.mod_eq_of_lt haNext]
+    let t := k - (a + 1)
+    have hcurrent : k - i % k = t + 1 := by
+      dsimp only [a] at ha ⊢
+      dsimp only [t]
+      omega
+    have hnext : k - (i + 1) % k = t := by
+      rw [hiNext]
+    change QuitTailPayoff G cycle (k - (i + 1) % k) ∈
+      FRow G η (QuitTailPayoff G cycle (k - i % k))
+    rw [hnext, hcurrent]
+    exact hgenerated.tail_mem_fRow G t
+
+/-- Rationality of every cyclic tail value passes to the reversed ordinary orbit. -/
+theorem ReverseCycleTailOrbit.isRational
+    (G : QuittingGame) {k : ℕ} (hk : 0 < k) (block : Fin k → QuitRow G)
+    {η : ℝ} (h : ∀ i, IsRational G η
+      (QuitTailPayoff G (CycleProfile G k hk block) i)) :
+    ∀ i, IsRational G η (ReverseCycleTailOrbit G hk block i) := by
+  intro i
+  exact h (k - i % k)
+
 /-- A positive-mass finite quitting block has unbounded mass when repeated periodically. -/
 theorem CycleProfile.hasUnboundedQuitMass (G : QuittingGame) {k : ℕ} (hk : 0 < k)
     (block : Fin k → QuitRow G) (hpositive : ∃ i, 0 < QuitProbability G (block i)) :
@@ -11424,6 +11513,71 @@ Unbounded variation of an infinite orbit uses finite partial sums, not a real `t
 -/
 def HasUnboundedVariation {N : Type} [Fintype N] (x : ℕ → Payoff N) : Prop :=
   ∀ B : ℝ, ∃ k, B ≤ ∑ i ∈ Finset.range k, ‖x (i + 1) - x i‖
+
+/-- A nonconstant periodic sequence has unbounded total variation. -/
+theorem hasUnboundedVariation_of_periodic_of_exists_ne
+    {N : Type} [Fintype N] {x : ℕ → Payoff N} {k : ℕ}
+    (hperiod : Function.Periodic x k)
+    (hne : ∃ i, i < k ∧ x (i + 1) ≠ x i) : HasUnboundedVariation x := by
+  let increment : ℕ → ℝ := fun i => ‖x (i + 1) - x i‖
+  let blockVariation : ℝ := ∑ i ∈ Finset.range k, increment i
+  have hblockPositive : 0 < blockVariation := by
+    apply Finset.sum_pos' (fun i _ => norm_nonneg (x (i + 1) - x i))
+    rcases hne with ⟨i, hi, hxi⟩
+    refine ⟨i, Finset.mem_range.mpr hi, ?_⟩
+    exact norm_pos_iff.mpr (sub_ne_zero.mpr hxi)
+  have hincrementPeriodic : Function.Periodic increment k := by
+    intro i
+    dsimp only [increment]
+    rw [show i + k + 1 = (i + 1) + k by omega, hperiod (i + 1), hperiod i]
+  have hsum : ∀ m : ℕ,
+      (∑ i ∈ Finset.range (m * k), increment i) = m * blockVariation := by
+    intro m
+    induction m with
+    | zero => simp
+    | succ m hm =>
+      rw [Nat.succ_mul, Finset.sum_range_add, hm]
+      have hshift : ∀ i, increment (m * k + i) = increment i := by
+        intro i
+        simpa [Nat.add_comm] using (hincrementPeriodic.nat_mul m i)
+      simp_rw [hshift]
+      dsimp only [blockVariation]
+      push_cast
+      ring
+  intro bound
+  obtain ⟨m, hm⟩ := exists_nat_gt (bound / blockVariation)
+  refine ⟨m * k, ?_⟩
+  change bound ≤ ∑ i ∈ Finset.range (m * k), increment i
+  rw [hsum]
+  rw [div_lt_iff₀ hblockPositive] at hm
+  exact hm.le
+
+/-- A nonconstant reversed cyclic tail orbit has unbounded total variation. -/
+theorem ReverseCycleTailOrbit.hasUnboundedVariation_of_exists_ne
+    (G : QuittingGame) {k : ℕ} (hk : 0 < k) (block : Fin k → QuitRow G)
+    (hne : ∃ i, i < k ∧ ReverseCycleTailOrbit G hk block (i + 1) ≠
+      ReverseCycleTailOrbit G hk block i) :
+    HasUnboundedVariation (ReverseCycleTailOrbit G hk block) :=
+  hasUnboundedVariation_of_periodic_of_exists_ne
+    (ReverseCycleTailOrbit.add_period G hk block) hne
+
+/--
+A generated cyclic profile with a nonconstant tail-value cycle yields the infinite orbit
+in Theorem 3(iv), including rationality and unbounded variation.
+-/
+theorem GeneratesFRowOrbit.exists_infiniteOrbit_of_reverseCycle_nonconstant
+    (G : QuittingGame) {k : ℕ} (hk : 0 < k) (block : Fin k → QuitRow G)
+    {η : ℝ} (hgenerated : GeneratesFRowOrbit G η (CycleProfile G k hk block))
+    (hrational : ∀ i, IsRational G η
+      (QuitTailPayoff G (CycleProfile G k hk block) i))
+    (hne : ∃ i, i < k ∧ ReverseCycleTailOrbit G hk block (i + 1) ≠
+      ReverseCycleTailOrbit G hk block i) :
+    ∃ x : ℕ → Payoff G.Player, IsInfiniteOrbit (FRow G η) x ∧
+      (∀ i, IsRational G η (x i)) ∧ HasUnboundedVariation x := by
+  exact ⟨ReverseCycleTailOrbit G hk block,
+    hgenerated.reverseCycleTailOrbit G hk block,
+    ReverseCycleTailOrbit.isRational G hk block hrational,
+    ReverseCycleTailOrbit.hasUnboundedVariation_of_exists_ne G hk block hne⟩
 
 /-- Theorem 3(iv): infinite `ε`-rational `F_ε` orbits of unbounded variation. -/
 def InfiniteOrbitCondition (G : QuittingGame) : Prop :=
