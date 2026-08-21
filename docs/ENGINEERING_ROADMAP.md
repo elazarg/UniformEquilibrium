@@ -50,6 +50,14 @@ repository gates agree.
 - High-fan-in semantic infrastructure lives in a neutral owner rather than in
   `Diagnostics` or an example module.
 
+Most integrated modules currently place project-owned declarations in the
+top-level `GameTheory` namespace even though `GameTheory/` is the pinned
+dependency and `UniformEquilibrium/` is the owning lane. This is a
+repository-wide namespace cleanup target. Extensions intrinsically attached to upstream
+objects may remain under their upstream namespaces; standalone project-owned
+interfaces should eventually move under a project namespace. Do not perform
+isolated renames that leave one mathematical API split between conventions.
+
 ### Reproducibility
 
 - Generated evidence names its source data and generator when they exist.
