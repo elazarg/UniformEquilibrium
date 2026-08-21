@@ -2963,6 +2963,97 @@ private theorem lemma3_4_high_probability_coordinate_lt_minMax_sub_half
   exact lt_of_le_of_lt hphiUpper (hstrict.trans_le (by
     linarith [neg_le_of_abs_le hchi]))
 
+/-- The singular penalty `u / (1-u)^N` is increasing before the endpoint. -/
+private theorem singularQuitPenalty_mono {N : ℕ} {u v : UnitInterval}
+    (huv : (u : ℝ) ≤ (v : ℝ)) (hv : (v : ℝ) < 1) :
+    (u : ℝ) / (1 - (u : ℝ)) ^ N ≤
+      (v : ℝ) / (1 - (v : ℝ)) ^ N := by
+  have hu : (u : ℝ) < 1 := huv.trans_lt hv
+  have hpowU : 0 < (1 - (u : ℝ)) ^ N := pow_pos (by linarith) _
+  have hpowV : 0 < (1 - (v : ℝ)) ^ N := pow_pos (by linarith) _
+  have hpow : (1 - (v : ℝ)) ^ N ≤ (1 - (u : ℝ)) ^ N := by
+    exact pow_le_pow_left₀ (by linarith) (by linarith) _
+  calc
+    (u : ℝ) / (1 - (u : ℝ)) ^ N ≤
+        (v : ℝ) / (1 - (u : ℝ)) ^ N :=
+      div_le_div_of_nonneg_right huv hpowU.le
+    _ ≤ (v : ℝ) / (1 - (v : ℝ)) ^ N :=
+      div_le_div_of_nonneg_left v.property.1 hpowV hpow
+
+/-- One player's quitting probability is at most the probability that someone quits. -/
+private theorem quitProbability_apply_le (G : QuittingGame) (p : QuitRow G)
+    (n : G.Player) : (p n : ℝ) ≤ QuitProbability G p := by
+  classical
+  rw [QuitProbability]
+  have hprod := Finset.mul_prod_erase Finset.univ
+    (fun k : G.Player => 1 - (p k : ℝ)) (Finset.mem_univ n)
+  have hrestNonneg :
+      0 ≤ ∏ k ∈ Finset.univ.erase n, (1 - (p k : ℝ)) :=
+    Finset.prod_nonneg fun k _ => sub_nonneg.mpr (p k).property.2
+  have hrestOne :
+      (∏ k ∈ Finset.univ.erase n, (1 - (p k : ℝ))) ≤ 1 :=
+    Finset.prod_le_one
+      (fun k _ => sub_nonneg.mpr (p k).property.2)
+      (fun k _ => by linarith [(p k).property.1])
+  rw [← hprod]
+  nlinarith [(p n).property.1, (p n).property.2]
+
+/-- A finite quitting row has a coordinate of maximal quitting probability. -/
+private theorem exists_maximalQuitter (G : QuittingGame) (p : QuitRow G) :
+    ∃ m : G.Player, ∀ k, (p k : ℝ) ≤ (p m : ℝ) := by
+  classical
+  obtain ⟨m, _hm, hmax⟩ := Finset.exists_max_image Finset.univ
+    (fun k => (p k : ℝ)) Finset.univ_nonempty
+  exact ⟨m, fun k => hmax k (Finset.mem_univ k)⟩
+
+/-- At a maximal quitter, the `φ` coordinate is at most the coordinate of
+any positive-probability quitter plus the two endpoint payoff bounds. -/
+private theorem phi_maximalQuitter_le (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d)
+    (z : EZeroTilde G) (j m : G.Player) (hj : 0 < (z.1.2 j : ℝ))
+    (hm : ∀ k, (z.1.2 k : ℝ) ≤ (z.1.2 m : ℝ)) :
+    Phi G M d z m ≤ Phi G M d z j + 2 * M / 3 := by
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let beta := z.1.1
+  let p := z.1.2
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hpm : 0 < (p m : ℝ) := hj.trans_le (hm j)
+  have hpmLt : (p m : ℝ) < 1 :=
+    (quitProbability_apply_le G p m).trans_lt z.2.2
+  have hpenalty := singularQuitPenalty_mono (N := Fintype.card G.Player)
+    (hm j) hpmLt
+  have hstageJ := oneStagePayoff_eq_forcedQuit_of_positive G beta p
+    z.2.1 z.2.2 j hj
+  have hstageM := oneStagePayoff_eq_forcedQuit_of_positive G beta p
+    z.2.1 z.2.2 m hpm
+  have hforcedJ := abs_forcedQuitPayoff_le_scale G M hM p j
+  have hforcedM := abs_forcedQuitPayoff_le_scale G M hM p m
+  have hsumJ :
+      (∑ k ∈ Finset.univ.erase j, (p k : ℝ)) + (p j : ℝ) =
+        ∑ k, (p k : ℝ) :=
+    Finset.sum_erase_add Finset.univ (fun k => (p k : ℝ)) (Finset.mem_univ j)
+  have hsumM :
+      (∑ k ∈ Finset.univ.erase m, (p k : ℝ)) + (p m : ℝ) =
+        ∑ k, (p k : ℝ) :=
+    Finset.sum_erase_add Finset.univ (fun k => (p k : ℝ)) (Finset.mem_univ m)
+  have hsum : ∑ k ∈ Finset.univ.erase m, (p k : ℝ) ≤
+      ∑ k ∈ Finset.univ.erase j, (p k : ℝ) := by
+    linarith [hm j]
+  have hcoefficient : 0 ≤ 5 * N * M / d := by positivity
+  change QuittingOneStagePayoff G beta p m -
+      (5 * N * M / d) *
+        ((p m : ℝ) / (1 - (p m : ℝ)) ^ Fintype.card G.Player) +
+      M * ∑ k ∈ Finset.univ.erase m, (p k : ℝ) ≤
+    QuittingOneStagePayoff G beta p j -
+      (5 * N * M / d) *
+        ((p j : ℝ) / (1 - (p j : ℝ)) ^ Fintype.card G.Player) +
+      M * ∑ k ∈ Finset.univ.erase j, (p k : ℝ) + 2 * M / 3
+  rw [hstageJ, hstageM]
+  nlinarith [neg_le_of_abs_le hforcedJ, le_abs_self (ForcedQuitPayoff G p m),
+    mul_le_mul_of_nonneg_left hpenalty hcoefficient,
+    mul_le_mul_of_nonneg_left hsum hMpos.le]
+
 /--
 Lemma 3.4.  For `a = φ(β,p)` and a point strictly inside the segment from
 `β` to `a`, a coordinate of `a` outside `[-R,R]` forces the segment point
@@ -3161,23 +3252,6 @@ private theorem othersQuitProbability_le (G : QuittingGame) (p : QuitRow G)
     (n : G.Player) : OthersQuitProbability G p n ≤ QuitProbability G p := by
   rw [othersQuitProbability_eq_replace_zero]
   exact quitProbability_replace_zero_le G p n
-
-private theorem quitProbability_apply_le (G : QuittingGame) (p : QuitRow G)
-    (n : G.Player) : (p n : ℝ) ≤ QuitProbability G p := by
-  classical
-  rw [QuitProbability]
-  have hprod := Finset.mul_prod_erase Finset.univ
-    (fun k : G.Player => 1 - (p k : ℝ)) (Finset.mem_univ n)
-  have hrestNonneg :
-      0 ≤ ∏ k ∈ Finset.univ.erase n, (1 - (p k : ℝ)) :=
-    Finset.prod_nonneg fun k _ => sub_nonneg.mpr (p k).property.2
-  have hrestOne :
-      (∏ k ∈ Finset.univ.erase n, (1 - (p k : ℝ))) ≤ 1 :=
-    Finset.prod_le_one
-      (fun k _ => sub_nonneg.mpr (p k).property.2)
-      (fun k _ => by linarith [(p k).property.1])
-  rw [← hprod]
-  nlinarith [(p n).property.1, (p n).property.2]
 
 private theorem forcedContinue_sub_solo (G : QuittingGame) (p : QuitRow G)
     (beta : Payoff G.Player) (n : G.Player) :
