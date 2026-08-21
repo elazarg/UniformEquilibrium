@@ -4413,6 +4413,177 @@ private theorem exists_later_active_cyclic_successor
     simp [hx, hvalue] at hlower
     norm_num at hlower
 
+private theorem uniqueActive_minThree_eq_one_with_idle
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (owner : Player)
+    (hsolo : IsUniqueActiveAt profile time owner) :
+    minThree
+      (continuationPayoff profile time 0)
+      (continuationPayoff profile time 1)
+      (continuationPayoff profile time 2) = 1 := by
+  classical
+  let successor := FTV.CyclicMinimality.nextThree owner
+  let P : ℕ → Prop := fun later ↦
+    time < later ∧ IsUniqueActiveAt profile later successor
+  have hfuture : ∃ later, P later := by
+    simpa [P, successor] using
+      exists_later_active_cyclic_successor profile hnash hlt time owner hsolo
+  let later := Nat.find hfuture
+  have hlater : P later := Nat.find_spec hfuture
+  have hinvariant : ∀ cutoff, time ≤ cutoff → cutoff < later →
+      ∃ last, time ≤ last ∧ last ≤ cutoff ∧
+        IsUniqueActiveAt profile last owner ∧
+        ∀ middle, last < middle → middle ≤ cutoff →
+          ¬ IsActiveStage profile middle := by
+    intro cutoff hcutoff hbefore
+    exact Nat.le_induction
+      (fun _ ↦
+        ⟨time, le_rfl, le_rfl, hsolo,
+          fun middle hleft hright ↦ by omega⟩)
+      (fun stage htime ih hstageLater ↦ by
+        obtain ⟨last, hlastTime, hlastStage, hlast, hquiet⟩ :=
+          ih (by omega)
+        by_cases hactive : IsActiveStage profile (stage + 1)
+        · obtain ⟨next, nextOwner, hnext, hrow, hallowed, hbetween⟩ :=
+            uniqueActive_next_active profile hnash hlt last owner hlast
+          have hnextLe : next ≤ stage + 1 := by
+            by_contra hle
+            exact hbetween (stage + 1) (by omega) (by omega) hactive
+          have hstageLt : stage < next := by
+            by_contra hle
+            exact hquiet next hnext (by omega) ⟨nextOwner, hrow.1⟩
+          have heq : next = stage + 1 := by omega
+          subst next
+          rcases hallowed with hsame | hcyclic
+          · subst nextOwner
+            exact ⟨stage + 1, hlastTime.trans (by omega), le_rfl, hrow,
+              fun middle hleft hright ↦ by omega⟩
+          · subst nextOwner
+            have hmember : P (stage + 1) := by
+              exact ⟨by omega, by simpa [successor] using hrow⟩
+            have hminimal := Nat.find_min' hfuture hmember
+            omega
+        · refine ⟨last, hlastTime, hlastStage.trans (by omega), hlast, ?_⟩
+          intro middle hleft hright
+          by_cases heq : middle = stage + 1
+          · simpa [heq] using hactive
+          · exact hquiet middle hleft (by omega)
+      ) cutoff hcutoff hbefore
+  have hbefore : ∀ stage, time ≤ stage → stage < later →
+      ¬ IsActiveStage profile stage ∨
+        IsUniqueActiveAt profile stage owner := by
+    intro stage htime hlater
+    by_cases hactive : IsActiveStage profile stage
+    · right
+      obtain ⟨last, _, hlast, hrow, hquiet⟩ :=
+        hinvariant stage htime hlater
+      have heq : last = stage := by
+        by_contra hne
+        exact hquiet stage (by omega) le_rfl hactive
+      simpa [heq] using hrow
+    · exact Or.inl hactive
+  have hsuccessorValue :
+      continuationPayoff profile later successor = 1 :=
+    uniqueActive_owner_payoff_eq_one profile hnash hlt
+      later successor hlater.2
+  rcases player_eq_zero_or_one_or_two owner with rfl | rfl | rfl
+  · have hbeneficiary : 1 ≤ continuationPayoff profile time 1 := by
+      exact Nat.decreasingInduction (n := later)
+        (motive := fun k _ ↦ time ≤ k →
+          1 ≤ continuationPayoff profile k 1)
+        (fun stage hstage ih htime ↦ by
+          rcases hbefore stage htime hstage with hinactive | hrow
+          · rw [congrFun
+                (continuationPayoff_eq_next_of_not_active profile stage hinactive)
+                1]
+            exact ih (by omega)
+          · have hx : 0 ≤ (profile stage 0).1 := (profile stage 0).2.1
+            have hxone : (profile stage 0).1 ≤ 1 := (profile stage 0).2.2
+            have hy : (profile stage 1).1 = 0 := hrow.2 1 (by decide)
+            have hz : (profile stage 2).1 = 0 := hrow.2 2 (by decide)
+            have hcontinue := continuationPayoff_eq_continue_of_zero
+              profile stage 1 hy
+            rw [markovRoot_eq_stationaryRoot] at hcontinue
+            rw [hcontinue, stationaryRoot_continuePayoff_one]
+            simp only [hz, sub_zero, mul_one]
+            nlinarith [ih (by omega)])
+        (fun _ ↦ by simpa [successor] using hsuccessorValue.ge)
+        (by omega) le_rfl
+    have howner := uniqueActive_owner_payoff_eq_one
+      profile hnash hlt time 0 hsolo
+    have hspectator := quitPayoff_le_continuationPayoff
+      profile hnash hlt time 2
+    rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_two]
+      at hspectator
+    have hy : (profile time 1).1 = 0 := hsolo.2 1 (by decide)
+    simp only [hy, sub_zero] at hspectator
+    simp [minThree, howner, hbeneficiary, hspectator]
+  · have hbeneficiary : 1 ≤ continuationPayoff profile time 2 := by
+      exact Nat.decreasingInduction (n := later)
+        (motive := fun k _ ↦ time ≤ k →
+          1 ≤ continuationPayoff profile k 2)
+        (fun stage hstage ih htime ↦ by
+          rcases hbefore stage htime hstage with hinactive | hrow
+          · rw [congrFun
+                (continuationPayoff_eq_next_of_not_active profile stage hinactive)
+                2]
+            exact ih (by omega)
+          · have hy : 0 ≤ (profile stage 1).1 := (profile stage 1).2.1
+            have hyone : (profile stage 1).1 ≤ 1 := (profile stage 1).2.2
+            have hx : (profile stage 0).1 = 0 := hrow.2 0 (by decide)
+            have hz : (profile stage 2).1 = 0 := hrow.2 2 (by decide)
+            have hcontinue := continuationPayoff_eq_continue_of_zero
+              profile stage 2 hz
+            rw [markovRoot_eq_stationaryRoot] at hcontinue
+            rw [hcontinue, stationaryRoot_continuePayoff_two]
+            simp only [hx, sub_zero, one_mul]
+            nlinarith [ih (by omega)])
+        (fun _ ↦ by simpa [successor] using hsuccessorValue.ge)
+        (by omega) le_rfl
+    have howner := uniqueActive_owner_payoff_eq_one
+      profile hnash hlt time 1 hsolo
+    have hspectator := quitPayoff_le_continuationPayoff
+      profile hnash hlt time 0
+    rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_zero]
+      at hspectator
+    have hz : (profile time 2).1 = 0 := hsolo.2 2 (by decide)
+    simp only [hz, sub_zero] at hspectator
+    simp [minThree, howner, hbeneficiary, hspectator]
+  · have hbeneficiary : 1 ≤ continuationPayoff profile time 0 := by
+      exact Nat.decreasingInduction (n := later)
+        (motive := fun k _ ↦ time ≤ k →
+          1 ≤ continuationPayoff profile k 0)
+        (fun stage hstage ih htime ↦ by
+          rcases hbefore stage htime hstage with hinactive | hrow
+          · rw [congrFun
+                (continuationPayoff_eq_next_of_not_active profile stage hinactive)
+                0]
+            exact ih (by omega)
+          · have hz : 0 ≤ (profile stage 2).1 := (profile stage 2).2.1
+            have hzone : (profile stage 2).1 ≤ 1 := (profile stage 2).2.2
+            have hx : (profile stage 0).1 = 0 := hrow.2 0 (by decide)
+            have hy : (profile stage 1).1 = 0 := hrow.2 1 (by decide)
+            have hcontinue := continuationPayoff_eq_continue_of_zero
+              profile stage 0 hx
+            rw [markovRoot_eq_stationaryRoot] at hcontinue
+            rw [hcontinue, stationaryRoot_continuePayoff_zero]
+            simp only [hy, zero_mul, add_zero]
+            nlinarith [ih (by omega)])
+        (fun _ ↦ by simpa [successor] using hsuccessorValue.ge)
+        (by omega) le_rfl
+    have howner := uniqueActive_owner_payoff_eq_one
+      profile hnash hlt time 2 hsolo
+    have hspectator := quitPayoff_le_continuationPayoff
+      profile hnash hlt time 1
+    rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_one]
+      at hspectator
+    have hx : (profile time 0).1 = 0 := hsolo.2 0 (by decide)
+    simp only [hx, sub_zero] at hspectator
+    simp [minThree, howner, hbeneficiary, hspectator]
+
 /-- Checked special case used in the period-three part of the paper's picture:
 every live phase of an exact cyclic packet has a unique active player. -/
 theorem exactCyclicPacket_existsUnique_activeRole
