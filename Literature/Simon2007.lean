@@ -1087,6 +1087,18 @@ private theorem DiscreteDecisionProcess.rawStageValue_martingale
   rw [hkernel', P.integral_valueY_stageKernel]
   simp [DiscreteDecisionProcess.rawStageValue]
 
+/-- The raw state-coordinate process is adapted to the finite-coordinate filtration. -/
+private theorem DiscreteDecisionProcess.rawState_adapted
+    (P : DiscreteDecisionProcess) :
+    Adapted (Filtration.piLE (X := fun _ : ℕ => DDPStage P))
+      (fun n stage => (stage n).1) := by
+  intro n
+  rw [Filtration.piLE_eq_comap_frestrictLe]
+  exact Measurable.of_discrete.comp
+    ((measurable_pi_apply (X := fun _ : Finset.Iic n => DDPStage P)
+      ⟨n, Finset.mem_Iic.mpr le_rfl⟩).comp
+        (comap_measurable (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n)))
+
 /-- Cumulative sampled-stage increments through stage `n` on the raw trajectory space. -/
 private def DiscreteDecisionProcess.rawAdvantage
     (P : DiscreteDecisionProcess) (stage : ℕ → DDPStage P) (n : ℕ) : ℝ :=
@@ -1831,6 +1843,75 @@ private instance DiscreteDecisionProcess.isProbabilityMeasure_rawLawAfterAction
     IsProbabilityMeasure (P.rawLawAfterAction x y) := by
   unfold DiscreteDecisionProcess.rawLawAfterAction
   infer_instance
+
+/-- Optional stopping at a bounded first return preserves the forced initial action value. -/
+private theorem DiscreteDecisionProcess.integral_stoppedValue_hittingBtwn_eq
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x)
+    (A : Set P.X) (N : ℕ) :
+    (∫ stage, stoppedValue P.rawStageValue
+      (fun stage => ((hittingBtwn
+        (fun (n : ℕ) (path : ℕ → DDPStage P) => (path n).1) A 1 N stage : ℕ) : ℕ∞))
+        stage ∂P.rawLawAfterAction x y) = P.valueY x y := by
+  let rawState : ℕ → (ℕ → DDPStage P) → P.X := fun n stage => (stage n).1
+  let tau : (ℕ → DDPStage P) → ℕ∞ := fun stage =>
+    ((hittingBtwn rawState A (1 : ℕ) N stage : ℕ) : ℕ∞)
+  have htau : IsStoppingTime (Filtration.piLE (X := fun _ : ℕ => DDPStage P)) tau := by
+    exact P.rawState_adapted.isStoppingTime_hittingBtwn MeasurableSet.of_discrete
+  have htau_le (stage : ℕ → DDPStage P) : tau stage ≤ (N : ℕ∞) := by
+    change ((hittingBtwn rawState A (1 : ℕ) N stage : ℕ) : ℕ∞) ≤ (N : ℕ∞)
+    exact_mod_cast
+      (hittingBtwn_le (u := rawState) (s := A) (n := 1) (m := N) stage)
+  have hzero_le (stage : ℕ → DDPStage P) : (0 : ℕ∞) ≤ tau stage := bot_le
+  have hm := P.rawStageValue_martingale (PMF.pure (⟨x, y⟩ : DDPStage P))
+  have hforward := hm.submartingale.expected_stoppedValue_mono
+    (isStoppingTime_const _ 0) htau hzero_le htau_le
+  have hbackward := hm.neg.submartingale.expected_stoppedValue_mono
+    (isStoppingTime_const _ 0) htau hzero_le htau_le
+  have hstopped :
+      (∫ stage, stoppedValue P.rawStageValue tau stage ∂P.rawLawAfterAction x y) =
+        ∫ stage, P.rawStageValue 0 stage ∂P.rawLawAfterAction x y := by
+    change (∫ stage, stoppedValue P.rawStageValue tau stage ∂
+      P.rawLawWithInitial (PMF.pure (⟨x, y⟩ : DDPStage P))) =
+        ∫ stage, P.rawStageValue 0 stage ∂
+          P.rawLawWithInitial (PMF.pure (⟨x, y⟩ : DDPStage P))
+    simp only [stoppedValue_const] at hforward hbackward
+    change (∫ stage, -P.rawStageValue 0 stage ∂
+      P.rawLawWithInitial (PMF.pure (⟨x, y⟩ : DDPStage P))) ≤
+        ∫ stage, -stoppedValue P.rawStageValue tau stage ∂
+          P.rawLawWithInitial (PMF.pure (⟨x, y⟩ : DDPStage P)) at hbackward
+    rw [integral_neg, integral_neg] at hbackward
+    linarith
+  have hsupport : P.rawLawAfterAction x y
+      {stage : ℕ → DDPStage P | stage 0 = (⟨x, y⟩ : DDPStage P)} = 1 := by
+    rw [DiscreteDecisionProcess.rawLawAfterAction]
+    have hformula := P.rawLawWithInitial_exactStageCylinder
+      (PMF.pure (⟨x, y⟩ : DDPStage P)) 0
+      (fun _ : Fin 1 => (⟨x, y⟩ : DDPStage P))
+    simpa [PMF.pure_apply] using hformula
+  have hset : MeasurableSet
+      {stage : ℕ → DDPStage P | stage 0 = (⟨x, y⟩ : DDPStage P)} :=
+    show MeasurableSet ((fun stage : ℕ → DDPStage P => stage 0) ⁻¹'
+      {(⟨x, y⟩ : DDPStage P)}) from
+        (measurable_pi_apply 0) (measurableSet_singleton (⟨x, y⟩ : DDPStage P))
+  have hae : ∀ᵐ stage ∂P.rawLawAfterAction x y,
+      P.rawStageValue 0 stage = P.valueY x y := by
+    have hmem : ∀ᵐ stage ∂P.rawLawAfterAction x y,
+        stage ∈ {stage : ℕ → DDPStage P | stage 0 = (⟨x, y⟩ : DDPStage P)} :=
+      (ae_mem_iff_measure_eq hset.nullMeasurableSet).2 (by
+        rw [hsupport]
+        letI : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
+          P.isProbabilityMeasure_rawLawAfterAction x y
+        rw [measure_univ])
+    filter_upwards [hmem] with stage hstage
+    change P.valueY (stage 0).1 (stage 0).2 = P.valueY x y
+    exact congrArg (fun current : DDPStage P => P.valueY current.1 current.2) hstage
+  rw [show (fun stage => ((hittingBtwn
+      (fun (n : ℕ) (path : ℕ → DDPStage P) => (path n).1) A 1 N stage : ℕ) : ℕ∞)) =
+      tau by rfl]
+  rw [hstopped, integral_congr_ae hae]
+  letI : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
+    P.isProbabilityMeasure_rawLawAfterAction x y
+  simp
 
 /-- Exact-prefix mass factors from every exact event after restarting at its last stage. -/
 private theorem DiscreteDecisionProcess.rawLawWithInitial_inter_shiftCylinder
