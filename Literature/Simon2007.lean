@@ -6845,6 +6845,18 @@ def IsQuittingPayoffDifferenceBound (G : QuittingGame) (M : ℝ) : Prop :=
   1 ≤ M ∧ (∀ A B n, |G.reward A n - G.reward B n| < M) ∧
     ∀ A n, |G.reward A n| < M
 
+/-- A positive strict bound on terminal rewards and pairwise reward differences, without
+the paper's convenient normalization `1 ≤ M`. -/
+def IsPositiveQuittingPayoffDifferenceBound (G : QuittingGame) (M : ℝ) : Prop :=
+  0 < M ∧ (∀ A B n, |G.reward A n - G.reward B n| < M) ∧
+    ∀ A n, |G.reward A n| < M
+
+/-- A normalized payoff-difference bound is in particular positive. -/
+theorem IsQuittingPayoffDifferenceBound.toPositive (G : QuittingGame) {M : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M) :
+    IsPositiveQuittingPayoffDifferenceBound G M :=
+  ⟨lt_of_lt_of_le zero_lt_one hM.1, hM.2⟩
+
 /-- Every finite quitting table has a strict payoff-difference bound. -/
 theorem exists_quittingPayoffDifferenceBound (G : QuittingGame) :
     ∃ M : ℝ, IsQuittingPayoffDifferenceBound G M := by
@@ -14312,6 +14324,213 @@ private theorem quittingOneStagePayoff_eq_endpointCombination
   rw [hsurvival, hreward]
   ring
 
+/-- A forced-Quit payoff is a convex combination of terminal rewards, so every one
+terminal reward lies within the common pairwise-difference bound. -/
+theorem abs_reward_sub_forcedQuitPayoff_le
+    (G : QuittingGame) {D : ℝ}
+    (hdifference : ∀ A B n, |G.reward A n - G.reward B n| ≤ D)
+    (p : QuitRow G) (A : {A : Finset G.Player // A.Nonempty}) (n : G.Player) :
+    |G.reward A n - ForcedQuitPayoff G p n| ≤ D := by
+  classical
+  let pOne := p.replace G n 1
+  have hqOne : QuitProbability G pOne = 1 := quitProbability_replace_one G p n
+  have hforced : ForcedQuitPayoff G p n = quittingRewardPart G pOne n := by
+    change (1 - QuitProbability G pOne) * (0 : Payoff G.Player) n +
+      quittingRewardPart G pOne n = quittingRewardPart G pOne n
+    rw [hqOne]
+    simp
+  have hmass :
+      (∑ B ∈ Finset.univ.powerset,
+        if _hB : B.Nonempty then CoalitionProbability G pOne B else 0) = 1 := by
+    rw [nonemptyCoalitionMass_eq_quitProbability, hqOne]
+  let mass : Finset G.Player → ℝ := fun B =>
+    if _hB : B.Nonempty then CoalitionProbability G pOne B else 0
+  let rewardTerm : Finset G.Player → ℝ := fun B =>
+    if hB : B.Nonempty then
+      CoalitionProbability G pOne B * G.reward ⟨B, hB⟩ n else 0
+  let differenceTerm : Finset G.Player → ℝ := fun B =>
+    if hB : B.Nonempty then
+      CoalitionProbability G pOne B * (G.reward A n - G.reward ⟨B, hB⟩ n) else 0
+  have hmass' : (∑ B ∈ Finset.univ.powerset, mass B) = 1 := by
+    simpa [mass] using hmass
+  have hdifferenceSum :
+      G.reward A n - (∑ B ∈ Finset.univ.powerset, rewardTerm B) =
+        ∑ B ∈ Finset.univ.powerset, differenceTerm B := by
+    calc
+      G.reward A n - (∑ B ∈ Finset.univ.powerset, rewardTerm B) =
+          (∑ B ∈ Finset.univ.powerset, mass B) * G.reward A n -
+            ∑ B ∈ Finset.univ.powerset, rewardTerm B := by rw [hmass']; ring
+      _ = ∑ B ∈ Finset.univ.powerset,
+          (mass B * G.reward A n - rewardTerm B) := by
+        rw [Finset.sum_mul, Finset.sum_sub_distrib]
+      _ = ∑ B ∈ Finset.univ.powerset, differenceTerm B := by
+        apply Finset.sum_congr rfl
+        intro B _hB
+        by_cases hB : B.Nonempty
+        · simp [mass, rewardTerm, differenceTerm, hB]
+          ring
+        · simp [mass, rewardTerm, differenceTerm, hB]
+  rw [hforced]
+  change |G.reward A n - ∑ B ∈ Finset.univ.powerset, rewardTerm B| ≤ D
+  rw [hdifferenceSum]
+  calc
+    |∑ B ∈ Finset.univ.powerset, differenceTerm B| ≤
+        ∑ B ∈ Finset.univ.powerset, if hB : B.Nonempty then
+          |CoalitionProbability G pOne B *
+            (G.reward A n - G.reward ⟨B, hB⟩ n)| else 0 := by
+      exact (Finset.abs_sum_le_sum_abs _ _).trans_eq (by
+        apply Finset.sum_congr rfl
+        intro B _hB
+        by_cases hB : B.Nonempty <;> simp [differenceTerm, hB])
+    _ ≤ ∑ B ∈ Finset.univ.powerset, if hB : B.Nonempty then
+          CoalitionProbability G pOne B * D else 0 := by
+      apply Finset.sum_le_sum
+      intro B _hB
+      split_ifs with hB
+      · rw [abs_mul, abs_of_nonneg (coalitionProbability_nonneg G pOne B)]
+        exact mul_le_mul_of_nonneg_left (hdifference A ⟨B, hB⟩ n)
+          (coalitionProbability_nonneg G pOne B)
+      · exact le_rfl
+    _ = D := by
+      calc
+        (∑ B ∈ Finset.univ.powerset, if hB : B.Nonempty then
+          CoalitionProbability G pOne B * D else 0) =
+            (∑ B ∈ Finset.univ.powerset, mass B) * D := by
+          rw [Finset.sum_mul]
+          apply Finset.sum_congr rfl
+          intro B _hB
+          by_cases hB : B.Nonempty <;> simp [mass, hB]
+        _ = D := by rw [hmass']; ring
+
+/-- The expected reward from coalitions in which `n` continues differs from the same
+quitting mass times `n`'s forced-Quit payoff by at most that mass times the common
+terminal-reward difference bound. -/
+theorem abs_quittingRewardPart_zero_sub_quitProbability_mul_forcedQuitPayoff_le
+    (G : QuittingGame) {D : ℝ}
+    (hdifference : ∀ A B n, |G.reward A n - G.reward B n| ≤ D)
+    (p : QuitRow G) (n : G.Player) :
+    |quittingRewardPart G (p.replace G n 0) n -
+        QuitProbability G (p.replace G n 0) * ForcedQuitPayoff G p n| ≤
+      D * QuitProbability G (p.replace G n 0) := by
+  classical
+  let pZero := p.replace G n 0
+  let mass : Finset G.Player → ℝ := fun A =>
+    if _hA : A.Nonempty then CoalitionProbability G pZero A else 0
+  let rewardTerm : Finset G.Player → ℝ := fun A =>
+    if hA : A.Nonempty then
+      CoalitionProbability G pZero A * G.reward ⟨A, hA⟩ n else 0
+  let centeredTerm : Finset G.Player → ℝ := fun A =>
+    if hA : A.Nonempty then CoalitionProbability G pZero A *
+      (G.reward ⟨A, hA⟩ n - ForcedQuitPayoff G p n) else 0
+  have hmass : (∑ A ∈ Finset.univ.powerset, mass A) = QuitProbability G pZero := by
+    simpa [mass] using nonemptyCoalitionMass_eq_quitProbability G pZero
+  have hcentered :
+      (∑ A ∈ Finset.univ.powerset, rewardTerm A) -
+          QuitProbability G pZero * ForcedQuitPayoff G p n =
+        ∑ A ∈ Finset.univ.powerset, centeredTerm A := by
+    calc
+      (∑ A ∈ Finset.univ.powerset, rewardTerm A) -
+          QuitProbability G pZero * ForcedQuitPayoff G p n =
+        (∑ A ∈ Finset.univ.powerset, rewardTerm A) -
+          (∑ A ∈ Finset.univ.powerset, mass A) * ForcedQuitPayoff G p n := by
+            rw [hmass]
+      _ = ∑ A ∈ Finset.univ.powerset,
+          (rewardTerm A - mass A * ForcedQuitPayoff G p n) := by
+        rw [Finset.sum_mul, Finset.sum_sub_distrib]
+      _ = ∑ A ∈ Finset.univ.powerset, centeredTerm A := by
+        apply Finset.sum_congr rfl
+        intro A _hA
+        by_cases hA : A.Nonempty
+        · simp [mass, rewardTerm, centeredTerm, hA]
+          ring
+        · simp [mass, rewardTerm, centeredTerm, hA]
+  change |(∑ A ∈ Finset.univ.powerset, rewardTerm A) -
+      QuitProbability G pZero * ForcedQuitPayoff G p n| ≤
+    D * QuitProbability G pZero
+  rw [hcentered]
+  calc
+    |∑ A ∈ Finset.univ.powerset, centeredTerm A| ≤
+        ∑ A ∈ Finset.univ.powerset, |centeredTerm A| :=
+      Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ A ∈ Finset.univ.powerset, mass A * D := by
+      apply Finset.sum_le_sum
+      intro A _hA
+      by_cases hA : A.Nonempty
+      · simp only [centeredTerm, hA, dite_true, abs_mul]
+        rw [abs_of_nonneg (coalitionProbability_nonneg G pZero A)]
+        exact mul_le_mul_of_nonneg_left
+          (abs_reward_sub_forcedQuitPayoff_le G hdifference p ⟨A, hA⟩ n)
+          (coalitionProbability_nonneg G pZero A) |>.trans_eq (by simp [mass, hA])
+      · simp [centeredTerm, mass, hA]
+    _ = D * QuitProbability G pZero := by
+      rw [← Finset.sum_mul, hmass]
+      ring
+
+/-- Conditional on somebody quitting in the row, the terminal reward is close to
+player `n`'s forced-Quit payoff whenever opponents account for only a small fraction
+of the quitting probability. -/
+theorem abs_quittingRewardPart_div_sub_forcedQuitPayoff_le
+    (G : QuittingGame) {D : ℝ}
+    (hdifference : ∀ A B n, |G.reward A n - G.reward B n| ≤ D)
+    (p : QuitRow G) (n : G.Player) (hquit : 0 < QuitProbability G p) :
+    |quittingRewardPart G p n / QuitProbability G p - ForcedQuitPayoff G p n| ≤
+      D * (QuitProbability G p - (p n : ℝ)) / QuitProbability G p := by
+  let pZero := p.replace G n 0
+  have hself : p.replace G n (p n) = p := QuitRow.replace_self G p n
+  have hreward := quittingRewardPart_replace_affine G p n (p n) n
+  rw [hself] at hreward
+  have hsurvival := one_sub_quitProbability_replace G p n (p n)
+  rw [hself] at hsurvival
+  have hprobability : QuitProbability G p =
+      (p n : ℝ) + (1 - (p n : ℝ)) * QuitProbability G pZero := by
+    change 1 - QuitProbability G p =
+      (1 - (p n : ℝ)) * (1 - QuitProbability G pZero) at hsurvival
+    linarith
+  have hrewardBound :=
+    abs_quittingRewardPart_zero_sub_quitProbability_mul_forcedQuitPayoff_le
+      G hdifference p n
+  change |quittingRewardPart G p n / QuitProbability G p - ForcedQuitPayoff G p n| ≤ _
+  rw [hreward]
+  have hquitNe : QuitProbability G p ≠ 0 := ne_of_gt hquit
+  rw [show
+    ((p n : ℝ) * quittingRewardPart G (p.replace G n 1) n +
+          (1 - (p n : ℝ)) * quittingRewardPart G pZero n) /
+        QuitProbability G p - ForcedQuitPayoff G p n =
+      ((p n : ℝ) * quittingRewardPart G (p.replace G n 1) n +
+          (1 - (p n : ℝ)) * quittingRewardPart G pZero n -
+        ForcedQuitPayoff G p n * QuitProbability G p) / QuitProbability G p by
+      field_simp]
+  rw [abs_div, abs_of_pos hquit]
+  apply (div_le_div_iff_of_pos_right hquit).2
+  calc
+    |(p n : ℝ) * quittingRewardPart G (p.replace G n 1) n +
+          (1 - (p n : ℝ)) * quittingRewardPart G pZero n -
+        ForcedQuitPayoff G p n * QuitProbability G p| ≤
+        (1 - (p n : ℝ)) *
+          (D * QuitProbability G pZero) := by
+      rw [show quittingRewardPart G (p.replace G n 1) n =
+          ForcedQuitPayoff G p n by
+        change quittingRewardPart G (p.replace G n 1) n =
+          (1 - QuitProbability G (p.replace G n 1)) * (0 : Payoff G.Player) n +
+            quittingRewardPart G (p.replace G n 1) n
+        rw [quitProbability_replace_one]
+        simp]
+      rw [hprobability]
+      rw [show
+        (p n : ℝ) * ForcedQuitPayoff G p n +
+              (1 - (p n : ℝ)) * quittingRewardPart G pZero n -
+            ForcedQuitPayoff G p n *
+              ((p n : ℝ) + (1 - (p n : ℝ)) * QuitProbability G pZero) =
+          (1 - (p n : ℝ)) *
+            (quittingRewardPart G pZero n -
+              QuitProbability G pZero * ForcedQuitPayoff G p n) by ring]
+      rw [abs_mul, abs_of_nonneg (sub_nonneg.mpr (p n).property.2)]
+      exact mul_le_mul_of_nonneg_left hrewardBound
+        (sub_nonneg.mpr (p n).property.2)
+    _ = D * (QuitProbability G p - (p n : ℝ)) := by
+      rw [hprobability]
+      ring
+
 /-- When `n` is forced to quit, only `n` quits exactly when every opponent continues. -/
 private theorem coalitionProbability_forcedSolo_eq_survival
     (G : QuittingGame) (p : QuitRow G) (n : G.Player) :
@@ -14339,7 +14558,7 @@ private theorem coalitionProbability_forcedSolo_eq_survival
 
 /-- Forced quitting loses at most `M` times the probability that an opponent also quits. -/
 private theorem forcedQuitPayoff_ge_solo_sub_otherQuitMass
-    (G : QuittingGame) {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (G : QuittingGame) {M : ℝ} (hM : IsPositiveQuittingPayoffDifferenceBound G M)
     (p : QuitRow G) (n : G.Player) :
     SoloPayoff G n - M * QuitProbability G (p.replace G n 0) ≤
       ForcedQuitPayoff G p n := by
@@ -14421,7 +14640,7 @@ Against fixed stationary opponents who eventually quit, the min-max is capped by
 better of quitting now and continuing until an opponent quits.
 -/
 theorem minMaxQuit_le_max_forcedQuit_stationaryContinue
-    (G : QuittingGame) {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (G : QuittingGame) {M : ℝ} (hM : IsPositiveQuittingPayoffDifferenceBound G M)
     (p : QuitRow G) (n : G.Player)
     (hq : 0 < QuitProbability G (p.replace G n 0)) :
     MinMaxQuit G n ≤ max (ForcedQuitPayoff G p n)
@@ -14432,7 +14651,7 @@ theorem minMaxQuit_le_max_forcedQuit_stationaryContinue
   let d := quittingRewardPart G pZero n / qOther
   let C := max (ForcedQuitPayoff G p n) d
   let profile : QuitProfile G := fun _ => pZero
-  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hM0 : 0 ≤ M := hM.1.le
   have hpayoffBound : ∀ z : QuitProfile G, |QuitPayoff G z n| ≤ M := fun z =>
     abs_quitPayoff_le G z n hM0 (fun A => le_of_lt (hM.2.2 A n))
   have hinnerAbove : ∀ z : QuitProfile G, BddAbove (range fun deviation :
@@ -14529,13 +14748,14 @@ theorem minMaxQuit_le_max_forcedQuit_stationaryContinue
   exact quitPayoff_le_of_rewardPart_le G deviated n C hrewards (by simpa using hmass)
 
 /--
-The quantitative core of Lemma 6: for normal players and `0 < ε ≤ 1`, an
+The positive-bound quantitative core of Lemma 6: if `0 < ε ≤ M`, an
 `F_{ε²/(2M)}` step preserves `3ε`-rationality and otherwise raises the coordinate by
 at least `ε²/(2M)`.  This estimate does not use either global nonexistence hypothesis.
 -/
-theorem lemma6_quantitative (G : QuittingGame) {M ε : ℝ}
-    (hM : IsQuittingPayoffDifferenceBound G M) (hnormal : ∀ n, IsNormalPlayer G n)
-    (hε : 0 < ε) (hε1 : ε ≤ 1) {r s : Payoff G.Player}
+theorem lemma6_quantitative_of_positiveBound (G : QuittingGame) {M ε : ℝ}
+    (hM : IsPositiveQuittingPayoffDifferenceBound G M)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hε : 0 < ε) (hεM : ε ≤ M) {r s : Payoff G.Player}
     (hstep : s ∈ FRow G (ε ^ 2 / (2 * M)) r) :
     ∀ n,
       (r n ≥ MinMaxQuit G n - 3 * ε → s n ≥ MinMaxQuit G n - 3 * ε) ∧
@@ -14549,14 +14769,12 @@ theorem lemma6_quantitative (G : QuittingGame) {M ε : ℝ}
   let q : ℝ := p n
   let pZero := p.replace G n 0
   let qOther : ℝ := QuitProbability G pZero
-  have hMpositive : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hMpositive : 0 < M := hM.1
   have hδpositive : 0 < δ := by
     exact div_pos (sq_pos_of_pos hε) (mul_pos (by norm_num) hMpositive)
   have htwodelta : 2 * δ ≤ ε := by
     have hεsquare : ε ^ 2 ≤ ε * M := by
-      have hfirst := mul_nonneg hε.le (sub_nonneg.mpr hε1)
-      have hsecond := mul_nonneg hε.le (sub_nonneg.mpr hM.1)
-      nlinarith
+      nlinarith [mul_le_mul_of_nonneg_left hεM hε.le]
     calc
       2 * δ = ε ^ 2 / M := by
         dsimp only [δ]
@@ -14673,6 +14891,17 @@ theorem lemma6_quantitative (G : QuittingGame) {M ε : ℝ}
       dsimp only [δ, y] at hs ⊢
       exact lt_of_not_ge hs
     exact hcore (by linarith) hslt
+
+/-- The normalized `M ≥ 1`, `ε ≤ 1` version used in the 2007 statement. -/
+theorem lemma6_quantitative (G : QuittingGame) {M ε : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M) (hnormal : ∀ n, IsNormalPlayer G n)
+    (hε : 0 < ε) (hε1 : ε ≤ 1) {r s : Payoff G.Player}
+    (hstep : s ∈ FRow G (ε ^ 2 / (2 * M)) r) :
+    ∀ n,
+      (r n ≥ MinMaxQuit G n - 3 * ε → s n ≥ MinMaxQuit G n - 3 * ε) ∧
+      (r n < MinMaxQuit G n - 3 * ε → s n ≥ r n + ε ^ 2 / (2 * M)) :=
+  lemma6_quantitative_of_positiveBound G (hM.toPositive G) hnormal hε
+    (hε1.trans hM.1) hstep
 
 /--
 Lemma 6 as stated in the paper.  Its stationary and instant hypotheses are not needed for
