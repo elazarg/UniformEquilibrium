@@ -8409,6 +8409,125 @@ private theorem finiteQuittingPayoff_congr (G : QuittingGame) (k : ℕ)
       intro j hj
       exact h (j + 1) (by omega)
 
+/-- The payoff from stage `i` is the payoff of the shifted quitting profile. -/
+private theorem quitTailPayoff_eq_quitPayoff_shift (G : QuittingGame)
+    (p : QuitProfile G) (i : ℕ) :
+    QuitTailPayoff G p i = QuitPayoff G (fun k => p (i + k)) := by
+  rw [QuitPayoff]
+  funext n
+  apply tsum_congr
+  intro k
+  simp only [Nat.zero_add]
+
+/-- A deviation that begins at stage `i` and agrees with the profile beforehand. -/
+private def QuitProfile.deviationFrom (G : QuittingGame) (p : QuitProfile G)
+    (n : G.Player) (i : ℕ) (q : ℕ → Set.Icc (0 : ℝ) 1) :
+    ℕ → Set.Icc (0 : ℝ) 1 :=
+  fun t => if t < i then p t n else q (t - i)
+
+/-- The gain from a deviation beginning at stage `i` is its conditional tail gain times
+the probability of reaching that stage. -/
+private theorem quitPayoff_replace_deviationFrom_sub (G : QuittingGame)
+    (p : QuitProfile G) (n : G.Player) (i : ℕ)
+    (q : ℕ → Set.Icc (0 : ℝ) 1) :
+    QuitPayoff G (p.replace G n (p.deviationFrom G n i q)) n - QuitPayoff G p n =
+      tailSurvival G p 0 i *
+        (QuitPayoff G (QuitProfile.replace G (fun k => p (i + k)) n q) n -
+          QuitTailPayoff G p i n) := by
+  let deviated := p.replace G n (p.deviationFrom G n i q)
+  have hprefix : ∀ t < i, deviated t = p t := by
+    intro t ht
+    funext m
+    by_cases hmn : m = n
+    · subst m
+      simp [deviated, QuitProfile.replace, QuitProfile.deviationFrom, ht]
+    · simp [deviated, QuitProfile.replace, hmn]
+  have htailProfile : (fun k => deviated (i + k)) =
+      QuitProfile.replace G (fun k => p (i + k)) n q := by
+    funext k m
+    by_cases hmn : m = n
+    · subst m
+      simp [deviated, QuitProfile.replace, QuitProfile.deviationFrom]
+    · simp [deviated, QuitProfile.replace, hmn]
+  have hdeviatedTail : QuitTailPayoff G deviated i =
+      QuitPayoff G (QuitProfile.replace G (fun k => p (i + k)) n q) := by
+    rw [quitTailPayoff_eq_quitPayoff_shift]
+    rw [htailProfile]
+  have hdeviated := quitTailPayoff_eq_finiteQuittingPayoff G deviated 0 i
+  have hbase := quitTailPayoff_eq_finiteQuittingPayoff G p 0 i
+  simp only [Nat.zero_add] at hdeviated hbase
+  change QuitTailPayoff G deviated 0 n - QuitTailPayoff G p 0 n = _
+  rw [hdeviated, hbase, hdeviatedTail]
+  rw [finiteQuittingPayoff_congr G i _ (fun j => deviated j) p hprefix]
+  simpa [tailSurvival] using finiteQuittingPayoff_sub G i
+    (QuitPayoff G (QuitProfile.replace G (fun k => p (i + k)) n q))
+    (QuitTailPayoff G p i) p n
+
+/-- The min-max value is below any uniform upper bound on all unilateral responses to
+one fixed opponents' profile. -/
+private theorem minMaxQuit_le_of_forall_deviation_le (G : QuittingGame)
+    (p : QuitProfile G) (n : G.Player) (C : ℝ)
+    (hC : ∀ q : ℕ → Set.Icc (0 : ℝ) 1,
+      QuitPayoff G (p.replace G n q) n ≤ C) :
+    MinMaxQuit G n ≤ C := by
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hpayoff (profile : QuitProfile G) : |QuitPayoff G profile n| ≤ M :=
+    abs_quitPayoff_le G profile n hM0 (fun A => le_of_lt (hM.2.2 A n))
+  let upper : QuitProfile G → ℝ := fun profile =>
+    ⨆ q : ℕ → Set.Icc (0 : ℝ) 1, QuitPayoff G (profile.replace G n q) n
+  have hinnerAbove (profile : QuitProfile G) : BddAbove (range fun deviation :
+      ℕ → Set.Icc (0 : ℝ) 1 => QuitPayoff G (profile.replace G n deviation) n) := by
+    refine ⟨M, ?_⟩
+    rintro _ ⟨deviation, rfl⟩
+    exact (le_abs_self _).trans (hpayoff (profile.replace G n deviation))
+  have hlower (profile : QuitProfile G) : -M ≤ upper profile := by
+    let q : ℕ → Set.Icc (0 : ℝ) 1 := fun i => profile i n
+    have hself : profile.replace G n q = profile := by
+      funext i m
+      by_cases hmn : m = n
+      · subst m
+        simp [QuitProfile.replace, q]
+      · simp [QuitProfile.replace, hmn]
+    calc
+      -M ≤ QuitPayoff G profile n := neg_le_of_abs_le (hpayoff profile)
+      _ = QuitPayoff G (profile.replace G n q) n := by rw [hself]
+      _ ≤ upper profile := le_ciSup (hinnerAbove profile) q
+  have houterBelow : BddBelow (range upper) :=
+    ⟨-M, by rintro _ ⟨profile, rfl⟩; exact hlower profile⟩
+  change (⨅ profile, upper profile) ≤ C
+  exact (ciInf_le houterBelow p).trans (ciSup_le hC)
+
+/-- A global approximate equilibrium is conditionally rational at every stage reached
+with enough probability. -/
+private theorem equilibrium_tail_rational
+    (G : QuittingGame) {α δ : ℝ} (p : QuitProfile G)
+    (hequilibrium : IsQuitEpsilonEquilibrium G α p) (i : ℕ)
+    (hsurvival : 0 < tailSurvival G p 0 i)
+    (hscaled : α ≤ δ * tailSurvival G p 0 i) :
+    IsRational G δ (QuitTailPayoff G p i) := by
+  have htailDeviation : ∀ n (q : ℕ → Set.Icc (0 : ℝ) 1),
+      QuitPayoff G (QuitProfile.replace G (fun k => p (i + k)) n q) n ≤
+        QuitTailPayoff G p i n + δ := by
+    intro n q
+    have hglobal := hequilibrium n (p.deviationFrom G n i q)
+    have hdiff := quitPayoff_replace_deviationFrom_sub G p n i q
+    have hglobal' :
+        QuitPayoff G (p.replace G n (p.deviationFrom G n i q)) n -
+          QuitPayoff G p n ≤ α := by linarith
+    rw [hdiff] at hglobal'
+    have hdelta :
+        tailSurvival G p 0 i *
+            (QuitPayoff G (QuitProfile.replace G (fun k => p (i + k)) n q) n -
+              QuitTailPayoff G p i n) ≤
+          δ * tailSurvival G p 0 i := hglobal'.trans hscaled
+    nlinarith
+  intro n
+  have hminmax := minMaxQuit_le_of_forall_deviation_le G
+    (fun k => p (i + k)) n (QuitTailPayoff G p i n + δ)
+    (htailDeviation n)
+  linarith
+
 /-- Reversing the first `j` rows and iterating from `s₀` produces `sⱼ`. -/
 private theorem finiteQuittingPayoff_reverse_eq (G : QuittingGame) {k : ℕ}
     (p : ℕ → QuitRow G) (s : ℕ → Payoff G.Player)
