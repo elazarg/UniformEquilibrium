@@ -1,5 +1,6 @@
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.BehaviorTransfer
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.DependentActionPadding
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Disintegration
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.MarkovConverse
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Normalization
@@ -23,6 +24,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootCont
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.UniformPayoffExistenceClosure
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.InitialActionAffineness
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.StageGame
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.TransitionIndependent

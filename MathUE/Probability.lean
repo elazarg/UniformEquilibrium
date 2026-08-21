@@ -620,6 +620,19 @@ theorem expect_sum_comm {Ω κ : Type*} [Finite Ω] [Fintype κ]
   exact Finset.sum_congr rfl fun ω _ =>
     (Finset.mul_sum Finset.univ (fun i => f i ω) ((d ω).toReal)).symm
 
+/-- A finite range sum of integrands commutes with `expect`. -/
+theorem sum_expect_range_comm {Ω : Type*} [Finite Ω]
+    (d : PMF Ω) (length : ℕ) (f : ℕ → Ω → ℝ) :
+    (∑ time ∈ Finset.range length, expect d (f time)) =
+      expect d fun outcome =>
+        ∑ time ∈ Finset.range length, f time outcome := by
+  letI : Fintype Ω := Fintype.ofFinite Ω
+  simp only [expect_eq_sum]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro outcome _
+  rw [Finset.mul_sum]
+
 /-! ### Finite total-variation duality -/
 
 /-- Positive total variation between two finite PMFs, in the convention
