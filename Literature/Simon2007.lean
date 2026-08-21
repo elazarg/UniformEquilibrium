@@ -4694,6 +4694,38 @@ private theorem ReturnValueData.valueY_sub_value_le_of_positive
       div_le_div_of_nonneg_right hdiffNorm hqPos.le
     _ = P.valueDifferenceBound := by field_simp
 
+/-- Positive return makes action value differ from the common conditional return value only
+on the no-return mass. -/
+private theorem ReturnValueData.valueY_sub_value_le_noReturn
+    {P : DiscreteDecisionProcess} {S : DDPSemantics P} (R : ReturnValueData P S)
+    (A : Set P.X) (x : P.X) (y : P.Y x)
+    (hq : 0 < ReturnProbability P S A x y) :
+    |P.valueY x y - R.value A x y| ≤
+      P.valueDifferenceBound * (1 - (ReturnProbability P S A x y).toReal) := by
+  have huniform : ∀ z (w : P.Y z),
+      |P.valueY z w - R.value A x y| ≤ P.valueDifferenceBound :=
+    R.valueY_sub_value_le_of_positive A x y hq
+  have hcenter := P.firstReturn_centered_bound_of_uniform S A x y (R.value A x y)
+    huniform
+  have hqFinite : ReturnProbability P S A x y ≠ ⊤ := by
+    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    exact measure_ne_top _ _
+  have hqReal : (ReturnProbability P S A x y).toReal ≠ 0 :=
+    ne_of_gt (ENNReal.toReal_pos (ne_of_gt hq) hqFinite)
+  have hsum :
+      (∑' z, (FirstReturnProbability P S A x y z).toReal * P.valueX z) =
+        (ReturnProbability P S A x y).toReal * R.value A x y := by
+    rw [R.positiveEquation A x y hq]
+    field_simp
+  rw [hsum] at hcenter
+  have hcollapse : P.valueY x y -
+      (ReturnProbability P S A x y).toReal * R.value A x y -
+        (1 - (ReturnProbability P S A x y).toReal) * R.value A x y =
+      P.valueY x y - R.value A x y := by
+    ring_nf
+  rw [hcollapse] at hcenter
+  exact hcenter
+
 /-- A state is varied if one of its actions has a value different from the state value. -/
 def IsVaried (P : DiscreteDecisionProcess) (x : P.X) : Prop :=
   ∃ y, P.valueY x y ≠ P.valueX x
