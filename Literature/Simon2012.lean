@@ -2532,6 +2532,52 @@ def AreSection3Constants (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
       β j ≤ 2 * (Fintype.card G.Player : ℝ) * M) →
     ∀ j, (p j : ℝ) ≤ 1 - ξ
 
+private theorem section3Constants_radius_bound (G : QuittingGame)
+    (M d ρ ξ R : ℝ) (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R) :
+    0 < ξ ∧ ξ < 1 ∧
+      10 * (Fintype.card G.Player : ℝ) * M ≤ R := by
+  let N : ℝ := Fintype.card G.Player
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpos : 0 < N := by linarith
+  have hMpos : 0 < M := lt_of_lt_of_le (by norm_num) hM.1
+  have hρpos : 0 < ρ := hmotion.2.1
+  have hρ1 : ρ ≤ 1 := hmotion.2.2.1
+  have hratioPos : 0 < ρ / (2 * N * M) := by positivity
+  have hdenSix : 6 ≤ 2 * N * M := by
+    have hNM : 3 * 1 ≤ N * M :=
+      mul_le_mul hN hM.1 (by norm_num) hNpos.le
+    nlinarith
+  have hratioOne : ρ / (2 * N * M) ≤ 1 := by
+    rw [div_le_one (by positivity : 0 < 2 * N * M)]
+    linarith
+  have hpowOne : (ρ / (2 * N * M)) ^ Fintype.card G.Player ≤ 1 :=
+    pow_le_one₀ hratioPos.le hratioOne
+  have hξ : 0 < ξ := hconstants.1
+  have hξOne : ξ < 1 := by
+    have hsmall := hconstants.2.1
+    dsimp only [N] at hsmall hpowOne
+    nlinarith
+  have hpowPos : 0 < ξ ^ Fintype.card G.Player := pow_pos hξ _
+  have hpowξOne : ξ ^ Fintype.card G.Player ≤ 1 :=
+    pow_le_one₀ hξ.le hξOne.le
+  have hdenomPos : 0 < d * ξ ^ Fintype.card G.Player := mul_pos hd hpowPos
+  have hdenomOne : d * ξ ^ Fintype.card G.Player ≤ 1 := by
+    calc
+      d * ξ ^ Fintype.card G.Player ≤
+          1 * ξ ^ Fintype.card G.Player :=
+        mul_le_mul_of_nonneg_right hd1 hpowPos.le
+      _ ≤ 1 := by simpa using hpowξOne
+  refine ⟨hξ, hξOne, ?_⟩
+  rw [hconstants.2.2.1, le_div_iff₀ hdenomPos]
+  have hbound := mul_le_mul_of_nonneg_left hdenomOne
+    (show 0 ≤ 10 * N * M by positivity)
+  simpa only [N, mul_one] using hbound
+
 /--
 Lemma 3.4.  For `a = φ(β,p)` and a point strictly inside the segment from
 `β` to `a`, a coordinate of `a` outside `[-R,R]` forces the segment point
