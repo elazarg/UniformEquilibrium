@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import MathUE.BackwardOrbitSelection
 import MathUE.MeshContraction
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRow
+import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 import UniformEquilibrium.Quitting.Root.TailStability
 import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix
@@ -41,7 +42,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open Math.Probability Math.PMFProduct QuittingLCPClassification
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -473,3 +474,81 @@ theorem quittingSequentiallyεPerfectAbsorbingExistence_of_soloExitPreference
     (quittingSurvivalPrefix_nonneg roots)
     hsurvival
     (tendsto_pow_atTop_nhds_zero_of_lt_one hbase0 hbase1)
+
+/-- Positive own-solo payoffs and weak solo-exit preference imply branch S.3.
+Playerwise positive scaling normalizes every own-solo payoff to one, after
+which weak preference is exactly the capped-joint-exit hypothesis. -/
+theorem quittingSequentiallyεPerfectAbsorbingExistence_of_positiveSolo_of_weakPreference
+    [Nonempty ι] {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hsolo : ∀ who, 0 < quittingSoloReward reward who who)
+    (hweak : QuittingWeakSoloExitPreference reward) :
+    QuittingSequentiallyεPerfectAbsorbingExistence reward := by
+  let factor : Payoff ι := fun who => (quittingSoloReward reward who who)⁻¹
+  let scaledReward : {S : Finset ι // S.Nonempty} → Payoff ι :=
+    fun S who => factor who * reward S who
+  have hunit : QuittingUnitSoloExit scaledReward := by
+    intro who
+    change factor who * quittingSoloReward reward who who = 1
+    dsimp [factor]
+    exact inv_mul_cancel₀ (ne_of_gt (hsolo who))
+  have hcap : QuittingCappedJointExit scaledReward := by
+    intro quitters who hmem
+    change factor who * reward quitters who ≤ 1
+    have hle := hweak quitters who hmem
+    calc
+      factor who * reward quitters who ≤
+          factor who * quittingSoloReward reward who who :=
+        mul_le_mul_of_nonneg_left hle (inv_nonneg.mpr (hsolo who).le)
+      _ = 1 := by
+        dsimp [factor]
+        exact inv_mul_cancel₀ (ne_of_gt (hsolo who))
+  have hscaled : QuittingSequentiallyεPerfectAbsorbingExistence scaledReward :=
+    quittingSequentiallyεPerfectAbsorbingExistence_of_soloExitPreference
+      hunit hcap
+  let scaledTable := repositoryQuittingPayoffTable scaledReward
+  have hscaledTable : scaledTable.SequentiallyεPerfectAbsorbingExistence := by
+    rw [scaledTable.sequentiallyεPerfectAbsorbingExistence_iff]
+    have hzero : scaledTable.zeroNeverReward = scaledReward := by
+      funext S who
+      simp [scaledTable, QuittingPayoffTable.zeroNeverReward,
+        repositoryQuittingPayoffTable]
+    rw [hzero]
+    exact hscaled
+  let solo : Payoff ι := fun who => quittingSoloReward reward who who
+  have hsoloNonneg : ∀ who, 0 ≤ solo who := fun who => (hsolo who).le
+  have hrescaled := scaledTable.sequentiallyεPerfectAbsorbingExistence_scale
+    solo hsoloNonneg hscaledTable
+  have htable : scaledTable.scale solo = repositoryQuittingPayoffTable reward := by
+    ext S who
+    · change solo who * (factor who * reward S who) = reward S who
+      have hproduct : solo who * factor who = 1 := by
+        dsimp [solo, factor]
+        exact mul_inv_cancel₀ (ne_of_gt (hsolo who))
+      calc
+        solo who * (factor who * reward S who) =
+            (solo who * factor who) * reward S who := by ring
+        _ = reward S who := by rw [hproduct, one_mul]
+    · simp [scaledTable, QuittingPayoffTable.scale,
+        repositoryQuittingPayoffTable]
+  rw [htable] at hrescaled
+  have horiginal :=
+    (QuittingPayoffTable.sequentiallyεPerfectAbsorbingExistence_iff
+      (repositoryQuittingPayoffTable reward)).mp hrescaled
+  have hzero : (repositoryQuittingPayoffTable reward).zeroNeverReward =
+      reward := by
+    funext S who
+    simp [QuittingPayoffTable.zeroNeverReward,
+      repositoryQuittingPayoffTable]
+  rwa [hzero] at horiginal
+
+/-- Table-level form of the positive-solo weak-preference S.3 producer.  The
+conditions are imposed after subtracting the never payoff, as required by
+playerwise translation invariance. -/
+theorem QuittingPayoffTable.sequentiallyεPerfectAbsorbingExistence_of_positiveSolo_of_weakPreference
+    [Nonempty ι] (table : QuittingPayoffTable ι)
+    (hsolo : ∀ who, 0 < quittingSoloReward table.zeroNeverReward who who)
+    (hweak : QuittingWeakSoloExitPreference table.zeroNeverReward) :
+    table.SequentiallyεPerfectAbsorbingExistence := by
+  rw [table.sequentiallyεPerfectAbsorbingExistence_iff]
+  exact quittingSequentiallyεPerfectAbsorbingExistence_of_positiveSolo_of_weakPreference
+    hsolo hweak

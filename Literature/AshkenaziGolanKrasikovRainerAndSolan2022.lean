@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Classification.ErrorExponentRefutation
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRootSequence
 import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeByThreeZeroDiagonalQ
@@ -178,6 +179,19 @@ theorem smallSequentialBranch_iff (table : QuittingPayoffTable ι) :
   · intro hbranch
     exact ⟨1, by norm_num, fun ε hε _ => hbranch ε hε⟩
 
+/-- The positive-solo weak-preference regime lands in the paper's literal
+S.3 branch after playerwise scaling relative to the never payoff. -/
+theorem smallSequentialBranch_of_positiveSolo_of_weakPreference
+    [Nonempty ι] (table : QuittingPayoffTable ι)
+    (hsolo : ∀ who,
+      0 < quittingSoloReward table.zeroNeverReward who who)
+    (hweak : QuittingWeakSoloExitPreference table.zeroNeverReward) :
+    SmallSequentialBranch table := by
+  rw [smallSequentialBranch_iff]
+  exact
+    QuittingPayoffTable.sequentiallyεPerfectAbsorbingExistence_of_positiveSolo_of_weakPreference
+      table hsolo hweak
+
 /-! **Theorem 3.4 (arXiv v1, forward statement).** If ε-equilibria exist for
 every positive ε, then one fixed branch among S.1 (stationary), S.2 (a sure
 first-stage quitter with arbitrary-profile punishment at min-max), and S.3
@@ -193,7 +207,27 @@ theorem theorem3_4
       SmallStationaryBranch ⟨reward, never⟩ ∨
         SmallPunishmentBranch ⟨reward, never⟩ ∨
           SmallSequentialBranch ⟨reward, never⟩ := by
-  sorry
+  intro _hexists
+  let table : QuittingPayoffTable ι := ⟨reward, never⟩
+  cases isEmpty_or_nonempty ι with
+  | inl hempty =>
+      left
+      rw [smallStationaryBranch_iff,
+        table.stationaryεEquilibriumExistence_iff]
+      intro ε _hε
+      refine ⟨fun who => hempty.elim who, ?_⟩
+      intro who
+      exact hempty.elim who
+  | inr hnonempty =>
+      letI := hnonempty
+      by_cases hnormalized :
+          (∀ who, 0 < quittingSoloReward table.zeroNeverReward who who) ∧
+            QuittingWeakSoloExitPreference table.zeroNeverReward
+      · right
+        right
+        exact smallSequentialBranch_of_positiveSolo_of_weakPreference
+          table hnormalized.1 hnormalized.2
+      · sorry
 
 /-! **Theorem 3.5 (paper statement).** For sufficiently small ε, every
 absorbing profile at which all players are sequentially ε-perfect is an
