@@ -19358,12 +19358,334 @@ def SunspotEquilibriumPayoff
 paper calls a Q-matrix an M-matrix when every row and every column has exactly
 one positive entry. -/
 
-/-! The v1 paper's M-matrix convention: Q, with exactly one positive entry in
-each row and column. -/
+/-! The paper's M-matrix convention: textbook Q, with exactly one positive
+entry in each row and column.  The textbook qualifier is essential here:
+the proof invokes inverse positivity, whereas the paper's normalized
+projective Q predicate also admits the homogeneous branch. -/
 def MMatrix (M : ι → ι → ℝ) : Prop :=
-  QMatrix M ∧
+  IsStandardQMatrix M ∧
     (∀ who, (Finset.filter (fun owner => 0 < M who owner) Finset.univ).card = 1) ∧
     (∀ owner, (Finset.filter (fun who => 0 < M who owner) Finset.univ).card = 1)
+
+namespace MMatrix
+
+/-! The unique positive column in a row. -/
+noncomputable def positiveOwner {M : ι → ι → ℝ}
+    (hM : MMatrix M) (who : ι) : ι :=
+  Classical.choose (Finset.card_eq_one.mp (hM.2.1 who))
+
+theorem positiveOwner_filter {M : ι → ι → ℝ}
+    (hM : MMatrix M) (who : ι) :
+    Finset.filter (fun owner => 0 < M who owner) Finset.univ =
+      {hM.positiveOwner who} :=
+  Classical.choose_spec (Finset.card_eq_one.mp (hM.2.1 who))
+
+theorem positive_positiveOwner {M : ι → ι → ℝ}
+    (hM : MMatrix M) (who : ι) :
+    0 < M who (hM.positiveOwner who) := by
+  have hmem : hM.positiveOwner who ∈
+      Finset.filter (fun owner => 0 < M who owner) Finset.univ := by
+    rw [hM.positiveOwner_filter who]
+    simp
+  exact (Finset.mem_filter.mp hmem).2
+
+theorem owner_eq_positiveOwner_of_pos {M : ι → ι → ℝ}
+    (hM : MMatrix M) {who owner : ι} (hpos : 0 < M who owner) :
+    owner = hM.positiveOwner who := by
+  have hmem : owner ∈
+      Finset.filter (fun candidate => 0 < M who candidate) Finset.univ := by
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hpos⟩
+  rw [hM.positiveOwner_filter who] at hmem
+  simpa using hmem
+
+theorem nonpos_of_ne_positiveOwner {M : ι → ι → ℝ}
+    (hM : MMatrix M) {who owner : ι}
+    (hne : owner ≠ hM.positiveOwner who) :
+    M who owner ≤ 0 := by
+  exact le_of_not_gt fun hpos => hne (hM.owner_eq_positiveOwner_of_pos hpos)
+
+/-! The unique positive row in a column. -/
+noncomputable def positiveRow {M : ι → ι → ℝ}
+    (hM : MMatrix M) (owner : ι) : ι :=
+  Classical.choose (Finset.card_eq_one.mp (hM.2.2 owner))
+
+theorem positiveRow_filter {M : ι → ι → ℝ}
+    (hM : MMatrix M) (owner : ι) :
+    Finset.filter (fun who => 0 < M who owner) Finset.univ =
+      {hM.positiveRow owner} :=
+  Classical.choose_spec (Finset.card_eq_one.mp (hM.2.2 owner))
+
+theorem positive_positiveRow {M : ι → ι → ℝ}
+    (hM : MMatrix M) (owner : ι) :
+    0 < M (hM.positiveRow owner) owner := by
+  have hmem : hM.positiveRow owner ∈
+      Finset.filter (fun who => 0 < M who owner) Finset.univ := by
+    rw [hM.positiveRow_filter owner]
+    simp
+  exact (Finset.mem_filter.mp hmem).2
+
+theorem positiveOwner_positiveRow {M : ι → ι → ℝ}
+    (hM : MMatrix M) (owner : ι) :
+    hM.positiveOwner (hM.positiveRow owner) = owner := by
+  exact (hM.owner_eq_positiveOwner_of_pos
+    (hM.positive_positiveRow owner)).symm
+
+theorem positiveRow_positiveOwner {M : ι → ι → ℝ}
+    (hM : MMatrix M) (who : ι) :
+    hM.positiveRow (hM.positiveOwner who) = who := by
+  have hpos := hM.positive_positiveOwner who
+  have hmem : who ∈ Finset.filter
+      (fun candidate => 0 < M candidate (hM.positiveOwner who))
+      Finset.univ := Finset.mem_filter.mpr ⟨Finset.mem_univ _, hpos⟩
+  rw [hM.positiveRow_filter (hM.positiveOwner who)] at hmem
+  simpa using hmem
+
+/-! The positive-entry pattern is a permutation between rows and columns. -/
+noncomputable def positiveOwnerEquiv {M : ι → ι → ℝ}
+    (hM : MMatrix M) : ι ≃ ι where
+  toFun := hM.positiveOwner
+  invFun := hM.positiveRow
+  left_inv := hM.positiveRow_positiveOwner
+  right_inv := hM.positiveOwner_positiveRow
+
+/-! Column multiplication in the paper's `Σⱼ zⱼ rⱼ` convention. -/
+def columnAction (M : ι → ι → ℝ) (weight : ι → ℝ) : ι → ℝ :=
+  fun who => ∑ owner, weight owner * M who owner
+
+/-! The coordinate vector `eᵢ`. -/
+def unitVector (target : ι) : ι → ℝ :=
+  fun who => if who = target then 1 else 0
+
+/-! A nonnegative solution of `Mx=eᵢ`, the inverse-positive ray used in
+Section 4. -/
+structure UnitColumnSolution (M : ι → ι → ℝ) (target : ι) where
+  weight : ι → ℝ
+  weight_nonneg : ∀ owner, 0 ≤ weight owner
+  equation : columnAction M weight = unitVector target
+
+private theorem standardSolution_weight_pos_of_negative_direction
+    {M : ι → ι → ℝ} (hM : MMatrix M) {q : ι → ℝ}
+    (hq : ∀ who, q who < 0) (solution : StandardLCPSolution M q) :
+    ∀ owner, 0 < solution.weight owner := by
+  intro owner
+  have hnonzero : solution.weight owner ≠ 0 := by
+    intro hzero
+    let row := hM.positiveRow owner
+    have hrowOwner : hM.positiveOwner row = owner := by
+      exact hM.positiveOwner_positiveRow owner
+    have hsum : (∑ candidate,
+        solution.weight candidate * M row candidate) ≤ 0 := by
+      apply Finset.sum_nonpos
+      intro candidate _
+      by_cases hcandidate : candidate = owner
+      · subst candidate
+        simp [hzero]
+      · exact mul_nonpos_of_nonneg_of_nonpos
+          (solution.weight_nonneg candidate)
+          (hM.nonpos_of_ne_positiveOwner (by simpa [hrowOwner]))
+    linarith [solution.residual_nonneg row, hq row]
+  exact lt_of_le_of_ne (solution.weight_nonneg owner) (Ne.symm hnonzero)
+
+private theorem standardSolution_columnAction_eq_neg_of_negative_direction
+    {M : ι → ι → ℝ} (hM : MMatrix M) {q : ι → ℝ}
+    (hq : ∀ who, q who < 0) (solution : StandardLCPSolution M q) :
+    columnAction M solution.weight = -q := by
+  funext who
+  have hweight := standardSolution_weight_pos_of_negative_direction
+    hM hq solution who
+  have hzero := solution.complementary who
+  have hresidual : q who + ∑ owner,
+      solution.weight owner * M who owner = 0 :=
+    (mul_eq_zero.mp hzero).resolve_left (ne_of_gt hweight)
+  change (∑ owner, solution.weight owner * M who owner) = -q who
+  linarith
+
+/-! Textbook Q plus the permutation sign pattern supplies a strictly positive
+calibration `p` with `Mp=1`. -/
+noncomputable def positiveCalibration {M : ι → ι → ℝ}
+    (hM : MMatrix M) : ι → ℝ :=
+  Classical.choose (hM.1 (fun _ => -1)) |>.weight
+
+theorem positiveCalibration_pos {M : ι → ι → ℝ}
+    (hM : MMatrix M) : ∀ owner, 0 < hM.positiveCalibration owner := by
+  let solution := Classical.choose (hM.1 (fun _ => -1))
+  exact standardSolution_weight_pos_of_negative_direction hM
+    (fun _ => by norm_num) solution
+
+theorem columnAction_positiveCalibration {M : ι → ι → ℝ}
+    (hM : MMatrix M) :
+    columnAction M hM.positiveCalibration = fun _ => 1 := by
+  let solution := Classical.choose (hM.1 (fun _ => -1))
+  have heq := standardSolution_columnAction_eq_neg_of_negative_direction hM
+    (fun _ => by norm_num) solution
+  simpa [positiveCalibration, solution] using heq
+
+/-! A permutation M-matrix is inverse monotone: `Mx≥0` implies `x≥0`.
+This is the finite minimum-ratio proof, avoiding any determinant API. -/
+theorem columnAction_nonneg_imp_nonneg [Nonempty ι]
+    {M : ι → ι → ℝ} (hM : MMatrix M) {x : ι → ℝ}
+    (hx : ∀ who, 0 ≤ columnAction M x who) :
+    ∀ owner, 0 ≤ x owner := by
+  by_contra hnot
+  push Not at hnot
+  obtain ⟨owner, _, hminimum⟩ := Finset.exists_min_image
+    Finset.univ (fun candidate =>
+      x candidate / hM.positiveCalibration candidate) Finset.univ_nonempty
+  have hownerNeg : x owner / hM.positiveCalibration owner < 0 := by
+    obtain ⟨negativeOwner, hnegativeOwner⟩ := hnot
+    have hcalibrationPos := hM.positiveCalibration_pos negativeOwner
+    exact (hminimum negativeOwner (Finset.mem_univ _)).trans_lt
+      (div_neg_of_neg_of_pos hnegativeOwner hcalibrationPos)
+  let ratio := x owner / hM.positiveCalibration owner
+  let row := hM.positiveRow owner
+  have hrowOwner : hM.positiveOwner row = owner := by
+    exact hM.positiveOwner_positiveRow owner
+  have hterm : ∀ candidate : ι,
+      x candidate * M row candidate ≤
+        ratio * hM.positiveCalibration candidate * M row candidate := by
+    intro candidate
+    by_cases hcandidate : candidate = owner
+    · subst candidate
+      have hcalibrationPos := hM.positiveCalibration_pos owner
+      dsimp only [ratio]
+      field_simp [ne_of_gt hcalibrationPos]
+    · have hratio : ratio * hM.positiveCalibration candidate ≤
+          x candidate := by
+        apply (le_div_iff₀ (hM.positiveCalibration_pos candidate)).mp
+        dsimp only [ratio]
+        exact hminimum candidate (Finset.mem_univ _)
+      exact mul_le_mul_of_nonpos_right hratio
+        (hM.nonpos_of_ne_positiveOwner (by simpa [hrowOwner]))
+  have hsum : columnAction M x row ≤ ratio := by
+    calc
+      columnAction M x row =
+          ∑ candidate, x candidate * M row candidate := rfl
+      _ ≤ ∑ candidate,
+          ratio * hM.positiveCalibration candidate * M row candidate :=
+        Finset.sum_le_sum fun candidate _ => hterm candidate
+      _ = ratio * columnAction M hM.positiveCalibration row := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro candidate _
+        ring
+      _ = ratio := by
+        rw [hM.columnAction_positiveCalibration]
+        simp
+  linarith [hx row]
+
+theorem columnAction_injective [Nonempty ι]
+    {M : ι → ι → ℝ} (hM : MMatrix M) :
+    Function.Injective (columnAction M) := by
+  intro x y hxy
+  have hsub : columnAction M (x - y) = 0 := by
+    funext who
+    have hcoordinate := congrFun hxy who
+    simp only [columnAction, Pi.sub_apply, Pi.zero_apply]
+    rw [Finset.sum_sub_distrib]
+    convert sub_eq_zero.mpr hcoordinate using 1 <;>
+      apply Finset.sum_congr rfl <;> intro owner _ <;> ring
+  have hsubNonneg : ∀ owner, 0 ≤ (x - y) owner := by
+    apply hM.columnAction_nonneg_imp_nonneg
+    intro who
+    rw [hsub]
+  have hnegSubNonneg : ∀ owner, 0 ≤ -(x - y) owner := by
+    apply hM.columnAction_nonneg_imp_nonneg
+    intro who
+    have hneg : columnAction M (-(x - y)) = 0 := by
+      funext row
+      rw [show columnAction M (-(x - y)) row =
+          -columnAction M (x - y) row by
+        simp only [columnAction, Pi.neg_apply, Finset.sum_neg_distrib]
+        apply Finset.sum_congr rfl
+        intro owner _
+        ring,
+        hsub]
+      simp
+    rw [hneg]
+  funext owner
+  have hle := hsubNonneg owner
+  have hge := hnegSubNonneg owner
+  simp only [Pi.sub_apply, Pi.neg_apply] at hle hge
+  linarith
+
+/-! The inverse-positive conclusion used in Eq. (20): for each `i` there is
+a nonnegative `x` with `Mx=eᵢ`. -/
+theorem exists_unitColumnSolution [Nonempty ι]
+    {M : ι → ι → ℝ} (hM : MMatrix M) (target : ι) :
+    Nonempty (UnitColumnSolution M target) := by
+  let qOne : ι → ℝ := fun who => -unitVector target who - 1
+  obtain ⟨oneSolution⟩ := hM.1 qOne
+  have hqOne : ∀ who, qOne who < 0 := by
+    intro who
+    dsimp only [qOne, unitVector]
+    split <;> norm_num
+  have honeEquation :=
+    standardSolution_columnAction_eq_neg_of_negative_direction
+      hM hqOne oneSolution
+  let x : ι → ℝ := fun owner =>
+    oneSolution.weight owner - hM.positiveCalibration owner
+  have hxEquation : columnAction M x = unitVector target := by
+    funext who
+    have hone := congrFun honeEquation who
+    have hcalibration := congrFun hM.columnAction_positiveCalibration who
+    dsimp only [qOne] at hone
+    simp only [Pi.neg_apply] at hone
+    dsimp only [x, columnAction]
+    rw [Finset.sum_sub_distrib]
+    change (∑ owner, oneSolution.weight owner * M who owner) -
+      (∑ owner, hM.positiveCalibration owner * M who owner) = _
+    linarith
+  have hxNonneg : ∀ owner, 0 ≤ x owner := by
+    intro owner
+    by_contra hnegative
+    have hxNegative : x owner < 0 := lt_of_not_ge hnegative
+    let δ := -x owner / (2 * hM.positiveCalibration owner)
+    have hδ : 0 < δ := by
+      dsimp only [δ]
+      positivity
+    let qδ : ι → ℝ := fun who => -unitVector target who - δ
+    obtain ⟨δSolution⟩ := hM.1 qδ
+    have hqδ : ∀ who, qδ who < 0 := by
+      intro who
+      dsimp only [qδ, unitVector]
+      split <;> linarith
+    have hδEquation :=
+      standardSolution_columnAction_eq_neg_of_negative_direction
+        hM hqδ δSolution
+    have haffine : δSolution.weight = fun candidate =>
+        x candidate + δ * hM.positiveCalibration candidate := by
+      apply hM.columnAction_injective
+      funext who
+      have hleft := congrFun hδEquation who
+      have hx := congrFun hxEquation who
+      have hp := congrFun hM.columnAction_positiveCalibration who
+      dsimp only [qδ] at hleft
+      simp only [Pi.neg_apply] at hleft
+      simp only [columnAction]
+      rw [Finset.sum_add_distrib]
+      change (∑ candidate, x candidate * M who candidate) +
+        (∑ candidate,
+          (δ * hM.positiveCalibration candidate) * M who candidate) = _
+      rw [show (∑ candidate,
+          (δ * hM.positiveCalibration candidate) * M who candidate) =
+          δ * (∑ candidate,
+            hM.positiveCalibration candidate * M who candidate) by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro candidate _
+        ring]
+      linarith
+    have hcoordinate := congrFun haffine owner
+    have hcalibrationPos := hM.positiveCalibration_pos owner
+    have hδNonneg := δSolution.weight_nonneg owner
+    dsimp only [δ] at hcoordinate
+    rw [hcoordinate] at hδNonneg
+    field_simp [ne_of_gt hcalibrationPos] at hδNonneg
+    nlinarith
+  exact ⟨{ weight := x, weight_nonneg := hxNonneg,
+    equation := hxEquation }⟩
+
+end MMatrix
 
 /-! `conv{rⁱ : i∈I*}` in the full payoff space of all players. -/
 def NormalSingletonHull (table : Table ι) : Set (Payoff ι) :=
