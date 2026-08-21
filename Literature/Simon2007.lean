@@ -4725,6 +4725,82 @@ private theorem DiscreteDecisionProcess.rawLawFrom_stage_eq_state_mul_choose
   simp_rw [hmeasure]
   exact ENNReal.tsum_mul_right
 
+/-- Expected absolute increment at one time, grouped by the state sampled then. -/
+private def DiscreteDecisionProcess.rawStateVariation
+    (P : DiscreteDecisionProcess) (start : P.X) (i : ℕ) (x : P.X) : ℝ≥0∞ :=
+  P.rawLawFrom start {stage | (stage i).1 = x} *
+    ∑' y : P.Y x, P.choose x y * ENNReal.ofReal |DDPStage.increment P ⟨x, y⟩|
+
+/-- Integrating one raw-stage increment is the sum of its statewise action averages. -/
+private theorem DiscreteDecisionProcess.lintegral_rawIncrement_eq_tsum_stateVariation
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) (start : P.X) (i : ℕ) :
+    (∫⁻ stage, ENNReal.ofReal |DDPStage.increment P (stage i)|
+        ∂P.rawLawFrom start) =
+      ∑' x : P.X, P.rawStateVariation start i x := by
+  have heval : Measurable (fun stage : ℕ → DDPStage P => stage i) := measurable_pi_apply i
+  rw [← lintegral_map (f := fun current : DDPStage P =>
+    ENNReal.ofReal |DDPStage.increment P current|) Measurable.of_discrete heval]
+  rw [lintegral_countable']
+  rw [ENNReal.tsum_sigma']
+  apply tsum_congr
+  intro x
+  rw [DiscreteDecisionProcess.rawStateVariation, ← ENNReal.tsum_mul_left]
+  apply tsum_congr
+  intro y
+  rw [Measure.map_apply heval (measurableSet_singleton (⟨x, y⟩ : DDPStage P))]
+  change ENNReal.ofReal |DDPStage.increment P ⟨x, y⟩| *
+      P.rawLawFrom start {stage | stage i = (⟨x, y⟩ : DDPStage P)} = _
+  rw [P.rawLawFrom_stage_eq_state_mul_choose S start i x y]
+  ac_rfl
+
+/-- Expected total variation is the sum of the statewise action averages at every time. -/
+private theorem ExpectedDDPVariation.eq_tsum_rawStateVariation
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) :
+    ExpectedDDPVariation P S =
+      ∑' index : ℕ × P.X, P.rawStateVariation P.initial index.1 index.2 := by
+  rw [ExpectedDDPVariation, S.law_eq_rawLaw]
+  rw [lintegral_map (DDPTotalVariation.measurable P) (DDPPath.measurable_ofRaw P)]
+  simp only [P.totalVariation_ofRaw]
+  rw [lintegral_tsum]
+  · rw [ENNReal.tsum_prod]
+    apply tsum_congr
+    intro i
+    exact P.lintegral_rawIncrement_eq_tsum_stateVariation S P.initial i
+  · intro i
+    have hincrement : Measurable (DDPStage.increment P) := Measurable.of_discrete
+    exact (hincrement.comp
+      (measurable_pi_apply (X := fun _ : ℕ => DDPStage P) i)).abs.ennreal_ofReal.aemeasurable
+
+/-- A statewise variation term is the nonnegative-real lift of its real probability average. -/
+private theorem DiscreteDecisionProcess.rawStateVariation_eq_ofReal
+    (P : DiscreteDecisionProcess) (start : P.X) (i : ℕ) (x : P.X) :
+    P.rawStateVariation start i x = ENNReal.ofReal
+      ((P.rawLawFrom start {stage | (stage i).1 = x}).toReal *
+        (∑' y : P.Y x, (P.choose x y).toReal *
+          |DDPStage.increment P ⟨x, y⟩|)) := by
+  have hweights : Summable fun y : P.Y x => (P.choose x y).toReal :=
+    ENNReal.summable_toReal (by rw [PMF.tsum_coe]; simp)
+  have hincrements : Summable fun y : P.Y x =>
+      (P.choose x y).toReal * |DDPStage.increment P ⟨x, y⟩| := by
+    apply Summable.of_norm_bounded (hweights.mul_right P.valueDifferenceBound)
+    intro y
+    rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg, Real.norm_eq_abs, abs_abs]
+    exact mul_le_mul_of_nonneg_left
+      (by simpa only [Real.norm_eq_abs] using DDPStage.norm_increment_le P ⟨x, y⟩)
+      ENNReal.toReal_nonneg
+  rw [DiscreteDecisionProcess.rawStateVariation]
+  rw [ENNReal.ofReal_mul ENNReal.toReal_nonneg]
+  rw [ENNReal.ofReal_toReal]
+  · rw [ENNReal.ofReal_tsum_of_nonneg
+        (fun y => mul_nonneg ENNReal.toReal_nonneg (abs_nonneg _)) hincrements]
+    apply congrArg ((P.rawLawFrom start {stage | (stage i).1 = x}) * ·)
+    apply tsum_congr
+    intro y
+    rw [ENNReal.ofReal_mul ENNReal.toReal_nonneg]
+    rw [ENNReal.ofReal_toReal (PMF.apply_ne_top _ _)]
+  · letI : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
+    exact measure_ne_top _ _
+
 /-- The raw event that the displayed sampled stage is the last visit to `A`. -/
 private def DiscreteDecisionProcess.rawLastExitAtStage
     (P : DiscreteDecisionProcess) (A : Set P.X) (i : ℕ) (current : DDPStage P) :
@@ -5170,16 +5246,21 @@ private theorem ReturnValueData.tsum_choose_mul_abs_increment_le
       linarith
     _ = 2 * P.valueDifferenceBound * NoReturnProbability P S A x := by ring
 
-/-- The expected variation accumulated while visiting one rank cell is at most `2M`. -/
-private theorem ReturnValueData.tsum_state_actionVariation_le
+/-- Variation in one rank cell is summable, with total at most `2M`. -/
+private theorem ReturnValueData.summable_state_actionVariation_and_tsum_le
     {P : DiscreteDecisionProcess} {S : DDPSemantics P} (R : ReturnValueData P S)
     (A : Set P.X) (hcommon : ∀ x, x ∈ A → ∃ r : ℝ, ∀ y : P.Y x, R.value A x y = r) :
-    (∑' index : ℕ × {x : P.X // x ∈ A},
+    Summable (fun index : ℕ × {x : P.X // x ∈ A} =>
       (P.rawLawFrom P.initial {stage | (stage index.1).1 = index.2.1}).toReal *
         (∑' y : P.Y index.2.1,
           (P.choose index.2.1 y).toReal *
-            |DDPStage.increment P ⟨index.2.1, y⟩|)) ≤
-      2 * P.valueDifferenceBound := by
+            |DDPStage.increment P ⟨index.2.1, y⟩|)) ∧
+      (∑' index : ℕ × {x : P.X // x ∈ A},
+        (P.rawLawFrom P.initial {stage | (stage index.1).1 = index.2.1}).toReal *
+          (∑' y : P.Y index.2.1,
+            (P.choose index.2.1 y).toReal *
+              |DDPStage.increment P ⟨index.2.1, y⟩|)) ≤
+        2 * P.valueDifferenceBound := by
   let lastExit : ℕ × {x : P.X // x ∈ A} → ℝ := fun index =>
     ∑' y : P.Y index.2.1,
       (P.rawLawFrom P.initial
@@ -5219,15 +5300,54 @@ private theorem ReturnValueData.tsum_state_actionVariation_le
     hlast.1.mul_left (2 * P.valueDifferenceBound)
   have hvariation : Summable variation :=
     Summable.of_nonneg_of_le hvariationNonneg hpoint hright
+  refine ⟨hvariation, ?_⟩
   change (∑' index, variation index) ≤ _
   calc
-    (∑' index, variation index) ≤
-        ∑' index, 2 * P.valueDifferenceBound * lastExit index :=
-      Summable.tsum_le_tsum hpoint hvariation hright
-    _ = 2 * P.valueDifferenceBound * ∑' index, lastExit index := tsum_mul_left
-    _ ≤ 2 * P.valueDifferenceBound * 1 :=
-      mul_le_mul_of_nonneg_left hlast.2 hcoefficientNonneg
-    _ = 2 * P.valueDifferenceBound := mul_one _
+      (∑' index, variation index) ≤
+          ∑' index, 2 * P.valueDifferenceBound * lastExit index :=
+        Summable.tsum_le_tsum hpoint hvariation hright
+      _ = 2 * P.valueDifferenceBound * ∑' index, lastExit index := tsum_mul_left
+      _ ≤ 2 * P.valueDifferenceBound * 1 :=
+        mul_le_mul_of_nonneg_left hlast.2 hcoefficientNonneg
+      _ = 2 * P.valueDifferenceBound := mul_one _
+
+/-- A time paired with a state in `A` is the subtype of time-state pairs lying over `A`. -/
+private def DiscreteDecisionProcess.timeStateInSetEquiv
+    (P : DiscreteDecisionProcess) (A : Set P.X) :
+    ℕ × {x : P.X // x ∈ A} ≃ {index : ℕ × P.X // index.2 ∈ A} where
+  toFun index := ⟨⟨index.1, index.2.1⟩, index.2.2⟩
+  invFun index := ⟨index.1.1, ⟨index.1.2, index.2⟩⟩
+  left_inv index := by cases index; rfl
+  right_inv index := by cases index; rfl
+
+/-- The ENNReal statewise variation accumulated in one rank cell is at most `2M`. -/
+private theorem ReturnValueData.tsum_rawStateVariation_cell_le
+    {P : DiscreteDecisionProcess} {S : DDPSemantics P} (R : ReturnValueData P S)
+    (A : Set P.X) (hcommon : ∀ x, x ∈ A → ∃ r : ℝ, ∀ y : P.Y x, R.value A x y = r) :
+    (∑' index : ℕ × {x : P.X // x ∈ A},
+      P.rawStateVariation P.initial index.1 index.2.1) ≤
+        ENNReal.ofReal (2 * P.valueDifferenceBound) := by
+  let variation : ℕ × {x : P.X // x ∈ A} → ℝ := fun index =>
+    (P.rawLawFrom P.initial {stage | (stage index.1).1 = index.2.1}).toReal *
+      (∑' y : P.Y index.2.1,
+        (P.choose index.2.1 y).toReal * |DDPStage.increment P ⟨index.2.1, y⟩|)
+  have hreal : Summable variation ∧ (∑' index, variation index) ≤
+      2 * P.valueDifferenceBound := by
+    simpa only [variation] using R.summable_state_actionVariation_and_tsum_le A hcommon
+  have hnonneg (index : ℕ × {x : P.X // x ∈ A}) : 0 ≤ variation index := by
+    apply mul_nonneg ENNReal.toReal_nonneg
+    exact tsum_nonneg fun _ => mul_nonneg ENNReal.toReal_nonneg (abs_nonneg _)
+  calc
+    (∑' index : ℕ × {x : P.X // x ∈ A},
+        P.rawStateVariation P.initial index.1 index.2.1) =
+        ∑' index, ENNReal.ofReal (variation index) := by
+      apply tsum_congr
+      intro index
+      exact P.rawStateVariation_eq_ofReal P.initial index.1 index.2.1
+    _ = ENNReal.ofReal (∑' index, variation index) :=
+      (ENNReal.ofReal_tsum_of_nonneg hnonneg hreal.1).symm
+    _ ≤ ENNReal.ofReal (2 * P.valueDifferenceBound) :=
+      ENNReal.ofReal_le_ofReal hreal.2
 
 /-- A state is varied if one of its actions has a value different from the state value. -/
 def IsVaried (P : DiscreteDecisionProcess) (x : P.X) : Prop :=
@@ -5281,7 +5401,62 @@ theorem proposition2 (P : DiscreteDecisionProcess) (S : DDPSemantics P)
     (R : ReturnValueData P S) {n : ℕ} (hrank : HasProcessRank P S R n) :
     ExpectedDDPVariation P S ≤
       ENNReal.ofReal (2 * n * P.valueDifferenceBound) := by
-  sorry
+  classical
+  let W : RankPartitionWitness P S R n := Classical.choice hrank.1
+  let cellIndices : Fin n → Set (ℕ × P.X) := fun cell =>
+    {index | index.2 ∈ W.cell cell}
+  let variation : ℕ × P.X → ℝ≥0∞ := fun index =>
+    P.rawStateVariation P.initial index.1 index.2
+  have hunion (index : ℕ × P.X) :
+      index ∈ ⋃ cell, cellIndices cell ↔ IsVaried P index.2 := by
+    rw [W.valid.1.2]
+    simp only [mem_iUnion, mem_setOf_eq, cellIndices]
+  have hzero (index : ℕ × P.X) (hindex : index ∉ ⋃ cell, cellIndices cell) :
+      variation index = 0 := by
+    have hnotVaried : ¬ IsVaried P index.2 := by
+      rwa [← hunion index]
+    have hincrement (y : P.Y index.2) : DDPStage.increment P ⟨index.2, y⟩ = 0 := by
+      rw [DDPStage.increment]
+      exact sub_eq_zero.mpr (not_ne_iff.mp (not_exists.mp hnotVaried y))
+    change P.rawStateVariation P.initial index.1 index.2 = 0
+    rw [DiscreteDecisionProcess.rawStateVariation]
+    simp_rw [hincrement]
+    simp
+  have hrestrict : (∑' index, variation index) =
+      ∑' index : {
+        index : ℕ × P.X // index ∈ ⋃ cell, cellIndices cell}, variation index.1 := by
+    calc
+      (∑' index, variation index) =
+          ∑' index, (⋃ cell, cellIndices cell).indicator variation index := by
+        apply tsum_congr
+        intro index
+        by_cases hindex : index ∈ ⋃ cell, cellIndices cell
+        · simp [hindex]
+        · simp [hindex, hzero index hindex]
+      _ = _ := (tsum_subtype (⋃ cell, cellIndices cell) variation).symm
+  have hcell (cell : Fin n) :
+      (∑' index : cellIndices cell, variation index.1) ≤
+        ENNReal.ofReal (2 * P.valueDifferenceBound) := by
+    change (∑' index : {index : ℕ × P.X // index.2 ∈ W.cell cell},
+      P.rawStateVariation P.initial index.1.1 index.1.2) ≤ _
+    rw [← (P.timeStateInSetEquiv (W.cell cell)).tsum_eq]
+    exact R.tsum_rawStateVariation_cell_le (W.cell cell) (W.valid.2 cell)
+  rw [ExpectedDDPVariation.eq_tsum_rawStateVariation P S]
+  change (∑' index, variation index) ≤ _
+  calc
+    (∑' index, variation index) =
+        ∑' index : {
+          index : ℕ × P.X // index ∈ ⋃ cell, cellIndices cell}, variation index.1 :=
+      hrestrict
+    _ ≤ ∑ cell : Fin n, ∑' index : cellIndices cell, variation index.1 :=
+      ENNReal.tsum_iUnion_le variation cellIndices
+    _ ≤ ∑ _cell : Fin n, ENNReal.ofReal (2 * P.valueDifferenceBound) := by
+      exact Finset.sum_le_sum fun cell _ => hcell cell
+    _ = ENNReal.ofReal (2 * n * P.valueDifferenceBound) := by
+      rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+      rw [show 2 * (n : ℝ) * P.valueDifferenceBound =
+          (n : ℝ) * (2 * P.valueDifferenceBound) by ring]
+      rw [ENNReal.ofReal_mul (Nat.cast_nonneg n), ENNReal.ofReal_natCast]
 
 /-- The interior indices of the `2n+1`-state nearest-neighbor process. -/
 abbrev Example1Interior (n : ℕ) :=
