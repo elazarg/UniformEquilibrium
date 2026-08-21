@@ -219,6 +219,31 @@ theorem tendsto_quittingRootSequenceTerminalValue_truncatedRoots
     simpa only [quittingElementaryTailRoots_never, hterminalShift] using hconv
 
 omit [DecidableEq ι] in
+/-- The stochastic-game terminal value of a root sequence is exactly the absolutely
+convergent series of survival-weighted one-stage absorbing contributions.  In particular,
+the production terminal semantics assigns zero to the event of never absorbing. -/
+theorem quittingRootSequenceTerminalValue_eq_tsum_absorbingContribution
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ) :
+    quittingRootSequenceTerminalValue reward roots who start =
+      ∑' offset, quittingJointSurvivalWeight roots start offset *
+        quittingRootAbsorbingContribution reward (roots (start + offset)) who := by
+  let shifted : ℕ → ι → PMF Bool := fun time => roots (start + time)
+  have hterminal := tendsto_quittingRootSequenceTerminalValue_truncatedRoots
+    reward roots who start
+  simp_rw [quittingRootSequenceTerminalValue_quittingTruncatedRoots_eq_sum] at hterminal
+  have hterminal' : Tendsto (fun fuel =>
+      ∑ offset ∈ Finset.range fuel,
+        quittingJointSurvivalWeight roots start offset *
+          quittingRootAbsorbingContribution reward (roots (start + offset)) who)
+      atTop (nhds (quittingRootSequenceTerminalValue reward roots who start)) := by
+    simpa [shifted, quittingJointSurvivalWeight_eq_shift] using hterminal
+  have hseries :=
+    (summable_quittingJointSurvivalWeight_mul_quittingRootAbsorbingContribution
+      reward roots who start).hasSum.tendsto_sum_nat
+  exact tendsto_nhds_unique hterminal' hseries
+
+omit [DecidableEq ι] in
 /-- **Phantom-boundary decomposition.**  A convergent bounded prescribed
 path differs from the actual terminal payoff by precisely the limiting
 survival probability times its limiting annotation. -/

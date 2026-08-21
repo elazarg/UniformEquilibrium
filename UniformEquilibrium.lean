@@ -377,6 +377,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.DebtOwnerTransferCounterexample
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalPacketSimpleFallbackCounterexample
 import UniformEquilibrium.Quitting.Boundary.Exceptional.BellmanTail
 import UniformEquilibrium.Quitting.Root.SequencePayoff
+import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailLimits
 import UniformEquilibrium.Quitting.Boundary.Exceptional.InfiniteLTG
 import UniformEquilibrium.Quitting.Boundary.Exceptional.SquareNormRigidity
