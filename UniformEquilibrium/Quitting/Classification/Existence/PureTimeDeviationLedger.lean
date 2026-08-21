@@ -144,6 +144,113 @@ theorem quittingPureTimeDeviationLedger
   rw [hstep, hplan, hsplit, hfactor, hCM, hcontinue]
   ring
 
+/-! ## Finite Continue-until deviations -/
+
+/-- Replace one player's marginals by pure Continue before `cutoff`, then
+resume the prescribed root sequence. -/
+def quittingContinueUntilRoots
+    (roots : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ) :
+    ℕ → ι → PMF Bool :=
+  fun time => if time < cutoff then
+    Function.update (roots time) who (PMF.pure false)
+  else roots time
+
+/-- Forcing one player to Continue over a finite window gains exactly the
+opponent-survival-weighted sum of the row's Continue-minus-plan values. -/
+theorem quittingContinueUntil_terminalValue_sub_eq_sum
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) :
+    ∀ (start length : ℕ),
+      quittingRootSequenceTerminalValue reward
+          (quittingContinueUntilRoots roots who (start + length)) who start -
+        quittingRootSequenceTerminalValue reward roots who start =
+      ∑ offset ∈ Finset.range length,
+        quittingOpponentSurvivalWeight roots who start offset *
+          (quittingRootContinuePayoff reward
+              (quittingRootSequenceTailVector reward roots
+                (start + offset + 1))
+              (roots (start + offset)) who -
+            quittingRootSequenceTerminalValue reward roots who
+              (start + offset)) := by
+  intro start length
+  induction length generalizing start with
+  | zero =>
+      have htail : quittingRootSequenceTerminalValue reward
+          (quittingContinueUntilRoots roots who start) who start =
+          quittingRootSequenceTerminalValue reward roots who start := by
+        apply quittingRootSequenceTerminalValue_congr
+        intro offset
+        simp [quittingContinueUntilRoots]
+      simp [htail]
+  | succ length ih =>
+      let forced := quittingContinueUntilRoots roots who (start + (length + 1))
+      have hforcedRoot : forced start =
+          Function.update (roots start) who (PMF.pure false) := by
+        simp [forced, quittingContinueUntilRoots]
+      have hforcedTail : quittingRootSequenceTerminalValue reward forced who
+          (start + 1) =
+          quittingRootSequenceTerminalValue reward
+            (quittingContinueUntilRoots roots who (start + 1 + length)) who
+              (start + 1) := by
+        dsimp only [forced]
+        rw [show start + (length + 1) = start + 1 + length by omega]
+      have hforcedBellman :=
+        quittingRootSequenceTerminalValue_eq_absorbingContribution_add
+          reward forced who start
+      have htailIdentity := ih (start + 1)
+      have htailEq : quittingRootSequenceTerminalValue reward
+          (quittingContinueUntilRoots roots who (start + 1 + length)) who
+            (start + 1) =
+          quittingRootSequenceTerminalValue reward roots who (start + 1) +
+            ∑ offset ∈ Finset.range length,
+              quittingOpponentSurvivalWeight roots who (start + 1) offset *
+                (quittingRootContinuePayoff reward
+                    (quittingRootSequenceTailVector reward roots
+                      (start + 1 + offset + 1))
+                    (roots (start + 1 + offset)) who -
+                  quittingRootSequenceTerminalValue reward roots who
+                    (start + 1 + offset)) := by
+        linarith
+      have hpeel := Finset.sum_range_succ' (fun offset ↦
+        quittingOpponentSurvivalWeight roots who start offset *
+          (quittingRootContinuePayoff reward
+              (quittingRootSequenceTailVector reward roots
+                (start + offset + 1))
+              (roots (start + offset)) who -
+            quittingRootSequenceTerminalValue reward roots who
+              (start + offset))) length
+      have hshift : ∀ offset,
+          quittingOpponentSurvivalWeight roots who start (offset + 1) *
+              (quittingRootContinuePayoff reward
+                  (quittingRootSequenceTailVector reward roots
+                    (start + (offset + 1) + 1))
+                  (roots (start + (offset + 1))) who -
+                quittingRootSequenceTerminalValue reward roots who
+                  (start + (offset + 1))) =
+            quittingFixedOpponentsContinueMass roots who start *
+              (quittingOpponentSurvivalWeight roots who (start + 1) offset *
+                (quittingRootContinuePayoff reward
+                    (quittingRootSequenceTailVector reward roots
+                      (start + 1 + offset + 1))
+                    (roots (start + 1 + offset)) who -
+                  quittingRootSequenceTerminalValue reward roots who
+                    (start + 1 + offset))) := by
+        intro offset
+        rw [quittingOpponentSurvivalWeight_succ_left]
+        rw [show start + (offset + 1) = start + 1 + offset by omega]
+        ring
+      rw [Finset.sum_congr rfl fun offset _ ↦ hshift offset,
+        ← Finset.mul_sum] at hpeel
+      have hzero : quittingOpponentSurvivalWeight roots who start 0 = 1 := by
+        simp [quittingOpponentSurvivalWeight]
+      rw [hforcedBellman, hforcedRoot, hforcedTail, htailEq, hpeel, hzero]
+      rw [quittingRootContinuePayoff_eq_fixedOpponents]
+      simp only [Nat.add_zero, one_mul]
+      change quittingFixedOpponentsContinueReward reward roots who start +
+          quittingFixedOpponentsContinueMass roots who start * (_ + _) - _ = _
+      simp only [quittingRootSequenceTailVector]
+      ring
+
 /-! ## Caps and floors from the solo-exit assumptions -/
 
 /-- The fixed-opponent quit value never exceeds `1` under capped joint
