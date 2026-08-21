@@ -5,6 +5,7 @@ Only UniformEquilibrium and MathUE modules are audited;
 Other modules such as Research and Literature are not to be quoted as formalized.
 -/
 
+import MathUE.AbelCesaro
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
 import MathUE.AlgebraicSelection

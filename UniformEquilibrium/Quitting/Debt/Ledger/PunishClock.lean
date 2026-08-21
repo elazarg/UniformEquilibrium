@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.AbelCesaro
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
 import UniformEquilibrium.Quitting.Terminal.TargetTail.FiniteChainTerminalCompiler
@@ -101,59 +102,6 @@ noncomputable section
 namespace GameTheory
 
 open StochasticGame Math.Probability Math.PMFProduct
-
-/-! ## Abel summation against a partial-sum sequence -/
-
-/-- **Summation by parts.**  A weighted sum rewrites as the weight
-increments tested against the partial sums, plus the final weight times the
-final partial sum. -/
-theorem sum_mul_eq_sum_weightStep_mul_partialSum (weight summand : ℕ → ℝ)
-    (horizon : ℕ) :
-    ∑ stage ∈ Finset.range horizon, weight stage * summand stage =
-      (∑ stage ∈ Finset.range horizon,
-          (weight stage - weight (stage + 1)) *
-            ∑ earlier ∈ Finset.range (stage + 1), summand earlier) +
-        weight horizon * ∑ earlier ∈ Finset.range horizon, summand earlier := by
-  induction horizon with
-  | zero => simp
-  | succ horizon ih =>
-      rw [Finset.sum_range_succ (f := fun stage => weight stage * summand stage),
-        Finset.sum_range_succ (f := fun stage =>
-          (weight stage - weight (stage + 1)) *
-            ∑ earlier ∈ Finset.range (stage + 1), summand earlier),
-        ih, Finset.sum_range_succ (f := summand) (n := horizon)]
-      ring
-
-/-- **Abel's inequality.**  If the weights are antitone and nonnegative and
-every partial sum up to the horizon is at most `ε`, then the weighted sum is
-at most the initial weight times `ε`. -/
-theorem sum_mul_le_initialWeight_mul_of_partialSum_le {weight summand : ℕ → ℝ}
-    {ε : ℝ} (horizon : ℕ)
-    (hanti : ∀ stage, weight (stage + 1) ≤ weight stage)
-    (hlast : 0 ≤ weight horizon)
-    (hpartial : ∀ index, index ≤ horizon →
-      ∑ earlier ∈ Finset.range index, summand earlier ≤ ε) :
-    ∑ stage ∈ Finset.range horizon, weight stage * summand stage ≤
-      weight 0 * ε := by
-  have hstepBound : ∀ stage ∈ Finset.range horizon,
-      (weight stage - weight (stage + 1)) *
-          ∑ earlier ∈ Finset.range (stage + 1), summand earlier ≤
-        (weight stage - weight (stage + 1)) * ε := by
-    intro stage hstage
-    exact mul_le_mul_of_nonneg_left
-      (hpartial (stage + 1) (Finset.mem_range.mp hstage))
-      (sub_nonneg.mpr (hanti stage))
-  have hfinal : weight horizon * ∑ earlier ∈ Finset.range horizon, summand earlier ≤
-      weight horizon * ε :=
-    mul_le_mul_of_nonneg_left (hpartial horizon le_rfl) hlast
-  have htelescope :
-      ∑ stage ∈ Finset.range horizon, (weight stage - weight (stage + 1)) * ε =
-        (weight 0 - weight horizon) * ε := by
-    rw [← Finset.sum_mul, Finset.sum_range_sub' weight horizon]
-  rw [sum_mul_eq_sum_weightStep_mul_partialSum weight summand horizon]
-  have hsum := Finset.sum_le_sum hstepBound
-  rw [htelescope] at hsum
-  nlinarith [hsum, hfinal]
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -620,7 +568,7 @@ theorem quittingRootSequenceHazardTerminalValue_quittingAlwaysContinueHazard_le_
         quittingAlwaysContinueHazard 0 ≤
       quittingRootSequenceTerminalValue reward roots who 0 + ε +
         quittingOpponentSurvivalWeight roots who 0 horizon * (2 * bound) := by
-  have habel := sum_mul_le_initialWeight_mul_of_partialSum_le
+  have habel := MathUE.sum_mul_le_initialWeight_mul_of_partialSum_le
     (weight := quittingOpponentSurvivalWeight roots who 0)
     (summand := quittingLedgerStageAdvantage reward roots who) horizon
     (fun stage => antitone_quittingOpponentSurvivalWeight roots who 0
@@ -743,7 +691,7 @@ theorem quittingRootSequenceHazardTerminalValue_quittingTruncatedRoots_le_of_led
   rw [quittingRootSequenceHazardTerminalValue_quittingTruncatedRoots_alwaysContinue_eq_zero,
     quittingRootSequenceTerminalValue_quittingTruncatedRoots_cutoff_eq_zero,
     sub_zero, mul_zero, add_zero] at hidentity
-  have habel := sum_mul_le_initialWeight_mul_of_partialSum_le
+  have habel := MathUE.sum_mul_le_initialWeight_mul_of_partialSum_le
     (weight := quittingOpponentSurvivalWeight (quittingTruncatedRoots plan cutoff) who 0)
     (summand := quittingLedgerStageAdvantage reward
       (quittingTruncatedRoots plan cutoff) who) cutoff

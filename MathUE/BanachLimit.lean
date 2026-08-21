@@ -114,6 +114,33 @@ theorem eval_mono (L : BanachLimit) {f g : ℕ → ℝ}
   rw [L.eval_sub hg hf] at hpositive
   linarith
 
+/-- A Banach limit is at most `c` when the bounded sequence is eventually
+below `c + ε` for every positive `ε`. -/
+theorem eval_le_of_eventually_le_add (L : BanachLimit) {f : ℕ → ℝ}
+    (hf : IsBoundedSequence f) {c : ℝ}
+    (hupper : ∀ ε, 0 < ε → ∀ᶠ n in atTop, f n ≤ c + ε) :
+    L.eval f ≤ c := by
+  let envelope : ℕ → ℝ := fun n ↦ max (f n) c
+  have henvelope : Tendsto envelope atTop (nhds c) := by
+    apply tendsto_order.2
+    constructor
+    · intro lower hlower
+      filter_upwards [] with n
+      exact hlower.trans_le (le_max_right (f n) c)
+    · intro upper hupperc
+      let ε := (upper - c) / 2
+      have hε : 0 < ε := by dsimp only [ε]; linarith
+      filter_upwards [hupper ε hε] with n hn
+      apply max_lt
+      · exact hn.trans_lt (by dsimp only [ε]; linarith)
+      · exact hupperc
+  have hboundedEnvelope : IsBoundedSequence envelope :=
+    IsBoundedSequence.of_tendsto henvelope
+  calc
+    L.eval f ≤ L.eval envelope :=
+      L.eval_mono hf hboundedEnvelope (fun n ↦ le_max_left _ _)
+    _ = c := L.agreesWithLimit envelope c hboundedEnvelope henvelope
+
 theorem eval_finset_sum (L : BanachLimit) {K : Type} (s : Finset K)
     (f : K → ℕ → ℝ) (hbounded : ∀ k ∈ s, IsBoundedSequence (f k)) :
     L.eval (fun n ↦ ∑ k ∈ s, f k n) = ∑ k ∈ s, L.eval (f k) := by
