@@ -3597,13 +3597,6 @@ def HasNonsingularSingletonDifferences (G : QuittingGame) : Prop := by
   exact ∀ Q : Finset G.Player, 2 ≤ Q.card →
     (SingletonDifferenceMatrix G Q).det ≠ 0
 
-/-- Replace only the reward table while keeping the player type. -/
-abbrev WithReward (G : QuittingGame)
-    (reward : {A : Finset G.Player // A.Nonempty} → Payoff G.Player) :
-    QuittingGame where
-  Player := G.Player
-  reward := reward
-
 /-- The small off-diagonal singleton perturbation described before Lemma 4.1. -/
 def IsNonsingularPerturbation (G : QuittingGame)
     (reward' : {A : Finset G.Player // A.Nonempty} → Payoff G.Player)
@@ -3614,7 +3607,7 @@ def IsNonsingularPerturbation (G : QuittingGame)
   (∀ i j, i ≠ j →
     reward' ⟨{j}, Finset.singleton_nonempty j⟩ i ≤
       G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i) ∧
-  HasNonsingularSingletonDifferences (WithReward G reward')
+  HasNonsingularSingletonDifferences (G.withReward reward')
 
 /-- Uniformly decrease exactly the off-diagonal singleton payoffs. -/
 private def perturbedSingletonReward (G : QuittingGame) (η : ℝ)
@@ -3640,12 +3633,12 @@ private theorem singletonDifferenceMatrix_perturbedSingletonReward
     (G : QuittingGame) [DecidableEq G.Player]
     (η : ℝ) (Q : Finset G.Player) :
     SingletonDifferenceMatrix
-        (WithReward G (perturbedSingletonReward G η)) Q =
+        (G.withReward (perturbedSingletonReward G η)) Q =
       SingletonDifferenceMatrix G Q -
         η • Math.LinearAlgebra.offDiagonalOnes {i // i ∈ Q} := by
   classical
   ext i j
-  simp only [SingletonDifferenceMatrix, WithReward, SoloPayoff,
+  simp only [SingletonDifferenceMatrix, QuittingGame.withReward, SoloPayoff,
     Matrix.sub_apply, Matrix.smul_apply]
   by_cases hij : i = j
   · subst j
@@ -3693,23 +3686,37 @@ private theorem exists_reward_nonsingularPerturbation (G : QuittingGame)
     simp [perturbedSingletonReward, hij, hη.le]
   · change ∀ Q : Finset G.Player, 2 ≤ Q.card →
       (SingletonDifferenceMatrix
-        (WithReward G (perturbedSingletonReward G η)) Q).det ≠ 0
+        (G.withReward (perturbedSingletonReward G η)) Q).det ≠ 0
     intro Q hQ
     rw [singletonDifferenceMatrix_perturbedSingletonReward]
     have hnonsingular := hdet ⟨Q, hQ⟩
     rw [Math.LinearAlgebra.offDiagonalPerturbationPolynomial_eval] at hnonsingular
     exact hnonsingular
 
-/--
-The paper's generic perturbation assertion.  A proof must also show that the
-min-max values vary in the direction needed to preserve normality; no existing
-normalization lemma proves this exact statement.
--/
+/-- The paper's generic perturbation assertion: decreasing all off-diagonal
+singleton rewards by one sufficiently small common amount makes every
+principal difference matrix nonsingular and preserves normality. -/
 theorem exists_nonsingularPerturbation (G : QuittingGame)
     (hnormal : ∀ n, IsNormalPlayer G n) {tol : ℝ} (htol : 0 < tol) :
     ∃ reward', IsNonsingularPerturbation G reward' tol ∧
-      ∀ n, IsNormalPlayer (WithReward G reward') n := by
-  sorry
+      ∀ n, IsNormalPlayer (G.withReward reward') n := by
+  obtain ⟨η, hη, _hηtol, hperturb⟩ :=
+    exists_reward_nonsingularPerturbation G htol
+  refine ⟨perturbedSingletonReward G η, hperturb, ?_⟩
+  intro n
+  have hreward : ∀ A,
+      perturbedSingletonReward G η A n ≤ G.reward A n := by
+    intro A
+    simp only [perturbedSingletonReward]
+    split_ifs
+    · linarith
+    · exact le_rfl
+  calc
+    MinMaxQuit (G.withReward (perturbedSingletonReward G η)) n ≤
+        MinMaxQuit G n := minMaxQuit_mono_reward G _ n hreward
+    _ ≤ SoloPayoff G n := hnormal n
+    _ = SoloPayoff (G.withReward (perturbedSingletonReward G η)) n := by
+      simp [SoloPayoff]
 
 /-- Every matrix entry is bounded in absolute value by `B`. -/
 def MatrixEntriesBounded {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ)
