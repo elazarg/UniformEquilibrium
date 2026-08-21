@@ -38,6 +38,10 @@ inductive PrincipalQClockEpochOutcome
       (state_tendsto : Tendsto (fun n =>
         (principalQClockOrbit M hdiag hQ hstepBound initial n).state)
           atTop (nhds restart.state))
+      (scaled_distance_le :
+        dist (principalQClockScaledState initial)
+            (principalQClockScaledState restart) ≤
+          principalQMatrixSpeedBound M * (restart.time - initial.time))
 
 /-- A finite target is crossed in one epoch, or that epoch has a strictly
 later Zeno restart node. -/
@@ -74,6 +78,30 @@ theorem nonempty_principalQClockEpochOutcome
     have hstrict : initial.time < restart.time := by
       rw [hrestartTime]
       exact hfirst.trans_le hfirstLeLimit
-    exact ⟨.restarts restart hstrict hstate⟩
+    have htimeRestart : Tendsto (fun n =>
+        (principalQClockOrbit M hdiag hQ hstepBound initial n).time)
+        atTop (nhds restart.time) := by
+      rw [hrestartTime]
+      exact htime
+    have hscaledRestart : Tendsto (fun n => principalQClockScaledState
+        (principalQClockOrbit M hdiag hQ hstepBound initial n))
+        atTop (nhds (principalQClockScaledState restart)) := by
+      simpa only [principalQClockScaledState] using htimeRestart.smul hstate
+    have hleft : Tendsto (fun n => dist (principalQClockScaledState initial)
+        (principalQClockScaledState
+          (principalQClockOrbit M hdiag hQ hstepBound initial n)))
+        atTop (nhds (dist (principalQClockScaledState initial)
+          (principalQClockScaledState restart))) :=
+      tendsto_const_nhds.dist hscaledRestart
+    have hright : Tendsto (fun n => principalQMatrixSpeedBound M *
+        ((principalQClockOrbit M hdiag hQ hstepBound initial n).time -
+          initial.time)) atTop
+        (nhds (principalQMatrixSpeedBound M *
+          (restart.time - initial.time))) :=
+      tendsto_const_nhds.mul (htimeRestart.sub tendsto_const_nhds)
+    have hdistance := le_of_tendsto_of_tendsto' hleft hright fun n =>
+      dist_principalQClockOrbit_scaledState_le
+        M hdiag hQ hstepBound initial n
+    exact ⟨.restarts restart hstrict hstate hdistance⟩
 
 end GameTheory.QuittingLCPClassification
