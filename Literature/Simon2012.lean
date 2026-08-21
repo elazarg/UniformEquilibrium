@@ -6551,12 +6551,15 @@ def Section4Omega (G : QuittingGame) (M d ρ ξ R ε : ℝ) : ℝ :=
   d * ε * ξ * ρ * Section4Delta G M ε /
     (200 * R * (Fintype.card G.Player : ℝ) ^ 2 * M)
 
-/-- The cutoff `λ` used to glue the structure homotopy to the identity near `D`. -/
-def IsSection4Cutoff (G : QuittingGame) (R δ : ℝ)
+/--
+The cutoff `λ` used to glue the structure homotopy to the identity near `D`.
+Its support radius is the paper's `ω`, not the separate quitting bound `δ`.
+-/
+def IsSection4Cutoff (G : QuittingGame) (R ω : ℝ)
     (cutoff : Payoff G.Player → UnitInterval) : Prop :=
   Continuous cutoff ∧
   (∀ x ∈ LowerBoundary G R, (cutoff x : ℝ) = 1) ∧
-  (∀ x, δ ≤ EuclideanInfDist x (LowerBoundary G R) → (cutoff x : ℝ) = 0) ∧
+  (∀ x, ω ≤ EuclideanInfDist x (LowerBoundary G R) → (cutoff x : ℝ) = 0) ∧
   ∀ x ∈ TruncatedW G R \ LowerBoundary G R, (cutoff x : ℝ) < 1
 
 /-- The first coordinate `x(a)` of the deformed graph. -/
@@ -6961,12 +6964,13 @@ Lemma 4.3's coordinate drift statement for `z = f(x,p)`, under the standing
 Section 3--4 choices used in its proof.  The deformed graph coordinate is the
 separate vector `y = λx + (1-λ)z`.  The hypotheses are not optional: the paper
 uses normality, exclusion of the two simple equilibrium classes, the common
-motion parameter, the constants `ξ,R`, and the support properties of the
-cutoff.  The missing proof is the paper's three-way split according to the
+motion parameter, the constants `ξ,R`, the accuracy restriction `ε < ρ/3`, and
+the cutoff supported in the radius `ω` defined in Section 4.3.  The missing proof
+is the paper's three-way split according to the
 player's quitting probability and continuation coordinate, with Lemma 2.2
 supplying the strict coordinate increase in the low-rationality case.
 -/
-theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R δ : ℝ)
+theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
     (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M)
     (hd : 0 < d) (hd1 : d ≤ 1)
@@ -6977,7 +6981,8 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R δ : ℝ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (inverse : PhiInverseData G M d)
     (cutoff : Payoff G.Player → UnitInterval)
-    (hcutoff : IsSection4Cutoff G R δ cutoff)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
     (a : Payoff G.Player)
     (haC : a ∈ TruncatedW G R)
     (hcutoff0 : 0 < (cutoff a : ℝ)) (hcutoff1 : (cutoff a : ℝ) < 1)
@@ -7134,7 +7139,7 @@ theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (inverse : PhiInverseData G M d)
     (cutoff : Payoff G.Player → UnitInterval)
-    (hcutoff : IsSection4Cutoff G R δ cutoff)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
     (hε : 0 < ε) (hεη : ε < η / 3) (hερ : ε < ρ / 3)
     (hδ : δ = Section4Delta G M ε) :
     Question1Hypotheses
