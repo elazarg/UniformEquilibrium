@@ -28,6 +28,59 @@ open scoped unitInterval
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
+/-- The zero scaled state at a positive paper clock. -/
+def zeroPrincipalQClockNode [Nonempty ι] (start : ℝ) (hstart : 0 < start) :
+    PrincipalQClockNode ι :=
+  principalQClockNodeOfScaledState start hstart 0 ⟨by simp, by
+    exact ⟨Classical.choice inferInstance, by simp⟩⟩
+
+omit [DecidableEq ι] in
+@[simp] theorem zeroPrincipalQClockNode_time [Nonempty ι]
+    (start : ℝ) (hstart : 0 < start) :
+    (zeroPrincipalQClockNode start hstart : PrincipalQClockNode ι).time = start :=
+  rfl
+
+omit [DecidableEq ι] in
+@[simp] theorem zeroPrincipalQClockNode_scaledState [Nonempty ι]
+    (start : ℝ) (hstart : 0 < start) :
+    principalQClockScaledState
+      (zeroPrincipalQClockNode start hstart : PrincipalQClockNode ι) = 0 := by
+  exact principalQClockNodeOfScaledState_scaledState _ _ _ _
+
+/-- One exact principal-Q approximation, retaining the clock mass path and
+its mesh-support certificate for later compact passage. -/
+structure PrincipalQAbsorptionApproximation [Nonempty ι]
+    (M : ι → ι → ℝ) (start mesh : ℝ) where
+  start_pos : 0 < start
+  start_lt_one : start < 1
+  mesh_pos : 0 < mesh
+  node : PrincipalQClockNode ι
+  node_time : node.time = 1
+  mass : PrincipalQClockMassPath M (zeroPrincipalQClockNode start start_pos) node
+  mesh_supported : mass.IsMeshSupported mesh
+
+omit [DecidableEq ι] in
+/-- Projective-Q viability supplies one exact mesh-supported approximation at
+every positive subunit starting clock and every positive mesh. -/
+theorem exists_principalQAbsorptionApproximation [Nonempty ι]
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M)
+    (start mesh : ℝ) (hstart : 0 < start) (hstartOne : start < 1)
+    (hmesh : 0 < mesh) :
+    Nonempty (PrincipalQAbsorptionApproximation M start mesh) := by
+  let initial : PrincipalQClockNode ι := zeroPrincipalQClockNode start hstart
+  obtain ⟨node, hnodeTime, mass, hsupported⟩ :=
+    exists_principalQClockMassPath_at_time_isMeshSupported M hdiag hQ hmesh
+      initial 1 (by simpa [initial] using hstartOne.le)
+  exact ⟨{
+    start_pos := hstart
+    start_lt_one := hstartOne
+    mesh_pos := hmesh
+    node := node
+    node_time := hnodeTime
+    mass := mass
+    mesh_supported := hsupported }⟩
+
 /-- Reverse accumulated clock mass into cumulative absorption mass. -/
 def PrincipalQClockMassPath.absorptionPrefixPath
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
