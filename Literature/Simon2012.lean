@@ -2810,7 +2810,15 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
       1 - (1 / 20 : ℝ) *
         (ρ / (2 * (Fintype.card G.Player : ℝ) * M)) ^
           Fintype.card G.Player ≤ (z.1.2 j : ℝ) := by
-  sorry
+  refine ⟨?_, ?_, ?_⟩
+  · sorry
+  · intro j hj
+    exact lemma3_4_positive_coordinate G M d ρ ξ R hplayers hM hd hd1
+      hmotion hconstants z j (by simpa only [ha] using hj)
+  · intro j hj hbeta
+    exact lemma3_4_negative_coordinate_probability G M d ρ ξ R
+      hplayers hM hd hd1 hmotion hconstants z j
+        (by simpa only [ha] using hj)
 
 private theorem endpointDifference_eq_forced (G : QuittingGame)
     [DecidableEq G.Player] (r : Payoff G.Player)
