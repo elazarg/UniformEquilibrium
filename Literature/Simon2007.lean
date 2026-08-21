@@ -9359,6 +9359,66 @@ private theorem quittingDDPFinitePath_terminal_persists
   have heq : a + (b - a) = b := Nat.add_sub_of_le hab
   simpa only [heq] using go (b - a) (by omega)
 
+/-- A positive-probability prefix that remains live sampled only Continue actions. -/
+private theorem quittingDDPFinitePath_action_false_of_live_end
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) {k : ℕ}
+    (path : DDPFinitePath (quittingDecisionProcess G p n T M hM) k)
+    (hstart : path.x 0 = (0, ∅))
+    (hprobability : path.probability (quittingDecisionProcess G p n T M hM) ≠ 0)
+    (hkT : k ≤ T) (hend : path.x (Fin.last k) = (k, ∅)) (j : Fin k) :
+    path.y j = false := by
+  let P := quittingDecisionProcess G p n T M hM
+  have hfactor : ∀ t : Fin k,
+      P.move (path.x t.castSucc) (path.y t) (path.x t.succ) ≠ 0 := by
+    intro t hzero
+    apply hprobability
+    rw [DDPFinitePath.probability]
+    apply Finset.prod_eq_zero (Finset.mem_univ t)
+    rw [hzero, mul_zero]
+  have hstate : path.x j.castSucc = (j.1, ∅) := by
+    have hreachable := quittingDDPFinitePath_reachable G p n T M hM path hstart
+      hprobability j.castSucc
+    rcases hreachable with hlive | hterminal
+    · apply Prod.ext
+      · simpa [min_eq_left (show j.1 ≤ T by omega)] using hlive.2
+      · exact hlive.1
+    · exfalso
+      have hpersist := quittingDDPFinitePath_terminal_persists G p n T M hM path
+        hprobability (show j.1 ≤ k by omega) le_rfl (show j.1 ≤ k by omega)
+        hterminal.1
+      have hcoalition := congrArg Prod.snd hpersist
+      have hlast : (⟨k, by omega⟩ : Fin (k + 1)) = Fin.last k := by ext; simp
+      have hend' : path.x ⟨k, by omega⟩ = (k, ∅) := by rwa [hlast]
+      rw [hend'] at hcoalition
+      have hindex : (⟨j.1, by omega⟩ : Fin (k + 1)) = j.castSucc := by rfl
+      have hempty : (path.x j.castSucc).2 = ∅ := by
+        rw [← hindex]
+        exact hcoalition.symm
+      rw [hempty] at hterminal
+      exact Finset.not_nonempty_empty hterminal.1
+  by_contra hfalse
+  have htrue : path.y j = true := Bool.eq_true_of_not_eq_false hfalse
+  have hnextTerminal : (path.x j.succ).2.Nonempty := by
+    apply quittingDDPMove_true_nonempty G p n T j.1 (by omega)
+    have hjmove := hfactor j
+    change quittingDDPMove G p n T (path.x j.castSucc) (path.y j)
+      (path.x j.succ) ≠ 0 at hjmove
+    rwa [hstate, htrue] at hjmove
+  have hpersist := quittingDDPFinitePath_terminal_persists G p n T M hM path
+    hprobability (show j.1 + 1 ≤ k by omega) le_rfl (show j.1 + 1 ≤ k by omega)
+    hnextTerminal
+  have hcoalition := congrArg Prod.snd hpersist
+  have hlast : (⟨k, by omega⟩ : Fin (k + 1)) = Fin.last k := by ext; simp
+  have hend' : path.x ⟨k, by omega⟩ = (k, ∅) := by rwa [hlast]
+  rw [hend'] at hcoalition
+  have hindex : (⟨j.1 + 1, by omega⟩ : Fin (k + 1)) = j.succ := by rfl
+  have hempty : (path.x j.succ).2 = ∅ := by
+    rw [← hindex]
+    exact hcoalition.symm
+  rw [hempty] at hnextTerminal
+  exact Finset.not_nonempty_empty hnextTerminal
+
 /-- An unreachable state has zero mass under the raw law of the quitting DDP. -/
 private theorem quittingDDPRawLaw_state_eq_zero_of_unreachable
     (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
