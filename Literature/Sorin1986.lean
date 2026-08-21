@@ -3612,12 +3612,13 @@ def FiniteStageGame.perfectPublicEquilibriumPayoffs
 
 /-! Immediately after Lemma 2 the paper states that its convergence result
 does not extend to perfect equilibria and cites Fudenberg--Maskin [5]. The
-counterexample is not printed, so this is an exact open citation claim. -/
-def ReportedPerfectEquilibriumFailureClaim : Prop :=
+counterexample is not printed, so its existence remains unproved here. -/
+theorem reported_perfect_equilibrium_failure :
     ∃ G : FiniteStageGame,
       ¬HausdorffConvergesAtZero
         G.perfectPublicEquilibriumPayoffs
-        G.individuallyRationalPayoffs
+        G.individuallyRationalPayoffs := by
+  sorry
 
 /-! Lemma 3 is block concatenation.  The feasible clause uses the exact
 public-history dispatcher below; the equilibrium clause additionally requires
@@ -4795,6 +4796,43 @@ private theorem FiniteStageGame.expectedStagePayoff_eq_expect_pinInitialAction
         (root who)
         (fun action => Math.PMFProduct.pmfPi
           (Function.update root who (PMF.pure action))) value)
+
+/-- A finite repeated payoff is affine in one player's initial mixed action
+when all continuation behavior is held fixed. -/
+private theorem FiniteStageGame.finitePayoff_eq_expect_pinInitialAction
+    (G : FiniteStageGame) (horizon : ℕ) (profile : G.BehaviorProfile)
+    (who : G.Player) :
+    G.finitePayoff horizon profile who =
+      Math.Probability.expect (G.initialMixedProfile profile who)
+        (fun action => G.finitePayoff horizon
+          (Function.update profile who
+            (G.pinInitialAction profile who action)) who) := by
+  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI (player : G.Player) : Finite (G.kernel.Strategy player) := by
+    change Finite (G.Action player)
+    exact Finite.of_fintype _
+  letI : Finite (∀ player, G.kernel.Strategy player) := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  letI : Finite G.repeatedGame.State :=
+    inferInstanceAs (Finite PUnit)
+  unfold FiniteStageGame.finitePayoff
+  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  simp_rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  rw [show (∑ time ∈ Finset.range horizon,
+        G.repeatedGame.expectedStagePayoff profile PUnit.unit time who) =
+      ∑ time ∈ Finset.range horizon,
+        Math.Probability.expect (G.initialMixedProfile profile who)
+          (fun action => G.repeatedGame.expectedStagePayoff
+            (Function.update profile who
+              (G.pinInitialAction profile who action))
+            PUnit.unit time who) by
+    apply Finset.sum_congr rfl
+    intro time _
+    exact G.expectedStagePayoff_eq_expect_pinInitialAction
+      profile who time]
+  rw [sum_expect_comm_range, ← Math.Probability.expect_const_mul]
 
 /-- After the first action, the nondeviator in the critical profile copies
 the deviator's initial action forever. -/
@@ -9192,11 +9230,12 @@ theorem proposition_13 (G : FiniteStageGame) (a : Payoff G.Player)
 one-stage equilibrium-payoff set is a singleton, the finite-horizon
 equilibrium-payoff sets converge to `Δ`. The cited theorem is not proved in
 this paper. -/
-def BenoitKrishnaReportedConverseClaim : Prop :=
+theorem benoit_krishna_reported_converse :
   ∀ (G : FiniteStageGame), Fintype.card G.Player = 2 →
     (∀ a, G.oneStageEquilibriumPayoffs ≠ {a}) →
     HausdorffConvergesAtTop G.finiteEquilibriumPayoffs
-      G.individuallyRationalPayoffs
+      G.individuallyRationalPayoffs := by
+  sorry
 
 /-- Every finite repetition of the Prisoner's Dilemma has only `(1,1)`. -/
 theorem prisonersDilemma_En_eq_singleton :
@@ -10904,13 +10943,14 @@ theorem concluding_remark_4 (α β x y : ℝ)
 
 /-- Added in proof: without full dimensionality or two players, Lemma 2 is
 false. The paper cites this three-player Forges--Mertens--Neyman counterexample
-but does not print its payoff table, so the claim remains open. -/
-def AddedInProofCounterexampleClaim : Prop :=
+but does not print its payoff table, so its existence remains unproved here. -/
+theorem added_in_proof_counterexample :
   ∃ G : FiniteStageGame,
     Fintype.card G.Player = 3 ∧
       affineDimension G.individuallyRationalPayoffs = 2 ∧
       ¬FullDimensional G.individuallyRationalPayoffs ∧
       ¬HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
-        G.individuallyRationalPayoffs
+        G.individuallyRationalPayoffs := by
+  sorry
 
 end Literature.Sorin1986
