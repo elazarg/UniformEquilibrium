@@ -22925,6 +22925,20 @@ theorem completedStrategy_cutoffDist_eq
     horizon tailError htailError).update who deviation
   exact le_rfl
 
+theorem completedStrategy_cutoffDist_eq_prescribed
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (horizon : ℕ) (tailError : ℝ) (htailError : 0 < tailError) :
+    (publicQuittingGame table blueprint.signalData.law).histDist
+        (blueprint.completedStrategy horizon tailError htailError)
+        .draw horizon =
+      (publicQuittingGame table blueprint.signalData.law).histDist
+        blueprint.strategy .draw horizon := by
+  apply (publicQuittingGame table
+    blueprint.signalData.law).histDist_eq_of_profilesAgreeBefore
+  exact blueprint.completedStrategy_agreesBefore
+    horizon tailError htailError
+  exact le_rfl
+
 private theorem publicQuittingState_parity
     {Signal : Type} [Fintype Signal]
     (table : Table ι) (signalLaw : PMF Signal)
@@ -23045,6 +23059,45 @@ private theorem publicExpectedStagePayoff_le_one
             _ = 1 := Math.Probability.expect_const _ _
     _ = 1 := Math.Probability.expect_const _ _
 
+private theorem neg_one_le_publicExpectedStagePayoff
+    {Signal : Type} [Fintype Signal]
+    (table : Table ι) (hbounded : TablePayoffsBounded table)
+    (signalLaw : PMF Signal)
+    (profile : (publicQuittingGame table signalLaw).BehaviorProfile)
+    (initial : (publicQuittingGame table signalLaw).State)
+    (time : ℕ) (who : ι) :
+    -1 ≤ (publicQuittingGame table signalLaw).expectedStagePayoff
+      profile initial time who := by
+  unfold StochasticGame.expectedStagePayoff
+  calc
+    -1 = expect ((publicQuittingGame table signalLaw).histDist
+        profile initial time) (fun _ => -1) :=
+      (Math.Probability.expect_const _ _).symm
+    _ ≤ expect ((publicQuittingGame table signalLaw).histDist
+        profile initial time)
+        (fun history => (publicQuittingGame table signalLaw).stageEUAt
+          profile history who) := by
+      apply Math.Probability.expect_mono
+      intro history
+      unfold StochasticGame.stageEUAt
+      calc
+        -1 = expect ((publicQuittingGame table signalLaw).stageActionDist
+            profile history) (fun _ => -1) :=
+          (Math.Probability.expect_const _ _).symm
+        _ ≤ expect ((publicQuittingGame table signalLaw).stageActionDist
+            profile history)
+            (fun action => (publicQuittingGame table signalLaw).stagePayoff
+              history.2 action who) := by
+                apply Math.Probability.expect_mono
+                intro action
+                cases history.2 with
+                | draw =>
+                    exact (neg_le_of_abs_le (hbounded.2 who))
+                | active signal =>
+                    exact (neg_le_of_abs_le (hbounded.2 who))
+                | absorbed quitters =>
+                    exact (neg_le_of_abs_le (hbounded.1 quitters who))
+
 private theorem publicExpectedStagePayoff_eq_publicFinitePayoff
     {signalCount : ℕ}
     (table : Table ι) (signalLaw : PMF (Fin (signalCount + 1)))
@@ -23162,6 +23215,31 @@ private theorem completedStrategy_afterHistoryExpectedPayoff_eq
       (blueprint.punishmentChild horizon tailError htailError)
       base who ((publicQuittingGame table
         blueprint.signalData.law).afterHistoryStrategy deviation base) length
+
+private theorem completedStrategy_afterHistoryExpectedPayoff_eq_prescribed
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (horizon : ℕ) (tailError : ℝ) (htailError : 0 < tailError)
+    (base : (publicQuittingGame table
+      blueprint.signalData.law).Hist horizon)
+    (length : ℕ) (who : ι) :
+    (publicQuittingGame table blueprint.signalData.law).expectedStagePayoff
+        ((publicQuittingGame table blueprint.signalData.law).afterHistoryProfile
+          (blueprint.completedStrategy horizon tailError htailError) base)
+        base.2 length who =
+      (publicQuittingGame table blueprint.signalData.law).expectedStagePayoff
+        (blueprint.punishmentChild horizon tailError htailError base)
+        base.2 length who := by
+  let G := publicQuittingGame table blueprint.signalData.law
+  change G.expectedStagePayoff
+      (G.afterHistoryProfile
+        (G.terminalChildDispatcher horizon blueprint.strategy
+          (blueprint.punishmentChild horizon tailError htailError)) base)
+      base.2 length who = _
+  rw [G.afterHistoryProfile_terminalChildDispatcher_canonical]
+  exact G.expectedStagePayoff_canonicalTerminalChildProfile
+    horizon blueprint.strategy
+    (blueprint.punishmentChild horizon tailError htailError)
+    base length who
 
 /-! The continuation value attached to a live control mode.  At an absorbed
 mode the actual terminal payoff is read from the public state instead. -/
@@ -24341,6 +24419,232 @@ private theorem completedStrategy_deviationPayoff_le
     horizon hodd htailError hslack suffixThreshold suffixHorizon hsuffix
     hfinite hwrong who deviation).le
 
+private theorem completedStrategy_localPrescribedDifference_le
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (horizon : ℕ) {tailError : ℝ} (htailError : 0 < tailError)
+    (base : (publicQuittingGame table
+      blueprint.signalData.law).Hist horizon)
+    (length : ℕ) (who : ι) :
+    |(publicQuittingGame table blueprint.signalData.law).expectedStagePayoff
+        ((publicQuittingGame table blueprint.signalData.law).afterHistoryProfile
+          (blueprint.completedStrategy horizon tailError htailError) base)
+        base.2 length who -
+      (publicQuittingGame table blueprint.signalData.law).expectedStagePayoff
+        ((publicQuittingGame table blueprint.signalData.law).afterHistoryProfile
+          blueprint.strategy base) base.2 length who| ≤
+      2 * Math.Probability.transientCharge
+        (absorbedCore (table := table)) (blueprint.mode horizon base) := by
+  rw [blueprint.completedStrategy_afterHistoryExpectedPayoff_eq_prescribed
+    horizon tailError htailError base length who]
+  have hmatches := blueprint.mode_state horizon base
+  cases hmode : blueprint.mode horizon base with
+  | draw source =>
+      have hcompletedUpper := publicExpectedStagePayoff_le_one table
+        blueprint.payoffsBounded blueprint.signalData.law
+        (blueprint.punishmentChild horizon tailError htailError base)
+        base.2 length who
+      have hcompletedLower := neg_one_le_publicExpectedStagePayoff table
+        blueprint.payoffsBounded blueprint.signalData.law
+        (blueprint.punishmentChild horizon tailError htailError base)
+        base.2 length who
+      have hrawUpper := publicExpectedStagePayoff_le_one table
+        blueprint.payoffsBounded blueprint.signalData.law
+        ((publicQuittingGame table
+          blueprint.signalData.law).afterHistoryProfile blueprint.strategy base)
+        base.2 length who
+      have hrawLower := neg_one_le_publicExpectedStagePayoff table
+        blueprint.payoffsBounded blueprint.signalData.law
+        ((publicQuittingGame table
+          blueprint.signalData.law).afterHistoryProfile blueprint.strategy base)
+        base.2 length who
+      rw [Math.Probability.transientCharge_of_not_mem (by
+        intro hmem
+        exact hmem)]
+      rw [mul_one]
+      exact abs_le.mpr ⟨by linarith, by linarith⟩
+  | active target =>
+      have hcompletedUpper := publicExpectedStagePayoff_le_one table
+        blueprint.payoffsBounded blueprint.signalData.law
+        (blueprint.punishmentChild horizon tailError htailError base)
+        base.2 length who
+      have hcompletedLower := neg_one_le_publicExpectedStagePayoff table
+        blueprint.payoffsBounded blueprint.signalData.law
+        (blueprint.punishmentChild horizon tailError htailError base)
+        base.2 length who
+      have hrawUpper := publicExpectedStagePayoff_le_one table
+        blueprint.payoffsBounded blueprint.signalData.law
+        ((publicQuittingGame table
+          blueprint.signalData.law).afterHistoryProfile blueprint.strategy base)
+        base.2 length who
+      have hrawLower := neg_one_le_publicExpectedStagePayoff table
+        blueprint.payoffsBounded blueprint.signalData.law
+        ((publicQuittingGame table
+          blueprint.signalData.law).afterHistoryProfile blueprint.strategy base)
+        base.2 length who
+      rw [Math.Probability.transientCharge_of_not_mem (by
+        intro hmem
+        exact hmem)]
+      rw [mul_one]
+      exact abs_le.mpr ⟨by linarith, by linarith⟩
+  | absorbed =>
+      cases hstate : base.2 with
+      | draw =>
+          simp [MMatrixPayoffMode.MatchesState, hmode, hstate] at hmatches
+      | active signal =>
+          simp [MMatrixPayoffMode.MatchesState, hmode, hstate] at hmatches
+      | absorbed quitters =>
+          have hcompleted := publicExpectedStagePayoff_absorbed table
+            blueprint.signalData.law
+            (blueprint.punishmentChild horizon tailError htailError base)
+            quitters length who
+          have hraw := publicExpectedStagePayoff_absorbed table
+            blueprint.signalData.law
+            ((publicQuittingGame table
+              blueprint.signalData.law).afterHistoryProfile blueprint.strategy base)
+            quitters length who
+          rw [hcompleted, hraw]
+          simpa only [sub_self, abs_zero] using
+            (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2)
+              (Math.Probability.transientCharge_nonneg _ _))
+
+private theorem completedStrategy_prescribedFiniteDifference_le
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (horizon : ℕ) {tailError : ℝ} (htailError : 0 < tailError)
+    (length : ℕ) (who : ι) :
+    |(publicQuittingGame table blueprint.signalData.law).expectedStagePayoff
+        (blueprint.completedStrategy horizon tailError htailError)
+        .draw (horizon + length) who -
+      (publicQuittingGame table blueprint.signalData.law).expectedStagePayoff
+        blueprint.strategy .draw (horizon + length) who| ≤
+      2 * expect (blueprint.modeDist horizon)
+        (Math.Probability.transientCharge
+          (absorbedCore (table := table))) := by
+  let completed := blueprint.completedStrategy horizon tailError htailError
+  let distribution := (publicQuittingGame table
+    blueprint.signalData.law).histDist blueprint.strategy .draw horizon
+  rw [FixedDepthAdaptivePotentialSplice.expectedStagePayoff_add_eq_expect_afterHistory,
+    FixedDepthAdaptivePotentialSplice.expectedStagePayoff_add_eq_expect_afterHistory]
+  rw [blueprint.completedStrategy_cutoffDist_eq_prescribed horizon
+    tailError htailError]
+  change |expect distribution (fun base =>
+      (publicQuittingGame table
+        blueprint.signalData.law).expectedStagePayoff
+        ((publicQuittingGame table
+          blueprint.signalData.law).afterHistoryProfile completed base)
+        base.2 length who) -
+      expect distribution (fun base =>
+        (publicQuittingGame table
+          blueprint.signalData.law).expectedStagePayoff
+          ((publicQuittingGame table
+            blueprint.signalData.law).afterHistoryProfile
+            blueprint.strategy base) base.2 length who)| ≤ _
+  rw [← Math.Probability.expect_sub]
+  calc
+    |expect distribution (fun base =>
+        (publicQuittingGame table
+          blueprint.signalData.law).expectedStagePayoff
+          ((publicQuittingGame table
+            blueprint.signalData.law).afterHistoryProfile completed base)
+          base.2 length who -
+        (publicQuittingGame table
+          blueprint.signalData.law).expectedStagePayoff
+          ((publicQuittingGame table
+            blueprint.signalData.law).afterHistoryProfile
+            blueprint.strategy base) base.2 length who)| ≤
+      expect distribution (fun base =>
+        |(publicQuittingGame table
+          blueprint.signalData.law).expectedStagePayoff
+          ((publicQuittingGame table
+            blueprint.signalData.law).afterHistoryProfile completed base)
+          base.2 length who -
+        (publicQuittingGame table
+          blueprint.signalData.law).expectedStagePayoff
+          ((publicQuittingGame table
+            blueprint.signalData.law).afterHistoryProfile
+            blueprint.strategy base) base.2 length who|) :=
+        Math.Probability.abs_expect_le_expect_abs _ _
+    _ ≤ expect distribution (fun base =>
+        2 * Math.Probability.transientCharge
+          (absorbedCore (table := table))
+          (blueprint.mode horizon base)) := by
+      apply Math.Probability.expect_mono
+      intro base
+      exact blueprint.completedStrategy_localPrescribedDifference_le
+        horizon htailError base length who
+    _ = 2 * expect distribution (fun base =>
+        Math.Probability.transientCharge
+          (absorbedCore (table := table))
+          (blueprint.mode horizon base)) :=
+      Math.Probability.expect_const_mul _ _ _
+    _ = 2 * expect (blueprint.modeDist horizon)
+        (Math.Probability.transientCharge
+          (absorbedCore (table := table))) := by
+      unfold modeDist
+      rw [Math.Probability.expect_map]
+
+private theorem completedStrategy_prescribedPayoffDifference_lt
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (horizon : ℕ) {tailError : ℝ} (htailError : 0 < tailError)
+    {liveThreshold : ℝ}
+    (hlive : expect (blueprint.modeDist horizon)
+      (Math.Probability.transientCharge
+        (absorbedCore (table := table))) < liveThreshold)
+    (who : ι) :
+    |publicQuittingPayoff table blueprint.signalData.law
+        (blueprint.completedStrategy horizon tailError htailError) who -
+      publicQuittingPayoff table blueprint.signalData.law
+        blueprint.strategy who| < 2 * liveThreshold := by
+  let completed := blueprint.completedStrategy horizon tailError htailError
+  let completedPayoff := publicQuittingPayoff table
+    blueprint.signalData.law completed who
+  let rawPayoff := publicQuittingPayoff table
+    blueprint.signalData.law blueprint.strategy who
+  have htimes : Tendsto (fun length : ℕ => horizon + length)
+      atTop atTop := by
+    apply tendsto_atTop.2
+    intro threshold
+    filter_upwards [eventually_ge_atTop threshold] with length hlength
+    omega
+  have hcompletedLimit : Tendsto (fun length =>
+      publicFinitePayoff table blueprint.signalData.law completed
+        (horizon + length) who) atTop (nhds completedPayoff) :=
+    (tendsto_publicFinitePayoff table blueprint.signalData.law
+      completed who).comp htimes
+  have hrawLimit : Tendsto (fun length =>
+      publicFinitePayoff table blueprint.signalData.law blueprint.strategy
+        (horizon + length) who) atTop (nhds rawPayoff) :=
+    (tendsto_publicFinitePayoff table blueprint.signalData.law
+      blueprint.strategy who).comp htimes
+  have habsLimit : Tendsto (fun length =>
+      |publicFinitePayoff table blueprint.signalData.law completed
+          (horizon + length) who -
+        publicFinitePayoff table blueprint.signalData.law blueprint.strategy
+          (horizon + length) who|) atTop
+      (nhds |completedPayoff - rawPayoff|) :=
+    (hcompletedLimit.sub hrawLimit).abs
+  have hfiniteBound : ∀ length,
+      |publicFinitePayoff table blueprint.signalData.law completed
+          (horizon + length) who -
+        publicFinitePayoff table blueprint.signalData.law blueprint.strategy
+          (horizon + length) who| ≤
+        2 * expect (blueprint.modeDist horizon)
+          (Math.Probability.transientCharge
+            (absorbedCore (table := table))) := by
+    intro length
+    rw [← publicExpectedStagePayoff_eq_publicFinitePayoff,
+      ← publicExpectedStagePayoff_eq_publicFinitePayoff]
+    exact blueprint.completedStrategy_prescribedFiniteDifference_le
+      horizon htailError length who
+  have hlimitBound : |completedPayoff - rawPayoff| ≤
+      2 * expect (blueprint.modeDist horizon)
+        (Math.Probability.transientCharge
+          (absorbedCore (table := table))) := by
+    apply le_of_tendsto habsLimit
+    exact Filter.Eventually.of_forall hfiniteBound
+  dsimp only [completedPayoff, rawPayoff, completed] at hlimitBound ⊢
+  exact hlimitBound.trans_lt
+    (mul_lt_mul_of_pos_left hlive (by norm_num))
+
 theorem expect_payoffPotential_eq_value
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
     (who : ι) : ∀ t,
@@ -24592,6 +24896,21 @@ theorem payoff_eq_value
   dsimp only [payoff] at habs ⊢
   exact sub_eq_zero.mp (abs_eq_zero.mp habs)
 
+theorem completedStrategy_prescribedValueDifference_lt
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (horizon : ℕ) {tailError : ℝ} (htailError : 0 < tailError)
+    {liveThreshold : ℝ}
+    (hlive : expect (blueprint.modeDist horizon)
+      (Math.Probability.transientCharge
+        (absorbedCore (table := table))) < liveThreshold)
+    (who : ι) :
+    |publicQuittingPayoff table blueprint.signalData.law
+        (blueprint.completedStrategy horizon tailError htailError) who -
+      value who| < 2 * liveThreshold := by
+  rw [← blueprint.payoff_eq_value who]
+  exact blueprint.completedStrategy_prescribedPayoffDifference_lt
+    horizon htailError hlive who
+
 end MMatrixPayoffBlueprint
 
 /-! **Theorem 4.3 (paper).** If `R̂` is an M-matrix, every vector in
@@ -24604,7 +24923,113 @@ theorem theorem4_3
     (hbounded : TablePayoffsBounded table)
     (hM : MMatrix (NormalMatrix table)) :
     ∀ value ∈ TildeD table, SunspotEquilibriumPayoff table value := by
-  sorry
+  intro value hvalue
+  have hnormal : (NormalPlayers table).Nonempty := by
+    by_contra hempty
+    rw [Finset.not_nonempty_iff_eq_empty] at hempty
+    have hrange : Set.range (fun owner : NormalPlayer table =>
+        fun who => table.terminal
+          (quittingProjectiveSingletonTerminal owner) who) = ∅ := by
+      ext payoff
+      constructor
+      · rintro ⟨owner, _⟩
+        have : owner.1 ∈ (∅ : Finset ι) := by
+          simpa [hempty] using owner.2
+        simp at this
+      · intro hfalse
+        simp at hfalse
+    have hhull := hvalue.1
+    rw [NormalSingletonHull, hrange, convexHull_empty] at hhull
+    exact hhull
+  letI : Nonempty (NormalPlayer table) := hnormal.to_subtype
+  let representation : NormalSingletonRepresentation table value :=
+    Classical.choice (exists_normalSingletonRepresentation table hvalue.1)
+  have hbuild : ∀ n : ℕ, ∃ profile : SunspotProfile table,
+      SunspotEpsilonEquilibrium table ((n + 1 : ℝ)⁻¹) profile ∧
+      ∀ who, |profile.payoff who - value who| < (n + 1 : ℝ)⁻¹ / 8 := by
+    intro n
+    let requested : ℝ := (n + 1 : ℝ)⁻¹
+    have hrequested : 0 < requested := by
+      dsimp only [requested]
+      positivity
+    let accuracy := requested / 8
+    let wrongThreshold := requested / 8
+    let tailError := requested / 8
+    let slack := requested / 8
+    let liveThreshold := requested / 16
+    have haccuracy : 0 < accuracy := by
+      dsimp only [accuracy]
+      positivity
+    have hwrongThreshold : 0 < wrongThreshold := by
+      dsimp only [wrongThreshold]
+      positivity
+    have htailError : 0 < tailError := by
+      dsimp only [tailError]
+      positivity
+    have hslack : 0 < slack := by
+      dsimp only [slack]
+      positivity
+    have hliveThreshold : 0 < liveThreshold := by
+      dsimp only [liveThreshold]
+      positivity
+    let blueprint : MMatrixPayoffBlueprint table hM value accuracy :=
+      { soloExitNormalized := hnormalized
+        payoffsBounded := hbounded
+        representation := representation
+        value_nonneg := hvalue.2
+        accuracy_pos := haccuracy }
+    obtain ⟨horizon, hodd, hwrong, hlive⟩ :=
+      blueprint.exists_completionCutoff hwrongThreshold hliveThreshold
+    obtain ⟨suffixThreshold, hfinite⟩ :=
+      blueprint.exists_punishmentFiniteCap_bound htailError hslack
+    let profile := blueprint.completedProfile horizon tailError htailError
+    refine ⟨profile, ?_, ?_⟩
+    · intro who deviation
+      have hdeviation := blueprint.completedStrategy_deviationPayoff_le
+        horizon hodd htailError hslack suffixThreshold hfinite hwrong
+        who deviation
+      have hprescribed :=
+        blueprint.completedStrategy_prescribedValueDifference_lt
+          horizon htailError hlive who
+      change publicQuittingPayoff table blueprint.signalData.law
+          (blueprint.completedStrategy horizon tailError htailError) who +
+        requested ≥
+          publicQuittingPayoff table blueprint.signalData.law
+            (Function.update
+              (blueprint.completedStrategy horizon tailError htailError)
+              who deviation) who
+      have hlower := (abs_lt.mp hprescribed).1
+      dsimp only [accuracy, wrongThreshold, tailError, slack,
+        liveThreshold] at hdeviation hlower
+      linarith
+    · intro who
+      have hclose :=
+        blueprint.completedStrategy_prescribedValueDifference_lt
+          horizon htailError hlive who
+      change |publicQuittingPayoff table blueprint.signalData.law
+          (blueprint.completedStrategy horizon tailError htailError) who -
+        value who| < requested / 8
+      dsimp only [liveThreshold] at hclose
+      linarith
+  choose profiles hnash hclose using hbuild
+  refine ⟨profiles, hnash, ?_⟩
+  intro who
+  have herror : Tendsto (fun n : ℕ => (n + 1 : ℝ)⁻¹ / 8)
+      atTop (nhds 0) := by
+    simpa only [one_div, zero_div] using
+      (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)).div_const 8
+  rw [Metric.tendsto_atTop]
+  intro δ hδ
+  rw [Metric.tendsto_atTop] at herror
+  obtain ⟨threshold, hthreshold⟩ := herror δ hδ
+  refine ⟨threshold, ?_⟩
+  intro n hn
+  have hclose' := hclose n who
+  have herror' := hthreshold n hn
+  rw [Real.dist_eq] at herror' ⊢
+  have hnonneg : 0 ≤ (n + 1 : ℝ)⁻¹ / 8 := by positivity
+  exact hclose'.trans (by
+    simpa only [sub_zero, abs_of_nonneg hnonneg] using herror')
 
 /-! ## Section 5 — discussion and open problems -/
 
