@@ -20,12 +20,11 @@ Question 193 isolated the full-core singleton comparison matrix
 ```
 
 and a four-block cap-clearance return whose total-debt map is
-`D ↦ (2 / 9) * D + 1 / 18`.  The remaining qualification in that calculation
-was semantic: its base clearance `(3/4, 0, 1/4, 0)` had not been placed in the
-actual compact terminal-semantic carrier.
+`D ↦ (2 / 9) * D + 1 / 18`. Its base clearance
+`(3/4, 0, 1/4, 0)` had not been placed in the actual compact
+terminal-semantic carrier.
 
-This file closes that qualification.  Starting at zero clearance, two ideal
-singleton blocks reach the charged-return base exactly:
+This file closes that qualification. Starting at zero clearance,
 
 ```
 (0, 0, 0, 0)
@@ -33,15 +32,11 @@ singleton blocks reach the charged-return base exactly:
   -- owner 3, survival 3/4 --> (3/4, 0, 1/4, 0).
 ```
 
-Each ideal block is a limit of genuine finite positive-hazard prefixes, so the
-base lies in the actual carrier whenever the zero-clearance starting pair does.
-The four-block return can then be iterated inside the carrier.  Its debt tends
-to the exact fixed point `1/14`; consequently every global terminal-semantic
-debt floor for such a reward completion is at most `1/14`.
-
-The result does not prove that the floor is zero.  It removes the reachability
-caveat from the charged return and turns the local calculation into a genuine
-global carrier bound.
+Each ideal singleton block is a limit of genuine finite positive-hazard
+prefixes. The four-block return can therefore be iterated inside the actual
+carrier. Its debt tends to the exact fixed point `1/14`, so every global
+terminal-semantic debt floor for such a reward completion is at most `1/14`.
+This does not prove that the floor is zero.
 -/
 
 noncomputable section
@@ -51,7 +46,9 @@ namespace FullCoreDeadlockChargedReturn
 
 open Filter Finset
 open QuittingLCPClassification
+open IdealSingletonBlockApproximation
 open IdealSingletonCarrierBridge
+open scoped Topology
 
 abbrev Player := Fin 4
 
@@ -66,9 +63,8 @@ def deadlockMatrix : Player → Player → ℝ :=
     deadlockMatrix who who = 0 := by
   fin_cases who <;> rfl
 
-/-- A concrete rational reward completion.  Every own-singleton payoff is
-one, singleton differences are `deadlockMatrix`, and larger coalitions pay
-zero. -/
+/-- A rational reward completion with normalized singleton matrix
+`deadlockMatrix`. Coalitions of size at least two pay zero. -/
 def reward : {S : Finset Player // S.Nonempty} → Payoff Player :=
   fun S who =>
     if S.1.card = 1 then
@@ -100,133 +96,115 @@ theorem normalizedSoloMatrix_reward :
   rw [reward_singleton, reward_singleton, deadlockMatrix_diagonal]
   ring
 
-/-- Zero cap clearance. -/
+/-- Clearance vectors used by the reach and return. -/
 def zeroClearance : Player → ℝ := ![0, 0, 0, 0]
-
-/-- The intermediate point in the two-block reach. -/
 def reachIntermediate : Player → ℝ := ![0, 2 / 3, 2 / 3, 0]
-
-/-- The base of the charged four-block return. -/
 def chargedBase : Player → ℝ := ![3 / 4, 0, 1 / 4, 0]
-
-/-- First intermediate point of the charged return. -/
 def returnFirst : Player → ℝ := ![1, 0, 0, 0]
-
-/-- Second intermediate point of the charged return. -/
 def returnSecond : Player → ℝ := ![0, 1 / 2, 0, 1 / 2]
-
-/-- Third intermediate point of the charged return. -/
 def returnThird : Player → ℝ := ![0, 1, 2 / 3, 0]
 
 theorem zeroClearance_nonneg : ∀ who, 0 ≤ zeroClearance who := by
   intro who
-  fin_cases who <;> norm_num [zeroClearance]
+  fin_cases who <;>
+    norm_num [zeroClearance, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
 theorem chargedBase_nonneg : ∀ who, 0 ≤ chargedBase who := by
   intro who
-  fin_cases who <;> norm_num [chargedBase]
+  fin_cases who <;>
+    norm_num [chargedBase, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
-/-! ## Exact cap-clearance reach -/
+/-! ## Exact cap-clearance reach and return -/
 
-/-- The first ideal block sends zero clearance to the displayed intermediate
-point. -/
 theorem firstReach_clearance :
     idealSingletonClearance deadlockMatrix 0 (2 / 3) zeroClearance =
       reachIntermediate := by
   funext who
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, zeroClearance,
-      reachIntermediate]
+      reachIntermediate, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
-/-- The second ideal block reaches the charged-return base. -/
 theorem secondReach_clearance :
     idealSingletonClearance deadlockMatrix 3 (3 / 4) reachIntermediate =
       chargedBase := by
   funext who
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, reachIntermediate,
-      chargedBase]
+      chargedBase, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
-/-! ## Exact charged return -/
-
-/-- First cap step of the return. -/
 theorem returnFirst_clearance :
     idealSingletonClearance deadlockMatrix 1 (8 / 9) chargedBase =
       returnFirst := by
   funext who
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, chargedBase,
-      returnFirst]
+      returnFirst, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
-/-- Second cap step of the return. -/
 theorem returnSecond_clearance :
     idealSingletonClearance deadlockMatrix 2 (1 / 2) returnFirst =
       returnSecond := by
   funext who
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, returnFirst,
-      returnSecond]
+      returnSecond, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
-/-- Third cap step of the return. -/
 theorem returnThird_clearance :
     idealSingletonClearance deadlockMatrix 0 (2 / 3) returnSecond =
       returnThird := by
   funext who
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, returnSecond,
-      returnThird]
+      returnThird, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
-/-- Final cap step returns exactly to the base. -/
 theorem returnBase_clearance :
     idealSingletonClearance deadlockMatrix 3 (3 / 4) returnThird =
       chargedBase := by
   funext who
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, returnThird,
-      chargedBase]
+      chargedBase, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
-/-- The first return block has the unique additive charge `2/9`, in
-coordinate three. -/
+/-! ## Exact debt accounting -/
+
 theorem returnFirst_debt (D : ℝ) :
     idealSingletonDebt deadlockMatrix 1 (8 / 9) chargedBase D =
       (8 / 9) * D + 2 / 9 := by
   norm_num [idealSingletonDebt, deadlockMatrix, chargedBase,
-    Fin.sum_univ_succ]
-  ring
+    Fin.sum_univ_succ, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> ring
 
-/-- The second return block is zero-cost. -/
 theorem returnSecond_debt (D : ℝ) :
     idealSingletonDebt deadlockMatrix 2 (1 / 2) returnFirst D =
       (1 / 2) * D := by
-  apply idealSingletonDebt_eq_mul_of_zeroCost
-  · rfl
-  · intro who hwho
-    fin_cases who <;>
-      norm_num [deadlockMatrix, returnFirst] at *
+  norm_num [idealSingletonDebt, deadlockMatrix, returnFirst,
+    Fin.sum_univ_succ, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> ring
 
-/-- The third return block is zero-cost. -/
 theorem returnThird_debt (D : ℝ) :
     idealSingletonDebt deadlockMatrix 0 (2 / 3) returnSecond D =
       (2 / 3) * D := by
-  apply idealSingletonDebt_eq_mul_of_zeroCost
-  · rfl
-  · intro who hwho
-    fin_cases who <;>
-      norm_num [deadlockMatrix, returnSecond] at *
+  norm_num [idealSingletonDebt, deadlockMatrix, returnSecond,
+    Fin.sum_univ_succ, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> ring
 
-/-- The final return block is zero-cost. -/
 theorem returnBase_debt (D : ℝ) :
     idealSingletonDebt deadlockMatrix 3 (3 / 4) returnThird D =
       (3 / 4) * D := by
-  apply idealSingletonDebt_eq_mul_of_zeroCost
-  · rfl
-  · intro who hwho
-    fin_cases who <;>
-      norm_num [deadlockMatrix, returnThird] at *
+  norm_num [idealSingletonDebt, deadlockMatrix, returnThird,
+    Fin.sum_univ_succ, Matrix.cons_val_zero, Matrix.cons_val_one,
+    Matrix.cons_val_two, Matrix.cons_val_three] <;> ring
 
 /-! ## Semantic realization -/
 
-/-- The two-block semantic map which reaches the charged-return base. -/
+/-- The two-block semantic map reaching the charged-return base. -/
 def reachChargedBase
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (pair : QuittingTerminalSemanticPair Player) :
@@ -244,7 +222,6 @@ def chargedReturn
       (idealSingletonSemanticPair reward' 2 (1 / 2)
         (idealSingletonSemanticPair reward' 1 (8 / 9) pair)))
 
-/-- The two-block reach preserves the actual compact semantic carrier. -/
 theorem reachChargedBase_mem_carrier
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (pair : QuittingTerminalSemanticPair Player)
@@ -261,8 +238,6 @@ theorem reachChargedBase_mem_carrier
     (idealSingletonSemanticPair reward' 0 (2 / 3) pair) 3 (3 / 4)
     (by norm_num) (by norm_num) hfirstClearance hfirst
 
-/-- Under the displayed singleton matrix, the two-block semantic reach has
-exactly the charged-base clearance. -/
 theorem capClearance_reachChargedBase
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (pair : QuittingTerminalSemanticPair Player)
@@ -274,7 +249,6 @@ theorem capClearance_reachChargedBase
     capClearance_idealSingletonSemanticPair, hmatrix, hclearance,
     firstReach_clearance, secondReach_clearance]
 
-/-- The charged return preserves the actual carrier. -/
 theorem chargedReturn_mem_carrier
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (pair : QuittingTerminalSemanticPair Player)
@@ -305,8 +279,6 @@ theorem chargedReturn_mem_carrier
   exact idealSingletonSemanticPair_mem_carrier reward' pair₃ 3 (3 / 4)
     (by norm_num) (by norm_num) hclearance₃ hpair₃
 
-/-- On the charged-base fibre, one semantic return comes back to the same cap
-clearance. -/
 theorem capClearance_chargedReturn
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (pair : QuittingTerminalSemanticPair Player)
@@ -321,7 +293,6 @@ theorem capClearance_chargedReturn
     hmatrix, hclearance, returnFirst_clearance, returnSecond_clearance,
     returnThird_clearance, returnBase_clearance]
 
-/-- Exact total-debt return map on the charged-base fibre. -/
 theorem debtSum_chargedReturn
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (pair : QuittingTerminalSemanticPair Player)
@@ -364,9 +335,8 @@ theorem debtSum_chargedReturn
     returnBase_debt, hdebt₃, hdebt₂, hdebt₁]
   ring
 
-/-! ## Iteration and the global `1/14` bound -/
+/-! ## Iteration and the global bound -/
 
-/-- Recursive orbit of the charged return. -/
 def chargedReturnOrbit
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (start : QuittingTerminalSemanticPair Player) :
@@ -374,8 +344,6 @@ def chargedReturnOrbit
   | 0 => start
   | n + 1 => chargedReturn reward' (chargedReturnOrbit reward' start n)
 
-/-- Every orbit point remains in the carrier, retains the charged-base cap,
-and has the exact affine-iteration debt formula. -/
 theorem chargedReturnOrbit_mem_cap_debt
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (start : QuittingTerminalSemanticPair Player)
@@ -407,12 +375,9 @@ theorem chargedReturnOrbit_mem_cap_debt
         (chargedReturnOrbit reward' start n) hmatrix ih.2.1
       rw [ih.2.2] at hdebt
       refine ⟨hmem, hcap, ?_⟩
-      rw [chargedReturnOrbit]
-      rw [hdebt]
-      rw [pow_succ]
+      rw [chargedReturnOrbit, hdebt, pow_succ]
       ring
 
-/-- The orbit debt converges to the exact fixed point `1/14`. -/
 theorem chargedReturnOrbit_debt_tendsto
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (start : QuittingTerminalSemanticPair Player)
@@ -431,8 +396,6 @@ theorem chargedReturnOrbit_debt_tendsto
       (quittingTerminalSemanticDebtSum start - 1 / 14))
   exact hlimit.congr' (Eventually.of_forall fun n => (horbit n).2.2.symm)
 
-/-- Any global debt floor is bounded by the charged-return fixed point once a
-zero-clearance carrier state exists. -/
 theorem globalDebtFloor_le_one_fourteenth
     (reward' : {S : Finset Player // S.Nonempty} → Payoff Player)
     (zeroStart : QuittingTerminalSemanticPair Player)
@@ -449,8 +412,8 @@ theorem globalDebtFloor_le_one_fourteenth
     · rw [hzeroCap]
       exact zeroClearance_nonneg
     · exact hzeroStart
-  have hstartCap : capClearance reward' start.2 = chargedBase := by
-    exact capClearance_reachChargedBase reward' zeroStart hmatrix hzeroCap
+  have hstartCap : capClearance reward' start.2 = chargedBase :=
+    capClearance_reachChargedBase reward' zeroStart hmatrix hzeroCap
   have htendsto := chargedReturnOrbit_debt_tendsto reward' start hmatrix
     hstartCap hstart
   by_contra hnot
@@ -464,9 +427,8 @@ theorem globalDebtFloor_le_one_fourteenth
     (chargedReturnOrbit_mem_cap_debt reward' start hmatrix hstartCap hstart N).1
   linarith [hN N (le_refl N)]
 
-/-! ## Concrete reward completion -/
+/-! ## Concrete completion -/
 
-/-- The Never boundary of the concrete completion has zero cap clearance. -/
 theorem never_capClearance :
     capClearance reward (quittingNeverBoundarySemanticPair reward).2 =
       zeroClearance := by
@@ -474,18 +436,17 @@ theorem never_capClearance :
   fin_cases who <;>
     norm_num [capClearance, ownSingleton, quittingNeverBoundarySemanticPair,
       reward_singleton, reward_quittingSingleton, deadlockMatrix,
-      zeroClearance]
+      zeroClearance, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
-/-- The Never boundary has total debt four, so the `1/14` bound is not merely
-the initial boundary value. -/
 theorem never_debtSum :
     quittingTerminalSemanticDebtSum
       (quittingNeverBoundarySemanticPair reward) = 4 := by
-  simp [quittingTerminalSemanticDebtSum, quittingTerminalSemanticDebt,
+  norm_num [quittingTerminalSemanticDebtSum, quittingTerminalSemanticDebt,
     quittingNeverBoundarySemanticPair, reward_quittingSingleton,
-    deadlockMatrix, Fin.sum_univ_succ]
+    deadlockMatrix, Fin.sum_univ_succ, Matrix.cons_val_zero,
+    Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three]
 
-/-- The Never semantic pair belongs to the compact carrier. -/
 theorem never_mem_carrier :
     quittingNeverBoundarySemanticPair reward ∈
       quittingTerminalSemanticCarrier reward := by
@@ -495,8 +456,6 @@ theorem never_mem_carrier :
     ?_⟩
   exact quittingTerminalSemanticPair_elementaryCap_never reward
 
-/-- Concrete global consequence: every debt lower bound on the full carrier of
-this rational completion is at most `1/14`. -/
 theorem reward_globalDebtFloor_le_one_fourteenth
     (δ : ℝ)
     (hfloor : ∀ pair ∈ quittingTerminalSemanticCarrier reward,
