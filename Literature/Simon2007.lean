@@ -3098,6 +3098,71 @@ private theorem DDPSemantics.fromState_eq_initialActionMixture
           exact tsum_zero.symm
   · rw [measure_univ, hmixtureUniv]
 
+/-- The return probability from a state is the action mixture of forced-action returns. -/
+private theorem DDPSemantics.fromState_returnsTo_eq_tsum
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) (A : Set P.X) (x : P.X) :
+    S.fromState x (ReturnsTo P A) =
+      ∑' y : P.Y x, P.choose x y * ReturnProbability P S A x y := by
+  rw [S.fromState_eq_initialActionMixture P x]
+  rw [Measure.sum_apply _ (measurableSet_returnsTo P A)]
+  simp only [Measure.smul_apply, smul_eq_mul, ReturnProbability]
+
+/-- The paper's `m_x`: probability of no positive-time return to `A` from `x`. -/
+private def NoReturnProbability (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (A : Set P.X) (x : P.X) : ℝ :=
+  (S.fromState x (ReturnsTo P A)ᶜ).toReal
+
+private theorem noReturnProbability_nonneg (P : DiscreteDecisionProcess)
+    (S : DDPSemantics P) (A : Set P.X) (x : P.X) :
+    0 ≤ NoReturnProbability P S A x := ENNReal.toReal_nonneg
+
+private theorem noReturnProbability_le_one (P : DiscreteDecisionProcess)
+    (S : DDPSemantics P) (A : Set P.X) (x : P.X) :
+    NoReturnProbability P S A x ≤ 1 := by
+  letI : IsProbabilityMeasure (S.fromState x) := S.fromStateProbability x
+  rw [NoReturnProbability, ← ENNReal.toReal_one]
+  apply ENNReal.toReal_mono (by simp)
+  calc
+    S.fromState x (ReturnsTo P A)ᶜ ≤ S.fromState x Set.univ :=
+      measure_mono (subset_univ _)
+    _ = 1 := measure_univ
+
+/-- No-return probability is the action-weighted mean of forced-action no-return masses. -/
+private theorem noReturnProbability_eq_tsum
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) (A : Set P.X) (x : P.X) :
+    NoReturnProbability P S A x =
+      ∑' y : P.Y x, (P.choose x y).toReal *
+        (1 - (ReturnProbability P S A x y).toReal) := by
+  have hmix := congrArg (fun mu : Measure (DDPPath P) => mu (ReturnsTo P A)ᶜ)
+    (S.fromState_eq_initialActionMixture P x)
+  rw [Measure.sum_apply _ (measurableSet_returnsTo P A).compl] at hmix
+  simp only [Measure.smul_apply, smul_eq_mul] at hmix
+  have hafter_ne_top (y : P.Y x) (E : Set (DDPPath P)) :
+      S.afterAction x y E ≠ ⊤ := by
+    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    exact measure_ne_top _ _
+  rw [NoReturnProbability, hmix]
+  rw [ENNReal.tsum_toReal_eq (fun y => ENNReal.mul_ne_top (PMF.apply_ne_top _ _)
+    (hafter_ne_top y _))]
+  apply tsum_congr
+  intro y
+  rw [ENNReal.toReal_mul]
+  have hcomplement : S.afterAction x y (ReturnsTo P A)ᶜ =
+      1 - ReturnProbability P S A x y := by
+    rw [measure_compl (measurableSet_returnsTo P A) (hafter_ne_top y _)]
+    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    rw [measure_univ]
+    rfl
+  rw [hcomplement]
+  rw [ENNReal.toReal_sub_of_le (by
+    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    change S.afterAction x y (ReturnsTo P A) ≤ 1
+    calc
+      S.afterAction x y (ReturnsTo P A) ≤ S.afterAction x y Set.univ :=
+        measure_mono (subset_univ _)
+      _ = 1 := measure_univ) (by simp)]
+  simp
+
 /-- A lower bound for all values in a decision process. -/
 def IsDDPValueLowerBound (P : DiscreteDecisionProcess) (L : ℝ) : Prop :=
   (∀ x, L ≤ P.valueX x) ∧ ∀ x y, L ≤ P.valueY x y
