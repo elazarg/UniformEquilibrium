@@ -43,6 +43,20 @@ def nonnegativeBoundary : Set (ι → ℝ) :=
   {q | IsNonnegativeBoundary q}
 
 omit [DecidableEq ι] in
+/-- The boundary of the finite-dimensional nonnegative orthant is closed. -/
+theorem isClosed_nonnegativeBoundary :
+    IsClosed (nonnegativeBoundary (ι := ι)) := by
+  rw [show nonnegativeBoundary (ι := ι) =
+      (⋂ i, {q : ι → ℝ | 0 ≤ q i}) ∩
+        ⋃ i, {q : ι → ℝ | q i = 0} by
+    ext q
+    simp [nonnegativeBoundary, IsNonnegativeBoundary]]
+  exact (isClosed_iInter fun i =>
+      isClosed_le continuous_const (continuous_apply i)).inter
+    (isClosed_iUnion_of_finite fun i =>
+      isClosed_eq (continuous_apply i) continuous_const)
+
+omit [DecidableEq ι] in
 /-- The complementary-product form says exactly that every nonzero control
 coordinate is supported on a zero coordinate of the state. -/
 theorem mem_principalQSupportControls_iff
