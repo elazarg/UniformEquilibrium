@@ -3,6 +3,7 @@ import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
+import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
 import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
 import UniformEquilibrium.Quitting.Cycles.PeriodicJointSurvival
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
@@ -4493,6 +4494,115 @@ theorem figure2_singletonMass_ge_two_fifteenths_sub_sixtyOne_mul
   · exact honeLower
   · exact htwoLower
   · exact hthreeLower
+
+/-- The finite chronology estimate behind Lemma 11 of the companion proof.
+If player `i`'s continuation value stays at least `1 + δ` through `fuel`,
+then `δ` times the probability that `i` is the unique first quitter in that
+window is at most the equilibrium error. -/
+theorem figure2_delta_mul_finiteSingletonMass_le_epsilon
+    {roots : RootSequence (ι := Fin 4)} {ε δ : ℝ}
+    (hεsmall : ε < 1) (hδ : 0 ≤ δ)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4) (fuel : ℕ)
+    (hfloor : ∀ offset, offset < fuel →
+      1 + δ ≤ quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots who offset) :
+    δ * (⟨0, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤ ε := by
+  have hrootNash : IsεQuittingRootSequenceNash
+      SolanVieilleBoundary.boundaryReward ε roots :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      SolanVieilleBoundary.boundaryReward ε roots).mpr hnash
+  have hcontinue : ∀ offset, offset < fuel →
+      0 < (roots offset who false).toReal := by
+    intro offset _
+    have hlower := (abs_lt.mp (hclose offset who)).1
+    linarith
+  have hgain :=
+    delta_mul_sum_jointSurvivalWeight_mul_quitProbability_le_continueUntil_gain
+      SolanVieilleBoundary.boundaryReward_cappedJointExit roots who 0 fuel hδ
+      (fun offset hoffset => by simpa using hcontinue offset hoffset)
+      (fun offset hoffset => by simpa using hfloor offset hoffset)
+  let hazard : ℕ → PMF Bool := fun time =>
+    if time < fuel then PMF.pure false else roots time who
+  have hdeviation := hrootNash who hazard
+  have hforced : quittingRootSequenceHazardTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who hazard 0 =
+      quittingRootSequenceTerminalValue SolanVieilleBoundary.boundaryReward
+        (quittingContinueUntilRoots roots who fuel) who 0 := by
+    unfold quittingRootSequenceHazardTerminalValue
+    rw [show quittingRootSequenceUpdate roots who hazard =
+        quittingContinueUntilRoots roots who fuel by
+      exact quittingRootSequenceUpdate_continueUntilHazard roots who fuel]
+  rw [hforced] at hdeviation
+  have hsingleton :
+      (⟨0, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤
+        ∑ offset ∈ Finset.range fuel,
+          quittingJointSurvivalWeight roots 0 offset *
+            (roots offset who true).toReal := by
+    rw [← Fin.sum_univ_eq_sum_range]
+    apply Finset.sum_le_sum
+    intro phase _
+    rw [quittingRootCoalitionMass_singleton_eq_opponentContinue_mul_quit]
+    simp only [QuittingFiniteRootWindow.survivalWeight,
+      QuittingFiniteRootWindow.rootAt, Nat.zero_add]
+    have hopponent := quittingStationaryContinueMass_le_one
+      (Function.update (roots phase.val) who (PMF.pure false))
+    have hsurvival := quittingJointSurvivalWeight_nonneg roots 0 phase.val
+    have hquit : 0 ≤ (roots phase.val who true).toReal := ENNReal.toReal_nonneg
+    change quittingJointSurvivalWeight roots 0 phase.val *
+        (quittingStationaryContinueMass
+            (Function.update (roots phase.val) who (PMF.pure false)) *
+          (roots phase.val who true).toReal) ≤ _
+    nlinarith [mul_nonneg hsurvival hquit,
+      mul_nonneg hsurvival
+        (mul_nonneg
+          (quittingStationaryContinueMass_nonneg
+            (Function.update (roots phase.val) who (PMF.pure false))) hquit)]
+  have hscaled := mul_le_mul_of_nonneg_left hsingleton hδ
+  simp only [Nat.zero_add] at hgain
+  linarith
+
+/-- The first stopping-time conclusion in the companion proof: for
+`ε < 10⁻⁴`, every player's continuation value eventually falls below
+`1 + √ε`. -/
+theorem figure2_exists_tail_value_lt_one_add_sqrt
+    {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε0 : 0 < ε) (hεsmall : ε < 1 / 10000)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4) :
+    ∃ time, quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who time <
+        1 + Real.sqrt ε := by
+  by_contra hnever
+  push Not at hnever
+  have hsqrt0 : 0 ≤ Real.sqrt ε := Real.sqrt_nonneg ε
+  have hsqrtSq : Real.sqrt ε ^ 2 = ε := Real.sq_sqrt hε0.le
+  have hsqrtSmall : Real.sqrt ε < 1 / 100 := by
+    nlinarith
+  have hfinite : ∀ fuel,
+      (⟨0, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤
+        Real.sqrt ε := by
+    intro fuel
+    have hchronology := figure2_delta_mul_finiteSingletonMass_le_epsilon
+      (by linarith : ε < 1) hsqrt0 hclose hnash who fuel
+      (fun offset _ => hnever offset)
+    have hmass0 :=
+      (⟨0, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass_nonneg who
+    nlinarith
+  have hinfinite : quittingRootSequenceSingletonMass roots 0 who ≤
+      Real.sqrt ε := by
+    exact le_of_tendsto'
+      (tendsto_finiteWindow_singletonMass roots 0 who) hfinite
+  have hlower :=
+    figure2_singletonMass_ge_two_fifteenths_sub_sixtyOne_mul
+      hε0 hclose hnash who
+  nlinarith
 
 /-- The first omitted Figure 2 assertion: for all sufficiently small positive
 `ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
