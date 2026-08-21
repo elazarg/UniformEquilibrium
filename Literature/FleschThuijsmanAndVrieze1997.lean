@@ -1,6 +1,7 @@
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
+import UniformEquilibrium.Quitting.Cycles.SoloRootSequenceValues
 import UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
 import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
@@ -2379,6 +2380,11 @@ theorem blockRepeatedEquilibrium
 def HasActivePlayerAtEveryStage (profile : MarkovProfile) : Prop :=
   ∀ time, ∃ who, 0 < (profile time who).1
 
+/-- Exactly one player has positive quit probability at a stage. -/
+def IsUniqueActiveAt (profile : MarkovProfile) (time : ℕ) (owner : Player) : Prop :=
+  0 < (profile time owner).1 ∧
+    ∀ who, who ≠ owner → (profile time who).1 = 0
+
 /-- A precise form of "exactly one positive hazard, and the active players
 appear cyclically in the order 1,2,3".  Consecutive stages may keep the same
 owner; every run is eventually followed by the cyclic successor. -/
@@ -2389,6 +2395,968 @@ def HasCyclicSupport (profile : MarkovProfile) : Prop :=
       owner (time + 1) = FTV.CyclicMinimality.nextThree (owner time)) ∧
     (∀ time, ∃ later, time < later ∧
       owner later = FTV.CyclicMinimality.nextThree (owner time))
+
+/-! The decreasing-minimum calculation in Step 2 is purely real algebra.  It
+is isolated here from the semantic argument that supplies its hypotheses. -/
+
+private def minThree (u v w : ℝ) : ℝ := min u (min v w)
+
+private def maxThree (x y z : ℝ) : ℝ := max x (max y z)
+
+private structure InteriorMarkovStep
+    (x y z x' y' z' u v w u' v' w' : ℝ) : Prop where
+  x_pos : 0 < x
+  y_pos : 0 < y
+  z_pos : 0 < z
+  x_lt_one : x < 1
+  y_lt_one : y < 1
+  z_lt_one : z < 1
+  u_eq : u = 1 - z
+  v_eq : v = 1 - x
+  w_eq : w = 1 - y
+  u'_eq : u' = 1 - z'
+  v'_eq : v' = 1 - x'
+  w'_eq : w' = 1 - y'
+  u_rec : u = (1 - y) * (1 - z) * u' + 3 * (1 - y) * z + y * z
+  v_rec : v = (1 - x) * (1 - z) * v' + 3 * x * (1 - z) + x * z
+  w_rec : w = (1 - x) * (1 - y) * w' + 3 * (1 - x) * y + x * y
+
+private theorem InteriorMarkovStep.zero_drop
+    {x y z x' y' z' u v w u' v' w' : ℝ}
+    (h : InteriorMarkovStep x y z x' y' z' u v w u' v' w')
+    (hyz : y ≤ z) :
+    u' < u - z ^ 2 := by
+  have hden : 0 < (1 - y) * (1 - z) :=
+    mul_pos (sub_pos.mpr h.y_lt_one) (sub_pos.mpr h.z_lt_one)
+  have hgap : 0 < 2 * z - y + z ^ 3 * (1 - y) := by
+    have hfirst : 0 < 2 * z - y := by linarith [h.z_pos]
+    have hsecond : 0 ≤ z ^ 3 * (1 - y) :=
+      mul_nonneg (pow_nonneg h.z_pos.le 3) (sub_nonneg.mpr h.y_lt_one.le)
+    linarith
+  have hrec := h.u_rec
+  rw [h.u_eq] at hrec ⊢
+  nlinarith [hden]
+
+private theorem InteriorMarkovStep.one_drop
+    {x y z x' y' z' u v w u' v' w' : ℝ}
+    (h : InteriorMarkovStep x y z x' y' z' u v w u' v' w')
+    (hzx : z ≤ x) :
+    v' < v - x ^ 2 := by
+  have hden : 0 < (1 - x) * (1 - z) :=
+    mul_pos (sub_pos.mpr h.x_lt_one) (sub_pos.mpr h.z_lt_one)
+  have hgap : 0 < 2 * x - z + x ^ 3 * (1 - z) := by
+    have hfirst : 0 < 2 * x - z := by linarith [h.x_pos]
+    have hsecond : 0 ≤ x ^ 3 * (1 - z) :=
+      mul_nonneg (pow_nonneg h.x_pos.le 3) (sub_nonneg.mpr h.z_lt_one.le)
+    linarith
+  have hrec := h.v_rec
+  rw [h.v_eq] at hrec ⊢
+  nlinarith [hden]
+
+private theorem InteriorMarkovStep.two_drop
+    {x y z x' y' z' u v w u' v' w' : ℝ}
+    (h : InteriorMarkovStep x y z x' y' z' u v w u' v' w')
+    (hxy : x ≤ y) :
+    w' < w - y ^ 2 := by
+  have hden : 0 < (1 - x) * (1 - y) :=
+    mul_pos (sub_pos.mpr h.x_lt_one) (sub_pos.mpr h.y_lt_one)
+  have hgap : 0 < 2 * y - x + y ^ 3 * (1 - x) := by
+    have hfirst : 0 < 2 * y - x := by linarith [h.y_pos]
+    have hsecond : 0 ≤ y ^ 3 * (1 - x) :=
+      mul_nonneg (pow_nonneg h.y_pos.le 3) (sub_nonneg.mpr h.x_lt_one.le)
+    linarith
+  have hrec := h.w_rec
+  rw [h.w_eq] at hrec ⊢
+  nlinarith [hden]
+
+private theorem InteriorMarkovStep.min_drop_and_max_grows
+    {x y z x' y' z' u v w u' v' w' : ℝ}
+    (h : InteriorMarkovStep x y z x' y' z' u v w u' v' w') :
+    minThree u' v' w' < minThree u v w - maxThree x y z ^ 2 ∧
+      maxThree x y z < maxThree x' y' z' := by
+  rcases le_total u v with huv | hvu
+  · rcases le_total u w with huw | hwu
+    · have hxz : x ≤ z := by rw [h.v_eq, h.u_eq] at huv; linarith
+      have hyz : y ≤ z := by rw [h.w_eq, h.u_eq] at huw; linarith
+      have hdrop := h.zero_drop hyz
+      have hzGrow : z < z' := by rw [h.u_eq, h.u'_eq] at hdrop; nlinarith
+      constructor
+      · have hminNext : minThree u' v' w' ≤ u' := min_le_left _ _
+        have hminNow : minThree u v w = u := by
+          simp only [minThree, min_eq_left (le_min huv huw)]
+        have hmaxNow : maxThree x y z = z := by
+          simp only [maxThree, max_eq_right hyz, max_eq_right hxz]
+        rw [hminNow, hmaxNow]
+        linarith
+      · have hzNext : z' ≤ maxThree x' y' z' :=
+          le_trans (le_max_right y' z') (le_max_right x' (max y' z'))
+        have hmaxNow : maxThree x y z = z := by
+          simp only [maxThree, max_eq_right hyz, max_eq_right hxz]
+        rw [hmaxNow]
+        linarith
+
+    · have hxz : x ≤ z := by rw [h.v_eq, h.u_eq] at huv; linarith
+      have hzy : z ≤ y := by rw [h.u_eq, h.w_eq] at hwu; linarith
+      have hxy : x ≤ y := hxz.trans hzy
+      have hdrop := h.two_drop hxy
+      have hyGrow : y < y' := by rw [h.w_eq, h.w'_eq] at hdrop; nlinarith
+      constructor
+      · have hminNext : minThree u' v' w' ≤ w' :=
+          le_trans (min_le_right u' (min v' w')) (min_le_right v' w')
+        have hminNow : minThree u v w = w := by
+          rw [minThree, min_eq_right (hwu.trans huv), min_eq_right hwu]
+        have hmaxNow : maxThree x y z = y := by
+          simp only [maxThree, max_eq_left hzy, max_eq_right hxy]
+        rw [hminNow, hmaxNow]
+        linarith
+      · have hyNext : y' ≤ maxThree x' y' z' :=
+          le_trans (le_max_left y' z') (le_max_right x' (max y' z'))
+        have hmaxNow : maxThree x y z = y := by
+          simp only [maxThree, max_eq_left hzy, max_eq_right hxy]
+        rw [hmaxNow]
+        linarith
+  · rcases le_total v w with hvw | hwv
+    · have hzx : z ≤ x := by rw [h.u_eq, h.v_eq] at hvu; linarith
+      have hyx : y ≤ x := by rw [h.w_eq, h.v_eq] at hvw; linarith
+      have hdrop := h.one_drop hzx
+      have hxGrow : x < x' := by rw [h.v_eq, h.v'_eq] at hdrop; nlinarith
+      constructor
+      · have hminNext : minThree u' v' w' ≤ v' :=
+          le_trans (min_le_right u' (min v' w')) (min_le_left v' w')
+        have hminNow : minThree u v w = v := by
+          simp only [minThree, min_eq_left hvw, min_eq_right hvu]
+        have hmaxNow : maxThree x y z = x := by
+          rw [maxThree, max_eq_left (max_le hyx hzx)]
+        rw [hminNow, hmaxNow]
+        linarith
+      · have hxNext : x' ≤ maxThree x' y' z' := le_max_left _ _
+        have hmaxNow : maxThree x y z = x := by
+          rw [maxThree, max_eq_left (max_le hyx hzx)]
+        rw [hmaxNow]
+        linarith
+    · have hxy : x ≤ y := by rw [h.v_eq, h.w_eq] at hwv; linarith
+      have hwu : w ≤ u := hwv.trans hvu
+      have hzy : z ≤ y := by rw [h.u_eq, h.w_eq] at hwu; linarith
+      have hdrop := h.two_drop hxy
+      have hyGrow : y < y' := by rw [h.w_eq, h.w'_eq] at hdrop; nlinarith
+      constructor
+      · have hminNext : minThree u' v' w' ≤ w' :=
+          le_trans (min_le_right u' (min v' w')) (min_le_right v' w')
+        have hminNow : minThree u v w = w := by
+          simp only [minThree, min_eq_right hwv, min_eq_right (hwv.trans hvu)]
+        have hmaxNow : maxThree x y z = y := by
+          simp only [maxThree, max_eq_left hzy, max_eq_right hxy]
+        rw [hminNow, hmaxNow]
+        linarith
+      · have hyNext : y' ≤ maxThree x' y' z' :=
+          le_trans (le_max_left y' z') (le_max_right x' (max y' z'))
+        have hmaxNow : maxThree x y z = y := by
+          simp only [maxThree, max_eq_left hzy, max_eq_right hxy]
+        rw [hmaxNow]
+        linarith
+
+private theorem not_forall_interiorMarkovStep
+    (x y z u v w : ℕ → ℝ)
+    (hstep : ∀ time,
+      InteriorMarkovStep
+        (x time) (y time) (z time)
+        (x (time + 1)) (y (time + 1)) (z (time + 1))
+        (u time) (v time) (w time)
+        (u (time + 1)) (v (time + 1)) (w (time + 1)))
+    (hnonneg : ∀ time, 0 ≤ minThree (u time) (v time) (w time)) :
+    False := by
+  let c := maxThree (x 0) (y 0) (z 0)
+  have hc : 0 < c := by
+    have hx := (hstep 0).x_pos
+    have hxle : x 0 ≤ c := le_max_left _ _
+    linarith
+  have hmax : ∀ time, c ≤ maxThree (x time) (y time) (z time) := by
+    intro time
+    induction time with
+    | zero => exact le_rfl
+    | succ time ih =>
+        exact ih.trans ((hstep time).min_drop_and_max_grows.2.le)
+  have hmin : ∀ time,
+      minThree (u time) (v time) (w time) ≤
+        minThree (u 0) (v 0) (w 0) - (time : ℝ) * c ^ 2 := by
+    intro time
+    induction time with
+    | zero => simp
+    | succ time ih =>
+        have hdrop := (hstep time).min_drop_and_max_grows.1
+        have hmaxNonneg :
+            0 ≤ maxThree (x time) (y time) (z time) :=
+          hc.le.trans (hmax time)
+        have hsquare : c ^ 2 ≤ maxThree (x time) (y time) (z time) ^ 2 :=
+          (sq_le_sq₀ hc.le hmaxNonneg).2 (hmax time)
+        push_cast
+        linarith
+  obtain ⟨time, htime⟩ := exists_nat_gt
+    (minThree (u 0) (v 0) (w 0) / c ^ 2)
+  have hcSquare : 0 < c ^ 2 := sq_pos_of_pos hc
+  have hnegative :
+      minThree (u 0) (v 0) (w 0) - (time : ℝ) * c ^ 2 < 0 := by
+    rw [div_lt_iff₀ hcSquare] at htime
+    linarith
+  linarith [hnonneg time, hmin time]
+
+private theorem hazards_lt_one_of_endpointNash
+    (profile : StationaryProfile) (tail : Payoff Player)
+    (hnash : IsεQuittingRootEndpointNash
+      FTV.CyclicAdmissibleCycle.ftvReward tail 0 (stationaryRoot profile)) :
+    ∀ who, (profile who).1 < 1 := by
+  let x := (profile 0).1
+  let y := (profile 1).1
+  let z := (profile 2).1
+  let d0 := 1 - z -
+    ((1 - y) * (1 - z) * tail 0 + 3 * (1 - y) * z + y * z)
+  let d1 := 1 - x -
+    ((1 - x) * (1 - z) * tail 1 + 3 * x * (1 - z) + x * z)
+  let d2 := 1 - y -
+    ((1 - x) * (1 - y) * tail 2 + 3 * (1 - x) * y + x * y)
+  have he0 : (1 - x) * d0 ≤ 0 ∧ 0 ≤ x * d0 := by
+    have h := hnash 0
+    simp only [neg_zero] at h
+    rw [quittingRootEndpointDifference,
+      stationaryRoot_quitPayoff_zero profile tail,
+      stationaryRoot_continuePayoff_zero profile tail] at h
+    simpa [stationaryRoot, x, y, z, d0] using h
+  have he1 : (1 - y) * d1 ≤ 0 ∧ 0 ≤ y * d1 := by
+    have h := hnash 1
+    simp only [neg_zero] at h
+    rw [quittingRootEndpointDifference,
+      stationaryRoot_quitPayoff_one profile tail,
+      stationaryRoot_continuePayoff_one profile tail] at h
+    simpa [stationaryRoot, x, y, z, d1] using h
+  have he2 : (1 - z) * d2 ≤ 0 ∧ 0 ≤ z * d2 := by
+    have h := hnash 2
+    simp only [neg_zero] at h
+    rw [quittingRootEndpointDifference,
+      stationaryRoot_quitPayoff_two profile tail,
+      stationaryRoot_continuePayoff_two profile tail] at h
+    simpa [stationaryRoot, x, y, z, d2] using h
+  have hx0 : 0 ≤ x := (profile 0).2.1
+  have hx1 : x ≤ 1 := (profile 0).2.2
+  have hy0 : 0 ≤ y := (profile 1).2.1
+  have hy1 : y ≤ 1 := (profile 1).2.2
+  have hz0 : 0 ≤ z := (profile 2).2.1
+  have hz1 : z ≤ 1 := (profile 2).2.2
+  intro who
+  fin_cases who
+  · have hxne : x ≠ 1 := by
+      intro hx
+      have hy : y = 0 := by
+        have h := he1.2
+        simp [d1, hx] at h
+        rcases eq_or_lt_of_le hy0 with hy | hy
+        · exact hy.symm
+        · have hfactor : -3 + 2 * z < 0 := by linarith only [hz1]
+          have hneg : y * (-3 + 2 * z) < 0 :=
+            mul_neg_of_pos_of_neg hy hfactor
+          have hneg' : y * (-z + -(3 * (1 - z))) < 0 := by
+            convert hneg using 1
+            ring
+          exact (not_lt_of_ge h hneg').elim
+      have hz : z = 1 := by
+        have h := he2.1
+        simp [d2, hx, hy] at h
+        linarith only [h, hz1]
+      have h := he0.2
+      norm_num [d0, hx, hy, hz] at h
+    exact lt_of_le_of_ne hx1 hxne
+  · have hyne : y ≠ 1 := by
+      intro hy
+      have hz : z = 0 := by
+        have h := he2.2
+        simp [d2, hy] at h
+        rcases eq_or_lt_of_le hz0 with hz | hz
+        · exact hz.symm
+        · have hfactor : -3 + 2 * x < 0 := by linarith only [hx1]
+          have hneg : z * (-3 + 2 * x) < 0 :=
+            mul_neg_of_pos_of_neg hz hfactor
+          have hneg' : z * (-x + -(3 * (1 - x))) < 0 := by
+            convert hneg using 1
+            ring
+          exact (not_lt_of_ge h hneg').elim
+      have hx : x = 1 := by
+        have h := he0.1
+        simp [d0, hy, hz] at h
+        linarith only [h, hx1]
+      have h := he1.2
+      norm_num [d1, hy, hz, hx] at h
+    exact lt_of_le_of_ne hy1 hyne
+  · have hzne : z ≠ 1 := by
+      intro hz
+      have hx : x = 0 := by
+        have h := he0.2
+        simp [d0, hz] at h
+        rcases eq_or_lt_of_le hx0 with hx | hx
+        · exact hx.symm
+        · have hfactor : -3 + 2 * y < 0 := by linarith only [hy1]
+          have hneg : x * (-3 + 2 * y) < 0 :=
+            mul_neg_of_pos_of_neg hx hfactor
+          have hneg' : x * (-y + -(3 * (1 - y))) < 0 := by
+            convert hneg using 1
+            ring
+          exact (not_lt_of_ge h hneg').elim
+      have hy : y = 1 := by
+        have h := he1.1
+        simp [d1, hz, hx] at h
+        linarith only [h, hy1]
+      have h := he2.2
+      norm_num [d2, hz, hx, hy] at h
+    exact lt_of_le_of_ne hz1 hzne
+
+private theorem all_hazards_lt_one_of_exact_rootSequenceNash
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile)) :
+    ∀ time who, (profile time who).1 < 1 := by
+  let reward := FTV.CyclicAdmissibleCycle.ftvReward
+  let roots := markovRoot profile
+  have hstage : ∀ time,
+      0 < quittingJointSurvivalWeight roots 0 time ∧
+        ∀ who, (profile time who).1 < 1 := by
+    intro time
+    induction time with
+    | zero =>
+        have hsurvival : 0 < quittingJointSurvivalWeight roots 0 0 := by simp
+        refine ⟨hsurvival, ?_⟩
+        have hendpoint :=
+          isεQuittingRootEndpointNash_tailVector_of_isεQuittingRootSequenceNash
+            reward roots hnash 0 hsurvival
+        apply hazards_lt_one_of_endpointNash
+          (profile 0) (quittingRootSequenceTailVector reward roots 1)
+        have hendpoint' : IsεQuittingRootEndpointNash reward
+            (quittingRootSequenceTailVector reward roots 1) 0 (roots 0) := by
+          simpa using hendpoint
+        have hroot : roots 0 = stationaryRoot (profile 0) := rfl
+        rw [hroot] at hendpoint'
+        simpa only [reward] using hendpoint'
+    | succ time ih =>
+        have hcontinueMass :
+            0 < quittingStationaryContinueMass (roots time) := by
+          rw [quittingStationaryContinueMass_eq_prod_continueProbability]
+          apply Finset.prod_pos
+          intro who _
+          change 0 < (coin (profile time who) false).toReal
+          rw [coin_false_toReal]
+          exact sub_pos.mpr (ih.2 who)
+        have hsurvival :
+            0 < quittingJointSurvivalWeight roots 0 (time + 1) := by
+          rw [quittingJointSurvivalWeight_succ]
+          simpa only [zero_add] using mul_pos ih.1 hcontinueMass
+        refine ⟨hsurvival, ?_⟩
+        have hendpoint :=
+          isεQuittingRootEndpointNash_tailVector_of_isεQuittingRootSequenceNash
+            reward roots hnash (time + 1) hsurvival
+        apply hazards_lt_one_of_endpointNash
+          (profile (time + 1))
+          (quittingRootSequenceTailVector reward roots (time + 2))
+        have hendpoint' : IsεQuittingRootEndpointNash reward
+            (quittingRootSequenceTailVector reward roots (time + 2)) 0
+            (roots (time + 1)) := by
+          simpa [Nat.add_assoc] using hendpoint
+        have hroot : roots (time + 1) = stationaryRoot (profile (time + 1)) := rfl
+        rw [hroot] at hendpoint'
+        simpa only [reward] using hendpoint'
+  exact fun time ↦ (hstage time).2
+
+/-- The paper's `(u_n,v_n,w_n)`: the terminal continuation payoff from a
+given stage of a Markov profile. -/
+def continuationPayoff (profile : MarkovProfile) (time : ℕ) : Payoff Player :=
+  quittingRootSequenceTailVector FTV.CyclicAdmissibleCycle.ftvReward
+    (markovRoot profile) time
+
+private theorem markovRoot_eq_stationaryRoot
+    (profile : MarkovProfile) (time : ℕ) :
+    markovRoot profile time = stationaryRoot (profile time) := rfl
+
+private theorem endpointNash_at_of_exact
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) :
+    IsεQuittingRootEndpointNash FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1)) 0 (markovRoot profile time) := by
+  have hsurvival :
+      0 < quittingJointSurvivalWeight (markovRoot profile) 0 time := by
+    rw [quittingJointSurvivalWeight_eq_prod]
+    apply Finset.prod_pos
+    intro offset _
+    rw [quittingStationaryContinueMass_eq_prod_continueProbability]
+    apply Finset.prod_pos
+    intro who _
+    simp only [zero_add]
+    change 0 < (coin (profile offset who) false).toReal
+    rw [coin_false_toReal]
+    exact sub_pos.mpr (hlt offset who)
+  simpa [continuationPayoff] using
+    isεQuittingRootEndpointNash_tailVector_of_isεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile)
+      hnash time hsurvival
+
+private theorem continuationPayoff_eq_quit_of_pos
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (who : Player) (hpos : 0 < (profile time who).1) :
+    continuationPayoff profile time who =
+      quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (continuationPayoff profile (time + 1)) (markovRoot profile time) who := by
+  have hendpoint := endpointNash_at_of_exact profile hnash hlt time
+  have hgap := quittingRootEndpointDifference_eq_zero_of_both_probabilities_pos
+    FTV.CyclicAdmissibleCycle.ftvReward
+    (continuationPayoff profile (time + 1)) (markovRoot profile time) who
+    hendpoint
+    (by change 0 < (coin (profile time who) false).toReal
+        rw [coin_false_toReal]
+        exact sub_pos.mpr (hlt time who))
+    (by change 0 < (coin (profile time who) true).toReal
+        rw [coin_true_toReal]
+        exact hpos)
+  have hdiff := quittingRootQuitPayoff_sub_successorPayoff
+    FTV.CyclicAdmissibleCycle.ftvReward
+    (continuationPayoff profile (time + 1)) (markovRoot profile time) who
+  rw [hgap, mul_zero] at hdiff
+  have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
+    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+  change continuationPayoff profile time who = _
+  change quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1)) (markovRoot profile time) who -
+      quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (continuationPayoff profile (time + 1)) (markovRoot profile time) who = 0
+    at hdiff
+  change continuationPayoff profile time who =
+    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1)) (markovRoot profile time) who at hbell
+  linarith
+
+private theorem continuationPayoff_eq_continue_of_pos
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (who : Player) (hpos : 0 < (profile time who).1) :
+    continuationPayoff profile time who =
+      quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (continuationPayoff profile (time + 1)) (markovRoot profile time) who := by
+  have hendpoint := endpointNash_at_of_exact profile hnash hlt time
+  have hgap := quittingRootEndpointDifference_eq_zero_of_both_probabilities_pos
+    FTV.CyclicAdmissibleCycle.ftvReward
+    (continuationPayoff profile (time + 1)) (markovRoot profile time) who
+    hendpoint
+    (by change 0 < (coin (profile time who) false).toReal
+        rw [coin_false_toReal]
+        exact sub_pos.mpr (hlt time who))
+    (by change 0 < (coin (profile time who) true).toReal
+        rw [coin_true_toReal]
+        exact hpos)
+  have hdiff := quittingRootContinuePayoff_sub_successorPayoff
+    FTV.CyclicAdmissibleCycle.ftvReward
+    (continuationPayoff profile (time + 1)) (markovRoot profile time) who
+  rw [hgap, mul_zero] at hdiff
+  have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
+    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+  change continuationPayoff profile time who = _
+  change quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1)) (markovRoot profile time) who -
+      quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (continuationPayoff profile (time + 1)) (markovRoot profile time) who = 0
+    at hdiff
+  change continuationPayoff profile time who =
+    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1)) (markovRoot profile time) who at hbell
+  linarith
+
+private theorem continuationPayoff_eq_continue_of_zero
+    (profile : MarkovProfile) (time : ℕ) (who : Player)
+    (hzero : (profile time who).1 = 0) :
+    continuationPayoff profile time who =
+      quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (continuationPayoff profile (time + 1)) (markovRoot profile time) who := by
+  have hdiff := quittingRootContinuePayoff_sub_successorPayoff
+    FTV.CyclicAdmissibleCycle.ftvReward
+    (continuationPayoff profile (time + 1)) (markovRoot profile time) who
+  have hprob : ((markovRoot profile time who) true).toReal = 0 := by
+    simpa [markovRoot] using hzero
+  rw [hprob] at hdiff
+  norm_num at hdiff
+  have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
+    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+  change continuationPayoff profile time who = _
+  change quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1)) (markovRoot profile time) who -
+      quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (continuationPayoff profile (time + 1)) (markovRoot profile time) who = 0
+    at hdiff
+  change continuationPayoff profile time who =
+    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1)) (markovRoot profile time) who at hbell
+  linarith
+
+private theorem quitPayoff_le_continuationPayoff
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (who : Player) :
+    quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        (continuationPayoff profile (time + 1)) (markovRoot profile time) who ≤
+      continuationPayoff profile time who := by
+  have hpure :=
+    (isεQuittingRootEndpointNash_iff_purePayoff_le
+      FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1)) 0
+      (markovRoot profile time)).mp
+      (endpointNash_at_of_exact profile hnash hlt time) who |>.1
+  have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
+    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+  change continuationPayoff profile time who =
+    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 1)) (markovRoot profile time) who at hbell
+  rw [← hbell] at hpure
+  simpa using hpure
+
+private theorem zero_two_forces_another_zero
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hz : (profile time 2).1 = 0) :
+    (profile time 0).1 = 0 ∨ (profile time 1).1 = 0 := by
+  by_contra hzero
+  push Not at hzero
+  have hx : 0 < (profile time 0).1 :=
+    lt_of_le_of_ne (profile time 0).2.1 (Ne.symm hzero.1)
+  have hy : 0 < (profile time 1).1 :=
+    lt_of_le_of_ne (profile time 1).2.1 (Ne.symm hzero.2)
+  have huQuit := continuationPayoff_eq_quit_of_pos profile hnash hlt time 0 hx
+  have hvQuit := continuationPayoff_eq_quit_of_pos profile hnash hlt time 1 hy
+  have huContinue :=
+    continuationPayoff_eq_continue_of_pos profile hnash hlt time 0 hx
+  have hvContinue :=
+    continuationPayoff_eq_continue_of_pos profile hnash hlt time 1 hy
+  rw [markovRoot_eq_stationaryRoot] at huQuit hvQuit huContinue hvContinue
+  have hu : continuationPayoff profile time 0 = 1 := by
+    rw [huQuit]
+    simpa [markovRoot, stationaryRoot, hz] using
+      stationaryRoot_quitPayoff_zero
+        (profile time) (continuationPayoff profile (time + 1))
+  have hv : continuationPayoff profile time 1 = 1 - (profile time 0).1 := by
+    rw [hvQuit]
+    simpa [markovRoot, stationaryRoot] using
+      stationaryRoot_quitPayoff_one
+        (profile time) (continuationPayoff profile (time + 1))
+  have huRec : continuationPayoff profile time 0 =
+      (1 - (profile time 1).1) * continuationPayoff profile (time + 1) 0 := by
+    rw [huContinue]
+    have hformula := stationaryRoot_continuePayoff_zero
+      (profile time) (continuationPayoff profile (time + 1))
+    simpa [markovRoot, stationaryRoot, hz] using hformula
+  have hvRec : continuationPayoff profile time 1 =
+      (1 - (profile time 0).1) * continuationPayoff profile (time + 1) 1 +
+        3 * (profile time 0).1 := by
+    rw [hvContinue]
+    have hformula := stationaryRoot_continuePayoff_one
+      (profile time) (continuationPayoff profile (time + 1))
+    simpa [markovRoot, stationaryRoot, hz] using hformula
+  have huNext : 1 < continuationPayoff profile (time + 1) 0 := by
+    have hylt := hlt time 1
+    nlinarith
+  have hvNext : continuationPayoff profile (time + 1) 1 < 1 := by
+    have hxlt := hlt time 0
+    nlinarith
+  have hxNext : (profile (time + 1) 0).1 = 0 := by
+    by_contra hne
+    have hpos : 0 < (profile (time + 1) 0).1 :=
+      lt_of_le_of_ne (profile (time + 1) 0).2.1 (Ne.symm hne)
+    have hvalue := continuationPayoff_eq_quit_of_pos
+      profile hnash hlt (time + 1) 0 hpos
+    rw [markovRoot_eq_stationaryRoot] at hvalue
+    have hformula := stationaryRoot_quitPayoff_zero
+      (profile (time + 1)) (continuationPayoff profile (time + 2))
+    have hle : continuationPayoff profile (time + 1) 0 ≤ 1 := by
+      rw [hvalue, hformula]
+      linarith [(profile (time + 1) 2).2.1]
+    linarith
+  have hquitNext := quitPayoff_le_continuationPayoff
+    profile hnash hlt (time + 1) 1
+  rw [markovRoot_eq_stationaryRoot] at hquitNext
+  have hformula := stationaryRoot_quitPayoff_one
+    (profile (time + 1)) (continuationPayoff profile (time + 2))
+  have : 1 ≤ continuationPayoff profile (time + 1) 1 := by
+    have hformula' : quittingRootQuitPayoff
+        FTV.CyclicAdmissibleCycle.ftvReward
+        (continuationPayoff profile (time + 2))
+        (stationaryRoot (profile (time + 1))) 1 = 1 := by
+      simpa [hxNext] using hformula
+    rw [show time + 1 + 1 = time + 2 by omega, hformula'] at hquitNext
+    exact hquitNext
+  linarith
+
+private theorem zero_zero_forces_another_zero
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hx : (profile time 0).1 = 0) :
+    (profile time 1).1 = 0 ∨ (profile time 2).1 = 0 := by
+  by_contra hzero
+  push Not at hzero
+  have hy : 0 < (profile time 1).1 :=
+    lt_of_le_of_ne (profile time 1).2.1 (Ne.symm hzero.1)
+  have hz : 0 < (profile time 2).1 :=
+    lt_of_le_of_ne (profile time 2).2.1 (Ne.symm hzero.2)
+  have hvQuit := continuationPayoff_eq_quit_of_pos profile hnash hlt time 1 hy
+  have hwQuit := continuationPayoff_eq_quit_of_pos profile hnash hlt time 2 hz
+  have hvContinue :=
+    continuationPayoff_eq_continue_of_pos profile hnash hlt time 1 hy
+  have hwContinue :=
+    continuationPayoff_eq_continue_of_pos profile hnash hlt time 2 hz
+  rw [markovRoot_eq_stationaryRoot] at hvQuit hwQuit hvContinue hwContinue
+  have hv : continuationPayoff profile time 1 = 1 := by
+    rw [hvQuit]
+    simpa [hx] using stationaryRoot_quitPayoff_one
+      (profile time) (continuationPayoff profile (time + 1))
+  have hw : continuationPayoff profile time 2 = 1 - (profile time 1).1 := by
+    rw [hwQuit]
+    simpa using stationaryRoot_quitPayoff_two
+      (profile time) (continuationPayoff profile (time + 1))
+  have hvRec : continuationPayoff profile time 1 =
+      (1 - (profile time 2).1) * continuationPayoff profile (time + 1) 1 := by
+    rw [hvContinue]
+    simpa [hx] using stationaryRoot_continuePayoff_one
+      (profile time) (continuationPayoff profile (time + 1))
+  have hwRec : continuationPayoff profile time 2 =
+      (1 - (profile time 1).1) * continuationPayoff profile (time + 1) 2 +
+        3 * (profile time 1).1 := by
+    rw [hwContinue]
+    simpa [hx] using stationaryRoot_continuePayoff_two
+      (profile time) (continuationPayoff profile (time + 1))
+  have hvNext : 1 < continuationPayoff profile (time + 1) 1 := by
+    have hzlt := hlt time 2
+    nlinarith
+  have hwNext : continuationPayoff profile (time + 1) 2 < 1 := by
+    have hylt := hlt time 1
+    nlinarith
+  have hyNext : (profile (time + 1) 1).1 = 0 := by
+    by_contra hne
+    have hpos : 0 < (profile (time + 1) 1).1 :=
+      lt_of_le_of_ne (profile (time + 1) 1).2.1 (Ne.symm hne)
+    have hvalue := continuationPayoff_eq_quit_of_pos
+      profile hnash hlt (time + 1) 1 hpos
+    rw [markovRoot_eq_stationaryRoot] at hvalue
+    have hformula := stationaryRoot_quitPayoff_one
+      (profile (time + 1)) (continuationPayoff profile (time + 2))
+    have hle : continuationPayoff profile (time + 1) 1 ≤ 1 := by
+      rw [hvalue, hformula]
+      linarith [(profile (time + 1) 0).2.1]
+    linarith
+  have hquitNext := quitPayoff_le_continuationPayoff
+    profile hnash hlt (time + 1) 2
+  rw [markovRoot_eq_stationaryRoot] at hquitNext
+  have hformula := stationaryRoot_quitPayoff_two
+    (profile (time + 1)) (continuationPayoff profile (time + 2))
+  have hformula' : quittingRootQuitPayoff
+      FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 2))
+      (stationaryRoot (profile (time + 1))) 2 = 1 := by
+    simpa [hyNext] using hformula
+  rw [show time + 1 + 1 = time + 2 by omega, hformula'] at hquitNext
+  linarith
+
+private theorem zero_one_forces_another_zero
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hy : (profile time 1).1 = 0) :
+    (profile time 2).1 = 0 ∨ (profile time 0).1 = 0 := by
+  by_contra hzero
+  push Not at hzero
+  have hz : 0 < (profile time 2).1 :=
+    lt_of_le_of_ne (profile time 2).2.1 (Ne.symm hzero.1)
+  have hx : 0 < (profile time 0).1 :=
+    lt_of_le_of_ne (profile time 0).2.1 (Ne.symm hzero.2)
+  have hwQuit := continuationPayoff_eq_quit_of_pos profile hnash hlt time 2 hz
+  have huQuit := continuationPayoff_eq_quit_of_pos profile hnash hlt time 0 hx
+  have hwContinue :=
+    continuationPayoff_eq_continue_of_pos profile hnash hlt time 2 hz
+  have huContinue :=
+    continuationPayoff_eq_continue_of_pos profile hnash hlt time 0 hx
+  rw [markovRoot_eq_stationaryRoot] at hwQuit huQuit hwContinue huContinue
+  have hw : continuationPayoff profile time 2 = 1 := by
+    rw [hwQuit]
+    simpa [hy] using stationaryRoot_quitPayoff_two
+      (profile time) (continuationPayoff profile (time + 1))
+  have hu : continuationPayoff profile time 0 = 1 - (profile time 2).1 := by
+    rw [huQuit]
+    simpa using stationaryRoot_quitPayoff_zero
+      (profile time) (continuationPayoff profile (time + 1))
+  have hwRec : continuationPayoff profile time 2 =
+      (1 - (profile time 0).1) * continuationPayoff profile (time + 1) 2 := by
+    rw [hwContinue]
+    simpa [hy] using stationaryRoot_continuePayoff_two
+      (profile time) (continuationPayoff profile (time + 1))
+  have huRec : continuationPayoff profile time 0 =
+      (1 - (profile time 2).1) * continuationPayoff profile (time + 1) 0 +
+        3 * (profile time 2).1 := by
+    rw [huContinue]
+    simpa [hy] using stationaryRoot_continuePayoff_zero
+      (profile time) (continuationPayoff profile (time + 1))
+  have hwNext : 1 < continuationPayoff profile (time + 1) 2 := by
+    have hxlt := hlt time 0
+    nlinarith
+  have huNext : continuationPayoff profile (time + 1) 0 < 1 := by
+    have hzlt := hlt time 2
+    nlinarith
+  have hzNext : (profile (time + 1) 2).1 = 0 := by
+    by_contra hne
+    have hpos : 0 < (profile (time + 1) 2).1 :=
+      lt_of_le_of_ne (profile (time + 1) 2).2.1 (Ne.symm hne)
+    have hvalue := continuationPayoff_eq_quit_of_pos
+      profile hnash hlt (time + 1) 2 hpos
+    rw [markovRoot_eq_stationaryRoot] at hvalue
+    have hformula := stationaryRoot_quitPayoff_two
+      (profile (time + 1)) (continuationPayoff profile (time + 2))
+    have hle : continuationPayoff profile (time + 1) 2 ≤ 1 := by
+      rw [hvalue, hformula]
+      linarith [(profile (time + 1) 1).2.1]
+    linarith
+  have hquitNext := quitPayoff_le_continuationPayoff
+    profile hnash hlt (time + 1) 0
+  rw [markovRoot_eq_stationaryRoot] at hquitNext
+  have hformula := stationaryRoot_quitPayoff_zero
+    (profile (time + 1)) (continuationPayoff profile (time + 2))
+  have hformula' : quittingRootQuitPayoff
+      FTV.CyclicAdmissibleCycle.ftvReward
+      (continuationPayoff profile (time + 2))
+      (stationaryRoot (profile (time + 1))) 0 = 1 := by
+    simpa [hzNext] using hformula
+  rw [show time + 1 + 1 = time + 2 by omega, hformula'] at hquitNext
+  linarith
+
+private theorem player_eq_zero_or_one_or_two (who : Player) :
+    who = 0 ∨ who = 1 ∨ who = 2 := by
+  fin_cases who <;> simp
+
+private theorem existsUnique_active_of_some_zero
+    (profile : MarkovProfile)
+    (hnonempty : HasActivePlayerAtEveryStage profile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (hzero : ∃ who, (profile time who).1 = 0) :
+    ∃! owner, 0 < (profile time owner).1 := by
+  rcases hzero with ⟨who, hwho⟩
+  rcases player_eq_zero_or_one_or_two who with rfl | rfl | rfl
+  · rcases zero_zero_forces_another_zero profile hnash hlt time hwho with
+      hy | hz
+    · have hzpos : 0 < (profile time 2).1 := by
+        rcases hnonempty time with ⟨active, hactive⟩
+        rcases player_eq_zero_or_one_or_two active with rfl | rfl | rfl
+        · simp [hwho] at hactive
+        · simp [hy] at hactive
+        · exact hactive
+      refine ⟨2, hzpos, fun other hother ↦ ?_⟩
+      rcases player_eq_zero_or_one_or_two other with rfl | rfl | rfl
+      · simp [hwho] at hother
+      · simp [hy] at hother
+      · rfl
+    · have hypos : 0 < (profile time 1).1 := by
+        rcases hnonempty time with ⟨active, hactive⟩
+        rcases player_eq_zero_or_one_or_two active with rfl | rfl | rfl
+        · simp [hwho] at hactive
+        · exact hactive
+        · simp [hz] at hactive
+      refine ⟨1, hypos, fun other hother ↦ ?_⟩
+      rcases player_eq_zero_or_one_or_two other with rfl | rfl | rfl
+      · simp [hwho] at hother
+      · rfl
+      · simp [hz] at hother
+  · rcases zero_one_forces_another_zero profile hnash hlt time hwho with
+      hz | hx
+    · have hxpos : 0 < (profile time 0).1 := by
+        rcases hnonempty time with ⟨active, hactive⟩
+        rcases player_eq_zero_or_one_or_two active with rfl | rfl | rfl
+        · exact hactive
+        · simp [hwho] at hactive
+        · simp [hz] at hactive
+      refine ⟨0, hxpos, fun other hother ↦ ?_⟩
+      rcases player_eq_zero_or_one_or_two other with rfl | rfl | rfl
+      · rfl
+      · simp [hwho] at hother
+      · simp [hz] at hother
+    · have hzpos : 0 < (profile time 2).1 := by
+        rcases hnonempty time with ⟨active, hactive⟩
+        rcases player_eq_zero_or_one_or_two active with rfl | rfl | rfl
+        · simp [hx] at hactive
+        · simp [hwho] at hactive
+        · exact hactive
+      refine ⟨2, hzpos, fun other hother ↦ ?_⟩
+      rcases player_eq_zero_or_one_or_two other with rfl | rfl | rfl
+      · simp [hx] at hother
+      · simp [hwho] at hother
+      · rfl
+  · rcases zero_two_forces_another_zero profile hnash hlt time hwho with
+      hx | hy
+    · have hypos : 0 < (profile time 1).1 := by
+        rcases hnonempty time with ⟨active, hactive⟩
+        rcases player_eq_zero_or_one_or_two active with rfl | rfl | rfl
+        · simp [hx] at hactive
+        · exact hactive
+        · simp [hwho] at hactive
+      refine ⟨1, hypos, fun other hother ↦ ?_⟩
+      rcases player_eq_zero_or_one_or_two other with rfl | rfl | rfl
+      · simp [hx] at hother
+      · rfl
+      · simp [hwho] at hother
+    · have hxpos : 0 < (profile time 0).1 := by
+        rcases hnonempty time with ⟨active, hactive⟩
+        rcases player_eq_zero_or_one_or_two active with rfl | rfl | rfl
+        · exact hactive
+        · simp [hy] at hactive
+        · simp [hwho] at hactive
+      refine ⟨0, hxpos, fun other hother ↦ ?_⟩
+      rcases player_eq_zero_or_one_or_two other with rfl | rfl | rfl
+      · rfl
+      · simp [hy] at hother
+      · simp [hwho] at hother
+
+private theorem exists_zero_hazard_of_lt_one
+    (profile : MarkovProfile)
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile)) :
+    ∃ time who, (profile time who).1 = 0 := by
+  let reward := FTV.CyclicAdmissibleCycle.ftvReward
+  let roots := markovRoot profile
+  let value : ℕ → Payoff Player := fun time ↦
+    quittingRootSequenceTailVector reward roots time
+  have hcontinueMass (time : ℕ) :
+      0 < quittingStationaryContinueMass (roots time) := by
+    rw [quittingStationaryContinueMass_eq_prod_continueProbability]
+    apply Finset.prod_pos
+    intro who _
+    change 0 < (coin (profile time who) false).toReal
+    rw [coin_false_toReal]
+    exact sub_pos.mpr (hlt time who)
+  have hsurvival (time : ℕ) :
+      0 < quittingJointSurvivalWeight roots 0 time := by
+    rw [quittingJointSurvivalWeight_eq_prod]
+    apply Finset.prod_pos
+    intro offset _
+    simpa only [zero_add] using hcontinueMass offset
+  have hendpoint (time : ℕ) :
+      IsεQuittingRootEndpointNash reward (value (time + 1)) 0 (roots time) := by
+    have h := isεQuittingRootEndpointNash_tailVector_of_isεQuittingRootSequenceNash
+      reward roots hnash time (hsurvival time)
+    simpa [value] using h
+  by_contra hzero
+  push Not at hzero
+  have hpos (time : ℕ) (who : Player) : 0 < (profile time who).1 :=
+    lt_of_le_of_ne (profile time who).2.1 (Ne.symm (hzero time who))
+  have hgap (time : ℕ) (who : Player) :
+      quittingRootEndpointDifference reward (value (time + 1))
+          (roots time) who = 0 := by
+    apply quittingRootEndpointDifference_eq_zero_of_both_probabilities_pos
+      reward (value (time + 1)) (roots time) who (hendpoint time)
+    · change 0 < (coin (profile time who) false).toReal
+      rw [coin_false_toReal]
+      exact sub_pos.mpr (hlt time who)
+    · change 0 < (coin (profile time who) true).toReal
+      simpa using hpos time who
+  have hquitValue (time : ℕ) (who : Player) :
+      value time who =
+        quittingRootQuitPayoff reward (value (time + 1)) (roots time) who := by
+    have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
+      reward roots who time
+    have hdiff := quittingRootQuitPayoff_sub_successorPayoff
+      reward (value (time + 1)) (roots time) who
+    rw [hgap time who, mul_zero] at hdiff
+    change value time who = _
+    change quittingRootQuitPayoff reward (value (time + 1)) (roots time) who -
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time) who = 0
+      at hdiff
+    change value time who =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time) who at hbell
+    linarith
+  have hcontinueValue (time : ℕ) (who : Player) :
+      value time who =
+        quittingRootContinuePayoff reward (value (time + 1)) (roots time) who := by
+    have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
+      reward roots who time
+    have hdiff := quittingRootContinuePayoff_sub_successorPayoff
+      reward (value (time + 1)) (roots time) who
+    rw [hgap time who, mul_zero] at hdiff
+    change value time who = _
+    change quittingRootContinuePayoff reward (value (time + 1)) (roots time) who -
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time) who = 0
+      at hdiff
+    change value time who =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time) who at hbell
+    linarith
+  have hstep (time : ℕ) :
+      InteriorMarkovStep
+        (profile time 0).1 (profile time 1).1 (profile time 2).1
+        (profile (time + 1) 0).1 (profile (time + 1) 1).1
+        (profile (time + 1) 2).1
+        (value time 0) (value time 1) (value time 2)
+        (value (time + 1) 0) (value (time + 1) 1) (value (time + 1) 2) := by
+    refine ⟨hpos time 0, hpos time 1, hpos time 2,
+      hlt time 0, hlt time 1, hlt time 2, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+    · simpa [reward, roots] using
+        hquitValue time 0 |>.trans
+          (stationaryRoot_quitPayoff_zero (profile time) (value (time + 1)))
+    · simpa [reward, roots] using
+        hquitValue time 1 |>.trans
+          (stationaryRoot_quitPayoff_one (profile time) (value (time + 1)))
+    · simpa [reward, roots] using
+        hquitValue time 2 |>.trans
+          (stationaryRoot_quitPayoff_two (profile time) (value (time + 1)))
+    · simpa [reward, roots] using
+        hquitValue (time + 1) 0 |>.trans
+          (stationaryRoot_quitPayoff_zero
+            (profile (time + 1)) (value (time + 2)))
+    · simpa [reward, roots] using
+        hquitValue (time + 1) 1 |>.trans
+          (stationaryRoot_quitPayoff_one
+            (profile (time + 1)) (value (time + 2)))
+    · simpa [reward, roots] using
+        hquitValue (time + 1) 2 |>.trans
+          (stationaryRoot_quitPayoff_two
+            (profile (time + 1)) (value (time + 2)))
+    · simpa [reward, roots] using
+        hcontinueValue time 0 |>.trans
+          (stationaryRoot_continuePayoff_zero (profile time) (value (time + 1)))
+    · simpa [reward, roots] using
+        hcontinueValue time 1 |>.trans
+          (stationaryRoot_continuePayoff_one (profile time) (value (time + 1)))
+    · simpa [reward, roots] using
+        hcontinueValue time 2 |>.trans
+          (stationaryRoot_continuePayoff_two (profile time) (value (time + 1)))
+  have hnonneg (time : ℕ) :
+      0 ≤ minThree (value time 0) (value time 1) (value time 2) := by
+    have hu := (hstep time).u_eq
+    have hv := (hstep time).v_eq
+    have hw := (hstep time).w_eq
+    rw [minThree, hu, hv, hw]
+    apply le_min
+    · exact sub_nonneg.mpr (profile time 2).2.2
+    · apply le_min
+      · exact sub_nonneg.mpr (profile time 0).2.2
+      · exact sub_nonneg.mpr (profile time 1).2.2
+  exact not_forall_interiorMarkovStep
+    (fun time ↦ (profile time 0).1)
+    (fun time ↦ (profile time 1).1)
+    (fun time ↦ (profile time 2).1)
+    (fun time ↦ value time 0)
+    (fun time ↦ value time 1)
+    (fun time ↦ value time 2)
+    hstep hnonneg
 
 /-! Existing checked results cover a strict finite-period subcase:
 `ExactCyclicPacket.existsUnique_activeRole` gives one active role per live
