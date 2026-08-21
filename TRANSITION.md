@@ -360,7 +360,7 @@ The certsearch reference tables retain the following source locators:
 - `TWO_PLAYER_COUNTEREXAMPLE` is owned by
   `UniformEquilibrium/Quitting/Boundary/Repair/DisjunctionCounterexample.lean`;
 - `FTV_WEIGHT` is the unperturbed table in
-  `UniformEquilibrium/Quitting/Examples/FTV/CyclicAdmissibleCycle.lean`;
+  `UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/AdmissibleCycle.lean`;
 - `HOSTILE_WEIGHT` is owned by
   `UniformEquilibrium/Quitting/Punishment/IsolatedPunishmentCeiling.lean`;
 - the circulation mode was launched from

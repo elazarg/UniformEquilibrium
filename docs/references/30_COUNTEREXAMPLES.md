@@ -167,9 +167,9 @@ level*. What remains is the Lean actual-data adapter.
 **Repo status.** `L~`. The concrete FTV architecture and credibility checks,
 the exact finite-horizon delivery constants `16/7`, `22/7`, `18/7` and common
 modulus `22/(7T)`, the all-start semantic credibility bridge, and the exact
-cyclic packet adapter are formalized in `UniformEquilibrium/Quitting/Examples/FTV/CyclicCredibility.lean`,
-`UniformEquilibrium/Quitting/Examples/FTV/CyclicFiniteHorizon.lean`, `UniformEquilibrium/Quitting/Examples/FTV/CyclicSemanticBridge.lean`, and
-`UniformEquilibrium/Quitting/Examples/FTV/CyclicMinimality.lean`. The remaining source-aligned target is the
+cyclic packet adapter are formalized in `UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/Credibility.lean`,
+`UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/FiniteHorizon.lean`, `UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/SemanticBridge.lean`, and
+`UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/Minimality.lean`. The remaining source-aligned target is the
 published stationary-impossibility/approximate-boundary theorem; do not
 describe the game or finite-horizon delivery as absent.
 

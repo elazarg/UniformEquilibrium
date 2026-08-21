@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Architectures.PublicResponse.ArbitraryStartPrescribedDeliveryTelescope
 import MathUE.PMFProduct.FiniteFubini
-import UniformEquilibrium.Quitting.Examples.FTV.CyclicCredibility
+import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.Credibility
 
 /-!
 # Finite-horizon delivery in the FTV three-cycle
@@ -25,7 +25,7 @@ noncomputable section
 
 open GameTheory
 
-namespace FTV.CyclicCredibility
+namespace GameTheory.CyclicThreePlayerQuitting.Credibility
 
 open Math.Probability StochasticGame
 
@@ -187,4 +187,4 @@ theorem abs_finiteAveragePayoff_sub_initialTarget_le_twentyTwo_sevenths
       apply (div_le_div_iff_of_pos_right hTreal).2
       fin_cases who <;> norm_num [deliveryConstant]
 
-end FTV.CyclicCredibility
+end GameTheory.CyclicThreePlayerQuitting.Credibility

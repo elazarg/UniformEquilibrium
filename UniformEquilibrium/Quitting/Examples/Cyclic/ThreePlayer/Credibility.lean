@@ -29,7 +29,7 @@ noncomputable section
 
 open GameTheory
 
-namespace FTV.CyclicCredibility
+namespace GameTheory.CyclicThreePlayerQuitting.Credibility
 
 open Math.Probability Math.PMFProduct StochasticGame
 
@@ -473,4 +473,4 @@ theorem isAdaptivePotentialCertificateAt
   architecture.isAdaptivePotentialCertificateAt_of_isGlobalCredibilityCriterion
     isGlobalCredibilityCriterion initialTarget target_start herr
 
-end FTV.CyclicCredibility
+end GameTheory.CyclicThreePlayerQuitting.Credibility

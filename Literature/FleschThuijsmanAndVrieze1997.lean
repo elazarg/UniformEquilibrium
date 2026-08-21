@@ -2,7 +2,7 @@ import UniformEquilibrium.Quitting.Classification.PlayerReindex
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.SoloRootSequenceValues
-import UniformEquilibrium.Quitting.Examples.FTV.CyclicAdmissibleCycle
+import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.AdmissibleCycle
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
 import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
@@ -37,7 +37,7 @@ open Filter Set
 open GameTheory GameTheory.StochasticGame
 open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
-abbrev Player := FTV.CyclicMinimality.Player
+abbrev Player := CyclicThreePlayerQuitting.Minimality.Player
 abbrev Hazard := Set.Icc (0 : ℝ) 1
 
 /-! ## Section 1: model and equilibrium notion
@@ -66,7 +66,7 @@ finite actions, perfect monitoring, recursion, and one live state.
 
 /-- The paper's terminal reward table, with `true` denoting the second action. -/
 def terminalReward (action : Player → Bool) : Payoff Player :=
-  FTV.CyclicMinimality.terminalReward action
+  CyclicThreePlayerQuitting.Minimality.terminalReward action
 
 @[simp] theorem terminalReward_TLN :
     terminalReward ![false, false, false] = ![0, 0, 0] := by
@@ -102,12 +102,12 @@ def terminalReward (action : Player → Bool) : Payoff Player :=
 
 /-- The quitter-set presentation used by the repository is exactly the paper's
 seven absorbing rows. -/
-theorem ftvReward_quitters (action : Player → Bool)
+theorem reward_quitters (action : Player → Bool)
     (h : (quittingQuitters action).Nonempty) :
-    FTV.CyclicAdmissibleCycle.ftvReward
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
         ⟨quittingQuitters action, h⟩ =
       terminalReward action := by
-  exact FTV.CyclicAdmissibleCycle.ftvReward_quitters action h
+  exact CyclicThreePlayerQuitting.AdmissibleCycle.reward_quitters action h
 
 /-- A Boolean coin whose `true` mass is the supplied hazard. -/
 def coin (p : Hazard) : PMF Bool :=
@@ -141,26 +141,26 @@ def markovRoot (profile : MarkovProfile) (time : ℕ) :
 /-- The behavior-profile adapter for a paper Markov profile.  Histories after
 absorption are irrelevant, and before absorption there is only one history. -/
 def markovBehaviorProfile (profile : MarkovProfile) :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile :=
-  quittingRootSequenceProfile FTV.CyclicAdmissibleCycle.ftvReward
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile :=
+  quittingRootSequenceProfile CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (markovRoot profile) 0
 
 /-- Exact terminal `ε`-equilibrium for a paper Markov profile. -/
 def IsMarkovEpsilonEquilibrium (ε : ℝ)
     (profile : MarkovProfile) : Prop :=
-  (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-    (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) ε
+  (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+    (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward) ε
     (markovBehaviorProfile profile)
 
 /-- Read an arbitrary behavior profile on the unique live public history as
 a paper Markov hazard sequence. -/
 def markovization
     (profile :
-      (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile) :
+      (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile) :
     MarkovProfile :=
   fun time who =>
     let marginal := quittingProfileLiveRoot
-      FTV.CyclicAdmissibleCycle.ftvReward profile time who
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward profile time who
     ⟨(marginal true).toReal,
       ENNReal.toReal_nonneg,
       by
@@ -172,13 +172,13 @@ def markovization
 /-- Markovization reproduces exactly the original live-path product roots. -/
 theorem markovRoot_markovization
     (profile :
-      (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile) :
+      (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile) :
     markovRoot (markovization profile) =
       quittingProfileLiveRoot
-        FTV.CyclicAdmissibleCycle.ftvReward profile := by
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward profile := by
   funext time who
   let marginal := quittingProfileLiveRoot
-    FTV.CyclicAdmissibleCycle.ftvReward profile time who
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward profile time who
   change coin (markovization profile time who) = marginal
   ext action
   apply (ENNReal.toReal_eq_toReal_iff'
@@ -199,86 +199,86 @@ theorem markovRoot_markovization
 sequence as the original profile. -/
 theorem quittingProfileLiveRoot_markovization
     (profile :
-      (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile) :
-    quittingProfileLiveRoot FTV.CyclicAdmissibleCycle.ftvReward
+      (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile) :
+    quittingProfileLiveRoot CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (markovBehaviorProfile (markovization profile)) =
       quittingProfileLiveRoot
-        FTV.CyclicAdmissibleCycle.ftvReward profile := by
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward profile := by
   calc
-    quittingProfileLiveRoot FTV.CyclicAdmissibleCycle.ftvReward
+    quittingProfileLiveRoot CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (markovBehaviorProfile (markovization profile)) =
       markovRoot (markovization profile) := by
         simp [markovBehaviorProfile]
     _ = quittingProfileLiveRoot
-        FTV.CyclicAdmissibleCycle.ftvReward profile :=
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward profile :=
       markovRoot_markovization profile
 
 /-- Markovization preserves the prescribed terminal payoff vector. -/
 theorem quittingTerminalPayoff_markovization
     (profile :
-      (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile) :
-    quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile) :
+    quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (markovBehaviorProfile (markovization profile)) =
       quittingTerminalPayoff
-        FTV.CyclicAdmissibleCycle.ftvReward profile := by
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward profile := by
   funext who
   calc
-    quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (markovBehaviorProfile (markovization profile)) who =
       quittingRootSequenceTerminalValue
-        FTV.CyclicAdmissibleCycle.ftvReward
-        (quittingProfileLiveRoot FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
+        (quittingProfileLiveRoot CyclicThreePlayerQuitting.AdmissibleCycle.reward
 (markovBehaviorProfile (markovization profile))) who 0 :=
       quittingTerminalPayoff_eq_rootSequence_profileLiveRoot
-        FTV.CyclicAdmissibleCycle.ftvReward _ who
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward _ who
     _ = quittingRootSequenceTerminalValue
-        FTV.CyclicAdmissibleCycle.ftvReward
-        (quittingProfileLiveRoot FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
+        (quittingProfileLiveRoot CyclicThreePlayerQuitting.AdmissibleCycle.reward
 profile) who 0 := by
       rw [quittingProfileLiveRoot_markovization]
     _ = quittingTerminalPayoff
-        FTV.CyclicAdmissibleCycle.ftvReward profile who :=
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward profile who :=
       (quittingTerminalPayoff_eq_rootSequence_profileLiveRoot
-        FTV.CyclicAdmissibleCycle.ftvReward profile who).symm
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward profile who).symm
 
 /-- Markovization preserves every unilateral terminal value and hence every
 terminal `ε`-equilibrium inequality. -/
 theorem isMarkovEpsilonEquilibrium_markovization
     (profile :
-      (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile)
+      (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile)
     {ε : ℝ}
-    (h : (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-      (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward)
+    (h : (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+      (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward)
       ε profile) :
     IsMarkovEpsilonEquilibrium ε (markovization profile) := by
   intro who deviation
   calc
-    quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (Function.update
 (markovBehaviorProfile (markovization profile))
 who deviation) who =
       quittingRootSequenceHazardTerminalValue
-        FTV.CyclicAdmissibleCycle.ftvReward
-        (quittingProfileLiveRoot FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
+        (quittingProfileLiveRoot CyclicThreePlayerQuitting.AdmissibleCycle.reward
 (markovBehaviorProfile (markovization profile))) who
         (quittingBehaviorLiveHazard
-FTV.CyclicAdmissibleCycle.ftvReward deviation) 0 :=
+CyclicThreePlayerQuitting.AdmissibleCycle.reward deviation) 0 :=
       quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue
-        FTV.CyclicAdmissibleCycle.ftvReward _ who deviation
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward _ who deviation
     _ = quittingRootSequenceHazardTerminalValue
-        FTV.CyclicAdmissibleCycle.ftvReward
-        (quittingProfileLiveRoot FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
+        (quittingProfileLiveRoot CyclicThreePlayerQuitting.AdmissibleCycle.reward
 profile) who
         (quittingBehaviorLiveHazard
-FTV.CyclicAdmissibleCycle.ftvReward deviation) 0 := by
+CyclicThreePlayerQuitting.AdmissibleCycle.reward deviation) 0 := by
       rw [quittingProfileLiveRoot_markovization]
-    _ = quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    _ = quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (Function.update profile who deviation) who :=
       (quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue
-        FTV.CyclicAdmissibleCycle.ftvReward profile who deviation).symm
-    _ ≤ quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward profile who deviation).symm
+    _ ≤ quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         profile who + ε := h who deviation
-    _ = quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    _ = quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (markovBehaviorProfile (markovization profile)) who + ε := by
       rw [quittingTerminalPayoff_markovization]
 
@@ -293,15 +293,15 @@ def stationaryRoot (profile : StationaryProfile) :
 
 /-- The repository behavior profile generated by a paper stationary profile. -/
 def stationaryBehaviorProfile (profile : StationaryProfile) :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile :=
-  quittingStationaryProfile FTV.CyclicAdmissibleCycle.ftvReward
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile :=
+  quittingStationaryProfile CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (stationaryRoot profile)
 
 /-- Exact terminal `ε`-equilibrium for a paper stationary profile. -/
 def IsStationaryEpsilonEquilibrium (ε : ℝ)
     (profile : StationaryProfile) : Prop :=
-  (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-    (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) ε
+  (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+    (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward) ε
     (stationaryBehaviorProfile profile)
 
 /-! For a Markov strategy triple `θ`, the paper writes `q_θ(a)` for the
@@ -329,21 +329,21 @@ theorem pureStationaryBestReply
     ∃ choice : Option ℕ,
       (choice = none ∨ choice = some 0) ∧
         ∀ deviation :
-          (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorStrategy who,
-          quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+          (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorStrategy who,
+          quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
               (Function.update
                 (quittingStationaryProfile
-                  FTV.CyclicAdmissibleCycle.ftvReward root)
+                  CyclicThreePlayerQuitting.AdmissibleCycle.reward root)
                 who deviation) who ≤
-            quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+            quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
               (Function.update
                 (quittingStationaryProfile
-                  FTV.CyclicAdmissibleCycle.ftvReward root)
+                  CyclicThreePlayerQuitting.AdmissibleCycle.reward root)
                 who
                 (quittingPureTimeBehaviorStrategy
-                  FTV.CyclicAdmissibleCycle.ftvReward who choice)) who := by
+                  CyclicThreePlayerQuitting.AdmissibleCycle.reward who choice)) who := by
   classical
-  let reward := FTV.CyclicAdmissibleCycle.ftvReward
+  let reward := CyclicThreePlayerQuitting.AdmissibleCycle.reward
   by_cases hcontracts :
       quittingStationaryFixedOpponentsContinueMass root who < 1
   · obtain ⟨choice, hchoice, hattains⟩ :=
@@ -431,19 +431,19 @@ theorem stationary_bestReply_is_quitNow_or_never_of_contracting
       quittingStationaryFixedOpponentsContinueMass root who < 1) :
     ∃ choice : Option ℕ,
       (choice = none ∨ choice = some 0) ∧
-        quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
             (Function.update
               (quittingStationaryProfile
-                FTV.CyclicAdmissibleCycle.ftvReward root)
+                CyclicThreePlayerQuitting.AdmissibleCycle.reward root)
               who
               (quittingPureTimeBehaviorStrategy
-                FTV.CyclicAdmissibleCycle.ftvReward who choice)) who =
+                CyclicThreePlayerQuitting.AdmissibleCycle.reward who choice)) who =
           quittingStationaryUnilateralCap
-            FTV.CyclicAdmissibleCycle.ftvReward root who := by
+            CyclicThreePlayerQuitting.AdmissibleCycle.reward root who := by
   let quitValue := quittingStationaryFixedOpponentsQuitValue
-    FTV.CyclicAdmissibleCycle.ftvReward root who
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward root who
   let continueReward := quittingStationaryFixedOpponentsContinueReward
-    FTV.CyclicAdmissibleCycle.ftvReward root who
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward root who
   let continueMass := quittingStationaryFixedOpponentsContinueMass root who
   by_cases hnever : quitValue ≤
       quittingStationaryNeverValue continueReward continueMass
@@ -451,7 +451,7 @@ theorem stationary_bestReply_is_quitNow_or_never_of_contracting
     rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
       quittingProfileLiveRoot_stationary,
       quittingRootSequencePureTimeTerminalValue_const
-        FTV.CyclicAdmissibleCycle.ftvReward root who hcontracts]
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward root who hcontracts]
     change quittingStationaryNeverValue continueReward continueMass =
       quittingStationarySelectedCap quitValue continueReward continueMass
     exact (max_eq_right hnever).symm
@@ -459,7 +459,7 @@ theorem stationary_bestReply_is_quitNow_or_never_of_contracting
     rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
       quittingProfileLiveRoot_stationary,
       quittingRootSequencePureTimeTerminalValue_const
-        FTV.CyclicAdmissibleCycle.ftvReward root who hcontracts]
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward root who hcontracts]
     change quittingStationaryPureTimeValue
         quitValue continueReward continueMass 0 =
       quittingStationarySelectedCap quitValue continueReward continueMass
@@ -471,69 +471,69 @@ expanded from the exact product root. -/
 
 theorem stationaryRoot_quitPayoff_zero
     (profile : StationaryProfile) (value : Payoff Player) :
-    quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootQuitPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         value (stationaryRoot profile) 0 = 1 - (profile 2).1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin3]
-  simp [stationaryRoot, FTV.CyclicMinimality.terminalReward,
+  simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
   all_goals ring
 
 theorem stationaryRoot_quitPayoff_one
     (profile : StationaryProfile) (value : Payoff Player) :
-    quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootQuitPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         value (stationaryRoot profile) 1 = 1 - (profile 0).1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin3]
-  simp [stationaryRoot, FTV.CyclicMinimality.terminalReward,
+  simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
 
 theorem stationaryRoot_quitPayoff_two
     (profile : StationaryProfile) (value : Payoff Player) :
-    quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootQuitPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         value (stationaryRoot profile) 2 = 1 - (profile 1).1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin3]
-  simp [stationaryRoot, FTV.CyclicMinimality.terminalReward,
+  simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
   all_goals ring
 
 theorem stationaryRoot_continuePayoff_zero
     (profile : StationaryProfile) (value : Payoff Player) :
-    quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootContinuePayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         value (stationaryRoot profile) 0 =
       (1 - (profile 1).1) * (1 - (profile 2).1) * value 0 +
         3 * (1 - (profile 1).1) * (profile 2).1 +
           (profile 1).1 * (profile 2).1 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin3]
-  simp [stationaryRoot, FTV.CyclicMinimality.terminalReward,
+  simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
   all_goals ring
 
 theorem stationaryRoot_continuePayoff_one
     (profile : StationaryProfile) (value : Payoff Player) :
-    quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootContinuePayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         value (stationaryRoot profile) 1 =
       (1 - (profile 0).1) * (1 - (profile 2).1) * value 1 +
         3 * (profile 0).1 * (1 - (profile 2).1) +
           (profile 0).1 * (profile 2).1 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin3]
-  simp [stationaryRoot, FTV.CyclicMinimality.terminalReward,
+  simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
   all_goals ring
 
 theorem stationaryRoot_continuePayoff_two
     (profile : StationaryProfile) (value : Payoff Player) :
-    quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootContinuePayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         value (stationaryRoot profile) 2 =
       (1 - (profile 0).1) * (1 - (profile 1).1) * value 2 +
         3 * (1 - (profile 0).1) * (profile 1).1 +
           (profile 0).1 * (profile 1).1 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin3]
-  simp [stationaryRoot, FTV.CyclicMinimality.terminalReward,
+  simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
   all_goals ring
 
@@ -620,7 +620,7 @@ theorem stationaryEquilibrium_implies_necessaryConditions
     (h : IsStationaryEpsilonEquilibrium 0 profile) :
     StationaryNecessaryConditions
       (profile 0).1 (profile 1).1 (profile 2).1 := by
-  let reward := FTV.CyclicAdmissibleCycle.ftvReward
+  let reward := CyclicThreePlayerQuitting.AdmissibleCycle.reward
   let root := stationaryRoot profile
   let value : Payoff Player := fun who ↦
     quittingTerminalPayoff reward (quittingStationaryProfile reward root) who
@@ -1057,14 +1057,14 @@ private theorem stationaryContinueMass_formula (profile : StationaryProfile) :
 
 private theorem stationaryPayoffNumerator_formula
     (profile : StationaryProfile) (who : Player) :
-    quittingRootAbsorbingContribution FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootAbsorbingContribution CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (stationaryRoot profile) who =
       stationaryPayoffNumerator profile who := by
   fin_cases who <;>
     unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff <;>
     rw [Math.PMFProduct.expect_pmfPi_fin3] <;>
     simp [stationaryRoot, stationaryPayoffNumerator,
-      FTV.CyclicMinimality.terminalReward, expect_coin,
+      CyclicThreePlayerQuitting.Minimality.terminalReward, expect_coin,
       Matrix.cons_val_two] <;> ring
 
 private theorem stationaryOpponentContinueMass_formula
@@ -1082,7 +1082,7 @@ private theorem stationaryOpponentContinueMass_formula
 private theorem stationaryNeverNumerator_formula
     (profile : StationaryProfile) (who : Player) :
     quittingStationaryFixedOpponentsContinueReward
-        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot profile) who =
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward (stationaryRoot profile) who =
       stationaryNeverNumerator profile who := by
   fin_cases who <;>
     unfold quittingStationaryFixedOpponentsContinueReward
@@ -1090,7 +1090,7 @@ private theorem stationaryNeverNumerator_formula
       quittingRootAbsorbingContribution quittingRootExpectedPayoff <;>
     rw [Math.PMFProduct.expect_pmfPi_fin3] <;>
     simp [stationaryRoot, stationaryNeverNumerator,
-      FTV.CyclicMinimality.terminalReward, expect_coin,
+      CyclicThreePlayerQuitting.Minimality.terminalReward, expect_coin,
       Matrix.cons_val_two] <;> ring
 
 /-- The two division-free inequalities used in the paper's compactness
@@ -1098,18 +1098,18 @@ argument: immediate Quit and Never are both within the Nash tolerance. -/
 private theorem stationaryEquilibrium_divisionFreeInequalities
     (profile : StationaryProfile) (ε : ℝ)
     (hnash : IsStationaryEpsilonEquilibrium ε profile) (who : Player) :
-    quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootQuitPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (fun player ↦ quittingTerminalPayoff
-            FTV.CyclicAdmissibleCycle.ftvReward
+            CyclicThreePlayerQuitting.AdmissibleCycle.reward
             (stationaryBehaviorProfile profile) player)
           (stationaryRoot profile) who ≤
-        quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+        quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
             (stationaryBehaviorProfile profile) who + ε ∧
       stationaryNeverNumerator profile who ≤
         stationaryOpponentAbsorptionDenominator profile who *
-          (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+          (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
             (stationaryBehaviorProfile profile) who + ε) := by
-  let reward := FTV.CyclicAdmissibleCycle.ftvReward
+  let reward := CyclicThreePlayerQuitting.AdmissibleCycle.reward
   let root := stationaryRoot profile
   let value : Payoff Player := fun player ↦
     quittingTerminalPayoff reward (quittingStationaryProfile reward root) player
@@ -1232,26 +1232,26 @@ theorem exists_positive_stationaryEpsilonEquilibrium :
         IsStationaryEpsilonEquilibrium ε profile := by
   let zeroHazard : Hazard := ⟨0, by norm_num⟩
   let profile : StationaryProfile := fun _ => zeroHazard
-  let M := quittingRewardBound FTV.CyclicAdmissibleCycle.ftvReward
+  let M := quittingRewardBound CyclicThreePlayerQuitting.AdmissibleCycle.reward
   have hM : 0 < M := by
-    have hthree := FTV.CyclicAdmissibleCycle.three_le_quittingRewardBound
+    have hthree := CyclicThreePlayerQuitting.AdmissibleCycle.three_le_quittingRewardBound
     dsimp [M]
     linarith
   refine ⟨2 * M, by positivity, profile, ?_⟩
   intro who deviation
   have hdev := abs_quittingTerminalPayoff_le_quittingRewardBound
-    FTV.CyclicAdmissibleCycle.ftvReward
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (Function.update (stationaryBehaviorProfile profile) who deviation) who
   have hbase := abs_quittingTerminalPayoff_le_quittingRewardBound
-    FTV.CyclicAdmissibleCycle.ftvReward
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (stationaryBehaviorProfile profile) who
   have hdev_le :
-      quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (Function.update (stationaryBehaviorProfile profile) who deviation) who ≤
         M := by
     exact (le_abs_self _).trans (by simpa [M] using hdev)
   have hbase_le :
-      -M ≤ quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      -M ≤ quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (stationaryBehaviorProfile profile) who := by
     exact (abs_le.mp (by simpa [M] using hbase)).1
   linarith
@@ -1297,7 +1297,7 @@ theorem theorem3_2_corrected :
   let p : ℕ → StationaryProfile := profile ∘ φ
   let error : ℕ → ℝ := ε ∘ φ
   let value : ℕ → Payoff Player := fun n who ↦
-    quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (stationaryBehaviorProfile (p n)) who
   let denominator : ℕ → ℝ := fun n ↦
     stationaryAbsorptionDenominator (p n)
@@ -1330,15 +1330,15 @@ theorem theorem3_2_corrected :
       funext who
       exact eq_pure_false_of_quittingStationaryContinueMass_eq_one hmass who
     have hbehavior : stationaryBehaviorProfile (p n) =
-        quittingAlwaysContinueProfile FTV.CyclicAdmissibleCycle.ftvReward := by
+        quittingAlwaysContinueProfile CyclicThreePlayerQuitting.AdmissibleCycle.reward := by
       rw [stationaryBehaviorProfile, hroot]
       rfl
     have hvalueZero : value n 0 = 0 := by
-      change quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      change quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (stationaryBehaviorProfile (p n)) 0 = 0
       rw [hbehavior]
       exact quittingTerminalPayoff_quittingAlwaysContinue
-        FTV.CyclicAdmissibleCycle.ftvReward 0
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward 0
     have hzeroHazard : ((p n) 2).1 = 0 := by
       have hpure := congrArg (fun marginal : PMF Bool ↦
         (marginal true).toReal)
@@ -1366,7 +1366,7 @@ theorem theorem3_2_corrected :
   have hbalance (n : ℕ) (who : Player) :
       denominator n * value n who = stationaryPayoffNumerator (p n) who := by
     have h := one_sub_continueMass_mul_quittingTerminalPayoff_stationary
-      FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot (p n)) who
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward (stationaryRoot (p n)) who
     rw [stationaryContinueMass_formula,
       stationaryPayoffNumerator_formula] at h
     simpa [denominator, value, stationaryBehaviorProfile] using h
@@ -1721,16 +1721,16 @@ theorem theorem3_2_corrected :
       rw [stationaryContinueMass_formula]
       exact sub_lt_self 1 hlimitDenominator_pos
     let limitValue : Payoff Player := fun who ↦
-      quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (stationaryBehaviorProfile limit) who
     have hlimitValueFormula (who : Player) :
         limitValue who = stationaryPayoffNumerator limit who /
           stationaryAbsorptionDenominator limit := by
-      change quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
-        (quittingStationaryProfile FTV.CyclicAdmissibleCycle.ftvReward
+      change quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
+        (quittingStationaryProfile CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (stationaryRoot limit)) who = _
       rw [quittingTerminalPayoff_stationary_eq_absorbingContribution_div
-        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot limit) who
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward (stationaryRoot limit) who
         hlimitAbsorbs]
       rw [stationaryContinueMass_formula,
         stationaryPayoffNumerator_formula]
@@ -1823,25 +1823,25 @@ theorem theorem3_2_corrected :
       · rfl
       · exact congrArg nhds hlimitCoordinate
     have hendpointApprox (n : ℕ) :
-        IsεQuittingRootEndpointNash FTV.CyclicAdmissibleCycle.ftvReward
+        IsεQuittingRootEndpointNash CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (value n) (error n) (quittingRootOfSimplex (simplexRoot n)) := by
       rw [hrootOfSimplex]
       apply (isεQuittingRootEndpointNash_iff_isεQuittingRootNash
-        FTV.CyclicAdmissibleCycle.ftvReward (value n) (error n)
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward (value n) (error n)
           (stationaryRoot (p n))).2
       apply isεQuittingRootNash_of_isεAsymptoticNash_stationary
       simpa [p, error, value, IsStationaryEpsilonEquilibrium,
         stationaryBehaviorProfile] using hprofile (φ n)
     have hendpointLimit :
-        IsεQuittingRootEndpointNash FTV.CyclicAdmissibleCycle.ftvReward
+        IsεQuittingRootEndpointNash CyclicThreePlayerQuitting.AdmissibleCycle.reward
           limitValue 0 (stationaryRoot limit) := by
       have hclosed := isεQuittingRootEndpointNash_of_tendsto
-        FTV.CyclicAdmissibleCycle.ftvReward error value simplexRoot herr
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward error value simplexRoot herr
         hvaluesLimit hsimplexRoot
         (Filter.Eventually.of_forall hendpointApprox)
       rwa [hlimitRootOfSimplex] at hclosed
     have hboundary : IsQuittingStationaryBoundaryAdmissible
-        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot limit)
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward (stationaryRoot limit)
           limitValue := by
       intro who hmass
       have hotherZero (other : Player) (hne : other ≠ who) :
@@ -1852,8 +1852,8 @@ theorem theorem3_2_corrected :
         have hprob := congrArg (fun marginal : PMF Bool ↦
           (marginal true).toReal) hpure
         simpa [stationaryRoot] using hprob
-      rw [FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal,
-        FTV.CyclicMinimality.soloReward_self]
+      rw [CyclicThreePlayerQuitting.AdmissibleCycle.reward_singletonTerminal,
+        CyclicThreePlayerQuitting.Minimality.soloReward_self]
       norm_num only [max_eq_right]
       fin_cases who
       · change 1 ≤ limitValue 0
@@ -1893,17 +1893,17 @@ theorem theorem3_2_corrected :
         field_simp [hpositive.ne']
         all_goals norm_num
     have hfixed : limitValue = quittingRootSuccessorPayoff
-        FTV.CyclicAdmissibleCycle.ftvReward limitValue
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward limitValue
           (stationaryRoot limit) := by
       funext who
       exact quittingTerminalPayoff_stationary_eq_rootExpectedPayoff
-        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot limit) who
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward (stationaryRoot limit) who
     have hexact :
-        (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-          (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) 0
+        (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+          (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward) 0
           (stationaryBehaviorProfile limit) := by
       apply (isZeroAsymptoticNash_stationary_iff_boundary_of_fixedPoint_endpointNash
-        FTV.CyclicAdmissibleCycle.ftvReward (stationaryRoot limit)
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward (stationaryRoot limit)
           limitValue hlimitAbsorbs hfixed hendpointLimit).2
       exact hboundary
     exact lemma3_1 ⟨limit, hexact⟩
@@ -1913,102 +1913,102 @@ theorem theorem3_2_corrected :
 /-- The periodic profile generated by the paper's three rows, from an arbitrary
 initial phase. -/
 def cyclicPhaseProfile (phase : Fin 3) :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile :=
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile :=
   quittingCyclicContinuationBlockProfile
-    FTV.CyclicAdmissibleCycle.ftvReward 2
-    FTV.CyclicAdmissibleCycle.ftvBlock phase
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward 2
+    CyclicThreePlayerQuitting.AdmissibleCycle.standardBlock phase
 
 /-- The three phase rows have the exact quit probabilities displayed in
 Theorem 3.3. -/
 theorem phaseRoot_quitProbability (c who : Player) :
-    (FTV.CyclicAdmissibleCycle.phaseRoot c who true).toReal =
-      FTV.CyclicMinimality.ExactCyclicPacket.standardQuitProb c who := by
-  exact FTV.CyclicAdmissibleCycle.phaseRoot_quitProbability c who
+    (CyclicThreePlayerQuitting.AdmissibleCycle.phaseRoot c who true).toReal =
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardQuitProb c who := by
+  exact CyclicThreePlayerQuitting.AdmissibleCycle.phaseRoot_quitProbability c who
 
 /-- Every phase shift of the displayed cycle is an exact terminal equilibrium,
 against all behavioral deviations. -/
 theorem cyclicPhaseProfile_isEquilibrium (phase : Fin 3) :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-      (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) 0
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+      (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward) 0
       (cyclicPhaseProfile phase) := by
   exact isZeroAsymptoticNash_quittingCyclicContinuationBlockProfile
-    FTV.CyclicAdmissibleCycle.ftvReward
-    FTV.CyclicMinimality.namedTarget 2
-    FTV.CyclicAdmissibleCycle.ftvBlock
-    FTV.CyclicAdmissibleCycle.ftvBlock_isQuittingCyclicContinuationBlock
-    FTV.CyclicAdmissibleCycle.isQuittingCycleAdmissible_ftvBlockCycle
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
+    CyclicThreePlayerQuitting.Minimality.namedTarget 2
+    CyclicThreePlayerQuitting.AdmissibleCycle.standardBlock
+    CyclicThreePlayerQuitting.AdmissibleCycle.standardBlock_isQuittingCyclicContinuationBlock
+    CyclicThreePlayerQuitting.AdmissibleCycle.isQuittingCycleAdmissible_standardBlockCycle
     phase
 
 /-- The terminal payoff of a phase shift is the corresponding promise vector. -/
 theorem quittingTerminalPayoff_cyclicPhaseProfile (phase : Fin 3) :
-    quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (cyclicPhaseProfile phase) =
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise phase := by
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise phase := by
   have hvalue :=
     eq_quittingCyclicTerminalValue_of_rootSuccessorPayoff_of_absorbing
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (quittingCyclicContinuationBlockCycle 2
-        FTV.CyclicAdmissibleCycle.ftvBlock)
+        CyclicThreePlayerQuitting.AdmissibleCycle.standardBlock)
       (quittingCyclicContinuationBlockValue 2
-        FTV.CyclicAdmissibleCycle.ftvBlock)
+        CyclicThreePlayerQuitting.AdmissibleCycle.standardBlock)
       (quittingCyclicContinuationBlock_policy
-        FTV.CyclicAdmissibleCycle.ftvReward
-        FTV.CyclicMinimality.namedTarget 2
-        FTV.CyclicAdmissibleCycle.ftvBlock
-        FTV.CyclicAdmissibleCycle.ftvBlock_isQuittingCyclicContinuationBlock)
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
+        CyclicThreePlayerQuitting.Minimality.namedTarget 2
+        CyclicThreePlayerQuitting.AdmissibleCycle.standardBlock
+        CyclicThreePlayerQuitting.AdmissibleCycle.standardBlock_isQuittingCyclicContinuationBlock)
       (quittingCyclicContinuationBlock_prod_continueMass_lt_one
-        FTV.CyclicAdmissibleCycle.ftvReward
-        FTV.CyclicMinimality.namedTarget 2
-        FTV.CyclicAdmissibleCycle.ftvBlock
-        FTV.CyclicAdmissibleCycle.ftvBlock_isQuittingCyclicContinuationBlock)
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
+        CyclicThreePlayerQuitting.Minimality.namedTarget 2
+        CyclicThreePlayerQuitting.AdmissibleCycle.standardBlock
+        CyclicThreePlayerQuitting.AdmissibleCycle.standardBlock_isQuittingCyclicContinuationBlock)
   rw [cyclicPhaseProfile, quittingCyclicContinuationBlockProfile,
     quittingTerminalPayoff_cyclicBehaviorProfile, ← hvalue]
   fin_cases phase <;> rfl
 
 /-- The phase-zero profile is the explicit profile of Theorem 3.3. -/
 def cyclicProfile :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile :=
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile :=
   cyclicPhaseProfile 0
 
 /-- **Theorem 3.3.** The displayed cyclic Markov profile is an equilibrium and
 has reward `(1,2,1)`.  The checked Nash statement allows every behavioral
 unilateral deviation, matching the paper's equilibrium notion. -/
 theorem theorem3_3 :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-        (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) 0
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+        (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward) 0
         cyclicProfile ∧
-      quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
           cyclicProfile =
-        FTV.CyclicMinimality.namedTarget := by
+        CyclicThreePlayerQuitting.Minimality.namedTarget := by
   constructor
   · exact cyclicPhaseProfile_isEquilibrium 0
   · simpa [cyclicProfile, cyclicPhaseProfile,
-      FTV.CyclicAdmissibleCycle.ftvCyclicProfile] using
-      FTV.CyclicAdmissibleCycle.quittingTerminalPayoff_ftvCyclicProfile
+      CyclicThreePlayerQuitting.AdmissibleCycle.cyclicProfile] using
+      CyclicThreePlayerQuitting.AdmissibleCycle.quittingTerminalPayoff_cyclicProfile
 
 /-- The expected finite-horizon averages of the displayed profile converge
 coordinatewise to `(1,2,1)`. -/
 theorem tendsto_cyclicProfile_payoff (who : Player) :
     Tendsto
       (fun horizon : ℕ =>
-        (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).finiteAveragePayoff
+        (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).finiteAveragePayoff
           none horizon cyclicProfile who)
-      atTop (nhds (FTV.CyclicMinimality.namedTarget who)) := by
+      atTop (nhds (CyclicThreePlayerQuitting.Minimality.namedTarget who)) := by
   simpa [cyclicProfile, cyclicPhaseProfile,
-    FTV.CyclicAdmissibleCycle.ftvCyclicProfile] using
-    FTV.CyclicAdmissibleCycle.tendsto_finiteAveragePayoff_ftvCyclicProfile
+    CyclicThreePlayerQuitting.AdmissibleCycle.cyclicProfile] using
+    CyclicThreePlayerQuitting.AdmissibleCycle.tendsto_finiteAveragePayoff_cyclicProfile
       who
 
 /-- The paper's tail beginning at stage `l`; only `l mod 3` matters. -/
 def cyclicTailProfile (l : ℕ) :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile :=
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile :=
   cyclicPhaseProfile (Fin.ofNat 3 l)
 
 /-- The post-Theorem-3.3 observation that every tail triple is again an
 exact Markov equilibrium. -/
 theorem cyclicTailProfile_isEquilibrium (l : ℕ) :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-      (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) 0
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+      (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward) 0
       (cyclicTailProfile l) := by
   exact cyclicPhaseProfile_isEquilibrium (Fin.ofNat 3 l)
 
@@ -2030,10 +2030,10 @@ private def blockContinuation (owner : Player) (α : Hazard)
     (remaining : ℕ) : Payoff Player :=
   fun who =>
     (1 - (1 - α.1) ^ remaining) *
-        FTV.CyclicMinimality.soloReward owner who +
+        CyclicThreePlayerQuitting.Minimality.soloReward owner who +
       (1 - α.1) ^ remaining *
-        FTV.CyclicMinimality.ExactCyclicPacket.standardPromise
-          (FTV.CyclicMinimality.nextThree owner) who
+        CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise
+          (CyclicThreePlayerQuitting.Minimality.nextThree owner) who
 
 private theorem blockRoot_eq_soloMixedRoot
     (n : ℕ) (α : Hazard) (time : ℕ) :
@@ -2057,8 +2057,8 @@ private theorem blockRoot_eq_soloMixedRoot
 
 private theorem blockContinuation_zero (owner : Player) (α : Hazard) :
     blockContinuation owner α 0 =
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise
-        (FTV.CyclicMinimality.nextThree owner) := by
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise
+        (CyclicThreePlayerQuitting.Minimality.nextThree owner) := by
   funext who
   simp [blockContinuation]
 
@@ -2066,12 +2066,12 @@ private theorem blockContinuation_succ
     (owner : Player) (α : Hazard) (remaining : ℕ) :
     blockContinuation owner α (remaining + 1) =
       quittingRootSuccessorPayoff
-        FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (blockContinuation owner α remaining)
         (quittingSoloMixedRoot owner (coin α)) := by
   funext who
   rw [quittingRootSuccessorPayoff_soloMixedRoot,
-    FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal]
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward_singletonTerminal]
   simp only [coin_true_toReal, coin_false_toReal]
   simp [blockContinuation, pow_succ]
   ring
@@ -2081,25 +2081,25 @@ private theorem blockContinuation_self
     blockContinuation owner α remaining owner = 1 := by
   fin_cases owner <;>
     simp [blockContinuation,
-      FTV.CyclicMinimality.soloReward,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise,
-      FTV.CyclicMinimality.nextThree]
+      CyclicThreePlayerQuitting.Minimality.soloReward,
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise,
+      CyclicThreePlayerQuitting.Minimality.nextThree]
 
 private theorem blockContinuation_rootNash
     (n : ℕ) (hn : 0 < n) (owner : Player) (α : Hazard)
     (hα : (1 - α.1) ^ n = (1 / 2 : ℝ))
     (remaining : ℕ) (hremaining : remaining < n) :
     IsεQuittingRootEndpointNash
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (blockContinuation owner α remaining) 0
       (quittingSoloMixedRoot owner (coin α)) := by
   apply isZeroQuittingRootEndpointNash_soloMixedRoot
-  · rw [FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal]
-    rw [FTV.CyclicMinimality.soloReward_self,
+  · rw [CyclicThreePlayerQuitting.AdmissibleCycle.reward_singletonTerminal]
+    rw [CyclicThreePlayerQuitting.Minimality.soloReward_self,
       blockContinuation_self]
   · intro who hwho
-    rw [FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal who,
-      FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal owner]
+    rw [CyclicThreePlayerQuitting.AdmissibleCycle.reward_singletonTerminal who,
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward_singletonTerminal owner]
     have hq0 : 0 ≤ 1 - α.1 := sub_nonneg.mpr α.2.2
     have hq1 : 1 - α.1 ≤ 1 := by linarith [α.2.1]
     have hpow0 : 0 ≤ (1 - α.1) ^ remaining := pow_nonneg hq0 remaining
@@ -2117,29 +2117,29 @@ private theorem blockContinuation_rootNash
       exact pow_le_pow_of_le_one hq0 hq1 (by omega)
     fin_cases owner <;> fin_cases who <;>
       simp_all [blockContinuation,
-        FTV.CyclicAdmissibleCycle.ftvReward,
-        FTV.CyclicMinimality.terminalReward,
-        FTV.CyclicMinimality.soloReward,
-        FTV.CyclicMinimality.ExactCyclicPacket.standardPromise,
-        FTV.CyclicMinimality.nextThree,
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward,
+        CyclicThreePlayerQuitting.Minimality.terminalReward,
+        CyclicThreePlayerQuitting.Minimality.soloReward,
+        CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise,
+        CyclicThreePlayerQuitting.Minimality.nextThree,
         coin_true_toReal, coin_false_toReal] <;>
       nlinarith
 
 private theorem nextThree_ofNat (k : ℕ) :
-    FTV.CyclicMinimality.nextThree (Fin.ofNat 3 k) =
+    CyclicThreePlayerQuitting.Minimality.nextThree (Fin.ofNat 3 k) =
       Fin.ofNat 3 (k + 1) := by
   generalize howner : Fin.ofNat 3 k = owner
   fin_cases owner <;>
     apply Fin.ext <;>
-    simp_all [FTV.CyclicMinimality.nextThree, Fin.ext_iff,
+    simp_all [CyclicThreePlayerQuitting.Minimality.nextThree, Fin.ext_iff,
       Nat.add_mod]
 
 private theorem blockContinuation_full
     (n : ℕ) (owner : Player) (α : Hazard)
     (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) :
     blockContinuation owner α n =
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise owner := by
-  rw [FTV.CyclicAdmissibleCycle.standardPromise_recursion]
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise owner := by
+  rw [CyclicThreePlayerQuitting.AdmissibleCycle.standardPromise_recursion]
   funext who
   simp only [blockContinuation, hα, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
   ring
@@ -2185,7 +2185,7 @@ private theorem blockValue_policy
     (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (time : ℕ) :
     blockValue n α time =
       quittingRootSuccessorPayoff
-        FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (blockValue n α (time + 1)) (blockRoot n α time) := by
   rw [blockRoot_eq_soloMixedRoot]
   have hmod : time % n < n := Nat.mod_lt time hn
@@ -2205,12 +2205,12 @@ private theorem blockValue_policy
             congr 2
             omega
       _ = quittingRootSuccessorPayoff
-          FTV.CyclicAdmissibleCycle.ftvReward
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (blockContinuation (Fin.ofNat 3 (time / n)) α 0)
           (quittingSoloMixedRoot (Fin.ofNat 3 (time / n)) (coin α)) :=
             blockContinuation_succ _ _ _
       _ = quittingRootSuccessorPayoff
-          FTV.CyclicAdmissibleCycle.ftvReward
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (blockContinuation (Fin.ofNat 3 (time / n + 1)) α n)
           (quittingSoloMixedRoot (Fin.ofNat 3 (time / n)) (coin α)) := by
             rw [blockContinuation_zero, blockContinuation_full n _ α hα,
@@ -2220,7 +2220,7 @@ private theorem blockValue_endpointNash
     (n : ℕ) (hn : 0 < n) (α : Hazard)
     (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (time : ℕ) :
     IsεQuittingRootEndpointNash
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (blockValue n α (time + 1)) 0 (blockRoot n α time) := by
   rw [blockRoot_eq_soloMixedRoot]
   have hmod : time % n < n := Nat.mod_lt time hn
@@ -2240,7 +2240,7 @@ private theorem blockValue_rootNash
     (n : ℕ) (hn : 0 < n) (α : Hazard)
     (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (time : ℕ) :
     IsεQuittingRootNash
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (blockValue n α (time + 1)) 0 (blockRoot n α time) := by
   rw [← isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash]
   exact blockValue_endpointNash n hn α hα time
@@ -2278,7 +2278,7 @@ private theorem blockCycle_policy
     (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (phase : Fin (n * 3)) :
     blockCycleValue n α phase =
       quittingRootSuccessorPayoff
-        FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (blockCycleValue n α (finRotate (n * 3) phase))
         (blockCycle n α phase) := by
   letI : NeZero (n * 3) := ⟨by omega⟩
@@ -2295,7 +2295,7 @@ private theorem blockCycle_rootNash
     (n : ℕ) (hn : 0 < n) (α : Hazard)
     (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) (phase : Fin (n * 3)) :
     IsεQuittingRootNash
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (blockCycleValue n α (finRotate (n * 3) phase)) 0
       (blockCycle n α phase) := by
   letI : NeZero (n * 3) := ⟨by omega⟩
@@ -2310,11 +2310,11 @@ private theorem blockCycle_rootNash
 
 private theorem blockCycle_admissible (n : ℕ) (α : Hazard) :
     IsQuittingCycleAdmissible
-      FTV.CyclicAdmissibleCycle.ftvReward (blockCycle n α) := by
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward (blockCycle n α) := by
   intro who
   right
-  rw [FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal,
-    FTV.CyclicMinimality.soloReward_self]
+  rw [CyclicThreePlayerQuitting.AdmissibleCycle.reward_singletonTerminal,
+    CyclicThreePlayerQuitting.Minimality.soloReward_self]
   norm_num
 
 private theorem blockCycle_absorbs
@@ -2341,10 +2341,10 @@ private theorem blockCycle_absorbs
 private theorem blockCyclicProfile_eq
     (n : ℕ) (hn : 0 < n) (α : Hazard) :
     quittingCyclicBehaviorProfile
-      FTV.CyclicAdmissibleCycle.ftvReward (blockCycle n α)
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward (blockCycle n α)
         (⟨0, by positivity⟩ : Fin (n * 3)) =
       quittingRootSequenceProfile
-        FTV.CyclicAdmissibleCycle.ftvReward (blockRoot n α) 0 := by
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward (blockRoot n α) 0 := by
   have hroots : quittingCyclicRootSequence (blockCycle n α)
       (⟨0, by positivity⟩ : Fin (n * 3)) = blockRoot n α := by
     funext time
@@ -2357,14 +2357,14 @@ private theorem blockCyclicProfile_eq
 theorem blockRepeatedEquilibrium
     (n : ℕ) (hn : 0 < n) (α : Hazard)
     (hα : (1 - α.1) ^ n = (1 / 2 : ℝ)) :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-      (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) 0
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+      (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward) 0
       (quittingRootSequenceProfile
-        FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (blockRoot n α) 0) := by
   have hcompiled :=
     isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_admissible
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (blockCycle n α) (blockCycleValue n α)
       (⟨0, by positivity⟩ : Fin (n * 3))
       (blockCycle_policy n hn α hα)
@@ -2391,9 +2391,9 @@ def HasCyclicSupport (profile : MarkovProfile) : Prop :=
   ∃ owner : ℕ → Player,
     (∀ time who, 0 < (profile time who).1 ↔ who = owner time) ∧
     (∀ time, owner (time + 1) = owner time ∨
-      owner (time + 1) = FTV.CyclicMinimality.nextThree (owner time)) ∧
+      owner (time + 1) = CyclicThreePlayerQuitting.Minimality.nextThree (owner time)) ∧
     (∀ time, ∃ later, time < later ∧
-      owner later = FTV.CyclicMinimality.nextThree (owner time))
+      owner later = CyclicThreePlayerQuitting.Minimality.nextThree (owner time))
 
 /-! The decreasing-minimum calculation in Step 2 is purely real algebra.  It
 is isolated here from the semantic argument that supplies its hypotheses. -/
@@ -2602,7 +2602,7 @@ private theorem not_forall_interiorMarkovStep
 private theorem hazards_lt_one_of_endpointNash
     (profile : StationaryProfile) (tail : Payoff Player)
     (hnash : IsεQuittingRootEndpointNash
-      FTV.CyclicAdmissibleCycle.ftvReward tail 0 (stationaryRoot profile)) :
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward tail 0 (stationaryRoot profile)) :
     ∀ who, (profile who).1 < 1 := by
   let x := (profile 0).1
   let y := (profile 1).1
@@ -2709,9 +2709,9 @@ private theorem hazards_lt_one_of_endpointNash
 private theorem all_hazards_lt_one_of_exact_rootSequenceNash
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile)) :
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile)) :
     ∀ time who, (profile time who).1 < 1 := by
-  let reward := FTV.CyclicAdmissibleCycle.ftvReward
+  let reward := CyclicThreePlayerQuitting.AdmissibleCycle.reward
   let roots := markovRoot profile
   have hstage : ∀ time,
       0 < quittingJointSurvivalWeight roots 0 time ∧
@@ -2764,7 +2764,7 @@ private theorem all_hazards_lt_one_of_exact_rootSequenceNash
 /-- The paper's `(u_n,v_n,w_n)`: the terminal continuation payoff from a
 given stage of a Markov profile. -/
 def continuationPayoff (profile : MarkovProfile) (time : ℕ) : Payoff Player :=
-  quittingRootSequenceTailVector FTV.CyclicAdmissibleCycle.ftvReward
+  quittingRootSequenceTailVector CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (markovRoot profile) time
 
 private theorem markovRoot_eq_stationaryRoot
@@ -2774,10 +2774,10 @@ private theorem markovRoot_eq_stationaryRoot
 private theorem endpointNash_at_of_exact
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) :
-    IsεQuittingRootEndpointNash FTV.CyclicAdmissibleCycle.ftvReward
+    IsεQuittingRootEndpointNash CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1)) 0 (markovRoot profile time) := by
   have hsurvival :
       0 < quittingJointSurvivalWeight (markovRoot profile) 0 time := by
@@ -2793,21 +2793,21 @@ private theorem endpointNash_at_of_exact
     exact sub_pos.mpr (hlt offset who)
   simpa [continuationPayoff] using
     isεQuittingRootEndpointNash_tailVector_of_isεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile)
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile)
       hnash time hsurvival
 
 private theorem continuationPayoff_eq_quit_of_pos
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (who : Player) (hpos : 0 < (profile time who).1) :
     continuationPayoff profile time who =
-      quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingRootQuitPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (continuationPayoff profile (time + 1)) (markovRoot profile time) who := by
   have hendpoint := endpointNash_at_of_exact profile hnash hlt time
   have hgap := quittingRootEndpointDifference_eq_zero_of_both_probabilities_pos
-    FTV.CyclicAdmissibleCycle.ftvReward
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (continuationPayoff profile (time + 1)) (markovRoot profile time) who
     hendpoint
     (by change 0 < (coin (profile time who) false).toReal
@@ -2817,34 +2817,34 @@ private theorem continuationPayoff_eq_quit_of_pos
         rw [coin_true_toReal]
         exact hpos)
   have hdiff := quittingRootQuitPayoff_sub_successorPayoff
-    FTV.CyclicAdmissibleCycle.ftvReward
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (continuationPayoff profile (time + 1)) (markovRoot profile time) who
   rw [hgap, mul_zero] at hdiff
   have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
-    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile) who time
   change continuationPayoff profile time who = _
-  change quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+  change quittingRootQuitPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1)) (markovRoot profile time) who -
-      quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingRootSuccessorPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (continuationPayoff profile (time + 1)) (markovRoot profile time) who = 0
     at hdiff
   change continuationPayoff profile time who =
-    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootSuccessorPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1)) (markovRoot profile time) who at hbell
   linarith
 
 private theorem continuationPayoff_eq_continue_of_pos
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (who : Player) (hpos : 0 < (profile time who).1) :
     continuationPayoff profile time who =
-      quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingRootContinuePayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (continuationPayoff profile (time + 1)) (markovRoot profile time) who := by
   have hendpoint := endpointNash_at_of_exact profile hnash hlt time
   have hgap := quittingRootEndpointDifference_eq_zero_of_both_probabilities_pos
-    FTV.CyclicAdmissibleCycle.ftvReward
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (continuationPayoff profile (time + 1)) (markovRoot profile time) who
     hendpoint
     (by change 0 < (coin (profile time who) false).toReal
@@ -2854,19 +2854,19 @@ private theorem continuationPayoff_eq_continue_of_pos
         rw [coin_true_toReal]
         exact hpos)
   have hdiff := quittingRootContinuePayoff_sub_successorPayoff
-    FTV.CyclicAdmissibleCycle.ftvReward
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (continuationPayoff profile (time + 1)) (markovRoot profile time) who
   rw [hgap, mul_zero] at hdiff
   have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
-    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile) who time
   change continuationPayoff profile time who = _
-  change quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+  change quittingRootContinuePayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1)) (markovRoot profile time) who -
-      quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingRootSuccessorPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (continuationPayoff profile (time + 1)) (markovRoot profile time) who = 0
     at hdiff
   change continuationPayoff profile time who =
-    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootSuccessorPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1)) (markovRoot profile time) who at hbell
   linarith
 
@@ -2874,47 +2874,47 @@ private theorem continuationPayoff_eq_continue_of_zero
     (profile : MarkovProfile) (time : ℕ) (who : Player)
     (hzero : (profile time who).1 = 0) :
     continuationPayoff profile time who =
-      quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingRootContinuePayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (continuationPayoff profile (time + 1)) (markovRoot profile time) who := by
   have hdiff := quittingRootContinuePayoff_sub_successorPayoff
-    FTV.CyclicAdmissibleCycle.ftvReward
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (continuationPayoff profile (time + 1)) (markovRoot profile time) who
   have hprob : ((markovRoot profile time who) true).toReal = 0 := by
     simpa [markovRoot] using hzero
   rw [hprob] at hdiff
   norm_num at hdiff
   have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
-    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile) who time
   change continuationPayoff profile time who = _
-  change quittingRootContinuePayoff FTV.CyclicAdmissibleCycle.ftvReward
+  change quittingRootContinuePayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1)) (markovRoot profile time) who -
-      quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingRootSuccessorPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (continuationPayoff profile (time + 1)) (markovRoot profile time) who = 0
     at hdiff
   change continuationPayoff profile time who =
-    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootSuccessorPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1)) (markovRoot profile time) who at hbell
   linarith
 
 private theorem quitPayoff_le_continuationPayoff
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (who : Player) :
-    quittingRootQuitPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootQuitPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (continuationPayoff profile (time + 1)) (markovRoot profile time) who ≤
       continuationPayoff profile time who := by
   have hpure :=
     (isεQuittingRootEndpointNash_iff_purePayoff_le
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1)) 0
       (markovRoot profile time)).mp
       (endpointNash_at_of_exact profile hnash hlt time) who |>.1
   have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
-    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile) who time
   change continuationPayoff profile time who =
-    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootSuccessorPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1)) (markovRoot profile time) who at hbell
   rw [← hbell] at hpure
   simpa using hpure
@@ -2922,7 +2922,7 @@ private theorem quitPayoff_le_continuationPayoff
 private theorem zero_two_forces_another_zero
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hz : (profile time 2).1 = 0) :
     (profile time 0).1 = 0 ∨ (profile time 1).1 = 0 := by
@@ -2988,7 +2988,7 @@ private theorem zero_two_forces_another_zero
     (profile (time + 1)) (continuationPayoff profile (time + 2))
   have : 1 ≤ continuationPayoff profile (time + 1) 1 := by
     have hformula' : quittingRootQuitPayoff
-        FTV.CyclicAdmissibleCycle.ftvReward
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (continuationPayoff profile (time + 2))
         (stationaryRoot (profile (time + 1))) 1 = 1 := by
       simpa [hxNext] using hformula
@@ -2999,7 +2999,7 @@ private theorem zero_two_forces_another_zero
 private theorem zero_zero_forces_another_zero
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hx : (profile time 0).1 = 0) :
     (profile time 1).1 = 0 ∨ (profile time 2).1 = 0 := by
@@ -3060,7 +3060,7 @@ private theorem zero_zero_forces_another_zero
   have hformula := stationaryRoot_quitPayoff_two
     (profile (time + 1)) (continuationPayoff profile (time + 2))
   have hformula' : quittingRootQuitPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 2))
       (stationaryRoot (profile (time + 1))) 2 = 1 := by
     simpa [hyNext] using hformula
@@ -3070,7 +3070,7 @@ private theorem zero_zero_forces_another_zero
 private theorem zero_one_forces_another_zero
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hy : (profile time 1).1 = 0) :
     (profile time 2).1 = 0 ∨ (profile time 0).1 = 0 := by
@@ -3131,7 +3131,7 @@ private theorem zero_one_forces_another_zero
   have hformula := stationaryRoot_quitPayoff_zero
     (profile (time + 1)) (continuationPayoff profile (time + 2))
   have hformula' : quittingRootQuitPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 2))
       (stationaryRoot (profile (time + 1))) 0 = 1 := by
     simpa [hzNext] using hformula
@@ -3145,7 +3145,7 @@ private theorem player_eq_zero_or_one_or_two (who : Player) :
 private theorem existsUnique_active_of_some_zero
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hactive : ∃ who, 0 < (profile time who).1)
     (hzero : ∃ who, (profile time who).1 = 0) :
@@ -3228,7 +3228,7 @@ private theorem existsUnique_active_of_some_zero
 private theorem solo_zero_forces_two_zero_next
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hsolo : IsUniqueActiveAt profile time 0) :
     (profile (time + 1) 2).1 = 0 := by
@@ -3238,7 +3238,7 @@ private theorem solo_zero_forces_two_zero_next
     profile hnash hlt time 2
   rw [markovRoot_eq_stationaryRoot] at hwLower
   have hquit : quittingRootQuitPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1))
       (stationaryRoot (profile time)) 2 = 1 := by
     simpa [hy] using stationaryRoot_quitPayoff_two
@@ -3273,7 +3273,7 @@ private theorem solo_zero_forces_two_zero_next
 private theorem solo_one_forces_zero_zero_next
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hsolo : IsUniqueActiveAt profile time 1) :
     (profile (time + 1) 0).1 = 0 := by
@@ -3283,7 +3283,7 @@ private theorem solo_one_forces_zero_zero_next
     profile hnash hlt time 0
   rw [markovRoot_eq_stationaryRoot] at huLower
   have hquit : quittingRootQuitPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1))
       (stationaryRoot (profile time)) 0 = 1 := by
     simpa [hz] using stationaryRoot_quitPayoff_zero
@@ -3318,7 +3318,7 @@ private theorem solo_one_forces_zero_zero_next
 private theorem solo_two_forces_one_zero_next
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hsolo : IsUniqueActiveAt profile time 2) :
     (profile (time + 1) 1).1 = 0 := by
@@ -3328,7 +3328,7 @@ private theorem solo_two_forces_one_zero_next
     profile hnash hlt time 1
   rw [markovRoot_eq_stationaryRoot] at hvLower
   have hquit : quittingRootQuitPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1))
       (stationaryRoot (profile time)) 1 = 1 := by
     simpa [hx] using stationaryRoot_quitPayoff_one
@@ -3363,7 +3363,7 @@ private theorem solo_two_forces_one_zero_next
 private theorem exists_isUniqueActiveAt_of_some_zero
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hactive : ∃ who, 0 < (profile time who).1)
     (hzero : ∃ who, (profile time who).1 = 0) :
@@ -3379,13 +3379,13 @@ private theorem uniqueActive_successor
     (profile : MarkovProfile)
     (hnonempty : HasActivePlayerAtEveryStage profile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (owner : Player)
     (hsolo : IsUniqueActiveAt profile time owner) :
     ∃ nextOwner, IsUniqueActiveAt profile (time + 1) nextOwner ∧
       (nextOwner = owner ∨
-        nextOwner = FTV.CyclicMinimality.nextThree owner) := by
+        nextOwner = CyclicThreePlayerQuitting.Minimality.nextThree owner) := by
   rcases player_eq_zero_or_one_or_two owner with rfl | rfl | rfl
   · have hzero := solo_zero_forces_two_zero_next profile hnash hlt time hsolo
     obtain ⟨nextOwner, hnext⟩ := exists_isUniqueActiveAt_of_some_zero
@@ -3431,7 +3431,7 @@ private theorem markovRoot_eq_pure_false_of_hazard_zero
 private theorem continuationPayoff_eq_zero_of_permanent_solo
     (profile : MarkovProfile) (time : ℕ) (owner spectator : Player)
     (hsolo : ∀ offset, IsUniqueActiveAt profile (time + offset) owner)
-    (hreward : FTV.CyclicMinimality.soloReward owner spectator = 0) :
+    (hreward : CyclicThreePlayerQuitting.Minimality.soloReward owner spectator = 0) :
     continuationPayoff profile time spectator = 0 := by
   let shifted : ℕ → Player → PMF Bool :=
     fun offset ↦ markovRoot profile (time + offset)
@@ -3441,31 +3441,31 @@ private theorem continuationPayoff_eq_zero_of_permanent_solo
     exact markovRoot_eq_pure_false_of_hazard_zero profile
       (time + offset) player ((hsolo offset).2 player hne)
   change quittingRootSequenceTerminalValue
-    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) spectator time = 0
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile) spectator time = 0
   rw [quittingRootSequenceTerminalValue_eq_shift]
   change quittingRootSequenceTerminalValue
-    FTV.CyclicAdmissibleCycle.ftvReward shifted spectator 0 = 0
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward shifted spectator 0 = 0
   rw [quittingRootSequenceTerminalValue_eq_of_soloRoots
-    FTV.CyclicAdmissibleCycle.ftvReward shifted owner 0 hshiftSolo spectator]
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward shifted owner 0 hshiftSolo spectator]
   apply mul_eq_zero.mpr
   right
-  change quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward
+  change quittingSoloReward CyclicThreePlayerQuitting.AdmissibleCycle.reward
     owner spectator = 0
   have htable := congrFun
-    (FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal owner) spectator
+    (CyclicThreePlayerQuitting.AdmissibleCycle.reward_singletonTerminal owner) spectator
   exact htable.trans hreward
 
 private theorem exists_later_cyclic_successor
     (profile : MarkovProfile)
     (hnonempty : HasActivePlayerAtEveryStage profile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (owner : Player)
     (hsolo : IsUniqueActiveAt profile time owner) :
     ∃ later, time < later ∧
       IsUniqueActiveAt profile later
-        (FTV.CyclicMinimality.nextThree owner) := by
+        (CyclicThreePlayerQuitting.Minimality.nextThree owner) := by
   by_contra hexists
   push Not at hexists
   have hstay : ∀ offset, IsUniqueActiveAt profile (time + offset) owner := by
@@ -3516,7 +3516,7 @@ private theorem exists_later_cyclic_successor
 private theorem uniqueActive_owner_payoff_eq_one
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (owner : Player)
     (hsolo : IsUniqueActiveAt profile time owner) :
@@ -3539,7 +3539,7 @@ private theorem uniqueActive_minThree_eq_one
     (profile : MarkovProfile)
     (hnonempty : HasActivePlayerAtEveryStage profile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (owner : Player)
     (hsolo : IsUniqueActiveAt profile time owner) :
@@ -3548,7 +3548,7 @@ private theorem uniqueActive_minThree_eq_one
       (continuationPayoff profile time 1)
       (continuationPayoff profile time 2) = 1 := by
   classical
-  let successor := FTV.CyclicMinimality.nextThree owner
+  let successor := CyclicThreePlayerQuitting.Minimality.nextThree owner
   let P : ℕ → Prop := fun later ↦
     time < later ∧ IsUniqueActiveAt profile later successor
   have hfuture : ∃ later, P later := by
@@ -3681,7 +3681,7 @@ private theorem uniqueActive_minThree_eq_one
 private theorem continuation_min_drop_of_all_positive
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hpos : ∀ who, 0 < (profile time who).1) :
     minThree
@@ -3739,9 +3739,9 @@ private theorem exists_zero_hazard_of_lt_one
     (profile : MarkovProfile)
     (hlt : ∀ time who, (profile time who).1 < 1)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile)) :
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile)) :
     ∃ time who, (profile time who).1 = 0 := by
-  let reward := FTV.CyclicAdmissibleCycle.ftvReward
+  let reward := CyclicThreePlayerQuitting.AdmissibleCycle.reward
   let roots := markovRoot profile
   let value : ℕ → Payoff Player := fun time ↦
     quittingRootSequenceTailVector reward roots time
@@ -3921,7 +3921,7 @@ private theorem exists_zero_hazard_at_or_after
     (profile : MarkovProfile)
     (hlt : ∀ time who, (profile time who).1 < 1)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (start : ℕ) :
     ∃ time, start ≤ time ∧ ∃ who, (profile time who).1 = 0 := by
   let shifted : MarkovProfile :=
@@ -3941,12 +3941,12 @@ private theorem exists_zero_hazard_at_or_after
     intro offset _
     simpa only [zero_add] using hcontinueMass offset
   have hnashShift : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot shifted) := by
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot shifted) := by
     change IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0
         (fun time ↦ markovRoot profile (start + time))
     exact exactRootSequenceNash_shift
-      FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile)
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile)
         hnash start hsurvival
   have hltShift : ∀ time who, (shifted time who).1 < 1 := by
     intro time who
@@ -3971,9 +3971,9 @@ theorem theorem3_4 (profile : MarkovProfile)
     HasCyclicSupport profile := by
   classical
   have hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile) := by
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile) := by
     apply (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile)).2
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile)).2
     simpa only [IsMarkovEpsilonEquilibrium, markovBehaviorProfile] using
       hequilibrium
   have hlt := all_hazards_lt_one_of_exact_rootSequenceNash profile hnash
@@ -4079,7 +4079,7 @@ theorem theorem3_4 (profile : MarkovProfile)
     obtain ⟨later, hlater, hnext⟩ := exists_later_cyclic_successor
       profile hnonempty hnash hlt time (owner time) (howner time)
     refine ⟨later, hlater, ?_⟩
-    have heq : owner later = FTV.CyclicMinimality.nextThree (owner time) := by
+    have heq : owner later = CyclicThreePlayerQuitting.Minimality.nextThree (owner time) := by
       by_contra hne
       have hzero := hnext.2 (owner later) hne
       have hpos := (howner later).1
@@ -4116,21 +4116,21 @@ private theorem continuationPayoff_eq_next_of_not_active
     continuationPayoff profile time = continuationPayoff profile (time + 1) := by
   funext who
   have hbell := quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
-    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) who time
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile) who time
   change continuationPayoff profile time who =
-    quittingRootSuccessorPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingRootSuccessorPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1))
       (markovRoot profile time) who at hbell
   rw [markovRoot_eq_allContinue_of_not_active profile time hinactive] at hbell
   exact hbell.trans (congrFun
     (quittingRootSuccessorPayoff_allContinueRoot_eq
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1))) who)
 
 private theorem exists_active_stage_at_or_after
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (start : ℕ) :
     ∃ time, start ≤ time ∧ IsActiveStage profile time := by
@@ -4144,7 +4144,7 @@ private theorem exists_active_stage_at_or_after
       (hexists time htime)
   have hvalue : continuationPayoff profile start 0 = 0 := by
     exact quittingRootSequenceTerminalValue_eq_zero_of_allContinue_from
-      FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) 0 start htail
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile) 0 start htail
   have hlower := quitPayoff_le_continuationPayoff
     profile hnash hlt start 0
   rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_zero]
@@ -4157,7 +4157,7 @@ private theorem exists_active_stage_at_or_after
 private theorem exists_active_stage_after
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) :
     ∃ later, time < later ∧ IsActiveStage profile later := by
@@ -4184,7 +4184,7 @@ private theorem continuationPayoff_eq_of_inactive_interval
 private theorem exists_first_active_stage_after
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) :
     ∃ later, time < later ∧ IsActiveStage profile later ∧
@@ -4205,7 +4205,7 @@ private theorem exists_first_active_stage_after
 private theorem solo_zero_spectator_next_gt_one
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hsolo : IsUniqueActiveAt profile time 0) :
     1 < continuationPayoff profile (time + 1) 2 := by
@@ -4214,7 +4214,7 @@ private theorem solo_zero_spectator_next_gt_one
   have hwLower := quitPayoff_le_continuationPayoff profile hnash hlt time 2
   rw [markovRoot_eq_stationaryRoot] at hwLower
   have hquit : quittingRootQuitPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1))
       (stationaryRoot (profile time)) 2 = 1 := by
     simpa [hy] using stationaryRoot_quitPayoff_two
@@ -4235,7 +4235,7 @@ private theorem solo_zero_spectator_next_gt_one
 private theorem solo_one_spectator_next_gt_one
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hsolo : IsUniqueActiveAt profile time 1) :
     1 < continuationPayoff profile (time + 1) 0 := by
@@ -4244,7 +4244,7 @@ private theorem solo_one_spectator_next_gt_one
   have huLower := quitPayoff_le_continuationPayoff profile hnash hlt time 0
   rw [markovRoot_eq_stationaryRoot] at huLower
   have hquit : quittingRootQuitPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1))
       (stationaryRoot (profile time)) 0 = 1 := by
     simpa [hz] using stationaryRoot_quitPayoff_zero
@@ -4265,7 +4265,7 @@ private theorem solo_one_spectator_next_gt_one
 private theorem solo_two_spectator_next_gt_one
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hsolo : IsUniqueActiveAt profile time 2) :
     1 < continuationPayoff profile (time + 1) 1 := by
@@ -4274,7 +4274,7 @@ private theorem solo_two_spectator_next_gt_one
   have hvLower := quitPayoff_le_continuationPayoff profile hnash hlt time 1
   rw [markovRoot_eq_stationaryRoot] at hvLower
   have hquit : quittingRootQuitPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (continuationPayoff profile (time + 1))
       (stationaryRoot (profile time)) 1 = 1 := by
     simpa [hx] using stationaryRoot_quitPayoff_one
@@ -4295,14 +4295,14 @@ private theorem solo_two_spectator_next_gt_one
 private theorem uniqueActive_next_active
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (owner : Player)
     (hsolo : IsUniqueActiveAt profile time owner) :
     ∃ later nextOwner,
       time < later ∧ IsUniqueActiveAt profile later nextOwner ∧
         (nextOwner = owner ∨
-          nextOwner = FTV.CyclicMinimality.nextThree owner) ∧
+          nextOwner = CyclicThreePlayerQuitting.Minimality.nextThree owner) ∧
         ∀ middle, time < middle → middle < later →
           ¬ IsActiveStage profile middle := by
   obtain ⟨later, hlater, hactive, hinactive⟩ :=
@@ -4392,7 +4392,7 @@ private theorem continuationPayoff_eq_zero_of_solo_from
     (profile : MarkovProfile) (time : ℕ) (owner spectator : Player)
     (hsolo : ∀ stage, time ≤ stage → ∀ player, player ≠ owner →
       (profile stage player).1 = 0)
-    (hreward : FTV.CyclicMinimality.soloReward owner spectator = 0) :
+    (hreward : CyclicThreePlayerQuitting.Minimality.soloReward owner spectator = 0) :
     continuationPayoff profile time spectator = 0 := by
   let shifted : ℕ → Player → PMF Bool :=
     fun offset ↦ markovRoot profile (time + offset)
@@ -4402,29 +4402,29 @@ private theorem continuationPayoff_eq_zero_of_solo_from
     exact markovRoot_eq_pure_false_of_hazard_zero profile
       (time + offset) player (hsolo (time + offset) (by omega) player hne)
   change quittingRootSequenceTerminalValue
-    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) spectator time = 0
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile) spectator time = 0
   rw [quittingRootSequenceTerminalValue_eq_shift]
   change quittingRootSequenceTerminalValue
-    FTV.CyclicAdmissibleCycle.ftvReward shifted spectator 0 = 0
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward shifted spectator 0 = 0
   rw [quittingRootSequenceTerminalValue_eq_of_soloRoots
-    FTV.CyclicAdmissibleCycle.ftvReward shifted owner 0 hshiftSolo spectator]
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward shifted owner 0 hshiftSolo spectator]
   apply mul_eq_zero.mpr
   right
-  change quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward
+  change quittingSoloReward CyclicThreePlayerQuitting.AdmissibleCycle.reward
     owner spectator = 0
   have htable := congrFun
-    (FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal owner) spectator
+    (CyclicThreePlayerQuitting.AdmissibleCycle.reward_singletonTerminal owner) spectator
   exact htable.trans hreward
 
 private theorem exists_later_active_cyclic_successor
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (owner : Player)
     (hsolo : IsUniqueActiveAt profile time owner) :
     ∃ later, time < later ∧ IsUniqueActiveAt profile later
-      (FTV.CyclicMinimality.nextThree owner) := by
+      (CyclicThreePlayerQuitting.Minimality.nextThree owner) := by
   by_contra hexists
   push Not at hexists
   have hinvariant : ∀ cutoff, time ≤ cutoff →
@@ -4503,7 +4503,7 @@ private theorem exists_later_active_cyclic_successor
 private theorem uniqueActive_minThree_eq_one_with_idle
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (owner : Player)
     (hsolo : IsUniqueActiveAt profile time owner) :
@@ -4512,7 +4512,7 @@ private theorem uniqueActive_minThree_eq_one_with_idle
       (continuationPayoff profile time 1)
       (continuationPayoff profile time 2) = 1 := by
   classical
-  let successor := FTV.CyclicMinimality.nextThree owner
+  let successor := CyclicThreePlayerQuitting.Minimality.nextThree owner
   let P : ℕ → Prop := fun later ↦
     time < later ∧ IsUniqueActiveAt profile later successor
   have hfuture : ∃ later, P later := by
@@ -4674,7 +4674,7 @@ private theorem uniqueActive_minThree_eq_one_with_idle
 private theorem inactive_minThree_ge_one
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) (hinactive : ¬ IsActiveStage profile time) :
     1 ≤ minThree
@@ -4696,7 +4696,7 @@ private theorem inactive_minThree_ge_one
 private theorem exists_zero_hazard_at_every_time
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1)
     (time : ℕ) :
     ∃ who, (profile time who).1 = 0 := by
@@ -4771,7 +4771,7 @@ private theorem exists_zero_hazard_at_every_time
 every live phase of an exact cyclic packet has a unique active player. -/
 theorem exactCyclicPacket_existsUnique_activeRole
     {K : ℕ} [NeZero K]
-    (packet : FTV.CyclicMinimality.ExactCyclicPacket K)
+    (packet : CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket K)
     (phase : Fin K) :
     ∃! who : Player, 0 < packet.quitProb phase who := by
   exact packet.existsUnique_activeRole phase
@@ -4779,7 +4779,7 @@ theorem exactCyclicPacket_existsUnique_activeRole
 /-- Checked lower bound for finite exact cyclic packets. -/
 theorem exactCyclicPacket_period_ge_three
     {K : ℕ} [NeZero K]
-    (packet : FTV.CyclicMinimality.ExactCyclicPacket K) :
+    (packet : CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket K) :
     3 ≤ K := by
   exact packet.period_ge_three
 
@@ -4790,18 +4790,18 @@ this definition because every behavior profile is outcome-equivalent on the
 unique live history to a Markov sequence. -/
 def EquilibriumRewards : Set (Payoff Player) :=
   {payoff | ∃ profile :
-      (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile,
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-      (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) 0
+      (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile,
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+      (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward) 0
       profile ∧
-    quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
       profile = payoff}
 
 /-- The same reward set quantified directly over paper Markov profiles. -/
 def MarkovEquilibriumRewards : Set (Payoff Player) :=
   {payoff | ∃ profile : MarkovProfile,
     IsMarkovEpsilonEquilibrium 0 profile ∧
-      quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+      quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (markovBehaviorProfile profile) = payoff}
 
 /-- In the one-live-state game, arbitrary behavioral equilibrium rewards and
@@ -4844,49 +4844,49 @@ def edgeRoot (owner : Player) (α : Hazard) : Player → PMF Bool :=
 /-- The reward produced by the first perturbed row followed by the standard
 cycle at the successor phase. -/
 def edgeTarget (owner : Player) (α : Hazard) : Payoff Player :=
-  (halfHazard α).1 • FTV.CyclicMinimality.soloReward owner +
+  (halfHazard α).1 • CyclicThreePlayerQuitting.Minimality.soloReward owner +
     (1 - (halfHazard α).1) •
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise
-        (FTV.CyclicMinimality.nextThree owner)
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise
+        (CyclicThreePlayerQuitting.Minimality.nextThree owner)
 
 /-- The profile used for the sufficiency half of Theorem 3.5. -/
 def edgeProfile (owner : Player) (α : Hazard) :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).BehaviorProfile :=
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).BehaviorProfile :=
   quittingRootThenContinuationProfile
-    FTV.CyclicAdmissibleCycle.ftvReward
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward
     (edgeRoot owner α)
-    (cyclicPhaseProfile (FTV.CyclicMinimality.nextThree owner))
+    (cyclicPhaseProfile (CyclicThreePlayerQuitting.Minimality.nextThree owner))
 
 /-- Expected payoff of a row with one possible quitter. -/
 theorem quittingRootSuccessorPayoff_soloRoot
     (owner : Player) (p : Hazard) (tail : Payoff Player) :
     quittingRootSuccessorPayoff
-        FTV.CyclicAdmissibleCycle.ftvReward tail
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward tail
         (soloRoot owner p) =
-      p.1 • FTV.CyclicMinimality.soloReward owner +
+      p.1 • CyclicThreePlayerQuitting.Minimality.soloReward owner +
         (1 - p.1) • tail := by
   funext who
   change quittingRootExpectedPayoff
-    FTV.CyclicAdmissibleCycle.ftvReward tail
+    CyclicThreePlayerQuitting.AdmissibleCycle.reward tail
       (soloRoot owner p) who = _
   unfold quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases owner <;> fin_cases who <;>
     simp [soloRoot,
-      FTV.CyclicMinimality.terminalReward,
-      FTV.CyclicMinimality.soloReward,
+      CyclicThreePlayerQuitting.Minimality.terminalReward,
+      CyclicThreePlayerQuitting.Minimality.soloReward,
       Matrix.cons_val_two, expect_pure]
 
 /-- Endpoint differences at the perturbed first row. -/
 theorem endpointDifference_edgeRoot
     (owner : Player) (α : Hazard) (who : Player) :
     quittingRootEndpointDifference
-        FTV.CyclicAdmissibleCycle.ftvReward
-        (FTV.CyclicMinimality.ExactCyclicPacket.standardPromise
-          (FTV.CyclicMinimality.nextThree owner))
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward
+        (CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise
+          (CyclicThreePlayerQuitting.Minimality.nextThree owner))
         (edgeRoot owner α) who =
       if who = owner then 0
-      else if who = FTV.CyclicMinimality.nextThree owner then
+      else if who = CyclicThreePlayerQuitting.Minimality.nextThree owner then
         -(3 * α.1 / 2)
       else α.1 - 1 := by
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
@@ -4895,9 +4895,9 @@ theorem endpointDifference_edgeRoot
     Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases owner <;> fin_cases who <;>
     simp [edgeRoot, soloRoot, halfHazard,
-      FTV.CyclicMinimality.terminalReward,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise,
-      FTV.CyclicMinimality.nextThree,
+      CyclicThreePlayerQuitting.Minimality.terminalReward,
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise,
+      CyclicThreePlayerQuitting.Minimality.nextThree,
       Matrix.cons_val_two, expect_pure] <;> ring
 
 /-- The perturbed first row is exact endpoint Nash against the successor
@@ -4905,34 +4905,34 @@ promise for every `α∈[0,1]`. -/
 theorem isZeroEndpointNash_edgeRoot
     (owner : Player) (α : Hazard) :
     IsεQuittingRootEndpointNash
-      FTV.CyclicAdmissibleCycle.ftvReward
-      (FTV.CyclicMinimality.ExactCyclicPacket.standardPromise
-        (FTV.CyclicMinimality.nextThree owner))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
+      (CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise
+        (CyclicThreePlayerQuitting.Minimality.nextThree owner))
       0 (edgeRoot owner α) := by
   intro who
   rw [endpointDifference_edgeRoot]
   fin_cases owner <;> fin_cases who <;>
     simp [edgeRoot, soloRoot, halfHazard,
-      FTV.CyclicMinimality.nextThree] <;>
+      CyclicThreePlayerQuitting.Minimality.nextThree] <;>
     nlinarith [α.2.1, α.2.2]
 
 /-- The perturbed-first-row construction is an exact equilibrium. -/
 theorem edgeProfile_isEquilibrium (owner : Player) (α : Hazard) :
-    (quittingGame FTV.CyclicAdmissibleCycle.ftvReward).IsεAsymptoticNash
-      (quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward) 0
+    (quittingGame CyclicThreePlayerQuitting.AdmissibleCycle.reward).IsεAsymptoticNash
+      (quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward) 0
       (edgeProfile owner α) := by
   have h :=
     isεAsymptoticNash_quittingRootThenContinuation_of_endpointNash_target_close
-      FTV.CyclicAdmissibleCycle.ftvReward
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (edgeRoot owner α)
       (cyclicPhaseProfile
-        (FTV.CyclicMinimality.nextThree owner))
-      (FTV.CyclicMinimality.ExactCyclicPacket.standardPromise
-        (FTV.CyclicMinimality.nextThree owner))
+        (CyclicThreePlayerQuitting.Minimality.nextThree owner))
+      (CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise
+        (CyclicThreePlayerQuitting.Minimality.nextThree owner))
       (η := 0) (ε := 0) (δ := 0) (by norm_num) (by norm_num)
       (isZeroEndpointNash_edgeRoot owner α)
       (cyclicPhaseProfile_isEquilibrium
-        (FTV.CyclicMinimality.nextThree owner))
+        (CyclicThreePlayerQuitting.Minimality.nextThree owner))
       (by
         intro who
         rw [quittingTerminalPayoff_cyclicPhaseProfile]
@@ -4942,16 +4942,16 @@ theorem edgeProfile_isEquilibrium (owner : Player) (α : Hazard) :
 /-- The construction realizes its displayed edge target. -/
 theorem quittingTerminalPayoff_edgeProfile
     (owner : Player) (α : Hazard) :
-    quittingTerminalPayoff FTV.CyclicAdmissibleCycle.ftvReward
+    quittingTerminalPayoff CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (edgeProfile owner α) =
       edgeTarget owner α := by
   funext who
   rw [edgeProfile, quittingTerminalPayoff_rootThenContinuation_eq,
     quittingTerminalPayoff_cyclicPhaseProfile]
   change quittingRootSuccessorPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward
-      (FTV.CyclicMinimality.ExactCyclicPacket.standardPromise
-        (FTV.CyclicMinimality.nextThree owner))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward
+      (CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise
+        (CyclicThreePlayerQuitting.Minimality.nextThree owner))
       (soloRoot owner (halfHazard α)) who = _
   rw [quittingRootSuccessorPayoff_soloRoot]
   rfl
@@ -4961,27 +4961,27 @@ theorem quittingTerminalPayoff_edgeProfile
   funext who
   fin_cases who <;>
     simp [edgeTarget, halfHazard,
-      FTV.CyclicMinimality.soloReward,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise,
-      FTV.CyclicMinimality.nextThree] <;> ring
+      CyclicThreePlayerQuitting.Minimality.soloReward,
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise,
+      CyclicThreePlayerQuitting.Minimality.nextThree] <;> ring
 
 @[simp] theorem edgeTarget_one (α : Hazard) :
     edgeTarget 1 α = ![2 - α.1, 1, 1 + α.1] := by
   funext who
   fin_cases who <;>
     simp [edgeTarget, halfHazard,
-      FTV.CyclicMinimality.soloReward,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise,
-      FTV.CyclicMinimality.nextThree] <;> ring
+      CyclicThreePlayerQuitting.Minimality.soloReward,
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise,
+      CyclicThreePlayerQuitting.Minimality.nextThree] <;> ring
 
 @[simp] theorem edgeTarget_two (α : Hazard) :
     edgeTarget 2 α = ![1 + α.1, 2 - α.1, 1] := by
   funext who
   fin_cases who <;>
     simp [edgeTarget, halfHazard,
-      FTV.CyclicMinimality.soloReward,
-      FTV.CyclicMinimality.ExactCyclicPacket.standardPromise,
-      FTV.CyclicMinimality.nextThree] <;> ring
+      CyclicThreePlayerQuitting.Minimality.soloReward,
+      CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardPromise,
+      CyclicThreePlayerQuitting.Minimality.nextThree] <;> ring
 
 /-- Every displayed edge target is feasible. -/
 theorem edgeTarget_mem_equilibriumRewards
@@ -5032,16 +5032,16 @@ private theorem markovRoot_eq_quittingSoloStationaryRoot
       (hsolo who hwho)]
     simp [quittingSoloStationaryRoot, hwho]
 
-private theorem ftv_solo_absorbing_coordinate_sum
+private theorem solo_absorbing_coordinate_sum
     (owner : Player) (hazard : PMF Bool) :
     quittingRootAbsorbingContribution
-          FTV.CyclicAdmissibleCycle.ftvReward
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (quittingSoloStationaryRoot owner hazard) 0 +
         quittingRootAbsorbingContribution
-          FTV.CyclicAdmissibleCycle.ftvReward
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (quittingSoloStationaryRoot owner hazard) 1 +
         quittingRootAbsorbingContribution
-          FTV.CyclicAdmissibleCycle.ftvReward
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward
           (quittingSoloStationaryRoot owner hazard) 2 =
       4 * quittingRootAbsorptionMass
         (quittingSoloStationaryRoot owner hazard) := by
@@ -5049,28 +5049,28 @@ private theorem ftv_solo_absorbing_coordinate_sum
     quittingRootAbsorbingContribution_solo,
     quittingRootAbsorbingContribution_solo,
     quittingRootAbsorptionMass_soloStationaryRoot]
-  have hsum : quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward owner 0 +
-      quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward owner 1 +
-      quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward owner 2 = 4 := by
-    have hsolo : quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward owner =
-        FTV.CyclicMinimality.soloReward owner := by
+  have hsum : quittingSoloReward CyclicThreePlayerQuitting.AdmissibleCycle.reward owner 0 +
+      quittingSoloReward CyclicThreePlayerQuitting.AdmissibleCycle.reward owner 1 +
+      quittingSoloReward CyclicThreePlayerQuitting.AdmissibleCycle.reward owner 2 = 4 := by
+    have hsolo : quittingSoloReward CyclicThreePlayerQuitting.AdmissibleCycle.reward owner =
+        CyclicThreePlayerQuitting.Minimality.soloReward owner := by
       unfold quittingSoloReward
-      exact FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal owner
+      exact CyclicThreePlayerQuitting.AdmissibleCycle.reward_singletonTerminal owner
     rw [hsolo]
     fin_cases owner <;>
-      norm_num [FTV.CyclicMinimality.soloReward, Matrix.cons_val_two]
+      norm_num [CyclicThreePlayerQuitting.Minimality.soloReward, Matrix.cons_val_two]
   linear_combination (hazard true).toReal * hsum
 
-private theorem ftv_stage_absorbing_coordinate_sum
+private theorem stage_absorbing_coordinate_sum
     (profile : MarkovProfile) (time : ℕ)
     (hrow : ¬ IsActiveStage profile time ∨
       ∃ owner, IsUniqueActiveAt profile time owner) :
     quittingRootAbsorbingContribution
-          FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile time) 0 +
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile time) 0 +
         quittingRootAbsorbingContribution
-          FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile time) 1 +
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile time) 1 +
         quittingRootAbsorbingContribution
-          FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile time) 2 =
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile time) 2 =
       4 * quittingRootAbsorptionMass (markovRoot profile time) := by
   obtain ⟨owner, hsolo⟩ : ∃ owner, ∀ who, who ≠ owner →
       (profile time who).1 = 0 := by
@@ -5079,22 +5079,22 @@ private theorem ftv_stage_absorbing_coordinate_sum
         hazard_eq_zero_of_not_active profile time hinactive who⟩
     · exact ⟨owner, howner.2⟩
   rw [markovRoot_eq_quittingSoloStationaryRoot profile time owner hsolo]
-  exact ftv_solo_absorbing_coordinate_sum owner (coin (profile time owner))
+  exact solo_absorbing_coordinate_sum owner (coin (profile time owner))
 
-private theorem ftvReward_abs_le_four
+private theorem reward_abs_le_four
     (terminal : {S : Finset Player // S.Nonempty}) (who : Player) :
-    |FTV.CyclicAdmissibleCycle.ftvReward terminal who| ≤ 4 := by
+    |CyclicThreePlayerQuitting.AdmissibleCycle.reward terminal who| ≤ 4 := by
   let action : Player → Bool := fun player ↦ decide (player ∈ terminal.1)
-  change |FTV.CyclicMinimality.terminalReward action who| ≤ 4
+  change |CyclicThreePlayerQuitting.Minimality.terminalReward action who| ≤ 4
   fin_cases who <;>
     cases h0 : action 0 <;> cases h1 : action 1 <;> cases h2 : action 2 <;>
-      norm_num [FTV.CyclicMinimality.terminalReward,
+      norm_num [CyclicThreePlayerQuitting.Minimality.terminalReward,
         Matrix.cons_val_two, h0, h1, h2]
 
-private theorem ftv_jointSurvivalLimit_eq_zero
+private theorem jointSurvivalLimit_eq_zero
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1) :
     quittingJointSurvivalLimit (markovRoot profile) 0 = 0 := by
   apply le_antisymm
@@ -5102,8 +5102,8 @@ private theorem ftv_jointSurvivalLimit_eq_zero
     intro hpositive
     have htend :=
       tendsto_quittingRootSequenceTerminalValue_tail_zero_of_survivalLimit_pos
-        FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) 0 0
-        ftvReward_abs_le_four hpositive
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovRoot profile) 0 0
+        reward_abs_le_four hpositive
     have heventually : ∀ᶠ cutoff : ℕ in atTop,
         continuationPayoff profile cutoff 0 < 1 / 2 := by
       simpa only [zero_add, continuationPayoff,
@@ -5123,10 +5123,10 @@ private theorem ftv_jointSurvivalLimit_eq_zero
     linarith [hthreshold later hlater]
   · exact quittingJointSurvivalLimit_nonneg _ _
 
-private theorem ftv_terminal_coordinate_sum_eq_four
+private theorem terminal_coordinate_sum_eq_four
     (profile : MarkovProfile)
     (hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile))
     (hlt : ∀ time who, (profile time who).1 < 1) :
     continuationPayoff profile 0 0 +
         continuationPayoff profile 0 1 +
@@ -5141,15 +5141,15 @@ private theorem ftv_terminal_coordinate_sum_eq_four
     · exact Or.inl hactive
   have hstage (time : ℕ) :
       quittingRootAbsorbingContribution
-            FTV.CyclicAdmissibleCycle.ftvReward (roots time) 0 +
+            CyclicThreePlayerQuitting.AdmissibleCycle.reward (roots time) 0 +
           quittingRootAbsorbingContribution
-            FTV.CyclicAdmissibleCycle.ftvReward (roots time) 1 +
+            CyclicThreePlayerQuitting.AdmissibleCycle.reward (roots time) 1 +
           quittingRootAbsorbingContribution
-            FTV.CyclicAdmissibleCycle.ftvReward (roots time) 2 =
+            CyclicThreePlayerQuitting.AdmissibleCycle.reward (roots time) 2 =
         4 * quittingRootAbsorptionMass (roots time) := by
-    exact ftv_stage_absorbing_coordinate_sum profile time (hrow time)
+    exact stage_absorbing_coordinate_sum profile time (hrow time)
   have habsorbing : quittingJointSurvivalLimit roots 0 = 0 := by
-    exact ftv_jointSurvivalLimit_eq_zero profile hnash hlt
+    exact jointSurvivalLimit_eq_zero profile hnash hlt
   have haccount (fuel : ℕ) :
       continuationPayoff profile 0 0 +
           continuationPayoff profile 0 1 +
@@ -5160,47 +5160,47 @@ private theorem ftv_terminal_coordinate_sum_eq_four
               continuationPayoff profile fuel 1 +
               continuationPayoff profile fuel 2) := by
     have hu := eq_sum_jointSurvivalWeight_mul_absorbingContribution_add
-      FTV.CyclicAdmissibleCycle.ftvReward roots 0
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0
         (fun time ↦ quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 0 time)
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0 time)
         (isQuittingLivePrescribedValue_quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 0) 0 fuel
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0) 0 fuel
     have hv := eq_sum_jointSurvivalWeight_mul_absorbingContribution_add
-      FTV.CyclicAdmissibleCycle.ftvReward roots 1
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 1
         (fun time ↦ quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 1 time)
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 1 time)
         (isQuittingLivePrescribedValue_quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 1) 0 fuel
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 1) 0 fuel
     have hw := eq_sum_jointSurvivalWeight_mul_absorbingContribution_add
-      FTV.CyclicAdmissibleCycle.ftvReward roots 2
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 2
         (fun time ↦ quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 2 time)
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 2 time)
         (isQuittingLivePrescribedValue_quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 2) 0 fuel
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 2) 0 fuel
     simp only [zero_add] at hu hv hw
     have habsSum :
         (∑ offset ∈ Finset.range fuel,
             quittingJointSurvivalWeight roots 0 offset *
               quittingRootAbsorbingContribution
-                FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 0) +
+                CyclicThreePlayerQuitting.AdmissibleCycle.reward (roots offset) 0) +
           (∑ offset ∈ Finset.range fuel,
             quittingJointSurvivalWeight roots 0 offset *
               quittingRootAbsorbingContribution
-                FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 1) +
+                CyclicThreePlayerQuitting.AdmissibleCycle.reward (roots offset) 1) +
           (∑ offset ∈ Finset.range fuel,
             quittingJointSurvivalWeight roots 0 offset *
               quittingRootAbsorbingContribution
-                FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 2) =
+                CyclicThreePlayerQuitting.AdmissibleCycle.reward (roots offset) 2) =
           4 * (1 - quittingJointSurvivalWeight roots 0 fuel) := by
       calc
         _ = ∑ offset ∈ Finset.range fuel,
               quittingJointSurvivalWeight roots 0 offset *
                 (quittingRootAbsorbingContribution
-                    FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 0 +
+                    CyclicThreePlayerQuitting.AdmissibleCycle.reward (roots offset) 0 +
                   quittingRootAbsorbingContribution
-                    FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 1 +
+                    CyclicThreePlayerQuitting.AdmissibleCycle.reward (roots offset) 1 +
                   quittingRootAbsorbingContribution
-                    FTV.CyclicAdmissibleCycle.ftvReward (roots offset) 2) := by
+                    CyclicThreePlayerQuitting.AdmissibleCycle.reward (roots offset) 2) := by
               rw [← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
               apply Finset.sum_congr rfl
               intro offset _
@@ -5228,19 +5228,19 @@ private theorem ftv_terminal_coordinate_sum_eq_four
                     ring
               rw [← Finset.mul_sum, htelescope fuel]
     change quittingRootSequenceTerminalValue
-        FTV.CyclicAdmissibleCycle.ftvReward roots 0 0 +
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0 0 +
         quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 1 0 +
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 1 0 +
         quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 2 0 =
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 2 0 =
       4 * (1 - quittingJointSurvivalWeight roots 0 fuel) +
         quittingJointSurvivalWeight roots 0 fuel *
           (quittingRootSequenceTerminalValue
-              FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel +
+              CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0 fuel +
             quittingRootSequenceTerminalValue
-              FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel +
+              CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 1 fuel +
             quittingRootSequenceTerminalValue
-              FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel)
+              CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 2 fuel)
     rw [hu, hv, hw]
     linear_combination habsSum
   have hsurvival : Tendsto
@@ -5252,33 +5252,33 @@ private theorem ftv_terminal_coordinate_sum_eq_four
           continuationPayoff profile fuel 1 +
           continuationPayoff profile fuel 2| ≤ 12 := by
     have hu := abs_quittingRootSequenceTerminalValue_le
-      FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel (by norm_num)
-        ftvReward_abs_le_four
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0 fuel (by norm_num)
+        reward_abs_le_four
     have hv := abs_quittingRootSequenceTerminalValue_le
-      FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel (by norm_num)
-        ftvReward_abs_le_four
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 1 fuel (by norm_num)
+        reward_abs_le_four
     have hw := abs_quittingRootSequenceTerminalValue_le
-      FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel (by norm_num)
-        ftvReward_abs_le_four
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 2 fuel (by norm_num)
+        reward_abs_le_four
     change |quittingRootSequenceTerminalValue
-        FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel +
+        CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0 fuel +
         quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel +
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 1 fuel +
         quittingRootSequenceTerminalValue
-          FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel| ≤ 12
+          CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 2 fuel| ≤ 12
     calc
       _ ≤ |quittingRootSequenceTerminalValue
-              FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel +
+              CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0 fuel +
             quittingRootSequenceTerminalValue
-              FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel| +
+              CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 1 fuel| +
           |quittingRootSequenceTerminalValue
-            FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel| := abs_add_le _ _
+            CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 2 fuel| := abs_add_le _ _
       _ ≤ (|quittingRootSequenceTerminalValue
-              FTV.CyclicAdmissibleCycle.ftvReward roots 0 fuel| +
+              CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0 fuel| +
             |quittingRootSequenceTerminalValue
-              FTV.CyclicAdmissibleCycle.ftvReward roots 1 fuel|) +
+              CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 1 fuel|) +
           |quittingRootSequenceTerminalValue
-            FTV.CyclicAdmissibleCycle.ftvReward roots 2 fuel| := by
+            CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 2 fuel| := by
               gcongr
               exact abs_add_le _ _
       _ ≤ 12 := by linarith
@@ -5328,9 +5328,9 @@ theorem theorem3_5_necessity :
   rw [equilibriumRewards_eq_markov] at hpayoff
   obtain ⟨profile, hequilibrium, hpayoff⟩ := hpayoff
   have hnash : IsεQuittingRootSequenceNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile) := by
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile) := by
     apply (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
-      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile)).2
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward 0 (markovRoot profile)).2
     simpa only [IsMarkovEpsilonEquilibrium, markovBehaviorProfile] using
       hequilibrium
   have hlt := all_hazards_lt_one_of_exact_rootSequenceNash profile hnash
@@ -5385,9 +5385,9 @@ theorem theorem3_5_necessity :
       · right
         right
         simpa [min_eq_right hright] using hmin
-  have hsum := ftv_terminal_coordinate_sum_eq_four profile hnash hlt
+  have hsum := terminal_coordinate_sum_eq_four profile hnash hlt
   have hterminal : quittingTerminalPayoff
-      FTV.CyclicAdmissibleCycle.ftvReward (markovBehaviorProfile profile) =
+      CyclicThreePlayerQuitting.AdmissibleCycle.reward (markovBehaviorProfile profile) =
       continuationPayoff profile 0 := by
     rfl
   have hpayoffEq : payoff = continuationPayoff profile 0 :=
