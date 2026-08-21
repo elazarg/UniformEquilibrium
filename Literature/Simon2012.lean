@@ -4007,6 +4007,124 @@ def AreSection3Constants (G : QuittingGame) (M d ρ ξ R : ℝ) : Prop :=
       β j ≤ 2 * (Fintype.card G.Player : ℝ) * M) →
     ∀ j, (p j : ℝ) ≤ 1 - ξ
 
+/-- The bounded exact-equilibrium slice used to choose the uniform distance
+from the sure-Quit faces. -/
+private def boundedExactEquilibriumSlice (G : QuittingGame) (M ρ : ℝ) :
+    Set (Payoff G.Player × QuitRow G) :=
+  EpsilonEquilibriumGraph G 0 ∩
+    ({β | ∀ j, MinMaxQuit G j - ρ ≤ β j ∧
+      β j ≤ 2 * (Fintype.card G.Player : ℝ) * M} ×ˢ Set.univ)
+
+private theorem isCompact_boundedExactEquilibriumSlice
+    (G : QuittingGame) (M ρ : ℝ) :
+    IsCompact (boundedExactEquilibriumSlice G M ρ) := by
+  have hbeta : IsCompact
+      {β : Payoff G.Player | ∀ j, MinMaxQuit G j - ρ ≤ β j ∧
+        β j ≤ 2 * (Fintype.card G.Player : ℝ) * M} := by
+    exact isCompact_pi_infinite fun _ => isCompact_Icc
+  have hproduct : IsCompact
+      ({β : Payoff G.Player | ∀ j, MinMaxQuit G j - ρ ≤ β j ∧
+        β j ≤ 2 * (Fintype.card G.Player : ℝ) * M} ×ˢ
+          (Set.univ : Set (QuitRow G))) :=
+    hbeta.prod isCompact_univ
+  exact hproduct.inter_left (isClosed_epsilonEquilibriumGraph_zero G)
+
+/-- On the bounded exact-equilibrium slice, exclusion of rational sure-Quit
+rows gives one positive survival slack for every player. -/
+private theorem exists_uniform_boundedExactEquilibriumSlack
+    (G : QuittingGame) (M ρ : ℝ)
+    (hρ : 0 < ρ) (hexcludes : ExcludesSureRationalRowAt G ρ) :
+    ∃ ξ, 0 < ξ ∧ ∀ β p,
+      (β, p) ∈ EpsilonEquilibriumGraph G 0 →
+      (∀ j, MinMaxQuit G j - ρ ≤ β j ∧
+        β j ≤ 2 * (Fintype.card G.Player : ℝ) * M) →
+      ∀ j, (p j : ℝ) ≤ 1 - ξ := by
+  classical
+  let K := boundedExactEquilibriumSlice G M ρ
+  have hK : IsCompact K := isCompact_boundedExactEquilibriumSlice G M ρ
+  by_cases hKne : K.Nonempty
+  · let survival : Payoff G.Player × QuitRow G → ℝ :=
+      fun z : Payoff G.Player × QuitRow G => 1 - QuitProbability G z.2
+    have hsurvivalContinuous : Continuous survival := by
+      exact continuous_const.sub
+        (continuous_quitProbability_comp G
+          (fun z : Payoff G.Player × QuitRow G => z.2) continuous_snd)
+    obtain ⟨least, hleastK, hleast⟩ :=
+      hK.exists_isMinOn hKne hsurvivalContinuous.continuousOn
+    have hleastExact : least ∈ EpsilonEquilibriumGraph G 0 := hleastK.1
+    have hleastBounds : ∀ j,
+        MinMaxQuit G j - ρ ≤ least.1 j ∧
+          least.1 j ≤ 2 * (Fintype.card G.Player : ℝ) * M := hleastK.2.1
+    have hleastRational : IsRational G ρ least.1 := fun j =>
+      (hleastBounds j).1
+    have hleastRow : least.2 ∈ EpsilonRow G ρ least.1 :=
+      EpsilonRow.mono G hρ.le least.1 hleastExact
+    have hcoordLt (j : G.Player) : (least.2 j : ℝ) < 1 := by
+      by_contra hnot
+      have hj : (least.2 j : ℝ) = 1 :=
+        le_antisymm (least.2 j).property.2 (le_of_not_gt hnot)
+      exact hexcludes least.1 least.2 j hleastRational hleastRow hj
+    have hslack : 0 < survival least := by
+      dsimp only [survival]
+      rw [QuitProbability, sub_sub_cancel]
+      exact Finset.prod_pos fun j _ => sub_pos.mpr (hcoordLt j)
+    refine ⟨survival least, hslack, ?_⟩
+    intro β p hexact hbounds j
+    have hmem : (β, p) ∈ K := ⟨hexact, hbounds, Set.mem_univ p⟩
+    have hmin : survival least ≤ survival (β, p) := hleast hmem
+    have hfactorNonneg : 0 ≤ 1 - (p j : ℝ) :=
+      sub_nonneg.mpr (p j).property.2
+    have hotherLe :
+        ∏ k ∈ Finset.univ.erase j, (1 - (p k : ℝ)) ≤ 1 := by
+      calc
+        _ ≤ ∏ _k ∈ Finset.univ.erase j, (1 : ℝ) := by
+          apply Finset.prod_le_prod
+          · intro k _hk
+            exact sub_nonneg.mpr (p k).property.2
+          · intro k _hk
+            linarith [(p k).property.1]
+        _ = 1 := by simp
+    have hsurvivalCoord : survival (β, p) ≤ 1 - (p j : ℝ) := by
+      dsimp only [survival, QuitProbability, sub_sub_cancel]
+      rw [← Finset.mul_prod_erase Finset.univ
+        (fun k => 1 - (p k : ℝ)) (Finset.mem_univ j)]
+      nlinarith
+    dsimp only [survival] at hmin
+    linarith
+  · refine ⟨1, zero_lt_one, ?_⟩
+    intro β p hexact hbounds
+    exact (hKne ⟨(β, p), hexact, hbounds, Set.mem_univ p⟩).elim
+
+/-- The choices of `ξ` and `R` made before Lemma 3.4 exist with precisely the
+bounds recorded in `AreSection3Constants`. -/
+private theorem exists_section3Constants (G : QuittingGame)
+    (M d ρ : ℝ) (hM : IsSimonPayoffScale G M) (_hd : 0 < d)
+    (hmotion : IsStructureMotionParameter G M ρ) :
+    ∃ ξ R, AreSection3Constants G M d ρ ξ R := by
+  let threshold : ℝ := (1 / 20 : ℝ) *
+    (ρ / (2 * (Fintype.card G.Player : ℝ) * M)) ^ Fintype.card G.Player
+  have hthreshold : 0 < threshold := by
+    dsimp only [threshold]
+    have hcard : 0 < (Fintype.card G.Player : ℝ) := by
+      exact_mod_cast Fintype.card_pos
+    have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+    have hratio : 0 < ρ / (2 * (Fintype.card G.Player : ℝ) * M) :=
+      div_pos hmotion.2.1 (by positivity)
+    exact mul_pos (by norm_num) (pow_pos hratio _)
+  obtain ⟨slack, hslack, hbound⟩ :=
+    exists_uniform_boundedExactEquilibriumSlack G M ρ hmotion.2.1
+      hmotion.2.2.2.2
+  let ξ := min slack threshold
+  have hξ : 0 < ξ := lt_min hslack hthreshold
+  have hξthreshold : ξ ≤ threshold := min_le_right _ _
+  let R := 10 * (Fintype.card G.Player : ℝ) * M /
+    (d * ξ ^ Fintype.card G.Player)
+  refine ⟨ξ, R, hξ, hξthreshold, rfl, ?_⟩
+  intro β p hp hbounds j
+  exact (hbound β p hp.1 hbounds j).trans (by
+    dsimp only [ξ]
+    linarith [min_le_left slack threshold])
+
 /-- The constants chosen after Lemma 3.3 satisfy `0 < ξ < 1` and `10NM ≤ R`. -/
 private theorem section3Constants_radius_bound (G : QuittingGame)
     (M d ρ ξ R : ℝ) (hplayers : HasAtLeastThreePlayers G)
