@@ -8763,6 +8763,116 @@ private def IsBadQuitAction (G : QuittingGame) (eta : ℝ)
     (r : Payoff G.Player) (p : QuitRow G) (n : G.Player) : Prop :=
   ForcedQuitPayoff G p n < ForcedContinuePayoff G r p n - eta
 
+/-- At this row, player `n`'s supported Continue action is more than `eta` worse than
+quitting against the prescribed opponents. -/
+private def IsBadContinueAction (G : QuittingGame) (eta : ℝ)
+    (r : Payoff G.Player) (p : QuitRow G) (n : G.Player) : Prop :=
+  ForcedContinuePayoff G r p n < ForcedQuitPayoff G p n - eta
+
+/-- Delete each badly supported action from a binary quitting row. -/
+private noncomputable def supportPurifiedRow (G : QuittingGame) (eta : ℝ)
+    (r : Payoff G.Player) (p : QuitRow G) : QuitRow G := by
+  classical
+  intro n
+  exact if IsBadQuitAction G eta r p n then 0
+    else if IsBadContinueAction G eta r p n then 1 else p n
+
+/-- Purification gives a well-supported row once its two endpoint payoff functions
+move by less than the available slack. -/
+private theorem supportPurifiedRow_mem_epsilonRow_of_endpoint_close
+    (G : QuittingGame) {beta e eta : ℝ} (hbeta : 0 ≤ beta)
+    (hslack : beta + 2 * e ≤ eta) (r : Payoff G.Player) (p : QuitRow G)
+    (hquit : ∀ n, |ForcedQuitPayoff G (supportPurifiedRow G beta r p) n -
+      ForcedQuitPayoff G p n| ≤ e)
+    (hcontinue : ∀ n,
+      |ForcedContinuePayoff G r (supportPurifiedRow G beta r p) n -
+        ForcedContinuePayoff G r p n| ≤ e) :
+    supportPurifiedRow G beta r p ∈ EpsilonRow G eta r := by
+  classical
+  constructor
+  · intro n hpositive
+    have hnotBad : ¬IsBadQuitAction G beta r p n := by
+      intro hbad
+      simp [supportPurifiedRow, hbad] at hpositive
+    have hbase := le_of_not_gt hnotBad
+    have hq := abs_le.mp (hquit n)
+    have hc := abs_le.mp (hcontinue n)
+    linarith
+  · intro n hcontinuePositive
+    have hnotBad : ¬IsBadContinueAction G beta r p n := by
+      intro hbadContinue
+      by_cases hbadQuit : IsBadQuitAction G beta r p n
+      · dsimp only [IsBadQuitAction] at hbadQuit
+        dsimp only [IsBadContinueAction] at hbadContinue
+        linarith
+      · simp [supportPurifiedRow, hbadQuit, hbadContinue] at hcontinuePositive
+    have hbase := le_of_not_gt hnotBad
+    have hq := abs_le.mp (hquit n)
+    have hc := abs_le.mp (hcontinue n)
+    linarith
+
+/-- Coordinatewise small deleted action masses make the purified row uniformly close
+to the original row. -/
+private theorem dist_supportPurifiedRow_lt
+    (G : QuittingGame) {beta d : ℝ} (hd : 0 < d)
+    (r : Payoff G.Player) (p : QuitRow G)
+    (hquit : ∀ n, IsBadQuitAction G beta r p n → (p n : ℝ) < d)
+    (hcontinue : ∀ n, IsBadContinueAction G beta r p n →
+      1 - (p n : ℝ) < d) :
+    dist (supportPurifiedRow G beta r p) p < d := by
+  classical
+  rw [dist_pi_lt_iff hd]
+  intro n
+  by_cases hbadQuit : IsBadQuitAction G beta r p n
+  · rw [show supportPurifiedRow G beta r p n = 0 by
+      simp [supportPurifiedRow, hbadQuit]]
+    rw [Subtype.dist_eq, Real.dist_eq]
+    simpa [abs_neg, abs_of_nonneg (p n).property.1] using hquit n hbadQuit
+  · by_cases hbadContinue : IsBadContinueAction G beta r p n
+    · have hp1 : 0 ≤ 1 - (p n : ℝ) := sub_nonneg.mpr (p n).property.2
+      rw [show supportPurifiedRow G beta r p n = 1 by
+        simp [supportPurifiedRow, hbadQuit, hbadContinue]]
+      rw [Subtype.dist_eq, Real.dist_eq]
+      simpa [abs_of_nonneg hp1] using hcontinue n hbadContinue
+    · simp [supportPurifiedRow, hbadQuit, hbadContinue, hd]
+
+/-- The mass of a badly supported Continue action. -/
+private noncomputable def badContinueMass (G : QuittingGame) (eta : ℝ)
+    (p : QuitProfile G) (n : G.Player) (i : ℕ) : ℝ := by
+  classical
+  exact if IsBadContinueAction G eta (QuitTailPayoff G p (i + 1)) (p i) n then
+    1 - (p i n : ℝ) else 0
+
+/-- The equilibrium error bounds the reached mass of a badly supported Continue action. -/
+private theorem survival_mul_eta_mul_badContinueMass_le
+    (G : QuittingGame) {alpha eta : ℝ} (halpha : 0 ≤ alpha)
+    (p : QuitProfile G)
+    (hequilibrium : IsQuitEpsilonEquilibrium G alpha p)
+    (i : ℕ) (n : G.Player) :
+    tailSurvival G p 0 i * eta * badContinueMass G eta p n i ≤ alpha := by
+  classical
+  by_cases hbad : IsBadContinueAction G eta (QuitTailPayoff G p (i + 1)) (p i) n
+  · rw [badContinueMass, if_pos hbad]
+    have hcurrent := quittingOneStagePayoff_replace_eq_endpoints G
+      (QuitTailPayoff G p (i + 1)) (p i) n (p i n)
+    rw [QuitRow.replace_self] at hcurrent
+    have htail := quitTailPayoff_eq_oneStage G p i
+    have hlocal : eta * (1 - (p i n : ℝ)) ≤
+        ForcedQuitPayoff G (p i) n - QuitTailPayoff G p i n := by
+      rw [htail, hcurrent]
+      dsimp only [IsBadContinueAction] at hbad
+      have hp0 := (p i n).property.1
+      have hp1 := (p i n).property.2
+      nlinarith
+    have hsurvival : 0 ≤ tailSurvival G p 0 i :=
+      Finset.prod_nonneg fun j _ =>
+        sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+    simpa only [mul_assoc] using
+      (mul_le_mul_of_nonneg_left hlocal hsurvival).trans
+        (equilibrium_weighted_forcedQuit_regret_le G p hequilibrium i n)
+  · rw [badContinueMass, if_neg hbad, mul_zero]
+    exact halpha
+
 /-- Delete exactly the player's badly supported Quit probabilities. -/
 private noncomputable def deleteBadQuit (G : QuittingGame) (eta : ℝ)
     (p : QuitProfile G) (n : G.Player) (i : ℕ) : Set.Icc (0 : ℝ) 1 := by
@@ -8951,6 +9061,57 @@ private theorem continuous_quitRow_replace (G : QuittingGame) (n : G.Player)
     simpa [QuitRow.replace] using
       (continuous_const : Continuous fun _p : QuitRow G => q)
   · simpa [QuitRow.replace, hi] using continuous_apply i
+
+/-- On a bounded continuation set, both forced endpoint payoff vectors vary uniformly
+with the quitting row. -/
+private theorem exists_endpointPayoff_stability_radius
+    (G : QuittingGame) {M e : ℝ} (he : 0 < e) :
+    ∃ d : ℝ, 0 < d ∧ ∀ r : Payoff G.Player, ‖r‖ ≤ M → ∀ p q : QuitRow G,
+      dist q p < d →
+        (∀ n, |ForcedQuitPayoff G q n - ForcedQuitPayoff G p n| < e) ∧
+        ∀ n, |ForcedContinuePayoff G r q n - ForcedContinuePayoff G r p n| < e := by
+  let endpoint : Payoff G.Player × QuitRow G →
+      Payoff G.Player × Payoff G.Player := fun rp =>
+    (fun n => ForcedQuitPayoff G rp.2 n,
+      fun n => ForcedContinuePayoff G rp.1 rp.2 n)
+  have hcontinuous : Continuous endpoint := by
+    apply Continuous.prodMk
+    · apply continuous_pi
+      intro n
+      have hinput : Continuous fun rp : Payoff G.Player × QuitRow G =>
+          ((0 : Payoff G.Player), rp.2.replace G n 1) :=
+        continuous_const.prodMk
+          ((continuous_quitRow_replace G n 1).comp continuous_snd)
+      simpa [endpoint, ForcedQuitPayoff, Function.comp_def] using
+        (continuous_quittingOneStagePayoff G n).comp hinput
+    · apply continuous_pi
+      intro n
+      have hinput : Continuous fun rp : Payoff G.Player × QuitRow G =>
+          (rp.1, rp.2.replace G n 0) :=
+        continuous_fst.prodMk
+          ((continuous_quitRow_replace G n 0).comp continuous_snd)
+      simpa [endpoint, ForcedContinuePayoff, Function.comp_def] using
+        (continuous_quittingOneStagePayoff G n).comp hinput
+  let K : Set (Payoff G.Player × QuitRow G) :=
+    Metric.closedBall 0 M ×ˢ (Set.univ : Set (QuitRow G))
+  have hK : IsCompact K := isCompact_closedBall 0 M |>.prod isCompact_univ
+  have huniform := hK.uniformContinuousOn_of_continuous hcontinuous.continuousOn
+  rw [Metric.uniformContinuousOn_iff] at huniform
+  obtain ⟨d, hd, hstable⟩ := huniform e he
+  refine ⟨d, hd, ?_⟩
+  intro r hr p q hpq
+  have hinput : (r, p) ∈ K ∧ (r, q) ∈ K := by
+    constructor <;> simp [K, Metric.mem_closedBall, dist_zero_right, hr]
+  have hpair := hstable (r, p) hinput.1 (r, q) hinput.2 (by
+    simpa [Prod.dist_eq, dist_comm] using hpq)
+  rw [Prod.dist_eq, max_lt_iff] at hpair
+  constructor
+  · intro n
+    have hn := (dist_pi_lt_iff he).mp hpair.1 n
+    simpa [endpoint, Real.dist_eq, abs_sub_comm] using hn
+  · intro n
+    have hn := (dist_pi_lt_iff he).mp hpair.2 n
+    simpa [endpoint, Real.dist_eq, abs_sub_comm] using hn
 
 /-- Reversing the first `j` rows and iterating from `s₀` produces `sⱼ`. -/
 private theorem finiteQuittingPayoff_reverse_eq (G : QuittingGame) {k : ℕ}
