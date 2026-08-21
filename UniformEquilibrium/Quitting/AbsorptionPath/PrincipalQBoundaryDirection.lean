@@ -178,4 +178,43 @@ theorem NonnegativeBoundaryDirection.exists_boundary_step
   rw [hqi, hri]
   ring
 
+/-- The endpoint step can be chosen so that the entire affine segment up to
+it remains on the nonnegative boundary. This is the local polygonal arc used
+by adaptive Euler constructions, not merely a feasible endpoint. -/
+theorem NonnegativeBoundaryDirection.exists_boundary_segment
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    {M : ι → ι → ℝ} {q : ι → ℝ}
+    (direction : NonnegativeBoundaryDirection M q)
+    (hq : IsNonnegativeBoundary q) {stepBound : ℝ} (hstepBound : 0 < stepBound) :
+    ∃ α : ℝ, 0 < α ∧ α < stepBound ∧ α < 1 ∧
+      ∀ β ∈ Set.Icc (0 : ℝ) α, IsNonnegativeBoundary (fun i =>
+        (1 - β) * q i + β * singletonLCPResidual M direction.weight i) := by
+  obtain ⟨α, hα, hαbound, hαone, hendpoint⟩ :=
+    direction.exists_boundary_step hq hstepBound
+  refine ⟨α, hα, hαbound, hαone, ?_⟩
+  intro β hβ
+  constructor
+  · intro i
+    change 0 ≤ (1 - β) * q i +
+      β * singletonLCPResidual M direction.weight i
+    let endpoint :=
+      (1 - α) * q i + α * singletonLCPResidual M direction.weight i
+    have hratioNonneg : 0 ≤ β / α := div_nonneg hβ.1 hα.le
+    have hratioLe : β / α ≤ 1 := (div_le_one hα).2 hβ.2
+    have hconvex : (1 - β / α) * q i + (β / α) * endpoint =
+        (1 - β) * q i + β * singletonLCPResidual M direction.weight i := by
+      dsimp [endpoint]
+      field_simp [ne_of_gt hα]
+      ring
+    rw [← hconvex]
+    exact add_nonneg
+      (mul_nonneg (sub_nonneg.mpr hratioLe) (hq.1 i))
+      (mul_nonneg hratioNonneg (hendpoint.1 i))
+  · obtain ⟨i, hqi, hresidual⟩ := direction.residual_zero_on_zero
+    refine ⟨i, ?_⟩
+    change (1 - β) * q i +
+      β * singletonLCPResidual M direction.weight i = 0
+    rw [hqi, hresidual]
+    ring
+
 end GameTheory.QuittingLCPClassification
