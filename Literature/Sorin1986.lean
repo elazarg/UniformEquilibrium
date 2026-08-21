@@ -7904,10 +7904,13 @@ theorem prisonersDilemma_Dn_eq_C :
   exact finiteFeasiblePayoffs_eq_correlated_of_oneStage_eq
     prisonersDilemma prisonersDilemma_D1_eq_C ⟨n, hn⟩
 
-/-! Proposition 13 is a backward last-deviation argument using the unique
-one-stage equilibrium payoff.  The repository does not yet expose the
-positive-probability conditional-history induction in reusable form. -/
+/-! Proposition 13 is a backward last-deviation argument.  Here `a` is the
+security-level vector recalled immediately before the proposition in the
+paper; uniqueness of the one-stage equilibrium payoff alone is insufficient.
+The repository does not yet expose the positive-probability
+conditional-history induction in reusable form. -/
 theorem proposition_13 (G : FiniteStageGame) (a : Payoff G.Player)
+    (hsecurity : ∀ who, G.individualRationalLevel who = a who)
     (hunique : G.oneStageEquilibriumPayoffs = {a}) :
     ∀ n, 0 < n → G.finiteEquilibriumPayoffs n = {a} := by
   sorry
@@ -7928,6 +7931,9 @@ theorem prisonersDilemma_En_eq_singleton :
       prisonersDilemma.finiteEquilibriumPayoffs n = {pair 1 1} := by
   intro n hn
   exact proposition_13 prisonersDilemma (pair 1 1)
+    (fun who => by
+      rw [prisonersDilemma_individualRationalLevel]
+      cases who <;> rfl)
     prisonersDilemma_E1_eq_singleton n hn
 
 /-! Proposition 14's proof is the paper's uniform gain inequality and
