@@ -433,3 +433,43 @@ theorem exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
     exists_periodic_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
       hunit hcap hε
   exact ⟨roots, δ, hδ0, hfloor, hperfect⟩
+
+/-- Unit solo exit and capped joint exit imply branch S.3: for every positive
+tolerance there is a completely absorbing sequentially perfect root sequence. -/
+theorem quittingSequentiallyεPerfectAbsorbingExistence_of_soloExitPreference
+    [Nonempty ι] {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward)
+    (hcap : QuittingCappedJointExit reward) :
+    QuittingSequentiallyεPerfectAbsorbingExistence reward := by
+  intro ε hε
+  obtain ⟨roots, δ, hδ0, hfloor, hperfect⟩ :=
+    exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
+      hunit hcap hε
+  refine ⟨roots, ?_, hperfect⟩
+  have hδ1 : δ ≤ 1 := by
+    have hstage := hfloor 0
+    have hmass := quittingStationaryContinueMass_nonneg (roots 0)
+    unfold quittingRootAbsorptionMass at hstage
+    linarith
+  have hbase0 : 0 ≤ 1 - δ := by linarith
+  have hbase1 : 1 - δ < 1 := by linarith
+  have hsurvival : ∀ fuel,
+      quittingSurvivalPrefix roots fuel ≤ (1 - δ) ^ fuel := by
+    intro fuel
+    induction fuel with
+    | zero => simp
+    | succ fuel ih =>
+        rw [show fuel + 1 = Nat.succ fuel by omega,
+          show Nat.succ fuel = fuel + 1 by omega,
+          quittingSurvivalPrefix_succ, pow_succ]
+        have hmass0 := quittingStationaryContinueMass_nonneg (roots fuel)
+        have hmass : quittingStationaryContinueMass (roots fuel) ≤ 1 - δ := by
+          have hstage := hfloor fuel
+          unfold quittingRootAbsorptionMass at hstage
+          linarith
+        exact mul_le_mul ih hmass hmass0 (pow_nonneg hbase0 fuel)
+  unfold IsCompletelyAbsorbing
+  exact squeeze_zero
+    (quittingSurvivalPrefix_nonneg roots)
+    hsurvival
+    (tendsto_pow_atTop_nhds_zero_of_lt_one hbase0 hbase1)
