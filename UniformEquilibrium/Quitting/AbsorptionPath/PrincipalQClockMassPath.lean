@@ -105,6 +105,21 @@ structure PrincipalQClockMassPath
       principalQClockScaledState node
 
 omit [DecidableEq ι] in
+/-- Robust mesh support: whenever a player's cumulative control increases
+on an interval, some clock point in that same interval has that player's
+scaled state within the local mesh error of zero. -/
+def PrincipalQClockMassPath.IsMeshSupported
+    {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node) (stepBound : ℝ) : Prop :=
+  ∀ who first second, first ≤ second →
+    path.mass first who < path.mass second who →
+    ∃ witness ∈ Set.Icc first second,
+      (principalQClockScaledState initial +
+          principalQMassImage M (path.mass witness)) who ≤
+        principalQMatrixSpeedBound M *
+          principalQNormalizedClock initial node witness * stepBound
+
+omit [DecidableEq ι] in
 /-- Every coordinate of cumulative mass is nonnegative. -/
 theorem PrincipalQClockMassPath.mass_nonneg
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
@@ -194,6 +209,15 @@ def initialPrincipalQClockMassPath
     simpa using principalQClockScaledState_mem initial
   scaledState_one := by
     simp
+
+omit [DecidableEq ι] in
+/-- The zero initial path satisfies every mesh-support bound vacuously. -/
+theorem initialPrincipalQClockMassPath_isMeshSupported
+    (M : ι → ι → ℝ) (initial : PrincipalQClockNode ι)
+    (stepBound : ℝ) :
+    (initialPrincipalQClockMassPath M initial).IsMeshSupported stepBound := by
+  intro who first second hle hincrease
+  simp [initialPrincipalQClockMassPath] at hincrease
 
 /-! ## Appending one local clock arc -/
 
@@ -438,6 +462,36 @@ theorem PrincipalQClockMassPath.scaledState_stepSegment_le_mesh
         (mul_le_mul_of_nonneg_left step.alpha_lt_stepBound.le hclockPos.le)
         (principalQMatrixSpeedBound_nonneg M)
     _ = principalQMatrixSpeedBound M * clock * stepBound := by ring
+
+omit [DecidableEq ι] in
+/-- Every strict coordinate increase inside one local segment has an
+in-interval witness satisfying the robust mesh-support estimate. -/
+theorem PrincipalQClockMassPath.exists_stepSegment_meshSupport_witness
+    {M : ι → ι → ℝ} {stepBound : ℝ}
+    {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (step : PrincipalQClockStep M stepBound node.time node.state)
+    (who : ι) (first second : unitInterval) (hle : first ≤ second)
+    (hincrease : path.stepSegment step first who <
+      path.stepSegment step second who) :
+    ∃ witness ∈ Set.Icc first second,
+      (principalQClockScaledState initial +
+          principalQMassImage M (path.stepSegment step witness)) who ≤
+        principalQMatrixSpeedBound M *
+          (node.time + (witness : ℝ) * (step.endTime - node.time)) *
+            stepBound := by
+  have hweight : step.direction.weight who ≠ 0 := by
+    intro hzero
+    have hstepMass : principalQClockStepMass step who = 0 := by
+      simp [principalQClockStepMass, hzero]
+    have hconstant (parameter : unitInterval) :
+        path.stepSegment step parameter who = path.mass 1 who := by
+      simp [PrincipalQClockMassPath.stepSegment,
+        AffineMap.lineMap_apply_module', hstepMass]
+    rw [hconstant first, hconstant second] at hincrease
+    exact (lt_irrefl _ hincrease).elim
+  exact ⟨second, ⟨hle, le_rfl⟩,
+    path.scaledState_stepSegment_le_mesh step second who hweight⟩
 
 /-- The cumulative mass function obtained by appending one local clock arc.
 The nontrivial-duration branch concatenates at the exact ratio of elapsed
