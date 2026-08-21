@@ -789,6 +789,313 @@ def PrincipalQClockMassPath.append
   scaledState_mem := path.scaledState_appendMass_mem step
   scaledState_one := path.scaledState_appendMass_one step
 
+omit [DecidableEq ι] in
+/-- Mesh support is preserved when one exact local clock arc is appended. -/
+theorem PrincipalQClockMassPath.isMeshSupported_append
+    {M : ι → ι → ℝ} {stepBound : ℝ}
+    {initial node : PrincipalQClockNode ι}
+    (path : PrincipalQClockMassPath M initial node)
+    (step : PrincipalQClockStep M stepBound node.time node.state)
+    (hsupported : path.IsMeshSupported stepBound) :
+    (path.append step).IsMeshSupported stepBound := by
+  classical
+  let oldDuration := principalQClockDuration initial node
+  let stepDuration := step.endTime - node.time
+  have hstep : 0 < stepDuration := sub_pos.mpr step.start_lt_endTime
+  have hendDuration : principalQClockDuration initial step.endNode =
+      oldDuration + stepDuration := by
+    simp only [principalQClockDuration, PrincipalQClockStep.endNode_time]
+    dsimp only [oldDuration, stepDuration, principalQClockDuration]
+    ring
+  have hnodeClock : node.time = initial.time + oldDuration := by
+    dsimp only [oldDuration, principalQClockDuration]
+    ring
+  intro who first second hle hincrease
+  by_cases hold : 0 < oldDuration
+  · have htotal : 0 < oldDuration + stepDuration := add_pos hold hstep
+    let split := oldDuration / (oldDuration + stepDuration)
+    have hsplitPos : 0 < split := div_pos hold htotal
+    have hsplitOne : split < 1 :=
+      (div_lt_one htotal).2 (lt_add_of_pos_right _ hstep)
+    have happend (parameter : unitInterval) :
+        (path.append step).mass parameter =
+          path.toPath.transAt (path.stepSegment step) split
+            hsplitPos hsplitOne parameter := by
+      change path.appendMass step parameter = _
+      unfold appendMass
+      dsimp only
+      rw [dif_pos hold]
+      dsimp only [split, oldDuration, stepDuration]
+      simp only [BoundedContinuousFunction.mkOfCompact_apply]
+      rfl
+    have hprefix (a b : unitInterval) (hab : a ≤ b)
+        (hb : (b : ℝ) ≤ split)
+        (hinc : (path.append step).mass a who <
+          (path.append step).mass b who) :
+        ∃ witness ∈ Set.Icc a b,
+          (principalQClockScaledState initial +
+              principalQMassImage M ((path.append step).mass witness)) who ≤
+            principalQMatrixSpeedBound M *
+              principalQNormalizedClock initial step.endNode witness *
+                stepBound := by
+      have ha : (a : ℝ) ≤ split :=
+        (show (a : ℝ) ≤ (b : ℝ) from hab).trans hb
+      let a' := Path.transAtLeftParameter hsplitPos a ha
+      let b' := Path.transAtLeftParameter hsplitPos b hb
+      have hab' : a' ≤ b' := by
+        exact div_le_div_of_nonneg_right
+          (show (a : ℝ) ≤ (b : ℝ) from hab) hsplitPos.le
+      rw [happend, Path.transAt_apply_leftParameter _ _ hsplitPos
+        hsplitOne a ha, path.toPath_apply,
+        happend, Path.transAt_apply_leftParameter _ _ hsplitPos
+          hsplitOne b hb, path.toPath_apply] at hinc
+      obtain ⟨w, hw, hwbound⟩ := hsupported who a' b' hab' hinc
+      let witness : unitInterval := ⟨split * (w : ℝ), by
+        constructor
+        · exact mul_nonneg hsplitPos.le w.property.1
+        · nlinarith [w.property.1, w.property.2, hsplitOne.le]⟩
+      have hwle : (witness : ℝ) ≤ split := by
+        exact mul_le_of_le_one_right hsplitPos.le w.property.2
+      have hwparam : Path.transAtLeftParameter hsplitPos witness hwle = w := by
+        apply Subtype.ext
+        dsimp [witness, Path.transAtLeftParameter]
+        rw [mul_div_cancel_left₀ _ hsplitPos.ne']
+      refine ⟨witness, ?_, ?_⟩
+      · constructor
+        · change (a : ℝ) ≤ split * (w : ℝ)
+          have := hw.1
+          dsimp [a', Path.transAtLeftParameter] at this
+          nlinarith [(div_le_iff₀ hsplitPos).mp this]
+        · change split * (w : ℝ) ≤ (b : ℝ)
+          have := hw.2
+          dsimp [b', Path.transAtLeftParameter] at this
+          nlinarith [(le_div_iff₀ hsplitPos).mp this]
+      · rw [happend, Path.transAt_apply_leftParameter _ _ hsplitPos
+          hsplitOne witness hwle, path.toPath_apply, hwparam]
+        have hclock : principalQNormalizedClock initial step.endNode witness =
+            principalQNormalizedClock initial node w := by
+          unfold principalQNormalizedClock
+          rw [hendDuration]
+          dsimp [witness, split]
+          field_simp [htotal.ne']
+          ring
+        rw [hclock]
+        exact hwbound
+    have hsuffix (a b : unitInterval) (hab : a ≤ b)
+        (ha : split < (a : ℝ))
+        (hinc : (path.append step).mass a who <
+          (path.append step).mass b who) :
+        ∃ witness ∈ Set.Icc a b,
+          (principalQClockScaledState initial +
+              principalQMassImage M ((path.append step).mass witness)) who ≤
+            principalQMatrixSpeedBound M *
+              principalQNormalizedClock initial step.endNode witness *
+                stepBound := by
+      have hablt : a < b := lt_of_le_of_ne hab fun heq => by
+        subst b
+        exact (lt_irrefl _ hinc).elim
+      have hbgt : split < (b : ℝ) :=
+        ha.trans hablt
+      have hagt : split < (a : ℝ) := ha
+      let a' := Path.transAtRightParameter hsplitOne a hagt.le
+      let b' := Path.transAtRightParameter hsplitOne b hbgt.le
+      have hab' : a' ≤ b' := by
+        exact div_le_div_of_nonneg_right
+          (sub_le_sub_right (show (a : ℝ) ≤ (b : ℝ) from hab) split)
+          (sub_nonneg.mpr hsplitOne.le)
+      rw [happend, Path.transAt_apply_rightParameter _ _ hsplitPos
+        hsplitOne a hagt, happend,
+        Path.transAt_apply_rightParameter _ _ hsplitPos hsplitOne b hbgt] at hinc
+      obtain ⟨w, hw, hwbound⟩ :=
+        path.exists_stepSegment_meshSupport_witness step who a' b' hab' hinc
+      let witness : unitInterval := ⟨split + (1 - split) * (w : ℝ), by
+        constructor
+        · nlinarith [w.property.1, hsplitPos.le, hsplitOne.le]
+        · nlinarith [w.property.2, hsplitOne.le]⟩
+      have hwpos : 0 < (w : ℝ) := by
+        have ha'pos : 0 < (a' : ℝ) := by
+          dsimp [a', Path.transAtRightParameter]
+          exact div_pos (sub_pos.mpr hagt) (sub_pos.mpr hsplitOne)
+        exact ha'pos.trans_le hw.1
+      have hwgt : split < (witness : ℝ) := by
+        dsimp [witness]
+        exact lt_add_of_pos_right _
+          (mul_pos (sub_pos.mpr hsplitOne) hwpos)
+      have hwparam : Path.transAtRightParameter hsplitOne witness hwgt.le = w := by
+        apply Subtype.ext
+        dsimp [witness, Path.transAtRightParameter]
+        have hdenom : 1 - split ≠ 0 := by linarith
+        apply (div_eq_iff hdenom).2
+        ring
+      refine ⟨witness, ?_, ?_⟩
+      · constructor
+        · have := hw.1
+          dsimp [a', Path.transAtRightParameter] at this
+          change (a : ℝ) ≤ split + (1 - split) * (w : ℝ)
+          change ((a : ℝ) - split) / (1 - split) ≤ (w : ℝ) at this
+          have hmul := (div_le_iff₀ (sub_pos.mpr hsplitOne)).mp this
+          nlinarith
+        · have := hw.2
+          dsimp [b', Path.transAtRightParameter] at this
+          change split + (1 - split) * (w : ℝ) ≤ (b : ℝ)
+          change (w : ℝ) ≤ ((b : ℝ) - split) / (1 - split) at this
+          have hmul := (le_div_iff₀ (sub_pos.mpr hsplitOne)).mp this
+          nlinarith
+      · rw [happend, Path.transAt_apply_rightParameter _ _ hsplitPos
+          hsplitOne witness hwgt, hwparam]
+        have hclock : principalQNormalizedClock initial step.endNode witness =
+            node.time + (w : ℝ) * (step.endTime - node.time) := by
+          unfold principalQNormalizedClock
+          rw [hendDuration]
+          change initial.time + (witness : ℝ) *
+              (oldDuration + stepDuration) =
+            node.time + (w : ℝ) * stepDuration
+          dsimp [witness, split]
+          field_simp [htotal.ne']
+          nlinarith [hnodeClock]
+        rw [hclock]
+        exact hwbound
+    by_cases hb : (second : ℝ) ≤ split
+    · exact hprefix first second hle hb hincrease
+    · have hbgt : split < (second : ℝ) := lt_of_not_ge hb
+      by_cases ha : split < (first : ℝ)
+      · exact hsuffix first second hle ha hincrease
+      · have halt : (first : ℝ) ≤ split := le_of_not_gt ha
+        let seam : unitInterval := ⟨split, hsplitPos.le, hsplitOne.le⟩
+        have hfirstSeam : first ≤ seam := halt
+        have hseamSecond : seam ≤ second := hbgt.le
+        rcases lt_or_eq_of_le
+            ((path.append step).coordinate_monotone who hfirstSeam) with
+          hprefixIncrease | hprefixEqual
+        · obtain ⟨w, hw, hwb⟩ :=
+            hprefix first seam hfirstSeam le_rfl hprefixIncrease
+          exact ⟨w, ⟨hw.1, hw.2.trans hseamSecond⟩, hwb⟩
+        · have hseamIncrease : (path.append step).mass seam who <
+              (path.append step).mass second who := by
+            change (path.append step).mass first who =
+              (path.append step).mass seam who at hprefixEqual
+            linarith
+          let b' := Path.transAtRightParameter hsplitOne second hbgt.le
+          have hsegmentIncrease : path.stepSegment step 0 who <
+              path.stepSegment step b' who := by
+            have hseamValue : (path.append step).mass seam = path.mass 1 := by
+              rw [happend, Path.transAt_apply_leftParameter _ _ hsplitPos
+                hsplitOne seam le_rfl, path.toPath_apply]
+              congr 2
+              apply Subtype.ext
+              simp [seam, Path.transAtLeftParameter, hsplitPos.ne']
+            rw [hseamValue, happend,
+              Path.transAt_apply_rightParameter _ _ hsplitPos hsplitOne
+                second hbgt] at hseamIncrease
+            simpa using hseamIncrease
+          obtain ⟨w, hw, hwb⟩ :=
+            path.exists_stepSegment_meshSupport_witness step who
+              0 b' (unitInterval.nonneg _) hsegmentIncrease
+          let witness : unitInterval :=
+            ⟨split + (1 - split) * (w : ℝ), by
+              constructor
+              · nlinarith [w.property.1, hsplitPos.le, hsplitOne.le]
+              · nlinarith [w.property.2, hsplitOne.le]⟩
+          have hwwithin : witness ∈ Set.Icc first second := by
+            constructor
+            · exact hfirstSeam.trans (show seam ≤ witness from by
+                change split ≤ split + (1 - split) * (w : ℝ)
+                nlinarith [w.property.1, hsplitOne.le])
+            · have := hw.2
+              dsimp [b', Path.transAtRightParameter] at this
+              change split + (1 - split) * (w : ℝ) ≤ (second : ℝ)
+              change (w : ℝ) ≤ ((second : ℝ) - split) / (1 - split) at this
+              have hmul := (le_div_iff₀ (sub_pos.mpr hsplitOne)).mp this
+              nlinarith
+          have hwgt_or_eq : split ≤ (witness : ℝ) := by
+            change split ≤ split + (1 - split) * (w : ℝ)
+            nlinarith [w.property.1, hsplitOne.le]
+          by_cases hwzero : w = 0
+          · subst w
+            have hweight : step.direction.weight who ≠ 0 := by
+              intro hweightZero
+              have hstepMass : principalQClockStepMass step who = 0 := by
+                simp [principalQClockStepMass, hweightZero]
+              have hconstant (parameter : unitInterval) :
+                  path.stepSegment step parameter who = path.mass 1 who := by
+                simp [PrincipalQClockMassPath.stepSegment,
+                  AffineMap.lineMap_apply_module', hstepMass]
+              rw [hconstant 0, hconstant b'] at hsegmentIncrease
+              exact (lt_irrefl _ hsegmentIncrease).elim
+            refine ⟨seam, ⟨hfirstSeam, hseamSecond⟩, ?_⟩
+            have hseamValue : (path.append step).mass seam =
+                path.stepSegment step 0 := by
+              rw [happend, Path.transAt_apply_leftParameter _ _ hsplitPos
+                hsplitOne seam le_rfl, path.toPath_apply]
+              have hp : Path.transAtLeftParameter hsplitPos seam le_rfl = 1 := by
+                apply Subtype.ext
+                simp [seam, Path.transAtLeftParameter, hsplitPos.ne']
+              rw [hp]
+              exact (path.stepSegment step).source.symm
+            rw [hseamValue]
+            have hclock : principalQNormalizedClock initial step.endNode seam =
+                node.time := by
+              unfold principalQNormalizedClock
+              rw [hendDuration]
+              dsimp [seam, split]
+              field_simp [htotal.ne']
+              ring_nf at hnodeClock ⊢
+              linarith
+            rw [hclock]
+            simpa using path.scaledState_stepSegment_le_mesh
+              step 0 who hweight
+          · have hwgt : split < (witness : ℝ) := by
+              exact lt_of_le_of_ne hwgt_or_eq fun heq => hwzero (by
+                apply Subtype.ext
+                change (w : ℝ) = 0
+                nlinarith [sub_pos.mpr hsplitOne])
+            have hwparam : Path.transAtRightParameter hsplitOne witness
+                hwgt.le = w := by
+              apply Subtype.ext
+              dsimp [witness, Path.transAtRightParameter]
+              have hdenom : 1 - split ≠ 0 := by linarith
+              apply (div_eq_iff hdenom).2
+              ring
+            refine ⟨witness, hwwithin, ?_⟩
+            rw [happend, Path.transAt_apply_rightParameter _ _ hsplitPos
+              hsplitOne witness hwgt, hwparam]
+            have hclock : principalQNormalizedClock initial step.endNode witness =
+                node.time + (w : ℝ) * (step.endTime - node.time) := by
+              unfold principalQNormalizedClock
+              rw [hendDuration]
+              change initial.time + (witness : ℝ) *
+                  (oldDuration + stepDuration) =
+                node.time + (w : ℝ) * stepDuration
+              dsimp [witness, split]
+              field_simp [htotal.ne']
+              nlinarith [hnodeClock]
+            rw [hclock]
+            exact hwb
+  · have hzero : oldDuration = 0 :=
+      le_antisymm (le_of_not_gt hold) path.duration_nonneg
+    have hmassZero := path.mass_one_eq_zero_of_duration_eq_zero hzero
+    have hsegment (parameter : unitInterval) :
+        (path.append step).mass parameter = path.stepSegment step parameter := by
+      change path.appendMass step parameter = _
+      unfold appendMass
+      dsimp only
+      rw [dif_neg hold]
+      simp [PrincipalQClockMassPath.stepSegment, hmassZero]
+    rw [hsegment first, hsegment second] at hincrease
+    obtain ⟨witness, hw, hwbound⟩ :=
+      path.exists_stepSegment_meshSupport_witness step who first second hle hincrease
+    refine ⟨witness, hw, ?_⟩
+    rw [hsegment]
+    have hclock : principalQNormalizedClock initial step.endNode witness =
+        node.time + (witness : ℝ) * (step.endTime - node.time) := by
+      unfold principalQNormalizedClock
+      rw [hendDuration, hzero, zero_add]
+      change initial.time + (witness : ℝ) * stepDuration =
+        node.time + (witness : ℝ) * stepDuration
+      linarith [hnodeClock, hzero]
+    rw [hclock]
+    exact hwbound
+
 /-! ## Exact clock truncation -/
 
 omit [DecidableEq ι] in
