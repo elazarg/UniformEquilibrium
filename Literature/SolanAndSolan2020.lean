@@ -21228,6 +21228,559 @@ theorem modeKernel_transienceCertificate
     fun source => ⟨.absorbed, trivial,
       blueprint.modeKernel_reaches_absorbed source⟩
 
+/-! The continuation value attached to a live control mode.  At an absorbed
+mode the actual terminal payoff is read from the public state instead. -/
+noncomputable def modeContinuationValue
+    (_blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) : MMatrixPayoffMode table → ℝ
+  | .draw none => value who
+  | .draw (some source) =>
+      mFineContinuationPayoff table hM source accuracy who
+  | .active target => mAxisPayoff table hM target who
+  | .absorbed => 0
+
+/-! The actual-history payoff martingale used in the proof of Theorem 4.3. -/
+noncomputable def payoffPotential
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) :
+    (publicQuittingGame table
+      blueprint.signalData.law).HistoryPotential :=
+  fun t history => match blueprint.mode t history with
+    | .absorbed => match history.2 with
+        | .absorbed quitters => table.terminal quitters who
+        | _ => 0
+    | mode => blueprint.modeContinuationValue who mode
+
+theorem expect_axisPayoff_signal
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (source : Option (NormalPlayer table)) (who : ι) :
+    expect blueprint.signalData.law (fun signal =>
+      mAxisPayoff table hM
+        (blueprint.signalData.selector source signal) who) =
+      match source with
+      | none => value who
+      | some target =>
+          mFineContinuationPayoff table hM target accuracy who := by
+  calc
+    expect blueprint.signalData.law (fun signal =>
+        mAxisPayoff table hM
+          (blueprint.signalData.selector source signal) who) =
+        expect (blueprint.signalData.law.map
+          (blueprint.signalData.selector source))
+          (fun target => mAxisPayoff table hM target who) := by
+      rw [Math.Probability.expect_map]
+    _ = expect (blueprint.signalMarginal source)
+        (fun target => mAxisPayoff table hM target who) := by
+      rw [blueprint.signalData.selector_law source]
+    _ = _ := by
+      cases source with
+      | none =>
+          rw [Math.Probability.expect_eq_sum]
+          simp_rw [blueprint.signalMarginal_none_toReal]
+          have hbalance := congrFun blueprint.initialWeight_axis_balance who
+          simpa only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+            using hbalance
+      | some source =>
+          rw [Math.Probability.expect_eq_sum]
+          simp_rw [blueprint.signalMarginal_some_toReal]
+          have hbalance := congrFun
+            (mFineTransitionWeight_axis_balance table hM source accuracy
+              blueprint.accuracy_pos) who
+          simpa only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+            using hbalance
+
+private theorem expect_hazard_terminal_continuation
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (target : NormalPlayer table) (who : ι) :
+    expect (quittingHazardCoin
+        (mFineExitProbability table hM target accuracy)
+        (mFineExitProbability_pos table hM target
+          blueprint.accuracy_pos).le
+        (mFineExitProbability_lt_one table hM target
+          blueprint.accuracy_pos).le)
+      (fun quits => if quits then
+        table.terminal (quittingProjectiveSingletonTerminal
+          (hM.positiveOwner target).1) who
+      else mFineContinuationPayoff table hM target accuracy who) =
+    mAxisPayoff table hM target who := by
+  rw [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+  simp only [quittingHazardCoin_false_toReal,
+    quittingHazardCoin_true_toReal, Bool.false_eq_true, ↓reduceIte]
+  have hbalance := congrFun
+    (mAxisPayoff_fine_exit_balance table hM target
+      blueprint.accuracy_pos) who
+  simpa only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] using hbalance.symm
+
+private theorem payoffPotential_snoc_active_of_draw
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (source : Option (NormalPlayer table))
+    (hmode : blueprint.mode t history = .draw source)
+    (action : (publicQuittingGame table
+      blueprint.signalData.law).JointAct)
+    (signal : Fin (blueprint.signalData.signalCount + 1)) :
+    blueprint.payoffPotential who (t + 1)
+        (Fin.snoc history.1 (history.2, action), .active signal) =
+      mAxisPayoff table hM
+        (blueprint.signalData.selector source signal) who := by
+  unfold payoffPotential
+  rw [blueprint.mode_snoc]
+  simp [hmode, nextMMatrixPayoffMode, modeContinuationValue]
+
+private theorem payoffPotential_snoc_draw_of_active
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (target : NormalPlayer table)
+    (hmode : blueprint.mode t history = .active target)
+    (action : (publicQuittingGame table
+      blueprint.signalData.law).JointAct) :
+    blueprint.payoffPotential who (t + 1)
+        (Fin.snoc history.1 (history.2, action), .draw) =
+      mFineContinuationPayoff table hM target accuracy who := by
+  unfold payoffPotential
+  rw [blueprint.mode_snoc]
+  simp [hmode, nextMMatrixPayoffMode, modeContinuationValue]
+
+private theorem payoffPotential_snoc_singleton_of_active
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (target : NormalPlayer table)
+    (_hmode : blueprint.mode t history = .active target)
+    (action : (publicQuittingGame table
+      blueprint.signalData.law).JointAct) :
+    blueprint.payoffPotential who (t + 1)
+        (Fin.snoc history.1 (history.2, action),
+          .absorbed (quittingProjectiveSingletonTerminal
+            (hM.positiveOwner target).1)) =
+      table.terminal (quittingProjectiveSingletonTerminal
+        (hM.positiveOwner target).1) who := by
+  unfold payoffPotential
+  rw [blueprint.mode_snoc]
+  simp [nextMMatrixPayoffMode]
+
+private theorem payoffPotential_snoc_absorbed
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (action : (publicQuittingGame table
+      blueprint.signalData.law).JointAct)
+    (quitters : {S : Finset ι // S.Nonempty}) :
+    blueprint.payoffPotential who (t + 1)
+        (Fin.snoc history.1 (history.2, action), .absorbed quitters) =
+      table.terminal quitters who := by
+  unfold payoffPotential
+  rw [blueprint.mode_snoc]
+  simp [nextMMatrixPayoffMode]
+
+private theorem payoffPotential_draw_step
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (source : Option (NormalPlayer table))
+    (hmode : blueprint.mode t history = .draw source)
+    (action : (publicQuittingGame table
+      blueprint.signalData.law).JointAct) :
+    expect (blueprint.signalData.law.map PublicQuittingState.active)
+        (fun nextState => blueprint.payoffPotential who (t + 1)
+          (Fin.snoc history.1 (history.2, action), nextState)) =
+      blueprint.payoffPotential who t history := by
+  calc
+    expect (blueprint.signalData.law.map PublicQuittingState.active)
+        (fun nextState => blueprint.payoffPotential who (t + 1)
+          (Fin.snoc history.1 (history.2, action), nextState)) =
+        expect blueprint.signalData.law (fun signal =>
+          blueprint.payoffPotential who (t + 1)
+            (Fin.snoc history.1 (history.2, action),
+              PublicQuittingState.active signal)) := by
+      rw [Math.Probability.expect_map]
+    _ = expect blueprint.signalData.law (fun signal =>
+        mAxisPayoff table hM
+          (blueprint.signalData.selector source signal) who) := by
+      apply Math.ProbabilityMassFunction.expect_congr_on_support
+      intro signal _
+      exact blueprint.payoffPotential_snoc_active_of_draw who history
+        source hmode action signal
+    _ = blueprint.modeContinuationValue who (.draw source) := by
+      cases source with
+      | none =>
+          simpa [modeContinuationValue] using
+            blueprint.expect_axisPayoff_signal none who
+      | some target =>
+          simpa [modeContinuationValue] using
+            blueprint.expect_axisPayoff_signal (some target) who
+    _ = blueprint.payoffPotential who t history := by
+      cases source <;>
+        simp [payoffPotential, hmode, modeContinuationValue]
+
+theorem payoffPotential_harmonic
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t) :
+    (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU
+        blueprint.strategy (blueprint.payoffPotential who) history =
+      blueprint.payoffPotential who t history := by
+  classical
+  rcases history with ⟨past, state⟩
+  have hmatches := blueprint.mode_state t (past, state)
+  cases hmode : blueprint.mode t (past, state) with
+  | draw source =>
+      cases state with
+      | active signal =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | absorbed quitters =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | draw =>
+          have haction := blueprint.stageActionDist_continue
+            (past, PublicQuittingState.draw) (by
+              intro target hactive
+              simp [hmode] at hactive)
+          unfold StochasticGame.historyContinuationEU
+          rw [haction, Math.Probability.expect_pure,
+            publicQuittingGame_transition_draw]
+          exact blueprint.payoffPotential_draw_step who
+            (past, PublicQuittingState.draw) source hmode
+            (publicAllContinueAction table blueprint.signalData.law)
+  | active target =>
+      cases state with
+      | draw =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | absorbed quitters =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | active signal =>
+          have haction := blueprint.stageActionDist_active
+            (past, PublicQuittingState.active signal) target hmode
+          unfold StochasticGame.historyContinuationEU
+          rw [haction, Math.Probability.expect_bind]
+          simp_rw [Math.Probability.expect_pure]
+          calc
+            expect (quittingHazardCoin
+                (mFineExitProbability table hM target accuracy)
+                (mFineExitProbability_pos table hM target
+                  blueprint.accuracy_pos).le
+                (mFineExitProbability_lt_one table hM target
+                  blueprint.accuracy_pos).le)
+                (fun quits => expect
+                  ((publicQuittingGame table
+                    blueprint.signalData.law).transition
+                      (PublicQuittingState.active signal)
+                      (publicSingleQuitAction table
+                        blueprint.signalData.law
+                        (hM.positiveOwner target).1 quits))
+                  (fun nextState => blueprint.payoffPotential who (t + 1)
+                    (Fin.snoc past
+                      (PublicQuittingState.active signal,
+                        publicSingleQuitAction table
+                          blueprint.signalData.law
+                          (hM.positiveOwner target).1 quits),
+                      nextState))) =
+                expect (quittingHazardCoin
+                    (mFineExitProbability table hM target accuracy)
+                    (mFineExitProbability_pos table hM target
+                      blueprint.accuracy_pos).le
+                    (mFineExitProbability_lt_one table hM target
+                      blueprint.accuracy_pos).le)
+                  (fun quits => if quits then
+                    table.terminal (quittingProjectiveSingletonTerminal
+                      (hM.positiveOwner target).1) who
+                  else mFineContinuationPayoff table hM target accuracy who) := by
+              apply Math.ProbabilityMassFunction.expect_congr_on_support
+              intro quits _
+              cases quits with
+              | false =>
+                  rw [publicQuittingGame_transition_publicSingleQuitAction_false,
+                    Math.Probability.expect_pure]
+                  exact blueprint.payoffPotential_snoc_draw_of_active who
+                    (past, PublicQuittingState.active signal) target hmode _
+              | true =>
+                  rw [publicQuittingGame_transition_publicSingleQuitAction,
+                    Math.Probability.expect_pure]
+                  exact blueprint.payoffPotential_snoc_singleton_of_active who
+                    (past, PublicQuittingState.active signal) target hmode _
+            _ = mAxisPayoff table hM target who :=
+              blueprint.expect_hazard_terminal_continuation target who
+            _ = blueprint.payoffPotential who t
+                (past, PublicQuittingState.active signal) := by
+              simp [payoffPotential, hmode, modeContinuationValue]
+  | absorbed =>
+      cases state with
+      | draw =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | active signal =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | absorbed quitters =>
+          have haction := blueprint.stageActionDist_continue
+            (past, PublicQuittingState.absorbed quitters) (by
+              intro target hactive
+              simp [hmode] at hactive)
+          unfold StochasticGame.historyContinuationEU
+          rw [haction, Math.Probability.expect_pure,
+            publicQuittingGame_transition_absorbed,
+            Math.Probability.expect_pure]
+          rw [blueprint.payoffPotential_snoc_absorbed who
+            (past, PublicQuittingState.absorbed quitters)]
+          simp [payoffPotential, hmode]
+
+theorem expect_payoffPotential_eq_value
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) : ∀ t,
+    expect ((publicQuittingGame table
+        blueprint.signalData.law).histDist
+      blueprint.strategy .draw t) (blueprint.payoffPotential who t) =
+      value who
+  | 0 => by
+      rw [(publicQuittingGame table
+        blueprint.signalData.law).histDist_zero,
+        Math.Probability.expect_pure]
+      simp [payoffPotential, blueprint.mode_initial, modeContinuationValue]
+  | t + 1 => by
+      change (publicQuittingGame table
+        blueprint.signalData.law).expectedHistoryValue
+          blueprint.strategy .draw (blueprint.payoffPotential who) (t + 1) = _
+      rw [(publicQuittingGame table
+        blueprint.signalData.law).expectedHistoryValue_succ]
+      simp_rw [blueprint.payoffPotential_harmonic who]
+      exact blueprint.expect_payoffPotential_eq_value who t
+
+noncomputable def payoffResidual
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) : MMatrixPayoffMode table → ℝ
+  | .absorbed => 0
+  | mode => table.never who - blueprint.modeContinuationValue who mode
+
+private theorem historyPayoff_eq_potential_add_residual
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t) :
+    (match history.2 with
+      | .absorbed quitters => table.terminal quitters who
+      | _ => table.never who) =
+      blueprint.payoffPotential who t history +
+        blueprint.payoffResidual who (blueprint.mode t history) := by
+  have hmatches := blueprint.mode_state t history
+  cases hmode : blueprint.mode t history with
+  | draw source =>
+      cases hstate : history.2 <;>
+        simp [MMatrixPayoffMode.MatchesState, hmode, hstate] at hmatches ⊢
+      · cases source <;>
+          simp [payoffPotential, payoffResidual, modeContinuationValue,
+            hmode]
+  | active target =>
+      cases hstate : history.2 <;>
+        simp [MMatrixPayoffMode.MatchesState, hmode, hstate] at hmatches ⊢
+      · simp [payoffPotential, payoffResidual, modeContinuationValue,
+          hmode]
+  | absorbed =>
+      cases hstate : history.2 <;>
+        simp [MMatrixPayoffMode.MatchesState, hmode, hstate] at hmatches ⊢
+      · unfold payoffPotential payoffResidual
+        rw [hmode, hstate]
+        simp
+
+theorem publicFinitePayoff_sub_value_eq_expect_residual
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) (t : ℕ) :
+    publicFinitePayoff table blueprint.signalData.law blueprint.strategy
+        t who - value who =
+      expect (blueprint.modeDist t) (blueprint.payoffResidual who) := by
+  have hreplace : publicFinitePayoff table blueprint.signalData.law
+      blueprint.strategy t who =
+      expect ((publicQuittingGame table
+          blueprint.signalData.law).histDist
+        blueprint.strategy .draw t) (fun history =>
+          blueprint.payoffPotential who t history +
+            blueprint.payoffResidual who (blueprint.mode t history)) := by
+    unfold publicFinitePayoff
+    apply Math.ProbabilityMassFunction.expect_congr_on_support
+    intro history _
+    have hmatches := blueprint.mode_state t history
+    cases hmode : blueprint.mode t history with
+    | draw source =>
+        cases hstate : history.2 <;>
+          simp [MMatrixPayoffMode.MatchesState, hmode, hstate]
+            at hmatches ⊢
+        · cases source <;>
+            simp [payoffPotential, payoffResidual, modeContinuationValue,
+              hmode]
+    | active target =>
+        cases hstate : history.2 <;>
+          simp [MMatrixPayoffMode.MatchesState, hmode, hstate]
+            at hmatches ⊢
+        · simp [payoffPotential, payoffResidual, modeContinuationValue,
+            hmode]
+    | absorbed =>
+        cases hstate : history.2 <;>
+          simp [MMatrixPayoffMode.MatchesState, hmode, hstate]
+            at hmatches ⊢
+        · unfold payoffPotential payoffResidual
+          rw [hmode, hstate]
+          simp
+  have hmodeExpect : expect (blueprint.modeDist t)
+      (blueprint.payoffResidual who) =
+      expect ((publicQuittingGame table
+          blueprint.signalData.law).histDist
+        blueprint.strategy .draw t) (fun history =>
+          blueprint.payoffResidual who (blueprint.mode t history)) := by
+    unfold modeDist
+    rw [Math.Probability.expect_map]
+  rw [hreplace, Math.Probability.expect_add,
+    blueprint.expect_payoffPotential_eq_value who t, hmodeExpect]
+  ring
+
+theorem abs_expect_payoffResidual_le
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) (distribution : PMF (MMatrixPayoffMode table)) :
+    |expect distribution (blueprint.payoffResidual who)| ≤
+      ‖blueprint.payoffResidual who‖ *
+        expect distribution (Math.Probability.transientCharge
+          (absorbedCore (table := table))) := by
+  let residual := blueprint.payoffResidual who
+  let transient := Math.Probability.transientCharge
+    (absorbedCore (table := table))
+  let bound := ‖residual‖
+  have hpoint : ∀ mode, |residual mode| ≤ bound * transient mode := by
+    intro mode
+    cases mode with
+    | absorbed =>
+        have hmem : (.absorbed : MMatrixPayoffMode table) ∈
+            absorbedCore := trivial
+        rw [show transient (.absorbed : MMatrixPayoffMode table) = 0 by
+          exact Math.Probability.transientCharge_of_mem hmem]
+        simp [residual, payoffResidual]
+    | draw source =>
+        rw [show transient (.draw source) = 1 by
+          exact Math.Probability.transientCharge_of_not_mem (by
+            intro hmem
+            exact hmem)]
+        rw [mul_one]
+        exact norm_le_pi_norm residual (.draw source)
+    | active target =>
+        rw [show transient (.active target) = 1 by
+          exact Math.Probability.transientCharge_of_not_mem (by
+            intro hmem
+            exact hmem)]
+        rw [mul_one]
+        exact norm_le_pi_norm residual (.active target)
+  have hupper := Math.Probability.expect_mono distribution residual
+    (fun mode => bound * transient mode)
+    (fun mode => (le_abs_self _).trans (hpoint mode))
+  have hlower := Math.Probability.expect_mono distribution
+    (fun mode => -(bound * transient mode)) residual
+    (fun mode => neg_le_of_abs_le (hpoint mode))
+  have hscale : expect distribution (fun mode => bound * transient mode) =
+      bound * expect distribution transient :=
+    Math.Probability.expect_const_mul distribution bound transient
+  have hnegScale : expect distribution
+      (fun mode => -(bound * transient mode)) =
+      -(bound * expect distribution transient) := by
+    rw [Math.Probability.expect_neg, hscale]
+  rw [hscale] at hupper
+  rw [hnegScale] at hlower
+  exact abs_le.mpr ⟨hlower, hupper⟩
+
+theorem payoff_eq_value
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) :
+    publicQuittingPayoff table blueprint.signalData.law
+      blueprint.strategy who = value who := by
+  let payoff := publicQuittingPayoff table blueprint.signalData.law
+    blueprint.strategy who
+  let finitePayoff := fun t => publicFinitePayoff table
+    blueprint.signalData.law blueprint.strategy t who
+  let residual := blueprint.payoffResidual who
+  let bound := ‖residual‖
+  have hclose : ∀ δ : ℝ, 0 < δ → |payoff - value who| < δ := by
+    intro δ hδ
+    let threshold := δ / (2 * (bound + 1))
+    have hbound : 0 ≤ bound := norm_nonneg _
+    have hthreshold : 0 < threshold := by
+      dsimp only [threshold]
+      positivity
+    let certificate := Classical.choice blueprint.modeKernel_transienceCertificate
+    obtain ⟨steps, hsteps⟩ :=
+      certificate.exists_iter_transientCharge_lt hthreshold (.draw none)
+    have heventually : ∀ᶠ t in atTop, |finitePayoff t - payoff| < δ / 2 := by
+      have htendsto : Tendsto finitePayoff atTop (nhds payoff) := by
+        dsimp only [finitePayoff, payoff]
+        exact tendsto_publicFinitePayoff table blueprint.signalData.law
+          blueprint.strategy who
+      have hevent := htendsto.eventually
+        (Metric.ball_mem_nhds _ (half_pos hδ))
+      filter_upwards [hevent] with t ht
+      simpa only [Metric.mem_ball, Real.dist_eq] using ht
+    have hafter : ∀ᶠ t in atTop, steps ≤ t := eventually_ge_atTop steps
+    obtain ⟨t, hpayoff, hstepsLe⟩ := (heventually.and hafter).exists
+    have hpad := Math.Probability.expect_iter_add_transientCharge_le
+      blueprint.absorbedCore_closed steps (t - steps) (.draw none)
+    rw [Nat.add_sub_of_le hstepsLe] at hpad
+    have htransientIter : expect
+        (Math.PMFIter.iter blueprint.modeKernel t (.draw none))
+          (Math.Probability.transientCharge
+            (absorbedCore (table := table))) < threshold :=
+      hpad.trans_lt hsteps
+    have htransient : expect (blueprint.modeDist t)
+        (Math.Probability.transientCharge
+          (absorbedCore (table := table))) < threshold := by
+      rw [blueprint.modeDist_eq_iter]
+      exact htransientIter
+    have hresidualBound := blueprint.abs_expect_payoffResidual_le
+      who (blueprint.modeDist t)
+    have hscaled : bound * expect (blueprint.modeDist t)
+        (Math.Probability.transientCharge
+          (absorbedCore (table := table))) < δ / 2 := by
+      have htransientNonneg : 0 ≤ expect (blueprint.modeDist t)
+          (Math.Probability.transientCharge
+            (absorbedCore (table := table))) := by
+        apply Math.Probability.expect_nonneg
+        exact Math.Probability.transientCharge_nonneg
+          (absorbedCore (table := table))
+      calc
+        bound * expect (blueprint.modeDist t)
+              (Math.Probability.transientCharge
+                (absorbedCore (table := table))) ≤
+            (bound + 1) * expect (blueprint.modeDist t)
+              (Math.Probability.transientCharge
+                (absorbedCore (table := table))) := by
+          exact mul_le_mul_of_nonneg_right (by linarith) htransientNonneg
+        _ < (bound + 1) * threshold :=
+          mul_lt_mul_of_pos_left htransient (by positivity)
+        _ = δ / 2 := by
+          dsimp only [threshold]
+          field_simp [ne_of_gt (show 0 < bound + 1 by positivity)]
+    have hfinite : |finitePayoff t - value who| < δ / 2 := by
+      have heq := blueprint.publicFinitePayoff_sub_value_eq_expect_residual
+        who t
+      dsimp only [finitePayoff]
+      rw [heq]
+      exact hresidualBound.trans_lt hscaled
+    calc
+      |payoff - value who| =
+          |(payoff - finitePayoff t) + (finitePayoff t - value who)| := by
+        congr 1
+        ring
+      _ ≤ |payoff - finitePayoff t| + |finitePayoff t - value who| :=
+        abs_add_le _ _
+      _ < δ / 2 + δ / 2 := add_lt_add
+        (by simpa [abs_sub_comm] using hpayoff) hfinite
+      _ = δ := by ring
+  have habs : |payoff - value who| = 0 := by
+    apply le_antisymm
+    · exact le_of_forall_pos_le_add fun δ hδ => by
+        simpa using (hclose δ hδ).le
+    · exact abs_nonneg _
+  dsimp only [payoff] at habs ⊢
+  exact sub_eq_zero.mp (abs_eq_zero.mp habs)
+
 end MMatrixPayoffBlueprint
 
 /-! **Theorem 4.3 (paper).** If `R̂` is an M-matrix, every vector in
