@@ -47,11 +47,13 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.UniformP
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Controller.MemoryController
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.BehaviorTransfer
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.DependentActionPadding
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Disintegration
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.MarkovConverse
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Normalization
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.NormalizedHistory
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Payoff.AffinePayoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.InitialActionAffineness
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.RealizedActionRepeatedAdapter
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.Feasible
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.PunishmentLevel

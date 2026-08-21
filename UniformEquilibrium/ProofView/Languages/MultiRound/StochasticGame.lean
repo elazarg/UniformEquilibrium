@@ -38,7 +38,8 @@ open Math.Probability
 structure StochasticGame (ι : Type) where
   /-- State space. -/
   State : Type
-  /-- Per-player action set (may depend on state). -/
+  /-- Per-player action set, shared across states.  State-dependent presentations use the
+  action-legality padding adapter. -/
   Act : ι → Type
   /-- Stage payoff given state and joint action. -/
   stagePayoff : State → (∀ i, Act i) → ι → ℝ
