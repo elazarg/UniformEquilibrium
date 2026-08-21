@@ -9366,6 +9366,584 @@ def symmetricGeneralizedDilemma (α β x : ℝ) : FiniteStageGame :=
 def criticalDiscount (α β x : ℝ) : ℝ :=
   (β - α - x) / (β - α)
 
+private theorem symmetricGeneralizedDilemma_mixedEU_false
+    (α β x : ℝ) (profile : Bool → PMF Bool) :
+    (symmetricGeneralizedDilemma α β x).kernel.mixedExtension.eu
+        profile false =
+      β - x + x * (profile false true).toReal -
+        (β - α) * (profile true true).toReal := by
+  rw [binaryKernel_mixedEU_apply]
+  simp only [pair_false]
+  ring
+
+private theorem symmetricGeneralizedDilemma_mixedEU_true
+    (α β x : ℝ) (profile : Bool → PMF Bool) :
+    (symmetricGeneralizedDilemma α β x).kernel.mixedExtension.eu
+        profile true =
+      β - x + x * (profile true true).toReal -
+        (β - α) * (profile false true).toReal := by
+  rw [binaryKernel_mixedEU_apply]
+  simp only [pair_true]
+  ring
+
+/-- Expected aggregate payoff above `(α,α)` in the generalized dilemma. -/
+private noncomputable def symmetricDilemmaSurplus
+    (α β x : ℝ)
+    (profile : (symmetricGeneralizedDilemma α β x).BehaviorProfile)
+    (time : ℕ) : ℝ :=
+  (symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+      profile (symmetricGeneralizedDilemma α β x).repeatedInitial time false +
+    (symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+      profile (symmetricGeneralizedDilemma α β x).repeatedInitial time true - 2 * α
+
+private theorem expectedStagePayoff_symmetricDilemma_constantTrueFrom_ge
+    (α β x : ℝ) (hαβ : α ≤ β)
+    (profile : (symmetricGeneralizedDilemma α β x).BehaviorProfile)
+    (who : Bool) (start time : ℕ) (htime : start ≤ time) :
+    α ≤ (symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+      (Function.update profile who
+        (constantActionFrom (symmetricGeneralizedDilemma α β x)
+          profile who start true))
+      (symmetricGeneralizedDilemma α β x).repeatedInitial time who := by
+  let G := symmetricGeneralizedDilemma α β x
+  letI (player : Bool) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  rw [← Math.Probability.expect_const
+    (G.repeatedGame.histDist
+      (Function.update profile who
+        (constantActionFrom G profile who start true))
+      G.repeatedInitial time) α]
+  apply Math.Probability.expect_mono
+  intro history
+  unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+  change α ≤ G.kernel.mixedExtension.eu
+    (fun player => Function.update profile who
+      (constantActionFrom G profile who start true) player time history) who
+  cases who
+  · rw [symmetricGeneralizedDilemma_mixedEU_false]
+    have hp : ((Function.update profile false
+        (constantActionFrom G profile false start true))
+        false time history true).toReal = 1 := by
+      simp [constantActionFrom, Nat.not_lt.mpr htime]
+    have hq0 : 0 ≤ ((Function.update profile false
+        (constantActionFrom G profile false start true))
+        true time history true).toReal := ENNReal.toReal_nonneg
+    have hq1 : ((Function.update profile false
+        (constantActionFrom G profile false start true))
+        true time history true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    rw [hp]
+    nlinarith
+  · rw [symmetricGeneralizedDilemma_mixedEU_true]
+    have hq : ((Function.update profile true
+        (constantActionFrom G profile true start true))
+        true time history true).toReal = 1 := by
+      simp [constantActionFrom, Nat.not_lt.mpr htime]
+    have hp0 : 0 ≤ ((Function.update profile true
+        (constantActionFrom G profile true start true))
+        false time history true).toReal := ENNReal.toReal_nonneg
+    have hp1 : ((Function.update profile true
+        (constantActionFrom G profile true start true))
+        false time history true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    rw [hq]
+    nlinarith
+
+private theorem symmetricDilemma_x_mul_surplus_eq_gap_mul_deviationGain
+    (α β x : ℝ)
+    (profile : (symmetricGeneralizedDilemma α β x).BehaviorProfile)
+    (time : ℕ) :
+    x * symmetricDilemmaSurplus α β x profile time = (β - α - x) *
+      (((symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+          (Function.update profile false
+            (constantActionFrom (symmetricGeneralizedDilemma α β x)
+              profile false time true))
+          (symmetricGeneralizedDilemma α β x).repeatedInitial time false -
+        (symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+          profile (symmetricGeneralizedDilemma α β x).repeatedInitial
+          time false) +
+       ((symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+          (Function.update profile true
+            (constantActionFrom (symmetricGeneralizedDilemma α β x)
+              profile true time true))
+          (symmetricGeneralizedDilemma α β x).repeatedInitial time true -
+        (symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+          profile (symmetricGeneralizedDilemma α β x).repeatedInitial
+          time true)) := by
+  let G := symmetricGeneralizedDilemma α β x
+  let rowDeviated := Function.update profile false
+    (constantActionFrom G profile false time true)
+  let columnDeviated := Function.update profile true
+    (constantActionFrom G profile true time true)
+  let law := G.repeatedGame.histDist profile G.repeatedInitial time
+  have hrowLaw : G.repeatedGame.histDist rowDeviated G.repeatedInitial time = law :=
+    G.repeatedGame.histDist_eq_of_profilesAgreeBefore
+      (update_constantActionFrom_agreeBefore G profile false time true) time le_rfl
+  have hcolumnLaw :
+      G.repeatedGame.histDist columnDeviated G.repeatedInitial time = law :=
+    G.repeatedGame.histDist_eq_of_profilesAgreeBefore
+      (update_constantActionFrom_agreeBefore G profile true time true) time le_rfl
+  unfold symmetricDilemmaSurplus StochasticGame.expectedStagePayoff
+  change x * (Math.Probability.expect law
+      (fun history => G.repeatedGame.stageEUAt profile history false) +
+      Math.Probability.expect law
+        (fun history => G.repeatedGame.stageEUAt profile history true) - 2 * α) = _
+  change (β - α - x) *
+    ((Math.Probability.expect
+          (G.repeatedGame.histDist rowDeviated G.repeatedInitial time)
+          (fun history => G.repeatedGame.stageEUAt rowDeviated history false) -
+        Math.Probability.expect law
+          (fun history => G.repeatedGame.stageEUAt profile history false)) +
+      (Math.Probability.expect
+          (G.repeatedGame.histDist columnDeviated G.repeatedInitial time)
+          (fun history => G.repeatedGame.stageEUAt columnDeviated history true) -
+        Math.Probability.expect law
+          (fun history => G.repeatedGame.stageEUAt profile history true))) = _
+  rw [hrowLaw, hcolumnLaw]
+  rw [← Math.Probability.expect_add, ← Math.Probability.expect_sub,
+    ← Math.Probability.expect_sub, ← Math.Probability.expect_add,
+    ← Math.Probability.expect_const law (2 * α),
+    ← Math.Probability.expect_const_mul, ← Math.Probability.expect_const_mul]
+  apply Math.ProbabilityMassFunction.expect_congr
+  intro history
+  let current : Bool → PMF Bool := fun player => profile player time history
+  have hrow : G.repeatedGame.stageEUAt rowDeviated history false =
+      G.kernel.mixedExtension.eu
+        (Function.update current false (PMF.pure true)) false := by
+    unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+    congr 1
+    apply congrArg Math.PMFProduct.pmfPi
+    funext player
+    by_cases hplayer : player = false
+    · subst player
+      simp [rowDeviated, constantActionFrom]
+    · simp [rowDeviated, current, Function.update_of_ne hplayer]
+  have hcolumn : G.repeatedGame.stageEUAt columnDeviated history true =
+      G.kernel.mixedExtension.eu
+        (Function.update current true (PMF.pure true)) true := by
+    unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+    congr 1
+    apply congrArg Math.PMFProduct.pmfPi
+    funext player
+    by_cases hplayer : player = true
+    · subst player
+      simp [columnDeviated, constantActionFrom]
+    · simp [columnDeviated, current, Function.update_of_ne hplayer]
+  have horiginal (who : Bool) : G.repeatedGame.stageEUAt profile history who =
+      G.kernel.mixedExtension.eu current who := by
+    unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+    rfl
+  rw [hrow, hcolumn, horiginal false, horiginal true,
+    symmetricGeneralizedDilemma_mixedEU_false,
+    symmetricGeneralizedDilemma_mixedEU_true]
+  norm_num
+  ring
+
+private theorem symmetricDilemmaSurplus_mem_Icc
+    (α β x : ℝ) (hgap : α < β - x)
+    (profile : (symmetricGeneralizedDilemma α β x).BehaviorProfile)
+    (time : ℕ) :
+    symmetricDilemmaSurplus α β x profile time ∈ Set.Icc 0 (2 * (β - α - x)) := by
+  let G := symmetricGeneralizedDilemma α β x
+  let law := G.repeatedGame.histDist profile G.repeatedInitial time
+  have hpointwise (history : G.repeatedGame.Hist time) :
+      0 ≤ G.repeatedGame.stageEUAt profile history false +
+          G.repeatedGame.stageEUAt profile history true - 2 * α ∧
+        G.repeatedGame.stageEUAt profile history false +
+          G.repeatedGame.stageEUAt profile history true - 2 * α ≤
+            2 * (β - α - x) := by
+    let current : Bool → PMF Bool := fun player => profile player time history
+    have horiginal (who : Bool) : G.repeatedGame.stageEUAt profile history who =
+        G.kernel.mixedExtension.eu current who := by
+      unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+      rfl
+    rw [horiginal false, horiginal true,
+      symmetricGeneralizedDilemma_mixedEU_false,
+      symmetricGeneralizedDilemma_mixedEU_true]
+    have hp0 : 0 ≤ (current false true).toReal := ENNReal.toReal_nonneg
+    have hq0 : 0 ≤ (current true true).toReal := ENNReal.toReal_nonneg
+    have hp1 : (current false true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hq1 : (current true true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    constructor <;> nlinarith
+  unfold symmetricDilemmaSurplus StochasticGame.expectedStagePayoff
+  change Math.Probability.expect law
+      (fun history => G.repeatedGame.stageEUAt profile history false) +
+      Math.Probability.expect law
+        (fun history => G.repeatedGame.stageEUAt profile history true) - 2 * α
+      ∈ Set.Icc 0 (2 * (β - α - x))
+  rw [← Math.Probability.expect_add,
+    ← Math.Probability.expect_const law (2 * α),
+    ← Math.Probability.expect_sub]
+  constructor
+  · rw [← Math.Probability.expect_const law 0]
+    exact Math.Probability.expect_mono fun history => (hpointwise history).1
+  · rw [← Math.Probability.expect_const law (2 * (β - α - x))]
+    exact Math.Probability.expect_mono fun history => (hpointwise history).2
+
+private theorem symmetricDilemma_deviationGain_le_futureSurplus
+    (α β x lam : ℝ) (hαβ : α ≤ β)
+    (profile : (symmetricGeneralizedDilemma α β x).BehaviorProfile)
+    (hnash : (symmetricGeneralizedDilemma α β x).repeatedGame.IsDiscountedεNash
+      (1 - lam) (symmetricGeneralizedDilemma α β x).repeatedInitial 0 profile)
+    (who : Bool) (start : ℕ) (hlam : 0 < lam) (hlam1 : lam < 1) :
+    (symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+        (Function.update profile who
+          (constantActionFrom (symmetricGeneralizedDilemma α β x)
+            profile who start true))
+        (symmetricGeneralizedDilemma α β x).repeatedInitial start who -
+      (symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+        profile (symmetricGeneralizedDilemma α β x).repeatedInitial start who ≤
+      ∑' offset : ℕ, (1 - lam) ^ (offset + 1) *
+        ((symmetricGeneralizedDilemma α β x).repeatedGame.expectedStagePayoff
+          profile (symmetricGeneralizedDilemma α β x).repeatedInitial
+          (start + (offset + 1)) who - α) := by
+  let G := symmetricGeneralizedDilemma α β x
+  let beta := 1 - lam
+  let deviation := constantActionFrom G profile who start true
+  let deviated := Function.update profile who deviation
+  have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
+  have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
+  have htail := discountedTail_le_of_nash_of_agreeBefore
+    G profile hnash who deviation start
+      (update_constantActionFrom_agreeBefore G profile who start true) hlam hlam1
+  change (∑' offset : ℕ, beta ^ offset *
+      G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial
+        (start + offset) who) ≤
+    ∑' offset : ℕ, beta ^ offset *
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+        (start + offset) who at htail
+  obtain ⟨bound, hbound⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun data : G.repeatedGame.State × G.repeatedGame.JointAct =>
+      G.repeatedGame.stagePayoff data.1 data.2 who)
+  have horiginalSummable : Summable fun offset : ℕ => beta ^ offset *
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+        (start + offset) who := by
+    apply summable_pow_mul_of_abs_le
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+    intro offset
+    exact G.repeatedGame.abs_expectedStagePayoff_le
+      (fun state action => hbound (state, action)) profile
+      G.repeatedInitial (start + offset)
+  have hdeviatedSummable : Summable fun offset : ℕ => beta ^ offset *
+      G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial
+        (start + offset) who := by
+    apply summable_pow_mul_of_abs_le
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+    intro offset
+    exact G.repeatedGame.abs_expectedStagePayoff_le
+      (fun state action => hbound (state, action)) deviated
+      G.repeatedInitial (start + offset)
+  rw [horiginalSummable.tsum_eq_zero_add,
+    hdeviatedSummable.tsum_eq_zero_add] at htail
+  simp only [pow_zero, one_mul, Nat.zero_add] at htail
+  have hfutureDeviation :
+      (∑' offset : ℕ, beta ^ (offset + 1) * α) ≤
+        ∑' offset : ℕ, beta ^ (offset + 1) *
+          G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial
+            (start + (offset + 1)) who := by
+    have hgeom : Summable fun offset : ℕ => beta ^ (offset + 1) * α := by
+      simpa [pow_succ'] using
+        ((summable_geometric_of_lt_one hbeta0 hbeta1).mul_left beta).mul_right α
+    have hdev : Summable fun offset : ℕ => beta ^ (offset + 1) *
+        G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial
+          (start + (offset + 1)) who :=
+      hdeviatedSummable.comp_injective (fun offset => offset + 1) (by omega)
+    exact hgeom.tsum_le_tsum (fun offset =>
+      mul_le_mul_of_nonneg_left
+        (expectedStagePayoff_symmetricDilemma_constantTrueFrom_ge
+          α β x hαβ profile who start (start + (offset + 1)) (by omega))
+        (pow_nonneg hbeta0 (offset + 1))) hdev
+  have horiginalFuture : Summable fun offset : ℕ => beta ^ (offset + 1) *
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+        (start + (offset + 1)) who :=
+    horiginalSummable.comp_injective (fun offset => offset + 1) (by omega)
+  have hbaselineFuture : Summable fun offset : ℕ =>
+      beta ^ (offset + 1) * α := by
+    simpa [pow_succ'] using
+      ((summable_geometric_of_lt_one hbeta0 hbeta1).mul_left beta).mul_right α
+  have hdifference :
+      (∑' offset : ℕ, beta ^ (offset + 1) *
+        (G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+          (start + (offset + 1)) who - α)) =
+      (∑' offset : ℕ, beta ^ (offset + 1) *
+        G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+          (start + (offset + 1)) who) -
+        ∑' offset : ℕ, beta ^ (offset + 1) * α := by
+    rw [← horiginalFuture.tsum_sub hbaselineFuture]
+    apply tsum_congr
+    intro offset
+    ring
+  change _ ≤ (∑' offset : ℕ, beta ^ (offset + 1) *
+    (G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+      (start + (offset + 1)) who - α))
+  rw [hdifference]
+  linarith
+
+private theorem symmetricDilemma_x_mul_surplus_le_futureSurplus
+    (α β x lam : ℝ) (hgap : α < β - x)
+    (profile : (symmetricGeneralizedDilemma α β x).BehaviorProfile)
+    (hnash : (symmetricGeneralizedDilemma α β x).repeatedGame.IsDiscountedεNash
+      (1 - lam) (symmetricGeneralizedDilemma α β x).repeatedInitial 0 profile)
+    (start : ℕ) (hlam : 0 < lam) (hlam1 : lam < 1) :
+    x * symmetricDilemmaSurplus α β x profile start ≤
+      (β - α - x) *
+        ∑' offset : ℕ, (1 - lam) ^ (offset + 1) *
+          symmetricDilemmaSurplus α β x profile (start + (offset + 1)) := by
+  let G := symmetricGeneralizedDilemma α β x
+  let beta := 1 - lam
+  have hαβ : α ≤ β := by linarith
+  have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
+  have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
+  have hrow := symmetricDilemma_deviationGain_le_futureSurplus
+    α β x lam hαβ profile hnash false start hlam hlam1
+  have hcolumn := symmetricDilemma_deviationGain_le_futureSurplus
+    α β x lam hαβ profile hnash true start hlam hlam1
+  let rowTerm : ℕ → ℝ := fun offset => beta ^ (offset + 1) *
+    (G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+      (start + (offset + 1)) false - α)
+  let columnTerm : ℕ → ℝ := fun offset => beta ^ (offset + 1) *
+    (G.repeatedGame.expectedStagePayoff profile G.repeatedInitial
+      (start + (offset + 1)) true - α)
+  obtain ⟨bound, hbound⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun data : G.repeatedGame.State × G.repeatedGame.JointAct × Bool =>
+      G.repeatedGame.stagePayoff data.1 data.2.1 data.2.2)
+  have hrowSummable : Summable rowTerm := by
+    apply summable_pow_mul_of_abs_le
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+    intro offset
+    dsimp only [rowTerm]
+    rw [abs_mul, abs_of_nonneg hbeta0]
+    exact mul_le_mul_of_nonneg_left
+      ((abs_sub _ _).trans_le (add_le_add
+        (G.repeatedGame.abs_expectedStagePayoff_le
+          (fun state action => hbound (state, action, false)) profile
+          G.repeatedInitial (start + (offset + 1))) (le_abs_self α))) hbeta0
+  have hcolumnSummable : Summable columnTerm := by
+    apply summable_pow_mul_of_abs_le
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+    intro offset
+    dsimp only [columnTerm]
+    rw [abs_mul, abs_of_nonneg hbeta0]
+    exact mul_le_mul_of_nonneg_left
+      ((abs_sub _ _).trans_le (add_le_add
+        (G.repeatedGame.abs_expectedStagePayoff_le
+          (fun state action => hbound (state, action, true)) profile
+          G.repeatedInitial (start + (offset + 1))) (le_abs_self α))) hbeta0
+  have hsum :
+      (∑' offset, rowTerm offset) + ∑' offset, columnTerm offset =
+        ∑' offset, beta ^ (offset + 1) *
+          symmetricDilemmaSurplus α β x profile (start + (offset + 1)) := by
+    rw [← hrowSummable.tsum_add hcolumnSummable]
+    apply tsum_congr
+    intro offset
+    dsimp only [rowTerm, columnTerm, symmetricDilemmaSurplus]
+    ring
+  have hgainIdentity :=
+    symmetricDilemma_x_mul_surplus_eq_gap_mul_deviationGain
+      α β x profile start
+  change _ ≤ (β - α - x) *
+    ∑' offset, beta ^ (offset + 1) *
+      symmetricDilemmaSurplus α β x profile (start + (offset + 1))
+  rw [← hsum]
+  change _ ≤ (β - α - x) *
+    ((∑' offset, rowTerm offset) + ∑' offset, columnTerm offset)
+  change _ ≤ _ at hrow hcolumn
+  nlinarith
+
+private theorem symmetricDilemmaSurplus_eq_zero_of_nash
+    (α β x lam : ℝ) (hgap : α < β - x) (hx : 0 < x)
+    (profile : (symmetricGeneralizedDilemma α β x).BehaviorProfile)
+    (hnash : (symmetricGeneralizedDilemma α β x).repeatedGame.IsDiscountedεNash
+      (1 - lam) (symmetricGeneralizedDilemma α β x).repeatedInitial 0 profile)
+    (hlam : criticalDiscount α β x < lam) (hlam1 : lam < 1) :
+    ∀ time, symmetricDilemmaSurplus α β x profile time = 0 := by
+  let beta := 1 - lam
+  let mass : ℕ → ℝ := symmetricDilemmaSurplus α β x profile
+  let y := sSup (Set.range mass)
+  have hd : 0 < β - α := by linarith
+  have hgap0 : 0 < β - α - x := by linarith
+  have hcritical0 : 0 < criticalDiscount α β x := by
+    unfold criticalDiscount
+    positivity
+  have hlam0 : 0 < lam := hcritical0.trans hlam
+  have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
+  have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
+  have hrangeNonempty : (Set.range mass).Nonempty := Set.range_nonempty mass
+  have hrangeBdd : BddAbove (Set.range mass) := by
+    refine ⟨2 * (β - α - x), ?_⟩
+    rintro _ ⟨time, rfl⟩
+    exact (symmetricDilemmaSurplus_mem_Icc α β x hgap profile time).2
+  have hmassLe (time : ℕ) : mass time ≤ y :=
+    le_csSup hrangeBdd ⟨time, rfl⟩
+  have hy0 : 0 ≤ y := by
+    have hzero := (symmetricDilemmaSurplus_mem_Icc α β x hgap profile 0).1
+    exact hzero.trans (hmassLe 0)
+  have hfutureBound (start : ℕ) :
+      (∑' offset : ℕ, beta ^ (offset + 1) * mass (start + (offset + 1))) ≤
+        y * (beta / (1 - beta)) := by
+    have hmassSummable : Summable fun offset : ℕ =>
+        beta ^ (offset + 1) * mass (start + (offset + 1)) := by
+      apply summable_pow_mul_of_abs_le
+        (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+      intro offset
+      rw [abs_mul, abs_of_nonneg hbeta0]
+      have hmass := symmetricDilemmaSurplus_mem_Icc
+        α β x hgap profile (start + (offset + 1))
+      rw [abs_of_nonneg hmass.1]
+      exact mul_le_mul_of_nonneg_left hmass.2 hbeta0
+    have hySummable : Summable fun offset : ℕ => beta ^ (offset + 1) * y := by
+      simpa [pow_succ'] using
+        ((summable_geometric_of_lt_one hbeta0 hbeta1).mul_left beta).mul_right y
+    calc
+      (∑' offset : ℕ, beta ^ (offset + 1) * mass (start + (offset + 1))) ≤
+          ∑' offset : ℕ, beta ^ (offset + 1) * y :=
+        hmassSummable.tsum_le_tsum (fun offset =>
+          mul_le_mul_of_nonneg_left (hmassLe _) (pow_nonneg hbeta0 _)) hySummable
+      _ = y * (beta / (1 - beta)) := by
+        rw [show (∑' offset : ℕ, beta ^ (offset + 1) * y) =
+            beta * ((∑' offset : ℕ, beta ^ offset) * y) by
+          rw [← tsum_mul_right, ← tsum_mul_left]
+          apply tsum_congr
+          intro offset
+          rw [pow_succ']]
+        rw [tsum_geometric_of_lt_one hbeta0 hbeta1]
+        field_simp [sub_ne_zero.mpr hbeta1.ne]
+        ring
+  have hmassUpper (time : ℕ) :
+      x * mass time ≤
+        (β - α - x) * (y * (beta / (1 - beta))) := by
+    have hpaper := symmetricDilemma_x_mul_surplus_le_futureSurplus
+      α β x lam hgap profile hnash time hlam0 hlam1
+    exact hpaper.trans (mul_le_mul_of_nonneg_left
+      (hfutureBound time) hgap0.le)
+  have hyUpper : x * y ≤
+      (β - α - x) * (y * (beta / (1 - beta))) := by
+    apply csSup_le hrangeNonempty
+    rintro _ ⟨time, rfl⟩
+    have := hmassUpper time
+    nlinarith
+  have hcontraction :
+      (β - α - x) * (beta / (1 - beta)) < x := by
+    have hcriticalExpanded : (β - α - x) / (β - α) < lam := by
+      simpa only [criticalDiscount] using hlam
+    have hdenom : 0 < 1 - beta := by linarith
+    apply (div_lt_iff₀ hdenom).2
+    apply (div_lt_iff₀ hd).1 at hcriticalExpanded
+    dsimp only [beta]
+    nlinarith
+  have hy : y = 0 := by
+    nlinarith
+  intro time
+  apply le_antisymm
+  · simpa [hy] using hmassLe time
+  · exact (symmetricDilemmaSurplus_mem_Icc α β x hgap profile time).1
+
+private theorem symmetricDilemma_discountedPayoff_sum_eq_baseline_of_surplus_zero
+    (α β x lam : ℝ)
+    (profile : (symmetricGeneralizedDilemma α β x).BehaviorProfile)
+    (hlam : 0 < lam) (hlam1 : lam < 1)
+    (hmass : ∀ time, symmetricDilemmaSurplus α β x profile time = 0) :
+    (symmetricGeneralizedDilemma α β x).discountedPayoff lam profile false +
+      (symmetricGeneralizedDilemma α β x).discountedPayoff lam profile true =
+        2 * α := by
+  let G := symmetricGeneralizedDilemma α β x
+  let beta := 1 - lam
+  have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
+  have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
+  obtain ⟨bound, hbound⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun data : G.repeatedGame.State × G.repeatedGame.JointAct × Bool =>
+      G.repeatedGame.stagePayoff data.1 data.2.1 data.2.2)
+  have hs (who : Bool) : Summable fun time : ℕ => beta ^ time *
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial time who :=
+    G.repeatedGame.summable_discounted_expectedStagePayoff
+      (fun state action => hbound (state, action, who)) profile G.repeatedInitial
+      (by simpa [abs_of_nonneg hbeta0] using hbeta1)
+  unfold FiniteStageGame.discountedPayoff StochasticGame.discountedPayoff
+  change lam * (∑' time : ℕ, beta ^ time *
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial time false) +
+    lam * (∑' time : ℕ, beta ^ time *
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial time true) = 2 * α
+  rw [← mul_add, ← (hs false).tsum_add (hs true)]
+  have hstage (time : ℕ) :
+      G.repeatedGame.expectedStagePayoff profile G.repeatedInitial time false +
+        G.repeatedGame.expectedStagePayoff profile G.repeatedInitial time true = 2 * α := by
+    have := hmass time
+    unfold symmetricDilemmaSurplus at this
+    linarith
+  simp_rw [← mul_add, hstage, tsum_mul_right,
+    tsum_geometric_of_lt_one hbeta0 hbeta1]
+  have hne : lam ≠ 0 := ne_of_gt hlam
+  change lam * ((1 - beta)⁻¹ * (2 * α)) = 2 * α
+  rw [show 1 - beta = lam by dsimp only [beta]; ring]
+  field_simp
+
+private theorem symmetricGeneralizedDilemma_E1_eq_singleton
+    (α β x : ℝ) (hx : 0 < x) :
+    (symmetricGeneralizedDilemma α β x).oneStageEquilibriumPayoffs =
+      {pair α α} := by
+  let G := symmetricGeneralizedDilemma α β x
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨profile, hnash, rfl⟩
+    have hrow := hnash false (PMF.pure true)
+    have hcolumn := hnash true (PMF.pure true)
+    change G.kernel.mixedExtension.eu profile false ≥
+      G.kernel.mixedExtension.eu
+        (Function.update profile false (PMF.pure true)) false at hrow
+    change G.kernel.mixedExtension.eu profile true ≥
+      G.kernel.mixedExtension.eu
+        (Function.update profile true (PMF.pure true)) true at hcolumn
+    rw [symmetricGeneralizedDilemma_mixedEU_false,
+      symmetricGeneralizedDilemma_mixedEU_false,
+      symmetricGeneralizedDilemma_mixedEU_true,
+      symmetricGeneralizedDilemma_mixedEU_true] at hrow hcolumn
+    have hp0 : 0 ≤ (profile false true).toReal := ENNReal.toReal_nonneg
+    have hq0 : 0 ≤ (profile true true).toReal := ENNReal.toReal_nonneg
+    have hp1 : (profile false true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    have hq1 : (profile true true).toReal ≤ 1 :=
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+    norm_num at hrow hcolumn
+    have hp : (profile false true).toReal = 1 := by nlinarith
+    have hq : (profile true true).toReal = 1 := by nlinarith
+    apply Set.mem_singleton_iff.mpr
+    funext who
+    cases who
+    · rw [symmetricGeneralizedDilemma_mixedEU_false, hp, hq]
+      norm_num
+      ring
+    · rw [symmetricGeneralizedDilemma_mixedEU_true, hp, hq]
+      norm_num
+      ring
+  · rintro _ rfl
+    let profile : Bool → PMF Bool := fun _ => PMF.pure true
+    refine ⟨profile, ?_, ?_⟩
+    · intro who deviation
+      cases who
+      · rw [symmetricGeneralizedDilemma_mixedEU_false,
+          symmetricGeneralizedDilemma_mixedEU_false]
+        have hp1 : (deviation true).toReal ≤ 1 :=
+          ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+        norm_num [profile]
+        nlinarith
+      · rw [symmetricGeneralizedDilemma_mixedEU_true,
+          symmetricGeneralizedDilemma_mixedEU_true]
+        have hq1 : (deviation true).toReal ≤ 1 :=
+          ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+        norm_num [profile]
+        nlinarith
+    · funext who
+      cases who
+      · rw [symmetricGeneralizedDilemma_mixedEU_false]
+        norm_num [profile, pair]
+        ring
+      · rw [symmetricGeneralizedDilemma_mixedEU_true]
+        norm_num [profile, pair]
+        ring
+
 @[simp] theorem prisonersDilemma_as_generalized_payoff
     (action : ∀ _ : Bool, Bool) :
     (symmetricGeneralizedDilemma 1 5 1).payoff action =
@@ -9385,7 +9963,90 @@ theorem concluding_remark_1 (α β x lam : ℝ)
     (hlam : criticalDiscount α β x < lam) (hlam1 : lam ≤ 1) :
     (symmetricGeneralizedDilemma α β x).discountedEquilibriumPayoffs lam =
       {pair α α} := by
-  sorry
+  let G := symmetricGeneralizedDilemma α β x
+  have hd : 0 < β - α := by linarith
+  have hgap0 : 0 < β - α - x := by linarith
+  have hcritical0 : 0 < criticalDiscount α β x := by
+    unfold criticalDiscount
+    positivity
+  have hlam0 : 0 < lam := hcritical0.trans hlam
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨profile, hnash, hpayoff⟩
+    have hcoordinates : payoff false = α ∧ payoff true = α := by
+      by_cases hcritical : lam = 1
+      · subst lam
+        let current := G.initialMixedProfile profile
+        have hcurrentNash : G.kernel.mixedExtension.IsNash current := by
+          intro who deviation
+          let behaviorDeviation : G.BehaviorStrategy who :=
+            fun _time _history => deviation
+          have hequilibrium := hnash who behaviorDeviation
+          simp only [add_zero] at hequilibrium
+          rw [discountedPayoff_one_eq_mixedPayoff_initial,
+            discountedPayoff_one_eq_mixedPayoff_initial] at hequilibrium
+          have hupdate : G.initialMixedProfile
+              (Function.update profile who behaviorDeviation) =
+              Function.update current who deviation := by
+            funext player
+            by_cases hplayer : player = who
+            · subst player
+              simp [FiniteStageGame.initialMixedProfile, behaviorDeviation]
+            · simp [FiniteStageGame.initialMixedProfile, current,
+                Function.update_of_ne hplayer]
+          rwa [hupdate] at hequilibrium
+        have hmem : G.mixedPayoff current ∈ G.oneStageEquilibriumPayoffs :=
+          ⟨current, hcurrentNash, rfl⟩
+        rw [symmetricGeneralizedDilemma_E1_eq_singleton α β x hx] at hmem
+        have hcurrent := Set.mem_singleton_iff.mp hmem
+        rw [← hpayoff]
+        constructor <;>
+          rw [discountedPayoff_one_eq_mixedPayoff_initial, hcurrent] <;> rfl
+      · have hlamLt : lam < 1 := lt_of_le_of_ne hlam1 hcritical
+        have hmass := symmetricDilemmaSurplus_eq_zero_of_nash
+          α β x lam hgap hx profile hnash hlam hlamLt
+        have hsum :=
+          symmetricDilemma_discountedPayoff_sum_eq_baseline_of_surplus_zero
+            α β x lam profile hlam0 hlamLt hmass
+        have hlower (who : Bool) : α ≤ G.discountedPayoff lam profile who := by
+          let deviation := constantActionFrom G profile who 0 true
+          let deviated := Function.update profile who deviation
+          obtain ⟨bound, hbound⟩ := Math.Probability.exists_abs_bound_of_finite
+            (fun data : G.repeatedGame.State × G.repeatedGame.JointAct =>
+              G.repeatedGame.stagePayoff data.1 data.2 who)
+          have hdeviation : α ≤ G.repeatedGame.discountedPayoff (1 - lam)
+              deviated G.repeatedInitial who := by
+            apply G.repeatedGame.discountedPayoff_ge_of_forall_expectedStagePayoff_ge
+              (fun state action => hbound (state, action))
+              (fun time => expectedStagePayoff_symmetricDilemma_constantTrueFrom_ge
+                α β x hd.le profile who 0 time (by omega))
+              (by linarith) (by linarith)
+          have hequilibrium := hnash who deviation
+          simp only [add_zero] at hequilibrium
+          change G.repeatedGame.discountedPayoff (1 - lam)
+              profile G.repeatedInitial who ≥
+            G.repeatedGame.discountedPayoff (1 - lam)
+              deviated G.repeatedInitial who at hequilibrium
+          exact hdeviation.trans hequilibrium
+        have hfalse : α ≤ payoff false := by
+          rw [← hpayoff]
+          exact hlower false
+        have htrue : α ≤ payoff true := by
+          rw [← hpayoff]
+          exact hlower true
+        rw [hpayoff] at hsum
+        constructor <;> linarith
+    apply Set.mem_singleton_iff.mpr
+    funext who
+    cases who
+    · exact hcoordinates.1
+    · exact hcoordinates.2
+  · intro payoff hpayoff
+    rw [Set.mem_singleton_iff] at hpayoff
+    subst payoff
+    let rate : G.DiscountRate := ⟨lam, hlam0, hlam1⟩
+    exact lemma_1_E1_subset_Elambda G rate
+      (by rw [symmetricGeneralizedDilemma_E1_eq_singleton α β x hx]
+          exact Set.mem_singleton _)
 
 /-- The square analogue in concluding Remark 2. -/
 def generalizedCriticalSquare (α β x : ℝ) : Set (Payoff Bool) :=
