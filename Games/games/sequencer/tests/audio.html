@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8"><title>running</title></head>
+<body><pre id="out">running…</pre>
+<iframe id="frame" src="../index.html?mock=1" width="1280" height="860"></iframe>
+<script type="module">
+const out = document.getElementById("out");
+const log = [];
+const say = (ok, t) => log.push(`${ok ? "ok  " : "FAIL"} ${t}`);
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+document.getElementById("frame").addEventListener("load", async () => {
+  const w = document.getElementById("frame").contentWindow;
+  const d = w.document;
+  w.addEventListener("error", (e) => say(false, `uncaught in game: ${e.message}`));
+  w.addEventListener("unhandledrejection", (e) => say(false, `rejected: ${e.reason}`));
+  try {
+    await wait(600);
+    // the transport is already running before any gesture (attract mode)
+    const first = [...d.querySelectorAll(".step-head")].findIndex((n) => n.classList.contains("now"));
+    await wait(700);
+    const later = [...d.querySelectorAll(".step-head")].findIndex((n) => n.classList.contains("now"));
+    say(first !== later, `the playhead advances without a gesture: ${first} -> ${later}`);
+    say(d.querySelectorAll(".cell.now").length === 4, "the playhead lights a whole column");
+    // audio unlocks on the first real gesture and nothing throws
+    w.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerId: 9 }));
+    await wait(500);
+    // a room whose binding deviation really strikes
+    const strike = Array.from({ length: 16 }, (_, m) => (m ? [-1, -1, -1, -1] : [0, 0, 0, 0]));
+    strike[1] = [3, -1, -1, -1];
+    d.getElementById("handin").value = JSON.stringify({ table: strike });
+    d.getElementById("handin").dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    await wait(300);
+    d.getElementById("preset-solo").click();
+    await wait(200);
+    say(d.querySelectorAll(".cell.ghosted").length > 0,
+        `ghost strike marks: ${d.querySelectorAll(".cell.ghosted").length}`);
+    say(d.querySelectorAll(".track.binding").length === 1, "the breaking channel is marked");
+    say(d.getElementById("caption").textContent.includes("breaks on"),
+        `caption names the step: ${d.getElementById("caption").textContent}`);
+    d.getElementById("mute").click();
+    d.getElementById("hits").click();
+    await wait(300);
+    say(d.getElementById("mute").getAttribute("aria-pressed") === "true", "sound toggles");
+    say(d.getElementById("hits").getAttribute("aria-pressed") === "false", "strikes toggle");
+    d.getElementById("run").click();
+    await wait(300);
+    say(d.querySelectorAll(".step-head.now").length === 0, "stopping clears the playhead");
+    say(d.getElementById("run-glyph").textContent === "▶", "the run button offers to start again");
+  } catch (error) { say(false, `threw: ${error && error.stack ? error.stack : error}`); }
+  const failed = log.some((l) => l.startsWith("FAIL"));
+  document.title = failed ? "FAIL" : "PASS";
+  out.textContent = log.join("\n") + `\n\n${failed ? "FAIL" : "PASS"}`;
+});
+</script></body></html>

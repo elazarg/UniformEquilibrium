@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sequencer</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="bar">
+  <div class="brand">
+    <span class="logo">▚▞</span>
+    <h1>SEQUENCER</h1>
+  </div>
+
+  <div class="transport">
+    <button id="targets-open" class="chip">rooms</button>
+    <button id="run" class="run" aria-pressed="true" aria-label="run or stop the machine">
+      <svg class="gauge" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="gauge-track" cx="24" cy="24" r="20" />
+        <circle class="gauge-arc" cx="24" cy="24" r="20"
+          stroke-dasharray="125.66" stroke-dashoffset="125.66" />
+        <rect class="gauge-notch" x="23.1" y="0.5" width="1.8" height="7" />
+      </svg>
+      <span class="glyph" id="run-glyph">■</span>
+    </button>
+    <button id="mute" class="chip" aria-pressed="false" aria-label="sound">🔊</button>
+    <button id="hits" class="chip" aria-pressed="true" aria-label="strikes">✦</button>
+    <label class="chip loop" aria-label="steps in the loop">
+      <span class="loop-glyph">⟳</span>
+      <input id="period" type="range" min="1" max="8" step="1" value="2" />
+      <output id="period-out">2</output>
+    </label>
+  </div>
+
+  <div class="flags">
+    <span id="mock-flag" class="flag mock" hidden>rehearsal — nothing is written down</span>
+    <span id="net-flag" class="flag warn" hidden></span>
+    <button id="ledger-open" class="ghost ledger-btn" type="button"
+      aria-haspopup="dialog" aria-label="the ledger" title="the ledger">the ledger</button>
+  </div>
+</header>
+
+<main>
+  <div class="frame" id="frame">
+    <div class="frame-skin" aria-hidden="true"></div>
+    <span class="screw tl" aria-hidden="true"></span>
+    <span class="screw tr" aria-hidden="true"></span>
+    <span class="screw bl" aria-hidden="true"></span>
+    <span class="screw br" aria-hidden="true"></span>
+    <div class="room-line">
+      <span class="plate"><span class="room-name" id="target-name"></span></span>
+      <div class="goal" id="goal">
+        <span class="goal-text" id="goal-text">settle the room</span>
+        <span class="goal-meter" id="goal-meter" aria-hidden="true">
+          <span class="goal-fill" id="goal-fill"></span>
+          <span class="goal-notch" id="goal-notch"></span>
+        </span>
+      </div>
+      <button class="ghost small" id="propose" hidden>post it as a bounty</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <p class="caption" id="caption"></p>
+    <div class="patterns">
+      <button class="chip small" id="preset-pair">pairs</button>
+      <button class="chip small" id="preset-solo">relay</button>
+      <button class="chip small" id="preset-random">shuffle</button>
+      <button class="chip small" id="preset-fine">softer</button>
+      <button class="chip small" id="preset-clear">silence</button>
+    </div>
+    <svg class="tether" id="tether" hidden aria-hidden="true">
+      <line id="tether-line" x1="0" y1="0" x2="0" y2="0" />
+    </svg>
+    <div class="halo" id="halo" hidden aria-hidden="true"></div>
+    <div class="coach" id="coach" hidden></div>
+    <div class="tip" id="tip" hidden></div>
+    <p class="dead" id="dead" hidden>the bench never opened — reload the page</p>
+  </div>
+</main>
+
+<footer class="status" id="status"></footer>
+
+
+
+<dialog id="targets">
+  <form method="dialog" class="dialog-head">
+    <h2>rooms</h2>
+    <button class="ghost" value="close">close</button>
+  </form>
+  <div class="dialog-body">
+    <div class="card-grid" id="curated-list"></div>
+    <div class="card-grid" id="candidate-list"></div>
+    <input id="handin" class="handin" type="text" spellcheck="false"
+      placeholder="paste a room someone handed you" />
+    <span class="handin-error" id="handin-error"></span>
+  </div>
+</dialog>
+
+<dialog id="lock">
+  <h2 id="lock-title">the room settles</h2>
+  <p class="lock-body" id="lock-body"></p>
+  <div class="lock-actions">
+    <button class="chip primary" id="lock-submit">cut it to brass</button>
+    <button class="chip" id="lock-close">keep tuning</button>
+  </div>
+  <p class="legend" id="lock-result"></p>
+  <button class="ghost small" id="lock-ledger">open the ledger</button>
+</dialog>
+
+<dialog id="ledger">
+  <form method="dialog" class="dialog-head">
+    <h2>The ledger</h2>
+    <button class="ghost" value="close">close</button>
+  </form>
+  <div class="dialog-body ledger-body">
+    <p class="honesty">This is the research view, and the only place this game
+      speaks plainly. The game is a search for four-player quitting reward
+      tables that resist every approximate equilibrium the portal can find.
+      A "settled room" is a periodic behavioural profile whose exploitability
+      the portal's engine measures below the kill threshold 0.02 on this
+      table: bounded numerical evidence that the table is not a
+      counterexample. It is not a theorem. Nothing you do here is recorded
+      until the server engine re-scores it; the live numbers below come from
+      an in-browser port of the same evaluator and drive feel only. Sealing a
+      groove first asks the engine to snap the hazards to small-denominator
+      rationals and re-verify in exact arithmetic; the "exact" tier means
+      exactly that, for that one profile on that one table, and nothing
+      about any other profile.</p>
+
+    <section class="ledger-section">
+      <h3>room</h3>
+      <div id="ledger-room"></div>
+    </section>
+
+    <section class="ledger-section">
+      <h3>profile (client evaluation)</h3>
+      <div class="exact-editor">
+        <label for="cell-value" id="editor-label">selected hazard</label>
+        <input id="cell-value" type="text" inputmode="decimal" spellcheck="false" />
+        <button class="chip small" id="halve">÷2</button>
+        <button class="chip small" id="double">×2</button>
+        <button class="chip small" id="zero">off</button>
+      </div>
+      <div id="ledger-profile"></div>
+    </section>
+
+    <section class="ledger-section">
+      <h3>record</h3>
+      <div id="ledger-record"></div>
+    </section>
+
+    <section class="ledger-section">
+      <h3>controls</h3>
+      <ul class="key-list">
+        <li>drag a bar — the scale is logarithmic, each hairline one decade</li>
+        <li>pull sideways while dragging for a steadier hand: the further the
+          pointer is from the slot, the finer the same movement gets, one tenth
+          of the gain per decade of distance (the tether and the shrinking halo
+          show it)</li>
+        <li><kbd>shift</kbd>-drag or <kbd>shift</kbd>-wheel: finer still ·
+          <kbd>alt</kbd>-drag: finer again — both multiply on top of the
+          sideways pull · wheel: nudge · double-click: off/on</li>
+        <li><kbd>↑</kbd><kbd>↓</kbd> nudge · <kbd>←</kbd><kbd>→</kbd> walk the loop ·
+          <kbd>PgUp</kbd><kbd>PgDn</kbd> double/halve · <kbd>Home</kbd> off ·
+          <kbd>End</kbd> full</li>
+        <li>the box above takes an exact hazard, e.g. <code>2.5e-4</code></li>
+      </ul>
+    </section>
+
+    <section class="ledger-section">
+      <h3>session</h3>
+      <ul class="stats" id="progress"></ul>
+      <p class="legend"><a href="selftest.html">evaluator self-check</a> — parity of this page's evaluator against the reference
+        experiment script.</p>
+    </section>
+  </div>
+</dialog>
+
+<script type="module" src="app.js"></script>
+<script>
+  // Runs even when the module graph does not: a stale cached script, a failed
+  // asset, a syntax error in a future edit. Without it that failure renders as
+  // an empty machine, which tells the player nothing.
+  window.setTimeout(function () {
+    if (window.__sequencerBooted) return;
+    if (document.querySelectorAll(".cell").length > 0) return;
+    var dead = document.getElementById("dead");
+    if (dead) dead.hidden = false;
+  }, 2500);
+</script>
+</body>
+</html>

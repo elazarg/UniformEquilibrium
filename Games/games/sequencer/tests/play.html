@@ -1,0 +1,275 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>running</title></head>
+<body><pre id="out">running…</pre>
+<iframe id="frame" src="../index.html?mock=1" width="1280" height="860"></iframe>
+<script type="module">
+const out = document.getElementById("out");
+const log = [];
+const say = (ok, text) => log.push(`${ok ? "ok  " : "FAIL"} ${text}`);
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const frame = document.getElementById("frame");
+
+function pointer(el, type, x, y, extra = {}) {
+  el.dispatchEvent(new PointerEvent(type, {
+    bubbles: true, cancelable: true, clientX: x, clientY: y, pointerId: 1,
+    pointerType: "mouse", buttons: type === "pointerup" ? 0 : 1, ...extra,
+  }));
+}
+
+const FORBIDDEN = ["exploitability", "profile", "hazard", "coalition", "tier",
+  "candidate", "counterexample", "equilibrium", "0.02", "threshold", "server",
+  "engine", "payoff", "eps_kill", "period"];
+
+function surfaceText(d) {
+  const parts = [];
+  d.querySelectorAll("header, main, footer, .ledger-tab").forEach((node) => {
+    parts.push(node.innerText || node.textContent || "");
+    node.querySelectorAll("[aria-label], [title], [placeholder]").forEach((n) => {
+      parts.push(n.getAttribute("aria-label") || "", n.getAttribute("title") || "",
+                 n.getAttribute("placeholder") || "");
+    });
+  });
+  return parts.join(" ").toLowerCase();
+}
+
+frame.addEventListener("load", async () => {
+  const w = frame.contentWindow;
+  const d = w.document;
+  w.addEventListener("error", (e) => say(false, `uncaught: ${e.message}`));
+  try {
+    // --- opens mid-play, no empty state
+    await wait(900);
+    say(d.getElementById("target-name").textContent.startsWith("The"),
+        `opens on a loaded room: ${d.getElementById("target-name").textContent}`);
+    say(d.querySelectorAll(".cell").length === 16, `4x4 grid up: ${d.querySelectorAll(".cell").length} cells`);
+    const lit = [...d.querySelectorAll(".cell")].filter(
+      (c) => Number(c.style.getPropertyValue("--level")) > 0).length;
+    say(lit >= 5, `a pattern is already playing: ${lit} live steps`);
+    say(d.querySelectorAll(".step-head.now").length === 1, "the playhead is running on load");
+    say(!d.getElementById("coach").hidden, `first-visit coach: ${d.getElementById("coach").textContent}`);
+    say(d.getElementById("caption").textContent.length > 5,
+        `caption: ${d.getElementById("caption").textContent}`);
+    const goal = d.getElementById("goal");
+    const goalText = d.getElementById("goal-text");
+    say(goal.offsetParent !== null && goalText.textContent.startsWith("settle the room"),
+        `the objective is on the panel from the first frame: "${goalText.textContent}"`);
+    const meterBoxes = [];
+    const meterBox = (label) => {
+      const b = d.getElementById("goal-meter").getBoundingClientRect();
+      meterBoxes.push([label, d.getElementById("goal-text").textContent,
+        [b.x, b.y, b.width, b.height].map((v) => Math.round(v * 100) / 100).join(",")]);
+    };
+    meterBox("far");
+    const goalArc = Number(getComputedStyle(goal).getPropertyValue("--arc"));
+    const runArc = Number(getComputedStyle(d.getElementById("run")).getPropertyValue("--arc"));
+    say(Math.abs(goalArc - runArc) < 1e-9 && goalArc > 0,
+        `the objective carries the same needle as the transport gauge: ${goalArc.toFixed(3)}`);
+    say(Number(getComputedStyle(d.getElementById("goal-fill")).width.replace("px", "")) > 1,
+        `and shows progress toward it: ${getComputedStyle(d.getElementById("goal-fill")).width}`);
+
+    // --- no domain language anywhere on the play surface
+    const text = surfaceText(d);
+    const found = FORBIDDEN.filter((word) => text.includes(word));
+    say(found.length === 0, `play surface speaks no domain language${found.length ? `: ${found}` : ""}`);
+    say(!/\d\.\d{3,}|e-\d/.test(text), `no raw floats on the play surface`);
+
+    // --- the machine is the gauge
+    const frameEl = d.getElementById("frame");
+    const tenseBefore = Number(getComputedStyle(frameEl).getPropertyValue("--tension"));
+    const arcBefore = Number(getComputedStyle(d.getElementById("run")).getPropertyValue("--arc"));
+    say(tenseBefore > 0.2 && arcBefore > 0.5,
+        `unsettled room reads hot: tension=${tenseBefore.toFixed(2)} arc=${arcBefore.toFixed(2)}`);
+    const lamps = [...d.querySelectorAll(".track[data-player]")].map(
+      (t) => Number(getComputedStyle(t).getPropertyValue("--gain")));
+    say(lamps.some((g) => g > 0.3) && lamps.length === 4,
+        `channel lamps carry per-channel urge: ${lamps.map((g) => g.toFixed(2))}`);
+    say(d.querySelectorAll(".track.binding").length === 1, "one channel is marked as the one that breaks");
+    const frameStyle = getComputedStyle(frameEl);
+    say(frameStyle.animationName === "none" && !frameEl.classList.contains("jolt"),
+        `the panel does not vibrate on its own: animation ${frameStyle.animationName}`);
+    say(d.getElementById("dead").hidden, "the never-opened notice stays hidden");
+
+    // --- first touch takes control, drag resolutions
+    const cell = d.querySelector('.cell[data-player="0"][data-phase="1"]');
+    const box = cell.getBoundingClientRect();
+    cell.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerId: 1 }));
+    say(d.getElementById("tip").textContent === "drag — pull sideways for a steadier hand",
+        `first-hover hint teaches the pull: "${d.getElementById("tip").textContent}"`);
+    pointer(cell, "pointerdown", box.left + 10, box.bottom - 4);
+    w.dispatchEvent(new PointerEvent("pointermove", {
+      bubbles: true, clientX: box.left + 10, clientY: box.bottom - 44, pointerId: 1 }));
+    const coarse = Number(cell.style.getPropertyValue("--level"));
+    w.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerId: 1 }));
+    say(coarse > 0, `coarse drag moved the bar to ${coarse.toFixed(3)} of travel`);
+    say(d.getElementById("coach").hidden || d.getElementById("coach").classList.contains("fading"),
+        "the coach retires once the player takes control");
+    // Pull-away granularity, measured as travel on the bar: the same 44px of
+    // vertical movement, made from the slot and then from further and further
+    // sideways, with the modifiers composing on top.
+    const setCell = (hazard) => {
+      const input = d.getElementById("cell-value");
+      input.value = String(hazard);
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    };
+    const level = () => Number(cell.style.getPropertyValue("--level"));
+    const dragBy = (offsetX, extra) => {
+      pointer(cell, "pointerdown", box.left + 10, box.top + 10);
+      w.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerId: 1 }));
+      setCell(0.05);
+      const before = level();
+      pointer(cell, "pointerdown", box.left + 10, box.bottom - 4);
+      w.dispatchEvent(new PointerEvent("pointermove", Object.assign({
+        bubbles: true, clientX: box.left + 10 + offsetX, clientY: box.bottom - 48,
+        pointerId: 1 }, extra || {})));
+      const moved = level() - before;
+      const halo = parseFloat(d.getElementById("halo").style.width);
+      const tethered = !d.getElementById("tether").hidden;
+      const banded = cell.classList.contains("tuning");
+      w.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerId: 1 }));
+      return { moved, halo, tethered, banded };
+    };
+
+    const onSlot = dragBy(0);
+    say(onSlot.tethered && onSlot.banded && onSlot.halo > 40,
+        `tuning draws the reach: tether, lit decade, halo ${onSlot.halo.toFixed(0)}px`);
+    const pulled = dragBy(560);
+    say(pulled.moved > 0 && pulled.moved < onSlot.moved / 4,
+        `pulling sideways steadies the same drag: ${pulled.moved.toFixed(4)} vs ` +
+        `${onSlot.moved.toFixed(3)} of travel`);
+    say(pulled.halo < onSlot.halo / 2,
+        `and the halo closes down with it: ${pulled.halo.toFixed(0)}px vs ${onSlot.halo.toFixed(0)}px`);
+    const shifted = dragBy(0, { shiftKey: true });
+    say(shifted.moved > 0 && shifted.moved < onSlot.moved / 4,
+        `shift still works on its own: ${shifted.moved.toFixed(4)}`);
+    const both = dragBy(560, { shiftKey: true });
+    say(both.moved > 0 && both.moved < pulled.moved / 2 && both.moved < shifted.moved / 2,
+        `and the two multiply: ${both.moved.toFixed(5)} under both ${pulled.moved.toFixed(4)} ` +
+        `and ${shifted.moved.toFixed(4)}`);
+    say(d.getElementById("tether").hidden && d.getElementById("halo").hidden,
+        "the reach is put away when the drag ends");
+    const second = d.querySelector('.cell[data-player="2"][data-phase="2"]');
+    second.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerId: 1 }));
+    say(d.getElementById("tip").textContent === "drag — pull sideways for a steadier hand",
+        "the hint is shown once, not on every hover");
+
+    // an in-between state, whose label is a different length
+    d.getElementById("preset-pair").click();
+    await wait(150);
+    say(d.getElementById("goal-text").textContent === "almost — the room is settling",
+        `closing in: "${d.getElementById("goal-text").textContent}"`);
+    meterBox("near");
+
+    // --- settle the room with the known groove (typed in the ledger)
+    d.getElementById("preset-clear").click();
+    d.getElementById("period").value = "2";
+    d.getElementById("period").dispatchEvent(new Event("input", { bubbles: true }));
+    const known = [[0.2539025417158748, 0, 0.2654747087705416, 0],
+                   [0, 0.25390254186703726, 0, 0.265474708745364]];
+    for (let t = 0; t < 2; t += 1) {
+      for (let i = 0; i < 4; i += 1) {
+        if (!known[t][i]) continue;
+        const target = d.querySelector(`.cell[data-player="${i}"][data-phase="${t}"]`);
+        const rect = target.getBoundingClientRect();
+        pointer(target, "pointerdown", rect.left + 5, rect.top + 5);
+        w.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerId: 1 }));
+        const input = d.getElementById("cell-value");
+        input.value = String(known[t][i]);
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    }
+    await wait(200);
+    const tenseAfter = Number(getComputedStyle(frameEl).getPropertyValue("--tension"));
+    const arcAfter = Number(getComputedStyle(d.getElementById("run")).getPropertyValue("--arc"));
+    say(tenseAfter === 0 && arcAfter < 0.2,
+        `settled room reads calm: tension=${tenseAfter} arc=${arcAfter.toFixed(2)}`);
+    say(d.getElementById("caption").classList.contains("settled"),
+        `caption at rest: ${d.getElementById("caption").textContent}`);
+    say(d.getElementById("goal").classList.contains("done") &&
+        d.getElementById("goal-text").textContent === "the room is quiet — cut it to brass",
+        `the objective completes and points at the next act: "${d.getElementById("goal-text").textContent}"`);
+    say(d.getElementById("goal").offsetParent !== null, "the objective is never retired");
+    meterBox("settled");
+    say(d.querySelectorAll(".cell.ghosted, .track.binding").length === 0,
+        "no ghost strike marks once nobody wants to move");
+
+    await wait(1500);
+    say(d.getElementById("lock").open, "the settle dialog opens after the house confirms");
+    say(d.getElementById("lock-submit").textContent === "cut it to brass",
+        "the engraving action is named in fiction");
+    const body = d.getElementById("lock-body").textContent;
+    say(!FORBIDDEN.some((word) => body.toLowerCase().includes(word)),
+        `settle text stays in fiction: ${body}`);
+
+    // --- seal it: harden then submit
+    d.getElementById("lock-submit").click();
+    await wait(1500);
+    const result = d.getElementById("lock-result").textContent;
+    say(result.includes("Cut to brass") && result.includes("Rehearsal"),
+        `brass result: ${result}`);
+    say(d.getElementById("lock-title").textContent === "cut to brass",
+        "the action keeps its name through the whole flow");
+    say(d.getElementById("goal-text").textContent === "on the shelf — take another room",
+        `and after the brass it names what to do next: "${d.getElementById("goal-text").textContent}"`);
+    meterBox("shelved");
+    const geometry = new Set(meterBoxes.map((row) => row[2]));
+    say(geometry.size === 1,
+        "the needle track holds its place through every state: " +
+        meterBoxes.map((r) => `${r[0]}=${r[2]}`).join(" | "));
+    say(new Set(meterBoxes.map((r) => r[1])).size === meterBoxes.length,
+        "and it did so across four different labels: " +
+        meterBoxes.map((r) => `"${r[1]}"`).join(", "));
+    const snapped = d.querySelector('.cell[data-player="0"][data-phase="0"]');
+    say(Math.abs(Number(snapped.style.getPropertyValue("--level")) - 0.8996) < 0.01,
+        "the grid shows the hardened groove");
+
+    // --- the ledger is the one door to the research view
+    d.getElementById("lock-close").click();
+    d.getElementById("ledger-open").click();
+    await wait(200);
+    const ledger = d.getElementById("ledger");
+    say(ledger.open, "the ledger opens from its corner tab");
+    const ledgerText = ledger.textContent.toLowerCase();
+    say(ledgerText.includes("exploitability") && ledgerText.includes("kill threshold 0.02") &&
+        ledgerText.includes("not a theorem") && ledgerText.includes("exact"),
+        "the ledger carries the honest statement and the raw numbers");
+    say(ledger.querySelectorAll(".matrix").length === 2,
+        "the ledger shows the reward table and the profile");
+    say(ledgerText.includes("rehearsal"), "the ledger says a rehearsal records nothing");
+    ledger.close();
+
+    // --- rooms as cards, difficulty as heat
+    d.getElementById("targets-open").click();
+    await wait(250);
+    const cards = d.querySelectorAll("#curated-list .card, #candidate-list .card");
+    say(cards.length >= 6, `rooms shown as cards: ${cards.length}`);
+    const cardText = d.getElementById("targets").textContent.toLowerCase();
+    say(!FORBIDDEN.some((w) => cardText.includes(w)) && !/\d\.\d{3}/.test(cardText),
+        "the room picker shows no scores and no jargon");
+    say(d.querySelectorAll("#curated-list .card .pip.on").length > 0, "difficulty is shown as heat pips");
+    say(d.querySelectorAll("#candidate-list .card.wanted").length === 1, "the hardest room is marked wanted");
+    const names = [...cards].map((c) => c.querySelector(".card-name").textContent);
+    say(names.every((n) => n.startsWith("The ")), `rooms are named in fiction: ${names.slice(0, 3)}`);
+
+    // --- hand-in on one line
+    d.getElementById("handin").value = JSON.stringify({
+      table: { "{1}": [1, 4, 0, 0], "{2}": [4, 1, 0, 0], "{1,2}": [1, 1, 1, 1] } });
+    d.getElementById("handin").dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    await wait(300);
+    say(d.getElementById("target-name").textContent.startsWith("The"),
+        `hand-in loaded and renamed: ${d.getElementById("target-name").textContent}`);
+    const propose = d.getElementById("propose");
+    say(!propose.hidden && propose.textContent === "post it as a bounty",
+        `a handed-in room can be posted: "${propose.textContent}"`);
+    propose.click();
+    await wait(500);
+    say(d.getElementById("status").textContent.startsWith("bounty posted"),
+        `and the act keeps its name: ${d.getElementById("status").textContent}`);
+  } catch (error) {
+    say(false, `threw: ${error && error.stack ? error.stack : error}`);
+  }
+  const failed = log.some((line) => line.startsWith("FAIL"));
+  document.title = failed ? "FAIL" : "PASS";
+  out.textContent = log.join("\n") + `\n\n${failed ? "FAIL" : "PASS"}`;
+});
+</script>
+</body></html>
