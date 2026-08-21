@@ -861,17 +861,828 @@ def ExtendedUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ orbit : ExtendedOrbitData (FRow G ε),
     HasUnboundedExtendedVariation orbit
 
+/-- Regard an extended orbit as an orbit of a larger correspondence. -/
+private def ExtendedOrbitData.mono
+    {X : Type} [TopologicalSpace X] {F H : Correspondence X X}
+    (orbit : ExtendedOrbitData F) (hFH : ∀ x, F x ⊆ H x) :
+    ExtendedOrbitData H where
+  segmentCount := orbit.segmentCount
+  segmentCountPositive := orbit.segmentCountPositive
+  segmentLength := orbit.segmentLength
+  segmentLengthPositive := orbit.segmentLengthPositive
+  point := orbit.point
+  step := fun j hj i hi => hFH _ (orbit.step j hj i hi)
+  finiteStitch := orbit.finiteStitch
+  infiniteStitch := orbit.infiniteStitch
+
+private theorem ExtendedOrbitData.mono_unbounded
+    {N : Type} [Fintype N]
+    {F H : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) (hFH : ∀ x, F x ⊆ H x)
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    HasUnboundedExtendedVariation (ExtendedOrbitData.mono orbit hFH) := by
+  classical
+  change ∀ B : ℝ, ∃ J I : ℕ, B ≤ _
+  change ∀ B : ℝ, ∃ J I : ℕ, B ≤ _ at hvariation
+  intro B
+  obtain ⟨J, I, hJI⟩ := hvariation B
+  exact ⟨J, I, hJI⟩
+
+/-- Remove finitely many complete segments from an extended orbit. -/
+private def ExtendedOrbitData.dropSegments
+    {X : Type} [TopologicalSpace X] {F : Correspondence X X}
+    (orbit : ExtendedOrbitData F) (start : ℕ)
+    (hstart : ActiveSegment orbit.segmentCount start) : ExtendedOrbitData F := by
+  let count := orbit.segmentCount.map fun total => total - start
+  have active_shift : ∀ j, ActiveSegment count j →
+      ActiveSegment orbit.segmentCount (start + j) := by
+    intro j hj total htotal
+    have hstartTotal := hstart total htotal
+    have hcount : count = some (total - start) := by
+      simp [count, htotal]
+    have hjlt := hj (total - start) hcount
+    omega
+  refine {
+    segmentCount := count
+    segmentCountPositive := ?_
+    segmentLength := fun j => orbit.segmentLength (start + j)
+    segmentLengthPositive := ?_
+    point := fun j i => orbit.point (start + j) i
+    step := ?_
+    finiteStitch := ?_
+    infiniteStitch := ?_ }
+  · intro remaining hremaining
+    cases hcount : orbit.segmentCount with
+    | none => simp [count, hcount] at hremaining
+    | some total =>
+        have hstartTotal := hstart total hcount
+        have hsome : some (total - start) = some remaining := by
+          simpa [count, hcount] using hremaining
+        have hremainingEq : total - start = remaining := by
+          exact Option.some.inj hsome
+        omega
+  · intro j hj k hk
+    exact orbit.segmentLengthPositive (start + j) (active_shift j hj) k hk
+  · intro j hj i hi
+    exact orbit.step (start + j) (active_shift j hj) i hi
+  · intro j hj k hk
+    have hactive := active_shift (j + 1) hj
+    simpa only [Nat.add_assoc] using orbit.finiteStitch (start + j) hactive k hk
+  · intro j hj hk
+    have hactive := active_shift (j + 1) hj
+    simpa only [Nat.add_assoc] using orbit.infiniteStitch (start + j) hactive hk
+
+@[simp] private theorem ExtendedOrbitData.dropSegments_segmentLength
+    {X : Type} [TopologicalSpace X] {F : Correspondence X X}
+    (orbit : ExtendedOrbitData F) (start : ℕ)
+    (hstart : ActiveSegment orbit.segmentCount start) (j : ℕ) :
+    (ExtendedOrbitData.dropSegments orbit start hstart).segmentLength j =
+      orbit.segmentLength (start + j) := by
+  rfl
+
+@[simp] private theorem ExtendedOrbitData.dropSegments_point
+    {X : Type} [TopologicalSpace X] {F : Correspondence X X}
+    (orbit : ExtendedOrbitData F) (start : ℕ)
+    (hstart : ActiveSegment orbit.segmentCount start) (j i : ℕ) :
+    (ExtendedOrbitData.dropSegments orbit start hstart).point j i =
+      orbit.point (start + j) i := by
+  rfl
+
+private theorem ExtendedOrbitData.dropSegments_active_iff
+    {X : Type} [TopologicalSpace X] {F : Correspondence X X}
+    (orbit : ExtendedOrbitData F) (start : ℕ)
+    (hstart : ActiveSegment orbit.segmentCount start) (j : ℕ) :
+    ActiveSegment
+        (ExtendedOrbitData.dropSegments orbit start hstart).segmentCount j ↔
+      ActiveSegment orbit.segmentCount (start + j) := by
+  cases hcount : orbit.segmentCount with
+  | none => simp [ActiveSegment, ExtendedOrbitData.dropSegments, hcount]
+  | some total =>
+      have hstartTotal : start < total := hstart total hcount
+      have hnewCount :
+          (ExtendedOrbitData.dropSegments orbit start hstart).segmentCount =
+            some (total - start) := by
+        simp [ExtendedOrbitData.dropSegments, hcount]
+      constructor
+      · intro hj remaining hremaining
+        have htotalRemaining : total = remaining :=
+          Option.some.inj hremaining
+        subst remaining
+        have hjlt := hj (total - start) hnewCount
+        omega
+      · intro hj remaining hremaining
+        have hremainingEq : total - start = remaining :=
+          Option.some.inj (hnewCount.symm.trans hremaining)
+        subst remaining
+        have hjlt := hj total rfl
+        omega
+
+private def extendedSegmentVariation
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) (j I : ℕ) : ℝ := by
+  classical
+  exact ∑ i ∈ Finset.range I,
+    if ActiveSegment orbit.segmentCount j ∧
+        SegmentIndex (orbit.segmentLength j) (i + 1)
+    then EuclideanDist (orbit.point j (i + 1)) (orbit.point j i)
+    else 0
+
+private theorem extendedSegmentVariation_nonneg
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) (j I : ℕ) :
+    0 ≤ extendedSegmentVariation orbit j I := by
+  classical
+  rw [extendedSegmentVariation]
+  apply Finset.sum_nonneg
+  intro i _
+  split_ifs
+  · exact Real.sqrt_nonneg _
+  · exact le_rfl
+
+private def HasBoundedSegmentVariation
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) (j : ℕ) : Prop :=
+  ∃ bound : ℝ, ∀ I, extendedSegmentVariation orbit j I ≤ bound
+
+private theorem hasBoundedSegmentVariation_of_finite
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) (j total : ℕ)
+    (hlength : orbit.segmentLength j = some total) :
+    HasBoundedSegmentVariation orbit j := by
+  classical
+  let term : ℕ → ℝ := fun i =>
+    if ActiveSegment orbit.segmentCount j ∧
+        SegmentIndex (orbit.segmentLength j) (i + 1)
+    then EuclideanDist (orbit.point j (i + 1)) (orbit.point j i)
+    else 0
+  refine ⟨∑ i ∈ Finset.range total, term i, ?_⟩
+  intro I
+  let top := max I total
+  have hI : I ≤ top := le_max_left _ _
+  have htotal : total ≤ top := le_max_right _ _
+  have hfirst : (∑ i ∈ Finset.range I, term i) ≤
+      ∑ i ∈ Finset.range top, term i := by
+    apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono hI)
+    intro i _ _
+    dsimp only [term]
+    split_ifs
+    · exact Real.sqrt_nonneg _
+    · exact le_rfl
+  have hsecond : (∑ i ∈ Finset.range total, term i) =
+      ∑ i ∈ Finset.range top, term i := by
+    apply Finset.sum_subset (Finset.range_mono htotal)
+    intro i hitop hinot
+    have htotalLe : total ≤ i := Nat.le_of_not_gt (by simpa using hinot)
+    dsimp only [term]
+    rw [if_neg]
+    intro hvalid
+    have := hvalid.2 total hlength
+    omega
+  exact hfirst.trans_eq hsecond.symm
+
+private theorem not_unbounded_of_eventually_zero_segments
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) (start : ℕ)
+    (hbounded : ∀ j, j < start → HasBoundedSegmentVariation orbit j)
+    (hzero : ∀ j, start ≤ j → ∀ I,
+      extendedSegmentVariation orbit j I = 0) :
+    ¬HasUnboundedExtendedVariation orbit := by
+  classical
+  let bound : ℕ → ℝ := fun j =>
+    if hj : j < start then Classical.choose (hbounded j hj) else 0
+  have hbound : ∀ j I, extendedSegmentVariation orbit j I ≤ bound j := by
+    intro j I
+    by_cases hj : j < start
+    · simpa only [bound, dif_pos hj] using
+        (Classical.choose_spec (hbounded j hj)) I
+    · rw [hzero j (Nat.le_of_not_gt hj) I]
+      simp [bound, hj]
+  have hboundNonneg : ∀ j, 0 ≤ bound j := by
+    intro j
+    by_cases hj : j < start
+    · have hzeroIndex := hbound j 0
+      simpa [extendedSegmentVariation, bound, hj] using hzeroIndex
+    · simp [bound, hj]
+  let totalBound := ∑ j ∈ Finset.range start, bound j
+  intro hvariation
+  obtain ⟨J, I, hJI⟩ := hvariation (totalBound + 1)
+  have hsumBound :
+      (∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I) ≤
+        totalBound := by
+    let top := max J start
+    calc
+      (∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I) ≤
+          ∑ j ∈ Finset.range J, bound j := by
+        exact Finset.sum_le_sum fun j _ => hbound j I
+      _ ≤ ∑ j ∈ Finset.range top, bound j := by
+        apply Finset.sum_le_sum_of_subset_of_nonneg
+          (Finset.range_mono (le_max_left J start))
+        intro j _ _
+        exact hboundNonneg j
+      _ = ∑ j ∈ Finset.range start, bound j := by
+        symm
+        apply Finset.sum_subset (Finset.range_mono (le_max_right J start))
+        intro j _ hj
+        have hstartj : start ≤ j := Nat.le_of_not_gt (by simpa using hj)
+        simp [bound, Nat.not_lt_of_ge hstartj]
+      _ = totalBound := rfl
+  simpa only [extendedSegmentVariation] using
+    (show ¬(totalBound + 1 ≤
+      ∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I) by
+        linarith) hJI
+
+private theorem segmentCount_eq_none_of_all_segments_bounded
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F)
+    (hbounded : ∀ j, ActiveSegment orbit.segmentCount j →
+      HasBoundedSegmentVariation orbit j)
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    orbit.segmentCount = none := by
+  cases hcount : orbit.segmentCount with
+  | none => rfl
+  | some total =>
+      exfalso
+      apply not_unbounded_of_eventually_zero_segments orbit total
+      · intro j hj
+        exact hbounded j (by simpa [ActiveSegment, hcount] using hj)
+      · intro j hj I
+        rw [extendedSegmentVariation]
+        apply Finset.sum_eq_zero
+        intro i hi
+        rw [if_neg]
+        intro hactive
+        exact (Nat.not_lt_of_ge hj) (hactive.1 total hcount)
+      · exact hvariation
+
+private theorem finiteSegmentStepCount_unbounded
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) (size : ℕ → ℕ)
+    (hcount : orbit.segmentCount = none)
+    (hsize : ∀ j, orbit.segmentLength j = some (size j))
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    ∀ K, ∃ J, K ≤ ∑ j ∈ Finset.range J, (size j - 1) := by
+  classical
+  let steps : ℕ → ℕ := fun J => ∑ j ∈ Finset.range J, (size j - 1)
+  have hmono : Monotone steps := by
+    intro J L hJL
+    exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono hJL)
+      (fun _ _ _ => Nat.zero_le _)
+  by_contra hnot
+  push Not at hnot
+  obtain ⟨K, hK⟩ := hnot
+  let values : Set ℕ := Set.range steps
+  have hvaluesFinite : values.Finite := by
+    apply Set.finite_Iio K |>.subset
+    rintro value ⟨J, rfl⟩
+    exact hK J
+  have hvaluesNonempty : values.Nonempty := ⟨steps 0, ⟨0, rfl⟩⟩
+  let valueFinset := hvaluesFinite.toFinset
+  have hvalueFinsetNonempty : valueFinset.Nonempty := by
+    obtain ⟨value, hvalue⟩ := hvaluesNonempty
+    exact ⟨value, by
+      simpa only [valueFinset, Set.Finite.mem_toFinset] using hvalue⟩
+  let maximum := valueFinset.max' hvalueFinsetNonempty
+  have hmaximumMem : maximum ∈ values := by
+    have := valueFinset.max'_mem hvalueFinsetNonempty
+    simpa only [maximum, valueFinset, Set.Finite.mem_toFinset] using this
+  obtain ⟨start, hstart⟩ := hmaximumMem
+  have heventually : ∀ j, start ≤ j → steps j = steps start := by
+    intro j hj
+    apply Nat.le_antisymm
+    · rw [hstart]
+      apply Finset.le_max'
+      simpa only [valueFinset, Set.Finite.mem_toFinset] using
+        (show steps j ∈ values from ⟨j, rfl⟩)
+    · exact hmono hj
+  have hsizeOne : ∀ j, start ≤ j → size j = 1 := by
+    intro j hj
+    have hnext := heventually (j + 1) (hj.trans (Nat.le_succ j))
+    have hcurrent := heventually j hj
+    have hrecurrence : steps (j + 1) = steps j + (size j - 1) := by
+      simp [steps, Finset.sum_range_succ]
+    have hpositive : 0 < size j :=
+      orbit.segmentLengthPositive j (by simp [ActiveSegment, hcount])
+        (size j) (hsize j)
+    rw [hrecurrence, hcurrent] at hnext
+    omega
+  have hbounded : ∀ j, j < start → HasBoundedSegmentVariation orbit j := by
+    intro j _
+    exact hasBoundedSegmentVariation_of_finite orbit j (size j) (hsize j)
+  apply not_unbounded_of_eventually_zero_segments orbit start hbounded
+  · intro j hj I
+    rw [extendedSegmentVariation]
+    apply Finset.sum_eq_zero
+    intro i hi
+    rw [if_neg]
+    rintro ⟨_, hindex⟩
+    have := hindex (size j) (hsize j)
+    rw [hsizeOne j hj] at this
+    omega
+  · exact hvariation
+
+private theorem extendedSegmentVariation_dropSegments
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) (start : ℕ)
+    (hstart : ActiveSegment orbit.segmentCount start) (j I : ℕ) :
+    extendedSegmentVariation
+        (ExtendedOrbitData.dropSegments orbit start hstart) j I =
+      extendedSegmentVariation orbit (start + j) I := by
+  classical
+  simp only [extendedSegmentVariation,
+    ExtendedOrbitData.dropSegments_active_iff orbit start hstart j,
+    ExtendedOrbitData.dropSegments_segmentLength,
+    ExtendedOrbitData.dropSegments_point]
+
+private theorem ExtendedOrbitData.dropSegments_unbounded_of_bounded_prefix
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData F) (start : ℕ)
+    (hstart : ActiveSegment orbit.segmentCount start)
+    (hbounded : ∀ j, j < start → HasBoundedSegmentVariation orbit j)
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    HasUnboundedExtendedVariation
+      (ExtendedOrbitData.dropSegments orbit start hstart) := by
+  classical
+  let bound : ℕ → ℝ := fun j =>
+    if hj : j < start then Classical.choose (hbounded j hj) else 0
+  have hbound : ∀ j, j < start → ∀ I,
+      extendedSegmentVariation orbit j I ≤ bound j := by
+    intro j hj I
+    simpa only [bound, dif_pos hj] using
+      (Classical.choose_spec (hbounded j hj)) I
+  have hboundNonneg : ∀ j, 0 ≤ bound j := by
+    intro j
+    by_cases hj : j < start
+    · have hzero := hbound j hj 0
+      simpa [extendedSegmentVariation] using hzero
+    · simp [bound, hj]
+  let prefixBound := ∑ j ∈ Finset.range start, bound j
+  have prefix_upper : ∀ J, J ≤ start → ∀ I,
+      (∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I) ≤
+        prefixBound := by
+    intro J hJ I
+    calc
+      (∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I) ≤
+          ∑ j ∈ Finset.range J, bound j := by
+        apply Finset.sum_le_sum
+        intro j hj
+        exact hbound j (Finset.mem_range.mp hj |>.trans_le hJ) I
+      _ ≤ ∑ j ∈ Finset.range start, bound j := by
+        apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono hJ)
+        intro j _ _
+        exact hboundNonneg j
+      _ = prefixBound := rfl
+  change ∀ B : ℝ, ∃ J I : ℕ, B ≤ _ at hvariation
+  change ∀ B : ℝ, ∃ J I : ℕ, B ≤ _
+  intro B
+  let target := max B 0 + prefixBound + 1
+  obtain ⟨J, I, hJIraw⟩ := hvariation target
+  have hJI : target ≤
+      ∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I := by
+    simpa only [extendedSegmentVariation] using hJIraw
+  have hstartJ : start ≤ J := by
+    by_contra hnot
+    have hJstart : J ≤ start := Nat.le_of_lt (Nat.lt_of_not_ge hnot)
+    have hupper := prefix_upper J hJstart I
+    dsimp only [target] at hJI
+    linarith [le_max_right B 0]
+  have hsplit :
+      (∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I) =
+        (∑ j ∈ Finset.range start, extendedSegmentVariation orbit j I) +
+          ∑ j ∈ Finset.range (J - start),
+            extendedSegmentVariation orbit (start + j) I := by
+    conv_lhs => rw [← Nat.add_sub_of_le hstartJ]
+    exact Finset.sum_range_add _ _ _
+  have hprefix := prefix_upper start le_rfl I
+  have hsuffix : B ≤ ∑ j ∈ Finset.range (J - start),
+      extendedSegmentVariation orbit (start + j) I := by
+    rw [hsplit] at hJI
+    dsimp only [target] at hJI
+    linarith [le_max_left B 0]
+  refine ⟨J - start, I, ?_⟩
+  change B ≤ ∑ j ∈ Finset.range (J - start),
+    extendedSegmentVariation
+      (ExtendedOrbitData.dropSegments orbit start hstart) j I
+  simpa only [extendedSegmentVariation_dropSegments orbit start hstart] using hsuffix
+
+/-- Start later inside an infinite first segment, retaining all later segments. -/
+private def ExtendedOrbitData.dropFirstInfinitePrefix
+    {X : Type} [TopologicalSpace X] {F : Correspondence X X}
+    (orbit : ExtendedOrbitData F) (start : ℕ)
+    (hlength : orbit.segmentLength 0 = none) : ExtendedOrbitData F where
+  segmentCount := orbit.segmentCount
+  segmentCountPositive := orbit.segmentCountPositive
+  segmentLength := orbit.segmentLength
+  segmentLengthPositive := orbit.segmentLengthPositive
+  point
+    | 0, i => orbit.point 0 (start + i)
+    | j + 1, i => orbit.point (j + 1) i
+  step := by
+    intro j hj i hi
+    cases j with
+    | zero =>
+        have hshift : SegmentIndex (orbit.segmentLength 0) (start + i + 1) := by
+          intro k hk
+          rw [hlength] at hk
+          simp at hk
+        simpa only [Nat.add_assoc] using orbit.step 0 hj (start + i) hshift
+    | succ j => exact orbit.step (j + 1) hj i hi
+  finiteStitch := by
+    intro j hj k hk
+    cases j with
+    | zero => simp [hlength] at hk
+    | succ j => exact orbit.finiteStitch (j + 1) hj k hk
+  infiniteStitch := by
+    intro j hj hk
+    cases j with
+    | zero =>
+        have hlimit := orbit.infiniteStitch 0 hj hlength
+        simpa only [Function.comp_def, Nat.add_comm] using
+          hlimit.comp (tendsto_add_atTop_nat start)
+    | succ j => exact orbit.infiniteStitch (j + 1) hj hk
+
+private theorem ExtendedOrbitData.dropFirstInfinitePrefix_extended_unbounded
+    {N : Type} [Fintype N]
+    {F : Correspondence (Payoff N) (Payoff N)} (orbit : ExtendedOrbitData F)
+    (start : ℕ) (hlength : orbit.segmentLength 0 = none)
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    HasUnboundedExtendedVariation
+      (ExtendedOrbitData.dropFirstInfinitePrefix orbit start hlength) := by
+  classical
+  let shifted := ExtendedOrbitData.dropFirstInfinitePrefix orbit start hlength
+  let removedVariation := ∑ i ∈ Finset.range start,
+    EuclideanDist (orbit.point 0 (i + 1)) (orbit.point 0 i)
+  have hremoved : 0 ≤ removedVariation := by
+    dsimp only [removedVariation]
+    exact Finset.sum_nonneg fun i _ => Real.sqrt_nonneg _
+  have hactive : ActiveSegment orbit.segmentCount 0 := by
+    intro total htotal
+    have := orbit.segmentCountPositive total htotal
+    omega
+  have hfirst : ∀ I,
+      extendedSegmentVariation orbit 0 I ≤
+        extendedSegmentVariation shifted 0 I + removedVariation := by
+    intro I
+    have hmono :
+        (∑ i ∈ Finset.range I,
+          EuclideanDist (orbit.point 0 (i + 1)) (orbit.point 0 i)) ≤
+        ∑ i ∈ Finset.range (start + I),
+          EuclideanDist (orbit.point 0 (i + 1)) (orbit.point 0 i) := by
+      apply Finset.sum_le_sum_of_subset_of_nonneg
+        (Finset.range_mono (Nat.le_add_left I start))
+      intro i _ _
+      exact Real.sqrt_nonneg _
+    rw [Finset.sum_range_add] at hmono
+    simpa [extendedSegmentVariation, shifted,
+      ExtendedOrbitData.dropFirstInfinitePrefix, SegmentIndex, hlength,
+      hactive, removedVariation, Nat.add_assoc, add_comm] using hmono
+  have hlater : ∀ j I, 0 < j →
+      extendedSegmentVariation orbit j I =
+        extendedSegmentVariation shifted j I := by
+    intro j I hj
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hj)
+    rfl
+  intro B
+  let target := max B 0 + removedVariation + 1
+  obtain ⟨J, I, hJIraw⟩ := hvariation target
+  have hJI : target ≤
+      ∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I := by
+    simpa only [extendedSegmentVariation] using hJIraw
+  have hsum :
+      (∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I) ≤
+        (∑ j ∈ Finset.range J, extendedSegmentVariation shifted j I) +
+          removedVariation := by
+    calc
+      (∑ j ∈ Finset.range J, extendedSegmentVariation orbit j I) ≤
+          ∑ j ∈ Finset.range J,
+            (extendedSegmentVariation shifted j I +
+              if j = 0 then removedVariation else 0) := by
+        apply Finset.sum_le_sum
+        intro j hj
+        by_cases hj0 : j = 0
+        · subst j
+          simpa using hfirst I
+        · simp only [hj0, ↓reduceIte, add_zero]
+          exact (hlater j I (Nat.pos_of_ne_zero hj0)).le
+      _ = (∑ j ∈ Finset.range J, extendedSegmentVariation shifted j I) +
+          ∑ j ∈ Finset.range J, if j = 0 then removedVariation else 0 := by
+        rw [Finset.sum_add_distrib]
+      _ ≤ (∑ j ∈ Finset.range J, extendedSegmentVariation shifted j I) +
+          removedVariation := by
+        gcongr
+        by_cases hJ : J = 0
+        · simp [hJ, hremoved]
+        · simp [Finset.sum_ite_eq', Nat.pos_of_ne_zero hJ]
+  refine ⟨J, I, ?_⟩
+  change B ≤ ∑ j ∈ Finset.range J, extendedSegmentVariation shifted j I
+  dsimp only [target] at hJI
+  linarith [le_max_left B 0]
+
+private theorem exists_rational_extendedOrbit_of_firstInfinite
+    (G : QuittingGame) {B a ε : ℝ}
+    (hB : IsPositivePayoffDifferenceBound G B)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (ha : 0 < a) (ha1 : a ≤ 1)
+    (hsmall : a ^ 2 / (2 * B) ≤ ε)
+    (orbit : ExtendedOrbitData (FRow G (a ^ 2 / (2 * B))))
+    (hlength : orbit.segmentLength 0 = none)
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    ∃ tail : ExtendedOrbitData (FRow G ε),
+      (∀ j, ActiveSegment tail.segmentCount j → ∀ i,
+        SegmentIndex (tail.segmentLength j) i →
+          IsRational G (3 * a) (tail.point j i)) ∧
+      HasUnboundedExtendedVariation tail := by
+  let δ := a ^ 2 / (2 * B)
+  have hδ : 0 < δ := by
+    have hBpos : 0 < B := zero_lt_one.trans_le hB.1
+    exact div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hBpos)
+  have hactive : ActiveSegment orbit.segmentCount 0 := by
+    intro total htotal
+    have := orbit.segmentCountPositive total htotal
+    omega
+  have heventual : ∀ n : G.Player, ∃ cutoff, ∀ i, cutoff ≤ i →
+      MinMaxQuit G n - 3 * a ≤ orbit.point 0 i n := by
+    intro n
+    apply Literature.Simon2007.eventually_ge_of_drift_below hδ
+    intro i
+    have hindex : SegmentIndex (orbit.segmentLength 0) (i + 1) := by
+      simp [SegmentIndex, hlength]
+    exact lemma2_2 G hB hnormal hgenerated hinstant ha ha1
+      (orbit.step 0 hactive i hindex) n
+  choose cutoff hcutoff using heventual
+  let start := ∑ n, cutoff n
+  have hcutoffStart : ∀ n, cutoff n ≤ start := by
+    intro n
+    exact Finset.single_le_sum (fun i _ => Nat.zero_le (cutoff i))
+      (Finset.mem_univ n)
+  let shifted := ExtendedOrbitData.dropFirstInfinitePrefix orbit start hlength
+  have hshiftedStart : IsRational G (3 * a) (shifted.point 0 0) := by
+    intro n
+    exact hcutoff n start (hcutoffStart n)
+  have hrationalClosed : IsClosed {r | IsRational G (3 * a) r} := by
+    have heq : {r | IsRational G (3 * a) r} =
+        ⋂ n, {r | MinMaxQuit G n - 3 * a ≤ r n} := by
+      ext r
+      simp [IsRational]
+    rw [heq]
+    exact isClosed_iInter fun n => isClosed_le continuous_const (continuous_apply n)
+  have hrationalForward : ∀ r ∈ {r | IsRational G (3 * a) r},
+      FRow G (a ^ 2 / (2 * B)) r ⊆ {r | IsRational G (3 * a) r} := by
+    intro r hr s hs n
+    exact (lemma2_2 G hB hnormal hgenerated hinstant ha ha1 hs n).1 (hr n)
+  have hstay : ExtendedOrbitStaysIn shifted {r | IsRational G (3 * a) r} :=
+    extendedOrbitStaysIn_of_closed_forwardInvariant shifted _ hrationalClosed
+      hrationalForward hshiftedStart
+  let tail := ExtendedOrbitData.mono shifted fun r => FRow.mono G hsmall r
+  refine ⟨tail, ?_, ?_⟩
+  · intro j hj i hi
+    exact hstay j hj i hi
+  · apply ExtendedOrbitData.mono_unbounded
+    exact ExtendedOrbitData.dropFirstInfinitePrefix_extended_unbounded orbit start
+      hlength hvariation
+
+private theorem exists_rational_extendedOrbit_of_all_finite
+    (G : QuittingGame) {B a ε : ℝ}
+    (hB : IsPositivePayoffDifferenceBound G B)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (ha : 0 < a) (ha1 : a ≤ 1)
+    (hsmall : a ^ 2 / (2 * B) ≤ ε)
+    (orbit : ExtendedOrbitData (FRow G (a ^ 2 / (2 * B))))
+    (hfinite : ∀ j, ActiveSegment orbit.segmentCount j →
+      ∃ size, orbit.segmentLength j = some size)
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    ∃ tail : ExtendedOrbitData (FRow G ε),
+      (∀ j, ActiveSegment tail.segmentCount j → ∀ i,
+        SegmentIndex (tail.segmentLength j) i →
+          IsRational G (3 * a) (tail.point j i)) ∧
+      HasUnboundedExtendedVariation tail := by
+  classical
+  let δ := a ^ 2 / (2 * B)
+  have hδ : 0 < δ := by
+    have hBpos : 0 < B := zero_lt_one.trans_le hB.1
+    exact div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hBpos)
+  have hallBounded : ∀ j, ActiveSegment orbit.segmentCount j →
+      HasBoundedSegmentVariation orbit j := by
+    intro j hj
+    obtain ⟨size, hsize⟩ := hfinite j hj
+    exact hasBoundedSegmentVariation_of_finite orbit j size hsize
+  have hcount : orbit.segmentCount = none :=
+    segmentCount_eq_none_of_all_segments_bounded orbit hallBounded hvariation
+  have hallActive : ∀ j, ActiveSegment orbit.segmentCount j := by
+    simp [ActiveSegment, hcount]
+  have hsome : ∀ j, ∃ size, orbit.segmentLength j = some size :=
+    fun j => hfinite j (hallActive j)
+  choose size hsize using hsome
+  let steps : ℕ → ℕ := fun J => ∑ j ∈ Finset.range J, (size j - 1)
+  have hstepsUnbounded : ∀ K, ∃ J, K ≤ steps J := by
+    simpa only [steps] using
+      finiteSegmentStepCount_unbounded orbit size hcount hsize hvariation
+  have hsizePositive : ∀ j, 0 < size j := by
+    intro j
+    exact orbit.segmentLengthPositive j (hallActive j) (size j) (hsize j)
+  let threshold : G.Player → ℝ := fun n => MinMaxQuit G n - 3 * a
+  have segment_growth : ∀ j,
+      (∀ n, threshold n ≤ orbit.point j 0 n ∨
+        orbit.point 0 0 n + (steps j : ℝ) * δ ≤ orbit.point j 0 n) →
+      ∀ i, i < size j → ∀ n,
+        threshold n ≤ orbit.point j i n ∨
+          orbit.point 0 0 n + (steps j + i : ℕ) * δ ≤ orbit.point j i n := by
+    intro j hstart i hi
+    induction i with
+    | zero =>
+        simpa using hstart
+    | succ i ih =>
+        have hiPrevious : i < size j := by omega
+        have hiIndex : SegmentIndex (orbit.segmentLength j) (i + 1) := by
+          intro k hk
+          have hkEq : size j = k := Option.some.inj ((hsize j).symm.trans hk)
+          simpa [hkEq] using hi
+        have hstep := orbit.step j (hallActive j) i hiIndex
+        intro n
+        obtain hthreshold | hgrowth := ih hiPrevious n
+        · exact Or.inl ((lemma2_2 G hB hnormal hgenerated hinstant ha ha1
+            hstep n).1 hthreshold)
+        · by_cases hbelow : orbit.point j i n < threshold n
+          · right
+            have hdrift := (lemma2_2 G hB hnormal hgenerated hinstant ha ha1
+              hstep n).2 hbelow
+            change orbit.point j i n + δ ≤ orbit.point j (i + 1) n at hdrift
+            norm_num [Nat.cast_add, Nat.cast_one] at hgrowth ⊢
+            nlinarith
+          · left
+            exact (lemma2_2 G hB hnormal hgenerated hinstant ha ha1
+              hstep n).1 (le_of_not_gt hbelow)
+  have hgrowth : ∀ j i, i < size j → ∀ n,
+      threshold n ≤ orbit.point j i n ∨
+        orbit.point 0 0 n + (steps j + i : ℕ) * δ ≤ orbit.point j i n := by
+    intro j
+    induction j with
+    | zero =>
+        apply segment_growth 0
+        intro n
+        right
+        simp [steps]
+    | succ j ih =>
+        have hlastIndex : size j - 1 < size j := by
+          have := hsizePositive j
+          omega
+        have hlast := ih (size j - 1) hlastIndex
+        apply segment_growth (j + 1)
+        intro n
+        have hstitch := orbit.finiteStitch j (hallActive (j + 1))
+          (size j) (hsize j)
+        have hstepsSucc : steps (j + 1) = steps j + (size j - 1) := by
+          simp [steps, Finset.sum_range_succ]
+        simpa only [hstitch, hstepsSucc] using hlast n
+  have heventualBound : ∀ n : G.Player, ∃ cutoff : ℕ,
+      threshold n ≤ orbit.point 0 0 n + cutoff * δ := by
+    intro n
+    obtain ⟨cutoff, hcutoff⟩ :=
+      exists_nat_gt ((threshold n - orbit.point 0 0 n) / δ)
+    refine ⟨cutoff, ?_⟩
+    rw [div_lt_iff₀ hδ] at hcutoff
+    nlinarith
+  choose cutoff hcutoff using heventualBound
+  let totalCutoff := ∑ n, cutoff n
+  have hcutoffTotal : ∀ n, cutoff n ≤ totalCutoff := by
+    intro n
+    exact Finset.single_le_sum (fun i _ => Nat.zero_le (cutoff i))
+      (Finset.mem_univ n)
+  obtain ⟨start, hstartSteps⟩ := hstepsUnbounded totalCutoff
+  have hstartRational : IsRational G (3 * a) (orbit.point start 0) := by
+    intro n
+    obtain hthreshold | hgrowthAtStart := hgrowth start 0 (hsizePositive start) n
+    · exact hthreshold
+    · have hcutoffLe : (cutoff n : ℝ) ≤ steps start := by
+        exact_mod_cast (hcutoffTotal n).trans hstartSteps
+      have hscaled : (cutoff n : ℝ) * δ ≤ (steps start : ℝ) * δ :=
+        mul_le_mul_of_nonneg_right hcutoffLe hδ.le
+      norm_num at hgrowthAtStart
+      nlinarith [hcutoff n, hscaled]
+  have hrationalClosed : IsClosed {r | IsRational G (3 * a) r} := by
+    have heq : {r | IsRational G (3 * a) r} =
+        ⋂ n, {r | MinMaxQuit G n - 3 * a ≤ r n} := by
+      ext r
+      simp [IsRational]
+    rw [heq]
+    exact isClosed_iInter fun n => isClosed_le continuous_const (continuous_apply n)
+  have hrationalForward : ∀ r ∈ {r | IsRational G (3 * a) r},
+      FRow G (a ^ 2 / (2 * B)) r ⊆ {r | IsRational G (3 * a) r} := by
+    intro r hr s hs n
+    exact (lemma2_2 G hB hnormal hgenerated hinstant ha ha1 hs n).1 (hr n)
+  let shifted := ExtendedOrbitData.dropSegments orbit start (hallActive start)
+  have hstay : ExtendedOrbitStaysIn shifted {r | IsRational G (3 * a) r} :=
+    extendedOrbitStaysIn_of_closed_forwardInvariant shifted _ hrationalClosed
+      hrationalForward hstartRational
+  let tail := ExtendedOrbitData.mono shifted fun r => FRow.mono G hsmall r
+  refine ⟨tail, ?_, ?_⟩
+  · intro j hj i hi
+    exact hstay j hj i hi
+  · apply ExtendedOrbitData.mono_unbounded
+    apply ExtendedOrbitData.dropSegments_unbounded_of_bounded_prefix orbit start
+      (hallActive start)
+    · intro j _
+      exact hallBounded j (hallActive j)
+    · exact hvariation
+
 /--
 Theorem 2.3.  Removing rationality from an extended orbit uses Lemma 2.2 to
-show eventual entry into, and permanence in, the rational region.  The
-repository has no checked extended-orbit tail/reindexing implementation.
+show eventual entry into, and permanence in, the rational region.  Infinite
+segments are handled by discarding a finite prefix; when all segments are
+finite, their cumulative number of genuine correspondence steps is unbounded.
 -/
 theorem theorem2_3 (G : QuittingGame)
     (hnormal : ∀ n, IsNormalPlayer G n)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     HasQuitApproximateEquilibria G ↔ ExtendedUnrestrictedOrbitCondition G := by
-  sorry
+  classical
+  have hfive := theorem2_1 G hgenerated hinstant
+  have hequivalent : HasQuitApproximateEquilibria G ↔ ExtendedOrbitCondition G :=
+    hfive.1.trans (hfive.2.1.trans (hfive.2.2.1.trans hfive.2.2.2))
+  constructor
+  · intro hequilibrium ε hε
+    obtain ⟨orbit, _, hvariation⟩ := hequivalent.mp hequilibrium ε hε
+    exact ⟨orbit, hvariation⟩
+  · intro hunrestricted
+    apply hequivalent.mpr
+    intro ε hε
+    obtain ⟨B, hB⟩ := Literature.Simon2007.exists_quittingPayoffDifferenceBound G
+    have hBpos : 0 < B := zero_lt_one.trans_le hB.1
+    let a : ℝ := min (ε / 3) (1 / 2)
+    have ha : 0 < a := lt_min (div_pos hε (by norm_num)) (by norm_num)
+    have ha1 : a ≤ 1 := (min_le_right _ _).trans (by norm_num)
+    have h3a : 3 * a ≤ ε := by
+      have := min_le_left (ε / 3) (1 / 2)
+      linarith
+    let δ : ℝ := a ^ 2 / (2 * B)
+    have hδ : 0 < δ := div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hBpos)
+    have hδε : δ ≤ ε := by
+      rw [div_le_iff₀ (mul_pos (by norm_num) hBpos)]
+      have haHalf := min_le_right (ε / 3) (1 / 2)
+      have haEps := min_le_left (ε / 3) (1 / 2)
+      nlinarith [sq_nonneg a, hB.1]
+    obtain ⟨orbit, hvariation⟩ := hunrestricted δ hδ
+    have htail : ∃ tail : ExtendedOrbitData (FRow G ε),
+        (∀ j, ActiveSegment tail.segmentCount j → ∀ i,
+          SegmentIndex (tail.segmentLength j) i →
+            IsRational G (3 * a) (tail.point j i)) ∧
+        HasUnboundedExtendedVariation tail := by
+      by_cases hinfinite : ∃ j, ActiveSegment orbit.segmentCount j ∧
+          orbit.segmentLength j = none
+      · let first := Nat.find hinfinite
+        have hfirst := Nat.find_spec hinfinite
+        have hprefixFinite : ∀ j, j < first →
+            ∃ size, orbit.segmentLength j = some size := by
+          intro j hj
+          have hjFind : j < Nat.find hinfinite := by simpa [first] using hj
+          cases hlength : orbit.segmentLength j with
+          | none =>
+              exfalso
+              exact Nat.find_min hinfinite hjFind ⟨by
+                intro total htotal
+                have := hfirst.1 total htotal
+                omega, hlength⟩
+          | some size => exact ⟨size, rfl⟩
+        have hprefixBounded : ∀ j, j < first →
+            HasBoundedSegmentVariation orbit j := by
+          intro j hj
+          obtain ⟨size, hsize⟩ := hprefixFinite j hj
+          exact hasBoundedSegmentVariation_of_finite orbit j size hsize
+        let shifted := ExtendedOrbitData.dropSegments orbit first hfirst.1
+        have hshiftedVariation : HasUnboundedExtendedVariation shifted :=
+          ExtendedOrbitData.dropSegments_unbounded_of_bounded_prefix orbit first
+            hfirst.1 hprefixBounded hvariation
+        have hshiftedLength : shifted.segmentLength 0 = none := by
+          simpa [shifted] using hfirst.2
+        exact exists_rational_extendedOrbit_of_firstInfinite G hB hnormal
+          hgenerated hinstant ha ha1 hδε shifted hshiftedLength hshiftedVariation
+      · push Not at hinfinite
+        have hfinite : ∀ j, ActiveSegment orbit.segmentCount j →
+            ∃ size, orbit.segmentLength j = some size := by
+          intro j hj
+          cases hlength : orbit.segmentLength j with
+          | none => exact (hinfinite j hj hlength).elim
+          | some size => exact ⟨size, rfl⟩
+        exact exists_rational_extendedOrbit_of_all_finite G hB hnormal
+          hgenerated hinstant ha ha1 hδε orbit hfinite hvariation
+    obtain ⟨tail, hrational, htailVariation⟩ := htail
+    refine ⟨tail, ?_, htailVariation⟩
+    intro j hj i hi n
+    have := hrational j hj i hi n
+    linarith
 
 /-- Lemma 2.3's pointwise small parameter. -/
 def SatisfiesLemma2_3At (G : QuittingGame) (r : Payoff G.Player)
