@@ -363,6 +363,7 @@ import MathUE.Topology.FiniteLimitDecomposition
 import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
+import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
