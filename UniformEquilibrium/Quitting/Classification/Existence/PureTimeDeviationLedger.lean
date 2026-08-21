@@ -265,6 +265,129 @@ theorem quittingFixedOpponentsQuitValue_le_one_of_cappedJointExit
   exact quittingRootQuitPayoff_le_one_of_cappedJointExit hcap
     (0 : Payoff ι) (roots time) who
 
+/-- If quitting now pays at most `1`, the plan value is at least `1 + δ`,
+and Continue has positive prescribed mass, then pure Continue improves the
+row value by at least `δ` times the prescribed Quit probability. -/
+theorem delta_mul_quitProbability_le_continueAdvantage
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hcap : QuittingCappedJointExit reward)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (time : ℕ) {δ : ℝ}
+    (hδ : 0 ≤ δ)
+    (hcontinue : 0 < (roots time who false).toReal)
+    (hfloor : 1 + δ ≤
+      quittingRootSequenceTerminalValue reward roots who time) :
+    δ * (roots time who true).toReal ≤
+      quittingRootContinuePayoff reward
+          (quittingRootSequenceTailVector reward roots (time + 1))
+          (roots time) who -
+        quittingRootSequenceTerminalValue reward roots who time := by
+  let quit := quittingRootQuitPayoff reward
+    (quittingRootSequenceTailVector reward roots (time + 1))
+    (roots time) who
+  let cont := quittingRootContinuePayoff reward
+    (quittingRootSequenceTailVector reward roots (time + 1))
+    (roots time) who
+  let value := quittingRootSequenceTerminalValue reward roots who time
+  let q := (roots time who true).toReal
+  let c := (roots time who false).toReal
+  have hquit : quit ≤ 1 :=
+    quittingRootQuitPayoff_le_one_of_cappedJointExit hcap _ _ _
+  have hvalue : value = q * quit + c * cont := by
+    rw [show value = quittingRootSuccessorPayoff reward
+      (quittingRootSequenceTailVector reward roots (time + 1))
+      (roots time) who from
+        quittingRootSequenceTerminalValue_eq_successorPayoff_tailVector
+          reward roots who time]
+    exact quittingRootSuccessorPayoff_eq_endpointMix reward _ _ _
+  have hmass : q + c = 1 := by
+    dsimp only [q, c]
+    linarith [quittingRoot_continueProbability_add_quitProbability
+      (roots time) who]
+  have hc0 : 0 < c := hcontinue
+  have hq0 : 0 ≤ q := ENNReal.toReal_nonneg
+  have hc1 : c ≤ 1 := by linarith
+  have hvalueQuit : δ ≤ value - quit := by
+    have hfloor' : 1 + δ ≤ value := hfloor
+    linarith
+  have hfactor : value - quit = c * (cont - quit) := by
+    rw [hvalue]
+    nlinarith
+  have hcontinueQuit : 0 ≤ cont - quit := by
+    rw [hfactor] at hvalueQuit
+    by_contra hnegative
+    have : cont - quit < 0 := lt_of_not_ge hnegative
+    nlinarith
+  have hdelta : δ ≤ cont - quit := by
+    rw [hfactor] at hvalueQuit
+    nlinarith [mul_nonneg (sub_nonneg.mpr hc1) hcontinueQuit]
+  have hmixDifference : cont - value = q * (cont - quit) := by
+    rw [hvalue]
+    nlinarith
+  dsimp only [cont, value, q] at hmixDifference ⊢
+  rw [hmixDifference]
+  simpa [mul_comm] using mul_le_mul_of_nonneg_right hdelta hq0
+
+/-- Over a finite interval on which the player's plan value stays above
+`1 + δ`, forcing Continue gains at least `δ` times the survival-weighted
+prescribed Quit clock. -/
+theorem delta_mul_sum_jointSurvivalWeight_mul_quitProbability_le_continueUntil_gain
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hcap : QuittingCappedJointExit reward)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start length : ℕ) {δ : ℝ}
+    (hδ : 0 ≤ δ)
+    (hcontinue : ∀ offset, offset < length →
+      0 < (roots (start + offset) who false).toReal)
+    (hfloor : ∀ offset, offset < length →
+      1 + δ ≤ quittingRootSequenceTerminalValue reward roots who
+        (start + offset)) :
+    δ * ∑ offset ∈ Finset.range length,
+        quittingJointSurvivalWeight roots start offset *
+          (roots (start + offset) who true).toReal ≤
+      quittingRootSequenceTerminalValue reward
+          (quittingContinueUntilRoots roots who (start + length)) who start -
+        quittingRootSequenceTerminalValue reward roots who start := by
+  rw [quittingContinueUntil_terminalValue_sub_eq_sum]
+  rw [Finset.mul_sum]
+  apply Finset.sum_le_sum
+  intro offset hoffset
+  have hoffset' := Finset.mem_range.mp hoffset
+  have hstage := delta_mul_quitProbability_le_continueAdvantage
+    hcap roots who (start + offset) hδ (hcontinue offset hoffset')
+      (hfloor offset hoffset')
+  have hjoint0 := quittingJointSurvivalWeight_nonneg roots start offset
+  have hopponent0 := quittingOpponentSurvivalWeight_nonneg roots who start offset
+  have hstage0 : 0 ≤
+      quittingRootContinuePayoff reward
+          (quittingRootSequenceTailVector reward roots
+            (start + offset + 1))
+          (roots (start + offset)) who -
+        quittingRootSequenceTerminalValue reward roots who
+          (start + offset) := by
+    exact le_trans (mul_nonneg hδ ENNReal.toReal_nonneg) hstage
+  calc
+    δ * (quittingJointSurvivalWeight roots start offset *
+        (roots (start + offset) who true).toReal) =
+      quittingJointSurvivalWeight roots start offset *
+        (δ * (roots (start + offset) who true).toReal) := by ring
+    _ ≤ quittingJointSurvivalWeight roots start offset *
+        (quittingRootContinuePayoff reward
+            (quittingRootSequenceTailVector reward roots
+              (start + offset + 1))
+            (roots (start + offset)) who -
+          quittingRootSequenceTerminalValue reward roots who
+            (start + offset)) :=
+      mul_le_mul_of_nonneg_left hstage hjoint0
+    _ ≤ quittingOpponentSurvivalWeight roots who start offset *
+        (quittingRootContinuePayoff reward
+            (quittingRootSequenceTailVector reward roots
+              (start + offset + 1))
+            (roots (start + offset)) who -
+          quittingRootSequenceTerminalValue reward roots who
+            (start + offset)) :=
+      mul_le_mul_of_nonneg_right
+        (quittingJointSurvivalWeight_le_quittingOpponentSurvivalWeight
+          roots who start offset) hstage0
+
 /-- Under unit solo exit, the fixed-opponent quit value is within twice the
 payoff bound times the opponent absorption mass of `1`. -/
 theorem abs_quittingFixedOpponentsQuitValue_sub_one_le
