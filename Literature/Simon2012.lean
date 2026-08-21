@@ -7169,6 +7169,113 @@ theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
   · intro n _hnContinue
     linarith [hcontinueLower n, hforced n |>.2]
 
+/-- In Lemma 4.3's low-own-hazard case, one dominant opponent makes the
+stationary continuation payoff an effective min-max cap. -/
+private theorem lowHazard_minMax_le_stagePayoff_add
+    (G : QuittingGame) (M ρ ξ : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hpayoffBound : IsQuittingPayoffDifferenceBound G M)
+    (hρ0 : 0 < ρ) (hξ0 : 0 ≤ ξ) (hξ1 : ξ < 1)
+    (beta x : Payoff G.Player) (p : QuitRow G) (j : G.Player)
+    (hp : p ∈ EpsilonRow G 0 beta)
+    (hjLt : (p j : ℝ) < 1)
+    (hqOtherHigh : 1 - ξ < QuitProbability G (p.replace G j 0))
+    (hbetaBound : |beta j| ≤ (Fintype.card G.Player : ℝ) * M)
+    (hxBound : |x j| ≤ M)
+    (hxiError : ξ * (((Fintype.card G.Player : ℝ) + 1) * M) ≤ ρ / 20) :
+    MinMaxQuit G j ≤ QuittingOneStagePayoff G x p j + ρ / 10 := by
+  let pZero : QuitRow G := p.replace G j 0
+  let qOther : ℝ := QuitProbability G pZero
+  let conditionalReward : ℝ := quittingRewardPart G pZero j / qOther
+  let stageBeta : ℝ := QuittingOneStagePayoff G beta p j
+  let stageX : ℝ := QuittingOneStagePayoff G x p j
+  have hqOtherHigh' : 1 - ξ < qOther := by
+    simpa only [qOther, pZero] using hqOtherHigh
+  have hqOtherPos : 0 < qOther := by
+    nlinarith
+  have hqOtherMem : qOther ∈ Set.Icc (0 : ℝ) 1 :=
+    quitProbability_mem_Icc G pZero
+  have hstageBetaContinue :
+      stageBeta = ForcedContinuePayoff G beta p j := by
+    simpa only [stageBeta] using
+      oneStagePayoff_eq_forcedContinue_of_lt_one G beta p hp j hjLt
+  have hrewardAbs : |quittingRewardPart G pZero j| ≤ M / 3 * qOther := by
+    simpa only [qOther] using
+      abs_quittingRewardPart_le G pZero j (fun A => hM.2.1 A j)
+  have hconditionalAbs : |conditionalReward| ≤ M / 3 := by
+    dsimp only [conditionalReward]
+    rw [abs_div, abs_of_pos hqOtherPos]
+    rw [div_le_iff₀ hqOtherPos]
+    simpa only [mul_comm] using hrewardAbs
+  have hrewardEq :
+      quittingRewardPart G pZero j = qOther * conditionalReward := by
+    dsimp only [conditionalReward]
+    field_simp [ne_of_gt hqOtherPos]
+  have hstageBetaFormula :
+      stageBeta = (1 - qOther) * beta j + qOther * conditionalReward := by
+    rw [hstageBetaContinue]
+    change (1 - QuitProbability G pZero) * beta j +
+        quittingRewardPart G pZero j = _
+    rw [hrewardEq]
+  have hforcedLe : ForcedQuitPayoff G p j ≤ stageBeta := by
+    rw [hstageBetaContinue]
+    have hraw := hp.2 j hjLt
+    simpa only [sub_zero] using hraw
+  have hconditionalDistance :
+      |conditionalReward - stageBeta| ≤ ρ / 20 := by
+    have hcoordinateDistance :
+        |conditionalReward - beta j| ≤
+          ((Fintype.card G.Player : ℝ) + 1) * M := by
+      calc
+        |conditionalReward - beta j| ≤
+            |conditionalReward| + |beta j| := abs_sub _ _
+        _ ≤ M / 3 + (Fintype.card G.Player : ℝ) * M :=
+          add_le_add hconditionalAbs hbetaBound
+        _ ≤ ((Fintype.card G.Player : ℝ) + 1) * M := by
+          nlinarith [hM.1]
+    have hsurvivalLe : 1 - qOther ≤ ξ := by
+      linarith
+    have hidentity :
+        conditionalReward - stageBeta =
+          (1 - qOther) * (conditionalReward - beta j) := by
+      rw [hstageBetaFormula]
+      ring
+    rw [hidentity, abs_mul, abs_of_nonneg (by linarith [hqOtherMem.2])]
+    exact (mul_le_mul hsurvivalLe hcoordinateDistance
+      (abs_nonneg _) hξ0).trans hxiError
+  have hminmaxCap :
+      MinMaxQuit G j ≤ max (ForcedQuitPayoff G p j) conditionalReward := by
+    simpa only [pZero, qOther, conditionalReward] using
+      minMaxQuit_le_max_forcedQuit_stationaryContinue
+        G hpayoffBound p j (by simpa only [qOther, pZero] using hqOtherPos)
+  have hminmaxBeta : MinMaxQuit G j ≤ stageBeta + ρ / 20 := by
+    apply hminmaxCap.trans
+    apply max_le
+    · linarith
+    · linarith [le_of_abs_le hconditionalDistance]
+  have hstageDistance : |stageBeta - stageX| ≤ ρ / 20 := by
+    have hbetaX :
+        |beta j - x j| ≤ ((Fintype.card G.Player : ℝ) + 1) * M := by
+      calc
+        |beta j - x j| ≤ |beta j| + |x j| := abs_sub _ _
+        _ ≤ (Fintype.card G.Player : ℝ) * M + M :=
+          add_le_add hbetaBound hxBound
+        _ = ((Fintype.card G.Player : ℝ) + 1) * M := by ring
+    have hsurvivalNonneg : 0 ≤ 1 - QuitProbability G p := by
+      linarith [(quitProbability_mem_Icc G p).2]
+    have hsurvivalLe : 1 - QuitProbability G p ≤ ξ := by
+      have hqMonotone := quitProbability_replace_zero_le G p j
+      change qOther ≤ QuitProbability G p at hqMonotone
+      linarith
+    rw [show stageBeta - stageX =
+        (1 - QuitProbability G p) * (beta j - x j) by
+      exact quittingOneStagePayoff_sub G beta x p j]
+    rw [abs_mul, abs_of_nonneg hsurvivalNonneg]
+    exact (mul_le_mul hsurvivalLe hbetaX
+      (abs_nonneg _) hξ0).trans hxiError
+  have hupper := le_of_abs_le hstageDistance
+  linarith
+
 /--
 Lemma 4.3's coordinate drift statement for `z = f(x,p)`, under the standing
 Section 3--4 choices used in its proof.  The deformed graph coordinate is the
@@ -7332,7 +7439,82 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
       _ ≤ ρ / 20 := by
         rw [div_le_iff₀ (by positivity : 0 < 40 * N)]
         nlinarith [mul_nonneg hmotion.2.1.le (by linarith : 0 ≤ N - 1)]
-  sorry
+  have hpayoffBound : IsQuittingPayoffDifferenceBound G M := by
+    refine ⟨hM.1, ?_, ?_⟩
+    · intro A B j
+      have h := hM.2.2 A B j
+      nlinarith
+    · intro A j
+      have h := hM.2.1 A j
+      nlinarith
+  intro j
+  let p : QuitRow G := z.1.2
+  let beta : Payoff G.Player := z.1.1
+  let pZero : QuitRow G := p.replace G j 0
+  let qOther : ℝ := QuitProbability G pZero
+  let stageX : ℝ := QuittingOneStagePayoff G x p j
+  have hsectionZ : Section4Z G inverse cutoff a j = stageX := by
+    rfl
+  by_cases hjLow : (p j : ℝ) ≤ threshold
+  · have hthresholdLt : threshold < 1 := by
+      dsimp only [threshold]
+      have hdenom : 0 < 2 * (Fintype.card G.Player : ℝ) * M := by
+        exact mul_pos
+          (mul_pos (by norm_num) (by exact_mod_cast Fintype.card_pos)) hMpos
+      have hquotient : 0 < ρ / (2 * (Fintype.card G.Player : ℝ) * M) :=
+        div_pos hmotion.2.1 hdenom
+      linarith
+    have hjLt : (p j : ℝ) < 1 := hjLow.trans_lt hthresholdLt
+    have hdominantNe : dominant ≠ j := by
+      intro heq
+      subst dominant
+      have hdominantLow : (z.1.2 j : ℝ) ≤ threshold := by
+        simpa only [p] using hjLow
+      have hraw := hpDominant.trans_le hdominantLow
+      dsimp only [threshold] at hraw
+      nlinarith
+    have hpZeroDominant : (pZero dominant : ℝ) = (p dominant : ℝ) := by
+      simp [pZero, QuitRow.replace, hdominantNe]
+    have hqOtherHigh : 1 - ξ < qOther := by
+      have hcoord := quitProbability_apply_le G pZero dominant
+      rw [hpZeroDominant] at hcoord
+      have hdominant : 1 - ξ < (p dominant : ℝ) := by
+        simpa only [p] using hpDominant
+      exact hdominant.trans_le hcoord
+    have hbetaBound : |beta j| ≤ (Fintype.card G.Player : ℝ) * M := by
+      simpa only [beta, p] using hbetaLow j hjLow
+    have hminmaxX : MinMaxQuit G j ≤ stageX + ρ / 10 := by
+      apply lowHazard_minMax_le_stagePayoff_add G M ρ ξ hM hpayoffBound
+        hmotion.2.1 hξ.le hξ1 beta x p j
+      · simpa only [beta, p] using z.2.1
+      · exact hjLt
+      · simpa only [qOther, pZero] using hqOtherHigh
+      · exact hbetaBound
+      · exact abs_le.mpr (hxBox' j)
+      · exact hxiError
+    have hquadratic : ρ ^ 2 / (500 * M) ≤ ρ / 500 := by
+      have hρM : ρ ≤ M := hmotion.2.2.1.trans hM.1
+      have hsq : ρ ^ 2 ≤ ρ * M := by
+        simpa only [pow_two] using
+          mul_le_mul_of_nonneg_left hρM hmotion.2.1.le
+      calc
+        ρ ^ 2 / (500 * M) ≤ (ρ * M) / (500 * M) :=
+          div_le_div_of_nonneg_right hsq (by positivity)
+        _ = ρ / 500 := by field_simp
+    rw [hsectionZ]
+    constructor
+    · intro _hxRational
+      calc
+        MinMaxQuit G j - ρ / 3 ≤ MinMaxQuit G j - ρ / 10 := by
+          linarith [hmotion.2.1]
+        _ ≤ stageX := by linarith [hminmaxX]
+    · intro hxIrrational
+      calc
+        x j + ρ ^ 2 / (500 * M) ≤ x j + ρ / 500 :=
+          by simpa only [add_comm] using add_le_add_left hquadratic (x j)
+        _ ≤ stageX := by
+          linarith [hminmaxX, hmotion.2.1]
+  · sorry
 
 /-!
 The proof of Lemma 4.4 uses the local inference that `pⱼ = 0` implies
