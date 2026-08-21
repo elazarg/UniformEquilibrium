@@ -20687,6 +20687,36 @@ inductive MMatrixPayoffMode (table : Table ι)
   | active (target : NormalPlayer table)
   | absorbed
 
+namespace MMatrixPayoffMode
+
+def finiteCodeEquiv (table : Table ι) :
+    MMatrixPayoffMode table ≃
+      Option (NormalPlayer table) ⊕ (NormalPlayer table ⊕ Unit) where
+  toFun
+    | .draw source => Sum.inl source
+    | .active target => Sum.inr (Sum.inl target)
+    | .absorbed => Sum.inr (Sum.inr ())
+  invFun
+    | Sum.inl source => .draw source
+    | Sum.inr (Sum.inl target) => .active target
+    | Sum.inr (Sum.inr ()) => .absorbed
+  left_inv mode := by cases mode <;> rfl
+  right_inv code := by
+    rcases code with source | target
+    · rfl
+    · rcases target with target | terminal
+      · rfl
+      · rcases terminal with ⟨⟩
+        rfl
+
+noncomputable instance (table : Table ι) :
+    Fintype (MMatrixPayoffMode table) :=
+  Fintype.ofEquiv
+    (Option (NormalPlayer table) ⊕ (NormalPlayer table ⊕ Unit))
+    (finiteCodeEquiv table).symm
+
+end MMatrixPayoffMode
+
 def MMatrixPayoffMode.MatchesState
     {table : Table ι} {Signal : Type}
     (mode : MMatrixPayoffMode table)
@@ -20814,6 +20844,389 @@ theorem mode_state
     (blueprint.mode t history).MatchesState history.2 :=
   compiledMMatrixPayoffMode_matchesState
     blueprint.signalData.law blueprint.signalData.selector t history
+
+@[simp] theorem mode_snoc
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (action : ι → Bool)
+    (nextState : PublicQuittingState ι
+      (Fin (blueprint.signalData.signalCount + 1))) :
+    blueprint.mode (t + 1)
+        (Fin.snoc history.1 (history.2, action), nextState) =
+      nextMMatrixPayoffMode blueprint.signalData.selector
+        (blueprint.mode t history) action nextState := by
+  simp [MMatrixPayoffBlueprint.mode, compiledMMatrixPayoffMode,
+    publicHistoryInit_snoc]
+
+/-! The finite control-state kernel induced by the prescribed profile. -/
+noncomputable def modeKernel
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    MMatrixPayoffMode table → PMF (MMatrixPayoffMode table)
+  | .draw source => blueprint.signalData.law.map fun signal =>
+      .active (blueprint.signalData.selector source signal)
+  | .active target =>
+      (quittingHazardCoin
+          (mFineExitProbability table hM target accuracy)
+          (mFineExitProbability_pos table hM target blueprint.accuracy_pos).le
+          (mFineExitProbability_lt_one table hM target
+            blueprint.accuracy_pos).le).bind fun quits =>
+        if quits then PMF.pure .absorbed
+        else PMF.pure (.draw (some target))
+  | .absorbed => PMF.pure .absorbed
+
+/-! The conditional law of the next control state at an actual history. -/
+noncomputable def historyModeStepDist
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (strategy : (publicQuittingGame table
+      blueprint.signalData.law).BehaviorProfile)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t) :
+    PMF (MMatrixPayoffMode table) :=
+  ((publicQuittingGame table
+      blueprint.signalData.law).stageActionDist strategy history).bind
+    fun action =>
+      ((publicQuittingGame table blueprint.signalData.law).transition
+          history.2 action).map fun nextState =>
+        blueprint.mode (t + 1)
+          (Fin.snoc history.1 (history.2, action), nextState)
+
+private theorem stageActionDist_continue
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (hmode : ∀ target, blueprint.mode t history ≠ .active target) :
+    (publicQuittingGame table blueprint.signalData.law).stageActionDist
+        blueprint.strategy history =
+      PMF.pure (publicAllContinueAction table blueprint.signalData.law) := by
+  unfold StochasticGame.stageActionDist
+  rw [show (fun who => blueprint.strategy who t history) =
+      fun _ => PMF.pure false by
+    funext who
+    unfold strategy
+    split
+    next target heq => exact False.elim (hmode target heq)
+    next => rfl]
+  exact Math.PMFProduct.pmfPi_pure _
+
+private theorem stageActionDist_active
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (target : NormalPlayer table)
+    (hmode : blueprint.mode t history = .active target) :
+    (publicQuittingGame table blueprint.signalData.law).stageActionDist
+        blueprint.strategy history =
+      (quittingHazardCoin
+          (mFineExitProbability table hM target accuracy)
+          (mFineExitProbability_pos table hM target blueprint.accuracy_pos).le
+          (mFineExitProbability_lt_one table hM target
+            blueprint.accuracy_pos).le).bind fun quits =>
+        PMF.pure (publicSingleQuitAction table blueprint.signalData.law
+          (hM.positiveOwner target).1 quits) := by
+  classical
+  let coin := quittingHazardCoin
+    (mFineExitProbability table hM target accuracy)
+    (mFineExitProbability_pos table hM target blueprint.accuracy_pos).le
+    (mFineExitProbability_lt_one table hM target
+      blueprint.accuracy_pos).le
+  let base : ∀ who,
+      PMF ((publicQuittingGame table
+        blueprint.signalData.law).Act who) :=
+    fun _ => PMF.pure false
+  let owner := (hM.positiveOwner target).1
+  have hfamily :
+      (fun who => blueprint.strategy who t history) =
+        Function.update base owner coin := by
+    funext who
+    by_cases hwho : who = owner
+    · subst who
+      simp [strategy, hmode, coin, base, owner]
+    · simp [strategy, hmode, base, owner, hwho]
+  unfold StochasticGame.stageActionDist
+  rw [hfamily]
+  calc
+    Math.PMFProduct.pmfPi (Function.update base owner coin) =
+        coin.bind (fun quits => Math.PMFProduct.pmfPi
+          (Function.update base owner (PMF.pure quits))) :=
+      Math.PMFProduct.pmfPi_update_bind base owner coin
+    _ = coin.bind (fun quits => PMF.pure
+        (publicSingleQuitAction table blueprint.signalData.law
+          owner quits)) := by
+      apply congrArg (PMF.bind coin)
+      funext quits
+      rw [show Function.update base owner (PMF.pure quits) =
+          fun who => PMF.pure
+            (publicSingleQuitAction table blueprint.signalData.law
+              owner quits who) by
+        funext who
+        by_cases hwho : who = owner
+        · subst who
+          simp [publicSingleQuitAction]
+        · simp [base, publicSingleQuitAction_apply_eq_raw,
+            rawSingleQuitAction, hwho]]
+      exact Math.PMFProduct.pmfPi_pure _
+
+theorem historyModeStepDist_profile_eq
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t) :
+    blueprint.historyModeStepDist blueprint.strategy history =
+      blueprint.modeKernel (blueprint.mode t history) := by
+  classical
+  rcases history with ⟨past, state⟩
+  have hmatches := blueprint.mode_state t (past, state)
+  cases hmode : blueprint.mode t (past, state) with
+  | draw source =>
+      cases state with
+      | active signal =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | absorbed quitters =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | draw =>
+          have haction := blueprint.stageActionDist_continue
+            (past, PublicQuittingState.draw) (by
+              intro target hactive
+              simp [hmode] at hactive)
+          have hnext : ∀ signal,
+              blueprint.mode (t + 1)
+                  (Fin.snoc past
+                    (PublicQuittingState.draw,
+                      publicAllContinueAction table blueprint.signalData.law),
+                    PublicQuittingState.active signal) =
+                .active (blueprint.signalData.selector source signal) := by
+            intro signal
+            exact (blueprint.mode_snoc
+              (past, PublicQuittingState.draw)
+              (publicAllContinueAction table blueprint.signalData.law)
+              (PublicQuittingState.active signal)).trans (by
+                simp [hmode, nextMMatrixPayoffMode])
+          unfold historyModeStepDist
+          rw [haction, PMF.pure_bind]
+          rw [publicQuittingGame_transition_draw]
+          unfold modeKernel
+          calc
+            PMF.map _
+                (PMF.map PublicQuittingState.active
+                  blueprint.signalData.law) = PMF.map
+                ((fun nextState => blueprint.mode (t + 1)
+                    (Fin.snoc past
+                      (PublicQuittingState.draw,
+                        publicAllContinueAction table
+                          blueprint.signalData.law), nextState)) ∘
+                  PublicQuittingState.active)
+                blueprint.signalData.law := PMF.map_comp _ _ _
+            _ = PMF.map (fun signal => MMatrixPayoffMode.active
+                (blueprint.signalData.selector source signal))
+                blueprint.signalData.law := by
+              apply congrArg
+                (fun f => PMF.map f blueprint.signalData.law)
+              funext signal
+              exact hnext signal
+  | active target =>
+      cases state with
+      | draw =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | absorbed quitters =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | active signal =>
+          have haction := blueprint.stageActionDist_active
+            (past, PublicQuittingState.active signal) target hmode
+          unfold historyModeStepDist
+          rw [haction, PMF.bind_bind]
+          unfold modeKernel
+          apply Math.ProbabilityMassFunction.bind_congr_on_support
+          intro quits _
+          cases quits with
+          | false =>
+              rw [PMF.pure_bind]
+              rw [publicQuittingGame_transition_publicSingleQuitAction_false
+                table blueprint.signalData.law signal
+                (hM.positiveOwner target).1]
+              rw [PMF.pure_map]
+              congr 1
+              rw [show blueprint.mode (t + 1)
+                  (Fin.snoc past
+                    (PublicQuittingState.active signal,
+                      publicSingleQuitAction table blueprint.signalData.law
+                        (hM.positiveOwner target).1 false),
+                    PublicQuittingState.draw) =
+                  nextMMatrixPayoffMode blueprint.signalData.selector
+                    (blueprint.mode t
+                      (past, PublicQuittingState.active signal))
+                    (publicSingleQuitAction table blueprint.signalData.law
+                      (hM.positiveOwner target).1 false) .draw by
+                simpa using blueprint.mode_snoc
+                  (past, PublicQuittingState.active signal)
+                  (publicSingleQuitAction table blueprint.signalData.law
+                    (hM.positiveOwner target).1 false) .draw]
+              simp [hmode, nextMMatrixPayoffMode]
+          | true =>
+              rw [PMF.pure_bind]
+              rw [publicQuittingGame_transition_publicSingleQuitAction
+                table blueprint.signalData.law signal
+                (hM.positiveOwner target).1]
+              rw [PMF.pure_map]
+              congr 1
+  | absorbed =>
+      cases state with
+      | draw =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | active signal =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | absorbed quitters =>
+          have haction := blueprint.stageActionDist_continue
+            (past, PublicQuittingState.absorbed quitters) (by
+              intro target hactive
+              simp [hmode] at hactive)
+          unfold historyModeStepDist
+          rw [haction, PMF.pure_bind]
+          simp only [publicQuittingGame, PMF.pure_map]
+          unfold modeKernel
+          congr 1
+
+/-! The time-`t` marginal of the actual prescribed control mode. -/
+noncomputable def modeDist
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (t : ℕ) : PMF (MMatrixPayoffMode table) :=
+  ((publicQuittingGame table blueprint.signalData.law).histDist
+      blueprint.strategy .draw t).map fun history =>
+    blueprint.mode t history
+
+theorem modeDist_succ
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (t : ℕ) :
+    blueprint.modeDist (t + 1) =
+      (blueprint.modeDist t).bind blueprint.modeKernel := by
+  unfold modeDist
+  rw [(publicQuittingGame table
+    blueprint.signalData.law).histDist_succ,
+    PMF.map_bind, PMF.bind_map]
+  apply Math.ProbabilityMassFunction.bind_congr_on_support
+  intro history _
+  simp only [Function.comp_apply]
+  rw [← blueprint.historyModeStepDist_profile_eq history]
+  unfold historyModeStepDist
+  rw [PMF.map_bind]
+  apply Math.ProbabilityMassFunction.bind_congr_on_support
+  intro action _
+  rw [PMF.map_bind]
+  simp_rw [PMF.pure_map]
+  rw [← PMF.bind_pure_comp]
+  apply Math.ProbabilityMassFunction.bind_congr_on_support
+  intro nextState _
+  rfl
+
+theorem modeDist_eq_iter
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (t : ℕ) :
+    blueprint.modeDist t =
+      Math.PMFIter.iter blueprint.modeKernel t (.draw none) := by
+  induction t with
+  | zero =>
+      unfold modeDist
+      rw [(publicQuittingGame table
+        blueprint.signalData.law).histDist_zero,
+        PMF.pure_map, Math.PMFIter.iter_zero]
+      simp [blueprint.mode_initial]
+  | succ t ih =>
+      rw [blueprint.modeDist_succ t, ih, Math.PMFIter.iter_succ']
+
+def absorbedCore : Set (MMatrixPayoffMode table)
+  | .absorbed => True
+  | _ => False
+
+theorem absorbedCore_closed
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    Math.Probability.IsClosedCore blueprint.modeKernel absorbedCore := by
+  intro source hsource destination hdestination
+  cases source with
+  | draw source => contradiction
+  | active target => contradiction
+  | absorbed =>
+      unfold modeKernel at hdestination
+      have heq : destination = .absorbed := by
+        simpa using hdestination
+      subst destination
+      trivial
+
+private theorem hazardCoin_true_mem_support
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (target : NormalPlayer table) :
+    true ∈ (quittingHazardCoin
+      (mFineExitProbability table hM target accuracy)
+      (mFineExitProbability_pos table hM target
+        blueprint.accuracy_pos).le
+      (mFineExitProbability_lt_one table hM target
+        blueprint.accuracy_pos).le).support := by
+  rw [PMF.mem_support_iff]
+  intro hzero
+  have hreal : ((quittingHazardCoin
+      (mFineExitProbability table hM target accuracy)
+      (mFineExitProbability_pos table hM target
+        blueprint.accuracy_pos).le
+      (mFineExitProbability_lt_one table hM target
+        blueprint.accuracy_pos).le) true).toReal = 0 := by
+    simp [hzero]
+  rw [quittingHazardCoin_true_toReal] at hreal
+  linarith [mFineExitProbability_pos table hM target
+    blueprint.accuracy_pos]
+
+private theorem draw_support_step
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (source : Option (NormalPlayer table))
+    (signal : Fin (blueprint.signalData.signalCount + 1))
+    (hsignal : signal ∈ blueprint.signalData.law.support) :
+    Math.Probability.PMFSupportStep blueprint.modeKernel (.draw source)
+      (.active (blueprint.signalData.selector source signal)) := by
+  rw [Math.Probability.PMFSupportStep, ← PMF.mem_support_iff]
+  unfold modeKernel
+  rw [PMF.mem_support_map_iff]
+  exact ⟨signal, hsignal, rfl⟩
+
+private theorem active_absorbed_support_step
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (target : NormalPlayer table) :
+    Math.Probability.PMFSupportStep blueprint.modeKernel (.active target)
+      .absorbed := by
+  rw [Math.Probability.PMFSupportStep, ← PMF.mem_support_iff]
+  unfold modeKernel
+  rw [PMF.mem_support_bind_iff]
+  refine ⟨true, blueprint.hazardCoin_true_mem_support target, ?_⟩
+  exact (PMF.mem_support_pure_iff _ _).2 rfl
+
+theorem modeKernel_reaches_absorbed
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    ∀ source, Math.Probability.PMFReachable blueprint.modeKernel source
+      .absorbed := by
+  intro source
+  cases source with
+  | absorbed => exact Relation.ReflTransGen.refl
+  | active target =>
+      exact Relation.ReflTransGen.single
+        (blueprint.active_absorbed_support_step target)
+  | draw source =>
+      obtain ⟨signal, hsignal⟩ := blueprint.signalData.law.support_nonempty
+      exact Relation.ReflTransGen.head
+        (blueprint.draw_support_step source signal hsignal)
+        (Relation.ReflTransGen.single
+          (blueprint.active_absorbed_support_step
+            (blueprint.signalData.selector source signal)))
+
+theorem modeKernel_transienceCertificate
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
+    Nonempty (Math.Probability.ClosedCoreTransienceCertificate
+      blueprint.modeKernel absorbedCore) := by
+  letI : Nonempty (MMatrixPayoffMode table) := ⟨.absorbed⟩
+  exact Math.Probability.exists_closedCoreTransienceCertificate
+    blueprint.modeKernel absorbedCore blueprint.absorbedCore_closed
+    fun source => ⟨.absorbed, trivial,
+      blueprint.modeKernel_reaches_absorbed source⟩
 
 end MMatrixPayoffBlueprint
 
