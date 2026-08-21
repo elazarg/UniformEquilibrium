@@ -23,6 +23,38 @@ namespace Path
 
 variable {X : Type*} [TopologicalSpace X] {x y z : X}
 
+/-- Reparameterize the initial segment up to `cut` over the whole unit
+interval. -/
+def initialSegment (path : Path x y) (cut : unitInterval) :
+    Path x (path cut) where
+  toFun time := path ⟨(time : ℝ) * (cut : ℝ), by
+    constructor
+    · exact mul_nonneg time.property.1 cut.property.1
+    · nlinarith [time.property.1, time.property.2,
+        cut.property.1, cut.property.2]⟩
+  continuous_toFun := by fun_prop
+  source' := by simp
+  target' := by simp
+
+@[simp] theorem initialSegment_apply (path : Path x y)
+    (cut time : unitInterval) :
+    path.initialSegment cut time =
+      path ⟨(time : ℝ) * (cut : ℝ), by
+        constructor
+        · exact mul_nonneg time.property.1 cut.property.1
+        · nlinarith [time.property.1, time.property.2,
+            cut.property.1, cut.property.2]⟩ :=
+  rfl
+
+/-- Initial-segment reparameterization preserves monotonicity. -/
+theorem monotone_initialSegment [Preorder X]
+    (path : Path x y) (cut : unitInterval) (hpath : Monotone path) :
+    Monotone (path.initialSegment cut) := by
+  intro first second hle
+  apply hpath
+  exact mul_le_mul_of_nonneg_right
+    (show (first : ℝ) ≤ (second : ℝ) from hle) cut.property.1
+
 /-- Concatenate two paths so that the first occupies `[0, split]` and the
 second occupies `[split, 1]`. -/
 def transAt (first : Path x y) (second : Path y z) (split : ℝ)
