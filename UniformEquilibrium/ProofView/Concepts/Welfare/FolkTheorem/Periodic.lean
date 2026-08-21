@@ -10,6 +10,7 @@ import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Topology.Algebra.Monoid
 import Mathlib.Topology.Algebra.InfiniteSum.Module
 import MathUE.SimplexApproximation
+import MathUE.FiniteEmpiricalConvexity
 import UniformEquilibrium.ProofView.Concepts.Mixed.MixedExtension
 import UniformEquilibrium.ProofView.Concepts.ZeroSum.SecurityStrategy
 import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Discounting
@@ -309,6 +310,71 @@ theorem exists_discountFactor_threshold_periodic_all_continuations_close_cycleAv
     simp [Fin.ofNat, Nat.add_mod]
   rw [hstart]
   exact hphase
+
+/-- In a finite kernel game, a single patience threshold suffices to
+approximate every feasible payoff by a periodic pure-profile path.  Finiteness
+of the possible cycles at one common empirical denominator makes the threshold
+uniform over the whole feasible polytope. -/
+theorem exists_discountFactor_threshold_periodic_payoff_close_feasibleSet
+    (G : KernelGame ι) [Fintype ι]
+    [∀ who, Fintype (G.Strategy who)]
+    [∀ who, Nonempty (G.Strategy who)] [Finite G.Outcome]
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ δ₀ : ℝ, 0 ≤ δ₀ ∧ δ₀ < 1 ∧
+      ∀ δ : ℝ, δ₀ < δ → δ < 1 →
+        ∀ value ∈ G.feasibleSet,
+          ∃ (n : ℕ) (_ : NeZero n) (cycle : Fin n → Profile G),
+            ∀ who,
+              |G.discountedContinuationPayoff δ
+                  (fun time ↦ cycle (Fin.ofNat n time)) 0 who -
+                value who| < ε := by
+  classical
+  letI : Nonempty (Profile G) := inferInstance
+  obtain ⟨bound, hboundAbs⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun profile : Profile G ↦ ‖G.payoffVector profile‖)
+  have hbound : ∀ profile : Profile G, ‖G.payoffVector profile‖ ≤ bound := by
+    intro profile
+    simpa [abs_of_nonneg (norm_nonneg _)] using hboundAbs profile
+  have hbound0 : 0 ≤ bound := by
+    exact (norm_nonneg (G.payoffVector (Classical.arbitrary (Profile G)))).trans
+      (hbound _)
+  obtain ⟨n, hn, happrox⟩ :=
+    MathUE.exists_uniformAverage_close_of_mem_convexHull_range
+      G.payoffVector hbound hbound0 (half_pos hε)
+  letI : NeZero n := ⟨Nat.ne_of_gt hn⟩
+  let Cycle := Fin n → Profile G
+  let Index := Cycle × ι
+  have hthreshold : ∀ index : Index,
+      ∃ δ₀ : ℝ, 0 ≤ δ₀ ∧ δ₀ < 1 ∧
+        ∀ δ : ℝ, δ₀ < δ → δ < 1 →
+          |G.discountedContinuationPayoff δ
+              (fun time ↦ index.1 (Fin.ofNat n time)) 0 index.2 -
+            G.cycleAveragePayoff index.1 index.2| < ε / 2 := by
+    intro index
+    exact G.exists_discountFactor_threshold_periodic_continuation_close_cycleAverage
+      index.1 0 index.2 (half_pos hε)
+  obtain ⟨δ₀, hδ₀0, hδ₀1, hδ₀⟩ :=
+    exists_common_discountFactor_threshold_of_finite hthreshold
+  refine ⟨δ₀, hδ₀0, hδ₀1, ?_⟩
+  intro δ hδ hδ1 value hvalue
+  obtain ⟨cycle, hcycle⟩ := happrox n le_rfl value hvalue
+  refine ⟨n, inferInstance, cycle, ?_⟩
+  have hcycleAverage : G.cycleAveragePayoff cycle =
+      (n : ℝ)⁻¹ • ∑ time, G.payoffVector (cycle time) := by
+    funext who
+    simp [cycleAveragePayoff, payoffVector, Pi.smul_apply,
+      Finset.sum_apply, smul_eq_mul, Finset.mul_sum]
+  rw [← hcycleAverage] at hcycle
+  intro who
+  have hperiod := hδ₀ δ hδ hδ1 (cycle, who)
+  have hcoordinate :
+      |G.cycleAveragePayoff cycle who - value who| < ε / 2 := by
+    have hle := norm_le_pi_norm
+      (G.cycleAveragePayoff cycle - value) who
+    rw [Pi.sub_apply, Real.norm_eq_abs] at hle
+    exact hle.trans_lt hcycle
+  rw [abs_lt] at hperiod hcoordinate ⊢
+  constructor <;> linarith
 
 
 end KernelGame
