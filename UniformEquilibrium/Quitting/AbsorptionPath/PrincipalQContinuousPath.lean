@@ -668,6 +668,211 @@ theorem PrincipalQClockMassPath.exists_absorptionPrefix_meshSupport_witness
     rw [hclock] at hclockBound
     exact hclockBound
 
+omit [DecidableEq ι] in
+/-- A strict player-mass increase on a subterminal interval of a compact
+limit has an in-interval point where that player's limiting singleton-matrix
+residual is nonpositive. -/
+theorem exists_limit_residual_nonpos_of_playerMass_increase
+    [Nonempty ι]
+    (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
+    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι)
+    {terminal : ι → ℝ} (limitPath : Path (0 : ι → ℝ) terminal)
+    (subsequence : ℕ → ℕ) (hsubsequence : StrictMono subsequence)
+    (htendsto : Tendsto (fun n => boundedFunctionOfPath
+      (principalQVanishingPlayerPath M hdiag hQ weight (subsequence n)))
+        atTop (nhds (boundedFunctionOfPath limitPath)))
+    (who : ι) (first second : unitInterval) (hle : first ≤ second)
+    (hsecondOne : (second : ℝ) < 1)
+    (hincrease : limitPath first who < limitPath second who) :
+    ∃ witness ∈ Icc first second,
+      ∑ owner, (limitPath 1 owner - limitPath witness owner) * M who owner ≤ 0 := by
+  have hmassAt (parameter : unitInterval) : Tendsto
+      (fun n => principalQVanishingPlayerPath M hdiag hQ weight
+        (subsequence n) parameter) atTop
+      (nhds (limitPath parameter)) := by
+    exact ((BoundedContinuousFunction.lipschitz_eval_const parameter).continuous
+      |>.tendsto (boundedFunctionOfPath limitPath)).comp htendsto
+  have hfirst : Tendsto
+      (fun n => principalQVanishingPlayerPath M hdiag hQ weight
+        (subsequence n) first who) atTop (nhds (limitPath first who)) :=
+    ((continuous_apply who).tendsto _).comp (hmassAt first)
+  have hsecond : Tendsto
+      (fun n => principalQVanishingPlayerPath M hdiag hQ weight
+        (subsequence n) second who) atTop (nhds (limitPath second who)) :=
+    ((continuous_apply who).tendsto _).comp (hmassAt second)
+  have hscale : Tendsto
+      (fun n => principalQVanishingScale (subsequence n)) atTop (nhds 0) :=
+    tendsto_principalQVanishingScale.comp hsubsequence.tendsto_atTop
+  have heventuallyPrefix : ∀ᶠ n in atTop,
+      (second : ℝ) ≤ 1 - principalQVanishingScale (subsequence n) := by
+    have hsmall := hscale.eventually_lt_const (sub_pos.mpr hsecondOne)
+    filter_upwards [hsmall] with n hn
+    linarith
+  have heventuallyIncrease : ∀ᶠ n in atTop,
+      principalQVanishingPlayerPath M hdiag hQ weight
+          (subsequence n) first who <
+        principalQVanishingPlayerPath M hdiag hQ weight
+          (subsequence n) second who :=
+    hfirst.eventually_lt hsecond hincrease
+  obtain ⟨start, hstart⟩ := eventually_atTop.1
+    (heventuallyPrefix.and heventuallyIncrease)
+  let tailIndex : ℕ → ℕ := fun n => start + n
+  have htailIndex : StrictMono tailIndex := by
+    intro a b hab
+    dsimp [tailIndex]
+    omega
+  have hprefix (n : ℕ) : (second : ℝ) ≤
+      1 - principalQVanishingScale (subsequence (tailIndex n)) :=
+    (hstart (tailIndex n) (by simp [tailIndex])).1
+  have hincreaseApprox (n : ℕ) :
+      principalQVanishingPlayerPath M hdiag hQ weight
+          (subsequence (tailIndex n)) first who <
+        principalQVanishingPlayerPath M hdiag hQ weight
+          (subsequence (tailIndex n)) second who :=
+    (hstart (tailIndex n) (by simp [tailIndex])).2
+  let approximation (n : ℕ) :=
+    principalQVanishingApproximation M hdiag hQ (subsequence (tailIndex n))
+  choose witness hwitnessInterval hwitnessBound using fun n =>
+    (approximation n).mass.exists_absorptionPrefix_meshSupport_witness
+      weight (approximation n).start_lt_one (approximation n).node_time
+      (approximation n).mesh_supported who first second hle (hprefix n)
+      (hincreaseApprox n)
+  obtain ⟨witnessLimit, witnessSubsequence, hwitnessSubsequence,
+      hwitnessTendsto⟩ := CompactSpace.tendsto_subseq witness
+  let index : ℕ → ℕ := fun n => tailIndex (witnessSubsequence n)
+  have hindex : StrictMono index := htailIndex.comp hwitnessSubsequence
+  have hmassIndex : Tendsto
+      (fun n => boundedFunctionOfPath
+        (principalQVanishingPlayerPath M hdiag hQ weight
+          (subsequence (index n)))) atTop
+      (nhds (boundedFunctionOfPath limitPath)) :=
+    htendsto.comp hindex.tendsto_atTop
+  have hmassWitness : Tendsto
+      (fun n => principalQVanishingPlayerPath M hdiag hQ weight
+        (subsequence (index n)) (witness (witnessSubsequence n))) atTop
+      (nhds (limitPath witnessLimit)) := by
+    have hpair : Tendsto
+        (fun n => (boundedFunctionOfPath
+            (principalQVanishingPlayerPath M hdiag hQ weight
+              (subsequence (index n))),
+          witness (witnessSubsequence n))) atTop
+        (nhds (boundedFunctionOfPath limitPath, witnessLimit)) := by
+      rw [nhds_prod_eq]
+      exact hmassIndex.prodMk hwitnessTendsto
+    have := (continuous_eval.tendsto
+      (boundedFunctionOfPath limitPath, witnessLimit)).comp hpair
+    change Tendsto
+      (fun n => boundedFunctionOfPath
+        (principalQVanishingPlayerPath M hdiag hQ weight
+          (subsequence (index n))) (witness (witnessSubsequence n))) atTop
+      (nhds (boundedFunctionOfPath limitPath witnessLimit))
+    simpa only [Function.comp_def] using this
+  have hresidual : Tendsto
+      (fun n => ∑ owner,
+        (principalQVanishingPlayerPath M hdiag hQ weight
+            (subsequence (index n)) 1 owner -
+          principalQVanishingPlayerPath M hdiag hQ weight
+            (subsequence (index n))
+              (witness (witnessSubsequence n)) owner) * M who owner) atTop
+      (nhds (∑ owner,
+        (limitPath 1 owner - limitPath witnessLimit owner) * M who owner)) := by
+    have hmassOne : Tendsto
+        (fun n => principalQVanishingPlayerPath M hdiag hQ weight
+          (subsequence (index n)) 1) atTop (nhds (limitPath 1)) := by
+      exact ((BoundedContinuousFunction.lipschitz_eval_const 1).continuous
+        |>.tendsto (boundedFunctionOfPath limitPath)).comp hmassIndex
+    apply tendsto_finsetSum
+    intro owner _
+    exact ((((continuous_apply owner).tendsto _).comp hmassOne).sub
+      (((continuous_apply owner).tendsto _).comp hmassWitness)).mul_const _
+  have hscaleIndex : Tendsto
+      (fun n => principalQVanishingScale (subsequence (index n))) atTop
+      (nhds 0) :=
+    tendsto_principalQVanishingScale.comp
+      (hsubsequence.comp hindex).tendsto_atTop
+  have hwitnessReal : Tendsto
+      (fun n => (witness (witnessSubsequence n) : ℝ)) atTop
+      (nhds (witnessLimit : ℝ)) :=
+    (continuous_subtype_val.tendsto witnessLimit).comp hwitnessTendsto
+  let error (n : ℕ) :=
+    principalQMatrixSpeedBound M *
+        (1 - (witness (witnessSubsequence n) : ℝ)) *
+          principalQVanishingScale (subsequence (index n)) +
+      principalQVanishingScale (subsequence (index n)) *
+        principalQMassImage M (weight : ι → ℝ) who
+  have herror : Tendsto error atTop (nhds 0) := by
+    dsimp [error]
+    convert ((tendsto_const_nhds.mul
+      (tendsto_const_nhds.sub hwitnessReal)).mul hscaleIndex).add
+        (hscaleIndex.mul_const
+          (principalQMassImage M (weight : ι → ℝ) who)) using 1
+    ring_nf
+  have hbound (n : ℕ) :
+      (∑ owner,
+        (principalQVanishingPlayerPath M hdiag hQ weight
+            (subsequence (index n)) 1 owner -
+          principalQVanishingPlayerPath M hdiag hQ weight
+            (subsequence (index n))
+              (witness (witnessSubsequence n)) owner) * M who owner) ≤
+        error n := by
+    have hs := hwitnessBound (witnessSubsequence n)
+    rw [zeroPrincipalQClockNode_scaledState, zero_add] at hs
+    have hdecompose :
+        ∑ owner,
+          (principalQVanishingPlayerPath M hdiag hQ weight
+              (subsequence (index n)) 1 owner -
+            principalQVanishingPlayerPath M hdiag hQ weight
+              (subsequence (index n))
+                (witness (witnessSubsequence n)) owner) * M who owner =
+          principalQMassImage M
+              ((approximation (witnessSubsequence n)).mass.mass 1 -
+                (approximation (witnessSubsequence n)).mass.absorptionPlayerPath
+                  weight (approximation (witnessSubsequence n)).start_lt_one
+                  (witness (witnessSubsequence n))) who +
+            principalQVanishingScale (subsequence (index n)) *
+              principalQMassImage M (weight : ι → ℝ) who := by
+      rw [(principalQVanishingPlayerPath M hdiag hQ weight
+        (subsequence (index n))).target]
+      change (∑ owner,
+        (((approximation (witnessSubsequence n)).mass.mass 1 +
+            principalQVanishingScale (subsequence (index n)) •
+              (weight : ι → ℝ)) owner -
+          (approximation (witnessSubsequence n)).mass.absorptionPlayerPath
+            weight (approximation (witnessSubsequence n)).start_lt_one
+            (witness (witnessSubsequence n)) owner) * M who owner) = _
+      unfold principalQMassImage
+      simp only [Pi.add_apply, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
+      rw [Finset.mul_sum, ← Finset.sum_add_distrib]
+      apply Finset.sum_congr rfl
+      intro owner _
+      ring
+    let base :=
+      principalQMassImage M
+        ((approximation (witnessSubsequence n)).mass.mass 1 -
+          (approximation (witnessSubsequence n)).mass.absorptionPlayerPath
+            weight (approximation (witnessSubsequence n)).start_lt_one
+            (witness (witnessSubsequence n))) who
+    let filler := principalQVanishingScale (subsequence (index n)) *
+      principalQMassImage M (weight : ι → ℝ) who
+    have hs' :
+        base ≤
+          principalQMatrixSpeedBound M *
+            (1 - (witness (witnessSubsequence n) : ℝ)) *
+              principalQVanishingScale (subsequence (index n)) := by
+      simpa only [base, approximation, index] using hs
+    calc
+      _ = base + filler := by simpa only [base, filler] using hdecompose
+      _ = filler + base := add_comm _ _
+      _ ≤ filler + principalQMatrixSpeedBound M *
+          (1 - (witness (witnessSubsequence n) : ℝ)) *
+            principalQVanishingScale (subsequence (index n)) :=
+        add_le_add_right hs' filler
+      _ = error n := by dsimp [error, filler]; ring
+  refine ⟨witnessLimit, ?_, ?_⟩
+  · exact isClosed_Icc.mem_of_tendsto hwitnessTendsto
+      (Eventually.of_forall fun n => hwitnessInterval (witnessSubsequence n))
+  · exact le_of_tendsto_of_tendsto' hresidual herror hbound
+
 /-- Bundle the reversed clock mass and terminal filler as a continuous
 singleton absorption path. -/
 def PrincipalQClockMassPath.toContinuousAbsorptionPath
