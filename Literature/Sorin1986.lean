@@ -1,5 +1,6 @@
 import Mathlib
 import GameTheory.Analysis.Payoff
+import GameTheory.Repeated.Trigger
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.PMFProduct.Bool
 import MathUE.BanachLimit
@@ -3217,6 +3218,237 @@ theorem property_3 (G : FiniteStageGame) :
         G.banachFeasiblePayoffs L = G.correlatedFeasiblePayoffs := by
   exact ⟨property_3_finite G, property_3_discounted G,
     property_3_banach G⟩
+
+/-! The trigger construction reads the public realized-action part of a
+stochastic history through GameTheory's generic first-mismatch monitor. -/
+
+/-- A payoff-irrelevant utility game whose profiles are the stage game's
+joint actions.  It lets us reuse the generic public first-mismatch grammar. -/
+private def FiniteStageGame.actionMonitoringGame (G : FiniteStageGame) :
+    UtilityGame G.Player where
+  form := {
+    sig := {
+      Strategy := G.Action
+      Outcome := Unit
+    }
+    play := fun _profile ↦ GameTheory.Math.Probability.FinDist.pure ()
+  }
+  utility := fun _outcome _who ↦ 0
+
+/-- Public realized actions from a stochastic history, in chronological
+list order. -/
+private def FiniteStageGame.publicActionHistory (G : FiniteStageGame)
+    {time : ℕ} (history : G.repeatedGame.Hist time) :
+    G.actionMonitoringGame.ProfileHistory :=
+  List.ofFn fun k ↦ (history.1 k).2
+
+/-- The first public action-profile mismatch, with one mismatching player
+selected as its culprit. -/
+private noncomputable def FiniteStageGame.publicTriggerStatus
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    {time : ℕ} (history : G.repeatedGame.Hist time) : Option G.Player :=
+  G.actionMonitoringGame.triggerStatus path (G.publicActionHistory history)
+
+private theorem FiniteStageGame.publicTriggerStatus_eq_none
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    {time : ℕ} (history : G.repeatedGame.Hist time)
+    (hpath : ∀ k, (history.1 k).2 = path k) :
+    G.publicTriggerStatus path history = none := by
+  let play : ℕ → (∀ who, G.Action who) := fun k ↦
+    if hk : k < time then (history.1 ⟨k, hk⟩).2 else path k
+  have hstatus := G.actionMonitoringGame.triggerStatus_ofFn_eq_none
+    path play time (fun k hk ↦ by simp [play, hk, hpath ⟨k, hk⟩])
+  simpa [FiniteStageGame.publicTriggerStatus,
+    FiniteStageGame.publicActionHistory, play] using hstatus
+
+private theorem FiniteStageGame.publicTriggerStatus_eq_some_of_first
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    (who : G.Player) {first time : ℕ}
+    (history : G.repeatedGame.Hist time)
+    (hfirst : first < time)
+    (hmismatch : (history.1 ⟨first, hfirst⟩).2 ≠ path first)
+    (hbefore : ∀ k (hk : k < first),
+      (history.1 ⟨k, hk.trans hfirst⟩).2 = path k)
+    (hother : ∀ other, other ≠ who →
+      (history.1 ⟨first, hfirst⟩).2 other = path first other) :
+    G.publicTriggerStatus path history = some who := by
+  let play : ℕ → (∀ who, G.Action who) := fun k ↦
+    if hk : k < time then (history.1 ⟨k, hk⟩).2 else path k
+  have hmismatch' : play first ≠ path first := by
+    dsimp only [play]
+    rw [dif_pos hfirst]
+    exact hmismatch
+  have hbefore' : ∀ k < first, play k = path k := by
+    intro k hk
+    dsimp only [play]
+    rw [dif_pos (hk.trans hfirst)]
+    exact hbefore k hk
+  have hother' : ∀ other, other ≠ who →
+      play first other = path first other := by
+    intro other hne
+    dsimp only [play]
+    rw [dif_pos hfirst]
+    exact hother other hne
+  have hstatus := G.actionMonitoringGame.triggerStatus_ofFn_eq_some_of_first
+    path play who hfirst hmismatch' hbefore' hother'
+  simpa [FiniteStageGame.publicTriggerStatus,
+    FiniteStageGame.publicActionHistory, play] using hstatus
+
+/-- Read one player's mixed action from an opponent punishment profile;
+the punished player's own coordinate is irrelevant and gets a fixed action. -/
+private noncomputable def FiniteStageGame.punishmentMixedAction
+    (G : FiniteStageGame)
+    (punishment : ∀ culprit, G.MixedOpponentProfile culprit)
+    (culprit player : G.Player) : PMF (G.Action player) :=
+  if hplayer : player = culprit then
+    PMF.pure (Classical.choice (G.nonemptyAction player))
+  else
+    punishment culprit ⟨player, hplayer⟩
+
+private theorem FiniteStageGame.punishmentMixedAction_of_ne
+    (G : FiniteStageGame)
+    (punishment : ∀ culprit, G.MixedOpponentProfile culprit)
+    {culprit player : G.Player} (hplayer : player ≠ culprit) :
+    G.punishmentMixedAction punishment culprit player =
+      punishment culprit ⟨player, hplayer⟩ := by
+  simp [FiniteStageGame.punishmentMixedAction, hplayer]
+
+/-- Follow a pure public calendar until its first realized-action mismatch;
+thereafter the nonculprits use the selected culprit's time-varying mixed
+punishment. -/
+private noncomputable def FiniteStageGame.triggerMonitoredProfile
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit) :
+    G.kernel.realizedActionMonitoring.MonitoredProfile :=
+  fun player time history ↦
+    match G.actionMonitoringGame.triggerStatus path (List.ofFn history) with
+    | none => PMF.pure (path time player)
+    | some culprit => G.punishmentMixedAction (punishment time) culprit player
+
+/-- The stochastic behavior profile implementing the public trigger. -/
+private noncomputable def FiniteStageGame.triggerBehaviorProfile
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit) :
+    G.BehaviorProfile :=
+  KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile G.kernel
+    (G.triggerMonitoredProfile path punishment)
+
+private theorem FiniteStageGame.triggerMonitoredProfile_of_onPath
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
+    (player : G.Player) {time : ℕ}
+    (history : G.kernel.realizedActionMonitoring.SignalHistory time)
+    (hpath : ∀ k, history k = path k) :
+    G.triggerMonitoredProfile path punishment player time history =
+      PMF.pure (path time player) := by
+  have hstatus := G.actionMonitoringGame.triggerStatus_ofFn_eq_none
+    path (fun k ↦ if hk : k < time then history ⟨k, hk⟩ else path k)
+    time (fun k hk ↦ by simp [hk, hpath ⟨k, hk⟩])
+  simp only [FiniteStageGame.triggerMonitoredProfile]
+  rw [show G.actionMonitoringGame.triggerStatus path (List.ofFn history) = none by
+    simpa using hstatus]
+  rfl
+
+private theorem FiniteStageGame.triggerMonitoredProfile_of_culprit
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
+    (culprit player : G.Player) {time : ℕ}
+    (history : G.kernel.realizedActionMonitoring.SignalHistory time)
+    (hstatus : G.actionMonitoringGame.triggerStatus path
+      (List.ofFn history) = some culprit) :
+    G.triggerMonitoredProfile path punishment player time history =
+      G.punishmentMixedAction (punishment time) culprit player := by
+  simp [FiniteStageGame.triggerMonitoredProfile, hstatus]
+
+/-- Under the prescribed trigger profile no mismatch occurs: the public law
+is the Dirac law on the calendar prefix. -/
+private theorem FiniteStageGame.signalHistoryDist_triggerMonitoredProfile
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit) :
+    ∀ time,
+      G.kernel.realizedActionMonitoring.signalHistoryDist
+          (G.triggerMonitoredProfile path punishment) time =
+        PMF.pure ((fun k : Fin time ↦ path k) :
+          G.kernel.realizedActionMonitoring.SignalHistory time) := by
+  intro time
+  induction time with
+  | zero =>
+      rw [KernelGame.PublicMonitoring.signalHistoryDist_zero]
+      congr 1
+      funext k
+      exact Fin.elim0 k
+  | succ time ih =>
+      rw [KernelGame.PublicMonitoring.signalHistoryDist_succ, ih]
+      change (PMF.pure ((fun k : Fin time ↦ path k) :
+        G.kernel.realizedActionMonitoring.SignalHistory time)).bind _ = _
+      rw [PMF.pure_bind]
+      have hprofile :
+          (fun player ↦ G.triggerMonitoredProfile path punishment
+            player time (fun k : Fin time ↦ path k)) =
+            fun player ↦ PMF.pure (path time player) := by
+        funext player
+        exact G.triggerMonitoredProfile_of_onPath path punishment player
+          (fun k : Fin time ↦ path k) (fun _ ↦ rfl)
+      rw [hprofile]
+      change (Math.PMFProduct.pmfPi
+        (fun player ↦ PMF.pure (path time player))).map
+          (Fin.snoc (α := fun _ ↦ (∀ who, G.Action who))
+            (fun k : Fin time ↦ path k)) = _
+      rw [Math.PMFProduct.pmfPi_pure, PMF.pure_map]
+      congr 1
+      funext k
+      refine Fin.lastCases ?_ (fun j ↦ ?_) k
+      · rw [Fin.snoc_last]
+        rfl
+      · rw [Fin.snoc_castSucc]
+        rfl
+
+/-- The prescribed trigger profile has exactly the calendar stage payoff. -/
+private theorem FiniteStageGame.stageEU_triggerMonitoredProfile
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
+    (time : ℕ) (who : G.Player) :
+    G.kernel.realizedActionMonitoring.stageEU
+        (G.triggerMonitoredProfile path punishment) time who =
+      G.payoff (path time) who := by
+  unfold KernelGame.PublicMonitoring.stageEU
+  rw [G.signalHistoryDist_triggerMonitoredProfile path punishment time]
+  change Math.Probability.expect
+    (PMF.pure ((fun k : Fin time ↦ path k) :
+      G.kernel.realizedActionMonitoring.SignalHistory time)) _ = _
+  rw [Math.Probability.expect_pure]
+  have hprofile :
+      (fun player ↦ G.triggerMonitoredProfile path punishment
+        player time (fun k : Fin time ↦ path k)) =
+        G.kernel.pureMixedProfile (path time) := by
+    funext player
+    exact G.triggerMonitoredProfile_of_onPath path punishment player
+      (fun k : Fin time ↦ path k) (fun _ ↦ rfl)
+  rw [hprofile, G.kernel.mixedExtension_eu_pureMixedProfile]
+  change G.kernel.eu (path time) who = G.payoff (path time) who
+  simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+
+/-- The stochastic implementation of the trigger delivers the ordinary
+calendar average at every positive horizon. -/
+private theorem FiniteStageGame.finitePayoff_triggerBehaviorProfile
+    (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
+      (horizon : ℕ) :
+    G.finitePayoff horizon (G.triggerBehaviorProfile path punishment) =
+      (horizon : ℝ)⁻¹ •
+        ∑ time ∈ Finset.range horizon, G.payoff (path time) := by
+  letI (player : G.Player) : Finite (G.kernel.Strategy player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  funext who
+  unfold FiniteStageGame.finitePayoff
+  unfold FiniteStageGame.triggerBehaviorProfile
+  rw [KernelGame.RealizedActionRepeatedAdapter.finiteAveragePayoff_toBehaviorProfile]
+  unfold KernelGame.PublicMonitoring.finiteAveragePayoff
+  simp_rw [G.stageEU_triggerMonitoredProfile path punishment]
+  simp only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul]
 
 private theorem stageEUAt_securityDeviation_ge
     (G : FiniteStageGame) (profile : G.BehaviorProfile)
