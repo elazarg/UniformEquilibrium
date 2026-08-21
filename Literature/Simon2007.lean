@@ -9167,6 +9167,32 @@ private theorem EpsilonRow.forcedContinue_sub_oneStage_le
     have hp1 := (p n).property.2
     nlinarith
 
+/-- A supported quit action lies at most `η` below its mixed row value. -/
+private theorem EpsilonRow.oneStage_sub_forcedQuitPayoff_le_of_pos
+    (G : QuittingGame) {r : Payoff G.Player} {p : QuitRow G} {η : ℝ}
+    (hp : p ∈ EpsilonRow G η r) (hη : 0 ≤ η) (n : G.Player)
+    (hpos : 0 < (p n : ℝ)) :
+    QuittingOneStagePayoff G r p n - ForcedQuitPayoff G p n ≤ η := by
+  have hcurrent := quittingOneStagePayoff_replace_eq_endpoints G r p n (p n)
+  rw [QuitRow.replace_self] at hcurrent
+  have hendpoint := hp.1 n hpos
+  have hp0 := (p n).property.1
+  have hp1 := (p n).property.2
+  nlinarith
+
+/-- A supported continue action lies at most `η` below its mixed row value. -/
+private theorem EpsilonRow.oneStage_sub_forcedContinuePayoff_le_of_lt_one
+    (G : QuittingGame) {r : Payoff G.Player} {p : QuitRow G} {η : ℝ}
+    (hp : p ∈ EpsilonRow G η r) (hη : 0 ≤ η) (n : G.Player)
+    (hlt : (p n : ℝ) < 1) :
+    QuittingOneStagePayoff G r p n - ForcedContinuePayoff G r p n ≤ η := by
+  have hcurrent := quittingOneStagePayoff_replace_eq_endpoints G r p n (p n)
+  rw [QuitRow.replace_self] at hcurrent
+  have hendpoint := hp.2 n hlt
+  have hp0 := (p n).property.1
+  have hp1 := (p n).property.2
+  nlinarith
+
 /-- Changing the continuation vector changes a forced-continue payoff by its survival factor. -/
 private theorem forcedContinuePayoff_sub
     (G : QuittingGame) (r s : Payoff G.Player) (p : QuitRow G) (n : G.Player) :
@@ -9905,6 +9931,57 @@ private noncomputable def quittingDecisionProcess
       abs_sub_le_of_mem_coordinateInterval G n hM hy hz,
       abs_sub_le_of_mem_coordinateInterval G n hM hy hw⟩
 
+/-- Rows in the generated orbit make the associated quitting DDP support-locally balanced. -/
+private theorem quittingDecisionProcess_balanced
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) {δ : ℝ}
+    (hδ : 0 ≤ δ) (horbit : GeneratesFRowOrbit G δ p) :
+    IsBalanced (quittingDecisionProcess G p n T M hM) δ := by
+  intro state action hpositive
+  by_cases hlive : IsQuittingDDPLive T state
+  · have hempty : ¬state.2.Nonempty := by
+      rw [hlive.2]
+      exact Finset.not_nonempty_empty
+    have hvalueX : quittingDDPValueX G p n T state =
+        QuitTailPayoff G p state.1 n := by
+      simp only [quittingDDPValueX, hempty, dite_false,
+        min_eq_left (le_of_lt hlive.1)]
+    have hrow := horbit state.1
+    change 0 < quittingDDPChoose G p n T state action at hpositive
+    change |quittingDDPValueY G p n T state action -
+      quittingDDPValueX G p n T state| ≤ δ
+    rw [hvalueX, quitTailPayoff_eq_oneStage G p state.1]
+    cases action with
+    | false =>
+        have hcontinue : (p state.1 n : ℝ) < 1 := by
+          simp only [quittingDDPChoose, hlive, if_pos, quittingBernoulli,
+            PMF.ofFintype_apply, Bool.false_eq_true, if_false] at hpositive
+          exact sub_pos.mp (ENNReal.ofReal_pos.mp hpositive)
+        simp only [quittingDDPValueY, hlive, if_pos, Bool.false_eq_true, if_false]
+        rw [abs_le]
+        constructor
+        · have := EpsilonRow.oneStage_sub_forcedContinuePayoff_le_of_lt_one
+              G hrow hδ n hcontinue
+          linarith
+        · exact EpsilonRow.forcedContinue_sub_oneStage_le G hrow hδ n
+    | true =>
+        have hquit : 0 < (p state.1 n : ℝ) := by
+          simp only [quittingDDPChoose, hlive, if_pos, quittingBernoulli,
+            PMF.ofFintype_apply] at hpositive
+          exact ENNReal.ofReal_pos.mp hpositive
+        simp only [quittingDDPValueY, hlive, if_pos]
+        rw [abs_le]
+        constructor
+        · have := EpsilonRow.oneStage_sub_forcedQuitPayoff_le_of_pos
+              G hrow hδ n hquit
+          linarith
+        · have := EpsilonRow.forcedQuitPayoff_le_oneStage_add G hrow hδ n
+          linarith
+  · change |quittingDDPValueY G p n T state action -
+      quittingDDPValueX G p n T state| ≤ δ
+    simp only [quittingDDPValueY, hlive, if_false, sub_self, abs_zero]
+    exact hδ
+
 private theorem PMF.mem_range_of_map_ne_zero {A B : Type*}
     (μ : PMF A) (f : A → B) {b : B} (hb : μ.map f b ≠ 0) : b ∈ Set.range f := by
   classical
@@ -10529,6 +10606,156 @@ private theorem quittingDDP_expectedVariation_le
       gcongr
       exact quittingDDPOwnQuitEvent_totalMass_le_one G p n T M hM S
     _ = ENNReal.ofReal (2 * M) := by simp [c]
+
+/-- The generated quitting DDP crosses an `ε` advantage with probability at most
+` ε² / M²` under the numerical hypothesis of Proposition 3. -/
+private theorem quittingDDP_rawAbsoluteCrossing_le
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    {M ε δ : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (hε : 0 < ε) (hδ : 0 < δ) (hsmall : δ < ε ^ 4 / (2 * M ^ 3))
+    (horbit : GeneratesFRowOrbit G δ p)
+    (S : DDPSemantics (quittingDecisionProcess G p n T M hM)) :
+    (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
+        {stage | ∃ l, ε ≤ |(quittingDecisionProcess G p n T M hM).rawAdvantage stage l|} ≤
+      ENNReal.ofReal (ε ^ 2 / M ^ 2) := by
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hrho : 0 < ε ^ 2 / M ^ 2 := div_pos (sq_pos_of_pos hε) (sq_pos_of_pos hMpos)
+  have hB : 0 < 2 * M := mul_pos (by norm_num) hMpos
+  have hnumerical : δ ≤ ε ^ 2 * (ε ^ 2 / M ^ 2) / (2 * M) := by
+    calc
+      δ ≤ ε ^ 4 / (2 * M ^ 3) := hsmall.le
+      _ = ε ^ 2 * (ε ^ 2 / M ^ 2) / (2 * M) := by
+        field_simp
+  exact DiscreteDecisionProcess.rawAbsoluteCrossing_le
+    (quittingDecisionProcess G p n T M hM) S hδ hε hrho hB
+      (quittingDecisionProcess_balanced G p n T M hM hδ.le horbit)
+      (quittingDDP_expectedVariation_le G p n T M hM S) hnumerical
+
+/-- The unique live prefix of length `T` in the quitting decision process. -/
+private def quittingDDPLivePath
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) :
+    DDPFinitePath (quittingDecisionProcess G p n T M hM) T where
+  x i := (i, ∅)
+  y _i := false
+
+/-- Each factor of the live DDP prefix is exactly the corresponding row-survival mass. -/
+private theorem quittingDDPLivePath_factor
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) (i : Fin T) :
+    let path := quittingDDPLivePath G p n T M hM
+    (quittingDecisionProcess G p n T M hM).choose (path.x i.castSucc) (path.y i) *
+        (quittingDecisionProcess G p n T M hM).move
+          (path.x i.castSucc) (path.y i) (path.x i.succ) =
+      ENNReal.ofReal (1 - QuitProbability G (p i)) := by
+  classical
+  let row := (p i).replace G n 0
+  let advance : Finset G.Player → QuittingDDPState G := fun A => (i + 1, A)
+  have hadvance : Function.Injective advance := fun A B h => congrArg Prod.snd h
+  have hmap : ((coalitionPMF G row).map advance) (advance ∅) = coalitionPMF G row ∅ := by
+    rw [PMF.map_apply, tsum_eq_single ∅]
+    · simp
+    · intro A hA
+      rw [if_neg]
+      exact fun h => hA (hadvance h.symm)
+  have hlive : IsQuittingDDPLive T (i, (∅ : Finset G.Player)) := ⟨i.2, rfl⟩
+  change quittingDDPChoose G p n T (i, ∅) false *
+      quittingDDPMove G p n T (i, ∅) false (i + 1, ∅) = _
+  simp only [quittingDDPChoose, quittingDDPMove, hlive, if_pos,
+    Bool.false_eq_true, if_false]
+  change quittingBernoulli (p i n) false *
+      ((coalitionPMF G row).map advance) (advance ∅) = _
+  rw [hmap]
+  rw [quittingBernoulli, PMF.ofFintype_apply, coalitionPMF, PMF.ofFintype_apply]
+  simp only [Bool.false_eq_true, if_false]
+  rw [← ENNReal.ofReal_mul (sub_nonneg.mpr (p i n).property.2)]
+  congr 1
+  have hempty : CoalitionProbability G row ∅ = 1 - QuitProbability G row := by
+    simp [CoalitionProbability, QuitProbability]
+  rw [hempty]
+  have hreplace := one_sub_quitProbability_replace G (p i) n (p i n)
+  rw [QuitRow.replace_self] at hreplace
+  exact hreplace.symm
+
+/-- The live DDP cylinder has the quitting profile's finite survival probability. -/
+private theorem quittingDDPLivePath_probability
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) :
+    (quittingDDPLivePath G p n T M hM).probability
+        (quittingDecisionProcess G p n T M hM) =
+      ENNReal.ofReal (tailSurvival G p 0 T) := by
+  rw [DDPFinitePath.probability]
+  simp_rw [quittingDDPLivePath_factor G p n T M hM]
+  rw [← ENNReal.ofReal_prod_of_nonneg]
+  · congr 1
+    simp only [tailSurvival, zero_add]
+    exact Fin.prod_univ_eq_prod_range
+      (fun i : ℕ => 1 - QuitProbability G (p i)) T
+  · intro i _hi
+    exact sub_nonneg.mpr (quitProbability_mem_Icc G (p i)).2
+
+/-- Along the live prefix, the DDP advantage is the player's continue ledger. -/
+private theorem quittingDDPLivePath_advantage
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (k : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) :
+    (quittingDDPLivePath G p n (k + 1) M hM).advantage
+        (quittingDecisionProcess G p n (k + 1) M hM) =
+      ContinueLedger G p n (k + 1) := by
+  rw [DDPFinitePath.advantage, ContinueLedger]
+  rw [← Fin.sum_univ_eq_sum_range (fun i : ℕ =>
+    ForcedContinuePayoff G (QuitTailPayoff G p (i + 1)) (p i) n -
+      QuitTailPayoff G p i n) (k + 1)]
+  apply Finset.sum_congr rfl
+  intro i _hi
+  have hlive : IsQuittingDDPLive (k + 1) (i, (∅ : Finset G.Player)) := ⟨i.2, rfl⟩
+  have hempty : ¬(∅ : Finset G.Player).Nonempty := Finset.not_nonempty_empty
+  change quittingDDPValueY G p n (k + 1) (i, ∅) false -
+      quittingDDPValueX G p n (k + 1) (i, ∅) = _
+  simp only [quittingDDPValueY, hlive, if_pos, Bool.false_eq_true, if_false,
+    quittingDDPValueX, hempty, dite_false, min_eq_left (le_of_lt i.2)]
+
+/-- A ledger crossing forces the live-prefix survival probability below the DDP crossing bound. -/
+private theorem tailSurvival_le_of_continueLedger_crossing
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    {M ε δ : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (hε : 0 < ε) (hδ : 0 < δ) (hsmall : δ < ε ^ 4 / (2 * M ^ 3))
+    (horbit : GeneratesFRowOrbit G δ p) (hledger : ε ≤ ContinueLedger G p n T) :
+    tailSurvival G p 0 T ≤ ε ^ 2 / M ^ 2 := by
+  rcases ddpSemantics_exists (quittingDecisionProcess G p n T M hM) with ⟨S⟩
+  have hcross := quittingDDP_rawAbsoluteCrossing_le G p n T hM hε hδ hsmall horbit S
+  cases T with
+  | zero =>
+      rw [ContinueLedger.zero] at hledger
+      linarith
+  | succ k =>
+      let P := quittingDecisionProcess G p n (k + 1) M hM
+      let path := quittingDDPLivePath G p n (k + 1) M hM
+      let cylinder : Set (ℕ → DDPStage P) := DDPPath.ofRaw P ⁻¹' DDPCylinder P path
+      have hsubset : cylinder ⊆
+          {stage | ∃ l, ε ≤ |P.rawAdvantage stage l|} := by
+        intro stage hstage
+        refine ⟨k, ?_⟩
+        have hadvantage : P.rawAdvantage stage k = ContinueLedger G p n (k + 1) := by
+          calc
+            P.rawAdvantage stage k =
+                DDPAdvantage P (DDPPath.ofRaw P stage) k := rfl
+            _ = ((DDPPath.ofRaw P stage).prefix P (k + 1)).advantage P :=
+              (DDPFinitePath.advantage_prefix P (DDPPath.ofRaw P stage) k).symm
+            _ = path.advantage P := by rw [hstage]
+            _ = ContinueLedger G p n (k + 1) :=
+              quittingDDPLivePath_advantage G p n k M hM
+        rw [hadvantage, abs_of_nonneg (hε.le.trans hledger)]
+        exact hledger
+      have hcylinder : P.rawLawFrom (0, ∅) cylinder =
+          ENNReal.ofReal (tailSurvival G p 0 (k + 1)) := by
+        rw [P.rawLawFrom_ddpCylinder (0, ∅) path rfl]
+        exact quittingDDPLivePath_probability G p n (k + 1) M hM
+      have hbound : ENNReal.ofReal (tailSurvival G p 0 (k + 1)) ≤
+          ENNReal.ofReal (ε ^ 2 / M ^ 2) := by
+        rw [← hcylinder]
+        exact (measure_mono hsubset).trans hcross
+      exact (ENNReal.ofReal_le_ofReal_iff
+        (div_nonneg (sq_nonneg ε) (sq_nonneg M))).mp hbound
 
 /--
 Proposition 3.  For `0 < ε ≤ 1`, `0 < δ < ε⁴/(2M³)`, an `ε`-rational
