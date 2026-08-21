@@ -4066,36 +4066,36 @@ private theorem DiscreteDecisionProcess.boundedFirstReturn_decomposition
     _ = _ := by rw [hhitIntegral, hresidualIntegral]
 
 /-- Centering the residual path at any state costs at most its mass times the value bound. -/
-private theorem DiscreteDecisionProcess.boundedFirstReturn_centered_bound
+private theorem DiscreteDecisionProcess.boundedFirstReturn_centered_bound_of_uniform
     (P : DiscreteDecisionProcess) (S : DDPSemantics P)
-    (x c : P.X) (y : P.Y x) (A : Set P.X) (N : ℕ) (hN : 1 ≤ N) :
+    (x : P.X) (y : P.Y x) (A : Set P.X) (N : ℕ) (hN : 1 ≤ N)
+    (r : ℝ) (hr : ∀ z (w : P.Y z), |P.valueY z w - r| ≤ P.valueDifferenceBound) :
     |P.valueY x y -
         (∑' z, (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z) -
         (P.rawLawAfterAction x y
-          (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ).toReal * P.valueX c| ≤
+          (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ).toReal * r| ≤
       P.valueDifferenceBound *
         (P.rawLawAfterAction x y
           (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ).toReal := by
   let E := (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ
   let mu := P.rawLawAfterAction x y
-  let cAction := Classical.choose (P.choose c).support_nonempty
   have hrawIntegrable : Integrable (P.rawStageValue N) mu := by
     exact P.integrable_rawStageValue (PMF.pure (⟨x, y⟩ : DDPStage P)) N
-  have hconstIntegrable : Integrable (fun _stage : ℕ → DDPStage P => P.valueX c)
+  have hconstIntegrable : Integrable (fun _stage : ℕ → DDPStage P => r)
       (mu.restrict E) := integrable_const _
   have hcenter :
-      (∫ stage in E, P.rawStageValue N stage - P.valueX c ∂mu) =
+      (∫ stage in E, P.rawStageValue N stage - r ∂mu) =
         (∫ stage in E, P.rawStageValue N stage ∂mu) -
-          (mu E).toReal * P.valueX c := by
+          (mu E).toReal * r := by
     rw [integral_sub hrawIntegrable.integrableOn hconstIntegrable]
     rw [setIntegral_const, Measure.real_def]
     rfl
   have hbound (stage : ℕ → DDPStage P) :
-    ‖P.rawStageValue N stage - P.valueX c‖ ≤ P.valueDifferenceBound := by
+      ‖P.rawStageValue N stage - r‖ ≤ P.valueDifferenceBound := by
     simpa only [DiscreteDecisionProcess.rawStageValue, Real.norm_eq_abs] using
-      (P.valueDifference (stage N).1 c (stage N).2 cAction).2.1
+      hr (stage N).1 (stage N).2
   have hcenterBound :
-      ‖∫ stage in E, P.rawStageValue N stage - P.valueX c ∂mu‖ ≤
+      ‖∫ stage in E, P.rawStageValue N stage - r ∂mu‖ ≤
         P.valueDifferenceBound * (mu E).toReal := by
     exact norm_setIntegral_le_of_norm_le_const (measure_lt_top mu E)
       (fun stage _hstage => hbound stage)
@@ -4106,6 +4106,22 @@ private theorem DiscreteDecisionProcess.boundedFirstReturn_centered_bound
         ∫ stage in E, P.rawStageValue N stage ∂mu at hdecomposition
   rw [hdecomposition]
   simpa only [add_sub_cancel_left, Real.norm_eq_abs] using hcenterBound
+
+/-- Centering at a state value satisfies the uniform residual hypothesis automatically. -/
+private theorem DiscreteDecisionProcess.boundedFirstReturn_centered_bound
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x c : P.X) (y : P.Y x) (A : Set P.X) (N : ℕ) (hN : 1 ≤ N) :
+    |P.valueY x y -
+        (∑' z, (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z) -
+        (P.rawLawAfterAction x y
+          (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ).toReal * P.valueX c| ≤
+      P.valueDifferenceBound *
+        (P.rawLawAfterAction x y
+          (DDPPath.ofRaw P ⁻¹' ReturnsBefore P A N)ᶜ).toReal := by
+  apply P.boundedFirstReturn_centered_bound_of_uniform S x y A N hN (P.valueX c)
+  intro z w
+  simpa only using
+    (P.valueDifference z c w (Classical.choose (P.choose c).support_nonempty)).2.1
 
 /-- The raw residual mass is one minus the semantic return-before-horizon probability. -/
 private theorem DiscreteDecisionProcess.rawNotReturnsBefore_toReal
@@ -4133,6 +4149,19 @@ private theorem DiscreteDecisionProcess.rawNotReturnsBefore_toReal
       P.isProbabilityMeasure_rawLawAfterAction x y
     simp
 
+/-- The finite centered bound for any uniformly close reference value. -/
+private theorem DiscreteDecisionProcess.boundedFirstReturn_centered_bound_semantic_of_uniform
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) (y : P.Y x) (A : Set P.X) (N : ℕ) (hN : 1 ≤ N)
+    (r : ℝ) (hr : ∀ z (w : P.Y z), |P.valueY z w - r| ≤ P.valueDifferenceBound) :
+    |P.valueY x y -
+        (∑' z, (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z) -
+        (1 - (S.afterAction x y (ReturnsBefore P A N)).toReal) * r| ≤
+      P.valueDifferenceBound *
+        (1 - (S.afterAction x y (ReturnsBefore P A N)).toReal) := by
+  simpa only [P.rawNotReturnsBefore_toReal S x y A N] using
+    P.boundedFirstReturn_centered_bound_of_uniform S x y A N hN r hr
+
 /-- The centered finite-return bound written entirely with semantic probabilities. -/
 private theorem DiscreteDecisionProcess.boundedFirstReturn_centered_bound_semantic
     (P : DiscreteDecisionProcess) (S : DDPSemantics P)
@@ -4144,6 +4173,70 @@ private theorem DiscreteDecisionProcess.boundedFirstReturn_centered_bound_semant
         (1 - (S.afterAction x y (ReturnsBefore P A N)).toReal) := by
   simpa only [P.rawNotReturnsBefore_toReal S x y A N] using
     P.boundedFirstReturn_centered_bound S x c y A N hN
+
+/-- Enlarging the horizon enlarges each truncated first-return event. -/
+private theorem firstReturnBefore_mono (P : DiscreteDecisionProcess)
+    (A : Set P.X) (z : P.X) : Monotone (FirstReturnBefore P A z) := by
+  intro N M hNM p hp
+  rw [FirstReturnBefore] at hp ⊢
+  rcases mem_iUnion.1 hp with ⟨k, hpk⟩
+  apply mem_iUnion.2
+  exact ⟨⟨k.1, k.2.trans_le hNM⟩, hpk⟩
+
+/-- Truncated first returns exhaust the full first-return event. -/
+private theorem iUnion_firstReturnBefore (P : DiscreteDecisionProcess)
+    (A : Set P.X) (z : P.X) :
+    ⋃ N, FirstReturnBefore P A z N = FirstReturnAt P A z := by
+  ext p
+  simp only [mem_iUnion]
+  constructor
+  · rintro ⟨N, hp⟩
+    rw [FirstReturnBefore] at hp
+    rcases mem_iUnion.1 hp with ⟨k, hpk⟩
+    rw [firstReturnAt_eq_iUnion_time]
+    exact mem_iUnion.2 ⟨k.1 + 1, hpk⟩
+  · intro hp
+    rw [firstReturnAt_eq_iUnion_time] at hp
+    rcases mem_iUnion.1 hp with ⟨j, hpj⟩
+    rcases hpj with ⟨hj, hx, hz, hbefore⟩
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hj)
+    refine ⟨k + 2, ?_⟩
+    rw [FirstReturnBefore]
+    apply mem_iUnion.2
+    exact ⟨⟨k, by omega⟩, Nat.succ_pos k, hx, hz, hbefore⟩
+
+/-- Enlarging the horizon enlarges the truncated return event. -/
+private theorem returnsBefore_mono (P : DiscreteDecisionProcess)
+    (A : Set P.X) : Monotone (ReturnsBefore P A) := by
+  intro N M hNM p hp
+  rw [ReturnsBefore] at hp ⊢
+  rcases mem_iUnion.1 hp with ⟨z, hpz⟩
+  exact mem_iUnion.2 ⟨z, firstReturnBefore_mono P A z hNM hpz⟩
+
+/-- Truncated returns exhaust the full return event. -/
+private theorem iUnion_returnsBefore (P : DiscreteDecisionProcess) (A : Set P.X) :
+    ⋃ N, ReturnsBefore P A N = ReturnsTo P A := by
+  ext p
+  simp only [mem_iUnion]
+  constructor
+  · rintro ⟨N, hp⟩
+    rw [ReturnsBefore] at hp
+    rcases mem_iUnion.1 hp with ⟨z, hpz⟩
+    rw [ReturnsTo]
+    refine mem_iUnion.2 ⟨z, mem_iUnion.2 ⟨?_, ?_⟩⟩
+    · rw [FirstReturnBefore] at hpz
+      rcases mem_iUnion.1 hpz with ⟨k, hpk⟩
+      exact hpk.2.2.1
+    · exact (iUnion_firstReturnBefore P A z).symm ▸ mem_iUnion.2 ⟨N, hpz⟩
+  · intro hp
+    rw [ReturnsTo] at hp
+    rcases mem_iUnion.1 hp with ⟨z, hpz⟩
+    rcases mem_iUnion.1 hpz with ⟨_hz, hpfirst⟩
+    rw [← iUnion_firstReturnBefore P A z] at hpfirst
+    rcases mem_iUnion.1 hpfirst with ⟨N, hpN⟩
+    refine ⟨N, ?_⟩
+    rw [ReturnsBefore]
+    exact mem_iUnion.2 ⟨z, hpN⟩
 
 /-- The return event is measurable as a countable union of first-return events. -/
 private theorem measurableSet_returnsTo (P : DiscreteDecisionProcess) (A : Set P.X) :
@@ -4197,6 +4290,137 @@ private theorem returnProbability_eq_tsum_firstReturnProbability
   rw [hunion]
   exact measure_iUnion (pairwise_disjoint_firstReturnAt P A)
     (fun z => measurableSet_firstReturnAt P A z)
+
+/-- Fixed-state truncated return probabilities converge to the first-return probability. -/
+private theorem tendsto_firstReturnBeforeProbability (P : DiscreteDecisionProcess)
+    (S : DDPSemantics P) (A : Set P.X) (x : P.X) (y : P.Y x) (z : P.X) :
+    Tendsto (fun N => (S.afterAction x y (FirstReturnBefore P A z N)).toReal)
+      atTop (nhds (FirstReturnProbability P S A x y z).toReal) := by
+  have hmeasure := tendsto_measure_iUnion_atTop
+    (μ := S.afterAction x y) (firstReturnBefore_mono P A z)
+  rw [iUnion_firstReturnBefore P A z] at hmeasure
+  have hfinite : FirstReturnProbability P S A x y z ≠ ⊤ := by
+    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    exact measure_ne_top _ _
+  exact (ENNReal.tendsto_toReal hfinite).comp hmeasure
+
+/-- Truncated return probabilities converge to `q_y^A`. -/
+private theorem tendsto_returnsBeforeProbability (P : DiscreteDecisionProcess)
+    (S : DDPSemantics P) (A : Set P.X) (x : P.X) (y : P.Y x) :
+    Tendsto (fun N => (S.afterAction x y (ReturnsBefore P A N)).toReal)
+      atTop (nhds (ReturnProbability P S A x y).toReal) := by
+  have hmeasure := tendsto_measure_iUnion_atTop
+    (μ := S.afterAction x y) (returnsBefore_mono P A)
+  rw [iUnion_returnsBefore P A] at hmeasure
+  have hfinite : ReturnProbability P S A x y ≠ ⊤ := by
+    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    exact measure_ne_top _ _
+  exact (ENNReal.tendsto_toReal hfinite).comp hmeasure
+
+/-- The truncated first-return value sums converge to the full first-return value sum. -/
+private theorem DiscreteDecisionProcess.tendsto_firstReturnBeforeValue
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (A : Set P.X) (x c : P.X) (y : P.Y x) :
+    Tendsto
+      (fun N => ∑' z,
+        (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z)
+      atTop
+      (nhds (∑' z, (FirstReturnProbability P S A x y z).toReal * P.valueX z)) := by
+  let C := ‖P.valueX c‖ + P.valueDifferenceBound
+  let bound : P.X → ℝ := fun z =>
+    (FirstReturnProbability P S A x y z).toReal * C
+  have hreturnFinite : ReturnProbability P S A x y ≠ ⊤ := by
+    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    exact measure_ne_top _ _
+  have hprobabilitySummable : Summable fun z =>
+      (FirstReturnProbability P S A x y z).toReal := by
+    apply ENNReal.summable_toReal
+    rw [← returnProbability_eq_tsum_firstReturnProbability P S A x y]
+    exact hreturnFinite
+  have hboundSummable : Summable bound := hprobabilitySummable.mul_right C
+  apply tendsto_tsum_of_dominated_convergence hboundSummable
+  · intro z
+    exact (tendsto_firstReturnBeforeProbability P S A x y z).mul_const (P.valueX z)
+  · filter_upwards with N z
+    have hsubset : FirstReturnBefore P A z N ⊆ FirstReturnAt P A z := by
+      intro path hpath
+      rw [← iUnion_firstReturnBefore P A z]
+      exact mem_iUnion.2 ⟨N, hpath⟩
+    have hprobability :
+        (S.afterAction x y (FirstReturnBefore P A z N)).toReal ≤
+          (FirstReturnProbability P S A x y z).toReal := by
+      apply ENNReal.toReal_mono
+      · letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+        exact measure_ne_top _ _
+      · exact measure_mono hsubset
+    have hvalue : ‖P.valueX z‖ ≤ C := by
+      calc
+        ‖P.valueX z‖ ≤ ‖P.valueX z - P.valueX c‖ + ‖P.valueX c‖ := by
+          simpa only [sub_add_cancel] using
+            norm_add_le (P.valueX z - P.valueX c) (P.valueX c)
+        _ ≤ P.valueDifferenceBound + ‖P.valueX c‖ := by
+          gcongr
+          simpa only [Real.norm_eq_abs] using
+            (P.valueDifference z c
+              (Classical.choose (P.choose z).support_nonempty)
+              (Classical.choose (P.choose c).support_nonempty)).1
+        _ = C := by simp only [C]; ring
+    change ‖(S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z‖ ≤
+      (FirstReturnProbability P S A x y z).toReal * C
+    rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg]
+    exact mul_le_mul hprobability hvalue (norm_nonneg _) ENNReal.toReal_nonneg
+
+/-- The full first-return value differs from `valueY` only on the no-return mass. -/
+private theorem DiscreteDecisionProcess.firstReturn_centered_bound_of_uniform
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (A : Set P.X) (x : P.X) (y : P.Y x) (r : ℝ)
+    (hr : ∀ z (w : P.Y z), |P.valueY z w - r| ≤ P.valueDifferenceBound) :
+    |P.valueY x y -
+        (∑' z, (FirstReturnProbability P S A x y z).toReal * P.valueX z) -
+        (1 - (ReturnProbability P S A x y).toReal) * r| ≤
+      P.valueDifferenceBound * (1 - (ReturnProbability P S A x y).toReal) := by
+  let truncatedValue : ℕ → ℝ := fun N =>
+    ∑' z, (S.afterAction x y (FirstReturnBefore P A z N)).toReal * P.valueX z
+  let truncatedProbability : ℕ → ℝ := fun N =>
+    (S.afterAction x y (ReturnsBefore P A N)).toReal
+  have hvalue : Tendsto truncatedValue atTop
+      (nhds (∑' z, (FirstReturnProbability P S A x y z).toReal * P.valueX z)) := by
+    exact P.tendsto_firstReturnBeforeValue S A x x y
+  have hprobability : Tendsto truncatedProbability atTop
+      (nhds (ReturnProbability P S A x y).toReal) := by
+    exact tendsto_returnsBeforeProbability P S A x y
+  have hcenter : Tendsto
+      (fun N => P.valueY x y - truncatedValue N -
+        (1 - truncatedProbability N) * r)
+      atTop
+      (nhds (P.valueY x y -
+        (∑' z, (FirstReturnProbability P S A x y z).toReal * P.valueX z) -
+        (1 - (ReturnProbability P S A x y).toReal) * r)) := by
+    exact (tendsto_const_nhds.sub hvalue).sub
+      ((tendsto_const_nhds.sub hprobability).mul_const r)
+  have hleft := hcenter.abs
+  have hright : Tendsto
+      (fun N => P.valueDifferenceBound * (1 - truncatedProbability N))
+      atTop
+      (nhds (P.valueDifferenceBound *
+        (1 - (ReturnProbability P S A x y).toReal))) := by
+    exact tendsto_const_nhds.mul (tendsto_const_nhds.sub hprobability)
+  apply le_of_tendsto_of_tendsto hleft hright
+  filter_upwards [eventually_ge_atTop (1 : ℕ)] with N hN
+  exact P.boundedFirstReturn_centered_bound_semantic_of_uniform S x y A N hN r hr
+
+/-- The full first-return estimate centered at a state value. -/
+private theorem DiscreteDecisionProcess.firstReturn_centered_bound
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (A : Set P.X) (x c : P.X) (y : P.Y x) :
+    |P.valueY x y -
+        (∑' z, (FirstReturnProbability P S A x y z).toReal * P.valueX z) -
+        (1 - (ReturnProbability P S A x y).toReal) * P.valueX c| ≤
+      P.valueDifferenceBound * (1 - (ReturnProbability P S A x y).toReal) := by
+  apply P.firstReturn_centered_bound_of_uniform S A x y (P.valueX c)
+  intro z w
+  simpa only using
+    (P.valueDifference z c w (Classical.choose (P.choose c).support_nonempty)).2.1
 
 /-- A state-started law first samples the action and then follows its forced-action law. -/
 private theorem DDPSemantics.fromState_eq_initialActionMixture
@@ -4380,6 +4604,95 @@ structure ReturnValueData (P : DiscreteDecisionProcess) (S : DDPSemantics P) whe
         (ReturnProbability P S A x y).toReal
   zeroBounds : ∀ A x y, ReturnProbability P S A x y = 0 →
     lower ≤ value A x y ∧ value A x y ≤ upper
+
+/-- A positive-return conditional value is within `M` of every sampled action value. -/
+private theorem ReturnValueData.valueY_sub_value_le_of_positive
+    {P : DiscreteDecisionProcess} {S : DDPSemantics P} (R : ReturnValueData P S)
+    (A : Set P.X) (x : P.X) (y : P.Y x)
+    (hq : 0 < ReturnProbability P S A x y) (z : P.X) (w : P.Y z) :
+    |P.valueY z w - R.value A x y| ≤ P.valueDifferenceBound := by
+  let q := (ReturnProbability P S A x y).toReal
+  let a : P.X → ℝ := fun t => (FirstReturnProbability P S A x y t).toReal
+  have hqFinite : ReturnProbability P S A x y ≠ ⊤ := by
+    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    exact measure_ne_top _ _
+  have hqPos : 0 < q := ENNReal.toReal_pos (ne_of_gt hq) hqFinite
+  have haSummable : Summable a := by
+    apply ENNReal.summable_toReal
+    rw [← returnProbability_eq_tsum_firstReturnProbability P S A x y]
+    exact hqFinite
+  have hsumA : ∑' t, a t = q := by
+    have hreal := ENNReal.tsum_toReal_eq fun t => by
+      letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+      exact (show FirstReturnProbability P S A x y t ≠ ⊤ from measure_ne_top _ _)
+    rw [← returnProbability_eq_tsum_firstReturnProbability P S A x y] at hreal
+    exact hreal
+  have hvalueBound (t : P.X) :
+      ‖P.valueX t‖ ≤ ‖P.valueY z w‖ + P.valueDifferenceBound := by
+    calc
+      ‖P.valueX t‖ ≤ ‖P.valueX t - P.valueY z w‖ + ‖P.valueY z w‖ := by
+        simpa only [sub_add_cancel] using
+          norm_add_le (P.valueX t - P.valueY z w) (P.valueY z w)
+      _ ≤ P.valueDifferenceBound + ‖P.valueY z w‖ := by
+        gcongr
+        simpa only [Real.norm_eq_abs, abs_sub_comm] using
+          (P.valueDifference z t w
+            (Classical.choose (P.choose t).support_nonempty)).2.1
+      _ = _ := by ring
+  have hvalueSummable : Summable fun t => a t * P.valueX t := by
+    apply Summable.of_norm_bounded
+      (haSummable.mul_right (‖P.valueY z w‖ + P.valueDifferenceBound))
+    intro t
+    rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg]
+    exact mul_le_mul_of_nonneg_left (hvalueBound t) ENNReal.toReal_nonneg
+  have hdiffSummable : Summable fun t => a t * (P.valueY z w - P.valueX t) := by
+    apply Summable.of_norm_bounded (haSummable.mul_right P.valueDifferenceBound)
+    intro t
+    rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg]
+    exact mul_le_mul_of_nonneg_left
+      (by simpa only [Real.norm_eq_abs] using
+        (P.valueDifference z t w
+          (Classical.choose (P.choose t).support_nonempty)).2.1)
+      ENNReal.toReal_nonneg
+  have hsumDiff :
+      (∑' t, a t * (P.valueY z w - P.valueX t)) =
+        q * P.valueY z w - ∑' t, a t * P.valueX t := by
+    simp_rw [mul_sub]
+    rw [(haSummable.mul_right (P.valueY z w)).tsum_sub hvalueSummable]
+    rw [Summable.tsum_mul_right (P.valueY z w) haSummable, hsumA]
+  have hdiffNorm :
+      ‖∑' t, a t * (P.valueY z w - P.valueX t)‖ ≤
+        q * P.valueDifferenceBound := by
+    calc
+      ‖∑' t, a t * (P.valueY z w - P.valueX t)‖ ≤
+          ∑' t, ‖a t * (P.valueY z w - P.valueX t)‖ :=
+        norm_tsum_le_tsum_norm hdiffSummable.norm
+      _ ≤ ∑' t, a t * P.valueDifferenceBound := by
+        apply Summable.tsum_le_tsum
+        · intro t
+          rw [norm_mul, Real.norm_of_nonneg ENNReal.toReal_nonneg]
+          exact mul_le_mul_of_nonneg_left
+            (by simpa only [Real.norm_eq_abs] using
+              (P.valueDifference z t w
+                (Classical.choose (P.choose t).support_nonempty)).2.1)
+            ENNReal.toReal_nonneg
+        · exact hdiffSummable.norm
+        · exact haSummable.mul_right P.valueDifferenceBound
+      _ = q * P.valueDifferenceBound := by
+        rw [Summable.tsum_mul_right P.valueDifferenceBound haSummable, hsumA]
+  rw [R.positiveEquation A x y hq]
+  have halgebra :
+      P.valueY z w - (∑' t, a t * P.valueX t) / q =
+        (q * P.valueY z w - ∑' t, a t * P.valueX t) / q := by
+    field_simp
+  rw [halgebra, ← hsumDiff, abs_div]
+  change ‖∑' t, a t * (P.valueY z w - P.valueX t)‖ / |q| ≤ _
+  rw [abs_of_pos hqPos]
+  calc
+    ‖∑' t, a t * (P.valueY z w - P.valueX t)‖ / q ≤
+        (q * P.valueDifferenceBound) / q :=
+      div_le_div_of_nonneg_right hdiffNorm hqPos.le
+    _ = P.valueDifferenceBound := by field_simp
 
 /-- A state is varied if one of its actions has a value different from the state value. -/
 def IsVaried (P : DiscreteDecisionProcess) (x : P.X) : Prop :=
