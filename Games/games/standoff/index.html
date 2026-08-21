@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>standoff — rig the table so nobody ever settles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <header class="hud">
+    <div class="brand">
+      <span class="brand-name">STANDOFF</span>
+      <span class="brand-sub">Ashfield saloon &middot; you are the fixer</span>
+    </div>
+
+    <div class="nerve" id="nerveBox">
+      <div class="nerve-head">
+        <span class="nerve-title">NERVE</span>
+        <span class="bells" id="bells"></span>
+      </div>
+      <canvas id="nerve" height="22"></canvas>
+      <div class="nerve-foot"><span id="nerveNote"></span></div>
+    </div>
+
+    <div class="meta">
+      <div class="meta-line" id="bellName"></div>
+      <div class="meta-line dim" id="tricksLabel"></div>
+    </div>
+
+    <div class="controls">
+      <button id="soundBtn" class="ghost" type="button" title="the piano">&#9834; on</button>
+      <button id="hoodBtn" class="ghost brass" type="button"
+        title="the county clerk's book: what the fiction leaves out">the ledger</button>
+      <button id="rerollBtn" class="ghost" type="button">deal again</button>
+    </div>
+  </header>
+
+  <main>
+    <canvas id="stage"></canvas>
+    <div id="ticker" class="ticker"></div>
+    <div id="coach" class="coach hidden"></div>
+    <div id="overlay" class="overlay hidden"></div>
+  </main>
+
+  <footer class="hand-bar">
+    <div class="budget">
+      <div class="budget-pips" id="budgetPips"></div>
+      <div class="budget-label">favours left</div>
+    </div>
+    <div id="hand" class="hand"></div>
+    <div class="bell-box">
+      <button id="bellBtn" class="bell" type="button">
+        <span class="bell-main">RING THE BELL</span>
+        <span class="bell-sub" id="bellSub">let them in</span>
+      </button>
+    </div>
+  </footer>
+
+  <section id="hood" class="hood hidden">
+    <div class="hood-head">
+      <h2>The ledger</h2>
+      <button id="hoodClose" class="ghost" type="button">shut the book</button>
+    </div>
+    <p class="hood-note">
+      What the clerk writes down and the saloon never says out loud: the reward
+      table behind the stakes, the structural filters the house enforces, the
+      real figures behind tonight&rsquo;s readings, and what a surviving table is
+      and is not evidence of. Nothing in this book is needed to play.
+    </p>
+    <div id="hoodNumbers"></div>
+    <div id="hoodTable"></div>
+    <div id="hoodFilters"></div>
+    <div id="hoodHonesty"></div>
+  </section>
+
+  <div id="toast" class="toast hidden"></div>
+</div>
+
+<script src="js/eval.js"></script>
+<script src="js/curated_mock.js"></script>
+<script src="js/api.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/moves.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

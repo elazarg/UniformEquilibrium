@@ -1,0 +1,189 @@
+<title>Exploit Floor</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A search arcade over four-player standoff games: rig tables, attack them, and see what survives.">
+<link rel="stylesheet" href="portal.css">
+<link rel="icon" href="data:,">
+
+<div class="arcade" id="arcade">
+
+  <div class="wall-strip">
+    <div class="feed-wrap">
+      <div class="feed-track" id="feed-track">
+        <span class="feed-msg">the floor is quiet…</span>
+      </div>
+    </div>
+    <button class="ghost ledger-btn" id="ledger-btn" type="button" aria-haspopup="dialog"
+      aria-label="the ledger">the ledger</button>
+  </div>
+
+  <div class="cabinet-grid">
+
+    <div class="tile tile-standoff">
+      <a class="tile-link" href="/standoff/" aria-label="Play Standoff"></a>
+      <div class="scene scene-standoff" aria-hidden="true">
+        <div class="lamp-glow"></div>
+        <div class="rail"></div>
+        <div class="gunslinger g1"></div>
+        <div class="gunslinger g2"></div>
+        <div class="gunslinger g3"></div>
+        <div class="gunslinger g4"></div>
+        <div class="dust d1"></div>
+        <div class="dust d2"></div>
+        <div class="dust d3"></div>
+      </div>
+      <div class="tile-label" aria-hidden="true">
+        <h2>Standoff</h2>
+        <p class="tagline">rig the table</p>
+      </div>
+      <button class="info-affordance" type="button" data-info="standoff" aria-label="About Standoff">i</button>
+      <div class="info-overlay" data-info-panel="standoff">
+        <p>Rig a table for four gunslingers, ring the bell, and hold it together
+          through wave after wave of opponents who each try a different way to
+          make somebody flinch first.</p>
+        <span class="info-close-hint">tap to close</span>
+      </div>
+    </div>
+
+    <div class="tile tile-sequencer">
+      <a class="tile-link" href="/sequencer/" aria-label="Play Sequencer"></a>
+      <div class="scene scene-sequencer" aria-hidden="true">
+        <div class="screw sc1"></div>
+        <div class="screw sc2"></div>
+        <div class="screw sc3"></div>
+        <div class="screw sc4"></div>
+        <div class="track t1"></div>
+        <div class="track t2"></div>
+        <div class="track t3"></div>
+        <div class="track t4"></div>
+        <div class="playhead"></div>
+      </div>
+      <div class="tile-label" aria-hidden="true">
+        <h2>Sequencer</h2>
+        <p class="tagline">find the beat that breaks it</p>
+      </div>
+      <button class="info-affordance" type="button" data-info="sequencer" aria-label="About Sequencer">i</button>
+      <div class="info-overlay" data-info-panel="sequencer">
+        <p>Play the attacker instead. Drum out a pattern of hesitation against a
+          target table until the meters settle and the whole thing locks into
+          groove.</p>
+        <span class="info-close-hint">tap to close</span>
+      </div>
+    </div>
+
+    <div class="tile tile-breeder">
+      <a class="tile-link" href="/breeder/" aria-label="Play Breeder"></a>
+      <div class="scene scene-breeder" aria-hidden="true">
+        <div class="gloss"></div>
+        <div class="moss-line"></div>
+        <div class="aura a1"></div>
+        <div class="aura a2"></div>
+        <div class="aura a3"></div>
+        <div class="creature">
+          <span class="eye e1"></span>
+          <span class="eye e2"></span>
+        </div>
+      </div>
+      <div class="tile-label" aria-hidden="true">
+        <h2>Breeder</h2>
+        <p class="tagline">breed something sneaky</p>
+      </div>
+      <button class="info-affordance" type="button" data-info="breeder" aria-label="About Breeder">i</button>
+      <div class="info-overlay" data-info-panel="breeder">
+        <p>Grow a grid of creatures whose bodies are built out of table structure.
+          Pick your favorites, let them breed, and watch the sneaky ones take
+          over the litter.</p>
+        <span class="info-close-hint">tap to close</span>
+      </div>
+    </div>
+
+    <div class="tile tile-atlas">
+      <a class="tile-link" href="/atlas/" aria-label="Play Atlas"></a>
+      <div class="scene scene-atlas" aria-hidden="true" id="atlas-scene">
+        <div class="sweep"></div>
+      </div>
+      <div class="tile-label" aria-hidden="true">
+        <h2>Atlas</h2>
+        <p class="tagline">find the pale country</p>
+      </div>
+      <button class="info-affordance" type="button" data-info="atlas" aria-label="About Atlas">i</button>
+      <div class="info-overlay" data-info-panel="atlas">
+        <p>Paint the territory between three known tables and go looking for the
+          pale, unattacked country nobody has tested yet.</p>
+        <span class="info-close-hint">tap to close</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mock-badge" id="mock-badge" hidden>MOCK DATA</div>
+</div>
+
+<div class="modal-backdrop" id="modal-backdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" id="modal-close" type="button" aria-label="Close">×</button>
+    <h2 id="modal-title">The ledger</h2>
+    <p class="ledger-intro">
+      Everything the portal keeps behind the fiction: real counts, real scores,
+      the evidence-tier vocabulary, and what any of it is actually worth.
+      Nothing here is needed to pick a game.
+    </p>
+
+    <div class="ledger-counters" id="ledger-counters">
+      <div class="ledger-stat" data-stat="candidates">
+        <span class="ls-label">candidates</span>
+        <span class="ls-value placeholder">—</span>
+      </div>
+      <div class="ledger-stat" data-stat="kills">
+        <span class="ls-label">kills</span>
+        <span class="ls-value placeholder">—</span>
+      </div>
+      <div class="ledger-stat" data-stat="library_profiles">
+        <span class="ls-label">library profiles</span>
+        <span class="ls-value placeholder">—</span>
+      </div>
+      <div class="ledger-stat" data-stat="best_score">
+        <span class="ls-label">best surviving score</span>
+        <span class="ls-value placeholder">—</span>
+      </div>
+    </div>
+
+    <div class="legend-groups">
+      <div class="legend-group">
+        <h3>Still standing</h3>
+        <div class="legend-chips">
+          <span class="tier-badge tier-unattacked">unattacked</span>
+          <span class="tier-badge tier-survivor-quick">survivor-quick</span>
+          <span class="tier-badge tier-survivor-standard">survivor-standard</span>
+          <span class="tier-badge tier-survivor-deep">survivor-deep</span>
+        </div>
+      </div>
+      <div class="legend-group">
+        <h3>Killed</h3>
+        <div class="legend-chips">
+          <span class="tier-badge tier-numerical-narrow">numerical-narrow</span>
+          <span class="tier-badge tier-numerical-wide">numerical-wide</span>
+          <span class="tier-badge tier-exact">exact</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="survivor-note">
+      <strong>What "survivor" means, exactly:</strong> a surviving table has
+      withstood some bounded amount of automated and human attack effort — no
+      more, no less. It is <strong>not</strong> a theorem, and it is
+      <strong>not</strong> a verified counterexample to anything. A table's
+      tier records how hard it was attacked, never how right it is. The tiers
+      under "still standing" run from least to most effort spent failing to
+      kill it; the tiers under "killed" run from a narrow numerical margin to
+      an exact, rational-arithmetic confirmation.
+    </p>
+
+    <h3 class="ledger-subhead">Recent records</h3>
+    <ul class="ledger-records" id="ledger-records">
+      <li class="ledger-record placeholder"><a href="#">—</a></li>
+    </ul>
+  </div>
+</div>
+
+<script src="portal.js"></script>

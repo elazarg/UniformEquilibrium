@@ -1,0 +1,6 @@
+{
+  "name": "sequencer-selftest",
+  "private": true,
+  "type": "module",
+  "description": "Marks the game's .js files as ES modules so node can run tools/run_selftest.js. The game itself needs no install and no build step."
+}

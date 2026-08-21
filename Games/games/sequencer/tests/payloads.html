@@ -1,0 +1,75 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>running</title></head>
+<body><pre id="out">running…</pre>
+<div id="stage"></div>
+<script>
+// Every ?table= arrival shape, each one a REAL load of index.html with a real
+// query parameter and a real module graph. A bad payload must still leave a
+// playing machine: the surface has no empty state, so a room the page cannot
+// read falls back to a room it can.
+const out = document.getElementById("out");
+const log = [];
+const say = (ok, t) => log.push(`${ok ? "ok  " : "FAIL"} ${t}`);
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function b64url(value) {
+  return btoa(unescape(encodeURIComponent(JSON.stringify(value))))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+const table = Array.from({ length: 16 }, (_, m) =>
+  (m ? [1 + m / 10, 4 - m / 8, -1 + m / 20, 0.5] : [0, 0, 0, 0]));
+const withNull = JSON.parse(JSON.stringify(table));
+withNull[3][1] = null; // what an atlas slice looks like if a value went non-finite
+
+const CASES = [
+  ["bare array, as atlas and standoff send it", `?table=${b64url(table)}`],
+  ["bare array plus the rehearsal flag", `?table=${b64url(table)}&mock=1`],
+  ["object payload with a name", `?table=${b64url({ name: "handed over", table })}`],
+  ["a value that did not survive the slice", `?table=${b64url(withNull)}`],
+  ["payload that is not base64 at all", "?table=not-base64-at-all"],
+  ["empty payload", "?table="],
+  ["no payload at all", ""],
+];
+
+function load(search) {
+  return new Promise((resolve) => {
+    const frame = document.createElement("iframe");
+    frame.width = 1200;
+    frame.height = 800;
+    const errors = [];
+    frame.addEventListener("load", async () => {
+      const w = frame.contentWindow;
+      w.addEventListener("error", (e) => errors.push(e.message));
+      await wait(1500);
+      const d = w.document;
+      resolve({
+        cells: d.querySelectorAll(".cell").length,
+        lit: [...d.querySelectorAll(".cell")]
+          .filter((c) => Number(c.style.getPropertyValue("--level")) > 0).length,
+        room: (d.getElementById("target-name").textContent || "").trim(),
+        goal: (d.getElementById("goal-text").textContent || "").trim(),
+        dead: d.getElementById("dead").hidden,
+        errors,
+        remove: () => frame.remove(),
+      });
+    });
+    frame.src = `../index.html${search}`;
+    document.getElementById("stage").appendChild(frame);
+  });
+}
+
+(async () => {
+  for (const [name, search] of CASES) {
+    const r = await load(search);
+    const ok = r.cells === 16 && r.lit >= 4 && r.room.length > 3 && r.goal.length > 5 &&
+      r.dead && r.errors.length === 0;
+    say(ok, `${name} -> ${r.cells} steps, ${r.lit} live, room "${r.room}"` +
+      `${r.errors.length ? `, errors: ${r.errors.join(" | ")}` : ""}`);
+    r.remove();
+  }
+  const failed = log.some((l) => l.startsWith("FAIL"));
+  document.title = failed ? "FAIL" : "PASS";
+  out.textContent = log.join("\n") + `\n\n${failed ? "FAIL" : "PASS"}`;
+})();
+</script></body></html>

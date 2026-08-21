@@ -1,0 +1,442 @@
+/* Terrarium theme: the one bright, gentle surface on the portal wall — moss,
+   glass, soft daylight, specimen-jar warmth. Deliberately breaks the dark-UI
+   default the other games use (per design review). */
+:root {
+  --bg: #f3ecd8;
+  --bg-2: #fbf6e6;
+  --panel: rgba(255, 255, 255, 0.55); /* glass jar */
+  --paper: #faf6e8; /* the ledger's own paper */
+  --paper-edge: #cdbd8f;
+  --ink: #2f3b28;
+  --ink-dim: #5d6b52;
+  --ink-faint: #8b9478;
+  --edge: #d8cfae;
+  --accent: #5f8a52; /* moss */
+  --accent-2: #d79c33; /* honey */
+  --danger: #c97a5c; /* terracotta */
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* full-viewport, zero-scroll play surface */
+}
+
+body {
+  background: radial-gradient(ellipse at top, var(--bg-2) 0%, var(--bg) 68%);
+  color: var(--ink);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+#app {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----------------------------------------------------------------- goal -- */
+/* Always-visible in-fiction objective (DESIGN.md "the goal is always
+   visible"), mirrored opposite the ledger door. The ring is the only
+   progress indicator — a threshold gauge, never a number. */
+.goal {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.goal-ring-wrap { position: relative; width: 30px; height: 30px; flex: 0 0 auto; }
+.goal-ring { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
+.ring-track { fill: none; stroke: var(--edge); stroke-width: 3; }
+.ring-fill {
+  fill: none;
+  stroke: var(--accent-2);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease, stroke 0.3s ease;
+}
+.goal.near .ring-fill { stroke: var(--accent); filter: drop-shadow(0 0 4px rgba(95, 138, 82, 0.6)); }
+.goal-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+  pointer-events: none;
+}
+.goal-text {
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+.goal.celebrate .goal-text { color: var(--accent-2); animation: goalCelebrate 0.6s ease-in-out 2; }
+@keyframes goalCelebrate {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* --------------------------------------------------------------- corner -- */
+.corner {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  background: var(--accent-2);
+  color: #3a2a05;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.badge.hidden { display: none; }
+
+.lab-counter {
+  font-size: 0.8rem;
+  color: var(--ink-dim);
+}
+.lab-counter.hidden { display: none; }
+
+.ghost {
+  background: transparent;
+  border: 1px solid var(--edge);
+  color: var(--ink-dim);
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 120ms ease;
+}
+.ghost:hover { color: var(--ink); border-color: var(--accent); background: rgba(95, 138, 82, 0.1); }
+
+/* ---------------------------------------------------------------- main --- */
+main {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  min-height: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: min(2.2vh, 18px);
+  width: min(82vh, 92vw);
+  aspect-ratio: 1;
+  transition: opacity 0.15s ease;
+}
+.grid.busy { opacity: 0.55; pointer-events: none; }
+
+/* each cell is a small glass specimen jar sitting on the shelf */
+.cell {
+  position: relative;
+  border-radius: 20px;
+  cursor: pointer;
+  background:
+    radial-gradient(ellipse at 50% 28%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 55%),
+    var(--panel);
+  border: 1px solid var(--edge);
+  box-shadow: 0 6px 16px rgba(120, 100, 60, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  padding: 7%;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.cell:hover {
+  transform: translateY(-4px) scale(1.05);
+  z-index: 2;
+  box-shadow: 0 14px 28px rgba(120, 100, 60, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+.cell.selected {
+  box-shadow: 0 0 0 3px var(--accent-2), 0 12px 26px rgba(215, 156, 51, 0.35);
+}
+.cell.selected::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 24px;
+  border: 2px solid var(--accent-2);
+  animation: selPulse 1.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes selPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.creature-wrap { width: 100%; height: 100%; }
+.creature-svg { width: 100%; height: 100%; display: block; }
+
+/* aura: score-driven glow, no digits */
+.creature-svg.tier-thriving { filter: drop-shadow(0 6px 14px rgba(95, 138, 82, 0.4)); }
+.creature-svg.tier-wary { filter: drop-shadow(0 6px 12px rgba(215, 156, 51, 0.38)); }
+.creature-svg.tier-critical { filter: drop-shadow(0 4px 8px rgba(201, 122, 92, 0.32)) saturate(0.55); }
+.creature-svg.tier-unknown { filter: none; opacity: 0.92; }
+
+.lab-badge {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  font-size: 1.1rem;
+  filter: drop-shadow(0 1px 3px rgba(60, 40, 10, 0.45));
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+.lab-badge.show { opacity: 1; transform: scale(1); animation: labPop 1.8s ease-in-out infinite; }
+@keyframes labPop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+/* Steady (non-pulsing) marker on this session's strongest unclaimed
+   specimen — the aspiration cue toward the goal banner, distinct from the
+   lab-badge's celebratory pulse once one is actually taken. */
+.leading-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 0.85rem;
+  color: var(--accent-2);
+  filter: drop-shadow(0 1px 2px rgba(60, 40, 10, 0.35));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.leading-badge.show { opacity: 0.85; }
+
+/* --- breathing / confidence rendering ------------------------------ */
+.breathe { transform-box: fill-box; transform-origin: center; }
+.tier-thriving .breathe { animation: beat 2.6s ease-in-out infinite; }
+.tier-wary .breathe { animation: beat 1.5s ease-in-out infinite, grain 2.2s steps(6) infinite; }
+.tier-critical .breathe { animation: beat 0.75s ease-in-out infinite, wobble 0.4s ease-in-out infinite; opacity: 0.92; }
+
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+@keyframes grain {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.88; }
+}
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-1.2deg) scale(0.99); }
+  75% { transform: rotate(1.2deg) scale(0.99); }
+}
+
+.halo { animation: spin 6s linear infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.predator-badge { filter: drop-shadow(0 1px 2px rgba(60, 40, 10, 0.4)); }
+
+/* ---------------------------------------------------------------- husks -- */
+.husks {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 3px;
+  font-size: 0.7rem;
+  opacity: 0.6;
+  pointer-events: none;
+  filter: grayscale(0.35);
+}
+
+/* ------------------------------------------------------------ breed fab -- */
+.breed-fab {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%) scale(0.85);
+  background: var(--accent);
+  color: var(--paper);
+  border: none;
+  border-radius: 999px;
+  padding: 12px 26px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(95, 138, 82, 0.4);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+.breed-fab.hidden { display: none; }
+.breed-fab.show {
+  opacity: 1;
+  animation: fabPulse 1.8s ease-in-out infinite;
+}
+@keyframes fabPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.05); }
+}
+
+/* First-run coach mark: one line, once, then never again. */
+.coach {
+  position: absolute;
+  left: 50%;
+  bottom: 90px;
+  transform: translateX(-50%);
+  background: rgba(215, 156, 51, 0.95);
+  color: #2f2205;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  padding: 7px 14px;
+  border-radius: 4px;
+  box-shadow: 0 8px 22px rgba(120, 100, 60, 0.3);
+  z-index: 9;
+  pointer-events: none;
+  animation: coachIn 320ms ease-out;
+}
+.coach.hidden { display: none; }
+.coach::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid rgba(215, 156, 51, 0.95);
+}
+@keyframes coachIn { from { opacity: 0; transform: translate(-50%, 8px); } }
+
+/* ------------------------------------------------------------- lineage -- */
+.lineage {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 16px;
+  overflow-x: auto;
+  min-height: 56px;
+}
+.lineage-node { flex: 0 0 auto; width: 40px; height: 40px; opacity: 0.6; transition: opacity 0.2s ease; }
+.lineage-node.current { opacity: 1; width: 48px; height: 48px; }
+.lineage-node svg { width: 100%; height: 100%; display: block; }
+.lineage-arrow { color: var(--edge); font-size: 0.9rem; flex: 0 0 auto; }
+
+/* ----------------------------------------------------------------- hood -- */
+/* The one out-of-fiction door — styled like an actual paper ledger book. */
+.hood {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: min(480px, 92vw);
+  background: var(--paper);
+  border-left: 1px solid var(--paper-edge);
+  box-shadow: -10px 0 26px rgba(120, 100, 60, 0.16);
+  padding: 18px 20px;
+  overflow-y: auto;
+  z-index: 20;
+}
+.hood.hidden { display: none; }
+.hood-head { display: flex; justify-content: space-between; align-items: center; }
+.hood h2 { margin: 0; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--ink-faint); font-weight: 400; text-transform: uppercase; }
+.hood-note { font-size: 0.72rem; color: var(--ink-faint); line-height: 1.6; }
+.hood .honesty {
+  font-size: 0.72rem;
+  color: var(--ink-dim);
+  line-height: 1.65;
+  border-top: 1px solid var(--paper-edge);
+  padding-top: 12px;
+  margin-top: 16px;
+}
+.hood .restriction-note {
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  line-height: 1.6;
+  border-top: 1px solid var(--paper-edge);
+  padding-top: 10px;
+  margin-top: 12px;
+}
+.hood .num-grid { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; font-size: 0.75rem; margin: 8px 0 14px; }
+.hood .num-grid .k { color: var(--ink-faint); }
+.hood .num-grid .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+.specimen-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--paper-edge);
+  font-size: 0.72rem;
+}
+.specimen-row .thumb { width: 34px; height: 34px; flex: 0 0 auto; }
+.specimen-row .thumb svg { width: 100%; height: 100%; display: block; }
+.specimen-row .fields { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.specimen-row .fields .num { font-variant-numeric: tabular-nums; }
+.specimen-row .fields .lab { color: var(--accent-2); }
+.specimen-row details { margin-top: 2px; }
+.specimen-row summary { cursor: pointer; color: var(--ink-faint); font-size: 0.68rem; }
+.specimen-row pre {
+  font-size: 0.62rem;
+  white-space: pre-wrap;
+  color: var(--ink-dim);
+  margin: 4px 0 0;
+}
+
+.death-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  padding: 2px 0;
+}
+.hood .section-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 14px 0 4px;
+}
+
+/* ---------------------------------------------------------------- toast -- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 150px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--edge);
+  border-left: 3px solid var(--accent);
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--ink);
+  z-index: 30;
+  max-width: 70vw;
+  text-align: center;
+  box-shadow: 0 10px 26px rgba(120, 100, 60, 0.2);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.toast.hidden { display: none; }
+.toast.show { opacity: 1; }
+.toast.warn { border-left-color: var(--danger); }
+.toast.good { border-left-color: var(--accent-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .breathe, .halo, .breed-fab.show, .lab-badge.show, .coach, .cell.selected::after, .goal.celebrate .goal-text {
+    animation: none;
+  }
+}

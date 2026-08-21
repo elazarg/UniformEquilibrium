@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>sequencer evaluator self-check</title>
+<link rel="stylesheet" href="style.css" />
+<style>
+  body { padding: 24px; display: block; }
+  pre { background: #0c1017; border: 1px solid #2a3346; border-radius: 10px;
+        padding: 14px; overflow: auto; font-size: 12px; }
+  .verdict { font: 600 22px/1.2 ui-monospace, Menlo, monospace; margin: 12px 0; }
+  .pass { color: #57e39b; }
+  .fail { color: #ff6b81; }
+</style>
+</head>
+<body>
+<h1>evaluator self-check</h1>
+<p class="legend">
+  The same checks the node runner performs
+  (<code>node tools/run_selftest.js</code>): parity of this page's evaluator
+  against hard-coded vectors produced by the reference experiment script, the
+  randomized identities (non-negative exploitability, on-path decomposition,
+  period-one agreement with a separately written stationary closed form), and
+  the degenerate shapes.
+</p>
+<div class="verdict" id="verdict">running…</div>
+<pre id="report"></pre>
+<script type="module">
+  import { runSelfTest } from "./selftest.js";
+
+  const report = runSelfTest();
+  const verdict = document.getElementById("verdict");
+  verdict.textContent = report.passed ? "PASS" : "FAIL";
+  verdict.className = `verdict ${report.passed ? "pass" : "fail"}`;
+  document.title = `${report.passed ? "PASS" : "FAIL"} — sequencer self-check`;
+  document.getElementById("report").textContent = JSON.stringify(report, null, 2);
+  console.log("sequencer self-check", report);
+</script>
+</body>
+</html>

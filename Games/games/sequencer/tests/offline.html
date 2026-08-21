@@ -1,0 +1,55 @@
+<!doctype html><html><head><meta charset="utf-8"><title>running</title></head>
+<body><pre id="out">running…</pre>
+<iframe id="frame" src="../index.html" width="1280" height="860"></iframe>
+<script type="module">
+const out = document.getElementById("out");
+const log = [];
+const say = (ok, t) => log.push(`${ok ? "ok  " : "FAIL"} ${t}`);
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+document.getElementById("frame").addEventListener("load", async () => {
+  const w = document.getElementById("frame").contentWindow;
+  const d = w.document;
+  w.addEventListener("error", (e) => say(false, `uncaught: ${e.message}`));
+  try {
+    await wait(1000);
+    say(d.getElementById("target-name").textContent.startsWith("The"),
+        `no empty stage even with the house down: ${d.getElementById("target-name").textContent}`);
+    say(d.querySelectorAll(".step-head.now").length === 1, "the machine still plays");
+    const flag = d.getElementById("net-flag");
+    say(!flag.hidden && flag.textContent === "the house is busy", `flag: ${flag.textContent}`);
+    // drive it to a groove the client thinks settles it; the house cannot confirm
+    d.getElementById("preset-clear").click();
+    d.getElementById("period").value = "2";
+    d.getElementById("period").dispatchEvent(new Event("input", { bubbles: true }));
+    const known = [[0.25, 0, 0.25, 0], [0, 0.25, 0, 0.25]];
+    for (let t = 0; t < 2; t += 1) {
+      for (let i = 0; i < 4; i += 1) {
+        if (!known[t][i]) continue;
+        const cell = d.querySelector(`.cell[data-player="${i}"][data-phase="${t}"]`);
+        const rect = cell.getBoundingClientRect();
+        cell.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true,
+          clientX: rect.left + 4, clientY: rect.top + 4, pointerId: 1 }));
+        w.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, pointerId: 1 }));
+        const input = d.getElementById("cell-value");
+        input.value = String(known[t][i]);
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    }
+    await wait(1800);
+    say(!d.getElementById("lock").open, "no settle dialog without the house");
+    say(d.getElementById("status").textContent.includes("never answered"),
+        `status: ${d.getElementById("status").textContent}`);
+    const stored = w.localStorage.getItem("sequencer.progress.v1");
+    say(!stored || JSON.parse(stored).grooves === 0, "nothing recorded");
+    say(Number(getComputedStyle(d.getElementById("run")).getPropertyValue("--arc")) >= 0,
+        "the machine's own gauge keeps working offline");
+    d.getElementById("ledger-open").click();
+    await wait(150);
+    say(d.getElementById("ledger").textContent.includes("not confirmed"),
+        "the ledger says the settling was never confirmed");
+  } catch (e) { say(false, `threw: ${e && e.stack ? e.stack : e}`); }
+  const failed = log.some((l) => l.startsWith("FAIL"));
+  document.title = failed ? "FAIL" : "PASS";
+  out.textContent = log.join("\n") + `\n\n${failed ? "FAIL" : "PASS"}`;
+});
+</script></body></html>

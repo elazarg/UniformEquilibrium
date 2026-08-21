@@ -1,0 +1,87 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>running</title></head>
+<body><pre id="out">running…</pre>
+<iframe id="frame" src="/atlas/?mock=1" width="1280" height="860"></iframe>
+<script>
+// The hand-off other games perform: atlas "Attack it" navigates the tab to
+// /sequencer/?table=<urlsafe-base64>. This drives the REAL atlas page, follows
+// the REAL navigation, and then checks the REAL sequencer page — index.html,
+// its module graph and the query parameter, none of it stubbed — because a
+// failure that only happens on the real page is invisible to a harness that
+// builds the DOM itself.
+//
+// Run against a portal server: python3 Games/serve.py --port <p> --data-dir <scratch>
+// then open http://localhost:<p>/sequencer/tests/handoff.html
+const out = document.getElementById("out");
+const log = [];
+const say = (ok, t) => log.push(`${ok ? "ok  " : "FAIL"} ${t}`);
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const frame = document.getElementById("frame");
+let stage = 0;
+const errors = [];
+
+function finish() {
+  const failed = log.some((l) => l.startsWith("FAIL"));
+  document.title = failed ? "FAIL" : "PASS";
+  out.textContent = log.join("\n") +
+    (errors.length ? "\n\nconsole errors:\n" + errors.join("\n") : "") +
+    `\n\n${failed ? "FAIL" : "PASS"}`;
+}
+
+frame.addEventListener("load", async () => {
+  const w = frame.contentWindow;
+  const d = w.document;
+  w.addEventListener("error", (e) =>
+    errors.push(`${w.location.pathname}: ${e.message} @ ${e.filename}:${e.lineno}`));
+  w.addEventListener("unhandledrejection", (e) =>
+    errors.push(`${w.location.pathname}: rejection ${e.reason}`));
+  try {
+    if (stage === 0) {
+      stage = 1;
+      await wait(2500);
+      const canvas = d.querySelector("canvas#mapCanvas, canvas");
+      say(Boolean(canvas), `atlas up with a map canvas: ${canvas && canvas.id}`);
+      const box = canvas.getBoundingClientRect();
+      ["pointerdown", "pointerup", "click"].forEach((type) => {
+        canvas.dispatchEvent(new PointerEvent(type, { bubbles: true, cancelable: true,
+          clientX: box.left + box.width * 0.45, clientY: box.top + box.height * 0.5,
+          pointerId: 1 }));
+      });
+      await wait(900);
+      const attack = d.getElementById("actAttack");
+      say(Boolean(attack) && attack.offsetParent !== null,
+          "the hand-off action is offered after picking a spot");
+      attack.click();
+      await wait(1500);
+      if (frame.contentWindow.location.pathname.indexOf("sequencer") === -1) {
+        say(false, `no hand-off happened; still at ${frame.contentWindow.location.pathname}`);
+        finish();
+      }
+      return;
+    }
+    // now on the real sequencer page, reached by a real navigation
+    await wait(1700);
+    say(w.location.pathname.indexOf("/sequencer/") === 0,
+        `landed on the sequencer: ${w.location.pathname}`);
+    say(w.location.search.length > 100,
+        `carrying a real payload of ${w.location.search.length} chars`);
+    const cells = d.querySelectorAll(".cell");
+    say(cells.length === 16, `the machine is built: ${cells.length} steps`);
+    const lit = [...cells].filter((c) => Number(c.style.getPropertyValue("--level")) > 0).length;
+    say(lit >= 4, `a pattern is already running: ${lit} live steps`);
+    say((d.getElementById("target-name").textContent || "").trim().length > 3,
+        `the room is named: "${d.getElementById("target-name").textContent}"`);
+    say((d.getElementById("goal-text").textContent || "").trim().length > 5,
+        `the objective is on the panel: "${d.getElementById("goal-text").textContent}"`);
+    say((d.getElementById("caption").textContent || "").trim().length > 5,
+        `the caption reads: "${d.getElementById("caption").textContent}"`);
+    say(d.querySelectorAll(".step-head.now").length === 1, "the transport is running");
+    say(d.getElementById("dead").hidden, "the never-opened notice stays hidden");
+    say(errors.length === 0,
+        errors.length ? `console errors: ${errors.join(" | ")}` : "no console errors on either page");
+  } catch (e) {
+    say(false, `threw: ${e && e.stack ? e.stack : e}`);
+  }
+  finish();
+});
+</script></body></html>

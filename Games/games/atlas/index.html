@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <canvas id="mapCanvas"></canvas>
+  <div id="scopeVignette" aria-hidden="true"></div>
+
+  <div id="hud">
+    <div id="heatMeter" class="hud-widget">
+      <div class="heat-track"><div class="heat-threshold"></div><div id="heatMarker" class="heat-marker"></div></div>
+    </div>
+    <div id="paintShimmer" class="hud-widget shimmer hidden">
+      <div class="shimmer-track"><div class="shimmer-fill"></div></div>
+    </div>
+  </div>
+
+  <div id="tooltip" class="hidden"></div>
+
+  <div id="inspectorCard" class="inspector-card hidden">
+    <div class="ic-top">
+      <span id="icPlace" class="ic-glyph">&#128205;</span>
+      <span id="icRoamsIcon" class="ic-roams-icon"></span>
+      <span id="icRoamsName" class="ic-roams-name"></span>
+    </div>
+    <div class="ic-gauge">
+      <div class="ic-gauge-track"><div class="ic-gauge-threshold"></div><div id="icGaugeMarker" class="ic-gauge-marker hidden"></div></div>
+    </div>
+    <div class="ic-actions">
+      <button id="actRig" class="action-btn" type="button" title="Rig it">
+        <span class="a-icon">&#129312;</span><span class="a-label">Rig it</span>
+      </button>
+      <button id="actAttack" class="action-btn" type="button" title="Attack it">
+        <span class="a-icon">&#127919;</span><span class="a-label">Attack it</span>
+      </button>
+      <button id="actClaim" class="action-btn primary" type="button" title="Claim it">
+        <span class="a-icon">&#127988;</span><span class="a-label">Claim it</span>
+      </button>
+    </div>
+  </div>
+
+  <button id="sliceBtn" class="ghost corner-slice" type="button" title="choose the frontier">
+    <canvas class="mini-thumb" id="miniA" width="14" height="14"></canvas>
+    <canvas class="mini-thumb" id="miniB" width="14" height="14"></canvas>
+    <canvas class="mini-thumb" id="miniC" width="14" height="14"></canvas>
+  </button>
+
+  <div id="slicePopover" class="popover hidden">
+    <p class="popover-title">the frontier</p>
+    <div class="slot-row" data-slot="A"><canvas class="thumb" width="34" height="34"></canvas><select id="selA"></select></div>
+    <div class="slot-row" data-slot="B"><canvas class="thumb" width="34" height="34"></canvas><select id="selB"></select></div>
+    <div class="slot-row" data-slot="C"><canvas class="thumb" width="34" height="34"></canvas><select id="selC"></select></div>
+    <div class="popover-actions">
+      <button id="btnPaste" class="ghost" type="button">paste a land&hellip;</button>
+      <button id="btnResetView" class="ghost" type="button">recenter</button>
+    </div>
+    <label class="chk"><input type="checkbox" id="chkFilters"> shade barren ground</label>
+  </div>
+
+  <div id="pasteDialog" class="dialog hidden">
+    <div class="dialog-box">
+      <h3>paste a custom land</h3>
+      <p class="dim">A 16&times;4 table (JSON), or a urlsafe-base64 <code>?table=</code> payload.</p>
+      <textarea id="pasteText" rows="6" placeholder="[[0,0,0,0], ...]"></textarea>
+      <div class="dialog-row">
+        <label>into <select id="pasteSlot"><option value="A">A</option><option value="B">B</option><option value="C">C</option></select></label>
+        <label>name <input id="pasteName" type="text" placeholder="a new land"></label>
+      </div>
+      <div class="dialog-actions">
+        <button id="pasteCancel" class="ghost" type="button">cancel</button>
+        <button id="pasteApply" class="primary" type="button">use it</button>
+      </div>
+      <p id="pasteError" class="error hidden"></p>
+    </div>
+  </div>
+
+  <div class="corner">
+    <span id="mockBadge" class="badge hidden">MOCK</span>
+    <button id="hoodBtn" class="ghost" type="button" aria-haspopup="dialog" aria-label="the ledger">the ledger</button>
+  </div>
+
+  <section id="hood" class="hood hidden">
+    <div class="hood-head">
+      <h2>The ledger</h2>
+      <button id="hoodClose" class="ghost" type="button">close</button>
+    </div>
+    <p class="hood-note">
+      Everything the game keeps behind the fiction: the reward table under
+      whatever ground you last touched, the real score and evidence tier
+      behind that read, and the honest statement of what any of it is (and
+      is not) evidence of. Nothing here is needed to play.
+    </p>
+    <div id="hoodBody"></div>
+  </section>
+
+  <div id="coach" class="coach hidden"></div>
+  <div id="toast" class="toast hidden"></div>
+
+</div>
+
+<script src="api.js"></script>
+<script src="mock.js"></script>
+<script src="atlas.js"></script>
+</body>
+</html>
