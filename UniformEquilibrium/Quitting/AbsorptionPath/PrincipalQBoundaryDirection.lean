@@ -136,8 +136,8 @@ theorem NonnegativeBoundaryDirection.exists_boundary_step
     {ι : Type} [Fintype ι] [DecidableEq ι]
     {M : ι → ι → ℝ} {q : ι → ℝ}
     (direction : NonnegativeBoundaryDirection M q)
-    (hq : IsNonnegativeBoundary q) :
-    ∃ α : ℝ, 0 < α ∧ α < 1 ∧
+    (hq : IsNonnegativeBoundary q) {stepBound : ℝ} (hstepBound : 0 < stepBound) :
+    ∃ α : ℝ, 0 < α ∧ α < stepBound ∧ α < 1 ∧
       IsNonnegativeBoundary (fun i =>
         (1 - α) * q i + α * singletonLCPResidual M direction.weight i) := by
   let residual : ι → ℝ := fun i =>
@@ -166,8 +166,11 @@ theorem NonnegativeBoundaryDirection.exists_boundary_step
     (eventually_lt_nhds zero_lt_one).filter_mono inf_le_left
   have hpos : ∀ᶠ α : ℝ in nhdsWithin 0 (Ioi 0), 0 < α :=
     self_mem_nhdsWithin
-  obtain ⟨α, hα, hαlt, hαpos⟩ := (hall.and (hlt.and hpos)).exists
-  refine ⟨α, hαpos, hαlt, hα, ?_⟩
+  have hbound : ∀ᶠ α : ℝ in nhdsWithin 0 (Ioi 0), α < stepBound :=
+    (eventually_lt_nhds hstepBound).filter_mono inf_le_left
+  obtain ⟨α, hα, hαlt, hαbound, hαpos⟩ :=
+    (hall.and (hlt.and (hbound.and hpos))).exists
+  refine ⟨α, hαpos, hαbound, hαlt, hα, ?_⟩
   obtain ⟨i, hqi, hri⟩ := direction.residual_zero_on_zero
   refine ⟨i, ?_⟩
   change (1 - α) * q i +
