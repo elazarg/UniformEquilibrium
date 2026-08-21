@@ -419,22 +419,20 @@ theorem PrincipalQClockMassPath.principalQMassImage_remaining_nonneg
   exact hstate
 
 omit [DecidableEq ι] in
-/-- A compact limit of the canonical approximations has nonnegative
-singleton-matrix residual at every time.  The only approximation error is
-the vanishing terminal filler. -/
-theorem exists_principalQAbsorptionPlayerPath_limit_residual_nonneg
+/-- Any retained compact limit of the canonical approximations has
+nonnegative singleton-matrix residual at every time.  The only approximation
+error is the vanishing terminal filler. -/
+theorem principalQAbsorptionPlayerPath_limit_residual_nonneg
     [Nonempty ι]
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
-    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι) :
-    ∃ terminal : ι → ℝ, ∃ limitPath : Path (0 : ι → ℝ) terminal,
-      (∀ who, Monotone fun time => limitPath time who) ∧
-      (∀ time, ∑ who, limitPath time who = (time : ℝ)) ∧
-      ∀ time who,
-        0 ≤ ∑ owner, (limitPath 1 owner - limitPath time owner) * M who owner := by
-  obtain ⟨terminal, limitPath, subsequence, hsubsequence, htendsto,
-      hmono, htotal⟩ :=
-    exists_principalQAbsorptionPlayerPath_limit M hdiag hQ weight
-  refine ⟨terminal, limitPath, hmono, htotal, ?_⟩
+    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι)
+    {terminal : ι → ℝ} (limitPath : Path (0 : ι → ℝ) terminal)
+    (subsequence : ℕ → ℕ) (hsubsequence : StrictMono subsequence)
+    (htendsto : Tendsto (fun n => boundedFunctionOfPath
+      (principalQVanishingPlayerPath M hdiag hQ weight (subsequence n)))
+        atTop (nhds (boundedFunctionOfPath limitPath))) :
+    ∀ time who,
+      0 ≤ ∑ owner, (limitPath 1 owner - limitPath time owner) * M who owner := by
   intro time who
   by_cases htimeOne : time = 1
   · subst time
@@ -526,10 +524,14 @@ theorem exists_continuousAbsorptionPath_sp2a_of_projectiveQBar
           absorptionPathPayoff reward path t who := by
   let owner : ι := Classical.choice inferInstance
   let weight : stdSimplex ℝ ι := stdSimplex.pure owner
-  obtain ⟨terminal, limitPath, hmono, htotal, hresidual⟩ :=
-    exists_principalQAbsorptionPlayerPath_limit_residual_nonneg
+  obtain ⟨terminal, limitPath, subsequence, hsubsequence, htendsto,
+      hmono, htotal⟩ :=
+    exists_principalQAbsorptionPlayerPath_limit
       (normalizedSoloMatrix reward) (normalizedSoloMatrix_diagonal reward)
       hQ weight
+  have hresidual := principalQAbsorptionPlayerPath_limit_residual_nonneg
+    (normalizedSoloMatrix reward) (normalizedSoloMatrix_diagonal reward)
+    hQ weight limitPath subsequence hsubsequence htendsto
   let path : AbsorptionPath (ι := ι) :=
     singletonAbsorptionPathOfPlayerPath limitPath hmono htotal
   refine ⟨path,
@@ -945,6 +947,75 @@ theorem limit_residual_nonpos_of_pathRightDerivative_pos
     exact (tendsto_const_nhds.sub
       (((continuous_apply owner).tendsto _).comp hmassWitness)).mul_const _
   exact le_of_tendsto' hresidual hwitnessResidual
+
+/-- Projective-Q-bar compactification produces a continuous singleton
+absorption path satisfying both continuous sequential-perfection inequalities.
+The jump condition is vacuous because the path is continuous. -/
+theorem exists_continuous_zeroPerfect_of_projectiveQBar
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hQ : IsProjectiveQBarMatrix (normalizedSoloMatrix reward)) :
+    ∃ path : AbsorptionPath (ι := ι),
+      IsContinuousAbsorptionPath path ∧
+        IsSequentiallyPerfectAbsorptionPath reward path 0 := by
+  let owner : ι := Classical.choice inferInstance
+  let weight : stdSimplex ℝ ι := stdSimplex.pure owner
+  obtain ⟨terminal, limitPath, subsequence, hsubsequence, htendsto,
+      hmono, htotal⟩ :=
+    exists_principalQAbsorptionPlayerPath_limit
+      (normalizedSoloMatrix reward) (normalizedSoloMatrix_diagonal reward)
+      hQ weight
+  have hresidualNonneg := principalQAbsorptionPlayerPath_limit_residual_nonneg
+    (normalizedSoloMatrix reward) (normalizedSoloMatrix_diagonal reward)
+    hQ weight limitPath subsequence hsubsequence htendsto
+  let path : AbsorptionPath (ι := ι) :=
+    singletonAbsorptionPathOfPlayerPath limitPath hmono htotal
+  refine ⟨path,
+    singletonAbsorptionPathOfPlayerPath_continuous limitPath hmono htotal,
+    ?_⟩
+  intro who
+  constructor
+  · intro t ht
+    change t ∈ pathJumps
+      (singletonCadlagPathOfPlayerPath limitPath hmono htotal) at ht
+    rw [pathJumps_singletonCadlagPathOfPlayerPath limitPath hmono htotal] at ht
+    exact ht.elim
+  · intro t ht htOne
+    have htIcc : t ∈ Icc (0 : ℝ) 1 := by
+      rw [← pathTimes_singletonCadlagPathOfPlayerPath limitPath hmono htotal]
+      exact ht
+    let time : unitInterval := ⟨t, htIcc⟩
+    have htimeOne : time ≠ 1 := by
+      intro heq
+      apply htOne
+      exact congrArg Subtype.val heq
+    have hdenom : 0 < 1 - (time : ℝ) := by
+      exact sub_pos.mpr (lt_of_le_of_ne time.property.2 fun heq =>
+        htimeOne (Subtype.ext heq))
+    have hidentity := one_sub_mul_absorptionPathPayoff_sub_solo
+      limitPath hmono htotal reward time htimeOne who
+    change (1 - (time : ℝ)) *
+        (absorptionPathPayoff reward path (time : ℝ) who -
+          reward (quittingProjectiveSingletonTerminal who) who) = _ at hidentity
+    constructor
+    · have hnonneg := hresidualNonneg time who
+      rw [normalizedSoloMatrix_eq_projectiveLCPMatrix] at hnonneg
+      change reward (quittingProjectiveSingletonTerminal who) who - 0 ≤
+        absorptionPathPayoff reward path (time : ℝ) who
+      rw [← hidentity] at hnonneg
+      simp only [sub_zero]
+      nlinarith
+    · intro hderivative
+      have hnonpos := limit_residual_nonpos_of_pathRightDerivative_pos
+        (normalizedSoloMatrix reward) (normalizedSoloMatrix_diagonal reward)
+        hQ weight limitPath subsequence hsubsequence htendsto hmono htotal who
+        time htimeOne hderivative
+      rw [normalizedSoloMatrix_eq_projectiveLCPMatrix] at hnonpos
+      change absorptionPathPayoff reward path (time : ℝ) who ≤
+        reward (quittingProjectiveSingletonTerminal who) who + 0
+      rw [← hidentity] at hnonpos
+      simp only [add_zero]
+      nlinarith
 
 /-- Bundle the reversed clock mass and terminal filler as a continuous
 singleton absorption path. -/
