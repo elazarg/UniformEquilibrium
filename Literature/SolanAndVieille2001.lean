@@ -1,6 +1,7 @@
 import MathUE.Topology.CompactSerialRelation
 import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
+import UniformEquilibrium.Quitting.AbsorptionPath.SurvivalWeightedObstructionAdapter
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
@@ -4846,6 +4847,273 @@ theorem figure2_exists_partnerDrop_before_with_reach
   refine ⟨firstDrop, partnerDrop, hpartnerBefore, hpartnerLow,
     hownSmall, hpartnerLarge, ?_⟩
   nlinarith
+
+/-- Choose the preceding partner drop to be the last low continuation time.
+Every strictly later continuation before the first drop is then at least
+`1 + √ε`. -/
+theorem figure2_exists_lastPartnerDrop_with_reach
+    {roots : RootSequence (ι := Fin 4)} {ε α : ℝ}
+    (hε0 : 0 < ε) (hεsmall : ε < 1 / 1000000)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4)
+    (hinitial : 1 + α ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who 0)
+    (hmargin : Real.sqrt ε <
+      (α - 2 * Real.sqrt ε - 96 * ε) / 4) :
+    ∃ firstDrop partnerDrop : ℕ,
+      partnerDrop < firstDrop ∧
+      quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots
+          (figure2Partner who) partnerDrop < 1 + Real.sqrt ε ∧
+      (∀ time, partnerDrop < time → time < firstDrop →
+        1 + Real.sqrt ε ≤ quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots
+            (figure2Partner who) time) ∧
+      (⟨0, firstDrop⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤
+        Real.sqrt ε ∧
+      (α - 2 * Real.sqrt ε - 96 * ε) / 4 ≤
+        (⟨0, firstDrop⟩ : QuittingFiniteRootWindow roots).singletonMass
+          (figure2Partner who) ∧
+      1 / 8 ≤ quittingJointSurvivalWeight roots 0 partnerDrop := by
+  obtain ⟨firstDrop, witness, hwitnessBefore, hwitnessLow,
+      hownSmall, hpartnerLarge, _⟩ :=
+    figure2_exists_partnerDrop_before_with_reach hε0 hεsmall hclose hnash who
+      hinitial hmargin
+  let lowTimes := (Finset.range firstDrop).filter fun time =>
+    quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots
+        (figure2Partner who) time < 1 + Real.sqrt ε
+  have hlowTimes : lowTimes.Nonempty := by
+    exact ⟨witness, Finset.mem_filter.mpr
+      ⟨Finset.mem_range.mpr hwitnessBefore, hwitnessLow⟩⟩
+  let partnerDrop := lowTimes.max' hlowTimes
+  have hpartnerMem : partnerDrop ∈ lowTimes :=
+    Finset.max'_mem lowTimes hlowTimes
+  have hpartnerBefore : partnerDrop < firstDrop :=
+    Finset.mem_range.mp (Finset.mem_filter.mp hpartnerMem).1
+  have hpartnerLow : quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots
+      (figure2Partner who) partnerDrop < 1 + Real.sqrt ε :=
+    (Finset.mem_filter.mp hpartnerMem).2
+  have hafter : ∀ time, partnerDrop < time → time < firstDrop →
+      1 + Real.sqrt ε ≤ quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots
+          (figure2Partner who) time := by
+    intro time hdropTime htime
+    apply le_of_not_gt
+    intro hlow
+    have hmem : time ∈ lowTimes :=
+      Finset.mem_filter.mpr ⟨Finset.mem_range.mpr htime, hlow⟩
+    exact (not_le_of_gt hdropTime) (Finset.le_max' lowTimes time hmem)
+  have hprefixOwn := finiteWindow_singletonMass_mono_fuel
+    roots 0 who hpartnerBefore.le
+  have htotalOwn :=
+    figure2_singletonMass_ge_two_fifteenths_sub_sixtyOne_mul
+      hε0 hclose hnash who
+  have hreach := sequenceSingletonMass_sub_finiteWindow_le_survivalWeight
+    roots 0 partnerDrop who
+  have hsqrtSq : Real.sqrt ε ^ 2 = ε := Real.sq_sqrt hε0.le
+  have hsqrtSmall : Real.sqrt ε < 1 / 1000 := by
+    nlinarith
+  refine ⟨firstDrop, partnerDrop, hpartnerBefore, hpartnerLow, hafter,
+    hownSmall, hpartnerLarge, ?_⟩
+  nlinarith
+
+/-- Between the last partner drop and the first drop, Lemma 11 can be applied
+to the restarted `8ε`-equilibrium. Thus almost all partner mass already lies
+before the last low-continuation time. -/
+theorem figure2_exists_partnerDrop_with_retained_mass
+    {roots : RootSequence (ι := Fin 4)} {ε α : ℝ}
+    (hε0 : 0 < ε) (hεsmall : ε < 1 / 1000000)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4)
+    (hinitial : 1 + α ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who 0)
+    (hmargin : Real.sqrt ε <
+      (α - 2 * Real.sqrt ε - 96 * ε) / 4) :
+    ∃ partnerDrop : ℕ,
+      quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots
+          (figure2Partner who) partnerDrop < 1 + Real.sqrt ε ∧
+      (⟨0, partnerDrop⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤
+        Real.sqrt ε ∧
+      (α - 38 * Real.sqrt ε - 100 * ε) / 4 ≤
+        (⟨0, partnerDrop⟩ : QuittingFiniteRootWindow roots).singletonMass
+          (figure2Partner who) ∧
+      1 / 8 ≤ quittingJointSurvivalWeight roots 0 partnerDrop := by
+  obtain ⟨firstDrop, partnerDrop, hpartnerBefore, hpartnerLow, hafter,
+      hownSmall, hpartnerLarge, hpartnerReach⟩ :=
+    figure2_exists_lastPartnerDrop_with_reach hε0 hεsmall hclose hnash who
+      hinitial hmargin
+  let restart := partnerDrop + 1
+  have hrestartLe : restart ≤ firstDrop := by
+    dsimp only [restart]
+    omega
+  have hrestartOwn := finiteWindow_singletonMass_mono_fuel
+    roots 0 who hrestartLe
+  have htotalOwn :=
+    figure2_singletonMass_ge_two_fifteenths_sub_sixtyOne_mul
+      hε0 hclose hnash who
+  have hrestartReachBound :=
+    sequenceSingletonMass_sub_finiteWindow_le_survivalWeight
+      roots 0 restart who
+  have hsqrtSq : Real.sqrt ε ^ 2 = ε := Real.sq_sqrt hε0.le
+  have hsqrtPos : 0 < Real.sqrt ε := Real.sqrt_pos.2 hε0
+  have hsqrtSmall : Real.sqrt ε < 1 / 1000 := by
+    nlinarith
+  have hrestartReach : 1 / 8 ≤
+      quittingJointSurvivalWeight roots 0 restart := by
+    nlinarith
+  let shifted : RootSequence (ι := Fin 4) :=
+    fun offset => roots (restart + offset)
+  have hrootNash : IsεQuittingRootSequenceNash
+      SolanVieilleBoundary.boundaryReward ε roots :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      SolanVieilleBoundary.boundaryReward ε roots).mpr hnash
+  have hshiftRootNash : IsεQuittingRootSequenceNash
+      SolanVieilleBoundary.boundaryReward (8 * ε) shifted := by
+    have hshift := isεQuittingRootSequenceNash_shift_of_survival_ge
+      SolanVieilleBoundary.boundaryReward roots hε0.le
+      (by norm_num : (0 : ℝ) < 1 / 8) hrootNash restart hrestartReach
+    simpa [shifted, mul_comm] using hshift
+  have hshiftNash : epsilonEquilibrium
+      SolanVieilleBoundary.boundaryReward (8 * ε)
+      (profile SolanVieilleBoundary.boundaryReward shifted) :=
+    (isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+      SolanVieilleBoundary.boundaryReward (8 * ε) shifted).mp hshiftRootNash
+  have hshiftClose : ∀ time player,
+      |(shifted time player false).toReal - 1| < 8 * ε := by
+    intro time player
+    have := hclose (restart + time) player
+    dsimp only [shifted]
+    linarith
+  let tailFuel := firstDrop - restart
+  have htailFloor : ∀ offset, offset < tailFuel →
+      1 + Real.sqrt ε ≤ quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward shifted
+          (figure2Partner who) offset := by
+    intro offset hoffset
+    have hglobal := hafter (restart + offset) (by
+      dsimp only [restart]
+      omega) (by
+      dsimp only [tailFuel] at hoffset
+      omega)
+    rw [quittingRootSequenceTerminalValue_eq_shift
+      SolanVieilleBoundary.boundaryReward shifted (figure2Partner who) offset]
+    rw [quittingRootSequenceTerminalValue_eq_shift
+      SolanVieilleBoundary.boundaryReward roots (figure2Partner who)
+        (restart + offset)] at hglobal
+    simpa [shifted, Nat.add_assoc] using hglobal
+  have htailChronology := figure2_delta_mul_finiteSingletonMass_le_epsilon
+    (by nlinarith : 8 * ε < 1) (Real.sqrt_nonneg ε) hshiftClose hshiftNash
+    (figure2Partner who) tailFuel htailFloor
+  have htailMass0 :=
+    (⟨0, tailFuel⟩ : QuittingFiniteRootWindow shifted).singletonMass_nonneg
+      (figure2Partner who)
+  have htailMass :
+      (⟨0, tailFuel⟩ : QuittingFiniteRootWindow shifted).singletonMass
+          (figure2Partner who) ≤ 8 * Real.sqrt ε := by
+    nlinarith
+  let beforeRestart : QuittingFiniteRootWindow roots := ⟨0, restart⟩
+  let afterRestart : QuittingFiniteRootWindow roots := ⟨restart, tailFuel⟩
+  have hadjacent : beforeRestart.ChronologicallyAdjacent afterRestart := by
+    simp [QuittingFiniteRootWindow.ChronologicallyAdjacent,
+      beforeRestart, afterRestart]
+  have hconcat := beforeRestart.singletonMass_concat afterRestart hadjacent
+    (figure2Partner who)
+  have hconcat' :
+      (⟨0, firstDrop⟩ : QuittingFiniteRootWindow roots).singletonMass
+          (figure2Partner who) =
+        beforeRestart.singletonMass (figure2Partner who) +
+          quittingJointSurvivalWeight roots 0 restart *
+            afterRestart.singletonMass (figure2Partner who) := by
+    change (⟨0, restart + tailFuel⟩ : QuittingFiniteRootWindow roots).singletonMass
+        (figure2Partner who) = _ at hconcat
+    rw [show restart + tailFuel = firstDrop by
+      dsimp only [tailFuel]
+      omega] at hconcat
+    simpa [beforeRestart, afterRestart] using hconcat
+  have hafterEq : afterRestart.singletonMass (figure2Partner who) =
+      (⟨0, tailFuel⟩ : QuittingFiniteRootWindow shifted).singletonMass
+        (figure2Partner who) := by
+    unfold QuittingFiniteRootWindow.singletonMass
+      QuittingFiniteRootWindow.survivalWeight QuittingFiniteRootWindow.rootAt
+    apply Finset.sum_congr rfl
+    intro phase _
+    rw [quittingJointSurvivalWeight_eq_shift]
+    simp [afterRestart, shifted]
+  rw [hafterEq] at hconcat'
+  have hsurvivalRestart := quittingJointSurvivalWeight_le_one roots 0 restart
+  have hsurvivalRestart0 := quittingJointSurvivalWeight_nonneg roots 0 restart
+  have hbeforeRestartLower :
+      (α - 2 * Real.sqrt ε - 96 * ε) / 4 - 8 * Real.sqrt ε ≤
+        beforeRestart.singletonMass (figure2Partner who) := by
+    have htransport : quittingJointSurvivalWeight roots 0 restart *
+        (⟨0, tailFuel⟩ : QuittingFiniteRootWindow shifted).singletonMass
+            (figure2Partner who) ≤ 8 * Real.sqrt ε := by
+      calc
+        _ ≤ 1 * (⟨0, tailFuel⟩ : QuittingFiniteRootWindow shifted).singletonMass
+            (figure2Partner who) :=
+          mul_le_mul_of_nonneg_right hsurvivalRestart htailMass0
+        _ ≤ 8 * Real.sqrt ε := by simpa using htailMass
+    linarith
+  let beforeDrop : QuittingFiniteRootWindow roots := ⟨0, partnerDrop⟩
+  let dropStage : QuittingFiniteRootWindow roots := ⟨partnerDrop, 1⟩
+  have hdropAdjacent : beforeDrop.ChronologicallyAdjacent dropStage := by
+    simp [QuittingFiniteRootWindow.ChronologicallyAdjacent,
+      beforeDrop, dropStage]
+  have hdropConcat := beforeDrop.singletonMass_concat dropStage hdropAdjacent
+    (figure2Partner who)
+  have hdropConcat' : beforeRestart.singletonMass (figure2Partner who) =
+      beforeDrop.singletonMass (figure2Partner who) +
+        quittingJointSurvivalWeight roots 0 partnerDrop *
+          dropStage.singletonMass (figure2Partner who) := by
+    change (⟨0, partnerDrop + 1⟩ : QuittingFiniteRootWindow roots).singletonMass
+        (figure2Partner who) = _ at hdropConcat
+    simpa [beforeDrop, dropStage, beforeRestart, restart] using hdropConcat
+  have hdropStageMass : dropStage.singletonMass (figure2Partner who) < ε := by
+    dsimp only [dropStage]
+    unfold QuittingFiniteRootWindow.singletonMass
+      QuittingFiniteRootWindow.survivalWeight QuittingFiniteRootWindow.rootAt
+    simp only [Fin.sum_univ_one, Fin.val_zero,
+      quittingJointSurvivalWeight_zero_fuel, one_mul, Nat.add_zero]
+    rw [quittingRootCoalitionMass_singleton_eq_opponentContinue_mul_quit]
+    have hopponent := quittingStationaryContinueMass_le_one
+      (Function.update (roots partnerDrop) (figure2Partner who) (PMF.pure false))
+    have hquit := quitProbability_lt_of_nearAllContinue hclose partnerDrop
+      (figure2Partner who)
+    have hquit0 : 0 ≤ (roots partnerDrop (figure2Partner who) true).toReal :=
+      ENNReal.toReal_nonneg
+    nlinarith [mul_nonneg
+      (quittingStationaryContinueMass_nonneg
+        (Function.update (roots partnerDrop) (figure2Partner who) (PMF.pure false)))
+      hquit0]
+  have hdropSurvival :=
+    quittingJointSurvivalWeight_le_one roots 0 partnerDrop
+  have hdropSurvival0 :=
+    quittingJointSurvivalWeight_nonneg roots 0 partnerDrop
+  have hbeforeDropLower :
+      (α - 38 * Real.sqrt ε - 100 * ε) / 4 ≤
+        beforeDrop.singletonMass (figure2Partner who) := by
+    have hdropTransport : quittingJointSurvivalWeight roots 0 partnerDrop *
+        dropStage.singletonMass (figure2Partner who) ≤ ε := by
+      calc
+        _ ≤ 1 * dropStage.singletonMass (figure2Partner who) :=
+          mul_le_mul_of_nonneg_right hdropSurvival
+            (dropStage.singletonMass_nonneg (figure2Partner who))
+        _ ≤ ε := by simpa using hdropStageMass.le
+    linarith
+  have hownDrop := finiteWindow_singletonMass_mono_fuel
+    roots 0 who hpartnerBefore.le
+  refine ⟨partnerDrop, hpartnerLow, ?_, ?_, hpartnerReach⟩
+  · exact hownDrop.trans hownSmall
+  · exact hbeforeDropLower
 
 /-- The first omitted Figure 2 assertion: for all sufficiently small positive
 `ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
