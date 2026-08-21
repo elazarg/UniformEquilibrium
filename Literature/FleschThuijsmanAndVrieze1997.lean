@@ -4301,6 +4301,118 @@ private theorem uniqueActive_next_active
       exact (lt_irrefl 0 hpos).elim
     · exact Or.inl rfl
 
+private theorem continuationPayoff_eq_zero_of_solo_from
+    (profile : MarkovProfile) (time : ℕ) (owner spectator : Player)
+    (hsolo : ∀ stage, time ≤ stage → ∀ player, player ≠ owner →
+      (profile stage player).1 = 0)
+    (hreward : FTV.CyclicMinimality.soloReward owner spectator = 0) :
+    continuationPayoff profile time spectator = 0 := by
+  let shifted : ℕ → Player → PMF Bool :=
+    fun offset ↦ markovRoot profile (time + offset)
+  have hshiftSolo : ∀ offset player, player ≠ owner →
+      shifted offset player = PMF.pure false := by
+    intro offset player hne
+    exact markovRoot_eq_pure_false_of_hazard_zero profile
+      (time + offset) player (hsolo (time + offset) (by omega) player hne)
+  change quittingRootSequenceTerminalValue
+    FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile) spectator time = 0
+  rw [quittingRootSequenceTerminalValue_eq_shift]
+  change quittingRootSequenceTerminalValue
+    FTV.CyclicAdmissibleCycle.ftvReward shifted spectator 0 = 0
+  rw [quittingRootSequenceTerminalValue_eq_of_soloRoots
+    FTV.CyclicAdmissibleCycle.ftvReward shifted owner 0 hshiftSolo spectator]
+  apply mul_eq_zero.mpr
+  right
+  change quittingSoloReward FTV.CyclicAdmissibleCycle.ftvReward
+    owner spectator = 0
+  have htable := congrFun
+    (FTV.CyclicAdmissibleCycle.ftvReward_singletonTerminal owner) spectator
+  exact htable.trans hreward
+
+private theorem exists_later_active_cyclic_successor
+    (profile : MarkovProfile)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (time : ℕ) (owner : Player)
+    (hsolo : IsUniqueActiveAt profile time owner) :
+    ∃ later, time < later ∧ IsUniqueActiveAt profile later
+      (FTV.CyclicMinimality.nextThree owner) := by
+  by_contra hexists
+  push Not at hexists
+  have hinvariant : ∀ cutoff, time ≤ cutoff →
+      ∃ last, time ≤ last ∧ last ≤ cutoff ∧
+        IsUniqueActiveAt profile last owner ∧
+        ∀ middle, last < middle → middle ≤ cutoff →
+          ¬ IsActiveStage profile middle := by
+    intro cutoff hcutoff
+    exact Nat.le_induction
+      ⟨time, le_rfl, le_rfl, hsolo, fun middle hleft hright ↦ by omega⟩
+      (fun stage htime ih ↦ by
+        obtain ⟨last, hlastTime, hlastStage, hlast, hquiet⟩ := ih
+        by_cases hactive : IsActiveStage profile (stage + 1)
+        · obtain ⟨later, nextOwner, hlater, hnext, hallowed,
+              hbetween⟩ :=
+            uniqueActive_next_active profile hnash hlt last owner hlast
+          have hlaterLe : later ≤ stage + 1 := by
+            by_contra hle
+            have hlt' : stage + 1 < later := by omega
+            exact hbetween (stage + 1) (by omega) hlt' hactive
+          have hstageLt : stage < later := by
+            by_contra hle
+            have hle' : later ≤ stage := by omega
+            exact hquiet later hlater hle' ⟨nextOwner, hnext.1⟩
+          have heq : later = stage + 1 := by omega
+          subst later
+          rcases hallowed with hsame | hcyclic
+          · subst nextOwner
+            exact ⟨stage + 1, hlastTime.trans (by omega), le_rfl, hnext,
+              fun middle hleft hright ↦ by omega⟩
+          · subst nextOwner
+            exact (hexists (stage + 1) (by omega) hnext).elim
+        · refine ⟨last, hlastTime, hlastStage.trans (by omega), hlast, ?_⟩
+          intro middle hleft hright
+          by_cases heq : middle = stage + 1
+          · simpa [heq] using hactive
+          · exact hquiet middle hleft (by omega)
+      ) cutoff hcutoff
+  have hquiet : ∀ stage, time ≤ stage → ∀ player, player ≠ owner →
+      (profile stage player).1 = 0 := by
+    intro stage hstage player hne
+    by_cases hactive : IsActiveStage profile stage
+    · obtain ⟨last, _, hlast, hrow, hbetween⟩ := hinvariant stage hstage
+      have heq : last = stage := by
+        by_contra hneLast
+        exact hbetween stage (by omega) le_rfl hactive
+      subst last
+      exact hrow.2 player hne
+    · exact hazard_eq_zero_of_not_active profile stage hactive player
+  rcases player_eq_zero_or_one_or_two owner with rfl | rfl | rfl
+  · have hvalue := continuationPayoff_eq_zero_of_solo_from
+      profile time 0 2 hquiet (by rfl)
+    have hlower := quitPayoff_le_continuationPayoff profile hnash hlt time 2
+    rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_two]
+      at hlower
+    have hy := hquiet time le_rfl 1 (by decide)
+    simp [hy, hvalue] at hlower
+    norm_num at hlower
+  · have hvalue := continuationPayoff_eq_zero_of_solo_from
+      profile time 1 0 hquiet (by rfl)
+    have hlower := quitPayoff_le_continuationPayoff profile hnash hlt time 0
+    rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_zero]
+      at hlower
+    have hz := hquiet time le_rfl 2 (by decide)
+    simp [hz, hvalue] at hlower
+    norm_num at hlower
+  · have hvalue := continuationPayoff_eq_zero_of_solo_from
+      profile time 2 1 hquiet (by rfl)
+    have hlower := quitPayoff_le_continuationPayoff profile hnash hlt time 1
+    rw [markovRoot_eq_stationaryRoot, stationaryRoot_quitPayoff_one]
+      at hlower
+    have hx := hquiet time le_rfl 0 (by decide)
+    simp [hx, hvalue] at hlower
+    norm_num at hlower
+
 /-- Checked special case used in the period-three part of the paper's picture:
 every live phase of an exact cyclic packet has a unique active player. -/
 theorem exactCyclicPacket_existsUnique_activeRole
