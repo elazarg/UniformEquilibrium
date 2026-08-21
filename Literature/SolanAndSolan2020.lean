@@ -5229,6 +5229,52 @@ def KiloblockConstruction.continueFiniteModeKernel
     (construction.continueModeKernel excluded
       (construction.modeOfFinite mode)).map construction.finiteMode
 
+/-! The one-stage kernel of the prescribed profile itself.  This differs
+from `continueModeKernel` only when the selected owner is the player forced
+to Continue there: under the prescribed profile every selected owner uses
+the block's mesh coin. -/
+def KiloblockConstruction.profileModeKernel
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    KiloblockMode table construction.blockCount →
+      PMF (KiloblockMode table construction.blockCount)
+  | .draw (.choose k) =>
+      construction.profile.signalLaw.map fun signal =>
+        .active k (construction.signalSelector k signal)
+          (construction.mesh k)
+  | .draw (.resume k choice remaining) =>
+      PMF.pure (.active k choice remaining)
+  | .draw .final => PMF.pure .finalActive
+  | .active k choice remaining =>
+      let after := if remaining ≤ 1 then
+          .draw (phaseAfterAttempt table
+            (fun block owner =>
+              (construction.attempt block owner).continuation)
+            k choice)
+        else .draw (.resume k choice (remaining - 1))
+      match choice with
+      | none => PMF.pure after
+      | some owner =>
+          (quittingMeshHazardCoin
+              (construction.attempt k owner).quitWeight
+              (construction.mesh k)
+              (construction.attempt k owner).quitWeight_pos.le
+              (construction.attempt k owner).quitWeight_lt_one).bind
+            fun quits => if quits then
+              PMF.pure (.absorbed (some k))
+            else PMF.pure after
+  | .finalActive => PMF.pure (.draw .final)
+  | .absorbed origin => PMF.pure (.absorbed origin)
+
+def KiloblockConstruction.profileFiniteModeKernel
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    KiloblockFiniteMode construction →
+      PMF (KiloblockFiniteMode construction) :=
+  fun mode =>
+    (construction.profileModeKernel
+      (construction.modeOfFinite mode)).map construction.finiteMode
+
 /-! The time-`t` marginal of the actual schedule state. -/
 def KiloblockConstruction.modeDist
     {table : Table ι} {ε : ℝ}
@@ -5354,6 +5400,26 @@ private theorem KiloblockConstruction.stageActionDist_continue_all
     · rw [Function.update_of_ne hwho]
       exact construction.strategy_eq_pure_continue_of_no_owner
         history hmode who]
+  exact Math.PMFProduct.pmfPi_pure
+    (publicAllContinueAction table construction.profile.signalLaw)
+
+private theorem KiloblockConstruction.stageActionDist_profile_continue_all
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t)
+    (hmode : ∀ k owner remaining,
+      construction.mode t history ≠ .active k (some owner) remaining) :
+    (publicQuittingGame table construction.profile.signalLaw).stageActionDist
+        construction.profile.strategy history =
+      PMF.pure (publicAllContinueAction table
+        construction.profile.signalLaw) := by
+  unfold StochasticGame.stageActionDist
+  rw [show (fun who => construction.profile.strategy who t history) =
+      fun _ => PMF.pure false by
+    funext who
+    exact construction.strategy_eq_pure_continue_of_no_owner
+      history hmode who]
   exact Math.PMFProduct.pmfPi_pure
     (publicAllContinueAction table construction.profile.signalLaw)
 
@@ -5928,6 +5994,135 @@ private theorem KiloblockConstruction.historyModeStepDist_continue_eq
                           simp [rawSingleQuitAction]))
                     simpa [quitState] using congrArg PMF.pure hnext
 
+private theorem KiloblockConstruction.historyModeStepDist_profile_eq
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t) :
+    construction.historyModeStepDist construction.profile.strategy history =
+      construction.profileModeKernel (construction.mode t history) := by
+  classical
+  have hnonempty : Nonempty (NormalPlayer table) := by
+    rw [← Fintype.card_pos_iff]
+    exact lt_of_lt_of_le Nat.zero_lt_two
+      construction.two_le_normalPlayer_card
+  let excluded : NormalPlayer table := Classical.choice hnonempty
+  cases hmode : construction.mode t history with
+  | draw phase =>
+      have hnone : ∀ k owner remaining,
+          construction.mode t history ≠ .active k (some owner) remaining := by
+        intro k owner remaining hselected
+        simp [hmode] at hselected
+      have hprofile := construction.stageActionDist_profile_continue_all
+        history hnone
+      have hcontinue := construction.stageActionDist_continue_all
+        excluded history hnone
+      calc
+        construction.historyModeStepDist construction.profile.strategy history =
+            construction.historyModeStepDist
+              (construction.continueProfile excluded) history := by
+          unfold KiloblockConstruction.historyModeStepDist
+          rw [hprofile, hcontinue]
+        _ = construction.continueModeKernel excluded (.draw phase) := by
+          simpa only [hmode] using
+            construction.historyModeStepDist_continue_eq excluded history
+        _ = construction.profileModeKernel (.draw phase) := by
+          cases phase <;> rfl
+  | finalActive =>
+      have hnone : ∀ k owner remaining,
+          construction.mode t history ≠ .active k (some owner) remaining := by
+        intro k owner remaining hselected
+        simp [hmode] at hselected
+      have hprofile := construction.stageActionDist_profile_continue_all
+        history hnone
+      have hcontinue := construction.stageActionDist_continue_all
+        excluded history hnone
+      calc
+        construction.historyModeStepDist construction.profile.strategy history =
+            construction.historyModeStepDist
+              (construction.continueProfile excluded) history := by
+          unfold KiloblockConstruction.historyModeStepDist
+          rw [hprofile, hcontinue]
+        _ = construction.continueModeKernel excluded .finalActive := by
+          simpa only [hmode] using
+            construction.historyModeStepDist_continue_eq excluded history
+        _ = construction.profileModeKernel .finalActive := by
+          rfl
+  | absorbed origin =>
+      have hnone : ∀ k owner remaining,
+          construction.mode t history ≠ .active k (some owner) remaining := by
+        intro k owner remaining hselected
+        simp [hmode] at hselected
+      have hprofile := construction.stageActionDist_profile_continue_all
+        history hnone
+      have hcontinue := construction.stageActionDist_continue_all
+        excluded history hnone
+      calc
+        construction.historyModeStepDist construction.profile.strategy history =
+            construction.historyModeStepDist
+              (construction.continueProfile excluded) history := by
+          unfold KiloblockConstruction.historyModeStepDist
+          rw [hprofile, hcontinue]
+        _ = construction.continueModeKernel excluded (.absorbed origin) := by
+          simpa only [hmode] using
+            construction.historyModeStepDist_continue_eq excluded history
+        _ = construction.profileModeKernel (.absorbed origin) := by
+          rfl
+  | active k choice remaining =>
+      cases choice with
+      | none =>
+          have hnone : ∀ other owner rest,
+              construction.mode t history ≠
+                .active other (some owner) rest := by
+            intro other owner rest hselected
+            simp [hmode] at hselected
+          have hprofile := construction.stageActionDist_profile_continue_all
+            history hnone
+          have hcontinue := construction.stageActionDist_continue_all
+            excluded history hnone
+          calc
+            construction.historyModeStepDist
+                construction.profile.strategy history =
+                construction.historyModeStepDist
+                  (construction.continueProfile excluded) history := by
+              unfold KiloblockConstruction.historyModeStepDist
+              rw [hprofile, hcontinue]
+            _ = construction.continueModeKernel excluded
+                (.active k none remaining) := by
+              simpa only [hmode] using
+                construction.historyModeStepDist_continue_eq excluded history
+            _ = construction.profileModeKernel
+                (.active k none remaining) := by
+              rfl
+      | some owner =>
+          obtain ⟨other, hother⟩ : ∃ other : NormalPlayer table,
+              other ≠ owner := by
+            by_contra hnot
+            push Not at hnot
+            have hcard : Fintype.card (NormalPlayer table) ≤ 1 := by
+              rw [Fintype.card_le_one_iff]
+              intro left right
+              exact (hnot left).trans (hnot right).symm
+            exact (not_lt_of_ge hcard)
+              construction.two_le_normalPlayer_card
+          have hsame := construction.stageActionDist_continue_selected_other
+            other owner history k remaining hother.symm hmode
+          calc
+            construction.historyModeStepDist
+                construction.profile.strategy history =
+                construction.historyModeStepDist
+                  (construction.continueProfile other) history := by
+              unfold KiloblockConstruction.historyModeStepDist
+              rw [hsame]
+            _ = construction.continueModeKernel other
+                (.active k (some owner) remaining) := by
+              simpa only [hmode] using
+                construction.historyModeStepDist_continue_eq other history
+            _ = construction.profileModeKernel
+                (.active k (some owner) remaining) := by
+              simp [KiloblockConstruction.continueModeKernel,
+                KiloblockConstruction.profileModeKernel, hother.symm]
+
 theorem KiloblockConstruction.finiteHistoryModeStepDist_continue_eq
     {table : Table ι} {ε : ℝ}
     (construction : KiloblockConstruction table ε)
@@ -5988,6 +6183,63 @@ theorem KiloblockConstruction.modeDist_continue_eq_iter
         KiloblockConstruction.finiteMode]
   | succ t ih =>
       rw [construction.modeDist_succ_continue excluded t, ih,
+        Math.PMFIter.iter_succ']
+
+theorem KiloblockConstruction.finiteHistoryModeStepDist_profile_eq
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) {t : ℕ}
+    (history : (publicQuittingGame table
+      construction.profile.signalLaw).Hist t) :
+    (construction.historyModeStepDist
+        construction.profile.strategy history).map construction.finiteMode =
+      construction.profileFiniteModeKernel
+        (construction.finiteMode (construction.mode t history)) := by
+  rw [construction.historyModeStepDist_profile_eq history]
+  unfold KiloblockConstruction.profileFiniteModeKernel
+  rw [construction.modeOfFinite_finiteMode]
+  intro k choice remaining hmode
+  exact construction.mode_remaining_le_mesh t history k choice remaining hmode
+
+theorem KiloblockConstruction.modeDist_succ_profile
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (t : ℕ) :
+    construction.modeDist construction.profile.strategy (t + 1) =
+      (construction.modeDist construction.profile.strategy t).bind
+        construction.profileFiniteModeKernel := by
+  let game := publicQuittingGame table construction.profile.signalLaw
+  unfold KiloblockConstruction.modeDist
+  rw [game.histDist_succ, PMF.map_bind, PMF.bind_map]
+  apply Math.ProbabilityMassFunction.bind_congr_on_support
+  intro history _
+  simp only [Function.comp_apply]
+  rw [← construction.finiteHistoryModeStepDist_profile_eq history]
+  unfold KiloblockConstruction.historyModeStepDist
+  rw [PMF.map_bind, PMF.map_bind]
+  apply Math.ProbabilityMassFunction.bind_congr_on_support
+  intro action _
+  rw [PMF.map_comp, PMF.map_bind]
+  simp_rw [PMF.pure_map]
+  rw [← PMF.bind_pure_comp]
+  apply Math.ProbabilityMassFunction.bind_congr_on_support
+  intro nextState _
+  rfl
+
+theorem KiloblockConstruction.modeDist_profile_eq_iter
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) (t : ℕ) :
+    construction.modeDist construction.profile.strategy t =
+      Math.PMFIter.iter construction.profileFiniteModeKernel t
+        (.drawChoose (Fin.last construction.blockCount)) := by
+  induction t with
+  | zero =>
+      unfold KiloblockConstruction.modeDist
+      rw [(publicQuittingGame table
+        construction.profile.signalLaw).histDist_zero,
+        PMF.pure_map, Math.PMFIter.iter_zero]
+      simp [construction.mode_initial,
+        KiloblockConstruction.finiteMode]
+  | succ t ih =>
+      rw [construction.modeDist_succ_profile t, ih,
         Math.PMFIter.iter_succ']
 
 def KiloblockConstruction.exitCapableChoice
@@ -6585,6 +6837,144 @@ theorem KiloblockConstruction.continueKernel_transienceCertificate
     construction.continueBoundary
     (construction.continueBoundary_closed excluded)
     (construction.continueKernel_reaches_boundary excluded)
+
+private theorem KiloblockConstruction.continueModeKernel_support_subset_profile
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (mode : KiloblockMode table construction.blockCount) :
+    (construction.continueModeKernel excluded mode).support ⊆
+      (construction.profileModeKernel mode).support := by
+  intro destination hdestination
+  cases mode with
+  | draw phase =>
+      cases phase <;> simpa [KiloblockConstruction.continueModeKernel,
+        KiloblockConstruction.profileModeKernel] using hdestination
+  | finalActive =>
+      simpa [KiloblockConstruction.continueModeKernel,
+        KiloblockConstruction.profileModeKernel] using hdestination
+  | absorbed origin =>
+      simpa [KiloblockConstruction.continueModeKernel,
+        KiloblockConstruction.profileModeKernel] using hdestination
+  | active k choice remaining =>
+      cases choice with
+      | none =>
+          simpa [KiloblockConstruction.continueModeKernel,
+            KiloblockConstruction.profileModeKernel] using hdestination
+      | some owner =>
+          by_cases howner : owner = excluded
+          · subst owner
+            simp only [KiloblockConstruction.continueModeKernel,
+              ite_true] at hdestination
+            have hdestination' : destination =
+                (if remaining ≤ 1 then
+                  .draw (phaseAfterAttempt table
+                    (fun block selected =>
+                      (construction.attempt block selected).continuation)
+                    k (some excluded))
+                else .draw (.resume k (some excluded) (remaining - 1))) :=
+              (PMF.mem_support_pure_iff _ _).mp hdestination
+            subst destination
+            simp only [KiloblockConstruction.profileModeKernel]
+            rw [PMF.mem_support_bind_iff]
+            refine ⟨false,
+              construction.meshCoin_false_mem_support k excluded, ?_⟩
+            exact (PMF.mem_support_pure_iff _ _).2 rfl
+          · simpa [KiloblockConstruction.continueModeKernel,
+              KiloblockConstruction.profileModeKernel, howner] using
+              hdestination
+
+private theorem
+    KiloblockConstruction.continueFiniteModeKernel_support_subset_profile
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε)
+    (excluded : NormalPlayer table)
+    (source : KiloblockFiniteMode construction) :
+    (construction.continueFiniteModeKernel excluded source).support ⊆
+      (construction.profileFiniteModeKernel source).support := by
+  intro destination hdestination
+  unfold KiloblockConstruction.continueFiniteModeKernel at hdestination
+  unfold KiloblockConstruction.profileFiniteModeKernel
+  rw [PMF.mem_support_map_iff] at hdestination ⊢
+  obtain ⟨raw, hraw, rfl⟩ := hdestination
+  exact ⟨raw,
+    construction.continueModeKernel_support_subset_profile excluded
+      (construction.modeOfFinite source) hraw,
+    rfl⟩
+
+theorem KiloblockConstruction.profileBoundary_closed
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    Math.Probability.IsClosedCore
+      construction.profileFiniteModeKernel
+      construction.continueBoundary := by
+  intro source hsource destination hdestination
+  cases source with
+  | drawChoose k => contradiction
+  | drawResume k choice remaining => contradiction
+  | active k choice remaining => contradiction
+  | drawFinal =>
+      unfold KiloblockConstruction.profileFiniteModeKernel
+        KiloblockConstruction.modeOfFinite
+        KiloblockConstruction.profileModeKernel at hdestination
+      have heq : destination = .finalActive := by
+        simpa [KiloblockConstruction.finiteMode] using hdestination
+      subst destination
+      trivial
+  | finalActive =>
+      unfold KiloblockConstruction.profileFiniteModeKernel
+        KiloblockConstruction.modeOfFinite
+        KiloblockConstruction.profileModeKernel at hdestination
+      have heq : destination = .drawFinal := by
+        simpa [KiloblockConstruction.finiteMode] using hdestination
+      subst destination
+      trivial
+  | absorbed origin =>
+      unfold KiloblockConstruction.profileFiniteModeKernel
+        KiloblockConstruction.modeOfFinite
+        KiloblockConstruction.profileModeKernel at hdestination
+      have heq : destination = .absorbed origin := by
+        simpa [KiloblockConstruction.finiteMode] using hdestination
+      subst destination
+      trivial
+
+theorem KiloblockConstruction.profileKernel_reaches_boundary
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    ∀ source, ∃ target, target ∈ construction.continueBoundary ∧
+      Math.Probability.PMFReachable
+        construction.profileFiniteModeKernel source target := by
+  have hnonempty : Nonempty (NormalPlayer table) := by
+    rw [← Fintype.card_pos_iff]
+    exact lt_of_lt_of_le Nat.zero_lt_two
+      construction.two_le_normalPlayer_card
+  let excluded : NormalPlayer table := Classical.choice hnonempty
+  intro source
+  obtain ⟨target, htarget, hreach⟩ :=
+    construction.continueKernel_reaches_boundary excluded source
+  have hmono : Math.Probability.PMFSupportStep
+      (construction.continueFiniteModeKernel excluded) ≤
+      Math.Probability.PMFSupportStep
+        construction.profileFiniteModeKernel := by
+    intro left right hstep
+    exact construction.continueFiniteModeKernel_support_subset_profile
+      excluded left hstep
+  exact ⟨target, htarget,
+    (Relation.ReflTransGen.mono hmono) source target hreach⟩
+
+theorem KiloblockConstruction.profileKernel_transienceCertificate
+    {table : Table ι} {ε : ℝ}
+    (construction : KiloblockConstruction table ε) :
+    Nonempty (Math.Probability.ClosedCoreTransienceCertificate
+      construction.profileFiniteModeKernel
+      construction.continueBoundary) := by
+  letI : Nonempty (KiloblockFiniteMode construction) :=
+    ⟨FiniteKiloblockMode.drawFinal⟩
+  exact Math.Probability.exists_closedCoreTransienceCertificate
+    construction.profileFiniteModeKernel
+    construction.continueBoundary
+    construction.profileBoundary_closed
+    construction.profileKernel_reaches_boundary
 
 /-! One fresh type draw under the forced-Continue profile may advance,
 absorb at another player, or restart. These are its unnormalized masses. -/
