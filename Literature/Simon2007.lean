@@ -12844,6 +12844,188 @@ theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_corrected_motion
   rw [(quitTailPayoff_eq_oneStage G profile i).symm] at hbound
   exact hbound
 
+/-- A finite quitting recursion stays in any symmetric coordinate bound containing both
+its terminal vector and all absorbing rewards. -/
+private theorem abs_finiteQuittingPayoff_le (G : QuittingGame) (k : ℕ)
+    (r : Payoff G.Player) (p : QuitProfile G) {M : ℝ}
+    (hreward : ∀ A n, |G.reward A n| ≤ M) (hr : ∀ n, |r n| ≤ M) :
+    ∀ n, |finiteQuittingPayoff G k r p n| ≤ M := by
+  induction k generalizing p with
+  | zero => simpa [finiteQuittingPayoff] using hr
+  | succ k ih =>
+      intro n
+      let q := QuitProbability G (p 0)
+      have hq0 : 0 ≤ q := (quitProbability_mem_Icc G (p 0)).1
+      have hq1 : q ≤ 1 := (quitProbability_mem_Icc G (p 0)).2
+      have htail := ih (fun i => p (i + 1)) n
+      have habsorb := abs_quittingRewardPart_le G (p 0) n (fun A => hreward A n)
+      simp only [finiteQuittingPayoff, QuittingOneStagePayoff]
+      calc
+        |(1 - q) * finiteQuittingPayoff G k r (fun i => p (i + 1)) n +
+            quittingRewardPart G (p 0) n| ≤
+            |(1 - q) * finiteQuittingPayoff G k r (fun i => p (i + 1)) n| +
+              |quittingRewardPart G (p 0) n| := abs_add_le _ _
+        _ = (1 - q) * |finiteQuittingPayoff G k r (fun i => p (i + 1)) n| +
+              |quittingRewardPart G (p 0) n| := by
+          rw [abs_mul, abs_of_nonneg (sub_nonneg.mpr hq1)]
+        _ ≤ (1 - q) * M + M * q :=
+          add_le_add (mul_le_mul_of_nonneg_left htail (sub_nonneg.mpr hq1)) habsorb
+        _ = M := by ring
+
+/-- Motion in one quitting row is controlled by its quitting probability on a bounded
+continuation vector. -/
+private theorem norm_quittingOneStagePayoff_sub_le (G : QuittingGame)
+    (r : Payoff G.Player) (p : QuitRow G) {M : ℝ}
+    (hreward : ∀ A n, |G.reward A n| ≤ M) (hr : ∀ n, |r n| ≤ M) :
+    ‖QuittingOneStagePayoff G r p - r‖ ≤ 2 * M * QuitProbability G p := by
+  rw [pi_norm_le_iff_of_nonempty]
+  intro n
+  rw [Real.norm_eq_abs]
+  let q := QuitProbability G p
+  have hq0 : 0 ≤ q := (quitProbability_mem_Icc G p).1
+  have habsorb := abs_quittingRewardPart_le G p n (fun A => hreward A n)
+  change |(1 - q) * r n + quittingRewardPart G p n - r n| ≤ 2 * M * q
+  rw [show (1 - q) * r n + quittingRewardPart G p n - r n =
+      quittingRewardPart G p n - q * r n by ring]
+  calc
+    |quittingRewardPart G p n - q * r n| ≤
+        |quittingRewardPart G p n| + |q * r n| := abs_sub _ _
+    _ = |quittingRewardPart G p n| + q * |r n| := by
+      rw [abs_mul, abs_of_nonneg hq0]
+    _ ≤ M * q + q * M := add_le_add habsorb
+      (mul_le_mul_of_nonneg_left (hr n) hq0)
+    _ = 2 * M * q := by ring
+
+/-- Reversing a finite list does not change the product of its entries. -/
+private theorem prod_range_reverse (f : ℕ → ℝ) (k : ℕ) :
+    (∏ j ∈ Finset.range k, f (k - 1 - j)) = ∏ j ∈ Finset.range k, f j := by
+  induction k with
+  | zero => simp
+  | succ k ih =>
+      rw [prod_range_succ_shift, Finset.prod_range_succ]
+      have hhead : f (k + 1 - 1 - 0) = f k := by simp
+      have htail : (fun j => f (k + 1 - 1 - (j + 1))) =
+          fun j => f (k - 1 - j) := by
+        funext j
+        congr 1
+        omega
+      rw [hhead, htail, ih]
+      ring
+
+/-- An infinite quitting orbit with unbounded variation eventually lies near the feasible
+set, and every tail retains unbounded variation. -/
+theorem InfiniteOrbitCondition.toFiniteNearOrbitCondition
+    (G : QuittingGame) (h : InfiniteOrbitCondition G) : FiniteNearOrbitCondition G := by
+  classical
+  intro ε hε B _hB
+  rcases h ε hε with ⟨x, horbit, hrational, hvariation⟩
+  let p : QuitProfile G := fun i => Classical.choose (horbit i)
+  have hp (i : ℕ) : p i ∈ EpsilonRow G ε (x i) :=
+    (Classical.choose_spec (horbit i)).1
+  have hstep (i : ℕ) :
+      x (i + 1) = QuittingOneStagePayoff G (x i) (p i) :=
+    (Classical.choose_spec (horbit i)).2.symm
+  obtain ⟨R, hR⟩ := exists_quittingPayoffDifferenceBound G
+  let M := max R ‖x 0‖
+  have hM : 0 < M := lt_of_lt_of_le zero_lt_one (hR.1.trans (le_max_left _ _))
+  have hreward : ∀ A n, |G.reward A n| ≤ M := fun A n =>
+    (le_of_lt (hR.2.2 A n)).trans (le_max_left _ _)
+  have hxzero : ∀ n, |x 0 n| ≤ M := by
+    intro n
+    have hn : |x 0 n| ≤ ‖x 0‖ := by
+      simpa [Real.norm_eq_abs] using norm_le_pi_norm (x 0) n
+    exact hn.trans (le_max_right _ _)
+  have hxbound : ∀ i n, |x i n| ≤ M := by
+    intro i n
+    have hreverse := finiteQuittingPayoff_reverse_eq G p x
+      (fun j _hj => hstep j) i le_rfl
+    rw [← hreverse]
+    exact abs_finiteQuittingPayoff_le G i (x 0) (fun j => p (i - 1 - j))
+      hreward hxzero n
+  have hmotion (i : ℕ) : ‖x (i + 1) - x i‖ ≤ 2 * M * QuitProbability G (p i) := by
+    rw [hstep]
+    exact norm_quittingOneStagePayoff_sub_le G (x i) (p i) hreward (hxbound i)
+  have hmass : HasUnboundedQuitMass G p := by
+    intro bound
+    rcases hvariation (2 * M * bound) with ⟨k, hk⟩
+    refine ⟨k, ?_⟩
+    have hsum : (∑ i ∈ Finset.range k, ‖x (i + 1) - x i‖) ≤
+        2 * M * ∑ i ∈ Finset.range k, QuitProbability G (p i) := by
+      rw [Finset.mul_sum]
+      exact Finset.sum_le_sum fun i _hi => hmotion i
+    have hscaled := hk.trans hsum
+    nlinarith [hscaled]
+  obtain ⟨start, hstart⟩ := hmass (‖x 0‖ / ε)
+  let survival := ∏ j ∈ Finset.range start, (1 - QuitProbability G (p j))
+  have hsurvival0 : 0 ≤ survival := Finset.prod_nonneg fun j _ =>
+    sub_nonneg.mpr (quitProbability_mem_Icc G (p j)).2
+  have hsurvivalBound : survival * ‖x 0‖ ≤ ε := by
+    have hproduct := prod_one_sub_mul_one_add_sum_le_one
+      (Finset.range start) (fun j => QuitProbability G (p j))
+      (fun j _ => (quitProbability_mem_Icc G (p j)).1)
+      (fun j _ => (quitProbability_mem_Icc G (p j)).2)
+    have hnorm : ‖x 0‖ ≤ ε *
+        (1 + ∑ j ∈ Finset.range start, QuitProbability G (p j)) := by
+      rw [div_le_iff₀ hε] at hstart
+      nlinarith
+    calc
+      survival * ‖x 0‖ ≤ survival *
+          (ε * (1 + ∑ j ∈ Finset.range start, QuitProbability G (p j))) :=
+        mul_le_mul_of_nonneg_left hnorm hsurvival0
+      _ = ε * (survival *
+          (1 + ∑ j ∈ Finset.range start, QuitProbability G (p j))) := by ring
+      _ ≤ ε * 1 := mul_le_mul_of_nonneg_left hproduct hε.le
+      _ = ε := mul_one ε
+  let reversed : QuitProfile G := fun j => p (start - 1 - j)
+  let z := finiteQuittingPayoff G start 0 reversed
+  have hzFeasible : Feasible G z := by
+    apply finiteQuittingPayoff_feasible
+    exact subset_convexHull ℝ _ (Or.inr (Set.mem_singleton 0))
+  have hxstart : finiteQuittingPayoff G start (x 0) reversed = x start :=
+    finiteQuittingPayoff_reverse_eq G p x (fun j _hj => hstep j) start le_rfl
+  have hnearStart : NearFeasible G ε (x start) := by
+    refine ⟨z, hzFeasible, ?_⟩
+    rw [← hxstart]
+    rw [pi_norm_le_iff_of_nonempty]
+    intro n
+    rw [Real.norm_eq_abs]
+    simp only [Pi.sub_apply, z, reversed]
+    rw [finiteQuittingPayoff_sub, abs_mul]
+    have hreverseProduct :
+        (∏ j ∈ Finset.range start,
+          (1 - QuitProbability G (p (start - 1 - j)))) = survival :=
+      prod_range_reverse (fun j => 1 - QuitProbability G (p j)) start
+    simp only [Pi.zero_apply, sub_zero]
+    rw [hreverseProduct, abs_of_nonneg hsurvival0]
+    calc
+      survival * |x 0 n| ≤ survival * ‖x 0‖ :=
+        mul_le_mul_of_nonneg_left
+          (by simpa [Real.norm_eq_abs] using norm_le_pi_norm (x 0) n) hsurvival0
+      _ ≤ ε := hsurvivalBound
+  have hnearTail : ∀ i, NearFeasible G ε (x (start + i)) := by
+    intro i
+    induction i with
+    | zero => simpa using hnearStart
+    | succ i ih =>
+        rcases ih with ⟨w, hwFeasible, hwClose⟩
+        refine ⟨QuittingOneStagePayoff G w (p (start + i)),
+          QuittingOneStagePayoff.feasible G hwFeasible _, ?_⟩
+        rw [show start + (i + 1) = (start + i) + 1 by omega, hstep]
+        have hcontract := finiteQuittingPayoff_norm_sub_le G 1
+          (x (start + i)) w (fun _ => p (start + i))
+        simpa [finiteQuittingPayoff] using hcontract.trans hwClose
+  rcases hvariation.tail start B with ⟨k, hk⟩
+  refine ⟨k, fun i => x (start + i), ?_, ?_, ?_⟩
+  · intro i
+    simpa [Nat.add_assoc] using horbit (start + i)
+  · intro i
+    exact ⟨hrational (start + i), hnearTail i⟩
+  · rw [FiniteOrbitVariation, Finset.sum_fin_eq_sum_range]
+    convert hk using 1
+    apply Finset.sum_congr rfl
+    intro i hi
+    simp [Finset.mem_range.mp hi]
+
 /-- The total probability of nonempty quitting coalitions lies in `[0,1]`. -/
 theorem nonemptyCoalitionProbability_sum_mem_Icc (G : QuittingGame) (p : QuitRow G) :
     (∑ A ∈ Finset.univ.powerset, if A.Nonempty then CoalitionProbability G p A else 0) ∈
