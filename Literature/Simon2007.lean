@@ -1315,6 +1315,230 @@ private theorem DiscreteDecisionProcess.rawLawFrom_exactStageCylinder
         ∏ i : Fin k, P.stepStagePMF (stage i.castSucc) (stage i.succ) := by
   exact P.rawLawWithInitial_exactStageCylinder (P.initialStagePMF start) k stage
 
+/-- Exact initial-stage cylinders form a generating pi-system on raw trajectories. -/
+private def DiscreteDecisionProcess.rawStagePrefixSets
+    (P : DiscreteDecisionProcess) : Set (Set (ℕ → DDPStage P)) :=
+  {U | ∃ k, ∃ stage : Fin (k + 1) → DDPStage P,
+    U = {w | ∀ i : Fin (k + 1), w i = stage i}}
+
+private theorem DiscreteDecisionProcess.isPiSystem_rawStagePrefixSets
+    (P : DiscreteDecisionProcess) : IsPiSystem P.rawStagePrefixSets := by
+  intro U hU V hV hnonempty
+  rcases hU with ⟨k, stage, rfl⟩
+  rcases hV with ⟨l, other, rfl⟩
+  rcases hnonempty with ⟨w, hwStage, hwOther⟩
+  simp only [mem_setOf_eq] at hwStage hwOther
+  rcases le_total k l with hkl | hlk
+  · refine ⟨l, other, ?_⟩
+    ext u
+    simp only [mem_inter_iff, mem_setOf_eq]
+    constructor
+    · exact fun h => h.2
+    · intro huOther
+      refine ⟨?_, huOther⟩
+      intro i
+      calc
+        u i = other ⟨i.1, by omega⟩ := huOther ⟨i.1, by omega⟩
+        _ = w i := (hwOther ⟨i.1, by omega⟩).symm
+        _ = stage i := hwStage i
+  · refine ⟨k, stage, ?_⟩
+    ext u
+    simp only [mem_inter_iff, mem_setOf_eq]
+    constructor
+    · exact fun h => h.1
+    · intro huStage
+      refine ⟨huStage, ?_⟩
+      intro i
+      calc
+        u i = stage ⟨i.1, by omega⟩ := huStage ⟨i.1, by omega⟩
+        _ = w i := (hwStage ⟨i.1, by omega⟩).symm
+        _ = other i := hwOther i
+
+private theorem DiscreteDecisionProcess.generateFrom_rawStagePrefixSets
+    (P : DiscreteDecisionProcess) :
+    (inferInstance : MeasurableSpace (ℕ → DDPStage P)) =
+      MeasurableSpace.generateFrom P.rawStagePrefixSets := by
+  apply le_antisymm
+  · have hid : @Measurable (ℕ → DDPStage P) (ℕ → DDPStage P)
+        (MeasurableSpace.generateFrom P.rawStagePrefixSets)
+        (MeasurableSpace.pi : MeasurableSpace (ℕ → DDPStage P)) id := by
+      refine @measurable_pi_lambda (ℕ → DDPStage P) ℕ (fun _ => DDPStage P)
+        (MeasurableSpace.generateFrom P.rawStagePrefixSets) (fun _ => inferInstance) id ?_
+      intro i
+      apply @measurable_to_countable' (DDPStage P) (ℕ → DDPStage P)
+        inferInstance inferInstance (MeasurableSpace.generateFrom P.rawStagePrefixSets)
+        (f := fun w => w i)
+      intro z
+      have heq : (fun w : ℕ → DDPStage P => w i) ⁻¹' {z} =
+          ⋃ (stage : Fin (i + 1) → DDPStage P) (_ : stage (Fin.last i) = z),
+            {w : ℕ → DDPStage P |
+              ∀ j : Fin (i + 1), w j = stage j} := by
+        ext w
+        simp only [mem_preimage, mem_singleton_iff, mem_iUnion, mem_setOf_eq]
+        constructor
+        · intro hw
+          let stage : Fin (i + 1) → DDPStage P := fun j => w j
+          refine ⟨stage, ?_, fun _j => rfl⟩
+          simpa [stage] using hw
+        · rintro ⟨stage, hstage, hw⟩
+          simpa [← hstage] using hw (Fin.last i)
+      rw [heq]
+      exact MeasurableSet.iUnion fun stage => MeasurableSet.iUnion fun _hstage =>
+        MeasurableSpace.measurableSet_generateFrom ⟨i, stage, rfl⟩
+    exact hid
+  · apply (MeasurableSpace.generateFrom_le_iff _).2
+    rintro U ⟨k, stage, rfl⟩
+    exact P.measurableSet_rawStageCylinder k stage
+
+/-- Forget a finite raw prefix and restart the trajectory at stage `i`. -/
+private def DiscreteDecisionProcess.rawShift (P : DiscreteDecisionProcess)
+    (i : ℕ) (stage : ℕ → DDPStage P) : ℕ → DDPStage P :=
+  fun j => stage (i + j)
+
+private theorem DiscreteDecisionProcess.measurable_rawShift
+    (P : DiscreteDecisionProcess) (i : ℕ) : Measurable (P.rawShift i) := by
+  apply measurable_pi_lambda
+  intro j
+  exact measurable_pi_apply (i + j)
+
+/-- Splice an exact prefix to a restarted exact tail, identifying their common stage. -/
+private def DiscreteDecisionProcess.spliceRawStages
+    (P : DiscreteDecisionProcess) {i k : ℕ}
+    (initialStages : Fin (i + 1) → DDPStage P) (tail : Fin (k + 1) → DDPStage P)
+    (_overlap : initialStages (Fin.last i) = tail 0) : Fin (i + k + 1) → DDPStage P :=
+  fun j => if h : j.1 ≤ i then initialStages ⟨j.1, by omega⟩
+    else tail ⟨j.1 - i, by omega⟩
+
+@[simp] private theorem DiscreteDecisionProcess.spliceRawStages_prefix
+    (P : DiscreteDecisionProcess) {i k : ℕ}
+    (initialStages : Fin (i + 1) → DDPStage P) (tail : Fin (k + 1) → DDPStage P)
+    (overlap : initialStages (Fin.last i) = tail 0) (j : Fin (i + 1)) :
+    P.spliceRawStages initialStages tail overlap ⟨j.1, by omega⟩ = initialStages j := by
+  change (if h : j.1 ≤ i then initialStages ⟨j.1, by omega⟩
+    else tail ⟨j.1 - i, by omega⟩) = initialStages j
+  rw [dif_pos (by omega)]
+
+@[simp] private theorem DiscreteDecisionProcess.spliceRawStages_tail
+    (P : DiscreteDecisionProcess) {i k : ℕ}
+    (initialStages : Fin (i + 1) → DDPStage P) (tail : Fin (k + 1) → DDPStage P)
+    (overlap : initialStages (Fin.last i) = tail 0) (j : Fin (k + 1)) :
+    P.spliceRawStages initialStages tail overlap ⟨i + j.1, by omega⟩ = tail j := by
+  by_cases hj : j = 0
+  · subst j
+    change (if h : i ≤ i then initialStages ⟨i, by omega⟩
+      else tail ⟨i - i, by omega⟩) = tail 0
+    rw [dif_pos le_rfl]
+    calc
+      initialStages ⟨i, by omega⟩ = initialStages (Fin.last i) := by congr
+      _ = tail 0 := overlap
+  · change (if h : i + j.1 ≤ i then initialStages ⟨i + j.1, by omega⟩
+      else tail ⟨i + j.1 - i, by omega⟩) = tail j
+    have hjpos : 0 < j.1 := by
+      exact Nat.pos_of_ne_zero fun hz => hj (Fin.ext hz)
+    rw [dif_neg (by omega)]
+    apply congrArg tail
+    apply Fin.ext
+    exact Nat.add_sub_cancel_left i j.1
+
+/-- The transition product of a spliced raw string factors at the restart stage. -/
+private theorem DiscreteDecisionProcess.prod_stepStagePMF_spliceRawStages
+    (P : DiscreteDecisionProcess) {i k : ℕ}
+    (initialStages : Fin (i + 1) → DDPStage P) (tail : Fin (k + 1) → DDPStage P)
+    (overlap : initialStages (Fin.last i) = tail 0) :
+    (∏ j : Fin (i + k),
+        P.stepStagePMF
+          (P.spliceRawStages initialStages tail overlap j.castSucc)
+          (P.spliceRawStages initialStages tail overlap j.succ)) =
+      (∏ j : Fin i, P.stepStagePMF (initialStages j.castSucc) (initialStages j.succ)) *
+        ∏ j : Fin k, P.stepStagePMF (tail j.castSucc) (tail j.succ) := by
+  rw [Fin.prod_univ_add]
+  congr 1
+  · apply Finset.prod_congr rfl
+    intro j _hj
+    have hleft : P.spliceRawStages initialStages tail overlap
+        (Fin.castAdd k j).castSucc = initialStages j.castSucc := by
+      rw [show (Fin.castAdd k j).castSucc = ⟨j.1, by omega⟩ by
+        apply Fin.ext; rfl]
+      exact P.spliceRawStages_prefix initialStages tail overlap j.castSucc
+    have hright : P.spliceRawStages initialStages tail overlap
+        (Fin.castAdd k j).succ = initialStages j.succ := by
+      rw [show (Fin.castAdd k j).succ = ⟨j.1 + 1, by omega⟩ by
+        apply Fin.ext; rfl]
+      exact P.spliceRawStages_prefix initialStages tail overlap j.succ
+    rw [hleft, hright]
+  · apply Finset.prod_congr rfl
+    intro j _hj
+    have hleft : P.spliceRawStages initialStages tail overlap
+        (Fin.natAdd i j).castSucc = tail j.castSucc := by
+      rw [show (Fin.natAdd i j).castSucc = ⟨i + j.1, by omega⟩ by
+        apply Fin.ext; rfl]
+      exact P.spliceRawStages_tail initialStages tail overlap j.castSucc
+    have hright : P.spliceRawStages initialStages tail overlap
+        (Fin.natAdd i j).succ = tail j.succ := by
+      rw [show (Fin.natAdd i j).succ = ⟨i + (j.1 + 1), by omega⟩ by
+        apply Fin.ext
+        simp only [Fin.val_succ, Fin.val_natAdd]
+        omega]
+      exact P.spliceRawStages_tail initialStages tail overlap j.succ
+    rw [hleft, hright]
+
+/-- A fixed raw prefix followed by a shifted fixed tail is their spliced string. -/
+private theorem DiscreteDecisionProcess.inter_shift_rawStageCylinder_eq_splice
+    (P : DiscreteDecisionProcess) {i k : ℕ}
+    (initialStages : Fin (i + 1) → DDPStage P) (tail : Fin (k + 1) → DDPStage P)
+    (overlap : initialStages (Fin.last i) = tail 0) :
+    {w : ℕ → DDPStage P | ∀ j : Fin (i + 1), w j = initialStages j} ∩
+        P.rawShift i ⁻¹' {w | ∀ j : Fin (k + 1), w j = tail j} =
+      {w | ∀ j : Fin (i + k + 1),
+        w j = P.spliceRawStages initialStages tail overlap j} := by
+  ext w
+  simp only [mem_inter_iff, mem_setOf_eq, mem_preimage]
+  constructor
+  · rintro ⟨hinitial, htail⟩ j
+    by_cases hj : j.1 ≤ i
+    · rw [P.spliceRawStages_prefix initialStages tail overlap ⟨j.1, by omega⟩]
+      exact hinitial ⟨j.1, by omega⟩
+    · let q : Fin (k + 1) := ⟨j.1 - i, by omega⟩
+      have hindex : i + q.1 = j.1 := by
+        dsimp only [q]
+        omega
+      calc
+        w j = w (i + q.1) := by rw [hindex]
+        _ = tail q := htail q
+        _ = P.spliceRawStages initialStages tail overlap j := by
+          rw [show j = ⟨i + q.1, by omega⟩ by apply Fin.ext; exact hindex.symm]
+          exact (P.spliceRawStages_tail initialStages tail overlap q).symm
+  · intro hspliced
+    constructor
+    · intro j
+      calc
+        w j = P.spliceRawStages initialStages tail overlap ⟨j.1, by omega⟩ :=
+          hspliced ⟨j.1, by omega⟩
+        _ = initialStages j := P.spliceRawStages_prefix initialStages tail overlap j
+    · intro j
+      change w (i + j.1) = tail j
+      calc
+        w (i + j.1) =
+            P.spliceRawStages initialStages tail overlap ⟨i + j.1, by omega⟩ :=
+          hspliced ⟨i + j.1, by omega⟩
+        _ = tail j := P.spliceRawStages_tail initialStages tail overlap j
+
+/-- Incompatible fixed prefix and shifted-tail cylinders are disjoint. -/
+private theorem DiscreteDecisionProcess.inter_shift_rawStageCylinder_eq_empty
+    (P : DiscreteDecisionProcess) {i k : ℕ}
+    (initialStages : Fin (i + 1) → DDPStage P) (tail : Fin (k + 1) → DDPStage P)
+    (overlap : initialStages (Fin.last i) ≠ tail 0) :
+    {w : ℕ → DDPStage P | ∀ j : Fin (i + 1), w j = initialStages j} ∩
+        P.rawShift i ⁻¹' {w | ∀ j : Fin (k + 1), w j = tail j} = ∅ := by
+  ext w
+  simp only [mem_inter_iff, mem_setOf_eq, mem_preimage, mem_empty_iff_false, iff_false,
+    not_and]
+  intro hinitial htail
+  apply overlap
+  calc
+    initialStages (Fin.last i) = w i := (hinitial (Fin.last i)).symm
+    _ = tail 0 := by simpa [DiscreteDecisionProcess.rawShift] using htail 0
+
 /-- Bundle a raw sequence of sampled stages as a DDP path. -/
 private def DDPPath.ofRaw (P : DiscreteDecisionProcess)
     (stage : ℕ → DDPStage P) : DDPPath P where
@@ -1431,6 +1655,143 @@ private instance DiscreteDecisionProcess.isProbabilityMeasure_rawLawAfterAction
     IsProbabilityMeasure (P.rawLawAfterAction x y) := by
   unfold DiscreteDecisionProcess.rawLawAfterAction
   infer_instance
+
+/-- Exact-prefix mass factors from every exact event after restarting at its last stage. -/
+private theorem DiscreteDecisionProcess.rawLawWithInitial_inter_shiftCylinder
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) {i k : ℕ}
+    (initialStages : Fin (i + 1) → DDPStage P) (tail : Fin (k + 1) → DDPStage P) :
+    P.rawLawWithInitial initial
+        (P.rawShift i ⁻¹' {w | ∀ j : Fin (k + 1), w j = tail j} ∩
+          {w | ∀ j : Fin (i + 1), w j = initialStages j}) =
+      P.rawLawWithInitial initial
+          {w | ∀ j : Fin (i + 1), w j = initialStages j} *
+        P.rawLawAfterAction (initialStages (Fin.last i)).1
+          (initialStages (Fin.last i)).2
+          {w | ∀ j : Fin (k + 1), w j = tail j} := by
+  classical
+  by_cases hoverlap : initialStages (Fin.last i) = tail 0
+  · rw [inter_comm, P.inter_shift_rawStageCylinder_eq_splice initialStages tail hoverlap]
+    rw [P.rawLawWithInitial_exactStageCylinder,
+      P.rawLawWithInitial_exactStageCylinder]
+    rw [DiscreteDecisionProcess.rawLawAfterAction,
+      P.rawLawWithInitial_exactStageCylinder]
+    rw [PMF.pure_apply, if_pos hoverlap.symm, one_mul]
+    have hzero : P.spliceRawStages initialStages tail hoverlap 0 = initialStages 0 := by
+      exact P.spliceRawStages_prefix initialStages tail hoverlap 0
+    rw [hzero]
+    rw [P.prod_stepStagePMF_spliceRawStages initialStages tail hoverlap]
+    ring
+  · rw [inter_comm, P.inter_shift_rawStageCylinder_eq_empty initialStages tail hoverlap]
+    rw [measure_empty, zero_eq_mul]
+    right
+    rw [DiscreteDecisionProcess.rawLawAfterAction,
+      P.rawLawWithInitial_exactStageCylinder]
+    rw [PMF.pure_apply, if_neg (Ne.symm hoverlap), zero_mul]
+
+/-- Restricting to a finite raw prefix and shifting gives its mass times the restarted law. -/
+private theorem DiscreteDecisionProcess.map_rawShift_restrict_rawStageCylinder
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) {i : ℕ}
+    (initialStages : Fin (i + 1) → DDPStage P) :
+    Measure.map (P.rawShift i)
+        ((P.rawLawWithInitial initial).restrict
+          {w | ∀ j : Fin (i + 1), w j = initialStages j}) =
+      P.rawLawWithInitial initial
+          {w | ∀ j : Fin (i + 1), w j = initialStages j} •
+        P.rawLawAfterAction (initialStages (Fin.last i)).1
+          (initialStages (Fin.last i)).2 := by
+  apply ext_of_generate_finite P.rawStagePrefixSets
+    P.generateFrom_rawStagePrefixSets P.isPiSystem_rawStagePrefixSets
+  · intro U hU
+    rcases hU with ⟨k, tail, rfl⟩
+    rw [Measure.map_apply (P.measurable_rawShift i)
+      (P.measurableSet_rawStageCylinder k tail)]
+    rw [Measure.restrict_apply
+      ((P.measurable_rawShift i) (P.measurableSet_rawStageCylinder k tail))]
+    rw [Measure.smul_apply, smul_eq_mul]
+    exact P.rawLawWithInitial_inter_shiftCylinder initial initialStages tail
+  · rw [Measure.map_apply (P.measurable_rawShift i) MeasurableSet.univ]
+    simp only [preimage_univ]
+    rw [Measure.restrict_apply MeasurableSet.univ]
+    rw [Measure.smul_apply, measure_univ, smul_eq_mul, mul_one]
+    simp
+
+/-- The restart factorization holds for every measurable tail event, not only cylinders. -/
+private theorem DiscreteDecisionProcess.rawLawWithInitial_inter_shift
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) {i : ℕ}
+    (initialStages : Fin (i + 1) → DDPStage P) {E : Set (ℕ → DDPStage P)}
+    (hE : MeasurableSet E) :
+    P.rawLawWithInitial initial
+        (P.rawShift i ⁻¹' E ∩
+          {w | ∀ j : Fin (i + 1), w j = initialStages j}) =
+      P.rawLawWithInitial initial
+          {w | ∀ j : Fin (i + 1), w j = initialStages j} *
+        P.rawLawAfterAction (initialStages (Fin.last i)).1
+          (initialStages (Fin.last i)).2 E := by
+  have hmeasure := congrArg (fun mu : Measure (ℕ → DDPStage P) => mu E)
+    (P.map_rawShift_restrict_rawStageCylinder initial initialStages)
+  rw [Measure.map_apply (P.measurable_rawShift i) hE] at hmeasure
+  rw [Measure.restrict_apply ((P.measurable_rawShift i) hE)] at hmeasure
+  rw [Measure.smul_apply, smul_eq_mul] at hmeasure
+  exact hmeasure
+
+/-- At a deterministic time, the future law depends only on the current sampled stage. -/
+private theorem DiscreteDecisionProcess.rawLawWithInitial_inter_shift_stageAt
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) (i : ℕ)
+    (current : DDPStage P) {E : Set (ℕ → DDPStage P)} (hE : MeasurableSet E) :
+    P.rawLawWithInitial initial
+        (P.rawShift i ⁻¹' E ∩ {w | w i = current}) =
+      P.rawLawWithInitial initial {w | w i = current} *
+        P.rawLawAfterAction current.1 current.2 E := by
+  classical
+  let Prefix := {stage : Fin (i + 1) → DDPStage P // stage (Fin.last i) = current}
+  let C : Prefix → Set (ℕ → DDPStage P) := fun stage =>
+    {w | ∀ j : Fin (i + 1), w j = stage.1 j}
+  have hpairwise : Pairwise (Function.onFun Disjoint C) := by
+    intro stage other hne
+    rw [Function.onFun, disjoint_left]
+    intro w hwStage hwOther
+    apply hne
+    apply Subtype.ext
+    funext j
+    exact (hwStage j).symm.trans (hwOther j)
+  have hunion : {w : ℕ → DDPStage P | w i = current} = ⋃ stage : Prefix, C stage := by
+    ext w
+    simp only [mem_setOf_eq, mem_iUnion, C]
+    constructor
+    · intro hw
+      let stage : Fin (i + 1) → DDPStage P := fun j => w j
+      refine ⟨⟨stage, ?_⟩, fun _j => rfl⟩
+      simpa [stage] using hw
+    · rintro ⟨stage, hw⟩
+      calc
+        w i = stage.1 (Fin.last i) := hw (Fin.last i)
+        _ = current := stage.2
+  have hinter : P.rawShift i ⁻¹' E ∩ {w : ℕ → DDPStage P | w i = current} =
+      ⋃ stage : Prefix, P.rawShift i ⁻¹' E ∩ C stage := by
+    rw [hunion, inter_iUnion]
+  have hpairwiseInter : Pairwise
+      (Function.onFun Disjoint fun stage : Prefix => P.rawShift i ⁻¹' E ∩ C stage) := by
+    intro stage other hne
+    exact (hpairwise hne).mono inter_subset_right inter_subset_right
+  have hmeasurableC (stage : Prefix) : MeasurableSet (C stage) :=
+    P.measurableSet_rawStageCylinder i stage.1
+  have hmeasurableInter (stage : Prefix) :
+      MeasurableSet (P.rawShift i ⁻¹' E ∩ C stage) :=
+    ((P.measurable_rawShift i) hE).inter (hmeasurableC stage)
+  rw [hinter, measure_iUnion hpairwiseInter hmeasurableInter]
+  rw [hunion, measure_iUnion hpairwise hmeasurableC]
+  calc
+    (∑' stage : Prefix,
+        P.rawLawWithInitial initial (P.rawShift i ⁻¹' E ∩ C stage)) =
+        ∑' stage : Prefix,
+          P.rawLawWithInitial initial (C stage) *
+            P.rawLawAfterAction current.1 current.2 E := by
+      apply tsum_congr
+      intro stage
+      rw [P.rawLawWithInitial_inter_shift initial stage.1 hE]
+      rw [show stage.1 (Fin.last i) = current from stage.2]
+    _ = (∑' stage : Prefix, P.rawLawWithInitial initial (C stage)) *
+        P.rawLawAfterAction current.1 current.2 E := ENNReal.tsum_mul_right
 
 /-- A forced first action removes exactly its action-selection factor. -/
 private theorem DiscreteDecisionProcess.rawLawAfterAction_stagesWithFinal
@@ -3162,6 +3523,34 @@ private theorem noReturnProbability_eq_tsum
         measure_mono (subset_univ _)
       _ = 1 := measure_univ) (by simp)]
   simp
+
+/-- Last-exit mass at a sampled stage is occupation mass times its restarted no-return mass. -/
+private theorem DiscreteDecisionProcess.rawLawFrom_inter_shift_noReturn_stageAt
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) (start : P.X)
+    (A : Set P.X) (i : ℕ) (current : DDPStage P) :
+    P.rawLawFrom start
+        (P.rawShift i ⁻¹' (DDPPath.ofRaw P ⁻¹' (ReturnsTo P A)ᶜ) ∩
+          {stage | stage i = current}) =
+      P.rawLawFrom start {stage | stage i = current} *
+        (1 - ReturnProbability P S A current.1 current.2) := by
+  have hreturns : MeasurableSet (ReturnsTo P A) := measurableSet_returnsTo P A
+  have hraw : MeasurableSet (DDPPath.ofRaw P ⁻¹' (ReturnsTo P A)ᶜ) :=
+    (DDPPath.measurable_ofRaw P) hreturns.compl
+  rw [DiscreteDecisionProcess.rawLawFrom]
+  rw [P.rawLawWithInitial_inter_shift_stageAt (P.initialStagePMF start) i current hraw]
+  congr 1
+  have hcanonical := congrArg (fun mu : Measure (DDPPath P) => mu (ReturnsTo P A)ᶜ)
+    (S.afterAction_eq_rawLaw P current.1 current.2)
+  rw [Measure.map_apply (DDPPath.measurable_ofRaw P) hreturns.compl] at hcanonical
+  rw [← hcanonical]
+  rw [measure_compl hreturns]
+  · letI : IsProbabilityMeasure (S.afterAction current.1 current.2) :=
+      S.afterActionProbability current.1 current.2
+    rw [measure_univ]
+    rfl
+  · letI : IsProbabilityMeasure (S.afterAction current.1 current.2) :=
+      S.afterActionProbability current.1 current.2
+    exact measure_ne_top _ _
 
 /-- A lower bound for all values in a decision process. -/
 def IsDDPValueLowerBound (P : DiscreteDecisionProcess) (L : ℝ) : Prop :=
