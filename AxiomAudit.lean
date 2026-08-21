@@ -367,6 +367,7 @@ import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.Viability.ControlledIntegralTrajectory
+import MathUE.Viability.LipschitzCompactness
 import MathUE.WeierstrassCurve
 import UniformEquilibrium.Architectures.PublicResponse.ArbitraryStartPrescribedDeliveryTelescope
 import UniformEquilibrium.Architectures.PublicResponse.ArbitraryStartUnilateralCap

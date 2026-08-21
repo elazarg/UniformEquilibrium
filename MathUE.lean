@@ -321,4 +321,5 @@ import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.Viability.ControlledIntegralTrajectory
+import MathUE.Viability.LipschitzCompactness
 import MathUE.WeierstrassCurve
