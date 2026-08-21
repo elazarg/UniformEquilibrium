@@ -805,6 +805,28 @@ theorem finiteWindow_singletonMass_le_sequenceSingletonMass
         (quittingJointSurvivalWeight_nonneg roots start phase)
         (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg _ _)
 
+/-- Extending a finite window can only increase its singleton mass. -/
+theorem finiteWindow_singletonMass_mono_fuel
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (owner : ι)
+    {fuel fuel' : ℕ} (hfuel : fuel ≤ fuel') :
+    (⟨start, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass owner ≤
+      (⟨start, fuel'⟩ : QuittingFiniteRootWindow roots).singletonMass owner := by
+  unfold QuittingFiniteRootWindow.singletonMass
+    QuittingFiniteRootWindow.survivalWeight QuittingFiniteRootWindow.rootAt
+  rw [Fin.sum_univ_eq_sum_range
+      (fun offset =>
+        quittingJointSurvivalWeight roots start offset *
+          quittingRootCoalitionMass (roots (start + offset)) {owner}) fuel,
+    Fin.sum_univ_eq_sum_range
+      (fun offset =>
+        quittingJointSurvivalWeight roots start offset *
+          quittingRootCoalitionMass (roots (start + offset)) {owner}) fuel']
+  exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono hfuel)
+    fun phase _ _ =>
+      mul_nonneg
+        (quittingJointSurvivalWeight_nonneg roots start phase)
+        (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg _ _)
+
 /-- A finite window's collision mass is at most the infinite collision mass
 from the same start. -/
 theorem finiteWindow_collisionMass_le_sequenceCollisionMass
