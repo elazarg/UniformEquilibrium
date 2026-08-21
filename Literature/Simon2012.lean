@@ -4365,6 +4365,76 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R δ : ℝ)
           Section4Z G inverse cutoff a j) := by
   sorry
 
+/-!
+The proof of Lemma 4.4 uses the local inference that `pⱼ = 0` implies
+`βⱼ ≤ φ(β,p)ⱼ`.  The displayed definition of `φ` and exact one-stage
+equilibrium do not imply it: the following two-player zero-payoff row is an
+explicit counterexample.  This refutes that proof step, not Lemma 4.4 under
+all of its standing Section 3 assumptions.
+-/
+namespace Lemma44ZeroQuitterInference
+
+abbrev game : QuittingGame where
+  Player := Bool
+  reward := fun _ _ => 0
+
+abbrev beta : Payoff game.Player := fun j => if j then 0 else 4
+
+abbrev row : QuitRow game := fun j => if j then ⟨1 / 2, by norm_num⟩ else 0
+
+private theorem univ_bool : (Finset.univ : Finset Bool) = {false, true} := by
+  decide
+
+private theorem quitProbability_eq : QuitProbability game row = 1 / 2 := by
+  rw [QuitProbability, univ_bool]
+  norm_num [row]
+
+private theorem oneStagePayoff_eq (n : game.Player) :
+    QuittingOneStagePayoff game beta row n = (1 / 2) * beta n := by
+  fin_cases n <;>
+    norm_num [QuittingOneStagePayoff, quitProbability_eq, game, beta]
+
+private theorem forcedQuitPayoff_eq (n : game.Player) :
+    ForcedQuitPayoff game row n = 0 := by
+  simp [ForcedQuitPayoff, QuittingOneStagePayoff, game]
+
+private theorem forcedContinuePayoff_eq (n : game.Player) :
+    ForcedContinuePayoff game beta row n = if n then 0 else 2 := by
+  cases n
+  · rw [ForcedContinuePayoff, QuittingOneStagePayoff, QuitProbability, univ_bool]
+    simp [CoalitionProbability, QuitRow.replace, row, beta, game]
+    norm_num
+  ·
+    norm_num [ForcedContinuePayoff, QuittingOneStagePayoff, QuitProbability,
+      CoalitionProbability, QuitRow.replace, row, beta, game]
+
+private theorem pair_mem : (beta, row) ∈ EZeroTilde game := by
+  refine ⟨⟨?_, ?_⟩, ?_⟩
+  · intro n hn
+    rw [forcedQuitPayoff_eq, forcedContinuePayoff_eq]
+    cases n <;> simp [row] at hn ⊢
+  · intro n _hn
+    rw [forcedQuitPayoff_eq, forcedContinuePayoff_eq]
+    fin_cases n <;> norm_num
+  · rw [quitProbability_eq]
+    norm_num
+
+abbrev point : EZeroTilde game := ⟨(beta, row), pair_mem⟩
+
+private theorem phi_false_eq : Phi game 1 1 point false = 5 / 2 := by
+  rw [Phi, oneStagePayoff_eq, univ_bool]
+  norm_num [point, row, beta, game]
+
+/-- The zero-quitting-coordinate inference used in the printed proof of
+Lemma 4.4 is false without the remaining standing assumptions. -/
+theorem zero_quitter_inference_fails :
+    (point.1.2 false : ℝ) = 0 ∧
+      ¬ point.1.1 false ≤ Phi game 1 1 point false := by
+  rw [phi_false_eq]
+  norm_num [point, row, beta]
+
+end Lemma44ZeroQuitterInference
+
 /--
 Lemma 4.4's boundedness of the continuation coordinate `β`, with the `d,ξ,R`
 relations from the preceding construction made explicit.  The missing proof
