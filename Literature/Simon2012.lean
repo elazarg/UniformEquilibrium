@@ -2319,6 +2319,73 @@ theorem continuous_phi (G : QuittingGame) (M d : ℝ) :
   exact (hstage.sub (continuous_const.mul hsingular)).add
     (continuous_const.mul hothers)
 
+/-- The continuation vector that makes every player indifferent at a row
+strictly below the sure-Quit faces. -/
+private def indifferentContinuation (G : QuittingGame) (p : QuitRow G) :
+    Payoff G.Player := fun j =>
+  (ForcedQuitPayoff G p j -
+      QuittingOneStagePayoff G 0 (p.replace G j 0) j) /
+    (1 - QuitProbability G (p.replace G j 0))
+
+/-- A row strictly below every sure-Quit face has positive survival. -/
+private theorem one_sub_quitProbability_pos_of_forall_lt_one
+    (G : QuittingGame) (p : QuitRow G)
+    (hp : ∀ j, (p j : ℝ) < 1) :
+    0 < 1 - QuitProbability G p := by
+  simp only [QuitProbability, sub_sub_cancel]
+  exact Finset.prod_pos fun j _hj => sub_pos.mpr (hp j)
+
+/-- Forcing a player to Continue preserves strict survival. -/
+private theorem one_sub_quitProbability_replace_zero_pos
+    (G : QuittingGame) (p : QuitRow G)
+    (hp : ∀ j, (p j : ℝ) < 1) (j : G.Player) :
+    0 < 1 - QuitProbability G (p.replace G j 0) := by
+  apply one_sub_quitProbability_pos_of_forall_lt_one
+  intro k
+  by_cases hkj : k = j
+  · subst k
+    simp [QuitRow.replace]
+  · simpa [QuitRow.replace, hkj] using hp k
+
+/-- The continuation chosen above makes the forced Quit and Continue
+endpoints equal coordinatewise. -/
+private theorem forcedContinue_indifferentContinuation
+    (G : QuittingGame) (p : QuitRow G)
+    (hp : ∀ j, (p j : ℝ) < 1) (j : G.Player) :
+    ForcedContinuePayoff G (indifferentContinuation G p) p j =
+      ForcedQuitPayoff G p j := by
+  let s := 1 - QuitProbability G (p.replace G j 0)
+  have hs : s ≠ 0 :=
+    (one_sub_quitProbability_replace_zero_pos G p hp j).ne'
+  change QuittingOneStagePayoff G (indifferentContinuation G p)
+      (p.replace G j 0) j = ForcedQuitPayoff G p j
+  rw [show QuittingOneStagePayoff G (indifferentContinuation G p)
+        (p.replace G j 0) j =
+      s * indifferentContinuation G p j +
+        QuittingOneStagePayoff G 0 (p.replace G j 0) j by
+    simp only [QuittingOneStagePayoff, Pi.zero_apply, mul_zero, zero_add, s]]
+  simp only [indifferentContinuation]
+  change s * ((ForcedQuitPayoff G p j -
+      QuittingOneStagePayoff G 0 (p.replace G j 0) j) / s) +
+    QuittingOneStagePayoff G 0 (p.replace G j 0) j = _
+  rw [mul_div_cancel₀ _ hs]
+  ring
+
+/-- The indifference continuation realizes every strictly interior row as an
+exact one-stage equilibrium with noncertain absorption. -/
+private def indifferentGraphPoint (G : QuittingGame) (p : QuitRow G)
+    (hp : ∀ j, (p j : ℝ) < 1) : EZeroTilde G := by
+  refine ⟨(indifferentContinuation G p, p), ?_⟩
+  constructor
+  · constructor
+    · intro j _hj
+      rw [← forcedContinue_indifferentContinuation G p hp j]
+      simp
+    · intro j _hj
+      rw [forcedContinue_indifferentContinuation G p hp j]
+      simp
+  · linarith [one_sub_quitProbability_pos_of_forall_lt_one G p hp]
+
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
 the paper's Jacobian argument: strict diagonal dominance gives local openness
