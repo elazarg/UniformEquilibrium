@@ -2095,6 +2095,190 @@ private theorem DDPSemantics.law_eq_rawLaw (P : DiscreteDecisionProcess)
       exact (cylinder_zero_of_wrong_start canonical hcanonicalSupport h hstart).symm
   · simp
 
+/-- Cylinder semantics also uniquely determine every state-restarted DDP law. -/
+private theorem DDPSemantics.fromState_eq_rawLaw (P : DiscreteDecisionProcess)
+    (S : DDPSemantics P) (start : P.X) :
+    S.fromState start = Measure.map (DDPPath.ofRaw P) (P.rawLawFrom start) := by
+  let canonical := Measure.map (DDPPath.ofRaw P) (P.rawLawFrom start)
+  letI : IsProbabilityMeasure (S.fromState start) := S.fromStateProbability start
+  letI : IsProbabilityMeasure canonical :=
+    Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+  let support : Set (DDPPath P) := {p | p.x 0 = start}
+  have hcanonicalSupport : canonical support = 1 := by
+    have heq : support = DDPCylinder P (DDPFinitePath.atState P start) := by
+      ext p
+      exact (DDPFinitePath.mem_atStateCylinder_iff P start p).symm
+    rw [heq]
+    dsimp only [canonical]
+    rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+      (measurableSet_ddpCylinder P (DDPFinitePath.atState P start))]
+    simpa [DDPFinitePath.probability] using
+      P.rawLawFrom_ddpCylinder start (DDPFinitePath.atState P start) rfl
+  have cylinder_zero_of_wrong_start (mu : Measure (DDPPath P))
+      [IsProbabilityMeasure mu] (hsupport : mu support = 1)
+      {k : ℕ} (h : DDPFinitePath P k) (hwrong : h.x 0 ≠ start) :
+      mu (DDPCylinder P h) = 0 := by
+    have hsupportMeasurable : MeasurableSet support :=
+      measurableSet_ddpInitialState P start
+    have hsupportComplement : mu supportᶜ = 0 := by
+      rw [measure_compl hsupportMeasurable (by rw [hsupport]; simp)]
+      rw [measure_univ, hsupport]
+      simp
+    apply nonpos_iff_eq_zero.mp
+    exact calc
+      mu (DDPCylinder P h) ≤ mu supportᶜ := by
+        apply measure_mono
+        intro p hp
+        simp only [support, mem_compl_iff, mem_setOf_eq]
+        intro hpstart
+        apply hwrong
+        change p.prefix P k = h at hp
+        have hx := congrArg (fun q : DDPFinitePath P k => q.x 0) hp
+        simpa [DDPPath.prefix, hpstart] using hx.symm
+      _ = 0 := hsupportComplement
+  apply ext_of_generate_finite
+    {U | ∃ k, ∃ h : DDPFinitePath P k, U = DDPCylinder P h}
+    rfl (isPiSystem_ddpCylinders P)
+  · intro U hU
+    rcases hU with ⟨k, h, rfl⟩
+    by_cases hstart : h.x 0 = start
+    · rw [S.fromStateCylinder start k h hstart]
+      rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+        (measurableSet_ddpCylinder P h)]
+      exact (P.rawLawFrom_ddpCylinder start h hstart).symm
+    · rw [cylinder_zero_of_wrong_start (S.fromState start)
+        (S.fromStateSupport start) h hstart]
+      exact (cylinder_zero_of_wrong_start canonical hcanonicalSupport h hstart).symm
+  · simp
+
+/-- Cylinder semantics uniquely determine every forced-first-action DDP law. -/
+private theorem DDPSemantics.afterAction_eq_rawLaw (P : DiscreteDecisionProcess)
+    (S : DDPSemantics P) (x : P.X) (y : P.Y x) :
+    S.afterAction x y = Measure.map (DDPPath.ofRaw P) (P.rawLawAfterAction x y) := by
+  classical
+  let canonical := Measure.map (DDPPath.ofRaw P) (P.rawLawAfterAction x y)
+  let support : Set (DDPPath P) := {p | p.x 0 = x ∧ HEq (p.y 0) y}
+  letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+  letI : IsProbabilityMeasure canonical :=
+    Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+  have hcanonicalSupport : canonical support = 1 := by
+    dsimp only [canonical, support]
+    rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+      (measurableSet_ddpInitialStateAction P x y)]
+    have heq : DDPPath.ofRaw P ⁻¹'
+          {p : DDPPath P | p.x 0 = x ∧ HEq (p.y 0) y} =
+        {stage : ℕ → DDPStage P |
+          ∀ _ : Fin 1, stage 0 = (⟨x, y⟩ : DDPStage P)} := by
+      ext stage
+      simp only [mem_preimage, mem_setOf_eq]
+      constructor
+      · rintro ⟨hx, hy⟩ i
+        exact Sigma.ext hx hy
+      · intro hs
+        have hstage := hs 0
+        exact ⟨congrArg Sigma.fst hstage, (Sigma.mk.inj_iff.mp hstage).2⟩
+    rw [heq, DiscreteDecisionProcess.rawLawAfterAction]
+    simpa [PMF.pure_apply] using
+      P.rawLawWithInitial_exactStageCylinder (PMF.pure (⟨x, y⟩ : DDPStage P))
+        0 (fun _ : Fin 1 => (⟨x, y⟩ : DDPStage P))
+  have cylinder_zero_of_wrong_support (mu : Measure (DDPPath P))
+      [IsProbabilityMeasure mu] (hsupport : mu support = 1)
+      {k : ℕ} (h : DDPFinitePath P (k + 1))
+      (hwrong : h.x 0 ≠ x ∨ ¬HEq (h.y 0) y) :
+      mu (DDPCylinder P h) = 0 := by
+    have hsupportMeasurable : MeasurableSet support :=
+      measurableSet_ddpInitialStateAction P x y
+    have hsupportComplement : mu supportᶜ = 0 := by
+      rw [measure_compl hsupportMeasurable (by rw [hsupport]; simp)]
+      rw [measure_univ, hsupport]
+      simp
+    apply nonpos_iff_eq_zero.mp
+    exact calc
+      mu (DDPCylinder P h) ≤ mu supportᶜ := by
+        apply measure_mono
+        intro p hp
+        simp only [support, mem_compl_iff, mem_setOf_eq]
+        rintro ⟨hpstart, hpaction⟩
+        change p.prefix P (k + 1) = h at hp
+        have hx := congrArg (fun q : DDPFinitePath P (k + 1) => q.x 0) hp
+        have hstage := congrArg (fun q : DDPFinitePath P (k + 1) =>
+          (⟨q.x 0, q.y 0⟩ : DDPStage P)) hp
+        rcases hwrong with hstart | haction
+        · apply hstart
+          simpa [DDPPath.prefix, hpstart] using hx.symm
+        · apply haction
+          exact (Sigma.mk.inj_iff.mp hstage.symm).2.trans hpaction
+      _ = 0 := hsupportComplement
+  have zeroCylinder_eq_initialState {h : DDPFinitePath P 0} :
+      DDPCylinder P h = {p | p.x 0 = h.x 0} := by
+    ext p
+    change p.prefix P 0 = h ↔ p.x 0 = h.x 0
+    constructor
+    · intro hp
+      exact congrArg (fun q : DDPFinitePath P 0 => q.x 0) hp
+    · intro hp
+      apply DDPFinitePath.ext_of_stages P
+      · intro i
+        have hi : i = 0 := Fin.eq_zero i
+        subst i
+        exact hp
+      · exact fun i => Fin.elim0 i
+  have zeroCylinder_measure (mu : Measure (DDPPath P)) [IsProbabilityMeasure mu]
+      (hsupport : mu support = 1) (h : DDPFinitePath P 0) :
+      mu (DDPCylinder P h) = if h.x 0 = x then 1 else 0 := by
+    split_ifs with hstart
+    · apply le_antisymm (by
+        calc
+          mu (DDPCylinder P h) ≤ mu Set.univ := measure_mono (subset_univ _)
+          _ = 1 := measure_univ)
+      calc
+        1 = mu support := hsupport.symm
+        _ ≤ mu (DDPCylinder P h) := by
+          apply measure_mono
+          intro p hp
+          rw [zeroCylinder_eq_initialState]
+          exact hstart.trans hp.1.symm |>.symm
+    · apply nonpos_iff_eq_zero.mp
+      calc
+        mu (DDPCylinder P h) ≤ mu supportᶜ := by
+          apply measure_mono
+          intro p hp
+          simp only [support, mem_compl_iff, mem_setOf_eq]
+          intro hs
+          apply hstart
+          rw [zeroCylinder_eq_initialState] at hp
+          exact hp.symm.trans hs.1
+        _ = 0 := by
+          rw [measure_compl (measurableSet_ddpInitialStateAction P x y)
+            (by rw [hsupport]; simp)]
+          rw [measure_univ, hsupport]
+          simp
+  apply ext_of_generate_finite
+    {U | ∃ k, ∃ h : DDPFinitePath P k, U = DDPCylinder P h}
+    rfl (isPiSystem_ddpCylinders P)
+  · intro U hU
+    rcases hU with ⟨k, h, rfl⟩
+    cases k with
+    | zero =>
+        rw [zeroCylinder_measure (S.afterAction x y) (S.afterActionSupport x y) h]
+        rw [zeroCylinder_measure canonical hcanonicalSupport h]
+    | succ k =>
+        by_cases hstart : h.x 0 = x
+        · by_cases haction : HEq (h.y 0) y
+          · rw [S.afterActionCylinder x y k h hstart haction]
+            rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+              (measurableSet_ddpCylinder P h)]
+            exact (P.rawLawAfterAction_ddpCylinder x y h hstart haction).symm
+          · rw [cylinder_zero_of_wrong_support (S.afterAction x y)
+              (S.afterActionSupport x y) h (Or.inr haction)]
+            exact (cylinder_zero_of_wrong_support canonical hcanonicalSupport h
+              (Or.inr haction)).symm
+        · rw [cylinder_zero_of_wrong_support (S.afterAction x y)
+            (S.afterActionSupport x y) h (Or.inl hstart)]
+          exact (cylinder_zero_of_wrong_support canonical hcanonicalSupport h
+            (Or.inl hstart)).symm
+  · simp
+
 /-- The finite cumulative advantage through the action indexed by `l`. -/
 def DDPAdvantage (P : DiscreteDecisionProcess) (p : DDPPath P) (l : ℕ) : ℝ :=
   Finset.sum (Finset.range (l + 1)) fun i =>
