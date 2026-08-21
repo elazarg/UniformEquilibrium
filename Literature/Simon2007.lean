@@ -1,4 +1,7 @@
 import Mathlib
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayMeasure
+import
+  UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.DependentActionPadding
 
 /-!
 # Robert Samuel Simon, *The structure of non-zero-sum stochastic games* (2007)
@@ -615,6 +618,57 @@ structure DiscreteDecisionProcess where
 attribute [instance] DiscreteDecisionProcess.countableX
 attribute [instance] DiscreteDecisionProcess.countableY
 
+/-! ### The production stochastic-game presentation of a DDP -/
+
+/-- A supported local action, used only to totalize incorrectly tagged padded actions. -/
+private noncomputable def DiscreteDecisionProcess.fallbackAction
+    (P : DiscreteDecisionProcess) (x : P.X) (_ : PUnit) : P.Y x :=
+  Classical.choose (P.choose x).support_nonempty
+
+/-- The stage payoff attached to the sampled action in the one-player presentation. -/
+private def DiscreteDecisionProcess.paddedStagePayoff
+    (P : DiscreteDecisionProcess) (x : P.X) (action : ∀ _ : PUnit, P.Y x)
+    (_ : PUnit) : ℝ :=
+  P.valueY x (action PUnit.unit)
+
+/-- The transition of the one-player presentation is the DDP move law. -/
+private def DiscreteDecisionProcess.paddedTransition
+    (P : DiscreteDecisionProcess) (x : P.X) (action : ∀ _ : PUnit, P.Y x) : PMF P.X :=
+  P.move x (action PUnit.unit)
+
+/-- The state-independent-action stochastic game obtained by sigma-padding the DDP's
+state-dependent action family. -/
+private abbrev DiscreteDecisionProcess.paddedGame
+    (P : DiscreteDecisionProcess) : GameTheory.StochasticGame PUnit :=
+  GameTheory.StochasticGame.DependentAction.game
+    (fun x : P.X => fun _ : PUnit => P.Y x)
+    P.fallbackAction P.paddedStagePayoff P.paddedTransition 0 (by norm_num) (by norm_num)
+
+private instance DiscreteDecisionProcess.countablePaddedState
+    (P : DiscreteDecisionProcess) : Countable P.paddedGame.State := by
+  change Countable P.X
+  infer_instance
+
+private instance DiscreteDecisionProcess.countablePaddedAction
+    (P : DiscreteDecisionProcess) (who : PUnit) : Countable (P.paddedGame.Act who) := by
+  change Countable (Σ state, P.Y state)
+  infer_instance
+
+/-- At a padded-game history, sample the DDP's local action at the current state. -/
+private def DiscreteDecisionProcess.paddedPolicy
+    (P : DiscreteDecisionProcess) (_ : PUnit) (t : ℕ) (history : P.paddedGame.Hist t) :
+    PMF (P.Y history.2) :=
+  P.choose history.2
+
+/-- The canonical padded behavior profile attaches the current-state tag to every sampled
+local action. -/
+private def DiscreteDecisionProcess.paddedProfile
+    (P : DiscreteDecisionProcess) : P.paddedGame.BehaviorProfile :=
+  GameTheory.StochasticGame.DependentAction.liftBehaviorProfile
+    (fun x : P.X => fun _ : PUnit => P.Y x)
+    P.fallbackAction P.paddedStagePayoff P.paddedTransition 0 (by norm_num) (by norm_num)
+    P.paddedPolicy
+
 /-- DDP states carry the discrete sigma algebra. -/
 private instance ddpStateMeasurableSpace (P : DiscreteDecisionProcess) :
     MeasurableSpace P.X := ⊤
@@ -712,14 +766,167 @@ private theorem DDPPath.measurable_prefix (P : DiscreteDecisionProcess) (k : ℕ
 /-- One sampled DDP stage records the current state and the action selected there. -/
 private abbrev DDPStage (P : DiscreteDecisionProcess) := (x : P.X) × P.Y x
 
+/-- Evaluate a one-coordinate independent product law at its unique coordinate. -/
+private theorem pmfPi_map_eval_punit {A : PUnit → Type} [∀ i, Countable (A i)]
+    (law : ∀ i, PMF (A i)) :
+    (Math.PMFProduct.pmfPi law).map (fun action => action PUnit.unit) = law PUnit.unit := by
+  classical
+  ext action
+  rw [PMF.map_apply]
+  rw [tsum_eq_single (fun _ => action)]
+  · simp [Math.PMFProduct.pmfPi_apply]
+  · intro other hother
+    rw [if_neg]
+    intro heval
+    apply hother
+    funext i
+    cases i
+    exact heval.symm
+
+/-- Read the unique player's padded action as a local action at the current state. -/
+private def DiscreteDecisionProcess.decodePaddedJointAction
+    (P : DiscreteDecisionProcess) (x : P.X) (action : P.paddedGame.JointAct) : P.Y x :=
+  GameTheory.StochasticGame.DependentAction.decode
+    (fun state : P.X => fun _ : PUnit => P.Y state) P.fallbackAction x PUnit.unit
+      (action PUnit.unit)
+
+/-- Attaching and then decoding the current-state tag preserves the local action law. -/
+private theorem DiscreteDecisionProcess.map_decode_embed_choice
+    (P : DiscreteDecisionProcess) (x : P.X) :
+    ((P.choose x).map
+        (GameTheory.StochasticGame.DependentAction.embed
+          (fun state : P.X => fun _ : PUnit => P.Y state) x PUnit.unit)).map
+      (GameTheory.StochasticGame.DependentAction.decode
+        (fun state : P.X => fun _ : PUnit => P.Y state) P.fallbackAction x PUnit.unit) =
+        P.choose x := by
+  rw [PMF.map_comp]
+  have hcomp :
+      GameTheory.StochasticGame.DependentAction.decode
+          (fun state : P.X => fun _ : PUnit => P.Y state) P.fallbackAction x PUnit.unit ∘
+        GameTheory.StochasticGame.DependentAction.embed
+          (fun state : P.X => fun _ : PUnit => P.Y state) x PUnit.unit = id := by
+    funext action
+    exact GameTheory.StochasticGame.DependentAction.decode_embed
+      (fun state : P.X => fun _ : PUnit => P.Y state) P.fallbackAction x PUnit.unit action
+  rw [hcomp, PMF.map_id]
+
+/-- Decode a padded stochastic-game stage back to the corresponding DDP stage. -/
+private def DiscreteDecisionProcess.decodePaddedStage (P : DiscreteDecisionProcess)
+    (stage : P.paddedGame.StageOutcome) : DDPStage P :=
+  ⟨stage.1, P.decodePaddedJointAction stage.1 stage.2⟩
+
+/-- Decode every stage of a padded stochastic-game play. -/
+private def DiscreteDecisionProcess.decodePaddedPlay (P : DiscreteDecisionProcess)
+    (play : P.paddedGame.Play) : ℕ → DDPStage P :=
+  fun i => P.decodePaddedStage (play i)
+
+/-- Decode a finite production prefix coordinatewise. -/
+private def DiscreteDecisionProcess.decodePaddedCoords
+    (P : DiscreteDecisionProcess) (t : ℕ)
+    (coords : ∀ _ : Finset.Iic t, P.paddedGame.StageOutcome) :
+    ∀ _ : Finset.Iic t, DDPStage P :=
+  fun i => P.decodePaddedStage (coords i)
+
 /-- The stage alphabet is countable and carries its discrete sigma algebra. -/
 private instance ddpStageMeasurableSpace (P : DiscreteDecisionProcess) :
     MeasurableSpace (DDPStage P) := ⊤
+
+/-- The canonical production infinite-play law, decoded to DDP stages. -/
+private def DiscreteDecisionProcess.productionRawLawFrom
+    (P : DiscreteDecisionProcess) (x : P.X) : Measure (ℕ → DDPStage P) := by
+  exact (P.paddedGame.infinitePlayMeasure P.paddedProfile x).map P.decodePaddedPlay
+
+private theorem DiscreteDecisionProcess.measurable_decodePaddedPlay
+    (P : DiscreteDecisionProcess) : Measurable P.decodePaddedPlay := by
+  apply measurable_pi_lambda
+  intro i
+  exact (measurable_of_countable P.decodePaddedStage).comp (measurable_pi_apply i)
+
+private theorem DiscreteDecisionProcess.measurable_decodePaddedCoords
+    (P : DiscreteDecisionProcess) (t : ℕ) : Measurable (P.decodePaddedCoords t) :=
+  measurable_of_countable _
+
+/-- Every finite marginal of the decoded DDP law is supplied by the production
+`coordsDist` projective family. -/
+private theorem DiscreteDecisionProcess.map_frestrictLe_productionRawLawFrom
+    (P : DiscreteDecisionProcess) (x : P.X) (t : ℕ) :
+    (P.productionRawLawFrom x).map
+        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) t) =
+      ((P.paddedGame.coordsDist P.paddedProfile x t).map
+        (P.decodePaddedCoords t)).toMeasure := by
+  rw [DiscreteDecisionProcess.productionRawLawFrom]
+  rw [Measure.map_map
+    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) t)
+    P.measurable_decodePaddedPlay]
+  have hcommute :
+      Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) t ∘ P.decodePaddedPlay =
+        P.decodePaddedCoords t ∘
+          Preorder.frestrictLe (π := fun _ : ℕ => P.paddedGame.StageOutcome) t := rfl
+  rw [hcommute]
+  rw [← Measure.map_map (P.measurable_decodePaddedCoords t)
+    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => P.paddedGame.StageOutcome) t)]
+  rw [P.paddedGame.map_frestrictLe_infinitePlayMeasure]
+  exact PMF.toMeasure_map (P.decodePaddedCoords t)
+    (P.paddedGame.coordsDist P.paddedProfile x t) (P.measurable_decodePaddedCoords t)
+
+/-- The unique padded action coordinate decodes to the DDP's local choice law. -/
+private theorem DiscreteDecisionProcess.map_decodePaddedJointAction_stageActionDist
+    (P : DiscreteDecisionProcess) {t : ℕ} (history : P.paddedGame.Hist t) :
+    (P.paddedGame.stageActionDist P.paddedProfile history).map
+        (P.decodePaddedJointAction history.2) = P.choose history.2 := by
+  let eval : P.paddedGame.JointAct → P.paddedGame.Act PUnit.unit :=
+    fun action => action PUnit.unit
+  let decode : P.paddedGame.Act PUnit.unit → P.Y history.2 :=
+    GameTheory.StochasticGame.DependentAction.decode
+      (fun state : P.X => fun _ : PUnit => P.Y state) P.fallbackAction history.2 PUnit.unit
+  have heval :
+      (P.paddedGame.stageActionDist P.paddedProfile history).map eval =
+        P.paddedProfile PUnit.unit t history := by
+    exact pmfPi_map_eval_punit (fun i => P.paddedProfile i t history)
+  calc
+    (P.paddedGame.stageActionDist P.paddedProfile history).map
+        (P.decodePaddedJointAction history.2) =
+        ((P.paddedGame.stageActionDist P.paddedProfile history).map eval).map decode := by
+      rw [PMF.map_comp]
+      rfl
+    _ = (P.paddedProfile PUnit.unit t history).map decode := by rw [heval]
+    _ = ((P.choose history.2).map
+        (GameTheory.StochasticGame.DependentAction.embed
+          (fun state : P.X => fun _ : PUnit => P.Y state) history.2 PUnit.unit)).map
+            decode := rfl
+    _ = P.choose history.2 := P.map_decode_embed_choice history.2
+
+private instance DiscreteDecisionProcess.isProbabilityMeasure_productionRawLawFrom
+    (P : DiscreteDecisionProcess) (x : P.X) :
+    IsProbabilityMeasure (P.productionRawLawFrom x) := by
+  unfold DiscreteDecisionProcess.productionRawLawFrom
+  exact Measure.isProbabilityMeasure_map P.measurable_decodePaddedPlay.aemeasurable
 
 /-- Draw the action at the initial state. -/
 private def DiscreteDecisionProcess.initialStagePMF (P : DiscreteDecisionProcess)
     (x : P.X) : PMF (DDPStage P) :=
   (P.choose x).map fun y => ⟨x, y⟩
+
+/-- Decoding the production game's initial stage recovers the DDP's initial-stage law. -/
+private theorem DiscreteDecisionProcess.map_decodePaddedStage_initialPMF
+    (P : DiscreteDecisionProcess) (x : P.X) :
+    (P.paddedGame.initialPMF P.paddedProfile x).map P.decodePaddedStage =
+      P.initialStagePMF x := by
+  let history := P.paddedGame.emptyHist x
+  have hdecode :
+      (P.paddedGame.stageActionDist P.paddedProfile history).map
+          (P.decodePaddedJointAction x) = P.choose x := by
+    simpa only [history, GameTheory.StochasticGame.emptyHist] using
+      P.map_decodePaddedJointAction_stageActionDist history
+  rw [GameTheory.StochasticGame.initialPMF, PMF.map_comp]
+  change (P.paddedGame.stageActionDist P.paddedProfile history).map
+      (fun action => (⟨x, P.decodePaddedJointAction x action⟩ : DDPStage P)) =
+        P.initialStagePMF x
+  change (P.paddedGame.stageActionDist P.paddedProfile history).map
+      ((fun action : P.Y x => (⟨x, action⟩ : DDPStage P)) ∘
+        P.decodePaddedJointAction x) = P.initialStagePMF x
+  rw [← PMF.map_comp, hdecode]
+  rfl
 
 /-- Move from the current state/action and then draw the action at the next state. -/
 private def DiscreteDecisionProcess.stepStagePMF (P : DiscreteDecisionProcess)
