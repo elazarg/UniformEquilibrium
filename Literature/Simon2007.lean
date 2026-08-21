@@ -8528,6 +8528,92 @@ private theorem equilibrium_tail_rational
     (htailDeviation n)
   linarith
 
+/-- Replace one player's action at the first row of a quitting profile and then resume
+the prescribed profile. -/
+private def QuitProfile.replaceFirst (G : QuittingGame) (p : QuitProfile G)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) : QuitProfile G :=
+  p.replace G n fun i => if i = 0 then q else p i n
+
+/-- A first-row deviation changes only that row's mixed action; its continuation payoff
+is the original payoff from the second row. -/
+private theorem quitPayoff_replaceFirst_eq (G : QuittingGame) (p : QuitProfile G)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    QuitPayoff G (p.replaceFirst G n q) =
+      QuittingOneStagePayoff G (QuitTailPayoff G p 1) ((p 0).replace G n q) := by
+  have hfirst : p.replaceFirst G n q 0 = (p 0).replace G n q := by
+    funext player
+    by_cases hplayer : player = n
+    · subst player
+      simp [QuitProfile.replaceFirst, QuitProfile.replace, QuitRow.replace]
+    · simp [QuitProfile.replaceFirst, QuitProfile.replace, QuitRow.replace, hplayer]
+  have htail : (fun k => p.replaceFirst G n q (1 + k)) = fun k => p (1 + k) := by
+    funext k player
+    by_cases hplayer : player = n
+    · subst player
+      simp [QuitProfile.replaceFirst, QuitProfile.replace]
+    · simp [QuitProfile.replaceFirst, QuitProfile.replace, hplayer]
+  have htailPayoff : QuitTailPayoff G (p.replaceFirst G n q) 1 =
+      QuitTailPayoff G p 1 := by
+    rw [quitTailPayoff_eq_quitPayoff_shift, quitTailPayoff_eq_quitPayoff_shift]
+    rw [htail]
+  rw [QuitPayoff, quitTailPayoff_eq_oneStage, hfirst, htailPayoff]
+
+/-- A global approximate equilibrium bounds the survival-weighted gain from forcing one
+endpoint action at any stage.  No positive-support conclusion is inferred here. -/
+private theorem equilibrium_weighted_endpoint_regret_le
+    (G : QuittingGame) {alpha : ℝ} (p : QuitProfile G)
+    (hequilibrium : IsQuitEpsilonEquilibrium G alpha p) (i : ℕ)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    tailSurvival G p 0 i *
+        (QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1))
+            ((p i).replace G n q) n - QuitTailPayoff G p i n) ≤ alpha := by
+  let tail : QuitProfile G := fun k => p (i + k)
+  have hglobal := hequilibrium n (p.deviationFrom G n i fun k =>
+    if k = 0 then q else tail k n)
+  have hdiff := quitPayoff_replace_deviationFrom_sub G p n i fun k =>
+    if k = 0 then q else tail k n
+  have htailReplace : QuitProfile.replace G tail n
+      (fun k => if k = 0 then q else tail k n) = tail.replaceFirst G n q := rfl
+  have hglobal' :
+      QuitPayoff G (p.replace G n (p.deviationFrom G n i fun k =>
+          if k = 0 then q else tail k n)) n - QuitPayoff G p n ≤ alpha := by
+    linarith
+  rw [hdiff, htailReplace, quitPayoff_replaceFirst_eq] at hglobal'
+  have hshift : QuitTailPayoff G tail 1 = QuitTailPayoff G p (i + 1) := by
+    rw [quitTailPayoff_eq_quitPayoff_shift, quitTailPayoff_eq_quitPayoff_shift]
+    congr 1
+    funext k
+    simp [tail, Nat.add_assoc]
+  rw [hshift] at hglobal'
+  simpa [tail] using hglobal'
+
+/-- Forcing Continue at one reached stage can improve by at most the global equilibrium
+error divided by the reach probability. -/
+private theorem equilibrium_weighted_forcedContinue_regret_le
+    (G : QuittingGame) {alpha : ℝ} (p : QuitProfile G)
+    (hequilibrium : IsQuitEpsilonEquilibrium G alpha p) (i : ℕ)
+    (n : G.Player) :
+    tailSurvival G p 0 i *
+        (ForcedContinuePayoff G (QuitTailPayoff G p (i + 1)) (p i) n -
+          QuitTailPayoff G p i n) ≤ alpha := by
+  simpa [ForcedContinuePayoff] using
+    equilibrium_weighted_endpoint_regret_le G p hequilibrium i n 0
+
+/-- Forcing Quit at one reached stage can improve by at most the global equilibrium
+error divided by the reach probability. -/
+private theorem equilibrium_weighted_forcedQuit_regret_le
+    (G : QuittingGame) {alpha : ℝ} (p : QuitProfile G)
+    (hequilibrium : IsQuitEpsilonEquilibrium G alpha p) (i : ℕ)
+    (n : G.Player) :
+    tailSurvival G p 0 i *
+        (ForcedQuitPayoff G (p i) n - QuitTailPayoff G p i n) ≤ alpha := by
+  have hregret := equilibrium_weighted_endpoint_regret_le G p hequilibrium i n 1
+  have heq := quittingOneStagePayoff_eq_of_quitProbability_eq_one G
+    (QuitTailPayoff G p (i + 1)) 0 ((p i).replace G n 1)
+    (quitProbability_replace_one G (p i) n)
+  rw [heq] at hregret
+  exact hregret
+
 /-- Reversing the first `j` rows and iterating from `s₀` produces `sⱼ`. -/
 private theorem finiteQuittingPayoff_reverse_eq (G : QuittingGame) {k : ℕ}
     (p : ℕ → QuitRow G) (s : ℕ → Payoff G.Player)
@@ -14025,7 +14111,7 @@ private theorem forcedQuitPayoff_ge_solo_sub_otherQuitMass
 Against fixed stationary opponents who eventually quit, the min-max is capped by the
 better of quitting now and continuing until an opponent quits.
 -/
-private theorem minMaxQuit_le_max_forcedQuit_stationaryContinue
+theorem minMaxQuit_le_max_forcedQuit_stationaryContinue
     (G : QuittingGame) {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
     (p : QuitRow G) (n : G.Player)
     (hq : 0 < QuitProbability G (p.replace G n 0)) :
