@@ -7059,6 +7059,12 @@ def MinMaxQuit (G : QuittingGame) (n : G.Player) : ℝ :=
 def IsRational (G : QuittingGame) (ε : ℝ) (r : Payoff G.Player) : Prop :=
   ∀ n, r n ≥ MinMaxQuit G n - ε
 
+/-- Increasing the error weakens individual rationality. -/
+theorem IsRational.mono (G : QuittingGame) {δ ε : ℝ} (hδε : δ ≤ ε)
+    {r : Payoff G.Player} (h : IsRational G δ r) : IsRational G ε r := by
+  intro n
+  exact (show MinMaxQuit G n - ε ≤ MinMaxQuit G n - δ by linarith).trans (h n)
+
 /-- The solo-quitting payoff `vⁿ = v({n})ⁿ`. -/
 def SoloPayoff (G : QuittingGame) (n : G.Player) : ℝ :=
   G.reward ⟨{n}, Finset.singleton_nonempty n⟩ n
@@ -9659,6 +9665,13 @@ theorem GeneratesFRowOrbit.tail_mem_fRow
   refine ⟨p i, h i, ?_⟩
   exact (quitTailPayoff_eq_oneStage G p i).symm
 
+/-- Increasing the row error preserves generation by the same profile. -/
+theorem GeneratesFRowOrbit.mono (G : QuittingGame) {δ ε : ℝ} (hδε : δ ≤ ε)
+    {p : QuitProfile G} (h : GeneratesFRowOrbit G δ p) :
+    GeneratesFRowOrbit G ε p := by
+  intro i
+  exact EpsilonRow.mono G hδε _ (h i)
+
 /-- The probability that player `n` follows the prescribed continue action through stage `i`. -/
 private def PlayerContinueProbability (G : QuittingGame) (p : QuitProfile G)
     (n : G.Player) (i : ℕ) : ℝ :=
@@ -11415,6 +11428,31 @@ theorem ReverseCycleTailOrbit.isRational
   intro i
   exact h (k - i % k)
 
+/-- Reversal sends the index immediately before `b` to the tail after row `b`. -/
+theorem ReverseCycleTailOrbit.at_before_reverse_index
+    (G : QuittingGame) {k : ℕ} (hk : 0 < k) (block : Fin k → QuitRow G)
+    (b : Fin k) :
+    ReverseCycleTailOrbit G hk block (k - 1 - b) =
+      QuitTailPayoff G (CycleProfile G k hk block) (b + 1) := by
+  have hi : k - 1 - (b : ℕ) < k := by omega
+  simp only [ReverseCycleTailOrbit, Nat.mod_eq_of_lt hi]
+  congr 1
+  omega
+
+/-- Reversal sends the index after `b` back to the tail at row `b`. -/
+theorem ReverseCycleTailOrbit.at_reverse_index
+    (G : QuittingGame) {k : ℕ} (hk : 0 < k) (block : Fin k → QuitRow G)
+    (b : Fin k) :
+    ReverseCycleTailOrbit G hk block (k - b) =
+      QuitTailPayoff G (CycleProfile G k hk block) b := by
+  by_cases hb : (b : ℕ) = 0
+  · have hperiod := CycleProfile.quitTailPayoff_add_period G hk block 0
+    simpa [ReverseCycleTailOrbit, hb] using hperiod
+  · have hi : k - (b : ℕ) < k := by omega
+    simp only [ReverseCycleTailOrbit, Nat.mod_eq_of_lt hi]
+    congr 1
+    omega
+
 /-- A positive-mass finite quitting block has unbounded mass when repeated periodically. -/
 theorem CycleProfile.hasUnboundedQuitMass (G : QuittingGame) {k : ℕ} (hk : 0 < k)
     (block : Fin k → QuitRow G) (hpositive : ∃ i, 0 < QuitProbability G (block i)) :
@@ -11584,6 +11622,53 @@ def InfiniteOrbitCondition (G : QuittingGame) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ x : ℕ → Payoff G.Player,
     IsInfiniteOrbit (FRow G ε) x ∧ (∀ i, IsRational G ε (x i)) ∧
       HasUnboundedVariation x
+
+/--
+The uniform motion estimate in Lemma 5 turns every positive-mass generated cycle into
+the unbounded infinite orbit of Theorem 3(iv).
+-/
+theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_uniformRho
+    (G : QuittingGame) (hcycle : CyclicOrbitCondition G)
+    {ρ : ℝ} (hρ : IsUniformRho G ρ) : InfiniteOrbitCondition G := by
+  intro ε hε
+  let δ := min ε ρ
+  have hδ : 0 < δ := lt_min hε hρ.1
+  have hδε : δ ≤ ε := min_le_left _ _
+  have hδρ : δ ≤ ρ := min_le_right _ _
+  rcases hcycle δ hδ with ⟨k, hk, block, hgenerated, hrational, b, hb⟩
+  let cycle := CycleProfile G k hk block
+  have hgeneratedρ : GeneratesFRowOrbit G ρ cycle :=
+    GeneratesFRowOrbit.mono G hδρ hgenerated
+  have hrationalρ : ∀ i, IsRational G ρ (QuitTailPayoff G cycle i) := fun i =>
+    IsRational.mono G hδρ (hrational i)
+  have hrow : block b ∈ EpsilonRow G ρ (QuitTailPayoff G cycle (b + 1)) := by
+    simpa [cycle, CycleProfile, Nat.mod_eq_of_lt b.2] using hgeneratedρ b
+  have hmotion := (hρ.2.2 (QuitTailPayoff G cycle (b + 1)) (block b)
+    (hrationalρ (b + 1)) hrow).1
+  have honeStage : QuittingOneStagePayoff G (QuitTailPayoff G cycle (b + 1))
+      (block b) = QuitTailPayoff G cycle b := by
+    have htail := quitTailPayoff_eq_oneStage G cycle b
+    simpa [cycle, CycleProfile, Nat.mod_eq_of_lt b.2] using htail.symm
+  rw [honeStage] at hmotion
+  have htailNe : QuitTailPayoff G cycle (b + 1) ≠ QuitTailPayoff G cycle b := by
+    intro heq
+    rw [heq, sub_self, norm_zero] at hmotion
+    nlinarith [mul_pos hρ.1 hb]
+  have hne : ∃ i, i < k ∧ ReverseCycleTailOrbit G hk block (i + 1) ≠
+      ReverseCycleTailOrbit G hk block i := by
+    refine ⟨k - 1 - b, by omega, ?_⟩
+    rw [show k - 1 - (b : ℕ) + 1 = k - b by omega,
+      ReverseCycleTailOrbit.at_reverse_index,
+      ReverseCycleTailOrbit.at_before_reverse_index]
+    exact htailNe.symm
+  obtain ⟨x, horbit, hxRational, hvariation⟩ :=
+    hgenerated.exists_infiniteOrbit_of_reverseCycle_nonconstant G hk block
+      hrational hne
+  refine ⟨x, ?_, ?_, hvariation⟩
+  · intro i
+    exact FRow.mono G hδε _ (horbit i)
+  · intro i
+    exact IsRational.mono G hδε (hxRational i)
 
 /-- Theorem 3(v): infinite extended `ε`-rational `F_ε` orbits of unbounded variation. -/
 def ExtendedOrbitCondition (G : QuittingGame) : Prop :=
