@@ -5305,6 +5305,80 @@ theorem example1_half_not_mem_D1 :
   change p * q = 1 / 2 at hcolumn
   nlinarith [sq_nonneg (p - q)]
 
+/-- If Example 1 attains aggregate payoff one at every preceding stage, its
+public history law remains a point mass. -/
+private theorem example1_histDist_eq_pure_of_stageTotals_eq_one
+    (profile : example1.BehaviorProfile) (horizon : ℕ)
+    (hstage : ∀ time, time < horizon →
+      example1.repeatedGame.expectedStagePayoff profile PUnit.unit time false +
+        example1.repeatedGame.expectedStagePayoff profile PUnit.unit time true = 1) :
+    ∀ time, time ≤ horizon → ∃ history,
+      example1.repeatedGame.histDist profile PUnit.unit time = PMF.pure history := by
+  intro time htime
+  induction time with
+  | zero =>
+      exact ⟨example1.repeatedGame.emptyHist PUnit.unit, rfl⟩
+  | succ time ih =>
+      obtain ⟨history, hhistory⟩ := ih (by omega)
+      have htime' : time < horizon := by omega
+      have htotal := hstage time htime'
+      unfold StochasticGame.expectedStagePayoff at htotal
+      rw [hhistory] at htotal
+      simp only [Math.Probability.expect_pure] at htotal
+      rw [example1_stageEUAt_eq_mixedPayoff,
+        example1_stageEUAt_eq_mixedPayoff] at htotal
+      obtain ⟨diagonal, hfalse, htrue⟩ :=
+        example1_mixedProfile_pure_diagonal_of_total_eq_one
+          (fun player => profile player time history) htotal
+      let action : example1.repeatedGame.JointAct := fun _ => diagonal
+      let nextHistory : example1.repeatedGame.Hist (time + 1) :=
+        (Fin.snoc history.1 (PUnit.unit, action), PUnit.unit)
+      refine ⟨nextHistory, ?_⟩
+      rw [example1.repeatedGame.histDist_succ, hhistory, PMF.pure_bind]
+      have hactions : example1.repeatedGame.stageActionDist profile history =
+          PMF.pure action := by
+        unfold StochasticGame.stageActionDist
+        have hprofile : (fun player => profile player time history) =
+            fun player => PMF.pure (action player) := by
+          funext player
+          cases player
+          · exact hfalse
+          · exact htrue
+        rw [hprofile]
+        exact Math.PMFProduct.pmfPi_pure action
+      rw [hactions, PMF.pure_bind]
+      simp only [FiniteStageGame.repeatedGame,
+        KernelGame.realizedActionStochasticGame, PMF.pure_bind]
+      rfl
+
+/-- On the Pareto boundary of Example 1, every expected row-stage payoff is
+zero or one. -/
+private theorem example1_expectedStagePayoff_false_eq_bool
+    (profile : example1.BehaviorProfile) (horizon time : ℕ)
+    (hstage : ∀ t, t < horizon →
+      example1.repeatedGame.expectedStagePayoff profile PUnit.unit t false +
+        example1.repeatedGame.expectedStagePayoff profile PUnit.unit t true = 1)
+    (htime : time < horizon) :
+    ∃ diagonal : Bool,
+      example1.repeatedGame.expectedStagePayoff profile PUnit.unit time false =
+        if diagonal then 0 else 1 := by
+  obtain ⟨history, hhistory⟩ :=
+    example1_histDist_eq_pure_of_stageTotals_eq_one
+      profile horizon hstage time htime.le
+  have htotal := hstage time htime
+  unfold StochasticGame.expectedStagePayoff at htotal ⊢
+  rw [hhistory] at htotal ⊢
+  simp only [Math.Probability.expect_pure] at htotal ⊢
+  rw [example1_stageEUAt_eq_mixedPayoff,
+    example1_stageEUAt_eq_mixedPayoff] at htotal
+  obtain ⟨diagonal, hfalse, htrue⟩ :=
+    example1_mixedProfile_pure_diagonal_of_total_eq_one
+      (fun player => profile player time history) htotal
+  refine ⟨diagonal, ?_⟩
+  rw [example1_stageEUAt_eq_mixedPayoff]
+  rw [binaryGame_mixedPayoff_apply, hfalse, htrue]
+  cases diagonal <;> norm_num [pair]
+
 /-! The paper also notes that no positive finite horizon convexifies Example 1.
 Its Pareto-boundary argument requires a reusable characterization of equality
 in the convex-hull bound, which is not yet available for the monitored
@@ -5312,7 +5386,132 @@ adapter. -/
 theorem example1_no_finite_convexification (n : example1.Horizon) :
     example1.finiteFeasiblePayoffsOnHorizon n ≠
       example1.correlatedFeasiblePayoffs := by
-  sorry
+  intro heq
+  let weight : ℝ := 1 / ((n.1 : ℝ) + 1)
+  let target : Payoff Bool := pair weight (1 - weight)
+  have hweight0 : 0 ≤ weight := by
+    dsimp only [weight]
+    positivity
+  have hweight1 : weight ≤ 1 := by
+    dsimp only [weight]
+    have hdenom : (0 : ℝ) < (n.1 : ℝ) + 1 := by positivity
+    rw [div_le_iff₀ hdenom]
+    linarith
+  have hleft : pair 1 0 ∈ example1.purePayoffSet := by
+    refine ⟨fun _ => false, ?_⟩
+    funext who
+    cases who <;> rfl
+  have hright : pair 0 1 ∈ example1.purePayoffSet := by
+    refine ⟨fun _ => true, ?_⟩
+    funext who
+    cases who <;> rfl
+  have htargetC : target ∈ example1.correlatedFeasiblePayoffs := by
+    have hleftHull := (subset_convexHull ℝ example1.purePayoffSet) hleft
+    have hrightHull := (subset_convexHull ℝ example1.purePayoffSet) hright
+    have hcomb := example1.correlatedFeasiblePayoffs_convex
+      hleftHull hrightHull (a := weight) (b := 1 - weight)
+      hweight0 (by linarith) (by ring)
+    convert hcomb using 1
+    funext who
+    cases who <;> simp [target, weight]
+  obtain ⟨profile, hpayoff⟩ :
+      ∃ profile, example1.finitePayoff n.1 profile = target := by
+    rw [← heq] at htargetC
+    exact htargetC
+  have htotalPayoff :
+      example1.finitePayoff n.1 profile false +
+        example1.finitePayoff n.1 profile true = 1 := by
+    rw [hpayoff]
+    simp [target]
+  let stageTotal : ℕ → ℝ := fun time =>
+    example1.repeatedGame.expectedStagePayoff profile PUnit.unit time false +
+      example1.repeatedGame.expectedStagePayoff profile PUnit.unit time true
+  have hstageLe (time : ℕ) : stageTotal time ≤ 1 :=
+    example1_expectedStageTotal_le_one profile time
+  have hsum : ∑ time ∈ Finset.range n.1, stageTotal time = n.1 := by
+    have hfalse := congrFun
+      (cast_smul_finitePayoff_eq_sum example1 n.1 profile) false
+    have htrue := congrFun
+      (cast_smul_finitePayoff_eq_sum example1 n.1 profile) true
+    simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hfalse htrue
+    unfold stageTotal
+    rw [Finset.sum_add_distrib, ← hfalse, ← htrue]
+    change (n.1 : ℝ) * example1.finitePayoff n.1 profile false +
+        (n.1 : ℝ) * example1.finitePayoff n.1 profile true = _
+    rw [← mul_add, htotalPayoff]
+    simp
+  have hstage : ∀ time, time < n.1 → stageTotal time = 1 := by
+    intro time htime
+    have hlossNonneg : ∀ t ∈ Finset.range n.1,
+        0 ≤ 1 - stageTotal t := by
+      intro t _
+      linarith [hstageLe t]
+    have hlossSum : ∑ t ∈ Finset.range n.1, (1 - stageTotal t) = 0 := by
+      rw [Finset.sum_sub_distrib]
+      simp [hsum]
+    exact (sub_eq_zero.mp
+      ((Finset.sum_eq_zero_iff_of_nonneg hlossNonneg).mp hlossSum
+        time (Finset.mem_range.mpr htime))).symm
+  have hbool : ∀ time, time < n.1 → ∃ diagonal : Bool,
+      example1.repeatedGame.expectedStagePayoff profile PUnit.unit time false =
+        if diagonal then 0 else 1 := by
+    intro time htime
+    exact example1_expectedStagePayoff_false_eq_bool
+      profile n.1 time (fun t ht => hstage t ht) htime
+  let diagonal : ℕ → Bool := fun time =>
+    if htime : time < n.1 then Classical.choose (hbool time htime) else false
+  have hdiagonal : ∀ time, time < n.1 →
+      example1.repeatedGame.expectedStagePayoff profile PUnit.unit time false =
+        if diagonal time then 0 else 1 := by
+    intro time htime
+    simpa only [diagonal, dif_pos htime] using
+      Classical.choose_spec (hbool time htime)
+  have hrow := congrFun hpayoff false
+  have hrowSum := congrFun
+    (cast_smul_finitePayoff_eq_sum example1 n.1 profile) false
+  simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hrowSum
+  rw [hrow] at hrowSum
+  change (n.1 : ℝ) * weight = _ at hrowSum
+  have hsumBool :
+      (∑ time ∈ Finset.range n.1,
+          example1.repeatedGame.expectedStagePayoff profile
+            example1.repeatedInitial time false) =
+        ∑ time ∈ Finset.range n.1, if diagonal time then 0 else 1 := by
+    apply Finset.sum_congr rfl
+    intro time htime
+    simpa only [FiniteStageGame.repeatedInitial] using
+      hdiagonal time (Finset.mem_range.mp htime)
+  rw [hsumBool] at hrowSum
+  let count := (Finset.range n.1 |>.filter fun time => ¬diagonal time).card
+  have hcount : (∑ time ∈ Finset.range n.1,
+      if diagonal time then (0 : ℝ) else 1) =
+      count := by
+    calc
+      _ = ∑ time ∈ Finset.range n.1,
+          if ¬diagonal time then (1 : ℝ) else 0 := by
+        apply Finset.sum_congr rfl
+        intro time _
+        by_cases h : diagonal time <;> simp [h]
+      _ = count := by
+        rw [Finset.sum_boole]
+  rw [hcount] at hrowSum
+  have hcountNonneg : (0 : ℝ) ≤ count := by positivity
+  have hnpos : (0 : ℝ) < n.1 := by exact_mod_cast n.2
+  have hdenom : (0 : ℝ) < n.1 + 1 := by positivity
+  dsimp only [weight] at hrowSum
+  by_cases hcountZero : count = 0
+  · rw [hcountZero] at hrowSum
+    norm_num at hrowSum
+    rcases hrowSum with hnzero | hdenomZero
+    · exact (Nat.ne_of_gt n.2) hnzero
+    · exact (ne_of_gt hdenom) hdenomZero
+  · have hcountOne : (1 : ℝ) ≤ count := by
+      exact_mod_cast Nat.one_le_iff_ne_zero.mpr hcountZero
+    field_simp [ne_of_gt hdenom] at hrowSum
+    have hlarge : (n.1 : ℝ) + 1 ≤
+        ((n.1 : ℝ) + 1) * count :=
+      by simpa using mul_le_mul_of_nonneg_left hcountOne hdenom.le
+    nlinarith
 
 /-- Equation (11): neither `Dₙ` nor `Eₙ` is monotone in general.
 The paper's Example 1 witnesses both failures for the same positive horizon. -/
