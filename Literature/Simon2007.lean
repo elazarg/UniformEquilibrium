@@ -6973,6 +6973,26 @@ theorem quitProbability_replace_one (G : QuittingGame) (p : QuitRow G)
   rw [hprod]
   ring
 
+/-- A row with one sure quitter has total quitting probability one. -/
+theorem quitProbability_eq_one_of_coord_eq_one (G : QuittingGame) (p : QuitRow G)
+    (j : G.Player) (hj : (p j : ℝ) = 1) : QuitProbability G p = 1 := by
+  simp only [QuitProbability]
+  have hjmem : j ∈ Finset.univ := Finset.mem_univ j
+  have hprod : (∏ i, (1 - (p i : ℝ))) = 0 := by
+    apply Finset.prod_eq_zero hjmem
+    linarith
+  rw [hprod]
+  ring
+
+/-- With certain absorption, a one-stage payoff is independent of its continuation vector. -/
+theorem quittingOneStagePayoff_eq_of_quitProbability_eq_one
+    (G : QuittingGame) (r s : Payoff G.Player) (p : QuitRow G)
+    (h : QuitProbability G p = 1) :
+    QuittingOneStagePayoff G r p = QuittingOneStagePayoff G s p := by
+  funext n
+  simp only [QuittingOneStagePayoff, h]
+  ring
+
 /-- `aⁿ(p)` is player `n`'s expected payoff when she is forced to quit. -/
 def ForcedQuitPayoff (G : QuittingGame) (p : QuitRow G) (n : G.Player) : ℝ :=
   QuittingOneStagePayoff G 0 (p.replace G n 1) n
@@ -8262,7 +8282,7 @@ private theorem quitTailPayoff_eq_oneStage (G : QuittingGame) (p : QuitProfile G
   ring_nf
 
 /-- The payoff of a finite sequence of quitting rows followed by terminal vector `x`. -/
-private def finiteQuittingPayoff (G : QuittingGame) :
+def finiteQuittingPayoff (G : QuittingGame) :
     (k : ℕ) → Payoff G.Player → (ℕ → QuitRow G) → Payoff G.Player
   | 0, x, _ => x
   | k + 1, x, p =>
@@ -8270,7 +8290,7 @@ private def finiteQuittingPayoff (G : QuittingGame) :
         (finiteQuittingPayoff G k x fun i => p (i + 1)) (p 0)
 
 /-- Iterating the Bellman recursion gives the tail payoff after a finite prefix. -/
-private theorem quitTailPayoff_eq_finiteQuittingPayoff (G : QuittingGame)
+theorem quitTailPayoff_eq_finiteQuittingPayoff (G : QuittingGame)
     (p : QuitProfile G) (i k : ℕ) :
     QuitTailPayoff G p i =
       finiteQuittingPayoff G k (QuitTailPayoff G p (i + k)) (fun j => p (i + j)) := by
@@ -9019,24 +9039,34 @@ private theorem exists_calibratedPunishmentWithin
     linarith
 
 /-- Follow a supplied quitting profile for `T` stages, then start a punishment profile. -/
-private def PrefixThenPunish (G : QuittingGame) (p : QuitProfile G)
+def PrefixThenPunish (G : QuittingGame) (p : QuitProfile G)
     (T : ℕ) (punishment : QuitProfile G) : QuitProfile G :=
   fun i => if i < T then p i else punishment (i - T)
 
-@[simp] private theorem PrefixThenPunish.apply_of_lt
+@[simp] theorem PrefixThenPunish.apply_of_lt
     (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
     (punishment : QuitProfile G) {i : ℕ} (hi : i < T) :
     PrefixThenPunish G p T punishment i = p i := by
   simp [PrefixThenPunish, hi]
 
-@[simp] private theorem PrefixThenPunish.apply_add
+@[simp] theorem PrefixThenPunish.apply_add
     (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
     (punishment : QuitProfile G) (i : ℕ) :
     PrefixThenPunish G p T punishment (T + i) = punishment i := by
   simp [PrefixThenPunish]
 
+/-- The instant profile is the one-row instance of finite-prefix punishment splicing. -/
+theorem instantProfile_eq_prefixThenPunish (G : QuittingGame) (p : QuitRow G)
+    (punishment : QuitProfile G) :
+    InstantProfile G p punishment =
+      PrefixThenPunish G (fun _ => p) 1 punishment := by
+  funext i
+  cases i with
+  | zero => simp [InstantProfile, PrefixThenPunish]
+  | succ i => simp [InstantProfile, PrefixThenPunish]
+
 /-- A finite quitting payoff depends only on the displayed finite prefix. -/
-private theorem finiteQuittingPayoff_congr_prefix (G : QuittingGame) (k : ℕ)
+theorem finiteQuittingPayoff_congr_prefix (G : QuittingGame) (k : ℕ)
     (x : Payoff G.Player) (p q : QuitProfile G)
     (hpq : ∀ i, i < k → p i = q i) :
     finiteQuittingPayoff G k x p = finiteQuittingPayoff G k x q := by
@@ -9051,7 +9081,7 @@ private theorem finiteQuittingPayoff_congr_prefix (G : QuittingGame) (k : ℕ)
       exact hpq (i + 1) (by omega)
 
 /-- At the switching stage, the spliced profile's tail is exactly the punishment payoff. -/
-private theorem quitTailPayoff_prefixThenPunish_at_switch
+theorem quitTailPayoff_prefixThenPunish_at_switch
     (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
     (punishment : QuitProfile G) :
     QuitTailPayoff G (PrefixThenPunish G p T punishment) T =
@@ -9073,7 +9103,7 @@ private theorem quitTailPayoff_prefixThenPunish_at_switch
   simp
 
 /-- The generated profile has the supplied finite prefix and the punishment as terminal value. -/
-private theorem quitPayoff_prefixThenPunish_eq_finite
+theorem quitPayoff_prefixThenPunish_eq_finite
     (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
     (punishment : QuitProfile G) :
     QuitPayoff G (PrefixThenPunish G p T punishment) =
@@ -9088,7 +9118,7 @@ private theorem quitPayoff_prefixThenPunish_eq_finite
   exact PrefixThenPunish.apply_of_lt G p T punishment hi
 
 /-- Unilateral replacement of a spliced profile splits into prefix and shifted-tail replacements. -/
-private theorem PrefixThenPunish.replace (G : QuittingGame) (p : QuitProfile G)
+theorem PrefixThenPunish.replace (G : QuittingGame) (p : QuitProfile G)
     (T : ℕ) (punishment : QuitProfile G) (n : G.Player)
     (deviation : ℕ → Set.Icc (0 : ℝ) 1) :
     (PrefixThenPunish G p T punishment).replace G n deviation =
@@ -9105,7 +9135,7 @@ private theorem PrefixThenPunish.replace (G : QuittingGame) (p : QuitProfile G)
     · rfl
 
 /-- A unilateral deviation from the generated profile has the exact finite-prefix evaluation. -/
-private theorem quitPayoff_prefixThenPunish_replace_eq_finite
+theorem quitPayoff_prefixThenPunish_replace_eq_finite
     (G : QuittingGame) (p : QuitProfile G) (T : ℕ)
     (punishment : QuitProfile G) (n : G.Player)
     (deviation : ℕ → Set.Icc (0 : ℝ) 1) :
@@ -9201,6 +9231,26 @@ private theorem forcedContinuePayoff_sub
   simp only [ForcedContinuePayoff, QuittingOneStagePayoff]
   ring_nf
 
+/-- An `η`-equilibrium row loses at most `η` against any mixed one-stage deviation. -/
+theorem quittingOneStagePayoff_deviation_le_add (G : QuittingGame)
+    {r : Payoff G.Player} {p : QuitRow G} {η : ℝ} (hη : 0 ≤ η)
+    (hp : p ∈ EpsilonRow G η r) (n : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    QuittingOneStagePayoff G r (p.replace G n q) n ≤
+      QuittingOneStagePayoff G r p n + η := by
+  rw [quittingOneStagePayoff_replace_eq_endpoints]
+  have hquit := EpsilonRow.forcedQuitPayoff_le_oneStage_add G hp hη n
+  have hcontinue := EpsilonRow.forcedContinue_sub_oneStage_le G hp hη n
+  calc
+    (q : ℝ) * ForcedQuitPayoff G p n +
+        (1 - (q : ℝ)) * ForcedContinuePayoff G r p n ≤
+        (q : ℝ) * (QuittingOneStagePayoff G r p n + η) +
+          (1 - (q : ℝ)) * (QuittingOneStagePayoff G r p n + η) := by
+      exact add_le_add
+        (mul_le_mul_of_nonneg_left hquit q.property.1)
+        (mul_le_mul_of_nonneg_left (by linarith)
+          (sub_nonneg.mpr q.property.2))
+    _ = QuittingOneStagePayoff G r p n + η := by ring_nf
+
 /-- A cumulative forced-continue ledger is a supermartingale budget for every deviation. -/
 private theorem finiteQuittingPayoff_replace_le_of_ledger
     (G : QuittingGame) (n : G.Player) {k : ℕ} {η K : ℝ}
@@ -9278,6 +9328,101 @@ private theorem finiteQuittingPayoff_replace_le_of_ledger
             (mul_le_mul_of_nonneg_left hcontinue
               (sub_nonneg.mpr (deviation 0).property.2))
         _ = r 0 n + K - ledger 0 := by ring
+
+/-- A sure first-stage quitter, an approximate equilibrium row, and an approximate
+min-max punishment compile to an instant equilibrium.  The three losses are the row
+error, the rationality error, and the punishment error. -/
+theorem instantProfile_isQuitEpsilonEquilibrium
+    (G : QuittingGame) {η δ : ℝ} (hη : 0 ≤ η) (hδ : 0 ≤ δ)
+    (r : Payoff G.Player) (p : QuitRow G) (j : G.Player)
+    (punishment : QuitProfile G) (hrational : IsRational G η r)
+    (hsure : (p j : ℝ) = 1) (hrow : p ∈ EpsilonRow G η r)
+    (hpunishment : IsPunishmentWithin G j δ punishment) :
+    IsQuitEpsilonEquilibrium G (2 * η + δ) (InstantProfile G p punishment) := by
+  intro n deviation
+  let shiftedDeviation : ℕ → Set.Icc (0 : ℝ) 1 := fun i => deviation (1 + i)
+  let tail := QuitPayoff G (punishment.replace G n shiftedDeviation)
+  have hbase : QuitPayoff G (InstantProfile G p punishment) =
+      QuittingOneStagePayoff G r p := by
+    rw [instantProfile_eq_prefixThenPunish,
+      quitPayoff_prefixThenPunish_eq_finite]
+    simp only [finiteQuittingPayoff]
+    exact quittingOneStagePayoff_eq_of_quitProbability_eq_one G _ r p
+      (quitProbability_eq_one_of_coord_eq_one G p j hsure)
+  have hdeviation :
+      QuitPayoff G ((InstantProfile G p punishment).replace G n deviation) =
+        QuittingOneStagePayoff G tail (p.replace G n (deviation 0)) := by
+    rw [instantProfile_eq_prefixThenPunish,
+      quitPayoff_prefixThenPunish_replace_eq_finite]
+    rfl
+  rw [hdeviation, hbase]
+  by_cases hnj : n = j
+  · subst n
+    have htail : tail j ≤ r j + η + δ := by
+      have hpunish := hpunishment shiftedDeviation
+      have hrationalJ := hrational j
+      dsimp only [tail]
+      linarith
+    let survival := 1 - QuitProbability G (p.replace G j 0)
+    have hsurvival0 : 0 ≤ survival := by
+      exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
+    have hsurvival1 : survival ≤ 1 := by
+      dsimp only [survival]
+      linarith [(quitProbability_mem_Icc G (p.replace G j 0)).1]
+    have hscaled : survival * (tail j - r j) ≤ η + δ := by
+      exact (mul_le_mul_of_nonneg_left (by linarith [htail]) hsurvival0).trans
+        (mul_le_of_le_one_left (add_nonneg hη hδ) hsurvival1)
+    have hforceContinue : ForcedContinuePayoff G tail p j ≤
+        QuittingOneStagePayoff G r p j + 2 * η + δ := by
+      have hshift := forcedContinuePayoff_sub G tail r p j
+      have hrowContinue := EpsilonRow.forcedContinue_sub_oneStage_le G hrow hη j
+      change ForcedContinuePayoff G tail p j - ForcedContinuePayoff G r p j =
+        survival * (tail j - r j) at hshift
+      linarith
+    have hforceQuit : ForcedQuitPayoff G p j ≤
+        QuittingOneStagePayoff G r p j + 2 * η + δ := by
+      have := EpsilonRow.forcedQuitPayoff_le_oneStage_add G hrow hη j
+      linarith
+    rw [quittingOneStagePayoff_replace_eq_endpoints]
+    calc
+      (deviation 0 : ℝ) * ForcedQuitPayoff G p j +
+          (1 - (deviation 0 : ℝ)) * ForcedContinuePayoff G tail p j ≤
+          (deviation 0 : ℝ) *
+              (QuittingOneStagePayoff G r p j + 2 * η + δ) +
+            (1 - (deviation 0 : ℝ)) *
+              (QuittingOneStagePayoff G r p j + 2 * η + δ) := by
+        exact add_le_add
+          (mul_le_mul_of_nonneg_left hforceQuit (deviation 0).property.1)
+          (mul_le_mul_of_nonneg_left hforceContinue
+            (sub_nonneg.mpr (deviation 0).property.2))
+      _ = QuittingOneStagePayoff G r p j + (2 * η + δ) := by ring_nf
+  · have hstillSure : ((p.replace G n (deviation 0)) j : ℝ) = 1 := by
+      simp [QuitRow.replace, Ne.symm hnj, hsure]
+    rw [quittingOneStagePayoff_eq_of_quitProbability_eq_one G tail r
+      (p.replace G n (deviation 0))
+        (quitProbability_eq_one_of_coord_eq_one G _ j hstillSure)]
+    exact (quittingOneStagePayoff_deviation_le_add G hη hrow n (deviation 0)).trans
+      (by linarith)
+
+/-- If instant approximate equilibria fail, then at one positive scale no rational
+approximate equilibrium row contains a sure quitter. -/
+theorem exists_scale_without_sure_quitter_of_not_instant (G : QuittingGame)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∃ η : ℝ, 0 < η ∧ ∀ r p j, IsRational G η r →
+      p ∈ EpsilonRow G η r → (p j : ℝ) ≠ 1 := by
+  classical
+  by_contra hscale
+  push Not at hscale
+  apply hinstant
+  intro ε hε
+  obtain ⟨r, p, j, hrational, hrow, hsure⟩ := hscale (ε / 2) (half_pos hε)
+  obtain ⟨punishment, hpunishment⟩ := exists_punishmentWithin G j hε
+  refine ⟨p, j, punishment, hsure, hpunishment, ?_⟩
+  have hcompiler := instantProfile_isQuitEpsilonEquilibrium G
+    (show 0 ≤ ε / 2 by linarith) hε.le r p j punishment
+    hrational hsure hrow hpunishment
+  convert hcompiler using 1
+  ring
 
 /-- Approximate equilibria made from a stationary prefix and a min-max punishment. -/
 def HasStationarilyGeneratedApproximateEquilibria (G : QuittingGame) : Prop :=
