@@ -31,6 +31,7 @@ namespace GameTheory
 namespace FullCoreDeadlockChargedReturn
 
 open Filter Finset
+open QuittingLCPClassification
 open IdealSingletonBlockApproximation
 open IdealSingletonCarrierBridge
 open scoped Topology
@@ -57,7 +58,7 @@ theorem abs_idealSingletonClearance_sub_le
               (α * s who + (1 - α) * M who owner)| :=
         abs_max_sub_max_le_max _ _ _ _
       _ = α * |t who - s who| := by
-        rw [sub_self, abs_zero, zero_max]
+        rw [sub_self, abs_zero, max_eq_right (abs_nonneg _)]
         rw [show
           α * t who + (1 - α) * M who owner -
               (α * s who + (1 - α) * M who owner) =
@@ -95,7 +96,7 @@ private theorem chargedFactor_le (who : Player) :
         singletonFactor 2 (1 / 2) who *
         singletonFactor 1 (8 / 9) who ≤
       4 / 9 := by
-  fin_cases who <;> norm_num [singletonFactor]
+  fin_cases who <;> norm_num [singletonFactor] <;> decide
 
 /-- The complete cap word is globally contractive, with worst coordinate
 factor `4/9`.  No sign hypothesis on the initial clearances is needed. -/
@@ -232,7 +233,7 @@ theorem chargedReturn_chargedFixedPair
     funext who
     have hwho := congrFun hcap who
     unfold capClearance at hwho
-    exact sub_left_injective (ownSingleton reward who) hwho
+    linarith [hwho]
 
 /-- Exact prescribed-coordinate formula along the semantic orbit. -/
 theorem chargedReturnOrbit_prescribed
@@ -293,9 +294,14 @@ theorem chargedReturnOrbit_tendsto_chargedFixedPair
     have hpow : Tendsto (fun n : ℕ => (2 / 9 : ℝ) ^ n)
         atTop (𝓝 0) :=
       tendsto_pow_atTop_nhds_zero_of_lt_one (by norm_num) (by norm_num)
-    have hlimit := (hpow.mul_const
-      (start.1 who - chargedFixedPrescribed reward who)).add_const
-        (chargedFixedPrescribed reward who)
+    have hlimit : Tendsto (fun n : ℕ =>
+        (2 / 9 : ℝ) ^ n *
+            (start.1 who - chargedFixedPrescribed reward who) +
+          chargedFixedPrescribed reward who)
+        atTop (𝓝 (chargedFixedPrescribed reward who)) := by
+      simpa using (hpow.mul_const
+        (start.1 who - chargedFixedPrescribed reward who)).add_const
+          (chargedFixedPrescribed reward who)
     exact hlimit.congr' (Eventually.of_forall fun n =>
       (chargedReturnOrbit_prescribed reward start n who).symm)
   · apply tendsto_pi_nhds.2
@@ -306,7 +312,8 @@ theorem chargedReturnOrbit_tendsto_chargedFixedPair
     let bound := fun n : ℕ => (4 / 9 : ℝ) ^ n *
       |capClearance reward start.2 who - chargedBase who|
     have hbound : Tendsto bound atTop (𝓝 0) := by
-      exact hpow.mul_const _
+      simpa [bound] using hpow.mul_const
+        |capClearance reward start.2 who - chargedBase who|
     have hdiff : Tendsto (fun n =>
         capClearance reward (chargedReturnOrbit reward start n).2 who -
           chargedBase who) atTop (𝓝 0) := by
