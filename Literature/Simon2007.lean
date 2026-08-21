@@ -7366,7 +7366,7 @@ private theorem nonemptyCoalitionMass_eq_quitProbability (G : QuittingGame)
     _ = QuitProbability G p := by rw [hsum, hempty]; ring_nf
 
 /-- The reward part is bounded by the quitting mass times a uniform payoff bound. -/
-private theorem abs_quittingRewardPart_le (G : QuittingGame) (p : QuitRow G)
+theorem abs_quittingRewardPart_le (G : QuittingGame) (p : QuitRow G)
     (n : G.Player) {M : ℝ} (hbound : ∀ A, |G.reward A n| ≤ M) :
     |quittingRewardPart G p n| ≤ M * QuitProbability G p := by
   classical
@@ -8528,6 +8528,23 @@ private theorem equilibrium_tail_rational
     (htailDeviation n)
   linarith
 
+/-- A unilateral mixed quitting decision is the affine mixture of its two pure endpoints. -/
+theorem quittingOneStagePayoff_replace_eq_endpoints
+    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G)
+    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    QuittingOneStagePayoff G r (p.replace G n q) n =
+      (q : ℝ) * ForcedQuitPayoff G p n +
+        (1 - (q : ℝ)) * ForcedContinuePayoff G r p n := by
+  change (1 - QuitProbability G (p.replace G n q)) * r n +
+      quittingRewardPart G (p.replace G n q) n =
+    (q : ℝ) * ((1 - QuitProbability G (p.replace G n 1)) * 0 +
+      quittingRewardPart G (p.replace G n 1) n) +
+    (1 - (q : ℝ)) * ((1 - QuitProbability G (p.replace G n 0)) * r n +
+      quittingRewardPart G (p.replace G n 0) n)
+  rw [one_sub_quitProbability_replace, quitProbability_replace_one]
+  rw [quittingRewardPart_replace_affine]
+  ring_nf
+
 /-- Replace one player's action at the first row of a quitting profile and then resume
 the prescribed profile. -/
 private def QuitProfile.replaceFirst (G : QuittingGame) (p : QuitProfile G)
@@ -8613,6 +8630,120 @@ private theorem equilibrium_weighted_forcedQuit_regret_le
     (quitProbability_replace_one G (p i) n)
   rw [heq] at hregret
   exact hregret
+
+/-- Finite-horizon performance-difference identity for one player's behavioral
+deviation, evaluated against the original continuation values. -/
+private theorem finiteQuittingPayoff_replace_sub_eq_sum
+    (G : QuittingGame) (n : G.Player) (k : ℕ)
+    (r : ℕ → Payoff G.Player) (p : QuitProfile G)
+    (q : ℕ → Set.Icc (0 : ℝ) 1)
+    (hvalue : ∀ i, i < k →
+      r i = QuittingOneStagePayoff G (r (i + 1)) (p i)) :
+    finiteQuittingPayoff G k (r k)
+          (fun i => (p i).replace G n (q i)) n - r 0 n =
+      ∑ i ∈ Finset.range k,
+        tailSurvival G (fun j => (p j).replace G n (q j)) 0 i *
+          (QuittingOneStagePayoff G (r (i + 1))
+              ((p i).replace G n (q i)) n - r i n) := by
+  induction k generalizing r p q with
+  | zero => simp [finiteQuittingPayoff]
+  | succ k ih =>
+      let deviated : QuitProfile G := fun i => (p i).replace G n (q i)
+      let tailPayoff := finiteQuittingPayoff G k (r (k + 1))
+        (fun i => deviated (i + 1))
+      have hzero := hvalue 0 (by omega)
+      have htailValue : ∀ i, i < k →
+          r (i + 1) = QuittingOneStagePayoff G (r (i + 2)) (p (i + 1)) := by
+        intro i hi
+        simpa only [Nat.add_assoc] using hvalue (i + 1) (by omega)
+      have htail := ih (fun i => r (i + 1)) (fun i => p (i + 1))
+        (fun i => q (i + 1)) htailValue
+      have hcontinuation :
+          QuittingOneStagePayoff G tailPayoff (deviated 0) n -
+              QuittingOneStagePayoff G (r 1) (deviated 0) n =
+            (1 - QuitProbability G (deviated 0)) * (tailPayoff n - r 1 n) := by
+        simp only [QuittingOneStagePayoff]
+        ring
+      simp only [finiteQuittingPayoff]
+      rw [show finiteQuittingPayoff G k (r (k + 1))
+          (fun i => deviated (i + 1)) = tailPayoff by rfl]
+      rw [hzero]
+      rw [show QuittingOneStagePayoff G tailPayoff (deviated 0) n -
+            QuittingOneStagePayoff G (r 1) (p 0) n =
+          (QuittingOneStagePayoff G (r 1) (deviated 0) n -
+              QuittingOneStagePayoff G (r 1) (p 0) n) +
+            (QuittingOneStagePayoff G tailPayoff (deviated 0) n -
+              QuittingOneStagePayoff G (r 1) (deviated 0) n) by ring]
+      rw [hcontinuation, htail]
+      rw [Finset.sum_range_succ']
+      simp only [tailSurvival, Nat.zero_add, Finset.prod_range_zero, one_mul]
+      conv_rhs => rw [add_comm]
+      rw [hzero]
+      rw [Finset.mul_sum]
+      congr 1
+      apply Finset.sum_congr rfl
+      intro i hi
+      rw [Finset.prod_range_succ']
+      simp only [deviated]
+      ring
+
+/-- Follow a supplied unilateral deviation for the first `T` stages, then resume the
+prescribed strategy exactly. -/
+private def QuitProfile.prefixDeviation (G : QuittingGame) (p : QuitProfile G)
+    (n : G.Player) (T : ℕ) (q : ℕ → Set.Icc (0 : ℝ) 1) :
+    ℕ → Set.Icc (0 : ℝ) 1 :=
+  fun i => if i < T then q i else p i n
+
+/-- The gain from a finite-prefix deviation is the sum of its local endpoint gains,
+weighted by survival under the deviating strategy. -/
+private theorem quitPayoff_prefixDeviation_sub_eq_sum
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (q : ℕ → Set.Icc (0 : ℝ) 1) :
+    QuitPayoff G (p.replace G n (p.prefixDeviation G n T q)) n -
+        QuitPayoff G p n =
+      ∑ i ∈ Finset.range T,
+        tailSurvival G
+            (fun j => (p j).replace G n (p.prefixDeviation G n T q j)) 0 i *
+          (QuittingOneStagePayoff G (QuitTailPayoff G p (i + 1))
+              ((p i).replace G n (q i)) n - QuitTailPayoff G p i n) := by
+  let deviated := p.replace G n (p.prefixDeviation G n T q)
+  have hprefix : ∀ i < T, deviated i = (p i).replace G n (q i) := by
+    intro i hi
+    funext player
+    by_cases hplayer : player = n
+    · subst player
+      simp [deviated, QuitProfile.replace, QuitProfile.prefixDeviation, hi,
+        QuitRow.replace]
+    · simp [deviated, QuitProfile.replace, QuitRow.replace, hplayer]
+  have htail : (fun k => deviated (T + k)) = fun k => p (T + k) := by
+    funext k player
+    by_cases hplayer : player = n
+    · subst player
+      simp [deviated, QuitProfile.replace, QuitProfile.prefixDeviation]
+    · simp [deviated, QuitProfile.replace, hplayer]
+  have htailPayoff : QuitTailPayoff G deviated T = QuitTailPayoff G p T := by
+    rw [quitTailPayoff_eq_quitPayoff_shift, quitTailPayoff_eq_quitPayoff_shift]
+    rw [htail]
+  have hdeviated := quitTailPayoff_eq_finiteQuittingPayoff G deviated 0 T
+  have hbase := quitTailPayoff_eq_finiteQuittingPayoff G p 0 T
+  simp only [Nat.zero_add] at hdeviated hbase
+  change QuitTailPayoff G deviated 0 n - QuitTailPayoff G p 0 n = _
+  rw [hdeviated, hbase, htailPayoff]
+  rw [finiteQuittingPayoff_congr G T _ (fun i => deviated i)
+    (fun i => (p i).replace G n (q i)) hprefix]
+  rw [← congrFun hbase n]
+  have hperformance := finiteQuittingPayoff_replace_sub_eq_sum G n T
+    (fun i => QuitTailPayoff G p i) p q
+    (fun i _hi => quitTailPayoff_eq_oneStage G p i)
+  rw [hperformance]
+  apply Finset.sum_congr rfl
+  intro i hi
+  have hiT := Finset.mem_range.mp hi
+  congr 1
+  apply Finset.prod_congr rfl
+  intro j hj
+  have hjT : j < T := (Finset.mem_range.mp hj).trans hiT
+  simp [QuitProfile.prefixDeviation, hjT]
 
 /-- Reversing the first `j` rows and iterating from `s₀` produces `sⱼ`. -/
 private theorem finiteQuittingPayoff_reverse_eq (G : QuittingGame) {k : ℕ}
@@ -9964,23 +10095,6 @@ theorem quitPayoff_prefixThenPunish_replace_eq_finite
         (fun i => (p i).replace G n (deviation i)) := by
   rw [PrefixThenPunish.replace]
   exact quitPayoff_prefixThenPunish_eq_finite G _ T _
-
-/-- A unilateral mixed quitting decision is the affine mixture of its two pure endpoints. -/
-private theorem quittingOneStagePayoff_replace_eq_endpoints
-    (G : QuittingGame) (r : Payoff G.Player) (p : QuitRow G)
-    (n : G.Player) (q : Set.Icc (0 : ℝ) 1) :
-    QuittingOneStagePayoff G r (p.replace G n q) n =
-      (q : ℝ) * ForcedQuitPayoff G p n +
-        (1 - (q : ℝ)) * ForcedContinuePayoff G r p n := by
-  change (1 - QuitProbability G (p.replace G n q)) * r n +
-      quittingRewardPart G (p.replace G n q) n =
-    (q : ℝ) * ((1 - QuitProbability G (p.replace G n 1)) * 0 +
-      quittingRewardPart G (p.replace G n 1) n) +
-    (1 - (q : ℝ)) * ((1 - QuitProbability G (p.replace G n 0)) * r n +
-      quittingRewardPart G (p.replace G n 0) n)
-  rw [one_sub_quitProbability_replace, quitProbability_replace_one]
-  rw [quittingRewardPart_replace_affine]
-  ring_nf
 
 /-- In an `η`-equilibrium row, forcing quit gains at most `η` over its mixed value. -/
 private theorem EpsilonRow.forcedQuitPayoff_le_oneStage_add
