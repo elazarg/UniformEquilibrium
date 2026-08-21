@@ -107,7 +107,8 @@ def EpsilonEquilibriumExistence
 /-! The three fixed-branch predicates below use the arbitrary-never payoff
 table interfaces already present in `TableExistenceBranches`.  Each branch has
 one small-ε threshold; the disjunction therefore cannot change branch with ε.
--/
+In S.2, “at the min-max level” means the usual `ε`-attainment of the infimum,
+not an exactly minimizing infinite-horizon profile. -/
 def SmallStationaryBranch (table : QuittingPayoffTable ι) : Prop :=
   ∃ bound : ℝ, 0 < bound ∧ ∀ ε : ℝ, 0 < ε → ε < bound →
     ∃ root : ι → PMF Bool,
@@ -119,7 +120,8 @@ def SmallPunishmentBranch (table : QuittingPayoffTable ι) : Prop :=
     ∃ (quitter : ι) (root : ι → PMF Bool)
       (punish : (quittingGame table.terminal).BehaviorProfile),
       root quitter = PMF.pure true ∧
-        table.bestReplyValue punish quitter = table.punishmentValue quitter ∧
+        table.bestReplyValue punish quitter ≤
+          table.punishmentValue quitter + ε ∧
         (quittingGame table.terminal).IsεAsymptoticNash table.terminalPayoff ε
           (quittingRootThenContinuationProfile table.terminal root punish)
 
@@ -128,6 +130,53 @@ def SmallSequentialBranch (table : QuittingPayoffTable ι) : Prop :=
     ∃ roots : ℕ → ι → PMF Bool, IsCompletelyAbsorbing roots ∧
       ∀ time : ℕ, QuittingRowεPerfect table.terminal
         (table.rootSequenceTailVector roots (time + 1)) (roots time) ε
+
+/-- The paper's “every sufficiently small `ε`” stationary branch is exactly
+the production all-positive-tolerances branch, by monotonicity of Nash error. -/
+theorem smallStationaryBranch_iff (table : QuittingPayoffTable ι) :
+    SmallStationaryBranch table ↔ table.StationaryεEquilibriumExistence := by
+  constructor
+  · rintro ⟨bound, hbound, hsmall⟩ ε hε
+    by_cases hεbound : ε < bound
+    · exact hsmall ε hε hεbound
+    · obtain ⟨root, hroot⟩ :=
+        hsmall (bound / 2) (by linarith) (by linarith)
+      exact ⟨root, hroot.mono (by linarith)⟩
+  · intro hbranch
+    exact ⟨1, by norm_num, fun ε hε _ => hbranch ε hε⟩
+
+/-- S.2's small-threshold form equals the production instant-punishment
+branch; both its Nash error and its approximate min-max cap are monotone. -/
+theorem smallPunishmentBranch_iff (table : QuittingPayoffTable ι) :
+    SmallPunishmentBranch table ↔
+      table.InstantPunishmentεEquilibriumExistence := by
+  constructor
+  · rintro ⟨bound, hbound, hsmall⟩ ε hε
+    by_cases hεbound : ε < bound
+    · exact hsmall ε hε hεbound
+    · obtain ⟨quitter, root, punish, hquit, hcap, hnash⟩ :=
+        hsmall (bound / 2) (by linarith) (by linarith)
+      refine ⟨quitter, root, punish, hquit, ?_,
+        hnash.mono (by linarith)⟩
+      linarith
+  · intro hbranch
+    exact ⟨1, by norm_num, fun ε hε _ => hbranch ε hε⟩
+
+/-- S.3's small-threshold form equals the production absorbing sequentially
+perfect branch, since one-stage perfection is monotone in its tolerance. -/
+theorem smallSequentialBranch_iff (table : QuittingPayoffTable ι) :
+    SmallSequentialBranch table ↔
+      table.SequentiallyεPerfectAbsorbingExistence := by
+  constructor
+  · rintro ⟨bound, hbound, hsmall⟩ ε hε
+    by_cases hεbound : ε < bound
+    · exact hsmall ε hε hεbound
+    · obtain ⟨roots, habsorbing, hperfect⟩ :=
+        hsmall (bound / 2) (by linarith) (by linarith)
+      refine ⟨roots, habsorbing, fun time =>
+        (hperfect time).mono (by linarith)⟩
+  · intro hbranch
+    exact ⟨1, by norm_num, fun ε hε _ => hbranch ε hε⟩
 
 /-! **Theorem 3.4 (arXiv v1, forward statement).** If ε-equilibria exist for
 every positive ε, then one fixed branch among S.1 (stationary), S.2 (a sure

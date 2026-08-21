@@ -170,6 +170,28 @@ def QuittingRowεPerfect
     (tail : Payoff ι) (root : ι → PMF Bool) (ε : ℝ) : Prop :=
   ∀ who : ι, QuittingPlayerRowεPerfect reward tail root who ε
 
+/-- Playerwise one-stage perfection is monotone in its error tolerance. -/
+theorem QuittingPlayerRowεPerfect.mono
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {tail : Payoff ι} {root : ι → PMF Bool} {who : ι} {ε ε' : ℝ}
+    (hperfect : QuittingPlayerRowεPerfect reward tail root who ε)
+    (hle : ε ≤ ε') :
+    QuittingPlayerRowεPerfect reward tail root who ε' := by
+  obtain ⟨hquit, hcontinue, hsupportQuit, hsupportContinue⟩ := hperfect
+  refine ⟨by linarith, by linarith, ?_, ?_⟩
+  · intro hused
+    linarith [hsupportQuit hused]
+  · intro hused
+    linarith [hsupportContinue hused]
+
+/-- Collective one-stage perfection is monotone in its error tolerance. -/
+theorem QuittingRowεPerfect.mono
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {tail : Payoff ι} {root : ι → PMF Bool} {ε ε' : ℝ}
+    (hperfect : QuittingRowεPerfect reward tail root ε) (hle : ε ≤ ε') :
+    QuittingRowεPerfect reward tail root ε' :=
+  fun who => (hperfect who).mono hle
+
 /-- **Branch S.3.**  For every positive tolerance there is an absorbing root
 sequence at which every stage's row is `ε`-perfect against that sequence's own
 continuation vector. -/
