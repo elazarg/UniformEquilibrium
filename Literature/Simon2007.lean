@@ -3012,6 +3012,29 @@ private theorem DDPSemantics.afterAction_cylinder_eq_zero_of_wrong
         exact (Sigma.mk.inj_iff.mp hstage.symm).2.trans hpaction
     _ = 0 := hsupportComplement
 
+/-- A wrong forced-action cylinder has zero mass under the raw law. -/
+private theorem DiscreteDecisionProcess.rawLawAfterAction_ddpCylinder_eq_zero_of_wrong
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) (y : P.Y x) {k : ℕ} (h : DDPFinitePath P (k + 1))
+    (hwrong : h.x 0 ≠ x ∨ ¬HEq (h.y 0) y) :
+    P.rawLawAfterAction x y (DDPPath.ofRaw P ⁻¹' DDPCylinder P h) = 0 := by
+  have hcanonical := congrArg (fun mu : Measure (DDPPath P) => mu (DDPCylinder P h))
+    (S.afterAction_eq_rawLaw P x y)
+  rw [Measure.map_apply (DDPPath.measurable_ofRaw P) (measurableSet_ddpCylinder P h)]
+    at hcanonical
+  rw [← hcanonical]
+  exact S.afterAction_cylinder_eq_zero_of_wrong P x y h hwrong
+
+/-- A wrong forced-action cylinder also has zero raw-law integral. -/
+private theorem DiscreteDecisionProcess.integral_rawStageValue_ddpCylinder_eq_zero_of_wrong
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) (y : P.Y x) {k : ℕ} (h : DDPFinitePath P (k + 1))
+    (hwrong : h.x 0 ≠ x ∨ ¬HEq (h.y 0) y) :
+    (∫ stage in DDPPath.ofRaw P ⁻¹' DDPCylinder P h,
+      P.rawStageValue (k + 1) stage ∂P.rawLawAfterAction x y) = 0 := by
+  apply setIntegral_measure_zero
+  exact P.rawLawAfterAction_ddpCylinder_eq_zero_of_wrong S x y h hwrong
+
 /-- A state-started cylinder with the wrong initial state has zero mass. -/
 private theorem DDPSemantics.fromState_cylinder_eq_zero_of_wrong
     (P : DiscreteDecisionProcess) (S : DDPSemantics P)
@@ -3615,6 +3638,11 @@ def FirstReturnAt (P : DiscreteDecisionProcess) (A : Set P.X) (z : P.X) :
     Set (DDPPath P) :=
   {p | ∃ k, 0 < k ∧ p.x k = z ∧ z ∈ A ∧ ∀ i, 0 < i → i < k → p.x i ∉ A}
 
+/-- First return to `A` at `z` at the specified positive time. -/
+private def FirstReturnAtTime (P : DiscreteDecisionProcess) (A : Set P.X)
+    (z : P.X) (k : ℕ) : Set (DDPPath P) :=
+  {p | 0 < k ∧ p.x k = z ∧ z ∈ A ∧ ∀ i, 0 < i → i < k → p.x i ∉ A}
+
 /-- The event that the process returns to `A` after its initial state. -/
 def ReturnsTo (P : DiscreteDecisionProcess) (A : Set P.X) : Set (DDPPath P) :=
   ⋃ z ∈ A, FirstReturnAt P A z
@@ -3667,6 +3695,137 @@ private theorem measurableSet_firstReturnAt (P : DiscreteDecisionProcess)
       simp [FirstReturnAt, hz]
     rw [heq]
     exact MeasurableSet.empty
+
+/-- A fixed-time first-return event is measurable. -/
+private theorem measurableSet_firstReturnAtTime (P : DiscreteDecisionProcess)
+    (A : Set P.X) (z : P.X) (k : ℕ) : MeasurableSet (FirstReturnAtTime P A z k) := by
+  by_cases hk : 0 < k
+  · by_cases hz : z ∈ A
+    · have heq : FirstReturnAtTime P A z k =
+          {p | p.x k = z} ∩ ⋂ i, if 0 < i ∧ i < k then {p | p.x i ∉ A} else Set.univ := by
+        ext p
+        simp only [FirstReturnAtTime, mem_setOf_eq, mem_inter_iff, mem_iInter]
+        constructor
+        · rintro ⟨_hk, hx, _hz, hbefore⟩
+          refine ⟨hx, ?_⟩
+          intro i
+          by_cases hi : 0 < i ∧ i < k
+          · simpa [hi] using hbefore i hi.1 hi.2
+          · simp [hi]
+        · rintro ⟨hx, hbefore⟩
+          refine ⟨hk, hx, hz, ?_⟩
+          intro i hi hik
+          simpa [hi, hik] using hbefore i
+      rw [heq]
+      apply MeasurableSet.inter
+      · exact (DDPPath.measurable_x P k) (measurableSet_singleton z)
+      · apply MeasurableSet.iInter
+        intro i
+        split_ifs
+        · exact (DDPPath.measurable_x P i)
+            (show MeasurableSet Aᶜ from MeasurableSet.of_discrete)
+        · exact MeasurableSet.univ
+    · have heq : FirstReturnAtTime P A z k = ∅ := by
+        ext p
+        simp [FirstReturnAtTime, hz]
+      rw [heq]
+      exact MeasurableSet.empty
+  · have heq : FirstReturnAtTime P A z k = ∅ := by
+      ext p
+      simp [FirstReturnAtTime, hk]
+    rw [heq]
+    exact MeasurableSet.empty
+
+/-- First return at `z` is the disjoint union over its possible times. -/
+private theorem firstReturnAt_eq_iUnion_time (P : DiscreteDecisionProcess)
+    (A : Set P.X) (z : P.X) :
+    FirstReturnAt P A z = ⋃ k, FirstReturnAtTime P A z k := by
+  ext p
+  simp only [FirstReturnAt, FirstReturnAtTime, mem_setOf_eq, mem_iUnion]
+
+/-- At a fixed first-return time, the sampled terminal action averages to the return-state value. -/
+private theorem DiscreteDecisionProcess.integral_rawStageValue_firstReturnAtTime
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P)
+    (x : P.X) (y : P.Y x) (A : Set P.X) (z : P.X) (k : ℕ) :
+    (∫ stage in DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k + 1),
+        P.rawStageValue (k + 1) stage ∂P.rawLawAfterAction x y) =
+      (S.afterAction x y (FirstReturnAtTime P A z (k + 1))).toReal * P.valueX z := by
+  classical
+  let H := {h : DDPFinitePath P (k + 1) //
+    h.x (Fin.last (k + 1)) = z ∧ z ∈ A ∧
+      ∀ i : Fin (k + 2), 0 < i.1 → i.1 < k + 1 → h.x i ∉ A}
+  let C : H → Set (ℕ → DDPStage P) := fun h =>
+    DDPPath.ofRaw P ⁻¹' DDPCylinder P h.1
+  have hevent : DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k + 1) = ⋃ h, C h := by
+    ext stage
+    simp only [mem_preimage, FirstReturnAtTime, mem_setOf_eq, mem_iUnion, C]
+    constructor
+    · rintro ⟨_hk, hlast, hz, hbefore⟩
+      let h := (DDPPath.ofRaw P stage).prefix P (k + 1)
+      have hgood : h.x (Fin.last (k + 1)) = z ∧ z ∈ A ∧
+          ∀ i : Fin (k + 2), 0 < i.1 → i.1 < k + 1 → h.x i ∉ A := by
+        refine ⟨?_, hz, ?_⟩
+        · simpa [h, DDPPath.prefix] using hlast
+        · intro i hi hik
+          simpa [h, DDPPath.prefix] using hbefore i.1 hi hik
+      exact ⟨⟨h, hgood⟩, rfl⟩
+    · rintro ⟨h, hpref⟩
+      change (DDPPath.ofRaw P stage).prefix P (k + 1) = h.1 at hpref
+      refine ⟨Nat.succ_pos k, ?_, h.2.2.1, ?_⟩
+      · have hlast := congrArg
+          (fun q : DDPFinitePath P (k + 1) => q.x (Fin.last (k + 1))) hpref
+        exact hlast.trans h.2.1
+      · intro i hi hik
+        let j : Fin (k + 2) := ⟨i, by omega⟩
+        have hstate := congrArg (fun q : DDPFinitePath P (k + 1) => q.x j) hpref
+        change (DDPPath.ofRaw P stage).x i = h.1.x j at hstate
+        rw [hstate]
+        exact h.2.2.2 j hi hik
+  have hmeasurable (h : H) : MeasurableSet (C h) :=
+    (DDPPath.measurable_ofRaw P) (measurableSet_ddpCylinder P h.1)
+  have hpairwise : Pairwise (Function.onFun Disjoint C) := by
+    intro first second hne
+    rw [Function.onFun, Set.disjoint_left]
+    intro stage hfirst hsecond
+    apply hne
+    apply Subtype.ext
+    change DDPPath.ofRaw P stage ∈ DDPCylinder P first.1 at hfirst
+    change DDPPath.ofRaw P stage ∈ DDPCylinder P second.1 at hsecond
+    exact hfirst.symm.trans hsecond
+  have hintegrable : Integrable (P.rawStageValue (k + 1))
+      (P.rawLawAfterAction x y) := by
+    exact P.integrable_rawStageValue (PMF.pure (⟨x, y⟩ : DDPStage P)) (k + 1)
+  rw [hevent, integral_iUnion hmeasurable hpairwise hintegrable.integrableOn]
+  have hcell (h : H) :
+      (∫ stage in C h, P.rawStageValue (k + 1) stage
+          ∂P.rawLawAfterAction x y) =
+        (P.rawLawAfterAction x y (C h)).toReal * P.valueX z := by
+    by_cases hstart : h.1.x 0 = x
+    · by_cases haction : HEq (h.1.y 0) y
+      · rw [P.integral_rawStageValue_ddpCylinder x y h.1 hstart haction]
+        rw [P.rawLawAfterAction_ddpCylinder x y h.1 hstart haction]
+        rw [h.2.1]
+      · rw [P.integral_rawStageValue_ddpCylinder_eq_zero_of_wrong S x y h.1
+          (Or.inr haction)]
+        rw [P.rawLawAfterAction_ddpCylinder_eq_zero_of_wrong S x y h.1
+          (Or.inr haction)]
+        simp
+    · rw [P.integral_rawStageValue_ddpCylinder_eq_zero_of_wrong S x y h.1
+        (Or.inl hstart)]
+      rw [P.rawLawAfterAction_ddpCylinder_eq_zero_of_wrong S x y h.1
+        (Or.inl hstart)]
+      simp
+  simp_rw [hcell]
+  rw [tsum_mul_right]
+  congr 1
+  have hcanonical := congrArg
+    (fun mu : Measure (DDPPath P) => mu (FirstReturnAtTime P A z (k + 1)))
+    (S.afterAction_eq_rawLaw P x y)
+  rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
+    (measurableSet_firstReturnAtTime P A z (k + 1))] at hcanonical
+  rw [hcanonical, hevent, measure_iUnion hpairwise hmeasurable]
+  exact (ENNReal.tsum_toReal_eq fun h =>
+    measure_ne_top (P.rawLawAfterAction x y) (C h)).symm
 
 /-- The return event is measurable as a countable union of first-return events. -/
 private theorem measurableSet_returnsTo (P : DiscreteDecisionProcess) (A : Set P.X) :
