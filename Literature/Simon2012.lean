@@ -2263,6 +2263,62 @@ theorem lemma3_1 (G : QuittingGame) (M d : ℝ)
     rw [quittingOneStagePayoff_zero]
     simp
 
+/-- The map `φ` is continuous on the exact-equilibrium graph below certain
+absorption. -/
+theorem continuous_phi (G : QuittingGame) (M d : ℝ) :
+    Continuous (Phi G M d) := by
+  classical
+  rw [continuous_pi_iff]
+  intro j
+  have hcoord (k : G.Player) :
+      Continuous (fun z : EZeroTilde G => (z.1.2 k : ℝ)) := by
+    fun_prop
+  have hquit : Continuous (fun z : EZeroTilde G => QuitProbability G z.1.2) := by
+    simp only [QuitProbability]
+    apply continuous_const.sub
+    apply continuous_finsetProd
+    intro k _hk
+    exact continuous_const.sub (hcoord k)
+  have hcoalition (A : Finset G.Player) :
+      Continuous (fun z : EZeroTilde G => CoalitionProbability G z.1.2 A) := by
+    simp only [CoalitionProbability]
+    apply (continuous_finsetProd A fun k _hk => hcoord k).mul
+    apply continuous_finsetProd
+    intro k hk
+    exact continuous_const.sub (hcoord k)
+  have hstage :
+      Continuous (fun z : EZeroTilde G =>
+        QuittingOneStagePayoff G z.1.1 z.1.2 j) := by
+    simp only [QuittingOneStagePayoff]
+    apply ((continuous_const.sub hquit).mul (by fun_prop)).add
+    apply continuous_finsetSum
+    intro A _hA
+    by_cases hA : A.Nonempty
+    · simp only [hA, ↓reduceDIte]
+      exact (hcoalition A).mul continuous_const
+    · simp only [hA, ↓reduceDIte]
+      exact continuous_const
+  have hdenom : ∀ z : EZeroTilde G,
+      (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player ≠ 0 := by
+    intro z
+    apply pow_ne_zero _
+    apply sub_ne_zero.mpr
+    intro hjOne
+    have hquitOne := quitProbability_eq_one_of_coord_eq_one G z.1.2 j hjOne.symm
+    linarith [z.2.2]
+  have hsingular : Continuous (fun z : EZeroTilde G =>
+      (z.1.2 j : ℝ) /
+        (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player) := by
+    exact (hcoord j).div ((continuous_const.sub (hcoord j)).pow _) hdenom
+  have hothers : Continuous (fun z : EZeroTilde G =>
+      ∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ)) := by
+    apply continuous_finsetSum
+    intro k _hk
+    exact hcoord k
+  simp only [Phi]
+  exact (hstage.sub (continuous_const.mul hsingular)).add
+    (continuous_const.mul hothers)
+
 /--
 Lemma 3.2: surjectivity and continuity of the inverse.  The missing proof is
 the paper's Jacobian argument: strict diagonal dominance gives local openness
