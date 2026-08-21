@@ -2405,6 +2405,76 @@ private theorem DiscreteDecisionProcess.rawLawAfterAction_ddpCylinder
     simp_rw [heq]
     simp
 
+/-- On a forced-action cylinder, averaging the unconstrained final action gives its state value. -/
+private theorem DiscreteDecisionProcess.integral_rawStageValue_ddpCylinder
+    (P : DiscreteDecisionProcess) (x : P.X) (y : P.Y x) {k : ℕ}
+    (h : DDPFinitePath P (k + 1)) (hstart : h.x 0 = x)
+    (haction : HEq (h.y 0) y) :
+    (∫ stage in DDPPath.ofRaw P ⁻¹' DDPCylinder P h,
+        P.rawStageValue (k + 1) stage ∂P.rawLawAfterAction x y) =
+      (h.afterActionProbability P).toReal * P.valueX (h.x (Fin.last (k + 1))) := by
+  classical
+  let C : P.Y (h.x (Fin.last (k + 1))) → Set (ℕ → DDPStage P) := fun last =>
+    {stage | ∀ i : Fin (k + 2), stage i = h.stagesWithFinal P last i}
+  have hevent : DDPPath.ofRaw P ⁻¹' DDPCylinder P h = ⋃ last, C last := by
+    rw [DDPPath.preimage_ddpCylinder_eq_iUnion]
+    ext stage
+    simp only [mem_iUnion, mem_setOf_eq, C]
+    constructor
+    · rintro ⟨⟨state, last⟩, hstate, hstage⟩
+      change state = h.x (Fin.last (k + 1)) at hstate
+      subst state
+      refine ⟨last, ?_⟩
+      simpa [h.extendWithFinalStage_mk P] using hstage
+    · rintro ⟨last, hstage⟩
+      refine ⟨⟨h.x (Fin.last (k + 1)), last⟩, rfl, ?_⟩
+      simpa [h.extendWithFinalStage_mk P] using hstage
+  have hmeasurable (last : P.Y (h.x (Fin.last (k + 1)))) : MeasurableSet (C last) :=
+    P.measurableSet_rawStageCylinder (k + 1) (h.stagesWithFinal P last)
+  have hpairwise : Pairwise (Function.onFun Disjoint C) := by
+    intro first second hne
+    rw [Function.onFun, Set.disjoint_left]
+    intro stage hfirst hsecond
+    apply hne
+    have hfinal := (hfirst (Fin.last (k + 1))).symm.trans
+      (hsecond (Fin.last (k + 1)))
+    exact eq_of_heq (by simpa using (Sigma.mk.inj_iff.mp hfinal).2)
+  have hintegrable : Integrable (P.rawStageValue (k + 1))
+      (P.rawLawAfterAction x y) := by
+    exact P.integrable_rawStageValue (PMF.pure (⟨x, y⟩ : DDPStage P)) (k + 1)
+  rw [hevent, integral_iUnion hmeasurable hpairwise hintegrable.integrableOn]
+  have hcylinder (last : P.Y (h.x (Fin.last (k + 1)))) :
+      (∫ stage in C last, P.rawStageValue (k + 1) stage
+          ∂P.rawLawAfterAction x y) =
+        (h.afterActionProbability P *
+          P.choose (h.x (Fin.last (k + 1))) last).toReal *
+            P.valueY (h.x (Fin.last (k + 1))) last := by
+    calc
+      (∫ stage in C last, P.rawStageValue (k + 1) stage
+          ∂P.rawLawAfterAction x y) =
+          ∫ _stage in C last, P.valueY (h.x (Fin.last (k + 1))) last
+            ∂P.rawLawAfterAction x y := by
+              apply integral_congr_ae
+              filter_upwards [ae_restrict_mem (hmeasurable last)] with stage hstage
+              change P.valueY (stage (k + 1)).1 (stage (k + 1)).2 = _
+              simpa [C, DDPFinitePath.stagesWithFinal] using
+                congrArg (fun current : DDPStage P =>
+                  P.valueY current.1 current.2) (hstage (Fin.last (k + 1)))
+      _ = (P.rawLawAfterAction x y (C last)).toReal *
+          P.valueY (h.x (Fin.last (k + 1))) last := by
+            rw [integral_const, Measure.real_def, Measure.restrict_apply_univ]
+            rfl
+      _ = _ := by
+        rw [show P.rawLawAfterAction x y (C last) =
+            h.afterActionProbability P *
+              P.choose (h.x (Fin.last (k + 1))) last from
+          P.rawLawAfterAction_stagesWithFinal x y h hstart haction last]
+  simp_rw [hcylinder, ENNReal.toReal_mul]
+  simp_rw [mul_assoc]
+  rw [tsum_mul_left]
+  congr 1
+  exact P.harmonicX (h.x (Fin.last (k + 1))) |>.symm
+
 /-- The one-step finite path with prescribed initial state, action, and successor. -/
 private def DDPFinitePath.firstStep (P : DiscreteDecisionProcess)
     (x : P.X) (y : P.Y x) (z : P.X) : DDPFinitePath P 1 where
