@@ -113,15 +113,12 @@ def assumptions
 
 /-- **Theorem 1.2.** Every quitting game satisfying A.1 and A.2 has a cyclic
 subgame-perfect `ε`-equilibrium for every `ε > 0`. -/
-def Theorem1_2 : Prop :=
+theorem theorem1_2 :
   ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
     assumptions reward → ∀ ε : ℝ, 0 < ε →
       ∃ roots : RootSequence (ι := ι),
         cyclicRootSequence roots ∧
-          subgamePerfectEpsilonEquilibrium reward roots ε
-
-/-- Theorem 1.2, checked against the exact cyclic and every-tail conclusion. -/
-theorem theorem1_2 : Theorem1_2 (ι := ι) := by
+          subgamePerfectEpsilonEquilibrium reward roots ε := by
   intro reward hassumptions ε hε
   rcases hassumptions with ⟨hunit, hcap⟩
   cases isEmpty_or_nonempty ι with
@@ -146,14 +143,6 @@ def symmetricReward
       reward terminal who =
         if who ∈ terminal.1 then quitterPayoff terminal.1.card
         else nonquitterPayoff terminal.1.card
-
-/-- **Theorem 1.3.** Every symmetric quitting game has a pure stationary
-zero-equilibrium. -/
-def Theorem1_3 : Prop :=
-  ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
-    symmetricReward reward →
-      ∃ root : ι → PMF Bool, pureRoot root ∧
-        epsilonEquilibrium reward 0 (stationaryProfile reward root)
 
 private theorem exists_symmetricExitCard
     (players : ℕ) (quitterPayoff nonquitterPayoff : ℕ → ℝ)
@@ -189,7 +178,13 @@ private theorem exists_symmetricExitCard
     rw [hsucc] at hnotLe
     exact le_of_lt (lt_of_not_ge hnotLe)
 
-theorem theorem1_3 : Theorem1_3 (ι := ι) := by
+/-- **Theorem 1.3.** Every symmetric quitting game has a pure stationary
+zero-equilibrium. -/
+theorem theorem1_3 :
+  ∀ (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
+    symmetricReward reward →
+      ∃ root : ι → PMF Bool, pureRoot root ∧
+        epsilonEquilibrium reward 0 (stationaryProfile reward root) := by
   intro reward hsymmetry
   obtain ⟨quitterPayoff, nonquitterPayoff, hreward⟩ := hsymmetry
   by_cases hplayers : Fintype.card ι = 0
@@ -275,15 +270,6 @@ stage. -/
 def symmetricRootSequence
     (roots : RootSequence (ι := Fin 2)) : Prop :=
   ∀ time first second, roots time first = roots time second
-
-/-- **Example 1.** If `ε + 2√ε < 1/2`, the displayed symmetric game has no
-symmetric `ε`-equilibrium. -/
-def Example1Claim : Prop :=
-  ∀ ε : ℝ, 0 ≤ ε → ε + 2 * Real.sqrt ε < 1 / 2 →
-    ¬ ∃ roots : RootSequence (ι := Fin 2),
-      symmetricRootSequence roots ∧
-        epsilonEquilibrium example1Reward ε
-          (profile example1Reward roots)
 
 private theorem expect_pmfPi_finTwo (root : Fin 2 → PMF Bool)
     (f : (Fin 2 → Bool) → ℝ) :
@@ -571,7 +557,14 @@ private theorem example1_tendsto_opponentSurvival_sqrt_jointLimit
   exact (Real.sqrt_sq
     (quittingOpponentSurvivalWeight_nonneg roots 0 0 fuel)).symm
 
-theorem example1 : Example1Claim := by
+/-- **Example 1.** If `ε + 2√ε < 1/2`, the displayed symmetric game has no
+symmetric `ε`-equilibrium. -/
+theorem example1 :
+    ∀ ε : ℝ, 0 ≤ ε → ε + 2 * Real.sqrt ε < 1 / 2 →
+      ¬ ∃ roots : RootSequence (ι := Fin 2),
+        symmetricRootSequence roots ∧
+          epsilonEquilibrium example1Reward ε
+            (profile example1Reward roots) := by
   intro ε hε hsmall
   rintro ⟨roots, hsym, hnash⟩
   have hcap : IsεQuittingRootSequenceNash example1Reward ε roots :=
