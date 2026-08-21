@@ -414,6 +414,80 @@ theorem quittingJointSurvivalWeight_mul_stageDeviationGain_le
   rw [hstage] at hscaling
   linarith
 
+/-- A global root-sequence Nash cap controls an arbitrary continuation
+deviation after a reached stage, multiplied by the probability of reaching
+that stage. -/
+theorem quittingJointSurvivalWeight_mul_tailDeviationGain_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) {ε : ℝ}
+    (hnash : IsεQuittingRootSequenceNash reward ε roots)
+    (who : ι) (start : ℕ) (hazard : ℕ → PMF Bool) :
+    quittingJointSurvivalWeight roots 0 start *
+        (quittingRootSequenceHazardTerminalValue reward
+            (fun offset => roots (start + offset)) who hazard 0 -
+          quittingRootSequenceTerminalValue reward roots who start) ≤ ε := by
+  let globalHazard := quittingStageDeviationHazard roots who start
+    (hazard 0) (fun offset => hazard (offset + 1))
+  let deviated := quittingRootSequenceUpdate roots who globalHazard
+  have hagree : ∀ time, time < start → deviated time = roots time := by
+    intro time htime
+    exact quittingRootSequenceUpdate_stageDeviationHazard_of_lt
+      roots who (hazard 0) (fun offset => hazard (offset + 1)) htime
+  have hscaling := quittingRootSequenceTerminalValue_sub_eq_jointSurvivalWeight_mul
+    reward deviated roots who start hagree
+  have hglobal : quittingRootSequenceTerminalValue reward deviated who 0 ≤
+      quittingRootSequenceTerminalValue reward roots who 0 + ε :=
+    hnash who globalHazard
+  have htail : quittingRootSequenceTerminalValue reward deviated who start =
+      quittingRootSequenceHazardTerminalValue reward
+        (fun offset => roots (start + offset)) who hazard 0 := by
+    rw [quittingRootSequenceTerminalValue_eq_shift,
+      quittingRootSequenceHazardTerminalValue]
+    congr 2
+    funext offset
+    rcases offset with _ | offset
+    · simp [deviated, globalHazard, quittingRootSequenceUpdate,
+        quittingStageDeviationHazard_self]
+    · unfold deviated globalHazard quittingRootSequenceUpdate
+      rw [show start + (offset + 1) = start + 1 + offset by omega,
+        quittingStageDeviationHazard_add]
+      congr 2
+      omega
+  rw [htail] at hscaling
+  linarith
+
+/-- If a stage is reached with probability at least `ρ > 0`, restarting the
+profile there is an `(ε / ρ)`-Nash root sequence. -/
+theorem isεQuittingRootSequenceNash_shift_of_survival_ge
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) {ε ρ : ℝ}
+    (hε : 0 ≤ ε) (hρ : 0 < ρ)
+    (hnash : IsεQuittingRootSequenceNash reward ε roots)
+    (start : ℕ) (hsurvival : ρ ≤ quittingJointSurvivalWeight roots 0 start) :
+    IsεQuittingRootSequenceNash reward (ε / ρ)
+      (fun offset => roots (start + offset)) := by
+  intro who hazard
+  have hweighted := quittingJointSurvivalWeight_mul_tailDeviationGain_le
+    reward roots hnash who start hazard
+  let gain := quittingRootSequenceHazardTerminalValue reward
+      (fun offset => roots (start + offset)) who hazard 0 -
+    quittingRootSequenceTerminalValue reward roots who start
+  have hshift := quittingRootSequenceTerminalValue_eq_shift
+    reward roots who start
+  by_cases hgainPos : 0 < gain
+  · have hscaled := mul_le_mul_of_nonneg_right hsurvival hgainPos.le
+    have hgainLe : gain ≤ ε / ρ := by
+      rw [le_div_iff₀ hρ]
+      dsimp only [gain] at hscaled hweighted ⊢
+      simpa [mul_comm] using hscaled.trans hweighted
+    dsimp only [gain] at hgainLe
+    rw [hshift] at hgainLe
+    linarith
+  · have hquotient : 0 ≤ ε / ρ := div_nonneg hε hρ.le
+    dsimp only [gain] at hgainPos
+    rw [← hshift]
+    linarith
+
 /-- **(1) The reached-stage transfer lemma.**  A globally `ε`-optimal plan is,
 at every stage reached with positive joint survival `S`, one-stage
 `(ε / S)`-Nash against its own continuation vector.
