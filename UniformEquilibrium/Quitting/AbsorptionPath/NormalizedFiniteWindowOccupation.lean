@@ -816,4 +816,129 @@ theorem sum_quittingRootSequenceSingletonMass_add_collisionMass
   funext fuel
   exact (window fuel).absorptionMass_eq_singletonTotal_add_collisionMass
 
+/-- Infinite survival-weighted reward contributed by multi-quitter
+absorptions. -/
+def quittingRootSequenceCollisionRewardContribution
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (who : ι) : ℝ :=
+  ∑' offset : ℕ, quittingJointSurvivalWeight roots start offset *
+    rootCollisionRewardContribution reward (roots (start + offset)) who
+
+/-- The infinite collision-reward series is absolutely summable. -/
+theorem summable_quittingJointSurvivalWeight_mul_rootCollisionRewardContribution
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (who : ι) {M : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    Summable (fun offset : ℕ =>
+      quittingJointSurvivalWeight roots start offset *
+        rootCollisionRewardContribution reward
+          (roots (start + offset)) who) := by
+  let major : ℕ → ℝ := fun offset => M *
+    (quittingJointSurvivalWeight roots start offset *
+      quittingRootCollisionMass (roots (start + offset)))
+  have hmajor : Summable major :=
+    (summable_quittingJointSurvivalWeight_mul_quittingRootCollisionMass
+      roots start).mul_left M
+  apply Summable.of_norm_bounded hmajor
+  intro offset
+  rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg
+    (quittingJointSurvivalWeight_nonneg roots start offset)]
+  have hbound := abs_rootCollisionRewardContribution_le reward
+    (roots (start + offset)) who hreward
+  dsimp only [major]
+  nlinarith [mul_le_mul_of_nonneg_left hbound
+    (quittingJointSurvivalWeight_nonneg roots start offset)]
+
+/-- Infinite collision reward is bounded by the reward bound times the
+infinite collision mass. -/
+theorem abs_quittingRootSequenceCollisionRewardContribution_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (who : ι) {M : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
+    |quittingRootSequenceCollisionRewardContribution
+        reward roots start who| ≤
+      M * quittingRootSequenceCollisionMass roots start := by
+  let term : ℕ → ℝ := fun offset =>
+    quittingJointSurvivalWeight roots start offset *
+      rootCollisionRewardContribution reward
+        (roots (start + offset)) who
+  let major : ℕ → ℝ := fun offset => M *
+    (quittingJointSurvivalWeight roots start offset *
+      quittingRootCollisionMass (roots (start + offset)))
+  have hterm : Summable term :=
+    summable_quittingJointSurvivalWeight_mul_rootCollisionRewardContribution
+      reward roots start who hreward
+  have hmajor : Summable major :=
+    (summable_quittingJointSurvivalWeight_mul_quittingRootCollisionMass
+      roots start).mul_left M
+  have hpoint : ∀ offset, ‖term offset‖ ≤ major offset := by
+    intro offset
+    rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg
+      (quittingJointSurvivalWeight_nonneg roots start offset)]
+    have hbound := abs_rootCollisionRewardContribution_le reward
+      (roots (start + offset)) who hreward
+    dsimp only [term, major]
+    nlinarith [mul_le_mul_of_nonneg_left hbound
+      (quittingJointSurvivalWeight_nonneg roots start offset)]
+  unfold quittingRootSequenceCollisionRewardContribution
+  rw [← Real.norm_eq_abs]
+  calc
+    ‖∑' offset, term offset‖ ≤ ∑' offset, ‖term offset‖ :=
+      norm_tsum_le_tsum_norm hterm.norm
+    _ ≤ ∑' offset, major offset :=
+      Summable.tsum_le_tsum hpoint hterm.norm hmajor
+    _ = M * quittingRootSequenceCollisionMass roots start := by
+      rw [show (∑' offset, major offset) = M *
+          ∑' offset, quittingJointSurvivalWeight roots start offset *
+            quittingRootCollisionMass (roots (start + offset)) by
+        exact tsum_mul_left]
+      rfl
+
+/-- The terminal value splits exactly into the infinite singleton-reward
+mixture and the infinite multi-quitter reward contribution. -/
+theorem quittingRootSequenceTerminalValue_eq_singleton_add_collision
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (who : ι) :
+    quittingRootSequenceTerminalValue reward roots who start =
+      (∑ owner, quittingRootSequenceSingletonMass roots start owner *
+        reward (quittingSingletonTerminal owner) who) +
+      quittingRootSequenceCollisionRewardContribution
+        reward roots start who := by
+  rw [quittingRootSequenceTerminalValue_eq_tsum_absorbingContribution]
+  simp_rw [quittingRootAbsorbingContribution_eq_singleton_add_collision,
+    mul_add]
+  let singletonTerm : ι → ℕ → ℝ := fun owner offset =>
+    quittingJointSurvivalWeight roots start offset *
+      (quittingRootCoalitionMass (roots (start + offset)) {owner} *
+        reward (quittingSingletonTerminal owner) who)
+  have hsingleton : ∀ owner, Summable (singletonTerm owner) :=
+    fun owner => by
+      simpa [singletonTerm, mul_assoc] using
+        (summable_quittingJointSurvivalWeight_mul_singletonMass
+          roots start owner).mul_right
+            (reward (quittingSingletonTerminal owner) who)
+  have hsingleSum :
+      Summable (fun offset => ∑ owner, singletonTerm owner offset) :=
+    summable_sum fun owner _ => hsingleton owner
+  have hcollision :=
+    summable_quittingJointSurvivalWeight_mul_rootCollisionRewardContribution
+      reward roots start who (abs_reward_le_quittingRewardBound reward)
+  simp_rw [Finset.mul_sum]
+  change (∑' offset : ℕ, ((∑ owner, singletonTerm owner offset) +
+      quittingJointSurvivalWeight roots start offset *
+        rootCollisionRewardContribution reward
+          (roots (start + offset)) who)) = _
+  rw [hsingleSum.tsum_add hcollision]
+  congr 1
+  rw [Summable.tsum_finsetSum fun owner _ => hsingleton owner]
+  apply Finset.sum_congr rfl
+  intro owner _
+  simp only [singletonTerm, ← mul_assoc]
+  change (∑' offset : ℕ,
+    (quittingJointSurvivalWeight roots start offset *
+      quittingRootCoalitionMass (roots (start + offset)) {owner}) *
+        reward (quittingSingletonTerminal owner) who) = _
+  rw [tsum_mul_right]
+  rfl
+
 end GameTheory
