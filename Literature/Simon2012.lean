@@ -4761,7 +4761,7 @@ private theorem interpolation_lt_maximalQuitter
     (x : Payoff G.Player)
     (hx : x = (1 - (lambda : ℝ)) • z.1.1 +
       (lambda : ℝ) • Phi G M d z)
-    (htarget : StructureTargetBox G M ρ x) :
+    (hxLower : -M ≤ x m) :
     (lambda : ℝ) < d * (1 - (z.1.2 m : ℝ)) /
       (3 * (Fintype.card G.Player : ℝ)) := by
   let N : ℝ := Fintype.card G.Player
@@ -4810,12 +4810,6 @@ private theorem interpolation_lt_maximalQuitter
           tau ^ (Fintype.card G.Player - 1 + 1) := by rw [hcard]
       _ = tau ^ (Fintype.card G.Player - 1) * tau := pow_succ _ _
       _ = tau * survivalFloor := by simp only [survivalFloor, mul_comm]
-  have htargetLower := (htarget m).1
-  have hchi := abs_minMaxQuit_le_of_reward_bound G m (by positivity)
-    (fun outcome => hM.2.1 outcome m)
-  have hxLower : -M ≤ x m := by
-    have hρM : ρ ≤ M := hmotion.2.2.1.trans hM.1
-    nlinarith [neg_le_of_abs_le hchi]
   by_contra hnot
   have hlambdaLower : d * tau / (3 * N) ≤ (lambda : ℝ) := by
     simpa only [tau, p, N] using le_of_not_gt hnot
@@ -4969,7 +4963,7 @@ private theorem forcedQuit_le_oneStage_of_continue_support
 /-- The low-probability large-continuation alternative contradicts the
 target box.  This proves both the printed positive Case 2C and the negative
 alternative omitted from the paper's displayed case split. -/
-private theorem lowProbability_largeContinuation_not_target
+private theorem lowProbability_largeContinuation_not_box
     (G : QuittingGame) (M d ρ ξ R : ℝ)
     (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
@@ -4986,8 +4980,8 @@ private theorem lowProbability_largeContinuation_not_target
     (x : Payoff G.Player)
     (hx : x = (1 - (lambda : ℝ)) • z.1.1 +
       (lambda : ℝ) • Phi G M d z) :
-    ¬StructureTargetBox G M ρ x := by
-  intro htarget
+    ¬InClosedPayoffBox M x := by
+  intro hbox
   classical
   let N : ℝ := Fintype.card G.Player
   let p := z.1.2
@@ -5016,7 +5010,8 @@ private theorem lowProbability_largeContinuation_not_target
     dsimp only [p]
     linarith [hm j]
   have hlambda := interpolation_lt_maximalQuitter G M d ρ ξ R hplayers
-    hM hd hd1 hmotion hconstants z j m hm haj lambda hlambda0 x hx htarget
+    hM hd hd1 hmotion hconstants z j m hm haj lambda hlambda0 x hx
+      (hbox m).1
   have hlambdaXi : (lambda : ℝ) < d * ξ / (3 * N) := by
     have hscale := mul_lt_mul_of_pos_left hpmXi hd
     have hden : 0 < 3 * N := by positivity
@@ -5114,7 +5109,7 @@ private theorem lowProbability_largeContinuation_not_target
         _ < (1 - (lambda : ℝ)) * z.1.1 l +
             (lambda : ℝ) * Phi G M d z l :=
           add_lt_add_of_lt_of_le hbetaWeighted halphaWeighted
-    exact (not_lt_of_ge (htarget l).2) hxLarge
+    exact (not_lt_of_ge (hbox l).2) hxLarge
   · have hstageUpper : QuittingOneStagePayoff G z.1.1 p l ≤ M / 3 := by
       apply quittingOneStagePayoff_le_of_coordinate_le G z.1.1 p l (M / 3)
       · intro A
@@ -5162,14 +5157,7 @@ private theorem lowProbability_largeContinuation_not_target
         _ = -N * M + 2 * ((lambda : ℝ) * (N * M)) +
             (lambda : ℝ) * (M / 3) := by ring
         _ < -M := hbaseSmall
-    have hchi := abs_minMaxQuit_le_of_reward_bound G l (by positivity)
-      (fun outcome => hM.2.1 outcome l)
-    have hρM : ρ ≤ M := le_trans hmotion.2.2.1 hM.1
-    have hchiLower := neg_le_of_abs_le hchi
-    have htargetLower := (htarget l).1
-    have hxLower : -M ≤ x l := by
-      linarith only [hchiLower, htargetLower, hρM, hMpos]
-    exact (not_lt_of_ge hxLower) hxSmall
+    exact (not_lt_of_ge (hbox l).1) hxSmall
 
 /--
 Lemma 3.4.  For `a = φ(β,p)` and a point strictly inside the segment from
@@ -5323,12 +5311,21 @@ theorem lemma3_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
           have haj : Phi G M d z j < -R := by
             rw [← ha]
             linarith
-          have hnotTarget := lowProbability_largeContinuation_not_target
+          have hnotTarget := lowProbability_largeContinuation_not_box
             G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z j m l hm haj
               (by simpa only [threshold, N] using hlow)
               (by simpa only [N] using hlarge) t ht0 ht1 x
               (by simpa only [ha] using hx)
-          exact hnotTarget htarget
+          apply hnotTarget
+          intro k
+          have hchi := abs_minMaxQuit_le_of_reward_bound G k
+            (by linarith [hM.1])
+            (fun outcome => hM.2.1 outcome k)
+          have hρM : ρ ≤ M := hmotion.2.2.1.trans hM.1
+          have hkLower := (htarget k).1
+          have hchiLower := neg_le_of_abs_le hchi
+          have hM0 : 0 ≤ M := by linarith [hM.1]
+          exact ⟨by linarith, (htarget k).2⟩
   · intro j hj
     exact lemma3_4_positive_coordinate G M d ρ ξ R hplayers hM hd hd1
       hmotion hconstants z j (by simpa only [ha] using hj)
@@ -6538,6 +6535,161 @@ def TruncatedW (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
 def LowerBoundary (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
   closure (frontier (TruncatedW G R) \ frontier (WSet G))
 
+private theorem isClosed_closedCoordinateCube {N : Type} [Fintype N]
+    (R : ℝ) : IsClosed (ClosedCoordinateCube (N := N) R) := by
+  rw [show ClosedCoordinateCube R =
+      ⋂ j, {x : Payoff N | -R ≤ x j} ∩ {x : Payoff N | x j ≤ R} by
+    ext x
+    simp only [ClosedCoordinateCube, Set.mem_setOf_eq, Set.mem_iInter,
+      Set.mem_inter_iff]]
+  exact isClosed_iInter fun j =>
+    (isClosed_le (continuous_const : Continuous fun _ : Payoff N => -R)
+      (continuous_apply j)).inter
+      (isClosed_le (continuous_apply j)
+        (continuous_const : Continuous fun _ : Payoff N => R))
+
+private theorem mem_frontier_closedCoordinateCube_exists_abs_eq
+    {N : Type} [Fintype N] [Nonempty N] {R : ℝ} (hR : 0 < R)
+    {x : Payoff N} (hx : x ∈ frontier (ClosedCoordinateCube R)) :
+    ∃ j, |x j| = R := by
+  have hxCube : x ∈ ClosedCoordinateCube R :=
+    (isClosed_closedCoordinateCube R).frontier_subset hx
+  by_contra hnot
+  push Not at hnot
+  have hstrict : ∀ j, -R < x j ∧ x j < R := by
+    intro j
+    have hj := hxCube j
+    have habsNe : |x j| ≠ R := hnot j
+    constructor
+    · by_contra hle
+      have heq : x j = -R := by linarith
+      apply habsNe
+      rw [heq, abs_neg, abs_of_pos hR]
+    · by_contra hle
+      have heq : x j = R := by linarith
+      apply habsNe
+      rw [heq, abs_of_pos hR]
+  let box : Set (Payoff N) := Set.pi Set.univ fun _ => Set.Ioo (-R) R
+  have hboxOpen : IsOpen box :=
+    isOpen_set_pi Set.finite_univ fun _ _ => isOpen_Ioo
+  have hxBox : x ∈ box := fun j _ => hstrict j
+  have hboxSubset : box ⊆ ClosedCoordinateCube R := by
+    intro y hy j
+    exact ⟨(hy j (Set.mem_univ j)).1.le, (hy j (Set.mem_univ j)).2.le⟩
+  have hxInterior : x ∈ interior (ClosedCoordinateCube R) := by
+    rw [mem_interior_iff_mem_nhds]
+    exact mem_of_superset (hboxOpen.mem_nhds hxBox) hboxSubset
+  exact ((mem_frontier_iff_notMem_interior hxCube).mp hx) hxInterior
+
+private theorem lowerBoundary_has_cube_coordinate (G : QuittingGame)
+    {R : ℝ} (hR : 0 < R + 1) {x : Payoff G.Player}
+    (hx : x ∈ LowerBoundary G R) :
+    ∃ j, |x j| = R + 1 := by
+  let boundaryCoordinates : Set (Payoff G.Player) :=
+    {x | ∃ j, |x j| = R + 1}
+  have hsource :
+      frontier (TruncatedW G R) \ frontier (WSet G) ⊆ boundaryCoordinates := by
+    rintro y ⟨hy, hyW⟩
+    have hyUnion : y ∈
+        frontier (WSet G) ∩ closure (ClosedCoordinateCube (R + 1)) ∪
+          closure (WSet G) ∩ frontier (ClosedCoordinateCube (R + 1)) := by
+      exact frontier_inter_subset (WSet G) (ClosedCoordinateCube (R + 1))
+        (by simpa only [TruncatedW] using hy)
+    rcases hyUnion with ⟨hyW', _⟩ | ⟨_, hyCube⟩
+    · exact (hyW hyW').elim
+    · exact mem_frontier_closedCoordinateCube_exists_abs_eq hR hyCube
+  have hclosed : IsClosed boundaryCoordinates := by
+    have heq : boundaryCoordinates =
+        ⋃ j, {x : Payoff G.Player | |x j| = R + 1} := by
+      ext y
+      simp only [boundaryCoordinates, Set.mem_setOf_eq, Set.mem_iUnion]
+    rw [heq]
+    exact isClosed_iUnion_of_finite fun j =>
+      isClosed_eq (continuous_abs.comp (continuous_apply j)) continuous_const
+  exact closure_minimal hsource hclosed hx
+
+private def lowerCubeCorner (G : QuittingGame) (R : ℝ) :
+    Payoff G.Player := fun _ => -(R + 1)
+
+private theorem lowerCubeCorner_mem_lowerBoundary (G : QuittingGame)
+    (R : ℝ) (hR : 0 ≤ R + 1)
+    (hsolo : ∀ j, -(R + 1) < SoloPayoff G j) :
+    lowerCubeCorner G R ∈ LowerBoundary G R := by
+  classical
+  let j : G.Player := Classical.choice inferInstance
+  have hcornerW : lowerCubeCorner G R ∈ WSet G := by
+    exact ⟨j, (hsolo j).le⟩
+  have hcornerCube : lowerCubeCorner G R ∈ ClosedCoordinateCube (R + 1) := by
+    intro k
+    dsimp only [lowerCubeCorner]
+    constructor <;> linarith
+  have hcornerTruncated : lowerCubeCorner G R ∈ TruncatedW G R :=
+    ⟨hcornerW, hcornerCube⟩
+  have hcornerInteriorW : lowerCubeCorner G R ∈ interior (WSet G) := by
+    let U : Set (Payoff G.Player) := {x | x j < SoloPayoff G j}
+    have hUOpen : IsOpen U := isOpen_lt (continuous_apply j) continuous_const
+    have hcornerU : lowerCubeCorner G R ∈ U := hsolo j
+    have hUW : U ⊆ WSet G := by
+      intro x hx
+      exact ⟨j, hx.le⟩
+    rw [mem_interior_iff_mem_nhds]
+    exact mem_of_superset (hUOpen.mem_nhds hcornerU) hUW
+  have hcornerFrontier : lowerCubeCorner G R ∈ frontier (TruncatedW G R) := by
+    rw [frontier_eq_closure_inter_closure]
+    constructor
+    · exact subset_closure hcornerTruncated
+    · let outside : ℕ → Payoff G.Player := fun m k =>
+        lowerCubeCorner G R k - 1 / ((m : ℝ) + 1)
+      have houtsideTendsto : Tendsto outside atTop (nhds (lowerCubeCorner G R)) := by
+        apply tendsto_pi_nhds.mpr
+        intro k
+        have hzero := tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)
+        simpa only [outside, sub_zero] using tendsto_const_nhds.sub hzero
+      apply mem_closure_of_tendsto (b := atTop) (f := outside) houtsideTendsto
+      exact Filter.Eventually.of_forall fun m => by
+        rw [Set.mem_compl_iff]
+        intro hm
+        have hcoord := hm.2 j
+        have hpositive : 0 < 1 / ((m : ℝ) + 1) := by positivity
+        dsimp only [outside, lowerCubeCorner] at hcoord
+        linarith
+  apply subset_closure
+  refine ⟨hcornerFrontier, ?_⟩
+  intro hfrontier
+  rw [frontier] at hfrontier
+  exact hfrontier.2 hcornerInteriorW
+
+private theorem abs_coordinate_sub_le_euclideanDist
+    {N : Type} [Fintype N] (x y : Payoff N) (j : N) :
+    |x j - y j| ≤ EuclideanDist x y := by
+  rw [EuclideanDist, euclideanNorm_eq_norm_toLp]
+  simpa only [Pi.sub_apply, Real.norm_eq_abs] using
+    PiLp.norm_apply_le (WithLp.toLp 2 (x - y)) j
+
+private theorem exists_large_coordinate_of_cutoff_pos
+    (G : QuittingGame) {R ω : ℝ} (hR : 0 < R + 1) (hω1 : ω ≤ 1)
+    (hD : (LowerBoundary G R).Nonempty)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hvanish : ∀ x, ω ≤ EuclideanInfDist x (LowerBoundary G R) →
+      (cutoff x : ℝ) = 0)
+    (a : Payoff G.Player) (ha : 0 < (cutoff a : ℝ)) :
+    ∃ j, R < |a j| := by
+  have hdist : EuclideanInfDist a (LowerBoundary G R) < ω := by
+    by_contra hnot
+    have hzero := hvanish a (le_of_not_gt hnot)
+    linarith
+  obtain ⟨distance, ⟨b, hbD, rfl⟩, hab⟩ :=
+    exists_lt_of_csInf_lt (hD.image (EuclideanDist a)) hdist
+  obtain ⟨j, hbj⟩ := lowerBoundary_has_cube_coordinate G hR hbD
+  have hcoordinate := abs_coordinate_sub_le_euclideanDist a b j
+  have habs : |b j| - |a j| ≤ |a j - b j| := by
+    calc
+      |b j| - |a j| ≤ |(|b j| - |a j|)| := le_abs_self _
+      _ ≤ |b j - a j| := abs_abs_sub_abs_le_abs_sub _ _
+      _ = |a j - b j| := abs_sub_comm _ _
+  refine ⟨j, ?_⟩
+  linarith
+
 /-- The upper part `U = ∂C ∩ ∂W`. -/
 def UpperBoundary (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
   frontier (TruncatedW G R) ∩ frontier (WSet G)
@@ -6550,6 +6702,64 @@ def Section4Delta (G : QuittingGame) (M ε : ℝ) : ℝ :=
 def Section4Omega (G : QuittingGame) (M d ρ ξ R ε : ℝ) : ℝ :=
   d * ε * ξ * ρ * Section4Delta G M ε /
     (200 * R * (Fintype.card G.Player : ℝ) ^ 2 * M)
+
+private theorem section4Omega_mem_Ioc (G : QuittingGame)
+    (M d ρ ξ R ε : ℝ) (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3) :
+    Section4Omega G M d ρ ξ R ε ∈ Set.Ioc 0 1 := by
+  let N : ℝ := Fintype.card G.Player
+  obtain ⟨hξ, hξ1, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hN1 : 1 ≤ N := by linarith
+  have hM1 : 1 ≤ M := hM.1
+  have hρ1 : ρ ≤ 1 := hmotion.2.2.1
+  have hε1 : ε ≤ 1 := by linarith
+  have hδpos : 0 < Section4Delta G M ε := by
+    rw [Section4Delta]
+    positivity
+  have hδ1 : Section4Delta G M ε ≤ 1 := by
+    rw [Section4Delta, div_le_one (by positivity :
+      0 < 2 * (Fintype.card G.Player : ℝ) * M)]
+    dsimp only [N] at hN ⊢
+    nlinarith
+  have hproduct1 : d * ε * ξ * ρ * Section4Delta G M ε ≤ 1 := by
+    have hdε : d * ε ≤ 1 := mul_le_one₀ hd1 hε.le hε1
+    have hdεξ : d * ε * ξ ≤ 1 := mul_le_one₀ hdε hξ.le hξ1.le
+    have hdεξρ : d * ε * ξ * ρ ≤ 1 :=
+      mul_le_one₀ hdεξ hmotion.2.1.le hρ1
+    exact mul_le_one₀ hdεξρ hδpos.le hδ1
+  have hR1 : 1 ≤ R := by
+    have hNM : 3 ≤ N * M := by
+      nlinarith [mul_le_mul hN hM1 (by norm_num) (by linarith : 0 ≤ N)]
+    have hR' : 10 * N * M ≤ R := by simpa only [N] using hR
+    nlinarith
+  have hNpow : 1 ≤ N ^ 2 := by
+    nlinarith [mul_nonneg (by linarith : 0 ≤ N - 1)
+      (by linarith : 0 ≤ N + 1)]
+  have hden1 : 1 ≤ 200 * R * N ^ 2 * M := by
+    have hfirst : 1 ≤ 200 * R := by nlinarith
+    have hsecond : 200 * R ≤ 200 * R * N ^ 2 := by
+      nlinarith [mul_nonneg (by positivity : 0 ≤ 200 * R)
+        (by linarith : 0 ≤ N ^ 2 - 1)]
+    have hthird : 200 * R * N ^ 2 ≤ 200 * R * N ^ 2 * M := by
+      nlinarith [mul_nonneg (by positivity : 0 ≤ 200 * R * N ^ 2)
+        (by linarith : 0 ≤ M - 1)]
+    exact hfirst.trans (hsecond.trans hthird)
+  have hdenpos : 0 < 200 * R * N ^ 2 * M := zero_lt_one.trans_le hden1
+  constructor
+  · rw [Section4Omega]
+    apply div_pos
+    · exact mul_pos (mul_pos (mul_pos (mul_pos hd hε) hξ) hmotion.2.1) hδpos
+    · simpa only [N] using hdenpos
+  · rw [Section4Omega, div_le_one]
+    · simpa only [N] using hproduct1.trans hden1
+    · simpa only [N] using hdenpos
 
 /--
 The cutoff `λ` used to glue the structure homotopy to the identity near `D`.
@@ -6994,6 +7204,60 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
       (Section4X G inverse cutoff a j < MinMaxQuit G j - ρ / 3 →
         Section4X G inverse cutoff a j + ρ ^ 2 / (500 * M) ≤
           Section4Z G inverse cutoff a j) := by
+  classical
+  let z : EZeroTilde G := inverse.inv a
+  let lambda : ℝ := cutoff a
+  let x : Payoff G.Player := Section4X G inverse cutoff a
+  have hphi : Phi G M d z = a := inverse.rightInverse a
+  obtain ⟨hξ, hξ1, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hN : 3 ≤ (Fintype.card G.Player : ℝ) := by exact_mod_cast hplayers
+  have hNM : 3 ≤ (Fintype.card G.Player : ℝ) * M := by
+    nlinarith [mul_le_mul hN hM.1 (by norm_num)
+      (by linarith : 0 ≤ (Fintype.card G.Player : ℝ))]
+  have hRpos : 0 < R := by linarith
+  have hsolo : ∀ j, -(R + 1) < SoloPayoff G j := by
+    intro j
+    have hj := hM.2.1 ⟨{j}, Finset.singleton_nonempty j⟩ j
+    change |SoloPayoff G j| ≤ M / 3 at hj
+    have hRM : M / 3 < R + 1 := by nlinarith [hR, hNM]
+    linarith [neg_le_of_abs_le hj]
+  have hD : (LowerBoundary G R).Nonempty :=
+    ⟨lowerCubeCorner G R,
+      lowerCubeCorner_mem_lowerBoundary G R (by linarith) hsolo⟩
+  have hω := section4Omega_mem_Ioc G M d ρ ξ R ε hplayers hM hd hd1
+    hmotion hconstants hε hερ
+  obtain ⟨large, hlarge⟩ := exists_large_coordinate_of_cutoff_pos G
+    (by linarith) hω.2 hD cutoff hcutoff.2.2.1 a hcutoff0
+  have hxFormula : x =
+      (1 - (cutoff a : ℝ)) • z.1.1 + (cutoff a : ℝ) • a := by
+    dsimp only [x, z, Section4X]
+    abel
+  have hnegative : ∃ k, a k < -R := by
+    rcases (lt_abs.mp hlarge) with hpos | hneg
+    · have hpositive := lemma3_4_positive_coordinate G M d ρ ξ R
+        hplayers hM hd hd1 hmotion hconstants z large (by
+          rw [hphi]
+          exact hpos)
+      have hxLarge := congrFun hxFormula large
+      simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxLarge
+      have hxUpper := (hxbox large).2
+      have hbetaLarge : M < z.1.1 large := by
+        nlinarith [hpositive.1]
+      have haLarge : M < a large := by
+        nlinarith
+      have hlambda0 : 0 < (cutoff a : ℝ) := hcutoff0
+      have hlambda1 : (cutoff a : ℝ) < 1 := hcutoff1
+      exfalso
+      nlinarith
+    · exact ⟨large, by linarith⟩
+  obtain ⟨dominant, hadominant⟩ := hnegative
+  have hpDominant : 1 - ξ < (z.1.2 dominant : ℝ) := by
+    apply lemma3_4_negative_coordinate_probability_gt_one_sub_xi
+      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z dominant
+    rw [hphi]
+    exact hadominant
   sorry
 
 /-!
