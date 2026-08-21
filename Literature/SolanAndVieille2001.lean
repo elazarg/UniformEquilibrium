@@ -4098,15 +4098,12 @@ def figure2PhaseRootCondition
       (roots time 3 false).toReal = b)
 
 /-- The corrected Figure 2 profile is a period-two equilibrium. -/
-def Figure2CyclicEquilibriumClaim : Prop :=
-  ∃ a b : ℝ, ∃ roots : RootSequence (ι := Fin 4),
-    cyclicRootSequence roots ∧
-    figure2PhaseRootCondition a b roots ∧
-    epsilonEquilibrium SolanVieilleBoundary.boundaryReward 0
-      (profile SolanVieilleBoundary.boundaryReward roots)
-
 theorem figure2_cyclic_equilibrium :
-    Figure2CyclicEquilibriumClaim := by
+    ∃ a b : ℝ, ∃ roots : RootSequence (ι := Fin 4),
+      cyclicRootSequence roots ∧
+      figure2PhaseRootCondition a b roots ∧
+      epsilonEquilibrium SolanVieilleBoundary.boundaryReward 0
+        (profile SolanVieilleBoundary.boundaryReward roots) := by
   let a := FourPlayerPairedSingleton.periodTwoParameter
   let b := FourPlayerPairedSingleton.periodTwoSecondary
   let cycle : Fin 2 → Fin 4 → PMF Bool :=
@@ -4764,7 +4761,7 @@ private theorem iUnion_firstAtEvent_inter_range { Ω : Type* }
 from requiring clock 1 to ring before clock 2 is bounded by the product of
 their success probabilities, and the two conditional first-clock laws are
 within `2 P(S₂<N)` in `ℓ¹`. -/
-def Lemma3_1 : Prop :=
+theorem lemma3_1 :
   ∀ (Ω : Type*) (probability : Probability Ω) (N : ℕ)
     (firstBits secondBits : Fin N → Ω → Bool),
     independentBernoulliSequences probability firstBits secondBits →
@@ -4785,9 +4782,7 @@ def Lemma3_1 : Prop :=
                 firstBeforeSecondEvent first₁ first₂ N) /
             probability.prob
               (firstBeforeSecondEvent first₁ first₂ N)|) ≤
-        2 * probability.prob (beforeEvent first₂ N)
-
-theorem lemma3_1 : Lemma3_1 := by
+        2 * probability.prob (beforeEvent first₂ N) := by
   intro Ω probability N firstBits secondBits hindependence
   dsimp only
   intro hjointPos
