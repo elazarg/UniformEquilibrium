@@ -702,4 +702,118 @@ theorem quittingAnnotationBoundary_eq_singleton_of_normalizedWindowOccupation
 
 end QuittingFiniteRootWindow
 
+/-! ## Infinite first-event occupation -/
+
+open QuittingFiniteRootWindow
+
+/-- Infinite first-event mass of the singleton quitter `owner`, from
+`start`. -/
+def quittingRootSequenceSingletonMass
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (owner : ι) : ℝ :=
+  ∑' offset : ℕ, quittingJointSurvivalWeight roots start offset *
+    quittingRootCoalitionMass (roots (start + offset)) {owner}
+
+/-- The survival-weighted singleton-mass series is summable. -/
+theorem summable_quittingJointSurvivalWeight_mul_singletonMass
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (owner : ι) :
+    Summable (fun offset : ℕ =>
+      quittingJointSurvivalWeight roots start offset *
+        quittingRootCoalitionMass (roots (start + offset)) {owner}) := by
+  apply summable_of_sum_range_le (c := 1)
+  · intro offset
+    exact mul_nonneg
+      (quittingJointSurvivalWeight_nonneg roots start offset)
+      (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg _ _)
+  · intro fuel
+    calc
+      ∑ offset ∈ Finset.range fuel,
+          quittingJointSurvivalWeight roots start offset *
+            quittingRootCoalitionMass (roots (start + offset)) {owner} ≤
+        ∑ offset ∈ Finset.range fuel,
+          quittingJointSurvivalWeight roots start offset *
+            quittingRootAbsorptionMass (roots (start + offset)) := by
+              apply Finset.sum_le_sum
+              intro offset _
+              apply mul_le_mul_of_nonneg_left _
+                (quittingJointSurvivalWeight_nonneg roots start offset)
+              have hdecomposition :=
+                quittingRootAbsorptionMass_eq_sum_singletonMass_add_collisionMass
+                  (roots (start + offset))
+              rw [hdecomposition]
+              exact (Finset.single_le_sum
+                (fun who _ =>
+                  MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg _ _)
+                (Finset.mem_univ owner)).trans
+                  (le_add_of_nonneg_right (quittingRootCollisionMass_nonneg _))
+      _ = 1 - quittingJointSurvivalWeight roots start fuel := by
+        let window : QuittingFiniteRootWindow roots := ⟨start, fuel⟩
+        rw [← Fin.sum_univ_eq_sum_range]
+        simpa [window, QuittingFiniteRootWindow.absorptionMass,
+          QuittingFiniteRootWindow.survivalWeight,
+          QuittingFiniteRootWindow.rootAt] using
+          window.absorptionMass_eq_one_sub_survivalWeight
+      _ ≤ 1 := by
+        linarith [quittingJointSurvivalWeight_nonneg roots start fuel]
+
+/-- Infinite singleton first-event mass is nonnegative. -/
+theorem quittingRootSequenceSingletonMass_nonneg
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (owner : ι) :
+    0 ≤ quittingRootSequenceSingletonMass roots start owner := by
+  exact tsum_nonneg fun offset => mul_nonneg
+    (quittingJointSurvivalWeight_nonneg roots start offset)
+    (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg _ _)
+
+/-- Finite singleton occupation converges to its infinite first-event mass. -/
+theorem tendsto_finiteWindow_singletonMass
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (owner : ι) :
+    Tendsto (fun fuel =>
+      (⟨start, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass owner)
+      atTop (nhds (quittingRootSequenceSingletonMass roots start owner)) := by
+  have h := (summable_quittingJointSurvivalWeight_mul_singletonMass
+    roots start owner).hasSum.tendsto_sum_nat
+  unfold quittingRootSequenceSingletonMass
+  convert h using 1
+  funext fuel
+  rw [← Fin.sum_univ_eq_sum_range]
+  rfl
+
+/-- Infinite first-event singleton mass plus collision mass exhausts all
+absorption; the missing mass is precisely Never. -/
+theorem sum_quittingRootSequenceSingletonMass_add_collisionMass
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) :
+    (∑ owner, quittingRootSequenceSingletonMass roots start owner) +
+        quittingRootSequenceCollisionMass roots start =
+      1 - quittingJointSurvivalLimit roots start := by
+  let window : ℕ → QuittingFiniteRootWindow roots :=
+    fun fuel => ⟨start, fuel⟩
+  have hsingleton : Tendsto (fun fuel => (window fuel).singletonTotal) atTop
+      (nhds (∑ owner,
+        quittingRootSequenceSingletonMass roots start owner)) := by
+    unfold QuittingFiniteRootWindow.singletonTotal
+    exact tendsto_finsetSum Finset.univ fun owner _ => by
+      simpa [window] using
+        tendsto_finiteWindow_singletonMass roots start owner
+  have hcollision : Tendsto (fun fuel => (window fuel).collisionMass) atTop
+      (nhds (quittingRootSequenceCollisionMass roots start)) := by
+    have h :=
+      (summable_quittingJointSurvivalWeight_mul_quittingRootCollisionMass
+        roots start).hasSum.tendsto_sum_nat
+    unfold quittingRootSequenceCollisionMass
+    convert h using 1
+    funext fuel
+    rw [← Fin.sum_univ_eq_sum_range]
+    rfl
+  have habsorption : Tendsto (fun fuel => (window fuel).absorptionMass) atTop
+      (nhds (1 - quittingJointSurvivalLimit roots start)) := by
+    have hsurvival := tendsto_quittingJointSurvivalLimit roots start
+    convert tendsto_const_nhds.sub hsurvival using 1
+    ext fuel
+    exact (window fuel).absorptionMass_eq_one_sub_survivalWeight
+  have hsum := hsingleton.add hcollision
+  symm
+  apply tendsto_nhds_unique habsorption
+  convert hsum using 1
+  funext fuel
+  exact (window fuel).absorptionMass_eq_singletonTotal_add_collisionMass
+
 end GameTheory
