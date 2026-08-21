@@ -219,5 +219,146 @@ theorem hasPositiveSquareAlong_of_frozen_lt_endpoint_sub_source
   rw [← endpoint_sub_source_sub_frozen_eq_squareCurvatureSum]
   linarith
 
+/-! ## Quantitative signed localization -/
+
+/-- Number of square contributions in the triangular decomposition of a
+reset word. Repeated coordinates are counted as distinct positions. -/
+def squareCount : List Coordinate → ℕ
+  | [] => 0
+  | _coordinate :: rest => squareCount rest + rest.length
+
+/-- A two-reset square in the triangular decomposition whose curvature is
+strictly larger than the displayed threshold. -/
+def HasSquareAboveAlong (value : Finset Coordinate → ℝ) (threshold : ℝ) :
+    Finset Coordinate → List Coordinate → Prop
+  | _source, [] => False
+  | source, coordinate :: rest =>
+      HasSquareAboveAlong value threshold (insert coordinate source) rest ∨
+        ∃ other ∈ rest, threshold < square value source coordinate other
+
+private theorem exists_mem_gt_of_length_mul_lt_sum
+    (values : List ℝ) (threshold : ℝ)
+    (hlarge : (values.length : ℝ) * threshold < values.sum) :
+    ∃ value ∈ values, threshold < value := by
+  induction values with
+  | nil => simp at hlarge
+  | cons value values ih =>
+      by_cases hvalue : threshold < value
+      · exact ⟨value, by simp, hvalue⟩
+      · have hvalueLe : value ≤ threshold := le_of_not_gt hvalue
+        have htail : (values.length : ℝ) * threshold < values.sum := by
+          simp only [List.length_cons, Nat.cast_add, Nat.cast_one,
+            List.sum_cons] at hlarge
+          linarith
+        obtain ⟨large, hlargeMem, hlargeValue⟩ := ih htail
+        exact ⟨large, by simp [hlargeMem], hlargeValue⟩
+
+/-- If the aggregate triangular curvature exceeds `squareCount * threshold`,
+one literal square contribution exceeds `threshold`. -/
+theorem hasSquareAboveAlong_of_mul_lt_squareCurvatureSum
+    (value : Finset Coordinate → ℝ)
+    (source : Finset Coordinate) (word : List Coordinate)
+    (threshold : ℝ)
+    (hlarge : (squareCount word : ℝ) * threshold <
+      squareCurvatureSum value source word) :
+    HasSquareAboveAlong value threshold source word := by
+  induction word generalizing source with
+  | nil => simp [squareCount, squareCurvatureSum] at hlarge
+  | cons coordinate rest ih =>
+      simp only [squareCount, squareCurvatureSum, Nat.cast_add] at hlarge
+      by_cases htail : (squareCount rest : ℝ) * threshold <
+          squareCurvatureSum value (insert coordinate source) rest
+      · exact Or.inl (ih (insert coordinate source) htail)
+      · have htailLe :
+            squareCurvatureSum value (insert coordinate source) rest ≤
+              (squareCount rest : ℝ) * threshold := le_of_not_gt htail
+        have hsquares : (rest.length : ℝ) * threshold <
+            (rest.map (square value source coordinate)).sum := by
+          linarith
+        obtain ⟨large, hlargeMem, hlargeValue⟩ :=
+          exists_mem_gt_of_length_mul_lt_sum
+            (rest.map (square value source coordinate)) threshold (by
+              simpa using hsquares)
+        obtain ⟨other, hotherMem, rfl⟩ := List.mem_map.mp hlargeMem
+        exact Or.inr ⟨other, hotherMem, hlargeValue⟩
+
+private theorem sum_map_neg_of
+    {α : Type*} (first second : α → ℝ) (values : List α)
+    (heq : ∀ value, first value = -second value) :
+    (values.map first).sum = -(values.map second).sum := by
+  induction values with
+  | nil => simp
+  | cons value values ih =>
+      simp only [List.map_cons, List.sum_cons]
+      rw [heq value, ih]
+      ring
+
+/-- Negating an observable negates every triangular curvature sum. -/
+theorem squareCurvatureSum_neg
+    (value : Finset Coordinate → ℝ)
+    (source : Finset Coordinate) (word : List Coordinate) :
+    squareCurvatureSum (fun reset ↦ -value reset) source word =
+      -squareCurvatureSum value source word := by
+  induction word generalizing source with
+  | nil => simp [squareCurvatureSum]
+  | cons coordinate rest ih =>
+      simp only [squareCurvatureSum, ih]
+      have hsquare : ∀ other,
+          square (fun reset ↦ -value reset) source coordinate other =
+            -square value source coordinate other := by
+        intro other
+        simp [square, edge]
+        ring
+      have hsquares := sum_map_neg_of
+        (square (fun reset ↦ -value reset) source coordinate)
+        (square value source coordinate) rest hsquare
+      rw [hsquares]
+      ring
+
+/-- **Quantitative signed curvature dichotomy.** Either the complete
+common-source/path discrepancy is at most `squareCount * threshold`, or one
+literal two-reset square exceeds `threshold` in one of the two orientations.
+The second orientation is represented by negating the observable. -/
+theorem abs_squareCurvatureSum_le_or_signedSquareAbove
+    (value : Finset Coordinate → ℝ)
+    (source : Finset Coordinate) (word : List Coordinate)
+    (threshold : ℝ) (hthreshold : 0 ≤ threshold) :
+    |squareCurvatureSum value source word| ≤
+          (squareCount word : ℝ) * threshold ∨
+      HasSquareAboveAlong value threshold source word ∨
+        HasSquareAboveAlong (fun reset ↦ -value reset) threshold source word := by
+  let bound : ℝ := (squareCount word : ℝ) * threshold
+  have hbound : 0 ≤ bound := mul_nonneg (Nat.cast_nonneg _) hthreshold
+  by_cases hnear : |squareCurvatureSum value source word| ≤ bound
+  · exact Or.inl hnear
+  · have hfar : bound < |squareCurvatureSum value source word| :=
+      lt_of_not_ge hnear
+    by_cases hcurvature : 0 ≤ squareCurvatureSum value source word
+    · right
+      left
+      apply hasSquareAboveAlong_of_mul_lt_squareCurvatureSum
+      simpa only [bound, abs_of_nonneg hcurvature] using hfar
+    · right
+      right
+      apply hasSquareAboveAlong_of_mul_lt_squareCurvatureSum
+      rw [squareCurvatureSum_neg]
+      have hnegative : squareCurvatureSum value source word < 0 :=
+        lt_of_not_ge hcurvature
+      simpa only [bound, abs_of_neg hnegative] using hfar
+
+/-- Endpoint form of the quantitative signed curvature dichotomy. -/
+theorem nearFrozenReturn_or_signedSquareAbove
+    (value : Finset Coordinate → ℝ)
+    (source : Finset Coordinate) (word : List Coordinate)
+    (threshold : ℝ) (hthreshold : 0 ≤ threshold) :
+    |value (finalSet source word) - value source -
+        frozenEdgeSum value source word| ≤
+          (squareCount word : ℝ) * threshold ∨
+      HasSquareAboveAlong value threshold source word ∨
+        HasSquareAboveAlong (fun reset ↦ -value reset) threshold source word := by
+  rw [endpoint_sub_source_sub_frozen_eq_squareCurvatureSum]
+  exact abs_squareCurvatureSum_le_or_signedSquareAbove
+    value source word threshold hthreshold
+
 end CubicalResetIntegrability
 end Math.Finset

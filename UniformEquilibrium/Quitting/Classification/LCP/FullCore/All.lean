@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockChargedReturn
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockGlobalContraction
+import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockSharperBound
 
 /-!
 # Four-player full-core classification results

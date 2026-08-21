@@ -177,6 +177,77 @@ theorem abs_sum_chatteringCoefficient_mul_charge_sub_one_le
       rw [← Finset.mul_sum]
       ring
 
+/-- A uniformly source-matched perturbation of the charged columns preserves
+the aggregate `O(1/N)` charge estimate. -/
+theorem abs_sum_chatteringCoefficient_mul_perturbed_charge_sub_one_le
+    (charge actualCharge mass : Move → ℝ)
+    (N : ℕ) (hN : 0 < N)
+    (hmass : ∀ move, 0 ≤ mass move)
+    (hcharge : ∑ move, mass move * charge move = 1)
+    (hclose : ∀ move, |actualCharge move - charge move| ≤ 1 / N) :
+    |(∑ move, chatteringCoefficient mass N move * actualCharge move) - 1| ≤
+      ((∑ move, |charge move|) + ∑ move, mass move) / N := by
+  have hcoefficientNonneg : ∀ move,
+      0 ≤ chatteringCoefficient mass N move := by
+    intro move
+    unfold chatteringCoefficient
+    positivity
+  have hcoefficientLe : ∀ move,
+      chatteringCoefficient mass N move ≤ mass move := by
+    intro move
+    exact chatteringCoefficient_le mass N hN move (hmass move)
+  have hfrozen := abs_sum_chatteringCoefficient_mul_charge_sub_one_le
+    charge mass N hN hmass hcharge
+  have hperturb :
+      |∑ move, chatteringCoefficient mass N move *
+          (actualCharge move - charge move)| ≤
+        (∑ move, mass move) / N := by
+    calc
+      |∑ move, chatteringCoefficient mass N move *
+          (actualCharge move - charge move)| ≤
+          ∑ move, |chatteringCoefficient mass N move *
+            (actualCharge move - charge move)| :=
+        Finset.abs_sum_le_sum_abs _ _
+      _ ≤ ∑ move, mass move * (1 / N) := by
+        apply Finset.sum_le_sum
+        intro move _
+        rw [abs_mul, abs_of_nonneg (hcoefficientNonneg move)]
+        exact mul_le_mul (hcoefficientLe move) (hclose move)
+          (abs_nonneg _) (hmass move)
+      _ = (∑ move, mass move) / N := by
+        rw [← Finset.sum_mul]
+        ring
+  have hdecompose :
+      (∑ move, chatteringCoefficient mass N move * actualCharge move) - 1 =
+        ((∑ move, chatteringCoefficient mass N move * charge move) - 1) +
+          ∑ move, chatteringCoefficient mass N move *
+            (actualCharge move - charge move) := by
+    calc
+      (∑ move, chatteringCoefficient mass N move * actualCharge move) - 1 =
+          (∑ move, (chatteringCoefficient mass N move * charge move +
+            chatteringCoefficient mass N move *
+              (actualCharge move - charge move))) - 1 := by
+        apply congrArg (fun value : ℝ ↦ value - 1)
+        apply Finset.sum_congr rfl
+        intro move _
+        ring
+      _ = ((∑ move, chatteringCoefficient mass N move * charge move) - 1) +
+          ∑ move, chatteringCoefficient mass N move *
+            (actualCharge move - charge move) := by
+        rw [Finset.sum_add_distrib]
+        ring
+  rw [hdecompose]
+  calc
+    |((∑ move, chatteringCoefficient mass N move * charge move) - 1) +
+        ∑ move, chatteringCoefficient mass N move *
+          (actualCharge move - charge move)| ≤
+        |(∑ move, chatteringCoefficient mass N move * charge move) - 1| +
+          |∑ move, chatteringCoefficient mass N move *
+            (actualCharge move - charge move)| := abs_add_le _ _
+    _ ≤ (∑ move, |charge move|) / N +
+        (∑ move, mass move) / N := add_le_add hfrozen hperturb
+    _ = ((∑ move, |charge move|) + ∑ move, mass move) / N := by ring
+
 /-- **Integer chattering approximation.**  Every normalized positive charged
 circulation has an explicit natural-number word whose aggregate displacement
 is `O(1/N)` and whose charge is within `O(1/N)` of one. -/
@@ -322,6 +393,133 @@ theorem abs_sum_chatteringPrefixCoefficient_mul_column_le
       add_le_add hcompletedBound hpartialBound
     _ = ((∑ move, |column move state|) +
         ∑ move, mass move * |column move state|) / N := by ring
+
+omit [Fintype Move] in
+/-- A prefix coefficient is nonnegative. -/
+theorem chatteringPrefixCoefficient_nonneg
+    (mass : Move → ℝ) (N completed : ℕ) (partialCount : Move → ℕ)
+    (move : Move) :
+    0 ≤ chatteringPrefixCoefficient mass N completed partialCount move := by
+  unfold chatteringPrefixCoefficient
+  positivity
+
+omit [Fintype Move] in
+/-- During the prescribed `N` microcycles, every prefix coefficient is at
+most twice its limiting occupation mass. -/
+theorem chatteringPrefixCoefficient_le_two_mul
+    (mass : Move → ℝ) (N completed : ℕ) (partialCount : Move → ℕ)
+    (hN : 0 < N) (hcompleted : completed ≤ N)
+    (hpartial : ∀ move, partialCount move ≤ chatteringCount mass N move)
+    (hmass : ∀ move, 0 ≤ mass move) (move : Move) :
+    chatteringPrefixCoefficient mass N completed partialCount move ≤
+      2 * mass move := by
+  have hNreal : 0 < (N : ℝ) := by exact_mod_cast hN
+  have hNone : (1 : ℝ) ≤ N := by exact_mod_cast hN
+  have hcompletedReal : (completed : ℝ) ≤ N := by
+    exact_mod_cast hcompleted
+  have hpartialReal : (partialCount move : ℝ) ≤
+      chatteringCount mass N move := by
+    exact_mod_cast hpartial move
+  have hcountMass : (chatteringCount mass N move : ℝ) ≤
+      (N : ℝ) * mass move := by
+    exact Nat.floor_le (mul_nonneg hNreal.le (hmass move))
+  unfold chatteringPrefixCoefficient
+  apply (div_le_iff₀ (sq_pos_of_pos hNreal)).2
+  calc
+    (completed : ℝ) * chatteringCount mass N move + partialCount move ≤
+        (N : ℝ) * ((N : ℝ) * mass move) + (N : ℝ) * mass move := by
+      exact add_le_add
+        (mul_le_mul hcompletedReal hcountMass (Nat.cast_nonneg _) hNreal.le)
+        (hpartialReal.trans hcountMass)
+    _ ≤ (2 * mass move) * (N : ℝ) ^ 2 := by
+      nlinarith [hmass move]
+
+/-- **Source perturbations preserve uniform prefix locality.** If every
+actual column is within `1/N` of one balanced frozen column, then the whole
+rounded chattering prefix remains `O(1/N)` from the common source. -/
+theorem abs_sum_chatteringPrefixCoefficient_mul_perturbed_column_le
+    (column actual : Move → State → ℝ) (mass : Move → ℝ)
+    (N completed : ℕ) (hN : 0 < N) (hcompleted : completed ≤ N)
+    (partialCount : Move → ℕ)
+    (hpartial : ∀ move, partialCount move ≤ chatteringCount mass N move)
+    (hmass : ∀ move, 0 ≤ mass move) (state : State)
+    (hbalance : ∑ move, mass move * column move state = 0)
+    (hclose : ∀ move, |actual move state - column move state| ≤ 1 / N) :
+    |∑ move,
+        chatteringPrefixCoefficient mass N completed partialCount move *
+          actual move state| ≤
+      ((∑ move, |column move state|) +
+          ∑ move, mass move * |column move state| +
+        2 * ∑ move, mass move) / N := by
+  have hfrozen := abs_sum_chatteringPrefixCoefficient_mul_column_le
+    column mass N completed hN hcompleted partialCount hpartial hmass state
+      hbalance
+  have hperturb :
+      |∑ move,
+          chatteringPrefixCoefficient mass N completed partialCount move *
+            (actual move state - column move state)| ≤
+        (2 * ∑ move, mass move) / N := by
+    calc
+      |∑ move,
+          chatteringPrefixCoefficient mass N completed partialCount move *
+            (actual move state - column move state)| ≤
+          ∑ move,
+            |chatteringPrefixCoefficient mass N completed partialCount move *
+              (actual move state - column move state)| :=
+        Finset.abs_sum_le_sum_abs _ _
+      _ ≤ ∑ move, (2 * mass move) * (1 / N) := by
+        apply Finset.sum_le_sum
+        intro move _
+        rw [abs_mul, abs_of_nonneg
+          (chatteringPrefixCoefficient_nonneg mass N completed partialCount move)]
+        exact mul_le_mul
+          (chatteringPrefixCoefficient_le_two_mul mass N completed partialCount
+            hN hcompleted hpartial hmass move)
+          (hclose move) (abs_nonneg _) (mul_nonneg (by positivity) (hmass move))
+      _ = (2 * ∑ move, mass move) / N := by
+        calc
+          ∑ move, (2 * mass move) * (1 / N) =
+              ∑ move, mass move * (2 / N) := by
+            apply Finset.sum_congr rfl
+            intro move _
+            ring
+          _ = (∑ move, mass move) * (2 / N) := by
+            rw [Finset.sum_mul]
+          _ = (2 * ∑ move, mass move) / N := by ring
+  have hdecompose :
+      (∑ move,
+          chatteringPrefixCoefficient mass N completed partialCount move *
+            actual move state) =
+        (∑ move,
+          chatteringPrefixCoefficient mass N completed partialCount move *
+            column move state) +
+        ∑ move,
+          chatteringPrefixCoefficient mass N completed partialCount move *
+            (actual move state - column move state) := by
+    rw [← Finset.sum_add_distrib]
+    apply Finset.sum_congr rfl
+    intro move _
+    ring
+  rw [hdecompose]
+  calc
+    |(∑ move,
+        chatteringPrefixCoefficient mass N completed partialCount move *
+          column move state) +
+      ∑ move,
+        chatteringPrefixCoefficient mass N completed partialCount move *
+          (actual move state - column move state)| ≤
+        |∑ move,
+          chatteringPrefixCoefficient mass N completed partialCount move *
+            column move state| +
+        |∑ move,
+          chatteringPrefixCoefficient mass N completed partialCount move *
+            (actual move state - column move state)| := abs_add_le _ _
+    _ ≤ ((∑ move, |column move state|) +
+          ∑ move, mass move * |column move state|) / N +
+        (2 * ∑ move, mass move) / N := add_le_add hfrozen hperturb
+    _ = ((∑ move, |column move state|) +
+          ∑ move, mass move * |column move state| +
+        2 * ∑ move, mass move) / N := by ring
 
 end Probability
 end Math

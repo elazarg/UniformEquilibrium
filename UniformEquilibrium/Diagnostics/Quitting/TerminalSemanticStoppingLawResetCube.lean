@@ -172,6 +172,48 @@ theorem hasPositiveSquareAlong_of_frozen_lt_endpoint_sub_source
   CubicalResetIntegrability.hasPositiveSquareAlong_of_frozen_lt_endpoint_sub_source
       (data.value observable) source word hpositive
 
+/-- **Source-matched near return or signed two-reset curvature.** For a
+frozen reset cube, either the endpoint/path discrepancy is bounded by the
+number of square faces times `threshold`, or one literal two-reset square has
+curvature larger than `threshold` in one of the two orientations. -/
+theorem nearFrozenReturn_or_signedSquareAbove
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observable : (quittingGame reward).BehaviorProfile → ℝ)
+    (source : Finset ι) (word : List ι)
+    (threshold : ℝ) (hthreshold : 0 ≤ threshold) :
+    |data.value observable (finalSet source word) -
+          data.value observable source -
+        frozenEdgeSum (data.value observable) source word| ≤
+          (squareCount word : ℝ) * threshold ∨
+      HasSquareAboveAlong (data.value observable) threshold source word ∨
+        HasSquareAboveAlong (fun reset ↦ -data.value observable reset)
+          threshold source word :=
+  CubicalResetIntegrability.nearFrozenReturn_or_signedSquareAbove
+    (data.value observable) source word threshold hthreshold
+
+/-- Coordinatewise terminal-debt specialization of the source-matched reset
+cube dichotomy. -/
+theorem terminalSemanticDebt_nearFrozenReturn_or_signedSquareAbove
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observer : ι) (source : Finset ι) (word : List ι)
+    (threshold : ℝ) (hthreshold : 0 ≤ threshold) :
+    let debt := fun candidate : (quittingGame reward).BehaviorProfile ↦
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward candidate) observer
+    |data.value debt (finalSet source word) - data.value debt source -
+        frozenEdgeSum (data.value debt) source word| ≤
+          (squareCount word : ℝ) * threshold ∨
+      HasSquareAboveAlong (data.value debt) threshold source word ∨
+        HasSquareAboveAlong (fun reset ↦ -data.value debt reset)
+          threshold source word := by
+  dsimp only
+  exact data.nearFrozenReturn_or_signedSquareAbove
+    (fun candidate ↦ quittingTerminalSemanticDebt
+      (quittingTerminalSemanticPair reward candidate) observer)
+    source word threshold hthreshold
+
 end QuittingStoppingLawResetCubeData
 
 /-- Every scalar observable has the exact square identity on two literal

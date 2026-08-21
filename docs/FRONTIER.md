@@ -79,15 +79,27 @@ interface.
 
 The full-core deadlock completion family has a sharper integrated carrier
 constraint.
-[`IsFullCoreDeadlockCompletion.globalDebtFloor_le_one_fourteenth`](../UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockGlobalContraction.lean)
-constructs an actual carrier point of total semantic debt exactly `1/14` and
-therefore bounds every global debt floor by `1/14`. The counterexample-regime
+[`IsFullCoreDeadlockCompletion.globalDebtFloor_le_sharperBound`](../UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockSharperBound.lean)
+constructs an actual carrier point of total semantic debt exactly
+`1227/96755` and therefore bounds every global debt floor by that value. The
+counterexample-regime
 consumer
-[`HasTerminalExploitabilityGap.fullCoreDeadlock_le_one_fourteenth`](../UniformEquilibrium/Diagnostics/Quitting/FullCoreDeadlockDebtBound.lean)
-then bounds every terminal exploitability gap on this family by `1/14`, with
-the stored gap of a counterexample regime as a direct corollary. Neither
+[`HasTerminalExploitabilityGap.fullCoreDeadlock_le_sharperBound`](../UniformEquilibrium/Diagnostics/Quitting/FullCoreDeadlockDebtBound.lean)
+then bounds every terminal exploitability gap on this family by `1227/96755`,
+with the stored gap of a counterexample regime as a direct corollary. Neither
 the minimum debt nor the gap is proved to vanish, and no uniform-equilibrium
 payoff is produced.
+
+The flat stopping-law charged-circulation branch now has an actual-source
+adapter.
+[`exists_sourceMatchedChatteringWithUniformPrefixes`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedChattering.lean)
+uses one late common source and one circulation mass to control every complete
+and partial frozen microcycle by `O(1/N)`. The exact edge adapter
+[`sourceMatchedResetCubeData_debtEdge_eq_scale_mul_actualDirection`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedResetCube.lean)
+places every column in one literal reset cube. The signed curvature and
+orientation routing theorems are integrated, but no theorem currently turns
+the weighted star into a chronological carrier path; the near-return consumer
+therefore remains conditional.
 
 ## Live formal leaves
 
