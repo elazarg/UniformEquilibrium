@@ -18,9 +18,7 @@ adapter `Game.rewardGame`, used to apply the reusable heterogeneous-discount
 Fink theorem.  The adapter is discharged by explicit marginalization and
 cost/reward identities before Theorem 2 is transferred back to literal
 state-dependent profiles.
-
-All numbered statements, the two corollaries, the maps `T`, `β`, and `φ`, and
-the three displayed properties of `f` are proved without `sorry`.
+.
 -/
 
 noncomputable section
