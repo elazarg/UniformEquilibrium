@@ -3868,6 +3868,91 @@ private theorem exists_zero_hazard_of_lt_one
     (fun time ↦ value time 2)
     hstep hnonneg
 
+private theorem exactRootSequenceNash_shift
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool)
+    (hnash : IsεQuittingRootSequenceNash reward 0 roots)
+    (start : ℕ)
+    (hsurvival : 0 < quittingJointSurvivalWeight roots 0 start) :
+    IsεQuittingRootSequenceNash reward 0
+      (fun time ↦ roots (start + time)) := by
+  intro who hazard
+  have htransfer := quittingJointSurvivalWeight_mul_stageDeviationGain_le
+    reward roots hnash who start (hazard 0) (fun time ↦ hazard (time + 1))
+  have htail : quittingRootSequenceHazardTerminalValue reward
+      (fun time ↦ roots (start + 1 + time)) who
+      (fun time ↦ hazard (time + 1)) 0 =
+      quittingRootSequenceHazardTerminalValue reward
+        (fun time ↦ roots (start + time)) who hazard 1 := by
+    unfold quittingRootSequenceHazardTerminalValue
+    rw [quittingRootSequenceTerminalValue_eq_shift reward
+      (quittingRootSequenceUpdate (fun time ↦ roots (start + time)) who hazard)
+      who 1]
+    congr 2
+    funext time player
+    by_cases hplayer : player = who
+    · subst player
+      simp [quittingRootSequenceUpdate, Nat.add_assoc]
+    · simp [quittingRootSequenceUpdate, hplayer, Nat.add_assoc]
+  have hdeviation : quittingRootSuccessorPayoff reward
+      (fun _ ↦ quittingRootSequenceHazardTerminalValue reward
+        (fun time ↦ roots (start + 1 + time)) who
+        (fun time ↦ hazard (time + 1)) 0)
+      (Function.update (roots start) who (hazard 0)) who =
+      quittingRootSequenceHazardTerminalValue reward
+        (fun time ↦ roots (start + time)) who hazard 0 := by
+    rw [quittingRootSequenceHazardTerminalValue_eq_rootExpectedPayoff reward
+      (fun time ↦ roots (start + time)) who hazard 0]
+    unfold quittingRootSuccessorPayoff
+    congr 2
+    funext player
+    exact htail
+  have hprescribed : quittingRootSequenceTerminalValue reward roots who start =
+      quittingRootSequenceTerminalValue reward
+        (fun time ↦ roots (start + time)) who 0 :=
+    quittingRootSequenceTerminalValue_eq_shift reward roots who start
+  rw [hdeviation, hprescribed] at htransfer
+  nlinarith
+
+private theorem exists_zero_hazard_at_or_after
+    (profile : MarkovProfile)
+    (hlt : ∀ time who, (profile time who).1 < 1)
+    (hnash : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot profile))
+    (start : ℕ) :
+    ∃ time, start ≤ time ∧ ∃ who, (profile time who).1 = 0 := by
+  let shifted : MarkovProfile :=
+    fun time who ↦ profile (start + time) who
+  have hcontinueMass (time : ℕ) :
+      0 < quittingStationaryContinueMass (markovRoot profile time) := by
+    rw [quittingStationaryContinueMass_eq_prod_continueProbability]
+    apply Finset.prod_pos
+    intro who _
+    change 0 < (coin (profile time who) false).toReal
+    rw [coin_false_toReal]
+    exact sub_pos.mpr (hlt time who)
+  have hsurvival :
+      0 < quittingJointSurvivalWeight (markovRoot profile) 0 start := by
+    rw [quittingJointSurvivalWeight_eq_prod]
+    apply Finset.prod_pos
+    intro offset _
+    simpa only [zero_add] using hcontinueMass offset
+  have hnashShift : IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0 (markovRoot shifted) := by
+    change IsεQuittingRootSequenceNash
+      FTV.CyclicAdmissibleCycle.ftvReward 0
+        (fun time ↦ markovRoot profile (start + time))
+    exact exactRootSequenceNash_shift
+      FTV.CyclicAdmissibleCycle.ftvReward (markovRoot profile)
+        hnash start hsurvival
+  have hltShift : ∀ time who, (shifted time who).1 < 1 := by
+    intro time who
+    exact hlt (start + time) who
+  obtain ⟨offset, who, hzero⟩ :=
+    exists_zero_hazard_of_lt_one shifted hltShift hnashShift
+  exact ⟨start + offset, by omega, who, hzero⟩
+
 /-! Existing checked results cover a strict finite-period subcase:
 `ExactCyclicPacket.existsUnique_activeRole` gives one active role per live
 phase, `ExactCyclicPacket.period_ge_three` rules out periods one and two, and
