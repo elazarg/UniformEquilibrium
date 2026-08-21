@@ -466,4 +466,72 @@ theorem one_sub_mul_absorptionPathPayoff_sub_solo
     norm_num
   rw [hremaining]
 
+/-- A positive lower right derivative of a singleton coordinate forces a
+strict increase of that player's mass before every later time. -/
+theorem exists_playerMass_increase_of_pathRightDerivative_pos
+    {terminal : ι → ℝ} (mass : Path (0 : ι → ℝ) terminal)
+    (hmono : ∀ who, Monotone fun time => mass time who)
+    (htotal : ∀ time, ∑ who, mass time who = (time : ℝ))
+    (who : ι) (time upper : ℝ) (htime : time ∈ Icc (0 : ℝ) 1)
+    (htimeOne : time < 1) (htimeUpper : time < upper)
+    (hderivative : 0 < pathRightDerivative
+      (singletonCadlagPathOfPlayerPath mass hmono htotal) time
+        (quittingProjectiveSingletonTerminal who)) :
+    ∃ second : unitInterval, time < (second : ℝ) ∧
+      (second : ℝ) < upper ∧
+      mass ⟨time, htime⟩ who < mass second who := by
+  letI : NeBot (nhdsWithin time (Ioo time 1)) :=
+    left_nhdsWithin_Ioo_neBot htimeOne
+  let clock : unitInterval := ⟨time, htime⟩
+  let quotient : ℝ → ℝ := fun s =>
+    (mass.extend s who - mass.extend time who) / (s - time)
+  have hderivative' : 0 < Filter.liminf quotient
+      (nhdsWithin time (Ioo time 1)) := by
+    change 0 < Filter.liminf
+      (fun s =>
+        (singletonCoalitionMass (mass.extend s)
+            (quittingProjectiveSingletonTerminal who) -
+          singletonCoalitionMass (mass.extend time)
+            (quittingProjectiveSingletonTerminal who)) / (s - time))
+      (nhdsWithin time (Ioo time 1)) at hderivative
+    simpa only [singletonCoalitionMass_singleton, quotient] using hderivative
+  have hquotientNonneg : ∀ᶠ s in nhdsWithin time (Ioo time 1),
+      0 ≤ quotient s := by
+    filter_upwards [self_mem_nhdsWithin] with s hs
+    have hsIcc : s ∈ Icc (0 : ℝ) 1 :=
+      ⟨htime.1.trans hs.1.le, hs.2.le⟩
+    unfold quotient
+    rw [show mass.extend s = mass ⟨s, hsIcc⟩ from
+        Path.extend_apply mass hsIcc,
+      show mass.extend time = mass clock from Path.extend_apply mass htime]
+    exact div_nonneg
+      (sub_nonneg.mpr (hmono who (show clock ≤ ⟨s, hsIcc⟩ from hs.1.le)))
+      (sub_nonneg.mpr hs.1.le)
+  have hpositive : ∀ᶠ s in nhdsWithin time (Ioo time 1),
+      0 < quotient s :=
+    eventually_lt_of_lt_liminf hderivative'
+      (isBoundedUnder_of_eventually_ge hquotientNonneg)
+  have hbelowUpper : ∀ᶠ s in nhdsWithin time (Ioo time 1), s < upper :=
+    (show ∀ᶠ s in nhds time, s < upper from
+      Iio_mem_nhds htimeUpper).filter_mono nhdsWithin_le_nhds
+  have hinIoo : ∀ᶠ s in nhdsWithin time (Ioo time 1),
+      s ∈ Ioo time 1 := self_mem_nhdsWithin
+  obtain ⟨s, hsIoo, hsPositive, hsUpper⟩ :=
+    (hinIoo.and (hpositive.and hbelowUpper)).exists
+  have hsIcc : s ∈ Icc (0 : ℝ) 1 :=
+    ⟨htime.1.trans hsIoo.1.le, hsIoo.2.le⟩
+  let second : unitInterval := ⟨s, hsIcc⟩
+  refine ⟨second, hsIoo.1, hsUpper, ?_⟩
+  have hquotient : 0 <
+      (mass second who - mass clock who) / (s - time) := by
+    simpa only [quotient,
+      show mass.extend s = mass second from Path.extend_apply mass hsIcc,
+      show mass.extend time = mass clock from Path.extend_apply mass htime]
+      using hsPositive
+  have hnumerator : 0 < mass second who - mass clock who := by
+    rcases div_pos_iff.mp hquotient with hpositive | hnegative
+    · exact hpositive.1
+    · exact (not_lt_of_ge (sub_nonneg.mpr hsIoo.1.le) hnegative.2).elim
+  exact sub_pos.mp hnumerator
+
 end GameTheory.QuittingAbsorptionPath
