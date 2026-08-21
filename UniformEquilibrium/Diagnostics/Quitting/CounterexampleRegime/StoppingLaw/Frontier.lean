@@ -373,7 +373,9 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
     subseq_strictMono := hsubseq
     lambda_subseq_tendsto_zero := hlambdaSubseq
     source_excess_over_lambda_tendsto_zero := by
-      simpa only [epsilon, Function.comp_apply] using
+      change Tendsto (fun rank => epsilon (subseq rank) /
+        lambda (subseq rank)) atTop (nhds 0)
+      simpa only [Function.comp_def] using
         hepsilonRate.comp hsubseq.tendsto_atTop
     tangent_tendsto := htangent
     tangent_diagonal := hdiagonal
