@@ -936,6 +936,32 @@ theorem sum_quittingRootSequenceSingletonMass_add_collisionMass
   funext fuel
   exact (window fuel).absorptionMass_eq_singletonTotal_add_collisionMass
 
+/-- One owner's singleton first-event mass is at most one. -/
+theorem quittingRootSequenceSingletonMass_le_one
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (owner : ι) :
+    quittingRootSequenceSingletonMass roots start owner ≤ 1 := by
+  have howner := Finset.single_le_sum
+    (fun player _ => quittingRootSequenceSingletonMass_nonneg roots start player)
+    (Finset.mem_univ owner)
+  have hmass := sum_quittingRootSequenceSingletonMass_add_collisionMass roots start
+  have hcollision := quittingRootSequenceCollisionMass_nonneg roots start
+  have hsurvival := quittingJointSurvivalLimit_nonneg roots start
+  linarith
+
+/-- The singleton mass still missing after a finite prefix is bounded by the
+probability of reaching the end of that prefix. -/
+theorem sequenceSingletonMass_sub_finiteWindow_le_survivalWeight
+    (roots : ℕ → ι → PMF Bool) (start fuel : ℕ) (owner : ι) :
+    quittingRootSequenceSingletonMass roots start owner -
+        (⟨start, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass owner ≤
+      quittingJointSurvivalWeight roots start fuel := by
+  have hsplit := sequenceSingletonMass_eq_finiteWindow_add_survival_mul
+    roots start fuel owner
+  have htail := quittingRootSequenceSingletonMass_le_one
+    roots (start + fuel) owner
+  have hsurvival := quittingJointSurvivalWeight_nonneg roots start fuel
+  nlinarith
+
 /-- Infinite survival-weighted reward contributed by multi-quitter
 absorptions. -/
 def quittingRootSequenceCollisionRewardContribution
