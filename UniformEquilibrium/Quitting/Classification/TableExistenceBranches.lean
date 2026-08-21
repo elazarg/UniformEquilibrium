@@ -56,6 +56,32 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 /-! ## The dynamics do not depend on the reward table -/
 
+/-- A behavior profile is unchanged when only the quitting game's reward
+table changes. -/
+def quittingBehaviorProfileCongrReward
+    (reward reward' : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) :
+    (quittingGame reward').BehaviorProfile :=
+  profile
+
+/-- A behavior strategy is unchanged when only the quitting game's reward
+table changes. -/
+def quittingBehaviorStrategyCongrReward
+    (reward reward' : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (who : ι) (strategy : (quittingGame reward).BehaviorStrategy who) :
+    (quittingGame reward').BehaviorStrategy who :=
+  strategy
+
+@[simp] theorem quittingBehaviorProfileCongrReward_update
+    (reward reward' : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
+    (strategy : (quittingGame reward).BehaviorStrategy who) :
+    quittingBehaviorProfileCongrReward reward reward'
+        (Function.update profile who strategy) =
+      Function.update (quittingBehaviorProfileCongrReward reward reward' profile)
+        who (quittingBehaviorStrategyCongrReward reward reward' who strategy) :=
+  rfl
+
 omit [DecidableEq ι] in
 /-- Public history distributions of a quitting game are the same for every
 reward table: only the stage payoff of `quittingGame` mentions the table. -/
@@ -95,6 +121,16 @@ theorem quittingRootThenContinuationProfile_congr_reward
       quittingRootThenContinuationProfile reward' root continuation := by
   funext who time history
   cases time <;> rfl
+
+omit [DecidableEq ι] in
+/-- A root-sequence profile does not depend on the reward table. -/
+theorem quittingRootSequenceProfile_congr_reward
+    (reward reward' : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) :
+    quittingRootSequenceProfile reward roots start =
+      quittingRootSequenceProfile reward' roots start := by
+  funext who time history
+  rfl
 
 /-! ## The payoff a table assigns to a behavior profile -/
 
@@ -155,6 +191,79 @@ theorem QuittingPayoffTable.terminalPayoff_eq_add_never
   simp only [hmass]
   rw [hsplit]
   ring
+
+/-- Scaling every outcome of one player scales that player's terminal payoff
+on every behavior profile by the same factor. -/
+theorem QuittingPayoffTable.terminalPayoff_scale
+    (table : QuittingPayoffTable ι) (factor : Payoff ι)
+    (profile : (quittingGame table.terminal).BehaviorProfile)
+    (who : ι) :
+    (table.scale factor).terminalPayoff
+        (quittingBehaviorProfileCongrReward table.terminal
+          (table.scale factor).terminal profile) who =
+      factor who * table.terminalPayoff profile who := by
+  classical
+  let scaledProfile := quittingBehaviorProfileCongrReward table.terminal
+    (table.scale factor).terminal profile
+  have hmass : ∀ S,
+      quittingAbsorbedMassLimit (table.scale factor).terminal scaledProfile S =
+        quittingAbsorbedMassLimit table.terminal profile S :=
+    fun S => by
+      change quittingAbsorbedMassLimit (table.scale factor).terminal profile S =
+        quittingAbsorbedMassLimit table.terminal profile S
+      exact quittingAbsorbedMassLimit_congr_reward
+        (table.scale factor).terminal table.terminal profile S
+  unfold QuittingPayoffTable.terminalPayoff quittingTerminalAbsorptionMass
+  change
+    (∑ S, quittingAbsorbedMassLimit (table.scale factor).terminal
+          scaledProfile S * (factor who * table.terminal S who)) +
+        (1 - ∑ S, quittingAbsorbedMassLimit (table.scale factor).terminal
+          scaledProfile S) * (factor who * table.never who) = _
+  simp_rw [hmass]
+  change
+    (∑ S, quittingAbsorbedMassLimit table.terminal profile S *
+          (factor who * table.terminal S who)) +
+        (1 - ∑ S, quittingAbsorbedMassLimit table.terminal profile S) *
+          (factor who * table.never who) = _
+  have hsum :
+      (∑ S, quittingAbsorbedMassLimit table.terminal profile S *
+          (factor who * table.terminal S who)) =
+        factor who * ∑ S,
+          quittingAbsorbedMassLimit table.terminal profile S *
+            table.terminal S who := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro S _
+    ring
+  rw [hsum]
+  ring
+
+/-- A terminal approximate-Nash profile remains approximate Nash after
+positive playerwise scaling, with the error scaled player by player. -/
+theorem QuittingPayoffTable.isεAsymptoticNash_scale
+    (table : QuittingPayoffTable ι) (factor : Payoff ι)
+    (hfactor : ∀ who, 0 ≤ factor who) {η ε : ℝ}
+    (profile : (quittingGame table.terminal).BehaviorProfile)
+    (hnash : (quittingGame table.terminal).IsεAsymptoticNash
+      table.terminalPayoff η profile)
+    (herror : ∀ who, factor who * η ≤ ε) :
+    (quittingGame (table.scale factor).terminal).IsεAsymptoticNash
+      (table.scale factor).terminalPayoff ε
+        (quittingBehaviorProfileCongrReward table.terminal
+          (table.scale factor).terminal profile) := by
+  intro who deviation
+  let originalDeviation := quittingBehaviorStrategyCongrReward
+    (table.scale factor).terminal table.terminal who deviation
+  have h := hnash who originalDeviation
+  rw [QuittingPayoffTable.terminalPayoff_scale table factor]
+  change factor who * table.terminalPayoff profile who + ε ≥
+    (table.scale factor).terminalPayoff
+      (quittingBehaviorProfileCongrReward table.terminal
+        (table.scale factor).terminal
+        (Function.update profile who originalDeviation)) who
+  rw [QuittingPayoffTable.terminalPayoff_scale table factor]
+  exact (mul_le_mul_of_nonneg_left h (hfactor who)).trans (by
+    linarith [herror who])
 
 /-- Viewing a repository reward in the larger model changes no payoff: the
 never payoff it adds is zero, so the table's functional is the repository
@@ -412,6 +521,19 @@ theorem QuittingPayoffTable.rootSequenceTailVector_eq_add_never
         table.never who :=
   table.terminalPayoff_eq_add_never _ who
 
+/-- Playerwise table scaling scales the continuation vector of every fixed
+root sequence coordinatewise. -/
+theorem QuittingPayoffTable.rootSequenceTailVector_scale
+    (table : QuittingPayoffTable ι) (factor : Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (start : ℕ) (who : ι) :
+    (table.scale factor).rootSequenceTailVector roots start who =
+      factor who * table.rootSequenceTailVector roots start who := by
+  unfold QuittingPayoffTable.rootSequenceTailVector
+  rw [← quittingRootSequenceProfile_congr_reward table.terminal
+    (table.scale factor).terminal roots start]
+  exact table.terminalPayoff_scale factor
+    (quittingRootSequenceProfile table.terminal roots start) who
+
 /-- One-stage `ε`-perfectness is invariant under translating the terminal
 rewards and the continuation vector by the same playerwise constant. -/
 theorem quittingRowεPerfect_translate_iff
@@ -468,6 +590,100 @@ theorem quittingRowεPerfect_translate_iff
     unfold quittingRootContinuePayoff quittingRootSuccessorPayoff at *
     rw [hshift, hshift]
     linarith [hsupportContinue hmem]
+
+/-- Positive playerwise rescaling preserves one-stage perfection after
+rescaling each player's error allowance. -/
+theorem quittingRowεPerfect_scale
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (factor tail : Payoff ι) (root : ι → PMF Bool) {η ε : ℝ}
+    (hfactor : ∀ who, 0 ≤ factor who)
+    (hperfect : QuittingRowεPerfect reward tail root η)
+    (herror : ∀ who, factor who * η ≤ ε) :
+    QuittingRowεPerfect
+      (fun S who => factor who * reward S who)
+      (fun who => factor who * tail who) root ε := by
+  have hscale : ∀ (continuation : Payoff ι) (row : ι → PMF Bool)
+      (who : ι),
+      quittingRootExpectedPayoff
+          (fun S player => factor player * reward S player)
+          (fun player => factor player * continuation player) row who =
+        factor who * quittingRootExpectedPayoff reward continuation row who := by
+    intro continuation row who
+    have hpointwise : (fun action =>
+        quittingRootPayoff (fun S player => factor player * reward S player)
+          (fun player => factor player * continuation player) action who) =
+        fun action => factor who *
+          quittingRootPayoff reward continuation action who := by
+      funext action
+      unfold quittingRootPayoff
+      by_cases hquit : (quittingQuitters action).Nonempty <;> simp [hquit]
+    unfold quittingRootExpectedPayoff
+    rw [hpointwise, Math.Probability.expect_const_mul]
+  intro who
+  obtain ⟨hquit, hcontinue, hsupportQuit, hsupportContinue⟩ := hperfect who
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · unfold quittingRootQuitPayoff quittingRootSuccessorPayoff at *
+    rw [hscale, hscale]
+    exact (mul_le_mul_of_nonneg_left hquit (hfactor who)).trans (by
+      linarith [herror who])
+  · unfold quittingRootContinuePayoff quittingRootSuccessorPayoff at *
+    rw [hscale, hscale]
+    exact (mul_le_mul_of_nonneg_left hcontinue (hfactor who)).trans (by
+      linarith [herror who])
+  · intro hused
+    unfold quittingRootQuitPayoff quittingRootSuccessorPayoff at *
+    rw [hscale, hscale]
+    have h := mul_le_mul_of_nonneg_left (hsupportQuit hused) (hfactor who)
+    linarith [herror who]
+  · intro hused
+    unfold quittingRootContinuePayoff quittingRootSuccessorPayoff at *
+    rw [hscale, hscale]
+    have h := mul_le_mul_of_nonneg_left (hsupportContinue hused) (hfactor who)
+    linarith [herror who]
+
+/-- Branch S.3 is preserved by nonnegative playerwise scaling.  Finiteness
+provides one common row tolerance small enough for every coordinate. -/
+theorem QuittingPayoffTable.sequentiallyεPerfectAbsorbingExistence_scale
+    (table : QuittingPayoffTable ι) (factor : Payoff ι)
+    (hfactor : ∀ who, 0 ≤ factor who)
+    (hbranch : table.SequentiallyεPerfectAbsorbingExistence) :
+    (table.scale factor).SequentiallyεPerfectAbsorbingExistence := by
+  intro ε hε
+  let bound : ℝ := 1 + ∑ who, factor who
+  have hbound : 0 < bound := by
+    dsimp [bound]
+    have hsum : 0 ≤ ∑ who, factor who :=
+      Finset.sum_nonneg fun who _ => hfactor who
+    linarith
+  let η := ε / bound
+  have hη : 0 < η := div_pos hε hbound
+  obtain ⟨roots, habsorbing, hperfect⟩ := hbranch η hη
+  refine ⟨roots, habsorbing, fun time => ?_⟩
+  have hfactorBound (who : ι) : factor who ≤ bound := by
+    have hle : factor who ≤ ∑ player, factor player :=
+      Finset.single_le_sum (fun player _ => hfactor player)
+        (Finset.mem_univ who)
+    dsimp [bound]
+    linarith
+  have herror (who : ι) : factor who * η ≤ ε := by
+    dsimp [η]
+    rw [show factor who * (ε / bound) =
+      (factor who * ε) / bound by ring, div_le_iff₀ hbound]
+    simpa only [mul_comm] using
+      mul_le_mul_of_nonneg_right (hfactorBound who) hε.le
+  have hscaled := quittingRowεPerfect_scale table.terminal factor
+    (table.rootSequenceTailVector roots (time + 1)) (roots time)
+    hfactor (hperfect time) herror
+  change QuittingRowεPerfect
+    (fun S who => factor who * table.terminal S who)
+    ((table.scale factor).rootSequenceTailVector roots (time + 1))
+    (roots time) ε
+  rw [show (table.scale factor).rootSequenceTailVector roots (time + 1) =
+    fun who => factor who *
+      table.rootSequenceTailVector roots (time + 1) who by
+      funext who
+      exact table.rootSequenceTailVector_scale factor roots (time + 1) who]
+  exact hscaled
 
 /-- **S.3 reduces to the zero-never branch.**  Absorption is a property of the
 rows alone, and normalization shifts the terminal rewards and the plan's own

@@ -59,6 +59,14 @@ def QuittingPayoffTable.translate
   terminal := fun S who => table.terminal S who + shift who
   never := fun who => table.never who + shift who
 
+/-- Multiply every payoff of player `who`, including nontermination, by the
+same playerwise factor. -/
+def QuittingPayoffTable.scale
+    (table : QuittingPayoffTable ι) (factor : Payoff ι) :
+    QuittingPayoffTable ι where
+  terminal := fun S who => factor who * table.terminal S who
+  never := fun who => factor who * table.never who
+
 /-- A semantic property of payoff tables is invariant under playerwise
 translation when adding arbitrary player constants preserves it in both
 directions.  This is the exact abstract adapter needed for source notions that
