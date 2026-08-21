@@ -3218,8 +3218,144 @@ theorem property_3 (G : FiniteStageGame) :
   exact ⟨property_3_finite G, property_3_discounted G,
     property_3_banach G⟩
 
+private theorem stageEUAt_securityDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) {time : ℕ} (history : G.repeatedGame.Hist time) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.stageEUAt
+        (Function.update profile who
+          (G.individualRationalDeviation profile who)) history who := by
+  letI (player : G.Player) : Fintype (G.kernel.Strategy player) :=
+    G.finiteAction player
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  let current : G.MixedProfile := fun player ↦
+    (Function.update profile who
+      (G.individualRationalDeviation profile who)) player time history
+  have hcurrent : current =
+      G.kernel.mixedExtension.profileWithOpponent who
+        (PMF.pure (G.individualRationalReply profile who history))
+        (G.opponentsAt profile who history) := by
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp [current, FiniteStageGame.individualRationalDeviation]
+      rfl
+    · simp [current, KernelGame.profileWithOpponent,
+        FiniteStageGame.opponentsAt, hplayer]
+  have hreply := G.individualRationalReply_spec profile who history
+  rw [← hcurrent] at hreply
+  unfold StochasticGame.stageEUAt
+  change G.individualRationalLevel who ≤
+    Math.Probability.expect (Math.PMFProduct.pmfPi current)
+      (fun action ↦ G.kernel.eu action who)
+  rw [← G.kernel.mixedExtension_eu]
+  exact hreply
+
+private theorem expectedStagePayoff_securityDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (time : ℕ) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.expectedStagePayoff
+        (Function.update profile who
+          (G.individualRationalDeviation profile who))
+        PUnit.unit time who := by
+  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  unfold StochasticGame.expectedStagePayoff
+  rw [← Math.Probability.expect_const
+    (G.repeatedGame.histDist
+      (Function.update profile who
+        (G.individualRationalDeviation profile who))
+      PUnit.unit time) (G.individualRationalLevel who)]
+  apply Math.Probability.expect_mono
+  intro history
+  exact stageEUAt_securityDeviation_ge G profile who history
+
+private theorem finiteAveragePayoff_securityDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (horizon : G.Horizon) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.finiteAveragePayoff PUnit.unit horizon.1
+        (Function.update profile who
+          (G.individualRationalDeviation profile who)) who := by
+  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  have hnonneg : 0 ≤ (horizon.1 : ℝ)⁻¹ := by positivity
+  calc
+    G.individualRationalLevel who =
+        (horizon.1 : ℝ)⁻¹ * ∑ _time ∈ Finset.range horizon.1,
+          G.individualRationalLevel who := by
+      rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul,
+        ← mul_assoc, inv_mul_cancel₀]
+      · simp
+      · exact_mod_cast Nat.ne_of_gt horizon.2
+    _ ≤ (horizon.1 : ℝ)⁻¹ * ∑ time ∈ Finset.range horizon.1,
+        G.repeatedGame.expectedStagePayoff
+          (Function.update profile who
+            (G.individualRationalDeviation profile who))
+          PUnit.unit time who := by
+      apply mul_le_mul_of_nonneg_left _ hnonneg
+      apply Finset.sum_le_sum
+      intro time _
+      exact expectedStagePayoff_securityDeviation_ge G profile who time
+
+/-! Every Banach-limit equilibrium payoff is feasible and individually
+rational.  For the second part, use at every public history the one-stage
+security reply from Lemma 1(8), then apply positivity of the Banach limit. -/
+theorem banachEquilibriumPayoffs_subset_individuallyRationalPayoffs
+    (G : FiniteStageGame) (L : BanachLimit) :
+    G.banachEquilibriumPayoffs L ⊆ G.individuallyRationalPayoffs := by
+  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  rintro payoff ⟨profile, hnash, rfl⟩
+  constructor
+  · rw [← property_3_banach G L]
+    exact ⟨profile, rfl⟩
+  · intro who
+    let deviation := G.individualRationalDeviation profile who
+    let deviatingProfile := Function.update profile who deviation
+    obtain ⟨C, hC⟩ := Math.Probability.exists_abs_bound_of_finite
+      (fun pair : G.repeatedGame.State × G.repeatedGame.JointAct ↦
+        G.repeatedGame.stagePayoff pair.1 pair.2 who)
+    have hC0 : 0 ≤ C := by
+      let action : G.repeatedGame.JointAct := fun player ↦
+        Classical.choice (G.nonemptyAction player)
+      exact (abs_nonneg
+        (G.repeatedGame.stagePayoff PUnit.unit action who)).trans
+          (hC (PUnit.unit, action))
+    have hbounded (candidate : G.BehaviorProfile) :
+        IsBoundedSequence
+          (fun step ↦ G.finitePayoff (step + 1) candidate who) := by
+      refine ⟨C, fun step ↦ ?_⟩
+      exact G.repeatedGame.abs_finiteAveragePayoff_le hC0
+        (fun state action ↦ hC (state, action)) PUnit.unit
+        (step + 1) candidate
+    have hsecurity (step : ℕ) :
+        G.individualRationalLevel who ≤
+          G.finitePayoff (step + 1) deviatingProfile who := by
+      exact finiteAveragePayoff_securityDeviation_ge G
+        profile who ⟨step + 1, by omega⟩
+    have hdeviation : G.individualRationalLevel who ≤
+        G.banachPayoff L deviatingProfile who := by
+      calc
+        G.individualRationalLevel who =
+            L.eval (fun _ : ℕ ↦ G.individualRationalLevel who) :=
+          (L.constant _).symm
+        _ ≤ L.eval (fun step ↦
+              G.finitePayoff (step + 1) deviatingProfile who) :=
+          L.eval_mono (IsBoundedSequence.const _)
+            (hbounded deviatingProfile) hsecurity
+        _ = G.banachPayoff L deviatingProfile who := rfl
+    exact hdeviation.trans (hnash who deviation)
+
 /-! The Banach-limit Folk theorem is the unconditional second clause of
-Property (4).  It is not available in the current library. -/
+Property (4).  The reverse inclusion is its trigger-strategy construction. -/
 theorem property_4_banach (G : FiniteStageGame) (L : BanachLimit) :
     G.banachEquilibriumPayoffs L = G.individuallyRationalPayoffs := by
   sorry
@@ -3688,34 +3824,8 @@ theorem stageEUAt_individualRationalDeviation_ge
     G.individualRationalLevel who ≤
       G.repeatedGame.stageEUAt
         (Function.update profile who
-          (G.individualRationalDeviation profile who)) history who := by
-  letI (player : G.Player) : Fintype (G.kernel.Strategy player) :=
-    G.finiteAction player
-  letI : Finite G.kernel.Outcome := by
-    change Finite (∀ player, G.Action player)
-    exact Finite.of_fintype _
-  let current : G.MixedProfile := fun player ↦
-    (Function.update profile who
-      (G.individualRationalDeviation profile who)) player time history
-  have hcurrent : current =
-      G.kernel.mixedExtension.profileWithOpponent who
-        (PMF.pure (G.individualRationalReply profile who history))
-        (G.opponentsAt profile who history) := by
-    funext player
-    by_cases hplayer : player = who
-    · subst player
-      simp [current, FiniteStageGame.individualRationalDeviation]
-      rfl
-    · simp [current, KernelGame.profileWithOpponent,
-        FiniteStageGame.opponentsAt, hplayer]
-  have hreply := G.individualRationalReply_spec profile who history
-  rw [← hcurrent] at hreply
-  unfold StochasticGame.stageEUAt
-  change G.individualRationalLevel who ≤
-    Math.Probability.expect (Math.PMFProduct.pmfPi current)
-      (fun action ↦ G.kernel.eu action who)
-  rw [← G.kernel.mixedExtension_eu]
-  exact hreply
+          (G.individualRationalDeviation profile who)) history who :=
+  stageEUAt_securityDeviation_ge G profile who history
 
 /-- The selected deviation earns at least the individual-rational level in
 every period. -/
@@ -3726,20 +3836,8 @@ theorem expectedStagePayoff_individualRationalDeviation_ge
       G.repeatedGame.expectedStagePayoff
         (Function.update profile who
           (G.individualRationalDeviation profile who))
-        PUnit.unit time who := by
-  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
-    @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
-  unfold StochasticGame.expectedStagePayoff
-  rw [← Math.Probability.expect_const
-    (G.repeatedGame.histDist
-      (Function.update profile who
-        (G.individualRationalDeviation profile who))
-      PUnit.unit time) (G.individualRationalLevel who)]
-  apply Math.Probability.expect_mono
-  intro history
-  exact stageEUAt_individualRationalDeviation_ge
-    G profile who history
+        PUnit.unit time who :=
+  expectedStagePayoff_securityDeviation_ge G profile who time
 
 /-- The deviation's positive-horizon average is at least the
 individual-rational level. -/
@@ -3749,30 +3847,8 @@ theorem finiteAveragePayoff_individualRationalDeviation_ge
     G.individualRationalLevel who ≤
       G.repeatedGame.finiteAveragePayoff PUnit.unit horizon.1
         (Function.update profile who
-          (G.individualRationalDeviation profile who)) who := by
-  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
-    @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
-  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
-  have hnonneg : 0 ≤ (horizon.1 : ℝ)⁻¹ := by positivity
-  calc
-    G.individualRationalLevel who =
-        (horizon.1 : ℝ)⁻¹ * ∑ _time ∈ Finset.range horizon.1,
-          G.individualRationalLevel who := by
-      rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul,
-        ← mul_assoc, inv_mul_cancel₀]
-      · simp
-      · exact_mod_cast Nat.ne_of_gt horizon.2
-    _ ≤ (horizon.1 : ℝ)⁻¹ * ∑ time ∈ Finset.range horizon.1,
-        G.repeatedGame.expectedStagePayoff
-          (Function.update profile who
-            (G.individualRationalDeviation profile who))
-          PUnit.unit time who := by
-      apply mul_le_mul_of_nonneg_left _ hnonneg
-      apply Finset.sum_le_sum
-      intro time _
-      exact expectedStagePayoff_individualRationalDeviation_ge
-        G profile who time
+          (G.individualRationalDeviation profile who)) who :=
+  finiteAveragePayoff_securityDeviation_ge G profile who horizon
 
 /-- The same deviation earns at least the individual-rational level under
 every paper discount rate. -/
