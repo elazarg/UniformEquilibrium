@@ -20593,6 +20593,36 @@ theorem mFineContinuationPayoff_nonneg
         subst who
         exact hnormal owner.2)).le
 
+/-! At the designated owner's coordinate both the axis value and its
+continuation are zero.  This is the local indifference that lets that owner
+replace the prescribed rare quit by Continue. -/
+theorem mFineContinuationPayoff_designatedOwner_zero
+    (hnormalized : SoloExitNormalized table)
+    (target : NormalPlayer table) {accuracy : ℝ}
+    (haccuracy : 0 < accuracy) :
+    mFineContinuationPayoff table hM target accuracy
+        (hM.positiveOwner target).1 = 0 := by
+  have hbalance := congrFun
+    (mAxisPayoff_fine_exit_balance table hM target haccuracy)
+      (hM.positiveOwner target).1
+  have haxis := mAxisPayoff_designatedOwner_zero
+    table hM hnormalized target
+  have hdiagonal : NormalMatrix table (hM.positiveOwner target)
+      (hM.positiveOwner target) = 0 :=
+    normalMatrix_diagonal_zero table hnormalized (hM.positiveOwner target)
+  simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hbalance
+  change mAxisPayoff table hM target (hM.positiveOwner target).1 =
+      mFineExitProbability table hM target accuracy *
+          NormalMatrix table (hM.positiveOwner target)
+            (hM.positiveOwner target) +
+        (1 - mFineExitProbability table hM target accuracy) *
+          mFineContinuationPayoff table hM target accuracy
+            (hM.positiveOwner target).1 at hbalance
+  rw [haxis, hdiagonal, mul_zero, zero_add] at hbalance
+  exact (mul_eq_zero.mp hbalance.symm).resolve_left
+    (ne_of_gt (sub_pos.mpr
+      (mFineExitProbability_lt_one table hM target haccuracy)))
+
 noncomputable def mFineTransitionWeight
     (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
     stdSimplex ℝ (NormalPlayer table) := by
@@ -20971,6 +21001,135 @@ private theorem stageActionDist_active
             rawSingleQuitAction, hwho]]
       exact Math.PMFProduct.pmfPi_pure _
 
+private theorem stageActionDist_pureContinue_active
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (target : NormalPlayer table)
+    (hmode : blueprint.mode t history = .active target) :
+    (publicQuittingGame table blueprint.signalData.law).stageActionDist
+        (Function.update blueprint.strategy who
+          (fun _ _ => PMF.pure false)) history =
+      if who = (hM.positiveOwner target).1 then
+        PMF.pure (publicAllContinueAction table blueprint.signalData.law)
+      else
+        (publicQuittingGame table blueprint.signalData.law).stageActionDist
+          blueprint.strategy history := by
+  classical
+  split_ifs with hwho
+  · subst who
+    unfold StochasticGame.stageActionDist
+    rw [show (fun player => Function.update blueprint.strategy
+        (hM.positiveOwner target).1 (fun _ _ => PMF.pure false)
+          player t history) = fun _ => PMF.pure false by
+      funext player
+      by_cases hplayer : player = (hM.positiveOwner target).1
+      · subst player
+        simp
+        rfl
+      · rw [Function.update_of_ne hplayer]
+        simp [strategy, hmode, hplayer]
+        rfl]
+    exact Math.PMFProduct.pmfPi_pure _
+  · apply congrArg Math.PMFProduct.pmfPi
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      rw [Function.update_self]
+      simp [strategy, hmode, hwho]
+    · rw [Function.update_of_ne hplayer]
+
+private theorem stageActionDist_pureQuit_active
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (target : NormalPlayer table)
+    (hmode : blueprint.mode t history = .active target) :
+    (publicQuittingGame table blueprint.signalData.law).stageActionDist
+        (Function.update blueprint.strategy who
+          (fun _ _ => PMF.pure true)) history =
+      if who = (hM.positiveOwner target).1 then
+        PMF.pure (publicSingleQuitAction table blueprint.signalData.law
+          who true)
+      else
+        (quittingHazardCoin
+            (mFineExitProbability table hM target accuracy)
+            (mFineExitProbability_pos table hM target
+              blueprint.accuracy_pos).le
+            (mFineExitProbability_lt_one table hM target
+              blueprint.accuracy_pos).le).bind fun quits =>
+          PMF.pure (Function.update
+            (publicSingleQuitAction table blueprint.signalData.law
+              (hM.positiveOwner target).1 quits) who true) := by
+  classical
+  split_ifs with hwho
+  · subst who
+    unfold StochasticGame.stageActionDist
+    rw [show (fun player => Function.update blueprint.strategy
+        (hM.positiveOwner target).1 (fun _ _ => PMF.pure true)
+          player t history) = fun player => PMF.pure
+            (publicSingleQuitAction table blueprint.signalData.law
+              (hM.positiveOwner target).1 true player) by
+      funext player
+      by_cases hplayer : player = (hM.positiveOwner target).1
+      · subst player
+        simp [publicSingleQuitAction]
+      · rw [Function.update_of_ne hplayer]
+        simp [strategy, hmode, publicSingleQuitAction_apply_eq_raw,
+          rawSingleQuitAction, hplayer]]
+    exact Math.PMFProduct.pmfPi_pure _
+  · let coin := quittingHazardCoin
+      (mFineExitProbability table hM target accuracy)
+      (mFineExitProbability_pos table hM target
+        blueprint.accuracy_pos).le
+      (mFineExitProbability_lt_one table hM target
+        blueprint.accuracy_pos).le
+    let base : ∀ player,
+        PMF ((publicQuittingGame table
+          blueprint.signalData.law).Act player) :=
+      fun player => if player = who then PMF.pure true else PMF.pure false
+    have hfamily :
+        (fun player => Function.update blueprint.strategy who
+          (fun _ _ => PMF.pure true) player t history) =
+          Function.update base (hM.positiveOwner target).1 coin := by
+      funext player
+      by_cases hplayerWho : player = who
+      · subst player
+        have hne : who ≠ (hM.positiveOwner target).1 := hwho
+        rw [Function.update_self, Function.update_of_ne hne]
+        simp [base]
+      · rw [Function.update_of_ne hplayerWho]
+        by_cases hplayerOwner :
+            player = (hM.positiveOwner target).1
+        · subst player
+          simp [strategy, hmode, coin, base]
+        · rw [Function.update_of_ne hplayerOwner]
+          simp [strategy, hmode, base, hplayerWho, hplayerOwner]
+    unfold StochasticGame.stageActionDist
+    rw [hfamily, Math.PMFProduct.pmfPi_update_bind]
+    apply congrArg (PMF.bind coin)
+    funext quits
+    rw [show Function.update base (hM.positiveOwner target).1
+        (PMF.pure quits) = fun player => PMF.pure
+          (Function.update
+            (publicSingleQuitAction table blueprint.signalData.law
+              (hM.positiveOwner target).1 quits) who true player) by
+      funext player
+      by_cases hplayerOwner :
+          player = (hM.positiveOwner target).1
+      · subst player
+        have hne : (hM.positiveOwner target).1 ≠ who := Ne.symm hwho
+        simp [base, publicSingleQuitAction, hne]
+      · rw [Function.update_of_ne hplayerOwner]
+        by_cases hplayerWho : player = who
+        · subst player
+          simp [base]
+        · simp [base, hplayerWho, publicSingleQuitAction_apply_eq_raw,
+            rawSingleQuitAction, hplayerOwner]]
+    exact Math.PMFProduct.pmfPi_pure _
+
 theorem historyModeStepDist_profile_eq
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
     {t : ℕ}
@@ -21251,6 +21410,133 @@ noncomputable def payoffPotential
         | _ => 0
     | mode => blueprint.modeContinuationValue who mode
 
+/-! The one-stage collision budget used against a unilateral deviation.
+It is present exactly while the public game is live. -/
+noncomputable def deviationPotential
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) :
+    (publicQuittingGame table
+      blueprint.signalData.law).HistoryPotential :=
+  fun t history => blueprint.payoffPotential who t history +
+    match blueprint.mode t history with
+    | .absorbed => 0
+    | _ => accuracy
+
+theorem deviationPotential_initial
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) :
+    blueprint.deviationPotential who 0
+        ((publicQuittingGame table
+          blueprint.signalData.law).emptyHist .draw) =
+      value who + accuracy := by
+  simp [deviationPotential, payoffPotential, blueprint.mode_initial,
+    modeContinuationValue]
+
+private theorem pureQuit_nextTerminalPayoff_le_accuracy
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (target : NormalPlayer table)
+    (hmode : blueprint.mode t history = .active target) :
+    (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU
+        (Function.update blueprint.strategy who
+          (fun _ _ => PMF.pure true))
+        (fun _ nextHistory => match nextHistory.2 with
+          | .absorbed quitters => table.terminal quitters who
+          | _ => 0) history ≤ accuracy := by
+  classical
+  have hstate : ∃ signal, history.2 = PublicQuittingState.active signal := by
+    have hmatches := blueprint.mode_state t history
+    cases hs : history.2 <;>
+      simp [MMatrixPayoffMode.MatchesState, hmode, hs] at hmatches
+    exact ⟨_, rfl⟩
+  obtain ⟨signal, hstate⟩ := hstate
+  rcases history with ⟨past, state⟩
+  simp only at hstate
+  subst state
+  have haction := blueprint.stageActionDist_pureQuit_active who
+    (past, PublicQuittingState.active signal) target hmode
+  by_cases hwho : who = (hM.positiveOwner target).1
+  · rw [if_pos hwho] at haction
+    unfold StochasticGame.historyContinuationEU
+    rw [haction, Math.Probability.expect_pure,
+      publicQuittingGame_transition_publicSingleQuitAction,
+      Math.Probability.expect_pure]
+    subst who
+    change table.terminal
+      (quittingProjectiveSingletonTerminal
+        (hM.positiveOwner target).1)
+        (hM.positiveOwner target).1 ≤ accuracy
+    rw [blueprint.soloExitNormalized]
+    exact blueprint.accuracy_pos.le
+  · rw [if_neg hwho] at haction
+    unfold StochasticGame.historyContinuationEU
+    rw [haction, Math.Probability.expect_bind]
+    simp_rw [Math.Probability.expect_pure]
+    let coin := quittingHazardCoin
+      (mFineExitProbability table hM target accuracy)
+      (mFineExitProbability_pos table hM target
+        blueprint.accuracy_pos).le
+      (mFineExitProbability_lt_one table hM target
+        blueprint.accuracy_pos).le
+    change expect coin (fun quits => expect
+        ((publicQuittingGame table blueprint.signalData.law).transition
+          (PublicQuittingState.active signal)
+          (Function.update (publicSingleQuitAction table
+            blueprint.signalData.law (hM.positiveOwner target).1 quits)
+            who true))
+        (fun nextState => match nextState with
+          | .absorbed quitters => table.terminal quitters who
+          | _ => 0)) ≤ accuracy
+    calc
+      expect coin (fun quits => expect
+          ((publicQuittingGame table blueprint.signalData.law).transition
+            (PublicQuittingState.active signal)
+            (Function.update (publicSingleQuitAction table
+              blueprint.signalData.law (hM.positiveOwner target).1 quits)
+              who true))
+          (fun nextState => match nextState with
+            | .absorbed quitters => table.terminal quitters who
+            | _ => 0)) ≤ expect coin (fun quits => if quits then 1 else 0) := by
+        apply Math.Probability.expect_mono
+        intro quits
+        cases quits with
+        | false =>
+            have hactionEq : Function.update
+                (publicSingleQuitAction table blueprint.signalData.law
+                  (hM.positiveOwner target).1 false) who true =
+                publicSingleQuitAction table blueprint.signalData.law
+                  who true := by
+              funext player
+              by_cases hplayer : player = who
+              · subst player
+                simp [publicSingleQuitAction]
+              · simp [publicSingleQuitAction_apply_eq_raw,
+                  rawSingleQuitAction, hplayer]
+            rw [hactionEq,
+              publicQuittingGame_transition_publicSingleQuitAction,
+              Math.Probability.expect_pure]
+            exact blueprint.soloExitNormalized who |>.le
+        | true =>
+            simp only [publicQuittingGame]
+            split
+            · rw [Math.Probability.expect_pure]
+              exact (le_abs_self _).trans
+                (blueprint.payoffsBounded.1 _ who)
+            · rename_i hfalse
+              exfalso
+              apply hfalse
+              refine ⟨who, ?_⟩
+              simp
+      _ = mFineExitProbability table hM target accuracy := by
+        rw [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+        simp [coin]
+      _ ≤ accuracy :=
+        (mFineExitProbability_lt_accuracy table hM target
+          blueprint.accuracy_pos).le
+
 theorem expect_axisPayoff_signal
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
     (source : Option (NormalPlayer table)) (who : ι) :
@@ -21529,6 +21815,469 @@ theorem payoffPotential_harmonic
           rw [blueprint.payoffPotential_snoc_absorbed who
             (past, PublicQuittingState.absorbed quitters)]
           simp [payoffPotential, hmode]
+
+private theorem historyContinuationEU_deviationPotential_le_add_accuracy
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι)
+    (strategy : (publicQuittingGame table
+      blueprint.signalData.law).BehaviorProfile)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t) :
+    (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU strategy
+        (blueprint.deviationPotential who) history ≤
+      (publicQuittingGame table
+        blueprint.signalData.law).historyContinuationEU strategy
+          (blueprint.payoffPotential who) history + accuracy := by
+  let lifted : (publicQuittingGame table
+      blueprint.signalData.law).HistoryPotential :=
+    fun nextTime nextHistory =>
+      blueprint.payoffPotential who nextTime nextHistory + accuracy * 1
+  have hmono : (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU strategy
+        (blueprint.deviationPotential who) history ≤
+      (publicQuittingGame table
+        blueprint.signalData.law).historyContinuationEU strategy
+          lifted history := by
+    unfold StochasticGame.historyContinuationEU
+    apply Math.Probability.expect_mono
+    intro action
+    apply Math.Probability.expect_mono
+    intro nextState
+    unfold deviationPotential lifted
+    split <;> linarith [blueprint.accuracy_pos]
+  have hsplit := historyContinuationEU_add_const_mul
+    blueprint.signalData.law strategy (blueprint.payoffPotential who)
+      (fun _ _ => 1) accuracy history
+  have hone : (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU strategy
+        (fun _ _ => 1) history = 1 := by
+    unfold StochasticGame.historyContinuationEU
+    simp only [Math.Probability.expect_const]
+  rw [hone, mul_one] at hsplit
+  exact hmono.trans_eq (by simpa [lifted] using hsplit)
+
+private theorem pureQuit_deviationPotential_le
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (target : NormalPlayer table)
+    (hmode : blueprint.mode t history = .active target) :
+    (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU
+        (Function.update blueprint.strategy who
+          (fun _ _ => PMF.pure true))
+        (blueprint.deviationPotential who) history ≤
+      blueprint.deviationPotential who t history := by
+  classical
+  have hstate : ∃ signal,
+      history.2 = PublicQuittingState.active signal := by
+    have hmatches := blueprint.mode_state t history
+    cases hs : history.2 <;>
+      simp [MMatrixPayoffMode.MatchesState, hmode, hs] at hmatches
+    exact ⟨_, rfl⟩
+  obtain ⟨signal, hstate⟩ := hstate
+  rcases history with ⟨past, state⟩
+  simp only at hstate
+  subst state
+  let strategy := Function.update blueprint.strategy who
+    (fun _ _ => PMF.pure true)
+  let terminal : (publicQuittingGame table
+      blueprint.signalData.law).HistoryPotential :=
+    fun _ nextHistory => match nextHistory.2 with
+      | .absorbed quitters => table.terminal quitters who
+      | _ => 0
+  have hcongr : (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU strategy
+        (blueprint.deviationPotential who)
+          (past, PublicQuittingState.active signal) =
+      (publicQuittingGame table
+        blueprint.signalData.law).historyContinuationEU strategy
+          terminal (past, PublicQuittingState.active signal) := by
+    apply historyContinuationEU_congr_next_profile
+    intro action haction nextState hnextState
+    have hactionQuit : action who = true := by
+      unfold strategy StochasticGame.stageActionDist at haction
+      let root : ∀ player,
+          PMF ((publicQuittingGame table
+            blueprint.signalData.law).Act player) :=
+        fun player => blueprint.strategy player t
+          (past, PublicQuittingState.active signal)
+      have hfamily :
+          (fun player => Function.update blueprint.strategy who
+            (fun _ _ => PMF.pure true) player t
+              (past, PublicQuittingState.active signal)) =
+            Function.update root who (PMF.pure true) := by
+        funext player
+        by_cases hplayer : player = who
+        · subst player
+          simp [root]
+        · simp [root, Function.update_of_ne hplayer]
+      rw [hfamily] at haction
+      by_contra hne
+      have hzero : Math.PMFProduct.pmfPi
+          (Function.update root who (PMF.pure true)) action = 0 := by
+        rw [Math.PMFProduct.pmfPi_apply]
+        apply Finset.prod_eq_zero (Finset.mem_univ who)
+        rw [Function.update_self, PMF.pure_apply, if_neg hne]
+      exact (PMF.mem_support_iff _ action).mp haction hzero
+    simp only [publicQuittingGame] at hnextState
+    split at hnextState
+    · rename_i hquitters
+      have hnext := (PMF.mem_support_pure_iff _ _).mp hnextState
+      subst nextState
+      unfold deviationPotential payoffPotential terminal
+      rw [blueprint.mode_snoc]
+      simp [nextMMatrixPayoffMode]
+    · rename_i himpossible
+      exfalso
+      apply himpossible
+      refine ⟨who, ?_⟩
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+      change (show Bool from action who) = true at hactionQuit
+      exact hactionQuit
+  rw [hcongr]
+  have hterminal := blueprint.pureQuit_nextTerminalPayoff_le_accuracy
+    who (past, PublicQuittingState.active signal) target hmode
+  change (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU strategy terminal
+        (past, PublicQuittingState.active signal) ≤ _
+  have hcurrent : 0 ≤ mAxisPayoff table hM target who :=
+    mAxisPayoff_nonneg table hM blueprint.soloExitNormalized
+      blueprint.payoffsBounded target who
+  unfold deviationPotential payoffPotential
+  rw [hmode]
+  change (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU strategy terminal
+        (past, PublicQuittingState.active signal) ≤
+      mAxisPayoff table hM target who + accuracy
+  exact hterminal.trans (le_add_of_nonneg_left hcurrent)
+
+private theorem pureContinue_deviationPotential_le
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (target : NormalPlayer table)
+    (hmode : blueprint.mode t history = .active target) :
+    (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU
+        (Function.update blueprint.strategy who
+          (fun _ _ => PMF.pure false))
+        (blueprint.deviationPotential who) history ≤
+      blueprint.deviationPotential who t history := by
+  classical
+  by_cases hwho : who = (hM.positiveOwner target).1
+  · have hstate : ∃ signal,
+        history.2 = PublicQuittingState.active signal := by
+      have hmatches := blueprint.mode_state t history
+      cases hs : history.2 <;>
+        simp [MMatrixPayoffMode.MatchesState, hmode, hs] at hmatches
+      exact ⟨_, rfl⟩
+    obtain ⟨signal, hstate⟩ := hstate
+    rcases history with ⟨past, state⟩
+    simp only at hstate
+    subst state
+    have haction := blueprint.stageActionDist_pureContinue_active who
+      (past, PublicQuittingState.active signal) target hmode
+    rw [if_pos hwho] at haction
+    unfold StochasticGame.historyContinuationEU
+    rw [haction, Math.Probability.expect_pure]
+    have hall : publicAllContinueAction table blueprint.signalData.law =
+        publicSingleQuitAction table blueprint.signalData.law who false := by
+      funext player
+      simp [publicAllContinueAction, publicSingleQuitAction_apply_eq_raw,
+        rawSingleQuitAction]
+    rw [hall,
+      publicQuittingGame_transition_publicSingleQuitAction_false,
+      Math.Probability.expect_pure]
+    unfold deviationPotential payoffPotential
+    rw [blueprint.mode_snoc]
+    simp [hmode, nextMMatrixPayoffMode, modeContinuationValue]
+    subst who
+    rw [mAxisPayoff_designatedOwner_zero table hM
+        blueprint.soloExitNormalized target,
+      mFineContinuationPayoff_designatedOwner_zero table hM
+        blueprint.soloExitNormalized target blueprint.accuracy_pos]
+  · let strategy := Function.update blueprint.strategy who
+        (fun _ _ => PMF.pure false)
+    have hupper := blueprint.historyContinuationEU_deviationPotential_le_add_accuracy
+      who strategy history
+    have haction := blueprint.stageActionDist_pureContinue_active who
+      history target hmode
+    rw [if_neg hwho] at haction
+    dsimp only [strategy] at hupper
+    unfold StochasticGame.historyContinuationEU at hupper
+    rw [haction] at hupper
+    have hharmonic := blueprint.payoffPotential_harmonic who history
+    unfold StochasticGame.historyContinuationEU at hharmonic
+    rw [hharmonic] at hupper
+    unfold StochasticGame.historyContinuationEU
+    rw [haction]
+    unfold deviationPotential
+    rw [hmode]
+    exact hupper
+
+private theorem deviationPotential_draw_step
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (source : Option (NormalPlayer table))
+    (hmode : blueprint.mode t history = .draw source)
+    (action : (publicQuittingGame table
+      blueprint.signalData.law).JointAct) :
+    expect (blueprint.signalData.law.map PublicQuittingState.active)
+        (fun nextState => blueprint.deviationPotential who (t + 1)
+          (Fin.snoc history.1 (history.2, action), nextState)) =
+      blueprint.deviationPotential who t history := by
+  calc
+    expect (blueprint.signalData.law.map PublicQuittingState.active)
+        (fun nextState => blueprint.deviationPotential who (t + 1)
+          (Fin.snoc history.1 (history.2, action), nextState)) =
+      expect (blueprint.signalData.law.map PublicQuittingState.active)
+        (fun nextState => blueprint.payoffPotential who (t + 1)
+          (Fin.snoc history.1 (history.2, action), nextState) +
+            accuracy) := by
+        apply Math.ProbabilityMassFunction.expect_congr_on_support
+        intro nextState hnext
+        rw [PMF.mem_support_map_iff] at hnext
+        obtain ⟨signal, _, rfl⟩ := hnext
+        unfold deviationPotential
+        rw [blueprint.mode_snoc]
+        simp [hmode, nextMMatrixPayoffMode]
+    _ = expect (blueprint.signalData.law.map PublicQuittingState.active)
+          (fun nextState => blueprint.payoffPotential who (t + 1)
+            (Fin.snoc history.1 (history.2, action), nextState)) +
+        accuracy := by
+      rw [Math.Probability.expect_add, Math.Probability.expect_const]
+    _ = blueprint.payoffPotential who t history + accuracy := by
+      rw [blueprint.payoffPotential_draw_step who history source hmode action]
+    _ = blueprint.deviationPotential who t history := by
+      simp [deviationPotential, hmode]
+
+private theorem deviationPotential_absorbed_step
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (action : (publicQuittingGame table
+      blueprint.signalData.law).JointAct)
+    (quitters : {S : Finset ι // S.Nonempty}) :
+    blueprint.deviationPotential who (t + 1)
+        (Fin.snoc history.1 (history.2, action), .absorbed quitters) =
+      table.terminal quitters who := by
+  unfold deviationPotential payoffPotential
+  rw [blueprint.mode_snoc]
+  simp [nextMMatrixPayoffMode]
+
+private def pureDeviation
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) (action : Bool) :
+    (publicQuittingGame table
+      blueprint.signalData.law).BehaviorStrategy who :=
+  fun _ _ => PMF.pure action
+
+private theorem deviationPotential_harmonic_draw
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι)
+    (strategy : (publicQuittingGame table
+      blueprint.signalData.law).BehaviorProfile)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (source : Option (NormalPlayer table))
+    (hmode : blueprint.mode t history = .draw source)
+    (hstate : history.2 = .draw) :
+    (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU strategy
+        (blueprint.deviationPotential who) history =
+      blueprint.deviationPotential who t history := by
+  rcases history with ⟨past, state⟩
+  simp only at hstate
+  subst state
+  have hinner (action : (publicQuittingGame table
+      blueprint.signalData.law).JointAct) :
+      expect ((publicQuittingGame table
+          blueprint.signalData.law).transition .draw action)
+        (fun nextState => blueprint.deviationPotential who (t + 1)
+          (Fin.snoc past (.draw, action), nextState)) =
+        blueprint.deviationPotential who t (past, .draw) := by
+    rw [publicQuittingGame_transition_draw]
+    exact blueprint.deviationPotential_draw_step who
+      (past, PublicQuittingState.draw) source hmode action
+  unfold StochasticGame.historyContinuationEU
+  simp_rw [hinner]
+  exact Math.Probability.expect_const _ _
+
+private theorem deviationPotential_harmonic_absorbed
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι)
+    (strategy : (publicQuittingGame table
+      blueprint.signalData.law).BehaviorProfile)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t)
+    (hmode : blueprint.mode t history = .absorbed)
+    (quitters : {S : Finset ι // S.Nonempty})
+    (hstate : history.2 = .absorbed quitters) :
+    (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU strategy
+        (blueprint.deviationPotential who) history =
+      blueprint.deviationPotential who t history := by
+  rcases history with ⟨past, state⟩
+  simp only at hstate
+  subst state
+  have hinner (action : (publicQuittingGame table
+      blueprint.signalData.law).JointAct) :
+      expect ((publicQuittingGame table
+          blueprint.signalData.law).transition (.absorbed quitters) action)
+        (fun nextState => blueprint.deviationPotential who (t + 1)
+          (Fin.snoc past (.absorbed quitters, action), nextState)) =
+        blueprint.deviationPotential who t (past, .absorbed quitters) := by
+    rw [publicQuittingGame_transition_absorbed,
+      Math.Probability.expect_pure]
+    rw [blueprint.deviationPotential_absorbed_step who
+      (past, PublicQuittingState.absorbed quitters)]
+    simp [deviationPotential, payoffPotential, hmode]
+  unfold StochasticGame.historyContinuationEU
+  simp_rw [hinner]
+  exact Math.Probability.expect_const _ _
+
+private theorem pureAction_deviationPotential_le
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι) (action : Bool) {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t) :
+    (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU
+        (Function.update blueprint.strategy who
+          (blueprint.pureDeviation who action))
+        (blueprint.deviationPotential who) history ≤
+      blueprint.deviationPotential who t history := by
+  classical
+  rcases history with ⟨past, state⟩
+  have hmatches := blueprint.mode_state t (past, state)
+  cases hmode : blueprint.mode t (past, state) with
+  | active target =>
+      cases state with
+      | draw =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | absorbed quitters =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | active signal =>
+          cases action with
+          | false =>
+              change (publicQuittingGame table
+                  blueprint.signalData.law).historyContinuationEU
+                    (Function.update blueprint.strategy who
+                      (fun _ _ => PMF.pure false))
+                    (blueprint.deviationPotential who)
+                    (past, PublicQuittingState.active signal) ≤ _
+              exact blueprint.pureContinue_deviationPotential_le who
+                (past, PublicQuittingState.active signal) target hmode
+          | true =>
+              change (publicQuittingGame table
+                  blueprint.signalData.law).historyContinuationEU
+                    (Function.update blueprint.strategy who
+                      (fun _ _ => PMF.pure true))
+                    (blueprint.deviationPotential who)
+                    (past, PublicQuittingState.active signal) ≤ _
+              exact blueprint.pureQuit_deviationPotential_le who
+                (past, PublicQuittingState.active signal) target hmode
+  | draw source =>
+      cases state with
+      | active signal =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | absorbed quitters =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | draw =>
+          exact (blueprint.deviationPotential_harmonic_draw who _
+            (past, PublicQuittingState.draw) source hmode rfl).le
+  | absorbed =>
+      cases state with
+      | draw =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | active signal =>
+          simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
+      | absorbed quitters =>
+          exact (blueprint.deviationPotential_harmonic_absorbed who _
+            (past, PublicQuittingState.absorbed quitters) hmode quitters rfl).le
+
+theorem deviationPotential_superharmonic
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι)
+    (deviation : (publicQuittingGame table
+      blueprint.signalData.law).BehaviorStrategy who)
+    {t : ℕ}
+    (history : (publicQuittingGame table
+      blueprint.signalData.law).Hist t) :
+    (publicQuittingGame table
+      blueprint.signalData.law).historyContinuationEU
+        (Function.update blueprint.strategy who deviation)
+        (blueprint.deviationPotential who) history ≤
+      blueprint.deviationPotential who t history := by
+  rw [historyContinuationEU_update_eq_expect_pure table
+    blueprint.signalData.law blueprint.strategy who deviation
+      (blueprint.deviationPotential who) history]
+  calc
+    expect (deviation t history) (fun action =>
+        (publicQuittingGame table
+          blueprint.signalData.law).historyContinuationEU
+            (Function.update blueprint.strategy who
+              (fun _ _ => PMF.pure action))
+            (blueprint.deviationPotential who) history) ≤
+      expect (deviation t history) (fun _ =>
+        blueprint.deviationPotential who t history) := by
+      apply Math.Probability.expect_mono
+      intro action
+      have hpure := blueprint.pureAction_deviationPotential_le
+        who action history
+      unfold pureDeviation at hpure
+      exact hpure
+    _ = blueprint.deviationPotential who t history :=
+      Math.Probability.expect_const _ _
+
+theorem expect_deviationPotential_le_initial
+    (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
+    (who : ι)
+    (deviation : (publicQuittingGame table
+      blueprint.signalData.law).BehaviorStrategy who) : ∀ t,
+    expect ((publicQuittingGame table
+        blueprint.signalData.law).histDist
+      (Function.update blueprint.strategy who deviation) .draw t)
+      (blueprint.deviationPotential who t) ≤ value who + accuracy
+  | 0 => by
+      rw [(publicQuittingGame table
+        blueprint.signalData.law).histDist_zero,
+        Math.Probability.expect_pure,
+        blueprint.deviationPotential_initial who]
+  | t + 1 => by
+      change (publicQuittingGame table
+        blueprint.signalData.law).expectedHistoryValue
+          (Function.update blueprint.strategy who deviation) .draw
+          (blueprint.deviationPotential who) (t + 1) ≤ _
+      rw [(publicQuittingGame table
+        blueprint.signalData.law).expectedHistoryValue_succ]
+      calc
+        expect ((publicQuittingGame table
+            blueprint.signalData.law).histDist
+          (Function.update blueprint.strategy who deviation) .draw t)
+          (fun history => (publicQuittingGame table
+            blueprint.signalData.law).historyContinuationEU
+              (Function.update blueprint.strategy who deviation)
+              (blueprint.deviationPotential who) history) ≤
+          expect ((publicQuittingGame table
+              blueprint.signalData.law).histDist
+            (Function.update blueprint.strategy who deviation) .draw t)
+            (blueprint.deviationPotential who t) := by
+          apply Math.Probability.expect_mono
+          exact fun history => blueprint.deviationPotential_superharmonic
+            who deviation history
+        _ ≤ value who + accuracy :=
+          blueprint.expect_deviationPotential_le_initial who deviation t
 
 theorem expect_payoffPotential_eq_value
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
