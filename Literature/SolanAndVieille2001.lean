@@ -1692,12 +1692,6 @@ def MainEstimateContext.blockExpectation
     (continueUntilRoots data.roots data.who (data.blockStart block))
     data.who 0
 
-/-- **Lemma 2.8.** `|π₂-π₂*| ≤ ε^a π₂*`. -/
-def Lemma2_8 : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
-    (data : MainEstimateContext ι), data.Admissible →
-      |data.π₂ - data.π₂star| ≤ data.ε ^ data.a * data.π₂star
-
 private def blockOwnerSurvivalWeight
     (roots : RootSequence (ι := ι)) (who : ι)
     (start fuel : ℕ) : ℝ :=
@@ -1884,18 +1878,16 @@ private theorem abs_opponentFirst_sub_opponentBlock_le
       apply mul_le_mul_of_nonneg_right hsmall.le
       exact Finset.sum_nonneg fun time _ ↦ hbase time
 
-theorem lemma2_8 : Lemma2_8 := by
+/-- **Lemma 2.8.** `|π₂-π₂*| ≤ ε^a π₂*`. -/
+theorem lemma2_8 :
+    ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
+      (data : MainEstimateContext ι), data.Admissible →
+        |data.π₂ - data.π₂star| ≤ data.ε ^ data.a * data.π₂star := by
   intro ι _ _ data hadmissible
   rcases hadmissible with ⟨-, -, -, -, -, -, -, -, hsmall⟩
   simpa [MainEstimateContext.π₂, MainEstimateContext.π₂star] using
     (abs_opponentFirst_sub_opponentBlock_le data.roots data.who
       data.localStart data.localLength hsmall)
-
-/-- **Lemma 2.9.** `|u₂-u₂*| ≤ 2ρ ε^a`. -/
-def Lemma2_9 : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
-    (data : MainEstimateContext ι), data.Admissible →
-      |data.u₂ - data.u₂star| ≤ 2 * data.ρ * data.ε ^ data.a
 
 private def blockOpponentContribution
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -2367,7 +2359,11 @@ private theorem abs_opponentConditionalBlockPayoff_sub_forced_le
         hbound herror.le herrorHalf' hmassLower hdifference hsecond
         hmassDifferenceNonneg hmassDifference
 
-theorem lemma2_9 : Lemma2_9 := by
+/-- **Lemma 2.9.** `|u₂-u₂*| ≤ 2ρ ε^a`. -/
+theorem lemma2_9 :
+    ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
+      (data : MainEstimateContext ι), data.Admissible →
+        |data.u₂ - data.u₂star| ≤ 2 * data.ρ * data.ε ^ data.a := by
   intro ι _ _ data hadmissible
   rcases hadmissible with
     ⟨hε, -, -, ha, -, -, -, -, hsmall⟩
@@ -2613,14 +2609,12 @@ private theorem abs_tailValue_sub_end_le_blockTermination
 
 /-- **Lemma 2.10.** The paper's displayed claim (8):
 `γⁱ(x_{n₂-1})-u₁ ≤ 4ρNπ₂* + ε`. -/
-def Lemma2_10 : Prop :=
+theorem lemma2_10 :
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
     (data : MainEstimateContext ι), data.Admissible →
       quittingRootSequenceTailVector data.reward data.roots
           (data.localStart + data.localLength) data.who - data.u₁ ≤
-        4 * data.ρ * Fintype.card ι * data.π₂star + data.ε
-
-theorem lemma2_10 : Lemma2_10 := by
+        4 * data.ρ * Fintype.card ι * data.π₂star + data.ε := by
   classical
   intro ι _ _ data hadmissible
   rcases hadmissible with
@@ -3335,15 +3329,13 @@ private theorem pureTime_none_le_sSup_blockExpectation
 
 /-- **Lemma 2.11.** A pure deviation payoff is bounded by the supremum of
 the block continuation expectations plus `ε + 2ρ ε^a`. -/
-def Lemma2_11 : Prop :=
+theorem lemma2_11 :
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
     (data : MainEstimateContext ι), data.Admissible →
       quittingRootSequenceHazardTerminalValue data.reward data.roots data.who
           (quittingPureTimeHazard data.quitTime) 0 ≤
         sSup (Set.range data.blockExpectation) +
-          data.ε + 2 * data.ρ * data.ε ^ data.a
-
-theorem lemma2_11 : Lemma2_11 := by
+          data.ε + 2 * data.ρ * data.ε ^ data.a := by
   classical
   intro ι _ _ data hadmissible
   change quittingRootSequencePureTimeTerminalValue data.reward data.roots
@@ -3829,15 +3821,13 @@ private theorem blockExpectation_succ_sub_eq
   rw [show start + length - start = length by omega]
 /-- **Lemma 2.12.** The block expectation supremum is at most the current
 payoff plus `2ε^(1-b-e) + 7ρNε^a`. -/
-def Lemma2_12 : Prop :=
+theorem lemma2_12 :
   ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
     (data : MainEstimateContext ι), data.Admissible →
       sSup (Set.range data.blockExpectation) ≤
         quittingRootSequenceTerminalValue data.reward data.roots data.who 0 +
           2 * data.ε ^ (1 - data.b - data.exponent) +
-          7 * data.ρ * Fintype.card ι * data.ε ^ data.a
-
-theorem lemma2_12 : Lemma2_12 := by
+          7 * data.ρ * Fintype.card ι * data.ε ^ data.a := by
   classical
   intro ι _ _ data hadmissible
   have hadmissible' := hadmissible
