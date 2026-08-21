@@ -440,6 +440,26 @@ theorem windowAbsorbingIntercept_eq_singleton_add_collision
   intro phase _
   ring
 
+/-- A root-sequence value is the finite window's singleton reward, plus its
+collision reward, plus the surviving continuation value at the far end. -/
+theorem terminalValue_eq_singleton_add_collision_add_survival_mul
+    (window : QuittingFiniteRootWindow roots)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
+    quittingRootSequenceTerminalValue reward roots who window.start =
+      window.singletonRewardContribution reward who +
+        window.collisionRewardContribution reward who +
+        quittingJointSurvivalWeight roots window.start window.fuel *
+          quittingRootSequenceTerminalValue reward roots who
+            (window.start + window.fuel) := by
+  have hdecomposition := quittingPrescribedValue_eq_windowIntercept_add_survival_mul
+    reward roots who
+    (quittingRootSequenceTerminalValue reward roots who)
+    (isQuittingLivePrescribedValue_quittingRootSequenceTerminalValue
+      reward roots who) window.start window.fuel
+  rw [window.windowAbsorbingIntercept_eq_singleton_add_collision reward who]
+    at hdecomposition
+  exact hdecomposition
+
 /-- On the positive-absorption branch, absorbing delivery is the normalized
 sum of the canonical singleton and collision contributions. -/
 theorem absorbingDelivery_eq
