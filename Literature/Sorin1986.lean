@@ -3,6 +3,7 @@ import GameTheory.Analysis.Payoff
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.PMFProduct.Bool
 import MathUE.FixedRatioConvexity
+import MathUE.FiniteEmpiricalConvexity
 import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer
 import UniformEquilibrium.Certificates.Public.FixedPrefixAccounting
 import UniformEquilibrium.Certificates.Public.TerminalChildLawTransfer
@@ -2852,9 +2853,164 @@ theorem property_2_discounted
   rw [← discountedCompactPresentation_equilibriumPayoffs_eq presentation]
   exact property_2 presentation.toCompactContinuousGame
 
+/-- Play a prescribed independently mixed stage profile at each date,
+independently of the public history. -/
+private noncomputable def mixedSequenceBehavior (G : FiniteStageGame)
+    (sequence : ℕ → G.MixedProfile) : G.BehaviorProfile :=
+  fun who time _history => sequence time who
+
+/-- A history-independent mixed-profile sequence has the prescribed expected
+stage payoff at every date. -/
+private theorem expectedStagePayoff_mixedSequenceBehavior
+    (G : FiniteStageGame) (sequence : ℕ → G.MixedProfile) (time : ℕ) :
+    (fun who => G.repeatedGame.expectedStagePayoff
+      (mixedSequenceBehavior G sequence) PUnit.unit time who) =
+      G.mixedPayoff (sequence time) := by
+  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  letI : Fintype G.repeatedGame.State := inferInstanceAs (Fintype PUnit)
+  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  funext who
+  unfold StochasticGame.expectedStagePayoff
+  rw [show (fun history => G.repeatedGame.stageEUAt
+      (mixedSequenceBehavior G sequence) history who) =
+      fun _history => G.mixedPayoff (sequence time) who by
+    funext history
+    unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
+    unfold mixedSequenceBehavior FiniteStageGame.mixedPayoff
+      KernelGame.payoffVector
+    exact (G.kernel.mixedExtension_eu (sequence time) who).symm]
+  exact Math.Probability.expect_const _ _
+
 /-! The asymptotic feasible-payoff statements use block approximation and the
 Banach-limit identification.  The corresponding general repeated-game theorem
 has not been formalized in the repository. -/
+private theorem expectedStagePayoff_mem_correlatedFeasiblePayoffs_early
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (time : ℕ) :
+    (fun who ↦ G.repeatedGame.expectedStagePayoff
+      profile PUnit.unit time who) ∈ G.correlatedFeasiblePayoffs := by
+  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  letI : Fintype G.repeatedGame.State := inferInstanceAs (Fintype PUnit)
+  letI : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  let payoffAt := fun history : G.repeatedGame.Hist time ↦
+    G.mixedPayoff (fun who ↦ profile who time history)
+  have hbar :=
+    Math.ProbabilityMassFunction.coordinateExpectation_mem_convexHull_range
+      (G.repeatedGame.histDist profile PUnit.unit time) payoffAt
+  have hrange : Set.range payoffAt ⊆ G.correlatedFeasiblePayoffs := by
+    rintro _ ⟨history, rfl⟩
+    exact G.mixedPayoff_mem_correlatedFeasiblePayoffs
+      (fun who ↦ profile who time history)
+  have hmem := convexHull_min hrange
+    G.correlatedFeasiblePayoffs_convex hbar
+  dsimp only [payoffAt] at hmem
+  change (fun who ↦ Math.Probability.expect
+    (G.repeatedGame.histDist profile PUnit.unit time) fun history ↦
+      G.repeatedGame.stageEUAt profile history who) ∈
+        G.correlatedFeasiblePayoffs
+  convert hmem using 1
+  funext who
+  congr 1
+  funext history
+  change Math.Probability.expect
+      (Math.PMFProduct.pmfPi (fun player ↦ profile player time history))
+        (fun action ↦ G.kernel.eu action who) =
+    G.kernel.mixedExtension.eu
+      (fun player ↦ profile player time history) who
+  exact (G.kernel.mixedExtension_eu _ _).symm
+
+/-- Property (3), finite-horizon clause: `Dₙ` converges to `C`. -/
+theorem property_3_finite (G : FiniteStageGame) :
+    HausdorffConvergesAtTop G.finiteFeasiblePayoffs
+      G.correlatedFeasiblePayoffs := by
+  let ActionProfile := ∀ who, G.Action who
+  letI : Nonempty ActionProfile := inferInstance
+  obtain ⟨bound, hboundAbs⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun action : ActionProfile => ‖G.payoff action‖)
+  have hbound : ∀ action : ActionProfile, ‖G.payoff action‖ ≤ bound := by
+    intro action
+    simpa [abs_of_nonneg (norm_nonneg _)] using hboundAbs action
+  have hbound0 : 0 ≤ bound := by
+    exact (norm_nonneg (G.payoff (Classical.arbitrary ActionProfile))).trans
+      (hbound _)
+  intro ε hε
+  obtain ⟨n₀, hn₀, happrox⟩ :=
+    MathUE.exists_uniformAverage_close_of_mem_convexHull_range
+      (fun action : ActionProfile => G.payoff action) hbound hbound0 hε
+  refine ⟨n₀, fun n hn => ?_⟩
+  have hnpos : 0 < n := hn₀.trans_le hn
+  constructor
+  · intro payoff hpayoff
+    rcases hpayoff with ⟨profile, rfl⟩
+    have hmem : G.finitePayoff n profile ∈
+        G.correlatedFeasiblePayoffs := by
+      unfold FiniteStageGame.finitePayoff
+      rw [show (fun who ↦ G.repeatedGame.finiteAveragePayoff
+        PUnit.unit n profile who) =
+          (n : ℝ)⁻¹ • ∑ time ∈ Finset.range n,
+            (fun who ↦ G.repeatedGame.expectedStagePayoff
+              profile PUnit.unit time who) by
+        funext who
+        rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+        simp only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul]]
+      rw [Finset.smul_sum]
+      apply G.correlatedFeasiblePayoffs_convex.sum_mem
+      · intro _ _
+        exact inv_nonneg.mpr (Nat.cast_nonneg n)
+      · rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+        apply mul_inv_cancel₀
+        exact_mod_cast Nat.ne_of_gt hnpos
+      · intro time _
+        exact expectedStagePayoff_mem_correlatedFeasiblePayoffs_early
+          G profile time
+    refine ⟨G.finitePayoff n profile, hmem, ?_⟩
+    exact (dist_self _).trans_lt hε
+  · intro target htarget
+    obtain ⟨sample, hsample⟩ := happrox n hn target htarget
+    let stages : ℕ → G.MixedProfile := fun time =>
+      if htime : time < n then
+        G.kernel.pureMixedProfile (sample ⟨time, htime⟩)
+      else
+        G.kernel.pureMixedProfile (Classical.arbitrary ActionProfile)
+    let behavior := mixedSequenceBehavior G stages
+    have hstage (time : ℕ) (htime : time < n) :
+        (fun who => G.repeatedGame.expectedStagePayoff
+          behavior PUnit.unit time who) = G.payoff (sample ⟨time, htime⟩) := by
+      rw [show behavior = mixedSequenceBehavior G stages by rfl,
+        expectedStagePayoff_mixedSequenceBehavior]
+      dsimp only [stages]
+      rw [dif_pos htime]
+      change G.kernel.mixedExtension.payoffVector
+          (G.kernel.pureMixedProfile (sample ⟨time, htime⟩)) =
+        G.payoff (sample ⟨time, htime⟩)
+      rw [G.kernel.mixedExtension_payoffVector_pureMixedProfile]
+      funext who
+      change G.kernel.eu (sample ⟨time, htime⟩) who =
+        G.payoff (sample ⟨time, htime⟩) who
+      simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+    have hpayoff : G.finitePayoff n behavior =
+        (n : ℝ)⁻¹ • ∑ j, G.payoff (sample j) := by
+      funext who
+      unfold FiniteStageGame.finitePayoff
+      rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+      simp only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul]
+      congr 1
+      rw [Finset.sum_fin_eq_sum_range]
+      apply Finset.sum_congr rfl
+      intro time htime
+      have htimen : time < n := Finset.mem_range.mp htime
+      rw [dif_pos htimen]
+      exact congrFun (hstage time htimen) who
+    refine ⟨G.finitePayoff n behavior, ⟨behavior, rfl⟩, ?_⟩
+    rw [hpayoff, dist_eq_norm]
+    exact hsample
+
 theorem property_3 (G : FiniteStageGame) :
     HausdorffConvergesAtTop G.finiteFeasiblePayoffs
         G.correlatedFeasiblePayoffs ∧
@@ -8323,37 +8479,6 @@ private theorem discounted_sum_eq_of_affine_recurrence
     _ = state 0 := by
       rw [hweightedState.tsum_eq_zero_add]
       simp [weightedState]
-
-/-- Play a prescribed independently mixed stage profile at each date,
-independently of the public history. -/
-private noncomputable def mixedSequenceBehavior (G : FiniteStageGame)
-    (sequence : ℕ → G.MixedProfile) : G.BehaviorProfile :=
-  fun who time _history => sequence time who
-
-/-- A history-independent mixed-profile sequence has the prescribed expected
-stage payoff at every date. -/
-private theorem expectedStagePayoff_mixedSequenceBehavior
-    (G : FiniteStageGame) (sequence : ℕ → G.MixedProfile) (time : ℕ) :
-    (fun who => G.repeatedGame.expectedStagePayoff
-      (mixedSequenceBehavior G sequence) PUnit.unit time who) =
-      G.mixedPayoff (sequence time) := by
-  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
-    @Finite.of_fintype _ (G.finiteAction who)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
-  letI : Finite G.kernel.Outcome := by
-    change Finite (∀ who, G.Action who)
-    exact Finite.of_fintype _
-  funext who
-  unfold StochasticGame.expectedStagePayoff
-  rw [show (fun history => G.repeatedGame.stageEUAt
-      (mixedSequenceBehavior G sequence) history who) =
-      fun _history => G.mixedPayoff (sequence time) who by
-    funext history
-    unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
-    unfold mixedSequenceBehavior FiniteStageGame.mixedPayoff
-      KernelGame.payoffVector
-    exact (G.kernel.mixedExtension_eu (sequence time) who).symm]
-  exact Math.Probability.expect_const _ _
 
 /-! Proposition 6 is the discounted analogue of Proposition 5. -/
 theorem proposition_6 (G : FiniteStageGame) (lam : ℝ)
