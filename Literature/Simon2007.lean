@@ -9240,6 +9240,60 @@ private theorem quittingDDPMove_reachable
     · right
       exact ⟨hnonempty, htime.trans (min_le_min_right T (Nat.le_succ i))⟩
 
+private theorem quittingDDPMove_eq_of_terminal
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    {state next : QuittingDDPState G} (hnonempty : state.2.Nonempty)
+    (action : Bool) (hmove : quittingDDPMove G p n T state action next ≠ 0) :
+    next = state := by
+  have hlive : ¬IsQuittingDDPLive T state := fun hlive => by
+    rw [hlive.2] at hnonempty
+    exact Finset.not_nonempty_empty hnonempty
+  have hpure : PMF.pure state next ≠ 0 := by
+    simpa only [quittingDDPMove, hlive, if_false] using hmove
+  rw [PMF.pure_apply] at hpure
+  split at hpure
+  · assumption
+  · exact (hpure rfl).elim
+
+private theorem quittingDDPMove_true_nonempty
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T i : ℕ)
+    (hi : i < T) {next : QuittingDDPState G}
+    (hmove : quittingDDPMove G p n T (i, ∅) true next ≠ 0) :
+    next.2.Nonempty := by
+  classical
+  let row := (p i).replace G n 1
+  let advance : Finset G.Player → QuittingDDPState G := fun A => (i + 1, A)
+  have hadvance : Function.Injective advance := fun A B h => congrArg Prod.snd h
+  have hlive : IsQuittingDDPLive T (i, (∅ : Finset G.Player)) := ⟨hi, rfl⟩
+  have hrange := PMF.mem_range_of_map_ne_zero (coalitionPMF G row) advance (by
+    simpa only [quittingDDPMove, hlive, if_pos, row, advance] using hmove)
+  rcases hrange with ⟨A, rfl⟩
+  have hmap : ((coalitionPMF G row).map advance) (advance A) = coalitionPMF G row A := by
+    rw [PMF.map_apply, tsum_eq_single A]
+    · simp
+    · intro B hBA
+      rw [if_neg]
+      exact fun h => hBA (hadvance h.symm)
+  have hsource : coalitionPMF G row A ≠ 0 := by
+    intro hzero
+    apply hmove
+    simpa only [quittingDDPMove, hlive, if_pos, row, advance, hmap] using hzero
+  rw [Finset.nonempty_iff_ne_empty]
+  intro hempty
+  change A = ∅ at hempty
+  subst A
+  apply hsource
+  have hcoalition : CoalitionProbability G row ∅ = 0 := by
+    simp only [CoalitionProbability, Finset.prod_empty, one_mul]
+    have hfilter : Finset.univ.filter (fun j : G.Player => j ∉ (∅ : Finset G.Player)) =
+        Finset.univ := by ext; simp
+    rw [hfilter]
+    apply Finset.prod_eq_zero (Finset.mem_univ n)
+    simp [row, QuitRow.replace]
+  rw [coalitionPMF, PMF.ofFintype_apply]
+  rw [hcoalition]
+  simp
+
 private theorem quittingDDPFinitePath_reachable
     (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
     (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) {k : ℕ}
@@ -9271,6 +9325,39 @@ private theorem quittingDDPFinitePath_reachable
           (path.y ⟨m, by omega⟩) (path.x ⟨m + 1, by omega⟩) ≠ 0
         exact hfactor ⟨m, by omega⟩
   exact go j.1 (by omega)
+
+/-- Once a positive-probability finite path is terminal, it remains at that state. -/
+private theorem quittingDDPFinitePath_terminal_persists
+    (G : QuittingGame) (p : QuitProfile G) (n : G.Player) (T : ℕ)
+    (M : ℝ) (hM : IsQuittingPayoffDifferenceBound G M) {k a b : ℕ}
+    (path : DDPFinitePath (quittingDecisionProcess G p n T M hM) k)
+    (hprobability : path.probability (quittingDecisionProcess G p n T M hM) ≠ 0)
+    (ha : a ≤ k) (hb : b ≤ k) (hab : a ≤ b)
+    (hterminal : (path.x ⟨a, by omega⟩).2.Nonempty) :
+    path.x ⟨b, by omega⟩ = path.x ⟨a, by omega⟩ := by
+  let P := quittingDecisionProcess G p n T M hM
+  have hfactor : ∀ t : Fin k,
+      P.move (path.x t.castSucc) (path.y t) (path.x t.succ) ≠ 0 := by
+    intro t hzero
+    apply hprobability
+    rw [DDPFinitePath.probability]
+    apply Finset.prod_eq_zero (Finset.mem_univ t)
+    rw [hzero, mul_zero]
+  have go : ∀ d (hd : a + d ≤ k),
+      path.x ⟨a + d, by omega⟩ = path.x ⟨a, by omega⟩ := by
+    intro d hd
+    induction d with
+    | zero => rfl
+    | succ d ih =>
+        have hcurrent := ih (by omega)
+        have hcurrentTerminal : (path.x ⟨a + d, by omega⟩).2.Nonempty := by
+          rw [hcurrent]
+          exact hterminal
+        have hstep := quittingDDPMove_eq_of_terminal G p n T hcurrentTerminal
+          (path.y ⟨a + d, by omega⟩) (hfactor ⟨a + d, by omega⟩)
+        exact hstep.trans hcurrent
+  have heq : a + (b - a) = b := Nat.add_sub_of_le hab
+  simpa only [heq] using go (b - a) (by omega)
 
 /-- An unreachable state has zero mass under the raw law of the quitting DDP. -/
 private theorem quittingDDPRawLaw_state_eq_zero_of_unreachable
