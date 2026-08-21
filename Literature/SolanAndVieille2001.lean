@@ -8,7 +8,10 @@ import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
 import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
 import UniformEquilibrium.Quitting.Cycles.PeriodicJointSurvival
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
+import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwoStationary
 import UniformEquilibrium.Quitting.Paths.SureExitSet
+import UniformEquilibrium.Quitting.Stationary.ApproximabilityCompactification
+import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
 
 noncomputable section
@@ -5115,16 +5118,6 @@ theorem figure2_exists_partnerDrop_with_retained_mass
   · exact hownDrop.trans hownSmall
   · exact hbeforeDropLower
 
-/-- The first omitted Figure 2 assertion: for all sufficiently small positive
-`ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
-the technical proof and refers to Solan and Vieille (2000). -/
-theorem figure2_no_stationary_epsilon :
-  ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε, 0 < ε → ε < ε₀ →
-    ¬ ∃ root : Fin 4 → PMF Bool,
-      epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
-        (stationaryProfile SolanVieilleBoundary.boundaryReward root) := by
-  sorry
-
 private theorem figure2_shifted_opposite_pair_contradiction
     {roots : RootSequence (ι := Fin 4)} {ε : ℝ}
     (hε0 : 0 < ε) (hεsmall : ε < 1 / 1000000000000)
@@ -5366,6 +5359,91 @@ theorem figure2_no_perturbed_epsilon :
     (Or.inr ⟨rfl, rfl⟩) (figure2Partner_oppositeSecond who)
   exact figure2_shifted_opposite_pair_contradiction hε0 hεsmall hclose hnash
     who drop hreach hfirstHigh hsecondHigh
+
+/-- The first omitted Figure 2 assertion: for all sufficiently small positive
+`ε`, the game has no stationary `ε`-equilibrium. The compactification
+proof uses the second omitted assertion above at the all-Continue apex. -/
+theorem figure2_no_stationary_epsilon :
+  ∃ ε₀ : ℝ, 0 < ε₀ ∧ ∀ ε, 0 < ε → ε < ε₀ →
+    ¬ ∃ root : Fin 4 → PMF Bool,
+      epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+        (stationaryProfile SolanVieilleBoundary.boundaryReward root) := by
+  obtain ⟨apexAccuracy, hapexAccuracy, hnoApex⟩ :=
+    figure2_no_perturbed_epsilon
+  have hnotApproximable : ¬ (∀ requested : ℝ, 0 < requested →
+      ∃ stationaryRoot : Fin 4 → PMF Bool,
+        (quittingGame SolanVieilleBoundary.boundaryReward).IsεAsymptoticNash
+          (quittingTerminalPayoff SolanVieilleBoundary.boundaryReward)
+          requested
+          (quittingStationaryProfile SolanVieilleBoundary.boundaryReward
+            stationaryRoot)) := by
+    intro happroximable
+    rcases
+        exactStationaryEndpoint_or_nearAllContinue_of_stationaryApproximable
+          SolanVieilleBoundary.boundaryReward happroximable with
+      hexact | hnear
+    · obtain ⟨value, simplexRoot, hpositive, hfixed, hendpoint⟩ := hexact
+      let exactRoot := quittingRootOfSimplex simplexRoot
+      have habsorbs : quittingStationaryContinueMass exactRoot < 1 :=
+        quittingStationaryContinueMass_lt_one_of_totalHazard_pos
+          exactRoot hpositive
+      have hactual := quittingTerminalPayoff_stationary_eq_of_fixedPoint
+        SolanVieilleBoundary.boundaryReward exactRoot value habsorbs hfixed
+      have hactualEndpoint : IsεQuittingRootEndpointNash
+          SolanVieilleBoundary.boundaryReward
+          (fun player ↦ quittingTerminalPayoff
+            SolanVieilleBoundary.boundaryReward
+            (quittingStationaryProfile
+              SolanVieilleBoundary.boundaryReward exactRoot) player)
+          0 exactRoot := by
+        simpa [exactRoot, hactual] using hendpoint
+      have habsorption : 0 < quittingRootAbsorptionMass exactRoot := by
+        change 0 < 1 - quittingStationaryContinueMass exactRoot
+        linarith
+      have hcomplementary :=
+        (isQuittingStationaryGainComplementary_iff_endpointNash
+          SolanVieilleBoundary.boundaryReward exactRoot habsorption).2
+          hactualEndpoint
+      exact
+        FourPlayerPairedSingleton.periodTwo_not_stationaryGainComplementary_of_absorbs
+          exactRoot habsorbs hcomplementary
+    · let requested := apexAccuracy / 2
+      have hrequested : 0 < requested := by
+        dsimp only [requested]
+        linarith
+      obtain ⟨nearRoot, hnearNash, hnearHazard⟩ :=
+        hnear requested hrequested
+      let nearRoots : RootSequence (ι := Fin 4) := fun _ ↦ nearRoot
+      have hclose : ∀ time player,
+          |(nearRoots time player false).toReal - 1| < requested := by
+        intro time player
+        have hsum := quittingRoot_continueProbability_add_quitProbability
+          nearRoot player
+        have hquit0 : 0 ≤ (nearRoot player true).toReal :=
+          ENNReal.toReal_nonneg
+        dsimp only [nearRoots]
+        rw [show (nearRoot player false).toReal - 1 =
+            -(nearRoot player true).toReal by linarith, abs_neg,
+          abs_of_nonneg hquit0]
+        exact hnearHazard player
+      apply hnoApex requested hrequested (by dsimp only [requested]; linarith)
+      refine ⟨nearRoots, hclose, ?_⟩
+      have hprofile :
+          profile SolanVieilleBoundary.boundaryReward nearRoots =
+            quittingStationaryProfile SolanVieilleBoundary.boundaryReward
+              nearRoot := by
+        funext player time history
+        rfl
+      rw [hprofile]
+      exact hnearNash
+  by_contra hnoGap
+  push Not at hnoGap
+  apply hnotApproximable
+  intro requested hrequested
+  obtain ⟨epsilon, hepsilon, hepsilonRequested, root, hnash⟩ :=
+    hnoGap requested hrequested
+  refine ⟨root, ?_⟩
+  exact StochasticGame.IsεAsymptoticNash.mono hnash hepsilonRequested.le
 
 /-- The repository's Figure 2 terminal table satisfies A.1 and A.2. -/
 theorem boundaryReward_assumptions :
