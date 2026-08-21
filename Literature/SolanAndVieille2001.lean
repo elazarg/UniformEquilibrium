@@ -4369,6 +4369,19 @@ private theorem singletonReward_sum_eq_pairMass
   rw [Fin.sum_univ_four]
   fin_cases who <;> simp [figure2Partner] <;> ring
 
+private theorem finiteWindow_singletonRewardContribution_eq_pairMass
+    {roots : RootSequence (ι := Fin 4)}
+    (window : QuittingFiniteRootWindow roots) (who : Fin 4) :
+    window.singletonRewardContribution
+        SolanVieilleBoundary.boundaryReward who =
+      window.singletonMass who +
+        4 * window.singletonMass (figure2Partner who) := by
+  unfold QuittingFiniteRootWindow.singletonRewardContribution
+  simp_rw [boundaryReward_singleton_eq_solo,
+    soloReward_eq_self_or_partner]
+  rw [Fin.sum_univ_four]
+  fin_cases who <;> simp [figure2Partner] <;> ring
+
 /-- Figure 2 payoff identity up to multi-quitter outcomes: player `i`'s
 payoff differs from `rᵢ + 4r_partner(i)` by at most four times collision
 mass. -/
@@ -4603,6 +4616,140 @@ theorem figure2_exists_tail_value_lt_one_add_sqrt
     figure2_singletonMass_ge_two_fifteenths_sub_sixtyOne_mul
       hε0 hclose hnash who
   nlinarith
+
+/-- Lemma 12's first-drop estimate. If player `i` starts above `1 + α`, then
+at the first time its continuation value falls below `1 + √ε`, little of
+`i`'s singleton mass and a controlled positive amount of its partner's mass
+have already occurred. -/
+theorem figure2_exists_firstDrop_with_partnerMass
+    {roots : RootSequence (ι := Fin 4)} {ε α : ℝ}
+    (hε0 : 0 < ε) (hεsmall : ε < 1 / 10000)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4)
+    (hinitial : 1 + α ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who 0)
+    (hα : Real.sqrt ε < α) :
+    ∃ cutoff : ℕ,
+      0 < cutoff ∧
+      quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots who cutoff <
+        1 + Real.sqrt ε ∧
+      (⟨0, cutoff⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤
+        Real.sqrt ε ∧
+      (α - 2 * Real.sqrt ε - 96 * ε) / 4 ≤
+        (⟨0, cutoff⟩ : QuittingFiniteRootWindow roots).singletonMass
+          (figure2Partner who) := by
+  have hexists := figure2_exists_tail_value_lt_one_add_sqrt
+    hε0 hεsmall hclose hnash who
+  let cutoff := Nat.find hexists
+  have hdrop : quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who cutoff <
+        1 + Real.sqrt ε := Nat.find_spec hexists
+  have hcutoffPos : 0 < cutoff := by
+    by_contra hnot
+    have hzero : cutoff = 0 := Nat.eq_zero_of_not_pos hnot
+    rw [hzero] at hdrop
+    linarith
+  have hbefore : ∀ offset, offset < cutoff →
+      1 + Real.sqrt ε ≤ quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots who offset := by
+    intro offset hoffset
+    exact le_of_not_gt (Nat.find_min hexists hoffset)
+  have hsqrt0 : 0 ≤ Real.sqrt ε := Real.sqrt_nonneg ε
+  have hsqrtPos : 0 < Real.sqrt ε := Real.sqrt_pos.2 hε0
+  have hsqrtSq : Real.sqrt ε ^ 2 = ε := Real.sq_sqrt hε0.le
+  have hchronology := figure2_delta_mul_finiteSingletonMass_le_epsilon
+    (by linarith : ε < 1) hsqrt0 hclose hnash who cutoff hbefore
+  have hown0 :=
+    (⟨0, cutoff⟩ : QuittingFiniteRootWindow roots).singletonMass_nonneg who
+  have hown :
+      (⟨0, cutoff⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤
+        Real.sqrt ε := by
+    nlinarith
+  let window : QuittingFiniteRootWindow roots := ⟨0, cutoff⟩
+  have hdecomp := window.terminalValue_eq_singleton_add_collision_add_survival_mul
+    SolanVieilleBoundary.boundaryReward who
+  have hsingleton :=
+    finiteWindow_singletonRewardContribution_eq_pairMass window who
+  rw [hsingleton] at hdecomp
+  have hcollisionAbs := window.abs_collisionRewardContribution_le
+    SolanVieilleBoundary.boundaryReward who boundaryReward_abs_le_four
+  have hcollisionReward := (abs_le.mp hcollisionAbs).2
+  have hcollisionFinite : window.collisionMass ≤ 24 * ε :=
+    (finiteWindow_collisionMass_le_sequenceCollisionMass roots 0 cutoff).trans
+      (figure2_collisionMass_le_twentyFour_mul hε0 hclose)
+  have hsurvival0 := quittingJointSurvivalWeight_nonneg roots 0 cutoff
+  have hsurvival1 := quittingJointSurvivalWeight_le_one roots 0 cutoff
+  have htail : quittingJointSurvivalWeight roots 0 cutoff *
+      quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots who cutoff ≤
+      1 + Real.sqrt ε := by
+    calc
+      _ ≤ quittingJointSurvivalWeight roots 0 cutoff *
+          (1 + Real.sqrt ε) :=
+        mul_le_mul_of_nonneg_left hdrop.le hsurvival0
+      _ ≤ 1 * (1 + Real.sqrt ε) :=
+        mul_le_mul_of_nonneg_right hsurvival1 (by positivity)
+      _ = 1 + Real.sqrt ε := one_mul _
+  refine ⟨cutoff, hcutoffPos, hdrop, hown, ?_⟩
+  change (α - 2 * Real.sqrt ε - 96 * ε) / 4 ≤
+    window.singletonMass (figure2Partner who)
+  have hdecomp0 : quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who 0 =
+        window.singletonMass who +
+          4 * window.singletonMass (figure2Partner who) +
+          window.collisionRewardContribution
+            SolanVieilleBoundary.boundaryReward who +
+          quittingJointSurvivalWeight roots 0 cutoff *
+            quittingRootSequenceTerminalValue
+              SolanVieilleBoundary.boundaryReward roots who cutoff := by
+    simpa [window] using hdecomp
+  change window.singletonMass who ≤ Real.sqrt ε at hown
+  linarith
+
+private theorem figure2Partner_partner (who : Fin 4) :
+    figure2Partner (figure2Partner who) = who := by
+  fin_cases who <;> rfl
+
+/-- Corollary 13, with constants adapted to the collision allowance: two
+partners cannot both begin more than `7√ε` above their solo-quitting value. -/
+theorem figure2_not_both_partners_high
+    {roots : RootSequence (ι := Fin 4)} {ε α : ℝ}
+    (hε0 : 0 < ε) (hεsmall : ε < 1 / 10000)
+    (hclose : ∀ time player,
+      |(roots time player false).toReal - 1| < ε)
+    (hnash : epsilonEquilibrium SolanVieilleBoundary.boundaryReward ε
+      (profile SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4) (hα : 7 * Real.sqrt ε < α) :
+    ¬ (1 + α ≤ quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots who 0 ∧
+        1 + α ≤ quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots (figure2Partner who) 0) := by
+  rintro ⟨hwhoInitial, hpartnerInitial⟩
+  have hsqrtPos : 0 < Real.sqrt ε := Real.sqrt_pos.2 hε0
+  have hsqrtSq : Real.sqrt ε ^ 2 = ε := Real.sq_sqrt hε0.le
+  have hsqrtSmall : Real.sqrt ε < 1 / 100 := by
+    nlinarith
+  have hmargin : Real.sqrt ε <
+      (α - 2 * Real.sqrt ε - 96 * ε) / 4 := by
+    nlinarith
+  obtain ⟨whoCutoff, _, _, hwhoSmall, hpartnerLarge⟩ :=
+    figure2_exists_firstDrop_with_partnerMass hε0 hεsmall hclose hnash who
+      hwhoInitial (by linarith)
+  obtain ⟨partnerCutoff, _, _, hpartnerSmall, hwhoLarge⟩ :=
+    figure2_exists_firstDrop_with_partnerMass hε0 hεsmall hclose hnash
+      (figure2Partner who) hpartnerInitial (by linarith)
+  rw [figure2Partner_partner] at hwhoLarge
+  rcases le_total whoCutoff partnerCutoff with hcutoffs | hcutoffs
+  · have hmono := finiteWindow_singletonMass_mono_fuel
+      roots 0 (figure2Partner who) hcutoffs
+    nlinarith
+  · have hmono := finiteWindow_singletonMass_mono_fuel
+      roots 0 who hcutoffs
+    nlinarith
 
 /-- The first omitted Figure 2 assertion: for all sufficiently small positive
 `ε`, the game has no stationary `ε`-equilibrium. The paper explicitly omits
