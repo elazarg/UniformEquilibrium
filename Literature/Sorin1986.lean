@@ -6317,12 +6317,167 @@ theorem example5_sharp (N : ℕ) [NeZero N] (lam : ℝ)
   sorry
 
 /-! Proposition 5 is a finite-horizon splice using convexity of `Dₙ`. -/
+private theorem finiteFeasiblePayoffs_succ_eq_of_convex
+    (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
+    (hconvex : Convex ℝ (G.finiteFeasiblePayoffs n)) :
+    G.finiteFeasiblePayoffs (n + 1) = G.finiteFeasiblePayoffs n := by
+  let horizon : G.Horizon := ⟨n, hn⟩
+  have hC : G.finiteFeasiblePayoffs n = G.correlatedFeasiblePayoffs :=
+    (lemma_1_Dn_convex_iff G horizon).mp hconvex
+  apply Set.Subset.antisymm
+  · intro payoff hpayoff
+    rw [hC]
+    exact lemma_1_Dn_subset_C G ⟨n + 1, by omega⟩ hpayoff
+  · intro payoff hpayoff
+    by_cases hn1 : n = 1
+    · subst n
+      have hD1 : G.oneStageFeasiblePayoffs =
+          G.correlatedFeasiblePayoffs := by
+        rw [← finiteFeasiblePayoffs_one_eq_oneStageFeasiblePayoffs]
+        exact hC
+      have hD2 := finiteFeasiblePayoffs_eq_correlated_of_oneStage_eq
+        G hD1 ⟨2, by omega⟩
+      change payoff ∈ G.finiteFeasiblePayoffsOnHorizon ⟨2, by omega⟩
+      rw [hD2, ← hC]
+      exact hpayoff
+    · have hn2 : 1 < n := by omega
+      obtain ⟨profile, hprofile⟩ := hpayoff
+      let stage : ℕ → Payoff G.Player := fun time ↦
+        fun who ↦ G.repeatedGame.expectedStagePayoff
+          profile G.repeatedInitial time who
+      let first := G.finitePayoff 1 profile
+      let tail := ((n - 1 : ℕ) : ℝ)⁻¹ •
+        ∑ time ∈ Finset.range (n - 1), stage (time + 1)
+      have hfirstD1 : first ∈ G.oneStageFeasiblePayoffs := by
+        rw [← finiteFeasiblePayoffs_one_eq_oneStageFeasiblePayoffs]
+        exact ⟨profile, rfl⟩
+      have hfirstDn : first ∈ G.finiteFeasiblePayoffs n :=
+        lemma_1_D1_subset_Dn G horizon hfirstD1
+      have htailC : tail ∈ G.correlatedFeasiblePayoffs := by
+        dsimp only [tail]
+        rw [Finset.smul_sum]
+        apply G.correlatedFeasiblePayoffs_convex.sum_mem
+        · intro _ _
+          positivity
+        · rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+          apply mul_inv_cancel₀
+          exact_mod_cast (by omega : n - 1 ≠ 0)
+        · intro time htime
+          dsimp only [stage]
+          exact expectedStagePayoff_mem_correlatedFeasiblePayoffs
+            G profile (time + 1)
+      have htailDn : tail ∈ G.finiteFeasiblePayoffs n := by
+        rwa [hC]
+      have hfirstEq : first = stage 0 := by
+        dsimp only [first, stage]
+        funext who
+        unfold FiniteStageGame.finitePayoff
+        rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+        simp
+      have hdecomp :
+          (n : ℝ) • G.finitePayoff n profile =
+            first + (n - 1 : ℝ) • tail := by
+        rw [cast_smul_finitePayoff_eq_sum, hfirstEq]
+        ext who
+        simp only [Finset.sum_apply, Pi.add_apply, Pi.smul_apply,
+          smul_eq_mul, stage, tail]
+        conv_lhs =>
+          rw [show n = (n - 1) + 1 by omega]
+          rw [Finset.sum_range_succ']
+        simp only [Nat.cast_sub (by omega : 1 ≤ n)]
+        have hnsub : (n : ℝ) - 1 ≠ 0 := by
+          intro hzero
+          apply hn1
+          have : (n : ℝ) = 1 := by linarith
+          exact_mod_cast this
+        norm_num only [Nat.cast_one]
+        rw [← mul_assoc, mul_inv_cancel₀ hnsub, one_mul]
+        abel
+      let coefficient : ℝ := (n : ℝ)⁻¹ ^ 2
+      let splice := coefficient • first + (1 - coefficient) • tail
+      have hcoefficient0 : 0 ≤ coefficient := by
+        dsimp only [coefficient]
+        positivity
+      have hcoefficient1 : coefficient ≤ 1 := by
+        dsimp only [coefficient]
+        have hnreal : 1 ≤ (n : ℝ) := by
+          exact_mod_cast (Nat.one_le_iff_ne_zero.mpr hn.ne')
+        have hinv : (n : ℝ)⁻¹ ≤ 1 := inv_le_one_of_one_le₀ hnreal
+        nlinarith [sq_nonneg ((n : ℝ)⁻¹),
+          mul_self_le_mul_self (inv_nonneg.mpr (by positivity)) hinv]
+      have hsplice : splice ∈ G.finiteFeasiblePayoffs n := by
+        exact hconvex hfirstDn htailDn hcoefficient0
+          (by linarith) (by ring)
+      have hscaledFirst : first ∈
+          scaleSet (1 : ℝ) (G.finiteFeasiblePayoffs 1) := by
+        refine ⟨first, ?_, by simp⟩
+        rw [finiteFeasiblePayoffs_one_eq_oneStageFeasiblePayoffs]
+        exact hfirstD1
+      have hscaledSplice : (n : ℝ) • splice ∈
+          scaleSet (n : ℝ) (G.finiteFeasiblePayoffs n) :=
+        ⟨splice, hsplice, rfl⟩
+      have hiterated : (n : ℝ) • splice ∈
+          iteratedAddSet 1
+            (scaleSet (n : ℝ) (G.finiteFeasiblePayoffs n)) := by
+        refine ⟨fun _ ↦ (n : ℝ) • splice, fun _ ↦ hscaledSplice, ?_⟩
+        simp
+      have hadd : (n : ℝ) • splice + first ∈
+          addSet
+            (iteratedAddSet 1
+              (scaleSet (n : ℝ) (G.finiteFeasiblePayoffs n)))
+            (scaleSet (1 : ℝ) (G.finiteFeasiblePayoffs 1)) :=
+        ⟨(n : ℝ) • splice, hiterated, first, hscaledFirst, by simp⟩
+      have hinclusion := lemma_3_feasible G (n + 1) 1 n 1 (by omega)
+      have hadd' : (n : ℝ) • splice + first ∈
+          addSet
+            (iteratedAddSet 1
+              (scaleSet (n : ℝ) (G.finiteFeasiblePayoffs n)))
+            (scaleSet ((1 : ℕ) : ℝ) (G.finiteFeasiblePayoffs 1)) := by
+        simpa only [Nat.cast_one] using hadd
+      obtain ⟨realized, hrealized, hscaled⟩ := hinclusion hadd'
+      obtain ⟨realizedProfile, hrealizedPayoff⟩ := hrealized
+      refine ⟨realizedProfile, ?_⟩
+      have htarget :
+          (n : ℝ) • splice + first =
+            (n + 1 : ℝ) • payoff := by
+        rw [← hprofile]
+        dsimp only [splice, coefficient]
+        ext who
+        have hdecompWho := congrFun hdecomp who
+        simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+          at hdecompWho ⊢
+        have hnreal : (n : ℝ) ≠ 0 := by positivity
+        field_simp [hnreal]
+        nlinarith
+      have hsame : (n + 1 : ℝ) • realized =
+          (n + 1 : ℝ) • payoff := by
+        norm_num [Nat.cast_add, Nat.cast_one] at hscaled ⊢
+        exact hscaled.symm.trans htarget
+      have hrealizedEq : realized = payoff :=
+        smul_right_injective (Payoff G.Player)
+          (by positivity : (n + 1 : ℝ) ≠ 0) hsame
+      rw [hrealizedPayoff, hrealizedEq]
+
 theorem proposition_5 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
     (hconvex : Convex ℝ (G.finiteFeasiblePayoffs n)) :
     G.finiteFeasiblePayoffs (n + 1) = G.finiteFeasiblePayoffs n ∧
       ∀ m, n < m →
         G.finiteFeasiblePayoffs m = G.correlatedFeasiblePayoffs := by
-  sorry
+  have hnext := finiteFeasiblePayoffs_succ_eq_of_convex G n hn hconvex
+  have hC : G.finiteFeasiblePayoffs n = G.correlatedFeasiblePayoffs :=
+    (lemma_1_Dn_convex_iff G ⟨n, hn⟩).mp hconvex
+  constructor
+  · exact hnext
+  · intro m hm
+    have hbase : G.finiteFeasiblePayoffs (n + 1) =
+        G.correlatedFeasiblePayoffs := hnext.trans hC
+    exact Nat.le_induction hbase (fun k hk ih ↦ by
+      have hkpos : 0 < k := by omega
+      have hkconvex : Convex ℝ (G.finiteFeasiblePayoffs k) := by
+        rw [ih]
+        exact G.correlatedFeasiblePayoffs_convex
+      exact (finiteFeasiblePayoffs_succ_eq_of_convex
+        G k hkpos hkconvex).trans ih) m (by omega)
 
 /-- Equation (19). -/
 theorem equation_19 (G : FiniteStageGame) (n : ℕ) (hn : 0 < n)
