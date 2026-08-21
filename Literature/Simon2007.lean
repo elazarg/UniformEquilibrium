@@ -4626,7 +4626,7 @@ private theorem ReturnValueData.valueY_sub_value_le_of_positive
       letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
       exact (show FirstReturnProbability P S A x y t ≠ ⊤ from measure_ne_top _ _)
     rw [← returnProbability_eq_tsum_firstReturnProbability P S A x y] at hreal
-    exact hreal
+    simpa [a, q] using hreal.symm
   have hvalueBound (t : P.X) :
       ‖P.valueX t‖ ≤ ‖P.valueY z w‖ + P.valueDifferenceBound := by
     calc
