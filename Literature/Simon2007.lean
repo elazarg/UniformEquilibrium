@@ -883,6 +883,69 @@ private theorem DiscreteDecisionProcess.integral_increment_stageKernel_eq_zero
   simp_rw [hzero]
   simp
 
+/-- Harmonicity makes the sampled `Y`-value invariant under one complete DDP step. -/
+private theorem DiscreteDecisionProcess.integral_valueY_stageKernel
+    (P : DiscreteDecisionProcess) (n : ℕ)
+    (history : ∀ _ : Finset.Iic n, DDPStage P) :
+    ∫ next, P.valueY next.1 next.2 ∂P.stageKernel n history =
+      P.valueY (history ⟨n, Finset.mem_Iic.mpr le_rfl⟩).1
+        (history ⟨n, Finset.mem_Iic.mpr le_rfl⟩).2 := by
+  let current := history ⟨n, Finset.mem_Iic.mpr le_rfl⟩
+  have hbound : ∀ next : DDPStage P,
+      ‖P.valueY next.1 next.2‖ ≤
+        ‖P.valueY current.1 current.2‖ + P.valueDifferenceBound := by
+    intro next
+    calc
+      ‖P.valueY next.1 next.2‖ ≤
+          ‖P.valueY next.1 next.2 - P.valueY current.1 current.2‖ +
+            ‖P.valueY current.1 current.2‖ := by
+        simpa only [sub_add_cancel] using
+          norm_add_le (P.valueY next.1 next.2 - P.valueY current.1 current.2)
+            (P.valueY current.1 current.2)
+      _ ≤ P.valueDifferenceBound + ‖P.valueY current.1 current.2‖ := by
+        gcongr
+        simpa only [Real.norm_eq_abs, abs_sub_comm] using
+          (P.valueDifference current.1 next.1 current.2 next.2).2.2
+      _ = _ := by ring
+  have hintegrable : Integrable (fun next : DDPStage P => P.valueY next.1 next.2)
+      (P.stepStagePMF current).toMeasure := by
+    letI : IsProbabilityMeasure (P.stepStagePMF current).toMeasure :=
+      PMF.toMeasure.isProbabilityMeasure _
+    exact Integrable.of_bound Measurable.of_discrete.aestronglyMeasurable
+      (‖P.valueY current.1 current.2‖ + P.valueDifferenceBound)
+      (ae_of_all _ hbound)
+  have hsummable : Summable fun next : DDPStage P =>
+      (P.stepStagePMF current next).toReal * P.valueY next.1 next.2 :=
+    PMF.summable_toReal_mul_of_norm_le (P.stepStagePMF current)
+      (fun next => P.valueY next.1 next.2) hbound
+  change (∫ next, P.valueY next.1 next.2 ∂(P.stepStagePMF current).toMeasure) = _
+  rw [PMF.integral_eq_tsum _ _ hintegrable]
+  simp only [smul_eq_mul]
+  rw [hsummable.tsum_sigma]
+  have hinner (x : P.X) :
+      (∑' y : P.Y x,
+        (P.stepStagePMF current ⟨x, y⟩).toReal * P.valueY x y) =
+        (P.move current.1 current.2 x).toReal * P.valueX x := by
+    have hvalueBound : ∀ y : P.Y x,
+        ‖P.valueY x y‖ ≤ ‖P.valueX x‖ + P.valueDifferenceBound := by
+      intro y
+      calc
+        ‖P.valueY x y‖ ≤ ‖P.valueY x y - P.valueX x‖ + ‖P.valueX x‖ := by
+          simpa only [sub_add_cancel] using
+            norm_add_le (P.valueY x y - P.valueX x) (P.valueX x)
+        _ ≤ P.valueDifferenceBound + ‖P.valueX x‖ := by
+          gcongr
+          simpa only [Real.norm_eq_abs] using (P.valueDifference x x y y).2.1
+        _ = _ := by ring
+    have hsummableY : Summable fun y : P.Y x =>
+        (P.choose x y).toReal * P.valueY x y :=
+      PMF.summable_toReal_mul_of_norm_le (P.choose x) (P.valueY x) hvalueBound
+    simp_rw [P.stepStagePMF_apply, ENNReal.toReal_mul, mul_assoc]
+    rw [Summable.tsum_mul_left (P.move current.1 current.2 x).toReal hsummableY]
+    rw [← P.harmonicX x]
+  simp_rw [hinner]
+  exact P.harmonicY current.1 current.2 |>.symm
+
 /-- The raw infinite stage law generated from an arbitrary initial stage distribution. -/
 private def DiscreteDecisionProcess.rawLawWithInitial
     (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
@@ -910,6 +973,119 @@ private instance DiscreteDecisionProcess.isProbabilityMeasure_rawLawFrom
 /-- The sampled-stage type is inhabited because its initial-stage PMF has nonempty support. -/
 private instance ddpStageNonempty (P : DiscreteDecisionProcess) : Nonempty (DDPStage P) :=
   ⟨Classical.choose (P.initialStagePMF P.initial).support_nonempty⟩
+
+/-- The harmonic value carried by the sampled action at raw stage `n`. -/
+private def DiscreteDecisionProcess.rawStageValue
+    (P : DiscreteDecisionProcess) (n : ℕ) (stage : ℕ → DDPStage P) : ℝ :=
+  P.valueY (stage n).1 (stage n).2
+
+private theorem DiscreteDecisionProcess.rawStageValue_stronglyAdapted
+    (P : DiscreteDecisionProcess) :
+    StronglyAdapted (Filtration.piLE (X := fun _ : ℕ => DDPStage P)) P.rawStageValue := by
+  intro n
+  rw [Filtration.piLE_eq_comap_frestrictLe]
+  apply Measurable.stronglyMeasurable
+  have hvalue : Measurable (fun stage : DDPStage P => P.valueY stage.1 stage.2) :=
+    Measurable.of_discrete
+  exact hvalue.comp
+    ((measurable_pi_apply (X := fun _ : Finset.Iic n => DDPStage P)
+      ⟨n, Finset.mem_Iic.mpr le_rfl⟩).comp
+        (comap_measurable (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n)))
+
+private theorem DiscreteDecisionProcess.integrable_rawStageValue
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) (n : ℕ) :
+    Integrable (P.rawStageValue n) (P.rawLawWithInitial initial) := by
+  let initialAction := Classical.choose (P.choose P.initial).support_nonempty
+  have hbound (stage : ℕ → DDPStage P) :
+      ‖P.rawStageValue n stage‖ ≤ ‖P.valueX P.initial‖ + P.valueDifferenceBound := by
+    calc
+      ‖P.rawStageValue n stage‖ ≤
+          ‖P.rawStageValue n stage - P.valueX P.initial‖ + ‖P.valueX P.initial‖ := by
+        simpa only [sub_add_cancel] using
+          norm_add_le (P.rawStageValue n stage - P.valueX P.initial) (P.valueX P.initial)
+      _ ≤ P.valueDifferenceBound + ‖P.valueX P.initial‖ := by
+        gcongr
+        simpa only [DiscreteDecisionProcess.rawStageValue, Real.norm_eq_abs] using
+          (P.valueDifference (stage n).1 P.initial (stage n).2 initialAction).2.1
+      _ = _ := by ring
+  exact Integrable.of_bound
+    ((P.rawStageValue_stronglyAdapted n).mono
+      (Filtration.le (Filtration.piLE (X := fun _ : ℕ => DDPStage P)) n)
+        |>.aestronglyMeasurable)
+    (‖P.valueX P.initial‖ + P.valueDifferenceBound) (ae_of_all _ hbound)
+
+/-- The sampled action values form a martingale under every raw initial-stage law. -/
+private theorem DiscreteDecisionProcess.rawStageValue_martingale
+    (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
+    Martingale P.rawStageValue (Filtration.piLE (X := fun _ : ℕ => DDPStage P))
+      (P.rawLawWithInitial initial) := by
+  let filtration := Filtration.piLE (X := fun _ : ℕ => DDPStage P)
+  apply martingale_of_condExp_sub_eq_zero_nat P.rawStageValue_stronglyAdapted
+    (P.integrable_rawStageValue initial)
+  intro n
+  let nextValue : DDPStage P → ℝ := fun next => P.valueY next.1 next.2
+  have hnext : P.rawStageValue (n + 1) =
+      fun stage : ℕ → DDPStage P => nextValue (stage (n + 1)) := rfl
+  have hconditional := condExp_ae_eq_integral_condDistrib
+    (μ := P.rawLawWithInitial initial)
+    (X := Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n)
+    (Y := fun stage : ℕ → DDPStage P => stage (n + 1))
+    (f := nextValue)
+    (Preorder.measurable_frestrictLe (X := fun _ : ℕ => DDPStage P) n)
+    (measurable_pi_apply (n + 1)).aemeasurable
+    Measurable.of_discrete.stronglyMeasurable (P.integrable_rawStageValue initial (n + 1))
+  have hkernel := Kernel.condDistrib_trajMeasure
+    (X := fun _ : ℕ => DDPStage P) (μ₀ := initial.toMeasure)
+    (κ := P.stageKernel) (a := n)
+  have hkernelOnPath := ae_of_ae_map
+    (Preorder.measurable_frestrictLe
+      (X := fun _ : ℕ => DDPStage P) n).aemeasurable hkernel
+  have hfiltration : filtration n = MeasurableSpace.comap
+      (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) inferInstance :=
+    Filtration.piLE_eq_comap_frestrictLe n
+  rw [hfiltration]
+  have hsub := condExp_sub (P.integrable_rawStageValue initial (n + 1))
+    (P.integrable_rawStageValue initial n)
+    (MeasurableSpace.comap
+      (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) inferInstance)
+  have hcurrent : (P.rawLawWithInitial initial)[P.rawStageValue n |
+      MeasurableSpace.comap
+        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) inferInstance] =
+      P.rawStageValue n := by
+    have hle : MeasurableSpace.comap
+        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) inferInstance ≤
+        (inferInstance : MeasurableSpace (ℕ → DDPStage P)) := by
+      rw [← hfiltration]
+      exact filtration.le n
+    apply condExp_of_stronglyMeasurable hle
+    · rw [← hfiltration]
+      exact P.rawStageValue_stronglyAdapted n
+    · exact P.integrable_rawStageValue initial n
+  rw [hcurrent] at hsub
+  rw [hnext] at hsub
+  rw [hnext]
+  filter_upwards [hsub, hconditional, hkernelOnPath] with stage hsub' hconditional' hkernel'
+  rw [hsub']
+  change (P.rawLawWithInitial initial)[fun path => nextValue (path (n + 1)) |
+      MeasurableSpace.comap
+        (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) inferInstance] stage -
+      P.rawStageValue n stage = 0
+  have hconditionalPoint :
+      (P.rawLawWithInitial initial)[fun path => nextValue (path (n + 1)) |
+        MeasurableSpace.comap
+          (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n) inferInstance] stage =
+        ∫ next, nextValue next ∂
+          (condDistrib (fun path : ℕ → DDPStage P => path (n + 1))
+            (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n)
+            (P.rawLawWithInitial initial)) (Preorder.frestrictLe n stage) := hconditional'
+  rw [hconditionalPoint]
+  change (condDistrib (fun path : ℕ → DDPStage P => path (n + 1))
+      (Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) n)
+      (P.rawLawWithInitial initial))
+      (Preorder.frestrictLe n stage) =
+        P.stageKernel n (Preorder.frestrictLe n stage) at hkernel'
+  rw [hkernel', P.integral_valueY_stageKernel]
+  simp [DiscreteDecisionProcess.rawStageValue]
 
 /-- Cumulative sampled-stage increments through stage `n` on the raw trajectory space. -/
 private def DiscreteDecisionProcess.rawAdvantage
