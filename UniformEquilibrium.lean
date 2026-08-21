@@ -345,6 +345,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanMinimizer
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanDebtMonotonicity
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier
 import UniformEquilibrium.Quitting.Stationary.RegretDichotomy
+import UniformEquilibrium.Quitting.Stationary.ApproximabilityCompactification
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDynamicDebtProvenance
 import UniformEquilibrium.Quitting.Root.SeparatedTerminalAnchor
 import UniformEquilibrium.Quitting.Boundary.Holonomy.All

@@ -1365,6 +1365,7 @@ import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixMetric
+import UniformEquilibrium.Quitting.Stationary.ApproximabilityCompactification
 import UniformEquilibrium.Quitting.Stationary.BestResponse
 import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
