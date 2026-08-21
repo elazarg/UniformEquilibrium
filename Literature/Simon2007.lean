@@ -3659,6 +3659,24 @@ private def FirstReturnAtTime (P : DiscreteDecisionProcess) (A : Set P.X)
 def ReturnsTo (P : DiscreteDecisionProcess) (A : Set P.X) : Set (DDPPath P) :=
   ⋃ z ∈ A, FirstReturnAt P A z
 
+/-- Returning to `A` is equivalent to visiting it at some positive time. -/
+private theorem mem_returnsTo_iff (P : DiscreteDecisionProcess) (A : Set P.X)
+    (p : DDPPath P) : p ∈ ReturnsTo P A ↔ ∃ k, 0 < k ∧ p.x k ∈ A := by
+  classical
+  constructor
+  · rw [ReturnsTo]
+    simp only [mem_iUnion]
+    rintro ⟨z, _hz, k, hk, hx, hz, _hbefore⟩
+    exact ⟨k, hk, hx.symm ▸ hz⟩
+  · intro hexists
+    let k := Nat.find hexists
+    have hk := Nat.find_spec hexists
+    rw [ReturnsTo]
+    refine mem_iUnion.2 ⟨p.x k, mem_iUnion.2 ⟨hk.2, ?_⟩⟩
+    refine ⟨k, hk.1, rfl, hk.2, ?_⟩
+    intro i hi hik hiA
+    exact (not_lt_of_ge (Nat.find_min' hexists ⟨hi, hiA⟩)) hik
+
 /-- State-coordinate projections are measurable in the cylinder sigma algebra. -/
 private theorem DDPPath.measurable_x (P : DiscreteDecisionProcess) (i : ℕ) :
     Measurable (fun p : DDPPath P => p.x i) := by
@@ -4706,6 +4724,95 @@ private theorem DiscreteDecisionProcess.rawLawFrom_stage_eq_state_mul_choose
   rw [hstateUnion, measure_iUnion hpairwiseC hmeasurableC]
   simp_rw [hmeasure]
   exact ENNReal.tsum_mul_right
+
+/-- The raw event that the displayed sampled stage is the last visit to `A`. -/
+private def DiscreteDecisionProcess.rawLastExitAtStage
+    (P : DiscreteDecisionProcess) (A : Set P.X) (i : ℕ) (current : DDPStage P) :
+    Set (ℕ → DDPStage P) :=
+  P.rawShift i ⁻¹' (DDPPath.ofRaw P ⁻¹' (ReturnsTo P A)ᶜ) ∩
+    {stage | stage i = current}
+
+/-- Occupation mass times `m_x` is the sum of last-exit masses over actions at `x`. -/
+private theorem DiscreteDecisionProcess.rawLawFrom_state_mul_noReturn_eq_tsum
+    (P : DiscreteDecisionProcess) (S : DDPSemantics P) (start : P.X)
+    (A : Set P.X) (i : ℕ) (x : P.X) :
+    (P.rawLawFrom start {stage | (stage i).1 = x}).toReal *
+        NoReturnProbability P S A x =
+      ∑' y : P.Y x,
+        (P.rawLawFrom start (P.rawLastExitAtStage A i ⟨x, y⟩)).toReal := by
+  rw [noReturnProbability_eq_tsum P S A x]
+  rw [← tsum_mul_left]
+  apply tsum_congr
+  intro y
+  rw [DiscreteDecisionProcess.rawLastExitAtStage]
+  rw [P.rawLawFrom_inter_shift_noReturn_stageAt S start A i ⟨x, y⟩]
+  rw [P.rawLawFrom_stage_eq_state_mul_choose S start i x y]
+  rw [ENNReal.toReal_mul, ENNReal.toReal_mul]
+  rw [ENNReal.toReal_sub_of_le]
+  · simp only [ENNReal.toReal_one]
+    ring_nf
+  · letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    change S.afterAction x y (ReturnsTo P A) ≤ 1
+    calc
+      S.afterAction x y (ReturnsTo P A) ≤ S.afterAction x y Set.univ :=
+        measure_mono (subset_univ _)
+      _ = 1 := measure_univ
+  · simp
+
+/-- Last exits from `A`, indexed by their time and sampled stage, have total mass at most one. -/
+private theorem DiscreteDecisionProcess.tsum_rawLastExitAtStage_le_one
+    (P : DiscreteDecisionProcess) (start : P.X) (A : Set P.X) :
+    (∑' index : ℕ × {current : DDPStage P // current.1 ∈ A},
+      (P.rawLawFrom start
+        (P.rawLastExitAtStage A index.1 index.2.1)).toReal) ≤ 1 := by
+  classical
+  let K := ℕ × {current : DDPStage P // current.1 ∈ A}
+  let L : K → Set (ℕ → DDPStage P) := fun index =>
+    P.rawLastExitAtStage A index.1 index.2.1
+  have hmeasurable (index : K) : MeasurableSet (L index) := by
+    apply MeasurableSet.inter
+    · exact (P.measurable_rawShift index.1)
+        ((DDPPath.measurable_ofRaw P) (measurableSet_returnsTo P A).compl)
+    · exact show MeasurableSet
+          ((fun stage : ℕ → DDPStage P => stage index.1) ⁻¹' {index.2.1}) from
+        (measurable_pi_apply index.1) (measurableSet_singleton index.2.1)
+  have hpairwise : Pairwise (Function.onFun Disjoint L) := by
+    intro first second hne
+    rw [Function.onFun, Set.disjoint_left]
+    intro stage hfirst hsecond
+    rcases hfirst with ⟨hfirstNoReturn, hfirstStage⟩
+    rcases hsecond with ⟨hsecondNoReturn, hsecondStage⟩
+    by_cases htime : first.1 = second.1
+    · apply hne
+      apply Prod.ext htime
+      apply Subtype.ext
+      exact hfirstStage.symm.trans (htime ▸ hsecondStage)
+    · rcases lt_or_gt_of_ne htime with hlt | hgt
+      · apply hfirstNoReturn
+        rw [mem_returnsTo_iff]
+        refine ⟨second.1 - first.1, by omega, ?_⟩
+        change (stage (first.1 + (second.1 - first.1))).1 ∈ A
+        rw [Nat.add_sub_of_le hlt.le]
+        exact hsecondStage.symm ▸ second.2.2
+      · apply hsecondNoReturn
+        rw [mem_returnsTo_iff]
+        refine ⟨first.1 - second.1, by omega, ?_⟩
+        change (stage (second.1 + (first.1 - second.1))).1 ∈ A
+        rw [Nat.add_sub_of_le hgt.le]
+        exact hfirstStage.symm ▸ first.2.2
+  have hmeasure : (∑' index : K, P.rawLawFrom start (L index)) ≤ 1 := by
+    rw [← measure_iUnion hpairwise hmeasurable]
+    letI : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
+    calc
+      P.rawLawFrom start (⋃ index, L index) ≤ P.rawLawFrom start Set.univ :=
+        measure_mono (subset_univ _)
+      _ = 1 := measure_univ
+  have hfinite (index : K) : P.rawLawFrom start (L index) ≠ ⊤ := by
+    letI : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
+    exact measure_ne_top _ _
+  have hreal := ENNReal.toReal_mono (by simp : (1 : ℝ≥0∞) ≠ ⊤) hmeasure
+  rw [ENNReal.tsum_toReal_eq hfinite] at hreal
+  simpa only [ENNReal.toReal_one, K, L] using hreal
 
 /-- A lower bound for all values in a decision process. -/
 def IsDDPValueLowerBound (P : DiscreteDecisionProcess) (L : ℝ) : Prop :=
