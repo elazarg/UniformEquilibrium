@@ -151,6 +151,56 @@ theorem quittingRelativePureTimeTerminalValue_sub_prefixTransport
     quittingRootSequencePureTimeTerminalValue,
     quittingRootSequenceHazardTerminalValue, firstRoots, secondRoots] using hprefix
 
+/-- **Exact first-disagreement decoder.** If one pure plan quits at the
+reached date and the other uses a delay measured from that date (including
+`Never`), their source payoff difference is opponent survival to the date
+times immediate-Quit payoff minus the delayed plan's reached-suffix payoff.
+
+For a positive finite delay this is the literal first date at which the two
+plans differ. No best-response attainment or positivity assumption is used. -/
+theorem quittingPureTimeFirstDisagreementValue_sub_eq_opponentSurvival_mul
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ)
+    (later : Option ℕ) :
+    quittingRootSequencePureTimeTerminalValue reward roots who
+          (some start) 0 -
+        quittingRootSequencePureTimeTerminalValue reward roots who
+          (quittingAbsolutePureTime start later) 0 =
+      quittingOpponentSurvivalWeight roots who 0 start *
+        (quittingFixedOpponentsQuitValue reward roots who start -
+          quittingRootSequenceRelativePureTimeTerminalValue
+            reward roots who start later) := by
+  have htransport :=
+    quittingRelativePureTimeTerminalValue_sub_prefixTransport
+      reward roots who start (some 0) later
+  simp only [quittingRootSequenceRelativePureTimeTerminalValue,
+    quittingAbsolutePureTime, Nat.add_zero] at htransport
+  rw [
+    quittingRootSequencePureTimeTerminalValue_some_self_eq_fixedOpponents]
+    at htransport
+  simpa [quittingRootSequenceRelativePureTimeTerminalValue,
+    quittingAbsolutePureTime] using htransport.symm
+
+/-- Absolute-date specialization of the first-disagreement decoder for two
+finite quit times. -/
+theorem quittingPureTimeEarlierValue_sub_later_eq_opponentSurvival_mul
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (earlier later : ℕ)
+    (hle : earlier ≤ later) :
+    quittingRootSequencePureTimeTerminalValue reward roots who
+          (some earlier) 0 -
+        quittingRootSequencePureTimeTerminalValue reward roots who
+          (some later) 0 =
+      quittingOpponentSurvivalWeight roots who 0 earlier *
+        (quittingFixedOpponentsQuitValue reward roots who earlier -
+          quittingRootSequencePureTimeTerminalValue reward roots who
+            (some later) earlier) := by
+  have hmain :=
+    quittingPureTimeFirstDisagreementValue_sub_eq_opponentSurvival_mul
+      reward roots who earlier (some (later - earlier))
+  simpa [quittingRootSequenceRelativePureTimeTerminalValue,
+    quittingAbsolutePureTime, Nat.add_sub_of_le hle] using hmain
+
 /-! ## The unconditional suffix regret inequality -/
 
 /-- A source passport's reached-suffix regret, weighted by opponent survival

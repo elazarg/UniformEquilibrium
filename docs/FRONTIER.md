@@ -99,10 +99,28 @@ and partial frozen microcycle by `O(1/N)`. Independently,
 absorbs every real circulation coefficient into a legal stopping-law weight
 and places one reset per active player in a single literal cube. Its normalized
 frozen star tends coordinatewise to zero while its normalized mover-diagonal
-charge tends to a positive limit. The cube dichotomy now directly bounds
-endpoint-to-source return unless it localizes signed two-reset curvature.
-No theorem currently turns either branch into a chronological carrier path;
-the chronological and curvature consumers therefore remain conditional.
+charge tends to a positive limit. The exact carrier minimum controls every
+cube face uniformly from below.
+[`eventually_all_sourceMatchedRadialFacePayoff_affineRemainder_le`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialResetCube.lean)
+proves that every fixed pure-time payoff on every face has affine remainder
+`o(lambda)`, uniformly in the face and quit time; its finite-rank precursor is
+an explicit `O(lambda²)` estimate. Consequently,
+[`exists_sourceMatchedRadial_commonPassport_or_edgeWitnessSwitch`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialResetCube.lean)
+selects its approximate pure-time witnesses internally and needs only a cap
+nonadditivity bound to return either a literal edge witness switch or one
+all-face common passport. Excess cap nonadditivity is not opaque:
+[`sourceMatchedRadialFaceCapNonadditivity_le_or_hasNegativeSquare`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialResetCube.lean)
+localizes it to a negative cap square on the same literal cube.
+
+Terminal differences between two pure-time witnesses also have an exact
+reached-history decoder.
+[`quittingPureTimeFirstDisagreementValue_sub_eq_opponentSurvival_mul`](../UniformEquilibrium/Quitting/Paths/SurvivalWeightedSuffixRegret.lean)
+covers both finite later dates and `Never`, so the source-to-reached-history
+transport itself is no longer a gap. What remains is the game-facing
+composition of a localized cap square with the appropriate branch consumer,
+and, in the common-passport branch, a chronological carrier-path producer
+whose ordered Bellman blocks have vanishing Green ratios and divergent
+opponent exposure. The static cube does not supply that chronology.
 
 ## Live formal leaves
 

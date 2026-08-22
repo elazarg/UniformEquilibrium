@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Data.Finset.Insert
 import Mathlib.Data.Finset.Sum
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
@@ -89,6 +90,31 @@ def squareCurvatureSum (value : Finset Coordinate → ℝ) :
   | source, coordinate :: rest =>
       squareCurvatureSum value (insert coordinate source) rest +
         (rest.map (square value source coordinate)).sum
+
+/-- Executing a reset word inserts exactly its set of coordinates. -/
+theorem finalSet_eq_union_toFinset
+    (source : Finset Coordinate) (word : List Coordinate) :
+    finalSet source word = source ∪ word.toFinset := by
+  induction word generalizing source with
+  | nil => simp [finalSet]
+  | cons coordinate rest ih =>
+      rw [finalSet, ih]
+      simp [Finset.insert_union]
+
+@[simp]
+theorem finalSet_empty_toList (face : Finset Coordinate) :
+    finalSet ∅ face.toList = face := by
+  rw [finalSet_eq_union_toFinset]
+  simp
+
+/-- On a duplicate-free face list, the frozen edge sum is the corresponding
+finite-set sum. -/
+theorem frozenEdgeSum_empty_toList
+    (value : Finset Coordinate → ℝ) (face : Finset Coordinate) :
+    frozenEdgeSum value ∅ face.toList =
+      face.sum (fun coordinate ↦ value {coordinate} - value ∅) := by
+  rw [frozenEdgeSum, ← List.sum_toFinset _ face.nodup_toList]
+  simp [edge]
 
 /-- A positive two-reset square appearing in the triangular decomposition of
 one ordered reset word. -/
@@ -297,6 +323,23 @@ def squareCount : List Coordinate → ℕ
   | [] => 0
   | _coordinate :: rest => squareCount rest + rest.length
 
+omit [DecidableEq Coordinate] in
+/-- The triangular square count is bounded by the square of the word length.
+This coarse form is convenient when one uniform budget must cover all faces
+of a fixed finite cube. -/
+theorem squareCount_le_length_mul_length (word : List Coordinate) :
+    squareCount word ≤ word.length * word.length := by
+  induction word with
+  | nil => simp [squareCount]
+  | cons coordinate rest ih =>
+      simp only [squareCount, List.length_cons]
+      calc
+        squareCount rest + rest.length ≤
+            rest.length * rest.length + rest.length :=
+          Nat.add_le_add_right ih rest.length
+        _ ≤ (rest.length + 1) * (rest.length + 1) := by
+          simp [Nat.add_mul, Nat.mul_add]
+
 /-- A two-reset square in the triangular decomposition whose curvature is
 strictly larger than the displayed threshold. -/
 def HasSquareAboveAlong (value : Finset Coordinate → ℝ) (threshold : ℝ) :
@@ -305,6 +348,126 @@ def HasSquareAboveAlong (value : Finset Coordinate → ℝ) (threshold : ℝ) :
   | source, coordinate :: rest =>
       HasSquareAboveAlong value threshold (insert coordinate source) rest ∨
         ∃ other ∈ rest, threshold < square value source coordinate other
+
+/-- A uniform bound on every two-coordinate square bounds the complete
+triangular curvature sum by the exact number of square contributions. -/
+theorem abs_squareCurvatureSum_le
+    (value : Finset Coordinate → ℝ)
+    (source : Finset Coordinate) (word : List Coordinate)
+    (threshold : ℝ)
+    (hsquare : ∀ background first second,
+      |square value background first second| ≤ threshold) :
+    |squareCurvatureSum value source word| ≤
+      (squareCount word : ℝ) * threshold := by
+  induction word generalizing source with
+  | nil => simp [squareCurvatureSum, squareCount]
+  | cons coordinate rest ih =>
+      have hrest := ih (insert coordinate source)
+      have hsquares :
+          |(rest.map (square value source coordinate)).sum| ≤
+            (rest.length : ℝ) * threshold := by
+        have haux : ∀ values : List Coordinate,
+            |(values.map (square value source coordinate)).sum| ≤
+              (values.length : ℝ) * threshold := by
+          intro values
+          induction values with
+        | nil => simp
+        | cons other tail tailIh =>
+            simp only [List.map_cons, List.sum_cons, List.length_cons,
+              Nat.cast_add, Nat.cast_one]
+            calc
+              |square value source coordinate other +
+                    (tail.map (square value source coordinate)).sum| ≤
+                  |square value source coordinate other| +
+                    |(tail.map (square value source coordinate)).sum| :=
+                abs_add_le _ _
+              _ ≤ threshold + (tail.length : ℝ) * threshold :=
+                add_le_add (hsquare source coordinate other) tailIh
+              _ = ((tail.length : ℝ) + 1) * threshold := by ring
+        exact haux rest
+      simp only [squareCurvatureSum, squareCount, Nat.cast_add]
+      calc
+        |squareCurvatureSum value (insert coordinate source) rest +
+            (rest.map (square value source coordinate)).sum| ≤
+            |squareCurvatureSum value (insert coordinate source) rest| +
+              |(rest.map (square value source coordinate)).sum| :=
+          abs_add_le _ _
+        _ ≤ (squareCount rest : ℝ) * threshold +
+              (rest.length : ℝ) * threshold := add_le_add hrest hsquares
+        _ = ((squareCount rest : ℝ) + rest.length) * threshold := by ring
+
+/-- The same quantitative bound needs square control only for the fresh,
+distinct coordinate pairs that occur in a duplicate-free reset word disjoint
+from its source. -/
+theorem abs_squareCurvatureSum_le_of_nodup_disjoint
+    (value : Finset Coordinate → ℝ)
+    (source : Finset Coordinate) (word : List Coordinate)
+    (threshold : ℝ) (hnodup : word.Nodup)
+    (hdisjoint : Disjoint word.toFinset source)
+    (hsquare : ∀ background first second,
+      first ∉ background → second ∉ background → first ≠ second →
+        |square value background first second| ≤ threshold) :
+    |squareCurvatureSum value source word| ≤
+      (squareCount word : ℝ) * threshold := by
+  induction word generalizing source with
+  | nil => simp [squareCurvatureSum, squareCount]
+  | cons coordinate rest ih =>
+      have hnodupParts := List.nodup_cons.mp hnodup
+      have hcoordinateNotSource : coordinate ∉ source := by
+        intro hsource
+        exact Finset.disjoint_left.mp hdisjoint (by simp) hsource
+      have hrestDisjoint : Disjoint rest.toFinset (insert coordinate source) := by
+        rw [Finset.disjoint_left]
+        intro other hotherRest hotherInsert
+        simp only [List.toFinset_cons, Finset.disjoint_insert_left] at hdisjoint
+        rcases Finset.mem_insert.mp hotherInsert with rfl | hotherSource
+        · exact hnodupParts.1 (by simpa using hotherRest)
+        · exact Finset.disjoint_left.mp hdisjoint.2 hotherRest hotherSource
+      have hrest := ih (insert coordinate source) hnodupParts.2 hrestDisjoint
+      have hsquareEach : ∀ other ∈ rest,
+          |square value source coordinate other| ≤ threshold := by
+        intro other hother
+        apply hsquare source coordinate other hcoordinateNotSource
+        · intro hotherSource
+          exact Finset.disjoint_left.mp hdisjoint (by simp [hother]) hotherSource
+        · intro heq
+          subst other
+          exact hnodupParts.1 hother
+      have hsquares :
+          |(rest.map (square value source coordinate)).sum| ≤
+            (rest.length : ℝ) * threshold := by
+        have haux : ∀ values : List Coordinate,
+            (∀ other ∈ values, |square value source coordinate other| ≤
+              threshold) →
+            |(values.map (square value source coordinate)).sum| ≤
+              (values.length : ℝ) * threshold := by
+          intro values hvalues
+          induction values with
+          | nil => simp
+          | cons other tail tailIh =>
+              simp only [List.map_cons, List.sum_cons, List.length_cons,
+                Nat.cast_add, Nat.cast_one]
+              calc
+                |square value source coordinate other +
+                      (tail.map (square value source coordinate)).sum| ≤
+                    |square value source coordinate other| +
+                      |(tail.map (square value source coordinate)).sum| :=
+                  abs_add_le _ _
+                _ ≤ threshold + (tail.length : ℝ) * threshold :=
+                  add_le_add (hvalues other (by simp))
+                    (tailIh fun value hvalue ↦ hvalues value (by simp [hvalue]))
+                _ = ((tail.length : ℝ) + 1) * threshold := by ring
+        exact haux rest hsquareEach
+      simp only [squareCurvatureSum, squareCount, Nat.cast_add]
+      calc
+        |squareCurvatureSum value (insert coordinate source) rest +
+            (rest.map (square value source coordinate)).sum| ≤
+            |squareCurvatureSum value (insert coordinate source) rest| +
+              |(rest.map (square value source coordinate)).sum| :=
+          abs_add_le _ _
+        _ ≤ (squareCount rest : ℝ) * threshold +
+              (rest.length : ℝ) * threshold := add_le_add hrest hsquares
+        _ = ((squareCount rest : ℝ) + rest.length) * threshold := by ring
 
 private theorem exists_mem_gt_of_length_mul_lt_sum
     (values : List ℝ) (threshold : ℝ)

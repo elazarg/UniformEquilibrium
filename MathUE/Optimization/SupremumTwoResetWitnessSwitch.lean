@@ -11,6 +11,7 @@ import Mathlib.Data.Set.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
+import MathUE.Finset.CubicalResetIntegrability
 
 /-!
 # Approximate witness switching for a four-corner supremum envelope
@@ -26,6 +27,7 @@ does not assert a behavioral-to-pure decomposition.
 noncomputable section
 
 open scoped BigOperators
+open Math.Finset.CubicalResetIntegrability
 
 namespace Math.Optimization
 
@@ -157,12 +159,91 @@ def finiteCubeAffineRemainder
     (payoff ∅ d + ∑ coordinate ∈ face,
       (payoff {coordinate} d - payoff ∅ d))
 
+omit [Fintype Coordinate] in
+/-- The common-source affine remainder of a finite face is exactly its
+triangular sum of two-coordinate square curvatures. -/
+theorem finiteCubeAffineRemainder_eq_squareCurvatureSum
+    (payoff : Finset Coordinate → D → ℝ)
+    (face : Finset Coordinate) (d : D) :
+    finiteCubeAffineRemainder payoff face d =
+      squareCurvatureSum
+        (fun reset ↦ payoff reset d) ∅ face.toList := by
+  rw [← endpoint_sub_source_sub_frozen_eq_squareCurvatureSum]
+  rw [finalSet_empty_toList, frozenEdgeSum_empty_toList]
+  simp only [finiteCubeAffineRemainder]
+  ring
+
+omit [Fintype Coordinate] in
+/-- Uniform square control gives an explicit affine-remainder budget on every
+finite face. -/
+theorem abs_finiteCubeAffineRemainder_le
+    (payoff : Finset Coordinate → D → ℝ)
+    (face : Finset Coordinate) (d : D) (threshold : ℝ)
+    (hsquare : ∀ background first second,
+      |square
+          (fun reset ↦ payoff reset d) background first second| ≤ threshold) :
+    |finiteCubeAffineRemainder payoff face d| ≤
+      (squareCount face.toList : ℝ) *
+        threshold := by
+  rw [finiteCubeAffineRemainder_eq_squareCurvatureSum]
+  exact abs_squareCurvatureSum_le
+    (fun reset ↦ payoff reset d) ∅ face.toList threshold hsquare
+
+omit [Fintype Coordinate] in
+/-- On a finite face it is enough to bound squares at fresh, distinct
+coordinates; no repeated-coordinate estimate is required. -/
+theorem abs_finiteCubeAffineRemainder_le_of_fresh
+    (payoff : Finset Coordinate → D → ℝ)
+    (face : Finset Coordinate) (d : D) (threshold : ℝ)
+    (hsquare : ∀ background first second,
+      first ∉ background → second ∉ background → first ≠ second →
+        |square (fun reset ↦ payoff reset d) background first second| ≤
+          threshold) :
+    |finiteCubeAffineRemainder payoff face d| ≤
+      (squareCount face.toList : ℝ) * threshold := by
+  rw [finiteCubeAffineRemainder_eq_squareCurvatureSum]
+  exact abs_squareCurvatureSum_le_of_nodup_disjoint
+    (fun reset ↦ payoff reset d) ∅ face.toList threshold face.nodup_toList
+      (by simp) hsquare
+
 /-- Failure of the cap at the full face to equal the sum of its singleton
 increments at the common source. -/
 def finiteCubeCapNonadditivity
     (cap : Finset Coordinate → ℝ) : ℝ :=
   (∑ coordinate, (cap {coordinate} - cap ∅)) -
     (cap Finset.univ - cap ∅)
+
+/-- Cap nonadditivity is exactly the negative triangular curvature sum along
+any duplicate-free listing of the full finite cube. -/
+theorem finiteCubeCapNonadditivity_eq_neg_squareCurvatureSum
+    (cap : Finset Coordinate → ℝ) :
+    finiteCubeCapNonadditivity cap =
+      -squareCurvatureSum cap ∅ Finset.univ.toList := by
+  rw [← finiteCubeAffineRemainder_eq_squareCurvatureSum
+    (fun face (_unit : Unit) ↦ cap face) Finset.univ ()]
+  simp only [finiteCubeCapNonadditivity, finiteCubeAffineRemainder,
+    Finset.sum_sub_distrib, Finset.sum_const, Finset.card_univ,
+    nsmul_eq_mul]
+  ring
+
+/-- A cap is either approximately additive at the full face or one literal
+square along the full reset word has negative curvature above the requested
+threshold. -/
+theorem finiteCubeCapNonadditivity_le_or_hasNegativeSquare
+    (cap : Finset Coordinate → ℝ) (threshold : ℝ) :
+    finiteCubeCapNonadditivity cap ≤
+        (squareCount (Finset.univ : Finset Coordinate).toList : ℝ) *
+          threshold ∨
+      HasSquareAboveAlong (fun face ↦ -cap face) threshold ∅
+        (Finset.univ : Finset Coordinate).toList := by
+  by_cases hnear : finiteCubeCapNonadditivity cap ≤
+      (squareCount (Finset.univ : Finset Coordinate).toList : ℝ) * threshold
+  · exact Or.inl hnear
+  · right
+    apply hasSquareAboveAlong_of_mul_lt_squareCurvatureSum
+    rw [squareCurvatureSum_neg,
+      ← finiteCubeCapNonadditivity_eq_neg_squareCurvatureSum]
+    exact lt_of_not_ge hnear
 
 omit [Fintype Coordinate] in
 /-- A large regret drop from the empty face to a nonempty face is carried by
