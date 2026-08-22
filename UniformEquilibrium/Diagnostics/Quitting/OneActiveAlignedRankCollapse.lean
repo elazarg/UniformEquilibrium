@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.OneActiveTransferDefectGraph
+import UniformEquilibrium.Diagnostics.Quitting.OneActiveTransferDefectGraph
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticQuantileNashificationAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification

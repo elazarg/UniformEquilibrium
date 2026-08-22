@@ -27,14 +27,12 @@ The table also satisfies both assumptions of the source's own existence
 theorem: unit solo exit and capped joint exit.  Its approximate equilibrium is
 therefore an instance of that theorem and not evidence against it.
 
-The source paper proves that this table admits an approximate equilibrium
-through a period-two two-quitter architecture, and admits neither a
-stationary approximate equilibrium nor one whose mixed action remains
-uniformly close to all-Continue at every stage. The checked content of this
-module is the table itself together with the collision and preemption-cycle
-geometry that its explicit data realizes. Any terminal-gap conclusion
-therefore requires an additional checked argument beyond the realized
-configuration itself.
+The checked companion modules separate the strategic conclusions cleanly.
+`SolanVieilleBoundaryEquilibrium` constructs an exact period-two equilibrium,
+while `SolanVieilleBoundaryNonstationarity` proves that sufficiently accurate
+terminal approximate equilibria are neither stationary nor uniformly close
+to all-Continue at every stage.  This module owns only the table and its
+collision/preemption geometry.
 
 -/
 

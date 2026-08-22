@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNashDefectMobiusIncidence
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
 /-!
 # Endpoint-defect polarity and exact coalition atomization
@@ -71,15 +72,6 @@ theorem quittingRootCoordinateNashDefect_eq_polaritySum
 
 /-! ## Exact opponent-coalition expansion -/
 
-/-- Probability that the opponents' exact Quit coalition is `coalition`.
-This definition is intended for coalitions contained in `univ.erase who`.
-The selected player's own action probability is deliberately not included. -/
-def quittingOpponentCoalitionMass
-    (root : ι → PMF Bool) (who : ι) (coalition : Finset ι) : ℝ :=
-  (∏ player ∈ coalition, (root player true).toReal) *
-    ∏ player ∈ Finset.univ.erase who \ coalition,
-      (root player false).toReal
-
 /-- At one opponent coalition, the selected player's pure-Quit advantage is
 the payoff after inserting the player minus the payoff without it.  At the
 empty coalition the latter payoff is the literal tail value, so this is the
@@ -89,13 +81,6 @@ def quittingEndpointInsertionToggle
     (tail : Payoff ι) (who : ι) (coalition : Finset ι) : ℝ :=
   quittingStageCoalitionPayoff reward tail (insert who coalition) who -
     quittingStageCoalitionPayoff reward tail coalition who
-
-theorem quittingOpponentCoalitionMass_nonneg
-    (root : ι → PMF Bool) (who : ι) (coalition : Finset ι) :
-    0 ≤ quittingOpponentCoalitionMass root who coalition := by
-  exact mul_nonneg
-    (Finset.prod_nonneg fun _ _ ↦ ENNReal.toReal_nonneg)
-    (Finset.prod_nonneg fun _ _ ↦ ENNReal.toReal_nonneg)
 
 /-- Pure Quit is the opponent-coalition average of the payoff after inserting
 the selected player. -/

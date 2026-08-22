@@ -8,7 +8,7 @@ import MathUE.AbelCesaro
 import MathUE.SurvivalProduct
 
 /-!
-# Generic diagonal discounted backward recursions
+# Diagonal discounted backward recursions
 
 This file contains the game-independent accounting behind a diagonal
 backward recursion.  It deliberately does not construct any game roots or

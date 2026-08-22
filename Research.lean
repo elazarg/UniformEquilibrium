@@ -72,9 +72,6 @@ import Research.Quitting.FullCoreDuplicatedCyclicLasso
 import Research.Quitting.HandshakeClub
 import Research.Quitting.HazardSummability
 import Research.Quitting.HolonomyEquivalenceCompression
-import Research.Quitting.KActiveMarkedAtomBudgetPathConsumer
-import Research.Quitting.KActiveMarkedAtomCompactPath
-import Research.Quitting.KActiveMarkedAtomPathConsumer
 import Research.Quitting.LiveRootExploitabilityFactorization
 import Research.Quitting.MinimumCertifiedForcedOwnerOrientation
 import Research.Quitting.MinimumExactNashOneActive
@@ -89,8 +86,6 @@ import Research.Quitting.ObserverAbsentFiniteClockCurvatureCollector
 import Research.Quitting.ObserverAbsentForcedOwnerCurvatureConsumer
 import Research.Quitting.ObserverAbsentNegativeTargetAtomicSourceNoGo
 import Research.Quitting.ObserverAbsentNeverClockTruncation
-import Research.Quitting.OneActiveAlignedRankCollapse
-import Research.Quitting.OneActiveTransferDefectGraph
 import Research.Quitting.OpponentClockVariation
 import Research.Quitting.OwnerOutsiderSquareContextDecomposition
 import Research.Quitting.OwnerSoloCertification
