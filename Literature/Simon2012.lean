@@ -3,6 +3,7 @@ import MathUE.BonferroniProductBounds
 import MathUE.LinearAlgebra.UniformNonsingularity
 import MathUE.PMFProduct.TotalVariation
 import MathUE.ProbabilityMassFunction.Simplex
+import MathUE.Topology.SimonViabilityQuestion
 import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEndpointDefectPolarity
 import UniformEquilibrium.Quitting.Classification.Existence.QuietWindowStationaryRepair
@@ -57,7 +58,7 @@ noncomputable section
 
 /-! ## 2. The model, the question, and the challenge -/
 
-abbrev UnitInterval := Set.Icc (0 : ℝ) 1
+abbrev UnitInterval := Math.Topology.SimonViability.UnitInterval
 
 /-- The Euclidean two-norm on the paper's finite-dimensional payoff space. -/
 def EuclideanNorm {N : Type} [Fintype N] (x : Payoff N) : ℝ := by
@@ -139,7 +140,7 @@ def EpsilonPayoffGraph (G : QuittingGame) (ε : ℝ) :
 def SmallStepGraph {N : Type} [Fintype N]
     (J : Set (Payoff N × Payoff N)) (δ : ℝ) :
     Set (Payoff N × Payoff N) :=
-  {z | z ∈ J ∧ EuclideanDist z.1 z.2 ≤ δ}
+  {z | z ∈ J ∧ EuclideanDist z.1 z.2 < δ}
 
 /-- A cluster point in the sense stated for extended orbits on page 182. -/
 def IsExtendedOrbitClusterPoint {N : Type} [Fintype N]
@@ -192,33 +193,12 @@ def Question1Hypotheses {N : Type} [Fintype N] {k : ℕ}
     (C : Set (Payoff N)) (piece : Fin k → Set (Payoff N))
     (H : Payoff N → UnitInterval → Payoff N × Payoff N)
     (V : Set (Payoff N)) (G J : Set (Payoff N × Payoff N)) : Prop :=
-  0 < k ∧
-  IsContractibleSet C ∧
-  (∀ i, IsFullDimensionalCompactConvexPolytope (piece i)) ∧
-  C = ⋃ i, piece i ∧
-  IsStraightLineOn C H ∧
-  (∀ x ∈ C, H x 0 = (x, x)) ∧
-  (∀ x ∈ frontier C, ∀ t, H x t = (x, x)) ∧
-  (∀ x, (x, x) ∈ HomotopyTerminalImage C H → x ∈ frontier C) ∧
-  IsCompact V ∧ frontier C ⊆ interior V ∧
-  IsCompact G ∧
-  (∀ z ∈ G, z.1 ∈ V) ∧
-  (∀ x ∈ V, IsContractibleSet (GraphFiber G x) ∧ x ∈ GraphFiber G x) ∧
-  IsCompact J ∧ HomotopyTerminalImage C H ⊆ J ∧ G ⊆ J ∧
-  ∃ ω : ℝ, 0 < ω ∧ SmallStepGraph J ω ⊆ G ∧
-    ∀ x ∈ V, ∀ i,
-      (frontier C ∩ piece i).Nonempty →
-      EuclideanInfDist x (frontier C ∩ piece i) ≤ ω →
-      ∃ y ∈ GraphFiber G x,
-        EuclideanInfDist y (piece i) ≤
-          EuclideanInfDist x (piece i) ∧
-        ω ≤ EuclideanDist x y ∧ segment ℝ x y ⊆ GraphFiber G x
+  Math.Topology.SimonViability.QuestionOneHypotheses C piece H V G J
 
 /-- The conclusion asked for in Question 1. -/
 def Question1Conclusion {N : Type} [Fintype N]
     (J : Set (Payoff N × Payoff N)) : Prop :=
-  ∃ orbit : ExtendedOrbitData (graphCorrespondence J),
-    HasUnboundedExtendedVariation orbit
+  Math.Topology.SimonViability.QuestionOneConclusion J
 
 /-- An affirmative answer to Question 1, uniformly in its finite dimension. -/
 def Question1Affirmative : Prop :=
@@ -8335,9 +8315,48 @@ irrelevant.
 def MinimumAbnormalGap (G : QuittingGame) : ℝ :=
   sInf {ν : ℝ | ∃ j, IsAbnormalPlayer G j ∧ ν = AbnormalGap G j}
 
+/-- An abnormal player's min--max deficit is strictly positive. -/
+theorem abnormalGap_pos (G : QuittingGame) {j : G.Player}
+    (habnormal : IsAbnormalPlayer G j) : 0 < AbnormalGap G j := by
+  exact sub_pos.mpr (lt_of_not_ge habnormal)
+
+/-- Under the Section 5 hypothesis, the finite minimum abnormal gap is
+attained by an abnormal player. -/
+theorem minimumAbnormalGap_mem (G : QuittingGame)
+    (habnormal : HasAbnormalPlayer G) :
+    ∃ j, IsAbnormalPlayer G j ∧
+      MinimumAbnormalGap G = AbnormalGap G j := by
+  let gaps : Set ℝ :=
+    {ν | ∃ j, IsAbnormalPlayer G j ∧ ν = AbnormalGap G j}
+  have hnonempty : gaps.Nonempty := by
+    obtain ⟨j, hj⟩ := habnormal
+    exact ⟨AbnormalGap G j, j, hj, rfl⟩
+  have hfinite : gaps.Finite := by
+    apply (Set.finite_range fun j ↦ AbnormalGap G j).subset
+    rintro ν ⟨j, _, rfl⟩
+    exact ⟨j, rfl⟩
+  have hmem : sInf gaps ∈ gaps := hnonempty.csInf_mem hfinite
+  rcases hmem with ⟨j, hj, hgap⟩
+  exact ⟨j, hj, hgap⟩
+
+/-- The minimum abnormal-player deficit used in Section 5 is positive. -/
+theorem minimumAbnormalGap_pos (G : QuittingGame)
+    (habnormal : HasAbnormalPlayer G) : 0 < MinimumAbnormalGap G := by
+  obtain ⟨j, hj, hgap⟩ := minimumAbnormalGap_mem G habnormal
+  rw [hgap]
+  exact abnormalGap_pos G hj
+
 /-- The Section 5 restriction `0 < ε < ν/3`. -/
 def IsSection5Accuracy (G : QuittingGame) (ε : ℝ) : Prop :=
   HasAbnormalPlayer G ∧ 0 < ε ∧ ε < MinimumAbnormalGap G / 3
+
+/-- The paper's required accuracy scale exists whenever an abnormal player exists. -/
+theorem exists_section5Accuracy (G : QuittingGame)
+    (habnormal : HasAbnormalPlayer G) :
+    ∃ ε : ℝ, IsSection5Accuracy G ε := by
+  have hgap := minimumAbnormalGap_pos G habnormal
+  refine ⟨MinimumAbnormalGap G / 6, habnormal, by positivity, ?_⟩
+  linarith
 
 /--
 The modified compact set proposed in Section 5:
