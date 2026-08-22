@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Bellman.Finite.ActiveSetSupport
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailFallback
 import UniformEquilibrium.Quitting.Cycles.ConditionedDiffuseStrategicRescaling
+import MathUE.FiniteSerialRelation
 import MathUE.Topology.FiniteLimitDecomposition
 
 /-!
@@ -44,15 +45,13 @@ def QuittingSoloPreempts
       quittingSoloReward reward other other
 
 /-- A positive-period closed directed walk in the strict solo-preemption
-relation. -/
-structure QuittingSoloPreemptionCycle
+relation.  This is the generic finite serial-relation cycle specialized to
+the payoff-table preemption edge. -/
+abbrev QuittingSoloPreemptionCycle
     (reward : {S : Finset player // S.Nonempty} → Payoff player)
-    (gap : ℝ) where
-  period : ℕ
-  period_pos : 0 < period
-  vertex : ℕ → player
-  vertex_periodic : ∀ time, vertex (time + period) = vertex time
-  edge : ∀ time, QuittingSoloPreempts reward gap (vertex time) (vertex (time + 1))
+    (gap : ℝ) :=
+  Math.FiniteSerialRelation.PeriodicCycle
+    (QuittingSoloPreempts reward gap)
 
 namespace QuittingSoloPreemptionCycle
 
@@ -61,14 +60,9 @@ omit [Fintype player] [DecidableEq player] in
 theorem two_le_period
     {gap : ℝ} (cycle : QuittingSoloPreemptionCycle reward gap) :
     2 ≤ cycle.period := by
-  by_contra hperiod
-  have hpos := cycle.period_pos
-  have hone : cycle.period = 1 := by omega
-  have hne := (cycle.edge 0).1
-  have hperiodic := cycle.vertex_periodic 0
-  rw [hone] at hperiodic
-  simp only [zero_add] at hperiodic
-  exact hne hperiodic
+  apply cycle.two_le_period_of_irreflexive
+  intro state hedge
+  exact hedge.1 rfl
 
 end QuittingSoloPreemptionCycle
 

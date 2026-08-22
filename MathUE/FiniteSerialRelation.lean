@@ -9,7 +9,11 @@ import Mathlib.Data.Finset.Card
 import Mathlib.Tactic
 
 /-!
-# Serial relations on at most four points
+# Cycles and short lassos in finite serial relations
+
+Every serial relation on a nonempty finite type contains a positive-period
+periodic cycle.  This general cycle extractor records the periodic orbit
+directly and does not assume decidable equality or a chosen finite enumeration.
 
 An irreflexive relation with one outgoing edge from a root and an outgoing
 edge after every reached edge generates a rooted directed lasso.  On at most
@@ -22,6 +26,123 @@ relation and the seriality proof.
 -/
 
 namespace Math.FiniteSerialRelation
+
+universe u
+
+section PeriodicCycle
+
+variable {State : Type u} (R : State → State → Prop)
+
+/-- A positive-period periodic orbit in a binary relation. -/
+structure PeriodicCycle where
+  /-- Period of the selected orbit. -/
+  period : ℕ
+  /-- The period is nonzero. -/
+  period_pos : 0 < period
+  /-- Vertices of the periodic orbit. -/
+  vertex : ℕ → State
+  /-- Advancing by one period returns to the same vertex. -/
+  vertex_periodic : ∀ time, vertex (time + period) = vertex time
+  /-- Every consecutive pair is an edge of the relation. -/
+  edge : ∀ time, R (vertex time) (vertex (time + 1))
+
+namespace PeriodicCycle
+
+variable {R}
+
+/-- Map a periodic relational cycle through a relation-preserving function. -/
+def map {Target : Type*} {S : Target → Target → Prop}
+    (cycle : PeriodicCycle R) (f : State → Target)
+    (hedge : ∀ {source target}, R source target → S (f source) (f target)) :
+    PeriodicCycle S where
+  period := cycle.period
+  period_pos := cycle.period_pos
+  vertex := fun time ↦ f (cycle.vertex time)
+  vertex_periodic := fun time ↦ congrArg f (cycle.vertex_periodic time)
+  edge := fun time ↦ hedge (cycle.edge time)
+
+/-- An irreflexive relation has no period-one relational cycle. -/
+theorem two_le_period_of_irreflexive
+    (cycle : PeriodicCycle R) (hirreflexive : ∀ state, ¬R state state) :
+    2 ≤ cycle.period := by
+  by_contra hperiod
+  have hpositive := cycle.period_pos
+  have hone : cycle.period = 1 := by omega
+  have hperiodic := cycle.vertex_periodic 0
+  rw [hone] at hperiodic
+  simp only [zero_add] at hperiodic
+  have hedge := cycle.edge 0
+  rw [hperiodic] at hedge
+  exact hirreflexive (cycle.vertex 0) hedge
+
+end PeriodicCycle
+
+/-- Every serial relation on a nonempty finite type contains a periodic cycle.
+
+The proof follows one chosen successor forever and closes the finite orbit at
+the first supplied repetition.  No irreflexivity assumption is needed, so a
+self-loop may produce period one. -/
+theorem nonempty_periodicCycle_of_serial
+    [Finite State] [Nonempty State]
+    (hserial : ∀ state, ∃ next, R state next) :
+    Nonempty (PeriodicCycle R) := by
+  let successor : State → State := fun state ↦ Classical.choose (hserial state)
+  have hsuccessor : ∀ state, R state (successor state) := fun state ↦
+    Classical.choose_spec (hserial state)
+  let seed : State := Classical.choice inferInstance
+  let orbit : ℕ → State := fun time ↦ (successor^[time]) seed
+  obtain ⟨left, right, hne, heq⟩ :=
+    Finite.exists_ne_map_eq_of_infinite orbit
+  have build : ∀ {start stop : ℕ}, start < stop → orbit start = orbit stop →
+      Nonempty (PeriodicCycle R) := by
+    intro start stop hlt hrepeat
+    let period := stop - start
+    have hperiodPos : 0 < period := by
+      dsimp only [period]
+      omega
+    have hstartPeriod : start + period = stop := by
+      dsimp only [period]
+      omega
+    let vertex : ℕ → State := fun time ↦ orbit (start + time)
+    have hedge : ∀ time, R (vertex time) (vertex (time + 1)) := by
+      intro time
+      have hstep := hsuccessor (orbit (start + time))
+      have horbitSucc : successor (orbit (start + time)) =
+          orbit (start + (time + 1)) := by
+        dsimp only [orbit]
+        rw [show start + (time + 1) = (start + time).succ by omega,
+          Function.iterate_succ_apply']
+      change R (orbit (start + time)) (orbit (start + (time + 1)))
+      rw [← horbitSucc]
+      exact hstep
+    have hreturn : (successor^[period]) (orbit start) = orbit start := by
+      change (successor^[period]) ((successor^[start]) seed) =
+        (successor^[start]) seed
+      rw [← Function.iterate_add_apply]
+      rw [Nat.add_comm, hstartPeriod]
+      exact hrepeat.symm
+    have hperiodic : ∀ time, vertex (time + period) = vertex time := by
+      intro time
+      change orbit (start + (time + period)) = orbit (start + time)
+      change (successor^[start + (time + period)]) seed =
+        (successor^[start + time]) seed
+      rw [show start + (time + period) = time + period + start by omega,
+        Function.iterate_add_apply]
+      rw [show start + time = time + start by omega,
+        Function.iterate_add_apply]
+      rw [Function.iterate_add_apply, hreturn]
+    exact ⟨{
+      period := period
+      period_pos := hperiodPos
+      vertex := vertex
+      vertex_periodic := hperiodic
+      edge := hedge
+    }⟩
+  rcases lt_or_gt_of_ne hne with hlt | hgt
+  · exact build hlt heq
+  · exact build hgt heq.symm
+
+end PeriodicCycle
 
 variable {State : Type} [Fintype State] [DecidableEq State]
 variable (R : State → State → Prop) (root : State)
