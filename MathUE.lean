@@ -174,6 +174,7 @@ import MathUE.OnlineLearning.ContextualMultiplicativeWeights
 import MathUE.OnlineLearning.MultiplicativeWeights
 import MathUE.OnlineLearning.ShiftedUniversalCalendar
 import MathUE.OnlineLearning.UniversalCalendar
+import MathUE.Optimization.SupremumTwoResetWitnessSwitch
 import MathUE.OptimizationLocalGlobal
 import MathUE.OutcomeClosure
 import MathUE.OutcomeClosure.TerminalTarget
@@ -282,6 +283,7 @@ import MathUE.Probability.StitchedMartingale
 import MathUE.Probability.SublinearLedger
 import MathUE.Probability.SupportedMovingKernelEpochAccount
 import MathUE.Probability.SurvivalAmplification
+import MathUE.Probability.SurvivalCoboundary
 import MathUE.Probability.SurvivalWeightedReachedHistoryAccount
 import MathUE.Probability.SwitchedPotentialCalculus
 import MathUE.Probability.TriangularLedger
