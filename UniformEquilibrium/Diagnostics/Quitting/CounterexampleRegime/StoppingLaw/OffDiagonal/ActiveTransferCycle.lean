@@ -50,6 +50,25 @@ abbrev QuittingStoppingLawActiveTransferCycle
   Math.FiniteSerialRelation.PeriodicCycle
     (QuittingStoppingLawActiveTransfer frontier)
 
+/-- Reset coordinates preceding one position of an active transfer cycle. -/
+def QuittingStoppingLawActiveTransferCycle.prefixWord
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (cycle : QuittingStoppingLawActiveTransferCycle frontier)
+    (time : ℕ) : List ι :=
+  (List.range time).map fun earlier ↦ (cycle.vertex earlier).1
+
+@[simp]
+theorem QuittingStoppingLawActiveTransferCycle.prefixWord_length
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (cycle : QuittingStoppingLawActiveTransferCycle frontier)
+    (time : ℕ) :
+    (cycle.prefixWord time).length = time := by
+  simp [prefixWord]
+
 /-- Simultaneous static and stopping-law localization of a quitting
 counterexample regime.  The package retains the executable singleton
 collision, the terminal-table preemption cycle, and one source-derived
@@ -277,6 +296,89 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformCubeEdge
   rw [frontier.sourceMatchedResetCubeData_debtEdge_eq_scale_mul_actualDirection]
   exact mul_le_mul_of_nonneg_left (hAll time htime)
     (frontier.lambda_pos (frontier.subseq rank)).le
+
+/-- **Reached cube edge or signed square curvature.**  Traverse the cycle's
+reset coordinates in order inside the literal source-matched cube.  At every
+cycle position, either the reached edge retains half of the common-source
+positive transfer, or one earlier reset crosses a square whose absolute
+curvature exceeds the common edge budget divided by twice the period.
+
+This is a chronological statement in the profile cube.  It is not yet a
+chronological quitting-play compiler. -/
+theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_reachedCubeEdge_or_curvature
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (cycle : QuittingStoppingLawActiveTransferCycle frontier) :
+    ∃ charge : ℝ, 0 < charge ∧
+      ∀ᶠ rank in atTop, ∀ time < cycle.period,
+        let data := frontier.sourceMatchedResetCubeData rank
+        let debt := fun candidate : (quittingGame reward).BehaviorProfile ↦
+          quittingTerminalSemanticDebt
+            (quittingTerminalSemanticPair reward candidate)
+            (cycle.vertex (time + 1)).1
+        let word := cycle.prefixWord time
+        frontier.lambda (frontier.subseq rank) * charge / 2 ≤
+            Math.Finset.CubicalResetIntegrability.edge
+              (data.value debt)
+              (Math.Finset.CubicalResetIntegrability.finalSet ∅ word)
+              (cycle.vertex time).1 ∨
+          Math.Finset.CubicalResetIntegrability.HasAbsSquareAboveOnEdge
+            (data.value debt)
+            (frontier.lambda (frontier.subseq rank) * charge /
+              (2 * (cycle.period : ℝ))) ∅ word (cycle.vertex time).1 := by
+  obtain ⟨charge, hcharge, heventually⟩ :=
+    cycle.exists_eventually_uniformCubeEdge
+  refine ⟨charge, hcharge, ?_⟩
+  filter_upwards [heventually] with rank hAll
+  intro time htime
+  dsimp only
+  let data := frontier.sourceMatchedResetCubeData rank
+  let debt := fun candidate : (quittingGame reward).BehaviorProfile ↦
+    quittingTerminalSemanticDebt
+      (quittingTerminalSemanticPair reward candidate)
+      (cycle.vertex (time + 1)).1
+  let word := cycle.prefixWord time
+  let edgeFloor := frontier.lambda (frontier.subseq rank) * charge
+  let threshold := edgeFloor / (2 * (cycle.period : ℝ))
+  have hedgeFloor : edgeFloor ≤
+      Math.Finset.CubicalResetIntegrability.edge
+        (data.value debt) ∅ (cycle.vertex time).1 := by
+    simpa only [data, debt, edgeFloor] using hAll time htime
+  have hperiodReal : 0 < (cycle.period : ℝ) := by
+    exact_mod_cast cycle.period_pos
+  have hedgeFloorPos : 0 < edgeFloor := by
+    exact mul_pos (frontier.lambda_pos (frontier.subseq rank)) hcharge
+  have hthreshold : 0 ≤ threshold := by
+    exact (div_pos hedgeFloorPos (mul_pos (by norm_num) hperiodReal)).le
+  have htimeReal : (time : ℝ) ≤ (cycle.period : ℝ) := by
+    exact_mod_cast Nat.le_of_lt htime
+  have hwordBound : (word.length : ℝ) * threshold ≤ edgeFloor / 2 := by
+    rw [show word.length = time by simp [word]]
+    calc
+      (time : ℝ) * threshold ≤ (cycle.period : ℝ) * threshold :=
+        mul_le_mul_of_nonneg_right htimeReal hthreshold
+      _ = edgeFloor / 2 := by
+        dsimp only [threshold]
+        field_simp [ne_of_gt hperiodReal]
+  rcases
+      Math.Finset.CubicalResetIntegrability.abs_edge_finalSet_sub_edge_le_or_hasAbsSquareAboveOnEdge
+        (data.value debt) ∅ word (cycle.vertex time).1 threshold with
+    hnear | hcurvature
+  · left
+    have hdiff :
+        |Math.Finset.CubicalResetIntegrability.edge
+              (data.value debt)
+              (Math.Finset.CubicalResetIntegrability.finalSet ∅ word)
+              (cycle.vertex time).1 -
+            Math.Finset.CubicalResetIntegrability.edge
+              (data.value debt) ∅ (cycle.vertex time).1| ≤
+          edgeFloor / 2 := hnear.trans hwordBound
+    have hlower := (abs_le.mp hdiff).1
+    dsimp only [edgeFloor] at hlower ⊢
+    linarith
+  · right
+    simpa only [data, debt, word, threshold, edgeFloor] using hcurvature
 
 /-- The four tagged stopping-law branches compress to three semantic outcomes:
 positive total slope, zero-debt support entry, or a dynamic active transfer
