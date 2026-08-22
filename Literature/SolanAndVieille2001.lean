@@ -10,6 +10,7 @@ import UniformEquilibrium.Quitting.Cycles.PeriodicJointSurvival
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryNonstationarity
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwoStationary
+import UniformEquilibrium.Quitting.PayoffProcess.FinitePrefixTailCompiler
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Stationary.ApproximabilityCompactification
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
@@ -1311,113 +1312,23 @@ theorem proposition2_4 :
             ∃ root : ι → PMF Bool,
               epsilonEquilibrium reward (ε ^ (1 / 6 : ℝ))
                 (stationaryProfile reward root) := by
-  classical
   intro reward hunit
-  cases isEmpty_or_nonempty ι with
-  | inl hempty =>
-      letI : IsEmpty ι := hempty
-      refine ⟨1, by norm_num, ?_⟩
-      intro roots ε _ _ _ _
-      left
-      intro start who
-      exact isEmptyElim who
-  | inr hnonempty =>
-      letI : Nonempty ι := hnonempty
-      let M := quittingRewardBound reward
-      have hM : 0 ≤ M := quittingRewardBound_nonneg reward
-      let k := min (1 / 2 : ℝ) (1 / (48 * M + 1))
-      have hdenom : 0 < 48 * M + 1 := by positivity
-      have hk : 0 < k := by
-        dsimp only [k]
-        exact lt_min (by norm_num) (by positivity)
-      refine ⟨k ^ 6, pow_pos hk 6, ?_⟩
-      intro roots ε hε hεsmall hterminate hrows
-      let x := ε ^ (1 / 6 : ℝ)
-      have hx : 0 < x := Real.rpow_pos_of_pos hε _
-      have hxpow : x ^ 6 = ε := by
-        dsimp only [x]
-        convert Real.rpow_inv_natCast_pow hε.le
-          (by norm_num : (6 : ℕ) ≠ 0) using 1
-        norm_num
-      have hxk : x < k := by
-        apply lt_of_pow_lt_pow_left₀ 6 hk.le
-        rwa [hxpow]
-      have hxhalf : x < 1 / 2 :=
-        lt_of_lt_of_le hxk (min_le_left _ _)
-      have hxdenom : x < 1 / (48 * M + 1) :=
-        lt_of_lt_of_le hxk (min_le_right _ _)
-      have hxscaled : (48 * M + 1) * x < 1 := by
-        rw [lt_div_iff₀ hdenom] at hxdenom
-        simpa [mul_comm] using hxdenom
-      have hvanish : ∀ start,
-          Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0) := by
-        intro start
-        have hlimit : quittingJointSurvivalLimit roots start = 0 := by
-          rw [← quittingLiveMassLimit_rootSequence_eq_jointSurvivalLimit]
-          exact hterminate start
-        simpa [hlimit] using tendsto_quittingJointSurvivalLimit roots start
-      have hperfect : ∀ time, QuittingRowεPerfect reward
-          (quittingRootSequenceTailVector reward roots (time + 1))
-          (roots time) ε := fun time ↦
-        quittingRowεPerfect_of_oneShotPerfect (hrows time)
-      let ρ := x ^ 2
-      have hρ : 0 < ρ := by positivity
-      have hρhalf : ρ ≤ 1 / 2 := by
-        dsimp only [ρ]
-        nlinarith [sq_nonneg x]
-      by_cases hactive : ∀ (who : ι) (start fuel : ℕ),
-          ρ ≤ quittingJointSurvivalWeight roots start fuel +
-            ∑ time ∈ Finset.range fuel,
-              quittingJointSurvivalWeight roots start time *
-                quittingRootOpponentAbsorptionMass
-                  (roots (start + time)) who
-      · left
-        intro start
-        have hnash :=
-          isεAsymptoticNash_quittingRootSequenceProfile_of_active_of_tendsto
-            roots hε.le hρ hvanish hperfect hactive start
-        apply hnash.mono
-        change 3 * ε / ρ ≤ x
-        rw [← hxpow]
-        dsimp only [ρ]
-        field_simp [hx.ne']
-        nlinarith [sq_nonneg x]
-      · push Not at hactive
-        obtain ⟨who, start, fuel, hquiet⟩ := hactive
-        obtain ⟨anchor, window, hwindow, hanchorPos, hη⟩ :=
-          exists_quietWindow_anchor roots who hρ hρhalf start fuel hquiet
-        let η := 3 * ρ / (1 - ρ)
-        have hone : 0 < 1 - ρ := by linarith
-        have hηle : η ≤ 4 * x ^ 2 := by
-          rw [show η = 3 * ρ / (1 - ρ) from rfl, div_le_iff₀ hone]
-          dsimp only [ρ]
-          have hfactor : 0 ≤ x ^ 2 * (1 - 4 * x ^ 2) := by
-            exact mul_nonneg (sq_nonneg x) (by nlinarith [sq_nonneg x])
-          nlinarith
-        have hMη : M * η ≤ 1 := by
-          have hscale := mul_le_mul_of_nonneg_left hηle hM
-          nlinarith [mul_nonneg hM hx.le, sq_nonneg x]
-        have hreward : ∀ terminal player, |reward terminal player| ≤ M :=
-          abs_reward_le_quittingRewardBound reward
-        have hrepair := isεAsymptoticNash_soloStationary_of_quietWindow
-          hunit roots who anchor window hε.le hreward (hperfect anchor)
-          hanchorPos hwindow (le_trans hη (le_rfl : η ≤ η)) hMη
-        right
-        refine ⟨quittingSoloStationaryRoot who (roots anchor who), ?_⟩
-        apply hrepair.mono
-        change ε + 4 * M * η ≤ x
-        have hx5 : x ^ 5 ≤ (1 / 2 : ℝ) ^ 5 :=
-          pow_le_pow_left₀ hx.le hxhalf.le 5
-        have hx6 : x ^ 6 ≤ x / 2 := by
-          rw [pow_succ']
-          have hscaled := mul_le_mul_of_nonneg_left hx5 hx.le
-          norm_num at hscaled ⊢
-          linarith
-        have hscale := mul_le_mul_of_nonneg_left hηle hM
-        have hMx : 48 * M * x ≤ 1 := by linarith
-        have hMxScaled := mul_le_mul_of_nonneg_right hMx hx.le
-        rw [← hxpow]
-        nlinarith [mul_nonneg hM hx.le, sq_nonneg x]
+  obtain ⟨ε0, hε0, hdecompose⟩ :=
+    exists_quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference hunit
+  refine ⟨ε0, hε0, ?_⟩
+  intro roots ε hε hεsmall hterminate hrows
+  have hvanish : ∀ start,
+      Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0) := by
+    intro start
+    have hlimit : quittingJointSurvivalLimit roots start = 0 := by
+      rw [← quittingLiveMassLimit_rootSequence_eq_jointSurvivalLimit]
+      exact hterminate start
+    simpa [hlimit] using tendsto_quittingJointSurvivalLimit roots start
+  have hperfect : ∀ time, QuittingRowεPerfect reward
+      (quittingRootSequenceTailVector reward roots (time + 1))
+      (roots time) ε := fun time ↦
+    quittingRowεPerfect_of_oneShotPerfect (hrows time)
+  exact hdecompose roots ε hε hεsmall hvanish hperfect
 
 /-! ### 2.4. The correspondence lemma and noncyclic construction -/
 
@@ -3929,6 +3840,21 @@ structure PayoffProcess (ι : Type) [Fintype ι] [DecidableEq ι] where
     Tendsto (fun n => payoff n ω terminal who) atTop
       (nhds (limit ω terminal who))
 
+/-- The paper carrier, with its unchanged probability and filtration data,
+as the reusable quitting payoff-process semantic carrier. -/
+def PayoffProcess.toQuittingPayoffProcess
+    (process : PayoffProcess ι) : QuittingPayoffProcess ι where
+  Ω := process.Ω
+  measurableSpace := process.measurableSpace
+  μ := process.μ
+  probability := process.probability
+  payoff := process.payoff
+  limit := process.limit
+  payoff_measurable := process.payoff_measurable
+  limit_measurable := process.limit_measurable
+  integrableEnvelope := process.integrableEnvelope
+  converges := process.converges
+
 /-- A behavioral profile for a paper payoff process. -/
 abbrev ProcessProfile (process : PayoffProcess ι) :=
   ℕ → ι → process.Ω → PMF Bool
@@ -3987,15 +3913,39 @@ def processEpsilonEquilibrium
 integrable uniform envelope, and its limit satisfies A.1 and A.2 almost
 surely, then it admits an `ε`-equilibrium for every `ε > 0`.
 
-The paper invokes the Kuratowski--Ryll-Nardzewski measurable-selection
-theorem in its backward induction. The repository currently has neither that
-selection theorem nor measurable finite-game Nash correspondences. -/
+The checked proof uses a measurable countable near-selector for the tail and
+a measurable finite-game approximate-Nash selector at each stage of the
+finite backward induction. -/
 theorem theorem2_14 (process : PayoffProcess ι)
     (hprocess : processAssumptions process) :
     ∀ ε : ℝ, 0 < ε → ∃ profile : ProcessProfile process,
       processAdapted process profile ∧
         processEpsilonEquilibrium process profile ε := by
-  sorry
+  intro ε hε
+  cases isEmpty_or_nonempty ι with
+  | inl hempty =>
+      letI : IsEmpty ι := hempty
+      let profile : ProcessProfile process := fun _ who ↦ isEmptyElim who
+      refine ⟨profile, ?_, ?_⟩
+      · intro _time who
+        exact isEmptyElim who
+      · intro who
+        exact isEmptyElim who
+  | inr hnonempty =>
+      letI : Nonempty ι := hnonempty
+      let integrated := process.toQuittingPayoffProcess
+      have hintegrated : integrated.SoloExitAssumptions := by
+        filter_upwards [hprocess] with ω hω
+        constructor
+        · intro who
+          exact (hω who).1
+        · intro terminal who hwho
+          exact (hω who).2 terminal hwho
+      obtain ⟨profile, hadapted, hequilibrium⟩ :=
+        integrated.exists_adapted_isεEquilibrium hintegrated hε
+      refine ⟨profile, ?_, ?_⟩
+      · exact hadapted
+      · exact hequilibrium
 
 /-! ## 3. The four-player example -/
 
