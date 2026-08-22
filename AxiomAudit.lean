@@ -123,7 +123,6 @@ import MathUE.DirectedTransport.MaxAffine.Sparse
 import MathUE.DirectedTransport.NormalForms
 import MathUE.DirectedTransport.PotentialRigidity
 import MathUE.DirectedTransport.SCC
-import MathUE.DiscountedBackwardRecursion
 import MathUE.DivergentChargeRecurrence
 import MathUE.EdgeGraph
 import MathUE.FiniteChargedReturn
@@ -280,6 +279,7 @@ import MathUE.Probability.CoreShadowCompiler
 import MathUE.Probability.CyclicAbelCesaroModes
 import MathUE.Probability.DecisionVariationMaximalInequality
 import MathUE.Probability.DiffusePairCollisionBound
+import MathUE.Probability.DiscountedBackwardRecursion
 import MathUE.Probability.DiscreteHazardMixture
 import MathUE.Probability.DiscreteHazardStopping
 import MathUE.Probability.EntryReachableChargedClass
@@ -362,6 +362,7 @@ import MathUE.SurvivalSegmentBalance
 import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.CalibrationSliceCompactness
+import MathUE.Topology.CompactBudgetedPrefixRelation
 import MathUE.Topology.CompactFinitePrefixRelation
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.FiniteLabelSubsequence
@@ -514,6 +515,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.EventualAllC
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.ExactCycleStrata
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.ExistenceBranches
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.ImmediateSingletonCollision
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.MarkedAtomBudgetPrefixes
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Orbit.Limit
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Orbit.SelfLoop
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet
@@ -569,6 +571,8 @@ import UniformEquilibrium.Diagnostics.Quitting.FiveCycleResetWindowHelix
 import UniformEquilibrium.Diagnostics.Quitting.FourPlayerSingletonBlocker
 import UniformEquilibrium.Diagnostics.Quitting.FullCoreDeadlockDebtBound
 import UniformEquilibrium.Diagnostics.Quitting.MinimalFinCounterexample
+import UniformEquilibrium.Diagnostics.Quitting.OneActiveAlignedRankCollapse
+import UniformEquilibrium.Diagnostics.Quitting.OneActiveTransferDefectGraph
 import UniformEquilibrium.Diagnostics.Quitting.Regression.AggregatePrefixResidual
 import UniformEquilibrium.Diagnostics.Quitting.Regression.NonpositiveFloorTerminalCap
 import UniformEquilibrium.Diagnostics.Quitting.RetainedRoleClockArithmetic
@@ -1001,6 +1005,9 @@ import UniformEquilibrium.Quitting.Circulation.ChiFloorBoundary
 import UniformEquilibrium.Quitting.Circulation.DirectionBarycenter
 import UniformEquilibrium.Quitting.Circulation.FaceCirculationAll
 import UniformEquilibrium.Quitting.Circulation.KActiveCompactPath
+import UniformEquilibrium.Quitting.Circulation.KActiveMarkedAtomBudgetPathConsumer
+import UniformEquilibrium.Quitting.Circulation.KActiveMarkedAtomCompactPath
+import UniformEquilibrium.Quitting.Circulation.KActiveMarkedAtomPathConsumer
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactPath
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationFiniteClosing
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationOrbit
@@ -1287,6 +1294,7 @@ import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.Minimality
 import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.PerturbedCycleExclusion
 import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.SemanticBridge
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryNonstationarity
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 import UniformEquilibrium.Quitting.Paths.AlmostSureOpponentUniformization
@@ -1368,6 +1376,8 @@ import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 import UniformEquilibrium.Quitting.Root.NashDefect
 import UniformEquilibrium.Quitting.Root.NearSureProfile
 import UniformEquilibrium.Quitting.Root.NearSureRoot
+import UniformEquilibrium.Quitting.Root.OneActiveCoalitionMass
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 import UniformEquilibrium.Quitting.Root.SeparatedTerminalAnchor
 import UniformEquilibrium.Quitting.Root.SequencePayoff
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate

@@ -162,6 +162,7 @@ import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.FiniteHorizon
 import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.Minimality
 import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.SemanticBridge
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryNonstationarity
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 import UniformEquilibrium.Quitting.Examples.BlockPair.All

@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Circulation.UniformPayoffExamples
 import UniformEquilibrium.Quitting.Circulation.ChiFloorBoundary
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationFiniteClosing
 import UniformEquilibrium.Quitting.Circulation.KActiveCompactPath
+import UniformEquilibrium.Quitting.Circulation.KActiveMarkedAtomBudgetPathConsumer
 import UniformEquilibrium.Quitting.Circulation.AffineResetSeriesMixTarget
 
 /-!

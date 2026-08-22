@@ -79,7 +79,7 @@ import MathUE.CyclicContraction
 import MathUE.CyclicExposure
 import MathUE.CyclicMaxAffineBound
 import MathUE.DirectedTransport
-import MathUE.DiscountedBackwardRecursion
+import MathUE.Probability.DiscountedBackwardRecursion
 import MathUE.DivergentChargeRecurrence
 import MathUE.EdgeGraph
 import MathUE.FiniteChargedReturn
@@ -316,6 +316,7 @@ import MathUE.SurvivalSegmentBalance
 import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.CalibrationSliceCompactness
+import MathUE.Topology.CompactBudgetedPrefixRelation
 import MathUE.Topology.CompactFinitePrefixRelation
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.FiniteLabelSubsequence

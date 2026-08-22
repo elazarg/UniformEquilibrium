@@ -335,10 +335,11 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "The Solan--Vieille boundary table has an ordinary uniform-equilibrium payoff at its cross-block target, delivered by a paired-singleton period-two profile, so it carries no counterexample regime. A separate no-go on the same table excludes exact anchored solo-periodic profiles whose hazards are strictly inside the unit interval; it says nothing about approximate equilibria, and nothing about single-quitter profiles that are not anchored in that sense.",
+      "summary": "The Solan--Vieille boundary table has an ordinary uniform-equilibrium payoff at its cross-block target, delivered by a paired-singleton period-two profile, so it carries no counterexample regime. Quantitative terminal analysis excludes every sufficiently accurate stationary or uniformly near-all-Continue approximate equilibrium. A separate no-go excludes exact anchored solo-periodic profiles whose hazards are strictly inside the unit interval; it does not cover arbitrary single-quitter profiles.",
       "evidence": [
         "UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryTable.lean",
         "UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryEquilibrium.lean",
+        "UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryNonstationarity.lean",
         "UniformEquilibrium/Quitting/Examples/SolanVieilleBoundarySoloPeriodicNoGo.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/SolanVieilleBoundary.lean"
       ],
@@ -347,6 +348,11 @@
         "L",
         "A",
         "C"
+      ],
+      "declarations": [
+        "GameTheory.SolanVieilleBoundary.no_nearAllContinue_terminalApproximateEquilibrium",
+        "GameTheory.SolanVieilleBoundary.no_stationary_terminalApproximateEquilibrium",
+        "GameTheory.SolanVieilleBoundary.periodTwoProfile_exact_and_stationary_nearContinue_excluded"
       ]
     },
     {

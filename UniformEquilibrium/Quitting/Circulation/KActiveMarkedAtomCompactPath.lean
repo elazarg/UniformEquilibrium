@@ -4,14 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.OneActiveTransferDefectGraph
+import UniformEquilibrium.Quitting.Root.OneActiveCoalitionMass
 
 /-!
 # Compact paths preserving a quantitatively marked coalition atom
 
 Support cardinality is a closed condition, but mere positivity of a selected
 coalition atom is not.  The correct compact annotation is a uniform lower
-bound.  This experiment augments the `K`-active circulation edge with
+bound.  This module augments the `K`-active circulation edge with
 
 ```text
 eta <= probability of one fixed opponent coalition.

@@ -4,10 +4,10 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.KActiveMarkedAtomCompactPath
+import UniformEquilibrium.Quitting.Circulation.KActiveMarkedAtomCompactPath
 
 /-!
-# A persistent one-active marked atom is already a UE certificate
+# A persistent one-active marked atom is already a uniform-equilibrium certificate
 
 The exceptional five-role graph does not require cardinal compression if its
 fixed singleton atom can be carried through compatible chronological finite

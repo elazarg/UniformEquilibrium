@@ -233,6 +233,106 @@ theorem BalancedSingletonCycleCertificateWithBounds.opponent_product_lt_one
         1 - certificate.hazard phase) < 1 :=
   certificate.opponent_contracts who
 
+/-- The worst deleted-opponent survival product in the finite player set. -/
+def BalancedSingletonCycleCertificateWithBounds.opponentProductCap
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificateWithBounds (L := L) reward) : ℝ :=
+  Finset.univ.sup'
+    ⟨certificate.owner certificate.initial, Finset.mem_univ _⟩
+    fun who => ∏ phase : Fin L,
+      if who = certificate.owner phase then 1 else
+        1 - certificate.hazard phase
+
+/-- Every player's deleted-opponent product is bounded by the finite cap. -/
+theorem BalancedSingletonCycleCertificateWithBounds.opponent_product_le_cap
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificateWithBounds (L := L) reward)
+    (who : ι) :
+    (∏ phase : Fin L,
+      if who = certificate.owner phase then 1 else
+        1 - certificate.hazard phase) ≤ certificate.opponentProductCap := by
+  unfold BalancedSingletonCycleCertificateWithBounds.opponentProductCap
+  exact Finset.le_sup'
+    (fun player : ι => ∏ phase : Fin L,
+      if player = certificate.owner phase then 1 else
+        1 - certificate.hazard phase)
+    (Finset.mem_univ who)
+
+/-- The finite deleted-opponent cap is strictly below one. -/
+theorem BalancedSingletonCycleCertificateWithBounds.opponentProductCap_lt_one
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificateWithBounds (L := L) reward) :
+    certificate.opponentProductCap < 1 := by
+  rw [BalancedSingletonCycleCertificateWithBounds.opponentProductCap,
+    Finset.sup'_lt_iff]
+  intro who _
+  exact certificate.opponent_product_lt_one who
+
+/-- At every positive subdivision count, a balanced certificate gives a
+terminal Nash profile with its exact coarse value. -/
+theorem BalancedSingletonCycleCertificateWithBounds.isTerminalNash_and_hasValue
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificateWithBounds (L := L) reward)
+    (m : ℕ) (hm : 0 < m) :
+    (quittingGame reward).IsεAsymptoticNash
+        (quittingTerminalPayoff reward)
+        (certificate.collisionBound * certificate.aStar / (m : ℝ))
+        (quittingCyclicBehaviorProfile reward
+          (quittingSingletonArcCycleRoot certificate.owner certificate.hazard m
+            certificate.hazard_nonneg certificate.hazard_lt_one)
+          (quittingSingletonMeshInitialPhase certificate.initial m hm)) ∧
+      quittingTerminalPayoff reward
+          (quittingCyclicBehaviorProfile reward
+            (quittingSingletonArcCycleRoot certificate.owner certificate.hazard m
+              certificate.hazard_nonneg certificate.hazard_lt_one)
+            (quittingSingletonMeshInitialPhase certificate.initial m hm)) =
+        certificate.coarse certificate.initial := by
+  exact singletonArcCycle_isTerminalNash_and_hasValue
+    reward certificate.owner certificate.hazard certificate.coarse
+    certificate.initial m hm certificate.hazard_nonneg certificate.hazard_lt_one
+    certificate.intensity_bound certificate.collision_bound certificate.arc
+    certificate.active certificate.soloFloor certificate.collision
+    certificate.opponent_contracts
+
+/-- The canonical square-root subdivision gives an explicit finite-horizon
+Nash and delivery bound. The contraction denominator is the exact worst
+deleted-opponent product of the certificate. -/
+theorem BalancedSingletonCycleCertificateWithBounds.isHorizonNash_and_delivers
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificateWithBounds (L := L) reward)
+    {N : ℕ} (hN : 1 ≤ (N : ℝ)) :
+    (quittingGame reward).IsεHorizonNash none N
+        ((certificate.collisionBound * certificate.aStar +
+            4 * quittingRewardBound reward *
+              ((L : ℝ) / (1 - certificate.opponentProductCap))) /
+          Real.sqrt (N : ℝ))
+        (quittingCyclicBehaviorProfile reward
+          (quittingSingletonArcCycleRoot certificate.owner certificate.hazard
+            (quittingSqrtMeshScale N) certificate.hazard_nonneg
+            certificate.hazard_lt_one)
+          (quittingSingletonMeshInitialPhase certificate.initial
+            (quittingSqrtMeshScale N) (quittingSqrtMeshScale_spec hN).1)) ∧
+      ∀ who,
+        |(quittingGame reward).finiteAveragePayoff none N
+            (quittingCyclicBehaviorProfile reward
+              (quittingSingletonArcCycleRoot certificate.owner certificate.hazard
+                (quittingSqrtMeshScale N) certificate.hazard_nonneg
+                certificate.hazard_lt_one)
+              (quittingSingletonMeshInitialPhase certificate.initial
+                (quittingSqrtMeshScale N) (quittingSqrtMeshScale_spec hN).1)) who -
+            certificate.coarse certificate.initial who| ≤
+          (2 * quittingRewardBound reward *
+              ((L : ℝ) / (1 - certificate.opponentProductCap))) /
+            Real.sqrt (N : ℝ) := by
+  exact singletonArcCycle_isHorizonNash_and_delivers
+    reward certificate.owner certificate.hazard certificate.coarse
+    certificate.initial certificate.hazard_nonneg certificate.hazard_lt_one
+    certificate.intensity_bound certificate.collision_bound
+    certificate.opponentProductCap_lt_one (quittingRewardBound_nonneg reward)
+    hN (abs_reward_le_quittingRewardBound reward) certificate.arc
+    certificate.active certificate.soloFloor certificate.collision
+    certificate.opponent_product_le_cap
+
 /-- A balanced cyclic singleton certificate yields a uniform-equilibrium
 payoff at its selected initial phase.
 
@@ -262,6 +362,81 @@ theorem BalancedSingletonCycleCertificate.opponent_product_lt_one
       if who = certificate.owner phase then 1 else
         1 - certificate.hazard phase) < 1 :=
   certificate.toWithBounds.opponent_product_lt_one who
+
+/-- The worst deleted-opponent survival product of a reader-facing
+certificate. -/
+def BalancedSingletonCycleCertificate.opponentProductCap
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificate (L := L) reward) : ℝ :=
+  certificate.toWithBounds.opponentProductCap
+
+theorem BalancedSingletonCycleCertificate.opponent_product_le_cap
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificate (L := L) reward)
+    (who : ι) :
+    (∏ phase : Fin L,
+      if who = certificate.owner phase then 1 else
+        1 - certificate.hazard phase) ≤ certificate.opponentProductCap :=
+  certificate.toWithBounds.opponent_product_le_cap who
+
+theorem BalancedSingletonCycleCertificate.opponentProductCap_lt_one
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificate (L := L) reward) :
+    certificate.opponentProductCap < 1 :=
+  certificate.toWithBounds.opponentProductCap_lt_one
+
+/-- Reader-facing fixed-subdivision terminal compilation with all finite
+caps derived from the certificate and reward table. -/
+theorem BalancedSingletonCycleCertificate.isTerminalNash_and_hasValue
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificate (L := L) reward)
+    (m : ℕ) (hm : 0 < m) :
+    (quittingGame reward).IsεAsymptoticNash
+        (quittingTerminalPayoff reward)
+        (balancedSingletonCycleCollisionCap reward *
+          balancedSingletonCycleIntensityCap certificate / (m : ℝ))
+        (quittingCyclicBehaviorProfile reward
+          (quittingSingletonArcCycleRoot certificate.owner certificate.hazard m
+            certificate.hazard_nonneg certificate.hazard_lt_one)
+          (quittingSingletonMeshInitialPhase certificate.initial m hm)) ∧
+      quittingTerminalPayoff reward
+          (quittingCyclicBehaviorProfile reward
+            (quittingSingletonArcCycleRoot certificate.owner certificate.hazard m
+              certificate.hazard_nonneg certificate.hazard_lt_one)
+            (quittingSingletonMeshInitialPhase certificate.initial m hm)) =
+        certificate.coarse certificate.initial := by
+  exact certificate.toWithBounds.isTerminalNash_and_hasValue m hm
+
+/-- Reader-facing explicit square-root finite-horizon compilation. -/
+theorem BalancedSingletonCycleCertificate.isHorizonNash_and_delivers
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (certificate : BalancedSingletonCycleCertificate (L := L) reward)
+    {N : ℕ} (hN : 1 ≤ (N : ℝ)) :
+    (quittingGame reward).IsεHorizonNash none N
+        ((balancedSingletonCycleCollisionCap reward *
+              balancedSingletonCycleIntensityCap certificate +
+            4 * quittingRewardBound reward *
+              ((L : ℝ) / (1 - certificate.opponentProductCap))) /
+          Real.sqrt (N : ℝ))
+        (quittingCyclicBehaviorProfile reward
+          (quittingSingletonArcCycleRoot certificate.owner certificate.hazard
+            (quittingSqrtMeshScale N) certificate.hazard_nonneg
+            certificate.hazard_lt_one)
+          (quittingSingletonMeshInitialPhase certificate.initial
+            (quittingSqrtMeshScale N) (quittingSqrtMeshScale_spec hN).1)) ∧
+      ∀ who,
+        |(quittingGame reward).finiteAveragePayoff none N
+            (quittingCyclicBehaviorProfile reward
+              (quittingSingletonArcCycleRoot certificate.owner certificate.hazard
+                (quittingSqrtMeshScale N) certificate.hazard_nonneg
+                certificate.hazard_lt_one)
+              (quittingSingletonMeshInitialPhase certificate.initial
+                (quittingSqrtMeshScale N) (quittingSqrtMeshScale_spec hN).1)) who -
+            certificate.coarse certificate.initial who| ≤
+          (2 * quittingRewardBound reward *
+              ((L : ℝ) / (1 - certificate.opponentProductCap))) /
+            Real.sqrt (N : ℝ) := by
+  exact certificate.toWithBounds.isHorizonNash_and_delivers hN
 
 /-- The reader-facing balanced singleton compiler.  All finite mesh and
 collision caps are derived internally from the supplied finite data and

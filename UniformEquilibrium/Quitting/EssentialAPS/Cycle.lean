@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.EssentialAPS.FixedPoint
-import UniformEquilibrium.Quitting.Cycles.SingletonArcCycle
+import UniformEquilibrium.Quitting.Cycles.BalancedSingletonCertificate
 
 /-!
 # Finite executable essential-APS cycles
@@ -81,6 +81,36 @@ namespace QuittingEssentialAPSCycleCertificate
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {L : ℕ}
 
+/-- Forget the algebraic carrier fields and retain the executable balanced
+singleton-cycle certificate, including the sharper supplied finite caps. -/
+def toBalancedSingletonCycleCertificateWithBounds
+    (certificate : QuittingEssentialAPSCycleCertificate reward L) :
+    BalancedSingletonCycleCertificateWithBounds (L := L) reward where
+  owner := certificate.owner
+  hazard := certificate.hazard
+  coarse := certificate.coarse
+  initial := certificate.initial
+  aStar := certificate.intensityBound
+  collisionBound := certificate.collisionBound
+  hazard_nonneg := fun block => (certificate.hazard_pos block).le
+  hazard_lt_one := certificate.hazard_lt_one
+  intensity_bound := certificate.intensity_le
+  collision_bound := certificate.collisionBound_nonneg
+  arc := certificate.arc
+  active := certificate.active
+  soloFloor := fun block who => certificate.viable block who
+  collision := certificate.collision_le
+  opponentDivergence := by
+    intro who
+    by_cases howner : who = certificate.owner certificate.initial
+    · refine ⟨finRotate L certificate.initial, ?_,
+        certificate.hazard_pos (finRotate L certificate.initial)⟩
+      intro hnext
+      exact certificate.owner_changes certificate.initial
+        (howner.symm.trans hnext)
+    · exact ⟨certificate.initial, howner,
+        certificate.hazard_pos certificate.initial⟩
+
 /-- Owner-indexed carrier displayed by a finite certificate. -/
 def carrier
     (certificate : QuittingEssentialAPSCycleCertificate reward L)
@@ -135,39 +165,31 @@ theorem opponentContracts
     (who : ι) :
     (∏ block : Fin L,
       if who = certificate.owner block then 1
-      else 1 - certificate.hazard block) < 1 := by
-  let factor : Fin L → ℝ := fun block ↦
-    if who = certificate.owner block then 1
-    else 1 - certificate.hazard block
-  have hpositive : ∀ block ∈ Finset.univ, 0 < factor block := by
-    intro block _
-    simp only [factor]
-    split
-    · norm_num
-    · exact sub_pos.mpr (certificate.hazard_lt_one block)
-  have hle : ∀ block ∈ Finset.univ, factor block ≤ (1 : ℝ) := by
-    intro block _
-    simp only [factor]
-    split
-    · exact le_rfl
-    · exact sub_le_self 1 (certificate.hazard_pos block).le
-  have hstrict : ∃ block ∈ Finset.univ, factor block < (1 : ℝ) := by
-    by_cases hwho : who = certificate.owner certificate.initial
-    · refine ⟨finRotate L certificate.initial, Finset.mem_univ _, ?_⟩
-      have hnext : who ≠
-          certificate.owner (finRotate L certificate.initial) := by
-        intro h
-        exact certificate.owner_changes certificate.initial
-          (hwho.symm.trans h)
-      simp only [factor, if_neg hnext]
-      linarith [certificate.hazard_pos
-        (finRotate L certificate.initial)]
-    · refine ⟨certificate.initial, Finset.mem_univ _, ?_⟩
-      simp only [factor, if_neg hwho]
-      linarith [certificate.hazard_pos certificate.initial]
-  have hproduct := Finset.prod_lt_prod hpositive hle hstrict
-  simpa only [Finset.prod_const_one, Finset.card_univ, one_pow,
-    factor] using hproduct
+      else 1 - certificate.hazard block) < 1 :=
+  certificate.toBalancedSingletonCycleCertificateWithBounds
+    |>.opponent_product_lt_one who
+
+/-- The worst deleted-opponent survival product around the finite cycle. -/
+def opponentProductCap
+    [Fintype ι]
+    (certificate : QuittingEssentialAPSCycleCertificate reward L) : ℝ :=
+  certificate.toBalancedSingletonCycleCertificateWithBounds.opponentProductCap
+
+theorem opponent_product_le_cap
+    [Fintype ι]
+    (certificate : QuittingEssentialAPSCycleCertificate reward L) (who : ι) :
+    (∏ block : Fin L,
+      if who = certificate.owner block then 1
+      else 1 - certificate.hazard block) ≤ certificate.opponentProductCap :=
+  certificate.toBalancedSingletonCycleCertificateWithBounds
+    |>.opponent_product_le_cap who
+
+theorem opponentProductCap_lt_one
+    [Fintype ι]
+    (certificate : QuittingEssentialAPSCycleCertificate reward L) :
+    certificate.opponentProductCap < 1 :=
+  certificate.toBalancedSingletonCycleCertificateWithBounds
+    |>.opponentProductCap_lt_one
 
 /-- Every displayed coarse value is a proper positive-mass segment prefix.
 Its next coarse value belongs to the union of exact-successor continuation
@@ -265,16 +287,44 @@ theorem isTerminalNash_and_hasValue
               certificate.hazard_lt_one)
             (quittingSingletonMeshInitialPhase certificate.initial m hm)) =
         certificate.coarse certificate.initial := by
-  exact singletonArcCycle_isTerminalNash_and_hasValue
-    reward certificate.owner certificate.hazard certificate.coarse
-    certificate.initial m hm
-    (aStar := certificate.intensityBound)
-    (D := certificate.collisionBound)
-    (fun block ↦ (certificate.hazard_pos block).le)
-    certificate.hazard_lt_one certificate.intensity_le
-    certificate.collisionBound_nonneg certificate.arc certificate.active
-    (fun block who ↦ certificate.viable block who)
-    certificate.collision_le certificate.opponentContracts
+  exact certificate.toBalancedSingletonCycleCertificateWithBounds
+    |>.isTerminalNash_and_hasValue m hm
+
+/-- Canonical square-root finite-horizon compilation with explicit Nash and
+delivery rates for the supplied finite essential-APS cycle. -/
+theorem isHorizonNash_and_delivers
+    [Fintype ι]
+    (certificate : QuittingEssentialAPSCycleCertificate reward L)
+    {N : ℕ} (hN : 1 ≤ (N : ℝ)) :
+    (quittingGame reward).IsεHorizonNash none N
+        ((certificate.collisionBound * certificate.intensityBound +
+            4 * quittingRewardBound reward *
+              ((L : ℝ) / (1 - certificate.opponentProductCap))) /
+          Real.sqrt (N : ℝ))
+        (quittingCyclicBehaviorProfile reward
+          (quittingSingletonArcCycleRoot certificate.owner certificate.hazard
+            (quittingSqrtMeshScale N)
+            (fun block => (certificate.hazard_pos block).le)
+            certificate.hazard_lt_one)
+          (quittingSingletonMeshInitialPhase certificate.initial
+            (quittingSqrtMeshScale N) (quittingSqrtMeshScale_spec hN).1)) ∧
+      ∀ who,
+        |(quittingGame reward).finiteAveragePayoff none N
+            (quittingCyclicBehaviorProfile reward
+              (quittingSingletonArcCycleRoot certificate.owner certificate.hazard
+                (quittingSqrtMeshScale N)
+                (fun block => (certificate.hazard_pos block).le)
+                certificate.hazard_lt_one)
+              (quittingSingletonMeshInitialPhase certificate.initial
+                (quittingSqrtMeshScale N) (quittingSqrtMeshScale_spec hN).1)) who -
+            certificate.coarse certificate.initial who| ≤
+          (2 * quittingRewardBound reward *
+              ((L : ℝ) / (1 - certificate.opponentProductCap))) /
+            Real.sqrt (N : ℝ) := by
+  simpa only [opponentProductCap,
+    toBalancedSingletonCycleCertificateWithBounds] using
+      certificate.toBalancedSingletonCycleCertificateWithBounds
+        |>.isHorizonNash_and_delivers hN
 
 /-- **Finite essential-APS cycle compiler.** The selected coarse value is a
 uniform-equilibrium payoff of the quitting game from its live state. -/
@@ -283,16 +333,8 @@ theorem isUniformEquilibriumPayoff
     (certificate : QuittingEssentialAPSCycleCertificate reward L) :
     (quittingGame reward).IsUniformEquilibriumPayoff none
       (certificate.coarse certificate.initial) := by
-  exact singletonArcCycle_isUniformEquilibriumPayoff
-    reward certificate.owner certificate.hazard certificate.coarse
-    certificate.initial
-    (aStar := certificate.intensityBound)
-    (D := certificate.collisionBound)
-    (fun block ↦ (certificate.hazard_pos block).le)
-    certificate.hazard_lt_one certificate.intensity_le
-    certificate.collisionBound_nonneg certificate.arc certificate.active
-    (fun block who ↦ certificate.viable block who)
-    certificate.collision_le certificate.opponentContracts
+  exact certificate.toBalancedSingletonCycleCertificateWithBounds
+    |>.isUniformEquilibriumPayoff
 
 end QuittingEssentialAPSCycleCertificate
 
