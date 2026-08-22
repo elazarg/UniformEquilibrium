@@ -99,7 +99,7 @@ theorem sourceMatched_totalDebtDirection_eq_sum
     quittingStoppingLawNormalizedDebtDirection
     quittingStoppingLawResetProfile quittingTerminalSemanticDebtChange
     sourceMatchedInnerResetStrategy
-  rw [Finset.sum_div, Finset.sum_sub_distrib]
+  rw [← Finset.sum_sub_distrib, Finset.sum_div]
 
 /-- **Finite-rank radial scaling bound.**
 
@@ -161,7 +161,7 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
           frontier.sourceMatchedRadialDebtDirection rank mover weight
             hweight0 hweight1 observer := by
     dsimp only [sourcePair, endpointPair, radialPair, sourceProfile,
-      endpointProfile, radialProfile]
+      endpointProfile, radialProfile, endpointStrategy]
     unfold actualDebtDirection quittingStoppingLawNormalizedDebtDirection
       quittingStoppingLawResetProfile quittingTerminalSemanticDebtChange
       sourceMatchedInnerResetStrategy sourceMatchedRadialDebtDirection
@@ -175,9 +175,12 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
         ∑ who, frontier.actualDebtDirection rank mover who := by
     dsimp only [endpointPair, sourcePair, endpointProfile, sourceProfile]
     exact frontier.sourceMatched_totalDebtDirection_eq_sum rank mover
-  have hlower := div_nonneg hraw.1 hlambda.le
-  have hupper := (div_le_div_iff_of_pos_right hlambda).2 hraw.2
-  rw [hgapIdentity] at hlower hupper
+  have hlower :
+      0 ≤ weight * frontier.actualDebtDirection rank mover observer -
+          frontier.sourceMatchedRadialDebtDirection rank mover weight
+            hweight0 hweight1 observer := by
+    rw [← hgapIdentity]
+    exact div_nonneg hraw.1 hlambda.le
   have hupperIdentity :
       (epsilon + weight *
           (quittingTerminalSemanticDebtSum endpointPair -
@@ -191,7 +194,33 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
     rw [← htotalIdentity]
     dsimp only [epsilon]
     ring
-  rw [hupperIdentity] at hupper
+  have hupper :
+      weight * frontier.actualDebtDirection rank mover observer -
+          frontier.sourceMatchedRadialDebtDirection rank mover weight
+            hweight0 hweight1 observer ≤
+        (quittingTerminalSemanticDebtSum sourcePair -
+            quittingTerminalSemanticDebtSum frontier.base) /
+              frontier.lambda (frontier.subseq rank) +
+          weight * (∑ who,
+            frontier.actualDebtDirection rank mover who) := by
+    calc
+      weight * frontier.actualDebtDirection rank mover observer -
+            frontier.sourceMatchedRadialDebtDirection rank mover weight
+              hweight0 hweight1 observer =
+          ((1 - weight) * quittingTerminalSemanticDebt sourcePair observer +
+                weight * quittingTerminalSemanticDebt endpointPair observer -
+              quittingTerminalSemanticDebt radialPair observer) /
+            frontier.lambda (frontier.subseq rank) := hgapIdentity.symm
+      _ ≤ (epsilon + weight *
+              (quittingTerminalSemanticDebtSum endpointPair -
+                quittingTerminalSemanticDebtSum sourcePair)) /
+            frontier.lambda (frontier.subseq rank) :=
+        (div_le_div_iff_of_pos_right hlambda).2 hraw.2
+      _ = (quittingTerminalSemanticDebtSum sourcePair -
+              quittingTerminalSemanticDebtSum frontier.base) /
+                frontier.lambda (frontier.subseq rank) +
+            weight * (∑ who,
+              frontier.actualDebtDirection rank mover who) := hupperIdentity
   simpa only [sourcePair, sourceProfile] using And.intro hlower hupper
 
 /-- **Radial homogeneity of every flat source-matched tangent column.**
@@ -224,7 +253,7 @@ theorem sourceMatchedRadialDebtDirection_tendsto
       ∑ who, frontier.actualDebtDirection rank mover who) atTop (nhds 0) := by
     have hcoordinate := tendsto_finsetSum Finset.univ fun who _whoMem =>
       frontier.tangent_tendsto mover who
-    simpa only [hflat] using hcoordinate
+    simpa only [actualDebtDirection, hflat] using hcoordinate
   have hweight : Tendsto (fun _rank : ℕ => weight) atTop (nhds weight) :=
     tendsto_const_nhds
   have hupper : Tendsto upper atTop (nhds 0) := by
@@ -245,7 +274,7 @@ theorem sourceMatchedRadialDebtDirection_tendsto
   have hresult := hscaled.sub herror
   convert hresult using 1
   · funext rank
-    dsimp only [error]
+    simp only [error, actualDebtDirection]
     ring
   · ring
 
