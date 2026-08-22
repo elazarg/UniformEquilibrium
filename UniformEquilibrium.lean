@@ -472,6 +472,7 @@ import UniformEquilibrium.Quitting.Boundary.Analytic.GermNondegeneracy
 import UniformEquilibrium.Quitting.Boundary.Repair.RefutedRouteFences
 import UniformEquilibrium.Quitting.Boundary.Analytic.UnboundedInverseIterate
 import UniformEquilibrium.Quitting.Paths.SurvivalPrefixBridge
+import UniformEquilibrium.Quitting.Paths.SurvivalWeightedSuffixRegret
 import UniformEquilibrium.Quitting.Boundary.Analytic.SeamPriceResidual
 import UniformEquilibrium.Quitting.Circulation.TransportedLeverage
 import UniformEquilibrium.Quitting.Boundary.Repair.JointComplementarity
