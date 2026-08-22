@@ -1326,6 +1326,7 @@ import UniformEquilibrium.Quitting.Paths.SupportWitnessReduction
 import UniformEquilibrium.Quitting.Paths.SupportWitnessUniform
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Paths.SurvivalPrefixBridge
+import UniformEquilibrium.Quitting.Paths.SurvivalWeightedSuffixRegret
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 import UniformEquilibrium.Quitting.Projective.AnalyticFirstEvent
 import UniformEquilibrium.Quitting.Projective.AnalyticPacket
