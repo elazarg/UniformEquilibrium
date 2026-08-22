@@ -85,6 +85,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.StaticOrientationDispatch
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.ReachedRowDebtLocalization
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedChattering
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedRadialCapSquareConsumer
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedRadialResetCube
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedRadialScaling
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedResetCube
@@ -102,7 +103,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
 Import-only inventory of the quantitative counterexample-regime pipeline.
 Every extension in this subtree materially consumes a selected
 `QuittingCounterexampleRegime`, its frontier, or a provenance-preserving object
-derived from it.  Reusable mathematical and game-semantic owners live outside
+derived from it. Reusable mathematical and game-semantic owners live outside
 this subtree.
 
 Ordinary consumers should import the narrow module that owns the declarations
