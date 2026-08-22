@@ -264,7 +264,7 @@ def quittingResetEdgeReceivingProfile
   | .insert => data.profile (insert mover base)
   | .delete => data.profile base
 
-/-- A selected pure quit time whose normalized regret rises on one actual,
+/-- A selected pure quit time whose regret rises on one actual,
 off-diagonal reset-cube edge.  The base set, changed mover, direction, and
 literal source/receiving profiles are all retained. -/
 structure QuittingPureTimeResetEdgeWitnessSwitch
@@ -284,6 +284,43 @@ structure QuittingPureTimeResetEdgeWitnessSwitch
         (quittingResetEdgeSourceProfile data base mover orientation)
         observer quitTime
 
+/-- An edge witness together with its provenance inside one supplied reset
+square. In particular, the changed mover is one of the square coordinates,
+and the uninserted endpoint lies between the square's base and full face. -/
+structure QuittingPureTimeResetSquareEdgeWitnessSwitch
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observer : ι) (squareBase : Finset ι) (first second : ι)
+    (quitTime : Option ℕ) (charge : ℝ) where
+  edge : QuittingPureTimeResetEdgeWitnessSwitch data observer quitTime charge
+  mover_eq_first_or_second : edge.mover = first ∨ edge.mover = second
+  squareBase_subset_edgeBase : squareBase ⊆ edge.base
+  edgeBase_subset_fullSquare : edge.base ⊆ insert second (insert first squareBase)
+
+/-- A square-localized edge witness whose two reset coordinates belong to a
+set has its changed mover in that set. -/
+theorem QuittingPureTimeResetSquareEdgeWitnessSwitch.mover_mem_of_mem
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {data : QuittingStoppingLawResetCubeData reward}
+    {observer : ι} {squareBase active : Finset ι} {first second : ι}
+    {quitTime : Option ℕ} {charge : ℝ}
+    (witness : QuittingPureTimeResetSquareEdgeWitnessSwitch data observer
+      squareBase first second quitTime charge)
+    (hfirst : first ∈ active) (hsecond : second ∈ active) :
+    witness.edge.mover ∈ active := by
+  rcases witness.mover_eq_first_or_second with h | h
+  · simpa [h] using hfirst
+  · simpa [h] using hsecond
+
+/-- Propositional existence wrapper for a square-localized edge switch. -/
+def HasQuittingPureTimeResetSquareEdgeWitnessSwitch
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observer : ι) (squareBase : Finset ι) (first second : ι)
+    (quitTime : Option ℕ) (charge : ℝ) : Prop :=
+  Nonempty (QuittingPureTimeResetSquareEdgeWitnessSwitch data observer
+    squareBase first second quitTime charge)
+
 /-- Propositional existence wrapper for an edge-localized switch. -/
 def HasQuittingPureTimeResetEdgeWitnessSwitch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -291,7 +328,7 @@ def HasQuittingPureTimeResetEdgeWitnessSwitch
     (observer : ι) (quitTime : Option ℕ) (charge : ℝ) : Prop :=
   Nonempty (QuittingPureTimeResetEdgeWitnessSwitch data observer quitTime charge)
 
-private theorem hasResetEdgeWitnessSwitch_of_upperToBase
+private theorem hasResetSquareEdgeWitnessSwitch_of_upperToBase
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (data : QuittingStoppingLawResetCubeData reward)
     (observer : ι) (base : Finset ι) (first second : ι)
@@ -305,8 +342,8 @@ private theorem hasResetEdgeWitnessSwitch_of_upperToBase
         (data.profile (insert second (insert first base))) observer)
       (quittingPureTimeDeviationPayoff reward (data.profile base) observer)
       charge eta) :
-    HasQuittingPureTimeResetEdgeWitnessSwitch data observer
-      switch.sourceWitness ((charge + eta) / 2) := by
+    HasQuittingPureTimeResetSquareEdgeWitnessSwitch data observer base
+      first second switch.sourceWitness ((charge + eta) / 2) := by
   let sourceRegret := quittingPureTimeDeviationRegret reward
     (data.profile (insert second (insert first base))) observer
       switch.sourceWitness
@@ -324,29 +361,41 @@ private theorem hasResetEdgeWitnessSwitch_of_upperToBase
       (charge + eta) sourceRegret middleRegret receivingRegret htotal with
     hfirstEdge | hsecondEdge
   · refine ⟨{
-      base := insert first base
-      mover := second
-      mover_not_mem := by simp [hsecond, Ne.symm hne]
-      observer_ne_mover := hobserverSecond
-      orientation := .delete
-      regret_increase := ?_
+      edge := {
+        base := insert first base
+        mover := second
+        mover_not_mem := by simp [hsecond, Ne.symm hne]
+        observer_ne_mover := hobserverSecond
+        orientation := .delete
+        regret_increase := ?_
+      }
+      mover_eq_first_or_second := Or.inr rfl
+      squareBase_subset_edgeBase := Finset.subset_insert first base
+      edgeBase_subset_fullSquare := Finset.subset_insert second _
     }⟩
     simpa only [sourceRegret, middleRegret,
       quittingResetEdgeReceivingProfile, quittingResetEdgeSourceProfile] using
       hfirstEdge
   · refine ⟨{
-      base := base
-      mover := first
-      mover_not_mem := hfirst
-      observer_ne_mover := hobserverFirst
-      orientation := .delete
-      regret_increase := ?_
+      edge := {
+        base := base
+        mover := first
+        mover_not_mem := hfirst
+        observer_ne_mover := hobserverFirst
+        orientation := .delete
+        regret_increase := ?_
+      }
+      mover_eq_first_or_second := Or.inl rfl
+      squareBase_subset_edgeBase := Finset.Subset.rfl
+      edgeBase_subset_fullSquare := by
+        intro who hwho
+        simp [hwho]
     }⟩
     simpa only [middleRegret, receivingRegret,
       quittingResetEdgeReceivingProfile, quittingResetEdgeSourceProfile] using
       hsecondEdge
 
-private theorem hasResetEdgeWitnessSwitch_of_sideToSide
+private theorem hasResetSquareEdgeWitnessSwitch_of_sideToSide
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (data : QuittingStoppingLawResetCubeData reward)
     (observer : ι) (base : Finset ι) (first second : ι)
@@ -360,8 +409,8 @@ private theorem hasResetEdgeWitnessSwitch_of_sideToSide
       (quittingPureTimeDeviationPayoff reward
         (data.profile (insert second base)) observer)
       charge eta) :
-    HasQuittingPureTimeResetEdgeWitnessSwitch data observer
-      switch.sourceWitness ((charge + eta) / 2) := by
+    HasQuittingPureTimeResetSquareEdgeWitnessSwitch data observer base
+      first second switch.sourceWitness ((charge + eta) / 2) := by
   let sourceRegret := quittingPureTimeDeviationRegret reward
     (data.profile (insert first base)) observer switch.sourceWitness
   let middleRegret := quittingPureTimeDeviationRegret reward
@@ -378,23 +427,37 @@ private theorem hasResetEdgeWitnessSwitch_of_sideToSide
       (charge + eta) sourceRegret middleRegret receivingRegret htotal with
     hfirstEdge | hsecondEdge
   · refine ⟨{
-      base := base
-      mover := first
-      mover_not_mem := hfirst
-      observer_ne_mover := hobserverFirst
-      orientation := .delete
-      regret_increase := ?_
+      edge := {
+        base := base
+        mover := first
+        mover_not_mem := hfirst
+        observer_ne_mover := hobserverFirst
+        orientation := .delete
+        regret_increase := ?_
+      }
+      mover_eq_first_or_second := Or.inl rfl
+      squareBase_subset_edgeBase := Finset.Subset.rfl
+      edgeBase_subset_fullSquare := by
+        intro who hwho
+        simp [hwho]
     }⟩
     simpa only [sourceRegret, middleRegret,
       quittingResetEdgeReceivingProfile, quittingResetEdgeSourceProfile] using
       hfirstEdge
   · refine ⟨{
-      base := base
-      mover := second
-      mover_not_mem := hsecond
-      observer_ne_mover := hobserverSecond
-      orientation := .insert
-      regret_increase := ?_
+      edge := {
+        base := base
+        mover := second
+        mover_not_mem := hsecond
+        observer_ne_mover := hobserverSecond
+        orientation := .insert
+        regret_increase := ?_
+      }
+      mover_eq_first_or_second := Or.inr rfl
+      squareBase_subset_edgeBase := Finset.Subset.rfl
+      edgeBase_subset_fullSquare := by
+        intro who hwho
+        simp [hwho]
     }⟩
     simpa only [middleRegret, receivingRegret,
       quittingResetEdgeReceivingProfile, quittingResetEdgeSourceProfile] using
@@ -412,7 +475,7 @@ by at least `(charge + eta) / 2`.
 
 This is a static cube certificate.  It does not make the selected edge a
 chronological edge of play. -/
-theorem exists_resetCubePureTimeWitnessSwitch_of_abs_debtCurvature
+theorem exists_resetCubePureTimeSquareEdgeWitnessSwitch_of_abs_debtCurvature
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (data : QuittingStoppingLawResetCubeData reward)
     (observer : ι) (base : Finset ι) (first second : ι)
@@ -457,13 +520,14 @@ theorem exists_resetCubePureTimeWitnessSwitch_of_abs_debtCurvature
     (∃ certificate : QuittingPureTimeWitnessSwitchCertificate reward
         (data.profile (insert second (insert first base))) (data.profile base)
         observer charge eta,
-      HasQuittingPureTimeResetEdgeWitnessSwitch data observer
-        certificate.switch.sourceWitness ((charge + eta) / 2)) ∨
+      HasQuittingPureTimeResetSquareEdgeWitnessSwitch data observer base
+        first second certificate.switch.sourceWitness ((charge + eta) / 2)) ∨
       (∃ certificate : QuittingPureTimeWitnessSwitchCertificate reward
           (data.profile (insert first base)) (data.profile (insert second base))
           observer charge eta,
-        HasQuittingPureTimeResetEdgeWitnessSwitch data observer
-          certificate.switch.sourceWitness ((charge + eta) / 2)) := by
+        HasQuittingPureTimeResetSquareEdgeWitnessSwitch data observer base
+          first second certificate.switch.sourceWitness
+            ((charge + eta) / 2)) := by
   have hswitch :=
     exists_pureTimeWitnessSwitchCertificate_of_abs_debtCurvature reward
       (data.profile base) (data.profile (insert first base))
@@ -473,12 +537,12 @@ theorem exists_resetCubePureTimeWitnessSwitch_of_abs_debtCurvature
   rcases hswitch with hswitch | hswitch
   · rcases hswitch with ⟨certificate⟩
     exact Or.inl ⟨certificate,
-      hasResetEdgeWitnessSwitch_of_upperToBase data observer base first second
+      hasResetSquareEdgeWitnessSwitch_of_upperToBase data observer base first second
         hfirst hsecond hne hobserverFirst hobserverSecond charge eta
           certificate.switch⟩
   · rcases hswitch with ⟨certificate⟩
     exact Or.inr ⟨certificate,
-      hasResetEdgeWitnessSwitch_of_sideToSide data observer base first second
+      hasResetSquareEdgeWitnessSwitch_of_sideToSide data observer base first second
         hfirst hsecond hobserverFirst hobserverSecond charge eta
           certificate.switch⟩
 
