@@ -6,20 +6,22 @@ Authors: GameTheory contributors
 
 import MathUE.Optimization.SupremumTwoResetWitnessSwitch
 import UniformEquilibrium.Quitting.Paths.OutsiderNeverGluing
+import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 
 /-!
 # Survival-weighted suffix regret
 
-This file records the exact interface needed to transport a pure-time
-deviation comparison from a quitting source to a reached suffix.  The
-transport is stated as a proposition rather than inferred from a terminal
-cap: producing it is a chronological task.  Once supplied, the supremum
-envelope inequality is an elementary consequence of nonnegative opponent
-survival.
+This file proves the exact transport of a pure-time deviation comparison
+from a quitting source to a reached suffix.  A suffix choice is a relative
+delay, so it is first rebased to an absolute source date.  Prefix scaling
+then gives the source difference as opponent survival to the suffix times
+the reached-suffix difference.  The corresponding supremum-envelope
+inequality does not assume that either supremum is attained.
 
 The same file gives a thin adapter from actual quitting pure-time values to
 the generic four-corner supremum witness-switch lemmas.  It does not assert
-that a radial reset cube supplies the transport or a common passport.
+that a radial reset cube supplies a common passport or chronological renewal
+construction.
 -/
 
 noncomputable section
@@ -39,12 +41,25 @@ def quittingAbsolutePureTime (start : ℕ) : Option ℕ → Option ℕ
   | none => none
   | some delay => some (start + delay)
 
-/-- The pure-time best-response envelope at a live date. -/
+@[simp] theorem quittingAbsolutePureTime_zero (quitTime : Option ℕ) :
+    quittingAbsolutePureTime 0 quitTime = quitTime := by
+  cases quitTime <;> simp [quittingAbsolutePureTime]
+
+/-- The value from a reached suffix of a quit delay measured relative to the
+suffix.  Evaluation uses the same absolute root sequence as the source. -/
+def quittingRootSequenceRelativePureTimeTerminalValue
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ)
+    (delay : Option ℕ) : ℝ :=
+  quittingRootSequencePureTimeTerminalValue reward roots who
+    (quittingAbsolutePureTime start delay) start
+
+/-- The relative pure-time best-response envelope at a reached live date. -/
 def quittingPureTimeBestResponseCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ) : ℝ :=
-  sSup (Set.range fun quitTime : Option ℕ =>
-    quittingRootSequencePureTimeTerminalValue reward roots who quitTime start)
+  sSup (Set.range
+    (quittingRootSequenceRelativePureTimeTerminalValue reward roots who start))
 
 /-- The pure-time values are bounded above at every live date by the standard
 terminal reward bound. -/
@@ -65,51 +80,104 @@ theorem bddAbove_range_quittingRootSequencePureTimeTerminalValue_at
             (quittingPureTimeHazard quitTime)) start)
         who))
 
-/-- A source-to-suffix pure-time transport identity.  This is the exact
-survival-weighted comparison behind a suffix passport: both deviations are
-measured from the same reached date, and their source versions are obtained
-by prefixing that date. -/
-def IsQuittingPureTimePrefixTransport
+/-- The relative pure-time payoff set at a reached date is bounded above. -/
+theorem bddAbove_range_quittingRootSequenceRelativePureTimeTerminalValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (who : ι) : Prop :=
-  ∀ (start : ℕ) (first second : Option ℕ),
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ) :
+    BddAbove (Set.range
+      (quittingRootSequenceRelativePureTimeTerminalValue reward roots who start)) := by
+  obtain ⟨bound, hbound⟩ :=
+    bddAbove_range_quittingRootSequencePureTimeTerminalValue_at
+      reward roots who start
+  refine ⟨bound, ?_⟩
+  rintro value ⟨delay, rfl⟩
+  exact hbound ⟨quittingAbsolutePureTime start delay, rfl⟩
+
+/-- Before the reached date, every rebased pure-time deviation continues
+surely. -/
+theorem quittingPureTimeHazard_absolute_eq_continue_of_lt
+    (start : ℕ) (delay : Option ℕ) {time : ℕ} (htime : time < start) :
+    quittingPureTimeHazard (quittingAbsolutePureTime start delay) time =
+      PMF.pure false := by
+  cases delay with
+  | none => rfl
+  | some delay =>
+      apply quittingPureTimeHazard_some_of_ne
+      omega
+
+/-- Exact source-to-suffix transport for two relative pure-time choices.
+Both suffix choices are rebased to absolute source dates before evaluation.
+The deviator surely continues through the common prefix, so joint survival
+of either deviated sequence there is exactly the opponents' survival. -/
+theorem quittingRelativePureTimeTerminalValue_sub_prefixTransport
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ)
+    (first second : Option ℕ) :
     quittingOpponentSurvivalWeight roots who 0 start *
-        (quittingRootSequencePureTimeTerminalValue reward roots who first start -
-          quittingRootSequencePureTimeTerminalValue reward roots who second start) =
+        (quittingRootSequenceRelativePureTimeTerminalValue
+            reward roots who start first -
+          quittingRootSequenceRelativePureTimeTerminalValue
+            reward roots who start second) =
       quittingRootSequencePureTimeTerminalValue reward roots who
           (quittingAbsolutePureTime start first) 0 -
         quittingRootSequencePureTimeTerminalValue reward roots who
-          (quittingAbsolutePureTime start second) 0
+          (quittingAbsolutePureTime start second) 0 := by
+  let firstRoots := quittingRootSequenceUpdate roots who
+    (quittingPureTimeHazard (quittingAbsolutePureTime start first))
+  let secondRoots := quittingRootSequenceUpdate roots who
+    (quittingPureTimeHazard (quittingAbsolutePureTime start second))
+  have hagree : ∀ time, time < start → firstRoots time = secondRoots time := by
+    intro time htime
+    unfold firstRoots secondRoots quittingRootSequenceUpdate
+    rw [quittingPureTimeHazard_absolute_eq_continue_of_lt start first htime,
+      quittingPureTimeHazard_absolute_eq_continue_of_lt start second htime]
+  have hprefix :=
+    quittingRootSequenceTerminalValue_sub_eq_jointSurvivalWeight_mul
+      reward firstRoots secondRoots who start hagree
+  have hsurvival : quittingJointSurvivalWeight secondRoots 0 start =
+      quittingOpponentSurvivalWeight roots who 0 start := by
+    rw [quittingJointSurvivalWeight_eq_prod]
+    unfold quittingOpponentSurvivalWeight
+    apply Finset.prod_congr rfl
+    intro offset hoffset
+    have hlt : offset < start := Finset.mem_range.mp hoffset
+    rw [Nat.zero_add]
+    unfold secondRoots quittingRootSequenceUpdate
+    rw [quittingPureTimeHazard_absolute_eq_continue_of_lt start second hlt]
+    rfl
+  rw [hsurvival] at hprefix
+  symm
+  simpa [quittingRootSequenceRelativePureTimeTerminalValue,
+    quittingRootSequencePureTimeTerminalValue,
+    quittingRootSequenceHazardTerminalValue, firstRoots, secondRoots] using hprefix
 
-/-! ## The suffix regret inequality -/
+/-! ## The unconditional suffix regret inequality -/
 
-/-- Survival-weighted suffix regret is bounded by source regret whenever the
-pure-time prefix transport identity is available.  The source and suffix
-caps are explicit `sSup`s, so no best-response attainment is assumed. -/
-theorem quittingPureTimeSuffixRegret_le_of_prefixTransport
+/-- A source passport's reached-suffix regret, weighted by opponent survival
+to that suffix, is bounded by its source regret.  The suffix stopping times
+are relative delays rebased to absolute source dates.  Both caps are explicit
+`sSup`s, and boundedness is discharged by the canonical terminal bound, so
+no best-response attainment or extra transport premise is assumed. -/
+theorem quittingPureTimeSuffixRegret_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ)
-    (passport : Option ℕ)
-    (htransport : IsQuittingPureTimePrefixTransport reward roots who)
-    (hsource : BddAbove (Set.range fun quitTime : Option ℕ =>
-      quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0))
-    (hsuffix : BddAbove (Set.range fun quitTime : Option ℕ =>
-      quittingRootSequencePureTimeTerminalValue reward roots who quitTime start)) :
+    (passport : Option ℕ) :
     quittingOpponentSurvivalWeight roots who 0 start *
         (quittingPureTimeBestResponseCap reward roots who start -
-          quittingRootSequencePureTimeTerminalValue reward roots who passport start) ≤
+          quittingRootSequenceRelativePureTimeTerminalValue
+            reward roots who start passport) ≤
       quittingPureTimeBestResponseCap reward roots who 0 -
         quittingRootSequencePureTimeTerminalValue reward roots who
           (quittingAbsolutePureTime start passport) 0 := by
   let survival := quittingOpponentSurvivalWeight roots who 0 start
   let suffixValue : Option ℕ → ℝ := fun quitTime ↦
-    quittingRootSequencePureTimeTerminalValue reward roots who quitTime start
+    quittingRootSequenceRelativePureTimeTerminalValue
+      reward roots who start quitTime
   let sourceValue : Option ℕ → ℝ := fun quitTime ↦
     quittingRootSequencePureTimeTerminalValue reward roots who
       (quittingAbsolutePureTime start quitTime) 0
   let suffixCap : ℝ := sSup (Set.range suffixValue)
-  let sourceCap : ℝ := sSup (Set.range fun quitTime : Option ℕ =>
-    quittingRootSequencePureTimeTerminalValue reward roots who quitTime 0)
+  let sourceCap : ℝ := quittingPureTimeBestResponseCap reward roots who 0
   have hsurvival : 0 ≤ survival := by
     exact quittingOpponentSurvivalWeight_nonneg roots who 0 start
   have hsurvival_le_one : survival ≤ 1 := by
@@ -118,13 +186,24 @@ theorem quittingPureTimeSuffixRegret_le_of_prefixTransport
       survival * (suffixValue first - suffixValue second) =
         sourceValue first - sourceValue second := by
     intro first second
-    exact htransport start first second
+    exact quittingRelativePureTimeTerminalValue_sub_prefixTransport
+      reward roots who start first second
+  have hsuffix : BddAbove (Set.range suffixValue) := by
+    exact bddAbove_range_quittingRootSequenceRelativePureTimeTerminalValue
+      reward roots who start
+  have hsource : BddAbove (Set.range fun quitTime : Option ℕ =>
+      quittingRootSequenceRelativePureTimeTerminalValue
+        reward roots who 0 quitTime) := by
+    exact bddAbove_range_quittingRootSequenceRelativePureTimeTerminalValue
+      reward roots who 0
   have hsuffixNonempty : (Set.range suffixValue).Nonempty := by
     exact ⟨suffixValue none, ⟨none, rfl⟩⟩
   have hsourceValue_le : ∀ quitTime, sourceValue quitTime ≤ sourceCap := by
     intro quitTime
     dsimp [sourceValue, sourceCap]
-    exact le_csSup hsource ⟨quittingAbsolutePureTime start quitTime, rfl⟩
+    apply le_csSup hsource
+    refine ⟨quittingAbsolutePureTime start quitTime, ?_⟩
+    simp [quittingRootSequenceRelativePureTimeTerminalValue]
   have hscaled : ∀ ε : ℝ, 0 < ε →
       survival * (suffixCap - suffixValue passport) ≤
         sourceCap - sourceValue passport + ε := by
@@ -164,28 +243,24 @@ theorem quittingPureTimeSuffixRegret_le_of_prefixTransport
     suffixValue, sourceValue] at hscaled ⊢
   exact le_of_forall_pos_le_add (fun ε hε => hscaled ε hε)
 
-/-- Absolute-date form of the suffix regret inequality.  The source passport
-is a finite quit date `quitTime`, while the reached suffix sees the remaining
-date `quitTime - start`. -/
-theorem quittingPureTimeSuffixRegret_le_of_prefixTransport_at_absoluteQuitTime
+/-- Absolute-date form of the suffix regret inequality.  The finite source
+passport `quitTime` is converted to the relative suffix delay
+`quitTime - start` only through the explicit rebasing definition. -/
+theorem quittingPureTimeSuffixRegret_le_at_absoluteQuitTime
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (start quitTime : ℕ)
-    (hstart : start ≤ quitTime)
-    (htransport : IsQuittingPureTimePrefixTransport reward roots who)
-    (hsource : BddAbove (Set.range fun choice : Option ℕ =>
-      quittingRootSequencePureTimeTerminalValue reward roots who choice 0))
-    (hsuffix : BddAbove (Set.range fun choice : Option ℕ =>
-      quittingRootSequencePureTimeTerminalValue reward roots who choice start)) :
+    (hstart : start ≤ quitTime) :
     quittingOpponentSurvivalWeight roots who 0 start *
         (quittingPureTimeBestResponseCap reward roots who start -
           quittingRootSequencePureTimeTerminalValue reward roots who
-            (some (quitTime - start)) start) ≤
+            (some quitTime) start) ≤
       quittingPureTimeBestResponseCap reward roots who 0 -
         quittingRootSequencePureTimeTerminalValue reward roots who
           (some quitTime) 0 := by
-  have hmain := quittingPureTimeSuffixRegret_le_of_prefixTransport
-    reward roots who start (some (quitTime - start)) htransport hsource hsuffix
-  simpa [quittingAbsolutePureTime, Nat.add_sub_of_le hstart] using hmain
+  have hmain := quittingPureTimeSuffixRegret_le
+    reward roots who start (some (quitTime - start))
+  simpa [quittingRootSequenceRelativePureTimeTerminalValue,
+    quittingAbsolutePureTime, Nat.add_sub_of_le hstart] using hmain
 
 /-! ## Adapter to the pure-time witness-switch interface -/
 
@@ -205,8 +280,6 @@ theorem quittingPureTimeFace_upperToBase_regret_ge
     {κ : Type*} (faces : κ → ℕ → ι → PMF Bool)
     (base one two both : κ) (who : ι)
     (q eta : ℝ) (quitTime : Option ℕ)
-    (h₁ : BddAbove (Set.range (quittingPureTimeFaceValue reward faces one who)))
-    (h₂ : BddAbove (Set.range (quittingPureTimeFaceValue reward faces two who)))
     (hface : ∀ choice : Option ℕ,
       |quittingPureTimeFaceValue reward faces both who choice -
           quittingPureTimeFaceValue reward faces one who choice -
@@ -221,30 +294,23 @@ theorem quittingPureTimeFace_upperToBase_regret_ge
         (quittingPureTimeFaceValue reward faces both who) - (q + eta) ≤
       Math.Optimization.baseRegret
         (quittingPureTimeFaceValue reward faces base who) quitTime := by
+  have h₁ : BddAbove
+      (Set.range (quittingPureTimeFaceValue reward faces one who)) := by
+    change BddAbove (Set.range fun choice : Option ℕ =>
+      quittingRootSequencePureTimeTerminalValue reward (faces one) who choice 0)
+    exact bddAbove_range_quittingRootSequencePureTimeTerminalValue_at
+      reward (faces one) who 0
+  have h₂ : BddAbove
+      (Set.range (quittingPureTimeFaceValue reward faces two who)) := by
+    change BddAbove (Set.range fun choice : Option ℕ =>
+      quittingRootSequencePureTimeTerminalValue reward (faces two) who choice 0)
+    exact bddAbove_range_quittingRootSequencePureTimeTerminalValue_at
+      reward (faces two) who 0
   exact Math.Optimization.upperToBase_regret_ge_supMixedDifference_sub
     (quittingPureTimeFaceValue reward faces base who)
     (quittingPureTimeFaceValue reward faces one who)
     (quittingPureTimeFaceValue reward faces two who)
     (quittingPureTimeFaceValue reward faces both who)
     h₁ h₂ q eta quitTime hface hupper
-
-/-! ## Explicit chronology input -/
-
-/-- A named conditional input for a chronological renewal consumer.  The
-fields separate source return, survival-weighted continuation residual, and
-passport alignment; no theorem in this file constructs them from a radial
-reset cube. -/
-structure QuittingChronologicalRenewalInput
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) where
-  phases : ℕ
-  sourceReturnError : ℝ
-  weightedContinueResidual : ℝ
-  passportError : ℝ
-  opponentSurvivalProduct : ι → ℝ
-  sourceReturnError_nonneg : 0 ≤ sourceReturnError
-  weightedContinueResidual_nonneg : 0 ≤ weightedContinueResidual
-  passportError_nonneg : 0 ≤ passportError
-  opponentSurvivalProduct_nonneg : ∀ who, 0 ≤ opponentSurvivalProduct who
-  opponentSurvivalProduct_lt_one : ∀ who, opponentSurvivalProduct who < 1
 
 end GameTheory
