@@ -87,6 +87,8 @@ import Research.Quitting.ObserverAbsentForcedOwnerCurvatureConsumer
 import Research.Quitting.ObserverAbsentNegativeTargetAtomicSourceNoGo
 import Research.Quitting.ObserverAbsentNeverClockTruncation
 import Research.Quitting.OpponentClockVariation
+import Research.Quitting.OrientedWitnessSwitchPureTime
+import Research.Quitting.OrientedWitnessSwitchPureTimeAtom
 import Research.Quitting.OwnerOutsiderSquareContextDecomposition
 import Research.Quitting.OwnerSoloCertification
 import Research.Quitting.PacketPreservingSourceReturnNoGo
