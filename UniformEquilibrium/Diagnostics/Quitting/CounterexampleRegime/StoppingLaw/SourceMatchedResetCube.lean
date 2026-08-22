@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedChattering
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawResetCube
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawResetCubeOrientation
 
 /-!
 # A literal reset cube for source-matched stopping-law chords
@@ -193,6 +193,75 @@ theorem exists_sourceMatchedChatteringResetCubeStar
     _ = frontier.lambda (frontier.subseq rank) *
         ((∑ mover, |frontier.tangent mover observer|) + budget) / N := by
       ring
+
+/-- The edge-localized pure-time switch theorem on the literal reset cube at
+one actual frontier rank.  Both reset directions are active source-matched
+best-response chords, and the returned edge retains which one of their movers
+changes.  The result is static cube geometry, not play chronology. -/
+theorem exists_sourceMatchedResetCubePureTimeWitnessSwitch_of_abs_debtCurvature
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (rank : ℕ) (observer : ι) (base : Finset ι)
+    (first second : {who // who ∈ frontier.active})
+    (hfirst : first.1 ∉ base) (hsecond : second.1 ∉ base)
+    (hne : first.1 ≠ second.1)
+    (hobserverFirst : observer ≠ first.1)
+    (hobserverSecond : observer ≠ second.1)
+    (prescribedBound q charge eta : ℝ)
+    (hcharge : 0 < charge) (heta : 0 < eta)
+    (hprescribed :
+      let data := frontier.sourceMatchedResetCubeData rank
+      |quittingTerminalPayoff reward
+              (data.profile (insert second.1 (insert first.1 base))) observer -
+          quittingTerminalPayoff reward (data.profile (insert first.1 base))
+            observer -
+          quittingTerminalPayoff reward (data.profile (insert second.1 base))
+            observer +
+          quittingTerminalPayoff reward (data.profile base) observer| ≤
+        prescribedBound)
+    (hface :
+      let data := frontier.sourceMatchedResetCubeData rank
+      ∀ quitTime : Option ℕ,
+        |quittingPureTimeDeviationPayoff reward
+                (data.profile (insert second.1 (insert first.1 base))) observer
+                quitTime -
+            quittingPureTimeDeviationPayoff reward
+                (data.profile (insert first.1 base)) observer quitTime -
+            quittingPureTimeDeviationPayoff reward
+                (data.profile (insert second.1 base)) observer quitTime +
+            quittingPureTimeDeviationPayoff reward (data.profile base) observer
+                quitTime| ≤ q)
+    (hcurvature :
+      let data := frontier.sourceMatchedResetCubeData rank
+      charge + prescribedBound + q + 3 * eta ≤
+        |quittingTerminalSemanticDebt
+                (quittingTerminalSemanticPair reward
+                  (data.profile (insert second.1 (insert first.1 base))))
+                observer -
+            quittingTerminalSemanticDebt
+                (quittingTerminalSemanticPair reward
+                  (data.profile (insert first.1 base))) observer -
+            quittingTerminalSemanticDebt
+                (quittingTerminalSemanticPair reward
+                  (data.profile (insert second.1 base))) observer +
+            quittingTerminalSemanticDebt
+                (quittingTerminalSemanticPair reward (data.profile base))
+                observer|) :
+    let data := frontier.sourceMatchedResetCubeData rank
+    (∃ certificate : QuittingPureTimeWitnessSwitchCertificate reward
+        (data.profile (insert second.1 (insert first.1 base)))
+        (data.profile base) observer charge eta,
+      HasQuittingPureTimeResetEdgeWitnessSwitch data observer
+        certificate.switch.sourceWitness ((charge + eta) / 2)) ∨
+      (∃ certificate : QuittingPureTimeWitnessSwitchCertificate reward
+          (data.profile (insert first.1 base))
+          (data.profile (insert second.1 base)) observer charge eta,
+        HasQuittingPureTimeResetEdgeWitnessSwitch data observer
+          certificate.switch.sourceWitness ((charge + eta) / 2)) := by
+  dsimp only at hprescribed hface hcurvature ⊢
+  exact exists_resetCubePureTimeWitnessSwitch_of_abs_debtCurvature
+    (frontier.sourceMatchedResetCubeData rank) observer base first.1 second.1
+    hfirst hsecond hne hobserverFirst hobserverSecond prescribedBound q charge
+      eta hcharge heta hprescribed hface hcurvature
 
 end QuittingCounterexampleStoppingLawFrontier
 end GameTheory

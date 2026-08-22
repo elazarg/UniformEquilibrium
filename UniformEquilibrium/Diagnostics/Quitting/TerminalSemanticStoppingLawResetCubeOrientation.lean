@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSimultaneousResetOrientationLocalization
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeRectangle
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawResetCube
 
 /-!
@@ -33,6 +34,7 @@ namespace GameTheory
 
 open Math.Finset
 open Math.Finset.CubicalResetIntegrability
+open Math.Optimization
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -235,5 +237,249 @@ theorem terminalSemanticDebt_resetCube_routeNearReturnConsumer
   rcases hroute with hnear | ⟨hcurvature, horientation⟩
   · exact Or.inl (nearConsumer hnear)
   · exact Or.inr (curvatureConsumer hcurvature horientation)
+
+/-! ## Pure-time witness switches on literal cube edges -/
+
+/-- Orientation of a literal reset-cube edge.  `insert` follows the reset;
+`delete` traverses the same edge back toward its unreset endpoint. -/
+inductive QuittingResetEdgeOrientation
+  | insert
+  | delete
+
+/-- Literal source profile of an oriented edge in a frozen reset cube. -/
+def quittingResetEdgeSourceProfile
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (base : Finset ι) (mover : ι) :
+    QuittingResetEdgeOrientation → (quittingGame reward).BehaviorProfile
+  | .insert => data.profile base
+  | .delete => data.profile (insert mover base)
+
+/-- Literal receiving profile of an oriented edge in a frozen reset cube. -/
+def quittingResetEdgeReceivingProfile
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (base : Finset ι) (mover : ι) :
+    QuittingResetEdgeOrientation → (quittingGame reward).BehaviorProfile
+  | .insert => data.profile (insert mover base)
+  | .delete => data.profile base
+
+/-- A selected pure quit time whose normalized regret rises on one actual,
+off-diagonal reset-cube edge.  The base set, changed mover, direction, and
+literal source/receiving profiles are all retained. -/
+structure QuittingPureTimeResetEdgeWitnessSwitch
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observer : ι) (quitTime : Option ℕ) (charge : ℝ) where
+  base : Finset ι
+  mover : ι
+  mover_not_mem : mover ∉ base
+  observer_ne_mover : observer ≠ mover
+  orientation : QuittingResetEdgeOrientation
+  regret_increase : charge ≤
+    quittingPureTimeDeviationRegret reward
+        (quittingResetEdgeReceivingProfile data base mover orientation)
+        observer quitTime -
+      quittingPureTimeDeviationRegret reward
+        (quittingResetEdgeSourceProfile data base mover orientation)
+        observer quitTime
+
+/-- Propositional existence wrapper for an edge-localized switch. -/
+def HasQuittingPureTimeResetEdgeWitnessSwitch
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observer : ι) (quitTime : Option ℕ) (charge : ℝ) : Prop :=
+  Nonempty (QuittingPureTimeResetEdgeWitnessSwitch data observer quitTime charge)
+
+private theorem hasResetEdgeWitnessSwitch_of_upperToBase
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observer : ι) (base : Finset ι) (first second : ι)
+    (hfirst : first ∉ base) (hsecond : second ∉ base)
+    (hne : first ≠ second)
+    (hobserverFirst : observer ≠ first)
+    (hobserverSecond : observer ≠ second)
+    (charge eta : ℝ)
+    (switch : OrientedSupremumWitnessSwitch
+      (quittingPureTimeDeviationPayoff reward
+        (data.profile (insert second (insert first base))) observer)
+      (quittingPureTimeDeviationPayoff reward (data.profile base) observer)
+      charge eta) :
+    HasQuittingPureTimeResetEdgeWitnessSwitch data observer
+      switch.sourceWitness ((charge + eta) / 2) := by
+  let sourceRegret := quittingPureTimeDeviationRegret reward
+    (data.profile (insert second (insert first base))) observer
+      switch.sourceWitness
+  let middleRegret := quittingPureTimeDeviationRegret reward
+    (data.profile (insert first base)) observer switch.sourceWitness
+  let receivingRegret := quittingPureTimeDeviationRegret reward
+    (data.profile base) observer switch.sourceWitness
+  have htotal : charge + eta ≤ receivingRegret - sourceRegret := by
+    dsimp only [sourceRegret, receivingRegret,
+      quittingPureTimeDeviationRegret]
+    rw [quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff,
+      quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff]
+    linarith [switch.receiving_regret, switch.source_approx]
+  rcases half_le_one_twoStep_increment
+      (charge + eta) sourceRegret middleRegret receivingRegret htotal with
+    hfirstEdge | hsecondEdge
+  · refine ⟨{
+      base := insert first base
+      mover := second
+      mover_not_mem := by simp [hsecond, Ne.symm hne]
+      observer_ne_mover := hobserverSecond
+      orientation := .delete
+      regret_increase := ?_
+    }⟩
+    simpa only [sourceRegret, middleRegret,
+      quittingResetEdgeReceivingProfile, quittingResetEdgeSourceProfile] using
+      hfirstEdge
+  · refine ⟨{
+      base := base
+      mover := first
+      mover_not_mem := hfirst
+      observer_ne_mover := hobserverFirst
+      orientation := .delete
+      regret_increase := ?_
+    }⟩
+    simpa only [middleRegret, receivingRegret,
+      quittingResetEdgeReceivingProfile, quittingResetEdgeSourceProfile] using
+      hsecondEdge
+
+private theorem hasResetEdgeWitnessSwitch_of_sideToSide
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observer : ι) (base : Finset ι) (first second : ι)
+    (hfirst : first ∉ base) (hsecond : second ∉ base)
+    (hobserverFirst : observer ≠ first)
+    (hobserverSecond : observer ≠ second)
+    (charge eta : ℝ)
+    (switch : OrientedSupremumWitnessSwitch
+      (quittingPureTimeDeviationPayoff reward
+        (data.profile (insert first base)) observer)
+      (quittingPureTimeDeviationPayoff reward
+        (data.profile (insert second base)) observer)
+      charge eta) :
+    HasQuittingPureTimeResetEdgeWitnessSwitch data observer
+      switch.sourceWitness ((charge + eta) / 2) := by
+  let sourceRegret := quittingPureTimeDeviationRegret reward
+    (data.profile (insert first base)) observer switch.sourceWitness
+  let middleRegret := quittingPureTimeDeviationRegret reward
+    (data.profile base) observer switch.sourceWitness
+  let receivingRegret := quittingPureTimeDeviationRegret reward
+    (data.profile (insert second base)) observer switch.sourceWitness
+  have htotal : charge + eta ≤ receivingRegret - sourceRegret := by
+    dsimp only [sourceRegret, receivingRegret,
+      quittingPureTimeDeviationRegret]
+    rw [quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff,
+      quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff]
+    linarith [switch.receiving_regret, switch.source_approx]
+  rcases half_le_one_twoStep_increment
+      (charge + eta) sourceRegret middleRegret receivingRegret htotal with
+    hfirstEdge | hsecondEdge
+  · refine ⟨{
+      base := base
+      mover := first
+      mover_not_mem := hfirst
+      observer_ne_mover := hobserverFirst
+      orientation := .delete
+      regret_increase := ?_
+    }⟩
+    simpa only [sourceRegret, middleRegret,
+      quittingResetEdgeReceivingProfile, quittingResetEdgeSourceProfile] using
+      hfirstEdge
+  · refine ⟨{
+      base := base
+      mover := second
+      mover_not_mem := hsecond
+      observer_ne_mover := hobserverSecond
+      orientation := .insert
+      regret_increase := ?_
+    }⟩
+    simpa only [middleRegret, receivingRegret,
+      quittingResetEdgeReceivingProfile, quittingResetEdgeSourceProfile] using
+      hsecondEdge
+
+/-- **Source-matched debt square to an actual edge witness switch.**
+
+For two fresh reset coordinates in one supplied
+`QuittingStoppingLawResetCubeData`, the four profiles are literal cube
+vertices.  After the prescribed-payoff and fixed-witness budgets are paid, a
+large debt square produces a full oriented pure-time certificate on one
+diagonal.  Along a two-edge cube path from its source to receiving vertex,
+one actual off-diagonal reset edge raises the selected source witness's regret
+by at least `(charge + eta) / 2`.
+
+This is a static cube certificate.  It does not make the selected edge a
+chronological edge of play. -/
+theorem exists_resetCubePureTimeWitnessSwitch_of_abs_debtCurvature
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (data : QuittingStoppingLawResetCubeData reward)
+    (observer : ι) (base : Finset ι) (first second : ι)
+    (hfirst : first ∉ base) (hsecond : second ∉ base)
+    (hne : first ≠ second)
+    (hobserverFirst : observer ≠ first)
+    (hobserverSecond : observer ≠ second)
+    (prescribedBound q charge eta : ℝ)
+    (hcharge : 0 < charge) (heta : 0 < eta)
+    (hprescribed :
+      |quittingTerminalPayoff reward
+              (data.profile (insert second (insert first base))) observer -
+          quittingTerminalPayoff reward (data.profile (insert first base))
+            observer -
+          quittingTerminalPayoff reward (data.profile (insert second base))
+            observer +
+          quittingTerminalPayoff reward (data.profile base) observer| ≤
+        prescribedBound)
+    (hface : ∀ quitTime : Option ℕ,
+      |quittingPureTimeDeviationPayoff reward
+              (data.profile (insert second (insert first base))) observer
+              quitTime -
+          quittingPureTimeDeviationPayoff reward
+              (data.profile (insert first base)) observer quitTime -
+          quittingPureTimeDeviationPayoff reward
+              (data.profile (insert second base)) observer quitTime +
+          quittingPureTimeDeviationPayoff reward (data.profile base) observer
+              quitTime| ≤ q)
+    (hcurvature : charge + prescribedBound + q + 3 * eta ≤
+      |quittingTerminalSemanticDebt
+              (quittingTerminalSemanticPair reward
+                (data.profile (insert second (insert first base)))) observer -
+          quittingTerminalSemanticDebt
+              (quittingTerminalSemanticPair reward
+                (data.profile (insert first base))) observer -
+          quittingTerminalSemanticDebt
+              (quittingTerminalSemanticPair reward
+                (data.profile (insert second base))) observer +
+          quittingTerminalSemanticDebt
+              (quittingTerminalSemanticPair reward (data.profile base))
+              observer|) :
+    (∃ certificate : QuittingPureTimeWitnessSwitchCertificate reward
+        (data.profile (insert second (insert first base))) (data.profile base)
+        observer charge eta,
+      HasQuittingPureTimeResetEdgeWitnessSwitch data observer
+        certificate.switch.sourceWitness ((charge + eta) / 2)) ∨
+      (∃ certificate : QuittingPureTimeWitnessSwitchCertificate reward
+          (data.profile (insert first base)) (data.profile (insert second base))
+          observer charge eta,
+        HasQuittingPureTimeResetEdgeWitnessSwitch data observer
+          certificate.switch.sourceWitness ((charge + eta) / 2)) := by
+  have hswitch :=
+    exists_pureTimeWitnessSwitchCertificate_of_abs_debtCurvature reward
+      (data.profile base) (data.profile (insert first base))
+      (data.profile (insert second base))
+      (data.profile (insert second (insert first base))) observer
+      prescribedBound q charge eta hcharge heta hprescribed hface hcurvature
+  rcases hswitch with hswitch | hswitch
+  · rcases hswitch with ⟨certificate⟩
+    exact Or.inl ⟨certificate,
+      hasResetEdgeWitnessSwitch_of_upperToBase data observer base first second
+        hfirst hsecond hne hobserverFirst hobserverSecond charge eta
+          certificate.switch⟩
+  · rcases hswitch with ⟨certificate⟩
+    exact Or.inr ⟨certificate,
+      hasResetEdgeWitnessSwitch_of_sideToSide data observer base first second
+        hfirst hsecond hobserverFirst hobserverSecond charge eta
+          certificate.switch⟩
 
 end GameTheory
