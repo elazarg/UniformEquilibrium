@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import MathUE.FiniteSerialRelation
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PreemptionCycle
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.SlopeFrontier
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedResetCube
 
 /-!
 # Active tangent-transfer cycles at a stopping-law frontier
@@ -247,6 +248,35 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformSlope
     exact heach time htime
   exact hall.mono fun _ hAll time htime ↦
     hAll time (Finset.mem_range.mpr htime)
+
+/-- The uniform cycle slope is realized by literal frozen edges of one
+source-matched reset cube at each selected rank.  In particular, all cycle
+edges coexist at one actual source profile and one common positive reset
+scale. -/
+theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformCubeEdge
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (cycle : QuittingStoppingLawActiveTransferCycle frontier) :
+    ∃ charge : ℝ, 0 < charge ∧
+      ∀ᶠ rank in atTop, ∀ time < cycle.period,
+        let data := frontier.sourceMatchedResetCubeData rank
+        let debt := fun candidate : (quittingGame reward).BehaviorProfile ↦
+          quittingTerminalSemanticDebt
+            (quittingTerminalSemanticPair reward candidate)
+            (cycle.vertex (time + 1)).1
+        frontier.lambda (frontier.subseq rank) * charge ≤
+          Math.Finset.CubicalResetIntegrability.edge
+            (data.value debt) ∅ (cycle.vertex time).1 := by
+  obtain ⟨charge, hcharge, heventually⟩ :=
+    cycle.exists_eventually_uniformSlope
+  refine ⟨charge, hcharge, ?_⟩
+  filter_upwards [heventually] with rank hAll
+  intro time htime
+  dsimp only
+  rw [frontier.sourceMatchedResetCubeData_debtEdge_eq_scale_mul_actualDirection]
+  exact mul_le_mul_of_nonneg_left (hAll time htime)
+    (frontier.lambda_pos (frontier.subseq rank)).le
 
 /-- The four tagged stopping-law branches compress to three semantic outcomes:
 positive total slope, zero-debt support entry, or a dynamic active transfer

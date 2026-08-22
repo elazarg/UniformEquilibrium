@@ -169,10 +169,11 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "The static collision and payoff-table preemption cycle now travel with one source-derived stopping-law frontier. In every flat frontier with no zero-debt support entry, every active debtor has a positive tangent transfer to another active debtor; finite seriality closes these transfers into a period-at-least-two cycle. One positive edge margin is retained uniformly along the literal stopping-law subsequence for every edge of the selected finite cycle. The payoff-table and tangent-transfer cycles are not identified, and the strengthened leaf is still open.",
+      "summary": "The static collision and payoff-table preemption cycle now travel with one source-derived stopping-law frontier. In every flat frontier with no zero-debt support entry, every active debtor has a positive tangent transfer to another active debtor; finite seriality closes these transfers into a period-at-least-two cycle. One positive edge margin is retained uniformly along the literal stopping-law subsequence for every edge of the selected finite cycle. At every selected rank all of those edges are realized simultaneously as positive frozen debt edges of one legal common-source, common-scale reset cube. The payoff-table and tangent-transfer cycles are not identified, the cube is not a chronological reset word, and the strengthened leaf is still open.",
       "evidence": [
         "MathUE/FiniteSerialRelation.lean",
         "UniformEquilibrium/Quitting/Classification/PreemptionCycle.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedResetCube.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/ActiveTransferCycle.lean"
       ],
       "cover_clause_ids": [
@@ -188,6 +189,7 @@
         "Math.FiniteSerialRelation.nonempty_periodicCycle_of_serial",
         "GameTheory.QuittingCounterexampleStoppingLawFrontier.nonempty_activeTransferCycle_of_noEntry",
         "GameTheory.QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformSlope",
+        "GameTheory.QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformCubeEdge",
         "GameTheory.QuittingCounterexampleRegime.nonempty_dynamicLocalization"
       ]
     },
