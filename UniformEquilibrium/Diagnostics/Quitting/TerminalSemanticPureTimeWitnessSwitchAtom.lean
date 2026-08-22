@@ -11,19 +11,14 @@ import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 /-!
 # Pure-time atoms from an oriented best-response witness switch
 
-A large two-reset curvature of the behavioral best-response envelope need not
-come from curvature of one fixed deviation.  The generic supremum theorem
-localizes the excess to a witness selected at one corner which is suboptimal at
-another literal corner.
+The generic supremum witness-switch theorem is instantiated directly on
+quitting-game deterministic quit times, including `Never`.  The selected
+witness at one literal corner and an approximate pure-time best response at the
+receiving corner form a four-profile payoff rectangle.  One absorbing terminal
+atom carries its positive oriented charge.
 
-For quitting games, pure-time extremality lets both corner witnesses be chosen
-as deterministic quit times (including `Never`).  The two times form a literal
-four-profile payoff rectangle between the selected source and receiving
-corner.  A positive rectangle is then carried by one absorbing terminal atom.
-
-This is a corner-preserving adapter.  It does not identify the two reset
-corners with consecutive Bellman states and does not assert that the receiving
-corner is reachable from the source in play chronology.
+This is a corner-preserving adapter.  It does not identify the corners with
+consecutive Bellman states and does not assert reachability in play chronology.
 -/
 
 noncomputable section
@@ -45,18 +40,17 @@ def quittingPureTimeDeviationPayoff
     (Function.update profile observer
       (quittingPureTimeBehaviorStrategy reward observer quitTime)) observer
 
-/-- The all-behavior best-response envelope is exactly the supremum over pure
-quit times and `Never`. -/
+/-- The all-behavior best-response envelope is the supremum over pure quit
+times and `Never`. -/
 theorem quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (observer : ι) :
     quittingContinuationBestResponseValue reward profile observer =
       sSup (Set.range
         (quittingPureTimeDeviationPayoff reward profile observer)) := by
-  unfold quittingContinuationBestResponseValue
-  simpa only [quittingPureTimeDeviationPayoff] using
-    sSup_range_quittingTerminalPayoff_update_eq_pureTime
-      reward profile observer
+  unfold quittingContinuationBestResponseValue quittingPureTimeDeviationPayoff
+  exact sSup_range_quittingTerminalPayoff_update_eq_pureTime
+    reward profile observer
 
 /-- Pure-time payoff values are bounded above by the behavioral best-response
 envelope. -/
@@ -90,11 +84,10 @@ theorem exists_pureTimeDeviationPayoff_ge_continuationBestResponseValue_sub
   unfold quittingPureTimeDeviationPayoff
   linarith
 
-/-- A corner-preserving pure-time witness switch.  `sourceTime` is
-`eta`-optimal at `source`, while `receivingTime` is `eta`-optimal at
-`receiving`.  Their oriented four-profile rectangle carries both a positive
-payoff lower bound and one absorbing terminal atom with the same lower bound
-up to the finite outcome-cardinality factor. -/
+/-- A corner-preserving pure-time witness switch.  Both selected times retain
+approximate optimality at their literal corners, their oriented payoff
+rectangle has the displayed positive charge, and one absorbing terminal atom
+carries the same charge up to the finite outcome-cardinality factor. -/
 def HasQuittingPureTimeWitnessSwitchRectangle
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source receiving : (quittingGame reward).BehaviorProfile)
@@ -126,7 +119,7 @@ def HasQuittingPureTimeWitnessSwitchRectangle
               (quittingPureTimeBehaviorStrategy reward observer receivingTime))
             observer (some terminal)
 
-private theorem exists_pureTimeWitnessSwitchRectangle_of_regret
+private theorem pureTimeWitnessSwitchRectangle_of_regret
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source receiving : (quittingGame reward).BehaviorProfile)
     (observer : ι) (charge eta : ℝ)
@@ -145,8 +138,8 @@ private theorem exists_pureTimeWitnessSwitchRectangle_of_regret
       reward receiving observer heta
   have hsourceUpper :
       quittingPureTimeDeviationPayoff reward source observer receivingTime ≤
-        quittingContinuationBestResponseValue reward source observer := by
-    exact quittingTerminalPayoff_update_le_continuationBestResponseValue
+        quittingContinuationBestResponseValue reward source observer :=
+    quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward source observer
         (quittingPureTimeBehaviorStrategy reward observer receivingTime)
   have hrectangle : charge ≤
@@ -176,128 +169,8 @@ private theorem exists_pureTimeWitnessSwitchRectangle_of_regret
   exact ⟨sourceTime, receivingTime, terminal, hsource, hreceiving,
     hrectangle, by simpa only [x00, x01, x10, x11] using hatom⟩
 
-/-- Positive upper-to-base envelope curvature yields a pure-time switch from
-the upper corner to the literal base corner. -/
-theorem exists_pureTimeWitnessSwitchRectangle_of_upperToBase
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (x00 x10 x01 x11 : (quittingGame reward).BehaviorProfile)
-    (observer : ι) (q charge eta : ℝ)
-    (hcharge : 0 < charge) (heta : 0 < eta)
-    (hface : ∀ quitTime : Option ℕ,
-      |quittingPureTimeDeviationPayoff reward x11 observer quitTime -
-          quittingPureTimeDeviationPayoff reward x10 observer quitTime -
-          quittingPureTimeDeviationPayoff reward x01 observer quitTime +
-          quittingPureTimeDeviationPayoff reward x00 observer quitTime| ≤ q)
-    (hcurvature : charge + q + 3 * eta ≤
-      quittingContinuationBestResponseValue reward x11 observer -
-        quittingContinuationBestResponseValue reward x10 observer -
-        quittingContinuationBestResponseValue reward x01 observer +
-        quittingContinuationBestResponseValue reward x00 observer) :
-    HasQuittingPureTimeWitnessSwitchRectangle reward x11 x00 observer
-      charge eta := by
-  let f00 := quittingPureTimeDeviationPayoff reward x00 observer
-  let f10 := quittingPureTimeDeviationPayoff reward x10 observer
-  let f01 := quittingPureTimeDeviationPayoff reward x01 observer
-  let f11 := quittingPureTimeDeviationPayoff reward x11 observer
-  obtain ⟨sourceTime, hsource⟩ :=
-    exists_pureTimeDeviationPayoff_ge_continuationBestResponseValue_sub
-      reward x11 observer heta
-  have hcap00 :=
-    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
-      reward x00 observer
-  have hcap10 :=
-    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
-      reward x10 observer
-  have hcap01 :=
-    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
-      reward x01 observer
-  have hcap11 :=
-    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
-      reward x11 observer
-  have hupper : sSup (Set.range f11) - eta ≤ f11 sourceTime := by
-    rw [← hcap11]
-    exact hsource
-  have hregretRaw := upperToBase_regret_ge_supMixedDifference_sub
-    f00 f10 f01 f11
-    (bddAbove_range_quittingPureTimeDeviationPayoff reward x10 observer)
-    (bddAbove_range_quittingPureTimeDeviationPayoff reward x01 observer)
-    q eta sourceTime hface hupper
-  have hregret :
-      (quittingContinuationBestResponseValue reward x11 observer -
-          quittingContinuationBestResponseValue reward x10 observer -
-          quittingContinuationBestResponseValue reward x01 observer +
-          quittingContinuationBestResponseValue reward x00 observer) -
-            (q + eta) ≤
-        quittingContinuationBestResponseValue reward x00 observer -
-          quittingPureTimeDeviationPayoff reward x00 observer sourceTime := by
-    simpa only [supMixedDifference, baseRegret, f00, f10, f01, f11,
-      ← hcap00, ← hcap10, ← hcap01, ← hcap11] using hregretRaw
-  apply exists_pureTimeWitnessSwitchRectangle_of_regret reward x11 x00
-    observer charge eta hcharge heta sourceTime hsource
-  linarith
-
-/-- Negative envelope curvature yields a pure-time switch from side `10` to
-side `01`, retaining both literal side profiles. -/
-theorem exists_pureTimeWitnessSwitchRectangle_of_sideOneToSideTwo
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (x00 x10 x01 x11 : (quittingGame reward).BehaviorProfile)
-    (observer : ι) (q charge eta : ℝ)
-    (hcharge : 0 < charge) (heta : 0 < eta)
-    (hface : ∀ quitTime : Option ℕ,
-      |quittingPureTimeDeviationPayoff reward x11 observer quitTime -
-          quittingPureTimeDeviationPayoff reward x10 observer quitTime -
-          quittingPureTimeDeviationPayoff reward x01 observer quitTime +
-          quittingPureTimeDeviationPayoff reward x00 observer quitTime| ≤ q)
-    (hcurvature : charge + q + 3 * eta ≤
-      -(quittingContinuationBestResponseValue reward x11 observer -
-        quittingContinuationBestResponseValue reward x10 observer -
-        quittingContinuationBestResponseValue reward x01 observer +
-        quittingContinuationBestResponseValue reward x00 observer)) :
-    HasQuittingPureTimeWitnessSwitchRectangle reward x10 x01 observer
-      charge eta := by
-  let f00 := quittingPureTimeDeviationPayoff reward x00 observer
-  let f10 := quittingPureTimeDeviationPayoff reward x10 observer
-  let f01 := quittingPureTimeDeviationPayoff reward x01 observer
-  let f11 := quittingPureTimeDeviationPayoff reward x11 observer
-  obtain ⟨sourceTime, hsource⟩ :=
-    exists_pureTimeDeviationPayoff_ge_continuationBestResponseValue_sub
-      reward x10 observer heta
-  have hcap00 :=
-    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
-      reward x00 observer
-  have hcap10 :=
-    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
-      reward x10 observer
-  have hcap01 :=
-    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
-      reward x01 observer
-  have hcap11 :=
-    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
-      reward x11 observer
-  have hside : sSup (Set.range f10) - eta ≤ f10 sourceTime := by
-    rw [← hcap10]
-    exact hsource
-  have hregretRaw := sideOneToSideTwo_regret_ge_neg_supMixedDifference_sub
-    f00 f10 f01 f11
-    (bddAbove_range_quittingPureTimeDeviationPayoff reward x00 observer)
-    (bddAbove_range_quittingPureTimeDeviationPayoff reward x11 observer)
-    q eta sourceTime hface hside
-  have hregret :
-      -(quittingContinuationBestResponseValue reward x11 observer -
-          quittingContinuationBestResponseValue reward x10 observer -
-          quittingContinuationBestResponseValue reward x01 observer +
-          quittingContinuationBestResponseValue reward x00 observer) -
-            (q + eta) ≤
-        quittingContinuationBestResponseValue reward x01 observer -
-          quittingPureTimeDeviationPayoff reward x01 observer sourceTime := by
-    simpa only [supMixedDifference, oppositeRegret₂, f00, f10, f01, f11,
-      ← hcap00, ← hcap10, ← hcap01, ← hcap11] using hregretRaw
-  apply exists_pureTimeWitnessSwitchRectangle_of_regret reward x10 x01
-    observer charge eta hcharge heta sourceTime hsource
-  linarith
-
-/-- A signed envelope square larger than the fixed-witness square budget
-therefore yields one of the two literal oriented pure-time rectangle atoms. -/
+/-- A signed envelope square larger than every fixed pure-time square budget
+produces a literal upper-to-base or side-to-side pure-time rectangle atom. -/
 theorem exists_pureTimeWitnessSwitchRectangle_of_abs_envelopeCurvature
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (x00 x10 x01 x11 : (quittingGame reward).BehaviorProfile)
@@ -317,6 +190,22 @@ theorem exists_pureTimeWitnessSwitchRectangle_of_abs_envelopeCurvature
         charge eta ∨
       HasQuittingPureTimeWitnessSwitchRectangle reward x10 x01 observer
         charge eta := by
+  let f00 := quittingPureTimeDeviationPayoff reward x00 observer
+  let f10 := quittingPureTimeDeviationPayoff reward x10 observer
+  let f01 := quittingPureTimeDeviationPayoff reward x01 observer
+  let f11 := quittingPureTimeDeviationPayoff reward x11 observer
+  have hcap00 :=
+    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
+      reward x00 observer
+  have hcap10 :=
+    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
+      reward x10 observer
+  have hcap01 :=
+    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
+      reward x01 observer
+  have hcap11 :=
+    quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff
+      reward x11 observer
   let curvature :=
     quittingContinuationBestResponseValue reward x11 observer -
       quittingContinuationBestResponseValue reward x10 observer -
@@ -324,13 +213,55 @@ theorem exists_pureTimeWitnessSwitchRectangle_of_abs_envelopeCurvature
       quittingContinuationBestResponseValue reward x00 observer
   by_cases hnonneg : 0 ≤ curvature
   · left
-    apply exists_pureTimeWitnessSwitchRectangle_of_upperToBase reward
-      x00 x10 x01 x11 observer q charge eta hcharge heta hface
-    simpa only [curvature, abs_of_nonneg hnonneg] using hcurvature
+    obtain ⟨sourceTime, hsource⟩ :=
+      exists_pureTimeDeviationPayoff_ge_continuationBestResponseValue_sub
+        reward x11 observer heta
+    have hupper : sSup (Set.range f11) - eta ≤ f11 sourceTime := by
+      rw [← hcap11]
+      exact hsource
+    have hregretRaw := upperToBase_regret_ge_supMixedDifference_sub
+      f00 f10 f01 f11
+      (bddAbove_range_quittingPureTimeDeviationPayoff reward x10 observer)
+      (bddAbove_range_quittingPureTimeDeviationPayoff reward x01 observer)
+      q eta sourceTime hface hupper
+    have hregret : charge + 2 * eta ≤
+        quittingContinuationBestResponseValue reward x00 observer -
+          quittingPureTimeDeviationPayoff reward x00 observer sourceTime := by
+      have hcurvature' : charge + q + 3 * eta ≤ curvature := by
+        simpa only [curvature, abs_of_nonneg hnonneg] using hcurvature
+      have hraw : curvature - (q + eta) ≤
+          quittingContinuationBestResponseValue reward x00 observer -
+            quittingPureTimeDeviationPayoff reward x00 observer sourceTime := by
+        simpa only [supMixedDifference, baseRegret, f00, f10, f01, f11,
+          ← hcap00, ← hcap10, ← hcap01, ← hcap11, curvature] using hregretRaw
+      linarith
+    exact pureTimeWitnessSwitchRectangle_of_regret reward x11 x00 observer
+      charge eta hcharge heta sourceTime hsource hregret
   · right
-    apply exists_pureTimeWitnessSwitchRectangle_of_sideOneToSideTwo reward
-      x00 x10 x01 x11 observer q charge eta hcharge heta hface
     have hnegative : curvature < 0 := lt_of_not_ge hnonneg
-    simpa only [curvature, abs_of_neg hnegative] using hcurvature
+    obtain ⟨sourceTime, hsource⟩ :=
+      exists_pureTimeDeviationPayoff_ge_continuationBestResponseValue_sub
+        reward x10 observer heta
+    have hside : sSup (Set.range f10) - eta ≤ f10 sourceTime := by
+      rw [← hcap10]
+      exact hsource
+    have hregretRaw := sideOneToSideTwo_regret_ge_neg_supMixedDifference_sub
+      f00 f10 f01 f11
+      (bddAbove_range_quittingPureTimeDeviationPayoff reward x00 observer)
+      (bddAbove_range_quittingPureTimeDeviationPayoff reward x11 observer)
+      q eta sourceTime hface hside
+    have hregret : charge + 2 * eta ≤
+        quittingContinuationBestResponseValue reward x01 observer -
+          quittingPureTimeDeviationPayoff reward x01 observer sourceTime := by
+      have hcurvature' : charge + q + 3 * eta ≤ -curvature := by
+        simpa only [curvature, abs_of_neg hnegative] using hcurvature
+      have hraw : -curvature - (q + eta) ≤
+          quittingContinuationBestResponseValue reward x01 observer -
+            quittingPureTimeDeviationPayoff reward x01 observer sourceTime := by
+        simpa only [supMixedDifference, oppositeRegret₂, f00, f10, f01, f11,
+          ← hcap00, ← hcap10, ← hcap01, ← hcap11, curvature] using hregretRaw
+      linarith
+    exact pureTimeWitnessSwitchRectangle_of_regret reward x10 x01 observer
+      charge eta hcharge heta sourceTime hsource hregret
 
 end GameTheory
