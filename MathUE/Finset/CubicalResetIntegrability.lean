@@ -49,6 +49,25 @@ def square (value : Finset Coordinate → ℝ)
     (source : Finset Coordinate) (first second : Coordinate) : ℝ :=
   edge value (insert first source) second - edge value source second
 
+/-- Accumulated change of one fixed coordinate edge while a word of other
+coordinates is inserted. -/
+def edgeCurvatureSum (value : Finset Coordinate → ℝ) :
+    Finset Coordinate → List Coordinate → Coordinate → ℝ
+  | _source, [], _coordinate => 0
+  | source, first :: rest, coordinate =>
+      square value source first coordinate +
+        edgeCurvatureSum value (insert first source) rest coordinate
+
+/-- A square with large absolute curvature encountered while transporting one
+fixed coordinate edge across a reset word. -/
+def HasAbsSquareAboveOnEdge (value : Finset Coordinate → ℝ)
+    (threshold : ℝ) : Finset Coordinate → List Coordinate → Coordinate → Prop
+  | _source, [], _coordinate => False
+  | source, first :: rest, coordinate =>
+      threshold < |square value source first coordinate| ∨
+        HasAbsSquareAboveOnEdge value threshold
+          (insert first source) rest coordinate
+
 /-- Sum of the literal consecutive edge increments along a reset word. -/
 def pathEdgeSum (value : Finset Coordinate → ℝ) :
     Finset Coordinate → List Coordinate → ℝ
@@ -92,6 +111,57 @@ theorem pathEdgeSum_eq_endpoint_sub
       rw [pathEdgeSum, finalSet, ih]
       unfold edge
       ring
+
+/-- Exact fixed-edge curvature telescope. -/
+theorem edge_finalSet_sub_edge_eq_edgeCurvatureSum
+    (value : Finset Coordinate → ℝ)
+    (source : Finset Coordinate) (word : List Coordinate)
+    (coordinate : Coordinate) :
+    edge value (finalSet source word) coordinate -
+        edge value source coordinate =
+      edgeCurvatureSum value source word coordinate := by
+  induction word generalizing source with
+  | nil => simp [finalSet, edgeCurvatureSum]
+  | cons first rest ih =>
+      rw [finalSet, edgeCurvatureSum]
+      rw [← ih (insert first source)]
+      unfold square
+      ring
+
+/-- Quantitative fixed-edge transport: either the edge changes by at most one
+threshold per inserted coordinate, or one crossed square has larger absolute
+curvature. -/
+theorem abs_edge_finalSet_sub_edge_le_or_hasAbsSquareAboveOnEdge
+    (value : Finset Coordinate → ℝ)
+    (source : Finset Coordinate) (word : List Coordinate)
+    (coordinate : Coordinate) (threshold : ℝ) :
+    |edge value (finalSet source word) coordinate -
+        edge value source coordinate| ≤
+          (word.length : ℝ) * threshold ∨
+      HasAbsSquareAboveOnEdge value threshold source word coordinate := by
+  rw [edge_finalSet_sub_edge_eq_edgeCurvatureSum]
+  induction word generalizing source with
+  | nil => simp [edgeCurvatureSum]
+  | cons first rest ih =>
+      rw [edgeCurvatureSum]
+      rcases ih (insert first source) with hrest | hlarge
+      · by_cases hfirst : |square value source first coordinate| ≤ threshold
+        · left
+          calc
+            |square value source first coordinate +
+                edgeCurvatureSum value (insert first source) rest coordinate| ≤
+                |square value source first coordinate| +
+                  |edgeCurvatureSum value (insert first source) rest coordinate| :=
+              abs_add_le _ _
+            _ ≤ threshold + (rest.length : ℝ) * threshold :=
+              add_le_add hfirst hrest
+            _ = ((first :: rest).length : ℝ) * threshold := by
+              simp only [List.length_cons, Nat.cast_add, Nat.cast_one]
+              ring
+        · right
+          exact Or.inl (lt_of_not_ge hfirst)
+      · right
+        exact Or.inr hlarge
 
 /-- Moving the base of every frozen edge across one coordinate produces the
 sum of the corresponding square curvatures. -/
