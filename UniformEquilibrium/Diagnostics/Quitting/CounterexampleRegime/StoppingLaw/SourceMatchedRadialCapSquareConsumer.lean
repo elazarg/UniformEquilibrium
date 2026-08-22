@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.Finset.CubicalResetSquareExtraction
+import MathUE.Finset.CubicalResetIntegrability
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedRadialResetCube
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPureTimeWitnessSwitchConsumer
 
@@ -12,20 +12,68 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPureTimeWitnessSw
 # Game-facing consumer for radial cap squares
 
 Excess cap nonadditivity on the source-matched radial cube is localized to a
-negative square of the behavioral best-response envelope.  Fixed pure-time
-payoffs have only quadratic square curvature.  The generic oriented supremum
+negative square of the behavioral best-response envelope. Fixed pure-time
+payoffs have only quadratic square curvature. The generic oriented supremum
 switch theorem therefore produces two near-best deterministic quit times on
 one diagonal of the literal square.
 
-This file performs the missing game-facing composition.  The profitable edge
+This file performs the missing game-facing composition. The profitable edge
 between those two pure times is decoded at its first disagreement into an
 actual reached Quit-versus-Continue comparison on the certificate's literal
-receiving profile.  The square coordinates, face, sign, observer, profile, and
-quantitative source-unit gain are all retained.  No chronological reset-cube
+receiving profile. The square coordinates, face, sign, observer, profile, and
+quantitative source-unit gain are all retained. No chronological reset-cube
 path or equilibrium compiler is asserted.
 -/
 
 noncomputable section
+
+namespace Math.Finset
+namespace CubicalResetIntegrability
+
+variable {Coordinate : Type*} [DecidableEq Coordinate]
+
+/-- A square localized along a duplicate-free word has two fresh, distinct
+coordinates at one reached background face. This extraction is kept beside
+its game-facing consumer rather than extending the reusable MathUE inventory. -/
+theorem exists_fresh_square_of_hasSquareAboveAlong
+    (value : Finset Coordinate → ℝ) (threshold : ℝ)
+    (source : Finset Coordinate) (word : List Coordinate)
+    (hnodup : word.Nodup) (hdisjoint : Disjoint word.toFinset source)
+    (hlarge : HasSquareAboveAlong value threshold source word) :
+    ∃ background first second,
+      first ∉ background ∧ second ∉ background ∧ first ≠ second ∧
+        threshold < square value background first second := by
+  induction word generalizing source with
+  | nil =>
+      simp [HasSquareAboveAlong] at hlarge
+  | cons coordinate rest ih =>
+      have hnodupParts := List.nodup_cons.mp hnodup
+      have hcoordinateNotSource : coordinate ∉ source := by
+        intro hsource
+        exact Finset.disjoint_left.mp hdisjoint (by simp) hsource
+      have hrestDisjoint : Disjoint rest.toFinset (insert coordinate source) := by
+        rw [Finset.disjoint_left]
+        intro other hotherRest hotherInsert
+        simp only [List.toFinset_cons, Finset.disjoint_insert_left] at hdisjoint
+        rcases Finset.mem_insert.mp hotherInsert with rfl | hotherSource
+        · exact hnodupParts.1 (by simpa using hotherRest)
+        · exact Finset.disjoint_left.mp hdisjoint.2 hotherRest hotherSource
+      simp only [HasSquareAboveAlong] at hlarge
+      rcases hlarge with hrest | ⟨other, hotherRest, hpositive⟩
+      · exact ih (insert coordinate source) hnodupParts.2 hrestDisjoint hrest
+      · have hotherNotSource : other ∉ source := by
+          intro hotherSource
+          exact Finset.disjoint_left.mp hdisjoint
+            (by simp [hotherRest]) hotherSource
+        have hne : coordinate ≠ other := by
+          intro heq
+          subst other
+          exact hnodupParts.1 hotherRest
+        exact ⟨source, coordinate, other, hcoordinateNotSource,
+          hotherNotSource, hne, hpositive⟩
+
+end CubicalResetIntegrability
+end Math.Finset
 
 namespace GameTheory
 
@@ -37,7 +85,7 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
 /-- A negative radial cap square together with its reached first-disagreement
-consumer.  The generic switch theorem has two possible receiving diagonals:
+consumer. The generic switch theorem has two possible receiving diagonals:
 the square base, or the side obtained by inserting `second`. -/
 def HasQuittingSourceMatchedRadialCapSquareFirstDisagreementConsumer
     (frontier : QuittingCounterexampleStoppingLawFrontier regime)
@@ -62,10 +110,10 @@ def HasQuittingSourceMatchedRadialCapSquareFirstDisagreementConsumer
 
 /-- **Localized negative cap square to a literal reached action comparison.**
 
-The fixed-witness square budget is the exact radial `O(lambda²)` bound.  Once
+The fixed-witness square budget is the exact radial `O(lambda²)` bound. Once
 the localized negative cap square exceeds `charge + q + 3 * eta`, the oriented
 supremum theorem produces a full quitting-game witness-switch certificate on
-one diagonal.  Its receiving payoff edge then lands in the exact
+one diagonal. Its receiving payoff edge then lands in the exact
 first-disagreement consumer with source-unit gain `charge + eta`. -/
 theorem has_sourceMatchedRadialCapSquareFirstDisagreementConsumer_of_negativeSquare
     (frontier : QuittingCounterexampleStoppingLawFrontier regime)
@@ -171,7 +219,7 @@ theorem has_sourceMatchedRadialCapSquareFirstDisagreementConsumer_of_negativeSqu
 /-- **Cap nonadditivity is either small or game-semantically consumed.**
 
 This is the direct composition of the radial cap-square localizer with the
-first-disagreement consumer above.  The right branch no longer stops at a
+first-disagreement consumer above. The right branch no longer stops at a
 static cap square: it contains an actual reached Quit-versus-Continue
 comparison on one literal receiving profile of that square. -/
 theorem sourceMatchedRadialFaceCapNonadditivity_le_or_hasFirstDisagreementConsumer
