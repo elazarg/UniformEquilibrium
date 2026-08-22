@@ -425,6 +425,7 @@ import UniformEquilibrium.Quitting.Cycles.CyclicSupersolution
 import UniformEquilibrium.Quitting.Circulation.SingletonFlowMesh
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 import UniformEquilibrium.Quitting.Cycles.SingletonArcCycle
+import UniformEquilibrium.Quitting.Cycles.BalancedSingletonCertificate
 import UniformEquilibrium.Quitting.EssentialAPS.All
 import UniformEquilibrium.Quitting.AbsorptionPath.All
 import UniformEquilibrium.Quitting.Examples.Cyclic.RotatingFourPlayer

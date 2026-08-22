@@ -218,6 +218,7 @@ import MathUE.OnlineLearning.ContextualMultiplicativeWeights
 import MathUE.OnlineLearning.MultiplicativeWeights
 import MathUE.OnlineLearning.ShiftedUniversalCalendar
 import MathUE.OnlineLearning.UniversalCalendar
+import MathUE.Optimization.SupremumTwoResetWitnessSwitch
 import MathUE.OptimizationLocalGlobal
 import MathUE.OutcomeClosure
 import MathUE.OutcomeClosure.TerminalTarget
@@ -328,6 +329,7 @@ import MathUE.Probability.StitchedMartingale
 import MathUE.Probability.SublinearLedger
 import MathUE.Probability.SupportedMovingKernelEpochAccount
 import MathUE.Probability.SurvivalAmplification
+import MathUE.Probability.SurvivalCoboundary
 import MathUE.Probability.SurvivalWeightedReachedHistoryAccount
 import MathUE.Probability.SwitchedPotentialCalculus
 import MathUE.Probability.TriangularLedger
@@ -845,6 +847,7 @@ import UniformEquilibrium.Quitting.AbsorptionPath.ContinuousPath
 import UniformEquilibrium.Quitting.AbsorptionPath.FiniteWindowRefusalReweighting
 import UniformEquilibrium.Quitting.AbsorptionPath.FlowCostateObstructionAdapter
 import UniformEquilibrium.Quitting.AbsorptionPath.HomogeneousContinuousPath
+import UniformEquilibrium.Quitting.AbsorptionPath.LogarithmicBlockDiscretization
 import UniformEquilibrium.Quitting.AbsorptionPath.MarkedAbsorptionCylinder
 import UniformEquilibrium.Quitting.AbsorptionPath.MarkedObstacleRecord
 import UniformEquilibrium.Quitting.AbsorptionPath.MetrizableMarkedAbsorptionComposition
@@ -1107,6 +1110,7 @@ import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
 import UniformEquilibrium.Quitting.Cycles.AnchoredRenewalTransport
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
+import UniformEquilibrium.Quitting.Cycles.BalancedSingletonCertificate
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 import UniformEquilibrium.Quitting.Cycles.BlockSurvival
