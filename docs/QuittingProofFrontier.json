@@ -77,7 +77,7 @@
   "obstruction_classes": [
     {
       "id": "OB-COLLISION",
-      "description": "A canonical absorbing singleton row has a source-matched collision gain at least the global terminal gap, and full-gap solo preemptions propagate to a positive-period directed cycle."
+      "description": "A canonical absorbing singleton row has a source-matched collision gain at least the global terminal gap, full-gap solo preemptions propagate to a positive-period payoff-table cycle, and one source-derived stopping-law frontier has positive total slope, a zero-debt support entry, or a positive-period active debt-transfer cycle."
     }
   ],
   "formal_leaves": [
@@ -85,9 +85,9 @@
       "id": "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE",
       "status": "open",
       "obstruction_class": "OB-COLLISION",
-      "representative": "Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap) ∧ Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap)",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionCycle.lean",
-      "producer": "QuittingCounterexampleRegime.immediateSingletonCollision_and_soloPreemptionCycle",
+      "representative": "Nonempty (QuittingCounterexampleDynamicLocalization regime)",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/ActiveTransferCycle.lean",
+      "producer": "QuittingCounterexampleRegime.nonempty_dynamicLocalization",
       "cover_clause_ids": [
         "REGIME-LOCALIZATION",
         "COVER-D"
@@ -161,6 +161,34 @@
       "evidence_seals": [
         "M",
         "L"
+      ]
+    },
+    {
+      "id": "STRENGTHEN-COLLISION-LEAF-BY-DYNAMIC-TRANSFER-CYCLE",
+      "kind": "frontier_strengthened",
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "The static collision and payoff-table preemption cycle now travel with one source-derived stopping-law frontier. In every flat frontier with no zero-debt support entry, every active debtor has a positive tangent transfer to another active debtor; finite seriality closes these transfers into a period-at-least-two cycle. One positive edge margin is retained uniformly along the literal stopping-law subsequence for every edge of the selected finite cycle. The payoff-table and tangent-transfer cycles are not identified, and the strengthened leaf is still open.",
+      "evidence": [
+        "MathUE/FiniteSerialRelation.lean",
+        "UniformEquilibrium/Quitting/Classification/PreemptionCycle.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/ActiveTransferCycle.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION",
+        "COVER-D"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A"
+      ],
+      "declarations": [
+        "Math.FiniteSerialRelation.nonempty_periodicCycle_of_serial",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.nonempty_activeTransferCycle_of_noEntry",
+        "GameTheory.QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformSlope",
+        "GameTheory.QuittingCounterexampleRegime.nonempty_dynamicLocalization"
       ]
     },
     {

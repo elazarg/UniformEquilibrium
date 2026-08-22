@@ -215,87 +215,22 @@ theorem nonempty_soloPreemptionCycle
   classical
   let Carrier := {current : player // ∃ predecessor,
     QuittingSoloPreempts reward regime.terminalGap predecessor current}
-  have houtgoing : ∀ state : Carrier, ∃ next,
-      QuittingSoloPreempts reward regime.terminalGap state.1 next := by
-    intro state
-    exact regime.exists_soloPreemptor_of_soloPreempts
-      (Classical.choose_spec state.2)
-  let nextPlayer : Carrier → player := fun state ↦
-    Classical.choose (houtgoing state)
-  have hnextPlayer : ∀ state : Carrier,
-      QuittingSoloPreempts reward regime.terminalGap state.1
-        (nextPlayer state) := by
-    intro state
-    exact Classical.choose_spec (houtgoing state)
-  let successor : Carrier → Carrier := fun state ↦
-    ⟨nextPlayer state, ⟨state.1, hnextPlayer state⟩⟩
-  have hsuccessor : ∀ state : Carrier,
-      QuittingSoloPreempts reward regime.terminalGap state.1
-        (successor state).1 := by
-    intro state
-    exact hnextPlayer state
   obtain ⟨owner, howner⟩ := regime.exists_terminalGap_le_soloReward
   have hownerViable : -regime.terminalGap <
       quittingSoloReward reward owner owner := by
     linarith [regime.terminalGap_pos]
   obtain ⟨first, hfirst⟩ := regime.exists_soloPreemptor hownerViable
-  let seed : Carrier := ⟨first, ⟨owner, hfirst⟩⟩
-  let orbit : ℕ → Carrier := fun time ↦ (successor^[time]) seed
-  obtain ⟨left, right, hne, heq⟩ :=
-    Finite.exists_ne_map_eq_of_infinite orbit
-  have build : ∀ {start stop : ℕ}, start < stop → orbit start = orbit stop →
-      Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap) := by
-    intro start stop hlt hrepeat
-    let period := stop - start
-    have hperiodPos : 0 < period := by
-      dsimp only [period]
-      omega
-    have hstartPeriod : start + period = stop := by
-      dsimp only [period]
-      omega
-    let vertex : ℕ → player := fun time ↦ (orbit (start + time)).1
-    have hedge : ∀ time, QuittingSoloPreempts reward regime.terminalGap
-        (vertex time) (vertex (time + 1)) := by
-      intro time
-      have hstep := hsuccessor (orbit (start + time))
-      have horbitSucc : successor (orbit (start + time)) =
-          orbit (start + (time + 1)) := by
-        dsimp only [orbit]
-        rw [show start + (time + 1) = (start + time).succ by omega,
-          Function.iterate_succ_apply']
-      change QuittingSoloPreempts reward regime.terminalGap
-        (orbit (start + time)).1 (orbit (start + (time + 1))).1
-      rw [← horbitSucc]
-      exact hstep
-    have hreturn : (successor^[period]) (orbit start) = orbit start := by
-      change (successor^[period]) ((successor^[start]) seed) =
-        (successor^[start]) seed
-      rw [← Function.iterate_add_apply]
-      rw [Nat.add_comm, hstartPeriod]
-      exact hrepeat.symm
-    have hperiodic : ∀ time, vertex (time + period) = vertex time := by
-      intro time
-      change (orbit (start + (time + period))).1 =
-        (orbit (start + time)).1
-      have hfull : orbit (start + (time + period)) = orbit (start + time) := by
-        change (successor^[start + (time + period)]) seed =
-          (successor^[start + time]) seed
-        rw [show start + (time + period) = time + period + start by omega,
-          Function.iterate_add_apply]
-        rw [show start + time = time + start by omega,
-          Function.iterate_add_apply]
-        rw [Function.iterate_add_apply, hreturn]
-      exact congrArg Subtype.val hfull
-    exact ⟨{
-      period := period
-      period_pos := hperiodPos
-      vertex := vertex
-      vertex_periodic := hperiodic
-      edge := hedge
-    }⟩
-  rcases lt_or_gt_of_ne hne with hlt | hgt
-  · exact build hlt heq
-  · exact build hgt heq.symm
+  letI : Nonempty Carrier := ⟨⟨first, owner, hfirst⟩⟩
+  let R : Carrier → Carrier → Prop := fun current next ↦
+    QuittingSoloPreempts reward regime.terminalGap current.1 next.1
+  have hserial : ∀ state : Carrier, ∃ next, R state next := by
+    intro state
+    obtain ⟨next, hedge⟩ := regime.exists_soloPreemptor_of_soloPreempts
+      (Classical.choose_spec state.2)
+    exact ⟨⟨next, state.1, hedge⟩, hedge⟩
+  obtain ⟨cycle⟩ :=
+    Math.FiniteSerialRelation.nonempty_periodicCycle_of_serial R hserial
+  exact ⟨cycle.map Subtype.val (fun hedge ↦ hedge)⟩
 
 /-- Strongest current counterexample localization: the executable immediate
 singleton collision and the payoff-table preemption cycle hold together. -/
