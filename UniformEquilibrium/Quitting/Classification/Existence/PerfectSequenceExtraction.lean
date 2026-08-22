@@ -469,6 +469,129 @@ theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference_of_tendsto
     exact Or.inr ⟨quittingSoloStationaryRoot who (roots anchor who),
       hrepair.mono hsmall⟩
 
+/-- **Solan--Vieille Proposition 2.4, calibrated production form.** Under
+unit solo-exit payoffs, for all sufficiently small positive row errors, a
+terminating root sequence whose rows are perfect against their actual tail
+values is either subgame-perfect at error `ε^(1/6)` or admits a stationary
+repair at that error.
+
+This records the paper's exponent and two-branch conclusion exactly.  The
+more flexible target-error interface below is the form consumed by the
+existence compiler. -/
+theorem exists_quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward) :
+    ∃ ε0 : ℝ, 0 < ε0 ∧
+      ∀ (roots : ℕ → ι → PMF Bool) (ε : ℝ),
+        0 < ε → ε < ε0 →
+        (∀ start,
+          Tendsto (quittingJointSurvivalWeight roots start) atTop (nhds 0)) →
+        (∀ n, QuittingRowεPerfect reward
+          (quittingRootSequenceTailVector reward roots (n + 1)) (roots n) ε) →
+        (∀ start,
+          (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) (ε ^ (1 / 6 : ℝ))
+            (quittingRootSequenceProfile reward roots start)) ∨
+          ∃ root : ι → PMF Bool,
+            (quittingGame reward).IsεAsymptoticNash
+              (quittingTerminalPayoff reward) (ε ^ (1 / 6 : ℝ))
+              (quittingStationaryProfile reward root) := by
+  classical
+  cases isEmpty_or_nonempty ι with
+  | inl hempty =>
+      letI : IsEmpty ι := hempty
+      refine ⟨1, by norm_num, ?_⟩
+      intro roots ε _ _ _ _
+      left
+      intro start who
+      exact isEmptyElim who
+  | inr hnonempty =>
+      letI : Nonempty ι := hnonempty
+      let M := quittingRewardBound reward
+      have hM : 0 ≤ M := quittingRewardBound_nonneg reward
+      let k := min (1 / 2 : ℝ) (1 / (48 * M + 1))
+      have hdenom : 0 < 48 * M + 1 := by positivity
+      have hk : 0 < k := by
+        dsimp only [k]
+        exact lt_min (by norm_num) (by positivity)
+      refine ⟨k ^ 6, pow_pos hk 6, ?_⟩
+      intro roots ε hε hεsmall hvanish hperfect
+      let x := ε ^ (1 / 6 : ℝ)
+      have hx : 0 < x := Real.rpow_pos_of_pos hε _
+      have hxpow : x ^ 6 = ε := by
+        dsimp only [x]
+        convert Real.rpow_inv_natCast_pow hε.le
+          (by norm_num : (6 : ℕ) ≠ 0) using 1
+        norm_num
+      have hxk : x < k := by
+        apply lt_of_pow_lt_pow_left₀ 6 hk.le
+        rwa [hxpow]
+      have hxhalf : x < 1 / 2 :=
+        lt_of_lt_of_le hxk (min_le_left _ _)
+      have hxdenom : x < 1 / (48 * M + 1) :=
+        lt_of_lt_of_le hxk (min_le_right _ _)
+      have hxscaled : (48 * M + 1) * x < 1 := by
+        rw [lt_div_iff₀ hdenom] at hxdenom
+        simpa [mul_comm] using hxdenom
+      let ρ := x ^ 2
+      have hρ : 0 < ρ := by positivity
+      have hρhalf : ρ ≤ 1 / 2 := by
+        dsimp only [ρ]
+        nlinarith [sq_nonneg x]
+      by_cases hactive : ∀ (who : ι) (start fuel : ℕ),
+          ρ ≤ quittingJointSurvivalWeight roots start fuel +
+            ∑ time ∈ Finset.range fuel,
+              quittingJointSurvivalWeight roots start time *
+                quittingRootOpponentAbsorptionMass
+                  (roots (start + time)) who
+      · left
+        intro start
+        have hnash :=
+          isεAsymptoticNash_quittingRootSequenceProfile_of_active_of_tendsto
+            roots hε.le hρ hvanish hperfect hactive start
+        apply hnash.mono
+        change 3 * ε / ρ ≤ x
+        rw [← hxpow]
+        dsimp only [ρ]
+        field_simp [hx.ne']
+        nlinarith [sq_nonneg x]
+      · push Not at hactive
+        obtain ⟨who, start, fuel, hquiet⟩ := hactive
+        obtain ⟨anchor, window, hwindow, hanchorPos, hη⟩ :=
+          exists_quietWindow_anchor roots who hρ hρhalf start fuel hquiet
+        let η := 3 * ρ / (1 - ρ)
+        have hone : 0 < 1 - ρ := by linarith
+        have hηle : η ≤ 4 * x ^ 2 := by
+          rw [show η = 3 * ρ / (1 - ρ) from rfl, div_le_iff₀ hone]
+          dsimp only [ρ]
+          have hfactor : 0 ≤ x ^ 2 * (1 - 4 * x ^ 2) := by
+            exact mul_nonneg (sq_nonneg x) (by nlinarith [sq_nonneg x])
+          nlinarith
+        have hMη : M * η ≤ 1 := by
+          have hscale := mul_le_mul_of_nonneg_left hηle hM
+          nlinarith [mul_nonneg hM hx.le, sq_nonneg x]
+        have hreward : ∀ terminal player, |reward terminal player| ≤ M :=
+          abs_reward_le_quittingRewardBound reward
+        have hrepair := isεAsymptoticNash_soloStationary_of_quietWindow
+          hunit roots who anchor window hε.le hreward (hperfect anchor)
+          hanchorPos hwindow (le_trans hη (le_rfl : η ≤ η)) hMη
+        right
+        refine ⟨quittingSoloStationaryRoot who (roots anchor who), ?_⟩
+        apply hrepair.mono
+        change ε + 4 * M * η ≤ x
+        have hx5 : x ^ 5 ≤ (1 / 2 : ℝ) ^ 5 :=
+          pow_le_pow_left₀ hx.le hxhalf.le 5
+        have hx6 : x ^ 6 ≤ x / 2 := by
+          rw [pow_succ']
+          have hscaled := mul_le_mul_of_nonneg_left hx5 hx.le
+          norm_num at hscaled ⊢
+          linarith
+        have hscale := mul_le_mul_of_nonneg_left hηle hM
+        have hMx : 48 * M * x ≤ 1 := by linarith
+        have hMxScaled := mul_le_mul_of_nonneg_right hMx hx.le
+        rw [← hxpow]
+        nlinarith [mul_nonneg hM hx.le, sq_nonneg x]
+
 /-- A uniform positive one-stage absorption floor implies the terminating-tail
 hypothesis of the quantitative subgame dichotomy. -/
 theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference

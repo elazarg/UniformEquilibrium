@@ -51,6 +51,18 @@ theorem finDistOfPMF_bind [Finite α] [Finite β]
       FinDist.bind (finDistOfPMF μ) (fun a => finDistOfPMF (f a)) := by
   exact FinDist.ext rfl
 
+/-- On finite coordinate spaces, converting the independent-product PMF to a
+finite-support law agrees with the independent product of the converted
+marginals. -/
+@[simp]
+theorem finDistOfPMF_pmfPi {ι : Type*} [Fintype ι]
+    {A : ι → Type*} [∀ i, Finite (A i)] (μ : ∀ i, PMF (A i)) :
+    finDistOfPMF (Math.PMFProduct.pmfPi μ) =
+      FinDist.pi (fun i ↦ finDistOfPMF (μ i)) := by
+  apply FinDist.ext
+  ext action
+  rfl
+
 @[simp]
 theorem expect_finDistOfPMF [Finite α] (μ : PMF α) (observable : α → ℝ) :
     FinDist.expect (finDistOfPMF μ) observable = expect μ observable :=

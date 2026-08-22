@@ -21,16 +21,17 @@ layers.  The first two are proved in this development:
   `exists_quittingPerfectAbsorbingRootSequence_of_soloExitPreference`
   (the source's Proposition 2.3).
 
-The remaining layer is the source's Proposition 2.4, its block-decomposition
-core: from a row sequence with a per-stage absorption floor whose every row
-is one-stage `ε`-perfect against its own continuation, extract a profile that
-is a terminal approximate equilibrium — either the sequence itself or a
-stationary repair.  `QuittingPerfectSequenceExtraction` names exactly that
-open step, at a hypothesis strength the second layer delivers.
+The source's Proposition 2.4 is its block-decomposition core: from a row
+sequence with a per-stage absorption floor whose every row is one-stage
+`ε`-perfect against its own continuation, extract a profile that is a
+terminal approximate equilibrium — either the sequence itself or a stationary
+repair.  `QuittingPerfectSequenceExtraction` names exactly that interface, at
+a hypothesis strength the second layer delivers.  Its production proof is
+`quittingPerfectSequenceExtraction_of_soloExitPreference`.
 
 `quittingCappedJointExitUniformεExistence_of_perfectSequenceExtraction`
-closes the chain: granting the extraction step for every table with unit
-solo exit and capped joint exit, the open proposition
+closes the chain: given the extraction step for every table with unit
+solo exit and capped joint exit, the proposition
 `QuittingCappedJointExitUniformεExistence` holds.  The bridge from terminal
 approximate equilibria at every error to uniform `ε`-equilibria is the
 notion-alignment waist
@@ -47,7 +48,7 @@ open StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- **Open step: perfect-sequence extraction** (Solan and Vieille, *Quitting
+/-- **Perfect-sequence extraction interface** (Solan and Vieille, *Quitting
 games*, Math. Oper. Res. 26 (2001), Proposition 2.4).  For every target
 tolerance there is a row tolerance such that any root sequence with a
 per-stage absorption floor, each of whose rows is one-stage perfect at the
