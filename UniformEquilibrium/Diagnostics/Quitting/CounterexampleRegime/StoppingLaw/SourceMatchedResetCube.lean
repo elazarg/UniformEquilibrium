@@ -26,6 +26,7 @@ noncomputable section
 namespace GameTheory
 
 open Math.Finset.CubicalResetIntegrability
+open Filter
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -72,6 +73,130 @@ theorem sourceMatchedResetCubeData_profile_empty
   funext who
   simp [QuittingStoppingLawResetCubeData.profile,
     sourceMatchedResetCubeData]
+
+/-- Any reset cube inherits the exact carrier-minimum lower bound between its
+empty face and every other face. -/
+theorem resetCubeData_totalDebtChange_ge_neg_sourceExcess
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (data : QuittingStoppingLawResetCubeData reward)
+    (face : Finset ι) :
+    -(quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward (data.profile ∅)) -
+        quittingTerminalSemanticDebtSum frontier.base) ≤
+      quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward (data.profile face)) -
+        quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward (data.profile ∅)) := by
+  have hminimum := frontier.base_minimum
+    (quittingTerminalSemanticPair reward (data.profile face))
+    (quittingTerminalSemanticPair_mem_carrier reward _)
+  linarith
+
+/-- Scale-normalized exact-minimum bound for an arbitrary reset cube. -/
+theorem resetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (rank : ℕ) (data : QuittingStoppingLawResetCubeData reward)
+    (face : Finset ι) :
+    -(quittingTerminalSemanticDebtSum
+            (quittingTerminalSemanticPair reward (data.profile ∅)) -
+          quittingTerminalSemanticDebtSum frontier.base) /
+        frontier.lambda (frontier.subseq rank) ≤
+      (quittingTerminalSemanticDebtSum
+            (quittingTerminalSemanticPair reward (data.profile face)) -
+          quittingTerminalSemanticDebtSum
+            (quittingTerminalSemanticPair reward (data.profile ∅))) /
+        frontier.lambda (frontier.subseq rank) := by
+  apply (div_le_div_iff_of_pos_right
+    (frontier.lambda_pos (frontier.subseq rank))).2
+  exact frontier.resetCubeData_totalDebtChange_ge_neg_sourceExcess
+    data face
+
+/-- Uniform asymptotic one-sided minimality for any sequence of reset cubes
+whose empty face is the selected frontier source. -/
+theorem eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (data : ℕ → QuittingStoppingLawResetCubeData reward)
+    (hsource : ∀ rank,
+      (data rank).profile ∅ = frontier.profiles (frontier.subseq rank))
+    {epsilon : ℝ} (hepsilon : 0 < epsilon) :
+    ∀ᶠ rank in atTop, ∀ face : Finset ι,
+      -epsilon <
+        (quittingTerminalSemanticDebtSum
+              (quittingTerminalSemanticPair reward ((data rank).profile face)) -
+            quittingTerminalSemanticDebtSum
+              (quittingTerminalSemanticPair reward ((data rank).profile ∅))) /
+          frontier.lambda (frontier.subseq rank) := by
+  have hsmall :=
+    (tendsto_order.1 frontier.source_excess_over_lambda_tendsto_zero).2
+      epsilon hepsilon
+  apply hsmall.mono
+  intro rank hrank face
+  have hlower := frontier.resetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess
+    rank (data rank) face
+  rw [hsource rank] at hlower
+  rw [neg_div] at hlower
+  rw [hsource rank]
+  linarith
+
+/-- Every face of the literal source-matched cube stays above the exact
+minimum-debt carrier point. Consequently, its total-debt change from the
+source is bounded below by the negative source excess. -/
+theorem sourceMatchedResetCubeData_totalDebtChange_ge_neg_sourceExcess
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (rank : ℕ) (face : Finset ι) :
+    -(quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward
+            ((frontier.sourceMatchedResetCubeData rank).profile ∅)) -
+        quittingTerminalSemanticDebtSum frontier.base) ≤
+      quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward
+            ((frontier.sourceMatchedResetCubeData rank).profile face)) -
+        quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward
+            ((frontier.sourceMatchedResetCubeData rank).profile ∅)) := by
+  exact frontier.resetCubeData_totalDebtChange_ge_neg_sourceExcess
+    (frontier.sourceMatchedResetCubeData rank) face
+
+/-- Scale-normalized form of the exact minimum-debt face bound. -/
+theorem sourceMatchedResetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (rank : ℕ) (face : Finset ι) :
+    -(quittingTerminalSemanticDebtSum
+            (quittingTerminalSemanticPair reward
+              ((frontier.sourceMatchedResetCubeData rank).profile ∅)) -
+          quittingTerminalSemanticDebtSum frontier.base) /
+        frontier.lambda (frontier.subseq rank) ≤
+      (quittingTerminalSemanticDebtSum
+            (quittingTerminalSemanticPair reward
+              ((frontier.sourceMatchedResetCubeData rank).profile face)) -
+          quittingTerminalSemanticDebtSum
+            (quittingTerminalSemanticPair reward
+              ((frontier.sourceMatchedResetCubeData rank).profile ∅))) /
+        frontier.lambda (frontier.subseq rank) := by
+  exact frontier.resetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess rank
+    (frontier.sourceMatchedResetCubeData rank) face
+
+/-- **Uniform asymptotic one-sided minimality of every reset-cube face.**
+
+The source excess is `o(lambda)`, while every face remains in the semantic
+carrier above the exact minimum. Hence, eventually, every face at once has
+normalized total-debt change greater than `-epsilon`. No variational
+selection or finiteness of the face family is needed. -/
+theorem eventually_all_sourceMatchedResetCubeData_normalizedTotalDebtChange_gt_neg
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    {epsilon : ℝ} (hepsilon : 0 < epsilon) :
+    ∀ᶠ rank in atTop, ∀ face : Finset ι,
+      -epsilon <
+        (quittingTerminalSemanticDebtSum
+              (quittingTerminalSemanticPair reward
+                ((frontier.sourceMatchedResetCubeData rank).profile face)) -
+            quittingTerminalSemanticDebtSum
+              (quittingTerminalSemanticPair reward
+                ((frontier.sourceMatchedResetCubeData rank).profile ∅))) /
+          frontier.lambda (frontier.subseq rank) := by
+  exact frontier.eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
+    frontier.sourceMatchedResetCubeData
+    frontier.sourceMatchedResetCubeData_profile_empty hepsilon
 
 /-- The singleton vertex for an active mover is its literal frontier reset. -/
 theorem sourceMatchedResetCubeData_profile_singleton
@@ -250,15 +375,17 @@ theorem exists_sourceMatchedResetCubePureTimeWitnessSwitch_of_abs_debtCurvature
     (∃ certificate : QuittingPureTimeWitnessSwitchCertificate reward
         (data.profile (insert second.1 (insert first.1 base)))
         (data.profile base) observer charge eta,
-      HasQuittingPureTimeResetEdgeWitnessSwitch data observer
-        certificate.switch.sourceWitness ((charge + eta) / 2)) ∨
+      HasQuittingPureTimeResetSquareEdgeWitnessSwitch data observer base
+        first.1 second.1 certificate.switch.sourceWitness
+          ((charge + eta) / 2)) ∨
       (∃ certificate : QuittingPureTimeWitnessSwitchCertificate reward
           (data.profile (insert first.1 base))
           (data.profile (insert second.1 base)) observer charge eta,
-        HasQuittingPureTimeResetEdgeWitnessSwitch data observer
-          certificate.switch.sourceWitness ((charge + eta) / 2)) := by
+        HasQuittingPureTimeResetSquareEdgeWitnessSwitch data observer base
+          first.1 second.1 certificate.switch.sourceWitness
+            ((charge + eta) / 2)) := by
   dsimp only at hprescribed hface hcurvature ⊢
-  exact exists_resetCubePureTimeWitnessSwitch_of_abs_debtCurvature
+  exact exists_resetCubePureTimeSquareEdgeWitnessSwitch_of_abs_debtCurvature
     (frontier.sourceMatchedResetCubeData rank) observer base first.1 second.1
     hfirst hsecond hne hobserverFirst hobserverSecond prescribedBound q charge
       eta hcharge heta hprescribed hface hcurvature

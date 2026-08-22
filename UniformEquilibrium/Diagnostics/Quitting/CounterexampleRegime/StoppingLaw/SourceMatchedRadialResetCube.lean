@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedRadialScaling
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawResetCube
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedResetCube
 
 /-!
 # Radially scaled source-matched stopping-law reset cubes
@@ -100,6 +100,35 @@ theorem sourceMatchedRadialResetCubeData_profile_empty
   funext who
   simp [QuittingStoppingLawResetCubeData.profile,
     sourceMatchedRadialResetCubeData]
+
+/-- **Uniform asymptotic one-sided minimality of every radial-cube face.**
+
+Every radial face is an actual behavioral profile in the semantic carrier,
+and the empty face is the frontier source. The exact carrier minimum and the
+source's `o(lambda)` excess therefore control all faces simultaneously. -/
+theorem eventually_all_sourceMatchedRadialResetCubeData_normalizedTotalDebtChange_gt_neg
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (weight : {who // who ∈ frontier.active} → ℝ)
+    (hweight0 : ∀ mover, 0 ≤ weight mover)
+    (hweight1 : ∀ mover, weight mover ≤ 1)
+    {epsilon : ℝ} (hepsilon : 0 < epsilon) :
+    ∀ᶠ rank in atTop, ∀ face : Finset ι,
+      -epsilon <
+        (quittingTerminalSemanticDebtSum
+              (quittingTerminalSemanticPair reward
+                ((frontier.sourceMatchedRadialResetCubeData rank weight
+                  hweight0 hweight1).profile face)) -
+            quittingTerminalSemanticDebtSum
+              (quittingTerminalSemanticPair reward
+                ((frontier.sourceMatchedRadialResetCubeData rank weight
+                  hweight0 hweight1).profile ∅))) /
+          frontier.lambda (frontier.subseq rank) := by
+  exact frontier.eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
+    (fun rank ↦ frontier.sourceMatchedRadialResetCubeData rank weight
+      hweight0 hweight1)
+    (fun rank ↦ frontier.sourceMatchedRadialResetCubeData_profile_empty rank
+      weight hweight0 hweight1)
+    hepsilon
 
 /-- Every active singleton vertex is exactly its literal radial reset. -/
 theorem sourceMatchedRadialResetCubeData_profile_singleton
