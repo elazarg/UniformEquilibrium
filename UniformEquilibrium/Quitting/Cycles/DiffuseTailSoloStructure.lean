@@ -20,7 +20,7 @@ conditioned mesh (`hmesh`), read through the conditioning of
 `UniformEquilibrium/Quitting/Cycles/PhantomBoundaryConditioning.lean`.  Active
 tightness — the boundary coordinate of a recurrently active player equals
 that player's singleton reward — is supplied as the hypothesis `htight` below;
-`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/DiffuseTailSoloStructure.lean`
+`UniformEquilibrium/Diagnostics/Quitting/Chronology/DiffuseTailSoloStructure.lean`
 discharges it at seam grade.
 
 The file formalizes a coexistence obstruction for persistently active
@@ -60,7 +60,7 @@ players in exact diffuse tails.
   value, and the owner of an all-solo root sequence has refusal value zero,
   since replacing the owner's marginals by never-quit stops all absorption.
   These feed the T4(a) obstruction analysis of
-  `UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/DiffuseTailSoloStructure.lean`.
+  `UniformEquilibrium/Diagnostics/Quitting/Chronology/DiffuseTailSoloStructure.lean`.
 
 Nothing in this file asserts that solo windows exist; every solo statement is
 conditional on being handed one.

@@ -5,9 +5,9 @@ Authors: GameTheory contributors
 -/
 
 import Experiments.counterexample_search.RegularTournamentFiveSeed
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicRenewal
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicRenewal
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicScreen
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicScreen
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
 import UniformEquilibrium.Quitting.Cycles.AdmissibleCycleTerminalEquilibrium
 

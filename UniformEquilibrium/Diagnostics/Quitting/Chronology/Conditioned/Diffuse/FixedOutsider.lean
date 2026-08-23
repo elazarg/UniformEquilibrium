@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Conditioned.Diffuse.Closure
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Conditioned.FloorViability
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.Conditioned.Diffuse.Closure
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.Conditioned.FloorViability
 
 /-!
 # A fixed inactive outsider in the diffuse defect branch

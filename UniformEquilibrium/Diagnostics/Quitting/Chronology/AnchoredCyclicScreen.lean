@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.PeriodicWindows
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
 
 /-!
@@ -32,7 +32,8 @@ player to satisfy `S⁰ ≥ U⁰ + γ` (`exists_anchoredCyclicResponse_gain`).  
 refusal hypothesis `hrefusal` is the one step of the bridge not proved here:
 the deterministic-stop half is `quittingAnchoredCyclicPhaseStop_le`, and the
 refusal half is discharged in
-`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/AnchoredCyclicRenewal.lean`.
+The renewal consequences are developed in
+`UniformEquilibrium/Diagnostics/Quitting/Chronology/AnchoredCyclicRenewal.lean`.
 -/
 
 noncomputable section

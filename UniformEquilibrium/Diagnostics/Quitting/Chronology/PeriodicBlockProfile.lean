@@ -4,10 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
+import UniformEquilibrium.Quitting.Cycles.TerminalExploitabilityPeriodicProfile
 import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
-import UniformEquilibrium.Quitting.Cycles.SoloPeriodicBlockCompiler
 
 /-!
 # Periodic block profiles against a terminal exploitability witness
@@ -33,8 +32,6 @@ profile, admit no regime at all.
 * `QuittingTerminalExploitabilityWitness.exists_quittingCyclicResponse_gain`
 * `QuittingTerminalExploitabilityWitness.exists_quittingBlockResponse_gain`
 * `isEmpty_terminalExploitabilityWitness_of_quittingCyclicResponseCap_le`
-* `isEmpty_terminalExploitabilityWitness_of_soloPeriodicBlock`
-* `isEmpty_terminalExploitabilityWitness_of_isQuittingBlockCertificate`
 -/
 
 noncomputable section
@@ -117,31 +114,7 @@ theorem isEmpty_terminalExploitabilityWitness_of_quittingCyclicResponseCap_le
   have hpos := witness.terminalGap_pos
   linarith [hcap who]
 
-/-! ## Certified single-quitter periodic profiles -/
-
-open SoloPeriodicBlockCompiler in
-/-- A table carrying a certified single-quitter periodic profile lies in no
-terminal exploitability witness. -/
-theorem isEmpty_terminalExploitabilityWitness_of_soloPeriodicBlock
-    {w : Fin (m + 1) → ι} {marginal : Fin (m + 1) → PMF Bool}
-    {value : Fin (m + 2) → Payoff ι}
-    (hcert : IsSoloPeriodicCertificate reward w marginal value) :
-    IsEmpty (QuittingTerminalExploitabilityWitness reward) :=
-  isEmpty_quittingTerminalExploitabilityWitness_of_exists_uniformEquilibriumPayoff _
-    ⟨value 0, isUniformEquilibriumPayoff_of_soloPeriodicBlock hcert⟩
-
-/-! ## Certified block periodic profiles -/
-
 variable {hazard : Fin (m + 1) → ι → ℝ}
-
-/-- A table carrying a certified block profile lies in no counterexample
-regime. -/
-theorem isEmpty_terminalExploitabilityWitness_of_isQuittingBlockCertificate
-    {U : Fin (m + 2) → Payoff ι}
-    (hcert : IsQuittingBlockCertificate reward hazard U) :
-    IsEmpty (QuittingTerminalExploitabilityWitness reward) :=
-  isEmpty_quittingTerminalExploitabilityWitness_of_exists_uniformEquilibriumPayoff _
-    ⟨U 0, isUniformEquilibriumPayoff_of_isQuittingBlockCertificate hcert⟩
 
 /-! ## The block necessary condition -/
 

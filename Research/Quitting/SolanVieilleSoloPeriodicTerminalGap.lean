@@ -7,9 +7,9 @@ Authors: GameTheory contributors
 import MathUE.AffineIterateTelescope
 import MathUE.CyclicContraction
 import MathUE.Finset.MinimalMemberSum
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicRenewal
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicRenewal
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicScreen
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicScreen
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
 import Research.Quitting.SolanVieilleSoloPeriodicGap
 import UniformEquilibrium.Quitting.Cycles.SingletonArcCycle

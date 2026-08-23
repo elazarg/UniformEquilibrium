@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Experiments.counterexample_search.RegularTournamentFiveSeed
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.DiffuseTailSoloStructure
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.DiffuseTailSoloStructure
 import UniformEquilibrium.Quitting.Cycles.DiffuseTailSoloStructure
 
 /-!

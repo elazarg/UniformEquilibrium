@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCoreStrictnessExample
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicRenewal
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicRenewal
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
 
 /-!

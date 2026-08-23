@@ -8,11 +8,11 @@ import UniformEquilibrium.Diagnostics.Quitting.Chronology.PositiveDebtDynamicTai
 import Mathlib.Data.Fintype.Pigeonhole
 
 /-!
-# Canonically blocked periodic windows of a counterexample tail
+# Canonically blocked periodic windows of a positive-gap tail
 
 Restart the length-`n+1` optimized-tail window beginning at date `n`, with
 phase zero as the restart point.  Every such periodic profile is exposed by
-the counterexample's full terminal gap.  Hence the resulting canonical
+the positive-gap witness's terminal gap.  Hence the resulting canonical
 periodic family is payoff-blocked from its first member, at half that gap, by
 one of the exact finite evaluator's two branches: refusal/`Never`, or one
 concrete stop phase.
@@ -32,30 +32,6 @@ open Math.Probability
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
-
-namespace QuittingTerminalExploitabilityWitness
-
-/-- Every periodic behavior profile is exposed by its exact finite periodic
-best-response cap at the full terminal gap. -/
-theorem exists_periodicCap_gain
-    (witness : QuittingTerminalExploitabilityWitness reward)
-    (profile : (quittingGame reward).BehaviorProfile)
-    (period : ℕ) [NeZero period]
-    (hperiodic : ∀ time,
-      quittingProfileLiveRoot reward profile (time + period) =
-        quittingProfileLiveRoot reward profile time) :
-    ∃ who,
-      quittingTerminalPayoff reward profile who + witness.terminalGap ≤
-        quittingPeriodicWindowBestResponseValue reward
-          (quittingProfileLiveRoot reward profile) who period := by
-  obtain ⟨who, hgain⟩ := witness.exists_pureTimeCap_gap profile
-  refine ⟨who, ?_⟩
-  rw [← sSup_range_quittingTerminalPayoff_update_eq_periodicWindow
-    reward profile who period hperiodic,
-    sSup_range_quittingTerminalPayoff_update_eq_pureTime]
-  exact hgain
-
-end QuittingTerminalExploitabilityWitness
 
 namespace QuittingPositiveDebtDynamicTailWitness
 
@@ -80,7 +56,7 @@ def canonicalPeriodicTailWindowFamily :
       (quittingPeriodicWindowInitialPhase window) time
 
 /-- Every canonical restarted window has an exact refusal-or-phase
-obstruction at half the counterexample margin. -/
+obstruction at half the terminal gap. -/
 theorem canonicalPeriodicTailWindow_escape (window : ℕ) :
     ∃ who,
       witness.terminalGap / 2 <

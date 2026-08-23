@@ -4,14 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicScreen
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicScreen
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
 
 /-!
 # Discharging the anchored cyclic screen's refusal hypothesis
 
 `exists_anchoredCyclicResponse_gain`
-(`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/AnchoredCyclicScreen.lean`)
+(`UniformEquilibrium/Diagnostics/Quitting/Chronology/AnchoredCyclicScreen.lean`)
 carries an explicit refusal hypothesis `hrefusal`.  This module discharges
 that hypothesis against the max-linear response system, using the refusal
 identity and response-cap bounds of
