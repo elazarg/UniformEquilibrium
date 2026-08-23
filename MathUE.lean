@@ -86,6 +86,7 @@ import MathUE.EdgeGraph
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
 import MathUE.FiniteEmpiricalConvexity
+import MathUE.FiniteLinearChargedCapacity
 import MathUE.FiniteLinearCompatibility
 import MathUE.FinitePivotOrbit
 import MathUE.FiniteSerialRelation

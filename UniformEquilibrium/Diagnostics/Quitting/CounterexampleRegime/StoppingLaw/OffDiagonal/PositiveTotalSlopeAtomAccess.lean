@@ -48,7 +48,7 @@ structure PositiveTotalSlopeEndpointAtomPassport
   observer_ne_mover : observer ≠ mover.1
   observer_tangent_lower :
     ((∑ who, frontier.tangent mover who) +
-        quittingTerminalSemanticDebt frontier.base mover.1 / 2) /
+        quittingTerminalSemanticDebt frontier.base mover.1) /
         ((Finset.univ.erase mover.1).card : ℝ) ≤
       frontier.tangent mover observer
   charge_eq : charge = 7 * frontier.tangent mover observer / 16
