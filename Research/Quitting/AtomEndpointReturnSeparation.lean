@@ -116,9 +116,8 @@ fixed mover, observer, charge, terminal label, and rank subsequence through
 the underlying sequence. -/
 structure QuittingPrescribedAtomEndpointCluster
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)
     where
   subseq : ℕ → ℕ
@@ -126,12 +125,12 @@ structure QuittingPrescribedAtomEndpointCluster
   cluster : QuittingTerminalSemanticPair ι
   cluster_mem : cluster ∈ quittingTerminalSemanticCarrier reward
   endpoint_tendsto : Tendsto (fun n =>
-    let profile := frontier.profiles
-      (frontier.subseq (sequence.rank (subseq n)))
+    let profile := frontier.source
+      (sequence.rank (subseq n))
     quittingTerminalSemanticPair reward
       (Function.update profile packet.chronology.mover.1
-        (frontier.bestResponse packet.chronology.mover
-          (frontier.subseq (sequence.rank (subseq n))))))
+        (frontier.replacement packet.chronology.mover
+          (sequence.rank (subseq n)))))
     atTop (nhds cluster)
   observer_rise : packet.chronology.charge ≤
     quittingTerminalSemanticDebt cluster packet.chronology.observer -
@@ -158,17 +157,16 @@ The fixed atom and exact stack remain available at every `sequence.rank
 (cluster.subseq n)`. -/
 theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.nonempty_endpointCluster
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet) :
     Nonempty (QuittingPrescribedAtomEndpointCluster sequence) := by
   let endpoint : ℕ → QuittingTerminalSemanticPair ι := fun n =>
-    let profile := frontier.profiles (frontier.subseq (sequence.rank n))
+    let profile := frontier.source (sequence.rank n)
     quittingTerminalSemanticPair reward
       (Function.update profile packet.chronology.mover.1
-        (frontier.bestResponse packet.chronology.mover
-          (frontier.subseq (sequence.rank n))))
+        (frontier.replacement packet.chronology.mover
+          (sequence.rank n)))
   have hendpointMem : ∀ n,
       endpoint n ∈ quittingTerminalSemanticCarrier reward := by
     intro n
@@ -177,12 +175,11 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.nonempty_endpointC
     (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
       hendpointMem
   have hsource : Tendsto (fun n => quittingTerminalSemanticPair reward
-      (frontier.profiles
-        (frontier.subseq (sequence.rank (subseq n))))) atTop
+      (frontier.source
+        (sequence.rank (subseq n)))) atTop
       (nhds frontier.base) := by
-    exact frontier.profiles_tendsto.comp
-      ((frontier.subseq_strictMono.comp
-        (sequence.rank_strictMono.comp hsubseq)).tendsto_atTop)
+    exact frontier.source_tendsto.comp
+      ((sequence.rank_strictMono.comp hsubseq).tendsto_atTop)
   have hobserverEndpoint :=
     (continuous_quittingTerminalSemanticDebt packet.chronology.observer).tendsto
       cluster |>.comp hendpoint
@@ -194,8 +191,8 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.nonempty_endpointC
           packet.chronology.observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles
-              (frontier.subseq (sequence.rank (subseq n)))))
+            (frontier.source
+              (sequence.rank (subseq n))))
           packet.chronology.observer) atTop
       (nhds (quittingTerminalSemanticDebt cluster
           packet.chronology.observer -
@@ -211,15 +208,15 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.nonempty_endpointC
       simpa only [endpoint] using sequence.endpointDebtRise (subseq n)
   let direction : ℕ → ℝ := fun n =>
     quittingStoppingLawNormalizedDebtDirection reward
-      (frontier.profiles (frontier.subseq (sequence.rank n)))
+      (frontier.source (sequence.rank n))
       packet.chronology.mover.1
-      (frontier.bestResponse packet.chronology.mover
-        (frontier.subseq (sequence.rank n)))
-      (frontier.lambda (frontier.subseq (sequence.rank n)))
-      (frontier.lambda_pos
-        (frontier.subseq (sequence.rank n))).le
-      (frontier.lambda_le_one
-        (frontier.subseq (sequence.rank n)))
+      (frontier.replacement packet.chronology.mover
+        (sequence.rank n))
+      (frontier.scale (sequence.rank n))
+      (frontier.scale_pos
+        (sequence.rank n)).le
+      (frontier.scale_le_one
+        (sequence.rank n))
       packet.chronology.mover.1
   have hdirection : Tendsto (fun n => direction (subseq n)) atTop
       (nhds (frontier.tangent packet.chronology.mover
@@ -246,16 +243,16 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.nonempty_endpointC
     intro n
     change quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles
-              (frontier.subseq (sequence.rank (subseq n)))))
+            (frontier.source
+              (sequence.rank (subseq n))))
           packet.chronology.mover.1 + direction (subseq n) =
         quittingTerminalSemanticDebt (endpoint (subseq n))
           packet.chronology.mover.1
     dsimp only [direction, endpoint]
     rw [stoppingLawNormalizedDebtDirection_self_eq_endpointDebtChange]
     · ring
-    · exact frontier.lambda_pos
-        (frontier.subseq (sequence.rank (subseq n)))
+    · exact frontier.scale_pos
+        (sequence.rank (subseq n))
   have hmoverEq : quittingTerminalSemanticDebt cluster
       packet.chronology.mover.1 =
       quittingTerminalSemanticDebt frontier.base
@@ -284,9 +281,8 @@ applies.  Otherwise the strictly positive residual is exactly why neither
 surface tension nor reset reprojection is available. -/
 theorem QuittingPrescribedAtomEndpointCluster.return_or_resetFaceConsumer_or_positiveResidual
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     {sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet}
     (cluster : QuittingPrescribedAtomEndpointCluster sequence) :
     quittingTerminalSemanticDebtSum cluster.cluster =
@@ -316,16 +312,15 @@ theorem QuittingPrescribedAtomEndpointCluster.return_or_resetFaceConsumer_or_pos
 /-- Literal double endpoint from the enriched rectangle sequence. -/
 def quittingRectangleDoubleEndpointProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (n : ℕ) : (quittingGame reward).BehaviorProfile :=
-  let profile := frontier.profiles (frontier.subseq (sequence.rank n))
+  let profile := frontier.source (sequence.rank n)
   Function.update
     (Function.update profile packet.chronology.mover.1
-      (frontier.bestResponse packet.chronology.mover
-        (frontier.subseq (sequence.rank n))))
+      (frontier.replacement packet.chronology.mover
+        (sequence.rank n)))
     packet.chronology.observer
     (quittingPureTimeBehaviorStrategy reward packet.chronology.observer
       (sequence.quitTime n))
@@ -335,9 +330,8 @@ point, with all fixed labels and atom bounds retained along the selected
 subsequence. -/
 structure QuittingRectangleDoubleEndpointCluster
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet) where
   subseq : ℕ → ℕ
   subseq_strictMono : StrictMono subseq
@@ -358,9 +352,8 @@ structure QuittingRectangleDoubleEndpointCluster
 /-- Extract the exact double-endpoint reset cluster. -/
 theorem QuittingStoppingLawRectangleEndpointRiseSequence.nonempty_doubleEndpointCluster
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet) :
     Nonempty (QuittingRectangleDoubleEndpointCluster sequence) := by
   let endpoint : ℕ → QuittingTerminalSemanticPair ι := fun n =>
@@ -395,9 +388,8 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.nonempty_doubleEndpoint
 named reset-face return/all-Continue separation consumer unconditionally. -/
 theorem QuittingRectangleDoubleEndpointCluster.has_resetFaceConsumer
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     {sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet}
     (cluster : QuittingRectangleDoubleEndpointCluster sequence) :
     HasQuittingResetFaceReturnOrAllContinueSeparation reward frontier.base

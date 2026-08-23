@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.FiniteLinearChargedCapacity
-import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ExhaustiveFrontierBranch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ExhaustiveTangentAlternative
 
 /-!
 # Linear charged capacity of a flat stopping-law tangent family
@@ -128,10 +128,10 @@ def IsQuittingStoppingLawLinearCapacityFrontierBranch
 
 /-- Consume the exact linear alternative on the flat/no-entry residual of
 any regime-free exhaustive stopping-law frontier witness. -/
-theorem IsQuittingStoppingLawExhaustiveFrontierBranch.toLinearCapacityBranch
+theorem IsQuittingStoppingLawExhaustiveTangentAlternative.toLinearCapacityBranch
     {base : QuittingTerminalSemanticPair ι} {active : Finset ι}
     {tangent : {who // who ∈ active} → ι → ℝ}
-    (branch : IsQuittingStoppingLawExhaustiveFrontierBranch
+    (branch : IsQuittingStoppingLawExhaustiveTangentAlternative
       base active tangent) :
     IsQuittingStoppingLawLinearCapacityFrontierBranch base active tangent := by
   rcases branch with hpositive | ⟨hflat, hentry⟩ |

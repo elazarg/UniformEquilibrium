@@ -81,10 +81,11 @@ the static compression itself does not need them. -/
 theorem QuittingTerminalExploitabilityWitness.stoppingLawSingletonStrategicOrientation_compress
     {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
     (witness : QuittingTerminalExploitabilityWitness reward)
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (horientation :
-      HasQuittingStoppingLawSingletonStrategicOrientation packet) :
+      HasQuittingStoppingLawSingletonStrategicOrientation
+        (witness := witness) packet) :
     HasQuittingStaticAtomicToggleHandoff reward ∨
       HasQuittingExactPlayerDeletionAtGap reward packet.observer
         witness.terminalGap := by

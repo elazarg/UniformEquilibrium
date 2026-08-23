@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.PotentialCoDecreaseEndpoint
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.MinimumFiberSupportDrop
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPaidFirstDisagreement
 
 /-!
-# Curvature alternative for a potential-guided full reset
+# Normalized curvature and paid-row alternatives
 
-A flat full-reset endpoint differs from its limiting tangent column by a
+A flat full-replacement endpoint differs from its limiting tangent column by a
 nonnegative coordinatewise curvature vector.  Its total curvature is exactly
 the endpoint's total-debt excess above the frontier minimum, and the mover
 coordinate has zero curvature.  Hence every off-minimum endpoint has a
@@ -31,29 +31,28 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {witness : QuittingTerminalExploitabilityWitness reward}
-  {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-  {mover : {who // who ∈ frontier.active}}
+  {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+  {mover : {who // who ∈ frontier.positiveDebtSupport}}
 
-namespace FullResetEndpointCluster
+namespace FullReplacementCluster
 
 /-- Coordinatewise curvature needed to complete the tangent column to the
-literal full-reset endpoint. -/
-def curvature (endpoint : FullResetEndpointCluster frontier mover)
+literal full-replacement endpoint. -/
+def curvature (endpoint : FullReplacementCluster frontier mover)
     (observer : ι) : ℝ :=
   quittingTerminalSemanticDebtChange frontier.base endpoint.cluster observer -
     frontier.tangent mover observer
 
 theorem curvature_nonneg
-    (endpoint : FullResetEndpointCluster frontier mover) (observer : ι) :
+    (endpoint : FullReplacementCluster frontier mover) (observer : ι) :
     0 ≤ endpoint.curvature observer :=
   sub_nonneg.mpr (endpoint.coordinate_excess observer)
 
 theorem curvature_mover_eq_zero
-    (endpoint : FullResetEndpointCluster frontier mover) :
+    (endpoint : FullReplacementCluster frontier mover) :
     endpoint.curvature mover.1 = 0 := by
   unfold curvature
   rw [endpoint.mover_excess_eq]
@@ -62,7 +61,7 @@ theorem curvature_mover_eq_zero
 /-- For a flat column, total endpoint curvature is exactly total semantic
 debt excess above the frontier minimum. -/
 theorem sum_curvature_eq_totalDebtExcess
-    (endpoint : FullResetEndpointCluster frontier mover)
+    (endpoint : FullReplacementCluster frontier mover)
     (hflat : ∑ observer, frontier.tangent mover observer = 0) :
     (∑ observer, endpoint.curvature observer) =
       quittingTerminalSemanticDebtSum endpoint.cluster -
@@ -75,7 +74,7 @@ theorem sum_curvature_eq_totalDebtExcess
 /-- Off the minimum fiber, one non-mover coordinate carries at least average
 curvature over all opponents. -/
 theorem exists_curvature_ge_opponentAverage
-    (endpoint : FullResetEndpointCluster frontier mover)
+    (endpoint : FullReplacementCluster frontier mover)
     (hflat : ∑ observer, frontier.tangent mover observer = 0) :
     ∃ observer : ι, observer ≠ mover.1 ∧
       (quittingTerminalSemanticDebtSum endpoint.cluster -
@@ -113,46 +112,42 @@ theorem exists_curvature_ge_opponentAverage
   simpa only [mul_comm] using hsumLe
 
 /-- The finite-rank normalized endpoint-curvature coordinate converges to the
-curvature of the compact full-reset cluster. -/
+curvature of the compact full-replacement cluster. -/
 theorem normalizedCurvature_tendsto
-    (endpoint : FullResetEndpointCluster frontier mover) (observer : ι) :
+    (endpoint : FullReplacementCluster frontier mover) (observer : ι) :
     Tendsto (fun rank ↦
       quittingTerminalSemanticDebtChange
           (frontier.sourcePair (endpoint.subseq rank))
-          (frontier.fullResetPair mover (endpoint.subseq rank)) observer -
+          (frontier.fullReplacementPair mover (endpoint.subseq rank)) observer -
         quittingStoppingLawNormalizedDebtDirection reward
-          (frontier.profiles (frontier.subseq (endpoint.subseq rank))) mover.1
-          (frontier.bestResponse mover
-            (frontier.subseq (endpoint.subseq rank)))
-          (frontier.lambda (frontier.subseq (endpoint.subseq rank)))
-          (frontier.lambda_pos
-            (frontier.subseq (endpoint.subseq rank))).le
-          (frontier.lambda_le_one
-            (frontier.subseq (endpoint.subseq rank))) observer)
+          (frontier.source (endpoint.subseq rank)) mover.1
+          (frontier.replacement mover (endpoint.subseq rank))
+          (frontier.scale (endpoint.subseq rank))
+          (frontier.scale_pos (endpoint.subseq rank)).le
+          (frontier.scale_le_one (endpoint.subseq rank)) observer)
       atTop (nhds (endpoint.curvature observer)) := by
   have hsource : Tendsto (fun rank ↦
       frontier.sourcePair (endpoint.subseq rank)) atTop
       (nhds frontier.base) := by
     unfold sourcePair
-    exact frontier.profiles_tendsto.comp
-      endpoint.sourceSubseq_strictMono.tendsto_atTop
+    exact frontier.source_tendsto.comp endpoint.subseq_strictMono.tendsto_atTop
   have hchange : Tendsto (fun rank ↦
       quittingTerminalSemanticDebtChange
         (frontier.sourcePair (endpoint.subseq rank))
-        (frontier.fullResetPair mover (endpoint.subseq rank)) observer)
+        (frontier.fullReplacementPair mover (endpoint.subseq rank)) observer)
       atTop (nhds (quittingTerminalSemanticDebtChange
         frontier.base endpoint.cluster observer)) := by
     unfold quittingTerminalSemanticDebtChange
     exact ((continuous_quittingTerminalSemanticDebt observer).tendsto
-      endpoint.cluster |>.comp endpoint.fullReset_tendsto).sub
+      endpoint.cluster |>.comp endpoint.fullReplacement_tendsto).sub
         ((continuous_quittingTerminalSemanticDebt observer).tendsto
           frontier.base |>.comp hsource)
   exact hchange.sub ((frontier.tangent_tendsto mover observer).comp
     endpoint.subseq_strictMono.tendsto_atTop)
 
-end FullResetEndpointCluster
+end FullReplacementCluster
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 
 /-! ## Finite-rank one-ray curvature decoder -/
 
@@ -306,19 +301,18 @@ theorem exists_paidFirstDisagreementRow_of_stoppingLawNormalizedCurvature
   · simpa only [hrowReceiving, targetValue, targetProfile] using
       hreceivingWitness
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {witness : QuittingTerminalExploitabilityWitness reward}
-  {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-  {mover : {who // who ∈ frontier.active}}
+  {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+  {mover : {who // who ∈ frontier.positiveDebtSupport}}
 
-namespace FullResetEndpointCluster
+namespace FullReplacementCluster
 
-/-- Every off-minimum flat full-reset cluster exports a fixed positive-gain
+/-- Every off-minimum flat full-replacement cluster exports a fixed positive-gain
 paid first-disagreement row along its exact source/reset subsequence. -/
 theorem exists_eventually_paidFirstDisagreement
-    (endpoint : FullResetEndpointCluster frontier mover)
+    (endpoint : FullReplacementCluster frontier mover)
     (hflat : ∑ observer, frontier.tangent mover observer = 0)
     (hseparated : quittingTerminalSemanticDebtSum frontier.base <
       quittingTerminalSemanticDebtSum endpoint.cluster) :
@@ -326,7 +320,7 @@ theorem exists_eventually_paidFirstDisagreement
       observer ≠ mover.1 ∧ 0 < gain ∧
       ∀ᶠ rank in atTop,
         Nonempty (QuittingPaidFirstDisagreementRow reward
-          (frontier.fullResetProfile mover (endpoint.subseq rank))
+          (frontier.fullReplacementProfile mover (endpoint.subseq rank))
           observer gain) := by
   obtain ⟨observer, hne, hlower⟩ :=
     endpoint.exists_curvature_ge_opponentAverage hflat
@@ -352,11 +346,11 @@ theorem exists_eventually_paidFirstDisagreement
   have hgain : 0 < gain := div_pos hcurvature (by norm_num)
   refine ⟨observer, gain, hne, hgain, ?_⟩
   filter_upwards [heventually] with rank hrank
-  let lambda := frontier.lambda (frontier.subseq (endpoint.subseq rank))
+  let lambda := frontier.scale (endpoint.subseq rank)
   have hlambda : 0 < lambda :=
-    frontier.lambda_pos (frontier.subseq (endpoint.subseq rank))
+    frontier.scale_pos (endpoint.subseq rank)
   have hlambdaOne : lambda ≤ 1 :=
-    frontier.lambda_le_one (frontier.subseq (endpoint.subseq rank))
+    frontier.scale_le_one (endpoint.subseq rank)
   let sourceError := lambda * curvature / 16
   let endpointError := curvature / 16
   have hsourceError : 0 < sourceError := by
@@ -371,12 +365,11 @@ theorem exists_eventually_paidFirstDisagreement
         lambda *
           (quittingTerminalSemanticDebtChange
               (frontier.sourcePair (endpoint.subseq rank))
-              (frontier.fullResetPair mover (endpoint.subseq rank)) observer -
+              (frontier.fullReplacementPair mover (endpoint.subseq rank)) observer -
             quittingStoppingLawNormalizedDebtDirection reward
-              (frontier.profiles (frontier.subseq (endpoint.subseq rank)))
+              (frontier.source (endpoint.subseq rank))
               mover.1
-              (frontier.bestResponse mover
-                (frontier.subseq (endpoint.subseq rank)))
+              (frontier.replacement mover (endpoint.subseq rank))
               lambda hlambda.le hlambdaOne observer) := by
     dsimp only [gain, endpointError, sourceError]
     nlinarith [mul_nonneg hlambda.le hcurvature.le,
@@ -384,17 +377,17 @@ theorem exists_eventually_paidFirstDisagreement
         (mul_nonneg hlambda.le hcurvature.le)]
   obtain ⟨row, _hsource, _hreceiving⟩ :=
     exists_paidFirstDisagreementRow_of_stoppingLawNormalizedCurvature
-      reward (frontier.profiles (frontier.subseq (endpoint.subseq rank)))
+      reward (frontier.source (endpoint.subseq rank))
       mover.1 observer
-      (frontier.bestResponse mover (frontier.subseq (endpoint.subseq rank)))
+      (frontier.replacement mover (endpoint.subseq rank))
       lambda sourceError endpointError gain hne hlambda hlambdaOne
       hsourceError hendpointError hgain hbudget
   exact ⟨row⟩
 
-end FullResetEndpointCluster
+end FullReplacementCluster
 
 /-- **Connected potential-endpoint alternative.**  A flat potential-guided
-co-decrease selects one literal full-reset endpoint cluster.  Either the
+co-decrease selects one literal full-replacement endpoint cluster.  Either the
 cluster remains on the minimum-total-debt fiber, where its positive-debt
 support and cardinal rank strictly deflate and the stored companion debt
 falls, or it is strictly separated from the minimum and exports a fixed
@@ -402,24 +395,24 @@ positive paid first-disagreement row along the same source/reset subsequence.
 
 The second arm retains the exact row but does not consume it chronologically. -/
 theorem potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hnoEntry : ¬HasQuittingStoppingLawFlatSupportEntry
-      frontier.base frontier.active frontier.tangent)
+      frontier.base frontier.positiveDebtSupport frontier.tangent)
     (hpotential : HasQuittingStoppingLawFlatPotentialCoDecrease
-      frontier.active frontier.tangent) :
-    ∃ mover : {who // who ∈ frontier.active},
-      ∃ other ∈ frontier.active.erase mover.1,
+      frontier.positiveDebtSupport frontier.tangent) :
+    ∃ mover : {who // who ∈ frontier.positiveDebtSupport},
+      ∃ other ∈ frontier.positiveDebtSupport.erase mover.1,
         frontier.tangent mover other < 0 ∧
-        ∃ endpoint : FullResetEndpointCluster frontier mover,
+        ∃ endpoint : FullReplacementCluster frontier mover,
           (quittingTerminalSemanticDebtSum endpoint.cluster =
                 quittingTerminalSemanticDebtSum frontier.base ∧
               (Finset.univ.filter fun who ↦
                 0 < quittingTerminalSemanticDebt endpoint.cluster who) ⊂
-                  frontier.active ∧
+                  frontier.positiveDebtSupport ∧
               (Finset.univ.filter fun who ↦
                 0 < quittingTerminalSemanticDebt endpoint.cluster who).card <
-                  frontier.active.card ∧
+                  frontier.positiveDebtSupport.card ∧
               quittingTerminalSemanticDebt endpoint.cluster other <
                 quittingTerminalSemanticDebt frontier.base other) ∨
             (quittingTerminalSemanticDebtSum frontier.base <
@@ -428,11 +421,11 @@ theorem potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement
                 observer ≠ mover.1 ∧ 0 < gain ∧
                 ∀ᶠ rank in atTop,
                   Nonempty (QuittingPaidFirstDisagreementRow reward
-                    (frontier.fullResetProfile mover (endpoint.subseq rank))
+                    (frontier.fullReplacementProfile mover (endpoint.subseq rank))
                     observer gain)) := by
   obtain ⟨mover, other, hotherMem, hotherDecrease, ⟨endpoint⟩,
       hminimumConsumer⟩ :=
-    frontier.exists_potentialCoDecrease_fullResetEndpointCluster
+    frontier.exists_potentialCoDecrease_fullReplacementEndpointCluster
       hpotential hflat hnoEntry
   refine ⟨mover, other, hotherMem, hotherDecrease, endpoint, ?_⟩
   have hfloor := frontier.base_minimum endpoint.cluster endpoint.cluster_mem
@@ -449,13 +442,13 @@ theorem potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement
 
 /-! ## Finite support-rank iteration -/
 
-/-- A minimum-fiber full-reset endpoint is itself a positive minimum
+/-- A minimum-fiber full-replacement endpoint is itself a positive minimum
 all-Continue plateau and can therefore serve as the base of a fresh
 stopping-law extraction. -/
-theorem FullResetEndpointCluster.hasPositiveMinimumTerminalSemanticPlateau_of_minimumFiber
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {mover : {who // who ∈ frontier.active}}
-    (endpoint : FullResetEndpointCluster frontier mover)
+theorem FullReplacementCluster.hasPositiveMinimumTerminalSemanticPlateau_of_minimumFiber
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {mover : {who // who ∈ frontier.positiveDebtSupport}}
+    (endpoint : FullReplacementCluster frontier mover)
     (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
       quittingTerminalSemanticDebtSum frontier.base) :
     HasPositiveMinimumTerminalSemanticPlateau reward := by
@@ -494,17 +487,17 @@ the active-support cardinal rank.  This is the reusable adapter needed for
 well-founded iteration; it asserts no relation between the old and new
 tangent families beyond their semantic base. -/
 theorem exists_reextractedFrontier_of_minimumFiberEndpoint
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    {mover : {who // who ∈ frontier.active}}
-    (endpoint : FullResetEndpointCluster frontier mover)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    {mover : {who // who ∈ frontier.positiveDebtSupport}}
+    (endpoint : FullReplacementCluster frontier mover)
     (hflat : ∀ source, ∑ observer, frontier.tangent source observer = 0)
     (hnoEntry : ¬HasQuittingStoppingLawFlatSupportEntry
-      frontier.base frontier.active frontier.tangent)
+      frontier.base frontier.positiveDebtSupport frontier.tangent)
     (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
       quittingTerminalSemanticDebtSum frontier.base) :
-    ∃ next : QuittingCounterexampleStoppingLawFrontier witness,
+    ∃ next : QuittingPositiveMinimumDebtTangentFamily reward,
       next.base = endpoint.cluster ∧
-      next.active.card < frontier.active.card := by
+      next.positiveDebtSupport.card < frontier.positiveDebtSupport.card := by
   have hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum endpoint.cluster ≤
         quittingTerminalSemanticDebtSum candidate := by
@@ -514,32 +507,13 @@ theorem exists_reextractedFrontier_of_minimumFiberEndpoint
   have hpositive : 0 < quittingTerminalSemanticDebtSum endpoint.cluster := by
     rw [hminimumFiber]
     exact frontier.base_positive
-  have hnonneg : ∀ who,
-      0 ≤ quittingTerminalSemanticDebt endpoint.cluster who :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-      reward endpoint.cluster_mem
-  have hcoordinate : ∃ who,
-      0 < quittingTerminalSemanticDebt endpoint.cluster who := by
-    by_contra hnone
-    have hzero : ∀ who,
-        quittingTerminalSemanticDebt endpoint.cluster who = 0 := by
-      intro who
-      exact le_antisymm
-        (le_of_not_gt fun hwho ↦ hnone ⟨who, hwho⟩) (hnonneg who)
-    unfold quittingTerminalSemanticDebtSum at hpositive
-    simp only [hzero, Finset.sum_const_zero] at hpositive
-    exact (lt_irrefl 0) hpositive
-  obtain ⟨hnash, hprefix, _hmargin⟩ :=
-    minimumTerminalSemantic_is_allContinuePlateau
-      (reward := reward) endpoint.cluster endpoint.cluster_mem hminimum hpositive
   obtain ⟨next, hbase⟩ :=
-    exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
-      witness endpoint.cluster endpoint.cluster_mem hminimum
-        hcoordinate hnash hprefix
-  have hactive : next.active = Finset.univ.filter fun who ↦
+    exists_positiveMinimumDebtTangentFamily_of_pair
+      endpoint.cluster endpoint.cluster_mem hminimum hpositive
+  have hactive : next.positiveDebtSupport = Finset.univ.filter fun who ↦
       0 < quittingTerminalSemanticDebt endpoint.cluster who := by
     ext who
-    rw [next.active_iff]
+    rw [next.positiveDebtSupport_iff]
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, hbase]
   refine ⟨next, hbase, ?_⟩
   rw [hactive]
@@ -550,27 +524,27 @@ theorem exists_reextractedFrontier_of_minimumFiberEndpoint
 positive total slope, flat support entry, flat charged circulation, or an
 off-minimum endpoint with an exact eventually paid first-disagreement row.
 The final branch stores the row but does not claim a chronological consumer. -/
-def HasQuittingStoppingLawFiniteSupportRankExit
-    (witness : QuittingTerminalExploitabilityWitness reward) : Prop :=
-  ∃ frontier : QuittingCounterexampleStoppingLawFrontier witness,
+def HasQuittingStoppingLawFiniteSupportRankAlternative
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
+  ∃ frontier : QuittingPositiveMinimumDebtTangentFamily reward,
     (∃ mover, 0 < ∑ observer, frontier.tangent mover observer) ∨
     ((∀ mover, ∑ observer, frontier.tangent mover observer = 0) ∧
       HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent) ∨
+        frontier.base frontier.positiveDebtSupport frontier.tangent) ∨
     ((∀ mover, ∑ observer, frontier.tangent mover observer = 0) ∧
       ¬HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent ∧
+        frontier.base frontier.positiveDebtSupport frontier.tangent ∧
       HasQuittingStoppingLawFlatChargedCirculation
-        frontier.active frontier.tangent) ∨
-    ∃ mover : {who // who ∈ frontier.active},
-      ∃ endpoint : FullResetEndpointCluster frontier mover,
+        frontier.positiveDebtSupport frontier.tangent) ∨
+    ∃ mover : {who // who ∈ frontier.positiveDebtSupport},
+      ∃ endpoint : FullReplacementCluster frontier mover,
         quittingTerminalSemanticDebtSum frontier.base <
             quittingTerminalSemanticDebtSum endpoint.cluster ∧
           ∃ observer : ι, ∃ gain : ℝ,
             observer ≠ mover.1 ∧ 0 < gain ∧
             ∀ᶠ rank in atTop,
               Nonempty (QuittingPaidFirstDisagreementRow reward
-                (frontier.fullResetProfile mover (endpoint.subseq rank))
+                (frontier.fullReplacementProfile mover (endpoint.subseq rank))
                 observer gain)
 
 /-- **Finite support-rank termination.**  Repeatedly re-extracting the
@@ -582,14 +556,14 @@ eventually paid first-disagreement row.
 
 This theorem deliberately does not turn the paid row into a chronology or a
 directed recipient-return consumer. -/
-theorem exists_finiteSupportRankExit
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
-    HasQuittingStoppingLawFiniteSupportRankExit witness := by
+theorem finiteSupportRankAlternative
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
+    HasQuittingStoppingLawFiniteSupportRankAlternative reward := by
   classical
-  generalize hrank : frontier.active.card = rank
+  generalize hrank : frontier.positiveDebtSupport.card = rank
   induction rank using Nat.strong_induction_on generalizing frontier with
   | h rank ih =>
-      rcases frontier.exhaustive_branch with hpositive | hentry |
+      rcases frontier.exhaustiveAlternative with hpositive | hentry |
           hcirculation | hpotential
       · exact ⟨frontier, Or.inl hpositive⟩
       · exact ⟨frontier, Or.inr (Or.inl hentry)⟩
@@ -604,7 +578,7 @@ theorem exists_finiteSupportRankExit
           obtain ⟨next, _hnextBase, hnextCard⟩ :=
             exists_reextractedFrontier_of_minimumFiberEndpoint
               frontier endpoint hflat hnoEntry hminimumFiber
-          apply ih next.active.card
+          apply ih next.positiveDebtSupport.card
           · exact hnextCard.trans_eq hrank
           · rfl
         · obtain ⟨hseparated, observer, gain, hobserver, hgain, hrow⟩ := hpaid
@@ -612,6 +586,15 @@ theorem exists_finiteSupportRankExit
             ⟨mover, endpoint, hseparated, observer, gain,
               hobserver, hgain, hrow⟩))⟩
 
-end QuittingCounterexampleStoppingLawFrontier
+/-- Every positive global minimum of terminal semantic debt reaches the
+finite support-rank alternative.  This result depends only on the minimum,
+not on a terminal exploitability witness. -/
+theorem finiteSupportRankAlternative_of_positiveMinimumDebt
+    (hminimum : HasPositiveMinimumTerminalSemanticDebt reward) :
+    HasQuittingStoppingLawFiniteSupportRankAlternative reward := by
+  let frontier := (nonempty_positiveMinimumDebtTangentFamily hminimum).some
+  exact frontier.finiteSupportRankAlternative
+
+end QuittingPositiveMinimumDebtTangentFamily
 
 end GameTheory

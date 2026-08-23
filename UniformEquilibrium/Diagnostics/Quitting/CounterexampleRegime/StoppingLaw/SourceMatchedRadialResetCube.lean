@@ -31,72 +31,71 @@ open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- Extend the active inner resets by the unchanged source strategies. -/
 def sourceMatchedRadialCubeTarget
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (who : ι) :
     (quittingGame reward).BehaviorStrategy who :=
-  if hwho : who ∈ frontier.active then
+  if hwho : who ∈ frontier.positiveDebtSupport then
     frontier.sourceMatchedInnerResetStrategy rank ⟨who, hwho⟩
   else
-    frontier.profiles (frontier.subseq rank) who
+    frontier.source rank who
 
 /-- Extend radial coefficients by zero on inactive players. -/
 def sourceMatchedRadialCubeScale
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (weight : {who // who ∈ frontier.active} → ℝ) (who : ι) : ℝ :=
-  if hwho : who ∈ frontier.active then weight ⟨who, hwho⟩ else 0
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ) (who : ι) : ℝ :=
+  if hwho : who ∈ frontier.positiveDebtSupport then weight ⟨who, hwho⟩ else 0
 
 @[simp]
 theorem sourceMatchedRadialCubeTarget_active
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     frontier.sourceMatchedRadialCubeTarget rank mover.1 =
       frontier.sourceMatchedInnerResetStrategy rank mover := by
   simp [sourceMatchedRadialCubeTarget, mover.property]
 
 @[simp]
 theorem sourceMatchedRadialCubeScale_active
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (weight : {who // who ∈ frontier.active} → ℝ)
-    (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     frontier.sourceMatchedRadialCubeScale weight mover.1 = weight mover := by
   simp [sourceMatchedRadialCubeScale, mover.property]
 
 /-- One variable-scale reset cube containing all radially scaled active
 frontier columns. -/
 def sourceMatchedRadialResetCubeData
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1) :
     QuittingStoppingLawResetCubeData reward where
-  source := frontier.profiles (frontier.subseq rank)
+  source := frontier.source rank
   target := frontier.sourceMatchedRadialCubeTarget rank
   scale := frontier.sourceMatchedRadialCubeScale weight
   scale_nonneg := by
     intro who
-    by_cases hwho : who ∈ frontier.active
+    by_cases hwho : who ∈ frontier.positiveDebtSupport
     · simpa [sourceMatchedRadialCubeScale, hwho] using hweight0 ⟨who, hwho⟩
     · simp [sourceMatchedRadialCubeScale, hwho]
   scale_le_one := by
     intro who
-    by_cases hwho : who ∈ frontier.active
+    by_cases hwho : who ∈ frontier.positiveDebtSupport
     · simpa [sourceMatchedRadialCubeScale, hwho] using hweight1 ⟨who, hwho⟩
     · simp [sourceMatchedRadialCubeScale, hwho]
 
 @[simp]
 theorem sourceMatchedRadialResetCubeData_profile_empty
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1) :
     (frontier.sourceMatchedRadialResetCubeData rank weight hweight0 hweight1).profile ∅ =
-      frontier.profiles (frontier.subseq rank) := by
+      frontier.source rank := by
   funext who
   simp [QuittingStoppingLawResetCubeData.profile,
     sourceMatchedRadialResetCubeData]
@@ -107,8 +106,8 @@ Every radial face is an actual behavioral profile in the semantic carrier,
 and the empty face is the frontier source. The exact carrier minimum and the
 source's `o(lambda)` excess therefore control all faces simultaneously. -/
 theorem eventually_all_sourceMatchedRadialResetCubeData_normalizedTotalDebtChange_gt_neg
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     {epsilon : ℝ} (hepsilon : 0 < epsilon) :
@@ -122,7 +121,7 @@ theorem eventually_all_sourceMatchedRadialResetCubeData_normalizedTotalDebtChang
               (quittingTerminalSemanticPair reward
                 ((frontier.sourceMatchedRadialResetCubeData rank weight
                   hweight0 hweight1).profile ∅))) /
-          frontier.lambda (frontier.subseq rank) := by
+          frontier.scale rank := by
   exact frontier.eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
     (fun rank ↦ frontier.sourceMatchedRadialResetCubeData rank weight
       hweight0 hweight1)
@@ -135,36 +134,36 @@ theorem eventually_all_sourceMatchedRadialResetCubeData_normalizedTotalDebtChang
 /-- Forget the active-subtype labels of a face, obtaining the corresponding
 literal reset coordinates in the ambient player cube. -/
 def sourceMatchedRadialActiveFace
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (face : Finset {who // who ∈ frontier.active}) : Finset ι :=
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (face : Finset {who // who ∈ frontier.positiveDebtSupport}) : Finset ι :=
   face.image Subtype.val
 
 @[simp]
 theorem sourceMatchedRadialActiveFace_empty
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
     frontier.sourceMatchedRadialActiveFace ∅ = ∅ := by
   simp [sourceMatchedRadialActiveFace]
 
 @[simp]
 theorem sourceMatchedRadialActiveFace_singleton
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     frontier.sourceMatchedRadialActiveFace {mover} = {mover.1} := by
   simp [sourceMatchedRadialActiveFace]
 
 @[simp]
 theorem sourceMatchedRadialActiveFace_insert
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (face : Finset {who // who ∈ frontier.active})
-    (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (face : Finset {who // who ∈ frontier.positiveDebtSupport})
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     frontier.sourceMatchedRadialActiveFace (insert mover face) =
       insert mover.1 (frontier.sourceMatchedRadialActiveFace face) := by
   simp [sourceMatchedRadialActiveFace]
 
 @[simp]
 theorem sourceMatchedRadialActiveFace_univ
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
-    frontier.sourceMatchedRadialActiveFace Finset.univ = frontier.active := by
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
+    frontier.sourceMatchedRadialActiveFace Finset.univ = frontier.positiveDebtSupport := by
   ext who
   simp [sourceMatchedRadialActiveFace]
 
@@ -172,11 +171,11 @@ theorem sourceMatchedRadialActiveFace_univ
 strategy, the singleton vertex of the inner source-matched cube is exactly
 the corresponding inner reset. -/
 theorem sourceMatchedResetCubeData_rebase_profile_singleton_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (profile : (quittingGame reward).BehaviorProfile)
-    (mover : {who // who ∈ frontier.active})
+    (mover : {who // who ∈ frontier.positiveDebtSupport})
     (hsource : profile mover.1 =
-      frontier.profiles (frontier.subseq rank) mover.1) :
+      frontier.source rank mover.1) :
     ((frontier.sourceMatchedResetCubeData rank).rebase profile).profile
         {mover.1} =
       Function.update profile mover.1
@@ -191,18 +190,19 @@ theorem sourceMatchedResetCubeData_rebase_profile_singleton_eq
   simp [data, QuittingStoppingLawResetCubeData.rebase,
     sourceMatchedResetCubeData, sourceMatchedReplacement, mover.property,
     hsource]
+  congr
 
 /-- The two-coordinate vertex of the same rebased inner cube applies the two
 literal inner resets in either order. -/
 theorem sourceMatchedResetCubeData_rebase_profile_pair_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (profile : (quittingGame reward).BehaviorProfile)
-    (first second : {who // who ∈ frontier.active})
+    (first second : {who // who ∈ frontier.positiveDebtSupport})
     (hne : first.1 ≠ second.1)
     (hfirstSource : profile first.1 =
-      frontier.profiles (frontier.subseq rank) first.1)
+      frontier.source rank first.1)
     (hsecondSource : profile second.1 =
-      frontier.profiles (frontier.subseq rank) second.1) :
+      frontier.source rank second.1) :
     ((frontier.sourceMatchedResetCubeData rank).rebase profile).profile
         (insert second.1 {first.1}) =
       Function.update
@@ -229,15 +229,16 @@ theorem sourceMatchedResetCubeData_rebase_profile_pair_eq
   simp [data, QuittingStoppingLawResetCubeData.rebase,
     sourceMatchedResetCubeData, sourceMatchedReplacement, second.property,
     hsecondSource]
+  congr
 
 /-- One pure-time deviation evaluated on an actual active face of the radial
 source-matched cube. -/
 def sourceMatchedRadialFacePayoff
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
-    (observer : ι) (face : Finset {who // who ∈ frontier.active})
+    (observer : ι) (face : Finset {who // who ∈ frontier.positiveDebtSupport})
     (quitTime : Option ℕ) : ℝ :=
   quittingPureTimeDeviationPayoff reward
     ((frontier.sourceMatchedRadialResetCubeData rank weight hweight0
@@ -246,11 +247,11 @@ def sourceMatchedRadialFacePayoff
 
 /-- The behavioral best-response cap on one actual active radial face. -/
 def sourceMatchedRadialFaceCap
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
-    (observer : ι) (face : Finset {who // who ∈ frontier.active}) : ℝ :=
+    (observer : ι) (face : Finset {who // who ∈ frontier.positiveDebtSupport}) : ℝ :=
   quittingContinuationBestResponseValue reward
     ((frontier.sourceMatchedRadialResetCubeData rank weight hweight0
       hweight1).profile (frontier.sourceMatchedRadialActiveFace face)) observer
@@ -258,8 +259,8 @@ def sourceMatchedRadialFaceCap
 /-- Cap nonadditivity on the actual radial cube is either below the requested
 full-word budget or localized to one literal negative cap square. -/
 theorem sourceMatchedRadialFaceCapNonadditivity_le_or_hasNegativeSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (threshold : ℝ) :
@@ -267,12 +268,12 @@ theorem sourceMatchedRadialFaceCapNonadditivity_le_or_hasNegativeSquare
           (frontier.sourceMatchedRadialFaceCap rank weight hweight0 hweight1
             observer) ≤
         (squareCount
-          (Finset.univ : Finset {who // who ∈ frontier.active}).toList : ℝ) *
+          (Finset.univ : Finset {who // who ∈ frontier.positiveDebtSupport}).toList : ℝ) *
           threshold ∨
       HasSquareAboveAlong
         (fun face ↦ -frontier.sourceMatchedRadialFaceCap rank weight hweight0
           hweight1 observer face) threshold ∅
-        (Finset.univ : Finset {who // who ∈ frontier.active}).toList := by
+        (Finset.univ : Finset {who // who ∈ frontier.positiveDebtSupport}).toList := by
   exact finiteCubeCapNonadditivity_le_or_hasNegativeSquare
     (frontier.sourceMatchedRadialFaceCap rank weight hweight0 hweight1 observer)
       threshold
@@ -284,13 +285,13 @@ product of the outer radial weights times the corresponding square in the
 inner common-scale source-matched cube rebased at that deviation. The inner
 square therefore carries another factor `lambda²`. -/
 theorem sourceMatchedRadialFacePayoff_square_eq_weights_mul_innerSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (quitTime : Option ℕ)
-    (face : Finset {who // who ∈ frontier.active})
-    (first second : {who // who ∈ frontier.active})
+    (face : Finset {who // who ∈ frontier.positiveDebtSupport})
+    (first second : {who // who ∈ frontier.positiveDebtSupport})
     (hfirst : first ∉ face) (hsecond : second ∉ face)
     (hne : first.1 ≠ second.1) (hobserverFirst : observer ≠ first.1)
     (hobserverSecond : observer ≠ second.1) :
@@ -322,12 +323,12 @@ theorem sourceMatchedRadialFacePayoff_square_eq_weights_mul_innerSquare
   have hsecondAmbient : second.1 ∉ ambientFace := by
     simpa [ambientFace, sourceMatchedRadialActiveFace] using hsecond
   have hdeviationFirst : deviationProfile first.1 =
-      frontier.profiles (frontier.subseq rank) first.1 := by
+      frontier.source rank first.1 := by
     dsimp only [deviationProfile]
     rw [Function.update_of_ne (Ne.symm hobserverFirst)]
     exact radialData.profile_apply_of_not_mem ambientFace first.1 hfirstAmbient
   have hdeviationSecond : deviationProfile second.1 =
-      frontier.profiles (frontier.subseq rank) second.1 := by
+      frontier.source rank second.1 := by
     dsimp only [deviationProfile]
     rw [Function.update_of_ne (Ne.symm hobserverSecond)]
     exact radialData.profile_apply_of_not_mem ambientFace second.1 hsecondAmbient
@@ -415,13 +416,13 @@ theorem sourceMatchedRadialFacePayoff_square_eq_weights_mul_innerSquare
 /-- Every opponent square of a radial pure-time payoff is uniformly
 `O(lambda²)`, independently of the face, quit time, and radial weights. -/
 theorem abs_sourceMatchedRadialFacePayoff_square_le_of_ne
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (quitTime : Option ℕ)
-    (face : Finset {who // who ∈ frontier.active})
-    (first second : {who // who ∈ frontier.active})
+    (face : Finset {who // who ∈ frontier.positiveDebtSupport})
+    (first second : {who // who ∈ frontier.positiveDebtSupport})
     (hfirst : first ∉ face) (hsecond : second ∉ face)
     (hne : first.1 ≠ second.1) (hobserverFirst : observer ≠ first.1)
     (hobserverSecond : observer ≠ second.1) (bound : ℝ)
@@ -430,8 +431,8 @@ theorem abs_sourceMatchedRadialFacePayoff_square_le_of_ne
     |square
         (fun reset ↦ frontier.sourceMatchedRadialFacePayoff rank weight
           hweight0 hweight1 observer reset quitTime) face first second| ≤
-      4 * bound * frontier.lambda (frontier.subseq rank) *
-        frontier.lambda (frontier.subseq rank) := by
+      4 * bound * frontier.scale rank *
+        frontier.scale rank := by
   rw [frontier.sourceMatchedRadialFacePayoff_square_eq_weights_mul_innerSquare
     rank weight hweight0 hweight1 observer quitTime face first second hfirst
       hsecond hne hobserverFirst hobserverSecond]
@@ -448,8 +449,8 @@ theorem abs_sourceMatchedRadialFacePayoff_square_le_of_ne
       |square (innerData.value fun candidate ↦
           quittingTerminalPayoff reward candidate observer)
           ∅ first.1 second.1| ≤
-        4 * bound * frontier.lambda (frontier.subseq rank) *
-          frontier.lambda (frontier.subseq rank) := by
+        4 * bound * frontier.scale rank *
+          frontier.scale rank := by
     simpa [innerData, sourceMatchedResetCubeData,
       QuittingStoppingLawResetCubeData.rebase] using hinner
   rw [abs_mul, abs_mul, abs_of_nonneg (hweight0 first),
@@ -459,55 +460,55 @@ theorem abs_sourceMatchedRadialFacePayoff_square_le_of_ne
       hweight1 second]
   have hweightProduct : 0 ≤ weight first * weight second :=
     mul_nonneg (hweight0 first) (hweight0 second)
-  have hscale := (frontier.lambda_pos (frontier.subseq rank)).le
+  have hscale := (frontier.scale_pos rank).le
   have htarget : 0 ≤
-      4 * bound * frontier.lambda (frontier.subseq rank) *
-        frontier.lambda (frontier.subseq rank) := by
+      4 * bound * frontier.scale rank *
+        frontier.scale rank := by
     exact mul_nonneg
       (mul_nonneg (mul_nonneg (by norm_num) hbound)
-        (frontier.lambda_pos (frontier.subseq rank)).le)
-      (frontier.lambda_pos (frontier.subseq rank)).le
+        (frontier.scale_pos rank).le)
+      (frontier.scale_pos rank).le
   calc
     weight first * weight second *
           |square (innerData.value fun candidate ↦
             quittingTerminalPayoff reward candidate observer)
             ∅ first.1 second.1| ≤
         weight first * weight second *
-          (4 * bound * frontier.lambda (frontier.subseq rank) *
-            frontier.lambda (frontier.subseq rank)) := by
+          (4 * bound * frontier.scale rank *
+            frontier.scale rank) := by
       exact mul_le_mul_of_nonneg_left hinner' hweightProduct
-    _ ≤ 1 * (4 * bound * frontier.lambda (frontier.subseq rank) *
-          frontier.lambda (frontier.subseq rank)) := by
+    _ ≤ 1 * (4 * bound * frontier.scale rank *
+          frontier.scale rank) := by
       exact mul_le_mul_of_nonneg_right hweights htarget
-    _ = 4 * bound * frontier.lambda (frontier.subseq rank) *
-          frontier.lambda (frontier.subseq rank) := one_mul _
+    _ = 4 * bound * frontier.scale rank *
+          frontier.scale rank := one_mul _
 
 /-- The same quadratic bound holds without excluding the observer: a square
 using the observer coordinate vanishes because the pure deviation overwrites
 that reset. -/
 theorem abs_sourceMatchedRadialFacePayoff_square_le
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (quitTime : Option ℕ)
-    (face : Finset {who // who ∈ frontier.active})
-    (first second : {who // who ∈ frontier.active})
+    (face : Finset {who // who ∈ frontier.positiveDebtSupport})
+    (first second : {who // who ∈ frontier.positiveDebtSupport})
     (hfirst : first ∉ face) (hsecond : second ∉ face)
     (hne : first ≠ second) (bound : ℝ) (hbound : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound) :
     |square
         (fun reset ↦ frontier.sourceMatchedRadialFacePayoff rank weight
           hweight0 hweight1 observer reset quitTime) face first second| ≤
-      4 * bound * frontier.lambda (frontier.subseq rank) *
-        frontier.lambda (frontier.subseq rank) := by
+      4 * bound * frontier.scale rank *
+        frontier.scale rank := by
   have htarget : 0 ≤
-      4 * bound * frontier.lambda (frontier.subseq rank) *
-        frontier.lambda (frontier.subseq rank) := by
+      4 * bound * frontier.scale rank *
+        frontier.scale rank := by
     exact mul_nonneg
       (mul_nonneg (mul_nonneg (by norm_num) hbound)
-        (frontier.lambda_pos (frontier.subseq rank)).le)
-      (frontier.lambda_pos (frontier.subseq rank)).le
+        (frontier.scale_pos rank).le)
+      (frontier.scale_pos rank).le
   by_cases hfirstObserver : observer = first.1
   · have hfaceSquare :
         square
@@ -546,19 +547,19 @@ theorem abs_sourceMatchedRadialFacePayoff_square_le
 /-- The affine remainder of every fixed pure-time witness on every radial
 face is explicitly quadratic in the frontier reset scale. -/
 theorem abs_sourceMatchedRadialFacePayoff_affineRemainder_le
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
-    (observer : ι) (face : Finset {who // who ∈ frontier.active})
+    (observer : ι) (face : Finset {who // who ∈ frontier.positiveDebtSupport})
     (quitTime : Option ℕ) (bound : ℝ) (hbound : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound) :
     |finiteCubeAffineRemainder
         (frontier.sourceMatchedRadialFacePayoff rank weight hweight0 hweight1
           observer) face quitTime| ≤
       (squareCount face.toList : ℝ) *
-        (4 * bound * frontier.lambda (frontier.subseq rank) *
-          frontier.lambda (frontier.subseq rank)) := by
+        (4 * bound * frontier.scale rank *
+          frontier.scale rank) := by
   apply abs_finiteCubeAffineRemainder_le_of_fresh
   intro background first second hfirst hsecond hne
   exact frontier.abs_sourceMatchedRadialFacePayoff_square_le rank weight
@@ -568,66 +569,66 @@ theorem abs_sourceMatchedRadialFacePayoff_affineRemainder_le
 /-- A single coarse quadratic budget controls the affine remainder of every
 face and every pure-time witness in the finite active cube. -/
 theorem abs_sourceMatchedRadialFacePayoff_affineRemainder_le_uniform
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
-    (observer : ι) (face : Finset {who // who ∈ frontier.active})
+    (observer : ι) (face : Finset {who // who ∈ frontier.positiveDebtSupport})
     (quitTime : Option ℕ) (bound : ℝ) (hbound : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound) :
     |finiteCubeAffineRemainder
         (frontier.sourceMatchedRadialFacePayoff rank weight hweight0 hweight1
           observer) face quitTime| ≤
-      (Fintype.card {who // who ∈ frontier.active} : ℝ) ^ 2 *
-        (4 * bound * frontier.lambda (frontier.subseq rank) *
-          frontier.lambda (frontier.subseq rank)) := by
+      (Fintype.card {who // who ∈ frontier.positiveDebtSupport} : ℝ) ^ 2 *
+        (4 * bound * frontier.scale rank *
+          frontier.scale rank) := by
   have hface :=
     frontier.abs_sourceMatchedRadialFacePayoff_affineRemainder_le rank weight
       hweight0 hweight1 observer face quitTime bound hbound hreward
   have hsquareCount : squareCount face.toList ≤ face.card * face.card := by
     simpa using squareCount_le_length_mul_length face.toList
-  have hcard : face.card ≤ Fintype.card {who // who ∈ frontier.active} := by
+  have hcard : face.card ≤ Fintype.card {who // who ∈ frontier.positiveDebtSupport} := by
     simpa using Finset.card_le_card (Finset.subset_univ face)
   have hcoefficient :
       (squareCount face.toList : ℝ) ≤
-        (Fintype.card {who // who ∈ frontier.active} : ℝ) ^ 2 := by
+        (Fintype.card {who // who ∈ frontier.positiveDebtSupport} : ℝ) ^ 2 := by
     have hnat := hsquareCount.trans (Nat.mul_le_mul hcard hcard)
     simpa [pow_two] using (show
       (squareCount face.toList : ℝ) ≤
-        (Fintype.card {who // who ∈ frontier.active} : ℝ) *
-          Fintype.card {who // who ∈ frontier.active} by exact_mod_cast hnat)
+        (Fintype.card {who // who ∈ frontier.positiveDebtSupport} : ℝ) *
+          Fintype.card {who // who ∈ frontier.positiveDebtSupport} by exact_mod_cast hnat)
   have hquadratic : 0 ≤
-      4 * bound * frontier.lambda (frontier.subseq rank) *
-        frontier.lambda (frontier.subseq rank) := by
+      4 * bound * frontier.scale rank *
+        frontier.scale rank := by
     exact mul_nonneg
       (mul_nonneg (mul_nonneg (by norm_num) hbound)
-        (frontier.lambda_pos (frontier.subseq rank)).le)
-      (frontier.lambda_pos (frontier.subseq rank)).le
+        (frontier.scale_pos rank).le)
+      (frontier.scale_pos rank).le
   exact hface.trans (mul_le_mul_of_nonneg_right hcoefficient hquadratic)
 
 /-- The uniform quadratic affine-remainder budget is `o(lambda)` after
 normalization by the positive frontier scale. -/
 theorem sourceMatchedRadialFacePayoff_affineRemainderBudget_div_tendsto_zero
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (bound : ℝ) :
     Tendsto (fun rank ↦
-      ((Fintype.card {who // who ∈ frontier.active} : ℝ) ^ 2 *
-          (4 * bound * frontier.lambda (frontier.subseq rank) *
-            frontier.lambda (frontier.subseq rank))) /
-        frontier.lambda (frontier.subseq rank)) atTop (nhds 0) := by
+      ((Fintype.card {who // who ∈ frontier.positiveDebtSupport} : ℝ) ^ 2 *
+          (4 * bound * frontier.scale rank *
+            frontier.scale rank)) /
+        frontier.scale rank) atTop (nhds 0) := by
   have hlimit := (tendsto_const_nhds : Tendsto (fun _rank : ℕ ↦
-      (Fintype.card {who // who ∈ frontier.active} : ℝ) ^ 2 *
-        (4 * bound)) atTop (nhds _)).mul frontier.lambda_subseq_tendsto_zero
+      (Fintype.card {who // who ∈ frontier.positiveDebtSupport} : ℝ) ^ 2 *
+        (4 * bound)) atTop (nhds _)).mul frontier.scale_tendsto_zero
   convert hlimit using 1
   · funext rank
-    field_simp [ne_of_gt (frontier.lambda_pos (frontier.subseq rank))]
+    field_simp [ne_of_gt (frontier.scale_pos rank)]
   · simp
 
 /-- Equivalently, every face and pure-time witness eventually has affine
 remainder at most `epsilon * lambda`, uniformly over the finite cube. -/
 theorem eventually_all_sourceMatchedRadialFacePayoff_affineRemainder_le
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (bound : ℝ) (hbound : 0 ≤ bound)
@@ -637,31 +638,31 @@ theorem eventually_all_sourceMatchedRadialFacePayoff_affineRemainder_le
       |finiteCubeAffineRemainder
           (frontier.sourceMatchedRadialFacePayoff rank weight hweight0
             hweight1 observer) face quitTime| ≤
-        epsilon * frontier.lambda (frontier.subseq rank) := by
+        epsilon * frontier.scale rank := by
   have hbudget :=
     frontier.sourceMatchedRadialFacePayoff_affineRemainderBudget_div_tendsto_zero
       bound
   have heventually : ∀ᶠ rank in atTop,
-      ((Fintype.card {who // who ∈ frontier.active} : ℝ) ^ 2 *
-          (4 * bound * frontier.lambda (frontier.subseq rank) *
-            frontier.lambda (frontier.subseq rank))) /
-        frontier.lambda (frontier.subseq rank) < epsilon :=
+      ((Fintype.card {who // who ∈ frontier.positiveDebtSupport} : ℝ) ^ 2 *
+          (4 * bound * frontier.scale rank *
+            frontier.scale rank)) /
+        frontier.scale rank < epsilon :=
     (tendsto_order.1 hbudget).2 _ hepsilon
   filter_upwards [heventually] with rank hrank face quitTime
   have hremainder :=
     frontier.abs_sourceMatchedRadialFacePayoff_affineRemainder_le_uniform rank
       weight hweight0 hweight1 observer face quitTime bound hbound hreward
-  have hlambda := frontier.lambda_pos (frontier.subseq rank)
+  have hlambda := frontier.scale_pos rank
   apply hremainder.trans
   apply (le_of_lt ((div_lt_iff₀ hlambda).mp hrank))
 
 /-- Every actual radial face admits an `eta`-optimal pure-time witness. -/
 theorem exists_sourceMatchedRadialFaceWitness
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
-    (observer : ι) (face : Finset {who // who ∈ frontier.active})
+    (observer : ι) (face : Finset {who // who ∈ frontier.positiveDebtSupport})
     {eta : ℝ} (heta : 0 < eta) :
     ∃ quitTime : Option ℕ,
       frontier.sourceMatchedRadialFaceCap rank weight hweight0 hweight1
@@ -702,8 +703,8 @@ alternative is a literal active-coordinate edge of this radial cube; the
 passport alternative controls the selected full-face witness on every active
 face. No chronology is asserted. -/
 theorem exists_sourceMatchedRadial_commonPassport_or_edgeWitnessSwitch
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (eta beta delta bound : ℝ)
@@ -713,7 +714,7 @@ theorem exists_sourceMatchedRadial_commonPassport_or_edgeWitnessSwitch
     (hnonadditivity : finiteCubeCapNonadditivity
         (frontier.sourceMatchedRadialFaceCap rank weight hweight0 hweight1
           observer) ≤ delta) :
-    ∃ witness : Finset {who // who ∈ frontier.active} → Option ℕ,
+    ∃ witness : Finset {who // who ∈ frontier.positiveDebtSupport} → Option ℕ,
       (∀ face,
         frontier.sourceMatchedRadialFaceCap rank weight hweight0 hweight1
               observer face - eta ≤
@@ -743,13 +744,13 @@ theorem exists_sourceMatchedRadial_commonPassport_or_edgeWitnessSwitch
               face (witness Finset.univ) ≤
             if face = ∅ then beta else
               delta + 2 * eta +
-                (((Fintype.card {who // who ∈ frontier.active} : ℝ) - 1) +
+                (((Fintype.card {who // who ∈ frontier.positiveDebtSupport} : ℝ) - 1) +
                     ((face.card : ℝ) - 1)) * beta +
-                  3 * ((Fintype.card {who // who ∈ frontier.active} : ℝ) ^
-                    2 * (4 * bound * frontier.lambda (frontier.subseq rank) *
-                      frontier.lambda (frontier.subseq rank)))) := by
+                  3 * ((Fintype.card {who // who ∈ frontier.positiveDebtSupport} : ℝ) ^
+                    2 * (4 * bound * frontier.scale rank *
+                      frontier.scale rank))) := by
   classical
-  have hchoice : ∀ face : Finset {who // who ∈ frontier.active},
+  have hchoice : ∀ face : Finset {who // who ∈ frontier.positiveDebtSupport},
       ∃ quitTime : Option ℕ,
         frontier.sourceMatchedRadialFaceCap rank weight hweight0 hweight1
               observer face - eta ≤
@@ -771,9 +772,9 @@ theorem exists_sourceMatchedRadial_commonPassport_or_edgeWitnessSwitch
       reward _ observer
         (quittingPureTimeBehaviorStrategy reward observer quitTime)
   let omega :=
-    (Fintype.card {who // who ∈ frontier.active} : ℝ) ^ 2 *
-      (4 * bound * frontier.lambda (frontier.subseq rank) *
-        frontier.lambda (frontier.subseq rank))
+    (Fintype.card {who // who ∈ frontier.positiveDebtSupport} : ℝ) ^ 2 *
+      (4 * bound * frontier.scale rank *
+        frontier.scale rank)
   have hremainder : ∀ face quitTime,
       |finiteCubeAffineRemainder
           (frontier.sourceMatchedRadialFacePayoff rank weight hweight0
@@ -789,11 +790,11 @@ theorem exists_sourceMatchedRadial_commonPassport_or_edgeWitnessSwitch
 
 /-- Every active singleton vertex is exactly its literal radial reset. -/
 theorem sourceMatchedRadialResetCubeData_profile_singleton
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
-    (mover : {who // who ∈ frontier.active}) :
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     (frontier.sourceMatchedRadialResetCubeData rank weight hweight0 hweight1).profile
         {mover.1} =
       frontier.sourceMatchedRadialResetProfile rank mover (weight mover)
@@ -812,11 +813,11 @@ theorem sourceMatchedRadialResetCubeData_profile_singleton
     have hscale : data.scale mover.1 = weight mover := by
       exact frontier.sourceMatchedRadialCubeScale_active weight mover
     have hsource : data.source mover.1 =
-        frontier.profiles (frontier.subseq rank) mover.1 := rfl
+        frontier.source rank mover.1 := rfl
     rw [htarget, hsource]
     simpa only using
       quittingStoppingLawMixtureBehaviorStrategy_congr_scale reward mover.1
-        (frontier.profiles (frontier.subseq rank) mover.1)
+        (frontier.source rank mover.1)
         (frontier.sourceMatchedInnerResetStrategy rank mover)
         (data.scale mover.1) (weight mover) (data.scale_nonneg mover.1)
         (data.scale_le_one mover.1) hscale
@@ -827,18 +828,18 @@ theorem sourceMatchedRadialResetCubeData_profile_singleton
 /-- A frozen active cube edge divided by the positive frontier scale is
 exactly its normalized radial debt direction. -/
 theorem sourceMatchedRadialResetCubeData_debtEdge_div_eq_radialDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
-    (mover : {who // who ∈ frontier.active}) (observer : ι) :
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (observer : ι) :
     let data := frontier.sourceMatchedRadialResetCubeData rank weight
       hweight0 hweight1
     let debt := fun candidate : (quittingGame reward).BehaviorProfile ↦
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward candidate) observer
     edge (data.value debt) ∅ mover.1 /
-        frontier.lambda (frontier.subseq rank) =
+        frontier.scale rank =
       frontier.sourceMatchedRadialDebtDirection rank mover (weight mover)
         (hweight0 mover) (hweight1 mover) observer := by
   dsimp only
@@ -852,7 +853,7 @@ theorem sourceMatchedRadialResetCubeData_debtEdge_div_eq_radialDirection
           (quittingTerminalSemanticPair reward
             ((frontier.sourceMatchedRadialResetCubeData rank weight
               hweight0 hweight1).profile ∅)) observer) /
-      frontier.lambda (frontier.subseq rank) = _
+      frontier.scale rank = _
   rw [frontier.sourceMatchedRadialResetCubeData_profile_singleton,
     frontier.sourceMatchedRadialResetCubeData_profile_empty]
   rfl
@@ -860,8 +861,8 @@ theorem sourceMatchedRadialResetCubeData_debtEdge_div_eq_radialDirection
 /-- The normalized frozen active star is exactly the sum of the normalized
 radial debt directions. -/
 theorem sum_sourceMatchedRadialResetCubeData_debtEdge_div_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1) (observer : ι) :
     let data := frontier.sourceMatchedRadialResetCubeData rank weight
@@ -869,9 +870,9 @@ theorem sum_sourceMatchedRadialResetCubeData_debtEdge_div_eq
     let debt := fun candidate : (quittingGame reward).BehaviorProfile ↦
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward candidate) observer
-    (∑ mover : {who // who ∈ frontier.active},
+    (∑ mover : {who // who ∈ frontier.positiveDebtSupport},
       edge (data.value debt) ∅ mover.1) /
-        frontier.lambda (frontier.subseq rank) =
+        frontier.scale rank =
       ∑ mover, frontier.sourceMatchedRadialDebtDirection rank mover
         (weight mover) (hweight0 mover) (hweight1 mover) observer := by
   dsimp only
@@ -884,27 +885,27 @@ theorem sum_sourceMatchedRadialResetCubeData_debtEdge_div_eq
 /-- Listing every active player once turns the cubical frozen-edge sum into
 the active-subtype star. -/
 theorem frozenEdgeSum_sourceMatchedRadialResetCubeData_eq_sum
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observable : (quittingGame reward).BehaviorProfile → ℝ) :
     let data := frontier.sourceMatchedRadialResetCubeData rank weight
       hweight0 hweight1
-    frozenEdgeSum (data.value observable) ∅ frontier.active.toList =
-      ∑ mover : {who // who ∈ frontier.active},
+    frozenEdgeSum (data.value observable) ∅ frontier.positiveDebtSupport.toList =
+      ∑ mover : {who // who ∈ frontier.positiveDebtSupport},
         edge (data.value observable) ∅ mover.1 := by
   dsimp only
   rw [frozenEdgeSum,
-    ← List.sum_toFinset _ frontier.active.nodup_toList]
+    ← List.sum_toFinset _ frontier.positiveDebtSupport.nodup_toList]
   simp only [Finset.toList_toFinset]
   rw [← Finset.sum_attach, Finset.attach_eq_univ]
 
 /-- The normalized frozen edge sum along the active reset word is exactly the
 sum of normalized radial debt directions. -/
 theorem frozenEdgeSum_sourceMatchedRadialResetCubeData_debt_div_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1) (observer : ι) :
     let data := frontier.sourceMatchedRadialResetCubeData rank weight
@@ -912,8 +913,8 @@ theorem frozenEdgeSum_sourceMatchedRadialResetCubeData_debt_div_eq
     let debt := fun candidate : (quittingGame reward).BehaviorProfile ↦
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward candidate) observer
-    frozenEdgeSum (data.value debt) ∅ frontier.active.toList /
-        frontier.lambda (frontier.subseq rank) =
+    frozenEdgeSum (data.value debt) ∅ frontier.positiveDebtSupport.toList /
+        frontier.scale rank =
       ∑ mover, frontier.sourceMatchedRadialDebtDirection rank mover
         (weight mover) (hweight0 mover) (hweight1 mover) observer := by
   dsimp only
@@ -928,11 +929,11 @@ There is one cube coordinate per active player.  The normalized frozen debt
 star converges coordinatewise to zero, while the normalized mover-diagonal
 charge converges to a strictly positive limit. -/
 theorem exists_boundedRadialSourceMatchedResetCube
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
-      frontier.active frontier.tangent) :
-    ∃ weight : {who // who ∈ frontier.active} → ℝ,
+      frontier.positiveDebtSupport frontier.tangent) :
+    ∃ weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ,
       ∃ hweight0 : ∀ mover, 0 ≤ weight mover,
       ∃ hweight1 : ∀ mover, weight mover ≤ 1,
       ∃ charge : ℝ, 0 < charge ∧
@@ -944,11 +945,11 @@ theorem exists_boundedRadialSourceMatchedResetCube
                 (quittingGame reward).BehaviorProfile ↦
               quittingTerminalSemanticDebt
                 (quittingTerminalSemanticPair reward candidate) observer
-            frozenEdgeSum (data.value debt) ∅ frontier.active.toList /
-              frontier.lambda (frontier.subseq rank))
+            frozenEdgeSum (data.value debt) ∅ frontier.positiveDebtSupport.toList /
+              frontier.scale rank)
             atTop (nhds 0)) ∧
         Tendsto (fun rank =>
-          ∑ mover : {who // who ∈ frontier.active},
+          ∑ mover : {who // who ∈ frontier.positiveDebtSupport},
             -(let data := frontier.sourceMatchedRadialResetCubeData rank weight
                 hweight0 hweight1
               let debt := fun candidate :
@@ -956,7 +957,7 @@ theorem exists_boundedRadialSourceMatchedResetCube
                 quittingTerminalSemanticDebt
                   (quittingTerminalSemanticPair reward candidate) mover.1
               edge (data.value debt) ∅ mover.1 /
-                frontier.lambda (frontier.subseq rank)))
+                frontier.scale rank))
           atTop (nhds charge) := by
   obtain ⟨weight, hweight0, hweight1, hbalance, charge, hcharge, hchargeLimit⟩ :=
     frontier.exists_boundedRadialSourceMatchedCirculation hflat hcirculation
@@ -972,5 +973,5 @@ theorem exists_boundedRadialSourceMatchedResetCube
     intro mover _moverMem
     rw [frontier.sourceMatchedRadialResetCubeData_debtEdge_div_eq_radialDirection]
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 end GameTheory

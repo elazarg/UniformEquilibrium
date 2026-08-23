@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTangentExtraction
 
 /-!
-# Disjoint branches of the finite stopping-law tangent frontier
+# Disjoint branches of a finite stopping-law tangent family
 
 This module refines the stopping-law tangent pipeline into a disjointly tagged
 partition.  Positive slope is separated from the flat case; within the flat
@@ -15,7 +15,7 @@ case, support entry is separated from its absence, and positive charged
 circulation from the residual separating-potential co-decrease.
 
 The partition is finite tangent data.  It assumes no terminal exploitability witness,
-selected frontier, or asymptotic chronology.
+selected tangent family, or asymptotic chronology.
 -/
 
 noncomputable section
@@ -59,13 +59,13 @@ def HasQuittingStoppingLawFlatPotentialCoDecrease
     column mover mover = -gain mover ∧
     column mover other < 0
 
-/-- A disjointly tagged form of the current finite stopping-law frontier.
+/-- A disjointly tagged form of the finite stopping-law tangent alternative.
 
 The last three branches explicitly record flatness.  Successive negations
 make this a partition for the selected tangent family: positive slope versus
 flat; then support entry versus no entry; then charged circulation versus its
 separating-potential alternative. -/
-def IsQuittingStoppingLawExhaustiveFrontierBranch
+def IsQuittingStoppingLawExhaustiveTangentAlternative
     (base : QuittingTerminalSemanticPair ι) (active : Finset ι)
     (tangent : {who // who ∈ active} → ι → ℝ) : Prop :=
   (∃ mover, 0 < ∑ observer, tangent mover observer) ∨
@@ -81,12 +81,12 @@ def IsQuittingStoppingLawExhaustiveFrontierBranch
 
 /-- Forgetting the partition tags recovers the existing stopping-law
 pipeline alternative. -/
-theorem IsQuittingStoppingLawExhaustiveFrontierBranch.toPipelineAlternative
+theorem IsQuittingStoppingLawExhaustiveTangentAlternative.toTangentAlternative
     {base : QuittingTerminalSemanticPair ι} {active : Finset ι}
     {tangent : {who // who ∈ active} → ι → ℝ}
-    (branch : IsQuittingStoppingLawExhaustiveFrontierBranch
+    (branch : IsQuittingStoppingLawExhaustiveTangentAlternative
       base active tangent) :
-    IsQuittingStoppingLawTangentPipelineAlternative base active tangent := by
+    IsQuittingStoppingLawTangentAlternative base active tangent := by
   rcases branch with hpositive | ⟨_hflat, hentry⟩ |
       ⟨_hflat, _hnoEntry, hcirculation⟩ |
       ⟨_hflat, _hnoEntry, _hnoCirculation, hpotential⟩

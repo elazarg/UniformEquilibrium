@@ -4,8 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.ActiveTransferCycle
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.PotentialCoDecreaseCurvature
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.NormalizedCurvaturePaidRow
 import UniformEquilibrium.Quitting.Bellman.Finite.PositiveAdmissibleCycle
 import UniformEquilibrium.Quitting.Debt.Dynamic.ChronologicalDebtShadowing
 
@@ -44,29 +43,27 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 /-- Fixed vanishing-debt atom data along one extracted stopping-law frontier.
 This is static source-profile data, not an executable chronology. -/
 structure QuittingVanishingDebtAtomAccess
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
-  mover : {who // who ∈ frontier.active}
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) where
+  mover : {who // who ∈ frontier.positiveDebtSupport}
   observer : ι
   charge : ℝ
   observer_ne_mover : observer ≠ mover.1
   charge_pos : 0 < charge
   atom_eventually : ∀ᶠ rank in atTop,
     HasQuittingStoppingLawVanishingDebtAtomAlternative reward
-      (frontier.profiles (frontier.subseq rank)) mover.1 observer
-      (frontier.bestResponse mover (frontier.subseq rank)) charge
+      (frontier.source rank) mover.1 observer
+      (frontier.replacement mover rank) charge
       (quittingStoppingLawAtomDecoderError charge rank)
 
 /-- Every extracted frontier has fixed vanishing-debt atom access.  This uses
 only the exact negative diagonal, nonnegative total slope, and a positive
 off-diagonal coordinate; it is independent of the four finite-rank exit tags.
 -/
-theorem QuittingCounterexampleStoppingLawFrontier.nonempty_vanishingDebtAtomAccess
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
+theorem QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
     Nonempty (QuittingVanishingDebtAtomAccess frontier) := by
-  obtain ⟨who, hwho⟩ := frontier.active_nonempty
-  let mover : {who // who ∈ frontier.active} := ⟨who, hwho⟩
+  obtain ⟨who, hwho⟩ := frontier.positiveDebtSupport_nonempty
+  let mover : {who // who ∈ frontier.positiveDebtSupport} := ⟨who, hwho⟩
   obtain ⟨observer, charge, hobserver, _hlower, _hchargeEq, hcharge, hatom⟩ :=
     frontier.exists_quantitativeStrongVanishingDebtAtomAlternative_of_mover mover
   exact ⟨{
@@ -79,19 +76,18 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_vanishingDebtAtomAcce
 
 /-- Support entry has a stronger adapter: the atom observer may be the same
 zero-debt recipient carried by the entry witness. -/
-theorem QuittingCounterexampleStoppingLawFrontier.exists_vanishingDebtAtomAccess_of_supportEntry
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+theorem QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hentry : HasQuittingStoppingLawFlatSupportEntry
-      frontier.base frontier.active frontier.tangent) :
+      frontier.base frontier.positiveDebtSupport frontier.tangent) :
     ∃ access : QuittingVanishingDebtAtomAccess frontier,
       quittingTerminalSemanticDebt frontier.base access.observer = 0 := by
-  change ∃ mover ∈ frontier.active, ∃ recipient,
+  change ∃ mover ∈ frontier.positiveDebtSupport, ∃ recipient,
     quittingTerminalSemanticDebt frontier.base recipient = 0 ∧
-      0 < quittingActiveDebtTangentExtension frontier.active frontier.tangent
+      0 < quittingActiveDebtTangentExtension frontier.positiveDebtSupport frontier.tangent
         mover recipient at hentry
   obtain ⟨who, hwho, observer, hzero, hpositive⟩ := hentry
-  let mover : {who // who ∈ frontier.active} := ⟨who, hwho⟩
+  let mover : {who // who ∈ frontier.positiveDebtSupport} := ⟨who, hwho⟩
   have htangent : 0 < frontier.tangent mover observer := by
     simpa only [quittingActiveDebtTangentExtension, hwho, dite_true] using hpositive
   obtain ⟨charge, _hchargeEq, hcharge, hatom⟩ :=
@@ -106,7 +102,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_vanishingDebtAtomAccess
     atom_eventually := hatom }, hzero⟩
   intro heq
   subst observer
-  have hactiveDebt := (frontier.active_iff who).1 hwho
+  have hactiveDebt := (frontier.positiveDebtSupport_iff who).1 hwho
   linarith
 
 /-- A positive exact edge together with an exact admissible return.  This is
@@ -131,8 +127,7 @@ theorem QuittingPositiveAdmissibleReturn.exists_uniformEquilibriumPayoff
 access above. -/
 def VanishingDebtAtomChronologicalConsumer
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
-  ∀ (witness : QuittingTerminalExploitabilityWitness reward)
-      (frontier : QuittingCounterexampleStoppingLawFrontier witness),
+  ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward),
     QuittingVanishingDebtAtomAccess frontier →
       ∀ eta : ℝ, 0 < eta →
         Nonempty (QuittingChronologicalDebtShadowingCertificate reward eta)
@@ -141,36 +136,29 @@ def VanishingDebtAtomChronologicalConsumer
 support-rank termination. -/
 def PaidFirstDisagreementAdmissibleReturnConsumer
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
-  ∀ (witness : QuittingTerminalExploitabilityWitness reward)
-      (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-      (mover : {who // who ∈ frontier.active})
+  ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+      (mover : {who // who ∈ frontier.positiveDebtSupport})
       (endpoint :
-        QuittingCounterexampleStoppingLawFrontier.FullResetEndpointCluster
+        QuittingPositiveMinimumDebtTangentFamily.FullReplacementCluster
           frontier mover),
     quittingTerminalSemanticDebtSum frontier.base <
         quittingTerminalSemanticDebtSum endpoint.cluster →
       ∀ observer gain, observer ≠ mover.1 → 0 < gain →
         (∀ᶠ rank in atTop,
           Nonempty (QuittingPaidFirstDisagreementRow reward
-            (frontier.fullResetProfile mover (endpoint.subseq rank))
+            (frontier.fullReplacementProfile mover (endpoint.subseq rank))
             observer gain)) →
         Nonempty (QuittingPositiveAdmissibleReturn reward)
 
 /-- Positive minimum semantic debt reaches the checked finite support-rank
-exit.  This is a one-way reduction, not an equivalence between the minimum and
-the four exit tags. -/
-theorem hasFiniteSupportRankExit_of_hasPositiveMinimumTerminalSemanticDebt
-    [Nonempty ι] (hpositive : HasPositiveMinimumTerminalSemanticDebt reward) :
-    ∃ witness : QuittingTerminalExploitabilityWitness reward,
-      QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit
-        witness := by
-  have hno : ¬ ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
-    (not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt
-      reward).2 hpositive
-  let witness := quittingTerminalExploitabilityWitnessOfNoUniformPayoff reward hno
-  obtain ⟨frontier⟩ := witness.exists_stoppingLaw_exhaustiveFrontier
-  exact ⟨witness, frontier.exists_finiteSupportRankExit⟩
+alternative.  This is a one-way reduction, not an equivalence between the
+minimum and the four tags. -/
+theorem finiteSupportRankAlternative_of_hasPositiveMinimumTerminalSemanticDebt
+    (hpositive : HasPositiveMinimumTerminalSemanticDebt reward) :
+    QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative
+      reward :=
+  QuittingPositiveMinimumDebtTangentFamily.finiteSupportRankAlternative_of_positiveMinimumDebt
+    hpositive
 
 /-- **Strong conditional capstone.**  Since every extracted frontier already
 has static vanishing-debt atom access, a chronological producer for that
@@ -181,12 +169,14 @@ theorem exists_uniformEquilibriumPayoff_of_vanishingDebtAtomChronologicalConsume
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
   by_contra hno
-  let witness := quittingTerminalExploitabilityWitnessOfNoUniformPayoff reward hno
-  obtain ⟨frontier⟩ := witness.exists_stoppingLaw_exhaustiveFrontier
+  have hpositive :=
+    (not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt
+      reward).1 hno
+  let frontier := (nonempty_positiveMinimumDebtTangentFamily hpositive).some
   obtain ⟨access⟩ := frontier.nonempty_vanishingDebtAtomAccess
   exact hno
     (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-      reward (hconsumer witness frontier access))
+      reward (hconsumer frontier access))
 
 /-- Consequently the chronological atom consumer makes a positive minimum
 semantic debt impossible. -/
@@ -208,45 +198,44 @@ be consumed by an exact positive admissible return. -/
 theorem exists_uniformEquilibriumPayoff_of_finiteSupportRankExitConsumers
     [Nonempty ι]
     (hpositiveSlope :
-      ∀ (witness : QuittingTerminalExploitabilityWitness reward)
-        (frontier : QuittingCounterexampleStoppingLawFrontier witness),
+      ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward),
         (∃ mover, 0 < ∑ observer, frontier.tangent mover observer) →
           ∀ eta : ℝ, 0 < eta →
             Nonempty (QuittingChronologicalDebtShadowingCertificate reward eta))
     (hsupportEntry :
-      ∀ (witness : QuittingTerminalExploitabilityWitness reward)
-        (frontier : QuittingCounterexampleStoppingLawFrontier witness),
+      ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward),
         HasQuittingStoppingLawFlatSupportEntry
-          frontier.base frontier.active frontier.tangent →
+          frontier.base frontier.positiveDebtSupport frontier.tangent →
           ∀ eta : ℝ, 0 < eta →
             Nonempty (QuittingChronologicalDebtShadowingCertificate reward eta))
     (hcirculation :
-      ∀ (witness : QuittingTerminalExploitabilityWitness reward)
-        (frontier : QuittingCounterexampleStoppingLawFrontier witness),
+      ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward),
         HasQuittingStoppingLawFlatChargedCirculation
-          frontier.active frontier.tangent →
+          frontier.positiveDebtSupport frontier.tangent →
           ∀ eta : ℝ, 0 < eta →
             Nonempty (QuittingChronologicalDebtShadowingCertificate reward eta))
     (hpaid : PaidFirstDisagreementAdmissibleReturnConsumer reward) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
   by_contra hno
-  let witness := quittingTerminalExploitabilityWitnessOfNoUniformPayoff reward hno
-  obtain ⟨first⟩ := witness.exists_stoppingLaw_exhaustiveFrontier
+  have hminimum :=
+    (not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt
+      reward).1 hno
+  let first := (nonempty_positiveMinimumDebtTangentFamily hminimum).some
   obtain ⟨frontier, hpositive | hentry | hcirculationExit | hpaidExit⟩ :=
-    first.exists_finiteSupportRankExit
+    first.finiteSupportRankAlternative
   · exact hno
       (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-        reward (hpositiveSlope witness frontier hpositive))
+        reward (hpositiveSlope frontier hpositive))
   · exact hno
       (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-        reward (hsupportEntry witness frontier hentry.2))
+        reward (hsupportEntry frontier hentry.2))
   · exact hno
       (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-        reward (hcirculation witness frontier hcirculationExit.2.2))
+        reward (hcirculation frontier hcirculationExit.2.2))
   · obtain ⟨mover, endpoint, hseparated, observer, gain, hobserver, hgain,
         hrows⟩ := hpaidExit
-    obtain ⟨result⟩ := hpaid witness frontier mover endpoint hseparated
+    obtain ⟨result⟩ := hpaid frontier mover endpoint hseparated
       observer gain hobserver hgain hrows
     exact hno result.exists_uniformEquilibriumPayoff
 

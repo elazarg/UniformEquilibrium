@@ -151,14 +151,14 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 
 | From | Status | To | Seals | Checked declaration or open interface |
 | --- | --- | --- | --- | --- |
-| `POSITIVE-MINIMUM-DEBT` | `proved` | `EXACT-DIAGONAL-FRONTIER` | `M`, `L`, `A` | [`GameTheory.hasFiniteSupportRankExit_of_hasPositiveMinimumTerminalSemanticDebt`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
-| `EXACT-DIAGONAL-FRONTIER` | `proved` | `FINITE-SUPPORT-RANK-EXIT` | `M`, `L`, `A` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_finiteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
-| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `POSITIVE-TOTAL-SLOPE` | `M`, `L` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
-| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `ZERO-DEBT-SUPPORT-ENTRY` | `M`, `L` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
-| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `FLAT-CHARGED-CIRCULATION` | `M`, `L` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
-| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `PAID-FIRST-DISAGREEMENT-ROW` | `M`, `L`, `A` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
-| `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
-| `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `POSITIVE-MINIMUM-DEBT` | `proved` | `EXACT-DIAGONAL-FRONTIER` | `M`, `L`, `A` | [`GameTheory.finiteSupportRankAlternative_of_hasPositiveMinimumTerminalSemanticDebt`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `EXACT-DIAGONAL-FRONTIER` | `proved` | `FINITE-SUPPORT-RANK-EXIT` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.finiteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `POSITIVE-TOTAL-SLOPE` | `M`, `L` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `ZERO-DEBT-SUPPORT-ENTRY` | `M`, `L` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `FLAT-CHARGED-CIRCULATION` | `M`, `L` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `PAID-FIRST-DISAGREEMENT-ROW` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
+| `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `L` | [`GameTheory.VanishingDebtAtomChronologicalConsumer`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `POSITIVE-ADMISSIBLE-RETURN` | `L` | [`GameTheory.PaidFirstDisagreementAdmissibleReturnConsumer`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `CHRONOLOGICAL-DEBT-SHADOWING` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors`](../UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean) |
@@ -172,13 +172,13 @@ The open producer arrows are:
 The DAG nodes have these mathematical meanings:
 
 - `POSITIVE-MINIMUM-DEBT`: The attainable terminal semantic carrier has strictly positive minimum total debt; for a nonempty finite player type this is equivalent to nonexistence of a uniform-equilibrium payoff.
-- `EXACT-DIAGONAL-FRONTIER`: A positive minimum supplies one stopping-law frontier whose active mover diagonal is exactly minus base debt and whose full-reset mover debt tends to zero.
-- `FINITE-SUPPORT-RANK-EXIT`: Repeated minimum-fiber re-extraction terminates because positive-debt support cardinality strictly decreases.
+- `EXACT-DIAGONAL-FRONTIER`: A positive minimum supplies one positive-minimum tangent family whose active mover diagonal is exactly minus base debt and whose full-replacement mover debt tends to zero.
+- `FINITE-SUPPORT-RANK-EXIT`: Repeated minimum-fiber re-extraction terminates because positive-debt support cardinality strictly decreases, or an explicit finite-support-rank alternative is reached.
 - `POSITIVE-TOTAL-SLOPE`: One active mover has strictly positive total tangent slope.
 - `ZERO-DEBT-SUPPORT-ENTRY`: A flat active tangent column has a positive coordinate at an actual zero-debt recipient.
 - `FLAT-CHARGED-CIRCULATION`: The flat tangent columns admit normalized positive charged balance.
-- `PAID-FIRST-DISAGREEMENT-ROW`: An off-minimum full-reset endpoint carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence.
-- `VANISHING-DEBT-ATOM-ACCESS`: Every extracted frontier has a fixed positive off-diagonal observer and an eventually available atom alternative whose endpoint observer debt tends to zero. In the support-entry branch the actual zero-debt recipient can be retained.
+- `PAID-FIRST-DISAGREEMENT-ROW`: An off-minimum full-replacement cluster carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence.
+- `VANISHING-DEBT-ATOM-ACCESS`: Every extracted positive-minimum tangent family has a fixed positive off-diagonal observer and an eventually available atom alternative whose endpoint observer debt tends to zero. In the support-entry branch the actual zero-debt recipient can be retained.
 - `CHRONOLOGICAL-DEBT-SHADOWING`: Certificates at every positive accuracy compile to terminal approximate Nash profiles and one uniform-equilibrium payoff.
 - `POSITIVE-ADMISSIBLE-RETURN`: One positive exact punishment-floor admissible edge followed by an exact return path compiles to a uniform-equilibrium payoff.
 - `UNIFORM-EQUILIBRIUM-PAYOFF`: Existence of one fixed payoff target satisfying the uniform finite-horizon equilibrium contract.

@@ -423,7 +423,7 @@ that last loss is a literal copy/negate endpoint flip by
 theorem observerAbsent_finiteClock_certifiedEndpointFlip
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -481,7 +481,8 @@ theorem observerAbsent_finiteClock_certifiedEndpointFlip
     witness.terminalGap
   have hchargePos : 0 < charge := mul_pos
     packet.observerAbsentMassLower_pos witness.terminalGap_pos
-  have hsplit := packet.observerAbsent_finiteClock_strategicSplit habsent
+  have hsplit := packet.observerAbsent_finiteClock_strategicSplit
+    (witness := witness) habsent
     n stop hstop δ hδ
   rcases hsplit with hforced | hrefusal
   · have hdispatch :=

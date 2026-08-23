@@ -32,44 +32,46 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- Extend the active frontier replacement family by the unchanged source
 strategy on inactive players. -/
 def sourceMatchedReplacement
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (who : ι) :
     (quittingGame reward).BehaviorStrategy who :=
-  if hwho : who ∈ frontier.active then
-    frontier.bestResponse ⟨who, hwho⟩ (frontier.subseq rank)
+  if hwho : who ∈ frontier.positiveDebtSupport then
+    frontier.replacement ⟨who, hwho⟩ rank
   else
-    frontier.profiles (frontier.subseq rank) who
+    frontier.source rank who
 
 @[simp]
 theorem sourceMatchedReplacement_active
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     frontier.sourceMatchedReplacement rank mover.1 =
-      frontier.bestResponse mover (frontier.subseq rank) := by
-  simp [sourceMatchedReplacement, mover.property]
+      frontier.replacement mover rank := by
+  unfold sourceMatchedReplacement
+  rw [dif_pos mover.property]
+  congr
 
 /-- The common-source, common-scale reset cube underlying one actual frontier
 index. -/
 def sourceMatchedResetCubeData
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) : QuittingStoppingLawResetCubeData reward where
-  source := frontier.profiles (frontier.subseq rank)
+  source := frontier.source rank
   target := frontier.sourceMatchedReplacement rank
-  scale := fun _who ↦ frontier.lambda (frontier.subseq rank)
-  scale_nonneg := fun _who ↦ (frontier.lambda_pos (frontier.subseq rank)).le
-  scale_le_one := fun _who ↦ frontier.lambda_le_one (frontier.subseq rank)
+  scale := fun _who ↦ frontier.scale rank
+  scale_nonneg := fun _who ↦ (frontier.scale_pos rank).le
+  scale_le_one := fun _who ↦ frontier.scale_le_one rank
 
 @[simp]
 theorem sourceMatchedResetCubeData_profile_empty
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) :
     (frontier.sourceMatchedResetCubeData rank).profile ∅ =
-      frontier.profiles (frontier.subseq rank) := by
+      frontier.source rank := by
   funext who
   simp [QuittingStoppingLawResetCubeData.profile,
     sourceMatchedResetCubeData]
@@ -77,7 +79,7 @@ theorem sourceMatchedResetCubeData_profile_empty
 /-- Any reset cube inherits the exact carrier-minimum lower bound between its
 empty face and every other face. -/
 theorem resetCubeData_totalDebtChange_ge_neg_sourceExcess
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (data : QuittingStoppingLawResetCubeData reward)
     (face : Finset ι) :
     -(quittingTerminalSemanticDebtSum
@@ -94,30 +96,30 @@ theorem resetCubeData_totalDebtChange_ge_neg_sourceExcess
 
 /-- Scale-normalized exact-minimum bound for an arbitrary reset cube. -/
 theorem resetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (data : QuittingStoppingLawResetCubeData reward)
     (face : Finset ι) :
     -(quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward (data.profile ∅)) -
           quittingTerminalSemanticDebtSum frontier.base) /
-        frontier.lambda (frontier.subseq rank) ≤
+        frontier.scale rank ≤
       (quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward (data.profile face)) -
           quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward (data.profile ∅))) /
-        frontier.lambda (frontier.subseq rank) := by
+        frontier.scale rank := by
   apply (div_le_div_iff_of_pos_right
-    (frontier.lambda_pos (frontier.subseq rank))).2
+    (frontier.scale_pos rank)).2
   exact frontier.resetCubeData_totalDebtChange_ge_neg_sourceExcess
     data face
 
 /-- Uniform asymptotic one-sided minimality for any sequence of reset cubes
 whose empty face is the selected frontier source. -/
 theorem eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (data : ℕ → QuittingStoppingLawResetCubeData reward)
     (hsource : ∀ rank,
-      (data rank).profile ∅ = frontier.profiles (frontier.subseq rank))
+      (data rank).profile ∅ = frontier.source rank)
     {epsilon : ℝ} (hepsilon : 0 < epsilon) :
     ∀ᶠ rank in atTop, ∀ face : Finset ι,
       -epsilon <
@@ -125,9 +127,9 @@ theorem eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
               (quittingTerminalSemanticPair reward ((data rank).profile face)) -
             quittingTerminalSemanticDebtSum
               (quittingTerminalSemanticPair reward ((data rank).profile ∅))) /
-          frontier.lambda (frontier.subseq rank) := by
+          frontier.scale rank := by
   have hsmall :=
-    (tendsto_order.1 frontier.source_excess_over_lambda_tendsto_zero).2
+    (tendsto_order.1 frontier.source_excess_over_scale_tendsto_zero).2
       epsilon hepsilon
   apply hsmall.mono
   intro rank hrank face
@@ -142,7 +144,7 @@ theorem eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
 minimum-debt carrier point. Consequently, its total-debt change from the
 source is bounded below by the negative source excess. -/
 theorem sourceMatchedResetCubeData_totalDebtChange_ge_neg_sourceExcess
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (face : Finset ι) :
     -(quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
@@ -159,20 +161,20 @@ theorem sourceMatchedResetCubeData_totalDebtChange_ge_neg_sourceExcess
 
 /-- Scale-normalized form of the exact minimum-debt face bound. -/
 theorem sourceMatchedResetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (face : Finset ι) :
     -(quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward
               ((frontier.sourceMatchedResetCubeData rank).profile ∅)) -
           quittingTerminalSemanticDebtSum frontier.base) /
-        frontier.lambda (frontier.subseq rank) ≤
+        frontier.scale rank ≤
       (quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward
               ((frontier.sourceMatchedResetCubeData rank).profile face)) -
           quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward
               ((frontier.sourceMatchedResetCubeData rank).profile ∅))) /
-        frontier.lambda (frontier.subseq rank) := by
+        frontier.scale rank := by
   exact frontier.resetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess rank
     (frontier.sourceMatchedResetCubeData rank) face
 
@@ -183,7 +185,7 @@ carrier above the exact minimum. Hence, eventually, every face at once has
 normalized total-debt change greater than `-epsilon`. No variational
 selection or finiteness of the face family is needed. -/
 theorem eventually_all_sourceMatchedResetCubeData_normalizedTotalDebtChange_gt_neg
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     {epsilon : ℝ} (hepsilon : 0 < epsilon) :
     ∀ᶠ rank in atTop, ∀ face : Finset ι,
       -epsilon <
@@ -193,28 +195,28 @@ theorem eventually_all_sourceMatchedResetCubeData_normalizedTotalDebtChange_gt_n
             quittingTerminalSemanticDebtSum
               (quittingTerminalSemanticPair reward
                 ((frontier.sourceMatchedResetCubeData rank).profile ∅))) /
-          frontier.lambda (frontier.subseq rank) := by
+          frontier.scale rank := by
   exact frontier.eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
     frontier.sourceMatchedResetCubeData
     frontier.sourceMatchedResetCubeData_profile_empty hepsilon
 
 /-- The singleton vertex for an active mover is its literal frontier reset. -/
 theorem sourceMatchedResetCubeData_profile_singleton
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     (frontier.sourceMatchedResetCubeData rank).profile {mover.1} =
       quittingStoppingLawResetProfile reward
-        (frontier.profiles (frontier.subseq rank)) mover.1
-        (frontier.bestResponse mover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) := by
+        (frontier.source rank) mover.1
+        (frontier.replacement mover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) := by
   funext observer
   by_cases hobserver : observer = mover.1
   · subst observer
     simp [QuittingStoppingLawResetCubeData.profile,
       sourceMatchedResetCubeData, quittingStoppingLawResetProfile,
-      sourceMatchedReplacement, mover.property]
+      frontier.sourceMatchedReplacement_active rank mover]
   · simp [QuittingStoppingLawResetCubeData.profile,
       sourceMatchedResetCubeData, quittingStoppingLawResetProfile,
       hobserver]
@@ -222,15 +224,15 @@ theorem sourceMatchedResetCubeData_profile_singleton
 /-- Every actual normalized frontier column is exactly the corresponding
 frozen debt-cube edge divided by the common positive reset scale. -/
 theorem sourceMatchedResetCubeData_debtEdge_eq_scale_mul_actualDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active})
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport})
     (observer : ι) :
     let data := frontier.sourceMatchedResetCubeData rank
     let debt := fun candidate : (quittingGame reward).BehaviorProfile ↦
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward candidate) observer
     edge (data.value debt) ∅ mover.1 =
-      frontier.lambda (frontier.subseq rank) *
+      frontier.scale rank *
         frontier.actualDebtDirection rank mover observer := by
   dsimp only
   rw [edge]
@@ -242,26 +244,26 @@ theorem sourceMatchedResetCubeData_debtEdge_eq_scale_mul_actualDirection
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
             ((frontier.sourceMatchedResetCubeData rank).profile ∅)) observer =
-      frontier.lambda (frontier.subseq rank) *
+      frontier.scale rank *
         frontier.actualDebtDirection rank mover observer
   rw [sourceMatchedResetCubeData_profile_singleton,
     sourceMatchedResetCubeData_profile_empty]
   unfold actualDebtDirection quittingStoppingLawNormalizedDebtDirection
     quittingTerminalSemanticDebtChange
-  field_simp [ne_of_gt (frontier.lambda_pos (frontier.subseq rank))]
+  field_simp [ne_of_gt (frontier.scale_pos rank)]
 
 /-- A scalar-weighted source star in the reset cube is exactly the common
 reset scale times the corresponding weighted normalized-debt star. -/
 theorem sum_mul_sourceMatchedResetCubeData_debtEdge_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (coefficient : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (coefficient : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (observer : ι) :
     let data := frontier.sourceMatchedResetCubeData rank
     let debt := fun candidate : (quittingGame reward).BehaviorProfile ↦
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward candidate) observer
     (∑ mover, coefficient mover * edge (data.value debt) ∅ mover.1) =
-      frontier.lambda (frontier.subseq rank) *
+      frontier.scale rank *
         ∑ mover, coefficient mover *
           frontier.actualDebtDirection rank mover observer := by
   dsimp only
@@ -278,12 +280,12 @@ actual reset cube. Their aggregate debt displacement is bounded by the common
 reset scale times `O(1/N)`, while the normalized mover charge remains
 `1 - O(1/N)`. This still does not compose the star chronologically. -/
 theorem exists_sourceMatchedChatteringResetCubeStar
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
-      frontier.active frontier.tangent) :
+      frontier.positiveDebtSupport frontier.tangent) :
     ∃ budget : ℝ, 0 ≤ budget ∧ ∀ N : ℕ, 0 < N →
       ∃ rank : ℕ, N ≤ rank ∧
-        ∃ count : {who // who ∈ frontier.active} → ℕ,
+        ∃ count : {who // who ∈ frontier.positiveDebtSupport} → ℕ,
           (∀ observer,
             let data := frontier.sourceMatchedResetCubeData rank
             let debt := fun candidate :
@@ -292,7 +294,7 @@ theorem exists_sourceMatchedChatteringResetCubeStar
                 (quittingTerminalSemanticPair reward candidate) observer
             |∑ mover, ((count mover : ℝ) / N) *
                 edge (data.value debt) ∅ mover.1| ≤
-              frontier.lambda (frontier.subseq rank) *
+              frontier.scale rank *
                 ((∑ mover, |frontier.tangent mover observer|) + budget) / N) ∧
           1 - ((∑ mover, |frontier.tangent mover mover.1|) + budget) / N ≤
             ∑ mover, ((count mover : ℝ) / N) *
@@ -306,16 +308,16 @@ theorem exists_sourceMatchedChatteringResetCubeStar
   intro observer
   dsimp only
   rw [frontier.sum_mul_sourceMatchedResetCubeData_debtEdge_eq]
-  rw [abs_mul, abs_of_pos (frontier.lambda_pos (frontier.subseq rank))]
+  rw [abs_mul, abs_of_pos (frontier.scale_pos rank)]
   calc
-    frontier.lambda (frontier.subseq rank) *
+    frontier.scale rank *
           |∑ mover, ((count mover : ℝ) / N) *
             frontier.actualDebtDirection rank mover observer| ≤
-        frontier.lambda (frontier.subseq rank) *
+        frontier.scale rank *
           (((∑ mover, |frontier.tangent mover observer|) + budget) / N) :=
       mul_le_mul_of_nonneg_left (hdisplacement observer)
-        (frontier.lambda_pos (frontier.subseq rank)).le
-    _ = frontier.lambda (frontier.subseq rank) *
+        (frontier.scale_pos rank).le
+    _ = frontier.scale rank *
         ((∑ mover, |frontier.tangent mover observer|) + budget) / N := by
       ring
 
@@ -324,9 +326,9 @@ one actual frontier rank.  Both reset directions are active source-matched
 best-response chords, and the returned edge retains which one of their movers
 changes.  The result is static cube geometry, not play chronology. -/
 theorem exists_sourceMatchedResetCubePureTimeWitnessSwitch_of_abs_debtCurvature
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (observer : ι) (base : Finset ι)
-    (first second : {who // who ∈ frontier.active})
+    (first second : {who // who ∈ frontier.positiveDebtSupport})
     (hfirst : first.1 ∉ base) (hsecond : second.1 ∉ base)
     (hne : first.1 ≠ second.1)
     (hobserverFirst : observer ≠ first.1)
@@ -390,5 +392,5 @@ theorem exists_sourceMatchedResetCubePureTimeWitnessSwitch_of_abs_debtCurvature
     hfirst hsecond hne hobserverFirst hobserverSecond prescribedBound q charge
       eta hcharge heta hprescribed hface hcurvature
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 end GameTheory

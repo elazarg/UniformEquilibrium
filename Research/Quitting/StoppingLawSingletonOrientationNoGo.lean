@@ -45,9 +45,9 @@ contains no information beyond the singleton label itself. -/
 theorem hasQuittingStoppingLawSingletonStrategicOrientation_iff_terminal_eq
     {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
-    HasQuittingStoppingLawSingletonStrategicOrientation packet ↔
+    HasQuittingStoppingLawSingletonStrategicOrientation (witness := witness) packet ↔
       packet.terminal.val = {packet.observer} := by
   classical
   constructor

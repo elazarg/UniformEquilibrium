@@ -14,32 +14,32 @@
     {
       "id": "EXACT-DIAGONAL-FRONTIER",
       "status": "proved",
-      "meaning": "A positive minimum supplies one stopping-law frontier whose active mover diagonal is exactly minus base debt and whose full-reset mover debt tends to zero.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/Frontier.lean",
-      "declaration": "GameTheory.QuittingTerminalExploitabilityWitness.exists_stoppingLaw_exhaustiveFrontier",
+      "meaning": "A positive minimum supplies one positive-minimum tangent family whose active mover diagonal is exactly minus base debt and whose full-replacement mover debt tends to zero.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/PositiveMinimumDebtTangentFamily.lean",
+      "declaration": "GameTheory.nonempty_positiveMinimumDebtTangentFamily",
       "evidence_seals": ["M", "L", "A"]
     },
     {
       "id": "FINITE-SUPPORT-RANK-EXIT",
       "status": "proved",
-      "meaning": "Repeated minimum-fiber re-extraction terminates because positive-debt support cardinality strictly decreases.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_finiteSupportRankExit",
+      "meaning": "Repeated minimum-fiber re-extraction terminates because positive-debt support cardinality strictly decreases, or an explicit finite-support-rank alternative is reached.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.finiteSupportRankAlternative",
       "evidence_seals": ["M", "L", "A"]
     },
     {
       "id": "POSITIVE-TOTAL-SLOPE",
       "status": "proved-alternative",
       "meaning": "One active mover has strictly positive total tangent slope.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative",
       "evidence_seals": ["M", "L"]
     },
     {
       "id": "ZERO-DEBT-SUPPORT-ENTRY",
       "status": "proved-alternative",
       "meaning": "A flat active tangent column has a positive coordinate at an actual zero-debt recipient.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/ExhaustiveFrontierBranch.lean",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/ExhaustiveTangentAlternative.lean",
       "declaration": "GameTheory.HasQuittingStoppingLawFlatSupportEntry",
       "evidence_seals": ["M", "L"]
     },
@@ -47,24 +47,24 @@
       "id": "FLAT-CHARGED-CIRCULATION",
       "status": "proved-alternative",
       "meaning": "The flat tangent columns admit normalized positive charged balance.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/ExhaustiveFrontierBranch.lean",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/ExhaustiveTangentAlternative.lean",
       "declaration": "GameTheory.HasQuittingStoppingLawFlatChargedCirculation",
       "evidence_seals": ["M", "L"]
     },
     {
       "id": "PAID-FIRST-DISAGREEMENT-ROW",
       "status": "proved-alternative",
-      "meaning": "An off-minimum full-reset endpoint carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit",
+      "meaning": "An off-minimum full-replacement cluster carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement",
       "evidence_seals": ["M", "L", "A"]
     },
     {
       "id": "VANISHING-DEBT-ATOM-ACCESS",
       "status": "proved",
-      "meaning": "Every extracted frontier has a fixed positive off-diagonal observer and an eventually available atom alternative whose endpoint observer debt tends to zero. In the support-entry branch the actual zero-debt recipient can be retained.",
+      "meaning": "Every extracted positive-minimum tangent family has a fixed positive off-diagonal observer and an eventually available atom alternative whose endpoint observer debt tends to zero. In the support-entry branch the actual zero-debt recipient can be retained.",
       "source": "UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.nonempty_vanishingDebtAtomAccess",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -98,9 +98,9 @@
       "status": "proved",
       "from": "POSITIVE-MINIMUM-DEBT",
       "to": "EXACT-DIAGONAL-FRONTIER",
-      "meaning": "A positive minimum supplies a terminal exploitability witness and its exact-diagonal stopping-law frontier; the witness certifies nonexistence of a uniform-equilibrium payoff.",
+      "meaning": "A positive minimum supplies a positive-minimum tangent family; the minimum itself certifies nonexistence of a uniform-equilibrium payoff.",
       "source": "UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean",
-      "declaration": "GameTheory.hasFiniteSupportRankExit_of_hasPositiveMinimumTerminalSemanticDebt",
+      "declaration": "GameTheory.finiteSupportRankAlternative_of_hasPositiveMinimumTerminalSemanticDebt",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -109,8 +109,8 @@
       "from": "EXACT-DIAGONAL-FRONTIER",
       "to": "FINITE-SUPPORT-RANK-EXIT",
       "meaning": "Minimum-fiber potential descent strictly lowers finite active support until an exit is reached.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_finiteSupportRankExit",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.finiteSupportRankAlternative",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -119,8 +119,8 @@
       "from": "FINITE-SUPPORT-RANK-EXIT",
       "to": "POSITIVE-TOTAL-SLOPE",
       "meaning": "First tagged exit arm.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative",
       "evidence_seals": ["M", "L"]
     },
     {
@@ -129,8 +129,8 @@
       "from": "FINITE-SUPPORT-RANK-EXIT",
       "to": "ZERO-DEBT-SUPPORT-ENTRY",
       "meaning": "Second tagged exit arm.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative",
       "evidence_seals": ["M", "L"]
     },
     {
@@ -139,8 +139,8 @@
       "from": "FINITE-SUPPORT-RANK-EXIT",
       "to": "FLAT-CHARGED-CIRCULATION",
       "meaning": "Third tagged exit arm.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative",
       "evidence_seals": ["M", "L"]
     },
     {
@@ -149,8 +149,8 @@
       "from": "FINITE-SUPPORT-RANK-EXIT",
       "to": "PAID-FIRST-DISAGREEMENT-ROW",
       "meaning": "Fourth tagged exit arm after all minimum-fiber support deflations terminate.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -158,9 +158,9 @@
       "status": "proved",
       "from": "EXACT-DIAGONAL-FRONTIER",
       "to": "VANISHING-DEBT-ATOM-ACCESS",
-      "meaning": "Every active frontier mover has a positive off-diagonal tangent coordinate, yielding fixed vanishing-debt atom access independently of the exit tag.",
+      "meaning": "Every active tangent-family mover has a positive off-diagonal tangent coordinate, yielding fixed vanishing-debt atom access independently of the finite-support-rank alternative tag.",
       "source": "UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.nonempty_vanishingDebtAtomAccess",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -170,7 +170,7 @@
       "to": "VANISHING-DEBT-ATOM-ACCESS",
       "meaning": "The support-entry witness itself supplies the observer, retaining its zero base debt.",
       "source": "UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean",
-      "declaration": "GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_vanishingDebtAtomAccess_of_supportEntry",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry",
       "evidence_seals": ["M", "L", "A"]
     },
     {

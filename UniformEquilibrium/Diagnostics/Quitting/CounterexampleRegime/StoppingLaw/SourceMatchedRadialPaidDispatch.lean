@@ -41,14 +41,14 @@ variable {witness : QuittingTerminalExploitabilityWitness reward}
 square.  `diagonal` records which of the two literal receiving diagonals was
 selected by the oriented supremum switch. -/
 structure QuittingSourceMatchedRadialPaidSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (threshold charge eta : ℝ) where
-  base : Finset {who // who ∈ frontier.active}
-  first : {who // who ∈ frontier.active}
-  second : {who // who ∈ frontier.active}
+  base : Finset {who // who ∈ frontier.positiveDebtSupport}
+  first : {who // who ∈ frontier.positiveDebtSupport}
+  second : {who // who ∈ frontier.positiveDebtSupport}
   first_fresh : first ∉ base
   second_fresh : second ∉ base
   distinct : first ≠ second
@@ -77,28 +77,28 @@ structure QuittingSourceMatchedRadialPaidSquare
 
 /-- A localized negative cap square above the fixed-witness quadratic budget
 produces a data-bearing paid first-disagreement carrier. -/
-theorem QuittingCounterexampleStoppingLawFrontier.exists_radialPaidSquare_of_negativeSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+theorem QuittingPositiveMinimumDebtTangentFamily.exists_radialPaidSquare_of_negativeSquare
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (threshold charge eta : ℝ)
     (hcharge : 0 < charge) (heta : 0 < eta)
     (hbudget : charge +
-        4 * quittingRewardBound reward * frontier.lambda (frontier.subseq rank) *
-          frontier.lambda (frontier.subseq rank) + 3 * eta ≤ threshold)
+        4 * quittingRewardBound reward * frontier.scale rank *
+          frontier.scale rank + 3 * eta ≤ threshold)
     (hnegative : HasSquareAboveAlong
       (fun face ↦ -frontier.sourceMatchedRadialFaceCap rank weight hweight0
         hweight1 observer face) threshold ∅
-      (Finset.univ : Finset {who // who ∈ frontier.active}).toList) :
+      (Finset.univ : Finset {who // who ∈ frontier.positiveDebtSupport}).toList) :
     Nonempty (QuittingSourceMatchedRadialPaidSquare frontier rank weight
       hweight0 hweight1 observer threshold charge eta) := by
   let activeWord :=
-    (Finset.univ : Finset {who // who ∈ frontier.active}).toList
+    (Finset.univ : Finset {who // who ∈ frontier.positiveDebtSupport}).toList
   have hwordNodup : activeWord.Nodup :=
-    (Finset.univ : Finset {who // who ∈ frontier.active}).nodup_toList
+    (Finset.univ : Finset {who // who ∈ frontier.positiveDebtSupport}).nodup_toList
   have hwordDisjoint : Disjoint activeWord.toFinset
-      (∅ : Finset {who // who ∈ frontier.active}) := by simp
+      (∅ : Finset {who // who ∈ frontier.positiveDebtSupport}) := by simp
   obtain ⟨base, first, second, hfirst, hsecond, hne, hsquare⟩ :=
     exists_fresh_square_of_hasSquareAboveAlong
       (fun face ↦ -frontier.sourceMatchedRadialFaceCap rank weight hweight0
@@ -115,16 +115,16 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_radialPaidSquare_of_neg
     rw [← hnegSquareEq]
     simpa only [cap] using hsquare
   let q := 4 * quittingRewardBound reward *
-    frontier.lambda (frontier.subseq rank) *
-      frontier.lambda (frontier.subseq rank)
+    frontier.scale rank *
+      frontier.scale rank
   have hcapSquareNegative : square cap base first second < 0 := by
     have hq0 : 0 ≤ q := by
       dsimp only [q]
       exact mul_nonneg
         (mul_nonneg
           (mul_nonneg (by positivity) (quittingRewardBound_nonneg reward))
-          (frontier.lambda_pos (frontier.subseq rank)).le)
-        (frontier.lambda_pos (frontier.subseq rank)).le
+          (frontier.scale_pos rank).le)
+        (frontier.scale_pos rank).le
     nlinarith
   have hcurvature : charge + q + 3 * eta ≤
       |square cap base first second| := by
@@ -215,8 +215,8 @@ branch stores a full legal behavior deviation of size `charge + eta`.  The
 outsider branch stores both the reached endpoint gain and its full behavior
 splice at the exact first-disagreement history. -/
 inductive QuittingSourceMatchedRadialStrategicDispatch
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {rank : ℕ} {weight : {who // who ∈ frontier.active} → ℝ}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {rank : ℕ} {weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ}
     {hweight0 : ∀ mover, 0 ≤ weight mover}
     {hweight1 : ∀ mover, weight mover ≤ 1}
     {observer : ι} {threshold charge eta gamma : ℝ}
@@ -265,22 +265,22 @@ the exact fixed-witness `4 M lambda^2` budget produces a literal paid square
 and consumes its temporal orientation.  The earlier-receiving branch uses
 the terminal exploitability witness's global terminal gap; the displayed strict error
 budget is exactly the hypothesis needed by the atomic barrier argument. -/
-theorem QuittingCounterexampleStoppingLawFrontier.exists_radialStrategicDispatch_of_negativeSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+theorem QuittingPositiveMinimumDebtTangentFamily.exists_radialStrategicDispatch_of_negativeSquare
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (threshold charge eta : ℝ)
     (hcharge : 0 < charge) (heta : 0 < eta)
     (hbudget : charge +
-        4 * quittingRewardBound reward * frontier.lambda (frontier.subseq rank) *
-          frontier.lambda (frontier.subseq rank) + 3 * eta ≤ threshold)
+        4 * quittingRewardBound reward * frontier.scale rank *
+          frontier.scale rank + 3 * eta ≤ threshold)
     (hsmall : eta < witness.terminalGap * (charge + eta) /
       (2 * quittingRewardBound reward))
     (hnegative : HasSquareAboveAlong
       (fun face ↦ -frontier.sourceMatchedRadialFaceCap rank weight hweight0
         hweight1 observer face) threshold ∅
-      (Finset.univ : Finset {who // who ∈ frontier.active}).toList) :
+      (Finset.univ : Finset {who // who ∈ frontier.positiveDebtSupport}).toList) :
     ∃ carrier : QuittingSourceMatchedRadialPaidSquare frontier rank weight
         hweight0 hweight1 observer threshold charge eta,
       Nonempty (QuittingSourceMatchedRadialStrategicDispatch
@@ -311,23 +311,23 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_radialStrategicDispatch
 
 /-- Cap nonadditivity is either within the triangular square budget or is
 consumed by the data-bearing temporal strategic dispatch. -/
-theorem QuittingCounterexampleStoppingLawFrontier.radialCapNonadditivity_le_or_strategicDispatch
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
+theorem QuittingPositiveMinimumDebtTangentFamily.radialCapNonadditivity_le_or_strategicDispatch
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (observer : ι) (threshold charge eta : ℝ)
     (hcharge : 0 < charge) (heta : 0 < eta)
     (hbudget : charge +
-        4 * quittingRewardBound reward * frontier.lambda (frontier.subseq rank) *
-          frontier.lambda (frontier.subseq rank) + 3 * eta ≤ threshold)
+        4 * quittingRewardBound reward * frontier.scale rank *
+          frontier.scale rank + 3 * eta ≤ threshold)
     (hsmall : eta < witness.terminalGap * (charge + eta) /
       (2 * quittingRewardBound reward)) :
     finiteCubeCapNonadditivity
           (frontier.sourceMatchedRadialFaceCap rank weight hweight0 hweight1
             observer) ≤
         (squareCount
-          (Finset.univ : Finset {who // who ∈ frontier.active}).toList : ℝ) *
+          (Finset.univ : Finset {who // who ∈ frontier.positiveDebtSupport}).toList : ℝ) *
           threshold ∨
       ∃ carrier : QuittingSourceMatchedRadialPaidSquare frontier rank weight
           hweight0 hweight1 observer threshold charge eta,
@@ -345,8 +345,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.radialCapNonadditivity_le_or_s
 owner branch has one common label; an outsider branch remembers the actual
 outsider. -/
 def QuittingSourceMatchedRadialStrategicDispatch.label
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {rank : ℕ} {weight : {who // who ∈ frontier.active} → ℝ}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {rank : ℕ} {weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ}
     {hweight0 : ∀ mover, 0 ≤ weight mover}
     {hweight1 : ∀ mover, weight mover ≤ 1}
     {observer : ι} {threshold charge eta gamma : ℝ}
@@ -360,8 +360,8 @@ def QuittingSourceMatchedRadialStrategicDispatch.label
 
 /-- The legal source-unit gain certified by a radial temporal dispatch. -/
 def QuittingSourceMatchedRadialStrategicDispatch.gain
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {rank : ℕ} {weight : {who // who ∈ frontier.active} → ℝ}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {rank : ℕ} {weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ}
     {hweight0 : ∀ mover, 0 ≤ weight mover}
     {hweight1 : ∀ mover, weight mover ≤ 1}
     {observer : ι} {threshold charge eta gamma : ℝ}
@@ -377,8 +377,8 @@ def QuittingSourceMatchedRadialStrategicDispatch.gain
 /-- Every temporal branch retains at least the smaller of the owner factor
 `1` and the outsider factor `gamma / (2M)` times the paid receiving edge. -/
 theorem QuittingSourceMatchedRadialStrategicDispatch.min_factor_mul_le_gain
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {rank : ℕ} {weight : {who // who ∈ frontier.active} → ℝ}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {rank : ℕ} {weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ}
     {hweight0 : ∀ mover, 0 ≤ weight mover}
     {hweight1 : ∀ mover, weight mover ≤ 1}
     {observer : ι} {threshold charge eta gamma : ℝ}
@@ -423,9 +423,9 @@ owner/outsider label with lower bound
 This statement permits the first-disagreement dates to diverge: their exact
 live masses have already been incorporated into each dispatch's legal gain. -/
 theorem exists_fixed_radialStrategicLabel_of_scaleNormalizedLiminfLower
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ → ℕ)
-    (weight : ℕ → {who // who ∈ frontier.active} → ℝ)
+    (weight : ℕ → {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ n mover, 0 ≤ weight n mover)
     (hweight1 : ∀ n mover, weight n mover ≤ 1)
     (observer : ι) (threshold charge eta scale : ℕ → ℝ)

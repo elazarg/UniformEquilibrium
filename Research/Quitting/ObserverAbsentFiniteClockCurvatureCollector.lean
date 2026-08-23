@@ -240,7 +240,7 @@ halvings forced by the landed wall/refusal split and affine no-cancellation. -/
 theorem observerAbsent_finiteClock_actualPlusSquare_or_deviation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -274,6 +274,7 @@ theorem observerAbsent_finiteClock_actualPlusSquare_or_deviation
   let squares := quittingFiniteClockPositiveSquareCharge
     reward profile packet.terminal owner stop
   have hsplit := packet.observerAbsent_finiteClock_strategicSplit
+    (witness := witness)
     habsent n stop hstop δ hδ
   dsimp only at hsplit
   rcases hsplit with houtside | hdeviation
@@ -301,7 +302,7 @@ The first two constants arise by two honest binary splits. -/
 theorem observerAbsent_finiteClock_actualDefect_or_square_or_deviation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -337,6 +338,7 @@ theorem observerAbsent_finiteClock_actualDefect_or_square_or_deviation
   let squares := quittingFiniteClockPositiveSquareCharge
     reward profile packet.terminal owner stop
   have hsplit := packet.observerAbsent_finiteClock_strategicSplit
+    (witness := witness)
     habsent n stop hstop δ hδ
   dsimp only at hsplit
   rcases hsplit with houtside | hdeviation

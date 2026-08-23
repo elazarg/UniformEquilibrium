@@ -4,14 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.PotentialCoDecreaseCurvature
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.NormalizedCurvaturePaidRow
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPaidFirstDisagreementOrientation
 
 /-!
-# Data-bearing temporal dispatch of potential co-decrease curvature
+# Strategic dispatch of normalized curvature
 
 The lower-level normalized-curvature decoder constructs approximate pure-time
-witnesses at both the source and the full-reset endpoint.  This module retains
+witnesses at both the source and the full-replacement endpoint.  This module retains
 those two inequalities together with the paid first-disagreement row and then
 consumes the row's temporal orientation.
 
@@ -84,7 +84,7 @@ theorem exists_quittingStoppingLawCurvaturePaidWitness
 /-- The strongest existing temporal consumer of a curvature-paid witness.
 The later-receiving branch is a legal deviation by the observer.  Under a
 terminal gap and the sharp endpoint-error threshold, the earlier-receiving
-branch is a reached pure endpoint deviation by an outsider. -/
+branch is a pure endpoint deviation by an outsider. -/
 inductive QuittingStoppingLawCurvatureStrategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {profile : (quittingGame reward).BehaviorProfile}
@@ -163,47 +163,24 @@ theorem QuittingStoppingLawCurvaturePaidWitness.nonempty_strategicDispatch
           hgamma hgap carrier.receiving_approx hsmall
       exact ⟨.outsider htime who hwho action hendpoint hbehavior⟩
 
-/-- The hard-coded curvature ratios used by the earlier row-only consumer
-satisfy the terminal-gap smallness test exactly when the reward bound is
-strictly below twice the gap. -/
-theorem fixedCurvatureRatios_terminalGapBudget_iff
-    {curvature gamma bound : ℝ}
-    (hcurvature : 0 < curvature) (hbound : 0 < bound) :
-    curvature / 16 < gamma * (curvature / 4) / (2 * bound) ↔
-      bound < 2 * gamma := by
-  constructor
-  · intro h
-    have h' := (lt_div_iff₀ (by positivity : 0 < 2 * bound)).mp h
-    by_contra hnot
-    have hproduct :
-        0 ≤ curvature * (bound - 2 * gamma) :=
-      mul_nonneg hcurvature.le (sub_nonneg.mpr (le_of_not_gt hnot))
-    nlinarith
-  · intro h
-    apply (lt_div_iff₀ (by positivity : 0 < 2 * bound)).mpr
-    have hproduct : 0 < curvature * (2 * gamma - bound) :=
-      mul_pos hcurvature (sub_pos.mpr h)
-    nlinarith
-
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {witness : QuittingTerminalExploitabilityWitness reward}
-  {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-  {mover : {who // who ∈ frontier.active}}
+  {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+  {mover : {who // who ∈ frontier.positiveDebtSupport}}
 
-namespace FullResetEndpointCluster
+namespace FullReplacementCluster
 
-/-- Parameterized eventual temporal dispatch of an off-minimum full-reset
+/-- Parameterized eventual temporal dispatch of an off-minimum full-replacement
 curvature coordinate.  Any positive gain, source budget, and endpoint error
 whose sum is below the limiting curvature produce the paid carrier.  If the
 endpoint error also meets the terminal-gap threshold, every sufficiently late
 rank yields either the owner or outsider strategic dispatch.
 
-The conclusion remains attached to the literal source/full-reset profiles; it
+The conclusion remains attached to the literal source/full-replacement profiles; it
 does not re-enter the resulting outsider endpoint into the tangent family. -/
 theorem exists_eventually_curvatureStrategicDispatch
-    (endpoint : FullResetEndpointCluster frontier mover)
+    (endpoint : FullReplacementCluster frontier mover)
     (hflat : ∑ observer, frontier.tangent mover observer = 0)
     (hseparated : quittingTerminalSemanticDebtSum frontier.base <
       quittingTerminalSemanticDebtSum endpoint.cluster)
@@ -218,11 +195,10 @@ theorem exists_eventually_curvatureStrategicDispatch
           gamma * gain / (2 * quittingRewardBound reward) →
         ∀ᶠ rank in atTop,
           ∃ carrier : QuittingStoppingLawCurvaturePaidWitness reward
-              (frontier.profiles (frontier.subseq (endpoint.subseq rank)))
+              (frontier.source (endpoint.subseq rank))
               mover.1 observer
-              (frontier.bestResponse mover
-                (frontier.subseq (endpoint.subseq rank)))
-              (frontier.lambda (frontier.subseq (endpoint.subseq rank)) *
+              (frontier.replacement mover (endpoint.subseq rank))
+              (frontier.scale (endpoint.subseq rank) *
                 sourceBudget) endpointError gain,
             Nonempty (QuittingStoppingLawCurvatureStrategicDispatch
               (gamma := gamma) carrier) := by
@@ -250,11 +226,11 @@ theorem exists_eventually_curvatureStrategicDispatch
   have heventually := (endpoint.normalizedCurvature_tendsto observer).eventually
     (Ioi_mem_nhds hsum)
   filter_upwards [heventually] with rank hrank
-  let lambda := frontier.lambda (frontier.subseq (endpoint.subseq rank))
+  let lambda := frontier.scale (endpoint.subseq rank)
   have hlambda : 0 < lambda :=
-    frontier.lambda_pos (frontier.subseq (endpoint.subseq rank))
+    frontier.scale_pos (endpoint.subseq rank)
   have hlambdaOne : lambda ≤ 1 :=
-    frontier.lambda_le_one (frontier.subseq (endpoint.subseq rank))
+    frontier.scale_le_one (endpoint.subseq rank)
   let sourceError := lambda * sourceBudget
   have hsourceError : 0 < sourceError := mul_pos hlambda hsourceBudget
   have hsourceTerm :
@@ -264,12 +240,11 @@ theorem exists_eventually_curvatureStrategicDispatch
       gain + endpointError + (1 - lambda) * sourceBudget <
         quittingTerminalSemanticDebtChange
             (frontier.sourcePair (endpoint.subseq rank))
-            (frontier.fullResetPair mover (endpoint.subseq rank)) observer -
+            (frontier.fullReplacementPair mover (endpoint.subseq rank)) observer -
           quittingStoppingLawNormalizedDebtDirection reward
-            (frontier.profiles (frontier.subseq (endpoint.subseq rank)))
+            (frontier.source (endpoint.subseq rank))
             mover.1
-            (frontier.bestResponse mover
-              (frontier.subseq (endpoint.subseq rank)))
+            (frontier.replacement mover (endpoint.subseq rank))
             lambda hlambda.le hlambdaOne observer := by
     have hsumLe :
         gain + endpointError + (1 - lambda) * sourceBudget ≤
@@ -281,26 +256,25 @@ theorem exists_eventually_curvatureStrategicDispatch
         lambda *
           (quittingTerminalSemanticDebtChange
               (frontier.sourcePair (endpoint.subseq rank))
-              (frontier.fullResetPair mover (endpoint.subseq rank)) observer -
+              (frontier.fullReplacementPair mover (endpoint.subseq rank)) observer -
             quittingStoppingLawNormalizedDebtDirection reward
-              (frontier.profiles (frontier.subseq (endpoint.subseq rank)))
+              (frontier.source (endpoint.subseq rank))
               mover.1
-              (frontier.bestResponse mover
-                (frontier.subseq (endpoint.subseq rank)))
+              (frontier.replacement mover (endpoint.subseq rank))
               lambda hlambda.le hlambdaOne observer) := by
     dsimp only [sourceError]
     nlinarith [mul_pos hlambda (sub_pos.mpr hsumRank)]
   obtain ⟨carrier⟩ := exists_quittingStoppingLawCurvaturePaidWitness
-    reward (frontier.profiles (frontier.subseq (endpoint.subseq rank)))
+    reward (frontier.source (endpoint.subseq rank))
     mover.1 observer
-    (frontier.bestResponse mover (frontier.subseq (endpoint.subseq rank)))
+    (frontier.replacement mover (endpoint.subseq rank))
     lambda sourceError endpointError gain hne hlambda hlambdaOne
     hsourceError hendpointError hgain hbudget
   exact ⟨carrier, carrier.nonempty_strategicDispatch
     hgain hgamma hgap hsmall⟩
 
-end FullResetEndpointCluster
+end FullReplacementCluster
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 
 end GameTheory

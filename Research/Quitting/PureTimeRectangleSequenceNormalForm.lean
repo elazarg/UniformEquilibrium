@@ -46,8 +46,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 literal and asymptotic provenance is retained definitionally. -/
 def QuittingStoppingLawVanishingDebtRectangleSequence.restrict
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (subseq : ℕ → ℕ) (hsubseq : StrictMono subseq) :
     QuittingStoppingLawVanishingDebtRectangleSequence frontier where
@@ -66,8 +65,7 @@ def QuittingStoppingLawVanishingDebtRectangleSequence.restrict
 
 @[simp] theorem quittingStoppingLawRectangleTargetProfile_restrict
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (subseq : ℕ → ℕ) (hsubseq : StrictMono subseq) (n : ℕ) :
     quittingStoppingLawRectangleTargetProfile
@@ -79,8 +77,7 @@ def QuittingStoppingLawVanishingDebtRectangleSequence.restrict
 selected pure-time response. -/
 def quittingStoppingLawRectangleTargetRoots
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ) : ι → PMF Bool :=
   quittingProfileLiveRoot reward
@@ -88,8 +85,7 @@ def quittingStoppingLawRectangleTargetRoots
 
 @[simp] theorem quittingStoppingLawRectangleTargetRoots_restrict
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (subseq : ℕ → ℕ) (hsubseq : StrictMono subseq) (n time : ℕ) :
     quittingStoppingLawRectangleTargetRoots
@@ -99,8 +95,7 @@ def quittingStoppingLawRectangleTargetRoots
 
 @[simp] theorem quittingStoppingLawRectangleQuitTime_restrict
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (subseq : ℕ → ℕ) (hsubseq : StrictMono subseq) (n : ℕ) :
     (packet.restrict subseq hsubseq).quitTime n =
@@ -110,8 +105,7 @@ def quittingStoppingLawRectangleTargetRoots
 /-- The selected pure-time observer payoff on the literal target word. -/
 def quittingStoppingLawRectangleSelectedPayoff
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : ℝ :=
   quittingRootSequencePureTimeTerminalValue reward
@@ -121,8 +115,7 @@ def quittingStoppingLawRectangleSelectedPayoff
 /-- The literal `Never` payoff against the same target opponent word. -/
 def quittingStoppingLawRectangleNeverPayoff
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : ℝ :=
   quittingRootSequencePureTimeTerminalValue reward
@@ -132,8 +125,7 @@ def quittingStoppingLawRectangleNeverPayoff
 at an actually reached date: opponent survival to that date is positive. -/
 def HasQuittingStoppingLawRectanglePureTimeNormalForm
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : Prop :=
   (∃ time : ℕ, ∀ n, packet.quitTime n = some time) ∨
     (∀ n, packet.quitTime n = none) ∨
@@ -164,8 +156,7 @@ a restriction of the supplied packet.  Consequently its terminal label and
 atom bound remain literal, and its observer debt still tends to zero. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_restrict_pureTimeNormalForm
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     ∃ subseq : ℕ → ℕ, ∃ hsubseq : StrictMono subseq,
       HasQuittingStoppingLawRectanglePureTimeNormalForm
@@ -230,8 +221,7 @@ impossible: a player prescribed never to Quit assigns zero mass to every
 terminal coalition containing it, contradicting the packet's positive atom. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.pureTimeNormalForm_of_observer_mem
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hnormal : HasQuittingStoppingLawRectanglePureTimeNormalForm packet) :
@@ -264,17 +254,17 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.pureTimeNormalForm_of_
     have htargetZero :=
       quittingTerminalOutcomeMass_update_pureTime_none_mem_eq_zero reward
         (Function.update
-          (frontier.profiles (frontier.subseq (packet.rank 0)))
+          (frontier.source (packet.rank 0))
           packet.mover.1
-          (frontier.bestResponse packet.mover
-            (frontier.subseq (packet.rank 0))))
+          (frontier.replacement packet.mover
+            (packet.rank 0)))
         packet.observer packet.terminal hobserver
     have hsourceZero :=
       quittingTerminalOutcomeMass_update_pureTime_none_mem_eq_zero reward
         (Function.update
-          (frontier.profiles (frontier.subseq (packet.rank 0)))
+          (frontier.source (packet.rank 0))
           packet.mover.1
-          (frontier.profiles (frontier.subseq (packet.rank 0))
+          (frontier.source (packet.rank 0)
             packet.mover.1))
         packet.observer packet.terminal hobserver
     unfold quittingTerminalPayoffDifferenceAtom at hbound
@@ -293,8 +283,7 @@ escaping with a positive late local gap.  Fixed terminal and vanishing debt
 remain fields of the restricted packet. -/
 theorem exists_restrict_observerContaining_pureTimeNormalForm
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val) :
     ∃ subseq : ℕ → ℕ, ∃ hsubseq : StrictMono subseq,
@@ -343,8 +332,7 @@ This is an immediate game-facing specialization of the unconditional
 elementary-tail theorem. -/
 theorem exists_elementaryFiniteSemanticTail_after_selectedTime
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time retainedAfterMark : ℕ) {δ : ℝ} (hδ : 0 < δ) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ tailCutoff,
@@ -416,8 +404,7 @@ opponent root literal.  This is the root word whose payoff is the `Never`
 term in the escaping-witness transport identity. -/
 def quittingStoppingLawRectangleNeverRoots
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ) : ι → PMF Bool :=
   Function.update (quittingStoppingLawRectangleTargetRoots packet n time)
@@ -427,8 +414,7 @@ def quittingStoppingLawRectangleNeverRoots
 definitionally its pure-time `Never` payoff. -/
 theorem quittingStoppingLawRectangleNeverRoots_payoff
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n start : ℕ) :
     (quittingRootSequenceContinuationSemanticPair reward
@@ -450,8 +436,7 @@ What this does not prove is `IsQuittingRootEndpointNash` for the marked root
 against the displayed finite evaluator. -/
 theorem exists_elementaryFiniteSemanticTail_preserving_positiveEndpointGap
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ)
     (hgap : packet.charge / 16 ≤
@@ -545,13 +530,12 @@ particular, the terminal coalition label and the pure-time normal mode are
 not reselected by prefix access. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.fixedAtom_lifts_through_continuePrefix
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) (roots : List (ι → PMF Bool))
     (hsurvival : 1 / 2 ≤
       quittingLiteralRootStackOpponentSurvival roots packet.mover.1) :
-    let terminal := frontier.profiles (frontier.subseq (packet.rank n))
+    let terminal := frontier.source (packet.rank n)
     let target := quittingStoppingLawRectangleTargetProfile packet n
     let response := quittingPureTimeBehaviorStrategy reward packet.observer
       (packet.quitTime n)
@@ -569,7 +553,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.fixedAtom_lifts_throug
           packet.observer (some packet.terminal) := by
   classical
   dsimp only
-  let terminal := frontier.profiles (frontier.subseq (packet.rank n))
+  let terminal := frontier.source (packet.rank n)
   let target := quittingStoppingLawRectangleTargetProfile packet n
   let response := quittingPureTimeBehaviorStrategy reward packet.observer
     (packet.quitTime n)

@@ -392,7 +392,7 @@ of the observer-absent wall. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteClock_strategicSplit
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -427,7 +427,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
       max 0 (-quittingAtomicBlockerBalance reward
         (Function.update (quittingProfileLiveRoot reward profile time) owner
           (PMF.pure true)) owner)
-  have hdispatch := packet.observerAbsent_forcedOwnerDispatch habsent
+  have hdispatch := packet.observerAbsent_forcedOwnerDispatch
+    (witness := witness) habsent
   unfold HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch at hdispatch
   rcases hdispatch with
     ⟨howner, _hownerNe, _hlowerPos, _hside, _hmassLower,

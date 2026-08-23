@@ -36,8 +36,7 @@ variable {iota : Type} [Fintype iota] [DecidableEq iota]
 evaluated. -/
 def quittingStoppingLawPositiveTargetReachedRowProfile
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (rank : Nat) : (quittingGame reward).BehaviorProfile :=
   Function.update
@@ -49,8 +48,7 @@ def quittingStoppingLawPositiveTargetReachedRowProfile
 -/
 def quittingStoppingLawPositiveTargetReachedRowGain
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (stop : Nat -> Nat) (other : iota) (rank : Nat) : Real :=
   let profile := quittingStoppingLawPositiveTargetReachedRowProfile
@@ -69,8 +67,7 @@ def quittingStoppingLawPositiveTargetReachedRowGain
 /-- The explicit gain floor delivered by reached-row localization. -/
 def quittingStoppingLawPositiveTargetReachedRowGainFloor
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (lower : Real) : Real :=
   lower * quittingTerminalSemanticDebtSum frontier.base /
@@ -82,8 +79,7 @@ profiles have a uniformly reached sure-Quit row and one fixed non-observer's
 canonical legal gain is bounded below by the displayed positive floor. -/
 def HasQuittingStoppingLawPositiveTargetReachedRowLocalization
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (lower : Real) : Prop :=
   0 < lower ∧
@@ -107,8 +103,7 @@ rank of the original strict subsequence.  Its `no_exact_return` field is a
 no-go: it does not assert that a packet-preserving return exists. -/
 structure QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (lower : Real) where
   lower_pos : 0 < lower
@@ -138,8 +133,7 @@ structure QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo
 source-return no-go packet without changing its behavioral row or tail. -/
 theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.nonempty_literalNoGo
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {lower : Real}
     (certificate :
@@ -208,8 +202,7 @@ theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.nonempty_lite
 proof-carrying row packet pays at least the certificate's uniform gain floor. -/
 theorem QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo.gainFloor_le_nashError
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {lower error : Real}
     (data : QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo packet lower)
@@ -230,8 +223,7 @@ fiber.  The existential form is retained as a convenient projection of the
 stronger proof-carrying packet above. -/
 theorem positiveTargetReachedRowLocalization_no_packetPreservingExactSourceReturn
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     {lower : Real}
     (certificate : HasQuittingStoppingLawPositiveTargetReachedRowLocalization
@@ -268,8 +260,7 @@ error bounded away from zero by a table-level constant.  This is an error
 floor, not an existence theorem for a packet-preserving repair. -/
 theorem positiveTargetReachedRowLocalization_sameFiberRepairErrorFloor
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     {lower : Real}
     (certificate : HasQuittingStoppingLawPositiveTargetReachedRowLocalization
@@ -355,8 +346,7 @@ player's full canonical gain sequence.  This is a mathematical projection:
 it uses the positive gain floor on the stored strict subsequence. -/
 theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.exists_gain_not_tendsto_zero
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {lower : Real}
     (certificate :
@@ -386,8 +376,7 @@ theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.exists_gain_n
 produce the quantitative reached-row localization. -/
 theorem positiveTargetReachedRowLocalization_of_eventually_stop_mass
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     {lower : Real} (hlower : 0 < lower) (stop baseSubseq : Nat -> Nat)
     (hbaseSubseq : StrictMono baseSubseq)
@@ -472,8 +461,7 @@ literal reached-row localization.  Its stored tail cluster and escape/fiber
 alternative are not needed for this consumer. -/
 theorem positiveCollisionMarkedTailDispatch_reachedRowLocalization
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     {lower : Real} (hlower : 0 < lower)
     (dispatch : HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch
@@ -494,8 +482,7 @@ canonical legal row deviation to have a uniform positive gain along a strict
 subsequence. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_reachedRowLocalization
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hrewardPositive : 0 < reward packet.terminal packet.observer) :
@@ -533,8 +520,7 @@ all actual-row provenance; it rules out unchanged exact source returns rather
 than constructing one. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_positiveTargetLiteralNoGo
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hrewardPositive : 0 < reward packet.terminal packet.observer) :

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Atom.ExactPrefixChronology
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Atom.ExactPrefixStackAccess
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashChronology
 
 /-!
@@ -16,8 +16,7 @@ The unweighted sum of their literal one-row absorption hazards consequently
 tends to zero.  Thus these access stacks cannot themselves supply unbounded
 exact prefix charge.
 
-This does not rule out appending a separate positive exact edge followed by
-an admissible return.
+This does not rule out a separate positive exact edge or a later consumer.
 -/
 
 noncomputable section
@@ -58,44 +57,43 @@ private theorem continueMass_pos_of_mem_of_continueProduct_pos
       · exact hheadPos
       · exact ih htailPos root hroot
 
-namespace QuittingStoppingLawAtomExactPrefixChronology
+namespace QuittingStoppingLawAtomExactPrefixStackAccess
 
 /-- With two distinct active debtors, the total literal absorption charge of
 the exact access stack tends to zero. -/
 theorem absorptionSum_tendsto_zero_of_twoActive
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    (chronology : QuittingStoppingLawAtomExactPrefixChronology frontier)
-    {first second : ι} (hfirst : first ∈ frontier.active)
-    (hsecond : second ∈ frontier.active) (hne : first ≠ second) :
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    (stack : QuittingStoppingLawAtomExactPrefixStackAccess frontier)
+    {first second : ι} (hfirst : first ∈ frontier.positiveDebtSupport)
+    (hsecond : second ∈ frontier.positiveDebtSupport) (hne : first ≠ second) :
     Tendsto (fun rank ↦
-      quittingCapNashStackAbsorptionSum (chronology.roots rank))
+      quittingCapNashStackAbsorptionSum (stack.roots rank))
       atTop (nhds 0) := by
-  have hsurvival := chronology.jointSurvival_tendsto_one_of_twoActive
+  have hsurvival := stack.jointSurvival_tendsto_one_of_twoActive
     hfirst hsecond hne
   have hproduct : Tendsto (fun rank ↦
-      quittingCapNashStackContinueProduct (chronology.roots rank))
+      quittingCapNashStackContinueProduct (stack.roots rank))
       atTop (nhds 1) := by
     simpa only [quittingCapNashStackContinueProduct,
       quittingLiteralRootStackJointSurvival] using hsurvival
   have hlog : Tendsto (fun rank ↦
       -Real.log (quittingCapNashStackContinueProduct
-        (chronology.roots rank))) atTop (nhds 0) := by
+        (stack.roots rank))) atTop (nhds 0) := by
     have := (Real.continuousAt_log (by norm_num : (1 : ℝ) ≠ 0)).tendsto.comp
       hproduct
     simpa using this.neg
   apply squeeze_zero'
   · exact Eventually.of_forall fun rank ↦
-      quittingCapNashStackAbsorptionSum_nonneg (chronology.roots rank)
+      quittingCapNashStackAbsorptionSum_nonneg (stack.roots rank)
   · filter_upwards [hproduct.eventually (Ioi_mem_nhds zero_lt_one)] with
       rank hpositive
     exact capNashStack_absorptionSum_le_neg_log_continueProduct
-      (chronology.roots rank)
+      (stack.roots rank)
       (continueMass_pos_of_mem_of_continueProduct_pos
-        (chronology.roots rank) hpositive)
+        (stack.roots rank) hpositive)
   · exact hlog
 
-end QuittingStoppingLawAtomExactPrefixChronology
+end QuittingStoppingLawAtomExactPrefixStackAccess
 
 end GameTheory
