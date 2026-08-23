@@ -62,6 +62,26 @@ def graphCorrespondence {X : Type*} (graph : Set (X × X)) :
     Correspondence X X :=
   fun first ↦ {second | (first, second) ∈ graph}
 
+/-- A bounded strict Lyapunov certificate on a graph rules out finite graph
+orbits with arbitrarily large accumulated cost. The state type may itself be
+a carrier subtype. This is only the finite-orbit obstruction and supplies no
+bridge from that obstruction to a game-semantic claim. -/
+theorem not_hasArbitrarilyLargeFiniteGraphOrbitVariationWith_of_potential_bounds
+    {X : Type*} {graph : Set (X × X)} {cost : X → X → ℝ}
+    {potential : X → ℝ} {constant lower upper : ℝ}
+    (hconstant : 0 < constant)
+    (hlower : ∀ state, lower ≤ potential state)
+    (hupper : ∀ state, potential state ≤ upper)
+    (hdecrease : ∀ pair ∈ graph,
+      potential pair.2 ≤
+        potential pair.1 - constant * cost pair.1 pair.2) :
+    ¬HasArbitrarilyLargeFiniteOrbitVariationWith
+      (graphCorrespondence graph) cost := by
+  apply not_hasArbitrarilyLargeFiniteOrbitVariationWith_of_potential_bounds
+    hconstant hlower hupper
+  intro first next hnext
+  exact hdecrease (first, next) hnext
+
 /-- The fiber of a graph over its first coordinate. -/
 def graphFiber {X Y : Type*} (graph : Set (X × Y)) (first : X) : Set Y :=
   {second | (first, second) ∈ graph}

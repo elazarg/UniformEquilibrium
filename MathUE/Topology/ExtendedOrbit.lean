@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Topology.MetricSpace.Pseudo.Basic
 
 /-!
@@ -54,6 +54,113 @@ def IsInfiniteOrbit {X : Type*} (relation : Correspondence X X)
 def IsFiniteOrbit {X : Type*} (relation : Correspondence X X) {length : ℕ}
     (point : Fin (length + 1) → X) : Prop :=
   ∀ index : Fin length, point index.succ ∈ relation (point index.castSucc)
+
+/-- Accumulated cost along the edges of a finite orbit candidate. -/
+def finiteOrbitVariationWith {X : Type*} {length : ℕ}
+    (cost : X → X → ℝ) (point : Fin (length + 1) → X) : ℝ :=
+  ∑ index : Fin length, cost (point index.castSucc) (point index.succ)
+
+/-- A correspondence has finite orbits with arbitrarily large accumulated
+cost. The orbit length and points may depend on the requested bound. -/
+def HasArbitrarilyLargeFiniteOrbitVariationWith {X : Type*}
+    (relation : Correspondence X X) (cost : X → X → ℝ) : Prop :=
+  ∀ bound : ℝ, ∃ length : ℕ, ∃ point : Fin (length + 1) → X,
+    IsFiniteOrbit relation point ∧ bound ≤ finiteOrbitVariationWith cost point
+
+/-- Successive potential drops along a finite orbit candidate telescope to
+the difference between its endpoints. -/
+theorem finiteOrbitPotentialDrop_sum {X : Type*} (potential : X → ℝ) :
+    ∀ {length : ℕ} (point : Fin (length + 1) → X),
+      (∑ index : Fin length,
+        (potential (point index.castSucc) - potential (point index.succ))) =
+      potential (point 0) - potential (point (Fin.last length)) := by
+  intro length
+  induction length with
+  | zero => simp
+  | succ length ih =>
+      intro point
+      have ih' := ih (fun index ↦ point index.succ)
+      rw [Fin.sum_univ_succ]
+      rw [show (∑ index : Fin length,
+          (potential (point index.succ.castSucc) -
+            potential (point index.succ.succ))) =
+          potential (point (Fin.succ 0)) -
+            potential (point (Fin.last length).succ) by
+        simpa only [Fin.succ_castSucc] using ih']
+      simpa only [Fin.castSucc_zero, Fin.succ_last] using
+        sub_add_sub_cancel
+          (potential (point 0))
+          (potential (point (Fin.succ 0)))
+          (potential (point (Fin.last (length + 1))))
+
+/-- A potential whose edge decrease dominates `constant` times a supplied
+cost pays that scaled cost along every finite orbit. No sign assumption on
+the cost or on `constant` is needed for this endpoint inequality. -/
+theorem IsFiniteOrbit.constant_mul_finiteOrbitVariationWith_le_potentialDrop
+    {X : Type*} {relation : Correspondence X X} {length : ℕ}
+    {point : Fin (length + 1) → X} {cost : X → X → ℝ}
+    {potential : X → ℝ} {constant : ℝ}
+    (horbit : IsFiniteOrbit relation point)
+    (hdecrease : ∀ first next, next ∈ relation first →
+      potential next ≤ potential first - constant * cost first next) :
+    constant * finiteOrbitVariationWith cost point ≤
+      potential (point 0) - potential (point (Fin.last length)) := by
+  rw [finiteOrbitVariationWith, Finset.mul_sum]
+  calc
+    ∑ index : Fin length,
+          constant * cost (point index.castSucc) (point index.succ) ≤
+        ∑ index : Fin length,
+          (potential (point index.castSucc) - potential (point index.succ)) := by
+      apply Finset.sum_le_sum
+      intro index _
+      exact (le_sub_iff_add_le).2 (by
+        simpa only [add_comm] using
+          (le_sub_iff_add_le.1
+            (hdecrease _ _ (horbit index))))
+    _ = potential (point 0) - potential (point (Fin.last length)) :=
+      finiteOrbitPotentialDrop_sum potential point
+
+/-- Explicit lower and upper bounds on a strict Lyapunov potential give one
+horizon-independent bound on the accumulated cost of every finite orbit. -/
+theorem IsFiniteOrbit.finiteOrbitVariationWith_le_of_potential_bounds
+    {X : Type*} {relation : Correspondence X X} {length : ℕ}
+    {point : Fin (length + 1) → X} {cost : X → X → ℝ}
+    {potential : X → ℝ} {constant lower upper : ℝ}
+    (horbit : IsFiniteOrbit relation point) (hconstant : 0 < constant)
+    (hlower : ∀ state, lower ≤ potential state)
+    (hupper : ∀ state, potential state ≤ upper)
+    (hdecrease : ∀ first next, next ∈ relation first →
+      potential next ≤ potential first - constant * cost first next) :
+    finiteOrbitVariationWith cost point ≤ (upper - lower) / constant := by
+  apply (le_div_iff₀ hconstant).2
+  have hdrop :=
+    horbit.constant_mul_finiteOrbitVariationWith_le_potentialDrop hdecrease
+  have hendpoint :
+      potential (point 0) - potential (point (Fin.last length)) ≤
+        upper - lower :=
+    sub_le_sub (hupper _) (hlower _)
+  simpa only [mul_comm] using hdrop.trans hendpoint
+
+/-- A bounded strict Lyapunov potential rules out finite orbits with
+arbitrarily large accumulated cost. This is only an orbit obstruction; it
+does not assert that such a potential exists or connect the obstruction to
+any game-semantic equilibrium claim. -/
+theorem not_hasArbitrarilyLargeFiniteOrbitVariationWith_of_potential_bounds
+    {X : Type*} {relation : Correspondence X X} {cost : X → X → ℝ}
+    {potential : X → ℝ} {constant lower upper : ℝ}
+    (hconstant : 0 < constant)
+    (hlower : ∀ state, lower ≤ potential state)
+    (hupper : ∀ state, potential state ≤ upper)
+    (hdecrease : ∀ first next, next ∈ relation first →
+      potential next ≤ potential first - constant * cost first next) :
+    ¬HasArbitrarilyLargeFiniteOrbitVariationWith relation cost := by
+  intro hunbounded
+  let bound := (upper - lower) / constant
+  obtain ⟨length, point, horbit, hbound⟩ := hunbounded (bound + 1)
+  have hvariation : finiteOrbitVariationWith cost point ≤ bound :=
+    horbit.finiteOrbitVariationWith_le_of_potential_bounds
+      hconstant hlower hupper hdecrease
+  exact (not_le_of_gt (lt_add_one bound)) (hbound.trans hvariation)
 
 /-- `none` means an infinite segment; `some k` means exactly `k` points. -/
 def SegmentIndex (length : Option ℕ) (index : ℕ) : Prop :=
