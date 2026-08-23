@@ -153,6 +153,259 @@ theorem convexMix_neverMass
   rw [hsurvival] at hconvex
   exact tendsto_nhds_unique hconvex hmixed
 
+/-! ## Posterior component weights after survival -/
+
+/-- The posterior weight of the target component after surviving through a
+finite cutoff.  It is meaningful as a conditional probability when the mixed
+survival mass at that cutoff is positive. -/
+def posteriorTargetWeight (cutoff : ℕ) : ℝ :=
+  lambda * target.survival 0 cutoff /
+    mixedSurvival source target lambda cutoff
+
+theorem posteriorTargetWeight_nonneg
+    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
+    (cutoff : ℕ) :
+    0 ≤ posteriorTargetWeight source target lambda cutoff := by
+  exact div_nonneg
+    (mul_nonneg hlambda0 (target.survival_nonneg 0 cutoff))
+    (mixedSurvival_nonneg source target lambda hlambda0 hlambda1 cutoff)
+
+theorem posteriorTargetWeight_le_one
+    (hlambda1 : lambda ≤ 1)
+    (cutoff : ℕ)
+    (hpositive : 0 < mixedSurvival source target lambda cutoff) :
+    posteriorTargetWeight source target lambda cutoff ≤ 1 := by
+  rw [posteriorTargetWeight, div_le_one hpositive]
+  exact le_add_of_nonneg_left
+    (mul_nonneg (sub_nonneg.mpr hlambda1)
+      (source.survival_nonneg 0 cutoff))
+
+/-- The complementary posterior source weight is its unnormalised surviving
+source flux divided by total surviving mass. -/
+theorem one_sub_posteriorTargetWeight
+    (cutoff : ℕ)
+    (hpositive : 0 < mixedSurvival source target lambda cutoff) :
+    1 - posteriorTargetWeight source target lambda cutoff =
+      (1 - lambda) * source.survival 0 cutoff /
+        mixedSurvival source target lambda cutoff := by
+  have hne : mixedSurvival source target lambda cutoff ≠ 0 := ne_of_gt hpositive
+  rw [posteriorTargetWeight]
+  field_simp [hne]
+  unfold mixedSurvival
+  ring
+
+/-- Exact displacement of the posterior from its prior mixture weight.  The
+only denominator is the probability of reaching the cutoff. -/
+theorem posteriorTargetWeight_sub
+    (cutoff : ℕ)
+    (hpositive : 0 < mixedSurvival source target lambda cutoff) :
+    posteriorTargetWeight source target lambda cutoff - lambda =
+      lambda * (1 - lambda) *
+          (target.survival 0 cutoff - source.survival 0 cutoff) /
+        mixedSurvival source target lambda cutoff := by
+  have hne : mixedSurvival source target lambda cutoff ≠ 0 := ne_of_gt hpositive
+  rw [posteriorTargetWeight]
+  field_simp [hne]
+  unfold mixedSurvival
+  ring
+
+/-- Denominator-free form of the posterior odds identity. -/
+theorem posteriorTargetWeight_odds_balance
+    (cutoff : ℕ)
+    (hpositive : 0 < mixedSurvival source target lambda cutoff) :
+    posteriorTargetWeight source target lambda cutoff *
+          ((1 - lambda) * source.survival 0 cutoff) =
+      (1 - posteriorTargetWeight source target lambda cutoff) *
+          (lambda * target.survival 0 cutoff) := by
+  rw [one_sub_posteriorTargetWeight source target lambda cutoff hpositive,
+    posteriorTargetWeight]
+  ring
+
+/-- When the source component and both prior weights are positive, posterior
+odds equal prior odds times the endpoint survival likelihood ratio. -/
+theorem posteriorTargetWeight_div_one_sub
+    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda < 1)
+    (cutoff : ℕ) (hsource : 0 < source.survival 0 cutoff) :
+    posteriorTargetWeight source target lambda cutoff /
+          (1 - posteriorTargetWeight source target lambda cutoff) =
+      (lambda / (1 - lambda)) *
+        (target.survival 0 cutoff / source.survival 0 cutoff) := by
+  have hsourceFlux : 0 < (1 - lambda) * source.survival 0 cutoff :=
+    mul_pos (sub_pos.mpr hlambda1) hsource
+  have hpositive : 0 < mixedSurvival source target lambda cutoff := by
+    exact hsourceFlux.trans_le (le_add_of_nonneg_right
+      (mul_nonneg hlambda0 (target.survival_nonneg 0 cutoff)))
+  rw [one_sub_posteriorTargetWeight source target lambda cutoff hpositive,
+    posteriorTargetWeight]
+  field_simp [ne_of_gt hpositive, ne_of_gt hsource,
+    ne_of_gt (sub_pos.mpr hlambda1)]
+
+/-- A positive lower bound on reached mixed survival converts endpoint
+survival mismatch into a quantitative posterior-displacement estimate. -/
+theorem abs_posteriorTargetWeight_sub_le_of_mixedSurvival_lower
+    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
+    (cutoff : ℕ) {lower : ℝ} (hlower : 0 < lower)
+    (hmixed : lower ≤ mixedSurvival source target lambda cutoff) :
+    |posteriorTargetWeight source target lambda cutoff - lambda| ≤
+      lambda * (1 - lambda) / lower *
+        |target.survival 0 cutoff - source.survival 0 cutoff| := by
+  have hpositive : 0 < mixedSurvival source target lambda cutoff :=
+    hlower.trans_le hmixed
+  rw [posteriorTargetWeight_sub source target lambda cutoff hpositive,
+    abs_div, abs_mul, abs_mul, abs_of_nonneg hlambda0,
+    abs_of_nonneg (sub_nonneg.mpr hlambda1), abs_of_pos hpositive]
+  rw [show lambda * (1 - lambda) *
+        |target.survival 0 cutoff - source.survival 0 cutoff| /
+          mixedSurvival source target lambda cutoff =
+      (lambda * (1 - lambda) *
+        |target.survival 0 cutoff - source.survival 0 cutoff|) /
+          mixedSurvival source target lambda cutoff by ring]
+  rw [show lambda * (1 - lambda) / lower *
+        |target.survival 0 cutoff - source.survival 0 cutoff| =
+      (lambda * (1 - lambda) *
+        |target.survival 0 cutoff - source.survival 0 cutoff|) / lower by ring]
+  exact div_le_div_of_nonneg_left
+    (mul_nonneg (mul_nonneg hlambda0 (sub_nonneg.mpr hlambda1)) (abs_nonneg _))
+    hlower hmixed
+
+/-- The mixed hazard at a reached cutoff is the convex combination of the
+component hazards with their posterior weights. -/
+theorem convexMix_stop_eq_posteriorMix
+    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
+    (cutoff : ℕ)
+    (hpositive : 0 < mixedSurvival source target lambda cutoff) :
+    (convexMix source target lambda hlambda0 hlambda1).stop cutoff =
+      (1 - posteriorTargetWeight source target lambda cutoff) *
+          source.stop cutoff +
+        posteriorTargetWeight source target lambda cutoff *
+          target.stop cutoff := by
+  rw [show (convexMix source target lambda hlambda0 hlambda1).stop cutoff =
+      mixedStopMass source target lambda cutoff /
+        mixedSurvival source target lambda cutoff by
+    simp [convexMix, ne_of_gt hpositive]]
+  rw [one_sub_posteriorTargetWeight source target lambda cutoff hpositive]
+  unfold posteriorTargetWeight mixedStopMass ScalarHazard.stopMass
+  field_simp [ne_of_gt hpositive]
+
+/-- Exact conditioning formula for every residual survival window.  It
+expresses the reached law without introducing a separate shifted-law object. -/
+theorem convexMix_conditionalSurvival_eq_posteriorMix
+    (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
+    (cutoff fuel : ℕ)
+    (hpositive : 0 < mixedSurvival source target lambda cutoff) :
+    (convexMix source target lambda hlambda0 hlambda1).survival 0
+          (cutoff + fuel) /
+        (convexMix source target lambda hlambda0 hlambda1).survival 0 cutoff =
+      (1 - posteriorTargetWeight source target lambda cutoff) *
+          source.survival cutoff fuel +
+        posteriorTargetWeight source target lambda cutoff *
+          target.survival cutoff fuel := by
+  rw [convexMix_survival, convexMix_survival,
+    one_sub_posteriorTargetWeight source target lambda cutoff hpositive]
+  unfold posteriorTargetWeight mixedSurvival ScalarHazard.survival
+  rw [Math.survivalProduct_add, Math.survivalProduct_add]
+  simp only [Nat.zero_add]
+  field_simp [ne_of_gt hpositive]
+
+/-! ## A sharp posterior-amplification regression -/
+
+/-- A stopping law supported on dates zero and one, with survival mass `eta`
+after date zero. -/
+def stopAtZeroOrOne (eta : ℝ) (heta0 : 0 ≤ eta) (heta1 : eta ≤ 1) :
+    ScalarHazard where
+  stop time := if time = 0 then 1 - eta else if time = 1 then 1 else 0
+  stop_nonneg time := by
+    split_ifs <;> linarith
+  stop_le_one time := by
+    split_ifs <;> linarith
+
+/-- The hazard that never stops. -/
+def never : ScalarHazard where
+  stop _ := 0
+  stop_nonneg _ := le_rfl
+  stop_le_one _ := zero_le_one
+
+@[simp] theorem stopAtZeroOrOne_survival_one
+    (eta : ℝ) (heta0 : 0 ≤ eta) (heta1 : eta ≤ 1) :
+    (stopAtZeroOrOne eta heta0 heta1).survival 0 1 = eta := by
+  rw [survival_succ]
+  simp [survival_zero, stopAtZeroOrOne]
+
+@[simp] theorem never_survival (start fuel : ℕ) :
+    never.survival start fuel = 1 := by
+  simp [never, ScalarHazard.survival, Math.survivalProduct]
+
+/-- With source survival `lambda ^ 2` and target survival one, the posterior
+target weight after one step is order one although its prior weight is
+`lambda`. -/
+theorem posteriorTargetWeight_square_amplification
+    (lambda : ℝ) (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1) :
+    posteriorTargetWeight
+        (stopAtZeroOrOne (lambda ^ 2) (sq_nonneg lambda)
+          (by nlinarith [mul_self_le_mul_self hlambda0.le hlambda1]))
+        never lambda 1 =
+      1 / (1 + (1 - lambda) * lambda) := by
+  rw [posteriorTargetWeight]
+  simp only [stopAtZeroOrOne_survival_one, never_survival, mixedSurvival]
+  field_simp [ne_of_gt hlambda0]
+  ring
+
+/-- The explicit amplified posterior converges to one as the prior weight
+tends to zero from above. -/
+theorem tendsto_posteriorTargetWeight_square_amplification :
+    Tendsto (fun lambda : ℝ => 1 / (1 + (1 - lambda) * lambda))
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 1) := by
+  have hcontinuous : ContinuousAt
+      (fun lambda : ℝ => 1 / (1 + (1 - lambda) * lambda)) 0 := by
+    apply continuousAt_const.div₀
+    · fun_prop
+    · norm_num
+  simpa using hcontinuous.tendsto.mono_left nhdsWithin_le_nhds
+
+/-- No constant can bound all amplified posterior weights by the prior weight
+times that constant. -/
+theorem not_exists_uniform_posteriorTargetWeight_linear_bound :
+    ¬ ∃ K : ℝ, ∀ lambda : ℝ, 0 < lambda → lambda ≤ 1 →
+      1 / (1 + (1 - lambda) * lambda) ≤ K * lambda := by
+  rintro ⟨K, hK⟩
+  have heventually : ∀ᶠ lambda : ℝ in nhdsWithin 0 (Set.Ioi 0),
+      1 / (1 + (1 - lambda) * lambda) ≤ K * lambda := by
+    filter_upwards [self_mem_nhdsWithin,
+      (eventually_le_nhds (show (0 : ℝ) < 1 by norm_num)).filter_mono
+        nhdsWithin_le_nhds] with lambda
+      hlambda hlambda1
+    exact hK lambda hlambda hlambda1
+  have hright : Tendsto (fun lambda : ℝ => K * lambda)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    simpa using
+      (tendsto_const_nhds.mul
+        (tendsto_id.mono_left nhdsWithin_le_nhds) :
+          Tendsto (fun lambda : ℝ => K * lambda)
+            (nhdsWithin 0 (Set.Ioi 0)) (nhds (K * 0)))
+  haveI : NeBot (nhdsWithin (0 : ℝ) (Set.Ioi 0)) :=
+    nhdsWithin_Ioi_neBot le_rfl
+  have : (1 : ℝ) ≤ 0 :=
+    le_of_tendsto_of_tendsto
+      tendsto_posteriorTargetWeight_square_amplification hright heventually
+  norm_num at this
+
+/-- The impossibility of a uniform linear posterior bound is realized by the
+actual two-point/never stopping-law mixture, not merely by an auxiliary real
+function. -/
+theorem not_exists_uniform_squareExample_posteriorTargetWeight_linear_bound :
+    ¬ ∃ K : ℝ, ∀ (lambda : ℝ) (hlambda0 : 0 < lambda)
+      (hlambda1 : lambda ≤ 1),
+      posteriorTargetWeight
+          (stopAtZeroOrOne (lambda ^ 2) (sq_nonneg lambda)
+            (by nlinarith [mul_self_le_mul_self hlambda0.le hlambda1]))
+          never lambda 1 ≤ K * lambda := by
+  rintro ⟨K, hK⟩
+  apply not_exists_uniform_posteriorTargetWeight_linear_bound
+  refine ⟨K, ?_⟩
+  intro lambda hlambda0 hlambda1
+  rw [← posteriorTargetWeight_square_amplification lambda hlambda0 hlambda1]
+  exact hK lambda hlambda0 hlambda1
+
 end ScalarHazard
 
 /-- A Boolean coin whose `true` probability is the supplied real number. -/

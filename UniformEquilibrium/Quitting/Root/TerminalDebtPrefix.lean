@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Root.FirstBranch
+import UniformEquilibrium.Quitting.Root.NashDefect
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Stationary.LiveMass
 
@@ -344,5 +345,71 @@ theorem quittingTerminalDeviationDebt_rootThenContinuation_le
           mass * debt - quittingRootContinuePayoff reward base root who =
             mass * debt := by ring
       rw [hsub, max_eq_right (mul_nonneg hmass hdebt)]
+
+/-- Prefixing an arbitrary root charges its actual one-coordinate Nash defect
+and transports the continuation debt with the probability that all opponents
+Continue.  Both the defect and the continuation payoff are computed from the
+literal continuation profile. -/
+theorem quittingTerminalDeviationDebt_rootThenContinuation_le_coordinateDefect_add
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool)
+    (continuation : (quittingGame reward).BehaviorProfile)
+    (who : ι) :
+    quittingTerminalDeviationDebt reward
+        (quittingRootThenContinuationProfile reward root continuation) who ≤
+      quittingRootCoordinateNashDefect reward
+          (fun player ↦ quittingTerminalPayoff reward continuation player)
+          root who +
+        quittingRootOpponentContinueMass root who *
+          quittingTerminalDeviationDebt reward continuation who := by
+  let tail : Payoff ι :=
+    fun player ↦ quittingTerminalPayoff reward continuation player
+  let debt := quittingTerminalDeviationDebt reward continuation who
+  let mass := quittingRootOpponentContinueMass root who
+  have hdebt : 0 ≤ debt :=
+    quittingTerminalDeviationDebt_nonneg reward continuation who
+  have hmass : 0 ≤ mass := quittingRootOpponentContinueMass_nonneg root who
+  rw [quittingTerminalDeviationDebt,
+    quittingContinuationBestResponseValue_rootThenContinuation_eq_max,
+    quittingTerminalPayoff_rootThenContinuation_eq]
+  have hbest : quittingContinuationBestResponseValue reward continuation who =
+      tail who + debt := by
+    dsimp [tail, debt, quittingTerminalDeviationDebt]
+    ring
+  change max
+      (quittingRootQuitPayoff reward tail root who)
+      (quittingRootContinuePayoff reward
+        (Function.update tail who
+          (quittingContinuationBestResponseValue reward continuation who))
+        root who) -
+      quittingRootSuccessorPayoff reward tail root who ≤ _
+  rw [hbest, quittingRootContinuePayoff_update_add]
+  unfold quittingRootCoordinateNashDefect
+  have hmax := max_sub_max_le_max
+    (quittingRootQuitPayoff reward tail root who)
+    (quittingRootContinuePayoff reward tail root who + mass * debt)
+    (quittingRootQuitPayoff reward tail root who)
+    (quittingRootContinuePayoff reward tail root who)
+  have htransport :
+      max
+          (quittingRootQuitPayoff reward tail root who)
+          (quittingRootContinuePayoff reward tail root who + mass * debt) -
+        max
+          (quittingRootQuitPayoff reward tail root who)
+          (quittingRootContinuePayoff reward tail root who) ≤
+      mass * debt := by
+    calc
+      _ ≤ max
+          (quittingRootQuitPayoff reward tail root who -
+            quittingRootQuitPayoff reward tail root who)
+          ((quittingRootContinuePayoff reward tail root who + mass * debt) -
+            quittingRootContinuePayoff reward tail root who) := hmax
+      _ = mass * debt := by
+        rw [sub_self]
+        have hsub : quittingRootContinuePayoff reward tail root who + mass * debt -
+            quittingRootContinuePayoff reward tail root who = mass * debt := by
+          ring
+        rw [hsub, max_eq_right (mul_nonneg hmass hdebt)]
+  linarith
 
 end GameTheory
