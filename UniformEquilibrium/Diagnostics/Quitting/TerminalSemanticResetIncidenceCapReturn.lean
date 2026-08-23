@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles.StrictOrbit
+import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.StrictOrbit
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumAggregateSurplusConsumer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauMarkedExitNashificationRegression
 
@@ -42,6 +42,53 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+
+/-- The game-facing data retained by a fixed-law reset-face dispatch.
+
+The returned point keeps the complete source law rather than merely its
+semantic projection.  The final alternative is a static cap dispatch: its
+all-Continue branch is not a chronological return. -/
+structure QuittingFixedLawResetDispatch
+    (source target : QuittingTerminalSemanticPair ι)
+    (mass : QuittingTerminalOutcome ι → ℝ)
+    (owner other : ι) (returned : QuittingTerminalSemanticPair ι) : Prop where
+  joint : (returned, mass) ∈ quittingTerminalSemanticLawCarrier reward
+  reset : quittingTerminalSemanticDebt returned owner = 0
+  source_le : quittingTerminalSemanticDebtSum source ≤
+    quittingTerminalSemanticDebtSum returned
+  target_ge : quittingTerminalSemanticDebtSum returned ≤
+    quittingTerminalSemanticDebtSum target
+  transfer : quittingTerminalSemanticDebt source owner ≤
+    ∑ player ∈ Finset.univ.erase owner,
+      quittingTerminalSemanticDebtChange source returned player
+  supported_toggle : ∃ terminal : {S : Finset ι // S.Nonempty},
+    other ∈ terminal.val ∧ 0 < mass (some terminal) ∧
+      ((∃ member ∈ terminal.val,
+          quittingSetReward reward terminal.val member <
+            quittingSetReward reward (terminal.val.erase member) member) ∨
+        ∃ outsider ∉ terminal.val,
+          quittingSetReward reward terminal.val outsider <
+            quittingSetReward reward
+              (insert outsider terminal.val) outsider)
+  dynamic_exit :
+    (∃ root : ι → PMF Bool,
+      IsεQuittingRootNash reward returned.2 0 root ∧
+      0 < quittingRootAbsorptionMass root ∧
+      0 < quittingStationaryContinueMass root ∧
+      quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPrefix reward root returned) <
+        quittingTerminalSemanticDebtSum returned ∧
+      (quittingTerminalSemanticPrefix reward root returned,
+          quittingTerminalOutcomeLawPrefix root mass) ∈
+        quittingTerminalSemanticLawCarrier reward ∧
+      quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPrefix reward root returned) owner = 0 ∧
+      0 < quittingTerminalOpponentIncidenceMass owner other
+        (quittingTerminalOutcomeLawPrefix root mass)) ∨
+    (IsεQuittingRootNash reward returned.2 0
+        (quittingAllContinueRoot : ι → PMF Bool) ∧
+      quittingTerminalSemanticPrefix reward quittingAllContinueRoot
+        returned = returned)
 
 /-- The law coordinate of every joint semantic/law carrier point remains a
 probability vector. -/
@@ -213,6 +260,32 @@ theorem QuittingTerminalExploitabilityWitness.exists_fixedLaw_resetFace_dispatch
     exact ⟨root, hnash, habsorbs, hcontinue, hstrict,
       hprefixedJoint, hprefixedReset, hprefixedIncidence⟩
   · exact Or.inr hcap
+
+/-- Named fixed-law packet returned by `exists_fixedLaw_resetFace_dispatch`.
+This wrapper keeps the source, reset target, complete law, incidence labels,
+toggle passport, and dynamic alternative in one consumer-facing object. -/
+theorem QuittingTerminalExploitabilityWitness.exists_fixedLawResetDispatch
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (source target : QuittingTerminalSemanticPair ι)
+    (mass : QuittingTerminalOutcome ι → ℝ)
+    (owner other : ι)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum source ≤
+        quittingTerminalSemanticDebtSum candidate)
+    (hsourcePositive : 0 < quittingTerminalSemanticDebtSum source)
+    (htarget : (target, mass) ∈ quittingTerminalSemanticLawCarrier reward)
+    (hreset : quittingTerminalSemanticDebt target owner = 0)
+    (hincidence : 0 <
+      quittingTerminalOpponentIncidenceMass owner other mass) :
+    ∃ returned,
+      QuittingFixedLawResetDispatch (reward := reward) source target mass
+        owner other returned := by
+  obtain ⟨returned, hjoint, _hcarrier, hreturnedReset, hsourceLe,
+      hreturnedLe, htransfer, htoggle, hdynamic⟩ :=
+    witness.exists_fixedLaw_resetFace_dispatch source target mass owner other
+      hminimum hsourcePositive htarget hreset hincidence
+  exact ⟨returned, hjoint, hreturnedReset, hsourceLe, hreturnedLe, htransfer,
+    htoggle, hdynamic⟩
 
 /-- Aggregate surplus can be carried alongside the fixed-law dispatch at the
 minimum source.  The conclusion deliberately keeps the source outcome and the

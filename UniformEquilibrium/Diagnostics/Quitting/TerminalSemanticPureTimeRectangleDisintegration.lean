@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeCausalRegression
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeAtom
 
 /-!
 # Causal disintegration of a pure-time stopping-law rectangle
@@ -877,5 +877,86 @@ theorem exists_positive_causalStage_and_actualTerminalMass_of_rectangleCharge
   rcases hactual with htarget | hsource
   · exact Or.inl htarget.2
   · exact Or.inr hsource.2
+
+/-! ## Positive slope to a literal causal stage -/
+
+/-- **Sourced positive-slope causal alternative.**
+
+A positive debt slope either exposes the prescribed-law terminal atom with
+the original factor-two loss, or exposes a deterministic-response rectangle
+atom with the original factor-four loss together with a positive literal
+causal stage.  The same mover, observer, source strategy, target strategy,
+response time, and terminal coalition occur throughout the rectangle branch.
+
+The actual terminal mass may belong to the target or source law.  The theorem
+does not select the target law, turn the signed rectangle stage into a target
+edge gain, or assert that the terminal is a reached profitable state. -/
+theorem
+    exists_prescribedAtom_or_positiveCausalStage_and_actualTerminalMass_of_stoppingLawDebtSlope
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (mover observer : ι) (hmoverObserver : mover ≠ observer)
+    (target : (quittingGame reward).BehaviorStrategy mover)
+    (lambda charge : ℝ) (hlambda0 : 0 < lambda) (hlambda1 : lambda ≤ 1)
+    (hcharge : 0 < charge)
+    (hslope : lambda * charge ≤
+      quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward
+            (Function.update profile mover
+              (quittingStoppingLawMixtureBehaviorStrategy reward mover
+                (profile mover) target lambda hlambda0.le hlambda1))) observer -
+        quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward profile) observer) :
+    (∃ terminal : {S : Finset ι // S.Nonempty},
+      charge / 2 ≤
+        (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
+          quittingTerminalPayoffDifferenceAtom reward profile
+            (Function.update profile mover target) observer (some terminal)) ∨
+    ∃ quitTime : Option ℕ, ∃ terminal : {S : Finset ι // S.Nonempty},
+      ∃ time : ℕ,
+        charge / 4 ≤
+            (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
+              quittingTerminalPayoffDifferenceAtom reward
+                (Function.update (Function.update profile mover target) observer
+                  (quittingPureTimeBehaviorStrategy reward observer quitTime))
+                (Function.update profile observer
+                  (quittingPureTimeBehaviorStrategy reward observer quitTime))
+                observer (some terminal) ∧
+          0 < quittingStoppingLawRectangleStageAtom reward
+            (Function.update profile observer
+              (quittingPureTimeBehaviorStrategy reward observer quitTime))
+            mover (profile mover) target observer time terminal ∧
+          IsQuittingPureTimeRectangleStage observer terminal quitTime time ∧
+          ((0 < quittingTerminalOutcomeMass reward
+              (Function.update
+                (Function.update profile observer
+                  (quittingPureTimeBehaviorStrategy reward observer quitTime))
+                mover target) (some terminal)) ∨
+            (0 < quittingTerminalOutcomeMass reward
+              (Function.update
+                (Function.update profile observer
+                  (quittingPureTimeBehaviorStrategy reward observer quitTime))
+                mover (profile mover)) (some terminal))) := by
+  rcases
+      exists_prescribedAtom_or_pureTimeRectangleAtom_of_stoppingLawDebtSlope
+        reward profile mover observer target lambda charge hlambda0 hlambda1
+          hcharge hslope with hprescribed | hrectangle
+  · exact Or.inl hprescribed
+  · right
+    rcases hrectangle with hnever | ⟨stop, terminal, hterminal⟩
+    · obtain ⟨terminal, hterminal⟩ := hnever
+      obtain ⟨time, hstage, hchronology, hactual⟩ :=
+        exists_positive_causalStage_and_actualTerminalMass_of_rectangleCharge
+          reward profile mover observer hmoverObserver (profile mover) target
+            none terminal (charge / 4) (by positivity) (by
+              simpa only [Function.update_eq_self] using hterminal)
+      exact ⟨none, terminal, time, hterminal, hstage, hchronology, hactual⟩
+    · obtain ⟨time, hstage, hchronology, hactual⟩ :=
+        exists_positive_causalStage_and_actualTerminalMass_of_rectangleCharge
+          reward profile mover observer hmoverObserver (profile mover) target
+            (some stop) terminal (charge / 4) (by positivity) (by
+              simpa only [Function.update_eq_self] using hterminal)
+      exact ⟨some stop, terminal, time, hterminal, hstage, hchronology,
+        hactual⟩
 
 end GameTheory

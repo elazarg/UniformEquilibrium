@@ -283,7 +283,7 @@ augmented graph, the payoff cells are a potential for its weights at every
 charging the table justifies, and weak duality caps its weight at zero —
 around a forced preemption cycle the switch costs total at least the whole
 period's worth of gap
-(`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionTransport.lean`).
+(`UniformEquilibrium/Diagnostics/Quitting/Collision/PreemptionTransport.lean`).
 The static route is closed,
 and no repricing of the same edges reopens it.  A relational or fibered layer
 becomes worth writing for a different object: one combining the static

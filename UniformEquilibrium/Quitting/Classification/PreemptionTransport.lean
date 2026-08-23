@@ -102,9 +102,9 @@ not free.
 genuine positive-slope transport along phases at a fixed spectator coordinate.
 The spectator index is frozen there; the observer-switch edges move it.
 
-`QuittingStaticObserverSwitchData` is the class of chargings the regime's own
+`QuittingStaticObserverSwitchData` is the class of chargings the witness's own
 solo table justifies.  The diagnostic adapter and completed no-go live in
-`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/PreemptionTransport.lean`.
+`UniformEquilibrium/Diagnostics/Quitting/Collision/PreemptionTransport.lean`.
 Every such charging has nonpositive augmented weight.
 
 A transport route that is not closed by the above needs different cells, not a

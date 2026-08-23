@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Frontier
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.DebtSlopeAtomAlternative
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeCausalRegression
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeAtom
 
 /-!
 # Fixed positive off-diagonal atoms from the stopping-law frontier

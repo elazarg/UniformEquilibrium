@@ -40,49 +40,6 @@ open scoped Topology
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-/-- The game-facing data retained by the fixed-law reset dispatch. -/
-structure QuittingFixedLawResetDispatch
-    (source target : QuittingTerminalSemanticPair ι)
-    (mass : QuittingTerminalOutcome ι → ℝ)
-    (owner other : ι) (returned : QuittingTerminalSemanticPair ι) : Prop where
-  joint : (returned, mass) ∈ quittingTerminalSemanticLawCarrier reward
-  reset : quittingTerminalSemanticDebt returned owner = 0
-  source_le : quittingTerminalSemanticDebtSum source ≤
-    quittingTerminalSemanticDebtSum returned
-  target_ge : quittingTerminalSemanticDebtSum returned ≤
-    quittingTerminalSemanticDebtSum target
-  transfer : quittingTerminalSemanticDebt source owner ≤
-    ∑ player ∈ Finset.univ.erase owner,
-      quittingTerminalSemanticDebtChange source returned player
-  supported_toggle : ∃ terminal : {S : Finset ι // S.Nonempty},
-    other ∈ terminal.val ∧ 0 < mass (some terminal) ∧
-      ((∃ member ∈ terminal.val,
-          quittingSetReward reward terminal.val member <
-            quittingSetReward reward (terminal.val.erase member) member) ∨
-        ∃ outsider ∉ terminal.val,
-          quittingSetReward reward terminal.val outsider <
-            quittingSetReward reward
-              (insert outsider terminal.val) outsider)
-  dynamic_exit :
-    (∃ root : ι → PMF Bool,
-      IsεQuittingRootNash reward returned.2 0 root ∧
-      0 < quittingRootAbsorptionMass root ∧
-      0 < quittingStationaryContinueMass root ∧
-      quittingTerminalSemanticDebtSum
-          (quittingTerminalSemanticPrefix reward root returned) <
-        quittingTerminalSemanticDebtSum returned ∧
-      (quittingTerminalSemanticPrefix reward root returned,
-          quittingTerminalOutcomeLawPrefix root mass) ∈
-        quittingTerminalSemanticLawCarrier reward ∧
-      quittingTerminalSemanticDebt
-          (quittingTerminalSemanticPrefix reward root returned) owner = 0 ∧
-      0 < quittingTerminalOpponentIncidenceMass owner other
-        (quittingTerminalOutcomeLawPrefix root mass)) ∨
-    (IsεQuittingRootNash reward returned.2 0
-        (quittingAllContinueRoot : ι → PMF Bool) ∧
-      quittingTerminalSemanticPrefix reward quittingAllContinueRoot
-        returned = returned)
-
 /-- A semantic reset subsequence and the inherited law limit form one joint
 carrier point.  This is the missing provenance bridge between pure-time debt
 extraction and fixed-law reset minimization. -/

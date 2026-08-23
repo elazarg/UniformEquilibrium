@@ -44,7 +44,7 @@ theorem exists_exactToggle_gain
   · obtain ⟨who, hnot, hgain⟩ := hjoin
     exact ⟨who, by simpa [quittingToggleCoalition_of_notMem hnot] using hgain⟩
 
-/-- Pointwise pure-toggle exploitability dominates the regime margin. -/
+/-- Pointwise pure-toggle exploitability dominates the witness margin. -/
 theorem terminalGap_le_pureToggleExploitability
     (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
     witness.terminalGap ≤ @quittingPureToggleExploitability ι _ _
@@ -140,7 +140,7 @@ end QuittingTerminalExploitabilityWitness
 
 namespace QuittingTerminalExploitabilityWitness
 
-/-- Pointwise stationary-cap exploitability dominates the regime margin. -/
+/-- Pointwise stationary-cap exploitability dominates the witness margin. -/
 theorem terminalGap_le_stationaryCapExploitability
     (witness : QuittingTerminalExploitabilityWitness reward)
     (root : ι → PMF Bool) :
@@ -159,7 +159,7 @@ theorem terminalGap_le_stationaryCapExploitability
           (quittingStationaryProfile reward root) who)
       (Finset.mem_univ who))
 
-/-- **Stationary-cap infimum ceiling.**  The regime margin lies below the
+/-- **Stationary-cap infimum ceiling.**  The witness margin lies below the
 infimum of stationary selected-cap exploitability. -/
 theorem terminalGap_le_stationaryCapCeiling
     (witness : QuittingTerminalExploitabilityWitness reward) :
