@@ -110,6 +110,7 @@ PRUNED_DIRECTORIES = {
     "__pycache__",
     ".pytest_cache",
     "ephemeral",
+    "literature",
 }
 
 

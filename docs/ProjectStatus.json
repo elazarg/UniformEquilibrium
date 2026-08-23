@@ -97,7 +97,7 @@
       "kind": "Unconditional family theorem",
       "declaration": "exists_uniformEquilibriumPayoff_of_projectiveQBar_snell",
       "source": "UniformEquilibrium/Quitting/AbsorptionPath/PunishmentNormalPathStrategicSnell.lean",
-      "umbrella": "UniformEquilibrium.lean",
+      "umbrella": "UniformEquilibrium/Quitting/AbsorptionPath/All.lean",
       "scope": "Ambient projective Q-bar yields a uniform-equilibrium payoff against every unilateral behavioral deviation. The punishment-normal path decoder is constructed through the deleted-survival Snell fork; this does not cover ResidualHardClass."
     },
     {
