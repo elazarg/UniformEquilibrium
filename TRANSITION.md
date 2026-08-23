@@ -483,3 +483,49 @@ were merged into their paper files. In the same restructuring Research became
 a terminal lane (imported nowhere outside itself), forcing the promotion of
 the Experiments-consumed Research closure into `UniformEquilibrium` and the
 demotion of the K11 conditional chain into `Experiments`.
+
+## Ephemeral mathematics and outstanding-branch consolidation (2026-08-23)
+
+The ignored `ephemeral/` working directory was retired after its mathematical
+content was compared with the integrated tree. No compatibility copies were
+kept. The durable outcomes are:
+
+- the transport manuscripts are represented by the integrated
+  `MathUE/DirectedTransport/` library and its quitting-game consumers;
+- the chronological stopping-law drafts are represented by the generated-
+  secant, source-matched reset-cube, chattering, first-disagreement, paid-row,
+  exact-prefix, Green-account, and charged-packet modules indexed in
+  `docs/TOOLKIT.md`; their proposed static-to-chronological producer remains
+  open and no draft capstone was promoted as a theorem;
+- the singleton-tight minimum-face calculation moved from Research to
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSingletonTightMinimumFaceIteration.lean`;
+- the full-core deadlock bounded-word calculation became the stronger
+  arbitrary-finite-word theorem in
+  `UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockReducedSingletonLassoBarrier.lean`,
+  including the exact homogeneous complementarity obstruction but not a
+  word-length-uniform debt floor;
+- the two Sorin strategy notes were consolidated into the game-independent
+  scalar identities in `MathUE/WeightedBlackwellFerguson.lean` and the full
+  finite-law construction in
+  `UniformEquilibrium/Examples/Sorin/UniformPayoffSegment.lean`; and
+- the proof-mining ledger's completed batches were already present in their
+  production owners. Negative proposals, corrected false claims, duplicate
+  proof sketches, and superseded API plans were not retained as living files.
+
+The open pull-request branches were closed rather than merged after the same
+comparison:
+
+- PRs 54 and 55 were superseded by the integrated deadlock contraction,
+  sharper debt bound, exploitability-gap consumer, and reduced-lasso barrier;
+- PRs 56 and 57 were already integrated and strengthened by uniform frozen-
+  prefix chattering, literal source-matched reset cubes, and radial scaling;
+- PR 58 supplied the reduced finite-word obstruction promoted above; its
+  proposed fixed-complexity quantitative floor was not a checked theorem;
+- PRs 60, 61, 62, and 64 were superseded by the integrated common-response,
+  positive-total-slope endpoint, atom-access, first-disagreement, and paid
+  radial dispatch modules, which retain stronger source and witness data;
+- PRs 43, 46, and 50 were obsolete relative to the flattened Literature lane
+  and the current production absorption-path and paper-audit developments.
+
+This record concerns extraction and repository transition only. Exact theorem
+status remains determined by the cited Lean declarations and their imports.

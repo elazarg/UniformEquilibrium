@@ -11,7 +11,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupati
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 
 /-!
-# Fixed solo-prefix iteration at a singleton-tight minimum
+# Singleton-tight carrier washout and punishment value
 
 This file checks fixed-row iteration on the singleton-tight,
 unique-debtor face of the compact terminal-semantic carrier.  The finite
