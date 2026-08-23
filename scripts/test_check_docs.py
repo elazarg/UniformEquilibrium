@@ -8,6 +8,7 @@ import tempfile
 import unittest
 
 from scripts.check_docs import (
+    PRUNED_DIRECTORIES as DOCS_PRUNED_DIRECTORIES,
     ROOT,
     TIMELESS_DOCS,
     is_dedicated_history_or_evidence,
@@ -15,6 +16,9 @@ from scripts.check_docs import (
     project_markdown_files,
     source_reference_issues,
     timeless_document_issues,
+)
+from scripts.normalize_markdown_names import (
+    PRUNED_DIRECTORIES as NAME_PRUNED_DIRECTORIES,
 )
 
 
@@ -118,6 +122,10 @@ class TimelessDocumentTests(unittest.TestCase):
         }
         self.assertFalse(living & evidence)
         self.assertEqual(documents, living | evidence)
+
+    def test_private_literature_is_not_project_documentation(self) -> None:
+        self.assertIn("literature", DOCS_PRUNED_DIRECTORIES)
+        self.assertIn("literature", NAME_PRUNED_DIRECTORIES)
 
     def test_transition_record_is_history_not_living(self) -> None:
         transition = ROOT / "TRANSITION.md"
