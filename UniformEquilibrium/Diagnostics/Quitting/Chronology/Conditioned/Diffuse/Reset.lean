@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Conditioned.Diffuse.FixedOutsider
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.Conditioned.Diffuse.FixedOutsider
 import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailPositiveAbsorptionRoot
 
 /-!

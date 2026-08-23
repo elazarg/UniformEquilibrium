@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicBlockProfile
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.PeriodicBlockProfile
 import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 
 /-!
@@ -203,8 +203,8 @@ theorem multiVisit_isUniformEquilibriumPayoff :
 /-- The table carries no terminal exploitability witness. -/
 theorem multiVisit_isEmpty_terminalExploitabilityWitness :
     IsEmpty (QuittingTerminalExploitabilityWitness multiVisitReward) :=
-  isEmpty_terminalExploitabilityWitness_of_isQuittingBlockCertificate
-    multiVisit_isQuittingBlockCertificate
+  isEmpty_quittingTerminalExploitabilityWitness_of_exists_uniformEquilibriumPayoff _
+    ⟨multiVisitValue 0, multiVisit_isUniformEquilibriumPayoff⟩
 
 end BlockPeriodicMultiVisit
 end GameTheory

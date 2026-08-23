@@ -320,6 +320,7 @@ import UniformEquilibrium.Quitting.Cycles.DiffuseTailSoloStructure
 import UniformEquilibrium.Quitting.Cycles.PeriodicRootResponseSystem
 import UniformEquilibrium.Quitting.Cycles.SoloPeriodicBlockCompiler
 import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
+import UniformEquilibrium.Quitting.Cycles.TerminalExploitabilityPeriodicProfile
 import UniformEquilibrium.Quitting.Cycles.PureTimeExtremality
 import UniformEquilibrium.Quitting.Stationary.SnellCap
 import UniformEquilibrium.Quitting.Paths.OpponentLiveMass

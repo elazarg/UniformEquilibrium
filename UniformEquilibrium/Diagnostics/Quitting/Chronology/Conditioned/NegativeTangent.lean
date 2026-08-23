@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodOne.TangentReadout
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.PeriodOne.TangentReadout
 import UniformEquilibrium.Quitting.Cycles.ConditionedTangentSeam
 
 /-!

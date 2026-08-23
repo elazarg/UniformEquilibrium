@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.SparseVanishingSchedule
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Conditioned.Diffuse.FixedOutsider
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.Conditioned.Diffuse.FixedOutsider
 
 /-!
 # The source-matched Snell-purification interface

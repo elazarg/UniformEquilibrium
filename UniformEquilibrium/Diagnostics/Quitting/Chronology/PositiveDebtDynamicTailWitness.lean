@@ -10,6 +10,7 @@ import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
 import UniformEquilibrium.Quitting.Cycles.PeriodicWindowEvaluation
+import UniformEquilibrium.Quitting.Cycles.TerminalExploitabilityPeriodicProfile
 
 /-!
 # Positive debt dynamic-tail witness of a quitting counterexample
@@ -76,23 +77,6 @@ structure QuittingPositiveDebtDynamicTailWitness
     Summable (quittingDynamicDebtTailAbsorptionCharge tail)
 
 namespace QuittingTerminalExploitabilityWitness
-
-/-- Against every behavior profile, the exact best-response supremum can be
-restricted to deterministic quit times and `Never` while retaining the full
-counterexample gap. -/
-theorem exists_pureTimeCap_gap
-    (witness : QuittingTerminalExploitabilityWitness reward)
-    (profile : (quittingGame reward).BehaviorProfile) :
-    ∃ who,
-      quittingTerminalPayoff reward profile who + witness.terminalGap ≤
-        sSup (Set.range fun quitTime : Option ℕ ↦
-          quittingTerminalPayoff reward
-            (Function.update profile who
-              (quittingPureTimeBehaviorStrategy reward who quitTime)) who) := by
-  obtain ⟨who, deviation, hgap⟩ := witness.terminalExploitability profile
-  refine ⟨who, hgap.trans ?_⟩
-  exact quittingTerminalPayoff_update_le_sSup_pureTimeBehaviorStrategy
-    reward profile who deviation
 
 /-- Every finite window of any dynamic-debt tail, restarted periodically, is
 exposed by the exact pure-time/`Never` cap at the witness's full terminal gap.

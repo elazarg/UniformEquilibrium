@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.Finset.PowersetBernoulliWeight
 import Research.Quitting.CirculantColliderBonusFamily
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicBlockProfile
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.PeriodicBlockProfile
 import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 
 /-!
@@ -486,8 +486,9 @@ theorem isEmpty_terminalExploitabilityWitness_colliderBonusReward_stationary
     (hm0 : m 0 = 0) (hs : 0 ≤ s) {u : ℝ} (hu0 : 0 < u) (hu1 : u < 1) :
     IsEmpty (QuittingTerminalExploitabilityWitness
       (colliderBonusReward s low (stationaryBonus s low (∑ d, m d) u) m)) :=
-  isEmpty_terminalExploitabilityWitness_of_isQuittingBlockCertificate
-    (isQuittingBlockCertificate_uniform hm0 hs hu0 hu1)
+  isEmpty_quittingTerminalExploitabilityWitness_of_exists_uniformEquilibriumPayoff _
+    ⟨_, isUniformEquilibriumPayoff_of_isQuittingBlockCertificate
+      (isQuittingBlockCertificate_uniform hm0 hs hu0 hu1)⟩
 
 end CirculantColliderBonus
 end GameTheory
