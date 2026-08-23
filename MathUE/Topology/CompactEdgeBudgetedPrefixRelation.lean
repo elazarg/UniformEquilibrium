@@ -18,6 +18,11 @@ This is a sufficient compactness interface for Simon-type viability
 questions. Its substantive input is the production of the budgeted finite
 prefixes; compactness does not manufacture those prefixes from local
 nonemptiness or contractibility alone.
+
+The module also records the complementary finite-cell Lyapunov interface.
+Exact coverage, bounds, and cellwise decrease proofs compile to the global
+potential inequality that obstructs arbitrarily large finite-orbit variation.
+No certificate search or polyhedral decision procedure is asserted here.
 -/
 
 noncomputable section
@@ -48,6 +53,172 @@ def HasRestartableExtension {Point : Type*}
     ∀ point ∈ restartSet,
       ∃ target ∈ restartSet,
         relation point target ∧ addedCost ≤ cost point target
+
+/-- Exact finite-cell data for a bounded strict Lyapunov potential. The cells
+need only cover the state type; disjointness is unnecessary. Requiring the
+edge inequality for every pair of cells containing the endpoints makes the
+interface sound even when cells overlap. -/
+def HasFiniteCellLyapunovCertificate {State Cell : Type*} [Fintype Cell]
+    (relation : Correspondence State State) (cost : State → State → ℝ)
+    (cell : Cell → Set State) (localPotential : Cell → State → ℝ)
+    (constant lower upper : ℝ) : Prop :=
+  (∀ state, ∃ index, state ∈ cell index) ∧
+    (∀ index state, state ∈ cell index →
+      lower ≤ localPotential index state) ∧
+    (∀ index state, state ∈ cell index →
+      localPotential index state ≤ upper) ∧
+    ∀ firstCell nextCell first next,
+      first ∈ cell firstCell → next ∈ cell nextCell →
+      next ∈ relation first →
+      localPotential nextCell next ≤
+        localPotential firstCell first - constant * cost first next
+
+/-- A finite-cell certificate selects one containing cell at each state and
+thereby produces a single globally bounded strict Lyapunov potential. -/
+theorem HasFiniteCellLyapunovCertificate.exists_globalPotential
+    {State Cell : Type*} [Fintype Cell]
+    {relation : Correspondence State State} {cost : State → State → ℝ}
+    {cell : Cell → Set State} {localPotential : Cell → State → ℝ}
+    {constant lower upper : ℝ}
+    (hcertificate : HasFiniteCellLyapunovCertificate
+      relation cost cell localPotential constant lower upper) :
+    ∃ potential : State → ℝ,
+      (∀ state, lower ≤ potential state) ∧
+      (∀ state, potential state ≤ upper) ∧
+      ∀ first next, next ∈ relation first →
+        potential next ≤ potential first - constant * cost first next := by
+  classical
+  rcases hcertificate with ⟨hcover, hlower, hupper, hdecrease⟩
+  let chosenCell : State → Cell := fun state ↦ Classical.choose (hcover state)
+  have hchosenCell : ∀ state, state ∈ cell (chosenCell state) := by
+    intro state
+    exact Classical.choose_spec (hcover state)
+  let potential : State → ℝ := fun state ↦
+    localPotential (chosenCell state) state
+  refine ⟨potential, ?_, ?_, ?_⟩
+  · intro state
+    exact hlower (chosenCell state) state (hchosenCell state)
+  · intro state
+    exact hupper (chosenCell state) state (hchosenCell state)
+  · intro first next hnext
+    exact hdecrease (chosenCell first) (chosenCell next) first next
+      (hchosenCell first) (hchosenCell next) hnext
+
+/-- Exact finite-cell inequalities certify the existing global finite-orbit
+obstruction. This theorem does not assert that the certificate data exist. -/
+theorem not_hasArbitrarilyLargeFiniteOrbitVariationWith_of_finiteCellCertificate
+    {State Cell : Type*} [Fintype Cell]
+    {relation : Correspondence State State} {cost : State → State → ℝ}
+    {cell : Cell → Set State} {localPotential : Cell → State → ℝ}
+    {constant lower upper : ℝ} (hconstant : 0 < constant)
+    (hcertificate : HasFiniteCellLyapunovCertificate
+      relation cost cell localPotential constant lower upper) :
+    ¬HasArbitrarilyLargeFiniteOrbitVariationWith relation cost := by
+  obtain ⟨potential, hlower, hupper, hdecrease⟩ :=
+    hcertificate.exists_globalPotential
+  exact not_hasArbitrarilyLargeFiniteOrbitVariationWith_of_potential_bounds
+    hconstant hlower hupper hdecrease
+
+/-- A positive-cost self-loop is a cheap negative regression for any proposed
+strict finite-cell certificate, independently of its claimed bounds. -/
+theorem not_hasFiniteCellLyapunovCertificate_of_positive_selfLoop
+    {State Cell : Type*} [Fintype Cell]
+    {relation : Correspondence State State} {cost : State → State → ℝ}
+    {cell : Cell → Set State} {localPotential : Cell → State → ℝ}
+    {constant lower upper : ℝ} {state : State}
+    (hconstant : 0 < constant) (hloop : state ∈ relation state)
+    (hcost : 0 < cost state state) :
+    ¬HasFiniteCellLyapunovCertificate
+      relation cost cell localPotential constant lower upper := by
+  rintro ⟨hcover, _, _, hdecrease⟩
+  obtain ⟨index, hindex⟩ := hcover state
+  have hdrop := hdecrease index index state state hindex hindex hloop
+  have hpositive : 0 < constant * cost state state := mul_pos hconstant hcost
+  linarith
+
+/-- An affine functional with exact rational coefficients, evaluated later in
+real coordinate space. -/
+structure RationalAffineFunctional (Coordinate : Type*) where
+  offset : ℚ
+  coefficient : Coordinate → ℚ
+
+namespace RationalAffineFunctional
+
+/-- Real evaluation of an exact rational affine functional. -/
+def eval {Coordinate : Type*} [Fintype Coordinate]
+    (functional : RationalAffineFunctional Coordinate)
+    (point : Coordinate → ℝ) : ℝ := by
+  classical
+  exact (functional.offset : ℝ) +
+    ∑ coordinate, (functional.coefficient coordinate : ℝ) * point coordinate
+
+end RationalAffineFunctional
+
+/-- A closed polyhedral cell described by exact rational weak halfspaces.
+Equalities can be represented by two opposite inequalities. A common finite
+row type can be padded when different cells use different row counts. -/
+structure RationalPolyhedralCell (Coordinate Row : Type*) where
+  normal : Row → Coordinate → ℚ
+  lower : Row → ℚ
+
+namespace RationalPolyhedralCell
+
+/-- Real points satisfying every rational halfspace row of a cell. -/
+def realization {Coordinate Row : Type*} [Fintype Coordinate]
+    (cell : RationalPolyhedralCell Coordinate Row) :
+    Set (Coordinate → ℝ) := by
+  classical
+  exact {point | ∀ row,
+    (cell.lower row : ℝ) ≤
+      ∑ coordinate, (cell.normal row coordinate : ℝ) * point coordinate}
+
+@[simp]
+theorem mem_realization {Coordinate Row : Type*} [Fintype Coordinate]
+    (cell : RationalPolyhedralCell Coordinate Row)
+    (point : Coordinate → ℝ) :
+    point ∈ cell.realization ↔
+      ∀ row, (cell.lower row : ℝ) ≤
+        ∑ coordinate, (cell.normal row coordinate : ℝ) * point coordinate :=
+  Iff.rfl
+
+end RationalPolyhedralCell
+
+/-- A finite rational-polyhedral specialization of the exact finite-cell
+certificate. The relation lives on a supplied carrier subtype; each carrier
+point must be covered by a cell. Coverage, bounds, and affine descent remain
+proof obligations, not outputs of an unformalized checker. -/
+def HasRationalPolyhedralLyapunovCertificate
+    {Coordinate Cell Row : Type*}
+    [Fintype Coordinate] [Fintype Cell] [Fintype Row]
+    (carrier : Set (Coordinate → ℝ))
+    (relation : Correspondence carrier carrier)
+    (cost : carrier → carrier → ℝ)
+    (cell : Cell → RationalPolyhedralCell Coordinate Row)
+    (localPotential : Cell → RationalAffineFunctional Coordinate)
+    (constant lower upper : ℝ) : Prop :=
+  HasFiniteCellLyapunovCertificate relation cost
+    (fun index ↦
+      {state | (state : Coordinate → ℝ) ∈ (cell index).realization})
+    (fun index state ↦ localPotential index |>.eval state)
+    constant lower upper
+
+/-- A supplied exact rational-polyhedral certificate rules out arbitrarily
+large finite-orbit variation on its carrier. No certificate existence,
+coverage algorithm, or rational inequality decision procedure is claimed. -/
+theorem not_hasArbitrarilyLargeFiniteOrbitVariationWith_of_rationalPolyhedralCertificate
+    {Coordinate Cell Row : Type*}
+    [Fintype Coordinate] [Fintype Cell] [Fintype Row]
+    {carrier : Set (Coordinate → ℝ)}
+    {relation : Correspondence carrier carrier}
+    {cost : carrier → carrier → ℝ}
+    {cell : Cell → RationalPolyhedralCell Coordinate Row}
+    {localPotential : Cell → RationalAffineFunctional Coordinate}
+    {constant lower upper : ℝ} (hconstant : 0 < constant)
+    (hcertificate : HasRationalPolyhedralLyapunovCertificate
+      carrier relation cost cell localPotential constant lower upper) :
+    ¬HasArbitrarilyLargeFiniteOrbitVariationWith relation cost := by
+  exact not_hasArbitrarilyLargeFiniteOrbitVariationWith_of_finiteCellCertificate
+    hconstant hcertificate
 
 variable {Point : Type*} [TopologicalSpace Point] [T2Space Point]
 

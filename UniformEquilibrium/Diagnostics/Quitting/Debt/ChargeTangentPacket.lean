@@ -18,11 +18,11 @@ delivery minus the far-end annotation.  Collision concentration and boundary
 pinning therefore turn every convergent occupation subsequence into a
 tail-derived tangent packet.
 
-For a hypothetical counterexample the packet cannot be complementary.  Hence
-its tangent has either a negative coordinate or, after excluding all negative
-coordinates, a positive coordinate in the active owner support.  This is the
-finite sign interface consumed respectively by phase repair and support
-enlargement.  Neither consumer is constructed here.
+For a hypothetical counterexample the packet cannot be complementary. The
+sharp dispatch leaves either a tangent that breaches the smaller of the solo
+and punishment boundary gaps, or a positive tangent in the active owner
+support. It refines the earlier negative/positive sign interface; neither
+residual consumer is constructed here.
 
 The normalization has a genuine denominator boundary.  The capstone keeps it
 as a literal alternative: either the tail is eventually the all-Continue root,
@@ -231,7 +231,118 @@ theorem exists_chargeTangentData_of_windows
 
 end QuittingPositiveDebtDynamicTailWitness
 
+namespace QuittingChargeTangentData
+
+/-- The unit mass of a charge-tangent datum forces the finite player type to
+be nonempty. -/
+theorem nonempty_players (data : QuittingChargeTangentData reward) : Nonempty ι := by
+  rcases isEmpty_or_nonempty ι with hempty | hnonempty
+  · letI := hempty
+    have hmass := data.mass_sum
+    simp at hmass
+  · exact hnonempty
+
+/-- Falling below the larger of the solo and punishment floors is exactly the
+tangent crossing the negative of the smaller available boundary gap. -/
+theorem tangent_lt_neg_min_gap_iff_singletonMixture_lt_minimalFloor
+    (data : QuittingChargeTangentData reward) (who : ι) :
+    data.tangent who <
+        -min
+          (data.boundary who -
+            reward (quittingSingletonTerminal who) who)
+          (data.boundary who - quittingPunishmentValue reward who) ↔
+      quittingSingletonMixture reward data.mass who <
+        max
+          (reward (quittingSingletonTerminal who) who)
+          (quittingPunishmentValue reward who) := by
+  rw [data.tangent_eq who]
+  rcases le_total
+      (reward (quittingSingletonTerminal who) who)
+      (quittingPunishmentValue reward who) with horder | horder
+  · rw [max_eq_right horder,
+      min_eq_right (sub_le_sub_left horder (data.boundary who))]
+    constructor <;> intro h <;> linarith
+  · rw [max_eq_left horder,
+      min_eq_left (sub_le_sub_left horder (data.boundary who))]
+    constructor <;> intro h <;> linarith
+
+/-- **Witness-free minimal-floor dispatch.** Every charge-tangent datum either
+compiles through the complementary singleton-mixture consumer, falls below
+the minimal solo/punishment floor in some coordinate, or has positive tangent
+on a positive-mass owner. No terminal-exploitability assumption is used. -/
+theorem uniformPayoff_or_minimalFloor_underfunded_or_active_funded
+    (data : QuittingChargeTangentData reward) :
+    (∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ∨
+    (∃ who, data.tangent who <
+      -min
+        (data.boundary who -
+          reward (quittingSingletonTerminal who) who)
+        (data.boundary who - quittingPunishmentValue reward who)) ∨
+    ∃ owner, 0 < data.mass owner ∧ 0 < data.tangent owner := by
+  classical
+  letI : Nonempty ι := data.nonempty_players
+  by_cases hunderfunded : ∃ who, data.tangent who <
+      -min
+        (data.boundary who -
+          reward (quittingSingletonTerminal who) who)
+        (data.boundary who - quittingPunishmentValue reward who)
+  · exact Or.inr (Or.inl hunderfunded)
+  by_cases hactive : ∃ owner, 0 < data.mass owner ∧ 0 < data.tangent owner
+  · exact Or.inr (Or.inr hactive)
+  left
+  push Not at hunderfunded hactive
+  let floor : Payoff ι := fun who ↦
+    max
+      (reward (quittingSingletonTerminal who) who)
+      (quittingPunishmentValue reward who)
+  have hmix : ∀ who,
+      floor who ≤ quittingSingletonMixture reward data.mass who := by
+    intro who
+    apply le_of_not_gt
+    intro hbelow
+    have htangent :=
+      (data.tangent_lt_neg_min_gap_iff_singletonMixture_lt_minimalFloor who).2
+        hbelow
+    exact (not_lt_of_ge (hunderfunded who)) htangent
+  have hactivePinned : ∀ owner, 0 < data.mass owner →
+      quittingSingletonMixture reward data.mass owner =
+        reward (quittingSingletonTerminal owner) owner := by
+    intro owner hmass
+    have hnonpos := hactive owner hmass
+    have hpin := data.positive_mass_pins_boundary owner hmass
+    have htangent := data.tangent_eq owner
+    have hsoloFloor :
+        reward (quittingSingletonTerminal owner) owner ≤ floor owner :=
+      le_max_left _ _
+    have hsoloMix := hsoloFloor.trans (hmix owner)
+    linarith
+  exact exists_uniformEquilibriumPayoff_of_complementarySingletonMixture
+    reward data.mass floor data.mass_nonneg data.mass_sum hmix hactivePinned
+      (fun who ↦ le_max_left _ _)
+      (fun who ↦ le_max_right _ _)
+
+end QuittingChargeTangentData
+
 namespace QuittingTerminalExploitabilityWitness
+
+/-- A terminal-exploitability witness excludes the compiled arm of the
+witness-free minimal-floor dispatch, leaving exactly minimal-floor
+underfunding or positive tangent on a positive-mass owner. -/
+theorem chargeTangentData_minimalFloor_underfunded_or_active_funded
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (data : QuittingChargeTangentData reward) :
+    (∃ who, data.tangent who <
+      -min
+        (data.boundary who -
+          reward (quittingSingletonTerminal who) who)
+        (data.boundary who - quittingPunishmentValue reward who)) ∨
+    ∃ owner, 0 < data.mass owner ∧ 0 < data.tangent owner := by
+  rcases data.uniformPayoff_or_minimalFloor_underfunded_or_active_funded with
+    hpayoff | hunderfunded | hactive
+  · exact (witness.not_exists_uniformEquilibriumPayoff hpayoff).elim
+  · exact Or.inl hunderfunded
+  · exact Or.inr hactive
 
 /-- A tail-derived tangent datum in a counterexample is either underfunded in
 some coordinate or, after all underfunding is excluded, strictly funded on an
@@ -242,30 +353,23 @@ theorem chargeTangentData_underfunded_or_active_funded
     (data : QuittingChargeTangentData reward) :
     (∃ who, data.tangent who < 0) ∨
       ∃ owner, 0 < data.mass owner ∧ 0 < data.tangent owner := by
-  letI : Nonempty ι := witness.nonempty_players
-  by_contra hsign
-  push Not at hsign
-  have hmix : ∀ who,
-      data.boundary who ≤
-        quittingSingletonMixture reward data.mass who := by
-    intro who
-    have htangent := data.tangent_eq who
-    linarith [hsign.1 who]
-  have hactive : ∀ owner, 0 < data.mass owner →
-      quittingSingletonMixture reward data.mass owner =
-        reward (quittingSingletonTerminal owner) owner := by
-    intro owner hmass
-    have htangentZero : data.tangent owner = 0 := by
-      have hnonneg := hsign.1 owner
-      have hnonpos := hsign.2 owner hmass
-      linarith
-    have hpin := data.positive_mass_pins_boundary owner hmass
-    have htangent := data.tangent_eq owner
+  rcases witness.chargeTangentData_minimalFloor_underfunded_or_active_funded data with
+    hunderfunded | hactive
+  · left
+    obtain ⟨who, hwho⟩ := hunderfunded
+    refine ⟨who, ?_⟩
+    have hsoloGap : 0 ≤ data.boundary who -
+        reward (quittingSingletonTerminal who) who :=
+      sub_nonneg.mpr (data.solo_le_boundary who)
+    have hpunishmentGap : 0 ≤ data.boundary who -
+        quittingPunishmentValue reward who :=
+      sub_nonneg.mpr (data.punishment_le_boundary who)
+    have hminGap : 0 ≤ min
+        (data.boundary who - reward (quittingSingletonTerminal who) who)
+        (data.boundary who - quittingPunishmentValue reward who) :=
+      le_min hsoloGap hpunishmentGap
     linarith
-  apply witness.not_exists_uniformEquilibriumPayoff
-  exact exists_uniformEquilibriumPayoff_of_complementarySingletonMixture
-    reward data.mass data.boundary data.mass_nonneg data.mass_sum hmix
-      hactive data.solo_le_boundary data.punishment_le_boundary
+  · exact Or.inr hactive
 
 /-- Every charge-tangent datum extracted in a counterexample has nonzero
 tangent and therefore upgrades canonically to a charge-tangent packet. -/
@@ -291,6 +395,19 @@ theorem chargeTangentPacket_underfunded_or_active_funded
     (∃ who, packet.tangent who < 0) ∨
       ∃ owner, 0 < packet.mass owner ∧ 0 < packet.tangent owner :=
   witness.chargeTangentData_underfunded_or_active_funded
+    packet.toQuittingChargeTangentData
+
+/-- The sharper minimal-floor dispatch for a packaged nonzero tangent. -/
+theorem chargeTangentPacket_minimalFloor_underfunded_or_active_funded
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (packet : QuittingChargeTangentPacket reward) :
+    (∃ who, packet.tangent who <
+      -min
+        (packet.boundary who -
+          reward (quittingSingletonTerminal who) who)
+        (packet.boundary who - quittingPunishmentValue reward who)) ∨
+    ∃ owner, 0 < packet.mass owner ∧ 0 < packet.tangent owner :=
+  witness.chargeTangentData_minimalFloor_underfunded_or_active_funded
     packet.toQuittingChargeTangentData
 
 end QuittingTerminalExploitabilityWitness

@@ -92,6 +92,15 @@
       "scope": "Strict lower and weak upper conditional reward-range comparisons yield a stationary behavioral terminal Nash and a uniform-equilibrium payoff; the hypotheses are a sufficient source-data condition, not a universal classification."
     },
     {
+      "id": "supplied-simon-finite-orbit-obstruction",
+      "subject": "Supplied finite-orbit obstruction in quitting-game semantics",
+      "kind": "Conditional obstruction",
+      "declaration": "not_exists_uniformEquilibriumPayoff_of_suppliedSimonNecessity",
+      "source": "UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/SuppliedCorrespondence.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "The production-semantic individually rational, near-feasible finite-orbit carrier is equivalent to the corresponding arbitrarily-large finite-variation condition. HasQuittingSimonFiniteCellLyapunovCertificate and its direct obstruction adapter consume supplied exact finite-cell data; the combined terminal-gap capstone additionally assumes SuppliedQuittingSimonFiniteOrbitNecessity, exclusion of stationarily generated approximate equilibria, exclusion of instant punishment, and one positive Lyapunov scale. The necessity implication, certificate, and chronological strategy remain unproved."
+    },
+    {
       "id": "sorin-uniform-payoff-segment",
       "subject": "Sorin's absorbing-game uniform-payoff segment",
       "kind": "Unconditional theorem",
