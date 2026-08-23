@@ -63,6 +63,15 @@
       "source": "UniformEquilibrium/Diagnostics/Quitting/FullCoreDeadlockDebtBound.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
       "scope": "For arbitrary nonsingleton coalition rewards, every terminal exploitability gap over a completion of the displayed normalized singleton matrix is at most 1227/96755; this does not prove that the gap vanishes or produce a uniform equilibrium."
+    },
+    {
+      "id": "sorin-uniform-payoff-segment",
+      "subject": "Sorin's absorbing-game uniform-payoff segment",
+      "kind": "Unconditional theorem",
+      "declaration": "isUniformEquilibriumPayoff_pair_value",
+      "source": "UniformEquilibrium/Examples/Sorin/UniformPayoffSegment.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Every payoff (a, 2(1-a)) with 1/2 <= a <= 2/3 is realized against all unilateral behavioral deviations; the account strategy may depend on the requested accuracy."
     }
   ],
   "quitting_frontier": {

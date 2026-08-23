@@ -343,3 +343,4 @@ import MathUE.Viability.AdaptiveEulerLimit
 import MathUE.Viability.ControlledIntegralTrajectory
 import MathUE.Viability.LipschitzCompactness
 import MathUE.WeierstrassCurve
+import MathUE.WeightedBlackwellFerguson

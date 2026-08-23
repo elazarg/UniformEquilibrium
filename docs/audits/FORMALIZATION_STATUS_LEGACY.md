@@ -149,9 +149,10 @@ The load-bearing absences recorded by this audit are:
   `λ ↦ v_λ`, convergence of `v_λ`, `lim vₙ = lim v_λ` — is not stated.
 - **Kohlberg 1974**, zero-sum absorbing games with a live state.
 - **Vieille 2000 I/II**, the two-player non-zero-sum existence theorem.
-- **Sorin's converse inclusion.** The target-free stopping estimate,
-  separation hyperplane, and endpoint exclusion are formalized. The converse
-  construction of every point with `1/2 ≤ w₁ ≤ 2/3` is not.
+- **Sorin's converse inclusion.** This was absent at the time of the legacy
+  audit. It is now proved by
+  `SorinAbsorbingGame.isUniformEquilibriumPayoff_pair_value`
+  (`UniformEquilibrium/Examples/Sorin/UniformPayoffSegment.lean`).
 - **Flesch–Thuijsman–Vrieze stationary-impossibility/approximate boundary.**
   The game, ten-node period-three adapter, exact sufficient-condition checks,
   cyclic packet rigidity, exact finite-horizon delivery constants and

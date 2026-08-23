@@ -335,12 +335,14 @@ hypothesis `UniformEquilibriaForceBottomRightOccupationVanishing`.
 `OccupationVanishing.lean` supplies the later closure and is imported by the
 root `UniformEquilibrium` umbrella.
 
-**One precision point.** That module proves `E(∞) ⊆ {2w₁ + w₂ = 2}` — the
-necessary direction, which is exactly what the separation needs. Sorin's
-Theorem 2 is stronger: a set *equality*
-`E(∞) = {(a, 2(1−a)) : 1/2 ≤ a ≤ 2/3}`. The converse inclusion is unformalized,
-and it is there that the bounds matter — the bare line admits `(1,0)` and
-`(0,2)`, which are not individually rational and are not in `E(∞)`.
+**The converse inclusion is also checked.**
+`SorinAbsorbingGame.isUniformEquilibriumPayoff_pair_value`
+(`UniformEquilibrium/Examples/Sorin/UniformPayoffSegment.lean`) constructs a
+weighted Blackwell--Ferguson account strategy and proves that every
+`(a, 2(1−a))`, `1/2 ≤ a ≤ 2/3`, is a uniform-equilibrium payoff against all
+unilateral behavioral deviations. Together with the necessary direction,
+this establishes Sorin's stated uniform-payoff segment. The bounds remain
+essential: the bare line also contains `(1,0)` and `(0,2)`.
 
 **Also worth recording:** the repo's docstring says the discounted equilibrium
 is "constant in the discount". The paper says something stronger and more

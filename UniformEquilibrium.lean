@@ -174,6 +174,7 @@ import UniformEquilibrium.Examples.Sorin.OccupationSecurity
 import UniformEquilibrium.Examples.Sorin.OccupationPlayerOneSecurity
 import UniformEquilibrium.Examples.Sorin.OccupationStopping
 import UniformEquilibrium.Examples.Sorin.OccupationVanishing
+import UniformEquilibrium.Examples.Sorin.UniformPayoffSegment
 import UniformEquilibrium.Examples.PureExternality.CycleGerm
 import UniformEquilibrium.Certificates.Public.ProperSupportGatePromotion
 import UniformEquilibrium.Certificates.Public.FinitePublicTerminalNashPerturbation

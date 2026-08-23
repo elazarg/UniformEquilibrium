@@ -103,7 +103,7 @@ The implementation gives an exact structural characterization and
 counterexample-regime closure. The finite-prefix claims, the carrier-wide cap
 identification, and the stationary calculation against arbitrary behavioral
 deviations are proved in
-[`Research/Quitting/SingletonTightMinimumFaceIteration.lean`](../../Research/Quitting/SingletonTightMinimumFaceIteration.lean).
+[`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSingletonTightMinimumFaceIteration.lean`](../../UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSingletonTightMinimumFaceIteration.lean).
 
 Write
 

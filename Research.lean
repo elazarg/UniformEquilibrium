@@ -104,7 +104,6 @@ import Research.Quitting.RectangleEndpointFixedLawAtomReturn
 import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
-import Research.Quitting.SingletonTightMinimumFaceIteration
 import Research.Quitting.SolanVieilleSoloPeriodicGap
 import Research.Quitting.SolanVieilleSoloPeriodicTerminalGap
 import Research.Quitting.SoloPeriodicInterVisitBalance

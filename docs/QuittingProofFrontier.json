@@ -324,11 +324,12 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "For every four-player reward table in the full-core deadlock completion family, a globally contractive four-block singleton return has a fixed carrier pair of total debt 7771/416472. Two further zero-additive-charge singleton blocks produce a carrier point of debt 1227/96755. Consequently no global debt barrier for this family can have a larger floor. This does not prove that the minimum debt is zero, produce a uniform-equilibrium payoff, or eliminate the family.",
+      "summary": "For every four-player reward table in the full-core deadlock completion family, a globally contractive four-block singleton return has a fixed carrier pair of total debt 7771/416472. Two further zero-additive-charge singleton blocks produce a carrier point of debt 1227/96755. Consequently no global debt barrier for this family can have a larger floor. Independently, every finite reduced cyclic ideal-singleton word has positive debt at every phase, although no word-length-uniform floor is proved. These results do not prove that the minimum debt is zero, produce a uniform-equilibrium payoff, or eliminate the family.",
       "evidence": [
         "UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockChargedReturn.lean",
         "UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockGlobalContraction.lean",
         "UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockSharperBound.lean",
+        "UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockReducedSingletonLassoBarrier.lean",
         "UniformEquilibrium/Diagnostics/Quitting/FullCoreDeadlockDebtBound.lean"
       ],
       "cover_clause_ids": [
@@ -347,6 +348,8 @@
         "GameTheory.FullCoreDeadlock.IsFullCoreDeadlockCompletion.globalDebtFloor_le_one_fourteenth",
         "GameTheory.FullCoreDeadlock.IsFullCoreDeadlockCompletion.exists_carrierPair_debtSum_eq_sharperBound",
         "GameTheory.FullCoreDeadlock.IsFullCoreDeadlockCompletion.globalDebtFloor_le_sharperBound",
+        "GameTheory.FullCoreDeadlock.ReducedIdealSingletonLasso.debt_pos",
+        "GameTheory.FullCoreDeadlock.not_exists_deadlockHomogeneousComplementary_normalized",
         "GameTheory.HasTerminalExploitabilityGap.fullCoreDeadlock_le_sharperBound",
         "GameTheory.QuittingCounterexampleRegime.fullCoreDeadlock_terminalGap_le_sharperBound"
       ]
