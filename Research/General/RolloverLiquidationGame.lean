@@ -4,9 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SearchConsequences
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Orbit.SelfLoop
+import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.Basic
+import UniformEquilibrium.Diagnostics.Quitting.Capacity.InfiniteOrbitConsequences
+import UniformEquilibrium.Diagnostics.Quitting.Capacity.InfiniteOrbitLimit
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySmallPlayers
 
 /-!

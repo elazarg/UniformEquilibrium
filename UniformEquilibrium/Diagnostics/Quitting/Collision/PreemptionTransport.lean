@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PreemptionCycle
+import UniformEquilibrium.Diagnostics.Quitting.Collision.PreemptionCycle
 import UniformEquilibrium.Quitting.Classification.PreemptionTransport
 
 /-!
@@ -26,14 +26,14 @@ namespace GameTheory
 variable {player : Type} [Fintype player] [DecidableEq player]
 variable {reward : {S : Finset player // S.Nonempty} → Payoff player}
 
-/-- A charging of the observer-switch edges that the regime's solo table
+/-- A charging of the observer-switch edges that the witness's solo table
 justifies. -/
 structure QuittingStaticObserverSwitchData
     (witness : QuittingTerminalExploitabilityWitness reward)
     (cycle : QuittingSoloPreemptionCycle reward witness.terminalGap) where
   /-- The weight charged to the observer switch out of each phase's head. -/
   cost : ℕ → ℝ
-  /-- The regime's solo table pays the charge at every switch. -/
+  /-- The witness's solo table pays the charge at every switch. -/
   observerSwitchCost_le : ∀ time : ℕ, cycle.observerSwitchCost time ≤ cost time
 
 namespace QuittingSoloPreemptionCycle

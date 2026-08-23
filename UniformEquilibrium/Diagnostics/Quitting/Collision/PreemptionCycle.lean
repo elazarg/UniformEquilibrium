@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.ImmediateSingletonCollision
+import UniformEquilibrium.Diagnostics.Quitting.Collision.ImmediateSingletonCollision
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
 import MathUE.Topology.FiniteLabelSubsequence
 

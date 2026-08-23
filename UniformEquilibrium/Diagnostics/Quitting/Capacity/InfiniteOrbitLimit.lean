@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SearchConsequences
+import UniformEquilibrium.Diagnostics.Quitting.Capacity.InfiniteOrbitConsequences
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorInfiniteOrbitLimit
 
 /-!
@@ -137,6 +137,75 @@ theorem infiniteOrbit_exists_value_limit
     exact le_of_tendsto_of_tendsto' hlower hshift
       (fun time =>
         orbit.soloReward_sub_opponentHazard_le_value_succ time who)
+
+/-!
+# The all-Continue Nash--Bellman self-loop at the orbit limit
+
+The quantitative variation bound and the structural self-loop are endpoints of
+the same exact-orbit limit argument.  The annotations are prescribed Bellman
+values, not realized payoffs of any strategy profile.
+-/
+
+/- Quantitative total variation along every arbitrary infinite exact
+punishment-floor orbit. -/
+theorem infiniteOrbit_tsum_abs_value_succ_sub_le
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (orbit : QuittingPunishmentFloorInfiniteOrbit reward) (who : ι) :
+    ∑' time, |orbit.value (time + 1) who - orbit.value time who| ≤
+      2 * quittingRewardBound reward *
+        quittingPunishmentFloorPrefixChargeBound reward := by
+  have h2M : (0 : ℝ) ≤ 2 * quittingRewardBound reward := by
+    linarith [quittingRewardBound_nonneg reward]
+  apply Real.tsum_le_of_sum_range_le (fun time => abs_nonneg _)
+  intro horizon
+  calc
+    ∑ time ∈ Finset.range horizon,
+        |orbit.value (time + 1) who - orbit.value time who| ≤
+      ∑ time ∈ Finset.range horizon,
+        2 * quittingRewardBound reward *
+          quittingRootAbsorptionMass (orbit.roots time) :=
+        Finset.sum_le_sum fun time _ =>
+          orbit.abs_value_succ_sub_le_two_mul_absorptionMass time who
+    _ = 2 * quittingRewardBound reward *
+        orbit.partialAbsorption horizon := by
+        simp only [QuittingPunishmentFloorInfiniteOrbit.partialAbsorption,
+          Finset.mul_sum]
+    _ ≤ 2 * quittingRewardBound reward *
+        quittingPunishmentFloorPrefixChargeBound reward :=
+        mul_le_mul_of_nonneg_left
+          (witness.infiniteOrbit_partialAbsorption_le_prefixChargeBound
+            orbit horizon) h2M
+
+/-! **All-Continue Nash--Bellman self-loop at the limit.**  Along every
+arbitrary infinite exact punishment-floor orbit of a terminal exploitability
+witness, the coordinatewise limit of the Bellman annotations, paired with the
+all-Continue simplex root, carries an exact Nash--Bellman edge from itself to
+itself.  The limit is an annotation, not a realized strategy payoff. -/
+theorem infiniteOrbit_exists_selfLoop_limit
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (orbit : QuittingPunishmentFloorInfiniteOrbit reward) :
+    ∃ limit : Payoff ι,
+      (∀ who, Tendsto (fun time => orbit.value time who) atTop
+        (nhds (limit who))) ∧
+      limit ∈ quittingPunishmentFloorForwardCarrier reward ∧
+      (∀ who, quittingPunishmentValue reward who ≤ limit who) ∧
+      IsQuittingNashBellmanEdge reward
+        (limit, quittingAllContinueSimplexRoot)
+        (limit, quittingAllContinueSimplexRoot) := by
+  obtain ⟨limit, hlimit, hcarrier, hfloor, hsolo⟩ :=
+    witness.infiniteOrbit_exists_value_limit orbit
+  refine ⟨limit, hlimit, hcarrier, hfloor, ?_⟩
+  constructor
+  · change limit = quittingRootSuccessorPayoff reward limit
+      (quittingRootOfSimplex quittingAllContinueSimplexRoot)
+    rw [quittingRootOfSimplex_allContinueSimplexRoot,
+      quittingRootSuccessorPayoff_allContinueRoot_eq]
+  · change IsεQuittingRootEndpointNash reward limit 0
+      (quittingRootOfSimplex quittingAllContinueSimplexRoot)
+    rw [quittingRootOfSimplex_allContinueSimplexRoot,
+      isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash]
+    exact quittingAllContinueRoot_isZeroNash_of_singleton_le reward limit
+      hsolo
 
 end QuittingTerminalExploitabilityWitness
 

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.DynamicLimit
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Surplus
+import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.Surplus
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
@@ -25,7 +25,7 @@ Every terminal exploitability witness supplies simultaneously:
 * for every finite window of that tail, a periodically restarted behavior
   profile whose complete behavioral best-response value is a finite maximum
   of first-pass stop values and refusal/`Never`, and exceeds its realized
-  payoff by the regime's terminal gap for some player.
+  payoff by the witness's terminal gap for some player.
 
 No structure combines the source packet with the dynamic tail: the two are
 separate consequences of terminal exploitability, and no relation between
@@ -113,7 +113,7 @@ theorem exists_pureTimeCap_gap
     reward profile who deviation
 
 /-- Every finite window of any dynamic-debt tail, restarted periodically, is
-exposed by the exact pure-time/`Never` cap at the regime's full terminal gap.
+exposed by the exact pure-time/`Never` cap at the witness's full terminal gap.
 No Bellman property of the supplied tail is needed for this strategic
 statement. -/
 theorem exists_cyclicWindow_pureTimeCap_gap

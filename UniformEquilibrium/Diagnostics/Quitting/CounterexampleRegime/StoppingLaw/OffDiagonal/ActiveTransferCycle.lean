@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.FiniteSerialRelation
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PreemptionCycle
+import UniformEquilibrium.Diagnostics.Quitting.Collision.PreemptionCycle
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.SlopeFrontier
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedResetCube
 

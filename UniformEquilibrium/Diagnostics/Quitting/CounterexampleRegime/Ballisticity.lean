@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.CapCarrier
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Defect
+import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.Defect
 import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
 
 /-!

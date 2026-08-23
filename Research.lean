@@ -89,7 +89,6 @@ import Research.Quitting.ObserverAbsentNeverClockTruncation
 import Research.Quitting.OpponentClockVariation
 import Research.Quitting.OwnerOutsiderSquareContextDecomposition
 import Research.Quitting.OwnerSoloCertification
-import Research.Quitting.PacketPreservingSourceReturnNoGo
 import Research.Quitting.PaidNonexactCapStackAccount
 import Research.Quitting.PairActiveSoloPhase
 import Research.Quitting.PathClosureKernels
@@ -100,7 +99,6 @@ import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
 import Research.Quitting.EndpointRecipientAtomSourceMismatchNoGo
-import Research.Quitting.RectangleEndpointFixedLawAtomReturn
 import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction

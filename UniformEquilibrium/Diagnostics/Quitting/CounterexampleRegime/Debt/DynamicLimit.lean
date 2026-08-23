@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Orbit.Limit
+import UniformEquilibrium.Diagnostics.Quitting.Capacity.InfiniteOrbitLimit
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.ViolationCollapse
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDebtSelfLoopLimit
 

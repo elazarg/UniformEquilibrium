@@ -18,7 +18,8 @@ over its players and a target payoff vector satisfying the source
 inequality, the punishment and singleton floors, and diagonal
 complementarity on the support.
 
-This adds a finite semialgebraic necessary condition to the regime: the
+This adds a finite semialgebraic necessary condition to a terminal
+exploitability witness: the
 packet's constraints are finitely many polynomial equalities and
 inequalities in the reward table and the packet data, so search code can
 reject a candidate table by proving the packet system infeasible.

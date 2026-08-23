@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Energy
+import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.Energy
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefixChargedBridge
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySmallPlayers
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows

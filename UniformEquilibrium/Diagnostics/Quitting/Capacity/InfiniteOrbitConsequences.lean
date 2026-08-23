@@ -19,7 +19,7 @@ The strongest graph restriction is local.  Every edge lying on a directed
 cycle has zero absorption charge.  Hence every positive-charge edge is
 strictly transient, and strictly decreases the canonical budget-to-go
 potential.  Quantitatively, a path contains at most `C / threshold` edges
-whose charge is at least a positive threshold, where `C` is the regime's
+whose charge is at least a positive threshold, where `C` is the common
 common prefix-charge bound.
 
 The same prefix bound has an all-orbits consequence.  Every arbitrary
@@ -78,7 +78,7 @@ theorem highAbsorptionStageCount_mul_threshold_le_prefixChargeBound
     (witness.prefixCharge_le cert)
 
 /-- Every finite partial absorption sum along every exact punishment-floor
-orbit is bounded by the one common regime constant. -/
+orbit is bounded by the common prefix-charge bound. -/
 theorem infiniteOrbit_partialAbsorption_le_prefixChargeBound
     (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
@@ -104,7 +104,7 @@ theorem infiniteOrbit_absorptionMass_summable
     witness.infiniteOrbit_partialAbsorption_le_prefixChargeBound orbit horizon
 
 /-- The total absorption mass of every arbitrary exact orbit is bounded by
-the same regime constant. -/
+the same common prefix-charge bound. -/
 theorem infiniteOrbit_tsum_absorptionMass_le_prefixChargeBound
     (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward) :
@@ -171,7 +171,7 @@ theorem infiniteOrbit_continueProbability_tendsto_one
 exact punishment-floor orbit, every sufficiently late current root has
 arbitrarily small absorption, yet the actual root-sequence behavior profile
 starting at that date still admits a unilateral terminal improvement of at
-least the regime's common terminal gap.
+least the witness's common terminal gap.
 
 The terminal payoffs here are the genuine stochastic-game terminal payoffs of
 `quittingRootSequenceProfile`.  No equality with `orbit.value time` is used or

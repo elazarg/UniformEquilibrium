@@ -40,7 +40,7 @@ namespace QuittingTerminalExploitabilityWitness
 
 open QuittingAggregateCalibratedTerminalAnchor
 
-/-- The literal regime gap floors the all-tail repair value of the complete
+/-- The literal terminal gap floors the all-tail repair value of the complete
 canonical aggregate exact-`D` minimizer at every positive cutoff. -/
 theorem terminalGap_le_canonicalAggregateFullPrefixRepairValue
     (witness : QuittingTerminalExploitabilityWitness reward) (last : ℕ) :
@@ -76,7 +76,7 @@ theorem terminalGap_le_repairValue_le_minAggregate
   exact ⟨witness.terminalGap_le_canonicalAggregateFullPrefixRepairValue last,
     canonicalAggregateFullPrefixRepairValue_le_minAggregate reward last⟩
 
-/-- At every cutoff the regime's literal terminal gap is carried by a marked
+/-- At every cutoff the witness's literal terminal gap is carried by a marked
 packet of the canonical aggregate minimizer.  This is a calibrated packet
 charge, not yet an edge in the punishment-floor reachable relation. -/
 theorem exists_aggregateAnchor_terminalGap_le_packetCharge
@@ -100,7 +100,7 @@ Suppose the initial state of an aggregate-calibrated prefix is literally the
 tail of a reachable punishment-floor predecessor edge.  If the co-realized
 terminal exploitability after an elementary cap is bounded by the next
 aggregate-objective drop plus a scaled charge of that edge, then at least half
-the regime gap is paid by the objective drop or by the legal predecessor
+the terminal gap is paid by the objective drop or by the legal predecessor
 charge.
 
 The `hcomparison` inequality is the minimal quantitative seam not supplied by

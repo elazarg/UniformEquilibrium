@@ -409,68 +409,6 @@ structure QuittingPureTimeWitnessSwitchCertificate
             switch.sourceWitness))
         observer (some receivingTerminal)
 
-/-- Propositional existence wrapper for the full quitting-game certificate. -/
-def HasQuittingPureTimeWitnessSwitchCertificate
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (source receiving : (quittingGame reward).BehaviorProfile)
-    (observer : ι) (charge eta : ℝ) : Prop :=
-  Nonempty (QuittingPureTimeWitnessSwitchCertificate reward source receiving
-    observer charge eta)
-
-/-- The reduced rectangle-only interface.  This is kept as a corollary
-surface; consumers needing strategic orientation should use the full
-certificate. -/
-def HasQuittingPureTimeWitnessSwitchRectangle
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (source receiving : (quittingGame reward).BehaviorProfile)
-    (observer : ι) (charge eta : ℝ) : Prop :=
-  ∃ sourceTime receivingTime : Option ℕ,
-    ∃ terminal : {S : Finset ι // S.Nonempty},
-      quittingContinuationBestResponseValue reward source observer - eta ≤
-          quittingPureTimeDeviationPayoff reward source observer sourceTime ∧
-        quittingContinuationBestResponseValue reward receiving observer - eta ≤
-          quittingPureTimeDeviationPayoff reward receiving observer
-            receivingTime ∧
-        charge ≤
-          quittingPureTimeDeviationPayoff reward receiving observer
-              receivingTime -
-            quittingPureTimeDeviationPayoff reward receiving observer
-              sourceTime -
-            quittingPureTimeDeviationPayoff reward source observer
-              receivingTime +
-            quittingPureTimeDeviationPayoff reward source observer sourceTime ∧
-        charge ≤ (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
-          quittingTerminalPayoffRectangleAtom reward
-            (Function.update source observer
-              (quittingPureTimeBehaviorStrategy reward observer sourceTime))
-            (Function.update source observer
-              (quittingPureTimeBehaviorStrategy reward observer receivingTime))
-            (Function.update receiving observer
-              (quittingPureTimeBehaviorStrategy reward observer sourceTime))
-            (Function.update receiving observer
-              (quittingPureTimeBehaviorStrategy reward observer receivingTime))
-            observer (some terminal)
-
-/-- Forgetting the receiving regret, both edge bounds, and the receiving-edge
-atom recovers the rectangle-only interface. -/
-theorem QuittingPureTimeWitnessSwitchCertificate.hasRectangle
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {source receiving : (quittingGame reward).BehaviorProfile}
-    {observer : ι} {charge eta : ℝ}
-    (certificate : QuittingPureTimeWitnessSwitchCertificate reward source
-      receiving observer charge eta) :
-    HasQuittingPureTimeWitnessSwitchRectangle reward source receiving observer
-      charge eta := by
-  exact ⟨certificate.switch.sourceWitness,
-    certificate.switch.receivingWitness, certificate.rectangleTerminal,
-    by simpa only [
-      quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff]
-      using certificate.switch.source_approx,
-    by simpa only [
-      quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff]
-      using certificate.switch.receiving_approx,
-    certificate.switch.rectangle, certificate.rectangle_atom⟩
-
 private theorem hasQuittingPureTimeWitnessSwitchCertificate_of_generic
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source receiving : (quittingGame reward).BehaviorProfile)
@@ -480,8 +418,8 @@ private theorem hasQuittingPureTimeWitnessSwitchCertificate_of_generic
       (quittingPureTimeDeviationPayoff reward source observer)
       (quittingPureTimeDeviationPayoff reward receiving observer)
       charge eta) :
-    HasQuittingPureTimeWitnessSwitchCertificate reward source receiving
-      observer charge eta := by
+    Nonempty (QuittingPureTimeWitnessSwitchCertificate reward source receiving
+      observer charge eta) := by
   let x00 := Function.update source observer
     (quittingPureTimeBehaviorStrategy reward observer switch.sourceWitness)
   let x01 := Function.update source observer
@@ -536,10 +474,10 @@ theorem exists_pureTimeWitnessSwitchCertificate_of_abs_envelopeCurvature
         quittingContinuationBestResponseValue reward x10 observer -
         quittingContinuationBestResponseValue reward x01 observer +
         quittingContinuationBestResponseValue reward x00 observer|) :
-    HasQuittingPureTimeWitnessSwitchCertificate reward x11 x00 observer
-        charge eta ∨
-      HasQuittingPureTimeWitnessSwitchCertificate reward x10 x01 observer
-        charge eta := by
+    Nonempty (QuittingPureTimeWitnessSwitchCertificate reward x11 x00 observer
+        charge eta) ∨
+      Nonempty (QuittingPureTimeWitnessSwitchCertificate reward x10 x01
+        observer charge eta) := by
   let f00 := quittingPureTimeDeviationPayoff reward x00 observer
   let f10 := quittingPureTimeDeviationPayoff reward x10 observer
   let f01 := quittingPureTimeDeviationPayoff reward x01 observer
@@ -605,10 +543,10 @@ theorem exists_pureTimeWitnessSwitchCertificate_of_abs_debtCurvature
             (quittingTerminalSemanticPair reward x01) observer +
           quittingTerminalSemanticDebt
             (quittingTerminalSemanticPair reward x00) observer|) :
-    HasQuittingPureTimeWitnessSwitchCertificate reward x11 x00 observer
-        charge eta ∨
-      HasQuittingPureTimeWitnessSwitchCertificate reward x10 x01 observer
-        charge eta := by
+    Nonempty (QuittingPureTimeWitnessSwitchCertificate reward x11 x00 observer
+        charge eta) ∨
+      Nonempty (QuittingPureTimeWitnessSwitchCertificate reward x10 x01
+        observer charge eta) := by
   let envelopeCurvature :=
     quittingContinuationBestResponseValue reward x11 observer -
       quittingContinuationBestResponseValue reward x10 observer -
