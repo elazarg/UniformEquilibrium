@@ -246,8 +246,20 @@ theorem fullEndpointPayoff_sub_source_eq_neg_actualDebtDirection_self
           (frontier.profiles (frontier.subseq rank)) mover.1 =
       -frontier.actualDebtDirection rank mover mover.1 := by
   rw [frontier.actualDebtDirection_self_eq_fullEndpointDebtChange]
+  change
+    quittingTerminalPayoff reward
+          (frontier.sourceMatchedFullEndpointProfile rank mover) mover.1 -
+        quittingTerminalPayoff reward
+          (frontier.profiles (frontier.subseq rank)) mover.1 =
+      -((quittingContinuationBestResponseValue reward
+              (frontier.sourceMatchedFullEndpointProfile rank mover) mover.1 -
+            quittingTerminalPayoff reward
+              (frontier.sourceMatchedFullEndpointProfile rank mover) mover.1) -
+        (quittingContinuationBestResponseValue reward
+              (frontier.profiles (frontier.subseq rank)) mover.1 -
+            quittingTerminalPayoff reward
+              (frontier.profiles (frontier.subseq rank)) mover.1))
   unfold sourceMatchedFullEndpointProfile
-  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
   rw [quittingContinuationBestResponseValue_update_self]
   ring
 
@@ -263,8 +275,9 @@ theorem fullEndpointGain_tendsto_neg_tangentDiagonal
       atTop (nhds (-frontier.tangent mover mover.1)) := by
   have hdirection := (frontier.tangent_tendsto mover mover.1).neg
   apply hdirection.congr'
-  exact Eventually.of_forall fun rank => by
-    rw [frontier.fullEndpointPayoff_sub_source_eq_neg_actualDebtDirection_self]
+  exact Eventually.of_forall fun rank =>
+    (frontier.fullEndpointPayoff_sub_source_eq_neg_actualDebtDirection_self
+      rank mover).symm
 
 /-- The supplied mover is eventually a fixed-gain legal source deviation.
 The quarter-debt constant leaves strict room below the limiting half-debt
@@ -313,7 +326,7 @@ theorem exists_scaleFreeFullEndpointExcursion_of_positiveTotalSlope
               (frontier.profiles (frontier.subseq rank)) mover.1 := by
   obtain ⟨mover, hslope⟩ := hpositive
   exact ⟨mover, hslope,
-    fun _ heta => frontier.eventually_eta_le_fullEndpoint_totalDebtChange
+    fun {eta} heta => frontier.eventually_eta_le_fullEndpoint_totalDebtChange
       mover heta,
     frontier.eventually_baseDebt_quarter_le_fullEndpointGain mover⟩
 
