@@ -10,7 +10,7 @@
     "dyadic_data": {
       "path": "Experiments/certsearch/block_pair/K11/DyadicData.lean",
       "canonical_role": "checked-in experimental evidence",
-      "source_file_sha256": "38ed7f43dffafb0add8106dc5a257f2f5d9817d03437cd54e45138531c461b1c",
+      "source_file_sha256": "ea5c0bed9bdb7f63893930e05995cc9b991c9bfe7935da7cde8ab04bea4e8fda",
       "logical_payload_sha256": "1db7a63e48a84d477cd7d913376a3f28637455dc38b1ae69ec865c0850ed79ad",
       "precision": 80,
       "center_count": 31,
@@ -20,7 +20,7 @@
     "preconditioner": {
       "path": "Experiments/certsearch/block_pair/K11/Preconditioner.lean",
       "canonical_role": "checked-in experimental evidence",
-      "source_file_sha256": "e2492d7c5ceb706dc7db4365e254174e3077e0e886c812acaf9031fb217deed9",
+      "source_file_sha256": "dce37619898b8d24803725bc408096f5f260685359277f2f5bc7707891198dee",
       "logical_payload_sha256": "286d9ff1fbff0ce3061faea9fd7ea1ea921750fcf02b69515200c95f2c92c36f",
       "rows": 31,
       "columns": 31,
@@ -30,7 +30,7 @@
     "jacobian_cache": {
       "path": "Experiments/certsearch/block_pair/K11/JacobianCache.lean",
       "canonical_role": "checked-in experimental evidence",
-      "source_file_sha256": "35b0b72e40a3def51852fc33915792c78622739c0e4a6e228bde7588dbb0f5d3",
+      "source_file_sha256": "ee2afaf206279b1ee8aaf8a339b78e001c16e7cf5638e6a2fca3964d9c1022e6",
       "logical_payload_sha256": "fdcc9fd0539b86ef413bd816407a864c8c811c73b8055fb4db99e5f7b1c0283a",
       "rows": 31,
       "columns": 31,
@@ -39,7 +39,7 @@
     "row_zero_cache": {
       "path": "Experiments/certsearch/block_pair/K11/RowZeroCacheData.lean",
       "canonical_role": "checked-in experimental evidence",
-      "source_file_sha256": "f31e24c519524cc583d183fa1708fa34b5d280275c43da39bf3a321c9fbad8a4",
+      "source_file_sha256": "bf7b49114c8c4a45fd8045153f35d75d7375f87d93daf9516440dfccbc41c846",
       "logical_payload_sha256": "08fa7efc45b99debfeab619311cb4cc57c5612603b92d548af4e095847360589",
       "precision": 80,
       "vector_count": 3,

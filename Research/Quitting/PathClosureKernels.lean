@@ -4,7 +4,7 @@ import UniformEquilibrium.Quitting.Paths.NonSoloMass
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 
 /-!
-# Proof-mining experiment: closing longer quitting paths
+# Closing longer quitting paths
 
 This file demonstrates four kernels suggested by the recent root and live-mass
 proofs.
@@ -544,7 +544,7 @@ theorem abs_finiteAveragePayoff_update_sub_terminal_le_opponentLiveAverage
 
 /-- Almost-sure opponent absorption upgrades the common finite estimate to
 absolute terminal-payoff approximation, uniformly over all deviations.  The
-production theorem needs only the one-sided half; this experiment records the
+production theorem needs only the one-sided half; this module records the
 stronger symmetric conclusion exposed by the same proof. -/
 theorem eventually_abs_finiteAveragePayoff_update_sub_terminal_lt_of_opponentsAbsorb
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

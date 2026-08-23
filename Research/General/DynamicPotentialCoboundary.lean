@@ -3,8 +3,8 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 /-!
 # Dynamic common interest modulo a coboundary
 
-This experiment formalizes the algebraic core of the dynamic-potential idea in
-`ideas/CoalitionSecurityWelfareAssembly.md`.
+This module formalizes the algebraic core of a dynamic-potential
+coalition-security and welfare-assembly construction.
 
 Suppose player `i`'s stage payoff is an affine transform of one common reward,
 up to a state-potential coboundary

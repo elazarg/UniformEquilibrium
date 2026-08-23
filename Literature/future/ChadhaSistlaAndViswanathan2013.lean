@@ -15,7 +15,7 @@ namespace Literature.ChadhaSistlaAndViswanathan2013
 def record : Literature.PaperRecord where
   paperId := "chadha_sistla_and_viswanathan_2013"
   bibliographyLabel := "Chadha, Sistla & Viswanathan 2013"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Chadha, Sistla & Viswanathan 2013"
+  bibliographyLocator := "Published source: Chadha, Sistla & Viswanathan 2013"
   role := .zeroSumBoundary
   paperEvidence := .secondaryInspected
   auditStatus := .paperInspected

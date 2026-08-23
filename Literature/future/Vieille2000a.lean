@@ -15,7 +15,7 @@ namespace Literature.Vieille2000a
 def record : Literature.PaperRecord where
   paperId := "vieille_2000a"
   bibliographyLabel := "Vieille 2000a"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Vieille 2000a"
+  bibliographyLocator := "Published source: Vieille 2000a"
   role := .nonzeroSumExistence
   paperEvidence := .bibliographic
   auditStatus := .catalogued

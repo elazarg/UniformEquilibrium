@@ -62,7 +62,7 @@ law against the three contraction deficits it names:
 
 ## Verification note
 
-The prose formula was checked against the repository's actual Bellman
+The prose formula was checked against the actual Bellman
 definitions before formalizing.  `quittingRootSuccessorPayoff`'s coordinate
 `who` reads the continuation *only* at `continuation who`
 (`quittingRootExpectedPayoff_eq_absorbingContribution_add`), with slope the

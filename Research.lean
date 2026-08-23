@@ -23,7 +23,7 @@ import Research.General.MaxAffineHolonomySemigroup
 import Research.General.MinimumSemanticPlateauConsistency
 import Research.General.ORCoupledCalibrationGame
 import Research.General.PathCarrierPrototype
-import Research.General.Question175OwnerNeverFloor
+import Research.General.NegativeOwnerNeverFloor
 import Research.General.RandomDeviationAuditCardinalReduction
 import Research.General.RandomDeviationAuditGame
 import Research.General.ResetSeriesCrossPinDebtCharge
@@ -99,7 +99,7 @@ import Research.Quitting.PrescribedAtomMinimumAccounting
 import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
-import Research.Quitting.Q182EndpointRecipientAtomInterfaceNoGo
+import Research.Quitting.EndpointRecipientAtomSourceMismatchNoGo
 import Research.Quitting.RectangleEndpointFixedLawAtomReturn
 import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo

@@ -15,7 +15,7 @@ import UniformEquilibrium.Quitting.Stationary.MinMax
 # Unordered singleton occupation does not determine stopping incentives
 
 After stochastic-button collision compression, the remaining diffuse object
-is singleton flow.  This experiment tests whether that flow may be compressed
+is singleton flow.  This module tests whether that flow may be compressed
 as an unordered occupation measure.
 
 Two two-row opponent chronologies below have exactly the same survival-weighted

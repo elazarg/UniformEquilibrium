@@ -15,7 +15,7 @@ namespace Literature.ChevallierAndFleuriot2021
 def record : Literature.PaperRecord where
   paperId := "chevallier_and_fleuriot_2021"
   bibliographyLabel := "Chevallier & Fleuriot 2021"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Chevallier & Fleuriot 2021"
+  bibliographyLocator := "Published source: Chevallier & Fleuriot 2021"
   role := .formalization
   paperEvidence := .bibliographic
   auditStatus := .catalogued

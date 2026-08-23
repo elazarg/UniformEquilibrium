@@ -66,7 +66,7 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_card_le_three
 def record : Literature.PaperRecord where
   paperId := "solan_1999"
   bibliographyLabel := "Solan 1999"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan 1999"
+  bibliographyLocator := "Published source: Solan 1999"
   role := .nonzeroSumExistence
   paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress

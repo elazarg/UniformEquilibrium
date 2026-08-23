@@ -15,7 +15,7 @@ namespace Literature.HolzlAndNipkow2012
 def record : Literature.PaperRecord where
   paperId := "holzl_and_nipkow_2012"
   bibliographyLabel := "Hölzl & Nipkow 2012"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Hölzl & Nipkow 2012"
+  bibliographyLocator := "Published source: Hölzl & Nipkow 2012"
   role := .formalization
   paperEvidence := .bibliographic
   auditStatus := .catalogued

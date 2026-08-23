@@ -15,7 +15,7 @@ namespace Literature.SolanAndSolan201819
 def record : Literature.PaperRecord where
   paperId := "solan_and_solan_2018_19"
   bibliographyLabel := "Solan & Solan 2018/19"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan & Solan 2018/19"
+  bibliographyLocator := "Published source: Solan & Solan 2018/19"
   role := .recentNonzeroSum
   paperEvidence := .bibliographic
   auditStatus := .catalogued

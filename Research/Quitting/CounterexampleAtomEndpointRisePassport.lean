@@ -13,7 +13,7 @@ import Research.Quitting.CounterfactualAtomMinimumResetSquare
 
 The fixed atom and rectangle decoders were obtained from a positive
 normalized stopping-law debt direction, but their public packets discarded
-that inequality.  This experiment retains it through the same fixed player
+that inequality.  This module retains it through the same fixed player
 labels, the same literal suffix profiles, and arbitrarily long exact Nash
 prefix stacks.
 

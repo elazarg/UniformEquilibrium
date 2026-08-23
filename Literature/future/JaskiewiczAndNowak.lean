@@ -15,7 +15,7 @@ namespace Literature.JaskiewiczAndNowak
 def record : Literature.PaperRecord where
   paperId := "jaskiewicz_and_nowak"
   bibliographyLabel := "Jaśkiewicz & Nowak"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Jaśkiewicz & Nowak"
+  bibliographyLocator := "Published source: Jaśkiewicz & Nowak"
   role := .surveys
   paperEvidence := .bibliographic
   auditStatus := .catalogued

@@ -15,7 +15,7 @@ namespace Literature.MunkAndSolan2020
 def record : Literature.PaperRecord where
   paperId := "munk_and_solan_2020"
   bibliographyLabel := "Munk & Solan 2020"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Munk & Solan 2020"
+  bibliographyLocator := "Published source: Munk & Solan 2020"
   role := .recentNonzeroSum
   paperEvidence := .bibliographic
   auditStatus := .catalogued

@@ -54,7 +54,7 @@ general negative about the seed is claimed.
 
 ## Reproduction
 
-`lake env lean Experiments/counterexample_search/RegularTournamentFiveSeedZeroOrbitGap.lean`
+This module can be checked independently with Lean.
 -/
 
 noncomputable section

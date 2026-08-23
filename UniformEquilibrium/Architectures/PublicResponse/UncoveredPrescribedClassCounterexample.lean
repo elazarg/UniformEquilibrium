@@ -41,7 +41,7 @@ namespace StochasticGame
 
 open Math.Probability Math.PMFProduct
 
-namespace Q96UncoveredClass
+namespace UncoveredPrescribedClass
 
 abbrev Player := Bool
 abbrev State := Bool
@@ -469,6 +469,6 @@ theorem no_global_prescribedPoissonBias :
   obtain ⟨bias, hbias⟩ := h
   exact no_prescribedPoissonBias_at_escaped ⟨bias, hbias true⟩
 
-end Q96UncoveredClass
+end UncoveredPrescribedClass
 end StochasticGame
 end GameTheory

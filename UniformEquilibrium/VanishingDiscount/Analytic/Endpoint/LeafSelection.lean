@@ -55,7 +55,7 @@ The `semanticClose` branch is nevertheless discriminated *sharply*:
 is labelled `semanticClose` if and only if
 `G.IsUniformEquilibriumPayoff entry (germ.endpointValue entry)` holds, and
 `finiteBiasSeedLeaf_eq_semanticClose` upgrades that to an equation between the
-produced leaf and the by-hand `semanticClose` leaf.  When the endpoint is not
+produced leaf and the explicitly `semanticClose` leaf.  When the endpoint is not
 a uniform equilibrium payoff the label is pinned to the remaining three
 finite-bias labels
 (`finiteBiasSeedLeaf_label_of_not_isUniformEquilibriumPayoff`).
@@ -250,7 +250,7 @@ theorem isUniformEquilibriumPayoff_of_label_eq_semanticClose
   case semanticClose => exact fun _ => by assumption
   all_goals exact fun h => by simp [label] at h
 
-/-- A leaf labelled `semanticClose` *is* the by-hand semantic leaf, for any
+/-- A leaf labelled `semanticClose` *is* the explicitly semantic leaf, for any
 proof of the semantic statement (proof irrelevance). -/
 theorem eq_semanticClose_of_label_eq_semanticClose
     {span : germ.EndpointHarmonicJetSpan} {entry : G.State}
@@ -493,7 +493,7 @@ theorem finiteBiasSeedLeaf_label_eq_semanticClose
   (finiteBiasSeedLeaf_isFiniteBiasSeedClassification seed span
     entry).label_eq_semanticClose uniform
 
-/-- The same selector, upgraded to an equation with the by-hand semantic
+/-- The same selector, upgraded to an equation with the explicitly semantic
 leaf: the classification returns exactly `semanticClose uniform`. -/
 theorem finiteBiasSeedLeaf_eq_semanticClose
     (seed : germ.FiniteBiasSeed)
@@ -634,7 +634,7 @@ end AnalyticBellmanGerm
 `PureExternalityCycleGerm.lean` had to exhibit its `semanticClose` leaves by
 hand, because `ofFirstHierarchyResponse` only returns `Nonempty`.  The adapter
 removes that: running it on the explicit first hierarchy responses of both
-germs *returns* the by-hand leaves, and the semantic theorem can be read back
+germs *returns* the explicitly leaves, and the semantic theorem can be read back
 off the resulting label. -/
 
 namespace PureExternalityCycle
@@ -642,7 +642,7 @@ namespace PureExternalityCycle
 open AnalyticBellmanGerm AnalyticBellmanGerm.AnalyticEndpointAtlasLeaf
 
 /-- The adapter, run on the explicit constant-`1` first hierarchy response,
-returns exactly the by-hand semantic leaf of `PureExternalityCycleGerm`. -/
+returns exactly the explicitly semantic leaf of `PureExternalityCycleGerm`. -/
 theorem firstHierarchyResponseLeaf_oneFirstHierarchyResponse (entry : Bool) :
     firstHierarchyResponseLeaf oneFirstHierarchyResponse entry =
       oneEndpointLeaf entry :=
@@ -658,7 +658,7 @@ theorem firstHierarchyResponseLeaf_oneFirstHierarchyResponse_label
     (oneGerm_isUniformEquilibriumPayoff entry)
 
 /-- The adapter, run on the explicit prescribed first hierarchy response,
-returns exactly the by-hand semantic leaf — despite the nonzero finite
+returns exactly the explicitly semantic leaf — despite the nonzero finite
 relative bias `prescribedFiniteBiasSeed_H_ne_zero`. -/
 theorem firstHierarchyResponseLeaf_prescribedFirstHierarchyResponse
     (entry : Bool) :
@@ -678,7 +678,7 @@ theorem firstHierarchyResponseLeaf_prescribedFirstHierarchyResponse_label
 
 /-- **Acceptance capstone.**  For both explicit germs of the pure-externality
 cycle the adapter *selects* the leaf rather than merely asserting that one
-exists: the returned leaf equals the by-hand `semanticClose` leaf, its label
+exists: the returned leaf equals the explicitly `semanticClose` leaf, its label
 is `semanticClose`, and the uniform-equilibrium-payoff theorem is recovered
 from that label alone. -/
 theorem adapter_selects_semanticClose (entry : Bool) :

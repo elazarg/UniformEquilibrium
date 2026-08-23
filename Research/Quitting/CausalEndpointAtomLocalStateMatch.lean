@@ -1,5 +1,5 @@
 /-
-Experimental: localize a direct endpoint-recipient atom from its global
+This module localizes a direct endpoint-recipient atom from its global
 profile to the literal reached Bellman row.  The rectangle mode is fenced.
 -/
 

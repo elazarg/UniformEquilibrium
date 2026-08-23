@@ -15,7 +15,7 @@ namespace Literature.HansenIbsenJensenAndNeyman2023
 def record : Literature.PaperRecord where
   paperId := "hansen_ibsen_jensen_and_neyman_2023"
   bibliographyLabel := "Hansen, Ibsen-Jensen & Neyman 2023"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Hansen, Ibsen-Jensen & Neyman 2023"
+  bibliographyLocator := "Published source: Hansen, Ibsen-Jensen & Neyman 2023"
   role := .recentNonzeroSum
   paperEvidence := .bibliographic
   auditStatus := .catalogued

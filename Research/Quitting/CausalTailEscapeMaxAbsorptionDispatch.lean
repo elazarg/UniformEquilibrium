@@ -17,16 +17,11 @@ import UniformEquilibrium.Quitting.RewardBound
 /-!
 # Maximal-absorption dispatch for a causal tail escape
 
-Proof-frontier passport:
-
-* seam attacked: strict Q183 tail escape below a literal causal suffix atom;
-* input consumed: compact exact cap--Nash correspondence, exact prefix debt
-  scaling, and `CausalTailEscapeReturnGate`'s return-selection interface;
-* output delivered: a same-tail return, or universal quantitative
-  undercharge even at the maximal-absorption exact root;
-* downstream consumer: the return branch feeds
-  `capNashTailEscapeReturnSelection_retains_causalSuffixAtom`; the obstruction
-  rules out further selection-only work at the unchanged tail.
+The argument treats strict tail escape below a literal causal suffix atom. It
+uses compactness of the exact cap--Nash correspondence, exact prefix-debt
+scaling, and the return-selection interface. It yields either a same-tail
+return or universal quantitative undercharge even at the maximal-absorption
+exact root.
 
 The exact cap--Nash correspondence at a fixed tail is compact.  Hence its
 one-stage absorption mass has a maximizer.  This removes an artificial
@@ -43,21 +38,12 @@ undercharged.  Thus finite Nash existence, extremal root selection, and local
 singleton-gap forcing are all exhausted.  Any further argument must change
 the cap/state or use additional chronology.
 
-Q184 state-change passport:
-
-* seam attacked: universal same-tail undercharge after selection has been
-  exhausted, now allowing the literal state and its cap to change;
-* input consumed: maximal exact cap roots, exact semantic prefix scaling,
-  fixed-tail absorption bounds, closed endpoint Nash graphs, and compactness
-  of the joint terminal semantic/law carrier;
-* output delivered: a nested maximal-root chronology with summable charge,
-  retained suffix atoms, and finite charged cap rise; its envelope states are
-  now proved to be a literal exact punishment-floor prefix with the identical
-  absorption charge;
-* frontier delta: every positive-absorption/support-entry branch is therefore
-  accepted by the existing prefix-capacity interface.  The only surviving
-  local obstruction is a cap whose exact Nash correspondence is the singleton
-  all-Continue root.  No owner decoder is needed merely to consume the charge.
+The state-changing case allows the literal state and cap to change. Maximal
+exact cap roots, semantic prefix scaling, fixed-tail absorption bounds, closed
+endpoint Nash graphs, and compactness of the joint terminal semantic/law carrier
+yield a nested maximal-root chronology with summable charge, retained suffix
+atoms, and finite charged cap rise. The remaining local obstruction is a cap
+whose exact Nash correspondence is the singleton all-Continue root.
 -/
 
 noncomputable section
@@ -1022,7 +1008,7 @@ theorem quittingMaximalCapPrefixPunishmentFloorPrefix_charge
 every finite segment is a legal punishment-floor prefix, its charge is
 uniformly bounded by the initial semantic excess divided by the positive
 minimum debt.  Consequently this chronology cannot by itself trigger the
-unbounded-prefix-charge compiler.  Any Q184 closure through capacity must
+unbounded-prefix-charge compiler.  Any closure through capacity must
 produce charge not already paid by this debt-scaling telescope. -/
 theorem maximalCapPrefixPunishmentFloorPrefix_charge_le_semanticBudget
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
@@ -1049,7 +1035,7 @@ theorem maximalCapPrefixPunishmentFloorPrefix_charge_le_semanticBudget
   apply (le_div_iff₀ hminimumPositive).2
   nlinarith
 
-/-- **Hard Q184 reduction.**  At a positive global semantic minimum, the
+/-- **Hard state-change reduction.**  At a positive global semantic minimum, the
 first state-changing maximal cap root has only two possibilities.  If it has
 positive absorption, it is already a positively charged exact
 punishment-floor prefix and it literally retains every positive suffix atom.

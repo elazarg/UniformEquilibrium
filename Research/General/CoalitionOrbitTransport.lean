@@ -3,8 +3,8 @@ import Mathlib
 /-!
 # Coalition orbit transport
 
-This coalition-specific experiment isolates the elementary group-action
-reduction used by `ideas/CoalitionSplittingGroupActions.md`.
+This coalition-specific module isolates the elementary group-action
+reduction used by the coalition-splitting group-action argument.
 
 Player permutations act on coalitions, preserve complements and cardinality,
 and make all singleton splits conjugate.  More abstractly, for a transitive

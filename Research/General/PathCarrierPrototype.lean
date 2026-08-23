@@ -22,7 +22,7 @@ check, in order of importance:
   (3) a boundary predicate is still required for semantic composition;
   (4) how much index transport (casts / HEq) this costs.
 
-Run: lake env lean experiments/PathCarrierPrototype.lean
+This module is checked independently with Lean.
 -/
 import Mathlib
 
@@ -258,8 +258,8 @@ theorem startsAt_toHist {t : ℕ} (h : Path S A t) :
 
 /-! ## Are the two carriers isomorphic?
 
-The design record claimed the image of `toHist` is "exactly the chained
-histories", i.e. that `Path` is the well-formed part of `Hist`.  That is
+One might claim that the image of `toHist` is "exactly the chained histories",
+i.e. that `Path` is the well-formed part of `Hist`.  That is
 false: `Hist t` stores `t+1` states and `t` actions, exactly as `Path t`
 does, and no state appears twice, so there is no chaining condition a `Hist`
 could violate.  `toHist` is a bijection.  Constructing its inverse settles

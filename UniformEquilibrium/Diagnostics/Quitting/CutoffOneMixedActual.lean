@@ -11,14 +11,13 @@ import MathUE.ProbabilityMassFunction.Bool
 /-!
 # Actual-data promotion of the mixed cutoff-one regression
 
-The rational table
-`Experiments/quitting_repair_cegis/tables/cutoff_one_mixed.json` has the
+The checked finite table has the
 zero-tail root `(1/2, 1/2)`.  This file is the proof-carrying promotion of
 that finite datum: it constructs the root and reward table directly in Lean,
 checks the two endpoint Nash equalities and the positive continuation safety,
 and names the resulting uniform-equilibrium payoff as `(0, 0)`.
 
-The Python report remains external evidence and is not used as an axiom or
+The numerical table is external evidence and is not used as an axiom or
 constructor input here.
 -/
 
@@ -30,7 +29,7 @@ namespace QuittingCutoffOneMixedActual
 open StochasticGame Math.Probability Math.PMFProduct
 
 -- BEGIN GENERATED CUTOFF_ONE_MIXED_DATA
--- source: Experiments/quitting_repair_cegis/tables/cutoff_one_mixed.json
+-- checked finite table
 -- fingerprint: sha256:a94fe0c3e4cb98f85c5632cc6169da76c7d3b75f30aaf92f69084da0734a36f5
 abbrev Player := Fin 2
 abbrev Terminal := {S : Finset Player // S.Nonempty}

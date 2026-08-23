@@ -33,7 +33,7 @@ instantiation.
   explicit three-way disjunction of sign/algebraic conditions on the four
   matrix entries.
 
-## Design notes
+## Construction details
 
 The definitions and theorems here are game-independent. Game-facing adapters
 belong in the production modules that own their semantic input types.

@@ -694,9 +694,8 @@ row is an absorbing exact complementary cycle by
 `-1`, the anchored orbit is constant at `Λ_true = max {0, -1} = 0`, and the
 mismatch is `1`.
 
-This is the scalar-companion half of the *hand check* recorded in the module
-docstring of `QuittingAdmissibleCycleTerminalEquilibrium.lean` (that its
-hypothesis (H2) is not redundant).  It is not the game-level statement: nothing
+This is the scalar-companion calculation showing that hypothesis (H2) is not
+redundant.  It is not the game-level statement: nothing
 here claims that the periodic profile fails to be terminal `ε`-Nash. -/
 
 namespace QuittingIsolatedNegativeSoloRegression

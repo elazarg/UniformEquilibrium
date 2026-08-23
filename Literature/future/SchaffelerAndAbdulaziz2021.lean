@@ -15,7 +15,7 @@ namespace Literature.SchaffelerAndAbdulaziz2021
 def record : Literature.PaperRecord where
   paperId := "schaffeler_and_abdulaziz_2021"
   bibliographyLabel := "Schäffeler & Abdulaziz 2021"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Schäffeler & Abdulaziz 2021"
+  bibliographyLocator := "Published source: Schäffeler & Abdulaziz 2021"
   role := .formalization
   paperEvidence := .bibliographic
   auditStatus := .catalogued

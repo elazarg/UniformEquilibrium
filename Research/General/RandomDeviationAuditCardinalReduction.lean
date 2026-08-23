@@ -10,7 +10,7 @@ import UniformEquilibrium.Diagnostics.Quitting.MinimalFinCounterexample
 /-!
 # Cardinal reduction for the random deviation audit game
 
-This experiment states the larger-to-four reduction without asserting it.
+This module states the larger-to-four reduction without asserting it.
 It separates three levels which are easy to conflate.
 
 1. `CounterexampleCardinalReductionToFour` is the exact cardinal statement:

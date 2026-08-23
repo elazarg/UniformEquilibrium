@@ -569,8 +569,7 @@ namespace QuittingCounterexampleStoppingLawFrontier
 counterexample frontier supplies either a prescribed-payoff atom sequence or
 one fixed rectangle packet in exactly one of the four terminal geometries.
 Each geometry is returned together with the strategic dispatch constructed
-from it, so downstream consumers do not have to recover discarded
-provenance. -/
+from it, so no discarded provenance must be recovered. -/
 theorem exists_prescribed_or_orientationPreservingStrategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}

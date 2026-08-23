@@ -39,7 +39,7 @@ tight, not merely a witness with room to spare.
 
 ## Reproduction
 
-`lake env lean Experiments/counterexample_search/CyclicBlockExactPeriodicCalibration.lean`
+This module can be checked independently with Lean.
 
 ## Scope
 

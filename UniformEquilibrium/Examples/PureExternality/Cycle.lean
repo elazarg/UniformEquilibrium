@@ -25,12 +25,8 @@ their actions; at `y` player 2's own payoff is `1` under both of theirs.  The
 controller's action moves only the *other* player's payoff.  The prescribed
 profile plays action `0` at both states.
 
-## Provenance
-
-This is the counterexample game of Part E (§11–§13) of an untracked local
-research note on mixed-context strategic routing: a finite genuine source
-datum for which all four routing strategies of the mixed-context
-strategic-routing theorem fail.  **This file is only the raw layer** — the game
+This module defines a finite counterexample game for mixed-context strategic
+routing: all four routing strategies fail.  **This file is only the raw layer** — the game
 itself and its direct equilibrium facts.  The four-route no-go theorems need
 the routing interfaces (schedulers, owner purification, common accounts,
 strict children) and are deliberately not stated here.

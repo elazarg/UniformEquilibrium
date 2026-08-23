@@ -14,7 +14,7 @@ namespace Literature.ChatterjeeSaonaAndZiliotto2022
 def record : Literature.PaperRecord where
   paperId := "chatterjee_saona_and_ziliotto_2022"
   bibliographyLabel := "Chatterjee, Saona & Ziliotto 2022"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Chatterjee, Saona & Ziliotto 2022"
+  bibliographyLocator := "Published source: Chatterjee, Saona & Ziliotto 2022"
   role := .zeroSumBoundary
   paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress

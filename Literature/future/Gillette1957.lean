@@ -15,7 +15,7 @@ namespace Literature.Gillette1957
 def record : Literature.PaperRecord where
   paperId := "gillette_1957"
   bibliographyLabel := "Gillette 1957"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Gillette 1957"
+  bibliographyLocator := "Published source: Gillette 1957"
   role := .foundations
   paperEvidence := .bibliographic
   auditStatus := .catalogued

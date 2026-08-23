@@ -15,7 +15,7 @@ namespace Literature.BlackwellAndFerguson1968
 def record : Literature.PaperRecord where
   paperId := "blackwell_and_ferguson_1968"
   bibliographyLabel := "Blackwell & Ferguson 1968"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Blackwell & Ferguson 1968"
+  bibliographyLocator := "Published source: Blackwell & Ferguson 1968"
   role := .zeroSumUniformValue
   paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress

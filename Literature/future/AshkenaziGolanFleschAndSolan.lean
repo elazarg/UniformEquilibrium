@@ -15,7 +15,7 @@ namespace Literature.AshkenaziGolanFleschAndSolan
 def record : Literature.PaperRecord where
   paperId := "ashkenazi_golan_flesch_and_solan"
   bibliographyLabel := "Ashkenazi-Golan, Flesch & Solan"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Ashkenazi-Golan, Flesch & Solan"
+  bibliographyLocator := "Published source: Ashkenazi-Golan, Flesch & Solan"
   role := .recentNonzeroSum
   paperEvidence := .bibliographic
   auditStatus := .catalogued

@@ -137,7 +137,7 @@ theorem booleanHazard_convexMix_zero_eq_of_eq
 /-- The payoff/root/debt coordinates of a behavioral tail at its terminal
 port.  The raw Boolean product root is equivalent to the simplex root used by
 `QuittingDebtPoint`; keeping it raw avoids an irrelevant representation
-conversion in this experiment. -/
+conversion in this module. -/
 abbrev QuittingBehaviorTerminalPort (ι : Type) [Fintype ι] :=
   (Payoff ι × (ι → PMF Bool)) × Payoff ι
 

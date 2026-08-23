@@ -11,7 +11,7 @@ import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
 /-!
 # A scalar sign fence for symmetric stationary counterexample searches
 
-This experiment records one rejection test, not a new branch of the quitting
+This module records one rejection test, not a new branch of the quitting
 frontier.  Suppose a one-parameter family of absorbing stationary roots has
 stationary fixed-point values, and symmetry makes every player's endpoint
 gap the same scalar continuous function.  If that scalar changes sign, the

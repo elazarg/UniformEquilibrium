@@ -8,7 +8,7 @@ namespace GameTheory.BlockPairK11.DyadicCertificate
 
 /-- Assembly of the checked K11 numeric payloads into the reusable
 `K11KrawczykData` checker interface. This declaration records the current
-exact data flow; its provenance is documented in `TRANSITION.md`. -/
+exact data flow. -/
 def checkedK11KrawczykData : K11KrawczykData where
   precision := Precision
   center := center

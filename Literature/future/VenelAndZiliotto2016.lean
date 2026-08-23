@@ -15,7 +15,7 @@ namespace Literature.VenelAndZiliotto2016
 def record : Literature.PaperRecord where
   paperId := "venel_and_ziliotto_2016"
   bibliographyLabel := "Venel & Ziliotto 2016"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Venel & Ziliotto 2016"
+  bibliographyLocator := "Published source: Venel & Ziliotto 2016"
   role := .zeroSumBoundary
   paperEvidence := .bibliographic
   auditStatus := .catalogued

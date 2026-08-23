@@ -39,7 +39,7 @@ so it is a calibration instance, not a counterexample candidate.
 
 ## Reproduction
 
-`lake env lean Experiments/counterexample_search/RegularTournamentFiveSeedZeroFree.lean`
+This module can be checked independently with Lean.
 -/
 
 noncomputable section

@@ -27,7 +27,7 @@ cap--Nash root.  In particular, none of the four cycling pure roots is itself
 an exact cap--Nash operation.
 
 All singleton rewards are nonpositive, hence every punishment value is
-nonpositive.  The experiment deliberately claims only a positive floor on
+nonpositive.  The module deliberately claims only a positive floor on
 its displayed finite four-profile family.  It makes no positive-minimum claim
 about the full terminal-semantic carrier.
 

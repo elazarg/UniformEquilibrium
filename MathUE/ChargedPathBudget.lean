@@ -53,7 +53,7 @@ range is bounded above and below, and its **oscillation** is
   path of strictly positive charge forces an infinite budget, hence excludes
   bounded potentials of every kind.
 
-## Design notes
+## Construction details
 
 The oscillation is taken over *all* states, not only over states touched by an
 edge, and the duality is nevertheless exact.  The reason is that the budget-to-go

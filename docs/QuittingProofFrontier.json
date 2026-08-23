@@ -1018,6 +1018,144 @@
         "GameTheory.SolanVieilleBoundary.HasSurjectiveSoloPeriodicTerminalGap",
         "GameTheory.SolanVieilleBoundary.HasUniformSoloPeriodicTerminalGap"
       ]
+    },
+    {
+      "id": "CONDITIONAL-GENERATED-SECANT-CHRONOLOGICAL-DEBT-COMPILER",
+      "kind": "conditional",
+      "open": true,
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "Unrolling the prescribed and best-response recursions separately gives an exact two-discount identity and a one-sided debt-shadowing bound of C + 2A. Its quitting-semantic adapter compiles bounded executable chronological data with controlled prescribed discrepancy and generated-secant adverse direct forcing, vanishing joint and deleted-player survival, and initial debt at most eta into a terminal 4 eta-equilibrium. Owner excess and singleton purification are not compiler hypotheses. Source-matched radial profiles now produce executable exact chronological data, and repeated finite samples have the required survival under an explicit one-period contraction hypothesis. This does not finish the producer: exact reached-tail data copy the actual exploitability into the candidate debt, frozen debt improvement need not create opponent exposure, and the reset-cube packet does not yet supply non-tautological small-debt candidate tails or the required contraction/block-splice identification.",
+      "evidence": [
+        "MathUE/Probability/OneSidedDebtShadowing.lean",
+        "UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean",
+        "UniformEquilibrium/Quitting/Debt/Dynamic/ExactChronologicalData.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedChronologicalData.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedChronologicalSurvival.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A",
+        "C"
+      ],
+      "declarations": [
+        "Math.twoDiscountDebtError_eq",
+        "Math.twoDiscountDebtError_le_oneSided",
+        "Math.twoDiscountDebtShadowing",
+        "GameTheory.QuittingChronologicalDebtShadowingCertificate.semanticDebt_le",
+        "GameTheory.QuittingChronologicalDebtShadowingCertificate.isAsymptoticNash",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.sourceMatchedRadialChronologicalData",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.sourceMatchedRadialRepeatedRoots_opponentSurvival",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.sourceMatchedRadialRepeatedRoots_jointSurvival",
+        "GameTheory.PositiveSlopeCausalRegression.debt_decreasing_reset_does_not_force_opponentExposure",
+        "GameTheory.PositiveSlopeCausalRegression.exact_source_has_zero_forcing_but_unit_initialDebt"
+      ]
+    },
+    {
+      "id": "REROUTE-RADIAL-CAP-SQUARE-TO-PAID-ATOMIC-ROW",
+      "kind": "frontier_strengthened",
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "A localized radial negative cap square above the exact fixed-witness quadratic remainder now yields an ordered, data-bearing first-disagreement row. The carrier retains the source and receiving pure-time witnesses, the exact live mass, and the division-free bound gain <= 2 M liveMass, including finite/Never cases. If the receiving witness is later, the paid edge is a legal owner refusal; if it is earlier and the selection error is below the displayed terminal-gap threshold, receiving-witness optimality and the exact forced-owner atomic barrier produce a legal outsider endpoint deviation. Cap nonadditivity is therefore either within the square budget or dispatched to this paid strategic row, and a scale-normalized liminf admits a fixed owner/outsider label along a strict subsequence. This reroutes the cap-square branch into the existing live atomic geometry; it does not eliminate that leaf, re-enter the row into a reset cube, or construct the missing renewal chronology.",
+      "evidence": [
+        "MathUE/Finset/FreshSquareExtraction.lean",
+        "MathUE/Topology/FiniteLabelLiminfExtraction.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPaidFirstDisagreement.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPaidFirstDisagreementOrientation.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialPaidDispatch.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A",
+        "C"
+      ],
+      "declarations": [
+        "GameTheory.QuittingPureTimeWitnessSwitchCertificate.exists_paidFirstDisagreementRow",
+        "GameTheory.QuittingPaidFirstDisagreementRow.exists_ownerDeviation_of_receivingLater",
+        "GameTheory.QuittingPaidFirstDisagreementRow.exists_outsiderDeviation_of_receivingEarlier",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_radialStrategicDispatch_of_negativeSquare",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.radialCapNonadditivity_le_or_strategicDispatch",
+        "GameTheory.exists_fixed_radialStrategicLabel_of_scaleNormalizedLiminfLower"
+      ]
+    },
+    {
+      "id": "CONDITIONAL-SIMON-Q1-COMPATIBLE-PREFIX-COMPILER",
+      "kind": "conditional",
+      "open": true,
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "Simon's seven topological hypotheses are represented by a literal source-neutral correspondence statement. Their local escape clause yields one common positive scale and a certified one-edge prefix near every relevant nonempty boundary piece. Independently, compact inverse-limit extraction proves that compatible finite prefixes at every horizon meeting one common diverging cumulative Euclidean-variation budget produce the requested unbounded extended orbit. The missing implication is exactly the production of that compatible prefix family from the seven hypotheses: local one-edge escape, compactness, and contractible fibers do not by themselves supply it. Thus QuestionOneAffirmative remains an open proposition, not a checked theorem.",
+      "evidence": [
+        "MathUE/Topology/ExtendedOrbit.lean",
+        "MathUE/Topology/CompactEdgeBudgetedPrefixRelation.lean",
+        "MathUE/Topology/SimonViabilityQuestion.lean",
+        "MathUE/Topology/SimonViabilityBudgetCompiler.lean",
+        "UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A",
+        "C"
+      ],
+      "declarations": [
+        "Math.Topology.SimonViability.QuestionOneHypotheses.exists_escapeScale",
+        "Math.Topology.SimonViability.QuestionOneHypotheses.exists_oneEdgeBudgetedPrefix",
+        "Math.Topology.SimonViability.questionOneConclusion_of_edgeBudgetedFinitePrefixes",
+        "Math.Topology.SimonViability.QuestionOneHypotheses.conclusion_of_edgeBudgetedFinitePrefixes",
+        "GameTheory.minimumQuittingAbnormalGap_pos"
+      ],
+      "open_propositions": [
+        "Math.Topology.SimonViability.QuestionOneAffirmative"
+      ]
+    },
+    {
+      "id": "CORRECTED-STATIONARILY-GENERATED-FOUR-WAY-BOUNDARY",
+      "kind": "conditional",
+      "open": true,
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "A supplied pointwise structured alternative has an exact corrected fixed-branch compactification with four outputs: stationary, instant punishment, well-supported absorbing, or diffuse stationarily generated approximate equilibria. The residual is now normalized faithfully. Fixed-horizon positive-live witnesses already yield a uniform payoff; vanishing one-stage live mass yields instant punishment; after excluding that branch, the only unresolved families have horizons tending to infinity and live mass tending to a positive limit. Their compact limit is either well-supported absorption or an all-Continue phantom carrying a separate realized punishment endpoint and cap. A one-player checked regression shows that the forward phantom value need not equal the punishment endpoint, so the final identification cannot be obtained by silently joining those limits. Neither the pointwise extraction from arbitrary approximate equilibria nor the diffuse-phantom compactification is proved. In particular, this boundary does not close AGKRS Theorem 3.4.",
+      "evidence": [
+        "UniformEquilibrium/Quitting/Classification/Existence/WellSupportedAbsorbingSequence.lean",
+        "UniformEquilibrium/Quitting/Classification/Existence/StationarilyGeneratedBranch.lean",
+        "UniformEquilibrium/Quitting/Classification/Existence/StationarilyGeneratedCompactnessObstruction.lean",
+        "UniformEquilibrium/Quitting/Classification/Existence/StationarilyGeneratedSemanticCarrier.lean",
+        "UniformEquilibrium/Quitting/Classification/Existence/StationarilyGeneratedWitnessRegimes.lean",
+        "UniformEquilibrium/Quitting/Classification/Existence/StationarilyGeneratedPositiveLiveLimit.lean",
+        "UniformEquilibrium/Quitting/Classification/Existence/CorrectedFixedBranch.lean"
+      ],
+      "evidence_seals": [
+        "M",
+        "L"
+      ],
+      "declarations": [
+        "GameTheory.fixedCorrectedQuittingBranch_of_pointwiseAlternative",
+        "GameTheory.exists_uniformEquilibriumPayoff_or_stationaryPrefix_residual",
+        "GameTheory.quittingInstantPunishment_of_stationaryPrefix_liveMass_tendsto_zero",
+        "GameTheory.exists_uniformEquilibriumPayoff_or_positiveLive_divergentHorizon",
+        "GameTheory.wellSupported_or_exists_allContinuePhantom_of_stationaryPrefix_family",
+        "GameTheory.StationaryPrefixEndpointDecouplingRegression.forward_value_ne_punishment_prescribed",
+        "GameTheory.fixedThreeQuittingBranches_of_pointwiseAlternative_of_diffuseCompactification"
+      ]
     }
   ]
 }

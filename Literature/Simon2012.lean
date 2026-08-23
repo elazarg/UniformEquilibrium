@@ -250,7 +250,7 @@ def Question2Affirmative : Prop :=
 
 /-!
 The paper reports that `Question2Affirmative` is false and points to a similar
-Gobbino--Simon construction, but does not print it.  The external blueprint is
+Gobbino--Simon construction, but does not print it.  The external construction is
 Gobbino--Simon, Example 4.9: in `ℝ²`, take the square `[0,2]²` with the segment
 from `(2,0)` to `(3,0)` attached, use the convex segment from `(1,1)` to `(3,0)`
 as the exceptional fiber at `(2,0)`, and send the remaining square points to

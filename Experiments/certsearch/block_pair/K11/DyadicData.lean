@@ -11,7 +11,7 @@ import UniformEquilibrium.Quitting.Examples.BlockPair.K11LocalInterval
 
 This checked-in file is concrete experimental evidence. The K11 integrity
 checker validates its structure and freshness but does not regenerate the
-numeric computation. Historical provenance is recorded in `TRANSITION.md`.
+numeric computation.
 -/
 
 namespace GameTheory.BlockPairK11.DyadicCertificate

@@ -1,5 +1,5 @@
 /-
-Experimental: a concentrated collision has a three-role transfer unless its
+A concentrated collision has a three-role transfer unless its
 tail pays a uniform minimum-fibre escape.  The fourth role is the terminal
 coalition/background host; no cardinal reduction is claimed here.
 -/

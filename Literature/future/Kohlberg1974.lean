@@ -15,7 +15,7 @@ namespace Literature.Kohlberg1974
 def record : Literature.PaperRecord where
   paperId := "kohlberg_1974"
   bibliographyLabel := "Kohlberg 1974"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Kohlberg 1974"
+  bibliographyLocator := "Published source: Kohlberg 1974"
   role := .zeroSumUniformValue
   paperEvidence := .bibliographic
   auditStatus := .catalogued

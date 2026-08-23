@@ -15,7 +15,7 @@ namespace Literature.RenaultAndZiliotto2020b
 def record : Literature.PaperRecord where
   paperId := "renault_and_ziliotto_2020b"
   bibliographyLabel := "Renault & Ziliotto 2020b"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Renault & Ziliotto 2020b"
+  bibliographyLocator := "Published source: Renault & Ziliotto 2020b"
   role := .counterexamples
   paperEvidence := .bibliographic
   auditStatus := .catalogued

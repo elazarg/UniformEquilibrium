@@ -15,7 +15,7 @@ namespace Literature.Thuijsman2003
 def record : Literature.PaperRecord where
   paperId := "thuijsman_2003"
   bibliographyLabel := "Thuijsman 2003"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Thuijsman 2003"
+  bibliographyLocator := "Published source: Thuijsman 2003"
   role := .surveys
   paperEvidence := .bibliographic
   auditStatus := .catalogued

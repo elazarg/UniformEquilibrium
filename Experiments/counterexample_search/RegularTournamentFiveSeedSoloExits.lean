@@ -61,7 +61,7 @@ affected.
 
 ## Reproduction
 
-`lake env lean Experiments/counterexample_search/RegularTournamentFiveSeedSoloExits.lean`
+This module can be checked independently with Lean.
 -/
 
 namespace GameTheory

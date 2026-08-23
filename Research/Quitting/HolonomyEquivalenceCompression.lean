@@ -14,7 +14,7 @@ smallest landed replacement tested here: for every player it retains two
 prescribed affine coefficients and three best-response max-affine
 coefficients.
 
-This experiment separates two assertions which should not be conflated.
+This module separates two assertions which should not be conflated.
 
 * Equality of holonomy is an exact equivalence relation on finite root blocks.
   It preserves prescribed finite evaluation, finite Bellman best response,

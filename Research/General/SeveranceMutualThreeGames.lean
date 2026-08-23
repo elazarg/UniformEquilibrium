@@ -14,7 +14,7 @@ import UniformEquilibrium.Quitting.Cycles.PeriodicNormalizedSeam
 /-!
 # A severance mutual, two arenas, and three certificate exits
 
-This experiment presents a finite quitting game without changing its strategy
+This module presents a finite quitting game without changing its strategy
 space.  A severance mutual has finitely many members.  Each day every member
 chooses `Stay` (`false`) or `File` (`true`).  The first nonempty set of filers
 closes the mutual and activates that set's settlement schedule; perpetual

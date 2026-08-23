@@ -16,7 +16,7 @@ paths.  It jointly retains the completed absorption law, holonomy, exact-D
 entry and exit anchors, terminal packet, entry debt, and the full compact
 marked-stage graph.
 
-This experiment applies one general compact-range argument twice.
+This module applies one general compact-range argument twice.
 
 1. Every finite semantically coherent cylinder is close to one of finitely
    many genuinely realized finite cylinders, hence to one with uniformly

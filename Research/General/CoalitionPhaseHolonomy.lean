@@ -3,15 +3,14 @@ import Mathlib
 /-!
 # Coalition phase-offset gauge cocycle
 
-This coalition-specific experiment formalizes the complete-overlap case of
+This coalition-specific module formalizes the complete-overlap case of
 the phase-alignment argument in
-`ideas/CoalitionSplittingGroupActions.md`.
+the coalition-splitting group-action construction.
 
 An offset between every ordered pair of coalitions is globally alignable iff
 it is an exact additive gauge cocycle (equivalently: it is antisymmetric and
 has zero triangle sum).  The constructed coalition phases are unique up to
-one global additive constant.  This is not the max-affine block holonomy from
-the resolved cycle-geometry program.
+one global additive constant.  This differs from max-affine block holonomy.
 -/
 
 noncomputable section

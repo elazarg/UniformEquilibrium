@@ -15,7 +15,7 @@ namespace Literature.Solan1998Dissertation
 def record : Literature.PaperRecord where
   paperId := "solan_1998_dissertation"
   bibliographyLabel := "Solan 1998 (dissertation)"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan 1998 (dissertation)"
+  bibliographyLocator := "Published source: Solan 1998 (dissertation)"
   role := .nonzeroSumExistence
   paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress

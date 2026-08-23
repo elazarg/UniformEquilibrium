@@ -14,7 +14,7 @@ namespace Literature.UmmelsAndWojtczak2009
 def record : Literature.PaperRecord where
   paperId := "ummels_and_wojtczak_2009"
   bibliographyLabel := "Ummels & Wojtczak 2009"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Ummels & Wojtczak 2009"
+  bibliographyLocator := "Published source: Ummels & Wojtczak 2009"
   role := .finiteMemoryAlgorithms
   paperEvidence := .primaryInspected
   auditStatus := .paperInspected

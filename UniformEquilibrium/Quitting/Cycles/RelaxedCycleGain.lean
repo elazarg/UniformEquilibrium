@@ -108,7 +108,7 @@ def quittingSignedCompanionLabelList
 /-! ## The finite unrolled stop and continuation excess -/
 
 /-- The best signed excess obtainable by continuing for some `ℓ ≤ m` phases starting at
-`k` and then stopping, i.e. `max_{0 ≤ ℓ ≤ m} H_{k,ℓ}` in the reported notation.  The
+`k` and then stopping, i.e. `max_{0 ≤ ℓ ≤ m} H_{k,ℓ}` in the notation above.  The
 window has `m + 1` phases; `m` (rather than a `period` requiring `Nat` subtraction) is
 the natural induction variable. -/
 def quittingSignedStopGap
@@ -122,7 +122,7 @@ def quittingSignedStopGap
             quittingSignedStopGap reward roots prescribed who (k + 1) m)
 
 /-- The signed excess of continuing through all `m + 1` phases starting at `k`, i.e.
-`B_k` in the reported notation. -/
+`B_k` in the notation above. -/
 def quittingSignedContinueGap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (prescribed : ℕ → ℝ) (who : ι) : ℕ → ℕ → ℝ
@@ -175,7 +175,7 @@ theorem quittingSignedCompanionLabelList_compList
 
 /-! ## The signed phasewise accumulation -/
 
-/-- The **signed phasewise accumulation**, the reported `Q_{i,1}`: the larger of the best
+/-- The **signed phasewise accumulation**, denoted `Q_{i,1}` here: the larger of the best
 finite stopping excess and the geometric continue-forever excess over the survival
 product of a period of length `m + 1`. -/
 def quittingRelaxedCycleGain
@@ -307,7 +307,7 @@ theorem quittingCompanionComposite_sub_prescribed_eq_compList_apply
 
 /-! ## Solving the single self-referential equation -/
 
-/-- **The scalar self-reference solves to the reported closed form.**  This is the case
+/-- **The scalar self-reference solves to the displayed closed form.**  This is the case
 split behind `quittingRelaxedCycleGain`: `max {M, N}` with `N = B / (1 - P)` is the unique
 solution of `X = max {M, B + P * X}` when `P < 1`. -/
 theorem quittingSignedCycleFixedPointEq (M B P : ℝ) (hP : P < 1) :

@@ -13,7 +13,7 @@ import UniformEquilibrium.ProofView.Concepts.Potential.MixedPotential
 This file isolates the root-level comparison between continuing with the
 singleton terminal option and joining the same realized opponent quitter set.
 It contains only one-stage product-root algebra; dynamic debt and path
-provenance are downstream consumers.
+provenance are subsequent applications.
 -/
 
 noncomputable section

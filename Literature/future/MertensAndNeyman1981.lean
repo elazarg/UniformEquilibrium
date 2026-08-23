@@ -15,7 +15,7 @@ namespace Literature.MertensAndNeyman1981
 def record : Literature.PaperRecord where
   paperId := "mertens_and_neyman_1981"
   bibliographyLabel := "Mertens & Neyman 1981"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Mertens & Neyman 1981"
+  bibliographyLocator := "Published source: Mertens & Neyman 1981"
   role := .zeroSumUniformValue
   paperEvidence := .bibliographic
   auditStatus := .catalogued

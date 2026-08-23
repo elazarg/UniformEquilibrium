@@ -15,7 +15,7 @@ namespace Literature.MertensSorinAndZamir2015
 def record : Literature.PaperRecord where
   paperId := "mertens_sorin_and_zamir_2015"
   bibliographyLabel := "Mertens, Sorin & Zamir 2015"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Mertens, Sorin & Zamir 2015"
+  bibliographyLocator := "Published source: Mertens, Sorin & Zamir 2015"
   role := .surveys
   paperEvidence := .bibliographic
   auditStatus := .catalogued

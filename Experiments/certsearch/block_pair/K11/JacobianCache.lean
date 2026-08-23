@@ -2,9 +2,8 @@
 # K11 Jacobian interval payload
 
 This checked-in file is concrete experimental evidence.
-`scripts/check_k11_generated_data.py` validates its structure and freshness
-but does not regenerate the interval computation. Historical provenance is
-recorded in `TRANSITION.md`.
+Its structure and freshness are validated separately, but the interval
+computation is not regenerated here.
 -/
 import MathUE.Interval.DyadicInterval
 import Mathlib.Data.Fin.VecNotation

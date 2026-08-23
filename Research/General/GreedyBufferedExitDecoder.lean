@@ -14,8 +14,8 @@ pigeonhole dichotomy along an *arbitrary* serial orbit.  There the exit
 branch is weak: an arbitrary orbit may leave the buffer even though a
 different successor choice would have stayed inside.
 
-This experiment machine-checks the greedy construction actually described
-in `ideas/CycleGeometryResolution.md` §8: while possible, choose a
+This module machine-checks the greedy construction actually described
+in the cycle-geometry construction: while possible, choose a
 successor inside the buffer; only when none exists take an outside
 successor.  The payoff is a strong exit branch, the hook required by the
 CG8 descent decoder:

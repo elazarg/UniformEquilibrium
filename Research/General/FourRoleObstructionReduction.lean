@@ -12,7 +12,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceCap
 /-!
 # Four-role local obstruction reduction
 
-This experiment packages the strongest currently landed player-label
+This module packages the strongest currently landed player-label
 reduction around a positive minimum terminal-semantic plateau.
 
 For a positive debtor `owner`, one pure-time best-response law and one
@@ -36,7 +36,7 @@ The terminal coalition may contain arbitrarily many players, the toggle need
 not be distinct from the first three labels, and no outsider is deleted or
 merged.  In particular, nothing below constructs a four-player reward table
 or proves the cardinal reduction in
-`experiments/RandomDeviationAuditCardinalReduction.lean`.
+the companion random-deviation cardinal reduction.
 
 The final section names the remaining consumer principle.  It is deliberately
 not asserted: bounded role support alone does not align the reset cluster,

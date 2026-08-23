@@ -44,7 +44,7 @@ these lemmas.
 
 Adapted from `GameTheory/Simplex.lean` and helper lemmas in
 `GameTheory/Zerosum.lean` from
-[math-xmum/gametheory](https://github.com/math-xmum/gametheory).
+the upstream GameTheory library.
 -/
 
 open Finset BigOperators Matrix

@@ -15,7 +15,7 @@ namespace Literature.RosenbergSolanAndVieille2003
 def record : Literature.PaperRecord where
   paperId := "rosenberg_solan_and_vieille_2003"
   bibliographyLabel := "Rosenberg, Solan & Vieille 2003"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Rosenberg, Solan & Vieille 2003"
+  bibliographyLocator := "Published source: Rosenberg, Solan & Vieille 2003"
   role := .zeroSumBoundary
   paperEvidence := .bibliographic
   auditStatus := .catalogued

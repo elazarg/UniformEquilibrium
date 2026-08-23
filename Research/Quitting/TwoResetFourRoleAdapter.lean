@@ -10,7 +10,7 @@ import Research.General.FiveCycleIncidenceSupportRigidity
 /-!
 # Two-reset four-role adapter for a five-player minimum
 
-This file combines two experimental facts:
+This file combines two facts:
 
 1. a minimum half reset followed through a positive recipient either creates
    a quantitative total-debt excess, or gives a second directed half reset

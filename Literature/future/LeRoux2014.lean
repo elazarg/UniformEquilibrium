@@ -15,7 +15,7 @@ namespace Literature.LeRoux2014
 def record : Literature.PaperRecord where
   paperId := "le_roux_2014"
   bibliographyLabel := "Le Roux 2014"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Le Roux 2014"
+  bibliographyLocator := "Published source: Le Roux 2014"
   role := .formalization
   paperEvidence := .bibliographic
   auditStatus := .catalogued

@@ -14,7 +14,7 @@ namespace Literature.Rote2025
 def record : Literature.PaperRecord where
   paperId := "rote_2025"
   bibliographyLabel := "Rote 2025"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Rote 2025"
+  bibliographyLocator := "Published source: Rote 2025"
   role := .zeroSumBoundary
   paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress

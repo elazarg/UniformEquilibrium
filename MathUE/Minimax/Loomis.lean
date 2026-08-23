@@ -26,11 +26,11 @@ packaged theorem) build on that scaffolding. The simplified-Loomis
 (von Neumann minimax) `MinimaxLoomis.lam0 = MinimaxLoomis.mu0` is re-derived
 as the `B = 𝟙` corollary `minmax_from_general` at the end of this file.
 
-## Blueprint
+## Proof ingredients
 
-* `docs/knowledge/nodes/zero_sum/loomis_theorem.md`
-* `docs/knowledge/nodes/zero_sum/loomis_induction_proof.md`
-* `docs/knowledge/nodes/zero_sum/loomis_induction_proof.positive_aggregate.md`
+* positivity of the aggregate denominators;
+* finite induction over the positive matrix entries; and
+* the all-ones specialization proved below.
 
 ## Attribution
 
@@ -867,9 +867,8 @@ theorem loomis_theorem (A B : I → J → ℝ) (hB : IsPositive B) :
 The simplified-Loomis development in `MinimaxLoomis` proves
 `lam0 A = mu0 A` directly by inlining the `B = 𝟙` specialisation of the
 induction. This section re-derives that statement from the general
-positive-`B` Loomis theorem above, validating the
-`minimax_from_loomis` blueprint node's "all-ones specialisation"
-claim. -/
+positive-`B` Loomis theorem above, validating the all-ones specialization.
+-/
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 private theorem xB_one (x : stdSimplex ℝ I) (j : J) :
@@ -929,8 +928,7 @@ theorem muB0_one (A : I → J → ℝ) :
 von Neumann minimax `MinimaxLoomis.lam0 A = MinimaxLoomis.mu0 A` follows by
 instantiating `loomis_value_eq` at the all-ones matrix `B = 𝟙`.
 
-This is the canonical "B = 𝟙 specialisation" route recorded by the
-[[minimax_from_loomis]] blueprint node, and the **sole** route to the finite
+This is the canonical "B = 𝟙 specialisation" route to the finite
 von Neumann minimax: `MinimaxLoomis` keeps only the shared foundational layer
 (aggregates, attainment, weak duality, drop/extend infra), and its scalar
 equality is exported here rather than re-proved by a standalone induction. -/

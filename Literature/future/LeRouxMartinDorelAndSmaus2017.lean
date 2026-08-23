@@ -15,7 +15,7 @@ namespace Literature.LeRouxMartinDorelAndSmaus2017
 def record : Literature.PaperRecord where
   paperId := "le_roux_martin_dorel_and_smaus_2017"
   bibliographyLabel := "Le Roux, Martin-Dorel & Smaus 2017"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Le Roux, Martin-Dorel & Smaus 2017"
+  bibliographyLocator := "Published source: Le Roux, Martin-Dorel & Smaus 2017"
   role := .formalization
   paperEvidence := .bibliographic
   auditStatus := .catalogued

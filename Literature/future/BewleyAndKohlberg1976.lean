@@ -15,7 +15,7 @@ namespace Literature.BewleyAndKohlberg1976
 def record : Literature.PaperRecord where
   paperId := "bewley_and_kohlberg_1976"
   bibliographyLabel := "Bewley & Kohlberg 1976"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Bewley & Kohlberg 1976"
+  bibliographyLocator := "Published source: Bewley & Kohlberg 1976"
   role := .zeroSumUniformValue
   paperEvidence := .bibliographic
   auditStatus := .catalogued

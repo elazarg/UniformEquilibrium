@@ -23,7 +23,7 @@ fixed-opponents continue reward and the fixed-opponents continue mass of
 
 Along a window of a root sequence the phase maps compose into
 `quittingCompanionComposite`, and around a cycle of length `period` the
-composite is the map `T_who` of the program notes, with Lipschitz constant
+composite is the map `T_who`, with Lipschitz constant
 the deleted survival product `P_who = quittingOpponentSurvivalWeight roots
 who 0 period`.
 
@@ -162,7 +162,7 @@ root *sequence* and a time.  The three definitions below are the same
 quantities read off a single root; every bridge lemma is `rfl`. -/
 
 /-- The payoff to `who` from quitting now against the opponents' fixed
-marginals at `root` (`Σ_who(root)` in the program notes). -/
+marginals at `root` (`Σ_who(root)`). -/
 def quittingRootDeletedQuitValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool) (who : ι) : ℝ :=

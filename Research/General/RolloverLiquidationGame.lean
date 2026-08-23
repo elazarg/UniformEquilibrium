@@ -12,7 +12,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.Smal
 /-!
 # Decentralized rollover and liquidation games
 
-This experiment gives the reduced quitting-game obstruction a self-contained
+This module gives the reduced quitting-game obstruction a self-contained
 economic presentation.  A finite family of claimants repeatedly chooses
 between `Call` (`true`) and `Roll` (`false`).  A nonempty set of callers
 liquidates the project and receives the corresponding settlement vector; if

@@ -11,7 +11,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCommonSuffixCurva
 /-!
 # Endpoint return versus reset-face separation
 
-This experiment compactifies the actual fixed-label atom endpoints.  For the
+This module compactifies the actual fixed-label atom endpoints.  For the
 rectangle branch, the observer response already has vanishing own debt, so
 its cluster lies on an exact reset face and feeds the existing reset-face
 return/all-Continue-cap consumer.

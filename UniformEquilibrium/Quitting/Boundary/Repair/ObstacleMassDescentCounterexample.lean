@@ -52,7 +52,7 @@ for every array" holds only in the degenerate case `r_i(K) = 0` for every
 
 This module does **not** refute the enriched-absorption-path route.  It
 refutes only the statement of the obstacle as a function of accumulated mass.
-The repair recorded in the design document is to carry the obstacle as a
+A natural repair is to carry the obstacle as a
 closed completed hypograph of the full chronological trace `t ↦ (τ(t), Q_i(t))`,
 retaining the zero-mass stages where this counterexample lives, rather than
 collapsing it to a function of `τ` alone.
@@ -79,7 +79,7 @@ player two surely quits (`p_{1,2} = 1`). -/
 def row1 : Bool → PMF Bool :=
   fun who => if who then PMF.pure true else PMF.pure false
 
-/-- The two-row table `p_0 = (0,0)`, `p_1 = (0,1)` from the design record,
+/-- The two-row table `p_0 = (0,0)`, `p_1 = (0,1)`,
 extended past index `1` by repeating row `1`.  Only rows `0` and `1` are read
 below; the extension exists solely so `rows` is a total `ℕ`-indexed family. -/
 def rows : ℕ → Bool → PMF Bool
