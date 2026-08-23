@@ -169,14 +169,18 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "The static collision and payoff-table preemption cycle now travel with one source-derived stopping-law frontier. In every flat frontier with no zero-debt support entry, every active debtor has a positive tangent transfer to another active debtor; finite seriality closes these transfers into a period-at-least-two cycle. One positive edge margin is retained uniformly along the literal stopping-law subsequence for every edge of the selected finite cycle. At every selected rank all of those edges are realized simultaneously as positive frozen debt edges of one legal common-source, common-scale reset cube. Traversing the cycle coordinates gives a retained edge or explicit square curvature. Independently, a supplied positive-total-slope mover has a compact full-reset endpoint with coordinatewise tangent domination, exact self-coordinate change, half-debt reduction, strict total-debt separation, retained prescribed gain, and a fixed positive off-diagonal atom alternative. Neither package gives an anchored return, Bellman rebase, or contradiction; profile-cube chronology is not quitting-play chronology, and the strengthened leaf is still open.",
+      "summary": "The static collision and payoff-table preemption cycle now travel with one source-derived stopping-law frontier. Vanishing-regret replacement selection makes every mover diagonal exactly minus its base debt and drives the literal full-replacement mover debt to zero. In every flat frontier with no zero-debt support entry, every active debtor has a positive tangent transfer to another active debtor; finite seriality closes these transfers into a period-at-least-two cycle, realized at every selected rank in one legal common-source reset cube. A positive-total-slope mover has a compact full-reset endpoint with zero mover debt, prescribed gain converging to its entire base debt, and a quantitatively stronger off-diagonal atom. In the flat potential arm, a full-reset cluster either stays on the minimum fiber and strictly deflates active support and a companion debt, or lies above the minimum and yields fixed-gain exact paid first-disagreement rows along the retained subsequence; this potential arm needs at least three active debtors, while rank at most two forces charged circulation. The increasingly long exact atom-access stacks have absorption charge tending to zero when two debtors are active. Separately, one positive exact edge with an admissible exact return would close the game by full-relation cycle amplification. No theorem constructs that return or chronologically consumes the paid row, so the strengthened leaf remains open.",
       "evidence": [
         "MathUE/FiniteSerialRelation.lean",
         "MathUE/Finset/CubicalResetIntegrability.lean",
         "UniformEquilibrium/Quitting/Classification/PreemptionCycle.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedResetCube.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/ActiveTransferCycle.lean",
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PositiveTotalSlopeEndpoint.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PositiveTotalSlopeEndpoint.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseEndpoint.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/Atom/ExactPrefixCharge.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Capacity/AdmissibleCycle.lean"
       ],
       "cover_clause_ids": [
         "REGIME-LOCALIZATION",
@@ -185,7 +189,8 @@
       "evidence_seals": [
         "M",
         "L",
-        "A"
+        "A",
+        "C"
       ],
       "declarations": [
         "Math.FiniteSerialRelation.nonempty_periodicCycle_of_serial",
@@ -194,6 +199,10 @@
         "GameTheory.QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformCubeEdge",
         "GameTheory.QuittingStoppingLawActiveTransferCycle.exists_eventually_reachedCubeEdge_or_curvature",
         "GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_positiveTotalSlopeEndpointCluster",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.has_flatChargedCirculation_of_active_card_le_two_of_flat_of_noEntry",
+        "GameTheory.QuittingStoppingLawAtomExactPrefixChronology.absorptionSum_tendsto_zero_of_twoActive",
+        "GameTheory.quittingGame_exists_uniformPayoff_of_positive_admissible_return",
         "GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_fixedAtomAlternative_of_mover",
         "GameTheory.QuittingCounterexampleRegime.nonempty_dynamicLocalization"
       ]

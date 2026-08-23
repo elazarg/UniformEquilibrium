@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTangentExtraction
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawVanishingRegretTangentExtraction
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ExhaustiveFrontierBranch
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Seam
 
@@ -113,6 +113,32 @@ structure QuittingCounterexampleStoppingLawFrontier
         (bestResponse mover (subseq rank)) (lambda (subseq rank))
         (lambda_pos (subseq rank)).le (lambda_le_one (subseq rank)) observer)
       atTop (nhds (tangent mover observer))
+  /-- At every selected rank, the literal full replacement's own debt is
+  bounded both by the squared reset scale and by half of its source debt. -/
+  fullReset_moverDebt_le_tolerance : ∀ mover rank,
+    quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward
+          (Function.update (profiles (subseq rank)) mover.1
+            (bestResponse mover (subseq rank)))) mover.1 ≤
+      min (lambda (subseq rank) ^ 2)
+        (quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward (profiles (subseq rank))) mover.1 / 2)
+  /-- The selected literal full replacement drives its mover's own debt to
+  zero along the same common tangent subsequence. -/
+  fullReset_moverDebt_tendsto_zero : ∀ mover,
+    Tendsto (fun rank ↦
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward
+          (Function.update (profiles (subseq rank)) mover.1
+            (bestResponse mover (subseq rank)))) mover.1)
+      atTop (nhds 0)
+  /-- Exact self-coordinate slope supplied by vanishing-regret endpoint
+  selection. -/
+  tangent_diagonal_eq : ∀ mover,
+    tangent mover mover.1 =
+      -quittingTerminalSemanticDebt base mover.1
+  /-- Half-debt compatibility bound retained for existing frontier
+  consumers. -/
   tangent_diagonal : ∀ mover,
     tangent mover mover.1 ≤
       -quittingTerminalSemanticDebt base mover.1 / 2
@@ -244,13 +270,19 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
     intro who hzero
     simpa only [inactiveDebt, hzero, if_pos] using hinactiveRate who
   obtain ⟨bestResponse, subseq, tangent, hsubseq, hlambdaSubseq,
-      htangent, hdiagonal, htangentInactive, hsumNonneg,
-      hslopeAlternative⟩ :=
-    exists_commonBase_stoppingLawDebtTangentFamily
+      htangent, hendpointDebtLeTolerance, hendpointDebtZero, hdiagonalEq,
+      htangentInactive, hsumNonneg, hslopeAlternative⟩ :=
+    exists_commonBase_stoppingLawDebtTangentFamily_exactDiagonal
       reward base profiles active epsilon lambda
-      hbase hbasePositive
-      hprofiles hactive hsourceActive hnear hlambdaPos hlambdaLe hlambdaZero
+      hprofiles hsourceActive hnear hlambdaPos hlambdaLe hlambdaZero
       hepsilonRate hinactiveRate'
+  have hdiagonal : ∀ mover,
+      tangent mover mover.1 ≤
+        -quittingTerminalSemanticDebt base mover.1 / 2 := by
+    intro mover
+    rw [hdiagonalEq mover]
+    have hpositive := (hactive mover.1).1 mover.2
+    linarith
   have hfrontierBranch :
       IsQuittingStoppingLawExhaustiveFrontierBranch base active tangent := by
     rcases hslopeAlternative with hpositiveSlope | hflat
@@ -376,6 +408,9 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
       simpa only [epsilon, Function.comp_def] using
         hepsilonRate.comp hsubseq.tendsto_atTop
     tangent_tendsto := htangent
+    fullReset_moverDebt_le_tolerance := hendpointDebtLeTolerance
+    fullReset_moverDebt_tendsto_zero := hendpointDebtZero
+    tangent_diagonal_eq := hdiagonalEq
     tangent_diagonal := hdiagonal
     tangent_inactive_nonneg := htangentInactive
     tangent_sum_nonneg := hsumNonneg
