@@ -163,6 +163,117 @@ theorem collisionMass_logarithmicBlock_le_sq
     Math.PMFProduct.collisionMass q ≤ (∑ j, q j) ^ 2 / 2 := hcollision
     _ ≤ h ^ 2 / 2 := by nlinarith
 
+/-- A quadratic collision error can be charged to the one-block loss of an
+opponent-deleted survival clock.  This is the denominator-free estimate used
+when the deleted clock may retain a positive survival atom. -/
+theorem sq_div_two_le_collisionScale_mul_one_sub_exp_neg
+    {H h : ℝ} (hH : 0 ≤ H) (hHh : H ≤ h) :
+    H ^ 2 / 2 ≤ h * exp h / 2 * (1 - exp (-H)) := by
+  have hhexp : H ≤ exp h * (1 - exp (-H)) := by
+    have hlocal := exp_neg_mul_self_le_one_sub_exp_neg (A := H)
+    have hscale := mul_le_mul_of_nonneg_left hlocal (exp_nonneg h)
+    have hscale' : H * exp (h - H) ≤ exp h * (1 - exp (-H)) := by
+      calc
+        H * exp (h - H) = exp h * (exp (-H) * H) := by
+          rw [show h - H = h + -H by ring, Real.exp_add]
+          ring
+        _ ≤ exp h * (1 - exp (-H)) := hscale
+    have hexpOne : 1 ≤ exp (h - H) := by
+      rw [← Real.exp_zero, Real.exp_le_exp]
+      linarith
+    calc
+      H ≤ H * exp (h - H) := by
+        nlinarith [mul_le_mul_of_nonneg_left hexpOne hH]
+      _ ≤ exp h * (1 - exp (-H)) := hscale'
+  have hh : 0 ≤ h := hH.trans hHh
+  nlinarith [mul_le_mul_of_nonneg_left hhexp hh]
+
+/-- Survival of an opponent-deleted logarithmic clock through the first `n`
+blocks. -/
+def logarithmicDeletedSurvival (H : ℕ → ℝ) (n : ℕ) : ℝ :=
+  exp (-(∑ k ∈ Finset.range n, H k))
+
+@[simp] theorem logarithmicDeletedSurvival_zero (H : ℕ → ℝ) :
+    logarithmicDeletedSurvival H 0 = 1 := by
+  simp [logarithmicDeletedSurvival]
+
+/-- One-block evolution of logarithmic deleted survival. -/
+theorem logarithmicDeletedSurvival_succ (H : ℕ → ℝ) (n : ℕ) :
+    logarithmicDeletedSurvival H (n + 1) =
+      logarithmicDeletedSurvival H n * exp (-H n) := by
+  simp only [logarithmicDeletedSurvival, Finset.sum_range_succ]
+  rw [show -(∑ k ∈ Finset.range n, H k + H n) =
+      -(∑ k ∈ Finset.range n, H k) + -H n by ring, Real.exp_add]
+
+/-- Exact finite deleted-survival telescope.  No limit-zero assumption is
+present: any residual survival is retained by the final term. -/
+theorem sum_logarithmicDeletedSurvival_mul_one_sub_exp_neg
+    (H : ℕ → ℝ) (n : ℕ) :
+    (∑ k ∈ Finset.range n,
+      logarithmicDeletedSurvival H k * (1 - exp (-H k))) =
+      1 - logarithmicDeletedSurvival H n := by
+  have hterm (k : ℕ) :
+      logarithmicDeletedSurvival H k * (1 - exp (-H k)) =
+        logarithmicDeletedSurvival H k - logarithmicDeletedSurvival H (k + 1) := by
+    rw [logarithmicDeletedSurvival_succ]
+    ring
+  simp_rw [hterm]
+  rw [Finset.sum_range_sub']
+  simp
+
+/-- Global finite-prefix version of the opponent-only comparison budget.  A
+local singleton discrepancy `H(1-exp(-H))` plus collision error `H²/2`, when
+weighted by the deleted survival, costs at most
+`h + h*exp(h)/2`, uniformly in the prefix length. -/
+theorem sum_logarithmicDeletedSurvival_mul_blockError_le
+    (H : ℕ → ℝ) {h : ℝ} (hH0 : ∀ k, 0 ≤ H k)
+    (hHh : ∀ k, H k ≤ h) (n : ℕ) :
+    (∑ k ∈ Finset.range n, logarithmicDeletedSurvival H k *
+      (H k * (1 - exp (-H k)) + (H k) ^ 2 / 2)) ≤
+      h + h * exp h / 2 := by
+  let scale : ℝ := h + h * exp h / 2
+  have hh : 0 ≤ h := (hH0 0).trans (hHh 0)
+  have hscale0 : 0 ≤ scale := by
+    dsimp [scale]
+    positivity
+  have hlocal (k : ℕ) :
+      H k * (1 - exp (-H k)) + (H k) ^ 2 / 2 ≤
+        scale * (1 - exp (-H k)) := by
+    have hone : 0 ≤ 1 - exp (-H k) := by
+      rw [sub_nonneg, exp_le_one_iff]
+      linarith [hH0 k]
+    have hfirst := mul_le_mul_of_nonneg_right (hHh k) hone
+    have hsecond := sq_div_two_le_collisionScale_mul_one_sub_exp_neg
+      (hH0 k) (hHh k)
+    dsimp [scale]
+    nlinarith
+  calc
+    (∑ k ∈ Finset.range n, logarithmicDeletedSurvival H k *
+        (H k * (1 - exp (-H k)) + (H k) ^ 2 / 2)) ≤
+        ∑ k ∈ Finset.range n, logarithmicDeletedSurvival H k *
+          (scale * (1 - exp (-H k))) := by
+      apply Finset.sum_le_sum
+      intro k hk
+      exact mul_le_mul_of_nonneg_left (hlocal k) (exp_nonneg _)
+    _ = scale * (1 - logarithmicDeletedSurvival H n) := by
+      calc
+        (∑ k ∈ Finset.range n, logarithmicDeletedSurvival H k *
+            (scale * (1 - exp (-H k)))) =
+            ∑ k ∈ Finset.range n, scale *
+              (logarithmicDeletedSurvival H k * (1 - exp (-H k))) := by
+          apply Finset.sum_congr rfl
+          intro k hk
+          ring
+        _ = scale * (∑ k ∈ Finset.range n,
+            logarithmicDeletedSurvival H k * (1 - exp (-H k))) := by
+          rw [Finset.mul_sum]
+        _ = scale * (1 - logarithmicDeletedSurvival H n) := by
+          rw [sum_logarithmicDeletedSurvival_mul_one_sub_exp_neg]
+    _ ≤ scale := by
+      have hsurvival0 : 0 ≤ logarithmicDeletedSurvival H n := exp_nonneg _
+      nlinarith [mul_nonneg hscale0 hsurvival0]
+    _ = h + h * exp h / 2 := rfl
+
 /-- No homogeneous singleton solution forces a strict negative entry in every
 singleton column of the normalized comparison matrix. -/
 theorem exists_negative_singleton_column_of_noHomogeneous

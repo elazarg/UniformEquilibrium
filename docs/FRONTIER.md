@@ -280,6 +280,34 @@ the live mathematical ledger.
   normal-player or sign-pattern dependency.  The direct residual corollaries
   and the direct approximate-existence-to-uniform-payoff adapter are checked,
   but the standard-Q side and full Simon Theorem 3 remain open.
+- **Projective Q-bar principal restriction:**
+  `exists_punishmentNormal_singletonPath_of_projectiveQBar` and the ambient
+  path/rate interfaces are checked for the punishment-normal principal matrix,
+  and the downstream decoder consumers are checked. The ambient
+  omitted-player/minmax lift is checked by
+  `ContinuousZeroPerfectSingletonPath.ambientLift`. The central
+  `QuittingPunishmentNormalPathDecoder` is not proved: logarithmic-rate and
+  integral reconstruction, the deleted-clock Snell identity and
+  exceptional-owner split, uniform product-law discretization, and the
+  conversion to actual terminal payoffs against every behavioral deviation
+  remain open. Thus projective Q-bar is a strong conditional route and forces
+  any counterexample surviving the decoder to fail on a normal principal
+  subset; it is not yet a theorem for all quitting games.
+- **Cyclic singleton escort route:**
+  `BalancedSingletonCycleCertificate.exists_escortCycle` proves the full escort
+  necessity and `hasQuittingCanonicalEqualHazardTailData_iff` gives the exact
+  criterion for the canonical equal-hazard tail data. `QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff`
+  is a direct arbitrary-behavior producer for the open-sign class at every
+  finite cyclic size, with an exact four-player instance in
+  `CyclicSingletonFourPlayer.isUniformEquilibriumPayoff`. The escort theorem
+  guarantees at least two vertices, not exactly two; neither the arbitrary-
+  sign producer nor a semantic adapter for all cyclic matrices is supplied.
+- **Solo-hazard boundary ledger:**
+  `boundarySoloBudgetIdentity` and the finite-prefix mass/floor estimates are
+  checked for the Solan--Vieille boundary table. The infinite semantic
+  reduction, exact arbitrary-schedule pair-death, uniform positive floor, and
+  rational upper certificate are still open, so this ledger does not yet give
+  a behavioral no-go theorem.
 - **Supplied Simon obstruction:** the production correspondence now makes the
   individually rational, near-feasible finite-orbit carrier and its finite-variation
   obstruction explicit. `HasQuittingSimonFiniteCellLyapunovCertificate` and

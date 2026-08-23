@@ -89,6 +89,7 @@ import MathUE.FiniteEmpiricalConvexity
 import MathUE.FiniteLinearChargedCapacity
 import MathUE.FiniteLinearCompatibility
 import MathUE.FinitePivotOrbit
+import MathUE.FinitePowerSumRoot
 import MathUE.FiniteSerialRelation
 import MathUE.FixedRatioConvexity
 import MathUE.Finset.CubicalResetIntegrability

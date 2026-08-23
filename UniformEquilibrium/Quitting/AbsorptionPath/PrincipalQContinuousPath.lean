@@ -948,16 +948,41 @@ theorem limit_residual_nonpos_of_pathRightDerivative_pos
       (((continuous_apply owner).tendsto _).comp hmassWitness)).mul_const _
   exact le_of_tendsto' hresidual hwitnessResidual
 
-/-- Projective-Q-bar compactification produces a continuous singleton
-absorption path satisfying both continuous sequential-perfection inequalities.
-The jump condition is vacuous because the path is continuous. -/
-theorem exists_continuous_zeroPerfect_of_projectiveQBar
+/-- A continuous zero-perfect absorption path together with its exposed
+singleton player-mass representation.  Keeping the mass path visible is
+essential for embedding a path from a player subtype into an ambient game. -/
+structure ContinuousZeroPerfectSingletonPath
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) where
+  terminal : ι → ℝ
+  mass : Path (0 : ι → ℝ) terminal
+  monotone : ∀ who, Monotone fun time => mass time who
+  total : ∀ time, ∑ who, mass time who = (time : ℝ)
+  zeroPerfect : IsSequentiallyPerfectAbsorptionPath reward
+    (singletonAbsorptionPathOfPlayerPath mass monotone total) 0
+
+/-- The absorption path represented by an exposed singleton-mass witness. -/
+def ContinuousZeroPerfectSingletonPath.path
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (witness : ContinuousZeroPerfectSingletonPath reward) :
+    AbsorptionPath (ι := ι) :=
+  singletonAbsorptionPathOfPlayerPath
+    witness.mass witness.monotone witness.total
+
+/-- The represented singleton absorption path is continuous. -/
+theorem ContinuousZeroPerfectSingletonPath.continuous
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (witness : ContinuousZeroPerfectSingletonPath reward) :
+    IsContinuousAbsorptionPath witness.path :=
+  singletonAbsorptionPathOfPlayerPath_continuous
+    witness.mass witness.monotone witness.total
+
+/-- Projective-Q-bar compactification with the singleton player-mass path
+retained as data. -/
+theorem exists_continuousZeroPerfectSingletonPath_of_projectiveQBar
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hQ : IsProjectiveQBarMatrix (normalizedSoloMatrix reward)) :
-    ∃ path : AbsorptionPath (ι := ι),
-      IsContinuousAbsorptionPath path ∧
-        IsSequentiallyPerfectAbsorptionPath reward path 0 := by
+    Nonempty (ContinuousZeroPerfectSingletonPath reward) := by
   let owner : ι := Classical.choice inferInstance
   let weight : stdSimplex ℝ ι := stdSimplex.pure owner
   obtain ⟨terminal, limitPath, subsequence, hsubsequence, htendsto,
@@ -970,9 +995,13 @@ theorem exists_continuous_zeroPerfect_of_projectiveQBar
     hQ weight limitPath subsequence hsubsequence htendsto
   let path : AbsorptionPath (ι := ι) :=
     singletonAbsorptionPathOfPlayerPath limitPath hmono htotal
-  refine ⟨path,
-    singletonAbsorptionPathOfPlayerPath_continuous limitPath hmono htotal,
-    ?_⟩
+  refine ⟨{
+    terminal := terminal
+    mass := limitPath
+    monotone := hmono
+    total := htotal
+    zeroPerfect := ?_
+  }⟩
   intro who
   constructor
   · intro t ht
@@ -1016,6 +1045,20 @@ theorem exists_continuous_zeroPerfect_of_projectiveQBar
       rw [← hidentity] at hnonpos
       simp only [add_zero]
       nlinarith
+
+/-- Projective-Q-bar compactification produces a continuous singleton
+absorption path satisfying both continuous sequential-perfection inequalities.
+The jump condition is vacuous because the path is continuous. -/
+theorem exists_continuous_zeroPerfect_of_projectiveQBar
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hQ : IsProjectiveQBarMatrix (normalizedSoloMatrix reward)) :
+    ∃ path : AbsorptionPath (ι := ι),
+      IsContinuousAbsorptionPath path ∧
+        IsSequentiallyPerfectAbsorptionPath reward path 0 := by
+  obtain ⟨witness⟩ :=
+    exists_continuousZeroPerfectSingletonPath_of_projectiveQBar reward hQ
+  exact ⟨witness.path, witness.continuous, witness.zeroPerfect⟩
 
 /-- Bundle the reversed clock mass and terminal filler as a continuous
 singleton absorption path. -/
