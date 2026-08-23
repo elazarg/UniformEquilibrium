@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectTelescope
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticWeightedAuxiliaryNashBudget
+import UniformEquilibrium.Quitting.Debt.Dynamic.PunishmentFloorViolation
 
 /-!
 # Dynamic costates for the plateau defect charge

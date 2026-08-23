@@ -4,7 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
+import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
+import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
+import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 
 /-!
 # Cap--Nash debt support above the minimum semantic debt

@@ -5,10 +5,12 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Stationary.LiveMass
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
 import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
+import UniformEquilibrium.Quitting.Root.NashExistence
+import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
+import UniformEquilibrium.Quitting.Terminal.TerminalDebtPrefixDescent
 
 /-!
 # Cap--Nash endpoint transport for literal terminal profiles

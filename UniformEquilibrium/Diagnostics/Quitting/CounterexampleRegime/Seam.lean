@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.DynamicLimit
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Surplus
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
 import UniformEquilibrium.Quitting.Cycles.PeriodicWindowEvaluation

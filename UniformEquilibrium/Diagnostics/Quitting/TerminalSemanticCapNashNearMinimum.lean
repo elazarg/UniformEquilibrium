@@ -7,6 +7,9 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Stationary.LiveMass
 import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
+import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
+import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
+import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
 
 /-!
 # Cap--Nash transport near the minimum terminal-semantic stratum

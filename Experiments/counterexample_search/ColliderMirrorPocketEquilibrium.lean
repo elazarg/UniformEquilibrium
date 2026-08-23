@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Circulant.ColliderClosure
+import UniformEquilibrium.Quitting.Classification.Circulant.TerminalExploitabilityColliderClosure
 import UniformEquilibrium.Quitting.Classification.Circulant.ColliderClosure
 
 /-!
@@ -34,7 +34,7 @@ What fires is the step-four cycle at an anchor root beyond
 This is a checked statement about one table, not a general theorem about
 collider completions.  The general statements are
 `GameTheory.CirculantColliderCompletion.isEmpty_terminalExploitabilityWitness_colliderDistantPocket`
-and `GameTheory.CirculantColliderCompletion.isEmpty_terminalExploitabilityWitness_colliderReward`.
+and `GameTheory.CirculantColliderCompletion.exists_uniformEquilibriumPayoff_colliderReward`.
 -/
 
 noncomputable section

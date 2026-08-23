@@ -229,10 +229,16 @@ theorem quittingTerminalDebtSumInf_localGlobalCounterexample_eq_zero :
       (reward := localGlobalCounterexampleReward)
       (quittingAlwaysContinueProfile localGlobalCounterexampleReward)).trans_eq hzero
   · unfold quittingTerminalDebtSumInf
+    have hrange : (Set.range (fun profile :
+        (quittingGame localGlobalCounterexampleReward).BehaviorProfile =>
+          quittingTerminalDebtSum localGlobalCounterexampleReward profile)).Nonempty :=
+      ⟨quittingTerminalDebtSum localGlobalCounterexampleReward
+          (quittingAlwaysContinueProfile localGlobalCounterexampleReward),
+        ⟨quittingAlwaysContinueProfile localGlobalCounterexampleReward, rfl⟩⟩
     apply (le_csInf_iff
       (bddBelow_range_quittingTerminalDebtSum
         (reward := localGlobalCounterexampleReward))
-      (Set.range_nonempty _)).2
+      hrange).2
     rintro total ⟨profile, rfl⟩
     unfold quittingTerminalDebtSum
     exact Finset.sum_nonneg fun who _ =>

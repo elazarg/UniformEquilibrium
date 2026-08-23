@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Surplus
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Classification.SingletonPacketSupport
 
 /-!

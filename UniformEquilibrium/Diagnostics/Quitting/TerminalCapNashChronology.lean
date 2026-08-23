@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
+import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.Debt.Marked.TimeAdvance
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 

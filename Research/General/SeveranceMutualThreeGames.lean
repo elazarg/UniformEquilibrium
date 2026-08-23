@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Energy
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefixChargedBridge
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.SmallPlayers
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySmallPlayers
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Ballisticity
 import UniformEquilibrium.Quitting.Cycles.PeriodicNormalizedSeam

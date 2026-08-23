@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalCollisionRecipientAtom
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicBlockerBarrier
+import UniformEquilibrium.Quitting.Boundary.Repair.AtomicBlockerPaidGeometry
 
 /-!
 # Atomic orientation of a causal collision recipient edge

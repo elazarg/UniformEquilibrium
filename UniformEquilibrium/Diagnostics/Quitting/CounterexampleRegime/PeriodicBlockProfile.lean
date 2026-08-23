@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.UniformPayoffBridge
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 import UniformEquilibrium.Quitting.Cycles.SoloPeriodicBlockCompiler
 

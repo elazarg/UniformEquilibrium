@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Conditioned.Diffuse.Reset
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 import UniformEquilibrium.Quitting.Boundary.Repair.PunishmentFloorClip
 

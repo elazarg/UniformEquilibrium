@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumPlateauPacket
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicSupportBoundary
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlayerDeletion
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupation
