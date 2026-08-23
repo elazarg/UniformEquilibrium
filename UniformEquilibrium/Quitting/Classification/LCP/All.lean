@@ -7,8 +7,10 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
 import UniformEquilibrium.Quitting.Classification.LCP.PrincipalRestriction
+import UniformEquilibrium.Quitting.Classification.LCP.PrincipalReward
 import UniformEquilibrium.Quitting.Classification.LCP.NormalPrincipalQBar
 import UniformEquilibrium.Quitting.Classification.LCP.NormalPrincipalReward
+import UniformEquilibrium.Quitting.Classification.LCP.ReturnedBlockTangentGap
 import UniformEquilibrium.Quitting.Classification.LCP.ProjectiveQBarBehavioralDecoder
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses

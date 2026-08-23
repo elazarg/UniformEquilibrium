@@ -302,12 +302,28 @@ the live mathematical ledger.
   `CyclicSingletonFourPlayer.isUniformEquilibriumPayoff`. The escort theorem
   guarantees at least two vertices, not exactly two; neither the arbitrary-
   sign producer nor a semantic adapter for all cyclic matrices is supplied.
-- **Solo-hazard boundary ledger:**
-  `boundarySoloBudgetIdentity` and the finite-prefix mass/floor estimates are
-  checked for the Solan--Vieille boundary table. The infinite semantic
-  reduction, exact arbitrary-schedule pair-death, uniform positive floor, and
-  rational upper certificate are still open, so this ledger does not yet give
-  a behavioral no-go theorem.
+- **Solo-hazard boundary obstruction:**
+  `Schedule.one_over_sixtyEight_lt_literal_exploitability` checks that every
+  finite or infinite deterministic at-most-one-owner calendar on the
+  Solan--Vieille boundary table has literal all-behavior terminal
+  exploitability strictly above `1/68`.  The proof includes the infinite
+  deleted-clock/friction telescope and the stronger quadratic inequality
+  `1 <= 14 * E^2 + 67 * E`.  Thus a universal chronological producer cannot
+  use only single-owner rows on this residual-hard table.  The packet's
+  rational upper schedule and the exact optimal solo-hazard floor remain
+  unformalized; the checked two-owner period-two equilibrium is unaffected.
+- **Returned-block tangent obstruction:**
+  `hasHomogeneousSimplexSolution_of_vanishing_returnedBlocks` proves that
+  bounded returned product blocks with vanishing total hazard and aggregate
+  Bellman and endpoint regret little-o of that hazard force a homogeneous
+  simplex solution of the normalized singleton matrix, with arbitrary varying
+  phase counts.  `relativeError_gap_of_noHomogeneous` gives the stronger
+  explicit converse scale and relative-error gap from the `R0` margin.
+  Principal-reward and recursive-normal-core adapters are checked for literal
+  restricted blocks.  This is a reduction on supplied local blocks, not a
+  block producer, chronology, or unrestricted-behavior equilibrium consumer;
+  ambient zero-off-subset block restriction remains a separate adapter unless
+  explicitly supplied.
 - **Supplied Simon obstruction:** the production correspondence now makes the
   individually rational, near-feasible finite-orbit carrier and its finite-variation
   obstruction explicit. `HasQuittingSimonFiniteCellLyapunovCertificate` and

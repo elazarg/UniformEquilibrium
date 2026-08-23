@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQContinuousPath
 import UniformEquilibrium.Quitting.Classification.AbnormalSingletonConsequences
 import UniformEquilibrium.Quitting.Classification.LCP.NormalPrincipalQBar
+import UniformEquilibrium.Quitting.Classification.LCP.PrincipalReward
 
 /-!
 # Reward restriction to punishment-normal players
@@ -38,8 +39,7 @@ def quittingPunishmentNormalCoalition
     (coalition :
       {S : Finset (punishmentNormalPlayers reward) // S.Nonempty}) :
     {S : Finset ι // S.Nonempty} :=
-  ⟨coalition.1.map ⟨Subtype.val, Subtype.val_injective⟩,
-    Finset.map_nonempty.mpr coalition.2⟩
+  quittingPrincipalCoalition (punishmentNormalPlayers reward) coalition
 
 /-- Restriction of the reward table to punishment-normal coalitions and
 payoff coordinates. -/
@@ -47,28 +47,27 @@ def quittingPunishmentNormalReward
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     {S : Finset (punishmentNormalPlayers reward) // S.Nonempty} →
       Payoff (punishmentNormalPlayers reward) :=
-  fun coalition who =>
-    reward (quittingPunishmentNormalCoalition reward coalition) who.1
+  quittingPrincipalReward reward (punishmentNormalPlayers reward)
 
 @[simp] theorem quittingPunishmentNormalCoalition_singleton
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (who : punishmentNormalPlayers reward) :
-    quittingPunishmentNormalCoalition reward
+      quittingPunishmentNormalCoalition reward
         (quittingProjectiveSingletonTerminal who) =
       quittingProjectiveSingletonTerminal who.1 := by
-  apply Subtype.ext
-  simp [quittingPunishmentNormalCoalition,
-    quittingProjectiveSingletonTerminal]
+  simpa only [quittingPunishmentNormalCoalition] using
+    quittingPrincipalCoalition_singleton
+      (punishmentNormalPlayers reward) who
 
 @[simp] theorem quittingPunishmentNormalReward_singleton
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (owner who : punishmentNormalPlayers reward) :
-    quittingPunishmentNormalReward reward
+      quittingPunishmentNormalReward reward
         (quittingProjectiveSingletonTerminal owner) who =
       reward (quittingProjectiveSingletonTerminal owner.1) who.1 := by
-  change reward (quittingPunishmentNormalCoalition reward
-    (quittingProjectiveSingletonTerminal owner)) who.1 = _
-  rw [quittingPunishmentNormalCoalition_singleton]
+  simpa only [quittingPunishmentNormalReward] using
+    quittingPrincipalReward_singleton reward
+      (punishmentNormalPlayers reward) owner who
 
 /-- The restricted reward's normalized singleton matrix is literally the
 production-normal principal matrix. -/
@@ -76,18 +75,10 @@ theorem normalizedSoloMatrix_quittingPunishmentNormalReward
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     normalizedSoloMatrix (quittingPunishmentNormalReward reward) =
       normalizedPunishmentNormalPlayerMatrix reward := by
-  rw [normalizedSoloMatrix_eq_projectiveLCPMatrix]
-  unfold normalizedPunishmentNormalPlayerMatrix principalMatrix
-  rw [normalizedSoloMatrix_eq_projectiveLCPMatrix]
-  funext who owner
-  change quittingPunishmentNormalReward reward
-      (quittingProjectiveSingletonTerminal owner) who -
-        quittingPunishmentNormalReward reward
-          (quittingProjectiveSingletonTerminal who) who =
-    reward (quittingProjectiveSingletonTerminal owner.1) who.1 -
-      reward (quittingProjectiveSingletonTerminal who.1) who.1
-  rw [quittingPunishmentNormalReward_singleton,
-    quittingPunishmentNormalReward_singleton]
+  simpa only [quittingPunishmentNormalReward,
+    normalizedPunishmentNormalPlayerMatrix] using
+      normalizedSoloMatrix_quittingPrincipalReward reward
+        (punishmentNormalPlayers reward)
 
 /-- Every probability mixture of punishment-normal singleton owners protects
 an omitted abnormal coordinate: its payoff is above the behavioral punishment

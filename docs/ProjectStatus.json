@@ -92,6 +92,15 @@
       "scope": "Strict lower and weak upper conditional reward-range comparisons yield a stationary behavioral terminal Nash and a uniform-equilibrium payoff; the hypotheses are a sufficient source-data condition, not a universal classification."
     },
     {
+      "id": "solan-vieille-solo-hazard-floor",
+      "subject": "At-most-one-owner calendars on the Solan--Vieille boundary table",
+      "kind": "Unconditional obstruction",
+      "declaration": "Schedule.one_over_sixtyEight_lt_literal_exploitability",
+      "source": "UniformEquilibrium/Quitting/Examples/SolanVieilleBoundarySoloHazardSemantic.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Every arbitrary finite or infinite deterministic calendar with at most one positive quitting hazard per date has literal all-behavior terminal exploitability E satisfying 1 <= 14 E^2 + 67 E and hence E > 1/68. This rules out that strategy architecture on one residual-hard table; the same game has a checked two-owner uniform equilibrium."
+    },
+    {
       "id": "supplied-simon-finite-orbit-obstruction",
       "subject": "Supplied finite-orbit obstruction in quitting-game semantics",
       "kind": "Conditional obstruction",
