@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Probability.MarkovOccupation
+import MathUE.Probability.DecisionVariationMaximalInequality
 import MathUE.Probability.RealizedAccountDeflation
 
 /-!
@@ -26,6 +27,14 @@ The final one-state example records the sharp boundary.  Harmonicity cannot
 identify an unrelated strategic charge with the state-potential increment:
 on a one-state path every state-potential account is constant, so it cannot
 realize the recurring charge `1`.
+
+The finite-horizon extension below is a conditional variation core for a
+finite homogeneous Markov chain.  A supplied statewise escape/Poisson
+potential certificate gives the sharp cardinality bound on expected
+space-time variation.  This is the finite accounting step relevant to
+Simon's Lemma 2; the escape/Poisson certificate itself and the infinite
+adapter from Simon's return argument are not produced here, so that lemma
+remains open.
 -/
 
 namespace Math.Probability
@@ -171,6 +180,286 @@ theorem statePotentialIncrement_finset_linearCombination
       ∑ j, coefficient j *
         statePotentialIncrement (potential j) path t := by
   simp only [statePotentialIncrement, Finset.sum_sub_distrib, mul_sub]
+
+/-! ## Conditional finite-horizon variation for a homogeneous Markov chain
+
+The definitions and centering identity below are unconditional.  The
+cardinality bound is conditional on
+`HasStatewiseMarkovVariationBudget`, which supplies the statewise escape
+majorant and its Poisson drift.  It is not a construction of that certificate
+from bounded harmonicity, nor an infinite-horizon or return-probability
+adapter for Simon's Lemma 2. -/
+
+/-- The history-dependent presentation of a time-homogeneous Markov kernel. -/
+def homogeneousMarkovStep
+    (initial : Ω) (kernel : Ω → PMF Ω) :
+    ∀ n, (Fin n → Ω) → PMF Ω :=
+  adaptiveMarkovStep initial
+    (fun n history ↦ kernel (history (Fin.last n)))
+
+@[simp] theorem homogeneousMarkovStep_zero
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (history : Fin 0 → Ω) :
+    homogeneousMarkovStep initial kernel 0 history = PMF.pure initial := rfl
+
+@[simp] theorem homogeneousMarkovStep_succ
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (n : ℕ) (history : Fin (n + 1) → Ω) :
+    homogeneousMarkovStep initial kernel (n + 1) history =
+      kernel (history (Fin.last n)) := rfl
+
+/-- The increment of a space-time observable along one Markov transition.
+The zeroth observation installs the initial state and carries no increment. -/
+def spaceTimeMarkovScore
+    (value : Ω → ℕ → ℝ) :
+    ∀ n, (Fin n → Ω) → Ω → ℝ
+  | 0, _, _ => 0
+  | n + 1, history, successor =>
+      value successor (n + 1) -
+        value (history (Fin.last n)) n
+
+@[simp] theorem spaceTimeMarkovScore_zero
+    (value : Ω → ℕ → ℝ)
+    (history : Fin 0 → Ω) (state : Ω) :
+    spaceTimeMarkovScore value 0 history state = 0 := rfl
+
+@[simp] theorem spaceTimeMarkovScore_succ
+    (value : Ω → ℕ → ℝ)
+    (n : ℕ) (history : Fin (n + 1) → Ω) (successor : Ω) :
+    spaceTimeMarkovScore value (n + 1) history successor =
+      value successor (n + 1) -
+        value (history (Fin.last n)) n := rfl
+
+/-- The space-time harmonic equation is exactly conditional centering of
+the Markov score. -/
+theorem expect_spaceTimeMarkovScore_eq_zero_of_harmonic
+    [Finite Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ)
+    (harmonic : ∀ state time,
+      value state time =
+        expect (kernel state) (fun successor =>
+          value successor (time + 1)))
+    (n : ℕ) (history : Fin n → Ω) :
+    expect (homogeneousMarkovStep initial kernel n history)
+      (spaceTimeMarkovScore value n history) = 0 := by
+  cases n with
+  | zero => simp
+  | succ n =>
+      rw [homogeneousMarkovStep_succ]
+      change
+        expect (kernel (history (Fin.last n)))
+            (fun successor => value successor (n + 1) -
+              value (history (Fin.last n)) n) = 0
+      rw [expect_sub, expect_const,
+        ← harmonic (history (Fin.last n)) n]
+      ring
+
+/-- Expected total variation through the first `horizon` transitions of a
+time-homogeneous finite Markov chain. -/
+noncomputable def finiteExpectedSpaceTimeMarkovVariation
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) (horizon : ℕ) : ℝ :=
+  expectedDecisionVariation
+    (homogeneousMarkovStep initial kernel)
+    (spaceTimeMarkovScore value)
+    (horizon + 1)
+
+theorem finiteExpectedSpaceTimeMarkovVariation_nonneg
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) (horizon : ℕ) :
+    0 ≤ finiteExpectedSpaceTimeMarkovVariation
+      initial kernel value horizon :=
+  expectedDecisionVariation_nonneg
+    (homogeneousMarkovStep initial kernel)
+    (spaceTimeMarkovScore value)
+    (horizon + 1)
+
+theorem finiteExpectedSpaceTimeMarkovVariation_mono
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) {earlier later : ℕ}
+    (hle : earlier ≤ later) :
+    finiteExpectedSpaceTimeMarkovVariation
+        initial kernel value earlier ≤
+      finiteExpectedSpaceTimeMarkovVariation
+        initial kernel value later :=
+  expectedDecisionVariation_mono
+    (homogeneousMarkovStep initial kernel)
+    (spaceTimeMarkovScore value)
+    (Nat.add_le_add_right hle 1)
+
+/-- A statewise certificate for the finite homogeneous-chain variation
+bound. `escape owner` dominates the conditional variation when the chain is
+at `owner`. The corresponding indicator charge is a nonnegative Poisson
+drift with at most one unit of initial potential.
+
+This interface deliberately asks for those two facts as data. In particular,
+it does not assert that bounded space-time harmonicity alone constructs the
+escape potentials used in Simon's informal return-probability argument. -/
+structure HasStatewiseMarkovVariationBudget
+    [Fintype Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) where
+  escape : Ω → ℝ
+  potential : Ω → Ω → ℝ
+  localVariation_le_escape : ∀ time state,
+    expect (kernel state) (fun successor ↦
+      |value successor (time + 1) - value state time|) ≤
+        escape state
+  potential_nonneg : ∀ owner state, 0 ≤ potential owner state
+  escape_eq_drift_at_owner : ∀ owner,
+    escape owner =
+      potential owner owner -
+        expect (kernel owner) (potential owner)
+  zero_eq_drift_of_ne : ∀ owner state, state ≠ owner →
+    0 = potential owner state -
+      expect (kernel state) (potential owner)
+  potential_initial_le_one : ∀ owner,
+    potential owner initial ≤ 1
+
+namespace HasStatewiseMarkovVariationBudget
+
+variable [Fintype Ω]
+  {initial : Ω} {kernel : Ω → PMF Ω}
+  {value : Ω → ℕ → ℝ}
+
+/-- The sum of all statewise potentials. -/
+noncomputable def totalPotential
+    (certificate :
+      HasStatewiseMarkovVariationBudget initial kernel value)
+    (state : Ω) : ℝ :=
+  ∑ owner, certificate.potential owner state
+
+theorem totalPotential_nonneg
+    (certificate :
+      HasStatewiseMarkovVariationBudget initial kernel value)
+    (state : Ω) :
+    0 ≤ certificate.totalPotential state :=
+  Finset.sum_nonneg fun owner _ ↦
+    certificate.potential_nonneg owner state
+
+theorem totalPotential_initial_le_card
+    (certificate :
+      HasStatewiseMarkovVariationBudget initial kernel value) :
+    certificate.totalPotential initial ≤ Fintype.card Ω := by
+  calc
+    certificate.totalPotential initial ≤ ∑ _owner : Ω, (1 : ℝ) :=
+      Finset.sum_le_sum fun owner _ ↦
+        certificate.potential_initial_le_one owner
+    _ = Fintype.card Ω := by simp
+
+theorem totalPotential_drift
+    (certificate :
+      HasStatewiseMarkovVariationBudget initial kernel value)
+    (state : Ω) :
+    certificate.totalPotential state -
+        expect (kernel state) certificate.totalPotential =
+      certificate.escape state := by
+  change
+    (∑ owner, certificate.potential owner state) -
+        expect (kernel state)
+          (fun next => ∑ owner, certificate.potential owner next) =
+      certificate.escape state
+  rw [← expect_sum_comm]
+  rw [← Finset.sum_sub_distrib]
+  rw [Finset.sum_eq_single state]
+  · exact (certificate.escape_eq_drift_at_owner state).symm
+  · intro owner _ howner
+    exact (certificate.zero_eq_drift_of_ne owner state howner.symm).symm
+  · simp
+
+private theorem conditionalVariationSum_le_chargeSum
+    (certificate :
+      HasStatewiseMarkovVariationBudget initial kernel value)
+    (horizon : ℕ) (history : Fin (horizon + 1) → Ω) :
+    predictableConditionalMeanSum
+        (homogeneousMarkovStep initial kernel)
+        (fun n past successor ↦
+          |spaceTimeMarkovScore value n past successor|)
+        (horizon + 1) history ≤
+      markovHistoryStateChargeSum certificate.escape horizon history := by
+  induction horizon with
+  | zero => simp [predictableConditionalMeanSum]
+  | succ horizon ih =>
+      rw [← Fin.snoc_init_self history]
+      simp only [predictableConditionalMeanSum_snoc,
+        markovHistoryStateChargeSum_snoc]
+      exact add_le_add (ih (Fin.init history))
+        (certificate.localVariation_le_escape horizon
+          ((Fin.init history) (Fin.last horizon)))
+
+/-- A supplied statewise escape/occupation certificate gives Simon's sharp
+finite-state cardinality bound at every finite horizon.  Producing this
+escape/Poisson certificate from Simon's hypotheses, and passing from these
+finite bounds to his infinite return argument, remain open. -/
+theorem finiteExpectedSpaceTimeMarkovVariation_le_card
+    (certificate :
+      HasStatewiseMarkovVariationBudget initial kernel value)
+    (horizon : ℕ) :
+    finiteExpectedSpaceTimeMarkovVariation
+        initial kernel value horizon ≤
+      Fintype.card Ω := by
+  let step := homogeneousMarkovStep initial kernel
+  let absScore := fun n history successor ↦
+    |spaceTimeMarkovScore value n history successor|
+  let law := adaptiveHistoryLaw step (horizon + 1)
+  have hvariation :
+      finiteExpectedSpaceTimeMarkovVariation
+          initial kernel value horizon =
+        expect law
+          (predictableConditionalMeanSum step absScore (horizon + 1)) := by
+    rw [finiteExpectedSpaceTimeMarkovVariation,
+      expectedDecisionVariation_eq_expect_predictableScoreSum_abs,
+      expect_predictableScoreSum_eq_expect_conditionalMeanSum]
+  have hcharge : ∀ state,
+      certificate.escape state =
+        certificate.totalPotential state -
+          expect (kernel state) certificate.totalPotential :=
+    fun state ↦ (certificate.totalPotential_drift state).symm
+  have hcenter : ∀ n history,
+      expect (step n history)
+        (adaptiveMarkovDiscrepancyScore
+          kernel certificate.totalPotential n history) = 0 := by
+    intro n history
+    cases n with
+    | zero => simp [step, homogeneousMarkovStep]
+    | succ n =>
+        simpa [step, homogeneousMarkovStep] using
+          (expect_adaptiveMarkovDiscrepancyScore_succ
+            initial kernel
+            (fun n history ↦ kernel (history (Fin.last n)))
+            certificate.totalPotential n history)
+  have hoccupation :
+      expect law
+          (markovHistoryStateChargeSum certificate.escape horizon) ≤
+        certificate.totalPotential initial := by
+    have hbound := expect_markovHistoryStateChargeSum_le
+      initial kernel
+      (fun n history ↦ kernel (history (Fin.last n)))
+      certificate.totalPotential certificate.escape
+      certificate.totalPotential_nonneg hcharge horizon
+    have hzero := expect_predictableScoreSum_eq_zero
+      step
+      (adaptiveMarkovDiscrepancyScore kernel certificate.totalPotential)
+      hcenter (horizon + 1)
+    rw [expect_predictableScoreSum_eq_expect_conditionalMeanSum] at hzero
+    change
+      expect law
+          (markovHistoryStateChargeSum certificate.escape horizon) ≤
+        certificate.totalPotential initial +
+          expect law
+            (predictableConditionalMeanSum step
+              (adaptiveMarkovDiscrepancyScore
+                kernel certificate.totalPotential)
+              (horizon + 1)) at hbound
+    rw [hzero, add_zero] at hbound
+    exact hbound
+  rw [hvariation]
+  exact (expect_mono law _ _ fun history ↦
+    certificate.conditionalVariationSum_le_chargeSum horizon history).trans
+      (hoccupation.trans certificate.totalPotential_initial_le_card)
+
+end HasStatewiseMarkovVariationBudget
 
 namespace HarmonicStateAccountCounterexample
 

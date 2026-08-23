@@ -218,13 +218,68 @@ the live mathematical ledger.
 - **Positive construction:** produce one of the inputs accepted by an
   integrated compiler, or add a new compiler whose output reaches terminal
   approximate Nash existence.
-- **Simon viability route:** a bounded strict potential would rule out finite
-  graph orbits with arbitrarily large accumulated variation, but no Simon
-  `F_epsilon` certificate, necessity bridge, or game conclusion is
-  available.  A positive restartable graph extension does produce one
-  compatible path with a linearly diverging prefix budget and
-  `QuestionOneConclusion`; Simon's seven hypotheses do not currently imply
-  that restartability.
+- **Simon viability route:** the conditional finite-horizon core
+  `finiteExpectedSpaceTimeMarkovVariation_le_card` bounds expected
+  space-time variation from a supplied statewise escape/Poisson certificate.
+  Simon Lemma 2 remains open because that escape/Poisson certificate and the
+  infinite adapter from return probabilities are not produced.  A positive
+  restartable graph extension does produce one compatible path with a
+  linearly diverging prefix budget and `QuestionOneConclusion`; the seven
+  generic hypotheses do not currently imply that restartability or a
+  certificate.  This claim is scoped to those hypotheses, not to the direct
+  approximate-equilibrium-to-uniform-payoff adapter elsewhere in the quitting
+  development.  Full Simon Theorem 3 remains open.
+- **Simon survival-crossing repair:** actual floor-clipped attainability by a
+  unilateral continuation deviation, simultaneous support purification, and
+  the strict first-crossing interval are checked in
+  `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/SurvivalCrossingRepair.lean`.
+  The deviation has payoff at least the clipped floor (whose definition
+  contains the explicit slack); no attained best-response supremum is
+  asserted.  The purified-row certificate feeds the first-crossing theorem
+  directly.  Coordinate closeness and the positive survival lower bound remain
+  conditional on supplied endpoint modulus,
+  normalized near-feasibility, no-sure-quitter, and corrected uniform-survival
+  predicates, with an explicit positive `ρ`.  No global conditioned prefix or
+  finite orbit is produced.
+- **Simon compact alternatives:** the near-total-absorption branch is checked
+  in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`:
+  `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows`
+  rounds a sufficiently small Continue coordinate to a sure Quit and produces
+  the instant-punishment branch.  The normalized-motion producer, the common
+  positive survival constant, and Simon Lemma 2 remain open.
+- **Simon positive-absorption splice:**
+  `quittingStationarilyGeneratedApproximateEquilibria_of_positiveAbsorptionStationary`
+  in `UniformEquilibrium/Quitting/Classification/Existence/PositiveAbsorptionStationarySplice.lean`
+  checks that a cofinal family of stationary approximate equilibria with
+  positive absorption generates the stationarily generated branch, against
+  arbitrary behavioral deviations.  The cofinal positive-absorption
+  hypothesis is not automatic in the zero-solo class.  The direct residual
+  corollary `quittingApproximateEquilibriumExistence_of_stationarilyGenerated`
+  and the direct adapter
+  `quittingGame_exists_uniformEquilibriumPayoff_of_approximateEquilibriumExistence`
+  consume the resulting approximate profiles without requiring a cycle
+  classification.
+- **Simon equilibrium-to-positive-cycle assembly:** exact charged forward
+  packets in one compact carrier close to positive cyclic `F_epsilon` orbits,
+  and the periodic support-witness consumer turns those cycles into a
+  uniform-equilibrium payoff.  The primary supplied hard-branch conclusion is
+  the disjunction `IsQuittingZeroSolo reward ∨
+  QuittingSimonArbitrarilyChargedForwardPacketCondition reward`; off zero solo
+  it yields the positive-cycle branch.  The audited approximate paths have not
+  been seam-exactified into exact packets in one common carrier, so the
+  necessity direction remains conditional and no arbitrary-game packet
+  producer is available.  This seam adapter is substantive, not a naming or
+  bookkeeping step.  Raw packet absorption charge is not Euclidean
+  finite-orbit variation and does not automatically supply the finite-
+  variation obstruction.
+- **Simon stationary gate:**
+  `zeroSolo_or_stationarilyGenerated_or_standardQMatrixSide` in
+  `UniformEquilibrium/Quitting/Classification/LCP/ZeroSoloGeneratedStandardQ.lean`
+  gives the checked trichotomy: every own singleton reward is nonpositive, or
+  the stationarily generated residual, or standard-Q.  It uses no
+  normal-player or sign-pattern dependency.  The direct residual corollaries
+  and the direct approximate-existence-to-uniform-payoff adapter are checked,
+  but the standard-Q side and full Simon Theorem 3 remain open.
 - **Supplied Simon obstruction:** the production correspondence now makes the
   individually rational, near-feasible finite-orbit carrier and its finite-variation
   obstruction explicit. `HasQuittingSimonFiniteCellLyapunovCertificate` and
