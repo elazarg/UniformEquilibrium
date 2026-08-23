@@ -33,6 +33,7 @@ import UniformEquilibrium.Quitting.Classification.Existence.All
 import UniformEquilibrium.Quitting.Classification.Existence.BlockerSwitch
 import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGap
 import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGapRange
+import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.SuppliedCorrespondence
 import UniformEquilibrium.Quitting.Debt.Dynamic.ChronologicalDebtShadowing
 import UniformEquilibrium.Quitting.Debt.Dynamic.ExactChronologicalData
 import UniformEquilibrium.Quitting.Debt.Dynamic.PeriodicDebtHolonomy

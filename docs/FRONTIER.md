@@ -222,6 +222,20 @@ the live mathematical ledger.
   compatible path with a linearly diverging prefix budget and
   `QuestionOneConclusion`; Simon's seven hypotheses do not currently imply
   that restartability.
+- **Supplied Simon obstruction:** the production correspondence now makes the
+  individually rational, near-feasible finite-orbit carrier and its finite-variation
+  obstruction explicit. `HasQuittingSimonFiniteCellLyapunovCertificate` and
+  its direct obstruction adapter consume supplied exact cell coverage, bounds,
+  and descent inequalities; the terminal-gap capstone combines that adapter
+  with the separately supplied necessity implication. Rational-polyhedral
+  certificates remain generic soundness inputs, and no source certificate,
+  strategy extraction, or chronological realization is provided.
+- **Sharper charge-tangent dispatch:** every extracted charge-tangent datum
+  either already has the complementary singleton-mixture payoff, crosses the
+  smaller solo/punishment boundary gap, or has positive tangent on an active
+  owner. A terminal-exploitability witness removes the first arm. The two
+  remaining alternatives still require their respective chronological or
+  admissible-return consumers.
 - **Chronological atom production:** serialize the fixed vanishing-debt atom
   access into executable reached tails satisfying the checked shadowing
   certificate at every positive accuracy.
