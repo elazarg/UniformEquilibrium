@@ -4,9 +4,12 @@
 .lsp-state.json
 .codex/
 .claude/
+
 # Short-lived intake: move contents into a tracked project lane or delete them.
 /ephemeral/
+
 /overleaf/
+/literature/
 *.log
 *.aux
 *.out

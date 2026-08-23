@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicSupportBoundary
 import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
 import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
+import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 
 /-!
 # Auxiliary-target budget at the minimum terminal-semantic stratum
@@ -492,6 +493,39 @@ theorem minimumTerminalSemantic_is_allContinuePlateau
       reward pair hdebtNonneg hnashAll,
     minimumTerminalSemantic_singletonMargin
       (reward := reward) pair hpair hminimum hpositive⟩
+
+/-- The intrinsic positive-minimum concept is exactly the existing
+all-Continue plateau package.  The all-Continue Nash and fixed-point fields are
+therefore consequences of the positive global minimum, not extra premises. -/
+theorem hasPositiveMinimumTerminalSemanticDebt_iff_terminalSemanticPlateau
+    [Nonempty ι] :
+    HasPositiveMinimumTerminalSemanticDebt reward ↔
+      HasPositiveMinimumTerminalSemanticPlateau reward := by
+  constructor
+  · rintro ⟨pair, hpair, hminimum, hpositive⟩
+    have hnonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
+      quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
+    have hcoordinate : ∃ who, 0 < quittingTerminalSemanticDebt pair who := by
+      by_contra hnone
+      have hzero : ∀ who, quittingTerminalSemanticDebt pair who = 0 := by
+        intro who
+        exact le_antisymm
+          (le_of_not_gt fun hwho ↦ hnone ⟨who, hwho⟩) (hnonneg who)
+      unfold quittingTerminalSemanticDebtSum at hpositive
+      simp only [hzero, Finset.sum_const_zero] at hpositive
+      exact (lt_irrefl 0) hpositive
+    obtain ⟨hnash, hprefix, _hmargin⟩ :=
+      minimumTerminalSemantic_is_allContinuePlateau
+        (reward := reward) pair hpair hminimum hpositive
+    exact ⟨pair, hpair, hminimum, hcoordinate, hnash, hprefix⟩
+  · rintro ⟨pair, hpair, hminimum, ⟨who, hwho⟩, _hnash, _hprefix⟩
+    have hnonneg : ∀ player, 0 ≤ quittingTerminalSemanticDebt pair player :=
+      quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
+    have hpositive : 0 < quittingTerminalSemanticDebtSum pair := by
+      unfold quittingTerminalSemanticDebtSum
+      exact Finset.sum_pos' (fun player _ ↦ hnonneg player)
+        ⟨who, Finset.mem_univ who, hwho⟩
+    exact ⟨pair, hpair, hminimum, hpositive⟩
 
 /-! ## Global consequences -/
 

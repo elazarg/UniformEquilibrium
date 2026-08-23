@@ -180,6 +180,7 @@
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseEndpoint.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/Atom/ExactPrefixCharge.lean",
+        "UniformEquilibrium/Quitting/Bellman/Finite/PositiveAdmissibleCycle.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Capacity/AdmissibleCycle.lean"
       ],
       "cover_clause_ids": [

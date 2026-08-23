@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.UniformPayoffBridge
 import UniformEquilibrium.Quitting.Classification.Circulant.Trichotomy
 
 /-!
@@ -37,8 +37,8 @@ theorem isEmpty_counterexampleRegime_of_circulant_surplus_nonpos
     [Nontrivial ι] (h : HasCirculantSoloMatrix reward m)
     (hσ : (∑ d, m d) ≤ 0) :
     IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
-    (exists_uniformEquilibriumPayoff_of_circulant_surplus_nonpos h hσ)⟩
+  isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
+    (exists_uniformEquilibriumPayoff_of_circulant_surplus_nonpos h hσ)
 
 /-- A circulant table of vanishing surplus is in no counterexample regime, by
 the homogeneous branch. -/
@@ -46,8 +46,8 @@ theorem isEmpty_counterexampleRegime_of_circulant_surplus_eq_zero
     [Nontrivial ι] (h : HasCirculantSoloMatrix reward m)
     (hσ : (∑ d, m d) = 0) :
     IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
-    (exists_uniformEquilibriumPayoff_of_circulant_surplus_eq_zero h hσ)⟩
+  isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
+    (exists_uniformEquilibriumPayoff_of_circulant_surplus_eq_zero h hσ)
 
 section FivePlayers
 
@@ -58,8 +58,8 @@ theorem isEmpty_counterexampleRegime_of_pentagonCirculant_surplus_nonpos
     {margin : ZMod 5 → ℝ} (h : HasCirculantSoloMatrix reward margin)
     (hσ : (∑ d, margin d) ≤ 0) :
     IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
-    (exists_uniformEquilibriumPayoff_of_pentagonCirculant_surplus_nonpos h hσ)⟩
+  isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
+    (exists_uniformEquilibriumPayoff_of_pentagonCirculant_surplus_nonpos h hσ)
 
 end FivePlayers
 

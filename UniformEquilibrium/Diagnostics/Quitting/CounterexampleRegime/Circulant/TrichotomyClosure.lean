@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Circulant.Trichotomy
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.UniformPayoffBridge
 import UniformEquilibrium.Quitting.Classification.Circulant.TrichotomyClosure
 
 /-!
@@ -54,8 +55,8 @@ theorem isEmpty_counterexampleRegime_of_isFiringStep
     (hsum : 0 < ∑ e, m e) {c : ZMod 5} (hfire : IsFiringStep m c)
     (hjoin : ∀ k : ZMod 5, k ≠ 0 → J (k * c) ≤ 0) :
     IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
-    (exists_uniformEquilibriumPayoff_of_isFiringStep htable hs hsum hfire hjoin)⟩
+  isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
+    (exists_uniformEquilibriumPayoff_of_isFiringStep htable hs hsum hfire hjoin)
 
 /-! ## The solo exit branch -/
 
@@ -65,8 +66,8 @@ theorem isEmpty_counterexampleRegime_of_nonneg_margins
     (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0)
     (hm : ∀ d : ZMod 5, d ≠ 0 → 0 ≤ m d) :
     IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
-    (exists_uniformEquilibriumPayoff_of_nonneg_margins htable hs hjoin hm)⟩
+  isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
+    (exists_uniformEquilibriumPayoff_of_nonneg_margins htable hs hjoin hm)
 
 /-! ## Three negative margins -/
 
@@ -77,9 +78,9 @@ theorem isEmpty_counterexampleRegime_of_unique_nonneg
     (hother : ∀ e : ZMod 5, e ≠ 0 → e ≠ g → m e < 0)
     (hjoin : ∀ d : ZMod 5, d ≠ 0 → J d ≤ 0) :
     IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
+  isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
     (exists_uniformEquilibriumPayoff_of_unique_nonneg htable hs hsum hgm hother
-      hjoin)⟩
+      hjoin)
 
 /-! ## The neighbour pocket -/
 

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.UniformPayoffBridge
 import UniformEquilibrium.Quitting.Cycles.BlockPeriodicProfile
 import UniformEquilibrium.Quitting.Cycles.SoloPeriodicBlockCompiler
 
@@ -126,8 +127,8 @@ theorem isEmpty_counterexampleRegime_of_soloPeriodicBlock
     {value : Fin (m + 2) → Payoff ι}
     (hcert : IsSoloPeriodicCertificate reward w marginal value) :
     IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime ↦ regime.not_exists_uniformEquilibriumPayoff
-    ⟨value 0, isUniformEquilibriumPayoff_of_soloPeriodicBlock hcert⟩⟩
+  isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
+    ⟨value 0, isUniformEquilibriumPayoff_of_soloPeriodicBlock hcert⟩
 
 /-! ## Certified block periodic profiles -/
 
@@ -139,8 +140,8 @@ theorem isEmpty_counterexampleRegime_of_isQuittingBlockCertificate
     {U : Fin (m + 2) → Payoff ι}
     (hcert : IsQuittingBlockCertificate reward hazard U) :
     IsEmpty (QuittingCounterexampleRegime reward) :=
-  ⟨fun regime ↦ regime.not_exists_uniformEquilibriumPayoff
-    ⟨U 0, isUniformEquilibriumPayoff_of_isQuittingBlockCertificate hcert⟩⟩
+  isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
+    ⟨U 0, isUniformEquilibriumPayoff_of_isQuittingBlockCertificate hcert⟩
 
 /-! ## The block necessary condition -/
 
