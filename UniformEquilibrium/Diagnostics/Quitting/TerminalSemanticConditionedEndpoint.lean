@@ -8,7 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalEndpointGapTransport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAllContinuePlateau
 
 /-!
-# The conditioned-endpoint sign regression on a semantic plateau
+# Conditioned endpoint obstruction on a semantic plateau
 
 The affine endpoint-gap transport requires one actual profile whose
 conditioned terminal payoff lies below a positive singleton payoff.  That

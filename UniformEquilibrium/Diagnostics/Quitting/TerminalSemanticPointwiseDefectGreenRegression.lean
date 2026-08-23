@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.Probability.DiscreteHazardMixture
 import MathUE.PMFProduct.FiniteFubini
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFiniteSplice
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawFiniteSplice
 
 /-!
 # Harmonic survival-clock regression

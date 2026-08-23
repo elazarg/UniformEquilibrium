@@ -10,7 +10,7 @@ import UniformEquilibrium.Quitting.Root.NashDefect
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
 /-!
-# Consuming a concentrated opponent singleton
+# Tentative consumption of a concentrated opponent singleton
 
 When the concentrated reprojection cylinder is a singleton different from
 the reset owner, its positive stage mass gives a uniform lower bound on the
@@ -28,11 +28,14 @@ sharpens it to three branches:
   coalition states;
 * the singleton owner has a fixed positive punishment moat.
 
-Thus the branch feeds the singleton compiler whenever the reset owner is not
+Thus the branch may feed a singleton compiler whenever the reset owner is not
 a strict table joiner.  In the remaining branch the exact residual is a
 coalition-cancellation problem; positive singleton mass and vanishing local
 defect alone do not produce a legal profitable deviation or a stationary
 singleton germ.
+
+This module is Research because no integrated consumer currently preserves
+and uses the concentrated packet data produced here.
 -/
 
 noncomputable section

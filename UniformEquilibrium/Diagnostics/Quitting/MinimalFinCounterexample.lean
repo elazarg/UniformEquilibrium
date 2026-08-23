@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityReindexNaturality
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySmallPlayers
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonStrategicCompression
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicCompression
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlayerDeletion
 
 /-!

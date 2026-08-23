@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Probability.ChargedOccupationAlternative
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumTangent
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawMinimumTangent
 
 /-!
 # Flat stopping-law tangent circulation or active-set co-decrease

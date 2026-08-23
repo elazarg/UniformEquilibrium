@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawVanishingRegretTangentExtraction
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawVanishingRegretTangentExtraction
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ExhaustiveTangentAlternative
 
 /-!

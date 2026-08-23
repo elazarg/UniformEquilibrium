@@ -32,6 +32,7 @@ import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 import UniformEquilibrium.Quitting.Classification.Existence.All
 import UniformEquilibrium.Quitting.Classification.Existence.BlockerSwitch
 import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGap
+import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGapRange
 import UniformEquilibrium.Quitting.Debt.Dynamic.ChronologicalDebtShadowing
 import UniformEquilibrium.Quitting.Debt.Dynamic.ExactChronologicalData
 import UniformEquilibrium.Quitting.Debt.Dynamic.PeriodicDebtHolonomy
@@ -464,6 +465,8 @@ import UniformEquilibrium.Quitting.Cycles.ThreeBranchDisjunction
 import UniformEquilibrium.Quitting.Classification.TwoPlayer.Existence
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.Existence
 import UniformEquilibrium.Quitting.Classification.LCP.All
+import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockJointBlockEquilibrium
+import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockRationalPolyhedralBlock
 import UniformEquilibrium.Quitting.Conjecture.Basic
 import UniformEquilibrium.Quitting.Examples.Cyclic.FourPlayerQuitting
 import UniformEquilibrium.Quitting.Boundary.Analytic.Germ

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Finset.MonotoneChainChangeBudget
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawGlobalRetention
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawGlobalRetention
 import UniformEquilibrium.Quitting.Bellman.Finite.ActiveSetSupport
 
 /-!

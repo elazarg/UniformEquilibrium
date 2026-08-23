@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Stationary.LiveMass
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticQuantileNashificationAlternative
+import Research.Quitting.QuantileNashificationAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
 import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
 

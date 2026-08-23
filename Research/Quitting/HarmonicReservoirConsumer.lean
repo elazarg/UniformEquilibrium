@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticTwoReservoirConsumer
+import Research.Quitting.TwoReservoirConsumer
 import UniformEquilibrium.Quitting.Punishment.SoloCycleCompletion
 
 /-!

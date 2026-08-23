@@ -65,6 +65,33 @@
       "scope": "For arbitrary nonsingleton coalition rewards, every terminal exploitability gap over a completion of the displayed normalized singleton matrix is at most 1227/96755; this does not prove that the gap vanishes or produce a uniform equilibrium."
     },
     {
+      "id": "full-core-deadlock-joint-block-equilibrium",
+      "subject": "Exact uniform equilibrium for the literal full-core deadlock completion",
+      "kind": "Unconditional theorem",
+      "declaration": "reward_isUniformEquilibriumPayoff_jointBlock",
+      "source": "UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockJointBlockEquilibrium.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "The named zero-multiquitter completion FullCoreDeadlock.reward has an exact uniform-equilibrium payoff, certified by a three-phase product block with supports {0}, {2}, and {1, 3}; arbitrary full-core completions retain only the separate 1227/96755 bound."
+    },
+    {
+      "id": "full-core-deadlock-rational-polyhedral-block",
+      "subject": "Uniform equilibrium on a rational polyhedral full-core deadlock slice",
+      "kind": "Conditional family theorem",
+      "declaration": "isUniformEquilibriumPayoff_of_isDeadlockRationalJointBlockCompletion",
+      "source": "UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockRationalPolyhedralBlock.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "For any baseline s, including negative coordinates, a completion satisfying IsDeadlockRationalJointBlockCompletion reward s has target deadlockRationalBlockValue s. The predicate fixes the full-core singleton matrix, requires reward({1,3}) = s, and imposes eight explicit collision-cap inequalities; it describes an unbounded nonlocal polyhedral slice, not all full-core completions."
+    },
+    {
+      "id": "conditional-face-gap-reward-range",
+      "subject": "Finite reward-range sufficient condition for stationary quitting equilibria",
+      "kind": "Conditional theorem",
+      "declaration": "exists_uniformEquilibriumPayoff_of_conditionalFaceGapRange",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Strict lower and weak upper conditional reward-range comparisons yield a stationary behavioral terminal Nash and a uniform-equilibrium payoff; the hypotheses are a sufficient source-data condition, not a universal classification."
+    },
+    {
       "id": "sorin-uniform-payoff-segment",
       "subject": "Sorin's absorbing-game uniform-payoff segment",
       "kind": "Unconditional theorem",

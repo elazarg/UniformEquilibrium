@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawExploitabilityFloor
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawExploitabilityFloor
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockGlobalContraction
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockSharperBound
 

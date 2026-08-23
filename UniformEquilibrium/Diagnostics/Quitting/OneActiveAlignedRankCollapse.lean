@@ -5,8 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.OneActiveTransferDefectGraph
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticQuantileNashificationAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMacroscopicAtomNashProvenance
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumDebtSimplex
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
 
 /-!

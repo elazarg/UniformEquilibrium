@@ -6,7 +6,6 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.RectangleResetFaceMinimizer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetSurfaceTension
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticTwoReservoirConsumer
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!

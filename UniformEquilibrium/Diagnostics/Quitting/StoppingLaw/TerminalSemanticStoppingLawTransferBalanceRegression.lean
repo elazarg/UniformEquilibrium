@@ -4,11 +4,15 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawDebtConvexity
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
-# Positive common-base transfers need not balance
+# Regression: positive common-base transfers need not balance
+
+This file is a deliberately finite regression guard, not a positive stopping-law
+construction and not evidence for the quitting-game conjecture.  Its checked
+examples prevent a tempting but invalid transfer-balance inference.
 
 The one-step stopping-law reset theorem starts at a minimum-debt profile,
 decreases the mover's debt, and forces positive aggregate debt change on the

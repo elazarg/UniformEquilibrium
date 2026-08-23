@@ -85,9 +85,37 @@ constructs an actual carrier point of total semantic debt exactly
 The terminal exploitability witness consumer
 [`HasTerminalExploitabilityGap.fullCoreDeadlock_le_sharperBound`](../UniformEquilibrium/Diagnostics/Quitting/FullCoreDeadlockDebtBound.lean)
 then bounds every terminal exploitability gap on this family by `1227/96755`,
-with the stored gap of a terminal exploitability witness as a direct corollary. Neither
-the minimum debt nor the gap is proved to vanish, and no uniform-equilibrium
-payoff is produced.
+with the stored gap of a terminal exploitability witness as a direct corollary.
+This statement ranges over arbitrary nonsingleton coalition rewards; it does
+not produce a uniform-equilibrium payoff for that whole family.
+
+The named zero-multiquitter completion is stronger.  The theorem
+[`FullCoreDeadlock.reward_isUniformEquilibriumPayoff_jointBlock`](../UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockJointBlockEquilibrium.lean)
+proves an exact uniform-equilibrium payoff for `FullCoreDeadlock.reward`.
+Its certificate is a three-phase product block with supports `{0}`, `{2}`, and
+`{1, 3}`; the last phase is a genuine double-quit phase, so it is not a
+reduced singleton lasso.  No analogous equilibrium conclusion is claimed for
+the arbitrary full-core completions covered by the `1227/96755` bound.
+
+The checked rational strengthening covers an unbounded, nonlocal polyhedral
+slice.  `IsDeadlockRationalJointBlockCompletion` and
+`isUniformEquilibriumPayoff_of_isDeadlockRationalJointBlockCompletion`
+(`UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockRationalPolyhedralBlock.lean`)
+allow an arbitrary baseline `s`, including negative coordinates, while fixing
+the full-core singleton matrix, requiring the `{1,3}` reward to equal `s`, and
+imposing eight explicit collision-cap inequalities.  Every such completion
+has target `deadlockRationalBlockValue s`.  This is a sufficient polyhedral
+slice and does not cover all full-core completions.
+
+The stationary construction boundary also has a checked finite source-data
+adapter.  `exists_uniformEquilibriumPayoff_of_conditionalFaceGapRange`
+(`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`)
+turns strict lower and weak upper reward-range comparisons into a stationary
+uniform-equilibrium payoff.  The five-player regression in
+`UniformEquilibrium/Diagnostics/Quitting/Regression/ConditionalFaceGapFivePlayer.lean`
+has direct checked face signs and an exact stationary certificate, while
+showing that the coarse range hypotheses are not necessary.  This remains a
+conditional stationary class, not a producer for arbitrary quitting games.
 
 The flat stopping-law charged-circulation branch now has a frozen actual-source
 reset-cube adapter.  Integer rounding gives a balanced finite packet with

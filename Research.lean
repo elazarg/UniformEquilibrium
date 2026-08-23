@@ -47,6 +47,10 @@ import Research.Quitting.CirculantColliderBonusStationary
 import Research.Quitting.CirculantColliderBonusWindow
 import Research.Quitting.CirculantColliderSlivers
 import Research.Quitting.ConcentratedCollisionFourRoleMonodromy
+import Research.Quitting.ConcentratedSingleton.Cancellation
+import Research.Quitting.ConcentratedSingleton.Compression
+import Research.Quitting.ConcentratedSingleton.Consumer
+import Research.Quitting.ConcentratedSingleton.StrategicDispatch
 import Research.Quitting.CounterexampleAtomEndpointRisePassport
 import Research.Quitting.CounterfactualAtomMinimumResetSquare
 import Research.Quitting.CoupledCalibrationQuittingRoot
@@ -56,6 +60,7 @@ import Research.Quitting.DebtTransportMarkovMonodromy
 import Research.Quitting.DiffuseTailEffectiveCharge
 import Research.Quitting.DiffuseTailNonvacuity
 import Research.Quitting.DiffuseTailSoloCalibrations
+import Research.Quitting.DiffuseApproximateDeletion
 import Research.Quitting.DissipativePeriodizationCompleteness
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
 import Research.Quitting.EnrichedSeamCompression
@@ -72,6 +77,7 @@ import Research.Quitting.FullCoreDuplicatedCyclicLasso
 import Research.Quitting.HandshakeClub
 import Research.Quitting.HazardSummability
 import Research.Quitting.HolonomyEquivalenceCompression
+import Research.Quitting.HarmonicReservoirConsumer
 import Research.Quitting.LiveRootExploitabilityFactorization
 import Research.Quitting.MinimumCertifiedForcedOwnerOrientation
 import Research.Quitting.MinimumExactNashOneActive
@@ -98,8 +104,11 @@ import Research.Quitting.PrescribedAtomMinimumAccounting
 import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo
 import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
+import Research.Quitting.QuantileNashificationAlternative
+import Research.Quitting.QuantileVertexEndpointControl
 import Research.Quitting.EndpointRecipientAtomSourceMismatchNoGo
 import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
+import Research.Quitting.SingletonClockDefectOverlap
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
 import Research.Quitting.SolanVieilleSoloPeriodicGap
@@ -108,6 +117,7 @@ import Research.Quitting.SoloPeriodicInterVisitBalance
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification
 import Research.Quitting.SoloWindowPhaseStopBranch
+import Research.Quitting.SoloQuantitativePassport
 import Research.Quitting.SourceMatchedSnellPurification
 import Research.Quitting.SourceMatchedSnellPurificationCollapse
 import Research.Quitting.StochasticButtonCompression
@@ -123,4 +133,6 @@ import Research.Quitting.TerminalLawTwoOutcomePassport
 import Research.Quitting.TerminalSemanticAuxiliaryNashHandoff
 import Research.Quitting.TerminalSemanticWeightedDebtAxisInsertion
 import Research.Quitting.TwoResetFourRoleAdapter
+import Research.Quitting.TwoReservoirConsumer
 import Research.Quitting.UniqueAllContinueCapStackNoGo
+import Research.Quitting.CemeteryPairClockDispatcher

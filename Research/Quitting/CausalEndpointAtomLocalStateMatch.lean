@@ -4,7 +4,7 @@ profile to the literal reached Bellman row.  The rectangle mode is fenced.
 -/
 
 import Research.Quitting.ConcentratedCollisionFourRoleMonodromy
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFiniteSpliceMarkedLaw
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawFiniteSpliceMarkedLaw
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalCollisionAtomicOrientation
 
 noncomputable section

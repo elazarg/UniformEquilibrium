@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicBlockerResetAdapter
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMixture
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawMixture
 
 /-!
 # Forced-owner gain versus actual rectangle curvature

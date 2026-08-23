@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTransferBalanceRegression
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawTransferBalanceRegression
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 import UniformEquilibrium.Quitting.Paths.SureExitSet

@@ -268,6 +268,22 @@ theorem eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue_of_absorbing
   rw [prod_quittingStationaryContinueMass_quittingBlockCycle]
   exact habsorb
 
+/-- **An absorbing closed block recursion is automatically reward-bounded.**
+The box condition in a block certificate need not be supplied separately when
+the displayed phase values solve the exact on-path recursion and the block has
+positive one-turn absorption. -/
+theorem abs_le_quittingRewardBound_of_isQuittingBlockOnPathValue_of_absorbing
+    (h0 : ∀ k i, 0 ≤ hazard k i) (h1 : ∀ k i, hazard k i ≤ 1)
+    {U : Fin (m + 1) → Payoff ι} (hU : IsQuittingBlockOnPathValue reward hazard U)
+    (habsorb : (∏ k : Fin (m + 1), continueMass (hazard k)) < 1)
+    (phase : Fin (m + 1)) (who : ι) :
+    |U phase who| ≤ quittingRewardBound reward := by
+  rw [congrFun
+    (eq_cyclicTerminalValue_of_isQuittingBlockOnPathValue_of_absorbing
+      h0 h1 hU habsorb) phase]
+  exact abs_quittingRootSequenceTerminalValue_le reward _ who 0
+    (quittingRewardBound_nonneg reward) (abs_reward_le_quittingRewardBound reward)
+
 /-! ## The refusal identity in hazard form -/
 
 /-- The hazard schedule with `who`'s own hazards set to zero. -/
