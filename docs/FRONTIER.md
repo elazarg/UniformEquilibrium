@@ -215,6 +215,13 @@ the live mathematical ledger.
 - **Positive construction:** produce one of the inputs accepted by an
   integrated compiler, or add a new compiler whose output reaches terminal
   approximate Nash existence.
+- **Simon viability route:** a bounded strict potential would rule out finite
+  graph orbits with arbitrarily large accumulated variation, but no Simon
+  `F_epsilon` certificate, necessity bridge, or game conclusion is
+  available.  A positive restartable graph extension does produce one
+  compatible path with a linearly diverging prefix budget and
+  `QuestionOneConclusion`; Simon's seven hypotheses do not currently imply
+  that restartability.
 - **Chronological atom production:** serialize the fixed vanishing-debt atom
   access into executable reached tails satisfying the checked shadowing
   certificate at every positive accuracy.

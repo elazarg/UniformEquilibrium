@@ -74,6 +74,17 @@ theorem continuous_euclideanDist
 def oneEdgeBudget (scale : ℝ) (cutoff : ℕ) : ℝ :=
   if cutoff = 0 then 0 else scale
 
+/-- A restart set supports another graph edge with a uniform cost lower bound
+after every visit. Positivity is imposed only by consumers that need divergence;
+compactness of the restart set is not needed for this implication. -/
+def HasRestartableEscape {Coordinate : Type*} [Fintype Coordinate]
+    (graph : Set (EuclideanSpace Coordinate × EuclideanSpace Coordinate))
+    (restartSet : Set (EuclideanSpace Coordinate))
+    (addedVariation : ℝ) : Prop :=
+  HasRestartableExtension
+    (fun first second ↦ (first, second) ∈ graph)
+    euclideanDist restartSet addedVariation
+
 /-- The seven hypotheses directly produce a charged one-edge prefix near each
 relevant boundary piece. Iterating these prefixes compatibly is the additional
 global obligation in Question 1. -/
@@ -121,6 +132,27 @@ theorem QuestionOneHypotheses.exists_oneEdgeBudgetedPrefix
     · simp [oneEdgeBudget]
     · simpa [oneEdgeBudget, path] using hlong
 
+/-- A graph restart edge automatically keeps every restart point in the graph's
+coordinate box, so the generic restartable-extension induction applies. -/
+theorem exists_compatible_edgeBudgetedFinitePrefixes_of_restartableEscape
+    {Coordinate : Type*} [Fintype Coordinate]
+    (graph : Set (EuclideanSpace Coordinate × EuclideanSpace Coordinate))
+    (restartSet : Set (EuclideanSpace Coordinate)) (addedVariation : ℝ)
+    (hrestart : HasRestartableEscape graph restartSet addedVariation) :
+    ∃ path : ℕ → EuclideanSpace Coordinate, ∀ horizon,
+      path ∈ compactEdgeBudgetedPrefixSolutionSet
+        (graphCoordinateBox graph)
+        (fun first second ↦ (first, second) ∈ graph)
+        euclideanDist (linearEdgeBudget addedVariation) horizon := by
+  have hcontained : restartSet ⊆ graphCoordinateBox graph := by
+    intro point hpoint
+    obtain ⟨target, _, htarget, _⟩ := hrestart.2 point hpoint
+    exact (graph_pair_mem_coordinateBox htarget).1
+  exact exists_compatible_edgeBudgetedFinitePrefixes_of_restartableExtension
+    (graphCoordinateBox graph)
+    (fun first second ↦ (first, second) ∈ graph)
+    euclideanDist restartSet addedVariation hcontained hrestart
+
 /-- A compact graph plus compatible prefixes meeting diverging cumulative
 budgets yields the extended orbit requested in Question 1. -/
 theorem questionOneConclusion_of_edgeBudgetedFinitePrefixes
@@ -147,6 +179,24 @@ theorem questionOneConclusion_of_edgeBudgetedFinitePrefixes
       hbudget hprefix
   exact ⟨orbit, horbit⟩
 
+/-- A compact graph with a positive restartable escape has the extended orbit
+requested in Question 1. The restart property is supplied independently of
+the seven hypotheses. -/
+theorem questionOneConclusion_of_restartableEscape
+    {Coordinate : Type*} [Fintype Coordinate]
+    (graph : Set (EuclideanSpace Coordinate × EuclideanSpace Coordinate))
+    (restartSet : Set (EuclideanSpace Coordinate)) (addedVariation : ℝ)
+    (hgraph : IsCompact graph) (hpositive : 0 < addedVariation)
+    (hrestart : HasRestartableEscape graph restartSet addedVariation) :
+    QuestionOneConclusion graph := by
+  obtain ⟨path, hpath⟩ :=
+    exists_compatible_edgeBudgetedFinitePrefixes_of_restartableEscape
+      graph restartSet addedVariation hrestart
+  exact questionOneConclusion_of_edgeBudgetedFinitePrefixes
+    graph (linearEdgeBudget addedVariation) hgraph
+      (linearEdgeBudget_tendsto_atTop hpositive)
+      fun horizon ↦ ⟨path, hpath horizon⟩
+
 /-- The seven hypotheses imply Question 1 once their remaining finite-prefix
 obligation is supplied for one diverging common budget schedule. -/
 theorem QuestionOneHypotheses.conclusion_of_edgeBudgetedFinitePrefixes
@@ -169,6 +219,28 @@ theorem QuestionOneHypotheses.conclusion_of_edgeBudgetedFinitePrefixes
     QuestionOneConclusion fullGraph := by
   exact questionOneConclusion_of_edgeBudgetedFinitePrefixes
     fullGraph budget hhypotheses.fullGraph_compact hbudget hprefix
+
+/-- The seven hypotheses imply their requested conclusion if a positive
+restartable escape for the full graph is additionally supplied. This theorem
+does not derive the restart property from Simon's seven hypotheses. -/
+theorem QuestionOneHypotheses.conclusion_of_restartableEscape
+    {Coordinate : Type*} [Fintype Coordinate] {pieceCount : ℕ}
+    {domain : Set (EuclideanSpace Coordinate)}
+    {piece : Fin pieceCount → Set (EuclideanSpace Coordinate)}
+    {homotopy : EuclideanSpace Coordinate → UnitInterval →
+      EuclideanSpace Coordinate × EuclideanSpace Coordinate}
+    {neighborhood : Set (EuclideanSpace Coordinate)}
+    {localGraph fullGraph :
+      Set (EuclideanSpace Coordinate × EuclideanSpace Coordinate)}
+    (hhypotheses : QuestionOneHypotheses
+      domain piece homotopy neighborhood localGraph fullGraph)
+    (restartSet : Set (EuclideanSpace Coordinate)) (addedVariation : ℝ)
+    (hpositive : 0 < addedVariation)
+    (hrestart : HasRestartableEscape fullGraph restartSet addedVariation) :
+    QuestionOneConclusion fullGraph := by
+  exact questionOneConclusion_of_restartableEscape
+    fullGraph restartSet addedVariation hhypotheses.fullGraph_compact
+      hpositive hrestart
 
 end SimonViability
 end Topology
