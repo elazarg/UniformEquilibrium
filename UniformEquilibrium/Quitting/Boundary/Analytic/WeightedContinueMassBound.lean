@@ -345,27 +345,6 @@ theorem continuous_continueMass : Continuous fun x : ι → ℝ => continueMass 
   unfold continueMass
   exact continuous_finsetProd _ fun i _ => continuous_const.sub (continuous_apply i)
 
-theorem continuous_continueMassExcl (i : ι) :
-    Continuous fun x : ι → ℝ => continueMassExcl x i := by
-  unfold continueMassExcl
-  exact continuous_finsetProd _ fun j _ => continuous_const.sub (continuous_apply j)
-
-theorem continuous_sigmaValue (w : Finset ι → ι → ℝ) (i : ι) :
-    Continuous fun x : ι → ℝ => sigmaValue w x i := by
-  unfold sigmaValue
-  refine continuous_finsetSum _ fun J _ => ?_
-  exact (((continuous_finsetProd _ fun j _ => continuous_apply j).mul
-    (continuous_finsetProd _ fun j _ =>
-      continuous_const.sub (continuous_apply j))).mul continuous_const)
-
-theorem continuous_excludedValue (w : Finset ι → ι → ℝ) (i : ι) :
-    Continuous fun x : ι → ℝ => excludedValue w x i := by
-  unfold excludedValue
-  refine continuous_finsetSum _ fun J _ => ?_
-  exact (((continuous_finsetProd _ fun j _ => continuous_apply j).mul
-    (continuous_finsetProd _ fun j _ =>
-      continuous_const.sub (continuous_apply j))).mul continuous_const)
-
 omit [Fintype ι] [DecidableEq ι] in
 /-- A convergent sequence of rows converges coordinatewise. -/
 theorem tendsto_apply_of_tendsto {rows : ℕ → ι → ℝ} {limit : ι → ℝ}

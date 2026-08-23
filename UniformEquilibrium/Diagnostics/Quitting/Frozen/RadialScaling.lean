@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedChattering
+import UniformEquilibrium.Diagnostics.Quitting.Frozen.BalancedResetPacket
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumFiberAffine
 
 /-!
-# Radial scaling of source-matched stopping-law tangent columns
+# Radial scaling of frozen common-source stopping-law tangent columns
 
-A source-matched tangent column is realized by one complete stopping-law reset
+A frozen common-source tangent column is realized by one complete stopping-law reset
 of weight `lambda`.  To scale that column by a coefficient in `[0, 1]`, use
 that literal reset strategy as the endpoint of a second stopping-law mixture.
 The resulting nested mixture is again one legal behavioral strategy.
@@ -40,7 +40,7 @@ namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- The actual reset strategy which realizes one extracted normalized chord at
 one selected common-source rank. -/
-def sourceMatchedInnerResetStrategy
+def frozenRadialInnerResetStrategy
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     (quittingGame reward).BehaviorStrategy mover.1 :=
@@ -51,9 +51,9 @@ def sourceMatchedInnerResetStrategy
     (frontier.scale_pos rank).le
     (frontier.scale_le_one rank)
 
-/-- A literal radial scaling of one source-matched reset.  The outer weight is
+/-- A literal radial scaling of one frozen common-source reset.  The outer weight is
 independent of the frontier reset scale. -/
-def sourceMatchedRadialResetProfile
+def frozenRadialResetProfile
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport})
     (weight : ℝ) (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1) :
@@ -62,12 +62,12 @@ def sourceMatchedRadialResetProfile
   Function.update source mover.1
     (quittingStoppingLawMixtureBehaviorStrategy reward mover.1
       (source mover.1)
-      (frontier.sourceMatchedInnerResetStrategy rank mover)
+      (frontier.frozenRadialInnerResetStrategy rank mover)
       weight hweight0 hweight1)
 
 /-- Debt direction of the radial reset, normalized by the original frontier
 scale rather than by the outer coefficient. -/
-def sourceMatchedRadialDebtDirection
+def frozenRadialDebtDirection
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport})
     (weight : ℝ) (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1)
@@ -76,29 +76,29 @@ def sourceMatchedRadialDebtDirection
       (quittingTerminalSemanticPair reward
         (frontier.source rank))
       (quittingTerminalSemanticPair reward
-        (frontier.sourceMatchedRadialResetProfile rank mover weight
+        (frontier.frozenRadialResetProfile rank mover weight
           hweight0 hweight1)) observer /
     frontier.scale rank
 
-/-- The total normalized debt slope of one actual source-matched reset is the
+/-- The total normalized debt slope of one actual frozen common-source reset is the
 sum of its normalized coordinate directions. -/
-theorem sourceMatched_totalDebtDirection_eq_sum
+theorem frozenRadialTotalDebtDirection_eq_sum
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     (quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
             (Function.update
               (frontier.source rank) mover.1
-              (frontier.sourceMatchedInnerResetStrategy rank mover))) -
+              (frontier.frozenRadialInnerResetStrategy rank mover))) -
         quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
             (frontier.source rank))) /
         frontier.scale rank =
-      ∑ observer, frontier.actualDebtDirection rank mover observer := by
-  unfold quittingTerminalSemanticDebtSum actualDebtDirection
+      ∑ observer, frontier.frozenDebtDirection rank mover observer := by
+  unfold quittingTerminalSemanticDebtSum frozenDebtDirection
     quittingStoppingLawNormalizedDebtDirection
     quittingStoppingLawResetProfile quittingTerminalSemanticDebtChange
-    sourceMatchedInnerResetStrategy
+    frozenRadialInnerResetStrategy
   rw [← Finset.sum_sub_distrib, Finset.sum_div]
 
 /-- **Finite-rank radial scaling bound.**
@@ -107,16 +107,16 @@ The difference between the formally scaled source column and the literal
 radial reset column is nonnegative coordinatewise.  After normalization by the
 frontier scale it is bounded by the normalized source excess plus the outer
 weight times the full column's total normalized slope. -/
-theorem sourceMatchedRadialDebtDirection_gap_bounds
+theorem frozenRadialDebtDirection_gap_bounds
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport})
     (observer : ι) (weight : ℝ)
     (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1) :
-    0 ≤ weight * frontier.actualDebtDirection rank mover observer -
-        frontier.sourceMatchedRadialDebtDirection rank mover weight
+    0 ≤ weight * frontier.frozenDebtDirection rank mover observer -
+        frontier.frozenRadialDebtDirection rank mover weight
           hweight0 hweight1 observer ∧
-      weight * frontier.actualDebtDirection rank mover observer -
-          frontier.sourceMatchedRadialDebtDirection rank mover weight
+      weight * frontier.frozenDebtDirection rank mover observer -
+          frontier.frozenRadialDebtDirection rank mover weight
             hweight0 hweight1 observer ≤
         (quittingTerminalSemanticDebtSum
               (quittingTerminalSemanticPair reward
@@ -124,11 +124,11 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
             quittingTerminalSemanticDebtSum frontier.base) /
               frontier.scale rank +
           weight *
-            (∑ who, frontier.actualDebtDirection rank mover who) := by
+            (∑ who, frontier.frozenDebtDirection rank mover who) := by
   let sourceProfile := frontier.source rank
-  let endpointStrategy := frontier.sourceMatchedInnerResetStrategy rank mover
+  let endpointStrategy := frontier.frozenRadialInnerResetStrategy rank mover
   let endpointProfile := Function.update sourceProfile mover.1 endpointStrategy
-  let radialProfile := frontier.sourceMatchedRadialResetProfile rank mover
+  let radialProfile := frontier.frozenRadialResetProfile rank mover
     weight hweight0 hweight1
   let sourcePair := quittingTerminalSemanticPair reward sourceProfile
   let endpointPair := quittingTerminalSemanticPair reward endpointProfile
@@ -157,14 +157,14 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
             weight * quittingTerminalSemanticDebt endpointPair observer -
           quittingTerminalSemanticDebt radialPair observer) /
           frontier.scale rank =
-        weight * frontier.actualDebtDirection rank mover observer -
-          frontier.sourceMatchedRadialDebtDirection rank mover weight
+        weight * frontier.frozenDebtDirection rank mover observer -
+          frontier.frozenRadialDebtDirection rank mover weight
             hweight0 hweight1 observer := by
     dsimp only [sourcePair, endpointPair, radialPair, sourceProfile,
       endpointProfile, radialProfile, endpointStrategy]
-    unfold actualDebtDirection quittingStoppingLawNormalizedDebtDirection
-      sourceMatchedRadialDebtDirection sourceMatchedRadialResetProfile
-      sourceMatchedInnerResetStrategy quittingStoppingLawResetProfile
+    unfold frozenDebtDirection quittingStoppingLawNormalizedDebtDirection
+      frozenRadialDebtDirection frozenRadialResetProfile
+      frozenRadialInnerResetStrategy quittingStoppingLawResetProfile
       quittingTerminalSemanticDebtChange
     field_simp [ne_of_gt hlambda]
     ring
@@ -172,9 +172,9 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
       (quittingTerminalSemanticDebtSum endpointPair -
           quittingTerminalSemanticDebtSum sourcePair) /
           frontier.scale rank =
-        ∑ who, frontier.actualDebtDirection rank mover who := by
+        ∑ who, frontier.frozenDebtDirection rank mover who := by
     dsimp only [endpointPair, sourcePair, endpointProfile, sourceProfile]
-    exact frontier.sourceMatched_totalDebtDirection_eq_sum rank mover
+    exact frontier.frozenRadialTotalDebtDirection_eq_sum rank mover
   have hlower := div_nonneg hraw.1 hlambda.le
   have hupper := (div_le_div_iff_of_pos_right hlambda).2 hraw.2
   change 0 ≤
@@ -201,31 +201,31 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
             quittingTerminalSemanticDebtSum frontier.base) /
               frontier.scale rank +
           weight * (∑ who,
-            frontier.actualDebtDirection rank mover who) := by
+            frontier.frozenDebtDirection rank mover who) := by
     rw [← htotalIdentity]
     dsimp only [epsilon]
     ring
   rw [hupperIdentity] at hupper
   simpa only [sourcePair, sourceProfile] using And.intro hlower hupper
 
-/-- **Radial homogeneity of every flat source-matched tangent column.**
+/-- **Radial homogeneity of every flat frozen common-source tangent column.**
 
 For any fixed coefficient in `[0, 1]`, the nested literal reset direction
 converges to that coefficient times the extracted tangent column.  The proof
 uses the source-excess rate retained by the frontier and the vanishing total
 slope of the flat column. -/
-theorem sourceMatchedRadialDebtDirection_tendsto
+theorem frozenRadialDebtDirection_tendsto
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (mover : {who // who ∈ frontier.positiveDebtSupport}) (observer : ι)
     (weight : ℝ) (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1)
     (hflat : ∑ who, frontier.tangent mover who = 0) :
     Tendsto (fun rank =>
-      frontier.sourceMatchedRadialDebtDirection rank mover weight
+      frontier.frozenRadialDebtDirection rank mover weight
         hweight0 hweight1 observer) atTop
       (nhds (weight * frontier.tangent mover observer)) := by
   let error : ℕ → ℝ := fun rank =>
-    weight * frontier.actualDebtDirection rank mover observer -
-      frontier.sourceMatchedRadialDebtDirection rank mover weight
+    weight * frontier.frozenDebtDirection rank mover observer -
+      frontier.frozenRadialDebtDirection rank mover weight
         hweight0 hweight1 observer
   let upper : ℕ → ℝ := fun rank =>
     (quittingTerminalSemanticDebtSum
@@ -233,12 +233,12 @@ theorem sourceMatchedRadialDebtDirection_tendsto
             (frontier.source rank)) -
         quittingTerminalSemanticDebtSum frontier.base) /
           frontier.scale rank +
-      weight * (∑ who, frontier.actualDebtDirection rank mover who)
+      weight * (∑ who, frontier.frozenDebtDirection rank mover who)
   have hsum : Tendsto (fun rank =>
-      ∑ who, frontier.actualDebtDirection rank mover who) atTop (nhds 0) := by
+      ∑ who, frontier.frozenDebtDirection rank mover who) atTop (nhds 0) := by
     have hcoordinate := tendsto_finsetSum Finset.univ fun who _whoMem =>
       frontier.tangent_tendsto mover who
-    simpa only [actualDebtDirection, hflat] using hcoordinate
+    simpa only [frozenDebtDirection, hflat] using hcoordinate
   have hweight : Tendsto (fun _rank : ℕ => weight) atTop (nhds weight) :=
     tendsto_const_nhds
   have hupper : Tendsto upper atTop (nhds 0) := by
@@ -249,15 +249,15 @@ theorem sourceMatchedRadialDebtDirection_tendsto
   have herror : Tendsto error atTop (nhds 0) := by
     apply squeeze_zero'
     · exact Eventually.of_forall fun rank =>
-        (frontier.sourceMatchedRadialDebtDirection_gap_bounds rank mover
+        (frontier.frozenRadialDebtDirection_gap_bounds rank mover
           observer weight hweight0 hweight1).1
     · exact Eventually.of_forall fun rank =>
-        (frontier.sourceMatchedRadialDebtDirection_gap_bounds rank mover
+        (frontier.frozenRadialDebtDirection_gap_bounds rank mover
           observer weight hweight0 hweight1).2
     · exact hupper
   have hscaled := hweight.mul (frontier.tangent_tendsto mover observer)
   change Tendsto (fun rank =>
-    weight * frontier.actualDebtDirection rank mover observer) atTop
+    weight * frontier.frozenDebtDirection rank mover observer) atTop
       (nhds (weight * frontier.tangent mover observer)) at hscaled
   have hresult := hscaled.sub herror
   convert hresult using 1
@@ -269,7 +269,7 @@ theorem sourceMatchedRadialDebtDirection_tendsto
 /-- A normalized charged circulation can be rescaled into one literal
 coefficient in `[0, 1]` for each active mover.  Balance is preserved and the
 aggregate diagonal charge remains strictly positive. -/
-theorem exists_boundedRadialCirculationWeights
+theorem exists_frozenRadialBoundedCirculationWeights
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
       frontier.positiveDebtSupport frontier.tangent) :
@@ -335,7 +335,7 @@ The external real multiplicities of the abstract circulation are absorbed
 into legal outer stopping-law mixture weights.  The finite sum of the literal
 normalized reset directions converges coordinatewise to zero, while its
 aggregate mover-diagonal charge converges to a strictly positive number. -/
-theorem exists_boundedRadialSourceMatchedCirculation
+theorem exists_frozenRadialBoundedCirculation
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
@@ -346,28 +346,28 @@ theorem exists_boundedRadialSourceMatchedCirculation
       (∀ observer,
         Tendsto (fun rank =>
           ∑ mover,
-            frontier.sourceMatchedRadialDebtDirection rank mover
+            frontier.frozenRadialDebtDirection rank mover
               (weight mover) (hweight0 mover) (hweight1 mover) observer)
           atTop (nhds 0)) ∧
       ∃ charge : ℝ, 0 < charge ∧
         Tendsto (fun rank =>
           ∑ mover,
-            -frontier.sourceMatchedRadialDebtDirection rank mover
+            -frontier.frozenRadialDebtDirection rank mover
               (weight mover) (hweight0 mover) (hweight1 mover) mover.1)
           atTop (nhds charge) := by
   obtain ⟨weight, hweight0, hweight1, hbalance, hcharge⟩ :=
-    frontier.exists_boundedRadialCirculationWeights hcirculation
+    frontier.exists_frozenRadialBoundedCirculationWeights hcirculation
   let charge := ∑ mover,
     weight mover * (-frontier.tangent mover mover.1)
   refine ⟨weight, hweight0, hweight1, ?_, charge, ?_, ?_⟩
   · intro observer
     have hsum := tendsto_finsetSum Finset.univ fun mover _moverMem =>
-      frontier.sourceMatchedRadialDebtDirection_tendsto mover observer
+      frontier.frozenRadialDebtDirection_tendsto mover observer
         (weight mover) (hweight0 mover) (hweight1 mover) (hflat mover)
     simpa only [hbalance observer] using hsum
   · simpa only [charge] using hcharge
   · have hsum := tendsto_finsetSum Finset.univ fun mover _moverMem =>
-      (frontier.sourceMatchedRadialDebtDirection_tendsto mover mover.1
+      (frontier.frozenRadialDebtDirection_tendsto mover mover.1
         (weight mover) (hweight0 mover) (hweight1 mover) (hflat mover)).neg
     simpa only [charge, mul_neg] using hsum
 

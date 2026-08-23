@@ -477,9 +477,9 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowi
 
 /-! ## Charged-circulation producer boundary
 
-The source-matched frontier currently ends at
-`QuittingPositiveMinimumDebtTangentFamily.exists_sourceMatchedChattering`
-and `exists_sourceMatchedChatteringResetCubeStar`.  Those results control
+The frozen common-source frontier currently ends at
+`QuittingPositiveMinimumDebtTangentFamily.exists_frozenBalancedResetPacket`.
+That result controls
 weighted chords from one frozen stopping-law source.  They do not construct
 the executable `root` tails in `QuittingChronologicalDebtData`, and hence do
 not prove `prescribed_discrepancy` or `adverse_direct_forcing` in the

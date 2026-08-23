@@ -30,6 +30,8 @@ import UniformEquilibrium.Quitting.Classification.SingletonPacketPreferenceLasso
 import UniformEquilibrium.Quitting.Classification.SoloExitPreference
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 import UniformEquilibrium.Quitting.Classification.Existence.All
+import UniformEquilibrium.Quitting.Classification.Existence.BlockerSwitch
+import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGap
 import UniformEquilibrium.Quitting.Debt.Dynamic.ChronologicalDebtShadowing
 import UniformEquilibrium.Quitting.Debt.Dynamic.ExactChronologicalData
 import UniformEquilibrium.Quitting.Debt.Dynamic.PeriodicDebtHolonomy
@@ -40,6 +42,7 @@ import UniformEquilibrium.Quitting.EssentialAPS.NashBellmanSingletonCycle
 import UniformEquilibrium.Quitting.PayoffProcess.All
 import UniformEquilibrium.Quitting.Punishment.CoalitionLock
 import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
+import UniformEquilibrium.Quitting.Root.TerminalSemanticResetFaceRigidity
 import UniformEquilibrium.Quitting.Paths.SupportWitnessUniform
 import UniformEquilibrium.Quitting.Boundary.Repair.LocalMechanismResidueWitness
 import UniformEquilibrium.Conjecture.UniformExistenceConjecture
@@ -341,6 +344,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanMinimizer
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanDebtMonotonicity
 import UniformEquilibrium.Quitting.Bellman.Finite.PositiveAdmissibleCycle
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier
+import UniformEquilibrium.Quitting.Stationary.FaceNumerator
 import UniformEquilibrium.Quitting.Stationary.RegretDichotomy
 import UniformEquilibrium.Quitting.Stationary.ApproximabilityCompactification
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDynamicDebtProvenance

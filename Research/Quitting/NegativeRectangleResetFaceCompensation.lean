@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.NegativeTargetAtomicDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.NegativeTargetAtomicDispatch
 
 /-!
 # Negative rectangles compensate on the zero-debt endpoint

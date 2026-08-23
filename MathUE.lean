@@ -335,6 +335,7 @@ import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PureTimeWitnessNormalForm
+import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
 import MathUE.TransferSummaryMonoid

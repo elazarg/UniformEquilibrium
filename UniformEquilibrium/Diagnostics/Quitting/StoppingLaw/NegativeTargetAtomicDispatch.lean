@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.StaticOrientationDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.StaticOrientationDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicBlockerResetAdapter
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauLocalizedOtherDefect
 
@@ -20,7 +20,7 @@ This file keeps that endpoint asymmetry.  It proves a uniform lower bound on
 the source terminal mass, identifies the observer's finite pure stopping date,
 and applies the atomic blocker barrier at the actual reached source row.  The
 result is a state-matched finite strategic alternative: either a named
-outsider has a root Nash defect of at least the counterexample gap against
+outsider has a root Nash defect of at least the terminal gap against
 the literal source continuation, or the observer has a punishment-refusal
 certificate of the same size.  The persistent source-stage mass remains present
 in both branches.  A finite-label extraction then freezes this alternative:
@@ -59,7 +59,7 @@ def quittingStoppingLawNegativeTargetMassLower
 
 /-- The game-facing output at every actual source row carrying a fixed
 negative target.  The row is reached with uniform mass, the observer
-Quits surely there, and either an outsider carries the full counterexample
+Quits surely there, and either an outsider carries the full terminal
 gap as a state-matched root Nash defect or the observer carries the same gap
 as an atomic punishment-refusal certificate. -/
 def HasQuittingStoppingLawNegativeTargetAtomicDispatch
@@ -223,7 +223,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_sourceStop_with
 /-- **Negative-target source-row closure.**  The repulsive rectangle
 orientation reaches a literal source row with uniform mass.  At that same
 row, and against its actual continuation value, either a named outsider has
-the full counterexample-gap Nash defect or the observer has a punishment
+the full terminal-gap Nash defect or the observer has a punishment
 refusal certificate of the same size. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTarget_atomicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -427,7 +427,7 @@ theorem negativeTargetAtomicDispatch_fixedActualSourceSubsequence
 
 namespace QuittingPositiveMinimumDebtTangentFamily
 
-/-- **Exhaustive static frontier with negative targets consumed.** The
+/-- **Exhaustive static dispatch with negative targets consumed.** The
 negative observer-containing target is routed to a persistent,
 state-matched atomic source-row dispatch. The unconsumed atom orientations are
 the prescribed comparison and the

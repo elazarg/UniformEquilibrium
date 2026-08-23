@@ -5,6 +5,8 @@ Authors: UniformEquilibrium contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope
+import UniformEquilibrium.Quitting.Classification.Existence.BlockerSwitch
+import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGap
 import UniformEquilibrium.Quitting.Classification.Existence.CorrectedFixedBranch
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRootSequence
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRow

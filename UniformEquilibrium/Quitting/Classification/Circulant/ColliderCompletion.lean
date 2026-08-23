@@ -49,7 +49,7 @@ of `MathUE/LinearProgramming/CirculantPocketR0.lean` is unavailable.
 What remains of the family is therefore the distant pocket `m 2 < 0`,
 `m 3 < 0`, `0 ≤ m 1`, `0 ≤ m 4` of positive margin sum, and nothing else.  The
 census against `QuittingTerminalExploitabilityWitness` is read off in
-`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Circulant/ColliderCompletion.lean`.
+`UniformEquilibrium/Quitting/Classification/Circulant/ColliderCompletion.lean`.
 
 ## Main definitions
 

@@ -53,7 +53,7 @@ position of `low - s` against the two negative margins.
 
 The census against `QuittingTerminalExploitabilityWitness`, and the closure of the
 whole family, are read off in
-`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Circulant/ColliderClosure.lean`.
+`UniformEquilibrium/Quitting/Classification/Circulant/ColliderClosure.lean`.
 -/
 
 noncomputable section

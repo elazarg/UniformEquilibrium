@@ -4,15 +4,15 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedRadialResetCube
+import UniformEquilibrium.Diagnostics.Quitting.Frozen.RadialResetCube
 import UniformEquilibrium.Quitting.Debt.Dynamic.ExactChronologicalData
 
 /-!
-# Executable singleton data read from source-matched reset profiles
+# Executable singleton data read from frozen common-source reset profiles
 
 A schedule of active reset movers determines an executable product-root
 sequence: at time `t`, use the live root of the scheduled mover's literal
-source-matched radial reset profile.  The canonical reached-tail values and
+frozen common-source radial reset profile.  The canonical reached-tail values and
 debts therefore have exact prescribed and direct-debt recursion.  An optional
 singleton projection is also recorded below.
 
@@ -36,94 +36,94 @@ variable {witness : QuittingTerminalExploitabilityWitness reward}
 namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- The complete product root read at `time` from the scheduled literal
-source-matched radial reset profile. -/
-def sourceMatchedRadialScheduledRoot
+frozen common-source radial reset profile. -/
+def frozenRadialScheduledRoot
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) (time : ℕ) : ι → PMF Bool :=
   quittingProfileLiveRoot reward
-    (frontier.sourceMatchedRadialResetProfile rank (schedule time)
+    (frontier.frozenRadialResetProfile rank (schedule time)
       (weight (schedule time)) (hweight0 (schedule time))
       (hweight1 (schedule time))) time
 
 /-- The scheduled mover's live marginal in its literal radial reset profile.
 All other players are subsequently purified to Continue by
-`sourceMatchedRadialSingletonRoot`. -/
-def sourceMatchedRadialSingletonMarginal
+`frozenRadialSingletonRoot`. -/
+def frozenRadialSingletonMarginal
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) (time : ℕ) : PMF Bool :=
-  frontier.sourceMatchedRadialScheduledRoot rank weight hweight0 hweight1
+  frontier.frozenRadialScheduledRoot rank weight hweight0 hweight1
     schedule time (schedule time).1
 
 /-- The executable singleton-purified root obtained from the scheduled reset
 profile at one live time. -/
-def sourceMatchedRadialSingletonRoot
+def frozenRadialSingletonRoot
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) (time : ℕ) : ι → PMF Bool :=
   quittingSoloMixedRoot (schedule time).1
-    (frontier.sourceMatchedRadialSingletonMarginal rank weight
+    (frontier.frozenRadialSingletonMarginal rank weight
       hweight0 hweight1 schedule time)
 
 /-- The retained marginal is exactly the stopping-law mixture of the common
-source hazard and its source-matched reset hazard at the same live time. -/
-theorem sourceMatchedRadialSingletonMarginal_eq_convexMix
+source hazard and its frozen common-source reset hazard at the same live time. -/
+theorem frozenRadialSingletonMarginal_eq_convexMix
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) (time : ℕ) :
-    frontier.sourceMatchedRadialSingletonMarginal rank weight
+    frontier.frozenRadialSingletonMarginal rank weight
         hweight0 hweight1 schedule time =
       BooleanHazard.convexMix
         (quittingBehaviorLiveHazard reward
           (frontier.source rank (schedule time).1))
         (quittingBehaviorLiveHazard reward
-          (frontier.sourceMatchedInnerResetStrategy rank (schedule time)))
+          (frontier.frozenRadialInnerResetStrategy rank (schedule time)))
         (weight (schedule time)) (hweight0 (schedule time))
         (hweight1 (schedule time)) time := by
-  unfold sourceMatchedRadialSingletonMarginal
-    sourceMatchedRadialScheduledRoot sourceMatchedRadialResetProfile
+  unfold frozenRadialSingletonMarginal
+    frozenRadialScheduledRoot frozenRadialResetProfile
     quittingProfileLiveRoot
   rw [Function.update_self]
   rfl
 
 @[simp]
-theorem sourceMatchedRadialSingletonRoot_owner
+theorem frozenRadialSingletonRoot_owner
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) (time : ℕ) :
-    frontier.sourceMatchedRadialSingletonRoot rank weight hweight0 hweight1
+    frontier.frozenRadialSingletonRoot rank weight hweight0 hweight1
         schedule time (schedule time).1 =
-      frontier.sourceMatchedRadialSingletonMarginal rank weight
+      frontier.frozenRadialSingletonMarginal rank weight
         hweight0 hweight1 schedule time := by
-  simp [sourceMatchedRadialSingletonRoot]
+  simp [frozenRadialSingletonRoot]
 
 /-- Every nonscheduled player literally Continues at the produced root. -/
-theorem sourceMatchedRadialSingletonRoot_of_ne
+theorem frozenRadialSingletonRoot_of_ne
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) (time : ℕ)
     (who : ι) (hne : who ≠ (schedule time).1) :
-    frontier.sourceMatchedRadialSingletonRoot rank weight hweight0 hweight1
+    frontier.frozenRadialSingletonRoot rank weight hweight0 hweight1
         schedule time who = PMF.pure false := by
   exact quittingSoloMixedRoot_of_ne hne _
 
 /-- Canonical reached-tail values and debts of the executable scheduled
 product roots.  No claim equates them with the frozen whole-profile endpoint
 semantics. -/
-def sourceMatchedRadialChronologicalData
+def frozenRadialChronologicalData
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
@@ -131,31 +131,31 @@ def sourceMatchedRadialChronologicalData
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) :
     QuittingChronologicalDebtData ι :=
   QuittingChronologicalDebtData.exactOfRoots reward
-    (frontier.sourceMatchedRadialScheduledRoot rank weight
+    (frontier.frozenRadialScheduledRoot rank weight
       hweight0 hweight1 schedule)
 
 @[simp]
-theorem sourceMatchedRadialChronologicalData_root
+theorem frozenRadialChronologicalData_root
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) (time : ℕ) :
-    (frontier.sourceMatchedRadialChronologicalData rank weight
+    (frontier.frozenRadialChronologicalData rank weight
       hweight0 hweight1 schedule).root time =
-      frontier.sourceMatchedRadialScheduledRoot rank weight
+      frontier.frozenRadialScheduledRoot rank weight
         hweight0 hweight1 schedule time := rfl
 
-/-- The source-matched executable chronology has no prescribed-payoff
+/-- The frozen common-source executable chronology has no prescribed-payoff
 forcing: its candidate values are its literal reached-tail values. -/
 @[simp]
-theorem sourceMatchedRadialChronologicalData_prescribedDefect
+theorem frozenRadialChronologicalData_prescribedDefect
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) (time : ℕ) :
-    (frontier.sourceMatchedRadialChronologicalData rank weight
+    (frontier.frozenRadialChronologicalData rank weight
       hweight0 hweight1 schedule).prescribedDefect reward time = 0 := by
   exact QuittingChronologicalDebtData.exactOfRoots_prescribedDefect
     reward _ time
@@ -163,13 +163,13 @@ theorem sourceMatchedRadialChronologicalData_prescribedDefect
 /-- Its direct debt forcing is also exactly zero, because the candidate debt
 is the literal reached-tail exploitability. -/
 @[simp]
-theorem sourceMatchedRadialChronologicalData_directDebtDefect
+theorem frozenRadialChronologicalData_directDebtDefect
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) (weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
     (schedule : ℕ → {who // who ∈ frontier.positiveDebtSupport}) (time : ℕ) :
-    (frontier.sourceMatchedRadialChronologicalData rank weight
+    (frontier.frozenRadialChronologicalData rank weight
       hweight0 hweight1 schedule).directDebtDefect reward time = 0 := by
   exact QuittingChronologicalDebtData.exactOfRoots_directDebtDefect
     reward _ time

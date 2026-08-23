@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetFaceLawTemporalSplit
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonCancellation
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.StaticOrientationDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.StaticOrientationDispatch
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
 
 /-!

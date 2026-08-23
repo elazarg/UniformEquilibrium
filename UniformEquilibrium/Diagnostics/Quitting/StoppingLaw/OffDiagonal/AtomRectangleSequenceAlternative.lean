@@ -9,7 +9,7 @@ import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.VanishingDebtAtomAlte
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeMarkedRowProvenance
 
 /-!
-# Vanishing-error dispatch for the off-diagonal atom frontier
+# Off-diagonal atom and rectangle sequence alternative
 
 The fixed positive off-diagonal tangent charge can be decoded without using
 a fixed approximation error.  At rank `n` the pure-time response is chosen
