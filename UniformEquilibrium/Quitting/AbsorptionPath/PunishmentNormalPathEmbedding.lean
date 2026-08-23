@@ -452,6 +452,30 @@ theorem ContinuousZeroPerfectSingletonPath.ambientPath_zeroPerfect
           at hderivative'
         exact (lt_irrefl 0 hderivative').elim
 
+/-- The zero-extended ambient path, bundled again with its exposed singleton
+mass coordinates so that generic rate and discretization interfaces can
+consume it without reconstructing the embedding. -/
+def ContinuousZeroPerfectSingletonPath.ambientSingletonWitness
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (witness : ContinuousZeroPerfectSingletonPath
+      (quittingPunishmentNormalReward reward)) :
+    ContinuousZeroPerfectSingletonPath reward where
+  terminal := punishmentNormalMassExtension reward witness.terminal
+  mass := witness.ambientMass
+  monotone := witness.ambientMass_monotone
+  total := witness.ambientMass_total
+  zeroPerfect := by
+    simpa only [ContinuousZeroPerfectSingletonPath.path,
+      ContinuousZeroPerfectSingletonPath.ambientPath] using
+        witness.ambientPath_zeroPerfect
+
+@[simp] theorem ContinuousZeroPerfectSingletonPath.ambientSingletonWitness_path
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (witness : ContinuousZeroPerfectSingletonPath
+      (quittingPunishmentNormalReward reward)) :
+    witness.ambientSingletonWitness.path = witness.ambientPath :=
+  rfl
+
 /-- The full checked ambient lift of a punishment-normal singleton path. -/
 theorem ContinuousZeroPerfectSingletonPath.ambientLift
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

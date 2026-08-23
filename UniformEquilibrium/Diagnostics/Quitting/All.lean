@@ -25,6 +25,7 @@ import UniformEquilibrium.Diagnostics.Quitting.Chronology.Conditioned.NegativeTa
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.Conditioned.SlackThreshold
 import UniformEquilibrium.Diagnostics.Quitting.Debt.BoundaryMismatchAlternative
 import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailCapCarrier
+import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailTerminalGap
 import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailConservation
 import UniformEquilibrium.Diagnostics.Quitting.Debt.PositiveDebtSelfLoopLimit
 import UniformEquilibrium.Diagnostics.Quitting.Debt.KilledCapacityPotential
@@ -57,6 +58,7 @@ import UniformEquilibrium.Diagnostics.Quitting.Collision.PreemptionGeometry
 import UniformEquilibrium.Diagnostics.Quitting.Collision.PreemptionTransport
 import UniformEquilibrium.Diagnostics.Quitting.Collision.StrictSingletonRefusalSourceWitness
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.PositiveDebtDynamicTailWitness
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.StrictCovectorDynamicTail
 import UniformEquilibrium.Diagnostics.Quitting.Capacity.InfiniteOrbitConsequences
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Atom.ContinuePrefixAccess
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Atom.ExactPrefixStackCharge

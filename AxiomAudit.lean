@@ -174,6 +174,7 @@ import MathUE.LinearAlgebra.CyclicSchur
 import MathUE.LinearAlgebra.ExactBlockElimination
 import MathUE.LinearAlgebra.ExactBlockEliminationConfluence
 import MathUE.LinearAlgebra.Farkas
+import MathUE.LinearAlgebra.FiniteConvexStrictSeparation
 import MathUE.LinearAlgebra.FiniteGroupInvariantWeights
 import MathUE.LinearAlgebra.FiniteRayMaximum
 import MathUE.LinearAlgebra.FourierMotzkin
@@ -389,6 +390,7 @@ import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
+import MathUE.Topology.TailSupConvergence
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.Viability.AdaptiveEulerLimit
@@ -520,6 +522,7 @@ import UniformEquilibrium.Diagnostics.Quitting.Chronology.PeriodicWindows
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.PositiveDebtDynamicTailWitness
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.SourceMatchedChronologicalData
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.SourceMatchedRepeatedRootSurvival
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.StrictCovectorDynamicTail
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.TargetTailGluingObstruction
 import UniformEquilibrium.Diagnostics.Quitting.Collision.AtomicBlockerCompletion
 import UniformEquilibrium.Diagnostics.Quitting.Collision.AtomicSoloLimitConsequences
@@ -548,6 +551,7 @@ import UniformEquilibrium.Diagnostics.Quitting.Debt.BoundaryMismatchAlternative
 import UniformEquilibrium.Diagnostics.Quitting.Debt.ChargeTangentPacket
 import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailCapCarrier
 import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailConservation
+import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailTerminalGap
 import UniformEquilibrium.Diagnostics.Quitting.Debt.KilledCapacityPotential
 import UniformEquilibrium.Diagnostics.Quitting.Debt.KilledTailPotential
 import UniformEquilibrium.Diagnostics.Quitting.Debt.OneStageObstructionCarrier
@@ -870,6 +874,9 @@ import UniformEquilibrium.Quitting.AbsorptionPath.FiniteWindowRefusalReweighting
 import UniformEquilibrium.Quitting.AbsorptionPath.FlowCostateObstructionAdapter
 import UniformEquilibrium.Quitting.AbsorptionPath.HomogeneousContinuousPath
 import UniformEquilibrium.Quitting.AbsorptionPath.LogarithmicBlockDiscretization
+import UniformEquilibrium.Quitting.AbsorptionPath.LogarithmicPathBlockAdapter
+import UniformEquilibrium.Quitting.AbsorptionPath.LogarithmicProductDecoder
+import UniformEquilibrium.Quitting.AbsorptionPath.LogarithmicProductLaw
 import UniformEquilibrium.Quitting.AbsorptionPath.MarkedAbsorptionCylinder
 import UniformEquilibrium.Quitting.AbsorptionPath.MarkedObstacleRecord
 import UniformEquilibrium.Quitting.AbsorptionPath.MetrizableMarkedAbsorptionComposition
@@ -891,9 +898,13 @@ import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQLocalArc
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQSupportCorrespondence
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQViabilityCorrespondence
 import UniformEquilibrium.Quitting.AbsorptionPath.PunishmentNormalPathEmbedding
+import UniformEquilibrium.Quitting.AbsorptionPath.PunishmentNormalPathSnell
+import UniformEquilibrium.Quitting.AbsorptionPath.PunishmentNormalPathStrategicSnell
 import UniformEquilibrium.Quitting.AbsorptionPath.RealizedMarkedAbsorptionCylinder
 import UniformEquilibrium.Quitting.AbsorptionPath.SingletonContinuousPath
 import UniformEquilibrium.Quitting.AbsorptionPath.SingletonPathRates
+import UniformEquilibrium.Quitting.AbsorptionPath.SingletonPathSnell
+import UniformEquilibrium.Quitting.AbsorptionPath.SingletonPathSnellTail
 import UniformEquilibrium.Quitting.AbsorptionPath.SurvivalWeightedObstructionAdapter
 import UniformEquilibrium.Quitting.Bellman.Finite.ActiveSetSupport
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanCapPureTimeStop
@@ -1023,6 +1034,10 @@ import UniformEquilibrium.Quitting.Boundary.Repair.TerminalFunding.IncomingPath
 import UniformEquilibrium.Quitting.Boundary.Repair.TerminalFunding.OneOwnerFarkas
 import UniformEquilibrium.Quitting.Boundary.Repair.TerminalFunding.SupportEnlargement
 import UniformEquilibrium.Quitting.Boundary.Repair.TerminalFunding.SupportNecessity
+import UniformEquilibrium.Quitting.Chronology.ConvergentDiffuseExactFloorTail
+import UniformEquilibrium.Quitting.Chronology.StrictCovectorCharge
+import UniformEquilibrium.Quitting.Chronology.StrictCovectorRootStep
+import UniformEquilibrium.Quitting.Chronology.SummableExactTailTerminalGap
 import UniformEquilibrium.Quitting.Circulation.AffineResetSeriesMixTarget
 import UniformEquilibrium.Quitting.Circulation.ChiFloorBoundary
 import UniformEquilibrium.Quitting.Circulation.DirectionBarycenter
@@ -1100,6 +1115,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockReducedSi
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockSharperBound
 import UniformEquilibrium.Quitting.Classification.LCP.Gate
 import UniformEquilibrium.Quitting.Classification.LCP.HomogeneousProducer
+import UniformEquilibrium.Quitting.Classification.LCP.HomogeneousProductionNormalDispatch
 import UniformEquilibrium.Quitting.Classification.LCP.IsolatedEndpointProducer
 import UniformEquilibrium.Quitting.Classification.LCP.LaterLayerAbnormal
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
@@ -1284,6 +1300,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtMonotonicity
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtOptimizer
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtPositiveLimit
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtSemantics
+import UniformEquilibrium.Quitting.Debt.Dynamic.NashBellmanChronologicalForcing
 import UniformEquilibrium.Quitting.Debt.Dynamic.OneStageObstructionCarrier
 import UniformEquilibrium.Quitting.Debt.Dynamic.OptimizedDynamicDebtBounds
 import UniformEquilibrium.Quitting.Debt.Dynamic.PeriodicDebtHolonomy
@@ -1391,6 +1408,7 @@ import UniformEquilibrium.Quitting.Paths.OpponentActionMass
 import UniformEquilibrium.Quitting.Paths.OpponentClockDichotomy
 import UniformEquilibrium.Quitting.Paths.OpponentLiveMass
 import UniformEquilibrium.Quitting.Paths.OutsiderNeverGluing
+import UniformEquilibrium.Quitting.Paths.PersistentDeletedClockTwoLabel
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
 import UniformEquilibrium.Quitting.Paths.StoppingLawExposure
 import UniformEquilibrium.Quitting.Paths.StoppingLawMixture

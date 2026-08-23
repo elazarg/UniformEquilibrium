@@ -178,9 +178,9 @@
       "status": "open-producer",
       "from": "VANISHING-DEBT-ATOM-ACCESS",
       "to": "CHRONOLOGICAL-DEBT-SHADOWING",
-      "meaning": "Missing: serialize the static whole-law atom alternatives into executable tails with bounded forcing, vanishing survival, and small initial debt at every accuracy.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean",
-      "declaration": "GameTheory.VanishingDebtAtomChronologicalConsumer",
+      "meaning": "Missing: select one exact Nash--Bellman spine from the static atom data whose same roots preserve two fixed divergent marginal-hazard labels. Exact-spine discrepancy, forcing, and initial debt are identically zero, while two persistent labels supply every required survival field.",
+      "source": "UniformEquilibrium/Quitting/Debt/Dynamic/NashBellmanChronologicalForcing.lean",
+      "declaration": "GameTheory.exists_zeroForcing_quittingChronologicalDebtData",
       "evidence_seals": ["L"]
     },
     {
