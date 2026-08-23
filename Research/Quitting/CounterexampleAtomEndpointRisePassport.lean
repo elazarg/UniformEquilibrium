@@ -4,12 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Atom.ExactPrefixChronology
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Atom.ExactPrefixStackAccess
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.AtomSequenceDispatch
 import Research.Quitting.CounterfactualAtomMinimumResetSquare
 
 /-!
-# Endpoint-debt provenance on the exact-prefix atom chronology
+# Endpoint-debt provenance on exact-prefix atom stack sequences
 
 The fixed atom and rectangle decoders were obtained from a positive
 normalized stopping-law debt direction, but their public packets discarded
@@ -34,71 +34,69 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- Exact-prefix chronology retaining the normalized slope, its correctly
+/-- Exact-prefix stack sequence retaining the normalized slope, its correctly
 scaled mixed-edge inequality, the full-endpoint debt rise, and the stronger
 vanishing-debt atom decoder. -/
-structure QuittingStoppingLawAtomEndpointRiseChronology
+structure QuittingStoppingLawAtomEndpointRiseStackSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
-  chronology : QuittingStoppingLawAtomExactPrefixChronology frontier
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) where
+  chronology : QuittingStoppingLawAtomExactPrefixStackAccess frontier
   normalizedSlope_eventually : ∀ᶠ rank in atTop,
     chronology.charge ≤ quittingStoppingLawNormalizedDebtDirection reward
-      (frontier.profiles (frontier.subseq rank)) chronology.mover.1
-      (frontier.bestResponse chronology.mover (frontier.subseq rank))
-      (frontier.lambda (frontier.subseq rank))
-      (frontier.lambda_pos (frontier.subseq rank)).le
-      (frontier.lambda_le_one (frontier.subseq rank)) chronology.observer
+      (frontier.source rank) chronology.mover.1
+      (frontier.replacement chronology.mover rank)
+      (frontier.scale rank)
+      (frontier.scale_pos rank).le
+      (frontier.scale_le_one rank) chronology.observer
   mixedSlope_eventually : ∀ᶠ rank in atTop,
-    frontier.lambda (frontier.subseq rank) * chronology.charge ≤
+    frontier.scale rank * chronology.charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (Function.update (frontier.profiles (frontier.subseq rank))
+            (Function.update (frontier.source rank)
               chronology.mover.1
               (quittingStoppingLawMixtureBehaviorStrategy reward
                 chronology.mover.1
-                (frontier.profiles (frontier.subseq rank)
+                (frontier.source rank
                   chronology.mover.1)
-                (frontier.bestResponse chronology.mover
-                  (frontier.subseq rank))
-                (frontier.lambda (frontier.subseq rank))
-                (frontier.lambda_pos (frontier.subseq rank)).le
-                (frontier.lambda_le_one (frontier.subseq rank)))))
+                (frontier.replacement chronology.mover
+                  rank)
+                (frontier.scale rank)
+                (frontier.scale_pos rank).le
+                (frontier.scale_le_one rank))))
           chronology.observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq rank))) chronology.observer
+            (frontier.source rank)) chronology.observer
   endpointDebtRise_eventually : ∀ᶠ rank in atTop,
     chronology.charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (Function.update (frontier.profiles (frontier.subseq rank))
+            (Function.update (frontier.source rank)
               chronology.mover.1
-              (frontier.bestResponse chronology.mover
-                (frontier.subseq rank)))) chronology.observer -
+              (frontier.replacement chronology.mover
+                rank))) chronology.observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq rank))) chronology.observer
+            (frontier.source rank)) chronology.observer
   vanishingAtom_eventually : ∀ᶠ rank in atTop,
     HasQuittingStoppingLawVanishingDebtAtomAlternative reward
-      (frontier.profiles (frontier.subseq rank)) chronology.mover.1
+      (frontier.source rank) chronology.mover.1
       chronology.observer
-      (frontier.bestResponse chronology.mover (frontier.subseq rank))
+      (frontier.replacement chronology.mover rank)
       chronology.charge
       (quittingStoppingLawAtomDecoderError chronology.charge rank)
 
-/-- The actual fixed tangent column admits the enriched chronology.  The
+/-- The actual fixed tangent column admits the enriched stack sequence.  The
 factor `lambda` appears only on the mixed edge; convexity removes it when
 passing to the full endpoint. -/
-theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChronology
+theorem QuittingPositiveMinimumDebtTangentFamily.nonempty_atomEndpointRiseStackSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
-    Nonempty (QuittingStoppingLawAtomEndpointRiseChronology frontier) := by
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
+    Nonempty (QuittingStoppingLawAtomEndpointRiseStackSequence frontier) := by
   classical
-  have hactiveNonempty : frontier.active.Nonempty := by
+  have hactiveNonempty : frontier.positiveDebtSupport.Nonempty := by
     by_contra hempty
-    have hactiveEmpty : frontier.active = ∅ :=
+    have hactiveEmpty : frontier.positiveDebtSupport = ∅ :=
       Finset.not_nonempty_iff_eq_empty.mp hempty
     have hdebtZero : ∀ who,
         quittingTerminalSemanticDebt frontier.base who = 0 := by
@@ -106,7 +104,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChron
       have hnotPositive :
           ¬0 < quittingTerminalSemanticDebt frontier.base who := by
         intro hpositive
-        have hmem := (frontier.active_iff who).2 hpositive
+        have hmem := (frontier.positiveDebtSupport_iff who).2 hpositive
         rw [hactiveEmpty] at hmem
         simp at hmem
       exact le_antisymm (le_of_not_gt hnotPositive)
@@ -117,39 +115,39 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChron
     simp only [hdebtZero, Finset.sum_const_zero] at hbasePositive
     exact (lt_irrefl 0) hbasePositive
   obtain ⟨mover, hmover⟩ := hactiveNonempty
-  let activeMover : {who // who ∈ frontier.active} := ⟨mover, hmover⟩
+  let activeMover : {who // who ∈ frontier.positiveDebtSupport} := ⟨mover, hmover⟩
   obtain ⟨observer, hobserverNe, hpositive⟩ :=
     frontier.exists_positiveOffDiagonal hmover
   let charge := frontier.tangent activeMover observer / 2
   have hcharge : 0 < charge := div_pos hpositive (by norm_num)
   have hchargeLt : charge < frontier.tangent activeMover observer := by
-    dsimp only [charge, activeMover]
-    linarith
+    dsimp only [charge]
+    exact half_lt_self hpositive
   have hnormalized : ∀ᶠ rank in atTop,
       charge ≤ quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover
-        (frontier.bestResponse activeMover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) observer :=
+        (frontier.source rank) mover
+        (frontier.replacement activeMover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) observer :=
     (frontier.tangent_tendsto activeMover observer).eventually
       (Ioi_mem_nhds hchargeLt) |>.mono fun _ hlt => hlt.le
   have hmixed : ∀ᶠ rank in atTop,
-      frontier.lambda (frontier.subseq rank) * charge ≤
+      frontier.scale rank * charge ≤
         quittingTerminalSemanticDebt
             (quittingTerminalSemanticPair reward
-              (Function.update (frontier.profiles (frontier.subseq rank)) mover
+              (Function.update (frontier.source rank) mover
                 (quittingStoppingLawMixtureBehaviorStrategy reward mover
-                  (frontier.profiles (frontier.subseq rank) mover)
-                  (frontier.bestResponse activeMover (frontier.subseq rank))
-                  (frontier.lambda (frontier.subseq rank))
-                  (frontier.lambda_pos (frontier.subseq rank)).le
-                  (frontier.lambda_le_one (frontier.subseq rank))))) observer -
+                  (frontier.source rank mover)
+                  (frontier.replacement activeMover rank)
+                  (frontier.scale rank)
+                  (frontier.scale_pos rank).le
+                  (frontier.scale_le_one rank)))) observer -
           quittingTerminalSemanticDebt
             (quittingTerminalSemanticPair reward
-              (frontier.profiles (frontier.subseq rank))) observer := by
+              (frontier.source rank)) observer := by
     filter_upwards [hnormalized] with rank hslopeNormalized
-    have hlambda := frontier.lambda_pos (frontier.subseq rank)
+    have hlambda := frontier.scale_pos rank
     unfold quittingStoppingLawNormalizedDebtDirection
       quittingTerminalSemanticDebtChange quittingStoppingLawResetProfile
       at hslopeNormalized
@@ -159,44 +157,44 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChron
       charge ≤
         quittingTerminalSemanticDebt
             (quittingTerminalSemanticPair reward
-              (Function.update (frontier.profiles (frontier.subseq rank)) mover
-                (frontier.bestResponse activeMover (frontier.subseq rank))))
+              (Function.update (frontier.source rank) mover
+                (frontier.replacement activeMover rank)))
             observer -
           quittingTerminalSemanticDebt
             (quittingTerminalSemanticPair reward
-              (frontier.profiles (frontier.subseq rank))) observer := by
+              (frontier.source rank)) observer := by
     filter_upwards [hmixed] with rank hslope
     exact stoppingLawSlope_le_fullEndpoint_observerDebtChange
-      reward (frontier.profiles (frontier.subseq rank)) mover observer
-      (frontier.bestResponse activeMover (frontier.subseq rank))
-      (frontier.lambda (frontier.subseq rank)) charge
-      (frontier.lambda_pos (frontier.subseq rank))
-      (frontier.lambda_le_one (frontier.subseq rank))
+      reward (frontier.source rank) mover observer
+      (frontier.replacement activeMover rank)
+      (frontier.scale rank) charge
+      (frontier.scale_pos rank)
+      (frontier.scale_le_one rank)
       hslope
   have hvanishing : ∀ᶠ rank in atTop,
       HasQuittingStoppingLawVanishingDebtAtomAlternative reward
-        (frontier.profiles (frontier.subseq rank)) mover observer
-        (frontier.bestResponse activeMover (frontier.subseq rank)) charge
+        (frontier.source rank) mover observer
+        (frontier.replacement activeMover rank) charge
         (quittingStoppingLawAtomDecoderError charge rank) := by
     filter_upwards [hmixed] with rank hslope
     exact exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound
-      reward (frontier.profiles (frontier.subseq rank)) mover observer
-      (frontier.bestResponse activeMover (frontier.subseq rank))
-      (frontier.lambda (frontier.subseq rank)) charge
+      reward (frontier.source rank) mover observer
+      (frontier.replacement activeMover rank)
+      (frontier.scale rank) charge
       (quittingStoppingLawAtomDecoderError charge rank)
-      (frontier.lambda_pos (frontier.subseq rank))
-      (frontier.lambda_le_one (frontier.subseq rank)) hcharge
+      (frontier.scale_pos rank)
+      (frontier.scale_le_one rank) hcharge
       (quittingStoppingLawAtomDecoderError_pos hcharge rank)
       (quittingStoppingLawAtomDecoderError_le hcharge.le rank) hslope
   have hatom : ∀ᶠ rank in atTop,
       HasQuittingStoppingLawDebtSlopeAtomAlternative reward
-        (frontier.profiles (frontier.subseq rank)) mover observer
-        (frontier.bestResponse activeMover (frontier.subseq rank)) charge :=
+        (frontier.source rank) mover observer
+        (frontier.replacement activeMover rank) charge :=
     hvanishing.mono fun _ h =>
       hasDebtSlopeAtomAlternative_of_hasVanishingDebtAtomAlternative
         reward _ mover observer _ charge _ h
   obtain ⟨chronology, hmoverEq, hobserverEq, hchargeEq⟩ :=
-    nonempty_atomExactPrefixChronology_of_fixedAlternative frontier activeMover
+    nonempty_atomExactPrefixStackAccess_of_fixedAlternative frontier activeMover
       observer charge hobserverNe hcharge hatom
   refine ⟨{
     chronology := chronology
@@ -219,9 +217,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChron
 debt-rise provenance retained. -/
 structure QuittingStoppingLawPrescribedAtomEndpointRiseSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    (packet : QuittingStoppingLawAtomEndpointRiseChronology frontier) where
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    (packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier) where
   rank : ℕ → ℕ
   rank_strictMono : StrictMono rank
   terminal : {S : Finset ι // S.Nonempty}
@@ -229,53 +226,52 @@ structure QuittingStoppingLawPrescribedAtomEndpointRiseSequence
     packet.chronology.charge / 2 ≤
       (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
         quittingTerminalPayoffDifferenceAtom reward
-          (frontier.profiles (frontier.subseq (rank n)))
-          (Function.update (frontier.profiles (frontier.subseq (rank n)))
+          (frontier.source (rank n))
+          (Function.update (frontier.source (rank n))
             packet.chronology.mover.1
-            (frontier.bestResponse packet.chronology.mover
-              (frontier.subseq (rank n))))
+            (frontier.replacement packet.chronology.mover
+              (rank n)))
           packet.chronology.observer (some terminal)
   mixedSlope : ∀ n,
-    frontier.lambda (frontier.subseq (rank n)) *
+    frontier.scale (rank n) *
         packet.chronology.charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (Function.update (frontier.profiles (frontier.subseq (rank n)))
+            (Function.update (frontier.source (rank n))
               packet.chronology.mover.1
               (quittingStoppingLawMixtureBehaviorStrategy reward
                 packet.chronology.mover.1
-                (frontier.profiles (frontier.subseq (rank n))
+                (frontier.source (rank n)
                   packet.chronology.mover.1)
-                (frontier.bestResponse packet.chronology.mover
-                  (frontier.subseq (rank n)))
-                (frontier.lambda (frontier.subseq (rank n)))
-                (frontier.lambda_pos (frontier.subseq (rank n))).le
-                (frontier.lambda_le_one (frontier.subseq (rank n))))))
+                (frontier.replacement packet.chronology.mover
+                  (rank n))
+                (frontier.scale (rank n))
+                (frontier.scale_pos (rank n)).le
+                (frontier.scale_le_one (rank n)))))
           packet.chronology.observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq (rank n))))
+            (frontier.source (rank n)))
           packet.chronology.observer
   endpointDebtRise : ∀ n,
     packet.chronology.charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (Function.update (frontier.profiles (frontier.subseq (rank n)))
+            (Function.update (frontier.source (rank n))
               packet.chronology.mover.1
-              (frontier.bestResponse packet.chronology.mover
-                (frontier.subseq (rank n))))) packet.chronology.observer -
+              (frontier.replacement packet.chronology.mover
+                (rank n)))) packet.chronology.observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq (rank n))))
+            (frontier.source (rank n)))
           packet.chronology.observer
 
 /-- Fixed rectangle labels and responses with exact-prefix, endpoint-rise,
 and vanishing observer-debt provenance. -/
 structure QuittingStoppingLawRectangleEndpointRiseSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    (packet : QuittingStoppingLawAtomEndpointRiseChronology frontier) where
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    (packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier) where
   rank : ℕ → ℕ
   rank_strictMono : StrictMono rank
   quitTime : ℕ → Option ℕ
@@ -286,15 +282,15 @@ structure QuittingStoppingLawRectangleEndpointRiseSequence
         quittingTerminalPayoffDifferenceAtom reward
           (Function.update
             (Function.update
-              (frontier.profiles (frontier.subseq (rank n)))
+              (frontier.source (rank n))
               packet.chronology.mover.1
-              (frontier.bestResponse packet.chronology.mover
-                (frontier.subseq (rank n))))
+              (frontier.replacement packet.chronology.mover
+                (rank n)))
             packet.chronology.observer
             (quittingPureTimeBehaviorStrategy reward
               packet.chronology.observer (quitTime n)))
           (Function.update
-            (frontier.profiles (frontier.subseq (rank n)))
+            (frontier.source (rank n))
             packet.chronology.observer
             (quittingPureTimeBehaviorStrategy reward
               packet.chronology.observer (quitTime n)))
@@ -304,99 +300,96 @@ structure QuittingStoppingLawRectangleEndpointRiseSequence
         (quittingTerminalSemanticPair reward
           (Function.update
             (Function.update
-              (frontier.profiles (frontier.subseq (rank n)))
+              (frontier.source (rank n))
               packet.chronology.mover.1
-              (frontier.bestResponse packet.chronology.mover
-                (frontier.subseq (rank n))))
+              (frontier.replacement packet.chronology.mover
+                (rank n)))
             packet.chronology.observer
             (quittingPureTimeBehaviorStrategy reward
               packet.chronology.observer (quitTime n))))
         packet.chronology.observer ≤
       quittingStoppingLawAtomDecoderError packet.chronology.charge (rank n)
   mixedSlope : ∀ n,
-    frontier.lambda (frontier.subseq (rank n)) *
+    frontier.scale (rank n) *
         packet.chronology.charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (Function.update (frontier.profiles (frontier.subseq (rank n)))
+            (Function.update (frontier.source (rank n))
               packet.chronology.mover.1
               (quittingStoppingLawMixtureBehaviorStrategy reward
                 packet.chronology.mover.1
-                (frontier.profiles (frontier.subseq (rank n))
+                (frontier.source (rank n)
                   packet.chronology.mover.1)
-                (frontier.bestResponse packet.chronology.mover
-                  (frontier.subseq (rank n)))
-                (frontier.lambda (frontier.subseq (rank n)))
-                (frontier.lambda_pos (frontier.subseq (rank n))).le
-                (frontier.lambda_le_one (frontier.subseq (rank n))))))
+                (frontier.replacement packet.chronology.mover
+                  (rank n))
+                (frontier.scale (rank n))
+                (frontier.scale_pos (rank n)).le
+                (frontier.scale_le_one (rank n)))))
           packet.chronology.observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq (rank n))))
+            (frontier.source (rank n)))
           packet.chronology.observer
   endpointDebtRise : ∀ n,
     packet.chronology.charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (Function.update (frontier.profiles (frontier.subseq (rank n)))
+            (Function.update (frontier.source (rank n))
               packet.chronology.mover.1
-              (frontier.bestResponse packet.chronology.mover
-                (frontier.subseq (rank n))))) packet.chronology.observer -
+              (frontier.replacement packet.chronology.mover
+                (rank n)))) packet.chronology.observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq (rank n))))
+            (frontier.source (rank n)))
           packet.chronology.observer
   observer_debt_tendsto_zero : Tendsto (fun n =>
     quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward
         (Function.update
           (Function.update
-            (frontier.profiles (frontier.subseq (rank n)))
+            (frontier.source (rank n))
             packet.chronology.mover.1
-            (frontier.bestResponse packet.chronology.mover
-              (frontier.subseq (rank n))))
+            (frontier.replacement packet.chronology.mover
+              (rank n)))
           packet.chronology.observer
           (quittingPureTimeBehaviorStrategy reward
             packet.chronology.observer (quitTime n))))
       packet.chronology.observer) atTop (nhds 0)
 
 /-- Every fixed-label subsequence retains the exact Nash stacks chosen in the
-enriched chronology. -/
+enriched stack sequence. -/
 theorem QuittingStoppingLawRectangleEndpointRiseSequence.exactStack
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (n : ℕ) :
     IsQuittingLiteralExactRootStack reward
       (packet.chronology.roots (sequence.rank n))
-      (frontier.profiles (frontier.subseq (sequence.rank n))) :=
+      (frontier.source (sequence.rank n)) :=
   packet.chronology.exact_stack (sequence.rank n)
 
 /-- Along the fixed-label rectangle subsequence, the complete exact-prefix
 profiles still converge in total debt to the global minimum fiber. -/
 theorem QuittingStoppingLawRectangleEndpointRiseSequence.prefixDebt_tendsto_minimum
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet) :
     Tendsto (fun n => quittingTerminalSemanticDebtSum
       (quittingTerminalSemanticPair reward
         (quittingLiteralRootStackProfile reward
           (packet.chronology.roots (sequence.rank n))
-          (frontier.profiles (frontier.subseq (sequence.rank n))))))
+          (frontier.source (sequence.rank n)))))
       atTop (nhds (quittingTerminalSemanticDebtSum frontier.base)) :=
   packet.chronology.prefixDebt_tendsto_minimum.comp
     sequence.rank_strictMono.tendsto_atTop
 
-/-- Fixed-label extraction from the enriched exact-prefix chronology. -/
-theorem QuittingStoppingLawAtomEndpointRiseChronology.exists_prescribed_or_rectangleSequence
+/-- Fixed-label extraction from the enriched exact-prefix stack sequence. -/
+theorem QuittingStoppingLawAtomEndpointRiseStackSequence.exists_prescribed_or_rectangleSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    (packet : QuittingStoppingLawAtomEndpointRiseChronology frontier) :
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    (packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier) :
     Nonempty (QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet) ∨
       Nonempty (QuittingStoppingLawRectangleEndpointRiseSequence packet) := by
   classical
@@ -408,9 +401,9 @@ theorem QuittingStoppingLawAtomEndpointRiseChronology.exists_prescribed_or_recta
       charge / 2 ≤
         (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
           quittingTerminalPayoffDifferenceAtom reward
-            (frontier.profiles (frontier.subseq rank))
-            (Function.update (frontier.profiles (frontier.subseq rank))
-              mover.1 (frontier.bestResponse mover (frontier.subseq rank)))
+            (frontier.source rank)
+            (Function.update (frontier.source rank)
+              mover.1 (frontier.replacement mover rank))
             observer (some terminal)
   let Rectangle : ℕ → Prop := fun rank =>
     ∃ quitTime : Option ℕ, ∃ terminal : {S : Finset ι // S.Nonempty},
@@ -418,46 +411,46 @@ theorem QuittingStoppingLawAtomEndpointRiseChronology.exists_prescribed_or_recta
         (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
           quittingTerminalPayoffDifferenceAtom reward
             (Function.update
-              (Function.update (frontier.profiles (frontier.subseq rank))
-                mover.1 (frontier.bestResponse mover (frontier.subseq rank)))
+              (Function.update (frontier.source rank)
+                mover.1 (frontier.replacement mover rank))
               observer
               (quittingPureTimeBehaviorStrategy reward observer quitTime))
             (Function.update
-              (Function.update (frontier.profiles (frontier.subseq rank))
-                mover.1 (frontier.profiles (frontier.subseq rank) mover.1))
+              (Function.update (frontier.source rank)
+                mover.1 (frontier.source rank mover.1))
               observer
               (quittingPureTimeBehaviorStrategy reward observer quitTime))
             observer (some terminal) ∧
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
             (Function.update
-              (Function.update (frontier.profiles (frontier.subseq rank))
-                mover.1 (frontier.bestResponse mover (frontier.subseq rank)))
+              (Function.update (frontier.source rank)
+                mover.1 (frontier.replacement mover rank))
               observer
               (quittingPureTimeBehaviorStrategy reward observer quitTime)))
           observer ≤ quittingStoppingLawAtomDecoderError charge rank
   let Slope : ℕ → Prop := fun rank =>
-    frontier.lambda (frontier.subseq rank) * charge ≤
+    frontier.scale rank * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (Function.update (frontier.profiles (frontier.subseq rank)) mover.1
+            (Function.update (frontier.source rank) mover.1
               (quittingStoppingLawMixtureBehaviorStrategy reward mover.1
-                (frontier.profiles (frontier.subseq rank) mover.1)
-                (frontier.bestResponse mover (frontier.subseq rank))
-                (frontier.lambda (frontier.subseq rank))
-                (frontier.lambda_pos (frontier.subseq rank)).le
-                (frontier.lambda_le_one (frontier.subseq rank))))) observer -
+                (frontier.source rank mover.1)
+                (frontier.replacement mover rank)
+                (frontier.scale rank)
+                (frontier.scale_pos rank).le
+                (frontier.scale_le_one rank)))) observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq rank))) observer
+            (frontier.source rank)) observer
   let Rise : ℕ → Prop := fun rank => charge ≤
     quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward
-          (Function.update (frontier.profiles (frontier.subseq rank)) mover.1
-            (frontier.bestResponse mover (frontier.subseq rank)))) observer -
+          (Function.update (frontier.source rank) mover.1
+            (frontier.replacement mover rank))) observer -
       quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward
-          (frontier.profiles (frontier.subseq rank))) observer
+          (frontier.source rank)) observer
   have hlocal : ∀ᶠ rank in atTop, Prescribed rank ∨ Rectangle rank := by
     simpa only [Prescribed, Rectangle, mover, observer, charge,
       HasQuittingStoppingLawVanishingDebtAtomAlternative] using
@@ -504,10 +497,10 @@ theorem QuittingStoppingLawAtomEndpointRiseChronology.exists_prescribed_or_recta
     have hfixedAtom : ∀ n, charge / 2 ≤
         (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
           quittingTerminalPayoffDifferenceAtom reward
-            (frontier.profiles (frontier.subseq (fixedRank n)))
+            (frontier.source (fixedRank n))
             (Function.update
-              (frontier.profiles (frontier.subseq (fixedRank n))) mover.1
-              (frontier.bestResponse mover (frontier.subseq (fixedRank n))))
+              (frontier.source (fixedRank n)) mover.1
+              (frontier.replacement mover (fixedRank n)))
             observer (some terminal) := by
       intro n
       have h := hterminalAt (terminalSubseq (n + labelStart))
@@ -562,11 +555,11 @@ theorem QuittingStoppingLawAtomEndpointRiseChronology.exists_prescribed_or_recta
           quittingTerminalPayoffDifferenceAtom reward
             (Function.update
               (Function.update
-                (frontier.profiles (frontier.subseq (rank n))) mover.1
-                (frontier.bestResponse mover (frontier.subseq (rank n))))
+                (frontier.source (rank n)) mover.1
+                (frontier.replacement mover (rank n)))
               observer
               (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
-            (Function.update (frontier.profiles (frontier.subseq (rank n)))
+            (Function.update (frontier.source (rank n))
               observer
               (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
             observer (some terminal) := by
@@ -579,8 +572,8 @@ theorem QuittingStoppingLawAtomEndpointRiseChronology.exists_prescribed_or_recta
             (quittingTerminalSemanticPair reward
               (Function.update
                 (Function.update
-                  (frontier.profiles (frontier.subseq (rank n))) mover.1
-                  (frontier.bestResponse mover (frontier.subseq (rank n))))
+                  (frontier.source (rank n)) mover.1
+                  (frontier.replacement mover (rank n)))
                 observer
                 (quittingPureTimeBehaviorStrategy reward observer (quitTime n))))
             observer ≤ quittingStoppingLawAtomDecoderError charge (rank n) := by
@@ -601,8 +594,8 @@ theorem QuittingStoppingLawAtomEndpointRiseChronology.exists_prescribed_or_recta
           (quittingTerminalSemanticPair reward
             (Function.update
               (Function.update
-                (frontier.profiles (frontier.subseq (rank n))) mover.1
-                (frontier.bestResponse mover (frontier.subseq (rank n))))
+                (frontier.source (rank n)) mover.1
+                (frontier.replacement mover (rank n)))
               observer
               (quittingPureTimeBehaviorStrategy reward observer (quitTime n))))
           observer) atTop (nhds 0) := by
@@ -626,15 +619,14 @@ has a fixed excess or the literal observer-response edge transfers a fixed
 amount to another named player. -/
 theorem QuittingStoppingLawRectangleEndpointRiseSequence.excess_or_secondTransfer
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (n : ℕ) :
-    let profile := frontier.profiles (frontier.subseq (sequence.rank n))
+    let profile := frontier.source (sequence.rank n)
     let first := Function.update profile packet.chronology.mover.1
-      (frontier.bestResponse packet.chronology.mover
-        (frontier.subseq (sequence.rank n)))
+      (frontier.replacement packet.chronology.mover
+        (sequence.rank n))
     let both := Function.update first packet.chronology.observer
       (quittingPureTimeBehaviorStrategy reward packet.chronology.observer
         (sequence.quitTime n))
@@ -649,9 +641,9 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.excess_or_secondTransfe
             (quittingTerminalSemanticPair reward first)
             (quittingTerminalSemanticPair reward both) recipient := by
   dsimp only
-  let profile := frontier.profiles (frontier.subseq (sequence.rank n))
-  let moverTarget := frontier.bestResponse packet.chronology.mover
-    (frontier.subseq (sequence.rank n))
+  let profile := frontier.source (sequence.rank n)
+  let moverTarget := frontier.replacement packet.chronology.mover
+    (sequence.rank n)
   let observerResponse := quittingPureTimeBehaviorStrategy reward
     packet.chronology.observer (sequence.quitTime n)
   have hsquare :=
@@ -659,12 +651,12 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.excess_or_secondTransfe
       reward frontier.base profile packet.chronology.mover.1
       packet.chronology.observer packet.chronology.observer_ne_mover.symm
       moverTarget observerResponse
-      (frontier.lambda (frontier.subseq (sequence.rank n)))
+      (frontier.scale (sequence.rank n))
       packet.chronology.charge
       (quittingStoppingLawAtomDecoderError packet.chronology.charge
         (sequence.rank n))
-      (frontier.lambda_pos (frontier.subseq (sequence.rank n)))
-      (frontier.lambda_le_one (frontier.subseq (sequence.rank n)))
+      (frontier.scale_pos (sequence.rank n))
+      (frontier.scale_le_one (sequence.rank n))
       packet.chronology.charge_pos
       (by
         have h := quittingStoppingLawAtomDecoderError_le
@@ -682,28 +674,27 @@ square dispatch eventually leaves only a uniformly positive second transfer.
 theorem
     QuittingStoppingLawRectangleEndpointRiseSequence.eventually_secondTransfer_of_firstNearMinimum
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (hnear : Tendsto (fun n =>
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
             (Function.update
-              (frontier.profiles (frontier.subseq (sequence.rank n)))
+              (frontier.source (sequence.rank n))
               packet.chronology.mover.1
-              (frontier.bestResponse packet.chronology.mover
-                (frontier.subseq (sequence.rank n))))) -
+              (frontier.replacement packet.chronology.mover
+                (sequence.rank n)))) -
         quittingTerminalSemanticDebtSum frontier.base) atTop (nhds 0)) :
     ∀ᶠ n in atTop,
       ∃ recipient ∈ Finset.univ.erase packet.chronology.observer,
         packet.chronology.charge / 4 /
             ((Finset.univ.erase packet.chronology.observer).card : ℝ) <
-          let profile := frontier.profiles
-            (frontier.subseq (sequence.rank n))
+          let profile := frontier.source
+            (sequence.rank n)
           let first := Function.update profile packet.chronology.mover.1
-            (frontier.bestResponse packet.chronology.mover
-              (frontier.subseq (sequence.rank n)))
+            (frontier.replacement packet.chronology.mover
+              (sequence.rank n))
           let both := Function.update first packet.chronology.observer
             (quittingPureTimeBehaviorStrategy reward
               packet.chronology.observer (sequence.quitTime n))
@@ -714,10 +705,10 @@ theorem
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
             (Function.update
-              (frontier.profiles (frontier.subseq (sequence.rank n)))
+              (frontier.source (sequence.rank n))
               packet.chronology.mover.1
-              (frontier.bestResponse packet.chronology.mover
-                (frontier.subseq (sequence.rank n))))) -
+              (frontier.replacement packet.chronology.mover
+                (sequence.rank n)))) -
         quittingTerminalSemanticDebtSum frontier.base <
           packet.chronology.charge / 2 :=
     hnear.eventually (Iio_mem_nhds
@@ -734,28 +725,27 @@ late square gives either a fixed literal total-debt descent on the observer
 edge or the same uniformly positive second-transfer certificate. -/
 theorem eventually_descent_or_secondTransfer_of_bothNearMinimum
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (hnear : Tendsto (fun n =>
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
             (Function.update
               (Function.update
-                (frontier.profiles (frontier.subseq (sequence.rank n)))
+                (frontier.source (sequence.rank n))
                 packet.chronology.mover.1
-                (frontier.bestResponse packet.chronology.mover
-                  (frontier.subseq (sequence.rank n))))
+                (frontier.replacement packet.chronology.mover
+                  (sequence.rank n)))
               packet.chronology.observer
               (quittingPureTimeBehaviorStrategy reward
                 packet.chronology.observer (sequence.quitTime n)))) -
         quittingTerminalSemanticDebtSum frontier.base) atTop (nhds 0)) :
     ∀ᶠ n in atTop,
-      let profile := frontier.profiles (frontier.subseq (sequence.rank n))
+      let profile := frontier.source (sequence.rank n)
       let first := Function.update profile packet.chronology.mover.1
-        (frontier.bestResponse packet.chronology.mover
-          (frontier.subseq (sequence.rank n)))
+        (frontier.replacement packet.chronology.mover
+          (sequence.rank n))
       let both := Function.update first packet.chronology.observer
         (quittingPureTimeBehaviorStrategy reward packet.chronology.observer
           (sequence.quitTime n))
@@ -775,10 +765,10 @@ theorem eventually_descent_or_secondTransfer_of_bothNearMinimum
           (quittingTerminalSemanticPair reward
             (Function.update
               (Function.update
-                (frontier.profiles (frontier.subseq (sequence.rank n)))
+                (frontier.source (sequence.rank n))
                 packet.chronology.mover.1
-                (frontier.bestResponse packet.chronology.mover
-                  (frontier.subseq (sequence.rank n))))
+                (frontier.replacement packet.chronology.mover
+                  (sequence.rank n)))
               packet.chronology.observer
               (quittingPureTimeBehaviorStrategy reward
                 packet.chronology.observer (sequence.quitTime n)))) -
@@ -793,26 +783,25 @@ theorem eventually_descent_or_secondTransfer_of_bothNearMinimum
 
 end QuittingStoppingLawRectangleEndpointRiseSequence
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- Regime-facing enriched dispatch.  The prescribed branch retains the
 endpoint debt-rise passport; the rectangle branch additionally carries the
 literal reset-square alternative at every fixed-label rank. -/
 theorem exists_prescribedEndpointRise_or_rectangleSquareDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
-    (∃ packet : QuittingStoppingLawAtomEndpointRiseChronology frontier,
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
+    (∃ packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier,
         Nonempty
           (QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)) ∨
-      ∃ packet : QuittingStoppingLawAtomEndpointRiseChronology frontier,
+      ∃ packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier,
         ∃ sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet,
           ∀ n,
-            let profile := frontier.profiles
-              (frontier.subseq (sequence.rank n))
+            let profile := frontier.source
+              (sequence.rank n)
             let first := Function.update profile packet.chronology.mover.1
-              (frontier.bestResponse packet.chronology.mover
-                (frontier.subseq (sequence.rank n)))
+              (frontier.replacement packet.chronology.mover
+                (sequence.rank n))
             let both := Function.update first packet.chronology.observer
               (quittingPureTimeBehaviorStrategy reward
                 packet.chronology.observer (sequence.quitTime n))
@@ -827,13 +816,13 @@ theorem exists_prescribedEndpointRise_or_rectangleSquareDispatch
                   quittingTerminalSemanticDebtChange
                     (quittingTerminalSemanticPair reward first)
                     (quittingTerminalSemanticPair reward both) recipient := by
-  obtain ⟨packet⟩ := frontier.nonempty_atomEndpointRiseChronology
+  obtain ⟨packet⟩ := frontier.nonempty_atomEndpointRiseStackSequence
   rcases packet.exists_prescribed_or_rectangleSequence with hprescribed |
       hrectangle
   · exact Or.inl ⟨packet, hprescribed⟩
   · obtain ⟨sequence⟩ := hrectangle
     exact Or.inr ⟨packet, sequence, sequence.excess_or_secondTransfer⟩
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 
 end GameTheory

@@ -248,10 +248,11 @@ arm of the general compression is eliminated by minimality rather than
 retained as a second leaf. -/
 theorem stoppingLawSingletonStrategicOrientation_atomicHandoff
     (minimal : MinimalFinQuittingCounterexample)
-    {frontier : QuittingCounterexampleStoppingLawFrontier minimal.witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily minimal.reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (horientation :
-      HasQuittingStoppingLawSingletonStrategicOrientation packet) :
+      HasQuittingStoppingLawSingletonStrategicOrientation
+        (witness := minimal.witness) packet) :
     HasQuittingStaticAtomicToggleHandoff minimal.reward := by
   rcases minimal.witness.stoppingLawSingletonStrategicOrientation_compress
       packet horientation with hatomic | hdeletion

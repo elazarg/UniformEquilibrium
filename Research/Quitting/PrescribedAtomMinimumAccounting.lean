@@ -133,15 +133,14 @@ the reset mover. -/
 theorem
     QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointExcursion_or_compensatingDecrease
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)
     (n : ℕ) :
-    let profile := frontier.profiles (frontier.subseq (sequence.rank n))
+    let profile := frontier.source (sequence.rank n)
     let endpoint := Function.update profile packet.chronology.mover.1
-      (frontier.bestResponse packet.chronology.mover
-        (frontier.subseq (sequence.rank n)))
+      (frontier.replacement packet.chronology.mover
+        (sequence.rank n))
     packet.chronology.charge / 2 ≤
         quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward endpoint) -
@@ -157,13 +156,13 @@ theorem
   apply endpointDebtRise_excursion_or_compensatingDecrease
     frontier.base
     (quittingTerminalSemanticPair reward
-      (frontier.profiles (frontier.subseq (sequence.rank n))))
+      (frontier.source (sequence.rank n)))
     (quittingTerminalSemanticPair reward
       (Function.update
-        (frontier.profiles (frontier.subseq (sequence.rank n)))
+        (frontier.source (sequence.rank n))
         packet.chronology.mover.1
-        (frontier.bestResponse packet.chronology.mover
-          (frontier.subseq (sequence.rank n)))))
+        (frontier.replacement packet.chronology.mover
+          (sequence.rank n))))
     packet.chronology.mover.1 packet.chronology.observer
     packet.chronology.observer_ne_mover packet.chronology.charge
   · apply frontier.base_minimum
@@ -176,15 +175,14 @@ ordinary minimum-reference transfer.  Hence the global-minimum input has not
 created a second reset edge. -/
 theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointPassiveTransferAccount
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)
     (n : ℕ) :
-    let profile := frontier.profiles (frontier.subseq (sequence.rank n))
+    let profile := frontier.source (sequence.rank n)
     let endpoint := Function.update profile packet.chronology.mover.1
-      (frontier.bestResponse packet.chronology.mover
-        (frontier.subseq (sequence.rank n)))
+      (frontier.replacement packet.chronology.mover
+        (sequence.rank n))
     let sourcePair := quittingTerminalSemanticPair reward profile
     let endpointPair := quittingTerminalSemanticPair reward endpoint
     let gain := quittingTerminalPayoff reward endpoint
@@ -204,10 +202,10 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointPassiveTra
         quittingTerminalSemanticDebtChange sourcePair endpointPair
           packet.chronology.observer := by
   dsimp only
-  let profile := frontier.profiles (frontier.subseq (sequence.rank n))
+  let profile := frontier.source (sequence.rank n)
   let endpoint := Function.update profile packet.chronology.mover.1
-    (frontier.bestResponse packet.chronology.mover
-      (frontier.subseq (sequence.rank n)))
+    (frontier.replacement packet.chronology.mover
+      (sequence.rank n))
   let sourcePair := quittingTerminalSemanticPair reward profile
   let endpointPair := quittingTerminalSemanticPair reward endpoint
   let gain := quittingTerminalPayoff reward endpoint
@@ -219,8 +217,8 @@ theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointPassiveTra
         gain := by
     have hidentity := terminalSemanticDebt_source_sub_update_self_eq_payoffGain
       reward profile packet.chronology.mover.1
-      (frontier.bestResponse packet.chronology.mover
-        (frontier.subseq (sequence.rank n)))
+      (frontier.replacement packet.chronology.mover
+        (sequence.rank n))
     dsimp only [sourcePair, endpointPair, endpoint, gain] at hidentity ⊢
     linarith
   have htransfer := minimumReference_opponentTransfer_of_coordinateDecrease
@@ -241,15 +239,14 @@ Otherwise the packet exposes only an unlabelled third-coordinate debt drop.
 Neither alternative retains a second reset or the prescribed atom. -/
 theorem endpointExcursion_or_knownMoverGain_or_unlabelledThirdDecrease
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {packet : QuittingStoppingLawAtomEndpointRiseStackSequence frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)
     (n : ℕ) :
-    let profile := frontier.profiles (frontier.subseq (sequence.rank n))
+    let profile := frontier.source (sequence.rank n)
     let endpoint := Function.update profile packet.chronology.mover.1
-      (frontier.bestResponse packet.chronology.mover
-        (frontier.subseq (sequence.rank n)))
+      (frontier.replacement packet.chronology.mover
+        (sequence.rank n))
     let threshold := packet.chronology.charge / 2 /
       ((Finset.univ.erase packet.chronology.observer).card : ℝ)
     packet.chronology.charge / 2 ≤

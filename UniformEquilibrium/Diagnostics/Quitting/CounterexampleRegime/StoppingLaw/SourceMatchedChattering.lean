@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Probability.ChargedCirculationChattering
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Frontier
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.PositiveMinimumDebtTangentFamily
 
 /-!
 # Source-matched chattering for a stopping-law charged circulation
@@ -38,24 +38,24 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- The literal normalized debt chord at one selected common-source index. -/
 def actualDebtDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active})
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport})
     (observer : ι) : ℝ :=
   quittingStoppingLawNormalizedDebtDirection reward
-    (frontier.profiles (frontier.subseq rank)) mover.1
-    (frontier.bestResponse mover (frontier.subseq rank))
-    (frontier.lambda (frontier.subseq rank))
-    (frontier.lambda_pos (frontier.subseq rank)).le
-    (frontier.lambda_le_one (frontier.subseq rank)) observer
+    (frontier.source rank) mover.1
+    (frontier.replacement mover rank)
+    (frontier.scale rank)
+    (frontier.scale_pos rank).le
+    (frontier.scale_le_one rank) observer
 
 /-- The actual mover charge of a normalized stopping-law chord. -/
 def actualGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active}) : ℝ :=
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport}) : ℝ :=
   -frontier.actualDebtDirection rank mover mover.1
 
 /-- **A limiting charged circulation has finite source-matched probes.**
@@ -71,12 +71,12 @@ multiplicity for every active mover such that:
 
 This is a finite star packet, not a sequentially executable word. -/
 theorem exists_sourceMatchedChattering
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
-      frontier.active frontier.tangent) :
+      frontier.positiveDebtSupport frontier.tangent) :
     ∃ budget : ℝ, 0 ≤ budget ∧ ∀ N : ℕ, 0 < N →
       ∃ rank : ℕ, N ≤ rank ∧
-        ∃ count : {who // who ∈ frontier.active} → ℕ,
+        ∃ count : {who // who ∈ frontier.positiveDebtSupport} → ℕ,
           (∀ observer,
             |∑ mover, ((count mover : ℝ) / N) *
                 frontier.actualDebtDirection rank mover observer| ≤
@@ -94,7 +94,7 @@ theorem exists_sourceMatchedChattering
   have hNreal : 0 < (N : ℝ) := by exact_mod_cast hN
   have hscale : 0 < (1 : ℝ) / N := div_pos zero_lt_one hNreal
   have hclose : ∀ᶠ rank in atTop,
-      ∀ mover : {who // who ∈ frontier.active}, ∀ observer,
+      ∀ mover : {who // who ∈ frontier.positiveDebtSupport}, ∀ observer,
         |frontier.actualDebtDirection rank mover observer -
             frontier.tangent mover observer| ≤ 1 / N := by
     rw [Filter.eventually_all]
@@ -109,7 +109,7 @@ theorem exists_sourceMatchedChattering
   obtain ⟨threshold, hthreshold⟩ := Filter.eventually_atTop.1 hclose
   let rank := max N threshold
   have hrankN : N ≤ rank := le_max_left _ _
-  have hcloseRank : ∀ mover : {who // who ∈ frontier.active}, ∀ observer,
+  have hcloseRank : ∀ mover : {who // who ∈ frontier.positiveDebtSupport}, ∀ observer,
       |frontier.actualDebtDirection rank mover observer -
           frontier.tangent mover observer| ≤ 1 / N :=
     hthreshold rank (le_max_right _ _)
@@ -121,7 +121,7 @@ theorem exists_sourceMatchedChattering
       ∑ mover, mass mover * (-frontier.tangent mover mover.1) = 1 := by
     simpa [quittingActiveDebtTangentGain,
       quittingActiveDebtTangentExtension] using hcharge
-  let count : {who // who ∈ frontier.active} → ℕ :=
+  let count : {who // who ∈ frontier.positiveDebtSupport} → ℕ :=
     chatteringCount mass N
   have hcoefficientNonneg : ∀ mover,
       0 ≤ chatteringCoefficient mass N mover := by
@@ -239,10 +239,15 @@ theorem exists_sourceMatchedChattering
         ∑ mover, chatteringCoefficient mass N mover *
           (-frontier.tangent mover mover.1) := by
     have herror := abs_sum_chatteringCoefficient_mul_charge_sub_one_le
-      (fun mover : {who // who ∈ frontier.active} ↦
+      (fun mover : {who // who ∈ frontier.positiveDebtSupport} ↦
         -frontier.tangent mover mover.1)
       mass N hN hmass hcharge'
     have hlower := neg_le_of_abs_le herror
+    let error : ℝ := (∑ mover, |-frontier.tangent mover mover.1|) / N
+    let approximation : ℝ := ∑ mover,
+      chatteringCoefficient mass N mover * (-frontier.tangent mover mover.1)
+    change -error ≤ approximation - 1 at hlower
+    change 1 - error ≤ approximation
     linarith
   have hactualCharge :
       1 - ((∑ mover, |frontier.tangent mover mover.1|) + budget) / N ≤
@@ -283,10 +288,10 @@ The prefix estimate is still frozen at the selected source. It is the exact
 input needed by a separate nonlinear reset-cube or reprojection argument; this
 theorem does not assert chronological executability by itself. -/
 theorem exists_sourceMatchedChatteringWithUniformPrefixes
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
-      frontier.active frontier.tangent) :
-    ∃ mass : {who // who ∈ frontier.active} → ℝ,
+      frontier.positiveDebtSupport frontier.tangent) :
+    ∃ mass : {who // who ∈ frontier.positiveDebtSupport} → ℝ,
       (∀ mover, 0 ≤ mass mover) ∧
       (∀ observer,
         ∑ mover, mass mover * frontier.tangent mover observer = 0) ∧
@@ -294,7 +299,7 @@ theorem exists_sourceMatchedChatteringWithUniformPrefixes
       ∀ N : ℕ, 0 < N →
         ∃ rank : ℕ, N ≤ rank ∧
           (∀ completed : ℕ, completed ≤ N →
-            ∀ partialCount : {who // who ∈ frontier.active} → ℕ,
+            ∀ partialCount : {who // who ∈ frontier.positiveDebtSupport} → ℕ,
               (∀ mover,
                 partialCount mover ≤ chatteringCount mass N mover) →
               ∀ observer,
@@ -325,7 +330,7 @@ theorem exists_sourceMatchedChatteringWithUniformPrefixes
   have hNreal : 0 < (N : ℝ) := by exact_mod_cast hN
   have hscale : 0 < (1 : ℝ) / N := div_pos zero_lt_one hNreal
   have hclose : ∀ᶠ rank in atTop,
-      ∀ mover : {who // who ∈ frontier.active}, ∀ observer,
+      ∀ mover : {who // who ∈ frontier.positiveDebtSupport}, ∀ observer,
         |frontier.actualDebtDirection rank mover observer -
             frontier.tangent mover observer| ≤ 1 / N := by
     rw [Filter.eventually_all]
@@ -340,7 +345,7 @@ theorem exists_sourceMatchedChatteringWithUniformPrefixes
   obtain ⟨threshold, hthreshold⟩ := Filter.eventually_atTop.1 hclose
   let rank := max N threshold
   have hrankN : N ≤ rank := le_max_left _ _
-  have hcloseRank : ∀ mover : {who // who ∈ frontier.active}, ∀ observer,
+  have hcloseRank : ∀ mover : {who // who ∈ frontier.positiveDebtSupport}, ∀ observer,
       |frontier.actualDebtDirection rank mover observer -
           frontier.tangent mover observer| ≤ 1 / N :=
     hthreshold rank (le_max_right _ _)
@@ -369,7 +374,13 @@ theorem exists_sourceMatchedChatteringWithUniformPrefixes
       intro mover _
       rw [abs_neg]
     rw [habs] at hlower
+    let error : ℝ := ((∑ mover, |frontier.tangent mover mover.1|) +
+      ∑ mover, mass mover) / N
+    let approximation : ℝ := ∑ mover,
+      chatteringCoefficient mass N mover * frontier.actualGain rank mover
+    change -error ≤ approximation - 1 at hlower
+    change 1 - error ≤ approximation
     linarith
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 end GameTheory

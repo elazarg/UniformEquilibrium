@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.FiniteSerialRelation
 import UniformEquilibrium.Diagnostics.Quitting.Collision.PreemptionCycle
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.SlopeFrontier
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.SlopeFrontier
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedResetCube
 
 /-!
@@ -36,25 +36,22 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- The positive tangent-transfer relation on the active debt carrier. -/
 def QuittingStoppingLawActiveTransfer
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover recipient : {who // who ∈ frontier.active}) : Prop :=
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover recipient : {who // who ∈ frontier.positiveDebtSupport}) : Prop :=
   0 < frontier.tangent mover recipient.1
 
 /-- A positive-period cycle in the active stopping-law tangent-transfer
 relation. -/
 abbrev QuittingStoppingLawActiveTransferCycle
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :=
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :=
   Math.FiniteSerialRelation.PeriodicCycle
     (QuittingStoppingLawActiveTransfer frontier)
 
 /-- Reset coordinates preceding one position of an active transfer cycle. -/
 def QuittingStoppingLawActiveTransferCycle.prefixWord
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (cycle : QuittingStoppingLawActiveTransferCycle frontier)
     (time : ℕ) : List ι :=
   (List.range time).map fun earlier ↦ (cycle.vertex earlier).1
@@ -62,8 +59,7 @@ def QuittingStoppingLawActiveTransferCycle.prefixWord
 @[simp]
 theorem QuittingStoppingLawActiveTransferCycle.prefixWord_length
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (cycle : QuittingStoppingLawActiveTransferCycle frontier)
     (time : ℕ) :
     (cycle.prefixWord time).length = time := by
@@ -71,13 +67,12 @@ theorem QuittingStoppingLawActiveTransferCycle.prefixWord_length
 
 /-- The active positive-debt carrier of every stopping-law frontier is
 nonempty. -/
-theorem QuittingCounterexampleStoppingLawFrontier.active_nonempty
+theorem QuittingPositiveMinimumDebtTangentFamily.active_nonempty
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
-    frontier.active.Nonempty := by
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
+    frontier.positiveDebtSupport.Nonempty := by
   by_contra hempty
-  have hactiveEmpty : frontier.active = ∅ :=
+  have hactiveEmpty : frontier.positiveDebtSupport = ∅ :=
     Finset.not_nonempty_iff_eq_empty.mp hempty
   have hdebtZero : ∀ who,
       quittingTerminalSemanticDebt frontier.base who = 0 := by
@@ -85,7 +80,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.active_nonempty
     have hnotPositive :
         ¬0 < quittingTerminalSemanticDebt frontier.base who := by
       intro hpositive
-      have hmem := (frontier.active_iff who).2 hpositive
+      have hmem := (frontier.positiveDebtSupport_iff who).2 hpositive
       rw [hactiveEmpty] at hmem
       simp at hmem
     exact le_antisymm (le_of_not_gt hnotPositive)
@@ -98,15 +93,14 @@ theorem QuittingCounterexampleStoppingLawFrontier.active_nonempty
 
 /-- In the absence of a flat support-entry branch, every positive tangent
 recipient of an active mover is itself active. -/
-theorem QuittingCounterexampleStoppingLawFrontier.mem_active_of_tangent_pos_of_noEntry
+theorem QuittingPositiveMinimumDebtTangentFamily.mem_active_of_tangent_pos_of_noEntry
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hnoEntry : ¬HasQuittingStoppingLawFlatSupportEntry
-      frontier.base frontier.active frontier.tangent)
-    {mover : {who // who ∈ frontier.active}} {recipient : ι}
+      frontier.base frontier.positiveDebtSupport frontier.tangent)
+    {mover : {who // who ∈ frontier.positiveDebtSupport}} {recipient : ι}
     (hpositive : 0 < frontier.tangent mover recipient) :
-    recipient ∈ frontier.active := by
+    recipient ∈ frontier.positiveDebtSupport := by
   by_contra hinactive
   have hdebtNonneg :
       0 ≤ quittingTerminalSemanticDebt frontier.base recipient :=
@@ -116,7 +110,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.mem_active_of_tangent_pos_of_n
       quittingTerminalSemanticDebt frontier.base recipient = 0 := by
     apply le_antisymm
     · exact le_of_not_gt (fun hdebt ↦
-        hinactive ((frontier.active_iff recipient).2 hdebt))
+        hinactive ((frontier.positiveDebtSupport_iff recipient).2 hdebt))
     · exact hdebtNonneg
   apply hnoEntry
   refine ⟨mover.1, mover.2, recipient, hdebtZero, ?_⟩
@@ -124,14 +118,13 @@ theorem QuittingCounterexampleStoppingLawFrontier.mem_active_of_tangent_pos_of_n
 
 /-- If a stopping-law frontier has no zero-debt support entry, its positive
 active tangent relation contains a periodic cycle. -/
-theorem QuittingCounterexampleStoppingLawFrontier.nonempty_activeTransferCycle_of_noEntry
+theorem QuittingPositiveMinimumDebtTangentFamily.nonempty_activeTransferCycle_of_noEntry
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hnoEntry : ¬HasQuittingStoppingLawFlatSupportEntry
-      frontier.base frontier.active frontier.tangent) :
+      frontier.base frontier.positiveDebtSupport frontier.tangent) :
     Nonempty (QuittingStoppingLawActiveTransferCycle frontier) := by
-  letI : Nonempty {who // who ∈ frontier.active} := by
+  letI : Nonempty {who // who ∈ frontier.positiveDebtSupport} := by
     obtain ⟨who, hwho⟩ := frontier.active_nonempty
     exact ⟨⟨who, hwho⟩⟩
   apply Math.FiniteSerialRelation.nonempty_periodicCycle_of_serial
@@ -146,14 +139,13 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_activeTransferCycle_o
 active tangent diagonal is strictly negative. -/
 theorem QuittingStoppingLawActiveTransferCycle.two_le_period
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (cycle : QuittingStoppingLawActiveTransferCycle frontier) :
     2 ≤ cycle.period := by
   apply cycle.two_le_period_of_irreflexive
   intro mover hedge
   have hdiagonal := frontier.tangent_diagonal mover
-  have hdebt := (frontier.active_iff mover.1).1 mover.2
+  have hdebt := (frontier.positiveDebtSupport_iff mover.1).1 mover.2
   simp only [QuittingStoppingLawActiveTransfer] at hedge
   linarith
 
@@ -163,17 +155,16 @@ same source profile at each rank; only the active mover and its selected best
 response vary with the edge. -/
 theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformSlope
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (cycle : QuittingStoppingLawActiveTransferCycle frontier) :
     ∃ charge : ℝ, 0 < charge ∧
       ∀ᶠ rank in atTop, ∀ time < cycle.period,
         charge ≤ quittingStoppingLawNormalizedDebtDirection reward
-          (frontier.profiles (frontier.subseq rank)) (cycle.vertex time).1
-          (frontier.bestResponse (cycle.vertex time) (frontier.subseq rank))
-          (frontier.lambda (frontier.subseq rank))
-          (frontier.lambda_pos (frontier.subseq rank)).le
-          (frontier.lambda_le_one (frontier.subseq rank))
+          (frontier.source rank) (cycle.vertex time).1
+          (frontier.replacement (cycle.vertex time) rank)
+          (frontier.scale rank)
+          (frontier.scale_pos rank).le
+          (frontier.scale_le_one rank)
           (cycle.vertex (time + 1)).1 := by
   classical
   have hrange : (Finset.range cycle.period).Nonempty :=
@@ -200,11 +191,11 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformSlope
   have heach : ∀ time ∈ Finset.range cycle.period,
       ∀ᶠ rank in atTop,
         charge ≤ quittingStoppingLawNormalizedDebtDirection reward
-          (frontier.profiles (frontier.subseq rank)) (cycle.vertex time).1
-          (frontier.bestResponse (cycle.vertex time) (frontier.subseq rank))
-          (frontier.lambda (frontier.subseq rank))
-          (frontier.lambda_pos (frontier.subseq rank)).le
-          (frontier.lambda_le_one (frontier.subseq rank))
+          (frontier.source rank) (cycle.vertex time).1
+          (frontier.replacement (cycle.vertex time) rank)
+          (frontier.scale rank)
+          (frontier.scale_pos rank).le
+          (frontier.scale_le_one rank)
           (cycle.vertex (time + 1)).1 := by
     intro time htime
     exact (frontier.tangent_tendsto (cycle.vertex time)
@@ -213,11 +204,11 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformSlope
           fun _ hvalue ↦ hvalue.le
   let P : ℕ → ℕ → Prop := fun rank time ↦
     charge ≤ quittingStoppingLawNormalizedDebtDirection reward
-      (frontier.profiles (frontier.subseq rank)) (cycle.vertex time).1
-      (frontier.bestResponse (cycle.vertex time) (frontier.subseq rank))
-      (frontier.lambda (frontier.subseq rank))
-      (frontier.lambda_pos (frontier.subseq rank)).le
-      (frontier.lambda_le_one (frontier.subseq rank))
+      (frontier.source rank) (cycle.vertex time).1
+      (frontier.replacement (cycle.vertex time) rank)
+      (frontier.scale rank)
+      (frontier.scale_pos rank).le
+      (frontier.scale_le_one rank)
       (cycle.vertex (time + 1)).1
   have gather : ∀ times : Finset ℕ,
       (∀ time ∈ times, ∀ᶠ rank in atTop, P rank time) →
@@ -236,11 +227,11 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformSlope
         · exact hrestRank other hother
   have hall : ∀ᶠ rank in atTop, ∀ time ∈ Finset.range cycle.period,
       charge ≤ quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) (cycle.vertex time).1
-        (frontier.bestResponse (cycle.vertex time) (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank))
+        (frontier.source rank) (cycle.vertex time).1
+        (frontier.replacement (cycle.vertex time) rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank)
         (cycle.vertex (time + 1)).1 := by
     change ∀ᶠ rank in atTop, ∀ time ∈ Finset.range cycle.period, P rank time
     apply gather
@@ -255,8 +246,7 @@ edges coexist at one actual source profile and one common positive reset
 scale. -/
 theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformCubeEdge
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (cycle : QuittingStoppingLawActiveTransferCycle frontier) :
     ∃ charge : ℝ, 0 < charge ∧
       ∀ᶠ rank in atTop, ∀ time < cycle.period,
@@ -265,7 +255,7 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformCubeEdge
           quittingTerminalSemanticDebt
             (quittingTerminalSemanticPair reward candidate)
             (cycle.vertex (time + 1)).1
-        frontier.lambda (frontier.subseq rank) * charge ≤
+        frontier.scale rank * charge ≤
           Math.Finset.CubicalResetIntegrability.edge
             (data.value debt) ∅ (cycle.vertex time).1 := by
   obtain ⟨charge, hcharge, heventually⟩ :=
@@ -276,7 +266,7 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformCubeEdge
   dsimp only
   rw [frontier.sourceMatchedResetCubeData_debtEdge_eq_scale_mul_actualDirection]
   exact mul_le_mul_of_nonneg_left (hAll time htime)
-    (frontier.lambda_pos (frontier.subseq rank)).le
+    (frontier.scale_pos rank).le
 
 /-- **Reached cube edge or signed square curvature.**  Traverse the cycle's
 reset coordinates in order inside the literal source-matched cube.  At every
@@ -284,12 +274,12 @@ cycle position, either the reached edge retains half of the common-source
 positive transfer, or one earlier reset crosses a square whose absolute
 curvature exceeds the common edge budget divided by twice the period.
 
-This is a chronological statement in the profile cube.  It is not yet a
-chronological quitting-play compiler. -/
+This is an ordered algebraic statement in the profile cube. It neither says
+that the intermediate cube vertices are reached nor supplies a chronological
+quitting-play compiler. -/
 theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_reachedCubeEdge_or_curvature
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (cycle : QuittingStoppingLawActiveTransferCycle frontier) :
     ∃ charge : ℝ, 0 < charge ∧
       ∀ᶠ rank in atTop, ∀ time < cycle.period,
@@ -299,14 +289,14 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_reachedCubeEdge
             (quittingTerminalSemanticPair reward candidate)
             (cycle.vertex (time + 1)).1
         let word := cycle.prefixWord time
-        frontier.lambda (frontier.subseq rank) * charge / 2 ≤
+        frontier.scale rank * charge / 2 ≤
             Math.Finset.CubicalResetIntegrability.edge
               (data.value debt)
               (Math.Finset.CubicalResetIntegrability.finalSet ∅ word)
               (cycle.vertex time).1 ∨
           Math.Finset.CubicalResetIntegrability.HasAbsSquareAboveOnEdge
             (data.value debt)
-            (frontier.lambda (frontier.subseq rank) * charge /
+            (frontier.scale rank * charge /
               (2 * (cycle.period : ℝ))) ∅ word (cycle.vertex time).1 := by
   obtain ⟨charge, hcharge, heventually⟩ :=
     cycle.exists_eventually_uniformCubeEdge
@@ -320,7 +310,7 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_reachedCubeEdge
       (quittingTerminalSemanticPair reward candidate)
       (cycle.vertex (time + 1)).1
   let word := cycle.prefixWord time
-  let edgeFloor := frontier.lambda (frontier.subseq rank) * charge
+  let edgeFloor := frontier.scale rank * charge
   let threshold := edgeFloor / (2 * (cycle.period : ℝ))
   have hedgeFloor : edgeFloor ≤
       Math.Finset.CubicalResetIntegrability.edge
@@ -329,7 +319,7 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_reachedCubeEdge
   have hperiodReal : 0 < (cycle.period : ℝ) := by
     exact_mod_cast cycle.period_pos
   have hedgeFloorPos : 0 < edgeFloor := by
-    exact mul_pos (frontier.lambda_pos (frontier.subseq rank)) hcharge
+    exact mul_pos (frontier.scale_pos rank) hcharge
   have hthreshold : 0 ≤ threshold := by
     exact (div_pos hedgeFloorPos (mul_pos (by norm_num) hperiodReal)).le
   have htimeReal : (time : ℝ) ≤ (cycle.period : ℝ) := by
@@ -365,15 +355,14 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_reachedCubeEdge
 either a zero-debt support entry or a dynamic active transfer cycle.  This
 reroutes the localization; it does not consume positive total slope, whose
 endpoint and atom consequences remain available in parallel. -/
-theorem QuittingCounterexampleStoppingLawFrontier.entry_or_activeTransferCycle
+theorem QuittingPositiveMinimumDebtTangentFamily.entry_or_activeTransferCycle
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
     HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent ∨
+        frontier.base frontier.positiveDebtSupport frontier.tangent ∨
       Nonempty (QuittingStoppingLawActiveTransferCycle frontier) := by
   by_cases hentry : HasQuittingStoppingLawFlatSupportEntry
-      frontier.base frontier.active frontier.tangent
+      frontier.base frontier.positiveDebtSupport frontier.tangent
   · exact Or.inl hentry
   · exact Or.inr (frontier.nonempty_activeTransferCycle_of_noEntry hentry)
 
@@ -381,15 +370,14 @@ theorem QuittingCounterexampleStoppingLawFrontier.entry_or_activeTransferCycle
 positive total slope, zero-debt support entry, or a dynamic active transfer
 cycle.  The first label retains extra quantitative information despite the
 independent binary rerouting above. -/
-theorem QuittingCounterexampleStoppingLawFrontier.slope_or_entry_or_activeTransferCycle
+theorem QuittingPositiveMinimumDebtTangentFamily.slope_or_entry_or_activeTransferCycle
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
     (∃ mover, 0 < ∑ observer, frontier.tangent mover observer) ∨
       HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent ∨
+        frontier.base frontier.positiveDebtSupport frontier.tangent ∨
       Nonempty (QuittingStoppingLawActiveTransferCycle frontier) := by
-  rcases frontier.exhaustive_branch with hpositive |
+  rcases frontier.exhaustiveAlternative with hpositive |
       ⟨_hflat, hentry⟩ |
       ⟨_hflat, hnoEntry, _hcirculation⟩ |
       ⟨_hflat, hnoEntry, _hnoCirculation, _hpotential⟩
@@ -399,32 +387,5 @@ theorem QuittingCounterexampleStoppingLawFrontier.slope_or_entry_or_activeTransf
       (frontier.nonempty_activeTransferCycle_of_noEntry hnoEntry))
   · exact Or.inr (Or.inr
       (frontier.nonempty_activeTransferCycle_of_noEntry hnoEntry))
-
-/-- Every terminal exploitability witness reaches one stopping-law frontier satisfying
-the compressed dynamic trichotomy. -/
-theorem QuittingTerminalExploitabilityWitness.exists_stoppingLaw_dynamicTrichotomy
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (witness : QuittingTerminalExploitabilityWitness reward) :
-    ∃ frontier : QuittingCounterexampleStoppingLawFrontier witness,
-      (∃ mover, 0 < ∑ observer, frontier.tangent mover observer) ∨
-        HasQuittingStoppingLawFlatSupportEntry
-          frontier.base frontier.active frontier.tangent ∨
-        Nonempty (QuittingStoppingLawActiveTransferCycle frontier) := by
-  letI : Nonempty ι := witness.nonempty_players
-  obtain ⟨frontier⟩ := witness.exists_stoppingLaw_exhaustiveFrontier
-  exact ⟨frontier, frontier.slope_or_entry_or_activeTransferCycle⟩
-
-/-- Every terminal exploitability witness reaches a stopping-law frontier satisfying
-the binary support-entry or active-transfer-cycle localization. -/
-theorem QuittingTerminalExploitabilityWitness.exists_stoppingLaw_entry_or_activeTransferCycle
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (witness : QuittingTerminalExploitabilityWitness reward) :
-    ∃ frontier : QuittingCounterexampleStoppingLawFrontier witness,
-      HasQuittingStoppingLawFlatSupportEntry
-          frontier.base frontier.active frontier.tangent ∨
-        Nonempty (QuittingStoppingLawActiveTransferCycle frontier) := by
-  letI : Nonempty ι := witness.nonempty_players
-  obtain ⟨frontier⟩ := witness.exists_stoppingLaw_exhaustiveFrontier
-  exact ⟨frontier, frontier.entry_or_activeTransferCycle⟩
 
 end GameTheory

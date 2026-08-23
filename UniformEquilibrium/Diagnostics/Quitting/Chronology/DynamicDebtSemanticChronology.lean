@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Frontier
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.PositiveMinimumDebtTangentFamily
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.PositiveDebtDynamicTailWitness
 import UniformEquilibrium.Quitting.Debt.Dynamic.SemanticChronology
 
@@ -188,9 +188,9 @@ theorem limitDynamicDebtSemanticPair_allContinue_nash :
 
 end QuittingPositiveDebtDynamicTailWitness
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
-variable (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+variable (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
 variable (tailWitness : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- The independent frontier minimum is no larger than the total exact debt
@@ -215,6 +215,6 @@ theorem baseDebtSum_le_dynamicTailLimitDebtSum :
     tailWitness.limitDynamicDebtSemanticPair_mem_carrier
   simpa [quittingTerminalSemanticDebtSum] using h
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 
 end GameTheory

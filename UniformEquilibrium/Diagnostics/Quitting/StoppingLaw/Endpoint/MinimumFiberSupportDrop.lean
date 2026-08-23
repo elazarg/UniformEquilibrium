@@ -4,17 +4,17 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.PositiveTotalSlopeEndpoint
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.PositiveTotalSlopeFullReplacement
 
 /-!
-# Full-reset endpoints of a flat potential co-decrease
+# Minimum-fiber support drop under full replacement
 
-Every selected stopping-law reset ray has a compact full-reset endpoint
+Every selected stopping-law reset ray has a compact full-replacement endpoint
 cluster, without any sign assumption on its total tangent slope.  Convexity
 of opponents' debt coordinates makes the limiting tangent a coordinatewise
 lower bound for the full endpoint debt change, while own-coordinate affinity
 makes the mover coordinate exact.  The retained vanishing-regret endpoint
-selection makes the mover's debt zero at every full-reset cluster,
+selection makes the mover's debt zero at every full-replacement cluster,
 independently of total slope and of the minimum-fiber question.
 
 If the tangent column is flat, has no entry into the inactive debt support,
@@ -38,24 +38,22 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {witness : QuittingTerminalExploitabilityWitness reward}
 
-/-- Compact full-reset endpoint data for an arbitrary supplied active mover.
-Unlike `PositiveTotalSlopeEndpointCluster`, this structure has no positive
+/-- Compact full-replacement endpoint data for an arbitrary supplied active mover.
+Unlike `PositiveTotalSlopeFullReplacement`, this structure has no positive
 total-slope or total-debt-separation field. -/
-structure FullResetEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) where
+structure FullReplacementCluster
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) where
   cluster : QuittingTerminalSemanticPair ι
   subseq : ℕ → ℕ
   cluster_mem : cluster ∈ quittingTerminalSemanticCarrier reward
   subseq_strictMono : StrictMono subseq
-  sourceSubseq_strictMono : StrictMono (frontier.subseq ∘ subseq)
-  fullReset_tendsto : Tendsto (fun rank ↦
-      frontier.fullResetPair mover (subseq rank)) atTop (nhds cluster)
+  fullReplacement_tendsto : Tendsto (fun rank ↦
+      frontier.fullReplacementPair mover (subseq rank)) atTop (nhds cluster)
   coordinate_excess : ∀ observer,
     frontier.tangent mover observer ≤
       quittingTerminalSemanticDebtChange frontier.base cluster observer
@@ -63,27 +61,26 @@ structure FullResetEndpointCluster
     quittingTerminalSemanticDebtChange frontier.base cluster mover.1 =
       frontier.tangent mover mover.1
 
-/-- Every supplied mover has a compact full-reset endpoint cluster retaining
+/-- Every supplied mover has a compact full-replacement endpoint cluster retaining
 coordinatewise tangent domination and exact own-coordinate change. -/
-theorem exists_fullResetEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) :
-    Nonempty (FullResetEndpointCluster frontier mover) := by
+theorem exists_fullReplacementEndpointCluster
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
+    Nonempty (FullReplacementCluster frontier mover) := by
   let endpoint : ℕ → QuittingTerminalSemanticPair ι :=
-    fun rank ↦ frontier.fullResetPair mover rank
+    fun rank ↦ frontier.fullReplacementPair mover rank
   have hendpointMem : ∀ rank,
       endpoint rank ∈ quittingTerminalSemanticCarrier reward := by
     intro rank
     exact quittingTerminalSemanticPair_mem_carrier reward
-      (frontier.fullResetProfile mover rank)
+      (frontier.fullReplacementProfile mover rank)
   obtain ⟨cluster, hcluster, subseq, hsubseq, hendpoint⟩ :=
     (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
       hendpointMem
   have hsource : Tendsto (fun rank ↦ frontier.sourcePair (subseq rank))
       atTop (nhds frontier.base) := by
     unfold sourcePair
-    exact frontier.profiles_tendsto.comp
-      ((frontier.subseq_strictMono.comp hsubseq).tendsto_atTop)
+    exact frontier.source_tendsto.comp hsubseq.tendsto_atTop
   have hcoordinate : ∀ observer,
       frontier.tangent mover observer ≤
         quittingTerminalSemanticDebtChange frontier.base cluster observer := by
@@ -93,7 +90,7 @@ theorem exists_fullResetEndpointCluster
     have hright : Tendsto (fun rank ↦
         quittingTerminalSemanticDebtChange
           (frontier.sourcePair (subseq rank))
-          (frontier.fullResetPair mover (subseq rank)) observer)
+          (frontier.fullReplacementPair mover (subseq rank)) observer)
         atTop (nhds
           (quittingTerminalSemanticDebtChange frontier.base cluster observer)) := by
       unfold quittingTerminalSemanticDebtChange
@@ -103,7 +100,7 @@ theorem exists_fullResetEndpointCluster
             |>.comp hsource)
     exact le_of_tendsto_of_tendsto hleft hright
       (Eventually.of_forall fun rank ↦
-        frontier.normalizedDebtDirection_le_fullResetDebtChange
+        frontier.normalizedDebtDirection_le_fullReplacementDebtChange
           mover observer (subseq rank))
   have hmoverEq :
       quittingTerminalSemanticDebtChange frontier.base cluster mover.1 =
@@ -113,7 +110,7 @@ theorem exists_fullResetEndpointCluster
     have hright : Tendsto (fun rank ↦
         quittingTerminalSemanticDebtChange
           (frontier.sourcePair (subseq rank))
-          (frontier.fullResetPair mover (subseq rank)) mover.1)
+          (frontier.fullReplacementPair mover (subseq rank)) mover.1)
         atTop (nhds
           (quittingTerminalSemanticDebtChange frontier.base cluster mover.1)) := by
       unfold quittingTerminalSemanticDebtChange
@@ -123,42 +120,41 @@ theorem exists_fullResetEndpointCluster
             |>.comp hsource)
     have heq : (fun rank ↦
         quittingStoppingLawNormalizedDebtDirection reward
-          (frontier.profiles (frontier.subseq (subseq rank))) mover.1
-          (frontier.bestResponse mover (frontier.subseq (subseq rank)))
-          (frontier.lambda (frontier.subseq (subseq rank)))
-          (frontier.lambda_pos (frontier.subseq (subseq rank))).le
-          (frontier.lambda_le_one (frontier.subseq (subseq rank))) mover.1) =
+          (frontier.source (subseq rank)) mover.1
+          (frontier.replacement mover (subseq rank))
+          (frontier.scale (subseq rank))
+          (frontier.scale_pos (subseq rank)).le
+          (frontier.scale_le_one (subseq rank)) mover.1) =
         (fun rank ↦ quittingTerminalSemanticDebtChange
           (frontier.sourcePair (subseq rank))
-          (frontier.fullResetPair mover (subseq rank)) mover.1) := by
+          (frontier.fullReplacementPair mover (subseq rank)) mover.1) := by
       funext rank
-      exact frontier.normalizedDebtDirection_self_eq_fullResetDebtChange
+      exact frontier.normalizedDebtDirection_self_eq_fullReplacementDebtChange
         mover (subseq rank)
     change Tendsto (fun rank ↦
       quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq (subseq rank))) mover.1
-        (frontier.bestResponse mover (frontier.subseq (subseq rank)))
-        (frontier.lambda (frontier.subseq (subseq rank)))
-        (frontier.lambda_pos (frontier.subseq (subseq rank))).le
-        (frontier.lambda_le_one (frontier.subseq (subseq rank))) mover.1)
+        (frontier.source (subseq rank)) mover.1
+        (frontier.replacement mover (subseq rank))
+        (frontier.scale (subseq rank))
+        (frontier.scale_pos (subseq rank)).le
+        (frontier.scale_le_one (subseq rank)) mover.1)
       atTop (nhds (frontier.tangent mover mover.1)) at hleft
     rw [heq] at hleft
     exact (tendsto_nhds_unique hleft hright).symm
-  refine ⟨⟨cluster, subseq, hcluster, hsubseq,
-    frontier.subseq_strictMono.comp hsubseq, ?_, hcoordinate, hmoverEq⟩⟩
+  refine ⟨⟨cluster, subseq, hcluster, hsubseq, ?_, hcoordinate, hmoverEq⟩⟩
   change Tendsto (endpoint ∘ subseq) atTop (nhds cluster)
   exact hendpoint
 
-namespace FullResetEndpointCluster
+namespace FullReplacementCluster
 
-variable {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-  {mover : {who // who ∈ frontier.active}}
+variable {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+  {mover : {who // who ∈ frontier.positiveDebtSupport}}
 
 /-- On a flat minimum-fiber endpoint, every coordinatewise convexity
 inequality is an equality.  The nonnegative coordinate defects have zero
 sum. -/
 theorem debtChange_eq_tangent_of_flat_of_minimumFiber
-    (endpoint : FullResetEndpointCluster frontier mover)
+    (endpoint : FullReplacementCluster frontier mover)
     (hflat : ∑ observer, frontier.tangent mover observer = 0)
     (hminimumFiber :
       quittingTerminalSemanticDebtSum endpoint.cluster =
@@ -188,9 +184,9 @@ theorem debtChange_eq_tangent_of_flat_of_minimumFiber
   linarith
 
 /-- Exact vanishing-regret extraction makes the mover's debt vanish at every
-full-reset endpoint cluster, independently of total slope or fiber. -/
+full-replacement endpoint cluster, independently of total slope or fiber. -/
 theorem mover_debt_eq_zero
-    (endpoint : FullResetEndpointCluster frontier mover) :
+    (endpoint : FullReplacementCluster frontier mover) :
     quittingTerminalSemanticDebt endpoint.cluster mover.1 = 0 := by
   have hchange := endpoint.mover_excess_eq
   have hexactDiagonal := frontier.tangent_diagonal_eq mover
@@ -201,17 +197,17 @@ theorem mover_debt_eq_zero
 diagonal, has positive debt support properly contained in the base active
 support. -/
 theorem positiveDebtSupport_ssubset_of_exactDiagonal_of_flat_of_noEntry_of_minimumFiber
-    (endpoint : FullResetEndpointCluster frontier mover)
+    (endpoint : FullReplacementCluster frontier mover)
     (hflat : ∑ observer, frontier.tangent mover observer = 0)
     (hnoEntry :
       ¬ HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent)
+        frontier.base frontier.positiveDebtSupport frontier.tangent)
     (hminimumFiber :
       quittingTerminalSemanticDebtSum endpoint.cluster =
         quittingTerminalSemanticDebtSum frontier.base) :
     (Finset.univ.filter fun who ↦
         0 < quittingTerminalSemanticDebt endpoint.cluster who) ⊂
-      frontier.active := by
+      frontier.positiveDebtSupport := by
   have hchange := endpoint.debtChange_eq_tangent_of_flat_of_minimumFiber
     hflat hminimumFiber
   have hmoverZero := endpoint.mover_debt_eq_zero
@@ -226,7 +222,7 @@ theorem positiveDebtSupport_ssubset_of_exactDiagonal_of_flat_of_noEntry_of_minim
         quittingTerminalSemanticDebt frontier.base observer = 0 := by
       apply le_antisymm
       · exact le_of_not_gt (fun hpositive ↦
-          hinactive ((frontier.active_iff observer).2 hpositive))
+          hinactive ((frontier.positiveDebtSupport_iff observer).2 hpositive))
       · exact hbaseNonneg
     have htangentNonneg : 0 ≤ frontier.tangent mover observer :=
       frontier.tangent_inactive_nonneg mover observer hbaseZero
@@ -253,56 +249,56 @@ theorem positiveDebtSupport_ssubset_of_exactDiagonal_of_flat_of_noEntry_of_minim
 
 /-- The support deflation lowers the finite cardinal rank. -/
 theorem positiveDebtSupport_card_lt_of_exactDiagonal_of_flat_of_noEntry_of_minimumFiber
-    (endpoint : FullResetEndpointCluster frontier mover)
+    (endpoint : FullReplacementCluster frontier mover)
     (hflat : ∑ observer, frontier.tangent mover observer = 0)
     (hnoEntry :
       ¬ HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent)
+        frontier.base frontier.positiveDebtSupport frontier.tangent)
     (hminimumFiber :
       quittingTerminalSemanticDebtSum endpoint.cluster =
         quittingTerminalSemanticDebtSum frontier.base) :
     (Finset.univ.filter fun who ↦
         0 < quittingTerminalSemanticDebt endpoint.cluster who).card <
-      frontier.active.card :=
+      frontier.positiveDebtSupport.card :=
   Finset.card_lt_card
     (endpoint.positiveDebtSupport_ssubset_of_exactDiagonal_of_flat_of_noEntry_of_minimumFiber
       hflat hnoEntry hminimumFiber)
 
-end FullResetEndpointCluster
+end FullReplacementCluster
 
-/-- In the potential arm, the selected mover has a full-reset endpoint
+/-- In the potential arm, the selected mover has a full-replacement endpoint
 cluster.  If such a cluster lies on the minimum-total-debt fiber and its
 diagonal came from vanishing-regret extraction, then active support strictly
 deflates and the stored second debtor strictly decreases. -/
-theorem exists_potentialCoDecrease_fullResetEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+theorem exists_potentialCoDecrease_fullReplacementEndpointCluster
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hpotential : HasQuittingStoppingLawFlatPotentialCoDecrease
-      frontier.active frontier.tangent)
+      frontier.positiveDebtSupport frontier.tangent)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hnoEntry :
       ¬ HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent) :
-    ∃ mover : {who // who ∈ frontier.active},
-      ∃ other ∈ frontier.active.erase mover.1,
+        frontier.base frontier.positiveDebtSupport frontier.tangent) :
+    ∃ mover : {who // who ∈ frontier.positiveDebtSupport},
+      ∃ other ∈ frontier.positiveDebtSupport.erase mover.1,
       frontier.tangent mover other < 0 ∧
-      Nonempty (FullResetEndpointCluster frontier mover) ∧
-      ∀ endpoint : FullResetEndpointCluster frontier mover,
+      Nonempty (FullReplacementCluster frontier mover) ∧
+      ∀ endpoint : FullReplacementCluster frontier mover,
         quittingTerminalSemanticDebtSum endpoint.cluster =
             quittingTerminalSemanticDebtSum frontier.base →
           (Finset.univ.filter fun who ↦
               0 < quittingTerminalSemanticDebt endpoint.cluster who) ⊂
-              frontier.active ∧
+              frontier.positiveDebtSupport ∧
             quittingTerminalSemanticDebt endpoint.cluster other <
               quittingTerminalSemanticDebt frontier.base other := by
   rcases hpotential with
     ⟨_potential, mover, hmover, other, hother, _hnonneg, _hseparation,
       _hmax, _hmoverLoss, hotherDecrease⟩
-  let activeMover : {who // who ∈ frontier.active} := ⟨mover, hmover⟩
+  let activeMover : {who // who ∈ frontier.positiveDebtSupport} := ⟨mover, hmover⟩
   have htangentOther : frontier.tangent activeMover other < 0 := by
     simpa [activeMover, quittingActiveDebtTangentExtension, hmover] using
       hotherDecrease
   refine ⟨activeMover, other, hother, ?_,
-    frontier.exists_fullResetEndpointCluster activeMover, ?_⟩
+    frontier.exists_fullReplacementEndpointCluster activeMover, ?_⟩
   · exact htangentOther
   · intro endpoint hminimumFiber
     have hsupport :=
@@ -322,19 +318,19 @@ at most two, its selected mover and same-column co-decreased debtor exhaust
 the active support; both tangent entries are negative and every inactive
 entry is zero, contradicting flatness. -/
 theorem three_le_active_card_of_flatPotentialCoDecrease_of_noEntry
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hpotential : HasQuittingStoppingLawFlatPotentialCoDecrease
-      frontier.active frontier.tangent)
+      frontier.positiveDebtSupport frontier.tangent)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hnoEntry :
       ¬ HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent) :
-    3 ≤ frontier.active.card := by
+        frontier.base frontier.positiveDebtSupport frontier.tangent) :
+    3 ≤ frontier.positiveDebtSupport.card := by
   rcases hpotential with
     ⟨_potential, mover, hmover, other, hother, _hnonneg, _hseparation,
       _hmax, _hmoverLoss, hotherDecrease⟩
-  let activeMover : {who // who ∈ frontier.active} := ⟨mover, hmover⟩
-  have hotherMem : other ∈ frontier.active := (Finset.mem_erase.mp hother).2
+  let activeMover : {who // who ∈ frontier.positiveDebtSupport} := ⟨mover, hmover⟩
+  have hotherMem : other ∈ frontier.positiveDebtSupport := (Finset.mem_erase.mp hother).2
   have hotherNe : other ≠ mover := (Finset.mem_erase.mp hother).1
   have hmoverNe : mover ≠ other := Ne.symm hotherNe
   have htangentOther : frontier.tangent activeMover other < 0 := by
@@ -342,10 +338,10 @@ theorem three_le_active_card_of_flatPotentialCoDecrease_of_noEntry
       hotherDecrease
   have htangentMover : frontier.tangent activeMover mover < 0 := by
     rw [frontier.tangent_diagonal_eq activeMover]
-    linarith [(frontier.active_iff mover).1 hmover]
+    linarith [(frontier.positiveDebtSupport_iff mover).1 hmover]
   by_contra hcard
-  have hcardLe : frontier.active.card ≤ 2 := by omega
-  have hpairSubset : ({mover, other} : Finset ι) ⊆ frontier.active := by
+  have hcardLe : frontier.positiveDebtSupport.card ≤ 2 := by omega
+  have hpairSubset : ({mover, other} : Finset ι) ⊆ frontier.positiveDebtSupport := by
     intro who hwho
     simp only [Finset.mem_insert, Finset.mem_singleton] at hwho
     rcases hwho with rfl | rfl
@@ -353,14 +349,14 @@ theorem three_le_active_card_of_flatPotentialCoDecrease_of_noEntry
     · exact hotherMem
   have hpairCard : ({mover, other} : Finset ι).card = 2 :=
     Finset.card_pair hmoverNe
-  have hactiveEq : ({mover, other} : Finset ι) = frontier.active := by
+  have hactiveEq : ({mover, other} : Finset ι) = frontier.positiveDebtSupport := by
     apply Finset.eq_of_subset_of_card_le hpairSubset
     rw [hpairCard]
     exact hcardLe
   have htangentInactive : ∀ observer ∉ ({mover, other} : Finset ι),
       frontier.tangent activeMover observer = 0 := by
     intro observer hobserver
-    have hinactive : observer ∉ frontier.active := by
+    have hinactive : observer ∉ frontier.positiveDebtSupport := by
       simpa [← hactiveEq] using hobserver
     have hbaseNonneg := quittingTerminalSemanticDebt_nonneg_of_mem_carrier
       reward frontier.base_mem observer
@@ -368,7 +364,7 @@ theorem three_le_active_card_of_flatPotentialCoDecrease_of_noEntry
         quittingTerminalSemanticDebt frontier.base observer = 0 := by
       apply le_antisymm
       · exact le_of_not_gt (fun hpositive ↦
-          hinactive ((frontier.active_iff observer).2 hpositive))
+          hinactive ((frontier.positiveDebtSupport_iff observer).2 hpositive))
       · exact hbaseNonneg
     have htangentNonneg : 0 ≤ frontier.tangent activeMover observer :=
       frontier.tangent_inactive_nonneg activeMover observer hbaseZero
@@ -392,15 +388,15 @@ theorem three_le_active_card_of_flatPotentialCoDecrease_of_noEntry
 force the normalized positive charged-circulation arm.  The potential arm is
 excluded by `three_le_active_card_of_flatPotentialCoDecrease_of_noEntry`. -/
 theorem has_flatChargedCirculation_of_active_card_le_two_of_flat_of_noEntry
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (hcard : frontier.active.card ≤ 2)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (hcard : frontier.positiveDebtSupport.card ≤ 2)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hnoEntry :
       ¬ HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent) :
+        frontier.base frontier.positiveDebtSupport frontier.tangent) :
     HasQuittingStoppingLawFlatChargedCirculation
-      frontier.active frontier.tangent := by
-  rcases frontier.exhaustive_branch with hpositive |
+      frontier.positiveDebtSupport frontier.tangent := by
+  rcases frontier.exhaustiveAlternative with hpositive |
       ⟨_hflat, hentry⟩ |
       ⟨_hflat, _hnoEntry, hcirculation⟩ |
       ⟨_hflat, _hnoEntry, _hnoCirculation, hpotential⟩
@@ -414,6 +410,6 @@ theorem has_flatChargedCirculation_of_active_card_le_two_of_flat_of_noEntry
         hpotential hflat hnoEntry
     omega
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 
 end GameTheory

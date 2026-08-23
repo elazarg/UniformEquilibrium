@@ -39,7 +39,7 @@ loss. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverClock_strategicSplit
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n : ℕ) (hnever : packet.quitTime n = none)
@@ -65,7 +65,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverCl
   dsimp only
   let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
   let owner := quittingStoppingLawObserverAbsentOwner packet
-  have hdispatch := packet.observerAbsent_forcedOwnerDispatch habsent
+  have hdispatch := packet.observerAbsent_forcedOwnerDispatch
+    (witness := witness) habsent
   unfold HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch at hdispatch
   rcases hdispatch with
     ⟨howner, _hownerNe, hlowerPos, _hside, hmassLower,
@@ -178,7 +179,7 @@ prefix of the terminal mass. -/
 theorem observerAbsent_neverClock_certifiedEndpointFlip
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n : ℕ) (hnever : packet.quitTime n = none)
@@ -291,7 +292,7 @@ to the stopping time being infinite. -/
 theorem observerAbsent_anyClock_certifiedEndpointFlip
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n : ℕ) (δ : ℝ) (hδ : 0 < δ) :
@@ -355,7 +356,7 @@ theorem observerAbsent_anyClock_certifiedEndpointFlip
         htime δ hδ
   | some stop =>
       have hfinite := packet.observerAbsent_finiteClock_certifiedEndpointFlip
-        habsent n stop htime δ hδ
+        (witness := witness) habsent n stop htime δ hδ
       rcases hfinite with howner | hcontinue | hquit | hflip
       · left
         obtain ⟨deviation, hgain⟩ := howner

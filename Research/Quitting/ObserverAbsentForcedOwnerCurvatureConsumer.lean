@@ -36,7 +36,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 def HasObserverAbsentForcedOwnerCurvatureRow
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ) : Prop :=
   let owner := quittingStoppingLawObserverAbsentOwner packet
@@ -74,15 +74,16 @@ or a positive same-witness rectangle row. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_forcedOwnerCurvatureRows
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val) :
     ∀ n time,
       (match packet.quitTime n with
         | some stop => time < stop
         | none => True) →
-      HasObserverAbsentForcedOwnerCurvatureRow packet n time := by
-  have hdispatch := packet.observerAbsent_forcedOwnerDispatch habsent
+      HasObserverAbsentForcedOwnerCurvatureRow (witness := witness) packet n time := by
+  have hdispatch := packet.observerAbsent_forcedOwnerDispatch
+    (witness := witness) habsent
   unfold HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch at hdispatch
   rcases hdispatch with
     ⟨howner, _hownerObserver, _hlower, _hside, _hmassLower,

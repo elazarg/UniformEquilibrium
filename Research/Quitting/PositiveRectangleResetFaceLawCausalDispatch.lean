@@ -38,7 +38,7 @@ namespace QuittingStoppingLawVanishingDebtRectangleSequence
 theorem exists_positiveObserver_carrierResetFaceLawPoint
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (hpositive : 0 < reward packet.terminal packet.observer) :
@@ -92,7 +92,8 @@ theorem exists_positiveObserver_carrierResetFaceLawPoint
       (nhds (point.2 (some packet.terminal))) :=
     ((continuous_apply (some packet.terminal)).comp continuous_snd).tendsto
       point |>.comp hendpoint
-  have hdispatch := packet.observerAbsent_forcedOwnerDispatch habsent
+  have hdispatch := packet.observerAbsent_forcedOwnerDispatch
+    (witness := witness) habsent
   unfold HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch at hdispatch
   rcases hdispatch with
     ⟨_howner, _hownerNe, _hlowerPos, _hside, hmassLower,
@@ -114,7 +115,7 @@ the reset observer. -/
 theorem exists_positiveObserver_resetFaceConcentratedPacket_of_collision
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (hpositive : 0 < reward packet.terminal packet.observer)
@@ -137,7 +138,7 @@ theorem exists_positiveObserver_resetFaceConcentratedPacket_of_collision
         Nonempty (QuittingReprojectionConcentratedPacket
           reward profiles packet.observer exact cutoff scale) := by
   obtain ⟨point, _subseq, hpoint, _hsubseq, _hlimit, hreset, hmass⟩ :=
-    packet.exists_positiveObserver_carrierResetFaceLawPoint
+    packet.exists_positiveObserver_carrierResetFaceLawPoint (witness := witness)
       habsent hpositive
   have hmassPos : 0 < point.2 (some packet.terminal) :=
     packet.observerAbsentMassLower_pos.trans_le hmass

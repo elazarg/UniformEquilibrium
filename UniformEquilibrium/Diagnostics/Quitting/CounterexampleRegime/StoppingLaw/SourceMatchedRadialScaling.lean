@@ -36,29 +36,29 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- The actual reset strategy which realizes one extracted normalized chord at
 one selected common-source rank. -/
 def sourceMatchedInnerResetStrategy
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     (quittingGame reward).BehaviorStrategy mover.1 :=
   quittingStoppingLawMixtureBehaviorStrategy reward mover.1
-    (frontier.profiles (frontier.subseq rank) mover.1)
-    (frontier.bestResponse mover (frontier.subseq rank))
-    (frontier.lambda (frontier.subseq rank))
-    (frontier.lambda_pos (frontier.subseq rank)).le
-    (frontier.lambda_le_one (frontier.subseq rank))
+    (frontier.source rank mover.1)
+    (frontier.replacement mover rank)
+    (frontier.scale rank)
+    (frontier.scale_pos rank).le
+    (frontier.scale_le_one rank)
 
 /-- A literal radial scaling of one source-matched reset.  The outer weight is
 independent of the frontier reset scale. -/
 def sourceMatchedRadialResetProfile
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active})
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport})
     (weight : ℝ) (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1) :
     (quittingGame reward).BehaviorProfile :=
-  let source := frontier.profiles (frontier.subseq rank)
+  let source := frontier.source rank
   Function.update source mover.1
     (quittingStoppingLawMixtureBehaviorStrategy reward mover.1
       (source mover.1)
@@ -68,32 +68,32 @@ def sourceMatchedRadialResetProfile
 /-- Debt direction of the radial reset, normalized by the original frontier
 scale rather than by the outer coefficient. -/
 def sourceMatchedRadialDebtDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active})
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport})
     (weight : ℝ) (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1)
     (observer : ι) : ℝ :=
   quittingTerminalSemanticDebtChange
       (quittingTerminalSemanticPair reward
-        (frontier.profiles (frontier.subseq rank)))
+        (frontier.source rank))
       (quittingTerminalSemanticPair reward
         (frontier.sourceMatchedRadialResetProfile rank mover weight
           hweight0 hweight1)) observer /
-    frontier.lambda (frontier.subseq rank)
+    frontier.scale rank
 
 /-- The total normalized debt slope of one actual source-matched reset is the
 sum of its normalized coordinate directions. -/
 theorem sourceMatched_totalDebtDirection_eq_sum
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     (quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
             (Function.update
-              (frontier.profiles (frontier.subseq rank)) mover.1
+              (frontier.source rank) mover.1
               (frontier.sourceMatchedInnerResetStrategy rank mover))) -
         quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq rank)))) /
-        frontier.lambda (frontier.subseq rank) =
+            (frontier.source rank))) /
+        frontier.scale rank =
       ∑ observer, frontier.actualDebtDirection rank mover observer := by
   unfold quittingTerminalSemanticDebtSum actualDebtDirection
     quittingStoppingLawNormalizedDebtDirection
@@ -108,8 +108,8 @@ radial reset column is nonnegative coordinatewise.  After normalization by the
 frontier scale it is bounded by the normalized source excess plus the outer
 weight times the full column's total normalized slope. -/
 theorem sourceMatchedRadialDebtDirection_gap_bounds
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (rank : ℕ) (mover : {who // who ∈ frontier.active})
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (rank : ℕ) (mover : {who // who ∈ frontier.positiveDebtSupport})
     (observer : ι) (weight : ℝ)
     (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1) :
     0 ≤ weight * frontier.actualDebtDirection rank mover observer -
@@ -120,12 +120,12 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
             hweight0 hweight1 observer ≤
         (quittingTerminalSemanticDebtSum
               (quittingTerminalSemanticPair reward
-                (frontier.profiles (frontier.subseq rank))) -
+                (frontier.source rank)) -
             quittingTerminalSemanticDebtSum frontier.base) /
-              frontier.lambda (frontier.subseq rank) +
+              frontier.scale rank +
           weight *
             (∑ who, frontier.actualDebtDirection rank mover who) := by
-  let sourceProfile := frontier.profiles (frontier.subseq rank)
+  let sourceProfile := frontier.source rank
   let endpointStrategy := frontier.sourceMatchedInnerResetStrategy rank mover
   let endpointProfile := Function.update sourceProfile mover.1 endpointStrategy
   let radialProfile := frontier.sourceMatchedRadialResetProfile rank mover
@@ -151,12 +151,12 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
         endpointStrategy weight epsilon hweight0 hweight1 hnear
   dsimp only at hraw
   rw [Function.update_eq_self] at hraw
-  have hlambda := frontier.lambda_pos (frontier.subseq rank)
+  have hlambda := frontier.scale_pos rank
   have hgapIdentity :
       ((1 - weight) * quittingTerminalSemanticDebt sourcePair observer +
             weight * quittingTerminalSemanticDebt endpointPair observer -
           quittingTerminalSemanticDebt radialPair observer) /
-          frontier.lambda (frontier.subseq rank) =
+          frontier.scale rank =
         weight * frontier.actualDebtDirection rank mover observer -
           frontier.sourceMatchedRadialDebtDirection rank mover weight
             hweight0 hweight1 observer := by
@@ -171,7 +171,7 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
   have htotalIdentity :
       (quittingTerminalSemanticDebtSum endpointPair -
           quittingTerminalSemanticDebtSum sourcePair) /
-          frontier.lambda (frontier.subseq rank) =
+          frontier.scale rank =
         ∑ who, frontier.actualDebtDirection rank mover who := by
     dsimp only [endpointPair, sourcePair, endpointProfile, sourceProfile]
     exact frontier.sourceMatched_totalDebtDirection_eq_sum rank mover
@@ -181,25 +181,25 @@ theorem sourceMatchedRadialDebtDirection_gap_bounds
     ((1 - weight) * quittingTerminalSemanticDebt sourcePair observer +
           weight * quittingTerminalSemanticDebt endpointPair observer -
         quittingTerminalSemanticDebt radialPair observer) /
-      frontier.lambda (frontier.subseq rank) at hlower
+      frontier.scale rank at hlower
   change
     ((1 - weight) * quittingTerminalSemanticDebt sourcePair observer +
           weight * quittingTerminalSemanticDebt endpointPair observer -
         quittingTerminalSemanticDebt radialPair observer) /
-        frontier.lambda (frontier.subseq rank) ≤
+        frontier.scale rank ≤
       (epsilon + weight *
         (quittingTerminalSemanticDebtSum endpointPair -
           quittingTerminalSemanticDebtSum sourcePair)) /
-        frontier.lambda (frontier.subseq rank) at hupper
+        frontier.scale rank at hupper
   rw [hgapIdentity] at hlower hupper
   have hupperIdentity :
       (epsilon + weight *
           (quittingTerminalSemanticDebtSum endpointPair -
             quittingTerminalSemanticDebtSum sourcePair)) /
-          frontier.lambda (frontier.subseq rank) =
+          frontier.scale rank =
         (quittingTerminalSemanticDebtSum sourcePair -
             quittingTerminalSemanticDebtSum frontier.base) /
-              frontier.lambda (frontier.subseq rank) +
+              frontier.scale rank +
           weight * (∑ who,
             frontier.actualDebtDirection rank mover who) := by
     rw [← htotalIdentity]
@@ -215,8 +215,8 @@ converges to that coefficient times the extracted tangent column.  The proof
 uses the source-excess rate retained by the frontier and the vanishing total
 slope of the flat column. -/
 theorem sourceMatchedRadialDebtDirection_tendsto
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (observer : ι)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (observer : ι)
     (weight : ℝ) (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1)
     (hflat : ∑ who, frontier.tangent mover who = 0) :
     Tendsto (fun rank =>
@@ -230,9 +230,9 @@ theorem sourceMatchedRadialDebtDirection_tendsto
   let upper : ℕ → ℝ := fun rank =>
     (quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq rank))) -
+            (frontier.source rank)) -
         quittingTerminalSemanticDebtSum frontier.base) /
-          frontier.lambda (frontier.subseq rank) +
+          frontier.scale rank +
       weight * (∑ who, frontier.actualDebtDirection rank mover who)
   have hsum : Tendsto (fun rank =>
       ∑ who, frontier.actualDebtDirection rank mover who) atTop (nhds 0) := by
@@ -243,7 +243,7 @@ theorem sourceMatchedRadialDebtDirection_tendsto
     tendsto_const_nhds
   have hupper : Tendsto upper atTop (nhds 0) := by
     have hcombined :=
-      frontier.source_excess_over_lambda_tendsto_zero.add
+      frontier.source_excess_over_scale_tendsto_zero.add
         (hweight.mul hsum)
     simpa only [upper, zero_add, mul_zero] using hcombined
   have herror : Tendsto error atTop (nhds 0) := by
@@ -270,10 +270,10 @@ theorem sourceMatchedRadialDebtDirection_tendsto
 coefficient in `[0, 1]` for each active mover.  Balance is preserved and the
 aggregate diagonal charge remains strictly positive. -/
 theorem exists_boundedRadialCirculationWeights
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
-      frontier.active frontier.tangent) :
-    ∃ weight : {who // who ∈ frontier.active} → ℝ,
+      frontier.positiveDebtSupport frontier.tangent) :
+    ∃ weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ,
       (∀ mover, 0 ≤ weight mover) ∧
       (∀ mover, weight mover ≤ 1) ∧
       (∀ observer,
@@ -284,7 +284,7 @@ theorem exists_boundedRadialCirculationWeights
   rcases hcirculation with ⟨mass, hmass, hbalance, hcharge⟩
   let budget : ℝ := ∑ mover, mass mover
   let denominator : ℝ := 1 + budget
-  let weight : {who // who ∈ frontier.active} → ℝ := fun mover =>
+  let weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ := fun mover =>
     mass mover / denominator
   have hbudget : 0 ≤ budget :=
     Finset.sum_nonneg fun mover _moverMem => hmass mover
@@ -336,11 +336,11 @@ into legal outer stopping-law mixture weights.  The finite sum of the literal
 normalized reset directions converges coordinatewise to zero, while its
 aggregate mover-diagonal charge converges to a strictly positive number. -/
 theorem exists_boundedRadialSourceMatchedCirculation
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
-      frontier.active frontier.tangent) :
-    ∃ weight : {who // who ∈ frontier.active} → ℝ,
+      frontier.positiveDebtSupport frontier.tangent) :
+    ∃ weight : {who // who ∈ frontier.positiveDebtSupport} → ℝ,
       ∃ hweight0 : ∀ mover, 0 ≤ weight mover,
       ∃ hweight1 : ∀ mover, weight mover ≤ 1,
       (∀ observer,
@@ -371,5 +371,5 @@ theorem exists_boundedRadialSourceMatchedCirculation
         (weight mover) (hweight0 mover) (hweight1 mover) (hflat mover)).neg
     simpa only [charge, mul_neg] using hsum
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 end GameTheory

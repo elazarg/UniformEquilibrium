@@ -31,7 +31,7 @@ sole residual of the observer-absent finite clock. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteClock_faceLoss
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -87,7 +87,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
   let owner := quittingStoppingLawObserverAbsentOwner packet
   let charge := quittingStoppingLawObserverAbsentMassLower packet *
     witness.terminalGap
-  have hdispatch := packet.observerAbsent_finiteClock_defectPolarity habsent
+  have hdispatch := packet.observerAbsent_finiteClock_defectPolarity
+    (witness := witness) habsent
     n stop hstop δ hδ
   rcases hdispatch with hrefusal | hcontinue | hquit | hrectangle
   · exact Or.inl hrefusal

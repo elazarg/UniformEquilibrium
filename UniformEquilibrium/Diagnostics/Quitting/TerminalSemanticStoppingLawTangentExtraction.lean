@@ -468,7 +468,7 @@ def quittingActiveDebtTangentGain
 /-- Final finite alternative attached to one extracted common-base
 paratangent family.  The first branch is a genuinely positive normalized total-debt
 slope.  All remaining branches use flat columns only. -/
-def IsQuittingStoppingLawTangentPipelineAlternative
+def IsQuittingStoppingLawTangentAlternative
     (base : QuittingTerminalSemanticPair ι) (active : Finset ι)
     (tangent : {who // who ∈ active} → ι → ℝ) : Prop :=
   (∃ mover, 0 < ∑ observer, tangent mover observer) ∨
@@ -498,7 +498,7 @@ slope, zero-debt support entry, a normalized positive charged balance, or a
 nonnegative-potential same-column co-decrease.  This statement does not claim
 that moving-source chords are based Bouligand tangents or that the charged
 balance integrates to a chronological circulation. -/
-theorem exists_commonBase_stoppingLawTangent_pipelineAlternative
+theorem exists_commonBase_stoppingLawTangent_alternative
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (base : QuittingTerminalSemanticPair ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
@@ -541,7 +541,7 @@ theorem exists_commonBase_stoppingLawTangent_pipelineAlternative
               (bestResponse mover (subseq rank)) (lambda (subseq rank))
               (hlambdaPos (subseq rank)).le (hlambdaLe (subseq rank)) observer)
             atTop (nhds (tangent mover observer))) ∧
-        IsQuittingStoppingLawTangentPipelineAlternative base active tangent := by
+        IsQuittingStoppingLawTangentAlternative base active tangent := by
   obtain ⟨bestResponse, subseq, tangent, hsubseq, hlambdaSubseqZero, htangent,
       hdiagonal, hinactiveNonneg, _hsumNonneg, hslope⟩ :=
     exists_commonBase_stoppingLawDebtTangentFamily

@@ -168,21 +168,20 @@ theorem exists_prescribedPassport_or_pureTimePassport_with_debtBound
 
 /-- The strengthened alternative holds eventually on the fixed tangent
 column, with the same vanishing error schedule as the production decoder. -/
-theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtPassportAlternative
+theorem QuittingPositiveMinimumDebtTangentFamily.exists_fixedVanishingDebtPassportAlternative
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
-    ∃ (mover : {who // who ∈ frontier.active}) (observer : ι) (charge : ℝ),
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
+    ∃ (mover : {who // who ∈ frontier.positiveDebtSupport}) (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧ 0 < charge ∧
       ∀ᶠ rank in atTop,
         HasQuittingStoppingLawVanishingDebtPassportAlternative reward
-          (frontier.profiles (frontier.subseq rank)) mover.1 observer
-          (frontier.bestResponse mover (frontier.subseq rank)) charge
+          (frontier.source rank) mover.1 observer
+          (frontier.replacement mover rank) charge
           (quittingStoppingLawAtomDecoderError charge rank) := by
   classical
-  have hactiveNonempty : frontier.active.Nonempty := by
+  have hactiveNonempty : frontier.positiveDebtSupport.Nonempty := by
     by_contra hempty
-    have hactiveEmpty : frontier.active = ∅ :=
+    have hactiveEmpty : frontier.positiveDebtSupport = ∅ :=
       Finset.not_nonempty_iff_eq_empty.mp hempty
     have hdebtZero : ∀ who,
         quittingTerminalSemanticDebt frontier.base who = 0 := by
@@ -190,7 +189,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtPassp
       have hnotPositive :
           ¬0 < quittingTerminalSemanticDebt frontier.base who := by
         intro hpositive
-        have hmem := (frontier.active_iff who).2 hpositive
+        have hmem := (frontier.positiveDebtSupport_iff who).2 hpositive
         rw [hactiveEmpty] at hmem
         simp at hmem
       exact le_antisymm (le_of_not_gt hnotPositive)
@@ -201,50 +200,50 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtPassp
     simp only [hdebtZero, Finset.sum_const_zero] at hbasePositive
     exact (lt_irrefl 0) hbasePositive
   obtain ⟨mover, hmover⟩ := hactiveNonempty
-  let activeMover : {who // who ∈ frontier.active} := ⟨mover, hmover⟩
+  let activeMover : {who // who ∈ frontier.positiveDebtSupport} := ⟨mover, hmover⟩
   obtain ⟨observer, hobserverNe, hpositive⟩ :=
     frontier.exists_positiveOffDiagonal hmover
   let charge := frontier.tangent activeMover observer / 2
   have hcharge : 0 < charge := div_pos hpositive (by norm_num)
   have hchargeLt : charge < frontier.tangent activeMover observer := by
-    dsimp only [charge, activeMover]
-    linarith
+    dsimp only [charge]
+    exact half_lt_self hpositive
   have heventuallySlope : ∀ᶠ rank in atTop,
       charge ≤ quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover
-        (frontier.bestResponse activeMover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) observer :=
+        (frontier.source rank) mover
+        (frontier.replacement activeMover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) observer :=
     (frontier.tangent_tendsto activeMover observer).eventually
       (Ioi_mem_nhds hchargeLt) |>.mono fun _ hlt ↦ hlt.le
   refine ⟨activeMover, observer, charge, hobserverNe, hcharge, ?_⟩
   filter_upwards [heventuallySlope] with rank hslopeNormalized
-  have hlambda := frontier.lambda_pos (frontier.subseq rank)
-  have hslope : frontier.lambda (frontier.subseq rank) * charge ≤
+  have hlambda := frontier.scale_pos rank
+  have hslope : frontier.scale rank * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
             (Function.update
-              (frontier.profiles (frontier.subseq rank)) mover
+              (frontier.source rank) mover
               (quittingStoppingLawMixtureBehaviorStrategy reward mover
-                (frontier.profiles (frontier.subseq rank) mover)
-                (frontier.bestResponse activeMover (frontier.subseq rank))
-                (frontier.lambda (frontier.subseq rank)) hlambda.le
-                (frontier.lambda_le_one (frontier.subseq rank))))) observer -
+                (frontier.source rank mover)
+                (frontier.replacement activeMover rank)
+                (frontier.scale rank) hlambda.le
+                (frontier.scale_le_one rank)))) observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq rank))) observer := by
+            (frontier.source rank)) observer := by
     unfold quittingStoppingLawNormalizedDebtDirection
       quittingTerminalSemanticDebtChange quittingStoppingLawResetProfile
       at hslopeNormalized
     have hscaled := (le_div_iff₀ hlambda).mp hslopeNormalized
     nlinarith
   exact exists_prescribedPassport_or_pureTimePassport_with_debtBound
-    reward (frontier.profiles (frontier.subseq rank)) mover observer
-      (frontier.bestResponse activeMover (frontier.subseq rank))
-      (frontier.lambda (frontier.subseq rank)) charge
+    reward (frontier.source rank) mover observer
+      (frontier.replacement activeMover rank)
+      (frontier.scale rank) charge
       (quittingStoppingLawAtomDecoderError charge rank) hlambda
-      (frontier.lambda_le_one (frontier.subseq rank)) hcharge
+      (frontier.scale_le_one rank) hcharge
       (quittingStoppingLawAtomDecoderError_pos hcharge rank)
       (quittingStoppingLawAtomDecoderError_le hcharge.le rank)
       hslope
@@ -254,9 +253,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtPassp
 /-- Prescribed-law branch with one fixed high/low outcome passport. -/
 structure QuittingStoppingLawPrescribedPassportSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
-  mover : {who // who ∈ frontier.active}
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) where
+  mover : {who // who ∈ frontier.positiveDebtSupport}
   observer : ι
   charge : ℝ
   observer_ne_mover : observer ≠ mover.1
@@ -269,18 +267,17 @@ structure QuittingStoppingLawPrescribedPassportSequence
     charge / 2 ≤
       (Fintype.card (QuittingTerminalOutcome ι) : ℝ) ^ 2 *
         quittingTerminalCrossLawAtom reward
-          (frontier.profiles (frontier.subseq (rank n)))
-          (Function.update (frontier.profiles (frontier.subseq (rank n)))
-            mover.1 (frontier.bestResponse mover
-              (frontier.subseq (rank n)))) observer high low
+          (frontier.source (rank n))
+          (Function.update (frontier.source (rank n))
+            mover.1 (frontier.replacement mover
+              (rank n))) observer high low
 
 /-- Pure-time rectangle branch with one fixed high/low outcome passport and
 vanishing observer debt at its high-law endpoint. -/
 structure QuittingStoppingLawVanishingDebtPassportSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
-  mover : {who // who ∈ frontier.active}
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) where
+  mover : {who // who ∈ frontier.positiveDebtSupport}
   observer : ι
   charge : ℝ
   observer_ne_mover : observer ≠ mover.1
@@ -296,14 +293,14 @@ structure QuittingStoppingLawVanishingDebtPassportSequence
         quittingTerminalCrossLawAtom reward
           (Function.update
             (Function.update
-              (frontier.profiles (frontier.subseq (rank n))) mover.1
-              (frontier.bestResponse mover (frontier.subseq (rank n))))
+              (frontier.source (rank n)) mover.1
+              (frontier.replacement mover (rank n)))
             observer
             (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
           (Function.update
             (Function.update
-              (frontier.profiles (frontier.subseq (rank n))) mover.1
-              (frontier.profiles (frontier.subseq (rank n)) mover.1))
+              (frontier.source (rank n)) mover.1
+              (frontier.source (rank n) mover.1))
             observer
             (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
           observer high low
@@ -312,20 +309,19 @@ structure QuittingStoppingLawVanishingDebtPassportSequence
       (quittingTerminalSemanticPair reward
         (Function.update
           (Function.update
-            (frontier.profiles (frontier.subseq (rank n))) mover.1
-            (frontier.bestResponse mover (frontier.subseq (rank n))))
+            (frontier.source (rank n)) mover.1
+            (frontier.replacement mover (rank n)))
           observer
           (quittingPureTimeBehaviorStrategy reward observer (quitTime n))))
       observer) atTop (nhds 0)
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- **Fixed two-outcome passport extraction.**  The ordered high/low pair is
 constant along a strict subsequence in either branch. -/
 theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
     Nonempty (QuittingStoppingLawPrescribedPassportSequence frontier) ∨
       Nonempty (QuittingStoppingLawVanishingDebtPassportSequence frontier) := by
   classical
@@ -336,9 +332,9 @@ theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
       charge / 2 ≤
         (Fintype.card (QuittingTerminalOutcome ι) : ℝ) ^ 2 *
           quittingTerminalCrossLawAtom reward
-            (frontier.profiles (frontier.subseq rank))
-            (Function.update (frontier.profiles (frontier.subseq rank)) mover.1
-              (frontier.bestResponse mover (frontier.subseq rank)))
+            (frontier.source rank)
+            (Function.update (frontier.source rank) mover.1
+              (frontier.replacement mover rank))
             observer high low
   let Rectangle : ℕ → Prop := fun rank ↦
     ∃ quitTime : Option ℕ, ∃ high low : QuittingTerminalOutcome ι,
@@ -346,21 +342,21 @@ theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
         (Fintype.card (QuittingTerminalOutcome ι) : ℝ) ^ 2 *
           quittingTerminalCrossLawAtom reward
             (Function.update
-              (Function.update (frontier.profiles (frontier.subseq rank))
-                mover.1 (frontier.bestResponse mover (frontier.subseq rank)))
+              (Function.update (frontier.source rank)
+                mover.1 (frontier.replacement mover rank))
               observer
               (quittingPureTimeBehaviorStrategy reward observer quitTime))
             (Function.update
-              (Function.update (frontier.profiles (frontier.subseq rank))
-                mover.1 (frontier.profiles (frontier.subseq rank) mover.1))
+              (Function.update (frontier.source rank)
+                mover.1 (frontier.source rank mover.1))
               observer
               (quittingPureTimeBehaviorStrategy reward observer quitTime))
             observer high low ∧
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
             (Function.update
-              (Function.update (frontier.profiles (frontier.subseq rank))
-                mover.1 (frontier.bestResponse mover (frontier.subseq rank)))
+              (Function.update (frontier.source rank)
+                mover.1 (frontier.replacement mover rank))
               observer
               (quittingPureTimeBehaviorStrategy reward observer quitTime)))
           observer ≤ quittingStoppingLawAtomDecoderError charge rank
@@ -461,14 +457,14 @@ theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
             quittingTerminalCrossLawAtom reward
               (Function.update
                 (Function.update
-                  (frontier.profiles (frontier.subseq (rank n))) mover.1
-                  (frontier.bestResponse mover (frontier.subseq (rank n))))
+                  (frontier.source (rank n)) mover.1
+                  (frontier.replacement mover (rank n)))
                 observer
                 (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
               (Function.update
                 (Function.update
-                  (frontier.profiles (frontier.subseq (rank n))) mover.1
-                  (frontier.profiles (frontier.subseq (rank n)) mover.1))
+                  (frontier.source (rank n)) mover.1
+                  (frontier.source (rank n) mover.1))
                 observer
                 (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
               observer pair.1 pair.2 := by
@@ -493,8 +489,8 @@ theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
           (quittingTerminalSemanticPair reward
             (Function.update
               (Function.update
-                (frontier.profiles (frontier.subseq (rank n))) mover.1
-                (frontier.bestResponse mover (frontier.subseq (rank n))))
+                (frontier.source (rank n)) mover.1
+                (frontier.replacement mover (rank n)))
               observer
               (quittingPureTimeBehaviorStrategy reward observer (quitTime n))))
           observer) atTop (nhds 0) := by
@@ -508,6 +504,6 @@ theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
     exact Or.inr ⟨⟨mover, observer, charge, hobserverNe, hcharge,
       rank, hrank, quitTime, pair.1, pair.2, hatom, hdebt⟩⟩
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 
 end GameTheory

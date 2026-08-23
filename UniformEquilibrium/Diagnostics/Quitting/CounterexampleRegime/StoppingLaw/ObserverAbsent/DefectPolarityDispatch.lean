@@ -31,7 +31,7 @@ same-witness rectangle.  The last alternative is the sole uncompiled term. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteClock_defectPolarity
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -73,8 +73,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
     witness.terminalGap
   have hchargePos : 0 < charge := mul_pos
     packet.observerAbsentMassLower_pos witness.terminalGap_pos
-  have hsplit := packet.observerAbsent_finiteClock_strategicSplit habsent
-    n stop hstop δ hδ
+  have hsplit := packet.observerAbsent_finiteClock_strategicSplit
+    (witness := witness) habsent n stop hstop δ hδ
   rcases hsplit with houtside | ⟨deviation, hdeviation⟩
   · have hdispatch :=
       exists_continueDeviation_or_fixedQuitAtom_or_fixedRectangle_of_forcedOwnerOccupation

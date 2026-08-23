@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.SlopeFrontier
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.SlopeFrontier
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.VanishingDebtAtomAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeMarkedRowProvenance
 
@@ -37,21 +37,20 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- The strengthened decoder holds eventually on the fixed tangent column.
 Unlike the older fixed-error decoder, its rectangle endpoint is an
 asymptotic best response for the observer. -/
-theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtAtomAlternative
+theorem QuittingPositiveMinimumDebtTangentFamily.exists_fixedVanishingDebtAtomAlternative
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
-    ∃ (mover : {who // who ∈ frontier.active}) (observer : ι) (charge : ℝ),
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
+    ∃ (mover : {who // who ∈ frontier.positiveDebtSupport}) (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧ 0 < charge ∧
       ∀ᶠ rank in atTop,
         HasQuittingStoppingLawVanishingDebtAtomAlternative reward
-          (frontier.profiles (frontier.subseq rank)) mover.1 observer
-          (frontier.bestResponse mover (frontier.subseq rank)) charge
+          (frontier.source rank) mover.1 observer
+          (frontier.replacement mover rank) charge
           (quittingStoppingLawAtomDecoderError charge rank) := by
   classical
-  have hactiveNonempty : frontier.active.Nonempty := by
+  have hactiveNonempty : frontier.positiveDebtSupport.Nonempty := by
     by_contra hempty
-    have hactiveEmpty : frontier.active = ∅ :=
+    have hactiveEmpty : frontier.positiveDebtSupport = ∅ :=
       Finset.not_nonempty_iff_eq_empty.mp hempty
     have hdebtZero : ∀ who,
         quittingTerminalSemanticDebt frontier.base who = 0 := by
@@ -59,7 +58,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtAtomA
       have hnotPositive :
           ¬0 < quittingTerminalSemanticDebt frontier.base who := by
         intro hpositive
-        have hmem := (frontier.active_iff who).2 hpositive
+        have hmem := (frontier.positiveDebtSupport_iff who).2 hpositive
         rw [hactiveEmpty] at hmem
         simp at hmem
       exact le_antisymm (le_of_not_gt hnotPositive)
@@ -70,50 +69,54 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtAtomA
     simp only [hdebtZero, Finset.sum_const_zero] at hbasePositive
     exact (lt_irrefl 0) hbasePositive
   obtain ⟨mover, hmover⟩ := hactiveNonempty
-  let activeMover : {who // who ∈ frontier.active} := ⟨mover, hmover⟩
+  let activeMover : {who // who ∈ frontier.positiveDebtSupport} := ⟨mover, hmover⟩
   obtain ⟨observer, hobserverNe, hpositive⟩ :=
     frontier.exists_positiveOffDiagonal hmover
   let charge := frontier.tangent activeMover observer / 2
-  have hcharge : 0 < charge := div_pos hpositive (by norm_num)
+  have hpositive' : 0 < frontier.tangent activeMover observer := by
+    have heq : activeMover = ⟨mover, hmover⟩ := Subtype.ext (by rfl)
+    rw [heq]
+    exact hpositive
+  have hcharge : 0 < charge := div_pos hpositive' (by norm_num)
   have hchargeLt : charge < frontier.tangent activeMover observer := by
     dsimp only [charge, activeMover]
     linarith
   have heventuallySlope : ∀ᶠ rank in atTop,
       charge ≤ quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover
-        (frontier.bestResponse activeMover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) observer :=
+        (frontier.source rank) mover
+        (frontier.replacement activeMover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) observer :=
     (frontier.tangent_tendsto activeMover observer).eventually
       (Ioi_mem_nhds hchargeLt) |>.mono fun _ hlt ↦ hlt.le
   refine ⟨activeMover, observer, charge, hobserverNe, hcharge, ?_⟩
   filter_upwards [heventuallySlope] with rank hslopeNormalized
-  have hlambda := frontier.lambda_pos (frontier.subseq rank)
-  have hslope : frontier.lambda (frontier.subseq rank) * charge ≤
+  have hlambda := frontier.scale_pos rank
+  have hslope : frontier.scale rank * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
             (Function.update
-              (frontier.profiles (frontier.subseq rank)) mover
+              (frontier.source rank) mover
               (quittingStoppingLawMixtureBehaviorStrategy reward mover
-                (frontier.profiles (frontier.subseq rank) mover)
-                (frontier.bestResponse activeMover (frontier.subseq rank))
-                (frontier.lambda (frontier.subseq rank)) hlambda.le
-                (frontier.lambda_le_one (frontier.subseq rank))))) observer -
+                (frontier.source rank mover)
+                (frontier.replacement activeMover rank)
+                (frontier.scale rank) hlambda.le
+                (frontier.scale_le_one rank)))) observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq rank))) observer := by
+            (frontier.source rank)) observer := by
     unfold quittingStoppingLawNormalizedDebtDirection
       quittingTerminalSemanticDebtChange quittingStoppingLawResetProfile
       at hslopeNormalized
     have hscaled := (le_div_iff₀ hlambda).mp hslopeNormalized
     nlinarith
   exact exists_prescribedAtom_or_pureTimeRectangleAtom_with_debtBound
-    reward (frontier.profiles (frontier.subseq rank)) mover observer
-      (frontier.bestResponse activeMover (frontier.subseq rank))
-      (frontier.lambda (frontier.subseq rank)) charge
+    reward (frontier.source rank) mover observer
+      (frontier.replacement activeMover rank)
+      (frontier.scale rank) charge
       (quittingStoppingLawAtomDecoderError charge rank) hlambda
-      (frontier.lambda_le_one (frontier.subseq rank)) hcharge
+      (frontier.scale_le_one rank) hcharge
       (quittingStoppingLawAtomDecoderError_pos hcharge rank)
       (quittingStoppingLawAtomDecoderError_le hcharge.le rank) hslope
 
@@ -124,9 +127,8 @@ strict subsequence.  The terminal label is allowed to vary; this branch has
 not yet acquired a strategic sign. -/
 structure QuittingStoppingLawPrescribedAtomSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
-  mover : {who // who ∈ frontier.active}
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) where
+  mover : {who // who ∈ frontier.positiveDebtSupport}
   observer : ι
   charge : ℝ
   observer_ne_mover : observer ≠ mover.1
@@ -138,10 +140,9 @@ structure QuittingStoppingLawPrescribedAtomSequence
     charge / 2 ≤
       (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
         quittingTerminalPayoffDifferenceAtom reward
-          (frontier.profiles (frontier.subseq (rank n)))
-          (Function.update (frontier.profiles (frontier.subseq (rank n)))
-            mover.1 (frontier.bestResponse mover
-              (frontier.subseq (rank n))))
+          (frontier.source (rank n))
+          (Function.update (frontier.source (rank n))
+            mover.1 (frontier.replacement mover (rank n)))
           observer (some terminal)
 
 /-- A fixed terminal rectangle along a literal strict subsequence.  Its
@@ -149,9 +150,8 @@ positive atom bound is uniform and the pure-time observer is an asymptotic
 best response at the target endpoint. -/
 structure QuittingStoppingLawVanishingDebtRectangleSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
-  mover : {who // who ∈ frontier.active}
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) where
+  mover : {who // who ∈ frontier.positiveDebtSupport}
   observer : ι
   charge : ℝ
   observer_ne_mover : observer ≠ mover.1
@@ -166,14 +166,14 @@ structure QuittingStoppingLawVanishingDebtRectangleSequence
         quittingTerminalPayoffDifferenceAtom reward
           (Function.update
             (Function.update
-              (frontier.profiles (frontier.subseq (rank n))) mover.1
-              (frontier.bestResponse mover (frontier.subseq (rank n))))
+              (frontier.source (rank n)) mover.1
+              (frontier.replacement mover (rank n)))
             observer
             (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
           (Function.update
             (Function.update
-              (frontier.profiles (frontier.subseq (rank n))) mover.1
-              (frontier.profiles (frontier.subseq (rank n)) mover.1))
+              (frontier.source (rank n)) mover.1
+              (frontier.source (rank n) mover.1))
             observer
             (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
           observer (some terminal)
@@ -182,8 +182,8 @@ structure QuittingStoppingLawVanishingDebtRectangleSequence
       (quittingTerminalSemanticPair reward
         (Function.update
           (Function.update
-            (frontier.profiles (frontier.subseq (rank n))) mover.1
-            (frontier.bestResponse mover (frontier.subseq (rank n))))
+            (frontier.source (rank n)) mover.1
+            (frontier.replacement mover (rank n)))
           observer
           (quittingPureTimeBehaviorStrategy reward observer (quitTime n))))
       observer) atTop (nhds 0)
@@ -191,8 +191,7 @@ structure QuittingStoppingLawVanishingDebtRectangleSequence
 /-- The terminal coordinate selected by a positive rectangle atom is nonzero. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.reward_ne_zero
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     reward packet.terminal packet.observer ≠ 0 := by
   intro hzero
@@ -206,23 +205,21 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.reward_ne_zero
 strictly positive. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.rewardBound_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     0 < quittingRewardBound reward := by
   have hbound := abs_reward_le_quittingRewardBound reward packet.terminal
     packet.observer
   exact (abs_pos.mpr packet.reward_ne_zero).trans_le hbound
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- **Fixed-label sequence dispatch.**  The unconditional off-diagonal
 tangent column yields either prescribed atoms infinitely often or a fixed
 terminal pure-time rectangle sequence whose observer debt vanishes. -/
 theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
     Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier) ∨
       Nonempty (QuittingStoppingLawVanishingDebtRectangleSequence frontier) := by
   classical
@@ -233,9 +230,9 @@ theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
       charge / 2 ≤
         (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
           quittingTerminalPayoffDifferenceAtom reward
-            (frontier.profiles (frontier.subseq rank))
-            (Function.update (frontier.profiles (frontier.subseq rank)) mover.1
-              (frontier.bestResponse mover (frontier.subseq rank)))
+            (frontier.source rank)
+            (Function.update (frontier.source rank) mover.1
+              (frontier.replacement mover rank))
             observer (some terminal)
   let Rectangle : ℕ → Prop := fun rank ↦
     ∃ quitTime : Option ℕ, ∃ terminal : {S : Finset ι // S.Nonempty},
@@ -243,21 +240,21 @@ theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
         (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
           quittingTerminalPayoffDifferenceAtom reward
             (Function.update
-              (Function.update (frontier.profiles (frontier.subseq rank))
-                mover.1 (frontier.bestResponse mover (frontier.subseq rank)))
+              (Function.update (frontier.source rank)
+                mover.1 (frontier.replacement mover rank))
               observer
               (quittingPureTimeBehaviorStrategy reward observer quitTime))
             (Function.update
-              (Function.update (frontier.profiles (frontier.subseq rank))
-                mover.1 (frontier.profiles (frontier.subseq rank) mover.1))
+              (Function.update (frontier.source rank)
+                mover.1 (frontier.source rank mover.1))
               observer
               (quittingPureTimeBehaviorStrategy reward observer quitTime))
             observer (some terminal) ∧
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
             (Function.update
-              (Function.update (frontier.profiles (frontier.subseq rank))
-                mover.1 (frontier.bestResponse mover (frontier.subseq rank)))
+              (Function.update (frontier.source rank)
+                mover.1 (frontier.replacement mover rank))
               observer
               (quittingPureTimeBehaviorStrategy reward observer quitTime)))
           observer ≤ quittingStoppingLawAtomDecoderError charge rank
@@ -295,11 +292,10 @@ theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
         charge / 2 ≤
           (Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
             quittingTerminalPayoffDifferenceAtom reward
-              (frontier.profiles (frontier.subseq (fixedRank n)))
+              (frontier.source (fixedRank n))
               (Function.update
-                (frontier.profiles (frontier.subseq (fixedRank n))) mover.1
-                (frontier.bestResponse mover
-                  (frontier.subseq (fixedRank n))))
+                (frontier.source (fixedRank n)) mover.1
+                (frontier.replacement mover (fixedRank n)))
               observer (some terminal) := by
       intro n
       have h := hterminalAt (terminalSubseq (n + labelStart))
@@ -353,14 +349,14 @@ theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
             quittingTerminalPayoffDifferenceAtom reward
               (Function.update
                 (Function.update
-                  (frontier.profiles (frontier.subseq (rank n))) mover.1
-                  (frontier.bestResponse mover (frontier.subseq (rank n))))
+                  (frontier.source (rank n)) mover.1
+                  (frontier.replacement mover (rank n)))
                 observer
                 (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
               (Function.update
                 (Function.update
-                  (frontier.profiles (frontier.subseq (rank n))) mover.1
-                  (frontier.profiles (frontier.subseq (rank n)) mover.1))
+                  (frontier.source (rank n)) mover.1
+                  (frontier.source (rank n) mover.1))
                 observer
                 (quittingPureTimeBehaviorStrategy reward observer (quitTime n)))
               observer (some terminal) := by
@@ -378,8 +374,8 @@ theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
           (quittingTerminalSemanticPair reward
             (Function.update
               (Function.update
-                (frontier.profiles (frontier.subseq (rank n))) mover.1
-                (frontier.bestResponse mover (frontier.subseq (rank n))))
+                (frontier.source (rank n)) mover.1
+                (frontier.replacement mover (rank n)))
               observer
               (quittingPureTimeBehaviorStrategy reward observer (quitTime n))))
           observer) atTop (nhds 0) := by
@@ -393,7 +389,7 @@ theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
     exact Or.inr ⟨⟨mover, observer, charge, hobserverNe, hcharge,
       rank, hrank, quitTime, terminal, hatom, hdebt⟩⟩
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 
 /-! ## Exhaustive terminal orientation -/
 
@@ -401,8 +397,7 @@ end QuittingCounterexampleStoppingLawFrontier
 theorem.  They are deliberately stated on the fixed literal terminal label. -/
 def HasQuittingStoppingLawOpenRectangleOrientation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : Prop :=
   packet.observer ∉ packet.terminal.val ∨
     packet.terminal.val.card = 1 ∨
@@ -412,8 +407,7 @@ def HasQuittingStoppingLawOpenRectangleOrientation
 is precisely a positive-reward collision containing the observer. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.openOrientation_or_positiveTargetCollision
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     HasQuittingStoppingLawOpenRectangleOrientation packet ∨
       (packet.observer ∈ packet.terminal.val ∧
@@ -438,19 +432,17 @@ response.  In particular, a later prefix-stack construction can target this
 unchanged suffix profile. -/
 def quittingStoppingLawRectangleTargetProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : (quittingGame reward).BehaviorProfile :=
-  Function.update (frontier.profiles (frontier.subseq (packet.rank n)))
+  Function.update (frontier.source (packet.rank n))
     packet.mover.1
-    (frontier.bestResponse packet.mover (frontier.subseq (packet.rank n)))
+    (frontier.replacement packet.mover (packet.rank n))
 
 /-- The normalized target-mass scale supplied by a positive rectangle atom. -/
 def quittingStoppingLawPositiveTargetMassLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : ℝ :=
   (packet.charge / 4) /
     ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
@@ -459,8 +451,7 @@ def quittingStoppingLawPositiveTargetMassLower
 /-- The positive target-mass scale is strictly positive. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetMassLower_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     0 < quittingStoppingLawPositiveTargetMassLower packet := by
   unfold quittingStoppingLawPositiveTargetMassLower
@@ -471,8 +462,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetMassLowe
 target endpoint. The estimate does not use terminal cardinality. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_massLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hrewardPositive : 0 < reward packet.terminal packet.observer) (n : ℕ) :
     quittingStoppingLawPositiveTargetMassLower packet ≤
@@ -490,7 +480,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_massLow
     (quittingPureTimeBehaviorStrategy reward packet.observer
       (packet.quitTime n))
   let sourceProfile := Function.update
-    (frontier.profiles (frontier.subseq (packet.rank n))) packet.observer
+    (frontier.source (packet.rank n)) packet.observer
     (quittingPureTimeBehaviorStrategy reward packet.observer
       (packet.quitTime n))
   let targetMass := quittingTerminalOutcomeMass reward targetProfile
@@ -512,9 +502,9 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_massLow
       (some packet.terminal)
   have hbound := packet.atom_bound n
   have hsourceUpdate : Function.update
-      (frontier.profiles (frontier.subseq (packet.rank n))) packet.mover.1
-      (frontier.profiles (frontier.subseq (packet.rank n)) packet.mover.1) =
-        frontier.profiles (frontier.subseq (packet.rank n)) :=
+      (frontier.source (packet.rank n)) packet.mover.1
+      (frontier.source (packet.rank n) packet.mover.1) =
+        frontier.source (packet.rank n) :=
     Function.update_eq_self _ _
   rw [hsourceUpdate] at hbound
   change packet.charge / 4 ≤ card *
@@ -541,8 +531,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_massLow
 sequence. -/
 def HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (lower : ℝ) : Prop :=
   ∃ (stop : ℕ → ℕ) (cluster : QuittingTerminalSemanticPair ι)
@@ -606,8 +595,7 @@ Together with the vanishing endpoint debt, this is exactly the existing
 marked-tail escape/other-defect alternative. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetCollision_markedTailDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hcollision : 1 < packet.terminal.val.card)
@@ -635,7 +623,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetCollisio
   simpa only [HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch,
     quittingStoppingLawPositiveTargetMassLower] using hconsumer
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- **Sequence-level strategic dispatch.**  The unconditional off-diagonal
 atom frontier has a fixed-label exhaustive output.  The positive-reward
@@ -643,8 +631,7 @@ collision orientation is consumed; precisely the three explicit rectangle
 orientations above and the prescribed-payoff atom sequence remain open. -/
 theorem exists_prescribedAtomSequence_or_openRectangleOrientation_or_markedTailDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {witness : QuittingTerminalExploitabilityWitness reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
     Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier) ∨
       ∃ packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier,
         HasQuittingStoppingLawOpenRectangleOrientation packet ∨
@@ -665,6 +652,6 @@ theorem exists_prescribedAtomSequence_or_openRectangleOrientation_or_markedTailD
         (packet.positiveTargetCollision_markedTailDispatch hobserver hcollision
           hreward)
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 
 end GameTheory

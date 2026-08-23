@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.SlopeFrontier
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.SlopeFrontier
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.VanishingDebtAtomAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeAtom
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
 
 /-!
-# Full reset endpoints of a positive total stopping-law slope
+# Full-replacement endpoints of a positive total stopping-law slope
 
 A positive total normalized debt slope has a scale-free consequence at the
 full unilateral reset endpoint.  Coordinatewise debt convexity cancels the
@@ -32,308 +32,307 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-namespace QuittingCounterexampleStoppingLawFrontier
+namespace QuittingPositiveMinimumDebtTangentFamily
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- The actual source semantic pair at one rank of the frontier's selected
 tangent subsequence. -/
-def sourcePair (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+def sourcePair (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : ℕ) : QuittingTerminalSemanticPair ι :=
   quittingTerminalSemanticPair reward
-    (frontier.profiles (frontier.subseq rank))
+    (frontier.source rank)
 
 /-- The literal full unilateral reset using the frontier's supplied mover and
 its actual selected replacement strategy at the original source rank. -/
-def fullResetProfile
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
+def fullReplacementProfile
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) :
     (quittingGame reward).BehaviorProfile :=
-  Function.update (frontier.profiles (frontier.subseq rank)) mover.1
-    (frontier.bestResponse mover (frontier.subseq rank))
+  Function.update (frontier.source rank) mover.1
+    (frontier.replacement mover rank)
 
 /-- Terminal semantic pair of the literal full unilateral reset endpoint. -/
-def fullResetPair
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
+def fullReplacementPair
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) :
     QuittingTerminalSemanticPair ι :=
-  quittingTerminalSemanticPair reward (frontier.fullResetProfile mover rank)
+  quittingTerminalSemanticPair reward (frontier.fullReplacementProfile mover rank)
 
-/-- Prescribed-payoff gain of the supplied mover at its literal full reset,
+/-- Prescribed-payoff gain of the supplied mover at its literal full replacement,
 measured from the actual source profile at the same selected rank. -/
-def fullResetPrescribedGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) : ℝ :=
-  quittingTerminalPayoff reward (frontier.fullResetProfile mover rank) mover.1 -
+def fullReplacementPrescribedGain
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) : ℝ :=
+  quittingTerminalPayoff reward (frontier.fullReplacementProfile mover rank) mover.1 -
     quittingTerminalPayoff reward
-      (frontier.profiles (frontier.subseq rank)) mover.1
+      (frontier.source rank) mover.1
 
 /-- Coordinatewise scale cancellation: the normalized debt change at the
 partial reset is bounded by the full endpoint's debt change from the same
 literal source. -/
-theorem normalizedDebtDirection_le_fullResetDebtChange
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (observer : ι) (rank : ℕ) :
+theorem normalizedDebtDirection_le_fullReplacementDebtChange
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (observer : ι) (rank : ℕ) :
     quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover.1
-        (frontier.bestResponse mover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) observer ≤
+        (frontier.source rank) mover.1
+        (frontier.replacement mover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) observer ≤
       quittingTerminalSemanticDebtChange (frontier.sourcePair rank)
-        (frontier.fullResetPair mover rank) observer := by
+        (frontier.fullReplacementPair mover rank) observer := by
   have hconvex := quittingTerminalSemanticDebt_stoppingLawMixture_le
-    reward (frontier.profiles (frontier.subseq rank)) mover.1 observer
-      (frontier.profiles (frontier.subseq rank) mover.1)
-      (frontier.bestResponse mover (frontier.subseq rank))
-      (frontier.lambda (frontier.subseq rank))
-      (frontier.lambda_pos (frontier.subseq rank)).le
-      (frontier.lambda_le_one (frontier.subseq rank))
+    reward (frontier.source rank) mover.1 observer
+      (frontier.source rank mover.1)
+      (frontier.replacement mover rank)
+      (frontier.scale rank)
+      (frontier.scale_pos rank).le
+      (frontier.scale_le_one rank)
   rw [Function.update_eq_self] at hconvex
   unfold quittingStoppingLawNormalizedDebtDirection
     quittingStoppingLawResetProfile quittingTerminalSemanticDebtChange
-    sourcePair fullResetPair fullResetProfile
-  rw [div_le_iff₀ (frontier.lambda_pos (frontier.subseq rank))]
+    sourcePair fullReplacementPair fullReplacementProfile
+  rw [div_le_iff₀ (frontier.scale_pos rank)]
   nlinarith
 
 /-- In the moved coordinate, scale cancellation is an equality because the
 best-response envelope depends only on the fixed opponents. -/
-theorem normalizedDebtDirection_self_eq_fullResetDebtChange
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
+theorem normalizedDebtDirection_self_eq_fullReplacementDebtChange
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) :
     quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover.1
-        (frontier.bestResponse mover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) mover.1 =
+        (frontier.source rank) mover.1
+        (frontier.replacement mover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) mover.1 =
       quittingTerminalSemanticDebtChange (frontier.sourcePair rank)
-        (frontier.fullResetPair mover rank) mover.1 := by
+        (frontier.fullReplacementPair mover rank) mover.1 := by
   have haffine := quittingTerminalSemanticDebt_stoppingLawMixture_eq_self
-    reward (frontier.profiles (frontier.subseq rank)) mover.1
-      (frontier.profiles (frontier.subseq rank) mover.1)
-      (frontier.bestResponse mover (frontier.subseq rank))
-      (frontier.lambda (frontier.subseq rank))
-      (frontier.lambda_pos (frontier.subseq rank)).le
-      (frontier.lambda_le_one (frontier.subseq rank))
+    reward (frontier.source rank) mover.1
+      (frontier.source rank mover.1)
+      (frontier.replacement mover rank)
+      (frontier.scale rank)
+      (frontier.scale_pos rank).le
+      (frontier.scale_le_one rank)
   rw [Function.update_eq_self] at haffine
   unfold quittingStoppingLawNormalizedDebtDirection
     quittingStoppingLawResetProfile quittingTerminalSemanticDebtChange
-    sourcePair fullResetPair fullResetProfile
+    sourcePair fullReplacementPair fullReplacementProfile
   apply (div_eq_iff (ne_of_gt
-    (frontier.lambda_pos (frontier.subseq rank)))).2
+    (frontier.scale_pos rank))).2
   rw [haffine]
   ring
 
-/-- The mover's full-reset prescribed gain is exactly the negative normalized
+/-- The mover's full-replacement prescribed gain is exactly the negative normalized
 self-debt direction at every original tangent rank. -/
-theorem fullResetPrescribedGain_eq_neg_normalizedDebtDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
-    frontier.fullResetPrescribedGain mover rank =
+theorem fullReplacementPrescribedGain_eq_neg_normalizedDebtDirection
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) :
+    frontier.fullReplacementPrescribedGain mover rank =
       -quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover.1
-        (frontier.bestResponse mover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) mover.1 := by
-  rw [frontier.normalizedDebtDirection_self_eq_fullResetDebtChange mover rank]
-  unfold fullResetPrescribedGain quittingTerminalSemanticDebtChange
-    sourcePair fullResetPair fullResetProfile quittingTerminalSemanticDebt
+        (frontier.source rank) mover.1
+        (frontier.replacement mover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) mover.1 := by
+  rw [frontier.normalizedDebtDirection_self_eq_fullReplacementDebtChange mover rank]
+  unfold fullReplacementPrescribedGain quittingTerminalSemanticDebtChange
+    sourcePair fullReplacementPair fullReplacementProfile quittingTerminalSemanticDebt
     quittingTerminalSemanticPair
   simp only
   rw [quittingContinuationBestResponseValue_update_self]
   ring
 
-/-- The literal full-reset gain is exactly the mover's source debt minus its
+/-- The literal full-replacement gain is exactly the mover's source debt minus its
 remaining debt at the full replacement endpoint. -/
-theorem fullResetPrescribedGain_eq_sourceDebt_sub_endpointDebt
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
-    frontier.fullResetPrescribedGain mover rank =
+theorem fullReplacementPrescribedGain_eq_sourceDebt_sub_endpointDebt
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) :
+    frontier.fullReplacementPrescribedGain mover rank =
       quittingTerminalSemanticDebt (frontier.sourcePair rank) mover.1 -
         quittingTerminalSemanticDebt
-          (frontier.fullResetPair mover rank) mover.1 := by
-  rw [frontier.fullResetPrescribedGain_eq_neg_normalizedDebtDirection mover rank,
-    frontier.normalizedDebtDirection_self_eq_fullResetDebtChange mover rank]
+          (frontier.fullReplacementPair mover rank) mover.1 := by
+  rw [frontier.fullReplacementPrescribedGain_eq_neg_normalizedDebtDirection mover rank,
+    frontier.normalizedDebtDirection_self_eq_fullReplacementDebtChange mover rank]
   unfold quittingTerminalSemanticDebtChange
   ring
 
-/-- The selected full reset has own debt at most the square of the original
+/-- The selected full replacement has own debt at most the square of the original
 reset scale at every tangent rank. -/
-theorem fullReset_moverDebt_le_lambda_sq
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
-    quittingTerminalSemanticDebt (frontier.fullResetPair mover rank) mover.1 ≤
-      frontier.lambda (frontier.subseq rank) ^ 2 := by
-  have hbound := frontier.fullReset_moverDebt_le_tolerance mover rank
+theorem fullReplacement_moverDebt_le_lambda_sq
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) :
+    quittingTerminalSemanticDebt (frontier.fullReplacementPair mover rank) mover.1 ≤
+      frontier.scale rank ^ 2 := by
+  have hbound := frontier.replacement_moverDebt_le_tolerance mover rank
   exact hbound.trans (min_le_left _ _)
 
-/-- Pointwise full-reset gain loses at most the squared reset scale from the
+/-- Pointwise full-replacement gain loses at most the squared reset scale from the
 mover's actual source debt. -/
-theorem sourceDebt_sub_lambda_sq_le_fullResetPrescribedGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
+theorem sourceDebt_sub_lambda_sq_le_fullReplacementPrescribedGain
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) :
     quittingTerminalSemanticDebt (frontier.sourcePair rank) mover.1 -
-        frontier.lambda (frontier.subseq rank) ^ 2 ≤
-      frontier.fullResetPrescribedGain mover rank := by
-  rw [frontier.fullResetPrescribedGain_eq_sourceDebt_sub_endpointDebt mover rank]
-  linarith [frontier.fullReset_moverDebt_le_lambda_sq mover rank]
+        frontier.scale rank ^ 2 ≤
+      frontier.fullReplacementPrescribedGain mover rank := by
+  rw [frontier.fullReplacementPrescribedGain_eq_sourceDebt_sub_endpointDebt mover rank]
+  linarith [frontier.fullReplacement_moverDebt_le_lambda_sq mover rank]
 
 /-- Pointwise, not merely eventually, the selected full replacement gains at
 least half of the mover's actual source debt. -/
-theorem sourceDebt_half_le_fullResetPrescribedGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
+theorem sourceDebt_half_le_fullReplacementPrescribedGain
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) :
     quittingTerminalSemanticDebt (frontier.sourcePair rank) mover.1 / 2 ≤
-      frontier.fullResetPrescribedGain mover rank := by
-  have hbound := frontier.fullReset_moverDebt_le_tolerance mover rank
+      frontier.fullReplacementPrescribedGain mover rank := by
+  have hbound := frontier.replacement_moverDebt_le_tolerance mover rank
   have hhalf : quittingTerminalSemanticDebt
-      (frontier.fullResetPair mover rank) mover.1 ≤
+      (frontier.fullReplacementPair mover rank) mover.1 ≤
       quittingTerminalSemanticDebt (frontier.sourcePair rank) mover.1 / 2 :=
     hbound.trans (min_le_right _ _)
-  rw [frontier.fullResetPrescribedGain_eq_sourceDebt_sub_endpointDebt mover rank]
+  rw [frontier.fullReplacementPrescribedGain_eq_sourceDebt_sub_endpointDebt mover rank]
   linarith
 
-/-- The supplied mover's literal full-reset payoff gain converges, along all
+/-- The supplied mover's literal full-replacement payoff gain converges, along all
 selected frontier ranks, to the negative diagonal tangent. -/
-theorem fullResetPrescribedGain_tendsto_neg_tangentDiagonal
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) :
-    Tendsto (fun rank => frontier.fullResetPrescribedGain mover rank) atTop
+theorem fullReplacementPrescribedGain_tendsto_neg_tangentDiagonal
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
+    Tendsto (fun rank => frontier.fullReplacementPrescribedGain mover rank) atTop
       (nhds (-frontier.tangent mover mover.1)) := by
   have htangent := (frontier.tangent_tendsto mover mover.1).neg
   apply htangent.congr'
   exact Eventually.of_forall fun rank =>
-    (frontier.fullResetPrescribedGain_eq_neg_normalizedDebtDirection
+    (frontier.fullReplacementPrescribedGain_eq_neg_normalizedDebtDirection
       mover rank).symm
 
-/-- Exact-diagonal extraction identifies the limiting full-reset gain with
+/-- Exact-diagonal extraction identifies the limiting full-replacement gain with
 the mover's entire base debt. -/
-theorem fullResetPrescribedGain_tendsto_baseDebt
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) :
-    Tendsto (fun rank => frontier.fullResetPrescribedGain mover rank) atTop
+theorem fullReplacementPrescribedGain_tendsto_baseDebt
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
+    Tendsto (fun rank => frontier.fullReplacementPrescribedGain mover rank) atTop
       (nhds (quittingTerminalSemanticDebt frontier.base mover.1)) := by
   simpa [frontier.tangent_diagonal_eq mover] using
-    frontier.fullResetPrescribedGain_tendsto_neg_tangentDiagonal mover
+    frontier.fullReplacementPrescribedGain_tendsto_neg_tangentDiagonal mover
 
 /-- Every threshold strictly below the mover's base debt is eventually below
-the literal full-reset payoff gain. -/
-theorem eventually_lt_fullResetPrescribedGain_of_lt_baseDebt
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (threshold : ℝ)
+the literal full-replacement payoff gain. -/
+theorem eventually_lt_fullReplacementPrescribedGain_of_lt_baseDebt
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (threshold : ℝ)
     (hthreshold : threshold <
       quittingTerminalSemanticDebt frontier.base mover.1) :
     ∀ᶠ rank in atTop,
-      threshold < frontier.fullResetPrescribedGain mover rank :=
-  (frontier.fullResetPrescribedGain_tendsto_baseDebt mover).eventually
+      threshold < frontier.fullReplacementPrescribedGain mover rank :=
+  (frontier.fullReplacementPrescribedGain_tendsto_baseDebt mover).eventually
     (Ioi_mem_nhds hthreshold)
 
 /-- Every supplied active mover is eventually a fixed-gain legal deviation
-from its literal source to its full reset endpoint. -/
-theorem eventually_baseDebt_quarter_le_fullResetPrescribedGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) :
+from its literal source to its full replacement endpoint. -/
+theorem eventually_baseDebt_quarter_le_fullReplacementPrescribedGain
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     ∀ᶠ rank in atTop,
       quittingTerminalSemanticDebt frontier.base mover.1 / 4 ≤
-        frontier.fullResetPrescribedGain mover rank := by
+        frontier.fullReplacementPrescribedGain mover rank := by
   have hdebt : 0 < quittingTerminalSemanticDebt frontier.base mover.1 :=
-    (frontier.active_iff mover.1).1 mover.2
-  exact (frontier.eventually_lt_fullResetPrescribedGain_of_lt_baseDebt mover
+    (frontier.positiveDebtSupport_iff mover.1).1 mover.2
+  exact (frontier.eventually_lt_fullReplacementPrescribedGain_of_lt_baseDebt mover
     (quittingTerminalSemanticDebt frontier.base mover.1 / 4) (by linarith)).mono
       fun _ h => h.le
 
 /-- The sum of normalized coordinate changes is bounded by the full
 endpoint's total-debt change from the actual source. -/
-theorem sum_normalizedDebtDirection_le_fullReset_totalDebtChange
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
+theorem sum_normalizedDebtDirection_le_fullReplacement_totalDebtChange
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (rank : ℕ) :
     (∑ observer,
       quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover.1
-        (frontier.bestResponse mover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) observer) ≤
-      quittingTerminalSemanticDebtSum (frontier.fullResetPair mover rank) -
+        (frontier.source rank) mover.1
+        (frontier.replacement mover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) observer) ≤
+      quittingTerminalSemanticDebtSum (frontier.fullReplacementPair mover rank) -
         quittingTerminalSemanticDebtSum (frontier.sourcePair rank) := by
   have hsum :
       (∑ observer,
         quittingStoppingLawNormalizedDebtDirection reward
-          (frontier.profiles (frontier.subseq rank)) mover.1
-          (frontier.bestResponse mover (frontier.subseq rank))
-          (frontier.lambda (frontier.subseq rank))
-          (frontier.lambda_pos (frontier.subseq rank)).le
-          (frontier.lambda_le_one (frontier.subseq rank)) observer) ≤
+          (frontier.source rank) mover.1
+          (frontier.replacement mover rank)
+          (frontier.scale rank)
+          (frontier.scale_pos rank).le
+          (frontier.scale_le_one rank) observer) ≤
         ∑ observer, quittingTerminalSemanticDebtChange
-          (frontier.sourcePair rank) (frontier.fullResetPair mover rank)
+          (frontier.sourcePair rank) (frontier.fullReplacementPair mover rank)
             observer := by
     exact Finset.sum_le_sum fun observer _ ↦
-      frontier.normalizedDebtDirection_le_fullResetDebtChange mover observer rank
+      frontier.normalizedDebtDirection_le_fullReplacementDebtChange mover observer rank
   unfold quittingTerminalSemanticDebtChange at hsum
   rw [Finset.sum_sub_distrib] at hsum
   exact hsum
 
 /-- Every threshold strictly below a total tangent slope is eventually
-realized as a scale-free full-reset total-debt excursion from the literal
+realized as a scale-free full-replacement total-debt excursion from the literal
 source profile at the same frontier rank.  This is the strongest finite-rank
 form of the endpoint amplification: no passage to the limiting minimum is
 needed. -/
-theorem eventually_fullReset_sourceRelative_totalDebtChange_of_lt_totalSlope
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (eta : ℝ)
+theorem eventually_fullReplacement_sourceRelative_totalDebtChange_of_lt_totalSlope
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (eta : ℝ)
     (heta : eta < ∑ observer, frontier.tangent mover observer) :
     ∀ᶠ rank in atTop,
       eta ≤ quittingTerminalSemanticDebtSum
-          (frontier.fullResetPair mover rank) -
+          (frontier.fullReplacementPair mover rank) -
         quittingTerminalSemanticDebtSum (frontier.sourcePair rank) := by
   have hsumTendsto : Tendsto (fun rank ↦ ∑ observer,
       quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover.1
-        (frontier.bestResponse mover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) observer)
+        (frontier.source rank) mover.1
+        (frontier.replacement mover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) observer)
       atTop (nhds (∑ observer, frontier.tangent mover observer)) :=
     tendsto_finsetSum Finset.univ fun observer _ ↦
       frontier.tangent_tendsto mover observer
   filter_upwards [hsumTendsto.eventually (Ioi_mem_nhds heta)] with rank hrank
   exact hrank.le.trans
-    (frontier.sum_normalizedDebtDirection_le_fullReset_totalDebtChange
+    (frontier.sum_normalizedDebtDirection_le_fullReplacement_totalDebtChange
       mover rank)
 
 /-- Base-relative corollary of the literal source-relative endpoint
 amplification.  Every source semantic pair lies above the frontier's global
 minimum, so forgetting the source only weakens the conclusion. -/
-theorem eventually_fullReset_totalDebt_excess_of_lt_positiveTotalSlope
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (eta : ℝ)
+theorem eventually_fullReplacement_totalDebt_excess_of_lt_positiveTotalSlope
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (eta : ℝ)
     (heta : eta < ∑ observer, frontier.tangent mover observer) :
     ∀ᶠ rank in atTop,
       eta ≤ quittingTerminalSemanticDebtSum
-          (frontier.fullResetPair mover rank) -
+          (frontier.fullReplacementPair mover rank) -
         quittingTerminalSemanticDebtSum frontier.base := by
   filter_upwards [
-    frontier.eventually_fullReset_sourceRelative_totalDebtChange_of_lt_totalSlope
+    frontier.eventually_fullReplacement_sourceRelative_totalDebtChange_of_lt_totalSlope
       mover eta heta] with rank hrank
   have hsourceMinimum := frontier.base_minimum (frontier.sourcePair rank)
     (quittingTerminalSemanticPair_mem_carrier reward
-      (frontier.profiles (frontier.subseq rank)))
+      (frontier.source rank))
   linarith
 
 /-- A positive total tangent slope yields the canonical half-slope endpoint
 excursion, with no residual reset-scale factor. -/
-theorem eventually_fullReset_totalDebt_excess_of_positiveTotalSlope
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active})
+theorem eventually_fullReplacement_totalDebt_excess_of_positiveTotalSlope
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport})
     (hslope : 0 < ∑ observer, frontier.tangent mover observer) :
     ∀ᶠ rank in atTop,
       (∑ observer, frontier.tangent mover observer) / 2 ≤
-        quittingTerminalSemanticDebtSum (frontier.fullResetPair mover rank) -
+        quittingTerminalSemanticDebtSum (frontier.fullReplacementPair mover rank) -
           quittingTerminalSemanticDebtSum frontier.base := by
-  apply frontier.eventually_fullReset_totalDebt_excess_of_lt_positiveTotalSlope
+  apply frontier.eventually_fullReplacement_totalDebt_excess_of_lt_positiveTotalSlope
     mover ((∑ observer, frontier.tangent mover observer) / 2)
   linarith
 
@@ -341,8 +340,8 @@ theorem eventually_fullReset_totalDebt_excess_of_positiveTotalSlope
 Its tangent entry is at least the average of the total slope plus the mover's
 entire base debt over all other players. -/
 theorem exists_offDiagonal_tangent_ge_average
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     ∃ observer : ι, observer ≠ mover.1 ∧
       ((∑ who, frontier.tangent mover who) +
           quittingTerminalSemanticDebt frontier.base mover.1) /
@@ -379,19 +378,18 @@ theorem exists_offDiagonal_tangent_ge_average
   apply (div_le_iff₀ hcardPos).2
   simpa only [mul_comm] using hsumLower.trans hsumLe
 
-/-- Compact full-reset endpoint data produced by one supplied positive-slope
+/-- Compact full-replacement endpoint data produced by one supplied positive-slope
 mover.  Every field retains the actual frontier subsequence and replacement
 strategies. -/
-structure PositiveTotalSlopeEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) where
+structure PositiveTotalSlopeFullReplacement
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) where
   cluster : QuittingTerminalSemanticPair ι
   subseq : ℕ → ℕ
   cluster_mem : cluster ∈ quittingTerminalSemanticCarrier reward
   subseq_strictMono : StrictMono subseq
-  sourceSubseq_strictMono : StrictMono (frontier.subseq ∘ subseq)
-  fullReset_tendsto : Tendsto (fun rank ↦
-      frontier.fullResetPair mover (subseq rank)) atTop (nhds cluster)
+  fullReplacement_tendsto : Tendsto (fun rank ↦
+      frontier.fullReplacementPair mover (subseq rank)) atTop (nhds cluster)
   coordinate_excess : ∀ observer,
     frontier.tangent mover observer ≤
       quittingTerminalSemanticDebtChange frontier.base cluster observer
@@ -406,36 +404,35 @@ structure PositiveTotalSlopeEndpointCluster
   totalDebt_separated : quittingTerminalSemanticDebtSum frontier.base <
     quittingTerminalSemanticDebtSum cluster
   prescribedGain_tendsto : Tendsto (fun rank ↦
-      frontier.fullResetPrescribedGain mover (subseq rank)) atTop
+      frontier.fullReplacementPrescribedGain mover (subseq rank)) atTop
         (nhds (-frontier.tangent mover mover.1))
   prescribedGain_eventually : ∀ᶠ rank in atTop,
     quittingTerminalSemanticDebt frontier.base mover.1 / 4 ≤
-      frontier.fullResetPrescribedGain mover (subseq rank)
+      frontier.fullReplacementPrescribedGain mover (subseq rank)
 
-/-- A supplied positive-total-slope mover has a compact full-reset endpoint
+/-- A supplied positive-total-slope mover has a compact full-replacement endpoint
 cluster with coordinatewise tangent domination, exact self-coordinate
 change, half-debt reduction, strict total separation, and fixed prescribed
 gain along the same source-matched reset sequence. -/
 theorem exists_positiveTotalSlopeEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active})
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport})
     (hslope : 0 < ∑ observer, frontier.tangent mover observer) :
-    Nonempty (PositiveTotalSlopeEndpointCluster frontier mover) := by
+    Nonempty (PositiveTotalSlopeFullReplacement frontier mover) := by
   let endpoint : ℕ → QuittingTerminalSemanticPair ι :=
-    fun rank ↦ frontier.fullResetPair mover rank
+    fun rank ↦ frontier.fullReplacementPair mover rank
   have hendpointMem : ∀ rank,
       endpoint rank ∈ quittingTerminalSemanticCarrier reward := by
     intro rank
     exact quittingTerminalSemanticPair_mem_carrier reward
-      (frontier.fullResetProfile mover rank)
+      (frontier.fullReplacementProfile mover rank)
   obtain ⟨cluster, hcluster, subseq, hsubseq, hendpoint⟩ :=
     (quittingTerminalSemanticCarrier_isCompact reward).tendsto_subseq
       hendpointMem
   have hsource : Tendsto (fun rank ↦ frontier.sourcePair (subseq rank))
       atTop (nhds frontier.base) := by
     unfold sourcePair
-    exact frontier.profiles_tendsto.comp
-      ((frontier.subseq_strictMono.comp hsubseq).tendsto_atTop)
+    exact frontier.source_tendsto.comp hsubseq.tendsto_atTop
   have hcoordinate : ∀ observer,
       frontier.tangent mover observer ≤
         quittingTerminalSemanticDebtChange frontier.base cluster observer := by
@@ -445,7 +442,7 @@ theorem exists_positiveTotalSlopeEndpointCluster
     have hright : Tendsto (fun rank ↦
         quittingTerminalSemanticDebtChange
           (frontier.sourcePair (subseq rank))
-          (frontier.fullResetPair mover (subseq rank)) observer)
+          (frontier.fullReplacementPair mover (subseq rank)) observer)
         atTop (nhds
           (quittingTerminalSemanticDebtChange frontier.base cluster observer)) := by
       unfold quittingTerminalSemanticDebtChange
@@ -455,7 +452,7 @@ theorem exists_positiveTotalSlopeEndpointCluster
             |>.comp hsource)
     exact le_of_tendsto_of_tendsto hleft hright
       (Eventually.of_forall fun rank ↦
-        frontier.normalizedDebtDirection_le_fullResetDebtChange
+        frontier.normalizedDebtDirection_le_fullReplacementDebtChange
           mover observer (subseq rank))
   have hmoverEq : quittingTerminalSemanticDebtChange frontier.base cluster mover.1 =
       frontier.tangent mover mover.1 := by
@@ -464,7 +461,7 @@ theorem exists_positiveTotalSlopeEndpointCluster
     have hright : Tendsto (fun rank ↦
         quittingTerminalSemanticDebtChange
           (frontier.sourcePair (subseq rank))
-          (frontier.fullResetPair mover (subseq rank)) mover.1)
+          (frontier.fullReplacementPair mover (subseq rank)) mover.1)
         atTop (nhds
           (quittingTerminalSemanticDebtChange frontier.base cluster mover.1)) := by
       unfold quittingTerminalSemanticDebtChange
@@ -474,24 +471,24 @@ theorem exists_positiveTotalSlopeEndpointCluster
             |>.comp hsource)
     have heq : (fun rank ↦
         quittingStoppingLawNormalizedDebtDirection reward
-          (frontier.profiles (frontier.subseq (subseq rank))) mover.1
-          (frontier.bestResponse mover (frontier.subseq (subseq rank)))
-          (frontier.lambda (frontier.subseq (subseq rank)))
-          (frontier.lambda_pos (frontier.subseq (subseq rank))).le
-          (frontier.lambda_le_one (frontier.subseq (subseq rank))) mover.1) =
+          (frontier.source (subseq rank)) mover.1
+          (frontier.replacement mover (subseq rank))
+          (frontier.scale (subseq rank))
+          (frontier.scale_pos (subseq rank)).le
+          (frontier.scale_le_one (subseq rank)) mover.1) =
         (fun rank ↦ quittingTerminalSemanticDebtChange
           (frontier.sourcePair (subseq rank))
-          (frontier.fullResetPair mover (subseq rank)) mover.1) := by
+          (frontier.fullReplacementPair mover (subseq rank)) mover.1) := by
       funext rank
-      exact frontier.normalizedDebtDirection_self_eq_fullResetDebtChange
+      exact frontier.normalizedDebtDirection_self_eq_fullReplacementDebtChange
         mover (subseq rank)
     change Tendsto (fun rank ↦
       quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq (subseq rank))) mover.1
-        (frontier.bestResponse mover (frontier.subseq (subseq rank)))
-        (frontier.lambda (frontier.subseq (subseq rank)))
-        (frontier.lambda_pos (frontier.subseq (subseq rank))).le
-        (frontier.lambda_le_one (frontier.subseq (subseq rank))) mover.1)
+        (frontier.source (subseq rank)) mover.1
+        (frontier.replacement mover (subseq rank))
+        (frontier.scale (subseq rank))
+        (frontier.scale_pos (subseq rank)).le
+        (frontier.scale_le_one (subseq rank)) mover.1)
       atTop (nhds (frontier.tangent mover mover.1)) at hleft
     rw [heq] at hleft
     exact (tendsto_nhds_unique hleft hright).symm
@@ -516,55 +513,54 @@ theorem exists_positiveTotalSlopeEndpointCluster
       quittingTerminalSemanticDebtSum cluster := by
     linarith
   have hgain : Tendsto (fun rank ↦
-      frontier.fullResetPrescribedGain mover (subseq rank)) atTop
+      frontier.fullReplacementPrescribedGain mover (subseq rank)) atTop
         (nhds (-frontier.tangent mover mover.1)) := by
     have htangent := (frontier.tangent_tendsto mover mover.1).neg.comp
       hsubseq.tendsto_atTop
     change Tendsto (fun rank ↦
       -quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq (subseq rank))) mover.1
-        (frontier.bestResponse mover (frontier.subseq (subseq rank)))
-        (frontier.lambda (frontier.subseq (subseq rank)))
-        (frontier.lambda_pos (frontier.subseq (subseq rank))).le
-        (frontier.lambda_le_one (frontier.subseq (subseq rank))) mover.1)
+        (frontier.source (subseq rank)) mover.1
+        (frontier.replacement mover (subseq rank))
+        (frontier.scale (subseq rank))
+        (frontier.scale_pos (subseq rank)).le
+        (frontier.scale_le_one (subseq rank)) mover.1)
       atTop (nhds (-frontier.tangent mover mover.1)) at htangent
     have heqGain : (fun rank ↦
-        frontier.fullResetPrescribedGain mover (subseq rank)) =
+        frontier.fullReplacementPrescribedGain mover (subseq rank)) =
         (fun rank ↦
           -quittingStoppingLawNormalizedDebtDirection reward
-            (frontier.profiles (frontier.subseq (subseq rank))) mover.1
-            (frontier.bestResponse mover (frontier.subseq (subseq rank)))
-            (frontier.lambda (frontier.subseq (subseq rank)))
-            (frontier.lambda_pos (frontier.subseq (subseq rank))).le
-            (frontier.lambda_le_one (frontier.subseq (subseq rank))) mover.1) := by
+            (frontier.source (subseq rank)) mover.1
+            (frontier.replacement mover (subseq rank))
+            (frontier.scale (subseq rank))
+            (frontier.scale_pos (subseq rank)).le
+            (frontier.scale_le_one (subseq rank)) mover.1) := by
       funext rank
-      exact frontier.fullResetPrescribedGain_eq_neg_normalizedDebtDirection
+      exact frontier.fullReplacementPrescribedGain_eq_neg_normalizedDebtDirection
         mover (subseq rank)
     rw [heqGain]
     exact htangent
   have hbaseDebtPos : 0 < quittingTerminalSemanticDebt frontier.base mover.1 :=
-    (frontier.active_iff mover.1).1 mover.2
+    (frontier.positiveDebtSupport_iff mover.1).1 mover.2
   have hgainThreshold : quittingTerminalSemanticDebt frontier.base mover.1 / 4 <
       -frontier.tangent mover mover.1 := by
     have hdiagonal := frontier.tangent_diagonal mover
     linarith
   have hgainEventually : ∀ᶠ rank in atTop,
       quittingTerminalSemanticDebt frontier.base mover.1 / 4 ≤
-        frontier.fullResetPrescribedGain mover (subseq rank) :=
+        frontier.fullReplacementPrescribedGain mover (subseq rank) :=
     (hgain.eventually (Ioi_mem_nhds hgainThreshold)).mono fun _ h ↦ h.le
-  refine ⟨⟨cluster, subseq, hcluster, hsubseq,
-    frontier.subseq_strictMono.comp hsubseq, ?_, hcoordinate, hmoverEq,
+  refine ⟨⟨cluster, subseq, hcluster, hsubseq, ?_, hcoordinate, hmoverEq,
     hmoverNonneg, hmoverLeHalf, htotal, hseparated, hgain,
     hgainEventually⟩⟩
   change Tendsto (endpoint ∘ subseq) atTop (nhds cluster)
   exact hendpoint
 
-/-- Exact diagonal upgrades every positive-slope full-reset endpoint's
+/-- Exact diagonal upgrades every positive-slope full-replacement endpoint's
 half-debt estimate to zero own debt. -/
-theorem PositiveTotalSlopeEndpointCluster.mover_debt_eq_zero
-    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
-    {mover : {who // who ∈ frontier.active}}
-    (endpoint : PositiveTotalSlopeEndpointCluster frontier mover) :
+theorem PositiveTotalSlopeFullReplacement.mover_debt_eq_zero
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {mover : {who // who ∈ frontier.positiveDebtSupport}}
+    (endpoint : PositiveTotalSlopeFullReplacement frontier mover) :
     quittingTerminalSemanticDebt endpoint.cluster mover.1 = 0 := by
   have hchange := endpoint.mover_excess_eq
   have hexactDiagonal := frontier.tangent_diagonal_eq mover
@@ -577,8 +573,8 @@ scales, and frontier subsequence while a distinct positive observer and fixed
 atom charge are selected.  In particular, this applies to the mover already
 supplied by a positive-total-slope branch. -/
 theorem exists_fixedAtomAlternative_of_mover
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     ∃ (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧
       0 < frontier.tangent mover observer ∧
@@ -586,40 +582,44 @@ theorem exists_fixedAtomAlternative_of_mover
       0 < charge ∧
       ∀ᶠ rank in atTop,
         HasQuittingStoppingLawDebtSlopeAtomAlternative reward
-          (frontier.profiles (frontier.subseq rank)) mover.1 observer
-          (frontier.bestResponse mover (frontier.subseq rank)) charge := by
+          (frontier.source rank) mover.1 observer
+          (frontier.replacement mover rank) charge := by
   obtain ⟨observer, hobserverNe, hpositive⟩ :=
     frontier.exists_positiveOffDiagonal mover.2
   let charge := frontier.tangent mover observer / 2
-  have hcharge : 0 < charge := div_pos hpositive (by norm_num)
+  have hpositive' : 0 < frontier.tangent mover observer := by
+    have heq : mover = ⟨mover.1, _⟩ := Subtype.ext (by rfl)
+    rw [heq]
+    exact hpositive
+  have hcharge : 0 < charge := div_pos hpositive' (by norm_num)
   have hchargeLt : charge < frontier.tangent mover observer := by
     dsimp only [charge]
     linarith
   have heventuallySlope : ∀ᶠ rank in atTop,
       charge ≤ quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover.1
-        (frontier.bestResponse mover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) observer :=
+        (frontier.source rank) mover.1
+        (frontier.replacement mover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) observer :=
     (frontier.tangent_tendsto mover observer).eventually
       (Ioi_mem_nhds hchargeLt) |>.mono fun _ hlt ↦ hlt.le
   refine ⟨observer, charge, hobserverNe, hpositive, rfl, hcharge, ?_⟩
   filter_upwards [heventuallySlope] with rank hslopeNormalized
-  have hlambda := frontier.lambda_pos (frontier.subseq rank)
-  have hslope : frontier.lambda (frontier.subseq rank) * charge ≤
+  have hlambda := frontier.scale_pos rank
+  have hslope : frontier.scale rank * charge ≤
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
             (Function.update
-              (frontier.profiles (frontier.subseq rank)) mover.1
+              (frontier.source rank) mover.1
               (quittingStoppingLawMixtureBehaviorStrategy reward mover.1
-                (frontier.profiles (frontier.subseq rank) mover.1)
-                (frontier.bestResponse mover (frontier.subseq rank))
-                (frontier.lambda (frontier.subseq rank)) hlambda.le
-                (frontier.lambda_le_one (frontier.subseq rank))))) observer -
+                (frontier.source rank mover.1)
+                (frontier.replacement mover rank)
+                (frontier.scale rank) hlambda.le
+                (frontier.scale_le_one rank)))) observer -
         quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
-            (frontier.profiles (frontier.subseq rank))) observer := by
+            (frontier.source rank)) observer := by
     unfold quittingStoppingLawNormalizedDebtDirection
       quittingTerminalSemanticDebtChange quittingStoppingLawResetProfile
         at hslopeNormalized
@@ -627,24 +627,24 @@ theorem exists_fixedAtomAlternative_of_mover
     nlinarith
   simpa only [HasQuittingStoppingLawDebtSlopeAtomAlternative] using
     (exists_prescribedAtom_or_pureTimeRectangleAtom_of_stoppingLawDebtSlope
-      reward (frontier.profiles (frontier.subseq rank)) mover.1 observer
-        (frontier.bestResponse mover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank)) charge hlambda
-        (frontier.lambda_le_one (frontier.subseq rank)) hcharge hslope)
+      reward (frontier.source rank) mover.1 observer
+        (frontier.replacement mover rank)
+        (frontier.scale rank) charge hlambda
+        (frontier.scale_le_one rank) hcharge hslope)
 
 /-- A supplied positive off-diagonal tangent entry exports the strong
 common-response atom alternative at exactly `7/16` of that entry. -/
 theorem exists_fixedStrongVanishingDebtAtomAlternative_of_positiveOffDiagonal
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) (observer : ι)
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) (observer : ι)
     (hpositive : 0 < frontier.tangent mover observer) :
     ∃ charge : ℝ,
       charge = 7 * frontier.tangent mover observer / 16 ∧
       0 < charge ∧
       ∀ᶠ rank in atTop,
         HasQuittingStoppingLawVanishingDebtAtomAlternative reward
-          (frontier.profiles (frontier.subseq rank)) mover.1 observer
-          (frontier.bestResponse mover (frontier.subseq rank)) charge
+          (frontier.source rank) mover.1 observer
+          (frontier.replacement mover rank) charge
           (quittingStoppingLawAtomDecoderError charge rank) := by
   let rawCharge := frontier.tangent mover observer / 2
   let charge := 7 * rawCharge / 8
@@ -657,11 +657,11 @@ theorem exists_fixedStrongVanishingDebtAtomAlternative_of_positiveOffDiagonal
     linarith
   have heventuallyDirection : ∀ᶠ rank in atTop,
       rawCharge ≤ quittingStoppingLawNormalizedDebtDirection reward
-        (frontier.profiles (frontier.subseq rank)) mover.1
-        (frontier.bestResponse mover (frontier.subseq rank))
-        (frontier.lambda (frontier.subseq rank))
-        (frontier.lambda_pos (frontier.subseq rank)).le
-        (frontier.lambda_le_one (frontier.subseq rank)) observer :=
+        (frontier.source rank) mover.1
+        (frontier.replacement mover rank)
+        (frontier.scale rank)
+        (frontier.scale_pos rank).le
+        (frontier.scale_le_one rank) observer :=
     (frontier.tangent_tendsto mover observer).eventually
       (Ioi_mem_nhds hrawChargeLt) |>.mono fun _ hlt => hlt.le
   refine ⟨charge, ?_, hcharge, ?_⟩
@@ -670,10 +670,10 @@ theorem exists_fixedStrongVanishingDebtAtomAlternative_of_positiveOffDiagonal
   · filter_upwards [heventuallyDirection] with rank hdirection
     have hrise : rawCharge ≤
         quittingTerminalSemanticDebt
-            (frontier.fullResetPair mover rank) observer -
+            (frontier.fullReplacementPair mover rank) observer -
           quittingTerminalSemanticDebt (frontier.sourcePair rank) observer :=
       hdirection.trans
-        (frontier.normalizedDebtDirection_le_fullResetDebtChange
+        (frontier.normalizedDebtDirection_le_fullReplacementDebtChange
           mover observer rank)
     have herror := quittingStoppingLawAtomDecoderError_pos hcharge rank
     have herrorLeCharge :=
@@ -685,23 +685,23 @@ theorem exists_fixedStrongVanishingDebtAtomAlternative_of_positiveOffDiagonal
         rawCharge / 8 := herrorLeCharge.trans
       (div_le_div_of_nonneg_right hchargeLeRaw (by norm_num))
     have halternative := hasVanishingDebtAtomAlternative_of_endpointDebtRise
-      reward (frontier.profiles (frontier.subseq rank)) mover.1 observer
-      (frontier.bestResponse mover (frontier.subseq rank)) rawCharge
+      reward (frontier.source rank) mover.1 observer
+      (frontier.replacement mover rank) rawCharge
       (quittingStoppingLawAtomDecoderError charge rank) hrawCharge herror
       herrorLeRaw (by
-        simpa only [fullResetPair, fullResetProfile, sourcePair] using hrise)
+        simpa only [fullReplacementPair, fullReplacementProfile, sourcePair] using hrise)
     have hchargeEq : 7 * rawCharge / 8 = charge := rfl
     rw [hchargeEq] at halternative
     exact halternative
 
 /-- **Supplied-mover strong atom adapter.**  Every active mover has a fixed
-positive off-diagonal observer for which the literal full-reset debt rise
+positive off-diagonal observer for which the literal full-replacement debt rise
 exports the common-response vanishing-debt atom alternative.  If the tangent
 entry is `tau`, the retained atom-interface charge is exactly `7 * tau / 16`.
 No zero-debt assumption on the observer is used. -/
 theorem exists_fixedStrongVanishingDebtAtomAlternative_of_mover
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     ∃ (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧
       0 < frontier.tangent mover observer ∧
@@ -709,8 +709,8 @@ theorem exists_fixedStrongVanishingDebtAtomAlternative_of_mover
       0 < charge ∧
       ∀ᶠ rank in atTop,
         HasQuittingStoppingLawVanishingDebtAtomAlternative reward
-          (frontier.profiles (frontier.subseq rank)) mover.1 observer
-          (frontier.bestResponse mover (frontier.subseq rank)) charge
+          (frontier.source rank) mover.1 observer
+          (frontier.replacement mover rank) charge
           (quittingStoppingLawAtomDecoderError charge rank) := by
   obtain ⟨observer, hobserverNe, hpositive⟩ :=
     frontier.exists_positiveOffDiagonal mover.2
@@ -724,8 +724,8 @@ theorem exists_fixedStrongVanishingDebtAtomAlternative_of_mover
 observer is at least the average forced by the total slope and the mover's
 negative diagonal, and its atom charge remains exactly `7/16` of that entry. -/
 theorem exists_quantitativeStrongVanishingDebtAtomAlternative_of_mover
-    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-    (mover : {who // who ∈ frontier.active}) :
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     ∃ (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧
       ((∑ who, frontier.tangent mover who) +
@@ -736,15 +736,15 @@ theorem exists_quantitativeStrongVanishingDebtAtomAlternative_of_mover
       0 < charge ∧
       ∀ᶠ rank in atTop,
         HasQuittingStoppingLawVanishingDebtAtomAlternative reward
-          (frontier.profiles (frontier.subseq rank)) mover.1 observer
-          (frontier.bestResponse mover (frontier.subseq rank)) charge
+          (frontier.source rank) mover.1 observer
+          (frontier.replacement mover rank) charge
           (quittingStoppingLawAtomDecoderError charge rank) := by
   obtain ⟨observer, hobserverNe, hobserverLower⟩ :=
     frontier.exists_offDiagonal_tangent_ge_average mover
   have hsum : 0 ≤ ∑ who, frontier.tangent mover who :=
     frontier.tangent_sum_nonneg mover
   have hdebt : 0 < quittingTerminalSemanticDebt frontier.base mover.1 :=
-    (frontier.active_iff mover.1).1 mover.2
+    (frontier.positiveDebtSupport_iff mover.1).1 mover.2
   have hcardPos : 0 < ((Finset.univ.erase mover.1).card : ℝ) := by
     have hpositiveObserver := frontier.exists_positiveOffDiagonal mover.2
     obtain ⟨positiveObserver, hpositiveNe, _hpositive⟩ := hpositiveObserver
@@ -764,6 +764,6 @@ theorem exists_quantitativeStrongVanishingDebtAtomAlternative_of_mover
   exact ⟨observer, charge, hobserverNe, hobserverLower, hchargeEq, hcharge,
     halternative⟩
 
-end QuittingCounterexampleStoppingLawFrontier
+end QuittingPositiveMinimumDebtTangentFamily
 
 end GameTheory

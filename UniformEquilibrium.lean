@@ -572,4 +572,5 @@ import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySoloExit
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Cycles.TerminalExploitabilityExactCycleExclusion
 import UniformEquilibrium.Quitting.Root.NashExistence
+import UniformEquilibrium.Quitting.Nash.FiniteHorizon.MarkedSureQuit
 import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
