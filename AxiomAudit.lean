@@ -565,6 +565,7 @@ import UniformEquilibrium.Diagnostics.Quitting.FullCoreDeadlockDebtBound
 import UniformEquilibrium.Diagnostics.Quitting.MinimalFinCounterexample
 import UniformEquilibrium.Diagnostics.Quitting.OneActiveAlignedRankCollapse
 import UniformEquilibrium.Diagnostics.Quitting.OneActiveTransferDefectGraph
+import UniformEquilibrium.Diagnostics.Quitting.PaidFirstDisagreementPayoffNearReturn
 import UniformEquilibrium.Diagnostics.Quitting.Regression.AggregatePrefixResidual
 import UniformEquilibrium.Diagnostics.Quitting.Regression.ConditionalFaceGapFivePlayer
 import UniformEquilibrium.Diagnostics.Quitting.Regression.NonpositiveFloorTerminalCap
@@ -1401,6 +1402,7 @@ import UniformEquilibrium.Quitting.Projective.ForwardBlockSingleSeam
 import UniformEquilibrium.Quitting.Projective.Lasso
 import UniformEquilibrium.Quitting.Projective.LassoAll
 import UniformEquilibrium.Quitting.Projective.LassoWeighted
+import UniformEquilibrium.Quitting.Projective.PunishmentFloorNearReturn
 import UniformEquilibrium.Quitting.Projective.ResolvedChart
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLasso
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLassoStrictness

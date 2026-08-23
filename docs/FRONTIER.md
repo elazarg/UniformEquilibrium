@@ -157,9 +157,12 @@ zero-debt recipient can be retained as the atom observer.
 
 Two concrete producer arrows remain explicit. Static vanishing-debt atom data
 must be serialized into chronological debt-shadowing certificates at every
-positive accuracy, or an eventually paid row must be re-entered as a positive
-exact admissible edge with an exact return. The chronological and
-admissible-return consumers themselves are proved in Lean.
+positive accuracy, or an eventually paid row must be re-entered as one
+one fixed positive charge threshold, while the source, target, path, and
+charged edge may vary with endpoint tolerance and endpoint payoff vectors
+become arbitrarily close. Fixed-edge payoff closure and exact return to the
+full tail state are stronger special cases. The chronological and
+payoff-near-return consumers themselves are proved in Lean.
 
 Seals use the independent `M`/`L`/`A`/`C` language of
 [`STATUS.md`](STATUS.md). An `L` seal on an open producer arrow means its
@@ -179,14 +182,14 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 | `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `L` | [`GameTheory.VanishingDebtAtomChronologicalConsumer`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
-| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `POSITIVE-ADMISSIBLE-RETURN` | `L` | [`GameTheory.PaidFirstDisagreementAdmissibleReturnConsumer`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `L` | [`GameTheory.PaidFirstDisagreementAdmissiblePayoffNearReturnConsumer`](../UniformEquilibrium/Diagnostics/Quitting/PaidFirstDisagreementPayoffNearReturn.lean) |
 | `CHRONOLOGICAL-DEBT-SHADOWING` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors`](../UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean) |
-| `POSITIVE-ADMISSIBLE-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformPayoff_of_positive_admissible_return`](../UniformEquilibrium/Quitting/Bellman/Finite/PositiveAdmissibleCycle.lean) |
+| `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_admissiblePath_payoffNearReturns`](../UniformEquilibrium/Quitting/Projective/PunishmentFloorNearReturn.lean) |
 
 The open producer arrows are:
 
 - `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: serialize the static whole-law atom alternatives into executable tails with bounded forcing, vanishing survival, and small initial debt at every accuracy.
-- `PAID-FIRST-DISAGREEMENT-ROW` to `POSITIVE-ADMISSIBLE-RETURN`: Missing: re-enter the paid strategic row as a positive exact floor-admissible edge and construct an exact return to its tail state.
+- `PAID-FIRST-DISAGREEMENT-ROW` to `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: Missing: fix one positive charge threshold, while allowing the paid-row realization's source, target, path, and charged edge to vary with endpoint tolerance, and make endpoint payoff vectors arbitrarily close.
 
 The DAG nodes have these mathematical meanings:
 
@@ -199,7 +202,7 @@ The DAG nodes have these mathematical meanings:
 - `PAID-FIRST-DISAGREEMENT-ROW`: An off-minimum full-replacement cluster carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence.
 - `VANISHING-DEBT-ATOM-ACCESS`: Every extracted positive-minimum tangent family has a fixed positive off-diagonal observer and an eventually available atom alternative whose endpoint observer debt tends to zero. In the support-entry branch the actual zero-debt recipient can be retained.
 - `CHRONOLOGICAL-DEBT-SHADOWING`: Certificates at every positive accuracy compile to terminal approximate Nash profiles and one uniform-equilibrium payoff.
-- `POSITIVE-ADMISSIBLE-RETURN`: One positive exact punishment-floor admissible edge followed by an exact return path compiles to a uniform-equilibrium payoff.
+- `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A fixed positive charge threshold, with source, target, path, and charged edge allowed to vary with endpoint tolerance, and endpoint payoff vectors converging arbitrarily closely, compiles to a uniform-equilibrium payoff.
 - `UNIFORM-EQUILIBRIUM-PAYOFF`: Existence of one fixed payoff target satisfying the uniform finite-horizon equilibrium contract.
 
 <!-- END GENERATED OPEN LEAVES -->
@@ -239,8 +242,10 @@ the live mathematical ledger.
 - **Chronological atom production:** serialize the fixed vanishing-debt atom
   access into executable reached tails satisfying the checked shadowing
   certificate at every positive accuracy.
-- **Exact return production:** re-enter a paid first-disagreement row as a
-  positive punishment-floor admissible edge and construct an exact return.
+- **Paid-row payoff near-return:** fix one positive charge threshold, while
+  allowing the source, target, path, and charged edge to vary with endpoint
+  tolerance, and make endpoint payoff vectors arbitrarily close. Fixed-edge
+  payoff closure and exact return are stronger special cases.
 - **Global barrier:** find a forward-invariant coupled semantic barrier with a
   positive debt floor, then consume it through the terminal-gap theorem.
 - **Vanishing discount:** decode analytic Bellman data into a strategically

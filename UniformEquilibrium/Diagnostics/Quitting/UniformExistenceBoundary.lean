@@ -25,9 +25,12 @@ zero-debt recipient from the entry witness.
 
 The remaining implications are producer statements.  One may turn static
 vanishing-debt atoms into chronological debt-shadowing certificates, or turn
-the paid row into a positive exact admissible edge with an exact return.  The
-checked consumers for those two concrete outputs already produce a uniform
-payoff.  Neither missing producer is asserted here.
+the paid row into a fixed positive charge threshold and, at every accuracy, a
+possibly varying admissible path containing an edge above that threshold whose
+endpoint payoff vectors are close.  Fixed-edge payoff closure and exact return
+to the full tail state are stronger special cases.  The checked consumers for
+those two concrete outputs already produce a uniform payoff.  Neither missing
+producer is asserted here.
 -/
 
 noncomputable section
@@ -150,6 +153,27 @@ def PaidFirstDisagreementAdmissibleReturnConsumer
             observer gain)) →
         Nonempty (QuittingPositiveAdmissibleReturn reward)
 
+/-- Source-matched paid-row consumer with the weakest downstream output used
+by the four-exit argument: an unrestricted uniform-equilibrium payoff.  More
+concrete paid-row consumers can factor through this interface without
+duplicating the finite support-rank case split. -/
+def PaidFirstDisagreementUniformPayoffConsumer
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
+  ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+      (mover : {who // who ∈ frontier.positiveDebtSupport})
+      (endpoint :
+        QuittingPositiveMinimumDebtTangentFamily.FullReplacementCluster
+          frontier mover),
+    quittingTerminalSemanticDebtSum frontier.base <
+        quittingTerminalSemanticDebtSum endpoint.cluster →
+      ∀ observer gain, observer ≠ mover.1 → 0 < gain →
+        (∀ᶠ rank in atTop,
+          Nonempty (QuittingPaidFirstDisagreementRow reward
+            (frontier.fullReplacementProfile mover (endpoint.subseq rank))
+            observer gain)) →
+        ∃ payoff : Payoff ι,
+          (quittingGame reward).IsUniformEquilibriumPayoff none payoff
+
 /-- Positive minimum semantic debt reaches the checked finite support-rank
 alternative.  This is a one-way reduction, not an equivalence between the
 minimum and the four tags. -/
@@ -192,9 +216,55 @@ theorem not_hasPositiveMinimumTerminalSemanticDebt_of_vanishingDebtAtomChronolog
     (exists_uniformEquilibriumPayoff_of_vanishingDebtAtomChronologicalConsumer
       hconsumer)
 
-/-- **Four-exit conditional capstone.**  The first three finite-rank exits may
-be consumed by chronological shadowing, while the paid-row exit may instead
-be consumed by an exact positive admissible return. -/
+/-- **Generic four-exit conditional capstone.**  The first three finite-rank
+exits are consumed by chronological shadowing.  The paid-row consumer keeps
+the exact source telescope but may discharge it by any proof of an unrestricted
+uniform-equilibrium payoff. -/
+theorem exists_uniformEquilibriumPayoff_of_finiteSupportRankExitUniformPayoffConsumers
+    [Nonempty ι]
+    (hpositiveSlope :
+      ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward),
+        (∃ mover, 0 < ∑ observer, frontier.tangent mover observer) →
+          ∀ eta : ℝ, 0 < eta →
+            Nonempty (QuittingChronologicalDebtShadowingCertificate reward eta))
+    (hsupportEntry :
+      ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward),
+        HasQuittingStoppingLawFlatSupportEntry
+          frontier.base frontier.positiveDebtSupport frontier.tangent →
+          ∀ eta : ℝ, 0 < eta →
+            Nonempty (QuittingChronologicalDebtShadowingCertificate reward eta))
+    (hcirculation :
+      ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward),
+        HasQuittingStoppingLawFlatChargedCirculation
+          frontier.positiveDebtSupport frontier.tangent →
+          ∀ eta : ℝ, 0 < eta →
+            Nonempty (QuittingChronologicalDebtShadowingCertificate reward eta))
+    (hpaid : PaidFirstDisagreementUniformPayoffConsumer reward) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  by_contra hno
+  have hminimum :=
+    (not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt
+      reward).1 hno
+  let first := (nonempty_positiveMinimumDebtTangentFamily hminimum).some
+  obtain ⟨frontier, hpositive | hentry | hcirculationExit | hpaidExit⟩ :=
+    first.finiteSupportRankAlternative
+  · exact hno
+      (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
+        reward (hpositiveSlope frontier hpositive))
+  · exact hno
+      (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
+        reward (hsupportEntry frontier hentry.2))
+  · exact hno
+      (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
+        reward (hcirculation frontier hcirculationExit.2.2))
+  · obtain ⟨mover, endpoint, hseparated, observer, gain, hobserver, hgain,
+        hrows⟩ := hpaidExit
+    exact hno (hpaid frontier mover endpoint hseparated
+      observer gain hobserver hgain hrows)
+
+/-- **Exact-return four-exit capstone.**  A positive admissible return is one
+concrete way to consume the paid-row exit. -/
 theorem exists_uniformEquilibriumPayoff_of_finiteSupportRankExitConsumers
     [Nonempty ι]
     (hpositiveSlope :
@@ -217,26 +287,12 @@ theorem exists_uniformEquilibriumPayoff_of_finiteSupportRankExitConsumers
     (hpaid : PaidFirstDisagreementAdmissibleReturnConsumer reward) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  by_contra hno
-  have hminimum :=
-    (not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt
-      reward).1 hno
-  let first := (nonempty_positiveMinimumDebtTangentFamily hminimum).some
-  obtain ⟨frontier, hpositive | hentry | hcirculationExit | hpaidExit⟩ :=
-    first.finiteSupportRankAlternative
-  · exact hno
-      (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-        reward (hpositiveSlope frontier hpositive))
-  · exact hno
-      (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-        reward (hsupportEntry frontier hentry.2))
-  · exact hno
-      (quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-        reward (hcirculation frontier hcirculationExit.2.2))
-  · obtain ⟨mover, endpoint, hseparated, observer, gain, hobserver, hgain,
-        hrows⟩ := hpaidExit
-    obtain ⟨result⟩ := hpaid frontier mover endpoint hseparated
-      observer gain hobserver hgain hrows
-    exact hno result.exists_uniformEquilibriumPayoff
+  apply
+    exists_uniformEquilibriumPayoff_of_finiteSupportRankExitUniformPayoffConsumers
+      hpositiveSlope hsupportEntry hcirculation
+  intro frontier mover endpoint hseparated observer gain hobserver hgain hrows
+  obtain ⟨result⟩ := hpaid frontier mover endpoint hseparated
+    observer gain hobserver hgain hrows
+  exact result.exists_uniformEquilibriumPayoff
 
 end GameTheory
