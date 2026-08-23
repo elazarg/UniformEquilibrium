@@ -380,9 +380,26 @@ theorem QuittingStoppingLawActiveTransferCycle.exists_eventually_reachedCubeEdge
   · right
     simpa only [data, debt, word, threshold, edgeFloor] using hcurvature
 
+/-- Independently of the total tangent slope, every stopping-law frontier has
+either a zero-debt support entry or a dynamic active transfer cycle.  This
+reroutes the localization; it does not consume positive total slope, whose
+endpoint and atom consequences remain available in parallel. -/
+theorem QuittingCounterexampleStoppingLawFrontier.entry_or_activeTransferCycle
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    HasQuittingStoppingLawFlatSupportEntry
+        frontier.base frontier.active frontier.tangent ∨
+      Nonempty (QuittingStoppingLawActiveTransferCycle frontier) := by
+  by_cases hentry : HasQuittingStoppingLawFlatSupportEntry
+      frontier.base frontier.active frontier.tangent
+  · exact Or.inl hentry
+  · exact Or.inr (frontier.nonempty_activeTransferCycle_of_noEntry hentry)
+
 /-- The four tagged stopping-law branches compress to three semantic outcomes:
 positive total slope, zero-debt support entry, or a dynamic active transfer
-cycle. -/
+cycle.  The first label retains extra quantitative information despite the
+independent binary rerouting above. -/
 theorem QuittingCounterexampleStoppingLawFrontier.slope_or_entry_or_activeTransferCycle
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
@@ -415,6 +432,19 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_dynamicTrichotomy
   letI : Nonempty ι := regime.nonempty_players
   obtain ⟨frontier⟩ := regime.exists_stoppingLaw_exhaustiveFrontier
   exact ⟨frontier, frontier.slope_or_entry_or_activeTransferCycle⟩
+
+/-- Every counterexample regime reaches a stopping-law frontier satisfying
+the binary support-entry or active-transfer-cycle localization. -/
+theorem QuittingCounterexampleRegime.exists_stoppingLaw_entry_or_activeTransferCycle
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (regime : QuittingCounterexampleRegime reward) :
+    ∃ frontier : QuittingCounterexampleStoppingLawFrontier regime,
+      HasQuittingStoppingLawFlatSupportEntry
+          frontier.base frontier.active frontier.tangent ∨
+        Nonempty (QuittingStoppingLawActiveTransferCycle frontier) := by
+  letI : Nonempty ι := regime.nonempty_players
+  obtain ⟨frontier⟩ := regime.exists_stoppingLaw_exhaustiveFrontier
+  exact ⟨frontier, frontier.entry_or_activeTransferCycle⟩
 
 /-- Every counterexample regime has the simultaneous static/dynamic
 localization package. -/

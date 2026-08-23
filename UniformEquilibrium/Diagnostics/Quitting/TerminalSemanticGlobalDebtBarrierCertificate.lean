@@ -59,6 +59,86 @@ structure Certificate
   debt_floor : ∀ pair ∈ barrier,
     δ ≤ quittingTerminalSemanticDebtSum pair
 
+/-- An exact nonnegative Lyapunov potential with fixed low-debt separation
+supplies a semantic debt barrier through its zero set.  This is the reusable
+consumer for distance potentials and for limits of approximate certificates;
+no semialgebraic presentation is assumed. -/
+def Certificate.ofPotential
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (floor separation : ℝ)
+    (potential : QuittingTerminalSemanticPair ι → ℝ)
+    (hseparation : 0 < separation)
+    (hnonneg : ∀ pair, 0 ≤ potential pair)
+    (hnever : potential (quittingNeverBoundarySemanticPair reward) = 0)
+    (hprefix : ∀ pair (root : ι → PMF Bool),
+      potential (quittingTerminalSemanticPrefix reward root pair) ≤
+        potential pair)
+    (hlowDebt : ∀ pair, quittingTerminalSemanticDebtSum pair ≤ floor →
+      separation ≤ potential pair) :
+    Certificate reward floor where
+  barrier := {pair | potential pair = 0}
+  neverBoundary_mem := hnever
+  prefix_mem := by
+    intro pair hpair root
+    apply le_antisymm
+    · calc
+        potential (quittingTerminalSemanticPrefix reward root pair) ≤
+            potential pair := hprefix pair root
+        _ = 0 := hpair
+    · exact hnonneg _
+  debt_floor := by
+    intro pair hpair
+    by_contra hfloor
+    have hpositive := hlowDebt pair (le_of_not_ge hfloor)
+    rw [hpair] at hpositive
+    exact (not_lt_of_ge hpositive) hseparation
+
+/-- Pointwise limits consume vanishing approximate Lyapunov certificates.
+Compactness or Arzelà--Ascoli is deliberately not hidden here: a producer must
+supply the common pointwise limit.  Once it does, nonnegativity, the Never
+boundary, all-root invariance, and the fixed low-debt separation pass exactly
+to the limit. -/
+def Certificate.ofApproximatePotentialLimit
+    {index : Type} {filter : Filter index} [filter.NeBot]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (floor separation : ℝ)
+    (approximation : index → QuittingTerminalSemanticPair ι → ℝ)
+    (potential : QuittingTerminalSemanticPair ι → ℝ)
+    (error : index → ℝ)
+    (hseparation : 0 < separation)
+    (herror : Tendsto error filter (nhds 0))
+    (hlimit : ∀ pair, Tendsto (fun n ↦ approximation n pair) filter
+      (nhds (potential pair)))
+    (hnonneg : ∀ n pair, 0 ≤ approximation n pair)
+    (hnever : ∀ n, approximation n
+      (quittingNeverBoundarySemanticPair reward) ≤ error n)
+    (hprefix : ∀ n pair (root : ι → PMF Bool),
+      approximation n (quittingTerminalSemanticPrefix reward root pair) ≤
+        approximation n pair + error n)
+    (hlowDebt : ∀ n pair,
+      quittingTerminalSemanticDebtSum pair ≤ floor →
+        separation ≤ approximation n pair) :
+    Certificate reward floor := by
+  apply Certificate.ofPotential reward floor separation potential hseparation
+  · intro pair
+    exact le_of_tendsto_of_tendsto tendsto_const_nhds (hlimit pair)
+      (Filter.Eventually.of_forall fun n ↦ hnonneg n pair)
+  · apply le_antisymm
+    · exact le_of_tendsto_of_tendsto (hlimit _)
+        herror (Filter.Eventually.of_forall hnever)
+    · exact le_of_tendsto_of_tendsto tendsto_const_nhds (hlimit _)
+        (Filter.Eventually.of_forall fun n ↦ hnonneg n _)
+  · intro pair root
+    have hright : Tendsto (fun n ↦ approximation n pair + error n) filter
+        (nhds (potential pair)) := by
+      simpa only [add_zero] using (hlimit pair).add herror
+    exact le_of_tendsto_of_tendsto (hlimit _)
+      hright
+      (Filter.Eventually.of_forall fun n ↦ hprefix n pair root)
+  · intro pair hdebt
+    exact le_of_tendsto_of_tendsto tendsto_const_nhds (hlimit pair)
+      (Filter.Eventually.of_forall fun n ↦ hlowDebt n pair hdebt)
+
 omit [DecidableEq ι] in
 /-- The Never boundary gives a table-level ceiling on every certified debt
 floor.  No prefix-invariance or closure hypothesis is needed for this bound:

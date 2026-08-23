@@ -79,23 +79,22 @@ structure QuittingStoppingLawAtomExactPrefixChronology
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
-/-- **Literal atom-to-chronology adapter.**
-
-The stopping-law atom suffix can be placed after an exact state-matched
-Nash-root word whose length tends to infinity.  The complete prefixed
-profiles remain asymptotically on the minimum-total-debt stratum.
-
-The result preserves the actual atom-producing suffix and replacement
-strategy.  It does not pass to an infinite-path limit, where the terminal
-atom could escape to infinity. -/
-theorem nonempty_atomExactPrefixChronology
+/-- Build an exact-prefix chronology from a supplied fixed atom column.  This
+is the mover- and observer-preserving form of the chronology constructor. -/
+theorem nonempty_atomExactPrefixChronology_of_fixedAlternative
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
-    Nonempty (QuittingStoppingLawAtomExactPrefixChronology frontier) := by
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (mover : {who // who ∈ frontier.active}) (observer : ι) (charge : ℝ)
+    (hobserver : observer ≠ mover.1) (hcharge : 0 < charge)
+    (hatom : ∀ᶠ rank in atTop,
+      HasQuittingStoppingLawDebtSlopeAtomAlternative reward
+        (frontier.profiles (frontier.subseq rank)) mover.1 observer
+        (frontier.bestResponse mover (frontier.subseq rank)) charge) :
+    ∃ chronology : QuittingStoppingLawAtomExactPrefixChronology frontier,
+      chronology.mover = mover ∧ chronology.observer = observer ∧
+        chronology.charge = charge := by
   classical
-  obtain ⟨mover, observer, charge, hobserver, hcharge, hatom⟩ :=
-    frontier.exists_fixedAtomAlternative
   have hstackChoice : ∀ rank : ℕ,
       ∃ roots : List (ι → PMF Bool),
         roots.length = rank + 1 ∧
@@ -164,7 +163,7 @@ theorem nonempty_atomExactPrefixChronology
   have hloss : Tendsto (fun rank => tailDebt rank - prefixDebt rank)
       atTop (nhds 0) := by
     simpa only [sub_self] using htailDebt.sub hprefixDebt
-  exact ⟨{
+  let chronology : QuittingStoppingLawAtomExactPrefixChronology frontier := {
     mover := mover
     observer := observer
     charge := charge
@@ -175,7 +174,29 @@ theorem nonempty_atomExactPrefixChronology
     exact_stack := hrootsExact
     atom_eventually := hatom
     prefixDebt_tendsto_minimum := hprefixDebt
-    totalDebtLoss_tendsto_zero := hloss }⟩
+    totalDebtLoss_tendsto_zero := hloss }
+  exact ⟨chronology, rfl, rfl, rfl⟩
+
+/-- **Literal atom-to-chronology adapter.**
+
+The stopping-law atom suffix can be placed after an exact state-matched
+Nash-root word whose length tends to infinity.  The complete prefixed
+profiles remain asymptotically on the minimum-total-debt stratum.
+
+The result preserves the actual atom-producing suffix and replacement
+strategy.  It does not pass to an infinite-path limit, where the terminal
+atom could escape to infinity. -/
+theorem nonempty_atomExactPrefixChronology
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    Nonempty (QuittingStoppingLawAtomExactPrefixChronology frontier) := by
+  obtain ⟨mover, observer, charge, hobserver, hcharge, hatom⟩ :=
+    frontier.exists_fixedAtomAlternative
+  obtain ⟨chronology, _hmover, _hobserver, _hcharge⟩ :=
+    frontier.nonempty_atomExactPrefixChronology_of_fixedAlternative mover
+      observer charge hobserver hcharge hatom
+  exact ⟨chronology⟩
 
 end QuittingCounterexampleStoppingLawFrontier
 
