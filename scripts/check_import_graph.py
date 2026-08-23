@@ -32,6 +32,10 @@ DEFAULT_UMBRELLAS = (
     "Theorems",
     "Experiments",
 )
+# Nested roots are additional authoritative inventories in a library whose
+# production root is intentionally narrower.  Their source paths follow the
+# ordinary dotted Lean module layout.
+SECONDARY_UMBRELLAS = ("UniformEquilibrium.Diagnostics",)
 PRUNED_DIRECTORIES = {".git", ".lake", "__pycache__", "GameTheory"}
 LEAN_LIBRARY_RE = re.compile(
     r"^\s*lean_lib\s+([A-Za-z_][A-Za-z0-9_']*)\s+where\b", re.MULTILINE
@@ -48,6 +52,7 @@ SCRATCH_NAMESPACE_RE = re.compile(
 INVENTORY_ONLY_FACADES = {
     "UniformEquilibrium.Diagnostics.Quitting.All": {
         "UniformEquilibrium",
+        "UniformEquilibrium.Diagnostics",
         "AxiomAudit",
     },
     "UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.All": {
@@ -196,8 +201,14 @@ def discover_umbrellas(root: pathlib.Path) -> list[Umbrella]:
     else:
         names = DEFAULT_UMBRELLAS
     umbrellas = []
-    for name in dict.fromkeys(names):
+    candidates = list(dict.fromkeys(names))
+    candidates.extend(
+        name for name in SECONDARY_UMBRELLAS if name not in candidates
+    )
+    for name in candidates:
         path = root / f"{name}.lean"
+        if not path.is_file() and name in SECONDARY_UMBRELLAS:
+            path = root.joinpath(*name.split(".")).with_suffix(".lean")
         if path.is_file():
             umbrellas.append(Umbrella(name, path))
     return umbrellas
@@ -272,10 +283,17 @@ def check_import_graph(
             )
             continue
         reachable = reachable_from(name, imports, local_names)
+        nested_umbrellas = tuple(
+            nested
+            for nested in by_name
+            if nested != name and _is_prefixed(nested, name)
+        )
         orphaned = sorted(
             module
             for module in local_names
-            if _is_prefixed(module, name) and module not in reachable
+            if _is_prefixed(module, name)
+            and not any(_is_prefixed(module, nested) for nested in nested_umbrellas)
+            and module not in reachable
         )
         for module in orphaned:
             failures.append(

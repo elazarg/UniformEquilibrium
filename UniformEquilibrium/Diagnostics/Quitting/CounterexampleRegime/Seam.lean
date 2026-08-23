@@ -12,11 +12,10 @@ import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
 import UniformEquilibrium.Quitting.Cycles.PeriodicWindowEvaluation
 
 /-!
-# The source--tail--restart seam of a quitting counterexample
+# Independent source and dynamic-tail witnesses of a quitting counterexample
 
-This module packages the strongest presently unconditional meeting point of
-the finite analytic source, the optimized exact dynamic-debt tail, and the
-strategic evaluation of periodic restarts.
+This module records independent finite-source and optimized dynamic-tail
+consequences, together with the strategic evaluation of periodic restarts.
 
 Every counterexample regime supplies simultaneously:
 
@@ -28,13 +27,9 @@ Every counterexample regime supplies simultaneously:
   of first-pass stop values and refusal/`Never`, and exceeds its realized
   payoff by the regime's terminal gap for some player.
 
-The package deliberately has no field equating the packet mass with a late
-window's singleton occupation law, or the packet target with the tail's
-realized terminal payoff.  Such an identification is false at the level of
-the currently forced data: noncomplementary singleton packets can themselves
-be uniformly refusal-blocked.  The remaining producer problem is therefore
-to use exact product-root dynamics and nonsingleton rewards to turn that
-blocking into a positive-charge return, or else to find an unblocked restart.
+No structure combines the source packet with the dynamic tail: the two are
+separate consequences of terminal exploitability, and no relation between
+their data has been proved.
 -/
 
 noncomputable section
@@ -46,9 +41,8 @@ open Filter Math.Probability
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-/-- A witness-rich normal form combining the finite source and the optimized
-tail consequences of one counterexample regime. -/
-structure QuittingCounterexampleSeamWitness
+/-- The finite singleton-source consequence of terminal exploitability. -/
+structure QuittingCounterexampleSourceWitness
     (regime : QuittingCounterexampleRegime reward) where
   packet : QuittingNormalizedSingletonSourcePacket reward
   packetOwner : ι
@@ -60,6 +54,11 @@ structure QuittingCounterexampleSeamWitness
   packetDelivery_lt_refusal :
     quittingSingletonMixture reward packet.mass packetOwner <
       quittingSingletonRefusalValue reward packet.mass packetOwner packetOwner
+
+/-- The optimized exact dynamic-debt tail consequence of terminal
+exploitability. -/
+structure QuittingCounterexampleDynamicTailWitness
+    (regime : QuittingCounterexampleRegime reward) where
   tail : ℕ → QuittingDebtPoint ι
   subseq : ℕ → ℕ
   limit : QuittingPositiveDebtSelfLoopLimit reward
@@ -116,7 +115,7 @@ theorem exists_pureTimeCap_gap
 /-- Every finite window of any dynamic-debt tail, restarted periodically, is
 exposed by the exact pure-time/`Never` cap at the regime's full terminal gap.
 No Bellman property of the supplied tail is needed for this strategic
-statement; a seam witness supplies the canonical tail to which it is applied. -/
+statement. -/
 theorem exists_cyclicWindow_pureTimeCap_gap
     (regime : QuittingCounterexampleRegime reward)
     (tail : ℕ → QuittingDebtPoint ι) (start length : ℕ)
@@ -182,27 +181,33 @@ theorem exists_cyclicWindow_finiteEvaluation_gap
         (quittingCyclicRootSequence cycle phase) who (length + 1) := by
       simpa [profile] using heval
 
-/-- **Combined source--tail seam.**  Every counterexample regime has a
-finite strict-refusal packet and an independently extracted positive-debt
-all-Continue tail limit, with their complete provenance and convergence data. -/
-theorem nonempty_seamWitness
+/-- Every counterexample regime has a finite strict-refusal source packet. -/
+theorem nonempty_sourceWitness
     (regime : QuittingCounterexampleRegime reward) :
-    Nonempty (QuittingCounterexampleSeamWitness regime) := by
+    Nonempty (QuittingCounterexampleSourceWitness regime) := by
   letI : Nonempty ι := regime.nonempty_players
   obtain ⟨packet⟩ := regime.nonempty_normalizedSingletonSourcePacket
   obtain ⟨packetOwner, hpacketPos, hpacketLtOne, htargetLt, hrefusal⟩ :=
     regime.exists_active_strictSingletonRefusal packet
-  obtain ⟨tail, subseq, limit, hsubseq, hprojective, hbox, hedge,
-      hinitialDebt, hlimitDebt, hvalue, hdebt, hquit, hcontinue,
-      hownerClock, habsorption⟩ :=
-    regime.exists_terminalGapDynamicDebtTail_selfLoopLimit
   exact ⟨{
     packet := packet
     packetOwner := packetOwner
     packetOwnerMass_pos := hpacketPos
     packetOwnerMass_lt_one := hpacketLtOne
     packetTarget_lt_delivery := htargetLt
-    packetDelivery_lt_refusal := hrefusal
+    packetDelivery_lt_refusal := hrefusal }⟩
+
+/-- Every counterexample regime has an independently extracted positive-debt
+all-Continue dynamic tail limit, with its provenance and convergence data. -/
+theorem nonempty_dynamicTailWitness
+    (regime : QuittingCounterexampleRegime reward) :
+    Nonempty (QuittingCounterexampleDynamicTailWitness regime) := by
+  letI : Nonempty ι := regime.nonempty_players
+  obtain ⟨tail, subseq, limit, hsubseq, hprojective, hbox, hedge,
+      hinitialDebt, hlimitDebt, hvalue, hdebt, hquit, hcontinue,
+      hownerClock, habsorption⟩ :=
+    regime.exists_terminalGapDynamicDebtTail_selfLoopLimit
+  exact ⟨{
     tail := tail
     subseq := subseq
     limit := limit

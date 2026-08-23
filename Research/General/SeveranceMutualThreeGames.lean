@@ -31,7 +31,8 @@ certification arenas over the same mutual, with three possible exits:
   positive reciprocal-synergy pair and seeks a positive-exposure exact return.
 
 The central object is `ThreeGameDossier`.  It stores the canonical
-counterexample regime and the source--tail--restart seam which current
+counterexample regime and the independent source and dynamic-tail witnesses
+which current
 production theorems force from it.  Two exact reductions are proved:
 
 1. a dossier exists iff the underlying quitting game has no
@@ -129,23 +130,25 @@ theorem allQuittingGames_iff_allMutuals :
 /-! ## The exact counterexample dossier -/
 
 /-- The complete three-game dossier forced by a hypothetical counterexample.
-The seam is derived data, but storing it makes all three games available
-without making any false identification between its packet, tail, and
-periodic windows. -/
+The source packet and dynamic tail are stored as independent consequences;
+no relation between them is asserted. -/
 structure ThreeGameDossier where
   regime : QuittingCounterexampleRegime club.settlement
-  seam : QuittingCounterexampleSeamWitness regime
+  source : QuittingCounterexampleSourceWitness regime
+  dynamicTail : QuittingCounterexampleDynamicTailWitness regime
 
 namespace ThreeGameDossier
 
 variable {club : Mutual ι}
 
-/-- Attach the forced source--tail--restart seam to a counterexample regime. -/
+/-- Attach the independently forced source and dynamic-tail witnesses to a
+counterexample regime. -/
 def ofCounterexampleRegime
     (regime : QuittingCounterexampleRegime club.settlement) :
-    club.ThreeGameDossier where
+  club.ThreeGameDossier where
   regime := regime
-  seam := Classical.choice regime.nonempty_seamWitness
+  source := Classical.choice regime.nonempty_sourceWitness
+  dynamicTail := Classical.choice regime.nonempty_dynamicTailWitness
 
 /-- A dossier itself refutes every uniform-equilibrium payoff. -/
 theorem not_hasUniformPayoff (dossier : club.ThreeGameDossier) :
@@ -219,10 +222,10 @@ namespace ThreeGameDossier
 
 variable {club : Mutual ι}
 
-/-- The particular underwriting proposal carried by the combined seam. -/
+/-- The particular underwriting proposal carried by the source witness. -/
 def underwritingProspectus (dossier : club.ThreeGameDossier) :
     club.Prospectus :=
-  dossier.seam.packet
+  dossier.source.packet
 
 /-- In a dossier, not only the selected proposal but every normalized
 prospectus has an active member with one common positive refusal advantage. -/
@@ -406,7 +409,7 @@ theorem not_hasWinningSupportReorganization
 /-- The optimized run-off ledger carried by the dossier. -/
 def optimizedRunoffLedger (dossier : club.ThreeGameDossier) :
     ℕ → QuittingDebtPoint ι :=
-  dossier.seam.tail
+  dossier.dynamicTail.tail
 
 /-- **Literal reserve conservation.**  Current dynamic debt equals surviving
 terminal debt plus the survival-weighted seams discharged inside the finite
@@ -426,7 +429,7 @@ theorem runoffDebt_conservation
             quittingDynamicDebtSeam
               (dossier.optimizedRunoffLedger (start + offset)) who := by
   simpa only [optimizedRunoffLedger] using
-    dossier.seam.debt_conservation who start fuel
+    dossier.dynamicTail.debt_conservation who start fuel
 
 /-- Every reversed finite segment of the selected run-off ledger is already
 a literal punishment-floor exact prefix; no extra endpoint-floor premise is
@@ -434,7 +437,7 @@ needed after all-date punishment rationality. -/
 def optimizedRunoffPrefix
     (dossier : club.ThreeGameDossier) (horizon : ℕ) :
     QuittingPunishmentFloorFinitePrefix club.settlement :=
-  dossier.seam.tailSegmentPunishmentFloorPrefix horizon
+  dossier.dynamicTail.tailSegmentPunishmentFloorPrefix horizon
 
 /-- The prefix's charge is exactly the original segment's accumulated
 closure exposure. -/
@@ -442,31 +445,31 @@ theorem optimizedRunoffPrefix_charge
     (dossier : club.ThreeGameDossier) (horizon : ℕ) :
     (dossier.optimizedRunoffPrefix horizon).charge =
       ∑ time ∈ Finset.range horizon,
-        quittingDynamicDebtTailAbsorptionCharge dossier.seam.tail time := by
+        quittingDynamicDebtTailAbsorptionCharge dossier.dynamicTail.tail time := by
   simpa only [optimizedRunoffPrefix] using
-    dossier.seam.tailSegmentPunishmentFloorPrefix_charge horizon
+    dossier.dynamicTail.tailSegmentPunishmentFloorPrefix_charge horizon
 
 /-- The limiting augmented account is a literal all-`Stay`, zero-charge exact
 Nash--Bellman self-loop. -/
 theorem limitingZombieAccount_exactSelfLoop
     (dossier : club.ThreeGameDossier) :
     IsQuittingNashBellmanEdge club.settlement
-      (dossier.seam.limitDynamicDebtCap, quittingAllContinueSimplexRoot)
-      (dossier.seam.limitDynamicDebtCap, quittingAllContinueSimplexRoot) :=
-  dossier.seam.limitDynamicDebtCap_exactSelfLoop
+      (dossier.dynamicTail.limitDynamicDebtCap, quittingAllContinueSimplexRoot)
+      (dossier.dynamicTail.limitDynamicDebtCap, quittingAllContinueSimplexRoot) :=
+  dossier.dynamicTail.limitDynamicDebtCap_exactSelfLoop
 
 /-- Honest late terminal settlement vanishes while the selected advertised
 account converges to a positive value retaining the counterexample gap. -/
 theorem ownerZombieGap_tendsto_limitValue
     (dossier : club.ThreeGameDossier) :
     Tendsto (fun start ↦
-      (dossier.optimizedRunoffLedger start).1.1 dossier.seam.limit.owner -
+      (dossier.optimizedRunoffLedger start).1.1 dossier.dynamicTail.limit.owner -
         quittingRootSequenceTerminalValue club.settlement
           (quittingDynamicDebtTailRoots dossier.optimizedRunoffLedger)
-          dossier.seam.limit.owner start)
-      atTop (nhds (dossier.seam.limit.value dossier.seam.limit.owner)) := by
+          dossier.dynamicTail.limit.owner start)
+      atTop (nhds (dossier.dynamicTail.limit.value dossier.dynamicTail.limit.owner)) := by
   simpa only [optimizedRunoffLedger] using
-    dossier.seam.ownerSemanticGap_tendsto_limitValue
+    dossier.dynamicTail.ownerSemanticGap_tendsto_limitValue
 
 end ThreeGameDossier
 
@@ -480,7 +483,7 @@ variable {club : Mutual ι}
 windows.  Window `n` starts at ledger date `n` and repeats `n+1` rows. -/
 def auditFamily (dossier : club.ThreeGameDossier) :
     QuittingPeriodicWindowFamily club.settlement :=
-  dossier.seam.canonicalPeriodicTailWindowFamily
+  dossier.dynamicTail.canonicalPeriodicTailWindowFamily
 
 /-- The source-typed window underlying canonical audit `n`.  It begins at
 tail date `n` and contains `n+1` roots, before periodic repetition changes the
@@ -488,8 +491,8 @@ boundary condition. -/
 def canonicalSourceWindow
     (dossier : club.ThreeGameDossier) (window : ℕ) :
     QuittingFiniteRootWindow
-      (quittingDynamicDebtTailRoots dossier.seam.tail) :=
-  dossier.seam.finiteRootWindow window (window + 1)
+      (quittingDynamicDebtTailRoots dossier.dynamicTail.tail) :=
+  dossier.dynamicTail.finiteRootWindow window (window + 1)
 
 /-- Conditional multi-filer noise vanishes along the canonical source
 windows.  This is the rigorous sense in which late audit occupation becomes
@@ -504,7 +507,7 @@ theorem canonicalSourceWindow_collision_tendsto_zero
     QuittingFiniteRootWindow.tendsto_normalizedCollisionMass_zero_of_start_tendsto
   · change Tendsto (fun window : ℕ ↦ window) atTop atTop
     exact Filter.tendsto_atTop_mono (fun _ ↦ le_rfl) tendsto_id
-  · exact dossier.seam.rootAbsorptionMass_tendsto_zero
+  · exact dossier.dynamicTail.rootAbsorptionMass_tendsto_zero
 
 /-- **Ballistic coupling of underwriting and audit.**  No escaping sequence
 of positive-absorption source windows can have endpoint displacement little-o
@@ -513,13 +516,13 @@ a complementary prospectus, contradicting the packet defect. -/
 theorem not_exists_sublinearAbsorptionReturn
     (dossier : club.ThreeGameDossier)
     (window : ℕ → QuittingFiniteRootWindow
-      (quittingDynamicDebtTailRoots dossier.seam.tail))
+      (quittingDynamicDebtTailRoots dossier.dynamicTail.tail))
     (hstart : Tendsto (fun index ↦ (window index).start) atTop atTop)
     (habsorption : ∀ index, 0 < (window index).absorptionMass)
     (hdrift : Tendsto (fun index ↦
-      dossier.seam.normalizedEndpointDrift (window index))
+      dossier.dynamicTail.normalizedEndpointDrift (window index))
       atTop (nhds 0)) : False :=
-  dossier.seam.not_exists_sublinearAbsorptionReturn
+  dossier.dynamicTail.not_exists_sublinearAbsorptionReturn
     window hstart habsorption hdrift
 
 /-- Canonical-window specialization of ballisticity. -/
@@ -527,7 +530,7 @@ theorem canonicalNormalizedEndpointDrift_not_tendsto_zero
     (dossier : club.ThreeGameDossier)
     (habsorption : ∀ window,
       0 < (dossier.canonicalSourceWindow window).absorptionMass) :
-    ¬ Tendsto (fun window ↦ dossier.seam.normalizedEndpointDrift
+    ¬ Tendsto (fun window ↦ dossier.dynamicTail.normalizedEndpointDrift
         (dossier.canonicalSourceWindow window)) atTop (nhds 0) := by
   intro hdrift
   exact dossier.not_exists_sublinearAbsorptionReturn
@@ -557,7 +560,7 @@ at one concrete phase. -/
 theorem not_passes (audit : dossier.Audit) : ¬ audit.Passes := by
   intro hpasses
   obtain ⟨who, hescape⟩ :=
-    dossier.seam.canonicalPeriodicTailWindow_escape audit.window
+    dossier.dynamicTail.canonicalPeriodicTailWindow_escape audit.window
   have hgap : dossier.regime.terminalGap / 2 <
       dossier.auditFamily.coordinateGap audit.window who := by
     unfold QuittingPeriodicWindowFamily.coordinateGap
@@ -596,7 +599,7 @@ theorem audit_exists_infinite_fixedMember_fixedBranch
             (dossier.auditFamily.roots window) who phase -
             dossier.auditFamily.delivery window who}) := by
   simpa only [auditFamily] using
-    dossier.seam.exists_infinite_fixedPlayer_fixedBranch
+    dossier.dynamicTail.exists_infinite_fixedPlayer_fixedBranch
 
 end ThreeGameDossier
 

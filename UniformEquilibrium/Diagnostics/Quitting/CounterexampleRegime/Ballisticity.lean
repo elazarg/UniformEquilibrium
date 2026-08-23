@@ -42,9 +42,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- A source-typed finite window of the optimized exact-D tail. -/
 def finiteRootWindow (start fuel : ℕ) :
@@ -451,6 +451,6 @@ theorem exists_pos_eventually_endpointDistance_ge_absorptionMass :
   exact seam.not_exists_sublinearAbsorptionReturn window hstartTendsto
     habsorptionWindow hdrift
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

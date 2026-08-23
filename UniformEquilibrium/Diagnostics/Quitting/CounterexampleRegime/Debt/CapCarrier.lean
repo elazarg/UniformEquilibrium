@@ -35,9 +35,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- Every augmented cap of the optimized projective tail lies in the
 canonical reward carrier and dominates the behavioral punishment floor. -/
@@ -215,6 +215,6 @@ theorem limitDynamicDebtCapAdmissibleSelfLoop_charge_eq_zero :
   rw [quittingRootOfSimplex_allContinueSimplexRoot]
   exact quittingRootAbsorptionMass_allContinueRoot
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

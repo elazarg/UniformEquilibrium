@@ -37,7 +37,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
 /-- The diffuse reset viability fork expressed by one scalar sign.
 
@@ -47,7 +47,7 @@ targets with a uniform singleton gap and a positive-absorption exact
 endpoint-Nash root.  Otherwise that outsider itself satisfies the opposite
 punishment/singleton inequality. -/
 theorem exists_fixedOutsider_punishment_ge_singleton_or_cofinal_floorClippedReset
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -176,7 +176,7 @@ toggle cannot be the same coordinate as a negative singleton.  This is a
 search-facing form of the scalar residual; it does not assert that the
 positive owner and negative outsider can be chronologically matched. -/
 theorem exists_positiveSolo_owner_and_scalar_diffuse_alternative
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -253,6 +253,6 @@ theorem exists_positiveSolo_owner_and_scalar_diffuse_alternative
     · exact Or.inr (Or.inl heq)
   · exact Or.inr (Or.inr hreset)
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

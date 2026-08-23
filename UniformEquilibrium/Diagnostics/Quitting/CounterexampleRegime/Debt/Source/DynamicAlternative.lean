@@ -41,9 +41,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-! ## Canonical tail flows and exact survival pricing -/
 
@@ -338,6 +338,6 @@ theorem zeroFace_recurrence_of_eventual_boundaryMismatch_le
   · exact ⟨cutoff, le_rfl, hcurrent⟩
   · exact ⟨cutoff + 1, Nat.le_add_right cutoff 1, hnext⟩
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

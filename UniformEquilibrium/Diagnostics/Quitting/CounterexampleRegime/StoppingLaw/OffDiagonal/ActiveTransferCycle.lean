@@ -69,25 +69,6 @@ theorem QuittingStoppingLawActiveTransferCycle.prefixWord_length
     (cycle.prefixWord time).length = time := by
   simp [prefixWord]
 
-/-- Simultaneous static and stopping-law localization of a quitting
-counterexample regime.  The package retains the executable singleton
-collision, the terminal-table preemption cycle, and one source-derived
-stopping-law frontier.  Its branch is compressed to positive total slope,
-zero-debt support entry, or an active debt-transfer cycle.
-
-The two cycles are stored together but are not identified. -/
-structure QuittingCounterexampleDynamicLocalization
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) where
-  collision : QuittingImmediateSingletonCollision reward regime.terminalGap
-  preemptionCycle : QuittingSoloPreemptionCycle reward regime.terminalGap
-  frontier : QuittingCounterexampleStoppingLawFrontier regime
-  branch :
-    (∃ mover, 0 < ∑ observer, frontier.tangent mover observer) ∨
-      HasQuittingStoppingLawFlatSupportEntry
-        frontier.base frontier.active frontier.tangent ∨
-      Nonempty (QuittingStoppingLawActiveTransferCycle frontier)
-
 /-- The active positive-debt carrier of every stopping-law frontier is
 nonempty. -/
 theorem QuittingCounterexampleStoppingLawFrontier.active_nonempty
@@ -445,21 +426,5 @@ theorem QuittingCounterexampleRegime.exists_stoppingLaw_entry_or_activeTransferC
   letI : Nonempty ι := regime.nonempty_players
   obtain ⟨frontier⟩ := regime.exists_stoppingLaw_exhaustiveFrontier
   exact ⟨frontier, frontier.entry_or_activeTransferCycle⟩
-
-/-- Every counterexample regime has the simultaneous static/dynamic
-localization package. -/
-theorem QuittingCounterexampleRegime.nonempty_dynamicLocalization
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) :
-    Nonempty (QuittingCounterexampleDynamicLocalization regime) := by
-  obtain ⟨collision⟩ := regime.exists_immediateSingletonCollision
-  obtain ⟨preemptionCycle⟩ := regime.nonempty_soloPreemptionCycle
-  obtain ⟨frontier, branch⟩ := regime.exists_stoppingLaw_dynamicTrichotomy
-  exact ⟨{
-    collision := collision
-    preemptionCycle := preemptionCycle
-    frontier := frontier
-    branch := branch
-  }⟩
 
 end GameTheory

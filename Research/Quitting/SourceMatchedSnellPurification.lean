@@ -137,7 +137,7 @@ def SourceMatchedSnellPurification : Prop :=
 
 theorem exists_sourceMatchedSnellCandidate_of_diffuse
     {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -255,7 +255,7 @@ every certified candidate reaches a uniform-equilibrium payoff. -/
 theorem exists_uniformPayoff_of_sourceMatchedSnellPurification
     {regime : QuittingCounterexampleRegime reward}
     (hinterface : SourceMatchedSnellPurification (reward := reward))
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight

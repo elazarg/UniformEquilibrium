@@ -7,7 +7,6 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawVanishingRegretTangentExtraction
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ExhaustiveFrontierBranch
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Seam
 
 /-!
 # An exhaustive stopping-law frontier for a quitting counterexample regime
@@ -15,10 +14,8 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Seam
 This module records one maintained implication from the conjecture-level
 counterexample package to the current finite stopping-law residual.
 
-Every counterexample regime has both the canonical source--dynamic-tail seam
-and a positive minimum all-Continue semantic plateau.  These are retained as
-simultaneous data; no identification between their limits is asserted.  A
-literal sequence realizing the semantic plateau can be shifted so that
+Every counterexample regime has a positive minimum all-Continue semantic
+plateau.  A literal sequence realizing the semantic plateau can be shifted so that
 every limiting positive-debt coordinate is already positive.  Near-minimum
 excess and all limiting zero-debt coordinates then vanish on that one common
 sequence.  The square-root scale selector makes all of them negligible
@@ -68,9 +65,6 @@ is stated. -/
 structure QuittingCounterexampleStoppingLawFrontier
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (regime : QuittingCounterexampleRegime reward) where
-  /-- The independently canonical optimized exact-D tail, finite source
-  packet, and its summable opponent/absorption clocks. -/
-  seam : QuittingCounterexampleSeamWitness regime
   base : QuittingTerminalSemanticPair ι
   profiles : ℕ → (quittingGame reward).BehaviorProfile
   active : Finset ι
@@ -123,33 +117,61 @@ structure QuittingCounterexampleStoppingLawFrontier
       min (lambda (subseq rank) ^ 2)
         (quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward (profiles (subseq rank))) mover.1 / 2)
-  /-- The selected literal full replacement drives its mover's own debt to
-  zero along the same common tangent subsequence. -/
-  fullReset_moverDebt_tendsto_zero : ∀ mover,
-    Tendsto (fun rank ↦
-      quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPair reward
-          (Function.update (profiles (subseq rank)) mover.1
-            (bestResponse mover (subseq rank)))) mover.1)
-      atTop (nhds 0)
   /-- Exact self-coordinate slope supplied by vanishing-regret endpoint
   selection. -/
   tangent_diagonal_eq : ∀ mover,
     tangent mover mover.1 =
       -quittingTerminalSemanticDebt base mover.1
-  /-- Half-debt compatibility bound retained for existing frontier
-  consumers. -/
-  tangent_diagonal : ∀ mover,
-    tangent mover mover.1 ≤
-      -quittingTerminalSemanticDebt base mover.1 / 2
   tangent_inactive_nonneg : ∀ mover observer,
     quittingTerminalSemanticDebt base observer = 0 →
       0 ≤ tangent mover observer
   tangent_sum_nonneg : ∀ mover, 0 ≤ ∑ observer, tangent mover observer
   exhaustive_branch :
     IsQuittingStoppingLawExhaustiveFrontierBranch base active tangent
-  alternative :
-    IsQuittingStoppingLawTangentPipelineAlternative base active tangent
+
+/-- The selected literal full replacement drives its mover's own debt to
+zero along the same common tangent subsequence. -/
+theorem QuittingCounterexampleStoppingLawFrontier.fullReset_moverDebt_tendsto_zero
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (mover : {who // who ∈ frontier.active}) :
+    Tendsto (fun rank ↦
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward
+          (Function.update (frontier.profiles (frontier.subseq rank)) mover.1
+            (frontier.bestResponse mover (frontier.subseq rank)))) mover.1)
+      atTop (nhds 0) := by
+  apply squeeze_zero'
+  · exact Eventually.of_forall fun rank ↦
+      quittingTerminalDeviationDebt_nonneg reward
+        (Function.update (frontier.profiles (frontier.subseq rank)) mover.1
+          (frontier.bestResponse mover (frontier.subseq rank))) mover.1
+  · exact Eventually.of_forall fun rank ↦
+      (frontier.fullReset_moverDebt_le_tolerance mover rank).trans
+        (min_le_left _ _)
+  · simpa using frontier.lambda_subseq_tendsto_zero.pow 2
+
+/-- Exact diagonal selection implies the half-debt bound. -/
+theorem QuittingCounterexampleStoppingLawFrontier.tangent_diagonal
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (mover : {who // who ∈ frontier.active}) :
+    frontier.tangent mover mover.1 ≤
+      -quittingTerminalSemanticDebt frontier.base mover.1 / 2 := by
+  rw [frontier.tangent_diagonal_eq mover]
+  have hpositive := (frontier.active_iff mover.1).1 mover.2
+  linarith
+
+/-- The tagged exhaustive branch forgets to the pipeline alternative. -/
+theorem QuittingCounterexampleStoppingLawFrontier.alternative
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {regime : QuittingCounterexampleRegime reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    IsQuittingStoppingLawTangentPipelineAlternative
+      frontier.base frontier.active frontier.tangent :=
+  frontier.exhaustive_branch.toPipelineAlternative
 
 /-- The frontier's base fields repackage as the intrinsic positive-minimum
 terminal semantic-debt concept. -/
@@ -187,13 +209,12 @@ theorem QuittingCounterexampleStoppingLawFrontier.hasPositiveMinimumTerminalSema
   exact ⟨frontier.base, frontier.base_mem, frontier.base_minimum, hcoordinate,
     frontier.base_allContinue_nash, frontier.base_allContinue_prefix⟩
 
-/-- Core stopping-law extraction from an explicitly supplied seam and positive
-minimum all-Continue semantic pair.  The returned equality preserves the
+/-- Core stopping-law extraction from a positive minimum all-Continue semantic
+pair.  The returned equality preserves the
 chosen base for subsequent minimum-fiber re-extraction. -/
 theorem exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (regime : QuittingCounterexampleRegime reward)
-    (seam : QuittingCounterexampleSeamWitness regime)
     (base : QuittingTerminalSemanticPair ι)
     (hbase : base ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -315,7 +336,7 @@ theorem exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
     intro who hzero
     simpa only [inactiveDebt, hzero, if_pos] using hinactiveRate who
   obtain ⟨bestResponse, subseq, tangent, hsubseq, hlambdaSubseq,
-      htangent, hendpointDebtLeTolerance, hendpointDebtZero, hdiagonalEq,
+      htangent, hendpointDebtLeTolerance, _hendpointDebtZero, hdiagonalEq,
       htangentInactive, hsumNonneg, hslopeAlternative⟩ :=
     exists_commonBase_stoppingLawDebtTangentFamily_exactDiagonal
       reward base profiles active epsilon lambda
@@ -428,9 +449,7 @@ theorem exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
               hmoverLoss mover hmover, hotherDecrease⟩
           exact Or.inr (Or.inr (Or.inr
             ⟨hflat, hentry, hnotCirculation, hcoDecrease⟩))
-  have halternative := hfrontierBranch.toPipelineAlternative
   refine ⟨{
-    seam := seam
     base := base
     profiles := profiles
     active := active
@@ -454,82 +473,32 @@ theorem exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
         hepsilonRate.comp hsubseq.tendsto_atTop
     tangent_tendsto := htangent
     fullReset_moverDebt_le_tolerance := hendpointDebtLeTolerance
-    fullReset_moverDebt_tendsto_zero := hendpointDebtZero
     tangent_diagonal_eq := hdiagonalEq
-    tangent_diagonal := hdiagonal
     tangent_inactive_nonneg := htangentInactive
     tangent_sum_nonneg := hsumNonneg
-    exhaustive_branch := hfrontierBranch
-    alternative := halternative }, rfl⟩
+    exhaustive_branch := hfrontierBranch }, rfl⟩
 
 /-- Proposition-packaged caller for the base-parameterized extractor. -/
 theorem exists_stoppingLaw_exhaustiveFrontier_of_plateau
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (regime : QuittingCounterexampleRegime reward)
-    (seam : QuittingCounterexampleSeamWitness regime)
     (hplateau : HasPositiveMinimumTerminalSemanticPlateau reward) :
     Nonempty (QuittingCounterexampleStoppingLawFrontier regime) := by
   obtain ⟨base, hbase, hminimum, hbaseDebt, hnash, hprefix⟩ := hplateau
   obtain ⟨frontier, _hfrontierBase⟩ :=
     exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
-      regime seam base hbase hminimum hbaseDebt hnash hprefix
+      regime base hbase hminimum hbaseDebt hnash hprefix
   exact ⟨frontier⟩
 
-/-- Compatibility caller: every quitting counterexample regime still reaches
-the finite stopping-law frontier by supplying its canonical seam and derived
-positive semantic plateau to the base-parameterized extractor. -/
+/-- Every quitting counterexample regime reaches the finite stopping-law
+frontier through its positive semantic plateau. -/
 theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (regime : QuittingCounterexampleRegime reward) :
     Nonempty (QuittingCounterexampleStoppingLawFrontier regime) := by
   classical
   letI : Nonempty ι := regime.nonempty_players
-  obtain ⟨seam⟩ := regime.nonempty_seamWitness
-  exact exists_stoppingLaw_exhaustiveFrontier_of_plateau regime seam
+  exact exists_stoppingLaw_exhaustiveFrontier_of_plateau regime
     (noUniformPayoff_implies_positiveMinimumSemanticPlateau regime)
-
-/-! ## Conjecture-level frontier anchor -/
-
-/-- The maintained stopping-law residual, bundled without choosing a
-counterexample regime separately.  Refinements of the branch predicate may
-change the internal frontier, while the equivalence below remains the
-conjecture-level bookkeeping target. -/
-def QuittingUniformExistenceFrontier
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :=
-  Σ regime : QuittingCounterexampleRegime reward,
-    QuittingCounterexampleStoppingLawFrontier regime
-
-/-- Nonexistence of a uniform-equilibrium payoff is exactly inhabitation of
-the maintained exhaustive stopping-law frontier. -/
-theorem not_exists_uniformEquilibriumPayoff_iff_nonempty_stoppingLawFrontier
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    (¬ ∃ payoff : Payoff ι,
-        (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
-      Nonempty (QuittingUniformExistenceFrontier reward) := by
-  constructor
-  · intro hno
-    let regime := quittingCounterexampleRegimeOfNoUniformPayoff reward hno
-    obtain ⟨frontier⟩ := regime.exists_stoppingLaw_exhaustiveFrontier
-    exact ⟨⟨regime, frontier⟩⟩
-  · rintro ⟨⟨regime, _frontier⟩⟩
-    exact regime.not_exists_uniformEquilibriumPayoff
-
-/-- Equivalently, the quitting-game conjecture for this reward table is the
-assertion that the maintained exhaustive frontier is empty. -/
-theorem exists_uniformEquilibriumPayoff_iff_no_stoppingLawFrontier
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    (∃ payoff : Payoff ι,
-        (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
-      ¬ Nonempty (QuittingUniformExistenceFrontier reward) := by
-  constructor
-  · intro hexists hfrontier
-    exact
-      (not_exists_uniformEquilibriumPayoff_iff_nonempty_stoppingLawFrontier
-        reward).mpr hfrontier hexists
-  · intro hfrontier
-    by_contra hno
-    exact hfrontier
-      ((not_exists_uniformEquilibriumPayoff_iff_nonempty_stoppingLawFrontier
-        reward).mp hno)
 
 end GameTheory

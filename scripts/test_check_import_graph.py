@@ -102,6 +102,35 @@ lean_lib UniformEquilibrium where
                 ["Alpha", "Beta"],
             )
 
+    def test_discovers_nested_diagnostics_umbrella(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            self.write(root, "lakefile.lean", "lean_lib UniformEquilibrium where\n")
+            self.write(root, "UniformEquilibrium.lean", "")
+            self.write(root, "UniformEquilibrium/Diagnostics.lean", "")
+            self.assertEqual(
+                [umbrella.name for umbrella in check_import_graph.discover_umbrellas(root)],
+                ["UniformEquilibrium", "UniformEquilibrium.Diagnostics"],
+            )
+
+    def test_nested_umbrella_owns_subtree(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            self.write(root, "lakefile.lean", "lean_lib UniformEquilibrium where\n")
+            self.write(
+                root,
+                "UniformEquilibrium.lean",
+                "import UniformEquilibrium.Production\n",
+            )
+            self.write(root, "UniformEquilibrium/Production.lean", "")
+            self.write(
+                root,
+                "UniformEquilibrium/Diagnostics.lean",
+                "import UniformEquilibrium.Diagnostics.Leaf\n",
+            )
+            self.write(root, "UniformEquilibrium/Diagnostics/Leaf.lean", "")
+            self.assertEqual(check_import_graph.check_import_graph(root), [])
+
     def test_mathue_may_import_gametheory_generic_math(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)

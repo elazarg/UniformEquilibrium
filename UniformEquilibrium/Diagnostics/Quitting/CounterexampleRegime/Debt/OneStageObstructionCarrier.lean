@@ -27,9 +27,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- Every adjacent pair of canonical tail states is an exact boxed
 floor-admissible source edge. -/
@@ -87,20 +87,20 @@ theorem oneStageTailFlow_mem_quittingOneStageObstructionCarrier (time : ℕ) :
 
 /-- The canonical tail makes the exact one-stage carrier nonempty. -/
 theorem quittingOneStageObstructionCarrier_nonempty
-    (seam : QuittingCounterexampleSeamWitness regime) :
+    (seam : QuittingCounterexampleDynamicTailWitness regime) :
     (quittingOneStageObstructionCarrier reward).Nonempty :=
   ⟨(seam.finiteRootWindow 0 1).toObstructionRawGradedFlow
       (fun date ↦ (seam.tail date).1.1),
     seam.oneStageTailFlow_mem_quittingOneStageObstructionCarrier 0⟩
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
 /-- In a counterexample regime, the canonical tail supplies nonemptiness, so
 every finite co-state has an attained support value on the exact carrier. -/
 theorem exists_hasSupportValue_oneStageObstructionCarrier
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
     (costate : Costate QuittingObstructionGrade
       (QuittingObstructionCoordinate ι)) :
     ∃ value,
@@ -109,6 +109,6 @@ theorem exists_hasSupportValue_oneStageObstructionCarrier
   exists_hasSupportValue_quittingOneStageObstructionCarrier reward
     (quittingOneStageObstructionCarrier_nonempty seam) costate
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

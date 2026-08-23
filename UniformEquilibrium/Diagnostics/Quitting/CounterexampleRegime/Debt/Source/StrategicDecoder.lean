@@ -61,7 +61,7 @@ variable (word : QuittingDebtSourceFaceReturnWord reward K)
 
 /-- Every zero-face source edge lifts to an exact Nash--Bellman edge between
 the corresponding augmented-cap states. -/
-theorem capEdge (seam : QuittingCounterexampleSeamWitness regime)
+theorem capEdge (seam : QuittingCounterexampleDynamicTailWitness regime)
     (current : Fin K) :
     IsQuittingNashBellmanEdge reward
       (quittingDynamicDebtCapPoint (word.state current))
@@ -81,7 +81,7 @@ theorem capEdge (seam : QuittingCounterexampleSeamWitness regime)
 
 /-- A literal common zero-face return word is a solved exact quitting cycle. -/
 theorem isSolvedExactQuittingCycle
-    (seam : QuittingCounterexampleSeamWitness regime) :
+    (seam : QuittingCounterexampleDynamicTailWitness regime) :
     IsSolvedExactQuittingCycle reward word.cycle word.value := by
   refine ⟨⟨?_, ?_⟩, ?_, ?_⟩
   · intro current
@@ -95,9 +95,9 @@ theorem isSolvedExactQuittingCycle
 
 end QuittingDebtSourceFaceReturnWord
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 include seam in
 /-- A common zero-face return word lands directly in the solved exact-cycle
@@ -356,6 +356,6 @@ theorem debtSource_strategicDecoderBoundary (selected : ι) (time : ℕ) :
     seam.eventually_allContinue_or_debtSource_signedDiagnostic,
     seam.not_hasQuittingDebtSourceFaceReturnWord⟩
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

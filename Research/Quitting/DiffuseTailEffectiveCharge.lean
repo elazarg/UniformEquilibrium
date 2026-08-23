@@ -86,7 +86,7 @@ at every date inside a window by the window's charge.
   `not_quittingTailRawChargeFloor_of_tendsto` routes the co-active branch to a
   vanishing one-stage absorption budget, consuming only one of the two players'
   rates, and
-  `QuittingCounterexampleSeamWitness.not_coactiveChargeFloor` discharges that
+  `QuittingCounterexampleDynamicTailWitness.not_coactiveChargeFloor` discharges that
   budget from the seam field `jointAbsorption_summable`.  The budget is in
   *raw* one-stage absorption mass, which is the currency the seam supplies; it
   therefore kills only a co-activity floor stated in raw quit probability.  A
@@ -891,14 +891,14 @@ theorem not_quittingTailCoactiveChargeFloor_of_summable
   not_quittingTailCoactiveChargeFloor_of_tendsto roots first second
     hsummable.tendsto_atTop_zero
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
 variable {regime : QuittingCounterexampleRegime reward}
 
 /-- **(ii), routed to the seam.**  The seam's joint-absorption budget excludes
 a raw co-activity floor along its canonical tail roots. -/
 theorem not_coactiveChargeFloor
-    (seam : QuittingCounterexampleSeamWitness regime) (first second : ι) :
+    (seam : QuittingCounterexampleDynamicTailWitness regime) (first second : ι) :
     ¬QuittingTailCoactiveChargeFloor
       (quittingDynamicDebtTailRoots seam.tail) first second :=
   not_quittingTailCoactiveChargeFloor_of_summable _ first second
@@ -907,13 +907,13 @@ theorem not_coactiveChargeFloor
 /-- The seam's joint-absorption budget also excludes a single-player raw charge
 floor along its canonical tail roots. -/
 theorem not_rawChargeFloor
-    (seam : QuittingCounterexampleSeamWitness regime) (who : ι) :
+    (seam : QuittingCounterexampleDynamicTailWitness regime) (who : ι) :
     ¬QuittingTailRawChargeFloor
       (quittingDynamicDebtTailRoots seam.tail) who :=
   not_quittingTailRawChargeFloor_of_tendsto _ who
     seam.jointAbsorption_summable.tendsto_atTop_zero
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 /-! ## (iii) The uniform charge floor, and the assembly -/
 

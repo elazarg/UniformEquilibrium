@@ -32,9 +32,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- The operational product root on a selected one-stage edge. -/
 def periodOneReadoutRoot (start : ℕ → ℕ) (index : ℕ) : ι → PMF Bool :=
@@ -763,6 +763,6 @@ theorem eventually_allContinue_or_exists_periodOneTangentReadout :
       signed_coordinate := hsigned
     }⟩
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

@@ -377,79 +377,84 @@ def check_frontier_names(entry: dict, sources: list[str], errors: list[str]) -> 
 
 def check_frontier(errors: list[str]) -> None:
     frontier = json.loads(FRONTIER_PATH.read_text(encoding="utf-8"))
-    if frontier.get("schema_version") != 2:
+    if frontier.get("schema_version") != 3:
         errors.append("docs/QuittingProofFrontier.json: unsupported schema_version")
-    leaves = frontier.get("formal_leaves", [])
-    if len(leaves) > frontier.get("open_leaf_limit", 0):
-        errors.append("docs/QuittingProofFrontier.json: open leaf limit exceeded")
-    leaf_ids = {leaf["id"] for leaf in leaves}
-    if len(leaf_ids) != len(leaves):
-        errors.append("docs/QuittingProofFrontier.json: duplicate formal leaf id")
-    alternatives = frontier.get("manuscript_alternatives", [])
-    alternative_numbers = {
-        alternative.get("alternative_number") for alternative in alternatives
-    }
-    issue_numbers = {alternative.get("issue_number") for alternative in alternatives}
-    if alternative_numbers != {1, 2, 3, 4, 5}:
-        errors.append(
-            "docs/QuittingProofFrontier.json: manuscript alternatives must be 1--5"
-        )
-    if len(issue_numbers) != len(alternatives):
-        errors.append("docs/QuittingProofFrontier.json: duplicate GitHub issue number")
-    open_alternatives = [
-        alternative for alternative in alternatives if alternative.get("status") == "open"
-    ]
-    mapped_leaf_ids = {alternative.get("leaf_id") for alternative in open_alternatives}
-    if mapped_leaf_ids != leaf_ids:
-        errors.append(
-            "docs/QuittingProofFrontier.json: open alternatives must map exactly to formal leaves"
-        )
-    transitions = frontier.get("transitions", [])
-    transition_ids = {transition["id"] for transition in transitions}
-    for alternative in alternatives:
-        status = alternative.get("status")
-        if status == "open":
-            if "resolution" in alternative:
-                errors.append(
-                    "docs/QuittingProofFrontier.json: open alternative has a resolution"
-                )
-        elif status == "eliminated":
-            resolution = alternative.get("resolution")
-            if resolution not in transition_ids:
-                errors.append(
-                    f"alternative {alternative.get('alternative_number')}: "
-                    f"unknown resolution {resolution}"
-                )
-            if "leaf_id" in alternative:
-                errors.append(
-                    "docs/QuittingProofFrontier.json: eliminated alternative has an open leaf"
-                )
-        else:
-            errors.append(
-                f"alternative {alternative.get('alternative_number')}: unknown status {status}"
-            )
-    for leaf in leaves:
-        source = ROOT / leaf["source"]
+    nodes = frontier.get("nodes", [])
+    allowed_node_statuses = {"proved", "proved-alternative", "consumer-ready", "target"}
+    allowed_edge_statuses = {"proved", "proved-branch", "open-producer", "proved-consumer"}
+    allowed_seals = {"M", "L", "A", "C"}
+    node_ids = {node["id"] for node in nodes}
+    if len(node_ids) != len(nodes):
+        errors.append("docs/QuittingProofFrontier.json: duplicate DAG node id")
+    for node in nodes:
+        if node.get("status") not in allowed_node_statuses:
+            errors.append(f"{node['id']}: unknown DAG node status {node.get('status')}")
+        unknown_seals = set(node.get("evidence_seals", [])) - allowed_seals
+        if unknown_seals:
+            errors.append(f"{node['id']}: unknown evidence seals {sorted(unknown_seals)}")
+        source = ROOT / node["source"]
         if not source.is_file():
-            errors.append(f"{leaf['id']}: missing source {leaf['source']}")
-        elif leaf["producer"].rsplit(".", 1)[-1] not in source.read_text(
+            errors.append(f"{node['id']}: missing source {node['source']}")
+        elif node["declaration"].rsplit(".", 1)[-1] not in source.read_text(
             encoding="utf-8"
         ):
             errors.append(
-                f"{leaf['id']}: producer {leaf['producer']} not found in {leaf['source']}"
+                f"{node['id']}: declaration {node['declaration']} not found in "
+                f"{node['source']}"
             )
-    for transition in transitions:
-        unknown = set(transition.get("target_ids", [])) - leaf_ids
+        check_frontier_names(node, [node["source"]], errors)
+    edges = frontier.get("edges", [])
+    edge_ids = {edge["id"] for edge in edges}
+    if len(edge_ids) != len(edges):
+        errors.append("docs/QuittingProofFrontier.json: duplicate DAG edge id")
+    for edge in edges:
+        if edge.get("status") not in allowed_edge_statuses:
+            errors.append(f"{edge['id']}: unknown DAG edge status {edge.get('status')}")
+        unknown_seals = set(edge.get("evidence_seals", [])) - allowed_seals
+        if unknown_seals:
+            errors.append(f"{edge['id']}: unknown evidence seals {sorted(unknown_seals)}")
+        unknown = {edge["from"], edge["to"]} - node_ids
         if unknown:
             errors.append(
-                f"{transition['id']}: unknown target ids {', '.join(sorted(unknown))}"
+                f"{edge['id']}: unknown node ids {', '.join(sorted(unknown))}"
             )
-        for evidence in transition.get("evidence", []):
-            if not (ROOT / evidence).is_file():
-                errors.append(f"{transition['id']}: missing evidence {evidence}")
-        check_frontier_names(transition, transition.get("evidence", []), errors)
-    for leaf in leaves:
-        check_frontier_names(leaf, [leaf["source"]], errors)
+        source = ROOT / edge["source"]
+        if not source.is_file():
+            errors.append(f"{edge['id']}: missing source {edge['source']}")
+        check_frontier_names(edge, [edge["source"]], errors)
+    adjacency = {node_id: set() for node_id in node_ids}
+    for edge in edges:
+        if edge.get("from") in adjacency and edge.get("to") in node_ids:
+            adjacency[edge["from"]].add(edge["to"])
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(node_id: str) -> None:
+        if node_id in visiting:
+            errors.append(f"docs/QuittingProofFrontier.json: DAG cycle at {node_id}")
+            return
+        if node_id in visited:
+            return
+        visiting.add(node_id)
+        for target in adjacency[node_id]:
+            visit(target)
+        visiting.remove(node_id)
+        visited.add(node_id)
+
+    for node_id in node_ids:
+        visit(node_id)
+    capstones = frontier.get("conditional_capstones", [])
+    capstone_ids = {capstone["id"] for capstone in capstones}
+    if len(capstone_ids) != len(capstones):
+        errors.append("docs/QuittingProofFrontier.json: duplicate capstone id")
+    for capstone in capstones:
+        unknown_seals = set(capstone.get("evidence_seals", [])) - allowed_seals
+        if unknown_seals:
+            errors.append(f"{capstone['id']}: unknown evidence seals {sorted(unknown_seals)}")
+        source = ROOT / capstone["source"]
+        if not source.is_file():
+            errors.append(f"{capstone['id']}: missing source {capstone['source']}")
+        check_frontier_names(capstone, [capstone["source"]], errors)
 
 
 def source_reference_issues(
