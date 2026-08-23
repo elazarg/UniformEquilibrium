@@ -447,6 +447,171 @@ theorem potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement
         (hflat mover) hseparated
     exact ⟨hseparated, observer, gain, hobserver, hgain, hpaid⟩
 
+/-! ## Finite support-rank iteration -/
+
+/-- A minimum-fiber full-reset endpoint is itself a positive minimum
+all-Continue plateau and can therefore serve as the base of a fresh
+stopping-law extraction. -/
+theorem FullResetEndpointCluster.hasPositiveMinimumTerminalSemanticPlateau_of_minimumFiber
+    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {mover : {who // who ∈ frontier.active}}
+    (endpoint : FullResetEndpointCluster frontier mover)
+    (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
+      quittingTerminalSemanticDebtSum frontier.base) :
+    HasPositiveMinimumTerminalSemanticPlateau reward := by
+  have hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum endpoint.cluster ≤
+        quittingTerminalSemanticDebtSum candidate := by
+    intro candidate hcandidate
+    rw [hminimumFiber]
+    exact frontier.base_minimum candidate hcandidate
+  have hpositive : 0 < quittingTerminalSemanticDebtSum endpoint.cluster := by
+    rw [hminimumFiber]
+    exact frontier.base_positive
+  have hnonneg : ∀ who,
+      0 ≤ quittingTerminalSemanticDebt endpoint.cluster who :=
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+      reward endpoint.cluster_mem
+  have hcoordinate : ∃ who,
+      0 < quittingTerminalSemanticDebt endpoint.cluster who := by
+    by_contra hnone
+    have hzero : ∀ who,
+        quittingTerminalSemanticDebt endpoint.cluster who = 0 := by
+      intro who
+      exact le_antisymm
+        (le_of_not_gt fun hwho ↦ hnone ⟨who, hwho⟩) (hnonneg who)
+    unfold quittingTerminalSemanticDebtSum at hpositive
+    simp only [hzero, Finset.sum_const_zero] at hpositive
+    exact (lt_irrefl 0) hpositive
+  obtain ⟨hnash, hprefix, _hmargin⟩ :=
+    minimumTerminalSemantic_is_allContinuePlateau
+      (reward := reward) endpoint.cluster endpoint.cluster_mem hminimum hpositive
+  exact ⟨endpoint.cluster, endpoint.cluster_mem, hminimum, hcoordinate,
+    hnash, hprefix⟩
+
+/-- Re-extraction at a flat no-entry minimum-fiber endpoint strictly lowers
+the active-support cardinal rank.  This is the reusable adapter needed for
+well-founded iteration; it asserts no relation between the old and new
+tangent families beyond their semantic base. -/
+theorem exists_reextractedFrontier_of_minimumFiberEndpoint
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    {mover : {who // who ∈ frontier.active}}
+    (endpoint : FullResetEndpointCluster frontier mover)
+    (hflat : ∀ source, ∑ observer, frontier.tangent source observer = 0)
+    (hnoEntry : ¬HasQuittingStoppingLawFlatSupportEntry
+      frontier.base frontier.active frontier.tangent)
+    (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
+      quittingTerminalSemanticDebtSum frontier.base) :
+    ∃ next : QuittingCounterexampleStoppingLawFrontier regime,
+      next.base = endpoint.cluster ∧
+      next.active.card < frontier.active.card := by
+  have hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum endpoint.cluster ≤
+        quittingTerminalSemanticDebtSum candidate := by
+    intro candidate hcandidate
+    rw [hminimumFiber]
+    exact frontier.base_minimum candidate hcandidate
+  have hpositive : 0 < quittingTerminalSemanticDebtSum endpoint.cluster := by
+    rw [hminimumFiber]
+    exact frontier.base_positive
+  have hnonneg : ∀ who,
+      0 ≤ quittingTerminalSemanticDebt endpoint.cluster who :=
+    quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+      reward endpoint.cluster_mem
+  have hcoordinate : ∃ who,
+      0 < quittingTerminalSemanticDebt endpoint.cluster who := by
+    by_contra hnone
+    have hzero : ∀ who,
+        quittingTerminalSemanticDebt endpoint.cluster who = 0 := by
+      intro who
+      exact le_antisymm
+        (le_of_not_gt fun hwho ↦ hnone ⟨who, hwho⟩) (hnonneg who)
+    unfold quittingTerminalSemanticDebtSum at hpositive
+    simp only [hzero, Finset.sum_const_zero] at hpositive
+    exact (lt_irrefl 0) hpositive
+  obtain ⟨hnash, hprefix, _hmargin⟩ :=
+    minimumTerminalSemantic_is_allContinuePlateau
+      (reward := reward) endpoint.cluster endpoint.cluster_mem hminimum hpositive
+  obtain ⟨next, hbase⟩ :=
+    exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
+      regime frontier.seam endpoint.cluster endpoint.cluster_mem hminimum
+        hcoordinate hnash hprefix
+  have hactive : next.active = Finset.univ.filter fun who ↦
+      0 < quittingTerminalSemanticDebt endpoint.cluster who := by
+    ext who
+    rw [next.active_iff]
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, hbase]
+  refine ⟨next, hbase, ?_⟩
+  rw [hactive]
+  exact endpoint.positiveDebtSupport_card_lt_of_exactDiagonal_of_flat_of_noEntry_of_minimumFiber
+    (hflat mover) hnoEntry hminimumFiber
+
+/-- A frontier has exited the potential-co-decrease recursion when it reaches
+positive total slope, flat support entry, flat charged circulation, or an
+off-minimum endpoint with an exact eventually paid first-disagreement row.
+The final branch stores the row but does not claim a chronological consumer. -/
+def HasQuittingStoppingLawFiniteSupportRankExit
+    (regime : QuittingCounterexampleRegime reward) : Prop :=
+  ∃ frontier : QuittingCounterexampleStoppingLawFrontier regime,
+    (∃ mover, 0 < ∑ observer, frontier.tangent mover observer) ∨
+    ((∀ mover, ∑ observer, frontier.tangent mover observer = 0) ∧
+      HasQuittingStoppingLawFlatSupportEntry
+        frontier.base frontier.active frontier.tangent) ∨
+    ((∀ mover, ∑ observer, frontier.tangent mover observer = 0) ∧
+      ¬HasQuittingStoppingLawFlatSupportEntry
+        frontier.base frontier.active frontier.tangent ∧
+      HasQuittingStoppingLawFlatChargedCirculation
+        frontier.active frontier.tangent) ∨
+    ∃ mover : {who // who ∈ frontier.active},
+      ∃ endpoint : FullResetEndpointCluster frontier mover,
+        quittingTerminalSemanticDebtSum frontier.base <
+            quittingTerminalSemanticDebtSum endpoint.cluster ∧
+          ∃ observer : ι, ∃ gain : ℝ,
+            observer ≠ mover.1 ∧ 0 < gain ∧
+            ∀ᶠ rank in atTop,
+              Nonempty (QuittingPaidFirstDisagreementRow reward
+                (frontier.fullResetProfile mover (endpoint.subseq rank))
+                observer gain)
+
+/-- **Finite support-rank termination.**  Repeatedly re-extracting the
+stopping-law frontier at a minimum-fiber potential endpoint cannot continue
+indefinitely: every such step strictly lowers the finite positive-debt support
+cardinality.  Therefore some re-extracted frontier reaches one of the three
+non-potential tangent branches or an off-minimum endpoint carrying an exact
+eventually paid first-disagreement row.
+
+This theorem deliberately does not turn the paid row into a chronology or a
+directed recipient-return consumer. -/
+theorem exists_finiteSupportRankExit
+    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    HasQuittingStoppingLawFiniteSupportRankExit regime := by
+  classical
+  generalize hrank : frontier.active.card = rank
+  induction rank using Nat.strong_induction_on generalizing frontier with
+  | h rank ih =>
+      rcases frontier.exhaustive_branch with hpositive | hentry |
+          hcirculation | hpotential
+      · exact ⟨frontier, Or.inl hpositive⟩
+      · exact ⟨frontier, Or.inr (Or.inl hentry)⟩
+      · exact ⟨frontier, Or.inr (Or.inr (Or.inl hcirculation))⟩
+      · rcases hpotential with
+          ⟨hflat, hnoEntry, _hnoCirculation, hcoDecrease⟩
+        obtain ⟨mover, other, _hotherMem, _hotherDecrease, endpoint,
+            hminimum | hpaid⟩ :=
+          potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement
+            frontier hflat hnoEntry hcoDecrease
+        · obtain ⟨hminimumFiber, _hsupport, _hcard, _hotherDebt⟩ := hminimum
+          obtain ⟨next, _hnextBase, hnextCard⟩ :=
+            exists_reextractedFrontier_of_minimumFiberEndpoint
+              frontier endpoint hflat hnoEntry hminimumFiber
+          apply ih next.active.card
+          · exact hnextCard.trans_eq hrank
+          · rfl
+        · obtain ⟨hseparated, observer, gain, hobserver, hgain, hrow⟩ := hpaid
+          exact ⟨frontier, Or.inr (Or.inr (Or.inr
+            ⟨mover, endpoint, hseparated, observer, gain,
+              hobserver, hgain, hrow⟩))⟩
+
 end QuittingCounterexampleStoppingLawFrontier
 
 end GameTheory

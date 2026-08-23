@@ -8,6 +8,7 @@ import MathUE.Probability.OneSidedDebtShadowing
 import UniformEquilibrium.Quitting.Boundary.Exceptional.InfiniteLTG
 import UniformEquilibrium.Quitting.Cycles.SoloPeriodicBlockCompiler
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
+import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 
 /-!
 # Generated-secant two-discount shadowing in quitting games
@@ -434,7 +435,45 @@ theorem isAsymptoticNash :
       4 * eta at hdebt
   linarith
 
+include certificate
+
+/-- Any global terminal exploitability gap is bounded by the certificate's
+quantitative `4 * eta` terminal Nash error.  No separate positivity
+hypothesis on the gap is needed. -/
+theorem terminalExploitabilityGap_le
+    {gap : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap) :
+    gap ≤ 4 * eta := by
+  obtain ⟨who, deviation, hgap⟩ :=
+    hexploit (quittingRootSequenceProfile reward certificate.data.root 0)
+  have hnash := certificate.isAsymptoticNash who deviation
+  linarith
+
+/-- A chronological certificate whose error is below a displayed terminal
+exploitability gap contradicts that gap. -/
+theorem not_hasTerminalExploitabilityGap_of_four_mul_eta_lt
+    {gap : ℝ} (hsmall : 4 * eta < gap) :
+    ¬ HasTerminalExploitabilityGap reward gap := by
+  intro hexploit
+  exact (not_lt_of_ge (certificate.terminalExploitabilityGap_le hexploit)) hsmall
+
 end QuittingChronologicalDebtShadowingCertificate
+
+/-- Chronological certificates at every positive accuracy produce terminal
+approximate Nash profiles at every positive error and hence, by compact
+terminal-payoff selection, one fixed uniform-equilibrium payoff. -/
+theorem quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hcertificates : ∀ eta : ℝ, 0 < eta →
+      Nonempty (QuittingChronologicalDebtShadowingCertificate reward eta)) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
+    reward
+  intro epsilon hepsilon
+  obtain ⟨certificate⟩ := hcertificates (epsilon / 4) (by positivity)
+  refine ⟨quittingRootSequenceProfile reward certificate.data.root 0, ?_⟩
+  convert certificate.isAsymptoticNash using 1
+  ring
 
 /-! ## Charged-circulation producer boundary
 

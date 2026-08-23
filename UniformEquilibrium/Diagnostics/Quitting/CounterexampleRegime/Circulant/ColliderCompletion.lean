@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Circulant.ConstantStepCycle
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Circulant.TrichotomyClosure
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SoloExitPreferenceScreen
+import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.UniformPayoffBridge
 import UniformEquilibrium.Quitting.Classification.Circulant.ColliderCompletion
 
 /-!
@@ -174,8 +175,8 @@ theorem isEmpty_counterexampleRegime_colliderNeighbourPocket
     (hsum : 0 < m 1 + m 2 + m 3 + m 4) :
     IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) := by
   by_cases hsure : IsQuittingSureExitSet (colliderReward s low m) {0, 0 + 1}
-  · exact ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
-      ⟨_, isUniformEquilibriumPayoff_setReward_of_isQuittingSureExitSet _ hsure⟩⟩
+  · exact isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
+      ⟨_, isUniformEquilibriumPayoff_setReward_of_isQuittingSureExitSet _ hsure⟩
   · exact isEmpty_counterexampleRegime_colliderPocket_of_not_sureExit hm0 hs hlow
       hm1 hm4 hm2 hm3 hsum 0 hsure
 

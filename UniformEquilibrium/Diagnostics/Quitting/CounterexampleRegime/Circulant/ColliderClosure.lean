@@ -39,9 +39,9 @@ theorem isEmpty_counterexampleRegime_colliderDistantPocket
     (hm1 : 0 ≤ m 1) (hm2 : m 2 < 0) (hm3 : m 3 < 0) (hm4 : 0 ≤ m 4)
     (hsum : 0 < m 1 + m 2 + m 3 + m 4) :
     IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
-    (exists_uniformEquilibriumPayoff_colliderDistantPocket hm0 hs hlow hm1 hm2 hm3
-      hm4 hsum)⟩
+  isEmpty_quittingCounterexampleRegime_of_exists_uniformEquilibriumPayoff _
+    (exists_uniformEquilibriumPayoff_colliderDistantPocket hm0 hs hlow hm1 hm2
+      hm3 hm4 hsum)
 
 /-- **The collider-completion family carries no counterexample regime.**  Every
 five-player collider completion whose margin at distance zero vanishes, whose
