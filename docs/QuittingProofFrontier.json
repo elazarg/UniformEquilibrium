@@ -169,13 +169,14 @@
       "target_ids": [
         "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
       ],
-      "summary": "The static collision and payoff-table preemption cycle now travel with one source-derived stopping-law frontier. In every flat frontier with no zero-debt support entry, every active debtor has a positive tangent transfer to another active debtor; finite seriality closes these transfers into a period-at-least-two cycle. One positive edge margin is retained uniformly along the literal stopping-law subsequence for every edge of the selected finite cycle. At every selected rank all of those edges are realized simultaneously as positive frozen debt edges of one legal common-source, common-scale reset cube. Traversing the cycle coordinates in that cube gives an exact alternative at every position: the reached cube edge retains half the transfer, or an earlier reset crosses a signed square with an explicit positive curvature threshold. The payoff-table and tangent-transfer cycles are not identified, profile-cube chronology is not quitting-play chronology, and the strengthened leaf is still open.",
+      "summary": "The static collision and payoff-table preemption cycle now travel with one source-derived stopping-law frontier. In every flat frontier with no zero-debt support entry, every active debtor has a positive tangent transfer to another active debtor; finite seriality closes these transfers into a period-at-least-two cycle. One positive edge margin is retained uniformly along the literal stopping-law subsequence for every edge of the selected finite cycle. At every selected rank all of those edges are realized simultaneously as positive frozen debt edges of one legal common-source, common-scale reset cube. Traversing the cycle coordinates gives a retained edge or explicit square curvature. Independently, a supplied positive-total-slope mover has a compact full-reset endpoint with coordinatewise tangent domination, exact self-coordinate change, half-debt reduction, strict total-debt separation, retained prescribed gain, and a fixed positive off-diagonal atom alternative. Neither package gives an anchored return, Bellman rebase, or contradiction; profile-cube chronology is not quitting-play chronology, and the strengthened leaf is still open.",
       "evidence": [
         "MathUE/FiniteSerialRelation.lean",
         "MathUE/Finset/CubicalResetIntegrability.lean",
         "UniformEquilibrium/Quitting/Classification/PreemptionCycle.lean",
         "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedResetCube.lean",
-        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/ActiveTransferCycle.lean"
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/ActiveTransferCycle.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PositiveTotalSlopeEndpoint.lean"
       ],
       "cover_clause_ids": [
         "REGIME-LOCALIZATION",
@@ -192,6 +193,8 @@
         "GameTheory.QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformSlope",
         "GameTheory.QuittingStoppingLawActiveTransferCycle.exists_eventually_uniformCubeEdge",
         "GameTheory.QuittingStoppingLawActiveTransferCycle.exists_eventually_reachedCubeEdge_or_curvature",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_positiveTotalSlopeEndpointCluster",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_fixedAtomAlternative_of_mover",
         "GameTheory.QuittingCounterexampleRegime.nonempty_dynamicLocalization"
       ]
     },
@@ -1054,6 +1057,44 @@
         "GameTheory.QuittingCounterexampleStoppingLawFrontier.sourceMatchedRadialRepeatedRoots_jointSurvival",
         "GameTheory.PositiveSlopeCausalRegression.debt_decreasing_reset_does_not_force_opponentExposure",
         "GameTheory.PositiveSlopeCausalRegression.exact_source_has_zero_forcing_but_unit_initialDebt"
+      ]
+    },
+    {
+      "id": "STRENGTHEN-CHRONOLOGICAL-BOUNDARY-BY-EXPOSURE-AND-GREEN-ACCOUNT",
+      "kind": "frontier_strengthened",
+      "target_ids": [
+        "IMMEDIATE-SINGLETON-PREEMPTION-CYCLE"
+      ],
+      "summary": "Finite-cutoff conditioning of a two-component hazard mixture has an exact posterior formula, but a source-survival lambda-squared example amplifies a prior weight lambda to 1/(1+(1-lambda)lambda), tending to one and ruling out a source-independent linear bound. At the game layer, bounded payoff gain forces total-variation and ever-quit exposure; a positive balanced source-matched circulation therefore supplies one fresh radial packet with a finite cutoff exposing the joint and every one-player-deleted clock at order lambda. Actual terminal debt also has a finite opponent-Green account against actual continuation defects. These facts do not compose into the missing chronology: the packet result is fresh rather than residual, a four-player harmonic regression has vanishing pointwise defects and all one-player-deleted clocks but terminal debt at least one half because the pair-deleted clock survives, and two profiles with the same terminal semantic pair and joint survival can splice differently when their labelled deleted clocks differ. Thus no residual-port stability, block/splice producer, or contradiction is claimed.",
+      "evidence": [
+        "MathUE/Probability/DiscreteHazardMixture.lean",
+        "MathUE/ProbabilityMassFunction/GeneralTotalVariation.lean",
+        "UniformEquilibrium/Quitting/Paths/StoppingLawExposure.lean",
+        "UniformEquilibrium/Quitting/Root/TerminalDebtGreenAccount.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialFreshPacketExposure.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPointwiseDefectGreenRegression.lean",
+        "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCommonWitnessNoncompositionality.lean"
+      ],
+      "cover_clause_ids": [
+        "REGIME-LOCALIZATION"
+      ],
+      "evidence_seals": [
+        "M",
+        "L",
+        "A",
+        "C"
+      ],
+      "declarations": [
+        "Math.Probability.DiscreteHazard.ScalarHazard.posteriorTargetWeight_sub",
+        "Math.Probability.DiscreteHazard.ScalarHazard.not_exists_uniform_squareExample_posteriorTargetWeight_linear_bound",
+        "GameTheory.radialEverQuitMass_ge_weight_mul_gain_div",
+        "GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_boundedRadialFreshPacketExposure",
+        "GameTheory.quittingRootSequenceTerminalDebt_le_opponentGreenDefectSum_add_tail",
+        "GameTheory.QuittingHarmonicGreenRegression.terminalDeviationDebt_active_ge_half",
+        "GameTheory.QuittingHarmonicGreenRegression.tendsto_coordinateNashDefect_active_zero",
+        "GameTheory.QuittingCommonWitnessNoncompositionality.semanticPair_eq",
+        "GameTheory.QuittingCommonWitnessNoncompositionality.deletedSurvival_ne",
+        "GameTheory.QuittingCommonWitnessNoncompositionality.spliced_envelope_ne"
       ]
     },
     {

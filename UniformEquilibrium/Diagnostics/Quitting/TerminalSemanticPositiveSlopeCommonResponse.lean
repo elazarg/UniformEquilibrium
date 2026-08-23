@@ -182,7 +182,7 @@ theorem exists_quittingStoppingLawCommonResponsePassport
     dsimp only [sourceGain, mixedGain, endpointGain,
       quittingPureTimeResponseGain, quittingPureTimeDeviationPayoff,
       response] at hsourceAffine hresponseAffine ⊢
-    linarith
+    linear_combination hresponseAffine - hsourceAffine
   have hsourceCap :=
     quittingTerminalPayoff_update_le_continuationBestResponseValue
       reward profile observer response
@@ -241,6 +241,10 @@ theorem exists_quittingStoppingLawCommonResponsePassport
             (quittingTerminalSemanticPair reward profile) observer -
           4 * quittingRewardBound reward * lambda - eta ≤ sourceGain := by
     linarith
+  have hsourceDebtNonneg : 0 ≤
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward profile) observer :=
+    quittingTerminalDeviationDebt_nonneg reward profile observer
   have hendpointGainGe :
       charge - eta / lambda -
             4 * quittingRewardBound reward * lambda - eta ≤ endpointGain := by
@@ -314,11 +318,139 @@ theorem hasQuittingStoppingLawDebtSlopeAtomAlternative_of_commonResponse
     cases quitTime with
     | none =>
         exact Or.inl ⟨terminal, by
-          simpa only [endpoint, response, Function.update_eq_self] using
-            hterminal⟩
+          simpa only [endpoint, response, quittingStoppingLawFullResetProfile,
+            Function.update_eq_self] using hterminal⟩
     | some stop =>
         exact Or.inr ⟨stop, terminal, by
-          simpa only [endpoint, response, Function.update_eq_self] using
-            hterminal⟩
+          simpa only [endpoint, response, quittingStoppingLawFullResetProfile,
+            Function.update_eq_self] using hterminal⟩
+
+/-- An explicitly supplied source witness with large regret at a receiving
+profile yields the full oriented quitting-game witness-switch certificate. -/
+theorem exists_quittingPureTimeWitnessSwitchCertificate_of_sourceWitness
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (source receiving : (quittingGame reward).BehaviorProfile)
+    (observer : ι) (sourceWitness : Option ℕ)
+    (charge eta : ℝ) (hcharge : 0 < charge) (heta : 0 < eta)
+    (hsourceApprox :
+      quittingContinuationBestResponseValue reward source observer - eta ≤
+        quittingPureTimeDeviationPayoff reward source observer sourceWitness)
+    (hregret : charge + 2 * eta ≤
+      quittingContinuationBestResponseValue reward receiving observer -
+        quittingPureTimeDeviationPayoff reward receiving observer
+          sourceWitness) :
+    HasQuittingPureTimeWitnessSwitchCertificate reward source receiving
+      observer charge eta := by
+  obtain ⟨switch⟩ := Math.Optimization.orientedSupremumWitnessSwitch_of_regret
+    (quittingPureTimeDeviationPayoff reward source observer)
+    (quittingPureTimeDeviationPayoff reward receiving observer)
+    (bddAbove_range_quittingPureTimeDeviationPayoff reward source observer)
+    charge eta heta sourceWitness (by
+      simpa only [
+        quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff]
+        using hsourceApprox) (by
+      simpa only [
+        quittingContinuationBestResponseValue_eq_sSup_pureTimeDeviationPayoff]
+        using hregret)
+  let x00 := Function.update source observer
+    (quittingPureTimeBehaviorStrategy reward observer switch.sourceWitness)
+  let x01 := Function.update source observer
+    (quittingPureTimeBehaviorStrategy reward observer switch.receivingWitness)
+  let x10 := Function.update receiving observer
+    (quittingPureTimeBehaviorStrategy reward observer switch.sourceWitness)
+  let x11 := Function.update receiving observer
+    (quittingPureTimeBehaviorStrategy reward observer switch.receivingWitness)
+  have hrectangle : charge ≤
+      quittingTerminalPayoff reward x11 observer -
+        quittingTerminalPayoff reward x10 observer -
+        quittingTerminalPayoff reward x01 observer +
+        quittingTerminalPayoff reward x00 observer := by
+    simpa only [x00, x01, x10, x11, quittingPureTimeDeviationPayoff] using
+      switch.rectangle
+  obtain ⟨rectangleTerminal, hrectangleAtom⟩ :=
+    exists_absorbingTerminalPayoffRectangleAtom reward x00 x01 x10 x11
+      observer charge hcharge hrectangle
+  have hreceiving : charge + eta ≤
+      quittingTerminalPayoff reward x11 observer -
+        quittingTerminalPayoff reward x10 observer := by
+    simpa only [x10, x11, quittingPureTimeDeviationPayoff] using
+      switch.receiving_gain
+  have hreceivingPositive : 0 < charge + eta := by linarith
+  obtain ⟨receivingTerminal, hreceivingAtom⟩ :=
+    exists_absorbingTerminalPayoffDifferenceAtom reward x11 x10 observer
+      (charge + eta) hreceivingPositive hreceiving
+  exact ⟨{
+    switch := switch
+    rectangleTerminal := rectangleTerminal
+    rectangle_atom := by
+      simpa only [x00, x01, x10, x11] using hrectangleAtom
+    receivingTerminal := receivingTerminal
+    receiving_atom := by simpa only [x10, x11] using hreceivingAtom
+  }⟩
+
+/-- The common response is either already a sufficiently good witness at the
+full endpoint or it produces the existing oriented witness-switch
+certificate.  This is the exact correction to moving the mixed-profile debt
+bound to the full endpoint without justification. -/
+theorem QuittingStoppingLawCommonResponsePassport.endpointDebt_le_or_witnessSwitch
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {profile : (quittingGame reward).BehaviorProfile}
+    {mover observer : ι}
+    {target : (quittingGame reward).BehaviorStrategy mover}
+    {lambda chordCharge chordEta : ℝ}
+    {hlambda0 : 0 ≤ lambda} {hlambda1 : lambda ≤ 1}
+    (passport : QuittingStoppingLawCommonResponsePassport reward profile mover
+      observer target lambda chordCharge chordEta hlambda0 hlambda1)
+    (switchCharge switchEta : ℝ)
+    (hswitchCharge : 0 < switchCharge) (hswitchEta : 0 < switchEta)
+    (hsourceError :
+      4 * quittingRewardBound reward * lambda + chordEta ≤ switchEta) :
+    let endpoint :=
+      quittingStoppingLawFullResetProfile reward profile mover target
+    let endpointResponse := Function.update endpoint observer
+      (quittingPureTimeBehaviorStrategy reward observer passport.quitTime)
+    quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward endpointResponse) observer ≤
+        switchCharge + 2 * switchEta ∨
+      HasQuittingPureTimeWitnessSwitchCertificate reward profile endpoint
+        observer switchCharge switchEta := by
+  dsimp only
+  let endpoint :=
+    quittingStoppingLawFullResetProfile reward profile mover target
+  let response := quittingPureTimeBehaviorStrategy reward observer
+    passport.quitTime
+  let endpointResponse := Function.update endpoint observer response
+  let endpointDebt := quittingTerminalSemanticDebt
+    (quittingTerminalSemanticPair reward endpointResponse) observer
+  by_cases hsmall : endpointDebt ≤ switchCharge + 2 * switchEta
+  · exact Or.inl hsmall
+  · right
+    have hsourceApprox :
+        quittingContinuationBestResponseValue reward profile observer -
+            switchEta ≤
+          quittingPureTimeDeviationPayoff reward profile observer
+            passport.quitTime := by
+      have hgain := passport.source_gain_ge
+      dsimp only [quittingPureTimeResponseGain,
+        quittingPureTimeDeviationPayoff] at hgain ⊢
+      unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair at hgain
+      linarith
+    have hregretEq :
+        quittingContinuationBestResponseValue reward endpoint observer -
+            quittingPureTimeDeviationPayoff reward endpoint observer
+              passport.quitTime = endpointDebt := by
+      dsimp only [endpointDebt, endpointResponse,
+        quittingPureTimeDeviationPayoff, response]
+      unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
+      rw [quittingContinuationBestResponseValue_update_self]
+    have hregret : switchCharge + 2 * switchEta ≤
+        quittingContinuationBestResponseValue reward endpoint observer -
+          quittingPureTimeDeviationPayoff reward endpoint observer
+            passport.quitTime := by
+      rw [hregretEq]
+      exact (lt_of_not_ge hsmall).le
+    exact exists_quittingPureTimeWitnessSwitchCertificate_of_sourceWitness
+      reward profile endpoint observer passport.quitTime switchCharge switchEta
+      hswitchCharge hswitchEta hsourceApprox hregret
 
 end GameTheory
