@@ -238,6 +238,7 @@ import MathUE.PMFProduct.CollisionMass
 import MathUE.PMFProduct.Conditioning
 import MathUE.PMFProduct.FiniteFubini
 import MathUE.PMFProduct.Independence
+import MathUE.PMFProduct.PrincipalRestriction
 import MathUE.PMFProduct.SmallHazardBounds
 import MathUE.PMFProduct.SmallHazardExpectation
 import MathUE.PMFProduct.TotalVariation
@@ -1111,6 +1112,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQClosure
 import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQProducer
 import UniformEquilibrium.Quitting.Classification.LCP.PrincipalRestriction
 import UniformEquilibrium.Quitting.Classification.LCP.PrincipalReward
+import UniformEquilibrium.Quitting.Classification.LCP.PrincipalRootRestriction
 import UniformEquilibrium.Quitting.Classification.LCP.ProjectiveQBarBehavioralDecoder
 import UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter
 import UniformEquilibrium.Quitting.Classification.LCP.ReturnedBlockTangentGap
@@ -1495,6 +1497,7 @@ import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Quitting.Stationary.MinMax
 import UniformEquilibrium.Quitting.Stationary.Payoff
 import UniformEquilibrium.Quitting.Stationary.RegretDichotomy
+import UniformEquilibrium.Quitting.Stationary.ReturnedBlockPrincipalRestriction
 import UniformEquilibrium.Quitting.Stationary.ReturnedBlockTangentObstruction
 import UniformEquilibrium.Quitting.Stationary.Root
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
