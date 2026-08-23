@@ -319,11 +319,11 @@ the live mathematical ledger.
   simplex solution of the normalized singleton matrix, with arbitrary varying
   phase counts.  `relativeError_gap_of_noHomogeneous` gives the stronger
   explicit converse scale and relative-error gap from the `R0` margin.
-  Principal-reward and recursive-normal-core adapters are checked for literal
-  restricted blocks.  This is a reduction on supplied local blocks, not a
-  block producer, chronology, or unrestricted-behavior equilibrium consumer;
-  ambient zero-off-subset block restriction remains a separate adapter unless
-  explicitly supplied.
+  `ResidualHardClass.exists_pos_ambientNormalCoreReturnedBlock_relativeError_gap`
+  uses the exact pure-Continue coordinate-deletion law to transfer this gap to
+  ambient blocks whose hazards vanish off the recursive normal core. This is a
+  reduction on supplied local blocks, not a block producer, chronology, or
+  unrestricted-behavior equilibrium consumer.
 - **Supplied Simon obstruction:** the production correspondence now makes the
   individually rational, near-feasible finite-orbit carrier and its finite-variation
   obstruction explicit. `HasQuittingSimonFiniteCellLyapunovCertificate` and

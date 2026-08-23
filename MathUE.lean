@@ -194,6 +194,7 @@ import MathUE.PMFProduct.CollisionMass
 import MathUE.PMFProduct.Conditioning
 import MathUE.PMFProduct.FiniteFubini
 import MathUE.PMFProduct.Independence
+import MathUE.PMFProduct.PrincipalRestriction
 import MathUE.PMFProduct.SmallHazardBounds
 import MathUE.PMFProduct.SmallHazardExpectation
 import MathUE.PMFProduct.TotalVariation

@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardAdapter
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
 import UniformEquilibrium.Quitting.Classification.LCP.PrincipalRestriction
 import UniformEquilibrium.Quitting.Classification.LCP.PrincipalReward
+import UniformEquilibrium.Quitting.Classification.LCP.PrincipalRootRestriction
 import UniformEquilibrium.Quitting.Classification.LCP.NormalPrincipalQBar
 import UniformEquilibrium.Quitting.Classification.LCP.NormalPrincipalReward
 import UniformEquilibrium.Quitting.Classification.LCP.ReturnedBlockTangentGap

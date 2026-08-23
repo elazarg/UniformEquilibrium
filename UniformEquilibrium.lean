@@ -365,6 +365,7 @@ import UniformEquilibrium.Quitting.Stationary.FaceNumerator
 import UniformEquilibrium.Quitting.Stationary.RegretDichotomy
 import UniformEquilibrium.Quitting.Stationary.ApproximabilityCompactification
 import UniformEquilibrium.Quitting.Stationary.ReturnedBlockTangentObstruction
+import UniformEquilibrium.Quitting.Stationary.ReturnedBlockPrincipalRestriction
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDynamicDebtProvenance
 import UniformEquilibrium.Quitting.Root.SeparatedTerminalAnchor
 import UniformEquilibrium.Quitting.Boundary.Holonomy.All
