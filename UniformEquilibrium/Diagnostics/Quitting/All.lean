@@ -265,6 +265,7 @@ import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStopp
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawTransferBalanceRegression
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticWeightedAuxiliaryNashBudget
 import UniformEquilibrium.Diagnostics.Quitting.UniformExistenceBoundary
+import UniformEquilibrium.Diagnostics.Quitting.PaidFirstDisagreementPayoffNearReturn
 
 /-!
 # Quitting diagnostics inventory

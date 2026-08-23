@@ -76,11 +76,11 @@
       "evidence_seals": ["M", "L", "C"]
     },
     {
-      "id": "POSITIVE-ADMISSIBLE-RETURN",
+      "id": "POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN",
       "status": "consumer-ready",
-      "meaning": "One positive exact punishment-floor admissible edge followed by an exact return path compiles to a uniform-equilibrium payoff.",
-      "source": "UniformEquilibrium/Quitting/Bellman/Finite/PositiveAdmissibleCycle.lean",
-      "declaration": "GameTheory.quittingGame_exists_uniformPayoff_of_positive_admissible_return",
+      "meaning": "A fixed positive charge threshold, with source, target, path, and charged edge allowed to vary with endpoint tolerance, and endpoint payoff vectors converging arbitrarily closely, compiles to a uniform-equilibrium payoff.",
+      "source": "UniformEquilibrium/Quitting/Projective/PunishmentFloorNearReturn.lean",
+      "declaration": "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_admissiblePath_payoffNearReturns",
       "evidence_seals": ["M", "L", "C"]
     },
     {
@@ -184,13 +184,13 @@
       "evidence_seals": ["L"]
     },
     {
-      "id": "PAID-ROW-TO-ADMISSIBLE-RETURN",
+      "id": "PAID-ROW-TO-PAYOFF-NEAR-RETURN",
       "status": "open-producer",
       "from": "PAID-FIRST-DISAGREEMENT-ROW",
-      "to": "POSITIVE-ADMISSIBLE-RETURN",
-      "meaning": "Missing: re-enter the paid strategic row as a positive exact floor-admissible edge and construct an exact return to its tail state.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean",
-      "declaration": "GameTheory.PaidFirstDisagreementAdmissibleReturnConsumer",
+      "to": "POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN",
+      "meaning": "Missing: fix one positive charge threshold, while allowing the paid-row realization's source, target, path, and charged edge to vary with endpoint tolerance, and make endpoint payoff vectors arbitrarily close.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/PaidFirstDisagreementPayoffNearReturn.lean",
+      "declaration": "GameTheory.PaidFirstDisagreementAdmissiblePayoffNearReturnConsumer",
       "evidence_seals": ["L"]
     },
     {
@@ -204,13 +204,13 @@
       "evidence_seals": ["M", "L", "C"]
     },
     {
-      "id": "ADMISSIBLE-RETURN-TO-UNIFORM-PAYOFF",
+      "id": "PAYOFF-CLOSURE-TO-UNIFORM-PAYOFF",
       "status": "proved-consumer",
-      "from": "POSITIVE-ADMISSIBLE-RETURN",
+      "from": "POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN",
       "to": "UNIFORM-EQUILIBRIUM-PAYOFF",
-      "meaning": "Positive exact return-cycle amplification produces arbitrarily charged prefixes and a uniform-equilibrium payoff.",
-      "source": "UniformEquilibrium/Quitting/Bellman/Finite/PositiveAdmissibleCycle.lean",
-      "declaration": "GameTheory.quittingGame_exists_uniformPayoff_of_positive_admissible_return",
+      "meaning": "Varying-edge payoff near-returns with one fixed positive charge threshold produce a projective lasso and a uniform-equilibrium payoff.",
+      "source": "UniformEquilibrium/Quitting/Projective/PunishmentFloorNearReturn.lean",
+      "declaration": "GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_admissiblePath_payoffNearReturns",
       "evidence_seals": ["M", "L", "C"]
     }
   ],
@@ -227,10 +227,10 @@
     },
     {
       "id": "FOUR-EXIT-CAPSTONE",
-      "meaning": "Chronological consumers for the first three finite-rank exits plus an exact admissible-return producer for the paid-row exit yield a uniform-equilibrium payoff.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean",
+      "meaning": "Chronological consumers for the first three finite-rank exits plus a varying-edge payoff-near-return producer with one fixed positive charge threshold for the paid-row exit yield a uniform-equilibrium payoff.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/PaidFirstDisagreementPayoffNearReturn.lean",
       "declarations": [
-        "GameTheory.exists_uniformEquilibriumPayoff_of_finiteSupportRankExitConsumers"
+        "GameTheory.exists_uniformEquilibriumPayoff_of_finiteSupportRankExitPayoffNearReturnConsumers"
       ],
       "evidence_seals": ["M", "L", "C"]
     }
