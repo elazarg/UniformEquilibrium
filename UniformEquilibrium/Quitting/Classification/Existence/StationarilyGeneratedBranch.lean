@@ -152,6 +152,18 @@ theorem quittingApproximateEquilibriumExistence_iff_behavior
       isεQuittingRootSequenceNash_profileLiveRoot_of_isεAsymptoticNash
         reward profile hnash⟩
 
+/-- Root-sequence approximate equilibria at every positive accuracy already
+select a uniform-equilibrium payoff.  This is the canonical direct consumer
+of `QuittingApproximateEquilibriumExistence`; no stationary-prefix, punishment,
+or finite-orbit classification hypothesis is needed. -/
+theorem quittingGame_exists_uniformEquilibriumPayoff_of_approximateEquilibriumExistence
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hequilibrium : QuittingApproximateEquilibriumExistence reward) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors reward
+    ((quittingApproximateEquilibriumExistence_iff_behavior reward).mp hequilibrium)
+
 /-- The corrected Simon residual at a displayed punishment accuracy `δ`:
 for every positive equilibrium slack, one finite repeated-root prefix followed
 by a `δ`-punishment is an `(ε + δ)`-equilibrium. -/

@@ -96,4 +96,49 @@ theorem survivalProduct_le_one (C : ℕ → ℝ) (hC0 : ∀ time, 0 ≤ C time)
   Finset.prod_le_one (fun offset _ => hC0 (start + offset))
     (fun offset _ => hC1 (start + offset))
 
+/-- Increasing finitely many factors in `[0,1]` changes their product by at
+most the sum of the coordinate increases. -/
+theorem prod_sub_prod_le_sum_sub_of_le
+    {κ : Type} [DecidableEq κ] (s : Finset κ) (first second : κ → ℝ)
+    (hfirst0 : ∀ index ∈ s, 0 ≤ first index)
+    (hfirst1 : ∀ index ∈ s, first index ≤ 1)
+    (hsecond0 : ∀ index ∈ s, 0 ≤ second index)
+    (hsecond1 : ∀ index ∈ s, second index ≤ 1)
+    (hle : ∀ index ∈ s, first index ≤ second index) :
+    (∏ index ∈ s, second index) - (∏ index ∈ s, first index) ≤
+      ∑ index ∈ s, (second index - first index) := by
+  induction s using Finset.cons_induction with
+  | empty => simp
+  | cons index s hindex ih =>
+      rw [Finset.prod_cons, Finset.prod_cons, Finset.sum_cons]
+      have hfirst0s : ∀ other ∈ s, 0 ≤ first other :=
+        fun other hother => hfirst0 other (Finset.mem_cons_of_mem hother)
+      have hfirst1s : ∀ other ∈ s, first other ≤ 1 :=
+        fun other hother => hfirst1 other (Finset.mem_cons_of_mem hother)
+      have hsecond0s : ∀ other ∈ s, 0 ≤ second other :=
+        fun other hother => hsecond0 other (Finset.mem_cons_of_mem hother)
+      have hsecond1s : ∀ other ∈ s, second other ≤ 1 :=
+        fun other hother => hsecond1 other (Finset.mem_cons_of_mem hother)
+      have hles : ∀ other ∈ s, first other ≤ second other :=
+        fun other hother => hle other (Finset.mem_cons_of_mem hother)
+      have hih := ih hfirst0s hfirst1s hsecond0s hsecond1s hles
+      have hprodSecond0 : 0 ≤ ∏ other ∈ s, second other :=
+        Finset.prod_nonneg hsecond0s
+      have hprodSecond1 : (∏ other ∈ s, second other) ≤ 1 :=
+        Finset.prod_le_one hsecond0s hsecond1s
+      have hprodLe : (∏ other ∈ s, first other) ≤
+          ∏ other ∈ s, second other :=
+        Finset.prod_le_prod hfirst0s hles
+      have hcoordinate0 : 0 ≤ second index - first index :=
+        sub_nonneg.mpr (hle index (Finset.mem_cons_self index s))
+      have hfirstIndex1 := hfirst1 index (Finset.mem_cons_self index s)
+      have hleft : (second index - first index) *
+          (∏ other ∈ s, second other) ≤ second index - first index :=
+        mul_le_of_le_one_right hcoordinate0 hprodSecond1
+      have hright : first index *
+          ((∏ other ∈ s, second other) - ∏ other ∈ s, first other) ≤
+          (∏ other ∈ s, second other) - ∏ other ∈ s, first other :=
+        mul_le_of_le_one_left (sub_nonneg.mpr hprodLe) hfirstIndex1
+      nlinarith
+
 end Math
