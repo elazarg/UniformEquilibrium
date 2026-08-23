@@ -9,7 +9,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.Gate
 import UniformEquilibrium.Quitting.Classification.ImmediateSingletonCollision
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
 import UniformEquilibrium.Quitting.Classification.PreemptionGateDictionary
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SoloExitPreferenceScreen
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySoloExitPreference
 
 /-!
 # The regular five-player tournament seed

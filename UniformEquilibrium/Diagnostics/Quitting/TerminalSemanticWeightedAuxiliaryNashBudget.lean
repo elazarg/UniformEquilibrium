@@ -4,7 +4,10 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumDebtSimplex
+import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
+import UniformEquilibrium.Quitting.Root.NashExistence
+import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
+import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 
 /-!
 # Weighted auxiliary Nash budget

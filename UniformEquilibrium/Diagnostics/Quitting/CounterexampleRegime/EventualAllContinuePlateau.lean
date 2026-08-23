@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Tangent.Packet
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Debt.Dynamic.ZeroAbsorptionPlateau
 import UniformEquilibrium.Quitting.Punishment.BlockerIntervalCover
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification

@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionDiffuseClockBridge
-import UniformEquilibrium.Quitting.Boundary.Repair.AtomicBlockerCompletion
+import UniformEquilibrium.Quitting.Boundary.Repair.AtomicBlockerPaidGeometry
 import UniformEquilibrium.Quitting.Classification.PlayerDeletionLift
 import UniformEquilibrium.Quitting.Cycles.ConditionedDeletedClockSoloCompletion
 import UniformEquilibrium.Quitting.Cycles.ConditionedProperFaceDeficientClock
@@ -74,32 +74,6 @@ theorem exists_strict_owner_toggle_or_exact_playerDeletion
 
 /-! ## The strict-toggle branch enters the atomic blocker geometry -/
 
-/-- At the pure row in which `owner` joins a nonempty opponent coalition,
-the atomic blocker balance is exactly the corresponding insertion gain. -/
-theorem quittingAtomicBlockerBalance_pure_ownerToggle
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (owner : ι) (quitters : Finset ι) (hquitters : quitters.Nonempty)
-    (howner : owner ∉ quitters) :
-    quittingAtomicBlockerBalance reward
-        (QuittingSureSetOwnerRepair.quittingPureSetRoot
-          (insert owner quitters)) owner =
-      reward
-          ⟨insert owner quitters,
-            Finset.insert_nonempty owner quitters⟩ owner -
-        reward ⟨quitters, hquitters⟩ owner := by
-  have herase : (insert owner quitters).erase owner = quitters := by
-    simp [howner]
-  have heraseNonempty : ((insert owner quitters).erase owner).Nonempty := by
-    simpa [herase] using hquitters
-  unfold quittingAtomicBlockerBalance quittingForcedOwnerObeyValue
-    quittingForcedOwnerRefusalCap
-    quittingForcedOwnerAllOutsidersContinueMass
-  rw [QuittingSureSetOwnerRepair.quittingRootAbsorbingContribution_pureSetRoot,
-    quittingStationaryFixedOpponentsContinueReward_pureSetRoot,
-    quittingStationaryFixedOpponentsContinueMass_pureSetRoot_of_erase_nonempty
-      heraseNonempty]
-  simp [QuittingSureSetOwnerRepair.quittingSetReward, herase, hquitters]
-
 /-- A strict owner-side insertion toggle cannot itself be a stable atomic
 row in a game with a positive terminal exploitability floor.  Some outsider
 has a strict one-stage deviation at the pure joined-coalition row.  This is
@@ -122,33 +96,10 @@ theorem exists_outsider_atomicDeviation_of_strict_ownerToggle
         quittingRootExpectedPayoff reward 0
           (QuittingSureSetOwnerRepair.quittingPureSetRoot
             (insert owner quitters)) who := by
-  let root := QuittingSureSetOwnerRepair.quittingPureSetRoot
-    (insert owner quitters)
-  have hrootOwner : root owner = PMF.pure true := by
-    simp [root, QuittingSureSetOwnerRepair.quittingPureSetRoot,
-      QuittingSureSetOwnerRepair.quittingSetAction]
-  have hbalance : 0 < quittingAtomicBlockerBalance reward root owner := by
-    rw [show quittingAtomicBlockerBalance reward root owner =
-      quittingAtomicBlockerBalance reward
-        (QuittingSureSetOwnerRepair.quittingPureSetRoot
-          (insert owner quitters)) owner by rfl,
-      quittingAtomicBlockerBalance_pure_ownerToggle reward owner quitters
-        hquitters howner]
-    linarith
-  have hnot : ¬ IsQuittingForcedOwnerNashRow reward owner root := by
-    intro hrow
-    have hbarrier :=
-      quittingAtomicBlockerBalance_le_neg_of_terminalExploitabilityGap
-        hrow hgap hexploit
-    linarith
-  have houtsider : ¬ ∀ who, who ≠ owner → ∀ deviation : PMF Bool,
-      quittingRootExpectedPayoff reward 0
-          (Function.update root who deviation) who ≤
-        quittingRootExpectedPayoff reward 0 root who := by
-    intro hstable
-    exact hnot ⟨hrootOwner, hstable⟩
-  push Not at houtsider
-  simpa [root] using houtsider
+  obtain ⟨who, hwho, deviation, hdeviation⟩ :=
+    exists_outsider_atomicDeviation_ge_of_strict_ownerToggle
+      reward hgap hexploit owner quitters hquitters howner htoggle
+  exact ⟨who, hwho, deviation, by linarith⟩
 
 /-- Strengthen the toggle side of the deletion dispatcher with its forced
 atomic-row instability witness. -/

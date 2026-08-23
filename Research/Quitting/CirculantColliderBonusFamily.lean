@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.CubicAnchorRoot
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Circulant.ColliderCompletion
+import UniformEquilibrium.Quitting.Classification.Circulant.TerminalExploitabilityColliderCompletion
 import UniformEquilibrium.Quitting.Classification.Circulant.ColliderCompletion
 
 /-!

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCapNashDebtSupport
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
 
 /-!
 # Boundary handoff and overtilt corollaries

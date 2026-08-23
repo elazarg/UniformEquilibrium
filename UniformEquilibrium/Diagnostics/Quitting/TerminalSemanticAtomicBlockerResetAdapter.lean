@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicBlockerBarrier
+import UniformEquilibrium.Quitting.Boundary.Repair.AtomicBlockerPaidGeometry
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauPartialResetTransfer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauFractionalResetDropout
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSignedPairDropoutConsumer

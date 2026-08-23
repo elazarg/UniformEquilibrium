@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.Source.DynamicAlternative
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.Energy
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodOne.TangentReadout
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.ExactCycleStrata
+import UniformEquilibrium.Quitting.Cycles.TerminalExploitabilityExactCycleExclusion
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtSourceFaceReturnWord
 
 /-!

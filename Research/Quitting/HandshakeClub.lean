@@ -7,8 +7,8 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Orbit.SelfLoop
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.SearchConsequences
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.SmallPlayers
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySmallPlayers
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Classification.AnalyticWaist
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 

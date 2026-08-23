@@ -4,10 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlayerDeletion
+import UniformEquilibrium.Quitting.Boundary.Repair.AtomicBlockerCompletion
+import UniformEquilibrium.Quitting.Paths.SureExitSet
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 
 /-!
-# The atomic blocker barrier
+# Paid geometry of the atomic blocker barrier
 
 For an arbitrary product row at which `owner` Quits surely, this module
 records the largest one-stage outsider deviation gain.  Since the owner's
@@ -229,7 +231,7 @@ owner's refusal advantage reaches the global exploitability floor. -/
 theorem terminalExploitabilityGap_le_atomicBlockerBarrier
     {root : ι → PMF Bool} {owner : ι} {η : ℝ}
     (howner : root owner = PMF.pure true)
-    (_hη : 0 < η) (hgap : HasTerminalExploitabilityGap reward η) :
+    (hgap : HasTerminalExploitabilityGap reward η) :
     η ≤ max (quittingForcedOwnerOutsiderDefect reward root owner)
       (max 0 (-quittingAtomicBlockerBalance reward root owner)) := by
   by_contra hnot
@@ -310,36 +312,50 @@ theorem QuittingTerminalExploitabilityWitness.terminalGap_le_atomicBlockerBarrie
       max (quittingForcedOwnerOutsiderDefect reward root owner)
         (max 0 (-quittingAtomicBlockerBalance reward root owner)) :=
   terminalExploitabilityGap_le_atomicBlockerBarrier howner
-    witness.terminalGap_pos witness.terminalExploitability
+    witness.terminalExploitability
 
-/-- If the blocker balance is positive, the barrier is paid entirely by a
-literal outsider endpoint deviation.  The witness can be chosen pure because
-the outsider's Boolean mixed payoff is affine between its two endpoints. -/
-theorem exists_outsider_atomicDeviation_ge_of_pos_blockerBalance
-    {root : ι → PMF Bool} {owner : ι} {η : ℝ}
-    (howner : root owner = PMF.pure true)
-    (hη : 0 < η) (hgap : HasTerminalExploitabilityGap reward η)
-    (hbalance : 0 < quittingAtomicBlockerBalance reward root owner) :
-    ∃ who, who ≠ owner ∧ ∃ deviation : PMF Bool,
-      quittingRootExpectedPayoff reward 0 root who + η ≤
+/-- At the pure row in which `owner` joins a nonempty opponent coalition,
+the atomic blocker balance is exactly the corresponding insertion gain. -/
+theorem quittingAtomicBlockerBalance_pure_ownerToggle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (owner : ι) (quitters : Finset ι) (hquitters : quitters.Nonempty)
+    (howner : owner ∉ quitters) :
+    quittingAtomicBlockerBalance reward
+        (QuittingSureSetOwnerRepair.quittingPureSetRoot
+          (insert owner quitters)) owner =
+      reward
+          ⟨insert owner quitters,
+            Finset.insert_nonempty owner quitters⟩ owner -
+        reward ⟨quitters, hquitters⟩ owner := by
+  have herase : (insert owner quitters).erase owner = quitters := by
+    simp [howner]
+  have heraseNonempty : ((insert owner quitters).erase owner).Nonempty := by
+    simpa [herase] using hquitters
+  unfold quittingAtomicBlockerBalance quittingForcedOwnerObeyValue
+    quittingForcedOwnerRefusalCap
+    quittingForcedOwnerAllOutsidersContinueMass
+  rw [QuittingSureSetOwnerRepair.quittingRootAbsorbingContribution_pureSetRoot,
+    quittingStationaryFixedOpponentsContinueReward_pureSetRoot,
+    quittingStationaryFixedOpponentsContinueMass_pureSetRoot_of_erase_nonempty
+      heraseNonempty]
+  simp [QuittingSureSetOwnerRepair.quittingSetReward, herase, hquitters]
+
+/-- A positive lower bound on the forced-owner outsider defect is attained
+by one outsider's pure Boolean endpoint. -/
+theorem exists_outsider_pureEndpoint_gain_ge_of_le_forcedOwnerOutsiderDefect
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (owner : ι) {lower : ℝ}
+    (hlower : 0 < lower)
+    (hdefect : lower ≤ quittingForcedOwnerOutsiderDefect reward root owner) :
+    ∃ who, who ≠ owner ∧ ∃ action : Bool,
+      quittingRootExpectedPayoff reward 0 root who + lower ≤
         quittingRootExpectedPayoff reward 0
-          (Function.update root who deviation) who := by
-  have hbarrier := terminalExploitabilityGap_le_atomicBlockerBarrier
-    howner hη hgap
-  have hrefusal :
-      max 0 (-quittingAtomicBlockerBalance reward root owner) = 0 := by
-    rw [max_eq_left]
-    linarith
-  have hdefect : η ≤ quittingForcedOwnerOutsiderDefect reward root owner := by
-    rw [hrefusal,
-      max_eq_left (quittingForcedOwnerOutsiderDefect_nonneg
-        reward root owner)] at hbarrier
-    exact hbarrier
+          (Function.update root who (PMF.pure action)) who := by
   letI : Nonempty ι := ⟨owner⟩
   obtain ⟨who, _hwhoMem, hsup⟩ :=
     Finset.exists_mem_eq_sup' Finset.univ_nonempty
       (quittingForcedOwnerOutsiderCoordinateDefect reward root owner)
-  have hcoordinate : η ≤
+  have hcoordinate : lower ≤
       quittingForcedOwnerOutsiderCoordinateDefect reward root owner who := by
     rw [← hsup]
     exact hdefect
@@ -363,11 +379,11 @@ theorem exists_outsider_atomicDeviation_ge_of_pos_blockerBalance
         quitValue, continueValue, obeyValue, max_eq_left hnonpos]
     rw [hzero] at hcoordinate
     linarith
-  have hraw : η ≤ max quitValue continueValue - obeyValue := by
+  have hraw : lower ≤ max quitValue continueValue - obeyValue := by
     simpa [quittingForcedOwnerOutsiderCoordinateDefect, hwho,
       quitValue, continueValue, obeyValue, max_eq_right hrawPos.le] using
       hcoordinate
-  have hgain : obeyValue + η ≤ max quitValue continueValue := by
+  have hgain : obeyValue + lower ≤ max quitValue continueValue := by
     linarith
   have hrootPayoff :
       quittingRootExpectedPayoff reward 0 root who = obeyValue := by
@@ -381,15 +397,89 @@ theorem exists_outsider_atomicDeviation_ge_of_pos_blockerBalance
           (Function.update root who (PMF.pure false)) who = continueValue := by
     rfl
   rcases le_total quitValue continueValue with hquit_le | hcontinue_le
-  · refine ⟨who, hwho, PMF.pure false, ?_⟩
+  · refine ⟨who, hwho, false, ?_⟩
     rw [hrootPayoff, hcontinuePayoff]
     rwa [max_eq_right hquit_le] at hgain
-  · refine ⟨who, hwho, PMF.pure true, ?_⟩
+  · refine ⟨who, hwho, true, ?_⟩
     rw [hrootPayoff, hquitPayoff]
     rwa [max_eq_left hcontinue_le] at hgain
 
-/-- A strict owner-side coalition toggle has a quantitative outsider pivot
-at the corresponding pure joined-coalition row. -/
+/-- If the blocker balance is nonnegative, the barrier is paid entirely by a
+literal outsider pure endpoint deviation. -/
+theorem exists_outsider_pureEndpoint_gain_ge_of_nonneg_blockerBalance
+    {root : ι → PMF Bool} {owner : ι} {η : ℝ}
+    (howner : root owner = PMF.pure true)
+    (hη : 0 < η) (hgap : HasTerminalExploitabilityGap reward η)
+    (hbalance : 0 ≤ quittingAtomicBlockerBalance reward root owner) :
+    ∃ who, who ≠ owner ∧ ∃ action : Bool,
+      quittingRootExpectedPayoff reward 0 root who + η ≤
+        quittingRootExpectedPayoff reward 0
+          (Function.update root who (PMF.pure action)) who := by
+  have hbarrier := terminalExploitabilityGap_le_atomicBlockerBarrier
+    howner hgap
+  have hrefusal :
+      max 0 (-quittingAtomicBlockerBalance reward root owner) = 0 := by
+    rw [max_eq_left]
+    linarith
+  have hdefect : η ≤ quittingForcedOwnerOutsiderDefect reward root owner := by
+    rw [hrefusal,
+      max_eq_left (quittingForcedOwnerOutsiderDefect_nonneg
+        reward root owner)] at hbarrier
+    exact hbarrier
+  exact exists_outsider_pureEndpoint_gain_ge_of_le_forcedOwnerOutsiderDefect
+    reward root owner hη hdefect
+
+/-- Positive-balance compatibility form of the pure endpoint theorem. -/
+theorem exists_outsider_atomicDeviation_ge_of_pos_blockerBalance
+    {root : ι → PMF Bool} {owner : ι} {η : ℝ}
+    (howner : root owner = PMF.pure true)
+    (hη : 0 < η) (hgap : HasTerminalExploitabilityGap reward η)
+    (hbalance : 0 < quittingAtomicBlockerBalance reward root owner) :
+    ∃ who, who ≠ owner ∧ ∃ deviation : PMF Bool,
+      quittingRootExpectedPayoff reward 0 root who + η ≤
+        quittingRootExpectedPayoff reward 0
+          (Function.update root who deviation) who := by
+  obtain ⟨who, hwho, action, haction⟩ :=
+    exists_outsider_pureEndpoint_gain_ge_of_nonneg_blockerBalance
+      howner hη hgap hbalance.le
+  exact ⟨who, hwho, PMF.pure action, haction⟩
+
+/-- A strict owner-side coalition toggle has a quantitative outsider pure
+endpoint at the corresponding joined-coalition row. -/
+theorem exists_outsider_pureEndpoint_gain_ge_of_strict_ownerToggle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {η : ℝ} (hη : 0 < η) (hgap : HasTerminalExploitabilityGap reward η)
+    (owner : ι) (quitters : Finset ι) (hquitters : quitters.Nonempty)
+    (howner : owner ∉ quitters)
+    (htoggle : reward ⟨quitters, hquitters⟩ owner <
+      reward
+        ⟨insert owner quitters,
+          Finset.insert_nonempty owner quitters⟩ owner) :
+    ∃ who, who ≠ owner ∧ ∃ action : Bool,
+      quittingRootExpectedPayoff reward 0
+          (QuittingSureSetOwnerRepair.quittingPureSetRoot
+            (insert owner quitters)) who + η ≤
+        quittingRootExpectedPayoff reward 0
+          (Function.update
+            (QuittingSureSetOwnerRepair.quittingPureSetRoot
+              (insert owner quitters)) who (PMF.pure action)) who := by
+  let root := QuittingSureSetOwnerRepair.quittingPureSetRoot
+    (insert owner quitters)
+  have hrootOwner : root owner = PMF.pure true := by
+    simp [root, QuittingSureSetOwnerRepair.quittingPureSetRoot,
+      QuittingSureSetOwnerRepair.quittingSetAction]
+  have hbalance : 0 < quittingAtomicBlockerBalance reward root owner := by
+    rw [show quittingAtomicBlockerBalance reward root owner =
+      quittingAtomicBlockerBalance reward
+        (QuittingSureSetOwnerRepair.quittingPureSetRoot
+          (insert owner quitters)) owner by rfl,
+      quittingAtomicBlockerBalance_pure_ownerToggle reward owner quitters
+        hquitters howner]
+    linarith
+  exact exists_outsider_pureEndpoint_gain_ge_of_nonneg_blockerBalance
+    hrootOwner hη hgap hbalance.le
+
+/-- PMF-valued compatibility form of the strict-toggle quantitative pivot. -/
 theorem exists_outsider_atomicDeviation_ge_of_strict_ownerToggle
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {η : ℝ} (hη : 0 < η) (hgap : HasTerminalExploitabilityGap reward η)
@@ -407,21 +497,10 @@ theorem exists_outsider_atomicDeviation_ge_of_strict_ownerToggle
           (Function.update
             (QuittingSureSetOwnerRepair.quittingPureSetRoot
               (insert owner quitters)) who deviation) who := by
-  let root := QuittingSureSetOwnerRepair.quittingPureSetRoot
-    (insert owner quitters)
-  have hrootOwner : root owner = PMF.pure true := by
-    simp [root, QuittingSureSetOwnerRepair.quittingPureSetRoot,
-      QuittingSureSetOwnerRepair.quittingSetAction]
-  have hbalance : 0 < quittingAtomicBlockerBalance reward root owner := by
-    rw [show quittingAtomicBlockerBalance reward root owner =
-      quittingAtomicBlockerBalance reward
-        (QuittingSureSetOwnerRepair.quittingPureSetRoot
-          (insert owner quitters)) owner by rfl,
-      quittingAtomicBlockerBalance_pure_ownerToggle reward owner quitters
-        hquitters howner]
-    linarith
-  exact exists_outsider_atomicDeviation_ge_of_pos_blockerBalance
-    hrootOwner hη hgap hbalance
+  obtain ⟨who, hwho, action, haction⟩ :=
+    exists_outsider_pureEndpoint_gain_ge_of_strict_ownerToggle
+      reward hη hgap owner quitters hquitters howner htoggle
+  exact ⟨who, hwho, PMF.pure action, haction⟩
 
 /-! ## A finite mountain-pass dichotomy -/
 
@@ -483,7 +562,7 @@ theorem exists_atomicBlockerDefect_or_balanceDrop_on_finiteWord
     have hlandingLower : -η / 2 ≤ balance first :=
       le_of_not_gt hlargeDropLanding
     have hbarrier := terminalExploitabilityGap_le_atomicBlockerBarrier
-      (howner first hfirstSpec.1) hη hgap
+      (howner first hfirstSpec.1) hgap
     have hrefusal : max 0 (-balance first) = -balance first := by
       rw [max_eq_right]
       linarith

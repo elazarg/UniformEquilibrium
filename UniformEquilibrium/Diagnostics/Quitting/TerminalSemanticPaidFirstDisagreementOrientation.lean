@@ -8,6 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPaidFirstDisagree
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticForcedOwnerRefusalCollector
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauLocalizedOtherDefect
+import UniformEquilibrium.Quitting.Boundary.Repair.AtomicBlockerPaidGeometry
 
 /-!
 # Temporal orientation of a paid first disagreement
@@ -207,66 +208,6 @@ theorem QuittingPaidFirstDisagreementRow.liveMass_mul_forcedRefusal_le_eta
   rw [← hlive]
   exact hrefusalWeighted.trans hdebt
 
-/-- A positive lower bound on the forced-owner outsider defect is attained
-by one outsider's pure Boolean endpoint. -/
-theorem exists_outsider_pureEndpoint_gain_ge_of_le_forcedOwnerOutsiderDefect
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (root : ι → PMF Bool) (owner : ι) {lower : ℝ}
-    (hlower : 0 < lower)
-    (hdefect : lower ≤ quittingForcedOwnerOutsiderDefect reward root owner) :
-    ∃ who, who ≠ owner ∧ ∃ action : Bool,
-      quittingRootExpectedPayoff reward 0 root who + lower ≤
-        quittingRootExpectedPayoff reward 0
-          (Function.update root who (PMF.pure action)) who := by
-  letI : Nonempty ι := ⟨owner⟩
-  obtain ⟨who, _hwhoMem, hsup⟩ :=
-    Finset.exists_mem_eq_sup' Finset.univ_nonempty
-      (quittingForcedOwnerOutsiderCoordinateDefect reward root owner)
-  have hcoordinate : lower ≤
-      quittingForcedOwnerOutsiderCoordinateDefect reward root owner who := by
-    rw [← hsup]
-    exact hdefect
-  have hwho : who ≠ owner := by
-    intro heq
-    subst who
-    simp [quittingForcedOwnerOutsiderCoordinateDefect] at hcoordinate
-    linarith
-  let quitValue := quittingStationaryFixedOpponentsQuitValue reward root who
-  let continueValue :=
-    quittingStationaryFixedOpponentsContinueReward reward root who
-  let obeyValue := quittingRootAbsorbingContribution reward root who
-  have hrawPos : 0 < max quitValue continueValue - obeyValue := by
-    by_contra hnot
-    have hnonpos : max quitValue continueValue - obeyValue ≤ 0 :=
-      le_of_not_gt hnot
-    have hzero :
-        quittingForcedOwnerOutsiderCoordinateDefect reward root owner who = 0 := by
-      simp [quittingForcedOwnerOutsiderCoordinateDefect, hwho,
-        quitValue, continueValue, obeyValue, max_eq_left hnonpos]
-    rw [hzero] at hcoordinate
-    linarith
-  have hgain : obeyValue + lower ≤ max quitValue continueValue := by
-    have hraw : lower ≤ max quitValue continueValue - obeyValue := by
-      simpa [quittingForcedOwnerOutsiderCoordinateDefect, hwho,
-        quitValue, continueValue, obeyValue, max_eq_right hrawPos.le] using
-        hcoordinate
-    linarith
-  have hrootPayoff :
-      quittingRootExpectedPayoff reward 0 root who = obeyValue := by rfl
-  have hquitPayoff :
-      quittingRootExpectedPayoff reward 0
-          (Function.update root who (PMF.pure true)) who = quitValue := by rfl
-  have hcontinuePayoff :
-      quittingRootExpectedPayoff reward 0
-          (Function.update root who (PMF.pure false)) who = continueValue := by rfl
-  rcases le_total quitValue continueValue with hquitLe | hcontinueLe
-  · refine ⟨who, hwho, false, ?_⟩
-    rw [hrootPayoff, hcontinuePayoff]
-    rwa [max_eq_right hquitLe] at hgain
-  · refine ⟨who, hwho, true, ?_⟩
-    rw [hrootPayoff, hquitPayoff]
-    rwa [max_eq_left hcontinueLe] at hgain
-
 /-- **Earlier-receiving temporal dispatch.**  Let `gain` be the paid
 receiving edge and let `gamma` be the terminal exploitability floor.  If the
 receiving witness is `eta`-optimal and
@@ -333,7 +274,7 @@ theorem QuittingPaidFirstDisagreementRow.exists_outsiderDeviation_of_receivingEa
     nlinarith [row.gain_le_liveMass]
   have hbarrier : gamma ≤ max defect refusal := by
     simpa only [defect, refusal] using
-      terminalExploitabilityGap_le_atomicBlockerBarrier howner hgamma hgap
+      terminalExploitabilityGap_le_atomicBlockerBarrier howner hgap
   have hrefusalWeighted : row.liveMass * refusal ≤ eta := by
     simpa only [profile, root, refusal] using
       row.liveMass_mul_forcedRefusal_le_eta hearlier happrox

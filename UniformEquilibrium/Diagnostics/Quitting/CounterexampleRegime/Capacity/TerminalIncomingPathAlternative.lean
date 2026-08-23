@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.Source.DynamicAlternative
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Players.SmallPlayers
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySmallPlayers
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.SupportLiftFarkas
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
 import UniformEquilibrium.Quitting.Boundary.Repair.TerminalFunding.IncomingPath
