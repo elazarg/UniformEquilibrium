@@ -130,6 +130,7 @@ import MathUE.LinearAlgebra.CyclicSchur
 import MathUE.LinearAlgebra.ExactBlockElimination
 import MathUE.LinearAlgebra.ExactBlockEliminationConfluence
 import MathUE.LinearAlgebra.Farkas
+import MathUE.LinearAlgebra.FiniteConvexStrictSeparation
 import MathUE.LinearAlgebra.FiniteGroupInvariantWeights
 import MathUE.LinearAlgebra.FiniteRayMaximum
 import MathUE.LinearAlgebra.FourierMotzkin
@@ -343,6 +344,7 @@ import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
+import MathUE.Topology.TailSupConvergence
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.Viability.AdaptiveEulerLimit

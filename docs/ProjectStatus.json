@@ -92,6 +92,15 @@
       "scope": "Strict lower and weak upper conditional reward-range comparisons yield a stationary behavioral terminal Nash and a uniform-equilibrium payoff; the hypotheses are a sufficient source-data condition, not a universal classification."
     },
     {
+      "id": "projective-qbar-uniform-payoff",
+      "subject": "Finite quitting games with projective-Q-bar normalized singleton matrix",
+      "kind": "Unconditional family theorem",
+      "declaration": "exists_uniformEquilibriumPayoff_of_projectiveQBar_snell",
+      "source": "UniformEquilibrium/Quitting/AbsorptionPath/PunishmentNormalPathStrategicSnell.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Ambient projective Q-bar yields a uniform-equilibrium payoff against every unilateral behavioral deviation. The punishment-normal path decoder is constructed through the deleted-survival Snell fork; this does not cover ResidualHardClass."
+    },
+    {
       "id": "solan-vieille-solo-hazard-floor",
       "subject": "At-most-one-owner calendars on the Solan--Vieille boundary table",
       "kind": "Unconditional obstruction",

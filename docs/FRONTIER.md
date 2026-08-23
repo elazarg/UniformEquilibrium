@@ -181,14 +181,14 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 | `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `PAID-FIRST-DISAGREEMENT-ROW` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
 | `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
-| `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `L` | [`GameTheory.VanishingDebtAtomChronologicalConsumer`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `L` | [`GameTheory.exists_zeroForcing_quittingChronologicalDebtData`](../UniformEquilibrium/Quitting/Debt/Dynamic/NashBellmanChronologicalForcing.lean) |
 | `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `L` | [`GameTheory.PaidFirstDisagreementAdmissiblePayoffNearReturnConsumer`](../UniformEquilibrium/Diagnostics/Quitting/PaidFirstDisagreementPayoffNearReturn.lean) |
 | `CHRONOLOGICAL-DEBT-SHADOWING` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors`](../UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean) |
 | `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_admissiblePath_payoffNearReturns`](../UniformEquilibrium/Quitting/Projective/PunishmentFloorNearReturn.lean) |
 
 The open producer arrows are:
 
-- `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: serialize the static whole-law atom alternatives into executable tails with bounded forcing, vanishing survival, and small initial debt at every accuracy.
+- `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: select one exact Nash--Bellman spine from the static atom data whose same roots preserve two fixed divergent marginal-hazard labels. Exact-spine discrepancy, forcing, and initial debt are identically zero, while two persistent labels supply every required survival field.
 - `PAID-FIRST-DISAGREEMENT-ROW` to `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: Missing: fix one positive charge threshold, while allowing the paid-row realization's source, target, path, and charged edge to vary with endpoint tolerance, and make endpoint payoff vectors arbitrarily close.
 
 The DAG nodes have these mathematical meanings:
@@ -282,17 +282,15 @@ the live mathematical ledger.
   but the standard-Q side and full Simon Theorem 3 remain open.
 - **Projective Q-bar principal restriction:**
   `exists_punishmentNormal_singletonPath_of_projectiveQBar` and the ambient
-  path/rate interfaces are checked for the punishment-normal principal matrix,
-  and the downstream decoder consumers are checked. The ambient
-  omitted-player/minmax lift is checked by
-  `ContinuousZeroPerfectSingletonPath.ambientLift`. The central
-  `QuittingPunishmentNormalPathDecoder` is not proved: logarithmic-rate and
-  integral reconstruction, the deleted-clock Snell identity and
-  exceptional-owner split, uniform product-law discretization, and the
-  conversion to actual terminal payoffs against every behavioral deviation
-  remain open. Thus projective Q-bar is a strong conditional route and forces
-  any counterexample surviving the decoder to fail on a normal principal
-  subset; it is not yet a theorem for all quitting games.
+  path/rate interfaces are checked for the punishment-normal principal matrix.
+  `quittingPunishmentNormalPathDecoder_of_snell` proves the formerly supplied
+  decoder through the exhaustive deleted-survival fork: a positive limit gives
+  a normal no-harm singleton owner, while all zero limits give actual
+  logarithmically discretized product profiles at one fixed target.
+  `exists_uniformEquilibriumPayoff_of_projectiveQBar_snell` therefore closes
+  the ambient projective-Q-bar branch against every behavioral deviation.
+  This does not solve `ResidualHardClass`, whose full matrix is not projective
+  Q-bar.
 - **Cyclic singleton escort route:**
   `BalancedSingletonCycleCertificate.exists_escortCycle` proves the full escort
   necessity and `hasQuittingCanonicalEqualHazardTailData_iff` gives the exact
@@ -324,6 +322,16 @@ the live mathematical ledger.
   ambient blocks whose hazards vanish off the recursive normal core. This is a
   reduction on supplied local blocks, not a block producer, chronology, or
   unrestricted-behavior equilibrium consumer.
+- **Strict-covector positive-survival cost:**
+  `QuittingConvergentDiffuseExactFloorTail.uniformPayoff_or_exists_strictCovectorPositiveSurvival`
+  gives one common normalized covector on every late finite and infinite
+  horizon of any convergent diffuse exact floor tail. On the unsolved branch
+  it derives summable absorption, suffix survival tending to one, and eventual
+  positive Never mass. `QuittingSummableExactValueTail.suffixGain_tendsto_max_solo`
+  computes the exact unrestricted behavioral suffix-gain limit as the positive
+  part of the solo payoff. The canonical dynamic-tail adapter is checked and
+  needs no `ResidualHardClass` hypothesis; attaching or paying a positive-solo
+  Never atom remains a producer obligation.
 - **Supplied Simon obstruction:** the production correspondence now makes the
   individually rational, near-feasible finite-orbit carrier and its finite-variation
   obstruction explicit. `HasQuittingSimonFiniteCellLyapunovCertificate` and

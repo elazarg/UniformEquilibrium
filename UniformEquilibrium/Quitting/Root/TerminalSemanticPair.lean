@@ -60,6 +60,24 @@ def quittingTerminalSemanticPrefix
         (quittingRootContinuePayoff reward
           (Function.update pair.1 who (pair.2 who)) root who))
 
+/-- Exact root Nash sends a diagonal candidate tail to a diagonal current
+semantic pair. -/
+theorem quittingTerminalSemanticPrefix_diagonal_eq_of_isZeroNash
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool)
+    (hnash : IsεQuittingRootNash reward tail 0 root) :
+    quittingTerminalSemanticPrefix reward root (tail, tail) =
+      (quittingRootSuccessorPayoff reward tail root,
+        quittingRootSuccessorPayoff reward tail root) := by
+  apply Prod.ext
+  · rfl
+  · funext who
+    unfold quittingTerminalSemanticPrefix
+    dsimp only
+    rw [Function.update_eq_self]
+    exact (quittingRootSuccessorPayoff_eq_max_of_isZeroNash
+      reward tail root who hnash).symm
+
 /-- Playerwise best-response debt of a terminal semantic pair, equivalently
 its unilateral exploitability gap. -/
 def quittingTerminalSemanticDebt

@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
 import UniformEquilibrium.Quitting.Classification.Existence.NoHarmSingletonGenerated
+import UniformEquilibrium.Quitting.AbsorptionPath.PunishmentNormalPathEmbedding
 import UniformEquilibrium.Quitting.Classification.LCP.NormalPrincipalReward
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
@@ -51,6 +52,19 @@ structure QuittingPureTimeTargetApproximationAt
           (quittingPureTimeBehaviorStrategy reward who quitTime)) who ≤
       target who + error
 
+/-- A pure-time target approximation remains valid after increasing its error
+budget. -/
+def QuittingPureTimeTargetApproximationAt.mono
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {target : Payoff ι} {small large : ℝ}
+    (approximation : QuittingPureTimeTargetApproximationAt reward target small)
+    (herror : small ≤ large) :
+    QuittingPureTimeTargetApproximationAt reward target large where
+  profile := approximation.profile
+  prescribed_close who := (approximation.prescribed_close who).trans herror
+  pureTime_le who quitTime :=
+    (approximation.pureTime_le who quitTime).trans (by linarith)
+
 /-- A uniform pure-time target approximation controls every behavioral
 deviation, with twice the displayed error. -/
 theorem QuittingPureTimeTargetApproximationAt.isTwoMulAsymptoticNash
@@ -87,6 +101,20 @@ structure QuittingPureTimeTargetApproximationCertificate
   approximation : ∀ error : ℝ, 0 < error →
     Nonempty (QuittingPureTimeTargetApproximationAt reward target error)
 
+/-- Cofinal arbitrarily small pure-time approximations supply the literal
+every-positive-error certificate consumed by terminal uniform semantics. -/
+theorem quittingPureTimeTargetApproximationCertificate_of_cofinal
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (target : Payoff ι)
+    (hcofinal : ∀ upper : ℝ, 0 < upper →
+      ∃ error : ℝ, 0 ≤ error ∧ error < upper ∧
+        Nonempty (QuittingPureTimeTargetApproximationAt reward target error)) :
+    QuittingPureTimeTargetApproximationCertificate reward target where
+  approximation upper hupper := by
+    obtain ⟨error, herror, hsmall, ⟨approximation⟩⟩ :=
+      hcofinal upper hupper
+    exact ⟨approximation.mono hsmall.le⟩
+
 /-- Uniform pure-time target approximation is already a complete
 unrestricted-behavior producer for the declared uniform payoff. -/
 theorem QuittingPureTimeTargetApproximationCertificate.isUniformEquilibriumPayoff
@@ -115,6 +143,23 @@ def QuittingNormalNoHarmSingletonOwner
         quittingSoloReward reward owner who) ∧
       quittingPunishmentValue reward owner ≤
         quittingSoloReward reward owner owner
+
+/-- Construct the harmful-branch owner certificate from the natural outsider
+no-harm inequalities and the owner's punishment normality. -/
+theorem quittingNormalNoHarmSingletonOwner_of_owner
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι)
+    (hnoHarm : ∀ other, other ≠ owner →
+      quittingSoloReward reward other other ≤
+        quittingSoloReward reward owner other)
+    (hnormal : quittingPunishmentValue reward owner ≤
+      quittingSoloReward reward owner owner) :
+    QuittingNormalNoHarmSingletonOwner reward := by
+  refine ⟨owner, ?_, hnormal⟩
+  intro who
+  by_cases hwho : who = owner
+  · subst who
+    exact le_rfl
+  · exact hnoHarm who hwho
 
 /-- A normal no-harm singleton owner supplies the checked stationarily
 generated branch, including actual punishment after a finite prefix. -/
@@ -162,6 +207,41 @@ theorem QuittingNormalNoHarmSingletonOwner.projectiveDecoderOutcome
     QuittingProjectiveDecoderOutcome reward :=
   Or.inr (Or.inl howner.stationarilyGenerated)
 
+/-- The fixed ambient payoff target carried by a punishment-normal singleton
+path.  It is chosen before any approximation accuracy. -/
+def punishmentNormalPathTarget
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (witness : ContinuousZeroPerfectSingletonPath
+      (quittingPunishmentNormalReward reward)) : Payoff ι :=
+  fun who => absorptionPathPayoff reward witness.ambientPath 0 who
+
+/-- Exact source-level strategic fork for one punishment-normal path.
+
+The left branch is the harmful exceptional-owner output and the right branch
+is the harmless fixed-target product approximation.  Both branches already
+have checked unrestricted-behavior consumers; the analytic path analysis and
+product discretization need only establish this disjunction. -/
+def QuittingPunishmentNormalPathStrategicForkAt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (witness : ContinuousZeroPerfectSingletonPath
+      (quittingPunishmentNormalReward reward)) : Prop :=
+  QuittingNormalNoHarmSingletonOwner reward ∨
+    Nonempty (QuittingPureTimeTargetApproximationCertificate reward
+      (punishmentNormalPathTarget reward witness))
+
+/-- The checked strategic consumers turn either side of the exact path fork
+into a projective-decoder outcome. -/
+theorem QuittingPunishmentNormalPathStrategicForkAt.projectiveDecoderOutcome
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {witness : ContinuousZeroPerfectSingletonPath
+      (quittingPunishmentNormalReward reward)}
+    (hfork : QuittingPunishmentNormalPathStrategicForkAt reward witness) :
+    QuittingProjectiveDecoderOutcome reward := by
+  rcases hfork with howner | hcertificate
+  · exact howner.projectiveDecoderOutcome
+  · exact Or.inr (Or.inr ⟨punishmentNormalPathTarget reward witness,
+      hcertificate⟩)
+
 /-- Every output of the projective decoder gives a uniform-equilibrium payoff.
 This is a consumer only: no matrix predicate is asserted to produce the
 disjunction. -/
@@ -178,28 +258,63 @@ theorem exists_uniformEquilibriumPayoff_of_quittingProjectiveDecoderOutcome
         (quittingApproximateEquilibriumExistence_of_stationarilyGenerated hgenerated)
   · exact ⟨target, certificate.isUniformEquilibriumPayoff⟩
 
-/-- The remaining source adapter for the reviewed projective-Q-bar argument.
-It starts from an actual continuous zero-perfect path on the checked
-punishment-normal restricted reward table and must establish one of the exact
-semantic outcomes consumed above.
+/-- Either branch of the exact path-level strategic fork already gives a
+uniform-equilibrium payoff against arbitrary behavioral deviations. -/
+theorem QuittingPunishmentNormalPathStrategicForkAt.exists_uniformEquilibriumPayoff
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {witness : ContinuousZeroPerfectSingletonPath
+      (quittingPunishmentNormalReward reward)}
+    (hfork : QuittingPunishmentNormalPathStrategicForkAt reward witness) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  exists_uniformEquilibriumPayoff_of_quittingProjectiveDecoderOutcome
+    reward hfork.projectiveDecoderOutcome
 
-This predicate packages no matrix-to-path claim: that step is proved by
-`exists_punishmentNormal_singletonPath_of_projectiveQBar`, and the checked
-`ContinuousZeroPerfectSingletonPath.ambientLift` supplies the ambient
-omitted-player/minmax lift.  Its remaining content is precisely the
-logarithmic-rate/integral reconstruction, deleted-clock Snell analysis
-(including the exceptional-owner split), and semantic product-law
-comparison against actual behavioral profiles. -/
+/-- Outcome-valued compatibility interface for earlier callers.  It packages
+away which of the established strategic consumers is used.  New source work
+should prove `QuittingPunishmentNormalPathStrategicFork` below, whose two
+alternatives are the exact outputs of the deleted-clock analysis. -/
 def QuittingPunishmentNormalPathDecoder
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   ∀ _witness : ContinuousZeroPerfectSingletonPath
       (quittingPunishmentNormalReward reward),
     QuittingProjectiveDecoderOutcome reward
 
-/-- Projective Q-bar only on the punishment-normal principal matrix is enough
-once the explicit normal-path decoder is supplied.  The matrix-to-restricted-
-path step and every downstream unrestricted-behavior consumer are checked;
-the `decoder` hypothesis is the remaining source theorem. -/
+/-- The one remaining source theorem after separating all checked strategic
+consumers: every punishment-normal path satisfies the literal exceptional-
+owner versus fixed-target-approximation fork. -/
+def QuittingPunishmentNormalPathStrategicFork
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
+  ∀ witness : ContinuousZeroPerfectSingletonPath
+      (quittingPunishmentNormalReward reward),
+    QuittingPunishmentNormalPathStrategicForkAt reward witness
+
+/-- The minimal strategic fork implies the older outcome-valued decoder
+interface. -/
+theorem QuittingPunishmentNormalPathStrategicFork.pathDecoder
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hfork : QuittingPunishmentNormalPathStrategicFork reward) :
+    QuittingPunishmentNormalPathDecoder reward :=
+  fun witness => (hfork witness).projectiveDecoderOutcome
+
+/-- Projective Q-bar on the punishment-normal principal matrix is sufficient
+once the single exact strategic fork is supplied. -/
+theorem exists_uniformEquilibriumPayoff_of_punishmentNormal_projectiveQBar_of_strategicFork
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hfork : QuittingPunishmentNormalPathStrategicFork reward)
+    (hQ : IsProjectiveQBarMatrix
+      (normalizedPunishmentNormalPlayerMatrix reward)) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  by_cases hzero : IsQuittingZeroSolo reward
+  · exact exists_uniformEquilibriumPayoff_of_zeroSolo reward hzero
+  · obtain ⟨witness⟩ :=
+      exists_punishmentNormal_singletonPath_of_projectiveQBar
+        reward hzero hQ
+    exact exists_uniformEquilibriumPayoff_of_quittingProjectiveDecoderOutcome
+      reward (hfork witness).projectiveDecoderOutcome
+
+/-- Compatibility form using the coarser outcome-valued path decoder. -/
 theorem exists_uniformEquilibriumPayoff_of_punishmentNormal_projectiveQBar_of_pathDecoder
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (decoder : QuittingPunishmentNormalPathDecoder reward)
@@ -228,8 +343,21 @@ theorem exists_uniformEquilibriumPayoff_of_projectiveQBar_of_pathDecoder
       reward decoder
       (isProjectiveQBarMatrix_normalizedPunishmentNormalPlayerMatrix reward hQ)
 
-/-- Conditional on the exact normal-path decoder, every counterexample lies
-in the strengthened residual class. -/
+/-- Ambient projective Q-bar is a special case of the stronger theorem driven
+by the exact punishment-normal path fork. -/
+theorem exists_uniformEquilibriumPayoff_of_projectiveQBar_of_strategicFork
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hfork : QuittingPunishmentNormalPathStrategicFork reward)
+    (hQ : IsProjectiveQBarMatrix (normalizedSoloMatrix reward)) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  exact
+    exists_uniformEquilibriumPayoff_of_punishmentNormal_projectiveQBar_of_strategicFork
+      reward hfork
+      (isProjectiveQBarMatrix_normalizedPunishmentNormalPlayerMatrix reward hQ)
+
+/-- Compatibility form of the residual classification using the coarser
+outcome-valued decoder. -/
 theorem punishmentNormalResidualHardClass_of_pathDecoder_of_not_exists_uniformEquilibriumPayoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (decoder : QuittingPunishmentNormalPathDecoder reward)
@@ -242,6 +370,17 @@ theorem punishmentNormalResidualHardClass_of_pathDecoder_of_not_exists_uniformEq
   exact
     exists_uniformEquilibriumPayoff_of_punishmentNormal_projectiveQBar_of_pathDecoder
       reward decoder
+
+/-- Strategic-fork form of the residual classification: a counterexample must
+fail projective Q on its punishment-normal principal matrix. -/
+theorem punishmentNormalResidualHardClass_of_strategicFork_of_not_exists_uniformEquilibriumPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hfork : QuittingPunishmentNormalPathStrategicFork reward)
+    (hnot : ¬∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    PunishmentNormalResidualHardClass reward :=
+  punishmentNormalResidualHardClass_of_pathDecoder_of_not_exists_uniformEquilibriumPayoff
+    reward hfork.pathDecoder hnot
 
 /-- The corresponding literal ambient obstruction: some nonempty principal
 subset consists entirely of punishment-normal players and fails projective Q.
@@ -257,5 +396,18 @@ theorem exists_normal_nonprojectivePrincipal_of_pathDecoder_of_counterexample
         (principalMatrix (normalizedSoloMatrix reward) players) :=
   (punishmentNormalResidualHardClass_of_pathDecoder_of_not_exists_uniformEquilibriumPayoff
     reward decoder hnot).exists_ambient_allNormal_nonprojectivePrincipal
+
+/-- Literal ambient obstruction obtained from the exact strategic fork. -/
+theorem exists_normal_nonprojectivePrincipal_of_strategicFork_of_counterexample
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hfork : QuittingPunishmentNormalPathStrategicFork reward)
+    (hnot : ¬∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ players : Finset ι, players.Nonempty ∧
+      (∀ who ∈ players, IsQuittingNormalPlayer reward who) ∧
+      ¬IsProjectiveQMatrix
+        (principalMatrix (normalizedSoloMatrix reward) players) :=
+  (punishmentNormalResidualHardClass_of_strategicFork_of_not_exists_uniformEquilibriumPayoff
+    reward hfork hnot).exists_ambient_allNormal_nonprojectivePrincipal
 
 end GameTheory

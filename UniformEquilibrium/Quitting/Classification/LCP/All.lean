@@ -25,6 +25,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.Gate
 import UniformEquilibrium.Quitting.Classification.LCP.FirstLayerSimple
 import UniformEquilibrium.Quitting.Classification.LCP.LaterLayerAbnormal
 import UniformEquilibrium.Quitting.Classification.LCP.HomogeneousProducer
+import UniformEquilibrium.Quitting.Classification.LCP.HomogeneousProductionNormalDispatch
 import UniformEquilibrium.Quitting.Classification.LCP.IsolatedEndpointProducer
 import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQProducer
 import UniformEquilibrium.Quitting.Classification.LCP.SupportHierarchy
