@@ -6,7 +6,8 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionConcentratedConsumer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNegativeVertexGerm
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNashDefectMobiusIncidence
+import UniformEquilibrium.Quitting.Root.NashDefect
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
 /-!
 # Consuming a concentrated opponent singleton
@@ -43,50 +44,6 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-
-/-- The mass of an exact coalition is bounded by any displayed nonmember's
-Continue probability. -/
-theorem quittingRootCoalitionMass_le_continueProbability_of_not_mem
-    (root : ι → PMF Bool) (coalition : Finset ι) (marked : ι)
-    (hmarked : marked ∉ coalition) :
-    quittingRootCoalitionMass root coalition ≤
-      (root marked false).toReal := by
-  let rate : ι → ℝ := fun who => (root who true).toReal
-  have hrateNonneg : ∀ who, 0 ≤ rate who :=
-    fun who => ENNReal.toReal_nonneg
-  have hrateLeOne : ∀ who, rate who ≤ 1 := fun who =>
-    ENNReal.toReal_mono ENNReal.one_ne_top ((root who).coe_le_one true)
-  have hinsideLeOne : (∏ who ∈ coalition, rate who) ≤ 1 :=
-    Finset.prod_le_one
-      (fun who _ => hrateNonneg who)
-      (fun who _ => hrateLeOne who)
-  have hmarkedComplement : marked ∈ coalitionᶜ := by
-    simpa using hmarked
-  have hrestNonneg :
-      0 ≤ ∏ who ∈ coalitionᶜ.erase marked, (1 - rate who) :=
-    Finset.prod_nonneg fun who _ => sub_nonneg.mpr (hrateLeOne who)
-  have hrestLeOne :
-      (∏ who ∈ coalitionᶜ.erase marked, (1 - rate who)) ≤ 1 :=
-    Finset.prod_le_one
-      (fun who _ => sub_nonneg.mpr (hrateLeOne who))
-      (fun who _ => by linarith [hrateNonneg who])
-  have houtside : (∏ who ∈ coalitionᶜ, (1 - rate who)) =
-      (∏ who ∈ coalitionᶜ.erase marked, (1 - rate who)) *
-        (1 - rate marked) := by
-    simpa using (Finset.prod_erase_mul coalitionᶜ
-      (fun who => 1 - rate who) hmarkedComplement).symm
-  have hcontinue : 1 - rate marked = (root marked false).toReal := by
-    have hsum := quittingRoot_continueProbability_add_quitProbability
-      root marked
-    dsimp only [rate]
-    linarith
-  unfold quittingRootCoalitionMass Math.PMFProduct.coalitionMass
-    quittingRootQuitRates
-  change (∏ who ∈ coalition, rate who) *
-      (∏ who ∈ coalitionᶜ, (1 - rate who)) ≤ _
-  rw [houtside, hcontinue, ← mul_assoc]
-  exact mul_le_of_le_one_left ENNReal.toReal_nonneg
-    (mul_le_one₀ hinsideLeOne hrestNonneg hrestLeOne)
 
 /-- Uniform mass on a coalition not containing the reset owner removes the
 played-Continue weight from the positive endpoint advantage. -/

@@ -39,9 +39,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 namespace TerminalExploitabilityWitnessPeriodOneTangentReadout
 
@@ -230,6 +230,6 @@ theorem eventually_phaseGain_of_mass_pos_of_tangent_neg
 
 end TerminalExploitabilityWitnessPeriodOneTangentReadout
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

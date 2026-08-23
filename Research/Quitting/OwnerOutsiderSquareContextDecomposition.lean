@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticForcedOwnerWallRectangleCurvature
+import UniformEquilibrium.Quitting.Bellman.Finite.BooleanMobiusAdapter
 import UniformEquilibrium.ProofView.Concepts.Potential.MixedPotential
 
 /-!

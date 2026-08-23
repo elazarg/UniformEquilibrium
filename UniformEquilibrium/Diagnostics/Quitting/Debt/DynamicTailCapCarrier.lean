@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.Conservation
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.TailBridge
+import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailConservation
+import UniformEquilibrium.Diagnostics.Quitting.Debt.PunishmentFloorTailBridge
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtCapCarrier
 
 /-!
@@ -35,9 +35,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- Every augmented cap of the optimized projective tail lies in the
 canonical reward carrier and dominates the behavioral punishment floor. -/
@@ -215,6 +215,6 @@ theorem limitDynamicDebtCapAdmissibleSelfLoop_charge_eq_zero :
   rw [quittingRootOfSimplex_allContinueSimplexRoot]
   exact quittingRootAbsorptionMass_allContinueRoot
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

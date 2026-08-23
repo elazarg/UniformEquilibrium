@@ -5,8 +5,9 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauPairDropoutConsumer
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNashDefectMobiusIncidence
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLinearPenaltyResetConsumer
+import UniformEquilibrium.Quitting.Root.NashDefect
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
 /-!
 # Same-row sign at the floor-forced pair dropout
@@ -41,27 +42,6 @@ open Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-
-/-- A positive exact coalition containing `other` contributes its full mass
-to the displayed root opponent-incidence coordinate. -/
-theorem quittingRootCoalitionMass_le_opponentIncidenceMass_of_other_mem
-    (root : ι → PMF Bool) (coalition : Finset ι) (marked other : ι)
-    (hother : other ∈ coalition)
-    (hne : other ≠ marked) :
-    quittingRootCoalitionMass root coalition ≤
-      quittingRootOpponentIncidenceMass marked other root := by
-  let terminal : {S : Finset ι // S.Nonempty} :=
-    ⟨coalition, ⟨other, hother⟩⟩
-  unfold quittingRootOpponentIncidenceMass
-  have hterminal : terminal ∈ Finset.univ.filter
-      (fun outcome : {S : Finset ι // S.Nonempty} =>
-        other ∈ outcome.val ∧ other ≠ marked) := by
-    simp [terminal, hother, hne]
-  exact Finset.single_le_sum
-    (fun outcome _ =>
-      MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg
-        root outcome.val)
-    hterminal
 
 /-! ## Signing the linear-penalty first full overwrite -/
 

@@ -76,24 +76,4 @@ theorem coordinateNashDefect_false_eq_zero :
 
 end QuittingMobiusIncidenceCancellationRegression
 
-/-- Any gain obtained by a finite-cutoff policy interpolation is still an
-ordinary unilateral behavioral gain and is therefore already bounded by the
-player's initial best-response debt.  Thus policy interpolation can expose
-the defect occupation, but cannot by itself beat the semantic envelope from
-which that debt was defined. -/
-theorem quittingTerminalPayoff_update_sub_le_terminalSemanticDebt
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    (deviation : (quittingGame reward).BehaviorStrategy who) :
-    quittingTerminalPayoff reward
-          (Function.update profile who deviation) who -
-        quittingTerminalPayoff reward profile who ≤
-      quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPair reward profile) who := by
-  have hbest :=
-    quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward profile who deviation
-  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
-  exact sub_le_sub_right hbest _
-
 end GameTheory

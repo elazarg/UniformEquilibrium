@@ -115,6 +115,84 @@ theorem coalitionMass_nonneg (x : ι → ℝ)
     (Finset.prod_nonneg fun i _ => h0 i)
     (Finset.prod_nonneg fun i _ => sub_nonneg.mpr (h1 i))
 
+/-- The mass of an exact coalition is bounded by the acting probability of
+every member of that coalition. -/
+theorem coalitionMass_le_coordinate_of_mem (x : ι → ℝ)
+    (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1)
+    {J : Finset ι} {i : ι} (hi : i ∈ J) :
+    coalitionMass x J ≤ x i := by
+  have hinsideRestNonneg : 0 ≤ ∏ j ∈ J.erase i, x j :=
+    Finset.prod_nonneg fun j _ => h0 j
+  have hinsideRestLeOne : (∏ j ∈ J.erase i, x j) ≤ 1 :=
+    Finset.prod_le_one
+      (fun j _ => h0 j)
+      (fun j _ => h1 j)
+  have houtsideNonneg : 0 ≤ ∏ j ∈ Jᶜ, (1 - x j) :=
+    Finset.prod_nonneg fun j _ => sub_nonneg.mpr (h1 j)
+  have houtsideLeOne : (∏ j ∈ Jᶜ, (1 - x j)) ≤ 1 :=
+    Finset.prod_le_one
+      (fun j _ => sub_nonneg.mpr (h1 j))
+      (fun j _ => by linarith [h0 j])
+  have hrest :
+      (∏ j ∈ J.erase i, x j) * (∏ j ∈ Jᶜ, (1 - x j)) ≤ 1 := by
+    calc
+      (∏ j ∈ J.erase i, x j) * (∏ j ∈ Jᶜ, (1 - x j)) ≤
+          1 * (∏ j ∈ Jᶜ, (1 - x j)) :=
+        mul_le_mul_of_nonneg_right hinsideRestLeOne houtsideNonneg
+      _ ≤ 1 * 1 := mul_le_mul_of_nonneg_left houtsideLeOne zero_le_one
+      _ = 1 := one_mul 1
+  rw [coalitionMass,
+    show (∏ j ∈ J, x j) = (∏ j ∈ J.erase i, x j) * x i by
+      simpa using (Finset.prod_erase_mul J x hi).symm]
+  calc
+    ((∏ j ∈ J.erase i, x j) * x i) * (∏ j ∈ Jᶜ, (1 - x j)) =
+        ((∏ j ∈ J.erase i, x j) * (∏ j ∈ Jᶜ, (1 - x j))) * x i := by
+      ring
+    _ ≤ 1 * x i := mul_le_mul_of_nonneg_right hrest (h0 i)
+    _ = x i := one_mul _
+
+/-- The mass of an exact coalition is bounded by the inaction probability
+of every coordinate outside that coalition. -/
+theorem coalitionMass_le_one_sub_coordinate_of_not_mem (x : ι → ℝ)
+    (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1)
+    {J : Finset ι} {i : ι} (hi : i ∉ J) :
+    coalitionMass x J ≤ 1 - x i := by
+  have hiComplement : i ∈ Jᶜ := by simpa using hi
+  have hinsideNonneg : 0 ≤ ∏ j ∈ J, x j :=
+    Finset.prod_nonneg fun j _ => h0 j
+  have hinsideLeOne : (∏ j ∈ J, x j) ≤ 1 :=
+    Finset.prod_le_one
+      (fun j _ => h0 j)
+      (fun j _ => h1 j)
+  have houtsideRestNonneg : 0 ≤ ∏ j ∈ Jᶜ.erase i, (1 - x j) :=
+    Finset.prod_nonneg fun j _ => sub_nonneg.mpr (h1 j)
+  have houtsideRestLeOne : (∏ j ∈ Jᶜ.erase i, (1 - x j)) ≤ 1 :=
+    Finset.prod_le_one
+      (fun j _ => sub_nonneg.mpr (h1 j))
+      (fun j _ => by linarith [h0 j])
+  have hrest :
+      (∏ j ∈ J, x j) * (∏ j ∈ Jᶜ.erase i, (1 - x j)) ≤ 1 := by
+    calc
+      (∏ j ∈ J, x j) * (∏ j ∈ Jᶜ.erase i, (1 - x j)) ≤
+          1 * (∏ j ∈ Jᶜ.erase i, (1 - x j)) :=
+        mul_le_mul_of_nonneg_right hinsideLeOne houtsideRestNonneg
+      _ ≤ 1 * 1 := mul_le_mul_of_nonneg_left houtsideRestLeOne zero_le_one
+      _ = 1 := one_mul 1
+  rw [coalitionMass,
+    show (∏ j ∈ Jᶜ, (1 - x j)) =
+        (∏ j ∈ Jᶜ.erase i, (1 - x j)) * (1 - x i) by
+      simpa using
+        (Finset.prod_erase_mul Jᶜ (fun j => 1 - x j) hiComplement).symm]
+  calc
+    (∏ j ∈ J, x j) *
+          ((∏ j ∈ Jᶜ.erase i, (1 - x j)) * (1 - x i)) =
+        ((∏ j ∈ J, x j) * (∏ j ∈ Jᶜ.erase i, (1 - x j))) *
+          (1 - x i) := by
+      ring
+    _ ≤ 1 * (1 - x i) :=
+      mul_le_mul_of_nonneg_right hrest (sub_nonneg.mpr (h1 i))
+    _ = 1 - x i := one_mul _
+
 /-- The coalition mass at the empty coalition is exactly the continuation
 mass: nobody acting is the same event as everyone staying put. -/
 @[simp] lemma coalitionMass_empty (x : ι → ℝ) :

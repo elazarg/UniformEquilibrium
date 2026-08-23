@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.DynamicLimit
+import UniformEquilibrium.Diagnostics.Quitting.Debt.PositiveDebtSelfLoopLimit
 import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.Surplus
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
@@ -12,14 +12,13 @@ import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
 import UniformEquilibrium.Quitting.Cycles.PeriodicWindowEvaluation
 
 /-!
-# Independent source and dynamic-tail witnesses of a quitting counterexample
+# Positive debt dynamic-tail witness of a quitting counterexample
 
-This module records independent finite-source and optimized dynamic-tail
-consequences, together with the strategic evaluation of periodic restarts.
+This module records the optimized dynamic-tail consequence of terminal
+exploitability, together with the strategic evaluation of periodic restarts.
 
-Every terminal exploitability witness supplies simultaneously:
+Every terminal exploitability witness supplies:
 
-* a normalized singleton source packet with an active strict refusal defect;
 * a projective optimized exact-D tail converging to a positive-debt
   all-Continue exact dynamic-debt self-loop; and
 * for every finite window of that tail, a periodically restarted behavior
@@ -27,9 +26,6 @@ Every terminal exploitability witness supplies simultaneously:
   of first-pass stop values and refusal/`Never`, and exceeds its realized
   payoff by the witness's terminal gap for some player.
 
-No structure combines the source packet with the dynamic tail: the two are
-separate consequences of terminal exploitability, and no relation between
-their data has been proved.
 -/
 
 noncomputable section
@@ -41,23 +37,9 @@ open Filter Math.Probability
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-/-- The finite singleton-source consequence of terminal exploitability. -/
-structure QuittingCounterexampleSourceWitness
-    (witness : QuittingTerminalExploitabilityWitness reward) where
-  packet : QuittingNormalizedSingletonSourcePacket reward
-  packetOwner : ι
-  packetOwnerMass_pos : 0 < packet.mass packetOwner
-  packetOwnerMass_lt_one : packet.mass packetOwner < 1
-  packetTarget_lt_delivery :
-    packet.target packetOwner <
-      quittingSingletonMixture reward packet.mass packetOwner
-  packetDelivery_lt_refusal :
-    quittingSingletonMixture reward packet.mass packetOwner <
-      quittingSingletonRefusalValue reward packet.mass packetOwner packetOwner
-
 /-- The optimized exact dynamic-debt tail consequence of terminal
 exploitability. -/
-structure QuittingCounterexampleDynamicTailWitness
+structure QuittingPositiveDebtDynamicTailWitness
     (witness : QuittingTerminalExploitabilityWitness reward) where
   tail : ℕ → QuittingDebtPoint ι
   subseq : ℕ → ℕ
@@ -181,27 +163,11 @@ theorem exists_cyclicWindow_finiteEvaluation_gap
         (quittingCyclicRootSequence cycle phase) who (length + 1) := by
       simpa [profile] using heval
 
-/-- Every terminal exploitability witness has a finite strict-refusal source packet. -/
-theorem nonempty_sourceWitness
-    (witness : QuittingTerminalExploitabilityWitness reward) :
-    Nonempty (QuittingCounterexampleSourceWitness witness) := by
-  letI : Nonempty ι := witness.nonempty_players
-  obtain ⟨packet⟩ := witness.nonempty_normalizedSingletonSourcePacket
-  obtain ⟨packetOwner, hpacketPos, hpacketLtOne, htargetLt, hrefusal⟩ :=
-    witness.exists_active_strictSingletonRefusal packet
-  exact ⟨{
-    packet := packet
-    packetOwner := packetOwner
-    packetOwnerMass_pos := hpacketPos
-    packetOwnerMass_lt_one := hpacketLtOne
-    packetTarget_lt_delivery := htargetLt
-    packetDelivery_lt_refusal := hrefusal }⟩
-
 /-- Every terminal exploitability witness has an independently extracted positive-debt
 all-Continue dynamic tail limit, with its provenance and convergence data. -/
-theorem nonempty_dynamicTailWitness
+theorem nonempty_positiveDebtDynamicTailWitness
     (witness : QuittingTerminalExploitabilityWitness reward) :
-    Nonempty (QuittingCounterexampleDynamicTailWitness witness) := by
+    Nonempty (QuittingPositiveDebtDynamicTailWitness witness) := by
   letI : Nonempty ι := witness.nonempty_players
   obtain ⟨tail, subseq, limit, hsubseq, hprojective, hbox, hedge,
       hinitialDebt, hlimitDebt, hvalue, hdebt, hquit, hcontinue,

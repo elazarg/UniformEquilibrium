@@ -9,6 +9,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauIncidence
 import UniformEquilibrium.Quitting.Debt.Marked.TimeAdvance
 import UniformEquilibrium.Quitting.Root.FaceGeometry
 import UniformEquilibrium.Quitting.Root.NashDefect
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
 /-!
 # Nash-defect charge at an actual semantic prefix row
@@ -497,43 +498,6 @@ theorem minimumTerminalSemantic_sum_opponentAbsorption_charge_le_excess_add_defe
     hminimum current hcurrent
   dsimp only [current] at hminCurrent
   linarith
-
-/-- The mass of an exact coalition is bounded by any displayed member's Quit
-probability. -/
-theorem quittingRootCoalitionMass_le_quitProbability_of_mem
-    (root : ι → PMF Bool) (coalition : Finset ι) (marked : ι)
-    (hmarked : marked ∈ coalition) :
-    quittingRootCoalitionMass root coalition ≤
-      (root marked true).toReal := by
-  let rate : ι → ℝ := fun who => (root who true).toReal
-  have hrateNonneg : ∀ who, 0 ≤ rate who := fun who => ENNReal.toReal_nonneg
-  have hrateLeOne : ∀ who, rate who ≤ 1 := fun who =>
-    ENNReal.toReal_mono ENNReal.one_ne_top ((root who).coe_le_one true)
-  have hinsideNonneg : 0 ≤ ∏ who ∈ coalition, rate who :=
-    Finset.prod_nonneg fun who _ => hrateNonneg who
-  have houtsideNonneg : 0 ≤ ∏ who ∈ coalitionᶜ, (1 - rate who) :=
-    Finset.prod_nonneg fun who _ => sub_nonneg.mpr (hrateLeOne who)
-  have houtsideLeOne : (∏ who ∈ coalitionᶜ, (1 - rate who)) ≤ 1 :=
-    Finset.prod_le_one
-      (fun who _ => sub_nonneg.mpr (hrateLeOne who))
-      (fun who _ => by linarith [hrateNonneg who])
-  have hrestNonneg : 0 ≤ ∏ who ∈ coalition.erase marked, rate who :=
-    Finset.prod_nonneg fun who _ => hrateNonneg who
-  have hrestLeOne : (∏ who ∈ coalition.erase marked, rate who) ≤ 1 :=
-    Finset.prod_le_one
-      (fun who _ => hrateNonneg who)
-      (fun who _ => hrateLeOne who)
-  have hinside : (∏ who ∈ coalition, rate who) =
-      (∏ who ∈ coalition.erase marked, rate who) * rate marked := by
-    simpa using (Finset.prod_erase_mul coalition rate hmarked).symm
-  unfold quittingRootCoalitionMass Math.PMFProduct.coalitionMass
-    quittingRootQuitRates
-  change (∏ who ∈ coalition, rate who) *
-      (∏ who ∈ coalitionᶜ, (1 - rate who)) ≤ rate marked
-  have hinsideLe : (∏ who ∈ coalition, rate who) ≤ rate marked := by
-    rw [hinside]
-    exact mul_le_of_le_one_left (hrateNonneg marked) hrestLeOne
-  exact (mul_le_of_le_one_right hinsideNonneg houtsideLeOne).trans hinsideLe
 
 /-- If the coalition contains an opponent of `who`, its exact mass is bounded
 by `who`'s opponent-absorption hazard. -/

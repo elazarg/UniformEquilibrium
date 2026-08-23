@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPureTimeRectangleDisintegration
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauLocalizedOtherDefect
+import UniformEquilibrium.Quitting.Root.NashDefect
 
 /-!
 # Positive target-edge atoms do not supply a state-matched strategic sign

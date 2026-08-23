@@ -18,7 +18,7 @@ Nash at accuracy zero, positive remaining eventual absorption, vanishing
 conditioned mesh, and a boundary tight at every persistently active player.
 
 The canonical counterexample seam of
-`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Seam.lean`,
+`UniformEquilibrium/Diagnostics/Quitting/Chronology/PositiveDebtDynamicTailWitness.lean`,
 read through the conditioning of
 `UniformEquilibrium/Quitting/Cycles/PhantomBoundaryConditioning.lean`,
 supplies exactly this data: its root sequence is
@@ -54,7 +54,7 @@ noncomputable section
 
 namespace GameTheory
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -64,7 +64,7 @@ variable {witness : QuittingTerminalExploitabilityWitness reward}
 singleton reward.  This is the seam-grade active-tightness input used by T2
 and T3, read off `eventually_active_implies_limitValue_eq_singleton`. -/
 theorem limitValue_eq_soloReward_of_persistentlyActive
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (who : ι)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (who : ι)
     (hactive : QuittingTailPersistentlyActive
       (quittingDynamicDebtTailRoots seam.tail) who) :
     seam.limit.value who = quittingSoloReward reward who who := by
@@ -83,7 +83,7 @@ root is solo at `owner`, no other coordinate has a refusal obstruction: it
 already continues surely at every date of the window, so refusing to quit
 reproduces the window's own delivery. -/
 theorem not_refusalObstruction_of_soloWindow
-    (seam : QuittingCounterexampleDynamicTailWitness witness) {window : ℕ}
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) {window : ℕ}
     {owner who : ι} (hne : who ≠ owner)
     (hsolo : ∀ time, IsQuittingSoloRoot
       (seam.canonicalPeriodicTailWindowFamily.roots window time) owner) :
@@ -108,7 +108,7 @@ periodic windows are solo at `owner`, the stabilized obstruction of
 some coordinate's phase stop: every other coordinate's refusal obstruction set
 is empty. -/
 theorem soloWindows_ownerRefusal_or_phaseStop
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ window time, IsQuittingSoloRoot
       (seam.canonicalPeriodicTailWindowFamily.roots window time) owner) :
     Set.Infinite {window : ℕ |
@@ -141,7 +141,7 @@ either an infinite family of windows whose delivery to `owner` falls below
 stops all absorption, so its refusal obstruction is exactly a negative
 delivery. -/
 theorem soloWindows_negativeOwnerDelivery_or_phaseStop
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ window time, IsQuittingSoloRoot
       (seam.canonicalPeriodicTailWindowFamily.roots window time) owner) :
     Set.Infinite {window : ℕ |
@@ -168,7 +168,7 @@ theorem soloWindows_negativeOwnerDelivery_or_phaseStop
 canonical windows are solo at `owner` and never deliver `owner` less than
 `-terminalGap / 2`, the stabilized obstruction is a phase stop. -/
 theorem exists_phaseStopObstruction_of_soloWindows
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ window time, IsQuittingSoloRoot
       (seam.canonicalPeriodicTailWindowFamily.roots window time) owner)
     (hdelivery : ∀ window, -(witness.terminalGap / 2) ≤
@@ -195,7 +195,7 @@ The phase-stop conjunct alone is the conclusion of
 `exists_phaseStopObstruction_of_soloWindows`; what this proposition adds is
 the preemption edge at the obstructing coordinate. -/
 def QuittingSoloWindowPhaseStopBranch
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (owner : ι)
     (margin : ℝ) : Prop :=
   ∃ other, QuittingSoloPreempts reward margin owner other ∧
     Set.Infinite {window : ℕ |
@@ -205,6 +205,6 @@ def QuittingSoloWindowPhaseStopBranch
             (seam.canonicalPeriodicTailWindowFamily.roots window) other phase -
             seam.canonicalPeriodicTailWindowFamily.delivery window other}
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

@@ -29,10 +29,10 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 namespace TerminalExploitabilityWitnessPeriodOneTangentReadout
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 variable (readout : TerminalExploitabilityWitnessPeriodOneTangentReadout seam)
 
 /-- Every selected one-root prefix inherits the regime's terminal-gap floor
@@ -82,6 +82,6 @@ theorem exists_elementaryTailCap_periodOne_terminalObstruction (index : ℕ) :
   exact hcap
 
 end TerminalExploitabilityWitnessPeriodOneTangentReadout
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

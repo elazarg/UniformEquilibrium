@@ -5,7 +5,6 @@ Authors: GameTheory contributors.
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauMarkedTailLocalization
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNashDefectMobiusDeviation
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 
 /-!

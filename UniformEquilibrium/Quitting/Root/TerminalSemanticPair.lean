@@ -66,6 +66,23 @@ def quittingTerminalSemanticDebt
     (pair : QuittingTerminalSemanticPair ι) (who : ι) : ℝ :=
   pair.2 who - pair.1 who
 
+/-- Every unilateral behavioral gain is bounded by the player's semantic
+debt at the original profile. -/
+theorem quittingTerminalPayoff_update_sub_le_terminalSemanticDebt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
+    (deviation : (quittingGame reward).BehaviorStrategy who) :
+    quittingTerminalPayoff reward
+          (Function.update profile who deviation) who -
+        quittingTerminalPayoff reward profile who ≤
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward profile) who := by
+  have hbest :=
+    quittingTerminalPayoff_update_le_continuationBestResponseValue
+      reward profile who deviation
+  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
+  exact sub_le_sub_right hbest _
+
 /-- Survival block induced by a finite-dimensional semantic pair and one
 root. -/
 def quittingTerminalSemanticDebtBlock
@@ -363,6 +380,20 @@ theorem quittingTerminalSemanticCarrier_nonempty
   exact ⟨quittingTerminalSemanticPair reward
       (quittingAlwaysContinueProfile reward),
     quittingAlwaysContinueProfile reward, rfl⟩
+
+/-- Carrier points inherit every uniform coordinate box containing the
+literal terminal semantic pairs. -/
+theorem quittingTerminalSemanticCarrier_mem_box
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    {M : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
+    pair ∈ quittingTerminalSemanticBox ι M := by
+  apply (closure_minimal ?_ ?_) hpair
+  · rintro candidate ⟨profile, rfl⟩
+    exact quittingTerminalSemanticPair_mem_box reward profile hreward
+  · exact (quittingTerminalSemanticBox_isCompact M).isClosed
 
 /-- Every point of the semantic carrier is the sequential limit of literal
 semantic pairs of executable behavior profiles. -/

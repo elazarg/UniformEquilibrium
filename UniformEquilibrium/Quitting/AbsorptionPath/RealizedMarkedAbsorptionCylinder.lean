@@ -5,8 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Basic
-import MathUE.PMFProduct.CoalitionMass
 import MathUE.SurvivalProduct
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
 /-!
 # Realized finite marked absorption cylinders
@@ -38,15 +38,6 @@ open Math.Probability Math.PMFProduct
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 /-! ## Finite rows and clocks -/
-
-/-- The Bernoulli quit-rate family associated with a product root. -/
-def quittingRootQuitRates (root : ι → PMF Bool) : ι → ℝ :=
-  fun who => (root who true).toReal
-
-/-- Mass of exactly the displayed nonempty coalition at one live row. -/
-def quittingRootCoalitionMass (root : ι → PMF Bool)
-    (coalition : Finset ι) : ℝ :=
-  coalitionMass (quittingRootQuitRates root) coalition
 
 /-- Full survival through a bounded prefix of the realized block. -/
 def realizedBlockFullSurvival

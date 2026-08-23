@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Quitting.Bellman.Finite.BooleanMobiusAdapter
+import UniformEquilibrium.Quitting.Root.NashDefect
 
 /-!
 # Local Nash defect in Boolean Möbius and incidence coordinates
@@ -41,55 +42,6 @@ open Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-
-/-! ## Exact played-action formula -/
-
-/-- Exact decomposition of coordinate Nash defect into the two possible
-played-action mistakes. -/
-theorem quittingRootCoordinateNashDefect_eq_actionProbability_mul_posPart
-    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι) :
-    quittingRootCoordinateNashDefect reward tail root who =
-      (root who false).toReal *
-          max (quittingRootEndpointDifference reward tail root who) 0 +
-        (root who true).toReal *
-          max (-quittingRootEndpointDifference reward tail root who) 0 := by
-  let quitValue := quittingRootQuitPayoff reward tail root who
-  let continueValue := quittingRootContinuePayoff reward tail root who
-  let quitProbability := (root who true).toReal
-  let continueProbability := (root who false).toReal
-  let difference := quittingRootEndpointDifference reward tail root who
-  have hmix := quittingRootSuccessorPayoff_eq_endpointMix
-    reward tail root who
-  have hsum := quittingRoot_continueProbability_add_quitProbability root who
-  have hsum' : continueProbability + quitProbability = 1 := hsum
-  have hdifference : difference = quitValue - continueValue := rfl
-  rw [quittingRootCoordinateNashDefect, hmix]
-  change max quitValue continueValue -
-      (quitProbability * quitValue + continueProbability * continueValue) =
-    continueProbability * max difference 0 +
-      quitProbability * max (-difference) 0
-  by_cases hpositive : 0 ≤ difference
-  · have hvalues : continueValue ≤ quitValue := by
-      rw [hdifference] at hpositive
-      linarith
-    rw [max_eq_left hvalues, max_eq_left hpositive,
-      max_eq_right (by linarith : -difference ≤ 0)]
-    rw [hdifference]
-    have hquitProbability : quitProbability = 1 - continueProbability := by
-      linarith [hsum']
-    rw [hquitProbability]
-    ring
-  · have hnegative : difference ≤ 0 := le_of_not_ge hpositive
-    have hvalues : quitValue ≤ continueValue := by
-      rw [hdifference] at hnegative
-      linarith
-    rw [max_eq_right hvalues, max_eq_right hnegative,
-      max_eq_left (by linarith : 0 ≤ -difference)]
-    rw [hdifference]
-    have hcontinueProbability : continueProbability = 1 - quitProbability := by
-      linarith [hsum']
-    rw [hcontinueProbability]
-    ring
 
 /-! ## Singleton, pair, and higher derivative grades -/
 

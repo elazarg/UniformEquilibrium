@@ -4,8 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNashDefectMobiusIncidence
+import UniformEquilibrium.Quitting.Bellman.Finite.BooleanMobiusAdapter
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
+import UniformEquilibrium.Quitting.Root.NashDefect
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
 /-!

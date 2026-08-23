@@ -28,12 +28,12 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
 /-! The fixed-player conclusion, with the singleton/conditioned-value
     consequence retained at the same selected dates. -/
 theorem exists_fixed_inactive_rescaledQuitDefect_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -271,7 +271,7 @@ theorem exists_fixed_inactive_rescaledQuitDefect_of_diffuse
 /-! The same fixed outsider also creates a literal endpoint gap.  The extra
     half-`eta` loss is only the deleted-clock Continue charge. -/
 theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -434,7 +434,7 @@ theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
     fixes the violating coordinate and the floor module exposes the exact
     phantom-survival account financing the violation. -/
 theorem exists_cofinal_endpoint_reset_or_fixed_underfloor_slack
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -561,7 +561,7 @@ theorem exists_cofinal_endpoint_reset_or_fixed_underfloor_slack
         quittingJointSurvivalLimit roots time *
           (boundary player - floor player) := by
         simpa [roots, value, boundary, floor, conditioned,
-          QuittingCounterexampleDynamicTailWitness.conditionedTailValue] using hbudget
+          QuittingPositiveDebtDynamicTailWitness.conditionedTailValue] using hbudget
       exact ⟨⟨time, player⟩,
         htime,
         by simpa [roots] using hinactive,
@@ -606,6 +606,6 @@ theorem exists_cofinal_endpoint_reset_or_fixed_underfloor_slack
       hfields.2.2.2.1, hfields.2.2.2.2.1, hfields.2.2.2.2.2.1,
       hfields.2.2.2.2.2.2⟩
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

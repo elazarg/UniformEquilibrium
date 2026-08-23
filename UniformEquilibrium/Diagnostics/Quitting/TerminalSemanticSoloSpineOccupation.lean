@@ -128,19 +128,6 @@ theorem exists_pos_le_quittingSoloSemanticSurvival_of_not_tendsto_zero
   exact (antitone_quittingSoloSemanticSurvival root owner start hfuel).trans_lt
     hthreshold
 
-/-- Carrier points inherit the same uniform coordinate box as literal
-terminal semantic pairs. -/
-theorem quittingTerminalSemanticCarrier_mem_box
-    (pair : QuittingTerminalSemanticPair ι)
-    {M : ℝ}
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
-    pair ∈ quittingTerminalSemanticBox ι M := by
-  apply (closure_minimal ?_ ?_) hpair
-  · rintro candidate ⟨profile, rfl⟩
-    exact quittingTerminalSemanticPair_mem_box reward profile hreward
-  · exact (quittingTerminalSemanticBox_isCompact M).isClosed
-
 /-- One exact solo semantic-prefix edge is the ordinary occupation mixture
 of the owner's singleton reward and the next prescribed vector. -/
 theorem quittingTerminalSemanticSoloSpine_prescribed_step

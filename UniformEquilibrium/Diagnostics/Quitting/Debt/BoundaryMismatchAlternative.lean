@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.Source.DynamicAlternative
+import UniformEquilibrium.Diagnostics.Quitting.Debt.Source.DynamicAlternative
 import UniformEquilibrium.Quitting.Boundary.Holonomy.QuantitativeAggregateTerminalAnchor
 
 /-!
@@ -50,9 +50,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- Raw chronological decrease of the capacity-derived debt account. -/
 def killedCapacityDebtAccountDrop (who : ι) (time : ℕ) : ℝ :=
@@ -204,6 +204,6 @@ theorem boundaryMismatch_one_sub_initialMismatch_tendsto_zero
   rw [heq]
   exact seam.killedCapacityDissipation_tendsto_zero who
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

@@ -80,11 +80,6 @@ def quittingInsertTerminal (mover : ι)
     {S : Finset ι // S.Nonempty} :=
   ⟨insert mover terminal.val, Finset.insert_nonempty mover terminal.val⟩
 
-/-- The singleton terminal of one mover. -/
-def quittingSoloTerminal (mover : ι) :
-    {S : Finset ι // S.Nonempty} :=
-  ⟨{mover}, Finset.singleton_nonempty mover⟩
-
 /-- Reward change when the mover joins one nonempty opponent coalition. -/
 def quittingStoppingLawInsertionGap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -99,7 +94,7 @@ def quittingStoppingLawPreemptionGap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (mover observer : ι)
     (terminal : {S : Finset ι // S.Nonempty}) : ℝ :=
-  reward (quittingSoloTerminal mover) observer -
+  reward (quittingSingletonTerminal mover) observer -
     reward (quittingInsertTerminal mover terminal) observer
 
 /-- Conditional payoff change at one fixed opponents' first-stop row.  The
@@ -112,7 +107,7 @@ def quittingStoppingLawConditionalFirstStopDifference
     (time : ℕ) (terminal : {S : Finset ι // S.Nonempty}) : ℝ :=
   (quittingHazardSurvival (quittingBehaviorLiveHazard reward source) time -
       quittingHazardSurvival (quittingBehaviorLiveHazard reward target) time) *
-      reward (quittingSoloTerminal mover) observer +
+      reward (quittingSingletonTerminal mover) observer +
     (quittingHazardStopMass (quittingBehaviorLiveHazard reward target) time -
       quittingHazardStopMass (quittingBehaviorLiveHazard reward source) time) *
       reward (quittingInsertTerminal mover terminal) observer +

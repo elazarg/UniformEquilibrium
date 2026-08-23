@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.Source.DynamicAlternative
+import UniformEquilibrium.Diagnostics.Quitting.Debt.Source.DynamicAlternative
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySmallPlayers
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.SupportLiftFarkas
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
@@ -285,7 +285,7 @@ used only to certify that zero is the attained supporting value of the
 compact carrier. -/
 theorem all_debtSourceZeroFaces_of_source_eq_zero
     {witness : QuittingTerminalExploitabilityWitness reward}
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (time : ℕ) (htime : time < cutoff)
     (hsource : source (reward := reward) path time = 0) :
     ∀ selected,
@@ -337,7 +337,7 @@ theorem all_debtSourceZeroFaces_of_source_eq_zero
 all-player zero-source exposed face at the first or second finite edge. -/
 theorem all_debtSourceZeroFaces_zero_or_one_of_frozenRootLift_and_initial_tight
     {witness : QuittingTerminalExploitabilityWitness reward}
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (hcutoff : 0 < cutoff)
     (hterminal : 0 < debt (reward := reward) path cutoff)
     (root : ι → PMF Bool) (support : Finset ι)
@@ -584,7 +584,7 @@ missing reverse objective comparison; terminal boundary domination alone
 cannot do it. -/
 theorem zeroFace_zero_or_one_or_initialCapacitySlack_or_farkas
     (witness : QuittingTerminalExploitabilityWitness reward)
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0) :
     anchor.IsAllDebtSourceZeroFace 0 ∨

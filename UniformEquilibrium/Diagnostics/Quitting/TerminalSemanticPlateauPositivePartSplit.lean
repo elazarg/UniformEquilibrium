@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauTimeDisintegration
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupation
+import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
 /-!
 # Positive-part charging on a semantic plateau

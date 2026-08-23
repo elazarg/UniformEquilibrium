@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.Source.DynamicAlternative
+import UniformEquilibrium.Diagnostics.Quitting.Debt.Source.DynamicAlternative
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.Energy
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodOne.TangentReadout
 import UniformEquilibrium.Quitting.Cycles.TerminalExploitabilityExactCycleExclusion
@@ -61,7 +61,7 @@ variable (word : QuittingDebtSourceFaceReturnWord reward K)
 
 /-- Every zero-face source edge lifts to an exact Nash--Bellman edge between
 the corresponding augmented-cap states. -/
-theorem capEdge (seam : QuittingCounterexampleDynamicTailWitness witness)
+theorem capEdge (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (current : Fin K) :
     IsQuittingNashBellmanEdge reward
       (quittingDynamicDebtCapPoint (word.state current))
@@ -81,7 +81,7 @@ theorem capEdge (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- A literal common zero-face return word is a solved exact quitting cycle. -/
 theorem isSolvedExactQuittingCycle
-    (seam : QuittingCounterexampleDynamicTailWitness witness) :
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) :
     IsSolvedExactQuittingCycle reward word.cycle word.value := by
   refine ⟨⟨?_, ?_⟩, ?_, ?_⟩
   · intro current
@@ -95,9 +95,9 @@ theorem isSolvedExactQuittingCycle
 
 end QuittingDebtSourceFaceReturnWord
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 include seam in
 /-- A common zero-face return word lands directly in the solved exact-cycle
@@ -356,6 +356,6 @@ theorem debtSource_strategicDecoderBoundary (selected : ι) (time : ℕ) :
     seam.eventually_allContinue_or_debtSource_signedDiagnostic,
     seam.not_hasQuittingDebtSourceFaceReturnWord⟩
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

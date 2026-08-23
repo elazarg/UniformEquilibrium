@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.Source.ObstructionCarrier
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.KilledCapacityPotential
+import UniformEquilibrium.Diagnostics.Quitting.Debt.Source.ObstructionCarrier
+import UniformEquilibrium.Diagnostics.Quitting.Debt.KilledCapacityPotential
 
 /-!
 # Dynamic alternative for the debt-source exposed face
@@ -41,9 +41,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-! ## Canonical tail flows and exact survival pricing -/
 
@@ -338,6 +338,6 @@ theorem zeroFace_recurrence_of_eventual_boundaryMismatch_le
   · exact ⟨cutoff, le_rfl, hcurrent⟩
   · exact ⟨cutoff + 1, Nat.le_add_right cutoff 1, hnext⟩
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory
