@@ -194,11 +194,14 @@ import MathUE.PMFProduct.CollisionMass
 import MathUE.PMFProduct.Conditioning
 import MathUE.PMFProduct.FiniteFubini
 import MathUE.PMFProduct.Independence
+import MathUE.PMFProduct.SmallHazardBounds
+import MathUE.PMFProduct.SmallHazardExpectation
 import MathUE.PMFProduct.TotalVariation
 import MathUE.PMFProduct.Update
 import MathUE.ParametricFarkasBasis
 import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
+import MathUE.FiniteCyclicVariation
 import MathUE.PolynomialSignCell
 import MathUE.Probability
 import MathUE.Probability.Adaptive

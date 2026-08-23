@@ -418,9 +418,9 @@ theorem ContinuousZeroPerfectSingletonPath.ambientPath_zeroPerfect
       constructor
       · simp only [sub_zero]
         rw [witness.ambientPathPayoff_normal clock hclockOne normal]
+        change reward (quittingProjectiveSingletonTerminal who) who ≤ _
+        rw [← quittingPunishmentNormalReward_singleton reward normal normal]
         simpa [normal, clock, ContinuousZeroPerfectSingletonPath.path,
-          quittingPunishmentNormalReward,
-          quittingPunishmentNormalCoalition,
           quittingProjectiveSingletonTerminal] using hperfect.1
       · intro hderivative
         have hrestrictedDerivative :
@@ -429,9 +429,9 @@ theorem ContinuousZeroPerfectSingletonPath.ambientPath_zeroPerfect
           rwa [← witness.ambientPathRightDerivative_normal time normal]
         simp only [add_zero]
         rw [witness.ambientPathPayoff_normal clock hclockOne normal]
+        change _ ≤ reward (quittingProjectiveSingletonTerminal who) who
+        rw [← quittingPunishmentNormalReward_singleton reward normal normal]
         simpa [normal, clock, ContinuousZeroPerfectSingletonPath.path,
-          quittingPunishmentNormalReward,
-          quittingPunishmentNormalCoalition,
           quittingProjectiveSingletonTerminal] using
             hperfect.2 hrestrictedDerivative
     · have habnormal : IsQuittingAbnormalPlayer reward who := by
