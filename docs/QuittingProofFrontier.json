@@ -178,20 +178,20 @@
       "status": "open-producer",
       "from": "VANISHING-DEBT-ATOM-ACCESS",
       "to": "CHRONOLOGICAL-DEBT-SHADOWING",
-      "meaning": "Missing: select one exact Nash--Bellman spine from the static atom data whose same roots preserve two fixed divergent marginal-hazard labels. Exact-spine discrepancy, forcing, and initial debt are identically zero, while two persistent labels supply every required survival field.",
-      "source": "UniformEquilibrium/Quitting/Debt/Dynamic/NashBellmanChronologicalForcing.lean",
-      "declaration": "GameTheory.exists_zeroForcing_quittingChronologicalDebtData",
-      "evidence_seals": ["L"]
+      "meaning": "Missing: select one exact Nash--Bellman spine from the static atom data whose same roots preserve two fixed divergent marginal-hazard labels. Exact-spine discrepancy, forcing, and initial debt are identically zero. A bounded cap pump now recovers the second label from divergent favorable drops plus summable reverse rises, or from unbounded known-mover-subtracted excess; source production of either pump condition remains open.",
+      "source": "UniformEquilibrium/Quitting/Paths/CapPumpChronologicalAdapter.lean",
+      "declaration": "GameTheory.nonempty_quittingChronologicalDebtShadowingCertificate_of_exactSpine_capPumpOwner",
+      "evidence_seals": ["M", "L", "C"]
     },
     {
       "id": "PAID-ROW-TO-PAYOFF-NEAR-RETURN",
       "status": "open-producer",
       "from": "PAID-FIRST-DISAGREEMENT-ROW",
       "to": "POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN",
-      "meaning": "Missing: fix one positive charge threshold, while allowing the paid-row realization's source, target, path, and charged edge to vary with endpoint tolerance, and make endpoint payoff vectors arbitrarily close.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/PaidFirstDisagreementPayoffNearReturn.lean",
-      "declaration": "GameTheory.PaidFirstDisagreementAdmissiblePayoffNearReturnConsumer",
-      "evidence_seals": ["L"]
+      "meaning": "Missing: fix one positive charge threshold while making endpoint payoff vectors arbitrarily close. Every such family must leave the separated tight-face payoff neighborhood, activate a Quit owner outside that face, or contain a nonperturbative collision row; a source-matched collision path additionally pays a fixed positive terminal-semantic debt excursion above the minimum fiber.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Chronology/TightFacePaidNearReturnRestriction.lean",
+      "declaration": "GameTheory.QuittingPositiveAdmissiblePayoffNearReturnFamily.exists_tightFace_escape",
+      "evidence_seals": ["M", "L", "A"]
     },
     {
       "id": "CHRONOLOGICAL-SHADOWING-TO-UNIFORM-PAYOFF",
