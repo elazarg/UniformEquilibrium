@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.CounterfactualAtomExternalityRegression
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticCausalCollisionRecipientAtom
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawExploitabilityFloor
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawExploitabilityFloor
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
 
 /-!

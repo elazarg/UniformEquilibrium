@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.Finset.CubicalResetIntegrability
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeRectangle
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTangentExtraction
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawTangentExtraction
 
 /-!
 # Literal commuting squares for stopping-law resets

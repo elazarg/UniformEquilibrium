@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFlatTangentAlternative
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawFlatTangentAlternative
 
 /-!
 # Common-base extraction of stopping-law debt paratangent chords

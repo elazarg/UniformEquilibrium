@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSimultaneousResetOrientationLocalization
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceCapReturn
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTransferBalanceRegression
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawTransferBalanceRegression
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!

@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import Research.Quitting.MinimumFiberResetSquareSourceMatchNoGo
 import Research.Quitting.EndpointRecipientAtomSourceMismatchNoGo
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTransferBalanceRegression
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawTransferBalanceRegression
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!

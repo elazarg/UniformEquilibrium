@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.Frozen.BalancedResetPacket
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumFiberAffine
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawMinimumFiberAffine
 
 /-!
 # Radial scaling of frozen common-source stopping-law tangent columns

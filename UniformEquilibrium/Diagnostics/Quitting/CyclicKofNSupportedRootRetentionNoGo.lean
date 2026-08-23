@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Cycles.CyclicKofNPhaseHazards
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawRetentionChain
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawRetentionChain
 
 /-!
 # Supported-root obstruction for positive-retention reset chains

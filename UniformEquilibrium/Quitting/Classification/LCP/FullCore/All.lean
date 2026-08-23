@@ -5,6 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockChargedReturn
+import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockJointBlockEquilibrium
+import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockRationalPolyhedralBlock
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockReducedSingletonLassoBarrier
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockGlobalContraction
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockSharperBound

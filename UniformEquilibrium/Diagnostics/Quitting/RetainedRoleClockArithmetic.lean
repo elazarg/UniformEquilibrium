@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Finset.RetainedRoleClockArithmetic
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawRetentionChain
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawRetentionChain
 
 /-!
 # Stopping-law adapters for retained-role clocks

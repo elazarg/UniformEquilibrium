@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawFiniteSpliceMarkedLaw
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawFiniteSpliceMarkedLaw
 
 /-!
 # Nashification interface for finite stopping-law splices

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.Frozen.BalancedResetPacket
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawResetCubeOrientation
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawResetCubeOrientation
 
 /-!
 # A literal reset cube for frozen-source stopping-law chords

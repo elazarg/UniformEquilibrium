@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSimultaneousResetOrientationLocalization
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeRectangle
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawResetCube
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawResetCube
 
 /-!
 # Orientation routing for stopping-law reset cubes

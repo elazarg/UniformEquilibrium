@@ -4,12 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonConsumer
+import Research.Quitting.ConcentratedSingleton.Consumer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectStratification
 import UniformEquilibrium.Quitting.Debt.Marked.FencePacket
 
 /-!
-# Resolving cancellation at a concentrated opponent singleton
+# Tentative cancellation analysis at a concentrated opponent singleton
 
 Suppose the reset owner strictly gains by joining a recurrent opponent
 singleton, while the owner's played-row defect vanishes.  The exact endpoint
@@ -23,7 +23,8 @@ strictly harmed by insertion into a nonempty coalition.  It is stronger than
 a signed Möbius coefficient because it retains both an actual product-action
 atom and the full table-edge payoff difference.  The former branch is the
 sharp residual: a high dynamic continuation can cancel the profitable
-singleton edge without any negative higher-coalition edge.
+singleton edge without any negative higher-coalition edge.  No integrated
+consumer currently closes that residual, so this analysis remains in Research.
 -/
 
 noncomputable section

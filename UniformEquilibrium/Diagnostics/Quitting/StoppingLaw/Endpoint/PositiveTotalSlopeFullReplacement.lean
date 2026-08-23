@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.SlopeFrontier
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.VanishingDebtAtomAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeAtom
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawDebtConvexity
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawDebtConvexity
 
 /-!
 # Full-replacement endpoints of a positive total stopping-law slope

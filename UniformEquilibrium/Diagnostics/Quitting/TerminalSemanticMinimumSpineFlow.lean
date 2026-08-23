@@ -8,7 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumSpine
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauMaxDebtFlow
 
 /-!
-# Debt-transfer regression on the minimum semantic spine
+# Debt transfer on the minimum semantic spine
 
 The minimum terminal-semantic inverse limit is a genuine state-matched
 chronology, but it conserves every best-response-debt coordinate exactly.

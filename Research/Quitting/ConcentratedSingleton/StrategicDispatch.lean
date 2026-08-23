@@ -5,12 +5,12 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetFaceLawTemporalSplit
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticConcentratedSingletonCancellation
+import Research.Quitting.ConcentratedSingleton.Cancellation
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.StaticOrientationDispatch
-import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicCompression
 
 /-!
-# Strategic dispatch for a relabeled concentrated singleton
+# Tentative strategic dispatch for a relabeled concentrated singleton
 
 A positive nonsingleton law on a reset face may produce a concentrated atom
 with a different label, and that label may be a singleton.  This file keeps
@@ -20,7 +20,9 @@ existing counterexample table and cancellation theorems.
 The exact outputs are an atomic-toggle handoff, positive punishment value,
 exact player deletion, a recurrent owner-payoff tail escape, or a fixed
 played coalition on which owner insertion is quantitatively harmful.  The
-last two are the remaining chronological singleton residuals.
+last two are unresolved chronological singleton residuals.  This component is
+kept in Research because no integrated consumer preserves those packet-level
+outputs.
 -/
 
 noncomputable section
@@ -105,31 +107,6 @@ def HasQuittingConcentratedSingletonStrategicDispatch
       HasQuittingConcentratedSingletonFixedOwnerJoinLoss packet other)
 
 namespace QuittingTerminalExploitabilityWitness
-
-/-- A strict joiner of a singleton supplies the existing literal atomic
-toggle handoff, with the pure pair row as its unstable atom. -/
-theorem hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
-    (witness : QuittingTerminalExploitabilityWitness reward)
-    (owner joiner : iota) (hne : joiner ≠ owner)
-    (hstrict : quittingSoloReward reward owner joiner <
-      quittingSingletonCollisionReward reward owner joiner) :
-    HasQuittingStaticAtomicToggleHandoff reward := by
-  classical
-  let quitters : Finset iota := {owner}
-  have hquitters : quitters.Nonempty := by
-    simp [quitters]
-  have hjoiner : joiner ∉ quitters := by
-    simp [quitters, hne]
-  have htoggle : reward ⟨quitters, hquitters⟩ joiner <
-      reward
-        ⟨insert joiner quitters,
-          Finset.insert_nonempty joiner quitters⟩ joiner := by
-    simpa [quitters, quittingSoloReward,
-      quittingSingletonCollisionReward, Finset.pair_comm] using hstrict
-  exact ⟨joiner, quitters, hquitters, hjoiner, htoggle,
-    exists_outsider_atomicDeviation_of_strict_ownerToggle reward
-      witness.terminalGap_pos witness.terminalExploitability joiner quitters
-      hquitters hjoiner htoggle⟩
 
 /-- **Relabeled concentrated-singleton strategic dispatch.**
 

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeRectangle
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimumTangent
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawMinimumTangent
 
 /-!
 # A source-active actual-deviation rectangle on a near-minimum reset
