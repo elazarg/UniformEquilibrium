@@ -10,6 +10,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.FinCases
+import Mathlib.Topology.Instances.Real.Lemmas
 
 /-!
 # A row-local dichotomy for a rational three-coordinate cyclic weight
@@ -90,6 +91,13 @@ than `i` stays put. -/
 def continueMassExcl (x : ι → ℝ) (i : ι) : ℝ :=
   ∏ j ∈ Finset.univ.erase i, (1 - x j)
 
+/-- The opponents' all-Continue mass is continuous in the finite hazard row. -/
+theorem continuous_continueMassExcl (i : ι) :
+    Continuous fun x : ι → ℝ => continueMassExcl x i := by
+  unfold continueMassExcl
+  exact continuous_finsetProd _ fun j _ =>
+    continuous_const.sub (continuous_apply j)
+
 /-- `Σ_i(t)`, equation (3): summed over subsets `J` of the coordinates other
 than `i`, the reward to `i` from the outcome `J ∪ {i}`, weighted by the
 coalition mass of `J` relative to the other coordinates. -/
@@ -97,10 +105,29 @@ def sigmaValue (r : Finset ι → ι → ℝ) (x : ι → ℝ) (i : ι) : ℝ :=
   ∑ J ∈ (Finset.univ.erase i).powerset,
     (∏ j ∈ J, x j) * (∏ j ∈ Finset.univ.erase i \ J, (1 - x j)) * r (insert i J) i
 
+/-- The pure-Quit value is continuous in the finite hazard row. -/
+theorem continuous_sigmaValue (r : Finset ι → ι → ℝ) (i : ι) :
+    Continuous fun x : ι → ℝ => sigmaValue r x i := by
+  unfold sigmaValue
+  refine continuous_finsetSum _ fun J _ => ?_
+  exact (((continuous_finsetProd _ fun j _ => continuous_apply j).mul
+    (continuous_finsetProd _ fun j _ =>
+      continuous_const.sub (continuous_apply j))).mul continuous_const)
+
 /-- `A_i(t)`, the nonempty-coalition part of `Γ_i`, equation (4). -/
 def excludedValue (r : Finset ι → ι → ℝ) (x : ι → ℝ) (i : ι) : ℝ :=
   ∑ J ∈ (Finset.univ.erase i).powerset.erase ∅,
     (∏ j ∈ J, x j) * (∏ j ∈ Finset.univ.erase i \ J, (1 - x j)) * r J i
+
+/-- The unconditional absorbing Continue contribution is continuous in the
+finite hazard row. -/
+theorem continuous_excludedValue (r : Finset ι → ι → ℝ) (i : ι) :
+    Continuous fun x : ι → ℝ => excludedValue r x i := by
+  unfold excludedValue
+  refine continuous_finsetSum _ fun J _ => ?_
+  exact (((continuous_finsetProd _ fun j _ => continuous_apply j).mul
+    (continuous_finsetProd _ fun j _ =>
+      continuous_const.sub (continuous_apply j))).mul continuous_const)
 
 /-- `Γ_i(t)`, equation (4): the nonempty-coalition value plus the
 continuation value, the latter reached exactly when everyone but `i` stays

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.EndpointReturn
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.RectangleResetFaceMinimizer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetSurfaceTension
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticTwoReservoirConsumer
 import UniformEquilibrium.Quitting.Paths.SureExitSet

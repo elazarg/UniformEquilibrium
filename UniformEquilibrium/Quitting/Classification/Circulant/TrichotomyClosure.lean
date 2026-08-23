@@ -48,7 +48,7 @@ the neighbour distances and the distant ones; the open pocket of
 `UniformEquilibrium/Quitting/Classification/Circulant/PocketAnchoredNoGo.lean`
 is an instance of the first.  The census of the complementary pockets against
 `QuittingTerminalExploitabilityWitness` is recorded in
-`UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Circulant/TrichotomyClosure.lean`.
+`UniformEquilibrium/Quitting/Classification/Circulant/TrichotomyClosure.lean`.
 
 Underneath that delimitation is a single inequality, free of the margin sum and
 of the value at the zero distance: a firing step is missing exactly when every

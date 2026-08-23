@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Atom.ExactPrefixStackAccess
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.AtomSequenceDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.AtomRectangleSequenceAlternative
 import Research.Quitting.CounterfactualAtomMinimumResetSquare
 
 /-!

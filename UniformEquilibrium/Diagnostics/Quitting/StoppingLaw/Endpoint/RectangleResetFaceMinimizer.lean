@@ -4,13 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.AtomSequenceDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.AtomRectangleSequenceAlternative
+import UniformEquilibrium.Quitting.Root.TerminalSemanticResetFaceRigidity
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceCapReturn
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetSurfaceTension
 
 /-!
-# Reset-face return for the off-diagonal rectangle endpoint
+# Reset-face minimization for an off-diagonal rectangle endpoint
 
 The fixed-label rectangle sequence already supplies literal double endpoints:
 first replace the active mover, then install the observer's selected pure-time
@@ -20,7 +21,7 @@ Compactifying the complete semantic/law points therefore gives an exact
 observer-reset cluster.  The existing reset-face minimizer then produces a
 point no higher than that cluster.  It either lies on the global minimum
 fiber, or it is an off-minimum reset point whose only exact cap--Nash root is
-all-Continue.  This removes any additional endpoint-return hypothesis from
+all-Continue.  This removes any additional endpoint-matching hypothesis from
 the rectangle branch.
 
 The original fixed atom, player labels, terminal label, and literal profiles
@@ -62,9 +63,9 @@ def quittingStoppingLawRectangleSourceResponseProfile
     (quittingPureTimeBehaviorStrategy reward packet.observer
       (packet.quitTime n))
 
-/-- Complete endpoint-return packet for a fixed rectangle sequence.  The
+/-- Complete reset-face minimizer packet for a fixed rectangle sequence.  The
 cluster retains the limiting terminal law of the literal double endpoints.
-The returned point records the separate semantic reset-face minimization. -/
+The minimizer records the separate semantic reset-face optimization. -/
 structure QuittingStoppingLawRectangleResetFaceDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
@@ -87,41 +88,41 @@ structure QuittingStoppingLawRectangleResetFaceDispatch
         quittingTerminalSemanticDebtSum frontier.base ∨
       quittingTerminalSemanticDebtSum frontier.base <
         quittingTerminalSemanticDebtSum cluster.1
-  returned : QuittingTerminalSemanticPair ι
-  returned_mem : returned ∈ quittingTerminalSemanticCarrier reward
-  returned_observer_reset :
-    quittingTerminalSemanticDebt returned packet.observer = 0
-  base_le_returned : quittingTerminalSemanticDebtSum frontier.base ≤
-    quittingTerminalSemanticDebtSum returned
-  returned_le_cluster : quittingTerminalSemanticDebtSum returned ≤
+  minimizer : QuittingTerminalSemanticPair ι
+  minimizer_mem : minimizer ∈ quittingTerminalSemanticCarrier reward
+  minimizer_observer_reset :
+    quittingTerminalSemanticDebt minimizer packet.observer = 0
+  base_le_minimizer : quittingTerminalSemanticDebtSum frontier.base ≤
+    quittingTerminalSemanticDebtSum minimizer
+  minimizer_le_cluster : quittingTerminalSemanticDebtSum minimizer ≤
     quittingTerminalSemanticDebtSum cluster.1
   opponent_transfer_identity :
     (∑ other ∈ Finset.univ.erase packet.observer,
-        quittingTerminalSemanticDebtChange frontier.base returned other) =
-      (quittingTerminalSemanticDebtSum returned -
+        quittingTerminalSemanticDebtChange frontier.base minimizer other) =
+      (quittingTerminalSemanticDebtSum minimizer -
           quittingTerminalSemanticDebtSum frontier.base) +
         quittingTerminalSemanticDebt frontier.base packet.observer
   opponent_transfer : quittingTerminalSemanticDebt frontier.base
       packet.observer ≤
     ∑ other ∈ Finset.univ.erase packet.observer,
-      quittingTerminalSemanticDebtChange frontier.base returned other
-  returned_fiber_or_separated :
-    quittingTerminalSemanticDebtSum returned =
+      quittingTerminalSemanticDebtChange frontier.base minimizer other
+  minimizer_fiber_or_separated :
+    quittingTerminalSemanticDebtSum minimizer =
         quittingTerminalSemanticDebtSum frontier.base ∨
       quittingTerminalSemanticDebtSum frontier.base <
-        quittingTerminalSemanticDebtSum returned
-  allContinue_nash : IsεQuittingRootNash reward returned.2 0
+        quittingTerminalSemanticDebtSum minimizer
+  allContinue_nash : IsεQuittingRootNash reward minimizer.2 0
     (quittingAllContinueRoot : ι → PMF Bool)
   allContinue_fixed :
-    quittingTerminalSemanticPrefix reward quittingAllContinueRoot returned =
-      returned
+    quittingTerminalSemanticPrefix reward quittingAllContinueRoot minimizer =
+      minimizer
   unique_capNash : ∀ root : ι → PMF Bool,
-    IsεQuittingRootNash reward returned.2 0 root →
+    IsεQuittingRootNash reward minimizer.2 0 root →
       root = (quittingAllContinueRoot : ι → PMF Bool)
 
 /-- The fixed signed rectangle atom remains literally true on every selected
 rank.  This concerns the original double endpoints, not the semantic point
-`dispatch.returned`. -/
+`dispatch.minimizer`. -/
 theorem QuittingStoppingLawRectangleResetFaceDispatch.atom_bound
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
@@ -141,7 +142,7 @@ theorem QuittingStoppingLawRectangleResetFaceDispatch.atom_bound
     quittingStoppingLawRectangleSourceResponseProfile,
     Function.update_eq_self] using packet.atom_bound (dispatch.subseq n)
 
-/-- **Unconditional rectangle endpoint return/separation.**  No metric-return
+/-- **Unconditional rectangle reset-face minimization.**  No metric-matching
 or near-minimality assumption on the double endpoints is needed. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_resetFaceDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -177,17 +178,17 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_resetFaceDisp
     terminalSemanticLawCarrier_fst_mem_carrier cluster hcluster
   have hclusterFloor := frontier.base_minimum cluster.1 hclusterCarrier
   have hclusterFiber := hclusterFloor.eq_or_lt.imp Eq.symm id
-  obtain ⟨returned, hreturned, hreturnedReset, hbaseLe, hreturnedLe,
-      htransferIdentity, htransfer, hreturnedFiber, hnash, hfixed,
+  obtain ⟨minimizer, hminimizer, hminimizerReset, hbaseLe, hminimizerLe,
+      htransferIdentity, htransfer, hminimizerFiber, hnash, hfixed,
       hunique⟩ :=
     exists_resetFace_minimizer_with_unique_allContinue_capNash
       (reward := reward) frontier.base cluster.1 packet.observer
       frontier.base_minimum frontier.base_positive hclusterCarrier
       hclusterReset
   refine ⟨⟨subseq, hsubseq, packet.rank_strictMono.comp hsubseq,
-    cluster, hcluster, ?_, hclusterReset, hclusterFiber, returned, hreturned,
-    hreturnedReset, hbaseLe, hreturnedLe, htransferIdentity, htransfer,
-    hreturnedFiber, hnash, hfixed, hunique⟩⟩
+    cluster, hcluster, ?_, hclusterReset, hclusterFiber, minimizer, hminimizer,
+    hminimizerReset, hbaseLe, hminimizerLe, htransferIdentity, htransfer,
+    hminimizerFiber, hnash, hfixed, hunique⟩⟩
   change Tendsto (fun n =>
     (quittingTerminalSemanticPair reward
         (quittingStoppingLawRectangleDoubleEndpointProfile packet (subseq n)),
@@ -199,8 +200,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_resetFaceDisp
 namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- Regime-facing dispatch: the prescribed atom branch remains open, while
-every rectangle branch reaches the semantic reset-face return/separation
-consumer without an extra endpoint-return hypothesis. -/
+every rectangle branch reaches the semantic reset-face minimizer without an
+extra endpoint-matching hypothesis. -/
 theorem exists_prescribedAtomSequence_or_rectangleResetFaceDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward) :
@@ -217,10 +218,10 @@ end QuittingPositiveMinimumDebtTangentFamily
 
 end GameTheory
 /-!
-# Fixed-law return of the rectangle endpoint atom
+# Fixed-law reset-face minimization of the rectangle endpoint atom
 
 The semantic reset-face dispatch retains the complete endpoint law only at
-its cluster, not at its constrained returned point.  Here the comparison law
+its cluster, not at its constrained minimizer.  Here the comparison law
 is compactified on the same subsequence.  The signed rectangle atom therefore
 survives as an exact inequality between two limiting laws.
 
@@ -229,13 +230,13 @@ an actual opponent, the endpoint law has positive mass on that coalition.
 The cluster consequently has positive observer--opponent incidence.  The
 existing fixed-law reset dispatcher then preserves the whole endpoint law,
 the atom-supporting incidence, and a strict static toggle.  Dynamically it
-gives either a positive-survival absorbing reset-face return or an
+gives either a positive-survival absorbing reset-face descent or an
 all-Continue cap fixed point.
 
 This does not make all-Continue unique at the fixed-law minimizer.  Prefixing
 changes the law, while fixed-law minimality compares only points with the old
 law.  Exact cap-root rigidity follows only from the additional premise that
-the same returned point minimizes debt on the entire reset face.  This is the
+the same minimizer attains least debt on the entire reset face.  This is the
 sharp separation between law retention and the semantic surface-tension
 selector.
 -/
@@ -431,7 +432,7 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.endpoint_opponentIncidence_po
 coalition contains another player reaches the existing same-law reset
 dispatcher.  Thus the complete endpoint law and a concrete atom-supported
 incidence survive reset-face minimization, together with a strict toggle and
-the absorbing-return/all-Continue dynamic alternative. -/
+the absorbing-descent/all-Continue dynamic alternative. -/
 theorem QuittingStoppingLawRectangleJointAtomLimit.exists_fixedLawResetDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
@@ -442,9 +443,9 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.exists_fixedLawResetDispatch
     (hreward : 0 < reward packet.terminal packet.observer)
     (other : ι) (hother : other ∈ packet.terminal.val)
     (hotherNe : other ≠ packet.observer) :
-    ∃ returned,
+    ∃ minimizer,
       QuittingFixedLawResetDispatch (reward := reward) frontier.base
-        dispatch.cluster.1 dispatch.cluster.2 packet.observer other returned := by
+        dispatch.cluster.1 dispatch.cluster.2 packet.observer other minimizer := by
   have hincidence := limit.endpoint_opponentIncidence_pos
     hreward other hother hotherNe
   exact witness.exists_fixedLawResetDispatch frontier.base
@@ -452,55 +453,6 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.exists_fixedLawResetDispatch
       frontier.base_minimum
       frontier.base_positive dispatch.cluster_mem
       dispatch.cluster_observer_reset hincidence
-
-/-- Fixed-law minimality alone cannot prove cap-root rigidity, because a cap
-prefix changes the law.  The exact additional premise is minimality on the
-whole reset face; under it, positive global debt forces every exact cap--Nash
-root to be all-Continue. -/
-theorem fixedLawResetPoint_unique_allContinue_of_globalResetFaceMinimum
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (source : QuittingTerminalSemanticPair ι)
-    (returned : QuittingTerminalSemanticLawPoint ι) (owner : ι)
-    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
-      quittingTerminalSemanticDebtSum source ≤
-        quittingTerminalSemanticDebtSum candidate)
-    (hsourcePositive : 0 < quittingTerminalSemanticDebtSum source)
-    (hreturned : returned ∈ quittingTerminalSemanticLawCarrier reward)
-    (hreset : quittingTerminalSemanticDebt returned.1 owner = 0)
-    (hfaceMinimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
-      quittingTerminalSemanticDebt candidate owner = 0 →
-        quittingTerminalSemanticDebtSum returned.1 ≤
-          quittingTerminalSemanticDebtSum candidate) :
-    ∀ root : ι → PMF Bool,
-      IsεQuittingRootNash reward returned.1.2 0 root →
-        root = (quittingAllContinueRoot : ι → PMF Bool) := by
-  intro root hnash
-  let prefixed := quittingTerminalSemanticPrefix reward root returned.1
-  have hreturnedCarrier :=
-    terminalSemanticLawCarrier_fst_mem_carrier returned hreturned
-  have hprefixed : prefixed ∈ quittingTerminalSemanticCarrier reward :=
-    quittingTerminalSemanticPrefix_mem_carrier reward root returned.1
-      hreturnedCarrier
-  have hprefixedReset : quittingTerminalSemanticDebt prefixed owner = 0 := by
-    rw [quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash
-      (reward := reward) returned.1 root owner hnash, hreset, mul_zero]
-  have hface := hfaceMinimum prefixed hprefixed hprefixedReset
-  have hscale : quittingTerminalSemanticDebtSum prefixed =
-      quittingStationaryContinueMass root *
-        quittingTerminalSemanticDebtSum returned.1 :=
-    quittingTerminalSemanticDebtSum_prefix_eq_continueMass_mul_of_capNash
-      (reward := reward) returned.1 root hnash
-  have hreturnedPositive : 0 <
-      quittingTerminalSemanticDebtSum returned.1 := by
-    exact hsourcePositive.trans_le (hminimum returned.1 hreturnedCarrier)
-  have hcontinueLe := quittingStationaryContinueMass_le_one root
-  have hcontinue : quittingStationaryContinueMass root = 1 := by
-    rw [hscale] at hface
-    nlinarith
-  funext player
-  have hpure := eq_pure_false_of_quittingStationaryContinueMass_eq_one
-    hcontinue player
-  simpa only [quittingAllContinueRoot] using hpure
 
 /-! ## Exact comparison of the two reset-face selectors -/
 
@@ -619,8 +571,8 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.nonempty_minimizerBridge
 The witnesses keep the reset endpoint cluster, the common comparison-law
 subsequence, the fixed atom law, and the global/fixed minimizer comparison in
 one dependent chain.  The chain ends in a static reset dispatch; it does not
-assert a chronological return. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_fixedLawAtomReturn
+assert chronological realization. -/
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_rectangleAtomMinimizerBridge
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)

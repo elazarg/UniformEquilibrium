@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Stationary.LiveMass
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.ObserverAbsent.ForcedOwnerDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ObserverAbsent.ForcedOwnerDispatch
 
 /-!
 # Forced-owner refusal is a literal semantic-debt charge

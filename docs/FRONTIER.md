@@ -89,27 +89,18 @@ with the stored gap of a terminal exploitability witness as a direct corollary. 
 the minimum debt nor the gap is proved to vanish, and no uniform-equilibrium
 payoff is produced.
 
-The flat stopping-law charged-circulation branch now has an actual-source
-variable-scale cube adapter.
-[`exists_sourceMatchedChatteringWithUniformPrefixes`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedChattering.lean)
-uses one late common source and one circulation mass to control every complete
-and partial frozen microcycle by `O(1/N)`. Independently,
-[`exists_boundedRadialSourceMatchedResetCube`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialResetCube.lean)
-absorbs every real circulation coefficient into a legal stopping-law weight
-and places one reset per active player in a single literal cube. Its normalized
-frozen star tends coordinatewise to zero while its normalized mover-diagonal
-charge tends to a positive limit. The exact carrier minimum controls every
-cube face uniformly from below.
-[`eventually_all_sourceMatchedRadialFacePayoff_affineRemainder_le`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialResetCube.lean)
-proves that every fixed pure-time payoff on every face has affine remainder
-`o(lambda)`, uniformly in the face and quit time; its finite-rank precursor is
-an explicit `O(lambda²)` estimate. Consequently,
-[`exists_sourceMatchedRadial_commonPassport_or_edgeWitnessSwitch`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialResetCube.lean)
-selects its approximate pure-time witnesses internally and needs only a cap
-nonadditivity bound to return either a literal edge witness switch or one
-all-face common passport. Excess cap nonadditivity is not opaque:
-[`sourceMatchedRadialFaceCapNonadditivity_le_or_hasNegativeSquare`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/SourceMatchedRadialResetCube.lean)
-localizes it to a negative cap square on the same literal cube.
+The flat stopping-law charged-circulation branch now has a frozen actual-source
+reset-cube adapter.  Integer rounding gives a balanced finite packet with
+`O(1/N)` prefix control (`exists_frozenBalancedResetPacket` in
+`UniformEquilibrium/Diagnostics/Quitting/Frozen/BalancedResetPacket.lean`).  Radial scaling absorbs
+real circulation coefficients into legal stopping-law weights; the six frozen
+modules under `Diagnostics/Quitting/Frozen/` place these resets in one literal
+cube, expose the joint and deleted-player clocks, and retain the exact
+`O(lambda²)` face remainder.  The strongest static dispatch is
+`exists_fixed_frozenRadialStrategicLabel_of_scaleNormalizedLiminfLower` in
+`UniformEquilibrium/Diagnostics/Quitting/Frozen/RadialCurvatureStrategicDispatch.lean`, which returns the oriented
+strategic square alternative.  These are frozen-source certificates: they do
+not provide a chronological carrier path or a renewal return.
 
 Terminal differences between two pure-time witnesses also have an exact
 reached-history decoder.

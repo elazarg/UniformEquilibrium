@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.NegativeTargetAtomicDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.NegativeTargetAtomicDispatch
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectStratification
 
 /-!
@@ -113,7 +113,7 @@ def quittingStoppingLawObserverAbsentRowBarrier
 is fixed by the reward sign.  Its full terminal mass is exactly the finite
 pre-stop sum or infinite clock, and every clock row admits a literal
 forced-owner profile which retains the selected cylinder and carries the
-mass-weighted counterexample barrier. -/
+mass-weighted terminal-exploitability barrier. -/
 def HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {witness : QuittingTerminalExploitabilityWitness reward}
@@ -494,7 +494,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_forcedO
   exact ⟨hobserver, hforcedProfile, hmass, hbarrier, hweightedBarrier,
     halternative⟩
 
-/-- **Static frontier with the observer-absent handoff.** Every rectangle
+/-- **Static dispatch with the observer-absent handoff.** Every rectangle
 orientation reaches a named strategic consumer. The observer-absent
 consumer is the aggregate counterfactual forced-owner wall above; it is not
 claimed to close the conjecture-facing branch.  The only remaining bare
@@ -559,10 +559,10 @@ def HasQuittingStoppingLawOrientationPreservingStrategicDispatch
 
 namespace QuittingPositiveMinimumDebtTangentFamily
 
-/-- **Orientation-preserving exhaustive stopping-law capstone.**  A quitting
-counterexample frontier supplies either a prescribed-payoff atom sequence or
+/-- **Orientation-preserving exhaustive stopping-law capstone.**  A positive
+minimum-debt tangent family supplies either a prescribed-payoff atom sequence or
 one fixed rectangle packet in exactly one of the four terminal geometries.
-Each geometry is returned together with the strategic dispatch constructed
+Each geometry is paired with the strategic dispatch constructed
 from it, so no discarded provenance must be recovered. -/
 theorem exists_prescribed_or_orientationPreservingStrategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

@@ -4,12 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.OffDiagonal.AtomSequenceDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.AtomRectangleSequenceAlternative
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLiteralSourceReturnNoGo
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticReachedRowDebtLocalization
 
 /-!
-# Target-row debt localization
+# Pure-time target-row debt localization
 
 Positive observer reward stores uniform mass at the rectangle target. If the
 terminal contains the observer, the observer's pure-time strategy reaches a
@@ -20,7 +20,7 @@ without using its stored cluster or escape/fiber alternative.
 This consumer retains the actual profile sequence, stop times, terminal
 coalition mass, and a uniform positive lower bound on one fixed player's
 legal one-row gains.  It does not provide source re-entry or an exact
-Nash--Bellman return.
+Nash--Bellman embedding.
 -/
 
 noncomputable section
@@ -94,14 +94,14 @@ def HasQuittingStoppingLawPositiveTargetReachedRowLocalization
           quittingStoppingLawPositiveTargetReachedRowGain packet stop other
             (subseq rank)
 
-/-- Literal source-return obstruction extracted from a positive reached-row
+/-- Literal same-fiber obstruction extracted from a positive pure-time row
 localization certificate.
 
 The packet keeps the actual target profile, selected date, fixed player,
 terminal label, positive terminal mass, and quantitative gain floor at every
-rank of the original strict subsequence.  Its `no_exact_return` field is a
-no-go: it does not assert that a packet-preserving return exists. -/
-structure QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo
+rank of the supplied strict subsequence.  It makes no re-entry or
+chronological realization claim. -/
+structure QuittingStoppingLawPositiveTargetPureTimeRowObstruction
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
     {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
@@ -125,13 +125,13 @@ structure QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo
     quittingStoppingLawPositiveTargetReachedRowGainFloor packet lower ≤
       quittingLiteralActualRowBestEndpointGain reward (row rank).profile
         (row rank).who (row rank).stage
-  no_exact_return : ∀ rank,
+  no_exact_embedding : ∀ rank,
     ¬ ∃ current tail : QuittingNashBellmanPoint iota,
       (row rank).IsLiteralNashBellmanEmbedding current tail
 
-/-- The production reached-row certificate constructs the full literal
-source-return no-go packet without changing its behavioral row or tail. -/
-theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.nonempty_literalNoGo
+/-- The reached-row certificate constructs a proof-carrying same-fiber
+obstruction without changing its supplied pure-time behavioral row or tail. -/
+theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.nonempty_pureTimeRowObstruction
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
     {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
@@ -139,7 +139,7 @@ theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.nonempty_lite
     (certificate :
       HasQuittingStoppingLawPositiveTargetReachedRowLocalization packet lower) :
     Nonempty
-      (QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo packet lower) := by
+      (QuittingStoppingLawPositiveTargetPureTimeRowObstruction packet lower) := by
   obtain ⟨hlower, stop, subseq, other, hsubseq, hother, htime, hmass,
       hgain⟩ := certificate
   let players := Finset.univ.erase packet.observer
@@ -200,12 +200,12 @@ theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.nonempty_lite
 
 /-- Any approximate Nash repair on the exact root--tail fiber stored by the
 proof-carrying row packet pays at least the certificate's uniform gain floor. -/
-theorem QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo.gainFloor_le_nashError
+theorem QuittingStoppingLawPositiveTargetPureTimeRowObstruction.gainFloor_le_nashError
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
     {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {lower error : Real}
-    (data : QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo packet lower)
+    (data : QuittingStoppingLawPositiveTargetPureTimeRowObstruction packet lower)
     (rank : Nat)
     (hnash : IsεQuittingRootNash reward
       (quittingLiteralActualRowTail reward (data.row rank).profile
@@ -221,7 +221,7 @@ theorem QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo.gainFloor_le_nash
 so none admits an exact Nash--Bellman embedding on its unchanged root--tail
 fiber.  The existential form is retained as a convenient projection of the
 stronger proof-carrying packet above. -/
-theorem positiveTargetReachedRowLocalization_no_packetPreservingExactSourceReturn
+theorem positiveTargetReachedRowLocalization_no_exactNashBellmanEmbedding
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
     {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
@@ -243,7 +243,7 @@ theorem positiveTargetReachedRowLocalization_no_packetPreservingExactSourceRetur
               lower ≤ row.mass ∧
               ¬ ∃ current tail : QuittingNashBellmanPoint iota,
                 row.IsLiteralNashBellmanEmbedding current tail := by
-  obtain ⟨data⟩ := certificate.nonempty_literalNoGo
+  obtain ⟨data⟩ := certificate.nonempty_pureTimeRowObstruction
   refine ⟨data.stop, data.subseq, data.other, data.subseq_strictMono,
     data.other_ne, ?_⟩
   intro rank
@@ -251,7 +251,7 @@ theorem positiveTargetReachedRowLocalization_no_packetPreservingExactSourceRetur
   dsimp only
   exact ⟨data.row rank, data.row_profile rank, data.row_stage rank,
     data.row_player rank, data.row_terminal rank, data.mass_lower rank,
-    data.no_exact_return rank⟩
+    data.no_exact_embedding rank⟩
 
 /-- **Uniform same-fiber repair floor for the positive-collision arm.**
 Along the fixed-player subsequence selected by actual-row localization, every
@@ -514,20 +514,21 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_reached
     packet hlower stop id strictMono_id hfinite (by
       simpa [quittingStoppingLawPositiveTargetReachedRowProfile] using hmass)
 
-/-- End-to-end literal no-go from the original positive rectangle packet.
+/-- End-to-end same-fiber obstruction from the positive rectangle packet.
 The conclusion retains the packet's quantitative target-mass lower bound and
-all actual-row provenance; it rules out unchanged exact source returns rather
-than constructing one. -/
-theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_positiveTargetLiteralNoGo
+all supplied pure-time row provenance; it rules out an unchanged exact
+Nash--Bellman embedding without claiming re-entry. -/
+theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_positiveTargetRowObstruction
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
     {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hrewardPositive : 0 < reward packet.terminal packet.observer) :
-    Nonempty (QuittingStoppingLawPositiveTargetReachedRowLiteralNoGo packet
+    Nonempty (QuittingStoppingLawPositiveTargetPureTimeRowObstruction packet
       ((packet.charge / 4) /
         ((Fintype.card (QuittingTerminalOutcome iota) : Real) *
           quittingRewardBound reward))) :=
-  (packet.positiveTarget_reachedRowLocalization hobserver hrewardPositive).nonempty_literalNoGo
+  (packet.positiveTarget_reachedRowLocalization
+    hobserver hrewardPositive).nonempty_pureTimeRowObstruction
 
 end GameTheory

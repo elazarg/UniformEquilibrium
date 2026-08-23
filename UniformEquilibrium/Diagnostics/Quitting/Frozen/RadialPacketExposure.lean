@@ -4,16 +4,16 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.SourceMatchedRadialResetCube
+import UniformEquilibrium.Diagnostics.Quitting.Frozen.RadialResetCube
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchResiduals
 import UniformEquilibrium.Quitting.Paths.StoppingLawExposure
 
 /-!
-# Finite exposure in fresh source-matched radial packets
+# Finite exposure in frozen radial packets
 
 Positive diagonal charge of a complete stopping-law reset forces finite
 stopping mass.  A balanced positive circulation has at least two positive
-radial coordinates, so a fresh simultaneous radial packet exposes every
+radial coordinates, so a frozen simultaneous radial packet exposes every
 deleted-player clock as well as the joint clock.  The result is deliberately
 packet-local: no repetition or moving-source estimate is asserted.
 -/
@@ -33,10 +33,10 @@ namespace QuittingPositiveMinimumDebtTangentFamily
 
 /-- The normalized owner debt drop is exactly the unscaled replacement's
 prescribed payoff gain. -/
-theorem actualGain_eq_endpointPayoffGain
+theorem frozenRadialGain_eq_endpointPayoffGain
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : Nat) (mover : {who // who ∈ frontier.positiveDebtSupport}) :
-    frontier.actualGain rank mover =
+    frontier.frozenGain rank mover =
       quittingTerminalPayoff reward
           (Function.update (frontier.source rank) mover.1
             (frontier.replacement mover rank)) mover.1 -
@@ -48,7 +48,7 @@ theorem actualGain_eq_endpointPayoffGain
       (frontier.replacement mover rank)
       (frontier.scale rank) hlambda.le
       (frontier.scale_le_one rank)
-  unfold actualGain actualDebtDirection
+  unfold frozenGain frozenDebtDirection
     quittingStoppingLawNormalizedDebtDirection
     quittingTerminalSemanticDebtChange quittingTerminalSemanticDebt
     quittingTerminalSemanticPair quittingStoppingLawResetProfile
@@ -59,16 +59,16 @@ theorem actualGain_eq_endpointPayoffGain
 
 /-- Actual finite-rank owner gains converge to the positive diagonal charge
 of the limiting tangent column. -/
-theorem actualGain_tendsto
+theorem frozenRadialGain_tendsto
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (mover : {who // who ∈ frontier.positiveDebtSupport}) :
-    Tendsto (fun rank => frontier.actualGain rank mover) atTop
+    Tendsto (fun rank => frontier.frozenGain rank mover) atTop
       (nhds (-frontier.tangent mover mover.1)) := by
-  simpa [actualGain, actualDebtDirection] using
+  simpa [frozenGain, frozenDebtDirection] using
     (frontier.tangent_tendsto mover mover.1).neg
 
 /-- Every active tangent has a strictly positive limiting owner charge. -/
-theorem tangentOwnerCharge_pos
+theorem frozenRadialTangentOwnerCharge_pos
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (mover : {who // who ∈ frontier.positiveDebtSupport}) :
     0 < -frontier.tangent mover mover.1 := by
@@ -79,7 +79,7 @@ theorem tangentOwnerCharge_pos
 
 /-- Exact balance with positive diagonal charge requires at least two
 positive radial coordinates. -/
-theorem exists_two_positive_boundedRadialCirculationWeights
+theorem exists_two_positive_frozenRadialCirculationWeights
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (weight : {who // who ∈ frontier.positiveDebtSupport} -> Real)
     (hweight0 : forall mover, 0 <= weight mover)
@@ -92,7 +92,7 @@ theorem exists_two_positive_boundedRadialCirculationWeights
   have hterm0 : forall mover,
       0 <= weight mover * (-frontier.tangent mover mover.1) := by
     intro mover
-    exact mul_nonneg (hweight0 mover) (frontier.tangentOwnerCharge_pos mover).le
+    exact mul_nonneg (hweight0 mover) (frontier.frozenRadialTangentOwnerCharge_pos mover).le
   obtain ⟨first, _hfirstMem, hfirstTerm⟩ :=
     (Finset.sum_pos_iff_of_nonneg
       (s := (Finset.univ : Finset {who // who ∈ frontier.positiveDebtSupport}))
@@ -122,55 +122,55 @@ theorem exists_two_positive_boundedRadialCirculationWeights
   have hbalanced := hbalance first.1
   rw [hsum] at hbalanced
   have hnegative : weight first * frontier.tangent first first.1 < 0 := by
-    nlinarith [frontier.tangentOwnerCharge_pos first]
+    nlinarith [frontier.frozenRadialTangentOwnerCharge_pos first]
   linarith
 
 /-- The simultaneous fresh packet is the full active face of the radial reset
-cube at one source-matched rank. -/
-def sourceMatchedRadialFreshPacketProfile
+cube at one frozen common-source rank. -/
+def frozenRadialPacketProfile
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : Nat) (weight : {who // who ∈ frontier.positiveDebtSupport} -> Real)
     (hweight0 : forall mover, 0 <= weight mover)
     (hweight1 : forall mover, weight mover <= 1) :
     (quittingGame reward).BehaviorProfile :=
-  (frontier.sourceMatchedRadialResetCubeData rank weight hweight0 hweight1).profile
+  (frontier.frozenRadialResetCubeData rank weight hweight0 hweight1).profile
     frontier.positiveDebtSupport
 
 /-- An active marginal of the full fresh packet is its literal nested radial
 stopping-law reset. -/
-theorem sourceMatchedRadialFreshPacketProfile_apply
+theorem frozenRadialPacketProfile_apply
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : Nat) (weight : {who // who ∈ frontier.positiveDebtSupport} -> Real)
     (hweight0 : forall mover, 0 <= weight mover)
     (hweight1 : forall mover, weight mover <= 1)
     (mover : {who // who ∈ frontier.positiveDebtSupport}) :
-    frontier.sourceMatchedRadialFreshPacketProfile rank weight hweight0
+    frontier.frozenRadialPacketProfile rank weight hweight0
         hweight1 mover.1 =
-      frontier.sourceMatchedRadialResetProfile rank mover (weight mover)
+      frontier.frozenRadialResetProfile rank mover (weight mover)
         (hweight0 mover) (hweight1 mover) mover.1 := by
-  let data := frontier.sourceMatchedRadialResetCubeData rank weight
+  let data := frontier.frozenRadialResetCubeData rank weight
     hweight0 hweight1
   change data.profile frontier.positiveDebtSupport mover.1 = _
   rw [data.profile_apply_of_mem frontier.positiveDebtSupport mover.1 mover.property]
-  simp only [sourceMatchedRadialResetProfile, Function.update_self]
+  simp only [frozenRadialResetProfile, Function.update_self]
   have htarget : data.target mover.1 =
-      frontier.sourceMatchedInnerResetStrategy rank mover :=
-    frontier.sourceMatchedRadialCubeTarget_active rank mover
+      frontier.frozenRadialInnerResetStrategy rank mover :=
+    frontier.frozenRadialCubeTarget_active rank mover
   have hscale : data.scale mover.1 = weight mover :=
-    frontier.sourceMatchedRadialCubeScale_active weight mover
+    frontier.frozenRadialCubeScale_active weight mover
   have hsource : data.source mover.1 =
       frontier.source rank mover.1 := rfl
   rw [htarget, hsource]
   simpa only using
     quittingStoppingLawMixtureBehaviorStrategy_congr_scale reward mover.1
       (frontier.source rank mover.1)
-      (frontier.sourceMatchedInnerResetStrategy rank mover)
+      (frontier.frozenRadialInnerResetStrategy rank mover)
       (data.scale mover.1) (weight mover) (data.scale_nonneg mover.1)
       (data.scale_le_one mover.1) hscale
 
 /-- A positive lower bound on the finite-rank owner gain yields proportional
 ever-quit mass in that mover's fresh radial marginal. -/
-theorem sourceMatchedRadialFreshPacket_everQuitMass_ge
+theorem frozenRadialPacket_everQuitMass_ge
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (rank : Nat) (weight : {who // who ∈ frontier.positiveDebtSupport} -> Real)
     (hweight0 : forall mover, 0 <= weight mover)
@@ -178,16 +178,16 @@ theorem sourceMatchedRadialFreshPacket_everQuitMass_ge
     (mover : {who // who ∈ frontier.positiveDebtSupport})
     (gainFloor M : Real) (hM : 0 < M)
     (hreward : forall terminal player, |reward terminal player| <= M)
-    (hgain : gainFloor <= frontier.actualGain rank mover)
+    (hgain : gainFloor <= frontier.frozenGain rank mover)
     (heffectiveHalf :
       weight mover * frontier.scale rank <= 1 / 2) :
     weight mover * frontier.scale rank * gainFloor /
           (2 * M) <=
       quittingBehaviorEverQuitMass reward
-        (frontier.sourceMatchedRadialFreshPacketProfile rank weight hweight0
+        (frontier.frozenRadialPacketProfile rank weight hweight0
           hweight1 mover.1) := by
-  rw [frontier.sourceMatchedRadialFreshPacketProfile_apply]
-  unfold sourceMatchedRadialResetProfile sourceMatchedInnerResetStrategy
+  rw [frontier.frozenRadialPacketProfile_apply]
+  unfold frozenRadialResetProfile frozenRadialInnerResetStrategy
   simp only [Function.update_self]
   apply nestedRadialEverQuitMass_ge_weight_mul_gain_div
     reward (frontier.source rank) mover.1
@@ -198,13 +198,13 @@ theorem sourceMatchedRadialFreshPacket_everQuitMass_ge
       (frontier.scale_pos rank).le
       (frontier.scale_le_one rank) heffectiveHalf hM hreward
   rw [Function.update_eq_self]
-  simpa only [frontier.actualGain_eq_endpointPayoffGain rank mover] using hgain
+  simpa only [frontier.frozenRadialGain_eq_endpointPayoffGain rank mover] using hgain
 
 /-- Two distinct marginals with twice the requested ever-quit exposure have
 one finite cutoff which exposes the joint clock and every player-deleted
 clock.  The two movers cover one another when either mover's own coordinate
 is deleted. -/
-theorem exists_finiteCutoff_joint_and_deleted_exposure
+theorem exists_frozenRadialFiniteCutoff_joint_and_deleted_exposure
     (profile : (quittingGame reward).BehaviorProfile)
     (first second : iota) (hne : first ≠ second)
     (exposure : Real) (hexposure : 0 < exposure)
@@ -276,7 +276,7 @@ theorem exists_finiteCutoff_joint_and_deleted_exposure
 with a fixed positive exposure coefficient.  Eventually, at each selected
 rank, a finite cutoff exposes both the joint clock and every deleted-player
 clock by at least that coefficient times the genuine frontier reset scale. -/
-theorem exists_boundedRadialFreshPacketExposure
+theorem exists_frozenRadialBoundedPacketExposure
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
       frontier.positiveDebtSupport frontier.tangent) :
@@ -290,18 +290,18 @@ theorem exists_boundedRadialFreshPacketExposure
               kappa * frontier.scale rank <=
                   1 - quittingJointSurvivalWeight
                     (quittingProfileLiveRoot reward
-                      (frontier.sourceMatchedRadialFreshPacketProfile rank
+                      (frontier.frozenRadialPacketProfile rank
                         weight hweight0 hweight1)) 0 cutoff ∧
                 forall who,
                   kappa * frontier.scale rank <=
                     1 - quittingOpponentSurvivalWeight
                       (quittingProfileLiveRoot reward
-                        (frontier.sourceMatchedRadialFreshPacketProfile rank
+                        (frontier.frozenRadialPacketProfile rank
                           weight hweight0 hweight1)) who 0 cutoff := by
   obtain ⟨weight, hweight0, hweight1, hbalance, hcharge⟩ :=
-    frontier.exists_boundedRadialCirculationWeights hcirculation
+    frontier.exists_frozenRadialBoundedCirculationWeights hcirculation
   obtain ⟨first, second, hne, hfirstWeight, hsecondWeight⟩ :=
-    frontier.exists_two_positive_boundedRadialCirculationWeights
+    frontier.exists_two_positive_frozenRadialCirculationWeights
       weight hweight0 hbalance hcharge
   obtain ⟨bound, hbound0, hreward⟩ := exists_quittingRewardBound reward
   let M := bound + 1
@@ -317,10 +317,10 @@ theorem exists_boundedRadialFreshPacketExposure
     exact (hreward terminal player).trans (by dsimp only [M]; linarith)
   have hfirstGain : 0 < firstGain := by
     dsimp only [firstGain]
-    linarith [frontier.tangentOwnerCharge_pos first]
+    linarith [frontier.frozenRadialTangentOwnerCharge_pos first]
   have hsecondGain : 0 < secondGain := by
     dsimp only [secondGain]
-    linarith [frontier.tangentOwnerCharge_pos second]
+    linarith [frontier.frozenRadialTangentOwnerCharge_pos second]
   have hkappa : 0 < kappa := by
     dsimp only [kappa]
     exact lt_min
@@ -333,20 +333,20 @@ theorem exists_boundedRadialFreshPacketExposure
     (tendsto_order.1 frontier.scale_tendsto_zero).2 (1 / 2)
       (by norm_num)
   have hfirstGainEventually : ∀ᶠ rank in atTop,
-      firstGain < frontier.actualGain rank first :=
-    (tendsto_order.1 (frontier.actualGain_tendsto first)).1 firstGain
+      firstGain < frontier.frozenGain rank first :=
+    (tendsto_order.1 (frontier.frozenRadialGain_tendsto first)).1 firstGain
       (by
         dsimp only [firstGain]
-        linarith [frontier.tangentOwnerCharge_pos first])
+        linarith [frontier.frozenRadialTangentOwnerCharge_pos first])
   have hsecondGainEventually : ∀ᶠ rank in atTop,
-      secondGain < frontier.actualGain rank second :=
-    (tendsto_order.1 (frontier.actualGain_tendsto second)).1 secondGain
+      secondGain < frontier.frozenGain rank second :=
+    (tendsto_order.1 (frontier.frozenRadialGain_tendsto second)).1 secondGain
       (by
         dsimp only [secondGain]
-        linarith [frontier.tangentOwnerCharge_pos second])
+        linarith [frontier.frozenRadialTangentOwnerCharge_pos second])
   filter_upwards [hlambdaEventually, hfirstGainEventually,
     hsecondGainEventually] with rank hlambdaHalf hfirstActual hsecondActual
-  let packet := frontier.sourceMatchedRadialFreshPacketProfile rank weight
+  let packet := frontier.frozenRadialPacketProfile rank weight
     hweight0 hweight1
   have hlambda0 : 0 <= frontier.scale rank :=
     (frontier.scale_pos rank).le
@@ -358,10 +358,10 @@ theorem exists_boundedRadialFreshPacketExposure
       weight second * frontier.scale rank <= 1 / 2 := by
     have hle := mul_le_mul_of_nonneg_right (hweight1 second) hlambda0
     linarith
-  have hfirstMass := frontier.sourceMatchedRadialFreshPacket_everQuitMass_ge
+  have hfirstMass := frontier.frozenRadialPacket_everQuitMass_ge
     rank weight hweight0 hweight1 first firstGain M hM hrewardM
       hfirstActual.le hfirstEffective
-  have hsecondMass := frontier.sourceMatchedRadialFreshPacket_everQuitMass_ge
+  have hsecondMass := frontier.frozenRadialPacket_everQuitMass_ge
     rank weight hweight0 hweight1 second secondGain M hM hrewardM
       hsecondActual.le hsecondEffective
   have hkappaFirst : kappa <= weight first * firstGain / (4 * M) :=
@@ -394,7 +394,7 @@ theorem exists_boundedRadialFreshPacketExposure
       0 < kappa * frontier.scale rank :=
     mul_pos hkappa (frontier.scale_pos rank)
   simpa only [packet] using
-    exists_finiteCutoff_joint_and_deleted_exposure
+    exists_frozenRadialFiniteCutoff_joint_and_deleted_exposure
       packet first.1 second.1 (Subtype.coe_ne_coe.mpr hne)
       (kappa * frontier.scale rank) hexposure
       hfirstExposure hsecondExposure
